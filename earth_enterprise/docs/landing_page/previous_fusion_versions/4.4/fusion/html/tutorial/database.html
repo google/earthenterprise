@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <link rel="stylesheet" type="text/css" href="../dev_docs2.css" />
+  <link rel="stylesheet" type="text/css" href="local_extensions.css" />
+  <!--[if IE]>
+    <link rel="stylesheet" type="text/css" href="iehacks.css" />
+  <![endif]-->
+  <title>Defining and Building Databases</title>
+</head>
+
+<body><!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo"><img alt="Google Earth Enterprise" border=0 src="images/index.gif" /></div>
+  <h1 id="doc_title">Tutorial</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Tutorial</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="setup.html">Setting Up For the Tutorial</a></li>
+    <li><a href="resources.html">Defining and Building Resources</a></li>
+    <li><a href="projects.html">Defining and Building Projects</a></li>
+    <li><a href="database.html" id="selected">Defining and Building Databases</a></li>
+    <li><a href="publish.html">Publishing and Viewing a Database</a></li>
+    <li><a href="points.html">Configuring Display Rules for Point Data</a></li>
+    <li><a href="polygons.html">Configuring Display Rules for Polygon Data</a></li>
+    <li><a href="importExport.html">Importing and Exporting Style Templates</a></li>
+    <li><a href="searchTabs.html">Configuring a Searchable Database</a></li>
+    <li><a href="searchLayers.html">Specifying Search Fields for Individual Layers</a></li>
+    <li><a href="maps.html">Creating a Map Database</a></li>
+    <li><a href="mosaics.html">Creating Imagery Mosaics</a></li>
+    <li><a href="split.html">Segmenting Large Imagery Files</a></li>
+    <li><a href="historical.html">Building a Historical Imagery Project</a></li>
+    <li><a href="dataFiles.html">Sample Data Files</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+<div id="pagecontent">
+
+<h1><a id="96788"></a>Defining and Building Databases</h1>
+
+<p>The following exercises guide you through defining and building a database,
+  using the projects you created in the previous lesson.</p>
+  
+<h2>Define a Database</h2>
+
+<p>When you define a database, you specify one or more Google Earth Enterprise Fusion
+  projects that Google Earth Enterprise Fusion combines into a single self-contained
+  world that is flyable in Google Earth EC. You can select up to three projects for a
+  database--one of each type:
+</p>
+
+<ul>
+  <li>Vector</li>
+  <li>Imagery</li>
+  <li>Terrain</li>
+</ul>
+
+<p>Because the majority of your efforts involve defining and configuring different
+  projects for inclusion in your database, it is relatively fast to define a database
+  once the projects are created. You simply select the projects that comprise the database
+  and give it a name.
+</p>
+
+<h4>To define a database:</h4>
+<ol>
+  <li>Select <b>Asset Manager</b> from the Tools menu. The Asset Manager appears.</li>
+  <li>Click the page icon on the toolbar: <img src="images/iconDatabase.png" /> The Database Editor appears with no projects selected.
+    <p><img src="images/databaseEditor.png" /></p>
+  </li>
+  <li><a id="59253"></a>Click the page icon in the <strong>Vector Project</strong> row: 
+    <img src="images/icon_new.gif" /></li>
+  <li><a id="25862"></a>Navigate to <code>ASSET_ROOT/Projects/Vector</code>.
+    <p class="note"><strong>Note:</strong> The selection in the <strong>Type</strong>
+    drop-down list near the bottom of this dialog determines the type of projects that
+    appear on the list. Vector Project is automatically selected, so only vector resources
+    appear on the list.</p>
+  </li>
+  <li><a id="47673"></a>Select the <b>CA_Projects </b>project and click <b>Open</b>.
+    The CA Roads project appears in the Database Editor next to Vector Project.    
+  </li>
+  <li>Click the page icon in the <strong>Imagery Project</strong> row and select
+    <code>Projects/Imagery/SFBayArea.</code></li>
+  <li>Click the page icon in the <strong>Terrain Project</strong> row and select
+    <code>Projects/Terrain/SFTerrain.</code>
+    <p>All three projects are now listed in the Database Editor window:
+      <p><img name="databaseEditorfull" src="images/databaseEditor-full.png" width="300" height="144" border="0" id="databaseEditorfull" alt="" /></p>
+  </li>
+  <li>Select <strong>File &gt; Save</strong> and <a id="70068"></a>navigate to the
+    <code>ASSET_ROOT/Databases</code> folder.</li>
+  <li>Enter <strong>SFHighways</strong> as the name of your database, and click <strong>Save</strong>.
+    <p>The name of the database is displayed when you select the
+      <code>/ASSET_ROOT/Databases </code>folder in the asset navigation tree.</p>
+  </li>
+</ol>
+
+<h2>Build a Database</h2>
+
+<p>Once the database has been defined, it is ready to be built.</p>
+<p class="note"><strong>Note:</strong> If you had not built the projects included in this
+  database previously, the following process would build them in the course of building
+  the database. As you might expect, the database build process takes much longer if it is
+  building all of the projects in the database at once. However, since Google Earth Enterprise
+  Fusion gives you the option to build each project as soon as you finish making modifications
+  or when you build the database, you can determine the best work style for yourself.</p>
+  
+<h4>To build a database:</h4>
+<ol>
+  <li>In the Asset Manager, select the <code>/ASSET_ROOT/Databases</code> folder.
+    <p><strong>SFHighways</strong> appears on the right with the Current Version and
+      the Current State set to <strong>None</strong>, indicating that the database has not yet been built.</p>
+  </li>
+  <li>Right-click <strong>SFHighways</strong> and select <strong>Build</strong>. The status of the database
+    immediately changes to <strong>Queued</strong> and then to <strong>In Progress</strong>.</li>
+  <li>Double-click the Current Version or Current State column of the <strong>SFHighways</strong> to view
+    the progress of the build.
+    <p>The Version Properties dialog displays the most recent version of that database. You can expand the
+      version tree to view the status of the build in real time by clicking the <strong>+</strong> signs.
+    </p>
+  </li>
+</ol>
+
+<p>When Google Earth Enterprise Fusion finishes building the database, its Current State column in the Asset
+  Manager changes to <strong>Succeeded</strong>, and its Current Version column changes to the date and time
+  the most recent build was started. 
+</p>
+
+<p>Close the Asset Manager by clicking the close box (<b>X</b>) in the top right corner, and go on to the next lesson.</p>
+
+</div>
+	<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+	<!-- END WRAPPER -->
+
+
+
+
+</body>
+</html>

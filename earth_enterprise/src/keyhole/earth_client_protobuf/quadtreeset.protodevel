@@ -1,0 +1,183 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+//
+// Protocol buffers for next-generation quadtree packets.
+//
+// We divide the globe up into a quadtree.  Each node of the quadtree contains
+// information about what layers are available at that node.  The entire
+// quadtree is divided up into QuadtreePacket's, each of which contains an
+// n-level subtree of the full quadtree.
+
+syntax = "proto2";
+
+package keyhole;
+
+
+
+// Channels come from Fusion and use Fusion's numbering scheme.
+message QuadtreeChannel {
+  required int32 type = 1;
+  required int32 channel_epoch = 2;
+};
+
+// "Timed" tile for a specific day:
+// Each tile's tile within the day and version are given in this message.
+message QuadtreeImageryTimedTile {
+  // Milliseconds since midnight, have to be "required" to make legacy client
+  // work.
+  required int32 milliseconds = 1;
+
+  // The version of the timed tile, exists if different from "dated_tile_epoch"
+  // in "QuadtreeImageryDatedTile", have to be "required" to make legacy client
+  // work.
+  required int32 timed_tile_epoch = 2;
+
+  // The provider of the timed tile, exists if different from "provider" in
+  // "QuadtreeImageryDatedTile".
+  optional int32 provider = 3;
+};
+
+// Layer-specific info for Time Machine dates.
+// One entry for each dated tile available.
+// Date in JpegCommentDate::YearMonthDayKey format.
+// dated_tile_epoch is the version of the Time Machine tile.
+// If a tile can be shared with keyhole-hires, its date is given in
+// shared_tile_date.
+// The timed_tiles field contains additional tiles with finer time resolution
+// than one day. The timed_tiles will be sorted in ascending order.
+// Note that a "one day" tile is still required for older
+// clients which won't see the timed_tiles field.
+message QuadtreeImageryDatedTile {
+  required int32 date = 1;
+  required int32 dated_tile_epoch = 2;
+  required int32 provider = 3;
+  repeated QuadtreeImageryTimedTile timed_tiles = 4;
+};
+
+message QuadtreeImageryDates {
+  repeated QuadtreeImageryDatedTile dated_tile = 1;
+  optional int32 shared_tile_date = 2;   // date of tile shared from keyhole
+  // Dates of tiles from coarser levels with assets that are visible in this
+  // tile. Date is in JpegCommentDate::YearMonthDayKey format as an int.
+  // These will be sorted in ascending order.
+  // The dates here do not intersect the dates of tiles in dated_tile, but are
+  // complement to them. "coarse_tile_dates" belong to tiles from upper levels
+  // with coarser resolution and are not visible at current level. They exist
+  // here to make user aware of different layers at upper level.
+  repeated int32 coarse_tile_dates = 3;
+  // Time (milliseconds from midnight) of tile shared from keyhole.
+  optional int32 shared_tile_milliseconds = 4;
+};
+
+message QuadtreeLayer {
+  enum LayerType {
+    LAYER_TYPE_IMAGERY = 0;
+    LAYER_TYPE_TERRAIN = 1;
+    LAYER_TYPE_VECTOR = 2;
+    LAYER_TYPE_IMAGERY_HISTORY = 3;
+  }
+
+  required LayerType type = 1;     // type of this layer
+  required int32 layer_epoch = 2;  // epoch of this layer
+  optional int32 provider = 3;     // provider id for this layer
+
+  // If there is additional information for a layer type, add it here:
+  optional QuadtreeImageryDates dates_layer = 4;
+};
+
+message QuadtreeNode {
+  // A bitfield of flags for this node.
+  // 0-3: presence bits for each interior child node.
+  // 4: for leaf nodes, this indicates other quadtree sets are below this node
+  // 5: vector data present in this node.
+  // 6: imagery data present in this node.
+  // 7: terrain data present in this node.
+  enum NodeFlags {
+    NODE_FLAGS_CHILD_COUNT = 4;   // interior node indication of child presence
+    NODE_FLAGS_CACHE_BIT = 4;     // there's data below leaf nodes
+    NODE_FLAGS_DRAWABLE_BIT = 5;  // there's vector data in this node
+    NODE_FLAGS_IMAGE_BIT = 6;     // there's image data in this node
+    NODE_FLAGS_TERRAIN_BIT = 7;   // there's terrain data in this node
+  }
+
+  optional int32 flags = 1;
+
+   // The epoch when this node was generated.
+   // Currently, all the nodes in a packet are generated at the same time,
+   // so each node has the same version. This may change in the future if
+   // we only generate the changed nodes. The client uses this to keep its
+   // node cache fresh.
+   optional int32 cache_node_epoch = 2;
+
+  // The layer data for this node.
+  // Layers: image, vector, terrain, etc.
+  repeated QuadtreeLayer layer = 3;
+
+  // The channel info for this node.
+  // Channels are components of the vector layer and come
+  // from the Fusion pipeline.
+  repeated QuadtreeChannel channel = 4;
+};
+
+// A full quadtree packet.  This contains a subtree of the full global
+// quadtree.
+message QuadtreePacket {
+  // Epoch of when this quadtree packet was generated.
+  required int32 packet_epoch = 1;
+
+// Nodes have two numbering schemes:
+//
+// 1) "Subindex".  This numbering starts at the top of the tree
+// and goes left-to-right across each level, like this:
+//
+//                    0
+//                 /     \                           .
+//               1  86 171 256
+//            /     \                                .
+//          2  3  4  5 ...
+//        /   \                                      .
+//       6 7 8 9  ...
+//
+// Notice that the second row is weird in that it's not left-to-right
+// order.  HOWEVER, the root node in Keyhole is special in that it
+// doesn't have this weird ordering.  It looks like this:
+//
+//                    0
+//                 /     \                           .
+//               1  2  3  4
+//            /     \                                .
+//          5  6  7  8 ...
+//       /     \                                     .
+//     21 22 23 24  ...
+//
+// The mangling of the second row is controlled by a parameter to the
+// constructor for TreeNumbering.
+//
+// 2) "Inorder". The order of this node in an inorder traversal.
+//
+// Clients make requests for nodes using subindex order.
+// See  googleclient/geo/earth_enterprise/src/common/qtpacket/tree_utils.cpp
+// for more details.
+
+  // All the quadtree nodes in this packet, with subindex indices.
+  repeated group SparseQuadtreeNode = 2 {
+    // Index of this node within the quadtree packet.  The nodes within
+    // a quadtree packet are numbered in subindex order and are sparse.
+    // Note: the nodes are not currently guaranteed to be sorted
+    // in any particular order.
+    required int32 index = 3;                // the subindex index
+    required QuadtreeNode Node = 4; // the node itself
+  }
+};

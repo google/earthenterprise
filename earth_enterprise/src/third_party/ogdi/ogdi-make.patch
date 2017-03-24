@@ -1,0 +1,26 @@
+env LC_ALL=C TZ=UTC0 diff -Naur ogdi-3.1.6.orig/config/common.mak ogdi-3.1.6/config/common.mak
+--- ogdi-3.1.6.orig/config/common.mak	2009-11-06 04:09:56.000000000 +0000
++++ ogdi-3.1.6/config/common.mak	2009-11-06 04:10:12.000000000 +0000
+@@ -224,8 +224,8 @@
+ 
+ ifeq ($(TARGETGEN),$(DYNAGEN))
+ default-install:
+-	mkdir -p $(INST_LIB)/ogdi
+-	cp $(TARGETGEN) $(INST_LIB)/ogdi
++	mkdir -p $(INST_LIB)
++	cp $(TARGETGEN) $(INST_LIB)
+ endif
+ 
+ ifeq ($(TARGETGEN),$(SHRDGEN))
+@@ -253,9 +253,8 @@
+ endif
+ 
+ install-so-link:
+-	mv -f $(INST_LIB)/$(LIB_PREFIX)$(TOBEGEN).$(SHLIB_EXT).$(OGDI_MAJOR).$(OGDI_MINOR) $(INST_LIB)
+-	mv -f $(INST_LIB)/$(LIB_PREFIX)$(TOBEGEN).$(SHLIB_EXT).$(OGDI_MAJOR) $(INST_LIB)
+-	pushd $(INST_LIB); ln -s $(LIB_PREFIX)$(TOBEGEN).$(SHLIB_EXT).$(OGDI_MAJOR).$(OGDI_MINOR) \
++	mv -f $(INST_LIB)/$(LIB_PREFIX)$(TOBEGEN_STRIPPED).$(SHLIB_EXT) $(INST_LIB)/$(LIB_PREFIX)$(TOBEGEN_STRIPPED)$(OGDI_MAJOR)$(OGDI_MINOR).$(SHLIB_EXT)
++	pushd $(INST_LIB); ln -s $(LIB_PREFIX)$(TOBEGEN)$(OGDI_MAJOR)$(OGDI_MINOR).$(SHLIB_EXT) \
+ 	      $(LIB_PREFIX)$(TOBEGEN_STRIPPED).$(SHLIB_EXT) ; \
+ 	popd
+ 

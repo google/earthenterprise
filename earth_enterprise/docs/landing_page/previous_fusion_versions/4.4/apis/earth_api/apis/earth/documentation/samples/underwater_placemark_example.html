@@ -1,0 +1,60 @@
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/samples/underwater_placemark_example.html";
+    </script>
+    
+   <title>underwater_placemark_example.html</title>
+   <script src="http://code.google.com/www.google.com/jsapi?key=ABQIAAAA5El50zA4PeDTEMlv-sXFfRSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xTdBhxbkZWuzyYTVeclkwYHpb17ZQ"></script>
+   <script type="text/javascript">
+      var ge;
+      google.load("earth", "1");
+
+      function init() {
+         google.earth.createInstance('map3d', initCB, failureCB);
+      }
+
+      function initCB(instance) {
+
+         ge = instance;
+         ge.getWindow().setVisibility(true);
+         ge.getNavigationControl().setVisibility(ge.VISIBILITY_SHOW);
+
+         var alt = -100;
+
+         // Create three placemarks, with altitudes of -100, 0, and 100.
+         for (var i = 0; i < 3; i++) {
+            // Create the placemark and add it to Earth.
+            var placemark = ge.createPlacemark('');
+
+            // Set the placemark's location.
+            var point = ge.createPoint('');
+            point.setLatitude(12.345);
+            point.setLongitude(54.321);
+            point.setAltitudeMode(ge.ALTITUDE_ABSOLUTE);
+            point.setAltitude(alt + i * 100);
+            placemark.setGeometry(point);
+            placemark.setName("Altitude: " + (alt + i * 100));
+
+            // Add the placemark to Earth.
+            ge.getFeatures().appendChild(placemark);
+         }
+
+         var la = ge.createLookAt('');
+         la.set(12.345, 54.323, 0, ge.ALTITUDE_RELATIVE_TO_SEA_FLOOR, 63.258, 76.112, 1000);
+         ge.getView().setAbstractView(la);
+      }
+
+      function failureCB(errorCode) {
+      }
+
+      google.setOnLoadCallback(init);
+   </script>
+
+</head>
+<body>
+
+   <div id="map3d" style="height:400px; width:600px;"></div>
+
+</body>
+</html>

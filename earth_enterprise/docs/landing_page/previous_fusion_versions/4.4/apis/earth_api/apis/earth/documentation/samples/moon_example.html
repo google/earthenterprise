@@ -1,0 +1,76 @@
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/samples/moon_example.html";
+    </script>
+    
+   <title>moon_example.html</title>
+   <link href="moon_example.css" rel="stylesheet" type="text/css" />
+   <script src="http://code.google.com/www.google.com/jsapi?key=ABQIAAAA5El50zA4PeDTEMlv-sXFfRSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xTdBhxbkZWuzyYTVeclkwYHpb17ZQ"></script>
+   <script type="text/javascript">
+      var ge;
+      var lookAt;
+      google.load("earth", "1");
+
+      function init() {
+         google.earth.createInstance('map3d', initCB, failureCB, { database: 'http://khmdb.google.com/?db=moon' });
+      }
+
+      function initCB(instance) {
+
+         ge = instance;
+         ge.getWindow().setVisibility(true);
+         ge.getNavigationControl().setVisibility(ge.VISIBILITY_SHOW);
+
+         addClickListener(showApollo11, 'apollo11');
+         addClickListener(showAitkenBasin, 'aitken_basin');
+         addClickListener(showLambertCrater, 'lambert_crater');
+      }
+      
+      function failureCB(errorCode) {
+      }
+
+      function addClickListener(func, id) {
+         var obj = document.getElementById(id);
+         if (obj.addEventListener)
+            obj.addEventListener('click', func, false);
+         else if (obj.attachEvent)
+            obj.attachEvent('onclick', func);
+      }
+
+      function showApollo11() {
+         lookAt = ge.createLookAt('');
+         lookAt.set(0.681400, 23.460550, 0, ge.ALTITUDE_RELATIVE_TO_GROUND, -1.946649, 0, 130);
+         ge.getView().setAbstractView(lookAt);
+      }
+
+      function showAitkenBasin() {
+         lookAt = ge.createLookAt('');
+         lookAt.set(-16.800000, 173.400000, 0, ge.ALTITUDE_RELATIVE_TO_GROUND, -4.378803, 0, 135000);
+         ge.getView().setAbstractView(lookAt);
+      }
+
+      function showLambertCrater() {
+         lookAt = ge.createLookAt('');
+         lookAt.set(25.238916, -21.138078, 0, ge.ALTITUDE_RELATIVE_TO_GROUND, -1.811669, 0, 78000);
+         ge.getView().setAbstractView(lookAt);
+      }
+
+      google.setOnLoadCallback(init);
+   </script>
+
+</head>
+<body>
+
+   <div id="map3d" style="height:400px; width:600px;"></div>
+   <div id="location_links">
+      <p><strong>Fly to:</strong></p>
+      <ul>
+         <li id="apollo11">Apollo 11 landing site</li>
+         <li id="aitken_basin">Aitken basin</li>
+         <li id="lambert_crater">Lambert lunar crater</li>
+      </ul>
+   </div>
+
+</body>
+</html>

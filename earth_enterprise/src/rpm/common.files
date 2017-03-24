@@ -1,0 +1,30 @@
+%attr(755,root,root)    %dir /opt/google
+%attr(755,root,root)    %dir /etc/opt/google
+%attr(775,root,gegroup) %dir /var/opt/google/log
+%attr(775,root,gegroup) %dir /var/opt/google/run
+
+%defattr(-,root,root)
+/opt/google/etc
+/opt/google/run
+/opt/google/log
+
+%defattr(755,root,root)
+%{gelibdir}/libgeindex_r.so
+%{gelibdir}/libgecommon.so
+%{gelibdir}/libserverdb_r.so
+%{gelibdir}/libserverdb.so
+%{gelibdir}/libgedbroot.so
+%{gelibdir}/libgeutil.so
+%{gelibdir}/libdbmanifest.so
+%{gelibdir}/libgepublish.so
+%{gelibdir}/libgesearchtabs.so
+%{gelibdir}/libgexml.so
+%{gelibdir}/libgeconfigutil.so
+%{gelibdir}/libgefconfigutil.so
+
+%defattr(0444,root,root,0555)
+%doc %{gesharedir}/doc/manual
+
+%defattr(0444,root,root,0555)
+%{gesharedir}/datasets
+

@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+  <link rel="stylesheet" type="text/css" href="local_extensions.css" />
+  <!--[if IE]>
+    <link rel="stylesheet" type="text/css" href="iehacks.css" />
+  <![endif]-->
+  <title>Multiple Database Support</title>
+</head>
+
+<body>
+<a name="top"></a>
+  
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" />
+  </div>
+  <h1 id="doc_title">Administration Guide</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Administration Guide</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="server.html">Configuring Server</a></li>
+    <li><a href="fusion.html">Configuring Fusion</a></li>
+    <li><a href="tutorial.html">Configuring Tutorial Work Space</a></li>
+    <li><a href="commands.html">Command Reference</a></li>
+    <li><a href="errors.html">Common Server Error Messages</a></li>
+    <li><a href="mult_db.html" id="selected">Multiple Database Support</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+<h1><a id="24206"></a>Multiple Database Support
+</h1>
+<p>Google Earth EC 4.0+ supports simultaneous connections to multiple databases. This feature allows users to view extra data and imagery layers drawn on top of each other.</p>
+<p>The first database the user connects to is identified as the primary database. After logging in, the user can connect to other databases (which are identified as secondary databases) with the <b>Add Database</b> option from the <strong>File</strong> menu. </p>
+<p>There is no hard limit to the number of databases that a user can connect to simultaneously. However the disk cache system supports a maximum number of eight databases. For all practical purposes, that means that a user should connect to a maximum of seven secondary databases in addition to the primary database.
+</p>
+<h2>Layers
+</h2>
+<p>The layers of each database are grouped in the <strong>Layers</strong> panel under the name of the database. </p>
+<h3>Imagery Layers
+</h3>
+<p>Google Earth EC draws the imagery of the primary database first. It draws other imagery layers from secondary databases (if present) on top.</p>
+<p>Users can make these additional imagery layers partially or totally transparent using the transparency slider that appears at the bottom of the Layers panel when a secondary database is selected. The transparency slider may not appear if the selected database does not contain any imagery layers. This feature facilitates comparison of imagery layers.</p>
+<h3>Vector Layers
+</h3>
+<p>Google Earth EC draws vector layers independently of each other. Users can enable any number of vector layers from any connected databases (primary or secondary).</p>
+<h2>Search Tabs
+</h2>
+<p>Custom search tabs can be configured for secondary databases, as well as for the primary database. The customization takes effect only after Google Earth EC connects to that database by either logging in to it as the primary database, or by adding it as a secondary database. (See the <em>Google Earth Enterprise Fusion Reference Guide</em> for instructions for configuring search tabs and adding them to a database.)</p>
+<p>If you log in to a primary database for which custom search tabs are configured, those search tabs appear in Google Earth EC. If you add a secondary database that also has search tabs configured for it, the secondary database&apos;s search tabs do NOT appear in Google Earth EC; only the primary database&apos;s search tabs appear. The search tabs configured for the secondary database appear in Google Earth EC only if the primary database has no custom search tabs configured for it.
+</p>
+<h2>Authentication Considerations
+</h2>
+<p>The prevailing authentication mode in any Google Earth EC session (that is, while logged in) is the mode used by the primary databases. For instance, if the primary database has authentication turned off, it is not possible to successfully download data from a database such as <code>kh.google.com</code>, because it requires session cookie authentication (<code>khauth</code>). However, Google Earth EC does not report any errors while trying to connect to that database; it just fails to download the imagery data.
+</p>
+<h3>Authentication Modes
+</h3>
+<p>The following list includes all possible authentication modes and the modes with which each is compatible:
+</p>
+<h4>Authentication Modes</h4>
+<table>
+  <tr>
+    <th>Mode 
+    </th>
+    <th>Description 
+    </th>
+    <th>Compatible Modes
+    </th>
+  </tr>
+  <tr>
+    <td>khauth 
+    </td>
+    <td>Regular authentication used by <code>kh.google.com</code> and other Google Earth servers 
+    </td>
+    <td>khauth, LDAP, LDAP+SSL, noauth
+    </td>
+  </tr>
+  <tr>
+    <td>LDAP 
+    </td>
+    <td>HTTP 1.1 authentication with user name/password 
+    </td>
+    <td>LDAP, LDAP+SSL, noauth
+    </td>
+  </tr>
+  <tr>
+    <td>LDAP + SSL 
+    </td>
+    <td>HTTPS authentication with user name/password 
+    </td>
+    <td>LDAP, LDAP+SSL, noauth
+    </td>
+  </tr>
+  <tr>
+    <td>noauth</td>
+    <td>Servers that do not require any authentication 
+    </td>
+    <td>LDAP, LDAP+SSL, noauth
+    </td>
+  </tr>
+</table>
+<h4>Sample Scenarios
+</h4>
+<p>A user wants to connect to the following databases:
+</p>
+<ul>
+  <li><code>kh.google.com</code> (khauth authentication mode)
+  </li>
+  <li><code>publicDB</code>, which requires no authentication (noauth authentication mode)
+  </li>
+  <li><code>internalDB</code>, which uses LDAP authentication (LDAP authentication mode)
+  </li>
+</ul>
+<p>The user connects to <code>kh.google.com</code> as the primary database, and then adds <code>publicDB</code> and <code>internalDB</code> as secondary databases.
+</p>
+<p>First, Google Earth EC authenticates itself with <code>kh.google.com</code>. Then, when it downloads the first packet from <code>internalDB</code>, it prompts the user to enter credentials on that server (the username/password combination configured by the administrator of that database). The primary authentication mode in this case is <strong>khauth</strong>, which is compatible with both <strong>noauth</strong> and LDAP. </p>
+<h4>Failure Scenarios
+</h4>
+<p>Connecting to <code>publicDB</code> first then to <code>kh.google.com</code> as secondary database fails. Google Earth EC downloads no imagery from <code>kh.google.com</code> (although it reports no error), because <strong>noauth</strong>, as noted in the table above, is not compatible with <strong>khauth</strong>. </p>
+<p>The same holds true if <code>internalDB</code> is the primary database and the user adds <code>kh.google.com</code> as a secondary database. In that case, the primary database uses LDAP authentication, which is not compatible with <strong>khauth</strong>. </p>
+<p>Another unsupported mode is connecting to a <strong>khauth</strong> primary database and a <strong>miniauth</strong> secondary database. In that case, the user cannot successfully log in to the secondary database (although, as with the first scenario, it reports no error). </p>
+<p>
+</p>
+</div>
+	<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+	<!-- END WRAPPER -->
+
+
+
+
+</body>
+</html>

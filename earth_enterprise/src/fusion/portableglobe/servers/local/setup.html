@@ -1,0 +1,266 @@
+<!--
+  Copyright 2017 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<head>
+  <title>Google Earth Enterprise Portable Server</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" href="/local/preview/css/style.css" type="text/css">
+
+
+<script type="text/javascript">
+
+// Catch for older browsers where window.location has no origin property.
+if (!window.location.origin) {
+  var GEE_PORT = window.location.port ? ':' + window.location.port : '';
+  window.location.origin = window.location.protocol + '//' +
+      window.location.hostname + GEE_PORT;
+}
+
+var GEE_BASE_URL = window.location.origin;
+var GLOBES_JSON = '/?cmd=globes_info_json';
+var BROADCASTING_LINK = '/?cmd=is_broadcasting';
+var isBroadcasting = false;
+
+var operatingSystemName = "Unknown OS";
+  if (navigator.appVersion.indexOf("Win")!=-1) operatingSystemName="Windows";
+  if (navigator.appVersion.indexOf("Mac")!=-1) operatingSystemName="MacOS";
+  if (navigator.appVersion.indexOf("X11")!=-1) operatingSystemName="UNIX";
+  if (navigator.appVersion.indexOf("Linux")!=-1) operatingSystemName="Linux";
+
+function setupInit() {
+  getGlobesJson('setupGlobesHolder');
+  getBroadcasting();
+}
+
+function getBroadcasting() {
+  cacheBust=Math.random()*10000000000000000;
+
+  var bcasting = new XMLHttpRequest();
+  bcasting.open('GET', GEE_BASE_URL + BROADCASTING_LINK + '&' + cacheBust, false);
+  bcasting.send();
+  isBroadcasting = eval('(' + bcasting.responseText +')');
+  toggleStatusBroadcast();
+}
+
+function toggleStatusBroadcast() {
+  broadcastDiv = document.getElementById("broadcastMenuLink");
+  if (isBroadcasting == true) {
+    broadcastDiv.innerHTML += '<label><a href="/?cmd=local_only" title="Stop broadcasting">Stop broadcasting</a></label>';
+  } else if (isBroadcasting == false) {
+    broadcastDiv.innerHTML += '<label><a href="javascript:lightBoxSetup();" onclick = "document.getElementById(\'ToggleBroadcast\').style.display=\'block\';document.getElementById(\'fade\').style.display=\'block\';" title="Broadcast map">Broadcast map</a></label>';
+  }
+}
+
+function getGlobesJson(divID) {
+  // in IE we must add random number to bust cache, otherwise isServing is not refreshed.
+
+  var ord = Math.random()* 10000000000000000;
+  var request = new XMLHttpRequest();
+  request.open('GET', GEE_BASE_URL + GLOBES_JSON + '&' + ord, false);
+  request.send();
+  var response = request.responseText.replace(/\\/g, '\\\\');
+ // Gathers all information about servable globes.
+  // Sorry - we used eval because of jQuery issues in Windows 8 and various IE versions.
+
+  var jsonGlobesData = eval('(' + response + ')');
+
+  for (var i = 0; i < jsonGlobesData.length; i++) {
+    var Name = jsonGlobesData[i].name;
+    var Description = jsonGlobesData[i].description;
+    var twoD = jsonGlobesData[i].is_2d;
+    var threeD = jsonGlobesData[i].is_3d;
+    var serving = jsonGlobesData[i].is_being_served;
+    var Path = jsonGlobesData[i].path;
+    var hasPolygon = jsonGlobesData[i].has_polygon;
+    var fileSize = jsonGlobesData[i].size;
+    var timeStamp = jsonGlobesData[i].timestamp;
+    var newTime=timeStamp.split(" ",1);
+    var newDescription = Description.substring(0,65);
+    var oneDescription = Description.replace(/<a href=/g, " ");
+    var twoDescription = oneDescription.replace(/<\/a>/g, " ");
+    var listDescription = twoDescription.replace(/'/g, " ");
+
+    var globePath = Path.replace(' ', '%20');
+
+
+    if (serving == false) {
+    // Path in Windows has some problems, so it is handled with the
+    // multiple split statements above (lns 94-98)
+
+    if (operatingSystemName == "Windows") {
+      var generatedHTML = "<a class=\"mapslink\" title=\"" + Name + "\" href=\"/list?cmd=serve_globe&globe=" + string5 + "\">";
+    } else {
+      generatedHTML = "<a class=\"mapslink\" title=\"Click to open " + Name + "\" href=\"/list?cmd=serve_globe&globe="+ globePath +"\">";
+    }
+
+    //  List of available globes is populated
+    generatedHTML += "<div id =\"InfoPaneEntries\">";
+
+    if (twoD == true) {
+      generatedHTML += "<img src =\"/local/preview/images/2d.png\" width=\"18px\" height=\"18px\" class=\"GlobeImg\" border=\"0\">";
+    } else {
+      generatedHTML += "<img src =\"/local/preview/images/3d.png\" width=\"18px\" height=\"18px\" class=\"GlobeImg\" border=\"0\">";
+    }
+
+    generatedHTML += "<div id=\"NonServingGlobe\">" + Name + "</div>";
+    generatedHTML += "<br>";
+    generatedHTML += "<div id=\"InfoPaneLabel\">" + listDescription + "</div>";
+    generatedHTML += "<div id=\"InfoPaneLabel2\">" + "Created: " + newTime + "&nbsp; Size: " + fileSize + "</div>";
+    generatedHTML += "</div>";
+    generatedHTML += "</a>";
+
+    document.getElementById(divID).innerHTML += generatedHTML;
+
+    }
+  }
+}
+
+function lightBoxSetup() {
+  var ele = document.getElementById("toggleTextSetup");
+  var text = document.getElementById("DisplayText");
+  if(ele.style.display == "block") {
+    ele.style.display = "none";
+    text.innerHTML = "<div id=\"ListButton\"></div>";
+  } else {
+    ele.style.display = "block";
+    text.innerHTML = "<div id=\"ListButton\"></div>";
+  }
+}
+
+</script>
+
+</head>
+
+<div id="setupPageFeatured">
+  <h2>[#SERVER_STATE]:&nbsp;&nbsp;
+  <a id="DisplayText" href="javascript:lightBoxSetup();">
+    <div id="ListButton"></div>
+  </a>
+  </h2>
+  <label>[#SERVED_GLOBE_INFO]</label>
+  <label></label>
+
+<!-- Begin dropdown menu for options -->
+
+<div id="toggleTextSetup" style="display:none">
+
+  <div class="inputbox">
+     <label>
+     <a href="/" title="Open in preview mode">Open in preview mode</a>
+     </label>
+  </div>
+
+  <div class="inputbox" id="broadcastMenuLink">
+      <label>
+  </label>
+  </div>
+
+  <div class="inputbox" class="red">
+   <label>
+    <a href="/setup?cmd=pre-quit" title="Quit">Quit</a>
+   </label>
+  </div>
+
+</div>
+
+<!-- End dropdown menu options-->
+
+</div>
+
+<body onload="setupInit();">
+
+  <div id="headerSetup">
+    <div id="GoogImg">
+      <a href="/">
+      <img src="local/preview/images/Google.png" width="103px" height="36px" border="0">
+    </a>
+        <label>Earth Enterprise Portable</label>
+    </div>
+  </div>
+
+<div id="setupWrapper">
+
+<div id="setupPageBody">
+        <h1>Google Earth Enterprise Portable Server:VL</h1>
+        <span>Welcome to the Google Earth Enterprise Portable Server. To start serving a different globe click on the name of any of the globes listed below. You may view it with the Google Earth Enterprise Client by connecting to <b>localhost:9335</b> or by clicking the "view in browser" link and using the Google Earth Plugin.</span>
+</div>
+
+<div id="globesHolderTitle">Offline Maps</div>
+<div id="setupGlobesHolder"></div>
+
+<div id="globesHolderTitle">Remote Servers  (<a class="serving_action" href="http://localhost:9335/?cmd=add_glr_form">add</a>)</div>
+  <div id="setupPageBody">
+          [#REMOTE_SERVERS]
+  </div>
+  <div id="globesHolderTitle"></div>
+</div>
+
+<!-- Begin lightbox helper divs -->
+
+<div id="FrameReference" style="position:absolute; top:0px;"></div>
+
+<div id="fade" class="BlackOverlay" onclick="document.getElementById('ToggleBroadcast').style.display='none';document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none';"></div>
+
+<div id="light" class="white_content">
+   <div id="InfoPane-Available-Title">Open offline map
+      <a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none';removeGlobesIframe();" class="closetoggle">
+      <img src="/local/preview/images/close.png" border="0" width="10px" height="10px"></a>
+    </div>
+    <div id="GlobeResults"></div>
+  </div>
+
+<!-- End lightbox helper divs -->
+
+<!-- Begin Broadcast popup-->
+
+<div id="ToggleBroadcast">
+  <div id="InfoPane-Available-Title">Broadcast this map:
+    <a href="javascript:void(0)" onclick = "document.getElementById('ToggleBroadcast').style.display='none';document.getElementById('fade').style.display='none';removeBroadcastIframe();" class="closetoggle">
+      <img src="/local/preview/images/close.png" border="0" width="10px" height="10px">
+    </a>
+  </div>
+  <div id="BroadcastText">
+      If you'd like to broadcast your globe over a local area network, you can specify a key or select the <i><b>Broadcast without</i></b> key option, and then click the <i><b>Start Broadcasting button</i></b>. If you select the <i><b>Broadcast without key</i></b> option, you are allowing anyone on the network to connect to your globe.<br><br>
+
+    <div class="span-17" style="text-align:left">
+        <form name="broadcast_key_form" action="/" method="post">
+          <input type="hidden" name="cmd" value="set_key" />
+          <span class="field_title">Key</span>
+            <input class="field_hint" type="text" name="key" id="key"
+                   value="... enter key here"
+                   onfocus="GEE_clearHint('key', '... enter key here');" />
+            <p>
+            <input class="field_hint" type="checkbox"
+                   name="accept_all_requests"
+                   id="accept_all_requests"
+                   value="t"/> Broadcast without key.
+            </p>
+
+            <button id="change_port" onClick="return checkForm()" class="kd_button">Start Broadcasting</button>
+            <span id="ErrorMsg" class="text_callout"></span>
+
+          </form>
+    </div>    </div>
+</div>
+
+<!-- End broadcast popup-->
+
+ <div id="Footer">
+    <a href="/local/preview/developers/index.html" class="footerlink">Developers</a>
+    <a href="/local/preview/developers/terms.html" class="footerlink">Terms of Use</a>  </div>
+
+</body>
+</html>

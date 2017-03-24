@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/examples/event-closure.html";
+    </script>
+    
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<title>Google Maps JavaScript API v3 Example: Event Closure</title>
+<link href="http://code.google.com/apis/maps/documentation/javascript/examples/default.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
+var map;
+function initialize() {
+  var myLatlng = new google.maps.LatLng(-25.363882,131.044922);
+  var myOptions = {
+    zoom: 4,
+    center: myLatlng,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  }
+
+  map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+  // Add 5 markers to the map at random locations
+  var southWest = new google.maps.LatLng(-31.203405,125.244141);
+  var northEast = new google.maps.LatLng(-25.363882,131.044922);
+  var bounds = new google.maps.LatLngBounds(southWest,northEast);
+  map.fitBounds(bounds);
+  var lngSpan = northEast.lng() - southWest.lng();
+  var latSpan = northEast.lat() - southWest.lat();
+  for (var i = 0; i < 5; i++) {
+    var location = new google.maps.LatLng(southWest.lat() + latSpan * Math.random(),
+        southWest.lng() + lngSpan * Math.random());
+    var marker = new google.maps.Marker({
+        position: location, 
+        map: map
+    });
+    var j = i + 1;
+    marker.setTitle(j.toString());
+    attachSecretMessage(marker, i);
+  }
+}
+
+// The five markers show a secret message when clicked
+// but that message is not within the marker's instance data
+
+function attachSecretMessage(marker, number) {
+  var message = ["This","is","the","secret","message"];
+  var infowindow = new google.maps.InfoWindow(
+      { content: message[number]
+      });
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindow.open(map,marker);
+  });
+}
+</script>
+</head>
+<body onload="initialize()">
+  <div id="map_canvas"></div>
+</body>
+</html>

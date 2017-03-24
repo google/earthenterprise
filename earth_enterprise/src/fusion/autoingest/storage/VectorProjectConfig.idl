@@ -1,0 +1,124 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+
+#include <vector>
+#include <qstring.h>
+#include <khTypes.h>
+#include <khMetaData.h>
+#include <autoingest/.idl/storage/LayerConfig.h>
+#include <searchtabs/.idl/SearchTabs.h>
+
+#cppquote
+#include <autoingest/.idl/storage/LayerConfig_impl.h>
+#include <searchtabs/.idl/SearchTabs_impl.h>
+#/cppquote
+
+class VectorProjectConfig {
+  enum ServerType { Standard, Overlay };
+  ServerType serverType = VectorProjectConfig::Standard;
+  IsUpToDateIgnore uint indexVersion = uint(1);
+  std::vector<LayerConfig> layers = std::vector<LayerConfig>();
+  deprecated QString projectContextScript = QString("");
+  SearchTabLabelOverrides poi_search_tab_overrides = SearchTabLabelOverrides::DefaultPOIOverrides();
+
+  // To force rebuilds, increment this version.
+  // When incrementing this version, you should also increment the
+  // one in Database so this one gets the chance to get checked.
+#version 1
+
+#pragma AfterLoad
+#pragma StrLoadAndSave
+#pragma GenerateIsUpToDate
+
+#hquote
+ public:
+  bool HasJS(void) const;
+
+  uint BeginChannelId(void) const {
+    return (serverType == Standard) ? 5 : 10000;
+  }
+  // This is a minor change for allowing chID=1
+  // in expert mode.
+  uint ExpertBeginChannelId(void) const {
+    return (serverType == Standard) ? 1 : 10000;
+  }
+  uint EndChannelId(void) const {
+    return (serverType == Standard) ? 10000 : 20000;
+  }
+  uint32 BeginStyleId(void) const {
+    return (serverType == Standard) ? 1 : 100000;
+  }
+  uint32 EndStyleId(void) const {
+    return (serverType == Standard) ? 100000 : 200000;
+  }
+
+  AvailId GetAvailChannelIds(void) const;
+  AvailId GetAvailStyleIds(void) const;
+  void AssignChannelIdsIfZero(void);
+  void AssignUuidsIfEmpty(void);
+
+  // Resets all IDs as it is in a config for a just created asset.
+  void ResetIds(void);
+
+  void AssignStyleIdsIfZero(void);
+  void AddLayer(const LayerConfig &layer);
+  void EnsureFolderExists(const QString &folder);
+  void CheckIds(void) const;
+  void AfterLoad(const VectorProjectConfig::DeprecatedMembers &depmembers);
+  bool HasSearchFields(void) const;
+#/hquote
+
+#cppquote
+  // see fusion/autoingest/VectorProjectConfigImpl.cpp for
+  // implementations of VectorProjectConfig methods
+#/cppquote
+
+};
+
+class VectorProjectEditRequest {
+  std::string assetname;
+  VectorProjectConfig config;
+  khMetaData meta;
+
+#pragma StrLoadAndSave
+};
+
+class VectorProjectAddItem {
+  std::string productRef;
+  std::string templateFile;
+};
+
+class VectorProjectNewRequest {
+  std::string assetname;
+  deprecated VectorProjectConfig::ServerType serverType = VectorProjectConfig::Standard;
+  std::vector<VectorProjectAddItem> items;
+#pragma StrLoadAndSave
+};
+
+class VectorProjectModifyRequest {
+  std::string assetname;
+  std::vector<VectorProjectAddItem> items;
+#pragma StrLoadAndSave
+};
+
+class VectorProjectDropFromRequest {
+  class Item {
+    QString     layername;
+    std::string assetRef;
+  };
+  std::string assetname;
+  std::vector<Item> items;
+#pragma StrLoadAndSave
+};

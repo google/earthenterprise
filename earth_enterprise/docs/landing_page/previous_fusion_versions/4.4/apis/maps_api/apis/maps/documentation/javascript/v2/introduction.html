@@ -1,0 +1,876 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+ 
+
+
+
+  
+
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/v2/introduction.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Google Maps JavaScript API V2 Basics - Google Maps JavaScript API V2 - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/html/apis/maps/documentation/javascript/v2/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../../css/iehacks.css"><![endif]-->
+
+<link href="../../local_extensions.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container" class="depr">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps JavaScript API V2 (<a href="../../../terms.html#section_4_4">Deprecated</a>)</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="index.html" title="Google Maps JavaScript API V2 home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="basics.html" class="selected" title="Official Google Maps JavaScript API V2 documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../../faq.html" title="Answers to frequently asked questions about Google Maps JavaScript API V2">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="articles.html" title="Focused articles and tutorials for Google Maps JavaScript API V2 developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps JavaScript API V2 blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="forum.html" title="Google Maps JavaScript API V2 developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../../../terms.html" title="Google Maps JavaScript API V2 terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <a name="gc-toc-anchor"></a>  
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../../../index.html">Maps API Family</a></li>
+  <li><a href="../../../signup.html">Sign up for an API key</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index your Maps Content</a></li>
+</ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Javascript API V3</h2>
+        <ul>
+          <li><a href="../index.html">Home Page</a></li>
+          <li><a href="../basics.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+       <div class="line"></div>
+    <ul>
+           <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+             <ul>
+               <li><a class="tlw-expanded" href="index.html">Developer Guide</a>
+                <ul>
+                 <li><a href="introduction.html">Basics</a></li>
+                 <li><a href="events.html">Events</a></li>
+                 <li><a href="controls.html">Controls</a></li>
+                 <li><a href="overlays.html">Overlays</a></li>
+                 <li><a href="services.html">Services</a></li>
+                </ul>
+               </li>
+              <li><a href="reference.html">API Reference</a></li>
+              <li><h2 class="tlw-expanded">Code Samples:</h2>
+               <ul>
+               <li><a href="demogallery.html">Demos</a></li>
+               <li><a href="examples/index.html">Examples</a></li>
+               <li><a href="http://code.google.com/apis/ajax/playground/?exp=maps">Code Playground</a></li>
+               </ul>
+              </li>
+              <li><h2 class="tlw-expanded">More Resources:</h2>
+               <ul>
+               <li><a href="articles.html">Articles</a></li>
+               <li><a href="mediagallery.html">Presentations</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/issues/list?can=2&q=apitype%3AJavascript&colspec=ID+Type+Status+Introduced+Fixed+Summary+Internal+Stars&cells=tiles">Known Issues</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/wiki/JavascriptMapsAPIChangelog">Changelog</a><sup class="new">New!</sup></li>
+               <li><a href="http://code.google.com/p/gmaps-utility-library-dev/">Utility Library</a></li>
+               <li><a href="http://maps.google.com/casestudies/">Case Studies</a></li>
+               </ul>
+              </li>
+             </ul>
+           </li>
+         </ul>
+   <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../../flash/index.html">Home Page</a></li>
+          <li><a href="../../flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+   <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../../mapsdata/index.html">Home Page</a></li>
+          <li><a href="../../mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+     <div class="line"></div>
+      <ul>
+        <li><h2><a href="../../webservices/index.html">Maps API Web Services</a></h2>
+         <ul>
+           <li><a href="../../geocoding/index.html">Geocoding API</a></li>
+           <li><a href="../../directions/index.html">Directions API</a></li>
+           <li><a href="../../elevation/index.html">Elevation API</a></li>
+           <li><a href="../../places/index.html">Places API</a></li>
+         </ul>
+       </li>
+      </ul>
+       <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../../staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../../localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../../localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+    <div class="promo"><p><a href="../../premier/index.html">Google Maps API Premier</a></p>
+    <p>Same great maps plus a SLA, support, and control over ads</p>
+    </div>
+
+      </div>
+      
+      <a name="gc-pagecontent-anchor"></a>   
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Google Maps JavaScript API V2 Basics</h1>
+
+
+<p class="note">Note: The Google Maps Javascript API Version 2
+has been officially deprecated as of May 19, 2010. The V2 API will continue
+to work as per our <a href="../../../terms.html#section_4_4">deprecation policy</a>,
+but we encourage you to migrate your code to
+<a href="../index.html">version 3 of the Maps
+Javascript API</a>.</p>
+
+
+<div class="toc">
+  <ol>
+  <li><a href="#Intro">Introduction</a></li>
+  
+  <li><a href="#The_Hello_World_of_Google_Maps">The "Hello, World" of Google Maps</a>
+   <ol class="toc">
+    <li><a href="#Loading_the_Maps_API">Loading the Google Maps API</a></li>
+    <li><a href="#Map_DOM_Elements">Map DOM Elements</a></li>
+    <li><a href="#GMap2"><code>GMap2</code> - the Elementary Object</a></li>
+    <li><a href="#Initializing_the_Map">Initializing the Map</a></li>
+    <li><a href="#LoadingMap">Loading the Map</a></li>
+   </ol>
+  </li>
+  <li><a href="#GLatLng">Latitudes and Longitudes</a></li>
+  <li><a href="#MapAttributes">Map Attributes</a></li>
+  <li><a href="#MapTypes">Map Types</a>
+  <ol class="toc">
+    <li><a href="#CommonMapTypes">Common Map Types</a></li>
+    <li><a href="#AerialMapTypes">Aerial Perspective Imagery</a>
+      <ul>
+        <li><a href="#EnablingAerials">Enabling Aerial Perspective Imagery</a></li>
+        <li><a href="#AerialMapTypes">Aerial Map Types</a></li>
+        <li><a href="#MapTypeCollections">Map Type Collections</a></li>
+      </ul>
+    </li>
+    <li><a href="#MapMakerTypes">Map Maker Map Types</a></li>
+    <li><a href="#CelestialMapTypes">Celestial Map Types</a></li>
+    <li><a href="#EarthPluginMapType">Earth Plug-In Map Types</a></li>
+  </ol>  
+  </li>
+  <li><a href="#MapInteractions">Map Interactions</a></li>
+  <li><a href="#Info_Windows">Info Windows</a></li>
+  </ol>
+</div>
+
+<h1 id="Intro">Introduction</h1>
+
+<p>The fundamental element in any Google Maps API application is the "map" itself. This
+document discusses usage of the fundamental <code>GMap2</code> object and the basics of 
+map operations.</p>
+
+<h1 id="The_Hello_World_of_Google_Maps">The "Hello, World" of Google Maps</h1>
+
+<p>The easiest way to start learning about the Google Maps API is to see a simple example. 
+The following web page displays a 500x300 map centered on Palo Alto, California:</p>
+
+<pre class="prettyprint">
+&lt;!DOCTYPE html "-//W3C//DTD XHTML 1.0 Strict//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+  &lt;head&gt;
+    &lt;meta http-equiv="content-type" content="text/html; charset=utf-8"/&gt;
+    &lt;title&gt;Google Maps JavaScript API Example&lt;/title&gt;
+    &lt;script src="http://maps.google.com/maps?file=api&amp;amp;v=2&amp;amp;key=abcdefg&amp;sensor=<i>true_or_false</i>"
+            type="text/javascript"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+
+    function initialize() {
+      if (GBrowserIsCompatible()) {
+        var map = new GMap2(document.getElementById("map_canvas"));
+        map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+        map.setUIToDefault();
+      }
+    }
+
+    &lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body onload="initialize()" onunload="GUnload()"&gt;
+    &lt;div id="map_canvas" style="width: 500px; height: 300px"&gt;&lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p>You can <a href="examples/map-simple.html">look at this example</a> and download it to edit and play 
+around with it, but you'll have to replace the key in that file with your own
+<a href="../../../signup.html">Maps API key</a>. 
+(If you register a key for a particular directory, it works for all subdirectories as well.)</p>
+
+<p>Even in this simple example, there are five things to note:</p>
+<ol>
+<li>We include the Maps API JavaScript using a <code>script</code> tag.</li>
+<li>We create a <code>div</code> element named "map_canvas" to hold the Map.</li>
+<li>We write a JavaScript function to create a "map" object.</li>
+<li>We center the map on a given geographic point and set the UI to a default configuration.</li>
+<li>We initialize the map object from the <code>body</code> tag's <code>onLoad</code> event.</li>
+</ol>
+
+<p>These steps are explained below.</p>
+
+<h2 id="Loading_the_Maps_API">Loading the Google Maps API</h2>
+
+<pre class="prettyprint">
+&lt;script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=abcdefg&amp;sensor=<i>true_or_false</i>"
+        type="text/javascript"&gt;
+&lt;/script&gt;
+</pre>
+
+<p>The <code>http://maps.google.com/maps?file=api&amp;v=2&amp;key=abcdefg</code> URL points to 
+the location of the JavaScript file that includes all of the symbols and definitions you need 
+for using the Google Maps API. Your page must contain a <code>script</code> tag pointing to this URL, using 
+the key you received when you signed up for the API. In this example the key is shown as "<code>abcdefg</code>."</p>
+
+<p>Note that we also pass a <code>sensor</code> parameter to indicate whether this application uses a sensor to 
+determine the user's location. We've left this example as a variable <i>true_or_false</i> to emphasize
+that you <b>must</b> set this value to either <code>true</code> or <code>false</code> explicitly.</p>
+
+<h2 id="Map_DOM_Elements">Map DOM Elements</h2>
+
+<pre class="prettyprint">
+&lt;div id="map_canvas" style="width: 500px; height: 300px"&gt;&lt;/div&gt;
+</pre>
+
+<p>For the map to display on a web page, we must reserve a spot for it. Commonly, we
+do this by creating a named <code>div</code> element and obtaining a reference to 
+this element in the browser's document object model (DOM).</p>
+
+<p>In the example above, we define a <code>div</code> named "map_canvas" and set its size
+using style attributes. Unless you specify a size explicitly for the map using
+<code>GMapOptions</code> in the constructor, the map 
+implicitly uses the size of the container to size itself.</p>
+
+<h2 id="GMap2"><code>GMap2</code> - the Elementary Object</h2>
+
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById("map_canvas"));
+</pre>
+
+<p>The JavaScript class that represents a map is the <code>GMap2</code> class. Objects of this class 
+define a single map on a page. (You may create more than one instance of this class - each
+object will define a separate map on the page.) We create a new instance of this class
+using the JavaScript <code>new</code> operator.</p>
+
+<p>When you create a new map instance, you specify a DOM node in the 
+page (usually a <code>div</code> element) as a container for the map. HTML nodes
+are children of the JavaScript <code>document</code> object, and
+we obtain a reference to this element via the <code>document.getElementById()</code> method.</p>
+
+<p>This code defines a variable (named <code>map</code>) and assigns that variable to a new 
+<code>GMap2</code> object. The function <code>GMap2()</code> is known as a <i>constructor</i>
+and its definition (condensed for clarity from the <a href="reference.html">
+Google Maps API Reference</a>) is shown below:
+</p>
+
+<table style="width:90%" summary="class GMap2 - Constructor">
+<tr>
+<th>Constructor</th>
+<th>Description</th>
+</tr>
+<tr class="odd">
+<td class="code">GMap2(<span class="type" title="type: Node">container</span>, <span class="type" title="type: GMapOptions"> opts?</span>)</td>
+<td>Creates a new map inside the given HTML <code><i>container</i></code>, which is typically a 
+<code><span class="nomatch">DIV</span></code> element. You may also pass optional parameters of type <code>GMap2Options</code> in the 
+<code><i>opts</i></code> parameter.</td>
+</tr>
+</table>
+
+<p>Note that because JavaScript is a loosely typed language, we do not need to pass any 
+optional parameters in the constructor, and we don't do so here.</p>
+
+<h2 id="Initializing_the_Map">Initializing the Map</h2>
+
+<pre class="prettyprint">
+  map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+  map.setUIToDefault();
+</pre>
+
+<p>Once we've created a map via the <code>GMap2</code> constructor, we need to 
+initialize it. This initialization is accomplished with use of the map's 
+<code>setCenter()</code> method. The <code>setCenter()</code> method requires a
+<code>GLatLng</code> coordinate and a zoom level and this method <b>must</b> be sent 
+before any other operations are performed on the map, including setting any other 
+attributes of the map itself.
+</p>
+
+<p>Additionally, we also call <code>setUIToDefault()</code> on the <code>map</code>.
+This method sets up the map's user interface (input handling and set of controls)
+to a default configuration, including pan and zoom controls, selection of map
+types, etc. See <a href="../../controls.html#DefaultUI">
+Using the Default Maps UI</a> in the Controls chapter for more information.</p>
+
+<h2 id="LoadingMap">Loading the Map</h2>
+
+<pre class="prettyprint">
+  &lt;body onload="initialize()" onunload="GUnload()"&gt;
+</pre>
+
+<p>While an HTML page renders, the document object model (DOM) is built out, and any external images and scripts are received 
+and incorporated into the <code>document</code> object. To ensure that our map is only placed on the page after the page has
+fully loaded, we only execute the function which constructs the <code>GMap2</code> object once the <code>&lt;body&gt;</code> element
+of the HTML page receives an <code>onload</code> event. Doing so avoids unpredictable behavior and gives us more
+control on how and when the map draws.</p>
+
+<p>The <code>onload</code> attribute is an example of an event handler. The Google Maps API also provides a number of
+events that you can "listen" for to determine state changes. See <a href="events.html">Maps Events 
+and Event Listeners</a> for more information.</p>
+
+<p>The <code>GUnload()</code> function is a utility function designed to prevent 
+<a href="../index.html#Memory_Leaks">memory leaks</a>.</p>
+
+<h1 id="GLatLng">Latitudes and Longitudes</h1>
+
+<p>Now that we have a map, we need a way to refer to locations on the map. The <code>GLatLng</code> object 
+provides such a mechanism within the Google Maps API. You construct a <code>GLatLng</code> object, passing its
+parameters in the order { latitude, longitude } as is customary in cartography:</p>
+
+<pre class="prettyprint">
+  var myGeographicCoordinates = new GLatLng(myLatitude, myLongitude)
+</pre>
+
+<p>Note: the process of turning an <i>address</i> into a geographic point is known as <i>geocoding</i> and is
+discussed in detail in the <a href="services.html#Geocoding">Google Maps API Services</a> section.</p>
+
+<p>Just as it is useful to easily refer to a geographic point, it is also useful to define the geographic bounds 
+of an object. For example, a map displays a current "window" of the entire world within what is known as a viewport. This
+viewport can be defined by the rectangular points at its corners. The <code>GLatLngBounds</code> object provides this 
+functionality, defining a rectangular region using two <code>GLatLng</code> objects representing the southwest and 
+northeast corners of the bounding box, respectively.</p>
+
+<p><code>GLatLng</code> objects have many uses within the Google Maps API. The <code>GMarker</code> object
+takes a <code>GLatLng</code> in its constructor, for example, and places a marker 
+<a href="overlays.html"><i>overlay</i></a> on the map at the given geographic location.</p>
+
+<p>The following example uses <code>getBounds()</code> to return the current viewport, and then randomly
+places 10 markers on the map within those bounds:</p>
+
+<pre class="prettyprint">
+function initialize() {
+  var map = new GMap2(document.getElementById(&quot;map_canvas&quot;));
+  map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+ 
+  // Add 10 markers to the map at random locations
+  var bounds = map.getBounds();
+  var southWest = bounds.getSouthWest();
+  var northEast = bounds.getNorthEast();
+  var lngSpan = northEast.lng() - southWest.lng();
+  var latSpan = northEast.lat() - southWest.lat();
+  for (var i = 0; i < 10; i++) {
+    var point = new GLatLng(southWest.lat() + latSpan * Math.random(),
+        southWest.lng() + lngSpan * Math.random());
+    map.addOverlay(new GMarker(point));
+  }
+}
+</pre>
+
+<p><a href="examples/map-markers.html">View example (map-markers.html)</a></p>
+
+<p>Note: more information on <code>GMarker</code> objects is within the 
+<a href="overlays.html">Overlays</a> section.</p>
+
+<h1 id="MapAttributes">Map Attributes</h1>
+
+<p>Each map contains a number of attributes that may be inspected or set. For example, to 
+find the dimensions of the current viewport, use the <code>GMap2</code> object's 
+<code>getBounds()</code> method to return a <code>GLatLngBounds</code> value.</p>
+
+<p>Each map also contains a <i>zoom level</i>, which defines the resolution of the current view. 
+Zoom levels between 0 (the lowest zoom level, in which the entire world can be seen on one map) to 
+19 (the highest zoom level, down to individual buildings) are possible within the normal maps view. Zoom 
+levels vary depending on where in the world you're looking, as data in some parts of the globe is more 
+defined than in others. Zoom levels up to 20 are possible within satellite view.</p>
+
+<p>You can retrieve the current zoom level in use by the map by using the <code>GMap2</code> object's 
+<code>getZoom()</code> method.</p>
+
+<p>Additionally, the "type" of map defines the imagery of the map. More information on map types
+is available in the <a href="#MapTypes">Map Types</a> section below.</p>
+
+<p>More about zoom levels, map tiles, and creating your own custom map types is available in the 
+<a href="overlays.html#Tile_Overlays">Tile Overlays</a> section.</p>
+
+<h1 id="MapTypes">Map Types</h1>
+
+<p>There are many types of maps available within the Google Maps API. By default, maps 
+show up within the Google Maps API using standard "painted" road map tiles. However, the 
+Google Maps API also supports other maps types.</p>
+
+<h2 id="CommonMapTypes">Common Map Types</h2>
+
+<p>The following map types are commonly used in the Google Maps API:</p>
+
+<ul>
+<li><code>G_NORMAL_MAP</code> displays the default road map view.</li>
+<li><code>G_SATELLITE_MAP</code> displays Google Earth satellite images.
+<span style="color:red">*</span></li>
+<li><code>G_HYBRID_MAP</code> displays a mixture of normal and satellite
+views.<span style="color:red">*</span></li>
+<li><code>G_DEFAULT_MAP_TYPES</code> contains an array of the above three types, useful 
+for iterative processing.</li>
+<li><code>G_PHYSICAL_MAP</code> displays a physical map based on terrain information.
+</ul>
+
+<p><span style="color:red">Note: </span> at high zoom levels, both satellite and
+hybrid map types may also display aerial imagery which is built into those
+map types. For more information, see <a href="#AerialMapTypes">Aerial Map
+Types</a> below.)</p>
+
+<p>You can set the map type using the <code>GMap2</code> object's <code>setMapType()</code> method. For example, 
+the following code sets the map to use the satellite view from Google Earth:</p>
+
+<pre class="prettyprint">
+  var map = new GMap2(document.getElementById("map_canvas"));
+  map.setMapType(G_SATELLITE_MAP);
+</pre>
+
+<h2 id="AerialMapTypes">Aerial Perspective Imagery</h2>
+
+<p>The Google Maps API now supports special aerial imagery for
+certain locations. This high-resolution imagery provides
+perspective views towards each of the cardinal direction
+(North, South, East, West). These images are available at higher
+zoom levels for supported map types.</p>
+
+<p>The following image shows an aerial perspective view of
+HP Pavillion (home of the San Jose Sharks) near downtown
+San Jose, CA:</p>
+
+<p><img src="images/sharksArena.png" /></p>
+
+<p>The existing <code>G_SATELLITE_MAP</code> and <code>G_HYBRID_MAP</code>
+map types support aerial perspective imagery at high
+zoom levels (where available) provided that you explicitly enable this
+functionality. If you zoom into a location for which such imagery exists,
+these map types will automatically alter their views in the following
+manner:</p>
+
+<ul>
+  <li>Any existing <code>GLargeZoomControl3D</code> control on a map
+  will alter to add a compass control around the existing navigation
+  controls. This compass allows you to change the heading of any aerial
+  imagery, snapping the direction to the nearest supported
+  direction which contains imagery.</li>
+  <li>The satellite or hybrid imagery will be replaced with
+  aerial perspective imagery centered on the current location. By default,
+  such views will orient towards North. If you zoom out, you will
+  return to viewing the default satellite or hybrid imagery.</li>
+  <li><p>The existing map type will be replaced to utilize an associated
+  aerial map type.</p>
+    <ul>
+      <li><code>G_SATELLITE_MAP</code> maps will convert to
+      <code>G_AERIAL_MAP</code> maps.</li>
+      <li><code>G_HYBRID_MAP</code> maps will convert to
+      <code>G_AERIAL_HYBRID_MAP</code> maps.</li>    
+    </ul>
+</ul>
+
+<p>Zooming out from an aerial map type will revert each of these
+changes, re-establishing the original map types.</p>
+
+<h3 id="EnablingAerials">Enabling Aerial Perspective Imagery</h3>
+
+<p>To enable aerial perspective imagery for supported map types,
+call <code>enableRotation()</code> on the <code>GMap2</code>
+object. You can disable aerials by calling
+<code>disableRotation()</code>.</p>
+
+<p>The following example displays an aerial view of St. James
+Park in downtown San Jose, CA:</p>
+
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById("map_canvas"));
+map.setCenter(new GLatLng(37.339085, -121.8914807), 18);
+
+// Select a map type which supports aerial imagery
+map.setMapType(G_HYBRID_MAP);
+map.setUIToDefault();
+
+// Enable the additional map types within
+// the map type collection
+map.enableRotation();
+</pre>
+
+<p><a href="examples/aerial-simple.html">
+View example (aerial-simple.html)</a></p>
+
+<h3 id="RotatingAerials">Rotating Aerial Perspective Imagery</h3>
+
+<p>The aerial map types actually consist of a collection of map types
+for each Cardinal direction (North, South, East, West). Once your map
+is displaying aerial imagery, you can orient the
+imagery towards one of its cardinal directions by calling
+<code>changeHeading()</code> on the <code>Map</code> object, passing
+a value expressed as degrees from North. The map type will select
+the proper image from the attached collection.</p>
+
+<p>The following example shows an aerial map and auto-rotates
+the map every 3 seconds when the button is clicked:</p>
+
+<pre class="prettyprint">
+function initialize() {
+  var map = new GMap2(document.getElementById("map_canvas"));
+  map.setCenter(new GLatLng(37.339085, -121.8914807), 18);
+
+  // Select a map type which supports obliques
+  map.setMapType(G_AERIAL_MAP);
+  map.setUIToDefault();
+
+  // Enable the additional map types within
+  //the map type collection
+  map.enableRotation();
+}
+    
+function autoRotate() {
+  // Determine if we're showing aerial imagery
+  if (map.isRotatable) {
+    // start auto-rotating at 3 second intervals
+    setTimeout('map.changeHeading(90)', 3000);
+    setTimeout('map.changeHeading(180)',6000);
+    setTimeout('map.changeHeading(270)',9000);
+    setTimeout('map.changeHeading(0)',12000);
+  }
+} 
+</pre>
+
+<p><a href="examples/aerial-rotation.html">
+View example (aerial-rotation.html)</a></p>
+
+<h2 id="MapMakerTypes">Google Map Maker Types</h2>
+
+<p>The Google Maps API also supports tiles created using <a href="http://www.google.com/mapmaker">
+Google Map Maker</a>. Google Map Maker tiles are maps created through user contributions from around the 
+world, and cover areas that are not yet covered by Google Maps. Google Map Maker currently has map
+tiles for <a href="http://sites.google.com/site/mapmakeruserhelp/collaboration">these
+countries</a>.</p>
+
+<p><span style="color:red">Note: </span> when using Map Maker tiles, you will only be able to inspect
+maps where Google Map Maker has launched. Zooming into areas not supported will result in notification
+that there are no map tiles for that region.</p>
+
+<p>The following Google Map Maker map types are available:</p>
+
+<ul>
+<li><code>G_MAPMAKER_NORMAL_MAP</code> displays the standard road map view</li>
+<li><code>G_MAPMAKER_HYBRID_MAP</code> displays a mixture of normal and satellite imagery.</li>
+</ul>
+
+<p>For more information about Google Map Maker, see its
+<a href="http://sites.google.com/site/mapmakeruserhelp/home">user documentation</a></p>
+
+<h2 id="CelestialMapTypes">Celestial Map Types</h2>
+
+<p>Google Maps provides several additional map types for celestial bodies other than Earth:</p>
+
+<ul>
+<li><code>G_MOON_ELEVATION_MAP</code> displays a shaded terrain map of the surface of the Moon, color-coded by altitude.</li>
+<li><code>G_MOON_VISIBLE_MAP</code> displays photographic imagery taken from orbit around the moon.</li>
+<li><code>G_MARS_ELEVATION_MAP</code> displays a shaded terrain map of the surface of Mars, color-coded by altitude.</li>
+<li><code>G_MARS_VISIBLE_MAP</code> displays photographs taken from orbit around Mars.</li>
+<li><code>G_MARS_INFRARED_MAP</code> displays a shaded infrared map of the surface of Mars, where warmer areas appear brighter 
+and colder areas appear darker.</li>
+<li><code>G_SKY_VISIBLE_MAP</code> displays a mosaic of the sky, as seen from Earth, covering the full celestial sphere.</li>
+</ul>
+
+<h2 id="EarthPluginMapType">Google Earth Plugin Map Type</h2>
+
+<p>A special map type, the <code>G_SATELLITE_3D_MAP</code> displays a 3D map within the Google Earth plugin. 
+For users that have already installed the plugin, selecting this map type will create an 
+Earth instance for the map and initialize the map. You may use <code>GMap2.getEarthInstance()</code>
+to retrieve this Earth instance and manipulate it using the Google Earth API. Users without the plugin will
+be prompted to install it.</p>
+ 
+<p>For more information on the Google Earth API, consult the <a href="http://code.google.com/apis/earth/documentation">
+API documentation</a>.</p>
+
+<h1 id="MapInteractions">Map Interactions</h1>
+
+<p>Now that you have a <code>GMap2</code> object, you can interact with it. The basic map object looks and behaves a lot
+like the map you interact with on the Google Maps website and comes with a lot of built-in behavior. The <code>GMap2</code> 
+object also provides a number of configuration methods to alter the behavior of the map object itself.</p>
+
+<p>By default, map objects tend to react to user activity as they do on <code>http://maps.google.com</code>. You can
+alter this behavior with a number of utility methods, however. For example, 
+the <code>GMap2.disableDragging()</code> method disables the ability to click and drag the map to a new location.</p>
+
+<p>You can also interact with the map programmatically. The <code>GMap2</code>
+object supports a number of methods that alter the map state directly. For example, the <code>setCenter()</code>, <code>panTo</code>, 
+and <code>zoomIn()</code> methods operate on the map programatically, rather than through user interaction.</p>
+
+<p>The following example displays a map and provides a button to initiate a <code>panTo</code> method,
+which centers the map at a given point. If the specified point is in the 
+visible part of the map, then the map pans smoothly to the point; if not, the map jumps to the point.</p>
+
+<pre class="prettyprint">
+  var map;
+
+  function initialize() {
+    if (GBrowserIsCompatible()) {
+      map = new GMap2(document.getElementById("map_canvas"));
+      map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+    }
+  }
+    
+  function animate() {    
+    map.panTo(new GLatLng(37.4569, -122.1569));
+  }
+</pre>
+
+<p><a href="examples/map-animate.html">View example (map-animate.html)</a></p>
+
+<p>More complex interactions are accomplished through use of <a href="events.html">Maps API Events</a>.</p>
+
+<h1 id="Info_Windows">Info Windows</h1>
+
+<p>Each map within the Google Maps API may show a single &quot;info window&quot;
+of type <code>GInfoWindow</code>, which displays HTML content in a floating 
+window above the map. The info window looks a little like a comic-book word 
+balloon; it has a content area and a tapered stem, where the tip of the 
+stem is at a specified point on the map. You can see the info window in 
+action by clicking a marker in <a href="http://local.google.com/">
+Google Maps</a>.</p>
+
+<p>The <code>GInfoWindow</code> object has no constructor. An info window is
+automatically created and attached to the map when you create the map.
+You can't show more than one info window at a time for a given map, 
+but you can move the info window and change its contents as needed.</p>
+
+<p>The <code>GMap2</code> object provides an <code>openInfoWindow()</code>
+method, which takes a point and an HTML DOM element as arguments. The HTML DOM 
+element is appended to the info window container, and the info 
+window window tip is anchored to the given point.</p>
+
+<p>The <code>GMap2</code>'s <code>openInfoWindowHtml()</code> method 
+is similar, but it takes an HTML string as its second argument rather than 
+a DOM element.</p>
+
+<p>To create an info window, call the <code>openInfoWindow</code> method, passing it a location and a 
+DOM element to display. The following example code displays an info window anchored to the center 
+of the map with a simple &quot;Hello, world&quot; message.</p>
+
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById(&quot;map_canvas&quot;));
+map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+map.openInfoWindow(map.getCenter(),
+                   document.createTextNode(&quot;Hello, world&quot;));</pre>
+
+<p><a href="examples/map-infowindow.html">View example (map-infowindow.html)</a></p>
+
+<p>For full documentation on info windows, consult the <a href="reference.html#GInfoWindow">Google Maps API Reference</a></p>
+
+        <!-- end body text -->
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

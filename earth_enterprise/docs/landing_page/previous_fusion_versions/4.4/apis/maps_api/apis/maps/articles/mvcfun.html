@@ -1,0 +1,784 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+ 
+ 
+
+
+ 
+
+  
+  
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/articles/mvcfun.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Fun with MVC Objects - Google Maps API Family - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/maps/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../css/iehacks.css"><![endif]-->
+
+    <link href="../../../css/semantic_headers.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    
+    
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  <a href="#gc-pagecontent">Skip to page content</a>
+  <a href="#gc-toc">Skip to main navigation</a>
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps API Family</h1>
+  <ul id="articles" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="../index.html" title="Google Maps API Family home page">Home</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../faq.html" title="Answers to frequently asked questions about Google Maps API Family">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="index.html" class="selected" title="Focused articles and tutorials for Google Maps API Family developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps API Family blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="../forum/index.html" title="Google Maps API Family developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../terms.html" title="Google Maps API Family terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../index.html">Maps API Family</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps Javascript API V3</h2>
+         <ul>
+           <li><a href="../documentation/javascript/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+      <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../documentation/javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+  <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../documentation/flash/index.html">Home Page</a></li>
+          <li><a href="../documentation/flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../documentation/mapsdata/index.html">Home Page</a></li>
+          <li><a href="../documentation/mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+     <div class="line"></div>
+      <ul>
+        <li><h2><a href="../documentation/webservices/index.html">Maps Web Services</a></h2>
+         <ul>
+           <li><a href="../documentation/geocoding/index.html">Geocoding Guide</a></li>
+           <li><a href="../documentation/directions/index.html">Directions Guide</a></li>
+           <li><a href="../documentation/elevation/index.html">Elevation Guide</a></li>
+           <li><a href="../documentation/places/index.html">Places Guide</a></li>
+         </ul>
+       </li>
+      </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../documentation/staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li>
+            <h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../documentation/localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../documentation/localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+      <div class="promo">
+     <p><a href="../documentation/premier/index.html">Google Maps API Premier</a></p><p>Includes enterprise licensing and support</p></div>
+
+        <a class="hidden" href="#gc-topnav-anchor">More Google Maps API Family resource links</a>
+      </div>
+
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Fun with MVC Objects</h1>
+
+
+<!-- ########## PAGE CONTENT ########## -->
+
+<div class="i">
+<i>Luke Mahe, Google Geo Team</i>
+<br>
+<i>April 2010</i>
+
+<br/><br/>
+<h3>Objective</h3>
+<p>Google Maps Javascript API V3 has introduced the implementation of <a
+  href="http://en.wikipedia.org/wiki/Model_view_controller">MVC</a> objects
+  that allow map objects to store state and update their presentation automatically,
+  which are awesome, but what can you do with them?
+</p>
+
+<p>
+  This article presents a basic introduction to using MVC objects within V3. You
+  will learn how to use the Maps Javascript API V3 MVC framework to create objects that
+  automatically respond to state changes. You will build a resizable distance
+  widget and by the end, you'll have a greater understanding on what MVC
+  objects are, how to use them, and why they're just so "awesome".
+</p>
+
+<p>Before you begin, look over the <a
+  href="../documentation/javascript/reference.html">API
+  reference</a>, and in particular the <a
+  href="../documentation/javascript/reference.html#MVCObject"
+  >MVCObject class</a>.</p>
+
+<p>The tutorial is broken up into the following steps:</p>
+<ol>
+  <li><a href="#gettingstarted">Getting Started</a></li>
+  <li><a href="#creatingthedistancewidget">Creating the Distance Widget</a></li>
+  <li><a href="#bindingproperties">Binding Properties</a></li>
+  <li><a href="#addaresizingmarker">Add a Resizing Marker</a></li>
+  <li><a href="#makingitwork">Making It Work</a></li>
+  <li><a href="#outputtinginformation">Outputting Information</a></li>
+  <li><a href="#whatcanbedonewithit">What Can Be Done With It?</a></li>
+</ol>
+
+
+<a name="gettingstarted"></a><h2>Getting Started</h2>
+<p>Start off by creating an HTML page that loads a map.</p>
+
+<pre class="prettyprint lang-html">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta http-equiv="content-type" content="text/html; charset=utf-8"/&gt;
+    &lt;title&gt;MVC is Fun&lt;/title&gt;
+
+    &lt;style type="text/css"&gt;
+      #map-canvas {
+        height: 500px;
+      }
+    &lt;/style&gt;
+
+    &lt;script type="text/javascript"
+        src="http://www.google.com/jsapi?autoload={'modules':[{name:'maps',version:3,other_params:'sensor=false'}]}"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+      function init() {
+        var mapDiv = document.getElementById('map-canvas');
+        var map = new google.maps.Map(mapDiv, {
+          center: new google.maps.LatLng(37.790234970864, -122.39031314844),
+          zoom: 8,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+      }
+
+      google.maps.event.addDomListener(window, 'load', init);
+    &lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id="map-canvas"&gt;&lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p>A brief explanation of the code above
+  (<a href="mvcfun/step1.html">step1</a>).</p>
+<ol>
+  <li>Add a DOCTYPE at the top of the page, in this case a HTML5 DOCTYPE.
+  This instruction tells the browser how to render the page</li>
+  <li>Create a style section and set the height of the map to '500px'. It is not
+  necessary to include a width because default display property of a
+  <code>&lt;div&gt;</code> element is 'block' which means it will take up as
+  much room that is available</li>
+  <li>Add a <code>script</code> tag to include the google maps api code</li>
+  <li>Add another <code>script</code> tag that contains the basics of loading
+    a map. The key part here is the event listener that calls the
+    function <code>init()</code> once the page has loaded.
+    This is a nice habit to get into rather than using
+    techniques like <code>onload</code> because it allows the separation of
+    Javascript and HTML code and also allows other functions to attach to the
+    same event.</li>
+</ol>
+
+<a name="creatingthedistancewidget"></a><h2>Creating the Distance Widget</h2>
+<p>The next step is to create the Distance widget. This
+widget is essentially a circle, a marker in the center of the circle and another
+marker on the circumference. When the center marker is dragged, it will also move
+the circle and the circumference marker.  When the circumference marker is
+dragged, the circle's radius either grows or shrinks based on whether the marker is
+pulled away or towards the center. Simple!</p>
+
+<p>Firstly create the Distance widget contructor that will take one parameter
+'map' which is a <code>google.maps.Map</code> class. The widget will also subclass the
+<code>google.maps.MVCObject</code> instance and that is done by setting the
+object's prototype to MVCObject.
+</p>
+
+<p>Then create a draggable marker, put it on the center of
+the map and use MVC techniques to bind properties.</p>
+
+<pre class="prettyprint lang-js">
+/**
+ * A distance widget that will display a circle that can be resized and will
+ * provide the radius in km.
+ *
+ * @param {google.maps.Map} map The map on which to attach the distance widget.
+ *
+ * @constructor
+ */
+function DistanceWidget(map) {
+  this.set('map', map);
+  this.set('position', map.getCenter());
+
+  var marker = new google.maps.Marker({
+    draggable: true,
+    title: 'Move me!'
+  });
+
+  // Bind the marker map property to the DistanceWidget map property
+  marker.bindTo('map', this);
+
+  // Bind the marker position property to the DistanceWidget position
+  // property
+  marker.bindTo('position', this);
+}
+DistanceWidget.prototype = new google.maps.MVCObject();
+</pre>
+
+<p>Add to the <code>init()</code> function some code to create a new
+<code>DistanceWidget</code>.</p>
+
+<pre class="prettyprint lang-js">
+var distanceWidget = new DistanceWidget(map);
+</pre>
+
+<p>The important part to take away is the two
+<code>bindTo()</code> methods that were used. By binding the marker's map property
+to the <code>DistanceWidget</code>, it means that the values are tied together.
+So if the map is changed by using
+<code>distanceWidget.set('map', myOtherMap);</code> then the
+<code>DistanceWidget</code> will change to the new map without having to add
+any extra code.  Pretty cool isn't it?</p>
+
+<p>This might be confusing at the start, but the simplest way to
+think about it is this.  Given there are two objects, A and B, bound on the same
+property, if object A updates the bound property, then object B's property
+will be updated to reflect the new value of object A and vice versa.</p>
+
+<p>Now you should have a map with a marker that you can drag around (<a
+href="mvcfun/step2.html">step2</a>).  While
+dragging, the MVC object is updating the <code>DistanceWidget</code>'s
+position property with the marker's position property.  It may not seem like
+much, but it's a start! In the next section you will create a
+<code>RadiusWidget</code> which will display a circle.</p>
+
+<a name="bindingproperties"></a><h2>Binding Properties</h2>
+
+<p>Create another widget called <code>RadiusWidget</code> that will be
+responsible for displaying a circle and eventually will be resizeable.
+This step is quite similar to the one above but instead of creating a marker,
+create a circle.</p>
+
+<p>Add the follow code to your javascript section.</p>
+
+<pre class="prettyprint lang-js">
+/**
+ * A radius widget that add a circle to a map and centers on a marker.
+ *
+ * @constructor
+ */
+function RadiusWidget() {
+  var circle = new google.maps.Circle({
+    strokeWeight: 2
+  });
+
+  // Set the distance property value, default to 50km.
+  this.set('distance', 50);
+
+  // Bind the RadiusWidget bounds property to the circle bounds property.
+  this.bindTo('bounds', circle);
+
+  // Bind the circle center to the RadiusWidget center property
+  circle.bindTo('center', this);
+
+  // Bind the circle map to the RadiusWidget map
+  circle.bindTo('map', this);
+
+  // Bind the circle radius property to the RadiusWidget radius property
+  circle.bindTo('radius', this);
+}
+RadiusWidget.prototype = new google.maps.MVCObject();
+
+
+/**
+ * Update the radius when the distance has changed.
+ */
+RadiusWidget.prototype.distance_changed = function() {
+  this.set('radius', this.get('distance') * 1000);
+};
+</pre>
+
+<p>Then add this code to the <code>DistanceWidget</code> constructor to create
+the <code>RadiusWidget</code>.</p>
+
+<pre class="prettyprint lang-js">
+// Create a new radius widget
+var radiusWidget = new RadiusWidget();
+
+// Bind the radiusWidget map to the DistanceWidget map
+radiusWidget.bindTo('map', this);
+
+// Bind the radiusWidget center to the DistanceWidget position
+radiusWidget.bindTo('center', this, 'position');
+</pre>
+
+<p>By looking at the code you can see a few things going on:</p>
+
+<ol>
+  <li>The <code>RadiusWidget</code> is bound to the
+    <code>DistanceWidget</code>'s map property</li>
+  <li>The <code>RadiusWidget</code> has bound it's <code>center</code> property to the
+    <code>DistanceWidget</code>'s <code>position</code> property</li>
+  <li>The <code>RadiusWidget</code> sets a property <code>distance</code>
+    on itself</li>
+  <li>The circle is bound to the the <code>RadiusWidget</code>'s
+  <code>center</code>, <code>map</code> and <code>radius</code> properties</li>
+</ol>
+
+<p>This step introduces using the MVC property changed methodology, in this case
+the <code>distance_changed()</code> function.
+This is a magic function that will be called whenever the distance
+property is <code>set()</code>. The <code>distance_changed()</code> function is updating
+the circle's radius property. </p>
+
+<p>Because the widget is using kilometers as it's
+measurement but the circle uses meters, this function will convert and set the
+radius property of the circle. If you always wanted to work in meters you could
+bind the radius directly to the distance property and not have the
+<code>distance_changed()</code> function at all.</p>
+
+<p>At this point you have a marker and a circle and when you move the marker the
+circle moves with it (<a href="mvcfun/step3.html">step3</a>). Isn't this fun?</p>
+
+<a name="addaresizingmarker"></a><h2>Add a Resizing Marker</h2>
+<p>Time to add another marker into the mix. This time add
+a marker to the <code>RadiusWidget</code> that will be used to adjust
+the radius of the circle. This second marker will be refered to as the 'sizer'
+marker.</p>
+
+<p>This steps involves:</p>
+<ol>
+  <li>Add a marker to the <code>RadiusWidget</code></li>
+  <li>Bind the marker's <code>map</code> to the <code>RadiusWidget</code>'s
+  <code>map</code> property</li>
+  <li>Bind the marker's <code>position</code> property to a new property on the
+    <code>RadiusWidget</code> called <code>sizer_position</code></li>
+  <li>Add a <code>center_changed()</code> function that will put the marker on
+  the circle's circumference</li>
+</ol>
+
+<p>Create a function called <code>addSizer_()</code> which will create a marker and
+bind that to the <code>RadiusWidget</code>'s <code>map</code>. Add another
+<code>bindTo()</code> so that the sizer's <code>position</code> property and the
+<code>RadiusWidget</code>'s <code>sizer_position</code> property are bound together.
+This brings up another interesting point to note about MVC. You can bind a property
+to any other property, if it doesn't already exist it will automatically be created.</p>
+
+<pre class="prettyprint lang-js">
+/**
+ * Add the sizer marker to the map.
+ *
+ * @private
+ */
+RadiusWidget.prototype.addSizer_ = function() {
+  var sizer = new google.maps.Marker({
+    draggable: true,
+    title: 'Drag me!'
+  });
+
+  sizer.bindTo('map', this);
+  sizer.bindTo('position', this, 'sizer_position');
+};
+</pre>
+
+<p>Add <code>this.addSizer_();</code> to the end of the
+<code>RadiusWidget</code>'s constructor.</p>
+
+<pre class="prettyprint lang-js">
+/**
+ * Update the center of the circle and position the sizer back on the line.
+ *
+ * Position is bound to the DistanceWidget so this is expected to change when
+ * the position of the distance widget is changed.
+ */
+RadiusWidget.prototype.center_changed = function() {
+  var bounds = this.get('bounds');
+
+  // Bounds might not always be set so check that it exists first.
+  if (bounds) {
+    var lng = bounds.getNorthEast().lng();
+
+    // Put the sizer at center, right on the circle.
+    var position = new google.maps.LatLng(this.get('center').lat(), lng);
+    this.set('sizer_position', position);
+  }
+};
+</pre>
+
+<p class="parap">Create a function on <code>RadiusWidget</code> called
+<code>center_changed()</code>.  This function is going to be called every time the
+center value is updated and will position the sizer to be on the right edge of
+the circle.</p>
+
+<p>Check out the example (<a href="mvcfun/step4.html">step4</a>)
+and drag around the center marker.  Notice how the sizer marker is now sitting
+on the edge of the circle and moving when you drag? Pretty fancy isn't it?</p>
+
+<a name="makingitwork"></a><h2>Making It Work</h2>
+
+<p>In the next section you will determine the distance between the center marker and the
+sizer marker whenever the sizer marker is dragged, then set the circle's
+radius to this distance between the two markers. This technique involves the
+following:</p>
+
+<ol>
+  <li>Add a function that calculates the distance between two
+    <code>google.maps.LatLng</code> locations</li>
+  <li>Add a function that sets the <code>distance</code> of the circle based
+    on the distance between the two markers</li>
+  <li>Add an event listener to the sizer marker's <code>drag</code> event to
+    set the radius of the circle</li>
+  <li>Bind the <code>DistanceWidget</code> to the
+    <code>RadiusWidget</code>'s <code>distance</code> and <code>bounds</code>
+    properties</li>
+</ol>
+
+<p>Add the following code:</p>
+<pre class="prettyprint lang-js">
+/**
+ * Calculates the distance between two latlng locations in km.
+ * @see http://www.movable-type.co.uk/scripts/latlong.html
+ *
+ * @param {google.maps.LatLng} p1 The first lat lng point.
+ * @param {google.maps.LatLng} p2 The second lat lng point.
+ * @return {number} The distance between the two points in km.
+ * @private
+*/
+RadiusWidget.prototype.distanceBetweenPoints_ = function(p1, p2) {
+  if (!p1 || !p2) {
+    return 0;
+  }
+
+  var R = 6371; // Radius of the Earth in km
+  var dLat = (p2.lat() - p1.lat()) * Math.PI / 180;
+  var dLon = (p2.lng() - p1.lng()) * Math.PI / 180;
+  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(p1.lat() * Math.PI / 180) * Math.cos(p2.lat() * Math.PI / 180) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var d = R * c;
+  return d;
+};
+
+
+/**
+ * Set the distance of the circle based on the position of the sizer.
+ */
+RadiusWidget.prototype.setDistance = function() {
+  // As the sizer is being dragged, its position changes.  Because the
+  // RadiusWidget's sizer_position is bound to the sizer's position, it will
+  // change as well.
+  var pos = this.get('sizer_position');
+  var center = this.get('center');
+  var distance = this.distanceBetweenPoints_(center, pos);
+
+  // Set the distance property for any objects that are bound to it
+  this.set('distance', distance);
+};
+</pre>
+
+<p>The function <code>distanceBetweenPoints_()</code> was added which
+will return in kilometers the distance between two
+<code>google.maps.LatLng</code> locations.
+For more information on this function and others like it, check out
+<a href="http://www.movable-type.co.uk/scripts/latlong.html"
+  >http://www.movable-type.co.uk/scripts/latlong.html</a>.
+Next create a function called <code>setDistance_</code> which sets the
+<code>distance</code> property of the <code>RadiusWidget</code> based
+on the distance between the two markers.</p>
+
+<p>Then in the <code>addSizer_</code> function attach a listener to
+the sizer marker's <code>drag</code> event.</p>
+
+<pre class="prettyprint lang-js">
+var me = this;
+google.maps.event.addListener(sizer, 'drag', function() {
+  // Set the circle distance (radius)
+  me.setDistance();
+});
+</pre>
+
+<p>Lastly in the <code>DistanceWidget</code>'s constructor, bind to the
+<code>RadiusWidget</code>'s <code>distance</code> and <code>bounds</code>
+properties.</p>
+
+<pre class="prettyprint lang-js">
+// Bind to the radiusWidgets' distance property
+this.bindTo('distance', radiusWidget);
+
+// Bind to the radiusWidgets' bounds property
+this.bindTo('bounds', radiusWidget);
+</pre>
+
+<p>Now you have a center marker that when dragged also moves the
+circle and the sizer marker. You also have a sizer marker that when dragged
+resizes the circle (<a href="mvcfun/step5.html">step5</a>).</p>
+
+<a name="outputtinginformation"></a><h2>Outputting Information</h2>
+<p>The last part demonstrates how MVC properties also act like events.
+In the context of the <code>DistanceWidget</code>, you can
+add event listeners to the properties that you care about. In this case,
+add a listener to the <code>distance_changed</code> and
+<code>position_changed</code> events which will call a function that will
+display the values.</p>
+
+<p>At the end of the <code>init</code> function add:</p>
+<pre class="prettyprint lang-js">
+google.maps.event.addListener(distanceWidget, 'distance_changed', function() {
+  displayInfo(distanceWidget);
+});
+
+google.maps.event.addListener(distanceWidget, 'position_changed', function() {
+  displayInfo(distanceWidget);
+});
+</pre>
+
+
+<p>Also add a new function <code>displayInfo()</code></p>
+<pre class="prettyprint lang-js">
+function displayInfo(widget) {
+  var info = document.getElementById('info');
+  info.innerHTML = 'Position: ' + widget.get('position') + ', distance: ' +
+    widget.get('distance');
+}
+</pre>
+
+<p>Finally add a <code>&lt;div&gt;</code> with the id 'info' after the map
+<code>&lt;div&gt;</code> so you have a place to display the info.</p>
+
+<pre class="prettyprint lang-html">
+&lt;div id="info"&gt;&lt;/div&gt;
+</pre>
+
+<p>Now as you drag around the center marker (<a
+  href="mvcfun/step6.html">step6</a>), you'll see the position value change and
+  as you resize the circle, you'll see the distance change.</p>
+
+<a name="whatcanbedonewithit"></a><h2>What Can Be Done With It?</h2>
+
+<p>If you wanted to, you could hook it up to your store locator from the
+<a href="http://code.google.com/apis/maps/articles/phpsqlsearch_v3.html"
+  >Creating a Store Locator with PHP, MySQL &amp; Google Maps</a> article or
+you can connect it to another service like Twitter who has a nice api that will
+let you search for tweets within a given distance of a LatLng location (<a
+  href="http://apiwiki.twitter.com/Twitter-API-Documentation">read more</a>).
+You can see the <a href="mvcfun/twittersearch.html">finished result</a> of
+connecting to the Twitter API.</p>
+
+<p>If you have any issues or questions about this tutorial, please post them in
+the <a href="http://groups.google.com/group/google-maps-js-api-v3">Maps v3 API
+ forum</a>.</p>
+</div>
+
+<!-- ########## END PAGE CONTENT ########## -->
+
+
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

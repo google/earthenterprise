@@ -1,0 +1,300 @@
+
+
+
+
+
+
+
+
+
+ 
+
+
+   
+  
+  
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/reference/interface_g_e_geometry_container.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>GEGeometryContainer Interface Reference - Google Earth API - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/earth/documentation/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../css/iehacks.css"><![endif]-->
+
+    <link href="../../../../css/semantic_headers.css" rel="stylesheet" type="text/css" />
+    <link href="stylesheet.css" rel="stylesheet" type="text/css">
+    <link href="tabs.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body class="gc-documentation">
+
+    
+    
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" class="dropdown" href="http://code.google.com" onclick="return false;"><img width="13" height="13" class="globeicon" src="../../../../images/globe2_small.png"
+     ><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  <a href="#gc-pagecontent">Skip to page content</a>
+  <a href="#gc-toc">Skip to main navigation</a>
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../../../../images/code_logo.png" height="40" width="161" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "ajax apis" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+<h2 id="googlecode-promo">Make web development faster with these <a href="http://chrome.google.com/extensions/featured/web_dev" onclick="siteTracker._trackEvent('Promos','Web Development',this.href);">Chrome Extensions</a>!</h2>
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Earth API</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="../../index.html" title="Google Earth API home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="../index.html" class="selected" title="Official Google Earth API documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../faq.html" title="Answers to frequently asked questions about Google Earth API">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="../../articles/index.html" title="Focused articles and tutorials for Google Earth API developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Earth API blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="http://groups.google.com/group/google-earth-browser-plugin/topics" title="Google Earth API developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="http://code.google.com/apis/maps/terms.html" title="Google Earth API terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="http://code.google.com/apis/maps/signup.html">Sign up for a Maps API key</a></li>
+</ul>
+
+<div class="line"></div>
+
+<ul>
+
+  <li>
+    <h2><a href="#">API Reference</a></h2>
+    <div class="line"></div>
+  </li>
+  <li><h2>Developer's Guide</h2>
+    <ul>
+      <li><a href="../index.html">Introduction</a></li>
+      <li><a href="../placemarks.html">Placemarks</a></li>
+      <li><a href="../balloons.html">Balloons</a></li>
+      <li><a href="../geometries.html">Geometries & Overlays</a></li>
+      <li><a href="../camera_control.html">Camera Control</a></li>
+      <li><a href="../layers.html">Layers & Controls</a></li>
+      <li><a href="../time.html">Time</a> <sup class="new">Updated</sup></li>
+      <li><a href="../ocean.html">Ocean</a></li>
+      <li><a href="../sky_mars_moon.html">Sky, Mars, & Moon</a></li>
+      <li><a href="../touring.html">Touring</a></li>
+      <li><a href="../events.html">Events</a></li>
+      <li><a href="../accessors.html">Accessors</a> <sup class="new">New!</sup></li>
+      <li><a href="../containers.html">Object Containers</a></li>
+      <li><a href="../kml.html">KML</a></li>
+      <li><a href="../options.html">Options</a></li>
+      <li><a href="../debugging.html">Debugging</a></li>
+    </ul>
+  </li>
+        
+  <div class="line"></div>
+    
+  <li><h2 class="tlw-expanded">Code Samples</h2>
+    <ul>
+      <li><a href="../examples.html">Examples</a></li>
+      <li><a href="../demogallery.html">Demo Gallery</a>
+      </li>
+      <li><a href="http://code.google.com/apis/ajax/playground/?exp=earth">Code Playground</a></li>
+    </ul>
+  </li>
+    
+  <div class="line"></div>
+    
+  <li><h2 class="tlw-expanded">More Resources</h2>
+    <ul>
+      <li><a href="../mediagallery.html">Media</a></li>
+      <li><a href="../releasenotes.html">Release Notes</a></li>
+      <li><a href="http://code.google.com/p/earth-api-utility-library">Utility Library</a></li>
+      <li><a href="http://code.google.com/p/earth-api-samples/issues/list?q=label%3AType-Defect">Known Issues</a></li>
+    </ul>
+  </li>
+</ul>
+
+<div class="line"></div>
+<ul>
+ <li>
+    <h2>Related Docs</h2>
+    <ul>                
+      <li><a href="http://code.google.com/apis/kml/documentation/index.html">KML</a></li>
+      <li><a href="http://code.google.com/apis/maps/documentation/index.html">Maps API</a></li>
+    </ul>                
+ </li>
+</ul>
+        <a class="hidden" href="#gc-topnav-anchor">More Google Earth API resource links</a>
+      </div>
+
+      <div class="g-unit" id="gc-pagecontent">
+
+<div id="doxygen-ref">
+<!-- Generated by Doxygen 1.5.8 -->
+<div class="navigation" id="top">
+</div>
+<div class="contents">
+<h1>GEGeometryContainer Interface Reference</h1><!-- doxytag: class="GEGeometryContainer" --><!-- doxytag: inherits="GESchemaObjectContainer" --><div class="dynheader">
+Inheritance diagram for GEGeometryContainer:</div>
+<div class="dynsection">
+
+<p><center><img src="interface_g_e_geometry_container.png" usemap="#GEGeometryContainer_map" border="0" alt=""></center>
+<map name="GEGeometryContainer_map">
+<area href="interface_g_e_schema_object_container.html" alt="GESchemaObjectContainer" shape="rect" coords="0,0,166,24">
+</map>
+</div>
+
+<p>
+<a href="interface_g_e_geometry_container-members.html">List of all members.</a><table border="0" cellpadding="0" cellspacing="0">
+<tr><td></td></tr>
+</table>
+<hr><a name="_details"></a><h2>Detailed Description</h2>
+A container object that contains an array of geometries, typically the children of a multi-geometry. </div>
+</div><!-- end doxygen-ref -->
+
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

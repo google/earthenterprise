@@ -1,0 +1,137 @@
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# Follows examples at:
+#   http://demo.mapserver.org/tutorial/example1-6.html
+#   http://demo.mapserver.org/tutorial/example1-7.html
+# A general introduction:
+#  http://mapserver.org/introduction.html#introduction-to-the-mapfile
+# MapServer as a WMS Client:
+#   http://mapserver.org/ogc/wms_client.html#mapfile-configuration
+# MapServer as a WMS Server:
+#   http://mapserver.org/ogc/wms_server.html#setting-up-a-wms-server-using-mapserver
+# (This file sets up MapServer to be both server and client.)
+MAP
+  NAME uppermidwest
+
+  PROJECTION
+     "init=epsg:3857"
+  END
+
+  # BBOX (so to speak), in 3857
+  EXTENT -20000000.0 -20000000.0 20000000.0 20000000.0
+
+  # To get the 3857 (Spherical Mercator) -equivalent mapspace
+  # coordinates, for comparison, you can take the lon lat boundary box
+  # (found at the tutorial link above) and use cs2cs as below:
+
+  # from latlong:
+  #   local> cs2cs +proj=latlong +datum=WGS84 +to +proj=merc
+  #   pj_open_lib(proj_def.dat): call fopen(/usr/share/proj/proj_def.dat) - succeeded
+  #   pj_open_lib(proj_def.dat): call fopen(/usr/share/proj/proj_def.dat) - succeeded
+  #   -97.5 41.619778 # lower-left
+  #   -10853650.35	5075806.01 0.00 # ignore 0, it's altitude
+  #   -82.122902 49.38562 # upper-right
+  #   -9141879.63	6308094.23 0.00
+
+  # from laea map coords (what's fed to the BBOX):
+  #   ext> cs2cs +proj=laea +ellps=clrk66 +lat_0=45 +lon_0=-100 +to +proj=merc
+  #   201621.496941 -294488.285333 # lower-left
+  #   -10859686.61	5180603.20 0.00
+  #   1425518.020722 498254.511514 # upper-right
+  #   -8983242.70	6062842.25 0.00
+
+  # To compare 2163 with (roughly) the same area of our native mercator:
+  # Native:
+  #   http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=s0-1000&STYLES=&FORMAT=image%2Fjpeg&CRS=EPSG:3857&BBOX=-10853650.3523,5104192.65579,-9141879.63311,6340548.15169&WIDTH=600&HEIGHT=600
+  # 2163, from MapServer:
+  #   http://localhost/cgi-bin/mapserv?map=/opt/google/gehttpd/htdocs/uppermidwest.map&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=BlueMarble&STYLES=&FORMAT=image%2Fjpeg&SRS=EPSG:2163&BBOX=201621.496941,-294488.285333,1425518.020722,498254.511514&WIDTH=600&HEIGHT=600
+
+  # Make available with ON
+  STATUS ON
+  SIZE 600 600
+
+  UNITS METERS
+  # Background, + padding color. Anything that's not the tile image.
+  IMAGECOLOR 255 255 255
+
+  IMAGETYPE PNG
+
+  #
+  # A WEB section means MapServer should act as a WMS server.
+  #
+  WEB
+    METADATA
+      WMS_TITLE "Google-Python-WMS-backed MapServer"
+
+      # All possibilities are listed just for reference. The '!'s
+      # would be disabled anyway if omitted.
+      WMS_ENABLE_REQUEST "GetCapabilities GetMap !GetFeatureInfo !GetLegendGraphic"
+
+      # The projection of the WMS we're serving up.
+      WMS_SRS "EPSG:2163"
+    END
+  END
+
+  #
+  # Start of layer definitions
+  #
+  #   http://mapserver.org/en/ogc/wms_client.html#wms-client
+  LAYER
+    NAME BlueMarble
+
+    # ie bitmap
+    TYPE RASTER
+
+    STATUS ON
+
+    # Source's url - replace with your own.
+    CONNECTION "http://localhost/cgi-bin/ogc/service.py?"
+
+    # This means that this layer's source is a another WMS server,
+    # of which we are the client.
+    CONNECTIONTYPE WMS
+
+# For this url, using EPSG:2163
+#   http://localhost/cgi-bin/mapserv?map=/opt/google/gehttpd/htdocs/uppermidwest.map&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=BlueMarble&STYLES=&FORMAT=image%2Fjpeg&SRS=EPSG:2163&BBOX=201621.496941,-294488.285333,1425518.020722,498254.511514&WIDTH=600&HEIGHT=600
+
+    # The WMS source's projection
+    PROJECTION
+      "init=EPSG:3857"
+    END
+
+    # The WMS source's metadata
+    METADATA
+      WMS_SRS "EPSG:3857"
+      # Note - this 's0-' -style namespace might change to the server
+      # name in future.
+      WMS_NAME "s0-1000"
+      WMS_SERVER_VERSION "1.1.1"
+      WMS_FORMAT "image/jpeg"
+
+      WMS_TITLE "Google's Python-WMS-backed Blue Marble layer."
+    END
+    # Per the docs, the above should be enough, but MapServer's
+    # GetCapabilities warns (only; not an error) that we might want
+    # (optional) LatLonBoundingBox. For some reason it's not
+    # inherited.
+    EXTENT -20000000.0 -20000000.0 20000000.0 20000000.0
+  END
+
+# debugging:
+#  CONFIG MS_ERRORFILE "$SOMEPATH/mserror_log.txt"
+#  DEBUG 5
+END # Map File

@@ -1,0 +1,10 @@
+URL: https://developer.mozilla.org/En/SpiderMonkey
+Version: 1.5
+License: MPL 1.1
+License File: LICENSE
+
+Description:
+libjs: Mozilla's C implementation of JavaScript Engine.
+
+Local Modifications:
+No Modifications.

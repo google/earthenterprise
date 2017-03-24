@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="Adding Markers to the Map" height="150">
+  <Require feature="sharedmap"/>
+</ModulePrefs>
+<Content type="html"><![CDATA[
+
+<script>
+  var map = new GMap2();
+  map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+ 
+  // Add 10 markers to the map at random locations
+  var bounds = map.getBoundsAsync(function(bounds) {
+    var southWest = bounds.getSouthWest();
+    var northEast = bounds.getNorthEast();
+    var lngSpan = northEast.lng() - southWest.lng();
+    var latSpan = northEast.lat() - southWest.lat();
+    for (var i = 0; i < 10; i++) {
+      var point = new GLatLng(southWest.lat() + latSpan * Math.random(),
+        southWest.lng() + lngSpan * Math.random());
+      map.addOverlay(new GMarker(point));
+    }
+  });
+</script>
+
+]]></Content>
+</Module>

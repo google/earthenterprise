@@ -1,0 +1,130 @@
+# Copyright 2009 Google Inc. All Rights Reserved.
+#-*- Python -*-
+
+
+Import('third_party_env')
+ogdi_version = 'ogdi-3.1.6'
+
+ogdi_patches = ['ogdi-errmsg.patch', 'ogdi-make.patch']
+
+num_cpu = GetOption('num_jobs')
+
+current_dir = Dir('.').abspath
+build_root = '%s/%s' % (current_dir, ogdi_version)
+install_root = '%s/install' % current_dir
+install_root_opt = '%s/opt/google' % install_root
+
+ogdi_source = File('#/../third_party/ogdi/%s.tar.gz' % ogdi_version).abspath
+
+ogdi_env = third_party_env.DeepCopy()
+root_dir = Dir(ogdi_env.exportdirs['root']).abspath
+
+
+# [1] Extract ogdi
+ogdi_target = '%s/.extract' % current_dir
+ogdi_extract = ogdi_env.Command(
+    ogdi_target, ogdi_source,
+    [ogdi_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xzf %s\n'
+        'touch %s' % (
+            current_dir, current_dir, ogdi_source, ogdi_target))])
+
+# [2] Patch ogdi
+ogdi_target = '%s/.patch' % current_dir
+ogdi_patch = ogdi_env.Command(
+    ogdi_target,
+    ogdi_extract + map(ogdi_env.GetBuildPath, ogdi_patches),
+    [ogdi_env.MultiCommand(
+        'cd %s\n'
+        '%s\n'
+        'touch %s' % (build_root,
+                      '\n'.join(map(
+                          lambda i: 'patch -g0 -p1 -b --suffix .topdir -s < %s' % (
+                              ogdi_env.GetBuildPath(i)), ogdi_patches)),
+                      ogdi_target))])
+
+if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+  env_opt = ''
+else:
+  env_opt = ''
+
+ogdi_env['ENV']['mod_env'] += ('TOPDIR=%s ' % build_root)
+
+if ogdi_env['release'] or ogdi_env['optimize']:
+  config_opt = ''
+else:
+  config_opt = ''
+
+# [3] Configure ogdi
+ogdi_target = '%s/.configure' % current_dir
+ogdi_configure = ogdi_env.Command(
+    ogdi_target, ogdi_patch,
+    [ogdi_env.MultiCommand(
+        'cd %s\n'
+        '%s%s ./configure --prefix=/opt/google '
+        '--with-proj=%s --with-expat=%s --with-zlib %s\n'
+        'touch %s' % (build_root, ogdi_env['ENV']['mod_env'], env_opt,
+                      root_dir, root_dir, config_opt, ogdi_target))])
+
+# [4] Build
+# Fails with parallel build; so not using -j is intentional
+ogdi_target = '%s/.build' % current_dir
+ogdi_build = ogdi_env.Command(
+    ogdi_target, ogdi_configure,
+    [ogdi_env.MultiCommand(
+        'cd %s\n'
+        '%smake\n'
+        'touch %s' % (build_root, ogdi_env['ENV']['mod_env'], ogdi_target))])
+
+# [5] Create ogdi master installer
+ogdi_target = '%s/.install' % current_dir
+ogdi_install = ogdi_env.Command(
+    ogdi_target, ogdi_build,
+    [ogdi_env.MultiCommand(
+        'cd %s\n'
+        '%smake prefix=%s install\n'
+        'cd %s\n'
+        'rm -rf bin/example1 bin/example2\n'
+        'mkdir -p share/doc/packages/ogdi-ge-3.1.6\n'
+        'cd %s\n'
+        'cp -pr ChangeLog LICENSE NEWS README '
+        '%s/share/doc/packages/ogdi-ge-3.1.6\n'
+        'touch %s' % (build_root, ogdi_env['ENV']['mod_env'], install_root_opt,
+                      install_root_opt, build_root,
+                      install_root_opt, ogdi_target))])
+
+# [6] Install these into various directories as required for build
+ogdi_target = '%s/.install_for_build' % current_dir
+ogdi_install_build = ogdi_env.Command(
+    ogdi_target, ogdi_install,
+    [ogdi_env.rsync_cmd % (
+        '%s/bin/' % install_root_opt,
+        '%s/bin/' % ogdi_env.exportdirs['root']),
+     ogdi_env.rsync_cmd % (
+         '%s/include/' % install_root_opt,
+         '%s/include/' % ogdi_env.exportdirs['root']),
+     ogdi_env.rsync_cmd % (
+         '%s/lib/' % install_root_opt,
+         '%s/lib/' % ogdi_env.exportdirs['root']),
+     Touch('$TARGET')])
+
+Default(ogdi_install_build)
+ogdi_env.ExecuteOnClean('rm -rf %s' % current_dir)
+
+if 'install' in COMMAND_LINE_TARGETS:
+  ogdi_env.InstallFileOrDir(
+      '%s/opt/google/bin/' % install_root,
+      '%s/opt/google/bin/' % ogdi_env.installdirs['common_root'],
+      ogdi_install_build, 'install')
+  ogdi_env.InstallFileOrDir(
+      '%s/opt/google/lib/' % install_root,
+      '%s/opt/google/lib/' % ogdi_env.installdirs['common_root'],
+      ogdi_install_build, 'install')
+  ogdi_env.InstallFileOrDir(
+      '%s/opt/google/share/' % install_root,
+      '%s/opt/google/share/' % ogdi_env.installdirs['common_root'],
+      ogdi_install_build, 'install')
+
+Return('ogdi_extract ogdi_install_build')

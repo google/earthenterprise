@@ -1,0 +1,125 @@
+#-*- Python -*-
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+
+Import('third_party_env')
+libcap_version = 'libcap-2.19'  # original tarball name is 'libcap-4a4b9db'
+
+libcap_patches = ['libcap-Make.Rules.patch']
+
+num_cpu = GetOption('num_jobs')
+
+ge_version = libcap_version.replace('cap', 'cap-ge')
+current_dir = Dir('.').abspath
+build_root = '%s/%s' % (current_dir, libcap_version)
+install_root = '%s/install' % current_dir
+install_root_opt = '%s/opt/google' % install_root
+
+libcap_source = File('#/../third_party/libcap/%s.tar.gz' %
+                      libcap_version).abspath
+
+libcap_env = third_party_env.DeepCopy()
+root_dir = Dir(libcap_env.exportdirs['root']).abspath
+
+# [1] Extract libcap
+libcap_target = '%s/.extract' % current_dir
+libcap_extract = libcap_env.Command(
+    libcap_target, libcap_source,
+    [libcap_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xzf %s\n'
+        'touch %s' % (
+            current_dir, current_dir, libcap_source, libcap_target))])
+
+# [2] Patch libcap
+libcap_target = '%s/.patch_libcap' % current_dir
+libcap_patch = libcap_env.Command(
+    libcap_target,
+    libcap_extract + map(libcap_env.GetBuildPath, libcap_patches),
+    [libcap_env.MultiCommand(
+        'cd %s\n'
+        '%s\n'
+        'touch %s' % (build_root,
+                      '\n'.join(map(lambda i: 'patch -g0 -p1 -s < %s' % (
+                          libcap_env.GetBuildPath(i)), libcap_patches)),
+                      libcap_target))])
+
+# [2] Build
+libcap_target = '%s/.build' % current_dir
+libcap_build = libcap_env.Command(
+    libcap_target, libcap_patch,
+    [libcap_env.MultiCommand(
+        'cd %s\n'
+        '%smake -j%d PAM_CAP=no\n'
+        'touch %s' % (build_root, libcap_env['ENV']['mod_env'], num_cpu,
+                      libcap_target))])
+
+# [3] Create libcap master installer
+libcap_target = '%s/.install' % current_dir
+libcap_install = libcap_env.Command(
+    libcap_target, libcap_build,
+    [libcap_env.MultiCommand(
+        'cd %s\n'
+        '%smake prefix=%s PAM_CAP=no install\n'
+        'cd %s\n'
+        'rm -rf lib64/libcap.a lib64/libcap.la share/doc/%s\n'
+        'mkdir -p share/doc/packages/%s\n'
+        'cd %s\n'
+        'cp -pr CHANGELOG License README %s/share/doc/packages/%s\n'
+        'touch %s' % (build_root,
+                      libcap_env['ENV']['mod_env'], install_root,
+                      install_root,
+                      libcap_version,
+                      ge_version,
+                      build_root,
+                      install_root, ge_version,
+                      libcap_target))])
+
+# [4] Install these into various directories as required for build
+libcap_target = '%s/.install_for_build' % current_dir
+libcap_install_build = libcap_env.Command(
+    libcap_target, libcap_install,
+    [
+# Note: do not copy the tools.
+#    libcap_env.rsync_cmd % ('%s/sbin/' % install_root,
+#                              '%s/bin/' % root_dir),
+     libcap_env.rsync_cmd % ('%s/include/' % install_root,
+                              '%s/include/' % root_dir),
+     libcap_env.rsync_cmd % ('%s/lib64/' % install_root,
+                              '%s/lib/' % root_dir),
+     Touch('$TARGET')])
+
+Default(libcap_install_build)
+libcap_env.ExecuteOnClean('rm -rf %s' % current_dir)
+
+if 'install' in COMMAND_LINE_TARGETS:
+# Note: do not copy the tools.
+#  libcap_env.InstallFileOrDir(
+#      '%s/sbin/' % install_root,
+#      '%s/' % libcap_env.installdirs['common_bin'],
+#      libcap_install_build, 'install')
+  libcap_env.InstallFileOrDir(
+      '%s/lib64/' % install_root,
+      '%s/' % libcap_env.installdirs['common_lib'],
+      libcap_install_build, 'install')
+  libcap_env.InstallFileOrDir(
+      '%s/share/' % install_root,
+      '%s/' % libcap_env.installdirs['common_share'],
+      libcap_install_build, 'install')
+
+Return('libcap_extract libcap_install_build')

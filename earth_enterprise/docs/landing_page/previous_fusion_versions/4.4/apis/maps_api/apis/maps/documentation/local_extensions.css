@@ -1,0 +1,107 @@
+.version {
+  text-align: right;
+}
+
+.code {
+  color: #006000;
+  font-family: "Courier", monospace;
+  font-size: 100%;
+}
+
+    .grid td {
+      padding: 4px;
+      border-collapse: collapse;
+      border: 1px solid gray;
+    }
+
+    .header td {
+      font-weight: bold;
+      background: #EEEEEE;
+    }
+
+span.superscript {vertical-align: super;}
+
+
+    .encodeBox {
+      width: 550px;
+      height: 40px;
+      font-size: 14px;
+      font-family: Courier;
+    }
+
+    .inputField {
+      width: 160px;
+    }
+
+    #pointList {
+      width: 300px;
+      font-size: 12px;
+    }
+
+    #map {
+      width: 350px;
+      height: 300px;
+      border: 1px solid gray;
+      margin-top:6px;
+    }
+
+    #txtAddress {
+      width: 14em;
+    }
+
+     .welcome {
+       border: none;
+     }
+
+     .welcome td{
+       border: none; 
+       padding:0 10px 0 10px;
+     }
+
+.number {
+  background-color: #E5ECF9; 
+  text-align:center; 
+  vertical-align:middle;
+  padding: 0 5px;
+}
+
+.leftpadding {
+  padding: 0 0 0 10px;
+}
+
+.identifier {
+  color: black;
+}
+
+/* List the contents inline to save vertical space */
+.summarylist {
+  margin-right: 4em;
+}
+
+.summarylist li {
+  display: inline;
+  margin: 0em;
+  margin-right: 0.2em;
+  line-height: 1.5em;
+}
+
+/* Self-links for Maps API for Flash */
+a.self-link:link {
+  color: #0000cc; 
+  text-decoration: none;
+}
+
+a.self-link:active {
+  color: #0000cc;
+  text-decoration: none;
+}
+
+a.self-link:visited {
+  color: #0000cc;
+  text-decoration: none;
+}
+
+/* Self-links for Maps API */
+.self-link {
+  cursor: pointer;
+}

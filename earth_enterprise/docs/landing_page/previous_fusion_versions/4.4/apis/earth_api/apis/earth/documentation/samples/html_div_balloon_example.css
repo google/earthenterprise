@@ -1,0 +1,20 @@
+
+#results {
+   width: 250px;
+}
+
+#results ul {
+   padding: 0px;
+}
+
+#results li {
+   background: #9CF;
+   margin-top: .4em;
+   padding: 3px;
+   list-style: none;
+}
+
+#results li:hover {
+   background: #09F;
+   cursor:pointer;
+}

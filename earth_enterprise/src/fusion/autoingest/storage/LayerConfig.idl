@@ -1,0 +1,807 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#include <string>
+#include <vector>
+#include <deque>
+#include <qstring.h>
+#include <khstl.h>
+#include <Defaultable.h>
+#include <khMetaData.h>
+#include <autoingest/AvailId.h>
+#include <autoingest/.idl/storage/LayerLegend.h>
+#include <autoingest/.idl/storage/IconReference.h>
+#include <autoingest/.idl/storage/VectorDefs.h>
+#include <autoingest/.idl/storage/FilterConfig.h>
+#include <autoingest/.idl/storage/SearchField.h>
+#include "common/khTileAddrConsts.h"
+
+#cppquote
+#include <autoingest/.idl/storage/IconReference_impl.h>
+#include <autoingest/.idl/storage/VectorDefs_impl.h>
+#include <autoingest/.idl/storage/FilterConfig_impl.h>
+#include <autoingest/.idl/storage/SearchField_impl.h>
+#/cppquote
+
+
+
+// ************************************************************************
+// *** NOTICE
+// ***
+// *** The following classes are used to represent the display rule
+// *** configuration information for GEVector layers
+// ***
+// *** The classes with the "Fuse" prefix are used only for the fuse assets
+// *** The classes w/o the prefix contain all the information and are what
+// *** is populated by the GUI. During the build process, the smaller "Fuse"
+// *** config objects are populated from the larger objects. What this does
+// *** is remove all the dbroot-only members from the fuse configs so
+// *** changing one of them does not force a re-fuse.
+// ***
+// ***  The full configs are used for the project and dbroot so if
+// ***  _anything_ the project will make a new version as will the
+// ***  dbroot. The dbroot must get a new version even for things that
+// ***  appear to be "fuse-only" (e.g. label string). This is because
+// ***  anything that can change the packet could in theory change the
+// ***  threshold of forced LODs (forcing more or fewer LODs than the previous
+// ***  build). Since the LOD tables are stored in the dbroot, if anything
+// ***  in the config changes, we must make a new dbroot.
+// ************************************************************************
+
+
+// This class is not used at all for fuse
+class IconConfig {
+  IconReference::Type type = IconReference::Internal;
+  deprecated std::string name = std::string("771");
+  QString href = QString("771");
+  std::vector<uint> normalColor = std::vector<uint>(4,255);
+  std::vector<uint> highlightColor = std::vector<uint>(4,255);
+  deprecated bool normalRandomColor = false;
+  deprecated bool highlightRandomColor = false;
+  double normalScale = 1.0;
+  double highlightScale = 1.0;
+  deprecated uint posX = uint(0);
+  deprecated uint posY = uint(0);
+  deprecated uint width = uint(32);
+  deprecated uint height = uint(32);
+
+#pragma GenerateIsUpToDate
+
+#hquote
+ public:
+  IconConfig( IconReference::Type t, const char* h ) :
+      type(t),
+      href(h),
+      normalColor(4, 255),
+      highlightColor(4, 255),
+      normalScale(1.0),
+      highlightScale(1.0)
+  { }
+
+#/hquote
+};
+
+
+
+class LabelConfig {
+
+  // WARNING - if you add fields here that affect the fuse, you must add the
+  // same field in the FuseLabelConfig below
+  enum BuildMode { Original = 0, JSExpression = 1 };
+  QString label = QString();
+  bool reformat = false;
+  std::vector<uint> normalColor = std::vector<uint>(4, 255);
+  std::vector<uint> highlightColor = std::vector<uint>(4, 255);
+  deprecated bool normalRandomColor = false;
+  deprecated bool highlightRandomColor = false;
+  double normalScale = 1.0;
+  double highlightScale = 1.0;
+  BuildMode labelMode = LabelConfig::Original;
+#hquote
+  inline bool HasJS(void) const {
+    return ((labelMode == JSExpression) && !label.isEmpty());
+  }
+#/hquote
+
+
+#pragma GenerateIsUpToDate
+
+};
+
+class FuseLabelConfig {
+  // WARNING - if you add fields here, you must add the
+  // same field in the LabelConfig above
+  QString label = QString();
+  bool reformat = false;
+  LabelConfig::BuildMode labelMode = LabelConfig::Original;
+#hquote
+  inline bool HasJS(void) const {
+    return ((labelMode == LabelConfig::JSExpression) && !label.isEmpty());
+  }
+#/hquote
+
+#pragma GenerateIsUpToDate
+#pragma ExtractOfClass LabelConfig
+};
+
+
+
+class StyleConfig {
+  // WARNING - if you add fields here that affect the fuse, you must add the
+  // same field in the FuseStyleConfig below
+  enum AltitudeMode { ClampToGround = 0, Relative = 1, Absolute = 2 };
+
+  deprecated std::vector<uint> rgba = std::vector<uint>(4, 255);
+  deprecated float scale = 1.0f;
+
+  uint32 id = uint32(0);
+  std::vector<uint> polyColor = std::vector<uint>(4, 255);
+  std::vector<uint> lineColor = std::vector<uint>(4, 255);
+  deprecated bool randomPolyColor = false
+  deprecated bool randomLineColor = false
+  double lineWidth = new:1.0, load:-1.0;
+  AltitudeMode altitudeMode = StyleConfig::ClampToGround;
+  bool extrude = false;
+
+  // these variables are used internally
+  bool enableCustomHeight = false;
+  IsUpToDateIgnoreIf(!enableCustomHeight) QString customHeightVariableName = QString();
+  IsUpToDateIgnoreIf(!enableCustomHeight) double customHeightOffset = 0.0;
+  IsUpToDateIgnoreIf(!enableCustomHeight) double customHeightScale = 1.0;
+
+  IconConfig icon = IconConfig();
+  LabelConfig label = LabelConfig();
+
+#hquote
+  inline bool HasLabelJS(void) const {
+    return label.HasJS();
+  }
+  inline bool HasJS(void) const {
+    return HasLabelJS();
+  }
+#/hquote
+
+#pragma GenerateIsUpToDate
+
+};
+
+
+class FuseStyleConfig {
+  // WARNING - if you add fields here, you must add the
+  // same field in the StyleConfig above
+  uint32 id = uint32(0);
+  StyleConfig::AltitudeMode altitudeMode = StyleConfig::ClampToGround;
+  bool extrude = false;
+
+  bool enableCustomHeight = false;
+  IsUpToDateIgnoreIf(!enableCustomHeight) QString customHeightVariableName = QString();
+  IsUpToDateIgnoreIf(!enableCustomHeight) double customHeightOffset = 0.0;
+  IsUpToDateIgnoreIf(!enableCustomHeight) double customHeightScale = 1.0;
+
+  FuseLabelConfig label = FuseLabelConfig();
+
+#hquote
+  inline bool HasLabelJS(void) const {
+    return label.HasJS();
+  }
+  inline bool HasJS(void) const {
+    return HasLabelJS();
+  }
+#/hquote
+
+#pragma GenerateIsUpToDate
+#pragma ExtractOfClass StyleConfig
+
+};
+
+
+
+
+// Features are line or polyline features. Roads are special line features.
+// Note: Roads when sent to client are treated as polygons only (draw context).
+class FeatureConfig {
+  // WARNING - if you add fields here that affect the fuse, you must add the
+  // same field in the FuseFeatureConfig below
+
+  // deprecated
+  enum Type { PolyLine = 0, Street = 1 };
+  enum RoadLabelType { Label = 0, Shield = 1 };
+
+  deprecated bool enabled = false;
+  deprecated uint32 level = uint32(StartVectorLevel);
+  StyleConfig style = StyleConfig();
+  deprecated Type type = FeatureConfig::PolyLine;
+  deprecated QString label = QString();
+  deprecated QString shield = QString();
+  deprecated std::vector<QString> suppressWords = std::vector<QString>(0, QString());
+  deprecated uint shieldType = uint(0);
+  deprecated RoadLabelType nameType = FeatureConfig::Label;
+  deprecated bool reformatLabel = false;
+  uint32 maxLevel = uint32(MaxVectorLevel);
+
+  VectorDefs::FeatureDisplayType featureType = VectorDefs::PointZ;
+  uint32 minLevel = uint32(StartVectorLevel);
+  bool drawAsRoads = false;
+  RoadLabelType roadLabelType = FeatureConfig::Label;
+  VectorDefs::PolygonDrawMode polygonDrawMode = VectorDefs::FillAndOutline;
+  double maxError = 0.5;
+  // Building beyond 18 is expensive, so we default to 18 and warn if they want
+  // to build deeper.
+  uint32 maxBuildLevel = uint32(kMaxRecommendedBuildLevel);
+
+#pragma AfterLoad
+#pragma GenerateIsUpToDate
+#pragma DontEmitFunc
+
+#hquote
+ public:
+  inline bool DontEmitFunc(void) const { return !enabled(); }
+  inline bool enabled(void) const {
+    return (featureType != VectorDefs::PointZ);
+  }
+  inline bool WantDrawAsRoads(void) const {
+    return ((featureType == VectorDefs::LineZ) && drawAsRoads);
+  }
+  inline bool HasRoadLabelJS(void) const {
+    return (WantDrawAsRoads() && style.HasLabelJS());
+  }
+  inline bool HasJS(void) const {
+    return HasRoadLabelJS();
+  }
+
+  void AfterLoad(const FeatureConfig::DeprecatedMembers &depmembers) {
+    // there was no linewidth in the old config.
+    // we use that as a means for differentiating between
+    // 2.3 and 2.4 configs
+    if ( style.lineWidth == -1.0 ) {
+      // change the linewidth to default
+      style.lineWidth = 1.0;
+      if ( depmembers.enabled == true )
+        featureType = VectorDefs::LineZ;
+      minLevel = depmembers.level;
+      if ( depmembers.type == FeatureConfig::Street ) {
+        drawAsRoads = true;
+        roadLabelType = depmembers.nameType;
+        style.label.reformat = depmembers.reformatLabel;
+        if ( roadLabelType == Shield ) {
+          style.icon.href = QString("shield") +
+                            QString::number(depmembers.shieldType);
+          style.label.label = depmembers.shield;
+          // if the shield icon is white then
+          // set the label color on the shield to be black
+          if ( depmembers.shieldType == 2 || depmembers.shieldType == 3 ) {
+            style.label.normalColor[0] = 0;
+            style.label.normalColor[1] = 0;
+            style.label.normalColor[2] = 0;
+            style.label.normalColor[3] = 255;
+          }
+        }
+        else {
+          style.label.label = depmembers.label;
+        }
+      }
+      style.lineColor = depmembers.style_depmembers.rgba;
+      style.lineWidth = depmembers.style_depmembers.scale;
+    }
+  }
+
+
+#/hquote
+};
+
+
+class FuseFeatureConfig {
+  // WARNING - if you add fields here, you must add the
+  // same field in the FeatureConfig above
+  FuseStyleConfig style = FuseStyleConfig();
+  uint32 maxLevel = uint32(MaxVectorLevel);
+  VectorDefs::FeatureDisplayType featureType = VectorDefs::PointZ;
+  uint32 minLevel = uint32(StartVectorLevel);
+  bool drawAsRoads = false;
+  double maxError = 0.5;
+  // Building beyond 18 is expensive, so we default to 18 and warn if they want
+  // to build deeper.
+  uint32 maxBuildLevel = uint32(kMaxRecommendedBuildLevel);
+
+#pragma DontEmitFunc
+#pragma GenerateIsUpToDate
+#pragma ExtractOfClass FeatureConfig
+
+#hquote
+ public:
+  inline VectorDefs::FeatureReduceMethod ReduceMethod(void) const {
+    if (WantDrawAsRoads()) {
+      return VectorDefs::ReduceFeatureRoads;
+    }
+    switch (featureType) {
+      case VectorDefs::PointZ:
+      case VectorDefs::IconZ:
+        return VectorDefs::ReduceFeatureNone;
+      case VectorDefs::LineZ:
+        return VectorDefs::ReduceFeaturePolylines;
+      case VectorDefs::PolygonZ:
+        return VectorDefs::ReduceFeaturePolygons;
+    }
+    // keep compiler happy
+    return VectorDefs::ReduceFeatureNone;
+  }
+  inline VectorDefs::FeatureDisplayType DisplayType(void) const {
+    return featureType;
+  }
+
+  inline bool DontEmitFunc(void) const { return !enabled(); }
+  inline bool enabled(void) const {
+    return (featureType != VectorDefs::PointZ);
+  }
+  inline bool WantDrawAsRoads(void) const {
+    return ((featureType == VectorDefs::LineZ) && drawAsRoads);
+  }
+  inline bool HasRoadLabelJS(void) const {
+    return (WantDrawAsRoads() && style.HasLabelJS());
+  }
+  inline bool HasJS(void) const {
+    return HasRoadLabelJS();
+  }
+#/hquote
+};
+
+
+
+
+
+
+
+// Sites are point features.
+class SiteConfig {
+  // WARNING - if you add fields here that affect the fuse, you must add the
+  // same field in the FuseSiteConfig below
+  enum PointDecimationMode { MaxFit = 0, RepSubset = 1 };
+
+  // deprecated
+  enum Type { Site = 0, Landmark = 1 };
+
+  // As of 3.2, ClientDefault is deprecated and Basic is the new default.
+  // Only valid modes are now 1 and 2. We will map 0 to 1 as it is equivalent.
+  enum BalloonStyleMode { ClientDefault = 0, Basic = 1, Advanced = 2, Undefined = 99 };
+
+  bool enabled = false;
+  deprecated uint32 level = uint32(5);
+  StyleConfig style = StyleConfig();
+  deprecated Type type = SiteConfig::Landmark;
+  VectorDefs::SiteDisplayPosition position = VectorDefs::AreaCenter;
+  deprecated IconConfig icon = IconConfig();
+  deprecated bool centerLabel = false;
+  deprecated bool hideLabel = false;
+  bool enablePopup = false;
+  deprecated QString label = QString();
+  deprecated QString addr = QString();
+  deprecated QString phone = QString();
+  deprecated QString url = QString();
+  uint32 maxLevel = uint32(24);
+  uint32 maxQuadCount = uint32(100);
+
+  uint32 minLevel = uint32(5);
+  QString popupText = QString();
+  PointDecimationMode decimationMode = SiteConfig::MaxFit;
+  bool suppressDuplicateSites = false;
+  uint32 minQuadCount = uint32(0);
+  double decimationRatio = 0.5;
+  LabelConfig::BuildMode popupTextMode = LabelConfig::Original;
+  QString balloonText = QString();
+  std::vector<uint> balloonBgColor = std::vector<uint>(4, 255);
+  std::vector<uint> balloonFgColor = makevec4<uint>(0,0,0,255);
+  BalloonStyleMode balloonStyleMode = new:SiteConfig::Basic, load:SiteConfig::Undefined;
+  bool balloonInsertHeader = false;
+  bool balloonInsertDirections = false;
+
+#pragma AfterLoad
+#pragma DontEmitFunc
+#pragma GenerateIsUpToDate
+
+#hquote
+ public:
+  inline bool DontEmitFunc(void) const { return !enabled; }
+  inline bool HasLabelJS(void) const {
+    return (enabled && style.HasLabelJS());
+  }
+  inline bool WantPopup(void) const {
+    return (enabled && enablePopup);
+  }
+  inline bool HasPopupTextJS(void) const {
+    return (WantPopup() &&
+            (popupTextMode == LabelConfig::JSExpression) &&
+            !popupText.isEmpty());
+  }
+  inline bool HasJS(void) const {
+    return HasLabelJS() || HasPopupTextJS();
+  }
+
+  void AfterLoad(const SiteConfig::DeprecatedMembers &depmembers) {
+    // there was no linewidth in the old config.
+    // we use that as a means for differentiating between
+    // 2.3 and 2.4 configs
+    if ( style.lineWidth == -1.0 ) {
+      // change the linewidth to default
+      style.lineWidth = 1.0;
+      minLevel = depmembers.level;
+      if ( depmembers.type == SiteConfig::Site ) {
+        popupText = depmembers.addr + QString("<BR>\n") + depmembers.phone + QString("<BR>\n") + depmembers.url;
+      }
+      else {
+        popupText = depmembers.addr + QString("<BR>\n") + depmembers.url;
+      }
+      style.icon.type = depmembers.icon.type;
+      style.icon.href = QString(depmembers.icon_depmembers.name);
+      style.label.label = depmembers.label;
+      style.label.normalColor = depmembers.style_depmembers.rgba;
+      style.label.highlightColor = depmembers.style_depmembers.rgba;
+      style.label.normalScale = depmembers.style_depmembers.scale;
+      style.icon.normalScale = depmembers.style_depmembers.scale;
+      style.label.highlightScale = depmembers.style_depmembers.scale*1.1;
+      style.icon.highlightScale = depmembers.style_depmembers.scale;
+      if ( depmembers.hideLabel ) {
+        style.label.normalScale = 0;
+        style.label.highlightScale = 0;
+      }
+    }
+
+    // 3.0 exposes some more balloon style capabilities, but internal 2.5 users
+    // already had some options so must determine if the balloonStyleMode should
+    // be set to Advanced for the 2.5 users
+    if (balloonStyleMode == SiteConfig::Undefined) {
+      if (!balloonText.isEmpty() || balloonBgColor != std::vector<uint>(4, 255) ||
+          balloonFgColor != makevec4<uint>(0,0,0,255)) {
+        balloonStyleMode = SiteConfig::Advanced;
+      } else {
+        balloonStyleMode = SiteConfig::Basic;
+      }
+    }
+
+    // 3.1 and previous used ClientDefault, we've deprecated that in favor
+    // of Basic.
+    if (balloonStyleMode == SiteConfig::ClientDefault) {
+      balloonStyleMode = SiteConfig::Basic;
+    }
+  }
+
+#/hquote
+};
+
+class FuseSiteConfig {
+  // WARNING - if you add fields here, you must add the
+  // same field in the SiteConfig above
+  bool enabled = false;
+  FuseStyleConfig style = FuseStyleConfig();
+  VectorDefs::SiteDisplayPosition position = VectorDefs::AreaCenter;
+  bool enablePopup = false;
+  uint32 maxLevel = uint32(24);
+  uint32 maxQuadCount = uint32(100);
+  uint32 minLevel = uint32(5);
+  QString popupText = QString();
+  SiteConfig::PointDecimationMode decimationMode = SiteConfig::MaxFit;
+  bool suppressDuplicateSites = false;
+  uint32 minQuadCount = uint32(0);
+  double decimationRatio = 0.5;
+  LabelConfig::BuildMode popupTextMode = LabelConfig::Original;
+
+#pragma DontEmitFunc
+#pragma GenerateIsUpToDate
+#pragma ExtractOfClass SiteConfig
+
+#hquote
+ public:
+  inline bool DontEmitFunc(void) const { return !enabled; }
+  inline VectorDefs::SiteReduceMethod ReduceMethod(void) const {
+    if (suppressDuplicateSites) {
+      return VectorDefs::ReduceSiteSuppressDuplicates;
+    } else {
+      return VectorDefs::ReduceSiteNone;
+    }
+  }
+
+  // TODO
+  // Member "position" should be deprecated, but is sometimes used directly.
+  // This call is more reliable as display_type is definitive.
+  inline VectorDefs::SiteDisplayPosition DisplayPosition(
+    VectorDefs::FeatureDisplayType display_type) const {
+    VectorDefs::SiteDisplayPosition display_position =
+      (display_type == VectorDefs::LineZ) ?
+          VectorDefs::LineCenter : VectorDefs::AreaCenter;
+    return display_position;
+  }
+
+  inline bool HasLabelJS(void) const {
+    return (enabled && style.HasLabelJS());
+  }
+  inline bool WantPopup(void) const {
+    return (enabled && enablePopup);
+  }
+  inline bool HasPopupTextJS(void) const {
+    return (WantPopup() &&
+            (popupTextMode == LabelConfig::JSExpression) &&
+            !popupText.isEmpty());
+  }
+  inline bool HasJS(void) const {
+    return HasLabelJS() || HasPopupTextJS();
+  }
+#/hquote
+
+};
+
+
+
+
+class DisplayRuleConfig {
+  IsUpToDateIgnore QString name = QString();        // fusion-only field
+  FeatureConfig feature = FeatureConfig();
+  SiteConfig site = SiteConfig();
+  FilterConfig filter = FilterConfig();
+#hquote
+  inline bool HasFilterJS(void) const {
+    return filter.HasJS();
+  }
+  inline bool HasJS(void) const {
+    return (feature.HasJS() ||
+            site.HasJS() ||
+            filter.HasJS());
+  }
+#/hquote
+
+#pragma GenerateIsUpToDate
+
+};
+
+
+
+
+
+class LocaleConfig {
+#hquote
+  static const int curr_config_version = 1;
+#/hquote
+
+#pragma AfterLoad
+
+  deprecated QString layerName = QString("");
+  deprecated bool layerName_default = true;
+  deprecated QString iconName = QString("");
+  deprecated IconReference::Type iconType = IconReference::Internal;
+  deprecated bool icon_default = true;
+  deprecated std::set<uint> labels = makeset<uint>(0);
+  deprecated bool labels_default = true;
+  deprecated bool isChecked = false;
+  deprecated bool isChecked_default = true;
+  deprecated QString desc = QString("");
+  deprecated bool desc_default = true;
+  deprecated QString lookAt = QString("");
+  deprecated bool lookAt_default = true;
+  deprecated QString kmlUrl = QString("");
+  deprecated bool kmlUrl_default = true;
+  deprecated QString required_client_version = QString("");
+  deprecated bool required_client_version_default = true;
+
+  xmlattr int config_version  = new:LocaleConfig::curr_config_version, load:0;
+  Defaultable<QString>       name_          = Defaultable<QString>(true /* use_default */, "");
+  Defaultable<IconReference> icon_          = Defaultable<IconReference>(true /* use_default */, IconReference(IconReference::Internal, ""));
+  deprecated Defaultable<std::set<uint> > labels_      = Defaultable<std::set<uint> >(true /* use_default */, makeset<uint>(0));
+  Defaultable<bool>          is_checked_    = Defaultable<bool>(true /* use_default */, false);
+  Defaultable<QString>       desc_          = Defaultable<QString>(true /* use_default */, "");
+  Defaultable<QString>       look_at_       = Defaultable<QString>(true /* use_default */, "");
+  Defaultable<QString>       kml_layer_url_ = Defaultable<QString>(true /* use_default */, "");
+  Defaultable<QString>       required_client_version_ = Defaultable<QString>(true /* use_default */, "");
+  Defaultable<QString>       required_client_vram_ = Defaultable<QString>(true /* use_default */, "");
+  Defaultable<QString>       probability_   = Defaultable<QString>(true /* use_default */, "");
+  Defaultable<bool>          save_locked_   = Defaultable<bool>(true /* use_default */, true);
+  Defaultable<QString>       required_user_agent_   = Defaultable<QString>(true /* use_default */, "");
+  Defaultable<QString>       required_client_capabilities_   = Defaultable<QString>(true /* use_default */, "");
+  Defaultable<QString>       client_config_script_name_   = Defaultable<QString>(true /* use_default */, "");
+  Defaultable<int>       diorama_data_channel_base_   = Defaultable<int>(true /* use_default */, -1);
+  Defaultable<int>       diorama_replica_data_channel_base_   = Defaultable<int>(true /* use_default */, -1);
+#pragma GenerateIsUpToDate
+
+  // ***** WARNING: Make sure you update ClearDefaultFlags and BindDefaults
+  // when you add a new field
+
+
+
+#hquote
+ public:
+  void AfterLoad(LocaleConfig::DeprecatedMembers &depmembers);
+
+  void ClearDefaultFlags(void);
+  void BindDefaults(const LocaleConfig &defaults);
+  static LocaleConfig FromLegendLocale(const LegendLocale &);
+  LegendLocale ToLegendLocale(void) const;
+#/hquote
+
+#cppquote
+  LocaleConfig LocaleConfig::FromLegendLocale(const LegendLocale &o) {
+    // get default values for rest of fields
+    LocaleConfig locale_config;
+
+    // assign the ones I know about
+    locale_config.name_       = o.name;
+    locale_config.is_checked_ = o.isChecked;
+    locale_config.desc_       = o.desc;
+    locale_config.look_at_    = o.lookAt;
+    locale_config.icon_       = o.icon;
+    return locale_config;
+  }
+
+  LegendLocale LocaleConfig::ToLegendLocale(void) const {
+    return LegendLocale(name_,
+                        is_checked_,
+                        desc_,
+                        look_at_,
+                        icon_);
+  }
+
+  void LocaleConfig::AfterLoad(LocaleConfig::DeprecatedMembers &dep) {
+    if (config_version == 0) {
+      name_          = Defaultable<QString>(dep.layerName_default,
+                                            dep.layerName);
+      icon_          = Defaultable<IconReference>(dep.icon_default,
+                                                  IconReference(dep.iconType,
+                                                                dep.iconName));
+      is_checked_    = Defaultable<bool>(dep.isChecked_default, dep.isChecked);
+      desc_          = Defaultable<QString>(dep.desc_default, dep.desc);
+      look_at_       = Defaultable<QString>(dep.lookAt_default, dep.lookAt);
+      kml_layer_url_ = Defaultable<QString>(dep.kmlUrl_default, dep.kmlUrl);
+      required_client_version_ = Defaultable<QString>(
+          dep.required_client_version_default, dep.required_client_version);
+    }
+
+    // update the version number now that we've handled the old ones
+    config_version = curr_config_version;
+  }
+
+  void LocaleConfig::ClearDefaultFlags(void) {
+    name_.ClearUseDefault();
+    icon_.ClearUseDefault();
+    is_checked_.ClearUseDefault();
+    desc_.ClearUseDefault();
+    look_at_.ClearUseDefault();
+    kml_layer_url_.ClearUseDefault();
+    required_client_version_.ClearUseDefault();
+    required_client_vram_.ClearUseDefault();
+    probability_.ClearUseDefault();
+    save_locked_.ClearUseDefault();
+    required_user_agent_.ClearUseDefault();
+    required_client_capabilities_.ClearUseDefault();
+    client_config_script_name_.ClearUseDefault();
+    diorama_data_channel_base_.ClearUseDefault();
+    diorama_replica_data_channel_base_.ClearUseDefault();
+  }
+  void LocaleConfig::BindDefaults(const LocaleConfig &defaults) {
+    name_.BindDefaults(defaults.name_);
+    icon_.BindDefaults(defaults.icon_);
+    is_checked_.BindDefaults(defaults.is_checked_);
+    desc_.BindDefaults(defaults.desc_);
+    look_at_.BindDefaults(defaults.look_at_);
+    kml_layer_url_.BindDefaults(defaults.kml_layer_url_);
+    required_client_version_.BindDefaults(defaults.required_client_version_);
+    required_client_vram_.BindDefaults(defaults.required_client_vram_);
+    probability_.BindDefaults(defaults.probability_);
+    save_locked_.BindDefaults(defaults.save_locked_);
+    required_user_agent_.BindDefaults(defaults.required_user_agent_);
+    required_client_capabilities_.BindDefaults(defaults.required_client_capabilities_);
+    client_config_script_name_.BindDefaults(defaults.client_config_script_name_);
+    diorama_data_channel_base_.BindDefaults(defaults.diorama_data_channel_base_);
+    diorama_replica_data_channel_base_.BindDefaults(defaults.diorama_replica_data_channel_base_);
+  }
+#/cppquote
+
+};
+
+
+
+
+// ********** used by VectorLayerAsset **********
+class LayerConfig {
+  uint channelId = uint(0);
+  std::string assetRef = std::string();
+  deprecated QString name = QString();                   // dbroot only
+  deprecated std::string icon = std::string();           // dbroot only
+  deprecated bool initialShow = false;                   // dbroot only
+  QString legend = QString("");               // dbroot only (names parent layer)
+  std::vector<uint8> lodForce = std::vector<uint8>(0, 0);
+  std::vector<DisplayRuleConfig> displayRules = std::vector<DisplayRuleConfig>(0, DisplayRuleConfig());
+  uint preserveTextLevel = uint(24);          // dbroot only
+  bool allowFeatureDuplication = false;       // if true allows every filter to get a
+                                              // a copy of the feature
+  deprecated IconReference::Type iconType = IconReference::Internal;
+
+  bool isVisible = true;    // dbRoot only
+
+  // isEnabled as a feature that we may want to use in the future.  wes has
+  // added support for that in the client. if isEnabled is false the user
+  // will see a particular layer but it is grayed out so that the user
+  // cannot change the state. the current value is set to true in the
+  // config.
+  // isEnabled is the only way we can guarantee that a layer is "always
+  // on". one very bad application would be to have an 'Ads' layer that is
+  // forced on certain set of users. one can argue that we could make the
+  // layer invisible instead of grayed out but i figured that we might come
+  // up with an application for that.
+  bool isEnabled = true;    // dbRoot only
+
+  bool isExpandable = true; // dbRoot only
+  // The UUID should remain constant for the life of the asset and should
+  // be unique to this asset universally.
+  std::string asset_uuid_ = std::string(); // dbRoot only
+
+  LocaleConfig defaultLocale = LocaleConfig(); // dbRoot only
+#hquote
+  typedef std::map<QString, LocaleConfig> LocaleMap;
+  typedef std::map<QString, LocaleConfig>::iterator LocaleMapIterator;
+  typedef std::map<QString, LocaleConfig>::const_iterator LocaleMapConstIterator;
+#/hquote
+
+  std::map<QString, LocaleConfig> locales = LayerConfig::LocaleMap(); // dbRoot
+  IsUpToDateIgnoreIf(!HasJS()) QString layerContextScript = QString("");
+  bool allowEmptyLayer = false;       // empty layer won't stop build
+  bool skipLayer = false;  // skip layer completely (no packets, no dbRoot)
+  std::vector<SearchField> searchFields = std::vector<SearchField>();
+
+  // This really is meta data that doesn't affect the build
+  // it's here in the config since it's the only data that we store per-layer
+  // in the project. Someday when we split the layers into their own
+  // top level asset, this meta will go into that asset's normal meta field
+  IsUpToDateIgnore khMetaData meta = khMetaData();
+
+  std::string searchStyle = std::string();
+
+  // ########## WARNING ##########
+  // if you add new fields you must also update ApplyTemplate()
+  // in fusion/autoingest/LayerConfigImpl.cpp
+  // ########## WARNING ##########
+
+
+#pragma LoadAndSave
+#pragma AfterLoad
+#pragma GenerateIsUpToDate
+
+#hquote
+ public:
+  void ApplyTemplate(const LayerConfig &templateConfig,
+                     bool applyDisplayRules,
+                     bool applyLegend);
+  bool ValidateIconPresence(QString* error_msg) const;
+  void AssignStyleIds(AvailId &avail);
+  void AssignUuidIfEmpty(void);
+
+  // Resets all IDs as it is in a config for a just created asset.
+  void ResetIds(void);
+
+  void SaveOldStyleIds(std::deque<uint32> &old);
+  void TryRestoreOldStyleIds(std::deque<uint32> &old);
+  void AfterLoad(LayerConfig::DeprecatedMembers &depmembers);
+  std::string MapName(std::string oldName);
+  LocaleConfig GetLocale(const QString& localeName) const;
+  QString DefaultNameWithPath(void) const;
+  QString DefaultShortName(void) const;
+  bool HasFilterJS(void) const;
+  bool HasJS(void) const;
+  inline bool IsFolder(void) const { return assetRef.empty(); }
+  bool HasSearchFields() const;
+  bool IsKMLLayer(void) const;
+  inline bool IsStreamedLayer(void) const { return !IsFolder() && !IsKMLLayer(); }
+#/hquote
+
+#cppquote
+  // see fusion/autoingest/LayerConfigImpl.cpp for
+  // implementations of many LayerConfig methods
+#/cppquote
+
+};

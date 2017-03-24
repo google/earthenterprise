@@ -1,0 +1,702 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+ 
+ 
+
+
+ 
+
+  
+  
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/articles/ezdigitizer.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Creating a Simple Digitizer Using the Google Maps API - Google Maps API Family - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/maps/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../css/iehacks.css"><![endif]-->
+
+    <link href="../../../css/semantic_headers.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    
+    
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  <a href="#gc-pagecontent">Skip to page content</a>
+  <a href="#gc-toc">Skip to main navigation</a>
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps API Family</h1>
+  <ul id="articles" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="../index.html" title="Google Maps API Family home page">Home</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../faq.html" title="Answers to frequently asked questions about Google Maps API Family">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="index.html" class="selected" title="Focused articles and tutorials for Google Maps API Family developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps API Family blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="../forum/index.html" title="Google Maps API Family developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../terms.html" title="Google Maps API Family terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../index.html">Maps API Family</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps Javascript API V3</h2>
+         <ul>
+           <li><a href="../documentation/javascript/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+      <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../documentation/javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+  <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../documentation/flash/index.html">Home Page</a></li>
+          <li><a href="../documentation/flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../documentation/mapsdata/index.html">Home Page</a></li>
+          <li><a href="../documentation/mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+     <div class="line"></div>
+      <ul>
+        <li><h2><a href="../documentation/webservices/index.html">Maps Web Services</a></h2>
+         <ul>
+           <li><a href="../documentation/geocoding/index.html">Geocoding Guide</a></li>
+           <li><a href="../documentation/directions/index.html">Directions Guide</a></li>
+           <li><a href="../documentation/elevation/index.html">Elevation Guide</a></li>
+           <li><a href="../documentation/places/index.html">Places Guide</a></li>
+         </ul>
+       </li>
+      </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../documentation/staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li>
+            <h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../documentation/localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../documentation/localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+      <div class="promo">
+     <p><a href="../documentation/premier/index.html">Google Maps API Premier</a></p><p>Includes enterprise licensing and support</p></div>
+
+        <a class="hidden" href="#gc-topnav-anchor">More Google Maps API Family resource links</a>
+      </div>
+      
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Creating a Simple Digitizer Using the Google Maps API</h1>
+
+
+<!-- ########## PAGE CONTENT ########## -->
+  
+<div class=i>
+<i>Chris Schalk, Google AJAX Team<br>April 2007</i>
+<br/><br/>
+<p class="para">Have you ever wished that there was an easy way to find the
+geographical coordinates of a region on a map? Or wanted to find the
+exact dimensions of a building seen in our satellite imagery? You may
+be surprised to find out how easy it is to create a useful digitizer
+tool using the Google Maps API. This document describes how to build a
+simple digitizer that allows users to point and click, or
+'draw,' around a particular region and store the
+geographical coordinates in KML. Users can then import the generated
+KML into other tools such as Google Earth in order to see and
+manipulate the objects in three dimensions. </p>
+<p class="para">Building a simple digitizer in Google Maps can be done in the
+following steps:</p>
+
+<ul>
+  <li><a href="#declare">Declaring a Map control in the page</a></li>
+  <li><a href="#clickhandler">Creating a click handler</a></li>
+  <li><a href="#coordinates">Creating a function to draw the coordinates</a> </li>
+  <li><a href="#kml_log">Creating a function to log the coordinates into KML (or any markup)</a></li>
+  <li><a href="#search">Allowing users to search anywhere</a> </li>
+
+</ul>
+<h3>Using the EZ Digitizer</h3>
+<p class="para"> Before stepping through how to build the digitizer, let's take a
+quick tour on how to use it. The EZ Digitizer tool consists of a map
+control with additional radio buttons to change the drawing mode as
+well as buttons to clear the last point or the entire map. To the
+right of the map is a text field which logs the clicked
+coordinates. The output for this example is in KML, however, the tool
+could easily be extended to generate other geographical
+formats. Finally, at the top of the Map is a search field which allows
+the user to enter any address and the tool will locate it
+geographically, that is <em>geocode</em> it. </p>
+<p class="para"><img src="http://g.codesite.articles.googlepages.com/cschalk-ezdigitizer.jpg" alt="ezdigitizer" width="600" height="484" style="margin-left: 2em; border:1px solid grey" /></p>
+<h5>Figure 1: The EZ Digitizer tool </h5>
+<h4>Digitizing a line</h4>
+<p class="para">Digitizing a path is done by simply clicking on the Map
+display. For example, if you wished to trace out a path of a popular
+race such as the San Francisco Bay to Breakers race, you could just
+point and click the race path over a map of San Francisco.</p>
+<p class="para"><img
+src="http://g.codesite.articles.googlepages.com/cschalk-digitize-btb.jpg"
+alt="digitize - bay to brkrs" width="600" height="423"
+style="margin-left: 2em; border:1px solid grey" /></p>
+
+<h5>Figure 2: Digitizing a path with EZ Digitizer</h5>
+<p class="para">Once you've traced out a path, you can copy the generated KML
+output to a single file such as <code>bay-to-breakers.kml</code> and
+then open it up in Google Earth to see how it looks.</p>
+<p class="para"><img
+src="http://g.codesite.articles.googlepages.com/cschalk-sf-btb-ge.jpg"
+alt="google earth - btb" width="600" height="424" style="margin-left:
+2em; border:1px solid grey"/> </p>
+<h5>Figure 3: The San Francisco Bay to Breakers KML race path in
+Google Earth </h5>
+<h4>Digitizing polygons</h4>
+<p class="para">In addition to digitizing paths (or specifically Polylines), it is
+easy to trace out structures or regions using the EZDigitizer's
+<em>Polygon</em> drawing mode. For example, if you wanted to trace out
+the perimeter of Disneyland's Space Mountain building, first enter an
+appropriate search criteria in EZDigitizer's search
+window. Incidentally, entering "Disneyland" will locate the
+park. You can then zoom into the Space Mountain building and switch
+the Map mode to <em>Satellite</em> in order to display the
+buildings. Once located, you can trace out the building perimeter
+using the <i>Polygon</i> draw mode.</p>
+
+<p class="para"><img
+src="http://g.codesite.articles.googlepages.com/cschalk-poly-disney.jpg"
+alt="space moutain - digitize" width="600" height="485"
+style="margin-left: 2em; border:1px solid grey" /> </p>
+<h5>Figure 4: Digitizing Space Mountain in Polygon mode</h5>
+<p class="para">As before, to view the digitized Space Mountain in a
+three-dimensional format, you can save the generated KML into a
+separate file (<code>space-mountain.kml</code>) and then open it up in
+Google Earth.</p>
+<p class="para"><img src="http://g.codesite.articles.googlepages.com/cschalk-space-mountain-ge.jpg" alt="space mountain google earth" width="600" height="424"  style="margin-left: 2em; border:1px solid grey" /></p>
+<h5>Figure 5: Space Mountain's KML file in Google Earth</h5>
+<p class="para">Obviously this exercise merely recorded the geographic coordinates
+of the perimeter of Space Mountain, as it is not yet a full 3D model
+of the building. Converting this shape to an accurate 3D model is
+possible but is beyond the scope of this article; you can find some
+information on modeling 3D objects in KML here: <a
+href="http://earth.google.com/kml/index.html">http://earth.google.com/kml/index.html</a>. Google
+Sketchup is also an extremely useful 3D modeling tool and is available
+here: <a
+href="http://sketchup.google.com/">http://sketchup.google.com/</a>.</p>
+
+<p class="para">This concludes our brief walk-through on how to use
+EZDigitizer. Feel free to try out the hosted version of this tool
+here:</p>
+<p class="para">
+  <a
+  href="http://code.google.com/articles/support/ezdigitizer.htm"
+  target="new">Try out the EZDigitizer Tool (ezdigitizer.htm)</a></p>
+  <p class="para">&nbsp;</p>
+<h3>Building the EZ Digitizer tool</h3>
+<p class="para">In using the EZ Digitizer tool, you may think that it would take a
+fair amount of programming to achieve this level of
+functionality. However, as you'll see in the following steps, it's
+actually quite simple. Let's dive into learning how simple it is to
+build EZDigitizer!</p>
+<h4><a name="declare" id="declare"></a>Declaring a Map control in the page</h4>
+<p class="para">Building the EZ Digitizer tool requires some familiarity with the
+Maps JavaScript API. Fortunately, getting started with the Google Maps
+API is quite simple. You'll want to check out the many useful
+tutorials at the Google Maps API home page at <a
+href="http://code.google.com">http://code.google.com</a>. After
+obtaining a key to use the API, you'll see in the <a
+href="http://www.google.com/apis/maps/documentation/#The_Hello_World_of_Google_Maps">"Hello
+World" map example</a> how to declare a new Map control on your
+page.</p>
+
+<p class="para">In our case, the following code is used: </p>
+<pre class="code">    function load() {<br />      if (GBrowserIsCompatible()) {<br />        map = new GMap2(document.getElementById(&quot;map&quot;));<br />        map.setCenter(new GLatLng(37.4224, -122.0838), 13);<br />      map.addControl(new GLargeMapControl());<br />       map.addControl(new GMapTypeControl());<br />      GEvent.addListener(map, 'click', mapClick);
+       geocoder = new GClientGeocoder();<br />       }<br />    }</pre>
+
+<p class="para">As you can see in this code sample, the <code>load()</code>
+function which is called as the page is loaded, creates a new Map
+control (<code>GMap2</code>) and establishes an initial geographic
+location (Google's headquarters). Subsequent Map controls are then
+added: <code>GLargeMapControl</code> which defines the left hand
+positioning and zoom controls, and <code>GMapTypeControl</code> which
+displays the top right buttons that allow users to select
+<strong>Map</strong>, <strong>Satellite</strong>, or
+<strong>Hybrid</strong>.</p>
+
+<p class="para">In order for the map to process click events, you'll see that an
+event listener for "click" events is associated with this
+map. Additionally, since the application will allow users to search
+for locations throughout the world, a new <code>GClientGeocoder</code>
+object is instantiated. The exact usage of this object will be defined
+later in this tutorial.</p>
+<h4><a name="clickhandler" id="clickhandler"></a>Creating a click handler</h4>
+<p class="para">As you just saw in the previous code sample, the
+<code>Gevent.addListener</code> call referred to a function,
+<code>mapClick()</code>, in the third argument. This is the function
+that will be invoked for every click on the map. This is the most
+important portion of EZDigitizer's code. In short, the code in
+<code>mapClick()</code> will do the following: convert the pixel of
+the map that was clicked to a latitude and longitude pair. This point
+(<code>polyPoint</code>) is then stored in an array of points
+(<code>polyPoints</code>), which will be used throughout the
+application. Here is the <code>mapClick()</code> function's code.</p>
+
+<pre class="code"> function mapClick(marker, clickedPoint) {
+   polygonMode = document.getElementById(&quot;drawMode_polygon&quot;).checked;
+   oldMarker = marker;
+
+   // Push onto polypoints of existing polygon
+   polyPoints.push(clickedPoint);
+   drawCoordinates();
+ }</pre>
+<p class="para">In addition to processing the click event, you can see that the
+  drawing mode is determined by checking whether the
+  <code>drawMode_polygon</code> DOM element is checked. If so, the
+  <code>polygonMode</code> variable is set to <code>true</code> (this
+  will be used later when drawing the points on the map). You'll also
+  notice that the global <code>marker</code> variable (which is the
+  visual marker of the map which identifies where the user clicked)
+  is stored temporarily, and then a new <code>GMarker</code> is
+  created based on the new <code>polyPoint</code>.</p>
+
+<p class="para">Once the new point has been stored and the map is displaying a new
+marker, the <code>drawCoordinates()</code> function is called to
+display either a Polygon or Polyline on the map.</p>
+<h4><a name="coordinates" id="coordinates"></a>Creating a function to
+draw the coordinates</h4>
+<p class="para">The role of <code>drawCoordinates()</code> is to graphically
+display the array of coordinates (<code>polyPoints</code>) as either a
+Polyline or a Polygon depending on the drawing mode.</p>
+  <pre class="code">function drawCoordinates(){
+   
+  //Re-create Polyline/Polygon
+
+  if (polygonMode) {
+    polyShape = new GPolygon(polyPoints,lineColor,lineWeight,opacity,fillColor,opacity);
+  } else {
+    polyShape = new GPolyline(polyPoints,lineColor,lineWeight,opacity);
+  }
+  
+  map.clearOverlays();
+
+  // Grab last point of polyPoints to add marker
+  marker = new GMarker(polyPoints[polyPoints.length -1]);
+
+  map.addOverlay(marker);
+  map.addOverlay(polyShape);
+
+  logCoordinates();
+}</pre>
+
+<p class="para">As you can see in the code, depending on the drawing mode, either a
+new <code>GPolygon</code> or a <code>GPolyline</code> is created using
+the <code>polyPoints</code> array which contains the coordinates
+clicked so far. The additional arguments are simply a set of default
+values for line color, weight, fill color, and opacity. These are
+constant values which are predefined earlier in the JavaScript body
+(as an enhancement, additional input fields could capture a user's
+preferences for these).</p>
+<p class="para">Once the new <code>polyShape</code> has been created based on the
+<code>polyPoints</code> array, it will be used as a map
+
+<em>overlay</em>; but before displaying it, the previous overlay must
+be removed using the map function <code>clearOverlays()</code>. The
+new overlay (<code>polyShape</code>) can then be added to the
+map. </p>
+<p class="para">Since by default the new overlay lacks a marker, the final bit of
+code defines a new marker (<code>Gmarker</code>) based on the last
+point in the array. It is then added to the Map. The final line calls
+<code>logCoordinates()</code> which generates the appropriate KML
+output depending on the drawing mode.</p>
+<h4><a name="kml_log" id="kml_log"></a>Creating a function to log the
+coordinates into KML (or any other markup) </h4>
+<p class="para">Generating markup for the coordinates is actually a trivial task of
+generating the appropriate header for your particular markup, looping
+through and printing out the latitude and longitude coordinates,
+followed by printing out a corresponding footer. All of the generated
+output is sent to a text window to the right of the Map. This example
+shows how to generate KML, but this function could easily be enhanced
+to generate any other geographical data formats.</p>
+
+<p class="para"><img
+src="http://g.codesite.articles.googlepages.com/cschalk-kmlout.jpg"
+alt="kml output" width="398" height="341" style="margin-left: 2em;
+border:1px solid grey" /></p>
+<h5>Figure 6: Generating KML output for the clicked points</h5>
+<p class="para">Here is the corresponding code for
+<code>logCoordinates()</code>. As you can see, it generates a generic
+KML header and then checks the drawing mode (Polygon or Polyline). It
+then generates the appropriate KML for the mode: e.g. for a Polygon,
+it generates a <code>&lt;Polygon&gt;</code> tag. It then loops through
+the coordinates in the <code>polyPoints</code> array and prints them
+out. For a Polyline, it wraps the coordinates in a
+<code>&lt;LineString&gt;</code> tag. </p>
+  <pre class="code">    // logCoordinates - prints out coordinates of global polyPoints array
+    // This version only logs KML, but could be extended to log different types of output
+
+    function logCoordinates(){
+
+      var header = "&lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt;\n" +
+        "&lt;kml xmlns=\"http://earth.google.com/kml/2.1\"&gt;\n" +
+        "&lt;Document&gt;&lt;name&gt;Your name of document&lt;/name&gt;&lt;description&gt;Your description&lt;/description&gt;\n" +
+        "&lt;Placemark&gt;&lt;Style&gt;\n&lt;LineStyle&gt;&lt;width&gt;" + lineWeight + "&lt;/width>&lt;/LineStyle&gt;\n&lt;PolyStyle&gt;&lt;color&gt;" + 
+        kmlFillColor +"&lt;/color&gt;&lt;/PolyStyle&gt;\n&lt;/Style&gt;\n";
+
+      // check mode
+      if (polygonMode){
+        header += "&lt;Polygon&gt;&lt;extrude&gt;1&lt;/extrude&gt;\n&lt;altitudeMode&gt;relativeToGround&lt;/altitudeMode&gt;" +
+     "&lt;outerBoundaryIs&gt;\n&lt;LinearRing&gt;\n&lt;coordinates&gt;\n";
+
+        var footer = "&lt;/coordinates&gt;&lt;/LinearRing&gt;&lt;/outerBoundaryIs&gt;&lt;/Polygon&gt;&lt;/Placemark&gt;\n&lt;/Document&gt;\n&lt;/kml&gt;";
+
+  // print coords header
+  document.getElementById("coords").value =  header;
+
+  // loop to print coords 
+  for (var i = 0; i<(polyPoints.length); i++) {
+    var lat = polyPoints[i].lat();
+    var longi = polyPoints[i].lng();
+    document.getElementById("coords").value += longi + ", " + lat + ", "+ polygonDepth + "\n";
+  }
+      } else {    
+        header += "&lt;LineString&gt;&lt;tessellate&gt;1&lt;/tessellate&gt;\n&lt;coordinates&gt;\n";
+        var footer = "&lt;/coordinates&gt;&lt;/LineString&gt;&lt;/Placemark&gt;\n&lt;/Document&gt;\n&lt;/kml&gt;";
+
+        // print coords header
+        document.getElementById("coords").value =  header;
+
+        // loop to print coords 
+        for (var i = 0; i<(polyPoints.length); i++) {
+          var lat = polyPoints[i].lat();
+          var longi = polyPoints[i].lng();
+          document.getElementById("coords").value += longi + ", " + lat + ",0\n";
+        }
+     }
+     document.getElementById("coords").value +=  footer;
+   }
+
+</pre>
+<p class="para">A useful feature for allowing the user to quickly save the
+generated KML is to do a "select all" when the user clicks into the
+coordinates text area. This is done by adding an <code>onclick</code>
+event handler for the text area that selects the text content. The
+following HTML code accomplishes this. </p>
+  <pre class="code"> &lt;textarea id=&quot;coords&quot; cols=&quot;40&quot; rows=&quot;20&quot; readonly=&quot;true&quot; <code>onclick=&quot;this.select();&quot;</code>&gt;</pre>
+
+<h4><a name="search" id="search"></a>Allowing users to search
+(geocode) anywhere </h4>
+<p class="para">The final feature of EZDigitizer is the search field which allows
+users to search for any place in the world such as "DisneyLand" or
+"Paris, France." This is achieved by adding a text field and a button
+on the page, and calling a function to geocode the entered search
+query. If a location is found, the map is then centered on the new
+location; if not, an alert is displayed indicating that Google Maps
+was unable to locate the intended address.</p>
+<p class="para"><img
+src="http://g.codesite.articles.googlepages.com/cschalk-search-window.jpg"
+alt="search window" width="536" height="135" style="margin-left: 2em;
+border:1px solid grey" /></p>
+<h5>Figure 7: Implementing an address search functionality with the
+geocoder</h5>
+<p class="para">Building a search feature is also fairly straightforward. It
+consists of creating the HTML form with an input field and a submit
+button (labeled "Geocode!") along with a corresponding JavaScript
+function that will respond when the button is clicked. The HTML for
+the search window is:</p>
+<pre class="code">&lt;h4&gt;Search for location (by geocoding and/or dragging)&lt;/h4&gt;
+&lt;form action=&quot;#&quot; onsubmit=&quot;showAddress(this.address.value); return false&quot;&gt;
+
+  &lt;p&gt;
+    &lt;input type=&quot;text&quot; size=&quot;40&quot; name=&quot;address&quot; value=&quot;1600 Amphitheatre Pky, Mountain View, CA&quot; /&gt;
+
+    &lt;input type=&quot;submit&quot; value=&quot;Geocode!&quot; /&gt;
+  &lt;/p&gt;
+&lt;/form&gt;
+</pre>
+<p class="para">As you can see in the code, when the submit button is clicked, the JavaScript function <code>showAddress()</code> is called. Also notice the "return false" statement in the action argument: This prevents the form from actually submitting and thus prevents an unnecessary roundtrip since the Maps API JavaScript communicates to the server directly.</p>
+
+<p class="para">Here is the code for <code>showAddress()</code>:</p>
+<pre class="code">
+function showAddress(address) {
+  if (geocoder) {
+    geocoder.getLatLng(address,
+    function(point) {
+      if (!point) {
+        alert(address + &quot; not found&quot;);
+      } else {
+        clearMap();
+        map.setCenter(point, 13);
+        }
+      }
+    );
+  }
+}
+</pre>
+<p class="para">This function takes an input address and uses the geocoder
+<code>getLatLng()</code> function to center on the corresponding
+location. The second argument to <code>getLatLng()</code> is the
+callback function. This is the function that will execute when
+geocoding results are returned from the Google Maps server. If the
+address is not found, the <code>point</code> object will be
+
+<code>null</code> and a JavaScript alert is issued indicating to the
+user that the address was not found. If the address was found, the
+current map is cleared of any existing digitized points by
+<code>clearMap()</code> and set to the new location using the returned
+<code>point</code> object with an arbitrary zoom level of 13. That's
+all there is to providing a search address capability to a
+map.</p>
+<p class="para">Incidentally the code to clear the map, <code>clearMap()</code>, is
+also called when a user intentionally clicks the "Clear Map"
+button; this is done by simply setting the <code>onclick</code>
+property of the button to call this function:
+
+<code>onclick=&quot;clearMap();&quot;</code>.</p>
+<p class="para">The code for <code>clearMap()</code> is as follows:</p>
+<pre class="code">function clearMap(){
+  map.clearOverlays();
+
+  polyPoints = [];
+  document.getElementById(&quot;coords&quot;).value =  &quot;&amp;lt;-- Click on the map to digitize!&quot;;
+} </pre>
+<p class="para"> To clear the map, the function first calls the
+
+<code>clearOverlays()</code> function to remove any overlays from the
+current map. It then reinitializes the global <code>polyPoints</code>
+array. The final line clears out the text area (<code>coords</code>)
+and sets the text back to the starter message describing how to use
+the digitizer.</p>
+<h4>Deleting a point</h4>
+<p class="para">The final feature discussed in this article is the "Delete Last
+Point" feature. This feature allows the user to erase the previous
+point that was clicked in order to possibly correct or amend the
+location. The implementation for this function is to simply remove the
+last point in the <code>polyPoints</code> array and then redraw the
+shape. This is accomplished with the following code:</p>
+<pre class="code">function deleteLastPoint(){
+  map.removeOverlay(polyShape);
+  // pop last element of polypoint array
+  polyPoints.pop();
+  drawCoordinates();
+} </pre>
+
+<p class="para">Similar to the <code>clearMap()</code> function, this function is
+linked to the button labeled "Delete Last Point" by using its
+<code>onclick</code> property. </p>
+<h3>Summary</h3>
+<p class="para">As you can see, building a simple yet useful tool such as this
+example digitizer is a fairly straightforward process. In building
+this tool, you've seen that it covers many of the common topics useful
+for building custom maps including customized map displays and
+handling click events to draw shapes on the map. It also explains how
+to allow users to search for an address with the geocoder. This
+example is also meant to serve as a simple starting point from which
+you can then extend. As you continue to work with the Google Maps API,
+you'll find that your only limit is your imagination.</p>
+<p class="para">For further information on the Google Maps API, please visit <a
+href="http://www.google.com/apis/maps/documentation/">http://www.google.com/apis/maps/documentation/</a></p>
+</div>
+
+<!-- ########## END PAGE CONTENT ########## -->
+  
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

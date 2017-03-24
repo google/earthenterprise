@@ -1,0 +1,721 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+ 
+
+
+
+  
+
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/v2/basics.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Google Maps API Concepts - Google Maps JavaScript API V2 - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/html/apis/maps/documentation/javascript/v2/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../../css/iehacks.css"><![endif]-->
+
+<link href="../../local_extensions.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container" class="depr">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps JavaScript API V2 (<a href="../../../terms.html#section_4_4">Deprecated</a>)</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="index.html" title="Google Maps JavaScript API V2 home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="basics.html" class="selected" title="Official Google Maps JavaScript API V2 documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../../faq.html" title="Answers to frequently asked questions about Google Maps JavaScript API V2">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="articles.html" title="Focused articles and tutorials for Google Maps JavaScript API V2 developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps JavaScript API V2 blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="forum.html" title="Google Maps JavaScript API V2 developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../../../terms.html" title="Google Maps JavaScript API V2 terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <a name="gc-toc-anchor"></a>  
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../../../index.html">Maps API Family</a></li>
+  <li><a href="../../../signup.html">Sign up for an API key</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index your Maps Content</a></li>
+</ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Javascript API V3</h2>
+        <ul>
+          <li><a href="../index.html">Home Page</a></li>
+          <li><a href="../basics.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+       <div class="line"></div>
+    <ul>
+           <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+             <ul>
+               <li><a class="tlw-expanded" href="index.html">Developer Guide</a>
+                <ul>
+                 <li><a href="introduction.html">Basics</a></li>
+                 <li><a href="events.html">Events</a></li>
+                 <li><a href="controls.html">Controls</a></li>
+                 <li><a href="overlays.html">Overlays</a></li>
+                 <li><a href="services.html">Services</a></li>
+                </ul>
+               </li>
+              <li><a href="reference.html">API Reference</a></li>
+              <li><h2 class="tlw-expanded">Code Samples:</h2>
+               <ul>
+               <li><a href="demogallery.html">Demos</a></li>
+               <li><a href="examples/index.html">Examples</a></li>
+               <li><a href="http://code.google.com/apis/ajax/playground/?exp=maps">Code Playground</a></li>
+               </ul>
+              </li>
+              <li><h2 class="tlw-expanded">More Resources:</h2>
+               <ul>
+               <li><a href="articles.html">Articles</a></li>
+               <li><a href="mediagallery.html">Presentations</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/issues/list?can=2&q=apitype%3AJavascript&colspec=ID+Type+Status+Introduced+Fixed+Summary+Internal+Stars&cells=tiles">Known Issues</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/wiki/JavascriptMapsAPIChangelog">Changelog</a><sup class="new">New!</sup></li>
+               <li><a href="http://code.google.com/p/gmaps-utility-library-dev/">Utility Library</a></li>
+               <li><a href="http://maps.google.com/casestudies/">Case Studies</a></li>
+               </ul>
+              </li>
+             </ul>
+           </li>
+         </ul>
+   <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../../flash/index.html">Home Page</a></li>
+          <li><a href="../../flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+   <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../../mapsdata/index.html">Home Page</a></li>
+          <li><a href="../../mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+     <div class="line"></div>
+      <ul>
+        <li><h2><a href="../../webservices/index.html">Maps API Web Services</a></h2>
+         <ul>
+           <li><a href="../../geocoding/index.html">Geocoding API</a></li>
+           <li><a href="../../directions/index.html">Directions API</a></li>
+           <li><a href="../../elevation/index.html">Elevation API</a></li>
+           <li><a href="../../places/index.html">Places API</a></li>
+         </ul>
+       </li>
+      </ul>
+       <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../../staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../../localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../../localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+    <div class="promo"><p><a href="../../premier/index.html">Google Maps API Premier</a></p>
+    <p>Same great maps plus a SLA, support, and control over ads</p>
+    </div>
+
+      </div>
+      
+      <a name="gc-pagecontent-anchor"></a>   
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Google Maps API Concepts</h1>
+
+
+<p>Welcome to the developer documentation for the Google Maps API! The Google Maps
+JavaScript API lets you embed <a href="http://maps.google.com/">Google Maps</a>
+in your web pages. To use the API, you need to first
+<a href="../../../signup.html">
+sign up for an API key</a>. Once you've received an API key, you can develop
+a map application following the instructions in this documentation.</p>
+
+<p class="note">Note: The Google Maps Javascript API Version 2
+has been officially deprecated as of May 19, 2010. The V2 API will continue
+to work as per our <a href="../../../terms.html#section_4_4">deprecation policy</a>,
+but we encourage you to migrate your code to
+<a href="../index.html">version 3 of the Maps
+Javascript API</a>.</p>
+
+
+<h1>Table of Contents</h1>
+
+<div class="toc">
+  <ol>
+  <li><a href="#Audience">Audience</a></li>
+  <li><a href="#AJAX_Loader">Using the Google AJAX API Loader</a></li>
+  <li><a href="#Localization">Localization of the Google Maps API</a></li>
+  <li><a href="#SpecifyingSensor">Specifying the Sensor Parameter</a></li>
+  <li><a href="#ProgrammingNotes">Programming Notes</a>
+  <ol class="toc">
+    <li><a href="#Browser_Compatibility">Browser Compatibility</a></li>
+    <li><a href="#CharacterEncoding">Character Encoding</a></li>
+    <li><a href="#XHTML_and_VML">XHTML and VML</a></li>
+    <li><a href="#API_Updates">API Updates</a></li>
+    <li><a href="#Memory_Leaks">Preventing Memory Leaks</a></li>
+  </ol>
+  </li>
+  <li><a href="#Troubleshooting">Troubleshooting</a></li>
+  <li><a href="#Other_Resources">Other Resources</a></li>
+  </ol>
+</div>
+
+<h1><a name="Audience" id="Audience"></a>Audience</h1>
+
+<p>This documentation is designed for people familiar with 
+<a href="http://www.ecma-international.org/publications/standards/Ecma-262.htm">JavaScript</a> 
+programming and object-oriented programming concepts. You should also be familiar with 
+<a href="http://maps.google.com/">Google Maps</a> from a user's point of view. There are 
+many <a href="http://www.google.com/search?q=javascript+tutorials">JavaScript tutorials</a> 
+available on the Web.</p>
+
+<p>This conceptual documentation is not complete and exhaustive; it is designed to let you quickly start
+ exploring and developing cool applications with the Google Maps API. We also publish the 
+<a href="reference.html">Google Maps API Reference</a> which should be relatively complete.</p>
+
+<p>We've recently reorganized the documentation to add more conceptual information and break out discussions
+into the following key areas:</p>
+<ul>
+<li><a href="introduction.html">Basic Map Objects</a></li>
+<li><a href="events.html">Map Events</a></li>
+<li><a href="controls.html">Map Controls</a></li>
+<li><a href="overlays.html">Map Overlays</a></li>
+<li><a href="services.html">Map Services</a></li>
+</ul>
+
+<p>We hope you find the redesign easier to follow, especially for developers who are new to the Maps API.
+Feedback on the documentation is welcome as well. Make sure to join the 
+<a href="http://groups-beta.google.com/group/Google-Maps-API">Maps API developer forum</a> 
+to give feedback and discuss the API.</p>
+
+<h1><a name="AJAX_Loader" id="AJAX_Loader"></a>Using the Google AJAX API Loader</h1>
+
+<p>The Google Maps API is now fully integrated with the 
+<a href="http://code.google.com/apis/ajax/documentation/"> Google AJAX APIs</a>. This 
+framework allows you to load one API key for all supported Google AJAX APIs (including
+Google Maps) and also provides a common namespace for each API, allowing different Google 
+APIs to operate together. Don't worry: if you decide not to use the Google AJAX API 
+framework, you can continue to use the existing namespace.</p>
+
+<p>Using the Google AJAX API framework is relatively simple. Changing your application to use the framework 
+involves the following steps:</p>
+
+<ul>
+	<li>Instead of loading the API from <code>http://maps.google.com/apis</code>, you load the common loader from 
+	<code>http://www.google.com/jsapi</code>. You can pass your existing Google Maps API key to this URL:
+	
+<pre class="prettyprint">
+&lt;script type="text/javascript" src="http://www.google.com/jsapi?key=<i>ABCDEFG</i>"&gt;&lt;/script&gt;
+</pre>
+	</li>
+	<li>Load the specific API you want using the <code>google.load</code> method. The <code>google.load</code>
+	method takes an argument for the specific API and version number to load:
+	
+<pre class="prettyprint">
+&lt;script type="text/javascript"&gt;
+  google.load("maps", "2");
+&lt;/script&gt;
+</pre>
+	</li>
+	
+	<li>Use the <code>google.maps.*</code> namespace for all classes, methods and 
+	properties you currently use in the Google Maps API, replacing the 
+	<code><i>G</i></code> prefix with this namespace. Perform any initialization 
+	to your objects using <code>google.setOnLoadCallback()</code>. For example,
+	the <code>GMap2</code> object is mapped to <code>google.maps.Map2</code> when 
+	using the Google AJAX API loader:
+	
+<pre class="prettyprint">
+&lt;script type="text/javascript" src="http://www.google.com/jsapi?key=<i>ABCDEFG</i>"&gt;&lt;/script&gt;
+&lt;script type="text/javascript"&gt;
+  <b>google.load</b>("maps", "2.x");
+   
+  // Call this function when the page has been loaded
+  function initialize() {
+    var map = new google.maps.Map2(document.getElementById("map"));
+    map.setCenter(new google.maps.LatLng(37.4419, -122.1419), 13);
+  }
+  <b>google.setOnLoadCallback</b>(initialize);
+&lt;/script&gt;
+</pre>
+</li>
+</ul>
+
+<p>Full documentation for using the Google AJAX API loader is available at 
+<a href="http://code.google.com/apis/ajax/documentation/">http://code.google.com/apis/ajax/documentation/</a>.</p>
+
+<h1><a name="Localization" id="Localization"></a>Localization of the Google Maps API</h1>
+
+<p>The Google Maps API uses the browser's preferred language setting when displaying textual 
+information such as the names for controls, copyright notices, and driving directions. If you 
+wish to change the Maps API to ignore the browser's language setting and force it to 
+display information in a particular language, you can add an optional <code>hl</code> 
+parameter to the <code>&lt;script&gt;</code> tag when including the Maps API javascript 
+code, specifying the domain language to use.</p>
+
+<p>For example, to display a Maps API application in German, add <code>&amp;hl=de</code>
+to the <code>&lt;script&gt;</code> tag as shown below:</p>
+
+<pre class="prettyprint">
+&lt;script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=abcdefg&amp;hl=de"
+</pre>
+
+<p>See also the <a href="../../../faq.html#languagesupport">supported list of domain 
+languages</a>. Note that we often update supported languages so this list may not be 
+exhaustive.</p>
+
+<p>Bidirectional languages, such as Arabic and Hebrew, require special consideration. 
+These languages affect the layout of info windows and other UI elements in the 
+Maps API. As a result, the Maps API will only implement these languages if explicitly
+set through an applicable <code>hl</code> parameter, or if the Maps API is loaded with an
+<code>allow_bidi=true</code> parameter and the user's browser setting specifies a
+bidirectional language. Note that browser settings are insufficient to enforce
+a language change on their own.</p>
+
+<pre class="prettyprint">
+&lt;script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=abcdefg&amp;allow_bidi=true"
+</pre>
+
+<p>The Google Maps API provides a read-only <code>GLanguage</code> namespace useful to 
+query the language settings in use by a Maps API application. In specific,
+<code>GLanguage.getLanguageCode()</code> returns the BCP 47 language code in use by the
+application, while <code>GLanguage.isRtl()</code> queries whether the language is 
+bi-directional.</p>
+
+<p>(See the <a href="../../reference.html#GLanguage">
+<code>GLanguage</code> reference documentation</a> for more information.)</p>
+
+<h1><a name="SpecifyingSensor" id="SpecifyingSensor"></a>Specifying the Sensor Parameter</h1>
+
+<p>Use of the Google Maps API now requires that you indicate whether your application is using a 
+sensor (such as a GPS locator) to determine the user's location. This is especially important for 
+mobile devices. Applications must pass a required <code>sensor</code> parameter to the 
+<code>&lt;script&gt;</code> tag when including the Maps API javascript code, indicating whether or not
+your application is using a sensor device.</p>
+
+<p>Applications that determine the user's location via a sensor must pass<code>&sensor=true</code>
+when loading the Maps API JavaScript via either the <code>http://maps.google.com/maps</code>
+or with the Common Loader.</p>
+
+<pre class="prettyprint">
+#
+# Example using sensor when loading the Maps JavaScript API
+#
+&lt;script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<i>abcdefg</i>&amp;sensor=true"&gt;
+#
+# Example using sensor when loading the Maps API via the common loader
+#
+&lt;script type="text/javascript" src="http://www.google.com/jsapi?key=<i>abcdef</i>"&gt;&lt;/script&gt;
+&lt;script type="text/javascript"&gt;
+  <b>google.load</b>("maps", "2",{"other_params":"sensor=true"});
+
+  function initialize() {
+    var map = new google.maps.Map2(document.getElementById("map"));
+    map.setCenter(new google.maps.LatLng(37.4419, -122.1419), 13);
+  }
+  <b>google.setOnLoadCallback</b>(initialize);
+&lt;/script&gt;
+</pre>
+
+<p>Note that even if your device does not use a sensing device, you must still pass this parameter, setting
+its value to <code>false</code>.</p>
+
+<h1><a name="ProgrammingNotes" id="ProgrammingNotes"></a>Programming Notes</h1>
+
+<p>Before you start delving into the Google Maps API, you should take note of
+the following concerns to ensure your application works smoothly across
+its intended platforms.</p>
+
+<h2><a name="Browser_Compatibility" id="Browser_Compatibility"></a>Browser Compatibility</h2>
+
+<p>The Google Maps API supports the 
+<a href="http://local.google.com/support/bin/answer.py?answer=16532&amp;topic=1499">same browsers 
+as the Google Maps website</a>. The script <code>http://maps.google.com/maps?file=api&amp;v=2</code>
+ can be parsed in almost every browser without errors, so you can safely include that script before 
+ checking for compatibility.</p>
+
+<p>Different applications sometimes require different behaviors for users with incompatible browsers. 
+The Maps API provides a global method (<code>GBrowserIsCompatible()</code>) to check compatibility, 
+but it does not have any automatic behavior when it detects an incompatible browser. Most of the 
+examples in this document do not check for browser compatibility, nor do they 
+display an error message for older browsers. Clearly real applications should do something 
+more friendly with incompatible browsers, but we have omitted such checks to make the 
+examples more readable.</p>
+
+<p>Non-trivial applications will inevitably encounter inconsistencies between browsers and 
+platforms. There is no simple solution to these problems, but the 
+<a href="http://groups.google.com/group/Google-Maps-API">Google Maps API developer forum</a> 
+and <a href="http://www.quirksmode.org" rel="nofollow">quirksmode.org</a> are 
+both good resources to find workarounds.</p>
+
+<h2><a name="CharacterEncoding" id="CharacterEncoding"></a>Character Encoding</h2>
+
+<p>The Google Maps API, by default, outputs and provides text elements using UTF-8 character
+encoding. In most cases, this is preferable. However, you may encounter problems if your HTML page is
+encoded using a different encoding scheme. In those cases, you will want to ensure that
+your HTML page and the Google Maps API are set up to use the same encoding scheme.</p>
+
+<p>You can set your HTML page's encoding scheme by setting the <code>content:charset</code> 
+parameter within the <code>&lt;meta&gt;</code> tag:</p>
+
+<pre class="prettyprint">
+&lt;meta http-equiv="content-type" content="text/html; charset=utf-8"/&gt;
+</pre>
+
+<p>If your web application supports UTF-8, set your <code>&lt;meta&gt;</code> tag as shown above.
+All of the examples within the Maps API documentation use this encoding scheme.</p>
+
+<p>There may be cases in which you may use (or must use) a different character encoding
+in your web page. In those cases, you can set the output encoding for the Maps API using the 
+<code>oe</code> parameter when you first load the Maps API with the <code>&lt;script&gt;</code>
+tag. The <code>oe</code> parameter supports many encoding values, including the most popular 
+noted below:</p>
+
+<ul>
+<li><code>utf-8</code> or <code>utf8</code> UTF-8 encoding (default)</li>
+<li><code>iso-8859-1</code> or <code>latin1</code> ISO-8859-1 Western European</li>
+<li><code>iso-8859-2</code> or <code>latin2</code> ISO-8859-2 Eastern European</li>
+<li><code>iso-8859-5</code> or <code>cyrillic</code> Russian (Cyrillic)</li>
+<li><code>iso-8859-7</code> or <code>greek</code> Greek</li>
+<li><code>iso-8859-8</code> or <code>hebrew</code> Hebrew</li>
+<li><code>shift_jis</code> Japanese</li>
+<li><code>gb2312</code> Simplified Chinese</li>
+<li><code>big5</code> Traditional Chinese</li>
+</ul>
+
+<p>Note that default encoding of <code>oe=utf-8</code> is highly preferred. Only set a different encoding
+if you have an HTML page that does not support UTF-8.</p>
+
+<p>For more information on encoding schemes, see 
+<a href="http://en.wikipedia.org/wiki/Character_encoding">Character Encoding</a>.</p>
+
+<h2><a name="XHTML_and_VML" id="XHTML_and_VML"></a>XHTML and VML</h2>
+
+<p>We recommend that you use standards-compliant XHTML on pages that contain maps. When browsers see the XHTML 
+<code>DOCTYPE</code> at the top of the page, they render the page in "standards compliance mode," which makes 
+layout and behaviors much more predictable across browsers. Pages without that definition may render in
+"<a href="http://en.wikipedia.org/wiki/Quirks_mode">quirks mode</a>" which can lead to inconsistent layout.</p>
+
+<p>If you want to show <a href="#Polylines_overview">polylines</a> on your map (like the lines used by Google 
+Maps to show driving directions), you need to include the VML namespace in your XHTML document 
+to make everything work properly in Internet Explorer. The beginning of your XHTML document should look like this:</p>
+
+<pre class="prettyprint">
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml" <span style="font-weight: bold">xmlns:v="urn:schemas-microsoft-com:vml"</span>&gt;
+</pre>
+
+<h2><a name="API_Updates" id="API_Updates"></a>API Updates</h2>
+
+<p>The <code>v</code> parameter within the <code>http://maps.google.com/maps?file=api&amp;<b>v</b>=2</code> 
+URL refers to the <i>version</i> number of the Google Maps API to use. Most users of the API 
+will want to use the current "Version 2" API by passing the <code>v=2</code> parameter within that 
+URL. You may instead obtain the latest release (including the latest features) by passing 
+<code>v=2.x</code> instead. However, be aware that the latest release may not be as reliable as 
+the <code>v=2</code> release and we do not recommend using this version for production sites.
+We update the Google Maps API often (sometimes every week), at which 
+point features within the <code>v=2.x</code> release are migrated into the <code>v=2</code> 
+release unless problems are discovered.</p>
+
+<p>In addition, you may use a "stable" version of the API by passing the 
+<code>v=2.s</code> parameter. This version is updated less often, about every
+few months. Since the <code>v=2</code> and <code>v=2.x</code> releases are updated 
+about every two weeks, some developers will prefer to use the stable <code>v=2.s</code>. 
+Please note that the stable version may be several versions behind the current 
+version and therefore may not include some of the latest features.</p>
+
+<p>Each version of the API is labeled as we update it (for example, "Version 2.76"). As we 
+update the API, older code based on previous versions may occasionally not work as advertised. 
+If you absolutely need to peg your application to a particular release of the API, you can do so 
+by explicitly including that version within the <code>v</code> parameter (e.g. <code>v=2.75</code>). 
+However, this is not recommended. It is always best to base your products on the code as it 
+gets updated.</p>
+
+<p>When we do a significant update to the API in the future, we will change up the major 
+version number and post a notice on <a href="http://code.google.com/">Google Code</a> and 
+the <a href="http://groups-beta.google.com/group/Google-Maps-API">Maps API developer forum</a>. 
+When that happens we expect to support both versions for at least a month in order to allow 
+you to migrate your code. We will also update the 
+<a href="http://code.google.com/p/gmaps-api-issues/wiki/JavascriptMapsAPIChangelog">
+Google Maps API Changelog</a> for any API bug fixes or features added.</p>
+
+<p>The Maps team also transparently updates the API with the most recent bug fixes and 
+performance enhancements. These bug fixes should only improve performance and fix bugs, 
+but we may inadvertently break some API clients. Please use the 
+<a href="http://groups-beta.google.com/group/Google-Maps-API">Maps API developer forum</a> 
+to report such issues.</p>
+
+<h2><a name="Example_Simplication" id="Example_Simplication"></a>Examples in the Maps API</h2>
+
+<p>Note that most of the examples in this documentation show only relevant JavaScript code, not the full 
+HTML file. You can plug the JavaScript code into your own skeleton HTML file, or you can 
+download the full HTML file for each example by clicking the link after the example.</p>
+
+<h2><a name="Memory_Leaks"></a>Reducing Browser Memory Leaks</h2>
+
+<p>The Google Maps API encourages the use of 
+<a href="http://jibbering.com/faq/faq_notes/closures.html" rel="nofollow">
+function closures</a>, and the API event handling system <code>GEvent</code> 
+attaches events to DOM nodes in such a way that almost inevitably 
+causes some browsers to leak memory, 
+<a href="http://jibbering.com/faq/faq_notes/closures.html#clMem" rel="nofollow">
+particularly Internet Explorer</a>. Version 2 of the Maps API 
+introduces a new method, <code>GUnload()</code>, that will remove 
+most of the circular references that cause these leaks.  You should call 
+<code>GUnload()</code> in the <code>onunload</code> event of your page 
+to reduce the potential that your application leaks memory:</p>
+
+<pre class="prettyprint">&lt;body onunload=&quot;GUnload()&quot;&gt;</pre>
+
+<p>Using this function has virtually eliminated Internet Explorer memory 
+leaks in Google Maps, though you should test for memory leaks on your own 
+site using tools like <a href="http://www.outofhanwell.com/ieleak/" rel="nofollow">
+Drip</a> if you are noticing memory consumption problems.</p>
+
+<h1><a name="Other_Resources" id="Other_Resources"></a>Other resources</h1>
+
+<p>Here are some additional resources. Note that these sites are not owned 
+or supported by Google.</p>
+
+<ul>
+  <li>Google Mapki: <a href="http://www.mapki.com/" rel="nofollow">Mapki</a></li>
+  <li>Google Maps API Tutorial: <a href="http://econym.org.uk/gmap/" rel="nofollow">http://econym.org.uk/gmap/</a></li>
+  <li>Esa's Google Maps API Examples: 
+  <a href="http://koti.mbnet.fi/ojalesa/exam/index.html" rel="nofollow">http://koti.mbnet.fi/ojalesa/exam/index.html</a></li>
+  <li>USNaviguide's Maps API Examples: <a href="http://maps.huge.info/examples.htm" rel="nofollow">http://maps.huge.info/examples.htm</a></li>
+  <li>Mark McClure's Encoded Polyline Examples: <a href="http://facstaff.unca.edu/mcmcclur/GoogleMaps/EncodePolyline/" rel="nofollow">
+  http://facstaff.unca.edu/mcmcclur/GoogleMaps/EncodePolyline/</a></li>
+  <li>Marcelo's Maps API Experiments: <a href="http://maps.forum.nu/" rel="nofollow">http://maps.forum.nu/</a></li>
+  <li>Bill Chadwick's Maps API Demos: <a href="http://www.bdcc.co.uk/Gmaps/BdccGmapBits.htm" rel="nofollow">http://www.bdcc.co.uk/Gmaps/BdccGmapBits.htm</a></li>
+</ul>
+
+<h1><a name="Troubleshooting" id="Troubleshooting"></a>Troubleshooting</h1>
+
+<p>If your code doesn't seem to be working, here are some approaches 
+that might help you solve your problems:</p>
+
+<ul>
+  <li>Make sure your API key is valid.</li>
+  <li>Look for typos. Remember that JavaScript is a case-sensitive language.</li>
+  <li>Use a JavaScript debugger. In Firefox, you can use the 
+  JavaScript console, the <a href="http://www.mozilla.org/projects/venkman/" rel="nofollow">
+  Venkman Debugger</a>, or the 
+  <a href="https://addons.mozilla.org/en-US/firefox/addon/1843" rel="nofollow">Firebug add-on</a>. 
+  In IE, you can use the 
+  <a href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/sdbug/Html/sdbug_17.asp" rel="nofollow">
+  Microsoft Script Debugger</a>. This <a href="../../../articles/debuggingmaps.html">series of screencasts</a>
+  demonstrates how to use the various debugging tools.</li>
+  <li>Search the <a href="http://groups.google.com/group/Google-Maps-API"> Maps 
+  API developer forum</a>. If you can't find a post that answers your question, 
+  post your question to the group along with a link to a web page that demonstrates the problem.</li>
+  <li>See <a href="#Other_Resources">Other Resources</a> for third party developer resources. </li>
+</ul>
+
+        <!-- end body text -->
+
+
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="Opening an Info Window" height="300">
+  <Require feature="sharedmap"/>
+</ModulePrefs>
+<Content type="html"><![CDATA[
+
+<small>
+The following example code displays an info window anchored to the center of the map with a simple "Hello World" message.
+</small>
+
+<script>
+var map = new GMap2();
+map.getCenterAsync(function(center) {
+  map.openInfoWindowHtml(center, "Hello World");
+});
+</script>
+
+]]></Content>
+</Module>

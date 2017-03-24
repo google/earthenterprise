@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <link href="user_docs.css" rel="stylesheet" type="text/css">
+    <link href="local_extensions.css" rel="stylesheet" type="text/css">
+    <title>
+      Importing Your Data Into Google Earth - Google Earth User Guide
+    </title>
+    <style type="text/css">
+/*<![CDATA[*/
+    table.c8 {background-color: #FFFFFF}
+    tr.c7 {background-color: #FFFFFF}
+    td.c6 {background-color: #E0DFE3}
+    td.c5 {background-color: #FFFFFF}
+    em.c4 {text-decoration: underline}
+    form.c3 {margin-bottom: 0;margin-top: 0;}
+    li.c2 {list-style: none; display: inline}
+    span.c1 {font-size: 100%;}
+    /*]]>*/
+    </style>
+  </head>
+  <body id="index">
+    <a id="top" name="top"></a>
+    <div id="header">
+      <div id="logo">
+        <a href="http://earth.google.com"><img alt="Return to earth.google.com" border="0" src=
+        "http://www.google.com/intl/en/images/logos/earth_logo.gif"></a>
+      </div>
+      <h1 id="doc_title">
+        Google Earth User Guide
+      </h1>
+    </div>
+    <div id="wrapper">
+      <div id="sidenav">
+        <form action="http://www.google.com/search" class="c3" method="get">
+          <span class="c1">Search Google Earth<br>
+          User Guide</span><br>
+          <form action="http://www.google.com/cse" id="cse-search-box" name="cse-search-box">
+            <div>
+              <input name="cx" type="hidden" value="006447561658385433045:da9zsap5cmm">
+              <input name="q" size="18" type="text"> <input name="sa" type="submit" value="Search">
+            </div>
+          </form>
+          <ul>
+            <li>
+              <h1>
+                <a href="ug_toc.html">Table of Contents</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="index.html">Introduction</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_findplaces.html">Finding Places and Directions</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_placemarks.html">Marking Places</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_layers.html">Using Layers</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_mapfeatures.html">Using Map Features</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_places.html">Using Places</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_kml.html">About KML</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_sharingplacedata.html">Sharing Places Information</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_touringplaces.html">Using Tours</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_editing.html">Editing Places and Folders</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_searchresults.html">Managing Search Results</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_measuring.html">Measuring Distances and Areas</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_sky.html">Viewing Sky</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_drawing.html">Drawing Paths and Polygons</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_imageoverlays.html">Using Image Overlays and 3D Models</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_flightsim.html">Using Flight Simulator</a>
+              </h1>
+            </li>
+            <li class="selected">
+              <h1>
+                Importing Your Data Into Google Earth
+              </h1>
+              <ul>
+                <li>
+                  <a href="#importvector">Importing Vector Data</a>
+                  <ul>
+                    <li>
+                      <a href="#3rdpartyvector">Using Third Party Vector Data</a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#text">Using Generic Text Files</a>
+                </li>
+                <li class="c2">
+                  <ul>
+                    <li>
+                      <a href="#reqfields">Required Location Fields</a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#addresses">Using Addresses</a>
+                </li>
+                <li>
+                  <a href="#coordinates">Using Geographic Coordinates</a>
+                </li>
+                <li class="c2">
+                  <ul>
+                    <li>
+                      <a href="#optfields">Optional and Descriptive Fields</a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#viewvector">Viewing Vector Data Fields</a>
+                </li>
+                <li>
+                  <a href="#modifyvector">Modifying Vector Data Display</a>
+                </li>
+                <li>
+                  <a href="#importimagery">Importing Imagery</a>
+                  <ul>
+                    <li>
+                      <a href="#opengis">Opening GIS Imagery</a>
+                    </li>
+                    <li>
+                      <a href="#savegis">Saving GIS Imagery</a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#note">A Note About Projections and Datums</a>
+                </li>
+                <li>
+                  <a href="#mapprojection">What is a Map Projection?</a>
+                </li>
+                <li>
+                  <a href="#datum">What Is a Datum?</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_styles.html">Using Style Templates</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_gps.html">Viewing Timelines</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_movies.html">Making Movies with Google Earth</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_keyboard.html">Keyboard Controls</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_3dviewer.html">3D Viewer Options</a>
+              </h1>
+            </li>
+          </ul>
+        </form>
+      </div>
+      <div id="pagecontent">
+        <h2>
+          Importing Your Data Into Google Earth
+        </h2>
+        <p>
+          Use the Data Import feature to import your custom geographic data into Google Earth and
+          view it as you would any of the <a href="ug_layers.html">layers</a> in the Layers panel.
+          When you use this import feature, you are importing two basic kinds of data:
+        </p>
+        <ul>
+          <li>
+            <strong>Vector Data</strong> - Vector data consists of points, lines, paths, and
+            polygons. Typically, point data is used to describe specific locations, such as the
+            center of a city. Lines and paths can be used for road or boundary data, for example,
+            while polygons might be used to describe parcel data or define other areas such as
+            lakes. You can import vector data into Google Earth from third-party data providers,
+            such as ESRI. In addition, you can use generic text files to import point data that you
+            define yourself. Once you import vector data into the Google Earth application, you can
+            change its appearance or content in the same way you would when editing placemarks and
+            folders. In addition, you can use <em>Style Templates</em> to format your data in
+            visually meaningful ways. You can also display <a href="ug_kml.html">KML data</a> in a
+            time sequence. To learn more, see <a href="ug_gps.html#timeline">Viewing a
+            Timeline</a>.
+          </li>
+          <li>
+            <strong>Imagery Data</strong> - You can import imagery data such as aerial maps or
+            topographical maps and have the imagery properly projected over the base imagery in the
+            3D viewer. For this to work, the imagery file itself must be in the proper format.
+            Imagery of this type is referred to as <em>GIS imagery</em>.
+          </li>
+        </ul>�
+        <div class="note">
+          <strong>Note</strong> - Import features are available only to Google Earth Pro and EC
+          users.
+        </div>
+        <p>
+          Once you import vector or imagery data into the Google Earth application, you can save
+          your modified data just as you would other types of placemarks or overlays.
+        </p>
+        <h2>
+          <a id="importvector" name="importvector"></a>Importing Vector Data
+        </h2>
+        <p>
+          Google Earth Pro and EC support the following kinds of vector data:
+        </p>
+        <ul>
+          <li>Points
+          </li>
+          <li>Lines and paths
+          </li>
+          <li>Polygons, including filled polygons
+          </li>
+        </ul>
+        <p>
+          The process of importing vector data files is simple:
+        </p>
+        <ol>
+          <li>Import the vector file using one of the following ways:
+            <ul>
+              <li>
+                <strong>Drag and drop</strong> - Locate the file on your computer or a network
+                server and drag it over the Google Earth 3D viewer.
+              </li>
+              <li>
+                <strong>Select <em>Open</em> or <em>Import...</em> from the <em>File</em>
+                menu</strong> - When you choose this option, you can specifically select the type
+                of data you're importing (i.e., TXT, SHP, TAB) or indicate <em>All data import
+                formats</em> from the select menu.
+              </li>
+            </ul><br>
+            You can also open a file from a machine on the network as you would open any file. In
+            addition, if you want to open a file located on a web browser, you must first download
+            the file <em>and all related files</em> to your computer or local network and then open
+            it.
+          </li>
+          <li>At the prompt, choose whether or not to apply a style template. If you select Yes to
+          apply a style template, you can define a new one at that point, or select an existing one
+          if one has already been defined for that data file. For more information, see <a href=
+          "ug_styles.html">Using Style Templates</a>.
+          </li>
+        </ol>
+        <p>
+          Once imported, the vector elements appear in the 3D viewer and the imported file is
+          listed under the <em>Temporary Places</em> folder. Labels, icons, color, and description
+          appear just as they do for other types of places and folders depending upon how you have
+          defined them using the style template.
+        </p>
+        <div class="note">
+          <strong>Note:</strong> If you don't use a style template to modify the appearance of the
+          data you've ingested, Google Earth looks for a <em class="c4">Name</em> field to use as
+          the label for your data. This label appears in the 3D viewer next to points as well as in
+          the listing beneath <em>Temporary Places</em>. If your data does not contain a
+          <em>Name</em> field, the first available field that contains text is used as the label
+          for data.
+        </div>
+        <p>
+          The rest of this section covers the following topics:
+        </p>
+        <ul>
+          <li>
+            <a href="#3rdpartyvector">Using third party vector data</a>
+          </li>
+          <li>
+            <a href="#text">Using generic text files</a> that contain tab- or comma-separated point
+            data. Only users of Google Earth EC or Google Earth PRO can import GIS vector data
+            files. However all Google Earth versions can import generic text files
+          </li>
+          <li>
+            <a href="#importimagery">Importing imagery</a>
+          </li>
+          <li>
+            <a href="#note">A brief discussion of projections and datums</a>
+          </li>
+        </ul>
+        <h3>
+          <a name="3rdpartyvector"></a>Using Third Party Vector Data
+        </h3>
+        <p>
+          Google Earth EC and Google Earth PRO users with the data import module can import the
+          following vector file formats:
+        </p>
+        <ul>
+          <li>MapInfo (TAB) - Required files include:
+            <ul>
+              <li>MAP ID
+              </li>
+              <li>DAT
+              </li>
+            </ul>
+          </li>
+          <li>ESRI Shape (SHP) - Requires SHX Projection information, which can either be built
+          into the SHP file or defined in a separate file with a PRJ extension DBF (for viewing
+          field data)
+          </li>
+        </ul>
+        <p>
+          Most third-party GIS vector data comes as a collection of related files that operate
+          together to produce all the vector data you see in Google Earth. Be aware that if
+          expected data does not display in the 3D viewer, it might be due to missing support
+          files. Those vector file types that require additional support files are indicated in the
+          list above.
+        </p>
+        <div class="note">
+          <strong>Note</strong> - You can also use generic text files to create your own point data
+          for use in Google Earth.
+        </div>
+        <h2>
+          <a id="text" name="text"></a>Using Generic Text Files
+        </h2>
+        <p>
+          In addition to importing vector data in SHP, TAB, and other formats, you can define your
+          own point data and import it into Google Earth.
+        </p>
+        <div class="note">
+          <strong>Note</strong> - Only point data can be created and imported using generic text
+          files.
+        </div>
+        <p>
+          Generic text files need named columns whose values are separated either by commas,
+          spaces, or tabs. Do this by creating your data in a spreadsheet application such as
+          Microsoft Excel and then saving the file as either CSV or TXT format. Alternatively, you
+          could use a programmatic method to extract data from a database and produce a final
+          output file in either CSV or TXT format.
+        </p>
+        <div class="note">
+          <strong>Note</strong> - If you attempt to import more than 5000 features (i.e., 5000
+          point data lines) into Google Earth, this process can take a long time.
+        </div>
+        <p>
+          For more information on using generic text files, see:
+        </p>
+        <ul>
+          <li>
+            <a href="#reqfields">Required Location Fields</a>
+          </li>
+          <li>
+            <a href="#optfields">Optional and Descriptive Fields</a>
+          </li>
+        </ul>
+        <h3>
+          <a id="reqfields" name="reqfields"></a>Required Location Fields
+        </h3>
+        <p>
+          At minimum, generic text file that you import must contain one or more fields that
+          specify the <em>location of the point</em> on the earth in order for the data to be
+          correctly positioned in the 3D viewer. This can be specified either with address fields
+          or with geographic coordinates.
+        </p>
+        <div class="note">
+          <strong>Note</strong> - You cannot use a mix of geographic coordinates and address fields
+          in a single file.
+        </div>
+        <h2>
+          <a id="addresses" name="addresses"></a>Using Addresses
+        </h2>
+        <p class="note">
+          <strong>Tip</strong>: Follow a tutorial on this subject: <a href=
+          "http://earth.google.com/userguide/v4/tutorials/import.html" target="_blank">Importing
+          Addresses in Google Earth Pro and EC</a>
+        </p>
+        <p>
+          Your data file can use street-level addressing to position each point on the Earth's
+          surface. Google Earth can ingest georeferenced and non-georeferenced information. At this
+          time, Google Earth can only ingest such information for addresses located within the
+          United States, United Kingdom, Canada, France, Italy, Germany, and Spain. Google Earth
+          cannot place any address that contains a P.O. box.
+        </p>
+        <p>
+          The following types of address formatting are supported:
+        </p>
+        <ul>
+          <li>
+            <strong>Single-address field</strong> - You can define the street, city, state,
+            country, and zip code in a single field. For example, a single field with the column
+            label of <em>address</em> might have the following value:<br>
+            <br>
+            123 Easy Street, San Jose, CA, 95330 <strong>Multiple address fields</strong> - You can
+            also define street, city, state, country, and zip code in multiple fields. In this
+            case, a field with a column label of <em>street</em> would have as its value:<br>
+            <br>
+            123 Easy Street<br>
+            <br>
+            In this scenario, additional fields would be defined for city, state, and zip code.
+          </li>
+          <li>
+            <strong>Partial address default values</strong> - Because some of your points might
+            have only partial addresses, you can use the data import wizard to define default
+            values for missing fields, such as state or zip Code.
+          </li>
+        </ul>
+        <h2>
+          <a id="coordinates" name="coordinates"></a>Using Geographic Coordinates
+        </h2>
+        <p>
+          You can use geographic coordinates (latitude, longitude) to indicate the position of the
+          point data in your text file. For importing generic text files, Google Earth supports
+          coordinates described in
+        </p>
+        <ul>
+          <li>Degrees, minutes, seconds (DMS)
+          </li>
+          <li>Decimal degrees (DDD)
+          </li>
+          <li>Degrees, minutes, with decimal seconds (DMM)
+          </li>
+        </ul>
+        <p>
+          Refer to <a href="ug_editing.html#entering">Entering Advanced Coordinates</a> for a
+          detailed description of the latitude/longitude coordinates supported in Google Earth as
+          well as the type of syntax supported.
+        </p>
+        <h3>
+          <a id="optfields" name="optfields"></a>Optional and Descriptive Fields
+        </h3>
+        <p>
+          You can use any number of fields in your custom data file to label and describe the
+          points and display them the Google Earth application. Optional fields can be defined as
+          the following values:
+        </p>
+        <ul>
+          <li>Text or strings - A string field can contain both numbers and alphabetic characters.
+          What actually defines a string with respect to style templates is that the string itself
+          is either enclosed in quotation marks, or contains white space so that it cannot be
+          interpreted as a number.<br>
+            <br>
+            This is an important distinction to keep in mind when using style templates applied to
+            fields.
+          </li>
+          <li>Integer
+          </li>
+          <li>Floating point value
+          </li>
+        </ul>
+        <p>
+          With style templates, you can take advantage of these field types to create useful visual
+          effects in the 3D viewer such as graphs or color-coding of data based on the values in
+          the fields.
+        </p>
+        <h2>
+          <a id="viewvector" name="viewvector"></a>Viewing Vector Data Fields
+        </h2>
+        <p>
+          After you have imported vector data into Google Earth, you can use the <em>Table
+          Window</em> to display the data fields contained within the vector data. To do this,
+          select <em>Table</em> from the <em>Tools</em> menu. The window appears over the Google
+          Earth application, listing the data fields of all placemark items in tabular form.
+        </p>
+        <p>
+          The <em>Table</em> window displays internal data fields for all vector data currently
+          listed as well as all other entries in the <em>Places</em> panel. You can use the scroll
+          bar to the right of the window to scroll through numerous entries, and you can collapse
+          the display of items you don't want to see by removing the check next to the name of the
+          item you want to minimize.
+        </p>
+        <p>
+          The <em>Table</em> window offers the following features:
+        </p>
+        <ul>
+          <li>
+            <strong>Sort the data by selected columns</strong> by clicking on the column header for
+            the field you want to sort by. With this feature, you can easily view all elements in
+            the data list and view these elements in the 3D viewer.
+          </li>
+          <li>
+            <strong>Single-click an item in the table</strong> to highlight that item in the
+            listing under the <em>Places</em> tab.
+          </li>
+          <li>
+            <strong>Double-click an item in the table</strong> to fly to it in the 3D viewer.
+          </li>
+          <li>
+            <strong>Right-click (CTRL click on the Mac) any table row</strong> to access the
+            following pop-up menu, which you can use to sort or modify the field display.
+          </li>
+        </ul>
+        <h2>
+          <a id="modifyvector" name="modifyvector"></a>Modifying Vector Data Display
+        </h2>
+        <p>
+          When you import point and line vector data into Google Earth, you can determine how you
+          want your data displayed in one of two ways:
+        </p>
+        <ul>
+          <li>
+            <strong>Apply a unified display across all data</strong> - Do this either by applying
+            shared styles across a given folder, or by applying a style template to your vector
+            data. For shared styles, follow the guidelines in <a href="ug_editing.html">Editing
+            Places and Folders</a> for details on setting shared altitude, line, label, and icon
+            properties. Style templates can be applied to your imported data at any point in time.
+          </li>
+          <li>
+            <strong>Edit individual data elements or folders</strong> - Follow the guidelines
+            described in <a href="ug_editing.html">Editing Places and Folders</a> for information
+            on editing individual placemarks.
+          </li>
+        </ul>
+        <h2>
+          <a id="importimagery" name="importimagery"></a>Importing Imagery
+        </h2>
+        <p>
+          You can open GIS imagery files in Google Earth Pro or EC and have the files correctly
+          projected over the proper map coordinates in the 3D viewer. Google Earth Pro and EC
+          support the following types of GIS imagery:
+        </p>
+        <ul>
+          <li>TIFF (.tif), including GeoTiff and compressed TIFF files
+          </li>
+          <li>National Imagery Transmission Format (.ntf)
+          </li>
+          <li>Erdas Imagine Images (.img)
+          </li>
+        </ul>
+        <p>
+          In addition, you can also import the following images. Because they do not contain
+          projection information, you must manually edit their coordinates for correct positioning:
+        </p>
+        <ul>
+          <li>Atlantis MFF Raster (.hdr)
+          </li>
+          <li>PCIDSK Database File (.pix)
+          </li>
+          <li>Portable Pixmap Format (.pnm)
+          </li>
+          <li>Device Independent Bitmap (.bmp)
+          </li>
+        </ul>
+        <div class="note">
+          <strong>Note</strong> - All imagery files must contain the correct projection information
+          in order to be accurately re-projected by the Google Earth software.
+        </div>
+        <p>
+          The rest of this section covers:
+        </p>
+        <ul>
+          <li>
+            <a href="#opengis">Opening GIS Imagery</a>
+          </li>
+          <li>
+            <a href="#savegis">Saving GIS Imagery</a>
+          </li>
+        </ul>
+        <h3>
+          <a id="opengis" name="opengis"></a>Opening GIS Imagery
+        </h3>
+        <p>
+          Use any one of the methods below to open the imagery file in Google Earth Pro or EC:
+        </p>
+        <ul>
+          <li>Select <em>Open</em> from the <em>File</em> menu.
+          </li>
+          <li>Drag the desired file from an explorer window and drop it over the viewer.
+          </li>
+        </ul>
+        <p>
+          Google Earth then attempts to reproject the image to a Simple Cylindrical, WGS84
+          coordinate system. From this, it creates an overlay with the image converted to PNG
+          format. The overlay edit window appears, and you can set the location of the new overlay
+          in any folder inside the <em>Places</em> panel. You can also set the properties for the
+          GIS imagery as you would any other overlay.
+        </p>
+        <p>
+          The following should be noted when importing GIS imagery data:
+        </p>
+        <ul>
+          <li>
+            <strong>The reprojected image is saved as an overlay</strong>. The image is saved under
+            the Google Earth directory on your hard drive. The name of the PNG file is based on the
+            source file name and the scaling or cropping parameters selected when importing the
+            overlay. (See below for more information on scaling or cropping an image.)
+          </li>
+          <li>
+            <strong>Images that exceed the maximum texture dimensions must be either cropped or
+            scaled</strong>. A dimension of 2048x2048 pixels is typically supported by high-end
+            graphics cards, while on laptop computers, the maximum dimension can be 1024x1024 or
+            even less. (Very good cards can support up to 4096x4096.)<br>
+            <br>
+            Determine the maximum allowable texture dimensions for your computer by clicking Help
+            &gt; <em>About Google Earth</em>:<br>
+            <br>
+            <img alt="Max Texture Size" border="0" height="270" src="images/maxtexture.jpg" width=
+            "450"><br>
+            <br>
+            Your image cannot exceed the Max Texture dimension listed. If you try to import an
+            image file that exceeds the allowable texture dimensions, a dialog box prompts you to
+            either scale or crop the image.
+            <ul>
+              <li>
+                <strong>Scale</strong> - This option scales and reprojects the entire image at the
+                same time so that it preserves the aspect ratio of the input image and fits the
+                results in texture memory. The typical size for the resultant image is 2048 pixels
+                along the longest side.
+              </li>
+              <li>
+                <strong>Crop</strong> - This option preserves the original resolution of the input
+                image while creating a subset of the original input file in order to fit it in
+                texture memory.
+              </li>
+            </ul>When you select the crop option, the viewer flies to the location of the input
+            image and contains the extents of the input image. You then select the center point of
+            the inset image you want to create. The client computes a maximum area centered from
+            the selected location.
+          </li>
+          <li>
+            <strong>For larger image files, reprojection can take some time.</strong><br>
+            <br>
+            If you have cropped or scaled an input image, or if you are reprojecting an image that
+            uses more texture memory, you will see a progress meter while the reprojection occurs.
+            You can cancel the operation at any time. <strong>Images that contain no projection
+            information are treated as ordinary overlay files.</strong><br>
+            <br>
+            In this case, you can position the image manually as you would an overlay image.
+          </li>
+          <li>
+            <strong>Images that contain incorrect or unsupported projection information will not be
+            imported.</strong><br>
+            <br>
+            In this case, a dialog box indicates that the reprojection cannot be performed and the
+            image will not be imported.
+          </li>
+        </ul>
+        <div class="note">
+          <strong>Note</strong> - Currently, files using NAD83 projection are not supported by
+          Google Earth.
+        </div>
+        <h3>
+          <a id="savegis" name="savegis"></a>Saving GIS Imagery
+        </h3>
+        <p>
+          Once you have imported imagery data into Google Earth Pro or EC, you can save content
+          changes made to the imported GIS data as follows:
+        </p>
+        <ul>
+          <li>
+            <strong>Move the imported imagery to remain in your <em>My Places</em> folder</strong>
+            - If you have already placed the imagery overlay within the <em>My Places</em> folder,
+            any changes you make to it are automatically saved and viewable each time you start
+            Google Earth.
+          </li>
+          <li>
+            <strong>Save the imagery overlay as a KMZ file</strong> - If you wish to remove the
+            imported imagery from your <em>My Places</em> folder, you can right-click (CTRL click
+            on the Mac) on the item and select <em>Save As...</em> from the pop-up menu and save
+            the GIS overlay as a KMZ file to your computer's hard drive or other accessible file
+            location. After that, you can delete the overlay from your <em>My Places</em> list and
+            open it later when you need it.
+          </li>
+        </ul>
+        <h2>
+          <a id="note" name="note"></a>A Note About Projections and Datums
+        </h2>
+        <p>
+          Google Earth uses Simple Cylindrical projection with a WGS84 datum for its imagery
+          base.<br>
+          <br>
+          <img alt=
+          "Google Earth uses Simple Cylindrical projection with a WGS84 datum for its imagery base"
+          border="0" height="192" src="images/projectiondatums.jpg" width="573">
+        </p>
+        <ol>
+          <li value="1">Simple Cylindrical (Plate Carree) Projection
+          </li>
+          <li value="2">Google Earth Image Base
+          </li>
+        </ol>
+        <p>
+          Typically, the data you import into the Google Earth application is created with a
+          specific geographic coordinate system, such as a Universal Transverse Mercator (UTM)
+          projection and a NAD27 datum (North American Datum of 1927). Each geographic coordinate
+          system may assign slightly different coordinates to the same location on the earth. When
+          you import data into Google Earth, your data is interpreted according to the Google Earth
+          coordinate system.
+        </p>
+        <p>
+          In the majority of cases, reprojection works as expected. In some situations, the
+          transformation might not work properly. In that case, you can use a third-party tool to
+          transform your data from its original coordinate system into the one used by Google
+          Earth.
+        </p>
+        <p>
+          The rest of this section provides a brief overview of map projections and datums.
+        </p>
+        <h2>
+          <a id="mapprojection" name="mapprojection"></a>What is a Map Projection?
+        </h2>
+        <p>
+          A map projection is a mathematical expression that is used to represent the round, 3D
+          surface of the earth on a flat, 2D map.<br>
+          <br>
+          <img alt=
+          "A map projection is a mathematical expression that is used to represent the round, 3-dimensional surface of the earth on a flat, 2-dimensional map"
+          border="0" height="258" src="images/mapprojection.jpg" width="556">
+        </p>
+        <ol>
+          <li>3D Earth
+          </li>
+          <li>Mercator Projection
+          </li>
+        </ol>
+        <p>
+          This process <em>always results in distortion</em> to one or more map properties, such as
+          area, scale, shape, or direction. Because of this, hundreds of projections have been
+          developed in order to accurately represent a <em>particular</em> map element or to best
+          suit a particular type of map.
+        </p>
+        <p>
+          Data sources for maps come in various projections depending upon which characteristic the
+          cartographer chooses to represent more accurately (at the expense of other
+          characteristics). In the example above, the Mercator projection preserves the right
+          angles of the latitude and longitudinal lines at the expense of area, which is distorted
+          at the poles, showing the land masses there to be larger than they actually are.
+        </p>
+        <p>
+          The following are some common map projections:
+        </p>
+        <table border="0" cellpadding="0" cellspacing="0" class="c8" width="90%">
+          <tr class="c7">
+            <td class="c5" width="20">
+              <img alt="spacer" height="1" src="images/spacer.gif" width="25">
+            </td>
+            <td class="c6" width="200">
+              <strong>Projection</strong>
+            </td>
+            <td class="c6">
+              <strong>Description</strong>
+            </td>
+            <td class="c6">
+              <strong>Example</strong>
+            </td>
+          </tr>
+          <tr class="c7">
+            <td class="c5" width="20"></td>
+            <td width="200">
+              Albers Equal Area Conic
+            </td>
+            <td>
+              Typically used for small regions or countries extending in an east-to-west direction,
+              but not continents. Preserves angles between meridians and parallels. Attempts to
+              minimize distortion for both shape and linear scale, but neither is truly correct.
+              The example here shows how this projection looks over the entire earth.
+            </td>
+            <td class="c5">
+              <img alt="Albers Equal Area Conic Example" border="0" height="210" hspace="10" src=
+              "images/projection-albersequal.jpg" vspace="10" width="270">
+            </td>
+          </tr>
+          <tr class="c7">
+            <td class="c5"></td>
+            <td width="200">
+              Oblique Mercator (Hotine)
+            </td>
+            <td>
+              A cylindrical projection like the Mercator projections, but where the cylinder is
+              shifted to align with a region that is oblique and follows neither a north-south nor
+              an east-west axis. The region to be mapped typically is a small portion along the
+              length of the meridian and close to it laterally. For example, this projection was
+              developed originally for mapping the Malaysian peninsula.
+            </td>
+            <td class="c5">
+              <img alt="Oblique Mercator (Hotine) Example" border="0" height="166" src=
+              "images/projection-oblique.jpg" vspace="10" width="260">
+            </td>
+          </tr>
+          <tr class="c7">
+            <td class="c5" width="20">
+              &nbsp;
+            </td>
+            <td width="200">
+              Chamberlin Trimetric
+            </td>
+            <td>
+              Used by the National Geographic Society for mapping most continents. This projection
+              is a three-point equidistant one, intended to preserve the distance between three
+              reference points relative to any other point.
+            </td>
+            <td class="c5">
+              <img alt="Chamberlin Trimetric Example" border="0" height="197" hspace="10" src=
+              "images/projection-chamberlin.jpg" vspace="10" width="200">
+            </td>
+          </tr>
+          <tr class="c7">
+            <td class="c5" width="20">
+              &nbsp;
+            </td>
+            <td width="200">
+              Lambert Conformal Conic
+            </td>
+            <td>
+              A projection ideal for middle latitudes and/or where the territory to be mapped has
+              an east-west orientation. This projection is often found in USGS maps created after
+              1957. Scale is most accurate at the expense of area.
+            </td>
+            <td class="c5">
+              <img alt="Lambert Conformal Conic Example" border="0" height="142" hspace="10" src=
+              "images/projection-lambert.jpg" vspace="10" width="200">
+            </td>
+          </tr>
+        </table>
+        <p>
+          When building whole-earth databases, a single global projection is the most convenient to
+          use. Google Earth uses Simple Cylindrical projection for its imagery base. This is a
+          simple map projection where the meridians and parallels are equidistant, straight lines,
+          with the two sets crossing at right angles. This projection is also known as Lat/Lon
+          WGS84.<br>
+          <br>
+          <img alt="Google Earth uses Simple Cylindrical projection for its imagery base" border=
+          "0" height="192" src="images/projectiondatums.jpg" width="573">
+        </p>
+        <ol>
+          <li>Simple Cylindrical (Plate Carree) Projection
+          </li>
+          <li>Google Earth Image Base
+          </li>
+        </ol>�
+        <h2>
+          <a id="datum" name="datum"></a>What Is a Datum?
+        </h2>
+        <p>
+          While a projection is used in mapping to define the earth on a flat surface, a datum is
+          used to describe the actual shape of the earth in mathematical terms. This is because the
+          earth's surface is not perfectly round, but ellipsoid in shape. A datum also defines the
+          association of latitude and longitude coordinates to points on the surface of the earth,
+          and defines the basis for elevation measurements.
+        </p>
+        <p>
+          As with projections, there is more than one mathematical interpretation of the earth's
+          shape. Google Earth uses WGS84 datum.
+        </p>
+        <table border="0" cellpadding="0" width="500">
+          <tr>
+            <td class="c5" width="20">
+              <img alt="spacer" height="1" src="images/spacer.gif" width="20">
+            </td>
+            <td class="c5">
+              <img alt=
+              "As with projections, there is more than one mathematical interpretation of the earth's shape"
+              border="0" height="231" src="images/datums.jpg" width="237">
+            </td>
+            <td align="left" class="c5" valign="top">
+              <ol>
+                <li>North Pole
+                </li>
+                <li>Equator
+                </li>
+                <li>South Pole
+                </li>
+                <li>Semi-minor axis or polar radius
+                </li>
+                <li>Semi-major axis or equatorial radius
+                </li>
+              </ol>
+            </td>
+          </tr>
+        </table><br>
+        <table border="0" cellpadding="0" cellspacing="3" id="ug" width="500">
+          <tr>
+            <td class="c5" width="20">
+              <img alt="spacer" height="1" src="images/spacer.gif" width="20">
+            </td>
+            <td class="c5">
+              &nbsp;
+            </td>
+            <td class="c5">
+              Semi-major axis
+            </td>
+            <td class="c5">
+              Semi-minor axis
+            </td>
+          </tr>
+          <tr>
+            <td class="c5" width="20">
+              &nbsp;
+            </td>
+            <td class="c5">
+              NAD83
+            </td>
+            <td class="c5">
+              6,378,137.0
+            </td>
+            <td class="c5">
+              6,356,752.3141
+            </td>
+          </tr>
+          <tr>
+            <td class="c5" width="20">
+              &nbsp;
+            </td>
+            <td class="new c5">
+              WGS84
+            </td>
+            <td class="new c5">
+              6,378,137.0
+            </td>
+            <td class="new c5">
+              6,356,752.3142
+            </td>
+          </tr>
+          <tr>
+            <td class="c5" width="20">
+              &nbsp;
+            </td>
+            <td class="c5">
+              Clark 1866
+            </td>
+            <td class="c5">
+              6,378,206.4
+            </td>
+            <td class="c5">
+              6,356,583.8
+            </td>
+          </tr>
+          <tr>
+            <td class="c5" width="20">
+              &nbsp;
+            </td>
+            <td class="c5">
+              Airy 1830
+            </td>
+            <td class="c5">
+              6,377,563.4
+            </td>
+            <td class="c5">
+              6,356,256.9
+            </td>
+          </tr>
+        </table>
+        <p>
+          <br>
+          <br>
+        </p>
+      </div>
+    </div>
+    <div id="footer">
+      <div id="footerlogo">
+        <img alt="Google color balls" height="53" src="http://earth.google.com/images/art.gif"
+        width="143">
+      </div>
+      <div id="copyright">
+        <p>
+          &copy;2010 Google - <a href="http://www.google.com/privacy.html">Privacy Policy</a> -
+          <a href="http://www.google.com/terms_of_service.html">Terms and Conditions</a> - <a href=
+          "http://www.google.com/about.html">About Google</a>
+        </p>
+      </div>
+    </div>
+    <p id="date">
+      Updated on <script type="text/javascript">
+//<![CDATA[
+      <!-- hide script from old browsers
+      var lm = new Date(document.lastModified);
+      document.write(lm.toDateString());
+      //-->
+      //]]>
+      </script>
+    </p><script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript">
+</script><script type="text/javascript">
+//<![CDATA[
+    _uacct="UA-18031-5";
+    _utcp="/userguide/";
+    _uanchor=1;
+    urchinTracker();
+    //]]>
+    </script>
+  </body>
+</html>

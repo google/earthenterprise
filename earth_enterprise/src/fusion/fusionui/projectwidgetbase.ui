@@ -1,0 +1,514 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>ProjectWidgetBase</class>
+<comment>  Copyright 2017 Google Inc.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+</comment>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>ProjectWidgetBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>574</width>
+            <height>608</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Project Widget</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>timemachine_controls</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>timemachine_pixmap</cstring>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap>timemachine-off.png</pixmap>
+                    </property>
+                    <property name="scaledContents">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>is_timemachine_checkbox</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Support Historical Imagery</string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>272</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>legend_group_box</cstring>
+            </property>
+            <property name="title">
+                <string>Legend</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="LayerLegendWidget">
+                    <property name="name">
+                        <cstring>layer_legend</cstring>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout9</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>build_overlay_terrain_checkbox</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Build "Overlay"</string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer9</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>25</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>overlay_terrain_start_level_label</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Start Level:</string>
+                    </property>
+                </widget>
+                <widget class="QSpinBox">
+                    <property name="name">
+                        <cstring>overlay_terrain_start_level_spinbox</cstring>
+                    </property>
+                    <property name="maxValue">
+                        <number>24</number>
+                    </property>
+                    <property name="minValue">
+                        <number>4</number>
+                    </property>
+                    <property name="lineStep">
+                        <number>2</number>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer8</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>24</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>overlay_terrain_resources_min_level_label</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Resources Min Level:</string>
+                    </property>
+                </widget>
+                <widget class="QSpinBox">
+                    <property name="name">
+                        <cstring>overlay_terrain_resources_min_level_spinbox</cstring>
+                    </property>
+                    <property name="maxValue">
+                        <number>24</number>
+                    </property>
+                    <property name="minValue">
+                        <number>4</number>
+                    </property>
+                    <property name="value">
+                        <number>12</number>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>l4</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>uuid_label</cstring>
+                    </property>
+                    <property name="text">
+                        <string>UUID:</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>uuid_edit</cstring>
+                    </property>
+                    <property name="maxLength">
+                        <number>36</number>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>generic_check</cstring>
+            </property>
+            <property name="text">
+                <string>Generic Checkbox</string>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>l2</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="ProjectLayerView">
+                    <property name="name">
+                        <cstring>layer_listview</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>300</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>l3</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="spacing">
+                            <number>2</number>
+                        </property>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>add_layer_btn</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>filenew</pixmap>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>add_group_btn</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>folder_new.png</pixmap>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>delete_layer_btn</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>editdelete.png</pixmap>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>move_up_btn</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>up.png</pixmap>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>move_down_btn</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>down.png</pixmap>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>s1</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Vertical</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>31</width>
+                                    <height>131</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </vbox>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<customwidgets>
+    <customwidget>
+        <class>LayerLegendWidget</class>
+        <header location="local">LayerLegendWidget.h</header>
+        <sizehint>
+            <width>50</width>
+            <height>50</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>3</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
+    </customwidget>
+    <customwidget>
+        <class>ProjectLayerView</class>
+        <header location="global">ProjectLayerView.h</header>
+        <sizehint>
+            <width>100</width>
+            <height>100</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
+        <signal>selectionChanged()</signal>
+        <signal>addAsset( const QString &amp; )</signal>
+        <signal>dropAsset( const QString &amp; )</signal>
+        <signal>contextMenuRequested(QListViewItem*, const QPoint&amp;, int)</signal>
+    </customwidget>
+</customwidgets>
+<images>
+    <image name="image0">
+        <data format="XBM.GZ" length="79">789c534e494dcbcc4b554829cdcdad8c2fcf4c29c95030e0524611cd48cd4ccf28010a1797249664262b2467241641a592324b8aa363156c15aab914146aadb90067111b1f</data>
+    </image>
+</images>
+<connections>
+    <connection>
+        <sender>add_layer_btn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectWidgetBase</receiver>
+        <slot>AddLayer()</slot>
+    </connection>
+    <connection>
+        <sender>add_group_btn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectWidgetBase</receiver>
+        <slot>AddGroup()</slot>
+    </connection>
+    <connection>
+        <sender>delete_layer_btn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectWidgetBase</receiver>
+        <slot>DeleteLayer()</slot>
+    </connection>
+    <connection>
+        <sender>move_up_btn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectWidgetBase</receiver>
+        <slot>MoveLayerUp()</slot>
+    </connection>
+    <connection>
+        <sender>move_down_btn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectWidgetBase</receiver>
+        <slot>MoveLayerDown()</slot>
+    </connection>
+    <connection>
+        <sender>layer_listview</sender>
+        <signal>selectionChanged()</signal>
+        <receiver>ProjectWidgetBase</receiver>
+        <slot>SelectLayer()</slot>
+    </connection>
+    <connection>
+        <sender>layer_listview</sender>
+        <signal>dropAsset(const QString&amp;)</signal>
+        <receiver>ProjectWidgetBase</receiver>
+        <slot>DropAsset(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>generic_check</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>ProjectWidgetBase</receiver>
+        <slot>GenericCheckboxToggled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>layer_listview</sender>
+        <signal>contextMenuRequested(QListViewItem*,const QPoint&amp;,int)</signal>
+        <receiver>ProjectWidgetBase</receiver>
+        <slot>ContextMenu(QListViewItem*,const QPoint&amp;,int)</slot>
+    </connection>
+    <connection>
+        <sender>is_timemachine_checkbox</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>ProjectWidgetBase</receiver>
+        <slot>TimeMachineCheckboxToggled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>build_overlay_terrain_checkbox</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>ProjectWidgetBase</receiver>
+        <slot>BuildOverlayTerrainCheckboxToggled(bool)</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="local" impldecl="in implementation">projectwidgetbase.ui.h</include>
+</includes>
+<forwards>
+    <forward>class QListViewItem</forward>
+</forwards>
+<slots>
+    <slot>AddLayer()</slot>
+    <slot>AddGroup()</slot>
+    <slot>DeleteLayer()</slot>
+    <slot>MoveLayerUp()</slot>
+    <slot>MoveLayerDown()</slot>
+    <slot>SelectLayer()</slot>
+    <slot>DropAsset( const QString &amp; )</slot>
+    <slot>GenericCheckboxToggled( bool )</slot>
+    <slot>ContextMenu( QListViewItem *, const QPoint &amp;, int )</slot>
+    <slot>TimeMachineCheckboxToggled( bool )</slot>
+    <slot>BuildOverlayTerrainCheckboxToggled( bool )</slot>
+</slots>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>LayerLegendWidget.h</includehint>
+    <includehint>ProjectLayerView.h</includehint>
+</includehints>
+</UI>

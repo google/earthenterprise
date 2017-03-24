@@ -1,0 +1,18 @@
+This python code lets you build the glc unpacker module consisting of C++ code and a python interface. Run the code for the platform you want to use, and then install the corresponding python and object code:
+
+Mac
+===
+./build_and_test.py Mac
+cp _glc_unpacker.so glc_unpacker.py /somewhere/useful/portable/server
+
+
+Windows
+=======
+./build_and_test.py Windows
+cp _glc_unpacker.pyd glc_unpacker.py /somewhere/useful/portable/server
+
+
+Linux
+=======
+./build_and_test.py Linux
+cp _glc_unpacker.so glc_unpacker.py /somewhere/useful/portable/server

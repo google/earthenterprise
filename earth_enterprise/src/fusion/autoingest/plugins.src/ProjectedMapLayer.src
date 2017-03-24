@@ -1,0 +1,177 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#config Name      ProjectedMapLayer
+#config Base      Composite
+#config Config    ProjectedMapLayerConfig
+#config Subtype   ProjectedLayer
+#config FixedType Map
+
+
+// ===== ProjectedMapLayerAsset.h =====
+#include <autoingest/.idl/storage/ProjectedMapLayerConfig.h>
+#include <autoingest/sysman/plugins/MapLayerAssetD.h>
+
+class ProjectedMapLayerAssetVersionImpl {
+ public:
+  std::vector<std::string> GetPOIFiles(void) const;
+};
+
+// ===== ProjectedMapLayerAsset.cpp =====
+std::vector<std::string> ProjectedMapLayerAssetVersionImpl::GetPOIFiles(void) const {
+
+  std::vector<std::string> results;
+  MapLayerAssetVersion asset(inputs[0]);
+  for (std::vector<std::string>::const_iterator iter = asset->children.begin();
+       iter != asset->children.end(); ++iter ) {
+    AssetVersion child(*iter);
+    if (child->subtype == "MapPOI") {
+      std::vector<std::string> outputFilenames;
+      child->GetOutputFilenames(outputFilenames);
+      for (std::vector<std::string>::const_iterator i = outputFilenames.begin() ;
+           i != outputFilenames.end(); ++i) {
+        results.push_back((*i));
+      }
+    }
+  }
+  return results;
+}
+
+// ===== ProjectedMapLayerAssetD.h =====
+
+
+// ===== ProjectedMapLayerAssetD.cpp =====
+#include <khstl.h>
+#include <autoingest/.idl/storage/MapLayerConfig.h>
+#include <autoingest/sysman/plugins/VectorProductAssetD.h>
+#include <autoingest/sysman/plugins/MapLayerAssetD.h>
+#include <autoingest/sysman/plugins/MapLayerLevelAssetD.h>
+
+
+namespace {
+
+class SubLayer {
+ public:
+  AssetVersion                       query_version_;
+  std::vector<geMultiRange<uint32> > disp_ranges_;
+};
+
+}
+
+
+void
+ProjectedMapLayerAssetVersionImplD::UpdateChildren(void)
+{
+  std::string assetRef = GetAssetRef();
+
+  // ***** load my input versions (only if they aren't already loaded)
+  // I'll use this list of my inputs to pass to my children so they don't
+  // have to look them up over and over again
+  // My inputs are VectorProductRefs
+  InputVersionGuard input_guard(this);
+  MapLayerAssetVersionD map_layer =
+    MapLayerAssetVersionD(input_guard->inputvers[0]->GetRef());
+
+  // load the inputs of my input
+  // these will be Vector Resources
+  InputVersionGuard resources_guard(map_layer);
+
+  // get a convenience handle to the map layers's config
+  const MapLayerConfig &layer_config = map_layer->config;
+
+  // Pre-calculate the valid levels for each display rule for each sub-asset
+  // we're going to need them to determine what work needs to be done at
+  // each level.
+  // Get the VectorQuery version from the layers children list
+  std::vector<SubLayer> sub_layers(layer_config.subLayers.size());
+  for (uint sl = 0; sl < layer_config.subLayers.size(); ++sl) {
+    const MapSubLayerConfig &sl_config = layer_config.subLayers[sl];
+
+    // populate the valid layers portion of our SubLayer struct
+    sub_layers[sl].disp_ranges_.reserve(sl_config.display_rules.size());
+    for (uint dr = 0; dr < sl_config.display_rules.size(); ++dr) {
+      sub_layers[sl].disp_ranges_.push_back(
+          sl_config.display_rules[dr].ValidLevels());
+    }
+
+    sub_layers[sl].query_version_ = AssetVersion(map_layer->children[sl]);
+  }
+
+
+  // now build my children (one for each level)
+  for (uint level = 0; level < Max2DClientLevel; ++level) {
+
+    // gather config, inputs, & inputvers for this level
+    MapLayerLevelConfig level_config(level, config.projection_);
+    level_config.sub_layers_.reserve(layer_config.subLayers.size());
+    std::vector<AssetVersion> inputvers;
+    std::vector<std::string>  inputrefs;
+    for (uint sl = 0; sl < layer_config.subLayers.size(); ++sl) {
+      const MapSubLayerConfig &sl_config = layer_config.subLayers[sl];
+      // Change logic here so that mapping of layers to vector query output is
+      // understood. Add default MapDisplayRuleConfig for not visible display
+      // rule. At the receiving end one can check for length of name to
+      // understand whether to ignore it.
+
+      // First find out whether any display rule visible on this level
+      uint dr = 0;
+      for (; dr < sl_config.display_rules.size(); ++dr) {
+        if (sub_layers[sl].disp_ranges_[dr].Contains(level)) {
+          break;
+        }
+      }
+      if (dr == sl_config.display_rules.size()) {
+        continue;
+      }
+
+      std::vector<MapDisplayRuleConfig>
+          disp_rules(sl_config.display_rules.size(), MapDisplayRuleConfig());
+      for (; dr < sl_config.display_rules.size(); ++dr) {
+        if (sub_layers[sl].disp_ranges_[dr].Contains(level)) {
+          disp_rules[dr] = sl_config.display_rules[dr];
+          // shrink all the valid level ranges to just this one level that way
+          // levels will be able to be reused even if the rnage of levels
+          // changes
+          disp_rules[dr].PinToLevel(level);
+        }
+      }
+
+      level_config.sub_layers_.push_back(
+          MapLayerLevelConfig::SubLayer(disp_rules,
+                                        sl_config.contextScript));
+      // add vector asset to inputs
+      inputvers.push_back(resources_guard->inputvers[sl]);
+      inputrefs.push_back(resources_guard->inputvers[sl]->GetRef());
+      // add query asset to inputs
+      inputvers.push_back(sub_layers[sl].query_version_);
+      inputrefs.push_back(sub_layers[sl].query_version_->GetRef());
+    }
+
+    if (!level_config.sub_layers_.empty()) {
+      // we have something to do at this level, make a child asset
+      char levelname[32];
+      snprintf(levelname, sizeof(levelname), "level%02d", level);
+
+      MutableAssetVersionD levelver =
+        MapLayerLevelFactory::FindMakeAndUpdateSubAsset(
+            assetRef, levelname,
+            inputrefs,
+            khMetaData(),
+            level_config,
+            inputvers);
+
+      AddChild(levelver);
+    }
+  }
+}

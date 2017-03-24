@@ -1,0 +1,56 @@
+env LC_ALL=C TZ=UTC0 diff -Naur Python-2.6-orig/setup.py Python-2.6/setup.py
+--- Python-2.6-orig/setup.py	2010-04-21 12:22:42.771114000 +0000
++++ Python-2.6/setup.py	2010-04-21 12:21:38.565182000 +0000
+@@ -552,7 +552,8 @@
+             # Operations on images
+             exts.append( Extension('imageop', ['imageop.c']) )
+         else:
+-            missing.extend(['imageop'])
++            pass
++            # missing.extend(['imageop'])
+ 
+         # readline
+         do_readline = self.compiler.find_library_file(lib_dirs, 'readline')
+@@ -993,7 +994,7 @@
+         # the more recent berkeleydb's db.h file first in the include path
+         # when attempting to compile and it will fail.
+         f = "/usr/include/db.h"
+-        if os.path.exists(f) and not db_incs:
++        if False and os.path.exists(f) and not db_incs:
+             data = open(f).read()
+             m = re.search(r"#s*define\s+HASHVERSION\s+2\s*", data)
+             if m is not None:
+@@ -1010,7 +1011,8 @@
+             else:
+                 missing.append('bsddb185')
+         else:
+-            missing.append('bsddb185')
++			pass
++#             missing.append('bsddb185')
+ 
+         # The standard Unix dbm module:
+         if platform not in ['cygwin']:
+@@ -1247,9 +1249,11 @@
+             if (dl_inc is not None) and (platform not in ['atheos']):
+                 exts.append( Extension('dl', ['dlmodule.c']) )
+             else:
+-                missing.append('dl')
++                pass
++                # missing.append('dl')
+         else:
+-            missing.append('dl')
++            pass
++            # missing.append('dl')
+ 
+         # Thomas Heller's _ctypes module
+         self.detect_ctypes(inc_dirs, lib_dirs)
+@@ -1355,7 +1359,8 @@
+             # SunOS specific modules
+             exts.append( Extension('sunaudiodev', ['sunaudiodev.c']) )
+         else:
+-            missing.append('sunaudiodev')
++			pass
++#             missing.append('sunaudiodev')
+ 
+         if platform == 'darwin':
+             # _scproxy

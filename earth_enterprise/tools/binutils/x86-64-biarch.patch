@@ -1,0 +1,13 @@
+Index: ld/emulparams/elf_i386.sh
+================================================================================
+--- ld/emulparams/elf_i386.sh
++++ ld/emulparams/elf_i386.sh
+@@ -12,3 +12,8 @@
+ GENERATE_PIE_SCRIPT=yes
+ NO_SMALL_DATA=yes
+ SEPARATE_GOTPLT=12
++
++# Look for 64 bit target libraries in /lib64, /usr/lib64 etc., first.
++case "$EMULATION_NAME" in
++  *64*) LIBPATH_SUFFIX=64 ;;
++esac

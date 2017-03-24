@@ -1,0 +1,11 @@
+
+[Desktop Entry]
+Name=Fusion
+Comment=Keyhole Fusion
+Name[en_US.ISO8859-15]=Fusion
+Comment[en_US.ISO8859-15]=Keyhole Fusion
+Exec=fusion >> $HOME/.gst.log 2>&1
+Icon=/usr/share/pixmaps/gnome-globe.png
+Terminal=false
+MultipleArgs=false
+Type=Application

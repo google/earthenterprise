@@ -1,0 +1,18 @@
+diff -uNr httpd-2.2.29.orig/docs/conf/httpd.conf.in httpd-2.2.29/docs/conf/httpd.conf.in
+--- httpd-2.2.29.orig/docs/conf/httpd.conf.in	2015-08-27 12:03:00.276038659 -0700
++++ httpd-2.2.29/docs/conf/httpd.conf.in	2015-08-27 12:12:32.168159817 -0700
+@@ -289,6 +289,7 @@
+     # directives as to Alias.
+     #
+     ScriptAlias /cgi-bin/ "@exp_cgidir@/"
++    Alias /error_handler "/opt/google/gehttpd/cgi-bin/"
+ 
+ </IfModule>
+ 
+@@ -309,6 +310,8 @@
+     Options None
+     Order allow,deny
+     Allow from all
++    Options +ExecCGI
++    SetHandler cgi-script
+ </Directory>

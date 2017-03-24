@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/v2/examples/tile-detector.html";
+    </script>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>Google Maps JavaScript API Example: Tile Detector</title>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSosDVG8KKPE1-m51RBrvYughuyMxQ-i1QfUnH94QxWIa6N4U6MouMmBA"
+            type="text/javascript"></script>
+    <script type="text/javascript">	
+    function initialize() {
+      if (GBrowserIsCompatible()) {
+      
+        var map = new GMap2(document.getElementById("map_canvas"));
+        map.setCenter(new GLatLng(37.88, -122.442626), 10);
+        map.setUIToDefault();
+
+        GEvent.addListener(map,"click", function(overlay,latlng) {
+          if (overlay) {
+            // ignore if we click on the info window
+            return;
+          }
+          var tileCoordinate = new GPoint();
+          var tilePoint = new GPoint();
+          var currentProjection = G_NORMAL_MAP.getProjection();
+          tilePoint = currentProjection.fromLatLngToPixel(latlng, map.getZoom());
+          tileCoordinate.x = Math.floor(tilePoint.x / 256);
+          tileCoordinate.y = Math.floor(tilePoint.y / 256);
+          var myHtml = "Latitude: " + latlng.lat() + "<br/>Longitude: " + latlng.lng() + 
+            "<br/>The Tile Coordinate is:<br/> x: " + tileCoordinate.x + 
+            "<br/> y: " + tileCoordinate.y + "<br/> at zoom level " + map.getZoom();	
+          map.openInfoWindow(latlng, myHtml);
+        });
+      }
+    }
+    </script>
+  </head>
+  <body onload="initialize()" onunload="GUnload()">
+    <div id="map_canvas" style="width: 500px; height: 300px"></div>
+  </body>
+</html>

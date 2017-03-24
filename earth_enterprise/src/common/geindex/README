@@ -1,0 +1,58 @@
+Basic structure of geindex source code
+
+--- shared.{h,cpp}
+namespace geindex
+Constants and simple classes used by the rest of the geindex code
+Classes include:
+BundleAddr
+EntryBucketAddr
+ChildBucketAddr
+LoadedChildBucket
+BucketPath (derived from QuadtreePath)
+
+--- Entries.h
+namespace geindex
+Classes that serve as the entries in the index. Different index will use
+different entries based on their needs.
+LoadedEntryBuckt declarations
+
+--- EntriesTmpl.h
+--- Entries.cpp
+namespace geindex
+Implementation of Entries and LoadedEntryBuckets
+
+--- IndexBundle.{h,cpp}
+namespace geindex
+Thin wrapper around FileBundle
+- reads index header
+- provides read APIs w/ BundleAddr
+
+--- IndexBundleReader.{h,cpp}
+namespace geindex
+Just provides a public contructor for reading from IndexBundle
+
+-- IndexBundleWriter.{h,cpp}
+namespace geindex
+Write interface to IndexBundle
+- writes index header
+- provides write API w/ (BundleAddr, FreePool (not finished))
+
+--- Reader.h
+namespace geindex
+Public API for reading an index
+
+--- ReaderImpl.h
+--- ReaderTmpl.h
+--- Reader.cpp
+namespace geindex && geindex::readimpl
+Implementation of Reader API
+
+--- Writer.h
+namespace geindex
+Public API for writer an index
+
+--- WriterImpl.h
+--- WriterTmpl.h
+--- Writer.cpp
+namespace geindex && geindex::writeimpl
+Implementation of Writer API

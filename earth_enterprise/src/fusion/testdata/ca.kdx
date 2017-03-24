@@ -1,0 +1,108 @@
+Layout {
+    FileType : "Delimited"
+    Delimiter : "	"
+    Latitude : "3"
+    Longitude : "4"
+    FieldDefinitions {
+	0 {
+	  Name : "RC"
+	  Type : "string"
+	}
+	1 {
+	  Name : "UFI"
+	  Type : "int"
+	}
+	2 {
+	  Name : "UNI" 
+	  Type : "int"
+	}
+	3 {
+	  Name : "DLAT"
+	  Type : "double"
+	}
+	4 {
+	  Name : "DLONG"
+	  Type : "double"
+	}
+	5 {
+	  Name : "LAT"
+	  Type : "double"
+	}
+	6 {
+	  Name : "LONG"
+	  Type : "double"
+	}
+	7 {
+	  Name : "MGRS"
+	  Type : "string"
+	}
+	8 {
+	  Name : "UTM"
+	  Type : "string"
+	}
+	9 {
+	  Name : "JOG"
+	  Type : "string"
+	}
+	10 {
+	  Name : "FC"
+	  Type : "string"
+	}
+	11 {
+	  Name : "DSG"
+	  Type : "string"
+	}
+	12 {
+	  Name : "PC"
+	  Type : "string"
+	}
+	13 {
+	  Name : "CC1"
+	  Type : "string"
+	}
+	14 {
+	  Name : "ADM1"
+	  Type : "string"
+	}
+	15 {
+	  Name : "ADM2"
+	  Type : "string"
+	}
+	16 {
+	  Name : "DIM"
+	  Type : "int"
+	}
+	17 {
+	  Name : "CC2"
+	  Type : "string"
+	}
+	18 {
+	  Name : "NT"
+	  Type : "string"
+	}
+	19 {
+	  Name : "LC"
+	  Type : "string"
+	}
+	20 {
+	  Name : "SHORT_FORM"
+	  Type : "string"
+	}
+	21 {
+	  Name : "GENERIC"
+	  Type : "string"
+	}
+	22 {
+	  Name : "SORT_NAME"
+	  Type : "string"
+	}
+	23 {
+	  Name : "FULL_NAME"
+	  Type : "string"
+	}
+	24 {
+	  Name : "FULL_NAME_ND"
+	  Type : "string"
+	}
+    }
+}

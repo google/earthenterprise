@@ -1,0 +1,318 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Creating a Map Database</title>
+</head>
+
+
+<body><a name="top"></a>
+  
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo"><img alt="Google Earth Enterprise" border=0 src="images/index.gif" /></div>
+  <h1 id="doc_title">Tutorial</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Tutorial</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="setup.html">Setting Up For the Tutorial</a></li>
+    <li><a href="resources.html">Defining and Building Resources</a></li>
+    <li><a href="projects.html">Defining and Building Projects</a></li>
+    <li><a href="database.html">Defining and Building Databases</a></li>
+    <li><a href="publish.html">Publishing and Viewing a Database</a></li>
+    <li><a href="points.html">Configuring Display Rules for Point Data</a></li>
+    <li><a href="polygons.html">Configuring Display Rules for Polygon Data</a></li>
+    <li><a href="importExport.html">Importing and Exporting Style Templates</a></li>
+    <li><a href="searchTabs.html">Configuring a Searchable Database</a></li>
+    <li><a href="searchLayers.html">Specifying Search Fields for Individual Layers</a></li>
+    <li><a href="maps.html" id="selected">Creating a Map Database</a></li>
+    <li><a href="mosaics.html">Creating Imagery Mosaics</a></li>
+    <li><a href="split.html">Segmenting Large Imagery Files</a></li>
+    <li><a href="historical.html">Building a Historical Imagery Project</a></li>
+    <li><a href="dataFiles.html">Sample Data Files</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+<h1><a id="78749"></a>Creating a Map Database
+</h1>
+<p>In addition to using Fusion to prepare and publish data in Google Earth, you can use it to prepare and publish map data in Google Maps. This lesson guides you through preparing your data for Google Maps.
+</p>
+<p>The first step in preparing any data for publication is to import the source data as Fusion resources. You can use one of the vector resources you defined in <a href="resources.html">Defining and Building Resources</a> for Google Maps.
+</p>
+<p class="note"><strong>Note:</strong> For Google Maps, you define vector data only. When you define a Google Maps database, however, you can include an imagery project. The imagery project is the same for Google Maps as for Google Earth EC, so you can use the imagery project you defined in <a href="resources.html">Defining and Building Resources</a> as well.
+</p>
+<p>After you define your vector resources, Google Maps requires an additional step. You must define and build at least one map layer for each map project. The first exercise in this lesson, <a href="#20348">Define a Map Layer</a> describes how to do so.
+</p>
+<p>The remaining steps are the similar for Google Maps data as for Google Earth EC data.
+</p>
+<ul>
+  <li><a href="#25717">Define and build a map project</a>. </li>
+  <li><a href="#43488">Define and build a map database</a>.</li>
+  <li><a href="#63228">Publish the map database</a>.
+  </li>
+</ul>
+<h2><a id="20348"></a>Define a Map Layer
+</h2>
+<p>Defining a map layer consists of adding resources to the layer and defining the display rules and filters for the layer. This is similar to the process of defining display rules and filters for a vector project destined for Google Earth EC.
+</p>
+<h4>To define a  map layer:</h4>
+<ol>
+  <li>Select <b>Asset Manager</b> from the Tools menu. The Asset Manager appears.    </li>
+  <li>Select  <strong>Flat Projection Map Tools (2D)</strong> or <strong>Mercator
+        Map Tools (2D)</strong> from the
+     drop-down menu. </li>
+   <p class="note"><strong>Note:</strong> The Flat Projection Maps layer uses the
+      local copy of the Google Maps API and has no communication wth google.com.
+      The Mercator Maps layer includes Google Maps layers and uses the Google Maps
+      API from google.com. If you use Mercator projection, it requires a separate
+      imagery database. For more details about the differences between the two types
+      of map layers, see the <em>Google Earth Enterprise Reference Guide</em>.  </p>
+   <li>Click <img src="images/iconLayerMaps.png" />. The Map Layer Editor appears.
+      <p><img name="mapLayerDia" src="images/mapLayerDia.png" id="mapLayerDia" /></p>
+      <p>The legend area displays the current value of each property you can set
+         for the map layer. The top row lists the names of the locales you support.
+         When you first open this dialog for a new map layer, only the default locale
+         and its values appear, and the box next to <b>Hide unspecialized locales</b> is
+         checked. Google Maps uses the default locale settings when you do not specify
+         different settings for a user’s locale in this tab.    </p>
+   </li>
+  <li>Set the property values for the default locale as follows:
+    <ol class="alpha">
+      <li>Click the icon in the Icon field, select <b>places3_new</b>, and click <b>OK</b>. This is the icon that appears next to the name of the map layer in the
+           Layers panel of Google Maps.        
+      </li>
+      <li>Click in the Name field, and enter <b>CAfreeways</b>, and press <b>Enter</b> to
+         save the change. This is the text label that appears in the Layers panel of Google Maps.        
+      </li>
+      <li>For Initial State, accept the default setting, <b>Off</b>. This setting determines whether the map layer is turned on or off in Google
+           Maps.        
+        <p>(Refer to the <strong>Reference Guide</strong> for
+           more details about these property values.) </p>
+      </li>
+    </ol>
+  </li>
+  <li><a id="43318"></a>Click <b>Add Resource</b>.  </li>
+  <li>Navigate to the <code>ASSET_ROOT/Resources/Vector</code> folder.  </li>
+  <li>Select <b>CAHighways</b>, and click <b>Open</b>. The CAHighways resource appears on the resource list.    
+    </li>
+  <li>Select <b>default select all </b>under the resource name.
+    <p>The <strong>Feature</strong> and <strong>Filter</strong> tabs appear on the right. The first option on the <strong>Feature</strong> tab is <strong>Draw Features As</strong>. This option allows you to specify the display rules
+       for the selected resource. The value you set for <strong>Draw Features As</strong> determines
+       the options available for you to specify. </p>
+    <p>In this lesson, you define display rules for label only.</p>
+  </li>
+  <li>For <strong>Draw Features As</strong>, select <b>Lines</b>. The <strong>Lines</strong> options appear. </li>
+  <li>Under <strong>Line</strong>, accept the default visibility range for the lines, <b>8</b> and <b>14</b>.  </li>
+  <li>For <strong>Color</strong>, set it to orange. </li>
+  <li>For <strong>Line Width</strong>, accept the default,<b> 2</b>.  </li>
+  <li>Check the box next to <b>Label</b>.  </li>
+  <li>Under <strong>Label</strong>, accept the default setting on the drop-down list, <b>Text</b>.  </li>
+  <li>Click the empty text field. The <strong>Label Format</strong> dialog appears.
+<p>The <b>Insert Field</b> drop-down list contains the names of all fields in
+  your source data.    </p>
+  </li>
+  <li>Select <b>NAME</b>, and click <b>OK</b>.<br />
+    <p>In the source file for the selected resource, the <strong>Name</strong> column lists the names
+       of the roads, so when you select the <b>Name</b> field here, it results in
+       the names of the roads appearing in Google Maps.    </p>
+  </li>
+  <li>For the label, change the visibility range to <b>10</b> through <b>14</b>.
+    <p>The visibility range refers to the zoom level at which your labels are visible
+       in Google Maps.    </p>
+  </li>
+  <li>The default text style is black on white in the Sans 12 font. Click the text
+     style button (labeled <b>Sans/12</b>) to specify a different text style for
+     the labels.
+    <p>The <strong>Text Style</strong> dialog appears. </p>
+    </li>
+  <li>For <strong>Size</strong>, change the value to <b>10</b>, and accept the default setting for
+     Color, black.
+    <p class="note"><strong>Note:</strong> The only font that Fusion provides by default is <i>Sans regular</i>. To add fonts, including international fonts such as Chinese, Japanese, or Hebrew, you can create a configuration file called a &quot;font list&quot; file. See <i>Configuring Fonts For the Text Style Dialog</i> in the <i>Administration Guide</i>.</p>
+    <p>A preview of the label appears in the Preview box.    </p>
+  </li>
+  <li>Drag the preview over any button on the left. The new style is stored on that button. The button name reflects the font
+       face and size of the style, and it appears with the selected color and outline
+       attributes.    
+    <p>After you save a style to a button, you can simply click that button to automatically
+       select its text style settings for another label in the future.    </p>
+  </li>
+  <li>Click <b>OK</b>. You return to the Map Layer Editor, and the Feature tab shows all of your
+       selections.    
+	</li>
+  <li>Select <b>Save</b> from the File menu<b>.</b> </li>
+  <li>Navigate to the <code>ASSET_ROOT/MapLayers</code> folder.  </li>
+  <li>In the Name field, enter <b>SFMapLayer</b>, and click <b>Save</b>. The new map layer name appears in the Asset Manager’s asset list.    
+    </li>
+</ol>
+<h2><a id="25717"></a>Define a Map Project
+</h2>
+<p>The first step in defining a map project is to specify which map layers to include and give the project a name. Before you define a map project, however, add a subfolder to the asset navigation tree in the Asset Manager in which you can store your map projects.
+</p>
+<h4>To add a subfolder for map projects:
+</h4>
+<ol>
+  <li>Select <b>Asset Manager</b> from the Tools menu. The Asset Manager appears.
+    
+  </li>
+  <li>Right-click <b>Projects</b> in the asset navigation tree, and select <b>New Subfolder</b>. The New Subfolder dialog appears.
+    
+  </li>
+  <li>Enter <b>Map</b> in the Folder Name field, and click <b>OK</b>. The new Map subfolder appears under Projects in the asset navigation tree.
+    
+    </li>
+</ol>
+<h4>To create a map project:
+</h4>
+<ol>
+  <li>In the Asset Manager, click 
+    <img src="images/iconProjMaps.png" />. The Map Project Editor appears.
+    
+  </li>
+  <li><a id="68889"></a>Click 
+    <img src="images/icon_new.gif" />. The Open dialog appears.
+    
+  </li>
+  <li>Navigate to the <code>ASSET_ROOT/MapLayers </code>folder.
+  </li>
+  <li><a id="47673"></a>Select <b>SFMapLayer</b>, the map layer you created in the previous exercise, and click <b>Open</b>. SF Map Layer appears in the Map Project Editor.
+    
+    <p>The default legend name of the map layer, <b>CAFreeways</b>, appears in the Legend Name column, followed by <b>&lt;DEFAULT&gt;</b>, which indicates that this is the name you specified for the legend when you created the layer. The name and path of the map layer appears in the Layer column.
+    </p>
+  </li>
+  <li>Double-click <b>CAFreeways</b>. The Layer Legend dialog displays the current values for the map layer.
+    
+    <p><img src="images/mapProject_LayerLegendDia.png" /></p>
+  </li>
+  <li>Click the name field, change the name to <b>California Freeways</b>, press <b>Enter</b> to save the change, and click <b>OK</b>.
+    <p>The new legend name appears in the Map Project Editor. Notice that <b>&lt;DEFAULT&gt;</b> no longer appears after the legend name. (If you ever want to return to the default name, right-click the value in the Legend Name field, and select <b>Use Layer Defaults</b> from the context menu.)
+    </p>
+    </li>
+  <li>Select <strong>File &gt; Save</strong>.</li>
+  <li><a id="70068"></a>Navigate to the <code>ASSET_ROOT/Projects/Map </code>folder.
+  </li>
+  <li>In the Name field, enter <b>SFMapProject</b>, and click <b>Save</b>. The new map project name appears in the Asset Manager’s asset list.
+    
+    </li>
+</ol>
+
+<h2><a id="43488"></a>Define a Flat Map Database</h2>
+
+<ol>
+   <li>Select <b>Asset Manager</b> from the Tools menu. The Asset Manager appears.</li>
+  <li>Select Flat Projection Map Tools. The tools for Flat maps appear in the toolbar.</li>
+  <li>Click 
+    <img src="images/iconDatabaseMap.png" />. The Map Database Editor appears with no projects selected.
+      <p><img name="mapsDatabaseEditor" src="images/mapsDatabaseEditor.png" id="mapsDatabaseEditor" /> </p>
+  </li>
+  <li><a id="59253"></a>Click 
+    <img src="images/icon_new.gif" /> next to <b>Map Project</b>. The Open Asset dialog appears.
+    
+  </li>
+  <li><a id="25862"></a>Navigate to the <code>ASSET_ROOT/Projects/Map </code>folder.</li>
+  <li>Select <b>SFMapProject</b>, and click <b>Open</b>. The SF Map Project appears in the Map Database Editor next to Map Project.
+    
+   
+  </li>
+  <li><a id="27648"></a>Click 
+    <img src="images/icon_new.gif" /> next to <b>Imagery Project</b>. The Open Asset dialog appears.
+    
+  </li>
+  <li>Navigate to the <code>ASSET_ROOT/Projects/Imagery </code>folder.
+  </li>
+  <li><a id="67971"></a>Select <b>SFBay Area</b>, and click <b>Open</b>. The SF Bay Area project appears in the Map Database Editor next to Imagery Project.
+    
+    <p>Both projects appear on the list.
+    </p>
+    </li>
+  <li>Select <strong>File &gt; Save</strong>.  </li>
+  <li>Navigate to the <code>ASSET_ROOT/Databases</code> folder.
+  </li>
+  <li>In the Name field, enter <b>SFMapDatabase</b>, and click <b>Save</b>.
+     <p>In the Asset Manager, the new map database appears, along with the other databases you have created. Notice that the Category column distinguishes between the Google Earth databases and the Google Maps database.
+    </p>
+    </li>
+  <li>Right-click <b>SFMapDatabase</b>, and select <b>Build</b> from the context
+     menu. The status of the database immediately changes to <b>Waiting</b> or <b>Queued</b> and then to <b>In Progress</b>. 
+    
+    <p class="note"><strong>Note:</strong> It might take a while to build the map database, because it is also building the project, since you did not build the it in the previous exercise. 
+    </p>
+    <p>When Fusion finishes building the database, its Current State column in the Asset Manager changes to <b>Succeeded</b>, and its Current Version column changes to the date and time the most recent build was started.
+    </p>
+  </li>
+</ol>
+<h2><a id="63228"></a>Publish a Map Database
+</h2>
+<ol>
+  <li>Right-click the name of the map database you built in the previous exercise, and select <b>Publish</b> from the context menu. The Publish Database dialog appears.
+    <p><img src="images/publishMapDatabase.png" />
+<p class="note"><strong>Note:</strong> Only server associations configured for publishing map databases appear on the drop-down list of server associations.
+    </p>
+  </li>
+  <li>Click <b>Publish</b>.
+    <p>Fusion runs the publishing process on the database, and displays a success message when it is done. 
+    </p>
+    <p class="note"><strong>Note:</strong> If you get an error message, contact your Google Earth Enterprise Server administrator for help, or check the <i>Google Earth Enterprise Administration Guide</i> for more information.
+    </p>
+  </li>
+</ol>
+<p>If you choose to use the Google Geo database, check to make sure the Rewrite rule in <code> /opt/google/gehttpd/conf.d/virtual_servers/default_map.location</code> is set correctly:
+<pre> RewriteRule ^/default_map/+$ /maps/maps_google.html [PT]</pre>
+<p>If you choose to use a local maps database, set the rule to:
+<pre> RewriteRule ^/default_map/+$ /maps/maps_local.html [PT]</pre>
+<h2>View Your Map Database
+</h2>
+<p>After you publish your database, you can view it in a browser.
+</p>
+<h4>To view your map database:
+</h4>
+<ol>
+  <li>Launch any web browser.
+  </li>
+  <li>Point your browser to:<pre><code><i>serverURL</i>/default_map</code></pre>
+    <p>where <i>serverURL</i> is the full URL of the stream server to which you published the map database, including the protocol, the server location, and the port (if the port is other than the default, port 80). For example:
+    </p><pre><code>http://my_host_name/default_map</code></pre>
+    <p>If you are not sure which server you published to, contact your Google Earth Enterprise Server administrator for help. 
+    </p>
+    <p>Google Maps displays your database.
+    </p>
+    <p class="note"><strong>Note:</strong> When you zoom in beyond full resolution of the background imagery, it disappears. Google Maps cannot magnify imagery beyond full resolution.
+    </p>
+  </li>
+</ol>
+<p>
+</p>
+</div>
+	<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+	<!-- END WRAPPER -->
+
+
+
+
+</body>
+</html>

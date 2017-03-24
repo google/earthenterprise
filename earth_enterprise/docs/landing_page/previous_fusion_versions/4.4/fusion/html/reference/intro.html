@@ -1,0 +1,340 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd"> 
+<html> 
+<head> 
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/> 
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" /> 
+<link rel="stylesheet" type="text/css" href="local_extensions.css" /> 
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]--> 
+<title>Introduction</title></head> 
+
+<body> 
+<a name="top"></a> 
+  
+<!-- BEGIN HEADER --> 
+<div id="header"> 
+  <div id="logo"> 
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" /> 
+  </div> 
+  <h1 id="doc_title">Reference Guide</h1> 
+</div> 
+<!-- END HEADER --> 
+ 
+<!-- BEGIN WRAPPER --> 
+<div id="wrapper"> 
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li> 
+    <div class="line"></div> 
+    <li><strong>Reference Guide</strong></li> 
+    <li><a href="index.html">Home</a></li>
+    <li><a href="intro.html" id="selected">Introduction</a></li>
+    <li><a href="fundamentals.html">Fundamentals</a></li>
+    <li><a href="setup.html">Setting Up Your Workspace</a></li>
+    <li><a href="resources.html">Defining Resources</a></li>
+    <li><a href="projects.html">Defining Projects</a></li>
+    <li><a href="databases.html">Defining and Publishing Databases</a></li>
+    <li><a href="building.html">Building Assets</a></li>
+    <li><a href="maps.html">Preparing Data for Google Maps</a></li>
+    <li><a href="commands.html">Command Line Reference</a></li>
+    <li><a href="createOwnData.html">Creating Your Own Source Data, Icons, and Masks</a></li>
+    <li><a href="htmlTags.html">HTML Tags Allowed</a></li>
+    <li><a href="plugins.html">Google Earth Plugin</a></li>
+    <li><a href="errors.html">Common Error Messages</a></li>
+    <li><a href="glossary.html">Glossary</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+
+<h1>Introduction</h1>
+<p>The Google Earth Enterprise solution is a network-based, rich 3D and 2D mapping system that makes vast amounts of data easily accessible from a desktop application. With the Google Earth Enterprise solution, you can create a central geographic information system (GIS) database that can simultaneously be distributed to thousands of users.
+</p>
+<h2>Overview of the Google Earth Enterprise Solution
+</h2>
+<p>The Google Earth Enterprise solution consists of three basic products:
+</p>
+<ul>
+  <li><strong>Google Earth Enterprise Client (EC)</strong>
+    <p>Google Earth EC is the client software that creates an interactive 3D globe by connecting to geospatial databases created with Google Earth Enterprise Fusion. A Google Earth Enterprise Fusion database consists of imagery, terrain, and vector data. Unlike some traditional GIS software, Google Earth EC is easy to use and allows users to view any location on the globe in seconds without specialized training. Google Earth EC supports common security protocols for user access control and includes powerful features for experts and non-experts alike, including:
+    </p>
+    <ul>
+      <li>Simultaneous access to multiple Google Earth Enterprise Servers
+      </li>
+      <li>Geographic data display in the form of KML
+      </li>
+      <li>3D buildings with textures
+      </li>
+      <li>Import of data in common GIS file formats
+      </li>
+      <li>Movie-making capability
+      </li>
+      <li>Large-format printing
+      </li>
+    </ul>
+	<img src="images/fusionClientConnections.png" />
+  </li>
+  <li><strong>Google Earth Enterprise Fusion</strong>
+    <p>Google Earth Enterprise Fusion is the integration component of the Google Earth Enterprise solution and is designed for businesses that want to create their own GIS and imagery data. With Google Earth Enterprise Fusion, businesses can create a standalone GIS database, as explained in <a href="intro.html#11388">“Google Earth Enterprise Fusion Products” on page 1-2</a>. 
+    </p>
+  </li>
+  <li><strong>Google Earth Enterprise Server</strong>
+    <p>The Google Earth Enterprise Server is the distribution component of the Google Earth Enterprise solution. It allows your organization to serve its own data from your own servers using your standalone database. In addition, you can use the secure server login feature of the Google Earth Enterprise Server to deliver sensitive data in a secure environment.    </li>
+  <li><strong>Google Maps</strong>
+    <p>The Google Maps API enables you to create 2D views of your Google Earth Enterprise Fusion database in any web page that can be displayed in a browser. The Google Maps API utilizes Asynchronous JavaScript XML (AJAX) technology to deliver a high performance, easy to use, interactive user experience similar to Google Maps on the World Wide Web (<a href="http://maps.google.com">http://maps.google.com</a>). The Google Maps API also allows you to integrate additional datasets as overlays using XML, allowing you to utilize the power of web services to create <i>mashups</i> inside your own organization.
+    </p>
+    <p>Combined with the features of Google Earth Enterprise, the Google Maps API allows you to:
+    </p>
+    <ul>
+      <li>View published databases in an easy to navigate AJAX-based application that allows users to zoom, pan, and search their data without refreshing the entire page.
+      </li>
+      <li>Turn on and off tile overlay sets created from Google Earth Enterprise Fusion-built vectors.
+      </li>
+      <li>Search against city- and street-level geocoders as well as all plug-ins registered as part of the search framework.
+        <p>The Google Maps API resides within an HTML page which you control as the administrator. Google Earth Enterprise Fusion generates a simple web page with appropriately configured Google Maps API JavaScript code when a user publishes a map database. From that point forward, the user interface is fully yours to determine. (See http://www.google.com/apis/maps for complete Google Maps API documentation.)
+        </p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2>Google Earth Enterprise Fusion Products</h2>
+<p>With Google Earth Enterprise Fusion <strong>PRO</strong>, you can create a standalone GIS database that includes imagery, terrain, and vector data, and then serve it using the Google Earth Enterprise Server.</p>
+<p><img src="images/fusionPro.png" /></p>
+
+<h2>Structure of Google Earth Enterprise Fusion Data</h2>
+
+<p>When you look at the graphical representation of data in Google Earth EC, it appears to be one cohesive set of data. In reality, it is a much more complex collection of different types of data that you build in stages. You use Google Earth Enterprise Fusion to prepare the different types of data to display smoothly together and to provide the types of information you want to display for your viewers.
+</p>
+<p>Source data is the most basic information you start with when working in Google Earth Enterprise Fusion. The source data that you import into Google Earth Enterprise Fusion falls into two broad categories:
+</p>
+<ul>
+  <li><strong>Vector Data (line, polygon, and point data)</strong>
+    <p>Vector data consists of geographic features which are either geographic coordinates (points), sequences of connected geographic coordinates (lines), or closed sequences of connected geographic coordinates (polygons). Each feature typically has attribute fields, such as name, street address, or web site URL. 
+    </p>
+    <p>Google Earth Enterprise Fusion supports common vector and point data file formats. For a listing of specific formats, see the <a href="resources.html#supported_source_file_formats">Supported Source File Formats</a> section of the <strong>Defining Resources</strong> chapter.</p>
+  </li>
+  <li><strong>Imagery and Terrain Data (raster data)</strong>
+    <p>You can use Google Earth Enterprise Fusion PRO to import your own imagery and terrain data in order to integrate it with your vector data. 
+    </p>
+    <p>Raster data is a grid of cells covering an area of interest. Each pixel, the smallest unit of information in the grid, displays a unique attribute. There are two types of raster data in Google Earth Enterprise Fusion:
+    </p>
+    <ul>
+      <li>Imagery data consists of satellite and overhead photographs.
+      </li>
+      <li>Terrain data provides topographical information about a geographic area. 
+        <p>In Google Earth EC, the imagery data is <i>draped</i> over the terrain data, giving the imagery a topographical appearance. 
+        </p>
+        <p>Google Earth Enterprise Fusion PRO supports common imagery and terrain data formats. For a listing of specific formats, see the <a href="resources.html#supported_source_file_formats">Supported Source File Formats</a> section of the <strong>Defining Resources</strong> chapter.</p></li>
+    </ul>
+  </li>
+</ul>
+<p>After you import source data and begin working with it to create your own GIS data, it becomes part of three fundamental components of Google Earth Enterprise Fusion:
+</p>
+<ul>
+  <li>Resources
+  </li>
+  <li>Projects
+  </li>
+  <li>Databases
+  </li>
+</ul>
+<p>The relationship among these three components is well defined. Resources comprise projects, and projects comprise databases. A given resource can be used in more than one project, and a given project can be used in more than one database.
+</p>
+<p>When you prepare map data, there are four components:
+</p>
+<ul>
+  <li>Resources (vector and imagery)
+  </li>
+  <li>Map Layer
+  (flat projection and mercator maps supported)</li>
+  <li>Map Projects (map and imagery)
+  </li>
+  <li>Map Database
+  </li>
+</ul>
+<p>You can use the same vector and imagery resources for both Google Earth EC and Google Maps. However, you have the additional step of creating map layers for Google Maps. (See <a href="maps.html">Preparing Data for Google Maps</a> for complete details.)
+</p>
+<h3>Google Earth Enterprise Fusion Workflow
+</h3>
+<p>The Google Earth Enterprise Fusion workflow is based on four general steps (with an additional step if you are creating Google Maps databases): the steps described in the previous section plus a publishing step. Generally, you perform these steps in the following order:
+</p>
+<ol>
+  <li>Create and build resources from source data by type (imagery, terrain, or vector).
+  </li>
+  <li>Create and build a map layer (for Google Maps only).
+  </li>
+  <li>Create and build projects from your resources by type (imagery, terrain, vector, or map layers).
+  </li>
+  <li>Create and build a database from your projects.
+  </li>
+  <li>Publish your database.
+  </li>
+</ol>
+<p>The following diagram illustrates this process:
+</p>
+<a href="images/process_flow.gif"><img src="images/process_flow_small.gif" width="450" height="329" /></a>
+<p>Each step consists of a definition stage and a building stage. You <i>define</i> the asset (that is, specify the properties of that asset), and then you <i>build</i> the asset. When the building process is complete, Google Earth Enterprise Fusion stores a new <i>version</i> of the asset in its file system. When you define projects and databases, you select each asset you want to include. When you publish a database, you can select the version of the database you want to publish.
+</p>
+<p>As you define your data, you specify:
+</p>
+<ul>
+  <li>Which source data comprises each resource
+  </li>
+  <li>Which resource(s) comprise each project
+  </li>
+  <li>Which project(s) comprise each database
+  </li>
+</ul>
+<p>If you are working with map data, you also specify:
+</p>
+<ul>
+  <li>Which resource(s) comprise each map layer
+  </li>
+  <li>Which map layer(s) comprise each Maps vector project
+  </li>
+  <li>Which Maps vector project and imagery project comprise each Maps database
+  </li>
+</ul>
+<p>You can define and build assets either by using the Google Earth Enterprise Fusion graphical user interface (GUI) or by entering shell commands on the command line. The main chapters of this guide provide information about  performing these steps using the GUI. For information about the shell commands, see the <a href="commands.html">Command Line Reference</a> chapter.</p>
+<p>You can build each resource as soon as you finish defining it, or you can wait and build several resources at the same time. You must build a resource, however, before you add it to a project. It is up to you to determine your own work style based on the type of data you are working with, the number of changes you are making, and so on.
+</p>
+<p>If you build a resource while you are defining other resources, the build process takes place in the background. By the time you finish defining the second resource, the build process for the first resource might be complete. Likewise, if you build all of your projects as you go, by the time you get ready to build your database, it takes relatively little time. With this work style, building each resource as soon as you finish defining it saves you time. The disadvantage of this work style is that building large amounts of data (particularly imagery data) uses much of your system resources, so working on something else while building large assets could create performance issues for you.
+</p>
+<p>If you wait to build your projects and databases at the same time, the build process takes more time and CPU cycles. The advantage of this work style, however, is that if you time it right, you can start a build just before you go to a meeting, lunch, or home for the night, and the build process can have your workstation all to itself.
+</p>
+<p class="note"><strong>Tip:</strong> Since builds occur in the background and Google Earth Enterprise Fusion is always running, you can close the Google Earth Enterprise Fusion GUI after you start a build, if you do not need to use it for anything else. In fact, this is a good practice, because it frees up RAM and CPU cycles on the workstation, which can improve build performance.
+</p>
+<h2>Best Practices
+</h2>
+<p>This section contains general information about best practices to follow as you become familiar with Google Earth Enterprise Fusion. This information is helpful to know and can sometimes save you time.
+</p>
+<h3><a id="85096"></a>Organizing Your Google Earth Enterprise Fusion Subfolders
+</h3>
+<p>Google Earth Enterprise Fusion employs the concept of an <i>asset root</i> as the root of the directory tree where all Google Earth Enterprise Fusion assets (resources, projects, and databases) are stored. You can (and should) create a hierarchy of subfolders within the asset root to organize your assets, so you and other users can find them easily.
+</p>
+<p>Since Google Earth Enterprise Fusion currently does not allow you to delete or rename subfolders after they are created, Google strongly recommends that you plan out your subfolder hierarchy and create all of the subfolders you can anticipate needing before you begin working with your data. You can always add more subfolders later, but a little preplanning in this area goes a long way.
+</p>
+<p>There are several ways to organize your subfolders. Google recommends the following general structure:</p>
+<pre>
+Databases/
+MapLayers/
+Projects/
+     Imagery
+     Terrain
+     Vector
+Resources/
+     Imagery
+     Terrain
+     Vector</pre>
+<p>Note that spaces or other non-alpha characters are not recommended in folder
+   or asset names.</p>
+<p>It is unnecessary to further organize your database folder, because you will have only a handful of databases at most (possibly only one or two). Subdividing your projects by data type is useful, but it is not necessary to go into any greater detail for projects.
+</p>
+<p>For Resources, however, depending on the type of data you work with, you can further organize your subfolders by:
+</p>
+<ul>
+  <li>Provider (such as USGS, NOAA, and so on)
+  </li>
+  <li>Region (such as Europe, which includes France, Germany, and so on; North America, which includes Canada, United States, Mexico)
+  </li>
+  <li>Type (roads, borders, streams, and so on)
+  </li>
+</ul>
+<p>Starting with the basic structure recommended above, your full folder structure might look something like this:
+</p>
+<pre class="prettyprint">
+Databases 
+MapLayers 
+Projects/ 
+   Imagery 
+   Terrain 
+   Vector 
+Resources/ 
+   Imagery/ 
+      NoAmer/ 
+         USA/ 
+            California 
+            NewMexico 
+            Texas 
+         Canada/ 
+            Ontario 
+   Terrain/ 
+      NoAmer/ 
+         USA/ 
+            California 
+            NewMexico 
+            Texas 
+         Canada/ 
+            Ontario 
+   Vector/ 
+      NoAmer/ 
+         USA/ 
+            California 
+            NewMexico 
+            Texas 
+         Canada/ 
+            Ontario</pre>
+            
+<h3>Determining How Many Databases and Projects To Create
+</h3>
+<p>Since Google Earth Enterprise Fusion currently does not allow you to delete or rename assets, Google recommends that you plan out your databases and projects, as much as possible, before you begin working with your data. 
+</p>
+<p>Most organizations publish only one database for a particular purpose. If you have multiple purposes (such as commercial property for sale and residential property for sale), you must create a separate database for each purpose or project. 
+</p>
+<p class="note"><strong>Note:</strong> Google Earth Enterprise Fusion does not allow you to associate multiple projects of the same type (such as two vector projects) with a database at the same time. You can associate one vector, one imagery, and one terrain project with each database. 
+</p>
+
+<p>After you define a database (that is, define the projects that comprise that database), that database definition should not change. You might update the underlying source data and rebuild the database; however, the association of the projects to the database and the resources to the projects should not change. 
+</p>
+<p>For example, you might define one database that contains the current real estate listings for your area and another database that contains the current week’s new listings. You can update the source data for each database as often as you like and then rebuild the databases and publish the new versions, but you never need to change the projects associated with each database. The main reason for this convention is so your users can always connect to a particular server (or virtual server) to get the most up-to-date listings.
+</p>
+<p>Using the example described in the previous paragraph, you can publish each database to a virtual server:
+</p>
+<ul>
+  <li>www.example.com/allcurrent
+  </li>
+  <li>www.example.com/thisweek
+  </li>
+</ul>
+<p>To save time and work efficiently, a good strategy is to create one main project and one evaluation project. The main project contains all of the resources you want to publish. You keep the evaluation project small, working only on new or changing layers. Because you are working on a small amount of data at a time, the evaluation project does not take long to build, so you can iteratively tweak it and view the results very quickly. When you finish working on a layer in the evaluation project, you can export that layer and import it into your main project. The next time you build and publish the database, the new layer is included.
+</p>
+<h3>Setting File Access Permissions
+</h3>
+<p>When you acquire the source data that you intend to import into Google Earth Enterprise Fusion, it is a good idea to store it in <code>/gevol/src</code><a href="#footnote"><sup>1</sup></a>. After you organize the subfolders in that location and copy your source data into those folders, you must set the file access permissions so that Google Earth Enterprise Fusion can open the source files. This is because Google Earth Enterprise Fusion has a special user name and is part of a special group, so you must set your file access permissions to allow all users and groups to read and execute the source data files.
+</p>
+<h4>To set file permissions for your source data:
+</h4>
+<br />
+
+<ol>
+  <li>Enter the following command:
+  <pre><code>chmod a+r /gevol/src</code></pre>
+  </li>
+</ol>
+<p>Each time you add source files to <code>/gevol/src</code><i> </i>directories, you must ensure that the permissions for the new files are set correctly by running this command.
+</p>
+<p class="note"><strong>Note:</strong> If you specify a different volume, substitute your volume name for <code>gevol</code>.
+</p>
+
+
+</div>
+<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+
+<!-- END WRAPPER --> 
+
+</body> 
+</html>

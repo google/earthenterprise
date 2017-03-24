@@ -1,0 +1,858 @@
+/*
+ * Copyright 2017 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* TODO: High-level file comment. */
+/* Shared/Common Elements First */
+@font-face {
+  font-family: "Open Sans";
+  src: url('../../shared_assets/fonts/OpenSans-Regular.ttf') format('truetype'),
+       url('../../shared_assets/fonts/OpenSans-Regular-webfont.eot'),
+       url('../../shared_assets/fonts/OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+       url('../../shared_assets/fonts/OpenSans-Regular-webfont.svg#OpenSansRegular') format('svg'),
+       url('../../shared_assets/fonts/OpenSans-Regular-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Open Sans Light";
+  src: url('../../shared_assets/fonts/OpenSans-Light.ttf') format('truetype'),
+       url('../../shared_assets/fonts/OpenSans-Light-webfont.eot'),
+       url('../../shared_assets/fonts/OpenSans-Light-webfont.eot?#iefix') format('embedded-opentype'),
+       url('../../shared_assets/fonts/OpenSans-Light-webfont.svg#OpenSansLight') format('svg'),
+       url('../../shared_assets/fonts/OpenSans-Light-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+font-family: "Arial", sans-serif;
+color: #666;
+background-color: #fff;
+}
+
+#NotificationModal {
+  font-family: "Arial", sans-serif;
+  color: #333;
+  top: 25%;
+  left: 35%;
+  z-index: 250;
+  position: absolute;
+  display: none;
+  height: auto;
+  width: 250px;
+  background-color: #fff;
+  border: 1px solid #DCDCDC;
+  box-shadow: 2px 2px 2px rgba(0,0,0,0.4);
+  padding: 16px;
+}
+
+#NotificationModal h1 {
+  font-size: 16px;
+  color: #777;
+}
+
+#NotificationModal span {
+  font-size: 13px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+#ButterBar,
+#ErrorBar {
+  margin: 0 auto;
+  font-family: "Arial", sans-serif;
+  font-size: 11px;
+  display: none;
+  position: absolute;
+  margin-top: 45px;
+  margin-left: 35%;
+  width: auto;
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  z-index: 11000;
+  padding: 4px 8px;
+}
+
+
+#ButterBar span,
+#ErrorBar span {
+  width: auto;
+}
+
+#ButterBar {
+  color: #333;
+  background-color: #F9EDBE;
+  border: 1px solid #F0C36D;
+}
+
+#ErrorBar {
+  color: #fff;
+  background-color: #d14836;
+  border: 1px solid #666;
+}
+
+#ButterBar a:link,
+#ButterBar a:visited,
+#ButterBar a:active {
+  margin-left: 8px;
+  color: #333;
+}
+
+#ErrorBar a:link,
+#ErrorBar a:visited,
+#ErrorBar a:active {
+  margin-left: 8px;
+  color: #fff;
+}
+
+#BuildResponseDiv {
+  display: none;
+  height: auto;
+  width: 350px;
+  font-size: 12px;
+  color: #333;
+  position: absolute;
+  bottom: 0;
+  right: 100px;
+  background-color: #f1f1f1;
+  z-index: 250;
+  border: 1px solid #DCDCDC;
+  box-shadow: 4px 4px 16px rgba(0,0,0,.2);
+  padding: 1px;
+  overflow: hidden;
+}
+
+#ListLink {
+  display: block;
+  position: absolute;
+  top: 24px;
+  right: 16px;
+  z-index: 100;
+  height: 20px;
+  width: 16px;
+  opacity: .6;
+}
+
+#ListLink:hover {
+  opacity: 1;
+}
+
+#ListLink span {
+  display: block;
+  margin-top: 2px;
+  height: 3px;
+  width: 16px;
+  background-color: #333;
+  border-radius: 1px;
+}
+
+.buildProgress {
+  background-color: #000;
+  height: 20px;
+  font-size: 13px;
+  color: #FFF;
+  display: block;
+  padding: 4px;
+}
+
+.buildCompleted {
+  background-color: #3079ed;
+}
+
+.closeBuildDialog {
+  position: absolute;
+  bottom: 10px;
+}
+
+.buildProgress a:link,
+.buildProgress a:visited,
+.buildProgress a:active {
+  color: #FFF;
+  font-size: 40px;
+  text-decoration: none;
+  position: absolute;
+  right: 8px;
+  top: -10px;
+}
+
+#BuildResponseDiv h1 a:hover {
+  color: #DCDCDC;
+}
+
+#BuildResponseDiv span {
+  transition: all .2s;
+  -webkit-transition: all .2s;
+  overflow: auto;
+  height: auto;
+  max-height: 250px;
+  padding: 8px;
+}
+
+.clicked_button {
+  background-color: #DCDCDC;
+  box-shadow: inset 0 2px 3px rgba(0,0,0,0.20), inset 0 -1px 0 rgba(0,0,0,0.07);
+}
+
+.ContentBlock {
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.ContentBlock label {
+  display: block;
+  margin-top: 8px;
+}
+
+.ContentBlock span {
+  margin-top: 4px;
+  display: block;
+  position: absolute;
+}
+
+#CutButtonDiv {
+  margin-bottom: 16px;
+  margin-top: 16px;
+}
+
+#ErrorModal {
+  font-family: "Arial", sans-serif;
+  color: #333;
+  top: 25%;
+  left: 35%;
+  z-index: 250;
+  position: absolute;
+  display: none;
+  height: auto;
+  width: 250px;
+  background-color: #fff;
+  border: 1px solid #F1F1F1;
+  box-shadow: 2px 2px 2px rgba(0,0,0,0.4);
+  padding: 16px;
+}
+
+#ErrorModal h1 {
+  font-size: 16px;
+  color: #777;
+}
+
+#ErrorModal span {
+  font-size: 13px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+#globesTitle {
+  display: block;
+  position: absolute;
+  top: 375px;
+  left: 48px;
+}
+
+#globesList,
+#globesListHeader {
+  display: block;
+  position: absolute;
+  left: 64px;
+  right: 64px;
+  top: 445px;
+  z-index: 1;
+}
+
+#globesListHeader {
+  top: 407px;
+}
+
+#globesList span,
+#globesListHeader span {
+  display: block;
+  height: 20px;
+  padding: 8px;
+  border-bottom: 1px solid #F1F1F1;
+  line-height: 24px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-wrap: nowrap;
+}
+
+.fixed {
+  position: fixed;
+  top: 345px;
+  box-shadow: 0 1px 3px -2px #999;
+}
+
+#globesList span .button {
+pointer-events: none;
+opacity: .6;
+}
+
+#globesList span:hover .button {
+  pointer-events: auto;
+  opacity: 1;
+}
+
+#globesList span:hover {
+  background-color: rgba(0,0,0,0.02);
+}
+
+#globesList span label,
+#globesListHeader span label {
+  display: inline-block;
+  font-family: "Arial", sans-serif;
+  font-size: 13px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-wrap: nowrap;
+  color: #333;
+  text-overflow: ellipsis;
+  vertical-align: top;
+}
+
+.globesButtons {
+  position: absolute;
+  right: 0;
+  margin-top: -4px;
+}
+
+.globeSize,
+.globeType,
+.globeDate {
+  width: 8%;
+  max-width: 8%;
+}
+
+.globeName {
+  width: 20%;
+  max-width: 20%;
+}
+
+.globeDesc {
+  width: 30%;
+  max-width: 30%;
+}
+
+.legend {
+  opacity: .4;
+  pointer-events: none;
+}
+
+#goog_img {
+ inherit: none;
+ margin-left: 16px;
+ position: relative;
+ padding: 16px;
+}
+#goog_img label {
+  font-family: "Open Sans Light", Fallback, sans-serif;
+  font-size: 28px;
+  position: absolute;
+  color: #777;
+  margin-left: 8px;
+  bottom: 19px;
+}
+
+#header,
+#header_glc {
+  z-index: 25;
+  width: 100%;
+  right: 0;
+  height:65px;
+  border-style: solid;
+  border-width: 0 0 0 0;
+  border-color: #E8E8E8;
+  background-color: #F1F1F1;
+  opacity: .9;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";
+  filter: alpha(opacity=90);
+  box-shadow: 0 0 8px 3px rgba(0,0,0,.078);
+  position: fixed;
+  top: 0;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #DCDCDC;
+}
+
+#header_glc {
+  opacity: 1;
+  position: absolute;
+}
+
+#InfoPane {
+  display: block;
+  position: absolute;
+  left: 32px;
+  top: 80px;
+  min-height: 150px;
+  height: auto;
+  width: 186px;
+  box-shadow: 1px 1px 3px rgba(0,0,0,.3);
+  border-radius: 1px;
+  z-index: 10;
+  padding: 8px 16px 8px 16px;
+  transition: all .1s;
+  background-color: #fff;
+}
+
+#InfoPane h1,
+#InfoPane h2
+.ContentBlock {
+  display: block;
+  margin: 0;
+  border: 0;
+  color: #333;
+}
+
+#InfoPane h1 {
+  width: 180px;
+  font-size: 14px;
+  font-weight: normal;
+  padding: 8px 0 8px 0;
+  border-bottom: 1px solid #DCDCDC;
+  border-style: dotted;
+}
+
+#InfoPane h2 {
+  width: 180px;
+  border: 0;
+  color: #333;
+  border-bottom: 1px solid #DCDCDC;
+  border-style: dotted;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+#InfoPane h3 {
+  font-size: 11px;
+  color: #888;
+  font-weight: normal;
+  margin-left: 1px;
+}
+
+#InfoPane h3 a:link,
+#InfoPane h3 a:hover,
+#InfoPane h3 a:visited,
+#InfoPane h3 a:active {
+  color: #4d90fe;
+  text-decoration: none;
+  position: absolute;
+  right: 26px;
+}
+
+#map,
+#map3d {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+#map_holder {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+}
+
+#map_list {
+  margin: 0 auto;
+  width: auto;
+  height: 350px;
+  pointer-events: none;
+}
+
+#map3d {
+  top: 65px;
+  bottom: 0;
+  height: auto;
+}
+
+.Muted,
+.MutedWithEvents {
+  opacity: .3;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+  filter: alpha(opacity=30);
+}
+
+.Muted {
+  opacity: .3;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+  filter: alpha(opacity=30);
+  pointer-events: none;
+}
+
+#now_serving {
+  font-family: "Arial", sans-serif;
+  font-style: italic;
+  font-size: 12px;
+  color: #333;
+  padding: 16px;
+  display: block;
+  position: fixed;
+  top: 100px;
+  left: 32px;
+  min-width: 200px;
+  max-width: 300px;
+  background-color: #FFF;
+  z-index: 15;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  border-bottom: 1px solid #DCDCDC;
+  border-radius: 1px;
+}
+
+#now_serving span {
+  display: block;
+  margin-top: 4px;
+}
+
+#serving_content {
+  font-size: 16px;
+  max-width: 270px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+#PasteKMLDiv {
+  display: none;
+  position: fixed;
+  top: 100px;
+  left: 30%;
+  height: 300px;
+  width: 350px;
+  font-size: 12px;
+  color: #333;
+  bottom: 0;
+  right: 100px;
+  background-color: #f1f1f1;
+  z-index: 250;
+  border: 1px solid #DCDCDC;
+  box-shadow: 4px 4px 16px rgba(0,0,0,.2);
+  padding: 16px;
+}
+
+#noPolyNote {
+  color: #999;
+  font-size: 11px;
+}
+
+#PasteKMLDiv h1 {
+  font-size: 16px;
+  font-weight: normal;
+}
+
+#showKMLButton {
+  margin-top: 8px;
+}
+
+#ResponseHolder {
+  display: block;
+}
+
+#ResponseMessage,
+#status,
+#globe {
+  display: block;
+}
+
+#status {
+  margin-top: -16px;
+}
+
+#status h1 {
+  font-size: 12px;
+  font-weight: bold;
+  color: #d14836;
+}
+
+#globe a:link,
+#globe a:hover,
+#globe a:visited,
+#globe a:active,
+#ResponseMessage a:link,
+#ResponseMessage a:active,
+#ResponseMessage a:hover,
+#ResponseMessage a:visited {
+  color: #3079ed;
+  font-size: 12px;
+}
+
+#ResponseMessage {
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+#zoom_controls {
+  display: none;
+  z-index: 99;
+  position: absolute;
+  height: 60px;
+  width: 30px;
+  bottom: 50px;
+  right: 25px;
+  background-color: #fff;
+  box-shadow: 4px 4px 16px rgba(0,0,0,.2);
+  border-radius: 1px;
+  border: 1px solid rgba(0,0,0,.1);
+}
+
+#zoom_in {
+  width: 30px;
+  height: 15px;
+  display: block;
+  background:url('../images/zoom-in-tool.png');
+  background-repeat: no-repeat;
+  margin: 0 auto;
+  margin-top: 10px;
+  margin-left: 8px;
+}
+
+#zoom_out {
+  width: 30px;
+  height: 15px;
+  display: block;
+  background:url('../images/zoom-out-tool.png');
+  background-repeat: no-repeat;
+  margin: 0 auto;
+  margin-left: 9px;
+}
+
+#ZoomDisplay {
+  margin-bottom: 12px;
+  margin-left: 1px;
+  margin-top: 12px;
+  font-size: 11px;
+  color: #7F7F7F;
+}
+
+/* Text input fields */
+
+#name_field,
+#text_field {
+  width: 170px;
+}
+
+#name_field,
+#text_field,
+#kml_field,
+.glc_name_field,
+.glc_path_field,
+.glc_text_field,
+.glc_name_field,
+.glc_poly_field {
+  font-family: "Arial", sans-serif;
+  font-size: 12px;
+  padding: 5px;
+  resize: none;
+  border: 1px solid #DCDCDC;
+}
+
+.glc_name_field,
+.glc_path_field {
+  width: 200px;
+}
+
+.glc_text_field {
+  width: 325px;
+}
+
+.glc_poly_field {
+  height: 100px;
+  width: 325px;
+}
+
+#kml_field {
+  display: block;
+  height: 180px;
+  margin-bottom: 32px;
+  width: 95%;
+}
+
+#text_field {
+  height: 75px;
+}
+
+#name_field {
+  margin-top: -8px;
+  margin-bottom: 10px;
+  margin-bottom: 8px;
+}
+
+/* Overlays used for blocking & offclick functions */
+
+#WhiteOverlay {
+  background-color: rgba(255,255,255,0.7);
+  z-index: 200;
+  position: fixed;
+  display: none;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+#ClearOverlay {
+  background-color: rgba(255,255,255,0);
+  z-index: 200;
+  position: fixed;
+  display: none;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+#clear-space {
+  height: 100%;
+  width: 100%;
+  background-color: rgba(255,255,255,0);
+  z-index: 9;
+  position: fixed;
+  display: none;
+  top: 0;
+  left: 0;
+}
+
+/* Iframes for Earth Plugin */
+
+.IframeHeader {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 65px;
+  z-index: -10000;
+}
+
+.IframeButtons {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -10000;
+}
+
+.IframeInfoPane {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -10000;
+}
+
+.IframeKML {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -10000;
+}
+
+.IframeResponse {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -10000;
+}
+
+.IframeError {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -10000;
+}
+
+#top_bar a {
+  color: #3079ed;
+  text-decoration: none;
+  font-size: 12px;
+  margin-left: 8px;
+}
+
+#ButterBar,
+#ErrorBar {
+  margin: 0 auto;
+  font-family: "Arial", sans-serif;
+  font-size: 11px;
+  display: none;
+  position: absolute;
+  margin-top: 45px;
+  margin-left: 35%;
+  width: auto;
+  max-width: 500px;
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  z-index: 11000;
+  padding: 4px 8px;
+}
+
+
+#ButterBar span,
+#ErrorBar span {
+  width: auto;
+}
+
+#ButterBar {
+  color: #333;
+  background-color: #F9EDBE;
+  border: 1px solid #F0C36D;
+}
+
+#ErrorBar {
+  color: #fff;
+  background-color: #d14836;
+  border: 1px solid #666;
+}
+
+#ButterBar a:link,
+#ButterBar a:visited,
+#ButterBar a:active {
+  margin-left: 8px;
+  color: #333;
+}
+
+#ErrorBar a:link,
+#ErrorBar a:visited,
+#ErrorBar a:active {
+  margin-left: 8px;
+  color: #fff;
+}
+
+#ClearHolder a {
+  margin-right: 0;
+  line-height: 11px;
+  width: 68px;
+}
+
+#advanced_zoom_toggle {
+  color: #222;
+  cursor: pointer;
+  padding-bottom: 4px;
+}

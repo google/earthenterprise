@@ -1,0 +1,5 @@
+cp ../shared/* .
+swig -python -c++ glc_unpacker.i
+g++ -O2 -fPIC -I/usr/include/python2.7 -c glc_unpacker_wrap.cxx
+g++ -O2 -c -fPIC glc_unpacker.cpp portable_glc_reader.cpp file_unpacker.cpp file_package.cpp packetbundle.cpp packetbundle_finder.cpp
+g++ -shared glc_unpacker_wrap.o glc_unpacker.o portable_glc_reader.o file_unpacker.o file_package.o packetbundle.o packetbundle_finder.o -o _glc_unpacker.so

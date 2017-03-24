@@ -1,0 +1,1301 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Defining Projects</title>
+</head>
+
+<body><!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" />
+  </div>
+  <h1 id="doc_title">Reference Guide</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Reference Guide</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="intro.html">Introduction</a></li>
+    <li><a href="fundamentals.html">Fundamentals</a></li>
+    <li><a href="setup.html">Setting Up Your Workspace</a></li>
+    <li><a href="resources.html">Defining Resources</a></li>
+    <li><a href="projects.html" id="selected">Defining Projects</a></li>
+    <li><a href="databases.html">Defining and Publishing Databases</a></li>
+    <li><a href="building.html">Building Assets</a></li>
+    <li><a href="maps.html">Preparing Data for Google Maps</a></li>
+    <li><a href="commands.html">Command Line Reference</a></li>
+    <li><a href="createOwnData.html">Creating Your Own Source Data, Icons, and Masks</a></li>
+    <li><a href="htmlTags.html">HTML Tags Allowed</a></li>
+    <li><a href="plugins.html">Google Earth Plugin</a></li>
+    <li><a href="errors.html">Common Error Messages</a></li>
+    <li><a href="glossary.html">Glossary</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+<a id="33825"></a><h1><a id="61436"></a>Defining Projects</h1>
+
+<ol class="toc">
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#defining_vector_projects">Defining Vector Projects</a></li>
+  <li><a href="#creating_a_vector_project">Creating a Vector Project</a></li>
+  <li><a href="#working_with_layers_in_vector_projects">Working with Layers in Vector Projects</a></li>
+  <li><a href="#working_with_vector_layer_groups">Working with Vector Layer Groups</a></li>
+  <li><a href="#configuring_layer_properties">Configuring Layer Properties</a></li>
+  <li><a href="#configuring_display_rules">Configuring Display Rules</a></li>
+  <li><a href="#filtering_vector_data">Filtering Vector Data</a></li>
+  <li><a href="#exporting_and_importing_display_rule_templates">Exporting and Importing Display Rule Templates</a></li>
+  <li><a href="#defining_imagery_and_terrain_projects">Defining Imagery and Terrain Projects</a></li>
+  <li><a href="#creating_a_historical_imagery_project">Creating a Historical Imagery Project</a></li>
+  <li><a href="#modifying_projects">Modifying Projects</a></li>
+</ol>
+
+
+<h2 id="overview">Overview</h2>
+<p><a id="marker-1036282"></a>This chapter describes all of the tasks necessary to define and build projects with Google Earth Enterprise Fusion. It includes information about vector, terrain, and imagery projects. For information about Google Maps projects, see the chapter titled <a href="maps.html#25717">Defining a Map Project</a>.</p>
+<p><a id="marker-1039675"></a>The purpose of creating projects is to specify the resources you want to display, the order in which you want to display them, and, for vector projects, the display properties for each resource.
+</p>
+<p>Google Earth Enterprise Fusion supports four types of projects:
+</p>
+<ul>
+  <li><a href="#vector_projects">Vector projects</a></li>
+  <li><a href="#imagery_projects">Imagery projects</a></li>
+  <li><a href="#terrain_projects">Terrain projects</a></li>
+  <li>Map vector projects
+  (covered in the <a href="maps.html">Defining a Map Project</a> chapter)</li>
+</ul>
+
+
+<h2 id="defining_vector_projects"><a id="55771"></a>Defining Vector Projects
+</h2>
+<p><a id="marker-1039689"></a>Within each type of project, you can add multiple resources of the same type. Each resource within a project is identified as a <i>layer</i>. 
+</p>
+<p>You can assign related layers to a layer group, which allows Google Earth EC users to turn on and off the entire group at the same time. See the <a href="projects.html#60450">Working with Vector Layer Groups</a> section of this chapter for more information.</p>
+<p><a id="marker-1039698"></a>For vector projects, the name of each layer appears in the Layer panel of Google Earth EC (outlined in red in the following graphic). You can use simple HTML codes in the layer names to display special designations.</p>
+<p><a id="marker-1039708"></a>The most effective way to create valuable vector data is to apply specific display rules to each layer. A display rule determines exactly which features of the layer are displayed and how Google Earth displays them. For more information on display rules for vector resources, refer to the <a href="projects.html#92365">Configuring Display Rules</a> section of this chapter.</p>
+<h2 id="creating_a_vector_project"><a id="33138"></a>Creating a Vector Project
+</h2>
+<p><a id="marker-1036298"></a>The first step in defining a vector project is to specify which resources to include and give the project a name.
+</p>
+
+<ol>
+  <li>Select <strong>Tools &gt; Asset Manager</strong>. The Asset Manager appears.    
+  </li>
+  <li>Click 
+  <img src="images/iconProjVector.png" /> to open the Vector Project Editor.    </li>
+  <li><a id="68889"></a>Click 
+    <img src="images/icon_new.gif" />. The Open dialog appears.    
+  </li>
+  <li>Navigate to the folder that contains your vector resources.
+    <p class="note"><strong>Note:</strong> The selection in the Type drop-down list near the bottom of this dialog determines the type of resources that appear on the list. Vector Resource is automatically selected when you open this dialog from the Vector Project Editor, so only vector resources appear on the list.    </p>
+  </li>
+  <li><a id="47673"></a>Select the resource you want to add to the project, and click <strong>Open</strong>.
+    <p><img src="images/vectorProject_OpenRes.png" /></p>
+    <p>The selected resource appears in the Vector Project Editor.</p>
+    <p><img src="images/vectorProjectEditor-full.png" /></p>
+  </li>
+  <li>Check the box next to the resource, if you want to view it in the Preview pane. When a resource’s preview box is checked, you can right-click the resource and select <strong>Zoom to Layer</strong> to zoom in on that resource.  </li>
+  <li>Repeat the previous steps<a href="projects.html#47673"></a> for each additional resource you want to include in the project.  </li>
+  <li><a id="64792"></a>To finish adding resources, select <strong>File &gt; Save</strong>.
+  </li>
+  <li><a id="70068"></a>Navigate to the folder where you want to save your project, or click 
+    <img src="images/iconCreateNewFolder.png" /> to create a new folder in the desired location.  </li>
+  <li>Enter the name of your project, and click <strong>Save</strong>.
+    <p>The new project name appears in the Asset Manager’s asset list.    </p>
+    <img src="images/assetManager_ProjList.png" />  </li>
+</ol>
+    <p class="caution"><strong>Caution:</strong> Assets can not be deleted once they are saved. They can be <em>cleaned</em>, so that they are no longer available to use in Google Earth Enterprise Fusion; see <a href="building.html#85338">Cleaning Asset Versions</a> in the <strong>Building Assets</strong> chapter for more information.</p>
+<p><a id="marker-1036308"></a>The following sections describe the many ways that you can modify the layers in your project to customize it. When you finish modifying each project, you can build it individually, build several projects at the same time, or wait until you build your database to build all of its projects at the same time. See the chapter on <a href="building.html#70505">Building Assets</a> for complete details.</p>
+<p>When you modify and then save a project, Google Earth Enterprise Fusion saves it in the same place with the same name as the original. If you modify a project that you have already built, you can rebuild it now or include it when you build the associated database.</p>
+<h2 id="working_with_layers_in_vector_projects"><a id="79294"></a>Working with Layers in Vector Projects
+</h2>
+<p><a id="marker-1036336"></a>After you create a vector project, you can add, remove, skip, or change the order of its layers.
+</p>
+<p class="note"><strong>Note:</strong> You must rebuild the project before the changes appear in the Preview pane.
+</p>
+<p>When you add layers to your project, they appear in the order in which you added them. The order in which they appear in the Vector Project Editor determines the order in which they appear in the Layers panel of Google Earth EC. You can rearrange them in the Vector Project Editor, if you want them to appear in a different order in Google Earth EC.
+</p>
+
+<h3>Modifying layers in a vector project</h3>
+<br />
+
+<ol>
+  <li>In the Asset Manager, double-click the name of the project in which you want to modify layers. The Vector Project Editor displays the list of layers included in the project.</li>
+  <li>Perform the desired procedure(s) below.
+  </li>
+  <li>Select <strong>File &gt; Save</strong>. Google Earth Enterprise Fusion saves your changes to the project, using the same project name.
+  </li>
+</ol>
+
+<h3><a id="marker-1053586"></a>Adding layers to a project</h3>
+
+<p>Follow steps <strong>3</strong> through <strong>5</strong> in <a href="projects.html#33138">Creating a Vector Project</a> for each layer you want to add to the project.
+</p>
+
+<h3><a id="marker-1048984"></a>Skipping a layer in a project</h3>
+
+<p id="34001"><a id="34001"></a>In the Vector Project Editor, right-click the layer you want to skip, and select <strong>Skip Layer</strong>. The selected layer appears with a strike-through.</p>
+<p>Skipping a layer temporarily excludes it from the build. To include the skipped layer in a later build,   right-click the layer and select <strong>Don’t Skip Layer</strong>.</p>
+
+<h3><a id="marker-1036340"></a>Removing layers from a project</h3>
+<p>In the Vector Project Editor, select the layer  to remove and click 
+  <img src="images/removeLayer.gif" align="absmiddle" />.
+</p>
+<p>Alternatively,  right-click the layer and select <strong>Remove Layer </strong>from the context menu.</p>
+
+<h3><a id="marker-1036342"></a><a id="54351"></a>Reordering layers in a project</h3>
+<br />
+
+<ol>
+  <li><a id="35451"></a>Select the layer  to move.</li>
+  <li><a id="55826"></a>Click <img src="images/arrowUp.gif" /> or <img src="images/arrowDown.gif" /> 
+     to move the selected layer to the desired position on the list. 
+       <p>(Or, right-click the layer and select <strong>Move Layer Up</strong> or <strong>Move Layer Down</strong> from the context menu.)</p>
+  </li>
+  <li>Repeat these steps<a href="projects.html#55826"></a> until the layers are in the order in which you want them to appear in the Layers panel of Google Earth EC.<br />
+  </li>
+</ol>
+<h2 id="working_with_vector_layer_groups"><a id="60450"></a>Working with Vector Layer Groups
+</h2>
+<p><a id="marker-1036352"></a>When creating vector projects, you can group layers together so they appear in a folder in the Layers panel in Google Earth EC. For example, you might have one vector layer that contains all the commuter rail lines for a given area and another vector layer that contains all the commuter rail station points for that area. You can place both layers in a folder named <strong>Transit - Rail Lines</strong>. 
+</p>
+<p>When you publish the database, a single folder named <strong>Transit - Rail Lines</strong> appears in the Layers panel in Google Earth EC. When a Google Earth EC user expands that folder, both the commuter rail line and the commuter rail station layers appear within it. In Google Earth EC, users can view the individual layers by turning them on or off individually.
+</p>
+<p>If you would prefer a layer group to behave as a single layer, rather than as
+   individual layers, deselect the <strong>Expandable</strong> checkbox in the <strong>Layer
+   Group Properties</strong> dialog.</p>
+<p><img src="images/expandable_checkbox.png" /></p>
+
+<h3><a id="marker-1036353"></a>Creating a Layer Group</h3>
+<br />
+
+<ol>
+  <li>In the Vector Project Editor, click 
+    <img src="images/iconLayerGroup.png" />. The <strong>New Layer Group</strong> dialog appears. </li>
+  <li>Enter a unique name for the layer group folder that allows it to be easily identified by users. The name you enter here appears as the layer group name in Google Earth EC.  </li>
+  <li>Click <strong>OK</strong>. The name of the layer group folder appears in the Vector Project Editor.
+    
+  </li>
+  <li>Drag and drop the layers you want to add  over the layer group folder. Once the first layer is added to the group, the layer group folder expands to display its layers.
+    
+  </li>
+</ol>
+<h3><a id="marker-1036368"></a>Removing a Layer from a Layer Group</h3>
+<br />
+<p>Right-click the layer to delete and select <strong>Take Layer Out of Group</strong>.</p>
+<p>Alternatively, drag the layer to be deleted to the white space below the layer group folder. The layer appears below the list.</p>
+<h2 id="configuring_layer_properties"><a id="25835"></a>Configuring Layer Properties
+</h2>
+<p><a id="marker-1036369"></a>After you add vector-based layers to your project, you can customize the layers to determine how the layer list (or <i>legend</i>) appears in Google Earth EC. This applies to layer groups as well as to individual layers.
+</p>
+<p>You can view the layer properties for a resource in a project by right-clicking the layer name in the Vector Project Editor and selecting <strong>Layer Properties</strong> from the context menu. 
+</p>
+<p>The Layer Properties dialog contains four tabs:
+</p>
+<ul>
+  <li><strong>Legend</strong></li>
+  <li><strong>Search</strong></li>
+  <li><strong>Advanced</strong></li>
+  <li><strong>Notes</strong></li>
+</ul>
+<p>The following sections describe each tab.
+</p>
+<h3><a id="17160"></a>Legend Tab
+</h3>
+<p>The <strong>Legend</strong> tab displays the selected layer's properties. </p>
+<img src="images/layerLegend.png" />
+<p>When you first open this dialog for a new layer, only the default locale and its values appear, and the box next to <strong>Hide unspecialized locales</strong> is checked. Google Earth EC uses the default locale settings when you do not specify different settings here for a user’s locale (as specified in the user’s operating system). See the section on <a href="#locale_specific_values">Locale-specific Values</a> below for information on setting property values for individual locales. </p>
+<p>The property values available for each locale are:
+</p>
+<ul>
+  <li><strong>Icon</strong>
+    <p><a id="marker-1039363"></a>The icon that appears next to the name of the layer in the Layers panel of Google Earth EC. You can select a different icon for the layer by clicking the value in the Icon column and then selecting a new icon from the Icons dialog.
+    </p>
+    <p class="note"><strong>Note:</strong> You can use the Icon Manager to create more icons. See <a href="setup.html#52623">Managing Icons</a> in the <strong>Setting Up Your Workspace</strong> chapter for more information.</p>
+  </li>
+  <li><strong>Name</strong>
+    <p><a id="marker-1039376"></a>The name of the layer displayed in the Layers panel of Google Earth EC. You can change the name of the layer by clicking the value in the Name column and changing it to a name that makes it easier for users to identify the layer.
+    </p>
+  </li>
+  <li><strong>Initial State</strong>
+    <p><a id="marker-1039382"></a>Determines whether the layer is turned on or off by default in Google Earth EC. The first time a user connects to the database containing this layer:
+    </p>
+    <ul>
+      <li>If you select <strong>On</strong> as the default state here, the check box for the layer is automatically checked. 
+      </li>
+      <li>If you select <strong>Off</strong> as the default state here, the check box for the layer is automatically unchecked.
+      </li>
+    </ul>
+        <p>Google Earth EC saves the state of the check box when a user disconnects from the database. For example, if you set the initial default state to <strong>Off</strong>, and then a user subsequently checks the box for a layer in Google Earth EC and then disconnects from the database, the next time that user connects to that database, the state of the check box for that layer is the same as when the user disconnected; that is, the box is checked.
+        </p>
+      <p class="caution"><strong>Caution:</strong> If you select <strong>On</strong> as the default state for the layer, be aware of the performance impact on Google Earth EC. If a user selects too many layers simultaneously in Google Earth EC, it can seriously impact performance. So it is best not to turn on too many layers at the same time. In most situations, setting the default state to <strong>Off</strong> is the best choice.
+      </p>
+  </li>
+  <li><strong><a id="17140"></a>LookAt</strong>
+    <p><a id="marker-1052229"></a>Allows you to specify a camera view by selecting a KML/KMZ file that includes a LookAt element. If you specify a KML/KMZ file in this field, Google Earth EC users can fly directly to the specified camera view by double-clicking the layer.
+    </p>
+    <ol>
+      <li>In Google Earth EC, set the desired camera view (tilt, pan, and zoom), create a placemark, and then save the placemark. (Refer to the Google Earth EC documentation for help with this step, if necessary.)
+      </li>
+      <li>Copy the resulting KML/KMZ file to the workstation where you run Google Earth Enterprise Fusion.
+      </li>
+      <li>Click the <strong>LookAt</strong> field for the desired locale. The Open dialog appears.      </li>
+      <li>Navigate to the folder containing the KML/KMZ file, select it, and click <strong>Open</strong>. The content of the KML/KMZ file (a series of numbers) appears in the <strong>LookAt</strong> field. 
+        <p>When Google Earth EC users double-click the name of this layer, Google Earth EC flies to the camera view of the placemark defined in that file. </p>
+      </li>
+    </ol>
+  </li>
+</ul>
+
+
+<ul>
+      <li><strong>KML URL</strong>
+        <p><a id="marker-1039424"></a>Allows you to specify a KML/KMZ file for this layer. (The KML/KMZ file must be hosted on a local or remote server.)
+        </p>
+      <p class="caution"><strong>Caution:</strong> If you specify a KML/KMZ file in this field, the content of the KML/KMZ file replaces the resource for which it is defined. So if you intend to specify a KML URL, include the simplest possible “dummy” resource (very small source file) in the project instead of a resource you actually want to display in Google Earth EC.
+      </p>
+      </li>
+  <li><strong>Labels</strong>
+    <p><a id="marker-1039427"></a>Defines which labels apply to this layer. You can create labels using the <a href="setup.html#89468">Label Manager</a>.</p>
+  </li>
+  <li><strong>Required Client Version</strong>
+    <p>(Optional) Indicates specific versions of Google Earth that the layer will
+        support. For example:</p>
+    <ul>
+      <li><code>5.0.11733</code> indicates that the layer is included if the Google Earth client
+        version is 5.0.11733 or newer.</li>
+      <li><code>5.0.11733-4.0.2291</code> indicates that the layer is included if the Google
+        Earth client version is between versions 4.0.2291 and 5.0.11733.</li>
+      <li><code>-4.0.2291</code> excludes the layer if the Google Earth client version
+        is 4.0.2291 or earlier.</li>
+    </ul>
+</li>
+</ul>
+
+<h4 id="locale_specific_values">Locale-specific Values</h4>
+
+<p><a id="marker-1049013"></a>If you uncheck the box next to <strong>Hide unspecialized locales</strong>, all of the locales that you created with the <a href="setup.html#33187">Locale Manager</a> appear in the table.</p>
+<p><img src="images/LayerProperties_Unchecked.png" /></p>
+<p><a id="marker-1049015"></a>All of the values for non-default locales are set to the default values unless you change them. That means that regardless of which locale a user selects in Google Earth EC, the default values appear.</p>
+<p>To change the value of a field for a specific locale, click the locale in the top row of the table. Click its field, and change the value. Some fields contain a drop-down menu, and some allow you to enter free-form text. For example, to support the Italian locale,  enter values for the fields under <strong>it</strong>:</p>
+<p><img src="images/layerProperties_Italian1.png" /></p>
+<p><a id="marker-1049022"></a>If Italy is the only locale for which you want to specify values other than the defaults, you can unclutter this dialog by checking the box next to <strong>Hide unspecialized locales</strong>. This hides the locales where no specialized values are defined and displays only the <strong>default</strong> and <strong>it</strong> columns.<img src="images/layerProperties_Italian2.png" /></p>
+<p>Continuing with this example, when a Google Earth EC user selects Italy as their locale, Google Earth EC displays the values listed under <strong>it</strong>.</p>
+<p><img src="images/layerPropertiesLocaleEC.png" /></p>
+
+<h3 id="search_tab"><a id="88708"></a>Search Tab</h3>
+
+<p>The Search tab allows you to specify one or more fields in the source data on which users can search. When you select one or more search fields on this tab of the Layer Properties dialog, a search tab appears in Google Earth EC that allows users to search for data in the selected field(s).</p>
+<p><img src="images/layerSearch.png" /></p>
+
+<h4>Adding Search Fields</h4>
+<br />
+
+<ol>
+  <li><a id="58061"></a>Click <img src="images/icon_new.gif" />. The
+    <strong>Add Search Field</strong> dialog appears.
+    <p><img src="images/layerSearchAdd.png" /></li></p>
+  <li>Select the desired field from the <strong>Column Name</strong> drop-down list. </li>
+  <li><a id="95749"></a>Select an option from the <strong>Use</strong> drop-down list:
+    <ul>
+      <li><strong>Search Only </strong>- Google Earth EC searches against the selected field but does not display the results.
+      </li>
+      <li><strong>Display Only </strong>- Google Earth EC displays the values of the selected field in the results but does not search against the selected field.
+      </li>
+      <li><strong>Search and Display</strong> - Google Earth EC searches against the selected field and displays the results.
+        <p>For example, if you have a database of trees that includes the common names of the trees and their ages, you could set up a search of all trees with a particular name and display their ages and locations. To do so, you would:
+        </p>
+      </li>
+      <li>Select the <strong>NAME</strong> field and select <strong>Search Only</strong>.
+      </li>
+      <li>Select the <strong>LOCATION</strong> field and select <strong>Display Only</strong>.
+      </li>
+      <li>Select the <strong>AGE</strong> field and select <strong>Display Only</strong>.
+        <p>In Google Earth EC, users could then enter <strong>oak</strong> as the search term, and the results would be the names and locations of all oak trees in the database. If the user enters <strong>elm</strong>, the results would be the names and locations of all <strong>elm</strong> trees in the database. </p>
+        <p class="note"><strong>Note:</strong> This is currently an exact search, which means that the Google Earth EC user must enter the value exactly as it appears in the database. In the example described above, if the user enters <strong>oak</strong>, the search results would include only trees listed as “oak”, not trees listed as “California live oak” or “cork oak”.
+        </p>
+      </li>
+    </ul>
+  </li>
+  <li>Repeat the steps above<a href="projects.html#95749"></a> for each additional field you want to add to the search.
+    <p>Your selections appear on the list of search fields on the <strong>Search</strong> tab in the order in which you added them:</p>
+    <p><img src="images/layerSearch-full.png"/></p>
+    <p>The order in which the fields  appear on this list is the order in which they appear in the description balloon in Google Earth EC. (The fields designated as <strong>Search Only</strong> do not affect the order in which the fields to be displayed appear.) In this case, the description balloon for a POI might look  like:</p>
+    <p><img src="images/layerSearchBalloonEC.png" /></p>
+    <p>Click <img src="images/arrowUp.gif" /> or
+      <img src="images/arrowDown.gif" /> to move the fields up or
+      down in the list to change the order in which they appear in
+      Google Earth EC.</p>
+  </li>
+</ol>
+
+<p>When you finish defining all of the layer properties, click <strong>OK</strong>. The <strong>Search Tab Properties</strong> fields appear at the bottom of the Vector Project Editor. </p>
+<p>You can modify the <strong>Tab Label</strong> and <strong>Search Field Label</strong> values to names that suit your search. </p>
+<p class="note"><strong>Note:</strong> Google Earth Enterprise Fusion combines all of the fields you select for all of the layers in a project into one search tab with one search field label. If you want more flexibility or control over your search tabs, use the <strong>Search Framework API</strong> to create plug-ins, and then reference those plug-ins when you create search tabs with the Search tab Manager. <br /><br />
+If you delete all of the search fields from the Layer Properties dialog, the <strong>Tab Label</strong> and <strong>Search Field Label</strong> fields disappear from the Vector Project Editor. If you ever add search fields to this project again, these fields reappear with the most recent values you provided. </p>
+<h3><a id="marker-1053371"></a>Advanced Tab
+</h3>
+<p><a id="marker-1036393"></a>The <strong>Advanced</strong> tab allows you to specify additional text-related options for the layer.</p>
+<p><img src="images/LayerProperties_Advanced.png" /></p>
+
+<h4><strong>Preserve Text</strong></h4>
+
+<p><a id="marker-1036395"></a>You can specify the level at which you want to preserve text labels on roads after the vector data for the road itself fades away. This feature is typically useful when a Google Earth EC user zooms in close enough to see the roads in the image, so it is no longer necessary to draw the road vector. However, it is still useful to see the name of the street.</p>
+<p>To specify the correct value:</p>
+
+<ol>
+  <li>Create a road layer, set the desired styles and levels of detail, and build it.</li>
+  <li>Open the build log for that layer:
+    <ul>
+      <li>In the <strong>Asset Manager</strong>, double-click the
+        value in the <strong>Current State</strong> column for the
+        desired vector project.</li>
+      <li>Expand the <strong>CHILD: VectorLayer</strong> subtype
+        for the desired layer. (If you do not know which layer is
+        which, expand all of the <strong>CHILD: VectorLayer</strong>
+        subtypes, and look at the <strong>INPUT: Resource</strong> values.)</li>
+      <li>Click <img src="images/iconLog.png" /> next to
+        <strong>CHILD: VectorFuse</strong> for the desired layer.</li>
+    </ul>
+  </li>
+  <li>Locate the last line in the build log that starts with
+    <code>Begin export of level <em>x</em></code>. The value of
+    <i>x</i> is the last level at which vector lines are displayed.</li>
+  <li>Go back to the <strong>Advanced</strong> tab of the
+    <strong>Layer Properties</strong> dialog.</li>
+  <li>In the <strong>Preserve Text</strong> field, specify the
+    last display level value indicated in the build log.
+    <p class="note"><strong>Note:</strong> This setting affects roads only.</p>
+  </li>
+</ol>
+
+<h4><strong><a id="30883"></a></strong>JavaScript</h4>
+
+<p>The JavaScript Editor allows you to create JavaScript functions. Click the insertion button (<strong>...</strong>) to the right of the empty text field to display the JavaScript Editor.    </p>
+<p><img src="images/jsEditor.png" /></p>
+<p class="note"><strong>Note:</strong> You need to be somewhat familiar with JavaScript to use the JavaScript Editor. You can use all of the standard JavaScript functions or objects that you would use in a JavaScript-enabled web page with the exception of <code>window</code>, <code>document</code>, <code>browser</code>, and so on.    </p>
+<p>Select a field (or function, if you have created any) on the left, and click <strong>Get Values</strong> to display the values of that field for the selected data set in the <strong>Field Values</strong> list on the right. </p>
+<p class="note"><strong>Tip:</strong> If your data set is very large, it can take a long time to find all of the values. In that case, a progress dialog appears showing you an ongoing count of how many values it has found. You can click <strong>Cancel</strong> on that dialog at any time to stop scanning your source file for unique values and populate the <strong>Field Values</strong> list with the unique values found so far. Typically, it stops finding unique values part way through the file. So when the counter virtually stops, that is a good time to click <strong>Cancel</strong> without concern that you might be missing some unique values.</p>
+<p><img src="images/jsEditor_GetValues.png" /></p>
+<p>Use the buttons in this dialog to help you write your JavaScript functions.</p>
+<p><img src="images/jsEditor-full.png" /></p>
+<p>The functions you create here become available in the other JavaScript Editors, where you are defining label strings or filter expressions for the current layer.</p>
+<p>When you finish creating your JavaScript functions, click <strong>OK</strong>. The functions appear in the <strong>JavaScript</strong> field on the <strong>Advanced</strong> tab of the <strong>Layer Properties</strong> dialog.</p>
+<p><img src="images/LayerProperties_Advanced-full.png" /></p>
+
+<h3 id="notes_tab">Notes Tab</h3>
+<p><a id="marker-1049064"></a>The <strong>Notes</strong> tab allows you to enter notes about the layer. </p>
+<p><a id="marker-1049048"></a>Enter the text of your note. To insert the current date and time, click <strong>Insert Timestamp</strong>.
+</p>
+<p class="note"><strong>Note:</strong> The notes appear in Google Earth Enterprise Fusion only.<a id="marker-1048939"></a>
+</p>
+
+<h2 id="configuring_display_rules">Configuring Display Rules</h2>
+
+<p><a id="marker-1036448"></a><a id="marker-1036417"></a>To specify how you would like to display vector data, you configure display rules for each layer. For example, you might add a vector resource that includes the boundaries of lakes, but the line color is not different enough from the color of the lake, so the boundaries of the lakes are not visible at higher altitudes. Using display rules, you can change the color of the border and set the display level of the resource to a lower number, so the lake borders are visible at higher altitudes.
+</p>
+<p>To define a display rule, right-click a layer in the Vector Project Editor, and select <strong>Configure Display Rules</strong> from the context menu.
+</p>
+<p>The Display Rules dialog appears with the <strong>Feature</strong> tab selected. </p>
+<img src="images/displayRules_Feature.png" />
+<h3>The Display Rules Window</h3>
+<p><a id="marker-1036421"></a>The default rule, <strong>default select all</strong>, appears automatically in the <strong>Rules</strong> list and is  selected. Below the list of rules are five small buttons. Their functions are: </p>
+
+<table width="80%" class="no_border middle">
+  <tr>
+    <td width="20" valign="middle"><img src="images/icon_new.gif" /></td>
+    <td valign="middle">Create a new rule.</td>
+  </tr>
+  <tr>
+    <td width="20" valign="middle"><img src="images/iconDelete.png" /></td>
+    <td valign="middle">Delete selected rule. </td>
+  </tr>
+  <tr>
+    <td width="20" valign="middle"><img src="images/iconCopy.png" /></td>
+    <td valign="middle">Make a copy of the selected rule.</td>
+  </tr>
+  <tr>
+    <td width="20" valign="middle"><img src="images/iconUp.png" /></td>
+    <td valign="middle">Move the selected rule up.</td>
+  </tr>
+  <tr>
+    <td width="20" valign="middle"><img src="images/iconDown.png" /></td>
+    <td valign="middle">Move the selected rule down.</td>
+  </tr>
+</table>
+<h4>Thematic Filters</h4>
+<p><a id="marker-1043921"></a>When you click <strong>Thematic Filters</strong>, the Thematic Filtering Editor appears. This editor allows you to easily create a series of filters to show data with a particular theme. For example, to show the population of counties in California, you could create a series of filters that show counties with the highest population in a dark shade of green, the lowest population in a light shade of green, and mid-level population in a medium green. (See <a href="projects.html#16933">“Creating Thematic Filters” on page 5-23</a> for more details.)
+</p>
+<h4>Allow Feature Duplication</h4>
+<p><a id="marker-1043924"></a>When you check the box next to <strong>Allow Feature Duplication</strong>, Google Earth Enterprise Fusion allows data to be matched by more than one filter and, therefore, apply more than one rule to it. For example, if you want to apply one type of formatting to counties and another kind of formatting to zip code areas, you can check this box to apply both types of formatting to the same data.</p>
+<h4>Allow Empty Layer</h4>
+<p>When you check the box next to <strong>Allow Empty Layer</strong>, Google Earth Enterprise Fusion allows empty layers. This works well if you are using a dynamic data set you want to display.</p>
+<h4>Feature Tab</h4>
+<p>The <strong>Feature</strong> tab displays the current settings for the selected rule. If you add rules, you can select any rule on the <strong>Rules</strong> list to display its settings on the Feature tab. See <a href="projects.html#25375">Adding a rule</a> for more information.</p>
+<h4>Filter Tab</h4>
+<p><a id="marker-1036424"></a>The <strong>Filter</strong> tab lists any filters for the rule selected in the <strong>Rules</strong> list. See <a href="projects.html#44892">Filtering Vector Data</a> in this chapter for more information about the <strong>Filter</strong> tab.</p>
+
+<h3 id="selecting_colors"><a id="12477"></a>Selecting Colors</h3>
+
+<p>When you click the color button <img src="images/iconColorBtn.png" /> anywhere it appears (regardless of what color it is), the <strong>Select Color</strong> dialog appears.</p>
+<p><img src="images/selectColorDia_alpha.png" /></p>
+<p>Click to select the desired color from the color grid on the left or the color spectrum on the right. To change the transparency of the lines, specify the desired <strong>Alpha channel</strong> value. </p>
+<p>The Alpha channel value can range from 0 to 255, where 0 is transparent and 255 is solid. If you specify a slight transparency, underlying geographic imagery is not obscured by the feature when viewed in Google Earth EC. To determine the correct transparency setting, first select a mid-range number, such as 127, and view the results in Google Earth EC. Adjust from there as needed.
+</p>
+<h3><a id="16933"></a>Creating Thematic Filters
+</h3>
+<p><a id="marker-1049139"></a>Thematic filters allow you to create a series of filters to show data with a particular theme. The following procedure guides you through creating thematic filters that show counties in California with the highest population in a dark shade of green, the lowest population in a light shade of green, and three mid-levels of population in a medium green.
+</p>
+<p class="note"><strong>Note:</strong> The Thematic Filter Editor replaces any rules you might have defined previously.
+</p>
+<h4>To create thematic filters:
+</h4>
+<br />
+
+<ol>
+  <li>Click <strong>Thematic Filters</strong> on the Display Rules dialog.
+    <p><a id="marker-1049142"></a>The Thematic Filtering Editor appears. The Thematic Filters Editor automates the creation of a series of filters.</p>
+    <p>Notice that under Color Ramp, Start Color is set to <strong>white</strong>, End Color is set to <strong>red</strong>, and Classes is set to <strong>3</strong>. These are the default settings, which result in dividing the values of the selected attribute (or column) into three equal-size classes (or as close as possible) and assigning the colors white, pink, and red to those classes. In the table in the lower half of the dialog, the Color column lists three classes--white, pink, and red. Listed next to each color is its RGB value.</p>
+    <p><img src="images/thematicFiltering.png" /></p>
+  </li>
+  <li>Select the field  from the <strong>Attribute</strong> list that contains the data you want to filter. 
+    <p>Google Earth Enterprise Fusion divides the number of data values for the selected field by 3 (the default number of classes) and fills in the <strong>Break Value</strong> and <strong>Class Count</strong> columns. </p>
+    <p class="note"><strong>Note:</strong> You do not need to (nor should you) change the Break Value and Class Count values.
+    </p>
+  </li>
+  <li>Select the number of filters you want to create from the <strong>Classes</strong> drop-down list.
+    <p>Google Earth Enterprise Fusion divides the number of data values for the selected field by the selected <strong>Classes</strong> value and recalculates  the <strong>Break Value</strong> and <strong>Class Count</strong> fields. </p>
+  </li>
+  <li><a id="marker-1049143"></a>Click the  <strong>Start Color</strong> button and select a color.</li>
+  <li>Click the  <strong>End Color</strong> button and select a color.
+    <p>The <strong>Color</strong> column  lists the shades of color to be used and the RGB value of each color. </p>
+    <img src="images/thematicFiltering-full.png" />
+  </li>
+  <li>When you finish defining the thematic filters, click <strong>OK</strong>.
+    <p>The thematic filters appear in the <strong>Rules</strong> list in the <strong>Display Rules</strong> dialog, replacing any rules you might have defined previously. </p>
+  </li>
+  <li>Click each rule on the list to see that rule’s display attributes on the <strong>Feature</strong> tab and its filters on the <strong>Filter</strong> tab.
+    <p>When you publish a database that contains the layer associated with these display rules, it looks something like this:
+</p>
+    <img src="images/thematicFiltering_EC.png" />  </li>
+</ol>
+<h3><a id="45981"></a>Additional Rule Configuration Options
+</h3>
+<p>The following procedures describe how to add, copy, reorder, and rename rules and allow feature duplication for multiple filters.
+</p>
+
+<h4><a id="25375"></a><a id="marker-1036439"></a>To add a rule:</h4>
+
+<ol>
+  <li>Click 
+    <img src="images/icon_newRule.png" />. The <strong>New Rule</strong> dialog appears.</li>
+  <li>Enter a name for the rule, and click <strong>OK</strong>. The new rule appears on the list, and the default settings appear on the <strong>Feature</strong> and <strong>Filter</strong> tabs.</li>
+</ol>
+
+<h4><strong>To copy an existing rule</strong><a id="marker-1036458"></a>:</h4>
+<br />
+
+<ol>
+  <li>Select the rule to copy.</li>
+  <li>Click <img src="images/iconCopy.png" />. Google Earth Enterprise Fusion makes a copy of the selected rule and appends <code>(copy)</code> to its name.</li>
+</ol>
+
+<p>You can use this feature when you want to use the properties from an existing rule to build a new one.
+</p>
+<h4><strong>To reorder a rule in the list:</strong><a id="marker-1036467"></a>
+</h4>
+<br />
+
+<ol>
+  <li>Select the rule  to move.
+  </li>
+  <li>Click 
+    <img src="images/arrowUp.gif" /> or 
+    <img src="images/arrowDown.gif" /> to move the rule up or down in the list.
+  </li>
+</ol>
+<p>The rules are executed in sequence, so it is typical to list the most exclusive rules before the least exclusive.</p>
+<h4><a id="marker-1064761"></a>To rename a rule:
+</h4>
+<br />
+
+<ol>
+  <li>Double-click the desired rule. The <strong>Rename Rule</strong> dialog appears.</li>
+  <li>Enter a new name for the rule, and click <strong>OK</strong>. The new name appears on the list of rules.
+    
+  </li>
+</ol>
+
+<h4><a id="marker-1036473"></a>To allow feature duplication for multiple filters:</h4>
+<p>Check the box next to <strong>Allow Feature Duplication</strong> below the list of rules.</p>
+
+<h3><a id="85044"></a>Configuring Display Rules for Points</h3>
+<p><a id="marker-1044566"></a>The first option in the Display Rules dialog is <strong>Draw Features As</strong>, and you can select <strong>Points</strong>, <strong>Lines</strong>, or <strong>Polygons</strong>. The default setting reflects the type of data you are configuring. For example, if you are configuring point data, <strong>Points</strong> is the default selection. If you are configuring line data, <strong>Lines</strong> is the default selection.</p>
+<p>The options that appear in this dialog are based on the option selected for <strong>Draw Features As</strong>. This section describes the display rule options for <strong>point</strong> features.</p>
+<h4><strong>Simplification Method</strong>
+</h4>
+<p><a id="marker-1036488"></a>If you have a large number of point features in your data, you can simplify the data set by displaying a subset of points instead of the entire data set. Select the simplification method you prefer from these options:</p>
+<ul>
+  <li><strong>Maximum Fit per Tile</strong> - This is the default simplification method, which displays the maximum number of point features possible per <i>tile</i> without sacrificing good visibility. (See <a href="fundamentals.html#74193">The Toolbar</a> in the <strong>Fundamentals</strong> chapter for more information about turning the grid on and off.) </li>
+  <li><strong>Representative Subset per Tile</strong> - You can control the number of point features displayed by specifying the decimation ratio. If you select this option, you can specify any of the following:
+    <ul>
+      <li><strong>Choose % points</strong> - The percentage of point features that appear at certain levels to represent the whole set of available points.
+      </li>
+      <li><strong>Min Points</strong> - Set the minimum number of point features to display per tile.
+      </li>
+      <li><strong>Max Points</strong> - Set the maximum number of point features to display per tile.
+      </li>
+    </ul>
+  </li>
+  <div class="note"><strong>Note:</strong> The minimum and maximum points impose limits on the percentage you set. For example, if you 
+    specify 50% with a minimum of 20 points and a maximum of 500 points:
+    <ul>
+      <li>If your data set includes 100 points, Google Earth EC displays 50 data points.
+      </li>
+      <li>If your data set includes only 10 points, Google Earth EC displays all 10 points, because the full data set is less than the minimum you specified.
+      </li>
+      <li>If your data set includes 100,000 points, Google Earth EC displays only 500 points, the maximum you specified.
+      </li>
+    </ul>
+  </div>
+</ul>
+<h4 id="marker-1036489"><strong><a id="marker-1036489"></a>Suppress Duplicate Points</strong>
+</h4>
+<p>Point primitives that have exactly the same coordinates and exactly the same label attributes qualify as duplicates. Check this box to automatically suppress duplicate point features.    </p>
+<h4><strong>Elevation/Height</strong> </h4>
+<p><a id="marker-1049606"></a><a id="marker-1036494"></a>The <strong>Elevation/Height</strong> option allows you to specify whether your data is displayed at ground level or is elevated. If it is elevated, you can specify either a relative position above ground level or an absolute elevation above sea level. </p>
+<p>You can specify custom <strong>Elevation/Height</strong> values for geometry of any feature that uses points, lines, or polygons. The height value can either be a constant offset or derived from source attribute data. You can use this feature to create powerful theme maps, such as neighborhoods in a city raised in height based on crime statistics. </p>
+<p>The <strong>Mode</strong> options are: </p>
+<ul>
+  <li><strong>Clamp to Ground</strong> - Select this option if you want your data to appear to be on the ground, regardless of the elevation of the ground.      </li>
+  <li><strong>Relative</strong> - Select this option if you want your data to appear to be hovering a particular height above ground level.      </li>
+  <li><strong>Absolute</strong> - Select this option if you want your data to appear to be hovering at a certain elevation above sea level.      </li>
+</ul>
+<p>If you select <strong>Relative</strong> or <strong>Absolute</strong>, the following  options become available:        </p>
+<ul>
+  <li><strong>Extrude</strong> - Check the box for this option if you want a drop line for points. This results in your point features appearing to be attached to the ground and projecting up to the specified height.</li>
+  <li><strong>User-Defined Height</strong><a id="49290"></a> - Check the box for this option if you want to display the features in your source data with elevation that reflects the values of particular type of data. For example, if you have source data that includes population by county in a particular state, you can display the counties at different heights based on population. A county with a dense population can be displayed higher than a county with a sparse population. When you select this option, you must specify:
+    <ul>
+      <li><strong>Height Variable (m)</strong> - Click the insertion button (<strong>...</strong>), and select a field from the <strong>Insert Field</strong> drop-down list. Using the same example, you would select the <strong>Population</strong> field.
+        <p><img src="images/insertField_Population.png" /></p>
+        <p>Then determine your input ranges from the data and calculate the values for <strong>Offset</strong> and <strong>Scale</strong>. For example, if:</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;Population = 20,000 - 150,000</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;Target Height = 10 - 200 meters</p>
+        <p>use the following linear transformations:</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;target height = 10 + ( (population - 20,000) / (150,000 - 20, 000) ) * (200 - 10)</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;offset = ( ( 20,000 * (200 - 10) / (150,000 - 20,000) ) + 10</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;scale = (200 - 10) / (150,000 - 20,000)</p>
+      </li>
+      <li><strong>Offset (m)</strong> - Enter the result of the offset calculation. (For this example, it is 39.2307692.)</li>
+      <li><strong>Scale</strong> - Enter the result of the scale calculation. (For this example, it is 0.00146153.)</li>
+    </ul>
+  </li>
+</ul>
+
+<h4><strong><a id="47051"></a>Draw Label</strong>
+</h4>
+<p>When you select the <strong>Draw Label</strong> checkbox, the label options become available.</p>
+
+<p><a id="marker-1049228"></a><a id="marker-1036502"></a>The <strong>Draw Label</strong> section appears on the right side of the <strong>Display Rules</strong> dialog when you are defining display rules for points or polygons, or if you do not click <strong>Draw As Roads</strong> when you are defining lines.</p>
+
+<p>The label options are:</p>
+
+<ul>
+  <li><strong><a id="marker-1036519"></a>Visibility</strong>
+    <p>The <strong>Visibility</strong> option allows you to specify the display level range at which your data is visible in Google Earth EC. The default values for the range are <strong>5</strong> and <strong>24</strong>. To determine your visibility setting, preview the layer in the Preview pane.</p>
+    <p class="note"><strong>Note:</strong> For geographically dense data, the data should only be visible when the user has sufficiently zoomed in to the area. Otherwise, the data clutters the view of the Earth from a high perspective. In addition, drawing dense vector data at a high level unnecessarily increases data processing time.</p>
+    <p>If you change the lower end of the range, Google recommends that you set it to no less than <strong>4</strong>.</p>
+  </li>
+  <li><strong><a id="marker-1036528"></a><a id="87632"></a>Label Properties</strong>
+    <p>The <strong>Text/JS Text</strong> option allows you to specify the text that appears on the label. Select the option you prefer from the drop-down list, and then click the empty text field to open an editor.
+    <ul>
+      <li><strong>Text</strong> - The <strong>Label Format</strong> dialog appears. The <strong>Insert Field</strong> drop-down list contains the names of all of the fields in your source data. Select a field name from the list, and click <strong>OK</strong>. For example, if you select <strong>NAME</strong>, the names of the roads appear in Google Earth EC.</li>
+      <li><strong>JS Text</strong> - <a id="marker-1054079"></a>The <strong>JavaScript Editor</strong> appears, and you can compose a JavaScript expression, which returns the string to use as the label.
+        <p>Select a field (or function, if you have created any) on the left, and click <strong>Get Values</strong> to display the values of that field for the selected data set in the Field Values list on the right.</p>
+        <p class="note"><strong>Tip:</strong> If your data set is very large, it can take a long time to find all of the values. In that case, a progress dialog appears showing you an ongoing count of how many values it has found. You can click <strong>Cancel</strong> on that dialog at any time to stop scanning your source file for unique values and populate the Field Values list with the unique values found so far. Typically, it stops finding unique values part way through the file. So when the counter virtually stops, that is a good time to click <strong>Cancel</strong> without concern that you might be missing some unique values.</p>
+        <p><img src="images/jsEditor_GetValues.png" /></p>
+        <p>You can use the buttons in this dialog to help you write your JavaScript expression.</p>
+        <p><img src="images/jsEditor_Expression-full.png" /></p>
+        <p>When you finish creating your JavaScript expression, click <strong>OK</strong>. The expression appears in the <strong>JavaScript</strong> field on the <strong>Display Rules</strong> dialog.</p>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Color and Scale</strong><a id="marker-1049255"></a> - Select the color and enter the scale for the label when it is <strong>highlighted</strong> (selected) and <strong>normal</strong> (not selected).
+    <ul>
+      <li><strong>Color</strong> - Click the <strong>Color</strong> button and select a color. </li>
+      <li><strong>Scale</strong> - Enter the magnification factor of the text label. The default value is <strong>1</strong>, which is equivalent to the value the user sets in Google Earth EC preferences. Greater than 1 makes the text size larger than the user’s preferred size. Less than 1 (such as 0.9) makes the text smaller than the user’s preferred size.
+        <p class="note"><strong>Note:</strong> Setting the scale to less than 1 could potentially yield invisible text labels, depending on the label size preference users set in Google Earth EC.</p>
+      </li>
+      <li><strong>Center Label</strong><a id="marker-1060184"></a> - If you check the <strong>Center Label</strong> box, the label appears centered over the point in Google Earth EC. If you do not check this box, the label appears to the right of the point.
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h4>Draw Icon</h4>
+<p><a id="marker-1036530"></a>When you select the <strong>Draw Icon</strong> checkbox, the icon options become available. </p>
+<p>You can select the icon you want to use when it is highlighted (selected) and normal (not selected) and the background color and scale of each.
+</p>
+
+<ul>
+  <li><strong>Color</strong><a id="marker-1049272"></a> - Click the button next to <strong>Color</strong>, and select a color.</li>
+  <li><strong>Scale</strong> - Determines the relative size of the icon. The default value is <strong>1</strong>, which displays the icon in Google Earth EC at its original size. To make the icon smaller, enter a value less than 1 in decimal. This option is useful when you want the highlighted (selected) icon to appear larger than the normal icon (not selected). For example, you could enter 0.8 for the normal icon and 1 for the highlighted icon.</li>
+  <li>The <strong>Balloon</strong> options allow you to define the text and images that appear in the description balloon, as well as certain display properties.
+    <ul>
+      <li>The <strong>Text/JS Text</strong> option allows you to specify the text that appears in the description balloon. Select the option you prefer from the drop-down list, and then click the empty text field to open an editor.
+        <p class="note"><strong>Tip:</strong> You can include HTML to point to an image, if desired. To do so, use standard HTML code, such as <code>&lt;img src=”http://www.example.com/image.jsp?newImages=true&amp;imageId=1191”&gt;</code>. If you do so, you must ensure that the image you reference actually appears in the location you specify.</p>
+        <ul>
+          <li><strong>Text</strong> - The <strong>Label Format</strong> dialog appears.
+            <p>The <strong>Insert Field</strong> drop-down list contains the names of all of the fields in your source data. Select a field name from the list, and click <strong>OK</strong>. For example, if you select <strong>NAME</strong>, the names of your features appear in Google Earth EC.</p>
+            <p>Alternatively, you can click <strong>Auto Populate</strong> to automatically insert the name of every field in the source data and its value.</p>
+            <p><img src="images/popupLabelFormat_AutoPopulate.png" /></p>
+            <p>When you use the Auto Populate feature and a user clicks the icon for a point in Google Earth EC, all of the data associated with the point appears in the description balloon. For example, if the data set includes state, county, zip code, and sales tax percentage for each data point, the description balloon might look like this:</p>
+            <p><img src="images/popupEC.png" /></p>
+          </li>
+          <li><strong>JS Text</strong> - The JavaScript Editor appears, and you can compose a JavaScript expression, which returns the string to use as the label. See <a href="projects.html#87632">Label Properties</a> for more information about this editor.</li>
+        </ul>
+      </li>
+      <li><strong>Style</strong> - The Style option allows you to define certain properties of the description balloon. Select an option from the drop-down list.
+        <ul>
+          <li><strong>Default</strong> - Select <strong>Default</strong> to make any of the following changes to the balloon properties:
+            <ul>
+              <li>Select <strong>Use Label as Title </strong>if you want to use the text you defined in <a href="projects.html#87632">Label Properties</a> as the title of the description balloon. If you do not check this box, the description balloon has no title.</li>
+              <li>Select <strong>Directions </strong>if you want to include  <strong>To here</strong> and <strong>From here</strong> links in your description balloon. By default, these links are <i>not</i> included.</li>
+              <li>Select <strong>Text</strong> <strong>Color</strong> to choose a color.</li>
+              <li>Choose a <strong>Background</strong> <strong>Color</strong>.</li>
+            </ul>
+          </li>
+          <li><strong>Advanced</strong> - Select <strong>Advanced</strong> to enter your own JavaScript for the description balloon display properties.
+            <ul>
+              <li>Click the empty text field. The <strong>Balloon Style Text</strong> dialog appears. Click <strong>Insert Default Text</strong> to insert the JavaScript for the default text in the text editing field. Now you can edit the JavaScript to change the appearance of the description balloon. When you are done editing, click <strong>OK</strong>.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3>Configuring Display Rules for Lines
+</h3>
+<p><a id="marker-1059022"></a>The first option in the <strong>Display Rules</strong> dialog is <strong>Draw Features As</strong>, and you can select <strong>Points</strong>, <strong>Lines</strong>, or <strong>Polygons</strong>. The default setting reflects the type of data you are configuring. For example, if you are configuring points data, <strong>Points</strong> is the default selection. If you are configuring line data, <strong>Lines</strong> is the default selection.
+</p>
+<p>The options that appear in this dialog are based on the option selected for <strong>Draw Features As</strong>. This section describes the display rule options for <strong>Lines</strong>. </p>
+
+<h4 id="marker-1045114"><strong><a id="marker-1045114"></a><a id="35864"></a>Visibility</strong></h4>
+
+<p>The Visibility option allows you to specify the display level range at which your data is 
+visible in Google Earth EC. The default values for the range are <strong>4</strong> and <strong>24</strong>. To determine your visibility setting, preview the layer in the Preview pane.</p>
+
+<p class="note"><strong>Note:</strong> For geographically dense data, the data should only be visible when the user has sufficiently zoomed in to the area. Otherwise, the data clutters the view of the Earth from a high perspective. In addition, drawing dense vector data at a high level unnecessarily increases data processing time.</p>
+
+<p class="note"><strong>Note:</strong> If you change the lower end of the range, Google recommends that you set it to no less than <strong>4</strong>.</p>
+<h4 id="marker-1045110"><strong><a id="marker-1045110"></a>Maximum Simplification Error</strong>
+</h4>
+<p>The value you specify is used in Google Earth Enterprise Fusion’s simplification algorithm to determine the maximum pixel error tolerated when displaying line vector data. The default is 0.5 pixels, which is appropriate in most cases.
+</p>
+<p class="note"><strong>Note:</strong> This functionality is intended for expert users.
+</p>
+<h4><strong>Max Resolution Level</strong>
+</h4>
+<p>Caps the level at which vector packets are built for a particular display
+  rule. For example, if you want to see roads to level 24, set the <strong>Visibility through</strong> level to 24 and <strong>Max Resolution Level</strong> to 18. This <em>builds</em> the roads at level 18, but those roads are visible down to level 24 (the
+  maximum level displayed in the Google Earth Client). <strong>Max Resolution
+  Level</strong> defaults to 18 because beyond level 18, the number of packets
+  and subsequent build time and database size quickly become unwieldy. If you
+  set the <strong>Max Resolution
+  Level</strong> beyond 18, monitor the vector fuse
+  build to determine how many packets will be built and how long this will
+  take. A warning message is displayed if you try to set both <strong>Max Resolution
+  Level</strong> and the <strong>Visibility through</strong> level to greater than 18. </p>
+<h4><strong>Draw as Roads</strong>
+</h4>
+<p><a id="marker-1036572"></a>Select this option if your line data represents roads. When you do so, the <strong>Road Label</strong> option becomes active, and the right side of the dialog changes to road-related options. For <strong>Road Label Type</strong>, if you select <strong>Label</strong>, only the <strong>Road Label</strong> section on the right becomes available. If you select <strong>Shield</strong>, both the <strong>Road Label</strong> and <strong>Road Shield</strong> sections become available. See <a href="projects.html#42713">Road Labels and Shields</a> below for details.</p>
+<p>Do not select this box if  your line data represents something other than roads (such as rivers or streams), do not check this box. See <a href="projects.html#47051">Drawing Labels</a> for more information.</p>
+<h4 id="57819"><strong><a id="57819"></a>Draw Style</strong></h4>
+<p><a id="marker-1036573"></a>The draw style options allow you to specify the color, transparency, and width of the lines used to represent your line data.</p>
+
+<ul>
+  <li><strong>Line Color</strong> - To set the color and transparency, click the button next to <strong>Line Color</strong>, and select a color.</li>
+  <li><strong>Line Width</strong><a id="marker-1036581"></a> - The default line width is <strong>1</strong>. To change the line width, enter the desired value. The larger the number, the thicker the line. For example, if you would like to overlay a subway map, you might want to set the scale to 4 or 5 so that the drawing resembles a real-world subway map.
+    <p class="note"><strong>Note:</strong> Setting the line width to less than 1 could potentially yield invisible text labels, depending on the label size preference users set in Google Earth EC.</p>
+  </li>
+</ul>
+
+
+
+
+<h4><strong>Elevation/Height</strong>
+</h4>
+<p><a id="marker-1045212"></a>The <strong>Elevation/Height</strong> option allows you to specify whether your data is displayed at ground level or is elevated. If it is elevated, you can specify either a relative position above ground level or an absolute elevation above sea level. </p>
+<p>You can specify custom <strong>Elevation/Height</strong> values for geometry of any feature that uses points, lines, or polygons. The height value can either be a constant offset or derived from source attribute data. You can use this feature to create powerful theme maps, such as neighborhoods in a city raised in height based on crime statistics. </p>
+<p>The Elevation/Height options are:
+</p>
+<ul>
+  <li><strong>Clamp to Ground</strong> - Your data  appears to be on the ground, regardless of the elevation of the ground.
+  </li>
+  <li><strong>Relative</strong> - Your data  appears to be hovering a particular height above ground level.
+  </li>
+  <li><strong>Absolute</strong> - Your data  appears to be hovering at a certain elevation above sea level.    </li>
+</ul>
+<p>If you select <strong>Relative</strong> or <strong>Absolute</strong>, the following addition options become available:
+</p>
+<ul>
+  <li><strong>Extrude</strong> - Draw side walls for lines that are elevated. Your line features appear to be attached to the ground and project up to the specified height.
+  </li>
+  <li><strong>User-Defined Height</strong> - See the description of <a href="projects.html#49290">User-Defined Height</a> earlier in this chapter<a href="projects.html#49290"></a>.
+  </li>
+</ul>
+<h4><a id="42713"></a>Road Labels and Shields<a id="marker-1036925"></a>
+      </h4>
+<p><a id="marker-1036597"></a>When you select <strong>Draw As Roads</strong> on the left side of the Display Rules dialog and select <strong>Label</strong> for the <strong>Road Label Type</strong>, the <strong>Road Label</strong> section appears on the right. If you select <strong>Shield </strong>for the <strong>Road Label Type</strong>, both the <strong>Road Label</strong> and <strong>Road Shield</strong> sections appear on the right. </p>
+
+<p><strong>Road Label</strong></p>
+<p>These options allow you to define the text that appears on the road label.</p>
+
+<ul>
+  <li>The <strong>Text/JS Text</strong> option allows you to specify the text that appears on the label. Select the option you prefer, and then click  the empty text field.
+    <ul>
+      <li><strong>Text</strong> - The <strong>Label Format</strong> dialog appears.
+        <p>The <strong>Insert Field</strong> drop-down list contains the names of all of the fields in your source data. Select a field name from the list, and click <strong>OK</strong>. For example, if you select <strong>NAME</strong>, the names of the roads appear in Google Earth EC.</p>
+      </li>
+      <li><strong>JS Text</strong> - The JavaScript Editor appears, and you can compose a JavaScript expression, which returns the string to use as the label. See <a href="projects.html#87632">Label Properties</a> for more information about this editor.</li>
+      </ul>
+    </li>
+  <li>Select the<strong> Apply standard formatting</strong><a id="marker-1036616"></a> box to apply the standard Google Earth Enterprise Fusion text formatting to road data labels. With this formatting: 
+    <ul>
+      <li>Street and road names are displayed with initial upper case letters.</li>
+      <li>Directional modifiers, such as N, E, S, W, appear in upper case.</li>
+      <li>Some words (such as “Ramp” and “Intersection”) are removed.</li>
+      <li>Extra white space between the fields is removed.</li>
+      </ul>
+    </li>
+  <li><strong>Color</strong><a id="marker-1049355"></a> - Select a color and transparency value to use for road labels.</li>
+  <li><strong>Scale</strong> - Determines the magnification factor of the text label. The default value is <strong>1</strong>, which is equivalent to the value the user sets in Google Earth EC preferences. Greater than 1 makes the text size larger than the user’s preferred size. Less than 1 (such as 0.9) makes the text smaller than the user’s preferred size.
+    <p class="note"><strong>Note:</strong> Setting the scale to less than 1 could potentially yield invisible text labels, depending on the label size preference users set in Google Earth EC.</p>
+  </li>
+</ul>
+
+<p id="marker-1036618"><strong><a id="marker-1036618"></a>Road Shield</strong></p>
+
+<p>These options allows you to define the shield that appears on the road. The options are:</p>
+
+
+<ul>
+  <li><strong>Icon</strong> - Determines the actual road shield icon that appears on the roads. To change the icon, click it. The <strong>Icons</strong> dialog appears.
+    <p><img src="images/shieldIcons.png" /></p>
+    <p>The <strong>Standard</strong> tab displays all of the standard icons that Google Earth Enterprise Fusion provides. The <strong>Custom</strong> tab displays any custom icons you have created and imported using the <a href="setup.html#52623">Icon Manager</a>.</p>
+    <p>Select the icon of your choice, and click <strong>OK</strong>. The new icon appears next to <strong>Icon</strong> under Road Shield.</p>
+  </li>
+  <li><strong>Scale</strong> - Determines the relative size of the icon. The default value is <strong>1</strong>, which displays the icon in Google Earth EC at its original size. To make the icon larger, enter a value greater than 1. For example, to render the icon twice as large as the original graphic, enter <strong>2</strong>.</li>
+</ul>
+
+<h3>Configuring Display Rules for Polygons
+</h3>
+<p><a id="marker-1036627"></a>The first option in the <strong>Display Rules</strong> dialog is <strong>Draw Features As</strong>, and you can select <strong>Points</strong>, <strong>Lines</strong>, or <strong>Polygons</strong>. The default setting reflects the type of data you are configuring. For example, if you are configuring points data, <strong>Points</strong> is the default selection. If you are configuring line data, <strong>Lines</strong> is the default selection.
+</p>
+<p>The options that appear in this dialog are based on the option selected for <strong>Draw Features As</strong>. This section describes the display rule options for <strong>Polygons</strong>.</p>
+<h4 id="marker-1036628"><strong><a id="marker-1036628"></a>Visibility</strong>
+</h4>
+<p>The <strong>Visibility</strong> option allows you to specify the display level range at which your data is visible in Google Earth EC. The default values for the range are <strong>4</strong> and <strong>24</strong>. To determine your visibility setting, preview the layer in the Preview pane.
+</p>
+<p class="note"><strong>Note:</strong> For geographically dense data, the data should only be visible when the user has sufficiently zoomed in to the area. Otherwise, the data clutters the view of the Earth from a high perspective. In addition, drawing dense vector data at a high level unnecessarily increases data processing time. 
+  <br /><br />
+  If you change the lower end of the range, Google recommends that you set it to no less than <strong>4</strong>.
+</p>
+<h4 id="marker-1036629"><strong><a id="marker-1036629"></a>Maximum Simplification Error</strong>
+</h4>
+<p>The value you specify is used in Google Earth Enterprise Fusion’s simplification algorithm to determine the maximum pixel error tolerated when displaying polygon data. The default is 0.5 pixels, which is appropriate in most cases.</p>
+<p class="note"><strong>Note:</strong> This functionality is intended for expert users.
+</p>
+<h4><strong>Max Resolution Level</strong> </h4>
+<p>Caps the level at which vector packets are built for a particular display
+  rule. For example, if you want to see polygons to level 24, set the <strong>Visibility through</strong> level to 24 and <strong>Max Resolution Level</strong> to 18. This <em>builds</em> the polygons at level 18, but those polygons are visible down to level 24 (the
+  maximum level displayed in the Google Earth Client). <strong>Max Resolution
+  Level</strong> defaults to 18 because beyond level 18, the number of packets
+  and subsequent build time and database size quickly become unwieldy. If you
+  set the <strong>Max Resolution
+  Level</strong> beyond 18, monitor the vector fuse
+  build to determine how many packets will be built and how long this will
+  take. A warning message is displayed if you try to set both <strong>Max Resolution
+  Level</strong> and the <strong>Visibility through</strong> level to greater than 18. </p>
+
+<div class="note"><strong>Note:</strong> Fusion does an analysis of size of features during the import of vector resources and based on this analysis states in resource import log the <i>Recommended Min/Max and Efficient Resolution Levels</i>.
+  <ul>
+    <li> The <i>Recommended Min Resolution Level</i> corresponds to the LOD at which the largest feature of the vector resource has a diameter equal to 1/8 of the tile size.
+    </li>
+    <li> The <i>Recommended Max Resolution Level</i> corresponds to the LOD at which the smallest feature of the vector resource has a diameter equal to 1/8 of the tile size.
+    </li>
+    <li> The <i>Efficient Resolution Level</i> corresponds to the LOD at which the average feature of the vector resource has a diameter equal to 1/8 of the tile size.
+    </li>
+  </ul>
+These values can be helpful in setting the <strong>Visibility levels</strong> and the <strong>Max Resolution Level</strong>. So based on the <i>Recommended Min Resolution Level</i> you can set the <strong>Visibility min level</strong>. And based on the <i>Recommended Max Resolution Level</i> you can set the <strong>Visibility max level</strong> and the <strong>Max Resolution Level</strong>.
+<br />
+For example, if you want to see the maximal feature of the data set with visible size not less than 1/8 of the tile size at the corresponding LOD you need to set the <strong>Visibility min level</strong> equal to the <i>Recommended Min Resolution Level</i>. Each level doubles the resolution, so if you want to see the maximal feature of the data set with visible size not less than 1/4 of the tile size you need to set the <strong>Visibility min level</strong> equal to the <i>Recommended Min Resolution Level + 1</i> and vice versa, if you want to see the maximal feature of the data set with visible size not less than 1/16 of the tile size you need to set the <strong>Visibility min level</strong> equal to the <i>Recommended Min Resolution Level - 1</i>.
+<br />
+The same logic is applied to the minimal feature of the data set and setting the <strong>Visibility max level</strong> and the <strong>Max Resolution Level</strong>. For example, if you want to see the minimal feature of the data set with visible size not more than 1/8 of the tile size at the corresponding LOD you need to set the <strong>Visibility max level</strong> equal to the <i>Recommended Max Resolution Level</i>. Each level doubles the resolution, so if you want to see the minimal feature of data set with visible size not more than 1/4 of the tile size at the corresponding LOD you need to set the <strong>Visibility max level</strong> equal to the <i>Recommended Max Resolution Level + 1</i> and vice versa, if you want to see the minimal feature of the data set with visible size not more than 1/16 of the tile size you need to set the <strong>Visibility max level</strong> equal to the <i>Recommended Max Resolution Level - 1</i>.
+<br />
+For setting the <strong>Max Resolution Level</strong> the rule sounds like if you want to build the data set with resolution until minimal feature of the data set has visible size not more than 1/8 of the tile size at the corresponding LOD you need to set the <strong>Max Resolution Level</strong> equal to the <i>Recommended Max Resolution Level</i> and so on.
+<br />
+The <i>Efficient Resolution Level</i> in pair with range of the <i>Recommended Min/Max Resolution Levels</i> can be useful in case you have a large variance in your feature size distribution (it can be estimated based on the range of the <i>Recommended Min/Max Resolution Level</i>). For such data sets if the <i>Efficient Resolution Level</i> is closer to the <i>Recommended Max Resolution Level</i> then you have a data set which contains primarily small features and so you can increase the <strong>Visibility min level</strong> up to <i>Efficient Resolution Level</i>. And vice versa, if the <i>Efficient Resolution Level</i> is closer to the <i>Recommended Min Resolution Level</i> then you have a data set which contains primarily large features that may be properly represented at the lower LOD and so you can decrease the <strong>Max Resolution Level</strong> down to the <i>Efficient Resolution Level</i>.
+</div>
+
+<h4><strong>Draw Style</strong></h4>
+<p><a id="marker-1036643"></a>You can use the Draw Style options to render filled 2D and 2.5D (extruded) polygon primitives.</p>
+<p>You can render polygons in filled, outlined, or both modes. You can also render polyline data sets as filled polygons.</p>
+
+<ul>
+  <li><strong>Mode</strong><a id="marker-1036646"></a> - The Mode option indicates whether the polygons appears as outlined, filled, or both in Google Earth EC.</li>
+  <li><strong>Fill Color</strong><a id="marker-1036661"></a> - Select a fill color and transparency value for the polygon.</li>
+  <li><strong>Outline Color</strong> - Select an outline color and transparency value.</li>
+  <li><strong>Outline Width</strong><a id="marker-1036670"></a> - The default outline width is 1.0. To change the outline width, enter the desired value. The larger the number, the thicker the outline.
+    <p class="note"><strong>Note:</strong> Setting the outline width to less than 1 could potentially make it invisible.</p>
+  </li>
+</ul>
+
+<h4><strong>Elevation/Height</strong></h4>
+<p><a id="marker-"></a>The <strong>Elevation/Height</strong> option allows you to specify whether your data is displayed at ground level or is elevated. If it is elevated, you can specify either a relative position above ground level or an absolute elevation above sea level. </p>
+<p>You can specify custom <strong>Elevation/Height</strong> values for geometry of any feature that uses points, lines, or polygons. The height value can either be a constant offset or derived from source attribute data. You can use this feature to create powerful theme maps, such as neighborhoods in a city raised in height based on crime statistics. </p>
+<p>The Elevation/Height options are: </p>
+<ul>
+  <li><strong>Clamp to Ground</strong> - Your data  appears to be on the ground, regardless of the elevation of the ground. </li>
+  <li><strong>Relative</strong> - Your data  appears to be hovering a particular height above ground level. </li>
+  <li><strong>Absolute</strong> - Your data  appears to be hovering at a certain elevation above sea level. </li>
+</ul>
+<p>If you select <strong>Relative</strong> or <strong>Absolute</strong>, the following addition options become available: </p>
+<ul>
+  <li><strong>Extrude</strong> - Draw side walls for lines that are elevated. Your line features appear to be attached to the ground and project up to the specified height. </li>
+  <li><strong>User-Defined Height</strong> - See the description of <a href="projects.html#49290">User-Defined Height</a> earlier in this chapter<a href="projects.html#49290"></a>. </li>
+</ul>
+
+<h4 id="marker-1049412"><strong><a id="marker-1049412"></a>Draw Label</strong></h4>
+<p>When you select <strong>Draw Label</strong>, the label options become available. See <a href="projects.html#47051">Drawing Labels</a> for details.</p>
+
+<a id="44892"></a><a id="13799"></a><a id="25078"></a><a id="11612"></a><a id="69174"></a><a id="marker-1013582"></a><a id="marker-1036675"></a><a id="marker-1036705"></a>
+
+<h2 id="filtering_vector_data">Filtering Vector Data</h2>
+
+<p>From the <strong>Display Rules</strong> window, click the <strong>Filter</strong> tab to access filter-related features.</p>
+<p>A filter is a pattern expression that is applied to a specific field of a vector resource. When the pattern expression matches the specified field in the associated vector data, Google Earth Enterprise Fusion selects the matching records and applies the feature settings for the rule to those records. Filters are inclusive.
+</p>
+<p class="note"><strong>Note:</strong> Filters match string and numeric data only, not dates and other complex patterns.
+</p>
+<p>To create an expression,  select a field to match from your resource, select an operator, and enter a value to match. Alternatively, you can write a JavaScript expression (see <a href="projects.html#44495">To add an expression</a> for details).</p>
+<p>For example, if you have census data by county in California, you can use filters to graphically represent counties with:</p>
+
+<ul>
+  <li>Population under 500,000.</li>
+  <li>Population between 500,000 and 2,500,000 inclusive.</li>
+  <li>Population over 2,500,000 (the remaining counties - no need for a filter).</li>
+</ul>
+
+<p>The following graphics show these three filters:</p>
+<p><img name="displayRules_FilterExample1" src="images/displayRules_FilterExample1.png" width="450" height="89" border="0" id="displayRules_FilterExample1" alt="" /> <br />
+<img name="displayRules_FilterExample2" src="images/displayRules_FilterExample2.png" width="450" height="89" border="0" id="displayRules_FilterExample2" alt="" /><br />
+<img name="displayRules_FilterExample3" src="images/displayRules_FilterExample3.png" width="450" height="89" border="0" id="displayRules_FilterExample3" alt="" /></p>
+<p>In Google Earth EC, these filters and display rules result in the colors you assigned for each rule distinguishing the counties with the population ranges you specified in the filters:</p>
+<p><img src="images/displayRules_FilterExampleEC.png" /></p>
+
+<h4><a id="marker-1036696"></a><a id="44495"></a>To add an expression:</h4>
+<br />
+
+<ol>
+  <li>From the <strong>Filter</strong> tab of the <strong>Display Rules</strong> window, click <strong>More</strong>. A new undefined expression appears on the list with the first field in the resource selected by default.</li>
+  <li>If you will be defining more than one expression for your filter, use the drop-down list above the filter list to define how restrictive you want the filter to be. If you will be using one expression, accept the default value, <strong>Match all of the following</strong>.
+    <p><img src="images/displayRules_FilterOptions.png" /></p>
+    <p>If you select: </p>
+    <ul>
+      <li><strong>Match all of the following expressions</strong>, the data must match all expressions in the filter, or the associated rule is not applied. </li>
+      <li><strong>Match any of the following expressions</strong>, the data can match any one or more of the expressions for the associated rule to be applied. </li>
+      <li><strong>JavaScript Expression</strong>, click the insertion button (<strong>...</strong>) to the right of the empty text field to display the JavaScript Editor. The results of the expression are interpreted as Boolean. If the Boolean is true, the feature matches. If the Boolean is false, the feature does not match.</li>
+    </ul>
+  </li>
+  <li>Select the field that you want to match from the first drop-down list in the filter window.</li>
+  <li>Select an operator from the second drop-down list.<a id="marker-1055113"></a> Filter operators are described in the next section.
+    <p>  <img src="images/displayRules_Operators.png" />  </li>
+  <li>Enter the value  to match in the text field.</li>
+  <li>Click <strong>More</strong> to add another expression to the filter, if desired. Click <strong>OK</strong> to save the filter.</li>
+</ol>
+  <h4><a id="24477"></a>Filter Operators
+  </h4>
+<table width="80%">
+  <tr>
+    <th>
+    </th>
+    <th colspan=2><img alt="" border=0 width=125 height=1 src="images/spacer.gif" /><strong>Example</strong>
+    </th>
+  </tr>
+  <tr>
+    <th>Operator
+    </th>
+    <th>Value in the text field:
+    </th>
+    <th>Matches:
+    </th>
+  </tr>
+  <tr>
+    <td>equals<a href="#id(pgfId-1046998)">1</a></td>
+    <td>2000</td>
+    <td>Only <strong>2000</strong></td>
+  </tr>
+  <tr>
+    <td>is less than or equal to</td>
+    <td>2000</td>
+    <td><strong>2000</strong> or any number less than 2000</td>
+  </tr>
+  <tr>
+    <td>is greater than or equal to</td>
+    <td>2000</td>
+    <td><strong>2000</strong> or any number greater than 2000</td>
+  </tr>
+  <tr>
+    <td>is less than</td>
+    <td>2000</td>
+    <td>Any number less than 2000</td>
+  </tr>
+  <tr>
+    <td>is greater than</td>
+    <td>2000</td>
+    <td>Any number greater than 2000</td>
+  </tr>
+  <tr>
+    <td>is not equal to</td>
+    <td>2000</td>
+    <td>Any number other than <strong>2000</strong></td>
+  </tr>
+  <tr>
+    <td>matches</td>
+    <td>[hc]?at</td>
+    <td>Only <strong>hat</strong>, <strong>cat</strong>, and <strong>at</strong></td>
+  </tr>
+  <tr>
+    <td>does not match</td>
+    <td>[hc]?at</td>
+    <td>Anything other than <strong>hat</strong>, <strong>cat</strong>, and <strong>at</strong></td>
+  </tr>
+</table>
+<p><a id="marker-1046481"></a>If you select <strong>equals</strong> or <strong>is not equal to</strong>, you can use wildcard characters when matching against a string in the vector data. The supported wildcard characters are:
+</p>
+<table width="80%" border="1" cellpadding="3">
+  <tr>
+    <th>Wildcard</th>
+    <th>Description</th>
+    <th>Example</th>
+  </tr>
+  <tr>
+    <td>*</td>
+    <td>Matches zero or more characters.</td>
+    <td>To display all states that end in the letter <strong>a</strong>:
+      <pre>*a</pre></td>
+  </tr>
+  <tr>
+    <td>?</td>
+    <td>Matches exactly one character (any character).</td>
+    <td>To display all states whose second letter is “o”:
+      <pre>?o*</pre></td>
+  </tr>
+  <tr>
+    <td>[]</td>
+    <td>Matches the specific character(s) or range of characters listed in the brackets.</td>
+    <td>To display all states whose second letter is either “a,” “o,” or “n.”
+      <pre>?[aon]*</pre>
+      <p>To display all states that begin with letters “A” through “M.” </p>
+      <pre>[A-M]*</pre></td>
+  </tr>
+</table>
+<p class="note"><strong>Note:</strong> The full set of wildcard characters is not currently available in Google Earth Enterprise Fusion, so forward and back slashes are not treated as special. For character negation, select <strong>is not equal to expression</strong> from the expression operator drop-down list.
+</p>
+<p>If you select <strong>matches</strong> or <strong>does not match</strong>, you must enter a regular expression pattern in the text field instead of a text value. Regular expressions are much more powerful than wildcard characters. Google Earth Enterprise Fusion does not support full Perl regular expression functionality, but it does support most standard regular expressions.
+</p>
+<p>For example: </p>
+<p><code>^M</code> -- Matches all values that begin with “M”
+</p>
+<p><code>a$</code> -- Matches all values that end with “a”
+</p>
+<p><code>(North|South)</code> -- Matches all values that have “North” or “South” anywhere in the text</p>
+
+<h4><a id="marker-1036697"></a>To remove an expression:</h4>
+<br />
+
+<ol>
+  <li><a id="61774"></a>Click <strong>Fewer</strong>. The last expression on the list disappears.
+    
+  </li>
+  <li>Repeat until you have removed all of the expressions desired.
+  </li>
+  <li>Click <strong>OK</strong> to save the filter.
+  </li>
+</ol>
+<h4><a id="marker-1036699"></a>To select all, defining no specific filter:
+</h4>
+<p>If you have only a single rule defined for your vector data and you want to display all of the data available, simply leave the filter undefined. 
+</p>
+<h4>To select all remaining elements after other filter-rule combinations are applied:
+</h4>
+<p>If you have one or more filter-rule combinations defined but want to display all of the data available, you can add a final rule with no filter definition to match all elements not matched by previous rules. This results in the application of the final rule to all elements not matched by previous rules.
+</p>
+<h4>Filtering Conventions<a id="marker-1043483"></a>
+</h4>
+<p>Keep in mind the following conventions when using multiple rules and filters for your vector data.
+</p>
+<ul>
+  <li><strong>Rules and filters are meant to operate together. </strong>
+    <p>A rule is the collection of settings on the <strong>Feature</strong> and <strong>Filter</strong> tabs, but you must provide a distinct filter for each rule in the list in order to have distinct features or labels for different data.</p>
+  </li>
+  <li><strong>The order of your rules determines which filter is applied to the data.<a id="marker-1029754"></a></strong>
+    <p>For example, you might specify the following rule-filter combinations:
+    </p>
+    <p><strong>Filter 1:</strong> All parcels with IDs over 30.
+    </p>
+    <p><strong>Rule 1:</strong> Display boundaries in red.
+    </p>
+    <p><strong>Filter 2:</strong> All parcels with IDs between 30 and 40.
+    </p>
+    <p><strong>Rule 2:</strong> Display boundaries in blue.
+    </p>
+    <p>In this case, all boundaries shown are red, because filter 1 includes all of the data that would be covered by filter 2. Rule 2 never gets applied.
+    </p>
+    <p>To achieve the desired effect, you must reverse the order of these filter-rule combinations:
+    </p>
+    <p><strong>Filter 1:</strong> All parcels with IDs between 30 and 40.
+    </p>
+    <p><strong>Rule 1:</strong> Display boundaries in blue.
+    </p>
+    <p><strong>Filter 2:</strong> All parcels with IDs over 30.
+    </p>
+    <p><strong>Rule 2:</strong> Display boundaries in red.
+    </p>
+    <p>Then rule 1 is applied to the parcels with IDs between 30 and 40, so those boundaries are blue, and rule 2 is applied to parcels with IDs over 40, so those boundaries are red.
+    </p>
+    <img src="images/example.png" />
+  </li>
+  <li><strong><a id="marker-1036719"></a>For adjoining boundary data, most recent matches overlay prior matches.</strong>
+    <p>When you are matching line data that is adjoining, such as boundary data, the last items matched are displayed on top. Consequently, if two parcels share a boundary and the last display rule sets boundary color to red, the boundary between the two parcels is red. 
+    </p>
+    <p>Using the example above, if parcel 40 is surrounded by parcels with IDs greater than 40, the boundaries around parcel 40 are red, not blue, even though the filter accurately applies blue boundaries to parcel 40. This is because all the parcels surrounding 40 are configured with the last filter, which, in effect, “covers” their boundaries with the surrounding red boundaries.
+    </p>
+  </li>
+  <li><strong><a id="marker-1036720"></a>Character matches are case sensitive.</strong>
+    <p>You can use square brackets to provide both upper and lower case characters to allow for case-insensitive matching. For example, if you want to match both <strong>ID</strong> and <strong>id</strong>, you can enter <code>[Ii][Dd]</code> to be sure both versions are considered a match.</p>
+  </li>
+</ul>
+<h2 id="exporting_and_importing_display_rule_templates">Exporting and Importing Display Rule Templates
+</h2>
+<p><a id="marker-1036721"></a>You can export a set of display rules as a <i>template</i>, and then later import the template to apply the same display rules to other vector layers. The template contains all of the filters and formatting information that you specified for the associated layer.
+</p>
+<p>When you export display rules, Google Earth Enterprise Fusion saves the information in a file with a name and in a location of your choice. You can save it on your local workstation, or you can save it in a shared folder on a network drive, so that other users in your organization can access it.
+</p>
+<p><a id="marker-1036722"></a>You can use the template file:
+</p>
+<ul>
+  <li>To ensure that multiple layers in the same project or in different projects have identical configuration.
+  </li>
+  <li>To create display rules for multiple layers that you want to look the same except for minor changes.
+  </li>
+  <li><a id="marker-1036865"></a>As a backup. For example, you can save the template file, along with the vector resource’s KVP file, on a separate computer. Then, if your asset root gets damaged by disk failure and you do not have a more integrated backup solution, you can create a new resource from the KVP file and quickly reconfigure the layer in a new project by importing the template.
+  </li>
+  <li>To use with projects you create using shell commands. See <a href="projects.html#33138">Creating a Vector Project</a> for more information.</li>
+</ul>
+<p>The following sections describe how to export and import display rule templates.
+</p>
+<h3><a id="60429"></a>Exporting Display Rules
+</h3>
+<p><a id="marker-1048766"></a>When you finish configuring the filters and display rules for a vector layer, you can export the settings as a template file. You can also use the template at the command line when adding to a vector project in batch mode. See <a href="commands.html#31635">Project Commands</a> in the <strong>Command Line Reference</strong> chapter for details about using display templates from the command line.</p>
+<h4>To export a display template:
+</h4>
+<br />
+
+<ol>
+  <li>In the Vector Project Editor, right-click the vector layer whose display settings you want to export.  </li>
+  <li>Select <strong>Export Configuration as Template</strong> from the context menu. The <strong>Export Template</strong> dialog appears.</li>
+  <li>Navigate to the folder where you want to save the template, or click 
+    <img src="images/iconCreateNewFolder.png" /> to create a new folder in the desired location.
+  </li>
+  <li>Click <strong>Save</strong>. Google Earth Enterprise Fusion saves the file with a <code>.khdsp</code> extension.</li>
+</ol>
+<h3><a id="47819"></a>Importing Display Rules
+</h3>
+<p><a id="marker-1036752"></a>After you export display rules as a template file, you can import the template and apply those display rules to other vector layers. 
+</p>
+<h4>To import a display template:
+</h4>
+<br />
+
+<ol>
+  <li>In the Vector Project Editor, right-click the vector layer to which you want to apply the saved settings.
+    <p><img src="images/displayRules_Import.png" /></p>
+  </li>
+  <li>Select <strong>Import Configuration from Template</strong> from the context menu. The <strong>Import Template</strong> dialog appears.</li>
+  <li>Navigate to the template file that contains the settings you want to apply, and select it.
+  </li>
+  <li>Check one or both of the boxes at the bottom of the dialog as follows:
+    <ul>
+      <li>Check <strong>Apply display rules</strong> to apply only the display rules from the template to the layer.
+      </li>
+      <li>Check <strong>Apply legend settings</strong> to apply only the legend settings from the template to the layer.
+      </li>
+      <li>Check both boxes to apply both the display rules and legend settings from the template to the layer.
+      </li>
+    </ul>
+  </li>
+  <li>Click <strong>Open</strong>. Google Earth Enterprise Fusion applies the settings contained in that template to the selected vector layer.
+    
+  </li>
+</ol>
+<p>After you apply the template, be sure to confirm that the results are as you intended. If you apply a template to data that does not contain the exact same attributes as the original data for which that template was created, you might need to modify the display rules for the current data. To view the settings or make modifications to them, perform the steps described in the section titled <a href="projects.html#92365">Configuring Display Rules</a>.</p>
+<h2 id="defining_imagery_and_terrain_projects"><a id="40225"></a>Defining Imagery and Terrain Projects<a id="marker-1013720"></a>
+</h2>
+
+<p>Within each type of project, you can add multiple resources of the same type. However, unlike vector projects, the entire imagery project appears as a single layer in Google Earth EC, regardless of how many source files it includes. See <a href="projects.html#10067">Display Order of Imagery and Terrain Resources</a> for details.
+</p>
+<h3>Creating an Imagery or Terrain Project
+</h3>
+<p><a id="marker-1051972"></a>The first step in defining an imagery or terrain project is to specify which resources to include and give the project a name.</p>
+
+<h4>To create an imagery  project:</h4>
+<p>The following instructions describe how to create an imagery project, but the steps are the same for a terrain project as well.</p>
+
+<ol>
+  <li>Select <strong>Tools &gt; Asset Manager</strong>. The Asset Manager appears.    </li>
+  <li>Click <img src="images/iconProjImagery.png" />. The Imagery Project editor appears.    
+    <p><img src="images/projEditorImagery.png" /></p>
+  </li>
+  <li>If you are creating a historical imagery project, select the <strong>Support Historical Imagery</strong> option. An acquisition date must be defined for this imagery.</li>
+  <li>Specify values in the <strong>Legend</strong> area for the entire imagery project by clicking the following fields under <strong>default</strong>:
+    <ul>
+      <li><strong><a id="marker-1052143"></a>Icon</strong>: The icon that appears in the legend in Google Earth EC.        </li>
+          <li><strong>Name</strong>: The text label that appears in the legend in Google Earth EC.        
+          </li>
+          <li><strong>Initial State</strong>: Determines whether the imagery is turned on or off by default in Google Earth EC. The first time a user connects to the database containing this imagery:        
+            <ul>
+              <li>If you select <strong>On</strong> (the default) as the initial state here, the check box for the imagery is automatically checked.          </li>
+              <li>If you select <strong>Off</strong> as the initial state here, the check box for the imagery is automatically unchecked.          </li>
+            </ul>
+             <p>Google Earth EC saves the state of the check box when a user disconnects from the database. For example, if you set the initial state to <strong>Off</strong>, and then a user subsequently checks the box for an imagery project in Google Earth EC and then disconnects from the database, the next time that user connects to that database, the state of the check box for that imagery is the same as when the user disconnected; that is, the box is checked.            </p>
+         </li>
+          <li><strong>LookAt</strong>: If you specify a KMZ file in this field, Google Earth EC users can fly directly to a particular camera view by double-clicking the layer. See <a href="projects.html#17140">LookAt</a>.</li>
+    </ul>
+  </li>
+  <li>If you want to add language support for additional locales, uncheck the box next to <strong>Hide unspecialized locales</strong>. See the <a href="projects.html#17160">Legend Tab</a> section for more information about this option.</li>
+  <li><a id="41264"></a>Click 
+    <img src="images/icon_new.gif" />. The <strong>Open</strong> dialog appears. </li>
+  <li>Navigate to the folder that contains your imagery resources.
+    <p class="note"><strong>Note:</strong> The selection in the <strong>Type</strong> drop-down list near the bottom of this dialog determines the type of resources that appear on the list. <strong>Imagery Resource</strong> is automatically selected when you open this dialog from the Imagery Project Editor, so only imagery resources appear on the list. </p>
+  </li>
+  <li><a id="97177"></a>Select the resource you want to add to the project, and click <strong>Open</strong>.    The selected resource appears in the Imagery Project Editor.
+    <p><img src="images/imageryProjEditor-full.png" /></p>
+  </li>
+  <li>Repeat steps <strong>6</strong> through <strong>8</strong> for each additional resource you want to include in the project. </li>
+  <li>When you finish adding resources, select <strong>File &gt; Save</strong>.</li>
+  <li>Navigate to the folder where you want to save your project, or click 
+    <img src="images/iconCreateNewFolder.png" /> to create a new folder in the desired location.  </li>
+  <li>Enter the name of your project, and click <strong>Save</strong>. The new project name appears in the Asset Manager’s asset list.    
+  </li>
+</ol>
+    <p class="caution"><strong>Caution:</strong> Assets can not be deleted once they are saved. They can be <em>cleaned</em>, so that they are no longer available to use in Google Earth Enterprise Fusion; see <a href="building.html#85338">Cleaning Asset Versions</a> in the <strong>Building Assets</strong> chapter for more information.</p>
+<p>There are some additional actions you can take with resources after you add them to an imagery and terrain project, including:
+</p>
+<ul>
+  <li>Check the box next to <strong>Preview</strong> to display a preview of the project in the Preview pane. A bounding box appears for each resource in the project. When <strong>Preview</strong> is checked, you can right-click a resource and select <strong>Zoom to Layer</strong> to zoom in on that resource.
+  </li>
+  <li>Rearrange the order of the resources. See the next section, <a href="projects.html#10067">Display Order of Imagery and Terrain Resources</a> for restrictions and <a href="projects.html#54351">To reorder layers in a project</a> for additional information.</li>
+  <li>Lower the resolution. You might want to take this action if a resource is much higher resolution than you need. You can artificially lower the resolution for a resource within a project without affecting the original resource or any other projects that use it.
+	  <p>To lower the resolution of a resource, right-click it and select <strong>Adjust Max Level Override</strong>. Then drag the slider to the left to adjust the resolution down. Click outside the slider to apply the new setting to the resource. The override appears in parentheses after the name of the resource in the Project Editor.</p>
+  </li>
+  <li><a id="marker-1049494"></a>To force a resource with lower resolution to appear above a resource with higher resolution, you can lower the resolution of the higher resolution resource as described above and then use the arrow keys to move it below the lower-resolution resource.
+  </li>
+</ul>
+<p class="note"><strong>Note:</strong> <a id="marker-1036754"></a>The number of imagery resources that you can include within a single project is currently over 3000. If you add more that 3000 resources, you could experience a performance degradation when you build the project.
+</p>
+<p class="note"><strong>Tip:</strong> Every imagery and terrain project should include at least one resource that spans the entire Earth, such as <code>BlueMarble</code> or <code>gtopo30</code>. Everywhere you have a high-resolution inset, you should include a medium-resolution inset between it and BlueMarble.
+</p>
+<p>As with vector projects, you can build imagery and terrain projects individually, build several projects at the same time, or wait until you build your database to build all of its projects at the same time. See the <a href="building.html#70505">Building Assets</a> chapter for complete details.</p>
+<h3><a id="marker-1049500"></a><a id="10067"></a>Display Order of Imagery and Terrain Resources
+</h3>
+<p>Although you can change the display order of imagery and terrain resources within a project, the order is ultimately determined by the resolution of the source files. That is, lower-resolution insets are automatically ordered below higher-resolution insets. So in reality, you can change the order of resources with the same resolution only.
+</p>
+<p>In addition, the resolution of the imagery inset determines its optimal display level. 
+</p>
+<p>The following example shows several imagery resources in a project ordered by resolution. The resolution of each resource appears in parentheses after the resource name.
+</p>
+<img src="images/ImageryProject.png" />
+<p><a id="marker-1050422"></a>The order in which the imagery or terrain resource data appears in the Imagery and Terrain Project Editors is the same as the stacking order of the insets in Google Earth EC. That is, higher-resolution insets appear above lower-resolution insets, so that viewing preference is given to the higher-quality imagery. The stacking order of same-resolution insets follows the order you define in the project. The following graphic illustrates this concept.</p>
+<p><img src="images/imageryLevels.png" /></p>
+
+<h2 id="creating_a_historical_imagery_project">Creating a Historical Imagery Project</h2>
+<p>Creating a historic imagery project is very similar  to a standard imagery projects and differs in two key aspects:</p>
+<ol>
+  <li> a user  must select the <strong>Support Historic Imagery</strong> checkbox in the Imagery Project editor, and </li>
+  <li> each image resource added to the project must  have an assigned acquisition date.  </li>
+</ol>
+<h4>To create a Historical Imagery Project:</h4>
+<ol>
+  <li>Create and build a new imagery resource which includes an acquisition date (in the format <code>YYYY</code>, <code>YYYY-MM</code>, or <code>YYYY-MM-DD</code>).</li>
+  <li>Create a new imagery project, select the <strong>Support Historic Imagery</strong> option, and add imagery resources to the project.</li>
+  <li>Build the imagery project.</li>
+  <li>Build the database and publish.</li>
+</ol>
+
+<p class="note"><strong>Note</strong>: Imagery will be ordered by resolution first, and  then  by acquisition date.  If three 1-meter resolution  images  for 2009, 2006, and 1999 are added to the  imagery project,  they will appear in order in Google Earth EC;  however, if the 1999 image is 0.3-meter resolution it will be layered  above the lower resolution (1-meter) 2009 and 2006 images and will  always be visible despite having the time slider set to 2009 or 2006.</p>
+<h2 id="modifying_projects"><a id="44960"></a>Modifying Projects
+</h2>
+<p><a id="marker-1049503"></a>After you create a project, you can modify it in any of the following ways:
+</p>
+<ul>
+  <li>Add another resource.
+  </li>
+  <li>Delete a previously associated resource.
+  </li>
+  <li>Modify the project’s layer properties.
+  </li>
+  <li>Configure display rules for layers in a vector project.
+  </li>
+  <li><a id="marker-1040872"></a>Hide the project so it does not appear in the Asset Manager unless the <strong>Show hidden resources</strong> check box is selected. With this feature, you can “turn off” projects you do not need to display regularly, such as those that are incorrectly named.
+  </li>
+</ul>
+<p class="note"><strong>Note:</strong> When you save a modified project, Google Earth Enterprise Fusion replaces the old project definition with the new one. When you build that new project, Google Earth Enterprise Fusion creates a new version. When you select a project to include in a database, it is always the latest version of the project. However, your modifications to a project have no effect on earlier versions of that project that were previously built into a database.
+</p>
+<h4>To modify an existing project:
+</h4>
+<br />
+
+<ol>
+  <li>Right-click the name of the project you want to modify in the Asset Manager, and select <strong>Modify</strong> (or double-click the name of the project). The Project Editor for that project type displays all of the resources currently included in that project.  </li>
+  <li>Make the desired modifications. See <a href="projects.html#55771">Defining Vector Projects</a> or <a href="projects.html#40225">Defining Imagery and Terrain Projects</a> for details.</li>
+  <li>When you finish modifying the settings for the project, select <strong>File &gt; Save</strong>.
+<p>Google Earth Enterprise Fusion saves the project in the same place with the same name. If you have already built the project, you can rebuild it now or when you build the associated database.
+    </p>
+  </li>
+</ol>
+</div>
+
+<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+
+<!-- END WRAPPER -->
+
+</body>
+</html>

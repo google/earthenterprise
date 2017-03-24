@@ -1,0 +1,117 @@
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+It handles 1.1.1 and 1.3.0, though they're both untested against clients, for different reasons.
+(I use specific versions of Earth's radius, and the maximum legal latitude, both
+are defined in projections.py. You may want to tweak these to get it to work with
+different clients; uDig always jumps past the 90^ latitude limit; I played with
+the values a bit but it didn't seem to help.)
+
+It doesn't have correct (or any) Service Exceptions.
+
+I haven't tried vector layers at all, I don't know what different those will make.
+
+Note that this uses /mapping space/ coordinates, not lat/lons as with flat.
+This space goes from 0,0 at the equator + Greenwich Meridian, out to:
+  CRS="EPSG:3857"
+  minx="-20037508.3428" miny="-20037508.3428"
+  maxx="20037508.3428" maxy="20037508.3428"
+
+Since this range is unwieldy, if you're playing with it by url
+you can change the radius value in projections.py, there's a
+convenient number there.
+
+Some example urls:
+
+# no version -> should give the 1.3.0 GetCapabilities
+  http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&REQUEST=GetCapabilities
+# 1.3.0
+  http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0
+# 1.1.1
+  http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.1.1
+
+# A small chunk centered around the origin, just under Africa's West bulb.
+  http://localhost/cgi-bin/ogc/service.py?LAYERS=s0-1002&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&STYLES=&FORMAT=image%2Fjpeg&SRS=EPSG:3857&BBOX=-4000000.0,-4000000.0,4000000.0,4000000.0&WIDTH=500&HEIGHT=500
+
+# bigger chunk, same center
+  http://localhost/cgi-bin/ogc/service.py?LAYERS=s0-1002&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&STYLES=&FORMAT=image%2Fjpeg&CRS=EPSG:3857&BBOX=-9000000.0,-9000000.0,9000000.0,9000000.0&WIDTH=400&HEIGHT=400
+
+# Top half of the world, runs over the pole and shows black there.
+  http://localhost/cgi-bin/ogc/service.py?LAYERS=s0-1002&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&STYLES=&FORMAT=image%2Fjpeg&SRS=EPSG:3857&BBOX=-9000000.0,0.0,9000000.0,40000000.0&WIDTH=400&HEIGHT=400
+
+# Middle quarter of the top half of the world, going over pole a bit.
+  http://localhost/cgi-bin/ogc/service.py?LAYERS=s0-1002&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&STYLES=&FORMAT=image%2Fjpeg&CRS=EPSG:3857&BBOX=-4000000.0,0.0,4000000.0,25000000.0&WIDTH=500&HEIGHT=500
+
+The form for the GetMap query is the same between 1.1.1 and 1.3.0 (at least if you don't add bells and whistles) and both work.
+
+
+# There are others, but one WMS server I've used as a model is this, which handles both 1.1.1 and 1.3.0
+  http://demo.cubewerx.com/demo/cubeserv/cubeserv.cgi?REQUEST=GetCapabilities&VERSION=1.3.0&SERVICE=WMS
+
+2013-01-07
+Changes: arithmetic corrected, and a lot of error checking added.
+
+# Native (no MapServer), showing a vector layer
+  http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=s0-1001&STYLES=&FORMAT=image%2Fpng&CRS=EPSG:2163&BBOX=-13692297.3676,4439106.78725,-13580977.8768,4650301.83674&WIDTH=600&HEIGHT=600
+
+# MapServer, showing re-projection (EPSG:2163)
+  http://localhost/cgi-bin/mapserv?map=/opt/google/gehttpd/htdocs/uppermidwest.map&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=BlueMarble&STYLES=&FORMAT=image%2Fjpeg&SRS=EPSG:2163&BBOX=201621.496941,-294488.285333,1425518.020722,498254.511514&WIDTH=600&HEIGHT=600
+
+# Native version of the above, for comparison:
+  http://localhost/cgi-bin/ogc/service.py?LAYERS=1002&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&STYLES=&FORMAT=image%2Fjpeg&CRS=EPSG:3857&BBOX=-10853650.3523,5104192.65579,-9141879.63311,6340548.15169&WIDTH=600&HEIGHT=600
+
+# 10.04 Ubuntu libraries, to compile mapserv:
+  libgdal1-dev
+  libproj-dev
+
+# To just run it:
+  libgdal1-1.6.0
+  libproj0
+
+The list might be incomplete, in which case these are the
+installation instructions:
+  http://mapserver.org/installation/unix.html#unix
+
+(You might need libpng-dev, I'm not sure.)
+
+Note that:
+  /usr/share/proj/epsg
+comes from the
+  proj-data
+package, (which might be included with either
+libgdal or libproj), but I found that mapserv didn't find it as lowercase.
+If you rename or link it to uppercase (EPSG) it'll be fine.
+The MapServerInstallation.tar.gz bundle includes a link.
+
+FWIW here was how I configured mapserv (if it helps with library dependencies):
+
+  ./configure --with-wmsclient --with-gdal --with-proj --with-png --with-jpeg \
+      --enable-debug --prefix=/usr/local/MapServer
+
+Then just copy $installdir/bin/mapserv into /opt/google/gehttpd/cgi-bin
+But MapServerInstallation.tar.gz has the binary.
+
+2013-01-18
+The 1.1.1 GetCapabilities and ServiceException xml types have not been
+validated; I'm not sure how except by specifying version 1.1.1 in wms
+clients and seeing whether it works. For one thing, one of the urls in
+the namespace definition no longer exists. Possibly some desktop tool
+might be able to do it, too. 1.3.0 is fine, the new-style .xsd -
+generated files contain all the information they need to validate
+themselves, and that's been done against the W3C's online validator.
+
+Portable doesn't work. It's closer than it was but, that needs doing,
+still.

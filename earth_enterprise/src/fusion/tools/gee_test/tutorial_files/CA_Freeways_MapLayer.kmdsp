@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<MapSubLayerConfig>
+
+  <asset_ref>Resources/Vector/CAHighways.kvasset</asset_ref>
+
+  <display_rules>
+    <display_rule>
+      <name>Major Freeways</name>
+      <feature>
+        <label>
+          <enabled>1</enabled>
+          <levelRange max="14" min="10"/>
+          <text mode="RecordFormatter">«NAME»</text>
+          <textStyle>
+            <font>Sans</font>
+            <weight>Regular</weight>
+            <size>10</size>
+            <color a="255" b="0" g="0" r="0"/>
+            <drawOutline>1</drawOutline>
+            <outlineThickness>4</outlineThickness>
+            <outlineColor a="255" b="255" g="255" r="255"/>
+          </textStyle>
+        </label>
+        <shield config_version="1">
+          <enabled>1</enabled>
+          <levelRange max="14" min="8"/>
+          <text mode="RecordFormatter">«NAME»</text>
+          <textStyle>
+            <font>Sans</font>
+            <weight>Regular</weight>
+            <size>12</size>
+            <color a="255" b="0" g="0" r="0"/>
+            <drawOutline>1</drawOutline>
+            <outlineThickness>4</outlineThickness>
+            <outlineColor a="255" b="255" g="255" r="255"/>
+          </textStyle>
+          <style>IconStyle</style>
+          <scaling>IconFixedSizeStyle</scaling>
+          <box_color a="255" b="0" g="0" r="0"/>
+          <icon_href>shield1</icon_href>
+          <icon_type>Internal</icon_type>
+          <left_margin>0</left_margin>
+          <top_margin>0</top_margin>
+          <right_margin>0</right_margin>
+          <bottom_margin>0</bottom_margin>
+        </shield>
+        <displayType>LineZ</displayType>
+        <polygonDrawMode>FillAndOutline</polygonDrawMode>
+        <fill_color a="255" b="255" g="255" r="255"/>
+        <stroke_color a="255" b="255" g="0" r="0"/>
+        <stroke_width>2</stroke_width>
+        <levelRange max="14" min="7"/>
+        <drawAsRoads>0</drawAsRoads>
+      </feature>
+      <filter>
+        <match>MatchAll</match>
+        <selectRules>
+          <selectRule>
+            <op>Equal</op>
+            <fieldNum>6</fieldNum>
+            <rvalue>Limited Access Highway</rvalue>
+          </selectRule>
+        </selectRules>
+        <matchScript></matchScript>
+      </filter>
+    </display_rule>
+    <display_rule>
+      <name>default select all</name>
+      <feature>
+        <label>
+          <enabled>1</enabled>
+          <levelRange max="14" min="10"/>
+          <text mode="RecordFormatter">«NAME»</text>
+          <textStyle>
+            <font>Sans</font>
+            <weight>Regular</weight>
+            <size>10</size>
+            <color a="255" b="0" g="0" r="0"/>
+            <drawOutline>1</drawOutline>
+            <outlineThickness>4</outlineThickness>
+            <outlineColor a="255" b="255" g="255" r="255"/>
+          </textStyle>
+        </label>
+        <displayType>LineZ</displayType>
+        <polygonDrawMode>FillAndOutline</polygonDrawMode>
+        <fill_color a="255" b="255" g="255" r="255"/>
+        <stroke_color a="255" b="0" g="85" r="255"/>
+        <stroke_width>2</stroke_width>
+        <levelRange max="14" min="8"/>
+        <drawAsRoads>0</drawAsRoads>
+      </feature>
+      <filter>
+        <match>MatchAll</match>
+        <selectRules/>
+        <matchScript></matchScript>
+      </filter>
+    </display_rule>
+  </display_rules>
+
+  <allowFeatureDuplication>0</allowFeatureDuplication>
+
+  <contextScript></contextScript>
+
+</MapSubLayerConfig>

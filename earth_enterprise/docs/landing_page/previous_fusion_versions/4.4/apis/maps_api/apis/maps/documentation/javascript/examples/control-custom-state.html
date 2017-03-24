@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/examples/control-custom-state.html";
+    </script>
+    
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<title>Google Maps JavaScript API v3 Example: Custom Controls</title>
+<link href="http://code.google.com/apis/maps/documentation/javascript/examples/default.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
+
+var map;
+var chicago = new google.maps.LatLng(41.850033, -87.6500523);
+
+/**
+ * The HomeControl adds a control to the map that
+ * returns the user to the control's defined home.
+ */
+
+// Define a property to hold the Home state
+HomeControl.prototype.home_ = null;
+
+// Define setters and getters for this property
+HomeControl.prototype.getHome = function() {
+  return this.home_;
+}
+
+HomeControl.prototype.setHome = function(home) {
+  this.home_ = home;
+}
+
+function HomeControl(controlDiv, map, home) {
+
+  // We set up a variable for this since we're adding
+  // event listeners later.
+  var control = this;
+  
+  // Set the home property upon construction
+  control.home_ = home;
+
+  // Set CSS styles for the DIV containing the control
+  // Setting padding to 5 px will offset the control
+  // from the edge of the map
+  controlDiv.style.padding = '5px';
+
+  // Set CSS for the control border
+  var goHomeUI = document.createElement('DIV'); 
+  goHomeUI.style.backgroundColor = 'white';
+  goHomeUI.style.borderStyle = 'solid';
+  goHomeUI.style.borderWidth = '2px';
+  goHomeUI.style.cursor = 'pointer';
+  goHomeUI.style.textAlign = 'center';
+  goHomeUI.title = 'Click to set the map to Home';
+  controlDiv.appendChild(goHomeUI);
+
+  // Set CSS for the control interior
+  var goHomeText = document.createElement('DIV');
+  goHomeText.style.fontFamily = 'Arial,sans-serif';
+  goHomeText.style.fontSize = '12px';
+  goHomeText.style.paddingLeft = '4px';
+  goHomeText.style.paddingRight = '4px';
+  goHomeText.innerHTML = '<b>Home</b>';
+  goHomeUI.appendChild(goHomeText);
+  
+  // Set CSS for the setHome control border
+  var setHomeUI = document.createElement('DIV');
+  setHomeUI.style.backgroundColor = 'white';
+  setHomeUI.style.borderStyle = 'solid';
+  setHomeUI.style.borderWidth = '2px';
+  setHomeUI.style.cursor = 'pointer';
+  setHomeUI.style.textAlign = 'center';
+  setHomeUI.title = 'Click to set Home to the current center';
+  controlDiv.appendChild(setHomeUI);
+
+  // Set CSS for the control interior
+  var setHomeText = document.createElement('DIV');
+  setHomeText.style.fontFamily = 'Arial,sans-serif';
+  setHomeText.style.fontSize = '12px';
+  setHomeText.style.paddingLeft = '4px';
+  setHomeText.style.paddingRight = '4px';
+  setHomeText.innerHTML = '<b>Set Home</b>';
+  setHomeUI.appendChild(setHomeText);
+
+  // Setup the click event listener for Home:
+  // simply set the map to the control's current home property.
+  google.maps.event.addDomListener(goHomeUI, 'click', function() {
+    var currentHome = control.getHome();
+    map.setCenter(currentHome);
+  });
+  
+  // Setup the click event listener for Set Home:
+  // Set the control's home to the current Map center.
+  google.maps.event.addDomListener(setHomeUI, 'click', function() {
+    var newHome = map.getCenter();
+    control.setHome(newHome);
+  });
+}
+
+function initialize() {
+  var mapDiv = document.getElementById('map_canvas');
+  var myOptions = {
+    zoom: 12,
+    center: chicago,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  }
+  map = new google.maps.Map(mapDiv, myOptions);
+
+  // Create the DIV to hold the control and
+  // call the HomeControl() constructor passing
+  // in this DIV.
+  var homeControlDiv = document.createElement('DIV');
+  var homeControl = new HomeControl(homeControlDiv, map, chicago);
+
+  homeControlDiv.index = 1;
+  map.controls[google.maps.ControlPosition.TOP_RIGHT].push(homeControlDiv);
+}
+
+</script>
+</head>
+<body onload="initialize()">
+  <div id="map_canvas"></div>
+</body>
+</html>

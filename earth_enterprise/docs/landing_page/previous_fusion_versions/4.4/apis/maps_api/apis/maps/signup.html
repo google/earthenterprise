@@ -1,0 +1,1410 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+ 
+ 
+
+
+ 
+
+
+
+
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/signup.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Sign Up for the Google Maps API - Google Maps API Family - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/maps/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../css/iehacks.css"><![endif]-->
+
+
+<script type="text/javascript" src="include/xmlhttp.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+
+function signUp(url) {
+  var requestUrl =
+      "http://code.google.com/apis/maps/signup/createkey?referer="
+          + encodeURIComponent(url);
+
+  function callback(responseBody) {
+    var response = eval('(' + responseBody + ')');
+    if (response['failure_reason'] == 'BAD_USER_INFO') {
+      top.location =
+          "https://www.google.com/accounts/Login?continue=" +
+              "http://code.google.com/apis/maps/signup.html";
+
+      return;
+    } else if (response['failure_reason'] == 'BAD_REFERER') {
+      alert('The URL you provided is invalid.');
+      return;
+    } else if (!response['generated_key']) {
+      alert('Unknown error while generating key.');
+      return;
+    }
+
+    document.getElementById('signup_text').style['display'] = 'none';
+
+    var key = response['generated_key'];
+    thankYouDiv = document.getElementById('signup_thank_you');
+    thankYouDiv.innerHTML = thankYouDiv.innerHTML.replace(/{{KEY}}/g, key);
+    thankYouDiv.style['display'] = '';
+  }
+
+  if (!downloadUrl(requestUrl, callback)) {
+    alert('Unknown error while generating key.');
+  }
+}
+
+function checkForm(form) {
+  if (!form["agreeTerms"].checked) {
+    alert("To get a Google Maps API key, " + 
+        "you must agree to the API terms by checking the checkbox.");
+  } else {
+    var url = form["url"].value;
+    if (url.length < 8) {
+      alert("Please enter the URL of the site on which you will use the API.");
+      form["url"].focus();
+    } else {
+      signUp(url);
+    }
+  }
+
+  return false;
+}
+
+//]]>
+</script>
+  </head>
+
+  <body class="gc-documentation">
+
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps API Family</h1>
+  <ul id="signup" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="index.html" title="Google Maps API Family home page">Home</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="faq.html" title="Answers to frequently asked questions about Google Maps API Family">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="articles/index.html" title="Focused articles and tutorials for Google Maps API Family developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps API Family blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="forum/index.html" title="Google Maps API Family developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="terms.html" title="Google Maps API Family terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <a name="gc-toc-anchor"></a>  
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="index.html">Maps API Family</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps Javascript API V3</h2>
+         <ul>
+           <li><a href="documentation/javascript/index.html">Home Page</a></li>
+           <li><a href="documentation/javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+      <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="documentation/javascript/v2/index.html">Home Page</a></li>
+           <li><a href="documentation/javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+  <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="documentation/flash/index.html">Home Page</a></li>
+          <li><a href="documentation/flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="documentation/mapsdata/index.html">Home Page</a></li>
+          <li><a href="documentation/mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+     <div class="line"></div>
+      <ul>
+        <li><h2><a href="documentation/webservices/index.html">Maps Web Services</a></h2>
+         <ul>
+           <li><a href="documentation/geocoding/index.html">Geocoding Guide</a></li>
+           <li><a href="documentation/directions/index.html">Directions Guide</a></li>
+           <li><a href="documentation/elevation/index.html">Elevation Guide</a></li>
+           <li><a href="documentation/places/index.html">Places Guide</a></li>
+         </ul>
+       </li>
+      </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="documentation/staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li>
+            <h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="documentation/localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="documentation/localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+      <div class="promo">
+     <p><a href="documentation/premier/index.html">Google Maps API Premier</a></p><p>Includes enterprise licensing and support</p></div>
+
+      </div>
+      
+      <a name="gc-pagecontent-anchor"></a>   
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Sign Up for the Google Maps API</h1>
+
+
+
+
+<div id="signup_text">
+  <p>The Google Maps API lets you embed Google Maps in your own web pages. 
+A single Maps API key is valid for a single &quot;directory&quot; or domain. 
+See this <a href="faq.html#keysystem">FAQ</a> for more information. 
+You must have a <a href="http://www.google.com/accounts/">Google Account</a> 
+to get a Maps API key, and your API key will be connected to your Google Account.</p>
+
+<p>Here are some highlights from the terms for those of you who aren't lawyers:</p>
+
+<ul style="margin-bottom: 2em">
+  <li><b>There is no limit on the number of page views you may generate per day
+  using the Maps API.</b>
+  See this <a href="faq.html#hightrafficsite">FAQ</a> for more information.</li> 
+  </li>
+  <li><b>There is a limit on the number of geocode requests per day.</b> 
+  See this <a href="faq.html#geocoder_limit">FAQ</a> for more information.</li>
+  <li><b>The Maps API does not include advertising.</b>  
+  If we ever decide to change this policy, we will give you at least 90 days 
+  notice via the 
+ <a href="faq.html#notify">announcements lists</a>.</li>
+  <li>If you use other APIs in conjunction with the Maps API, you should 
+  also review the terms for the other APIs.
+  Note in particular that the <a href="documentation/services.html#LocalSearch">GoogleBar</a>
+   in the JS Maps API uses the AJAX Search API, and that API has its own terms.<li><b>Your service must be 
+  <a href="terms.html#section_9_1">
+  freely accessible</a> to end users.</b>
+  To use Google mapping technology in other types of applications, please use 
+  <a href="http://www.google.com/enterprise/maps/">Google Maps API Premier.</a>
+  See this <a href="faq.html#tos_commercial">FAQ</a> for more information.</li>
+  </li>
+
+  <li><b>You may not alter or obscure the logos or attribution on the map.</b></li>
+
+  <li>You must <a href="documentation/index.html#SpecifyingSensor"> 
+  indicate whether your application is using a sensor</a>
+  (such as a GPS locator) to determine the user's location.</li>
+
+  <li>You may use the API (except for the Static Maps API) in websites or in
+  software applications. For websites, please sign up with the URL where your
+  implementation can be found.  For other software applications, please sign up 
+  with the URL of the page where your application can be downloaded.</li>
+
+  <li>Google will upgrade the APIs periodically. To be notified of updates,
+  please subscribe to the <a href="faq.html#notify">announcements lists</a>. 
+  </li>
+
+  <li>Remember that we reserve the right to 
+  suspend or terminate your use of the service at any time, so please read 
+  through the <a href="faq.html">FAQ</a> and 
+  <a href="http://groups.google.com/group/Google-Maps-API">forum posts</a> to 
+  decide whether your site meets the Terms of Use before you begin API integration.</li>
+</ul>
+<div id="termsbox" style="border:2px solid #000066;margin-left:2em;overflow:auto;height:150px;width:90%">
+Last updated: November 26, 2008
+<ol>
+<br>
+<b>1. Your relationship with Google.</b><br>
+<br>
+1.1    <u>Use of the Service is Subject to these Terms</u>.  Your use of
+any of the Google Maps/Google Earth APIs (referred to in this document as
+the "<b>Maps API(s)</b>" or the "<b>Service</b>") is subject to the terms
+of a legal agreement between you and Google Inc., whose principal place
+of business is at 1600 Amphitheatre Parkway, Mountain View, California
+94043, United States ("<b>Google</b>").  This legal agreement is referred
+to as the <b>"Terms"</b>.<br>
+<br>
+1.2    <u>The Terms include Google's Legal Notices and Privacy
+Policy</u>. <br>
+<br>
+
+<div style="margin-left: 40px;">
+
+(a)  Unless otherwise agreed in writing with Google, the Terms will include the 
+ following: <br>
+
+<div style="margin-left: 40px;">
+               (i) the terms and conditions set forth in this document
+               (the <b>"Maps APIs Terms"</b>);<br>
+               (ii) the <a title="Legal Notices" target="_top"
+               href="http://www.google.com/intl/en-us/help/legalnotices_maps.html"
+               id="o56t" target="_top">Legal Notices</a>; and<br>
+               (iii) the <a title="Privacy Policy"
+               href="http://www.google.com/privacypolicy.html" target="_top"
+               id="fd26" target="_top">Privacy Policy</a>.<br>
+</div>
+<br>
+         (b) Before you use the Maps APIs, you should read each of the
+         documents comprising the Terms, and print or save a local copy
+         for your records.<br>
+
+</div>
+
+ <br>
+1.3    <u>Use of Other Google Services and Additional Terms</u>.  If you
+use the Maps APIs in conjunction with any other Google products or
+services, including any other Google API, (collectively, the Service and
+all other Google products and services are referred to as the "<b>Google
+Services</b>"), your agreement with Google will also include the terms
+applicable to those Google Services. All of these are referred to as
+the "<b>Additional Terms</b>."  If Additional Terms apply, they will be
+accessible to you either within or through your use of the applicable
+Google Services.  If there is any contradiction between the Additional
+Terms and the Maps APIs Terms, then the Maps APIs Terms will take
+precedence only as it relates to the Maps APIs, and not to any other
+Google Services.<br>
+<br>
+1.4   <u>Precedence of Maps APIs Terms</u>.  If there is any contradiction
+between the Maps APIs Terms and other Maps API-related documents
+(including but not limited to the Maps APIs Documentation), then the
+Maps APIs Terms will take
+precedence. <br>
+<br>
+1.5    <u>Changes to the Terms</u>.  Google reserves the right to
+make changes to the Terms from time to time. When these changes
+are made, Google will make a new copy of the Terms available at <a
+href="http://code.google.com/apis/maps/terms.html" target="_top">http://code.google.com/apis/maps/terms.html</a>.
+You understand and agree that if you use the Service after the date on
+which the Terms have changed, Google will treat your use as acceptance
+of the updated Terms.  If a modification is unacceptable to you, you
+may terminate the agreement by ceasing use of the Maps APIs.<br>
+<br>
+<b>2.    Accepting the Terms.<br>
+<br>
+</b>
+<a id="section_2_1"></a>
+2.1    <u>Clicking to Accept or Using the Maps APIs</u>.  In order
+to use the Maps APIs you must agree to the Terms.  You can accept the
+Terms by:<br>
+ <br>
+<div style="margin-left: 40px;">
+         (a) clicking to accept or agree to the Terms, where this option
+         is made available to you by Google in the user interface for
+         the Service; or<br>
+         (b) using the Maps APIs.  In this case, you understand and agree
+         that Google will treat your use of the Maps APIs as acceptance
+         of the Terms from that point onwards.<br>
+</div>
+<br>
+2.2    <u>U.S. Law Restrictions</u>.  You may not use the Maps APIs
+and may not accept the Terms if you are a person barred from using the
+Service under the laws of the United States.<br>
+<br>
+2.3    <u>Authority to Accept the Terms</u>.  You represent that you have
+full power, capacity and authority to accept these Terms.  If you are
+accepting on behalf of your employer or another entity, you represent
+that you have full legal authority to bind your employer or such entity
+to these Terms.  If you don't have the legal authority to bind, please
+ensure that an authorized person from your entity consents to and accepts
+these Terms.<br>
+<br>
+<b>3.    Privacy and Personal Information.<br>
+<br>
+</b>3.1    <u>Google's Privacy Policy</u>.  For information about
+Google's data protection practices, please read Google's privacy policy
+at <a href="http://www.google.com/privacy.html" target="_top">
+http://www.google.com/privacy.html</a>.  This policy explains how Google
+treats your personal information and protects your privacy when you use
+the Service.<br>
+<br>
+3.2    <u>Use of Your Data under Google's Privacy Policy</u>.  You agree
+to the use of your data in accordance with Google's privacy policy.<br>
+<br>
+3.3    <u>Your Privacy Policy</u>.  You must post and abide by an
+appropriate privacy policy, and will comply with all applicable
+laws relating to the collection of information from visitors to Your
+Maps API Implementation in accordance with Section 9.2 below.<span
+style="background-color: rgb(255, 255, 0);"></span><br>
+<br>
+<b>4.    Provision of Service by Google.</b><br>
+<br>
+4.1    <u>Google's Subsidiaries and Affiliates</u>.  Google has
+subsidiaries and affiliated legal entities around the world
+("<b>Subsidiaries and Affiliates</b>").  Sometimes, these companies
+will be providing the Service to you on behalf of Google itself.
+You acknowledge and agree that Subsidiaries and Affiliates will be
+entitled to provide the Service to you.<br>
+<br>
+4.2    <u>Limits on Your Use of the Service</u>.  You acknowledge and agree
+that Google may impose or adjust the limit on the number of transactions
+you may send or receive through the Service; such fixed upper limits
+may be set by Google at any time, at Google's discretion.<span
+style="background-color: rgb(255, 255, 0);"></span><br>
+<div>
+  <br>
+<a id="section_4_3"></a>
+  4.3    <u>Advertising</u>.  The Service currently does not include
+  advertising in the maps images.  <span style="background-color:
+  rgb(255, 255, 255);">However, Google reserves the right to
+  include advertising in the maps images provided to you through
+  the Service, but will provide you with ninety (90) days notice
+  prior to the commencement of advertising in the maps images. Such notice may be
+  provided on relevant Google websites, including but not limited
+  to the </span><a style="background-color: rgb(255, 255, 255);"
+  id="ygto" href="http://googlegeodevelopers.blogspot.com/" target="_top"
+  title="Google Geo Developers Blog">Google Geo Developers
+  Blog</a><span style="background-color: rgb(255, 255, 255);"> and the
+  </span><a style="background-color: rgb(255, 255, 255);" id="lei1"
+  href="http://groups.google.com/group/Google-Maps-API" title="Google
+  Maps API Group" target="_top">Google Maps API Group</a><span style="background-color:
+  rgb(255, 255, 255);"> (or such successor URLs that Google may designate
+  from time to time).  </span>During that 90 day period, you may terminate
+  your use of the Service, or provide notice of your refusal to accept
+  advertising in the maps images in accordance with Google's policies and procedures for
+  providing such notice (which Google may make available from time to
+  time in its sole discretion).<br>
+  <br>
+<a id="section_4_4"></a>
+4.4 <u>Changes to the Service: Termination of the Service</u>.
+<div style="margin-left: 40px;">
+<br>
+  (a) If Google in its discretion chooses to cease providing the current 
+  version of the Service whether through discontinuation of the Service 
+  or by upgrading the Service to a newer version, the current version of 
+  the Service will be deprecated and become the Deprecated Version of the
+  Service. Google will issue an announcement if the current version of the
+  Service will be deprecated.  For a period of 3 years after an announcement 
+  (the “Deprecation Period”), Google will use commercially reasonable efforts 
+  to continue to operate the Deprecated Version of the Service and to respond to
+  problems with the Deprecated Version of the Service deemed by Google in its
+  discretion to be critical.  During the Deprecation Period, no new features 
+  will be added to the Deprecated Version of the Service.
+<br>
+<br>
+  (b) Google reserves the right in its discretion to cease providing all or 
+  any part of the Deprecated Version of the Service immediately without any 
+  notice if:
+<br>
+<div style="margin-left: 40px;">
+    (i) you have breached any provision of the Terms (or have acted in manner 
+    that clearly shows that you do not intend to, or are unable to comply with 
+    the provisions of the Terms); or
+<br>
+<br>
+    (ii) Google is required to do so by law (for example, due to a change to the 
+    law governing the provision of the Deprecated Version of the Service); or
+<br>
+<br>
+    (iii) the Deprecated Version of the Service relies on data or services 
+    provided by a third party partner and the relationship with such partner 
+    (x) has expired or been terminated or (y) requires Google to change the way 
+    Google provides the data or services through the Deprecated Version of the 
+    Service; or
+<br>
+<br>
+    (iv) providing the Deprecated Version of the Service could create a 
+    substantial economic burden as determined by Google in its reasonable good 
+    faith judgment; or
+<br>
+<br>
+    (v) providing the Deprecated Version of the Service could create a security 
+    risk or material technical burden as determined by Google in its reasonable 
+    good faith judgment.
+<br>
+</div>
+  (c) Google is constantly innovating in order to provide the best possible 
+  experience for its users.  At any time prior to discontinuing the current 
+  version of the Service or upgrading to a new version of the Service, Google 
+  may, in its discretion as part of this continuing innovation, label certain 
+  features or functionality of the Service as "experimental."  Additionally, Google 
+  may elect to offer a version of the Service within Google Labs. This Section 
+  4.4 of the Terms will not apply to any features or functionality labeled as 
+  "experimental," or to any version of the Service offered within Labs.
+<br>
+</div>
+<br>
+  <b>5.    Your Google Account.<br>
+  <br>
+<a id="section_5_1"></a>
+  </b>5.1    <u>Signing Up for a Google Account</u>.  In order to access
+  the Service, you must have a <a href="http://www.google.com/accounts/" target="_top">
+  Google Account</a>.  You agree that any information you give to Google 
+  in connection with your Google Account or your continued use of the Service 
+  will always be accurate, correct and up to date.<br>
+  <br>
+<a id="section_5_2"></a>
+  5.2    <u>Account Key</u>.  After supplying Google with your account
+  information and the URL of your Maps API Implementation, and accepting
+  the Terms, you will be issued an alphanumeric key assigned to you by
+  Google that is uniquely associated with your Google Account and the
+  URL of your Maps API Implementation.  Your Maps API Implementation
+  must import the Google Maps APIs using this key as described in the
+  <a id="ac:s" href="http://code.google.com/apis/maps/documentation/"
+  title="Maps APIs Documentation" target="_top">Maps APIs Documentation</a>,
+  and Google will block requests with an invalid key or invalid URL.
+  You may only obtain and use a key in accordance with these Terms and
+  the <a id="ac:s" href="http://code.google.com/apis/maps/documentation/"
+  title="Maps APIs Documentation" target="_top">Maps APIs Documentation</a>.<br>
+  <br>
+<a id="section_5_3"></a>
+  5.3    <u>Your Passwords and Account Security</u>.  You agree that
+  you will be solely responsible to Google for your use of the Service.
+  If you become aware of any unauthorized use of your password, your account,
+  or your key, you agree to notify Google immediately.
+  <br>
+  <br>
+  <b>6.    Google's Proprietary Rights.</b>  You acknowledge and agree
+  that Google (or Google's licensors and their suppliers, as applicable)
+  own all legal right, title and interest in and to the Service and
+  Content, including any intellectual property rights that subsist in
+  the Service and Content (whether those rights happen to be registered
+  or not, and wherever in the world those rights may exist).<br>
+  <br>
+  <b>7.    Licenses from Google to You.<br>
+  <br>
+<a id="section_7_1"></a>
+  </b>7.1    <u>Definitions</u>.<br>
+  <br>
+<div style="margin-left: 40px;">
+            (a)    "<b>Brand Features</b>" means the trade names,
+            trademarks, service marks, logos, domain names, and other
+            distinctive brand features of each party, respectively,
+            as secured by such party from time to time.<br>
+            (b)    "<b>Content</b>" means any content provided through
+            the Service (whether created by Google or its third party
+            licensors), including map and terrain data, photographic
+            imagery, traffic data, or any other content.<br>
+            (c)    "<b>Maps API Implementation</b>" means a software
+            application or website that uses the Maps APIs to obtain and
+            display Content in conjunction with Your Content, according
+            to these Terms.<br>
+            (d)    "<b>Your Content</b>" means any content that you
+            provide in your Maps API Implementation, including data,
+            images, video, or software.  Your Content does not include
+            the Content.<br>
+</div>
+  <br>
+  7.2    <u>Service License</u>. Subject to these Terms (including but not limited
+  to Section 9 (License Requirements)), Google gives you a personal, worldwide,
+  royalty-free, non-assignable and non-exclusive license to use the
+  Service as provided by Google, in the manner permitted by the Terms.<br>
+  <br>
+  7.3    <u>Content License</u>. Subject to these Terms (including but not limited
+  to Section 9 (License Requirements)), Google gives you a personal, worldwide,
+  royalty-free, non-assignable and non-exclusive license to access,
+  use, publicly perform and publicly display the Content in your Maps
+  API Implementation, as the Content is provided in the Service, and
+  in the manner permitted by the Terms.  Specifically, you understand
+  the following:<br>
+  <br>
+<div style="margin-left: 40px;">
+             (a)    Content (including but not limited to map data,
+             traffic, and directions) is provided for planning
+             purposes only.  You may find that weather conditions,
+             construction projects, closures, or other events may cause
+             road conditions or directions to differ from the results
+             depicted in the Content.  You should exercise judgment in
+             your use of the Content.<br>
+             (b)    Certain Content is provided
+             under <a title="license from third parties"
+             href="http://www.google.com/intl/en-us/help/legalnotices_maps.html"
+             id="nalu" target="_top">license from third parties</a>, including
+             Tele Atlas B.V. ("<b>Tele Atlas</b>"), and is subject
+             to copyright and other intellectual property rights
+             owned by or licensed to Tele Atlas and/or such third
+             parties. You may be held liable for any unauthorized
+             copying or disclosure of this content.  Your use
+             of Tele Atlas map data is subject to additional
+             restrictions located in the <a title="Legal Notices"
+             href="http://www.google.com/intl/en-us/help/legalnotices_maps.html"
+             id="smzl" target="_top">Legal Notices</a> page.<br>
+</div>
+  <br>
+  7.4    <u>Brand Features License</u>.<br>
+   <br>
+<div style="margin-left: 40px;">
+            (a)    <u>Grant</u>.  Subject to these Terms, Google gives you a personal,
+            worldwide, royalty-free, non-assignable, non-transferable,
+            non-sublicenseable, and non-exclusive license to display
+            Google's Brand Features solely for the purpose of promoting or
+            advertising your authorized use of the Service in accordance
+            with this Section and for the purpose of fulfilling your
+            obligations under the Terms.<br>
+  <br>
+<a id="section_7_4_b"></a>
+            (b)    <u>Restrictions</u>.  In using Google Brand Features,
+            you will not:<br>
+<div style="margin-left: 40px;">
+                    (i)    display a Google Brand Feature in any manner
+                    that implies a relationship or affiliation with,
+                    sponsorship, or endorsement by Google, other than
+                    your use of the Service, or that can be reasonably
+                    interpreted to suggest editorial content has been
+                    authored by, or represents the views or opinions of
+                    Google or Google personnel;<br>
+                    (ii)   use Google Brand Features to disparage Google,
+                    its products, or the Google Services;<br>
+                    (iii)    display a Google Brand Feature in your
+					Maps API Implementation or on your
+                    site if your Maps API Implementation or site
+ 					contains or displays adult content or
+                    promotes illegal activities, gambling, or the sale
+                    of tobacco or alcohol to persons under twenty-one
+                    (21) years of age;<br>
+                     (iv)    have the Google logo as the largest logo
+                     in your Maps API Implementation or on your website
+                     (except as displayed in the map image itself);<br>
+                     (v)    display a Google Brand Feature as the most
+                     prominent element in your Maps API Implementation
+                     on any page of your website;<br>
+                     (vi)    display a Google Brand Feature in a manner
+                     that is misleading, defamatory, infringing, libelous,
+                     disparaging, obscene or otherwise objectionable
+                     to Google;<br>
+                     (vii)  display a Google Brand Feature in your Maps
+					API Implementation or on a site
+                     that violates any law or regulation; or<br>
+                     (viii)    remove, distort or alter any element of
+                     a Google Brand Feature (this includes squeezing,
+                     stretching, inverting, discoloring, etc.).<br>
+  <br>
+</div>
+             (c)    <u>No Further License Grant; No Challenges</u>.
+             Except as set forth in this Section, nothing in the Terms
+             will grant or will be deemed to grant you any right, title
+             or interest in or to Google's Brand Features.  All use
+             by you of Google's Brand Features (including any goodwill
+             associated therewith) will inure to the benefit of Google.
+             At no time during or after the Term will you challenge or
+             assist others to challenge the Brand Features of Google
+             (except to the extent such restriction is prohibited by law)
+             or the registration thereof by Google, nor will you attempt
+             to register any Brand Features (including domain names) that
+             are confusingly similar in any way (including but not limited
+             to, sound, appearance and spelling) to those of Google.<br>
+  <br>
+             (d)    <u>Proprietary Rights Notices</u>.  You agree that
+             you will not remove, obscure, or alter any proprietary
+             rights notices (including copyright and trademark notices,
+             Terms of Use links, or Brand Features) that may be
+             affixed to or provided through the Service.  Where such
+             notices are not affixed within the Service, you agree
+             to display such notices according to the <a id="ac:s"
+             href="http://code.google.com/apis/maps/documentation/"
+             title="Maps APIs Documentation" target="_top">Maps APIs
+             Documentation</a>.<br>
+</div>
+  <br>
+  7.5    <u>U.S. Government Restricted Rights</u>.  If the Service
+  or Content is being used or accessed by or on behalf of the United
+  States government, such use is subject to additional terms located in
+  the "Government End Users" section of our <a title="Legal Notices"
+  href="http://www.google.com/intl/en-us/help/legalnotices_maps.html"
+  id="qphq" target="_top">Legal Notices</a> page.<br>
+   <br>
+  7.6    <u>Determination of Compliance</u>.  Google reserves the sole
+  right and discretion to determine whether your use of the Service,
+  Content, and Brand Features is in compliance with these Terms.<br>
+  <br>
+  <b>8.    Permitted Uses under Google's Licenses.</b><br>
+  <br>
+  8.1    <u>Permitted Purposes</u>.  You agree to use the Service only
+  for purposes:<br>
+  <br>
+<div style="margin-left: 40px;">
+           (a) that are permitted by the Terms;<br>
+           (b) that are permitted by any applicable third party contract,
+           law, or regulation in the relevant jurisdictions; and<br>
+           (c) that comply with all applicable policies or guidelines
+           made available by Google.<br>
+</div>
+  <br>
+  8.2    <u>Maps APIs Documentation and FAQs</u>.  For further
+  guidance regarding use of the Content, please see the <a id="ac:s"
+  href="http://code.google.com/apis/maps/documentation/" title="Maps
+  APIs Documentation" target="_top">Maps APIs Documentation</a> and <a title="FAQs"
+  href="http://code.google.com/apis/maps/faq.html" id="h094" target="_top">FAQs</a>.
+  If there is any conflict between these Terms and the Maps API
+  Documentation or FAQs, these Terms will <span style="background-color:
+  rgb(255, 255, 255);">control</span>. <br>
+<br>
+<b>9.    License Requirements.</b>  Google's licenses above are subject
+to your adherence to the following requirements:<br>
+  <br>
+<a id="section_9_1"></a>
+  9.1   <u>Free, Public Accessibility to Your Maps API Implementation</u>.
+  Your Maps API Implementation must be generally accessible to users
+  without charge.  <span dir="ltr" id=":2t">You may require users
+  to log in to your Maps API Implementation if you do not require
+  users to pay a fee.  </span><span dir="ltr" id=":2t">U</span><span
+  dir="ltr" id=":2t">nless you have entered into </span><a id="ovov"
+  href="http://www.google.com/enterprise/maps/" target="_top" title="a separate
+  agreement with Google or obtained Google's written permission">a
+  separate written agreement with Google or obtained Google's written
+  permission</a><span dir="ltr" id=":2t">, your</span><span dir="ltr"
+  id=":2t"> Maps API Implementation must not:<br><br>
+<div style="margin-left: 40px;">
+          (a) require a fee-based subscription or other fee-based
+          restricted access; or<br>
+          (b) operate only behind a firewall or only on an internal
+          network (except during the development and testing phase).<br>
+</div>
+  </span><br>
+
+<ul>
+  </ul>
+<a id="section_9_2"></a>
+  9.2    <u>Reporting</u>.  You must implement those
+  reporting mechanisms that Google has set forth and may
+  update from time to time in these Terms and in the <a id="tmr0"
+  href="http://code.google.com/apis/maps/documentation/index.html#SpecifyingSensor"
+  title="Maps APIs Documentation" target="_top">Maps APIs Documentation</a>.  
+  For example, as specified
+  in the Maps API Documentation, you agree to provide reports to Google
+  if your Maps API Implementation enables a device to detect its own
+  location through use of a sensor (including but not limited to GPS,
+  cell triangulation, WiFi or similar functionality) to display the
+  location of the device on a map or to calculate a route.<br>
+  <br>
+<a id="section_9_3"></a>
+  9.3    <u>End User Terms and Privacy Policy</u>.  If you <span
+  style="background-color: rgb(255, 0, 255);"></span>develop a Maps API
+  Implementation for use by other users, you must:<br>
+  <br>
+<div style="margin-left: 40px;">
+            (a)    display to the users of your Maps API Implementation
+            the link to Google's Terms of Use as presented
+            through the Service or described in the <a id="tmr0"
+            href="http://code.google.com/apis/maps/documentation/"
+            title="Maps APIs Documentation" target="_top">Maps APIs
+            Documentation</a>;<br>
+            (b)    explicitly state in your Maps API Implementation's
+            terms of use that, by using your Maps API Implementation,
+            your users are agreeing to be bound by Google's Terms of
+            Use; and<br>
+            (c)    protect the privacy and legal rights of those users.
+            If your Maps API Implementation enables you or any party to gain
+            access to information about users of the Service, including but not
+            limited to personally identifying information or non-personally
+            identifying usage information, you or the party receiving the
+            information must make publicly available, and must abide by,
+            an appropriate privacy policy in your Maps API Implementation.
+            <br>
+</div>
+  <br> 9.4 <u>Attribution</u> Content provided to you through the Service may contain 
+  the trade names, trademarks, service marks, logos, domain names, and other 
+  distinctive brand features of Google, its partners, or other third party rights 
+  holders of content indexed by Google. You may not delete or in any manner alter 
+  these trade names, trademarks, service marks, logos, domain names, and other 
+  distinctive brand features.<br>
+
+  <br> 9.5 <u>Responsibility for Breaches</u>.  You agree that you are
+  solely responsible for (and that Google has no responsibility to you or to
+  any third party for) any breach of your obligations under the Terms and for
+  the consequences (including any loss or damage which Google may suffer) of
+  any such breach.<br> 
+
+  <br> <b>10.    License Restrictions.  </b>Except as
+  expressly permitted under the Terms, or unless you have received prior
+  written authorization from Google (or, as applicable, from the provider of
+  particular Content), Google's licenses above are subject to your adherence to
+  all of the restrictions below.  Except as explicitly permitted in Section 7 or
+  the Maps APIs Documentation, you must not (nor may you permit anyone else to):
+
+<a id="section_10_1"></a>
+  <br> <br> 10.1    access
+  or use the Service or any Content through any technology or means other
+  than those provided in the Service, or through other explicitly authorized
+  means Google may designate;<span style="background-color: rgb(255, 0,
+  255);"></span><br style="background-color: rgb(255, 0, 255);"> <br> 
+
+<a id="section_10_2"></a>
+ 
+  10.2
+  copy, translate, modify, create a derivative work of, or publicly display any
+  Content or any part thereof (for example, the following are prohibited: (a)
+  creating server-side modification of map tiles; and (b) stitching multiple
+  static map images together to display a map that is larger than permitted
+  in the <a id="tmr0" href="http://code.google.com/apis/maps/documentation/"
+  title="Maps APIs Documentation" target="_top">Maps APIs Documentation</a>);<br> <br>
+
+<a id="section_10_3"></a>
+  10.3    <span style="background-color: rgb(255, 255, 255);">pre-fetch,
+  cache, or store any Content, <span style="background-color: rgb(255, 255,
+  255);">except that you may store limited amounts of Content for the purpose
+  of improving the performance of your Maps API Implementation if you do
+  so temporarily, securely, and in a manner that does not permit use of the
+  Content outside of the Service;</span></span><br> <br> 
+
+<a id="section_10_4"></a>
+  10.4    charge users
+  or any other third party any fee for the use of the Maps API Implementation,
+  the Service, or the Content, unless you have entered into <a id="ovov"
+  href="http://www.google.com/enterprise/maps/" target="_top" title="a separate agreement
+  with Google or obtained Google's written permission">a separate written
+  agreement with Google or obtained Google's written permission</a> to do so
+  (but if you are a consultant who creates or hosts Maps API Implementations
+  for third party customers, you may charge such customers a fee for your
+  consulting or hosting services);<span style="background-color: rgb(255,
+  255, 0);"></span>
+</div> <div>
+  <br> 10.5    reverse engineer, decompile or otherwise attempt to extract the
+  source code of the Service or any part thereof, unless this is expressly
+  permitted or required by applicable law;<br> <br> 10.6    use the Service
+  in a manner that gives you or any other person access to mass downloads
+  or bulk feeds of any Content, including but not limited to numerical
+  latitude or longitude coordinates, imagery, and visible map data;<br>
+  <br> 10.7    delete, obscure, or in any manner alter any warning, notice
+  (including but not limited to any copyright or other proprietary rights
+  notice), or link that appears in the Service or the Content;<br> <br>
+
+<a id="section_10_8"></a>
+10.8   use the Static Maps API other than in an implementation in a web
+browser<span style="background-color: rgb(255, 255, 0);"></span>;<br> <br>
+
+<a id="section_10_9"></a>
+  10.9   use the Service or Content with any products, systems, or applications
+  for or in connection with:<br><br>
+
+<div style="margin-left: 40px;">
+    (a)    real time navigation or route guidance, including but not
+    limited to turn-by-turn route guidance that is synchronized to the
+    position of a user's sensor-enabled device;<br>
+  </div>
+
+<div style="margin-left: 40px;">
+    (b)    any systems or functions for automatic or autonomous control
+    of vehicle behavior; or<br>
+  </div>
+
+<div style="margin-left: 40px;">
+    (c)    d<span style="background-color: rgb(255, 255, 255);">ispatch,
+    fleet management, business asset tracking, or similar enterprise
+    applications (the Google Maps APIs can be used to track assets (such
+    as cars, buses or other vehicles) as long as the tracking application
+    is made </span><span style="background-color: rgb(255, 255,
+    255);">available to the public </span><span style="background-color:
+    rgb(255, 255, 255);">without charge.  For example, you may offer
+    a free</span>, public<span style="background-color: rgb(255, 255,
+    255);"> Maps API Implementation that displays real-time public
+    transit or other transportation status information</span><span
+    style="background-color: rgb(255, 255, 255);">.  If your Maps API
+    Implementation is deployed internally or you are charging for use
+    of your Maps API Implementation, please contact the <a id="uiy5"
+    href="http://www.google.com/support/enterprise/bin/request.py?contact_type=gme&utm_campaign=en-us-codeterms"
+    target="_top" title="Google Maps API Premier sales team"
+    style="text-decoration: none;"><span
+    style="background-color: rgb(255, 255, 255);"><u>Google Maps
+    API Premier sales team</u><span style="text-decoration: none;">
+    </span></span></a>for more information)</span>;
+  </div>
+</div>
+<div>
+  <br>
+  10.10  <span style="background-color: rgb(255, 255, 255);">print
+  more than 5,000 copies of sales collateral materials containing a
+  screenshot of Tele Atlas Content for purposes of commercial sales
+  lead generation (</span><b style="background-color: rgb(255, 255,
+  255);">"Direct Marketing"</b><span style="background-color: rgb(255, 255,
+  255);">) or incorporate Tele Atlas Content as a core part of printed
+  matter (such as printed maps or guide books) that you redistribute
+  for a fee (you must contact Tele Atlas to obtain a direct license if
+  you desire to do either of the above);</span><br>
+  <br>
+  10.11    offer a batch geocoding service that uses Content contained
+  in any Google Services;<span style="background-color: rgb(255, 0,
+  255);"></span><br>
+  <br>
+
+<a id="section_10_12"></a>
+  10.12    use or display the Content without a corresponding
+  Google map, unless you are explicitly permitted to do so in the <a
+  id="tmr0" href="http://code.google.com/apis/maps/documentation/"
+  title="Maps APIs Documentation" target="_top">Maps APIs Documentation</a>,
+  the <a style="background-color: rgb(255, 255, 255);" id="rll_"
+  href="http://code.google.com/apis/maps/documentation/services.html#Streetview"
+  title="Street View Documentation" target="_top">Street View API Documentation</a>,
+  or through written permission from Google (for example, you must not
+  use geocodes obtained through the Service except in conjunction with
+  a Google map<span style="background-color: rgb(255, 255, 255);">, but
+  the </span><a style="background-color: rgb(255, 255, 255);" id="rll_"
+  href="http://code.google.com/apis/maps/documentation/services.html#Streetview"
+  title="Street View Documentation" target="_top">Street View API Documentation</a><span
+  style="background-color: rgb(255, 255, 255);"> explicitly permits
+  you to display Street View imagery without a corresponding Google
+  map</span>); or<br>
+  <br>
+
+<a id="section_10_13"></a>
+  10.13  hide or mask from Google the identity of your service as it uses 
+  the Service, including by failing to follow the identification conventions 
+  listed in the Maps APIs Documentation; or
+<br>
+<br>
+  10.14  violate any policies in the Maps APIs Documentation
+  <span style="background-color: rgb(255, 255, 0);"></span>or
+  violate Google's Software Principles (available at <a
+  title="http://www.google.com/intl/en/corporate/software_principles.html"
+  href="http://www.google.com/intl/en/corporate/software_principles.html"
+  id="jblz" target="_top">http://www.google.com/intl/en/corporate/software_principles.html</a>
+  or such successor URL as Google may provide) and other policies as
+  Google may develop from time to time, including but not limited to
+  the Google policies below, under which you agree not to:<br>
+<div style="margin-left: 40px;">
+   <br>
+               (a)    defame, abuse, harass, stalk, threaten or otherwise
+               violate the legal rights (such as rights of privacy and
+               publicity) of others;<br>
+               (b)    upload, post, transmit or otherwise make available
+               any inappropriate, defamatory, obscene, or unlawful
+               content;<br>
+               (c)    upload, post, transmit or otherwise make available
+               any content that infringes any patent, trademark,
+               copyright, trade secret or other proprietary right of any
+               party, unless you are the owner of the rights, or have
+               the permission of the owner or other legal justification
+               to use such content;<br>
+               (d)    upload, post, transmit or otherwise make available
+               messages that promote pyramid schemes, chain letters,
+               or disruptive commercial messages or advertisements;<br>
+             (e)    <span style="background-color: rgb(255, 255,
+             255);">upload, post, email, transmit or otherwise make
+             available any other
+content, message, or communication prohibited by applicable law, the
+Terms or any applicable Service policies or guidelines;</span><br>
+               (f)    download any file posted by another that you know,
+               or reasonably should know, cannot legally be distributed
+               in such manner;<br>
+               (g)    impersonate another person or entity, or falsify
+               or delete any author attributions or labels of the origin
+               or source of Content, or other material;<br>
+               (h)   restrict or inhibit any other user from using and
+               enjoying the Service or any other Google Services;<br>
+               (i)    delete, obscure, or fail to display the Terms of
+               Use link as presented through the Service or described
+               in the Maps APIs Documentation;<br>
+               (j)    delete, obscure, or in any manner alter any warning,
+               notice (including but not limited to any copyright or
+               other proprietary rights notice), or link that appears
+               in the Service or the Content; <br>
+               (k)    interfere with or disrupt the Google Services,
+               servers, or networks connected to the Google Services,
+               or disobey any requirements, procedures, policies,
+               or regulations of networks connected to the Google
+               Services;<br>
+               (l)   use any robot, spider, site search/retrieval
+               application, or other device to retrieve or index any
+               portion of the Google Services or Content or collect
+               information about users for any unauthorized purpose;<br>
+             (m)  display content in your Maps API Implementation that
+             falsely expresses or implies that such content is sponsored
+             or endorsed by Google;<br>
+<a id="section_10_13_n"></a>
+               (n)   create user accounts by automated means or under
+               false or fraudulent pretenses, or obtain or attempt to
+               obtain multiple keys for the same URL;<br>
+               (o)   promote or provide instructional information about
+               illegal activities;<br>
+               (p)   promote physical harm or injury against any group
+               or individual; or<br>
+               (q)    transmit any viruses, worms, defects, Trojan horses,
+               or any items of a destructive nature.<br>
+</div>
+  <br>
+  <b>11.    Licenses from You to Google.</b><br>
+  <br>
+<a id="section_11_1"></a>
+  11.1    <u>Content License</u>.
+        Google claims no ownership over Your Content, and you retain copyright
+        and any other rights you already hold in Your Content. By submitting,
+        posting or displaying Your Content in the Service, you give Google a
+        perpetual, irrevocable, worldwide, royalty-free, and non-exclusive
+        license to reproduce, adapt, modify, translate, publicly perform,
+        publicly display and distribute Your Content through the Service
+        and as search results through Google Services.  This license is solely
+        for the purpose of enabling Google to operate the Service, to promote
+        the Service (including through public presentations), and to index
+        and serve such content as search results through Google Services.
+        If you are unable or unwilling to provide such a license to Your
+        Content, please see the <a href="faq.html#tos_optout" target="_top">FAQ</a> for
+        information on configuring your Maps API Implementation to opt out.
+
+  <br> <br> 11.2    <u>Brand Features License</u>. You grant to Google a
+  nontransferable, nonexclusive license during the Term to use Your Brand
+  Features to advertise that you are using the Service.<br> <br> 11.3
+  <u>Authority to Grant Licenses</u>.  You confirm and warrant to Google
+  that you have all the rights, power and authority necessary to grant the
+  above licenses.<br> <br> <b>12.    Terminating this Agreement.<br> <br>
+  </b>12.1    The Terms will continue to apply until terminated by either you
+  or Google as set out below.<br> <br> 12.2    You may terminate your legal
+  agreement with Google by discontinuing your use of the Service at any time,
+  and removing the Maps API code from your Maps API Implementation.  You do
+  not need to specifically inform Google when you stop using the Service.<br>
+
+  <br> 12.3    Google may, at any time, terminate its legal agreement with you
+  or cease providing all or any part of the Service immediately without any 
+  notice if:<br> 
+<br>
+<div style="margin-left: 40px;">
+<br>
+    (a) you have breached any provision of the Terms (or have acted in manner 
+    that clearly shows that you do not intend to, or are unable to comply 
+    with the provisions of the Terms); or
+<br>
+<br>
+    (b) Google is required to do so by law (for example, due to a change to 
+    the law governing the provision of the Service); or
+<br>
+<br>
+    (c) the Service relies on data or services provided by a third party 
+    partner and the relationship with such partner (x) has expired or been 
+    terminated or (y) requires Google to change the way Google provides the 
+    data or services through the Service; or
+<br>
+<br>
+    (d) providing the Service could create a substantial economic burden 
+    as determined by Google in its reasonable good faith judgment; or
+<br>
+<br>
+    (e) providing the Service could create a security risk or material 
+    technical burden as determined by Google in its reasonable good faith judgement.
+</div>
+<br>
+
+  <br> 12.4    Nothing in
+  this Section will affect Google's rights regarding provision of the Service
+  under Section 4 of the Terms.<br> <br> 12.5    When this legal agreement
+  comes to an end, those Terms that by their nature are intended to continue
+  indefinitely will continue to apply, including but not limited to: Sections 6
+  (Google's Proprietary Rights); 12.4 and 12.5 (Terminating this Agreement);
+  13 (Exclusion of Warranties); 14 (Limitation of Liability); 15 (Indemnity);
+  and 19 (General Legal Terms).<br> <br> <b>13.    EXCLUSION OF WARRANTIES.<br>
+  <br> </b>13.1    NOTHING IN THESE TERMS, INCLUDING SECTIONS 13 AND 14, WILL
+  EXCLUDE OR LIMIT GOOGLE'S WARRANTY OR LIABILITY FOR LOSSES THAT MAY NOT BE
+  LAWFULLY EXCLUDED OR LIMITED BY APPLICABLE LAW.  SOME JURISDICTIONS DO NOT
+  ALLOW THE EXCLUSION OF CERTAIN WARRANTIES OR CONDITIONS OR THE LIMITATION
+  OR EXCLUSION OF LIABILITY FOR CERTAIN TYPES OF LOSS OR DAMAGES. ACCORDINGLY,
+  ONLY THE LIMITATIONS THAT ARE LAWFUL IN YOUR JURISDICTION WILL APPLY TO YOU,
+  AND GOOGLE.S LIABILITY WILL BE LIMITED TO THE MAXIMUM EXTENT PERMITTED BY
+  LAW.<br> <br> 13.2    YOU EXPRESSLY UNDERSTAND AND AGREE THAT YOUR USE OF
+  THE SERVICE AND THE CONTENT IS AT YOUR SOLE RISK AND THAT THE SERVICE AND
+  THE CONTENT ARE PROVIDED "AS IS" AND "AS AVAILABLE."  IN PARTICULAR, GOOGLE,
+  ITS SUBSIDIARIES AND AFFILIATES, AND ITS LICENSORS AND THEIR SUPPLIERS,
+  DO NOT REPRESENT OR WARRANT TO YOU THAT:<br>
+<div style="margin-left: 40px;">
+              (a)    YOUR USE OF THE SERVICE WILL MEET YOUR REQUIREMENTS;<br>
+              (b)    YOUR USE OF THE SERVICE WILL BE UNINTERRUPTED, TIMELY,
+              SECURE OR FREE FROM ERROR;<br> (c)    ANY INFORMATION OBTAINED
+              BY YOU AS A RESULT OF YOUR USE OF THE SERVICE WILL BE ACCURATE
+              OR RELIABLE; AND<br> (d)    THAT DEFECTS IN THE OPERATION OR
+              FUNCTIONALITY OF ANY SOFTWARE PROVIDED TO YOU AS PART OF THE
+              SERVICE WILL BE CORRECTED.<br>
+</div>
+  <br> 13.3    ANY CONTENT OBTAINED THROUGH THE USE OF THE GOOGLE SERVICES
+  IS DONE AT YOUR OWN DISCRETION AND RISK AND YOU WILL BE SOLELY RESPONSIBLE
+  FOR ANY DAMAGE TO YOUR COMPUTER SYSTEM OR OTHER DEVICE, LOSS OF DATA,
+  OR ANY OTHER DAMAGE OR INJURY THAT RESULTS FROM THE DOWNLOAD OR USE OF
+  ANY SUCH CONTENT.<br> <br> 13.4    NO ADVICE OR INFORMATION, WHETHER
+  ORAL OR WRITTEN, OBTAINED BY YOU FROM GOOGLE, OR THROUGH OR FROM THE
+  SERVICE OR CONTENT, WILL CREATE ANY WARRANTY NOT EXPRESSLY STATED IN THE
+  TERMS.<br> <br> 13.5    GOOGLE, ITS LICENSORS AND THEIR SUPPLIERS FURTHER
+  EXPRESSLY DISCLAIM ALL WARRANTIES AND CONDITIONS OF ANY KIND, WHETHER
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES
+  AND CONDITIONS OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NON-INFRINGEMENT.<br> <br> <b>14.    LIMITATION OF LIABILITY.</b><br> <br>
+  14.1 SUBJECT TO SECTION 13.1, YOU EXPRESSLY UNDERSTAND AND AGREE THAT GOOGLE,
+  ITS SUBSIDIARIES AND AFFILIATES, AND GOOGLE.S LICENSORS AND THEIR SUPPLIERS,
+  WILL NOT BE LIABLE TO YOU FOR:<br>
+<div style="margin-left: 40px;">
+  <br>
+              (a)    ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL
+              OR EXEMPLARY DAMAGES THAT MAY BE INCURRED BY YOU, HOWEVER
+              CAUSED AND UNDER ANY THEORY OF LIABILITY (INCLUDING, BUT NOT
+              BE LIMITED TO, ANY LOSS OF PROFIT (WHETHER INCURRED DIRECTLY
+              OR INDIRECTLY), ANY LOSS OF GOODWILL OR BUSINESS REPUTATION,
+              ANY LOSS OF DATA, COST OF PROCUREMENT OF SUBSTITUTE GOODS OR
+              SERVICES, OR OTHER INTANGIBLE LOSS); OR<br>
+  <br>
+              (b)    ANY LOSS OR DAMAGE AS A RESULT OF:<br>
+<div style="margin-left: 40px;">
+                      (i)    ANY RELIANCE PLACED BY YOU ON THE COMPLETENESS,
+                      ACCURACY OR EXISTENCE OF ANY ADVERTISING, OR AS A
+                      RESULT OF ANY RELATIONSHIP OR TRANSACTION BETWEEN YOU
+                      AND ANY ADVERTISER OR SPONSOR WHOSE ADVERTISING APPEARS
+                      ON THE GOOGLE SERVICES;<br> (ii)    ANY CHANGES THAT
+                      GOOGLE MAY MAKE TO THE SERVICE, OR ANY PERMANENT OR
+                      TEMPORARY CESSATION IN THE PROVISION OF THE SERVICE
+                      (OR ANY FEATURES WITHIN THE SERVICE);<br> (iii)    THE
+                      DELETION OF, CORRUPTION OF, OR FAILURE TO STORE, ANY
+                      CONTENT AND OTHER COMMUNICATIONS DATA MAINTAINED OR
+                      TRANSMITTED BY OR THROUGH YOUR USE OF THE SERVICE;<br>
+                      (iv)    YOUR FAILURE TO PROVIDE GOOGLE WITH ACCURATE
+                      ACCOUNT INFORMATION; OR<br> (v)    YOUR FAILURE TO
+                      KEEP YOUR PASSWORD OR ACCOUNT DETAILS SECURE AND
+                      CONFIDENTIAL.<br>
+</div></div>
+  <br> 14.2    THE LIMITATIONS ON GOOGLE'S LIABILITY TO YOU IN SECTION 14.1
+  ABOVE WILL APPLY WHETHER OR NOT GOOGLE, ITS SUBSIDIARIES, AFFILIATES, LICENSORS OR THEIR
+  SUPPLIERS HAVE BEEN ADVISED OF OR SHOULD HAVE BEEN AWARE OF THE POSSIBILITY
+  OF ANY SUCH LOSSES OR DAMAGES.<br> <br> <b>15.    Indemnity.</b><br>
+  <br> 15.1    You hereby agree to indemnify, defend and hold Google, its
+  strategic partners, officers, directors, agents, affiliates, licensors
+  and their suppliers ("<b>the Indemnified Parties</b>") harmless from and
+  against any claim or liability arising out of:<br>
+<div style="margin-left: 40px;">
+             (a) your use of the Maps APIs in breach of the Terms or
+             applicable policies;<br> (b) your Maps API Implementation;<br>
+             (c) any use by users of your Maps API Implementation;<br> (d)
+             any claim that your Maps API Implementation or Your Content
+             violates any applicable law, including but not limited to any
+             claim that your Maps API Implementation infringes the rights
+             of a third party. <br>
+</div>
+  <br> 15.2    You will cooperate as fully as reasonably required in the
+  defense of any claim.  Google reserves the right, at its own expense,
+  to assume the exclusive defense and control of any matter subject to
+  indemnification by you.  You acknowledge that damages for improper use of
+  the Maps APIs may be irreparable; therefore, Google is entitled to seek
+  equitable relief, including but not limited to preliminary injunction
+  and injunction, in addition to all other remedies.<br> <br> <b>16.
+  Copyright Policies.</b><br> <br> It is Google's policy to respond to
+  notices of alleged copyright infringement that comply with applicable
+  international intellectual property law (including, in the United States,
+  the Digital Millennium Copyright Act) and to terminate the accounts of
+  repeat infringers.  Details of Google's policy can be found <a title="here"
+  href="http://www.google.com/dmca.html" id="y7:c" target="_top">here</a>.<br> <br> <b>17.
+  Other Content</b>.<br> <br> 17.1    The Service may include hyperlinks to
+  other websites or content or resources.  Google has no control over any
+  web sites or resources that are provided by companies or persons other
+  than Google.  You acknowledge and agree that Google is not responsible
+  for the availability of any such external sites or resources, and does not
+  endorse any advertising, products or other materials on or available from
+  such websites or resources.<br> <br> 17.2    You acknowledge and agree
+  that Google is not liable for any loss or damage that may be incurred by
+  you as a result of the availability of those external sites or resources,
+  or as a result of any reliance placed by you on the completeness, accuracy
+  or existence of any advertising, products, or other materials on, or
+  available from, such websites or resources.<br> <br> <b>18.    Language
+  of the Terms.<br> <br> </b>18.1    Where Google has provided you with a
+  translation of the English language version of the Terms, you agree that
+  the translation is provided for your convenience only and that the English
+  language version of the Terms will govern your relationship with Google.<br>
+  <br> 18.2    If there is any contradiction between the English language
+  version of the Terms and a translation of the Terms, the English language
+  version will take precedence.<br> <br> <b>19.    General Legal Terms.<br>
+  <br> </b>19.1    <u>Notices</u>.  You agree that Google may provide you
+  with notices, including those regarding changes to the Terms, by email,
+  regular mail, or postings on the Service.<br> <br> 19.2    <u>No Waiver</u>.
+  You agree that if Google does not exercise or enforce any legal right or
+  remedy contained in the Terms (or that Google has the benefit of under
+  any applicable law), this will not be taken to be a formal waiver of
+  Google's rights and that those rights or remedies will still be available
+  to Google.  Any waiver of any provision of these Terms will be effective
+  only if Google expressly states in a signed writing that it is waiving a
+  specified Term.<br> <br> 19.3    <u>Severability</u>.  If any court of law
+  that has jurisdiction rules that any provision of these Terms is invalid,
+  then that provision will be removed from the Terms without affecting the
+  rest of the Terms.  The remaining provisions of the Terms will continue to
+  be valid and enforceable.<br> <br> 19.4    <u>Third Party Beneficiaries</u>.
+  You acknowledge and agree that each member of the group of companies of which
+  Google is the parent will be third party beneficiaries to the Terms and that
+  such other companies will be entitled to directly enforce, and rely upon,
+  any provision of the Terms that confers a benefit on (or rights in favor
+  of) them.  Other than this, no other person or company will be a third party
+  beneficiary to the Terms.<br> <br> 19.5    <u>Assignment</u>.  The Terms
+  may be assigned by Google and will inure to the benefit of Google, its
+  successors and assigns.<br> <br> 19.6    <u>Governing Law and Jurisdiction;
+  Injunctive Relief</u>.  The Terms, and your relationship with Google under
+  the Terms, will be governed by the laws of the State of California, USA,
+  without regard to its conflict of laws provisions.  You and Google agree to
+  submit to the exclusive jurisdiction of the courts located in the County
+  of Santa Clara, California, USA, to resolve any legal matter arising from
+  the Terms.  Notwithstanding this, you agree that Google will be allowed
+  to apply for injunctive remedies (or an equivalent type of urgent legal
+  relief) in any jurisdiction.<br> <br> 19.7    <u>Complete Agreement</u>.
+  The Terms constitute the whole legal agreement between you and Google and
+  govern your use of the Service and Content, and completely replace and
+  supersede any prior agreements between you and Google, written or oral,
+  in relation to the Service and Content.<br> <br> <br>
+</div> </ol>
+
+</div>
+
+<form onsubmit="return checkForm(this)">
+  <div class="terms">
+    <table style="width:95%">
+      <tr>
+        <td style="width:1em"><input type="checkbox" name="agreeTerms" value="1"/></td>
+        <td>I have read and agree with the terms and conditions <span class="printable">(<a href="terms.html">printable version</a>)</span></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          My web site URL:
+          <input type="text" name="url" value="http://"/> 
+        </td>
+      </tr>
+      <tr>
+       <td>
+       </td>
+       <td>
+  Tip: Signing up a key for <i>http://yourdomain.com</i> is usually the best practice, 
+  as it will work for all subdomains and directories.
+  See this <a href="faq.html#keysystem">FAQ</a> for more information.
+       </td>
+      <tr>
+        <td></td>
+        <td><input type="submit" value="Generate API Key"/></td>
+      </tr>
+    </table>
+  </div>
+</form>
+
+</div>
+
+
+<div id="signup_thank_you" style="display: none;">
+  <h1>Thank You for Signing Up for a Google Maps API Key!</h1>
+
+<p>Your key is:</p>
+
+<pre class="code">{{KEY}}</pre>
+
+<p><span style="color:red">Note: </span> for more information on the API key system, consult <a href="http://code.google.com/apis/maps/faq.html#keysystem">http://code.google.com/apis/maps/faq.html#keysystem</a>.</p>
+
+<p>How you use your key depends on what Maps API product or service you use. Your key is valid for use within the entire family of Google Maps API solutions. The following examples show how to use your key within the Maps API product family.</p>
+
+<h2>JavaScript Maps API Example</h2>
+
+<p>Within the JavaScript Maps API, place the key within the script tag when you load the API:</p>
+
+<pre class="code">
+...
+  // Note: you will need to replace the sensor parameter below with either an explicit true or false value.
+  &lt;script src="http://maps.google.com/maps?file=api&amp;amp;v=2&amp;amp;sensor=<i>true_or_false</i>&amp;amp;key={{KEY}}" type="text/javascript"&gt;&lt;/script&gt;
+...
+</pre>
+
+<p>See <a href="http://code.google.com/apis/maps/documentation/introduction.html#Loading_the_Maps_API">Loading the Maps API</a> in the JavaScript Maps API documentation for more information.</p>
+
+<h2>Maps API for Flash Example</h2>
+
+<p>Within the Maps API for Flash, you may place the key within an MXML declaration, declare it directly within code as a <code>Map.key</code> property, or as a <code>flashVars</code> property within the HTML container. A sample MXML declaration is shown below.</p>
+
+<pre class="code">
+...
+  &lt;maps:Map xmlns:maps="com.google.maps.*" id="map" mapevent_mapready="onMapReady(event)" width="100%" height="100%"
+    key="{{KEY}}"/&gt;
+...
+</pre>
+
+<p>See <a href="http://code.google.com/apis/maps/documentation/flash/tutorial-flex.html#DeclaringMaps">Declaring Maps</a> in the Maps API for Flash documentation for more information.</p>
+
+<h2>HTTP Service Example</h2>
+
+<p>Within a Maps API HTTP Service, such as the <a href="http://code.google.com/apis/maps/documentation/staticmaps/">Static Maps API</a> or <a href="http://code.google.com/apis/maps/documentation/geocoding/">Geocoding Service</a>, place the key directly in the request URL:</p>
+
+<pre class="code">
+http://maps.google.com/maps/geo?q=1600+Amphitheatre+Parkway,+Mountain+View,+CA&amp;output=json&amp;oe=utf8\
+&amp;sensor=true_or_false&amp;key={{KEY}}
+</pre>
+
+<p>Note that for all examples, you must replace the <code>sensor</code> parameter with a valid value, based on whether your application uses a sensor to determine a user's location. Check out the <a href="http://code.google.com/apis/maps/documentation/index.html#SpecifyingSensor">API documentation</a> for more information.</p>
+
+</div>
+
+        <!-- end body text -->
+
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

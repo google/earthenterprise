@@ -1,0 +1,63 @@
+#-*- Python -*-
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+import sys
+import os
+import commands
+
+env = Environment()
+
+# process commandline arguments
+installdir = ARGUMENTS.get('installdir', 0)
+
+# this fallback really shouldn't be used, whenever you specify the install
+# target you should also specify an install dir.
+# But having a default makes the rest of the SCons code easier
+if (not installdir) and ('install' in COMMAND_LINE_TARGETS):
+   print "installdir=... must be specified with install target"
+   Exit(1)
+
+tutorials_dir = installdir + '/tutorial'
+root_dir = tutorials_dir + '/opt/google/share/tutorials/fusion/'
+
+def makeHardLinks(instdir, target_dir, excluded_list):
+    # get contents of target_dir and make hard links to files in instdir
+    # recurse down the directories
+
+    contents = os.listdir(target_dir)
+    target_dir = target_dir + "/"
+    # Ensure the install dir exists at each step
+    commands.getstatusoutput("mkdir -p " + instdir)
+    for file in contents:
+        if file in excluded_list:
+            continue
+        target_file = target_dir + file
+        if os.path.isdir(target_file):
+            subdir = instdir + "/" + file
+            makeHardLinks(subdir, target_file,
+                                             excluded_list)
+        else:
+            commands.getstatusoutput("ln \"" + target_file + "\" " +
+                                     instdir)
+
+# Clean install dir (note: the current sconscripts leave stuff behind, like
+# directories).
+if env.GetOption('clean'):
+    # clean the search and getomcat install folders.
+    commands.getstatusoutput("rm -rf " + tutorials_dir)
+else:
+    makeHardLinks(root_dir, 'FusionTutorial/', ['.svn'])

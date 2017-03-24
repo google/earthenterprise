@@ -1,0 +1,67 @@
+#-*- Python -*-
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+Import('env')
+
+gepackgen = env.executable('gepackgen',
+                           ['gepackgen.cpp',
+                            'RasterBlender.cpp',
+                            'RasterMerger.cpp',
+                            'ImageryPackgenTraverser.cpp',
+                            'TmeshGenerator.cpp',
+                            'TmeshPackgenTraverser.cpp',
+                            'vipm/heap.cpp',
+                            'vipm/procmesh.cpp',
+                            'vipm/compress.cpp',
+                           ],
+                           LIBS=['geautoingest', 'khrasterffio', 'gegdal',
+                                 'geraster', 'khffio', 'gefconfigutil',
+                                 'geutil', 'gecommon', 'geprotobuf',
+                                 'qt-mt', 'geos'])
+
+pyr_info = env.executable('pyr_info', ['pyrinfo.cpp', '../tools/geImageWriter.o'],
+                          LIBS=['geraster', 'geutil', 'gecommon',
+                                'gerastergdal', 'gegdal', 'gdal', 'qt-mt'])
+
+# ***** Make a copy of the env and add the libs shared by these last two. *****
+# ***** They share a .cpp file and SCons whines if they override the LIBS
+# ***** themselves.
+env = env.Clone();
+env.Append(LIBS=['geraster', 'gegdal', 'gegdalutil', 'gdal', 'geutil', 'gecommon', 'qt-mt', 'geos'])
+
+gerasterimport = env.executable('gerasterimport',
+                                ['gerasterimport.cpp',
+                                 'RasterGenerator.cpp'])
+
+gerasterextract = env.executable('gerasterextract',
+                                 ['gerasterextract.cpp',
+                                  'RasterGenerator.cpp'])
+
+geraster2kml = env.executable('geraster2kml',
+                              ['geraster2kml.cpp'],
+                              LIBS=['geautoingest', 'geraster', 'gemiscconfig',
+                                    'geutil', 'gecommon', 'qt-mt'])
+
+geraster2gigapxl = env.executable('geraster2gigapxl',
+                                  ['geraster2gigapxl.cpp'])
+
+# ***************************************************************************
+
+
+env.install('fusion_bin', [gerasterimport, gepackgen, geraster2kml])
+env.install('tools_bin', [geraster2gigapxl])
+

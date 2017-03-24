@@ -1,0 +1,939 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+ 
+ 
+
+
+ 
+
+  
+  
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/articles/phpsqlsearch_v3.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Creating a Store Locator with PHP, MySQL & Google Maps - Google Maps API Family - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/maps/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../css/iehacks.css"><![endif]-->
+
+    <link href="../../../css/semantic_headers.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    
+    
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  <a href="#gc-pagecontent">Skip to page content</a>
+  <a href="#gc-toc">Skip to main navigation</a>
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps API Family</h1>
+  <ul id="articles" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="../index.html" title="Google Maps API Family home page">Home</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../faq.html" title="Answers to frequently asked questions about Google Maps API Family">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="index.html" class="selected" title="Focused articles and tutorials for Google Maps API Family developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps API Family blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="../forum/index.html" title="Google Maps API Family developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../terms.html" title="Google Maps API Family terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../index.html">Maps API Family</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps Javascript API V3</h2>
+         <ul>
+           <li><a href="../documentation/javascript/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+      <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../documentation/javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+  <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../documentation/flash/index.html">Home Page</a></li>
+          <li><a href="../documentation/flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../documentation/mapsdata/index.html">Home Page</a></li>
+          <li><a href="../documentation/mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+     <div class="line"></div>
+      <ul>
+        <li><h2><a href="../documentation/webservices/index.html">Maps Web Services</a></h2>
+         <ul>
+           <li><a href="../documentation/geocoding/index.html">Geocoding Guide</a></li>
+           <li><a href="../documentation/directions/index.html">Directions Guide</a></li>
+           <li><a href="../documentation/elevation/index.html">Elevation Guide</a></li>
+           <li><a href="../documentation/places/index.html">Places Guide</a></li>
+         </ul>
+       </li>
+      </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../documentation/staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li>
+            <h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../documentation/localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../documentation/localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+      <div class="promo">
+     <p><a href="../documentation/premier/index.html">Google Maps API Premier</a></p><p>Includes enterprise licensing and support</p></div>
+
+        <a class="hidden" href="#gc-topnav-anchor">More Google Maps API Family resource links</a>
+      </div>
+      
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Creating a Store Locator with PHP, MySQL & Google Maps</h1>
+
+
+<!-- ########## PAGE CONTENT ########## -->
+  
+<div class=i>
+<i>Pamela Fox, Google Geo APIs Team</i>
+<br>
+<i>August 2009</i>
+
+<br><br>
+<p class="note">
+The <a href="phpsqlsearch.html">original version</a> of this
+article used the <a href="../index.html">JavaScript Maps API v2</a>. This new
+version uses the <a href="../documentation/javascript/index.html">JavaScript Maps API v3</a>.
+</p>
+
+<p class="para"> This tutorial is intended for developers who are familiar with
+PHP/MySQL, and want to learn how to use Google Maps with a MySQL
+database to create a store locator-type app. After completing this tutorial,
+you will have a database of locations and a webpage that lets a user enter
+their address and see markers on a map for the locations nearest to them,
+within a chosen distance restriction. Since the Maps API v3 is designed to
+work well on modern mobile browsers, this article will show how to create
+a website that displays nicely on them.</p>
+<p class="para">
+The tutorial is broken up into the following steps:
+</p>
+<ul>
+<li><a href="#createtable">Creating the Table</a></li>
+
+<li><a href="#populatetable">Populating the Table</a></li>
+<li><a href="#findnearsql">Finding Locations with MySQL</a></li>
+<li><a href="#outputxml">Outputting XML with PHP</a></li>
+<li><a href="#createmap">Creating the Map</a></li>
+<li><a href="#wheretogo">Where to Go From Here</a></li>
+</ul>
+<br>
+<a name="createtable"></a><h3>Creating the Table</h3>
+<p class="para"> When you create the MySQL table, you want to pay particular
+attention to the <code>lat</code> and <code>lng</code> attributes.
+With the current zoom capabilities of Google Maps, you should only
+need 6 digits of precision after the decimal. To keep the storage
+space required for your table at a minimum, you can specify that the
+
+<code>lat</code> and <code>lng</code> attributes are floats of size
+(10,6). That will let the fields store 6 digits after the decimal,
+plus up to 4 digits before the decimal, e.g. -123.456789 degrees.
+Your table should also have an <code>id</code> attribute to serve as
+the primary key.
+<p class="para"> <strong>Note:</strong> This tutorial uses location data that
+already have latitude and longitude information needed to plot
+corresponding markers. If you're trying to use your own data that
+don't yet have that information, use a batch geocoding service to
+convert the addresses into latitudes/longitudes. You can check out <a href="phpsqlgeocode.html">our tutorial</a> on using the Google Maps API geocoder, or check out this link for a good list of geocoders: <a href="http://groups.google.com/group/Google-Maps-API/web/resources-non-google-geocoders" target="_blank">http://groups.google.com/group/Google-Maps-API/web/resources-non-google-geocoders</a>
+
+</p>
+<p class="para"> If you prefer interacting with your database through the
+phpMyAdmin interface, here's a screenshot of the table creation.
+</p>
+<p class="para">
+<img src="http://gmaps-samples-v3.googlecode.com/svn/trunk/articles/phpsqlsearch/phpsqlsearch_createtable.jpg" style="border: 1px solid grey; margin-left: 2em;" width="600">
+</p>
+<p class="para"> If you don't have access to phpMyAdmin or prefer using SQL
+commands instead, here's the SQL statement that creates the table. <a href="http://gmaps-samples-v3.googlecode.com/svn/trunk/articles/phpsqlsearch/phpsqlsearch_createtable.sql" target="_blank">phpsqlajax_createtable.sql</a>:</p>
+<pre class="prettyprint">CREATE TABLE `markers` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+  `name` VARCHAR( 60 ) NOT NULL ,
+  `address` VARCHAR( 80 ) NOT NULL ,
+  `lat` FLOAT( 10, 6 ) NOT NULL ,
+  `lng` FLOAT( 10, 6 ) NOT NULL 
+) ENGINE = MYISAM ;
+</pre>
+<br>
+<a name="populatetable"></a><h3>Populating the Table</h3>
+
+<p class="para"> After creating the table, it's time to populate it with
+data. The sample data provided below is for about 180 pizzarias scattered across the United States. In phpMyAdmin, you can use the IMPORT tab to import various file formats, including CSV (comma-separated values). Microsoft Excel and Google Spreadsheets both export to CSV format, so you can easily
+transfer data from spreadsheets to MySQL tables through exporting/importing CSV files. </p>
+<p class="para">Here's a snippet of the sample data in CSV format. <a href="http://gmaps-samples-v3.googlecode.com/svn/trunk/articles/phpsqlsearch/phpsqlsearch_data.csv" target="_blank">phpsqlsearch_data.csv</a>:</p>
+<pre class="prettyprint">Frankie Johnnie & Luigo Too,"939 W El Camino Real, Mountain View, CA",37.386339,-122.085823
+Amici's East Coast Pizzeria,"790 Castro St, Mountain View, CA",37.38714,-122.083235
+Kapp's Pizza Bar & Grill,"191 Castro St, Mountain View, CA",37.393885,-122.078916
+Round Table Pizza: Mountain View,"570 N Shoreline Blvd, Mountain View, CA",37.402653,-122.079354
+Tony & Alba's Pizza & Pasta,"619 Escuela Ave, Mountain View, CA",37.394011,-122.095528
+Oregano's Wood-Fired Pizza,"4546 El Camino Real, Los Altos, CA",37.401724,-122.114646
+...
+</pre>
+<p class="para">Here's a screenshot of the import options used to transform this
+CSV into table data:</p>
+<p class="para"> <img src="http://gmaps-samples-v3.googlecode.com/svn/trunk/articles/phpsqlsearch/phpsqlsearch_importdata.jpg" style="border: 1px solid grey; margin-left: 2em;" width="600">
+
+</p>
+<p class="para">If you'd rather not use the phpMyAdmin interface, here's a snippet of the SQL
+statements that accomplish the same results. <a href="http://gmaps-samples-v3.googlecode.com/svn/trunk/articles/phpsqlsearch/phpsqlsearch_data.sql" target="_blank">phpsqlsearch_data.sql</a>: </p>
+<pre class="prettyprint">INSERT INTO `markers` (`name`, `address`, `lat`, `lng`) VALUES ('Frankie Johnnie & Luigo Too','939 W El Camino Real, Mountain View, CA','37.386339','-122.085823');
+INSERT INTO `markers` (`name`, `address`, `lat`, `lng`) VALUES ('Amici\'s East Coast Pizzeria','790 Castro St, Mountain View, CA','37.38714','-122.083235');
+INSERT INTO `markers` (`name`, `address`, `lat`, `lng`) VALUES ('Kapp\'s Pizza Bar & Grill','191 Castro St, Mountain View, CA','37.393885','-122.078916');
+INSERT INTO `markers` (`name`, `address`, `lat`, `lng`) VALUES ('Round Table Pizza: Mountain View','570 N Shoreline Blvd, Mountain View, CA','37.402653','-122.079354');
+INSERT INTO `markers` (`name`, `address`, `lat`, `lng`) VALUES ('Tony & Alba\'s Pizza & Pasta','619 Escuela Ave, Mountain View, CA','37.394011','-122.095528');
+INSERT INTO `markers` (`name`, `address`, `lat`, `lng`) VALUES ('Oregano\'s Wood-Fired Pizza','4546 El Camino Real, Los Altos, CA','37.401724','-122.114646');
+...
+</pre>
+<br>
+<a name="findnearsql"></a><h3>Finding Locations with MySQL</h3>
+<p class="para">
+To find locations in your <code>markers</code> table that are within a certain radius distance of a given latitude/longitude, you can use a <code>SELECT</code> statement based on the Haversine formula. The Haversine formula is used generally for computing great-circle distances between two pairs of coordinates on a sphere. An in-depth mathemetical explanation is given by <a href="http://en.wikipedia.org/wiki/Haversine_formula">Wikipedia</a> and a good discussion of the formula as it relates to programming is <a href="http://www.movable-type.co.uk/scripts/latlong.html">on Movable Type's site</a>.
+
+</p>
+<p>Here's the SQL statement that will find the closest 20 locations that are within a radius of 25 miles to the 37, -122 coordinate. It calculates the distance based on the latitude/longitude of that row and the target latitude/longitude, and then asks for only rows where the distance value is less than 25, orders the whole query by distance, and limits it to 20 results.
+To search by kilometers instead of miles, replace 3959 with 6371.
+</p>
+<pre class="prettyprint">
+SELECT id, ( 3959 * acos( cos( radians(37) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(-122) ) + sin( radians(37) ) * sin( radians( lat ) ) ) ) AS distance FROM markers HAVING distance < 25 ORDER BY distance LIMIT 0 , 20;
+
+</pre>
+<a name="outputxml"></a><h3>Outputting XML with PHP</h3>
+<p class="para">
+Now that you have the table and the SQL statement, you can put them together to 
+output the search results into an XML format that your map can retrieve through 
+asynchronous JavaScript calls. If the code provided here does not work with your 
+PHP configuration, read through the <a href="phpsqlajax.html#outputxml">Outputting XML with PHP</a>
+section of our Using PHP/MySQL with Google Maps article. The only difference 
+between the various PHP code samples shown there and the code needed for this 
+article will be the SQL statement and the rows that are outputted in the XML.
+</p>
+<p class="para"> First, you should put your database connection information in a
+separate file. This is generally a good idea whenever you're using PHP
+to access a database, as it keeps your confidential information in a
+file that you won't be tempted to share. In the Maps API forum, we've
+occasionally had people accidentally publish their database connection
+information when they were just trying to debug their XML-outputting
+code. The file should look like this, but with your own database
+information filled in. <a href="http://gmaps-samples-v3.googlecode.com/svn/trunk/articles/phpsqlsearch/phpsqlsearch_dbinfo.php" target="_blank">phpsqlsearch_dbinfo.php</a>: </p>
+
+<pre class="prettyprint">&lt;?
+$username="username";
+$password="password";
+$database="username-databaseName";
+?&gt;
+
+</pre>
+<h4>Using PHP's DOM Functions to Output XML</h4>
+<p class="para">
+First, check your configuration and see if you're using PHP5. If so, continue to 
+the explanation and code below. If you aren't, then you can use 
+<code>echo</code> to output XML, as used in 
+<a href="http://gmaps-samples-v3.googlecode.com/svn/trunk/articles/phpsqlsearch/phpsqlsearch_genxml_php4.php">this sample code</a>.
+</p>
+<p class="para">
+In PHP, first initialize a new XML document and create the "markers" parent node. Then connect to the database, execute the <code>SELECT</code> by distance query discussed above on the markers table, and iterate through the results.For each row in the table (each location), create a new XML node with the row attributes as XML attributes, and append it to the parent node. Then dump the XML to the screen.
+
+</p>
+<p class="para">
+<strong>Note: </strong>Since this PHP sends user input in a MySQL statement, this code uses the <code>mysql_real_escape_string</code> technique of avoiding SQL injection. A more elegant solution may be to use <a href="http://devzone.zend.com/node/view/id/686">MySQL prepared statements</a>, though implementation varies on the PHP version and DB wrapper used.
+</p>
+<p class="para">
+<strong>Note: </strong> If your database contains international characters or you otherwise need to force UTF-8 output, you can use <code><a href="http://us2.php.net/manual/en/function.utf8-encode.php">utf8_encode</a></code> on the outputted data.
+
+</p>
+<p class="para">
+The PHP file that does all that is shown below (<a href="http://gmaps-samples-v3.googlecode.com/svn/trunk/articles/phpsqlsearch/phpsqlsearch_genxml.php">phpsqlsearch_genxml.php</a>):
+</p>
+<pre class="prettyprint">&lt;?php  
+require("phpsqlsearch_dbinfo.php");
+
+// Get parameters from URL
+$center_lat = $_GET["lat"];
+$center_lng = $_GET["lng"];
+$radius = $_GET["radius"];
+
+// Start XML file, create parent node
+$dom = new DOMDocument("1.0");
+$node = $dom-&gt;createElement("markers");
+$parnode = $dom-&gt;appendChild($node);
+
+// Opens a connection to a mySQL server
+$connection=mysql_connect (localhost, $username, $password);
+if (!$connection) {
+  die("Not connected : " . mysql_error());
+}
+
+// Set the active mySQL database
+$db_selected = mysql_select_db($database, $connection);
+if (!$db_selected) {
+  die ("Can\'t use db : " . mysql_error());
+}
+
+// Search the rows in the markers table
+$query = sprintf("SELECT address, name, lat, lng, ( 3959 * acos( cos( radians('%s') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians('%s') ) + sin( radians('%s') ) * sin( radians( lat ) ) ) ) AS distance FROM markers HAVING distance &lt; '%s' ORDER BY distance LIMIT 0 , 20",
+  mysql_real_escape_string($center_lat),
+  mysql_real_escape_string($center_lng),
+  mysql_real_escape_string($center_lat),
+  mysql_real_escape_string($radius));
+$result = mysql_query($query);
+
+$result = mysql_query($query);
+if (!$result) {
+  die("Invalid query: " . mysql_error());
+}
+
+header("Content-type: text/xml");
+
+// Iterate through the rows, adding XML nodes for each
+while ($row = @mysql_fetch_assoc($result)){
+  $node = $dom-&gt;createElement("marker");
+  $newnode = $parnode-&gt;appendChild($node);
+  $newnode-&gt;setAttribute("name", $row['name']);
+  $newnode-&gt;setAttribute("address", $row['address']);
+  $newnode-&gt;setAttribute("lat", $row['lat']);
+  $newnode-&gt;setAttribute("lng", $row['lng']);
+  $newnode-&gt;setAttribute("distance", $row['distance']);
+}
+
+echo $dom-&gt;saveXML();
+?&gt;
+
+</pre>
+<h4>Checking That the XML Output Works</h4>
+<p class="para"> Call this PHP script from the browser to make sure it's 
+producing valid XML. If you suspect there's a problem with connecting to your
+database, you may find it easier to debug if you remove the line in
+the file that sets the header to the <code>text/xml</code> content
+type, as that usually causes your browser to try to parse XML and may
+make it difficult to see your debugging messages. </p>
+<p class="para">
+If the script is working correctly and you append reasonable sample query 
+parameters to the URL (e.g. <code>?lat=37&lng=-122&radius=25</code>),
+you should see XML output like this 
+(<a href="http://gmaps-samples-v3.googlecode.com/svn/trunk/articles/phpsqlsearch/phpsqlsearch_expectedoutput.xml" target="_blank">phpsqlsearch_expectedoutput.xml</a>):
+
+</p>
+<pre class="prettyprint">
+&lt;?xml version="1.0"?&gt;
+&lt;markers&gt;&lt;marker name="Round Table Pizza: Mountain View" address="570 N Shoreline Blvd, Mountain View, CA" lat="37.402653" lng="-122.079353" distance="0.38091455044131"/&gt;
+&lt;marker name="Kapp's Pizza Bar &amp; Grill" address="191 Castro St, Mountain 
+     View, CA" lat="37.393887" lng="-122.078918" distance="0.5596115438175"/&gt;
+&lt;marker name="Amici's East Coast Pizzeria" address="790 Castro St, Mountain View, CA" lat="37.387138" lng="-122.083237" distance="1.0796074495809"/&gt;
+&lt;marker name="Frankie Johnnie &amp; Luigo Too" address="939 W El Camino Real, Mountain View, CA" lat="37.386337" lng="-122.085823" distance="1.2044231336188"/&gt;
+&lt;marker name="Tony &amp; Alba's Pizza &amp; Pasta" address="619 Escuela Ave, Mountain View, CA" lat="37.394012" lng="-122.095528" distance="1.3156538737837"/&gt;&lt;marker name="Round Table Pizza: Sunnyvale-Mary-Central Expy" address="415 N Mary Ave, Sunnyvale, CA" lat="37.390038" lng="-122.042030" distance="1.84565061776"/&gt;
+&lt;marker name="Oregano's Wood-Fired Pizza" address="4546 El Camino Real, Los Altos, CA" lat="37.401726" lng="-122.114647" distance="2.2887425990519"/&gt;
+...
+&lt;/markers&gt;
+</pre>
+<br>
+<a name="createmap"></a><h3>Creating the Map</h3>
+
+<p class="para"> Once you are getting correct XML output in your browser,
+, it's time to create the map with JavaScript. If you have never created a
+v3 Google Map, please try some of the basic examples in the documentation
+to make sure you understand the basics of creating a map.
+</p>
+
+<h4>Setting Up the Page Layout</h4>
+
+<p class="para">Since one of the objectives is to have this store locator 
+display nicely in a mobile browser, you need to customize the HTML
+to suit mobile browsers better. First, instead of using a sidebar to display
+a list of all the search results, you can use a dropdown menu. A dropdown menu
+takes little space, and mobile browsers will display the options in a large,
+easy to read list once the dropdown is selected. Then, set the CSS width
+of your dropdown menu and map to be 100%. This will ensure that it always fills
+the mobile screen space.</p>
+
+<pre class="prettyprint">
+ &lt;div&gt;&lt;select id="locationSelect" style="width:100%;visibility:hidden"&gt;&lt;/select&gt;&lt;/div&gt;
+ &lt;div id="map" style="width: 100%; height: 80%"&gt;&lt;/div&gt;
+</pre>
+
+<h4>Searching Near a Geocode</h4>
+
+<p class="para">The PHP script takes latitude and longitude parameters
+in order to perform the search. Since most people who use your map will
+know their address but not their coordinates, you can use the
+<code>Geocoder</code> class to turn their address into a coordinate.
+Create a button on the page and hook it up to the <code>searchLocations</code>
+function shown below which just passes in the address from the textbox to the
+asynchronous <code>Geocoder.doGeocode</code> function, gets a
+<code>LatLng</code> in response, and sends it off to the
+<code>searchLocationsNear</code> function if the geocode was successful.
+</p>
+
+<pre class="prettyprint">
+function searchLocations() {
+  var address = document.getElementById("addressInput").value;
+  var geocoder = new google.maps.Geocoder();
+  geocoder.geocode({address: address}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+      searchLocationsNear(results[0].geometry.location);
+    } else {
+      alert(address + ' not found');
+    }
+  });
+}
+</pre>
+
+<h4>Loading the XML Results</h4>
+<p class="para">
+After you know the latitude and longitude of the user entered location,
+you need to pass that to the PHP script and process the XML that is outputted.
+To load the XML file into the page, you can take advantage of the browser-provided
+<code><a href="http://www.w3.org/TR/2009/WD-XMLHttpRequest-20090820/">XMLHttpRequest</a></code> object. 
+This object lets you retrieve a file
+that resides on the same domain as the requesting webpage, and is the basis
+of "AJAX" programming. The JS API v2 provided a built-in <code>GDownloadUrl</code>
+function that wrapped this functionality, but as API v3 is designed to be
+compact, it does not offer an equivalent wrapper function.
+</p>
+<p>
+So, you can define your own function for loading the file, and call it
+<code>downloadUrl()</code>. The function takes two parameters:
+<ol>
+<li><code>url</code> specifies the path to the PHP script.
+It's usually easiest to have this reside in the same directory as
+the HTML so that you can just refer to it by filename.
+<li><code>callback</code> indicates the function that's called when the XML is
+returned to the JavaScript.
+</ol>
+<p>
+The function declaration is shown below:
+</p>
+<pre class="prettyprint">
+function downloadUrl(url,callback) {
+ var request = window.ActiveXObject ?
+     new ActiveXObject('Microsoft.XMLHTTP') :
+     new XMLHttpRequest;
+
+ request.onreadystatechange = function() {
+   if (request.readyState == 4) {
+     request.onreadystatechange = doNothing;
+     callback(request.responseText, request.status);
+   }
+ };
+
+ request.open('GET', url, true);
+ request.send(null);
+}
+</pre>
+
+<p class="para"> <strong>Note:</strong> Since
+<code>XMLHttpRequest</code> is asynchronous, the callback function
+won't be called as soon as you invoke <code>downloadUrl</code>. The
+bigger your XML file, the longer it may take. Don't put any code after
+<code>downloadUrl</code> that relies on the markers existing
+already&mdash;put it inside the callback function instead. </p>
+
+<p class="para">
+Now that the function is defined, you can call it from your code,
+passing in the name of the PHP file and a callback function.
+In the callback function, you need to find all the "marker"
+elements in the XML, and iterate through them. For each marker element
+you find, retrieve the name, address, distance, and lat/lng attributes
+and pass them to <code>createMarker()</code> to create the marker, and to
+<code>createOption()</code> to create an option in the results dropdown.
+You can also figure out the optimal viewport for the returned results by using
+<code>LatLngBounds.extend</code> and <code>Map.fitBounds</code>.
+</p>
+<pre class="prettyprint">
+
+function searchLocationsNear(center) {
+  clearLocations();
+
+  var radius = document.getElementById('radiusSelect').value;
+  var searchUrl = 'phpsqlajax_search.php?lat=' + center.lat() + '&lng=' + center.lng() + '&radius=' + radius;
+  downloadUrl(searchUrl, function(data) {
+  var xml = parseXml(data);
+  var markerNodes = xml.documentElement.getElementsByTagName("marker");
+  var bounds = new google.maps.LatLngBounds();
+  for (var i = 0; i &lt; markerNodes.length; i++) {
+    var name = markerNodes[i].getAttribute("name");
+    var address = markerNodes[i].getAttribute("address");
+    var distance = parseFloat(markerNodes[i].getAttribute("distance"));
+    var latlng = new google.maps.LatLng(
+        parseFloat(markerNodes[i].getAttribute("lat")),
+        parseFloat(markerNodes[i].getAttribute("lng")));
+
+    createOption(name, distance, i);
+    createMarker(latlng, name, address);
+    bounds.extend(latlng);
+  }
+  map.fitBounds(bounds);
+ });
+}
+
+</pre>
+
+<h4>Creating Markers & the Sidebar</h4>
+<p class="para">
+In the <code>createMarker()</code> function shown below, you just create a marker
+at the given <code>LatLng</code>, and add an event listener to the marker so
+that when clicked, an info window is displayed showing the name and address.
+Note that since API v3 permits multiple infowindows to be displayed on the map
+at once, you can re-use the same infowindow variable throughout the code to ensure
+that only one infowindow ever displays.
+</p>
+
+<pre class="prettyprint">
+function createMarker(latlng, name, address) {
+  var html = "&lt;b&gt;" + name + "&lt;/b&gt; &lt;br/&gt;" + address;
+  var marker = new google.maps.Marker({
+    map: map,
+    position: latlng
+  });
+  google.maps.event.addListener(marker, 'click', function() {
+    infoWindow.setContent(html);
+    infoWindow.open(map, marker);
+  });
+  markers.push(marker);
+}
+</pre>
+
+<p class="para"> In the <code>createOption()</code> function shown below, you 
+create an option element that displays the name and distance in parantheses.
+The value of the option is the index of the marker in the global markers array.
+You can use this value to open the infowindow over the marker when the option
+is selected.
+
+<pre class="prettyprint">
+function createOption(name, distance, num) {
+  var option = document.createElement("option");
+  option.value = num;
+  option.innerHTML = name + "(" + distance.toFixed(1) + ")";
+  locationSelect.appendChild(option);
+}
+</pre>
+
+<h4>Clearing Previous Results</h4>
+
+<p class="para"> Between searches, you need to remove the previously displayed
+infowindow, markers and dropdown options. The <code>clearLocations()</code>
+function removes the markers by setting their <code>map</code> property to null,
+and then clears the options.
+</p>
+
+<pre class="prettyprint">
+
+function clearLocations() {
+  infoWindow.close();
+  for (var i = 0; i &lt; markers.length; i++) {
+    markers[i].setMap(null);
+  }
+  markers.length = 0;
+
+  locationSelect.innerHTML = "";
+  var option = document.createElement("option");
+  option.value = "none";
+  option.innerHTML = "See all results:";
+  locationSelect.appendChild(option);
+  locationSelect.style.visibility = "visible";
+}
+
+</pre>
+
+<h4>Putting It All Together</h4>
+<p class="para">Here's a screenshot and code for the webpage that ties everything
+together (<a href="http://gmaps-samples-v3.googlecode.com/svn/trunk/articles/phpsqlsearch/phpsqlsearch_map.html">phpsqlsearch_map.html</a>).
+When the page loads, the <code>load</code> function is called.
+This function sets up the map and the results dropdown.
+</p>
+<p class="para">
+<img src="http://gmaps-samples-v3.googlecode.com/svn/trunk/articles/phpsqlsearch/phpsqlsearch_map.png"/>
+</p>
+
+<pre class="prettyprint">
+
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+  &lt;head&gt;
+    &lt;meta http-equiv="content-type" content="text/html; charset=utf-8"/&gt;
+    &lt;meta name="viewport" content="initial-scale=1.0, user-scalable=no" /&gt;
+    &lt;title&gt;Google Maps AJAX + mySQL/PHP Example&lt;/title&gt;
+    &lt;script src="http://maps.google.com/maps/api/js?sensor=false"
+            type="text/javascript"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+    //&lt;![CDATA[
+    var map;
+    var markers = [];
+    var infoWindow;
+    var locationSelect;
+
+    function load() {
+      map = new google.maps.Map(document.getElementById("map"), {
+        center: new google.maps.LatLng(40, -100),
+        zoom: 4,
+        mapTypeId: 'roadmap',
+        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+      });
+      infoWindow = new google.maps.InfoWindow();
+
+      locationSelect = document.getElementById("locationSelect");
+      locationSelect.onchange = function() {
+        var markerNum = locationSelect.options[locationSelect.selectedIndex].value;
+        if (markerNum != "none"){
+          google.maps.event.trigger(markers[markerNum], 'click');
+        }
+      };
+   }
+
+   function searchLocations() {
+     var address = document.getElementById("addressInput").value;
+     var geocoder = new google.maps.Geocoder();
+     geocoder.geocode({address: address}, function(results, status) {
+       if (status == google.maps.GeocoderStatus.OK) {
+        searchLocationsNear(results[0].geometry.location);
+       } else {
+         alert(address + ' not found');
+       }
+     });
+   }
+
+   function clearLocations() {
+     infoWindow.close();
+     for (var i = 0; i &lt; markers.length; i++) {
+       markers[i].setMap(null);
+     }
+     markers.length = 0;
+
+     locationSelect.innerHTML = "";
+     var option = document.createElement("option");
+     option.value = "none";
+     option.innerHTML = "See all results:";
+     locationSelect.appendChild(option);
+   }
+
+   function searchLocationsNear(center) {
+     clearLocations(); 
+
+     var radius = document.getElementById('radiusSelect').value;
+     var searchUrl = 'phpsqlsearch_genxml.php?lat=' + center.lat() + '&lng=' + center.lng() + '&radius=' + radius;
+     downloadUrl(searchUrl, function(data) {
+       var xml = parseXml(data);
+       var markerNodes = xml.documentElement.getElementsByTagName("marker");
+       var bounds = new google.maps.LatLngBounds();
+       for (var i = 0; i &lt; markerNodes.length; i++) {
+         var name = markerNodes[i].getAttribute("name");
+         var address = markerNodes[i].getAttribute("address");
+         var distance = parseFloat(markerNodes[i].getAttribute("distance"));
+         var latlng = new google.maps.LatLng(
+              parseFloat(markerNodes[i].getAttribute("lat")),
+              parseFloat(markerNodes[i].getAttribute("lng")));
+
+         createOption(name, distance, i);
+         createMarker(latlng, name, address);
+         bounds.extend(latlng);
+       }
+       map.fitBounds(bounds);
+       locationSelect.style.visibility = "visible";
+       locationSelect.onchange = function() {
+         var markerNum = locationSelect.options[locationSelect.selectedIndex].value;
+         google.maps.event.trigger(markers[markerNum], 'click');
+       };
+      });
+    }
+
+    function createMarker(latlng, name, address) {
+      var html = "&lt;b&gt;" + name + "&lt;/b&gt; &lt;br/&gt;" + address;
+      var marker = new google.maps.Marker({
+        map: map,
+        position: latlng
+      });
+      google.maps.event.addListener(marker, 'click', function() {
+        infoWindow.setContent(html);
+        infoWindow.open(map, marker);
+      });
+      markers.push(marker);
+    }
+
+    function createOption(name, distance, num) {
+      var option = document.createElement("option");
+      option.value = num;
+      option.innerHTML = name + "(" + distance.toFixed(1) + ")";
+      locationSelect.appendChild(option);
+    }
+
+    function downloadUrl(url, callback) {
+      var request = window.ActiveXObject ?
+          new ActiveXObject('Microsoft.XMLHTTP') :
+          new XMLHttpRequest;
+
+      request.onreadystatechange = function() {
+        if (request.readyState == 4) {
+          request.onreadystatechange = doNothing;
+          callback(request.responseText, request.status);
+        }
+      };
+
+      request.open('GET', url, true);
+      request.send(null);
+    }
+
+    function parseXml(str) {
+      if (window.ActiveXObject) {
+        var doc = new ActiveXObject('Microsoft.XMLDOM');
+        doc.loadXML(str);
+        return doc;
+      } else if (window.DOMParser) {
+        return (new DOMParser).parseFromString(str, 'text/xml');
+      }
+    }
+
+    function doNothing() {}
+
+    //]]&gt;
+  &lt;/script&gt;
+  &lt;/head&gt;
+
+  &lt;body style="margin:0px; padding:0px;" onload="load()"&gt; 
+    &lt;div&gt;
+     &lt;input type="text" id="addressInput" size="10"/&gt;
+    &lt;select id="radiusSelect"&gt;
+      &lt;option value="25" selected&gt;25mi&lt;/option&gt;
+      &lt;option value="100"&gt;100mi&lt;/option&gt;
+      &lt;option value="200"&gt;200mi&lt;/option&gt;
+    &lt;/select&gt;
+
+    &lt;input type="button" onclick="searchLocations()" value="Search"/&gt;
+    &lt;/div&gt;
+    &lt;div&gt;&lt;select id="locationSelect" style="width:100%;visibility:hidden"&gt;&lt;/select&gt;&lt;/div&gt;
+    &lt;div id="map" style="width: 100%; height: 80%"&gt;&lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+
+</pre>
+<a name="wheretogo"></a><h3>Where to Go From Here</h3>
+
+<p class="para">
+Now that you have a store locator for your website, consider extending it with more features. Some ideas:
+</p>
+<ul>
+  <li><b>User Location</b>: The Android phone provides a Gears Geolocation module
+for determining the approximate location of a user, and the iPhone supports the 
+W3C geolocation property. You can use this information to do a default search for
+the user when they first arrive at your page, and minimize the amount of typing
+they need to do. See <a href="http://gmaps-samples-v3.googlecode.com/svn/trunk/geolocate/geolocate.html">this example</a>.
+  </li>
+  <li><b>Advanced search</b>: Let users restrict searches by category or some attribute. Check out the <a href="http://www.acehardware.com/mystore/storeLocator.jsp">Ace Hardware store locator</a> for a great example of this.
+  </li>
+  <li><b>Fancy infowindows</b>: You can make your info windows more helpful
+by adding quick links for the user to zoom in to that location or 
+<a href="../faq.html#directions_exists">get driving directions</a>
+to/from that location.
+  </li>
+
+</ul>
+</div>
+
+<!-- ########## END PAGE CONTENT ########## -->
+  
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

@@ -1,0 +1,129 @@
+## ====================================================================
+## Copyright (c) 1999-2006 Ralf S. Engelschall <rse@engelschall.com>
+## Copyright (c) 1999-2006 The OSSP Project <http://www.ossp.org/>
+##
+## Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions
+## are met:
+##
+## 1. Redistributions of source code must retain the above copyright
+##    notice, this list of conditions and the following disclaimer.
+##
+## 2. Redistributions in binary form must reproduce the above copyright
+##    notice, this list of conditions and the following disclaimer in
+##    the documentation and/or other materials provided with the
+##    distribution.
+##
+## 3. All advertising materials mentioning features or use of this
+##    software must display the following acknowledgment:
+##    "This product includes software developed by
+##     Ralf S. Engelschall <rse@engelschall.com>."
+##
+## 4. Redistributions of any form whatsoever must retain the following
+##    acknowledgment:
+##    "This product includes software developed by
+##     Ralf S. Engelschall <rse@engelschall.com>."
+##
+## THIS SOFTWARE IS PROVIDED BY RALF S. ENGELSCHALL ``AS IS'' AND ANY
+## EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+## IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+## PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL RALF S. ENGELSCHALL OR
+## ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+## NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+## LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+## HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+## STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+## ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+## OF THE POSSIBILITY OF SUCH DAMAGE.
+## ====================================================================
+
+##
+## mm-config.pod -- Manpage
+##
+
+=pod
+
+=head1 NAME
+
+B<mm-config> - OSSP mm library configuration/build utility
+
+=head1 VERSION
+
+OSSP mm MM_VERSION_STR
+
+=head1 SYNOPSIS
+
+B<mm-config>
+[B<--help>]
+[B<--version>]
+[B<--cflags>]
+[B<--ldflags>]
+[B<--libs>]
+
+=head1 DESCRIPTION
+
+The B<mm-config> program is a little helper utility for easy configuring and
+building applications based on the mm(3) library.  It can be used to query the
+C compiler and linker flags which are required to correctly compile and link
+the application against the mm(3) library.
+
+=head1 OPTIONS
+
+B<mm-config> accepts the following options:
+
+=over 4
+
+=item B<--help>
+
+Prints the short usage information.
+
+=item B<--version>
+
+Prints the version number and date of the installed mm(3) library.
+
+=item B<--cflags>
+
+Prints the C compiler flags which are needed to compile the mm(3)-based
+application. The output is usually added to the C<CFLAGS> variable of the
+applications C<Makefile>.
+
+=item B<--ldflags>
+
+Prints the linker flags (C<-L>) which are needed to link the application with
+the mm(3) library. The output is usually added to the C<LDFLAGS> variable of
+the applications C<Makefile>.
+
+=item B<--libs>
+
+Prints the library flags (C<-l>) which are needed to link the application with
+the mm(3) library. The output is usually added to the C<LIBS> variable of the
+applications C<Makefile>.
+
+=back
+
+=head1 EXAMPLE
+
+ CC=cc
+ CFLAGS=-O `mm-config --cflags`
+ LDFLAGS=`mm-config --ldflags`
+ LIBS=-lm `mm-config --libs`
+
+ all: foo
+ foo: foo.o
+     $(CC) $(LDFLAGS) -o foo foo.o $(LIBS)
+ foo.o: foo.c
+     $(CC) $(CFLAGS) -c foo.c
+
+=head1 SEE ALSO
+
+mm(3).
+
+=head1 AUTHOR
+
+ Ralf S. Engelschall
+ rse@engelschall.com
+ www.engelschall.com
+
+=cut
+

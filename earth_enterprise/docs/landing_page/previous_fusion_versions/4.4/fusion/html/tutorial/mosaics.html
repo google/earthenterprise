@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Creating Imagery Mosaics</title>
+</head>
+
+
+<body><a name="top"></a>
+  
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" />
+  </div>
+  <h1 id="doc_title">Tutorial</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Tutorial</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="setup.html">Setting Up For the Tutorial</a></li>
+    <li><a href="resources.html">Defining and Building Resources</a></li>
+    <li><a href="projects.html">Defining and Building Projects</a></li>
+    <li><a href="database.html">Defining and Building Databases</a></li>
+    <li><a href="publish.html">Publishing and Viewing a Database</a></li>
+    <li><a href="points.html">Configuring Display Rules for Point Data</a></li>
+    <li><a href="polygons.html">Configuring Display Rules for Polygon Data</a></li>
+    <li><a href="importExport.html">Importing and Exporting Style Templates</a></li>
+    <li><a href="searchTabs.html">Configuring a Searchable Database</a></li>
+    <li><a href="searchLayers.html">Specifying Search Fields for Individual Layers</a></li>
+    <li><a href="maps.html">Creating a Map Database</a></li>
+    <li><a href="mosaics.html" id="selected">Creating Imagery Mosaics</a></li>
+    <li><a href="split.html">Segmenting Large Imagery Files</a></li>
+    <li><a href="historical.html">Building a Historical Imagery Project</a></li>
+    <li><a href="dataFiles.html">Sample Data Files</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+<h1><a id="65387"></a>Creating Imagery Mosaics
+</h1>
+<p>The simplest way to import source data is to create one resource from each data file. In certain cases, though, you might obtain multiple source files that comprise a single image. In that case, you can combine the source files into a single resource, called a <i>mosaic</i>. This lesson guides you through the process of creating an imagery mosaic. 
+</p>
+<p class="note"><strong>Note:</strong> All of the steps in this lesson apply to terrain data as well.
+</p>
+<h2>Create an Imagery Resource
+</h2>
+<p>To create a mosaic, the source images must meet the following requirements:
+</p>
+<ul>
+  <li>Source images must be in the same projection and use the same coordinate system.
+  </li>
+  <li>Source images must have the same resolution.
+  </li>
+  <li>Source images must have geographic proximity to each other.
+  </li>
+  <li>Ideally, the individual source images are perfectly abutting (no overlap, no gaps).
+  </li>
+</ul>
+<h4>To define an imagery mosaic:
+</h4>
+<br />
+<ol>
+  <li>Select <b>Asset Manager</b> from the Tools menu. The Asset Manager appears.    
+  </li>
+  <li>Click 
+    <img src="images/iconResImagery.png" /> on the toolbar. The Imagery Resource Editor appears.    
+    <p><img name="imageryResEditor" src="images/imageryResEditor.png" /></p></li>
+  <li>Set the acquisition date to today’s date in year-month-day format by clicking each section of the date and enter the values.  </li>
+  <li>Select <b>USGS Imagery</b> from the Provider drop-down list.  </li>
+  <li>Set the Mask Type (under Mask Options) to <b>No Mask</b>.  </li>
+  <li>Click <b>Add</b>. The Open Source dialog appears.    
+  </li>
+  <li>Navigate to the <code>/opt/google/share/tutorials/fusion/Imagery/SF_grayscale/SFnorth</code> folder.  </li>
+  <li>Select all four TIFF files (only the four files with the <code>.tif</code> extension), and click <b>Open</b>. 
+      <p><img src="images/mosaicImageryAddDia.png"  /></p>
+      <p>The selected files appear on the Source File(s) list.    </p>
+      <p>Notice that the Mosaic Options area is enabled when you import more than one imagery file. (Refer to the <strong> Reference Guide</strong> for detailed explanations of these settings.)    </p>
+  </li>
+  <li>Under Mosaic Options, for Tile Fill, select <b>Black</b>. Now the Fill Tolerance option is enabled.    
+  </li>
+  <li>For Fill Tolerance, select <b>1</b>.  </li>
+  <li>Select <strong>File &gt; Save</strong>.  </li>
+  <li>Navigate to the <code>/ASSET_ROOT/Resources/Imagery</code> folder you created in <a href="setup.html#24546">Lesson 1</a>.  </li>
+  <li>Enter the name <b>ImageryMosaic</b> for the resource, and click <b>Save</b>.
+    <p>The name of the resource appears on the right when you select the <code>/ASSET_ROOT/Resources/Imagery </code>folder in the asset navigation tree.    </p>
+    </li>
+  <li>Right-click <b>ImageryMosaic</b>, and select <b>Build</b> from the context menu. Google Earth Enterprise Fusion builds the resource.    
+    <p class="note"><strong>Note:</strong> Building this resource could take several minutes, since it contains four images.    </p>
+  </li>
+  <li>When the status of the resource changes to <b>Succeeded</b> in the Asset Manager, drag it to the Preview List pane.  </li>
+  <li>Check the box next to <b>ImageryMosaic</b> in the Preview List pane, and then right-click it and select <b>Zoom to Layer</b> from the context menu.
+    <p>The grayscale image of San Francisco appears in the Preview pane, surrounded by a bounding box. This is the single mosaic resource created from four separate source files.    </p>
+    <img src="images/mosaicPreview.png" width="459" height="321" />  </li>
+</ol>
+<p>Notice the black border and uneven edges of the mosaic. These are called <i>fill pixels</i>. The fill pixels fill the frame around the imagery where its borders are uneven. 
+</p>
+<p>If you want to add more imagery around this image and have all of the imagery blend together seamlessly, you need to <i>mask</i> the fill pixels. Masking blocks the pixels that you do not want users to see. The auto mask feature in Google Earth Enterprise Fusion does a very good job of creating masks for most situations. The <i>Google Earth Enterprise Fusion Reference Guide</i> provides instructions for doing so. 
+</p>
+<p>In some cases, however, you might want to use a custom mask that you create outside of Google Earth Enterprise Fusion so you have more control over the pixels that are blocked and the pixels that are allowed to show through. However, since Google Earth Enterprise Fusion allows you to use custom masks with resources that include a single source file only, you cannot apply a custom mask to a resource that includes more than one source file. 
+</p>
+<p>There is a way to resolve this problem. You can create a <i>virtual mosaic</i> and apply your custom mask to it. A virtual mosaic is a single source file created from multiple source files. The following exercises walk you through the process of creating a virtual mosaic and applying a custom mask to it.
+</p>
+<h2>Create a Virtual Mosaic
+</h2>
+<p>If you have multiple source files that you want to combine into a single resource to which you want to apply a custom mask, you can create a virtual mosaic using command line tools and then apply the custom mask within the GUI.
+</p>
+<h4>To create a virtual mosaic:
+</h4>
+<ol>
+  <li>At the command prompt, change to the folder that contains the imagery source files by entering:<pre><code>cd /opt/google/share/tutorials/fusion/Imagery/SF_grayscale/SFnorth</code></pre>
+  </li>
+  <li><a id="10096"></a>Create a virtual raster file by entering (all on one line): <pre><code>gevirtualraster --fill 0,0,0 -o /gevol/src/all_files.khvr *.tif</code></pre>
+    <p>This command specifies the fill value to be used for the mosaic (<code>0,0,0</code> = black), the name of the file to be generated (<code>all_files.khvr</code>), and includes all of the <code>.tif</code> files in the specified folder as input.    </p>
+  </li>
+  <li>Change to <code>/gevol/src</code>, and enter the following command to be sure the file was created successfully:<pre><code>ls a*</code></pre>
+    <p>The file <code>all_files.khvr</code> should be listed.    </p>
+  </li>
+  <li>Preview the new virtual mosaic:
+    <ol class="alpha">
+      <li>In the Google Earth Enterprise Fusion GUI, click 
+        <img src="images/iconOpenFile.png" />.
+        <p>The Open dialog appears.        </p>
+      </li>
+      <li>Navigate to the <code>/gevol/src</code> folder.      </li>
+      <li>Select <b>all_files.khvr</b>, and click <b>OK</b>.
+          <p>Two entries appear in the Preview List pane: <b>all_files:0</b> and <b>all_files:1</b>. (If Imagery Mosaic is still listed, you can leave the box next to it checked.)        </p>
+        <p>When you check the box next to <b>all_files:0</b>, a bounding box indicates the position of the entire virtual mosaic. When you check the box next to <b>all_files:1</b>, four bounding boxes indicate the position of each of the individual source files.        </p>
+        <p class="note"><strong>Note:</strong> Because you have not yet built this resource, only the bounding boxes appear, not the actual imagery.        </p>
+      </li>
+    </ol>
+  </li>
+  <li>You can check and uncheck the boxes to see the different views. When you finish, right-click any layer in the Preview List pane, and select <b>Remove All Layers</b> from the context menu. A message prompts you to confirm that you want to remove all layers from the Preview panes.    
+  </li>
+  <li>Click <b>OK</b>. All of the layers disappear from the Preview panes.    
+  </li>
+  <li>Back at the command prompt, enter the following command:<pre><code>cp /opt/google/share/tutorials/fusion/Imagery/SF_grayscale/all_files-mask.tif<br /> /gevol/src/</code></pre>
+    <p>This command copies the mask file provided with the tutorial data into the same folder as <code>all_files.tif</code> you created in step <a href="#10096">2</a>.    </p>
+  </li>
+  <li>Change to the /gevol/src folder, if necessary, and enter the following command:<pre><code>ls a*</code></pre>
+    <p>Both files, <code>all_files.khvr</code> and <code>all_files-mask.tif</code> should be listed.    </p>
+  </li>
+</ol>
+<p>The mask for your input must be located in the same folder as the source file, and the file name must match the name of the source file with <code>-mask</code> appended. In this case, the mask file is named <code>all_files-mask.tif</code>. When you select <b>Have Mask</b> in the Imagery Resource Editor in the next exercise, Google Earth Enterprise Fusion automatically applies the mask file by reference to the source file.
+</p>
+<h2>Apply a Custom Mask to the Virtual Mosaic
+</h2>
+<p>Now that you have a virtual mosaic and a custom mask for it, you can import the virtual mosaic into a resource and apply the mask. This exercise guides you through that process.
+</p>
+<h4>To apply a custom mask to the virtual mosaic:
+</h4>
+<ol>
+  <li>Select <b>Asset Manager</b> from the Tools menu. The Asset Manager appears.    
+  </li>
+  <li>Click 
+    <img src="images/iconResImagery.png" /> on the toolbar. The Imagery Resource Editor appears.    
+    <p><img src="images/imageryResEditor.png" /></p></li>
+  <li>Set the acquisition date to today’s date in year-month-day format by clicking each section of the date and enter the values.  </li>
+  <li>Select <b>USGS Imagery</b> from the Provider drop-down list.  </li>
+  <li>Set the Mask Type (under Mask Options) to <b>Have Mask</b>.  </li>
+  <li>Click <b>Add</b>. The Open Source dialog appears.    
+  </li>
+  <li>Navigate to the <code>/gevol/src </code>folder.  </li>
+  <li>Select <code>all_files.khvr</code>, and click <b>Open</b>. The selected file appears on the Source File(s) list.    
+    </li>
+  <li>Select <strong>File &gt; Save</strong>.    
+  </li>
+  <li>Navigate to the <code>/ASSET_ROOT/Resources/Imagery</code> folder you created in <a href="setup.html#24546">Lesson 1</a>.  </li>
+  <li>Enter the name <b>VirtualMosaic</b> for the resource, and click <b>Save</b>. The name of the resource appears on the right when you select the <code>/ASSET_ROOT/Resources/Imagery </code>folder in the asset navigation tree.    
+    </li>
+  <li>Right-click <b>VirtualMosaic</b>, and select <b>Build</b> from the context menu. Google Earth Enterprise Fusion builds the resource.    
+    <p class="note"><strong>Note:</strong> Building this resource could take several minutes.    </p>
+  </li>
+  <li>When the status of the resource changes to <b>Succeeded</b> in the Asset Manager, drag it to the Preview List pane.  </li>
+  <li>Check the box next to <b>VirtualMosaic</b> in the Preview List pane, and then right-click it and select <b>Zoom to Layer</b> from the context menu.
+    <p>The grayscale image of San Francisco appears in the Preview pane, surrounded by a bounding box. This is the mosaic created from four separate tiles.    </p>
+    <p>Notice that the black border and uneven edges of the mosaic are gone. The mask has done its job.    </p>
+  </li>
+</ol>
+<p>
+</p>
+</div>
+	<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+	<!-- END WRAPPER -->
+
+
+
+
+</body>
+</html>

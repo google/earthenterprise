@@ -1,0 +1,1309 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// Note: need to keep this synced with MercatorRasterProject.src
+//
+// Changes:
+// Description: Support for terrain "overlay" projects.
+//
+
+#config Name      RasterProject
+#config Base      Composite
+#config Config    RasterProjectConfig
+#config Subtype   Project
+// #config FixedType
+
+
+// ===== RasterProjectAsset.h =====
+#include "common/khConstants.h"
+#include "common/khStringUtils.h"
+#include "autoingest/.idl/storage/RasterProjectConfig.h"
+#include "autoingest/.idl/storage/DatedImageryIndexInfo.h"
+#include "autoingest/plugins/RasterGEIndexAsset.h"
+#include "autoingest/plugins/RasterDBRootAsset.h"
+#include "autoingest/plugins/RasterProductAsset.h"
+#include "autoingest/plugins/MapLayerJSAsset.h"
+
+class RasterProjectAssetVersionImpl {
+ public:
+  MapLayerJSAssetVersion GetLayerJSVersion(void) const {
+    if (children.size() > 2) {
+      AssetVersion index(children[2]);
+      if (index->subtype == "MapLayerJS") {
+        return children[2];
+      } else {
+        return MapLayerJSAssetVersion();
+      }
+    } else {
+      return MapLayerJSAssetVersion();
+    }
+  }
+  RasterDBRootAssetVersion GetDBRootVersion(void) const {
+    if (children.size() > 1) {
+      AssetVersion index(children[1]);
+      if (index->subtype == "RasterDBRoot") {
+        return children[1];
+      } else {
+        return RasterDBRootAssetVersion();
+      }
+    } else {
+      return RasterDBRootAssetVersion();
+    }
+  }
+  RasterGEIndexAssetVersion GetGEIndexVersion(void) const {
+    if (children.size()) {
+      AssetVersion index(children[0]);
+      if (index->subtype == "RasterGEIndex") {
+        return children[0];
+      } else {
+        return RasterGEIndexAssetVersion();
+      }
+    } else {
+      return RasterGEIndexAssetVersion();
+    }
+  }
+  // Return the most recent acquisition date from the projects.
+  // imagery/terrain resources.
+  // String is of form "YYYY-MM-DD".
+  // If no image resources or dates are available returns "0000-00-00" for
+  // "unknown date".
+  std::string GetAcquisitionDate(void) const {
+    std::string result(kUnknownDate);  // init to unknown
+    const std::vector<InsetStackItem>& insets = config.insets;
+    for(uint i = 0; i < insets.size(); ++i) {
+      // Note: the date is stored in the asset, not the version!!!
+      RasterProductAsset resource(insets[i].dataAsset);
+      std::string resource_date = resource->GetAcquisitionDate();
+      if (resource_date != kUnknownDate) {
+        if (result == kUnknownDate || resource_date.compare(result) > 0) {
+          result = resource_date;
+        }
+      }
+    }
+    return result;
+  }
+
+  // Add the dated imagery indexes to the dated_imagery_indexes vector.
+  // Assign the channel id for each index starting with the initial_channel_id.
+  void GetDatedImageryInfo(uint32 initial_channel_id,
+                           std::vector<DatedImageryIndexInfo>*
+                           dated_imagery_indexes) const {
+    if (dated_imagery_indexes == NULL)
+      return;
+    uint32 channel_id = initial_channel_id;
+    // The first 3 children are reserved, the rest are dated imagery indexes.
+    for(uint i = 3; i < children.size(); ++i) {
+      RasterGEIndexAssetVersion index(children[i]);
+      std::string index_ref(index->GetRef());
+      std::string date_string(index->config.date_string_);
+      std::string index_file = index->GetOutputFilename(0);
+      DatedImageryIndexInfo info(index_ref, date_string, channel_id++);
+      dated_imagery_indexes->push_back(info);
+    }
+  }
+
+  // Return the asset version for the specified DatedImagery Index.
+  // The Dated Imagery indexes are children 3..N, but the index i is expected
+  // in the range of 0...N-3.
+  // If i is outside the valid range, an empty RasterGEIndexAssetVersion
+  // is returned.
+  RasterGEIndexAssetVersion GetDatedImageryAssetVersion(uint32 i) const {
+    i += 3;  // Put i in the range of 3..N
+    if (i >= 3 && i < children.size())
+      return children[i];
+    return RasterGEIndexAssetVersion();
+  }
+};
+
+// ===== RasterProjectAsset.cpp =====
+
+// ===== RasterProjectAssetD.h =====
+#include "fusion/autoingest/sysman/InsetInfo.h"
+#include <limits>
+#include "autoingest/plugins/RasterProductAsset.h"
+
+class RasterProjectAssetImplD {
+ protected:
+  void AddInsets(const std::vector<RasterProjectModifyRequest::Item> &items);
+  void SyncInputRefs(void);
+
+  bool NeedStackUpdate(void) const;
+  void UpdateStack(void);
+
+  // this is const so it doesn't need a MutableHandle, if it needs to
+  // modify itself, it will create the mutable handle
+  // returns true if something changed
+  bool FixConfigBeforeUpdateCheck(void) const;
+  void PostUpdate(void) { IncrementIndexVersion(); }
+
+ public:
+  void IncrementIndexVersion(void) {
+    // quad tree packets store unsigned short for tile versions
+    config.indexVersion = (config.indexVersion + 1) %
+                          std::numeric_limits<unsigned short>::max();
+  }
+
+  static void HandleEditRequest(const RasterProjectEditRequest &);
+  static void HandleNewRequest(const RasterProjectModifyRequest &);
+  static void HandleModifyRequest(const RasterProjectModifyRequest &);
+  static void HandleAddToRequest(const RasterProjectModifyRequest &);
+  static void HandleDropFromRequest(const RasterProjectDropFromRequest &);
+ private:
+  // Utility to check and throw if any imagery resources have invalid/empty
+  // acquisition dates.
+  void ThrowIfAnyInvalidDates();
+};
+
+class RasterProjectAssetVersionImplD {
+ protected:
+  virtual void ChildrenToCancel(std::vector<AssetVersion> &out);
+
+  // This will make my children after my inputs have succeeded
+  virtual void DelayedBuildChildren(void);
+
+ private:
+  // Utility to build a single RasterGEIndex given a vector of InsetInfo.
+  // date: a string date of format "YYYY-MM-DD" that indicates the latest
+  //       date from all the insets. This is used in naming the geindex asset.
+  // Returns the version of the new geindex.
+  uint32 BuildIndex(
+    const khTilespace &tilespace,
+    const std::vector<InsetInfo<RasterProductAssetVersion> >& inset_infos,
+    const std::string& date);
+
+  // Utility to load all the InsetInfos for the project.
+  void LoadInsetInfoForIndexing(
+      const khTilespace &tilespace,
+      std::vector<InsetInfo<RasterProductAssetVersion> >* inset_infos,
+      std::set<uint32>* used_provider_ids);
+
+  // Given a list of insets, returns in the input parameter the list of insets
+  // which acquisition date is same or older than the max_date_string.
+  // inset_infos: set of RasterProduct insets.
+  // max_date_string: a string of the form "YYYY-MM-DD".
+  void FilterInsetInfosByDate(
+    std::vector<InsetInfo<RasterProductAssetVersion> >* inset_infos,
+    const std::string& max_date_string) const;
+
+  // Calculate levels where transparent tiles may be skipped.
+  // Note: currently, it is only for Imagery projects.
+  void CalcLevelsToSkipTransparentTiles(std::vector<PacketGenInfo> *gen_infos,
+                                        uint32 beginProjectLevel,
+                                        uint32 endMinifyLevel) const;
+
+  // Makes index subasset (subfunction for BuildIndex()).
+  // Returns the version of the new geindex.
+  uint32 MakeIndexSubAsset(const std::vector<std::string> &packgenkids,
+                           const std::vector<std::string> &packgenassets,
+                           const std::vector<AssetVersion> &packgenvers,
+                           const std::vector<PacketGenInfo> &genInfo,
+                           const std::string &date);
+
+  // Throw an exception if any of the insets has an invalid date.
+  void ThrowIfAnyInvalidDates(
+      const std::vector<InsetInfo<RasterProductAssetVersion> >& inset_infos);
+
+ public:
+  template <class T>
+  void LoadInsetInfo(const khTilespace &tilespace,
+                     uint beginCovLevel,
+                     uint endCovLevel,
+                     std::vector<T> &insets) const;
+  void LoadSimpleInsetInfo(
+      const khTilespace &tilespace,
+      std::vector<SimpleInsetInfo<RasterProductAssetVersion> > &insets,
+      uint &maxClientImageryLevel) const;
+};
+
+
+// ===== RasterProjectAssetD.cpp =====
+#include "autoingest/sysman/plugins/RasterProductAssetD.h"
+#include "autoingest/sysman/plugins/RasterGEIndexAssetD.h"
+#include "autoingest/sysman/plugins/PacketGenAssetD.h"
+#include "autoingest/sysman/plugins/RasterDBRootAssetD.h"
+#include "autoingest/sysman/plugins/MapLayerJSAssetD.h"
+#include "autoingest/Misc.h"
+#include "autoingest/sysman/.idl/FusionUniqueId.h"
+#include <set>
+#include <algorithm>
+#include "fusion/khraster/khRasterProduct.h"
+#include "common/khTileAddr.h"
+#include "common/khConstants.h"
+#include <third_party/rfc_uuid/uuid.h>
+
+
+// Throw and exception about invalid dates in time machine projects if the
+// missing_dates string is non-empty.
+void ThrowIfAnyInvalidDates(const std::string& missing_dates) {
+  notify(NFY_DEBUG, "Check for Missing Dates: %s\n", missing_dates.c_str());
+  if (!missing_dates.empty()) {
+    throw khException(
+        kh::tr("Imagery resources in time machine projects are required to "
+               "have valid acquisition dates.\n"
+               "The following imagery resource(s) do not have acquisition "
+               "dates specified:%1.\n").arg(missing_dates));
+  }
+}
+
+void RasterProjectAssetImplD::AddInsets(
+    const std::vector<RasterProjectModifyRequest::Item> &items) {
+  // make a set of those that I already have
+  std::set<std::string> have;
+  for (std::vector<InsetStackItem>::const_iterator inset =
+         config.insets.begin();
+       inset != config.insets.end(); ++inset) {
+    have.insert(inset->dataAsset);
+  }
+
+  // process each of the items to add
+  for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
+         items.begin();
+       item != items.end(); ++item) {
+    // error if there's anything I already have
+    if (have.find(item->dataAsset) != have.end()) {
+      throw khException(kh::tr("Project already has inset '%1'")
+                        .arg(item->dataAsset));
+    }
+
+    // figure out what its levels should be
+    uint effectivemax = ComputeEffectiveMaxLevel(*item);
+    // Get the acquisition date (we want most recent imagery first).
+    RasterProductAsset asset = item->dataAsset;
+    std::string date_string = asset->GetAcquisitionDate();
+
+    // walk backwards until we find where to insert it
+    std::vector<InsetStackItem>::reverse_iterator where;
+    for (where = config.insets.rbegin(); where != config.insets.rend();
+         ++where) {
+      if (where->maxlevel < effectivemax) {
+        break;
+      }
+      if (where->maxlevel == effectivemax) {
+        // For the same level of detail, we want the newest asset (in terms
+        // of acquisition date) first.
+        RasterProductAsset where_asset = where->dataAsset;
+        std::string where_date_string = where_asset->GetAcquisitionDate();
+        fprintf(stderr, "Where: %s : date: %s\n", where_date_string.c_str(),
+                date_string.c_str());
+        if (where_date_string.compare(date_string) <= 0) {
+          break;
+        }
+      }
+    }
+
+    // now put it where it belongs
+    // Remember: since 'where' is a reverse iterator, 'where.base()' is
+    // one after 'where' (in the forward sense). Since insert is insert
+    // before, where.base is exactly what we want.
+    config.insets.insert(where.base(), InsetStackItem(item->dataAsset,
+                                                      effectivemax,
+                                                      item->overridemax));
+
+    // update my "have" set so I won't try to add the same one again
+    have.insert(item->dataAsset);
+  }
+
+  SyncInputRefs();
+}
+
+
+void RasterProjectAssetImplD::SyncInputRefs(void) {
+  // update my inputs based on which layers have assetRefs
+  inputs.clear();
+  for (std::vector<InsetStackItem>::const_iterator inset
+         = config.insets.begin();
+       inset != config.insets.end(); ++inset) {
+    inputs.push_back(inset->dataAsset);
+  }
+}
+
+
+bool RasterProjectAssetImplD::FixConfigBeforeUpdateCheck(void) const {
+  // Check for validity the overlay_terrain_start_level_. The value should be
+  // even.
+  if (config.is_overlay_terrain_project_ &&
+      (config.overlay_terrain_start_level_ & 0x1) ) {
+    throw khException(
+      kh::tr("\nInternal error: invalid \"overlay_terrain_start_level_\" (%1)"
+             " in (%2).\nThe start level value should be even.").arg(
+               config.overlay_terrain_start_level_).arg(GetRef()));
+  }
+
+  bool changed = false;
+  if (config.fuid_channel_ == 0) {
+    MutableRasterProjectAssetD self(GetRef());
+    self->config.fuid_channel_ = FusionUniqueId::Get(FusionUniqueId::Channel);
+    self->config.AssignUuidIfEmpty();
+    changed = true;
+  } else if (config.asset_uuid_ == "") {
+    MutableRasterProjectAssetD self(GetRef());
+    self->config.AssignUuidIfEmpty();
+    changed = true;
+  }
+  if (NeedStackUpdate()) {
+    MutableRasterProjectAssetD self(GetRef());
+    self->UpdateStack();
+    changed = true;
+  }
+  return changed;
+}
+
+bool RasterProjectAssetImplD::NeedStackUpdate(void) const {
+  uint newmax[config.insets.size()];
+  for (uint i = 0; i < config.insets.size(); ++i) {
+    uint effectivemax = ComputeEffectiveMaxLevel(config.insets[i]);
+
+    if (effectivemax != config.insets[i].maxlevel) {
+      // The effective max has changed, we must update
+      return true;
+    }
+
+    if ((i > 0) && (effectivemax < newmax[i-1])) {
+      // The stack is out of order, we must update
+      return true;
+    }
+    newmax[i] = effectivemax;
+  }
+
+  return false;
+}
+
+void RasterProjectAssetImplD::UpdateStack(void) {
+  // see if the effective maxlevel has changed for anything in inset stack
+  bool changed = false;
+  for (std::vector<InsetStackItem>::iterator inset =
+         config.insets.begin(); inset != config.insets.end(); ++inset) {
+
+    uint effectivemax = ComputeEffectiveMaxLevel(*inset);
+    if (effectivemax != inset->maxlevel) {
+      inset->maxlevel = effectivemax;
+      changed = true;
+    }
+  }
+
+  // walk backwards through the stack and make sure that everybody's
+  // in the right place
+  for (int i = config.insets.size() - 2; i >= 0; --i) {
+    if (config.insets[i].maxlevel > config.insets[i+1].maxlevel) {
+      uint j = i+2;
+      for (; j < config.insets.size(); ++j) {
+        if (config.insets[i].maxlevel <=
+            config.insets[j].maxlevel) {
+          break;
+        }
+      }
+
+      // extract it and put it where I want it
+      InsetStackItem tomove = config.insets[i];
+      config.insets.erase(config.insets.begin()+i);
+      config.insets.insert(config.insets.begin()+j-1, tomove);
+
+      changed = true;
+    }
+  }
+
+  if (changed) {
+    SyncInputRefs();
+  }
+}
+
+
+void RasterProjectAssetImplD::HandleEditRequest(
+    const RasterProjectEditRequest &req) {
+  // Make sure the assetRef's are valid.
+  for (std::vector<InsetStackItem>::const_iterator inset =
+           req.config.insets.begin();
+       inset != req.config.insets.end(); ++inset) {
+    RasterProductFactory::ValidateRefForInput(inset->dataAsset, req.type);
+  }
+
+  // Find/make our target project.
+  std::string projname =
+      khEnsureExtension(req.assetname,
+                        AssetDefs::FileExtension(req.type, kProjectSubtype));
+
+  // Will be filled in later.
+  std::vector<std::string> inputs;
+
+
+  // Custom FindMake - modified to set/preserve indexVersion & fuid_channel_.
+  MutableRasterProjectAssetD project =
+      RasterProjectFactory::Find(projname, req.type);
+  if (project) {
+    // It is a regular (editing the same asset) or "SaveAs" re-writing edit
+    // request.
+
+    // If this edit request is going to set the fuid_channel_ back to zero,
+    // recover the previous version of asset config.
+    // Make a copy we can play with.
+    RasterProjectConfig projConfig = req.config;
+    if (projConfig.fuid_channel_ == 0) {
+      projConfig.fuid_channel_ = project->config.fuid_channel_;
+    }
+    // Similarly recover the asset_uuid from previous version of the asset
+    // config if asset_uuid is not set.
+    if (projConfig.asset_uuid_.empty()) {
+      projConfig.asset_uuid_ = project->config.asset_uuid_;
+    }
+
+    // We must preserve the indexVersion since the GUI doesn't/can't.
+    // TODO: we really should split this RasterProjectConfig into two pieces.
+    projConfig.indexVersion = project->config.indexVersion;
+
+    // Note: Modify() updates project.config too.
+    project->Modify(inputs, req.meta, projConfig);
+
+    // Need to test timemachine status after inputs are set.
+    if (project->config.is_timemachine_project_) {
+      // Need to test that all the insets have dates.
+      project->ThrowIfAnyInvalidDates();
+    }
+  } else {
+    // It is a "Save" or "SaveAs" edit request when creating a new asset.
+    assert(req.config.indexVersion == 1);
+    project = RasterProjectFactory::Make(projname, req.type, inputs,
+                                         req.meta, req.config);
+  }
+
+  if (!project)
+    throw khException(kh::tr("Unable to create %1 project %2")
+                      .arg(ToQString(req.type), ToQString(projname)));
+
+  project->UpdateStack();
+
+  // Note: UpdateStack() only calls SyncInputRefs if it has to modify
+  // the stack. This function needs to make sure SyncInputRefs is always called.
+  project->SyncInputRefs();
+}
+
+void RasterProjectAssetImplD::ThrowIfAnyInvalidDates() {
+  // Validate that all timemachine imagery resources have a valid date.
+  // Throw exception and warning if not.
+  std::string missing_dates;
+
+  for(uint i = 0; i < config.insets.size(); ++i) {
+    RasterProductAsset asset = config.insets[i].dataAsset;
+    std::string date_string = asset->GetAcquisitionDate();
+    notify(NFY_DEBUG, "DATESTRING: %s\n", date_string.c_str());
+    if (date_string == kUnknownDate) {
+      missing_dates += "\n\t" + asset->GetRef();
+      notify(NFY_DEBUG, "UNKNOWN DATESTRING: %s\n", missing_dates.c_str());
+    }
+  }
+  extern void ThrowIfAnyInvalidDates(const std::string& missing_dates);
+  ThrowIfAnyInvalidDates(missing_dates);
+}
+
+void RasterProjectAssetImplD::HandleNewRequest(
+    const RasterProjectModifyRequest &req) {
+  // verify the assets before I create anything
+  for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
+         req.items.begin();
+       item != req.items.end(); ++item) {
+    RasterProductFactory::ValidateRefForInput(item->dataAsset, req.type);
+  }
+
+  // normalize the supplied asset name
+  std::string projname =
+    AssetDefs::NormalizeAssetName(req.assetname, req.type, kProjectSubtype);
+
+
+  if (RasterProjectFactory::Find(projname, req.type)) {
+    throw khException(kh::tr("%1 project %2 already exists")
+                      .arg(ToQString(req.type), ToQString(projname)));
+  } else {
+    // make it
+    RasterProjectConfig projConfig(req.type);
+    MutableRasterProjectAssetD project =
+      RasterProjectFactory::Make(projname,
+                                 req.type,
+                                 std::vector<std::string>(),
+                                 khMetaData(),
+                                 projConfig);
+
+    project->AddInsets(req.items);
+    bool is_timemachine_project = false;  // False by default for new projects.
+    if (req.enable_timemachine) {
+      // Need to test that all the insets have dates.
+      project->ThrowIfAnyInvalidDates();
+      is_timemachine_project = true;
+    }
+    project->config.is_timemachine_project_ = is_timemachine_project;
+    notify(NFY_DEBUG, "TimeMachine: %s for %s\n", req.assetname.c_str(),
+           is_timemachine_project ? "on" : "off");
+  }
+}
+
+
+void RasterProjectAssetImplD::HandleModifyRequest(
+    const RasterProjectModifyRequest &req) {
+  // verify the assets before I do anything else
+  for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
+         req.items.begin();
+       item != req.items.end(); ++item) {
+    RasterProductFactory::ValidateRefForInput(item->dataAsset, req.type);
+  }
+
+  // find it and make the change
+  MutableRasterProjectAssetD project;
+  if ((project = RasterProjectFactory::Find(req.assetname, req.type))) {
+    // blow away old insets
+    project->config.insets.clear();
+    // define new ones
+    project->AddInsets(req.items);
+    // By default keep is_timemachine_project_ the same unless directed
+    // otherwise.
+    bool is_timemachine_project = project->config.is_timemachine_project_;
+    if (req.enable_timemachine) {
+      // Need to test that all the insets have dates.
+      project->ThrowIfAnyInvalidDates();
+      is_timemachine_project = true;
+    } else if (req.disable_timemachine) {
+      is_timemachine_project = false;
+    }
+    project->config.is_timemachine_project_ = is_timemachine_project;
+    notify(NFY_DEBUG, "TimeMachine: %s for %s\n", req.assetname.c_str(),
+           is_timemachine_project ? "on" : "off");
+  } else {
+    throw khException(kh::tr("No %1 project named %2")
+                      .arg(ToQString(req.type), ToQString(req.assetname)));
+  }
+}
+
+
+void RasterProjectAssetImplD::HandleAddToRequest(
+    const RasterProjectModifyRequest &req) {
+  // verify the assets before I do anything else
+  for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
+         req.items.begin();
+       item != req.items.end(); ++item) {
+    RasterProductFactory::ValidateRefForInput(item->dataAsset, req.type);
+  }
+
+  // find it and make the change
+  MutableRasterProjectAssetD project;
+  if ((project = RasterProjectFactory::Find(req.assetname, req.type))) {
+    // make sure my existing insets are still in order before adding more
+    // a new version of a product asset could invalidate
+    // my stacking order
+    project->UpdateStack();
+
+    // define new ones
+    project->AddInsets(req.items);
+    // By default keep is_timemachine_project_ the same unless directed
+    // otherwise.
+    bool is_timemachine_project = project->config.is_timemachine_project_;
+    if (req.enable_timemachine) {
+      // Need to test that all the insets have dates.
+      project->ThrowIfAnyInvalidDates();
+      is_timemachine_project = true;
+    } else if (req.disable_timemachine) {
+      is_timemachine_project = false;
+    }
+    project->config.is_timemachine_project_ = is_timemachine_project;
+    notify(NFY_DEBUG, "TimeMachine: %s for %s\n", req.assetname.c_str(),
+           is_timemachine_project ? "on" : "off");
+  } else {
+    throw khException(kh::tr("No %1 project named %2")
+                      .arg(ToQString(req.type), ToQString(req.assetname)));
+  }
+}
+
+
+void RasterProjectAssetImplD::HandleDropFromRequest(
+    const RasterProjectDropFromRequest &req) {
+  // find the project
+  MutableRasterProjectAssetD project;
+  if (!(project = RasterProjectFactory::Find(req.assetname, req.type))) {
+    throw khException(kh::tr("No %1 project named %2")
+                      .arg(ToQString(req.type), ToQString(req.assetname)));
+  }
+
+  // check for valid asset refs
+  std::set<std::string> todrop;
+  for (std::vector<std::string>::const_iterator r =
+         req.productRefs.begin(); r != req.productRefs.end(); ++r) {
+    if (std::find_if(project->config.insets.begin(),
+                     project->config.insets.end(),
+                     mem_var_pred_ref<std::equal_to>
+                     (&InsetStackItem::dataAsset, *r)) ==
+        project->config.insets.end()) {
+      throw khException(kh::tr("Project doesn't have inset '%1'")
+                        .arg(*r));
+    } else {
+      todrop.insert(*r);
+    }
+
+  }
+
+  // generate a list of the ones we want to keep and stuff it back into the
+  // config
+  std::vector<InsetStackItem> tokeep;
+  tokeep.reserve(project->config.insets.size());
+  for (std::vector<InsetStackItem>::const_iterator inset =
+         project->config.insets.begin();
+       inset != project->config.insets.end(); ++inset) {
+    if (todrop.find(inset->dataAsset) == todrop.end()) {
+      // this one's not in the list to drop, so copy it over
+      tokeep.push_back(*inset);
+    }
+  }
+  project->config.insets = tokeep;
+  project->SyncInputRefs();
+}
+
+
+
+void RasterProjectAssetVersionImplD::ChildrenToCancel(
+    std::vector<AssetVersion> &out) {
+  if (children.size()) {
+    // my direct children are my index and optionally a copyright
+    std::copy(children.begin(), children.end(), back_inserter(out));
+
+    // additionally, my indexes' inputs are my sub assets as well
+    for(uint i = 0; i < children.size(); ++i) {
+      AssetVersion index(children[i]);
+      if (index->subtype == "RasterGEIndex") {
+        index->GetInputs(back_inserter(out));
+      }
+    }
+  }
+}
+
+
+
+// Don't do anything for UpdateChildren - we defer to DelayedBuildChildren
+void RasterProjectAssetVersionImplD::UpdateChildren(void) {
+  const uint numInsets = inputs.size();
+
+  if (numInsets == 0) {
+    throw khException(kh::tr("No insets defined for project %1.\n"
+                             "Cannot build").arg(GetRef()));
+  }
+}
+
+template <class T>
+void RasterProjectAssetVersionImplD::LoadInsetInfo(
+    const khTilespace &tilespace,
+    uint beginCovLevel,
+    uint endCovLevel,
+    std::vector<T> &insets) const {
+  // Load my input versions (will reuse list populated by caller)
+  InputVersionGuard guard(this);
+
+  uint numInsets = inputs.size();
+  insets.reserve(numInsets);
+  for (uint i = 0; i < numInsets; ++i) {
+    insets.push_back(T
+                     (tilespace,
+                      guard->inputvers[i].Ref(),
+                      guard->inputvers[i]->children[0],
+                      config.insets[i].maxlevel,
+                      beginCovLevel,
+                      endCovLevel));
+  }
+}
+
+void RasterProjectAssetVersionImplD::LoadSimpleInsetInfo(
+    const khTilespace &tilespace,
+    std::vector<SimpleInsetInfo<RasterProductAssetVersion> > &insets,
+    uint &maxClientImageryLevel) const {
+  LoadInsetInfo(tilespace, 0, 0, insets);
+
+  maxClientImageryLevel = ProductToImageryLevel(config.insets.back().maxlevel);
+}
+
+
+// ***** explicit instantiations *****
+template
+void RasterProjectAssetVersionImplD::LoadInsetInfo<
+  SimpleInsetInfo<RasterProductAssetVersion> >(
+    const khTilespace &tilespace,
+    uint beginCovLevel,
+    uint endCovLevel,
+    std::vector<SimpleInsetInfo<RasterProductAssetVersion> > &insets) const;
+
+template
+void RasterProjectAssetVersionImplD::LoadInsetInfo<
+  InsetInfo<RasterProductAssetVersion> >(
+    const khTilespace &tilespace,
+    uint beginCovLevel,
+    uint endCovLevel,
+    std::vector<InsetInfo<RasterProductAssetVersion> > &insets) const;
+
+void RasterProjectAssetVersionImplD::ThrowIfAnyInvalidDates(
+  const std::vector<InsetInfo<RasterProductAssetVersion> >& inset_infos) {
+  // Validate that all timemachine imagery resources have a valid date.
+  // Throw exception and warning if not.
+  std::string missing_dates;
+  for(uint i = 0; i < inset_infos.size(); ++i) {
+    const InsetInfo<RasterProductAssetVersion>& info = inset_infos[i];
+    notify(NFY_DEBUG, "DATESTRING: %s\n", info.date_string_.c_str());
+    if (info.date_string_ == kUnknownDate) {
+      missing_dates += "\n\t" + info.resource_->GetRef();
+      notify(NFY_DEBUG, "UNKNOWN DATESTRING: %s\n", missing_dates.c_str());
+    }
+  }
+
+  extern void ThrowIfAnyInvalidDates(const std::string& missing_dates);
+  ThrowIfAnyInvalidDates(missing_dates);
+}
+
+void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
+  std::string assetRef = GetAssetRef();
+
+  // short circuit on degenerate case. Do this so the rest of the code
+  // can assume that there is at least one inset.
+  const uint numInsets = inputs.size();
+  if (numInsets == 0) {
+    throw khException(kh::tr("No insets defined for project %1.\n"
+                             "Cannot build").arg(GetRef()));
+  }
+
+  // sanity check in case the previous logic to ensure a valid channel id
+  // fails
+  if (config.fuid_channel_ == 0) {
+    throw khException(kh::tr("Internal Error: No channel id for %1")
+                      .arg(GetRef()));
+  }
+
+  if (config.asset_uuid_ == "") {
+    throw khException(kh::tr("Internal Error: No UUID for %1")
+                      .arg(GetRef()));
+  }
+
+
+  // Load my input versions (will reuse list populated by caller)
+  InputVersionGuard guard(this);
+
+  // figure out which tilespace to work in
+  const khTilespace &tilespace((type == AssetDefs::Imagery) ?
+                               ClientImageryTilespaceFlat :
+                               ClientTmeshTilespaceFlat);
+
+  // TODO:  fix test for timemachine authorization
+  bool create_timemachine = config.is_timemachine_project_;  // && timemachine enabled
+  // Load InsetInfo and provider id's just once.
+  // TimeMachine will create N geindex's so we don't want to duplicate work
+  // if possible.
+  std::vector<InsetInfo<RasterProductAssetVersion> > inset_infos;
+  std::set<uint32> used_provider_ids;
+  std::set<std::string> dates;  // Keep an ordered set of the acquisition
+                                // dates of the insets.
+  LoadInsetInfoForIndexing(tilespace, &inset_infos, &used_provider_ids);
+
+  if (create_timemachine && inset_infos.size() > 1) {
+    // For timemachine projects, we must insist that all resources have valid
+    // acquisition dates.
+    ThrowIfAnyInvalidDates(inset_infos);
+
+    // Leave the base globe layer as the last Inset and give it the
+    // oldest date (required due to TimeMachine protocol).
+    std::vector<InsetInfo<RasterProductAssetVersion> >::iterator iter =
+      inset_infos.begin();
+    // Set the base layer to be the oldest date.
+    iter->date_string_ = kTimeMachineOldestDateString;
+
+    // For debugging, print a list of the sorted insets.
+    for(uint i = 0; i < inset_infos.size(); ++i) {
+      const InsetInfo<RasterProductAssetVersion>& info = inset_infos[i];
+      dates.insert(info.date_string_);
+      notify(NFY_DEBUG, "  Historical Inset: %d %s, level %d, start date: %s\n",
+             i,
+             info.resource_->GetRef().c_str(),
+             info.effectiveMaxLevel,
+             info.date_string_.c_str());
+    }
+    notify(NFY_DEBUG, "Historical Imagery: %lu unique dates\n",
+           static_cast<unsigned long>(dates.size()));
+  }
+  // ---------------------------
+  // make the Top Level Imagery index
+  // Always build the topmost index 1st.
+  // needs to be children[0]...code above assumes this (not nice).
+  // ---------------------------
+  std::string top_level_date = kUnknownDate;
+  if (!dates.empty()) {
+    // For Historical Imagery, give it the latest date (last in the date set).
+    top_level_date = *(dates.rbegin());
+  }
+
+  uint32 geindex_version = BuildIndex(tilespace, inset_infos,
+                                      top_level_date);
+
+  // ---------------------------
+  // make RasterDBRoot sub asset
+  // needs to be children[1]...code above assumes this (not nice).
+  // ---------------------------
+  RasterDBRootAssetConfig dbrootConfig;
+  dbrootConfig.layers_.resize(1);
+  dbrootConfig.layers_[0].legend_     = config.legend;
+  dbrootConfig.layers_[0].asset_uuid_ = config.asset_uuid_;
+  dbrootConfig.layers_[0].channel_id_ =
+    (type == (AssetDefs::Imagery))
+    ? kGEImageryChannelId
+    : kGETerrainChannelId;
+  dbrootConfig.used_provider_ids_ = used_provider_ids;
+
+  MutableAssetVersionD dbroot =
+    RasterDBRootFactory::FindMakeAndUpdateSubAsset(
+        assetRef, type, "dbroot",
+        std::vector<std::string>(),
+        khMetaData(),
+        dbrootConfig,
+        std::vector<AssetVersion>());
+  AddChild(dbroot);
+
+
+  // **********************************
+  // create my Map JS layer definitions - only for imagery
+  // needs to be children[2]...code above assumes this (not nice).
+  // **********************************
+  if (type == AssetDefs::Imagery) {
+    std::string layerJSAssetName(
+      MapLayerJSFactory::SubAssetName(assetRef, "layerjs"));
+    MapLayerJSConfig layerJSConfig;
+    layerJSConfig.layers_.push_back(
+        MapLayerJSConfig::Layer(
+            MapLayerJSConfig::Layer::Imagery,
+            MapLayerJSConfig::Layer::FlatProjection,
+            config.fuid_channel_,
+            geindex_version,
+            config.legend));
+    MutableAssetVersionD layerjs =
+      MapLayerJSFactory::FindMakeAndUpdate(layerJSAssetName,
+                                           std::vector<std::string>(),
+                                           khMetaData(),
+                                           layerJSConfig,
+                                           std::vector<AssetVersion>());
+    AddChild(layerjs);
+  }
+
+  // ---------------------------
+  // make the Dated Imagery Layers indexes
+  // needs to be children[3]...code above assumes this (not nice).
+  // ---------------------------
+  if (create_timemachine && inset_infos.size() > 1) {
+    // For timemachine, we want to generate the remaining date layers by peeling
+    // off the insets for each date.
+    // Iterate through the dates from newest to oldest.
+    // Each iteration, we only want the insets OLDER than the current
+    // date_string.
+    // Note: We DO want to generate a TM layer for the base map (which should
+    // be the last inset in the list.
+    std::set<std::string>::const_reverse_iterator iter = dates.rbegin();
+    iter++;  // Skip past the first date.
+    for(; iter != dates.rend(); ++iter) {
+      FilterInsetInfosByDate(&inset_infos, *iter);
+      notify(NFY_DEBUG, "TimeMachine: Generating index %s: %lu insets\n",
+             iter->c_str(), static_cast<unsigned long>(inset_infos.size()));
+      if (inset_infos.empty()) {
+        notify(NFY_DEBUG, "TimeMachine: EMPTY insets at %s\n", iter->c_str());
+      }
+      BuildIndex(tilespace, inset_infos, *iter);
+    }
+  }
+}
+
+void RasterProjectAssetVersionImplD::LoadInsetInfoForIndexing(
+    const khTilespace &tilespace,
+    std::vector<InsetInfo<RasterProductAssetVersion> >* inset_infos,
+    std::set<uint32>* used_provider_ids) {
+  // get the range of levels that we're going to generate
+  const uint beginProjectLevel =
+      (type == AssetDefs::Imagery) ? StartImageryLevel :
+         ((config.is_overlay_terrain_project_ &&
+           config.overlay_terrain_start_level_ > StartTmeshLevel) ?
+         config.overlay_terrain_start_level_ : StartTmeshLevel);
+
+  // "+1" since endLevel is "one beyond" max for constructor khInsetCoverage.
+  // The endProjectLevel is used below for create the khInsetCoverage-object
+  // in InsetInfo-constructor.
+  const uint endProjectLevel =
+    TranslateTileLevel(RasterProductTilespaceBase,
+                       config.insets.back().maxlevel + 1,
+                       tilespace);
+
+  // Load more info about all of the project's insets
+  LoadInsetInfo(tilespace, beginProjectLevel, endProjectLevel, *inset_infos);
+
+  // make an array of all the resource version refs
+  // this is needed by the DBRoot generator
+  // while we're add it make the map of fuid -> provider id for the indexer
+  for (std::vector<InsetInfo<RasterProductAssetVersion> >::const_iterator i =
+           inset_infos->begin(); i != inset_infos->end(); ++i) {
+    if (i->resource_->config.provider_id_ != 0) {
+      used_provider_ids->insert(i->resource_->config.provider_id_);
+    }
+  }
+}
+
+void RasterProjectAssetVersionImplD::FilterInsetInfosByDate(
+    std::vector<InsetInfo<RasterProductAssetVersion> >* inset_infos,
+    const std::string& max_date_string) const {
+  // TODO: Copying InsetInfo-objects is pretty expensive.
+  // Make a refactoring: use array of pointers.
+
+  // Return only the insets with "date" older than the max_date_string.
+  std::vector<InsetInfo<RasterProductAssetVersion> > output_inset_infos;
+  output_inset_infos.reserve(inset_infos->size());
+  for(size_t i = 0; i < inset_infos->size(); ++i) {
+    const InsetInfo<RasterProductAssetVersion>& info = (*inset_infos)[i];
+    if (info.date_string_.compare(max_date_string) <= 0) {
+      output_inset_infos.push_back(info);
+    }
+  }
+  inset_infos->swap(output_inset_infos);
+}
+
+uint32 RasterProjectAssetVersionImplD::BuildIndex(
+    const khTilespace &tilespace,
+    const std::vector<InsetInfo<RasterProductAssetVersion> >& inset_infos,
+    const std::string& date) {
+  // Check that we have at least one inset.
+  const uint numInsets = inset_infos.size();
+  if (numInsets == 0) {
+    throw khException(kh::tr("Attempt to build index with too few "
+                             "insets for project: %1.\n"
+                             "Cannot build").arg(GetRef()));
+  }
+
+  std::vector<InsetInfo<
+    RasterProductAssetVersion> >::const_reverse_iterator last_iter =
+      inset_infos.rbegin();
+  notify(NFY_DEBUG, "Building GERasterIndex: %zu insets, level %d for %s\n",
+         inset_infos.size(), last_iter->effectiveMaxLevel, date.c_str());
+
+  // get the range of levels that we're going to generate
+  const uint beginProjectLevel =
+      (type == AssetDefs::Imagery) ? StartImageryLevel :
+         ((config.is_overlay_terrain_project_ &&
+           config.overlay_terrain_start_level_ > StartTmeshLevel) ?
+         config.overlay_terrain_start_level_ : StartTmeshLevel);
+
+  // All levels at a resolution lower than the fullresLevel of our lowest
+  // resolution inset can be minified instead of blended. This increases
+  // speed, reduces grey line artifacts around insets, and generally
+  // increases low res image quality.
+  const uint beginMinifyLevel  = beginProjectLevel;
+  const uint endMinifyLevel    = inset_infos[0].effectiveMaxLevel;
+
+  // Calc the info about what work to do.
+  std::vector<PacketGenInfo> genInfo;
+  CalcPacketGenInfo(tilespace, type, inset_infos,
+                    beginProjectLevel,
+                    genInfo,
+                    0 /* maxLevelDelta - always 0 here, only differs for SS*/,
+                    config.is_overlay_terrain_project_,
+                    config.overlay_terrain_resources_min_level_);
+#if 1
+  // Calculate levels where transparent tiles may be skipped.
+  CalcLevelsToSkipTransparentTiles(&genInfo, beginProjectLevel, endMinifyLevel);
+#endif
+
+  // make a copy of the inset_infos w/ pointers. The FindNeeded*
+  // routines want pointers.
+  std::vector<const InsetInfo<RasterProductAssetVersion> *> insetInfoPtrs;
+  insetInfoPtrs.reserve(inset_infos.size());
+  for (uint i = 0; i < inset_infos.size(); ++i) {
+    insetInfoPtrs.push_back(&inset_infos[i]);
+  }
+
+  // create my children giving them each a bigger piece of the stack
+  std::vector<std::string> packgenkids;
+  std::vector<std::string> packgenassets;
+  std::vector<AssetVersion> packgenvers;
+  packgenkids.reserve(numInsets);
+  packgenassets.reserve(numInsets);
+  packgenvers.reserve(numInsets);
+
+  for (uint i = 0; i < genInfo.size(); ++i) {
+    // Check if I even need to do any packet generation at all
+    // Maybe the other insets will completely replace everything
+    // that this one would generate
+    if (genInfo[i].coverage.numLevels() == 0)
+      continue;
+
+
+    // Determine which insets (0 .. i) intersect this coverage area.
+    std::vector<uint> neededIndexes;
+    neededIndexes.reserve(i);
+    if (type == AssetDefs::Imagery) {
+      FindNeededImageryInsets(genInfo[i].coverage,
+                              insetInfoPtrs, i,
+                              neededIndexes,
+                              beginMinifyLevel,
+                              endMinifyLevel);
+    } else {
+      FindNeededTerrainInsets(genInfo[i].coverage,
+                              insetInfoPtrs, i,
+                              neededIndexes,
+                              beginMinifyLevel,
+                              endMinifyLevel);
+    }
+    neededIndexes.push_back(i); // each inset always intersects itself
+
+
+    // calculate the level range that will be minified
+    uint effectiveBeginMinifyLevel =
+      std::max(genInfo[i].coverage.beginLevel(), beginMinifyLevel);
+    uint effectiveEndMinifyLevel =
+      std::min(genInfo[i].coverage.endLevel(), endMinifyLevel);
+
+    // Build a PacketGenConfig
+    PacketGenConfig packetGenConfig;
+    packetGenConfig.coverage  = genInfo[i].coverage;
+    packetGenConfig.beginMinifyLevel = beginMinifyLevel;
+    packetGenConfig.endMinifyLevel   = endMinifyLevel;
+    packetGenConfig.cacheRaster      = !inset_infos[i].alphaRPFile.empty();
+
+    packetGenConfig.beginSkipTransparentLevel =
+      genInfo[i].beginSkipTransparentLevel;
+
+    packetGenConfig.useOpaqueTopInsetInsteadOfMerge = true;
+
+    packetGenConfig.insets.reserve(neededIndexes.size());
+    for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
+         idx != neededIndexes.end(); ++idx) {
+
+      const PacketGenInfo &otherGenInfo(genInfo[*idx]);
+
+      // +1 below since we minify from the next level
+      bool otherWillContribToMinify =
+        otherGenInfo.coverage.intersectsLevels
+        (effectiveBeginMinifyLevel+1,
+         effectiveEndMinifyLevel+1);
+
+      // see if we want to depend on the packgen for this guy
+      // packetgenverref will only be populated if the other one
+      // actually cached raster blends.
+      std::string packgenVerRef;
+      if (!otherGenInfo.packetgenverref.empty() &&
+          otherWillContribToMinify) {
+        packgenVerRef = otherGenInfo.packetgenverref;
+      }
+
+      packetGenConfig.insets.push_back
+        (PacketGenConfig::Inset
+         (inset_infos[*idx].combinedrp_.Ref(),
+          packgenVerRef));
+    }
+
+    // Build a PacketGenExtraUpdateArg
+    PacketGenExtraUpdateArg<RasterProductAssetVersion> extraArg;
+    extraArg.insetInfo.reserve(neededIndexes.size());
+    extraArg.genInfo.reserve(neededIndexes.size());
+    for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
+         idx != neededIndexes.end(); ++idx) {
+      extraArg.insetInfo.push_back(&inset_infos[*idx]);
+      extraArg.genInfo.push_back(&genInfo[*idx]);
+    }
+
+    // reuse or make a new PacketGenAssetVersion
+    MutableAssetVersionD packgen =
+      PacketGenFactory::ReuseOrMakeAndUpdate(genInfo[i].assetname,
+                                             type,
+                                             khMetaData(),
+                                             packetGenConfig,
+                                             extraArg);
+
+    if (packetGenConfig.cacheRaster) {
+      // Extract the PacketLevel children from the new version and store
+      // them in my genInfo. My later children will use these to help
+      // build their own Packetlevel asset versions
+      genInfo[i].PopulatePacketLevels(packgen);
+    }
+
+    // remember this new PacketGen version
+    packgenkids.push_back(packgen->GetRef());
+    packgenassets.push_back(packgen->GetAssetRef());
+    packgenvers.push_back(packgen);
+  }
+
+  // Make index subasset (RasterGEIndex).
+  return MakeIndexSubAsset(packgenkids, packgenassets, packgenvers, genInfo, date);
+}
+
+
+void RasterProjectAssetVersionImplD::CalcLevelsToSkipTransparentTiles(
+     std::vector<PacketGenInfo> *genInfos,
+     uint32 beginProjectLevel,
+     uint32 endMinifyLevel) const {
+  // ----------
+  // Skipping transparent tiles _could_ cause problems with the way the
+  // client currently required full resolution coverage for levels of
+  // detail. Always emitting square regions will also make future indexing
+  // optimizations easier.
+  // ----------
+
+  // TODO: Consider if we may calculate "transparent" levels for
+  // terrain projects, since the comments below look obsolete - now Client can
+  // do up-sampling for Terrain.
+
+  // Lets see which levels we can allow to skip transparent tiles.
+  // We can only do this for imagery, the client can't magnify low resolution
+  // meshes to fill in for missing high resolution ones.
+  // We are only allowed to skip transparent tiles if no other inset has
+  // cut it's blend levels short because we're going to do work for it.
+  if (type == AssetDefs::Imagery) {
+    // First we know that we don't want skip tiles during minification
+    // so set each inset to start after that
+    for (size_t i = 0; i < genInfos->size(); ++i) {
+      PacketGenInfo &genInfo = (*genInfos)[i];
+      genInfo.beginSkipTransparentLevel =
+          std::max(endMinifyLevel, genInfo.coverage.beginLevel());
+    }
+
+    // Now let's go see which insets had their work coverage narrowed
+    for (size_t i = 0; i < genInfos->size(); ++i) {
+      PacketGenInfo &genInfoCur = (*genInfos)[i];
+
+      uint narrowedBegin = genInfoCur.coverage.beginLevel();
+      if (narrowedBegin > beginProjectLevel) {
+        // This inset's coverage got narrowed - we need to adjust
+        // the skip transparent levels for those after it.
+        for (size_t j = i + 1; j < genInfos->size(); ++j) {
+
+          // NOTE:
+          // Since all the genInfos' coverages were initially
+          // created with the same level ranges, we know that we
+          // can do the levelExtents indexing below w/o worrying
+          // about stepping off either end of the coverage levels.
+
+          PacketGenInfo &genInfoOther = (*genInfos)[j];
+
+          // We check each level deferred by the narrowed inset
+          // that this inset was planning on skipping
+          uint beginCheckLevel =
+            genInfoOther.beginSkipTransparentLevel;
+          uint endCheckLevel = narrowedBegin;
+          for (uint checkLevel = beginCheckLevel;
+               checkLevel < endCheckLevel; ++checkLevel) {
+            if (genInfoOther.coverage.hasLevel(checkLevel) &&
+                (genInfoOther.coverage.levelExtents(checkLevel).intersects(
+                     genInfoCur.coverage.levelExtents(checkLevel)))) {
+              genInfoOther.beginSkipTransparentLevel = checkLevel + 1;
+            } else {
+              // due to stepout and minification logic,
+              // we know that if this level doesn't intersect
+              // then none of the following (higher res) ones
+              // will intersect either.
+              break;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+uint32 RasterProjectAssetVersionImplD::MakeIndexSubAsset(
+    const std::vector<std::string> &packgenkids,
+    const std::vector<std::string> &packgenassets,
+    const std::vector<AssetVersion> &packgenvers,
+    const std::vector<PacketGenInfo> &genInfo,
+    const std::string &date) {
+  std::string assetRef = GetAssetRef();
+  std::string dbname = khDropExtension(khBasename(assetRef));
+  RasterGEIndexConfig geindexConfig;
+  geindexConfig.db_name_ = dbname;
+  //  figure out the packetvers for the geindex
+  uint indexVer = config.indexVersion;
+  bool tryReuse = true;
+  // For time machine, dated imagery indexes,
+  // use "YYYY/MM/DD/MS/geindex..." for the index path.
+  // If date is undefined, use "geindex..."
+  // Using the date is a little arbitrary but provides a way to store
+  // lots of indexes without flooding a single directory.
+  std::string subpath = "geindex";
+  if (!date.empty() && date != kUnknownDate) {
+    struct tm time = {0};
+    if (ParseUTCTime(date, &time)) {
+      std::string date_path = khComposeTimePath(time);
+      subpath = khComposePath(date_path, subpath);
+      geindexConfig.date_string_ = GetUTCTimeString(time);
+    } else {
+      notify(NFY_WARN, "Building index sub asset: Unable to parse a Date - "
+             "interpret it as Unknown.");
+    }
+  }
+  std::string geindexAssetName(
+    RasterGEIndexFactory::SubAssetName(assetRef, type, subpath));
+  if (indexVer == 0) {
+    // zero is a sentinal value that means we've wrapped and
+    // need to completely re-index.
+
+    // clear the sentinal
+    MutableRasterProjectAssetD asset(GetAssetRef());
+    indexVer = asset->config.indexVersion = config.indexVersion = 1;
+
+    tryReuse = false;
+  }
+  geindexConfig.index_version_ = indexVer;
+
+
+  // Fill geindexConfig packetvers and reuse indexVersions if possible
+  // We build the config with our LevelPack grandkids
+  // and reuse as aggressively as we can
+  uint asset_idx = 0;
+  assert(packgenvers.size() == packgenassets.size());
+  geindexConfig.packet_insets_.reserve(packgenvers.size());
+  for (std::vector<AssetVersion>::const_iterator packgenver =
+           packgenvers.begin(); packgenver != packgenvers.end();
+       ++packgenver, ++asset_idx) {
+    // Check if terrain inset has type "Filling" then do not add it into
+    // GEIndex-build.
+    if (AssetDefs::Terrain == type && config.is_overlay_terrain_project_) {
+      AssetNameEqualToPred assetname_equal_pred(packgenassets[asset_idx]);
+      std::vector<PacketGenInfo>::const_iterator genInfoIt =
+          std::find_if(genInfo.begin(), genInfo.end(),
+                       assetname_equal_pred);
+      // packgenvers is subset of genInfo;
+      assert(genInfoIt != genInfo.end());
+
+      if (kFillingTerrainInset == genInfoIt->terrain_inset_type) {
+        notify(NFY_DEBUG, "Skip \"Filling\"-terrain inset: %s",
+               genInfoIt->assetname.c_str());
+        continue;  // Skip "Filling" terrain inset.
+      }
+    }
+
+    if ((*packgenver)->children.size()) {
+      geindexConfig.packet_insets_.push_back(RasterPacketInset());
+      geindexConfig.packet_insets_.back().levels_.reserve(
+          (*packgenver)->children.size());
+      for (std::vector<std::string>::const_iterator packlevelref =
+             (*packgenver)->children.begin();
+           packlevelref != (*packgenver)->children.end(); ++packlevelref) {
+        geindexConfig.packet_insets_.back().levels_.push_back(
+            RasterPacketLevelVersion(*packlevelref, indexVer));
+      }
+    }
+  }
+  if (tryReuse) {
+    RasterGEIndexAssetD asset(geindexAssetName);
+    if (asset) {
+      asset->ReuseOldPacketVers(geindexConfig);
+    }
+  }
+  MutableRasterGEIndexAssetVersionD geindex =
+    RasterGEIndexFactory::FindMakeAndUpdate(geindexAssetName, type,
+                                            packgenkids,
+                                            khMetaData(),
+                                            geindexConfig,
+                                            packgenvers);
+  AddChild(geindex);
+  return geindex->config.index_version_;
+}

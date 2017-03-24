@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="Simple Event Handling" height="300">
+  <Require feature="sharedmap"/>
+</ModulePrefs>
+<Content type="html"><![CDATA[
+
+<small>
+In the following example, when the visitor clicks a point on the map 
+without a marker, we create a new marker at that point. When the 
+visitor clicks a marker, we remove it from the map.
+</small>
+
+<script>
+var map = new GMap2();
+
+GEvent.addListener(map, "click", function(marker, point) {
+  if (marker) {
+    map.removeOverlay(marker);
+  } else {
+    map.addOverlay(new GMarker(point));
+  }
+});
+</script>
+
+]]></Content>
+</Module>

@@ -1,0 +1,583 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+ 
+ 
+
+
+ 
+
+  
+  
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/articles/phpsqlinfo_v3.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>From Info Windows to a Database: Saving User-Added Form Data - Google Maps API Family - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/maps/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../css/iehacks.css"><![endif]-->
+
+    <link href="../../../css/semantic_headers.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    
+    
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  <a href="#gc-pagecontent">Skip to page content</a>
+  <a href="#gc-toc">Skip to main navigation</a>
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps API Family</h1>
+  <ul id="articles" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="../index.html" title="Google Maps API Family home page">Home</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../faq.html" title="Answers to frequently asked questions about Google Maps API Family">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="index.html" class="selected" title="Focused articles and tutorials for Google Maps API Family developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps API Family blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="../forum/index.html" title="Google Maps API Family developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../terms.html" title="Google Maps API Family terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../index.html">Maps API Family</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps Javascript API V3</h2>
+         <ul>
+           <li><a href="../documentation/javascript/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+      <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../documentation/javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+  <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../documentation/flash/index.html">Home Page</a></li>
+          <li><a href="../documentation/flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../documentation/mapsdata/index.html">Home Page</a></li>
+          <li><a href="../documentation/mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+     <div class="line"></div>
+      <ul>
+        <li><h2><a href="../documentation/webservices/index.html">Maps Web Services</a></h2>
+         <ul>
+           <li><a href="../documentation/geocoding/index.html">Geocoding Guide</a></li>
+           <li><a href="../documentation/directions/index.html">Directions Guide</a></li>
+           <li><a href="../documentation/elevation/index.html">Elevation Guide</a></li>
+           <li><a href="../documentation/places/index.html">Places Guide</a></li>
+         </ul>
+       </li>
+      </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../documentation/staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li>
+            <h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../documentation/localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../documentation/localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+      <div class="promo">
+     <p><a href="../documentation/premier/index.html">Google Maps API Premier</a></p><p>Includes enterprise licensing and support</p></div>
+
+        <a class="hidden" href="#gc-topnav-anchor">More Google Maps API Family resource links</a>
+      </div>
+      
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">From Info Windows to a Database: Saving User-Added Form Data</h1>
+
+
+<!-- ########## PAGE CONTENT ########## -->
+
+<div class=i>
+<em>Pamela Fox and Abdulla Kamar, Google Maps API Team
+<br>June 2009</em>
+
+<p class="note">
+The <a href="phpsqlinfo.html">original version</a> of this
+article used the <a href="../index.html">JavaScript Maps API v2</a>. This new
+version uses the <a href="../documentation/javascript/index.html">JavaScript Maps API v3</a>.
+</p>
+
+<h3>Objective</h3>
+<p class="para">
+Many developers use the Google Maps API to create mashups that enable users to add and annotate geographically located information.
+The most intuitive user interface for accomplishing that goal is to have the user first create a marker or poly, pop up a window with a form, then let the user fill out the form and press a 'save' button to close the info window. This is the method used, for instance, by Google's My Maps service.
+This tutorial will explain the concepts behind the HTML and JavaScript that make up the info-window editing user interface, as well as the PHP code that can be used to add the saved info window data into a MySQL database. Developers following this tutorial should have some HTML/JavaScript/Google Maps API v3 experience, as well as PHP/MySQL knowledge.
+</p>
+<p class="para">
+This article is broken up into the following steps:
+</p>
+<ul>
+<li><a href="#CreatingTable">Creating the Table</a></li>
+<li><a href="#AddingRow">Adding Row Data with PHP</a></li>
+<li><a href="#CreatingMap">Creating the Map & UI</a></li>
+<li><a href="#WhereToGo">Where to Go From Here</a></li>
+
+</ul>
+<br/>
+<a name="CreatingTable"></a><h3>Creating the Table</h3>
+<p class="para">
+When you create the MySQL table, you want to pay particular attention to the lat and lng attributes. With the current zoom capabilities of Google Maps, you should only need 6 digits of precision after the decimal. To keep the storage space required for our table at a minimum, you can specify that the lat and lng attributes are floats of size (10,6). That will let the fields store 6 digits after the decimal, plus up to 4 digits before the decimal, e.g. -123.456789 degrees. Your table should also have an id attribute to serve as the primary key, and a type attribute to distinguish between restaurants and bars, as we'll let users select one of those options from a drop-down select in the form.</p>
+<p class="para"> If you prefer interacting with your database through the
+phpMyAdmin interface, here's a screenshot of the table creation.
+</p>
+<p class="para">
+<img src="http://www.google.com/help/hc/images/phpsqlinfo_createtable.jpg" style="border: 1px solid grey; margin-left: 2em;" width="600">
+</p>
+<p class="para"> If you don't have access to phpMyAdmin or prefer using SQL
+commands instead, here's the SQL statement that creates the table.
+<a href="http://gmaps-samples-v3.googlecode.com/svn/trunk/articles/phpsqlinfo/phpsqlinfo_createtable.sql" target="_blank">phpsqlinfo_createtable.sql</a>:</p>
+
+<pre class="prettyprint">CREATE TABLE `markers` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+  `name` VARCHAR( 60 ) NOT NULL ,
+  `address` VARCHAR( 80 ) NOT NULL ,
+  `lat` FLOAT( 10, 6 ) NOT NULL ,
+  `lng` FLOAT( 10, 6 ) NOT NULL ,
+  `type` VARCHAR( 30 ) NOT NULL
+) ENGINE = MYISAM ;
+</pre>
+<br>
+<a name="AddingRow"></a><h3>Adding Row Data with PHP</h3>
+<p class="para">
+At this point, you should have an empty table named <code>markers</code>. You now need to write some PHP statements that can add a row to the table with data passed into the URL. The functions used here should work in both PHP 4 and PHP 5. If you've never written PHP to connect to a MySQL database, you should visit <a href="http://www.php.net">php.net</a> and read up on <code>mysql_connect</code>, <code>mysql_select_db</code>, <code>my_sql_query</code>, and <code>mysql_error</code>.
+
+</p>
+<p class="para"> First, you should put your database connection information in a
+separate file. This is generally a good idea whenever you're using PHP
+to access a database, as it keeps your confidential information in a
+file that you won't be tempted to share. In the Maps API forum, we've
+occasionally had people accidentally publish their database connection
+information when they were just trying to debug their XML-outputting
+code. The file should look like this, but with your own database
+information filled in (<a href="http://gmaps-samples-v3.googlecode.com/svn/trunk/articles/phpsqlinfo/phpsqlinfo_dbinfo.php" target="_blank">phpsqlinfo_dbinfo.php</a>): </p>
+<pre class="prettyprint">&lt;?
+$username="username";
+$password="password";
+$database="username-databaseName";
+?&gt;
+</pre>
+<p class="para">
+Now, you can write the code that will do the fun stuff &mdash; inserting the row. In the PHP, first retrieve the user data passed in through the URL, then connect to your database and execute an <code>"INSERT INTO"</code> query on your table, passing in the user data.
+If there's an error along the way, output a message to the screen to help you debug what's going on. To test that this PHP script works correctly, visit the URL in the browser and append the necessary parameters, e.g.:
+</p>
+
+<a href="http://yourdomain.com/phpsqlinfo_addrow.php?name=Best%20Bar%20Ever&address=123%20Main%20St&lat=-37.12345&lng=122.12345&type=bar">
+http://yourdomain.com/phpsqlinfo_addrow.php?name=Best%20Bar%20Ever&address=123%20Main%20St&lat=-37.12345&lng=122.12345&type=bar
+</a>
+<p class="para">
+If no error message is output to the screen, then the PHP worked. Just make sure to delete later the rows you added while debugging.
+</p>
+<p class="para">
+The PHP file that does all that is shown below (<a href="http://gmaps-samples-v3.googlecode.com/svn/trunk/articles/phpsqlinfo/phpsqlinfo_addrow.php" target="_blank">phpsqlinfo_addrow.php</a>):
+</p>
+<pre class="prettyprint">
+&lt;?php
+require("phpsqlinfo_dbinfo.php");
+
+// Gets data from URL parameters
+$name = $_GET['name'];
+$address = $_GET['address'];
+$lat = $_GET['lat'];
+$lng = $_GET['lng'];
+$type = $_GET['type'];
+
+// Opens a connection to a MySQL server
+$connection=mysql_connect ("localhost", $username, $password);
+if (!$connection) {
+  die('Not connected : ' . mysql_error());
+}
+
+// Set the active MySQL database
+$db_selected = mysql_select_db($database, $connection);
+if (!$db_selected) {
+  die ('Can\'t use db : ' . mysql_error());
+}
+
+// Insert new row with user data
+$query = sprintf("INSERT INTO markers " .
+         " (id, name, address, lat, lng, type ) " .
+         " VALUES (NULL, '%s', '%s', '%s', '%s', '%s');",
+         mysql_real_escape_string($name),
+         mysql_real_escape_string($address),
+         mysql_real_escape_string($lat),
+         mysql_real_escape_string($lng),
+         mysql_real_escape_string($type));
+
+$result = mysql_query($query);
+
+if (!$result) {
+  die('Invalid query: ' . mysql_error());
+}
+
+?&gt;
+
+</pre>
+<a name="CreatingMap"></a><h3>Creating the Map & UI</h3>
+<p class="para">
+Now that the backend functionality is setup, it's time to move onto creating the map and user interface functionality. If you have never created a Google Map, please try some of the basic examples in the documentation to make sure you understand the basics of creating a map.
+</p>
+<h4>Creating the Marker + Info Window</h4>
+<p class="para">
+After creating the map and centering it, you can assign a click listener to
+the map. In the callback function <code>addListener()</code>, create a
+marker at the coordinate that was clicked.
+Then, assign a click listener to the marker
+that pops open an info window over the marker. The info window has the HTML
+for a form with several text fields, a drop down, and a save button.
+Each form input has an ID, and the button has an onclick listener to
+call the <code>saveData()</code> function, described below.
+</p>
+<pre class="code">
+    google.maps.event.addListener(map, &quot;click&quot;, function(event) {
+        marker = new google.maps.Marker({
+          position: event.latLng,
+          map: map
+        });
+        google.maps.event.addListener(marker, &quot;click&quot;, function() {
+          infowindow.open(map, marker);
+        });
+    });
+</pre>
+
+<h4>Saving the Data</h4>
+<p class="para">
+In the <code>saveData()</code> function that&#39;s called by the info window
+button, you do the following: <br>
+<ul>
+ <li>Save the value of the marker coordinates and all the values
+contained within the form elements
+(escaping when needed, for URL-friendliness).
+ <li>Construct a URL by concatenating the name of the PHP file with
+the parameters and their values.
+ <li>Pass the URL as the first parameter of <code>downloadUrl()</code>,
+a simple function which wraps the XMLHTTPRequest object that lets you
+retrieve files (commonly in XML format) via JavaScript.
+The <code>downloadUrl()</code> callback function will provide you with the
+content of the URL and the status code. If you use a framework like jQuery or
+YUI, you may want to replace this function with their respective
+wrapper functions.
+ <li>Check that the returned status code is <code>200</code>. This means that the
+file was retrieved successfully and we can continue processing.
+ <li>Check the length of the data string returned -
+an empty data file indicates that the request generated no error strings.
+If the length is zero, you can close the
+info window and output a success message.
+</ul>
+</p>
+<p>
+The HTML file containing this code is shown below (<a href="http://gmaps-samples-v3.googlecode.com/svn/trunk/articles/phpsqlinfo/phpsqlinfo_add.html" target="_blank">phpsqlinfo_add.html</a>):
+</p>
+<pre class="prettyprint">
+&lt;!DOCTYPE html &gt;
+  &lt;head&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1.0, user-scalable=no&quot; /&gt;
+    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot;/&gt;
+    &lt;title&gt;Google Maps JavaScript API v3 Example: Map Simple&lt;/title&gt;
+    &lt;script type=&quot;text/javascript&quot; src=&quot;<a href="http://maps.google.com/maps/api/js?sensor=false" target="_blank">http://maps.google.com/maps/api/js?sensor=false</a>&quot;&gt;&lt;/script&gt;
+    &lt;script type=&quot;text/javascript&quot;&gt;
+    var marker;
+    var infowindow;
+
+    function initialize() {
+      var latlng = new google.maps.LatLng(37.4419, -122.1419);
+      var options = {
+        zoom: 13,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      }
+      var map = new google.maps.Map(document.getElementById(&quot;map_canvas&quot;), options);
+      var html = &quot;&lt;table&gt;&quot; +
+                 &quot;&lt;tr&gt;&lt;td&gt;Name:&lt;/td&gt; &lt;td&gt;&lt;input type=&#39;text&#39; id=&#39;name&#39;/&gt; &lt;/td&gt; &lt;/tr&gt;&quot; +
+                 &quot;&lt;tr&gt;&lt;td&gt;Address:&lt;/td&gt; &lt;td&gt;&lt;input type=&#39;text&#39; id=&#39;address&#39;/&gt;&lt;/td&gt; &lt;/tr&gt;&quot; +
+                 &quot;&lt;tr&gt;&lt;td&gt;Type:&lt;/td&gt; &lt;td&gt;&lt;select id=&#39;type&#39;&gt;&quot; +
+                 &quot;&lt;option value=&#39;bar&#39; SELECTED&gt;bar&lt;/option&gt;&quot; +
+                 &quot;&lt;option value=&#39;restaurant&#39;&gt;restaurant&lt;/option&gt;&quot; +
+                 &quot;&lt;/select&gt; &lt;/td&gt;&lt;/tr&gt;&quot; +
+                 &quot;&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;input type=&#39;button&#39; value=&#39;Save &amp; Close&#39; onclick=&#39;saveData()&#39;/&gt;&lt;/td&gt;&lt;/tr&gt;&quot;;
+    infowindow = new google.maps.InfoWindow({
+     content: html
+    });
+ 
+    google.maps.event.addListener(map, &quot;click&quot;, function(event) {
+        marker = new google.maps.Marker({
+          position: event.latLng,
+          map: map
+        });
+        google.maps.event.addListener(marker, &quot;click&quot;, function() {
+          infowindow.open(map, marker);
+        });
+    });
+    }
+
+    function saveData() {
+      var name = escape(document.getElementById(&quot;name&quot;).value);
+      var address = escape(document.getElementById(&quot;address&quot;).value);
+      var type = document.getElementById(&quot;type&quot;).value;
+      var latlng = marker.getPosition();
+ 
+      var url = &quot;phpsqlinfo_addrow.php?name=&quot; + name + &quot;&amp;address=&quot; + address +
+                &quot;&amp;type=&quot; + type + &quot;&amp;lat=&quot; + latlng.lat() + &quot;&amp;lng=&quot; + latlng.lng();
+      downloadUrl(url, function(data, responseCode) {
+        if (responseCode == 200 &amp;&amp; data.length &lt;= 1) {
+          infowindow.close();
+          document.getElementById(&quot;message&quot;).innerHTML = &quot;Location added.&quot;;
+        }
+      });
+    }
+
+    function downloadUrl(url, callback) {
+      var request = window.ActiveXObject ?
+          new ActiveXObject(&#39;Microsoft.XMLHTTP&#39;) :
+          new XMLHttpRequest;
+
+      request.onreadystatechange = function() {
+        if (request.readyState == 4) {
+          request.onreadystatechange = doNothing;
+          callback(request.responseText, request.status);
+        }
+      };
+
+      request.open(&#39;GET&#39;, url, true);
+      request.send(null);
+    }
+
+    function doNothing() {}
+    &lt;/script&gt;
+  &lt;/head&gt;
+
+  &lt;body style=&quot;margin:0px; padding:0px;&quot; onload=&quot;initialize()&quot;&gt;
+    &lt;div id=&quot;map_canvas&quot; style=&quot;width: 500px; height: 300px&quot;&gt;&lt;/div&gt;
+    &lt;div id=&quot;message&quot;&gt;&lt;/div&gt;
+  &lt;/body&gt;
+
+&lt;/html&gt;
+</pre>
+  <p class="para">The map should look like this when the info window is opened:</p>
+  <p>
+  <img src="http://www.google.com/help/hc/images/phpsqlinfo_map.jpg" style="border: 1px solid grey; margin-left: 2em;" alt="Screenshot of map"/>
+  </p>
+<a name="WhereToGo"></a><h3>Where to Go From Here</h3>
+<p>
+Now that you have a basic running example of adding user-annotated data from a Google Map into your database, there are many more fun features you can add. Some ideas:
+</p>
+<ul>
+ <li>Let users 'rate' each location: Modify a <a href="http://www.google.com/search?q=star+rating+javascript&ie=utf-8&oe=utf-8&aq=t&rls=org.mozilla:en-US:official&client=firefox-a" target="_blank">star rating system</a>, add it to your info window, and save the rating to the table.</li>
+ <li>Output all of the user-added data on one map: Check out our <a href="phpsqlajax_v3.html">PHP/MySQL -&gt; Google Maps tutorial</a>. It uses the exact same table structure, so you'll be able to skip right down to the "Creating the Map" section.
+ </li>
+</ul>
+<p class="para">
+If you have any issues or questions about this tutorial, please post them in the <a href="http://groups.google.com/group/google-maps-api-js-v3">Maps API forum</a>. Happy mashing!
+</p>
+
+</div>
+
+<!-- ########## END PAGE CONTENT ########## -->
+  
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

@@ -1,0 +1,11 @@
+URL: http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tgz
+Version: 2.7.5
+License: PSF 2
+License File: LICENSE
+
+Description:
+  Python is an interpreted, interactive, object-oriented programming
+  language. It is often compared to Tcl, Perl, Scheme or Java.
+
+Local Modifications:
+None

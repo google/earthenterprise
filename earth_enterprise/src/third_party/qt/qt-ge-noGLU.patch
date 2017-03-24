@@ -1,0 +1,36 @@
+diff -uNr qt-x11-commercial-3.3.6.old/mkspecs/linux-g++/qmake.conf qt-x11-commercial-3.3.6/mkspecs/linux-g++/qmake.conf
+--- qt-x11-commercial-3.3.6.old/mkspecs/linux-g++/qmake.conf	2007-07-25 10:19:35.000000000 -0700
++++ qt-x11-commercial-3.3.6/mkspecs/linux-g++/qmake.conf	2007-07-25 10:39:59.000000000 -0700
+@@ -65,7 +65,7 @@
+ QMAKE_LIBS_NIS		= -lnsl
+ QMAKE_LIBS_QT		= -lqt
+ QMAKE_LIBS_QT_THREAD	= -lqt-mt
+-QMAKE_LIBS_OPENGL	= -lGLU -lGL -lXmu
++QMAKE_LIBS_OPENGL	= -lGL -lXmu
+ QMAKE_LIBS_OPENGL_QT	= -lGL -lXmu
+ QMAKE_LIBS_THREAD	= -lpthread
+ 
+diff -uNr qt-x11-commercial-3.3.6.old/mkspecs/linux-g++-32/qmake.conf qt-x11-commercial-3.3.6/mkspecs/linux-g++-32/qmake.conf
+--- qt-x11-commercial-3.3.6.old/mkspecs/linux-g++-32/qmake.conf	2007-07-25 10:19:35.000000000 -0700
++++ qt-x11-commercial-3.3.6/mkspecs/linux-g++-32/qmake.conf	2007-07-25 10:40:13.000000000 -0700
+@@ -65,7 +65,7 @@
+ QMAKE_LIBS_NIS		= -lnsl
+ QMAKE_LIBS_QT		= -lqt
+ QMAKE_LIBS_QT_THREAD	= -lqt-mt
+-QMAKE_LIBS_OPENGL	= -lGLU -lGL -lXmu
++QMAKE_LIBS_OPENGL	= -lGL -lXmu
+ QMAKE_LIBS_OPENGL_QT	= -lGL -lXmu
+ QMAKE_LIBS_THREAD	= -lpthread
+ 
+diff -uNr qt-x11-commercial-3.3.6.old/mkspecs/linux-g++-64/qmake.conf qt-x11-commercial-3.3.6/mkspecs/linux-g++-64/qmake.conf
+--- qt-x11-commercial-3.3.6.old/mkspecs/linux-g++-64/qmake.conf	2007-07-25 10:19:35.000000000 -0700
++++ qt-x11-commercial-3.3.6/mkspecs/linux-g++-64/qmake.conf	2007-07-25 10:40:42.000000000 -0700
+@@ -68,7 +68,7 @@
+ QMAKE_LIBS_NIS		= -lnsl
+ QMAKE_LIBS_QT		= -lqt
+ QMAKE_LIBS_QT_THREAD	= -lqt-mt
+-QMAKE_LIBS_OPENGL	= -lGLU -lGL -lXmu
++QMAKE_LIBS_OPENGL	= -lGL -lXmu
+ QMAKE_LIBS_OPENGL_QT	= -lGL -lXmu
+ QMAKE_LIBS_THREAD	= -lpthread
+ 

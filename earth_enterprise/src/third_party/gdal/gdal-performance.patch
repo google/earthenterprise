@@ -1,0 +1,234 @@
+env LC_ALL=C TZ=UTC0 diff -Naur gdal-1.6.2/alg/gdalwarpkernel.cpp gdal-1.6.2-patch/alg/gdalwarpkernel.cpp
+--- gdal-1.6.2/alg/gdalwarpkernel.cpp	2009-07-26 18:17:25.000000000 +0000
++++ gdal-1.6.2-patch/alg/gdalwarpkernel.cpp	2009-11-03 23:27:53.000000000 +0000
+@@ -62,6 +62,11 @@
+ static CPLErr GWKNearestShort( GDALWarpKernel *poWK );
+ static CPLErr GWKNearestNoMasksFloat( GDALWarpKernel *poWK );
+ static CPLErr GWKNearestFloat( GDALWarpKernel *poWK );
++static int GWKCubicResampleNoMasksByteFast( GDALWarpKernel *poWK,
++                             double dfSrcX, double dfSrcY, int iDstOffset );
++static int GWKBilinearResampleNoMasksByteFast( GDALWarpKernel *poWK,
++                                           double dfSrcX, double dfSrcY,
++                                           int iDstOffset );
+ 
+ /************************************************************************/
+ /* ==================================================================== */
+@@ -1626,6 +1631,197 @@
+     return TRUE;
+ }
+ 
++/************************************************************************/
++/*                        GWKCubicResampleNoMasksByteFast()             */
++/*     Same as GWKCubicResampleNoMasksByte, however it does all bands   */
++/*     in parallel and saves some computation by caching some results   */
++/*     inbetween multiple calls. Test show that this function is        */
++/*     approx. 20% faster.                                              */
++/************************************************************************/
++
++#define CubicConvolution(distance1,distance2,distance3,f0,f1,f2,f3) \
++   (  (   -f0 +     f1 - f2 + f3) * distance3 \
++    + (2.0*(f0 - f1) + f2 - f3) * distance2 \
++    + (   -f0          + f2     ) * distance1 \
++    +               f1                         )
++
++static int GWKCubicResampleNoMasksByteFast( GDALWarpKernel *poWK,
++                             double dfSrcX, double dfSrcY, int iDstOffset )
++{
++    static int iSrcX,column_changed;
++    static double last_dfSrcX= 0;
++    static double dfDeltaX,dfDeltaX2,dfDeltaX3;
++
++    column_changed= dfSrcX!=last_dfSrcX;
++    if (column_changed) {
++      iSrcX = (int) floor( dfSrcX - 0.5 );
++      last_dfSrcX= dfSrcX;
++    }
++    int iSrcY= (int) floor( dfSrcY - 0.5 );
++
++    // Get the bilinear interpolation at the image borders
++    if ( iSrcX < 1 || iSrcX + 2 >= poWK->nSrcXSize ||
++         iSrcY < 1 || iSrcY + 2 >= poWK->nSrcYSize ) {
++
++        return GWKBilinearResampleNoMasksByteFast( poWK, dfSrcX, dfSrcY,
++                                                   iDstOffset);
++
++    } else {
++
++        if (column_changed) {
++            dfDeltaX= dfSrcX - 0.5 - iSrcX;
++            dfDeltaX2 = dfDeltaX * dfDeltaX;
++            dfDeltaX3 = dfDeltaX2 * dfDeltaX;
++        };
++        double dfDeltaY = dfSrcY - 0.5 - iSrcY;
++        double dfDeltaY2 = dfDeltaY * dfDeltaY;
++        double dfDeltaY3 = dfDeltaY2 * dfDeltaY;
++
++        for (int iBand=0; iBand<poWK->nBands; iBand++) {
++
++            int iOffset = iSrcX + iSrcY*poWK->nSrcXSize - poWK->nSrcXSize;
++            double a0= CubicConvolution(dfDeltaX, dfDeltaX2, dfDeltaX3,
++                             (double)poWK->papabySrcImage[iBand][iOffset - 1],
++                             (double)poWK->papabySrcImage[iBand][iOffset],
++                             (double)poWK->papabySrcImage[iBand][iOffset + 1],
++                             (double)poWK->papabySrcImage[iBand][iOffset + 2]);
++            iOffset+= poWK->nSrcXSize;
++            double a1= CubicConvolution(dfDeltaX, dfDeltaX2, dfDeltaX3,
++                             (double)poWK->papabySrcImage[iBand][iOffset - 1],
++                             (double)poWK->papabySrcImage[iBand][iOffset],
++                             (double)poWK->papabySrcImage[iBand][iOffset + 1],
++                             (double)poWK->papabySrcImage[iBand][iOffset + 2]);
++            iOffset+= poWK->nSrcXSize;
++            double a2= CubicConvolution(dfDeltaX, dfDeltaX2, dfDeltaX3,
++                             (double)poWK->papabySrcImage[iBand][iOffset - 1],
++                             (double)poWK->papabySrcImage[iBand][iOffset],
++                             (double)poWK->papabySrcImage[iBand][iOffset + 1],
++                             (double)poWK->papabySrcImage[iBand][iOffset + 2]);
++            iOffset+= poWK->nSrcXSize;
++            double a3= CubicConvolution(dfDeltaX, dfDeltaX2, dfDeltaX3,
++                             (double)poWK->papabySrcImage[iBand][iOffset - 1],
++                             (double)poWK->papabySrcImage[iBand][iOffset],
++                             (double)poWK->papabySrcImage[iBand][iOffset + 1],
++                             (double)poWK->papabySrcImage[iBand][iOffset + 2]);
++
++            double dfValue = CubicConvolution(dfDeltaY, dfDeltaY2, dfDeltaY3,
++                                              a0, a1, a2, a3);
++
++            if ( dfValue < 0.0 )
++                poWK->papabyDstImage[iBand][iDstOffset] = 0;
++            else if ( dfValue > 255.0 )
++                poWK->papabyDstImage[iBand][iDstOffset] = 255;
++            else
++                poWK->papabyDstImage[iBand][iDstOffset] = (GByte)(0.5+dfValue);
++        }
++    }
++
++    return TRUE;
++}
++
++/************************************************************************/
++/*                        GWKBilinearResampleNoMasksByteFast()          */
++/*     Same as GWKBilinearResampleNoMasksByte, however it does all bands*/
++/*     in parallel and saves some computation by caching some results   */
++/*     inbetween multiple calls.                                        */
++/************************************************************************/
++
++static int GWKBilinearResampleNoMasksByteFast( GDALWarpKernel *poWK,
++                                           double dfSrcX, double dfSrcY,
++                                           int iDstOffset )
++
++{
++    int     iSrcX = (int) floor(dfSrcX - 0.5);
++    int     iSrcY = (int) floor(dfSrcY - 0.5);
++    int     iSrcOffset = iSrcX + iSrcY * poWK->nSrcXSize;
++    double  dfRatioX = 1.5 - (dfSrcX - iSrcX);
++    double  dfRatioY = 1.5 - (dfSrcY - iSrcY);
++
++    for (int iBand=0; iBand<poWK->nBands; iBand++) {
++
++        double  dfAccumulator = 0.0;
++        double  dfAccumulatorDivisor = 0.0;
++
++        // Upper Left Pixel
++        if( iSrcX >= 0 && iSrcX < poWK->nSrcXSize &&
++            iSrcY >= 0 && iSrcY < poWK->nSrcYSize )
++        {
++            double dfMult = dfRatioX * dfRatioY;
++
++            dfAccumulatorDivisor += dfMult;
++
++            dfAccumulator +=
++                (double)poWK->papabySrcImage[iBand][iSrcOffset] * dfMult;
++        }
++
++        // Upper Right Pixel
++        if( iSrcX+1 >= 0 && iSrcX+1 < poWK->nSrcXSize &&
++            iSrcY >= 0 && iSrcY < poWK->nSrcYSize )
++        {
++            double dfMult = (1.0-dfRatioX) * dfRatioY;
++
++            dfAccumulatorDivisor += dfMult;
++
++            dfAccumulator +=
++                (double)poWK->papabySrcImage[iBand][iSrcOffset+1] * dfMult;
++        }
++
++        // Lower Right Pixel
++        if( iSrcX+1 >= 0 && iSrcX+1 < poWK->nSrcXSize &&
++            iSrcY+1 >= 0 && iSrcY+1 < poWK->nSrcYSize )
++        {
++            double dfMult = (1.0-dfRatioX) * (1.0-dfRatioY);
++
++            dfAccumulatorDivisor += dfMult;
++
++            dfAccumulator +=
++               (double)poWK->papabySrcImage[iBand][iSrcOffset+1+poWK->nSrcXSize]
++               * dfMult;
++        }
++
++        // Lower Left Pixel
++        if( iSrcX >= 0 && iSrcX < poWK->nSrcXSize &&
++            iSrcY+1 >= 0 && iSrcY+1 < poWK->nSrcYSize )
++        {
++            double dfMult = dfRatioX * (1.0-dfRatioY);
++
++            dfAccumulatorDivisor += dfMult;
++
++            dfAccumulator +=
++                (double)poWK->papabySrcImage[iBand][iSrcOffset+poWK->nSrcXSize]
++                * dfMult;
++        }
++
++/* -------------------------------------------------------------------- */
++/*      Return result.                                                  */
++/* -------------------------------------------------------------------- */
++        double      dfValue;
++
++        if( dfAccumulatorDivisor < 0.00001 )
++        {
++            poWK->papabyDstImage[iBand][iDstOffset]= 0;
++            return FALSE;
++        }
++        else if( dfAccumulatorDivisor == 1.0 )
++        {
++            dfValue = dfAccumulator;
++        }
++        else
++        {
++            dfValue = dfAccumulator / dfAccumulatorDivisor;
++        }
++
++        if ( dfValue < 0.0 )
++            poWK->papabyDstImage[iBand][iDstOffset]= 0;
++        else if ( dfValue > 255.0 )
++            poWK->papabyDstImage[iBand][iDstOffset]= 255;
++        else
++            poWK->papabyDstImage[iBand][iDstOffset]= (GByte)(0.5 + dfValue);
++    }
++
++    return TRUE;
++}
++
+ static int GWKBilinearResampleNoMasksShort( GDALWarpKernel *poWK, int iBand, 
+                                             double dfSrcX, double dfSrcY,
+                                             GInt16 *piValue )
+@@ -2918,18 +3114,14 @@
+ /* ==================================================================== */
+ /*      Loop processing each band.                                      */
+ /* ==================================================================== */
+-            int iBand;
+             int iDstOffset;
+ 
+             iDstOffset = iDstX + iDstY * nDstXSize;
+ 
+-            for( iBand = 0; iBand < poWK->nBands; iBand++ )
+-            {
+-                GWKCubicResampleNoMasksByte( poWK, iBand,
++            GWKCubicResampleNoMasksByteFast( poWK,
+                                              padfX[iDstX]-poWK->nSrcXOff,
+                                              padfY[iDstX]-poWK->nSrcYOff,
+-                                             &poWK->papabyDstImage[iBand][iDstOffset] );
+-            }
++                                             iDstOffset);
+         }
+ 
+ /* -------------------------------------------------------------------- */

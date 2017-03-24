@@ -1,0 +1,324 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// Note: need to keep this synced with MercatorMapDatabase.src
+
+#config Name       MapDatabase
+#config Base       Composite
+#config Config     MapDatabaseConfig
+#config Subtype    MapDatabase
+#config FixedType  Database
+#config ModifyResistantConfigMembers indexVersion
+
+// ===== MapDatabaseAsset.h =====
+#include <autoingest/.idl/storage/MapDatabaseConfig.h>
+
+class MapDatabaseAssetVersionImpl {
+ public:
+  AssetVersion GetMapdbChild() const;
+};
+
+// ===== MapDatabaseAsset.cpp =====
+
+namespace {
+
+uint kUnifiedIndexChildPos    = 0;
+uint kMapDBChildPos            = 1;
+
+}
+AssetVersion
+MapDatabaseAssetVersionImpl::GetMapdbChild(void) const
+{
+  // As these variables are not used the following lines are required to
+  // work-around compiler warnings. TODO: check that the following
+  // variables are used at appropriate places.
+  (void) kUnifiedIndexChildPos;
+
+  AssetVersion asset_version;
+  if (children.size() > kMapDBChildPos) {
+    AssetVersion tmp = children[kMapDBChildPos];
+    if (tmp->subtype == "MapDB") {
+      asset_version = tmp;
+    }
+  }
+  return asset_version;
+}
+
+// ===== MapDatabaseAssetD.h =====
+#include <limits>
+
+class MapDatabaseAssetImplD {
+ protected:
+  void PostUpdate(void) { IncrementIndexVersion(); }
+  static void PopulateInputs(const MapDatabaseConfig &config,
+                             std::vector<std::string> &inputs);
+
+ public:
+  static void HandleEditRequest(const MapDatabaseEditRequest &);
+  static void HandleNewRequest(const MapDatabaseEditRequest &);
+  static void HandleModifyRequest(const MapDatabaseEditRequest &);
+
+  void IncrementIndexVersion(void) {
+    config.indexVersion = (config.indexVersion + 1) %
+                          std::numeric_limits<uint32>::max();
+    if (config.indexVersion == 0) {
+      config.indexVersion = 1;
+    }
+  }
+};
+
+class MapDatabaseAssetVersionImplD {
+ protected:
+
+  // This will make my children after my inputs have succeeded
+  virtual void DelayedBuildChildren(void);
+
+ public:
+  virtual bool MustForceUpdate(void) const;
+};
+
+
+// ===== MapDatabaseAssetD.cpp =====
+#include <autoingest/sysman/plugins/RasterProjectAssetD.h>
+#include <autoingest/sysman/plugins/RasterProductAssetD.h>
+#include <autoingest/sysman/plugins/MapProjectAssetD.h>
+#include <autoingest/sysman/plugins/ProjectedMapProjectAssetD.h>
+#include <autoingest/sysman/plugins/UnifiedIndexAssetD.h>
+#include <autoingest/sysman/plugins/MapDBAssetD.h>
+#include <geindex/Entries.h>
+#include <khConstants.h>
+#include "fusion/fusionversion.h"
+
+void MapDatabaseAssetImplD::PopulateInputs(const MapDatabaseConfig &config,
+                                           std::vector<std::string> &inputs)
+{
+  if (!config.imageryProject.empty()) {
+    RasterProjectFactory::ValidateRefForInput(config.imageryProject,
+                                              AssetDefs::Imagery);
+    inputs.push_back(config.imageryProject);
+  }
+  if (!config.mapProject.empty()) {
+    MapProjectFactory::ValidateRefForInput(config.mapProject);
+
+    // make a projected map project for my input
+    ProjectedMapProjectConfig proj_config(AssetDefs::FlatProjection);
+
+    // Go through AssetVersionRef just in case mapProject is a reference to
+    // a version instead of an asset
+    std::string proj_asset_ref = AssetVersionRef(config.mapProject).AssetRef();
+    std::string base_ref = khComposePath(proj_asset_ref, "projected");
+    base_ref += "_flat";
+    std::string projected_proj_name =
+      AssetDefs::NormalizeAssetName(base_ref, AssetDefs::Map,
+                                    "ProjectedProject");
+
+    MutableProjectedMapProjectAssetD proj_asset =
+      ProjectedMapProjectFactory::FindMake(projected_proj_name,
+                                           makevec(config.mapProject),
+                                           khMetaData(),
+                                           proj_config);
+    inputs.push_back(proj_asset->GetRef());
+  }
+}
+
+void
+MapDatabaseAssetImplD::HandleEditRequest(const MapDatabaseEditRequest &req)
+{
+  // make sure the project assetRef's are valid
+  std::vector<std::string> inputs;
+  PopulateInputs(req.config, inputs);
+
+  // normalize the supplied asset name
+  std::string dbname =
+    AssetDefs::NormalizeAssetName(req.assetname, AssetDefs::Database,
+                                  kMapDatabaseSubtype);
+
+
+  (void) MapDatabaseFactory::FindMake(dbname,
+                                      inputs,
+                                      req.meta,
+                                      req.config);
+}
+
+void
+MapDatabaseAssetImplD::HandleNewRequest(const MapDatabaseEditRequest &req)
+{
+  // make sure the project assetRef's are valid
+  std::vector<std::string> inputs;
+  PopulateInputs(req.config, inputs);
+
+  // normalize the supplied asset name
+  std::string dbname =
+    AssetDefs::NormalizeAssetName(req.assetname, AssetDefs::Database,
+                                  kMapDatabaseSubtype);
+
+  (void) MapDatabaseFactory::MakeNew(dbname,
+                                     inputs,
+                                     req.meta,
+                                     req.config);
+}
+
+
+void
+MapDatabaseAssetImplD::HandleModifyRequest(const MapDatabaseEditRequest &req)
+{
+  // make sure the project assetRef's are valid
+  std::vector<std::string> inputs;
+  PopulateInputs(req.config, inputs);
+
+  // normalize the supplied asset name
+  std::string dbname =
+    AssetDefs::NormalizeAssetName(req.assetname, AssetDefs::Database,
+                                  kMapDatabaseSubtype);
+
+  // find and modify the DB
+  (void) MapDatabaseFactory::FindAndModify(dbname,
+                                           inputs,
+                                           req.meta,
+                                           req.config);
+}
+
+bool
+MapDatabaseAssetVersionImplD::MustForceUpdate(void) const
+{
+  // if the version has a mapdb child then we know that it was not created
+  // using the older versions of fusion.
+  // if we don't have any children, it's because this build's inputs failed
+  // so we don't know enough to decide if we need to force a build
+  if (children.size() > 0) {
+    MapDBAssetVersion asset_version = GetMapdbChild();
+    if (asset_version) {
+      // Check the MapDB to see if we must force an update.
+      // This is necessary as of 3.2 due to added JSON support.
+      // We now record the fusion version with GEDB's as of 3.2, if it's
+      // empty we need to force update.
+      return asset_version->config.fusion_version_.empty();
+    } else {
+      return true;
+    }
+  } else {
+    return false;
+  }
+}
+
+// Don't do anything for UpdateChildren - we defer to DelayedBuildChildren
+void
+MapDatabaseAssetVersionImplD::UpdateChildren(void)
+{
+}
+
+void
+MapDatabaseAssetVersionImplD::DelayedBuildChildren(void)
+{
+  std::string assetRef = GetAssetRef();
+  std::vector<std::string> children;
+
+  // get my project inputs
+  RasterProjectAssetVersionD imageryProject;
+  ProjectedMapProjectAssetVersionD   mapProject;
+  uint next = 0;
+  if (!config.imageryProject.empty()) {
+    imageryProject = inputs[next++];
+  }
+  if (!config.mapProject.empty()) {
+    mapProject = inputs[next++];
+  }
+
+
+  // ------------------------
+  // make unified index asset
+  // ------------------------
+  MutableUnifiedIndexAssetVersionD unified_index;
+  {
+    std::string unified_index_asset_name
+      (UnifiedIndexFactory::SubAssetName(assetRef, "unifiedindex"));
+    std::vector<AssetVersion> index_input_versions;
+    std::vector<std::string>  index_input_verrefs;
+
+    UnifiedIndexConfig unified_index_config;
+    if (imageryProject) {
+      RasterGEIndexAssetVersion subindex = imageryProject->GetGEIndexVersion();
+      index_input_versions.push_back(subindex);
+      index_input_verrefs.push_back(subindex.Ref());
+      unified_index_config.indexes_.push_back(
+          UnifiedIndexEntry(ToString(geindex::TypedEntry::Imagery),
+                            subindex.Ref(),
+                            subindex->config.index_version_,
+                            imageryProject->config.fuid_channel_,
+                            "" /* unused date_string */));
+    }
+    if (mapProject) {
+      AssetVersion subindex = mapProject->GetGEIndexVersion();
+      index_input_versions.push_back(subindex);
+      index_input_verrefs.push_back(subindex.Ref());
+      unified_index_config.indexes_.push_back(
+          UnifiedIndexEntry(ToString(geindex::TypedEntry::Unified),
+                            subindex.Ref(),
+                            0 /* unused version */,
+                            0 /* unused channel id */,
+                            "" /* unused date_string */));
+    }
+
+    unified_index =
+      UnifiedIndexFactory::FindMakeAndUpdate(
+          unified_index_asset_name,
+          index_input_verrefs,
+          khMetaData(),
+          unified_index_config,
+          index_input_versions);
+  }
+
+  // ------------------------
+  // make mapdb asset
+  // ------------------------
+  MutableMapDBAssetVersionD mapdb;
+  {
+    std::string mapdb_asset_name
+      (MapDBFactory::SubAssetName(assetRef, kMapdbBase));
+    std::vector<AssetVersion> mapdb_input_versions;
+    std::vector<std::string>  mapdb_input_verrefs;
+
+    // populate inputs
+    // Adding the unified index as my input and registering that offline inputs
+    // break me, will ensure that nothing gets cleaned out from underneath me
+    // including the projects and their dbroots
+    mapdb_input_versions.push_back(unified_index);
+    mapdb_input_verrefs.push_back(unified_index.Ref());
+
+    // build config
+    MapDBAssetConfig mapdb_config(unified_index.Ref(),
+                                  mapProject.Ref(),
+                                  imageryProject.Ref(),
+                                  config.search_tabs_,
+                                  config.indexVersion,
+                                  config.useGoogleImagery,
+                                  false,  // This is flat projection Map DB.
+                                  FUSION_VERSION);
+    // update the mapdb asset
+    mapdb =
+      MapDBFactory::FindMakeAndUpdate(
+          mapdb_asset_name,
+          mapdb_input_verrefs,
+          khMetaData(),
+          mapdb_config,
+          mapdb_input_versions);
+  }
+
+
+  // --------------------
+  // Now add my children in the order we define above
+  // --------------------
+  AddChild(unified_index);
+  AddChild(mapdb);
+}

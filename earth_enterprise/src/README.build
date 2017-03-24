@@ -1,0 +1,7 @@
+--- additional packages needed for SuSE 8.2 ---
+mesa-devel
+libpng-devel
+libghttp-devel
+freetype2-devel
+apache-devel
+giflib-devel

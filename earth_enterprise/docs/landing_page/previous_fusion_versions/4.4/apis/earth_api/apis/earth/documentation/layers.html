@@ -1,0 +1,398 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+
+ 
+
+
+   
+  
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/layers.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Layers and Controls - Google Earth API - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/earth/documentation/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../css/iehacks.css"><![endif]-->
+
+    <link href="../../../css/semantic_headers.css" rel="stylesheet" type="text/css" />
+       <script src="addCommentsToToc.js" type="text/javascript"></script>
+  </head>
+
+  <body class="gc-documentation">
+
+    
+    
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" class="dropdown" href="http://code.google.com" onclick="return false;"><img width="13" height="13" class="globeicon" src="../../../images/globe2_small.png"
+     ><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  <a href="#gc-pagecontent">Skip to page content</a>
+  <a href="#gc-toc">Skip to main navigation</a>
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../../../images/code_logo.png" height="40" width="161" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "ajax apis" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+<h2 id="googlecode-promo">Make web development faster with these <a href="http://chrome.google.com/extensions/featured/web_dev" onclick="siteTracker._trackEvent('Promos','Web Development',this.href);">Chrome Extensions</a>!</h2>
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Earth API</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="../index.html" title="Google Earth API home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="index.html" class="selected" title="Official Google Earth API documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../faq.html" title="Answers to frequently asked questions about Google Earth API">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="../articles/index.html" title="Focused articles and tutorials for Google Earth API developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Earth API blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="http://groups.google.com/group/google-earth-browser-plugin/topics" title="Google Earth API developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="http://code.google.com/apis/maps/terms.html" title="Google Earth API terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="http://code.google.com/apis/maps/signup.html">Sign up for a Maps API key</a></li>
+</ul>
+
+<div class="line"></div>
+
+<ul>
+
+  <li>
+    <h2><a href="reference/#">API Reference</a></h2>
+    <div class="line"></div>
+  </li>
+  <li><h2>Developer's Guide</h2>
+    <ul>
+      <li><a href="index.html">Introduction</a></li>
+      <li><a href="placemarks.html">Placemarks</a></li>
+      <li><a href="balloons.html">Balloons</a></li>
+      <li><a href="geometries.html">Geometries & Overlays</a></li>
+      <li><a href="camera_control.html">Camera Control</a></li>
+      <li><a href="layers.html">Layers & Controls</a></li>
+      <li><a href="time.html">Time</a> <sup class="new">Updated</sup></li>
+      <li><a href="ocean.html">Ocean</a></li>
+      <li><a href="sky_mars_moon.html">Sky, Mars, & Moon</a></li>
+      <li><a href="touring.html">Touring</a></li>
+      <li><a href="events.html">Events</a></li>
+      <li><a href="accessors.html">Accessors</a> <sup class="new">New!</sup></li>
+      <li><a href="containers.html">Object Containers</a></li>
+      <li><a href="kml.html">KML</a></li>
+      <li><a href="options.html">Options</a></li>
+      <li><a href="debugging.html">Debugging</a></li>
+    </ul>
+  </li>
+        
+  <div class="line"></div>
+    
+  <li><h2 class="tlw-expanded">Code Samples</h2>
+    <ul>
+      <li><a href="examples.html">Examples</a></li>
+      <li><a href="demogallery.html">Demo Gallery</a>
+      </li>
+      <li><a href="http://code.google.com/apis/ajax/playground/?exp=earth">Code Playground</a></li>
+    </ul>
+  </li>
+    
+  <div class="line"></div>
+    
+  <li><h2 class="tlw-expanded">More Resources</h2>
+    <ul>
+      <li><a href="mediagallery.html">Media</a></li>
+      <li><a href="releasenotes.html">Release Notes</a></li>
+      <li><a href="http://code.google.com/p/earth-api-utility-library">Utility Library</a></li>
+      <li><a href="http://code.google.com/p/earth-api-samples/issues/list?q=label%3AType-Defect">Known Issues</a></li>
+    </ul>
+  </li>
+</ul>
+
+<div class="line"></div>
+<ul>
+ <li>
+    <h2>Related Docs</h2>
+    <ul>                
+      <li><a href="http://code.google.com/apis/kml/documentation/index.html">KML</a></li>
+      <li><a href="http://code.google.com/apis/maps/documentation/index.html">Maps API</a></li>
+    </ul>                
+ </li>
+</ul>
+        <a class="hidden" href="#gc-topnav-anchor">More Google Earth API resource links</a>
+      </div>
+
+      <div class="g-unit" id="gc-pagecontent">
+        <script type="text/javascript">CODESITE_docEarlyProcessing();</script>
+
+
+        <h1 class="page_title">Layers and Controls</h1>
+
+
+
+<div class="toc">
+<ol>
+   <li><a href="#introduction">Introduction</a></li>
+   <li><a href="#layers">Layers</a></li>
+   <li><a href="#atmosphere_and_sun">Atmosphere and Sun</a></li>
+   <li><a href="#navigation_controls">Navigation controls</a></li>
+   <li><a href="#informational_overlays">Informational overlays</a></li>
+</ol>
+</div>
+
+<h2 id="introduction">Introduction</h2>
+<p>Layers contain additional information that is draped over the base Google Earth imagery layer. Navigation controls allow the user to pan, tilt, and zoom using controls superimposed on the viewport.</p>
+
+<h2 id="layers">Layers</h2>
+<p>By default, the terrain layer is the only layer displayed when the Google Earth Plugin first loads. Not all of the layers that are available in the Google Earth desktop client are available with the plugin. Available layers are:</p>
+<ul>
+  <li><code>LAYER_BORDERS</code> - shows country and area borders, and place labels for cities, states, countries, oceans, etc</li>
+  <li><code>LAYER_BUILDINGS</code> - 3D buildings</li>
+  <li><code>LAYER_BUILDINGS_LOW_RESOLUTION</code> - grey buildings (non-photorealistic). Note that this does not contain copies of photorealistic buildings; rather, it includes buildings that do not yet exist in the photorealistic buildings layer. As photorealistic versions of grey buildings are created, the buildings will be added to <code>LAYER_BUILDINGS</code> and removed from <code>LAYER_BUILDINGS_LOW_RESOLUTION</code>.</li>
+  <li><code>LAYER_ROADS</code> - displays roads and road names</li>
+  <li><code>LAYER_TERRAIN</code> - 3D terrain</li>
+</ul>
+
+<p>To enable a specific layer:
+<pre class="prettyprint">
+ge.getLayerRoot().enableLayerById(ge.LAYER_<em>NAME</em>, true);
+</pre>
+
+<p>To disable a layer:
+<pre class="prettyprint">
+ge.getLayerRoot().enableLayerById(ge.LAYER_<em>NAME</em>, false);
+</pre>
+
+<h2 id="atmosphere_and_sun">Atmosphere and Sun</h2>
+
+<p>The Google Earth Plugin can display the sun as well as the Earth's atmosphere.
+   The Sun casts shadows and appears in the sky in the correct location according
+   to the specified time (see the Developer's Guide chapter on <a href="time.html">Time</a> for
+   more information); the atmosphere is displayed as gradiated blue coloring to mimic
+   the scattering of light as it passes through the atmosphere.</p>
+
+<p>To toggle the Sun in the plugin:</p>
+<pre class="prettyprint">ge.getSun().setVisibility(true);</pre>
+
+<p>To toggle the atmosphere in the plugin:</p>
+<pre class="prettyprint">ge.getOptions().setAtmosphereVisibility(true);</pre>
+
+<p><img src="images/sun_and_atmosphere_example.gif" height="400" width="600" /></p>
+
+<h2 id="navigation_controls">Navigation controls</h2>
+
+<p>Navigation controls allow a user to move around in Google Earth, and include zoom, pan, tilt, scroll, and rotate controls. These can be always visible, never visible, or can be hidden until the user moves their mouse cursor over the controls' area in the plugin. To specify which behavior to display:</p>
+<pre class="prettyprint">ge.getNavigationControl().setVisibility(ge.VISIBILITY_<em>X</em>);</pre>
+
+<p>The acceptable values are:</p>
+<ul>
+   <li><code>ge.VISIBILITY_SHOW</code></li>
+   <li><code>ge.VISIBILITY_HIDE</code></li>
+   <li><code>ge.VISIBILITY_AUTO</code></li>
+</ul>
+
+<h3>Positioning the controls</h3>
+<p>The navigation controls can be positioned at any corner of the Google Earth Plugin window. To do so, change the value of the x and y units to be relative to either the top or bottom of the window, and either the left or right.</p>
+<ul>
+   <li><code>ge.UNITS_PIXELS</code>: interpreted as pixels from the left of bottom edge of the plugin window</li>
+   <li><code>ge.UNITS_INSET_PIXELS</code>: interpreted as pixels from the right or top edge of the plugin window</li>
+</ul>
+
+<p>For example, to move the controls to the bottom right of the window:</p>
+<pre class="prettyprint">
+  ge.getNavigationControl().getScreenXY().setXUnits(ge.UNITS_INSET_PIXELS);
+  ge.getNavigationControl().getScreenXY().setYUnits(ge.UNITS_PIXELS);</pre>
+
+<p class="note"><strong>Note</strong>: the navigation controls do not accept specific pixel values (e.g. <code>KmlVec2.setX()</code>) for positioning.</p>
+
+<p>For an interactive example, visit the <strong>Earth API</strong> section of the Ajax APIs Playground: <a href="http://code.google.com/apis/ajax/playground/?exp=earth#show/hide_navigation_controls">Show/Hide Navigation Controls</a>.
+  
+<h2 id="informational_overlays">Informational overlays</h2>
+<p>Google Earth also provides a set of informational overlays that can be added to the plugin window. These overlays communicate information about the current viewport - latitude, longitude, altitude, etc.</p>
+<p><img src="images/screen_options.jpg" /></p>
+
+
+<p>
+  <table>
+     <tr>
+        <td>1.&nbsp;<code>setScaleLegendVisibility()</code></td>
+        <td>Displays the current scale of the map.</td>
+     </tr>
+     <tr>
+        <td>2.&nbsp;<code>setStatusBarVisibility()</code></td>
+        <td>Displays a status bar at the bottom of the Earth window, containing geographic coordinates and altitude
+            of the terrain below the current cursor position, as well as the range from which the user is viewing the Earth.</td>
+     </tr>
+     <tr>
+        <td>3.&nbsp;<code>setOverviewMapVisibility()</code></td>
+        <td>Displays an inset map of the entire world in the bottom right corner. The current viewport is 
+            displayed on the inset map as a red rectangle.</td>
+     </tr>
+     <tr>
+        <td>4.&nbsp;<code>setGridVisibility()</code></td>
+        <td>Displays the lines of latitude and longitude on the globe.</td>
+     </tr>
+     <tr>
+        <td>5.&nbsp;<code>setAtmosphereVisibility()</code></td>
+        <td>Displays scattered light in the Earth's atmosphere.</td>
+     </tr>
+   </table>
+</p>
+
+   
+<p>&nbsp;</p>
+
+
+   
+   
+         
+</div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

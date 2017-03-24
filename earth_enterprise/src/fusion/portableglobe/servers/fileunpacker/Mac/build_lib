@@ -1,0 +1,5 @@
+cp ../shared/* .
+swig -python -c++ glc_unpacker.i
+g++ -arch x86_64 -c glc_unpacker_wrap.cxx -I/usr/include/python2.6 -I/usr/lib/python2.6
+g++ -arch x86_64 -c glc_unpacker.cpp portable_glc_reader.cpp file_unpacker.cpp file_package.cpp packetbundle.cpp packetbundle_finder.cpp
+g++ -arch x86_64 -bundle -flat_namespace -undefined suppress -o _glc_unpacker.so glc_unpacker_wrap.o glc_unpacker.o portable_glc_reader.o file_unpacker.o file_package.o packetbundle.o packetbundle_finder.o 

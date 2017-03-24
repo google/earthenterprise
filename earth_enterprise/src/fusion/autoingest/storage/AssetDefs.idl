@@ -1,0 +1,82 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+
+#include <string>
+#include <autoingest/AssetVersionRef.h>
+#include <khConstants.h>
+
+class AssetDefs {
+  enum Type { Invalid, Vector, Imagery, Terrain, Database, Map, KML };
+
+  enum Projection { FlatProjection, MercatorProjection };
+#hquote
+  static const Type LastType = KML;
+#/hquote
+
+  enum State { New = 1, Waiting = 2, Blocked = 4, Queued = 8, InProgress = 16, Failed = 32, Succeeded = 64, Canceled = 128, Offline = 256, Bad = 512};
+#hquote
+  static bool Ready(State state) {
+    return !(state & (New | Waiting | Blocked));
+  }
+  static bool Working(State state) {
+    return (state & (Queued | InProgress));
+  }
+  static bool Finished(State state) {
+    return (state & (Failed | Succeeded | Canceled | Offline | Bad));
+  }
+  static bool CanOffline(State state) {
+    return ((state != Offline) &&
+            (Finished(state) || (state == Blocked)));
+  }
+  static std::string PrettySubtype(const std::string &subtype) {
+    return (subtype == kProductSubtype) ? kResourceSubtype : subtype;
+  }
+
+  // implemented in AssetDefsExtra.cpp
+  static const std::string& AssetRoot(void);
+  static std::string MasterHostName(void);
+  static std::string AssetPathToFilename(const std::string &assetpath);
+  static std::string FilenameToAssetPath(const std::string &filepath);
+  static std::string FileExtension(Type type, const std::string &subtype);
+
+  static std::string SubAssetName(const std::string &parentAssetRef,
+                                  const std::string &basename,
+                                  Type type,
+                                  const std::string &subtype);
+  static bool HaveAssetFile(const std::string &ref);
+
+
+  // these can throw
+  static std::string NormalizeAssetName(const std::string &name,
+                                        Type type,
+                                        const std::string &subtype);
+  static std::string GuessAssetRef(const std::string &name);
+  static AssetVersionRef GuessAssetVersionRef(const std::string &name,
+                                              const std::string &version);
+
+  // Validate a string to ensure that it does not contain special characters:
+  // & % ' " * = + ~ ` ? < > \ ; : or " ".
+  // Return true if the name is valid, false otherwise.
+  // Note: an asset may end in a version spec: i.e., asset?version=123
+  // is valid.
+  static bool ValidateAssetName(const std::string& name);
+
+  // This is mainly for the upgrade tool
+  // to look for .kmp files in an assetroot different than
+  // the one stored in systemrc.
+  static void OverrideAssetRoot(const std::string& assetroot);
+
+#/hquote
+};

@@ -1,0 +1,829 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+ 
+ 
+
+
+ 
+
+  
+  
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/articles/communitymap.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Creating a User-Contributed Map with PHP and Google Spreadsheets - Google Maps API Family - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/maps/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../css/iehacks.css"><![endif]-->
+
+    <link href="../../../css/semantic_headers.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    
+    
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  <a href="#gc-pagecontent">Skip to page content</a>
+  <a href="#gc-toc">Skip to main navigation</a>
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps API Family</h1>
+  <ul id="articles" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="../index.html" title="Google Maps API Family home page">Home</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../faq.html" title="Answers to frequently asked questions about Google Maps API Family">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="index.html" class="selected" title="Focused articles and tutorials for Google Maps API Family developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps API Family blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="../forum/index.html" title="Google Maps API Family developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../terms.html" title="Google Maps API Family terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../index.html">Maps API Family</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps Javascript API V3</h2>
+         <ul>
+           <li><a href="../documentation/javascript/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+      <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../documentation/javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+  <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../documentation/flash/index.html">Home Page</a></li>
+          <li><a href="../documentation/flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../documentation/mapsdata/index.html">Home Page</a></li>
+          <li><a href="../documentation/mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+     <div class="line"></div>
+      <ul>
+        <li><h2><a href="../documentation/webservices/index.html">Maps Web Services</a></h2>
+         <ul>
+           <li><a href="../documentation/geocoding/index.html">Geocoding Guide</a></li>
+           <li><a href="../documentation/directions/index.html">Directions Guide</a></li>
+           <li><a href="../documentation/elevation/index.html">Elevation Guide</a></li>
+           <li><a href="../documentation/places/index.html">Places Guide</a></li>
+         </ul>
+       </li>
+      </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../documentation/staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li>
+            <h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../documentation/localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../documentation/localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+      <div class="promo">
+     <p><a href="../documentation/premier/index.html">Google Maps API Premier</a></p><p>Includes enterprise licensing and support</p></div>
+
+        <a class="hidden" href="#gc-topnav-anchor">More Google Maps API Family resource links</a>
+      </div>
+      
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Creating a User-Contributed Map with PHP and Google Spreadsheets</h1>
+
+
+<!-- ########## PAGE CONTENT ########## -->
+<div class=i>
+<em>Pamela Fox, Google Maps API Team
+<br>November 2007</em>
+<h3>Objective</h3>
+<p class="para">
+The web is full of communities centered around geographies and interests: people who love museums, European cathedrals, state parks, etc. So, there's always a need for a developer (like you!) to create a system where users can contribute geotagged places to a map, and that's exactly what we'll do here.
+At the end of this article, you'll have a system where users can register, login, and add geotagged places. The system will use AJAX for the front-end, PHP for server-side scripting, and Google Spreadsheets for storage. If you're accustomed to using MySQL databases for storage, you could easily modify the code here to use a MySQL database backend instead.
+
+</p>
+<p class="para">
+This article is broken up into the following steps:
+</p>
+<ul>
+<li><a href="#SettingUpSpreadsheet">Setting up the Spreadsheet</a></li>
+<li><a href="#ZendFramework">Working with the Zend Gdata Framework</a></li>
+<li><a href="#CreatingGlobalFunctions">Creating Global Functions</a></li>
+<li><a href="#RegisteringUser">Registering a New User</a></li>
+<li><a href="#LoggingInUser">Logging in a User</a></li>
+<li><a href="#LettingUsersAdd">Letting Users Add Map Places</a></li>
+
+<li><a href="#CreatingMap">Creating the Map</a></li>
+<li><a href="#Conclusion">Conclusion</a></li>
+</ul>
+<br/>
+<a name="SettingUpSpreadsheet"></a><h3>Setting up the Spreadsheet</h3>
+<p class="para">
+We'll be using Google Spreadsheets to store all the data for this system. There are two types of data we need to store: user account information and user-added places, so we'll create one worksheet for each data type. We'll be interacting with the worksheets using their list feed, which relies on the first row in a worksheet containing column labels, and each subsequent row containing data.
+</p>
+<p class="para">
+Visit <a href="http://docs.google.com" target="_blank">docs.google.com</a>, and create a new spreadsheet. Rename the default worksheet to "Users," and create columns named "user," "password," and "session."
+Then add another sheet, rename it to "Locations," and create columns named "user," "status," "lat," "lng," and "date." Or, if you don't feel like all that manual labor, download <a href="http://gmaps-samples.googlecode.com/svn/trunk/articles_communitymap/communitymap_template.ods">this template</a> and import it into Google Spreadsheets via the File->Import command.
+
+</p>
+<p class="para">
+ The user account information needs to be kept private (only visible to the spreadsheet owner-you), while the user-added places will be displayed on a publicly visible map. Luckily, Google Spreadsheets allows you to selectively decide which worksheets in a spreadsheet can be public and which should remain private (default). To publish the "Locations" worksheet, click on the "Publish" tab, click "Publish now," check the "Automatically re-publish" checkbox, and then in the "What parts?" drop-down, select "Sheet 'Locations' only." The correct options are shown in the screenshot below:
+</p>
+<img src="http://www.google.com/help/hc/images/communitymap_publishsheet.jpg" style="border:1px solid black; margin: 20px"/>
+<a name="ZendFramework"></a><h3>Working with the Zend GData Framework</h3>
+<p class="para">
+The Google Spreadsheets API provides an HTTP interface for CRUD operations like retrieving rows, inserting rows, updating rows and deleting rows. The Zend Framework provides a PHP wrapper on top of the API (and the other GData APIs) so that you don't have to worry about implementing the raw HTTP operations. The Zend Framework requires PHP 5.
+</p>
+<p class="para">
+If you don't have it already, download the Zend framework and upload it to your server. The framework is available here:
+<a href="http://framework.zend.com/download/gdata">http://framework.zend.com/download/gdata</a>.
+</p>
+<p class="para">
+
+You should modify your PHP include_path to include the Zend library. There are several ways of doing that, depending on the level of administration rights you have on your server. One way is to add this line above the require statements in any PHP files using the library:
+<br/>
+<pre class="code">
+ini_set("include_path", ".:/usr/lib/php:/usr/local/lib/php:../../../library/");
+</pre>
+</p>
+<p class="para">
+To test it out, run the Spreadsheets demo by entering this at the command line in the demos/Zend/Gdata folder:
+</p>
+<pre class="code">
+php Spreadsheet-ClientLogin.php --user=YourGMailUsername --pass=YourPassword
+</pre>
+<p class="para">
+If it works, you should see a list of your spreadsheets displayed. If you get an error, check your include path is set correctly and that you have PHP 5 installed.
+</p>
+<a name="CreatingGlobalFunctions"></a><h3>Creating Global Functions</h3>
+
+<p class="para">
+All of the PHP scripts we'll be writing for the Community Map will be using common includes, variables, and functions, which we'll put in one file.
+</p>
+<p class="para">
+At the beginning of the file, we'll have the necessary statements to include and load the Zend library, taken from the Spreadsheets-ClientLogin.php example.
+</p>
+<p class="para">
+Then we'll define the constants that will be used throughout the files: the spreadsheet key and the two worksheet IDs. To find the information for your spreadsheet, open it up, click on the "Publish tab," and click on "More publishing options." Select "ATOM" from the File Format drop-down list, and click "Generate URL." You'll see something like:
+</p>
+<pre class="code">
+http://spreadsheets.google.com/feeds/list/o16162288751915453340.4016005092390554215/od6/public/basic
+</pre>
+<p class="para">
+The spreadsheet key is the long alphanumeric string after "/list/," and the worksheet ID is the 3-character long string after that. To find the other worksheet ID, select the other sheet from the "What Sheets?" drop-down.
+</p>
+<p class="para">
+Then we'll create 3 functions: setupClient, getWkshtListFeed, and printFeed. In setupClient, we'll set our GMail username and password, authenticate with ClientLogin, and return a Zend_Gdata_Spreadsheets object. In getWkshtListFeed, we'll return a Spreadsheets list feed for a given spreadsheet key and worksheet id, with an optional spreadsheets query (link). The printFeed function is taken from the Spreadsheets-ClientLogin.php example, and may be useful to you for debugging. It will take in a feed object and print it out to the screen.
+
+</p>
+<p class="para">
+The PHP that does this is shown below (<a href="http://gmaps-samples.googlecode.com/svn/trunk/articles_communitymap/communitymap_globals.php" target="_blank">communitymap_globals.php</a>):
+</p>
+<pre class="code">
+&lt;?php
+ini_set("include_path", ".:/usr/lib/php:/usr/local/lib/php:../../../library/");
+require_once 'Zend/Loader.php';
+Zend_Loader::loadClass('Zend_Gdata');
+Zend_Loader::loadClass('Zend_Gdata_ClientLogin');
+Zend_Loader::loadClass('Zend_Gdata_Spreadsheets');
+Zend_Loader::loadClass('Zend_Http_Client');
+
+define("SPREADSHEET_KEY", "o16162288751915453340.4016005092390554215");
+define("USER_WORKSHEET_ID", "od6");
+define("LOC_WORKSHEET_ID", "od7");
+ 
+function setupClient() {
+  $email = "your.name@gmail.com";
+  $password = "yourPassword";
+  $client = Zend_Gdata_ClientLogin::getHttpClient($email, $password,
+          Zend_Gdata_Spreadsheets::AUTH_SERVICE_NAME);
+  $gdClient = new Zend_Gdata_Spreadsheets($client);
+  return $gdClient;
+}
+ 
+function getWkshtListFeed($gdClient, $ssKey, $wkshtId, $queryString=null) {
+  $query = new Zend_Gdata_Spreadsheets_ListQuery();
+  $query->setSpreadsheetKey($ssKey);
+  $query->setWorksheetId($wkshtId);
+  if ($queryString !== null) {
+    $query->setSpreadsheetQuery($queryString);
+  }
+  $listFeed = $gdClient->getListFeed($query);
+  return $listFeed;
+}
+ 
+function printFeed($feed)
+{
+  print "printing feed";
+  $i = 0;
+  foreach($feed->entries as $entry) {
+      if ($entry instanceof Zend_Gdata_Spreadsheets_CellEntry) {
+         print $entry->title->text .' '. $entry->content->text . "\n";
+      } else if ($entry instanceof Zend_Gdata_Spreadsheets_ListEntry) {
+         print $i .' '. $entry->title->text .' '. $entry->content->text . "\n";
+      } else {
+         print $i .' '. $entry->title->text . "\n";
+      }
+      $i++;
+  }
+}
+ 
+?&gt;
+</pre>
+<a name="RegisteringUser"></a><h3>Registering a New User</h3>
+<p class="para">
+To register a new user, we'll want a user-facing HTML page with text fields and a submit button, and a PHP backend script to add the user to the spreadsheet.
+</p>
+<p class="para">
+In the PHP script, we first include the global script and then get the username and password values from the GET variable. Then we set up a Spreadsheets client, and request the list feed for the users worksheet with a query string to restrict results to only rows where the username column equals the username passed into the script. If we get no rows in the list feed result, then we can safely proceed knowing that the username passed in is unique. Before inserting a row in the list feed, we create an associative array of the column values: the username, an encryption of the password using PHP's sha1 function, and a filler character for the session. Then we call insertRow on the spreadsheets client, passing in the associative array, the spreadsheets key, and the worksheet ID. If the returned object is a ListFeedEntry, then we output a Success! message.
+
+</p>
+<p class="para">
+The PHP that does this is shown below (<a href="http://gmaps-samples.googlecode.com/svn/trunk/articles_communitymap/communitymap_newuser.php" target="_blank">communitymap_newuser.php</a>):
+</p>
+<pre class="code">
+&lt;?php
+ 
+require_once 'communitymap_globals.php';
+ 
+$username = $_GET['username'];
+$password = $_GET['password'];
+ 
+$gdClient = setupClient();
+ 
+$listFeed = getWkshtListFeed($gdClient, SPREADSHEET_KEY, USER_WORKSHEET_ID, ('user='.$username));
+$totalResults = $listFeed->totalResults;
+if ( $totalResults != "0") {
+  // Username already exists
+  exit;
+}
+ 
+$rowArray["user"] = $username;
+$rowArray["password"] = sha1($password);
+$rowArray["session"] = "a";
+ 
+$entry = $gdClient->insertRow($rowArray, SPREADSHEET_KEY, USER_WORKSHEET_ID);
+if ($entry instanceof Zend_Gdata_Spreadsheets_ListEntry) {
+  echo "Success!";
+}
+?&gt;
+</pre>
+<p class="para">
+On the registration page, we can include the Maps API so that we can use it's XMLHttpRequest wrapper function called GDownloadUrl. When the user clicks the submit button, we'll get the username and password from the text fields, construct a parameters string from their values, and call GDownloadUrl on the script url and parameters. Since we're sending sensitive information, we're using the HTTP POST version of GDownloadUrl (by sending the parameters as the third argument instead of appending them to the URL). In the callback function, we'll check for a successful response and output an appropriate message to the user.
+</p>
+<p class="para">
+A screenshot and code are shown below for a sample registration page (<a href="http://gmaps-samples.googlecode.com/svn/trunk/articles_communitymap/communitymap_register.htm" target="_blank">communitymap_register.htm</a>):
+
+</p>
+<img src="http://www.google.com/help/hc/images/communitymap_register.jpg" style="border:1px solid black; margin: 20px"/>
+<br/>
+<pre class="code">
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+  &lt;head&gt;
+  &lt;title&gt; Community Map - Register/Login &lt;/title&gt;
+
+  &lt;script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=abcdef"
+      type="text/javascript"&gt;&lt;/script&gt;
+  &lt;script type="text/javascript"&gt;
+
+  function register() {
+    var username = document.getElementById("username").value;
+    var password = document.getElementById("password").value;
+    var url = "communitymap_newuser.php?";
+    var params = "username=" + username + "&password=" + password;
+    GDownloadUrl(url, function(data, responseCode) {
+      if (data.length &gt; 1) {
+        document.getElementById("message").innerHTML = "Successfully registered." + 
+          "&lt;a href='communitymap_login.htm'&gt;Proceed to Login&lt;/a&gt;.";
+      } else {
+        document.getElementById("message").innerHTML = "Username already exists. Try again.";
+      }
+    }, params);
+  }
+
+  &lt;/script&gt;
+
+  &lt;/head&gt;
+  &lt;body&gt;
+  &lt;h1&gt;Register for Community Map&lt;/h1&gt;
+  &lt;input type="text" id="username"&gt;
+  &lt;input type="password" id="password"&gt;
+
+  &lt;input type="button" onclick="register()" value="Register"&gt;
+  &lt;div id="message"&gt;&lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<a name="LoggingInUser"></a><h3>Logging in a User</h3>
+<p class="para">
+
+To allow users to sign into our system, we'll want a user-facing HTML page to prompt them for their username and password &mdash; and a PHP script to verify the login information, create a session ID, and pass it back to the login page to set a cookie. The user will stay logged in through the session cookie on subsequent pages.
+</p>
+<p class="para">
+In the PHP script, we first include the global script and then get the username and password values from the GET variable. Then we set up a Spreadsheets client, and request the list feed for the users worksheet with a query string to restrict results to only rows where the username column equals the username passed into the script.
+</p>
+<p class="para">
+In the row that's returned, we'll check that the hash of the password passed in matches the hash stored in the spreadsheet. If it is, we'll create a session ID using the md5, uniqid, and rand functions. Then we'll update the row in the spreadsheet with the session, and output it to the screen if the row update is successful.
+</p>
+<p class="para">
+The PHP that does that is shown below (<a href="http://gmaps-samples.googlecode.com/svn/trunk/articles_communitymap/communitymap_loginuser.php" target="_blank">communitymap_loginuser.php</a>):
+</p>
+<pre class="code">
+&lt;?php
+ 
+require_once 'communitymap_globals.php';
+ 
+$username = $_POST['username'];
+$password = $_POST['password'];
+ 
+$gdClient = setupClient();
+ 
+$listFeed = getWkshtListFeed($gdClient, SPREADSHEET_KEY, USER_WORKSHEET_ID, ('user='.$username));
+ 
+$password_hash = sha1($password);
+$row = $listFeed-&gt;entries[0];
+$rowData = $row-&gt;getCustom();
+foreach($rowData as $customEntry) {
+  if ($customEntry-&gt;getColumnName()=="password" && $customEntry-&gt;getText()==$password_hash) {
+    $updatedRowArray["user"] = $username;
+    $updatedRowArray["password"] = sha1($password);
+    $updatedRowArray["session"] = md5(uniqid(rand(), true));
+    $updatedRow = $gdClient-&gt;updateRow($row, $updatedRowArray); 
+    if ($updatedRow instanceof Zend_Gdata_Spreadsheets_ListEntry) {
+      echo $updatedRowArray["session"];
+    }
+  }
+}
+?&gt;
+
+</pre>
+<p class="para">
+On the login page, we can again include the Maps API so that we can use it's XMLHttpRequest wrapper function called GDownloadUrl. When the user clicks the submit button, we'll get the username and password from the text fields, construct the script URL with the query parameters, and call GDownloadUrl on the script url. In the callback function, we'll set a cookie with the session ID that's returned by the script, or output an error message if none is returned. The setCookie function comes from a cookies.js that's based on the w3c JavaScript tutorial: http://www.w3schools.com/js/js_cookies.asp.
+</p>
+<p class="para">
+A screenshot and code are shown below for a sample login page (<a href="http://gmaps-samples.googlecode.com/svn/trunk/articles_communitymap/communitymap_login.htm" target="_blank">communitymap_login.htm</a>):
+</p>
+<img src="http://www.google.com/help/hc/images/communitymap_login.jpg" style="border:1px solid black; margin: 20px"/>
+<br/>
+<pre class="code">
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+  &lt;head&gt;
+
+  &lt;title&gt;Community Map - Login&lt;/title&gt;
+      &lt;script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=abcdef"
+      type="text/javascript"&gt;&lt;/script&gt;
+  &lt;script src="cookies.js" type="text/javascript"&gt;&lt;/script&gt;
+  &lt;script type="text/javascript"&gt;
+
+  function login() {
+    var username = document.getElementById("username").value;
+    var password = document.getElementById("password").value;
+    var url = "communitymap_loginuser.php?username=" + username + "&password=" + password;
+    GDownloadUrl(url, function(data, responseCode) {
+      if (data.length &gt; 1) {
+        setCookie("session", data, 5);
+      } else {
+        document.getElementById("nessage").innerHTML = "Error. Try again.";
+      }
+    });
+  }
+
+  &lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+
+  &lt;h1&gt;Login for Community Map&lt;/h1&gt;
+
+  &lt;input type="text" id="username"&gt;
+  &lt;input type="password" id="password"&gt;
+  &lt;input type="button" onclick="login()" value="Login"&gt;
+  &lt;div id="message"&gt;&lt;/div&gt;
+  &lt;/body&gt;
+
+&lt;/html&gt;
+
+</pre>
+<a name="LettingUsersAdd"></a><h3>Letting Users Add Map Places</h3>
+<p class="para">
+To let a user add places to our map, we'll want a user-facing HTML page to let them provide information about the location, and two PHP scripts - one to check that they're logged in through the cookie we set, and another to add the location to the locations worksheet.
+</p>
+<p class="para">
+In the first PHP script that checks if a user is logged in, we first include the global script and then get the session value from the GET variable. Then we set up a Spreadsheets client, and request the list feed for the users worksheet with a query string to restrict results to only those rows where the session column equals the session value passed into the script. We then iterate through the custom entries of that feed (the ones that correspond to our column headers), and print out the corresponding user name for that session if one exists.
+</p>
+<p class="para">
+The PHP that does that is shown below (<a href="http://gmaps-samples.googlecode.com/svn/trunk/articles_communitymap/communitymap_checksession.php" target="_blank">communitymap_checksession.php</a>):
+</p>
+
+<pre class="code">
+&lt;?php
+
+require_once 'communitymap_globals.php';
+
+$session = $_GET['session'];
+
+$gdClient = setupClient();
+
+$listFeed = getWkshtListFeed($gdClient, SPREADSHEET_KEY, USER_WORKSHEET_ID, ('session='.$session));
+
+if ( count($listFeed-&gt;entries) > 0) {
+  $row = $listFeed-&gt;entries[0];
+  $rowData = $row-&gt;getCustom();
+  foreach($rowData as $customEntry) {
+    if ($customEntry-&gt;getColumnName()=="user") {
+      echo $customEntry-&gt;getText();
+    }
+  }
+}
+?&gt;
+</pre>
+<p class="para">
+In the second PHP script that lets a user add a location, we first replicate the code from communitymap_checksession.php, to make sure the user is still logged in and valid. Then once we get a valid username back from the users sheet, we get the place, lat, and lng values from the GET variable. We put all those values into an associative array, and we also add a "date" value using PHP's date() function, so that we know when the user added the place. We pass that associative array, the spreadsheets key constant, and the locations worksheet id constant into the insertRow function. We then output "Success" if a row for the new location was added to the spreadsheet. If you're getting an error at this step, it's likely due to a mismatch in column header names. The keys in the associative array must match the column headers in the worksheet specified by the spreadsheet key and worksheet ID.
+</p>
+<p class="para">
+The PHP that does that is shown below (<a href="http://gmaps-samples.googlecode.com/svn/trunk/articles_communitymap/communitymap_addlocation.php" target="_blank">communitymap_addlocation.php</a>):
+</p>
+
+<pre class="code">
+&lt;?php
+
+require_once 'communitymap_globals.php';
+
+$session = $_GET['session'];
+
+$gdClient = setupClient();
+
+$listFeed = getWkshtListFeed($gdClient, SPREADSHEET_KEY, USER_WORKSHEET_ID, ('session='.$session));
+
+if ( count($listFeed-&gt;entries) &gt; 0) {
+  $row = $listFeed-&gt;entries[0];
+  $rowData = $row-&gt;getCustom();
+  foreach($rowData as $customEntry) {
+    if ($customEntry-&gt;getColumnName()=="user") {
+      $user = $customEntry-&gt;getText();
+    }
+  }
+
+  $place = $_GET['place'];
+  $lat = $_GET['lat'];
+  $lng = $_GET['lng'];
+  $rowArray["user"] = $user;
+  $rowArray["place"] = $place;
+  $rowArray["lat"] = $lat;
+  $rowArray["lng"] = $lng;
+  $rowArray["date"] = date("F j, Y, g:i a");
+  $entry = $gdClient-&gt;insertRow($rowArray, SPREADSHEET_KEY, LOC_WORKSHEET_ID);
+  if ($entry instanceof Zend_Gdata_Spreadsheets_ListEntry) {
+    echo "Success!\n";
+  }
+}
+
+?&gt;
+</pre>
+<p class="para">
+On the add location page, we can again include the Maps API so that we can use GDownloadUrl and create a map. After the page loads, we use the getCookie function from cookies.js to retrieve the session value. If the session string is null or empty, we output an error message. If it's not, then we call GDownloadUrl on map.checksession.php, sending in the session. If that successfully returns a username, we display a welcome message to the user, reveal the add-a-location form, and load the map in.
+The form consists of an address text field, map, and text fields for the placename, latitude, and longitude. If the user doesn't already know the latitude/longitude of the location, they can geocode it by entering their address in the form and pressing "submit." That will send a call to the Map API's GClientGeocoder, which will place a marker on the map if it finds the address, and auto-populate the lat/lng text fields.
+</p>
+<p class="para">
+When the user is satisfied, they can press the "add location" button. Then, in the JavaScript, we'll get the values for user, place, lat, and lng, and send them off to the communitymap_addlocation.php script with <code>GDownloadUrl</code>.
+
+</p>
+<p class="para">
+If that script returns success, we'll output a success message to the screen.
+</p>
+A screenshot and code are shown below for a sample add location page (<a href="http://gmaps-samples.googlecode.com/svn/trunk/articles_communitymap/communitymap_addlocation.htm" target="_blank">communitymap_addlocation.htm</a>):
+<br/>
+<img src="http://www.google.com/help/hc/images/communitymap_addlocation.jpg" style="border:1px solid black; margin: 20px"/>
+<br/>
+<pre class="code">
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+  &lt;head&gt;
+
+    &lt;meta http-equiv="content-type" content="text/html; charset=UTF-8"/&gt;
+    &lt;title&gt;Community Map - Add a Place!&lt;/title&gt;
+
+    &lt;script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=abcdef" type="text/javascript"&gt;&lt;/script&gt;
+    &lt;script src="cookies.js" type="text/javascript"&gt;&lt;/script&gt;
+
+    &lt;script type="text/javascript"&gt;
+    //&lt;![CDATA[
+
+    var map = null;
+    var geocoder = null; 
+    var session = null;
+
+    function load() {
+      session = getCookie('session');
+      if (session != null && session != "") {
+        url = "communitymap_checksession.php?session=" + session;
+        GDownloadUrl(url, function(data, responseCode) {
+          if (data.length &gt; 0) {
+            document.getElementById("message").innerHTML = "Welcome " + data;
+            document.getElementById("content").style.display = "block";
+            map = new GMap2(document.getElementById("map"));
+            map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+            geocoder = new GClientGeocoder();
+          }
+        });
+      } else {
+        document.getElementById("message").innerHTML = "Error: Not logged in.";
+      }
+    }
+
+    function addLocation() {
+      var place = document.getElementById("place").value;
+      var lat = document.getElementById("lat").value;
+      var lng = document.getElementById("lng").value;
+
+      var url = "communitymap_addlocation.php?session=" + session + "&place=" + place +
+                "&lat=" + lat + "&lng=" + lng;
+      GDownloadUrl(url, function(data, responseCode) {
+        GLog.write(data);
+        if (data.length &gt; 0) {
+          document.getElementById("message").innerHTML = "Location added.";
+        }
+      });
+    }
+
+    function showAddress(address) {
+      if (geocoder) {
+        geocoder.getLatLng(
+          address,
+          function(point) {
+            if (!point) {
+              alert(address + " not found");
+            } else {
+              map.setCenter(point, 13);
+              var marker = new GMarker(point, {draggable:true});
+              document.getElementById("lat").value = marker.getPoint().lat().toFixed(6);
+              document.getElementById("lng").value = marker.getPoint().lng().toFixed(6);
+
+              map.addOverlay(marker);
+              GEvent.addListener(marker, "dragend", function() {
+                document.getElementById("lat").value = marker.getPoint().lat().toFixed(6);
+                document.getElementById("lng").value = marker.getPoint().lng().toFixed(6);
+        });
+            }
+          }
+        );
+      }
+    }
+    //]]&gt;
+
+    &lt;/script&gt;
+
+  &lt;/head&gt;
+
+  &lt;body onload="load()" onunload="GUnload()"&gt;
+   &lt;div id="message"&gt;&lt;/div&gt;
+   &lt;div id="content" style="display:none"&gt;
+
+   &lt;form action="#" onsubmit="showAddress(this.address.value); return false"&gt;
+        &lt;p&gt;
+        &lt;input type="text" size="60" name="address" value="1600 Amphitheatre Pky, Mountain View, CA" /&gt;
+        &lt;input type="submit" value="Geocode!" /&gt;
+
+    &lt;/form&gt;
+
+      &lt;/p&gt;
+
+      &lt;div id="map" style="width: 500px; height: 300px"&gt;&lt;/div&gt;
+ 
+  Place name: &lt;input type="text" size="20" id="place" value="" /&gt;
+  &lt;br/&gt;
+  Lat: &lt;input type="text" size="20" id="lat" value="" /&gt;
+
+  &lt;br/&gt;
+
+  Lng: &lt;input type="text" size="20" id="lng" value="" /&gt;
+
+        &lt;br/&gt;
+  &lt;input type="button" onclick="addLocation()" value="Add a location" /&gt;
+    &lt;/form&gt;
+
+    &lt;/div&gt;
+
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<a name="CreatingMap"></a><h3>Creating the Map</h3>
+<p class="para">
+Since you made the locations worksheet public in the first step, there is no server-side programming required to create a map of them. In fact, there is no programming required at all. You can use this <a href="http://gmaps-samples.googlecode.com/svn/trunk/spreadsheetsmapwizard/makecustommap.htm" target="_blank">Spreadsheets -> Map wizard</a>, and it will generate all the code needed for the map. The wizard downloads the worksheet entries into the page by way of appending a script tag that points to the JSON output for the feed, and specifies a callback function that gets called once the JSON has downloaded. More information is available <a href="http://code.google.com/apis/gdata/samples/spreadsheet_sample.html" target="_blank">here</a>.
+
+</p>
+<p class="para">
+Sample HTML code for doing that is available here: <a href="http://gmaps-samples.googlecode.com/svn/trunk/articles_communitymap/communitymap_mainmap.htm" target="_blank">mainmap.htm</a>. A screenshot is shown below:
+</p>
+<img src="http://www.google.com/help/hc/images/communitymap_mainmap.jpg" style="border:1px solid black; margin: 20px"/>
+<a name="Conclusion"></a><h3>Conclusion</h3>
+<p class="para">
+Hopefully, you now have your very own user-contributed map system running on your server. This article provides the very basic code needed for the essential aspects of this system, but now that you're familiar with the Zend Spreadsheets library, you should be able to extend the system to meet your particular needs. If you've run into errors along the way, remember that you can use the <code>echo</code> command in PHP or the Map API's <code>GLog.write()</code> in JavaScript for debugging, and you can always post in the <a href="http://groups.google.com/group/Google-Maps-API/" target="_blank">Maps API</a> or <a href="http://groups.google.com/group/Google-Docs-Data-APIs" target="_blank">Spreadsheets API</a> developer forums for additional help.
+
+</p>
+</div>
+
+<!-- ########## END PAGE CONTENT ########## -->
+  
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

@@ -1,0 +1,52 @@
+Copyright 2017 Google Inc.
+
+Google’s Proprietary Rights
+
+You understand and agree that Google and its licensors and their suppliers
+(as applicable) own all legal right, title, and interest in and to the Service
+and Content, including any intellectual property rights in the Service and
+Content (whether those rights are registered or not, and wherever in the world
+those rights may exist).
+
+General Google API Restrictions
+
+The following restrictions apply generally to all Google Services, including
+the Google application programming interfaces at
+https://developers.google.com/products/
+(or such other URL as Google may provide) (the “Google API(s)”). You will not:
+
+a. Sublicense a Google API for use by a third party. Consequently, you will not
+create an API client that functions substantially the same as the Google APIs
+and offer it for use by third parties.
+
+b. Perform an action with the intent of introducing to Google Services any
+viruses, worms, defects, Trojan horses, malware, or any items of a destructive
+nature.
+
+c. Defame, abuse, harass, stalk, or threaten others.
+
+d. Interfere with or disrupt the Google APIs or the servers or networks
+providing the Google APIs.
+
+e. Promote or facilitate unlawful online gambling or disruptive commercial
+messages or advertisements.
+
+f. Reverse engineer or attempt to extract the source code from any Google API
+or any related software, except to the extent that this restriction is expressly
+prohibited by applicable law.
+
+g. Use the Google APIs for any activities where the use or failure of the Google
+APIs could lead to death, personal injury, or environmental damage (such as the
+operation of nuclear facilities, air traffic control, or life support systems).
+
+h. Use the Google APIs to process or store any data that is subject to the
+International Traffic in Arms Regulations maintained by the U.S. Department of
+State.
+
+i. Remove, obscure, or alter any Google terms of service, or any links to or
+notices of those terms.
+
+For more information, refer to the relevant sections in the
+Google Maps APIs Terms of Service:
+
+https://developers.google.com/maps/terms

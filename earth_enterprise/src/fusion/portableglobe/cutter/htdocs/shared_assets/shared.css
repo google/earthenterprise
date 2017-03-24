@@ -1,0 +1,548 @@
+/*
+ * Copyright 2017 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* TODO: High-level file comment. */
+/* Shared/Common Elements First */
+@font-face {
+  font-family: "Open Sans";
+  src: url('fonts/OpenSans-Regular-webfont.eot'),
+       url('fonts/OpenSans-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+       url('fonts/OpenSans-Regular-webfont.svg#OpenSansRegular') format('svg'),
+       url('fonts/OpenSans-Regular-webfont.woff') format('woff'),
+       url('fonts/OpenSans-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Open Sans Light";
+  src: url('fonts/OpenSans-Light-webfont.eot'),
+       url('fonts/OpenSans-Light-webfont.eot?#iefix') format('embedded-opentype'),
+       url('fonts/OpenSans-Light-webfont.svg#OpenSansLight') format('svg'),
+       url('fonts/OpenSans-Light-webfont.woff') format('woff'),
+       url('fonts/OpenSans-Light.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+#earth {
+  position: absolute;
+  width: 100%;
+  top: 64px;
+  left: 0;
+  bottom: 0;
+  z-index: -10000;
+}
+#GoogImg {
+ inherit: none;
+ margin-left: 16px;
+ position: relative;
+ padding: 16px;
+}
+#GoogImg label {
+  font-family: "Open Sans Light", sans-serif;
+  font-size: 28px;
+  position: absolute;
+  color: #777;
+  margin-left: 8px;
+  margin-top: -5px;
+  white-space: nowrap;
+}
+#Header,
+#ApacheHeader {
+ z-index: 3000;
+ width: 100%;
+ right: 0;
+ height:65px;
+ border-style: solid;
+ border-width: 0 0 0 0;
+ border-color: #E8E8E8;
+ background-color: #F1F1F1;
+ opacity: 1;
+ -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+ filter: alpha(opacity=100);
+ box-shadow: 0 0 8px 3px rgba(0,0,0,.078);
+ position: absolute;
+ top: 0;
+ margin-bottom: 16px;
+ border-bottom: 1px solid #DCDCDC;
+ overflow: hidden;
+}
+
+#ApacheHeader {
+  position: fixed;
+  box-shadow: 0 0 8px 3px rgba(0,0,0,.1);
+}
+
+#LayersHolder {
+  font-family: "Arial", sans-serif;
+  display: block;
+  min-height: 0px;
+  width: 250px;
+  position: absolute;
+  top: 85px;
+  left: 36px;
+  background-color: #FFF;
+  border-radius: 1px;
+  box-shadow: 0px 1px 3px rgba(0,0,0,0.25);
+  overflow: hidden;
+  color: #333;
+  font-size: 13px;
+  padding-bottom: 2px;
+}
+#LayerDiv span {
+  display: block;
+  width: 235px;
+  font-size: 13px;
+  color: #666;
+  padding: 8px 12px;
+  margin-bottom: 0px;
+}
+
+#LayerDiv h2 {
+  font-weight: normal;
+  font-size: 13px;
+  padding: 0;
+  margin: 0;
+  max-width: 215px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#LayerDiv label {
+  display: block;
+  margin-left: 16px;
+  font-size: 12px;
+  height: 22px;
+  vertical-align: top;
+  width: 210px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 20px;
+}
+
+#LayerDiv label em {
+  display: inline-block;
+  width: 12px;
+}
+
+#PreviewOptionsButton {
+  position: absolute;
+  display: block;
+  height: 16px;
+  width: 19px;
+  top: 4px;
+  right: 4px;
+  background: url('images/show_all_sheet.png');
+  cursor: pointer;
+  opacity: .6;
+}
+
+#PreviewOptionsButton:hover {
+  opacity: .3;
+}
+
+#PreviewOptions {
+  position: absolute;
+  display: none;
+  width: 150px;
+  top: 24px;
+  right: 2px;
+  background-color: #fff;
+  border: 1px solid #999;
+  box-shadow: 1px 1px 2px #DCDCDC;
+}
+
+#PreviewOptions em {
+  text-align: right;
+  display: block;
+  font-size: 11px;
+  height: 14px;
+  border: 0;
+  padding: 2px 4px;
+  font-style: normal;
+}
+
+#PreviewOptions em:hover {
+  background-color: #DCDCDC;
+  cursor: pointer;
+}
+
+.CollapseIcon {
+  display: inline-block;
+  border: 0;
+  font-size: 10px;
+  margin-top: -4px;
+  height: 22px;
+  vertical-align: top;
+  margin-top: 0;
+  color: #2A76F6;
+  text-decoration: none;
+}
+
+#map {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+}
+#SearchResults span,
+#SearchDiv span {
+  padding: 8px;
+  color: #666;
+  font-size: 13px;
+  height: 16px;
+  padding: 4px 8px;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0 2px 2px rgba(0,0,0,0.15);
+  display: block;
+  margin-top: 4px;
+  vertical-align: top;
+}
+
+#SearchResults span img,
+#SearchDiv span img {
+  cursor: pointer;
+  margin-bottom: -6px;
+}
+
+#SearchResults label,
+#SearchDiv label,
+#SearchDiv div {
+  display: block;
+  padding: 8px 12px;
+}
+
+#SearchDiv label,
+#SearchDiv div {
+  display: none;
+}
+
+#SearchResults em,
+#SearchDiv em {
+  display: block;
+  color: #666;
+  font-style: italic;
+  font-size: 10px;
+  margin-left: 4px;
+}
+
+#SearchResults {
+  display: none;
+}
+
+#ResultsDiv {
+  max-height: 175px;
+  overflow: auto;
+  background-color: #F8F8F8;
+}
+
+#ResultsDiv label {
+  vertical-align: top;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+#ResultsDiv label:hover {
+  background-color: #DCDCDC;
+}
+
+#ResultsDiv img {
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  margin-right: 8px;
+}
+
+#ResultsDiv em {
+  margin: 0;
+  background-color: rgb(235, 235, 235);
+  padding: 6px 12px;
+  font-size: 11px;
+}
+
+#CloseResults {
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-block;
+  width: 20px;
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  height: 16px;
+  color: #333;
+  text-align: right;
+  z-index: 10;
+  vertical-align: top;
+  float: right;
+}
+
+#ZmControls {
+  display: block;
+  position: absolute;
+  right: 35px;
+  bottom: 45px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 2px;
+  z-index: 25;
+}
+#ZmIn {
+  background-color: rgb(245, 245, 245);
+  border: 1px solid rgb(219, 219, 219);
+  width: 16px;
+  height: 16px;
+  padding: 7px;
+  cursor: pointer;
+  z-index: 25;
+}
+#ZmOut {
+  background-color: rgb(245, 245, 245);
+  border: 1px solid rgb(219, 219, 219);
+  width: 16px;
+  height: 16px;
+  padding: 7px;
+  cursor: pointer;
+  z-index: 25;
+}
+input[type=checkbox] {
+  height: 13px;
+  width: 13px;
+  appearance: none;
+  -webkit-appearance: none;
+  content: url('images/unchecked.png');
+}
+input[type=checkbox]:checked {
+  content:url('images/checked.png');
+}
+input[type=checkbox]:disabled {
+  opacity: .5;
+}
+
+input[type=text] {
+ height: 24px;
+ background-color: #FFF;
+ line-height: 27px;
+ padding-left: 2px;
+ color: #333;
+ border: 1px solid #d9d9d9;
+ border-top: 1px solid #c0c0c0;
+ display: block;
+ vertical-align: top;
+ box-sizing: border-box;
+ border-radius: 1px;
+ margin-left: 2px;
+ margin-top: 4px;
+ margin-bottom: 2px;
+}
+
+.IframeHeader,
+.IframeLayers {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -500;
+}
+
+.StandardButton {
+ font-family: "Arial", sans-serif;
+ margin-right: 8px;
+ margin-top: 4px;
+ display: inline-block;
+ min-width: 54px;*min-width:70px;/*hello,IE7!*/
+ max-width: 200px;
+ border:1px solid #DCDCDC;
+ border: 1px solid rgba(0,0,0,0.1);
+ text-align: center;
+ color: #444;
+ font-size: 11px;
+ font-weight: bold;
+ height: 27px;
+ padding: 0 8px;
+ line-height: 27px;
+ border-radius: 2px;
+ -webkit-transition: all 0.1s;
+ -moz-transition: all 0.1s;
+ -o-transition: all 0.1s;
+ transition: all 0.1s;
+ background-color: #f5f5f5;
+ background-image: -webkit-gradient(linear,left top,left bottom,from(#f5f5f5),to(#f1f1f1));
+ background-image: -webkit-linear-gradient(top,#f5f5f5,#f1f1f1);
+ background-image: -moz-linear-gradient(top,#f5f5f5,#f1f1f1);
+ background-image: -ms-linear-gradient(top,#f5f5f5,#f1f1f1);
+ background-image: -o-linear-gradient(top,#f5f5f5,#f1f1f1);
+ background-image: linear-gradient(top,#f5f5f5,#f1f1f1);
+ filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#f5f5f5',EndColorStr='#f1f1f1');
+ -webkit-user-select:none;
+ -moz-user-select:none;
+ cursor:default;
+ text-decoration: none;
+}
+.StandardButton:hover, .StandardButton.hover {
+ text-decoration: none;
+ border: 1px solid #C6C6C6;
+ color: #222;
+ -webkit-transition: all 0.0s;
+ -moz-transition: all 0.0s;
+ -o-transition: all 0.0s;
+ transition: all 0.0s;
+ background-color: #f8f8f8;
+ background-image: -webkit-gradient(linear,left top,left bottom,from(#f8f8f8),to(#f1f1f1));
+ background-image: -webkit-linear-gradient(top,#f8f8f8,#f1f1f1);
+ background-image: -moz-linear-gradient(top,#f8f8f8,#f1f1f1);
+ background-image: -ms-linear-gradient(top,#f8f8f8,#f1f1f1);
+ background-image: -o-linear-gradient(top,#f8f8f8,#f1f1f1);
+ background-image: linear-gradient(top,#f8f8f8,#f1f1f1);
+ filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#f8f8f8',EndColorStr='#f1f1f1');
+ box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+}
+.StandardButton:active, .StandardButton.active {
+ text-decoration: none;
+ background-color: #f6f6f6;
+ background-image: -webkit-gradient(linear,left top,left bottom,from(#f6f6f6),to(#f1f1f1));
+ background-image: -webkit-linear-gradient(top,#f6f6f6,#f1f1f1);
+ background-image: -moz-linear-gradient(top,#f6f6f6,#f1f1f1);
+ background-image: -ms-linear-gradient(top,#f6f6f6,#f1f1f1);
+ background-image: -o-linear-gradient(top,#f6f6f6,#f1f1f1);
+ background-image: linear-gradient(top,#f6f6f6,#f1f1f1);
+ filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#f6f6f6',EndColorStr='#f1f1f1');
+ box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+.StandardButton.active{
+ border: 1px solid #C6C6C6;
+ color: #333;
+}
+.StandardButton:visited {
+ color: #000;
+ text-decoration: none;
+}
+
+#ButterBar,
+#ErrorBar {
+  margin: 0 auto;
+  font-family: "Arial", sans-serif;
+  font-size: 11px;
+  display: none;
+  position: absolute;
+  margin-top: 45px;
+  margin-left: 35%;
+  width: auto;
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  z-index: 11000;
+  padding: 4px 8px;
+}
+
+
+#ButterBar span,
+#ErrorBar span {
+  width: auto;
+}
+
+#ButterBar {
+  color: #333;
+  background-color: #F9EDBE;
+  border: 1px solid #F0C36D;
+}
+
+#ErrorBar {
+  color: #fff;
+  background-color: #d14836;
+  border: 1px solid #666;
+}
+
+#ButterBar a:link,
+#ButterBar a:visited,
+#ButterBar a:active {
+  margin-left: 8px;
+  color: #333;
+}
+
+#ErrorBar a:link,
+#ErrorBar a:visited,
+#ErrorBar a:active {
+  margin-left: 8px;
+  color: #fff;
+}
+
+#log_tools {
+  display: block;
+  position: fixed;
+  top: 65px;
+  background-color: #3079ed;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+#log_tools span {
+  font-family: "Arial", sans-serif;
+  font-size: 14px;
+  display: inline-block;
+  height: 100%;
+  margin-left: 32px;
+  padding: 8px 4px;
+}
+
+#log_tools span:hover {
+  background-color: rgba(255,255,255,0.6);
+  color: #333;
+  cursor: pointer;
+}
+
+#log_content {
+  font-family: "Arial", sans-serif;
+  font-size: 12px;
+  display: block;
+  margin-top: 98px;
+}
+
+#log_content span {
+  font-family: "Courier New", monospace;
+  color: #000;
+  display: block;
+  padding: 4px;
+}
+
+.apache_unselected {
+  color: #fff;
+}
+
+.apache_selected {
+  background-color: rgba(255,255,255,0.8);
+  color: #333;
+}
+
+.evenLog {
+  background-color: #f1f1f1;
+}
+
+.oddLog {
+  background-color: #DCDCDC;
+}
+
+.refresh_log {
+  opacity: .4;
+}
+
+.log_error {
+  border: 0;
+  font-size: 14px;
+  font-style: italic;
+}

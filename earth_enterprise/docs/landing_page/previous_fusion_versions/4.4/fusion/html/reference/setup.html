@@ -1,0 +1,464 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Setting Up Your Workspace</title>
+</head>
+
+<body>
+
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" />
+  </div>
+  <h1 id="doc_title">Reference Guide</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Reference Guide</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="intro.html">Introduction</a></li>
+    <li><a href="fundamentals.html">Fundamentals</a></li>
+    <li><a href="setup.html" id="selected">Setting Up Your Workspace</a></li>
+    <li><a href="resources.html">Defining Resources</a></li>
+    <li><a href="projects.html">Defining Projects</a></li>
+    <li><a href="databases.html">Defining and Publishing Databases</a></li>
+    <li><a href="building.html">Building Assets</a></li>
+    <li><a href="maps.html">Preparing Data for Google Maps</a></li>
+    <li><a href="commands.html">Command Line Reference</a></li>
+    <li><a href="createOwnData.html">Creating Your Own Source Data, Icons, and Masks</a></li>
+    <li><a href="htmlTags.html">HTML Tags Allowed</a></li>
+    <li><a href="plugins.html">Google Earth Plugin</a></li>
+    <li><a href="errors.html">Common Error Messages</a></li>
+    <li><a href="glossary.html">Glossary</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+
+<h1>Setting Up Your Workspace</h1>
+
+<ol class="toc">
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#setting_your_preferences">Setting Your Preferences</a></li>
+  <li><a href="#organizing_assets">Organizing Assets</a></li>
+  <li><a href="#managing_locales">Managing Locales</a></li>
+  <li><a href="#managing_labels">Managing Labels</a></li>
+  <li><a href="#managing_data_providers">Managing Data Providers</a></li>
+  <li><a href="#managing_icons">Managing Icons</a></li>
+  <li><a href="#managing_search_tabs">Managing Search Tabs</a></li>
+</ol>
+
+<h2 id="overview">Overview</h2>
+
+<p>Before you begin importing your source data, it is important to:</p>
+<ul>
+  <li>Set your preferences.</li>
+  <li>Set up the subfolders in which you will store your Google Earth Enterprise Fusion data.
+  </li>
+  <li>Pre-configure various list options that you need to select later. 
+  </li>
+</ul>
+<p>If you want to add more subfolders or list options later, you can do so at any time. However, it is more efficient for one person to configure them in advance, resulting in more consistent data in Google Earth EC.</p>
+<p class="note"><strong>Note:</strong> Preference settings are stored for each user. Subfolders and list options are shared by all users of a Google Earth Enterprise Fusion on a particular workstation.</p>
+
+<h2 id="setting_your_preferences">Setting Your Preferences</h2>
+
+<p>Google Earth Enterprise Fusion allows you to set certain preferences to customize the GUI to your own needs. When you make changes to your preferences, those changes do not affect other users.
+</p>
+
+<h4>To set preferences for Google Earth Enterprise Fusion:</h4>
+<br />
+<ol>
+  <li>Select <strong>Preferences</strong> from the Edit menu.
+  </li>
+  <li>Specify your preferences on the General and Asset Manager tabs, as described in the following sections.
+  </li>
+  <li>Click <strong>OK</strong>.
+  </li>
+</ol>
+
+<h3 id="general_tab">General Tab</h3>
+
+<p><img src="images/preferencesGeneral.png"  /></p>
+<p>On the General tab, you can set the following preferences:</p>
+
+<ul>
+  <li><strong>Background Imagery<a id="marker-1014418"></a></strong>
+    <p>Google Earth Enterprise Fusion is initially configured to refer to the NASA Blue Marble imagery as the default background imagery of the Earth. If you have higher-resolution imagery that you prefer to use as your default background imagery, select an option from the drop-down list (a Google Earth Enterprise Fusion imagery project). If you select <strong>Stream Server (HTTP)</strong>, enter the URL of the desired database.    </p>
+    <p class="note"><strong>Note:</strong> You cannot add a stream server that requires authentication, including <code>kh.google.com</code>.</p>
+  </li>
+  <li><strong>Background Imagery for Mercator Projection Preview</strong>
+    <p>If you want to use the Mercator imagery, you can select either the raster or a Mercator imagery project. If you choose a Mercator mimagery project, enter the location of the desired database.
+  </li>
+</ul>
+
+<ul>
+  <li><strong>Internationalization</strong>
+    <p>If most of your vector data has a particular character encoding, you can specify that as the default character encoding to avoid having to set the encoding every time. For example, if the majority of your vector data fields have character encoding of type ISO8859-1, select <strong>ISO8859-1</strong> from the drop-down list. The default character encoding for vector files is ASCII (plain text) (<strong>&lt;none&gt;</strong> on the drop-down list).</p>
+    <p class="note"><strong>Note:</strong> <a id="marker-1018560"></a>Google Earth Enterprise Fusion supports bi-directional character encoding. However, right-to-left character encoding and multi-byte character sets are not supported in map layers.</p>
+  </li>
+  <li><strong>Attribute Table<a id="marker-1014438"></a></strong>
+    <p>The settings in the Attribute Table section affect the behavior of the Attribute Table.</p>
+    <ul>
+      <li><strong>Show Feature ID </strong><a id="marker-1018566"></a>- Select this option to display the feature IDs for the selected data in the first column of the Attribute Table. Uncheck it if you do not want to display the ID column.
+        <p>The feature ID is an internal, unique ID applied to all vector data converted to Google Earth Enterprise Fusion resource format. The IDs are assigned sequentially in the order the features are imported.</p>
+      </li>
+      <li><strong>Auto-Show Selected Data</strong><a id="marker-1018565"></a> - Select this option to automatically display the Attribute Table when vector features are selected in the Preview List pane.</li>
+    </ul>
+  </li>
+  <li><strong><a id="marker-1018568"></a>Selection Tool</strong>
+    <p>You can specify your preference for the outline color, outline width, and fill color of the selection tool. Generally, you set these options based on the overall coloring of your imagery data to make sure the selection tool is visible.</p>
+    <ul>
+      <li><strong>Outline Color</strong><a id="marker-1023743"></a> - Click the button next to <strong>Color</strong>, and select a color. See <a href="projects.html#57819">Draw Style</a> in the <strong>Defining Projects</strong> chapter for more information.</li>
+      <li><strong>Outline Width</strong> - The default outline width is 1. To change the outline width, enter the desired value. The larger the number, the thicker the outline.</li>
+      <li><strong>Fill Color</strong> - Click the button next to <strong>Color</strong>, and select a color. See <a href="projects.html#57819">Draw Style</a> in the <strong>Defining Projects</strong> chapter for more information.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="asset_manager_tab">Asset Manager Tab</h3>
+
+<p><img src="images/preferencesAssetManager.png" /></p>
+<p>On the Asset Manager tab, you can set the following preferences:</p>
+
+<ul>
+  <li><strong><a id="marker-1018588"></a>Show Full Asset Root Path</strong>
+    <p>If you prefer to view the full path name of the Google Earth Enterprise Fusion asset root (such as <code>/gevol/assets/</code>) in the Location field of the Asset Manager, check this option. If you do not check this option, the Location field at the top of the Asset Manager shows the path starting with <code>ASSET_ROOT/</code>.</p>
+  </li>
+  <li><strong>Resource Editor Default Paths</strong>
+    <p>You can specify the default path for each type of source data (vector, imagery, and terrain), if desired. Whenever you add a source file to a resource, the Open dialog opens to the specified folder. If you do not specify a default path here, the Open dialog opens to the folder from which you launched Google Earth Enterprise Fusion.</p>
+    <p class="note"><strong>Note:</strong> Initially, these paths are set to the appropriate paths for the <i>Google Earth Enterprise Fusion Tutorial</i>, if you installed the tutorial files. You do not need to change these paths until you start working with your own data. Then change each path to the top-most directory where each type of data is stored.</p>
+  </li>
+</ul>
+
+<h4>To specify the default paths:</h4>
+<br />
+
+<ol>
+  <li><a id="73763"></a>Click 
+    <img src="images/iconPath.png" /> next to <strong>Vector</strong>. The Select Folder dialog appears.</li>
+  <li><a id="73203"></a>Navigate to the folder you want to set as the default folder to open for vector source files, and click <strong>OK</strong>.
+  </li>
+  <li>Repeat for <strong>Imagery</strong> and <strong>Terrain</strong>.
+    The specified paths appear next to each type of source file.
+    <p><img src="images/preferencesAssetManager-full.png"  /></p>
+  </li>
+  <li>Click <strong>OK</strong>.
+  </li>
+</ol>
+
+<h2 id="organizing_assets"><a id="56245"></a>Organizing Assets</h2>
+
+<p><a id="marker-1018590"></a>When you have a plan in place for your folder structure and naming conventions, you can start adding subfolders to the asset root. See <a href="intro.html#85096">Organizing Your Google Earth Enterprise Fusion Subfolders</a> in the <strong>Introduction</strong> chapter for details about planning and organizing your subfolders.</p>
+<p class="caution"><strong>Caution:</strong> <a id="marker-1018594"></a>Folders and subfolders can not be deleted after they've been created in your asset root.  This makes it especially important for you to plan out and organize your subfolders before you or anyone else begins working with data in Google Earth Enterprise Fusion.</p>
+
+<h4><a id="marker-1023757"></a>To add a subfolder:</h4>
+<br />
+
+<ol>
+  <li><a id="98984"></a>Right-click the folder in which you want to add the new subfolder (in this case, <strong>ASSET_ROOT</strong>), and select <strong>New Subfolder</strong> from the context menu.
+    <p><a id="marker-1018604"></a>A dialog prompts you to enter the name of the folder.</p>
+  </li>
+  <li><a id="81701"></a>Enter a unique name that helps identify the contents of the folder, and click <strong>OK</strong>.
+    <p class="note"><strong>Tip:</strong> Consider using subfolder names that correspond to the type of resource that you are creating. For instance, you might first create a subfolder named <code>vector</code> to indicate the type of source data. Under the <code>vector</code> folder, you could create additional subfolders to further distinguish the source by provider, if desired, or by some other category. See <a href="intro.html#85096">Organizing Your Google Earth Enterprise Fusion Subfolders</a> in the <strong>Introduction</strong> chapter for more information.</p>
+    <p>The new subfolder appears in the asset navigation tree.</p>
+  </li>
+  <li>Repeat the previous steps to add more subfolders.</li>
+  <li>When you're finished, click <strong>OK</strong>.</li>
+</ol>
+
+<h2 id="managing_locales"><a id="33187"></a>Managing Locales</h2>
+
+<p class="note"><strong>Note:</strong> If you do not intend to translate your layer names or supply different data for different languages, you can skip this section. You do not need to create a locale in the Locale Manager for your primary locale.</p>
+<p><a id="marker-1020301"></a>The Locale Manager allows you to set up language support for your users’ locales. If you specify locales here, you can enter layer names in multiple languages. Google Earth EC and Google Maps use the locale setting of the computer to select which language-specific content to display. If you do not specify any locales, all labels in Google Earth EC and Google Maps appear in your native language.</p>
+<p class="caution"><strong>Caution:</strong> If you are working with multiple Google Earth Enterprise Fusion users on multiple workstations, it is important to remember that all managers on the Tools menu can be accessed by all users at the same time. If multiple users are working with the same manager at the same time, when one user closes the manager, that user’s changes overwrite all previous data for that manager. So if you are working in a multi-user environment, be sure to coordinate with the other users to be sure that only one user has this manager open at a time.</p>
+<p>After you add all of the locales you want to support using the Locale Manager, you can select the locales you want to support for each layer in your project using the Layer Properties dialog. See <a href="projects.html#25835">Configuring Layer Properties</a> in the <strong>Defining Projects</strong> chapter for more information.</p>
+
+<h4><a id="marker-1018608"></a>To create a new locale:</h4>
+<br />
+
+<ol>
+  <li>Select <strong>Tools &gt; Locale Manager</strong>. The Locale Manager appears.</li>
+  <li><a id="53662"></a>Click 
+    <img src="images/icon_new.gif" />. The <strong>Support New Locale</strong> dialog appears.
+    <p><img src="images/localeNew.png" /></p>
+  </li>
+  <li><a id="marker-1023910"></a><a id="marker-1023764"></a>Enter the name of the new locale using standard ISO locale language abbreviations (such as <strong>fr</strong>, <strong>de</strong>, <strong>it</strong>, or <strong>fr_CA</strong>). If you need to distinguish among regions, you can use regional designations as well (such as <strong>fr_FR</strong>, <strong>fr_CA</strong>, <strong>en_UK</strong>, and so on).
+  </li>
+  <li><a id="55881"></a>Click <strong>OK</strong>. The locale  appears in the Locale Manager.
+    <p><img src="images/localeManager-full.png" /></p>
+  </li>
+  <li>Repeat steps <strong>2</strong> through <strong>4</strong> for each new locale.
+  </li>
+  <li>Click <strong>OK</strong> when you've finished adding locales.</li>
+</ol>
+
+<h2 id="managing_labels"><a id="89468"></a>Managing Labels</h2>
+
+<p class="note"><strong>Note</strong>: The <strong>Label</strong> panel
+  has been removed from the Google Earth Enterprise Client as of version
+  5.0. The <strong>Label Manager</strong> feature of Google Earth
+  Enterprise Fusion is no longer applicable, and will be removed in a 
+  future version.</p>
+
+<h2 id="managing_data_providers">Managing Data Providers<a id="79671"></a><a id="marker-1014145"></a></h2>
+
+<p><a id="marker-1018628"></a>The Provider Manager allows you to create a list of organizations that provide the data you use in Google Earth. For each provider, you specify a lookup key (any unique abbreviation you choose) and copyright information. When you create a resource, you associate a data provider with it, so that when the resource is displayed in Google Earth EC, it displays the appropriate copyright information.</p>
+
+<p class="caution"><strong>Caution:</strong> If you are working with multiple Google Earth Enterprise Fusion users on multiple workstations, it is important to remember that all managers on the Tools menu can be accessed by all users at the same time. If multiple users are working with the same manager at the same time, when one user closes the manager, that user’s changes overwrite all previous data for that manager. So if you are working in a multi-user environment, be sure to coordinate with the other users to be sure that only one user has this manager open at a time.</p>
+
+<h4><a id="marker-1018637"></a>To create a provider:</h4>
+<br />
+
+<ol>
+  <li>Select <strong>Tools &gt; Provider Manager</strong>. The <strong>Provider Manager</strong> window appears.</li>
+  <li><a id="38829"></a>Click 
+    <img src="images/icon_new.gif" /> to open the <strong>Edit Provider</strong> dialog.</li>
+  <li>Enter the following information:
+    <ul>
+      <li><strong>Name</strong>: Full name of the resource provider.</li>
+      <li><strong>Key</strong>: An abbreviation of your choice that is unique to this provider.</li>
+      <li><strong>Copyright Text</strong>: This string appears at the bottom of the viewer in Google Earth EC when the corresponding imagery, map, road, or terrain data is displayed. Enter any free-form text string, including white spaces.</li>
+    </ul>
+  </li>
+  <li><a id="76156"></a>Click <strong>OK</strong>. The new provider appears at the end of the list of providers.
+    <p><img src="images/manageProviders-full.png" /></p>
+  </li>
+  <li>Repeat steps <strong>2</strong> through <strong>4</strong> to add more providers.  </li>
+  <li>When you finish adding providers, click <strong>OK</strong>.  </li>
+</ol>
+<h4><a id="marker-1018648"></a>To modify a provider:</h4>
+<br />
+<ol>
+  <li>Double-click the name of the provider you want to change.    
+  </li>
+  <li>Modify the information as desired, and click <strong>OK</strong>. The updated information appears in the Provider Manager.
+   </li>
+</ol> 
+
+<p><strong>Note 1:</strong> Changing the copyright text for a provider does not force a rebuild of the affected resources. The old copyright text will be displayed until the resources are rebuilt.</p>
+
+<p><strong>Note 2:</strong> <a id="marker-1018649"></a>If you change a provider’s key, the copyright information associated with that provider can no longer be displayed for associated resources in Google Earth EC.</p>
+
+<h4><a id="marker-1018650"></a>To delete a provider:</h4>
+<br />
+
+<ol>
+  <li>Select the provider  to delete, and click 
+    <img src="images/iconDelete.png" />. You are prompted to confirm the deletion.  </li>
+  <li>Click <strong>OK</strong> to permanently delete the provider.
+  </li>
+</ol>
+
+<p class="caution"><strong>Caution:</strong> If you delete a provider, the copyright information associated with that provider can no longer be displayed for associated resources in Google Earth EC.</p>
+
+<h2 id="managing_icons"><a id="52623"></a>Managing Icons</h2>
+
+<p><a id="marker-1018656"></a>In addition to the standard icons that are supplied with your installation of Google Earth Enterprise Fusion, you can create, import, and manage your own collection of icons that you can apply to vector data. See <a href="createOwnData.html#47824">Creating Custom Icons</a> in the chapter on <strong>Creating Your Own Source Data, Icons, and Masks </strong>for details.</p>
+<p class="caution"><strong>Caution:</strong> If you are working with multiple Google Earth Enterprise Fusion users on multiple workstations, it is important to remember that all managers on the Tools menu can be accessed by all users at the same time. If multiple users are working with the same manager at the same time, when one user closes the manager, that user’s changes overwrite all previous data for that manager. So if you are working in a multi-user environment, be sure to coordinate with the other users to be sure that only one user has this manager open at a time.</p>
+
+<h4><a id="marker-1018657"></a>To add a custom icon:</h4>
+<br />
+<ol>
+  <li>Select <strong>Tools &gt; Icon Manager</strong>. The Icon Manager appears.
+    <p class="note"><strong>Note:</strong> The Icon Manager is empty if you have not yet imported any custom icons. The standard icons provided with Google Earth Enterprise Fusion do not appear in this dialog. You cannot add to or delete from the standard collection.</p>
+  </li>
+  <li>Click <img src="images/icon_new.gif" />.</li>
+  <li>Select the desired image file  and click <strong>Open</strong>. The new icon appears in the Icon Manager.</li>
+  <li>Repeat these steps<a href="setup.html#76156"></a> to add more icons.</li>
+  <li>When finished, click <strong>OK</strong>.</li>
+</ol>
+
+<p>After you add an icon to your collection, you can use it as a road shield or other marker for vector data, as described in <a href="projects.html#42713">Road Labels and Shields</a> in the <strong>Defining Projects</strong> chapter. </p>
+
+<h4><a id="marker-1018658"></a>To delete a custom icon:</h4>
+<br />
+
+<ol>
+  <li>Select the icon  to delete and click 
+    <img src="images/iconDelete.png" />. A message prompts you to confirm the deletion.
+  </li>
+  <li>Click <strong>OK</strong>. The icon no longer appears in the Icon Manager.</li>
+</ol>
+
+<p class="note"><strong>Note:</strong> If you delete an icon from the Icon Manager, it does not force you to rebuild projects that reference that icon. If that icon was previously referenced in a project that has already been built, when you publish a database that includes that project, the old icon appears. If something else in that project subsequently triggers a build, the new icon will appear in the resulting version.
+  <br />
+  <br />
+  If you delete an icon from the Icon Manager that is referenced in a saved but unbuilt project, that project’s build fails. If the Project Editor is open when you delete the icon from the Icon Manager, when you close and then reopen the project editor and look at the Display Rules dialog for the affected layer, a large red box appears instead of the deleted icon. 
+  <br />
+  <img src="images/deletedIcon.png" />
+	<br />
+  <br />
+  If you see this red box, you must select a different icon for the affected layer. 
+  <br />
+  <br />
+  If the deleted icon is referenced in a template (that is, you referenced it, saved the template, and then deleted the icon from the Icon Manager), the next time you import that template and try to build the project, the build fails. As in the first case, the next time you open the project and look at the Display Rules dialog for the affected layer, a large red box appears instead of the deleted icon, and you must select a different icon for the affected layer. In addition, it would be a good idea to save a new version of that template that includes an icon in the Icon Manager.
+</p>
+
+<h2 id="managing_search_tabs"><a id="47044"></a><a id="12547"></a>Managing Search Tabs</h2>
+
+<p><a id="marker-1018701"></a>Search tabs allow Google Earth EC or Google Maps users to:</p>
+
+<ul>
+  <li>Replace the standard search tabs in Google Earth EC.</li>
+  <li>Search Google Earth EC or Google Maps databases created with Google Earth Enterprise Fusion.</li>
+  <li>Access other databases not related to Google Earth Enterprise Fusion (such as geocoders, Google Search appliance, and so on).</li>
+  <li>Access external search servers (such as a real estate search).</li>
+</ul>
+
+<p>For example, if you have a database of property locations that contains specific information that your users need, you can create a search tab called “Property Search” and configure it to search for locations in your property database, even if that database is stored on another server.</p>
+
+<p>The Search Tab Manager allows you to pre-configure the search tabs to be used for any database you create with Google Earth Enterprise Fusion. You define all of the search tabs you need using the Search Tab Manager, and then you can select up to three of those search tabs for a specific database using the Database Editor. See <a href="databases.html#48752">Adding Search Tabs to a Database</a> in the <strong>Defining and Publishing Databases</strong> chapter for details.</p>
+
+<p class="caution"><strong>Caution:</strong> If you are working with multiple Google Earth Enterprise Fusion users on multiple workstations, it is important to remember that all managers on the Tools menu can be accessed by all users at the same time. If multiple users are working with the same manager at the same time, when one user closes the manager, that user’s changes overwrite all previous data for that manager. So if you are working in a multi-user environment, be sure to coordinate with the other users to be sure that only one user has this manager open at a time.</p>
+
+<h4><a id="marker-1018702"></a>To define a new search tab:</h4>
+<br />
+
+<ol>
+  <li>Select <strong>Tools &gt; Search Tab Manager</strong>. The <strong>Search Tab Manager</strong> window appears.
+    <p><img src="images/searchTabManager.png"  /></p>
+  </li>
+  <li><a id="98205"></a>Click 
+    <img src="images/icon_new.gif" /> to open the <strong>New Search Tab</strong> window. </li>
+  <li>Enter a unique name for the search tab, and click <strong>OK</strong>. The search tab name appears on the list on the left and is selected.</li>
+  <li><a id="82534"></a>Enter  <strong>Label</strong> and <strong>Key</strong> values for each field you want to display on the search tab. You can enter Label and Key values for one or two fields.    
+    <p> Basic HTML tags are supported in the Label text. See the <a href="htmlTags.html#95824">HTML Tags Allowed</a> chapter for details.</p>
+    <p>The <strong>Label</strong> value  appears above the search field in Google Earth EC. In the example below, the Label value is:</p>
+    <p><code>What &lt;font color=&quot;#999999&gt;e.g., Computer repair&lt;/font&gt;</code>.</p>
+    <img src="images/searchTabFields.gif" />
+    <p><a id="marker-1018722"></a>The <strong>Key</strong> value is the name of a search key in your search application. The value the user enters in the corresponding field in Google Earth EC is paired with the key in the search expression that Google Earth EC passes back to your search server in its query URL. For example, in the screen shown above, the key for the first field might be <code>what</code>, and the key for the second field might be <code>where</code>. You must know, however, the exact names of the search keys in your search application.    </p>
+  </li>
+  <li><a id="38783"></a>Select <strong>URL</strong> or <strong>Plug-in Name</strong> from the drop-down list.
+    <ul>
+      <li>Select <strong>URL</strong> if you want to specify the URL of the non-Google server. Enter the URL in the text field.</li>
+      <li><a id="marker-1027913"></a>Select <strong>Plug-in Name</strong> if you want to reference
+        a <i>plug-in</i> for the search tab. Enter the name of the plug-in. The
+        following plug-ins are installed with Google Earth Enterprise Fusion and
+        are located in the <code>/opt/google/search/tabs</code> directory:
+        <ul>
+          <li><code>Coordinates.gestd</code></li>
+          <li><code>Example_Plugin.gestd</code></li>
+          <li><code>GeocodingFederated.gestd</code></li>
+          <li><code>GSA_Plugin.gestd</code></li>
+          <li><code>Places.gestd</code></li>
+        </ul>  
+        <p>After you create the search tab, you need to make sure the plug-in
+          is registered. Use the following command to see the registered plug-ins:</p>
+        <pre><code>geserveradmin --listplugins</code></pre>
+        
+        <p>See the <strong>Search Framework Developer’s Guide</strong> for
+          more information about creating your own plug-ins for search tabs. To
+          get you started, Google provides eight sample plug-ins that are ready
+          to use in the <a href="plugins.html">Sample Plug-ins</a> chapter.</p>
+        <p>To register a plug-in that is not regisitered by default, issue the following command:</p>
+          
+<pre>/opt/google/geserveradmin --addplugin <em>Plugin_name</em> --jar_path
+/opt/google/search/plugins/<em>Plugin_name.jar</em>
+  --class com.google.earth.search.plugin.<em>Plugin_name</em></pre>
+
+        <p>You can specify the plug-ins the <code>GeocodingFederated</code> plug-in uses in
+          the <code>GeocodingFederatedPlugin.properties</code> file:</p>
+        <pre>plugins=GEPlacesPlugin,CoordinatePlugin</pre>
+              
+        <p>You can add the plug-in names in the comma separated list for <code>plugins</code>.
+          The plug-in must be registered or <code>GeocodingFederatedPlugin</code>
+          will fail to initialize. If you want to add <code>MyPlugin</code> to the
+          <code>GeocodingFederatedPlugin</code>, for example: </p>
+        <pre>plugins=GEPlacesPlugin,CoordinatePlugin,MyPlugin</pre>
+        <p>To unregister <code>GeocodingFederatedPlugin</code>:</p>
+
+<pre>/opt/google/bin/geserveradmin --deleteplugin GeocodingFederatedPlugin
+                      
+/opt/google/bin/geserveradmin --addplugin MyPlugin
+  --jar_path /opt/google/search/plugins /MyPlugin.jar
+  --class com.google.earth.search.plugin.MyPlugin
+                      
+/opt/google/bin/geserveradmin
+  --addplugin GeocodingFederatedPlugin
+  --jar_path /opt/google/search/plugins /GeocodingFederatedPlugin.jar
+  --class com.google.earth.search.plugin.GeocodingFederatedPlugin</pre>
+       </li>
+    </ul>
+  </li>
+  <li><a id="18796"></a>If you want to add query parameters that are hidden from Google Earth EC, such as the way the results will be sorted or the number of results displayed at a time, enter them in the <strong>Additional Query Parameters</strong> field.
+    <p>The syntax is <code>key1=value1&amp;key2=value2</code>. For example, <strong>sortby=name&amp;numresults=10</strong> sorts by the <strong>name</strong> field and displays 10 results at a time. Your search application must be able to understand and respond to these key/value pairs, so you must be very familiar with your search application to use this field.</p>
+    <p class="caution"><strong>Caution:</strong> Any web service, servlet, or web application you configure the search tabs to query must return valid KML to Google Earth EC. For Google Maps, it must return valid JavaScript in the specified structure.</p>
+  </li>
+  <li><a id="51423"></a>If you are licensed to use Google-hosted services, you can enter additional configuration parameters in the <strong>Additional Configuration Parameters</strong> field. For more information, refer to the Google Earth Enterprise support web site. Log in at <a href="https://support.google.com">https://support.google.com</a> then point your browser to <a href="https://support.google.com/enterprise/Earth">https://support.google.com/enterprise/Earth</a>.    </li>
+  <li>Repeat steps <strong>2</strong> through <strong>7</strong> to add all of the search tabs that you and other Google Earth Enterprise Fusion users plan to use in your databases.
+    <p><img src="images/searchTabConfig2.png" /></p>
+    <p>As you add each search tab, it appears on the list. You can view or modify the properties for any search tab by selecting (highlighting) it on the list.</p>
+    <p class="note"><strong>Note:</strong> The number of search tabs you add in the Search Tab Manager is unlimited. However, you cannot add more than three search tabs to any particular database.</p>
+  </li>
+  <li>When you finish configuring search tabs, click <strong>OK</strong>. The search tabs are ready for you to add to your databases. See <a href="databases.html#48752">Adding Search Tabs to a Database</a> in the <strong>Defining and Publishing Databases</strong> chapter.</li>
+</ol>
+
+<h4><a id="marker-1018725"></a>To import a search tab from a plug-in:</h4>
+<br />
+<ol>
+  <li>Select <strong>Tools &gt; Search Tab Manager</strong>. The <strong>Search Tab Manager</strong> appears. </li>
+  <li>Click 
+    <img src="images/iconPath.png" />. The <strong>Import Search Tab Definition</strong> dialog appears with <strong>Google Earth Search Tab Definition</strong> selected as the file type.</li>
+  <li>Navigate to and select the desired search tab definition file, and click <strong>Open</strong>. The imported search tab appears in the Search Tab Manager.
+    
+  </li>
+  <li>Click <strong>OK</strong> to close the Search Tab Manager.
+  </li>
+</ol>
+<h4><a id="marker-1025500"></a>To export a search tab:</h4>
+<br />
+<ol>
+  <li>Select <strong>Tools &gt; Search Tab Manager</strong>. The <strong>Search Tab Manager</strong> appears. </li>
+  <li><a id="marker-1018727"></a>Select the desired search tab, and click 
+    <img src="images/iconExport.png" />. The <strong>Export Search Tab Definition</strong> dialog appears with <strong>Google Earth Search Tab Definition</strong> selected as the file type.</li>
+  <li><a id="marker-1018801"></a>Navigate to the folder where you want to save the exported search tab definition file, enter a name for the file, and click <strong>Save</strong>.
+    <p>Google Earth Enterprise Fusion saves the file with the <code>.gestd</code> extension. Now you can copy or move that file wherever you want and import the search tab definitions elsewhere.
+    </p>
+  </li>
+  <li>Click <strong>OK</strong> to close the Search Tab Manager.
+  </li>
+</ol>
+
+<h4>To delete a search tab definition:</h4>
+<br />
+<ol>
+  <li>Select <strong>Tools &gt; Search Tab Manager</strong>. The <strong>Search Tab Manager</strong> appears. </li>
+  <li><a id="marker-1025577"></a>Select  search tab to delete and click 
+    <img src="images/iconDelete.png" />. You are prompted  to confirm the deletion.
+    <p class="caution"><strong>Caution:</strong> When you delete a search tab definition from the Search Tab Manager, Google Earth Enterprise Fusion does not check to see if any databases are currently using that search tab definition. If you delete a search tab definition that is used in a database that has already been built and published, there is not problem if you delete it. However, if you delete a search tab definition that has been used in a database that has not yet been built, when you try to build that database, Google Earth Enterprise Fusion displays a message informing you that it is unable to find the deleted search tab. You must remove that search tab from the database before you can build it.</p>
+  </li>
+  <li>Click <strong>OK</strong>.</li>
+</ol>
+
+</div>
+<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+<!-- END WRAPPER -->
+
+</body>
+</html>

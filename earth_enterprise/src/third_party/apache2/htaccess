@@ -1,0 +1,4 @@
+Options +FollowSymlinks
+RewriteEngine On
+
+

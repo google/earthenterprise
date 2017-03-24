@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="Geodesic Polylines" height="300">
+  <Require feature="sharedmap"/>
+</ModulePrefs>
+<Content type="html"><![CDATA[
+
+<small>
+This example displays a geodesic polyline.
+</small>
+
+<script>
+var map = new GMap2();
+map.setCenter(new GLatLng(45.828799,-105.292969), 2);
+
+// Create GPolylineOptions argument as an object literal.
+// Note that we don't use a constructor.
+
+var polyOptions = {geodesic:true};
+var polyline = new GPolyline([
+  new GLatLng(40.65642, -73.7883),
+  new GLatLng(61.1699849, -149.944496)
+  ], "#ff0000", 10, 1, polyOptions);
+map.addOverlay(polyline);
+</script>
+
+]]></Content>
+</Module>

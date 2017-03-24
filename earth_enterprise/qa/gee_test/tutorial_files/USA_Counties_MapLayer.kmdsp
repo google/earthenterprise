@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<MapSubLayerConfig>
+
+  <asset_ref>Resources/Vector/US_Population.kvasset</asset_ref>
+
+  <display_rules>
+    <display_rule>
+      <name>default select all</name>
+      <feature>
+        <displayType>PolygonZ</displayType>
+        <polygonDrawMode>OutlineOnly</polygonDrawMode>
+        <fill_color a="255" b="255" g="255" r="255"/>
+        <stroke_color a="255" b="0" g="255" r="255"/>
+        <stroke_width>2</stroke_width>
+        <levelRange max="14" min="6"/>
+        <drawAsRoads>0</drawAsRoads>
+      </feature>
+      <filter>
+        <match>MatchAll</match>
+        <selectRules/>
+        <matchScript></matchScript>
+      </filter>
+    </display_rule>
+  </display_rules>
+
+  <allowFeatureDuplication>0</allowFeatureDuplication>
+
+  <contextScript></contextScript>
+
+</MapSubLayerConfig>

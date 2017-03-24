@@ -1,0 +1,13 @@
+--- httpd-2.2.27.orig/docs/conf/extra/httpd-ssl.conf.in	2014-06-09 18:11:27.016781632 -0700
++++ httpd-2.2.27/docs/conf/extra/httpd-ssl.conf.in	2014-06-09 18:14:12.239279238 -0700
+@@ -75,8 +75,8 @@
+ 
+ #   General setup for the virtual host
+ DocumentRoot "@exp_htdocsdir@"
+-ServerName www.example.com:@@SSLPort@@
+-ServerAdmin you@example.com
++#ServerName www.example.com:@@SSLPort@@
++#ServerAdmin you@example.com
+ ErrorLog "@exp_logfiledir@/error_log"
+ TransferLog "@exp_logfiledir@/access_log"
+ 

@@ -1,0 +1,658 @@
+diff -c -r skia.0.8.unmod/include/SkFontHost.h skia.0.8/include/SkFontHost.h
+*** skia.0.8.unmod/include/SkFontHost.h	2007-02-20 08:31:15.000000000 -0800
+--- skia.0.8/include/SkFontHost.h	2007-03-06 09:30:49.000000000 -0800
+***************
+*** 18,23 ****
+--- 18,26 ----
+  #ifndef SkFontHost_DEFINED
+  #define SkFontHost_DEFINED
+  
++ #include <string>
++ #include <vector>
++ 
+  #include "SkScalerContext.h"
+  #include "SkTypeface.h"
+  
+***************
+*** 38,43 ****
+--- 41,53 ----
+          3) If both are null, use default family.
+      */
+      static SkTypeface* CreateTypeface(const SkTypeface* family, const char name[], SkTypeface::Style);
++     static SkTypeface* CreateExactTypeface(const char name[], SkTypeface::Style);
++     /** Add a face to the interal list of available faces.
++      */
++     static bool AddFace(const std::string &family_name,
++                         const std::string &file_name,
++                         bool bold,
++                         bool italic);
+      /** Given a typeface (or null), return the number of bytes needed to flatten it
+          into a buffer, for the purpose of communicating information to the
+          scalercontext. If buffer is null, then ignore it but still return the number
+***************
+*** 74,80 ****
+          the "default" typeface.
+      */
+      static bool TypefaceEqual(const SkTypeface* a, const SkTypeface* b);
+  };
+  
+  #endif
+- 
+--- 84,109 ----
+          the "default" typeface.
+      */
+      static bool TypefaceEqual(const SkTypeface* a, const SkTypeface* b);
++ 
++     /** Return a list of available font families and available faces
++      */
++     struct FontInfo {
++       FontInfo(const std::string &name_)
++           : name(name_),
++             regular(false),
++             bold(false),
++             italic(false),
++             bold_italic(false) {
++       }
++       ~FontInfo() {}
++       std::string name;
++       bool regular;
++       bool bold;
++       bool italic;
++       bool bold_italic;
++     };
++ 
++     static void GetFontList(std::vector<FontInfo> *font_list);
+  };
+  
+  #endif
+diff -c -r skia.0.8.unmod/src/SkFontHost_FONTPATH.cpp skia.0.8/src/SkFontHost_FONTPATH.cpp
+*** skia.0.8.unmod/src/SkFontHost_FONTPATH.cpp	2007-02-20 08:30:31.000000000 -0800
+--- skia.0.8/src/SkFontHost_FONTPATH.cpp	2007-03-06 11:40:35.000000000 -0800
+***************
+*** 15,130 ****
+  ** limitations under the License.
+  */
+  
+  #include "SkFontHost.h"
+  #include "SkDescriptor.h"
+  #include "SkString.h"
+  #include "SkStream.h"
+  #include <stdio.h>
+  
+  /* define this if we can use mmap() to access fonts from the filesystem */
+  #define SK_CAN_USE_MMAP 
+  
+  #ifndef SK_FONTPATH
+!     #define SK_FONTPATH "the complete path for a font file"
+  #endif
+  
+! struct FontFaceRec {
+!     const char* fFileName;    
+!     uint8_t     fFamilyIndex;
+!     SkBool8     fBold;
+!     SkBool8     fItalic;
+  
+!     static const FontFaceRec& FindFace(const FontFaceRec rec[], int count, int isBold, int isItalic);
+  };
+  
+  struct FontFamilyRec {
+!     const FontFaceRec*  fFaces;
+!     int                 fFaceCount;
+  };
+  
+! const FontFaceRec& FontFaceRec::FindFace(const FontFaceRec rec[], int count, int isBold, int isItalic)
+! {
+!     SkASSERT(count > 0);
+      
+!     int i;
+  
+      // look for an exact match
+!     for (i = 0; i < count; i++) {
+!         if (rec[i].fBold == isBold && rec[i].fItalic == isItalic)
+!             return rec[i];
+      }
+      // look for a match in the bold field
+!     for (i = 0; i < count; i++) {
+!         if (rec[i].fBold == isBold)
+!             return rec[i];
+      }
+      // look for a normal/regular face
+!     for (i = 0; i < count; i++) {
+!         if (!rec[i].fBold && !rec[i].fItalic)
+!             return rec[i];
+      }
+      // give up
+!     return rec[0];
+! }
+  
+! enum {
+!     DEFAULT_FAMILY_INDEX,
+!     
+!     FAMILY_INDEX_COUNT
+  };
+  
+! static const FontFaceRec gDefaultFaces[] = {
+!     { SK_FONTPATH, DEFAULT_FAMILY_INDEX, 0,  0 }
+! };
+  
+! // This table must be in the same order as the ..._FAMILY_INDEX enum specifies
+! static const FontFamilyRec gFamilies[] = {
+!     { gDefaultFaces,   SK_ARRAY_COUNT(gDefaultFaces)  }
+! };
+! 
+! #define DEFAULT_FAMILY_INDEX            DEFAULT_FAMILY_INDEX
+! #define DEFAULT_FAMILY_FACE_INDEX       0
+  
+  ////////////////////////////////////////////////////////////////////////////////////////
+  
+! /* map common "web" font names to our font list */
+! 
+! struct FontFamilyMatchRec {
+!     const char* fLCName;
+!     int         fFamilyIndex;
+! };
+  
+! /*  This is a table of synonyms for collapsing font names
+!     down to their pseudo-equivalents (i.e. in terms of fonts
+!     we actually have.)
+!     Keep this sorted by the first field so we can do a binary search.
+!     If this gets big, we could switch to a hash...
+! */
+! static const FontFamilyMatchRec gMatches[] = {
+! #if 0
+!     { "Ahem",               Ahem_FAMILY_INDEX },
+!     { "arial",              SANS_FAMILY_INDEX },
+!     { "courier",            MONO_FAMILY_INDEX },
+!     { "courier new",        MONO_FAMILY_INDEX },
+!     { "cursive",            SERIF_FAMILY_INDEX },
+!     { "fantasy",            SERIF_FAMILY_INDEX },
+!     { "georgia",            SERIF_FAMILY_INDEX },
+!     { "goudy",              SERIF_FAMILY_INDEX },
+!     { "helvetica",          SANS_FAMILY_INDEX },
+!     { "palatino",           SERIF_FAMILY_INDEX },
+!     { "tahoma",             SANS_FAMILY_INDEX },
+!     { "sans-serif",         SANS_FAMILY_INDEX },
+!     { "serif",              SERIF_FAMILY_INDEX },
+!     { "times",              SERIF_FAMILY_INDEX },
+!     { "times new roman",    SERIF_FAMILY_INDEX },
+!     { "verdana",            SANS_FAMILY_INDEX }
+! #endif
+  };
+  
+- ////////////////////////////////////////////////////////////////////////////////////////
+- 
+- #include "SkTSearch.h"
+- 
+  static bool contains_only_ascii(const char s[])
+  {
+      for (;;)
+--- 15,227 ----
+  ** limitations under the License.
+  */
+  
++ #include <vector>
++ #include <string>
++ #include <list>
+  #include "SkFontHost.h"
+  #include "SkDescriptor.h"
+  #include "SkString.h"
+  #include "SkStream.h"
++ #include "SkTSearch.h"
+  #include <stdio.h>
+  
++ /*
++ ** Changes by Mike Goss for Google Earth Fusion.  Allow client program
++ ** to dynamically add fonts to available font list.
++ */
++ 
+  /* define this if we can use mmap() to access fonts from the filesystem */
+  #define SK_CAN_USE_MMAP 
+  
+  #ifndef SK_FONTPATH
+!     #define SK_FONTPATH "the complete path for the default font file"
+  #endif
+  
+! #ifndef SK_FONTFACE
+!     #define SK_FONTFACE "Default"
+! #endif
+! 
+! namespace {
+  
+! struct FontFaceRec {
+!   FontFaceRec()
+!       : fFileName(NULL),
+!         fFamilyIndex(0),
+!         fBold(0),
+!         fItalic(0) {
+!   }
+!   FontFaceRec(const char *file_name,
+!               uint8_t family_index,
+!               SkBool8 bold,
+!               SkBool8 italic)
+!       : fFileName(file_name),
+!         fFamilyIndex(family_index),
+!         fBold(bold),
+!         fItalic(italic) {
+!   }
+!   const char* fFileName;    
+!   uint8_t     fFamilyIndex;
+!   SkBool8     fBold;
+!   SkBool8     fItalic;
+  };
+  
+  struct FontFamilyRec {
+!   std::string name;
+!   std::vector<size_t> face_indices;
+!   // Non-movable storage for face file names.  These are referred to
+!   // from FontFaceRec structures by pointer, so use list instead of
+!   // vector to prevent reallocation.
+!   std::list<std::string> face_file_names;
+  };
+  
+! /* class DynamicFontManager
+! 
+!     The DynamicFontManager class maintains the list of available font
+!     families and correspoinding faces.  We don't use std::vector
+!     because various routines pass around pointers to things, so we
+!     can't safely reallocate when a vector changes size.
+! */
+! 
+! class DynamicFontManager {
+!  public:
+!   static const size_t kMaxFamilyCount = 255; // SKIA stores index as uint8_t
+!   static const size_t kMaxFaceCount = 4*kMaxFamilyCount;
+! 
+!   DynamicFontManager()
+!       : family_count_(0),
+!         face_count_(0) {
+!     AddFace(SK_FONTFACE, SK_FONTPATH, 0, 0); // default family & face
+!   }
+! 
+!   const FontFaceRec &DefaultFace() {
+!     return faces_[0];
+!   }
+! 
+!   // Add a new face (and possibly new family). NOTE: this is NOT
+!   // thread safe with regard to itself or FindFace.  It normally
+!   // doesn't need to be, since the normal use pattern is to add all
+!   // faces during initialization.  Returns true if success, false
+!   // if too many families or faces.
+!   bool AddFace(const std::string &family_name,
+!                const std::string &file_name,
+!                bool bold,
+!                bool italic) {
+!     if (face_count_ >= kMaxFaceCount)
+!       return false;
+      
+!     // Find or create family
+!     size_t family_index = 0;
+!     while (family_index < family_count_
+!            &&  family_name != families_[family_index].name)
+!       ++family_index;
+!     if (family_index >= family_count_) {
+!       if (family_count_ >= kMaxFamilyCount)
+!         return false;
+!       families_[family_index].name = family_name;
+!       ++family_count_;
+!     }
+! 
+!     // Add face to family
+!     FontFamilyRec &family = families_[family_index];
+!     family.face_indices.push_back(face_count_);
+!     family.face_file_names.push_back(file_name);
+! 
+!     // Create face record
+!     FontFaceRec &face = faces_[face_count_++];
+!     face.fFileName = family.face_file_names.back().c_str();
+!     face.fFamilyIndex = family_index;
+!     face.fBold = bold;
+!     face.fItalic = italic;
+!     
+!     return true;
+!   }
+! 
+!   int FindFamily(const std::string &family_name) {
+!     for (size_t i = 0; i < family_count_; ++i) {
+!       if (families_[i].name == family_name)
+!         return i;
+!     }
+! 
+!     return -1;                          // if not found
+!   }
+! 
+!   const FontFaceRec &FindFace(size_t family_index,
+!                               int isBold,
+!                               int isItalic) const {
+!     SkASSERT(family_index < family_count_);
+!     const FontFamilyRec &family = families_[family_index];
+!     size_t family_faces = family.face_indices.size();
+!     SkASSERT(family_faces > 0);
+  
+      // look for an exact match
+!     for (int i = 0; i < family_faces; i++) {
+!       const FontFaceRec &face = faces_[family.face_indices.at(i)];
+!       if (face.fBold == isBold  &&  face.fItalic == isItalic)
+!         return face;
+      }
+      // look for a match in the bold field
+!     for (int i = 0; i < family_faces; i++) {
+!       const FontFaceRec &face = faces_[family.face_indices.at(i)];
+!       if (face.fBold == isBold)
+!         return face;
+      }
+      // look for a normal/regular face
+!     for (int i = 0; i < family_faces; i++) {
+!       const FontFaceRec &face = faces_[family.face_indices.at(i)];
+!       if (!face.fBold  &&  !face.fItalic)
+!         return face;
+      }
+      // give up
+!     return faces_[family.face_indices.at(0)];
+!   }
+  
+!   void GetFontList(std::vector<SkFontHost::FontInfo> *font_list) {
+!     font_list->clear();
+!     for (int i = 0; i < family_count_; ++i) {
+!       font_list->push_back(SkFontHost::FontInfo(families_[i].name));
+!       for (int j = 0; j < families_[i].face_indices.size(); ++j) {
+!         const FontFaceRec &face = faces_[families_[i].face_indices[j]];
+!         if (!face.fBold  &&  !face.fItalic)
+!           font_list->back().regular = true;
+!         else if (face.fBold  &&  !face.fItalic)
+!           font_list->back().bold = true;
+!         else if (!face.fBold  &&  face.fItalic)
+!           font_list->back().italic = true;
+!         else
+!           font_list->back().bold_italic = true;
+!       }
+!     }
+!   }
+! 
+!  private:
+!   size_t family_count_;
+!   size_t face_count_;
+!   FontFamilyRec families_[kMaxFamilyCount];
+!   FontFaceRec faces_[kMaxFaceCount];
+  };
+  
+! // Create the single, static DynamicFontManager
+  
+! DynamicFontManager font_manager;
+  
+  ////////////////////////////////////////////////////////////////////////////////////////
+  
+! class FontFaceRec_Typeface : public SkTypeface {
+! public:
+!     FontFaceRec_Typeface(const FontFaceRec& face) : fFace(face)
+!     {
+!         int style = 0;
+!         if (face.fBold)
+!             style |= SkTypeface::kBold;
+!         if (face.fItalic)
+!             style |= SkTypeface::kItalic;
+!         this->setStyle((SkTypeface::Style)style);
+!     }
+  
+!     // This global const reference completely identifies the face
+!     const FontFaceRec& fFace;
+  };
+  
+  static bool contains_only_ascii(const char s[])
+  {
+      for (;;)
+***************
+*** 141,219 ****
+  #define TRACE_FONT_NAME(code)
+  //#define TRACE_FONT_NAME(code)   code
+  
+- const FontFamilyRec* find_family_rec(const char target[])
+- {
+-     int     index;
+- 
+-     //  If we're asked for a font name that contains non-ascii,
+-     //  1) SkStrLCSearch can't handle it
+-     //  2) All of our fonts are have ascii names, so...
+- 
+- TRACE_FONT_NAME(printf("----------------- font request <%s>", target);)
+- 
+-     if (contains_only_ascii(target))
+-     {
+-         // Search for the font by matching the entire name
+-         index = SkStrLCSearch(&gMatches[0].fLCName, SK_ARRAY_COUNT(gMatches), target, sizeof(gMatches[0]));
+-         if (index >= 0)
+-         {
+-             TRACE_FONT_NAME(printf(" found %d\n", index);)
+-             return &gFamilies[gMatches[index].fFamilyIndex];
+-         }
+-     }
+- 
+-     // Sniff for key words...
+- 
+- #if 0
+-     if (strstr(target, "sans") || strstr(target, "Sans"))
+-     {
+-         TRACE_FONT_NAME(printf(" found sans\n");)
+-         return &gFamilies[SANS_FAMILY_INDEX];
+-     }
+-     if (strstr(target, "serif") || strstr(target, "Serif"))
+-     {
+-         TRACE_FONT_NAME(printf(" found serif\n");)
+-         return &gFamilies[SERIF_FAMILY_INDEX];
+-     }
+-     if (strstr(target, "mono") || strstr(target, "Mono"))
+-     {
+-         TRACE_FONT_NAME(printf(" found mono\n");)
+-         return &gFamilies[MONO_FAMILY_INDEX];
+-     }
+- #endif
+- 
+-     TRACE_FONT_NAME(printf(" use default\n");)
+-     // we give up, just give them the default font
+-     return &gFamilies[DEFAULT_FAMILY_INDEX];
+- }
+- 
+- ///////////////////////////////////////////////////////////////////////////////////////////////
+- 
+- static const FontFaceRec* get_default_face()
+- {
+-     return &gFamilies[DEFAULT_FAMILY_INDEX].fFaces[DEFAULT_FAMILY_FACE_INDEX];
+- }
+- 
+- class FontFaceRec_Typeface : public SkTypeface {
+- public:
+-     FontFaceRec_Typeface(const FontFaceRec& face) : fFace(face)
+-     {
+-         int style = 0;
+-         if (face.fBold)
+-             style |= SkTypeface::kBold;
+-         if (face.fItalic)
+-             style |= SkTypeface::kItalic;
+-         this->setStyle((SkTypeface::Style)style);
+-     }
+- 
+-     // This global const reference completely identifies the face
+-     const FontFaceRec& fFace;
+- };
+- 
+  static const FontFaceRec* get_typeface_rec(const SkTypeface* face)
+  {
+      const FontFaceRec_Typeface* f = (FontFaceRec_Typeface*)face;
+!     return f ? &f->fFace : get_default_face();
+  }
+  
+  static uint32_t ptr2uint32(const void* p)
+--- 238,247 ----
+  #define TRACE_FONT_NAME(code)
+  //#define TRACE_FONT_NAME(code)   code
+  
+  static const FontFaceRec* get_typeface_rec(const SkTypeface* face)
+  {
+      const FontFaceRec_Typeface* f = (FontFaceRec_Typeface*)face;
+!     return f ? &f->fFace : &font_manager.DefaultFace();
+  }
+  
+  static uint32_t ptr2uint32(const void* p)
+***************
+*** 223,228 ****
+--- 251,260 ----
+      return (uint32_t)((char*)p - (char*)0);
+  }
+  
++ } // namespace
++ 
++ ///////////////////////////////////////////////////////////////////////////////////////////////
++ 
+  uint32_t SkFontHost::TypefaceHash(const SkTypeface* face)
+  {
+      // just use our address as the hash value
+***************
+*** 234,261 ****
+      return get_typeface_rec(facea) == get_typeface_rec(faceb);
+  }
+  
+! SkTypeface* SkFontHost::CreateTypeface(const SkTypeface* familyFace, const char familyName[], SkTypeface::Style style)
+  {
+!     const FontFamilyRec* family;
+      
+!     if (familyFace)
+!         family = &gFamilies[((FontFaceRec_Typeface*)familyFace)->fFace.fFamilyIndex];
+!     else if (familyName)
+!         family = find_family_rec(familyName);
+      else
+!         family = &gFamilies[DEFAULT_FAMILY_INDEX];
+! 
+!     const FontFaceRec& face = FontFaceRec::FindFace(family->fFaces, family->fFaceCount,
+!                                                     (style & SkTypeface::kBold) != 0,
+!                                                     (style & SkTypeface::kItalic) != 0);
+  
+!     // if we're returning our input parameter, no need to create a new instance
+!     if (familyFace != NULL && &((FontFaceRec_Typeface*)familyFace)->fFace == &face)
+!     {
+!         familyFace->ref();
+!         return (SkTypeface*)familyFace;
+!     }
+!     return SkNEW_ARGS(FontFaceRec_Typeface, (face));
+  }
+  
+  uint32_t SkFontHost::FlattenTypeface(const SkTypeface* tface, void* buffer)
+--- 266,323 ----
+      return get_typeface_rec(facea) == get_typeface_rec(faceb);
+  }
+  
+! SkTypeface* SkFontHost::CreateTypeface(const SkTypeface* familyFace,
+!                                        const char familyName[],
+!                                        SkTypeface::Style style)
+  {
+!   size_t family;
+      
+!   if (familyFace)
+!     family = ((FontFaceRec_Typeface*)familyFace)->fFace.fFamilyIndex;
+!   else if (familyName) {
+!     int family_index = font_manager.FindFamily(familyName);
+!     family = (family_index >= 0) ? family_index : 0; // default if not found
+!   } else {
+!     family = 0;
+!   }
+! 
+!   const FontFaceRec& face =
+!       font_manager.FindFace(family,
+!                             (style & SkTypeface::kBold) != 0,
+!                             (style & SkTypeface::kItalic) != 0);
+! 
+!   // if we're returning our input parameter, no need to create a new instance
+!   if (familyFace != NULL && &((FontFaceRec_Typeface*)familyFace)->fFace == &face)
+!   {
+!     familyFace->ref();
+!     return (SkTypeface*)familyFace;
+!   }
+!   return SkNEW_ARGS(FontFaceRec_Typeface, (face));
+! }
+! 
+! SkTypeface* SkFontHost::CreateExactTypeface(const char familyName[],
+!                                             SkTypeface::Style style)
+! {
+!   // Create exact match only.  Return NULL if no match found.
+!   int family_index = font_manager.FindFamily(familyName);
+!   if (family_index >= 0) {
+!     bool bold = style & SkTypeface::kBold;
+!     bool italic = style & SkTypeface::kItalic;
+!     const FontFaceRec& face = font_manager.FindFace(family_index, bold, italic);
+!     if (face.fBold == bold  &&  face.fItalic == italic)
+!       return SkNEW_ARGS(FontFaceRec_Typeface, (face));
+      else
+!       return NULL;
+!   } else {
+!     return NULL;
+!   }
+! }
+  
+! bool SkFontHost::AddFace(const std::string &family_name,
+!                          const std::string &file_name,
+!                          bool bold,
+!                          bool italic) {
+!   return font_manager.AddFace(family_name, file_name, bold, italic);
+  }
+  
+  uint32_t SkFontHost::FlattenTypeface(const SkTypeface* tface, void* buffer)
+***************
+*** 265,271 ****
+      if (tface)
+          face = &((const FontFaceRec_Typeface*)tface)->fFace;
+      else
+!        face = get_default_face();
+  
+      size_t  size = sizeof(face);
+      if (buffer)
+--- 327,333 ----
+      if (tface)
+          face = &((const FontFaceRec_Typeface*)tface)->fFace;
+      else
+!       face = &font_manager.DefaultFace();
+  
+      size_t  size = sizeof(face);
+      if (buffer)
+***************
+*** 275,281 ****
+  
+  void SkFontHost::GetDescriptorKeyString(const SkDescriptor* desc, SkString* key)
+  {
+!     key->set(SK_FONTPATH);
+  }
+  
+  #ifdef SK_CAN_USE_MMAP
+--- 337,345 ----
+  
+  void SkFontHost::GetDescriptorKeyString(const SkDescriptor* desc, SkString* key)
+  {
+!   const FontFaceRec** face =
+!       (const FontFaceRec**)desc->findEntry(kTypeface_SkDescriptorTag, NULL);
+!   key->set((*face)->fFileName);
+  }
+  
+  #ifdef SK_CAN_USE_MMAP
+***************
+*** 384,390 ****
+  
+  SkScalerContext* SkFontHost::CreateFallbackScalerContext(const SkScalerContext::Rec& rec)
+  {
+!     const FontFaceRec* face = get_default_face();
+  
+      SkAutoDescriptor    ad(sizeof(rec) + sizeof(face) + SkDescriptor::ComputeOverhead(2));
+      SkDescriptor*       desc = ad.getDesc();
+--- 448,454 ----
+  
+  SkScalerContext* SkFontHost::CreateFallbackScalerContext(const SkScalerContext::Rec& rec)
+  {
+!     const FontFaceRec* face = &font_manager.DefaultFace();
+  
+      SkAutoDescriptor    ad(sizeof(rec) + sizeof(face) + SkDescriptor::ComputeOverhead(2));
+      SkDescriptor*       desc = ad.getDesc();
+***************
+*** 397,399 ****
+--- 461,466 ----
+      return SkFontHost::CreateScalerContext(desc);
+  }
+  
++ void SkFontHost::GetFontList(std::vector<FontInfo> *font_list) {
++   font_manager.GetFontList(font_list);
++ }

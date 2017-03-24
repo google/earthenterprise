@@ -1,0 +1,64 @@
+/**
+ * Licensed under the Apache License, v. 2.0
+ * (http://www.apache.org/licenses/)
+ *
+ * The transitional CSS fix-file to make headers semantic.
+ */
+
+#gc-pagecontent h1 {
+  line-height: 130%;
+  font-size: 170%;
+  margin: 0 0 0 -10px;
+  padding: .8em 0 0;
+  border: none;
+  background: none;
+}
+
+#gc-pagecontent h2 {
+  font-size: 130%;
+  font-weight: bold;
+  margin: 2em 0 0 -10px; 
+  padding: 1px 3px;
+  position: relative;
+  border-top: 1px solid #3366CC;
+  background-color: #e5ecf9;
+}
+
+.labs #gc-pagecontent h2 {
+  background-color: #dcf6db;
+  border-top: 1px solid #009900;
+}
+
+#gc-pagecontent h3 {
+  font-size: 130%;
+  font-weight: bold;
+  margin: 1.5em 0 0 0;
+  top: 0em;
+}
+
+#gc-pagecontent h4 {
+  font-size: 110%;
+  margin: .7em 0 0 0;
+  position: relative;
+  top: .4em;
+}
+	
+#gc-pagecontent h5 {
+  font-size: 100%;
+  font-weight: bold;
+  margin: .6em 0 0 0;
+  position: relative;
+  top: .4em;
+  z-index: 5;
+}
+	
+#gc-pagecontent h6 {
+  font-size: 100%;
+  font-weight: normal;
+  font-style: italic;
+  text-decoration: underline;
+  margin: .4em 0 0 0;
+  position: relative;
+  top: .4em;
+  z-index: 5;
+}

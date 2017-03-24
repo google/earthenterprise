@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<RasterProduct>
+
+  <type>Imagery</type>
+
+  <compression>JPEG</compression>
+
+  <compressionQuality>85</compressionQuality>
+
+  <numComponents>3</numComponents>
+
+  <componentType>UInt8</componentType>
+
+  <tileResolution>1024</tileResolution>
+
+  <minLevel>8</minLevel>
+
+  <maxLevel>14</maxLevel>
+
+  <degExtents>
+    <beginx>-20037508.342789199</beginx>
+    <endx>20037508.342789199</endx>
+    <beginy>-20037508.342789199</beginy>
+    <endy>20037508.342789199</endy>
+  </degExtents>
+
+  <projectionType>Mercator</projectionType>
+
+</RasterProduct>

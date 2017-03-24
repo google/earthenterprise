@@ -1,0 +1,583 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+ 
+ 
+
+
+ 
+
+  
+
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/articles/tutorial-iphone.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Google Maps API V3: Developing Native iPhone Applications - Google Maps API Family - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/maps/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../css/iehacks.css"><![endif]-->
+
+  </head>
+
+  <body class="gc-documentation">
+
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps API Family</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="../index.html" title="Google Maps API Family home page">Home</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../faq.html" title="Answers to frequently asked questions about Google Maps API Family">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="index.html" title="Focused articles and tutorials for Google Maps API Family developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps API Family blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="../forum/index.html" title="Google Maps API Family developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../terms.html" title="Google Maps API Family terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <a name="gc-toc-anchor"></a>  
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../index.html">Maps API Family</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps Javascript API V3</h2>
+         <ul>
+           <li><a href="../documentation/javascript/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+      <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../documentation/javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+  <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../documentation/flash/index.html">Home Page</a></li>
+          <li><a href="../documentation/flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../documentation/mapsdata/index.html">Home Page</a></li>
+          <li><a href="../documentation/mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+     <div class="line"></div>
+      <ul>
+        <li><h2><a href="../documentation/webservices/index.html">Maps Web Services</a></h2>
+         <ul>
+           <li><a href="../documentation/geocoding/index.html">Geocoding Guide</a></li>
+           <li><a href="../documentation/directions/index.html">Directions Guide</a></li>
+           <li><a href="../documentation/elevation/index.html">Elevation Guide</a></li>
+           <li><a href="../documentation/places/index.html">Places Guide</a></li>
+         </ul>
+       </li>
+      </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../documentation/staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li>
+            <h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../documentation/localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../documentation/localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+      <div class="promo">
+     <p><a href="../documentation/premier/index.html">Google Maps API Premier</a></p><p>Includes enterprise licensing and support</p></div>
+
+      </div>
+      
+      <a name="gc-pagecontent-anchor"></a>   
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Google Maps API V3: Developing Native iPhone Applications</h1>
+
+
+<div class="i">
+<i>Tom Manshreck, Maps API Team</i>
+<br>
+<i>January, 2010</i>
+
+<div class="toc">
+  <ol>
+  <li><a href="#Introduction">Why Develop a native iPhone&trade; Maps Application?</a></li>
+  <li><a href="#SettingUp">Setting Up the Apple iPhone SDK</a></li>
+  <li><a href="#UIWebView">Adding a UIWebView</a></li>
+  <li><a href="#Interface">Hooking Up the UI</a></li>
+  <li><a href="#HTML">Loading the HTML Application</a></li>
+  <li><a href="#Running">Running the Native Application</a></li>
+  </ol>
+  </li>
+  </ol>
+</div>
+
+<p>This tutorial walks through creation of a native iPhone&trade;
+application using the Google Maps JavaScript API V3. This tutorial
+discusses some of Apple's Objective-C programming syntax, and does
+not assume any prior knowledge, though this should not be considered
+an exhaustive tutorial in Apple iPhone development or Objective-C
+programming.</p>
+
+<p>For documentation on iPhone development, contact Apple's
+official
+<a href="http://developer.apple.com/iphone">iPhone Dev Center</a>.</p>
+
+<p>This tutorial was written using version 3.1.2 of the iPhone SDK.</p>
+
+<h1 id="Introduction">Why Develop a native iPhone Maps Application?</h1>
+
+
+
+<p>When developing a Google Maps API application, you have several options,
+as discussed in <a href="mobile_overview_v3.html">Overview
+of Mobile Development for the Google Maps API</a>.</p>
+
+<p>A native iPhone application written using the Google Maps
+JavaScript API V3 has many of the advantages of a native application
+(ability to launch as a separate application, sale through the
+App Store, etc.) while also allowing you to take
+advantage of newer features available in the most current
+Google Maps API.</p>
+
+<h1 id="SettingUp">Setting Up the Apple iPhone SDK</h1>
+
+<p>This tutorial assumes you've enrolled in the iPhone Developer
+Program and have downloaded and installed the iPhone SDK. For
+more information, consult
+<a href="http://developer.apple.com/iphone/program/">
+<code>http://developer.apple.com/iphone/program/</code></a>. To
+download the SDK, you will need to obtain an Apple ID.</p>
+
+<p>Once you've downloaded and installed the SDK, start up <b>XCode</b>,
+Apple's main development IDE. This application, by default, is 
+located within the <b>Developer -> Applications</b> folder on
+your hard drive.</p>
+
+<p>Once <b>XCode</b> is launched, select <b>File -> New Project</b>.
+The <b>New Project</b> dialog box appears:</p>
+
+<p><img src="images/iphone-newProject.png" /></p>
+
+<p>Select <b>View-based Application</b> and click the <b>Choose</b>
+button. Enter a name for your project and save the project file to
+your desktop. <b>XCode</b> creates a number of files for you
+automatically and brings you to the default view.</p>
+
+<p><img src="images/iphone-initialProject.png" /></p>
+
+<p><b>iPhone</b> applications within the Apple SDK are written in
+Objective-C. The Apple SDK makes extensive use of a type of MVC
+(Model-View-Controller) framework to specify how objects respond
+and communicate with each other. Your code typically relies
+on <i>Controller</i> objects to handle state changes and communicate
+directly with <i>Model</i> objects, typically through the
+<a href="http://en.wikipedia.org/wiki/Delegation_pattern">
+Delegation Design Pattern</a>.</p>
+
+<p>Your initial application code consists of a root
+<code>main.m</code>, and class definitions for two
+classes:</p>
+
+<ul>
+  <li>A <code><i>projectName</i>AppDelegate</code> class which acts as the
+  application "model."</li>
+  <li>A <code><i>projectName</i>AppViewController</code> class which receives
+  most input/output messages, and communicates with the
+  delegate classes. (This class is not a strict
+  controller, but for the purposes of this tutorial, don't
+  worry about that.)</li>
+</ul>
+
+<p>Additionally, UI files, ending in <code>.xib</code>,
+act as the <i>View</i> within the MVC framework. Generally,
+you modify the UI through a special <b>XCode</b>
+application known as the <b>Interface Builder</b>.</p>
+
+<h1 id="UIWebView">Adding a <b><code>UIWebView</code></b></h1>
+
+<p>Conveniently, the Apple SDK provides a special class
+that implements most of the functionality of a web browser.
+This class, the <b><code>UIWebView</code></b> class implements
+Apple's version of the <b>WebKit</b> browser layout engine.
+We'll hook this class into the application's code.</p>
+
+<p>Each class within Apple's SDK is typically defined using
+two files:</p>
+
+<ul>
+  <li>Interface files, ending in <code>.h</code></li>
+  <li>Implementation files, ending in <code>.m</code></li>
+</ul>
+
+<p>Opening the <b>Classes</b> folder, you should therefore see
+four files for your two classes: a <b><code>Delegate</code></b>
+class for the application's model and a <b><code>ViewController</code></b>
+class, which acts as a controller for any displayed objects.</p>
+
+<p>We'll now want to add a <b><code>UIWebView</code></b> as an instance
+variable to the application so that we can reference it within
+the application's <i>View</i>. Open the
+<b><code><i>projectName</i>Controller.h</code></b> file and modify
+the class's <code>@interface</code> declaration with the following
+code:</p>
+
+<pre class="prettyprint">
+@interface MySampleController : UIViewController {
+  <b>IBOutlet UIWebView *webView;</b>
+}
+</pre>
+
+<p>This declaration creates a <code>webView</code>
+instance variable using the <b><code>UIWebView</code></b>
+class. Additionally, the <b><code>IBOutlet</code></b>
+instruction tells <b>XCode</b> that this object should
+be exposed as an <i>outlet</i> within <b>XCode</b>'s
+<b>Interface Builder</b>, allowing you to dynamically attach
+this <code>UIWebView</code> to other UI elements
+in the iPhone application.</p>
+
+<h1 id="Interface">Hooking Up the UI</h1>
+
+<p>Now, let's hook up the <b>Web View</b> to our UI. Select
+the Controller's <b>.nib</b> file within the <b>NIB</b>
+folder and double-click on it. <b>Interface Builder</b> will
+launch and display a number of windows, including:</p>
+
+<ul>
+  <li>A <b>XIB</b> panel showing the interface objects</li>
+  <li>A <b>View</b> panel containing a mockup of the iPhone
+  screen</li>
+  <li>A <b>Library</b> panel containing a collection
+  of objects which you can attach to your UI through
+  drag and drop actions</li>
+</ul>
+
+<p><img src="images/iphone-interfaceBuilder.png" /></p>
+
+<p>Within the <b>Library</b> panel, select the <b>Web
+View</b> object and drag and drop it onto the controller's
+<b>View</b> window. The <b>Web View</b> will resize to occupy
+the window's full screen.</p>
+
+<p>Now CTRL-click on the <b>File's Owner</b> object within the
+<b>XIB</b> window. A property dialog box will appear. Select the
+outlet (open circle) on the <b>webView</b> instance variable and
+drag and drop it onto the Web View object.</p>
+
+<p><img src="images/iphone-webViewOutlet.png" /></p>
+
+<p>This action attaches the <code>webView</code> instance variable to the
+<b>Web View</b> object we dropped on the window.</p>
+
+<h1 id="HTML">Loading the HTML Application</h1>
+
+<p>Now, return to <b>XCode</b> and open the
+<code><i>projectName</i>ViewController.m</code> file. Uncomment the
+template <code>viewDidLoad</code> message and add the following
+code:</p>
+
+
+<pre class="prettyprint">
+// Implement viewDidLoad to do additional setup after loading the view,
+// typically from a nib.
+- (void) viewDidLoad {
+  NSString *url = @"http://code.google.com/apis/maps/documentation/javascript/examples/map-geolocaton-iphone.html";
+  NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+  [webView loadRequest:request];
+  [super viewDidLoad];
+}
+</pre>
+
+
+<p>This code instructs the application to load the given URL within the
+application's <code>webView</code> object upon completion of the
+<code>viewDidLoad</code> message. Note that our "application" in reality
+is simply an HTML file retrieved from the web, though instead of loading
+it within a browser, we are loading it directly within the application.</p>
+
+<p>The code for this application is shown below:</p>
+
+<pre class="prettyprint">
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta name="viewport" content="initial-scale=1.0, user-scalable=no" /&gt;
+&lt;meta http-equiv="content-type" content="text/html; charset=UTF-8"/&gt;
+&lt;title&gt;Google Maps JavaScript API v3 Example: iPhone Geolocation&lt;/title&gt;
+&lt;script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"&gt;&lt;/script&gt;
+&lt;script type="text/javascript"&gt;
+var initialLocation;
+var newyork = new google.maps.LatLng(40.69847032728747, -73.9514422416687);
+
+function initialize() {
+  var myOptions = {
+    zoom: 14,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  
+  // Safari supports the W3C Geolocation method
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+      var placeMarker = new google.maps.Marker({
+        position: initialLocation,
+        map: map,
+      });
+      map.setCenter(initialLocation);
+    }, function() {
+      handleNoGeolocation(browserSupportFlag);
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleNoGeolocation();
+  }
+  
+  function handleNoGeolocation() {
+    initialLocation = newyork;
+    map.setCenter(initialLocation);
+  }
+}
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body style="margin:0px; padding:0px;" onload="initialize()"&gt;
+  &lt;div id="map_canvas" style="width:100%; height:100%"&gt;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p>This HTML page contains Google Maps Javascript API V3 code for
+retrieving the current location (via the W3C Geolocation standard
+supported by Safari) and plotting that location on the map. More
+information about geolocation is located in the
+<a href="../documentation/javascript/basics.html#Geolocation">
+Maps API V3 documentation</a>.</p>
+
+<p class="note">Note that this application is quite simple; you may wish
+to enable more robust mobile-specific usages of Geolocation within your HTML
+application. You can do so using the techniques explained in the
+<a href="http://developer.apple.com/safari/library/documentation/AppleApplications/Reference/SafariWebContent/GettingGeographicalLocations/GettingGeographicalLocations.html">
+Apple iPhone Dev Center documentation</a>.</p>
+
+<p>Because this code is simply a full-screen HTML page, it automatically
+supports all orientations. We'll then want to alter the
+template <code>shouldAutorotateToInterfaceOrientation</code> method
+to return <code>YES</code> in all cases, and this will enable both
+portrait and landscape modes.</p>
+
+<pre class="prettyprint">
+// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
+- (void) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+  return YES;
+}
+</pre>
+
+<h1 id="Running">Running Your Application</h1>
+
+<p>We're now ready to build and run our application. Click <b>Build and Go</b> and
+<b>XCode</b> will build your application, launch the <b>iPhone Simulator</b>, and
+display your map once the application finishes loading:</p>
+
+<p><img src="images/iphone-application.png" /></p>
+
+<p>Congratulations! With this simple code, you've built an iPhone application
+running Google Maps JavaScript API V3!</p>
+
+        <!-- end body text -->
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

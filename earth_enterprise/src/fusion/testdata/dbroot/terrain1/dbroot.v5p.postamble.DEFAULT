@@ -1,0 +1,21 @@
+provider_info {
+  provider_id: 1
+  copyright_string {
+    value: "\302\251 NASA 1900"
+  }
+  vertical_pixel_offset: -1
+}
+provider_info {
+  provider_id: 2
+  copyright_string {
+    value: "\302\251 John 2000"
+  }
+  vertical_pixel_offset: -1
+}
+end_snippet {
+  model {
+    radius: 6371.01
+    negative_altitude_exponent_bias: 32
+    compressed_negative_altitude_threshold: 1e-12
+  }
+}

@@ -1,0 +1,204 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>LabelFormatBase</class>
+<comment>  Copyright 2017 Google Inc.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+</comment>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>LabelFormatBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>482</width>
+            <height>196</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Label Format</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>4</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QTextEdit" row="2" column="0">
+            <property name="name">
+                <cstring>textEdit</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>460</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="textFormat">
+                <enum>PlainText</enum>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="wordWrap">
+                <enum>NoWrap</enum>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="1" column="0">
+            <property name="name">
+                <cstring>lineEdit</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>460</width>
+                    <height>0</height>
+                </size>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget" row="3" column="0">
+            <property name="name">
+                <cstring>layout36</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>Spacer11</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>270</width>
+                            <height>16</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>accept_btn</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;OK</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+O</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>cancel_btn</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+C</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="default">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLayoutWidget" row="0" column="0">
+            <property name="name">
+                <cstring>layout37</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QComboBox">
+                    <property name="name">
+                        <cstring>insert_field_combo</cstring>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer40</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>201</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>auto_populate_btn</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Auto Populate</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>accept_btn</sender>
+        <signal>released()</signal>
+        <receiver>LabelFormatBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>insert_field_combo</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>LabelFormatBase</receiver>
+        <slot>insertField(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>auto_populate_btn</sender>
+        <signal>clicked()</signal>
+        <receiver>LabelFormatBase</receiver>
+        <slot>AutoPopulate()</slot>
+    </connection>
+    <connection>
+        <sender>cancel_btn</sender>
+        <signal>clicked()</signal>
+        <receiver>LabelFormatBase</receiver>
+        <slot>reject()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>insert_field_combo</tabstop>
+    <tabstop>lineEdit</tabstop>
+    <tabstop>accept_btn</tabstop>
+</tabstops>
+<slots>
+    <slot>insertField(const QString &amp;)</slot>
+    <slot>AutoPopulate()</slot>
+</slots>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

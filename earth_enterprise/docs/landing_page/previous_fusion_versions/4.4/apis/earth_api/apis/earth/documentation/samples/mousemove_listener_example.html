@@ -1,0 +1,47 @@
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/samples/mousemove_listener_example.html";
+    </script>
+    
+   <title>mousemove_listener_example.html</title>
+   <script src="http://code.google.com/www.google.com/jsapi?key=ABQIAAAA5El50zA4PeDTEMlv-sXFfRSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xTdBhxbkZWuzyYTVeclkwYHpb17ZQ"></script>
+   <script type="text/javascript">
+      var ge;
+      google.load("earth", "1");
+
+      function init() {
+        google.earth.createInstance('map3d', initCB, failureCB);
+      }
+
+      function initCB(instance) {
+         ge = instance;
+         ge.getWindow().setVisibility(true);
+
+         // Define what happens when a mousemove is detected on the globe.
+         var maxAlt = -1000000;
+         function recordAltitude(event) {
+            var currentAlt = event.getAltitude();
+            maxAlt = Math.max(maxAlt, currentAlt);
+            document.getElementById('altitude').innerHTML = 
+                  '<p>Current altitude: ' + currentAlt + '<br />Max altitude: ' + maxAlt + '</p>';
+         }
+
+         // Listen to the mousemove event on the globe.
+         google.earth.addEventListener(ge.getGlobe(), 'mousemove', recordAltitude);
+      }
+
+      function failureCB(errorCode) {
+      }
+
+      google.setOnLoadCallback(init);
+   </script>
+
+</head>
+<body>
+
+   <div id="map3d" style="height:400px; width:600px;"></div>
+   <div id="altitude"><p>Current altitude: N/A<br />Max altitude: N/A</p></div>
+
+</body>
+</html>

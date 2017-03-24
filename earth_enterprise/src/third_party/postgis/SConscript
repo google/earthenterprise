@@ -1,0 +1,144 @@
+# Copyright 2009 Google Inc. All Rights Reserved.
+#-*- Python -*-
+
+
+Import('third_party_env')
+
+postgis_major_version = 'postgis-1.5'
+postgis_version = 'postgis-1.5.8'
+postgis_source = File('#/../../earth_enterprise/third_party/postgis/'
+                      '%s.tar.gz' % postgis_version).abspath
+
+ge_version = postgis_version.replace('postgis', 'postgis-ge')
+
+current_dir = Dir('.').abspath
+build_root = '%s/%s' % (current_dir, postgis_version)
+
+postgis_env = third_party_env.DeepCopy()
+root_dir = Dir(postgis_env.exportdirs['root']).abspath
+opt_dir = Dir(postgis_env['optdir']).abspath
+install_root = '%s/install' % current_dir
+install_root_opt = '%s%s' % (install_root, opt_dir)
+
+# [1] Extract
+postgis_target = '%s/.extract' % current_dir
+postgis_extract = postgis_env.Command(
+    postgis_target, postgis_source,
+    [postgis_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xzf %s\n'
+        'touch %s' % (
+            current_dir, current_dir, postgis_source, postgis_target))])
+
+# Find out whether optimize or debug and set variables accordingly
+if postgis_env['release'] or postgis_env['optimize']:
+  cflags = '-O2'
+else:
+  cflags = '-g'
+cstar_options = '%s -Wall -fPIC -fexceptions' % cflags
+
+# [2] Configure
+mod_env = '%sPATH="%s/bin:%s" ' % (postgis_env['ENV']['mod_env'], root_dir,
+                                   postgis_env['ENV']['PATH'])
+postgis_target = '%s/.configure' % current_dir
+if postgis_env['bundle_3rd_libs']:
+  configure_cmd = (
+      'cd %s\n'
+      '%s LDFLAGS=-lstdc++ ./configure --prefix=%s --mandir=%s/share/man '
+      '--with-pgconfig=%s/bin/pg_config --with-projdir=%s '
+      '--with-geosconfig=%s/bin/geos-config '
+      'CFLAGS="%s"\n'
+      'touch %s' % (build_root,
+                    mod_env, opt_dir, opt_dir,
+                    root_dir, root_dir,
+                    root_dir,
+                    cflags,
+                    postgis_target))
+else:
+  configure_cmd = (
+      'cd %s\n'
+      '%s LDFLAGS=-lstdc++ ./configure --prefix=%s --mandir=%s/share/man '
+      '--with-pgconfig=%s/bin/pg_config '
+      'CFLAGS="%s"\n'
+      'touch %s' % (build_root,
+                    mod_env, opt_dir, opt_dir,
+                    root_dir,
+                    cflags,
+                    postgis_target))
+
+postgis_configure = postgis_env.Command(
+    postgis_target, postgis_extract,
+    [postgis_env.MultiCommand(configure_cmd)])
+
+# [3] Build
+postgis_target = '%s/.build' % current_dir
+make_options = 'CSTAR_FLAGS="%s"' % cstar_options
+postgis_build = postgis_env.Command(
+    postgis_target, postgis_configure,
+    [postgis_env.MultiCommand(
+        'cd %s\n'
+        '%smake %s\n'
+        'touch %s' % (
+            build_root, mod_env, make_options, postgis_target))])
+
+# [4] Create postgis master installer
+install_root = '%s/install' % current_dir
+install_root_opt = '%s%s' % (install_root, opt_dir)
+postgis_target = '%s/.install' % current_dir
+postgis_install = postgis_env.Command(
+    postgis_target, postgis_build,
+    [postgis_env.MultiCommand(
+        'cd %s\n'
+        'make DESTDIR=%s install\n'
+        'rm -rf %s/lib\n'
+        'mkdir -p %s/share/doc/packages/%s\n'
+        'cp -pr COPYING CREDITS README.postgis %s/share/doc/packages/%s\n'
+        'cd %s%s\n'
+        'tar cf - * | (cd %s; tar xf -)\n'
+        'cd %s/share/postgresql/contrib\n'
+        'mv %s/* .\n'
+        'rm -rf %s\n'
+        'cd %s\n'
+        'touch %s' % (build_root,
+                      install_root,
+                      install_root_opt,
+                      install_root_opt, ge_version,
+                      install_root_opt, ge_version,
+                      install_root, root_dir,
+                      install_root_opt,
+                      install_root_opt,
+                      postgis_major_version,
+                      postgis_major_version,
+                      install_root,
+                      postgis_target))])
+
+# [5] Install these into various directories as required for build
+postgis_target = '%s/.install_for_build' % current_dir
+postgis_install_build = postgis_env.Command(
+    postgis_target, postgis_install,
+    [postgis_env.rsync_cmd % (
+        '%s/bin/' % install_root_opt,
+        '%s/' % Dir(postgis_env.exportdirs['bin']).abspath),
+     Touch('$TARGET')])
+
+Default(postgis_install_build)
+postgis_env.ExecuteOnClean('rm -rf %s' % current_dir)
+
+# [6] Copy to proper directory structure for installer (if install is in target)
+if 'install' in COMMAND_LINE_TARGETS:
+  postgis_env.InstallFileOrDir(
+      '%s/bin/' % install_root_opt,
+      '%s/' % postgis_env.installdirs['server_bin'],
+          postgis_install_build, 'install')
+  postgis_env.InstallFileOrDir(
+      '%s/lib/' % install_root_opt,
+      '%s/' % postgis_env.installdirs['server_lib'],
+          postgis_install_build, 'install')
+  postgis_env.InstallFileOrDir(
+      '%s/share/' % install_root_opt,
+      '%s/' % postgis_env.installdirs['server_share'],
+          postgis_install_build, 'install')
+
+Return('postgis_extract postgis_install_build')
+

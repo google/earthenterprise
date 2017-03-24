@@ -1,0 +1,54 @@
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#-*-perl-*-
+
+package GEServer;
+
+use strict;
+use server::GEServerBase;
+use InstallUtils;
+
+
+our( @ISA );
+@ISA = ("GEServerBase");
+
+our $PrettyName = "Google Earth Enterprise Server";
+
+sub new {
+    my ($class) = @_;
+    return $class->SUPER::new($PrettyName);
+}  
+
+sub JavaDisallowHash {
+    return { '/opt/google/java' => 1 };
+}
+
+sub PreInstallHandler {
+    my $self = shift;
+    # SSL installed by default as of 2008-05-31, no longer: $self->OpenSSLCheck();
+    $self->{java_home} = $self->FindJavaHome(JavaDisallowHash());
+    $self->SUPER::PreInstallHandler();
+}
+
+sub PostInstallHandler {
+    my $self = shift;
+    $self->SetJavaHome($self->{java_home});
+    $self->SUPER::PostInstallHandler();
+}
+
+
+push @Product::AllProductList, new GEServer();
+
+1;

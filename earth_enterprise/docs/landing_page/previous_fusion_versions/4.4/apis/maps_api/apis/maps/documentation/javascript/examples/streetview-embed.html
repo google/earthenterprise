@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/examples/streetview-embed.html";
+    </script>
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Google Maps JavaScript API Example: Embedded StreetView</title>
+<link href="http://code.google.com/apis/maps/documentation/javascript/examples/standard.css" rel="stylesheet" type="text/css" />
+<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+<script type="text/javascript">
+
+  function initialize() {
+    var bryantPark = new google.maps.LatLng(37.869260, -122.254811);
+    var panoramaOptions = {
+      position:bryantPark,
+      pov: {
+        heading: 165,
+        pitch:0,
+        zoom:1
+      }
+    };
+    var myPano = new google.maps.StreetViewPanorama(document.getElementById("pano"), panoramaOptions);
+    myPano.setVisible(true);
+  }
+</script>
+</head>
+<body onload="initialize()">
+  <div id="pano" style="width: 425px; height: 240px"></div>
+</body>
+</html>

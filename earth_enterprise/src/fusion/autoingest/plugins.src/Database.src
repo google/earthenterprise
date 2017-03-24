@@ -1,0 +1,1017 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#config Name       Database
+#config Base       Composite
+#config Config     DatabaseConfig
+#config Subtype    Database
+#config FixedType  Database
+
+
+// ===== DatabaseAsset.h =====
+#include <autoingest/.idl/storage/DatabaseConfig.h>
+#include "RasterProjectAsset.h"
+#include "VectorProjectAsset.h"
+
+class DatabaseAssetVersionImpl {
+ public:
+  RasterProjectAssetVersion GetImageryProjectAssetVersion(void) const;
+  VectorProjectAssetVersion GetVectorProjectAssetVersion(void) const;
+  RasterProjectAssetVersion GetTerrainProjectAssetVersion(void) const;
+  AssetVersion GetGedbChild() const;
+};
+
+
+// ===== DatabaseAsset.cpp =====
+#include <autoingest/.idl/Systemrc.h>
+
+namespace {
+
+uint kUnifiedIndexChildPos    = 0;
+uint kGEDBChildPos            = 1;
+uint kQTPacketChildPos        = 2;
+uint kCombinedTerrainChildPos = 3;  // optional
+
+}
+
+RasterProjectAssetVersion
+DatabaseAssetVersionImpl::GetImageryProjectAssetVersion(void) const
+{
+  if (!config.imageryProject.empty())
+    return inputs[0];
+  return RasterProjectAssetVersion();
+}
+
+VectorProjectAssetVersion
+DatabaseAssetVersionImpl::GetVectorProjectAssetVersion(void) const
+{
+  uint next = 0;
+  if (!config.imageryProject.empty())
+    ++next;
+
+  if (!config.vectorProject.empty())
+    return inputs[next];
+
+  return VectorProjectAssetVersion();
+}
+
+RasterProjectAssetVersion
+DatabaseAssetVersionImpl::GetTerrainProjectAssetVersion(void) const
+{
+  uint next = 0;
+  if (!config.imageryProject.empty())
+    ++next;
+  if (!config.vectorProject.empty())
+    ++next;
+
+  if (!config.terrainProject.empty())
+    return inputs[next];
+
+  return RasterProjectAssetVersion();
+}
+
+
+AssetVersion
+DatabaseAssetVersionImpl::GetGedbChild(void) const
+{
+  // As these variables are not used the following lines are required to
+  // work-around compiler warnings. TODO: check that the following
+  // variables are used at appropriate places.
+  (void) kUnifiedIndexChildPos;
+  (void) kQTPacketChildPos;
+  (void) kCombinedTerrainChildPos;
+
+  AssetVersion asset_version;
+  // old databases only had children if they were supersampling terrain
+  // new databases always have their gedb and unified index children
+  if (children.size() > kGEDBChildPos) {
+    AssetVersion tmp = children[kGEDBChildPos];
+    if (tmp->subtype == "GEDB") {
+      asset_version = tmp;
+    }
+  }
+  return asset_version;
+}
+
+
+// ===== DatabaseAssetD.h =====
+#include <limits>
+#include <autoingest/sysman/plugins/RasterProjectAssetD.h>
+#include <autoingest/sysman/plugins/VectorProjectAssetD.h>
+#include <autoingest/sysman/plugins/PacketGenAssetD.h>
+#include <autoingest/sysman/plugins/RasterGEIndexAssetD.h>
+#include <autoingest/sysman/plugins/CombinedTerrainAssetD.h>
+#include <autoingest/sysman/plugins/QTPacketAssetD.h>
+#include <autoingest/sysman/plugins/UnifiedIndexAssetD.h>
+#include <autoingest/sysman/plugins/GEDBAssetD.h>
+#include "fusion/fusionversion.h"
+
+// Creating subsampled terrain is switched off because EC can create it itself.
+// #define CREATE_SUBSAMPLED_TERRAIN 1
+
+class DatabaseAssetImplD {
+ protected:
+  void PostUpdate(void) { IncrementIndexVersion(); }
+
+ public:
+  static void HandleEditRequest(const DatabaseEditRequest &);
+  static void HandleNewRequest(const DatabaseEditRequest &);
+  static void HandleModifyRequest(const DatabaseEditRequest &);
+
+  void IncrementIndexVersion(void) {
+    config.indexVersion = (config.indexVersion + 1) %
+                          std::numeric_limits<uint32>::max();
+    if (config.indexVersion == 0) {
+      config.indexVersion = 1;
+    }
+  }
+
+private:
+  // Static helper to process all the inputs from a request, validate them and
+  // pack them in a vector.  Used by HandleXXXRequest.
+  static void ConstructInputsFromRequest(const DatabaseEditRequest &req,
+                                  std::vector<std::string>* inputs);
+};
+
+
+class DatabaseAssetVersionImplD {
+ protected:
+  // Before fusion 3.0 a Database had 0 or 1 chidren (depending on whether
+  // or not it needed to do super sampling). We can use that information to
+  // know if this version was one of the old ones or one of the new ones.
+  bool IsBeforeGEDB(void) const { return (children.size() <= 1); }
+
+  virtual void ChildrenToCancel(std::vector<AssetVersion> &out);
+
+  // Old Databases needed to be marked as broken if their inputs wen
+  // offline. The new ones don't beed to bother because their GEDB child
+  // will take care if it for them.
+  virtual bool OfflineInputsBreakMe(void) const { return IsBeforeGEDB(); }
+
+  // Old databases (only has a super sample index child) need to base their
+  // state off inputs as well as children.
+  virtual bool CompositeStateCaresAboutInputsToo(void) const { return IsBeforeGEDB(); }
+
+  // This will make my children after my inputs have succeeded
+  virtual void DelayedBuildChildren(void);
+
+private:
+
+  // Utility methods used to simplify readability of DelayedBuildChildren()
+  MutableCombinedTerrainAssetVersionD CreateCombinedTerrain(
+      const std::string& asset_ref_string,
+      RasterProjectAssetVersionD& terrain_project
+#ifdef CREATE_SUBSAMPLED_TERRAIN
+      , MutableRasterGEIndexAssetVersionD& ssindex
+#endif
+      );
+  MutableQTPacketAssetVersionD CreateQTPacket(
+      const std::string& asset_ref_string,
+      RasterProjectAssetVersionD& imagery_project,
+      RasterProjectAssetVersionD& terrain_project,
+      MutableCombinedTerrainAssetVersionD& combined_terrain,
+      VectorProjectAssetVersionD& vector_project,
+      std::vector<DatedImageryIndexInfo>& dated_imagery_indexes);
+  MutableUnifiedIndexAssetVersionD CreateUnifiedIndex(
+      const std::string& asset_ref_string,
+      RasterProjectAssetVersionD& imagery_project,
+      MutableCombinedTerrainAssetVersionD& combined_terrain,
+      VectorProjectAssetVersionD& vector_project,
+      std::vector<DatedImageryIndexInfo>& dated_imagery_indexes,
+      MutableQTPacketAssetVersionD& qtpacket);
+  MutableGEDBAssetVersionD CreateGedbAsset(
+      const std::string& asset_ref_string,
+      RasterProjectAssetVersionD& imagery_project,
+      RasterProjectAssetVersionD& terrain_project,
+      VectorProjectAssetVersionD& vector_project,
+      MutableUnifiedIndexAssetVersionD& unified_index);
+#ifdef CREATE_SUBSAMPLED_TERRAIN
+  MutableRasterGEIndexAssetVersionD CreateSubsampledTerrain(
+      const std::string& asset_ref_string,
+      RasterProjectAssetVersionD& imagery_project,
+      RasterProjectAssetVersionD& terrain_project);
+#endif
+};
+
+
+// ===== DatabaseAssetD.cpp =====
+#include <notify.h>
+#include <khTileAddr.h>
+#include <autoingest/.idl/Systemrc.h>
+#include <geindex/Entries.h>
+#include <khConstants.h>
+
+#undef DEBUG_SS_DECISIONS
+
+#ifdef CREATE_SUBSAMPLED_TERRAIN
+namespace {
+
+uint kSSTerrainChildPos       = 4;  // optional
+
+}
+#endif
+
+void DatabaseAssetImplD::ConstructInputsFromRequest(
+                            const DatabaseEditRequest &req,
+                            std::vector<std::string>* inputs) {
+  // make sure the project asset_ref_string's are valid
+  if (!req.config.imageryProject.empty()) {
+    RasterProjectFactory::ValidateRefForInput(req.config.imageryProject,
+                                              AssetDefs::Imagery);
+    inputs->push_back(req.config.imageryProject);
+  }
+  if (!req.config.vectorProject.empty()) {
+    VectorProjectFactory::ValidateRefForInput(req.config.vectorProject);
+    inputs->push_back(req.config.vectorProject);
+  }
+  if (!req.config.terrainProject.empty()) {
+    RasterProjectFactory::ValidateRefForInput(req.config.terrainProject,
+                                              AssetDefs::Terrain);
+    inputs->push_back(req.config.terrainProject);
+  }
+}
+
+void
+DatabaseAssetImplD::HandleEditRequest(const DatabaseEditRequest &req)
+{
+  // make sure the project asset_ref_string's are valid
+  std::vector<std::string> inputs;
+  ConstructInputsFromRequest(req, &inputs);
+
+  // normalize the supplied asset name
+  std::string dbname =
+    AssetDefs::NormalizeAssetName(req.assetname,
+                                  AssetDefs::Database, kDatabaseSubtype);
+
+  // custom FindMake - modified to set/preserve indexVersion
+  DatabaseConfig dbConfig = req.config;
+  MutableDatabaseAssetD db = DatabaseFactory::Find(dbname);
+  if (db) {
+    // we must preserve the indexVersion sine the GUI doesn't/can't
+    // we really should split this VectrProjectConfig into two pieces
+    dbConfig.indexVersion = db->config.indexVersion;
+    db->Modify(inputs, req.meta, dbConfig);
+  } else {
+    dbConfig.indexVersion = 1;
+    db = DatabaseFactory::Make(dbname, inputs, req.meta, dbConfig);
+  }
+
+  if (!db) {
+    throw khException(kh::tr("Unable to create database %1")
+                      .arg(dbname));
+  }
+
+}
+
+void
+DatabaseAssetImplD::HandleNewRequest(const DatabaseEditRequest &req)
+{
+  // make sure the project asset_ref_string's are valid
+  std::vector<std::string> inputs;
+  ConstructInputsFromRequest(req, &inputs);
+
+  // normalize the supplied asset name
+  std::string dbname =
+    AssetDefs::NormalizeAssetName(req.assetname,
+                                  AssetDefs::Database, kDatabaseSubtype);
+
+  if (DatabaseFactory::Find(dbname)) {
+    throw khException(kh::tr("Database '%1' already exists")
+                      .arg(ToQString(dbname)));
+  } else {
+    DatabaseConfig dbConfig = req.config;
+    dbConfig.indexVersion = 1;
+    DatabaseFactory::FindMake(dbname,
+                              inputs,
+                              req.meta,
+                              dbConfig);
+  }
+}
+
+
+void
+DatabaseAssetImplD::HandleModifyRequest(const DatabaseEditRequest &req)
+{
+  // make sure the project asset_ref_string's are valid
+  std::vector<std::string> inputs;
+  ConstructInputsFromRequest(req, &inputs);
+
+  // normalize the supplied asset name
+  std::string dbname =
+    AssetDefs::NormalizeAssetName(req.assetname,
+                                  AssetDefs::Database, kDatabaseSubtype);
+
+
+  // find and modify the DB
+  MutableDatabaseAssetD db;
+  if (db = DatabaseFactory::Find(dbname)) {
+    // we must preserve the indexVersion
+    DatabaseConfig dbConfig = req.config;
+    dbConfig.indexVersion = db->config.indexVersion;
+    db->Modify(inputs, req.meta, dbConfig);
+  } else {
+    throw khException(kh::tr("No database named '%1'")
+                      .arg(ToQString(dbname)));
+  }
+}
+
+
+void
+DatabaseAssetVersionImplD::ChildrenToCancel(std::vector<AssetVersion> &out)
+{
+  if (children.size()) {
+    if (children.size() >= 2) {
+      // new format w/ unified index and gedb
+
+      // all my children belong only to me and should be canceled
+      copy(children.begin(), children.end(), back_inserter(out));
+#ifdef CREATE_SUBSAMPLED_TERRAIN
+      // the inputs of my optional SS index are also mine to cancel. If the
+      // SS child exists, we're guaranteed that the Combined terrain child
+      // also exists. So we can go ahead and directly index rather than
+      // scanning.
+      if (children.size() > kSSTerrainChildPos) {
+        AssetVersion index = children[kSSTerrainChildPos];
+        copy(index->inputs.begin(), index->inputs.end(), back_inserter(out));
+      }
+#endif
+    } else {
+      // old format with a SS index
+
+      // my direct child is the tmesh index, it should be cancelled
+      AssetVersion index = children[0];
+      out.push_back(index);
+
+      // its inputs are also my sub assets and should be canceled
+      copy(index->inputs.begin(), index->inputs.end(), back_inserter(out));
+    }
+  } else {
+    // old database w/ no SS
+  }
+}
+
+// Don't do anything for UpdateChildren - we defer to DelayedBuildChildren
+void
+DatabaseAssetVersionImplD::UpdateChildren(void)
+{
+}
+
+void
+DatabaseAssetVersionImplD::DelayedBuildChildren(void)
+{
+  std::string asset_ref_string = GetAssetRef();
+
+  // get my project inputs
+  RasterProjectAssetVersionD imagery_project;
+  RasterProjectAssetVersionD terrain_project;
+  VectorProjectAssetVersionD vector_project;
+  std::vector<DatedImageryIndexInfo> dated_imagery_indexes;
+  uint next = 0;
+  if (!config.imageryProject.empty()) {
+    imagery_project = inputs[next++];
+  }
+  if (!config.vectorProject.empty()) {
+    vector_project = inputs[next++];
+  }
+  if (!config.terrainProject.empty()) {
+    terrain_project = inputs[next++];
+  }
+
+  if (imagery_project && imagery_project->config.is_timemachine_project_) {
+    // TODO: additional timemachine authorization needed
+    // An imagery project may be tagged as time machine
+    // We'll collect information for each imagery project
+    // in a vector for use within this method.
+    // we need a unique channel id for each imagery project
+    uint32 unique_channel_id = 1000; // choose a number much higher than
+                                     // reserved channel id's.
+    // Find Max Channel ID among the layers.
+    if (vector_project) {
+      // Start the unique_channel_id one beyond the max layer id (which is
+      // currently hard coded).
+      unique_channel_id = vector_project->config.EndChannelId() + 1;
+    }
+
+    // Pull the dates and indexes from the imagery project.
+    imagery_project->GetDatedImageryInfo(unique_channel_id,
+                                         &dated_imagery_indexes);
+
+    // Validate that all timemachine imagery resources have a valid date.
+    // Throw exception and warning if not.
+    std::string missing_dates;
+    for(uint i = 0; i < dated_imagery_indexes.size(); ++i) {
+      const DatedImageryIndexInfo& info = dated_imagery_indexes[i];
+      if (info.date_string_ == kUnknownDate) {
+        missing_dates += "\n\t" + info.imagery_index_version_;
+      }
+    }
+    if (!missing_dates.empty()) {
+      throw khException(
+          kh::tr("Imagery resources in time machine projects are required to "
+                 "have valid acquisition dates.\n"
+                 "The following imagery resource(s) do not have acquisition "
+                 "dates specified:%1.\n").arg(missing_dates));
+    }
+  }
+
+#ifdef CREATE_SUBSAMPLED_TERRAIN
+  MutableRasterGEIndexAssetVersionD ssindex =
+    CreateSubsampledTerrain(asset_ref_string, imagery_project, terrain_project);
+#endif
+
+  // ------------------------
+  // make combined terrain sub asset
+  // ------------------------
+  MutableCombinedTerrainAssetVersionD combined_terrain =
+      CreateCombinedTerrain(asset_ref_string, terrain_project
+#ifdef CREATE_SUBSAMPLED_TERRAIN
+       , ssindex
+#endif
+         );
+
+
+  // make qt packet assets (both format1 and 2 will be generated for now)
+  MutableQTPacketAssetVersionD qtpacket =
+    CreateQTPacket(asset_ref_string, imagery_project, terrain_project,
+                   combined_terrain, vector_project, dated_imagery_indexes);
+
+  // make unified index asset
+  MutableUnifiedIndexAssetVersionD unified_index =
+    CreateUnifiedIndex(asset_ref_string, imagery_project, combined_terrain,
+                       vector_project, dated_imagery_indexes, qtpacket);
+
+  // make gedb asset
+  MutableGEDBAssetVersionD gedb =
+    CreateGedbAsset(asset_ref_string, imagery_project, terrain_project,
+                    vector_project, unified_index);
+
+  // --------------------
+  // Now add my children in the order we define above
+  // --------------------
+  AddChild(unified_index);
+  AddChild(gedb);
+  AddChild(qtpacket);  // both packet format 1 and 2 are generated by same
+                       // command and considered the same asset for all intents
+                       // and purposes.
+
+  if (combined_terrain) {
+    AddChild(combined_terrain);
+  }
+
+#ifdef CREATE_SUBSAMPLED_TERRAIN
+  if (ssindex) {
+    AddChild(ssindex);
+  }
+#endif
+}
+
+
+// ------------------------
+// make combined terrain sub asset
+// ------------------------
+MutableCombinedTerrainAssetVersionD
+DatabaseAssetVersionImplD::CreateCombinedTerrain(
+    const std::string& asset_ref_string,
+    RasterProjectAssetVersionD& terrain_project
+#ifdef CREATE_SUBSAMPLED_TERRAIN
+    , MutableRasterGEIndexAssetVersionD& ssindex
+#endif
+    ) {
+
+  MutableCombinedTerrainAssetVersionD combined_terrain;
+  if (terrain_project) {
+    std::string combinedTerrainAssetName
+      (CombinedTerrainFactory::SubAssetName(asset_ref_string, "terrain"));
+
+    std::string dbname = khDropExtension(khBasename(asset_ref_string));
+    RasterGEIndexAssetVersion terrainIndex =
+      terrain_project->GetGEIndexVersion();
+
+    CombinedTerrainConfig combinedConfig;
+    combinedConfig.index_version_ = config.indexVersion;
+
+#ifdef CREATE_SUBSAMPLED_TERRAIN
+    if (ssindex) {
+      combined_terrain =
+        CombinedTerrainFactory::FindMakeAndUpdate(
+            combinedTerrainAssetName,
+            makevec2(terrainIndex->GetRef(), ssindex->GetRef()),
+            khMetaData(),
+            combinedConfig,
+            makevec2(AssetVersion(terrainIndex), AssetVersion(ssindex)));
+    } else {
+#endif
+      combined_terrain =
+        CombinedTerrainFactory::FindMakeAndUpdate(
+            combinedTerrainAssetName,
+            makevec1(terrainIndex->GetRef()),
+            khMetaData(),
+            combinedConfig,
+            makevec1(AssetVersion(terrainIndex)));
+#ifdef CREATE_SUBSAMPLED_TERRAIN
+    }
+#endif
+  }
+  return combined_terrain;
+}
+
+// ------------------------
+// make qt packet asset
+// includes both quadtree packet formats within the same asset:
+//   format1 (original QTPacket needed for GE Client 4.3 and prior)
+//   format2 (protocol buffer QTPacket needed for GE Client 4.4+)
+// ------------------------
+MutableQTPacketAssetVersionD
+DatabaseAssetVersionImplD::CreateQTPacket(
+    const std::string& asset_ref_string,
+    RasterProjectAssetVersionD& imagery_project,
+    RasterProjectAssetVersionD& terrain_project,
+    MutableCombinedTerrainAssetVersionD& combined_terrain,
+    VectorProjectAssetVersionD& vector_project,
+    std::vector<DatedImageryIndexInfo>& dated_imagery_indexes
+    ) {
+  std::string qtpacket_asset_name
+    (QTPacketFactory::SubAssetName(asset_ref_string, "qtpacket"));
+  std::vector<AssetVersion> input_versions;
+  std::vector<std::string>  input_verrefs;
+
+  QTPacketConfig qtpacket_config;
+  qtpacket_config.index_version_ = config.indexVersion;
+  if (imagery_project) {
+    AssetVersion subindex = imagery_project->GetGEIndexVersion();
+    input_versions.push_back(subindex);
+    input_verrefs.push_back(subindex.Ref());
+    qtpacket_config.imagery_verref_ = subindex.Ref();
+    qtpacket_config.imageryproj_verref_ = imagery_project->GetRef();
+    qtpacket_config.imagery_date_string_ = imagery_project->GetAcquisitionDate();
+  }
+  if (combined_terrain) {
+    input_versions.push_back(combined_terrain);
+    input_verrefs.push_back(combined_terrain.Ref());
+    qtpacket_config.terrain_verref_ = combined_terrain.Ref();
+    qtpacket_config.terrainproj_verref_ = terrain_project->GetRef();
+  }
+  if (vector_project) {
+    AssetVersion subindex = vector_project->GetGEIndexVersion();
+    input_versions.push_back(subindex);
+    input_verrefs.push_back(subindex.Ref());
+    qtpacket_config.vector_verref_ = subindex.Ref();
+  }
+
+  if (!dated_imagery_indexes.empty()) {
+    for(uint i = 0; i < dated_imagery_indexes.size(); ++i) {
+      // Add the DatedImageryIndexInfo for this project to the QTPacketConfig.
+      qtpacket_config.dated_imagery_indexes_.push_back(
+                                             dated_imagery_indexes[i]);
+    }
+  }
+
+  return QTPacketFactory::FindMakeAndUpdate(
+        qtpacket_asset_name,
+        input_verrefs,
+        khMetaData(),
+        qtpacket_config,
+        input_versions);
+}
+
+// ------------------------
+// make unified index asset
+// ------------------------
+MutableUnifiedIndexAssetVersionD
+DatabaseAssetVersionImplD::CreateUnifiedIndex(
+    const std::string& asset_ref_string,
+    RasterProjectAssetVersionD& imagery_project,
+    MutableCombinedTerrainAssetVersionD& combined_terrain,
+    VectorProjectAssetVersionD& vector_project,
+    std::vector<DatedImageryIndexInfo>& dated_imagery_indexes,
+    MutableQTPacketAssetVersionD& qtpacket) {
+  std::string unified_index_asset_name
+    (UnifiedIndexFactory::SubAssetName(asset_ref_string, "unifiedindex"));
+  std::vector<AssetVersion> index_input_versions;
+  std::vector<std::string>  index_input_verrefs;
+
+  UnifiedIndexConfig unified_index_config;
+  if (imagery_project) {
+    AssetVersion subindex = imagery_project->GetGEIndexVersion();
+    index_input_versions.push_back(subindex);
+    index_input_verrefs.push_back(subindex.Ref());
+    std::string date_string = imagery_project->GetAcquisitionDate();
+    unified_index_config.indexes_.push_back(
+        UnifiedIndexEntry(ToString(geindex::TypedEntry::Imagery),
+                          subindex.Ref(),
+                          0 /* unused version */,
+                          kGEImageryChannelId,
+                          date_string));
+  }
+
+  if (!dated_imagery_indexes.empty()) {
+    for(uint i = 0; i < dated_imagery_indexes.size(); ++i) {
+      AssetVersion subindex(imagery_project->GetDatedImageryAssetVersion(i));
+      index_input_versions.push_back(subindex);
+      index_input_verrefs.push_back(subindex.Ref());
+      unified_index_config.indexes_.push_back(
+          UnifiedIndexEntry(ToString(geindex::TypedEntry::DatedImagery),
+                            dated_imagery_indexes[i].imagery_index_version_,
+                            0 /* unused version */,
+                            dated_imagery_indexes[i].channel_id_,
+                            dated_imagery_indexes[i].date_string_));
+    }
+  }
+
+  if (combined_terrain) {
+    index_input_versions.push_back(combined_terrain);
+    index_input_verrefs.push_back(combined_terrain.Ref());
+    unified_index_config.indexes_.push_back(
+        UnifiedIndexEntry(ToString(geindex::TypedEntry::Terrain),
+                          combined_terrain.Ref(),
+                          combined_terrain->config.index_version_,
+                          kGETerrainChannelId,
+                          "" /* unused date_string */));
+  }
+  if (vector_project) {
+    AssetVersion subindex = vector_project->GetGEIndexVersion();
+    index_input_versions.push_back(subindex);
+    index_input_verrefs.push_back(subindex.Ref());
+    unified_index_config.indexes_.push_back(
+        UnifiedIndexEntry(ToString(geindex::TypedEntry::VectorGE),
+                          subindex.Ref(),
+                          0 /* unused version */,
+                          0 /* unused channel id */,
+                          "" /* unused date_string */));
+  }
+
+  // Add the original QTPacket (needed for GE Client 4.3 and prior)
+  index_input_versions.push_back(qtpacket);
+  index_input_verrefs.push_back(qtpacket.Ref());
+  unified_index_config.indexes_.push_back(
+      UnifiedIndexEntry(ToString(geindex::TypedEntry::QTPacket),
+                        qtpacket.Ref(),
+                        qtpacket->config.index_version_,
+                        0 /* unused channel id */,
+                        "" /* unused date_string */));
+
+  // Force an entry for the format2 Protocol Buffer QTPacket (needed for
+  // GE Client 4.4+).
+  // This asset is really a sibling asset/product within the qtpacket asset.
+  // The filebundle is in qtpacket.kda/verXXX/qtpacket2.
+  // UnifiedIndexAsset knows to treat this type specially (by accessing the
+  // 2nd OutputFilename of the asset for QTPacket2.
+  unified_index_config.indexes_.push_back(
+      UnifiedIndexEntry(ToString(geindex::TypedEntry::QTPacket2),
+                        qtpacket.Ref(),
+                        qtpacket->config.index_version_,
+                        0 /* unused channel id */,
+                        "" /* unused date_string */));
+
+  return UnifiedIndexFactory::FindMakeAndUpdate(
+        unified_index_asset_name,
+        index_input_verrefs,
+        khMetaData(),
+        unified_index_config,
+        index_input_versions);
+}
+
+
+  // ------------------------
+  // make gedb asset
+  // ------------------------
+MutableGEDBAssetVersionD
+DatabaseAssetVersionImplD::CreateGedbAsset(
+    const std::string& asset_ref_string,
+    RasterProjectAssetVersionD& imagery_project,
+    RasterProjectAssetVersionD& terrain_project,
+    VectorProjectAssetVersionD& vector_project,
+    MutableUnifiedIndexAssetVersionD& unified_index) {
+  std::string gedb_asset_name
+    (GEDBFactory::SubAssetName(asset_ref_string, kGedbBase));
+  std::vector<AssetVersion> input_versions;
+  std::vector<std::string>  input_verrefs;
+
+  // populate inputs
+  // Adding the unified index as my input and registering that offline inputs
+  // break me, will ensure that nothing gets cleaned out from underneath me
+  // including the projects and their dbroots
+  input_versions.push_back(unified_index);
+  input_verrefs.push_back(unified_index.Ref());
+
+  // build GEDB config
+  GEDBAssetConfig gedb_config(unified_index.Ref(),
+                              vector_project.Ref(),
+                              imagery_project.Ref(),
+                              terrain_project.Ref(),
+                              config.search_tabs_,
+                              config.indexVersion);
+
+  // update the gedb asset
+  return GEDBFactory::FindMakeAndUpdate(
+        gedb_asset_name,
+        input_verrefs,
+        khMetaData(),
+        gedb_config,
+        input_versions);
+}
+
+
+#ifdef CREATE_SUBSAMPLED_TERRAIN
+
+// SS terrain is a fully-triangulated, 3x3 grid. That results in 8
+// coplanar triangles. If SS were to go to the same client level as the
+// imagery does, it would have 8 coplanar triangles to cover the imagery
+// tile. That's overkill. Going one level less will cause the client to
+// use one quadrant of the parent terrain tile (or two SS triangles) to
+// cover the imagery tile.
+const int kImageryToSSClientLevelDelta = 0;
+
+// ------------------------
+// Subsample Terrain
+// See if we need to generate tmeshes under imagery
+// This method is REALLY LONG.
+// ------------------------
+MutableRasterGEIndexAssetVersionD
+DatabaseAssetVersionImplD::CreateSubsampledTerrain(
+    const std::string& asset_ref_string,
+    RasterProjectAssetVersionD& imagery_project,
+    RasterProjectAssetVersionD& terrain_project) {
+  MutableRasterGEIndexAssetVersionD ssindex;
+  if (imagery_project && terrain_project) {
+
+#ifdef DEBUG_SS_DECISIONS
+    notify(NFY_NOTICE, "Database has both imagery and terrain");
+#endif
+
+    // Load (simple) info about the imagery project's insets
+    uint maxClientImageryLevel = 0;
+    std::vector<SimpleInsetInfo<RasterProductAssetVersion> > imageryInsets;
+    imagery_project->LoadSimpleInsetInfo(ClientTmeshTilespaceFlat,
+                                        imageryInsets,
+                                        maxClientImageryLevel);
+
+    // get the range of levels that we may need to supersample
+    const uint beginSSLevel = StartTmeshLevel;
+    // "1 +" since endSSLevel is "one beyond" max
+    // std::max since delta sould be negative
+    const uint endSSLevel = 1 + (uint)std::max((int)maxClientImageryLevel +
+                                               kImageryToSSClientLevelDelta,
+                                               (int)beginSSLevel);
+
+#ifdef DEBUG_SS_DECISIONS
+    notify(NFY_NOTICE, "  beginSSLevel = %u", beginSSLevel);
+    notify(NFY_NOTICE, "  endSSLevel   = %u", endSSLevel);
+#endif
+
+    // Load info about the terrain project's insets
+    std::vector<InsetInfo<RasterProductAssetVersion> > terrainInsets;
+    terrain_project->LoadInsetInfo(ClientTmeshTilespaceFlat,
+                                  beginSSLevel, endSSLevel,
+                                  terrainInsets);
+    const uint beginMinifyLevel  = StartTmeshLevel;
+    const uint endMinifyLevel    = terrainInsets[0].effectiveMaxLevel;
+
+#ifdef DEBUG_SS_DECISIONS
+    notify(NFY_NOTICE, "  beginMinifyLevel = %u", beginMinifyLevel);
+    notify(NFY_NOTICE, "  endMinifyLevel   = %u", endMinifyLevel);
+#endif
+
+    // Load info about the work the terrain project did
+    std::vector<PacketGenInfo> terrainGenInfo;
+    CalcPacketGenInfo(ClientTmeshTilespaceFlat, AssetDefs::Terrain,
+                      terrainInsets,
+                      beginSSLevel,
+                      terrainGenInfo,
+                      0 /* maxLevelDelta - terrain to terrain has no delta */);
+
+#ifdef DEBUG_SS_DECISIONS
+    notify(NFY_NOTICE, "Info about terrain project");
+    for (uint i = 0; i < terrainGenInfo.size(); ++i) {
+      notify(NFY_NOTICE, "   %s: %u -> %u",
+             terrainGenInfo[i].assetname.c_str(),
+             terrainGenInfo[i].coverage.beginLevel(),
+             terrainGenInfo[i].coverage.endLevel());
+    }
+#endif
+
+    // Load the PacketLevel children ref from the finished terrain version
+    // They may be used for minified levels.
+    for (uint i = 0; i < terrainGenInfo.size(); ++i) {
+      if (!terrainInsets[i].alphaRPFile.empty() &&
+          terrainGenInfo[i].coverage.numLevels()) {
+        AssetVersion packgen(terrainGenInfo[i].assetname);
+        terrainGenInfo[i].PopulatePacketLevels(packgen);
+      }
+    }
+
+
+#ifdef DEBUG_SS_DECISIONS
+    notify(NFY_NOTICE, "Info about imagery project");
+    for (uint i = 0; i < imageryInsets.size(); ++i) {
+      notify(NFY_NOTICE, "   %s: %u",
+             imageryInsets[i].combinedrp_.Ref().c_str(),
+             imageryInsets[i].effectiveMaxLevel);
+    }
+#endif
+
+    // Load info about the work to be done for SS
+    std::vector<PacketGenInfo> ssGenInfo;
+    CalcPacketGenInfo(ClientTmeshTilespaceFlat, AssetDefs::Terrain,
+                      imageryInsets,
+                      beginSSLevel,
+                      ssGenInfo,
+                      kImageryToSSClientLevelDelta);
+
+
+#ifdef DEBUG_SS_DECISIONS
+    notify(NFY_NOTICE, "Before Narrow");
+    for (uint i = 0; i < ssGenInfo.size(); ++i) {
+      notify(NFY_NOTICE, "   %s: %u -> %u",
+             imageryInsets[i].combinedrp_.Ref().c_str(),
+             ssGenInfo[i].coverage.beginLevel(),
+             ssGenInfo[i].coverage.endLevel());
+    }
+#endif
+
+
+    // Narrow the SS work by what the terrain project
+    // has already done
+    uint numTerrain = terrainGenInfo.size();
+    for (uint i = 0; i < ssGenInfo.size(); ++i) {
+      ssGenInfo[i].NarrowCoverage(&terrainGenInfo[0],
+                                  &terrainGenInfo[numTerrain]);
+    }
+
+#ifdef DEBUG_SS_DECISIONS
+    notify(NFY_NOTICE, "After Narrow");
+    for (uint i = 0; i < ssGenInfo.size(); ++i) {
+      notify(NFY_NOTICE, "   %s: %u -> %u",
+             imageryInsets[i].combinedrp_.Ref().c_str(),
+             ssGenInfo[i].coverage.beginLevel(),
+             ssGenInfo[i].coverage.endLevel());
+    }
+#endif
+
+
+    // make a copy of the terrainInsets w/ pointers. The FindNeeded*
+    // routines want pointers.
+    std::vector<const InsetInfo<RasterProductAssetVersion>*> terrainInsetPtrs;
+    terrainInsetPtrs.reserve(terrainInsets.size());
+    for (uint i = 0; i < terrainInsets.size(); ++i) {
+      terrainInsetPtrs.push_back(&terrainInsets[i]);
+    }
+
+    // Create my children. Give them each their needed terrain insets
+    std::vector<std::string> packgenkids;
+    std::vector<AssetVersion> packgenvers;
+    packgenkids.reserve(imageryInsets.size());
+    packgenvers.reserve(imageryInsets.size());
+    for (uint i = 0; i < ssGenInfo.size(); ++i) {
+      // Check if I even need to do any packet generation at all
+      if (ssGenInfo[i].coverage.numLevels() == 0)
+        continue;
+
+
+      // Determine which terrain insets intersect this coverage area.
+      std::vector<uint> neededIndexes;
+      neededIndexes.reserve(numTerrain);
+      FindNeededTerrainInsets(ssGenInfo[i].coverage,
+                              terrainInsetPtrs, numTerrain,
+                              neededIndexes,
+                              beginMinifyLevel,
+                              endMinifyLevel);
+
+      // ***** If there's nothing to super-sample from, just skip this
+      // one.  This will not normally happen since there will usually
+      // be at least the whole earth terrain.
+      if (neededIndexes.empty())
+        continue;
+
+      // calculate the level range that will be minified
+      uint effectiveBeginMinifyLevel =
+        std::max(ssGenInfo[i].coverage.beginLevel(), beginMinifyLevel);
+      uint effectiveEndMinifyLevel =
+        std::min(ssGenInfo[i].coverage.endLevel(), endMinifyLevel);
+
+      // Build a PacketGenConfig
+      PacketGenConfig packetGenConfig;
+      packetGenConfig.coverage  = ssGenInfo[i].coverage;
+      packetGenConfig.beginMinifyLevel   = beginMinifyLevel;
+      packetGenConfig.endMinifyLevel     = endMinifyLevel;
+      packetGenConfig.cacheRaster        = false;
+      packetGenConfig.beginSimplifyLevel =
+        terrainInsets[neededIndexes.back()].effectiveMaxLevel + 1;
+      packetGenConfig.beginSkipTransparentLevel = 100; /* never skip */
+      packetGenConfig.useOpaqueTopInsetInsteadOfMerge = false;
+      packetGenConfig.insets.reserve(neededIndexes.size());
+      for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
+           idx != neededIndexes.end(); ++idx) {
+
+
+        const PacketGenInfo &otherGenInfo(terrainGenInfo[*idx]);
+
+        // +1 below since we minify from the next level
+        bool otherWillContribToMinify =
+          otherGenInfo.coverage.intersectsLevels
+          (effectiveBeginMinifyLevel+1,
+           effectiveEndMinifyLevel+1);
+
+        // see if we want to depend on the packgen for this guy
+        // packetgenverref will only be populated if the other one
+        // actually cached raster blends.
+        std::string packgenVerRef;
+        if (!otherGenInfo.packetgenverref.empty() &&
+            otherWillContribToMinify) {
+          packgenVerRef = otherGenInfo.packetgenverref;
+        }
+
+        packetGenConfig.insets.push_back
+          (PacketGenConfig::Inset
+           (terrainInsets[*idx].combinedrp_.Ref(),
+            packgenVerRef));
+      }
+
+      // Build a PacketGenExtraUpdateArg
+      PacketGenExtraUpdateArg<RasterProductAssetVersion> extraArg;
+      extraArg.insetInfo.reserve(neededIndexes.size());
+      extraArg.genInfo.reserve(neededIndexes.size());
+      for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
+           idx != neededIndexes.end(); ++idx) {
+        extraArg.insetInfo.push_back(&terrainInsets[*idx]);
+        extraArg.genInfo.push_back(&terrainGenInfo[*idx]);
+      }
+
+      // ruse or make a new RasterBlendAssetVersion
+      MutableAssetVersionD packgen =
+        PacketGenFactory::ReuseOrMakeAndUpdate
+        (ssGenInfo[i].assetname,
+         AssetDefs::Terrain,
+         khMetaData(),
+         packetGenConfig,
+         extraArg);
+
+      // remember this new PacketGen version
+      packgenkids.push_back(packgen->GetRef());
+      packgenvers.push_back(packgen);
+    }
+
+    if (packgenvers.size()) {
+      // ------------------------
+      // make SS index sub asset
+      // ------------------------
+      std::string dbname = khDropExtension(khBasename(asset_ref_string));
+      RasterGEIndexConfig geindexConfig;
+      geindexConfig.db_name_ = dbname;
+      geindexConfig.index_version_ =
+        terrain_project->GetGEIndexVersion()->config.index_version_;
+
+      //  figure out the packetvers for the geindex
+      uint indexVer = geindexConfig.index_version_;
+      std::string geindexAssetName
+        (RasterGEIndexFactory::SubAssetName(asset_ref_string,
+                                            AssetDefs::Database,
+                                            "geindex"));
+
+      // Fill geindexConfig packetvers and reuse indexVersions if possible
+      // We build the config with our LevelPack grandkids
+      // and reuse as aggressively as we can
+      geindexConfig.packet_insets_.reserve(packgenvers.size());
+      for (std::vector<AssetVersion>::const_iterator packgenver =
+             packgenvers.begin(); packgenver != packgenvers.end();
+           ++packgenver) {
+        if ((*packgenver)->children.size()) {
+          geindexConfig.packet_insets_.push_back(RasterPacketInset());
+          geindexConfig.packet_insets_.back().levels_.reserve(
+              (*packgenver)->children.size());
+          for (std::vector<std::string>::const_iterator packlevelref =
+                 (*packgenver)->children.begin();
+               packlevelref != (*packgenver)->children.end(); ++packlevelref) {
+            geindexConfig.packet_insets_.back().levels_.push_back(
+                RasterPacketLevelVersion(*packlevelref, indexVer));
+          }
+        }
+      }
+      RasterGEIndexAssetD asset(geindexAssetName);
+      if (asset) {
+        asset->ReuseOldPacketVers(geindexConfig);
+      }
+
+      ssindex =
+        RasterGEIndexFactory::FindMakeAndUpdate(geindexAssetName,
+                                                AssetDefs::Database,
+                                                packgenkids,
+                                                khMetaData(),
+                                                geindexConfig,
+                                                packgenvers);
+    }
+  }
+  return ssindex;
+}  // End CreateSubsampledTerrain
+#endif  // CREATE_SUBSAMPLED_TERRAIN

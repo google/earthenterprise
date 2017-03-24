@@ -1,0 +1,1 @@
+/opt/google/bin/postmaster -D /var/opt/google/pgsql/data

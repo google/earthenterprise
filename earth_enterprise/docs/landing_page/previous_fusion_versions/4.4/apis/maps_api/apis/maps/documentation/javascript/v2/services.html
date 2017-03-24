@@ -1,0 +1,1234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+ 
+
+
+
+  
+
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/v2/services.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Google Maps JavaScript API V2 Services - Google Maps JavaScript API V2 - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/html/apis/maps/documentation/javascript/v2/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../../css/iehacks.css"><![endif]-->
+
+  <link href="../../local_extensions.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container" class="depr">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps JavaScript API V2 (<a href="../../../terms.html#section_4_4">Deprecated</a>)</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="index.html" title="Google Maps JavaScript API V2 home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="basics.html" class="selected" title="Official Google Maps JavaScript API V2 documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../../faq.html" title="Answers to frequently asked questions about Google Maps JavaScript API V2">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="articles.html" title="Focused articles and tutorials for Google Maps JavaScript API V2 developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps JavaScript API V2 blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="forum.html" title="Google Maps JavaScript API V2 developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../../../terms.html" title="Google Maps JavaScript API V2 terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <a name="gc-toc-anchor"></a>  
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../../../index.html">Maps API Family</a></li>
+  <li><a href="../../../signup.html">Sign up for an API key</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index your Maps Content</a></li>
+</ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Javascript API V3</h2>
+        <ul>
+          <li><a href="../index.html">Home Page</a></li>
+          <li><a href="../basics.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+       <div class="line"></div>
+    <ul>
+           <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+             <ul>
+               <li><a class="tlw-expanded" href="index.html">Developer Guide</a>
+                <ul>
+                 <li><a href="introduction.html">Basics</a></li>
+                 <li><a href="events.html">Events</a></li>
+                 <li><a href="controls.html">Controls</a></li>
+                 <li><a href="overlays.html">Overlays</a></li>
+                 <li><a href="services.html">Services</a></li>
+                </ul>
+               </li>
+              <li><a href="reference.html">API Reference</a></li>
+              <li><h2 class="tlw-expanded">Code Samples:</h2>
+               <ul>
+               <li><a href="demogallery.html">Demos</a></li>
+               <li><a href="examples/index.html">Examples</a></li>
+               <li><a href="http://code.google.com/apis/ajax/playground/?exp=maps">Code Playground</a></li>
+               </ul>
+              </li>
+              <li><h2 class="tlw-expanded">More Resources:</h2>
+               <ul>
+               <li><a href="articles.html">Articles</a></li>
+               <li><a href="mediagallery.html">Presentations</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/issues/list?can=2&q=apitype%3AJavascript&colspec=ID+Type+Status+Introduced+Fixed+Summary+Internal+Stars&cells=tiles">Known Issues</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/wiki/JavascriptMapsAPIChangelog">Changelog</a><sup class="new">New!</sup></li>
+               <li><a href="http://code.google.com/p/gmaps-utility-library-dev/">Utility Library</a></li>
+               <li><a href="http://maps.google.com/casestudies/">Case Studies</a></li>
+               </ul>
+              </li>
+             </ul>
+           </li>
+         </ul>
+   <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../../flash/index.html">Home Page</a></li>
+          <li><a href="../../flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+   <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../../mapsdata/index.html">Home Page</a></li>
+          <li><a href="../../mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+     <div class="line"></div>
+      <ul>
+        <li><h2><a href="../../webservices/index.html">Maps API Web Services</a></h2>
+         <ul>
+           <li><a href="../../geocoding/index.html">Geocoding API</a></li>
+           <li><a href="../../directions/index.html">Directions API</a></li>
+           <li><a href="../../elevation/index.html">Elevation API</a></li>
+           <li><a href="../../places/index.html">Places API</a></li>
+         </ul>
+       </li>
+      </ul>
+       <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../../staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../../localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../../localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+    <div class="promo"><p><a href="../../premier/index.html">Google Maps API Premier</a></p>
+    <p>Same great maps plus a SLA, support, and control over ads</p>
+    </div>
+
+      </div>
+      
+      <a name="gc-pagecontent-anchor"></a>   
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Google Maps JavaScript API V2 Services</h1>
+
+
+<p class="note">Note: The Google Maps Javascript API Version 2
+has been officially deprecated as of May 19, 2010. The V2 API will continue
+to work as per our <a href="../../../terms.html#section_4_4">deprecation policy</a>,
+but we encourage you to migrate your code to
+<a href="../index.html">version 3 of the Maps
+Javascript API</a>.</p>
+
+
+<div class="toc">
+  <ol>
+  <li><a href="#Services_Overview">Services Overview</a>
+  <li><a href="#XML_Requests">XML and Data Parsing</a></li>
+  <li><a href="#Geocoding">Geocoding</a>
+  <ol>
+	<li><a href="#Geocoding_Object">The Geocoding Object</a></li>
+	<li><a href="#Geocoding_Structured">Extracting Structured Addresses</a></li>
+	<li><a href="#ReverseGeocoding">Reverse Geocoding</a></li>
+    <li><a href="#Geocoding_Caching">Geocoding Caches</a></li>
+	<li><a href="#Geocoding_Direct">Using the Geocoding Web Service</a></li>
+  </ol>
+  </li>
+  <li><a href="#Streetview">Using Street View Panorama Objects</a>
+    <ol>
+	<li><a href="#PanoramaObject">The <code>GStreetviewPanorama</code> Object</a></li>
+	<li><a href="#StreetviewOverlays">Street View Overlays</a></li>
+	<li><a href="#UserPhotos">Showing User Photos in Street View</a></li>
+	<li><a href="#StreetviewClientQuerys">Street View Client Querying</a></li>
+  </ol>
+  </li>
+  <li><a href="#Earth">Integrating with Google Earth</a>
+    <ol>
+	  <li><a href="#LoadingEarth">Loading the Google Earth Plugin</a></li>
+	  <li><a href="#EarthInitialization">Adding the Google Earth Map Type</a></li>
+	  <li><a href="#EarthAccessingAPI">Accessing the Earth API within the Maps API</a></li>
+    </ol>
+  </li>
+  <li><a href="#LocalSearch">Adding Local Search to Your Map</a>
+    <ol>
+	  <li><a href="#UsingGoogleBar">Setting Up the GoogleBar</a></li>
+    </ol>
+  </li>
+  <li><a href="#Advertising">Advertising Using AdSense for Maps</a>
+    <ol>
+     <li><a href="#AdvertisingGoogleBar">Advertising in the <code>GoogleBar</code></a></li>
+     <li><a href="#AdvertisingAdUnit">Advertising Using the Maps Ad Unit</a></li>   
+    </ol>  
+  </li>
+  <li><a href="#XML_Overlays">KML and GeoRSS Overlays</a></li>
+  <li><a href="#Traffic_Overlays">Traffic Overlays</a></li>
+  <li><a href="#Directions">Directions</a>  
+  <ol>
+	<li><a href="#LoadingDirections">Loading Directions</a></li>
+	<li><a href="#TravelModes">Travel Modes</a></li>
+    <li><a href="#ReturningDirections">Handling Returned Directions</a></li>
+	<li><a href="#RoutesAndSteps">Routes and Steps</a></li>
+  </ol>
+  </li>
+  </ol>
+</div>
+   
+<h1 id="Services_Overview">Services Overview</h1>
+
+<p>The Google Maps API is regularly extended, adding new functionality and features
+that are often released on <a href="http://maps.google.com">maps.google.com</a> first. 
+This section covers these services. Note: because the definition of a "service" is 
+somewhat elusive, this section is somewhat of a catch-all. Basically, this section 
+is where we put all of those neat things that we couldn't put anywhere else.</p>
+
+<h1 id="XML_Requests">XML and Data Parsing</h1>
+
+<p>The Google Maps API exports a factory method for creating browser-neutral 
+<code>XmlHttpRequest()</code> objects that work in recent versions 
+of Internet Explorer, Firefox, and Safari. As with all <code>XmlHttpRequest</code>s,
+any retrieved files must be on your local domain. The following example 
+downloads a file called <code>myfile.txt</code> and displays its contents in a 
+JavaScript <code>alert()</code>:</p>
+
+<pre class="prettyprint">
+var request = GXmlHttp.create();
+request.open(&quot;GET&quot;, &quot;myfile.txt&quot;, true);
+request.onreadystatechange = function() {
+  if (request.readyState == 4) {
+    alert(request.responseText);
+  }
+}
+request.send(null);
+</pre>
+
+<p>The API also exports a simpler <code>GDownloadUrl()</code> method 
+for typical HTTP GET requests that eliminates the need for 
+<code>XmlHttpRequest()</code> <code>readyState</code> checking. 
+The example above could be rewritten using <code>GDownloadUrl()</code> 
+like this:</p>
+
+<pre class="prettyprint">
+GDownloadUrl(&quot;myfile.txt&quot;, function(data, responseCode) {
+  alert(data);
+});
+</pre>
+
+<p>You can parse an XML document with the static method 
+<code>GXml.parse()</code>, which takes a string of XML as its 
+only argument. This method is compatible with most modern browsers, 
+but it throws an exception if the browser does not support XML parsing 
+natively.</p>
+
+<p>In this example, we download a static file (<code>&quot;data.xml&quot;</code>) 
+that contains a list of lat/lng coordinates in XML using the 
+<a href="reference.html#GDownloadUrl"><code>GDownloadUrl</code></a> method. When 
+the download completes, we parse the XML with <a href="reference.html#GXml">
+<code>GXml</code></a> and create a marker at each of those points in the XML document.</p>
+
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById(&quot;map_canvas&quot;));
+map.addControl(new GSmallMapControl());
+map.addControl(new GMapTypeControl());
+map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+
+// Download the data in data.xml and load it on the map. The format we
+// expect is:
+// &lt;markers&gt;
+//   &lt;marker lat=&quot;37.441&quot; lng=&quot;-122.141&quot;/&gt;
+//   &lt;marker lat=&quot;37.322&quot; lng=&quot;-121.213&quot;/&gt;
+// &lt;/markers&gt;
+GDownloadUrl(&quot;data.xml&quot;, function(data, responseCode) {
+  var xml = GXml.parse(data);
+  var markers = xml.documentElement.getElementsByTagName(&quot;marker&quot;);
+  for (var i = 0; i &lt; markers.length; i++) {
+    var point = new GLatLng(parseFloat(markers[i].getAttribute(&quot;lat&quot;)),
+                            parseFloat(markers[i].getAttribute(&quot;lng&quot;)));
+    map.addOverlay(new GMarker(point));
+  }
+});
+</pre>
+
+<p><a href="examples/xhr-requests.html">View example (xhr-requests.html)</a>. This example uses an
+ external XML data file <a href="examples/include/data.xml">data.xml</a>.</p>
+
+<p>See the <a href="reference.html#GXmlHttp"><code>GXmlHttp</code></a> 
+and <a href="reference.html#GXml"><code>GXml</code></a> class 
+references for more information.</p>
+
+<h1 id="Geocoding">Geocoding</h1>
+
+<p>Geocoding is the process of converting addresses (like "1600 Amphitheatre 
+Parkway, Mountain View, CA") into geographic coordinates (like latitude 
+37.423021 and longitude -122.083739), which you can use to place markers or 
+position the map. The Google Maps API includes a Geocoding web service that 
+can be accessed directly via an HTTP request or by using a <code>GClientGeocoder</code>
+object.</p>
+
+<p>The Google Maps API provides a client geocoder for geocoding addresses dynamically
+from user input. If instead, you wish to geocode static, known addresses, see the
+<a href="../../geocoding/index.html">Geocoding Service</a>
+documentation.</p>
+
+<h2 id="Geocoding_Object">The Geocoding Object</h2>
+
+<p>You can access the Google Maps API geocoding service via the <code>GClientGeocoder</code> 
+object. Use <code>GClientGeocoder.getLatLng()</code> to convert a string address into 
+a <code>GLatLng</code>. This method takes as parameters a string address to convert, 
+and a callback function to execute upon retrieval of the address. The callback function is
+necessary since geocoding involves sending a request to Google's servers and
+can take some time.</p>
+
+<p>In this example, we geocode an address, add a marker at that point, and open 
+an info window displaying the address. Note that the callback is passed as a
+function literal.</p>
+
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById("map_canvas"));
+var geocoder = new GClientGeocoder();
+
+function showAddress(address) {
+  geocoder.getLatLng(
+    address,
+    function(point) {
+      if (!point) {
+        alert(address + " not found");
+      } else {
+        map.setCenter(point, 13);
+        var marker = new GMarker(point);
+        map.addOverlay(marker);
+        marker.openInfoWindowHtml(address);
+      }
+    }
+  );
+}
+</pre>
+
+<p><a href="examples/geocoding-simple.html">View example (geocoding-simple.html)</a></p>
+
+<p>You can also modify the Maps API geocoder to prefer results within a given 
+viewport (expressed as a bounding box of type <code>GLatLngBounds</code>) 
+through the <code>GClientGeocoder.setViewport()</code> method. You can 
+return results tailored to a particular domain (country) using the 
+<code>GClientGeocoder.setBaseCountryCode()</code> method. Geocoding requests
+can be sent for every domain in which the main Google Maps application 
+offers geocoding. For example, searches for "Toledo" will return different 
+results within the domain of Spain (<code>http://maps.google.es</code>) specified by a country code of "es"
+than within the default domain within the United States (<code>http://maps.google.com</code>).</p>
+
+<h2 id="Geocoding_Structured">Extracting Structured Addresses</h2>
+
+<p>If you would like to access structured information about an address, 
+<code>GClientGeocoder</code> also provides a <code>getLocations()</code> 
+method that returns a JSON object consisting of the following information:</p>
+
+<ul>
+<li><code>Status</code></li>
+<li>
+ <ul>
+  <li><code>request</code> -- The request type. In this case, it is always 
+  <code>geocode</code>.</li>
+  <li><code>code</code> -- A response code (similar to HTTP status codes) 
+  indicating whether the geocode request was successful or not.
+  See the <a href="reference.html#GGeoStatusCode">full list of status codes</a>.</li>
+ </ul>
+</li>
+<li><code>Placemark</code> -- Multiple placemarks may be returned 
+if the geocoder finds multiple matches.</li>
+<li>
+ <ul>
+  <li><code>address</code> -- A nicely formatted and properly capitalized version of the address.</li>
+  <li><code>AddressDetails</code> -- The address formatted as xAL, or 
+  <a href="http://www.oasis-open.org/committees/ciq/ciq.html#6">eXtensible 
+  Address Language</a>, an international standard for address formatting.</li>
+  <li>
+   <ul>
+    <li><code>Accuracy</code> -- An attribute indicating how accurately we 
+    were able to geocode the given address. See a 
+    <a href="reference.html#GGeoAddressAccuracy">list of possible values</a>.</li>
+   </ul>
+  </li>
+  <li><code>Point</code> -- A point in 3D space.</li>
+   <li>
+    <ul>
+    <li><code>coordinates</code> -- The longitude, latitude, and 
+    altitude of the address.  In this case, the altitude is always set to 0.</li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+<p>Here we show the JSON object returned by the geocoder for the address 
+of Google's headquarters:</p>
+
+<pre class="prettyprint">
+{
+  "name": "1600 Amphitheatre Parkway, Mountain View, CA, USA",
+  "Status": {
+    "code": 200,
+    "request": "geocode"
+  },
+  "Placemark": [
+    {
+      "address": "1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA",
+      "AddressDetails": {
+        "Country": {
+          "CountryNameCode": "US",
+          "AdministrativeArea": {
+            "AdministrativeAreaName": "CA",
+            "SubAdministrativeArea": {
+              "SubAdministrativeAreaName": "Santa Clara",
+              "Locality": {
+                "LocalityName": "Mountain View",
+                "Thoroughfare": {
+                  "ThoroughfareName": "1600 Amphitheatre Pkwy"
+                },
+                "PostalCode": {
+                  "PostalCodeNumber": "94043"
+                }
+              }
+            }
+          }
+        },
+        "Accuracy": 8
+      },
+      "Point": {
+        "coordinates": [-122.083739, 37.423021, 0]
+      }
+    }
+  ]
+}
+</pre>
+
+<p>In this example, we use the <code>getLocations()</code> method to geocode 
+addresses, and extract the nicely formatted version of the address and the 
+two-letter country from the JSON and display it in the info window.</p>
+
+<pre class="prettyprint">
+var map;
+var geocoder;
+
+function addAddressToMap(response) {
+  map.clearOverlays();
+  if (!response || response.Status.code != 200) {
+    alert("\"" + address + "\" not found");
+  } else {
+    place = response.Placemark[0];
+    point = new GLatLng(place.Point.coordinates[1],
+                        place.Point.coordinates[0]);
+    marker = new GMarker(point);
+    map.addOverlay(marker);
+    marker.openInfoWindowHtml(place.address + '&lt;br&gt;' + 
+      '&lt;b&gt;Country code:&lt;/b&gt; ' + place.AddressDetails.Country.CountryNameCode);
+  }
+}
+</pre>
+
+<p><a href="examples/geocoding-extraction.html">
+View example (geocoding-extraction.html)</a></p>
+
+<h2 id="ReverseGeocoding">Reverse Geocoding</h2>
+
+<p>The term <i>geocoding</i> generally refers to translating a human-readable
+address into a point on the map. The process of doing the converse, translating
+a point into a human-readable address, is known as <i>reverse geocoding</i>.</p>
+
+<p>The <code>GClientGeocoder.getLocations()</code> method supports both standard
+and reverse geocoding. If you pass this method a <code>GLatLng</code> object 
+instead of a <code>String</code> address, the geocoder will perform a reverse lookup
+and return a structured JSON object of the <i>closest addressable</i> location. Note
+that the closest addressable location may be some distance from the original
+latitude and longitude values of the query, if the supplied <code>GLatLng</code>
+is not an exact match for any addressable locations.</p>
+
+<p><span style="color:red">Note: </span> reverse geocoding is not an exact
+science. The geocoder will attempt to find the closest addressable location
+within a certain tolerance; if no match is found, the geocoder will usually 
+return a <code>G_GEO_UNKNOWN_ADDRESS (602)</code> status code.</p>
+
+
+<pre class="prettyprint">
+var map;
+var geocoder;
+var address;
+
+function initialize() {
+  map = new GMap2(document.getElementById("map_canvas"));
+  map.setCenter(new GLatLng(40.730885,-73.997383), 15);
+  map.addControl(new GLargeMapControl);
+  GEvent.addListener(map, "click", getAddress);
+  geocoder = new GClientGeocoder();
+}
+
+function getAddress(overlay, latlng) {
+  if (latlng != null) {
+    address = latlng;
+    geocoder.getLocations(latlng, showAddress);
+  }
+}
+
+function showAddress(response) {
+  map.clearOverlays();
+  if (!response || response.Status.code != 200) {
+    alert("Status Code:" + response.Status.code);
+  } else {
+    place = response.Placemark[0];
+    point = new GLatLng(place.Point.coordinates[1],place.Point.coordinates[0]);
+    marker = new GMarker(point);
+    map.addOverlay(marker);
+    marker.openInfoWindowHtml(
+        '&lt;b&gt;orig latlng:&lt;/b&gt;' + response.name + '&lt;br/&gt;' + 
+        '&lt;b&gt;latlng:&lt;/b&gt;' + place.Point.coordinates[1] + "," + place.Point.coordinates[0] + '&lt;br&gt;' +
+        '&lt;b&gt;Status Code:&lt;/b&gt;' + response.Status.code + '&lt;br&gt;' +
+        '&lt;b&gt;Status Request:&lt;/b&gt;' + response.Status.request + '&lt;br&gt;' +
+        '&lt;b&gt;Address:&lt;/b&gt;' + place.address + '&lt;br&gt;' +
+        '&lt;b&gt;Accuracy:&lt;/b&gt;' + place.AddressDetails.Accuracy + '&lt;br&gt;' +
+        '&lt;b&gt;Country code:&lt;/b&gt; ' + place.AddressDetails.Country.CountryNameCode);
+  }
+}
+</pre>
+
+
+<p><a href="examples/geocoding-reverse.html">
+View example (geocoding-reverse.html)</a></p>
+
+<h2 id="Geocoding_Caching">Geocoding Caches</h2>
+
+<p><code>GClientGeocoder</code> is equipped with a client-side cache by 
+default. The cache stores geocoder responses, enabling faster responses
+if addresses are re-geocoded. You can turn off caching by passing <code>null</code> 
+to the <code>setCache()</code> method of the <code>GClientGeocoder</code>
+object. However, we recommend that you leave caching on as it improves 
+performance. To change the cache being used by <code>GClientGeocoder</code>, 
+call <code>setCache()</code> and pass in the new cache. To 
+empty the contents of the current cache, call the <code>reset()</code> 
+method on the geocoder or on the cache directly.</p>
+
+<p>Developers are encouraged to build their own client-side caches. 
+In this example, we construct a cache that contains pre-computed geocoder 
+responses to six capital cities in countries covered by geocoding API. 
+First, we build an array of geocode responses. Next, we create a custom 
+cache that extends a standard GeocodeCache. Once the cache is defined, 
+we call the <code>setCache()</code> method. There is no strict checking 
+of objects stored in the cache, so you may store other information 
+(such as population size) in the cache as well.</p>
+
+<pre class="prettyprint">
+
+// Builds an array of geocode responses for the 6 capitals
+var city = [
+  {
+    name: "Washington, DC",
+    Status: {
+      code: 200,
+      request: "geocode"
+    },
+    Placemark: [
+      {
+        address: "Washington, DC, USA",
+        population: "0.563M",
+        AddressDetails: {
+          Country: {
+            CountryNameCode: "US",
+            AdministrativeArea: {
+              AdministrativeAreaName: "DC",
+              Locality: {
+                LocalityName: "Washington"
+              }
+            }
+          },
+          Accuracy: 4          
+        },
+        Point: {
+          coordinates: [-77.036667, 38.895000, 0]
+        }
+      }
+    ]
+  },
+  ... // etc., and so on for other cities
+];
+
+  var map;
+  var geocoder;
+
+  // CapitalCitiesCache is a custom cache that extends the standard GeocodeCache.
+  // We call apply(this) to invoke the parent's class constructor.
+  function CapitalCitiesCache() {
+    GGeocodeCache.apply(this);
+  }
+
+  // Assigns an instance of the parent class as a prototype of the
+  // child class, to make sure that all methods defined on the parent
+  // class can be directly invoked on the child class.
+  CapitalCitiesCache.prototype = new GGeocodeCache();
+
+  // Override the reset method to populate the empty cache with
+  // information from our array of geocode responses for capitals.
+  CapitalCitiesCache.prototype.reset = function() {
+    GGeocodeCache.prototype.reset.call(this);
+    for (var i in city) {
+      this.put(city[i].name, city[i]);
+    }
+  }
+
+  map = new GMap2(document.getElementById("map_canvas"));
+  map.setCenter(new GLatLng(37.441944, -122.141944), 6);
+
+  // Here we set the cache to use the UsCitiesCache custom cache.
+  geocoder = new GClientGeocoder();
+  geocoder.setCache(new CapitalCitiesCache());
+</pre>
+
+<p><a href="examples/geocoding-cache.html">
+View example (geocoding-cache.html)</a></p>
+
+<h2 id="Geocoding_Direct">Using the Geocoding Web Service</h2>
+
+<p>Google provides a direct Geocoding Web Service via HTTP as well. This
+geocoding service is distinct from the JavaScript Google Maps API. Using the
+Geocoding Web Service is not recommended for dynamic or live retrieval of
+geocoding requests; instead use the JavaScript client-side geocoder
+documented within this chapter. However, the HTTP geocoder is useful
+for populating a static set of data, for debugging purposes, or for
+cases where a JavaScript  <code>GClientGeocoder</code> object is no
+available.</p>
+
+<p>See the <a href="../../geocoding/index.html">
+Geocoding Web Service</a> for more information.</p>
+
+<h1 id="Streetview">Using Street View Objects</h1>
+
+<p><span class="new">Use of the Street View Panorama object requires
+support for the Flash plugin on the client's browser.</span></p>
+
+<p>Google Street View provides panoramic 360 degree views from
+designated roads throughout the coverage area for Google Maps. A
+sample Street View image is shown below.</p>
+<br/>
+
+<iframe width="425" height="240" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" 
+src="http://maps.google.com/maps/sv?cbp=1,479.7175735027764,,0,-3.50219513621329&amp;cbll=40.754501,-73.984358&amp;v=1&amp;panoid=dmZf3jLw1OS-1bR58b03FA&amp;gl=&amp;hl=en">
+</iframe>
+
+<p>Google Street View uses the Flash&reg; plugin supported 
+on most browsers to display these interactive images. The Google
+Maps API provides a Street View service for obtaining and
+manipulating the imagery used in Google Maps Street View.</p>
+
+<p><span style="color:red">New!</span> The Street View service
+now provides user photos from supported image repositories such
+as Panaramio and Picasa. See <a href="#UserPhotos">Showing User
+Photos within Street View</a> below.</p>
+
+<h2 id="PanoramaObject">The <code>GStreetviewPanorama</code> Object</h2>
+
+<p>Street View images are supported through use of the
+<code>GStreetviewPanorama</code> object, which provides an API interface
+to a Street View Flash&reg; viewer. To incorporate Street View into your
+Maps API application, you will need to follow these simple steps:</p>
+
+<ol>
+<li>Create a container (usually a <code>&lt;div&gt;</code> element) to hold
+the Street View Flash&reg; viewer.</li>
+<li>Create a <code>GStreetviewPanorama</code> object and place it within the container.</li>
+<li>Initialize the Street View object to refer to a specific location and display an 
+initial "point of view" (POV).</li>
+<li>Handle unsupported browsers by checking for the <code>603</code> error value.</li>
+</ol>
+
+<p>The <code>GStreetviewPanorama</code> object requires a container element
+within its constructor. It also, optionally, allows you to set its location
+using the <code>GStreetviewPanoramaOptions</code> parameter. You may call 
+<code>setLocationAndPOV()</code> on the object after construction to change
+its location and POV.</p>
+
+<p><span style="color:red">Note: </span> although Street View functionality
+is designed to be used in conjunction with a map, this usage is not
+required. You may use a standalone Street View object without a map.</p>
+
+<p>More information on containers and setting locations and points of
+view is described below.</p>
+
+<h3 id="StreetviewContainers">Street View Containers</h3>
+
+<p>The Street View Flash viewer requires a container DOM node in which to 
+display its content, often a <code>&lt;div&gt;</code> element. For optimum display of 
+Panorama images, we recommend a minimum size of 200 pixels by 200 pixels. Large viewers 
+are also discouraged as they may cause the flash viewer to consume too much memory 
+and could adversely affect the performance of the browser.</li>
+
+<p>The <code>GStreetviewPanorama</code> constructor requires a <code>container</code> 
+parameter identifying the initial container element within which to display the 
+Street View Flash viewer. You may <code>hide()</code> the <code>GStreetviewPanorama</code> 
+object to temporarily disable its display or <code>show()</code> the object to 
+reenable visual display of the viewer.</p>
+
+<p>If at any time you wish to change the container for the Street View Flash viewer,
+send it a <code>setContainer()</code> method, passing it the new element within which
+it should be attached. If the container is resized, you can send the
+<code>GStreetviewPanorama</code> object a <code>checkResize()</code> method to force
+it to resize to fit its new dimensions.</p>
+
+<p>If you wish to remove the Street View Flash viewer entirely from the DOM and release its 
+memory, pass the object the <code>remove()</code> method. You <b>must</b> call this method
+before removing the Street View object's container element from the DOM; not doing so will 
+result in memory leaks and/or JavaScript errors on the client's browser.</p>
+
+<h3 id="StreetviewLocations">Street View Locations</h3>
+
+<p>A Street View image consists of both a location (corresponding to a 
+<code>GLatLng</code>) and a particular orientation (a <code>GPov</code>) which 
+together identify the view for the image display. Both of these parameters 
+can be specified upon construction of the Street View object using the optional 
+<code>GStreetviewPanoramaOptions</code> parameter.</p>
+
+<p>The list of currently supported cities for Street View is available at the
+<a href="http://maps.google.com/support/bin/topic.py?topic=11640">
+Google Maps Help Center</a>. There are three basic 
+ways to determine if a location supports Street View data:</p>
+
+<ul>
+<li>You can store the <code>GLatLng</code> of a known-valid Street View location.</li>
+<li>You can examine the <code>GStreetviewOverlay</code> tile overlay and visually 
+inspect the road network. Roads which support Street View are highlighted in blue on the 
+overlay. You can then use click events or geocoding logic to pass supported locations 
+to <code>GStreetviewPanorama</code> objects. (See 
+<a href="#StreetviewOverlays">Street View Overlays</a>.)</li>
+<li>You can use the <code>GStreetviewClient</code> object to perform queries for 
+Street View objects given passed <code>GLatLng</code>s. The <code>GStreetviewClient</code> 
+object supports a number of queries to find panorama data. (See 
+<a href="#StreetviewClientQuerys">Street View Client Querying</a>.)</li>
+</ul>
+
+<p>Note that the last two methods are inexact: the Street View service does not require 
+(and generally does not receive) exact latitudes and longitudes in these cases, but rather 
+searches for the existence of panorama data "near" a given <code>GLatLng</code>.</p>
+
+<p>The following example uses a <code>GStreetviewPanoramaOptions</code> to specify the initial
+latitude and longitude to use for the Street View. The POV is left blank, indicating a default
+view to the north.</p>
+
+<pre class="prettyprint">
+var fenwayPark = new GLatLng(42.345573,-71.098326);
+panoramaOptions = { latlng:fenwayPark };
+var myPano = new GStreetviewPanorama(document.getElementById("pano"), panoramaOptions);
+</pre>
+
+<p><a href="examples/streetview-simple.html">
+View example (streetview-simple.html)</a></p>
+
+<h3 id="StreetviewErrorHandling">Street View Error Handling</h3>
+
+<p>As Street View requires support for the Flash&reg; plugin, your code should check whether 
+that plugin is available for use within the user's browser. You can do so within your 
+application by registering an event listener for the <code>error</code> event on the 
+<code>GStreetviewPanorama</code> object. The <code>error</code> event passes an 
+<a href="reference.html#GStreetviewPanorama.ErrorValues">error code</a> which you can evaluate.
+</p>
+
+<p>The sample code below performs a quick check for support of the Flash plugin and
+brings up an alert dialog box if Flash is not supported.</p>
+
+<pre class="prettyprint">
+var fenwayPark = new GLatLng(42.345573,-71.098326);
+panoramaOptions = { latlng:fenwayPark };
+myPano = new GStreetviewPanorama(document.getElementById("pano"), panoramaOptions);
+GEvent.addListener(myPano, "error", handleNoFlash);
+    
+function handleNoFlash(errorCode) {
+  if (errorCode == 603) {
+    alert("Error: Flash doesn't appear to be supported by your browser");
+    return;
+  }
+}  
+</pre>
+
+<h3 id="StreetviewPOV">Street View Points of View (POV)</h3>
+
+<p>The Street View location defines the placement of the camera locus for an image, but 
+it does not define the orientation of the camera for that image. For that purpose, the 
+<code>GPov</code> object literal defines three properties:</p>
+
+<ul>
+  <li><code>yaw</code> defines the rotation angle around the camera locus in
+  degrees relative from true north. Yaw angles are measured clockwise (90 degrees is
+  true east).</li>
+  <li><code>pitch</code> defines the angle variance "up" or "down" from the camera's
+  initial default pitch, which is often (but not always) flat horizontal. (For example,
+  an image taken on a hill will likely exhibit a default pitch that is not horizontal.)
+  Pitch angles are measured with negative values looking up (to -90 degrees straight up and
+  orthogonal to the default pitch) and positive values looking down (to +90 degrees straight down
+  and orthogonal to the default pitch).</li>
+  <li><code>zoom</code> defines the zoom level of this view (effectively proscribing the 
+  "field of view") with 0 being fully zoomed-out. Different Street View locations may provide higher or lower zoom levels.</li>
+</ul>
+
+<p>By default, these values are all 0 and define a flat horizontal view directly north with the
+widest possible field of view.</p>
+
+<h3 id="PanoramaViews">Setting the Panorama View</h3>
+
+<p>As described earlier, you may set both the location and <code>GPov</code>
+for a panorama object upon its construction using the
+<code>GStreetviewPanoramaOptions</code> parameter.</p>
+
+<pre class="prettyprint">
+fenwayPark = new GLatLng(42.345573,-71.098326);
+myPOV = {yaw:370.64659986187695,pitch:-20};
+svOpts = {latlng:fenwayPark, pov:myPOV};
+var myPano = new GStreetviewPanorama(document.getElementById("pano"), svOpts);
+</pre>
+
+You may also set both the location and POV using the <code>setLocationAndPOV()</code>
+method after construction of the <code>GStreetviewPanorama</code> object. In the 
+following example, we create a <code>GStreetviewPanorama</code> object, and then
+set its location and POV to a specific value.</p>
+
+<pre class="prettyprint">
+var myPano = new GStreetviewPanorama(document.getElementById("pano"));
+fenwayPark = new GLatLng(42.345573,-71.098326);
+myPOV = {yaw:370.64659986187695,pitch:-20};
+myPano.setLocationAndPOV(fenwayPark, myPOV);
+</pre>
+
+<p><a href="examples/streetview-object.html">
+View example (streetview-object.html)</a></p>
+
+<h2 id="StreetviewOverlays">Using the Street
+View Overlay</h2>
+
+<p>The simplest way to determine if a road supports Street View is through the
+<code>GStreetviewOverlay</code> object. Simply create an overlay of this type and
+add it to the map; roads which contain Street View data will show up highlighted
+on the map using blue outlines.</p>
+
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById("map_canvas"));
+map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+svOverlay = new GStreetviewOverlay();
+map.addOverlay(svOverlay);
+</pre>
+
+<p><a href="examples/streetview-layer.html">
+View example (streetview-layer.html)</a></p>
+
+<p>Once you know that a geographic area supports Street View, you can add logic which responds to
+clicks on valid Street View roads by populating the <code>GStreetviewPanorama</code> object.</p>
+
+<pre class="prettyprint">
+var myPano = new GStreetviewPanorama(document.getElementById("pano"));
+var map = new GMap2(document.getElementById("map_canvas"));
+map.setCenter(new GLatLng(42.345573,-71.098326), 14);
+svOverlay = new GStreetviewOverlay();
+map.addOverlay(svOverlay);
+GEvent.addListener(map,"click", function(overlay,latlng) {
+  myPano.setLocationAndPOV(latlng);
+});
+</pre>
+
+<p><a href="examples/streetview-click.html">
+View example (streetview-click.html)</a></p>
+
+<p>If you know that a particular location supports Street View,
+you can save the location information and POV and place that
+information within the object itself.</p>
+
+<h2 id="UserPhotos">Showing User Photos in Street View</h2>
+
+<p>The <code>GStreetviewPanorama</code> object not only supports Street View
+imagery, but can additionally show user photos from popular photo repositories
+such as Picasa and Panaramio. A sample Street View containing user photos
+is shown below:</p>
+
+<p><img src="images/userPhotos.png" /></p>
+
+<p>When navigating to a location which contains nearby user photos, the Street
+View will show a small window labeled "User Photos" that brings up a set
+of user photos when clicked on.</p>
+
+<h3 id="EnablingUserPhotos">Enabling User Photos</h3>
+
+<p>By default, user photos are enabled within Street View. To disable user photos
+in Street View, set <code>userPhotos</code> to <code>false</code> within the
+<code>GStreetviewPanoramaOptions</code>'s <code>features</code> parameter.
+Additionally, you may indicate the specific photo repositories you wish to enable
+within the option's <code>userPhotoOptions</code> field.</p>
+
+<p>The following <code>GStreetviewUserPhotoOptions</code> are currently supported:</p>
+
+<ul>
+  <li><code>"panoramio"</code></li>
+  <li><code>"picasa"</code></li>
+  <li><code>"flickr"</code></li>
+</ul>
+
+<p>If you don't indicate interest in a particular repository, all photo repositories
+will be enabled.</p>
+
+<p>The following example shows a map of Boston with user photos enabled for both
+Picasa and Panoramio:</p>
+
+<pre class="prettyprint">
+var panoOpts = {
+  features: {
+    streetView: true,
+    userPhotos: true
+  },
+  userPhotoOptions: {
+    photoRepositories: [ 'panoramio', 'picasa']
+  }
+};
+var myPano = new GStreetviewPanorama(document.getElementById("pano"), panoOpts);
+var boston = new GLatLng(42.345573,-71.098326);
+GEvent.addListener(myPano, "error", handleNoFlash);  
+
+var map = new GMap2(document.getElementById("map_canvas"));
+map.setCenter(boston, 14);
+svOverlay = new GStreetviewOverlay();
+map.addOverlay(svOverlay);
+myPano.setLocationAndPOV(boston);
+</pre>
+
+<p><a href="examples/streetview-photos.html">
+View example (streetview-photos.html)</a></p>
+
+<p><span style="color:red">Note: </span> we did not need to explicitly enable user
+photos in this example, but we have done so to illustrate the API.</p>
+
+<h3 id="RetrievingPhotos">Retrieving Specific Photos</h3>
+
+<p>Certain photo repositories (currently the <code>"panoramio"</code> repository)
+allow you to identify particular photos. The Street View object allows you to select
+specific photos and display them within the Street View object by selecting the
+photo using a <code>GPhotoSpec</code> object. A <code>GPhotoSpec</code> consists
+of a <code>repository</code> identifier along with an <code>id</code> field
+identifying the individual photo.</p>
+
+<p>The following example shows a photo of Fenway Park in Boston, home of the
+2004 World Series champion Red Sox:</p>
+
+<pre class="prettyprint">
+var panoOpts = {
+  features: {
+    streetView: false,
+    userPhotos: true
+  },
+  userPhotoOptions: {
+    photoRepositories: [ 'panoramio']
+  }
+};
+var myPano = new GStreetviewPanorama(document.getElementById("pano"), panoOpts);
+var fenway = {
+  repository: "panoramio",
+  id: 8323025
+};
+GEvent.addListener(myPano, "error", handleNoFlash);
+myPano.setUserPhoto(fenway);
+</pre>
+
+<p><a href="examples/streetview-photo-id.html">
+View example (streetview-photo-id.html)</a></p>
+
+<p>For more information on obtaining IDs for individual photos, consult the
+<a href="http://www.panoramio.com/api/">Panoramio API</a>.</p>
+
+<h2 id="StreetviewClientQuerys">Street View Client Querying</h2>
+
+<p>Determining whether a road supports Street View by visual inspection of the 
+<code>GStreetviewOverlay</code> is not often feasible, or desirable from a user's
+perspective. For that reason, the API provides a service which programmatically 
+requests and retrieves Street View data. This service is facilitated through use
+of the <code>GStreetviewClient</code> object.</p>
+
+<h3 id="StreetviewClientRequests">Performing Street View Lookups</h3>
+
+<p>The <code>GStreetviewClient</code> object performs Panorama data lookups using 
+Google's Street View service. Because this lookup is asynchronous, the methods of this 
+class require callback functions to execute upon receipt of the data. All of the given
+callbacks pass <code>null</code> if no value is returned, so you should check 
+for that case within your callback functions.</p>
+
+<p>The <code>GStreetviewClient</code> method <code>getNearestPanoramaLatLng()</code>
+</code>retrieves the <code>GLatLng</code> of a nearby Panorama image from a given
+location (itself passed as a <code>GLatLng</code>).</p>
+
+<p>Both <code>getNearestPanorama()</code> and <code>getPanoramaById()</code> instead
+retrieve <code>GStreetviewData</code> objects, which store metadata about the particular
+Panorama object. That data is described in the section below.</p>
+
+<h3 id="StreetviewClientData">Handling Client Responses</h3>
+
+<p>The structure of a <code>GStreetviewData</code> object consists of three properties: 
+<code>location</code> and <code>copyright</code> (which contain information about the 
+specific image being shown), and <code>links</code> (which provides information about 
+adjacent Panorama objects). The structure of these properties is described below:</p>
+
+<pre>
+# The location property uses the GStreetviewLocation object literal
+location: {
+  latlng: GLatLng, 
+  pov: { 
+    yaw: String, 
+    pitch: String, 
+    zoom: String
+  }, 
+  description: String, 
+  panoId: String
+}
+
+copyright: String
+
+# The links property uses the GStreetviewLink object literal
+links[]: {
+  yaw: String, 
+  description: String, 
+  panoId: String
+}
+</pre>
+
+<p>(Full descriptions of the <code>GStreetviewLocation</code> and <code>GStreetviewLink</code> 
+object literals are shown in the <a href="reference.html#GStreetviewData">Maps API Reference</a>.)</p>
+
+<p><span class="new">Note:</span> the <code>GStreetviewData.location</code> property 
+should not be confused with the <code>window.location</code> property. If you are
+trying to extract data from this object's <code>location</code> property, ensure
+that you have actually received a response back from the Street View server (see below).
+Otherwise, the <code>location</code> property will default to <code>window.location</code>
+and you will get unexpected behavior.</p>
+
+<p>If a request to a <code>GStreetviewClient</code> object is successful, it will pass 
+either a <code>GLatLng</code> or a <code>GStreetviewData</code> object to the specified
+callback function. Because retrieving Street View data is asynchronous, however, the
+client object may not retrieve these data objects, so your code should not depend on them
+being present. Instead, you should always check the <code>code</code> value returned from 
+any request, which is guaranteed to be returned. The code snippet below illustrates this
+concept.</p>
+
+<pre class="prettyprint">
+panoClient = new GStreetviewClient();
+panoClient.getPanoramaById(panoData.location.panoId, processReturnedData);
+    
+function processReturnedData(panoData) {
+  if (panoData.code != 200) {
+    GLog.write('showPanoData: Server rejected with code: ' + panoData.code);
+    return;
+  }
+  
+  // Code to actually process the GStreetviewData object is contained here
+  
+}  
+</pre>
+
+<p>A full response containing a sample <code>GStreetviewData</code> structure is shown below:</p>
+
+<pre class="prettyprint">
+{
+  location: {
+    latlng: GLatLng("42.345566, -71.098354")
+    pov: {
+      yaw: "370.64659986187695"
+      pitch: "-20"
+      zoom: "1"
+    }
+    description: "Yawkey Way"
+    panoId: "-KNGDaZvSQjMqug7ISM_CA"
+  }
+  copyright: "© 2008 Google"
+  links:[ {
+    yaw: "0"
+    description: "Yawkey Way"
+    panoId: "S142iWXa_4Fi7L7d8HKhuQ"
+  },
+  {
+    yaw: "0"
+    description: "Yawkey Way"
+    panoId: "2vFI79AjOpHTAYJSCKquFg"
+  }
+  ]
+}
+</pre>
+
+<p>The sample application below displays an initial Panorama object, extracts its ID, and stores
+ the linked Panorama object in the returned <code>GStreetviewData</code> object, and displays the
+ data set associated with that Street View object. Each time the user clicks "Next," the process 
+ repeats, allowing a user to "walk" through a set of adjacent Panorama objects.</p>
+
+<pre class="prettyprint">
+var map;
+var myPano;   
+var panoClient;
+var nextPanoId;
+
+function initialize() {
+  var fenwayPark = new GLatLng(42.345573,-71.098326);
+  var fenwayPOV = {yaw:370.64659986187695,pitch:-20};
+      
+  panoClient = new GStreetviewClient();      
+   
+  map = new GMap2(document.getElementById("map_canvas"));
+  map.setCenter(fenwayPark, 15);
+  GEvent.addListener(map, "click", function(overlay,latlng) {
+    panoClient.getNearestPanorama(latlng, showPanoData);
+  });
+      
+  myPano = new GStreetviewPanorama(document.getElementById("pano"));
+  myPano.setLocationAndPOV(fenwayPark, fenwayPOV);
+  GEvent.addListener(myPano, "error", handleNoFlash);  
+  panoClient.getNearestPanorama(fenwayPark, showPanoData);
+}
+    
+function showPanoData(panoData) {
+  if (panoData.code != 200) {
+    GLog.write('showPanoData: Server rejected with code: ' + panoData.code);
+    return;
+  }
+  nextPanoId = panoData.links

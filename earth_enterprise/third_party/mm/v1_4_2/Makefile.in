@@ -1,0 +1,140 @@
+## ====================================================================
+## Copyright (c) 1999-2006 Ralf S. Engelschall <rse@engelschall.com>
+## Copyright (c) 1999-2006 The OSSP Project <http://www.ossp.org/>
+##
+## Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions
+## are met:
+##
+## 1. Redistributions of source code must retain the above copyright
+##    notice, this list of conditions and the following disclaimer.
+##
+## 2. Redistributions in binary form must reproduce the above copyright
+##    notice, this list of conditions and the following disclaimer in
+##    the documentation and/or other materials provided with the
+##    distribution.
+##
+## 3. All advertising materials mentioning features or use of this
+##    software must display the following acknowledgment:
+##    "This product includes software developed by
+##     Ralf S. Engelschall <rse@engelschall.com>."
+##
+## 4. Redistributions of any form whatsoever must retain the following
+##    acknowledgment:
+##    "This product includes software developed by
+##     Ralf S. Engelschall <rse@engelschall.com>."
+##
+## THIS SOFTWARE IS PROVIDED BY RALF S. ENGELSCHALL ``AS IS'' AND ANY
+## EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+## IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+## PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL RALF S. ENGELSCHALL OR
+## ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+## NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+## LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+## HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+## STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+## ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+## OF THE POSSIBILITY OF SUCH DAMAGE.
+## ====================================================================
+
+@SET_MAKE@
+
+TOP         = .
+
+DESTDIR     =
+prefix      = @prefix@
+exec_prefix = @exec_prefix@
+datarootdir = @datarootdir@
+bindir      = @bindir@
+libdir      = @libdir@
+includedir  = @includedir@
+mandir      = @mandir@
+
+SHELL       = /bin/sh
+CC          = @CC@
+CFLAGS      = @CFLAGS@
+LDFLAGS     = @LDFLAGS@
+LIBS        = @LIBS@
+RM          = rm -f
+LIBTOOL     = ./libtool
+SHTOOL      = ./shtool
+
+LIBS        = libmm.la
+OBJS        = mm_global.lo mm_alloc.lo mm_core.lo mm_lib.lo mm_vers.lo
+MANS        = mm.3 mm-config.1
+TSTS        = mm_test
+
+.SUFFIXES: .o .lo
+
+.c.o:
+	$(LIBTOOL) --quiet --mode=compile $(CC) -c $(CFLAGS) $<
+.c.lo:
+	$(LIBTOOL) --quiet --mode=compile $(CC) -c $(CFLAGS) $<
+
+all: $(LIBS) $(MANS) $(TSTS)
+
+libmm.la: $(OBJS)
+	$(LIBTOOL) --quiet --mode=link $(CC) -o $@ $(OBJS) \
+	    -rpath $(libdir) -version-info `$(SHTOOL) version -l c -d libtool mm_vers.c`
+
+mm_alloc.c mm_core.c mm_global.c: mm.h mm_vers.c
+mm.h: config.h
+
+mm_test: mm_test.lo libmm.la
+	$(LIBTOOL) --quiet --mode=link $(CC) -o $@ mm_test.lo libmm.la
+
+mm.3: mm.pod
+	V1=`$(SHTOOL) version -l c -d short mm_vers.c`; \
+	V2=`$(SHTOOL) version -l c -d long mm_vers.c`; \
+	D=`$(SHTOOL) version -l c -d long mm_vers.c | sed -e 's;.*(;;' -e 's;).*;;'`; \
+	pod2man --section=3 --center="Shared Memory Library" --release="$$D" --date="MM $$V1" mm.pod |\
+	perl -p -e 's;^(\\\&\s+.+?)([Mm][Mm]_[a-zA-Z0-9_]+)(\(.+?)$$;$$1\\fB$$2\\fR$$3;' |\
+	sed -e "s;MM_VERSION_STR;$$V2;" >mm.3
+
+mm-config.1: mm-config.pod
+	V1=`$(SHTOOL) version -l c -d short mm_vers.c`; \
+	V2=`$(SHTOOL) version -l c -d long mm_vers.c`; \
+	D=`$(SHTOOL) version -l c -d long mm_vers.c | sed -e 's;.*(;;' -e 's;).*;;'`; \
+	pod2man --section=1 --center="Shared Memory Library" --release="$$D" --date="MM $$V1" mm-config.pod |\
+	perl -p -e 's;^(\\\&\s+.+?)([Mm][Mm]_[a-zA-Z0-9_]+)(\(.+?)$$;$$1\\fB$$2\\fR$$3;' |\
+	sed -e "s;MM_VERSION_STR;$$V2;" >mm-config.1
+
+check: test
+test: mm_test
+	@$(LIBTOOL) --mode=execute ./mm_test
+debug: mm_test
+	@$(LIBTOOL) --mode=execute gdb ./mm_test
+
+install: all
+	$(SHTOOL) mkdir -f -p -m 755 $(DESTDIR)$(bindir)
+	$(SHTOOL) mkdir -f -p -m 755 $(DESTDIR)$(includedir)
+	$(SHTOOL) mkdir -f -p -m 755 $(DESTDIR)$(libdir)
+	$(SHTOOL) mkdir -f -p -m 755 $(DESTDIR)$(mandir)/man1
+	$(SHTOOL) mkdir -f -p -m 755 $(DESTDIR)$(mandir)/man3
+	$(SHTOOL) install -c -m 755 mm-config $(DESTDIR)$(bindir)/mm-config
+	$(SHTOOL) install -c -m 644 mm-config.1 $(DESTDIR)$(mandir)/man1/mm-config.1
+	$(SHTOOL) install -c -m 644 mm.3 $(DESTDIR)$(mandir)/man3/mm.3
+	$(SHTOOL) install -c -m 644 mm.h $(DESTDIR)$(includedir)/mm.h
+	@$(LIBTOOL) --mode=install $(SHTOOL) install -c -m 644 libmm.la $(DESTDIR)$(libdir)/libmm.la
+
+clean:
+	-$(RM) $(TSTS)
+	-$(RM) $(OBJS)
+	-$(RM) $(LIBS)
+	-$(RM) core *.core *.bak *~
+	-$(RM) -r .libs >/dev/null 2>&1 || true
+	-$(RM) *.o *.lo
+
+distclean: clean
+	-$(RM) config.log config.status config.cache
+	-$(RM) Makefile config.h cfg-config
+	-$(RM) libtool
+	-$(RM) mm-config
+
+realclean: distclean
+	-$(RM) $(MANS)
+	-$(RM) configure config.h.in
+	-$(RM) shtool
+	-$(RM) ltmain.sh libtool.m4 config.guess config.sub
+

@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Configuring a Searchable Database</title>
+</head>
+
+
+<body>
+<a name="top"></a>
+  
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo"><img alt="Google Earth Enterprise" border=0 src="images/index.gif" /></div>
+  <h1 id="doc_title">Tutorial</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Tutorial</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="setup.html">Setting Up For the Tutorial</a></li>
+    <li><a href="resources.html">Defining and Building Resources</a></li>
+    <li><a href="projects.html">Defining and Building Projects</a></li>
+    <li><a href="database.html">Defining and Building Databases</a></li>
+    <li><a href="publish.html">Publishing and Viewing a Database</a></li>
+    <li><a href="points.html">Configuring Display Rules for Point Data</a></li>
+    <li><a href="polygons.html">Configuring Display Rules for Polygon Data</a></li>
+    <li><a href="importExport.html">Importing and Exporting Style Templates</a></li>
+    <li><a href="searchTabs.html" id="selected">Configuring a Searchable Database</a></li>
+    <li><a href="searchLayers.html">Specifying Search Fields for Individual Layers</a></li>
+    <li><a href="maps.html">Creating a Map Database</a></li>
+    <li><a href="mosaics.html">Creating Imagery Mosaics</a></li>
+    <li><a href="split.html">Segmenting Large Imagery Files</a></li>
+    <li><a href="historical.html">Building a Historical Imagery Project</a></li>
+    <li><a href="dataFiles.html">Sample Data Files</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+<h1><a id="57763"></a>Configuring a Searchable Database
+</h1>
+<p>Search tabs allow Google Earth EC and Google Maps users to search external databases on Google Earth Enterprise Servers as well as non-Google servers. For example, if you have a database of San Francisco neighborhoods that contains specific information that your users need about each neighborhood, you can add a search tab called SF Neighborhoods and configure it to search for neighborhoods in your database, even if that database is stored on another server. Google distributes some sample databases with the Google Earth Enterprise Server.
+</p>
+<p>The first thing you need to do is pre-configure search tabs using the Search Tab Manager. Then you can associate the search tabs with a particular database. The exercises in this lesson show you how to perform both steps.
+</p>
+<h2>Define Search Tabs
+</h2>
+<h4>To define a new search tab:
+</h4>
+<ol>
+  <li>Select <strong>Tools &gt;Search Tab Manager</strong>. The <strong>Search Tab Manager</strong> appears.
+<p><img src="images/searchTabsMgr.png" /></p>
+  </li>
+  <li><a id="98205"></a>Click 
+    <img src="images/icon_new.gif" />. The <strong>New  Search Tab</strong> dialog appears.</li>
+  <li>Enter <b>SFNeighborhoods </b>in the Search Tab Label field, and click <b>OK</b>.
+    <p>The search tab name appears on the list on the left and is selected.    </p>
+    </li>
+  <li><a id="82534"></a>In the first Label field, enter:
+    <pre>&lt;b&gt;Starts with&lt;/b&gt; (e.g., &lt;b&gt;Pac&lt;/b&gt; for Pacific Heights)</pre> 
+    <p class="note"><strong>Note:</strong> You can use some basic HTML to format the Label text, if desired. Google Earth EC accepts only basic font styling HTML codes, such as font size, color, bold, italic, and superscript. It does not accept line breaks.    </p>
+    <p>After you build and publish the database, the text value in the first Label field appears above the first search field in Google Earth EC.    </p>
+    </li>
+  <li>Enter <b>neighborhood</b> in the first Key field.
+    <p>When a Google Earth EC user specifies a search value, the Key value is associated with the value specified by the user and added to the <code>URL GET</code> request submitted to the preconfigured plug-in. It does not necessarily correlate to a field in the search database.    </p>
+    <p>You can enter Label and Key values for one or two fields on each search tab. In this exercise, you use the first Label and Key fields only.    </p>
+  </li>
+  <li><a id="38783"></a>Select <b>Plug-in Name</b> from the drop-down list, and enter <b>ExamplePlugin</b> in the text field.
+    <p>This is the plug-in example supplied with Google Earth Enterprise Fusion. For more information about plug-ins for search tabs and the other fields in this dialog, see the <strong>Managing Search Tabs</strong> section in the <strong>Setting Up Your Workspace</strong> chapter of the <strong>Reference Guide</strong>.</p>
+    </li>
+  <li>Click <b>OK</b>. Now the search tab is ready for you to add to your databases.    
+  </li>
+</ol>
+<h2>Add Search Tabs To Your Database
+</h2>
+<h4>To add search tabs to your database:
+</h4>
+<ol>
+  <li>Select <b>Asset Manager</b> from the Tools menu.
+    <p>The Asset Manager appears.    </p>
+  </li>
+  <li>Navigate to <code>ASSET_ROOT/Databases</code> in the asset navigation tree, and double-click the <b>SFHighways</b> database that you built in <a href="database.html#96788">Lesson 4</a>.
+    <p>The Database Editor appears with the imagery, terrain, and vector projects specified.    </p>
+    </li>
+  <li>Check the box next to <b>Search Tabs</b>.
+    <p>The Database Editor extends to include a Search Tabs definition area.    </p>
+    </li>
+  <li><a id="25611"></a>Click 
+    <img src="images/icon_new.gif" /> on the right side of the Search Tabs area.
+    <p>A pop-up list displays the search tab you created in the previous exercise.    </p>
+    </li>
+  <li><a id="67878"></a>Click <b>SFNeighborhoods</b>.
+    <p>The selected tab appears in the Search Tabs area.    </p>
+    </li>
+  <li>Select <strong>File &gt; Save</strong>.
+    <p>Google Earth Enterprise Fusion saves the changes to the database with the same name.    </p>
+  </li>
+  <li>Close the Database Editor.  </li>
+  <li>Rebuild the database by right-clicking <b>SFHighways</b> and selecting <b>Build</b> from the context menu.
+    <p>Even though you built the database before, you must build it again to include the new search tabs. See <strong>Adding Search Tabs to a Database</strong>, in the <strong>Defining and Building Databases</strong> chapter of the <strong>Reference Guide</strong>.</p>
+  </li>
+  <li>Publish the database by right-clicking <b>SFHighways</b> and selecting <b>Publish</b> from the context menu. The <strong>Publish Database</strong> dialog appears. Notice that the default version is now 2. </li>
+  <li>Click <b>Publish</b>. Google Earth Enterprise Fusion runs the publishing process on the database, and displays a success message when it is done.    
+  </li>
+  <li>Launch Google Earth EC, and log in to your server.  </li>
+</ol>
+      <p class="caution"><strong>Caution:</strong> If you have logged in to this server with Google Earth EC previously, log out, clear your cache, and log back in. For help with clearing your cache, refer to the <i>Google Earth User Guide</i>.
+      </p>
+<p>Google Earth EC displays your database with the search tabs you specified.</p>
+<p><img src="images/Page_83.png" /></p>
+<p>
+</p>
+</div>
+	<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+	<!-- END WRAPPER -->
+
+
+
+
+</body>
+</html>

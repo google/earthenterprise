@@ -1,0 +1,1086 @@
+/* geo/earth/common/reset.gss */
+/*
+ * Copyright 2012 Google Inc, All Rights Reserved
+ *
+ * Standard Kennedy spec reset.
+ *
+ */
+
+/*------------------------------------------------------------------
+Removes the browser-defined default styling
+Allows for consistent Kennedy styling across different browsers
+
+Copied from the Kennedy spec:;
+https://www.corp.google.com/kennedy/spec/assets/css/kd_components.css
+(which is itself adapted from Eric Meyer's reset)
+------------------------------------------------------------------*/
+
+html,body,div,span,applet,object,iframe,
+h1,h2,h3,h4,h5,h6,p,blockquote,pre,
+a,abbr,acronym,address,big,cite,code,
+del,dfn,em,font,img,ins,kbd,q,s,samp,
+small,strike,strong,sub,sup,tt,var,
+dl,dt,dd,ol,ul,li,
+fieldset,form,label,legend,
+table,caption,tbody,tfoot,thead,tr,th,td {
+  border: 0;
+  font-family: inherit;
+  font-size: 100%;
+  font-style: inherit;
+  font-weight: inherit;
+  margin: 0;
+  outline: 0;
+  padding: 0;
+  vertical-align: baseline;
+}
+
+body {
+  background: white;
+  color: black;
+  line-height: 1;
+}
+
+ol,ul {
+  list-style: none;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+caption,th,td {
+  font-weight: normal;
+  text-align: left;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+}
+
+blockquote,q {
+  quotes: "" "";
+}
+
+input::-moz-focus-inner {
+  border: 0;
+}
+/* javascript/jfk/gss/base.gss */
+/**
+ * Copyright 2010 Google Inc. All Rights Reserved.
+ *
+ * Base Kennedy GSS definitions.
+ *
+ * Note: 1. Please do not use the base colors directly in component gss.
+ *          Use the component definitions or define a new mapping.
+ *       2. Don't put any style rules here. Definitions only.
+ *       3. Modifying these values will have an impact on every product using
+ *          the Kennedy UI. Changes to these values must be carefully
+ *          considered.
+ *       4. If you change this file, you *must* run
+ *          //javatests/com/google/gwt/corp/jfk:AllTests since GWT uses this
+ *          file for their Kennedy stuff as well and they process it using a
+ *          different parser.
+ *
+ */
+
+@provide 'jfk.gss.base';
+
+@if (!DISABLE_KENNEDY) {
+
+/* Basic Kennedy typography. */
+@def JFK_BASE_FONT_FAMILY                  arial,sans-serif;
+@def JFK_BASE_FONT_LINE_HEIGHT             1.4;
+@def JFK_BASE_FONT_SIZE_SMALL              11px;
+@def JFK_BASE_FONT_SIZE_NORMAL             13px;
+@def JFK_BASE_FONT_NORMAL
+    normal JFK_BASE_FONT_SIZE_NORMAL JFK_BASE_FONT_FAMILY;
+@def JFK_BASE_FONT
+    normal JFK_BASE_FONT_SIZE_NORMAL / JFK_BASE_FONT_LINE_HEIGHT JFK_BASE_FONT_FAMILY;
+
+/* Primary and secondary typography for body text. */
+@def JFK_BASE_PRIMARY_TEXT_COLOR           #222;
+@def JFK_BASE_SECONDARY_TEXT_FONT_SIZE     JFK_BASE_FONT_SIZE_SMALL;
+@def JFK_BASE_SECONDARY_TEXT_COLOR         #777;
+@def JFK_BASE_SECONDARY_SOURCE_LINK_COLOR  #093;
+
+/* Product name typography. */
+@def JFK_BASE_PRODUCT_NAME_TEXT_COLOR      #dd4b39;
+@def JFK_BASE_PRODUCT_NAME_FONT_SIZE       20px;
+
+/* Section header typography. */
+@def JFK_BASE_SECTION_HEADER_TEXT_COLOR    #222;
+@def JFK_BASE_SECTION_HEADER_FONT_SIZE     16px;
+
+/* Link typography. */
+@def JFK_BASE_LINK_COLOR                   #15c;
+@def JFK_BASE_VISITED_LINK_COLOR           #61c;
+@def JFK_BASE_ACTIVE_LINK_COLOR            #d14836;
+@def JFK_BASE_DISABLED_LINK_COLOR          #ccc;
+@def JFK_BASE_TITLE_LINK_COLOR             JFK_BASE_LINK_COLOR;
+@def JFK_BASE_TITLE_LINK_FONT_SIZE         JFK_BASE_SECTION_HEADER_FONT_SIZE;
+
+/* Shared menu @def. */
+/* TODO(chrishenry): We should really have a menu/defs.gss, just like
+   button/defs.gss */
+@def JFK_BASE_MENU_BG_COLOR                #fff;
+@def JFK_BASE_MENU_TEXT_COLOR              #333;
+@def JFK_BASE_MENU_BORDER                  1px solid rgba(0, 0, 0, .2);
+@def JFK_BASE_MENU_FALLBACK_BORDER         1px solid #ccc;
+@def JFK_BASE_MENU_SEPARATOR               1px solid #ebebeb;
+
+/* Shared text input @def. */
+@def JFK_BASE_INPUT_BORDER_COLOR           #d9d9d9;
+@def JFK_BASE_INPUT_BORDER_TOP_COLOR       #c0c0c0;
+@def JFK_BASE_INPUT_FOCUS_BOX_SHADOW       0 1px 2px rgba(0, 0, 0, 0.3);
+@def JFK_BASE_INPUT_FOCUS_BORDER_COLOR     #4d90fe;
+
+/* Common icons (not product-specific ones) */
+@def JFK_TOOLBAR_BUTTON_DISCLOSURE_ARROW
+    url(//ssl.gstatic.com/ui/v1/disclosure/grey-disclosure-arrow.png);
+@def JFK_TOOLBAR_BUTTON_DISCLOSURE_ARROW_SELECT
+    url(//ssl.gstatic.com/ui/v1/disclosure/grey-disclosure-arrow-up-down.png);
+@def JFK_TOOLBAR_BUTTON_SMALL_DISCLOSURE_ARROW
+    url(//ssl.gstatic.com/ui/v1/disclosure/small-grey-disclosure-arrow-down.png);
+
+@def JFK_ARROW_DROPDOWN
+    url(//ssl.gstatic.com/ui/v1/icons/common/down_arrow.png);
+
+@def JFK_SETTINGS_ICON_BG  url(//ssl.gstatic.com/ui/v1/icons/common/settings.png);
+
+
+/* DEPRECATED: do not use these @defs on new gss. */
+
+@def JFK_BASE_BORDER_SHADE_COLOR           #ececec;
+@def JFK_BASE_ERROR_TEXT_COLOR             #f00;
+@def JFK_BASE_FONT_SIZE_LARGE              110%;
+@def JFK_BASE_FONT_TITLE                   bold 130% JFK_BASE_FONT_FAMILY;
+@def JFK_BASE_INPUT_FALLBACK_BORDER        JFK_BASE_MENU_FALLBACK_BORDER;
+@def JFK_BASE_INPUT_RGBA_BORDER            JFK_BASE_MENU_BORDER;
+@def JFK_BASE_INPUT_SEPARATOR              JFK_BASE_MENU_SEPARATOR;
+@def JFK_BASE_ONTOP_TEXT_COLOR             #fff;
+@def JFK_BASE_SECONDARY_BG_COLOR           #e4ebf8;
+@def JFK_BASE_SHADE_BG_COLOR               #f1f6fa;
+@def JFK_TOOLBAR_BUTTON_SMALL_DISCLOSURE_ARROW_SELECT
+    url(//ssl.gstatic.com/ui/v1/disclosure/small-grey-disclosure-arrow-up-down.png);
+
+}  /* if (!DISABLE_KENNEDY) */
+
+/* geo/earth/common/base.gss */
+@def DEFAULT_PADDING 0.5em;
+@def DEFAULT_TEXT_COLOR JFK_BASE_PRIMARY_TEXT_COLOR;
+@def DARK_TEXT_COLOR #000;
+@def SUPPLEMENTAL_TEXT_COLOR JFK_BASE_SECONDARY_TEXT_COLOR;
+@def SNIPPET_COLOR SUPPLEMENTAL_TEXT_COLOR;
+@def LINK_COLOR JFK_BASE_LINK_COLOR;
+@def SECONDARY_LINK_COLOR LINK_COLOR;
+@def EARTH_LINK_COLOR #285490;
+@def DEFAULT_TEXT_SIZE 14px;
+@def SMALL_TEXT_SIZE 80%;
+@def IMPORTANT_TEXT_COLOR JFK_BASE_ERROR_TEXT_COLOR;
+
+body {
+  font-size: DEFAULT_TEXT_SIZE;
+  font-family: JFK_BASE_FONT_FAMILY;
+  -webkit-user-select: none;
+  color: DEFAULT_TEXT_COLOR;
+  margin: 0;
+  padding: 0;
+}
+
+b, strong {
+  color: DARK_TEXT_COLOR;
+  font-weight: bold;
+}
+
+a {
+  color: LINK_COLOR;
+  text-decoration: none;
+  outline: none;
+}
+
+a b, a strong {
+  color: LINK_COLOR;
+}
+
+a.secondary {
+  color: SECONDARY_LINK_COLOR;
+}
+
+a.secondary b, a.secondary strong {
+  color: SECONDARY_LINK_COLOR;
+}
+
+a:hover, a.secondary:hover {
+  text-decoration: underline;
+}
+
+.snippet {
+  color: SNIPPET_COLOR;
+  font-size: SMALL_TEXT_SIZE;
+}
+
+.legalese, .supplemental {
+  color: SUPPLEMENTAL_TEXT_COLOR;
+  font-size: SMALL_TEXT_SIZE;
+}
+
+.important_note {
+  color: IMPORTANT_TEXT_COLOR;
+}
+
+.error, .refinement, .refinement-prompt {
+  margin: DEFAULT_PADDING;
+}
+
+.jfk-butterBar {
+  margin: DEFAULT_PADDING;
+  height: inherit;  /* LHP is too narrow to enforce one-line butter bar. */
+}
+
+.debug_box {
+  font-size: SMALL_TEXT_SIZE;
+  background: #FEE;
+  border: 1px solid #FCC;
+  margin: DEFAULT_PADDING;
+  padding: DEFAULT_PADDING;
+}
+
+/* geo/earth/common/ads.gss */
+@def AD_BACKGROUND_COLOR #FDF6E5;
+@def AD_LINK_COLOR green;
+@def AD_LINK_TEXT_SIZE 100%;
+@def AD_LABEL_TEXT_SIZE 70%;
+
+.ad {
+  font-size: AD_LINK_TEXT_SIZE;
+  background-color: AD_BACKGROUND_COLOR;
+  padding: DEFAULT_PADDING;
+  margin: DEFAULT_PADDING;
+  margin-bottom: 0.25em;
+  cursor: default;
+}
+
+.ad-label {
+  font-size: AD_LABEL_TEXT_SIZE;
+  color: SUPPLEMENTAL_TEXT_COLOR;
+  float: right;
+}
+
+.ad-snippet {
+  font-size: SMALL_TEXT_SIZE;
+}
+
+.ad-link {
+  text-decoration: none;
+  color: AD_LINK_COLOR;
+  font-size: SMALL_TEXT_SIZE;
+}
+
+.ad-link b,
+.ad-link strong {
+  color: AD_LINK_COLOR;
+}
+
+.ad-link:hover {
+  text-decoration: underline;
+}
+
+/* geo/earth/common/boxes.gss */
+/* Shadow effect used around any box that should stand on its own as an object.
+ * Only use this if the box as a whole is interactible AND a border around the
+ * box is necessary for usability. */
+@def BOX_SHADOW 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.2);
+
+/* Background for boxes that are being hovered over. */
+@def HOVER_BACKGROUND rgba(40, 84, 144, 0.1);
+
+/* Background for boxes that are selected. */
+@def SELECTED_BACKGROUND rgba(40, 84, 144, 0.2);
+
+/* Background for boxes that are selected when the view is inactive. */
+@def INACTIVE_SELECTED_BACKGROUND rgba(0, 0, 0, 0.1);
+
+/* Background for boxes containing error information. */
+@def ERROR_BACKGROUND #FFF1A8;
+
+/* Shadow effect used around any box that uses the Google Now card styling. */
+@def CARD_BOX_SHADOW 0 2px 6px rgba(0, 0, 0, 0.3), 0 -3px 8px rgba(0, 0, 0, 0.2);
+
+/* As above, but for high-res devices. */
+@def CARD_BOX_SHADOW_HIGHRES 0 4px 12px rgba(0, 0, 0, 0.3), 0 -6px 16px rgba(0, 0, 0, 0.2);
+
+/* Background color of primary Google Now-style cards. */
+@def CARD_BACKGROUND #fff;
+
+/* Background color of secondary Google Now-style cards. */
+@def SECONDARY_CARD_BACKGROUND #f8f8f8;
+
+/* Background color for cards or card regions expressing errors or warnings. */
+@def CARD_ERROR_BACKGROUND #F9EDBE;
+
+/* geo/earth/common/ui.gss */
+@def BUTTON_FONT_SIZE 10pt;
+
+@def BUTTON_PADDING 3px 6px;
+@def BUTTON_GRADIENT -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#e1e1e1));
+@def BUTTON_HOVER_GRADIENT BUTTON_GRADIENT;
+@def BUTTON_ACTIVE_GRADIENT -webkit-gradient(linear, left top, left bottom, from(#5883be), to(#7fa6db));
+@def BUTTON_CHECKED_GRADIENT -webkit-gradient(linear, left bottom, left top, from(#5883be), to(#7fa6db));
+@def BUTTON_HOVER_CHECKED_GRADIENT -webkit-gradient(linear, left bottom, left top, from(#38629e), to(#7fa6db));
+@def BUTTON_ACTIVE_CHECKED_GRADIENT -webkit-gradient(linear, left top, left bottom, from(#38629e), to(#5883be));
+@def BUTTON_BORDER 1px solid #aaa;
+@def BUTTON_HOVER_BORDER 1px solid #5883be;
+@def BUTTON_ACTIVE_BORDER BUTTON_HOVER_BORDER;
+@def BUTTON_CHECKED_BORDER BUTTON_HOVER_BORDER;
+@def BUTTON_HOVER_CHECKED_BORDER 1px solid #38629e;
+@def BUTTON_ACTIVE_CHECKED_BORDER BUTTON_HOVER_CHECKED_BORDER;
+@def BUTTON_BORDER_RADIUS 3px;
+@def BUTTON_TEXT_COLOR black;
+@def BUTTON_HOVER_TEXT_COLOR BUTTON_TEXT_COLOR;
+@def BUTTON_ACTIVE_TEXT_COLOR white;
+@def BUTTON_CHECKED_TEXT_COLOR BUTTON_ACTIVE_TEXT_COLOR;
+@def BUTTON_HOVER_CHECKED_TEXT_COLOR BUTTON_ACTIVE_TEXT_COLOR;
+@def BUTTON_ACTIVE_CHECKED_TEXT_COLOR BUTTON_ACTIVE_TEXT_COLOR;
+
+@def INPUT_FONT_SIZE BUTTON_FONT_SIZE;
+@def INPUT_PADDING 3px 5px;
+@def INPUT_BOX_SHADOW inset 0 1px 2px rgba(0,0,0,0.1);
+@def INPUT_BORDER_RADIUS 1px;
+@def INPUT_BORDER 1px solid #d9d9d9;
+@def INPUT_TOP_BORDER 1px solid #c0c0c0;
+@def INPUT_HOVER_BORDER 1px solid #b9b9b9;
+@def INPUT_HOVER_TOP_BORDER 1px solid #a0a0a0;
+@def INPUT_FOCUSED_BORDER BUTTON_HOVER_BORDER;
+
+@def SPINNER_SIZE 16px;
+@def SPINNER_OFFSET_MARGIN -4px;
+@def SPINNER_IMAGE url('//www.google.com/images/vsli1.gif');
+
+.goog-custom-button {
+  display: inline-block;
+  padding: BUTTON_PADDING;
+  cursor: default;
+}
+
+.goog-custom-button, button, input[type='submit'] {
+  background: BUTTON_GRADIENT;
+  border: BUTTON_BORDER;
+  color: BUTTON_TEXT_COLOR;
+  -webkit-border-radius: BUTTON_BORDER_RADIUS;
+  font-size: BUTTON_FONT_SIZE;
+}
+.goog-custom-button-hover, button:hover, input[type='submit']:hover {
+  background: BUTTON_HOVER_GRADIENT;
+  border: BUTTON_HOVER_BORDER;
+  color: BUTTON_HOVER_TEXT_COLOR;
+}
+.goog-custom-button-active, button:active, input[type='submit']:active {
+  background: BUTTON_ACTIVE_GRADIENT;
+  border: BUTTON_ACTIVE_BORDER;
+  color: BUTTON_ACTIVE_TEXT_COLOR;
+}
+.goog-custom-button-checked {
+  background: BUTTON_CHECKED_GRADIENT;
+  border: BUTTON_CHECKED_BORDER;
+  color: BUTTON_CHECKED_TEXT_COLOR;
+}
+.goog-custom-button-checked.goog-custom-button-hover {
+  background: BUTTON_HOVER_CHECKED_GRADIENT;
+  border: BUTTON_HOVER_CHECKED_BORDER;
+  color: BUTTON_HOVER_CHECKED_TEXT_COLOR;
+}
+.goog-custom-button-checked.goog-custom-button-active {
+  background: BUTTON_ACTIVE_CHECKED_GRADIENT;
+  border: BUTTON_ACTIVE_CHECKED_BORDER;
+  color: BUTTON_ACTIVE_CHECKED_TEXT_COLOR;
+}
+.goog-custom-button-disabled, button:disabled, input[type='submit']:disabled {
+  background: BUTTON_GRADIENT;
+  border: BUTTON_BORDER;
+  color: BUTTON_TEXT_COLOR;
+  -webkit-border-radius: BUTTON_BORDER_RADIUS;
+  font-size: BUTTON_FONT_SIZE;
+  opacity: 0.5;
+}
+
+input[type="text"] {
+  font-size: INPUT_FONT_SIZE;
+  border: INPUT_BORDER;
+  border-top: INPUT_TOP_BORDER;
+  border-radius: INPUT_BORDER_RADIUS;
+  padding: INPUT_PADDING;
+}
+
+input[type="text"]:hover {
+  border: INPUT_HOVER_BORDER;
+  border-top: INPUT_HOVER_TOP_BORDER;
+  -webkit-box-shadow: INPUT_BOX_SHADOW;
+}
+
+input[type="text"]:focus{
+  outline: none;
+  border: INPUT_FOCUSED_BORDER;
+  -webkit-box-shadow: INPUT_BOX_SHADOW;
+}
+
+.spinner {
+  display: none;
+  margin-bottom: SPINNER_OFFSET_MARGIN;
+  width: SPINNER_SIZE;
+  height: SPINNER_SIZE;
+  -webkit-background-size: SPINNER_SIZE SPINNER_SIZE;
+  background-image: SPINNER_IMAGE;
+}
+
+/* @group Menu */
+
+.goog-menu {
+  cursor: default;
+  outline: none;
+  position: absolute;
+  z-index: 20000; /* Arbitrary, but some apps depend on it... */
+}
+
+.goog-menu-jfk {
+  font: normal 13px Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  border-width: 6px 7px 9px;
+  -webkit-border-image: url('../common/static/20111010-menu-border.png') 6 7 9 stretch;
+}
+
+/* State: resting. */
+.goog-menuitem {
+  list-style: none;
+  white-space: nowrap;
+}
+
+.goog-menu-jfk .goog-menuitem {
+  margin: 0 -4px;
+  color: #222;
+  background: #fff;
+  font: normal 13px Arial, sans-serif;
+  list-style: none;
+  padding: 6px 44px 6px 16px;
+  white-space: nowrap;
+  -webkit-transition: background 0.130s;
+}
+
+.goog-menu-jfk .goog-menuitem:first-child {
+  margin-top: -4px;
+}
+
+.goog-menu-jfk .goog-menuitem-content {
+  color: #333;
+  font: normal 13px Arial, sans-serif;
+}
+
+/* State: disabled. */
+.goog-menuitem-disabled .goog-menuitem-accel,
+.goog-menuitem-disabled .goog-menuitem-content {
+  color: #ccc !important;
+}
+
+/* State: hover. */
+.goog-menu-jfk .goog-menuitem-highlight,
+.goog-menu-jfk .goog-menuitem-hover {
+  background-color: #eee;
+}
+
+.goog-menuseparator {
+  list-style: none;
+}
+
+.goog-menu-jfk .goog-menuseparator {
+  border-top: 1px solid #ebebeb;
+  margin: 9px 0;
+  padding: 0;
+}
+
+
+/* @group Mac */
+
+.goog-menu-mac {
+  padding: 0;
+  border-width: 34px 33px 32px;
+  -webkit-border-image: url('../common/static/20111010-menu-border-mac.png') 34 33 32 stretch;
+}
+
+.goog-menu-mac .goog-menuitem {
+  list-style-type: none;
+  line-height: 17px;
+  padding: 0 16px;
+  margin: 0 -17px;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+}
+
+.goog-menu-mac .goog-menuitem:first-child {
+  margin-top: -22px;
+}
+
+.goog-menu-mac .goog-menuitem:last-child {
+  margin-bottom: -3px;
+}
+
+.goog-menu-mac .goog-menuitem-content {
+  font: 14px "Lucida Grande";
+  position: relative;
+  top: -1px;
+}
+
+.goog-menu-mac .goog-menuitem-highlight, .goog-menu-mac .goog-menuitem-hover {
+  background-image: -webkit-gradient(
+      linear,
+      left bottom,
+      left top,
+      color-stop(0, rgb(32,96,246)),
+      color-stop(1, rgb(99,136,248))
+  );
+  border-top: 1px solid #5A80EE;
+  border-bottom: 1px solid #0D53EC;
+}
+
+.goog-menu-mac .goog-menuitem-highlight .goog-menuitem-content, .goog-menu-macs .goog-menuitem-hover .goog-menuitem-content {
+  color: white;
+}
+
+.goog-menu-mac .goog-menuitem-blinking {
+  background: none;
+  border-color: transparent;
+}
+
+.goog-menu-mac .goog-menuitem-blinking .goog-menuitem-content {
+  color: black;
+}
+
+.goog-menu-mac .goog-menuseparator {
+  margin: 8px -16px;
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, .1);
+}
+
+/* @end */
+
+/* @end */
+
+/* geo/earth/kmlrender/kmltree_qt.gss */
+/**
+ * Copyright 2011 Google Inc. All Rights Reserved.
+ *
+ * GSS styles for the KmlTree and KmlTreeNode controls.
+ *
+ * This version makes profligate use of border-image to accomplish the shadow
+ * and rounded corner effects because QtWebKit can't deal with soft box shadows
+ * or anti-aliased border-radius corners.  The use of border-image creates a
+ * lot of complexity which has to be hacked around, so if you make any changes
+ * to this file, it would be a good idea to make equivalent changes to
+ * kmltree.gss as well to make it easier to switch when QtWebKit stops sucking
+ * so much. (The QtWebKit in Qt 4.8 correctly supports box-shadow.)
+ *
+ * This file contains a lot of child selectors ('>') because nodes are
+ * contained within other nodes, so the usual descendant selectors would match
+ * too much. Unfortunately this often forces us to specify each step of a
+ * hierarchy in our selector (we want something like "a .name whose nearest
+ * ancestor that has the .goog-earth-kmltreenode class also has the .goog-
+ * earth-kmltreenode-leaf class", but there's no way to express that in CSS).
+ *
+ * TODO(phoenix): See if this can be accomplished cleanly using overrides.
+ */
+
+/* @group GSS Defs */
+@def CONTAINER_CONTENT_BACKGROUND_COLOR #FFF;
+@def ROOT_CONTAINER_BACKGROUND_GRADIENT -webkit-gradient(linear, left top, right top, from(#F1F1F1), color-stop(.5, #F6F6F6), to(#F1F1F1));
+
+@def CONTAINER_HEADER_BACKGROUND_COLOR #FFF;
+
+@def NODE_CONTENT_TOP_BORDER_WIDTH 1px;
+@def NODE_CONTENT_TOP_BORDER NODE_CONTENT_TOP_BORDER_WIDTH solid rgba(0, 0, 0, .08);
+
+@def NODE_BORDER_RADIUS 2px;
+@def NODE_BORDER_IMAGE url('static/20110829-node-border.png') 6 7 9 7;
+@def NODE_BORDER_WIDTH 6px 7px 9px 7px;
+@def NODE_BORDER_OUTSET -4px;
+@def DOUBLE_NODE_BORDER_OUTSET plus(NODE_BORDER_OUTSET, NODE_BORDER_OUTSET, px);
+@def DOUBLE_NODE_BORDER_OUTSET_MINUS_ONE minus(DOUBLE_NODE_BORDER_OUTSET, 1, px);
+
+@def NODE_CONTENT_SHADOW_TOP_MARGIN minus(NODE_CONTENT_TOP_BORDER_WIDTH, NODE_BORDER_OUTSET, px);
+
+@def CONTAINER_HEADER_TEXT_SHADOW 0 1px 0 rgba(255, 255, 255, 1);
+
+@def SELECTED_TEXT_SHADOW 0 -1px 0 rgba(0, 0, 0, .33);
+
+@def FOCUS_BOX_SHADOW inset 0 0 0 1px #4D90FE;
+
+@def NODE_INDENTATION 8px;
+
+@def CHECKMARK_BUTTON_SIZE 16px;
+@def CHECKMARK_MARGIN 0 4px 0 0;
+@def CHECKMARK_IMG_URL url('static/20111028-checkmark.png');
+@def CHECKMARK_DISABLED_OPACITY 0.2;
+@def CHECKMARK_ANCESTOR_DISABLED_OPACITY 0.33;
+@def CHECKMARK_ENABLED_OPACITY 0.55;
+
+/* @end */
+
+/* Use the Earth blue for all links in KmlTree (for now). */
+a, a b, a strong, a.secondary, a.secondary b, a.secondary strong {
+ color: EARTH_LINK_COLOR;
+}
+
+/* Default styles for all features. */
+.KmlFeature {
+  position: relative;  /* Make this the offset for absolutely positioned children. */
+  color: DEFAULT_TEXT_COLOR;
+  border-width: NODE_BORDER_WIDTH;
+  -webkit-border-image: NODE_BORDER_IMAGE;
+  -webkit-user-drag: element;
+  margin: 0;
+}
+
+/* The expandable portion of the container. This wraps all the container's
+ * children, and exists only in container nodes. */
+.goog-zippy-wrapper {
+  position: relative;
+  left: NODE_BORDER_OUTSET;
+  top: NODE_BORDER_OUTSET;
+  margin-right: DOUBLE_NODE_BORDER_OUTSET;
+  margin-bottom: DOUBLE_NODE_BORDER_OUTSET;
+  background-color: CONTAINER_CONTENT_BACKGROUND_COLOR;
+  border-bottom-left-radius: NODE_BORDER_RADIUS;
+  border-bottom-right-radius: NODE_BORDER_RADIUS;
+  /* This value must be the inverse of .feature-header's bottom-margin. */
+  margin-top: minus(0, DOUBLE_NODE_BORDER_OUTSET_MINUS_ONE, px);
+}
+
+/* The div enclosing the contents of the node, if any. This exists even for
+ * leaf nodes, so we hide it by default and only show it for containers. */
+.goog-earth-kmltreenode-content {
+  display: none;
+}
+
+/* The header bar for the node. This contains the icon, title, and snippet (if
+ * any), and exists for both leaf and container nodes. */
+.goog-earth-kmltreenode-feature-header {
+  padding: 6px;
+  white-space: nowrap;
+}
+
+/* Containers (nodes that can have children, empty or not) */
+.goog-earth-kmltreenode-container {
+  margin: NODE_INDENTATION;
+  font-weight: bold;
+}
+
+/* The header bar for containers. */
+.goog-earth-kmltreenode-container > .goog-earth-kmltreenode-feature-header {
+  position: relative;
+  left: NODE_BORDER_OUTSET;
+  top: NODE_BORDER_OUTSET;
+  margin-right: DOUBLE_NODE_BORDER_OUTSET;
+  margin-bottom: DOUBLE_NODE_BORDER_OUTSET_MINUS_ONE;
+  border-radius: NODE_BORDER_RADIUS;
+}
+
+/* The div enclosing the contents of the container. The left margin applied
+ * here causes a noticeable indentation to this node's children to visualize the
+ * hierarchy. */
+.goog-earth-kmltreenode-container > .goog-zippy-wrapper > .goog-earth-kmltreenode-content {
+  display: block;
+  padding: NODE_INDENTATION 0;
+  margin: 0 NODE_INDENTATION;
+  border-top: NODE_CONTENT_TOP_BORDER;
+}
+
+@def NODE_CONTENT_SHADOW_FADE_DURATION .5s;
+@def NODE_CONTENT_SHADOW_HEIGHT 8px;
+@def NODE_CONTENT_SHADOW_GRADIENT url('../common/static/20121204-shadow-overlay-top.png') top left no-repeat;
+
+/* The shadow at the top of the container contents. The transition here and the
+ * opacities set in the next two rules will cause it to fade in when the
+ * container is expanded and fade back out when it's collapsed. */
+.goog-earth-kmltreenode-container > .goog-earth-kmltreenode-content-shadow {
+  -webkit-transition: opacity NODE_CONTENT_SHADOW_FADE_DURATION ease;
+  position: absolute;
+  /* Must be set, or content will draw over the shadow while the container is
+   * collapsing/expanding. */
+  z-index: 100;
+  width: 100%;
+  height: NODE_CONTENT_SHADOW_HEIGHT;
+  margin-top: NODE_CONTENT_SHADOW_TOP_MARGIN;
+  background: NODE_CONTENT_SHADOW_GRADIENT;
+  background-size:100% 100%;
+  overflow: hidden;
+}
+
+/* The shadow should be invisible when the container is closed. */
+.goog-earth-kmltreenode-closed > .goog-earth-kmltreenode-content-shadow {
+  opacity: 0;
+}
+
+/* The shadow should be visible when the container is open or opening. */
+.goog-earth-kmltreenode-open > .goog-earth-kmltreenode-content-shadow,
+.goog-earth-kmltreenode-opening > .goog-earth-kmltreenode-content-shadow {
+  opacity: 1;
+}
+
+/* The shadow should be invisible when the container is closing.  This must
+ * come after the open/opening rules due to specificity rules. */
+.goog-earth-kmltreenode-closing > .goog-earth-kmltreenode-content-shadow {
+  opacity: 0;
+}
+
+/*
+ * Visibility button base style.
+ */
+.goog-earth-kmltreenode-visibility {
+  display: inline-block;
+  width: CHECKMARK_BUTTON_SIZE;
+  height: CHECKMARK_BUTTON_SIZE;
+  margin: CHECKMARK_MARGIN;
+  background-position: left center;
+  vertical-align: top;
+  border: 0;
+}
+
+/*
+ * Visibility button: show disabled button if feature is hidden and
+ * user is hovering over the item.
+ */
+.goog-earth-kmltreenode-feature-header:hover > .goog-earth-kmltreenode-visibility {
+  background-image: CHECKMARK_IMG_URL;
+  opacity: CHECKMARK_DISABLED_OPACITY;
+}
+
+/*
+ * Visibility button: show enabled button whenever feature visible.
+ */
+.goog-earth-kmltreenode .goog-earth-kmltreenode-visibility.goog-flat-button-checked,
+.goog-earth-kmltreenode-feature-header:hover > .goog-earth-kmltreenode-visibility.goog-flat-button-checked {
+  background-image: CHECKMARK_IMG_URL;
+  opacity: CHECKMARK_ENABLED_OPACITY;
+}
+
+/*
+ * Visibility button: enabled button shows half transparent when an ancestor
+ * node is hidden.
+ */
+.goog-earth-kmltreenode-kmlhidden .goog-earth-kmltreenode-visibility.goog-flat-button-checked {
+  background-image: CHECKMARK_IMG_URL;
+  opacity: CHECKMARK_ANCESTOR_DISABLED_OPACITY;
+}
+
+/* Any container that is the first child of its parent does not need a top
+ * margin, which would normally separate it from the node above it. */
+.goog-earth-kmltreenode-container:first-child {
+  margin-top: 0;
+}
+
+/* Any container that is the last child of its parent does not need a bottom
+ * margin, which would normally separate it from the node below it. */
+.goog-earth-kmltreenode-container:last-child {
+  margin-bottom: 0;
+}
+
+/* The top-level container. Note that if the KML we're rendering is not a
+ * container, this won't match anything. */
+.goog-earth-kmltreenode-root.goog-earth-kmltreenode-container {
+  border-radius: 0;
+  margin: 0;
+  border: none;
+  border-width: 0;
+  background-image: ROOT_CONTAINER_BACKGROUND_GRADIENT;
+}
+
+/* The top-level container's header bar. */
+.goog-earth-kmltreenode-root.goog-earth-kmltreenode-container > .goog-earth-kmltreenode-feature-header {
+  left: 0;
+  top: 0;
+  margin: 0;
+}
+
+/* The expandable portion of the top-level container. */
+.goog-earth-kmltreenode-root.goog-earth-kmltreenode-container > .goog-zippy-wrapper {
+  background-color: transparent;
+  margin: 0;
+  top: 0;
+  left: 0;
+}
+
+/* The div enclosing the contents of the top-level container. We don't want to
+ * indent this node's contents as deeply as all its descendents, since it's the
+ * top-level node. */
+.goog-earth-kmltreenode-root.goog-earth-kmltreenode-container > .goog-zippy-wrapper > .goog-earth-kmltreenode-content {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+/* The shadow for the root element. */
+.goog-earth-kmltreenode-root.goog-earth-kmltreenode-container > .goog-earth-kmltreenode-content-shadow {
+  margin-top: 0;
+}
+
+/* A leaf node, that is, one that cannot have children.  Placemarks, overlays,
+ * tours, and models are all leaf nodes. */
+.goog-earth-kmltreenode-leaf {
+  font-weight: normal;
+  border: none;
+  border-width: 0;
+  -webkit-box-shadow: none;
+  background-color: transparent;
+  background-image: none;
+  margin: 0;
+}
+
+/* Hover state for leaf nodes and container headers. */
+.goog-earth-kmltreenode-leaf.goog-earth-kmltreenode-hover,
+.goog-earth-kmltreenode-container > .goog-earth-kmltreenode-feature-header:hover {
+  background: HOVER_BACKGROUND;
+}
+
+/* Nodes that have the keyboard focus, container or otherwise. By default,
+ * browsers will draw an outline around any node that has a tabindex (which
+ * these do), but we want to suppress that to draw our own border. */
+.goog-earth-kmltreenode:focus {
+  outline: none;
+}
+
+/* Apply the focused appearance to the entirety of a leaf node, but just the
+ * header of a container so it's clear what's focused. */
+.goog-earth-kmltreenode-leaf.goog-earth-kmltreenode-focused,
+.goog-earth-kmltreenode-container.goog-earth-kmltreenode-focused > .goog-earth-kmltreenode-feature-header {
+  -webkit-box-shadow: FOCUS_BOX_SHADOW;
+}
+
+/* Apply the selected appearance similarly to the focused appearance. We
+ * explicitly select the root container because otherwise other rules above
+ * would match that node more specifically and the selection would not be
+ * applied. */
+.goog-earth-kmltreenode-leaf.goog-earth-kmltreenode-selected,
+.goog-earth-kmltreenode-container.goog-earth-kmltreenode-selected > .goog-earth-kmltreenode-feature-header,
+.goog-earth-kmltreenode-root.goog-earth-kmltreenode-container.goog-earth-kmltreenode-selected > .goog-earth-kmltreenode-feature-header {
+  background: SELECTED_BACKGROUND;
+}
+
+/* Selection color for when the window is inactive.  This doesn't appear to do
+ * anything yet, but let's keep it here for when browsers start supporting it.
+ */
+.goog-earth-kmltreenode-leaf.goog-earth-kmltreenode-selected:window-inactive,
+.goog-earth-kmltreenode-container.goog-earth-kmltreenode-selected:window-inactive > .goog-earth-kmltreenode-feature-header,
+.goog-earth-kmltreenode-root.goog-earth-kmltreenode-container.goog-earth-kmltreenode-selected:window-inactive > .goog-earth-kmltreenode-feature-header {
+  background: INACTIVE_SELECTED_BACKGROUND;
+}
+
+/* The zippy within a container's header. This only exists for container nodes,
+ * so it's not necessary to explicitly exclude leaves. */
+.goog-earth-kmltreenode-zippy {
+  display: inline-block;
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background-position: center center;
+  vertical-align: middle;
+  right: 6px;
+  top: 8px;
+}
+
+/* Zippy expanded state. */
+.goog-earth-kmltreenode-zippy.goog-zippy-expanded {
+  background-image: url('static/20110726-zippy-open.png');
+}
+
+/* Zippy expanded and hovered state. */
+.goog-earth-kmltreenode-zippy.goog-zippy-expanded:hover {
+  /* TODO(phoenix): use a sprite sheet here. */
+  background-image: url('static/20110726-zippy-open-hover.png');
+}
+
+/* Zippy expanded and pressed state. */
+.goog-earth-kmltreenode-zippy.goog-zippy-expanded:active {
+  /* TODO(phoenix): use a sprite sheet here. */
+  background-image: url('static/20110726-zippy-open-active.png');
+}
+
+/* Zippy collapsed state. */
+.goog-earth-kmltreenode-zippy.goog-zippy-collapsed {
+  background-image: url('static/20110726-zippy.png');
+}
+
+/* Zippy collapsed and hovered state. */
+.goog-earth-kmltreenode-zippy.goog-zippy-collapsed:hover {
+  /* TODO(phoenix): use a sprite sheet here. */
+  background-image: url('static/20110726-zippy-hover.png');
+}
+
+/* Zippy collapsed and pressed state. */
+.goog-earth-kmltreenode-zippy.goog-zippy-collapsed:active {
+  /* TODO(phoenix): use a sprite sheet here. */
+  background-image: url('static/20110726-zippy-active.png');
+}
+
+/* The menu button within the header of all nodes. By default, the menu button
+   is hidden. */
+.goog-earth-kmltreenode-feature-header > .goog-menu-button {
+  display: none;
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background-image: url('static/20110726-menu.png');
+  background-position: center center;
+  right: 6px;
+  top: 8px;
+}
+
+/* Move the menu button for containers over so it doesn't lie on top of the
+   zippy button. */
+.goog-earth-kmltreenode-container > .goog-earth-kmltreenode-feature-header > .goog-menu-button {
+  right: 24px;
+}
+
+/* When the node is hovered, show the menu button so it can be clicked. */
+.goog-earth-kmltreenode-feature-header:hover > .goog-menu-button {
+  display: inline-block;
+}
+
+/* Menu button hover appearance, which is only used when the button itself is
+ * hovered, not just the node that contains it. */
+.goog-earth-kmltreenode-feature-header > .goog-menu-button:hover {
+  /* TODO(phoenix): use a sprite sheet here. */
+  background-image: url('static/20110726-menu-hover.png');
+}
+
+/* Menu button pressed appearance. */
+.goog-earth-kmltreenode-feature-header > .goog-menu-button:active {
+  /* TODO(phoenix): use a sprite sheet here. */
+  background-image: url('static/20110726-menu-active.png');
+}
+
+/* Menu button opened appearance. This is visually identical to the pressed
+ * appearance, but is used when the menu is visible and the mouse has left the
+ * button region. Hover and active states are selected too so that the above
+ * rules don't override due to higher specificity. */
+.goog-earth-kmltreenode-feature-header > .goog-menu-button-open,
+.goog-earth-kmltreenode-feature-header > .goog-menu-button-open:hover,
+.goog-earth-kmltreenode-feature-header > .goog-menu-button-open:active {
+  display: inline-block;
+  /* TODO(phoenix): use a sprite sheet here. */
+  background-image: url('static/20110726-menu-active.png');
+}
+
+/* Name of the feature. */
+.goog-earth-kmltreenode-name {
+  display: inline-block;
+  vertical-align: top;
+  position: relative;
+  cursor: default; /* Use default cursor since it's not selectable anyway. */
+  white-space: normal;
+  margin-right: 32px;
+}
+
+/* Snippet of the feature, if any. */
+.goog-earth-kmltreenode-snippet {
+  font-size: 11px !important;
+  color: SNIPPET_COLOR;
+  margin: 4px 0 0 20px;
+  max-height: 6em;
+  overflow: hidden;
+  cursor: default;
+  white-space: normal;
+  margin-right: 32px;
+}
+
+/* Any sub-elements of the snippet get their font size forced.  This is marked
+ * !important so that even if the snippet contents have CSS applied, this will
+ * (usually) override. */
+.goog-earth-kmltreenode-snippet * {
+  font-size: 11px !important;
+}
+
+/* @group Icons */
+/* Icon of the feature. */
+.goog-earth-kmltreenode-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  /* Resize background image to fit the div (CSS3). */
+  background-size: auto 16px;
+  /* Resize background image to fit the div (FF). */
+  -moz-background-size: cover;
+  margin-right: 4px;
+  background-position: center top;
+  background-repeat: no-repeat;
+  vertical-align: top;
+}
+/* TODO(phoenix): Make a Kennedy-style document icon as well? */
+.KmlDocumentIcon {
+  background-image: url('static/20110726-document.png');
+  margin-left: 4px;
+}
+.KmlFolderIcon {
+  background-image: url('static/20111028-icon-folder.png');
+  opacity: 0.55;
+}
+.goog-earth-kmltreenode-open > .goog-earth-kmltreenode-feature-header > .KmlFolderIcon,
+.goog-earth-kmltreenode-opening > .goog-earth-kmltreenode-feature-header > .KmlFolderIcon {
+  background-image: url('static/20111028-icon-folder-open.png');
+  opacity: 0.55;
+}
+.KmlTourIcon {
+  background-image: url('static/20111028-icon-tour.png');
+  opacity: 0.55;
+}
+.KmlGroundOverlayIcon {
+  background-image: url('static/20111028-icon-overlay-ground.png');
+  opacity: 0.55;
+}
+.KmlScreenOverlayIcon {
+  background-image: url('static/20111028-icon-overlay-screen.png');
+  opacity: 0.55;
+}
+.KmlPhotoOverlayIcon {
+  background-image: url('static/20111028-icon-overlay-photo.png');
+  opacity: 0.55;
+}
+.KmlPlacemarkIcon {
+  background-image: url('static/20111028-icon-placemark.png');
+  opacity: 0.55;
+}
+.KmlPointIcon {
+  background-image: url('static/20111028-icon-placemark.png');
+  opacity: 0.55;
+}
+.KmlPolygonIcon {
+  background-image: url('static/20111028-icon-polygon.png');
+  opacity: 0.55;
+}
+.KmlLineStringIcon {
+  background-image: url('static/20111028-icon-linestring.png');
+  opacity: 0.55;
+}
+.KmlLinearRingIcon {
+  background-image: url('static/20111028-icon-linearring.png');
+  opacity: 0.55;
+}
+.KmlModelIcon {
+  background-image: url('static/20111028-icon-model.png');
+  opacity: 0.55;
+}
+.KmlMultiGeometryIcon {
+  background-image: url('static/20111028-icon-placemark.png');
+  opacity: 0.55;
+}
+.KmlNetworkLinkIcon {
+  background-image: url('static/20111212-icon-networklink.png');
+  opacity: 0.55;
+}
+
+/* @end */
+
+.goog-earth-kmltreenode-context-menu {
+  position: absolute;
+  left: -1024px;  /* Hide menu initially. */
+}

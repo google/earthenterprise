@@ -1,0 +1,682 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+ 
+  
+
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/flash/overlays.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Google Maps API for Flash Overlays - Google Maps API for Flash - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/html/apis/maps/documentation/flash/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../css/iehacks.css"><![endif]-->
+
+<link href="../local_extensions.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps API for Flash</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="index.html" title="Google Maps API for Flash home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="intro.html" class="selected" title="Official Google Maps API for Flash documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../faq.html" title="Answers to frequently asked questions about Google Maps API for Flash">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="articles.html" title="Focused articles and tutorials for Google Maps API for Flash developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps API for Flash blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="forum.html" title="Google Maps API for Flash developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../../terms.html" title="Google Maps API for Flash terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <a name="gc-toc-anchor"></a>  
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../../index.html">Maps API Family</a></li>
+  <li><a href="../../signup.html">Sign up for an API key</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+  <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a class="tlw-expanded" href="intro.html">Developer Guide</a>
+            <ul>
+              <li><h2 class="tlw-expanded">Tutorials</h2>
+                <ul>
+                  <li><a href="tutorial-flex.html">Flex SDK</a></li>
+                  <li><a href="tutorial-flexbuilder.html">FlexBuilder</a></li>
+                  <li><a href="tutorial-flash.html">Flash CS3</a></li>                
+                </ul>              
+              </li>
+              <li><a href="basics.html">Basics</a></li>
+              <li><a href="events.html">Events</a></li>
+              <li><a href="controls.html">Controls</a></li>
+              <li><a href="overlays.html">Overlays</a></li>
+              <li><a href="services.html">Services</a></li>
+              <li><a href="maptypes.html">Map Types</a></li>           
+              <li><a href="3d-maps.html">3D Maps</a></li>
+            </ul>                                
+          </li>
+          <li><a href="reference.html">API Reference</a></li>
+          <li><h2 class="tlw-expanded">Code Samples:</h2>
+            <ul>
+              <li><a href="demogallery.html">Demos</a></li>
+              <li><a href="examples/index.html">Examples</a></li>
+            </ul>
+          </li>
+          <li><h2 class="tlw-expanded">More Resources:</h2>
+               <ul>
+               <li><a href="articles.html">Articles</a></li>
+               <li><a href="mediagallery.html">Presentations</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/issues/list?can=2&q=apitype%3AFlash&colspec=ID+Type+Status+Introduced+Fixed+Summary+Internal+Stars&cells=tiles">Known Issues</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/wiki/MapsAPIforFlashChangelog">Changelog</a><sup class="new">New!</sup></li>
+               <li><a href="http://code.google.com/p/gmaps-utility-library-flash/">Utility Library</a></li>
+              </ul>
+           </li>
+        </ul>
+      </li>
+    </ul>    
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps JavaScript API V3</h2>
+         <ul>
+           <li><a href="../javascript/index.html">Home Page</a></li>
+           <li><a href="../javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+            <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../mapsdata/index.html">Home Page</a></li>
+          <li><a href="../mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+      <ul>
+        <li><h2><a href="../webservices/index.html">Maps API Web Services</a></h2>
+         <ul>
+           <li><a href="../geocoding/index.html">Geocoding API</a></li>
+           <li><a href="../directions/index.html">Directions API</a></li>
+           <li><a href="../elevation/index.html">Elevation API</a></li>
+           <li><a href="../places/index.html">Places API</a></li>
+         </ul>
+       </li>
+      </ul>
+       <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+    <div class="promo">
+      <p><a href="../premier/index.html">Google Maps API Premier</a></p>
+      <p>Includes enterprise licensing and support</p>
+    </div>
+
+      </div>
+      
+      <a name="gc-pagecontent-anchor"></a>   
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Google Maps API for Flash Overlays</h1>
+
+  
+<div class="toc">
+  <ol>
+  <li><a href="#Overlays_Overview">Map Overlays Overview</a>
+  <li><a href="#Markers">Markers</a>
+  <ol>
+    <li><a href="#Draggable_Markers">Draggable Markers</a></li>
+    <li><a href="#Icons_Overview">Icons</a></li>
+  </ol>
+  </li>
+  <li><a href="#Polylines_Overview">Polylines</a>
+  <ol>
+  	<li><a href="#Drawing_Polylines">Drawing Polylines</a></li>
+    <li><a href="#Encoded_Polylines">Encoded Polylines</a></li>
+  </ol>
+  </li>
+  <li><a href="#Polygons_Overview">Polygons</a></li>
+  <li><a href="#Ground_Overlays">Ground Overlays</a></li>
+  </ol>
+</div>
+
+<h1 id="Overlays_Overview">Map Overlays Overview</h1>
+
+<p>Overlays are objects on the map that are tied to latitude/longitude 
+coordinates, so they move when you drag or zoom the map. Overlays reflect
+objects that you "add" to the map to designate points, lines, or areas.</p>
+
+<p>The Maps API has several types of overlays:
+<ul>
+<li>Points on the map are displayed using <b>markers</b>, and often 
+display a custom icon. Markers are objects of type <code>Marker</code> 
+and may use custom visual objects as icons.</li>
+<li>Lines on the map are displayed using <b>polylines</b> (representing a 
+collection of points). Lines are objects of type <code>Polyline</code>.</li>
+<li>Areas on the map are displayed either as <b>polygons</b> if they
+are areas of an arbitrary shape or as <b>ground overlays</b> if they
+are rectangular. Polygons are similar to polylines in that they consist 
+of a collection of points with a closed loop and may take any shape. 
+Ground overlays are often used for areas that map either directly or
+indirectly to tiles on the map.</li>
+<li>Map tiles may be displayed using a <b>tile overlay</b>. You can
+create your own set of tiles by using a 
+<code>TileLayerOverlay</code> or even by creating your map type
+using a <code>MapType</code>.</li>
+<li>The <b>info window</b> is also a special kind of overlay. Note, however, that
+the info window is added to the map automatically, and that there can only be one
+object of type <code>InfoWindow</code> attached to a map.</li>
+</ul>
+
+<p>Each overlay extends the <code>IOverlay</code> interface. Overlays
+can be added to a map using the <code>Map.addOverlay()</code> method and
+removed using the <code>Map.removeOverlay()</code> method. (Note that
+the info window is added by default to the map, though it is not initially
+visible.)</p>
+
+<h1 id="Markers">Markers</h1>
+
+<p>Markers identify points on the map. The <code>Marker</code> 
+constructor takes a <code>LatLng</code> and an 
+optional <code>MarkerOptions</code> object as arguments. This
+<code>MarkerOptions</code> objects allows you to override default
+implementations for markers.</p>
+
+<p>Markers are designed to be interactive. By default, they
+receive <code>MapMouseEvent.CLICK</code> events, for example, and are often
+used within event listeners to bring up info windows.</p>
+
+<pre class="prettyprint">
+private function onMapReady(event:Event):void {
+  map.setCenter(new LatLng(37.4419, -122.1419), 13, MapType.NORMAL_MAP_TYPE);
+
+  var markerA:Marker = new Marker(
+      new LatLng(48.858842, 2.346997),
+      new MarkerOptions({
+		  strokeStyle: new StrokeStyle({color: 0x987654}),
+		  fillStyle: new FillStyle({color: 0x223344, alpha: 0.8}),
+		  radius: 12,
+		  hasShadow: true
+      }));
+  map.addOverlay(markerA);
+}
+</pre>
+
+<p><a href="http://gmaps-samples-flash.googlecode.com/svn/trunk/examples/MarkerSimple.html">View example (MarkerSimple.html)</a></p>
+
+<p><a href="http://code.google.com/p/gmaps-samples-flash/source/browse/trunk/samplecode/MarkerSimple.mxml">
+View Source (MarkerSimple.mxml)</a></p>
+
+<h2 id="Draggable_Markers">Draggable Markers</h2>
+
+<p>Markers are interactive objects that can be clicked on and dragged to a new location. 
+In this example, we place a draggable marker on the map, and listen to a few of its 
+simpler events. Draggable markers implement four events to indicate their drag status:
+<code>CLICK</code>, <code>DRAG_START</code>, <code>DRAG</code> 
+and <code>DRAG_END</code>. By default, markers are clickable but not draggable, 
+so they need to be initialized with the additional <code>MarkerOption</code> 
+property <code>draggable</code> set to true.</p>
+
+<pre class="prettyprint">
+private function onMapReady(event:Event):void {
+  map.setCenter(new LatLng(37.4419, -122.1419), 13, MapType.NORMAL_MAP_TYPE);
+
+  var marker:Marker = new Marker(map.getCenter(), new MarkerOptions({draggable: true}));
+  marker.addEventListener(MapMouseEvent.DRAG_START, function(event:Event):void {
+    map.closeInfoWindow();
+  });
+
+  marker.addEventListener(MapMouseEvent.DRAG_END, function(event:Event):void {
+    marker.openInfoWindow(new InfoWindowOptions({content:"Just bouncing along..."}));
+  });
+
+  map.addOverlay(marker);
+}
+</pre>
+
+<p><a href="http://gmaps-samples-flash.googlecode.com/svn/trunk/examples/MarkerDrag.html">View example (MarkerDrag.html)</a></p>
+
+<p><a href="http://code.google.com/p/gmaps-samples-flash/source/browse/trunk/samplecode/MarkerDrag.mxml">
+View Source (MarkerDrag.mxml)</a></p>
+
+<h2 id="Icons_Overview">Icons</h2>
+
+<p>By default, markers use a standard Google mini-balloon similar to that shown on 
+<code>maps.google.com</code> to indicate placements. You may modify the standard
+display of a <code>Marker</code> by specifying <code>MarkerOptions</code> upon
+construction of the marker. For example, if the 
+<code>Marker</code> is constructed with a <code>MarkerOptions.label</code> property, 
+the marker will also show that alpha-numeric character within the marker
+geometry.</P>
+
+<p>Markers may also define a graphic <code>DisplayObject</code> to show in place of the 
+default icon. Icons are generally defined by setting the following properties:</P>
+
+<ul>
+<li><code>icon</code> defines the icon as a <code>DisplayObject</code>.</li>
+<li><code>iconAlignment</code> defines how the icon is anchored 
+to the reference point for the marker's location. The following values are valid:
+<ul>
+<li>ALIGN_TOP</li>
+<li>ALIGN_BOTTOM</li>
+<li>ALIGN_RIGHT</li>
+<li>ALIGN_LEFT</li>
+<li>ALIGN_HORIZONTAL_CENTER</li>
+<li>ALIGN_VERTICAL_CENTER</li>
+</ul>
+
+</li>
+<li><code>iconOffset</code> defines an offset (used in tandem with the 
+<code>iconAlignment</code> above) as a <code>Point</code> {x,y} pixel value.</li>
+</ul>
+
+<pre class="prettyprint">
+private function onMapReady(event:Event):void {
+  var markerOptions:MarkerOptions = new MarkerOptions();
+  markerOptions.icon = new purpleIcon();
+  markerOptions.tooltip = "Purple";
+  markerOptions.iconAlignment = MarkerOptions.ALIGN_HORIZONTAL_CENTER;
+  markerOptions.iconOffset = new Point(2, 2);
+ 
+  var marker:Marker = new Marker(map.getCenter(), markerOptions);
+  map.addOverlay(marker);
+}
+</pre>
+
+<p><a href="http://gmaps-samples-flash.googlecode.com/svn/trunk/examples/IconSimple.html">View example (IconSimple.html)</a></p>
+
+<p><a href="http://code.google.com/p/gmaps-samples-flash/source/browse/trunk/samplecode/IconSimple.mxml">
+View Source (IconSimpleSimple.mxml)</a></p>
+
+<h1 id="Polylines_Overview">Polylines</h1>
+
+<p><code>Polyline</code> objects create a linear overlay on the map. A 
+<code>Polyline</code> consists of a series of points and creates a series 
+of line segments that connect those points in an ordered sequence.
+
+<h2 id="Drawing_Polylines">Drawing Polylines</h2>
+
+<p>Polylines are drawn as a series of straight segments on the map. You can specify 
+custom colors, line thicknesses, and opacities for the line. Colors should use
+a numeric value in <code>com.google.maps.Color</code>. 
+<code>Polyline</code> does not understand named colors.</p>
+
+<p>Polyline attributes are specified within a <code>PolylineOptions</code>
+object. The following polyline options are currently supported:</p>
+
+<ul>
+<li><code>geodesic</code> specifies that the polyline should be drawn between
+two points as a geodesic ("great circle").</li>
+<lI><code>strokeStyle</code> specifies the <code>StrokeStyle</code> to use
+when drawing the polyline.</lI>
+</ul>
+
+<p>The following code snippet creates a 4-pixel-wide red polyline between two points:</p>
+
+<pre class="prettyprint">
+private function onMapReady(event:MapEvent):void {
+  map.setCenter(new LatLng(37.4419, -122.1419), 13, MapType.NORMAL_MAP_TYPE);
+
+  // Polyline overlay.
+  var polyline:Polyline = new Polyline([
+      new LatLng(37.4419, -122.1419),
+      new LatLng(37.4519, -122.1519)
+      ], new PolylineOptions({ strokeStyle: new StrokeStyle({
+	    color: 0xFF0000,
+	    thickness: 4,
+	    alpha: 0.7})
+  }));
+    	
+  map.addOverlay(polyline);
+}
+</pre>
+
+<p><a href="http://gmaps-samples-flash.googlecode.com/svn/trunk/examples/PolylineSimple.html">View example 
+(PolylineSimple.html)</a></p>
+
+<p><a href="http://code.google.com/p/gmaps-samples-flash/source/browse/trunk/samplecode/PolylineSimple.mxml">
+View Source (PolylineSimple.mxml)</a></p>
+
+<h2 id="Encoded_Polylines">Encoded Polylines</h2>
+
+<p>The <code>Polyline</code> object within a Google map denotes a line as a 
+series of points, making it easy to use but not necessarily compact. Long and 
+complicated lines require a fair amount of memory, and often may take longer to 
+draw. Also, the individual segments within an unencoded polyline are drawn on the
+map regardless of their resolution at larger zoom levels.</p>
+
+<p>The Google Maps API for Flash allows you to represent paths using encoded polylines, 
+which specify a series of points within a <code>Polyline</code> using a 
+compressed format of ASCII characters.</p>
+
+<p>An encoded <code>Polyline</code> appears below 
+(for now, don't worry about particulars of the encoding algorithm).</p>
+
+<pre class="prettyprint">
+// Add an encoded polyline.
+var encodedPoints:String = "iuowFf{kbMzH}N`I@yzCv^k@?mI";
+var encodedLevels:String = "B?B";
+ 
+var encodedPolyline:Polyline = Polyline.fromEncoded(
+    new EncodedPolylineData(encodedPoints, 32, encodedLevels, 4), 
+    new PolylineOptions({ strokeStyle: new StrokeStyle({
+        color: 0x0000ff,
+        thickness: 4,
+        alpha: 0.7})
+    }));
+map.addOverlay(encodedPolyline);
+}
+</pre>
+
+<p>There are two things to notice about this code.
+<ol>
+<li>
+First, the series of points is represented as a series of ASCII characters in 
+the encoded polyline, while familiar latitude and longitudes are used in the 
+basic <code>Polyline</code>. The algorithm for creating these points as a 
+series of encoded ASCII values is documented <a href="../polylinealgorithm.html">
+here</a>. This algorithm is needed if you wish to calculate encoded polylines 
+on the fly via a server process, for example.</a>.
+</li>
+<li>
+Second, the encoded polyline also allows you to specify the maximum zoom level for each line segment 
+to draw itself on a Google map. If a point is not shown on a higher zoom level, the path is simply drawn 
+from the previous displayable point to the next displayable point. Note that this feature is not available 
+within non-encoded <code>Polyline</code>s and is especially useful for allowing fast drawing at high zoom 
+levels, where the details of some line segments may not be relevant. For example, an encoded polyline 
+representing a drive from New York City to Chicago should not care about the line segments representing 
+particular streets in Manhattan when the map is zoomed out to the state level.
+</li>
+</ol>
+
+<p><a href="http://gmaps-samples-flash.googlecode.com/svn/trunk/examples/PolylineEncoding.html">View example (PolylineEncoding.html)</a></p>
+
+<p><a href="http://code.google.com/p/gmaps-samples-flash/source/browse/trunk/samplecode/PolylineEncoding.mxml">
+View Source (PolylineEncoding.mxml)</a></p>
+
+<p>See <a href="../polylinealgorithm.html">Polyline Algorithm</a> for 
+information on the underlying encoded polyline algorithm.</p>
+
+<h1 id="Polygons_Overview">Polygons</h1>
+
+<p><code>Polygon</code> objects are similar to <code>Polyline</code> objects
+in that they consist of a series of points in an ordered sequence. However,
+instead of being open-ended, polygons are designed to define regions within a
+closed loop. As with polylines, you can define custom colors, line thicknesses, and
+ opacities for the edge of the polygon (the "line") and custom colors and
+ opacities for the fill area within the enclosed region. Colors should be 
+ a numeric value from <code>com.google.maps.Color</code>.</p>
+
+<p>The following code snippet creates a 10-pixel-wide box around four points.
+Note that this polygon is "closed" by returning the segment path
+to its initial point; you should always close polygons to avoid 
+undefined behavior.</p>
+
+<pre class="prettyprint">
+private function onMapReady(event:MapEvent):void {
+  map.setCenter(new LatLng(37.4419, -122.1419), 13, MapType.NORMAL_MAP_TYPE);
+  map.addControl(new ZoomControl());
+  var latlng:LatLng = map.getCenter();
+  var lat:Number = latlng.lat();
+  var lon:Number = latlng.lng();
+  var latOffset:Number = 0.01;
+  var lonOffset:Number = 0.01;
+  var polygon:Polygon = new Polygon([
+      new LatLng(lat, lon - lonOffset),
+      new LatLng(lat + latOffset, lon),
+      new LatLng(lat, lon + lonOffset),
+      new LatLng(lat - latOffset, lon),
+      new LatLng(lat, lon - lonOffset)
+      ], 
+      new PolygonOptions({ 
+      strokeStyle: new StrokeStyle({
+          color: 0x0000ff,
+          thickness: 10,
+          alpha: 0.7}), 
+      fillStyle: new FillStyle({
+          color: 0x0000ff,
+          alpha: 0.7})
+  }));
+  map.addOverlay(polygon);      
+}
+</pre>
+
+<p><a href="http://gmaps-samples-flash.googlecode.com/svn/trunk/examples/PolygonSimple.html">View example 
+(PolygonSimple.html)</a></p>
+
+<p><a href="http://code.google.com/p/gmaps-samples-flash/source/browse/trunk/samplecode/PolygonSimple.mxml">
+View Source (PolygonSimple.mxml)</a></p>
+
+<h1 id="Ground_Overlays">Ground Overlays</h1>
+
+<p>Polygons are useful overlays to represent arbitrarily-sized areas, but they
+cannot display images. If you have an image that you wish to place on a map,
+you can use a <code>GroundOverlay</code> object. The constructor for a <code>
+GroundOverlay</code> takes a URL of an image and the <code>LatLngBounds</code> of the image
+as parameters. 
+
+<p>The following example places an antique map of Newark, NJ on the map as an overlay:</p>
+
+<pre class="prettyprint">
+private function onMapReady(event:Event):void {
+  map.setCenter(new LatLng(40.740, -74.18), 12, MapType.NORMAL_MAP_TYPE);
+  map.addControl(new ZoomControl());
+  map.addControl(new MapTypeControl());
+        
+  var testLoader:Loader = new Loader();
+  var urlRequest:URLRequest = new URLRequest("http://www.lib.utexas.edu/maps/historical/newark_nj_1922.jpg");
+  testLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void {
+    var groundOverlay:GroundOverlay = new GroundOverlay(
+        testLoader,
+        new LatLngBounds(new LatLng(40.716216,-74.213393), new LatLng(40.765641,-74.139235)));
+    map.addOverlay(groundOverlay);
+  });
+  testLoader.load(urlRequest);  
+}
+</pre>
+
+<p><a href="http://gmaps-samples-flash.googlecode.com/svn/trunk/examples/GroundOverlaySimple.html">View example 
+(GroundOverlaySimple.html)</a></p>
+
+<p><a href="http://code.google.com/p/gmaps-samples-flash/source/browse/trunk/samplecode/GroundOverlaySimple.mxml">
+View Source (GroundOverlaySimple.mxml)</a></p>
+
+        <!-- end body text -->
+
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

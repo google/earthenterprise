@@ -1,0 +1,361 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#config Name    PacketLevel
+#config Base    Leaf
+#config Config  PacketLevelConfig
+#config Subtype PacketLevel
+#config WithReuse 1
+
+
+// ===== PacketLevelAsset.h =====
+#include <autoingest/.idl/storage/PacketLevelConfig.h>
+
+// ===== PacketLevelAsset.cpp =====
+
+// ===== PacketLevelAssetD.h =====
+class PacketLevelAssetVersionImplD {
+ public:
+  bool AttemptConvertFromOldLastGood(void);
+  void MakeConvertTask(const AssetVersion &old);
+ private:
+  uint64 EstimateOutputSize(bool is_mercator) const;
+};
+
+// ===== PacketLevelAssetD.cpp =====
+#include <autoingest/plugins/RasterProductAsset.h>
+#include "fusion/khraster/khRasterProduct.h"
+#include "common/khFileUtils.h"
+#include "common/khConstants.h"
+
+void PacketLevelAssetVersionImplD::DoSubmitTask(void) {
+  if (AttemptConvertFromOldLastGood()) {
+    return;
+  }
+
+  // write out the config XML file used by gepackgen
+  // It's just like my config except packetLevel and packetAlphaLevel are
+  // bound to filenames.
+  PacketLevelConfig taskConfig(config);
+  for (std::vector<PacketLevelConfig::Inset>::iterator inset =
+         taskConfig.insets.begin();
+       inset != taskConfig.insets.end(); ++inset) {
+    if (!inset->packetLevel.empty()) {
+      // get the pack dir for this level
+      std::string blendFile =
+        AssetVersion(inset->packetLevel)->GetOutputFilename(0) +
+        "/cache.pack";
+      inset->packetLevel = blendFile;
+    }
+
+    if (!inset->packetAlphaLevel.empty()) {
+      std::string blendAlphaFile =
+        AssetVersion(inset->packetAlphaLevel)->GetOutputFilename(0) +
+        "/cache_alpha.pack";
+      inset->packetAlphaLevel = blendAlphaFile;
+    }
+  }
+  std::string configfile = WorkingFilename("config.xml");
+  taskConfig.Save(configfile);
+
+  // Purge the asset version cache, keeping (2n + 32) recent items:
+  // (n combinedRp + n product + 24 pyramid levels + constant 8 = 2n + 32),
+  // other items will be saved and removed from the cache. This way we are
+  // trying to keep in the cache all the needed asset version items for
+  // building current packetLevel, free the space for loading new items, thus
+  // prevent complete cache purging in GetInputFilenames().
+  // If we do not purge, the cache could be filled up with mutable packetLevel
+  // asset versions that are not being purged automatically (since they are
+  // referenced in DirtyMap), thus ends up complete cache purging when the
+  // cache is fully filled.
+  MutableAssetVersionD::PurgeCacheIfNeeded(
+    (taskConfig.insets.size() << 1) + 32);
+
+  // get my input filenames so I can pass them to the TaskDef
+  std::vector<std::string> inputFilenames;
+  inputFilenames.reserve(inputs.size());
+  GetInputFilenames(inputFilenames);
+
+  // generate packlev filename based on my name
+  std::string packExt = (type == AssetDefs::Imagery) ?
+                        ".kipacket" : ".ktpacket";
+  std::string outdir =
+    WorkingFileRef(khReplaceExtension(khBasename(GetAssetRef()),
+                                      packExt));
+
+  // create and submit the task
+  TaskDef task(*this);
+  task.AddInputs(inputFilenames);
+
+  // Estimate resultant packetLevel size
+  // If the output file is in a *.kimasset directory it is a Mercator
+  // Imagery packet.
+  bool is_mercator = outdir.find(kMercatorImageryAssetSuffix + "/") !=
+      std::string::npos;
+  uint64 sizeEstimate = EstimateOutputSize(is_mercator);
+
+  task.AddOutput(outdir, sizeEstimate);
+
+
+  task << "gepackgen"
+       << ((type == AssetDefs::Imagery) ? "--imagery" : "--terrain")
+       << "--config"  << configfile
+       << "--output"  << "$OUTPUT"
+       << "--numcpus" << "$NUMCPU";
+  theAssetManager.SubmitTask(GetRef(), task);
+}
+
+
+namespace {
+void GetInputChildren(const AssetVersion &ver,
+                      std::vector<std::string> &inputkids) {
+  for (std::vector<std::string>::const_iterator i
+         = ver->inputs.begin();
+       i != ver->inputs.end(); ++i) {
+    AssetVersion input(*i);
+    if (input) {
+      std::copy(input->children.begin(), input->children.end(),
+                back_inserter(inputkids));
+    }
+  }
+}
+}
+
+
+bool PacketLevelAssetVersionImplD::AttemptConvertFromOldLastGood(void) {
+  if (version > 1) {
+    // We have previous versions. It was their job, not mine, to convert
+    // from the old location/format
+    return false;
+  }
+
+  // find the appropriate directly under the resource (old way) instead of
+  // under CombinedRP (the new way)
+  std::string oldassetref = GetAssetRef();
+  if (type == AssetDefs::Imagery) {
+    if (find_and_replace(oldassetref, "CombinedRP.kia/", std::string()) ==
+        std::string::npos) {
+      notify(NFY_DEBUG, "Couldn't strip CombinedRP.kia/");
+      return false;
+    }
+  } else if (find_and_replace(oldassetref, "CombinedRP.kta/", std::string()) ==
+             std::string::npos) {
+    notify(NFY_DEBUG, "Couldn't strip CombinedRP.kta/");
+    return false;
+  }
+
+
+  // see if the old name is even an asset dir
+  if (!khDirExists(AssetDefs::AssetPathToFilename(oldassetref))) {
+    notify(NFY_DEBUG, "Old assetref (%s) not a dir", oldassetref.c_str());
+    return false;
+  }
+
+  // load the old asset
+  Asset oldasset(oldassetref);
+  if (!oldasset) {
+    notify(NFY_DEBUG, "Can't load assetref (%s)", oldassetref.c_str());
+    return false;
+  }
+
+  // make a list of my input KRPs & KRMPs
+  std::vector<std::string> inputkids;
+  GetInputChildren(AssetVersion(GetRef()), inputkids);
+
+  // make a modified copy of my config that we can compare against the old
+  // configs
+  PacketLevelConfig checkconfig = config;
+  for (std::vector<PacketLevelConfig::Inset>::iterator inset =
+         checkconfig.insets.begin();
+       inset != checkconfig.insets.end(); ++inset) {
+    // if this inset has a packetLevel (I'm a merge instead of a blend) and
+    // if that packetLevel was upgraded from another, then use the original
+    // packetLevel name when checking to see if I can find a match for
+    // upgrading
+    if (!inset->packetLevel.empty()) {
+      std::string upgraded_from =
+        AssetVersion(inset->packetLevel)->WorkingFilename("upgradedfrom");
+      if (khExists(upgraded_from)) {
+        std::string oldver;
+        if (khReadStringFromFile(upgraded_from, oldver)) {
+          inset->packetLevel = oldver;
+        }
+      }
+    }
+
+    // if this inset has a packetAlphaLevel (I'm a merge instead of a blend)
+    // and if that packetAlphaLevel was upgraded from another, then use the
+    // original packetAlphaLevel name when checking to see if I can find a
+    // match for upgrading.
+    if (!inset->packetAlphaLevel.empty()) {
+      std::string upgraded_from =
+        AssetVersion(inset->packetAlphaLevel)->WorkingFilename("upgradedfrom");
+      if (khExists(upgraded_from)) {
+        std::string oldver;
+        if (khReadStringFromFile(upgraded_from, oldver)) {
+          inset->packetAlphaLevel = oldver;
+        }
+      }
+    }
+  }
+
+
+  // walk the old assets version looking for a compatible one
+  // this is similar to the logic used by the ReuseOrMake method
+  for (AssetStorage::VersionList::const_iterator v
+         = oldasset->versions.begin();
+       v != oldasset->versions.end(); ++v) {
+    PacketLevelAssetVersionD version(*v);
+    if (!version) {
+      continue;
+    }
+
+    if (version->state != AssetDefs::Succeeded) {
+      continue;
+    }
+
+    if (!IsUpToDate(version->config, checkconfig)) {
+      notify(NFY_DEBUG, "Configs don't match: %s",
+             version->GetRef().c_str());
+      continue;
+    }
+
+
+    std::vector<std::string> oldinputkids;
+    GetInputChildren(version, oldinputkids);
+    if (inputkids != oldinputkids) {
+      notify(NFY_DEBUG, "Input kids don't match: %s",
+             version->GetRef().c_str());
+      continue;
+    }
+
+
+    // All requirements are met, convert this old version to a new version
+    MakeConvertTask(version);
+
+    // tell caller that we've already added the task so it doesn't need to
+    return true;
+  }
+
+  return false;
+}
+
+
+void PacketLevelAssetVersionImplD::MakeConvertTask(
+    const AssetVersion &oldver) {
+  // write out the config XML file used by gerasterpackupgrade
+  RasterPackUpgradeConfig taskConfig(config);
+  std::string configfile = WorkingFilename("config.xml");
+  taskConfig.Save(configfile);
+
+  // write out an "upgradedfrom" file to tell that I am upgrading from an old
+  // version. This information will be used by merge PacketLevels to determine
+  // if they can upgrade instead of doing their own work.
+  (void)khWriteStringToFile(WorkingFilename("upgradedfrom"),
+                            oldver->GetRef());
+
+  // get my input filenames so I can pass them to the TaskDef
+  std::vector<std::string> inputFilenames;
+  oldver->GetOutputFilenames(inputFilenames);
+
+  // generate packlev filename based on my name
+  std::string packExt = (type == AssetDefs::Imagery) ?
+                        ".kipacket" : ".ktpacket";
+  std::string outdir =
+    WorkingFileRef(khReplaceExtension(khBasename(GetAssetRef()),
+                                      packExt));
+
+  // create and submit the task
+  TaskDef task(*this);
+  task.AddInputs(inputFilenames);
+
+  // Estimate resultant packetLevel size
+  // If the output file is in a *.kimasset directory it is a Mercator
+  // Imagery packet.
+  bool is_mercator = outdir.find(kMercatorImageryAssetSuffix + "/") !=
+      std::string::npos;
+  uint64 sizeEstimate = EstimateOutputSize(is_mercator);
+
+  task.AddOutput(outdir, sizeEstimate);
+
+
+  task << "gerasterpackupgrade"
+       << "--config"  << configfile
+       << "--input"   << inputFilenames[0]
+       << "--output"  << "$OUTPUT";
+  theAssetManager.SubmitTask(GetRef(), task);
+}
+
+
+// Estimates resultant packetLevel size.
+uint64 PacketLevelAssetVersionImplD::EstimateOutputSize(bool is_mercator) const {
+  uint64 sizeEstimate = 0;
+
+  const khTilespaceBase &tilespace((type == AssetDefs::Imagery)
+                                   ? ClientImageryTilespaceFlat
+                                   : ClientTmeshTilespaceFlat);
+  uint64 rasterSize = static_cast<uint64>(config.coverage.extents.width()) *
+                      static_cast<uint64>(tilespace.tileSize) *
+                      static_cast<uint64>(config.coverage.extents.height()) *
+                      static_cast<uint64>(tilespace.tileSize);
+
+  uint32 pixelSize = (type == AssetDefs::Imagery) ?
+      ImageryProductTile::NumComp * sizeof(ImageryProductTile::PixelType) :
+      HeightmapFloat32ProductTile::NumComp *
+      sizeof(HeightmapFloat32ProductTile::PixelType);
+
+  const uint32 alphaPixelSize = AlphaProductTile::NumComp *
+      sizeof(AlphaProductTile::PixelType);
+
+  if (type == AssetDefs::Imagery) {
+    // Calculate size of Imagery packet data.
+    if (is_mercator) {
+      // Mercator imagery packet we save in either JPEG (no alpha band) or png
+      // (alpha band exists). Assume 1/8 (0.125) of tiles have an alpha band.
+      // packet_data_size = (7/8  * sizeof_image_data) /
+      // jpeg_compression_factor + (1/8 * sizeof_image_with_alpha_data) /
+      // png_compression_rate;
+      sizeEstimate = static_cast<uint64>(
+          (rasterSize * pixelSize * 0.875) / kJpegCompressionRatio +
+          (rasterSize * (pixelSize + alphaPixelSize) * 0.125) /
+          kPngCompressionRatio);
+    } else {
+      // The Flat Imagery packet is a 3-band JPEG for data image plus
+      // 1-band PNG for alpha image if alpha-band exists.
+      // Assume 1/8 (0.125) of tiles have an alpha band.
+      // packet_data_size = (sizeof_image_data / jpeg_compression_factor) +
+      //      (1/8 * sizeof_image_alpha / png_compression_alpha_factor);
+      sizeEstimate = static_cast<uint64>(
+          (rasterSize * pixelSize) / kJpegCompressionRatio +
+          (rasterSize * alphaPixelSize * 0.125) / kPngCompressionAlphaRatio);
+    }
+  } else {
+    // tmeshes are a little smaller than their raster
+    sizeEstimate = static_cast<uint64>((rasterSize * pixelSize) * 0.80);
+  }
+
+  // If we're caching the blends, let's take them into account too
+  if (config.cacheRaster) {
+    // assume 1/8 (0.125) of tiles are blended
+    // we use LZ compression for a 1/2 (0.5) reduction
+
+    // blend data cache size
+    sizeEstimate += static_cast<uint64>((rasterSize * pixelSize) * 0.125 * 0.5);
+
+    // blend alpha cache size
+    sizeEstimate += static_cast<uint64>((rasterSize * alphaPixelSize) * 0.125 * 0.5);
+  }
+
+  return sizeEstimate;
+}

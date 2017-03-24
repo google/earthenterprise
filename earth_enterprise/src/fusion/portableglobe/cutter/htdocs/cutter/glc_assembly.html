@@ -1,0 +1,156 @@
+<!--
+  Copyright 2017 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE html>
+<head>
+
+  <script type="text/javascript" src="../js/jquery.js"></script>
+  <script type="text/javascript" src="/js/gees_utilities.js"></script>
+  <script type="text/javascript" src="/js/gees_initialize.js"></script>
+  <script type="text/javascript" src="/js/togeojson.js"></script>
+  <script type="text/javascript" src="/cutter/js/glc_tools.js"></script>
+  <script type="text/javascript" src='/cutter/js/ajax_sequence.js'></script>
+
+  <LINK href="/cutter/css/style.css" rel="stylesheet" type="text/css">
+  <LINK href="/cutter/css/buttons.css" rel="stylesheet" type="text/css">
+  <LINK href="/cutter/css/dropdown.css" rel="stylesheet" type="text/css">
+  <LINK href="/cutter/css/glc_style.css" rel="stylesheet" type="text/css">
+  <LINK rel="icon" type="image/png" href="/shared_assets/images/google_favicon.ico">
+
+  <title>GEE Server - GLC Assembly</title>
+
+</head>
+<body>
+
+<div id="header_glc">
+  <div id="goog_img">
+    <img src="/shared_assets/images/GEE_Server_Header.png" width="103px" height="36px" border="0">
+    <label>Earth Enterprise Server</label>
+  </div>
+</div>
+
+<div id="top_bar">
+  GLC assembly tool
+</div>
+
+<div id="right_bar">
+
+    <span id="name_span">
+      <label>Name</label>
+      <input type="text" placeholder="name" class="glc_name_field" id="glc_name_field" name="form_element">
+    </span>
+
+    <span id="desc_span">
+      <label>Description</label>
+      <textarea placeholder="description" class="glc_text_field" id="glc_desc_field" name="form_element"></textarea>
+    </span>
+
+    <span id="poly_span">
+      <label>Polygon</label>
+      <textarea placeholder="polygon" class="glc_poly_field" id="glc_poly_field" name="form_element"></textarea>
+    </span>
+
+    <span id="layers_span">
+      <label>Layers</label>
+      <input type="radio" name="projection" id="radio2d" onclick="checkGlcSourceType()"> 2d
+      <input type="radio" name="projection" id="radio3d" onclick="checkGlcSourceType()"> 3d
+      <em id="ChooseType">Choose a projection to see available layers</em>
+      <div id="AvailableLayers" style="display:none;">
+        <h1>Select a layer to add to GLC</h1>
+          <select id="AvailableLayersSelect" onchange="stageGlcLayer()"></select>
+
+        <div id="SelectedLayers">
+          <em id="NoSelectedLayers">No layers selected</em>
+        </div>
+      </div>
+    </span>
+
+    <span id="baseglobe_span" style="display:none;">
+       <label>Base globe options</label>
+       <div id="BaseGlobeOptions">
+       <h1>Select a base globe</h1>
+        <select id="BaseGlobeSelect" onchange="stageGlcLayer()"></select>
+
+        <span>
+          <div id="ImageryRadioOptions">
+          <label>Use imagery? </label>
+          <input id="imagery_radio" type="radio" name="base_globe_imagery_radio" onclick="">Yes
+          <input id="imagery_radio_no" type="radio" name="base_globe_imagery_radio" onclick="" checked>No
+          </div>
+        </span>
+
+        <span>
+          <div id="TerrainRadioOptions">
+          <label>Use terrain? </label>
+          <input id="terrain_radio" type="radio" name="base_globe_terrain_radio" onclick="">Yes
+          <input id="terrain_radio_no" type="radio" name="base_globe_terrain_radio" onclick="" checked>No
+          </div>
+        </span>
+
+        <input id='is_proto_imagery', style="display:none;", value=0>
+
+      </div>
+    </span>
+
+    <span>
+      <a href="#" id="commit_button" onclick="initializeGlcAssembly()" class="button blue Muted">Assemble Glc</a>
+      <a href="#" style="display:none" id="refresh_button" onclick="location.reload()" class="button standard">New glc</a>
+      <a href="#" style="display:none" id="cancel_button" onclick="cancelGlcBuild()" class="button standard">Cancel</a>
+      <em id="ErrorMessage"></em>
+    </span>
+
+</div>
+
+<div id="AvailableGlobes"></div>
+
+<form name="glc_request" action="/cgi-bin/glc_assembler_app.py" method="POST" style="display:none">
+<input type="hidden" name="cmd" value="ASSEMBLE_GLC">
+<input type="hidden" name="name" value="">
+<input type="hidden" name="description" value="">
+<input type="hidden" name="polygon" value="">
+<input type="hidden" name="base_glb_info" value="">
+<input type="hidden" name="layers_info" value="">
+<input type="hidden" name="is_2d" value="">
+Json:
+<br><textarea name="glc_assembly_spec" rows="12" cols="70"></textarea>
+</form>
+
+<!-- ERROR BAR -->
+
+<div id="ErrorBar">
+  <span id="ErrorBarMessage"></span>
+  <a href="#" onclick="gees.dom.hide('ErrorBar')">close</a>
+</div>
+
+<div id="WhiteOverlay" onclick="closeAllPopups()"></div>
+
+<div id="BuildProgress">
+  <h1>Assembly details
+    <a href="#" onclick="hideBuildProgress()">close</a>
+  </h1>
+  <span id="status">Build in progress...</span>
+  <span id="globe"></span>
+</div>
+
+<div id="NotificationModal" style="display:none;">
+  <h1 id='NoteTitle'></h1>
+  <span id="NoteContents"></span>
+  <div id="NoteButtons"></div>
+</div>
+
+<script src="js/glc_tools.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+URL: http://www.tornadoweb.org/ (linux & mac), http://github.com/mgenti/tornado (windows fork)
+Version: 0.2
+License: Apache 2.0
+License File: LICENSE
+
+Description:
+Tornado is an open source version of the scalable, non-blocking web server and
+tools that power FriendFeed. It is a Python based application and so portable.
+
+Local Modifications:
+None

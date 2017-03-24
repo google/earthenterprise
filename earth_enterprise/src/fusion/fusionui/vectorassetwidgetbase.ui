@@ -1,0 +1,580 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>VectorAssetWidgetBase</class>
+<comment>  Copyright 2017 Google Inc.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+</comment>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>VectorAssetWidgetBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>748</width>
+            <height>351</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Vector Asset Widget</string>
+    </property>
+    <grid>
+        <widget class="QGroupBox" row="0" column="0" colspan="5">
+            <property name="name">
+              <cstring>acqusition_date_box</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>2</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="title">
+                <string>Acquisition</string>
+            </property>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <grid>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>TextLabel1_5</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Date (YYYY-MM-DD)</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="0" column="1">
+                    <property name="name">
+                        <cstring>acquisition_date_year</cstring>
+                    </property>
+                    <property name="text">
+                        <string>0000</string>
+                    </property>
+                    <property name="maxLength">
+                        <number>4</number>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>60</width>
+                        </size>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="0" column="2">
+                    <property name="name">
+                        <cstring>acquisition_date_month</cstring>
+                    </property>
+                    <property name="text">
+                        <string>00</string>
+                    </property>
+                    <property name="maxLength">
+                        <number>2</number>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="0" column="3">
+                    <property name="name">
+                        <cstring>acquisition_date_day</cstring>
+                    </property>
+                    <property name="text">
+                        <string>00</string>
+                    </property>
+                    <property name="maxLength">
+                        <number>2</number>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="4">
+                    <property name="name">
+                        <cstring>TextLabel3_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Provider:</string>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="0" column="5">
+                    <item>
+                        <property name="text">
+                            <string>&lt;none&gt;</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>provider_combo</cstring>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QLayoutWidget" row="5" column="0" rowspan="1" colspan="5">
+            <property name="name">
+                <cstring>layout51</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget" row="0" column="1">
+                    <property name="name">
+                        <cstring>layout11</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QListBox">
+                            <property name="name">
+                                <cstring>source_list</cstring>
+                            </property>
+                            <property name="selectionMode">
+                                <enum>Multi</enum>
+                            </property>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout10</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>source_changed_label</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&lt;font color="#ff0000"&gt;* One or more sources has changed&lt;/font&gt;</string>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QLayoutWidget" row="0" column="0">
+                    <property name="name">
+                        <cstring>Layout42</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>TextLabel2</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string>Source File(s):</string>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>Spacer18</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Vertical</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>0</width>
+                                    <height>51</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </vbox>
+                </widget>
+                <widget class="QLayoutWidget" row="0" column="2">
+                    <property name="name">
+                        <cstring>Layout41</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>add_src_btn</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string>Add</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>delete_src_btn</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string>Delete</string>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>Spacer17</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Vertical</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>0</width>
+                                    <height>21</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </vbox>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QComboBox" row="1" column="1" rowspan="1" colspan="3">
+            <item>
+                <property name="text">
+                    <string>&lt;none&gt;</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>codec_combo</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>TextLabel5</cstring>
+            </property>
+            <property name="text">
+                <string>Encoding:</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="3" column="0">
+            <property name="name">
+                <cstring>force_feature_type_label</cstring>
+            </property>
+            <property name="text">
+                <string>Feature Type Converting:</string>
+            </property>
+        </widget>
+        <widget class="QComboBox" row="3" column="1" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>force_feature_type_combo</cstring>
+            </property>
+        </widget>
+
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>TextLabel5_2</cstring>
+            </property>
+            <property name="text">
+                <string>Elevation Units:</string>
+            </property>
+        </widget>
+        <widget class="QComboBox" row="2" column="1" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>elev_units_combo</cstring>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget" row="0" column="4" rowspan="4" colspan="1">
+            <property name="name">
+                <cstring>layout12</cstring>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout55</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <spacer row="1" column="2">
+                            <property name="name">
+                                <cstring>spacer26</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>41</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QLabel" row="1" column="0">
+                            <property name="name">
+                                <cstring>TextLabel6</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>1</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="text">
+                                <string>Layer:</string>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox" row="1" column="1">
+                            <property name="name">
+                                <cstring>layer_spin</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>1</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout6</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QCheckBox">
+                            <property name="name">
+                                <cstring>ignore_bad_features_check</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Ignore Bad Features</string>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer5</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>91</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout9</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QCheckBox">
+                            <property name="name">
+                                <cstring>do_not_fix_invalid_geometries_check</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Don't Fix Invalid Geometries</string>
+                            </property>
+                            <property name="checked">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer8</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>71</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </hbox>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QGroupBox" row="4" column="0" rowspan="1" colspan="5">
+            <property name="name">
+                <cstring>automask_box_2</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>1</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="title">
+                <string>Bounding Box to Limit Import</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>mask_tolerance_label_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>South:</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="0" column="1">
+                    <property name="name">
+                        <cstring>south_boundary</cstring>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="0" column="7">
+                    <property name="name">
+                        <cstring>east_boundary</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="6">
+                    <property name="name">
+                        <cstring>mask_holesize_label_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>East:</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="0" column="5">
+                    <property name="name">
+                        <cstring>west_boundary</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="4">
+                    <property name="name">
+                        <cstring>mask_nodata_label_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>West:</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="0" column="3">
+                    <property name="name">
+                        <cstring>north_boundary</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="2">
+                    <property name="name">
+                        <cstring>mask_feather_label_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>North:</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>add_src_btn</sender>
+        <signal>clicked()</signal>
+        <receiver>VectorAssetWidgetBase</receiver>
+        <slot>AddSource()</slot>
+    </connection>
+    <connection>
+        <sender>delete_src_btn</sender>
+        <signal>clicked()</signal>
+        <receiver>VectorAssetWidgetBase</receiver>
+        <slot>DeleteSource()</slot>
+    </connection>
+    <connection>
+        <sender>elev_units_combo</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>VectorAssetWidgetBase</receiver>
+        <slot>CustomConversion(const QString&amp;)</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>acquisition_date_year</tabstop>
+    <tabstop>acquisition_date_month</tabstop>
+    <tabstop>acquisition_date_day</tabstop>
+    <tabstop>codec_combo</tabstop>
+    <tabstop>elev_units_combo</tabstop>
+    <tabstop>force_feature_type_combo</tabstop>
+    <tabstop>provider_combo</tabstop>
+    <tabstop>layer_spin</tabstop>
+    <tabstop>ignore_bad_features_check</tabstop>
+    <tabstop>do_not_fix_invalid_geometries_check</tabstop>
+    <tabstop>south_boundary</tabstop>
+    <tabstop>north_boundary</tabstop>
+    <tabstop>west_boundary</tabstop>
+    <tabstop>east_boundary</tabstop>
+    <tabstop>source_list</tabstop>
+    <tabstop>add_src_btn</tabstop>
+    <tabstop>delete_src_btn</tabstop>
+</tabstops>
+<slots>
+    <slot>AddSource()</slot>
+    <slot>DeleteSource()</slot>
+    <slot>CustomConversion(const QString&amp;)</slot>
+</slots>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

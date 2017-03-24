@@ -1,0 +1,65 @@
+#!/bin/bash
+# Copyright 2008 Google Inc. All Rights Reserved.
+
+set -e
+
+VARDIR=/var/opt/google/pgsql
+SHAREDIR=/opt/google/share
+BINDIR=/opt/google/bin
+SQLDIR=$SHAREDIR/postgresql/contrib
+
+if [ ! -n "$1" ]
+then
+  echo "Usage: geplaces {create|delete}"
+  exit 1
+fi
+
+# Start postmaster.
+if [ ! -f $VARDIR/data/postmaster.pid ]
+then
+  echo You must start the postmaster...exiting.
+  exit 1
+fi
+
+if [ $1 == "create" ]
+then
+  echo "Creating GEPLACES database..."
+  query="select count(1) from pg_catalog.pg_database where datname = 'geplaces'"
+  cmd="$BINDIR/psql  -U geuser -t -c \"$query\" template1"
+  db_exists=`eval $cmd`
+  if [ $db_exists -eq 1 ] ; then
+    echo GEPLACES database already exists...exiting.
+    exit 0
+  fi
+  $BINDIR/createdb -U geuser --owner=geuser geplaces
+  $BINDIR/createlang -U geuser plpgsql geplaces
+  $BINDIR/psql -q -U geuser -d geplaces -f $SQLDIR/postgis.sql 2>/dev/null >/dev/null
+#  $BINDIR/psql -q -U geuser -d geplaces -f $SQLDIR/postgis_upgrade.sql 2>/dev/null >/dev/null
+  $BINDIR/psql -q -U geuser -d geplaces -f $SQLDIR/spatial_ref_sys.sql 2>/dev/null >/dev/null
+  zcat $SHAREDIR/geplaces/geplaces_db.gz | $BINDIR/psql -q -U geuser -d geplaces 2>/dev/null >/dev/null
+
+  # Create new cities view
+  create_view_query="CREATE VIEW cities_utf8 AS
+                     SELECT g.name AS city, g.country AS country_code,
+                     g.admin1 AS subnational_code, g.population, g.the_geom,
+                     c.name AS country_name, a.admin_name AS subnational_name
+                     FROM (geonames g
+                     LEFT JOIN countryinfo c
+                     ON (((g.country)::bpchar = c.iso_alpha2))), admincodes a
+                     WHERE (((g.country)::text = (a.country_code)::text)
+                     AND ((g.admin1)::text = (a.admin_code)::text))"
+
+  create_view_cmd="$BINDIR/psql -U geuser -t -c \"$create_view_query\" geplaces"
+  view_exists=`eval $create_view_cmd`
+  if [ $view_exists -eq 1 ] ; then
+    echo GEPLACES cities_utf8 view already exists.
+  fi
+
+
+else
+  if [ $1 == "delete" ]
+  then
+    echo "Deleting GEPLACES database..."
+    $BINDIR/dropdb -U geuser geplaces
+  fi
+fi

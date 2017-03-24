@@ -1,0 +1,85 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#config Name      VectorPOI
+#config Base      Leaf
+#config Config    VectorPOIAssetConfig
+#config Subtype   VectorPOI
+#config FixedType Vector
+
+
+// ===== VectorPOIAsset.h =====
+#include <autoingest/.idl/storage/VectorPOIAssetConfig.h>
+
+// ===== VectorPOIAsset.cpp =====
+
+// ===== VectorPOIAssetD.h =====
+
+// ===== VectorPOIAssetD.cpp =====
+#include <khFileUtils.h>
+
+void
+VectorPOIAssetVersionImplD::DoSubmitTask(void)
+{
+  TaskDef task(*this);
+
+  // *******************************************************************
+  // Determine our bound input filenames
+  //    The first input is the vector product file. The second input is
+  // our VectorQuery which can have multiple outputs (one for each
+  // filter)
+  // *******************************************************************
+  std::string productfile = AssetVersion(inputs[0])->GetOutputFilename(0);
+  std::vector<std::string> selectfiles;
+  AssetVersion query(inputs[1]);
+  query->GetOutputFilenames(selectfiles);
+
+  // add the product file to the task's inputs
+  // the selectfiles will be added in the loop below
+  task.AddInput(productfile);
+
+  // ******************************************************
+  // write out the fuseconfig.xml file used by gevectorfuse
+  // ******************************************************
+  POIConfig poi_config;
+  for (uint i = 0; i < selectfiles.size(); ++i) {
+    // Skip any selectfile that doesn't exist. We have to do this since a
+    // query step may result in zero selected elements. When this is the
+    // case, the query step does NOT produce an output file. But if we pass
+    // a filename of a non-existent file to gevectorfuse, it is
+    // unhappy. Maybe later we can get gevectorquery & gevectorfuse to be
+    // consistent in their handling of the "no records selected" case
+    if (khExists(selectfiles[i])) {
+      poi_config.query_files_.push_back(selectfiles[i]);
+      task.AddInput(selectfiles[i]);
+    }
+  }
+  poi_config.search_fields_ = config.search_fields_;
+  poi_config.search_style_  = config.search_style_;
+  std::string config_filename = WorkingFilename("poiconfig.xml");
+  poi_config.Save(config_filename);
+
+  // generate .search filename based on my name
+  // TODO: - implement size estimates
+  std::string poi_path = WorkingFileRef("poifile");
+  task.AddOutput(poi_path, 0); // size estimate
+
+  // submit the task
+  task << "gevectorpoi"
+       << "--output"  << "$OUTPUT"
+       << "--product" << "$INPUTS[0]"
+       << "--config"  << config_filename;
+
+  theAssetManager.SubmitTask(GetRef(), task);
+}

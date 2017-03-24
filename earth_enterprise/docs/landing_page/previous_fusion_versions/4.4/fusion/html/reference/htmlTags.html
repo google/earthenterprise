@@ -1,0 +1,319 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>HTML Tags Allowed</title>
+</head>
+
+<body>
+
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" />
+  </div>
+  <h1 id="doc_title">Reference Guide</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Reference Guide</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="intro.html">Introduction</a></li>
+    <li><a href="fundamentals.html">Fundamentals</a></li>
+    <li><a href="setup.html">Setting Up Your Workspace</a></li>
+    <li><a href="resources.html">Defining Resources</a></li>
+    <li><a href="projects.html">Defining Projects</a></li>
+    <li><a href="databases.html">Defining and Publishing Databases</a></li>
+    <li><a href="building.html">Building Assets</a></li>
+    <li><a href="maps.html">Preparing Data for Google Maps</a></li>
+    <li><a href="commands.html">Command Line Reference</a></li>
+    <li><a href="createOwnData.html">Creating Your Own Source Data, Icons, and Masks</a></li>
+    <li><a href="htmlTags.html" id="selected">HTML Tags Allowed</a></li>
+    <li><a href="plugins.html">Google Earth Plugin</a></li>
+    <li><a href="errors.html">Common Error Messages</a></li>
+    <li><a href="glossary.html">Glossary</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+<a id="37363"></a> <h1><a id="95824"></a>HTML Tags Allowed
+</h1>
+<p><a id="marker-1018313"></a>When specifying labels, descriptions, and layer names in Google Earth Enterprise Fusion, you can use limited HTML mark-up tags. 
+</p>
+      <p class="caution"><strong>Caution:</strong> Although Google Earth Enterprise Fusion allows the mark-up tags listed below, there is no guarantee that there is enough space for Google Earth EC to display the text you enter. Be particularly careful about text that consumes vertical space (such as line breaks, horizontal rules, and so on). Some places in Google Earth EC expand to allow one or two extra lines, but if you add too many, your text could get truncated. Other places in Google Earth EC handle additional lines of text without a problem.
+      </p>
+  <h4><a id="90059"></a>Supported HTML Mark-Up Tags 
+  </h4>
+<table>
+  <tr>
+    <th>HTML Tag
+    </th>
+    <th>Description
+    </th>
+  </tr>
+  <tr>
+    <td><code>&lt;h1&gt;...&lt;/h1&gt;</code>
+    </td>
+    <td>Top-level heading.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;h2&gt;...&lt;/h2&gt;
+</code>
+    </td>
+    <td>Second-level heading.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;h3&gt;...&lt;/h3&gt;
+</code>
+    </td>
+    <td>Third-level heading.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;h4&gt;...&lt;/h4&gt; &lt;h5&gt;...&lt;/h5&gt;
+</code>
+    </td>
+    <td>Headings of lesser importance.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;p&gt;...&lt;/p&gt;
+</code>
+    </td>
+    <td>Left-align paragraph. Adjust the alignment with the align attribute. Possible values are left, right, and center. 
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;center&gt;...&lt;/center&gt;
+</code>
+    </td>
+    <td>Center paragraph.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;blockquote&gt;...<br />
+      &nbsp;&nbsp;&lt;/blockquote&gt;
+</code>
+    </td>
+    <td>Indented paragraph that is useful for quotes.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;ul&gt;...&lt;/ul&gt;
+</code>
+    </td>
+    <td>Unordered list. You can also pass a type argument to define the bullet style. The default is type=disc; other types are circle and square.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;ol&gt;...&lt;/ol&gt;
+</code>
+    </td>
+    <td>Ordered list. You can also pass a type argument to define the enumeration label style. The default is type=”1”; other types are “a” and “A”.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;li&gt;...&lt;/li&gt;
+</code>
+    </td>
+    <td>List item. This tag can be used only within the context of <code>&lt;ol&gt;...&lt;/ol&gt;</code> or <code>&lt;ul&gt;...&lt;/ul&gt;</code>.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;dl&gt;...&lt;/dl&gt;
+</code>
+    </td>
+    <td>List of definitions, consisting of terms and descriptions. 
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;dt&gt;...&lt;/dt&gt;
+</code>
+    </td>
+    <td>A term in a list of definitions. This tag can be used only in the context of <code>&lt;dl&gt;...&lt;/dl&gt;</code>.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;dd&gt;...&lt;/dd&gt;
+</code>
+    </td>
+    <td>Description in a list of definitions. This tag can be used only in the context of <code>&lt;dl&gt;...&lt;/dl&gt;</code>.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;pre&gt;...&lt;/pre&gt;
+</code>
+    </td>
+    <td>Pre-formatted text. Use for larger chunks of code. White spaces in the contents are preserved. For small bits of code use the inline-style code.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;div&gt;...&lt;/div&gt;<br />&lt;span&gt;...&lt;/span&gt;
+</code>
+    </td>
+    <td>Block grouping elements. These are used to structure the document, and are often used to provide hints about the intended presentation of the document.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;em&gt;...&lt;/em&gt;
+</code>
+    </td>
+    <td>Emphasis. By default this is the same as <code>&lt;i&gt;...&lt;/i&gt;</code> (italic). 
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;strong&gt;...&lt;/strong&gt;
+</code>
+    </td>
+    <td>Strong. By default this is the same as <code>&lt;b&gt;...&lt;/b&gt;</code> (bold).
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;i&gt;...&lt;/i&gt;
+</code>
+    </td>
+    <td>Italic font style.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;b&gt;...&lt;/b&gt;
+</code>
+    </td>
+    <td>Bold font style.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;u&gt;...&lt;/u&gt;
+</code>
+    </td>
+    <td>Underlined font style.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;s&gt;...&lt;/s&gt;
+</code>
+    </td>
+    <td>Strike-out font style.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;big&gt;...&lt;/big&gt;
+</code>
+    </td>
+    <td>Larger font size.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;small&gt;...&lt;/small&gt;
+</code>
+    </td>
+    <td>Smaller font size. 
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;sub&gt;...&lt;/sub&gt;
+</code>
+    </td>
+    <td>Subscript text.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;sup&gt;...&lt;/sup&gt;
+</code>
+    </td>
+    <td>Superscript text.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;code&gt;...&lt;/code&gt;
+</code>
+    </td>
+    <td>Fixed-width font, such as Courier. By default this is the same as <code>&lt;tt&gt;...&lt;/tt&gt;</code> (typewriter). For larger chunks of code use the block-tag <code>&lt;pre&gt;</code>.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;tt&gt;...&lt;/tt&gt;
+</code>
+    </td>
+    <td>Typewriter font style. This is the same as <code>&lt;code&gt;...&lt;/code&gt;</code>.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;font&gt;...&lt;/font&gt;
+</code>
+    </td>
+    <td>Customizes the font size, family, and text color. This tag understands the following attributes:
+      <ul>
+        <li><code>color</code> - The text color, for example <code>color=&quot;red&quot;</code> or <code>color=&quot;#FF0000&quot;</code>.
+        </li>
+        <li><code>size</code> - The logical size of the font. Logical sizes 1 to 7 are supported. The value can either be absolute (for example, <code>size=3</code>) or relative (<code>size=-2</code>). In the latter case, the size is added to the previous font size.
+        </li>
+        <li><code>face</code> - The family of the font, for example <code>face=times</code>.
+        </li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;img&gt;
+</code>
+    </td>
+    <td>An image. The image name for the mime source factory is given in the source attribute, for example <code>&lt;img src=&quot;qt.xpm&quot;&gt;</code>. The image tag also understands the attributes <code>width</code> and <code>height</code>, which determine the size of the image. If the pixmap does not fit the specified size it will be scaled automatically. The <code>align</code> attribute determines where the image is placed. By default, an image is placed inline just like a normal character. Specify <code>left</code> or <code>right</code> to place the image at the specified side. 
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;hr&gt;
+</code>
+    </td>
+    <td>Horizontal line.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;br&gt;
+</code>
+    </td>
+    <td>Line break.
+    </td>
+  </tr>
+  <tr>
+    <td><code>&lt;nobr&gt;...&lt;/nobr&gt;
+</code>
+    </td>
+    <td>No break. Prevents word wrap.
+    </td>
+  </tr>
+</table>
+<p><a id="marker-1018314"></a>
+</p>
+</div>
+
+<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+
+<!-- END WRAPPER -->
+  
+</body>
+</html>

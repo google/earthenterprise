@@ -1,0 +1,12 @@
+diff -uNr libsgl-ge-0.8.orig/include/Makefile.in libsgl-ge-0.8/include/Makefile.in
+--- libsgl-ge-0.8.orig/include/Makefile.in	2007-02-20 08:46:24.000000000 -0800
++++ libsgl-ge-0.8/include/Makefile.in	2007-03-07 12:40:08.000000000 -0800
+@@ -70,7 +70,7 @@
+ VERSION = @VERSION@
+ freetype_config = @freetype_config@
+ 
+-include_HEADERS = Sk64.h 	SkBuffer.h 	SkChunkAlloc.h 	SkEndian.h 	SkEndian.h 	SkFDot6.h 	SkFixed.h 	SkFloatingPoint.h 	SkMath.h 	SkMatrix.h 	SkPoint.h 	SkPostConfig.h 	SkPreConfig.h 	SkRandom.h 	SkRect.h 	SkRegion.h 	SkScalar.h 	SkTemplates.h 	SkThread.h 	SkThread_platform.h 	SkTypes.h     Sk1DPathEffect.h     SkBitmap.h     SkBitmapRef.h     SkBounder.h     SkCanvas.h     SkColor.h     SkColorPriv.h     SkDOM.h     SkDeque.h     SkDescriptor.h     SkFlattenable.h     SkFontHost.h     SkGlobals.h     SkGradientShader.h     SkGraphics.h     SkImageDecoder.h     SkMask.h     SkMaskFilter.h     SkPaint.h     SkPath.h     SkPathEffect.h     SkPathMeasure.h     SkPorterDuff.h     SkRefCnt.h     SkShader.h     SkStream.h     SkString.h     SkStroke.h     SkTDArray.h     SkTSearch.h     SkUnitMapper.h 	SkUserConfig.h     SkUtils.h     SkXfermode.h
++include_HEADERS = Sk64.h 	SkBuffer.h 	SkChunkAlloc.h 	SkEndian.h 	SkEndian.h 	SkFDot6.h 	SkFixed.h 	SkFloatingPoint.h 	SkMath.h 	SkMatrix.h 	SkPoint.h 	SkPostConfig.h 	SkPreConfig.h 	SkRandom.h 	SkRect.h 	SkRegion.h 	SkScalar.h 	SkTemplates.h 	SkThread.h 	SkThread_platform.h 	SkTypes.h     Sk1DPathEffect.h     SkBitmap.h     SkBitmapRef.h     SkBounder.h     SkCanvas.h     SkColor.h     SkColorPriv.h     SkDOM.h     SkDeque.h     SkDescriptor.h     SkFlattenable.h     SkFontHost.h     SkGlobals.h     SkGradientShader.h     SkGraphics.h     SkImageDecoder.h     SkMask.h     SkMaskFilter.h     SkPaint.h     SkPath.h     SkPathEffect.h     SkPathMeasure.h     SkPorterDuff.h     SkRefCnt.h     SkShader.h     SkStream.h     SkString.h     SkStroke.h     SkTDArray.h     SkTSearch.h     SkUnitMapper.h 	SkUserConfig.h     SkUtils.h     SkXfermode.h SkNoncopyable.h SkDevice.h SkScalerContext.h SkBlurMaskFilter.h SkTypeface.h
+ 
+ mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+ CONFIG_CLEAN_FILES = 

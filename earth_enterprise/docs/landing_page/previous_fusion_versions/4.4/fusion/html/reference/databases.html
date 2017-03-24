@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Defining and Publishing Databases</title>
+</head>
+
+<body>
+
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" />
+  </div>
+  <h1 id="doc_title">Reference Guide</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Reference Guide</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="intro.html">Introduction</a></li>
+    <li><a href="fundamentals.html">Fundamentals</a></li>
+    <li><a href="setup.html">Setting Up Your Workspace</a></li>
+    <li><a href="resources.html">Defining Resources</a></li>
+    <li><a href="projects.html">Defining Projects</a></li>
+    <li><a href="databases.html" id="selected">Defining and Publishing Databases</a></li>
+    <li><a href="building.html">Building Assets</a></li>
+    <li><a href="maps.html">Preparing Data for Google Maps</a></li>
+    <li><a href="commands.html">Command Line Reference</a></li>
+    <li><a href="createOwnData.html">Creating Your Own Source Data, Icons, and Masks</a></li>
+    <li><a href="htmlTags.html">HTML Tags Allowed</a></li>
+    <li><a href="plugins.html">Google Earth Plugin</a></li>
+    <li><a href="errors.html">Common Error Messages</a></li>
+    <li><a href="glossary.html">Glossary</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+
+<a id="22215"></a><h1><a id="61436"></a>Defining and Publishing Databases</h1>
+
+<ol class="toc">
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#defining_a_database">Defining a Database</a></li>
+  <li><a href="#adding_search_tabs_to_a_database">Adding Search Tabs to a Database</a></li>
+  <li><a href="#publishing_a_database">Publishing a Database</a></li>
+  <li><a href="#viewing_your_database">Viewing Your Database</a></li>
+</ol>
+
+<h2 id="overview">Overview</h2>
+<p>This chapter provides information on how to define Google Earth databases with Google Earth Enterprise Fusion. For information about defining Google Maps databases, see the chapter titled <a href="maps.html#43488">Defining a Map Database</a>.</p>
+<h2><a id="33104"></a>Defining a Database
+</h2>
+<p><a id="marker-1015792"></a>When you finish defining your projects, you define your database. To define a database, you specify one or more projects whose data functions together on the Google Earth Enterprise Server. You can select up to three projects for a database--one of each type:
+</p>
+<ul>
+  <li>Vector
+  </li>
+  <li>Imagery
+  </li>
+  <li>Terrain
+  </li>
+</ul>
+
+<img src="images/fusionPROvLT.gif" />
+<p>Because  the majority of your efforts go into defining and configuring projects, it is relatively simple to define a database. You simply select the projects that comprise the database and give it a name.
+</p>
+<h4><a id="98722"></a>To define a database:
+</h4>
+<br />
+
+<ol>
+  <li><a id="marker-1015814"></a>Select <strong>Tools &gt; Asset Manager</strong>. The <strong>Asset Manager</strong> appears. </li>
+  <li>Click 
+    <img src="images/iconDatabase.png" />. The <strong>Database Editor</strong> appears with no projects selected. </li>
+  <li><a id="59253"></a>Click 
+    <img src="images/icon_new.gif" /> next to Vector Project. The <strong>Open</strong> dialog appears. </li>
+  <li><a id="25862"></a>Navigate to the folder that contains the vector project you want to include.
+    <p class="note"><strong>Note:</strong> The selection in the <strong>Type</strong> drop-down list near the bottom of this dialog determines the type of projects that appear on the list. <strong>Vector Project</strong> is automatically selected, so only vector projects appear on the list. </p>
+  </li>
+  <li><a id="47673"></a>Select the vector project you want to add to the database, and click <strong>Open</strong>. The selected project appears in the <strong>Database Editor</strong> next to <strong>Vector Project</strong>. </li>
+  <li>Repeat steps <strong>3</strong> through <strong>5</strong> to add imagery and terrain projects. All three projects appear on the list.    </li>
+  <li>To add search tabs for the database, click the box next to <strong>Search Tabs</strong>. See <a href="databases.html#48752">Adding Search Tabs to a Database</a> for details.</li>
+  <li><a id="64792"></a>When you've finished defining your database, select <strong>File &gt; Save</strong>.  </li>
+  <li><a id="70068"></a>Navigate to the folder where you want to save your database, or click 
+    <img src="images/iconCreateNewFolder.png" /> to create a new folder in the desired location.
+  </li>
+  <li>Enter the name of your database, and click <strong>Save</strong>.
+  </li>
+</ol>
+<p>Now you are ready to build your database. See the <a href="building.html#70505">Building Assets</a> chapter for complete details.
+</p>
+      <p class="caution"><strong>Caution:</strong> Assets can not be deleted once they are saved. They can be <em>cleaned</em>, so that they are no longer available to use in Google Earth Enterprise Fusion; see <a href="building.html#85338">Cleaning Asset Versions</a> in the <strong>Building Assets</strong> chapter for more information.</p>
+
+<h4><a id="marker-1015818"></a>To modify a database:</h4>
+<br />
+
+<ol>
+  <li>Select <strong>Tools &gt; Asset Manager</strong>. The Asset Manager appears.    </li>
+  <li>In the asset navigation tree on the left, navigate to the folder that contains the database you want to change, and select it. The database appears on the right.
+    
+  </li>
+  <li>Double-click the name of the database. The Database Editor displays its contents.
+    
+  </li>
+  </ol>
+<p>To change one of the selected projects, click 
+  <img src="images/icon_new.gif" /> next to the project you want to replace. The <strong>Open</strong> dialog appears. </p>
+<ol>
+  <li>Navigate to the folder that contains the  project you want to include.  </li>
+  <li>Select the  project you want to add to the database, and click <strong>Open</strong>. The selected project appears in the <strong>Database Editor</strong>. </li>
+  <li>Select <strong>File &gt; Save</strong>.</li>
+  </ol>
+<p>To remove a project from the database and not include any project of that type, click 
+  <img src="images/iconDelete.png" /> next to the project you want to remove, then select <strong>File &gt; Save</strong>.    </p>
+<p>In both cases, Google Earth Enterprise Fusion saves the database in the same place with the same name. If you have already built the database, you must build a new version to make the changes available for publishing.
+    </p>
+<h2 id="adding_search_tabs_to_a_database"><a id="48752"></a>Adding Search Tabs to a Database
+</h2>
+<p><a id="marker-1015819"></a>Search tabs allow Google Earth EC and Google Maps users to search external databases on non-Google servers. For example, if you have a database of property locations that contains specific information that your users need, you can add a search tab call “Property Search” and configure it to search for locations in your property database, even if that database is stored on another server.
+</p>
+<p>The Search Tab Manager allows you to add and pre-configure the standard search tabs to be used throughout Google Earth Enterprise Fusion. See <a href="setup.html#12547">Managing Search Tabs</a> for more information. After you have configured the search tabs in the Search Tab Manager, you can select the search tabs you want to use for each database you define.
+</p>
+<p class="note"><strong>Note:</strong> Regardless of how many search tabs you add, even if you add only one or two, the custom search tab(s) replace all three default search tabs in Google Earth EC. If you do not create any tabs, Google Earth EC displays the default search tabs.
+</p>
+<h4>To add search tabs to your database:
+</h4>
+<br />
+
+<ol>
+  <li>In the Database Editor, select the <strong>Search Tabs</strong> checkbox. The Database Editor extends to include a <strong>Search Tabs</strong> area. </li>
+  <li><a id="25611"></a>Click 
+    <img src="images/icon_new.gif" /> on the right side of the <strong>Search Tabs</strong> area. A pop-up list displays a list of the available search tabs.
+    
+    <p class="note"><strong>Note:</strong> If you specified search fields for a layer in the selected vector project, the tab label you provided in the Vector Project Editor for that project appears on this pop-up list. See <a href="projects.html#88708">Search Tab</a> for details. You can select that search tab or not.
+    </p>
+  </li>
+  <li><a id="67878"></a>Click the name of the first search tab you want to add. The selected tab appears in the <strong>Search Tabs</strong> area. </li>
+  <li>You can add up to three search tabs (including the layer-specific search fields, if you specified them for the selected vector project) by repeating the above steps.
+    <p>After you add three tabs, the 
+      <img src="images/icon_new.gif" /> button is disabled. 
+    </p>
+    </li>
+  <li>If you want to delete one of the tabs, select it and click 
+    <img src="images/iconDelete.png" />, then OK to confirm.
+    <p>The tab disappears from the Search Tabs dialog, and the 
+      <img src="images/icon_new.gif" /> button is enabled again.
+    </p>
+  </li>
+  <li>To change the order of the search tabs, select the tab you want to move, and then click 
+    <img src="images/arrowLeft.png" /> or 
+    <img src="images/arrowRight.png" /> to move it.
+  </li>
+  <li>When you finish defining the search tabs, save the database, as described in <a href="databases.html#33104">Defining a Database</a>.
+  </li>
+</ol>
+<h2><a id="76398"></a>Publishing a Database
+</h2>
+<p><a id="marker-1017035"></a>After you successfully build a database, you are ready to publish it to a Google Earth Enterprise Server. Publishing a database is fairly straightforward after you set up your server associations. Consult your administrator or refer to the <strong>Administration Guide</strong> for complete details about setting up server associations.</p>
+<h4>To publish a database:
+</h4>
+<br />
+
+<ol>
+  <li>Select <strong>Tools &gt; Asset Manager</strong>. The Asset Manager appears.    </li>
+  <li>Navigate to the folder where the database you want to publish is located.
+  </li>
+  <li>Right-click the database name, and select <strong>Publish</strong>. The Publish Database dialog appears.    <img src="images/publishDatabase.png" />
+    <p>The first server association on the list in the Server Associations Manager is the default selection on the <strong>Server Association</strong> drop-down list. The most recently built version of the database is the default selection on the <strong>Version</strong> drop-down list. </p>
+  </li>
+  <li>If you want to publish the database to a different server association, select it from the <strong>Server Associations</strong> drop-down list; otherwise, leave the default selected. </li>
+  <li>If you want to publish a different version of the database, select it from the <strong>Version</strong> drop-down list; otherwise, leave the default selected. </li>
+  <li>Click <strong>Publish</strong>.</li>
+  <li>If the server is configured for publishing authentication, the <strong>Authentication Required</strong> dialog appears.
+<p><img src="images/publishAuth.png" /></p>
+    <p><a id="69934"></a>Enter your user name and password, and click <strong>OK</strong>.</p>
+    <p>Contact your system administrator if you do not know your user name and password.</p>
+  </li>
+</ol>
+<p>A progress dialog shows you the progress of the publishing operation. When the publishing operation is complete, a message confirms that the database was successfully published. If the publishing operation is unsuccessful, see the <a href="errors.html#61436">Common Error Messages</a> chapter for more information.</p>
+
+<h2 id="viewing_your_database">Viewing Your Database</h2>
+
+<p><a id="marker-1018229"></a>After you publish your database, you can view it in Google Earth EC.
+</p>
+<h4>To view your database:
+</h4>
+<br />
+
+<ol>
+  <li>Launch Google Earth EC. The <strong>Select Server</strong> dialog appears.  </li>
+  <li>Enter or select the URL or IP address of your server in the Server field, and accept the default setting, <strong>80</strong>, in the <strong>Port</strong> field (unless you know that your server uses a different port). </li>
+  <li>Click <strong>Login</strong>.
+  </li>
+</ol>
+
+<p class="caution"><strong>Caution:</strong> If you have logged in to this server with Google Earth EC previously, log out, clear your cache, and log back in. For help with clearing your cache, refer to the <strong>Google Earth User Guide</strong>.</p>
+<p>Google Earth EC displays your database. The Layers panel shows the terrain, imagery, and vector layers in the published database.</p>
+
+</div>
+
+<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+
+<!-- END WRAPPER -->
+
+</body>
+</html>

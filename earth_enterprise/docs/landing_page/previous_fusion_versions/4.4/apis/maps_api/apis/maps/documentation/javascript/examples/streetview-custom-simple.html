@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/examples/streetview-custom-simple.html";
+    </script>
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Google Maps JavaScript API Example: Simple Custom StreetView</title>
+<link href="http://code.google.com/apis/maps/documentation/javascript/examples/standard.css" rel="stylesheet" type="text/css" />
+<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+<script type="text/javascript">
+
+  var panorama;
+
+  function initialize() {
+ 
+    // Set up Street View and initially set it visible. Register the
+    // custom panorama provider function. Set the StreetView to display
+    // the custom panorama 'reception' which we check for below.
+    var panoOptions = {
+      pano: 'reception',
+      visible: true,
+      panoProvider: getCustomPanorama
+    }
+
+    panorama = new google.maps.StreetViewPanorama(
+        document.getElementById('pano_canvas'),panoOptions);
+  }
+
+  // Return a pano image given the panoID.
+  function getCustomPanoramaTileUrl(pano,zoom,tileX,tileY) {
+    
+    // Note: robust custom panorama methods would require tiled pano data.
+    // Here we're just using a single tile, set to the tile size and equal
+    // to the pano "world" size.
+    return 'images/panoReception1024-0.jpg';
+  }
+
+  // Construct the appropriate StreetViewPanoramaData given
+  // the passed pano IDs.
+  function getCustomPanorama(pano,zoom,tileX,tileY) {
+  
+     switch(pano) {
+
+      case 'reception':
+        return {
+          location: {
+            pano: 'reception',
+            description: "Google Sydney - Reception"
+          },
+          links: [
+            ],
+          // The text for the copyright control.
+          copyright: 'Imagery (c) 2010 Google',
+          // The definition of the tiles for this panorama.
+          tiles: {
+            tileSize: new google.maps.Size(1024, 512),
+            worldSize: new google.maps.Size(1024, 512),
+            // The heading in degrees at the origin of the panorama 
+            // tile set.
+            centerHeading: 105,
+            getTileUrl: getCustomPanoramaTileUrl
+          }
+        };
+        break;
+    }
+  }
+</script>
+</head>
+<body onload="initialize()">
+  <div id="pano_canvas" style="width: 500px; height: 380px"></div>
+</body>
+</html>

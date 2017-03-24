@@ -1,0 +1,35 @@
+
+<etStruct> [export.layers]
+{
+	<etLayer> [imagery]
+	{
+		"" 	1.0 	0 	true 	"imagery"
+	}
+}
+
+
+<etStruct> [export.nestedlayers]
+{
+	<etNestedLayer> [imagery]
+	{
+		0 	"Imagery" 	"imagery" 	false 	true 	true 	true 	false 	"All Layers" 	30 	"icons/773_l.png" 	"" 	"" 
+	}
+}
+
+
+<etStruct> [export.labels]
+{
+	<etLabel> [All Layers]
+	{
+		""	2
+	}
+}
+
+<etStruct> [export.provider.info]
+{
+	<etProviderInfo> [20]
+	{
+		20	"Imagery from NASA"	-1	false	256
+	}
+}
+

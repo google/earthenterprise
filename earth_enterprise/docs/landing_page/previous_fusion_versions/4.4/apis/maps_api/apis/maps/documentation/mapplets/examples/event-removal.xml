@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="Event Removal" height="300">
+  <Require feature="sharedmap"/>
+</ModulePrefs>
+<Content type="html"><![CDATA[
+
+<small>
+In the following example, we remove an event listener once the map
+is clicked twice.
+</small>
+
+<script>
+function MyApplication() {
+  this.counter = 0;
+  this.map = new GMap2();
+  this.map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+  var myEventListener = GEvent.bind(this.map, "click", this, function(marker,point) {
+    if (this.counter == 0) {
+      if (point) {
+        this.map.addOverlay(new GMarker(point))
+        this.counter++;
+      } else {
+        this.removeOverlay(marker)
+      }
+    } else {
+      GEvent.removeListener(myEventListener);
+    }
+  }); 
+}
+
+var application = new MyApplication();
+</script>
+
+]]></Content>
+</Module>

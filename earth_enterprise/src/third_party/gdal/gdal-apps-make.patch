@@ -1,0 +1,26 @@
+env LC_ALL=C TZ=UTC0 diff -Naur gdal-1.7.1/GNUmakefile  gdal-1.7.1.patch/GNUmakefile
+--- gdal-1.7.1/GNUmakefile	2010-03-30 17:45:17.000000000 +0000
++++ gdal-1.7.1.patch/GNUmakefile	2010-03-30 18:17:12.000000000 +0000
+@@ -66,7 +66,7 @@
+ 	(cd ogr; $(MAKE) all)
+ 
+ apps-target:	lib-target
+-	(cd apps; $(MAKE))
++	(cd apps; $(MAKE) EXE_DEP_LIBS="")
+ 
+ ifeq ($(BINDINGS),)
+ swig-target: ;
+@@ -171,7 +171,7 @@
+ 	(cd frmts; $(MAKE) install)
+ 	(cd alg; $(MAKE) install)
+ 	(cd ogr; $(MAKE) install)
+-	(cd apps; $(MAKE) install)
++	(cd apps; $(MAKE) EXE_DEP_LIBS="" install)
+ ifneq ($(BINDINGS),)
+ 	(cd swig; $(MAKE) install)
+ endif
+@@ -228,4 +228,3 @@
+ 
+ 
+ endif # HAVE_LIBTOOL=no 
+-

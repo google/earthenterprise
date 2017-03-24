@@ -1,0 +1,54 @@
+/*
+ * Copyright 2017 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* TODO: High-level file comment. */
+/* Blueprint overrides */
+body {font-size:75%;color:#222;background:#fff;font-family:"Arial", Helvetica, sans-serif;}
+
+.page_header {
+  font: bold 22px Arial, sans-serif;
+}
+
+.section_header {
+  font: bold 16px Arial, sans-serif;
+}
+
+.field_title {
+  font: 13px Arial, sans-serif;padding-right:13px;
+}
+
+.field_hint {
+  font: 13px Arial, sans-serif; color:#666;
+}
+
+.text_callout {
+  font: bold 13px Arial, sans-serif; color:#666;
+}
+
+.text_status {
+  font: 12px Arial, sans-serif; color:#888;
+}
+
+.text_status_warn {
+  font: 12px Arial, sans-serif; color:#F00;
+}
+
+.text_globe {
+  font: bold 13px Arial, sans-serif; color:#006;
+}
+
+p {font-size: 13px;color:fff;font-family:"Arial", Helvetica, sans-serif;}
+

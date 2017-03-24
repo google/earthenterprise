@@ -1,0 +1,5 @@
+my_glb1 test.glb IMAGE 1 0
+my_glm2 test.glm IMAGE 2 0
+dbRoot dbroot/meta_dbroot_test DBROOT 0 0
+info earth/info.txt FILE 0 0
+layerInfo earth/layer_info.txt FILE 0 0

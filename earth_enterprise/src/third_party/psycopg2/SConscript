@@ -1,0 +1,94 @@
+# Copyright 2013 Google Inc. All Rights Reserved.
+#-*- Python -*-
+
+Import('third_party_env')
+
+psycopg2_version='psycopg2-2.4.6'
+psycopg2_ge_version = psycopg2_version.replace('psycopg2', 'psycopg2-ge')
+
+current_dir = Dir('.').abspath
+build_root = '%s/%s' % (current_dir, psycopg2_version)
+install_root = '%s/install' % current_dir
+install_root_opt = '%s/opt/google' % install_root
+
+psycopg2_source = File('#/../../earth_enterprise/third_party/psycopg2/%s.tar.gz' %
+                       psycopg2_version).abspath
+
+psycopg2_env = third_party_env.DeepCopy()
+root_dir = Dir(psycopg2_env.exportdirs['root']).abspath
+
+# [1] Extract psycopg2
+psycopg2_target = '%s/.extract_psycopg2' % current_dir
+psycopg2_extract = psycopg2_env.Command(
+    psycopg2_target, psycopg2_source,
+    [psycopg2_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xzf %s\n'
+        'touch %s' % (current_dir, current_dir, psycopg2_source,
+                      psycopg2_target))])
+
+if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+  env_opt = 'ac_cv_prog_cc_c99=no'
+else:
+  env_opt = ''
+
+# [2] Build psycopg2
+python_cmd = psycopg2_env['python_bin']
+
+psycopg2_target = '%s/.build' % current_dir
+psycopg2_build = psycopg2_env.Command(
+    psycopg2_target, psycopg2_extract,
+    [psycopg2_env.MultiCommand(
+        'cd %s\n'
+        '%s%s %s setup.py build\n'
+        'touch %s' % (build_root, psycopg2_env['ENV']['mod_env'],
+                      env_opt, python_cmd, psycopg2_target))])
+
+# [3] Create psycopg2 master installer
+install_root_lib = '%s/lib/python%s/site-packages' % (
+    install_root, psycopg2_env['python_major_version'])
+install_root_doc = '%s/share/doc/packages/%s' % (
+    install_root_opt, psycopg2_ge_version)
+
+psycopg2_target = '%s/.install' % current_dir
+psycopg2_install = psycopg2_env.Command(
+    psycopg2_target, psycopg2_build,
+    [psycopg2_env.MultiCommand('\n'.join([
+        'cd %s' % build_root,
+        'rm -rf %s %s' % (install_root_lib, install_root_doc),
+        'mkdir -p %s' % install_root_doc,
+        'cp -pr README LICENSE ChangeLog %s' % install_root_doc,
+        'mkdir -p %s' % install_root_lib,
+        'rsync -pvr --exclude psycopg2/tests build/lib.linux-x86_64-%s/ %s' % (
+            psycopg2_env['python_major_version'], install_root_lib),
+        'touch %s' % psycopg2_target]))])
+
+# [4] Install these into various directories as required for build
+psycopg2_target = '%s/.install_for_build' % current_dir
+psycopg2_install_build = psycopg2_env.Command(
+    psycopg2_target, psycopg2_install,
+    [psycopg2_env.rsync_cmd % (
+        '%s' % install_root_lib,
+        '%s/lib/python%s' % (root_dir, psycopg2_env['python_major_version'])),
+     Touch('$TARGET')])
+
+
+Default(psycopg2_install_build)
+psycopg2_env.ExecuteOnClean('rm -rf %s' % current_dir)
+
+
+if 'install' in COMMAND_LINE_TARGETS:
+  psycopg2_env.InstallFileOrDir(
+      '%s/lib' % install_root,
+      '%s/opt/google/gepython/Python-%s' % (
+          psycopg2_env.installdirs['common_root'], psycopg2_env['python_version']),
+       psycopg2_install, 'install')
+  psycopg2_env.InstallFileOrDir(
+      '%s/opt/google/share/' % install_root,
+      '%s/opt/google/share/' % Dir(
+          psycopg2_env.installdirs['common_root']).abspath,
+      psycopg2_install, 'install')
+
+
+Return('psycopg2_extract psycopg2_install_build')

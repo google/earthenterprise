@@ -1,0 +1,1363 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>MainWindowBase</class>
+<comment>  Copyright 2017 Google Inc.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+</comment>
+<widget class="QMainWindow">
+    <property name="name">
+        <cstring>MainWindowBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>1126</width>
+            <height>941</height>
+        </rect>
+    </property>
+    <property name="maximumSize">
+        <size>
+            <width>9999</width>
+            <height>9999</height>
+        </size>
+    </property>
+    <property name="caption">
+        <string>Google Earth Fusion</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>8</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="GfxView" row="0" column="0">
+            <property name="name">
+                <cstring>gfxview</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>64</width>
+                    <height>64</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>2048</width>
+                    <height>2048</height>
+                </size>
+            </property>
+            <property name="focusPolicy">
+                <enum>StrongFocus</enum>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<menubar>
+    <property name="name">
+        <cstring>menubar</cstring>
+    </property>
+    <item text="&amp;File" name="file_menu">
+        <action name="fileOpenAction"/>
+        <action name="fileExitAction"/>
+    </item>
+    <item text="&amp;Edit" name="edit_menu">
+        <action name="editEnableAllAction"/>
+        <action name="editDisableAllAction"/>
+        <separator/>
+        <action name="editExpandAllAction"/>
+        <action name="editCollapseAllAction"/>
+        <separator/>
+        <action name="editPrefsAction"/>
+    </item>
+    <item text="&amp;Tools" name="tools_menu">
+        <action name="assetManagerAction"/>
+        <action name="placemarkManagerAction"/>
+        <action name="featureEditorAction"/>
+        <action name="iconAction"/>
+        <action name="localeManagerAction"/>
+        <action name="providerManagerAction"/>
+        <action name="toolsPublisherAction"/>
+        <action name="systemManagerAction"/>
+    </item>
+    <item text="&amp;Navigation" name="navigation_menu">
+        <action name="addPlacemarkAction"/>
+        <separator/>
+        <action name="resetViewAction"/>
+    </item>
+    <item text="&amp;View" name="view_menu">
+        <action name="viewProjectManagerAction"/>
+        <action name="viewSelectionAction"/>
+        <separator/>
+        <action name="drawTexturesAction"/>
+        <action name="toggleBaseAction"/>
+        <action name="toggleAlphaAction"/>
+        <action name="snapToLevelAction"/>
+        <separator/>
+    </item>
+    <item text="&amp;Help" name="help_menu">
+        <action name="helpmanual"/>
+        <separator/>
+        <action name="helpAction"/>
+    </item>
+</menubar>
+<toolbars>
+    <toolbar dock="2">
+        <property name="name">
+            <cstring>toolbar</cstring>
+        </property>
+        <property name="label">
+            <string>Toolbar</string>
+        </property>
+        <action name="fileOpenAction"/>
+        <action name="select_tool"/>
+        <action name="zoombox_tool"/>
+        <action name="zoomdrag_tool"/>
+        <action name="pan_tool"/>
+        <action name="edit_tool"/>
+        <action name="Grids"/>
+        <widget class="QLCDNumber">
+            <property name="name">
+                <cstring>levelView</cstring>
+            </property>
+            <property name="paletteForegroundColor">
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="paletteBackgroundColor">
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="focusPolicy">
+                <enum>ClickFocus</enum>
+            </property>
+            <property name="smallDecimalPoint">
+                <bool>true</bool>
+            </property>
+            <property name="mode">
+                <enum>Dec</enum>
+            </property>
+            <property name="segmentStyle">
+                <enum>Outline</enum>
+            </property>
+            <property name="value" stdset="0">
+                <number>1.123</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Display Level</string>
+            </property>
+        </widget>
+        <widget class="QSpinBox">
+            <property name="name">
+                <cstring>levelOffset</cstring>
+            </property>
+            <property name="enabled">
+                <bool>true</bool>
+            </property>
+            <property name="focusPolicy">
+                <enum>ClickFocus</enum>
+            </property>
+            <property name="maxValue">
+                <number>5</number>
+            </property>
+            <property name="minValue">
+                <number>-5</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Display Level Offset</string>
+            </property>
+        </widget>
+        <widget class="QComboBox">
+            <property name="name">
+                <cstring>placeMarkList</cstring>
+            </property>
+            <property name="focusPolicy">
+                <enum>NoFocus</enum>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Move to Placemark</string>
+            </property>
+        </widget>
+        <widget class="Spacer">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>28</width>
+                    <height>27</height>
+                </size>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Preview Projection:</string>
+            </property>
+        </widget>
+        <widget class="QComboBox">
+            <item>
+                <property name="text">
+                    <string>Flat</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Mercator</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>previewProjection</cstring>
+            </property>
+        </widget>
+    </toolbar>
+</toolbars>
+<customwidgets>
+    <customwidget>
+        <class>GfxView</class>
+        <header location="local">GfxView.h</header>
+        <sizehint>
+            <width>100</width>
+            <height>100</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
+        <signal>levelChanged(double)</signal>
+        <signal>latlonChanged(double, double)</signal>
+        <signal>drawOpenFiles(gstDrawState&amp;)</signal>
+        <signal>selectBox(double, double, double, double)</signal>
+        <signal>renderbusy(int)</signal>
+        <slot access="public" specifier="">drawGrids(bool)</slot>
+        <slot access="public" specifier="">toolModeZoomBox(bool)</slot>
+        <slot access="public" specifier="">activated()</slot>
+        <slot access="public" specifier="">toolModeZoomDrag(bool)</slot>
+        <slot access="public" specifier="">toolModeSelect(bool)</slot>
+        <slot access="public" specifier="">toolModePan(bool)</slot>
+        <slot access="public" specifier="">levelOffset(int)</slot>
+        <slot access="public" specifier="">resetView()</slot>
+        <slot access="public" specifier="">toggleTextures()</slot>
+        <slot access="public" specifier="">toggleAlpha()</slot>
+        <slot access="public" specifier="">toggleDebug()</slot>
+        <slot access="public" specifier="">toggleBaseTexture()</slot>
+        <slot access="public" specifier="">zoomToBox(gstBBox&amp;)</slot>
+        <slot access="public" specifier="">zoomToBox(const gstBBox&amp;)</slot>
+        <slot access="public" specifier="">slot()</slot>
+        <slot access="public" specifier="">toolModeEdit(bool)</slot>
+        <slot access="public" specifier="">snapToLevel(bool)</slot>
+    </customwidget>
+</customwidgets>
+<actions>
+    <action>
+        <property name="name">
+            <cstring>fileNewAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>filenew</iconset>
+        </property>
+        <property name="text">
+            <string>New</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;New</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+N</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileOpenAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>fileopen</iconset>
+        </property>
+        <property name="text">
+            <string>Open</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Open...</string>
+        </property>
+        <property name="toolTip">
+            <string>Open File in Preview</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+O</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>filePrintAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>print</iconset>
+        </property>
+        <property name="text">
+            <string>Print</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Print...</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileExitAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>exit.png</iconset>
+        </property>
+        <property name="text">
+            <string>Exit</string>
+        </property>
+        <property name="menuText">
+            <string>E&amp;xit</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+Q</string>
+        </property>
+    </action>
+    <actiongroup>
+        <property name="name">
+            <cstring>toolModes</cstring>
+        </property>
+        <property name="enabled">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>ActionGroup</string>
+        </property>
+        <property name="menuText">
+            <string>ActionGroup</string>
+        </property>
+        <property name="usesDropDown">
+            <bool>false</bool>
+        </property>
+        <action>
+            <property name="name">
+                <cstring>select_tool</cstring>
+            </property>
+            <property name="toggleAction">
+                <bool>true</bool>
+            </property>
+            <property name="on">
+                <bool>true</bool>
+            </property>
+            <property name="iconSet">
+                <iconset>select.xpm</iconset>
+            </property>
+            <property name="text">
+                <string>Select</string>
+            </property>
+            <property name="menuText">
+                <string>Select</string>
+            </property>
+            <property name="toolTip">
+                <string>Enter Select Mode</string>
+            </property>
+            <property name="accel">
+                <string>S</string>
+            </property>
+        </action>
+        <action>
+            <property name="name">
+                <cstring>zoombox_tool</cstring>
+            </property>
+            <property name="toggleAction">
+                <bool>true</bool>
+            </property>
+            <property name="iconSet">
+                <iconset>zoombox.xpm</iconset>
+            </property>
+            <property name="text">
+                <string>ZoomBox</string>
+            </property>
+            <property name="menuText">
+                <string>ZoomBox</string>
+            </property>
+            <property name="toolTip">
+                <string>Enter Zoom Box Mode</string>
+            </property>
+            <property name="accel">
+                <string>Z</string>
+            </property>
+        </action>
+        <action>
+            <property name="name">
+                <cstring>zoomdrag_tool</cstring>
+            </property>
+            <property name="toggleAction">
+                <bool>true</bool>
+            </property>
+            <property name="iconSet">
+                <iconset>zoomdrag.xpm</iconset>
+            </property>
+            <property name="text">
+                <string>ZoomDrag</string>
+            </property>
+            <property name="menuText">
+                <string>ZoomDrag</string>
+            </property>
+            <property name="toolTip">
+                <string>Enter Zoom Drag Mode</string>
+            </property>
+            <property name="accel">
+                <string>D</string>
+            </property>
+        </action>
+        <action>
+            <property name="name">
+                <cstring>pan_tool</cstring>
+            </property>
+            <property name="toggleAction">
+                <bool>true</bool>
+            </property>
+            <property name="iconSet">
+                <iconset>hand.xpm</iconset>
+            </property>
+            <property name="text">
+                <string>Pan</string>
+            </property>
+            <property name="menuText">
+                <string>Pan</string>
+            </property>
+            <property name="toolTip">
+                <string>Enter Pan Mode</string>
+            </property>
+            <property name="accel">
+                <string>P</string>
+            </property>
+        </action>
+        <action>
+            <property name="name">
+                <cstring>edit_tool</cstring>
+            </property>
+            <property name="toggleAction">
+                <bool>true</bool>
+            </property>
+            <property name="iconSet">
+                <iconset>edit_tool.png</iconset>
+            </property>
+            <property name="text">
+                <string>Edit</string>
+            </property>
+            <property name="menuText">
+                <string>Edit</string>
+            </property>
+            <property name="toolTip">
+                <string>Enter Edit Mode</string>
+            </property>
+            <property name="accel">
+                <string>E</string>
+            </property>
+        </action>
+    </actiongroup>
+    <action>
+        <property name="name">
+            <cstring>Grids</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="iconSet">
+            <iconset>grids.xpm</iconset>
+        </property>
+        <property name="text">
+            <string>Action</string>
+        </property>
+        <property name="menuText">
+            <string>Action</string>
+        </property>
+        <property name="toolTip">
+            <string>Toggle Tile Grids</string>
+        </property>
+        <property name="accel">
+            <string>G</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>addPlacemarkAction</cstring>
+        </property>
+        <property name="text">
+            <string>Add &amp;Favorite</string>
+        </property>
+        <property name="menuText">
+            <string>Add &amp;Favorite</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+B</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>resetViewAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset></iconset>
+        </property>
+        <property name="text">
+            <string>&amp;Reset View</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Reset View</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+R</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editPrefsAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Preferences...</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Preferences...</string>
+        </property>
+        <property name="toolTip">
+            <string>Edit Preferences</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+K</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>drawTexturesAction</cstring>
+        </property>
+        <property name="text">
+            <string>Toggle Textures</string>
+        </property>
+        <property name="menuText">
+            <string>Toggle Textures</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+2</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>projectNewAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>project_new.png</iconset>
+        </property>
+        <property name="text">
+            <string>&amp;New</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;New</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>projectOpenAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>project_open.png</iconset>
+        </property>
+        <property name="text">
+            <string>&amp;Open...</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Open...</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>projectCloseAction</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="iconSet">
+            <iconset>fileclose.png</iconset>
+        </property>
+        <property name="text">
+            <string>&amp;Close</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Close</string>
+        </property>
+    </action>
+    <actiongroup>
+        <property name="name">
+            <cstring>projectOpenRecent</cstring>
+        </property>
+        <property name="text">
+            <string>Open &amp;Recent Project...</string>
+        </property>
+        <property name="menuText">
+            <string>Open &amp;Recent Project...</string>
+        </property>
+        <property name="usesDropDown">
+            <bool>true</bool>
+        </property>
+    </actiongroup>
+    <action>
+        <property name="name">
+            <cstring>projectSettingsAction</cstring>
+        </property>
+        <property name="enabled">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>&amp;Project Settings...</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Project Settings...</string>
+        </property>
+        <property name="toolTip">
+            <string>Project Settings...</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>projectAddFileAction</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="text">
+            <string>&amp;Add File...</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Add File...</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>toggleAlphaAction</cstring>
+        </property>
+        <property name="text">
+            <string>Cycle Mask Textures</string>
+        </property>
+        <property name="menuText">
+            <string>Cycle Mask Textures</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+4</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>toggleBaseAction</cstring>
+        </property>
+        <property name="text">
+            <string>Toggle Base Texture</string>
+        </property>
+        <property name="menuText">
+            <string>Toggle Base Texture</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+3</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>buildProjectAction</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="iconSet">
+            <iconset>make_kdevelop.png</iconset>
+        </property>
+        <property name="text">
+            <string>&amp;Build...</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Build...</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>projectOverviewAction</cstring>
+        </property>
+        <property name="text">
+            <string>Over&amp;view...</string>
+        </property>
+        <property name="menuText">
+            <string>Over&amp;view...</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>projectSaveAction</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="iconSet">
+            <iconset>project_save.png</iconset>
+        </property>
+        <property name="text">
+            <string>Save</string>
+        </property>
+        <property name="menuText">
+            <string>Save</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewSelectionAction</cstring>
+        </property>
+        <property name="text">
+            <string>Attribute Table</string>
+        </property>
+        <property name="menuText">
+            <string>Attribute Table</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+1</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewProjectManagerAction</cstring>
+        </property>
+        <property name="text">
+            <string>Preview List</string>
+        </property>
+        <property name="menuText">
+            <string>Preview List</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+0</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewOpenFilesAction</cstring>
+        </property>
+        <property name="text">
+            <string>Open Files</string>
+        </property>
+        <property name="menuText">
+            <string>Open Files</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+0</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>iconAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Icon Manager</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Icon Manager</string>
+        </property>
+        <property name="statusTip">
+            <string>Icon Manager</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+I</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>assetManagerAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Asset Manager</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Asset Manager</string>
+        </property>
+        <property name="toolTip">
+            <string>Asset Manager</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+A</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>helpAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;About</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;About</string>
+        </property>
+        <property name="toolTip">
+            <string>About</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>systemManagerAction</cstring>
+        </property>
+        <property name="text">
+            <string>System Manager</string>
+        </property>
+        <property name="menuText">
+            <string>System Manager</string>
+        </property>
+        <property name="toolTip">
+            <string>System Manager</string>
+        </property>
+        <property name="statusTip">
+            <string>System Manager</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>providerManagerAction</cstring>
+        </property>
+        <property name="text">
+            <string>Pro&amp;vider Manager</string>
+        </property>
+        <property name="menuText">
+            <string>Pro&amp;vider Manager</string>
+        </property>
+        <property name="toolTip">
+            <string>Provider Manager</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+V</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>placemarkManagerAction</cstring>
+        </property>
+        <property name="text">
+            <string>Favorites Manager</string>
+        </property>
+        <property name="menuText">
+            <string>Favorites Manager</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+F</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>helpmanual</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Contents</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Contents</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editSelectAllAction</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="text">
+            <string>Select All</string>
+        </property>
+        <property name="menuText">
+            <string>Select All</string>
+        </property>
+        <property name="toolTip">
+            <string>Selects all features of current layer</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editEnableAllAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Enable All Layers</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Enable All Layers</string>
+        </property>
+        <property name="toolTip">
+            <string>Enable All Layers</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editDisableAllAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Disable All Layers</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Disable All Layers</string>
+        </property>
+        <property name="toolTip">
+            <string>Disable All Layers</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editExpandAllAction</cstring>
+        </property>
+        <property name="text">
+            <string>E&amp;xpand All Layers</string>
+        </property>
+        <property name="menuText">
+            <string>E&amp;xpand All Layers</string>
+        </property>
+        <property name="toolTip">
+            <string>Expand All Layers</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editCollapseAllAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Collapse All Layers</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Collapse All Layers</string>
+        </property>
+        <property name="toolTip">
+            <string>Collapse All Layers</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>streamServerManagerAction</cstring>
+        </property>
+        <property name="text">
+            <string>S&amp;tream Server Manager</string>
+        </property>
+        <property name="menuText">
+            <string>S&amp;tream Server Manager</string>
+        </property>
+        <property name="toolTip">
+            <string>Stream Server Manager</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>databaseViewerAction</cstring>
+        </property>
+        <property name="text">
+            <string>Database Viewer</string>
+        </property>
+        <property name="menuText">
+            <string>Database Viewer</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>featureEditorAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Feature Editor</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Feature Editor</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>localeManagerAction</cstring>
+        </property>
+        <property name="text">
+            <string>Locale Manager</string>
+        </property>
+        <property name="menuText">
+            <string>Locale Manager</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>snapToLevelAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>Snap To Level</string>
+        </property>
+        <property name="menuText">
+            <string>Snap To Level</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+5</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>toolsAction</cstring>
+        </property>
+        <property name="text">
+            <string></string>
+        </property>
+        <property name="menuText">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>toolsPublisherAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Server Associations Manager</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Server Associations Manager</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+S</string>
+        </property>
+    </action>
+</actions>
+<images>
+    <image name="image0">
+        <data format="XBM.GZ" length="79">789c534e494dcbcc4b554829cdcdad8c2fcf4c29c95030e0524611cd48cd4ccf28010a1797249664262b2467241641a592324b8aa363156c15aab914146aadb90067111b1f</data>
+    </image>
+</images>
+<connections>
+    <connection>
+        <sender>addPlacemarkAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>addPlaceMark()</slot>
+    </connection>
+    <connection>
+        <sender>assetManagerAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>assetManager()</slot>
+    </connection>
+    <connection>
+        <sender>buildProjectAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>buildProject()</slot>
+    </connection>
+    <connection>
+        <sender>drawTexturesAction</sender>
+        <signal>activated()</signal>
+        <receiver>gfxview</receiver>
+        <slot>toggleTextures()</slot>
+    </connection>
+    <connection>
+        <sender>edit_tool</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>gfxview</receiver>
+        <slot>toolModeEdit(bool)</slot>
+    </connection>
+    <connection>
+        <sender>editPrefsAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>editPrefs()</slot>
+    </connection>
+    <connection>
+        <sender>editSelectAllAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>editSelectAll()</slot>
+    </connection>
+    <connection>
+        <sender>featureEditorAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>ShowFeatureEditor()</slot>
+    </connection>
+    <connection>
+        <sender>fileExitAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>fileExit()</slot>
+    </connection>
+    <connection>
+        <sender>fileOpenAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>fileOpen()</slot>
+    </connection>
+    <connection>
+        <sender>filePrintAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>filePrint()</slot>
+    </connection>
+    <connection>
+        <sender>gfxview</sender>
+        <signal>levelChanged(double)</signal>
+        <receiver>levelView</receiver>
+        <slot>display(double)</slot>
+    </connection>
+    <connection>
+        <sender>Grids</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>gfxview</receiver>
+        <slot>drawGrids(bool)</slot>
+    </connection>
+    <connection>
+        <sender>helpAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>helpAbout()</slot>
+    </connection>
+    <connection>
+        <sender>helpmanual</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>launchHelpManual()</slot>
+    </connection>
+    <connection>
+        <sender>iconAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>manageIcons()</slot>
+    </connection>
+    <connection>
+        <sender>levelOffset</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>gfxview</receiver>
+        <slot>levelOffset(int)</slot>
+    </connection>
+    <connection>
+        <sender>localeManagerAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>manageLocales()</slot>
+    </connection>
+    <connection>
+        <sender>pan_tool</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>gfxview</receiver>
+        <slot>toolModePan(bool)</slot>
+    </connection>
+    <connection>
+        <sender>placeMarkList</sender>
+        <signal>activated(int)</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>selectPlaceMark(int)</slot>
+    </connection>
+    <connection>
+        <sender>placemarkManagerAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>managePlacemarks()</slot>
+    </connection>
+    <connection>
+        <sender>projectAddFileAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>addFileToProject()</slot>
+    </connection>
+    <connection>
+        <sender>projectCloseAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>closeProject()</slot>
+    </connection>
+    <connection>
+        <sender>projectNewAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>newProject()</slot>
+    </connection>
+    <connection>
+        <sender>projectOpenAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>openProject()</slot>
+    </connection>
+    <connection>
+        <sender>projectOverviewAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>projectOverview()</slot>
+    </connection>
+    <connection>
+        <sender>projectSaveAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>saveProject()</slot>
+    </connection>
+    <connection>
+        <sender>projectSettingsAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>projectSettings()</slot>
+    </connection>
+    <connection>
+        <sender>providerManagerAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>manageProviders()</slot>
+    </connection>
+    <connection>
+        <sender>resetViewAction</sender>
+        <signal>activated()</signal>
+        <receiver>gfxview</receiver>
+        <slot>resetView()</slot>
+    </connection>
+    <connection>
+        <sender>select_tool</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>gfxview</receiver>
+        <slot>toolModeSelect(bool)</slot>
+    </connection>
+    <connection>
+        <sender>snapToLevelAction</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>gfxview</receiver>
+        <slot>snapToLevel(bool)</slot>
+    </connection>
+    <connection>
+        <sender>systemManagerAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>systemManager()</slot>
+    </connection>
+    <connection>
+        <sender>toggleAlphaAction</sender>
+        <signal>activated()</signal>
+        <receiver>gfxview</receiver>
+        <slot>toggleAlpha()</slot>
+    </connection>
+    <connection>
+        <sender>toggleBaseAction</sender>
+        <signal>activated()</signal>
+        <receiver>gfxview</receiver>
+        <slot>toggleBaseTexture()</slot>
+    </connection>
+    <connection>
+        <sender>toolsPublisherAction</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>openPublisher()</slot>
+    </connection>
+    <connection>
+        <sender>toolsPublisherAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>openPublisher()</slot>
+    </connection>
+    <connection>
+        <sender>viewOpenFilesAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>viewOpenFiles()</slot>
+    </connection>
+    <connection>
+        <sender>viewProjectManagerAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>viewProjectManager()</slot>
+    </connection>
+    <connection>
+        <sender>viewSelectionAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>viewSelection()</slot>
+    </connection>
+    <connection>
+        <sender>zoombox_tool</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>gfxview</receiver>
+        <slot>toolModeZoomBox(bool)</slot>
+    </connection>
+    <connection>
+        <sender>zoomdrag_tool</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>gfxview</receiver>
+        <slot>toolModeZoomDrag(bool)</slot>
+    </connection>
+    <connection>
+        <sender>previewProjection</sender>
+        <signal>activated(int)</signal>
+        <receiver>MainWindowBase</receiver>
+        <slot>previewProjectionActivated(int)</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="local" impldecl="in implementation">mainwindowbase.ui.h</include>
+</includes>
+<slots>
+    <slot>addFileToProject()</slot>
+    <slot>addPlaceMark()</slot>
+    <slot>addProject()</slot>
+    <slot>assetManager()</slot>
+    <slot>buildProject()</slot>
+    <slot>closeProject()</slot>
+    <slot>editFeatures()</slot>
+    <slot>editPrefs()</slot>
+    <slot>fileExit()</slot>
+    <slot>fileNew()</slot>
+    <slot>fileOpen()</slot>
+    <slot>filePrint()</slot>
+    <slot>fileSave()</slot>
+    <slot>fileSaveAs()</slot>
+    <slot>helpAbout()</slot>
+    <slot>init()</slot>
+    <slot>latlongUpdate( double, double )</slot>
+    <slot>manageIcons()</slot>
+    <slot>managePlacemarks()</slot>
+    <slot>newProject()</slot>
+    <slot>manageProviders()</slot>
+    <slot>openProject()</slot>
+    <slot>projectOverview()</slot>
+    <slot>projectSettings()</slot>
+    <slot>saveProject()</slot>
+    <slot>selectPlaceMark( int )</slot>
+    <slot>selectProject( int )</slot>
+    <slot>systemManager()</slot>
+    <slot>viewGeometryLayers()</slot>
+    <slot>viewImageLayers()</slot>
+    <slot>viewOpenFiles()</slot>
+    <slot>viewProjectManager()</slot>
+    <slot>viewSelection()</slot>
+    <slot>launchHelpManual()</slot>
+    <slot>editSelectAll()</slot>
+    <slot>ShowFeatureEditor()</slot>
+    <slot>manageLocales()</slot>
+    <slot>openPublisher()</slot>
+    <slot>previewProjectionActivated( int )</slot>
+</slots>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="8"/>
+<includehints>
+    <includehint>GfxView.h</includehint>
+</includehints>
+</UI>

@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Creating Your Own Source Data, Icons, and Masks</title>
+</head>
+
+<body>
+
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" />
+  </div>
+  <h1 id="doc_title">Reference Guide</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Reference Guide</strong></li>
+    <li><a href="index.html" id="selected">Home</a></li>
+    <li><a href="intro.html">Introduction</a></li>
+    <li><a href="fundamentals.html">Fundamentals</a></li>
+    <li><a href="setup.html">Setting Up Your Workspace</a></li>
+    <li><a href="resources.html">Defining Resources</a></li>
+    <li><a href="projects.html">Defining Projects</a></li>
+    <li><a href="databases.html">Defining and Publishing Databases</a></li>
+    <li><a href="building.html">Building Assets</a></li>
+    <li><a href="maps.html">Preparing Data for Google Maps</a></li>
+    <li><a href="commands.html">Command Line Reference</a></li>
+    <li><a href="createOwnData.html" id="selected">Creating Your Own Source Data, Icons, and Masks</a></li>
+    <li><a href="htmlTags.html">HTML Tags Allowed</a></li>
+    <li><a href="plugins.html">Google Earth Plugin</a></li>
+    <li><a href="errors.html">Common Error Messages</a></li>
+    <li><a href="glossary.html">Glossary</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent"><h1>Creating Your Own Source Data, Icons, and Masks</h1>
+
+<ol class="toc">
+  <li><a href="#creating_point_data">Creating Point Data</a></li>
+  <li><a href="#creating_custom_icons">Creating Custom Icons</a></li>
+  <li><a href="#creating_custom_masks">Creating Custom Masks</a></li>
+</ol>
+
+<h2 id="creating_point_data"><a id="marker-1015780"></a>Creating Point Data<a id="marker-1015781"></a>
+</h2>
+<p>In addition to using vector resources in SHP, TAB, and other formats, you can define your own point data and import it as a resource into Google Earth Enterprise Fusion. To do so, you create delimited text files, such as CSV or tab-delimited TXT files. 
+</p>
+<p><a id="marker-1016061"></a>Each text file must be paired with a configuration file in order for Google Earth Enterprise Fusion to parse the source data. The configuration file defines the source file structure, specifying field/value pairs and the type of delimiter used in the text file (that is, tabs or commas).
+</p>
+<p><a id="marker-1017115"></a>The configuration file must be a KDX file, have the same name as the CSV file, and be located in the same folder. For example, if you have a text file called <code>fast_food_stores.csv</code>, the configuration file must be stored in the same folder with the name <code>fast_food_stores.kdx</code>. 
+</p>
+<p class="note"><strong>Tip:</strong> You can create the KDX file with a text editor, if you know the required format, or you can auto-generate it by importing the CSV file into Google Earth EC. Google Earth EC saves the KDX file in the same folder and with the same name as the original text file but with the <code>.kdx</code> extension.
+</p>
+<p><a id="marker-1017137"></a><a id="marker-1017120"></a><a id="marker-1017145"></a>Your installation of Google Earth Enterprise Fusion includes a sample tab-delimited text file with a corresponding configuration file that you can examine. They are called <code>web_cam.txt</code> and <code>web_cam.kdx</code> and are located in:
+</p><pre>/opt/google/share/tutorials/fusion/Vector</pre>
+<p>The following sections describe how to create the text and configuration file with Google Earth Enterprise Fusion.
+</p>
+<h3>Defining a Configuration File<a id="marker-1013521"></a>
+</h3>
+<p>The key to using your own delimited data with Google Earth Enterprise Fusion is the configuration file, which defines the structure of the data, the data fields, and the type of data contained in the fields. The following is an example of a configuration file:
+</p>
+<pre>Layout {
+  FileType : &quot;delimited&quot;
+  Delimiter : &quot;,&quot;
+  Latitude : &quot;2&quot;
+  Longitude : &quot;1&quot;
+  SkipRows : &quot;1&quot;
+  FieldDefinitions {
+    0 {
+      Name : &quot;Name&quot;
+      Type : &quot;string&quot;
+    }
+    1 {
+      Name : &quot;Longitude&quot;
+      Type : &quot;double&quot;
+    }
+    2 {
+      Name : &quot;Latitude&quot;
+      Type : &quot;double&quot;
+    }
+    3 {
+      Name : &quot;Comments&quot;
+      Type : &quot;string&quot;
+    }
+    4 {
+      Name : &quot;URL&quot;
+      Type : &quot;string&quot;
+    }
+  }
+}</pre>
+<h4>File Structure
+</h4>
+<p><a id="marker-1016214"></a>Notice that the first line of the file begins with the word <code>Layout</code> and is followed by a curly brace that has its closing bracket in the last line of the file. This layout block is the basic structure in the configuration file. Each configuration file must start with a layout block. All settings within the layout block must appear inside of its curly braces <code>{}</code>.
+</p>
+<h4>File Type
+</h4>
+<p><a id="marker-1014379"></a>The <code>FileType</code> value defines the text file type. The options are:
+</p>
+<ul>
+  <li><code>delimited</code> - Data fields are separated by tabs or commas.
+  </li>
+  <li><code>fixedwidth</code> - Each data field has a fixed width.
+  </li>
+</ul>
+<p>If the file type is <code>delimited</code>, you must indicate the delimiter type in the next line. Enter a comma (,) or an actual tab between the quotation marks. 
+</p>
+<h4>Data Location
+</h4>
+<p><a id="marker-1014391"></a>The data location is defined by the <code>Latitude</code> and <code>Longitude</code> values. 
+</p>
+<p>The <code>Latitude</code> value defines which column contains latitude data. The column count starts with 0. In the example above, the latitude column count is <strong>2</strong>, which is the third column in the file. The required format for the <code>Latitude</code> data is degrees. If your data uses degrees-minutes-seconds format, you must convert it to degrees by using the following formula: 
+</p>
+<p>Latitude = number of degrees + number of minutes/60 + number of seconds/3600
+</p>
+<p>Record as many numbers after the decimal points as you can to ensure the accuracy of the <code>latitude</code> value.
+</p>
+<p>The <code>Longitude</code> value defines which column contains longitude data. As with latitude, the column count starts with 0, and the format of the value is in degrees.
+</p>
+<h4>Indicating Header Rows
+</h4>
+<p><a id="marker-1014394"></a>When you want to include a header row in the file for ease of reading but do not want to include it as part of the data Google Earth Enterprise Fusion reads from the file, you can use the <code>SkipRows</code> keyword to indicate how many rows should be ignored. For example, the line:
+</p><pre>SkipRows : &quot;1&quot;</pre>
+<p>indicates that Google Earth Enterprise Fusion should ignore the top row in the source file. If the source file contains more than one header row, indicate the number of rows within the quotation marks.
+</p>
+<h4>Field Definitions
+</h4>
+<p><a id="marker-1014395"></a>The Field Definitions block defines the column structure of the source file. The values for each column are defined in a separate block (indicated by curly braces), and the position of each column is indicated by its index number, starting with 0 for the first column and incrementing by 1 for each subsequent column. 
+</p>
+<p>The actual field definitions have the following values: 
+</p>
+<ul>
+  <li><strong>Name</strong> - The name of the column. 
+  </li>
+  <li><strong>Type</strong> - The column data type, which can be integer, double, or string. 
+  </li>
+  <li><strong>Length</strong> - If the file type is <code>fixedwidth</code>, you must use the <code>Length</code> keyword to define each column’s width, for example:
+  </li>
+</ul>
+<pre>Length : &quot;50&quot;</pre>
+<p class="note"><strong>Notes:</strong> <a id="marker-1014398"></a>Google Earth Enterprise Fusion is case-sensitive when reading the configuration file. In addition, the space between each line header and the subsequent colon (:) is required. Make sure that your configuration file has exactly the same syntax as the sample configuration file shown above. 
+<br /><br />
+If the configuration file for your source data is not set up correctly, or if the structure of your source file does not match the structure specify in your configuration file, Google Earth Enterprise Fusion generates an error message when trying to import your source data.
+<br /><br />
+For your convenience, instead of creating a configuration file from scratch, you can copy the sample file to the folder where your source data is located, rename it, and then modify the content.
+</p>
+<h2 id="creating_custom_icons"><a id="47824"></a>Creating Custom Icons
+</h2>
+<p><a id="marker-1014400"></a>You can create your own custom icons in the graphics application of your choice for use on roads, points of interest, and other features in Google Earth Enterprise Fusion. When you do so, the following restrictions apply:
+</p>
+<ul>
+  <li>The image must be created and saved in RGBA mode (RGB with an alpha channel).
+  </li>
+  <li>The image file must be saved in PNG format.
+  </li>
+  <li>Icons must be square. The standard sizes are 32 x 32 pixels up to a maximum of 64 x 64 pixels. However, you can make an icon any size, and when you import it, Google Earth Enterprise Fusion scales the icon <i>up</i> to as large as 64 x 64 pixels (changing the proportions to make it square, if it is rectangular). If the original icon image is larger than 64 x 64 pixels, Google Earth Enterprise Fusion scales it <i>down</i> to 64 x 64 pixels.
+  </li>
+  <li>Each image file must contain two versions of the icon (one for normal display
+    and one when it is selected/highlighted). If you do not include two versions, Google Earth Enterprise Fusion duplicates the single 32 x 32 or 64 x 64 image and uses the same image for both versions. The red phone image below is an example of how an icon image might look. If the original icon is 32 x 32 pixels, the total for this stacked image is 32 x 64 pixels.
+    <p><img src="images/iconPhone.png" />
+  </li>
+</ul>
+<ul>
+  <li>Icons that are highlighted <i>and</i> part of a legend must contain a version of the icon for the legend which is 16 x 16, stacked on top and to the left of the top icon. The beach ball image below is an example of how such an image file might look. If the original icon is 32 x 32 pixels, the total for this stacked image is 32 x 96 pixels.
+    <p><img src="images/ball_icon.png" /></p>
+  </li>
+</ul>
+<p class="note"><strong>Note:</strong> If you change the image used for a custom icon name, it does not force you to rebuild projects that reference that icon. If that icon was previously referenced in a project that has already been built, when you publish a database that includes that project, the old icon appears. If something else in that project subsequently triggers a build, the new icon will appear in the resulting version.
+</p>
+<h2 id="creating_custom_masks"><a id="77793"></a>Creating Custom Masks
+</h2>
+<p><a id="marker-1017167"></a>Google Earth Enterprise Fusion’s auto-masking tool provides a very robust and dependable method of excluding fill data from imagery and terrain resources and requires the least investment of your time, since Google Earth Enterprise Fusion builds the mask itself. There are cases, however, where, in addition to fill data, some of the imagery within a resource should be masked out of view to produce the best quality imagery project. 
+</p>
+<p>This section describes how to create a custom mask, including how to create the necessary supporting files.
+</p>
+<h4>To create a custom mask:
+</h4>
+<br />
+
+<ol>
+  <li>Change to the folder that contains the version of the imagery resource for which you want to create a custom mask, such as:
+    <pre>/gevol/assets/Resources/Imagery/
+  SFBayAreaLanSat.kiasset/product.kia/ver001</pre>
+  </li>
+  <li><a id="58668"></a>Extract a preview of the imagery resource using the <code>gemaskgen</code> command with the <code>--extract</code> option. For example:
+<pre>gemaskgen --extract raster.kip file-extract.tif
+</pre>
+<p>This command creates a preview image file called file-extract.tif.
+</p>
+  </li>
+  <li><a id="17691"></a>Create a default mask to serve as the base for the custom mask:
+<pre>gemaskgen --mask --feather 200 raster.kip file-maskold.tif
+</pre>
+<p>This creates a mask file called file-maskold.tif with a feather of 200 pixels. 
+</p>
+<p class="note"><strong>Note:</strong> It could take a few minutes to generate the mask.
+</p>
+  </li>
+  <li>If necessary, copy the <code>file-extract.tif</code> and <code>file-maskold.tif</code> files created in steps <strong>2</strong> and <strong>3</strong> to another computer that has a graphics editing software application installed, such as Adobe Photoshop. 
+  </li>
+  <li>Open both files in your graphics editing software application, and edit the mask as desired.
+  </li>
+  <li><a id="95499"></a>When you finish editing the mask, save it with the same name as the original source image file, adding <code>-mask</code>. 
+    <p>For example, if your original file is called <code>trails.tif</code>, name your mask file <code>trails-mask.tif</code>.
+    </p>
+  </li>
+  <li>Copy the mask file to the computer where you use Google Earth Enterprise Fusion.
+  </li>
+  <li>Within Google Earth Enterprise Fusion, open the imagery resource to which you want to apply the mask, and select <strong>Hand Mask</strong> for Mast Type in the Imagery Resource Editor.
+  </li>
+</ol>
+<p>When you build the resource, Google Earth Enterprise Fusion looks for a file with the same name as the original source file with the <code>-mask</code> ending, as described in step <strong>6</strong>.
+</p>
+<p>
+</p>
+
+</div>
+
+<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+
+</div>
+<!-- END WRAPPER -->
+
+</body>
+</html>

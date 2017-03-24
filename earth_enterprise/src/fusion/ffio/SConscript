@@ -1,0 +1,9 @@
+# Copyright 2008 Google Inc. All Rights Reserved.
+#-*- Python -*-
+Import('env')
+
+khffio = env.sharedLib('khffio', ['ffioIndex.cpp', 'ffioWriter.cpp',
+                                  'ffioReader.cpp', 'ffioPresenceMask.cpp'],
+                       LIBS=['gemiscconfig'])
+
+env.install('fusion_lib', [khffio])

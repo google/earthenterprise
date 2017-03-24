@@ -1,0 +1,200 @@
+/*
+ * Copyright 2017 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+body {
+  margin-top: 75px;
+}
+
+h1,
+h3,
+.geecheck-wrapper {
+  display: block;
+  margin: 0 auto;
+  font-family: "Arial", sans-serif;
+}
+
+h1,
+h3 {
+  width: 90%;
+}
+
+h1 {
+  font-family: "Open sans", sans-serif;
+  font-weight: 100;
+  font-size: 26px;
+  padding: 0;
+  color: rgba(42, 118, 246, 0.63);
+}
+
+h3 {
+  font-size: 14px;
+  font-weight: normal;
+  color: #666;
+  font-style: italic;
+  margin-bottom: 24px;
+}
+
+.error-summary {
+  display: block;
+  border: 1px solid #DAD6D6;
+  padding: 16px;
+  color: #A95353;
+  text-align: center;
+  font-size: 14px;
+  font-style: italic;
+}
+
+.geecheck-loader {
+  display: block;
+  position: fixed;
+  z-index: 1;
+  top: 125px;
+  left: 0;
+  right: 0;
+}
+
+.geecheck-loader span {
+  display: block;
+  width: 250px;
+  margin: 0 auto;
+  background: #F7F6F6;
+  padding: 16px;
+  text-align: center;
+  font-family: "Arial", sans-serif;
+  color: rgb(92, 92, 92);
+  box-shadow: 0 2px 3px rgba(0,0,0,0.2);
+}
+
+.geecheck-loader span em {
+  display: inline-block;
+  width: 20px;
+  text-align: left;
+}
+
+.test-results-header,
+.test-summary-header {
+  color: rgba(102, 102, 102, 0.72);
+  font-size: 18px;
+  padding: 8px 0;
+  border-bottom: 1px solid #DCDCDC;
+  display: block;
+}
+
+.geecheck-wrapper {
+  width: 80%;
+}
+
+.error-summary,
+.test-results,
+.test-summary {
+  display: none;
+}
+
+.test-summary {
+  margin-bottom: 24px;
+}
+
+.test-summary-content span {
+  display: block;
+  margin: 4px;
+  font-size: 13px;
+}
+
+.test-summary-content .test_id,
+.test-summary-content .FAILURE,
+.test-summary-content .SUCCESS,
+.test-summary-content .ERROR {
+  padding: 4px;
+  display: inline-block;
+  margin: 1px 8px;
+  border-radius: 1px;
+}
+
+.test-summary-content .test_id {
+  background-color: #F1F1F1;
+  color: #333;
+  text-align: center;
+  width: 175px;
+}
+
+.test-summary-content .desc {
+  color: #333;
+  margin-left: 8px;
+}
+
+.test-summary-content .FAILURE,
+.test-summary-content .SUCCESS,
+.test-summary-content .ERROR {
+  width: 75px;
+  color: #fff;
+  text-align: center;
+}
+
+.test-summary-content .ERROR,
+.test-results-content span label.ERROR label {
+  background-color: rgba(224, 186, 74, 0.79);
+}
+
+.test-summary-content .FAILURE,
+.test-results-content span label.FAILURE label {
+  background-color: rgba(218, 52, 50, 0.79);
+}
+
+.test-summary-content .SUCCESS,
+.test-results-content span label.SUCCESS label {
+  background-color: rgba(0, 151, 80, 0.77);
+}
+
+.test-results-content span label
+.test-results-content span {
+  padding: 4px;
+}
+
+.test-results-content span {
+  margin: 12px;
+  background: #F1F1F1;
+  display: block;
+  border-radius: 1px;
+  color: #333;
+}
+
+.test-results-content span label {
+  display: block;
+  font-size: 13px;
+  padding: 4px 8px;
+}
+
+.test-results-content span label em {
+  font-style: normal;
+  font-weight: bold;
+  width: 125px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.test-results-content span label label {
+  display: inline-block;
+  width: 50%;
+}
+
+.test-results-content span label.FAILURE label,
+.test-results-content span label.SUCCESS label,
+.test-results-content span label.ERROR label {
+  display: inline-block;
+  width: auto;
+  margin-left: 4px;
+  color: #fff;
+}

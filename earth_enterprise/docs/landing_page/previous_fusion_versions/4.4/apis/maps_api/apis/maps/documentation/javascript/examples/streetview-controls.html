@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/examples/streetview-controls.html";
+    </script>
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Google Maps JavaScript API Example: Street View Controls</title>
+<link href="http://code.google.com/apis/maps/documentation/javascript/examples/standard.css" rel="stylesheet" type="text/css" />
+<script src="http://maps.google.com/maps/api/js?sensor=false"
+        type="text/javascript"></script>
+<script type="text/javascript">
+function initialize() {
+  var fenway = new google.maps.LatLng(42.345573,-71.098326);
+
+  // Note: constructed panorama objects have visible: true
+  // set by default.
+  var panoOptions = {
+    position: fenway,
+    addressControlOptions: {
+      position: google.maps.ControlPosition.BOTTOM,
+      style: {
+        "fontWeight": "bold",
+        "backgroundColor": "#191970",
+        "color": "#A9203E"
+      }
+    },
+    linksControl: false,
+    navigationControlOptions: {
+      style: google.maps.NavigationControlStyle.SMALL
+    },
+    enableCloseButton: false
+  };
+
+  var panorama = new google.maps.StreetViewPanorama(
+      document.getElementById("pano"), panoOptions);
+}
+</script>
+</head>
+<body onload="initialize()">
+  <div id="pano" style="width: 400px; height: 300px"></div>
+</body>
+</html>

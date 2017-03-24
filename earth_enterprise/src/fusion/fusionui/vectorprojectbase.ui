@@ -1,0 +1,454 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>VectorProjectBase</class>
+<comment>  Copyright 2017 Google Inc.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+</comment>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>VectorProjectBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>515</width>
+            <height>494</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Vector Project</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>2</number>
+        </property>
+        <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>name_layout</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>name_label_2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Name:</string>
+                    </property>
+                </widget>
+                <widget class="QWidgetStack">
+                    <property name="name">
+                        <cstring>name_stack</cstring>
+                    </property>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>WStackPage</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>0</number>
+                        </attribute>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <property name="spacing">
+                                <number>0</number>
+                            </property>
+                            <widget class="QLineEdit" row="0" column="0">
+                                <property name="name">
+                                    <cstring>asset_name_edit</cstring>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>WStackPage</cstring>
+                        </property>
+                        <attribute name="id">
+                            <number>1</number>
+                        </attribute>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <property name="spacing">
+                                <number>0</number>
+                            </property>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>asset_name_label</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>asset name goes here ...</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QListView" row="1" column="0">
+            <column>
+                <property name="text">
+                    <string>Display Label</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <column>
+                <property name="text">
+                    <string>Asset</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <property name="name">
+                <cstring>layer_listview</cstring>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget" row="1" column="1">
+            <property name="name">
+                <cstring>layout21</cstring>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="spacing">
+                    <number>2</number>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>add_layer_btn</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap>filenew</pixmap>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>add_group_btn</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap>folder_new.png</pixmap>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>delete_layer_btn</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap>editdelete.png</pixmap>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>move_up_btn</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap>up.png</pixmap>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>move_down_btn</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap>down.png</pixmap>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer12_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>31</width>
+                            <height>131</height>
+                        </size>
+                    </property>
+                </spacer>
+            </vbox>
+        </widget>
+        <widget class="QLayoutWidget" row="3" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>layout141</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>Spacer12_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>380</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>ok_btn</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="text">
+                        <string>&amp;OK</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+O</string>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>cancel_btn</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+C</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>groupBox16</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="title">
+                <string>Properties</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="spacing">
+                    <number>2</number>
+                </property>
+                <widget class="QPushButton" row="0" column="3">
+                    <property name="name">
+                        <cstring>notes_btn</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>true</bool>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Notes...</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+N</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>hidden_check</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Hidden</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="0" column="1">
+                    <property name="name">
+                        <cstring>starred_check</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Starred</string>
+                    </property>
+                </widget>
+                <spacer row="0" column="2">
+                    <property name="name">
+                        <cstring>spacer108</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>211</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>cancel_btn</sender>
+        <signal>clicked()</signal>
+        <receiver>VectorProjectBase</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>ok_btn</sender>
+        <signal>clicked()</signal>
+        <receiver>VectorProjectBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>notes_btn</sender>
+        <signal>clicked()</signal>
+        <receiver>VectorProjectBase</receiver>
+        <slot>EditNotes()</slot>
+    </connection>
+    <connection>
+        <sender>add_layer_btn</sender>
+        <signal>clicked()</signal>
+        <receiver>VectorProjectBase</receiver>
+        <slot>AddLayer()</slot>
+    </connection>
+    <connection>
+        <sender>add_group_btn</sender>
+        <signal>clicked()</signal>
+        <receiver>VectorProjectBase</receiver>
+        <slot>AddGroup()</slot>
+    </connection>
+    <connection>
+        <sender>delete_layer_btn</sender>
+        <signal>clicked()</signal>
+        <receiver>VectorProjectBase</receiver>
+        <slot>DeleteLayer()</slot>
+    </connection>
+    <connection>
+        <sender>move_up_btn</sender>
+        <signal>clicked()</signal>
+        <receiver>VectorProjectBase</receiver>
+        <slot>MoveUp()</slot>
+    </connection>
+    <connection>
+        <sender>move_down_btn</sender>
+        <signal>clicked()</signal>
+        <receiver>VectorProjectBase</receiver>
+        <slot>MoveDown()</slot>
+    </connection>
+    <connection>
+        <sender>asset_name_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>VectorProjectBase</receiver>
+        <slot>NameChanged(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>layer_listview</sender>
+        <signal>selectionChanged(QListViewItem*)</signal>
+        <receiver>VectorProjectBase</receiver>
+        <slot>SelectLayer(QListViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>layer_listview</sender>
+        <signal>contextMenuRequested(QListViewItem*,const QPoint&amp;,int)</signal>
+        <receiver>VectorProjectBase</receiver>
+        <slot>ContextMenu(QListViewItem*,const QPoint&amp;,int)</slot>
+    </connection>
+    <connection>
+        <sender>layer_listview</sender>
+        <signal>doubleClicked(QListViewItem*,const QPoint&amp;,int)</signal>
+        <receiver>VectorProjectBase</receiver>
+        <slot>ModifyItem(QListViewItem*,const QPoint&amp;,int)</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>EditNotes()</slot>
+    <slot>AddLayer()</slot>
+    <slot>AddGroup()</slot>
+    <slot>DeleteLayer()</slot>
+    <slot>MoveUp()</slot>
+    <slot>MoveDown()</slot>
+    <slot>NameChanged( const QString &amp; )</slot>
+    <slot>SelectLayer( QListViewItem * )</slot>
+    <slot>ContextMenu( QListViewItem *, const QPoint &amp;, int )</slot>
+    <slot>ModifyItem(QListViewItem *, const QPoint &amp;, int)</slot>
+</slots>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

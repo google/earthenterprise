@@ -1,0 +1,471 @@
+#-*- Python -*-
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+"""Top level SConstruct file."""
+
+import os
+import re
+import subprocess
+import sys
+sys.path += ['scons']
+from khEnvironment import khEnvironment
+
+
+# Path to crosstool root directory.
+crosstool_path = '/usr/local/crosstool'
+
+# make our umask less severe while building files
+try:
+  umask = os.umask(022)
+except OSError:
+  pass
+
+
+EnsureSConsVersion(0, 96, 92)
+
+# Error strings:
+ErrorUnsupportedCrossToolVer = (
+    'ERROR: Unsupported version of crosstool is specified. Supported versions: v13, v14.')
+
+# find out the machine architecture
+# Note "uname -m" doesn't work correctly on Gubuntu machines.
+fh = os.popen('getconf LONG_BIT')
+bits = fh.readline().strip()
+fh.close()
+if bits == '32':
+  march = 'i686'
+else:
+  march = 'x86_64'
+
+
+# only accept known arguments
+ValidOptions = set(
+    ['installdir',
+     'release',
+     'optimize',
+     'crosstool',
+      # Use to build GEE Fusion w/ max number of concurrent jobs equal
+      # to max_num_jobs_coeff * 8.
+     'max_num_jobs_coeff',
+     'gprof',
+     'profile',
+     'sandbox',
+     'jobstats',  # Use to enable jobstats profile output.
+     'internal',  # Use to enable internal use only debug classes
+     'cross_cc',  # Use the cross compiler.
+     'coverage',
+     'bundle_3rd_libs',  # Build with bundling 3rd party libs.
+     ]);
+for argkey in ARGUMENTS:
+  if argkey not in ValidOptions:
+    print "Unrecognized option: '" + argkey + "'"
+    Exit(1)
+
+# process commandline arguments
+installdir = ARGUMENTS.get('installdir', 0)
+release = int(ARGUMENTS.get('release', 0))
+optimize = int(ARGUMENTS.get('optimize', 0))
+crosstool_version = ARGUMENTS.get('crosstool', 'v14')
+max_num_jobs_coeff = ARGUMENTS.get('max_num_jobs_coeff', 16)
+gprof = ARGUMENTS.get('profile', 0) or ARGUMENTS.get('gprof', 0)
+# A sandbox build has no built-in library rpath info, so that the
+# library search path can be specified at runtime. Sandbox is
+# independent: it can be debug, optimize, or release.
+sandbox = int(ARGUMENTS.get('sandbox', 0))
+jobstats = ARGUMENTS.get('jobstats', 0)
+internal = int(ARGUMENTS.get('internal', 0))
+native_cc = not int(ARGUMENTS.get('cross_cc', 0))
+coverage = ARGUMENTS.get('coverage', 0)
+bundle_3rd_libs = int(ARGUMENTS.get('bundle_3rd_libs', 0))
+
+# make some directory variables used by other parts of the build system
+top_dir = Dir('#').abspath
+
+skia_rel_dir = 'third_party/skia'
+
+
+# The below folder has files from {earth_client_protobuf, etc}.
+src_keyhole_abs_dir = os.path.join(top_dir, 'keyhole')
+
+optdir = '/opt/google'
+
+# Our builds link against some golden (old) versions of various system libs.
+# This helps a single build run on multiple distros (SLES, RHEL, Goobuntu).
+# Make sure that directory exists before proceeding
+# The exception is when the user defines native_cc=1 on the commandline
+compatibility_dir = '%s/lib64/compatibility' % optdir
+if not native_cc and not os.path.isdir(compatibility_dir):
+  print "ERROR: %s doesn't exist.\nPlease run %s/../rpms/build_scripts/update_ghardy.sh" % (compatibility_dir, top_dir)
+  Exit(1)
+
+
+if release:
+  builddir = 'REL-'
+elif optimize:
+  builddir = 'OPT-'
+elif gprof:
+  builddir = 'PROF-'
+else:
+  builddir = 'DBG-'
+if sandbox:
+  builddir += 'SBOX-'
+builddir += march
+
+if native_cc:
+  builddir = 'NATIVE-' + builddir
+
+# setup export directories
+exportdir = Dir('#/%s' % builddir).abspath
+exportdirs = {
+    'root': exportdir+'/',
+    'lib': exportdir+'/lib/',
+    'bin': exportdir+'/bin/',
+}
+
+if bundle_3rd_libs:
+  python_version = '2.7.5'
+  python_major_version = '2.7'
+  python_bin = os.path.join(exportdirs['bin'], 'python')
+  python_include = os.path.join(exportdirs['root'], 'include/python%s' % python_major_version)
+else:
+  python_version = sys.version[:5]        # '2.7.6'
+  python_major_version = sys.version[:3]  # '2.7'
+  python_bin = '/usr/bin/python'
+  python_include = '/usr/include/python%s' % python_major_version
+
+# setup platform specific operations
+is_hardy = True
+# if non-zero return status it is not hardy
+# Warning: assume your Ubuntu version is 10.04.2, otherwise need change 
+#the version number in order to compile
+if os.WEXITSTATUS(os.system('awk \'/Ubuntu/ { split($2, array,"."); \
+      if(!(array[1]>=10 && array[2]>=04)) exit(1) }\'  /etc/issue')):
+  print 'Unknown Unbuntu version, require 10.04.x or higher.\
+  Please check /etc/issue for version number'
+  Exit(1)
+  is_hardy = False
+
+extragccflags = []
+if sys.platform[0:5] == 'linux':
+  if release:
+    # -s tells the linker to strip all symbols
+    linkflags = ['-Wl,-s']
+    optflags = ['-O2', '-DNDEBUG']
+  elif optimize:
+    linkflags = []
+    optflags = ['-O2']
+  else:
+    linkflags = ['']
+    optflags = ['-g']
+  extragccflags += ['-pipe', '-pthread']
+  warnflags = ['-Wall', '-Werror']
+  # gcc 4.2.1 gives warnings about resolving parentheses to avoid
+  # confusion. But it is not dangerous and so for the time being we ignore
+  # those.
+  # TODO: Remove this and correct all places where we see this warning.
+  if is_hardy:
+    warnflags += ['-Wno-parentheses']
+  cppflags = ['-D_LARGEFILE64_SOURCE', '-DQT_THREAD_SUPPORT',
+              '-DQT_NO_ASCII_CAST', '-DQT_CLEAN_NAMESPACE', '-D_REENTRANT',
+              '-DGUNIT_NO_GOOGLE3']
+
+  # set any architecture specific specific flags
+  if re.compile('i.86').match(march):
+    optflags = ['-march=i686'] + optflags
+  if march == 'ia64':
+    linkflags += ['-Wl,-relax']
+    warnflags += ['-Wno-sign-compare']
+else:
+  if release:
+    optflags = ['-O', '-DNDEBUG']
+  elif optimize:
+    optflags = ['-O']
+  else:
+    optflags = ['-g']
+  warnflags = ['-W', '-Werror']
+  cppflags = []
+  linkflags = []
+  Bstaticflags = []
+  Bdynamicflags = []
+  dynamiclibs = {}
+
+# TODO: remove this and fix all places where we see this warnings.
+if native_cc:
+  warnflags += ['-Wno-error=unused-result',
+                '-Wno-error=unused-local-typedefs',
+                '-Wno-error=unused-but-set-variable']
+
+if max_num_jobs_coeff:
+  cppflags += ['-DKH_MAX_NUM_JOBS_COEFF=%s' % max_num_jobs_coeff]
+
+if coverage:
+  # Use gcov to generate code coverage numbers.
+  cppflags += ['-fprofile-arcs', '-ftest-coverage']
+  linkflags += ['-fprofile-arcs', '-ftest-coverage']
+
+if gprof:
+  linkflags = ['-pg']
+  optflags = ['-O2', '-DNDEBUG', '-DPROFILE_THREADS', '-g', '-pg']
+
+# setup -rpath-link and -rpath options
+rpathlink_dirs = [Dir(exportdirs['lib']).abspath]
+rpath_dirs = [Dir(exportdirs['lib']).abspath,
+              "'$$ORIGIN/../qt/lib'",
+              "'$$ORIGIN/../lib64'",
+              "'$$ORIGIN/../lib'",
+              '%s/lib64' % optdir,
+              '%s/lib' % optdir]
+
+# setup crosstool directories.
+if not native_cc:
+    # Note: when building on Ubuntu 10, use hardcoded path to crosstool.
+    crosstool_top = '%s/third_party/crosstool/%s/release' % (
+        crosstool_path, crosstool_version)
+    grte_top = os.path.join(crosstool_path, 'third_party/grte/v2/release')
+
+    cross_cc_dir = os.path.join(crosstool_top, 'gcc-4.4.3-glibc-2.11.1-grte')
+    cross_cc_target = 'x86'
+    cross_cc_base = cross_cc_dir
+else:
+  cross_cc_dir = None
+  cross_cc_target = None
+  cross_cc_base = None
+
+# TODO: clean up using of the is_hardy-flag.
+if not native_cc:
+  if is_hardy:
+    optflags += ['-D_GNU_SOURCE', '-mno-red-zone', '-fno-strict-aliasing', '-mcld',
+                 '-idirafter', '/usr/include', '-isystem', '/usr/include']
+    linkflags += ['-Wl,-dynamic-linker,/lib64/ld-linux-x86-64.so.2']
+
+    # specify system include/lib directory for crosstool.
+    if crosstool_version == 'v13':
+      # appropriate system include is specified by default: /usr/grte/v1/include.
+      pass
+    elif crosstool_version == 'v14':
+      optflags += ['--sysroot=%s' % grte_top]
+      linkflags += ['--sysroot=%s' % grte_top]
+    else:
+      print ErrorUnsupportedCrossToolVer
+      Exit(1)
+
+    cross_cc_lib = '%s/%s/lib64' % (cross_cc_base, cross_cc_target)
+    rpathlink_dirs += [compatibility_dir,
+                       cross_cc_lib,
+                       '/usr/lib',
+                       '/lib']
+  else:
+    rpathlink_dirs += [compatibility_dir]
+
+rpathlink_flags = map(lambda dir_name: '-Wl,-rpath-link,'+dir_name,
+                      rpathlink_dirs)
+rpath_flags = map(lambda dir_name: '-Wl,-rpath,'+dir_name, rpath_dirs)
+linkflags = linkflags + rpathlink_flags + rpath_flags
+
+# Enforce that installdir=BLAH is specified when 'install'
+# is supplied as a target
+if (not installdir) and ('install' in COMMAND_LINE_TARGETS):
+  print 'installdir=... must be specified with install target'
+  Exit(1)
+
+installdir = Dir(installdir)
+
+
+def DirCat(install_dir, subdir1, subdir2):
+  if subdir2:
+    return Dir(subdir1 + subdir2, install_dir)
+  else:
+    return Dir(subdir1, install_dir)
+
+
+def InstCommonDir(subdir):
+  return DirCat(installdir, 'common%s/' % optdir, subdir)
+
+
+def InstFusionDir(subdir):
+  return DirCat(installdir, 'fusion%s/' % optdir, subdir)
+
+
+def InstServerDir(subdir):
+  return DirCat(installdir, 'server%s/' % optdir, subdir)
+
+
+def InstToolsDir(subdir):
+  return DirCat(installdir, 'tools%s/' % optdir, subdir)
+
+
+def InstDisconnectedDir(subdir):
+  return DirCat(installdir, 'disconnected%s/' % optdir, subdir)
+
+# We have 5 install directories:
+#   Common: installed in both Fusion and Server
+#   Fusion: the fusion client
+#   Server: apache module and configuration and helper files
+#   Tools:  internal only tools
+#   Disconnected: disconnected publisher libs and binaries
+installdirs = {
+    'root': installdir,
+
+    'common_bin': InstCommonDir('bin'),
+    'common_lib': InstCommonDir('lib'),
+    'common_root': Dir('common/', installdir),
+    'common_share': InstCommonDir('share'),
+    'common_fonts': InstCommonDir('share/fonts'),
+    'common_geecheck': InstCommonDir('share/support/geecheck'),
+    'common_geecheck_lib': InstCommonDir('share/support/geecheck/lib'),
+
+    'fusion_bin': InstFusionDir('bin'),
+    'fusion_etc': Dir('fusion/etc%s' % optdir, installdir),
+    'fusion_lib': InstFusionDir('lib'),
+    'fusion_root': Dir('fusion/', installdir),
+    'fusion_share': InstFusionDir('share'),
+    'fusion_taskrules': InstFusionDir('share/taskrules'),
+
+    'disconnected_bin': InstDisconnectedDir('bin'),
+    'disconnected_lib': InstDisconnectedDir('lib'),
+    'disconnected_share': InstDisconnectedDir('share'),
+
+    'tools_bin': InstToolsDir('bin'),
+    'tools_lib': InstToolsDir('lib'),
+
+    'server_bin': InstServerDir('bin'),
+    'server_etc': Dir('server/etc%s' % optdir, installdir),
+    'server_lib': InstServerDir('lib'),
+    'server_root': Dir('server/', installdir),
+    'server_share': InstServerDir('share'),
+    'server_search': InstServerDir('search'),
+
+    'httpd': InstServerDir('gehttpd'),
+    'httpdmodules': InstServerDir('gehttpd/modules'),
+    'httpdcgi': InstServerDir('gehttpd/cgi-bin'),
+    'httpdwsgi': InstServerDir('gehttpd/wsgi-bin'),
+    'httpdconf': InstServerDir('gehttpd/conf.d'),
+    'httpdconfex': InstCommonDir('share/gehttpd/examples'),
+    'httpdconfvs': InstServerDir('gehttpd/conf.d/virtual_servers'),
+    'httpdconfvscmn': InstServerDir('gehttpd/conf.d/virtual_servers/common'),
+    'httpdconfvsrt': InstServerDir('gehttpd/conf.d/virtual_servers/runtime'),
+    'httpdicons': InstServerDir('gehttpd/htdocs/icons'),
+    'maps': InstServerDir('gehttpd/htdocs/maps'),
+    'javascript': InstServerDir('gehttpd/htdocs/js'),
+    'earth': InstServerDir('gehttpd/htdocs/earth'),
+    'htdocs': InstServerDir('gehttpd/htdocs'),
+}
+
+
+def FusionVersionNumber(source):
+  """Read the Fusion Version number from source file.
+
+  Args:
+    source: The file storing version number.
+  Returns:
+    The Fusion Version string, without '\n'.
+  """
+
+  try:
+    spec = open(source, 'r')
+    line = spec.readline()
+    while line:
+      if line[0] != '#':
+        version = line.strip()
+        if version:
+          return version
+      line = spec.readline()
+    print 'Unable to find Fusion Version Number'
+    Exit(1)
+  except Exception, exp:
+    print 'Unable to find Fusion Version Number:', exp
+fusion_version_number = FusionVersionNumber('fusion_version.txt')
+
+# create the environment that controls the builds
+
+if is_hardy:
+  path_string = '%sbin:/bin:/usr/bin' % (exportdirs['root'])
+else:
+  path_string = '%sbin:%s/bin:/bin:/usr/bin' % (exportdirs['root'], optdir)
+
+env = khEnvironment(
+    ENV={'PATH': path_string},
+    release=release,
+    optimize=optimize,
+    crosstool_version=crosstool_version,
+    jobstats=jobstats,
+    internal=internal,
+    native_cc=native_cc,
+    bundle_3rd_libs=bundle_3rd_libs,
+    is_hardy=is_hardy,
+    exportdirs=exportdirs,
+    installdirs=installdirs,
+    skia_rel_dir=skia_rel_dir,
+    LINKFLAGS=extragccflags + linkflags,
+    CXXFLAGS=optflags + extragccflags + warnflags,
+    CCFLAGS=optflags + extragccflags + warnflags,
+    CPPFLAGS=cppflags,
+    CPPPATH=[
+             # generated 3rd party headers
+             Dir(builddir + '/include'),
+             Dir(builddir),  # generated headers
+             Dir('.'),
+             Dir(builddir+'/common'),
+             Dir('common'),
+             Dir('common/khmisc'),
+             src_keyhole_abs_dir],
+    LIBPATH=rpathlink_dirs,
+    optflags=optflags,
+    optdir=optdir,
+    march=march,
+    rpathlink_dirs=rpathlink_dirs,
+    cross_cc_dir=cross_cc_dir,
+    cross_cc_target=cross_cc_target,
+    cross_cc_base=cross_cc_base,
+    python_bin=python_bin,
+    python_include=python_include,
+    python_version=python_version,
+    python_major_version=python_major_version
+)
+
+# The following is to make Scons 1.xx behave like it used to with scons .96
+env['SHCXXFLAGS'] = ['$CXXFLAGS', '-fPIC']
+env['CXXCOM'] = '$CXX -o $TARGET -c $CXXFLAGS $_CCCOMCOM $SOURCES'
+env['SHCXXCOM'] = '$SHCXX -o $TARGET -c $SHCXXFLAGS $_CCCOMCOM $SOURCES'
+
+env.SourceCode('.', None)
+
+
+env.Alias('install', installdirs['root'])
+
+Export('env')
+Export('fusion_version_number')
+
+# needed by colorgcc
+home = os.environ.get('HOME', 0)
+if home: env['ENV']['HOME'] = str(home)
+
+# setup QTDIR & friends
+# always use our Qt
+qtdir = exportdir
+qtdir_lib = '%s/lib' % exportdir
+env['ENV']['QTDIR'] = str(qtdir)
+env['QTDIR'] = str(qtdir)
+env['QTINCDIR'] = qtdir+'/include'
+env['QTLIBDIR'] = qtdir+'/lib'
+env['MOC'] = qtdir+'/bin/moc'
+env['UIC'] = qtdir+'/bin/uic'
+env['LRELEASE'] = qtdir+'/bin/lrelease'
+
+env['KHIDL'] = File('#common/khxml/khidl.pl')
+
+SConscript('SConscript', build_dir=builddir, duplicate=0)

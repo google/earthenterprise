@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<RasterDBRootGenConfig>
+
+  <layers>
+    <layer>
+      <legend>
+        <defaultLocale>
+          <name useDefault="0">Terrain</name>
+          <isChecked useDefault="0">1</isChecked>
+          <desc useDefault="0"></desc>
+          <lookAt useDefault="0"></lookAt>
+          <icon useDefault="0">
+            <type>Internal</type>
+            <href>773</href>
+          </icon>
+        </defaultLocale>
+        <locales>
+          <item key="it">
+            <name useDefault="0">Montange</name>
+            <isChecked useDefault="1"/>
+            <desc useDefault="1"/>
+            <lookAt useDefault="1"/>
+            <icon useDefault="0">
+              <type>Internal</type>
+              <href>geographic_features64</href>
+            </icon>
+          </item>
+        </locales>
+      </legend>
+      <channel_id>2</channel_id>
+      <asset_uuid>d73e8db2-9c4e-11e0-b660-bd627c3b590e</asset_uuid>
+    </layer>
+  </layers>
+
+  <used_provider_ids>
+    <used_provider_id>1</used_provider_id>
+    <used_provider_id>2</used_provider_id>
+  </used_provider_ids>
+
+</RasterDBRootGenConfig>

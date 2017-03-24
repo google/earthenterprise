@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="Directions Example" height="300">
+  <Require feature="sharedmap"/>
+</ModulePrefs>
+<Content type="html"><![CDATA[
+
+<script>
+// Create a directions object and register a map to hold the 
+// resulting computed directions
+
+var map = new GMap2();
+map.setCenter(new GLatLng(49.496675,-102.65625), 3);
+var directions = new GDirections(map);
+directions.load("New York, NY to Chicago, IL");
+</script>
+
+]]></Content>
+</Module>

@@ -1,0 +1,68 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+
+#include <string>
+#include <vector>
+#include <khTypes.h>
+#include <khMetaData.h>
+
+class KMLProjectConfig {
+  class LayerItem {
+    std::string assetRef = std::string();
+    uint channelId = uint(0);
+    //Defaultable<LayerLegend> legend = Defaultable<LayerLegend>();
+    bool skipLayer = false;
+
+#pragma GenerateIsUpToDate
+  };
+
+  IsUpToDateIgnore uint indexVersion = uint(1);
+  std::vector<LayerItem> layers = std::vector<KMLProjectConfig::LayerItem>();
+
+#pragma GenerateIsUpToDate
+
+#hquote
+ private:
+  static const uint BeginChannelId = 1;
+  static const uint EndChannelId = USHRT_MAX;
+
+ public:
+  //AvailId GetAvailChannelIds(void) const;
+  //void AssignChannelIdsIfZero(void);
+  //void AddLayer(const std::string &layerref);
+  //void DeleteLayer(const std::string &layerref);
+
+  // Resets all Ids as it is in a config for just created asset.
+  void ResetIds(void) {
+    indexVersion = 1;
+  }
+
+#/hquote
+
+#cppquote
+  // see fusion/autoingest/KMLProjectConfigImpl.cpp for
+  // implementations of KMLProjectConfig methods
+#/cppquote
+
+};
+
+class KMLProjectEditRequest {
+  std::string assetname;
+  KMLProjectConfig config;
+  khMetaData meta;
+
+#pragma StrLoadAndSave
+};
+

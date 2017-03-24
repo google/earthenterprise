@@ -1,0 +1,508 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+ 
+ 
+
+
+ 
+
+  
+  
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/articles/election-ratings.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Election Ratings and Spatial Data with Fusion Tables - Google Maps API Family - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/maps/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../css/iehacks.css"><![endif]-->
+
+    <link href="../../../css/semantic_headers.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    
+    
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  <a href="#gc-pagecontent">Skip to page content</a>
+  <a href="#gc-toc">Skip to main navigation</a>
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps API Family</h1>
+  <ul id="articles" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="../index.html" title="Google Maps API Family home page">Home</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../faq.html" title="Answers to frequently asked questions about Google Maps API Family">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="index.html" class="selected" title="Focused articles and tutorials for Google Maps API Family developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps API Family blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="../forum/index.html" title="Google Maps API Family developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../terms.html" title="Google Maps API Family terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../index.html">Maps API Family</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps Javascript API V3</h2>
+         <ul>
+           <li><a href="../documentation/javascript/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+      <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../documentation/javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+  <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../documentation/flash/index.html">Home Page</a></li>
+          <li><a href="../documentation/flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../documentation/mapsdata/index.html">Home Page</a></li>
+          <li><a href="../documentation/mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+     <div class="line"></div>
+      <ul>
+        <li><h2><a href="../documentation/webservices/index.html">Maps Web Services</a></h2>
+         <ul>
+           <li><a href="../documentation/geocoding/index.html">Geocoding Guide</a></li>
+           <li><a href="../documentation/directions/index.html">Directions Guide</a></li>
+           <li><a href="../documentation/elevation/index.html">Elevation Guide</a></li>
+           <li><a href="../documentation/places/index.html">Places Guide</a></li>
+         </ul>
+       </li>
+      </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../documentation/staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li>
+            <h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../documentation/localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../documentation/localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+      <div class="promo">
+     <p><a href="../documentation/premier/index.html">Google Maps API Premier</a></p><p>Includes enterprise licensing and support</p></div>
+
+        <a class="hidden" href="#gc-topnav-anchor">More Google Maps API Family resource links</a>
+      </div>
+
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Election Ratings and Spatial Data with Fusion Tables</h1>
+
+
+<!-- ########## PAGE CONTENT ########## -->
+
+<div class=i>
+<i>Josh Livni and Kathryn Hurley, Google Geo APIs Team</i>
+<br>
+<i>September 2010</i>
+
+<br><br>
+
+<p class="para">
+This article covers some of the map styling and data feed aggregation
+techniques that were used to build the
+<a href="http://maps.google.com/intl/en_us/2010election/ratings.html">2010
+Election Ratings gadget</a>, and some general concepts around visualizing
+complex datasets that change over time.
+</p>
+
+<a href="http://maps.google.com/intl/en_us/2010election/ratings.html" border=0>
+  <img src="election-ratings.png" style="float:right;padding:15px"/>
+</a>
+
+
+
+<a name="overview"></a><h3>Overview</h3>
+<p class="para">
+This map application visualizes data based on both State and County boundaries,
+and each polygon must be rendered according to a set of attributes that change
+daily.  Developers who are familiar with displaying lots of data in Maps will
+notice that in this case the states and districts are not being rendered as
+vectors on the client, but as tiled image overlays.
+We made this choice because we knew the number and complexity of polygons would
+be greater than most browsers can render responsively.  This is a common
+problem many developers face, and for this project we used a relatively new way
+of storing and styling complex geographic data for display in maps:
+<a href="http://google.com/fusiontables">Fusion Tables</a>.
+</p>
+
+<p class="para">
+Fusion Tables provides access to its underlying data using the
+<a href="http://code.google.com/apis/maps/documentation/javascript/overlays.html#FusionTables">FusionTablesLayer</a>
+in the Google Maps Javascript V3 API.  You can use an SQL-like syntax
+to query for a subset of the data and then display the results on a map.
+The process is quick and easy to implement.
+</p>
+
+
+
+<a name="aggregating"></a><h3>Aggregating daily data feeds</h3>
+<p class="para">
+Before we could style or render the State and County polygons, we needed to
+acquire the attribute data that would be joined to the polygons and used to
+color each one appropriately.
+In this project, we had multiple disparate XML feeds we needed to parse,
+upload to Fusion Tables, and check for updates daily.
+</p>
+
+<p class="para">
+To check for daily updates of the election ratings, we set up App Engine cron
+jobs to retrieve the data from each feed and compare that data to what was
+stored in Fusion Tables.  Data was updated in Fusion Tables if the information
+in the table no longer matched the data in the feed.  To keep our code simple,
+we used the <a href="http://code.google.com/p/placemat/">Placemat</a> library
+to access the Fusion Tables API, and our workflow (minus the xml parsing)
+followed these 3 steps:
+</p>
+
+<p class="para">
+1. Authenticate to FT
+<pre class="prettyprint lang-js">
+  auth_uri = 'https://www.google.com/accounts/ClientLogin'
+  authreq_data = urllib.urlencode({
+    'Email': username,
+    'Passwd': pw,
+    'service': 'fusiontables',
+    'accountType': 'HOSTED_OR_GOOGLE'})
+  auth_req = urllib2.Request(auth_uri, data=authreq_data)
+  auth_resp = urllib2.urlopen(auth_req)
+  auth_resp_body = auth_resp.read()
+  auth_resp_dict = dict(x.split('=') for x in auth_resp_body.split('\n') if x)
+  authtoken = auth_resp_dict['Auth']
+</pre>
+</p>
+
+<p class="para">
+2. Retrieve data in FT
+<pre class="prettyprint lang-js">
+  encoded_query_params = urllib.urlencode({'sql': "SELECT rowid,rating,color
+FROM %d" % (tableid)})
+  path = "http://www.google.com/fusiontables/api/query?%s" %
+(encoded_query_params)
+  headers = {
+    'Authorization': 'GoogleLogin auth=%s' % (authtoken),
+  }
+  serv_req = urllib2.Request(path, '', headers)
+  serv_resp = urllib2.urlopen(serv_req)
+  ft_data = serv_resp.read()
+</pre>
+</p>
+
+<p class="para">
+3. Update Fusion Tables
+<pre class="prettyprint lang-js">
+  path = 'http://www.google.com/fusiontables/api/query'
+  data = urllib.urlencode({'sql': "UPDATE %d SET rating='%s',color='%s' WHERE ROWID='%s'" % (tableid, rating, color, rowid)})
+  headers = {
+    'Authorization': 'GoogleLogin auth=%s' % (authtoken),
+    'Content-Type': 'application/x-www-form-urlencoded',
+  }
+  serv_req = urllib2.Request(path, data, headers)
+  serv_resp = urllib2.urlopen(serv_req)
+  response = serv_resp.read()
+</pre>
+</p>
+
+<p class="para">
+Since App Engine cron jobs are limited to a maximum of 30
+seconds, we had to be efficient in retrieving the data from Fusion Tables and
+comparing this data to the current data.   A simple approach of fetching the
+rows from Fusion Tables one-by-one would take too long, but fetching the entire
+dataset from Fusion Tables in one SELECT statement and holding this data in
+memory before the data was compared was a big timesaver.
+</p>
+
+<p class="para">
+There are some awesome features in App Engine and Fusion Tables that made the
+data aggregation process much simpler.  For one, setting up
+<a href="http://code.google.com/appengine/docs/python/config/cron.html">
+cron jobs</a> was a snap in App Engine. The merging capabilities in Fusion
+Tables really came in handy, as well.  Merging is a left outer join, for those
+familiar with relational databases.  We set up a separate table for each feed,
+and merged all tables into a single view using the id for the geographic area
+as a key.
+</p>
+
+<p class="para">
+Now we were ready to merge this Fusion Table with a table of actual geometries,
+which we downloaded from the
+<a href="http://www.census.gov/geo/www/tiger/tgrshp2009/tgrshp2009.html">US Census</a>
+and imported into Fusion Tables.  We then merged this view with the geometry
+for each geographic region.  Because we made these geometry tables (such as
+<a href="http://www.google.com/fusiontables/DataSource?dsrcid=227275">this one</a>)
+public, anyone can create new Fusion Tables by combining a table of their own
+attributes and these geometries to easily create choropleth maps with their
+own attribute data.  See for youself an example of
+<a href="http://www.google.com/fusiontables/DataSource?dsrcid=261639">
+a final merged table</a>.
+</p>
+
+
+<a name="styling"></a><h3>Styling</h3>
+<p class="para">
+Now that the data was ready, it was time to make sure it looked good.  Fusion
+Tables supports a variety of
+<a href="http://www.google.com/support/fusiontables/bin/answer.py?hl=en&answer=185991">
+styling options</a> to ensure you can tell your story with your data.
+For this application we used the 'Column' option to set a specific polygon
+color (and opacity) for each possible rating.
+</p>
+
+
+
+<a name="rendering"></a><h3>Rendering</h3>
+<p class="para">
+With Fusion Tables all prepped with data and associated styles, it’s just a
+simple two line javascript call to get the data into your map:
+</p>
+
+
+<pre class="prettyprint lang-js">
+var layer = new google.maps.FusionTablesLayer(table_id);
+layer.setMap(map);
+</pre>
+
+<p class="para">
+That was easy!   In the case of this particular dataset, we didn’t want to
+show polygons that had no associated rating at all, so we also set a query
+on the layer to ignore those rows with no associated color rating:
+
+<pre class="prettyprint lang-js">
+var query = ["select geo from",table_id,"where 'color' > 0"].join(' ');
+layer.setQuery(query);
+</pre>
+</p>
+
+<a name="infowindows"></a><h3>InfoWindows</h3>
+<p class="para">
+Even though the Polygons are rendered server side we can still display custom
+data in our infoWindows.  In this case we can use the
+<a href="http://code.google.com/apis/maps/documentation/javascript/reference.html#FusionTablesMouseEvent">
+FusionTablesMouseEvent</a>
+to determine which polygon was clicked on and get the associated content.  Then
+we used jQuery tabs (see <a href="http://gmaps-samples-v3.googlecode.com/svn/trunk/infowindow/tabs.html">here</a> for an example) to help with the formatting of the results.
+</p>
+
+
+<a name="conclusion"></a><h3>Conclusion</h3>
+<p class="para">
+As with most mapping applications, getting your data in order is the most time consuming
+part of the project.  Once that's out of the way, displaying complex spatial data
+in your Maps mashup is straightforward with Fusion Tables, and AppEngine’s cron jobs
+make periodic updates a breeze.
+
+But even if you are just displaying some static data on your map, don't forget to
+use <a href="http://googlegeodevelopers.blogspot.com/2010/05/add-touch-of-style-to-your-maps.html">Styled Maps</a>
+for your base, and to customize the default cartography in your Fusion Tables layer
+for maximum effect.
+
+</p>
+
+</div>
+
+<!-- ########## END PAGE CONTENT ########## -->
+
+
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

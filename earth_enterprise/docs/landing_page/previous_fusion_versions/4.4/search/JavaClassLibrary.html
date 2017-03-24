@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../fusion/html/css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Search Framework API</title>
+</head>
+
+<body>
+
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="../fusion/html/images/index.gif" />
+  </div>
+  <h1 id="doc_title">Search Framework API</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../index.html">4.4 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Search Framework API</strong></li>
+    <li><a href="index.html">Overview</a></li>
+    <li><a href="JavaClassLibrary.html" id="selected">Java Class Library</a> </li>
+    <li><a href="CreatingAPlugin.html">Creating a Plug-in</a> </li>
+    <li><a href="samples.html">Sample Plug-ins</a></li>
+    <li><a href="docs/index.html">Class Reference</a></li>
+  </ul>
+</div> 
+<!-- ########## END SIDE NAVIGATION ########## -->
+
+<!-- ########## PAGE CONTENT ########## -->
+<div id="pagecontent">
+
+<h1>Java Class Library</h1>
+
+<p>The Search Framework Java Class Library provides classes for storing request and response data in the generic Common Search Format.</p>
+<p>To use the Search Framework Java Class Library, you need to include this line in your code to refer to the <code>SearchAPI.jar</code> file:</p>
+<pre>import com.google.earth.search.api.*;
+</pre>
+<p>Be sure the <code>SearchAPI.jar</code> file is in your CLASSPATH.</p>
+<p> The following table summarizes the classes and functions included in this library.</p>
+<table>
+<tr>
+<th>Class</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><span class="style1">GeomMetaData</span></td>
+<td>A simple data structure for holding per-geometry metadata such as:<br />
+        <span class="style1">name</span> - a label for the geometry snippet - a short piece of text to associate with
+    the geometry description - text (possibly lengthy) to associate with the geometry </td>
+</tr>
+<tr>
+<td class="alt"><span class="style1">KmlPluginPreferences</span></td>
+<td class="alt">Abstract class for pluging preferences for general purpose KML returned by
+        the various Google Earth Search plugins.</td>
+</tr>
+<tr>
+<td><span class="style1">KmlProperties</span></td>
+<td>A container of KML property keys for use within the search
+        framework.</td>
+</tr>
+<tr>
+<td class="alt"><span class="style1">KmlSearchPlugin</span> <br /></td>
+<td class="alt">This abstraction provides Kml style search response using <span class="style1">KmlPluginPreferences</span>.</td>
+</tr>
+<tr>
+<td><span class="style1">PluginPreferences</span></td>
+ <td>Abstract class for preferences for the KML returned by the various plugins.</td>
+</tr>
+<tr>
+<td class="alt"><span class="style1">SearchContainer</span></td>
+<td class="alt">The object that stores a single search request issued
+        by any supported interface and stores any number of search responses to this
+        request.</td>
+</tr>
+<tr>
+<td><code>SearchPlugin</code></td>
+<td>Interface for the search plug-in application. Provides the <code>init()</code> and <code>doSearch()</code> methods, which the plug-in must implement.</td>
+</tr>
+<tr>
+<td class="alt"><code>SearchContainer</code></td>
+<td class="alt">Stores one search request and any number of search responses to this request. </td>
+</tr>
+<tr>
+<td><code>SearchRequest</code></td>
+<td>Object that encapsulates the key/value pairs that make up the search query. This class provides the <code>getService()</code> method, which returns the name of the service that should handle this request. </td>
+</tr>
+<tr>
+<td class="alt"><code>SearchResponse</code></td>
+<td class="alt">Object that encapsulates one or more results sets created by a single search plug-in application.</td>
+</tr>
+<tr>
+<td><code>StyleData</code></td>
+<td>Class for representing styles associated with geometry. Fields are</p>
+  <ul>
+    <li><code>balloonStyle</code> - Hash map includes:
+      <ul>
+        <li><code>bgColor</code> </li>
+	      <li><code>textColor</code></li>
+	      <li><code>text</code></li>
+      </ul>
+    </li>
+    <li><code>iconStyle</code> - Hash map includes:</li>
+		  <ul>
+      <li><code>color</code></li>
+			<li><code>scale</code></li>
+      <li><code>href</code></li>
+      </ul>
+    <li><code>lineStyle</code> - Hash map includes:</li>
+      <ul>
+      <li><code>color</code></li>
+      <li><code>width</code></li>
+      </ul>
+    <li><code>polyStyle</code> - Hash map includes:    </li>
+		<ul>
+    <li><code>color</code></li>
+		<li><code>colorMode</code></li>
+	  <li><code>fill</code></li>
+	  <li><code>outline</code></li>
+	 </ul>
+  </ul>
+	<p>Currently, styles are recognized only by Google Earth plug-ins.  These styles correspond to the KML styles of the same names. (For more information, see the <a href="http://earth.google.com/kml">KML Reference</a>.)</p>	</td>
+</tr>
+</table>
+
+</div> 
+<!-- ########## END PAGE CONTENT ########## -->
+
+</div><!-- end wrapper -->
+
+</body>
+</html>

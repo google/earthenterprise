@@ -1,0 +1,626 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Configuring Google Earth Enterprise Fusion</title>
+<style type="text/css">
+<!--
+.style1 {font-family: "Courier New", Courier, monospace}
+.style2 {font-family: Arial, Helvetica, sans-serif}
+-->
+</style>
+</head>
+
+
+<body><a name="top"></a>
+  
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" />
+  </div>
+  <h1 id="doc_title">Administration Guide</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+<ul>
+  <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+  <div class="line"></div>
+  <li><strong>Administration Guide</strong></li>
+  <li><a href="index.html">Home</a></li>
+  <li><a href="server.html">Configuring Server</a></li>
+  <li><a href="fusion.html" id="selected">Configuring Fusion</a></li>
+  <li><a href="tutorial.html">Configuring Tutorial Work Space</a></li>
+  <li><a href="commands.html">Command Reference</a></li>
+  <li><a href="errors.html">Common Server Error Messages</a></li>
+  <li><a href="mult_db.html">Multiple Database Support</a></li>
+  <div class="line"></div>
+  <li><a href="notices.html">Legal Notices</a></li>
+</ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+<h1>Configuring Google Earth Enterprise Fusion</h1>
+
+<ol class="toc">
+  <li><a href="#before_you_begin">Before You Begin</a></li>
+  <li><a href="#data_locations">Configuring Your Data Locations</a></li>
+  <li><a href="#font_size">Configuring Font Size in the GUI</a></li>
+  <li><a href="#fonts">Configuring Fonts for the Text Style Dialog</a></li>
+  <li><a href="#maps_landing_page">Customizing Your Google Maps Landing Page</a></li>
+  <li><a href="#dbroot_snippet_manager">Using the dbRoot Snippet Manager</a></li>
+  <li><a href="#monitoring_system_processes">Monitoring System Processes</a></li>
+  <li><a href="#backing_up_your_data">Backing Up Your Data</a></li>
+  <li><a href="#taskrules">Running Fusion on a Machine with Multiple CPU Cores</a></li>
+</ol>
+
+<h2 id="before_you_begin">Before You Begin</h2>
+<p>Before you use many of the Fusion configuration tools, you must stop the system manager and then start it after you change the configuration. To stop/start the system manager, enter:
+</p>
+<pre><code>/etc/init.d/gefusion [stop | start | restart]</code></pre>
+<h2><a id="61325"></a><span id="data_locations">Configuring Your Data Locations</span></h2>
+<p>The Google Earth Enterprise installation script prompts you to enter information about your system and then properly configures your primary asset root and source volume. After you install Fusion,  use the <code>geconfigureassetroot</code> command to:
+</p>
+<ul>
+  <li><b>Add asset roots.</b>
+    <p>If you use the <i>Google Earth Enterprise Fusion Tutorial</i>, Google recommends that you specify separate asset roots for each user’s tutorial data and a completely different asset root for your real working data.
+    </p>
+  </li>
+  <li><b>Identify source volumes.</b>
+    <p>You must identify each directory that contains your source data files (or subdirectories of your source data files). Fusion is not able to read files located in other directories.
+    </p>
+  </li>
+  <li><b>Modify the current volume.</b>
+    <p>You can modify volume definitions when migrating from a single- to a multiple-workstation configuration or when modifying the local path of a network-mounted source volume (for example, when adding a larger drive for source data).
+    </p>
+  </li>
+</ul>
+<p>For more information on these commands, see <a href="commands.html#63542">geconfigureassetroot</a> in the <strong>Command Reference</strong> chapter. </p>
+
+      <p class="caution"><strong>Caution:</strong> Do not modify the volume definition after you save data to that volume. Because the local name and the network path definitions are used by Fusion for resources, projects, and database definitions, any change to a volume definition invalidates the data already processed on that volume.
+      </p>
+<p>If you add multiple asset roots, you can use the <code>geselectassetroot</code> to specify the volume in which you want to work and to switch back and forth among the available asset roots, if desired. For more information on these commands, see <a href="commands.html#13019">geselectassetroot</a> in the <strong>Command Reference</strong> chapter. </p>
+<h2 id="font_size">Configuring Font Size in the GUI
+</h2>
+<p>If you want to customize certain aspects of the Fusion GUI (such as menus, button labels, tables, lists, and so on), you can use a graphical configuration tool called Qt Configuration to customize the font size and other GUI features. 
+</p>
+<h4>To customize the appearance of the Fusion GUI:
+</h4>
+<ol>
+  <li>On the command line, enter <code>qtconfig</code>. 
+    <p>The Qt Configuration dialog appears.    </p>
+    <img name="qtconfig" src="images/qtconfig.png" width="450" height="381" border="0" id="qtconfig" alt="" />  </li>
+  <li>Click the tabs at the top of the right side of the window to view the available options, and use the help text on the left side for help with each tab.
+    <p class="note"><strong>Note:</strong> The Qt Configuration tool is not a Google product. For more information about Qt Configuration, select either of the options on the Help menu.    </p>
+  </li>
+</ol>
+<h2 id="fonts">Configuring Fonts For the Text Style Dialog
+</h2>
+<p>Fusion provides the <em>Sans regular</em> font for map vector labels. If you want to let users create labels in additional fonts, you can define a &quot;font list&quot; file so that the Text Style dialog  displays a list of the fonts you support. For example, you can display international fonts such as Chinese,  Japanese, or Hebrew character fonts. (For more information about the Text Style dialog, see the <em>Google Earth Enterprise Fusion Reference Guide</em>.) </p>
+<h4>To create a font list file:
+</h4>
+<ol>
+  <li>Create an ASCII text file and save it as <code>/opt/google/share/fonts/fontlist</code>.
+  </li>
+  <li>For each font you want to support, enter one line in the file that contains the four following pieces of information:
+    <ul>
+      <li><b>Font name</b> - the name of the font, which appears in the drop-down list of fonts available in the Text Style dialog (for example, <code>TimesRoman</code>). No spaces are allowed in the font face name. Multiple variations of the font, such as regular, bold, italic, are automatically grouped under the same name in the drop-down list.
+      </li>
+      <li><b>File Path</b> - the full path to the TrueType (<code>.ttf</code>) font file. No spaces are allowed in this path.</li>
+      <li><b>Bold</b> - 1 if the font is bold; 0 if not.
+      </li>
+      <li><b>Italic</b> - 1 if the font is italic (or oblique); 0 if not.
+      </li>
+    </ul>
+  </li>
+  <li>Save the file.
+  </li>
+</ol>
+<p>For example, your font list file might contain:
+</p>
+<pre><code>LucidaBrightDemi /usr/local/lib/fonts/LucidaBrightDemiBold.ttf 1 0
+LucidaBrightDemi /usr/local/lib/fonts/LucidaBrightDemiItalic.ttf 0 1
+LucidaBright /usr/local/lib/fonts/LucidaBrightItalic.ttf 0 1
+LucidaBright /usr/local/lib/fonts/LucidaBrightRegular.ttf 0 0
+LucidaSansDemi /usr/local/lib/fonts/LucidaSansDemiBold.ttf 1 0
+LucidaSans /usr/local/lib/fonts/LucidaSansRegular.ttf 0 0
+LucidaTypewriter /usr/local/lib/fonts/LucidaTypewriterBold.ttf 1 0
+LucidaTypewriter /usr/local/lib/fonts/LucidaTypewriterRegular.ttf 0 0
+LucidaTypewriter /usr/local/lib/oblique-fonts/LucidaTypewriterBoldOblique.ttf 1 1
+LucidaSansDemi /usr/local/lib/oblique-fonts/LucidaSansDemiOblique.ttf 0 1
+LucidaSans /usr/local/lib/oblique-fonts/LucidaSansOblique.ttf 0 1
+LucidaTypewriter /usr/local/lib/oblique-fonts/LucidaTypewriterOblique.ttf 0 1</code></pre>
+<h2 id="maps_landing_page">Customizing Your Google Maps Landing Page
+</h2>
+<p>Google used the Google Maps API to create a sample web application that provides a very basic way to display your Google Maps database output in a browser. The sample web application and the Google Maps API are automatically installed with Fusion.
+</p>
+<p>Google recommends that you use the sample application to display your Google Maps data at first. After you see how it looks, you can create your own Google Maps web application that looks more your other web applications, using the provided sample web application as a guide. Documentation for the Google Maps API is at 
+  <a href="http://www.google.com/apis/maps/">http://www.google.com/apis/maps/</a>. 
+</p>
+<p>To get started, make a copy of the sample application files (<code>maps_local.html</code>, <code>maps_google.html,
+        fusionmaps.js</code>,
+    and <code>fusionmaps.css</code>). Then configure a virtual server on which you
+    can experiment, and move the copied files to that virtual server. (See <a href="server.html#95347">Configuring
+    Virtual Servers</a> for help, if you need it.) When you create the
+    Apache configuration file for the new virtual server, change “/<span class="style1">maps/maps_google.html</span>”
+    or &quot;<span class="style1">/maps/maps_local.html</span>&quot; in the following
+    line to point to your copy of the example files on
+    the new virtual server:</p>
+<pre>RewriteRule ^/default_map/+$ <i>/maps/maps_google.html</i> [PT]</pre>
+<p>or</p>
+<pre>RewriteRule ^/default_map/+$ <i>/maps/maps_local.html</i> [PT]</pre>
+<p>You can edit the rest of the sample application in whatever ways you like, adding your own logo, branding, and so on.
+</p>
+<h3>Configuring the Google Maps API License Key
+</h3>
+<p>Google Maps supports only specific browser/operating system combinations. Even if you are using a supported browser, there are some features in Fusion that are not supported by some browsers on certain operating systems. (See <strong>Google Maps Browser Support and Incompatibilities</strong> in the <em>Google Earth Enterprise Fusion Reference Guide</em>.)
+</p>
+<p>As long as you are connected to the Internet and have a license key for the Google Maps API, there is no problem (regardless of your platform), since your server contacts Google’s servers for functions that are not supported in the browser.
+</p>
+<p class="note"><strong>Note:</strong> The following procedure assumes that you have received an email from Google that contains your license key for the Google Maps API.
+</p>
+<h4>To configure your Google Maps API license key:
+</h4>
+<ol>
+  <li>Open <code> /opt/google/gehttpd/htdocs/maps/maps_google.html</code>.  </li>
+  <li><a id="78451"></a>Locate the following line in the script:<pre><code>&lt;script src=&quot;http://maps.google.com/maps?file=api&amp;v=2&amp;key=abcdefg&quot;type=&quot;text/javascript&quot;&gt;&lt;/script&gt;</code></pre>
+   
+
+  </li>
+  <li>Replace the <code>key</code>  placeholder ('<code>abcdefg</code>')  with your
+     Google Maps API license key. Your key is contained in an email sent from Google.</li>
+  <li>Save the <code>maps_google.html</code> file.  </li>
+  <li>Restart the Google Earth Enterprise Server (as root):<pre><code>sudo /etc/init.d/geserver restart</code></pre>
+  </li>
+</ol>
+<h2 id="dbroot_snippet_manager"><a id="71616"></a>Using the dbRoot Snippet Manager
+</h2>
+<p>The dbRoot is a file that contains information that Fusion passes to Google Earth EC when you publish a database. The dbRoot Snippet Manager allows you to add your preferences to the dbRoot. Many of these preferences (or <i>snippets</i>) apply to display characteristics, such as showing or hiding the Google logo in Google Earth EC. The snippets you specify in the dbRoot Snippet Manager apply to all databases you publish from Fusion.
+</p>
+      <p class="caution"><strong>Caution:</strong> If you are working with multiple Fusion users on multiple workstations, it is important to remember that all managers on the Tools menu can be accessed by all users at the same time. If multiple users are working with the same manager at the same time, when one user closes the manager, that user’s changes overwrite all previous data for that manager. So if you are working in a multi-user environment, be sure to coordinate with the other users to be sure that only one user has this manager open at a time.
+      </p>
+<h4>To add a snippet:
+</h4>
+<ol>
+  <li>Select <strong>Tools &gt; dbRoot</strong><b> Snippet Manager</b>. The dbRoot Snippet Manager appears.<br />
+    <img name="dbrootSnippetManager" src="images/dbrootSnippetManager.png" width="450" height="159" border="0" id="dbrootSnippetManager" alt="" />  </li>
+  <li><a id="22082"></a>Click the page icon
+    <img src="images/icon_new.gif" />. The <strong>Add New Snippet</strong> dialog appears.<br />
+  </li>
+  <li>Enter a name for the new snippet, and click <b>OK</b>. The snippet appears on the list in the dbRoot Snippet Manager.    </li>
+  <li>Click  in the <strong>Snippet Text</strong> column to enter the appropriate snippet text. The next section contains a list of allowable snippets. Snippet text syntax is as follows: <code>[snippetName] value</code>
+     <p><img name="dbrootSnippetManagerfull" src="images/dbrootSnippetManager-full.png" width="450" height="101" border="0" id="dbrootSnippetManagerfull" alt="" />       </li>
+  <li><a id="20519"></a>If you want to specify different snippet text for each supported locale, right-click the name of the snippet, and select a locale. 
+  </li>
+  <li>When finished, click <b>OK</b>.
+  </li>
+</ol>
+
+<h4><a id="23229"></a>dbRoot Snippet Syntax</h4>
+<p>The following table lists the syntax for all of the possible dbRoot snippets.
+</p>
+<table>
+  <tr>
+    <th>Snippet Name
+    </th>
+    <th>Purpose
+    </th>
+    <th>Syntax - Default Value
+    </th>
+    <th>Notes
+    </th>
+  </tr>
+  <tr>
+    <td>userGuideURL
+    </td>
+    <td>Help menu &gt; User Guide
+    </td>
+    <td><code>../userguide/v4/userGuideURL</code>
+    </td>
+    <td>Defaults to local PDF file for Google Earth EC. Can be set to an internal IP or hostname address.
+    </td>
+  </tr>
+  <tr>
+    <td>supportCenterURL
+    </td>
+    <td>Help menu &gt; Support Center
+    </td>
+    <td><code>../userguide/v4/support</code>
+    </td>
+    <td>Hidden in Google Earth EC if dbRoot setting does not exist. Can be set to an internal IP or hostname address.
+    </td>
+  </tr>
+  <tr>
+    <td>tutorialGuideURL
+    </td>
+    <td>Help menu &gt; Tutorial
+    </td>
+    <td><code>../userguide/v4/tutorials/index.htm</code>
+    </td>
+    <td> Can be set to an internal IP or hostname address.
+    </td>
+  </tr>
+  <tr>
+    <td>keyboardShortcutURL</td>
+    <td>Help menu &gt; Keyboard shortcuts link
+    </td>
+    <td><code>../userguide/v4/ug_keyboard.html</code>
+    </td>
+    <td> Can be set to an internal IP or hostname address.
+    </td>
+  </tr>
+  <tr>
+    <td>defaultWebPageURL</td>
+    <td>Tools menu &gt; Web browser home page
+    </td>
+    <td><code>http://www.google.com</code>
+    </td>
+    <td> Can be set to an internal IP or hostname address.
+    </td>
+  </tr>
+  <tr>
+    <td>useGELogo
+    </td>
+    <td>Shows/hides Google Earth logo in lower right corner of display
+    </td>
+    <td>boolean
+    </td>
+    <td>Default is true.
+    </td>
+  </tr>
+  <tr>
+    <td>bbsServer.host
+    </td>
+    <td>Host name
+    </td>
+    <td><i>string</i>
+    </td>
+    <td>bbs.keyhole.com
+    </td>
+  </tr>
+  <tr>
+    <td>bbsServer.port
+    </td>
+    <td>Port
+    </td>
+    <td><i>int</i>
+    </td>
+    <td>80
+    </td>
+  </tr>
+  <tr>
+    <td>bbsServer.<br />
+      &nbsp;&nbsp;fileSubmitPath</td>
+    <td>URL to post KMZ content to 
+    </td>
+    <td><i>string</i>
+    </td>
+    <td>/ubb/postbouncer.php
+    </td>
+  </tr>
+  <tr>
+    <td><p>bbsServer.<br />
+      &nbsp;&nbsp;postWizardPath</p></td>
+    <td>URL where posting wizard is located
+    </td>
+    <td><i>string</i>
+    </td>
+    <td>/ubb/postcatcher.php
+    </td>
+  </tr>
+  <tr>
+    <td>bbsServer.timeout
+    </td>
+    <td>Timeout in seconds
+    </td>
+    <td><i>double</i>
+    </td>
+    <td>15.0
+    </td>
+  </tr>
+  <tr>
+    <td>bbsServer.retries
+    </td>
+    <td>Number of retries before failing
+    </td>
+    <td><i>int</i>
+    </td>
+    <td>2
+    </td>
+  </tr>
+  <tr>
+    <td>bbsServer.secureSS
+    </td>
+    <td>true = use HTTPS connection to hostfalse = use HTTP connection
+    </td>
+    <td>boolean
+    </td>
+    <td>Default is false.
+    </td>
+  </tr>
+  <tr>
+     <td>cobrandInfo</td>
+     <td> Custom co-branded logo</td>
+     <td> <p><code>[export.cobrandInfo] {<br />
+       &lt;etCobrandInfo&gt; [top-center] {<br />
+       &quot;<a><u>http://<em>your_server</em>.com/<em>your_logo</em>.png</u></a></code><code>&quot;</code><br />
+       <code> 0.5
+         0.95 true true top-center 0.25<br />
+        }</code></p></td>
+     <td></td>
+  </tr>
+  <tr>
+    <td>earthIntlURL
+    </td>
+    <td>Localize international URL for Google Earth
+    </td>
+    <td><code>http://earth.google.com/intl/%1/</code>
+    </td>
+    <td>
+    </td>
+  </tr>
+  <tr>
+    <td>supportAnswerIntlURL</td>
+    <td>Localize international URL for support answers
+    </td>
+    <td><p><code>http://earth.google.com/support/<br />
+    </code><code>bin/answer.py?answer=%4&amp;hl=%1</code></p></td>
+    <td>
+    </td>
+  </tr>
+  <tr>
+    <td>supportTopicIntlURL</td>
+    <td>Localize international URL for support topics
+    </td>
+    <td><code>http://earth.google.com/support/<br />
+      bin/topic.py?topic=%4&amp;hl=%1</code></td>
+    <td>
+    </td>
+  </tr>
+  <tr>
+    <td>supportRequestIntlURL</td>
+    <td>Localize international URL for support requests
+    </td>
+    <td><code>http://earth.google.com/support/<br />
+      bin/request.py?hl=%1</code>
+    </td>
+    <td>
+    </td>
+  </tr>
+  <tr>
+    <td>startupTipsURL</td>
+    <td>Localize international URL for startup tips
+    </td>
+    <td><p><code>http://earth.google.com/</code><br />
+      <code>intl/%1/tips/v4/</code></p></td>
+    <td>
+    </td>
+  </tr>
+  <tr>
+    <td>userGuideIntlURL</td>
+    <td>Localize international URL for documentation
+    </td>
+    <td><code>http://earth.google.com/intl/%1/<br />
+      userguide/v4/</code>
+    </td>
+    <td>
+    </td>
+  </tr>
+  <tr>
+    <td>supportCenterIntlURL</td>
+    <td>Localize international URL for the support center
+    </td>
+    <td><code>http://earth.google.com/support/?hl=%1</code>
+    </td>
+    <td>
+    </td>
+  </tr>
+  <tr>
+    <td>businessListingIntlURL</td>
+    <td>Localize international URL for business listings
+    </td>
+    <td><code>http://www.google.com/local/<br />
+      add/login?hl=%3&amp;gl=%2</code>
+    </td>
+    <td>
+    </td>
+  </tr>
+  <tr>
+    <td>defaultWebPageIntlURL</td>
+    <td>Localize international URL for the default web page
+    </td>
+    <td>
+      <p><code>http://www.google.com</code> (English)
+      </p>
+      <p><code>http://www.google.com/intl/pt-BR</code> (Portuguese)
+      </p><code>http://www.google.com/intl/%1</code> (all other languages)
+    </td>
+    <td>
+    </td>
+  </tr>
+  <tr>
+    <td>numStartupTips</td>
+    <td>Set the number of startup tips
+    </td>
+    <td><code>13</code>
+    </td>
+    <td>
+    </td>
+  </tr>
+  <tr>
+    <td>hideUserData
+    </td>
+    <td>true = Suppress user name and license key information in the Help -&gt; About windowfalse = Display user name and license key information
+    </td>
+    <td>boolean
+    </td>
+    <td>Default is false.
+    </td>
+  </tr>
+  <tr>
+    <td>export.options.<br />
+      &nbsp;&nbsp;disableDiskCache</td>
+    <td>true = Disable disk caching, so databases can ask Google Earth EC not to use disk cache at all.false = Enable disk caching.
+    </td>
+    <td>boolean
+    </td>
+    <td>Default is false.
+    </td>
+  </tr>
+  <tr>
+    <td>reverseGeocodingServer...</td>
+    <td>Defines the reverse geocoding server.</td>
+    <td>The default uses Google's geocoding server:
+      <pre>[googleMFEReverseGeocoder] 
+ http://maps.google.com/
+ maps/api/earth/
+ GeocodeService.Search
+[reverseGeocodingServerVersion] 3
+[reverseGeocodingServer.host] 
+ geo.keyhole.com
+[reverseGeocodingServer.path] /maps</pre>
+      <p>To use your own geocoding server:</p>
+      <pre>[reverseGeocodingServerVersion] 2
+[reverseGeocodingServer.host] <em>
+ your_geocoding_server</em>
+[reverseGeocodingServer.path] 
+ /<em>path_for_queries</em></pre>
+         
+        </td>
+    <td></td>
+  </tr>
+</table>
+<div class="note">
+<p><strong>Note:</strong> Advanced users of previous versions of Fusion were able to hand edit the dbRoot preamble. That is no longer possible. Most of the hand edits that users made in the past are now features built in to Fusion (such as the Search Tab Manager), and other changes are possible using the dbRoot Snippet Manager. However, there are some edits that advanced users made in dbRoot in previous versions of the software that are no longer allowed at all, including:
+</p>
+<ul>
+  <li>Manually editing streamed layers combined for hybrid service.
+  </li>
+  <li>Appending a KML file to dbRoot.
+  </li>
+  <li>Manually adding a nested layer.
+  </li>
+</ul>
+<p>If you have any questions about these functions, please contact Google Earth Enterprise Fusion technical support. </p><br />
+</div>
+
+<h4>To modify a snippet:
+</h4>
+<ol>
+  <li>If you want to change the location of the snippet in dbRoot, click in the Snippet Location field for the snippet you want to move.
+    <p>This field toggles between the values <b>End</b> and <b>Beginning</b> to move the snippet to the end or beginning of the dbRoot. This setting is useful when you want to change the order in which the layers appear in Google Earth EC by reordering them in dbRoot.
+    </p>
+  </li>
+  <li>If you want to change the snippet text, click in the Snippet Text field for the snippet you want to modify, and edit the text.
+    <p class="note"><strong>Note:</strong> If you modify a dbRoot snippet, it does not force you to rebuild project affected by that change. If that dbRoot snippet affects a project that has already been built, when you publish a database that includes that project, the previous dbRoot snippet remains in effect. If something else in that project subsequently triggers a build, the modified dbRoot snippet will take effect in the resulting version.
+    </p>
+  </li>
+</ol>
+<h4>To delete a snippet:
+</h4>
+<ol>
+  <li>Select the snippet you want to delete, and click 
+    <img src="images/iconDelete.png" />.
+    <p>A message prompts you to confirm that you want to delete the selected snippet.
+    </p>
+  </li>
+  <li>Click <b>OK</b>.
+    <p>The snippet disappears from the dbRoot Snippet Manager.
+    </p>
+  </li>
+</ol>
+
+<h2 id="monitoring_system_processes"><a id="55705"></a><a id="65682"></a>Monitoring System Processes
+</h2>
+<p>You can watch all active Fusion system tasks and processes using the <code>getop</code> command. This command is similar to the Unix command <code>top</code>, but is specific to Fusion processing. It is the command line equivalent to the System Manager in the Fusion GUI. See <a href="commands.html#69541">getop</a> in the <strong>Command Line Reference</strong> chapter for more information.</p>
+<p>The <code>getop</code> command outputs the following data for the workstation to the console:
+</p>
+<ul>
+  <li>Version of Fusion running
+  </li>
+  <li>Host name of the master
+  </li>
+  <li>Currently selected asset root
+  </li>
+  <li>The active process and maximum number of jobs allowed (max = <i>n</i>)
+  </li>
+  <li>List of processes waiting to run
+  </li>
+  <li>Process IDs, running time, and names of all Fusion processes running
+  </li>
+</ul>
+<p>For example, the output might look something like this:</p>
+<img src="images/getop_results.png"  />
+
+<h2 id="backing_up_your_data">Backing Up Your Data
+</h2>
+<p>Generally, the important Google Earth Enterprise Server data is all within the <code>/var</code> directory. If you perform regular back-ups of <code>/var</code>, that covers most of the server data. Google recommends that you also back up the following directories:
+</p>
+<pre><code>/etc
+/opt/google/gehttpd/conf
+/opt/google/gehttpd/conf.d
+/opt/google/getomcat/conf</code>
+/opt/google/gehttpd/htdocs</pre>
+<p>With regard to Fusion data, Google strongly recommends that you back up all of your original source data (vector and raster). In addition, Google encourages you to back up all of the <code>.xml</code> files within your asset root(s). In theory, if you have the source data and the asset root <code>.xml</code> files, everything else can be reconstructed. Google Earth Enterprise does not include any tools for doing such a reconstruction, but the data is there and it could be done, if necessary.
+</p>
+<p>You do not need to back up your publish root(s), since there is nothing there that cannot be reproduced. If you have the space and want to back them up, however, recovery will be faster, but it is not necessary.
+</p>
+<p>Many Google Earth Enterprise users also back up their product files. These are the low-level files that result from building resources (for example, <code>.kip</code>, <code>.ktp</code>, <code>.kmp</code>, <code>.kvp</code>). That way, if you do need to reconstruct, you can import the product files (rather than raw source files) to recreate the resources. This will save you some build time.
+</p>
+<h2 id="taskrules">Running Fusion on a Machine with Multiple CPU Cores
+</h2>
+<p>Fusion can be configured to use a maximum number of CPU cores on a machine with the command:
+</p>
+<pre><code>/opt/google/bin/geselectassetroot --assetroot /my/assetroot --numcpus X</code></pre>
+<p>This number will show up as the <code>maxjobs</code> entry within <code>getop</code> output and corresponds to how many concurrent jobs Fusion may spawn at any one time. Note that the value for <code>--numcpus</code> should be equal to, or less than, the total number of CPUs permitted by your Fusion license; it should never exceed the number of physical CPU cores on the machine. 
+</p>
+<p>Each task within Fusion is configured to use 1 CPU by default. Changing the maximum number of CPUs using the above command will <i>not</i> affect the number of CPUs assigned to each individual task.  Some tasks in Fusion are capable of multithreaded support including:
+</p>
+  <li><code>gepackgen</code> (imagery and terrain projects)</li>
+  <li><code>gemaptilegen</code> (2D vector-based map tiles)</li>
+  <li><code>gecombineterrain</code> (3D databases)</li>
+<p>These tasks may be multithreaded by enabling 'Taskrules' within Fusion.  Implementation of Taskrules is described in: <code>/opt/google/share/taskrules/README</code>.
+</p>
+<p>The <code>PacketLevel.taskrule</code>, <code>MapLayerLevel.taskrule</code>, and <code>CombinedTerrain.taskrule</code> taskrules will enable multiple CPUs to work on each individual task. For example, configuring a <code>minNumCPUs</code> and <code>maxNumCPUs</code> of 2 for <code>gepacken</code> means that up to 4 gepackgen processes may run on Fusion, with 2 CPUs assigned each, when 8 CPU cores are allocated. 
+</p>
+<p>As a best practice, <code>PacketLevel.taskrule</code> and <code>MapLayerLevel.taskrule</code> should be configured such that multiple <code>gepackgen</code> and <code>gemaptilegen</code> processes can run concurrently. Since <code>gecombineterrain</code> is CPU-intensive and can be an operational bottleneck, more CPUs should be assigned to that task to expedite processing. 
+</p>
+<p>So on a machine with 8 CPU cores available for Fusion processing: 
+</p>
+<ol>
+  <li>Set <code>--numcpus</code>=7.  It's recommended to set the maximum number of CPUs allocated to Fusion to (N-1), such that one CPU core is reserved for system operations</li>
+  <li>Set <code>minNumCPU</code>=2 and <code>maxNumCPU</code>=2 in <code>PacketLevel.taskrule</code> for imagery projects (3 concurrent <code>gepackgen</code> jobs possible)**</li> 
+  <li>Set <code>minNumCPU</code>=3 and <code>maxNumCPU</code>=4 in <code>PacketLevel.taskrule</code> for terrain projects (2 concurrent <code>gepackgen</code> jobs possible)**</li>
+  <li>Set <code>minNumCPU</code>=3 and <code>maxNumCPU</code>=4 in <code>MapLayerLevel.taskrule</code> (2 concurrent <code>gemaptilegen</code> jobs possible)</li> 
+  <li>Set <code>minNumCPU</code>=7 and <code>maxNumCPU</code>=7 in <code>CombinedTerrain.taskrule</code> (1 <code>gecombineterrain</code> job)</li>
+</ol>
+<div class="note">
+**<strong>Note</strong>: Fusion will use up to 200% CPU processing for imagery projects per <code>gepackgen</code> process, and up to 600% CPU processing for terrain projects.  There is fundamentally a balance between assigning sufficient numbers of CPUs to each individual process for <code>gepackgen</code> while still enabling multiple concurrent <code>gepackgen</code> processes for parallel processing.
+</div>
+<p>All other tasks in Fusion will continue to operate with min/max 1 CPU. 
+</p>
+<p>
+</p>
+</div>
+	<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+	<!-- END WRAPPER -->
+</body>
+</html>

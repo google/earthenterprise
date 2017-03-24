@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="Geocoding Extraction" height="300">
+  <Require feature="sharedmap"/>
+</ModulePrefs>
+<Content type="html"><![CDATA[
+
+<small>
+In this example, we geocode an address, and extract
+the information from the return value.
+</small>
+
+<script>
+var map = new GMap2();;
+map.setCenter(new GLatLng(34, 0), 1);
+var geocoder = new GClientGeocoder();;
+
+function addAddressToMap(response) {
+  map.clearOverlays();
+  if (!response || response.Status.code != 200) {
+    alert("\"" + address + "\" not found");
+  } else {
+    place = response.Placemark[0];
+    point = new GLatLng(place.Point.coordinates[1],
+                        place.Point.coordinates[0]);
+    marker = new GMarker(point);
+    map.addOverlay(marker);
+    marker.openInfoWindowHtml(place.address + '&lt;br&gt;' + 
+      '&lt;b&gt;Country code:&lt;/b&gt; ' + place.AddressDetails.Country.CountryNameCode);
+  }
+}
+
+// showLocation() is called when you click on the Search button
+// in the form.  It geocodes the address entered into the form
+// and adds a marker to the map at that location.
+function showLocation() {
+  var address = document.forms[0].q.value;
+  geocoder.getLocationsAsync(address, addAddressToMap);
+}
+
+// findLocation() is used to enter the sample addresses into the form.
+function findLocation(address) {
+  document.forms[0].q.value = address;
+  showLocation();
+}
+</script>
+   <!-- Creates a simple input box where you can enter an address
+         and a Search button that submits the form. //-->
+    <form action="#" onsubmit="showLocation(); return false;">
+      <p>
+        <b>Search for an address:</b>
+        <input type="text" name="q" value="" class="address_input" size="40" />
+        <input type="submit" name="find" value="Search" />
+
+      </p>
+    </form>
+
+   <!-- Sample addresses //-->
+   <p><b>Try these:</b><br />
+
+   <a href="javascript:void(0)"
+     onclick="findLocation('1600 amphitheatre mountain view ca');return false;">1600
+     amphitheatre mountain view ca</a><br />
+
+   <a href="javascript:void(0)"
+     onclick="findLocation('1 Telegraph Hill Blvd, San Francisco, CA, USA');return false;">1
+     Telegraph Hill Blvd, San Francisco, CA, <b>USA</b></a><br />
+
+   <a href="javascript:void(0)"
+     onclick="findLocation('4141 Avenue Pierre-De-Coubertin, Montr&#x00E9;al, QC, Canada');return false;">4144
+     Avenue Pierre-De-Coubertin, Montr&#x00E9;al, <b>Canada</b></a><br />
+
+   <a href="javascript:void(0)"
+     onclick="findLocation('Champ de Mars 75007 Paris, France');return false;">Champ
+     de Mars 75007 Paris, <b>France</b></a><br />
+
+   <a href="javascript:void(0)"
+     onclick="findLocation('Piazza del Colosseo, Roma, Italia');return false;">Piazza
+     del Colosseo, Roma, <b>Italia</b></a><br />
+
+   <a href="javascript:void(0)"
+     onclick="findLocation('Domkloster 3,  50667 K&#x00F6;ln, Deutschland');return false;">Domkloster
+     3,  50667 K&#x00F6;ln, <b>Deutschland</b></a><br />
+
+   <a href="javascript:void(0)"
+     onclick="findLocation('Plaza de la Virgen de los Reyes, 41920, Sevilla, Espa&#x00F1;a');return false;">Plaza
+     de la Virgen de los Reyes, 41920, Sevilla, <b>Espa&#x00F1;a</b></a><br />
+
+  </p>
+]]></Content>
+</Module>

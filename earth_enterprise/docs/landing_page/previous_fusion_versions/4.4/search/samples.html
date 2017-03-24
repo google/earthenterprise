@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../fusion/html/css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Search Framework API</title>
+</head>
+
+<body>
+
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border="0" src="../fusion/html/images/index.gif" />
+  </div>
+  <h1 id="doc_title">Search Framework API</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../index.html">4.4 documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Search Framework API</strong></li>
+    <li><a href="index.html">Overview</a></li>
+    <li><a href="JavaClassLibrary.html">Java Class Library</a></li>
+    <li><a href="CreatingAPlugin.html">Creating a Plug-in</a></li>
+    <li><a href="samples.html" id="selected">Sample Plug-ins</a></li>
+    <li><a href="docs/index.html">Class Reference</a></li>
+  </ul>
+</div> 
+<!-- ########## END SIDE NAVIGATION ########## -->
+
+<!-- ########## PAGE CONTENT ########## -->
+
+<div id="pagecontent">
+
+<h1>Sample Search Plug-ins</h1>
+
+<p><a id="marker-1019451"></a>To get you started with the Google Earth Enterprise Search Framework API, Google provides some sample plug-ins with the Google Earth Enterprise system. They are located in <code>/opt/google/search/plugins</code>.</p>
+
+<h4>CoordinatePlugin
+</h4><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot; ?&gt;
+&lt;SearchTabDefinition&gt;
+&lt;label&gt;Coordinates&lt;/label&gt;
+&lt;fields&gt;
+ &lt;field&gt;
+ &lt;label&gt;Latitude, Longitude&lt;/label&gt;
+ &lt;key&gt;location&lt;/key&gt;
+ &lt;/field&gt;
+ &lt;/fields&gt;
+&lt;url&gt;&lt;/url&gt;
+&lt;plugin_name&gt;CoordinatePlugin&lt;/plugin_name&gt;
+&lt;query_params&gt;flyToFirstElement=true&amp;displayKeys=location&lt;/query_params&gt;
+&lt;is_poi&gt;0&lt;/is_poi&gt;
+&lt;/SearchTabDefinition&gt;
+</code></pre>
+<h4>ExamplePlugin
+</h4>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot; ?&gt;
+&lt;SearchTabDefinition&gt;
+&lt;label&gt;Example Plugin&lt;/label&gt;
+&lt;fields&gt;
+ &lt;field&gt;
+ &lt;label&gt;San Francisco Neighborhoods&lt;/label&gt;
+ &lt;key&gt;neighborhood&lt;/key&gt;
+ &lt;/field&gt;
+ &lt;/fields&gt;
+&lt;url&gt;&lt;/url&gt;
+&lt;plugin_name&gt;ExamplePlugin&lt;/plugin_name&gt;
+&lt;query_params&gt;flyToFirstElement=true&amp;displayKeys=location&lt;/query_params&gt;
+&lt;is_poi&gt;0&lt;/is_poi&gt;
+&lt;/SearchTabDefinition&gt;
+</code></pre>
+<h4>GSAPlugin
+</h4>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot; ?&gt;
+&lt;SearchTabDefinition&gt;
+&lt;label&gt;Google Search Appliance Plugin&lt;/label&gt;
+&lt;fields&gt;
+ &lt;field&gt;
+ &lt;label&gt;Search Term&lt;/label&gt;
+ &lt;key&gt;searchTerm&lt;/key&gt;
+ &lt;/field&gt;
+ &lt;/fields&gt;
+&lt;url&gt;&lt;/url&gt;
+&lt;plugin_name&gt;GSAPlugin&lt;/plugin_name&gt;
+&lt;query_params&gt;flyToFirstElement=true&amp;displayKeys=location&lt;/query_params&gt;
+&lt;is_poi&gt;0&lt;/is_poi&gt;
+&lt;/SearchTabDefinition&gt;
+</code></pre>
+
+<h4>GeocodingFederatedPlugin
+</h4>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot; ?&gt;
+&lt;SearchTabDefinition&gt;
+&lt;label&gt;Places or Coordinates&lt;/label&gt;
+&lt;fields&gt;
+ &lt;field&gt;
+ &lt;label&gt;City, Country or lat, lng (e.g., 40, -90)&lt;/label&gt;
+ &lt;key&gt;location&lt;/key&gt;
+ &lt;/field&gt;
+ &lt;/fields&gt;
+&lt;url&gt;&lt;/url&gt;
+&lt;plugin_name&gt;GeocodingFederatedPlugin&lt;/plugin_name&gt;
+&lt;query_params&gt;flyToFirstElement=true&amp;displayKeys=location&lt;/query_params&gt;
+&lt;is_poi&gt;0&lt;/is_poi&gt;
+&lt;/SearchTabDefinition&gt;
+</code></pre>
+<h4>GEPlacesPlugin</h4>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot; ?&gt;
+&lt;SearchTabDefinition&gt;
+&lt;label&gt;Places&lt;/label&gt;
+&lt;fields&gt;
+ &lt;field&gt;
+ &lt;label&gt; City, Country&lt;/label&gt;
+ &lt;key&gt;location&lt;/key&gt;
+ &lt;/field&gt;
+ &lt;/fields&gt;
+&lt;url&gt;&lt;/url&gt;
+&lt;plugin_name&gt;GEPlacesPlugin&lt;/plugin_name&gt;
+&lt;query_params&gt;flyToFirstElement=true&amp;displayKeys=location&lt;/query_params&gt;
+&lt;is_poi&gt;0&lt;/is_poi&gt;
+&lt;/SearchTabDefinition&gt;
+</code></pre>
+
+</div> 
+<!-- ########## END PAGE CONTENT ########## -->
+
+</div><!-- end wrapper -->
+
+</body>
+</html>

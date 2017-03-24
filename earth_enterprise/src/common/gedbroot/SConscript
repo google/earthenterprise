@@ -1,0 +1,109 @@
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+#-*- Python -*-
+Import('env')
+
+dbroot_v2 = env.ProtocolBuffer(
+    '#/keyhole/proto/dbroot/dbroot_v2.proto');
+
+
+gedbroot = env.sharedLib('gedbroot',
+                         ['eta_dbroot.cc',
+                          'proto_dbroot.cc',
+                          dbroot_v2[0],   # generated .cc file
+                          'eta2proto_dbroot.cc',
+                          'proto_dbroot_util.cc',
+                          'tools/eta_parser.cc',
+                          'tools/eta_dbroot_utils.cc',
+                          'tools/dbroot_v2_converter.cc',
+                          'strings/numbers.cc',
+                          ],
+                         LIBS=['gecommon',
+                               'geprotobuf',
+                               'qt-mt',
+                               ])
+env.install('common_lib', [gedbroot])
+
+# we want to be careful and make sure we depend on only the minimal set of
+# libraries to actually do the dumping.  This should be able to run on a
+# server machine w/o having all the fusion libraries installed.
+gedumpdbroot = env.executable('gedumpdbroot',
+                             ['gedumpdbroot.cpp',
+                              ],
+                             LIBS=['gedbroot',
+                                   'gecommon',
+                                   'png12'])
+
+env.install('tools_bin', [gedumpdbroot])
+
+geencryptdbroot = env.executable('geencryptdbroot',
+                                 ['geencryptdbroot.cpp',
+                                  ],
+                                 LIBS=['gedbroot',
+                                       'gecommon',
+                                       'png12'])
+
+env.install('tools_bin', [geencryptdbroot])
+
+protobuf_walker = env.sharedLib('protobuf_walker',
+                                ['protobuf_walker.cpp',
+                                 'typed-accessor-implementations.cpp'
+                                 ],
+                                LIBS=['gecommon',
+                                      'geprotobuf',
+                                      'png12'
+                                      ])
+
+env.install('common_lib', [protobuf_walker])
+
+
+# The library
+dbroot_google_url_remover = env.sharedLib('dbroot_google_url_remover',
+                                          ['dbroot_google_url_remover.cpp'
+                                           ],
+                                          LIBS=['protobuf_walker',
+                                                'gecommon',
+                                                'geprotobuf',
+                                                'png12'
+                                                ])
+
+env.install('common_lib', [dbroot_google_url_remover])
+
+# library test
+dbroot_google_url_remover_test = env.test(
+    'dbroot_google_url_remover_test',
+    ['dbroot_google_url_remover_test.cpp'],
+    LIBS=['dbroot_google_url_remover',
+          'protobuf_walker',
+          'gtest', 'gedbroot', 'geprotobuf', 'gecommon', 'png12'])
+
+
+# The application
+gedbrootgoogleurlremover = env.executable(
+    'gedbrootgoogleurlremover',
+    ['gedbroot_google_url_remover.cpp'
+     ],
+    LIBS=['dbroot_google_url_remover',
+          'gedbroot',
+          'gecommon',
+          'geprotobuf',
+          'png12'
+          ])
+
+env.install('tools_bin', [gedbrootgoogleurlremover])
+
+env.installAs('fusion_share', 'postamble.v5.base', 'template', 'dbroot')
+

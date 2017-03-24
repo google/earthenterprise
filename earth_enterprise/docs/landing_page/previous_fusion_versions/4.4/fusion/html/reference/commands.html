@@ -1,0 +1,1827 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Command Line Reference</title>
+</head>
+
+<body>
+
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" />
+  </div>
+  <h1 id="doc_title">Reference Guide</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Reference Guide</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="intro.html">Introduction</a></li>
+    <li><a href="fundamentals.html">Fundamentals</a></li>
+    <li><a href="setup.html">Setting Up Your Workspace</a></li>
+    <li><a href="resources.html">Defining Resources</a></li>
+    <li><a href="projects.html">Defining Projects</a></li>
+    <li><a href="databases.html">Defining and Publishing Databases</a></li>
+    <li><a href="building.html">Building Assets</a></li>
+    <li><a href="maps.html">Preparing Data for Google Maps</a></li>
+    <li><a href="commands.html" id="selected">Command Line Reference</a></li>
+    <li><a href="createOwnData.html">Creating Your Own Source Data, Icons, and Masks</a></li>
+    <li><a href="htmlTags.html">HTML Tags Allowed</a></li>
+    <li><a href="plugins.html">Google Earth Plugin</a></li>
+    <li><a href="errors.html">Common Error Messages</a></li>
+    <li><a href="glossary.html">Glossary</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+
+<h1>Command Line Reference</h1>
+
+<ol class="toc">
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#functional">Commands Listed by Functional Area</a></li>
+  <li><a href="#alpha">Commands Listed Alphabetically</a></li>
+</ol>
+
+<h2 id="overview">Overview</h2>
+
+<p>This chapter describes the shell commands for Google Earth Enterprise Fusion. You can use the shell commands to set up an automated environment to build and deliver databases from frequently updated or new source data.
+</p>
+<p>In addition, if you have a large number of sources to process, you can build a command line script to add them rather than adding them individually using the Google Earth Enterprise Fusion GUI.
+</p>
+<p class="note"><strong>Note:</strong> <a id="marker-1032631"></a>The commands included
+    in previous releases that began with <strong>kh</strong> have all been changed to begin with
+    <strong>ge</strong> since version 3.0. They are documented by their new names in this guide.    </p>
+<p>A feature of an automated system is the ability to optimize your work at all phases of data collection--resource, project, and database definition. You can:
+</p>
+<ul>
+  <li>Build a database to process all of the resource and project data that comprise the database.
+  </li>
+  <li>Build a project to process all of the resource data that comprise a project.
+  </li>
+  <li>Build an individual resource as new source data becomes available.
+  </li>
+</ul>
+<img src="images/buildProcess.png" />
+<p><a id="marker-1032646"></a>You can use the Google Earth Enterprise Fusion shell commands to access all components in each building phase of a servable set of GIS data. This appendix provides a list of commands grouped by component--resource, project, or database--and then describes each command in an alphabetical listing. In addition to the information in this appendix, you can determine each command’s usage by simply entering the command with the <code>--help</code> option, for example
+</p>
+<pre>genewimageryresource --help</pre>
+<p><a id="marker-1018233"></a>This appendix uses the following typographic conventions:
+</p>
+<table>
+  <tr>
+    <td><i>Italic</i><code> </code>
+    </td>
+    <td>Information that the user must supply
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Bold</strong>
+    </td>
+    <td>Text that the user must type exactly as shown
+    </td>
+  </tr>
+  <tr>
+    <td>Ellipsis <strong>...</strong>
+    </td>
+    <td>Parameter that can be repeated several times in a command line
+    </td>
+  </tr>
+  <tr>
+    <td>Square brackets <strong>[ ]</strong>
+    </td>
+    <td>Optional items
+    </td>
+  </tr>
+  <tr>
+    <td>Curly braces <strong>{ }</strong> with options separated by pipes <strong>|</strong>; for example: <strong>{even | odd}</strong> 
+    </td>
+    <td>Set of choices from which the user can select only one
+    </td>
+  </tr>
+  <tr>
+    <td>Parentheses <strong>( )</strong>
+    </td>
+    <td>Grouped items that function together.
+    </td>
+  </tr>
+  <tr>
+    <td><code>Courier font</code> 
+    </td>
+    <td>Code or program output
+    </td>
+  </tr>
+</table>
+<h2 id="functional">Commands Listed by Functional Area
+</h2>
+<h3><a id="marker-1032673"></a>Resource Commands
+</h3>
+<p>This section describes the commands you can use to define and modify terrain, imagery, and vector resources from the command line:
+</p>
+<ul>
+  <li><a href="#genewimageryresource">genewimageryresource</a>
+  </li>
+  <li><a href="#genewmaplayer">genewmaplayer</a></li>
+  <li><a href="#genewterrainresource">genewterrainresource</a>
+  </li>
+  <li><a href="#genewvectorresource">genewvectorresource</a>
+  </li>
+  <li><a href="#gemodifyimageryresource">gemodifyimageryresource</a>
+  </li>
+  <li><a href="#gemodifyterrainresource">gemodifyterrainresource</a>
+  </li>
+  <li><a href="#gemodifyvectorresource">gemodifyvectorresource</a>
+  </li>
+</ul>
+<p>You can use these commands for bulk processing when you have large quantities of data to process. See the <a href="resources.html#79906">Defining Resources</a> chapter for more information.
+</p>
+<h4>Defining and Modifying Resources
+</h4>
+<p><a id="marker-1024756"></a>When defining and modifying resources, keep these points in mind:
+</p>
+<ul>
+  <li>You define a single resource at a time by importing a single source file or multiple source files.
+  </li>
+  <li>When you import multiple source files for a single resource, all of the source data must have the same projection, and the header attributes must have the same structure. The source files, however, can be in different formats, such as TIFF or IMG (although this is unlikely).
+  </li>
+  <li>You can import the same source file into different resources.
+  </li>
+  <li>If you use one of the <code>modify</code> commands (<code>gemodifyimageryresource</code>, <code>gemodifyterrainresource</code>, or <code>gemodifyvectorresource</code>) and specify a resource that does not exist, Google Earth Enterprise Fusion creates a new resource with the name you specify.
+  </li>
+  <li>When you import multiple source files for a single imagery or terrain resource, the pixel resolution of all files must be the same.
+  </li>
+  <li>When you import multiple source files for a single vector resource, the geometry type must be the same.
+  </li>
+  <li>You must use a <code>modify</code> command to change properties for an existing resource. If you use the one of the <code>new</code> (<code>genewimageryresource</code>, <code>genewterrainresource</code>, or <code>genewvectorresource</code>) commands and a resource with the name and type you specify already exists, the command fails. 
+  </li>
+</ul>
+<p>When you define an imagery or terrain resource, the source file must include geo-reference information. Typically the coordinate and projection information is part of the imagery file itself (as with a GeoTIFF file, for example). However, if your imagery source file does not contain geo-coordinate information, you must provide it in a separate external file. (See <a href="resources.html#72206">Special Cases</a> in the <strong>Defining Resources</strong> chapter for details about external files.) </p>
+<h4><a id="30885"></a>Importing Preprocessed Resources
+</h4>
+<p><a id="marker-1032782"></a>If you purchase preprocessed imagery or terrain data from Google or receive preprocessed data from another Google Earth Enterprise Fusion user, it arrives as a complementary pair of folders. These folders share the same name but have different extensions. Folders with a <code>.kip</code> extension are imagery data. Folders with a <code>.ktp</code> extension are terrain data. Folders with a <code>.kmp</code> extension are mask files. Folders with a <code>.kvp</code> extension are vector data.
+</p>
+<p>You must use the Google Earth Enterprise Fusion command line tools to add preprocessed data to your asset root. The command line tools for importing preprocessed data are:
+</p>
+<ul>
+  <li><a href="#genewimageryresource">genewimageryresource</a>
+  </li>
+  <li><a href="#genewterrainresource">genewterrainresource</a>
+  </li>
+</ul>
+<p>These commands have similar options and parameters.
+</p>
+<p>You must specify the <strong>--havemask</strong> option to correctly import the preprocessed mask files with the imagery. You can associate provider copyright information with the resource by specifying the <strong>--provider</strong> option and the appropriate provider key. You specify the resource name and target location in the asset tree with the <code>-o </code>option (for example: <code>-o assets/imagery/north_america/usa/ca/usgsLandSat</code>), followed by the full path to the source data. 
+</p>
+<h4><a id="marker-1032784"></a>To import preprocessed imagery data:
+</h4>
+<br />
+
+<ol>
+  <li>Change to the asset root folder, for example:<pre>cd /gevol/assets</pre>
+    <p class="note"><strong>Tip:</strong> Although this step is not necessary, it allows you to use auto-completion (pressing <strong>TAB</strong> after typing the first few letters of a file name) on the command line, which helps you avoid typographical errors.
+    </p>
+  </li>
+  <li>Add the imagery data with the <code>genewimageryresource</code> command, for example:<pre>genewimageryresource --provider <i>&lt;PROVIDER_KEY&gt;</i> --havemask 
+-o <i>path/to/resource/directory/resourcename</i> <i>/path/to/imagery.kip</i></pre>
+  </li>
+  <li>Press <strong>Enter</strong>.
+    <p>Google Earth Enterprise Fusion defines the resource.
+    </p>
+  </li>
+</ol>
+<h4><a id="marker-1032783"></a>To import preprocessed terrain data:
+</h4>
+<br />
+
+<ol>
+  <li>Change to the asset root folder, for example:<pre>cd /gevol/assets</pre>
+  </li>
+  <li>Add the terrain data with the <code>genewimageryresource</code> command, for example:<pre>genewterrainresource --provider <i>&lt;PROVIDER_KEY&gt;</i> --havemask 
+-o <i>path/to/resource/directory/resourcename</i> <i>/path/to/terrain.kip</i></pre>
+  </li>
+  <li>Press <strong>Enter</strong>.
+    <p>Google Earth Enterprise Fusion defines the resource.
+    </p>
+  </li>
+</ol>
+<h3><a id="31635"></a>Project Commands<a id="marker-1024840"></a>
+</h3>
+<p>After defining resources, the next phase in producing a Google Earth database involves defining projects and adding resources to them. For your database, you can define up to three different projects--imagery, terrain, and/or vector.
+</p>
+<p>This section describes the commands you can use to define and modify terrain, imagery, and vector projects from the command line:
+</p>
+<ul>
+  <li><a href="#genewimageryproject">genewimageryproject</a>
+  </li>
+  <li><a href="#genewterrainproject">genewterrainproject</a>
+  </li>
+  <li><a href="#genewvectorproject">genewvectorproject</a>
+  </li>
+  <li><a href="#gemodifyimageryproject">gemodifyimageryproject</a>
+  </li>
+  <li><a href="#gemodifyterrainproject">gemodifyterrainproject</a>
+  </li>
+  <li><a href="#gemodifyvectorproject">gemodifyvectorproject</a>
+  </li>
+  <li><a href="#geaddtoimageryproject">geaddtoimageryproject</a>
+  </li>
+  <li><a href="#geaddtoterrainproject">geaddtoterrainproject</a>
+  </li>
+  <li><a href="#geaddtovectorproject">geaddtovectorproject</a>
+  </li>
+  <li><a href="#gedropfromimageryproject">gedropfromimageryproject</a>
+  </li>
+  <li><a href="#gedropfromterrainproject">gedropfromterrainproject</a>
+  </li>
+  <li><a href="#gedropfromvectorproject">gedropfromvectorproject</a>
+  </li>
+</ul>
+<p>As with resource commands, you can use these commands for bulk processing when you have large quantities of data to process. See <a href="projects.html#61436">Defining Projects</a> for more information.
+</p>
+<h4>Defining and Modifying Projects<a id="marker-1024847"></a>
+</h4>
+<p><a id="marker-1026472"></a>When defining and modifying resources, keep these points in mind:
+</p>
+<ul>
+  <li><a id="marker-1026501"></a><a id="marker-1026502"></a>You use the project modification commands to redefine an existing project with a known set of resources. You can use one of the <code>modify</code> commands as a single command to achieve this operation, rather than having to use the <code>addto</code> or <code>dropfrom</code> commands to change the resources in an existing project. That is, when you use the project modification command, the resources you specify replace the previous set of resources for that project.
+  </li>
+  <li>When you add terrain and imagery resources to a project, Google Earth Enterprise Fusion automatically orders them according to their resolution. That is, a 1-meter imagery resource is stacked on top of a 3-meter imagery resource. Beyond that, the imagery resources are ordered according to the order in which you list them in the command. 
+  </li>
+  <li>You can use the <code>addto</code> command to add resources to an existing project. To add resources to a project that has not yet been defined, use the <code>new </code>command.
+  </li>
+</ul>
+<h3>Database Commands<a id="marker-1024891"></a>
+</h3>
+<p>This section describes the commands you can use to define and modify terrain, imagery, and vector databases from the command line:
+</p>
+<ul>
+  <li><a href="#genewdatabase">genewdatabase</a>
+  </li>
+  <li><a href="#gemodifydatabase">gemodifydatabase</a>
+  </li>
+</ul>
+<p>As with resource and project commands, you can use these commands for bulk processing when you have large quantities of data to process. See <a href="databases.html#33104">Defining a Database</a> for more information.
+</p>
+<h4>Defining a Database<a id="marker-1024894"></a>
+</h4>
+<p>Before publishing your project and resource data to a Google Earth Enterprise Server, you must define a database. A database typically contains at least a single project--imagery, terrain, or vector. It can contain one project of each type for a total of three projects. 
+</p>
+<p><a id="marker-1024906"></a>When you define a database without one of the three project types, that project type is supplied by the default project data specified in your Google Earth Enterprise Fusion system configuration. For example, if you define a database using your own imagery and terrain projects, but you supply no vector project, the default vector project is used. (See the <i>Google Earth Enterprise Administration Guide</i> for a description of the default project settings.)
+</p>
+<p class="note"><strong>Tip:</strong> The <code>gemodifydatabase</code> command exists as a convenience when you must redefine the projects for a given database. However, it is not recommended that you use this command to repeatedly redefine the projects for a single database. For example, if you want to view different vector data projects in relationship to the same imagery and terrain projects, you should define two separate databases with different vector projects rather than repeatedly redefining the same database in order to switch vector data.
+</p>
+<h3><a id="marker-1026593"></a><a id="34808"></a>Building Commands
+</h3>
+<p>This section describes the commands you can use to build any type of asset--resource, map layer, project, or database--from the command line:
+</p>
+<ul>
+  <li><a href="#gebuild">gebuild</a>
+  </li>
+  <li><a href="#gecancel">gecancel</a>
+  </li>
+  <li><a href="#geclean">geclean</a>
+  </li>
+  <li><a href="#gequery">gequery</a>
+  </li>
+  <li><a href="#geresume">geresume</a>
+  </li>
+  <li><a href="#gesetbad">gesetbad</a>
+  </li>
+  <li><a href="#geclearbad">geclearbad</a>
+  </li>
+</ul>
+<p>Google Earth Enterprise Fusion allows you the flexibility of building the entire database and its components at the same time or building the individual components one at a time. This flexibility is particularly useful when source data updates become available at varying times, and you want to build some components before other components are updated.
+</p>
+<p>When you define or modify a resource, you are defining the source file and configuration settings for the resource. When you build the resource, you are using those settings to actually produce the resource itself, which is a group of related files that are the result of this processing.
+</p>
+<p>You can use the <code>gecancel</code> command to cancel a build that is in progress. If, for example, you realize that you’ve specified an incorrect value for the configuration of a resource that is already building, you can use this command to stop the build.
+</p>
+<h4><a id="97528"></a>Handling Asset Build Failures<a id="marker-1024938"></a>
+</h4>
+<p>Sometimes a build fails for external reasons, such as lack of disk space or file permissions set incorrectly. When that happens, after you resolve the disk space problem, you can use the <code>geresume</code> command to continue building the asset from the point at which the build failed. The purpose of the <code>geresume</code> command is to continue a build on a version where there has been no change to the data itself--only changes to external factors. 
+</p>
+<p>On the other hand, if the build failed because of a configuration or inherent data problem, you can change the configuration of the asset (such as removing a resource from a project or changing the visibility range for a display rule). Then you must use <code>gebuild</code> to rebuild the resource, since the underlying data actually changed. 
+</p>
+<p>Unlike the <code>gebuild</code> command, <code>geresume</code> does not define a new version of the resource; it rebuilds a previously failed or canceled version. 
+</p>
+<h4><a id="65987"></a>Querying Asset Properties<a id="marker-1024946"></a>
+</h4>
+<p>You can use the <code>gequery</code> command to debug the process of building an asset when it fails to build or to find a specific version of an asset. Typically, you use the <code>--status</code> parameter to determine the initial status of a particular asset. 
+</p>
+<p>If for some reason the asset build fails, you can use the other available querying parameters to further expose the details of the build for that asset in order to identify the specific point at which the build failed. A typical debug process involves the following steps:
+</p>
+<ol>
+  <li>Find the dependency list for a resource.<pre>gequery --dependencies imagery/Mississippi/RiverDelta</pre>
+  </li>
+  <li>Determine the first failed element in the dependency list.
+  </li>
+  <li>View the dependency list and note the dependency with a failed status.
+  </li>
+  <li>Use the <code>gequery</code> command on the failed element to view its log file.<pre>gequery --showlog imagery/Mississippi/RiverDelta/RiverDelta?version=3</pre>
+    <p class="note"><strong>Note:</strong> You can use the <code>gequery</code> command for an asset or for source data.
+    </p>
+  </li>
+  <li>View the log file to check for relevant error messages.
+  </li>
+</ol>
+<h4><a id="65214"></a>Cleaning Assets
+</h4>
+<p><a id="marker-1032713"></a>Each time you build an asset, Google Earth Enterprise Fusion creates a new version for that asset. As a consequence, many updates to an asset can take up significant disk space. You can use the <code>geclean</code> command to clean out assets whose prior versions are no longer needed and are not being referenced by other projects or databases. 
+</p>
+<p>For details on cleaning assets and the requirements for this process, see <a href="building.html#85338">Cleaning Asset Versions</a> in the <strong>Building Assets</strong> chapter. </p>
+<h4>Marking an Asset as Bad<a id="marker-1024983"></a>
+</h4>
+<p>Using the <code>gesetbad</code> command, you can change the status of a resource, project, or database to <strong>Bad</strong> after it has been successfully built. This command is useful if, for example, you incorrectly configure an asset but do not realize it until after the build is complete. By marking the asset as <strong>Bad</strong>, you can prevent other users (or yourself) from building on that asset in the future.
+</p>
+<p>For example, you can create two versions of an imagery resource, build them both, and preview them, and then decide which one you want to keep. You can use the <code>gesetbad</code> command to prevent the rejected resource from being used to build projects and databases. 
+</p>
+<p>To revert the <strong>Bad</strong> status to the prior status, use the <strong>--off </strong>parameter. 
+</p>
+<h4><a id="marker-1032717"></a>Building a Database
+</h4>
+<p>After you define a database with its project components, you must build it before publishing it to the server. If you have already built some components of your database, Google Earth Enterprise Fusion does not repeat that work when it builds the database. It only builds the components that have not yet been built. However, even if all of your database components have been built prior to being added to the database, you must still build the database before publishing it.
+</p>
+<h3><a id="marker-1032718"></a><a id="81415"></a>Publishing Command
+</h3>
+<p>This section describes the command you use when you are publishing a database:
+</p>
+<ul>
+  <li><a href="#gepublishdatabase">gepublishdatabase</a>
+  </li>
+</ul>
+<p>After you successfully build a database, you can publish it to a stream and search server association and then view the data with Google Earth EC. See <a href="databases.html#76398">Publishing a Database</a> for more information about publishing.</p>
+<h3><a id="marker-1032719"></a>Miscellaneous Commands
+</h3>
+<p>There are several commands you can use to perform various miscellaneous Google Earth Enterprise Fusion tasks from the command line, including:
+</p>
+<ul>
+  <li><a href="#geinfo">geinfo</a>
+  </li>
+  <li><a href="#gemaskgen">gemaskgen</a></li>
+  <li><a href="#gepolymaskgen">gepolymaskgen</a></li>
+  <li><a href="#geraster2kml">geraster2kml</a>
+  </li>
+  <li><a href="#gereproject">gereproject</a>
+  </li>
+  <li><a href="#gesplitkhvr">gesplitkhvr</a>
+  </li>
+  <li><a href="#getop">getop</a>
+  </li>
+  <li><a href="#getranslate">getranslate</a>
+  </li>
+  <li><a href="#gevirtualraster">gevirtualraster</a>
+  </li>
+</ul>
+<h1 id="alpha"><a id="marker-1032720"></a>Commands Listed Alphabetically
+</h1>
+<p>
+</p>
+<h2><a name="geaddtoimageryproject"></a><a id="marker-1032721"></a>geaddtoimageryproject
+<br />
+<a name="geaddtoterrainproject"></a><a id="marker-1032722"></a>geaddtoterrainproject
+</h2>
+<pre><strong>geaddtoimageryproject</strong>
+<strong>geaddtoterrainproject --o</strong> <i>projectname</i> <i>resourcename</i>...</pre>
+<h4><a id="marker-1032787"></a>Purpose
+</h4>
+<p>To add one or more resources to an existing imagery or terrain project. Use spaces between resources.
+</p>
+<h4>Example
+</h4>
+<p>This example adds two resources to the project <code>nySectorB</code>.
+</p>
+<pre>geaddtoimageryproject --o projects/imagery/ImageryProjectA
+   imagery/nySector2imagery/nySector3</pre>
+<h4>Parameters
+</h4>
+<pre><strong>--o</strong> <i>projectname</i></pre>
+<p><i>Required</i>. Specify the name of the project relative to the asset root, for example, <code>vector/VectorProjectA</code>.
+</p>
+<pre><i>resourcename</i></pre>
+<p><i>Required</i>. Specify at least one resource to add to the project, for example, <code>vector/VectorResourceA</code>.
+</p>
+<h2><a name="geaddtomapproject"></a><a id="marker-1038976"></a>geaddtomapproject
+</h2>
+<pre><strong>geaddtomapproject -o</strong> <i>projectname</i> <i>layername</i>...</pre>
+<h4>Purpose
+</h4>
+<p>To add map layers to an existing map project.
+</p>
+<h4>Example
+</h4>
+<pre>geaddtomapproject -o Projects/map/MapProjectA MapLayers/SFneighborhoods</pre>
+<h4>Parameters
+</h4>
+<pre><strong>-o</strong> <i>projectname</i></pre>
+<p><i>Required</i>. Specify the location and name of the project relative to the asset root, for example, <code>Projects/Map/MapProjectA</code>. 
+</p>
+<pre><i>layername</i></pre>
+<p><i>Required.</i> Specify the location(s) and name(s) of one or more map layers to add to the project. 
+</p>
+<h2><a name="geaddtovectorproject"></a><a id="marker-1032723"></a>geaddtovectorproject
+</h2>
+<pre><strong>geaddtovectorproject</strong> <strong>--o</strong> <i>projectname</i> ([<strong>--template </strong><i>filename</i>] [<i>vectorresource</i>...])</pre>
+<h4>Purpose
+</h4>
+<p><a id="marker-1032789"></a>To add one or more resources to an existing vector project.
+</p>
+<h4>Example
+</h4>
+<p>This example adds one resource to vector project <code>vectorTemplateB</code>.
+</p>
+<pre>geaddtovectorproject --o vector/VectorProjectA
+   --template templates/vectorTemplateB NewYorkCityStreets</pre>
+<h4>Parameters
+</h4>
+<pre><strong>--o</strong> <i>projectname</i></pre>
+<p><i>Required</i>. Specify the name of the project relative to the asset root, for example, <code>vector/VectorProjectA</code>.
+</p>
+<pre><strong>--template</strong> <i>filename</i></pre>
+<p><i>Required</i>. Specify the template file that contains the display rules you want to apply to your vector layer. To create a template file, see <a href="projects.html#60429">Exporting Display Rules</a> in the <strong>Defining Projects</strong> chapter. </p>
+<pre><i>vectorresource</i></pre>
+<p><i>Required</i>. Specify one or more vector resources to add to the project relative to the asset root, for example, <code>vector/VectorResourceA</code>. Google Earth Enterprise Fusion applies the specified template to each resource.
+</p>
+<h2><a name="geapplylayertemplate"></a>geapplylayertemplate
+</h2>
+<pre><strong>geapplylayertemplate</strong> [<strong>--displayrules</strong>] [<strong>--legend</strong>]
+   <strong>--project</strong> <i>projectname</i>{<strong>--layer</strong> <i>layername</i> | <strong>--layerid</strong> <i>channelid</i>} <strong>
+   --template</strong> <i>filename</i></pre>
+<h4>Purpose
+</h4>
+<p>To apply a display rules template to a project layer. Use single quotes for names with spaces and when listing more than one layer.
+</p>
+<h4>Example
+</h4>
+<pre>geapplylayertemplate --displayrules --legend --project ‘CA Roads’
+   --layer CAHighways
+geapplylayertemplate --displayrules --project ‘CA POIs’
+   --layer ‘LayerA|LayerB|LayerC’</pre>
+<h4>Parameters
+</h4>
+<pre><strong>--displayrules</strong></pre>
+<p><i>Optional</i>. Include if you want to apply the display rules from the template.
+</p>
+<pre><strong>--legend</strong></pre>
+<p><i>Optional</i>. Include if you want to apply the legend specifications from the template.
+</p>
+<pre><strong>--project</strong> <i>projectname</i></pre>
+<p><i>Required</i>. Specify the name of the project that contains the layers to which you want to apply the template.
+</p>
+<pre><strong>--layer</strong> <i>layername</i> | <strong>--layerid</strong> <i>channelid</i></pre>
+<p><i>Optional</i>. Specify the name of the layer(s) or channel(s) to which you want to apply the template. If omitted, Google Earth Enterprise Fusion applies the template to all layers in the specified project.
+</p>
+<pre><strong>--template</strong> <i>filename</i></pre>
+<p><i>Required</i>. Specify the file name of the template you want to apply.
+</p>
+<h2><a name="gebuild"></a><a id="marker-1032724"></a>gebuild
+</h2>
+<pre><strong>gebuild</strong><i> assetname</i></pre>
+<h4>Purpose
+</h4>
+<p>To build any type of asset (resource, map layer, project, or database).
+</p>
+<h4>Example
+</h4>
+<pre>gebuild imagery/SourceInc/MississippiDeltaRegion</pre>
+<h4>Parameters
+</h4>
+<pre><i>assetname</i></pre>
+<p><i>Required</i>. Specify the location and name of the asset (resource, map layer, project, or database) that you want to build relative to the asset root, for example, <code>Projects/Vector/VectorProjectA</code>.
+</p>
+<h2><a name="gecancel"></a><a id="24981"></a><a id="marker-1032728"></a>gecancel
+</h2>
+<pre><strong>gecancel</strong><i> assetname</i> [<i>version</i>]</pre>
+<h4>Purpose
+</h4>
+<p>To cancel a build in progress on the specified asset.
+</p>
+<h4>Example
+</h4>
+<pre>gecancel projects/TransitData/BostonTransitLines 2</pre>
+<h4>Parameters
+</h4>
+<pre><i>assetname</i></pre>
+<p><i>Required</i>. Specify the location and name of the asset (resource, map layer, project, or database) whose build you want to cancel relative to the asset root, for example, <code>Projects/Vector/VectorProjectA</code>.
+</p>
+<pre><i>version</i></pre>
+<p><i>Optional.</i> Specify the version number of the asset you want to cancel, or enter <code>current</code> or <code>lastgood</code>. If you omit the version specification, Google Earth Enterprise Fusion cancels the current version of the specified asset.
+</p>
+<h2><a name="geclean"></a><a id="marker-1032729"></a>geclean
+</h2>
+<pre><strong>geclean</strong> <i>assetname</i> [<i>version</i>]</pre>
+<h4>Purpose
+</h4>
+<p>To clean a particular version of the specified asset.
+</p>
+<h4>Example
+</h4>
+<pre>geclean imagery/SourceInc/MississippiDeltaRegion</pre>
+<h4>Parameters
+</h4>
+<pre><i>assetname</i></pre>
+<p><i>Required</i>. Specify the location and name of the asset (resource, map layer, project, or database) whose version you want to clean relative to the asset root, for example, <code>Projects/Vector/VectorProjectA</code>.
+</p>
+<pre><i>version</i></pre>
+<p><i>Optional.</i> Specify the version number of the asset you want to clean, or enter <code>current</code> or <code>lastgood</code>. If you omit the version specification, Google Earth Enterprise Fusion cleans the current version of the specified asset.
+</p>
+<h2><a name="geclearbad"></a>geclearbad
+</h2>
+<pre><strong>geclearbad</strong> <i>assetname</i> [<i>version</i>]</pre>
+<h4>Purpose
+</h4>
+<p>To revert a version of an asset that has been marked as <strong>Bad</strong> to its prior status.
+</p>
+<h4>Example
+</h4>
+<pre>geclearbad projects/TransitLines/BostonTransitLines 2</pre>
+<h4>Parameters
+</h4>
+<pre><i>assetname</i></pre>
+<p><i>Required</i>. Specify the location and name of the asset (resource, map layer, project, or database) whose version you want to revert relative to the asset root, for example, <code>Projects/Vector/VectorProjectA</code>.
+</p>
+<pre><i>version</i></pre>
+<p><i>Optional.</i> Specify the version number of the asset you want to revert, or enter <code>current</code> or <code>lastgood</code>. If you omit the version specification, Google Earth Enterprise Fusion reverts the current version of the specified asset to its previous status.
+</p>
+<h2><a name="gedropfromimageryproject"></a><a id="marker-1032730"></a>gedropfromimageryproject
+<br />
+<a name="gedropfromterrainproject"></a><a id="marker-1032731"></a>gedropfromterrainproject
+<br />
+<a name="gedropfromvectorproject"></a><a id="marker-1032732"></a>gedropfromvectorproject
+</h2>
+<pre><strong>gedropfromimageryproject</strong>
+<strong>gedropfromterrainproject</strong>
+<strong>gedropfromvectorproject</strong> <strong>--o</strong> <i>projectname</i> <i>resourcename</i>...</pre>
+<h4>Purpose
+</h4>
+<p>To remove one or more resources from the specified project.
+</p>
+<h4>Example
+</h4>
+<pre>gedropfromimageryproject --o projects/imagery/ImageryProjectA
+   imagery/nySector2 imagery/nySector3</pre>
+<h4>Parameters
+</h4>
+<pre><strong>--o</strong> <i>projectname</i></pre>
+<p><i>Required</i>. Specify the location and name of the project relative to the asset root, for example, <code>Projects/Vector/VectorProjectA</code>. 
+</p>
+<pre><i>resourcename</i></pre>
+<p><i>Required</i>. Specify the location and name of at least one resource that you want to drop from the project relative to the asset root, for example, <code>Resources/Vector/VectorResourceA</code>.
+</p>
+<h2><a name="gedropfrommapproject"></a><a id="marker-1039023"></a>gedropfrommapproject
+</h2>
+<pre><strong>gedropfrommapproject -o</strong> <i>projectname</i> <i>layername</i>...</pre>
+<h4>Purpose
+</h4>
+<p>To drop map layers from an existing map project.
+</p>
+<h4>Example
+</h4>
+<pre>gedropfrommapproject -o Projects/map/MapProjectA SFneighborhoods</pre>
+<h4>Parameters
+</h4>
+<pre><strong>-o</strong> <i>projectname</i></pre>
+<p><i>Required</i>. Specify the location and name of the project relative to the asset root, for example, <code>Projects/Map/MapProjectA</code>. 
+</p>
+<pre><i>layername</i></pre>
+<p><i>Required.</i> Specify the name(s) of one or more map layers to drop from the project. 
+</p>
+<h2><a name="geexportlayertemplate"></a>geexportlayertemplate
+</h2><pre><strong>geexportlayertemplate</strong> <strong>--project</strong> <i>projectname</i> <strong>--layer</strong> <i>layername</i> <strong>-o</strong> <i>templatefile</i>
+</pre>
+<p>or
+</p><pre><strong>geexportlayertemplate</strong> <strong>--project</strong> <i>projectname</i> <strong>--alllayers -o </strong><i>outdir</i>
+</pre>
+<h4>Purpose
+</h4>
+<p><a id="marker-1032800"></a>To export a template from the display rules defined for one or more layers in a specific project.
+</p>
+<h4>Example
+</h4><pre>geexportlayertemplate --alllayers -o fusion/templates
+</pre>
+<h4>Parameters
+</h4><pre>--project
+</pre>
+<p><i>Required</i>. Specify the name of the project that contains the layers for which the display rules you want to export have been defined.
+</p><pre>--layer
+</pre>
+<p><i>Required.</i> Specify the name(s) of the layer(s) for which the display rules you want to export have been defined. You can specify more than one layer within single quotes, separated by pipes, for example:
+</p><pre>--layer ‘folder1|folder2|layerA’
+</pre>
+<p>where <code>folder1</code> and <code>folder1</code> are folders that contain a group of layers.
+</p><pre><strong>-o </strong><i>templatefile</i>
+</pre>
+<p><i>Required</i>. Specify this option with the <code>--layer</code> option. Enter the location and name of the directory where you want to store the template. This location can be anywhere on your network where Google Earth Enterprise Fusion has write permission.
+</p><pre>--alllayers
+</pre>
+<p><i>Required.</i> Specify this option if you want to export templates for all layers in separate files within the specified output folder.
+</p><pre><strong>-o </strong><i>outdir</i>
+</pre>
+<p><i>Required</i>. Specify this option with the <code>--alllayers</code> option. Enter the location and name of the directory where you want to store the templates. This location can be anywhere on your network where Google Earth Enterprise Fusion has write permission.
+</p>
+<h2><a name="geinfo"></a><a id="99912"></a><a id="marker-1032734"></a>geinfo
+</h2>
+<pre><strong>geinfo [--a_srs </strong><i>override_srs</i><strong>] [--dump] [--formats] [--minmax] 
+   [--nogcp][--nometa] [--sample] [--srs </strong><i>override_srs</i><strong>]
+   [--writeprj </strong><i>prjfile</i><strong>] [--writetfw </strong><i>tfwfile</i><strong>] </strong><i>input</i>
+</pre>
+<h4>Purpose
+</h4>
+<p>To provide information about the specified raster file.
+</p>
+<h4>Example
+</h4><pre>geinfo --writeprj projectionfile.prj myimage.tif
+</pre>
+<h4>Parameters
+</h4><pre>--a_srs<strong> </strong><i>override_srs</i>
+</pre>
+<p><i>Optional.</i> Specify the SRS to override.
+</p><pre>--dump
+</pre>
+<p><i>Optional.</i> Dump the contents of the raster file.
+</p><pre>--formats
+</pre>
+<p><i>Optional.</i> Display all supported formats in the raster file.
+</p><pre>--minmax
+</pre>
+<p><i>Optional.</i> Compute and display the minimum and maximum pixel values in the raster file.
+</p><pre>--nogcp
+</pre>
+<p><i>Optional.</i> Do not display ground control points in the raster file.
+</p><pre>--nometa
+</pre>
+<p><i>Optional.</i> Do not display metadata in the raster file.
+</p><pre>--sample
+</pre>
+<p><i>Optional.</i> Sample the pixel data in (but not print) the raster file.
+</p><pre>--srs<strong> </strong><i>override_srs</i>
+</pre>
+<p><i>Optional.</i> Specify the SRS to override.
+</p><pre>--writeprj prjfile
+</pre>
+<p><i>Optional.</i> Write a PRJ file with the raster file’s projection.
+</p><pre>--writetfw tfwfile
+</pre>
+<p><i>Optional.</i> Write a TFW file with the raster file’s extents.
+</p><pre><i>input</i>
+</pre>
+<p><i>Required</i>. Specify the name of the raster file on which to take the specified action(s).
+</p>
+<h2><a name="gemaskgen"></a><a id="marker-1032735"></a>gemaskgen
+</h2>
+<pre><strong>gemaskgen { [--extract] [--mask] [--prep] [--preview] }
+   </strong>{ [--band <i>num</i>] [--debug] [--feather <i>num</i>] [--fill <i>0-255</i>]
+   [--formats][--holesize <i>num</i>] [--maxsize <i>num</i>] [--oformat]
+   [--tolerance <i>num</i>] [--whitefill] }<i>rasterproduct output</i>
+</pre>
+<h4>Purpose
+</h4>
+<p>To create a mask file for a raster (imagery or terrain) file.
+</p>
+<h4>Example
+</h4><pre>gemaskgen --mask --feather 200 raster.kip file-maskold.tif
+</pre>
+<h4>Parameters
+</h4>
+<p><strong>Modes:</strong>
+</p><pre><strong>--extract</strong>
+</pre>
+<p><i>Optional.</i> Specify this mode to extract the image from the specified raster file. No mask is created. The output data type matches the original image file type.
+</p><pre><strong>--mask</strong>
+</pre>
+<p><i>Optional.</i> Specify this mode to generate an 8-bit mask file (the default) from the specified raster file.
+</p><pre><strong>--prep</strong>
+</pre>
+<p><i>Optional.</i> Specify this mode to generate an 8-bit mask prep file from the specified raster file.
+</p><pre><strong>--preview</strong>
+</pre>
+<p><i>Optional.</i> Specify this mode to generate an RGBA preview file from the specified raster file.
+</p>
+<p><strong>Options:</strong>
+</p><pre>--band <i>num</i>
+</pre>
+<p><i>Optional.</i> Specify the band number (0-based) to use for the mask and prep files. The defaults are 1 for imagery and 0 for terrain.
+</p><pre>--debug
+</pre>
+<p><i>Optional.</i> Read the input and compute the size of the specified raster file but not to write it to the output file.
+</p><pre>--feather <i>num</i>
+</pre>
+<p><i>Optional.</i> Specify the number of pixels to feather. The default is no feather, 0.
+</p><pre>--fill <i>0-255</i>
+</pre>
+<p><i>Optional.</i> Specify the pixel value to treat as fill. The default is the corner colors.
+</p><pre>--formats
+</pre>
+<p><i>Optional.</i> Display the supported output formats.
+</p><pre>--holesize <i>num</i>
+</pre>
+<p><i>Optional.</i> Specify the minimum size of the interior holes of the fill color to be masked. The default is not to look for holes.
+</p><pre>--maxsize <i>num</i>
+</pre>
+<p><i>Optional.</i> Specify the maximum mask size. The default is 16000.
+</p><pre>--oformat
+</pre>
+<p><i>Optional.</i> Specify the output file format. The default is GTiff. (Use the <code>--format</code> option to determine the supported formats.)
+</p><pre>--tolerance <i>num</i>
+</pre>
+<p><i>Optional.</i> Specify the deviation from the value specified for <code>--fill</code> that should also be considered as fill.
+</p><pre>--whitefill
+</pre>
+<p><i>Optional.</i> Specify white as an additional fill color.
+</p><pre><i>rasterproduct</i>
+</pre>
+<p><i>Required</i>. Specify the name and location of the raster file for which you want to create a mask file.
+</p><pre><i>output</i>
+</pre>
+<p><i>Required</i>. Specify the name and location of the output file containing the mask. This location can be anywhere on your network where Google Earth Enterprise Fusion has write permission.
+</p>
+
+<h2><a name="genewdatabase"></a><a id="marker-1032736"></a>genewdatabase
+<br />
+<a name="gemodifydatabase"></a><a id="marker-1032737"></a>gemodifydatabase</h2>
+
+<pre><b>genewdatabase</b>
+<b>gemodifydatabase -o</b> <i>dbname</i> [<b>--imagery</b> <i>imgproject[?version=x]]</i> 
+   [<b>--terrain</b> <i>terrainproject[?version=x]</i>] [<b>--vector</b> <i>vectorproject</i><i>[?version=x]</i>]</pre>
+
+<h4>Purpose
+</h4>
+<p>To define or modify a database.
+</p>
+<h4>Example
+</h4>
+<pre>genewdatabase -o msDelta --imagery imagery/MississippiDelta?version=21
+   --terrain terrain/msDeltaTerrain?version=20 --vector vector/msDeltaCities</pre>
+<h4>Parameters
+</h4><pre><strong>-o </strong><i>dbname</i></pre>
+<p><i>Required</i>. Specify the location and name of the database relative to the asset root, for example, <code>databaseA</code>. 
+</p>
+<pre><b>--imagery</b> <i>imgproject</i></pre>
+<p><i>Optional.</i> Specify the location and name of the imagery project relative to the asset root, for example, <code>Projects/Imagery/ImageryProjectA</code>. </p>
+<pre><b>--terrain</b> <i>terrainproject</i></pre>
+<p><i>Optional.</i> Specify the location and name of the terrain project relative to the asset root, for example, <code>Projects/Terrain/TerrainProjectA</code>. 
+</p>
+<pre><strong>--vector</strong> <i>vectorproject</i></pre>
+<p><i>Optional.</i> Specify the location and name of the vector project relative to the asset root, for example, <code>Projects/Vector/VectorProjectA</code>. 
+</p>
+<pre><i>version=x</i></pre>
+<p><em>Optional</em>. The version parameter can be applied to any, none, or all of the imagery, terrain, or vector project values. <code>x</code> must be a valid  project version to be used with the database.</p>
+
+<h2><a name="genewmapdatabase"></a>genewmapdatabase
+<br />
+<a name="gemodifymapdatabase"></a>gemodifymapdatabase
+</h2>
+<pre><strong>genewmapdatabase</strong><a id="gemodifydatabase"></a><a id="marker-1039144"></a>
+gemodifymapdatabase [<strong>--meta</strong> <i>key</i><strong>=</strong><i>value</i>] <strong>-o</strong> <i>dbname</i> [<strong>--imagery</strong> <i>imgproject</i>]
+   [<strong>--map</strong> <i>mapproject</i>]</code> [--mercator | --flat]</pre>
+<h4>Purpose
+</h4>
+<p>To define or modify a map database.
+</p>
+<h4>Examples</h4>
+<p>A Flat Projection map database:</p>
+<pre>genewmapdatabase -o Databases/msDelta --imagery Projects/Imagery/MissDelta
+--map Projects/Map/MissWaterways</pre>
+<p>A Mercator Projection map database:</p>
+<pre>genewmapdatabase -o Databases/msDeltaMercator --imagery 
+   Projects/Imagery/MissDeltaMercator
+   --map Projects/Map/MissWaterways --mercator</pre>
+<h4>Parameters
+</h4><pre><strong>--meta</strong> <i>key</i><strong>=</strong><i>value</i></pre>
+<p><i>Optional.</i> This option supports any number of optional name/value pairs that you want to store for the data. For example, you might want to provide additional information about the data provider, such as the specific airplane that took the photo, or you might want to assign your confidence level with the data. If the name or value string contains white space, it should be enclosed in quotation marks.
+</p><pre><strong>-o </strong><i>dbname</i>
+</pre>
+<p><i>Required</i>. Specify the location and name of the map database relative to the asset root, for example, <code>Databases/databaseA</code>. 
+</p><pre><strong>--imagery</strong> <i>imgproject</i>
+</pre>
+<p><i>Optional.</i> Specify the location and name of the imagery project relative to the asset root, for example, <code>Projects/Imagery/ImageryProjectA</code>. 
+</p>
+<pre><strong>--map</strong> <i>mapproject</i>
+</pre>
+<p><i>Optional.</i> Specify the location and name of the map project relative to the asset root, for example, <code>Projects/Map/MapProjectA</code>. 
+</p>
+<pre>--mercator | --flat</pre>
+<p><em>Optional</em>. Default value is <code>--flat</code>. Specifies the projection
+   of the map database. Only applies to new imagery resources. <strong>Glossary</strong>: <a href="glossary.html#flat_projection">Flat
+   Projection</a>, <a href="glossary.html#mercator_projection">Mercator Projection</a>.</p>
+<p>&nbsp;</p>
+<h2><a name="genewimageryproject"></a><a id="marker-1032738"></a>genewimageryproject
+<br />
+<a name="gemodifyimageryproject"></a><a id="marker-1032739"></a>gemodifyimageryproject
+<br />
+<a name="genewterrainproject"></a><a id="marker-1032741"></a>genewterrainproject
+<br />
+<a name="gemodifyterrainproject"></a><a id="marker-1032742"></a>gemodifyterrainproject
+</h2><pre><strong>genewimageryproject</strong>
+<strong>gemodifyimageryproject</strong>
+<strong>genewterrainproject</strong>
+<strong>gemodifyterrainproject -o</strong> <i>projectname</i> {[<strong>--maxlevel=</strong><i>num</i>] <i>insetresource</i> ...}</pre>
+<h4>Purpose
+</h4>
+<p>To define or modify an imagery or terrain project.
+</p>
+<h4>Example
+</h4>
+<pre>genewimageryproject -o 
+   projects/imagery/ImageryProjectAimagery/MississippiDeltaRegion</pre>
+<h4>Parameters
+</h4><pre><strong>-o</strong> <i>projectname</i>
+</pre>
+<p><i>Required</i>. Specify the location and name of the project relative to the asset root, for example, <code>Projects/Imagery/ImageryProjectA</code>.
+</p><pre><strong>--maxlevel=</strong><i>num</i>
+</pre>
+<p><i>Optional.</i> Specify the maximum number of levels in the project.
+</p><pre><i>insetresource</i>
+</pre>
+<p><i>Optional.</i> Specify the location(s) and name(s) of one or more imagery or terrain resources to add to the project.
+</p>
+
+<h2 id="genewmaplayer">genewmaplayer</h2>
+<pre>genewmaplayer --legend=<em>legend_name</em> --output=<em>map_layer_name</em> [options]
+   {[--template=<em>filename</em>] <em>vectorresource</em>}...</pre>
+
+<h4>Purpose</h4>
+<p>Creates a new map layer.</p>
+
+<h4>Example</h4>
+<pre>genewmaplayer --legend=cars --output=ca-car_map-layer --layericon=car
+   --template=/home/doe/template_1.kmdsp Resources/Vector/cities
+   Resources/Vector/villages --template=/home/doe/template_2.kmdsp
+   Resources/Vector/counties</pre>
+
+<h4>Parameters</h4>
+<pre>--legend=<em>legend_name</em></pre>
+<p><em>Required</em>. Name of the layer as it appears in a web browser.</p>
+<pre>--output=<em>map_layer_name</em></pre>
+<p><em>Required</em>. Name of the map layer asset as it appears in the Asset Manager.
+   This value is relative to the asset root and should not include an extension (eg.
+   <code>Resources/Vector/counties</code>).</p>
+<pre>layericon=<em>icon_name</em></pre>
+<p><em>Optional</em>. Basename of the icon png file as it appears in the icon browser
+   (eg. <code>cars</code>).</p>
+<pre>--default_state_on</pre>
+<p><em>Optional</em>. Sets this layer's default state to 'on' in the web browser.</p>
+<pre>--template=<em>filename</em></pre>
+<p><em>Optional</em>. A KMDSP filename (absolute) and a corresponding vector resource
+   (relative to asset_root and without extension). Specifies the display rules and
+   the vector resource for a sublayer; KMDSP files can be exported from the Map Layer
+   widget of the Fusion GUI. More than one template and vector resource pair can
+   be specified.
+
+
+<h2><a name="genewmapproject"></a><a id="marker-1038875"></a>genewmapproject
+   <br />
+   <a name="gemodifymapproject"></a><a id="marker-1038878"></a>gemodifymapproject
+</h2>
+<pre><strong>genewmapproject</strong>
+<strong>gemodifymapproject -o</strong> <i>projectname</i> <i>layername</i>...
+</pre>
+<h4>Purpose
+</h4>
+<p>To define or modify a map project.
+</p>
+<h4>Example
+</h4><pre>genewmapproject -o Projects/map/MapProjectA MapLayers/SFneighborhoods
+</pre>
+<h4>Parameters
+</h4><pre><strong>-o</strong> <i>projectname</i>
+</pre>
+<p><i>Required</i>. Specify the location and name of the project relative to the asset root, for example, <code>Projects/Map/MapProjectA</code>. 
+</p><pre><i>layername</i>
+</pre>
+<p><i>Required.</i> Specify the location(s) and name(s) of one or more map layers to add to the project. 
+</p>
+<h2><a name="genewvectorproject"></a><a id="marker-1032743"></a>genewvectorproject
+<br />
+<a name="gemodifyvectorproject"></a><a id="marker-1032745"></a>gemodifyvectorproject
+</h2><pre><strong>genewvectorproject</strong>
+<strong>gemodifyvectorproject</strong><strong> </strong><strong>-o</strong> <i>projectname</i> {[<strong>--template </strong><i>filename</i>] <i>vectorresource</i>...}
+</pre>
+<h4>Purpose
+</h4>
+<p>To define or replace a vector project.
+</p>
+<h4>Example
+</h4>
+<p>This example updates the PhoenixRoads project with three resources and applies an existing template to the data:
+</p>
+<pre>genewvectorproject --template templates/cityRoadData
+   resources/vector/RoadData/PhoenixRoad1resources/vector/RoadData/PhoenixRoad2
+   resources/vector/RoadData/PhoenixRoad3</pre>
+<h4>Parameters
+</h4>
+</p><pre><strong>-o</strong> <i>projectname</i>
+</pre>
+<p><i>Required</i>. Specify the location and name of the project relative to the asset root, for example, <code>Projects/Vector/VectorProjectA</code>.
+</p><pre><strong>--template</strong> <i>filename</i>
+</pre>
+<p><i>Required</i>. Specify the template file that contains the display rules that you want to apply to the specified resources for this project. To create a template file, see <a href="projects.html#60429">Exporting Display Rules</a> in the <strong>Defining Projects</strong> chapter. </p>
+<p>You can apply different templates to different resources as follows:
+</p><pre>gemodifyvectorproject -o projects/vector/PhoenixRoads --templatetemplates/cityRoadData resources/vector/RoadData/PhoenixRoad1 resources/vector/RoadData/PhoenixRoad2 --template templates/countyRoadData resources/vector/RoadData/PhoenixRoad3
+<i>vectorresource</i>
+</pre>
+<p><i>Optional</i>. Specify one or more vector resources to add to the project.
+</p>
+<h2><a name="genewimageryresource"></a><a id="marker-1032747"></a>genewimageryresource
+<br />
+<a name="gemodifyimageryresource"></a>gemodifyimageryresource
+<br />
+<a name="genewterrainresource"></a><a id="marker-1032748"></a>genewterrainresource
+<br />
+<a name="gemodifyterrainresource"></a>gemodifyterrainresource
+</h2>
+<pre><strong>genewimageryresource</strong>
+<strong>gemodifyimageryresource</strong>
+<strong>genewterrainresource</strong>
+<strong>gemodifyterrainresource</strong> [<strong>--havemask</strong>] [<strong>--nomask</strong>] [<strong>--mosaicfill</strong><i> nn,nn,nn</i>] 
+<strong></strong>   [<strong>--mosaictolerance</strong><i> n</i>] [<strong>--band</strong> <i>n</i>] [<strong>--feather </strong><i>radius</i>] [<strong>--feet</strong> | <strong>--scale </strong><i>num</i>]
+   [<strong>--holesize</strong> <i>n</i>] [<strong>--masktolerance</strong> <i>n</i>] [<strong>--meta </strong><i>name=value</i>] [<strong>--provider </strong><i>key</i>]
+   [<strong>--sourcedate </strong><i>string</i>] [<strong>--whitefill</strong>] [<strong>--srs</strong> <em>srs_def</em>]
+   <strong>-o</strong> [<i>path</i>] <i>resourcename</i> 
+   {<i>sourcefile</i> ... | <strong>--filelist</strong> <i>file</i>} [--mercator | --flat]
+</pre>
+<h4>Purpose
+</h4>
+<p><a id="marker-1032817"></a>To define or modify an imagery or terrain resource.
+</p>
+<h4>Example
+</h4>
+<p>This example defines a single mosaic imagery resource from three source files, specifying <code>white</code> as the fill value and setting the feather to 80 pixels for automask generation.
+</p>
+<pre>genewimageryresource --feather 80 --fill 255,255,255 --provider SourceInc 
+   --sourcedate 2003-05-10 -o imagery/MississippiDeltaRegion 
+   /vol/machine2/SourceInc/msRiver1.tif /vol/machine2/SourceInc/msRiver2.tif 
+   /vol/machine2/SourceInc/msRiver3.tif
+</pre>
+<h4>Parameters
+</h4><pre><strong>--havemask</strong></pre>
+<p><i>Optional.</i> Use this option if you have an alpha <i>mask</i> or file that you want to use. The mask for your input must be located in the same folder as the source file, and the file name must match the name of the source file with <code>-mask</code> appended. For example, if your source file is called <code>NewYork.tif</code>, its mask file must be named <code>NewYork-mask.tif</code>. 
+</p>
+<p class="note"><strong>Note:</strong> You can use the <code>--havemask</code> option only when you include a single source file in the resource. The mask file must be either of the same file format as the original image file, or it must be a TIFF file.
+</p><pre><strong>--nomask</strong></pre>
+<p><i>Optional.</i> Use this option if you do not want Google Earth Enterprise Fusion to generate an alpha mask for the resource.
+</p><pre><strong>--mosaicfill</strong> <i>nn,nn,nn</i></pre>
+<p><i>Optional.</i> Typically, you specify a fill value if you are importing several imagery files whose borders overlap in the resultant mosaic. Specify the fill value in decimal format. Height map imagery needs a signed 16-bit value (a numeric range between -32,767 and 32,767), whereas color map imagery needs a 24-bit value or a 3x8 bit color. In general, the fill color depth should match that of your source data.
+</p><pre><strong>--mosaictolerance</strong> <i>n</i></pre>
+<p><i>Optional.</i> Tolerance specifies the color range for mask selection. The default tolerance is zero, which is adequate for many fill colors that are typically pure black or pure white. However, because imagery compression and decompression can affect fill values by 1 or 2 color values, you can adjust the tolerance to compensate for any loss in precision. Typically, a setting of 1 or 2 is adequate in those situations.
+</p>
+<p>If you do not specify <code>--nomask</code> or <code>--havemask</code>, Google Earth Enterprise Fusion automatically generates a mask. In that case, the following options are also available:
+</p><pre><strong>--band</strong> <i>n</i></pre>
+<p><i>Optional.</i> Specify the band to use when generating the auto mask. If this option is unspecified, Google Earth Enterprise Fusion uses the green channel. The legitimate values for this option are 0, 1, 2, corresponding to red, green, and blue, respectively.
+</p><pre><strong>--feather</strong> <i>radius</i></pre>
+<p><i>Optional.</i> Specify the feather value in pixels. If you omit this option, the default value is 100.
+</p>
+<p><strong>--feet</strong><code> | </code><strong>--scale num</strong> (terrain only)
+</p>
+<p><i>Optional.</i> This option sets the elevation scale for your height map imagery. Google Earth Enterprise Fusion interprets height map values as meters. If the elevation unit for your data is not meters, you must use this option to provide the correct conversion number from your data’s unit to meters. For example, if your source height map file has decimeters for its height unit, you would specify <code>.1</code> for the scale value in order to have the elevation represented in meters.
+</p>
+<p>Alternatively, you can use the <code>--feet</code> parameter as a shorthand mechanism for<code> --scale .3048</code>, which represents feet units in their metric equivalent.
+</p>
+<p class="note"><strong>Note:</strong> Meters is the default scale elevation. If you do not specify this option when defining terrain resources, the elevation units are treated as meters.
+</p><pre><strong>--holesize</strong> <i>n</i></pre>
+<p><i>Optional.</i> Use this option if you have masked regions inside the boundaries of your imagery data. The default setting for hole size is 0, which is OFF.
+</p>
+<p>The hole size indicates the number of contiguous pixels Google Earth Enterprise Fusion uses when matching any color region inside your imagery with the same value specified as your fill. For example, if you set the value to 100 and the imagery has 100+ contiguous pixels with the same color as one of the corners (fill value), it treats that area as a “hole” in the data and applies the mask to it. The end result is that whatever data is under the masked data shows through. 
+</p><pre><strong>--masktolerance</strong> <i>n</i></pre>
+<p><i>Optional.</i> Specify the tolerance to be used when comparing pixels against mask fill value. Tolerance specifies the color range for mask selection. The default tolerance is 0, which is adequate for many fill colors that are typically pure black or pure white. However, because imagery compression and decompression can affect fill values by 1 or 2 color values, you can adjust the tolerance to compensate for any loss in precision. Typically, a setting of 1 or 2 is adequate in those situations.
+</p><pre><strong>--meta name=</strong><i>value</i></pre>
+<p><i>Optional.</i> This option supports any number of optional name/value pairs that you want to store for the source data. For example, you might want to provide additional information about the data provider, such as the specific airplane that took the photo, or you might want to assign your confidence level with the data. If the name or value string contains white space, it should be enclosed in quotation marks.
+</p><pre><strong>--provider</strong> <i>key</i></pre>
+<p><i>Optional.</i> Specify a string that identifies the provider of the source data you are importing. This provider key must match the provider key in your database that corresponds to the source data. The provider name and copyright fields associated with this key are displayed for this resource in Google Earth EC. If the key contains white space, you must use quotation marks around the string.
+</p>
+<p class="note"><strong>Note:</strong> If you are importing several source files to define a single resource, Google Earth Enterprise Fusion assumes that they have a common provider.
+</p><pre><strong>--sourcedate</strong> <i>string</i></pre>
+<p><i>Optional.</i> This option is a string that represents the date of acquisition for your source file. It must in the ISO 8601 format (yyyy-mm-dd). 
+</p><pre><strong>--whitefill</strong></pre>
+<p><i>Optional.</i> Use this option if imagery holes in your source data are filled with white. In some cases, source providers fill missing data inside the imagery with white and use a different color for the boundary mask. 
+</p>
+
+<pre><strong>--srs</strong> <em>srs</em>_def</pre>
+
+<p><em>Optional</em>. Specify the  spatial reference set to use instead of the embedded SRS. The coordinate systems that can be passed are anything supported by the <code>OGRSpatialReference.SetFromUserInput()</code> call, which includes <strong>EPSG PCS</strong> and <strong>GCS</strong>es (for example, <code>EPSG:4296</code>), PROJ.4 declarations, or the name of a <code>.prf</code> file containing well known text.</p>
+
+<pre><strong>-o</strong> <i>path resourcename</i></pre>
+<p><i>Required</i>. Specify the path and name of the resource relative to the asset root, for example, <code>Resources/Imagery/ImageryResourceA</code>. If you indicate a subfolder that does not yet exist, Google Earth Enterprise Fusion creates it for you.
+</p><pre><i>sourcefile</i></pre>
+<p><i>Required</i>. Specify the path and file name of the source file for the resource. You can reference any network-available source file as this value. (Optional if you specify <strong>--filelist</strong><code> </code><i>file</i>.)
+</p><pre><strong>--filelist</strong> <i>file</i></pre>
+<p><i>Optional.</i> Specify the path and file name of a file that contains a list of source files that you want to include in the resource. You can use this option, list files individually, or use a combination of the two.
+</p>
+
+<pre>--mercator | --flat</pre>
+<p><em>Optional</em>. Default value is <code>--flat</code>. Specifies the projection
+   of the map database. Only applies to new imagery resources. <strong>Glossary</strong>: <a href="glossary.html#flat_projection">Flat
+   Projection</a>,
+   <a href="glossary.html#mercator_projection">Mercator Projection</a>.</p>
+<h2><a name="genewvectorresource"></a><a id="marker-1032749"></a>genewvectorresource
+   <br />
+<a name="gemodifyvectorresource"></a>gemodifyvectorresource
+</h2>
+<pre><strong>genewvectorresource</strong> [<strong>--encoding </strong><i>type</i>] [<strong>--layer </strong><i>num</i>] [<strong>--meta name=</strong><i>value</i>]
+   [<strong>--provider </strong><i>key</i>] [<strong>--sourcedate </strong><i>string</i>] <strong>-o</strong> [<i>path</i>] <i>resourcename</i> <i>sourcefile</i> ...
+<strong>gemodifyvectorresource</strong> [<strong>--encoding </strong><i>type</i>] [<strong>--layer </strong><i>num</i>] [<strong>--meta name=</strong><i>value</i>]
+   [<strong>--provider </strong><i>key</i>] [<strong>--sourcedate </strong><i>string</i>] <strong>-o</strong> [<i>path</i>] <i>resourcename</i> <i>sourcefile</i> ...</pre>
+<h4>Purpose
+</h4>
+<p><a id="marker-1032829"></a>To define or modify a vector resource.
+</p>
+<h4>Example
+</h4>
+<pre>genewvectorresource --layer 2 --encoding ISO8859-1 --sourcedate 2003-05-15 -o
+   vector/MyVectorProvider/ResourceAssetA/vol/machine2/source/vector/ResourceSourceA.shp</pre>
+<h4>Parameters
+</h4><pre><strong>--encoding</strong> <i>type</i></pre>
+<p><i>Optional.</i> If the field data in your vector resource has a particular encoding for characters, such as ISO8859-1, set this parameter to correctly display your data in Google Earth EC. If you omit this option, the character encoding defaults to ASCII (plain text). The table below lists the supported encoding formats.
+</p>
+<p class="note"><strong>Note:</strong> If the encoding strings contain white space, you must use quotation marks around the string.
+</p> 
+  <h4><a id="60899"></a>Supported Encoding Formats 
+  </h4>
+<table>
+  <tr>
+    <td>Apple Roman 
+    </td>
+    <td>CP 1258 
+    </td>
+    <td>ISO 8859-15 
+    </td>
+    <td>ISO-10646-UCS-2
+    </td>
+  </tr>
+  <tr>
+    <td>Big5
+    </td>
+    <td>CP 874
+    </td>
+    <td>ISO 8859-2
+    </td>
+    <td>JIS7
+    </td>
+  </tr>
+  <tr>
+    <td>CP 1250
+    </td>
+    <td>GB18030
+    </td>
+    <td>ISO 8859-3
+    </td>
+    <td>KOI8-R
+    </td>
+  </tr>
+  <tr>
+    <td>CP 1251
+    </td>
+    <td>GBK
+    </td>
+    <td>ISO 8859-4
+    </td>
+    <td>KOI8-U
+    </td>
+  </tr>
+  <tr>
+    <td>CP 1252
+    </td>
+    <td>IBM 850
+    </td>
+    <td>ISO 8859-5
+    </td>
+    <td>SJIS
+    </td>
+  </tr>
+  <tr>
+    <td>CP 1253
+    </td>
+    <td>ISO 8859-1
+    </td>
+    <td>ISO 8859-6
+    </td>
+    <td>TSCII
+    </td>
+  </tr>
+  <tr>
+    <td>CP 1254
+    </td>
+    <td>ISO 8859-10
+    </td>
+    <td>ISO 8859-7
+    </td>
+    <td>UTF-8
+    </td>
+  </tr>
+  <tr>
+    <td>CP 1255
+    </td>
+    <td>ISO 8859-11
+    </td>
+    <td>ISO 8859-8
+    </td>
+    <td>eucJP
+    </td>
+  </tr>
+  <tr>
+    <td>CP 1256
+    </td>
+    <td>ISO 8859-13
+    </td>
+    <td>ISO 8859-8-I
+    </td>
+    <td>eucKR
+    </td>
+  </tr>
+  <tr>
+    <td>CP 1257
+    </td>
+    <td>ISO 8859-14
+    </td>
+    <td>ISO 8859-9 eucKR
+    </td>
+    <td>
+    </td>
+  </tr>
+</table><pre><strong>--layer</strong> <i>num</i>
+</pre>
+<p><i>Optional.</i> Use this option if your source data contains multiple layers and you want to extract a specific layer for your resource. The first layer of your data is 0. If you omit this option, Google Earth Enterprise Fusion uses the first layer of the source file to define the resource.
+</p>
+<p>In most circumstances, source vector data has only one layer; however, Tiger vector data can contain multiple layers. Because there is a one-to-one correspondence between a vector resource and a single vector layer, resource creation from multi-layer data must specify a layer. If you are unsure which layer to indicate in defining a resource from multi-layer source data, you can open the vector source file in the Preview pane. The Preview List pane lists all of the layers in the source data, and you can examine each layer in order to select the appropriate one to import.
+</p><pre><strong>--meta name=</strong><i>value</i>
+</pre>
+<p><i>Optional.</i> Specify any number of name/value pairs that you want to include about the source data. For example, you might want to provide additional information about the data provider. If the name or value string contains white space, you must use quotation marks around the string.
+</p><pre><strong>--provider</strong> <i>key</i>
+</pre>
+<p><i>Optional.</i> Specify a string that identifies the provider of the source data you are importing. This provider key must match the provider key in your database that corresponds to the source data. The provider name and copyright fields associated with this key are displayed for this resource in Google Earth EC.
+</p>
+<p class="note"><strong>Note:</strong> If you are importing several source files to define a single resource, Google Earth Enterprise Fusion assumes that they have a common provider.
+</p><pre><strong>--sourcedate </strong><i>string</i> 
+</pre>
+<p><i>Optional.</i> Specify a string to represent the date of acquisition for your source file. It must in the ISO 8601 format (yyyy-mm-dd). 
+</p><pre><strong>-o</strong> <i>path resourcename</i>
+</pre>
+<p><i>Required</i>. Specify the path and name of the resource relative to the asset root, for example, <code>Resources/Vector/VectorResourceA</code>. If you indicate a subfolder that does not yet exist, Google Earth Enterprise Fusion creates it for you.
+</p><pre><i>sourcefile</i>
+</pre>
+<p><i>Required</i>. Specify the path and file name of the source file for the resource. You can reference any network-available source file as this value.
+</p>
+
+<h2 id="gepolymaskgen">gepolymaskgen</h2>
+<pre>
+gepolymaskgen [--feather &lt;int_feather&gt;] --base_mask &lt;geotiff_mask_file&gt;
+  [options] --output_mask &lt;geotiff_mask_file&gt;
+gepolymaskgen [--feather &lt;int_feather&gt;] --base_image &lt;geotiff_image_file&gt;
+  [options] --output_mask &lt;geotiff_mask_file&gt;
+</pre>
+<h4>Purpose</h4>
+<p>Creates a mask file in .tiff format. Accepts geotiff image or mask files, KML polygons, or .shp files as input.</p>
+
+<h4>Examples</h4>
+<p>Simple polygon mask with no feathering:</p>
+<pre>gepolymaskgen --base_image /path/input_image.tif \
+  --or_mask /path/polygon.kml \
+  --output_mask /path/result_mask.tif</pre>
+<p> Negative polygon mask with some feathering:</p>
+<pre>gepolymaskgen --base_image /path/input_image.tif \
+  --feather 30 \
+  --feather_border 0 \
+  --and_neg_mask /path/polygon.kml \
+  --invert \
+  --output_mask /path/result_mask.tif</pre>
+<p> OR and AND polygon and tiff masks with different feathers:</p>
+<pre>gepolymaskgen --feather 30 \
+  --base_mask /path/base_mask.tif \
+  --feather 20 \
+  --feather_border 0 \
+  --or_mask /path/SF.kml \
+  --or_mask /path/daly_city.kml \
+  --feather 15 \
+  --feather_border 1 \
+  --or_mask /path/circle_mask.tif \
+  --feather 5 \
+  --and_neg_mask /path/gg_park.kml \
+  --and_neg_mask /path/northbeach.kml \
+  --feather 40 \
+  --and_neg_mask /path/circle_mask2.tif \
+  --output_mask /path/mask.tif </pre>
+
+<h4>Options</h4>
+<p>Options are applied in the order given.</p>
+<pre>--feather <em>int</em></pre>
+<p>Feather to apply to all
+subsequent masks until a
+different feather is given.
+Feather can be 0, positive,
+or negative. Default is 0.</p>
+<pre>--feather_border <em>int</em></pre>
+<p>If flag is non-zero, border
+is feathered. Otherwise,
+border is left in tact.
+Flag remains in effect
+until it is modified.
+Default is border is
+feathered.</p>
+<pre>--and_neg_mask &lt;mask_file&gt;</pre>
+<p>Bitwise AND of negative image of polygon or raster mask
+with the current mask.
+Polygons can be given in
+.kml or .shp files and are
+assumed to be filled with
+0x00. Raster masks should be
+.tif files with the same pixel dimensions as the base mask.
+Care should be taken not to overlap feathered regions.<br />
+</p>
+<pre> --or_mask &lt;mask_file&gt;</pre>
+<p>Bitwise OR of polygon or raster
+mask to the current mask.
+Polygons can be given in
+.kml or .shp files and are
+assumed to be filled with
+0xff. Raster masks should be
+.tif files with the same pixel
+dimensions as the base mask.
+Care should be taken not to overlap feathered regions.</p>
+<pre> --threshold &lt;thresh_byte&gt;</pre>
+<p>All pixels at or below the
+threshold byte are set to
+0x00; all other pixels are set
+to 0xff.</p>
+
+<h2><a name="gepublishdatabase"></a><a id="marker-1032751"></a>gepublishdatabase
+</h2><pre><strong>gepublishdatabase</strong> [<strong>--delete </strong><i>db_name</i><strong> </strong>[<strong>--serverurl</strong> <i>url</i>]][<strong>--listdbs</strong> [<strong>--serverurl</strong> <i>url</i>]][<strong>--publish </strong><i>dbname</i> [<strong>--server</strong> <i>nickname</i>]][<strong>--publisheddbs</strong> [<strong>--serverurl</strong> <i>url</i>]]
+</pre>
+<h4>Purpose
+</h4>
+<p>To publish a database (locally or remotely).
+</p>
+<h4>Examples
+</h4><pre>gepublishdatabase --publish msDelta
+gepublishdatabase --publish msDelta --server mainServer
+gepublishdatabase --listdbs --serverurl http://private.company.com
+</pre>
+<h4>Commands
+</h4><pre><strong>--delete </strong><i>db_name</i>
+</pre>
+<p>Delete a registered database from the server.
+</p><pre><strong>--serverurl</strong> <i>url</i>
+</pre>
+<p><i>Optional.</i> Use a specific server URL, such as http://private.company.com.
+</p><pre><strong>--listdbs</strong>
+</pre>
+<p>List all databases registered on the server.
+</p><pre><strong>--serverurl</strong> <i>url</i>
+</pre>
+<p><i>Optional.</i> Use a specific server URL, such as http://private.company.com.
+</p><pre><strong>--publish </strong><i>dbname</i>
+</pre>
+<p>Specify the location and name of the database that you want to publish relative to the asset root, for example, <code>Databases/databaseA</code>.
+</p><pre><strong>--server</strong> <i>nickname</i>
+</pre>
+<p><i>Optional.</i> Specify the nickname of the server association to which you want to publish. If you omit the server specification, Google Earth Enterprise Fusion publishes to the default server. (Consult your administrator or refer to the <i>Google Earth Enterprise Administration Guide</i> for information about setting up server associations.)
+</p><pre><strong>--publisheddbs</strong>
+</pre>
+<p>List all of the published databases on the server.
+</p><pre><strong>--serverurl</strong> <i>url</i>
+</pre>
+<p><i>Optional.</i> Use a specific server URL, such as http://private.company.com.
+</p>
+<h2><a name="gequery"></a>gequery<a id="marker-1032752"></a>
+</h2><pre><strong>gequery</strong> [<strong>--blockers</strong>] [<strong>--dependencies</strong>] [<strong>--geocode</strong>] [<strong>--infiles</strong>] [<strong>--logfile</strong>]
+[<strong>--outfiles</strong>] [<strong>--showlog</strong>] [<strong>--taillog</strong>] [<strong>--status</strong>] [<strong>--versions</strong>] 
+<i>assetname</i> [<i>version</i>]
+</pre>
+<h4>Purpose
+</h4>
+<p>To query Google Earth Enterprise Fusion about a particular asset’s build.
+</p>
+<h4>Example
+</h4><pre>gequery --dependencies imagery/TestProject?version=1
+</pre>
+<h4>Parameters
+</h4><pre><strong>--blockers</strong>
+</pre>
+<p><i>Optional.</i> Display sub-versions that block the specified version.
+</p><pre><strong>--dependencies</strong>
+</pre>
+<p><i>Optional.</i> List the dependencies for the indicated asset and the status of each, such as <code>Succeeded</code>, <code>Blocked</code>, or <code>Failed</code>. The purpose of being able to view the dependencies of an asset is to allow easier troubleshooting of failed asset builds. After you view the dependency list for an asset, you can use additional options to query a failed dependent element in order to find out why it failed. For example, you might use <strong>--logfile</strong> to determine the path to the log file for a failed asset.
+</p><pre><strong>--infiles</strong>
+</pre>
+<p><i>Optional.</i> Provide the file name and location of the input file for the named asset. You typically use this command on a dependency for an asset file that is listed as <code>Failed</code>. For example, if you learn that a project build phase fails, you could use the <strong>--infile</strong> parameter to determine specific image source file for that phase of the build.
+</p><pre><strong>--logfile </strong>
+</pre>
+<p><i>Optional.</i> List the path to log file for the specified asset.
+</p>
+<p class="note"><strong>Note:</strong> Not all resources have log files.
+</p><pre><strong>--outfiles </strong>
+</pre>
+<p><i>Optional.</i> List the files output by the specified dependency. This option allows you to trace forward in the dependency chain to see the next step in the process.
+</p><pre><strong>--showlog </strong>
+</pre>
+<p><i>Optional.</i> Display the contents of the log file for the specified version.
+</p>
+<p class="note"><strong>Note:</strong> Not all resource versions have log files.
+</p><pre><strong>--taillog</strong>
+</pre>
+<p><i>Optional.</i> Display the contents of the log file for the specified version, but in a manner similar to the UNIX command <code>tail -f</code>.
+</p>
+<p class="note"><strong>Note:</strong> Not all resource versions have log files.
+</p><pre><strong>--status</strong>
+</pre>
+<p><i>Optional.</i> List the completion and availability status of assets by version. If no version is specified, it reports the status of the current version. The table below lists the possible status values for each asset.
+</p>
+  <h4><a id="45687"></a>Status Values
+  </h4>
+<table>
+  <tr>
+    <th>Status
+    </th>
+    <th>Description
+    </th>
+  </tr>
+  <tr>
+    <td><strong>Waiting</strong>
+    </td>
+    <td>The asset is waiting for its input data to finish.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Blocked</strong>
+    </td>
+    <td>The asset version cannot proceed. One or more of its input data or subcomponents has failed, is marked bad, or is otherwise unavailable. The responsible component is listed.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Queued</strong>
+    </td>
+    <td>The asset version (or its subcomponents) is queued and waiting to be built.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>InProgress</strong>
+    </td>
+    <td>The asset version (or subcomponents) are actively being built.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Failed</strong>
+    </td>
+    <td>The asset version failed.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Succeeded</strong>
+    </td>
+    <td>The asset version (and subcomponents) succeeded.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Canceled</strong>
+    </td>
+    <td>The asset version was canceled. 
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Offline</strong>
+    </td>
+    <td>The version of this asset is unavailable because it has been cleaned up.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Bad</strong>
+    </td>
+    <td>The version of this asset has been marked bad.
+    </td>
+  </tr>
+</table><pre><strong>--versions</strong>
+</pre>
+<p><i>Optional.</i> List the version numbers for the indicated asset.
+</p><pre><i>assetname</i>
+</pre>
+<p><i>Required</i>. Specify the location and name of the asset (resource, map layer, project, or database) whose build you want to query relative to the asset root, for example, <code>Projects/Vector/VectorProjectA</code>.
+</p><pre><i>version</i>
+</pre>
+<p><i>Optional.</i> Specify the version number of the asset you want to query, or enter <code>current</code> or <code>lastgood</code>. If you omit the version specification, Google Earth Enterprise Fusion queries the current version of the specified asset.
+</p>
+<h2><a name="geraster2kml"></a><a id="marker-1032765"></a>geraster2kml
+</h2>
+<pre><strong>geraster2kml [--url</strong><i> url_root</i><strong>] [--output </strong><i>dirname</i><strong>] [--layer_name </strong><i>name</i><strong>]
+   [--tile_size </strong><i>size</i><strong>] [--kml_only] [--no_kmz] [--jpg_quality </strong><i>qual</i><strong>]
+   [--debug]--kip</strong> <i>raster.kip</i> <strong>--kmp</strong> <i>mask.kmp</i></pre>
+<h4>Purpose
+</h4>
+<p><a id="marker-1032845"></a>To convert a Google Earth Enterprise Fusion resource to the KML Region hierarchy, so you can access the data in any Google Earth client.
+</p>
+<p>If the imagery resource has a source date, that date will be passed to the rasterized
+   KML as well.</p>
+<h4>Example
+</h4><pre>geraster2kml --kip myimage.kip --kmp myimage-mask.kmp
+</pre>
+<h4>Parameters
+</h4><pre><strong>--url </strong><i>url_root</i>
+</pre>
+<p><i>Optional</i>. Specify the URL root for all links.
+</p><pre><strong>--output </strong><i>dirname</i>
+</pre>
+<p><i>Optional</i>. Specify the name of the output directory.
+</p><pre><strong>--layer_name </strong><i>name</i>
+</pre>
+<p><i>Optional</i>. Specify the name of the layer to appear in the Layers panel in Google Earth EC.
+</p><pre><strong>--tile_size </strong><i>size</i>
+</pre>
+<p><i>Optional</i>. Specify the output tile size (<code>256</code>, <code>512</code>, or <code>1024</code>).
+</p><pre><strong>--kml_only</strong>
+</pre>
+<p><i>Optional</i>. Generate KML files only (no imagery).
+</p><pre><strong>--no_kmz</strong>
+</pre>
+<p><i>Optional</i>. Specify no compression to KMZ files, to output to KML only.
+</p><pre><strong>--jpg_quality </strong><i>qual</i>
+</pre>
+<p><i>Optional</i>. Specify the quality for the JPG compression.
+</p><pre><strong>--debug</strong>
+</pre>
+<p><i>Optional</i>. Specify adding debug geometry to the output file.
+</p><pre><strong>--kip</strong> <i>raster.kip</i>
+</pre>
+<p><i>Required</i>. Specify the name of the imagery file.
+</p><pre><strong>--kmp</strong> <i>mask.kmp</i>
+</pre>
+<p><i>Required</i>. Specify the name of the mask file.
+</p>
+<h2><a name="gereproject"></a><a id="marker-1032766"></a>gereproject
+</h2>
+<pre><strong>gereproject </strong>[<strong>--version</strong>]<strong> </strong>[<strong>--formats</strong>]<strong> </strong>[<strong>--query</strong>]<strong> </strong>[<strong>--snapup</strong>]<strong> </strong>[<strong>-co “</strong><i>NAME</i><strong>=</strong><i>VALUE</i><strong>”</strong>]<strong>*
+   </strong><strong>[-dstnodata</strong>] [<strong>-et</strong> <i>err_threshold</i>] [<strong>-multi</strong>]<strong> </strong>[<strong>-of </strong><i>format</i>]<strong> </strong>[<strong>-order</strong> <i>n</i>]
+   [<strong>-ot </strong><i>Byte/Int16/...</i>]<strong> </strong>[<strong>-q</strong>]<strong> </strong>[<strong>-rb</strong>]<strong> </strong>[<strong>-rc</strong>] [<strong>-rcs</strong>]<strong> </strong>[<strong>-rn</strong>]<strong> </strong>[<strong>-s_srs</strong><i> srs_def</i>]
+   <strong></strong>[<strong>-srcnodata </strong><i>value</i> ...]<strong> </strong>[<strong>-t_srs</strong> <i>srs_def</i>] [<strong>-te </strong><i>xmin ymin xmax ymax</i>]
+  <strong> </strong>[<strong>-tr </strong><i>xres yres</i>]<strong> </strong>[<strong>-ts </strong><i>width height</i>]<strong> </strong>[<strong>-wm </strong><i>memory_in_mb</i>]<strong> </strong>[<strong>-wo “</strong><i>NAME</i><strong>=</strong><i>VALUE</i><strong>”</strong>]
+  <strong> </strong>[<strong>-wt Byte/Int16</strong>]<strong> </strong><i>srcfile dstfile</i></pre>
+<h4>Purpose
+</h4>
+<p>A simple utility used for image warping.
+</p>
+<h4>Example
+</h4><pre>gereproject -s_srs EPSG:4326 usgsLanSat.tif usgsLanSat_rep.tif
+gereproject --query SFNorth.img
+</pre>
+<h4>Parameters
+</h4><pre><strong>--version</strong>
+</pre>
+<p><i>Optional</i>. The project version you want to warp.</p>
+<pre><strong>--formats</strong>
+</pre>
+<p><i>Optional</i>. Display the supported output formats.
+</p><pre><strong>--query</strong>
+</pre>
+<p><i>Optional</i>. Provides information about the specified source file.
+</p><pre><strong>--snapup</strong>
+</pre>
+<p><i>Optional</i>. Force the imagery to be magnified to a predefined level.
+</p>
+<p><strong>Options:</strong>
+</p><pre><strong>-co “</strong><i>NAME</i><strong>=</strong><i>VALUE</i><strong>”</strong>
+</pre>
+<p><i>Optional</i>. Specify construction arguments to pass to the output GDAL dataset. Multiple -co options are allowed.</p>
+
+<pre><strong>-dstnodata</strong>
+</pre>
+<p><i>Optional</i>. Set nodata values for output bands (different values can be supplied
+    for each band). If more than one value is supplied, all values should be quoted
+    to keep them together as a single operating system argument. New files will be
+    initialized to this value and if possible the nodata value will be recorded in
+    the output file.</p>
+<pre><strong>-et</strong> <i>err_threshold</i>
+</pre>
+<p><i>Optional</i>. Specify the error threshold for transformation approximation in pixels. The default is 0.125.
+</p><pre><strong>-multi</strong>
+</pre>
+<p><i>Optional</i>. Use multi-threaded warping implementation. Multiple threads will be used to process chunks of image and perform input/output operation simultaneously.
+</p><pre><strong>-of </strong><i>format</i>
+</pre>
+<p><i>Optional</i>. Specify the output format. The default is GeoTIFF (GTiff). Use the short format name.
+</p><pre><strong>-order</strong> <i>n</i>
+</pre>
+<p><i>Optional</i>. Specify the order of polynomial used for warping (1 to 3). The default is to select a polynomial order based on the number of GCPs.
+</p><pre><strong>-ot {Byte</strong>|<strong>Int16</strong>|<strong>UInt16</strong>|<strong>UInt32</strong>|<strong>Float32</strong>|<strong>Float64</strong>|<strong>CInt16</strong>|<strong>CInt32</strong>|<strong>CFloat32</strong>|<strong>CFloat64</strong>}
+</pre>
+<p><i>Optional</i>. Specify the data type of the output bands. The default is to match the input.
+</p><pre><strong>-q</strong>
+</pre>
+<p><i>Optional</i>. Quiet; do not display the process messages in the terminal window.
+</p><pre><strong>-rb</strong>
+</pre>
+<p><i>Optional</i>. Use bilinear as the resampling method.
+</p><pre><strong>-rc</strong>
+</pre>
+<p><i>Optional</i>. Use cubic as the resampling method.
+</p><pre><strong>-rcs</strong>
+</pre>
+<p><i>Optional</i>. Use cubicspline as the resampling method.
+</p><pre><strong>-rn</strong>
+</pre>
+<p><i>Optional</i>. Use near as the resampling method.
+</p><pre><strong>-s_srs</strong><i> srs_def</i>
+</pre>
+<p><i>Optional</i>. Specify the source spatial reference set. The coordinate systems that can be passed are anything supported by the <code>OGRSpatialReference.SetFromUserInput()</code> call, which includes <code>EPSG PCS</code> and <code>GCSes</code> (for example, <code>EPSG:4296</code>), <code>PROJ.4</code> declarations, or the name of a <code>.prf </code>file containing well known text.
+</p><pre><strong>-srcnodata </strong><i>value</i>...
+</pre>
+<p><i>Optional</i>. Specify no data masking values for input bands. (You can specify different values for each band.) If you enter more than one value, use single quotes to keep them together as a single argument. Masked values will not be used in interpolation.
+</p><pre><strong>-t_srs</strong> <i>srs_def</i>
+</pre>
+<p><i>Optional</i>. Specify the target spatial reference set. The coordinate systems that can be passed are anything supported by the <code>OGRSpatialReference.SetFromUserInput()</code> call, which includes <code>EPSG PCS</code> and <code>GCSes</code> (for example <code>EPSG:4296</code>), <code>PROJ.4</code> declarations, or the name of a <code>.prf</code> file containing well known text.
+</p><pre><strong>-te </strong><i>xmin ymin xmax ymax</i>
+</pre>
+<p><i>Optional</i>. Specify the geo-referenced extents of output file to be created.
+</p><pre><strong>-tr </strong><i>xres yres</i>
+</pre>
+<p><i>Optional</i>. Specify the output file resolution in target geo-referenced units.
+</p><pre><strong>-ts </strong><i>width height</i>
+</pre>
+<p><i>Optional</i>. Specify the output file size in pixels and lines.
+</p><pre><strong>-wm </strong><i>memory_in_mb</i>
+</pre>
+<p><i>Optional</i>. Specify the amount of memory (in megabytes) that the warp API is allowed to use for caching.
+</p><pre><strong>-wo “</strong><i>NAME</i><strong>=</strong><i>VALUE</i><strong>”</strong>
+</pre>
+<p><i>Optional</i>. Specify the warp options. See <a href="commands.html#55976">Warp Options</a>.
+</p>
+<pre><strong>-wt {Byte</strong>|<strong>Int16}</strong>
+</pre>
+<p><i>Optional</i>. Specify the working pixel data type in the source image and destination image buffers.
+</p><pre><i>srcfile</i>
+</pre>
+<p><i>Required</i>. Specify the source file name(s).
+</p><pre><i>dstfile</i>
+</pre>
+<p><i>Required</i>. Specify the destination file name.
+</p>
+<h4><a id="55976"></a>Warp Options
+</h4>
+<p>The warp options (for <code>-wo</code>) are:
+</p>
+<ul>
+  <li><code>INIT_DEST=</code><i>value</i><code> </code>or<code> INIT_DEST=NO_DATA</code> 
+    <p>Forces the destination image to be initialized to the indicated value (for all bands) or indicates that it should be initialized to the NO_DATA value in padfDstNoDataReal/padfDstNoDataImag. If this value isn&apos;t set the destination image will be read and overlayed.
+    </p>
+  </li>
+  <li><code>WRITE_FLUSH={YES</code>|<code>NO}</code>
+    <p>Forces a flush to disk of data after each chunk is processed. In some cases this helps ensure a serial writing of the output data otherwise a block of data may be written to disk each time a block of data is read for the input buffer resulting in a lot of extra seeking around the disk, and reduced IO throughput. The default at this time is NO.
+    </p>
+  </li>
+  <li><code>SKIP_NOSOURCE={YES</code>|<code>NO}</code>
+    <p>Skip all processing for chunks for which there is no corresponding input data. This will disable initializing the destination (INIT_DEST) and all other processing, and so should be used careful. Mostly useful to short circuit a lot of extra work in mosaic creation situations.
+    </p>
+    <p>Normally when computing the source raster data to load to generate a particular output area, the warper samples transforms 21 points along each edge of the destination region back onto the source file, and uses this to compute a bounding window on the source image that is sufficient. Depending on the transformation in effect, the source window may be a bit too small, or even missing large areas. Problem situations are those where the transformation is very non-linear or “inside out”. Examples are transforming from WGS84 to Polar Steregraphic for areas around the pole, or transformations where some of the image is untransformable.
+    </p>
+    <p>The following options provide some additional control to deal with errors in computing the source window:
+    </p>
+  </li>
+  <li><code>SAMPLE_GRID={YES</code>|<code>NO}</code>
+    <p>Setting this option to YES will force the sampling to include internal points as well as edge points which can be important if the transformation is esoteric inside out, or if large sections of the destination image are not transformable into the source coordinate system.
+    </p>
+  </li>
+  <li><code>SAMPLE_STEPS</code>
+    <p>Modifies the density of the sampling grid. The default number of steps is 21. Increasing this can increase the computational cost, but improves the accuracy with which the source region is computed.
+    </p>
+  </li>
+  <li><code>SOURCE_EXTRA</code>
+    <p>This is a number of extra pixels added around the source window for a given request, and by default it is 1 to take care of rounding error. Setting this larger will increase the amount of data that needs to be read, but can avoid missing source data. 
+    </p>
+  </li>
+</ul>
+<h2><a name="geresume"></a><a id="93950"></a>geresume<a id="marker-1032767"></a>
+</h2><pre><strong>geresume</strong> <i>assetname</i> [<i>version</i>]
+</pre>
+<h4>Purpose
+</h4>
+<p>To resume a build process that was canceled, blocked, or failed, after correcting the problem, if necessary.
+</p>
+<h4>Example
+</h4><pre>geresume imagery/SourceInc/MississippiRiverDelta
+geresume imagery/TestImage.kiresource/mosaic.kia?version=1
+</pre>
+<h4>Parameters
+</h4><pre><i>assetname</i>
+</pre>
+<p><i>Required</i>. Specify the location and name of the asset (resource, map layer, project, or database) whose build you want to resume relative to the asset root, for example, <code>Projects/Vector/VectorProjectA</code>.
+</p><pre><i>version</i>
+</pre>
+<p><i>Optional.</i> Specify the version number of the asset whose build you want to resume, or enter <code>current</code> or <code>lastgood</code>. If you omit the version specification, Google Earth Enterprise Fusion resumes the build of the current version of the specified asset.
+</p>
+<h2><a name="gesetbad"></a>gesetbad<a id="marker-1032768"></a>
+</h2><pre><strong>gesetbad </strong><i>assetname</i> [<i>version</i>]
+</pre>
+<h4>Purpose
+</h4>
+<p>To specify a version of an asset as <strong>Bad</strong>.
+</p>
+<h4>Example
+</h4><pre>gesetbad projects/TransitLines/BostonTransitLines 2
+</pre>
+<h4>Parameters
+</h4><pre><i>assetname</i>
+</pre>
+<p><i>Required</i>. Specify the location and name of the asset (resource, map layer, project, or database) whose version you want to set as <strong>Bad</strong> relative to the asset root, for example, <code>Projects/Vector/VectorProjectA</code>.
+</p><pre><i>version</i>
+</pre>
+<p><i>Optional.</i> Specify the version number of the asset you want to set as <strong>Bad</strong>, or enter <code>current</code> or <code>lastgood</code>. If you omit the version specification, Google Earth Enterprise Fusion sets as <strong>Bad</strong> the current version of the specified asset.
+</p>
+<h2><a name="gesplitkhvr"></a><a id="11666"></a>gesplitkhvr<a id="marker-1033163"></a>
+</h2><pre><strong>gesplitkhvr [--rows</strong> <i>num</i><strong>] [--cols</strong> <i>num</i><strong>] [--overlap</strong> <i>num</i><strong>] [--quiet] </strong><i>input</i><strong>.khvr</strong>
+</pre>
+<h4>Purpose
+</h4>
+<p>To create two or more source files from a large imagery or terrain source file to reduce the size of each source file to under 80 GB in raw size. (Raw size = number of pixels width * number of pixels height * 3.) This tool produces a grid of image files designated as rows and columns.
+</p>
+<h4>Example
+</h4><pre>gesplitkhvr --rows 4 --cols 4 --overlap 10 image_file.khvr
+</pre>
+<h4>Parameters
+</h4><pre><strong>--rows </strong><i>num</i>
+</pre>
+<p><i>Required</i>. Specify the number of resulting image files across.
+</p><pre><strong>--cols </strong><i>num</i>
+</pre>
+<p><i>Required</i>. Specify the number of resulting image files high.
+</p><pre><strong>--overlap </strong><i>num</i>
+</pre>
+<p><i>Optional</i>. Specify the number of pixels of overlap between the resulting images. The default is 300.
+</p><pre><strong>--quiet</strong>
+</pre>
+<p><i>Optional</i>. Do not display the progress messages in the terminal window.
+</p><pre><i>input</i><strong>.khvr</strong>
+</pre>
+<p><i>Required</i>. Specify the name of the input file. It must be a <code>.khvr</code> file.
+</p>
+<h2><a name="getop"></a><a id="25787"></a>getop<a id="marker-1032769"></a>
+</h2><pre><strong>getop --delay </strong><i>seconds</i>
+</pre>
+<h4>Purpose
+</h4>
+<p>Displays a list of what Google Earth Enterprise Fusion is currently working on and whether <code>gesystem</code> and <code>gehttpd</code> are currently running. 
+</p>
+<h4>Example
+</h4><pre>getop 30
+</pre>
+<h4>Parameters
+</h4><pre>--delay <i>seconds</i>
+</pre>
+<p><i>Required</i>. Specify the number of seconds delay between refreshes. For example, if you specify <code>30</code>, <code>getop</code> runs every 30 seconds.
+</p>
+<h2><a name="getranslate"></a>getranslate<a id="marker-1032770"></a>
+</h2>
+<pre><strong>getranslate</strong> [<strong>--formats</strong>]
+   [<strong>-ot </strong><i>Byte|Int16|UInt16|UInt32|Float32|Float64|CInt16|CInt32|CFloat32|CFloat64</i>]
+   [<strong>-not_strict</strong>] [<strong>-of</strong> <i>format</i>] [<strong>-b</strong> <i>band</i>] [<strong>-outsize</strong> <i>xsize[%] ysize[%]</i>]
+   [<strong>-scale</strong> <i>src_min src_max [dst_min dst_max]</i>] [<strong>-srcwin</strong> <i>xoff yoff xsize ysize</i>]
+   [<strong>-a_src</strong> <i>projection</i>] [<strong>-projwin</strong> <i>ulx uly lrx lry</i>] [<strong>-co</strong> <strong>“</strong><i>NAME</i><strong>=</strong><i>VALUE</i><strong>”</strong>]*
+   [<strong>-mo</strong> <strong>“</strong><i>META-TAG</i><strong>=</strong><i>VALUE</i><strong>”</strong>]* [<strong>-quiet</strong>] </pre>
+<h4>Purpose
+</h4>
+<p>A simple utility used for image reprojection. You must use this tool for:
+</p>
+<ul>
+  <li>Extracting a piece for preview purposes
+  </li>
+  <li>Reordering bands
+  </li>
+</ul>
+<p>Since Google Earth Enterprise Fusion can perform the following tasks, you do not need this utility for:
+</p>
+<ul>
+  <li>Adding projection data to a source file
+  </li>
+  <li>Converting data from one format to another
+  </li>
+</ul>
+<h4>Example
+</h4><pre>getranslate -of Jpeg -a_srs WGS84 usgsSFHiRes.tif HiRes_translate.jpg
+</pre>
+<h4>Parameters
+</h4><pre><strong>-a_src</strong> <i>projection</i>
+</pre>
+<p><i>Optional</i>. Specify the projection for the output. Options are:
+</p>
+<ul>
+  <li><code>NAD27|NAD83|WGS84|WGS72</code>
+  </li>
+  <li><code>EPSG:</code><i>num</i>
+  </li>
+  <li><code>PROJ.4</code> definition
+  </li>
+  <li>OpenGIS Well Known Text
+  </li>
+  <li>Name of file with OpenGIS Well Known Text
+  </li>
+  <li>ESRI::ESRI Well Known Text File (<code>.prj</code>)
+  </li>
+</ul>
+  <pre><strong>--formats</strong></pre>
+    <p><i>Optional</i>. Display the supported output formats.
+    </p><pre><strong>-b</strong> <i>band</i>
+</pre>
+    <p><i>Optional</i>. Specify the band to copy (1-based indexing). You can specify this value multiple times. For example, the following entry reverses the bands:
+    </p><pre>-b 3 -b 2 -b 1 
+<strong>-co</strong> <strong>“</strong><i>NAME</i><strong>=</strong><i>VALUE</i><strong>”</strong>*
+</pre>
+    <p><i>Optional</i>. Specify construction arguments to pass to the output GDAL dataset.
+    </p><pre><strong>-mo</strong> <strong>“</strong><i>META-TAG</i><strong>=</strong><i>VALUE</i><strong>”</strong>*
+</pre>
+    <p><i>Optional</i>. Specify that metadata is to be included in the output.
+    </p><pre><strong>-not_strict</strong>
+</pre>
+    <p><i>Optional</i>. Be forgiving of mismatches and lost data when translating to the output format.
+    </p><pre><strong>-of</strong> <i>format</i>
+</pre>
+    <p><i>Optional</i>. Specify the file format of the output. The default is <code>GTiff</code>. Use the short format name.
+    </p><pre><strong>-ot Byte</strong>|<strong>Int16</strong>|<strong>UInt16</strong>|<strong>UInt32</strong>|<strong>Float32</strong>|<strong>Float64</strong>|<strong>CInt16</strong>|<strong>CInt32</strong>|<strong>CFloat32</strong>|<strong>CFloat64</strong>
+</pre>
+    <p><i>Optional</i>. Specify the data type of the output bands. The default is to match the input.
+    </p><pre><strong>-outsize</strong> <i>xsize[%] ysize[%]</i>
+</pre>
+    <p><i>Optional</i>. Specify the output image size in pixels or percent of original.
+    </p><pre><strong>-projwin</strong> <i>ulx uly lrx lry</i>
+</pre>
+    <p><i>Optional</i>. Specify the extents and size of the output window. (Similar to <code>-srcwin</code> but uses georeferenced coordinate.)
+    </p><pre><strong>-quiet</strong>
+</pre>
+    <p><i>Optional</i>. Do not display the process messages in the terminal window.
+    </p><pre><strong>-scale</strong> <i>src_min src_max [dst_min dst_max]</i>
+</pre>
+    <p><i>Optional</i>. Specify the scale of the input pixel values.
+    </p><pre><strong>-srcwin</strong> <i>xoff yoff xsize ysize</i>
+</pre>
+    <p><i>Optional</i>. Specify the extents and size of the output window.
+    </p>
+<h2><a name="gevirtualraster"></a><a id="marker-1032771"></a>gevirtualraster
+</h2>
+<pre><strong>g</strong>evirtualraster [<strong>--crop </strong><i>pixelx,pixely,pixelx,pixelh</i>] [<strong>--fill </strong><i>a,b,...</i>]
+   [<strong>--lut </strong><i>lutfile</i>] [<strong>--src </strong><i>override_srs</i>] [<strong>--tolerance </strong><i>num</i>] [<strong>--validate</strong>]
+   <strong>-o </strong><i>output</i><strong>.khvr</strong><i> </i>{<i>sourcefile</i> ... | <strong>--filelist</strong> <i>file</i>}</pre>
+<h4>Purpose
+</h4>
+<p>To create a <i>virtual mosaic</i>, which allows you to use a mask created outside of Google Earth Enterprise Fusion for an imagery mosaic.
+</p>
+<h4>Example
+</h4>
+<pre>gevirtualraster --fill 0,0,0 -o 
+  /gevol/src/imagery/usa/XX/new_location/all_files.khvr/gevol/src/imagery/usa/
+XX/new_location/*.tif</pre>
+<h4>Parameters
+</h4><pre><strong>--crop </strong><i>pixelx,pixely,pixelx,pixelh</i>
+</pre>
+<p><i>Optional</i>. Crop the image to the specified pixel extents.
+</p><pre><strong>--fill </strong><i>a,b,...</i>
+</pre>
+<p><i>Optional</i>. Specify band values to use as fill.
+</p><pre><strong>--lut </strong><i>lutfile</i>
+</pre>
+<p><i>Optional</i>. Specify a LUT file for the entire image.
+</p><pre><strong>--src </strong><i>override_srs</i>
+</pre>
+<p><i>Optional</i>. Specify the SRS.
+</p><pre><strong>--tolerance </strong><i>num</i>
+</pre>
+<p><i>Optional</i>. Specify the tolerance to be applied to the fill. The default is 0.
+</p><pre><strong>--validate</strong>
+</pre>
+<p><i>Optional</i>. Validate the inputs and exit.
+</p><pre><strong>-o</strong> <i>output</i><strong>.khvr</strong>
+</pre>
+<p><i>Required</i>. Specify the name of the output file, which must have the <code>.khvr</code> extension.
+</p><pre><i>sourcefile</i>
+</pre>
+<p><i>Required</i>. Specify the path and file name of the source file for the resource. You can reference any network-available source file as this value. (Optional if you specify <strong>--filelist</strong><code> </code><i>file</i>.)
+</p><pre><strong>--filelist</strong> <i>file</i>
+</pre>
+<p><i>Optional.</i> Specify the path and file name of a file that contains a list of source files that you want to include in the resource. You can use this option, list files individually, or use a combination of the two.
+</p>
+
+
+</div>
+<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+
+<!-- END WRAPPER -->
+
+</body>
+</html>

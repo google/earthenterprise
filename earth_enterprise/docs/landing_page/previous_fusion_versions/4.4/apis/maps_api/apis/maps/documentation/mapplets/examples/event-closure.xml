@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="Event Closures" height="300">
+  <Require feature="sharedmap"/>
+</ModulePrefs>
+<Content type="html"><![CDATA[
+
+<small>
+In this example, we show a custom info window above each marker by listening 
+to the click event for each marker. We take advantage of JavaScript function 
+closures to customize the info window content for each marker.
+</small>
+
+<script>
+var map = new GMap2();
+
+// Creates a marker at the given point with the given number label
+function createMarker(point, number) {
+  var marker = new GMarker(point);
+  GEvent.addListener(marker, "click", function() {
+    marker.openInfoWindowHtml("Marker #" + number);
+  });
+  return marker;
+}
+
+// Add 10 markers to the map at random locations
+map.getBoundsAsync(function(bounds) {
+  var southWest = bounds.getSouthWest();
+  var northEast = bounds.getNorthEast();
+  var lngSpan = northEast.lng() - southWest.lng();
+  var latSpan = northEast.lat() - southWest.lat();
+
+  for (var i = 0; i < 10; i++) {
+    var point = new GLatLng(southWest.lat() + latSpan * Math.random(),
+                            southWest.lng() + lngSpan * Math.random());
+    map.addOverlay(createMarker(point, i + 1));
+  }
+});
+</script>
+
+]]></Content>
+</Module>

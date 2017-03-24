@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <link href="user_docs.css" rel="stylesheet" type="text/css">
+    <link href="local_extensions.css" rel="stylesheet" type="text/css">
+    <title>
+      Importing Addresses in Google Earth Pro and EC - Google Earth Tutorials
+    </title>
+    <style type="text/css">
+/*<![CDATA[*/
+    form.c4 {margin-bottom: 0;margin-top: 0;}
+    input.c3 {font-size: 100%;}
+    input.c2 {font-size: 100%; color: #000000;}
+    span.c1 {font-size: 100%;}
+    /*]]>*/
+    </style>
+  </head>
+  <body id="index">
+    <a id="top" name="top"></a>
+    <div id="header">
+      <div id="logo">
+        <a href="http://earth.google.com"><img alt="Return to earth.google.com" border="0" src=
+        "http://www.google.com/intl/en/images/logos/earth_logo.gif"></a>
+      </div>
+      <h1 id="doc_title">
+        Google Earth Tutorials
+      </h1>
+    </div>
+    <div id="wrapper">
+      <div id="sidenav">
+        <form action="http://www.google.com/search" class="c4" method="get">
+          <span class="c1">Search Google Earth<br>
+          User Guide</span><br>
+          <input class="c2" name="q" size="18" title="Search Google Maps User Guide" type=
+          "text"><br>
+          <input class="c3" name="submit" title="Search Google Maps User Guide" type="submit"
+          value="Search"> <input name="sitesearch" type="hidden" value=
+          "maps.google.com/userguide"><br>
+          <br>
+        </form>
+        <ul>
+          <li>
+            <h1>
+              <a href="index.html">About Google Earth Tutorials</a>
+            </h1>
+          </li>
+        </ul>
+      </div>
+      <div id="pagecontent">
+        <h2>
+          Importing Addresses in Google Earth Plus, Pro and EC
+        </h2>
+        <p>
+          This tutorial describes how you can import addresses into Google Earth Pro or EC. You
+          will import addresses from a sample electronic file and view them in Google Earth Pluus,
+          Pro or EC. You can also import latitude and longitude data - <a href=
+          "http://earth.google.com/userguide/v4/ug_importdata.html">learn more</a>.
+        </p>
+        <p class="note">
+          <strong>Note</strong> - You must have Google Earth Plus, Pro or EC to use the features
+          described in this tutorial. <a href="http://earth.google.com/products.html" target=
+          "_blank">Learn more here</a>.
+        </p>
+        <h2 class="header">
+          <a id="about" name="about"></a>About Importing Addresses into Google Earth Pro and EC
+        </h2>
+        <p>
+          When you import addresses into Google Earth, each address is converted to a <a href=
+          "http://earth.google.com/userguide/v4/ug_placemarks.html">placemark</a> on the earth that
+          is displayed in the <a href=
+          "http://earth.google.com/userguide/v4/index.html#getting_to_know">3D viewer</a> and in
+          the <a href="http://earth.google.com/userguide/v4/index.html#getting_to_know">Places
+          panel</a>.
+        </p>
+        <p>
+          At this time, Google Earth can only ingest such information for addresses located within
+          the United States, United Kingdom, Canada, France, Italy, Germany, and Spain. Google
+          Earth cannot place any address that contains a P.O. box. Google Earth Plus can import 100
+          addresses at a time. To learn more about what information Google Earth Plus, Pro or EC
+          can import, see <a href=
+          "http://earth.google.com/userguide/v4/ug_importdata.html#addresses">Using Addresses</a>
+          in the <a href="http://earth.google.com/userguide/v4/ug_importdata.html">Google Earth
+          User Guide</a>.
+        </p>
+        <h2 class="header">
+          <a id="sample" name="sample"></a>Importing Address Data from the Sample File into Google
+          Earth Plus, Pro and EC
+        </h2>
+        <p>
+          Try importing data from a sample CSV file. To do this:
+        </p>
+        <ol>
+          <li value="1">Download the <a href=
+          "http://services.google.com/earth/samplefile.csv">sample file</a>. Save this file to a
+          location on your hard drive (for example C:\SampleData\samplefile.csv).
+          </li>
+          <li value="2">In Google Earth, click <em>File</em> &gt; <em>Import</em>. If you are using
+          Google Earth Plus, click <em>File</em> &gt; <em>Open</em>.
+          </li>
+          <li value="3">Browse to the location of the the sample file and select it. Click
+          <em>Open</em>. The Data Import Wizard appears. Note that this wizard only appears when
+          you import addresses.<br>
+            <br>
+            <img alt="Import wizard" height="473" src="images/import_wizard.png" width="444"><br>
+            <br>
+          </li>
+          <li>Choose the following options:<br>
+            <br>
+            <em>Field Type</em> - Choose <em>Delimited</em><br>
+            <em>Delimited</em> - Choose <em>Comma</em>
+          </li>
+          <li>In the preview pane, look at the data. This pane depicts your data and how it will
+          appear after it is imported. Notice that the city and state data are in the incorrect
+          columns. This is because some of the addresses contain a second address (Address 2),
+          while others do not. Google Earth is set to ignore consecutive commas as delimiters. To
+          fix this, uncheck <em>Treat consecutive delimiters as one</em>.
+          </li>
+          <li>Click <em>Next</em>. Check <em>This data does not contain latitude/longitude
+          information...</em>
+          </li>
+          <li>Click <em>Next</em>. Choose <em>Addresses are broken into multiple fields...</em>
+          </li>
+          <li>Under <em>Select Address Fields</em>, review the names given to each field.
+          </li>
+          <li>Click <em>Next</em>. Review the list of fields and the type of data selected for
+          each. Note that this is an optional step. When you are finished, click <em>Back</em>.
+          </li>
+          <li>Click <em>Finish</em>. Google Earth begins geocoding your data.<br>
+            <br>
+            <img alt="Geocoding dialog box" height="125" src="images/geocoding_db.png" width="208">
+          </li>
+          <li>A dialog box appears indicating that Google Earth could not geocode one of your
+          addresses. This is the last address in the sample file and it is intentionally formatted
+          incorrectly. This dialog box allows you to view exactly which addresses did not import
+          correctly so that you can edit the data or refine how you import your data in Google
+          Earth.
+          </li>
+          <li>A dialog box appears and asks you if you want to apply a style template. Click
+          <em>Yes</em>. The Style Template Settings dialog box appears.<br>
+            <br>
+            <img alt="Style Settings dialog box" height="353" src="images/style_template.jpg"
+            width="450">
+          </li>
+          <li>Click the Color tab. Choose <em>Use single color</em> and click the adjacent button
+          to pick a color for the icon which depicts the addresses in the 3D viewer.
+          </li>
+          <li>Click the Icon tab. Choose <em>Use same icon for all features</em> and click the
+          adjacent field to choose the icon (example <img alt="icon" height="33" src=
+          "images/placemark_icon_big.png" width="22">) that will display at the location of each
+          address in the 3D viewer.
+          </li>
+          <li>Click the Height tab. Choose <em>Clamp feature to the ground</em>. This sets the
+          icons to display at ground level in the 3D viewer.
+          </li>
+          <li>Click <em>OK</em>. The Save Template dialog box appears. Save the template as a file
+          (.kst) that you can use when you import and format data in the future.
+          </li>
+          <li>You are done! Google Earth displays your address data as icons in the 3D viewer. You
+          can edit the properties of these placemarks as you would any other placemark.
+          </li>
+        </ol>
+        <p class="note">
+          <strong>Note</strong> - The imported data is located in the Temporary Places folder
+          within the Places Panel. Before you exit Google Earth, you need to drag this data out of
+          this folder and choose <em>File</em> &gt; <em>Save</em> &gt; <em>Save My Places</em>.
+        </p>
+      </div>
+    </div>
+    <div id="footer">
+      <div id="footerlogo">
+        <img alt="Google color balls" height="53" src="http://earth.google.com/images/art.gif"
+        width="143">
+      </div>
+      <div id="copyright">
+        <p>
+          &copy;2010 Google - <a href="http://www.google.com/privacy.html">Privacy Policy</a> -
+          <a href="http://www.google.com/terms_of_service.html">Terms and Conditions</a> - <a href=
+          "http://www.google.com/about.html">About Google</a>
+        </p>
+      </div>
+    </div>
+    <p id="date">
+      Updated on <script type="text/javascript">
+//<![CDATA[
+      <!-- hide script from old browsers
+      var lm = new Date(document.lastModified);
+      document.write(lm.toDateString());
+      //-->
+      //]]>
+      </script>
+    </p><script type="text/javascript">
+//<![CDATA[
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    //]]>
+    </script><script type="text/javascript">
+//<![CDATA[
+    var pageTracker = _gat._getTracker("UA-18031-5");
+    pageTracker._initData();
+    pageTracker._trackPageview();
+    //]]>
+    </script>
+  </body>
+</html>

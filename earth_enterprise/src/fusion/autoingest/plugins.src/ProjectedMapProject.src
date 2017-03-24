@@ -1,0 +1,271 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#config Name      ProjectedMapProject
+#config Base      Composite
+#config Config    ProjectedMapProjectConfig
+#config Subtype   ProjectedProject
+#config FixedType Map
+#config ModifyResistantConfigMembers index_version_
+
+// ===== ProjectedMapProjectAsset.h =====
+#include <autoingest/.idl/storage/ProjectedMapProjectConfig.h>
+#include "MapGEIndexAsset.h"
+#include "MapLayerJSAsset.h"
+#include <autoingest/sysman/plugins/ProjectedMapLayerAssetD.h>
+
+class ProjectedMapProjectAssetVersionImpl {
+ public:
+
+  void GetPOIFiles(std::vector<std::string> &out) const;
+
+  MapGEIndexAssetVersion GetGEIndexVersion(void) const {
+    if (children.size()) {
+      AssetVersion index(children[0]);
+      if (index->subtype == "MapGEIndex") {
+        return children[0];
+      } else {
+        return MapGEIndexAssetVersion();
+      }
+    } else {
+      return MapGEIndexAssetVersion();
+    }
+  }
+  MapLayerJSAssetVersion GetLayerJSVersion(void) const {
+    if (children.size() > 1) {
+      AssetVersion index(children[1]);
+      if (index->subtype == "MapLayerJS") {
+        return children[1];
+      } else {
+        return MapLayerJSAssetVersion();
+      }
+    } else {
+      return MapLayerJSAssetVersion();
+    }
+  }
+};
+
+
+// ===== ProjectedMapProjectAsset.cpp =====
+
+void
+ProjectedMapProjectAssetVersionImpl::GetPOIFiles(
+    std::vector<std::string> &out) const
+{
+  // skip index, the rest are our layer children
+  for (uint i = 0; i < children.size(); ++i) {
+    AssetVersion tmpchild(children[i]);
+    if (tmpchild->subtype == "ProjectedLayer") {
+      ProjectedMapLayerAssetVersion layer(children[i]);
+      std::vector<std::string> poifiles = layer->GetPOIFiles();
+      for (std::vector<std::string>::const_iterator i = poifiles.begin();
+           i != poifiles.end(); ++i) {
+        out.push_back( (*i) );
+      }
+    }
+  }
+}
+
+// ===== ProjectedMapProjectAssetD.h =====
+class ProjectedMapProjectAssetImplD {
+ protected:
+  void PostUpdate(void) { IncrementIndexVersion(); }
+ public:
+  inline void IncrementIndexVersion(void) {
+    config.index_version_ = config.index_version_ + 1;
+  }
+};
+
+
+
+// ===== ProjectedMapProjectAssetD.cpp =====
+#include <autoingest/sysman/plugins/ProjectedMapLayerAssetD.h>
+#include <autoingest/sysman/plugins/MapProjectAssetD.h>
+#include <autoingest/sysman/plugins/MapLayerAssetD.h>
+#include <autoingest/sysman/plugins/MapGEIndexAssetD.h>
+#include <autoingest/sysman/plugins/MapLayerJSAssetD.h>
+#include <autoingest/.idl/storage/MapProjectConfig.h>
+#include <khstl.h>
+
+void
+ProjectedMapProjectAssetVersionImplD::UpdateChildren(void)
+{
+  std::string assetRef = GetAssetRef();
+
+  // ***** load my input versions (only if they aren't already loaded)
+  // I'll use this list of my inputs to pass to my children so they don't
+  // have to look them up over and over again
+  InputVersionGuard input_guard(this);
+  MapProjectAssetVersionD map_project =
+    MapProjectAssetVersionD(input_guard->inputvers[0]->GetRef());
+
+  // load the inputs of my input
+  // these will be MapLayer AssetVersions
+  InputVersionGuard layers_guard(map_project);
+
+  // geta convenience handle to the map project's config
+  const MapProjectConfig &proj_config = map_project->config;
+
+  // track which of my layers actually get indexed
+  std::vector<uint> used_layers;
+  used_layers.reserve(proj_config.layers.size());
+  std::vector<LayerLegend> used_legends;
+  used_legends.reserve(proj_config.layers.size());
+  std::vector<MutableAssetVersionD> projected_layer_kids;
+  projected_layer_kids.reserve(proj_config.layers.size());
+
+  // ******************************
+  // create my GEIndex
+  //   - make my ProjectedMapLayer children in the process
+  // ******************************
+  MapGEIndexConfig geindexConfig;
+  {
+    std::string geindexAssetName(MapGEIndexFactory::SubAssetName(assetRef,
+                                                                 "geindex"));
+    std::vector<AssetVersion> index_input_vers;
+    std::vector<std::string> index_input_refs;
+
+    std::string dbname = khDropExtension(khBasename(assetRef));
+    geindexConfig.db_name_ = dbname;
+    uint indexVer = config.index_version_;
+    bool tryReuse = true;
+    if (indexVer == 0) {
+      // zero is a sentinal value that means we've wrapped and
+      // need to completely re-index.
+
+      // clear the sentinal
+      MutableProjectedMapProjectAssetD asset(GetAssetRef());
+      indexVer = asset->config.index_version_ = config.index_version_ = 1;
+
+      tryReuse = false;
+    }
+    geindexConfig.index_version_ = indexVer;
+
+    // Prefill the geindex config with the verrefs of my MapLayerLevel
+    // grandkids. Initialize the index_version_'s to my index_version_
+    geindexConfig.layers_.reserve(proj_config.layers.size());
+    uint not_skipped_count = 0;
+    for (uint l = 0; l < proj_config.layers.size(); ++l, ++not_skipped_count) {
+      if (proj_config.layers[l].skipLayer) {
+        continue;
+      }
+      MapLayerAssetVersion base_layer_ver =
+        layers_guard->inputvers[not_skipped_count];
+
+      // build a ProjectedMapLayer for this layer
+      std::string layer_asset_ref =
+        AssetVersionRef(base_layer_ver->GetRef()).AssetRef();
+      std::string projected_layer_name =
+        khComposePath(layer_asset_ref, "projected");
+      switch (config.projection_) {
+        case AssetDefs::FlatProjection:
+          projected_layer_name += "_flat";
+          break;
+        case AssetDefs::MercatorProjection:
+          projected_layer_name += "_mercator";
+          break;
+      }
+      projected_layer_name =
+        AssetDefs::NormalizeAssetName(projected_layer_name, AssetDefs::Map,
+                                      "ProjectedLayer");
+      MutableProjectedMapLayerAssetVersionD layerver =
+        ProjectedMapLayerFactory::FindMakeAndUpdate(
+            projected_layer_name,
+            makevec1(base_layer_ver->GetRef()),
+            khMetaData(),
+            ProjectedMapLayerConfig(config.projection_),
+            makevec1<AssetVersion>(base_layer_ver));
+
+      // did the layer create any levels
+      if (layerver->children.size()) {
+        used_layers.push_back(l);
+        projected_layer_kids.push_back(layerver);
+
+        // figure out the legend I'm going to use
+        if (proj_config.layers[l].legend.UseDefault()) {
+          used_legends.push_back(base_layer_ver->config.legend);
+        } else {
+          used_legends.push_back(proj_config.layers[l].legend.GetValue());
+        }
+
+        index_input_vers.push_back(layerver);
+        index_input_refs.push_back(layerver->GetRef());
+        geindexConfig.layers_.push_back(
+            MapGEIndexConfig::Layer(base_layer_ver->config.fuid_channel_,
+                                    indexVer,
+                                    geindex::TypedEntry::VectorMapsRaster));
+        geindexConfig.layers_.back().levels_.reserve(
+            layerver->children.size());
+        for (std::vector<std::string>::const_iterator levelverref =
+               layerver->children.begin();
+             levelverref != layerver->children.end(); ++levelverref) {
+          AssetVersion ver(*levelverref);
+          if (ver->subtype != "MapLayerLevel") {
+            // we've traversed past all our level children, stop looking
+            break;
+          }
+          geindexConfig.layers_.back().levels_.push_back(
+              MapGEIndexConfig::Level(*levelverref));
+        }
+      }
+    }
+
+    // reuse old index versions as much as possible
+    if (tryReuse) {
+      MapGEIndexAssetD asset(geindexAssetName);
+      if (asset) {
+        asset->ReuseOldPacketVers(geindexConfig);
+      }
+    }
+    MutableAssetVersionD geindex =
+      MapGEIndexFactory::FindMakeAndUpdate(geindexAssetName,
+                                           index_input_refs,
+                                           khMetaData(),
+                                           geindexConfig,
+                                           index_input_vers);
+    AddChild(geindex);
+  }
+
+  // ******************************
+  // create my JS layer definitions
+  // ******************************
+  {
+    std::string layerJSAssetName(MapLayerJSFactory::SubAssetName(assetRef,
+                                                                 "layerjs"));
+    MapLayerJSConfig layerJSConfig;
+    layerJSConfig.layers_.reserve(used_layers.size());
+    for (uint i = 0; i < used_layers.size(); ++i) {
+      layerJSConfig.layers_.push_back(
+          MapLayerJSConfig::Layer(
+              MapLayerJSConfig::Layer::VectorRaster,
+              (config.projection_ ==  AssetDefs::FlatProjection ?
+               MapLayerJSConfig::Layer::FlatProjection :
+               MapLayerJSConfig::Layer::MercatorProjection),
+              geindexConfig.layers_[i].channel_id_,
+              geindexConfig.layers_[i].index_version_,
+              used_legends[i]));
+    }
+    MutableAssetVersionD layerjs =
+      MapLayerJSFactory::FindMakeAndUpdate(layerJSAssetName,
+                                           std::vector<std::string>(),
+                                           khMetaData(),
+                                           layerJSConfig,
+                                           std::vector<AssetVersion>());
+    AddChild(layerjs);
+  }
+
+
+  AddChildren(projected_layer_kids);
+}
+

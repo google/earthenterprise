@@ -1,0 +1,71 @@
+<!--
+  This is a "hello world" example that demonstrates how to set up a simple
+  Google Earth Enterpise map page using the geeCreateFusionMap object and the
+  Google Maps API v3.
+
+  This example ASSUMES that you have a published 2D Google Earth Enterprise
+  Maps Database on your server and HAVE indicated to "Include Google Map Base Layer".
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>Fusion Maps API - Hello World Example</title>
+
+    <script type="text/javascript">
+        var gmap;
+        var geeServerDefs;
+    </script>
+
+    <!-- Edit the script tag below. -->
+    <!-- Enter the target path of a published 2D database on your server.  Example: http://yourhost.com/YOUR_TARGET_PATH -->
+    <script type="text/javascript" src="/{YOUR_TARGET_PATH_HERE}/query?request=Json&var=geeServerDefs"></script>
+
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <script type='text/javascript' src='/maps/api/fusion_extended_map.js'></script>
+    <script type='text/javascript' src='/maps/api/fusion_utils.js'></script>
+
+    <script type="text/javascript">
+
+      /**
+       * If you are seeing this alert on the page, you need to enter a target
+       * path in the geeServerDefs script tag above, or the path that you have
+       * entered is invalid.
+       */
+      if (!geeServerDefs) {
+        alert('Please customize the geeServerDefs script in this file');
+      }
+
+
+      /**
+       * Load map initially focused on San Francisco. If there are less
+       * than two layers, disable buttons for corresponding layers.
+       */
+      function LoadMap() {
+        var mapOpts = {
+              zoom: 4,
+              center: new google.maps.LatLng(37.5, -122),
+              navigationControl: true,
+              mapTypeControl: false,
+              scaleControl: true,
+              streetViewControl: false,
+              mapTypeId: google.maps.MapTypeId.SATELLITE
+          };
+
+        geeServerDefs.useGoogleLayers = true;
+        gmap = new geeCreateFusionMap("mymap", geeServerDefs, mapOpts);
+      }
+
+    </script>
+
+  </head>
+
+  <body onload="LoadMap()" onresize="">
+
+    <h2>Fusion Maps API - Hello World Example (online w/ google public layers)</h2>
+    <!-- div where map will get installed -->
+    <div id="mymap" style="width: 500px; height: 500px"></div>
+
+  </body>
+</html>

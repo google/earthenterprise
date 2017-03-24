@@ -1,0 +1,855 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+
+
+
+  
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/staticmaps/v1/index.html";
+    </script>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Google Static Maps API V1 - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/html/apis/maps/documentation/staticmaps/v1/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+  </head>
+  <body>
+    <a id="top" name="top"></a>
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container" class="depr">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Static Maps API V1 (<a href="../../../terms.html#section_4_4">Deprecated</a>)</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="../index.html" title="Google Static Maps API V1 home page">Home</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../../faq.html" title="Answers to frequently asked questions about Google Static Maps API V1">FAQ</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Static Maps API V1 blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="http://groups.google.com/group/Google-Maps-API" title="Google Static Maps API V1 developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../../../terms.html" title="Google Static Maps API V1 terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <a name="gc-toc"></a>  
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../../../index.html">Maps API Family</a></li>
+  <li><a href="../../../signup.html">Sign up for an API key</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+       <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+<div class="line"></div>
+<ul>
+  <li><h2>Maps JavaScript API V3</h2>
+    <ul>
+      <li><a href="../../javascript/index.html">Home Page</a></li>
+      <li><a href="../../javascript/basics.html">Documentation</a></li>
+    </ul>
+  </li>
+</ul>
+      <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../../javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../../javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+<div class="line"></div>
+<ul>
+  <li><h2>Maps API for Flash</h2>
+    <ul>
+      <li><a href="../../flash/index.html">Home Page</a></li>
+      <li><a href="../../flash/intro.html">Documentation</a></li>
+    </ul>
+  </li>
+</ul>
+   <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../../mapsdata/index.html">Home Page</a></li>
+          <li><a href="../../mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+      <ul>
+        <li><h2><a href="../../webservices/index.html">Maps API Web Services</a></h2>
+         <ul>
+           <li><a href="../../geocoding/index.html">Geocoding API</a></li>
+           <li><a href="../../directions/index.html">Directions API</a></li>
+           <li><a href="../../elevation/index.html">Elevation API</a></li>
+           <li><a href="../../places/index.html">Places API</a></li>
+         </ul>
+       </li>
+      </ul>
+    <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+   <div class="line"></div>
+<div class="promo">
+<p><a href="../../premier/index.html">Google Maps API Premier</a></p>
+<p>Includes enterprise licensing and support</p>
+</div>
+
+      </div>
+      
+      <a name="gc-pagecontent"></a>   
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Static Maps API V1 Developer Guide</h1>
+
+
+<p class="note">Note: The Google Static Maps V1 service
+has been officially deprecated as of August 25, 2009. The V1 API will continue
+to work as per our <a href="../../../terms.html#section_4_4">deprecation policy</a>,
+but we encourage you to migrate your code to the new
+<a href="../index.html">Static Maps API V2</a> service.</p>
+
+
+<p>Welcome to the developer documentation for the Google Static Maps API! The Google Static 
+Maps API lets you embed a Google Maps image on your webpage without requiring JavaScript or 
+any dynamic page loading. The Google Static Map service creates your map based on URL 
+parameters sent through a standard HTTP request and returns the map as an image you can 
+display on your web page.</p>
+
+<p>The Google Static Maps API requires a Maps API key. If you haven't
+already done so, <a href="../../../signup.html">sign up for a free API key.</a></p>
+
+<h1>A Quick Example</h1>
+
+<p>The following example contains the URL of a static map image, which is displayed below:</p>
+
+<pre>
+# Note that this URL wraps at the '\' character.
+# You can copy the URL from the image below, however.
+# For clarity, we don't write the actual API key in use.
+#
+http://maps.google.com/staticmap?center=40.714728,-73.998672&zoom=14&size=512x512&maptype=mobile\
+&markers=40.702147,-74.015794,blues%7C40.711614,-74.012318,greeng%7C40.718217,-73.998284,redc\
+&key=<i>MAPS_API_KEY&sensor=false</i>
+</pre>
+
+<p><img border="0" src="http://maps.google.com/staticmap?center=40.714728,-73.998672&amp;zoom=14&amp;size=512x512&amp;maptype=mobile&amp;markers=40.702147,-74.015794,blues%7C40.711614,-74.012318,greeng%7C40.718217,-73.998284,redc&amp;sensor=false&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xQJpBVbSrqNn69S6DOTv203MQ5ufA" alt="Points of Interest in Lower Manhattan" /></p>
+
+<p>Notice that you don't need to do anything "special" to get this image to show up on the page. 
+No JavaScript is required. All we needed to do was create a URL, and place it within an 
+<code>&lt;img&gt;</code> tag. You can place a Google static map anywhere on your webpage 
+where you can place an image.</p>
+
+<h1>Contents</h1>
+<table width="100%" class="columns">
+ <tr>
+  <td width="50%">
+  <ol class="toc">
+   <li><a href="#Audience">Audience</a></li>
+   <li><a href="#Limits">Usage Limits</a></li>
+   <li><a href="#Overview">Overview</a></li>
+   <li><a href="#URL_Parameters">URL Parameters</a></li>
+   <li><a href="#Usage">Parameter Usage</a>
+     <ul>
+       <li><a href="#Locations">Specifying Locations</a>
+         <ul>
+           <li><a href="#Latlons">Latitudes and Longitudes</a></li>
+           <li><a href="#Geocoding">Geocoding</a></li>
+         </ul>
+       </li>
+       <li><a href="#Zoomlevels">Zoom Levels</a></li>  
+       <li><a href="#Imagesizes">Image Sizes</a></li>
+       <li><a href="#Viewports">Viewport</a></li>
+       <li><a href="#ImageFormats">Image Formats</a></li> 
+       <li><a href="#MapTypes">Map Types</a></li>  
+       <li><a href="#Markers">Adding Markers</a>
+         <ul>
+           <li><a href="#MarkerDescriptors">Marker Descriptors</a></li>
+           <li><a href="#ImplicitPositioning">Implicit Positioning of the Map Using Markers</a></li>
+         </ul>
+       </li>
+       <li><a href="#Paths">Static Map Paths</a>
+         <ul>
+           <li><a href="#PathAttrs">Path Attributes</a></li>
+           <li><a href="#PathPoints">Specifying Path Points</a></li>
+         </ul>
+       </li>  
+     </ul>
+   </li>
+   <li><a href="#Moreinfo">More Information</a></li>  
+  </ol>
+  </td>
+ </tr>
+</table>
+
+<h1><a name="Audience" id="Audience"></a>Audience</h1>
+
+<p>This document is intended for website and mobile developers who want to include Google Static 
+Maps API images within a webpage. It provides an introduction to using the API and reference material 
+on the available parameters.</p>
+
+<h1><a name="Limits" id="Limits"></a>Usage Limits</h1>
+
+<p>Use of the Static Maps API requires registration of a free <a href="../../signup.html">Maps API key</a>. The Maps
+API key allows you to use the Static Maps API, as well as the standard Maps API.</p>
+
+<p>Use of the Google Static Maps API is also subject to a query limit of 1000
+unique (different) image requests 
+per viewer per day. Since this restriction is a quota per <i>viewer</i> and not per <i>key</i>, most developers should
+not need to worry about exceeding their quota. Additionally, note that requests of identical images, 
+in general, do not count towards this limit beyond the original request.</p>
+
+<p>If a user exceeds the limit as proscribed above, the following image will be displayed indicating
+that the quota has been exceeded:</p>
+<p>
+<img src="images/quota.png"></img>
+</p>
+<p>
+This limit is enforced to prevent abuse and/or repurposing of the Static Maps API, and this limit may be changed in
+the future without notice. If you exceed the 24-hour limit or otherwise abuse the service, the Static Maps API
+ may stop working for you temporarily. If you continue to exceed this limit, your access to the Static Maps API 
+may be blocked.</p>
+
+<h1><a name="Overview" id="Overview"></a>Overview</h1>
+
+<p>The Google Static Maps API returns an image (either GIF, PNG or JPEG) in response to a HTTP request via a URL. For each request,
+you can specify the location of the map, the size of the image, the zoom level, the type of map, and the placement of
+optional markers at locations on the map. You can additionally label your markers using alphanumeric characters, so that you
+can refer to them in a "key."</p>
+
+<p>You embed a Static Maps API image within a webpage inside an <code>&lt;img&gt;</code> tag's 
+<code>src</code> attribute. When the webpage is displayed, the browser requests the image 
+from the the Static Maps API and it renders within the image location.</p>
+
+<p>This document describes the required format of Static Maps API URLs and the available parameters. It also points out
+some tips and tricks in specifying your URLs.</p>
+
+<h1><a name="URL_Parameters" id="URL_Parameters"></a>URL Parameters</h1>
+
+<p>A Google Static Maps API URL must be of the following form:</p>
+<p><code>http://maps.google.com/staticmap?<i>parameters</i></code></p>
+
+<p>Certain parameters are required while some are optional. As is standard in HTTP requests, all parameters are 
+separated using the ampersand (<code>&amp;</code>) character. The list of parameters and their possible values
+are enumerated below.</p>
+
+<p>The Static Maps API defines map images using the following URL parameters:</p>
+
+<ul>
+<li><code>center</code> (required if markers not present) defines the center of the map, equidistant from all edges of the map. 
+This parameter takes a comma-separated {latitude,longitude} pair (e.g. "40.714728,-73.998672") identifying a
+unique location on the face of the earth. For more information, see <a href="#Latlons">latitudes and 
+longitudes</a> below.</li>
+
+<li><code>zoom</code> (required if markers not present) defines the <a href="#Zoomlevels"><i>zoom level</i></a> of the map,
+which determines the magnification level of the map. This parameter takes a numerical value corresponding 
+to the zoom level of the region desired. For more information, see <a href="#Zoomlevels">zoom levels</a> below.</li>
+
+<li><code>size</code> (required) defines the rectangular dimensions of the map image. This parameter takes a
+string of the form <code><i>value</i>x<i>value</i></code> where horizontal pixels are denoted first while
+vertical pixels are denoted second. For example, <code>500x400</code> defines a map 500 pixels wide by 400 pixels high.
+If you create a static map that is 100 pixels wide or smaller, the "Powered by Google" logo is automatically reduced
+in size.</li>
+
+<li><code>format</code> (optional) defines the format of the resulting image. By default, the Static Maps API
+creates GIF images. There are several possible formats including GIF, JPEG and PNG types.  Which format you 
+use depends on how you intend to present the image. JPEG typically provides greater compression, while GIF 
+and PNG provide greater detail. For more information, see <a href="#ImageFormats">Image Formats.</a>
+</li>
+
+<li><code>maptype</code> (optional) defines the type of map to construct. There are several possible 
+maptype values, including <code>satellite</code>, <code>terrain</code>, <code>hybrid</code>, and 
+<code>mobile</code>. For more information, see <a href="#MapTypes">Static Maps API Maptypes</a> below.
+</li>
+
+<li><code>markers</code> (optional) define one or more markers to attach to the image at specified locations. 
+This parameter takes a string of marker definitions separated by the pipe character (<code>|</code>). Note that if
+you supply markers for a map, you do not need to specify the (normally required) <code>center</code> and <code>zoom</code>
+parameters. For more information, see <a href="#Markers">Static Map Markers</a> below.
+</li>
+
+<li><code>path</code> (optional) defines a single path of two or more connected points to overlay on the 
+image at specified locations. This parameter takes a string of point definitions separated by the pipe 
+character (<code>|</code>). Note that if you supply a path for a map, you do not need to specify the 
+(normally required) <code>center</code> and <code>zoom</code> parameters. For more information, see 
+<a href="#Paths">Static Map Paths</a> below.</li>
+
+<li><code>span</code> (optional) defines a minimum <i>viewport</i> for the map image expressed 
+as a latitude and longitude pair. The static map service takes this value and produces a map of 
+the proper zoom level to include the entire provided <code>span</code> value from the map's center 
+point. Note that the resulting map may include larger bounds for either latitude or longitude 
+depending on the rectangular dimensions of the map. If <code>zoom</code> is specified, 
+<code>span</code> is ignored.</li>
+
+<li><code>frame</code> (optional) specifies that the resulting image should be framed with a colored
+blue border. The frame consists of a 5 pixel, 55% opacity blue border.</li>
+
+<li><code>hl</code> (optional) defines the language to use for display of labels on map tiles. Note that this paramater is only
+supported for some country tiles; if the specific language requested is not supported for the tile set, then the default
+language for that tilset will be used.</li>
+
+<li><code>key</code> (required) identifies the Maps API key for the domain on which this URL request takes place.
+If you don't have a Maps API key, you can <a href="../../signup.html">sign up for one free</a>.</li>
+
+
+<li><code>sensor</code> (required) specifies whether the application requesting the static map is using a
+sensor to determine the user's location. This parameter is now required for all static map requests. For more
+information, see <a href="#Locations">Specifying Locations</a> below.</li>
+</ul>
+
+<h1><a name="Usage" id="Usage"></a>Parameter Usage</h1>
+
+<p>The Static Maps API is relatively easy to use, as it consists solely of a parameterized URL. This section explains
+how to use these parameters to construct your URLs.</p>
+
+<h2><a name="Locations" id="Locations"></a>Specifying Locations</h2>
+
+<p>The Static Maps API must be able to precisely identify locations on the map, both to focus the map at the
+correct location (using the <code>center</code> parameter) and/or to place any optional placemarks 
+(using the <code>markers</code> parameter) at locations on the map. The Static Maps API uses 
+latitude and longitude values to specify these locations. These values together identify a <i>geocoded</i>
+location.</p>
+
+<p>If your device uses a "sensor" (such as a GPS device) to determine the location of a device or user, you must also
+pass <code>sensor=true</code> within your Static Maps API request URL. If your application does not use a sensor,
+pass <code>sensor=false</code>.</p>
+
+<h3><a name="Latlons" id="Latlons"></a>Latitudes and Longitudes</h3>
+
+<p>Latitudes and longitudes are defined using numerals within a comma-separated text string that have a precision 
+to 6 decimal places. For example, "40.714728,-73.998672" is a valid geocode value. Precision beyond the 6 decimal places 
+is ignored.</p>
+
+<P>Longitude values are based on their distance from Greenwich, England, home of the prime meridian. 
+Since Greenwich is situated at 51.477222 latitude, we can enter a <code>center</code> value of
+<code>51.477222,0</code> to center the map on Greenwich:</P>
+
+<p><img border="0" src="http://maps.google.com/staticmap?center=51.477222,0&amp;zoom=14&amp;size=400x400&amp;sensor=false&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xQJpBVbSrqNn69S6DOTv203MQ5ufA" alt="Greenwich, England" /></p>
+
+<p>Latitude and longitude values must correspond to a valid location on the face of the earth. Latitudes 
+can take any value between <code>-90</code> and <code>90</code> while longitude values can take any value between 
+<code>-180</code> and <code>180</code>. If you specify an invalid latitude or longitude value, your request will 
+be rejected as a bad request.</p>
+
+<h3><a name="Geocoding" id="Geocoding"></a>Geocoding</h3>
+
+<p>Most people don't speak in latitudes and longitudes; they denote locations using <i>addresses</i>. The process 
+of turning an address into a geographic point is known as <i>geocoding</i> and is discussed in detail in the 
+<a href="http://code.google.com/apis/maps/documentation/services.html#Geocoding">Google Maps API Services</a> 
+section. Note that to use the Geocoding service directly, you will need to use a 
+<a href="../../signup.html">Maps API key</a>.</p>
+
+<p>You can obtain geocoded latitude and longitude values using a variety of services other than this Geocoding service, 
+including Google Maps itself. For example, you can enter an address into Google Maps and determine its geocoded 
+location by clicking on the <b>Link to this page</b> link in the upper right of the map. A popup dialog box will 
+appear where you can copy the URL. If you copy that URL into a browser, you will be able to find the geocoded 
+values contained within the <code>ll</code> parameter.</p>
+
+<h2><a name="Zoomlevels" id="Zoomlevels"></a>Zoom Levels</h2>
+
+<p>Maps on Google Maps have an integer "zoom level" which defines the resolution of the current view. 
+Zoom levels between <code>0</code> (the lowest zoom level, in which the entire world can be seen 
+on one map) to <code>19</code> (the highest zoom level, down to individual buildings) are possible 
+within the normal maps view.</p>
+
+<p>Google Maps sets zoom level <code>0</code> to encompass the entire earth. Each succeeding zoom level 
+doubles the precision in both horizontal and vertical dimensions. More information on how this is done is
+available in the <a href="http://code.google.com/apis/maps/documentation/overlays.html#Google_Maps_Coordinates">Google Maps API documentation</a>.</p>
+
+<p>Note: not all zoom levels appear at all locations on the earth. Zoom levels vary depending on location, 
+as data in some parts of the globe is more granular than in other locations.</p>
+
+<p>If you send a request for a zoom level in which no map tiles exist, the Static Maps API will return a
+black image instead.</p>
+
+<p>The example below requests two maps of Manhattan at the same <code>center</code> value but at zoom levels 12 and 14, respectively:</p>
+<pre>
+http://maps.google.com/staticmap?center=40.714728,-73.998672&zoom=12&size=400x400&key=<i>MAPS_API_KEY</i>&sensor=<i>true_or_false</i>
+http://maps.google.com/staticmap?center=40.714728,-73.998672&zoom=14&size=400x400&key=<i>MAPS_API_KEY</i>&sensor=<i>true_or_false</i>
+</pre>
+<p><img border="0" src="http://maps.google.com/staticmap?center=40.714728,-73.998672&amp;zoom=12&amp;size=400x400&amp;sensor=false&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xQJpBVbSrqNn69S6DOTv203MQ5ufA" alt="Manhattan Faraway" />&nbsp;&nbsp;<img border="0" src="http://maps.google.com/staticmap?center=40.714728,-73.998672&amp;zoom=14&amp;size=400x400&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xQJpBVbSrqNn69S6DOTv203MQ5ufA" alt="Manhattan Up Close" /></p>
+
+<h2 id="Imagesizes">Image Sizes</h2>
+
+<p>Images may be retrieved in sizes up to 640 by 640 pixels. The <code>size</code> parameter takes a string with
+two values separated by the <code>x</code> character. <code>640x640</code> is the largest image size allowed. 
+Note that the <code>center</code> parameter, combined with the <code>size</code> parameter 
+implicitly defines the coverage area of the map image.</p>
+
+<p>The example below requests a "slice" of the earth at the equator at zoom level 1:</p>
+
+<pre>
+http://maps.google.com/staticmap?center=0,0&zoom=1&size=400x50&key=<i>MAPS_API_KEY</i>&sensor=<i>true_or_false</i>
+</pre>
+<p><img border="0" src="http://maps.google.com/staticmap?center=0,0&amp;zoom=1&amp;size=400x50&amp;sensor=false&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xQJpBVbSrqNn69S6DOTv203MQ5ufA" alt="Equator" /></p>
+
+<p>The example below requests a small map, of size 100 x 100 pixels centered on the same region. Note
+the smaller Google logo:</p>
+
+<p><img border="0" src="http://maps.google.com/staticmap?center=0,0&amp;zoom=1&amp;size=100x100&amp;sensor=false&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xQJpBVbSrqNn69S6DOTv203MQ5ufA" alt="Small Equator Map" /></p>
+
+<h2 id="Viewports">Viewports</h2>
+
+<p>Images may specify a <i>viewport</i> (defined by latitude and longitude values expressed as degrees) to display 
+around a provided center point by passing a <code>span</code> parameter. Defining a minimum viewport
+in this manner obviates the need to specify an exact zoom level. The static map service uses the 
+<code>span</code> parameter in conjunction with the <code>size</code> parameter to construct a 
+map of the proper zoom level which includes at least the given viewport constraints.</p>
+
+<p>The example below requests a square map centered on 0 degrees longitude and 0 degrees latitude 
+of width and height of 20 degrees:</p>
+
+<pre>
+http://maps.google.com/staticmap?center=0,0&span=20,20&size=512x512&key=<i>MAPS_API_KEY</i>&sensor=<i>true_or_false</i>
+</pre>
+
+<p><img border="0" src="http://maps.google.com/staticmap?center=0,0&amp;span=20,20&amp;size=512x512&amp;sensor=false&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xQJpBVbSrqNn69S6DOTv203MQ5ufA" alt="Equator Square Map"/></p>
+
+<p>The example below requests a map centered on Manhattan that shows 1 degree of arc in both directions.
+Note that since this map is horizontally shaped that it extends 4 degrees horizontally so that it can
+extend the minimum 1 degree vertically.</p>
+
+<pre>
+http://maps.google.com/staticmap?center=40.714728,-73.998672&span=1,1&size=512x128&key=<i>MAPS_API_KEY</i>&sensor=<i>true_or_false</i>
+</pre>
+
+<p><img border="0" src="http://maps.google.com/staticmap?center=40.714728,-73.998672&amp;span=1,1&amp;size=512x128&amp;sensor=false&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xQJpBVbSrqNn69S6DOTv203MQ5ufA" alt="New York, 1 Degree on all sides"/></p>
+
+<h2><a name="ImageFormats" id="ImageFormats"></a>Image Formats</h2>
+
+<p>Images may be returned in several common web graphics formats: <b>GIF</b>, <b>JPEG</b> and <b>PNG</b>. The 
+<code>format</code> parameter takes one of the following values:</p>
+
+<ul>
+  <li><code>gif</code> (default) specifies the <a href="http://en.wikipedia.org/wiki/GIF">GIF</a> format.</li>
+  <li><code>jpg</code> specifies the <a href="http://en.wikipedia.org/wiki/JPEG">JPEG</a> compression format.</li>
+  <li><code>jpg-baseline</code> specifies a non-progressive <a href="http://en.wikipedia.org/wiki/JPEG">JPEG</a> compression format.</li>
+  <li><code>png8</code> specifies the 8-bit <a href="http://en.wikipedia.org/wiki/Portable_Network_Graphics">PNG</a> format.</li>
+  <li><code>png32</code> specifies the 32-bit <a href="http://en.wikipedia.org/wiki/Portable_Network_Graphics">PNG</a>
+  format.</li>  
+</ul>
+
+<p><code>jpg</code> and <code>jpg-baseline</code> typically provide the smallest image size, though it does so through "lossy" 
+compression which may degrade the image. <code>gif</code>, <code>png8</code> and <code>png32</code> provide lossless
+compression.</p>
+
+<p>Most JPEG images are progressive, meaning that they load a courser image earlier and refine the image 
+resolution as more data arrives. This allows images to be loaded quickly in webpages and is the most widespread
+use of JPEG currently. However, some uses of JPEG (especially printing) require non-progressive (baseline) 
+images. In such cases, you may want to use the <code>jpg-baseline</code> format, which is non-progressive.</p>
+
+<h2><a name="MapTypes" id="MapTypes"></a>Map Types</h2>
+
+<p>The Google Static Maps API creates maps in several formats, listed below:</p>
+
+<ul>
+  <li><code>roadmap</code> (default) specifies a standard roadmap image, as is normally shown on the 
+  Google Maps website. If no <code>maptype</code> value is specified, the Static Maps API serves 
+  <code>roadmap</code> tiles by default.</li>
+  <li><code>mobile</code> specifies a mobile roadmap map image, which contains larger features and text fonts 
+  to enable easier visual display at the high resolutions and small screen sizes of mobile devices.</li>  
+  <li><code>satellite</code> specifies a satellite image.</li>
+  <li><code>terrain</code> specifies a physical relief map image, showing terrain and vegetation.</li>
+  <li><code>hybrid</code> specifies a hybrid of the satellite and roadmap image, showing a
+  transparent layer of major streets and place names on the satellite image.</li>   
+  <li><code>mapmaker-roadmap</code> specifies a roadmap using tiles from 
+  <a href="http://www.google.com/mapmaker">Google Map Maker</a>.</li>     
+  <li><code>mapmaker-hybrid</code> specifies a hybrid of satellite and roadmap images from
+  <a href="http://www.google.com/mapmaker">Google Map Maker</a>, showing a
+  transparent layer of major streets and place names on the satellite image.</li>               
+</ul>
+
+<p>You can see the difference between roadmap and mobile types in the code example below. Note that these maps
+also have <code>frame=true</code>.</p>
+
+<pre>
+http://maps.google.com/staticmap?center=40.714728,-73.998672&zoom=12&size=400x400&key=<i>MAPS_API_KEY</i>&sensor=<i>true_or_false</i>
+http://maps.google.com/staticmap?center=40.714728,-73.998672&zoom=12&size=400x400&maptype=mobile&key=<i>MAPS_API_KEY</i>&sensor=<i>true_or_false</i>
+</pre>
+
+<p><img border="0" src="http://maps.google.com/staticmap?center=40.714728,-73.998672&amp;frame=true&amp;zoom=12&amp;size=400x400&amp;sensor=false&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xQJpBVbSrqNn69S6DOTv203MQ5ufA" alt="Manhattan Normal Map" />&nbsp;&nbsp;<img border="0" src="http://maps.google.com/staticmap?center=40.714728,-73.998672&amp;frame=true&amp;zoom=12&amp;maptype=mobile&amp;size=400x400&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xQJpBVbSrqNn69S6DOTv203MQ5ufA" alt="Manhattan Mobile Map" /></p>
+
+<p>The following examples show satellite and terrain map types:</p>
+
+<pre>
+http://maps.google.com/staticmap?center=40.714728,-73.998672&zoom=12&size=400x400&maptype=satellite&key=<i>MAPS_API_KEY</i>&sensor=<i>true_or_false</i>
+http://maps.google.com/staticmap?center=40.714728,-73.998672&zoom=12&size=400x400&maptype=terrain&key=<i>MAPS_API_KEY</i>&sensor=<i>true_or_false</i>
+</pre>
+
+<p><img border="0" src="http://maps.google.com/staticmap?center=40.714728,-73.998672&amp;frame=true&amp;zoom=12&amp;maptype=satellite&amp;size=400x400&amp;sensor=false&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xQJpBVbSrqNn69S6DOTv203MQ5ufA" alt="Manhattan Satellite Map" />&nbsp;&nbsp;<img border="0" src="http://maps.google.com/staticmap?center=40.714728,-73.998672&amp;frame=true&amp;zoom=12&amp;maptype=terrain&amp;size=400x400&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xQJpBVbSrqNn69S6DOTv203MQ5ufA" alt="Manhattan Terrain Map" /></p>
+
+<p><a href="http://www.google.com/mapmaker">Google Map Maker</a> takes user-contributed map data to produce 
+maps of regions where Google Maps is not yet launched. Setting your static map to use the maptypes 
+<code>mapmaker-roadmap</code> and <code>mapmaker-hybrid</code> will create maps using map tiles from 
+the Map Maker repository. Maps are only available for those 
+<a href="http://www.google.com/mapmaker/mapfiles/s/launched.html">countries in which Map Maker has 
+launched</a>. However, in those countries, the quality of map data is generally much more robust.</p>
+
+<p>The following map displays a <code>http://maps.google.com</code> map of Lahore, Pakistan compared to a Google Map Maker map of the same area:</p>
+
+<pre>
+http://maps.google.com/staticmap?center=31.6000000,74.3140000&zoom=12&size=400x400&maptype=roadmap&key=<i>MAPS_API_KEY</i>&sensor=<i>true_or_false</i>
+http://maps.google.com/staticmap?center=31.6000000,74.3140000&zoom=12&size=400x400&maptype=mapmaker-roadmap&key=<i>MAPS_API_KEY</i>&sensor=<i>true_or_false</i>
+</pre>
+
+<p><img border="0" src="http://maps.google.com/staticmap?center=31.6000000,74.3140000&amp;frame=true&amp;zoom=12&amp;maptype=roadmap&amp;size=400x400&amp;sensor=false&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xQJpBVbSrqNn69S6DOTv203MQ5ufA" alt="Lahore, Pakistan" /> &nbsp;&nbsp;<img border="0" src="http://maps.google.com/staticmap?center=31.6000000,74.3140000&amp;frame=true&amp;zoom=12&amp;maptype=mapmaker-roadmap&amp;size=400x400&amp;sensor=false&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xQJpBVbSrqNn69S6DOTv203MQ5ufA" alt="Lahore, Pakistan" /></p>
+
+<p><span style="color:red">Note! </span> If you request a <code>mapmaker</code> map type for an area not covered by Map Maker,
+you will only receive a blank image.</p>
+
+<p>More information about Google Map Maker is available at the 
+<a href="http://sites.google.com/site/mapmakeruserhelp/home">Google Map Maker user documentation</a>.</p>
+
+<h2><a name="Markers" id="Markers"></a>Markers</h2>
+
+<p>The <code>markers</code> parameter defines a set of one or more markers to attach to the map image.
+This parameter takes a list of up to 50 markers defined by a set of value assignments:
+<p><code>markers=<i>markerDescriptor1</i>|<i>markerDescriptor2</i>|<i>markerDescriptor3</i>|...</code> etc.</p>
+<p>Note that marker descriptors are separated from each other using the pipe character (<code>|</code>). (Note: the pipe
+character is also %7C in ASCII if you are encoding your URLs.)</p>
+
+<h3><a name="MarkerDescriptors" id="MarkerDescriptors"></a>Marker Descriptors</h3>
+
+<p>Each marker descriptor contains a string defining the location to place the marker and the visual attributes 
+to use when displaying the marker. These strings contain the following variable values:</p>
+
+<ul>
+  <li><code><i>{latitude}</i></code> (required) specifies a latitudinal value with precision to 6 decimal places.</li>
+  <li><code><i>{longitude}</i></code> (required) specifies a longitudinal value with precision to 6 decimal places.</li>
+  <li><code><i>{size}</i></code> (optional) specifies the size of marker from the set <code>{tiny, mid, small}</code>. If no 
+  <code>size</code> parameter is set, the marker will appear in its default (normal) size.</li>
+  <li><code><i>{color}</i></code> (optional) specifies a color from the set <code>{black, brown, green, purple, yellow, blue, gray, 
+  orange, red, white}</code>.</li>
+  <li><code><i>{alphanumeric-character}</i></code> (optional) specifies a single lowercase 
+  alphanumeric character from the set {a-z, 0-9}. Note 
+  that default and <code>mid</code> sized markers are the only markers capable of displaying an 
+  <code>alphanumeric-character</code> parameter.
+  <code>tiny</code> and <code>small</code> markers are not capable of displaying an alphanumeric-character.</li>
+</ul>
+
+<p>The latitude and longitude values define the marker's location on the map. If the location is off the map, 
+that marker will not appear in the constructed image.</p>
+
+<p>The size, color and alphanumeric-character values define the visual appearance of the marker. If no size value is given, 
+a marker displays in its default (normal) size. Additionally, normal-sized markers are the only markers capable of
+displaying alphanumeric characters. If no value (or an incorrect value) is given, the marker appears as a default dotted red marker:</p>
+
+<p><img border="0" src="http://maps.google.com/intl/en_us/mapfiles/marker.png"></img></p>
+
+<p>An example marker declaration is of the form 
+<code><i>{latitude}</i>,<i>{longitude}</i>,<i>{size}</i><i>{color}</i><i>{alphanumeric-character}</i></code>. Note in particular that 
+the size, color and alphanumeric-character values of the string are not separated by commas. A sample marker declaration
+is shown below.</p>
+<pre>
+markers=40.702147,-74.015794,blues|40.711614,-74.012318,tinygreen|40.713504,-74.005607,midyellowc&key=<i>MAPS_API_KEY</i>&sensor=<i>true_or_false</i>
+</pre>
+
+<p>This <code>markers</code> parameter defines three markers (separated by the "<code>|</code>" character): 
+one blue marker labeled "S" at 40.702147,-74.015794, one tiny green marker at 
+40.711614,-74.012318, and one mid-sized yellow marker labeled "C" at 40.713504,-74.005607 (City Hall). These markers are shown in the example below:</p>
+
+<p><img border="0" src="http://maps.google.com/staticmap?center=40.709028,-74.018672&amp;zoom=14&amp;size=400x400&amp;maptype=mobile&amp;markers=40.702147,-74.015794,blues%7C40.711614,-74.012318,tinygreen%7C40.713504,-74.005607,midyellowc&amp;sensor=false&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xQJpBVbSrqNn69S6DOTv203MQ5ufA" alt="Points of Interest in Lower Manhattan" /></p>
+
+<h3><a name="ImplicitPositioning" id="ImplicitPositioning"></a>Implicit Positioning of the Map Using Markers</h3>
+
+<p>Normally, you need to specify <code>center</code> and <code>zoom</code> URL parameters to define the location 
+and zoom level of your generated map. However, if you supply a <code>markers</code> parameter, you can instead 
+let the Static Maps API determine the correct center and zoom level implicitly, based on evaluation of the position
+of these markers.</p>
+
+<p>If supplying two or more markers, the Static Maps API will determine a proper center and zoom level, providing
+generous margins for display of the markers contained within the <code>markers</code> parameter. The example below contains the same
+markers as shown above, but removes the <code>center</code> and <code>zoom</code> parameters, allowing the map
+to center more closely on the two markers of interest.</p>
+
+<p><img border="0" src="http://maps.google.com/staticmap?size=512x512&amp;maptype=mobile&amp;markers=40.702147,-74.015794,blues%7C40.711614,-74.012318,greeng&amp;sensor=false&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xQJpBVbSrqNn69S6DOTv203MQ5ufA" alt="Implicit Positioning" /></p>
+
+<h2><a name="Paths" id="Paths"></a>Static Map Paths</h2>
+
+<p>The <code>path</code> parameter defines a set of one or more paths to overlay on the map image.
+This parameter takes a list of paths defined by a set of value assignments:</p>
+<p>
+<code>path=<i>pathColorType</i>:<i>pathColorValue</i>,weight:<i>pathWeight</i>|<i>pathPoint1</i>|<i>pathPoint2</i>|<i>pathPoint3</i>|...</code> etc.</p>
+<p>Note that path points are separated from each other using the pipe character (<code>|</code>). (The pipe
+character is also %7C in ASCII if you are encoding your URLs.)</p>
+
+<h3><a name="PathAttrs" id="PathAttrs"></a>Path Attributes</h3>
+
+<p>Each <code>path</code> parameter may begin with an optional string specifying the attributes of the path, consisting of a 
+<i>pathColorType</i> and a value for that type separated by a colon. If default path attributes are desired instead, the path attribute 
+prefix may be omitted from the path descriptor; the first argument to the path descriptor in this case then describes the first 
+point in the path declaration. (See <a href="#PathPoints">Path Points</a> below.)</p>
+
+<p>There are two possible <i>pathColorType</i>s:</p>
+
+<ul>
+<li><code>rgb</code> specifies a standard RGB color scheme using a 24-bit hex color value of the form <code>0xffffff</code> as 
+the <i>pathColorValue</i>. The default opacity for <code>rgb</code> paths is 50%.</li>
+<li><code>rgba</code> specifies a 32-bit hex color value of the form <code>0xffffffff</code> as the <i>pathColorValue</i>, 
+where the fourth byte (the last two characters) specifies an <i>alpha channel</i> transparency. Using <code>rgba</code> allows you to vary the
+transparency of any paths you create.</li>
+</ul>
+
+<p>In addition to the color, <code>weight</code> specifies the thickness of the given path, in pixels.</p>
+
+<p>Some example path definitions appear below:</p>
+
+<ul>
+<li>Thin blue line, 50% opacity: <code>path=rgb:0x0000ff,weight:1</code></li>
+<li>Solid red line: <code>path=rgba:0xff0000ff,weight:5</code></li>
+<li>Solid thick black line: <code>path=rgba:0xffffffff,weight:10</code></li>
+</ul>
+
+<p>The specification of path attributes in the path descriptor is optional. If default attributes are desired, you
+may skip defining the path attributes; in that case, the path descriptor's first "argument" will consist instead
+of the first declared point.</p>
+
+<h3><a name="PathPoints" id="PathPoints"></a>Path Points</h3>
+
+<p>In order to draw a path, the <code>path</code> parameter must also be passed two or more points. The 
+Google Static Maps API will then connect the path along those points, in the specified order. Each 
+<i>pathPoint</i> is denoted in the <i>pathDescriptor</i> separated by the <code>|</code> (pipe) 
+character. As with markers, the Google Static Maps API will attempt to determine the default center 
+and zoom of the map based on implicit positioning of the supplied path. Currently, there is a limit of 
+100 points for any given path.</p>
+
+<p>The following example defines a blue path with default 50% opacity from Union Square NY to Times Square, NY. Note that we did not need
+to supply a <code>center</code> or <code>zoom</code> parameter.</p>
+
+<p>
+<img src="http://maps.google.com/staticmap?path=rgb:0x0000ff,weight:5|40.737102,-73.990318|40.749825,-73.987963|40.752946,-73.987384|40.755823,-73.986397&amp;size=512x512&amp;sensor=false&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xQJpBVbSrqNn69S6DOTv203MQ5ufA" alt="Path from Union Sq to Times Sq"/>
+</p>
+
+<p>The specifics of the <code>path</code> parameter appear below:</p>
+<pre class="prettyprint">
+path=rgb:0x0000ff,weight:5|40.737102,-73.990318|40.749825,-73.987963|40.752946,-73.987384|40.755823,-73.986397
+</pre>
+
+<p>The following example defines the same path instead defining a solid red line with 100% opacity:</p>
+<p>
+<img src="http://maps.google.com/staticmap?path=rgba:0xff0000ff,weight:5|40.737102,-73.990318|40.749825,-73.987963|40.752946,-73.987384|40.755823,-73.986397&amp;size=512x512&amp;sensor=false&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xQJpBVbSrqNn69S6DOTv203MQ5ufA" alt="Path from Union Sq to Times Sq"/>
+</p>
+<p>The specifics of this <code>path</code> parameter appear below:</p>
+
+<pre class="prettyprint">
+path=rgba:0xff0000ff,weight:5|40.737102,-73.990318|40.749825,-73.987963|40.752946,-73.987384|40.755823,-73.986397
+</pre>
+
+<h1><a name="Moreinfo" id="Moreinfo"></a>More Information</h1>
+
+<p>If the concept of "coding" gives you a headache, a 
+<a href="http://gmaps-samples.googlecode.com/svn/trunk/simplewizard/makestaticmap.html">Google Static Map Wizard</a>
+provides a simple UI-driven way to generate static maps via a simple UI interface.</p>
+
+<p>For more information on using the Static Maps API, or other Google Maps API products, be sure to check out the 
+<a href="http://groups-beta.google.com/group/Google-Maps-API">Maps API Google Group</a>.</p>
+
+        
+
+      </div><!-- end g-c-gc-home -->
+    </div><!-- end g-unit -->
+  </div><!-- end g-section -->
+
+</div><!-- end gc-home -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

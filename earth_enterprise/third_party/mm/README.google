@@ -1,0 +1,18 @@
+URL: http://www.ossp.org/pkg/lib/mm/
+Version: 1.4.2
+License: Unrestricted, must include acknowledgment
+License File: LICENSE
+
+Description:
+OSSP mm is a 2-layer abstraction library which simplifies the usage of
+shared memory between forked (and this way strongly related) processes
+under Unix platforms. On the first (lower) layer it hides all platform
+dependent implementation details (allocation and locking) when dealing
+with shared memory segments and on the second (higher) layer it
+provides a high-level malloc(3)-style API for a convenient and well
+known way to work with data-structures inside those shared memory
+segments.
+
+
+Local Modifications:
+None

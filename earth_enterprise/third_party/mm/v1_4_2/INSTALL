@@ -1,0 +1,22 @@
+   _        ___  ____ ____  ____
+  |_|_ _   / _ \/ ___/ ___||  _ \   _ __ ___  _ __ ___
+  _|_||_| | | | \___ \___ \| |_) | | '_ ` _ \| '_ ` _ \
+ |_||_|_| | |_| |___) |__) |  __/  | | | | | | | | | | |
+  |_|_|_|  \___/|____/____/|_|     |_| |_| |_|_| |_| |_|
+
+  OSSP mm - Shared Memory Allocation
+
+  INSTALL
+  =======
+
+  To install the MM library into /path/to/mm/{bin,lib,include,man}/ perform
+  the following steps in your shell:
+
+    $ ./configure --prefix=/path/to/mm
+    $ make
+    $ make test
+    $ make install
+
+  This installs at least a static variant of the MM library and when your
+  platforms support it, also a shared library variant of the MM library.
+

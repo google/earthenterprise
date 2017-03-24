@@ -1,0 +1,75 @@
+%attr(4555,root,root) %{gebindir}/geresetpgdb
+%attr(4555,root,root) %{gebindir}/gerestartapache
+%attr(555,root,root) %{gebindir}/geconfigurepublishroot
+%attr(555,root,root) %{gebindir}/geselectpublishroot
+%attr(555,root,root) %{gebindir}/geserveradmin
+%attr(444,root,root) %{gebindir}/gestream_tables.sql
+%attr(444,root,root) %{gebindir}/gestream_tables_upgrade_to_3_1.sql
+%attr(444,root,root) %{gebindir}/gesearch_tables.sql
+
+%defattr(444,root,root)
+# %doc %{gesharedir}/doc/RELEASE-server.html
+
+
+%defattr(755,root,root)
+/etc/profile.d/ge-server.csh
+/etc/profile.d/ge-server.sh
+
+%attr(744,root,root) /etc/init.d/geserver
+
+%defattr(755,root,root) 
+%dir /opt/google/gehttpd/auth
+
+%defattr(-,root,root)
+/opt/google/gehttpd/modules/mod_gedb.so
+/opt/google/gehttpd/conf.d/gemodules.conf
+/opt/google/gehttpd/conf.d/jkmount
+/opt/google/gehttpd/conf.d/mod_jk-ge.conf
+/opt/google/gehttpd/conf.d/security.conf
+/opt/google/gehttpd/conf.d/dav_setup.conf
+/opt/google/gehttpd/conf.d/examples/default_ge_digest.location
+/opt/google/gehttpd/conf.d/examples/publisher_ldap_auth.conf
+/opt/google/gehttpd/conf.d/examples/publisher_digest_auth.conf
+/opt/google/gehttpd/conf.d/examples/location_based_ge_vs_example.location
+/opt/google/gehttpd/conf.d/examples/location_based_map_vs_example.location
+/opt/google/gehttpd/conf.d/examples/name_based_ge_vs_example.vhost
+/opt/google/gehttpd/conf.d/examples/name_based_map_vs_example.vhost
+/opt/google/gehttpd/conf.d/examples/port_based_ge_vs_example.vhost
+/opt/google/gehttpd/conf.d/examples/port_based_map_vs_example.vhost
+/opt/google/gehttpd/conf.d/worker_mpm.conf
+/opt/google/gehttpd/conf.d/virtual_servers/default_ge.location
+/opt/google/gehttpd/conf.d/virtual_servers/default_map.location
+/opt/google/gehttpd/conf.d/virtual_servers/default_search.location
+/opt/google/gehttpd/conf.d/virtual_servers/common/rewrite_rules.conf
+
+%attr(555,root,root) /opt/google/gehttpd/htdocs/maps
+
+%attr(555,root,root) /opt/google/gehttpd/htdocs/icons
+
+%defattr(444,getomcatuser,gegroup)
+/opt/google/getomcat/webapps/StreamPublisher.war
+/opt/google/getomcat/webapps/SearchPublisher.war
+/opt/google/getomcat/webapps/SearchServlet.war
+/opt/google/getomcat/lib/GEJniWrapper.jar
+/opt/google/search/plugins/CoordinatePlugin.jar
+/opt/google/search/plugins/ExamplePlugin.jar
+/opt/google/search/plugins/GeocodingFederatedPlugin.jar
+/opt/google/search/plugins/GEPlacesPlugin.jar
+/opt/google/search/plugins/PoiPlugin.jar
+/opt/google/search/plugins/GSAPlugin.jar
+/opt/google/search/plugins/CoordinatePlugin.properties
+/opt/google/search/plugins/ExamplePlugin.properties
+/opt/google/search/plugins/GEPlacesPlugin.properties
+/opt/google/search/plugins/GSAPlugin.properties
+/opt/google/search/plugins/GeocodingFederatedPlugin.properties
+/opt/google/search/plugins/POIPlugin.properties
+/opt/google/search/plugins/postgres.properties
+/opt/google/search/tabs/GSA_Plugin.gestd
+/opt/google/search/tabs/Coordinates.gestd
+/opt/google/search/tabs/Example_Plugin.gestd
+/opt/google/search/tabs/GeocodingFederated.gestd
+/opt/google/search/tabs/Places.gestd
+/opt/google/search/api/SearchAPI.jar
+
+%defattr(555,root,root)
+%{gelibdir}/libjniwrapper.so

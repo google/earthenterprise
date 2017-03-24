@@ -1,0 +1,81 @@
+#-*- Python -*-
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+""" Top level Sconscript file.
+"""
+
+
+import glob
+import os
+import time
+Import('env')
+
+# list of dirs to try to build (if present)
+dirs = ['third_party', 'google', 'keyhole', 'common', 'fusion', 'server',
+        'maps', 'share/taskrules', 'support', 'earthplugin', 'javascript']
+
+# get the build date
+build_date = time.localtime(time.time())
+build_date_str = time.strftime('%Y-%m-%d', build_date)
+date_file = File('builddate.cpp').abspath
+
+env.Command(date_file, [env.Value(build_date_str)],
+            [env.EmitBuildDate(date_file, build_date)])
+build_date_obj = env.StaticObject(date_file)
+env['BUILDDATE'] = build_date_obj
+
+# For cross compiler set the binaries
+link_gcc = []
+
+if env['is_hardy'] and not env['native_cc']:
+  env.AlwaysBuild(
+      env.exportdirs['bin'], [], ['mkdir -p %s' % '$TARGET'])
+  crosstool_version = env['crosstool_version']
+  if crosstool_version == 'v13':
+    bin_files_template = '%s/bin/%s-*'
+  elif crosstool_version == 'v14':
+    bin_files_template = '%s/%s/bin/*'
+  else:
+    print 'ERROR: Unsupported version of crosstool is specified. Supported versions: v13, v14.'
+    Exit(1)
+
+  for file_name in glob.glob(bin_files_template % (env['cross_cc_base'],
+      env['cross_cc_target'])):
+    target_bin_base = os.path.basename(file_name)
+    if crosstool_version == 'v13':
+      target_bin_base = target_bin_base.replace(
+          '%s-' % env['cross_cc_target'], '')
+
+    target_bin = '%s%s' % (env.exportdirs['bin'], target_bin_base)
+    if target_bin_base == 'gfortran':
+      continue
+    link_gcc += env.Command(
+        target_bin, [file_name],
+        ['rm -f %s' % target_bin,
+         env.WriteToFile(target_bin,
+                         '#!/bin/bash\nexec %s "$$@"' % file_name),
+         'chmod 755 %s' % target_bin])
+
+Export('link_gcc')
+
+# references the child SConscript files
+for dir_name in dirs:
+  SConscript('%s/SConscript' % dir_name)
+
+Default(env.exportdirs['root'])
+
+#env.Requires(dirs[1:], Alias('third_party'))

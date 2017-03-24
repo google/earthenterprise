@@ -1,0 +1,54 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// NOTE: Currently, py api versioning is not suppored in the open source
+// protocol buffer library, so inserting one in this proto will break the
+// Google Earth client builds.
+
+syntax = "proto2";
+
+package keyhole;
+
+option java_package = "com.google.keyhole.common.proto";
+
+// Protocol message to describe an imagery packet
+message EarthImageryPacket {
+  enum Codec {
+    JPEG = 0;
+    JPEG2000 = 1;
+    DXT1 = 2;
+    DXT5 = 3;
+    PNG_RGBA = 4;
+  };
+
+  enum SeparateAlphaType {
+    NONE = 0;
+    PNG = 1;
+    JPEG_ALPHA = 2;
+    RLE_1_BIT = 3;
+  };
+
+  // An image encoded with jpeg2000 might have alpha directly in the
+  // image.  The decoder needs to handle this case.
+  optional Codec image_type = 1 [default = JPEG];
+
+  optional bytes image_data = 2;
+
+  optional SeparateAlphaType alpha_type = 3 [default = NONE];
+
+  optional bytes image_alpha = 4;
+
+  // The ids of copyrights associated with the data in this packet.
+  repeated uint32 copyright_ids = 5;
+}

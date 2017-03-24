@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/examples/maptype-base.html";
+    </script>
+    
+<title>Google Maps JavaScript API v3 Example: Base MapTypes</title>
+<link href="http://code.google.com/apis/maps/documentation/javascript/examples/standard.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>  
+<script>
+function CoordMapType() {
+}
+
+CoordMapType.prototype.tileSize = new google.maps.Size(256,256);
+CoordMapType.prototype.maxZoom = 19;
+
+CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
+  var div = ownerDocument.createElement('DIV');
+  div.innerHTML = coord;
+  div.style.width = this.tileSize.width + 'px';
+  div.style.height = this.tileSize.height + 'px';
+  div.style.fontSize = '10';
+  div.style.borderStyle = 'solid';
+  div.style.borderWidth = '1px';
+  div.style.borderColor = '#AAAAAA';
+  return div;
+};
+
+CoordMapType.prototype.name = "Tile #s";
+CoordMapType.prototype.alt = "Tile Coordinate Map Type";
+
+var map;
+var chicago = new google.maps.LatLng(41.850033,-87.6500523);
+var coordinateMapType = new CoordMapType();
+
+function initialize() {
+  var mapOptions = {
+    zoom: 10,
+    center: chicago,
+    mapTypeId: 'coordinate',
+    mapTypeControlOptions: {
+      mapTypeIds: ['coordinate', google.maps.MapTypeId.ROADMAP],
+      style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+    }
+  };
+  map = new google.maps.Map(document.getElementById("map_canvas"),
+      mapOptions);
+      
+  // Now attach the coordinate map type to the map's registry
+  map.mapTypes.set('coordinate',coordinateMapType);
+
+  // We can now set the map to use the 'coordinate' map type
+  //map.setMapTypeId('coordinate');
+}
+</script> 
+</head> 
+<body onload="initialize()"> 
+  <div id="map_canvas" style="width: 640px; height: 480px;">map div</div> 
+</body> 
+</html> 

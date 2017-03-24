@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="Adding Ground Overlays to a Map" height="300">
+  <Require feature="sharedmap"/>
+</ModulePrefs>
+<Content type="html"><![CDATA[
+
+<small>
+This example adds a ground overlay to a specific location on a map.
+</small>
+
+<script>
+var map = new GMap2();
+map.setCenter(new GLatLng(40.740, -74.18), 12);
+// ground overlay
+ 
+var boundaries = new GLatLngBounds(new GLatLng(40.716216,-74.213393), new GLatLng(40.765641,-74.139235));
+var oldmap = new GGroundOverlay("http://www.lib.utexas.edu/maps/historical/newark_nj_1922.jpg", boundaries);
+map.addOverlay(oldmap);
+</script>
+
+]]></Content>
+</Module>

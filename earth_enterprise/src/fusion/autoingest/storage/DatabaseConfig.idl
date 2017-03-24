@@ -1,0 +1,81 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+
+#include <string>
+#include <vector>
+#include <khTypes.h>
+#include <khMetaData.h>
+#include <searchtabs/.idl/SearchTabs.h>
+#include <autoingest/.idl/storage/SearchTabReference.h>
+
+#cppquote
+#include <searchtabs/.idl/SearchTabs_impl.h>
+#include <autoingest/.idl/storage/SearchTabReference_impl.h>
+#/cppquote
+
+
+class DatabaseConfig {
+  std::string imageryProject;
+  std::string vectorProject;
+  std::string terrainProject;
+  deprecated std::string magratheanCoverage = std::string();
+
+  IsUpToDateIgnore uint indexVersion = uint(1);
+  deprecated bool searchTabsEnabled = false;
+
+  // TODO: deprecate search_tabs_, search_tab_refs_.
+  // will be empty in asset, but populated in version
+  std::vector<SearchTabDefinition> search_tabs_ = std::vector<SearchTabDefinition>();
+
+  // will be populated in asset, but empty in version
+  std::vector<SearchTabReference> search_tab_refs_ = std::vector<SearchTabReference>();
+
+  // To force rebuilds, increment this version.
+
+#version 2
+  // 1 - gedbrootgen changed to emit protobuf dbroot instead of ETA dbroot
+  // (targeted for 5.0).
+  // 2 - gepackgen changed to emit protobuf imagery instead of ETA imagery
+  // for Earth's DB and imagery with alpha in 4-channel PNG for Map's DB
+  // (targeted for 5.0).
+  // 3 - creating subsampled terrain is switched off (targeted to 4.3).
+  // 3 -> 2 - Note: version number reverted back to switch off
+  // force rebuild for terrain project (targeted to 5.0.0).
+  // 2 -> 1 - Note: version number reverted back to switch off
+  // force rebuild for imagery project (targeted to 5.0.0).
+  // 2 - gedbgen changed to set proto_imagery to true in time-machine protobuf
+  // dbroot (targeted for 5.1.1).
+
+#pragma GenerateIsUpToDate
+
+#hquote
+
+ public:
+  // Resets all Ids as it is in a config for just created asset.
+  void ResetIds(void) {
+    indexVersion = 1;
+  }
+
+#/hquote
+};
+
+
+class DatabaseEditRequest {
+  std::string assetname;
+  DatabaseConfig config;
+  khMetaData meta;
+
+#pragma StrLoadAndSave
+};

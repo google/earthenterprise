@@ -1,0 +1,132 @@
+%defattr(555,root,root)
+%{gelibdir}/libgeautoingest.so
+%{gelibdir}/libgegdal.so
+%{gelibdir}/libgegst.so
+%{gelibdir}/libgehistogram.so
+%{gelibdir}/libgeindex_rw.so
+%{gelibdir}/libgejs.so
+%{gelibdir}/libgemiscconfig.so
+%{gelibdir}/libgenet.so
+%{gelibdir}/libgeraster.so
+%{gelibdir}/libgerastergdal.so
+%{gelibdir}/libgeutil.so
+%{gelibdir}/libgexml.so
+%{gelibdir}/libgesearchtabs.so
+%{gelibdir}/libdbmanifest.so
+%{gelibdir}/libgeiconutil.so
+%{gelibdir}/libgeqtpacket.so
+%{gelibdir}/libgepublish.so
+%{gelibdir}/libgeconfigutil.so
+%{gelibdir}/libgefconfigutil.so
+
+
+
+%defattr(555,root,root)
+%{gebindir}/fusion
+%{gebindir}/gevectorimport
+%{gebindir}/gevectorquery
+%{gebindir}/gevectorfuse
+%{gebindir}/gevectorpoi
+%{gebindir}/geindexcheck
+%{gebindir}/geextracticon
+%{gebindir}/gedbrootgen
+%{gebindir}/geexportlayertemplate
+%{gebindir}/geapplylayertemplate
+%{gebindir}/geserveradmin
+%{gebindir}/gepublishdatabase
+%{gebindir}/geindexgen
+%{gebindir}/gevectorpackupgrade
+%{gebindir}/geraster2kml
+%{gebindir}/geunifiedindexgen
+%{gebindir}/geqtgen
+%{gebindir}/gemaptilegen
+%{gebindir}/gedbgen
+%{gebindir}/mapdbgen
+%{gebindir}/gelayerjsgen
+
+
+
+%attr(755,root,root) %dir %{gesharedir}/dbroot
+%defattr(444,root,root)
+%{gesharedir}/dbroot/template
+%{gesharedir}/dbroot/header
+
+%defattr(755,root,root)
+%dir %{gesharedir}/
+%dir %{gesharedir}/site-icons/
+
+%defattr(444,root,root)
+%{gesharedir}/site-icons/*
+%{gesharedir}/fusion.desktop
+%{gesharedir}/fusion_splash.png
+#%{gesharedir}/fusion_*.qm
+
+# auto ingest stuff
+%attr(744,root,root) /etc/init.d/gefusion
+%defattr(555,root,root)
+%{gebindir}/geconfigureassetroot
+%{gebindir}/geupgradeassetroot
+%{gebindir}/geselectassetroot
+%{gebindir}/gefdaemoncheck
+%{gebindir}/gesystemmanager
+%{gebindir}/geresourceprovider
+%{gebindir}/gestartdaemon
+%{gebindir}/gestopdaemon
+%{gebindir}/genewvectorresource
+%{gebindir}/gemodifyvectorresource
+%{gebindir}/genewvectorproject
+%{gebindir}/gemodifyvectorproject
+%{gebindir}/geaddtovectorproject
+%{gebindir}/gedropfromvectorproject
+%{gebindir}/genewdatabase
+%{gebindir}/gemodifydatabase
+%{gebindir}/gecancel
+%{gebindir}/gesetbad
+%{gebindir}/geclearbad
+%{gebindir}/geresume
+%{gebindir}/gebuild
+%{gebindir}/gequery
+%{gebindir}/geclean
+%{gebindir}/getop
+%{gebindir}/genewmapproject
+%{gebindir}/gemodifymapproject
+%{gebindir}/geaddtomapproject
+%{gebindir}/gedropfrommapproject
+%{gebindir}/genewmapdatabase
+%{gebindir}/gemodifymapdatabase
+%{gebindir}/gedisconnectedsend
+
+
+# Path settings
+%attr(755,root,root) /etc/profile.d/ge-fusion.csh
+%attr(755,root,root) /etc/profile.d/ge-fusion.sh
+
+# Documentation
+# %doc %attr(-,root,root) %{gesharedir}/doc/RELEASE-fusion.html
+
+
+# ###########################
+# for backwards compatibility
+# ###########################
+%defattr(555,root,root)
+%{gelibdir}/libkhffio.so
+%{gelibdir}/libkhrasterffio.so
+
+%defattr(-,root,root)
+%{gebindir}/khtop
+%{gebindir}/khaddtovectorproject
+%{gebindir}/khdropfromvectorproject
+%{gebindir}/khmodifyvectorproject
+%{gebindir}/khnewvectorproject
+%{gebindir}/khnewvectorasset
+%{gebindir}/khmodifyvectorasset
+%{gebindir}/khnewdatabase
+%{gebindir}/khmodifydatabase
+%{gebindir}/khbuild
+%{gebindir}/khcancel
+%{gebindir}/khclean
+%{gebindir}/khclearbad
+%{gebindir}/khresume
+%{gebindir}/khsetbad
+%{gebindir}/khinfo
+%{gebindir}/khquery

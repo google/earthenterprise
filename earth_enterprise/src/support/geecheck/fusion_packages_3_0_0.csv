@@ -1,0 +1,34 @@
+# Master CSV list of Google Earth Fusion required packages
+# format: package_name, version
+# Empty lines and comments "#" are ignored
+fusion, GoogleEarthCommon, 3.0.0-0
+fusion, GoogleEarthFusionPro, 3.0.0-0
+fusion, gcc-ge-runtime, 4.1.1-4
+fusion, expat-ge, 2.0.0-1
+fusion, qt-ge, 3.3.6-7
+fusion, xerces-c-ge, 2.7.0-3
+fusion, libtiff-ge, 3.8.2-2
+fusion, proj-ge, 4.5.0-0
+fusion, libgeotiff-ge, 1.2.3-4
+fusion, ogdi-ge, 3.1.5-6
+fusion, gdal-ge, 1.4.1-2
+fusion, libcurl-ge, 7.16.3-3
+fusion, libjs-ge, 1.5.0.1-10
+fusion, libsgl-ge, 0.8-5
+fusion, geos-ge, 2.2.3-0
+# server packages
+fusion-server, gcc-ge-runtime, 4.1.1-4
+fusion-server, expat-ge, 2.0.0-1
+fusion-server, proj-ge, 4.5.0-0
+fusion-server, openldap-ge, 2.3.24-5
+fusion-server, apache-ge, 2.2.4-9
+fusion-server, tomcat-ge, 5.5.23-5
+fusion-server, geos-ge, 2.2.3-0
+fusion-server, postgresql-ge, 8.1.8-3
+fusion-server, postgis-ge, 1.1.7-1
+fusion-server, GoogleEarthServer, 3.0.0-0
+# tutorial
+fusion-tutorial, GoogleEarthFusionTutorial, 3.0.0-0
+fusion-tutorial, GoogleEarthPlacesDB, 3.0.0-0
+fusion-tutorial, GoogleEarthSearchExample, 3.0.0-0
+

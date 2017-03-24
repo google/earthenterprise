@@ -1,0 +1,13 @@
+URL:  http://initd.org/psycopg/
+Version: 2.4.6
+License:
+    GNU Lesser General Public License, version 3 or later plus an exception 
+to allow OpenSSL (libpq) linking.
+License File: LICENSE
+
+Description:
+    psycopg2 is a PostgreSQL database adapter for the Python programming
+language.
+
+Local Modifications:
+None

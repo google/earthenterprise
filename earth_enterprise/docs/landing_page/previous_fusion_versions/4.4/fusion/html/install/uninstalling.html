@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Uninstalling</title>
+</head>
+
+<body>
+<a name="top"></a>
+
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" />
+  </div>
+  <h1 id="doc_title">Installation Guide</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Installation Guide</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="system_requirements.html">System Requirements</a></li>
+    <li><a href="before_you_install.html">Before you Install</a></li>
+    <li><a href="gui_install.html">GUI Installer</a></li>
+    <li><a href="cl_install.html">Command Line Installer</a></li>
+    <li><a href="system_manager.html">Verifying and Troubleshooting</a></li>
+    <li><a href="uninstalling.html" id="selected">Uninstalling</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+<h1>Uninstalling the Google Earth Enterprise Software</h1>
+
+<p>This section provides instructions for uninstalling all or some of the
+  software provided in the Google Earth Enterprise 4.4 software package. For
+  this procedure, you use the same installer you used to install the software.
+</p>
+
+<p class="note"><strong>Note:</strong> As with installation, you can use either
+  the command-line uninstaller or the graphical user interface (GUI) uninstaller
+  to remove the Google Earth Enterprise Fusion and Server products.</p>
+  
+<p>To uninstall all or  part of the Google Earth Enterprise software:</p>
+<ol>
+  <li>Open a terminal window on your Linux workstation. </li>
+  <li>Log in as <code>root</code>.</li>
+  <li>Stop the Google Earth Enterprise Fusion system manager and Google Earth
+    Enterprise Server, if you have a previous version installed and they
+    are running:
+
+<pre><code>/etc/init.d/gefusion stop
+/etc/init.d/geserver stop</code></pre>
+
+  </li>
+  <li>Navigate to the <code>/opt/install/GoogleEarthFusion_Uninstaller</code> or
+    <code>/opt/install/GoogleEarthServer_Uninstaller/</code> directory.
+
+    <p>To uninstall using the Fusion DVD, insert the DVD and mount the drive.
+      The uninstallers listed below are available at the top level of the
+      DVD media.</p>
+  </li>
+  <li>To uninstall Fusion Pro:
+
+<pre>./Uninstall_Google_Earth_Enterprise_Fusion_GUI.sh // GUI uninstaller
+./Uninstall_Google_Earth_Enterprise_Fusion.sh // Command line uninstaller</pre>
+
+  </li>
+  <li>To uninstall Server:
+
+<pre>./Uninstall_Google_Earth_Enterprise_Server_GUI.sh // GUI uninstaller
+./Uninstall_Google_Earth_Enterprise_Server.sh // Command line uninstaller</pre>
+
+  </li>
+    <p>The uninstall script starts. Follow the on-screen instructions to remove
+      the Google Earth Enterprise Fusion or Server products.</p>
+  </li>
+</ol>
+
+</div>
+<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+
+<!-- END WRAPPER -->
+
+</body>
+</html>

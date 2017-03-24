@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="Using Custom Marker Icons" height="300">
+  <Require feature="sharedmap"/>
+</ModulePrefs>
+<Content type="html"><![CDATA[
+
+<small>
+This example creates a new type of icon, u
+sing the Google Ride Finder "mini" markers as an 
+example. We have to specify the foreground image, the shadow image, 
+and the points at which we anchor the icon to the map and anchor the 
+info window to the icon.
+</small>
+
+<script>
+var map = new GMap2();
+
+// Create our "tiny" marker icon
+var tinyIcon = new GIcon();
+tinyIcon.image = "http://labs.google.com/ridefinder/images/mm_20_red.png";
+tinyIcon.shadow = "http://labs.google.com/ridefinder/images/mm_20_shadow.png";
+tinyIcon.iconSize = new GSize(12, 20);
+tinyIcon.shadowSize = new GSize(22, 20);
+tinyIcon.iconAnchor = new GPoint(6, 20);
+tinyIcon.infoWindowAnchor = new GPoint(5, 1);
+
+// Add 10 markers to the map at random locations
+map.getBoundsAsync(function(bounds) {
+  var southWest = bounds.getSouthWest();
+  var northEast = bounds.getNorthEast();
+  var lngSpan = northEast.lng() - southWest.lng();
+  var latSpan = northEast.lat() - southWest.lat();
+
+  for (var i = 0; i < 10; i++) {
+    var point = new GLatLng(southWest.lat() + latSpan * Math.random(),
+                            southWest.lng() + lngSpan * Math.random());
+    map.addOverlay(new GMarker(point, {icon:tinyIcon}));
+  }
+});
+</script>
+
+]]></Content>
+</Module>

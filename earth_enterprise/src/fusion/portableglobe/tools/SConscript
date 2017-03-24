@@ -1,0 +1,9 @@
+# Copyright 2009 Google Inc. All Rights Reserved.
+#-*- Python -*-
+Import('env')
+import os
+
+tools_env = env.Clone()
+
+# Install explode.py.
+tools_env.install('server_bin', ['explode.py'])

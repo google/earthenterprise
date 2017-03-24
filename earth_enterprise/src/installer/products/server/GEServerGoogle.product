@@ -1,0 +1,41 @@
+# Copyright 2008 Google Inc. All Rights Reserved.
+#-*-perl-*-
+
+package GEServerGoogle;
+
+use strict;
+use server::GEServerBase;
+
+our( @ISA );
+@ISA = ("GEServerBase");
+
+our $PrettyName = "Google Earth Enterprise Server (Google)";
+
+sub new {
+    my ($class) = @_;
+    return $class->SUPER::new($PrettyName);
+}  
+
+sub RPMList {
+    my $self = shift;
+    return ($self->SUPER::RPMList(),
+            'openssl-ge',
+            'jdk-ge',
+            );
+}
+
+sub PreInstallHandler {
+    my $self = shift;
+    $self->SUPER::PreInstallHandler();
+}
+
+sub PostInstallHandler {
+    my $self = shift;
+    $self->SUPER::PostInstallHandler();
+    $self->SetJavaHome('/opt/google/java');
+}
+
+
+push @Product::AllProductList, new GEServerGoogle();
+
+1;

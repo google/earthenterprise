@@ -1,0 +1,309 @@
+<!--
+  Copyright 2017 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>GEE Supplemental UI</title>
+
+<script type="text/javascript">
+
+var GEE_HOST = window.location.host;
+var GEE_BASE_URL = window.location.protocol + '//' + GEE_HOST;
+
+// Get targetPath where url is http://server.com/targetPath/etc...
+var servingTargetPath = window.location.pathname.split('/')[1];
+
+var SEARCH_DEFS_LIST = '/' + servingTargetPath + '/search_json';
+var SEARCH_DEFS_REQUEST = GEE_BASE_URL + SEARCH_DEFS_LIST;
+
+// Toggles visibilty of search form.
+function showHideDiv(id) {
+  var spanElement = document.getElementById('span_' + id);
+  var arrowElement = document.getElementById('arrow_' + id);
+  if (spanElement.style.display == 'block' || spanElement.style.display == '') {
+    spanElement.style.display = 'none';
+    arrowElement.className = 'right_arrow';
+  } else {
+    spanElement.style.display = 'block';
+    arrowElement.className = 'down_arrow';
+  }
+}
+
+// Create an element for earch search tab.
+function createSearchList() {
+  // Get and return Json string.
+  var searchDefsListing = JSON.parse(makeGETRequest(SEARCH_DEFS_REQUEST));
+
+  // Count supplementary search services (not marked hidden).
+  var visibleSearchTabsCount = 0;
+  for (var j = 0; j < searchDefsListing.length; j++) {
+    var item = searchDefsListing[j];
+    if (!item.supplemental_ui_hidden) {
+      visibleSearchTabsCount++;
+    }
+  }
+
+  if (visibleSearchTabsCount == 0) {
+    return;
+  }
+
+  var targetDiv = document.getElementById('SearchTabsDiv');
+  targetDiv.innerHTML = '';
+
+  // Get and define variables for the tab.
+  for (var i = 0; i < searchDefsListing.length; i++) {
+    var item = searchDefsListing[i];
+    // Check if it is hidden search tab, then skip it.
+    if (item.supplemental_ui_hidden) {
+      continue;
+    }
+
+    var label = item.label;
+    var url = item.service_url;
+    var params = '';
+    if (item.additional_query_param && item.additional_query_param != null) {
+      params += '&' + item.additional_query_param;
+    }
+    if (item.additional_config_param && item.additional_config_param != null) {
+      params += '&' + item.additional_config_param;
+    }
+    var divId = 'SD' + i;
+    var fields = item.fields;
+    var formAction;
+    var geProtocol;
+    var isRelative = url.search('http') != 0;
+    if (isRelative) {
+      var addPublishPoint = url.search('/') == 0 ?
+        '' : window.location.pathname;
+      addPublishPoint = addPublishPoint == '' ?
+          '' : cleanPublishPointForClient(addPublishPoint.split('/'));
+      formAction = 'kmlsearch://' + GEE_HOST + addPublishPoint + url;
+      if (window.location.protocol.search('https') == 0) {
+        geProtocol = 'https';
+      }
+    } else {
+      // Catch for https protocol.
+      if (url.search('https') == 0) {
+        formAction = url.replace('https', 'kmlsearch');
+        geProtocol = 'https';
+      } else {
+        formAction = url.replace('http', 'kmlsearch');
+      }
+    }
+
+    // If there are multiple supplementary search services,
+    // give each one a header. Otherwise, simply expose the search form.
+    if (visibleSearchTabsCount > 1) {
+      // Create a header element and a span where we'll put the fields.
+      targetDiv.innerHTML +=
+          '<h1  onclick="showHideDiv(\'' + divId + '\')"' +
+          ' id="div_' + divId +'">' +
+          '<span id="arrow_' + divId + '" class="right_arrow">' +
+          '<label>' + label + '</label></span>' + '</h1>' +
+          '<span id="span_' + divId + '" style="display:none;"></span>';
+    } else {
+      targetDiv.innerHTML +=
+          '<span id="span_' + divId + '" style="display:block;"></span>';
+    }
+
+    // Fill the span with the foundation of the form.
+    var targetSpan = document.getElementById('span_' + divId);
+    targetSpan.innerHTML =
+        '<form id="SearchForm' + i + '" action="' + formAction + '" accept-charset="UTF-8">' +
+        '<div id="fields_' + divId + '">' +
+        '</div>' +
+        '<input type="submit" value="Search">' +
+        '</form>';
+
+    // Iterate over the fields and create input elements and labels
+    // for each one.
+    var numFields = fields.length;
+    var fieldsDiv = document.getElementById('fields_' + divId);
+    for (var j = 0; j < numFields; j++) {
+      var field = fields[j];
+      var fieldLabel = field.label == null || field.label == undefined ?
+          '' : field.label;
+      var suggestion = field.suggestion;
+      var key = field.key;
+      fieldsDiv.innerHTML +=
+          fieldLabel + '<input type="text" name="' + key + '">' +
+          '<label class="fieldLabel">' + suggestion + '</label>';
+    }
+
+    // Add additional parameters as form hidden parameters.
+    if (params != '') {
+      // Note: Next check is to support set of additional parameters with
+      // incorrect encoding '&amp;' (GEE 5.0).
+      params = params.replace('&amp;', '&');
+      var additionalParamList = params.split('&');
+      for (var j = 0; j < additionalParamList.length; j++) {
+        var keyValue = additionalParamList[j].split('=');
+        fieldsDiv.innerHTML +=
+           '<input type="hidden" name="' + keyValue[0] + '" ' +
+           'value="' + keyValue[1] + '">';
+      }
+    }
+
+    if (geProtocol) {
+      // Add parameter ge-protocol as form's hidden parameter.
+      fieldsDiv.innerHTML +=
+         '<input type="hidden" name="ge-protocol" value="' +
+         geProtocol + '">';
+    }
+  }
+}
+
+// Removes unwanted string from the end of publishPoint array.
+function cleanPublishPointForClient(publishPoint) {
+  // Create a limit to count to; disregard last item.
+  var limit = publishPoint.length - 1;
+  var newPublishPoint = '';
+  for (var i = 0; i < limit; i++) {
+    newPublishPoint += publishPoint[i] + '/';
+  }
+  return newPublishPoint;
+}
+
+// Returns string to be parsed.
+function makeGETRequest(url) {
+  var retrieveDatabases = new XMLHttpRequest();
+  retrieveDatabases.open('GET', url, false);
+  retrieveDatabases.send();
+  return retrieveDatabases.responseText;
+}
+
+</script>
+
+<style type="text/css">
+
+#SearchTabsDiv {
+  cursor: pointer;
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+body {
+  background-color: #EFEBE7;
+  font-family: "Arial", sans-serif;
+  font-size: 12px;
+}
+
+h1 {
+  display: block;
+  padding: 5px 8px;
+  border-bottom: 1px solid #999;
+  border-top: 1px solid #999;
+  border-right: 1px solid #999;
+  color: #4E64A0;
+  font-weight: bold;
+  font-size: 12px;
+  margin-left: 0;
+  background-image: linear-gradient(
+      bottom,
+      rgb(227,227,227) 4%,
+      rgb(238,238,238) 51%,
+      rgb(254,254,254) 86%);
+  background-image: -o-linear-gradient(
+      bottom,
+      rgb(227,227,227) 4%,
+      rgb(238,238,238) 51%,
+      rgb(254,254,254) 86%);
+  background-image: -moz-linear-gradient(
+      bottom,
+      rgb(227,227,227) 4%,
+      rgb(238,238,238) 51%,
+      rgb(254,254,254) 86%);
+  background-image: -webkit-linear-gradient(
+      bottom,
+      rgb(227,227,227) 4%,
+      rgb(238,238,238) 51%,
+      rgb(254,254,254) 86%);
+  background-image: -ms-linear-gradient(
+      bottom,
+      rgb(227,227,227) 4%,
+      rgb(238,238,238) 51%,
+      rgb(254,254,254) 86%);
+  background-image: -webkit-gradient(
+  linear,
+  left bottom,
+  left top,
+  color-stop(0.04, rgb(227,227,227)),
+  color-stop(0.51, rgb(238,238,238)),
+  color-stop(0.86, rgb(254,254,254))
+  );
+  text-shadow: 0px 1px 1px #fff;
+}
+
+.fieldLabel {
+  width: 100px;
+  color: #777;
+  display: block;
+  margin-left: 12px;
+  font-style: italic;
+}
+
+input {
+  display: inline-block;
+  margin-left: 8px;
+}
+
+h1 span {
+  display: inline-block;
+}
+
+h1 span label {
+  margin-left: 16px;
+}
+
+h1 img {
+  display: inline-block;
+  position: absolute;
+  margin-top: 2px;
+}
+
+input[type="submit"] {
+  font-weight: bold;
+  display: block;
+  margin-top: 6px;
+}
+
+/* Base 64 image encoding to minimize http requests */
+.right_arrow {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAKCAYAAACJxx+AAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAFxJREFUeNpisEiatx6ICxhwACYgFgDifqCi/UCsgE0BDDgA8Xl005jQNGCYxoTDarhpuBTAAQsO8QNAnHhiXtIDdAUfoBIbsDkSJKiILAmz4gEQOwIlDmCzCyDAADZiH3YKHTrbAAAAAElFTkSuQmCC);
+  background-repeat: no-repeat;
+  background-position: 0 2px;
+}
+
+.down_arrow {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAICAYAAADA+m62AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAGBJREFUeNpitEiad56BgcGAAT/4wAQkEhkIg0SmE/OSLgAZjXgUbQCq2cAE5UwA4gfYrITZCFYI1PEBhxMSoXIMMBNBig9ATUaxEsZhQjOhEWrdB4KeBAZXAAijiwMEGAAHnh89PWv6WQAAAABJRU5ErkJggg==);
+  background-repeat: no-repeat;
+  background-position: 0 2px;
+}
+
+</style>
+
+</head>
+
+<body onload="createSearchList()">
+
+  <div id="SearchTabsDiv"></div>
+
+</body>
+
+</html>

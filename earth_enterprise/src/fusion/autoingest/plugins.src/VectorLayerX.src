@@ -1,0 +1,105 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#config Name      VectorLayerX
+#config Base      Composite
+#config Config    VectorLayerXConfig
+#config Subtype   Layer
+#config FixedType Vector
+
+
+// ===== VectorLayerXAsset.h =====
+#include <autoingest/.idl/storage/VectorLayerXConfig.h>
+
+
+// ===== VectorLayerXAsset.cpp =====
+
+
+// ===== VectorLayerXAssetD.h =====
+#include <climits>
+class VectorLayerXAssetImplD {
+ protected:
+  bool FixConfigBeforeUpdateCheck(void) const;
+ public:
+  static void HandleEditRequest(const VectorLayerXEditRequest &);
+};
+
+class VectorLayerXAssetVersionImplD {
+ public:
+};
+
+
+
+// ===== VectorLayerXAssetD.cpp =====
+#include <autoingest/sysman/plugins/VectorProductAssetD.h>
+#include <autoingest/sysman/.idl/FusionUniqueId.h>
+
+void
+VectorLayerXAssetImplD::HandleEditRequest(const VectorLayerXEditRequest &req)
+{
+  // Validate our input (Make sure it's a VectorProduct)
+  // make sure the vprod asset_ref is valid
+  VectorProductFactory::ValidateRefForInput(req.config.vectorResource);
+  std::vector<std::string> productrefs;
+  productrefs.push_back(req.config.vectorResource);
+
+  // Normalize our asset name
+  std::string assetname =
+    khEnsureExtension(req.assetname,
+                      AssetDefs::FileExtension(AssetDefs::Vector,
+                                               kLayer));
+
+  // Custom FindMake
+  // We need to make sure we don't clobber an existing fuid_channel
+  MutableVectorLayerXAssetD vectorlayer = VectorLayerXFactory::Find(assetname);
+
+  if (vectorlayer) {
+    // It is a regular (editing the same asset) or "SaveAs" re-writing edit
+    // request.
+
+    // If this edit request is going to set the fuid_channel_ back to zero,
+    // recover from previous version of the asset config.
+    // Make a copy we can play with.
+    VectorLayerXConfig layer_config = req.config;
+    if (layer_config.fuid_channel_ == 0) {
+      layer_config.fuid_channel_ = vectorlayer->config.fuid_channel_;
+    }
+
+    vectorlayer->Modify(productrefs, req.meta, layer_config);
+  } else {
+    // It is a "Save" or "SaveAs" edit request when creating a new asset.
+    vectorlayer = VectorLayerXFactory::Make(assetname,
+                                            productrefs,
+                                            req.meta,
+                                            req.config);
+  }
+}
+
+bool
+VectorLayerXAssetImplD::FixConfigBeforeUpdateCheck(void) const
+{
+  // Make sure we have a valid fuid_channel_ before we build
+  bool changed = false;
+  if (config.fuid_channel_ == 0) {
+    MutableVectorLayerXAssetD self(GetRef());
+    self->config.fuid_channel_ = FusionUniqueId::Get(FusionUniqueId::Channel);
+    changed = true;
+  }
+  return changed;
+}
+
+void
+VectorLayerXAssetVersionImplD::UpdateChildren(void)
+{
+}

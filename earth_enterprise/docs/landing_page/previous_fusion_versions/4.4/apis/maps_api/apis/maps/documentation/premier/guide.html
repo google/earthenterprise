@@ -1,0 +1,952 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/premier/guide.html";
+    </script>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Google Maps API Premier - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/html/apis/maps/documentation/premier/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+  </head>
+  <body>
+    <a id="top" name="top"></a>
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps API Premier</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="index.html" title="Google Maps API Premier home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="guide.html" class="selected" title="Official Google Maps API Premier documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="faq.html" title="Answers to frequently asked questions about Google Maps API Premier">FAQ</a>
+    </li>
+  
+    <li>
+      <a href="http://googleenterprise.blogspot.com/" title="Official Google Maps API Premier blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="http://groups.google.com/group/Google-Maps-API" title="Google Maps API Premier developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="https://support.google.com/enterprise/doc/gme/terms/maps_purchase_agreement.html" title="Google Maps API Premier terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <a name="gc-toc"></a>
+      <div class="g-unit g-first" id="gc-toc">
+          <ul>
+    <li><a href="http://www.google.com/support/enterprise/bin/request.py?contact_type=gme&utm_campaign=en-codepremierguide">Contact us to purchase a client license</a></li>
+  </ul>
+  <div class="line"></div>
+  <ul>
+    <li><h2>Google Maps API Premier</h2>
+      <ul>
+        <li><a href="index.html">Home Page</a></li>
+        <li><a class="tlw-expanded" href="guide.html">Developer Guide</a></li>
+      </ul>
+    </li>
+  </ul>   
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps JavaScript API V3</h2>
+         <ul>
+           <li><a href="../javascript/index.html">Home Page</a></li>
+           <li><a href="../javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+      <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+        <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../flash/index.html">Home Page</a></li>
+          <li><a href="../flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+     <div class="line"></div>
+    <ul>
+        <li><h2><a href="../webservices/index.html">Maps API Web Services</a></h2>
+        <ul>
+          <li><a href="../geocoding/index.html">Geocoding API</a></li>
+          <li><a href="../directions/index.html">Directions API</a></li>
+          <li><a href="../elevation/index.html">Elevation API</a></li>
+          <li><a href="../places/index.html">Places APl</a></li>
+        </ul>
+      </li>
+    </ul>
+       <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+
+
+      </div>
+
+      <a name="gc-pagecontent"></a>
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Google Maps API Premier Developer's Guide</h1>
+
+
+<p>The Google Maps API lets you add easy-to-use interactive maps to your public
+website, enhancing your customers' experience by helping them find exactly what
+they need from your organization. That's why it's the most popular mapping API
+in the world. When Google Maps plays an important role on your public website,
+or is incorporated in an internal application for your employees, organizations
+need an enterprise-class application that handles high volumes and provides
+necessary support.</p>
+
+<div>
+<ol class="toc">
+ <li><a href="#WhyPremier">Why Google Maps API Premier?</a></li>
+ <li><a href="#Signup">Specifying a <i>Client ID</i></a></li>
+  <li><a href="#URLs">Registering authorized URLs</a></li>
+ <li><a href="#Sensor">Tracking Usage with the <code>sensor</code> Parameter</a></li>
+ <li><a href="#URLSigning">URL Authentication</a></li>
+ <li><a href="#Accessing">Accessing and Loading the API</a>
+   <ol>
+     <li><a href="#MapsJS">Loading the JavaScript API</a></li>
+     <li><a href="#Flash">Loading the Google Maps API for Flash</a></li>
+     <li><a href="#EarthAPI">Loading the Google Earth API</a></li>
+   </ol>
+ </li>
+ <li><a href="#Services">Using Maps API Services</a>
+  <ol>
+     <li><a href="#StaticMaps">Static Maps API</a></li>
+     <li><a href="#WebServices">Google Maps API Web Services</a></li>
+   </ol>
+ </li>
+ <li><a href="#Channels">Determining Application Usage</a></li>
+ <li><a href="#Support">Support</a></li>
+</ol>
+</div>
+
+<h1 id="WhyPremier">Why Google Maps API Premier?</h1>
+
+<p>Google Maps API Premier provides Enterprise-ready application support for
+your mapping application needs. Google Maps API Premier uses the same code base
+as the standard Google Maps API, but provides the following additional features
+and benefits:</p>
+
+<ul>
+<li>A robust Service Level Agreement (SLA)</li>
+<li>Customer support</li>
+<li>Increased limits on Web Services</li>
+<li>Commercial-grade terms and conditions</li>
+<li>Intranet application support within the enterprise</li>
+<li>Access to the API via a secure <b>HTTPS</b> connection</li>
+</ul>
+
+<p>Google Maps API Premier requires registration of your website to access
+these additional features. For more information, <a
+href="http://www.google.com/support/enterprise/bin/request.py?contact_type=gme&utm_campaign=en-codepremierguide"
+>contact us</a>.</p>
+
+<p>This documentation discusses use cases and coding issues particular to the
+Google Maps API Premier product. For full documentation on all common code, use
+this guide in consultation with the existing
+<a href="../../index.html">Google Maps API Documentation</a>.</p>
+
+<h1 id="Signup">Specifying a <i>Client ID</i></h1>
+
+<p>To access the special features of Google Maps API Premier, you must
+provide a <i>client ID</i> when accessing any of the Premier API libraries
+or services. When registering for Google Maps API Premier, you will receive
+this <i>client ID</i> from Google Enterprise Support. All client IDs begin
+with a <code>gme-</code> prefix.</p>
+
+<p class="note"><span style="color:red">Note: </span> this client ID is not a
+key. It will only work from URLs which you authorize so you don't need to
+worry about keeping it secret. Users of Google Maps API Premier no longer need
+to register or provide an API key when using the Maps API or one of its
+services.</p>
+
+<h1 id="URLs">Registering authorized URLs</h1>
+
+<p>In order to prevent a third party from reusing your client ID on their own
+website, the use of your client id is restricted to a list of URLs that you
+specifically authorize. If you wish to obtain a list of your authorized
+URLs, or authorize additional URLs to use with your client ID, please contact <a
+href="http://www.google.com/enterprise/portal">Google Enterprise
+Support</a>. You may register any number of URLs for authorization with
+your client ID.</p>
+
+<p>A URL such as <code>http://www.example.com/foo</code> consists of a
+<i>protocol</i> prefix (the 'http://' part), a <i>domain name</i> declaration
+(the 'www.example.com' part), as well as an additional path (the '/foo' part)
+after the domain name. An <i>IP address</i> can be used instead of a <i>domain
+name</i>. E.g. <code>http://192.168.1.1/foo</code>.</p>
+
+<p>The following considerations apply regarding URLs that are authorized:
+<ul>
+  <li>The <i>domain name</i> (or <i>IP address</i>) does not have to be
+  publicly accessible.
+    <ul><li>E.g. <code>http://myintranet</code> and
+    <code>http://192.168.1.1</code> are valid entries.
+    </li>
+    </ul>
+  </li>
+  <li>Any subdomain of an authorized domain is also authorized.
+    <ul><li>E.g. if <code>http://example.com</code> is authorized, then
+    <code>http://www.example.com</code> is also authorized.</li>
+    </ul>
+  </li>
+  <li>Any subpath of an authorized path is also authorized.
+    <ul><li>E.g. if <code>http://example.com</code> is authorized, then
+    <code>http://example.com/foo</code> is also authorized.</li>
+    </ul>
+  </li>
+  <li>You may restrict valid URLs to those using certain ports, which is
+  indicated by including the allowed port as a suffix to the <i>domain name</i>
+  declaration.
+    <ul><li>E.g. <code>http://example.com:8080/foo</code>.</li>
+    </ul>
+  </li>
+  <li>You may authorize URLs over the HTTPS protocol, which counts as a separate
+authorization than that of the default HTTP (non-secure) protocol.
+    <ul><li>E.g. <code>https://example.com</code>.</li>
+    </ul>
+  </li>
+</ul>
+</p>
+
+<h1 id="Sensor">Tracking Usage with the <code>sensor</code> Parameter</h1>
+
+<p>Use of the Google Maps API(s) requires that you indicate whether your
+application is using a sensor (such as a GPS locator) to determine the user's
+location in any Maps API library or service requests. This is especially
+important for mobile devices. If your Google Maps API application
+uses any form of sensor to determine the location of the device accessing your
+application, you must declare this with a <code>sensor</code> parameter value
+of <code>true</code>.</p>
+
+<p>Note that even if your application does not use a location sensor, you
+still must set the <code>sensor</code> parameter (in this case to
+<code>false</code>).</p>
+
+<h1 id="URLSigning">URL Authentication</h1>
+<a id="SignatureProcess"></a>
+<a id="GettingKeys"></a>
+<a id="BuildingURLs"></a>
+<a id="GeneratingSignatures"></a>
+<a id="SignatureExamples"></a>
+<a id="PythonSignatureExample"></a>
+<a id="JavaSignatureExample"></a>
+<a id="CSharpSignatureExample"></a>
+
+<p>Requests to certain Maps API Premier web services now require digital
+<i>signatures</i> using a cryptographic key we provide to you for that
+purpose. The signing process combines a URL and a private key together using an
+encryption algorithm, creating a unique signature. This unique signature allows
+our web services to verify that any site generating requests that use your Maps
+API Premier client ID are authorized to do so. The signature is also unique per
+URL, ensuring that requests that use your client ID cannot be modified without
+requiring a new signature to be generated.</p>
+
+<p>Signed requests can retrieve results when sent from an unregistered URL. Note
+however that the referring URL will continue to be tracked for billing; Premier
+customers must continue to register URLs after implementing URL signing.</p>
+
+<p>We encourage you to begin converting all of your applications to incorporate
+signing of URL requests as we roll this feature out to additional web services.</p>
+
+<p>Details on how to <a
+href="../webservices/#BuildingURLs">build valid URLs</a> and <a
+href="../webservices/#URLSigning">generate URL signatures</a>
+can be found on the <a
+href="../webservices/index.html">Web Services</a> documentation.</p>
+
+
+<h1 id="Accessing">Accessing and Loading the API</h1>
+
+<p>Loading an API library or service as a Premier application requires
+specification of the Client ID within a <code>client</code> parameter. How you
+specify this value depends on the library or service you utilize.</p>
+
+<ul>
+  <li><a href="#MapsJS">Loading the Google Maps JavaScript API</a></li>
+  <li><a href="#Flash">Loading the Google Maps API for Flash</a></li>
+  <li><a href="#EarthAPI">Loading the Google Earth API</a></li>
+</ul>
+
+<h2 id="MapsJS">Loading the Google Maps JavaScript API</h2>
+
+<ul>
+  <li><a href="#ClientID">Using the standalone API</a></li>
+    <ul>
+      <li><a href="#SyncV3">Maps JavaScript API V3</a></li>
+      <li><a href="#SyncV2">Maps JavaScript API V2</a> (deprecated)</li>
+    </ul>
+  <li><a href="#CommonLoader">Using the Common AJAX Loader</a></li>
+</ul>
+
+<h3 id="ClientID">Using the standalone API</h3>
+
+<h4 id="SyncV3">Maps JavaScript API V3</h4>
+
+<p>To load the Google Maps JavaScript API Version 3 using your Google Maps API
+Premier client ID, append an additional <code>client</code> parameter onto the
+URL used to retrieve the JavaScript library:</p>
+
+<pre>
+&lt;script src="http://maps.google.com/maps/api/js?v=3&client=<i>gme-yourclientid</i>&sensor=true_or_false"
+type="text/javascript"&gt;&lt;/script&gt;
+</pre>
+
+<p>Note that you need to provide provide a valid value for the
+<code>sensor</code> parameter, please refer to <a href="#Sensor">Tracking Usage
+with the <code>sensor</code> Parameter</a> above.</p>
+
+<p>The above example uses the <code>v=3</code> API version, which is
+updated regularly. These updates will include the latest bug fixes and features,
+though the version may be more unstable as a result. If
+you need a more stable version, you can use a "release version" as
+explained in
+<a href="../javascript/basics.html#Versioning">
+Versioning</a>.</p>
+
+<p>You can also access the Google Maps JavaScript API over <b>HTTPS</b>. In that
+case, you must <a href="#URLs">register</a> the HTTPS URL of your
+website for use with your client ID. Otherwise, requests will instead be
+redirected to HTTP.</p>
+
+<p>To load the Google Maps JavaScript API Version 3 over <b>HTTPS</b>, load the
+API from the following URL:</p>
+
+<pre>
+&lt;script src="https://maps-api-ssl.google.com/maps/api/js?v=3&client=<i>gme-yourclientid</i>&sensor=true_or_false"
+type="text/javascript"&gt;&lt;/script&gt;
+</pre>
+
+<h4 id="SyncV2">Maps JavaScript API V2 (deprecated)</h4>
+
+<p>To load the Google Maps JavaScript API Version 2 using your Google Maps API
+Premier client ID, append an additional <code>client</code> parameter onto the
+URL used to retrieve the JavaScript library:</p>
+
+<pre>
+&lt;script src="http://maps.google.com/maps?file=api&v=2&client=<i>gme-yourclientid</i>&sensor=true_or_false"
+type="text/javascript"&gt;&lt;/script&gt;
+</pre>
+
+<p>Note that you do not need to provide an API key in this URL, though you do
+need to provide a <code>sensor</code> parameter.</p>
+
+<p>The above example uses the <code>v=2</code> API version, which is
+updated regularly. Updates include the latest bug fixes and
+features, though the version may be more unstable as a result. If you need a
+more stable version, you can use <code>v=2.s</code> or a numbered
+version as explained in <a
+href="../javascript/v2/basics.html#API_Updates">API
+Updates</a>.
+
+<p>To load the Google Maps JavaScript API Version 2 over <b>HTTPS</b>, use the
+following URL:</p>
+
+<pre>
+&lt;script src="https://maps-api-ssl.google.com/maps?file=api&v=2&client=<i>gme-yourclientid</i>&sensor=true_or_false"
+type="text/javascript"&gt;&lt;/script&gt;
+</pre>
+
+<p class="note">Note: The Google Maps Javascript API Version 2
+has been officially deprecated as of May 19, 2010. The V2 API will continue
+to work as per our <a href="../../terms.html#section_4_4">deprecation policy</a>,
+but we encourage you to migrate your code to
+<a href="../javascript/index.html">version 3 of the Maps
+Javascript API</a>.</p>
+
+
+<h3 id="CommonLoader">Using the Common AJAX Loader</h3>
+
+<p>The Google Maps JavaScript API Version 3 is also fully
+integrated with the Google AJAX APIs as documented at <a
+href="../javascript/v2/basics.html#AJAX_Loader">
+http://code.google.com/apis/maps/documentation/javascript/v2/basics.html#AJAX_Loader</a>.</p>
+
+<p>Using the Common AJAX Loader makes it easy to load the Maps API
+<a href="http://code.google.com/apis/ajax/documentation/#Dynamic">
+ asynchronously</a>, and therefore generate a
+<a href="faq.html#pageview">Page View</a>
+only when you need it.</p>
+
+<p>It is not necessary to provide an API key when loading the common loader
+if you wish to load the Google Maps JavaScript API with your Google Maps API
+Premier client ID:</p>
+
+<pre>
+&lt;script type="text/javascript" src="http://www.google.com/jsapi"&gt;&lt;/script&gt;
+</pre>
+
+<p>When loading the Google Maps JavaScript API using the common loader, provide
+your client ID within the <code>other_params</code> option:</p>
+
+<pre>
+google.load("maps","3", {"other_params":"client=<i>gme-yourclientid</i>&amp;sensor=true_or_false"});
+</pre>
+
+<p>You can also access the Google Maps JavaScript API over <b>HTTPS</b>. In that
+case, you must <a href="#URLs">register</a> the HTTPS URL of your
+website for use with your client ID. Otherwise, requests will instead be
+redirected to HTTP.</p>
+
+<p>To load the Google Maps JavaScript API Version 3 over <b>HTTPS</b>, using the
+Google AJAX API Loader, first load the common loader over <b>HTTPS</b>:</p>
+
+<pre>
+&lt;script type="text/javascript" src="https://www.google.com/jsapi"&gt;&lt;/script&gt;
+</pre>
+
+<p>You can then load the Google Maps JavaScript API using
+<code>google.load()</code> as shown above.</p>
+
+<p>This method is also valid for the Google Maps JavaScript API Version 2.</p>
+
+<p class="note">Note: The Google Maps Javascript API Version 2
+has been officially deprecated as of May 19, 2010. The V2 API will continue
+to work as per our <a href="../../terms.html#section_4_4">deprecation policy</a>,
+but we encourage you to migrate your code to
+<a href="../javascript/index.html">version 3 of the Maps
+Javascript API</a>.</p>
+
+
+<h2 id="Flash">Loading the Google Maps API for Flash</h2>
+
+<p>Your Google Maps API Premier client ID also allows you to access
+the Google Maps API for Flash as an Enterprise application.  Full
+documentation for the Google Maps API for Flash is available at
+<a href="../flash/index.html">
+http://code.google.com/apis/maps/documentation/flash/</a>. As with
+the JavaScript API, you will need to pass <code>client</code> and
+<code>sensor</code> parameters when accessing the API, though you will not need
+an API key.</p>
+
+<p><span style="color:red; ">Note: </span>The Google Maps for Flash API removed
+the need to provide API keys for Premier customers starting with version 1.8b
+of the <a href="http://maps.googleapis.com/maps/flash/release/sdk.zip">Flash
+SDK</a>. Be sure you compile your application using that version or later to
+take advantage of keyless functionality.  Existing applications will need to be
+re-compiled with this version to enable keyless support.</p>
+
+<p>There are three ways to supply your Google Maps API Premier client ID when
+accessing the Google Maps API for Flash. Whichever you choose, we recommend that
+you supply both your client ID and the <code>sensor</code> parameter in the same
+manner:</p>
+
+<ol>
+<li><p>Supply your client ID and sensor parameter as attributes
+of the UI container object declared in your MXML:</p>
+<pre class="prettyprint">
+&lt;maps:Map xmlns:maps="com.google.maps.*" id="map"
+mapevent_mapready="onMapReady(event)" width="100%" height="100%"
+sensor="false" client="<i>gme-yourclientid</i>"/&gt;
+</pre>
+<p>This method is preferred if you are developing your application using
+FlexBuilder or the Flex framework.</p>
+</li>
+
+<li><p>Supply your client ID and sensor parameter as attributes
+of the <code>object</code> and <code>embed</code> tags used to add your
+Flash application to a web page:</p>
+<pre class="prettyprint">
+&lt;div id="map_canvas" name="map_canvas"&gt;
+  &lt;object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+      codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0"
+      width="800px"
+      height="600px"&gt;
+    &lt;param name="movie" value="helloworld.swf"&gt;
+    &lt;param name="quality" value="high"&gt;
+    &lt;param name="flashVars" value="client=<i>gme-yourclientid</i>&sensor=true_or_false"&gt;
+    &lt;embed width="800px"
+        height="600px"
+        src="helloworld.swf"
+        quality="high"
+        flashVars="client=<i>gme-yourclientid</i>&sensor=true_or_false"
+        pluginspage="http://www.macromedia.com/go/getflashplayer"
+        type="application/x-shockwave-flash"&gt;
+    &lt;/embed&gt;
+  &lt;/object&gt;
+&lt;/div&gt;
+</pre>
+</li>
+
+<li><p>Supply your client ID and sensor parameter as properties of
+your <code>Map</code> object directly within ActionScript code:</p>
+<pre class="prettyprint">
+  var map:Map = new Map();
+  map.sensor = "false";
+  map.client = "<i>gme-yourclientid</i>";
+</pre>
+<p>This method is necessary if you are developing your application
+within Flash CS3.</p>
+</li>
+</ol>
+
+<p>You can also access the Google Maps API for Flash over <b>HTTPS</b>. In that
+case, you must <a href="#URLs">register</a> the HTTPS URL of your
+website for use with your client ID. Otherwise, requests will instead be
+redirected to HTTP. Your application will also need to be built against version
+1.18 or later of the Google Maps API for Flash.</p>
+
+<p>To load the Google Maps API for Flash over <b>HTTPS</b>, use the <i>https</i>
+protocol to load your application and pass a <code>ssl</code> property
+set to <code>true</code> to instruct the application to load the API over
+HTTPS. As with the <code>client</code> and <code>sensor</code> parameters, this
+<code>ssl</code> parameter may be set in either the <code>MXML</code> file,
+within the <code>flashVars</code> elements of your HTML, or as a direct property
+of the <code>Map</code> object within your ActionScript code.</p>
+
+<p>The <code>MXML</code> specification below indicates that this application
+should load the API over <b>HTTPS</b>.</p>
+
+<pre class="prettyprint">
+&lt;maps:Map xmlns:maps="com.google.maps.*" id="map"
+mapevent_mapready="onMapReady(event)" width="100%" height="100%"
+sensor="false" ssl="true" client="<i>gme-yourclientid</i>"/&gt;
+</pre>
+
+<p class="note"><span style="color:red">Note: </span> your containing SWF
+application must also be loaded over HTTPS in order to properly load the API
+over HTTPS.</p>
+
+<h2 id="EarthAPI">Loading the Google Earth API</h2>
+
+<p>The Google Earth API gives you control of a three dimensional
+globe in your web pages and applications. Documentation
+is available at <a href="http://code.google.com/apis/earth/documentation">
+http://code.google.com/apis/earth/documentation</a>.</p>
+
+<h3>Authenticating with a Client ID</h3>
+
+<p>The Google Earth API must be loaded with the Google AJAX API Loader. Do not
+include an API key when referencing the <strong>jsapi</strong> file; you'll
+supply your client ID in the next step.</p>
+
+<pre class="prettyprint">&lt;script src=&quot;http://www.google.com/jsapi&quot;&gt;&lt;/script&gt;</pre>
+
+<p>Your client ID is passed to the <code>google.load()</code> method within the
+<code>other_params</code> property, as follows:</p>
+
+<pre class="prettyprint">google.load("earth","1", {"other_params":"client=<i>gme-yourclientid</i>&sensor=true_or_false"});</pre>
+
+<p>The <code>client</code> and <a href="#Sensor"><code>sensor</code></a> parameters are required.</p>
+
+<p>More information about loading and getting started with the Google Earth API
+is available from the Google Earth API <a
+href="http://code.google.com/apis/earth/documentation/#using_the_google_earth_api">Developer's
+Guide</a>. </p>
+
+<h3>HTTPS Connections</h3>
+
+<p>You can also access the Google Earth API over <b>HTTPS</b>. In that
+case, you must <a href="#URLs">register</a> the HTTPS URL of your
+website for use with your client ID. Otherwise, requests will instead be
+redirected to HTTP.</p>
+
+<p>To access the Google Earth API using a secure <strong>HTTPS</strong>
+connection, update the protocol from <i>http</i> to
+<i>https</i> in the <code>src</code> value:</p>
+
+<pre class="prettyprint">
+&lt;script src=&quot;https://www.google.com/jsapi&quot;&gt;&lt;/script&gt;
+</pre>
+
+<h1 id="Services">Using Maps API Services</h1>
+
+<h2 id="StaticMaps">Static Maps API</h2>
+
+<p>The <a href="../staticmaps/index.html">Google Static Maps API</a>
+allows you to construct and retrieve map images using parameters passed through
+its URL service.</p>
+
+<p>To embed a map image in a webpage using your Google Maps API Premier client
+ID, append to the Static Maps URL a <code>client</code> parameter containing
+your client ID, and a valid signature parameter.</p>
+
+<pre class="prettyprint">
+http://maps.google.com/maps/api/staticmap?center=40.714728,-73.998672&zoom=12&size=400x400&client=<i>gme-yourclientid</i>&sensor=<i>true_or_false</i>&signature=<i>SIGNATURE</i>
+</pre>
+
+<p class="note">Note that you do not need to pass an API key. Premier users must
+now <i>sign</i> their Static Map URL requests. (See <a href="#URLSigning">URL
+Authentication</a> for more information.)</p>
+
+<p>You can also access the Google Static Maps API over <b>HTTPS</b>. In that
+case, you must <a href="#URLs">register</a> the HTTPS URL of your
+website for use with your client ID. Otherwise, your requests may be rejected
+with a Status 400 "Bad Request" error.</p>
+
+<p>To embed a map image into a page retrieved over a secure <b>HTTPS</b>
+connection, use the alternative hostname in your request URL as shown below:</p>
+
+<pre class="prettyprint">
+https://maps.googleapis.com/maps/api/staticmap?center=40.714728,-73.998672&zoom=12&size=400x400&client=<i>gme-yourclientid</i>&sensor=<i>true_or_false</i>&signature=<i>SIGNATURE</i>
+</pre>
+
+<p class="note"><span style="color:red">Note: </span> the Static
+Maps API does not support icons accessed over <b>HTTPS</b>; markers with
+custom icons using <b>HTTPS</b> URLs will fall back to the default icon.</p>
+
+<p>The same methods and considerations apply to the legacy <a
+href="../staticmap/v1">Static Maps API V1</a>, but there
+is no need to sign URLs in that case.</p>
+
+<pre class="prettyprint">
+http://maps.google.com/staticmap?center=40.714728,-73.998672&zoom=12&size=400x400&client=<i>gme-yourclientid</i>&sensor=true_or_false
+</pre>
+
+<p class="note">Note: The Google Static Maps V1 service
+has been officially deprecated as of August 25, 2009. The V1 API will continue
+to work as per our <a href="../../terms.html#section_4_4">deprecation policy</a>,
+but we encourage you to migrate your code to the new
+<a href="../staticmaps/index.html">Static Maps API V2</a> service.</p>
+
+
+<h2 id="WebServices">Google Maps API Web Services</h2>
+<a id="Geocoding"></a>
+
+<p>Google Maps API Web Services provide a collection of HTTP
+interfaces to Google services providing geographic data for
+your maps applications, see the full documentation for the <a
+href="../geocoding/index.html">Geocoding</a>, <a
+href="../directions/index.html">Directions</a> and <a
+href="../elevation/index.html">Elevation</a> APIs.</p>
+
+<p>Using Maps API Web Services with a Premier license gives you
+access to 
+<a href="http://code.google.com/apis/maps/documentation/premier/faq.html#usage_limits">
+higher usage limits</a>.</p>
+
+<p>To send a request to any of the Google Maps API Web Services using your
+Google Maps API Premier client ID, append a <code>client</code> parameter
+containing your client ID to the URL. Note that you also need to
+<a href="../webservices/index.html#URLSigning">
+sign this URL</a>.</p>
+
+<pre class="prettyprint">
+http://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&client=<i>gme-yourclientid</i>&sensor=true_or_false&signature=<i>YOUR_URL_SIGNATURE</i>
+</pre>
+
+<p>Google Maps API Premier customers can also make requests to the Google Maps
+API Web Services over <b>HTTPS</b>.
+
+<p>To sent a request to the Google Maps API Web Services over <b>HTTPS</b>,
+use the alternative hostname in your request URL as shown below:</p>
+
+<pre class="prettyprint">
+https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&client=<i>gme-yourclientid</i>&sensor=true_or_false&signature=<i>YOUR_URL_SIGNATURE</i>
+</pre>
+
+Requests made in excess of your daily and
+instantaneous throughput limits may return an (<code>OVER_QUERY_LIMIT</code>)
+<code>status</code> code.</p>
+
+<p>The same methods and considerations apply to the legacy <a
+href="../geocoding/v2/index.html">Geocoding API V2</a>, but there is
+no need to sign URLs.</p>
+
+<pre class="prettyprint">
+http://maps.google.com/maps/geo?q=1600+Amphitheatre+Parkway,+Mountain+View,+CA&output=json&sensor=true_or_false&client=<i>gme-yourclientid</i>
+</pre>
+
+<p>Note that you do not need to provide an API key in this URL, though you do
+need to provide a <code>sensor</code> parameter.</p>
+
+<p class="note">Note: The Google Maps Geocoding API Version 2
+has been officially deprecated as of March 8, 2010. The V2 API will continue
+to work as per our <a href="../../terms.html#section_4_4">deprecation policy</a>,
+but we encourage you to migrate your code to the new
+<a href="../geocoding/index.html">Geocoding API</a>.</p>
+
+
+<h1 id="Channels">Determining Application Usage</h1>
+
+<p>Google Maps API Premier enables customers to determine and analyze the
+activity on your API application based on client ID. These reports are
+available in the <a href="http://www.google.com/enterprise/portal">Enterprise
+Support Portal</a> (in the "Resources" tab). In some cases you may wish
+to provide a finer breakdown of usage across different applications using the
+same client ID. In those cases, you may provide an optional
+<code>channel</code> parameter when accessing any of the Premier APIs that
+are tracked in the reports. By specifying different <code>channel</code>
+values for different aspects of your application, you can determine precisely
+how your application is used.</p>
+
+<p>This <code>channel</code> is a unique string which you define and will be
+logged when accessing the Google Maps API Premier services. Google will provide
+you usage statistics for your client ID broken down by your defined channels in
+the <a href="http://www.google.com/enterprise/portal">Enterprise Support
+Portal</a>.</p>
+
+<p>For example, your externally facing website may access the API
+using a <code>channel</code> set to <code>customer</code> while your
+internal marketing department may instead have a <code>channel</code>
+set to <code>mkting</code>. Your reports will break down usage by those
+<code>channel</code> values.</p>
+
+<p>The <code>channel</code> parameter must be an ASCII alphanumeric
+string. Additionally, the period (<code>.</code>) and hyphen (<code>-</code>)
+values are allowed. <span style="color:red">Note: </span> The
+<code>channel</code> value must be a static value assigned per application
+instance, and must not be generated dynamically.  You may not use
+<code>channel</code> values to track individual users, for example.</p>
+
+<p>The <code>channel</code> parameter is provided in the same manner
+as the <code>client</code> and <code>sensor</code> parameters
+within Maps API requests. For example, if loading the
+Maps JavaScript API v3, append a <code>channel</code>
+parameter to the src URL of your script tag:
+
+<pre>
+&lt;script src="http://maps.google.com/maps/api/js?v=3&client=<i>gme-yourclientid</i>&sensor=true_or_false&channel=<i>yourchannel</i>"
+type="text/javascript"&gt;&lt;/script&gt;
+</pre>
+
+<h1 id="Support">Support</h1>
+
+<p>Google Maps API Premier comes with dedicated Enterprise-level support.
+Support is primarily offered through the
+<a href="http://www.google.com/enterprise/portal">Enterprise Support Portal</a>.
+Once you obtain a Premier license, you'll receive contact information
+from a Google Maps API Enterprise Support representative. Otherwise, please <a
+href="http://www.google.com/support/enterprise/bin/answer.py?answer=142246#q3"
+>fill this form</a>.</p>
+
+
+
+      </div><!-- end g-c-gc-home -->
+    </div><!-- end g-unit -->
+  </div><!-- end g-section -->
+
+</div><!-- end gc-home -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+
+

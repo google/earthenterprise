@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<LayerConfig>
+
+  <channelId>5</channelId>
+
+  <assetRef>Resources/Vector/CAHighways.kvasset</assetRef>
+
+  <legend></legend>
+
+  <lodForce/>
+
+  <displayRules>
+    <displayRule>
+      <name>default select all</name>
+      <feature>
+        <style>
+          <id>1</id>
+          <polyColor>
+            <polyColor_element>255</polyColor_element>
+            <polyColor_element>255</polyColor_element>
+            <polyColor_element>255</polyColor_element>
+            <polyColor_element>255</polyColor_element>
+          </polyColor>
+          <lineColor>
+            <lineColor_element>255</lineColor_element>
+            <lineColor_element>0</lineColor_element>
+            <lineColor_element>0</lineColor_element>
+            <lineColor_element>255</lineColor_element>
+          </lineColor>
+          <lineWidth>1</lineWidth>
+          <altitudeMode>ClampToGround</altitudeMode>
+          <extrude>0</extrude>
+          <enableCustomHeight>0</enableCustomHeight>
+          <customHeightVariableName></customHeightVariableName>
+          <customHeightOffset>0</customHeightOffset>
+          <customHeightScale>1</customHeightScale>
+          <icon>
+            <type>Internal</type>
+            <href>771</href>
+            <normalColor>
+              <normalColor_element>255</normalColor_element>
+              <normalColor_element>255</normalColor_element>
+              <normalColor_element>255</normalColor_element>
+              <normalColor_element>255</normalColor_element>
+            </normalColor>
+            <highlightColor>
+              <highlightColor_element>255</highlightColor_element>
+              <highlightColor_element>255</highlightColor_element>
+              <highlightColor_element>255</highlightColor_element>
+              <highlightColor_element>255</highlightColor_element>
+            </highlightColor>
+            <normalScale>1</normalScale>
+            <highlightScale>1</highlightScale>
+          </icon>
+          <label>
+            <label>«NAME»</label>
+            <reformat>1</reformat>
+            <normalColor>
+              <normalColor_element>255</normalColor_element>
+              <normalColor_element>255</normalColor_element>
+              <normalColor_element>255</normalColor_element>
+              <normalColor_element>255</normalColor_element>
+            </normalColor>
+            <highlightColor>
+              <highlightColor_element>255</highlightColor_element>
+              <highlightColor_element>255</highlightColor_element>
+              <highlightColor_element>255</highlightColor_element>
+              <highlightColor_element>255</highlightColor_element>
+            </highlightColor>
+            <normalScale>1</normalScale>
+            <highlightScale>1</highlightScale>
+            <labelMode>Original</labelMode>
+          </label>
+        </style>
+        <maxLevel>24</maxLevel>
+        <featureType>LineZ</featureType>
+        <minLevel>4</minLevel>
+        <drawAsRoads>1</drawAsRoads>
+        <roadLabelType>Label</roadLabelType>
+        <polygonDrawMode>FillAndOutline</polygonDrawMode>
+        <maxError>0.5</maxError>
+        <maxBuildLevel>16</maxBuildLevel>
+      </feature>
+      <filter>
+        <match>MatchAll</match>
+        <selectRules/>
+        <matchScript></matchScript>
+      </filter>
+    </displayRule>
+  </displayRules>
+
+  <preserveTextLevel>24</preserveTextLevel>
+
+  <allowFeatureDuplication>0</allowFeatureDuplication>
+
+  <isVisible>1</isVisible>
+
+  <isEnabled>1</isEnabled>
+
+  <isExpandable>1</isExpandable>
+
+  <asset_uuid>c21db8ea-0b69-11e3-9320-e79fe4cc41b6</asset_uuid>
+
+  <defaultLocale config_version="1">
+    <name useDefault="0">CAHighways</name>
+    <icon useDefault="0">
+      <type>Internal</type>
+      <href>773</href>
+    </icon>
+    <is_checked useDefault="0">0</is_checked>
+    <desc useDefault="0"></desc>
+    <look_at useDefault="0"></look_at>
+    <kml_layer_url useDefault="0"></kml_layer_url>
+    <required_client_version useDefault="0"></required_client_version>
+    <required_client_vram useDefault="0"></required_client_vram>
+    <probability useDefault="0"></probability>
+    <save_locked useDefault="0">1</save_locked>
+    <required_user_agent useDefault="0"></required_user_agent>
+    <required_client_capabilities useDefault="0"></required_client_capabilities>
+    <client_config_script_name useDefault="0"></client_config_script_name>
+    <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+    <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+  </defaultLocale>
+
+  <locales/>
+
+  <layerContextScript></layerContextScript>
+
+  <allowEmptyLayer>0</allowEmptyLayer>
+
+  <skipLayer>0</skipLayer>
+
+  <searchFields/>
+
+  <meta/>
+
+  <searchStyle></searchStyle>
+
+</LayerConfig>

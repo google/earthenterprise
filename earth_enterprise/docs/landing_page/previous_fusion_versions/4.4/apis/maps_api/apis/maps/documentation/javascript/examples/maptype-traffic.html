@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/examples/maptype-traffic.html";
+    </script>
+    
+<title>Google Maps JavaScript API v3 Example: Image MapTypes</title>
+<link href="http://code.google.com/apis/maps/documentation/javascript/examples/standard.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>  
+<script> 
+  var traffic = new google.maps.ImageMapType({
+    getTileUrl: function(coord, zoom) {
+      return "http://mt3.google.com/mapstt?" +
+      "zoom=" + zoom + "&x=" + coord.x + "&y=" + coord.y + "&client=api";
+   },
+   tileSize: new google.maps.Size(256, 256),
+   isPng: true
+  });
+ 
+  var map;
+  function initialize() {
+    map = new google.maps.Map(document.getElementById("map_canvas"));
+    map.setCenter(new google.maps.LatLng(37.76, -122.45));
+    map.setZoom(12);
+    map.setMapTypeId('satellite');
+    map.overlayMapTypes.insertAt(0, traffic);
+  }
+</script> 
+</head> 
+<body onload="initialize()"> 
+  <div id="map_canvas" style="width: 640px; height: 480px;"></div> 
+</body> 
+</html> 

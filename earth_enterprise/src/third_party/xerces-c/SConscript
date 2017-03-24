@@ -1,0 +1,101 @@
+# Copyright 2009 Google Inc. All Rights Reserved.
+#-*- Python -*-
+
+
+Import('third_party_env')
+xerces_c_version = 'xerces-c-3.1.1'
+
+num_cpu = GetOption('num_jobs')
+
+current_dir = Dir('.').abspath
+build_root = '%s/%s' % (current_dir, xerces_c_version)
+install_root = '%s/install' % current_dir
+install_root_opt = '%s/opt/google' % install_root
+
+xerces_c_source = File('#/../../earth_enterprise/third_party/xerces-c/%s'
+                       '.tar.gz' % xerces_c_version).abspath
+
+xerces_c_env = third_party_env.DeepCopy()
+xerces_c_env['ENV']['mod_env'] += 'XERCESCROOT=%s ' % build_root
+
+# [1] Extract xerces_c
+xerces_c_target = '%s/.extract' % current_dir
+xerces_c_extract = xerces_c_env.Command(
+    xerces_c_target, xerces_c_source,
+    [xerces_c_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xzf %s\n'
+        'touch %s' % (
+            current_dir, current_dir, xerces_c_source, xerces_c_target))])
+
+if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+  env_opt = ''
+else:
+  env_opt = ''
+
+if xerces_c_env['release'] or xerces_c_env['optimize']:
+  config_opt = ''
+else:
+  config_opt = ''
+
+# [3] Configure xerces_c
+xerces_c_target = '%s/.configure' % current_dir
+xerces_c_configure = xerces_c_env.Command(
+    xerces_c_target, xerces_c_extract,
+    [xerces_c_env.MultiCommand(
+        'cd %s\n'
+        '%s%s ./configure --enable-msgloader-inmemory '
+        '--enable-netaccessor-socket --prefix=/opt/google '
+        '-enable-shared --disable-static %s\n'
+        'touch %s' % (build_root, xerces_c_env['ENV']['mod_env'], env_opt,
+                      config_opt, xerces_c_target))])
+
+# [4] Build
+xerces_c_target = '%s/.build' % current_dir
+xerces_c_build = xerces_c_env.Command(
+    xerces_c_target, xerces_c_configure,
+    [xerces_c_env.MultiCommand(
+        'cd %s\n'
+        '%smake -j%d\n'
+        'touch %s' % (build_root, xerces_c_env['ENV']['mod_env'], num_cpu,
+                      xerces_c_target))])
+
+# [5] Create xerces_c master installer
+xerces_c_target = '%s/.install' % current_dir
+xerces_c_install = xerces_c_env.Command(
+    xerces_c_target, xerces_c_build,
+    [xerces_c_env.MultiCommand(
+        'cd %s\n'
+        '%smake prefix=%s install\n'
+        'cd %s\n'
+        'rm -rf lib/libxerces-depdom.so* lib/lib*.a lib/lib*.la '
+        'lib/pkgconfig bin\n'
+        'mkdir -p share/xerces-c\n'
+        'cp -a %s/samples share/xerces-c\n'
+        'touch %s' % (build_root, xerces_c_env['ENV']['mod_env'],
+                      install_root_opt,
+                      install_root_opt, build_root, xerces_c_target))])
+
+# [6] Install these into various directories as required for build
+xerces_c_target = '%s/.install_for_build' % current_dir
+xerces_c_install_build = xerces_c_env.Command(
+    xerces_c_target, xerces_c_install,
+    [xerces_c_env.rsync_cmd % (
+        '%s/include/' % install_root_opt,
+        '%s/include/' % xerces_c_env.exportdirs['root']),
+     xerces_c_env.rsync_cmd % (
+         '%s/lib/' % install_root_opt,
+         '%s/lib/' % xerces_c_env.exportdirs['root']),
+     Touch('$TARGET')])
+
+Default(xerces_c_install_build)
+xerces_c_env.ExecuteOnClean('rm -rf %s' % current_dir)
+
+if 'install' in COMMAND_LINE_TARGETS:
+  xerces_c_env.InstallFileOrDir(
+      '%s/opt/google/lib/' % install_root,
+      '%s/opt/google/lib/' % xerces_c_env.installdirs['common_root'],
+      xerces_c_install_build, 'install')
+
+Return('xerces_c_extract xerces_c_install_build')

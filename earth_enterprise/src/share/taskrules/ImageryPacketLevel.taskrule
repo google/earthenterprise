@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<TaskRule>
+  <taskname>ImageryPacketLevel</taskname>
+  <inputConstraints/>
+  <outputConstraints/>
+  <cpuConstraint>
+       <minNumCPU>2</minNumCPU>
+       <maxNumCPU>2</maxNumCPU>
+  </cpuConstraint>
+</TaskRule>

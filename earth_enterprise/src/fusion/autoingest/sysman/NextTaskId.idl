@@ -1,0 +1,113 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+
+#include <string>
+#include <khTypes.h>
+
+class NextTaskId {
+  uint32 id;
+
+#pragma LoadAndSave
+
+#hquote
+  static std::string Filename(void);
+  static void Load(void);
+  static uint32 Get(void);
+ private:
+  static uint32 nextTaskId;
+  static const uint32 saveStep;
+  static const uint32 rollSize;
+#/hquote
+
+
+#cppquote
+#include <autoingest/.idl/storage/AssetDefs.h>
+#include <autoingest/geAssetRoot.h>
+#include <khFileUtils.h>
+
+  uint32 NextTaskId::nextTaskId = 0;
+  const uint32 NextTaskId::saveStep = 1000;
+  const uint32 NextTaskId::rollSize = 1000000;  // even multiple of saveStep
+
+  std::string NextTaskId::Filename(void) {
+    return khComposePath(geAssetRoot::Dirname(AssetDefs::AssetRoot(),
+                                              geAssetRoot::StateDir),
+                         "NextTaskId.xml");
+  }
+
+  uint32
+  NextTaskId::Get(void)
+  {
+    uint32 id = nextTaskId++;
+
+    // wrap the taskid at one million
+    // (just to keep the numbers small enough for people to deal with)
+    nextTaskId %= rollSize;
+
+    // save the nextTaskId every 1000
+    if (nextTaskId % saveStep == 0) {
+      std::string filename = Filename();
+      NextTaskId storage;
+
+      // the one we save is always 1000 beyond what we're
+      // using, that way a reload won't reuse any of the ids
+      // that we handed out since the last save.
+      storage.id = nextTaskId + saveStep;
+      if (!storage.Save(filename)) {
+        notify(NFY_WARN, "Unable to save %s", filename.c_str());
+        // I was able to save it at startup, maybe something will change
+        // and I'll be able to save it again the next time.
+      }
+      (void)khChmod(filename, 0600);
+    }
+
+    // taskid 0 is special (meaning no task)
+    if (nextTaskId == 0)
+      ++nextTaskId;
+
+    return id;
+  }
+
+  void
+  NextTaskId::Load(void)
+  {
+    std::string filename = Filename();
+
+    nextTaskId = 0;
+
+    NextTaskId storage;
+    if (storage.Load(filename)) {
+      if (storage.id > rollSize) {
+        storage.id = 0;
+      }
+      nextTaskId = storage.id;
+    }
+
+    // Save out the next fallback point
+    storage.id = (nextTaskId / saveStep) * saveStep + saveStep;
+    storage.id %= rollSize;
+    if (!storage.Save(filename)) {
+      notify(NFY_FATAL, "Unable to save %s", filename.c_str());
+    }
+
+    // taskid 0 is special (meaning no task)
+    if (nextTaskId == 0)
+      ++nextTaskId;
+  }
+
+
+#/cppquote
+
+}

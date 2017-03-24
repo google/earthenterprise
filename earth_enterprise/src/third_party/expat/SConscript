@@ -1,0 +1,114 @@
+# Copyright 2009 Google Inc. All Rights Reserved.
+#-*- Python -*-
+
+
+Import('third_party_env')
+
+expat_version = 'expat-2.0.1'
+ge_version = expat_version.replace('expat', 'expat-ge')
+num_cpu = GetOption('num_jobs')
+
+current_dir = Dir('.').abspath
+build_root = '%s/%s' % (current_dir, expat_version)
+
+expat_dir = Dir('#/third_party/expat').abspath
+expat_source = File('#/../../earth_enterprise/third_party/expat/%s'
+                    '.tar.gz' % expat_version).abspath
+
+expat_env = third_party_env.DeepCopy()
+
+# [1] Extract expat
+expat_target = '%s/.extract' % current_dir
+expat_extract = expat_env.Command(
+    expat_target, expat_source,
+    [expat_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xzf %s\n'
+        'touch %s' % (
+            current_dir, current_dir, expat_source, expat_target))])
+
+# [2] Find out whether optimize or debug and set variables accordingly
+if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+  env_opt = ''
+else:
+  env_opt = ''
+
+if expat_env['release'] or expat_env['optimize']:
+  config_opt = ''
+else:
+  config_opt = ''
+
+# [3] Configure expat
+expat_target = '%s/.configure' % current_dir
+expat_configure = expat_env.Command(
+    expat_target, expat_extract,
+    [expat_env.MultiCommand(
+        'cd %s\n'
+        '%s%s ./configure --mandir=/opt/google/share/man --prefix=/opt/google '
+        '--enable-shared --disable-static %s\n'
+        'touch %s' % (build_root, expat_env['ENV']['mod_env'], env_opt,
+                      config_opt, expat_target))])
+
+# [4] Build
+expat_target = '%s/.build' % current_dir
+expat_build = expat_env.Command(
+    expat_target, expat_configure,
+    [expat_env.MultiCommand(
+        'cd %s\n'
+        '%smake -j%d\n'
+        'touch %s' % (build_root, expat_env['ENV']['mod_env'], num_cpu,
+                      expat_target))])
+
+# [5] Create expat master installer
+install_root = '%s/install' % current_dir
+install_root_opt = '%s/opt/google' % install_root
+expat_target = '%s/.install' % current_dir
+expat_install = expat_env.Command(
+    expat_target, expat_build,
+    [expat_env.MultiCommand(
+        'cd %s\n'
+        'make DESTDIR=%s install\n'
+        'cd %s\n'
+        'rm -rf share/map bin lib/libexpat.a lib/libexpat.so.0\n'
+        'ln -s `readlink lib/libexpat.so.1` lib/libexpat.so.0\n'
+        'rm -rf share/doc/packages/%s\n'
+        'mkdir -p share/doc/packages/%s\n'
+        'cd %s\n'
+        'cp -pr COPYING Changes README %s/share/doc/packages/%s\n'
+        'touch %s' % (
+            build_root, install_root, install_root_opt,
+            ge_version, ge_version, build_root, install_root_opt,
+            ge_version, expat_target))])
+
+# [6] Install these into various directories as required for build
+expat_target = '%s/.install_for_build' % current_dir
+expat_install_build = expat_env.Command(
+    expat_target, expat_install,
+    [expat_env.rsync_cmd % (
+        '%s/include/' % install_root_opt,
+        '%s/' % Dir('%s/include' % expat_env.exportdirs['root']).abspath),
+     expat_env.rsync_cmd % (
+         '%s/lib/' % install_root_opt,
+         '%s/' % Dir('%s/lib' % expat_env.exportdirs['root']).abspath),
+     expat_env.rsync_cmd % (
+         '%s/share/' % install_root_opt,
+         '%s/' % Dir('%s/share' % expat_env.exportdirs['root']).abspath),
+     Touch('$TARGET')])
+
+Default(expat_install_build)
+expat_env.ExecuteOnClean('rm -rf %s' % current_dir)
+
+if 'install' in COMMAND_LINE_TARGETS:
+  expat_env.InstallFileOrDir(
+      '%s/opt/google/lib/' % install_root,
+      '%s/opt/google/lib/' % Dir(
+          expat_env.installdirs['common_root']).abspath,
+      expat_install_build, 'install')
+  expat_env.InstallFileOrDir(
+      '%s/opt/google/share/' % install_root,
+      '%s/opt/google/share/' % Dir(
+          expat_env.installdirs['common_root']).abspath,
+      expat_install_build, 'install')
+
+Return('expat_extract expat_install_build')

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="Hello World" 
+                description="Displays a Hello World message in the left panel"
+                author="Your name"
+                author_email="your-email@gmail.com"
+                height="150">
+</ModulePrefs>
+<Content type="html"><![CDATA[
+
+<h2>Hello World!</h2>
+
+]]></Content>
+</Module>

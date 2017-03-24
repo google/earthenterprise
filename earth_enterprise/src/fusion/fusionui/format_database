@@ -1,0 +1,82 @@
+Formats {
+  1 {
+    Description : "MapInfo"
+    ShortDesc : "MapInfo"
+    Filter : "*.tab *.TAB"
+    Loader : "OGR"
+  }
+  2 {
+    Description : "MicroStation"
+    ShortDesc : "MicroStation"
+    Filter : "*.dgn"
+    Loader : "OGR"
+  }
+  3 {
+    Description : "ESRI Shape"
+    ShortDesc : "Shape"
+    Filter : "*.shp"
+    Loader : "OGR"
+  }
+  4 {
+    Description : "Generic Text"
+    ShortDesc : "ASCII"
+    Filter : "*.txt *.csv"
+    Loader : "TXT"
+  }
+  5 {
+    Description : "Keyhole ASCII"
+    ShortDesc : "Keyhole ETA"
+    Filter : "*.eta"
+    Loader : "ETA"
+  }
+  6 {
+    Description : "Keyhole Image Pyramids"
+    ShortDesc : "Keyhole Pyramid"
+    Filter : "*.pyr"
+    Loader : "TEX"
+  }
+  7 {
+    Description : "Supported Raster"
+    ShortDesc : "GDAL"
+    Filter : "*.tif *.fit *.img *.rpf"
+    Loader : "GDAL"
+  }
+  8 {
+    Description : "Keyhole Geo Binary"
+    ShortDesc : "Keyhole Geo Binary"
+    Filter : "*.kgb KGB00*"
+    Loader : "KGB"
+  }
+  9 {
+    Description : "Geographic Data Technology"
+    ShortDesc : "GDT"
+    Filter : "*.tx1 *.TX1 *.tx7 *.t37 *.t31 *.t91 *.T33 *.T39 *.T93"
+    Loader : "GDT"
+  }
+  10 {
+    Description : "SGI ClipGen Inset Coordinates"
+    ShortDesc : "ClipGen geo"
+    Filter : "*.geo"
+    Loader : "GEO"
+  }
+  11 {
+    Description : "US Census Bureau TIGER/Line"
+    ShortDesc : "Tiger"
+    Filter : "*.RT1"
+    Loader : "OGR"
+  }
+}
+Unsupported {
+  1 {
+    Description : "NIMA MUSE ASCII"
+    ShortDesc : "MUSE ASCII"
+    Filter : "*.asc"
+    Loader : "ASC"
+  }
+  2 {
+    Description : "ESRI Shape"
+    ShortDesc : "ESRI Shp"
+    Filter : "*.shpx"
+    Loader : "SHP"
+  }
+}

@@ -1,0 +1,225 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>AssetBase</class>
+<comment>  Copyright 2017 Google Inc.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+</comment>
+<widget class="QMainWindow">
+    <property name="name">
+        <cstring>AssetBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>545</width>
+            <height>317</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Asset Base</string>
+    </property>
+    <property name="focusPolicy">
+        <enum>TabFocus</enum>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget" row="0" column="0">
+            <property name="name">
+                <cstring>layout13</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>nameLabel</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>0</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>Asset Name:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>asset_name_label</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Untitled</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QFrame" row="1" column="0">
+            <property name="name">
+                <cstring>main_frame</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Raised</enum>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<menubar>
+    <property name="name">
+        <cstring>MenuBarEditor</cstring>
+    </property>
+    <item text="&amp;File" name="File">
+        <action name="save_action"/>
+        <action name="close_action"/>
+    </item>
+    <item text="&amp;Edit" name="Edit">
+        <action name="notes_action"/>
+        <action name="hidden_action"/>
+    </item>
+</menubar>
+<toolbars>
+</toolbars>
+<actions>
+    <action>
+        <property name="name">
+            <cstring>save_action</cstring>
+        </property>
+        <property name="text">
+            <string>Save</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Save</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+S</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>close_action</cstring>
+        </property>
+        <property name="text">
+            <string>Close</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Close</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>hidden_action</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>Hidden</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Hidden</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>notes_action</cstring>
+        </property>
+        <property name="text">
+            <string>Notes</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Notes</string>
+        </property>
+    </action>
+</actions>
+<connections>
+    <connection>
+        <sender>save_action</sender>
+        <signal>activated()</signal>
+        <receiver>AssetBase</receiver>
+        <slot>Save()</slot>
+    </connection>
+    <connection>
+        <sender>close_action</sender>
+        <signal>activated()</signal>
+        <receiver>AssetBase</receiver>
+        <slot>Close()</slot>
+    </connection>
+    <connection>
+        <sender>notes_action</sender>
+        <signal>activated()</signal>
+        <receiver>AssetBase</receiver>
+        <slot>EditNotes()</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="global" impldecl="in declaration">autoingest/.idl/AssetStorage.h</include>
+    <include location="local" impldecl="in implementation">assetbase.ui.h</include>
+</includes>
+<variables>
+    <variable access="private">khMetaData meta_;</variable>
+</variables>
+<slots>
+    <slot returnType="bool">Save()</slot>
+    <slot>Close()</slot>
+    <slot>EditNotes()</slot>
+</slots>
+<functions>
+    <function access="protected" returnType="AssetDefs::Type">AssetType() const</function>
+    <function access="protected" returnType="std::string">AssetSubtype() const</function>
+    <function access="protected" returnType="QWidget *">BuildMainWidget( QWidget * )</function>
+    <function access="protected" specifier="non virtual">InstallMainWidget()</function>
+    <function access="protected">closeEvent( QCloseEvent * event )</function>
+    <function access="protected" specifier="non virtual">SetName( const QString &amp; text )</function>
+    <function access="protected" specifier="non virtual" returnType="QString">Name()</function>
+    <function access="protected" returnType="bool">IsModified()</function>
+    <function access="protected" returnType="std::string">AssetPrettyName()</function>
+</functions>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

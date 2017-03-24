@@ -1,0 +1,76 @@
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/samples/mars_example.html";
+    </script>
+    
+   <title>mars_example.html</title>
+   <link href="mars_example.css" rel="stylesheet" type="text/css" />
+   <script src="http://code.google.com/www.google.com/jsapi?key=ABQIAAAA5El50zA4PeDTEMlv-sXFfRSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xTdBhxbkZWuzyYTVeclkwYHpb17ZQ"></script>
+   <script type="text/javascript">
+      var ge;
+      var lookAt;
+      google.load("earth", "1");
+
+      function init() {
+         google.earth.createInstance('map3d', initCB, failureCB, { database: 'http://khmdb.google.com/?db=mars' });
+      }
+
+      function initCB(instance) {
+
+         ge = instance;
+         ge.getWindow().setVisibility(true);
+         ge.getNavigationControl().setVisibility(ge.VISIBILITY_SHOW);
+
+         addClickListener(showOlympusMons, 'olympus_mons');
+         addClickListener(showFaceOnMars, 'face_on_mars');
+         addClickListener(showCandorChasma, 'candor_chasma');
+      }
+      
+      function failureCB(errorCode) {
+      }
+
+      function addClickListener(func, id) {
+         var obj = document.getElementById(id);
+         if (obj.addEventListener)
+            obj.addEventListener('click', func, false);
+         else if (obj.attachEvent)
+            obj.attachEvent('onclick', func);
+      }
+
+      function showOlympusMons() {
+         lookAt = ge.createLookAt('');
+         lookAt.set(18.4, -134, 0, ge.ALTITUDE_RELATIVE_TO_GROUND, 0, 0, 650000);
+         ge.getView().setAbstractView(lookAt);
+      }
+
+      function showFaceOnMars() {
+         lookAt = ge.createLookAt('');
+         lookAt.set(40.717, -9.424, 0, ge.ALTITUDE_RELATIVE_TO_GROUND, -44.158, 0, 10150);
+         ge.getView().setAbstractView(lookAt);
+      }
+
+      function showCandorChasma() {
+         lookAt = ge.createLookAt('');
+         lookAt.set(-6.276, -69.939, 0, ge.ALTITUDE_RELATIVE_TO_GROUND, 3.095, 35, 52800);
+         ge.getView().setAbstractView(lookAt);
+      }
+
+      google.setOnLoadCallback(init);
+   </script>
+
+</head>
+<body>
+
+   <div id="map3d" style="height:400px; width:600px;"></div>
+   <div id="location_links">
+      <p><strong>Fly to:</strong></p>
+      <ul>
+         <li id="olympus_mons">Olympus Mons</li>
+         <li id="face_on_mars">Face on Mars</li>
+         <li id="candor_chasma">Candor Chasma</li>
+      </ul>
+   </div>
+
+</body>
+</html>

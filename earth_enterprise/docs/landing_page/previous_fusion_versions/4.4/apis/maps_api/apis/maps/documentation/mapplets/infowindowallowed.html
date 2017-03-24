@@ -1,0 +1,486 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+  
+
+
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/mapplets/infowindowallowed.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Content Allowed in Mapplet Info Windows - Google Mapplets - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/html/apis/maps/documentation/mapplets/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../css/iehacks.css"><![endif]-->
+
+  </head>
+
+  <body class="gc-documentation">
+
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container" class="depr">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Mapplets (<a href="../../terms.html#section_4_4">Deprecated</a>)</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="index.html" title="Google Mapplets home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="guide.html" class="selected" title="Official Google Mapplets documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../faq.html" title="Answers to frequently asked questions about Google Mapplets">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="articles.html" title="Focused articles and tutorials for Google Mapplets developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Mapplets blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="http://groups.google.com/group/google-mapplets/" title="Google Mapplets developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../../terms.html" title="Google Mapplets terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <a name="gc-toc-anchor"></a>  
+      <div class="g-unit g-first" id="gc-toc">
+          <ul>
+    <li><a href="../../index.html">Maps API Family</a></li>
+    <li><a href="http://maps.google.com/gadgets/directory?synd=mpl">Mapplets Directory</a></li>
+    </ul>
+  <div class="line"></div>
+    <ul>
+      <li><h2>Mapplets API</h2>
+                <ul>
+                  <li><a class="tlw-expanded" href="guide.html">Developer Guide</a>
+                    <ul>
+                      <li><a href="basics.html">Basics</a></li>
+                      <li><a href="events.html">Events</a></li>
+                      <li><a href="overlays.html">Overlays</a></li>
+                      <li><a href="services.html">Services</a></li>
+                    </ul>                               
+                  </li>
+                  <li><a href="reference.html">API Reference</a></li>
+                  <li><a href="infowindowallowed.html">Content Allowed in Mapplet Info Windows</a></li>
+               <li><h2 class="tlw-expanded">More Resources:</h2>
+               <ul>
+               <li><a href="demogallery.html">Demos</a></li>
+               <li><a href="articles.html">Articles</a></li>
+               <li><a href="mediagallery.html">Presentations</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/issues/list?can=2&q=apitype%3AMapplets&colspec=ID+Type+Status+Introduced+Fixed+Summary+Internal+Stars&cells=tiles">Known Issues</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/wiki/MappletsAPIChangelog">Changelog</a><sup class="new">New!</sup></li>
+              </ul>
+                </ul>
+              </li>
+      </li>
+    </ul>   
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps JavaScript API V3</h2>
+         <ul>
+           <li><a href="../javascript/index.html">Home Page</a></li>
+           <li><a href="../javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+      <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../flash/index.html">Home Page</a></li>
+          <li><a href="../flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+  <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../mapsdata/index.html">Home Page</a></li>
+          <li><a href="../mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+      <div class="line"></div>
+    <ul>
+        <li><h2><a href="../webservices/index.html">Maps API Web Services</a></h2>
+        <ul>
+          <li><a href="../geocoding/index.html">Geocoding API</a></li>
+          <li><a href="../directions/index.html">Directions API</a></li>
+          <li><a href="../elevation/index.html">Elevation API</a></li>
+          <li><a href="../places/index.html">Places APl</a></li>
+        </ul>
+      </li>
+    </ul>
+       <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+          <div class="promo"><p><a href="../premier/index.html">Google Maps API Premier</a></p><p>Includes enterprise licensing and support</p></div>
+
+      </div>
+      
+      <a name="gc-pagecontent-anchor"></a>   
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Content Allowed in Mapplet Info Windows</h1>
+
+
+<p class="note">Note: The Google Mapplets API has been officially
+deprecated as of May 19, 2010. Existing Mapplets will continute
+to be supported, but no new Mapplets will be accepted into the
+Mapplets Gallery.</p>
+
+
+<p>Since the HTML placed into info windows runs within the Google Maps
+domain, we must santize its contents to prevent any malicious code
+from executing.  No Javascript is allowed and only the tags and CSS
+listed on this page are allowed.</p>
+
+<h2>Allowed HTML tags</h2>
+<table>
+<tr><th>Tag</th><th><b>Attributes</b></th></tr>
+<tr class="odd"><td class="code">A</td><td class="code">style, href, name, rel, type, target</td></tr>
+<tr class="odd"><td class="code">B</td><td class="code">style</td></tr>
+<tr class="odd"><td class="code">BIG</td><td class="code">style</td></tr>
+<tr class="odd"><td class="code">BLOCKQUOTE</td><td class="code">style</td></tr>
+<tr class="odd"><td class="code">BR</td><td class="code">style</td></tr>
+<tr class="odd"><td class="code">CAPTION</td><td class="code">style</td></tr>
+<tr class="odd"><td class="code">CITE</td><td class="code">style</td></tr>
+<tr class="odd"><td class="code">CODE</td><td class="code">style</td></tr>
+<tr class="odd"><td class="code">DD</td><td class="code">style</td></tr>
+<tr class="odd"><td class="code">DIV</td><td class="code">style, align</td></tr>
+<tr class="odd"><td class="code">DL</td><td class="code">style</td></tr>
+<tr class="odd"><td class="code">DT</td><td class="code">style</td></tr>
+<tr class="odd"><td class="code">EM</td><td class="code">style</td></tr>
+<tr class="odd"><td class="code">EMBED</td><td class="code">style, align, hidden, width, height, src, type, flashvars, wmode, units</td></tr>
+<tr class="odd"><td class="code">FONT</td><td class="code">style, color, size, face</td></tr>
+<tr class="odd"><td class="code">FORM</td><td class="code">style, action, method, target</td></tr>
+<tr class="odd"><td class="code">H1</td><td class="code">style, align</td></tr>
+<tr class="odd"><td class="code">H2</td><td class="code">style, align</td></tr>
+<tr class="odd"><td class="code">H3</td><td class="code">style, align</td></tr>
+<tr class="odd"><td class="code">H4</td><td class="code">style, align</td></tr>
+<tr class="odd"><td class="code">H5</td><td class="code">style, align</td></tr>
+<tr class="odd"><td class="code">H6</td><td class="code">style, align</td></tr>
+<tr class="odd"><td class="code">HR</td><td class="code">style, align, noshade, size, width</td></tr>
+<tr class="odd"><td class="code">I</td><td class="code">style</td></tr>
+<tr class="odd"><td class="code">IFRAME</td><td class="code">style, src, name, width, height, align, frameborder, marginwidth, marginheight, scrolling</td></tr>
+<tr class="odd"><td class="code">IMG</td><td class="code">style, src, alt, width, height, align, border, hspace, vspace</td></tr>
+<tr class="odd"><td class="code">INPUT</td><td class="code">style, type, name, value, checked, size, maxlength, disabled, readonly</td></tr>
+<tr class="odd"><td class="code">LABEL</td><td class="code">style, for</td></tr>
+<tr class="odd"><td class="code">LI</td><td class="code">style, type, value</td></tr>
+<tr class="odd"><td class="code">OBJECT</td><td class="code">style, width, height</td></tr>
+<tr class="odd"><td class="code">OL</td><td class="code">style, type, start, compact</td></tr>
+<tr class="odd"><td class="code">OPTGROUP</td><td class="code">style, label, disabled</td></tr>
+<tr class="odd"><td class="code">OPTION</td><td class="code">style, value, selected, disabled, label</td></tr>
+<tr class="odd"><td class="code">P</td><td class="code">style, align</td></tr>
+<tr class="odd"><td class="code">PARAM</td><td class="code">name, value</td></tr>
+<tr class="odd"><td class="code">PRE</td><td class="code">style, width</td></tr>
+<tr class="odd"><td class="code">Q</td><td class="code">style</td></tr>
+<tr class="odd"><td class="code">SAMP</td><td class="code">style</td></tr>
+<tr class="odd"><td class="code">SELECT</td><td class="code">style, name, multiple, size, disabled</td></tr>
+<tr class="odd"><td class="code">SMALL</td><td class="code">style</td></tr>
+<tr class="odd"><td class="code">SPAN</td><td class="code">style</td></tr>
+<tr class="odd"><td class="code">STRIKE</td><td class="code">style</td></tr>
+<tr class="odd"><td class="code">STRONG</td><td class="code">style</td></tr>
+<tr class="odd"><td class="code">SUB</td><td class="code">style</td></tr>
+<tr class="odd"><td class="code">SUP</td><td class="code">style</td></tr>
+<tr class="odd"><td class="code">TABLE</td><td class="code">style, width, border, frame, cellspacing, cellpadding, align, bgcolor</td></tr>
+<tr class="odd"><td class="code">TBODY</td><td class="code">style, align, valign</td></tr>
+<tr class="odd"><td class="code">TD</td><td class="code">style, rowspan, colspan, align, valign, width, height, nowrap, bgcolor</td></tr>
+<tr class="odd"><td class="code">TEXTAREA</td><td class="code">style, name, rows, cols, disabled, readonly</td></tr>
+<tr class="odd"><td class="code">TFOOT</td><td class="code">style, align, valign</td></tr>
+<tr class="odd"><td class="code">TH</td><td class="code">style, rowspan, colspan, align, valign, width, height, nowrap, bgcolor</td></tr>
+<tr class="odd"><td class="code">THEAD</td><td class="code">style, align, valign</td></tr>
+<tr class="odd"><td class="code">TR</td><td class="code">style, align, valign, bgcolor</td></tr>
+<tr class="odd"><td class="code">TT</td><td class="code">style</td></tr>
+<tr class="odd"><td class="code">U</td><td class="code">style</td></tr>
+<tr class="odd"><td class="code">UL</td><td class="code">style, type, compact</td></tr>
+<tr class="odd"><td class="code">VAR</td><td class="code">style</td></tr>
+</table>
+
+<h2>Allowed CSS styles</h2>
+<table>
+<tr class="odd"><td class="code">background-color</td></tr>
+<tr class="odd"><td class="code">border</td></tr>
+<tr class="odd"><td class="code">border-bottom</td></tr>
+<tr class="odd"><td class="code">border-bottom-color</td></tr>
+<tr class="odd"><td class="code">border-bottom-style</td></tr>
+<tr class="odd"><td class="code">border-bottom-width</td></tr>
+<tr class="odd"><td class="code">border-collapse</td></tr>
+<tr class="odd"><td class="code">border-color</td></tr>
+<tr class="odd"><td class="code">border-left</td></tr>
+<tr class="odd"><td class="code">border-left-color</td></tr>
+<tr class="odd"><td class="code">border-left-style</td></tr>
+<tr class="odd"><td class="code">border-left-width</td></tr>
+<tr class="odd"><td class="code">border-right</td></tr>
+<tr class="odd"><td class="code">border-right-color</td></tr>
+<tr class="odd"><td class="code">border-right-style</td></tr>
+<tr class="odd"><td class="code">border-right-width</td></tr>
+<tr class="odd"><td class="code">border-spacing</td></tr>
+<tr class="odd"><td class="code">border-top</td></tr>
+<tr class="odd"><td class="code">border-top-color</td></tr>
+<tr class="odd"><td class="code">border-top-style</td></tr>
+<tr class="odd"><td class="code">border-top-width</td></tr>
+<tr class="odd"><td class="code">bottom</td></tr>
+<tr class="odd"><td class="code">caption-side</td></tr>
+<tr class="odd"><td class="code">clear</td></tr>
+<tr class="odd"><td class="code">clip</td></tr>
+<tr class="odd"><td class="code">color</td></tr>
+<tr class="odd"><td class="code">css-float</td></tr>
+<tr class="odd"><td class="code">cursor</td></tr>
+<tr class="odd"><td class="code">dir</td></tr>
+<tr class="odd"><td class="code">direction</td></tr>
+<tr class="odd"><td class="code">display</td></tr>
+<tr class="odd"><td class="code">empty-cells</td></tr>
+<tr class="odd"><td class="code">font</td></tr>
+<tr class="odd"><td class="code">font-family</td></tr>
+<tr class="odd"><td class="code">font-size</td></tr>
+<tr class="odd"><td class="code">font-size-adjust</td></tr>
+<tr class="odd"><td class="code">font-stretch</td></tr>
+<tr class="odd"><td class="code">font-style</td></tr>
+<tr class="odd"><td class="code">font-variant</td></tr>
+<tr class="odd"><td class="code">font-weight</td></tr>
+<tr class="odd"><td class="code">height</td></tr>
+<tr class="odd"><td class="code">lang</td></tr>
+<tr class="odd"><td class="code">left</td></tr>
+<tr class="odd"><td class="code">letter-spacing</td></tr>
+<tr class="odd"><td class="code">line-height</td></tr>
+<tr class="odd"><td class="code">margin</td></tr>
+<tr class="odd"><td class="code">margin-bottom</td></tr>
+<tr class="odd"><td class="code">margin-left</td></tr>
+<tr class="odd"><td class="code">margin-right</td></tr>
+<tr class="odd"><td class="code">margin-top</td></tr>
+<tr class="odd"><td class="code">marker-offset</td></tr>
+<tr class="odd"><td class="code">marks</td></tr>
+<tr class="odd"><td class="code">max-height</td></tr>
+<tr class="odd"><td class="code">max-width</td></tr>
+<tr class="odd"><td class="code">min-height</td></tr>
+<tr class="odd"><td class="code">min-width</td></tr>
+<tr class="odd"><td class="code">outline</td></tr>
+<tr class="odd"><td class="code">outline-bottom</td></tr>
+<tr class="odd"><td class="code">outline-left</td></tr>
+<tr class="odd"><td class="code">outline-right</td></tr>
+<tr class="odd"><td class="code">outline-top</td></tr>
+<tr class="odd"><td class="code">padding</td></tr>
+<tr class="odd"><td class="code">padding-bottom</td></tr>
+<tr class="odd"><td class="code">padding-left</td></tr>
+<tr class="odd"><td class="code">padding-right</td></tr>
+<tr class="odd"><td class="code">padding-top</td></tr>
+<tr class="odd"><td class="code">position</td></tr>
+<tr class="odd"><td class="code">right</td></tr>
+<tr class="odd"><td class="code">table-layout</td></tr>
+<tr class="odd"><td class="code">text-align</td></tr>
+<tr class="odd"><td class="code">text-decoration</td></tr>
+<tr class="odd"><td class="code">text-indent</td></tr>
+<tr class="odd"><td class="code">text-shadow</td></tr>
+<tr class="odd"><td class="code">text-transform</td></tr>
+<tr class="odd"><td class="code">title</td></tr>
+<tr class="odd"><td class="code">top</td></tr>
+<tr class="odd"><td class="code">unicode-bidi</td></tr>
+<tr class="odd"><td class="code">vertical-align</td></tr>
+<tr class="odd"><td class="code">visibility</td></tr>
+<tr class="odd"><td class="code">white-space</td></tr>
+<tr class="odd"><td class="code">width</td></tr>
+<tr class="odd"><td class="code">word-spacing</td></tr>
+<tr class="odd"><td class="code">z-index</td></tr>
+</table>
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

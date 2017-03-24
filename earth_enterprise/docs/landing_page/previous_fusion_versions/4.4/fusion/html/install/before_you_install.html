@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/> 
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" /> 
+<link rel="stylesheet" type="text/css" href="local_extensions.css" /> 
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Before Installing</title>
+</head>
+
+<body>
+<a name="top"></a>
+
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" />
+  </div>
+  <h1 id="doc_title">Installation Guide</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Installation Guide</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="system_requirements.html">System Requirements</a></li>
+    <li><a href="before_you_install.html" id="selected">Before you Install</a></li>
+    <li><a href="gui_install.html">GUI Installer</a></li>
+    <li><a href="cl_install.html">Command Line Installer</a></li>
+    <li><a href="system_manager.html">Verifying and Troubleshooting</a></li>
+    <li><a href="uninstalling.html">Uninstalling</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+<h1>Before Installing</h1>
+
+<p>Before you install  Google Earth Enterprise (GEE), you must configure your hardware, network, and GEE users. You should also carefully decide in advance where you want to store your Fusion data and where you want to publish your Fusion databases. During installation, you'll be prompted for this information. The following sections provide information about   GEE  requirements, considerations, and best practices. Be sure to complete all of the tasks described in these sections before installing  GEE. </p>
+<h1>Licensing</h1>
+<p>See the GEE License Agreement and your Ordering Document for information about the maximum number of physical CPU cores allowed per machine. If you want to exceed the maximum, you'll need to buy more Fusion or core licenses.</p>
+<h2>Configuring Your Host Volumes</h2>
+<p>The best practices for naming your host volumes are:</p>
+<ul>
+  <li><b>Network naming convention</b>. You should use a network naming convention for any new volume that hosts Fusion  or source data, whether it is initially part of a network  or not, because you will almost certainly migrate to a network-based configuration eventually. Fusion requires both a network path and local name to resolve the locations of  source files and related Fusion data, so changing the host volume name or path invalidates Fusion data. On a single workstation setup, the local and network paths are identical,  but on a network-based configuration they are not. </li>
+  <li><b>/gevol</b>. You should use  /<code>gevol</code> as your volume naming convention because it's unlikely to conflict with standard Linux volume definitions. Linux systems frequently use either <code>/vol(*)</code> or <code>/</code><code>data(*)</code> as the local volume definition on a new system, so using this convention for  Fusion can cause name conflicts if you later switch from a single workstation to a network-based configuration. For example, if you initially define <code>/vol1/assets</code> as the network location for a Fusion <i>asset root</i>, and you later add another workstation that has a local volume called <code>/vol1</code>, that workstation cannot reference <code>/vol1/assets </code>through the network because of the name conflict with its local volume definition. (See <a href="install.html#32583">“Planning the Location of Your Asset Root”</a> for more information about the asset root.) You can avoid this conflict by using any unique naming convention for all volumes on your network (such as /<code>vol1</code>... /<code>vol</code><i>n</i>), but  /<code>gevol</code>  is a good choice because it's descriptive.</li>
+</ul>
+<h2>Configuring Multiple Storage Devices</h2>
+
+<p>GEE Server and the Fusion asset root, source volumes, and publish root require large amounts of disk storage space. Fusion requires about three times as much storage space as GEE Server. The storage space can be either in the form of internal disks, directly attached storage devices, network-attached storage (NAS) devices, or storage area network (SAN) devices. Typically, these devices are configured into redundant arrays of independent disks (RAIDs) and presented to the operating system as volumes. Volumes can range in size, from several hundred gigabytes   to tens of terabytes.</p>
+<p>The difference between configuring a workstation with one, two, or three volumes is how you defne  the mount point  for
+  the source and asset volumes.</p>
+<p>When configuring a Linux workstation, it is best practice to use the following mount point naming conventions: </p>
+
+<ul>
+  <li>
+    <b>Single volume</b>
+    <p>Mount the single drive to slash (/). All data
+      (<code>/gevol/assets</code>, <code>/gevol/src</code>, and
+      <code>/gevol/published_dbs</code>) resides on that drive with the local
+      path defined using the /<code>gevol</code> naming convention.</p>
+  </li>
+  <li>
+    <b>Two volumes - a small system volume and a larger data volume</b>
+    <p>Mount the small system drive to slash (<code>/</code>). Mount the larger
+      data drive to <code>/gevol/</code>. Source and asset data volumes can then
+      be defined as <code>/gevol/assets</code> and <code>/gevol/src</code>.</p>
+  </li>
+  <li>
+    <b>Three volumes - a small system volume and two larger data volumes</b>
+    <p>Mount the small system drive to slash (<code>/</code>). Mount the first
+      large data drive to <code>/gevol/assets</code>. Mount the second large
+      data drive to <code>/gevol/src</code>.</p>
+  </li>
+  <li>
+    <b>More than three volumes</b>
+    <p>There are several strategies for storing very large data sets. Fusion can read from and write to multiple volumes.
+      If your requirements exceed the
+      capacity of three volumes, consult your GEE sales engineer to determine the best
+      way to configure your storage needs, </p>
+  </li>
+</ul>
+
+<p>It is also important to keep internal and external storage devices separated so that if your internal server goes down, it does not affect your ability to serve published data to external clients. Likewise, if your external server goes down, you can replace it and publish from the internal storage device. Perhaps more importantly, keeping your internal and external storage devices separate reduces the possibility of performance problems that could occur if you are building a large data set or if a client requests a time-consuming search. </p>
+<h2><a id="79483"></a><a id="32583"></a>Planning the Location of Your Asset Root</h2>
+<p>During  Fusion installation, you must specify a location for your <i>asset root</i>. The asset root is the main location where  all of the assets (resources, map layers, projects, and databases) are stored that are created with Fusion. (Refer to th<i>e </i><a href="../reference/index.html">Reference Guide</a> for more information about the asset root.)</p>
+
+<p>The asset root must be located on a single volume. It cannot be split across multiple volumes. Therefore, it is important to think ahead and allocate as much storage space as possible for the asset root.</p>
+
+<p>Unless you have an established partitioning scheme for all of your storage devices, you should accept the default partitioning scheme presented to you while installing Linux. That scheme gives you a reasonable amount of space in <code>/opt</code> for GEE and other system software, a small amount of space for <code>/home</code>, and the remaining space on your storage device for the asset root.</p>
+
+<p>You should also  accept the default volume designation for your asset root during installation (<code>/gevol/assets</code>), unless that name conflicts with your established naming conventions.</p>
+
+<p class="note"><strong>Note:</strong> It is a good idea to dedicate a network-attached storage device (NAS) for your asset root.</p>
+
+<h2><a id="96247"></a>Planning the Location of Your Publish Root</h2>
+
+<p>During  GEE Server installation, you must specify a volume for the <i>publish root</i>. The publish root is the directory in which all of your published databases are stored.
+</p>
+<p><b>If you specify a different volume than the asset root</b>: </p>
+<p>Whenever you publish a database, Fusion registers the database on the specified volume and then copies all of the database files to the designated volume. </p>
+<p>For example, if you specify <code>/gevol/assets</code> for your asset root and <code>/data1/published_dbs</code> for your publish root: whenever you publish a database, Fusion copies all of the database files from <code>/gevol/assets</code> to <code>/data1/published_dbs</code> (unless you allow symbolic links during installation). Copying takes more time as well as extra disk space.</p>
+
+<p><b>If you specify the same volume as the asset root</b>: </p>
+<p>Whenever you publish a database, Fusion registers the database on the specified volume and sets symbolic links to the database files.</p>
+<p>For example, if you specify <code>/gevol/assets</code> for your asset root and <code>/gevol/published_dbs</code> for your publish root: whenever you publish a database, Fusion registers the database on <code>gevol</code> and sets hard links to the database files. No copying is necessary.</p>
+<p>&nbsp;</p>
+
+<h2><a id="88523"></a>Setting Up GEE Users</h2>
+
+<p>The GEE installer automatically configures certain system users to perform background tasks at the system level. If you accept the default user names and allow the installer to create those users on your local workstation, you are implementing local authentication only. Local authentication is designed for standalone workstations only.</p>
+
+<p>If you are using GEE over a network with at least two workstations, storage devices, or servers, the best practice is to use a centralized network authentication system such as LDAP, NIS, or one of the many commercially available systems available.</p>
+
+<p>If you use a centralized network authentication system, you must add the following users to your authentication system’s user list:
+</p>
+
+<ul>
+  <li><b>gefusionuser</b></li>
+  <li><b>geapacheuser</b></li>
+  <li><b>getomcatuser</b></li>
+  <li><b>gepguser</b></li>
+</ul>
+
+<p>The primary group for all of these users is <b>gegroup</b>.</p>
+
+<p>The installer prompts you to assign a user ID (UID) for each of these users. You can accept the installer-assigned UID or specify a unique UID for each user. If you are using a standalone workstation, you can simply accept the installer-assigned UIDs. However, if you are in a multi-user environment in which multiple workstations share a common asset root on a NAS/SAN, <strong>these users must have the same UID on all devices, so you must assign them explicitly in both your network authentication system and in GEE</strong>.</p>
+
+<p>To determine the UIDs to assign, examine the UIDs that are already used on each device on which you plan to install GEE software, and determine four UIDs that are available on all devices. Then, when the installer prompts you for the UIDs, assign the same UIDs for these users in GEE as on all network devices.</p>
+
+<p class="note"><strong>Note:</strong> You must assign these users on the NAS as well as the workstations and servers.</p>
+
+<p>Be sure to configure each GEE workstation, storage device, and GEE Server to use your network authentication system. For more information, see your network authentication system documentation. For more configuration options, see <a href="../admin/server.html#41361">Configuring Publishing Authentication</a> in the <strong>Administration Guide</strong>.</p>
+<h3>Customizing GEE User Names </h3>
+<p>You can use customized user names, user IDs, and group names. During installation,
+    you are asked if you want to change the default user and group names. If you
+    choose <strong>yes</strong>, you are prompted to provide a user and group name of your choice. </p>
+<h2>Deciding Which Products To Install</h2>
+<p>You do not need to install all products on all devices. Follow the   guidelines below.</p>
+<p><b>Development machine</b>:</p>
+<ul>
+  <li>Install both Fusion and GEE Server on the server machine that you want to use to import your source GIS data and create flyable 3D and 2D databases. A system in this configuration is typically called the &quot;development machine&quot; since its primary task is to build flyable databases and only a small number of users will view the flyable data for quality assurance testing.</li>
+  <li>Install the Fusion tutorial files on the &quot;development machine&quot; for users who are new to Fusion or to this version of Fusion.   You can also use the Fusion tutorial files to test publishing. (See <a href="../admin/tutorial.html#79906">Configuring Tutorial Work Space</a> in the <strong>Administration Guide</strong> for additional important information about configuring the tutorial work space for users.)<br />
+  </li>
+</ul>
+<p><b>Production machine</b>:</p>
+<ul>
+  <li>Install   only the GEE Server  on the server machine that hosts flyable 3D and 2D databases. All authorized end-users will connect to this system -- typically referred to as the &quot;production machine&quot; -- to view the flyable databases. This machine must be accessible through the network from the development machine in order to publish  databases. </li>
+  <li>Users who will not have direct network access to their production machines, or users who plan to update remote systems with external hard drives, must also install the &quot;Disconnected Publishing Add-on&quot; for additional tools.  </li>
+</ul>
+<p>The following diagram shows a sample system configuration.</p>
+<p><img src="images/entnetwork.jpg" /></p>
+<p>In this example, there are two server-class machines assigned to data building and data hosting tasks, plus one workstation  for data management. A GIS specialist uses the workstation to remotely log in to the development machine with Fusion installed to import source GIS data and output a flyable globe to publish for end users. GEE Server software is also installed on the development machine so the GIS specialist may perform quality assurance tests on the data before publishing to the production machine. Only the GEE Server is installed on the production machine, which authorized end-users in the network may access with Google Earth Enterprise Client (Earth EC) for 3D databases, or a compatible web browser for 2D databases.  </p>
+
+</div>
+<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+
+<!-- END WRAPPER -->
+
+</body>
+</html>

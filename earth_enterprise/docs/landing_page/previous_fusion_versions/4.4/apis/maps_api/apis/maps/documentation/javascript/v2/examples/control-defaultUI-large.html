@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/v2/examples/control-defaultUI-large.html";
+    </script>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>Google Maps JavaScript API Example: Large Map Default UI</title>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSosDVG8KKPE1-m51RBrvYughuyMxQ-i1QfUnH94QxWIa6N4U6MouMmBA" type="text/javascript"></script>
+    <script type="text/javascript">
+    var map;
+    
+    function initialize() {
+      if (GBrowserIsCompatible()) {
+        map = new GMap2(document.getElementById("map_canvas"));
+        map.setCenter(new GLatLng(41.897997,-87.790203), 11);
+        map.setUIToDefault();
+      }
+    }
+    
+    </script>
+  </head>
+
+  <body onload="initialize()" onunload="GUnload()">
+    <div id="map_header" style="width: 400px; height: 20px"><p><b>Large Map Default UI:</b></p></div>
+    <div id="map_canvas" style="width: 400px; height: 150px"></div>
+  </body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Common Server Messages</title>
+</head>
+
+<body>
+<a name="top"></a>
+  
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" />
+  </div>
+  <h1 id="doc_title">Administration Guide</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+<ul>
+  <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+  <div class="line"></div>
+  <li><strong>Administration Guide</strong></li>
+  <li><a href="index.html">Home</a></li>
+  <li><a href="server.html">Configuring Server</a></li>
+  <li><a href="fusion.html">Configuring Fusion</a></li>
+  <li><a href="tutorial.html">Configuring Tutorial Work Space</a></li>
+  <li><a href="commands.html">Command Reference</a></li>
+  <li><a href="errors.html" id="selected">Common Server Error Messages</a></li>
+  <li><a href="mult_db.html">Multiple Database Support</a></li>
+<div class="line"></div>
+  <li><a href="notices.html">Legal Notices</a></li>
+</ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+<h1><a id="61436"></a>Common Server Error Messages
+</h1>
+<p>Server error messages appear mainly when:
+</p>
+<ul>
+  <li>The server (or part of it) is not running.
+  </li>
+  <li>The network connection to the server is down.
+  </li>
+</ul>
+<p>To determine whether the server is running, enter the server’s URL or IP address in a browser window. If it is running, the browser displays the Google Earth logo. If it is not running, the browser displays a Page Not Found error message. To start the server, if necessary, enter:
+</p><code>/etc/init.d/geserver start</code>
+<p>The remainder of this appendix provides additional information about the most common error messages you might see in Google Earth Enterprise Server, including:
+</p>
+<ul>
+  <li><a href="#authentication">Authentication required</a>
+  </li>
+  <li><a href="#published">Database is currently published. Please disable the stream virtual server first.</a>
+  </li>
+  <li><a href="#vs_no_exist">Either the virtual server <i>vs_name</i> does not exist or is already disabled.</a>
+  </li>
+  <li><a href="#cache">Incorrect cache level</a>
+  </li>
+  <li><a href="#database">Invalid database</a>
+  </li>
+  <li><a href="#plugin_exists">Plugin already exists.</a>
+  </li>
+  <li><a href="#plugin_not_reg">Plugin <i>plug-in_name</i> is not registered.</a>
+  </li>
+  <li><a href="#syncfailed">Search server push failed</a>
+  </li>
+  <li><a href="#syncfailed">Stream server push failed</a>
+  </li>
+  <li><a href="#nocontact">Unable to contact server</a>
+  </li>
+  <li><a href="#nocontact">Unable to contact search server</a>
+  </li>
+  <li><a href="#nocontact">Unable to contact stream server</a>
+  </li>
+  <li><a href="#upload">Upload failed</a>
+  </li>
+  <li><a href="#vs_exists">Virtual server already exists</a>
+  </li>
+  <li><a href="#URLmissing">Virtual server URL missing</a>
+  </li>
+</ul>
+<p>If you encounter any errors that include the text “internal error”, contact Google technical support.
+</p>
+<h2><a id="authentication"></a>Authentication required
+</h2>
+<h4>Where It Appears
+</h4>
+<p>When you try to publish a database on a server that requires authentication.
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>You entered an invalid user name or password three times.
+</p>
+<h4>Resolution
+</h4>
+<p>Check with your system administrator to be sure you have permission to publish a database and have a valid user name and password. Then try entering the user name and password. 
+</p>
+<p class="note"><strong>Note:</strong> Be sure that CapsLock is not on.
+</p>
+<h2><a id="published"></a>Database is currently published. Please disable the stream virtual server first.
+</h2>
+<h4>Where It Appears
+</h4>
+<p>When you try to delete a published database with <code>geserveradmin --deletedb <em>db_name</em></code>. (See <a href="commands.html#75914">geserveradmin</a>.)
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>You cannot delete a published database.
+</p>
+<h4>Resolution
+</h4>
+<p>Either publish a different database, or disable the virtual stream server, and then try deleting the database again.
+</p>
+<h2><a id="vs_no_exist"></a>Either the virtual server <i>vs_name</i> does not exist or is already disabled.
+</h2>
+<h4>Where It Appears
+</h4>
+<p>When you are trying to publish to a virtual server.
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>Either the virtual server has been disabled, or you made a typographical error when you entered the command.
+</p>
+<h4>Resolution
+</h4>
+<p>Use <code>geserveradmin --listdbs</code> to list all databases registered on the server. (See <a href="commands.html#75914">geserveradmin</a>.)
+</p>
+<h2><a id="cache"></a>Incorrect cache level
+</h2>
+<h4>Where It Appears
+</h4>
+<p>When you add a virtual server.
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>You set the cache level to a number other than 1, 2, or 3.
+</p>
+<h4>Resolution
+</h4>
+<p>Set the cache level to 1, 2, or 3. (See <a href="commands.html#75914">“geserveradmin” on page A-11</a> for details.)
+</p>
+<h2><a id="database"></a>Invalid database
+</h2>
+<h4>Where It Appears
+</h4>
+<p>When you try to publish a database using the <code>geserveradmin --publishdb</code> command. (See <a href="commands.html#75914">geserveradmin
+</a>.)
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>The database path is incorrect, the database has not yet been built, or the database has been corrupted.
+</p>
+<h4>Resolution
+</h4>
+<p>Enter the correct path or build/rebuild the database.
+</p>
+<h2><a id="plugin_exists"></a>Plugin already exists.
+</h2>
+<h4>Where It Appears
+</h4>
+<p>When you are trying to register a plug-in.
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>The plug-in is already registered.
+</p>
+<h4>Resolution
+</h4>
+<p>No action is required.
+</p>
+<h2><a id="plugin_not_reg"></a>Plugin <i>plug-in_name</i> is not registered.
+</h2>
+<h4>Where It Appears
+</h4>
+<p>When trying to create a search tab.
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>You tried to create a search tab with a plug-in that is not registered with the server.
+</p>
+<h4>Resolution
+</h4>
+<p>Register the plug-in using <code>geserveradmin</code>. (See <a href="commands.html#75914">“geserveradmin” on page A-11</a>.)
+</p>
+<h2><a id="syncfailed"></a>Search server push failed<br />
+Stream server push failed
+</h2>
+<h4>Where It Appears
+</h4>
+<p>When you try to publish a database.
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>The network connection to the server is down, or permissions are set incorrectly where the publisher is attempting to write data.
+</p>
+<h4>Resolution
+</h4>
+<p>Check your network connections and ensure that the targeted server is running and accessible. Check the access permissions in the publish root directory.
+</p>
+<h2><a id="nocontact"></a>Unable to contact server<br />
+Unable to contact search server<br />
+Unable to contact stream server
+</h2>
+<h4>Where It Appears
+</h4>
+<p>When you try to publish a database.
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>The specified server is not running, or a service that it requires is not running.
+</p>
+<h4>Resolution
+</h4>
+<p>Enter the following command as root to restart the server:
+</p>
+<pre><code>/etc/init.d/geserver restart</code></pre>
+<h2><a id="upload"></a>Upload failed
+</h2>
+<h4>Where It Appears
+</h4>
+<p>When you try to publish a database.
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>The network connection to the server is down, or permissions are set incorrectly where the publisher is attempting to write data.
+</p>
+<h4>Resolution
+</h4>
+<p>Check your network connections and ensure that the targeted server is running and accessible. Check the access permissions in the publish root directory.
+</p>
+<h2><a id="vs_exists"></a>Virtual server already exists
+</h2>
+<h4>Where It Appears
+</h4>
+<p>When you are creating a virtual server with <code>geserveradmin --addvs</code>. (See <a href="commands.html#75914">“geserveradmin” on page A-11</a>.)
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>You tried to use a virtual server name that has already been used for another server.
+</p>
+<h4>Resolution
+</h4>
+<p>Always use a unique name for a new virtual server.
+</p>
+<h2><a id="URLmissing"></a>Virtual server URL missing
+</h2>
+<h4>Where It Appears
+</h4>
+<p>When you add a virtual server.
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>You did not provide a URL for the virtual server you are trying to add.
+</p>
+<h4>Resolution
+</h4>
+<p>Include a URL in the command. (See <a href="commands.html#75914">“geserveradmin” on page A-11</a> for details.)
+</p>
+
+<h2><a id="mismatch"></a>Additional Support</h2>
+<p>For the most up-to-date information about Google Earth Enterprise, please email
+   the Google Enterprise Support team at <a href="mailto:enterprise-support@google.com">enterprise-support@google.com</a>.</p>
+</div>
+	<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+	<!-- END WRAPPER -->
+
+
+
+
+</body>
+</html>

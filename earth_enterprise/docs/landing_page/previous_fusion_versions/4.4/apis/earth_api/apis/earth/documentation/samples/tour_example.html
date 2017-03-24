@@ -1,0 +1,89 @@
+<html>
+   <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/samples/tour_example.html";
+    </script>
+    
+      <title>tour_example.html</title>
+      <script src="http://code.google.com/www.google.com/jsapi?key=ABQIAAAA5El50zA4PeDTEMlv-sXFfRSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xTdBhxbkZWuzyYTVeclkwYHpb17ZQ"></script>      <script src="http://earth-api-samples.googlecode.com/svn/trunk/lib/kmldomwalk.js" type="text/javascript"></script>
+      <script type="text/javascript">
+
+         var ge;
+			var tour;
+         google.load("earth", "1");
+
+         function init() {
+            google.earth.createInstance('map3d', initCB, failureCB);
+         }
+
+         function initCB(instance) {
+            ge = instance;
+            ge.getWindow().setVisibility(true);
+            ge.getNavigationControl().setVisibility(ge.VISIBILITY_SHOW);
+
+            var href = 'http://code.google.com/apis/kml/'
+                     + 'documentation/kmlfiles/complete_tour_example.kml';
+            google.earth.fetchKml(ge, href, fetchCallback);
+
+            function fetchCallback(fetchedKml) {
+               // Alert if no KML was found at the specified URL.
+               if (!fetchedKml) {
+                  setTimeout(function() {
+                     alert('Bad or null KML');
+                  }, 0);
+                  return;
+               }
+
+               // Add the fetched KML into this Earth instance.
+               ge.getFeatures().appendChild(fetchedKml);
+
+               // Walk through the KML to find the tour object; assign to variable 'tour.'
+               walkKmlDom(fetchedKml, function() {
+                  if (this.getType() == 'KmlTour') {
+                     tour = this;
+                     return false;
+                  }
+               });
+            }
+         }
+
+         function failureCB(errorCode) {
+         }
+
+         // Tour control functions
+         function enterTour() {
+            if (!tour) {
+               alert('No tour found!');
+               return;
+            }
+            ge.getTourPlayer().setTour(tour);
+         }
+         function playTour() {
+            ge.getTourPlayer().play();
+         }
+         function pauseTour() {
+            ge.getTourPlayer().pause();
+         }
+         function resetTour() {
+            ge.getTourPlayer().reset();
+         }
+         function exitTour() {
+            ge.getTourPlayer().setTour(null);
+         }
+
+         google.setOnLoadCallback(init);
+      </script>
+   </head>
+   <body>
+
+      <div id="map3d" style="height: 400px; width: 600px;"></div>
+         <div id ="controls">
+            <input type="button" onClick="enterTour()" value="Enter Tour"/>
+            <input type="button" onClick="playTour()" value="Play Tour"/>
+            <input type="button" onClick="pauseTour()" value="Pause Tour"/>
+            <input type="button" onClick="resetTour()" value="Stop/Reset Tour"/>
+            <input type="button" onClick="exitTour()" value="Exit Tour"/>
+         </div>
+
+   </body>
+</html>

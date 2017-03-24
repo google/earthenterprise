@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <link href="user_docs.css" rel="stylesheet" type="text/css">
+    <link href="local_extensions.css" rel="stylesheet" type="text/css">
+    <title>
+      Marking Places - Google Earth User Guide
+    </title>
+    <style type="text/css">
+/*<![CDATA[*/
+    img.c4 {vertical-align:text-bottom;}
+    span.c3 {text-decoration: underline}
+    form.c2 {margin-bottom: 0;margin-top: 0;}
+    span.c1 {font-size: 100%;}
+    /*]]>*/
+    </style>
+  </head>
+  <body id="index">
+    <a name="top"></a>
+    <div id="header">
+      <div id="logo">
+        <a href="http://earth.google.com"><img alt="Return to earth.google.com" border="0" src=
+        "http://www.google.com/intl/en/images/logos/earth_logo.gif"></a>
+      </div>
+      <h1 id="doc_title">
+        Google Earth User Guide
+      </h1>
+    </div>
+    <div id="wrapper">
+      <div id="sidenav">
+        <form action="http://www.google.com/search" class="c2" method="get">
+          <span class="c1">Search Google Earth<br>
+          User Guide</span><br>
+          <form action="http://www.google.com/cse" id="cse-search-box">
+            <div>
+              <input name="cx" type="hidden" value="006447561658385433045:da9zsap5cmm">
+              <input name="q" size="18" type="text"> <input name="sa" type="submit" value="Search">
+            </div>
+          </form>
+          <ul>
+            <li>
+              <h1>
+                <a href="ug_toc.html">Table of Contents</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="index.html">Introduction</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_findplaces.html">Finding Places and Directions</a>
+              </h1>
+            </li>
+            <li class="selected">
+              <h1>
+                Marking Places
+              </h1>
+              <ul>
+                <li>
+                  <a href="#new">Creating a New Placemark</a>
+                </li>
+                <li>
+                  <a href="#savepoint">Saving a Point of Interest</a>
+                </li>
+                <li>
+                  <a href="#sharingpoi">Sharing a Placemark</a>
+                </li>
+                <li>
+                  <a href="#savesearch">Saving Search Results</a>
+                </li>
+                <li>
+                  <a href="#saveimage">Saving Images</a>
+                </li>
+                <li>
+                  <a href="#printimage">Printing</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_layers.html">Using Layers</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_mapfeatures.html">Using Map Features</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_places.html">Using Places</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_kml.html">About KML</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_sharingplacedata.html">Sharing Places Information</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_touringplaces.html">Using Tours</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_editing.html">Editing Places and Folders</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_searchresults.html">Managing Search Results</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_measuring.html">Measuring Distances and Areas</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_sky.html">Viewing Sky</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_drawing.html">Drawing Paths and Polygons</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_imageoverlays.html">Using Image Overlays and 3D Models</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_flightsim.html">Using Flight Simulator</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_importdata.html">Importing Your Data Into Google Earth</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_styles.html">Using Style Templates</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_gps.html">Viewing Timelines</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_movies.html">Making Movies with Google Earth</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_keyboard.html">Keyboard Controls</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_3dviewer.html">3D Viewer Options</a>
+              </h1>
+            </li>
+          </ul>
+        </form>
+      </div>
+      <div id="pagecontent">
+        <h2>
+          Marking Places
+        </h2>
+        <p>
+          When you first start Google Earth, the <em>Places</em> panel contains an empty <em>My
+          Places</em> folder to hold places that you want to save. (If you are upgrading from a
+          previous version of Google Earth, Google Earth imports your saved places.) Every item
+          located in the <em>My Places</em> folder is saved for subsequent Google Earth sessions.
+          Items located in the <em>Places</em> panel but <span class="c3">not</span> saved in the
+          <em>My Places</em> folder are located in the <em>Temporary Places</em> folder and are
+          unavailable in the next Google Earth session if you do not move or save them to your
+          <em>My Places</em> folder.
+        </p>
+        <p>
+          You can use the <em>Places</em> panel to save and organize places that you visit, address
+          or listing searches, natural features, and more.
+        </p>
+        <p>
+          This section covers the basic ways to add a placemark to the <em>My Places</em> folder:
+        </p>
+        <ul>
+          <li>
+            <a href="#new">Create a new placemark</a>
+          </li>
+          <li>
+            <a href="#savepoint">Add a point of interest</a>
+          </li>
+          <li>
+            <a href="#savesearch">Add search results</a>
+          </li>
+          <li>
+            <a href="#saveimage">Saving an image</a>
+          </li>
+          <li>
+            <a href="#printimage">Printing imagery from the 3D viewer</a>
+          </li>
+        </ul>
+        <p>
+          For more information on other things you can do with placemarks, see <a href=
+          "ug_places.html">Using Places</a>.
+        </p>
+        <div class="note">
+          <strong>Tip:</strong> If Google Earth takes a long time to load, you might have more
+          places saved than your computer can reasonably handle. Try moving some of the places you
+          don't regularly visit to a folder and saving that folder to your computer. See <a href=
+          "ug_places.html#saving">Saving and Sharing Places</a>.
+        </div>
+        <h2>
+          <a name="new"></a>Creating a New Placemark
+        </h2>
+        <p class="note">
+          <strong>Tip</strong> - Follow a <a href=
+          "http://earth.google.com/userguide/v4/tutorials/marking_locations.html" target=
+          "_blank">tutorial on this subject</a> or watch the following video:
+        </p>
+        <p>
+          <object height="355" width="425">
+            <param name="movie" value="http://www.youtube.com/v/FB1EseH7jzs&rel=1">
+            <param name="wmode" value="transparent">
+            <embed height="355" src="http://www.youtube.com/v/FB1EseH7jzs&rel=1" type=
+            "application/x-shockwave-flash" width="425" wmode="transparent">
+          </object>
+        </p>
+        <p>
+          Follow these instructions to add a new placemark to any spot in the viewer.
+        </p>
+        <ol>
+          <li>Position the 3D viewer to contain the spot you want to placemark. Consider zooming
+          into the best viewing level for the desired location. Choose any one of the following
+          methods:
+            <ul>
+              <li>Select <em>Placemark</em> from the <em>Add</em> Menu.
+              </li>
+              <li>Click the Placemark icon on the toolbar menu at the the top of the screen<br>
+                <img alt="Pushpin icon" border="0" height="22" src="images/pushpin.png" width="29">
+              </li>
+            </ul>The <em>New Placemark</em> dialog box appears and a <em>New Placemark</em> icon is
+            centered in the viewer inside a flashing yellow square. Position the placemark. To do
+            this, position the cursor on the placemark until the cursor changes to a pointing
+            finger and drag it to the desired location. The cursor changes to a finger pointing
+            icon to indicate that you can move the placemark.<br>
+            <br>
+            <img alt="Position the placemark" border="0" height="116" src=
+            "images/positionplacemark.jpg" width="317"><br>
+            <br>
+            You can also lock the placemark position or set advanced coordinates for its position.
+            Set the following properties for the new placemark:
+            <ul>
+              <li>
+                <strong>Name</strong> for the placemark
+              </li>
+              <li>
+                <strong>Description</strong>, including HTML text (see <a href=
+                "ug_editing.html#writing">Writing Descriptions</a>)
+              </li>
+              <li>
+                <strong>Style, Color</strong> - Choose a color, scale (size) and opacity for the
+                placemark icon
+              </li>
+              <li>
+                <strong>View</strong> - Choose a position for the placemark. For explanation of
+                terms in this tab, mouse over each field. Click <em>Snapshot current view</em> to
+                apply the current view (altitude and camera angle) to this placemark.
+              </li>
+              <li>
+                <strong>Altitude</strong> - Choose the height of the placemark as it appears over
+                terrain with a numeric value or the slider. Choose <em>Extend to ground</em> to
+                show the placemark attached to a line anchored to the ground.
+              </li>
+              <li>
+                <strong>(Icon)</strong> - Click the icon for the placemark (top right corner of the
+                dialog box) to choose an alternate icon.
+              </li>
+            </ul>
+          </li>
+          <li value="2">Click <strong>OK</strong> to apply the information you entered in the
+          placemark dialog box.
+          </li>
+        </ol>
+        <p>
+          Your placemark appears in the 3D viewer and as an entry in the selected folder. Once you
+          save this placemark, you can always change its position and properties. See <a href=
+          "ug_editing.html">Editing Places and Folders</a> for more information.
+        </p>
+        <h2>
+          <a name="savepoint"></a>Saving a Point of Interest
+        </h2>
+        <p>
+          You can save any point of interest (POI) displayed in the 3D viewer to the <em>My
+          Places</em> folder by right-clicking (CTRL clicking on the Mac) on the placemark in the
+          viewer and selecting <em>Save to My Places</em> from the pop-up menu.
+        </p>
+        <p>
+          You can also use the copy feature as follows:
+        </p>
+        <ol>
+          <li>Right-click (CTRL click on the Mac) on a POI and select Copy from the pop-up menu.
+          </li>
+          <li>Open the My Places folder to display the destination folder for the POI.
+          </li>
+          <li>Position your cursor over the desired folder or sub-folder.
+          </li>
+          <li>Right-click (CTRL click on the Mac) and select Paste from the pop-up menu. The POI
+          appears in the location you selected.
+          </li>
+        </ol>
+        <p>
+          See <a href="ug_findplaces.html#pointofinterest">Showing and Hiding Points of
+          Interest</a> for more information on viewing points of interest in the 3D viewer.
+        </p>
+        <p>
+          You can also move a saved POI to any folder in your <em>Places</em> panel. See <a href=
+          "ug_places.html#organizing">Organizing Places</a> for more information.
+        </p>
+        <h2>
+          <a id="sharingpoi" name="sharingpoi"></a>Sharing a Placemark
+        </h2>
+        <p>
+          After you have created a placemark, you can easily share it with others on the <a href=
+          "http://bbs.keyhole.com">Google Earth Community BBS</a> website. To do this, right click
+          (CTRL click on the Mac) on the placemark and choose <em>Share/Post</em>. The Google Earth
+          Community posting wizard appears in a browser window at the bottom of your screen. Follow
+          the instructions on this web page to post information about this placemark on the Google
+          Earth BBS.
+        </p>
+        <div class="note">
+          <strong>Note</strong> - You can also share information that appears in Google Earth via
+          <a href="ug_kml.html">KML files</a>.
+        </div>
+        <h2>
+          <a name="savesearch"></a>Saving Search Results
+        </h2>
+        <p>
+          After you perform a search, a listing results panel also appears below the
+          <em>Search</em> button. Each search term you enter is the title for the folder containing
+          the top 10 results within it. You can collapse a particular search folder by clicking on
+          the minus icon next to the search term. While you are logged in, you can revisit your
+          search results just by double-clicking on an item in the search list. You can clear
+          search results from the listing by clicking on the <em>Clear</em> button
+          (<strong>X</strong>).
+        </p>
+        <p>
+          Once you log out of Google Earth, your search terms are cleared. However, you can save
+          search results for future Google Earth sessions in the following ways:
+        </p>
+        <ul>
+          <li>Drag and drop a search result item from the search results panel to any folder within
+          the Places panel. Release the item to place it in the new location.
+          </li>
+          <li>Right-click (CTRL click on the Mac) on a search result in either the listing or the
+          3D viewer and select Save to My Places from the pop-up menu.
+          </li>
+          <li>Use the copy feature by right-clicking (CTRL clicking on the Mac) on a result listing
+          in either the viewer or the Search panel and selecting Copy from the pop-up menu. From
+          there, right-click (CTRL click on the Mac) on a folder in the Places panels where you
+          want to save the search result and select Paste from the pop-up menu to paste the search
+          result in your new location.
+          </li>
+        </ul>
+        <div class="note">
+          <strong>Tip:</strong> You can also save the contents of the entire search result to the
+          <em>Places</em> panel by selecting the folder containing your search results and dragging
+          it to the desired location.
+        </div>
+        <p>
+          Once a search result is saved, you can change its title, location, and description. See
+          <a href="ug_editing.html">Editing Placemark or Folder</a> for information.
+        </p>
+        <h2>
+          <a name="saveimage"></a>Saving Images
+        </h2>
+        <div class="note">
+          <strong>Note</strong> - This feature is available to users of the Google Earth Pro and
+          Google Earth EC products. Visit <a href=
+          "http://earth.google.com/products.html">http://earth.google.com/products.html</a> for
+          more information.
+        </div>
+        <p>
+          Use <em>File</em> &gt; <em>Save</em> &gt; <em>Save Image</em> to save the current view as
+          an image file to your computer's hard drive. When you save an image, a <em>Save</em>
+          dialog box appears and you can locate a folder on your computer to save the image to,
+          just as you would for any document you might save. The image is saved with all visible
+          placemarks, borders, or other Layer information visible in the 3D viewer.
+        </p>
+        <p>
+          You can save images in the following resolutions:
+        </p>
+        <ul>
+          <li>Screen
+          </li>
+          <li>1000 pixels
+          </li>
+        </ul>
+        <p>
+          Google Earth PRO/EC users can save images in the following resolutions:
+        </p>
+        <ul>
+          <li>1400 pixels
+          </li>
+          <li>2400 pixels
+          </li>
+          <li>4800 pixels
+          </li>
+        </ul>
+        <h2>
+          <a name="printimage"></a>Printing
+        </h2>
+        <p>
+          Use the <em>Print...</em> command under the <em>File</em> menu to print the current view.
+          You can also type <em>Ctrl</em> (<img alt="Command/Open Apple Key" border="0" class="c4"
+          height="14" src="images/mac-cmdkey.gif" width="14"> on the Mac) <em>+ P</em>. When you
+          print an image, a <em>Print</em> dialog box appears that asks you to choose one of the
+          following:
+        </p>
+        <ul>
+          <li>
+            <em>Graphic of 3D Viewer -</em> Choose an appropriate resolution. You can then select
+            available printers, just as you would for any document. The image is printed with all
+            visible placemarks, borders, or other layer information visible in the 3D viewer.
+          </li>
+          <li>
+            <em>Most recent Search Results</em> - Choose this if you want to print search results
+            or driving directions
+          </li>
+          <li>
+            <em>Selected Folders/Placemarks in My Places</em> - This is available if you have
+            selected any placemark or folder in the Places folder. This prints the current 3D view
+            plus placemark information and images.
+          </li>
+        </ul>
+        <p class="note">
+          <strong>Note</strong> - Some of these printing options are only available to Google Earth
+          Pro and EC users.
+        </p>
+      </div>
+    </div>
+    <div id="footer">
+      <div id="footerlogo">
+        <img alt="Google color balls" height="53" src="http://earth.google.com/images/art.gif"
+        width="143">
+      </div>
+      <div id="copyright">
+        <p>
+          &copy;2010 Google - <a href="http://www.google.com/privacy.html">Privacy Policy</a> -
+          <a href="http://www.google.com/terms_of_service.html">Terms and Conditions</a> - <a href=
+          "http://www.google.com/about.html">About Google</a>
+        </p>
+      </div>
+    </div>
+    <p id="date">
+      Updated on <script type="text/javascript">
+//<![CDATA[
+      <!-- hide script from old browsers
+      var lm = new Date(document.lastModified);
+      document.write(lm.toDateString());
+      //-->
+      //]]>
+      </script>
+    </p><script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript">
+</script><script type="text/javascript">
+//<![CDATA[
+    _uacct="UA-18031-5";
+    _utcp="/userguide/";
+    _uanchor=1;
+    urchinTracker();
+    //]]>
+    </script>
+  </body>
+</html>

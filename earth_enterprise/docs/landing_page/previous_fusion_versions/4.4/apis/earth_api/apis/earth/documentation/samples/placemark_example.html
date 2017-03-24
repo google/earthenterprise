@@ -1,0 +1,76 @@
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/samples/placemark_example.html";
+    </script>
+    
+   <title>placemark_example.html</title>
+   <script src="http://code.google.com/www.google.com/jsapi?key=ABQIAAAA5El50zA4PeDTEMlv-sXFfRSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xTdBhxbkZWuzyYTVeclkwYHpb17ZQ"></script>
+   <script type="text/javascript">
+      var ge;
+      google.load("earth", "1");
+
+      function init() {
+         google.earth.createInstance('map3d', initCB, failureCB);
+      }
+
+      function initCB(instance) {
+
+         ge = instance;
+         ge.getWindow().setVisibility(true);
+         ge.getNavigationControl().setVisibility(ge.VISIBILITY_HIDE);
+
+         // Create the placemark.
+         var placemark = ge.createPlacemark('');
+         placemark.setName("placemark (roll over this point)");
+
+         // Set the placemark's location.  
+         var point = ge.createPoint('');
+         point.setLatitude(12.345);
+         point.setLongitude(54.321);
+         placemark.setGeometry(point);
+
+         // Create a style map.
+         var styleMap = ge.createStyleMap('');
+
+         // Create normal style for style map.
+         var normalStyle = ge.createStyle('');
+         var normalIcon = ge.createIcon('');
+         normalIcon.setHref('http://maps.google.com/mapfiles/kml/paddle/red-circle.png');
+         normalStyle.getIconStyle().setIcon(normalIcon);
+
+         // Create highlight style for style map.
+         var highlightStyle = ge.createStyle('');
+         var highlightIcon = ge.createIcon('');
+         highlightIcon.setHref('http://google-maps-icons.googlecode.com/files/girlfriend.png');
+         highlightStyle.getIconStyle().setIcon(highlightIcon);
+         highlightStyle.getIconStyle().setScale(5.0);
+
+         styleMap.setNormalStyle(normalStyle);
+         styleMap.setHighlightStyle(highlightStyle);
+
+         // Apply stylemap to a placemark.
+         placemark.setStyleSelector(styleMap);
+
+         // Add the placemark to Earth.
+         ge.getFeatures().appendChild(placemark);
+
+         // Move the camera.
+         var la = ge.createLookAt('');
+         la.set(12.345, 54.321, 0, ge.ALTITUDE_RELATIVE_TO_GROUND, -8.541, 66.213, 20000);
+         ge.getView().setAbstractView(la);
+      }
+
+      function failureCB(errorCode) {
+      }
+
+      google.setOnLoadCallback(init);
+   </script>
+
+</head>
+<body>
+
+   <div id="map3d" style="height:400px; width:600px;"></div>
+
+</body>
+</html>

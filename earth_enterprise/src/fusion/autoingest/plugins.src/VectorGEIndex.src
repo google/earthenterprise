@@ -1,0 +1,240 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#config Name      VectorGEIndex
+#config Base      Leaf
+#config Config    VectorGEIndexConfig
+#config Subtype   VectorGEIndex
+#config FixedType Vector
+
+
+// ===== VectorGEIndexAsset.h =====
+#include <autoingest/.idl/storage/VectorGEIndexConfig.h>
+
+// ===== VectorGEIndexAsset.cpp =====
+
+// ===== VectorGEIndexAssetD.h =====
+class VectorGEIndexAssetVersionImplD {
+ protected:
+  virtual bool OfflineInputsBreakMe(void) const { return true; }
+};
+
+// ===== VectorGEIndexAssetD.cpp =====
+#include <khException.h>
+#include <khGuard.h>
+#include <set>
+#include <algorithm>
+#include <cctype>
+#include <autoingest/sysman/plugins/deprecated/VectorKHDBAssetD.h>
+#include <geindexgen/.idl/VectorStack.h>
+
+// use to sort VectorPackVersions numerically by channelid
+static
+bool lessByChannelId(const VectorPacketVersion &a,
+                     const VectorPacketVersion &b)
+{
+  return (a.channel_id_ < b.channel_id_);
+}
+
+void
+VectorGEIndexAssetVersionImplD::DoSubmitTask(void)
+{
+  if (inputs.empty()) {
+    throw khException(kh::tr("No vector packets for indexing"));
+  }
+
+
+  // *****************************************
+  // figure out the packvers for this version
+  // *****************************************
+  uint indexVer = config.index_version_;
+  bool tryReuse = true;
+  if (indexVer == 0) {
+    // zero is a sentinal value that means we've wrapped and
+    // need to completely re-index.
+
+    // clear the sentinal
+    MutableVectorGEIndexAssetD asset(GetAssetRef());
+    indexVer = asset->config.index_version_ = config.index_version_ = 1;
+
+    tryReuse = false;
+  }
+
+
+  // *************************************************************
+  // prefill a table with channelId, packAsset and latest indexVer
+  // *************************************************************
+  std::vector<VectorPacketVersion> packvers;
+  for (std::vector<std::string>::const_iterator input = inputs.begin();
+       input != inputs.end(); ++input) {
+    // get the channelIds by grocking my input refs - they are guaranteed
+    // to contain their channelId /layer(\d+)packet.kva$/
+    std::string assetref = AssetVersionRef(*input).AssetRef();
+    uint assetreflen = assetref.size();
+    uint suffixlen = 10; // strlen("packet.kva");
+    // start just before the prefix
+    uint channelEnd = std::max(0, int(assetreflen) - int(suffixlen));
+    uint channelBegin = channelEnd;
+    // walk back to find all the digits
+    while (channelBegin && isdigit(assetref[channelBegin-1])) {
+      --channelBegin;
+    }
+    // walk forward over leading 0's. Note: this precludes a channel
+    // number like '000', but that's OK since 0 isn't a valid channel id
+    while ((channelBegin < channelEnd) && (assetref[channelBegin] == '0')){
+      ++channelBegin;
+    }
+    uint channelLen = channelEnd - channelBegin;
+    if (!channelLen) {
+      throw khException(kh::tr("Can't find channelId for ") + assetref);
+    }
+    uint channelId=atoi(assetref.substr(channelBegin, channelLen).c_str());
+
+
+    packvers.push_back(VectorPacketVersion(*input, channelId, indexVer));
+  }
+
+
+  // *************************************************************
+  // Try to figure out which index versions to use for each layer
+  // *************************************************************
+  VectorGEIndexAsset asset(GetAssetRef());
+  if (tryReuse) {
+    // make a map of the channelId we still need to check
+    // packvers won't change size anymore so it's safe to store
+    // pointers to its elements
+    typedef std::map<uint, VectorPacketVersion*> CheckMap;
+    CheckMap tocheck;
+    for (uint i = 0; i < packvers.size(); ++i) {
+      tocheck.insert(std::make_pair(packvers[i].channel_id_, &packvers[i]));
+    }
+
+    // now walk back the previous AssetVersions to see if we can
+    // find a better index version to use for our VectorPacketVersions
+    for (uint i = 1; i < asset->versions.size(); ++i) {
+      AssetVersion prevbase(asset->versions[i]);
+      if (prevbase->subtype == "VectorKHDB") {
+        VectorKHDBAssetVersion prev(asset->versions[i]);
+        for (std::vector<VectorPackVersion>::const_iterator prevpackver =
+               prev->config.packvers.begin();
+             prevpackver != prev->config.packvers.end();
+             ++prevpackver) {
+          // see if we are still checking for this channelId
+          CheckMap::iterator found =tocheck.find(prevpackver->channelId);
+          if (found != tocheck.end()) {
+            // see if the packAsset's match
+            if (found->second->packet_verref_ == prevpackver->packAsset) {
+              // found match, use it
+              found->second->version_ = prevpackver->version;
+              tocheck.erase(prevpackver->channelId);
+            } else {
+              // We don't have a match. If the indexVersion is the
+              // same as mine, it won't matter if I skip this one
+              // and keep looking. If I later find an older one
+              // that matches, that will be OK since the
+              // indexVersion hasn't incremented between this one
+              // and now. So as far as any clients are concerned
+              // this one doesn't exist.
+              if (prev->config.indexVersion != indexVer) {
+                tocheck.erase(prevpackver->channelId);
+              }
+            }
+          }
+        }
+      } else {
+        VectorGEIndexAssetVersion prev(asset->versions[i]);
+        for (std::vector<VectorPacketVersion>::const_iterator prevpackver =
+               prev->config.packet_vers_.begin();
+             prevpackver != prev->config.packet_vers_.end();
+             ++prevpackver) {
+          // see if we are still checking for this channelId
+          CheckMap::iterator found =tocheck.find(prevpackver->channel_id_);
+          if (found != tocheck.end()) {
+            // see if the packAsset's match
+            if (found->second->packet_verref_ == prevpackver->packet_verref_) {
+              // found match, use it
+              found->second->version_ = prevpackver->version_;
+              tocheck.erase(prevpackver->channel_id_);
+            } else {
+              // We don't have a match. If the indexVersion is the
+              // same as mine, it won't matter if I skip this one
+              // and keep looking. If I later find an older one
+              // that matches, that will be OK since the
+              // indexVersion hasn't incremented between this one
+              // and now. So as far as any clients are concerned
+              // this one doesn't exist.
+              if (prev->config.index_version_ != indexVer) {
+                tocheck.erase(prevpackver->channel_id_);
+              }
+            }
+          }
+        }
+      }
+      if (!tocheck.size()) {
+        // we've already found versions for all our VectorPackVersions
+        // there no sense to keep walking further back in time
+        break;
+      }
+    }
+  }
+
+
+  // ***************************************************************
+  // update my config with the updated packvers (sorted numerically)
+  // ***************************************************************
+  sort(packvers.begin(), packvers.end(), std::ptr_fun(&lessByChannelId));
+  config.packet_vers_ = packvers;
+
+
+
+  // ************************************************
+  // Generate the vector stackfile
+  // ************************************************
+  geindexgen::VectorStack geindex_stack_;
+  geindex_stack_.layers_.reserve(config.packet_vers_.size());
+  for (uint i = 0; i < config.packet_vers_.size(); ++i) {
+    AssetVersion assetver(config.packet_vers_[i].packet_verref_);
+    geindex_stack_.layers_.push_back(
+        geindexgen::VectorStack::Layer(
+            assetver->GetOutputFilename(0),
+            config.packet_vers_[i].channel_id_,
+            config.packet_vers_[i].version_));
+  }
+  std::string stackfile = WorkingFilename("stackfile"); // fully bound name
+  if (!geindex_stack_.Save(stackfile)) {
+    throw khException(kh::tr("Unable to save %1").arg(stackfile));
+  }
+
+
+  // ******************************************************
+  // Create and submit the task (it will have one or two commands)
+  // ******************************************************
+  TaskDef task(*this);
+  std::vector<std::string> inputs;
+  GetInputFilenames(inputs);
+  task.AddInputs(inputs);
+
+  // TODO: - implement size estimate
+  task.AddOutput(WorkingFileRef(config.db_name_ + "-v" +
+                                ToString(indexVer) + ".geindex"),
+                 0); // size estimate
+
+  // first create the index (it will clean/make the directory)
+  task << "geindexgen"
+       << "--type=VectorGE"
+       << "--stack"  << stackfile
+       << "--output" << "$OUTPUT";
+
+  theAssetManager.SubmitTask(GetRef(), task);
+}

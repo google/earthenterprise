@@ -1,0 +1,1308 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/mapsdata/developers_guide_java.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Developer Guide: Java - Google Maps Data API - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/maps/documentation/mapsdata/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../css/iehacks.css"><![endif]-->
+
+  </head>
+
+  <body class="gc-documentation">
+
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container" class="depr">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps Data API (<a href="http://googlegeodevelopers.blogspot.com/2010/11/maps-data-api-deprecation-announcement.html">Deprecated</a>)</h1>
+  <ul id="Docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="index.html" title="Google Maps Data API home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="developers_guide.html" class="selected" title="Official Google Maps Data API documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../faq.html" title="Answers to frequently asked questions about Google Maps Data API">FAQ</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps Data API blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="forum.html" title="Google Maps Data API developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="terms.html" title="Google Maps Data API terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <a name="gc-toc-anchor"></a>
+      <div class="g-unit g-first" id="gc-toc">
+          <ul>
+    <li><a href="../../index.html">Maps API Family</a></li>
+    <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+  </ul>
+  <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="index.html">Home Page</a></li>
+          <li><a class="tlw-expanded" href="developers_guide.html">Developer's Guide</a>
+            <ul>
+              <li><a href="developers_guide_protocol.html">HTTP Protocol Guide</a>
+              <li><a href="developers_guide_java.html">Java Developer's Guide</a></li>
+              <li><a href="developers_guide_javascript.html">JavaScript Developer's Guide</a></li>
+            </ul>
+          <li><a href="reference.html">HTTP Reference</a></li>
+          <li><a href="libraries.html">Client Libraries</a></li>
+          <li><a href="examples.html">Examples</a></li>
+          <li><a href="http://code.google.com/p/gmaps-api-issues/issues/list?can=2&q=apitype:MapsData&colspec=ID+Type+Status+Introduced+Fixed+Summary+Internal+Stars&cells=tiles">Known Issues</a></li>
+        </ul>
+        <div class="line"></div>
+        <ul>
+          <li><h2>GData APIs</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/gdata/overview.html">Overview</a></li>
+              <li><a href="http://code.google.com/apis/gdata/auth.html">Authentication</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>   
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps JavaScript API V3</h2>
+         <ul>
+           <li><a href="../javascript/index.html">Home Page</a></li>
+           <li><a href="../javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+      <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+        <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../flash/index.html">Home Page</a></li>
+          <li><a href="../flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+        <li><h2><a href="../webservices/index.html">Maps API Web Services</a></h2>
+        <ul>
+          <li><a href="../geocoding/index.html">Geocoding API</a></li>
+          <li><a href="../directions/index.html">Directions API</a></li>
+          <li><a href="../elevation/index.html">Elevation API</a></li>
+          <li><a href="../places/index.html">Places APl</a></li>
+        </ul>
+      </li>
+    </ul>
+       <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+          <div class="promo"><p><a href="../premier/index.html">Google Maps API Premier</a></p><p>Includes enterprise licensing and support</p></div>
+
+      </div>
+
+      <a name="gc-pagecontent-anchor"></a>
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Developer Guide: Java</h1>
+
+
+<p>The Maps Data API allows client applications to view and update maps (and
+features on those maps) through the use of Google Data API feeds. These feeds
+are provided as URLs using the popular
+<a href="http://en.wikipedia.org/wiki/Atom_(standard)">Atom standard</a>. You
+programmatically create, alter and delete data using HTTP requests.</p>
+
+<p>In addition to providing some background on the capabilities of the Maps
+Data API Data API, this document provides examples of basic Data API interactions
+using the <a href="http://code.google.com/p/gdata-java-client/">Java client library</a>.
+If you're interested in understanding more about the underlying protocol that
+the library uses, see the <a href="developers_guide_protocol.html">HTTP Protocol Guide</a>
+of this developer's guide.</p>
+
+<h2>Contents</h2>
+<div class="toc">
+  <ol>
+    <li><a href="#Audience">Audience</a></li>
+    <li><a href="#GettingStarted">Getting Started</a>
+      <ol>
+        <li><a href="#CreatingAccount">Creating a Maps Data API Account</a></li>
+        <li><a href="#Authenticating">Authenticating to the Maps Data API Service</a></li>
+      </ol>
+    </li>
+    <li><a href="#Maps">Maps</a>
+      <ol>
+      <li><a href="#MapMetaFeeds">Retrieving a List of Maps</a></li>
+      <li><a href="#AdditionalMetaFeeds">Additional Maps Metafeeds</a></li>
+      <ol>
+        <li><a href="#RetrievingMaps">Retrieving Maps</a></li>
+        <li><a href="#CreatingMaps">Creating Maps</a></li>
+        <li><a href="#UpdatingMaps">Updating Maps</a></li>
+        <li><a href="#DeletingMaps">Deleting Maps</a></li>
+      </ol>
+      </ol>
+    </li>
+    <li><a href="#Features">Map Features</a>
+      <ol>
+        <li><a href="#FeatureMetaFeeds">Retrieving a List of Features</a></li>
+        <li><a href="#RetrievingFeatures">Retrieving Map Features</a></li>
+        <li><a href="#CreatingFeatures">Creating Map Features</a></li>
+        <li><a href="#UpdatingFeatures">Updating Map Features</a></li>
+        <li><a href="#DeletingFeatures">Deleting Map Features</a></li>
+      </ol>
+    </li>
+    <li><a href="#controlling_access_to_maps">Controlling Access to Maps</a>
+      <ol>
+        <li><a href="#the_api_visible_custom_property">The <code>api_visible</code>
+          Custom Property</a></li>
+        <li><a href="#access_control_lists">Access Control Lists</a></li>
+      </ol>
+    </li>
+  </ol>
+</div>
+
+<h1 id="Audience">Audience</h1>
+
+<p>This document is intended for programmers who want to write Java client applications
+that can interact with the Google Maps Data API.</p>
+
+<p>This document assumes that you understand the general ideas behind the
+<a href="http://code.google.com/apis/gdata/basics.html">Google Data APIs protocol</a>, and that you're
+familiar with the Google Maps Data API.</p>
+
+<p>For reference information about the classes and methods provided by the client library,
+see the <a href="http://code.google.com/apis/gdata/javadoc">Java client library API reference</a>. For general
+Maps Data API Data API reference information, see the <a href="reference.html">HTTP Protocol
+Reference</a>.</p>
+
+<h1 id="GettingStarted">Getting Started</h1>
+
+<p>Using the Maps Data API requires the following:</p>
+
+<ul>
+<li>A Java 1.5 (or greater) SDK and associated development libraries for Ant
+and Sun's Java Activation Framework&trade;.</li>
+<li>The latest Java GData Client Library</li>
+<li>A Google user account, used for associating your data</li>
+<li>An appropriate Authentication scheme, used for validating
+permissible operations</li>
+<li>A browser or XML editor to inspect data</li>
+</ul>
+
+<p>For help setting up the Java client library, see
+the <a href="http://code.google.com/apis/gdata/articles/java_client_lib.html">Getting Started Guide</a>.</p>
+
+<p>The Java client library requires Java 1.5. After
+<a href="http://code.google.com/p/gdata-java-client/downloads/list" onclick="javascript:urchinTracker ('download/javapackage');">
+downloading the client library</a>, you'll find the classes you need to get started in the
+<code>java/lib/gdata-maps.client-2.0.jar</code> file.</p>
+
+<h2 id="CreatingAccount">Creating a Maps Data API Account</h2>
+
+<p>Maps are stored and associated with user IDs attached to a
+<a href="https://www.google.com/accounts/Login">Google Account</a>. If you do
+not currently have a Google account,
+<a href="https://www.google.com/accounts/NewAccount"> sign up for one here</a>.
+</p>
+
+<p>The Maps Data API manipulates maps which appear within the My Maps feature
+on Google Maps. MyMaps includes two types of maps:
+<b>Public</b>, and <b>Unlisted</b>. A sample MyMap is shown below:</p>
+<br/>
+<img src="images/mymaps_example.png" width="640" height=""/>
+
+<p>You can use MyMaps within your browser to inspect the state of your map after
+data updates. Additionally, if you create Public maps, these will be indexed and
+may show up in search results. Note that you do not need to use MyMaps to
+present your data. Any application that can present KML is an appropriate
+"browser" for data returned by the Maps Data API.</p>
+
+<h2 id="Authenticating">Authenticating to the Maps Data API Service</h2>
+
+<p>Conceptual information about authentication is covered within the
+<a href="developers_guide_protocol.html#Authenticating">
+HTTP Protocol Guide</a>.</p>
+
+<p>You can supply or retrieve credentials from within your application using several
+authentication schemes. The simplest method involves using <code>ClientLogin</code>
+using a stored username and password in the client. The following code
+requests an authentication token using the passed username and
+password:</p>
+
+<pre class="prettyprint">
+MapsService myService = new MapsService("<i>applicationName</i>");
+myService.setUserCredentials("<i>username</i>","<i>password</i>");
+</pre>
+
+<p>Storing usernames and passwords within code is not advised due to security
+concerns, however. Applications wishing to add more security
+may wish to use <code>AuthSub</code> or <code>OAuth</code> authentication
+instead. However, the sample code in this chapter assumes
+<code>ClientLogin</code> authentication schemes to keep the code simpler.</p>
+
+<h1 id="Maps">Maps</h1>
+
+<p>The fundamental <code>MapEntry</code> within a Maps Data API feed is an
+instance of a map. Using the Maps Data API, you may perform the following
+operations on maps:</p>
+
+<ul>
+  <li>Retrieving a List of Maps</li>
+  <li>Retrieving Individual Maps</li>
+  <li>Creating New Maps</li>
+  <li>Updating Map Information</li>
+  <li>Deleting Maps</li>
+</ul>
+
+<p>Each of these operations is discussed in the following sections.</p>
+
+<h2 id="MapMetaFeeds">Retrieving a List of Maps</h2>
+
+<p>The Maps Data API provides a feed that returns the maps created by a particular
+user; this feed is known as a &quot;metafeed&quot;. Using the Java client
+library, the metafeed is returned within a <code>MapFeed</code> object.
+You then use methods on that object to return information about the feed.</p>
+
+<p>The following sample code uses an authenticated <code>MapsService</code>
+object to retrieve the metafeed and then prints each map's title. The
+feed is returned within a <code>MapFeed</code> object, each consisting
+of zero or more <code>MapEntry</code> objects.</p>
+
+<pre class="prettyprint">
+package com.google.gdata.client.sample.maps;
+
+import com.google.gdata.client.*;
+import com.google.gdata.client.maps.*;
+import com.google.gdata.data.*;
+import com.google.gdata.data.maps.*;
+import com.google.gdata.util.*;
+import java.io.IOException;
+import java.net.URL;
+
+public class GetMapsFeed {
+
+  public static void main(String[] args) {
+
+    // Name your service
+    MapsService myService = new MapsService("<i>applicationName</i>");
+    try {
+      // Replace these credentials with your own
+      myService.setUserCredentials("<i>username</i>","<i>password</i>");
+    } catch(AuthenticationException e) {
+    }
+    try {
+      printUserMaps(myService);
+    } catch(ServiceException e) {
+    } catch(IOException e) {
+    }
+  }
+
+  public static void printUserMaps(MapsService myService)
+    throws ServiceException, IOException {
+
+    // Request the default metafeed
+    final URL feedUrl = new URL("http://maps.google.com/maps/feeds/maps/default/full");
+    MapFeed resultFeed = myService.getFeed(feedUrl, MapFeed.class);
+
+    // Print the title of the feed itself.
+    System.out.println(resultFeed.getTitle().getPlainText());
+
+    // Iterate through the feed entries (maps) and print out info
+    // for each map
+    for (int i = 0; i < resultFeed.getEntries().size(); i++) {
+      MapEntry entry = resultFeed.getEntries().get(i);
+      System.out.println(entry.getTitle().getPlainText());
+      System.out.println("  Summary: " + entry.getSummary().getPlainText());
+      System.out.println("  Self Link: " + entry.getSelfLink().getHref() +"\n");
+    }
+  }
+}
+</pre>
+
+<p>Each <code>MapFeed</code> metafeed contains a set of <code>Link</code> elements
+which specify how to interact with the user's maps. These link elements
+may be accessed via the following <code>MapFeed</code> methods noted below:</p>
+
+<ul>
+ <li><code>getSelfLink()</code> returns the full maps metafeed (also known as a
+ <code>#feed</code> link). This feed
+  requests all maps created by the user associated with the authenticated
+  session. (Additionally the default metafeed is useful for determing your
+  <i>userID</i>, which is included in the link.)</p></li>
+  <li><code>getEntryPostLink()</code> returns a URL for <code>POST</code>
+  requests to add new map elements. This link is also known as a <code>#post</code>
+  link.</li>
+  <li><code>getFeedBatchLink()</code> returns a URL for
+  <a href="http://code.google.com/apis/gdata/batch.html">batch processing. This
+  link is also known as a <code>#batch</code> link.</a>
+  </li>
+</ul>
+
+<p>You can also return these links by calling <code>getLinks()</code> on the
+<code>MapFeed</code> object, and determine the type of link using <code>getRel()</code>
+on the links themselves. The following code iterates through a metafeed and prints
+out both the relation types and the URLs of the links:</p>
+
+<pre class="prettyprint">
+for (Link link : resultFeed.getLinks()) {
+  System.out.println(&quot;\t&quot; + link.getRel() + &quot;\n&quot; + link.getHref());
+}
+</pre>
+
+<p>Executing this code will print out links similar to those below:</p>
+<pre>
+	alternate
+http://maps.google.com/maps/ms?msa=1
+	http://schemas.google.com/g/2005#feed
+http://maps.google.com/maps/feeds/maps/<i>userID</i>/full
+	http://schemas.google.com/g/2005#batch
+http://maps.google.com/maps/feeds/maps/<i>userID</i>/full/batch
+	http://schemas.google.com/g/2005#post
+http://maps.google.com/maps/feeds/maps/<i>userID</i>/full
+</pre>
+
+<p>The standard <code>#feed</code> returns all feeds associated with a given
+authenticated <i>userID</i>. This <i>userID</i> is a unique token associated
+with your Google account username.</p>
+
+<p>The response also contains <code>MapEntry</code> elements for each
+map available for access by the authenticated user. These <code>MapEntry
+</code> elements only contain meta information about the map; they do not
+contain specific feature information about maps. Each <code>MapEntry</code>
+contains a set of fields. (Most of these are inherited from
+<code>BaseEntry.EntryState</code>.) Of special note are the fields noted below:</p>
+
+<ul>
+<li>An <code>id</code> field containing a URL used to specify this
+particular entry (map)</li>
+<li>Additional meta information for date of publication (<code>published</code>)
+and modification (<code>updated</code>)</li>
+<li>A <code>title</code> and <code>summary</code> field, which
+correspond to the title and description entered within the My Maps editor.</li>
+<li><p><code>link</code> fields of type <code>Link</code> containing URLS for performing
+operations on this map:</p>
+<ul>
+  <li><code>self</code> for requesting information on this element.
+  This feed simply returns the <code>MapEntry</code> you see here.</li>
+  <li><code>edit</code> for <code>PUT</code> requests to update information in
+  this element</li>
+</ul>
+</li>
+<li><code>author</code> fields of type <code>Person</code> describing the
+author(s) of this map.</li>
+<li>A <code>content</code> field whose <code>src</code> attribute specifies the
+feed for retrieving the full list of features for this map.</li>
+</ul>
+
+<p>Note that the <code>MapEntry</code> does not itself describe any of its feature
+content (markers, polylines,polygons, etc.) To retrieve that additional
+information, you will need to request a map's feature feed. (See
+<a href="#FeatureMetaFeeds">Requesting a List of Features</a> below.)
+
+<p>For complete information about these elements, consult the
+<a href="reference.html#Elements">Maps Data API feed elements reference
+guide</a>, <a href="http://code.google.com/apis/gdata/reference.html#Document-format">Google Data
+APIs Protocol Reference</a> document, or the
+<a href="http://www.atomenabled.org/developers/syndication/atom-format-spec.php">
+Atom 1.0 specification</a>.</p>
+
+<h2 id="AdditionalMetaFeeds">Additional Maps Metafeeds</h2>
+
+<p>In addition to <code>http://maps.google.com/maps/feeds/maps/default/full</code>, which
+retrieves all feeds associated with a given user, the following subsets are available:</p>
+
+<ul>
+<li><code>http://maps.google.com/maps/feeds/maps/default/owned</code> returns all maps
+created by the user</li>
+<li><code>http://maps.google.com/maps/feeds/maps/default/public</code> returns all
+public maps created by the user</li>
+<li><code>http://maps.google.com/maps/feeds/maps/default/unlisted</code> returns all
+unlisted maps created by the user</li>
+</ul>
+
+<h2 id="RetrievingMaps">Retrieving Maps</h2>
+
+<p>To retrieve a map, simply initiate a request to the
+<code>self</code> URL specified within the map's entry. We can get
+these URLs from the metafeed itself. The following code prints out
+title and summary information for a map given its <code>#self</code>
+feed URL.</p>
+
+<pre class="prettyprint">
+public static void getMapInfo(MapsService myService)
+   throws ServiceException, IOException {
+
+   // Request the self link on a particular map
+   // Note that you should replace the URL to a self link of
+   // a particular map
+   final URL mapSelfUrl = new URL("http://maps.google.com/maps/feeds/maps/<i>userID</i>/full/<i>mapID</i>");
+   MapEntry map = myService.getEntry(mapSelfUrl, MapEntry.class);
+
+   System.out.println("\t" + map.getSelfLink().getHref());
+   System.out.println(map.getTitle().getPlainText());
+   System.out.println(map.getSummary().getPlainText());
+}
+</pre>
+
+<p>As with the metafeed, retrieving an individual <code>MapEntry</code> does
+not return feature information associated with a map. To do so, you will
+need to request the map entry's <i>feature feed</i>. Note that the <code>MapEntry</code>
+you return and access is identical to the entry returned within the full maps metafeed.
+Generally, you either use the maps metafeed or get the entry for a specific map,
+but there's usually not a reason to do both.</p>
+
+<h2 id="CreatingMaps">Creating Maps</h2>
+
+<p>Authenticated applications can publish new maps by using the metafeed's
+POST (edit) URL.</p>
+
+<p>To create a new map, first create a <code>MapEntry</code> object to represent
+the map. Set the title, summary and other attributes of the map, and call
+the <code>insert()</code> method on the <code>MapsService</code> object to
+create the map. The following example creates a new map:</p>
+
+<pre class="prettyprint">
+public static MapEntry createMap(MapsService myService)
+  throws ServiceException, IOException {
+
+  //  Replace the following URL with your metafeed's POST (Edit) URL
+  final URL feedUrl = new URL("http://maps.google.com/maps/feeds/maps/<i>userID</i>/full");
+  MapFeed resultFeed = myService.getFeed(feedUrl, MapFeed.class);
+  URL mapUrl = new URL(resultFeed.getEntryPostLink().getHref());
+
+  // Create a MapEntry object
+  MapEntry myEntry = new MapEntry();
+  myEntry.setTitle(new PlainTextConstruct("Demo Map"));
+  myEntry.setSummary(new PlainTextConstruct("Summary"));
+  Person author = new Person("Maps Developer", null, "example@gmail.com");
+  myEntry.getAuthors().add(author);
+
+  return myService.insert(mapUrl, myEntry);
+}
+</pre>
+
+
+<p>The <code>insert()</code> method creates a map using the <code>MapEntry</code>. The
+entry returned is the same one you sent, but also contains various elements added
+by the Maps Data API, such as an <code>id</code> element and creation
+information. If your request fails for some reason, the Maps Data API Java client library
+will throw a <code>ServiceException</code>. You should handle such exceptions
+gracefully.</p>
+
+<h2 id="UpdatingMaps">Updating Maps</h2>
+
+<p>To update an existing map, first retrieve the <code>MapEntry</code> you want
+to update, modify it, and then call the method <code>update()</code> on
+the <code>MapsService</code> object, passing it the the updated <code>MapEntry</code>
+and the map's POST (edit) URL.</p>
+
+<p>In the following example, we simply change the map's title:</p>
+
+<pre class="prettyprint">
+public static MapEntry updateMap(MapsService myService)
+  throws ServiceException, IOException {
+
+  // Use the map entry's post (edit) URL
+  final URL editMapUrl = new URL("http://maps.google.com/maps/feeds/maps/<i>userID</i>/full/<i>mapID</i>");
+
+  // Create a MapEntry object and replace the title to 'Demo Map 2'
+  MapEntry myEntry = new MapEntry();
+  myEntry.setTitle(new PlainTextConstruct("Demo Map 2"));
+  return myService.update(editMapUrl, myEntry);
+}
+</pre>
+
+<h2 id="DeletingMaps">Deleting Maps</h2>
+
+<p>To delete a map, call the <code>delete()</code> method on the
+  <code>MapsService</code>
+  object, passing it the to the <code>MapEntry</code>'s POST (edit) URL.
+  This is the same URL used to <a href="#UpdatingMaps">update a map</a>.</p>
+
+<pre class="prettyprint">
+public static void deleteMap(MapsService myService)
+  throws ServiceException, IOException {
+
+  // Request the POST (edit) URL of a specific map
+  final URL editMapUrl = new URL("http://maps.google.com/maps/feeds/maps/<i>userID</i>/full/<i>mapID</i>");
+
+  myService.delete(editMapUrl);
+}
+</pre>
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+
+<h1 id="Features">Map Features</h1>
+
+<p>So far, we have only discussed maps, but we haven't discussed the things we
+want to put on maps: markers, lines, shapes, etc. These elements are known as
+<i>features</i> in the Maps Data API. Each map contains a <i>feature feed</i>
+which returns a list of the features attached to a map. You may then add,
+modify, or delete features using this feed.</p>
+
+<p>This chapter discusses the feature feed (of type <code>FeatureFeed</code>),
+what makes up a feature in the Maps Data API, and how to perform the following
+functions: </p>
+
+<ul>
+  <li><a href="#FeatureMetaFeeds">Retrieving a List of Features</a></li>
+  <li><a href="#RetrievingFeatures">Retrieving Individual Features</a></li>
+  <li><a href="#CreatingFeatures">Creating New Features</a></li>
+  <li><a href="#UpdatingFeatures">Updating Features</a></li>
+  <li><a href="#DeletingFeatures">Deleting Features</a></li>
+</ul>
+
+<p>Features are attached to individual maps, so to fully address a feature in
+  the Maps Data API, you will need to provide both a <i>userID</i> of the
+  authenticated user and a <i>mapID</i> of the specific map. You can only
+  request a feature feed per map. There is no feature feed for all features
+  across all maps.</p>
+
+<h2 id="FeatureMetaFeeds">Retrieving a List of Features</h2>
+
+<p>A map's feature feed is generally retrieved from a <code>MapEntry</code>
+via the <code>getFeatureFeedUrl()</code> method. The feature feed not only
+contains a <i>userID</i> but also a <i>mapID</i> of the map in question. A
+feature feed is a URL of the following form:</p>
+
+<pre>
+http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full
+</pre>
+
+<p>Upon success, a feature feed will return information about the
+map and a list of <code>FeatureEntry</code> elements for each
+feature. Each <code>FeatureEntry</code> contains content in the form of KML,
+consisting of a list of <code>&lt;Placemark&gt;</code> elements.</p>
+
+<p>The following code uses a feature feed URL to return the set of features
+associated with a given map and print out the KML content of those features.</p>
+
+<pre class="prettyprint">
+public static void getFeatures(MapsService myService)
+  throws ServiceException, IOException {
+
+  // Get a feature feed for a specific map
+  final URL featureFeedUrl = new URL("http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full");
+  FeatureFeed featureFeed = myService.getFeed(featureFeedUrl, FeatureFeed.class);
+
+  System.out.println("Features of the Map:");
+
+  for (int i = 0; i < featureFeed.getEntries().size(); i++) {
+    FeatureEntry entry = featureFeed.getEntries().get(i);
+
+    // Print the title of the feed itself.
+    System.out.println("\nTitle: " + entry.getTitle().getPlainText());
+    System.out.println("Self Link: " + entry.getSelfLink().getHref());
+
+    System.out.println("KML: \n");
+
+    // Print out the KML
+    try {
+      // Note that the KML is set to type XmlBlob
+      XmlBlob kml = entry.getKml();
+      System.out.println(kml.getBlob());
+    } catch(NullPointerException e) {
+      System.out.println("Error: " + e.getClass().getName());
+    }
+  }
+}
+</pre>
+
+<p>Executing the above code will produce output like the following for a map:</p>
+
+<pre>
+Title: Bicycle Leg 1
+Self Link: http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full/<i>featureID</i>
+KML:
+
+&lt;Placemark&gt;
+  &lt;name&gt;Bicycle Leg 1&lt;/name&gt;
+  &lt;Style&gt;
+    &lt;LineStyle&gt;
+      &lt;color&gt;40000000&lt;/color&gt;
+      &lt;width&gt;3&lt;/width&gt;
+    &lt;/LineStyle&gt;
+    &lt;PolyStyle&gt;
+      &lt;color&gt;406666FF&lt;/color&gt;
+      &lt;fill&gt;1&lt;/fill&gt;
+      &lt;outline&gt;1&lt;/outline&gt;
+    &lt;/PolyStyle&gt;
+  &lt;/Style&gt;
+  ...
+&lt;/Placemark&gt;
+
+Title: Bicycle Leg 2
+Self Link: http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full/<i>featureID</i>
+KML:
+
+&lt;Placemark&gt;
+...
+&lt;/Placemark&gt;
+</pre>
+
+<p>Note that individual features have <code>#self</code> links of the following form:</p>
+
+<pre>
+http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full/<i>featureID</i>"
+</pre>
+
+<p>The fully address a feature, you will need the ID of the authenticated user, the ID of
+the map, and the ID of the specific feature.</p>
+
+<p>Note that if you are given a <code>MapEntry</code>, you can request the feature feed directly
+using the <code>getFeatureFeed()</code> method.</p>
+
+<h2 id="RetrievingFeatures">Retrieving Individual Features</h2>
+
+<p>To retrieve a specific feature associated with a map, you can either
+directly query the feature feed URL as shown above and pick out the individual
+feature, or you can initiate a request to the <code>self</code> URL specified
+within the feature's entry. The following code uses a previously stored
+feature entry <code>#self</code> URL:</p>
+
+<pre class="prettyprint">
+public static void printFeatureInfo(MapsService myService)
+  throws ServiceException, IOException {
+
+  // Get a feature entry from its self URL (returned in the feature feed)
+  final URL featureEntryUrl = new URL("http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full/<i>featureID</i>");
+
+  FeatureEntry entry = myService.getEntry(featureEntryUrl, FeatureEntry.class);
+
+  // Print out the KML
+  try {
+    XmlBlob kml = ((OtherContent) entry.getContent()).getXml();
+    System.out.println(kml.getBlob());
+  } catch(NullPointerException e) {
+    System.out.println("Null Pointer Exception");
+  }
+}
+</pre>
+
+<p>Note that the <code>FeatureEntry</code> you return and access is identical to
+the entry returned within the full feature metafeed. Generally, you either use
+the feature metafeed or get the entry for a specific feature,
+but there's usually not a reason to do both.</p>
+
+<h2 id="CreatingFeatures">Creating Features</h2>
+
+<p>Authenticated applications can publish new features to a map by
+using the feature feed's POST (edit) URL.</p>
+
+<p>To create a new feature, first create a <code>FeatureEntry</code> object to represent
+the feature. Set the title and KML content of the feature, and call
+the <code>insert()</code> method on the <code>MapsService</code> object to
+create the feature.</p>
+
+<p>In practice, you will likely want a way to write existing KML in a file
+to a string. The following utility method may be useful:</p>
+
+<pre class="prettyprint">
+// Utility method to read KML from a file and create a string
+private static String getKml(String filename) throws IOException {
+  StringBuilder sb = new StringBuilder();
+  BufferedReader r = new BufferedReader(new FileReader(filename));
+  int c;
+  while ((c = r.read()) != -1) {
+    sb.append((char) c);
+  }
+  return sb.toString();
+}
+</pre>
+
+<p>The following example uses this utility method to create a new
+feature from an existing KML file. Note that the KML file
+must contain only one <code>&lt;Placemark&gt;</code> and
+not full KML (such as the <code>&lt;kml&gt;</code> root element).</p>
+
+<pre class="prettyprint">
+public static FeatureEntry createFeature(MapsService myService)
+    throws ServiceException, IOException {
+
+  // Use the feature feed's #post URL as the Edit URL for this map
+  // Replace userID and mapID with appropriate values for your map
+  final URL featureEditUrl = new URL("http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full");
+
+  // Create a blank FeatureEntry object
+  FeatureEntry featureEntry = new FeatureEntry();
+
+  try {
+    // KML is simply XML so we'll use the XmlBlob object to store it
+    XmlBlob kml = new XmlBlob();
+    kml.setBlob(CreateFeature.getKml("<i>YOUR_KML_FILE.kml</i>"));
+
+    // Set the KML for this feature
+    // Note that the KML should only include one &lt;Placemark&gt; entry
+    featureEntry.setKml(kml);
+
+    // Set the tile for the feature. Each atom entry requires a feature
+    // This feature title will be displayed within My Maps
+    featureEntry.setTitle(new PlainTextConstruct("Feature Title"));
+  } catch(NullPointerException e) {
+    System.out.println("Error: " + e.getClass().getName());
+  }
+
+  // Insert the feature entry using the #post URL
+  return myService.insert(featureEditUrl, featureEntry);
+}
+</pre>
+
+<p>The <code>insert()</code> method creates a feature using the <code>FeatureEntry</code>.
+Once the entry is added, it will also contain various elements added
+by the Maps Data API, such as an <code>id</code> element and creation
+information. If your request fails for some reason, the Maps Data API will throw
+a <code>ServiceException</code>. You should handle such exceptions
+gracefully.</p>
+
+<p>You may also create a feature from a text string rather than from a file.
+Doing so is slightly easier, since you simply need to pass the KML text string
+to <code>setBlob()</code> rather than use the <code>CreateFeature.getKml()</code>
+class method:</p>
+
+<pre class="prettyprint">
+//Specify the KML as a String
+<b>String kml = "&lt;Placemark xmlns=\"http://www.opengis.net/kml/2.2\"&gt;" +
+  "&lt;name&gt;Aunt Joan&apos;s Ice Cream Shop&lt;/name&gt;" +
+  "&lt;Point&gt;" +
+  "&lt;coordinates&gt;-87.74613826475604,41.90504663195118,0&lt;/coordinates&gt;" +
+  "&lt;/Point&gt;&lt;/Placemark&gt;";</b>
+
+// Call createFeature, passing the KML string
+<b>createFeature(myService,kml);</b>
+
+<b>public static FeatureEntry createFeature(MapsService myService, String KML)</b>
+   throws ServiceException, IOException {
+
+  // Use the feature feed's #post URL as the Edit URL for this map
+  // Replace userID and mapID with appropriate values for your map
+
+  final URL featureEditUrl = new URL("http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full");
+
+  // Create a blank FeatureEntry object
+  FeatureEntry featureEntry = new FeatureEntry();
+
+  try {
+    // KML is simply XML so we'll use the XmlBlob object to store it
+    XmlBlob kml = new XmlBlob();
+    <b>kml.setBlob(KML);</b>
+
+    // Set the KML for this feature
+    // Note that the KML should only include one &lt;Placemark&gt; entry
+    featureEntry.setKml(kml);
+
+    // Set the tile for the feature. Each atom entry requires a feature
+	// This feature title will be displayed within My Maps
+    featureEntry.setTitle(new PlainTextConstruct("Feature Title"));
+  } catch(NullPointerException e) {
+    System.out.println("Error: " + e.getClass().getName());
+  }
+
+  // Insert the feature entry using the #post URL
+  return myService.insert(featureEditUrl, featureEntry);
+}
+</pre>
+
+<h2 id="UpdatingFeatures">Updating Features</h2>
+
+<p>To update an existing feature, first retrieve the <code>FeatureEntry</code>
+of the feature you want to update, modify it, and then call the
+<code>update()</code> method on your <code>MapsService</code> object,
+passing it the feature's edit <code>#post</code> URL and the updated
+<code>FeatureEntry</code>.</p>
+
+<pre class="prettyprint">
+public static FeatureEntry updateFeature(MapsService myService)
+  throws ServiceException, IOException {
+
+  // Request the default metafeed
+  // Replace userID, mapID and featureID with appropriate values for your map
+  final URL featureEditUrl = new URL("http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full/<i>featureID</i>");
+
+  FeatureEntry featureEntry =  myService.getEntry(featureEditUrl, FeatureEntry.class);
+  featureEntry.setTitle(new PlainTextConstruct("Aunt Joan's Coffee Shop"));
+  return myService.update(featureEditUrl, featureEntry);
+}
+</pre>
+
+
+<h2 id="DeletingFeatures">Deleting Features</h2>
+
+<p>To delete a feature, call the <code>delete()</code> method on your
+<code>MapsService</code> object, passing it the feature's
+edit URL. This is the same URL used to <a href="#UpdatingEntries">update a
+feature</a>.</p>
+
+<pre class="prettyprint">
+public static void deleteFeature(MapsService myService)
+  throws ServiceException, IOException {
+
+  // Get a feature entry from its edit URL (returned in the feature feed)
+  final URL featureEditUrl = new URL("http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full/<i>featureID</i>");
+
+  myService.delete(featureEditUrl);
+}
+</pre>
+
+<p class="note"><strong>Note</strong>: To update existing features, see
+<a href="#UpdatingFeatures">Updating Features</a>; don't update features by
+deleting and then re-adding them.</p>
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+
+<h1 id="controlling_access_to_maps">Controlling Access to Maps</h1>
+
+<p>Controlling access to your maps is important: sometimes you need to
+  keep your data restricted to a small set of people, and other times you'd like
+  your map to be accessible to the entire world. The Maps Data API provides two
+  layers of access control:</p>
+
+<ul>
+  <li>
+    The <a href="#the_api_visible_property"><code>api_visible</code> custom
+    property</a> defines whether a map can be accessed by non-owners through the Maps Data API.
+  </li>
+  <li>
+    <a href="#access_control_lists">Access control lists</a> define the type
+    of access for each user of your map, from read+write, to read-only
+    or write-only, to no access at all.
+  </li>
+</ul>
+
+<p>Using these two layers of control, you can make sure that the correct people
+  have access to your maps.</p>
+
+<h2 id="the_api_visible_custom_property">The <code>api_visible</code> Custom
+  Property</h2>
+
+<p>Maps are always accessible to their owners through the API.</p>
+<p>If you'd like your map to be accessible to others through the API (such as
+  with a web application you create), the map's <code>api_visible</code> custom
+  property must be <strong>true</strong>. The map's
+  <a href="#access_control_lists">access control list</a> then defines access
+  levels for non-owners. In this case, users who are not authenticated fall
+  under the ACL's <code>default</code> scope.</p>
+<p>When <code>api_visible</code> is <strong>false</strong>, only a map's owner
+  can access that map through the API.</p>
+
+<h3>Default Values</h3>
+<p>A map's <code>api_visible</code> custom property is set at creation according
+  to the method of creation:</p>
+<ul>
+  <li>Maps created with the API have <code>api_visible</code> set to
+    <strong>true</strong>.</li>
+  <li>Maps created using the My Maps web interface have <code>api_visible</code>
+    set to <strong>false</strong>.</li>
+  </ul>
+<p class="note"><strong>Note</strong>: <em>All</em> maps created <strong>before
+  December 16th, 2009</strong> were created with <code>api_visible</code> set to
+  <strong>false</strong>.</p>
+
+<h3>Updating the api_visible Custom Property</h3>
+<p>To update the <code>api_visible</code> custom property:</p>
+
+<pre class="prettyprint">
+public static MapEntry setApiVisibleProperty(MapsService myService) {
+  final URL editMapUrl = new URL(&quot;http://maps.google.com/maps/feeds/maps/<em>userID</em>/full/<em>mapID</em>&quot;);
+  MapEntry map = myService.getEntry(editMapUrl, MapEntry.class);
+
+  com.google.gdata.data.extensions.CustomProperty customProperty = new com.google.gdata.data.extensions.CustomProperty();
+  customProperty.setName(&quot;api_visible&quot;);
+  customProperty.setValue(&quot;1&quot;); // Or &quot;0&quot; for false
+
+  map.addCustomProperty(customProperty);
+  return myService.update(editMapUrl, map);
+}</pre>
+
+<h2 id="access_control_lists">Access Control Lists</h2>
+
+<p>The Google Maps Data API provides methods to control access to your maps.
+  	ACLs control both individual user access, as well as default access levels
+    for all users not specifically named.</p>
+<p>Access control is accomplished using the classes in the
+  <code>com.google.gdata.data.acl</code> package. You must import this package
+  in your Java file:</p>
+
+<pre class="prettyprint">import com.google.gdata.data.acl.*;</pre>
+
+<p>Each map  has one <code>AclFeed</code> object, containing one or more
+  <code>AclEntry</code> objects. Each entry
+  specifies a <strong>scope</strong> and a <strong>role</strong>; the
+  <strong>scope</strong> defines the user affected, and the
+  <strong>role</strong> defines their access level. All feeds contain an entry
+  for the <code>default</code> scope, which applies to all users without their
+  own entry.</p>
+
+<h3 id="scopes_and_roles">Scopes and Roles</h3>
+
+<p>Allowed scopes in the Maps Data API are:</p>
+<ul>
+  <li><strong>default</strong>: everyone</li>
+  <li><strong>user</strong>: a user can be specified with their email address
+    (eg. <em>mike@gmail.com</em>) or by their <em>userID</em>.</li>
+</ul>
+<p>Allowed roles are explained in the table below.</p>
+
+<table class="nowrap">
+  <tr>
+    <th>Role</th>
+    <th>Map</th>
+    <th>Features</th>
+    <th>ACL</th>
+  </tr>
+  <tr>
+    <td><code>owner</code><br />(not valid with <code>default</code> scope)</td>
+    <td>View&nbsp;-&nbsp;Edit</td>
+    <td>View&nbsp;-&nbsp;Add&nbsp;-&nbsp;Edit&nbsp;-&nbsp;Delete</td>
+    <td>View&nbsp;-&nbsp;Edit</td>
+  </tr>
+  <tr class="alt">
+    <td><code>reader</code></td>
+    <td>View</td>
+    <td>View</td>
+    <td>View</td>
+  </tr>
+  <tr>
+    <td><code>writer</code></td>
+    <td>View&nbsp;-&nbsp;Edit</td>
+    <td>View&nbsp;-&nbsp;Add&nbsp;-&nbsp;Edit&nbsp;-&nbsp;Delete</td>
+    <td>View</td>
+  </tr>
+  <tr class="alt">
+    <td><code>appender</code></td>
+    <td>-</td>
+    <td>Add</td>
+    <td>-</td>
+  </tr>
+  <tr>
+    <td><code>readappender</code></td>
+    <td>View</td>
+    <td>View&nbsp;-&nbsp;Add</td>
+    <td>View</td>
+  </tr>
+  <tr class="alt">
+    <td><code>default</code></td>
+    <td colspan="3">Explicitly grants a user the same role as is granted the
+      default scope.</td>
+  </tr>
+  <tr>
+    <td><code>none</code></td>
+    <td colspan="3">Assigning a role of <code>none</code> to a user will remove
+      that user's ACL entry.</td>
+  </tr>
+</table>
+
+<h4 id="creators">Special Rules for Map Creators</h4>
+<p>The creator of a map  always has full permission to the map, its features,
+  and its ACL, regardless of any changes to the owner's ACL entry. A map can
+  only be deleted by its creator.</p>
+
+<h3 id="retrieving_an_acl">Retrieving an ACL</h3>
+
+<p>A map's access control list can be retrieved with the ACL's unique URL. This
+  URL can be inferred from the map entry's <code>id</code> property, as
+  follows:</p>
+
+<pre class="prettyprint">final URL aclFeedUrl = new URL(map.getId().replace(&quot;feeds/maps&quot;, &quot;feeds/acl/maps&quot;) + &quot;/full&quot;);</pre>
+<p>The ACL feed URL is passed to <code>getFeed()</code> on the <code>MapsService</code> object, along with the class of this feed (<code>AclFeed.class</code> in this case).</p>
+
+<pre class="prettyprint">
+public static AclFeed getAclFeed(MapsService myService, MapEntry map) throws IOException, ServiceException {
+  final URL aclFeedUrl = new URL(map.getId().replace("feeds/maps", "feeds/acl/maps") + "/full");
+  return myService.getFeed(aclFeedUrl, AclFeed.class);
+}
+</pre>
+
+<h3 id="retrieving_an_acl_entry">Retrieving an ACL Entry</h3>
+
+<p>From the ACL feed, individual entries can be returned by calling
+  <code>getEntries()</code> on the feed object.</p>
+
+<pre class="prettyprint">public static void printAclEntries(AclFeed aclFeed) {
+
+  for (AclEntry aclEntry : aclFeed.getEntries()) {
+    System.out.println(&quot;Scope type: &quot; + aclEntry.getScope().getType());
+    System.out.println(&quot;Scope value: &quot; + aclEntry.getScope().getValue());
+    System.out.println(&quot;Role value: &quot; + aclEntry.getRole().getValue());
+  }</span>
+}</pre>
+
+<p>An ACL entry can also be retrieved by passing the entry's unique URL to
+  <code>myService.getEntry()</code>, along with the type of feed (in this case,
+  <code>AclEntry.class</code>). To obtain this URL, either:</p>
+
+<ul>
+  <li>call <code>getSelfLink().getHref()</code> on the ACL entry, or</li>
+  <li>append the URL-encoded scope type and scope value to the ACL feed URL
+    (eg. <code>user%3Ajohn%40gmail.com</code>).</li>
+</ul>
+
+<p>The following example shows how to retrieve an ACL entry by constructing the
+  URL:</p>
+<pre class="prettyprint">
+public static void printAclEntry(MapsService myService, AclFeed aclFeed) throws IOException, ServiceException {
+
+  final URL aclEntryUrl = new URL(aclFeed.getId() + &quot;/user%3Ajohn%40gmail.com&quot;);
+  AclEntry aclEntry = myService.getEntry(aclEntryUrl, AclEntry.class);
+
+  System.out.println(&quot;Scope type: &quot; + aclEntry.getScope().getType());
+  System.out.println(&quot;Scope value: &quot; + aclEntry.getScope().getValue());
+  System.out.println(&quot;Role value: &quot; + aclEntry.getRole().getValue());
+}</pre>
+
+<h3 id="adding_an_acl_entry">Adding  an ACL Entry</h3>
+
+<p>AclEntry objects are inserted into the ACL feed by calling
+  <code>insert()</code> on the <code>MapsService</code> object. The  role and
+  scope must be defined in the ACL entry.</p>
+
+<pre class="prettyprint">public static AclEntry addAclEntry(MapsService myService, AclFeed aclFeed) throws IOException, ServiceException {
+
+  AclEntry aclEntry = new AclEntry();
+  AclRole role = new AclRole();
+  role.setValue(&quot;writer&quot;);
+
+  AclScope scope = new AclScope();
+  scope.setType(AclScope.Type.USER);
+  scope.setValue(&quot;john@gmail.com&quot;);
+
+  final URL aclFeedUrl = new URL(aclFeed.getId());
+  return myService.insert(aclFeedUrl, aclEntry);
+}</pre>
+
+<h3 id="updating_an_acl_entry">Updating an ACL Entry</h3>
+
+<p>To update an ACL entry, first retrieve the <code>AclEntry</code> you wish to
+  update. Then modify the <code>AclEntry</code> object before passing it (and
+  the map's edit URL) to <code>update()</code> on the <code>MapsService</code>
+  object.</p>
+
+<p>Only the role value of an entry can be changed; scope can not be updated.</p>
+
+<pre class="prettyprint">public static AclEntry updateAclEntry(MapsService myService, AclEntry aclEntry) throws IOException, ServiceException {
+
+  AclRole aclRole = aclEntry.getRole();
+  aclRole.setValue(&quot;reader&quot;);
+  aclEntry.setRole(aclRole);
+
+  final URL aclEntryUrl = new URL(aclEntry.getId());
+  return myService.update(aclEntryUrl, aclEntry);
+}</pre>
+
+<h3 id="deleting_an_acl_entry">Deleting an ACL Entry</h3>
+
+<p> To delete an ACL entry, call the <code>delete()</code> method on the
+  <code>MapsService</code> object, passing it the <code>AclEntry's</code> unique
+  URL.</p>
+
+<pre class="prettyprint">public static void deleteAclEntry(MapsService myService, AclEntry aclEntry) throws IOException, ServiceException {
+
+  final URL aclEntryUrl = new URL(aclEntry.getId());
+  myService.delete(aclEntryUrl);
+}
+</pre>
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+
+
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

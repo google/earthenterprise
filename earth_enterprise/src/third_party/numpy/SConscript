@@ -1,0 +1,97 @@
+#-*- Python -*-
+Import('third_party_env')
+
+current_dir = Dir('.').abspath
+numpy_version = 'numpy-1.9.1'
+numpy_ge_version = numpy_version.replace('numpy', 'numpy-ge')
+
+build_root = '%s/%s' % (current_dir, numpy_version)
+install_root = '%s/install' % current_dir
+install_root_opt = '%s/opt/google' % install_root
+
+
+numpy_source = File('#/../../earth_enterprise/third_party/numpy/%s.tar.gz'
+                    % numpy_version).abspath
+
+numpy_env = third_party_env.DeepCopy()
+
+root_dir = Dir(numpy_env.exportdirs['root']).abspath
+
+if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+  env_opt = 'ac_cv_prog_cc_c99=no'
+else:
+  env_opt = ''
+
+# [1] Extract numpy.
+
+numpy_target = '%s/.extract_numpy' % current_dir
+numpy_extract = numpy_env.Command(
+    numpy_target, numpy_source,
+    [numpy_env.MultiCommand(
+         'mkdir -p %s\n'
+         'cd %s\n'
+         'tar xzf %s\n'
+         'touch %s' % (current_dir, current_dir, numpy_source,
+                       numpy_target))])
+
+# [2] Build numpy.
+python_cmd = '%s/bin/python' % root_dir
+numpy_target = '%s/.build' % current_dir
+numpy_build = numpy_env.Command(
+    numpy_target, numpy_extract,
+    [numpy_env.MultiCommand(
+        'cd %s\n'
+        '%s%s %s setup.py build\n'
+        'touch %s' % (build_root, numpy_env['ENV']['mod_env'],
+                      env_opt, python_cmd, numpy_target))])
+
+# [3] Create numpy master installer
+install_root_lib = '%s/lib/python%s/site-packages' % (
+        install_root, numpy_env['python_major_version'])
+install_root_doc = '%s/share/doc/packages/%s' % (install_root_opt, numpy_ge_version)
+
+numpy_target = '%s/.install' % current_dir
+numpy_install = numpy_env.Command(
+    numpy_target, numpy_build,
+    [numpy_env.MultiCommand('\n'.join([
+        'cd %s' % build_root,
+        'rm -rf %s %s' % (install_root_lib, install_root_doc),
+        'mkdir -p %s' % install_root_doc,
+        'cp -pr README.txt LICENSE.txt %s' % install_root_doc,
+        'mkdir -p %s' % install_root_lib,
+        numpy_env.rsync_cmd % ('build/lib.linux-x86_64-%s/' % numpy_env['python_major_version'],
+                               install_root_lib),
+        'touch %s' % numpy_target]))])
+
+# [4] Install numpy for build.
+numpy_target = '%s/.install_for_build' % current_dir
+numpy_install_build = numpy_env.Command(
+        numpy_target, numpy_install,
+        [numpy_env.MultiCommand(
+            'cd %s\n'
+            '%s%s %s setup.py install\n'
+            'touch %s' % (build_root, numpy_env['ENV']['mod_env'],
+                          env_opt, python_cmd, numpy_target))])
+
+Default(numpy_install_build)
+numpy_env.ExecuteOnClean('rm -rf %s' % current_dir)
+
+
+if 'install' in COMMAND_LINE_TARGETS:
+  # Copies numpy python bindings from ../install/lib/python2.7/site-packages
+  # to ../opt/google/gepython/../site-packages/ folder.
+  numpy_env.InstallFileOrDir(
+      '%s/' % install_root_lib,
+      '%s/opt/google/gepython/Python-%s/lib/python%s/site-packages' % (
+          numpy_env.installdirs['fusion_root'], numpy_env['python_version'],
+          numpy_env['python_major_version']),
+      numpy_install, 'install')
+
+  # Copies LICENSE, README files to /opt/google/share/..
+  numpy_env.InstallFileOrDir(
+      '%s' % install_root_doc,
+      '%s/opt/google/share/doc/packages' % Dir(
+          numpy_env.installdirs['fusion_root']).abspath,
+      numpy_install, 'install')
+
+Return('numpy_extract numpy_install_build')

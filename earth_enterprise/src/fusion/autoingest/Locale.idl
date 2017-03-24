@@ -1,0 +1,104 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+
+#include <string>
+#include <vector>
+#include <qstring.h>
+#include <khTypes.h>
+
+class LocaleSet
+{
+  std::vector<QString> supportedLocales;
+
+#pragma LoadAndSave
+#hquote
+  static std::string LocalesFilename(void);
+  // Utility to generate the locales file path, in the assetroot.
+  static std::string AssetRootLocalesFilename();
+  // Load the locales from the locales file in the asset root.
+  // return true if successful (returns true if locales file is missing/empty).
+  bool Load(void);
+  // Load the locales from the specified file.
+  // return true if successful (returns true if locales file is missing/empty).
+  bool LoadFromPath(const std::string& file_path);
+  bool Save(void);
+  bool validLocale(const QString &loc) const;
+  // Helper function for testing
+  void AddLocaleForTesting(const QString &locale) {
+    supportedLocales.push_back(locale);
+  }
+#/hquote
+
+#cppquote
+#include <autoingest/.idl/storage/AssetDefs.h>
+#include <autoingest/geAssetRoot.h>
+#include <khFileUtils.h>
+
+  bool
+  LocaleSet::validLocale(const QString &loc) const
+  {
+    for (std::vector<QString>::const_iterator l = supportedLocales.begin();
+         l != supportedLocales.end(); ++l) {
+      if (*l == loc) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  std::string
+  LocaleSet::LocalesFilename(void)
+  {
+    return "supportedLocales.xml";
+  }
+
+  std::string
+  LocaleSet::AssetRootLocalesFilename() {
+    return khComposePath(geAssetRoot::Dirname(AssetDefs::AssetRoot(),
+                                              geAssetRoot::UserDataDir),
+                         LocaleSet::LocalesFilename());
+  }
+
+  bool
+  LocaleSet::Load(void) {
+    // Default is to load from assetroot.
+    return LoadFromPath(AssetRootLocalesFilename());
+  }
+
+  bool
+  LocaleSet::LoadFromPath(const std::string& file_path) {
+    if (!khExists(file_path)) {
+      // missing locales file means empty, it's not an error
+      return true;
+    }
+    return Load(file_path.c_str());
+  }
+
+  bool
+  LocaleSet::Save(void)
+  {
+    std::string filename = AssetRootLocalesFilename();
+    if (Save(filename)) {
+      khChmod(filename, 0666); // in case the umask trimmed any permissions
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
+#/cppquote
+
+};

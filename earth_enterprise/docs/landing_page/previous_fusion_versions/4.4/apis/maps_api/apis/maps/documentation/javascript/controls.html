@@ -1,0 +1,1036 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/controls.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Google Maps Javascript API V3 Controls - Google Maps JavaScript API V3 - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/html/apis/maps/documentation/javascript/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../css/iehacks.css"><![endif]-->
+
+  </head>
+
+  <body class="gc-documentation">
+
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps JavaScript API V3</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="index.html" title="Google Maps JavaScript API V3 home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="basics.html" class="selected" title="Official Google Maps JavaScript API V3 documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../faq.html" title="Answers to frequently asked questions about Google Maps JavaScript API V3">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="articles.html" title="Focused articles and tutorials for Google Maps JavaScript API V3 developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps JavaScript API V3 blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="forum.html" title="Google Maps JavaScript API V3 developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../../terms.html" title="Google Maps JavaScript API V3 terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <a name="gc-toc-anchor"></a>
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../../index.html">Maps API Family</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+ <div class="line"></div>
+    <ul>
+      <li><h2>Maps Javascript API V3</h2>
+        <ul>
+          <li><a class="tlw-expanded" href="index.html">Home Page</a>
+            <ul>
+              <li><a href="basics.html">Basics</a></li>
+              <li><a href="tutorial.html">Tutorial</a></li>
+              <li><a href="events.html">Events</a></li>
+              <li><a href="controls.html">Controls</a></li>
+              <li><a href="overlays.html">Overlays</a></li>
+              <li><a href="services.html">Services</a></li>
+              <li><a href="maptypes.html">Map Types</a></li>
+            </ul>
+          </li>
+          <li><a class="tlw-collapsed" href="reference.html">API Reference</a>
+            <ul>
+              <li><a href="reference.html">3.3</a></li>
+              <li><a href="3.2/reference.html">3.2</a></li>
+              <li><a href="3.1/reference.html">3.1</a></li>
+            </ul>
+          </li>
+          <li><h2 class="tlw-expanded">Code Samples:</h2>
+            <ul>
+              <li><a href="examples/index.html">Samples</a></li>
+              <li><a href="demogallery.html">Demo Gallery</a></li>
+            </ul>
+          </li>
+          <li><h2 class="tlw-expanded">More Resources:</h2>
+            <ul>
+               <li><a href="articles.html">Articles</a><sup class="new">New!</sup></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/issues/list?can=2&q=apitype:Javascript3&colspec=ID+Type+Status+Introduced+Fixed+Summary+Internal+Stars&cells=tiles">Known Issues</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/wiki/JavascriptMapsAPIv3Changelog">Changelog</a></li>
+               <li><a href="http://code.google.com/p/google-maps-utility-library-v3/">Utility Library</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+       <div class="line"></div>
+       <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="v2/index.html">Home Page</a></li>
+           <li><a href="v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+   <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../flash/index.html">Home Page</a></li>
+          <li><a href="../flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../mapsdata/index.html">Home Page</a></li>
+          <li><a href="../mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+        <li><h2><a href="../webservices/index.html">Maps API Web Services</a></h2>
+        <ul>
+          <li><a href="../geocoding/index.html">Geocoding API</a></li>
+          <li><a href="../directions/index.html">Directions API</a></li>
+          <li><a href="../elevation/index.html">Elevation API</a></li>
+          <li><a href="../places/index.html">Places APl</a></li>
+        </ul>
+      </li>
+    </ul>
+       <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+    <div class="promo"><p><a href="../premier/index.html">Google Maps API Premier</a></p>
+    <p>Same great maps plus a SLA, support, and control over ads</p>
+    </div>
+
+      </div>
+
+      <a name="gc-pagecontent-anchor"></a>
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Google Maps Javascript API V3 Controls</h1>
+
+
+<p class="note">Note: The Google Maps Javascript API Version 3 documented within
+these pages is now the official Javascript API. Version 2 of this API has been
+officially deprecated as per our deprecation policy. We encourage you to migrate
+your code to this newly updated and enhanced version!</p>
+
+<div class="toc">
+  <ol>
+  <li><a href="#ControlsOverview">Map Controls Overview</a></li>
+  <li><a href="#DefaultUI">The Default UI</a>
+    <ol class="toc">
+      <li><a href="#DefaultControls">The Default Control Set</a></li>
+      <li><a href="#DisablingDefaults">Disabling the Default UI</a></li>
+    </ol>
+  </li>
+  <li><a href="#Adding_Controls_to_the_Map">Adding Controls to the
+  Map</a></li>
+  <li><a href="#ControlOptions">Control Options</a>
+     <ol class="toc">
+      <li><a href="#ControlModification">Modifying Control
+      Presentation</a></li>
+      <li><a href="#ControlPositioning">Control Positioning</a></li>
+    </ol>
+  </li>
+  <li><a href="#CustomControls">Custom Map Controls</a>
+     <ol class="toc">
+      <li><a href="#CustomPositioning">Positioning Custom Map Controls</a></li>
+      <li><a href="#CustomDrawing">Drawing Custom Map Controls</a></li>
+      <li><a href="#CustomEvents">Handling Events from Custom Map
+      Controls</a></li>
+      <li><a href="#CustomExample">A Custom Map Control Example</a></li>
+      <li><a href="#ControlState">Adding State to Map Controls</a></li>
+    </ol>
+  </li>
+  </ol>
+</div>
+
+<h1 id="ControlsOverview">Controls Overview</h1>
+
+<p>The maps on Google Maps contain UI elements for allowing user interaction
+through the map. These elements are known as <i>controls</i> and you can
+include variations of these controls in your Google Maps API application.
+Alternatively, you can do nothing and let the Google Maps API handle all
+control behavior.</p>
+
+<p>The Maps API comes with a handful of built-in controls you can use in your
+maps:</p>
+
+<ul>
+  <li>The <b><i>Navigation control</i></b> displays a large pan/zoom
+  control as used on Google Maps. This control appears by default in
+  the top left corner of the map.</li>
+  <li>The <b><i>Scale control</i></b> displays a map scale element. This
+  control is not enabled by default.</li>
+  <li>The <b><i>MapType control</i></b> lets the user toggle between map types
+  (such as <code>ROADMAP</code> and <code>SATELLITE</code>). This control
+  appears by default in the top right corner of the map.</li>
+</ul>
+
+<p>You don't access or modify these map controls directly. Instead, you
+modify the map's <code>MapOptions</code> fields which affect the visibility
+and presentation of controls. You can adjust control presentation upon
+instantiating your map (with appropriate <code>MapOptions</code>) or modify a
+map dynamically by calling <code>setOptions()</code> to change the map's
+options.</p>
+
+<p>Not all of these controls are enabled by default. To learn about default UI
+behavior (and how to modify such behavior), see <a href="#DefaultUI">The
+Default UI</a> below.</p>
+
+<h1 id="DefaultUI">The Default UI</h1>
+
+<p>Rather than specifying and setting up individual controls, you may simply
+wish to specify that your map exhibit the look and feel of the Google Maps
+interface, (including any new features or controls that get added in the
+future). To get this behavior, you need do nothing. Your map will show up with
+default controls.</p>
+
+<h2 id="DefaultControls">The Default Control Set</h2>
+
+<p>The Maps API provides the following default controls:</p>
+
+<table>
+<tr>
+<th>Control</th>
+<th>Large Screens</th>
+<th>Small Screens</th>
+<th>iPhone</th>
+<th>Android</th>
+</tr>
+<tr>
+<td>Navigation</td>
+<td>Large Pan/Zoom for sizes larger than 400x350px</td>
+<td>Small Mini-Zoom for sizes smaller than 400x350px</td>
+<td>Not present</td>
+<td>"Android" control</td>
+</tr>
+<tr>
+<td>MapType</td>
+<td>Horizontal Bar for screens larger than 320px wide</td>
+<td>Dropdown for screens smaller than 320px wide</td>
+<td>Same as Large/Small Screens</td>
+<td>Same as Large/Small Screens</td>
+</tr>
+<tr>
+<td>Scale</td>
+<td>Not present</td>
+<td>Not present</td>
+<td>Not present</td>
+<td>Not present</td>
+</tr>
+</table>
+
+<p>Additionally, keyboard handling is on by default on all devices.</p>
+<h2 id="DisablingDefaults">Disabling the Default UI</h2>
+
+<p>You may instead wish to turn off the API's default UI settings. To do so,
+set the <code>Map</code>'s <code>disableDefaultUI</code> property (within the
+<code><i>Map options</i></code> object) to <code>true</code>. This property
+disables any automatic UI behavior from the Google Maps API.<p>
+
+<p>The following code disables the default UI entirely:</p>
+
+<pre class="prettyprint lang-javascript">
+function initialize() {
+  var myOptions = {
+    zoom: 4,
+    center: new google.maps.LatLng(-33, 151),
+    disableDefaultUI: true,
+    mapTypeId: google.maps.MapTypeId.ROADMAP  
+  }
+  var map = new google.maps.Map(document.getElementById("map_canvas"),
+       myOptions);
+}
+</pre>
+
+<p><a href="examples/control-disableUI.html">View example
+(control-disableUI.html)</a></p>
+
+<h1 id="Adding_Controls_to_the_Map">Adding Controls to the Map</h1>
+
+<p>You may wish to tailor your interface by removing, adding, or modifying UI
+behavior or controls and ensure that future updates don't alter this behavior.
+If you wish to only add or modify existing behavior, you need to ensure that
+the control is explicitly added to your application.</p>
+
+<p>Some controls appear on the map by default while others will not appear
+unless you specifically request them. Adding or removing controls from the map
+is specified in the following <code><i>Map options</i></code> object's fields,
+which you set to <code>true</code> to make them visible or set to 
+<code>false</code> to hide them:</p>
+
+<pre class="prettyprint lang-javascript">
+{
+  navigationControl: boolean,
+  mapTypeControl: boolean,
+  scaleControl: boolean
+}
+</pre>
+
+<p>Note that the Maps API V3 does not currently allow you to dynamically add
+or remove controls. These must be set upon creation of the map through a
+<code><i>Map options</i></code> object.</p>
+
+<p>The following example sets the map to hide the navigation control and
+display the scale control. Note that we do not explicitly disable the default
+UI, so these modifications are additive to the default UI behavior.</p>
+
+<pre class="prettyprint lang-javascript">
+function initialize() {
+  var myOptions = {
+    zoom: 4,
+    center: new google.maps.LatLng(-33, 151),
+    navigationControl: false,
+    scaleControl: true,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  }
+  var map = new google.maps.Map(document.getElementById("map_canvas"),
+        myOptions);
+}
+</pre>
+
+<p><a href="examples/control-simple.html">View example
+(control-simple.html)</a></p>
+
+<h1 id="ControlOptions">Control Options</h1>
+
+<p>Several controls are configurable, allowing you to alter their behavior or
+change their appearance. The <b><i>Navigation control</i></b>, for example,
+may display as either a large control with a full zoom control and panning
+controls as shown on Google Maps, or as a smaller, mini-zoom control for
+smaller devices.</p>
+
+<p>These controls are modified by altering appropriate control <i>options</i>
+fields within the <code>MapOptions</code> object upon creation of the map. For
+example, options for altering the <b><i>Navigation control</i></b> are
+indicated in the <code>navigationControlOptions</code> field.</p>
+
+<p>The <b><i>Navigation control</i></b> may appear in one of the following
+<code>style</code> options:</p>
+
+<ul>
+  <li><code>google.maps.NavigationControlStyle.SMALL</code> displays
+  a mini-zoom control, consisting of only <b>+</b> and <b>-</b> buttons.
+  This style is appropriate for mobile devices.</li>
+  <li><code>google.maps.NavigationControlStyle.ZOOM_PAN</code>
+  displays the standard zoom slider control with a panning control,
+  as on Google Maps.</li>
+  <li><code>google.maps.NavigationControlStyle.ANDROID</code> displays
+  the small zoom control as used on the native Maps application on
+  Android devices.</li>
+  <li><code>google.maps.NavigationControlStyle.DEFAULT</code> picks
+  an appropriate navigation control based on the map's size and the
+  device on which the map is running.</li>
+</ul>
+
+<p>The <b><i>MapType control</i></b> may appear in one of the following
+<code>style</code> options:</p>
+
+<ul>
+  <li><code>google.maps.MapTypeControlStyle.HORIZONTAL_BAR</code>
+  displays the array of controls as buttons in a horizontal bar as
+  is shown on Google Maps.</li>
+  <li><code>google.maps.MapTypeControlStyle.DROPDOWN_MENU</code>
+  displays a single button control allowing you to select the map
+  type via a dropdown menu.</li>
+  <li><code>google.maps.MapTypeControlStyle.DEFAULT</code> displays
+  the "default" behavior, which depends on screen size and may
+  change in future versions of the API</li>
+</ul>
+
+<p>Note that if you do modify any control options, you should
+explicitly enable the control as well by setting the appropriate
+<code>MapOptions</code> value to <code>true</code>. For example,
+to set a <b><i>Navigation control</i></b> to exhibit the <code>SMALL</code>
+style, use the following code within the <code>MapOptions</code> object:</p>
+
+<pre class="prettyprint lang-javascript">
+  ...
+  navigationControl: true,
+  navigationControlOptions: {
+    style: google.maps.NavigationControlStyle.SMALL
+  }
+  ...
+</pre>
+
+<p>The following example sets a drop-down <b><i>MapType</i></b>
+control and specifies that the <b><i>Navigation control</i></b> use
+a small mini-zoom layout:</p>
+
+<pre class="prettyprint lang-javascript">
+function initialize() {
+  var myOptions = {
+    zoom: 4,
+    center: new google.maps.LatLng(-33, 151),
+    mapTypeControl: true,
+    mapTypeControlOptions: {
+      style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+    },
+    navigationControl: true,
+    navigationControlOptions: {
+      style: google.maps.NavigationControlStyle.SMALL
+    },
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  }
+  var map = new google.maps.Map(document.getElementById("map_canvas"),
+      myOptions);            
+}
+</pre>
+
+<p><a href="examples/control-options.html">View example (control-options.html)</a></p>
+
+<p>Controls are typically configured upon creation of the map. However,
+you may alter the presentation of controls dynamically by
+calling the <code>Map</code>'s <code>setOptions()</code> method,
+passing it new control options.</p>
+
+<h2 id="ControlModification">Modifying Controls</h2>
+
+<p>You specify a control's presentation when you create your map
+through fields within the map's <code>MapOptions</code> object. These
+fields are denoted below:</p>
+
+<ul>
+  <li><code>mapTypeControl</code> enables/disables the Map Type control
+  that lets the user toggle between map types (such as Map and Satellite).
+  By default, this control is visible and appears in the top right
+  corner of the map. The <code>mapTypeControlOptions</code> field
+  additionally specifies the <code>MapTypeControlOptions</code> to
+  use for this control.</li>
+  <li><code>navigationControl</code> enables/disables the Navigation
+  control that provides a pan/zoom control. By default, this control
+  is visible and appears in the top left corner of the map. The
+  <code>navigationControlOptions</code> field additionally specifies the
+  <code>NavigationControlOptions</code> to use for this control.</li>
+  <li><code>scaleControl</code> enables/disables the Scale control
+  that provides a simple map scale. By default, this control is
+  not visible. When enabled, it appears in the bottom left corner of
+  the map. The <code>scaleControlOptions</code> additionally specifies the
+  <code>ScaleControlOptions</code> to use for this control.</li>
+</ul>
+
+<p>Note that you may specify options for controls you initially disable.</p>
+
+<h2 id="ControlPositioning">Control Positioning</h2>
+
+<p>Each of these control options contains a <code>position</code> property
+(of type <code>ControlPosition</code>) which indicates where on the map to
+place the control. Positioning of these controls is not absolute; instead, the
+API will layout the controls intelligently by "flowing" them around existing
+map elements, or other controls, within given constraints (such as the map
+size). <span style="color:red">Note: </span> no guarantees can be made that
+controls may not overlap given complicated layouts, though the API will
+attempt to arrange them intelligently.</p>
+
+<p>The following control positions are supported:</p>
+
+<ul>
+  <li><code>TOP_CENTER</code> indicates that the control should be placed
+  along the top center of the map.</li>
+  <li><code>TOP_LEFT</code> indicates that the control should be placed along
+  the top left of the map, with any sub-elements of the control "flowing"
+  towards the top center.</li>
+  <li><code>TOP_RIGHT</code> indicates that the control should be placed along
+  the top right of the map, with any sub-elements of the control "flowing"
+  towards the top center.</li>
+  <li><code>LEFT_TOP</code> indicates that the control should be placed along
+  the top left of the map, but below any <code>TOP_LEFT</code> elements.</li>
+  <li><code>RIGHT_TOP</code> indicates that the control should be placed along
+  the top right of the map, but below any <code>TOP_RIGHT</code> elements.</li>
+  <li><code>LEFT_CENTER</code> indicates that the control should be placed along
+  the left side of the map, centered between the <code>TOP_LEFT</code> and
+  <code>BOTTOM_LEFT</code> positions.</li>
+  <li><code>RIGHT_CENTER</code> indicates that the control should be placed
+  along the right side of the map, centered between the <code>TOP_RIGHT</code> and
+  <code>BOTTOM_RIGHT</code> positions.</li>
+  <li><code>LEFT_BOTTOM</code> indicates that the control should be placed along
+  the bottom left of the map, but above any <code>BOTTOM_LEFT</code> elements.</li>
+  <li><code>RIGHT_BOTTOM</code> indicates that the control should be placed along
+  the bottom right of the map, but above any <code>BOTTOM_RIGHT</code> elements.</li>  
+  <li><code>BOTTOM_CENTER</code> indicates that the control should be placed
+  along the bottom center of the map.</li>
+  <li><code>BOTTOM_LEFT</code> indicates that the control should be placed
+  along the bottom left of the map, with any sub-elements of the control
+  "flowing" towards the bottom center.</li>
+  <li><code>BOTTOM_RIGHT</code> indicates that the control should be placed
+  along the bottom right of the map, with any sub-elements of the control
+  "flowing" towards the bottom center.</li>
+</ul>
+
+<p style="text-align:center"><img src="images/control-positions.png" /></p>
+
+<p>Note that these positions may coincide with positions of UI elements
+whose placements you may not modify (such as copyrights and the Google logo).
+In those cases, the controls will "flow" according to the logic noted for
+each position and appear as close as possible to their indicated position.</p>
+
+<p>The following example shows a simple map with all controls enabled, in
+different positions.</p>
+
+<pre class="prettyprint lang-javascript">
+function initialize() {
+  var myOptions = {
+    zoom: 12,
+    center: new google.maps.LatLng(-28.643387, 153.612224),
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    mapTypeControl: true,
+    mapTypeControlOptions: {
+        style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+        position: google.maps.ControlPosition.BOTTOM
+    },
+    navigationControl: true,
+    navigationControlOptions: {
+        style: google.maps.NavigationControlStyle.ZOOM_PAN,
+        position: google.maps.ControlPosition.TOP_RIGHT
+    },
+    scaleControl: true,
+    scaleControlOptions: {
+        position: google.maps.ControlPosition.TOP_LEFT
+    }
+  }
+  var map = new google.maps.Map(document.getElementById("map_canvas"),
+      myOptions);
+}
+</pre>
+
+<p><a href="examples/control-positioning.html">View example
+(control-positioning.html)</a></p>
+
+<h1 id="CustomControls">Custom Controls</h1>
+
+<p>As well as modifying the style and position of existing API controls, you
+can create your own controls to handle interaction with the user. Controls are
+stationary widgets which float on top of a map at absolute positions, as
+opposed to <i>overlays</i>, which move with the underlying map. More
+fundamentally, a control is simply a <code>&lt;div&gt;</code> element which
+has an absolute position on the map, displays some UI to the user, and handles
+interaction with either the user or the map, usually through an event
+handler.</p>
+
+<p>To create your own custom control, few "rules" are necessary. However, the
+following guidelines can act as best practices:</p>
+
+<ul>
+  <li>Define appropriate CSS for the control element(s) todisplay.</li>
+  <li>Handle interaction with the user or the map through event handlers for
+  either map property changes or user events (e.g. <code>'click'</code>
+  events).</li>
+  <li>Create a <code>&lt;div&gt;</code> element to hold the control and add
+  this element to the <code>Map</code>'s <code>controls</code> property.</li>
+</ul>
+
+<p>Each of these concerns is discussed below.</p>
+
+<h2 id="CustomDrawing">Drawing Custom Controls</h2>
+
+<p>How you draw your control is up to you. Generally, we recommend that you
+place all of your control presentation within a single
+<code>&lt;div&gt;</code> element so that you can manipulate your control as
+one unit. We will use this design pattern in the samples shown below.</p>
+
+<p>Designing attractive controls requires some knowledge of CSS and DOM
+structure. The following code shows how a simple control is created from a
+containing <code>&lt;div&gt;</code>, a <code>&lt;div&gt;</code> to hold the
+button outline, and another <code>&lt;div&gt;</code> to hold the button
+interior.</p>
+
+<pre class="prettyprint lang-javascript">
+// Create a div to hold the control.
+var controlDiv = document.createElement('DIV');
+
+// Set CSS styles for the DIV containing the control
+// Setting padding to 5 px will offset the control
+// from the edge of the map
+controlDiv.style.padding = '5px';
+
+// Set CSS for the control border
+var controlUI = document.createElement('DIV');
+controlUI.style.backgroundColor = 'white';
+controlUI.style.borderStyle = 'solid';
+controlUI.style.borderWidth = '2px';
+controlUI.style.cursor = 'pointer';
+controlUI.style.textAlign = 'center';
+controlUI.title = 'Click to set the map to Home';
+controlDiv.appendChild(controlUI);
+
+// Set CSS for the control interior
+var controlText = document.createElement('DIV');
+controlText.style.fontFamily = 'Arial,sans-serif';
+controlText.style.fontSize = '12px';
+controlText.style.paddingLeft = '4px';
+controlText.style.paddingRight = '4px';
+controlText.innerHTML = '<b>Home</b>';
+controlUI.appendChild(controlText);
+</pre>
+
+<h2 id="CustomEvents">Handling Events from Custom Controls</h2>
+
+<p>For a control to be useful, it must actually do something. What the control
+does is up to you. The control may respond to user input, or it may respond to
+changes in the <code>Map</code>'s state.</p>
+
+<p>For responding to user input, the Maps API provides a cross-browser event
+handling method <code>addDomListener()</code> which handles most of the
+browser's <a href="http://en.wikipedia.org/wiki/DOM_events">supported DOM
+events</a>. The following code snippet adds a listener for the browser's
+<code>'click'</code> event. Note that this event is received from the DOM, not
+from the map.</p>
+
+<pre class="prettyprint lang-javascript">
+// Setup the click event listener: simply set the map to center on Chicago
+var chicago = new google.maps.LatLng(41.850033, -87.6500523);
+
+google.maps.event.addDomListener(outer, 'click', function() {
+  map.setCenter(chicago)
+});
+</pre>
+
+<h2 id="CustomPositioning">Positioning Custom Controls</h2>
+
+<p>Custom controls are positioned on the map by placing them at appropriate
+positions within the <code>Map</code> object's <code>controls</code> property.
+This property contains an array of <code>google.maps.ControlPosition</code>s.
+You add a custom control to the map by adding the <code>Node</code> (typically
+the <code>&lt;div&gt;</code>) to an appropriate <code>ControlPosition</code>.
+(For information on these positions, see <a href="#ControlPositioning">Control
+Positioning</a> above.)</p>
+
+<p>Each <code>ControlPosition</code> stores an <code>MVCArray</code> of the
+controls displayed in that position. As a result, when controls are added or
+removed from the position, the API will update the controls accordingly.</p>
+
+<p>The API places controls at each position by the order of an
+<code>index</code> property; controls with a lower index are placed first. For 
+example, two custom controls at position <code>BOTTOM_RIGHT</code> will be
+laid out according to this index order, with lower index values taking
+precedence. By default, all custom controls are placed <i>after</i> placing
+any API default controls. You can override this behavior by setting a
+control's <code>index</code> property to be a negative value. Note that you
+will normally only need to set an index value if you wish to place your
+control "before" a default API control in the same position.</p>
+
+<p>The following code creates a new custom control (its constructor is not 
+shown) and adds it to the map in the <code>TOP_RIGHT</code> position.</p>
+
+
+<pre class="prettyprint lang-javascript">
+var map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+
+// Construct your control in whatever manner is appropriate.
+// Generally, your constructor will want access to the
+// DIV on which you'll attach the control UI to the Map.
+var controlDiv = document.createElement('DIV');
+var myControl = new MyControl(controlDiv);
+
+// We don't really need to set an index value here, but
+// this would be how you do it. Note that we set this
+// value as a property of the DIV itself.
+controlDiv.index = 1;
+
+// Add the control to the map at a designated control position
+// by pushing it on the position's array. This code will
+// implicitly add the control to the DOM, through the Map
+// object. You should not attach the control manually.
+map.controls[google.maps.ControlPosition.TOP_RIGHT].push(controlDiv);
+</pre>
+
+
+<h2 id="CustomExample">A Custom Control Example</h2>
+
+<p>The following control is simple (though not particularly useful) and
+combines the patterns shown above. This control responds to DOM
+<code>'click'</code> events by centering the map at a certain default
+location:</p>
+
+
+<pre class="prettyprint lang-javascript">
+var map;
+var chicago = new google.maps.LatLng(41.850033, -87.6500523);
+
+/**
+ * The HomeControl adds a control to the map that simply
+ * returns the user to Chicago. This constructor takes
+ * the control DIV as an argument.
+ */
+
+function HomeControl(controlDiv, map) {
+
+  // Set CSS styles for the DIV containing the control
+  // Setting padding to 5 px will offset the control
+  // from the edge of the map
+  controlDiv.style.padding = '5px';
+
+  // Set CSS for the control border
+  var controlUI = document.createElement('DIV');
+  controlUI.style.backgroundColor = 'white';
+  controlUI.style.borderStyle = 'solid';
+  controlUI.style.borderWidth = '2px';
+  controlUI.style.cursor = 'pointer';
+  controlUI.style.textAlign = 'center';
+  controlUI.title = 'Click to set the map to Home';
+  controlDiv.appendChild(controlUI);
+
+  // Set CSS for the control interior
+  var controlText = document.createElement('DIV');
+  controlText.style.fontFamily = 'Arial,sans-serif';
+  controlText.style.fontSize = '12px';
+  controlText.style.paddingLeft = '4px';
+  controlText.style.paddingRight = '4px';
+  controlText.innerHTML = '<b>Home</b>';
+  controlUI.appendChild(controlText);
+
+  // Setup the click event listeners: simply set the map to Chicago
+  google.maps.event.addDomListener(controlUI, 'click', function() {
+    map.setCenter(chicago)
+  });
+}
+
+function initialize() {
+  var mapDiv = document.getElementById('map_canvas');
+  var myOptions = {
+    zoom: 12,
+    center: chicago,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  }
+  map = new google.maps.Map(mapDiv, myOptions);
+
+  // Create the DIV to hold the control and call the HomeControl() constructor
+  // passing in this DIV.
+  var homeControlDiv = document.createElement('DIV');
+  var homeControl = new HomeControl(homeControlDiv, map);
+
+  homeControlDiv.index = 1;
+  map.controls[google.maps.ControlPosition.TOP_RIGHT].push(homeControlDiv);
+}
+</pre>
+
+
+<p><a href="examples/control-custom.html">View example
+(control-custom.html)</a></p>
+
+<h2 id="ControlState">Adding State to Controls</h2>
+
+<p>Controls may also store state. The following example is similar to that
+shown before, but the control contains an additional "Set Home" button which
+sets the control to exhibit a new home location. We do so by creating a
+<code>home_</code> property within the control to store this state and provide
+getters and setters for that state.</p>
+
+
+<pre class="prettyprint lang-javascript">
+var map;
+var chicago = new google.maps.LatLng(41.850033, -87.6500523);
+
+/**
+ * The HomeControl adds a control to the map that
+ * returns the user to the control's defined home.
+ */
+
+// Define a property to hold the Home state
+HomeControl.prototype.home_ = null;
+
+// Define setters and getters for this property
+HomeControl.prototype.getHome = function() {
+  return this.home_;
+}
+
+HomeControl.prototype.setHome = function(home) {
+  this.home_ = home;
+}
+
+function HomeControl(map, div, home) {
+
+  // Get the control DIV. We'll attach our control UI to this DIV.
+  var controlDiv = div;
+
+  // We set up a variable for the 'this' keyword since we're adding event
+  // listeners later and 'this' will be out of scope.
+  var control = this;
+
+  // Set the home property upon construction
+  control.home_ = home;
+
+  // Set CSS styles for the DIV containing the control. Setting padding to
+  // 5 px will offset the control from the edge of the map
+  controlDiv.style.padding = '5px';
+
+  // Set CSS for the control border
+  var goHomeUI = document.createElement('DIV');
+  goHomeUI.title = 'Click to set the map to Home';
+  controlDiv.appendChild(goHomeUI);
+
+  // Set CSS for the control interior
+  var goHomeText = document.createElement('DIV');
+  goHomeText.innerHTML = '<b>Home</b>';
+  goHomeUI.appendChild(goHomeText);
+  
+  // Set CSS for the setHome control border
+  var setHomeUI = document.createElement('DIV');
+  setHomeUI.title = 'Click to set Home to the current center';
+  controlDiv.appendChild(setHomeUI);
+
+  // Set CSS for the control interior
+  var setHomeText = document.createElement('DIV');
+  setHomeText.innerHTML = '<b>Set Home</b>';
+  setHomeUI.appendChild(setHomeText);
+
+  // Setup the click event listener for Home:
+  // simply set the map to the control's current home property.
+  google.maps.event.addDomListener(goHomeUI, 'click', function() {
+    var currentHome = control.getHome();
+    map.setCenter(currentHome);
+  });
+
+  // Setup the click event listener for Set Home:
+  // Set the control's home to the current Map center.
+  google.maps.event.addDomListener(setHomeUI, 'click', function() {
+    var newHome = map.getCenter();
+    control.setHome(newHome);
+  });
+}
+
+function initialize() {
+  var mapDiv = document.getElementById('map_canvas');
+  var myOptions = {
+    zoom: 12,
+    center: chicago,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  }
+  map = new google.maps.Map(mapDiv, myOptions);
+
+  // Create the DIV to hold the control and call the HomeControl()
+  // constructor passing in this DIV.
+  var homeControlDiv = document.createElement('DIV');
+  var homeControl = new HomeControl(map, homeControlDiv, chicago);
+
+  homeControlDiv.index = 1;
+  map.controls[google.maps.ControlPosition.TOP_RIGHT].push(homeControlDiv);
+}
+</pre>
+
+
+<p><a href="examples/control-custom-state.html">View example
+(control-custom-state.html)</a></p>
+
+        <!-- end body text -->
+
+
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

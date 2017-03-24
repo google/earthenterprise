@@ -1,0 +1,108 @@
+
+#reference {
+	margin-left:20px;
+}
+#reference h3 {
+	margin-left:-20px;
+}
+#reference code {
+	color:#007000;
+}
+#reference dt {
+	color:#007000;
+	font-family:"Courier New", Courier, monospace;
+}
+
+.table_note td {
+	border-top: thin #F00;
+	border-bottom: thin #F00;
+	border-left: none;
+	border-right: none;
+	background-color:#EEE;
+}
+
+#doc_title, h1, h2, hr, .sidebox h2, .linkbox a, th, .alert{
+	background-color: #e5ecf9; 
+	border-color: #3366cc;
+	}	
+
+/* ----  do not change  ---- */
+table, td, h2 {
+	background-color: #fff;
+	}
+/* ------------------------- */
+	
+/*  ---- COLORS ----
+
+--RED--
+	background-color: #f1e4d8; 
+	border-color: #aa1002;
+
+--YELLOW--
+	background-color: #fff9e4; 
+	border-color: #ddad08;  
+
+--GREEN--
+	background-color: #d8f1e4; 
+	border-color: #339966;
+
+--BLUE--
+	background-color: #e5ecf9; 
+	border-color: #3366cc;
+	
+	
+ ---- END COLORS ---- */
+ 
+
+/* ---- PAGE ID TAGS ---- */
+
+#selected{
+	color:#000;
+	text-decoration:none;
+	}
+
+
+/* ---- TOP NAV ID TAGS ---- */
+#intro th#intro_link,
+#cplusplus th#cplusplus_link,
+#java th#java_link,
+#python th#python_link {
+	background-color:#C3D9FF;
+	}
+
+/* temporary -- will go in dev_docs.css */
+
+
+/* Search box */
+
+#sidenav div#search {
+  margin-top: 2em;
+}
+
+#sidenav div#search .header {
+  font-weight: bold;
+  font-size: 90%;
+  margin-bottom: 1px;
+}
+
+#sidenav div#search .button {
+  margin-top: 1px;
+}
+
+#sidenav div#search .input input {
+  width: 125px;
+}
+
+#pagecontent {
+  padding-left: 40px;
+  padding-right: 50px;
+}
+
+#pagecontent h2, #pagecontent h1 {
+  margin-left:-20px;
+}
+
+#pagecontent h3 {
+  margin-left:-10px;
+  top: 0.5em;
+}

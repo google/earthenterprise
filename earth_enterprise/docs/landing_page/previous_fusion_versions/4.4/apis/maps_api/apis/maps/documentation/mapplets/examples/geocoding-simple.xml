@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="Geocoding" height="300">
+  <Require feature="sharedmap"/>
+</ModulePrefs>
+<Content type="html"><![CDATA[
+
+<small>
+In this example, we geocode an address, add a marker at that 
+point, and open an info window displaying the address.
+</small>
+
+<script>
+var map = new GMap2();
+var geocoder = new GClientGeocoder();
+showAddress("76 9th ave new york");
+
+function showAddress(address) {
+  geocoder.getLatLngAsync(
+    address,
+    function(latlng) {
+      if (!latlng) {
+        alert(address + " not found");
+      } else {
+        map.setCenter(latlng, 15);
+        var marker = new GMarker(latlng);
+        map.addOverlay(marker);
+        marker.openInfoWindowHtml(address);
+      }
+    }
+  );
+}
+</script>
+
+]]></Content>
+</Module>

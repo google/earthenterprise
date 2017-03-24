@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/v2/examples/control-maptypes.html";
+    </script>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>Control Initialization</title>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSosDVG8KKPE1-m51RBrvYughuyMxQ-i1QfUnH94QxWIa6N4U6MouMmBA" type="text/javascript"></script>
+    <script type="text/javascript">
+    //<![CDATA[
+
+    function initialize() {
+      if (GBrowserIsCompatible()) {
+        var map = new GMap2(document.getElementById("map_canvas"),
+            { size: new GSize(640,320) } );
+        map.setCenter(new GLatLng(42.366662,-71.106262), 11);
+        var customUI = map.getDefaultUI();
+        // Remove MapType.G_HYBRID_MAP
+        customUI.maptypes.hybrid = false;
+        map.setUI(customUI);
+      }
+    }
+    //]]>
+    </script>
+  </head>
+
+  <body onload="initialize()" onunload="GUnload()">
+    <div id="map_canvas" style="width: 640px; height: 320px"></div>
+  </body>
+</html>

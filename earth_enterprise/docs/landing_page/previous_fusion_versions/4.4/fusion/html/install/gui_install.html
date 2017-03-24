@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>The Graphical Installer</title>
+</head>
+
+<body>
+<a name="top"></a>
+
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" />
+  </div>
+  <h1 id="doc_title">Installation Guide</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Installation Guide</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="system_requirements.html">System Requirements</a></li>
+    <li><a href="before_you_install.html">Before you Install</a></li>
+    <li><a href="gui_install.html" id="selected">GUI Installer</a></li>
+    <li><a href="cl_install.html">Command Line Installer</a></li>
+    <li><a href="system_manager.html">Verifying and Troubleshooting</a></li>
+    <li><a href="uninstalling.html">Uninstalling</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+
+<h1>The GUI Installer</h1>
+
+<ol class="toc">
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#before_you_begin">Before you Begin</a></li>
+  <li><a href="#install_fusion">Installing Google Earth Enterprise Fusion</a></li>
+  <li><a href="#install_server">Installing Google Earth Enterprise Server</a></li>
+</ol>
+
+<h2 id="overview">Overview</h2>
+<p>This section provides information about installing Google Earth Enterprise Fusion, Google Earth Enterprise Server, the Google Earth Enterprise Fusion tutorial files, and the additional files and features provided in the software package.</p>
+<p>Both a graphical
+  user interface (GUI) and a <a href="cl_install.html">command-line
+  installer</a> are available for  Google Earth Enterprise Server and
+  Fusion.
+  A <a href="cl_install.html#silent">silent installation</a> option is also available if you want to install on multiple machines without user interaction. Use
+  the command-line installer if you are installing on a server without an X11
+  server.
+<p>The GUI installers are  recommended for most Google Earth Enterprise Fusion and
+  Server installations. During installation, you are prompted 
+  and guided through the process automatically.</p>
+    
+<h2 id="before_you_begin">Before you Begin</h2>
+<p>The Google Earth Enterprise software is available in two formats: as a download from Google.com servers, or on physical media in the form of DVDs. The instructions below are the same for both formats, once the following setup has been completed:</p>
+
+<h3>If you downloaded the software package</h3>
+<p>Unpack the archived installer(s) to a temporary directory:</p>
+<pre>tar -zxvf GEEFusion40.tar.gz -C /<em>target</em>/<em>directory</em>
+tar -zxvf GEEServer40.tar.gz -C /<em>target</em>/<em>directory</em></pre>
+<h3>If you ordered the DVD</h3>    
+<p>Insert the distribution DVD, and mount the DVD drive.</p>
+
+<h2 id="install_fusion">Installing Google Earth Enterprise Fusion</h2>
+
+<ol>
+  <li>Open a terminal window on your Linux workstation.</li>
+  <li>Log in as <code>root</code>.</li>
+  <li>Stop the Google Earth Enterprise Fusion system manager and Google Earth
+    Enterprise Server, if you have a previous version installed and they are
+    running:
+    <pre>/etc/init.d/gefusion stop<br />/etc/init.d/geserver stop</pre>
+    <p><strong>Note:</strong> If you try to run the Google
+      Earth Enterprise installer using a secure shell (<code>ssh -XY user@machine</code>),
+      you might get the following error:</p>
+    <pre>X11 connection rejected because of wrong authentication.
+X connection to localhost:10.0 broken (explicit kill or server shutdown)</pre>
+    <p>If you do, set the following variable to point to the X11 authorization file:</p>         
+    <pre>export XAUTHORITY=~/.Xauthority</pre>
+  </li>
+  <li>Navigate to your DVD directory, or the directory to which you extracted the Google Earth Enterprise files, and run the Google Earth Fusion installer: 
+    <pre><code>cd /media/cdrom
+./InstallGEFusionGUI.sh</code></pre>
+    <p>If your DVD automounted without exec privileges, you might need to
+        run <code>sh ./InstallGEFusionGUI.sh</code> instead.</p>
+    <p>The installer starts and the following window appears:</p>
+    <p><img src="images/fusiongui1.jpg" /></p>
+  </li>
+  <li>Click <strong>Next</strong> to continue. You can click <strong>Cancel</strong> to
+    exit the installation process or <strong>Previous</strong> to return to
+    the previous screen at any time. The License Agreement appears:
+    <p><img src="images/fusiongui2.jpg" /> </li>
+  <li>Accept the License Agreement and click <strong>Next</strong>. The <strong>Choose
+    Products</strong> screen appears:
+    <p><img src="images/fusiongui3.jpg" /> </p> 
+  </li>
+  <li>Choose the installlation type or click <strong>Next</strong> to
+    accept the default (<strong>Typical</strong>). If the installer determines it needs to upgrade
+    any product you are installing, it prompts you to confirm the upgrade.
+    <ul>
+      <li> <strong>Typical</strong> installation includes Google Earth Enterprise Fusion and
+        the Tutorial. </li>
+      <li><strong>Minimal</strong> installation includes only Google Earth Enterprise Fusion.</li>
+      <li><strong>Custom</strong> installation allows you to customize the components you install.</li>
+    </ul>
+  </li>
+  <li>The installer displays the default location for the backup files: <code>/var/opt/google/fusion-backups/...</code><br />
+    Click <strong>Next</strong> to continue. </li>
+  <li>You are prompted  to create the user and group for Google Earth Enterprise
+    Fusion. Click <strong>Next</strong> to accept the default, or enter your customized
+    names. The <strong>Pre-Installation Summary</strong> appears:
+    <p><img src="images/fusiongui4.jpg" /></p>
+  </li>
+  <li>Click <strong>Install</strong> to continue.  The installer prompts you to designate
+    your asset root and source volumes. A source volume is a directory that contains your source data files.
+    <p><img src="images/fusiongui5.jpg" /></p>
+  </li>
+  <li> Click <b>Next</b> to accept the default (<code>/gevol/assets and /gevol/src</code>), or enter
+    the paths you want to set for your asset root and source volume. (See <a href="before_you_install.html">Before you Install</a><a href="../admin/fusion.html#61325"></a> for more information.)
+  </li>
+  <li>Click <strong>Done</strong>. </li>
+  <li>Log out of the system, and log back in (<i>not</i> as root).</li>
+  <li>From the command line, launch Google Earth Enterprise Fusion:
+    <pre><code>fusion</code></pre>
+  </li>
+</ol>
+
+<h2 id="install_server">Installing Google Earth Enterprise Server</h2>
+
+<ol>
+  <li>Open a terminal window on your Linux workstation. </li>
+  <li>Log in as <code>root</code>.</li>
+  <li>Stop the Google Earth Enterprise Fusion system manager and Google Earth
+    Enterprise Server, if you have a previous version installed and they are running:
+    <pre>/etc/init.d/gefusion stop<br />/etc/init.d/geserver stop</pre>
+  </li>
+  <li>Navigate to your DVD directory, or the directory to which you extracted the Google Earth Enterprise files, and run the Google Earth Server installer: 
+    <pre>./InstallGEServerGUI.sh</pre>
+    <p>If your DVD automounted without exec privileges, you might need to
+      run <code>sh ./InstallGEServerGUI.sh</code> instead.
+      <p>The installation script starts running and the following window appears:</p>
+    <p><img src="images/server1.jpg" /></p>
+  </li>
+  <li>Click <strong>Next</strong> to continue. You can click <strong>Cancel</strong> to
+    exit the installation process or <strong>Previous</strong> to return
+    to the previous screen at any time. The License Agreement appears: 
+    <p><img src="images/server2.jpg" /></p>
+  </li>
+  <li>Accept the License Agreement and click <strong>Next</strong>. The Choose
+    products screens appears: 
+    <p><img src="images/server3.jpg" /></p>
+  </li>
+  <li>Choose the installlation type click <strong>Next</strong> to
+    accept the default (<strong>Typical</strong>). If the installer determines it needs
+    to upgrade any product you are installing, it prompts you to confirm
+    the upgrade.
+  </li>
+    <ul>
+      <li><strong>Typical</strong> installation includes Google Earth Enterprise Server
+        and Google Earth Enterprise Places Database.</li>
+      <li><strong>Minimal</strong> installation includes only Google Earth Enterprise Server.</li>
+      <li><strong>Custom</strong> installation allows you to customize the components you install.</li>
+    </ul>
+  <li>The installer displays the default location for the backup
+    files: <code>/var/opt/google/fusion-backups/...<br />
+    </code>Click <strong>Next</strong> to continue. The <strong>User and Group Names</strong> screen appears:
+    <p><img src="images/server4.jpg" /></p>
+  </li>
+  <li>If you want to customize user or group names or IDs, select <strong>Customize</strong>.
+    Otherwise, select <strong>Default</strong> and click <strong>Next</strong>.
+    The <strong>Publish Root Location</strong> screen appears:
+    <p><img src="images/server5.jpg" /></p>
+  </li>
+  <li>The installer prompts you to designate your publish root. (See
+    <a href="before_you_install.html">Before you Install</a> for more information.)
+    <p>The Pre-Installation summary appears.</p>
+  </li>
+  <li>Click <strong>Install</strong>. When the installer is finished, you can choose to start
+    the Google Earth Server services.
+  </li> 
+  <li>Click <strong>Done</strong> to complete the installation.             
+</ol>
+        
+</div> 
+<!-- END PAGE CONTENT --> 
+ 
+<p class="backtotop"><a href="#top">Back to top</a></p> 
+</div> 
+<!-- END WRAPPER --> 
+ 
+</body> 
+</html> 

@@ -1,0 +1,33 @@
+Sheraton Kuai Webcam	-159.46667075157166	21.874292939901352		http://hawaiilive.sheraton-hawaii.com/skr-cam.cfm
+Lahaina Webcam	-156.67781710624695	20.877857655286789		http://readyset.net/jumbolahainacam.hmx
+Mt. St Helens Webcam	-122.21666693687439	46.276581287384033		http://www.fs.fed.us/gpnf/mshnvm/volcanocam
+Transamerica Webcam	-122.40312201653006	37.795591963116692		http://www.kron.com/Global/category.asp?C=20787&nav=5QYe
+Embarcadero Webcam	-122.39565608567894	37.795749947268703		http://www.kron.com/Global/category.asp?C=20788&nav=5QYe
+Golden Gate Bridge Webcam	-122.47753858566284	37.809668183326721		http://www.kron.com/Global/category.asp?C=21304&nav=5QYe
+Bay Bridge Toll Plaza	-122.31375217437744	37.824667096138		http://www.kron.com/Global/category.asp?C=20789&nav=5QYe
+SFO Webcam	-122.39437937736511	37.611906230449677		http://www.bayinsider.com/autos/traffic/livecams/live_cam6.html
+Lawrence Berkeley Webcam	-122.24702954292297	37.878566086292267		http://sv.berkeley.edu/view/index.html
+Sproul Plaza Webcam	-122.25930333137512	37.869545817375183		http://www.berkeley.edu/webcams/sproul.html
+Lake Tahoe Webcam	-120.10346174240112	39.201166033744812		http://wx.thekcrachannel.com/sac/sh/wx/popup_image.cfm?ImageID=433
+Half Dome Webcam	-119.5707106590271	37.747690379619598		http://www.halfdomecam.com/current_capture.htm
+Glacier Point Webcam	-119.59113836288452	37.738367021083832		http://www.yosemite.org/vryos
+Mt. Shasta Webcam	-122.31850504875183	41.299396455287933		http://www.snowcrest.net/camera/
+Vegas Webcam	-115.20779728889465	36.115716397762299		http://206.159.186.169/rio/rio.jpg
+Hard Rock Vegas Cam	-115.15457153320312	36.110032796859741		http://live5.truelook.com/face/newface.jsp?name=/hardrock/vegas&func=live&overlay=default&width=640&height=480
+Scripps Webcam	-117.25308895111084	32.869731187820435		http://cil-www.oce.orst.edu:8080/scripps/latest.snap
+UCLA Cam	-118.44233751296997	34.072026014328003		http://www.admissions.ucla.edu/bruincam/default.htm
+Santa Monica Pier Webcam	-118.49488735198975	34.011652171611786		http://www.westland.net/piercam/
+Venice Beach Cam	-118.47444891929626	33.987968266010284	From Sidewalk Cafe	http://www.westland.net/beachcam/
+Hermosa Beach Webcam	-118.40163230895996	33.86160671710968	From Good Stuff Restaurant	http://webcam.hermosawave.net/
+Times Square Webcam	-73.98443877696991	40.757322013378143		http://www.earthcam.com/usa/newyork/timessquare
+San Antonio Webcam	-98.489964008331299	29.426732361316681		http://heartofsanantonio.com/salive/largeview.asp
+Austin Webcam	-97.739192247390747	30.266928970813751	From Paradise Cafe	http://www.earthcam.com/usa/texas/austin/
+New Oreleans Cam	-90.066336393356323	29.957538843154907		http://www.nola.com/bourbocam/classic/
+Adler Planetarium Webcam	-87.607190608978271	41.86652809381485		http://live6.truelook.com/face/newface.jsp?name=/adler/skyeye&func=live&overlay=default
+Michigan Ave Webcam	-87.624388933181763	41.889849901199341		http://wgntv.trb.com/features/webcam/
+Tokyo Cam	139.70177292823792	35.657211542129517		http://cgi.jp.educe.com/educe/CGI/tower.cgi
+SLOPPY JOE'S BAR	-81.805201999999923	24.559036999999918	201 DUVAL ST, KEY WEST, FL 33040|| (305) 294-5717	http://webcam.keywest.com/sloppycam/
+SALTY DOG CAFE	-80.824510999999987	32.112145000000083	232 S SEA PINES DR # 27, HILTON HEAD ISLE, SC 29928|| (843) 671-2233	http://www.saltydogcafe.com/webcam/webcam.html
+Heavenly Tram Cam	-119.90722060203552	38.919684290885925		http://www.skiheavenly.com/explore/webcams/tram/
+Heavenly Dipper Cam	-119.91085767745972	38.917927443981171		http://www.skiheavenly.com/explore/webcams/dipper/
+Kirkwood, CA	-120.06143689155579	38.662109076976776		http://www.kirkwood.com/webcam.asp

@@ -1,0 +1,496 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+
+ 
+
+
+   
+  
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/index.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Google Earth API Developer's Guide - Google Earth API - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/earth/documentation/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../css/iehacks.css"><![endif]-->
+
+    <link href="../../../css/semantic_headers.css" rel="stylesheet" type="text/css" />
+       <script src="addCommentsToToc.js" type="text/javascript"></script>
+  </head>
+
+  <body class="gc-documentation">
+
+    
+    
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" class="dropdown" href="http://code.google.com" onclick="return false;"><img width="13" height="13" class="globeicon" src="../../../images/globe2_small.png"
+     ><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  <a href="#gc-pagecontent">Skip to page content</a>
+  <a href="#gc-toc">Skip to main navigation</a>
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../../../images/code_logo.png" height="40" width="161" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "ajax apis" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+<h2 id="googlecode-promo">Make web development faster with these <a href="http://chrome.google.com/extensions/featured/web_dev" onclick="siteTracker._trackEvent('Promos','Web Development',this.href);">Chrome Extensions</a>!</h2>
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Earth API</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="../index.html" title="Google Earth API home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="index.html" class="selected" title="Official Google Earth API documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../faq.html" title="Answers to frequently asked questions about Google Earth API">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="../articles/index.html" title="Focused articles and tutorials for Google Earth API developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Earth API blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="http://groups.google.com/group/google-earth-browser-plugin/topics" title="Google Earth API developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="http://code.google.com/apis/maps/terms.html" title="Google Earth API terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="http://code.google.com/apis/maps/signup.html">Sign up for a Maps API key</a></li>
+</ul>
+
+<div class="line"></div>
+
+<ul>
+
+  <li>
+    <h2><a href="reference/#">API Reference</a></h2>
+    <div class="line"></div>
+  </li>
+  <li><h2>Developer's Guide</h2>
+    <ul>
+      <li><a href="index.html">Introduction</a></li>
+      <li><a href="placemarks.html">Placemarks</a></li>
+      <li><a href="balloons.html">Balloons</a></li>
+      <li><a href="geometries.html">Geometries & Overlays</a></li>
+      <li><a href="camera_control.html">Camera Control</a></li>
+      <li><a href="layers.html">Layers & Controls</a></li>
+      <li><a href="time.html">Time</a> <sup class="new">Updated</sup></li>
+      <li><a href="ocean.html">Ocean</a></li>
+      <li><a href="sky_mars_moon.html">Sky, Mars, & Moon</a></li>
+      <li><a href="touring.html">Touring</a></li>
+      <li><a href="events.html">Events</a></li>
+      <li><a href="accessors.html">Accessors</a> <sup class="new">New!</sup></li>
+      <li><a href="containers.html">Object Containers</a></li>
+      <li><a href="kml.html">KML</a></li>
+      <li><a href="options.html">Options</a></li>
+      <li><a href="debugging.html">Debugging</a></li>
+    </ul>
+  </li>
+        
+  <div class="line"></div>
+    
+  <li><h2 class="tlw-expanded">Code Samples</h2>
+    <ul>
+      <li><a href="examples.html">Examples</a></li>
+      <li><a href="demogallery.html">Demo Gallery</a>
+      </li>
+      <li><a href="http://code.google.com/apis/ajax/playground/?exp=earth">Code Playground</a></li>
+    </ul>
+  </li>
+    
+  <div class="line"></div>
+    
+  <li><h2 class="tlw-expanded">More Resources</h2>
+    <ul>
+      <li><a href="mediagallery.html">Media</a></li>
+      <li><a href="releasenotes.html">Release Notes</a></li>
+      <li><a href="http://code.google.com/p/earth-api-utility-library">Utility Library</a></li>
+      <li><a href="http://code.google.com/p/earth-api-samples/issues/list?q=label%3AType-Defect">Known Issues</a></li>
+    </ul>
+  </li>
+</ul>
+
+<div class="line"></div>
+<ul>
+ <li>
+    <h2>Related Docs</h2>
+    <ul>                
+      <li><a href="http://code.google.com/apis/kml/documentation/index.html">KML</a></li>
+      <li><a href="http://code.google.com/apis/maps/documentation/index.html">Maps API</a></li>
+    </ul>                
+ </li>
+</ul>
+        <a class="hidden" href="#gc-topnav-anchor">More Google Earth API resource links</a>
+      </div>
+
+      <div class="g-unit" id="gc-pagecontent">
+        <script type="text/javascript">CODESITE_docEarlyProcessing();</script>
+
+
+        <h1 class="page_title">Google Earth API Developer's Guide</h1>
+
+
+<div class="toc">
+<ol>
+  <li><a href="#introduction">Introduction</a></li>
+  <li><a href="#audience">Audience</a></li>
+  <li><a href="#installing_the_google_earth_plugin">Installing the Google Earth Plugin</a></li>
+  <li><a href="#using_the_google_earth_api">Using the Google Earth API</a></li>
+  <li><a href="#troubleshooting">Troubleshooting</a></li>
+  <li><a href="#additional_resources">Additional Resources</a></li>
+</ol>
+</div>
+
+<h2 id="introduction">Introduction</h2>
+<p>Welcome to the developer documentation for the Google Earth API. The Google Earth Plugin and its JavaScript API let you embed the full power of Google Earth and its 3D rendering capabilities into your web pages. Just like in the Google Maps API, you can draw markers and lines&mdash;but in 3D!
+<p>See the <a href="http://groups.google.com/group/google-earth-browser-plugin/topics">Google Earth API developer forum</a> if you have have questions about the API after reading this developer guide.</p>
+
+<h2 id="audience">Audience</h2>
+<p>This documentation is designed for people familiar with JavaScript programming and object-oriented programming concepts. The Google Earth API is modelled after KML, so you should also consult Google's <a href="http://code.google.com/apis/kml/documentation">KML documentation</a>. </p>
+
+<h2 id="installing_the_google_earth_plugin">The Google Earth Plugin</h2>
+<p>The Google Earth Plugin is currently available for the following platforms:</p>
+<ul>
+  <li><strong>Microsoft Windows (2000, XP, and Vista)</strong>
+  <ul>
+    <li>Google Chrome 1.0+</li>
+    <li>Internet Explorer 6.0+</li>
+    <li>Firefox 2.0+</li>
+    <li>Flock 1.0+</li>
+  </ul></li>
+  <li><strong>Apple Mac OS X 10.4 and higher (Intel and PowerPC)</strong>
+  <ul>
+    <li>Safari 3.1+</li>
+    <li>Firefox 3.0+</li>
+  </ul>
+</ul>
+<p>Although the plugin and API may work correctly on other browsers that support
+  <a href="https://developer.mozilla.org/en/Plugins">NPAPI</a> with
+  <a href="https://developer.mozilla.org/En/Gecko_Plugin_API_Reference:Scripting_plugins">npruntime extensions</a>, these browsers are not officially supported.</p>
+<h3>Installation</h3>
+<p>To install the Google Earth Plugin, browse to any page in which the plugin is
+   included (e.g. <a href="../index.html">http://code.google.com/apis/earth</a>).
+
+Your browser will likely ask for permission before installing the plugin - click
+   through to allow installation. Once the plugin is installed, you may need to refresh
+   the page before the plugin displays correctly.
+
+<h3>Uninstalling</h3>
+<ul>
+  <li><strong>Windows</strong>: Select <strong>Start</strong> &gt;
+    <strong>Programs</strong> (or <strong>All Programs</strong>) &gt; <strong>Google
+    Earth</strong> &gt; <strong>Uninstall Google Earth Plug-in</strong>.</li>
+  <li><strong>Mac</strong>: Delete <code>/Library/Internet Plug-ins/Google Earth Web Plug-in.plugin</code> before restarting your browser.</li>
+</ul>
+
+<h2 id="using_the_google_earth_api">Using the Google Earth API</h2>
+<p> To load the Google Earth Plugin in your web page, you need to:</p>
+<ol>
+   <li>Load the Google Earth API.</li>
+   <li>Create a&nbsp;DIV&nbsp;element to hold the plugin.</li>
+   <li>Create functions to initialize the plugin.</li>
+   <li>Call the initialization functions once the page has loaded.</li>
+</ol>
+<p>These steps are explained below.</p>
+
+<p class="note"><strong>Note:</strong> If you intend to use the Google Earth API
+  under your Google Maps API Premier license, please refer to the
+  <a href="http://code.google.com/apis/maps/documentation/premier/guide.html#EarthAPI">Google Maps API
+    Premier Developer's Guide</a> for additional information.
+</p>
+
+<h3>Loading the Google Earth API</h3>
+<p>Place the following tag in the <code>&lt;head&gt;</code> of your HTML page, replacing
+   <code>ABCDEF</code> with your own key (<span class="note">available from <a href="http://code.google.com/apis/maps/signup.html">http://code.google.com/apis/maps/signup.html</a></span>):</p>
+
+<pre class="prettyprint">&lt;script src=&quot;http://www.google.com/jsapi?key=ABCDEF&quot;&gt;&lt;/script&gt;</pre>
+
+<p>The&nbsp;tag's <code>src</code> points to a JavaScript file with a single method,
+   <code>google.load</code>, used to load individual Google APIs. Inside a new <code>&lt;script&gt;</code> tag,
+   call:</p>
+<pre class="prettyprint">google.load(&quot;earth&quot;, &quot;1&quot;);</pre>
+<p>This tells Google to load the <code>earth</code> module into the <code>google.earth</code> namespace, and
+   specifies version 1 (the last stable version of the API). To specify the latest
+   test version of the API, specify <code>&quot;1.x&quot;</code>.</p>
+<p>For more information on the loading mechanism, refer to the
+   <a href="http://code.google.com/apis/ajax/documentation/#DetailedDocumentation">Google
+      AJAX APIs</a> documentation.</p>
+
+<h3>Creating a container for the plugin</h3>
+<p>The  Google Earth Plugin is loaded into a&nbsp;DIV&nbsp;element with a unique&nbsp;id.
+   Add the DIV to your page's <code>&lt;body&gt;</code> section:</p>
+
+<pre class="prettyprint">&lt;div id=&quot;map3d&quot; style=&quot;height: 400px; width: 600px;&quot;&gt;&lt;/div&gt;</pre>
+
+<p>In the example above, the&nbsp;DIV&nbsp;named <code>map3d</code> will become the
+   target element for the plugin.</p>
+<h3>Creating initialization functions</h3>
+<p>You will create three functions as part of this step. In order, they will:</p>
+<ul>
+   <li>attempt to create a new instance of the plugin</li>
+   <li>be called when the plugin instance is successfully created</li>
+   <li>be called if the instance cannot be created</li>
+   </ul>
+<p>The first function looks like this:</p>
+<pre class="prettyprint">function init() {
+   google.earth.createInstance('map3d', initCB, failureCB);
+}</pre>
+<p><code>google.earth.createInstance</code> here shows three options: the DIV element
+   into which the instance should be added, the function to call when success is
+   returned, and the function to call if a failure is returned. In addition to these
+   options, you can specify an <a href="reference/google_earth_namespace.html#70288485024d8129dd1">alternative
+   database</a> to connect to, in order to display
+   <a href="sky_mars.html#mars">Mars</a> imagery or to connect to an Earth Enterprise database.</p>
+<p>The success callback function will contain all of the code required to set up
+   your 'first run' experience - all of the objects and views that will first appear
+   when your plugin instance is loaded in the browser. This function must contain
+   the <code>GEWindow.setVisibility</code> method,  setting the window visibility
+   to <code>true</code>,
+   so that the plugin is visible inside its DIV:</p>
+<pre class="prettyprint">function initCB(instance) {
+   ge = instance;
+   ge.getWindow().setVisibility(true);
+}
+</pre>
+<p>The failure callback can contain any code to deal with a failure to create the
+   plugin instance. The error code is passed to the callback function, and can be
+   repeated on the page or as an alert, if desired. Throughout this guide, the error
+   callback function is left empty:</p>
+<pre class="prettyprint">function failureCB(errorCode) {
+}</pre>
+<h3>Calling the intialization function when the page is loaded</h3>
+<p>The google namespace includes the <code>setOnLoadCallback()</code> function, which
+   calls the specified function once the HTML page and requested APIs have been loaded.
+   Using this function ensures that the plugin is not loaded until the page's DOM
+   is completely built out.</p>
+<pre class="prettyprint">google.setOnLoadCallback(init);</pre>
+
+<h3>Complete example</h3>
+<pre class="prettyprint">
+&lt;html&gt;
+&lt;head&gt;
+   &lt;title&gt;Sample&lt;/title&gt;
+   &lt;script src=&quot;http://www.google.com/jsapi?key=ABCDEFG&quot;&gt; &lt;/script&gt;
+   &lt;script type=&quot;text/javascript&quot;&gt;
+      var ge;
+      google.load(&quot;earth&quot;, &quot;1&quot;);
+
+      function init() {
+         google.earth.createInstance('map3d', initCB, failureCB);
+      }
+
+      function initCB(instance) {
+         ge = instance;
+         ge.getWindow().setVisibility(true);
+      }
+
+      function failureCB(errorCode) {
+      }
+
+      google.setOnLoadCallback(init);
+   &lt;/script&gt;
+
+&lt;/head&gt;
+&lt;body&gt;
+   &lt;div id=&quot;map3d&quot; style=&quot;height: 400px; width: 600px;&quot;&gt;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>If your code doesn't seem to be working, here are some approaches 
+that might help you solve your problems:</p>
+
+<ul>
+  <li>Use a JavaScript debugger. More information, including a list of common applications,
+     is available in the <a href="debugging.html">Debugging</a> section
+     of this guide.</li>
+  <li>Make sure your <a href="http://code.google.com/apis/maps/signup.html">API key</a> is valid.</li>
+  <li>Look for typos. Remember that JavaScript is a case-sensitive language.</li>
+  <li>Search the <a href="http://groups.google.com/group/google-earth-browser-plugin/topics">developer forum</a>. If you can't find a post that answers your question, 
+     post your question to the group along with a link to a web page that demonstrates the problem.</li>
+  <li>See <a href="#resources">Additional Resources</a> for more developer resources. </li>
+</ul>
+
+
+<h2 id="additional_resources">Additional Resources</h2>
+<p>This guide contains a number of working examples, linked from the <strong>Source</strong> line
+   above the relevant code sample. In addition to the samples in this documentation,
+   the following resources contain a number of examples:</p>
+<ul>
+   <li><a href="http://code.google.com/apis/ajax/playground/?exp=earth">AJAX APIs
+         Playground</a> - an interactive selection of examples that can be edited
+         directly on the page. Your code can be exported and saved as JavaScript
+         or HTML.</li>
+   <li><a href="demogallery.html">Earth API Demo Gallery</a> -
+      a collection of Earth API demos and samples, including community contributions.</li>
+   <li><a href="http://earth-api-samples.googlecode.com/svn/trunk/examples/">Basic
+         Samples</a> - Investigate individual API features with these standalone
+         samples containing full HTML.</li>
+</ul>
+<p>If you need more information about Google Earth, KML, or Google Maps, refer to the following:</p>
+<ul>
+<li><a href="http://earth.google.com">Google Earth Homepage</a></li>
+<li><a href="http://code.google.com/apis/kml">KML Documentation</a></li>
+<li><a href="http://code.google.com/apis/maps">Maps API Documentation</a></li>
+</ul>
+<h3>Developer channel</h3>
+<p>A developer channel plugin is available from <a href="http://earth.google.com/plugin/download-dev-plugin.html">http://earth.google.com/plugin/download-dev-plugin.html</a>. This version of the plugin receives new features before they're released to the regular channel; it may however be less stable, and features launched only to the developer channel can be removed at any time. </p>
+<ul>
+  <li>Developer channel features are documented in the <a href="developer_channel.html">Developer Channel</a> chapter of this guide.</li>
+  <li>A discussion forum dedicated to the developer channel plugin is at  <a href="https://groups.google.com/group/earth-api-developer-channel" target="_blank">https://groups.google.com/group/earth-api-developer-channel</a>.</li>
+</ul>
+
+
+
+
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+
+

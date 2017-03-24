@@ -1,0 +1,56 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+
+#include <string>
+#include <vector>
+#include <khTypes.h>
+#include <gstTypes.h>
+#include <qstring.h>
+
+class gstKVPAsset
+{
+  class Source
+  {
+    std::string file;
+    uint32 featureCount;
+    double xmin;
+    double xmax;
+    double ymin;
+    double ymax;
+    // The average feature diameter at level 0. It is calculated in
+    // product coordinates. The parameterization of the earth is within
+    // the unit square [0, 1]x[0, 1].
+    double averageFeatureDiameter = double(0.0);
+  };
+
+  class Record
+  {
+    QString name;
+    uint32 type;
+  };
+
+  std::vector<Record> header;
+
+  std::vector<Source> sources;
+  std::string name;
+  uint32 primType = uint32(gstUnknown);
+
+  // The resolution levels calculated by max, min, and average feature size.
+  uint32 minResolutionLevel = uint32(0);
+  uint32 maxResolutionLevel = uint32(0);
+  uint32 efficientResolutionLevel = uint32(0);
+
+#pragma LoadAndSave
+};

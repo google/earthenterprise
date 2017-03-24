@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html dir="rtl"> 
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/examples/map-rtl.html";
+    </script>
+    
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Maps API Example: Right-to-Left Text</title>
+<link href="http://code.google.com/apis/maps/documentation/javascript/examples/standard.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript"
+    src="http://maps.google.com/maps/api/js?sensor=false&language=ar"></script> 
+<script  type="text/javascript"> 
+    function init() {
+      var map = new google.maps.Map(document.getElementById("map_canvas"), {
+        scaleControl: true});
+      map.setCenter(new google.maps.LatLng(30.064742, 31.249509));
+      map.setZoom(10);
+      map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+ 
+      var marker = new google.maps.Marker({map: map, position:
+        map.getCenter()});
+      var infowindow = new google.maps.InfoWindow();
+      infowindow.setContent('<b>القاهرة</b>');
+      google.maps.event.addListener(marker, 'click', function() {
+        infowindow.open(map, marker);
+      });
+    }
+</script> 
+</head> 
+<body onload="init()">
+  <p>القاهرة Egypt</p>
+  <div id="map_canvas" style="width: 500px; height: 400px;"></div> 
+</body> 
+</html> 

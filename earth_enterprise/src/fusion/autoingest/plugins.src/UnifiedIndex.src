@@ -1,0 +1,94 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#config Name      UnifiedIndex
+#config Base      Leaf
+#config Config    UnifiedIndexConfig
+#config Subtype   UnifiedIndex
+#config FixedType Database
+
+
+// ===== UnifiedIndexAsset.h =====
+#include <autoingest/.idl/storage/UnifiedIndexConfig.h>
+
+// ===== UnifiedIndexAsset.cpp =====
+
+
+// ===== UnifiedIndexAssetD.h =====
+class UnifiedIndexAssetVersionImplD {
+ protected:
+  virtual bool OfflineInputsBreakMe(void) const { return true; }
+};
+
+
+// ===== UnifiedIndexAssetD.cpp =====
+#include <khException.h>
+#include <geindexgen/.idl/UnifiedConfig.h>
+
+void
+UnifiedIndexAssetVersionImplD::DoSubmitTask(void)
+{
+  if (config.indexes_.empty()) {
+    throw khException(kh::tr("No index data for indexing"));
+  }
+
+  // ************************************************
+  // Generate the configfile
+  // ************************************************
+  geindexgen::UnifiedConfig geindex_config;
+  geindex_config.indexes_.reserve(config.indexes_.size());
+  for (uint i = 0; i < config.indexes_.size(); ++i) {
+    AssetVersion assetver(config.indexes_[i].verref_);
+    std::string indexdir = assetver->GetOutputFilename(0);
+    // TODO: not worth fixing the framework at this
+    // point, needs a full rewrite really.
+    // Special case that is not otherwise handled by the UnifiedIndex
+    // Framework.  QTPacket2 is a sibling product of QTPacket.
+    // For the unified index it also needs the indexdir for the qtpacket2
+    // which is part of the qtpacket asset.
+    // This is solved by creating a 2nd UnifiedIndexEntry for the qtpacket asset
+    // but using QTPacket2 type.
+    if (config.indexes_[i].type_ == kQtPacketTwoType) {
+      indexdir = assetver->GetOutputFilename(1);
+    }
+    geindex_config.indexes_.push_back(
+        geindexgen::UnifiedConfig::Entry(
+            config.indexes_[i].type_,
+            indexdir,
+            config.indexes_[i].version_,
+            config.indexes_[i].channel_id_,
+            config.indexes_[i].date_string_));
+  }
+  std::string configfile = WorkingFilename("config.xml"); // fully bound name
+  if (!geindex_config.Save(configfile)) {
+    throw khException(kh::tr("Unable to save %1").arg(configfile));
+  }
+
+  // ******************************************************
+  // Create and submit the task that will invoke the script
+  // ******************************************************
+  TaskDef task(*this);
+  std::vector<std::string> inputs;
+  GetInputFilenames(inputs);
+  task.AddInputs(inputs);
+
+  // TODO: - implement size estimate
+  task.AddOutput(WorkingFileRef("unified.geindex"),
+                 0); // size estimate
+
+  task << "geunifiedindexgen"
+       << "--config" << configfile
+       << "--output" << "$OUTPUT";
+  theAssetManager.SubmitTask(GetRef(), task);
+}

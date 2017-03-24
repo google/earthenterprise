@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="Draggable Markers" height="300">
+  <Require feature="sharedmap"/>
+</ModulePrefs>
+<Content type="html"><![CDATA[
+
+<small>
+This example has a marker that you can drag around the map.
+</small>
+
+<script>
+var map = new GMap2();
+var center = new GLatLng(37.4419, -122.1419);
+map.setCenter(center, 13);
+
+var marker = new GMarker(center, {draggable: true, bouncy: true});
+map.addOverlay(marker);
+
+GEvent.addListener(marker, "dragstart", function() {
+  map.closeInfoWindow();
+});
+
+GEvent.addListener(marker, "dragend", function() {
+  marker.openInfoWindowHtml("Just bouncing along...");
+});
+</script>
+
+]]></Content>
+</Module>

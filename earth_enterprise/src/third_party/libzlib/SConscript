@@ -1,0 +1,89 @@
+# Copyright 2013 Google Inc. All Rights Reserved.
+#-*- Python -*-
+
+Import('third_party_env')
+
+zlib_version = 'zlib-1.2.8'
+zlib_source = File('#/../third_party/libzlib/%s.tar.gz' %
+                   zlib_version).abspath
+
+ge_version = zlib_version.replace('zlib', 'zlib-ge')
+
+current_dir = Dir('.').abspath
+build_root = '%s/%s' % (current_dir, zlib_version)
+install_root = '%s/install' % current_dir
+
+zlib_env = third_party_env.DeepCopy()
+root_dir = Dir(zlib_env.exportdirs['root']).abspath
+install_root_opt = '%s%s' % (install_root, zlib_env['optdir'])
+
+# [1] Extract zlib.
+zlib_target = '%s/.extract_zlib' % current_dir
+zlib_extract = zlib_env.Command(
+    zlib_target, zlib_source,
+    [zlib_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xzf %s\n'
+        'touch %s' % (current_dir, current_dir, zlib_source,
+                      zlib_target))])
+
+# [2] Build zlib (configure, make).
+zlib_target = '%s/.build' % current_dir
+zlib_build = zlib_env.Command(
+    zlib_target, zlib_extract,
+    [zlib_env.MultiCommand(
+        'cd %s\n'
+        '%s ./configure --prefix=%s\n'
+        '%s make\n'
+        'touch %s' % (build_root,
+                      zlib_env['ENV']['mod_env'],  zlib_env['optdir'],
+                      zlib_env['ENV']['mod_env'],
+                      zlib_target))])
+
+
+# [3] Create zlib master installer
+zlib_target = '%s/.install' % current_dir
+zlib_install = zlib_env.Command(
+    zlib_target, zlib_build,
+    [zlib_env.MultiCommand(
+        'cd %s\n'
+        '%smake DESTDIR=%s mandir=/share/man install\n'
+        'rm -rf %s/lib/libz.a\n'
+        'mkdir -p %s/share/doc/packages/%s\n'
+        'cd %s\n'
+        'cp -pr README ChangeLog %s/share/doc/packages/%s\n'
+        'touch %s' % (build_root,
+                      zlib_env['ENV']['mod_env'], install_root,
+                      install_root_opt,
+                      install_root, ge_version,
+                      build_root,
+                      install_root, ge_version,
+                      zlib_target))])
+
+
+# [4] Install zlib into various directories as required for build.
+zlib_target = '%s/.install_for_build' % current_dir
+zlib_install_build = zlib_env.Command(
+    zlib_target, zlib_install,
+    [zlib_env.rsync_cmd % ('%s/include/' % install_root_opt,
+                           '%s/include/' % root_dir),
+     zlib_env.rsync_cmd % ('%s/lib/' % install_root_opt,
+                           '%s/lib/' % root_dir),
+     Touch('$TARGET')])
+
+
+Default(zlib_install_build)
+zlib_env.ExecuteOnClean('rm -rf %s' % current_dir)
+
+if 'install' in COMMAND_LINE_TARGETS:
+  zlib_env.InstallFileOrDir(
+      '%s/lib/' % install_root_opt,
+      '%s/' % zlib_env.installdirs['common_lib'],
+      zlib_install_build, 'install')
+  zlib_env.InstallFileOrDir(
+      '%s/share/' % install_root,
+      '%s/' % zlib_env.installdirs['common_share'],
+      zlib_install_build, 'install')
+
+Return('zlib_extract zlib_install_build')

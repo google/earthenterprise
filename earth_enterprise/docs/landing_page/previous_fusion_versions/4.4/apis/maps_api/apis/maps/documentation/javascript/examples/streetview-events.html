@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/examples/streetview-events.html";
+    </script>
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Google Maps JavaScript API Example: Street View Events</title>
+<link href="http://code.google.com/apis/maps/documentation/javascript/examples/standard.css" rel="stylesheet" type="text/css" />
+<script src="http://maps.google.com/maps/api/js?sensor=false"
+        type="text/javascript"></script>
+<script type="text/javascript">
+
+  var cafe = new google.maps.LatLng(37.869085,-122.254775);
+
+  function initialize() {
+
+    var panoramaOptions = {
+      position: cafe,
+      pov: {
+        heading: 270,
+        pitch: 0,
+        zoom: 1
+      },
+      visible: true
+    };
+    var panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"), panoramaOptions);
+
+    google.maps.event.addListener(panorama, 'pano_changed', function() {
+        var panoCell = document.getElementById('pano_cell');
+        panoCell.innerHTML = panorama.getPano();
+    });
+
+    google.maps.event.addListener(panorama, 'links_changed', function() {
+        var linksTable = document.getElementById('links_table');
+        while(linksTable.hasChildNodes()) {
+          linksTable.removeChild(linksTable.lastChild);
+        };
+        var links =  panorama.getLinks();
+        for (var i in links) {
+          var row = document.createElement("tr");
+          linksTable.appendChild(row);
+          var labelCell = document.createElement("td");
+          labelCell.innerHTML = "<b>Link: " + i + "</b>";
+          var valueCell = document.createElement("td");
+          valueCell.innerHTML = links[i].description;
+          linksTable.appendChild(labelCell);
+          linksTable.appendChild(valueCell);
+        }
+    });
+
+    google.maps.event.addListener(panorama, 'position_changed', function() {
+        var positionCell = document.getElementById('position_cell');
+        positionCell.firstChild.nodeValue = panorama.getPosition();
+    });
+
+    google.maps.event.addListener(panorama, 'pov_changed', function() {
+        var headingCell = document.getElementById('heading_cell');
+        var pitchCell = document.getElementById('pitch_cell');
+        headingCell.firstChild.nodeValue = panorama.getPov().heading;
+        pitchCell.firstChild.nodeValue = panorama.getPov().pitch;
+    });
+}
+</script>
+</head>
+<body onload="initialize()">
+  <div id="pano" style="width: 425px; height: 240px;float:left"></div>
+  <div id="panoInfo" style="width: 425px; height: 240 px;float:left">
+  <table>
+  <tr>
+    <td><b>Position</b></td><td id="position_cell">&nbsp;</td>
+  </tr>
+  <tr>
+    <td><b>POV Heading</b></td><td id="heading_cell">270</td>
+  </tr>
+  <tr>
+    <td><b>POV Pitch</b></td><td id="pitch_cell">0.0</td>
+  </tr>
+  <tr>
+    <td><b>Pano ID</b></td><td id="pano_cell">&nbsp;</td>
+  </tr>
+  <table id="links_table">
+  </table>
+  </table>
+  </div>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!--
+  Copyright 2017 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <LINK href="css/style.css" rel="stylesheet" type="text/css">
+  <LINK href="css/buttons.css" rel="stylesheet" type="text/css">
+  <LINK href="css/dropdown.css" rel="stylesheet" type="text/css">
+  <LINK rel="icon" type="image/png" href="/shared_assets/images/google_favicon.ico">
+
+  <script type="text/javascript" src="/js/jquery.js"></script>
+  <script type="text/javascript" src="/js/gees_utilities.js"></script>
+  <script type="text/javascript" src="/js/gees_initialize.js"></script>
+  <script type="text/javascript" src="/js/togeojson.js"></script>
+
+  <script type="text/javascript" src="/maps/api/bootstrap.js"></script>
+  <script type="text/javascript" src="/maps/api/fusion_extended_map.js"></script>
+  <script type="text/javascript" src="/maps/api/earth_plugin_loader.js"></script>
+
+  <script src='/cutter/js/map_cutter.js'></script>
+  <script src='/cutter/js/ajax_sequence.js'></script>
+  <script src='/cutter/js/cutter_utils.js'></script>
+
+  <script src="/cutter/js/cutter_tools.js"></script>
+  <script src="/cutter/js/drawing_tools.js"></script>
+  <script src="/shared_assets/polygon_tools.js"></script>
+
+  <title>GEE Server - Cutting Tool</title>
+</head>
+<body onLoad='initializeCutter()'>
+
+<div id="button_holder">
+  <a id="hand_button" class="clicked_button" onclick="finish()"></a><a id="poly_button" class="nada" onclick="initDrawing()" title="Draw polygon"></a>
+  <iframe class="IframeButtons" id="IframeButtons" frameborder="0" scrolling="no" style="display: none;">
+    <html><head></head><body></body></html>
+  </iframe>
+</div>
+
+<div id="header">
+  <div id="goog_img">
+    <img src="/shared_assets/images/GEE_Server_Header.png" width="103px" height="36px" border="0">
+    <label>Earth Enterprise Server</label>
+  </div>
+  <!-- We will use this, but the link is not currently live
+  <a href="/cutter/globes_list.html" id="ListLink">
+    <span></span>
+    <span></span>
+    <span></span>
+  </a>
+  -->
+  <!-- all iframes are placed to help their parent divs appear correctly in Earth on Windows-->
+  <iframe class="IframeHeader" id="IframeHeader" frameborder="0" scrolling="no" style="display: none;">
+    <html><head></head><body></body></html>
+  </iframe>
+</div>
+
+<div id="InfoPane">
+
+  <h1>Create new offline map</h1>
+
+  <select id="GlobeIdHolder" class="CutterSelect BigSelect" onchange="selectGlobeSwitcher()"></select>
+
+  <input type="text" placeholder="name" id="name_field" class="">
+  <textarea  id="text_field" placeholder="description"></textarea>
+
+  <div class="SmallDropHolder">
+    <label>Overwrite?</label>
+    <input type="radio" name="overwrite" checked>No
+    <input id="overwrite_radio" type="radio" name="overwrite">Yes
+  </div>
+
+  <h2></h2>
+  <div class="SmallDropHolder" id="RegionHolder">
+    <label>Select Region:</label>
+    <select class="CutterSelect MediumSelect" id="region_options" onchange="selectRegion()"></select>
+  </div>
+  <div class="SmallDropHolder" id="ClearHolder" style="display:none">
+    <label>Region defined.</label>
+    <a href="javascript:void(0)" onclick="cancel()" class="button standard">Clear</a>
+  </div>
+
+  <h3 id="RegionNotes">Draw polygon to define region</h3>
+  <h2></h2>
+
+  <div class="SmallDropHolder" id="InnerZoomHolder">
+    <label>World level:</label>
+    <em id="inner_zoom_em"></em>
+   <select id="inner_zoom" class="CutterSelect SmallSelect"></select>
+  </div>
+
+  <div class="SmallDropHolder" id="OuterZoomHolder">
+    <label>Region level:</label>
+    <em  id="outer_zoom_em"></em>
+    <select id="outer_zoom" class="CutterSelect SmallSelect"></select>
+  </div>
+
+  <div id="ZoomDisplay">Your current zoom level:</div>
+
+  <div class="SmallDropHolder" id="AdvancedZoomHolder">
+    <div id="advanced_zoom_toggle" onclick="toggleAdvancedZoom()">
+      Advanced ...
+    </div>
+    <div id="polyZoomHolder" style="display:none;">
+      <label>Polygon level:</label>
+      <em  id="polygon_zoom_em"></em>
+      <select id="polygon_zoom" class="CutterSelect SmallSelect"></select>
+    </div>
+  </div>
+  <h2></h2>
+  <div class="ContentBlock" id="CutButtonDiv">
+    <a href="javascript:void(0)" id="CutButtonBlue" onclick="checkAndBuild()" class="button blue">Cut map</a>
+    <a href="javascript:void(0)" id="CancelButton" onclick="GEE_cancelBuild()" class="button standard" style="display:none;">Cancel</a>
+  </div>
+  <iframe class="IframeInfoPane" id="IframeInfoPane" frameborder="0" scrolling="no" style="display: none;">
+    <html><head></head><body></body></html>
+  </iframe>
+</div>
+
+<div id="map"></div>
+
+<div id="map3d" style="display:none;"></div>
+
+<div id="zoom_controls">
+  <div id="zoom_in" onclick="ZoomTheMap('in');"></div>
+  <center><hr width="15px" height=".5px" color="#DCDCDC"></center>
+  <div id="zoom_out" onclick="ZoomTheMap('out');"></div>
+</div>
+
+<div id="NotificationModal" style="display:none;">
+  <h1 id='NoteTitle'></h1>
+  <span id="NoteContents"></span>
+  <div id="NoteButtons"></div>
+  <iframe class="IframeError" id="IframeError" frameborder="0" scrolling="no" style="display: none;">
+    <html><head></head><body></body></html>
+  </iframe>
+</div>
+
+<div id="WhiteOverlay" onclick="closeAllPopups()"></div>
+
+<div id="PasteKMLDiv">
+  <h1>Paste KML</h1>
+  <textarea  id="kml_field" placeholder="Paste KML here"></textarea>
+  <a href="javascript:void(0)" class="button blue finishDraw" onclick="finishKML()">
+    Use KML
+  </a>
+  <a href="javascript:void(0)" class="button standard finishDraw" onclick="gees.tools.setElementDisplay(DISPLAY_ELEMENTS_KML, 'none')">
+    Cancel
+  </a>
+  <iframe class="IframeKML" id="IframeKML" frameborder="0" scrolling="no" style="display: none;">
+    <html><head></head><body></body></html>
+  </iframe>
+</div>
+
+<div id="BuildResponseDiv">
+  <div class="buildProgress" id="ProgressBar">
+    Build Status
+    <a href="javascript:void(0)" onclick="hideBuildResponse()">-</a>
+  </div>
+  <div id="ResponseHolder">
+    <span id="ResponseMessage"></span>
+    <span id="status"></span>
+    <span id="globe"></span>
+  </div>
+  <iframe class="IframeResponse" id="IframeResponse" frameborder="0" scrolling="no" style="display: none;">
+    <html><head></head><body></body></html>
+  </iframe>
+</div>
+
+<!-- BUTTER BAR -->
+
+<div id="ButterBar">
+  <span id="ButterBarMessage"></span>
+  <a href="javascript:void(0)" onclick="gees.dom.hide('ButterBar')">close</a>
+</div>
+
+<!-- ERROR BAR -->
+
+<div id="ErrorBar">
+  <span id="ErrorBarMessage"></span>
+  <a href="javascript:void(0)" onclick="gees.dom.hide('ErrorBar');">close</a>
+</div>
+
+</body>
+</html>

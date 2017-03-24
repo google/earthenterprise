@@ -1,0 +1,168 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// For the classes below, "Packet" usually implies that the protocol buffer is
+// used as a reply to a server request (http GET for a given tile & channel).
+
+syntax = "proto2";
+
+package keyhole;
+
+
+message DioramaMetadata {
+  enum ObjectFlags {
+    IS_GEOMETRY = 4;          // 1 = geometry object; 0 = texture object
+    NORTH = 0;
+    SOUTH = 1;
+    EAST = 2;
+    WEST = 3;
+    OWNER_DIRECTION_MASK = 3;  // value 0-3: N, S, E, W
+    IS_GROUP = 8;         // 1: the object has no real data at this level
+    LOD_PARENT_HERE = 16;  // 1: LOD parent is in this quad; 0: in parent quad
+    IS_INSTANCE = 32;
+  };
+
+  optional int32 max_absolute_altitude = 14;  // Includes all descendents.
+  optional int32 max_relative_altitude = 15;  // Both are in meters.
+
+  // The provider ID is set when the tile is dominated by data from a
+  // particular data source. This could sometimes be set to -1 for coarse
+  // quads that contain no objects as a hack to get the packet size above
+  // the min 8 bytes size limitation in the client.
+  optional int32 provider_id = 19;
+
+  // Objects that have no data in this quad (e.g. are not owned, or are pure
+  // groups) will appear at the end of this list and will not be part of any
+  // packet.
+  repeated group Object = 16 {
+    // default: texture, not group, LOD parent in quad above us
+    optional int32 flags = 1;  // ObjectFlags
+
+    optional int32 lod_parent = 2;  // default: no parent (this is an LOD root)
+    optional fixed64 lod_parent_tile = 18;
+
+    // If id_at_source appears, it means that this object has no data in this
+    // quad but is a reference to an object in another quad.
+    // If the IS_INSTANCE field is set it means this object is a
+    // duplicate of the original (an instance). If not, it means that the
+    // original object is large and overlaps this quad. In this case, follow
+    // the chain of "OWNER_DIRECTION_MASK/id_at_source" to the quad that has
+    // the data, in case absolute_source is not set.
+    optional int32 id_at_source = 3;  // instance source or neighbor quad.
+    optional int32 offset_to_source = 4;
+    optional fixed64 absolute_source = 5;
+  }
+
+  repeated group DataPacket = 17 {
+    // num_objects: how many objects in repeated group above belong to this
+    // packet. May be missing for the last packet.
+    optional int32 num_objects = 8;
+    required int32 max_altitude = 9;  // in meters, relative to terrain
+    optional int32 min_altitude = 10;  // in meters, relative to terrain
+    required int32 version = 11;
+    optional int32 max_absolute_altitude = 12;
+    optional int32 min_absolute_altitude = 13;
+  }
+};
+
+// The Metadata PB's are aggregated together in quad-sets to form packets.
+// A quad-set is formed by all the descendents within 4 levels deep of a single
+// node. The root node itself is not included in the quad-set. The descendents
+// on the first level are on a global tree level divisible by 4.
+// The first Diorama quadset roots are at level 7.
+message DioramaQuadset {
+  // Vector of metadata PBs for the quadnodes in the quadset, ordered to match
+  // the tree_bits in a depth first traversal order.
+  repeated DioramaMetadata metadata = 25;
+
+  // The root of the quadset and all nodes on relative levels < 4 get 4 bits
+  // in this string, indicating whether the corresponding child is present or
+  // not. This is generated using a depth-first traversal.
+  // Nodes on level 4 are not represented since their children would not be
+  // part of this quadset anyway.
+  // The child indexing scheme is the same as the Earth client quadtree path:
+  // 3 2
+  // 0 1
+  required string tree_bits = 26;
+}
+
+
+message DioramaDataPacket {
+  // The publish operation assumes these codec codes match the ones in
+  // diorama.protodevel
+  enum Codec {
+    NO_CODEC = 0;
+    JPEG = 1;
+    PNG = 2;
+    DXT = 3;
+    JP2 = 4;
+    DIO_GEOMETRY = 101;
+    BUILDING_Z = 102;
+  };
+
+  enum ClampMode {
+    CLAMP_S_CLAMP_T = 1;
+    CLAMP_S_WRAP_T = 2;
+    WRAP_S_CLAMP_T = 3;
+    WRAP_S_WRAP_T = 4;
+  };
+
+  repeated group Objects = 16 {
+    required string data = 1;
+    required Codec codec = 2;
+
+    optional int32 provider_id = 3;
+
+    // If this part is a texture, it may be an LOD refinement of a window
+    // inside the (parent LOD) texture.
+    // 4 float coords (bottom left origin): Up, Down, Left, Right.
+    repeated float texture_sub_window = 4;
+
+    optional int32 rotate_90_ccw_in_lod_parent = 8;
+
+    optional ClampMode texture_clamp_mode = 5;
+
+    optional string bounding_box = 6;
+
+    repeated int32 use_texture_object_id = 7;
+
+    // If these don't appear for a geometry part, it's using absolute altitude.
+    optional double relative_altitude_anchor_lat = 9;
+    optional double relative_altitude_anchor_lng = 10;
+    optional float  relative_altitude_anchor_elevation = 18;
+
+    // Id used to fetch building description (originates from 3D Warehouse).
+    optional string description_id = 11;
+
+    // These chunk fields are used for progressive streaming of Jpeg2000.
+    // Where a each resolution level contains a chunk of the encoded full res
+    // stream.
+    // The client will concatenate the data from the previous chunks, and store
+    // the result in concatenated_data, this field is never filled by the server
+    // and only acts as a place holder for the client's caching.
+    // The previous_chunk fields are needed to do the concatenation without
+    // looking at the metadata protocol buffers.
+    // reduce_resolution_levels is needed when decoding a lower res chunk
+    // in order to reduce the dimensions of the resulting image otherwise it
+    // would be a blurry image with the full res dimensions.
+    // has_next_chunk indicates whether there are still chunks to come, this
+    // helps the client optimize memory usage.
+    optional fixed64 previous_chunk_path = 12;
+    optional int32 previous_chunk_channel = 13;
+    optional int32 previous_chunk_object = 14;
+    optional int32 reduce_resolution_levels = 15;
+    optional string concatenated_data = 16;
+    optional bool has_next_chunk = 17;
+  };
+};

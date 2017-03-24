@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd"> 
+<html> 
+<head> 
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/> 
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" /> 
+<link rel="stylesheet" type="text/css" href="local_extensions.css" /> 
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]--> 
+<title>The Command Line Installer</title>
+</head>
+
+<body>
+<a name="top"></a>
+  
+<!-- BEGIN HEADER --> 
+<div id="header"> 
+  <div id="logo"> 
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" /> 
+  </div> 
+  <h1 id="doc_title">Installation Guide</h1> 
+</div> 
+<!-- END HEADER --> 
+ 
+<!-- BEGIN WRAPPER --> 
+<div id="wrapper"> 
+ 
+<!-- BEGIN LEFT NAV BAR --> 
+<div id="sidenav"> 
+  <ul> 
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Installation Guide</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="system_requirements.html">System Requirements</a></li>
+    <li><a href="before_you_install.html">Before you Install</a></li>
+    <li><a href="gui_install.html">GUI Installer</a></li>
+    <li><a href="cl_install.html" id="selected">Command Line Installer</a></li>
+    <li><a href="system_manager.html">Verifying and Troubleshooting</a></li>
+    <li><a href="uninstalling.html">Uninstalling</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul> 
+</div> 
+<!-- END LEFT NAV BAR --> 
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+<h1>The Command Line Installer</h1>
+
+<ol class="toc">
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#before_you_begin">Before you Begin</a></li>
+  <li><a href="#fusion">Installing Fusion</a></li>
+  <li><a href="#server">Installing GEE Server</a></li>
+  <li><a href="#silent">Using the Silent Installer</a></li>
+</ol>
+
+<h2 id="overview">Overview</h2>
+<p>You can install  GEE Server and Fusion with either  the command line installer or the <a href="gui_install.html">graphical user interface (GUI)</a> installer. If you are installing on a server without X11, use the command-line installer. During installation, you are prompted for replies and guided
+  through the process automatically. </p>
+<p>If you want to install on multiple machines without user interaction, you can use the <a href="#silent">silent installer</a>.</p>
+<h2 id="before_you_begin">Before you Begin</h2>
+<p>Google Earth Enterprise  is available in two formats: as a download from Google.com servers, or on physical media in the form of DVDs. The instructions below are the same for both formats after the following setup has been completed:</p>
+
+<h3>If you downloaded the software package</h3>
+<p>Unpack the archived installer(s) to a temporary directory:</p>
+<pre>tar -zxvf GEEFusion40.tar.gz -C /<em>target</em>/<em>directory</em>
+tar -zxvf GEEServer40.tar.gz -C /<em>target</em>/<em>directory</em></pre>
+
+<h3>If you ordered the DVD</h3>    
+<p>Insert the distribution DVD, and mount the DVD drive.</p>
+
+<h2 id="fusion">Installing Fusion</h2>
+<ol>
+  <li><a id="70889"></a>Open a terminal window on your Linux workstation.</li>
+  <li>Log in as <code>root</code>.</li>
+  <li>Stop the Fusion system manager and GEE
+      Server, if you have a previous version installed and they are running:<pre><code>/etc/init.d/gefusion stop
+/etc/init.d/geserver stop</code></pre>
+  </li>
+  <li>Navigate to your DVD directory, or the directory to which you extracted the GEE files, and run the Google Earth Fusion installer:
+             <pre><code>./InstallGEFusion.sh</code></pre>
+	          <p>If your DVD automounted without exec privileges, you might need to
+	              run <code>sh ./InstallGEFusion.sh</code> instead.<p>The installation script starts running. </p> 
+      
+  <li>Press <strong>Enter</strong> to continue. You can type <strong>Quit</strong> to
+    exit the installation process or <strong>Back</strong> to return to the previous
+    screen at any time. </li>
+  <li>Press <strong>Enter</strong> to scroll through the Google License Agreement.  Press  <strong>Y</strong> to
+      accept the terms.</li>
+  <li>Enter the applicable number for  <strong>Typical</strong>, <strong>Minimal</strong>, or <strong>Custom</strong> installation or press <strong>Enter</strong> to
+      accept the default (<strong>Typical</strong>). If the installer determines  it needs to upgrade
+      any product you are installing, it prompts you to confirm the upgrade.
+<ul>
+     <li> <strong>Typical</strong> installation includes Fusion and the Tutorial. </li>
+     <li><strong>Minimal</strong> installation includes only Fusion.</li>
+     <li><strong>Custom</strong> installation allows you to customize the components you install. </li>
+ </ul>
+    <li>The installer displays the default location for the backup files: <code>/var/opt/google/install-backups/...<br />
+     </code>Press
+         <strong>Enter </strong> to continue. </li>
+     <li>The installer prompts you to create the user and group for Fusion. Press <strong>Enter</strong> to accept the default, or
+         enter your customized names. </li>
+     <li>The <strong>Pre-Installation Summary</strong> appears. Press <strong>Enter</strong> to continue. </li>
+     <li>The installer prompts you to designate your asset root. (See <a href="before_you_install.html">Before you Install</a> for more information.) Press <b>Enter</b> to
+         accept the default (<code>/gevol/assets</code>), or
+         enter the path you want to set for your asset root. </li>
+     <li>The installer prompts you to designate a source volume. A source volume
+         is a directory that contains your source data files (or subdirectories
+         of your source data files). You can add more source volumes later. (See
+        also <a href="../admin/fusion.html#61325">Configuring
+             Your Data Locations </a> and <a href="../admin/tutorial.html#96185">Configuring
+             the Tutorial Asset Root and Source Volume</a> in the <strong>Administration Guide</strong>.) <br />
+             <br />
+        Press <b>Enter</b> to
+             accept the default (<code>/gevol/src</code>), or enter
+         the path you want to set for your source volume. If the source volume does
+             not exist, the installer asks if it should create it.    </li>
+     <li>You can choose to start the Fusion Services.   To start the services at a later
+         time:
+         
+         <pre><code>/etc/init.d/gefusion start</code></pre>
+     </li>
+     <li>Press <strong>Enter</strong> to exit. </li>
+     <li>Log out of the system, and log back in (<i>not</i> as root).</li>
+     <li>Launch Fusion:
+         <pre><code>fusion</code></pre>
+     </li>
+ </ol>
+ 
+<h2 id="server">Installing GEE Server</h2>
+
+<ol>
+  <li><a id="70889"></a>Open a terminal window on your Linux workstation.</li>
+  <li>Log in as <code>root</code>.</li>
+  <li>Stop the Fusion system manager and GEE
+    Server, if you have a previous version installed and they are running:
+    <pre>/etc/init.d/gefusion stop<br />/etc/init.d/geserver stop</pre>
+  </li>
+  <li>Navigate to your DVD directory, or the directory to which you extracted the GEE files, and run the Google Earth Server installer: 
+    <pre>./InstallGEServer.sh</pre>
+    <p>If your DVD automounted without exec privileges, enter <code>sh ./InstallGEServer.sh</code> instead.    </p>
+    <p>The installation script starts running. </p>     
+  <li>Press <strong>Enter</strong> to continue. You can type <strong>Quit</strong> to
+    exit the installation process or <strong>Back</strong> to return to the previous
+    screen at any time. </li>
+  <li>Press <strong>Enter</strong> to scroll through the Google License Agreement. Type <strong>Y</strong> to accept the terms.</li>
+  <li>Enter the applicable number for <strong>Typical</strong>, <strong>Minimal</strong>, or <strong>Custom</strong> installation,
+    or press <strong>Enter</strong> to accept the default (<strong>Typical</strong>). If the installer
+    determines it needs to upgrade any product you are installing, it prompts you
+    to confirm the upgrade.
+		<ul>
+      <li><strong>Typical</strong> installation includes Fusion and
+        the Tutorial.</li>
+      <li><strong>Minimal</strong> installation includes only Fusion.</li>
+      <li><strong>Custom</strong> installation allows you to customize the components you install.</li>
+    </ul>
+  </li>
+  <li>The installer prompts you to create the user and group for GEE
+    Server. Press <strong>Enter</strong> to accept the default or enter your customized
+    names.</li>
+  <li>The installer prompts you to designate your publish root. Press <strong>Enter</strong> to
+    accept the default (<code>/gevol/published_dbs/</code>), or enter the path
+    you want to set for your publish root.</li>
+  <li>The <strong>Pre-Installation Summary</strong> appears. Press <strong>Enter</strong> to continue.</li>
+  <li>You can choose to start the GEE Server services. To start them later, from the command line:
+    <pre>/etc/init.d/gefusion start<br />/etc/init.d/geserver start</pre>
+  </li>
+</ol>
+
+<h2 id="silent">Using the Silent Installer</h2>
+
+<p>You can use the silent installater to install Fusion and GEE Server while unattended. This allows for automatic
+  updates of the software as needed. </p>
+
+<ol>
+  <li><a id="40564"></a>Log in as root.</li>
+  <li>Navigate to your DVD directory, or the directory to which you extracted the GEE files, and run the Google Earth Fusion installer: 
+    <pre>./InstallGEFusion.sh</pre>
+  <li>Locate the <code>installer.properties</code> file in the directory
+    containing the installer files (for example, <code>GEEFusion-4.4.1/installer)</code>.</li>
+  <li>Move the <code>installer.properties</code> file to another location.</li>
+  <li>Run the Google Earth Server installer:
+    <pre>./InstallGEServer.sh</pre>
+  </li>
+  <li>A new <code>installer.properties</code> file is created in the same location.</li>
+  <li>Run the Google Earth Fusion silent installer:
+    <pre>./InstallGEFusion.sh installer.properties</pre> 
+  </li>
+  <li>Run the Google Earth Server silent installer:
+    <pre>./InstallGEServer.sh installer.properties</pre>
+    <p>You can customize the following properties for the silent installation. Set value
+      to <code>0</code> for the default, or <code>1</code> to customize the value:</p>
+      
+<pre>#1.Creating gefusionuser user (0 for default, 1 for customizing users and group)
+
+#--------------------------
+GEFUSION_SERVER_CUSTOMIZE=0
+
+#2.Set the Asset Root Location
+#---------------------------
+ASSET_ROOT=/gevol/asset
+
+#3.Set the Source Volume Location
+#------------------------------
+SOURCE_VOLUME=/gevol/src
+
+#4.Previous installation found 
+#----------------------------
+PROMPT_USER_CHOSEN_OPTION=0
+
+#5.Google Earth Fusion is running 
+#-------------------------------
+PROMPT_USER_CHOSEN_OPTION=0
+
+#6.Creating gefusionuser user(0 for default, 1 for #customizing users)
+#--------------------------
+GEFUSION_SERVER_CUSTOMIZE=1
+
+#7.Get User Name for gefusionuser
+#-------------
+GEFUSION_USER_NAME=gefusionuser1</pre>
+
+  </li>
+</ol>
+
+</div> 
+<!-- END PAGE CONTENT --> 
+  
+<p class="backtotop"><a href="#top">Back to top</a></p> 
+</div> 
+ 
+<!-- END WRAPPER --> 
+ 
+</body> 
+</html>

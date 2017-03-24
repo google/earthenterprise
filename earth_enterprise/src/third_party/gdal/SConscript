@@ -1,0 +1,274 @@
+# Copyright 2014 Google Inc. All Rights Reserved.
+#-*- Python -*-
+
+
+# Notes on GDAL driver support for MrSID and JPEG2000 formats:
+# MrSID - requires a 'GeoExpress' decoding software development kit (DSDK)
+#         licensed from LizardTech.  See: http://www.gdal.org/frmt_mrsid.html
+# JP2KAK - requires SDK licensed from Kakadu.  Alternate drivers for JPEG2000
+#          are also available.  See: http://www.gdal.org/frmt_jp2kak.html
+# To compile GDAL with either/both of these drivers, install their libraries
+# in /../geo/earth_enterprise/third_party and uncomment the corresponding
+# lines below.
+
+Import('third_party_env')
+
+gdal_version = 'gdal-2.1.2'
+# kakadu_version = 'v5_2_6-00418C'
+# geoexpress_version = 'MrSID_DSDK-8.5.0.3422'
+make_cmd_cpu = 'make -j%d' % GetOption('num_jobs')
+
+ge_version = gdal_version.replace('gdal', 'gdal-ge')
+
+current_dir = Dir('.').abspath
+build_root = '%s/%s' % (current_dir, gdal_version)
+gdal_source = File('#/../../earth_enterprise/third_party/gdal/%s.tar.gz'
+                   % gdal_version).abspath
+
+# Specify path to kakadu library here:
+# kakadu_source = File('#/../../earth_enterprise/third_party/kakadu/%s.zip'
+#                      % kakadu_version).abspath
+
+# kakadu patch files:
+# kakadu_patches = {'kakadu-fPIC.patch': 2, 'kakadu-static-kdu.patch': 1}
+
+# Specify path to MrSID libary here:
+# geoexpress_source = File('#/../../earth_enterprise/third_party/geoexpres'
+#                          's/%s-linux.x86-64.gcc44.tar.gz' % geoexpress_version
+#                         ).abspath
+
+
+gdal_env = third_party_env.DeepCopy()
+
+# kakadu_lib_defs = "-DKDU_MAJOR_VERSION=5 -DKDU_MINOR_VERSION=2 -DKDU_PATCH_VERSION=6"
+# gdal_env['ENV']['mod_env'] = 'env CFLAGS="%s" CXXFLAGS="%s" ' % (
+#     kakadu_lib_defs, kakadu_lib_defs)
+
+optdir = gdal_env['optdir']
+root_dir = Dir(gdal_env.exportdirs['root']).abspath
+
+if GetOption('clean'):
+  gdal_env.Execute('rm -rf %s' % current_dir)
+
+# [1] Extract gdal
+gdal_target = '%s/.extract' % current_dir
+gdal_extract = gdal_env.Command(
+    gdal_target, [gdal_source],
+    [gdal_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xzf %s\n'
+        'touch %s'% (current_dir, current_dir, gdal_source, gdal_target))])
+
+# [2] Extract Kakadu
+# gdal_target = '%s/.extract_kakadu' % current_dir
+# kakadu_extract = gdal_env.Command(
+#     gdal_target, [kakadu_source, gdal_extract],
+#     [gdal_env.MultiCommand(
+#         'cd %s\n'
+#         'unzip -q -o %s\n'
+#         'touch %s' % (build_root, kakadu_source, gdal_target))])
+
+# kakadu 5.2
+# [3] Patch Kakadu
+# gdal_target = '%s/.patch_kakadu' % current_dir
+# kakadu_patch = gdal_env.Command(
+#     gdal_target, kakadu_extract +
+#     map(gdal_env.GetBuildPath, kakadu_patches.keys()),
+#     [gdal_env.MultiCommand(
+#         'cd %s/%s\n'
+#         '%s\n'
+#         'touch %s' % (
+#             build_root, kakadu_version, '\n'.join(map(
+#                 lambda i: 'patch -g0 -p%d -s < %s' % (
+#                     kakadu_patches[i], gdal_env.GetBuildPath(i)),
+#                 kakadu_patches.keys())), gdal_target))])
+
+# [4] Extract Geoexpress (Mrsid)
+# gdal_target = '%s/.extract_geoexpress' % current_dir
+# geoexpress_extract = gdal_env.Command(
+#    gdal_target, [geoexpress_source, gdal_extract],
+#    [gdal_env.MultiCommand(
+#         'cd %s\n'
+#         'tar xzf %s\n'
+#         'touch %s' % (build_root, geoexpress_source, gdal_target))])
+
+# [5] Build kakadu
+# Note: kakadu build uses -DKDU_PENTIUM_GCC which don't work well with anything
+# later than gcc 4.1.1 ; Removing this flag and using gcc 4.4.0 gives good
+# image but with image regressions. So to keep things unchanged use gcc 4.1.1
+# for Kakadu. i.e /opt/google/bin/g++
+# make_cmd = '%s CC="%s"' % (make_cmd_cpu, gdal_env['ENV']['CXX'])
+# gdal_target = '%s/.build_kakadu' % current_dir
+# gdal_kakadu_build = gdal_env.Command(
+#     gdal_target, kakadu_patch,
+#     [gdal_env.MultiCommand(
+#         'cd %s\n'
+#         '%s CC=%s/g++ -C %s/coresys/make -f Makefile-Linux-x86-gcc libkdu.a\n'
+#         'mkdir -p %s/%s/java/kdu_jni\n'
+#         '%s%s -C %s/apps/make -f Makefile-Linux-x86-gcc\n'
+#         'ln -f %s/lib/Linux-x86-gcc/libkdu.a %s/lib\n'
+#         'touch %s' % (
+#             build_root, make_cmd, '%s/bin' % optdir, kakadu_version,
+#             build_root, kakadu_version, gdal_env['ENV']['mod_env'], make_cmd,
+#             kakadu_version, kakadu_version, kakadu_version, gdal_target))])
+
+
+# [6] Configure Gdal
+gdal_target = '%s/.configure_gdal' % current_dir
+
+if gdal_env['bundle_3rd_libs']:
+  configure_cmd = (
+      'cd %s\n'
+      '%s./configure --prefix=%s --with-gnu-ld --without-libtool '
+      '--disable-static --with-threads --with-expat=%s --with-ogdi=%s '
+      '--with-libtiff=internal --without-netcdf --with-png=internal --with-jpeg '
+      '--with-geotiff=internal --with-xerces=%s --with-geos=%s/bin/geos-config '
+#      '--with-kakadu=%s/%s --with-mrsid=%s/%s-linux.x86-64.gcc44/Raster_DSDK '
+      '--with-python=%s '
+      '--with-xml2=%s/bin '
+      '--without-pg --without-jasper --with-odbc=no --without-mysql '
+      '--with-jp2mrsid=no --without-grass --with-oci=no --with-gif=internal '
+      '--with-ecw=no --with-curl=%s/bin --with-pic --without-sqlite3\n'
+      'touch %s' % (
+           build_root,
+           gdal_env['ENV']['mod_env'], optdir,
+           root_dir, root_dir,
+           root_dir, root_dir,
+#           build_root, kakadu_version, build_root, geoexpress_version,
+           gdal_env['python_bin'],
+           root_dir,
+           root_dir,
+           gdal_target))
+else:
+  configure_cmd = (
+        'cd %s\n'
+        '%s./configure --prefix=%s --with-gnu-ld --without-libtool '
+        '--disable-static --with-threads --with-expat --with-ogdi '
+        '--with-libtiff=internal --without-netcdf --with-png=internal --with-jpeg '
+        '--with-geotiff=internal --with-xerces --with-geos '
+#        '--with-kakadu=%s/%s --with-mrsid=%s/%s-linux.x86-64.gcc44/Raster_DSDK '
+        '--with-python=%s '
+        '--with-xml2 '
+        '--without-pg --without-jasper --with-odbc=no --without-mysql '
+        '--with-jp2mrsid=no --without-grass --with-oci=no --with-gif=internal '
+        '--with-ecw=no --with-curl --with-pic --without-sqlite3\n'
+        'touch %s' % (
+            build_root,
+            gdal_env['ENV']['mod_env'], optdir,
+#            build_root, kakadu_version, build_root, geoexpress_version,
+            gdal_env['python_bin'],
+            gdal_target))
+
+
+gdal_configure = gdal_env.Command(
+#    gdal_target, [geoexpress_extract, gdal_kakadu_build],
+    gdal_target, gdal_extract,
+    [gdal_env.MultiCommand(configure_cmd)])
+
+# [7] Build Gdal
+if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+  ld = '%s -shared' % gdal_env['ENV']['CXX']
+else:
+  ld = '%s -shared' % gdal_env['ENV']['CXX']
+make_cmd = '%s LD_SHARED="%s"' % (make_cmd_cpu, ld)
+gdal_target = '%s/.build_gdal' % current_dir
+gdal_build = gdal_env.Command(
+    gdal_target, gdal_configure,
+    [gdal_env.MultiCommand(
+        'cd %s\n'
+        '%s%s\n'
+        'make docs\n'
+        'touch %s' % (build_root, gdal_env['ENV']['mod_env'], make_cmd,
+                      gdal_target))])
+
+# [8] Create Gdal master installer
+make_cmd = 'make LD_SHARED="%s"' % (ld)
+install_root = '%s/install' % current_dir
+other_dir = '%s/share/doc/packages/%s' % (install_root, ge_version)
+gdal_target = '%s/.install' % current_dir
+gdal_install = gdal_env.Command(
+    gdal_target, gdal_build,
+    [gdal_env.MultiCommand(
+        'cd %s\n'
+        '%s %s prefix=%s install install-docs install-man\n'
+        'mkdir -p %s\n'
+        'cp -pr VERSION NEWS LICENSE.TXT %s\n'
+        'install -m 0444 frmts/vrt/vrtdataset.h %s/include/vrtdataset.h\n'
+        'touch %s' % (
+            build_root, gdal_env['ENV']['mod_env'], make_cmd, install_root,
+            other_dir, other_dir, install_root,
+            gdal_target))])
+
+# [9] Copy Geoexpress libraries (Gdal master installer)
+# gdal_target = '%s/.geoxpress_install' % current_dir
+# geoexpress_install = gdal_env.Command(
+#    gdal_target, gdal_install,
+#    [gdal_env.MultiCommand(
+#         'cd %s\n'
+#         'cp -d  %s-linux.x86-64.gcc44/Raster_DSDK/lib/libltidsdk.so* %s/lib\n'
+#        'touch %s' % (
+#        build_root, geoexpress_version, install_root, gdal_target))])
+
+# [10] Install these into various directories as required for build
+gdal_target = '%s/.install_for_build' % current_dir
+gdal_install_build = gdal_env.Command(
+#    gdal_target, [gdal_install, geoexpress_install],
+    gdal_target, gdal_install,
+    [gdal_env.rsync_cmd % (
+        '%s/bin/' % install_root,
+        '%s/' % Dir(gdal_env.exportdirs['bin']).abspath),
+     gdal_env.rsync_cmd % (
+         '%s/include/' % install_root,
+         '%s/include/' % Dir(gdal_env.exportdirs['root']).abspath),
+     gdal_env.rsync_cmd % (
+         '%s/lib/' % install_root,
+         '%s/' % Dir(gdal_env.exportdirs['lib']).abspath),
+     Touch('$TARGET')])
+Default(gdal_install_build)
+
+if 'install' in COMMAND_LINE_TARGETS:
+  # Copies GDAL python bindings from ../install/lib/python2.7/site-packages
+  # to ../opt/google/gepython/../site-packages/ folder.
+  gdal_env.InstallFileOrDir(
+      '%s/lib/python%s/site-packages/' % (install_root,
+                                          gdal_env['python_major_version']),
+      '%s/opt/google/gepython/Python-%s/lib/python%s/site-packages' % (
+          gdal_env.installdirs['common_root'], gdal_env['python_version'],
+          gdal_env['python_major_version']),
+      gdal_install_build, 'install')
+
+  # Copies GDAL py_tools to /opt/google/bin folder.
+
+  gdal_env.InstallFileOrDir(
+      '%s/bin/' % install_root,
+      '%s/opt/google/bin' % gdal_env.installdirs['common_root'],
+      gdal_install_build, 'install')
+
+  # Copies gdal libraries from ../install/lib/ folder to /opt/google/lib.
+  gdal_env.Alias(
+      'install', [gdal_install_build],
+      [gdal_env.rsync_excl_cmd %(
+          'python%s' % gdal_env['python_major_version'],
+          '%s/lib/' % install_root,
+          '%s/opt/google/lib' % gdal_env.installdirs['common_root'])])
+
+  # copy gdal docs to /opt/google/share folder.
+  gdal_env.InstallFileOrDir(
+      '%s/share/' % install_root,
+      '%s/opt/google/share/' % gdal_env.installdirs['common_root'],
+      gdal_install_build, 'install')
+
+  gdal_env.InstallFileOrDir(
+      '%s/doc' % install_root,
+      '%s/opt/google/share/doc/packages/%s' % (
+          gdal_env.installdirs['common_root'], ge_version),
+      gdal_install_build, 'install')
+
+  gdal_env.InstallFileOrDir(
+      '%s/man' % install_root,
+      '%s/opt/google/share/doc/packages/%s' % (
+          gdal_env.installdirs['common_root'], ge_version),
+      gdal_install_build, 'install')
+
+Return('gdal_extract gdal_install_build')

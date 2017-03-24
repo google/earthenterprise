@@ -1,0 +1,142 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+
+#include <khTypes.h>
+#include <map>
+#include <string>
+
+
+class FusionUniqueId {
+  enum Category { Channel, Resource };
+  typedef std::map<FusionUniqueId::Category, uint32> IdMap;
+
+  IdMap next_ids;
+
+#pragma LoadAndSave
+
+#hquote
+  // stay away from low numbers that are often used for sentinals
+  static const uint32 FirstId = 1000;
+
+  static void Init(const std::string &assetroot);
+  static uint32 Get(Category category);
+
+  // used only by configure tools
+  static void TouchNew(const std::string &assetroot);
+  void OverwriteSave_Dangerous(const std::string &assetroot);
+
+  static IdMap ID_MAP;
+#/hquote
+
+
+#cppquote
+#include <autoingest/.idl/storage/AssetDefs.h>
+#include <autoingest/geAssetRoot.h>
+#include <khFileUtils.h>
+
+
+  FusionUniqueId::IdMap FusionUniqueId::ID_MAP;
+  
+  uint32
+  FusionUniqueId::Get(Category category)
+  {
+    uint id;
+    // see if we need to bootstrap this category
+    if (ID_MAP.find(category) == ID_MAP.end()) {
+      id = FirstId;
+    } else {
+      id = ID_MAP[category];
+    }
+
+    // make sure we haven't wrapped
+    if (id+1 == 0) {
+      throw khException(
+          kh::tr("INTERNAL ERROR: Fusion unique %1 id rolled back to 0")
+          .arg(ToString(category)));
+    }
+
+    ID_MAP[category] = id+1;
+
+    // we save every time we get a new one. this doesn't happen that often
+    FusionUniqueId storage(ID_MAP);
+    std::string filename = geAssetRoot::Filename(AssetDefs::AssetRoot(),
+                                                 geAssetRoot::UniqueIdFile);
+    if (!storage.Save(filename)) {
+      throw khException(
+          kh::tr("Unable to save %1\n"
+                 "Check system manager logfile for more details.")
+          .arg(filename));
+    }
+    (void)khChmod(filename, geAssetRoot::FilePerms(geAssetRoot::UniqueIdFile));
+    return id;
+  }
+
+  void
+  FusionUniqueId::Init(const std::string &assetroot)
+  {
+    QString msg = kh::tr("%1 has %2 id file.\n"
+                         "Please run the following command:\n"
+                         "'geconfigureassetroot --repair --assetroot %3'");
+
+    std::string filename = geAssetRoot::Filename(assetroot,
+                                                 geAssetRoot::UniqueIdFile);
+
+    uint64 size;
+    time_t mtime;
+    if (!khGetFileInfo(filename, size, mtime)) {
+      throw khException(msg
+                        .arg(assetroot)
+                        .arg(kh::tr("missing"))
+                        .arg(assetroot));
+    }
+
+    FusionUniqueId storage;
+    if (size == 0) {
+      // special case - this empty file was created by the configure
+      // or upgrade tool. It's empty so we cannot actually try to read it.
+      // But that's OK since we just want the default in this case anyway
+    } else if (!storage.Load(filename)) {
+      throw khException(msg
+                        .arg(assetroot)
+                        .arg(kh::tr("broken")));
+    }
+
+    ID_MAP = storage.next_ids;
+  }
+
+
+  void FusionUniqueId::TouchNew(const std::string &assetroot) {
+    std::string idfname = geAssetRoot::Filename(assetroot,
+                                                 geAssetRoot::UniqueIdFile);
+    if (!khMakeEmptyFile(idfname)) {
+      throw khException(kh::tr("Unable to create %1")
+                        .arg(idfname));
+    }
+    (void)khChmod(idfname, geAssetRoot::FilePerms(geAssetRoot::UniqueIdFile));
+  }
+
+  void FusionUniqueId::OverwriteSave_Dangerous(const std::string &assetroot) {
+    std::string filename = geAssetRoot::Filename(assetroot,
+                                                 geAssetRoot::UniqueIdFile);
+    if (!Save(filename)) {
+      throw khException(kh::tr("Unable to save %1")
+                        .arg(filename));
+    }
+    (void)khChmod(filename, geAssetRoot::FilePerms(geAssetRoot::UniqueIdFile));
+  }
+
+#/cppquote
+
+}

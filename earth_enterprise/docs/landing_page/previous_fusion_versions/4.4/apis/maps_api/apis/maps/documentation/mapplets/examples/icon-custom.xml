@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="Using Icon Classes" height="300">
+  <Require feature="sharedmap"/>
+</ModulePrefs>
+<Content type="html"><![CDATA[
+
+<small>
+In many cases, your icons may have different foregrounds,
+but the same shape and shadow. The easiest way to achieve this 
+behavior is to use the copy constructor for the GIcon class, 
+which copies all the properties over to a new icon which you can 
+then customize.
+</small>
+
+<script>
+var map = new GMap2();
+
+// Create a base icon for all of our markers that specifies the
+// shadow, icon dimensions, etc.
+var baseIcon = new GIcon();
+baseIcon.shadow = "http://www.google.com/mapfiles/shadow50.png";
+baseIcon.iconSize = new GSize(20, 34);
+baseIcon.shadowSize = new GSize(37, 34);
+baseIcon.iconAnchor = new GPoint(9, 34);
+baseIcon.infoWindowAnchor = new GPoint(9, 2);
+baseIcon.infoShadowAnchor = new GPoint(18, 25);
+
+// Creates a marker whose info window displays the letter corresponding
+// to the given index.
+function createMarker(point, index) {
+  // Create a lettered icon for this point using our icon class
+  var letter = String.fromCharCode("A".charCodeAt(0) + index);
+  var letterIcon = new GIcon(baseIcon);
+  letterIcon.image = "http://www.google.com/mapfiles/marker" + letter + ".png";
+  return new GMarker(point, {icon:letterIcon});
+}
+
+// Add markers A - J to the map at random locations
+map.getBoundsAsync(function(bounds) {
+  var southWest = bounds.getSouthWest();
+  var northEast = bounds.getNorthEast();
+  var lngSpan = northEast.lng() - southWest.lng();
+  var latSpan = northEast.lat() - southWest.lat();
+
+  for (var i = 0; i < 10; i++) {
+    var point = new GLatLng(southWest.lat() + latSpan * Math.random(),
+                            southWest.lng() + lngSpan * Math.random());
+    map.addOverlay(createMarker(point, i));
+  }
+});
+</script>
+
+]]></Content>
+</Module>

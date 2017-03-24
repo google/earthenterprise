@@ -1,0 +1,119 @@
+   _        ___  ____ ____  ____
+  |_|_ _   / _ \/ ___/ ___||  _ \   _ __ ___  _ __ ___
+  _|_||_| | | | \___ \___ \| |_) | | '_ ` _ \| '_ ` _ \
+ |_||_|_| | |_| |___) |__) |  __/  | | | | | | | | | | |
+  |_|_|_|  \___/|____/____/|_|     |_| |_| |_|_| |_| |_|
+
+  OSSP mm - Shared Memory Allocation
+
+  PORTING
+  =======
+
+  The OSSP mm library was successfully tested on the following platforms
+  (and should automatically adjust to other platforms, of course):
+
+  alpha-dec-osf3.2
+  alpha-dec-osf4.0d
+  alpha-dec-osf4.0e
+  alpha-dec-osf4.0g
+  alpha-dec-osf5.1
+  alpha-redhat-linux-gnu2.4glibc2.1
+  alpha-unknown-linux-gnu
+  alpha-unknown-netbsd1.4.2
+  alphaev56-dec-osf4.0c
+  alphaev56-dec-osf4.0d
+  alphaev56-unknown-linux-gnu
+  alphaev6-dec-osf4.0f
+  alphaev6-dec-osf5.0
+  alphaev6-unknown-linux-gnu
+  arm-unknown-linux-gnu
+  hppa1.1-hp-hpux10.10
+  hppa1.1-hp-hpux10.20
+  hppa1.1-hp-hpux11.00
+  hppa2.0-hp-hpux10.20
+  hppa2.0w-hp-hpux11.00
+  i386-pc-bsdi2.1
+  i386-pc-bsdi4.0.1
+  i386-pc-freebsd2.2.8
+  i386-pc-freebsd4.1
+  i386-pc-sco3.2v5.0.5
+  i386-pc-solaris2.6
+  i386-pc-solaris2.7
+  i386-pc-solaris2.8
+  i386-unknown-netbsd1.4
+  i386-unknown-netbsd1.4.2
+  i386-unknown-openbsd2.4
+  i386-unknown-openbsd2.5
+  i386-unknown-openbsd2.7
+  i386-unknown-openbsd2.8
+  i486-pc-freebsd2.2.6
+  i486-pc-linux-gnulibc1
+  i586-cobalt-linux-gnu2.2glibc2.1
+  i586-debian-linux-gnu2.2glibc2.1
+  i586-debian-linux-gnu2.4glibc2.1
+  i586-gnu-linux-gnu2.2glibc2.1
+  i586-pc-freebsd2.2.2
+  i586-pc-freebsd2.2.7
+  i586-pc-freebsd2.2.8
+  i586-pc-freebsd3.4
+  i586-pc-linux-gnu
+  i586-pc-linux-gnulibc1
+  i586-redhat-linux-gnu2.2glibc2.1
+  i586-redhat-linux-gnu2.2glibc2.2
+  i586-redhat-linux-gnu2.4glibc2.1
+  i586-redhat-linux-gnu2.4glibc2.2
+  i586-suse-linux-gnu2.2glibc2.1
+  i686-UnixWare7.1.0-sysv5
+  i686-debian-linux-gnu2.0glibc2.0
+  i686-debian-linux-gnu2.2glibc2.0
+  i686-debian-linux-gnu2.2glibc2.1
+  i686-gnu-linux-gnu2.0glibc1
+  i686-gnu-linux-gnu2.2glibc2.1
+  i686-gnu-linux-gnu2.4glibc2.1
+  i686-pc-cygwin
+  i686-pc-freebsd3.1
+  i686-pc-freebsd3.2
+  i686-pc-freebsd3.3
+  i686-pc-freebsd3.4
+  i686-pc-freebsd4.0
+  i686-pc-freebsd4.1.1
+  i686-pc-freebsd4.2
+  i686-pc-linux-gnu
+  i686-pc-linux-gnulibc1
+  i686-pc-sco3.2v5.0.5
+  i686-redhat-linux-gnu2.2glibc2.1
+  i686-redhat-linux-gnu2.2glibc2.2
+  i686-suse-linux-gnu2.2glibc2.1
+  i686-turbolinux-linux-gnu2.2glibc2.1
+  m68k-apple-aux3.1.1
+  mips-sgi-irix5.3
+  mips-sgi-irix6.2
+  mips-sgi-irix6.3
+  mips-sgi-irix6.4
+  mips-sgi-irix6.5
+  mips-sni-sysv4
+  powerpc-ibm-aix4.2.0.0
+  powerpc-ibm-aix4.2.1.0
+  powerpc-ibm-aix4.3.1.0
+  powerpc-ibm-aix4.3.2.0
+  powerpc-ibm-aix4.3.3.0
+  powerpc-redhat-linux-gnu2.2glibc2.1
+  powerpc-unknown-linux-gnu
+  powerpc-unknown-linux-gnulibc1
+  powerpc-yellowdog-linux-gnu2.2glibc2.1
+  rs6000-ibm-aix4.2.1.0
+  rs6000-ibm-aix4.3.2.0
+  rs6000-ibm-aix4.3.3.0
+  s390-ibm-linux-gnu2.2glibc2.1
+  sparc-sun-solaris2.5.1
+  sparc-sun-solaris2.6
+  sparc-sun-solaris2.7
+  sparc-sun-solaris2.8
+  sparc-sun-sunos4.1.3_U1
+  sparc-sun-sunos4.1.4
+  sparc-unknown-linux-gnu
+  sparc-unknown-netbsd1.4.1
+  sparc-unknown-netbsd1.4.2
+  sparc64-redhat-linux-gnu2.2glibc2.1
+  sparc64-unknown-linux-gnu
+

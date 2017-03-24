@@ -1,0 +1,61 @@
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/samples/underwater_linestring_example.html";
+    </script>
+    
+   <title>underwater_linestring_example.html</title>
+   <script src="http://code.google.com/www.google.com/jsapi?key=ABQIAAAA5El50zA4PeDTEMlv-sXFfRSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xTdBhxbkZWuzyYTVeclkwYHpb17ZQ"></script>
+   <script type="text/javascript">
+      var ge;
+      google.load("earth", "1");
+      
+      function init() {
+         google.earth.createInstance('map3d', initCB, failureCB);
+      }
+
+      function initCB(instance) {
+
+         ge = instance;
+         ge.getWindow().setVisibility(true);
+         ge.getNavigationControl().setVisibility(ge.VISIBILITY_SHOW);
+
+         // Create the placemark.
+         var lineStringPlacemark = ge.createPlacemark('');
+
+         // Create the LineString.
+         var lineString = ge.createLineString('');
+         lineStringPlacemark.setGeometry(lineString);
+         lineString.setAltitudeMode(ge.ALTITUDE_RELATIVE_TO_SEA_FLOOR);
+
+         // Add LineString points.
+         lineString.getCoordinates().pushLatLngAlt(48.3253, -126.3422, 768);
+         lineString.getCoordinates().pushLatLngAlt(48.2874, -126.3469, 768);
+         lineString.getCoordinates().pushLatLngAlt(48.2785, -126.3355, 768);
+         lineString.getCoordinates().pushLatLngAlt(48.2777, -126.3143, 768);
+         lineString.getCoordinates().pushLatLngAlt(48.2656, -126.3092, 768);
+         lineString.setExtrude(true);
+
+         // Add the feature to Earth.
+         ge.getFeatures().appendChild(lineStringPlacemark);
+         
+         // Move the camera.
+         var la = ge.createLookAt('');
+         la.set(48.2793, -126.3358, 0, ge.ALTITUDE_RELATIVE_TO_SEA_FLOOR, 42.7, 71, 4250);
+         ge.getView().setAbstractView(la);
+      }
+      
+      function failureCB(errorCode) {
+      }
+      
+      google.setOnLoadCallback(init);
+   </script>
+
+</head>
+
+<body>
+
+   <div id="map3d" style="height:400px; width:600px;"></div>
+
+</body>
+</html>

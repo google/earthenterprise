@@ -1,0 +1,58 @@
+<!--
+  Copyright 2017 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+<link href="local/preview/css/style.css" rel="stylesheet" type="text/css">
+
+<title>Google Earth Enterprise Portable Server</title>
+
+<script type='text/javascript' src='/js/jquery.js'></script>
+</head>
+
+<body>
+
+
+  <div id="headerSetup">
+    <div id="GoogImg">
+      <a href="/">
+      <img src="local/preview/images/Google.png" width="103px" height="36px" border="0">
+    </a>
+        <label>Earth Enterprise Portable</label>
+    </div>
+  </div>
+
+<div id="QuitBody">
+      <h1>Google Earth Enterprise Portable Server</h1>
+      <span>The Google Earth Enterprise Portable Server is now shutting down.</span>
+      <span>You can start the server again at any time by double-clicking the application icon or double-clicking any portable globe (.glb) file.</span>
+</div>
+
+</body>
+</html>
+
+
+<script type="text/javascript">
+
+function Quit() {
+  jQuery.get("?cmd=quit");
+}
+
+// Wait to give page a chance to get all of its images.
+window.setTimeout(Quit,1000);
+</script>

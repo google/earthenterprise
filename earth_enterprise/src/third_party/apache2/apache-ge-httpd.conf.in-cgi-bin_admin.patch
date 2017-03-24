@@ -1,0 +1,30 @@
+diff -uNr httpd-2.2.29.orig/docs/conf/httpd.conf.in httpd-2.2.29/docs/conf/httpd.conf.in
+--- httpd-2.2.29.orig/docs/conf/httpd.conf.in	2015-07-30 17:09:30.644259782 -0700
++++ httpd-2.2.29/docs/conf/httpd.conf.in	2015-07-30 17:09:52.219686038 -0700
+@@ -178,6 +178,26 @@
+     </Limit>
+ </Directory>
+ 
++
++# Set up admin directory in cgi-bin.
++# Add basic password protection.
++#
++# Note: the same AuthUserFile as for htdocs/admin is used.
++#
++# To change the default password, run:
++#  sudo /opt/google/gehttpd/bin/htpasswd -c .htpasswd geapacheuser
++<Directory "/opt/google/gehttpd/cgi-bin/admin">
++    AuthUserFile /opt/google/gehttpd/conf.d/.htpasswd
++    AuthGroupFile /dev/null
++    AuthName "Earth Server admin pages"
++    AuthType Basic
++
++    <Limit GET>
++    require valid-user
++    </Limit>
++</Directory>
++
++
+ #
+ # DirectoryIndex: sets the file that Apache will serve if a directory
+ # is requested.

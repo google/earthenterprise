@@ -1,0 +1,1620 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// Definition of all protocol buffers used by dbroot v2 protocol.
+// The goal is to convert all dbroot-related tools (in VPE and mappacket) to
+// use this protocol definition and deprecate
+//
+// NOTE: Currently, py api versioning is not suppored in the open source
+// protocol buffer library, so inserting one in this proto will break the
+// Google Earth client builds.
+
+syntax = "proto2";
+
+package keyhole.dbroot;
+option java_package = "com.google.keyhole.tools.dbroot";
+
+// Protocol message that pairs an ID (which must be unique in the entire dbroot
+// hierarchy downloaded in one session) with an actual string.
+message StringEntryProto {
+  // Unique ID of string used in other parts of dbroot. Always use 4 bytes
+  // for storage to avoid ints taking way more space than this, since we will
+  // use large numbers frequently.
+  required fixed32 string_id = 1;
+
+  // Actual value of string
+  required string string_value = 2;
+}
+
+// Simple pair that can contain either a string id (which must be unique across
+// all ids in the dbroot hierarchy) or an actual value. If both values are
+// present, behavior of the client is undefined and implementation dependent.
+// Nearly all string values in other protocol messages use this message to
+// allow strings to be specified as an index in the translation table, or
+// directly (which eliminates the need for any lookup)
+// Strings that must be translated (e.g. not the same across all languages)
+// should probably use the string_id field so that the translation (which
+// varies) can be put in the translation table portion of the dbroot
+// (see DbRootProto below). This allows the part that references string_id
+// to be the same across all language versions of dbroot, and have only one
+// dbroot object that changes across different languages.
+message StringIdOrValueProto {
+  // Id of string to look up in translation table (see DbRootProto)
+  optional fixed32 string_id = 1;
+  // Actual value of string, if present - does not require any lookup.
+  optional string value = 2;
+}
+
+// List of values that describe the planet size and shape (assumed to be an
+// oblate spheroid) and extra data that allow encoding negative altitudes under
+// the water surface
+message PlanetModelProto {
+  // Mean planet radius. Default value is the WGS84 model for earth.
+  optional double radius = 1 [default = 6378.13700];
+
+  // Planet flattening. Default value is 1.0/298.257223563 (from  WGS84)
+  optional double flattening = 2 [default = 0.00335281066474748];
+
+  // Elevation bias
+  optional double elevation_bias = 4;
+
+  // Bias for negative altitude so that ocean tiles can be streamed to older
+  // clients
+  optional int32 negative_altitude_exponent_bias = 5;
+
+  // Threshold below which negative altitudes are compressed
+  optional double compressed_negative_altitude_threshold = 6;
+}
+
+// The client has the ability to display a copyright message on a per-layer
+// basis only. If you have multiple providers' data contained in one layer and
+// need to display a copyright for each, you'll have to break the layer into
+// multiples, each with its own provider specified.
+message ProviderInfoProto {
+  // Must be unique across all providers.
+  required int32 provider_id = 1;
+
+  // Contents of the copyright as an actual string or index in translation
+  // table.
+  optional StringIdOrValueProto copyright_string = 2;
+
+  // Distance in pixels that indicates how far from the bottom of the screen
+  // the copyright appears for that provider.
+  optional int32 vertical_pixel_offset = 3 [default = -1];
+}
+
+// When a placemark is clicked on a pop-up bubble 'pops up'. Only enabled for
+// point layers, the pop-up bubbles support a very limited set of HTML and
+// image linking. For a full description of what can be contained in the
+// pop-up bubble description go to:
+// http://earth.google.com/kml/kml_tags_21.html#description
+message PopUpProto {
+  // Over-rides the default client pop-up html which contains entity references
+  // to $[name] and $[geDirections]. Set this field to true if you want
+  // to control all of the HTML behavior in the bubble.
+  optional bool is_balloon_style = 1 [default = false];
+
+  // Text contents of description or balloon style.
+  optional StringIdOrValueProto text = 2;
+
+  // Background and text color in balloon. Both colors must be specified
+  // in abgr format.
+  optional fixed32 background_color_abgr = 3 [default = 0xffffffff];
+  optional fixed32 text_color_abgr = 4 [default = 0xff000000];
+}
+
+message StyleAttributeProto {
+  // Unique id for this style attribute specification.
+  required string style_id = 1;  // requires no translation
+
+  // The provider id used here must be present in the ProviderInfoProto if
+  // other than the default. If you need copyright strings to display make sure
+  // to fill this value.
+  optional int32 provider_id = 3;
+
+  // Display color for polygons.
+  optional fixed32 poly_color_abgr = 4 [default = 0xffffffff];
+
+  // Display color for lines.
+  optional fixed32 line_color_abgr = 5 [default = 0xffffffff];
+  optional float line_width = 6 [default=1.0];
+
+  // Display color of placemark or road name text.
+  optional fixed32 label_color_abgr = 7 [default = 0xffffffff];
+  optional float label_scale = 8 [default = 1.0];
+
+  // Controls icon 'tinting', a color hue will be applied to the con if
+  // specified here.
+  optional fixed32 placemark_icon_color_abgr = 9 [default = 0xffffffff];
+  optional float placemark_icon_scale = 10 [default = 1.0];
+
+  // Path to the icon that will be displayed for placemarks or road shields.
+  // These can be either 32x32 or 64x64 8-bit/color RGBA, non-interlaced png
+  // images. Path can be translated through translation table mechanism (see
+  // definition of StringIdOrValueProto for more info).
+  optional StringIdOrValueProto placemark_icon_path = 11;
+
+  // Specify the offset you'd like from the placemark coordinate point on the X
+  // axis.
+  optional int32 placemark_icon_x = 12 [default = 0];
+
+  // Specify the offset you'd like from the placemark coordinate point on the Y
+  // axis.
+  optional int32 placemark_icon_y = 13 [default = 0];
+
+  // Usually, either 32 or 64.
+  optional int32 placemark_icon_width = 14 [default = 32];
+
+  // Usually, either 32 or 64.
+  optional int32 placemark_icon_height = 15 [default = 32];
+
+  // Fields to control behavior in the HTML pop up bubbles when placemarks
+  // are clicked on.
+  optional PopUpProto pop_up = 16;
+
+  // List of draw flags that should be applied to this style. See definition
+  // of DrawFlagProto in dbroot.proto.
+  repeated DrawFlagProto draw_flag = 17;
+}
+
+
+// Each fusion packet for layers has a mapping id number(s) baked into it that
+// reference the style map postamble in the dbroot. Each style map block
+// specifies pointers to two style attribute specifications that are used in
+// rendering the fusion packet. One for 'Normal' view (no mouse over) and
+// one for 'Highlight' view (mouse over). For non-point features, the normal
+// and highlight style maps point to the same style specification.
+//
+// It is expected and even encouraged to use the same style attribute
+// specification ids across multiple style maps when they are exactly the same
+// as this helps shrink the size of the dbroot and improves parsing speed in
+// the client.
+//
+// Example non-point layer: <etStyleMap> [20210] { "A"      "A" }
+// Meaning: Style map 20210 uses style spec "A" for normal and "A" for
+//          highlight.
+// NOTE: For non-point layers only fill one style_attribute message as
+// normal. The writer will automatically fill in the style map for the
+// highlight style with the same style id as used for normal.
+//
+// Example point layer: <etStyleMap> [20210] { "A"      "B" }
+// Meaning: Style map 20210 uses style spec "A" for normal and "B" for
+//          highlight.
+message StyleMapProto {
+  required int32 style_map_id = 1;
+
+  // Specifies which layers this style map is referenced in.
+  // If not provided, one can always inspect all layers to find which ones
+  // reference this style map.
+  repeated int32 channel_id = 2;
+
+  // Styles are associated with their corresponding layer.
+  // If provided, the value is an index into the array of styles.
+  optional int32 normal_style_attribute = 3;
+  optional int32 highlight_style_attribute = 4;
+}
+
+// Specifies a range of zoom levels that a style rule will be visible for.
+message ZoomRangeProto {
+  required int32 min_zoom = 1;
+  required int32 max_zoom = 2;
+}
+
+// Draw flags are used to control cartographic styling. For example, a polygon
+// layer with flag TYPE_FULL_ONLY would only display the outlines of the
+// polygon.
+message DrawFlagProto {
+
+  enum DrawFlagType {
+    TYPE_FILL_ONLY = 1;
+    TYPE_OUTLINE_ONLY = 2;
+    TYPE_FILL_AND_OUTLINE = 3;
+    TYPE_ANTIALIASING = 4;
+    TYPE_CENTER_LABEL = 5;  // Points only.
+  };
+  required DrawFlagType draw_flag_type = 1;
+}
+
+// Specific configurations for layers.
+message LayerProto {
+  // Specifies the zoom range(s) that layer styles will be valid for.
+  repeated ZoomRangeProto zoom_range = 1;
+
+  // Controls the zoom level that text labels will be displayed until. For
+  // example with roads, it is common to have the line geometry fade out around
+  // 18-20 but have the label text continue until level 24.
+  optional int32 preserve_text_level = 2 [default = 30];
+
+  // Controls how the client transitions between levels-of-detail (LOD) of this
+  // layer.  If lod_begin_transition is true, the client will fade in the layer
+  // when at the level that it is first displayed.  If lod_end_transition is
+  // true, the client will fade out the layer at the level that it is last
+  // displayed.
+  optional bool lod_begin_transition = 4;
+  optional bool lod_end_transition = 5;
+}
+
+// Specific configuration options for folders.
+message FolderProto {
+  // Controls whether the tree view of child folders or layers is visible.
+  optional bool is_expandable = 1 [default = true];
+}
+
+// Requirements are configurations available for NestedFeatures that do not
+// exist in all client versions. They are all optional and provide additional
+// control over how and when layers are displayed.
+message RequirementProto {
+  // Allows limiting display of a nested feature to computers with a specified
+  // vram threshold or above.
+  // Example: 64-127
+  // Meaning: Show iff 64 to 127MB of VRAM.
+  // Version support: 4.0.2292 +
+  optional string required_vram = 3;
+
+  // Allows limiting display of a nested feature to those with a client version
+  // at or above the value specified.
+  // Example: -4.0.2291
+  // Meaning: Exclude if 4.0.2292 or later.
+  // Version support: 4.0.2292 +
+  optional string required_client_ver = 4;
+
+  // Probability of being shown (preserved across sessions).
+  // Example: Layers: A with "-20" and B with "10-100"
+  // Meaning: 10% get A, 10% get A+B, 80% get B)
+  // Version support: 4.0.2292 +
+  optional string probability = 5;
+
+  // Limit by anything in user agent.
+  // Example: (Windows|Mac)
+  // Meaning: PC & Mac but not Linux Excluded if RegExp is non-empty and match
+  //          fails.
+  // Version support: 4.0.2292 +
+  optional string required_user_agent = 6;
+
+  // Limit by client capability
+  // TODO: update the example.
+  // Example: Not used in production yet, but something like 'supports Flash'.
+  // Version support: 4.3 +.
+  optional string required_client_capabilities = 7;
+}
+
+// Message that defines a view (i.e. position and orientation of camera) of
+// the planet.
+// For more detailed documentation see:
+// http://code.google.com/apis/kml/documentation/kml_tags_21.html#lookat
+// NOTE: This does not support tags for altitudeMode or altitude.
+message LookAtProto {
+  required float longitude = 1;
+  required float latitude = 2;
+  optional float range = 3;
+  optional float tilt = 4;
+  optional float heading = 5;
+}
+
+// A nested feature is an entity in the layer menu tree. The feature may
+// be either a folder (think container for more child features) or a layer
+// (a layer is a vector data layer that displays points, lines, or polygons).
+// Next available id: 22
+message NestedFeatureProto {
+  enum FeatureType {
+    TYPE_POINT_Z = 1;
+    TYPE_POLYGON_Z = 2;
+    TYPE_LINE_Z = 3;
+    TYPE_TERRAIN = 4;  // This will soon be deprecated, do not use.
+  };
+  optional FeatureType feature_type = 1;
+
+  // URL of KML layer, if present.
+  // Version support: GE 4.0.2292+, GE5
+  optional StringIdOrValueProto kml_url = 2;
+
+  // If this url appears, it means this object is referring to a secondary
+  // database that should be added.
+  optional string database_url = 21;
+
+  // Data members only used for layers.
+  optional LayerProto layer = 3;
+
+  // Data members only used in containers of other features. This has no effect
+  // if the layer has no children.
+  optional FolderProto folder = 4;
+
+  // Additional, optional specifications to extend layers and folders.
+  optional RequirementProto requirement = 5;
+
+  // Each nested feature must have its own unique identifier number. This
+  // identifier is used in several places in the quadtree packets and fusion
+  // packets to link the fusion packet to a given style specification for
+  // example.
+  required int32 channel_id = 6;
+
+  // Name of the nested feature, either as a string ID or actual value.
+  // Names that must be translated should probably use string IDs so this
+  // part of the protocol buffer is the same across all languages.
+  optional StringIdOrValueProto display_name = 7;
+
+  // Controls whether the nested feature can be seen or not in the layer panel
+  // menu. Visibility is inherited from parents too (all parents in the
+  // hierarchy must be visible for a layer to be visible).
+  optional bool is_visible = 8 [default = true];
+
+  // Controls whether the nested feature is turned on by default when the
+  // client starts up.
+  optional bool is_enabled = 9 [default = true];
+
+  // Does the feature have a 'check' in the layer menu panel.
+  optional bool is_checked = 10 [default = false];
+
+  // Path of image that will be displayed in the layer menu panel. These must
+  // be 16x16 8-bit/color RGBA, non-interlaced png images.
+  optional string layer_menu_icon_path = 11 [default = "icons/773_l.png"];
+
+  // Human readable description string of the layer.
+  optional StringIdOrValueProto description = 12;
+
+  // Default view for that layer. In Google Earth, double-clicking on that layer
+  // flies to the default view of the layer if it is specified. Layers with no
+  // default view cannot be "flown to".
+  optional LookAtProto look_at = 13;
+
+  // The asset UUID is used by the Earth Plugin to provide a unique identifier
+  // that exposes the different layers via a JavaScript API.
+  // This string must be unique across *all* layers in the entire dbroot
+  // hierarchy.
+  optional string asset_uuid = 15;  // requires no translation
+
+  // The save_locked field controls whether or not a placemark can be right-
+  // clicked and saved out to My Places.
+  // Note: Clients < 4.3 did not accurately use this feature, so everything was
+  // set to 'true'.
+  optional bool is_save_locked = 16 [default = true];
+
+  repeated NestedFeatureProto children = 17;
+
+  // Reference to client configuration script which is applied to every layer.
+  // This allows some layers to be turned off on certain clients based on
+  // decisions that must be made at runtime. The client is responsible for
+  // parsing and applying the script.
+  optional string client_config_script_name = 18;
+
+  // This field is used only for Diorama layers, which may contain multiple
+  // data packets per tile for a single <etNestedLayer> entry in the dbroot.
+  // When this field is set to a positive integer, the client will fetch this
+  // layer's packets along with Diorama metadata indicating the number of
+  // packets per tile. For each packet i between 0 and number of packets per
+  // tile, the client will fetch data for layer diorama_data_channel_base + i;
+  // however, these layers do not appear in the dbroot.
+  optional int32 diorama_data_channel_base = 19 [default=-1];
+
+  // This field is used only for 3D replica data (e.g. Trees) and uses the
+  // same mechanism as described in the diorama_data_channel_base field above.
+  optional int32 replica_data_channel_base = 20 [default=-1];
+}
+
+// Deprecated in Earth 6.2 and higher in favor of search_config.
+message MfeDomainFeaturesProto {
+  // 2-character country code for which these values apply
+  required string country_code = 1;
+
+  // domain name to use for requests - e.g. maps.google.com (default
+  // protocol is http, default port is 80). If a full URL is specified,
+  // it will override the default maps url. Otherwise, if just a host is
+  // specified (as usual), the port, path and protocol of the default maps URL
+  // will be used to build the URL for this country.
+  required string domain_name = 2;
+
+  // enum that lists all available features.
+  enum SupportedFeature {
+    GEOCODING = 0;
+    LOCAL_SEARCH = 1;
+    DRIVING_DIRECTIONS = 2;
+  };
+
+  // List of all available features. Duplicate entries are ignored.
+  repeated SupportedFeature supported_features = 3;
+}
+
+// Collection of various client features that can be enabled or disabled. Some
+// of these options are not really tied to the database.
+message ClientOptionsProto {
+  // If true, no data will be cached on disk for this database. It will not
+  // be accessible offline.
+  optional bool disable_disk_cache = 1;
+
+  // If true, disables the embedded browser feature from Earth 5.1 and earlier
+  // when running on Vista or Windows 7.  This setting is deprecated, since it
+  // applies only to older clients that do not parse dbroot_proto anyway.
+  optional bool disable_embedded_browser_vista = 2;
+
+  // Used to enable or disable the atmosphere. You may want to disable the
+  // atmosphere on the Moon, for instance.
+  optional bool draw_atmosphere = 3 [default = true];
+
+  // Used to enable drawing stars around the planet.
+  optional bool draw_stars = 4 [default = true];
+
+  // Specifies the prefix to use for the names of the shader files.
+  optional string shader_file_prefix = 5;
+
+  // If set to true, this database uses protocol buffer quadtree packets.
+  optional bool use_protobuf_quadtree_packets = 6;
+
+  // If true, this database uses large copyright IDs (allows copyright ids
+  // larger than 255).
+  optional bool use_extended_copyright_ids = 7 [default = true];
+
+  // Nested message to control precipitation feature (rain and snow simulation)
+  message PrecipitationsOptions {
+    // URL for doppler images.
+    optional string image_url = 1;
+
+    // Expiration time in seconds of doppler images.
+    optional int32 image_expire_time = 2 [default = 900];
+
+    // Maximum squared distance threshold for choosing an element in the
+    // weather mapping.
+    // This is to account for small differences in the color tables from
+    // different areas (e.g. US vs. Europe). It also accounts for lossy
+    // compression artifacts.
+    optional int32 max_color_distance = 3 [default = 20];
+
+    // Quadtree (zero-indexed) image level to fetch.
+    // Image level 5 corresponds to 6-digit filenames (e.g. 010310.png).
+    optional int32 image_level = 4 [default = 5];
+
+    // Describes an entry in the list that maps weather image colors
+    // to rain/snow/fog/etc.
+    message WeatherMapping {
+      // Color that may be found in weather images.
+      required uint32 color_abgr = 1;
+      enum WeatherType {
+        NO_PRECIPITATION = 0;
+        RAIN = 1;
+        SNOW = 2;
+      }
+      // No precipitation, raining, or snowing.
+      required WeatherType weather_type = 2;
+      // How much stretch or compress the rain/snow texture. Smaller
+      // (positive) values correspond to longer precipitation.
+      optional float elongation = 3 [default = 1.0];
+      // Texture's opacity.
+      optional float opacity = 4;
+      // Fog's density used in exp2 fog equation.
+      optional float fog_density = 5;
+      // Speed for front-most texture layer.
+      optional float speed0 = 6;
+      // Speed for second texture layer.
+      optional float speed1 = 7;
+      // Speed for third texture layer.
+      optional float speed2 = 8;
+      // Speed for back-most texture layer.
+      optional float speed3 = 9;
+    }
+
+    // Maps weather map colors to rain/snow/fog/etc.
+    repeated WeatherMapping weather_mapping = 5;
+
+    // Clouds layer URL. This is used to detect whether the clouds layer
+    // is enabled.
+    optional string clouds_layer_url = 6;
+
+    // Delay in seconds before animation starts transitioning to a stop after
+    // any user os streaming activity.
+    optional float animation_deceleration_delay = 7 [default = 20];
+  }
+
+  optional PrecipitationsOptions precipitations_options = 8;
+
+  // Nested message to control printing / image saving capability on main
+  // database. The default values match the client's default values in all
+  // versions up to the 5.0.1 maintenance release.
+  message CaptureOptions {
+    // Can enable or disable saving a screenshot as a JPG image.
+    optional bool allow_save_as_image = 1 [default = true];
+
+    // Specifies the maximum capture resolution (in largest dimension) in the
+    // free client. The best image that can be captured will be
+    // max_free_capture_res * max_free_capture_res.
+    optional int32 max_free_capture_res = 2 [default = 2400];
+
+    // Similar max limit for Pro/EC clients for premium printing. This limit
+    // should be higher than the max free capture resolution for obvious
+    // reasons.
+    optional int32 max_premium_capture_res = 3 [default = 4800];
+  }
+
+  optional CaptureOptions capture_options = 9;
+
+  // Controls whether or not the "Show in maps button" should be shown. On by
+  // default, typically set to false for EC databases.
+  optional bool show_2d_maps_icon = 10 [default = true];
+
+  // If true, disables the internal browser feature for Earth 5.2 and later.
+  optional bool disable_internal_browser = 11;
+
+  // A whitespace-separated list of globbing patterns (using the * and ?
+  // wildcards) specifying URLs that are explicitly not allowed to open in the
+  // internal browser in Earth 5.2 and later.
+  optional string internal_browser_blacklist = 12;
+
+  // A whitespace-separated list of globbing patterns (using the * and ?
+  // wildcards) specifying URLs of origins for which KML content may open
+  // non-blacklisted links in the internal browser in Earth 5.2 and later.
+  // An "origin" refers to the path of the KML or KMZ file that contains the
+  // feature description that has the link in it.  The origin of a streamed
+  // layer is the URL at which it resides on its database server.
+  optional string internal_browser_origin_whitelist = 13 [default = "*"];
+
+  // Indicates whether the database supports merged polar image tiles,
+  // and if so at what zoom level the merging begins.  Values around 3
+  // are typical.  A value of zero or no value indicates that the
+  // database does not offer merged polar tiles.
+  optional int32 polar_tile_merging_level = 14;
+
+  // A whitespace-separated list of globbing patterns (using the * and ?
+  // wildcards) specifying URLs of origins from which the JavaScript bridge
+  // may make cross-domain requests on behalf of web content.  This should be
+  // set to an empty string for Fusion dbroots, and only Google domains should
+  // be whitelisted for the consumer clients.
+  optional string js_bridge_request_whitelist = 15 [default = "http://*.google.com/*"];
+
+  // Message with Maps documents options.
+  message MapsOptions {
+    // Whether to use maps library for managing documents.
+    optional bool enable_maps = 1;
+    // Whether to enable auto download for polling docs server for feed and
+    // maps changes.
+    optional bool docs_auto_download_enabled = 2;
+    // Interval in milliseconds of how often to poll docs server for feed and
+    // maps changes. Depends on docs_auto_download_enabled.
+    optional int32 docs_auto_download_interval = 3;
+    // Whether to enable auto uploads for new or modified maps.
+    optional bool docs_auto_upload_enabled = 4;
+    // Delay in milliseconds of how long to wait before uploading local
+    // changes to docs maps. Depends on docs_upload_enabled.
+    optional int32 docs_auto_upload_delay = 5;
+  }
+
+  optional MapsOptions maps_options = 16;
+}
+
+// Settings that affect how data can be fetched and throttled for this database.
+// Next available id: 16
+message FetchingOptionsProto {
+  // Maximum number of nodes that can be asked for in a single request. If set
+  // to 1, clients will issue one request per node. Larger values allow clients
+  // to group requests together. This value impacts all the other
+  // batching-related options.
+  optional int32 max_requests_per_query = 1 [default = 1];
+
+  // We allow the user to specify Connection/avoidRequestBatching
+  // in drivers.ini.  If force_max_requests_per_query is true,
+  // we ignore the user setting and use max_requests_per_query.
+  optional bool force_max_requests_per_query = 12;
+
+  // Whether the client should sort requests before grouping requests together.
+  optional bool sort_batches = 13;
+
+  // The following values control the maximum number of packets per type for a
+  // single request. The client will issue requests that stay within the given
+  // bounds. A value of 0 for any of the following values means this packet
+  // type should never be grouped with any other requests (e.g. batching is
+  // disabled for that data type).
+
+  // Maximum number of drawable packets per request.
+  optional int32 max_drawable = 2 [default = 2];
+
+  // Maximum number of imagery packets per request.
+  optional int32 max_imagery = 3 [default = 2];
+
+  // Maximum number of terrain packets per request.
+  optional int32 max_terrain = 4 [default = 5];
+
+  // Maximum number of quadtree packets per request.
+  optional int32 max_quadtree = 5 [default = 5];
+
+  // Maximum number of diorama metadata packets per request.
+  optional int32 max_diorama_metadata = 6 [default = 1];
+
+  // Maximum number of diorama data packets per request. The default is to not
+  // allow this packet type to be grouped with any other type, since these
+  // packets are typically quite large.
+  optional int32 max_diorama_data = 7 [default = 0];
+
+  // Throttling-related settings.
+
+  // Fetch ratio for consumer builds (non-paying customers). The default is to
+  // limit the number of packets fetched per frame to a low number (4 in
+  // consumer builds). This ratio allows to increase that low number - a ratio
+  // of 10 bumps the max number of packets to 40 per frame. Allowing a large
+  // number of packets to be fetched per frame can significantly decrease scene
+  // resolution time. A value of 0 means to not restrict the amount of data
+  // fetched per frame at all (infinite ratio).
+  optional float max_consumer_fetch_ratio = 8 [default = 1.0];
+
+  // Same ratio, for Pro and EC builds. The default is to not throttle these
+  // builds at all.
+  optional float max_pro_ec_fetch_ratio = 9 [default = 0.0];
+
+  // QPS throttle for all node types. Forces the client to not issue more
+  // requests than the given number. A batched request counts for a single
+  // request from a qps standpoint. If not set or 0.0f, limit is ignored and the
+  // client won't be throttled.
+  optional float safe_overall_qps = 10;
+
+  // Same type of throttle for imagery requests only. Each imagery packet
+  // requested in a batch request counts as 1 request. This setting is effective
+  // to reduce overall bandwidth usage since imagery packets are the largest of
+  // the most commonly requested pakcets types.
+  optional float safe_imagery_qps = 11;
+
+  // List of domains for which the client should use the HTTPS protocol
+  // instead of standard HTTP, when client option is enabled (supported as
+  // of Earth 7.1).
+  optional string domains_for_https = 14 [default = "google.com gstatic.com"];
+
+  // List of hosts for which the client should use regular HTTP instead of
+  // HTTPS.  This is effectively a list of exceptions to the domains_for_https
+  // field above.  Supported as of Earth 7.1.1.x for x > 1888.
+  // Example:  "sketchup.google.com chart.apis.google.com" will cause the client
+  // to use HTTP for these hosts, even though they belong to a domain in the
+  // domains_for_https list above.
+  optional string hosts_for_http = 15;
+}
+
+message TimeMachineOptionsProto {
+  // Url of timemachine database. If set and non-empty, there is a time machine
+  // server associated to this database.
+  optional string server_url = 1;
+
+  // If set to true, this database is a time machine server.
+  optional bool is_timemachine = 2;
+
+  // Number of milliseconds to wait since the last time change until we
+  // actually set the date used for time machine requests.
+  optional int32 dwell_time_ms = 3 [default = 500];
+
+  // The camera altitude (in meters) below which the client is allowed to
+  // expose timemachine dates to the user to inform her that interesting data
+  // exists.  The default value is 15 km.
+  optional int32 discoverability_altitude_meters = 4 [default = 15000];
+}
+
+message AutopiaOptionsProto {
+  // Url of the cityblock server from which to fetch the panorama
+  // metadata.
+  optional string metadata_server_url = 1 [default = "http://cbk0.google.com/cbk"];
+
+  // Url of the cityblock server from which to fetch the depthmaps
+  optional string depthmap_server_url = 2 [default = "http://cbk0.google.com/cbk"];
+
+  // Url of the coverage overlay KML. Not specifying this value will
+  // result in no coverage overlays being shown while dragging the
+  // pegman in autopia.
+  optional string coverage_overlay_url = 3 [default = ""];
+
+  // QPS throttle for Autopia imagery requests. If not set or 0.0f,
+  // limit is ignored and the client won't be throttled. We have a separate
+  // throttle for imagery requests as they are the most common type of requests.
+  //
+  // If we set an identical throttle value to imagery and metadata-depthmap,
+  // then requests can share the http connection. On the other hand they will
+  // use two different connections for different values. This enables us to
+  // throttle imagery without throttling metadata.
+  optional float max_imagery_qps = 4;
+
+  // QPS throttle for Autopia metadata and depthmap requests.
+  optional float max_metadata_depthmap_qps = 5;
+}
+
+// Settings that control the client's interaction with the CSI logging server.
+// Only useful for the main database.
+message CSIOptionsProto {
+  // The percentage of authenticated non-EC logins to send to CSI.
+  optional int32 sampling_percentage = 1;
+
+  // A string used to tag samples sent to CSI as part of an experiment.
+  // This string is passed as a CGI parameter of the URL and is expected
+  // to be URL-friendly.
+  optional string experiment_id = 2;
+}
+
+message SearchTabProto {
+  // If false, tab is hidden.
+  required bool is_visible = 1;
+
+  // Name printed on tab.
+  optional StringIdOrValueProto tab_label = 2;
+
+  // Base url for searches on this tab. This can contain a host, port, path
+  // and base query. Extra query parameter will be added to this URL to form
+  // the final URL.
+  optional string base_url = 3;
+
+  // Prefix added to viewport query
+  optional string viewport_prefix = 4;
+
+  // Describes a single input box - the label it should have and how its
+  // contents should be sent with the search query.
+  message InputBoxInfo {
+    // Label next to tag.
+    required StringIdOrValueProto label = 1;
+
+    // Query param (verb)
+    required string query_verb = 2;
+
+    // String prepended to input parameter
+    optional string query_prepend = 3;
+  }
+
+  // List of input boxes. Most clients support only two input boxes.
+  repeated InputBoxInfo input_box = 5;
+
+  // Requirement for showing search tab.
+  // This requirement is ignored for clients before 6.2 (i.e. it does not
+  // affect the search tab visibility for older clients).
+  // Version support: 6.2 +
+  optional RequirementProto requirement = 6;
+}
+
+// Defines position and size of custom logos that will be fetched and shown
+// by the client.
+message CobrandProto {
+  // Inner message that allows specifying a coordinate.
+  message Coord {
+    // Coordinate value. Interpretation depends on is_relative (absolute or
+    required double value = 1 [default = 0.0];
+    // If true, the coordinate is relative to the screen.
+    optional bool is_relative = 2 [default = false];
+  }
+
+  // URL of image to use as logo. Can be remote or local. However, using local
+  // URLs depends on the installation of the client and should be used
+  // carefully.
+  required string logo_url = 1;
+
+  // Controls x position of reference overlay point (see tie_point)
+  optional Coord x_coord = 2;
+
+  // Controls y position of reference overlay point (see tie_point)
+  optional Coord y_coord = 3;
+
+  enum TiePoint {
+    TOP_LEFT = 0;
+    TOP_CENTER = 1;
+    TOP_RIGHT = 2;
+    MID_LEFT = 3;
+    MID_CENTER = 4;
+    MID_RIGHT = 5;
+    BOTTOM_LEFT = 6;
+    BOTTOM_CENTER = 7;
+    BOTTOM_RIGHT = 8;
+  }
+
+  // Controls reference point in overlay.
+  optional TiePoint tie_point = 4 [default = BOTTOM_LEFT];
+
+  // If specified and strictly positive but <= 1.0, makes logo scalable with
+  // screen by forcing its width to occupy a fixed fraction of the screeen.
+  // For instance, a value of .25 makes the given logo occupy 25% of the screen.
+  optional double screen_size = 5 [default = 0.0];
+}
+
+// Describes a database the client can connect to when connected to this server.
+message DatabaseDescriptionProto {
+  // Human-readable name of database (such as "Primary Database" or "Digital
+  // Globe Database")
+  optional StringIdOrValueProto database_name = 1;
+
+  // URL of server. This can include a path and query, and must be a
+  // well-formed, absolute URL.
+  required string database_url = 2;
+}
+
+// Name/value pair that maps a script name to an alchemy script.
+message ConfigScriptProto {
+  // Name of the script that can be used in NestedFeatureProto (see
+  // client_config_script_name).
+  required string script_name = 1;
+
+  // Contents of the script. This must be a valid Alchemy script.
+  required string script_data = 2;
+}
+
+// Setting to control the swoop feature in Google Earth. We can use it to reduce
+// the amount of tilt generated by swooping and thefore reduce overall
+// traffic (tilted views cause more tiles to be downloaded than non-tilted
+// ones).
+message SwoopParamsProto {
+  // Controls how far from a target swooping should start.
+  optional double start_dist_in_meters = 1;
+}
+
+// Group of settings that can describe a BBS server where user can post their
+// data or report errors in our imagery or data.
+message PostingServerProto {
+  // Name that will be displayed in context menu to user. Must be translated.
+  optional StringIdOrValueProto name = 1;
+
+  // URL of the server including protocol, domain and port. Can be translated
+  // if we use different servers for different languages.
+  optional StringIdOrValueProto base_url = 2;
+
+  // Path on server where wizard can be found.
+  optional StringIdOrValueProto post_wizard_path = 3;
+
+  // Path on server where files can be submitted.
+  optional StringIdOrValueProto file_submit_path = 4;
+}
+
+// Describes a database for another planet or satellite (e.g. Mars, Moon)
+// accessible from this database (e.g. Earth).
+message PlanetaryDatabaseProto {
+  // Full URL of database that will be used as base URL to request data.
+  required StringIdOrValueProto url = 1;
+
+  // Translated name of database - will be displayed to the user.
+  required StringIdOrValueProto name = 2;
+}
+
+// Group of settings to configure logging server used by Google Earth clients
+// that connect to this database.
+message LogServerProto {
+  // Full url of logging server. Can be translated or specified as a string.
+  // The default value in Google Earth 5.1 is
+  // http://www.google.com/tbproxy/usagestats?sourceid=GoogleEarth
+  optional StringIdOrValueProto url = 1;
+
+  // Specifies if logging should be performed. By default logging is turned off.
+  optional bool enable = 2;
+
+  // Controls log throttling - a fraction of 1.0 / throttling_factor() sessions
+  // will be logged. A value of 1 means no throttling, while a value of 100
+  // causes only 1% of sessions to log data.
+  optional int32 throttling_factor = 3 [default = 1];
+}
+
+// The dbroot is used as a dumping ground for miscellaneous configuration
+// options sent to the client via the dbroot. These configuration options are
+// appended onto the end of the dbroot and defined here.
+// See http://wiki/Main/DbRootPostambleConfiguration for an explanation of the
+// various fields in this message.
+// The name "EndSnippet" comes from the location of this portion of information
+// in the legacy ETA dbroot - these fields were packaged as an ETA "snippet"
+// and inserted at the bottom of the dbroot packet.
+// Next available id: 70
+
+message EndSnippetProto {
+  // Options that describe planet shape.
+  optional PlanetModelProto model = 1;
+
+  // URL of authentication server for paying customers.
+  // e.g. "auth.keyhole.com". This can actually be a URL and contain a port,
+  // a path, and a protocol (such as https://server.company.com:8080/auth)
+  optional StringIdOrValueProto auth_server_url = 2;
+
+  // Flag that can be used by entreprise customers - indicates that this
+  // database does not require session cookie-based authentication. Entreprise
+  // databases are typically protected with LDAP over HTTP or HTTPS.  Be *very*
+  // careful to never set this to true for kh.google.com or any other database
+  // we control unless you know for a fact it's the right thing to do.
+  optional bool disable_authentication = 3;
+
+  // Deprecated in Earth 6.1 and higher in favor of search_config.
+  // For each known country, lists maps domains to use and associated enabled
+  // features. For instance, some countries might be launched without
+  // localsearch support.
+  repeated MfeDomainFeaturesProto mfe_domains = 4;
+
+  // Deprecated in Earth 6.1 and higher.
+  // Parameter(s) that should sent with each request to MFE.
+  // '[' or ']' does not seem to be valid in default values, it causes
+  // errors when compiling the code. 0x5B and 0xx5D are their respective
+  // hex ascii codes.
+  // Note: it is valid to specifiy multiple parameters, for instance:
+  // end_snippet->set_mfe_lang_param("hl=$[hl]&gl=$[gl]");
+  optional string mfe_lang_param = 5 [default = "hl=$\x5Bhl\x5D"];
+
+  // List of space-separated strings treated as glob patterns that describe
+  // which URLs should be treated as ads URLs and never be fetched by the
+  // client. The default value in the client is:
+  // "http://*doubleclick.net* http://*googlesyndication.com* "
+  // "http://*google.com/aclk* http://*googleadservices.com* */pagead/*"
+  optional string ads_url_patterns = 6;
+
+  // Reverse geocoder server URL
+  optional StringIdOrValueProto reverse_geocoder_url = 7;
+
+  // Reverse geocoder protocol version. Default is 3 which is the
+  // protocol supported by newer clients.
+  optional int32 reverse_geocoder_protocol_version = 8 [default = 3];
+
+  // Whether or not sky database is present
+  optional bool sky_database_is_available = 9 [default = true];
+
+  // Location of sky database URL.
+  // e.g. "http://khmdb.google.com?db=sky"
+  optional StringIdOrValueProto sky_database_url = 10;
+
+  // Default location of web page.
+  // e.g. "http://www.google.com/intl/%1/";
+  optional StringIdOrValueProto default_web_page_intl_url = 11;
+
+  // DEPRECATED as of version 7.0.
+  // Controls the number of start-up tip urls that the client will cycle
+  // through before repeating. This should be no greater than the number of
+  // startup tips available on the server.
+  optional int32 num_start_up_tips = 12 [default = 17];
+
+  // DEPRECATED as of version 7.0.
+  // Where to get startup tips from.
+  // e.g. "http://earth.google.com/intl/%1/tips/v43/"
+  optional StringIdOrValueProto start_up_tips_url = 13;
+
+  // DEPRECATED as of version 7.0.
+  // Same settings for Pro/EC - Pro and EC clients will read these settings.
+  optional int32 num_pro_start_up_tips = 51;
+
+  // DEPRECATED as of version 7.0.
+  optional StringIdOrValueProto pro_start_up_tips_url = 52;
+
+  // URL from which to load startup tips in Earth 7.0 and higher.  This will be
+  // the same URL for Free and Pro, since that logic is now dealt with on the
+  // server side.
+  // e.g. "http://support.google.com/earth/?p=startup_tip_1"
+  optional StringIdOrValueProto startup_tips_intl_url = 64;
+
+  // Url to user guide.
+  // e.g. "http://earth.google.com/intl/%1/userguide/v4/"
+  optional StringIdOrValueProto user_guide_intl_url = 14;
+
+  // Url to support center.
+  // e.g. "http://earth.google.com/support/?hl=%1"
+  optional StringIdOrValueProto support_center_intl_url = 15;
+
+  // Url to business listings.
+  // e.g. "http://www.google.com/local/add/login?hl=%3&gl=%2"
+  optional StringIdOrValueProto business_listing_intl_url = 16;
+
+  // Url to support answer.
+  // e.g. "http://earth.google.com/support/bin/answer.py?answer=%4&hl=%1"
+  optional StringIdOrValueProto support_answer_intl_url = 17;
+
+  // Url to support topics used by certain diagnostic messages.
+  // e.g. "http://earth.google.com/support/bin/topic.py?topic=%4&hl=%1"
+  optional StringIdOrValueProto support_topic_intl_url = 18;
+
+  // Url to support pages.
+  // e.g. "http://earth.google.com/support/bin/request.py?hl=%1"
+  optional StringIdOrValueProto support_request_intl_url = 19;
+
+  // Location of international page for earth.
+  // e.g. "http://earth.google.com/intl/$[hl]/"
+  optional StringIdOrValueProto earth_intl_url = 20;
+
+  // Location of server that accepts uploads from Google Earth.
+  // e.g. "http://earth.google.com/ig/directory?pid=earth&synd=earth&" +
+  //      "hl=$[hl]&gl=%2"
+  optional StringIdOrValueProto add_content_url = 21;
+
+  // DEPRECATED. There is no longer support for this field. http://b/1605305
+  // URL to show when SketchUp is not installed.
+  // e.g. "http://sketchup.google.com/intl/$[hl]/modeling.html"
+  optional StringIdOrValueProto sketchup_not_installed_url = 22;
+
+  // DEPRECATED. There is no longer support for this field. http://b/1605305
+  // URL to show when a SketchUp error occurs.
+  // e.g. "http://sketchup.google.com/intl/$[hl]/gemodelerror.html"
+  optional StringIdOrValueProto sketchup_error_url = 23;
+
+  // URL for the terms of service for the free client.
+  // sample value: http://earth.google.com/intl/$[hl]
+  optional StringIdOrValueProto free_license_url = 24;
+
+  // URL for the license agreement for Google Earth Pro.
+  // sample value: http://earth.google.com/intl/$[hl]
+  optional StringIdOrValueProto pro_license_url = 25;
+
+  // URL for tutorial page.
+  // If not specified, this URL is built from user_guide_intl_url as
+  // user_guide_intl_url + "tutorials/index.html".
+  optional StringIdOrValueProto tutorial_url = 48;
+
+  // URL for keyboard shortcuts page.
+  // If not specified, this URL is built from user_guide_intl_url as
+  // user_guide_intl_url + "ug_keyboard.html".
+  optional StringIdOrValueProto keyboard_shortcuts_url = 49;
+
+  // URL for release notes page.
+  // If not specified, this URL is built from support_answer_intl_url,
+  // replacing answer argument with 40901 and appending the application version
+  // as a fragment:
+  // http://earth.google.com/support/bin/answer.py?answer=40901&hl=en#5.1.3533
+  optional StringIdOrValueProto release_notes_url = 50;
+
+  // If true, hides user license key in about dialog. Useful for Pro only,
+  // allows information to not be visible for shared license keys.
+  optional bool hide_user_data = 26 [default = false];
+
+  // If true, hides the Google logo. This setting is only honored by entreprise
+  // clients.
+  optional bool use_ge_logo = 27 [default = true];
+
+  // URL to description of diorama layers.
+  // e.g. "http://mw2.google.com/mw-buglight/diorama/descriptions/en/"
+  optional StringIdOrValueProto diorama_description_url_base = 28;
+
+  // Color for diorama buildings that do not specify any color. Used for
+  // gray (non-photorealistic) buildings.
+  optional uint32 diorama_default_color = 29 [default = 0xffc7c2c7];
+
+  // URL used to fetch Diorama blacklist (ID's of buildings to hide).
+  optional StringIdOrValueProto diorama_blacklist_url = 53;
+
+  // Client-side features that should be altered for this database.
+  optional ClientOptionsProto client_options = 30;
+
+  // Network-related options such as throttle and batched requests
+  // configuration.
+  optional FetchingOptionsProto fetching_options = 31;
+
+  // Time-machine related settings
+  optional TimeMachineOptionsProto time_machine_options = 32;
+
+  // CSI options for this database.
+  optional CSIOptionsProto csi_options = 33;
+
+  // List of customized search tabs. If list is empty, use default search tabs.
+  repeated SearchTabProto search_tab = 34;
+
+  // List of extra logos to draw on screen.
+  repeated CobrandProto cobrand_info = 35;
+
+  // List of valid databases a client can connect to from this server.
+  repeated DatabaseDescriptionProto valid_database = 36;
+
+  // List of client configuration scripts
+  repeated ConfigScriptProto config_script = 37;
+
+  // Url of deauthentication server (for paying customers only)
+  optional StringIdOrValueProto deauth_server_url = 38;
+
+  // Swoop parameters - if specified, will affect the amount of swoop when
+  // zooming in and out.
+  optional SwoopParamsProto swoop_parameters = 39;
+
+  // BBS server parameters. If not specified, default values in the client
+  // will be used.
+  optional PostingServerProto bbs_server_info = 40;
+
+  // Data error server parameters. If not specified, default values in the
+  // client will be used.
+  optional PostingServerProto data_error_server_info = 41;
+
+  // List of other databases accessible from this database.
+  repeated PlanetaryDatabaseProto planetary_database = 42;
+
+  // Log server configuration
+  optional LogServerProto log_server = 43;
+
+  optional AutopiaOptionsProto autopia_options = 44;
+
+  // Search server configuration for Earth 6.1 and higher.  This obsoletes
+  // search_info and the SearchInfoProto message, and also obsoletes search_tab
+  // and SearchTabProto.
+  message SearchConfigProto {
+    // Represents a search server that returns XML or KML search results.
+    // There can be any number of these.
+    message SearchServer {
+      // The name of the search service.  This will be shown to the user if
+      // (and only if) there is more than one primary_search_server defined.
+      // To avoid bloating the UI, it should be as short as possible.
+      optional StringIdOrValueProto name = 1;
+
+      // The server URL, including protocol, port, and path.
+      // This URL must be fully encoded and use only ASCII characters.
+      // The query parameters will be added automatically, and should not be
+      // specified here.  You can use $[hl] and friends here if necessary, but
+      // the hl and gl parameters will be appended to the query anyway.
+      // Example: http://maps.google.com/local
+      optional StringIdOrValueProto url = 2;
+
+      // Result format type for search results.
+      enum ResultType {
+        // The results are pure KML, which should be rendered in the Earth 3D
+        // view directly. The search results listing should be generated from
+        // the KML in whatever way is most appropriate.
+        RESULT_TYPE_KML = 0;
+
+        // The results are an XML document which can be piped through XSLT style
+        // sheets to generate KML for display in the Earth 3D view and HTML for
+        // display in the search results listing.
+        RESULT_TYPE_XML = 1;
+      }
+
+      // The format in which this server will return results.
+      optional ResultType type = 3 [default = RESULT_TYPE_KML];
+
+      // If type is RESULT_TYPE_XML, the XML document received from the server
+      // will be fed through the XSLT stylesheet at this (fully encoded,
+      // ASCII-only) URL to generate the HTML that will be shown in the search
+      // results view.  (If type is RESULT_TYPE_KML, the HTML will be generated
+      // using JavaScript.) You can use $[hl] and friends here if necessary.
+      optional StringIdOrValueProto html_transform_url = 4;
+
+      // If type is RESULT_TYPE_XML, the XML document received from the server
+      // will be fed through the XSLT stylesheet at this (fully-encoded,
+      // ASCII-only) URL to generate the KML that will be shown in the 3D view.
+      // (If type is RESULT_TYPE_KML, the KML returned from the server will, of
+      // course, be used directly.) You can use $[hl] and friends here if
+      // necessary.
+      optional StringIdOrValueProto kml_transform_url = 5;
+
+      // Information about the supplemental UI, which shows an HTML page that
+      // can be used for rich search entry UI.
+      message SupplementalUi {
+        // If specified, a button will appear below the search field that, when
+        // clicked, will load this URL in the search panel.  The page can
+        // perform search requests through a JavaScript API.  If omitted, the
+        // button will not be shown. You can use $[hl] and friends here if
+        // necessary.
+        optional StringIdOrValueProto url = 1;
+
+        // If specified, the label for the supplemental UI.
+        optional StringIdOrValueProto label = 2;
+
+        // The height, in pixels, that will be allocated in the search panel for
+        // the supplemental UI.  This includes the height of the search panel
+        // itself.
+        optional int32 height = 3 [default = 160];
+      }
+
+      // If specified, info about the supplemental UI.  If omitted, no
+      // supplemental UI button will be shown.
+      optional SupplementalUi supplemental_ui = 6;
+
+      // If specified, one or more suggested searches for this server.  Could
+      // be something like "pizza near nyc" or "epsilon eridani".  When the
+      // search UI is shown in the client, one of these suggestions will be
+      // randomly selected and shown beneath the search field.
+      repeated StringIdOrValueProto suggestion = 9;
+
+      // Searchlet configuration.
+      message SearchletProto {
+        // The URL of the searchlet service, including protocol, port, and path.
+        // This URL must be fully encoded and use only ASCII characters.
+        // The query parameters will be added automatically, and should not be
+        // specified here. You can, however, use $[hl] and friends here in the
+        // URL path if necessary.
+        optional StringIdOrValueProto url = 1;
+
+        // The name of this searchlet, which will be shown in its results.
+        optional StringIdOrValueProto name = 2;
+
+        // optional requirements - searchlet will only be used if requirements
+        // are met. This can be used to selectively exclude a searchlet based on
+        // client capabilities. See definition of RequirementProto for more
+        // details.
+        optional RequirementProto requirements = 3;
+      }
+
+      // List of searchlets that should be queried. Only searchlets that match
+      // the version number of the client will be queried, and only those that
+      // return non-empty results will be displayed.
+      repeated SearchletProto searchlet = 7;
+
+      // Optional requirements. The server will only be loaded if requirements
+      // are met. This can be used to selectively exclude a server based on
+      // client capabilities. See definition of RequirementProto for more
+      // details.
+      optional RequirementProto requirements = 8;
+
+      // The URL of a server, conforming to the Maps Suggest HTTP API, that
+      // should be used to provide search suggestions for queries to this
+      // server. If not provided, suggestions will be derived from local history
+      // only.
+      optional StringIdOrValueProto suggest_server = 10;
+    }
+
+    // One or more search servers.  In the consumer Google Earth client, there
+    // is only one of these in the KH database, and it's Google Maps.
+    // Enterprise customers can add extra servers to have them appear in a
+    // tab-like UI above the search field.  For the time being, we will also
+    // convert legacy SearchTabProtos into SearchServers as best we can.
+    repeated SearchServer search_server = 1;
+
+    // Configuration for the onebox service.
+    message OneboxServiceProto {
+      // The URL of the onebox service, including protocol, port, and path.
+      // This URL must be fully encoded and use only ASCII characters.  It can
+      // use $[hl] and friends here if necessary.
+      optional StringIdOrValueProto service_url = 1;
+
+      // optional requirements - onebox service will only be used if
+      // requirements are met. This can be used to selectively choose a onebox
+      // service based on client capabilities. See definition of
+      // RequirementProto for more details.
+      optional RequirementProto requirements = 2;
+    }
+
+    // List of onebox services. This field is repeated to support requirements.
+    // The client will select the first onebox service whose requirements allow
+    // it to connect. All others will be ignored.
+    repeated OneboxServiceProto onebox_service = 2;
+
+    // URL of a page that will be shown when a KML search is performed.  This
+    // page should have JavaScript that reads the KML from the environment and
+    // renders it as HTML, and also performs onebox and searchlet searches if
+    // applicable.  The URL should be fully encoded, and can use $[hl] and
+    // friends if necessary.
+    optional StringIdOrValueProto kml_search_url = 3;
+
+    // URL of a page that will be shown when KML is rendered in the search
+    // panel.  This page should have JavaScript that reads the KML from the
+    // environment and renders it as HTML, but should NOT perform onebox or
+    // searchlet searches.  The URL should be fully encoded, and can use $[hl]
+    // and friends if necessary.
+    optional StringIdOrValueProto kml_render_url = 4;
+
+    // URL of a page that will be shown when the search history is requested.
+    // This page should have JavaScript that reads the search history from
+    // the client and renders it as HTML.  The URL should be fully encoded,
+    // and can use $[hl] and friends if necessary.
+    optional StringIdOrValueProto search_history_url = 6;
+
+    // URL of a page that will be displayed if a network error or other local
+    // error occurs while performing a search.  This might be an error for a
+    // local geocode while in offline mode, a connection error while trying to
+    // connect to MFE, or some other error where we can't get an error message
+    // from the server.  (Obviously this page should be cached locally, or it's
+    // not terribly useful.)  The URL should be fully encoded, and can use $[hl]
+    // and friends if necessary.
+    optional StringIdOrValueProto error_page_url = 5;
+  }
+
+  optional SearchConfigProto search_config = 54;
+
+  // Search server configuration.  Deprecated and unused since Earth 6.1.
+  message SearchInfoProto {
+    // Default search server (MFE) URL.
+    // Note that this can be reconfigured on a per-country basis with
+    // MfeDomainFeaturesProto.
+    optional string default_url = 1 [default = "http://maps.google.com/maps"];
+    // Query parameter to use for queries on maps server.
+    optional string geocode_param = 2 [default = "q"];
+  }
+  optional SearchInfoProto search_info = 45;
+
+  // Terrain elevation service URL. If empty, service will be unavailable.
+  // This should be set to empty for EC clients to disable connection to google
+  // services.
+  optional string elevation_service_base_url = 46 [default = "http://maps.google.com/maps/api/elevation/"];
+
+  // Length of time in ms to wait before sending query to elevation server.
+  // Can be used to throttle server requests.
+  optional int32 elevation_profile_query_delay = 47 [default = 500];
+
+  // URL of webpage to go to buy Earth Pro License
+  optional StringIdOrValueProto pro_upgrade_url = 55;
+
+  // URL of webpage to go for Earth Community
+  optional StringIdOrValueProto earth_community_url = 56;
+
+  // URL for Google Maps, for features like "View in Maps". As we no
+  // longer assume that search is only MFE, we need an extra URL
+  // parameter to tell us where to send users who want to view the
+  // current location in Maps. This should be set to empty for EC
+  // clients to disable connection to google services. If nothing is
+  // specified, the client uses "http://maps.google.com/".
+  optional StringIdOrValueProto google_maps_url = 57;
+
+  // URL for Sharing in Google+.
+  // e.g. "http://www.gstatic.com/earth/sharing/static/$[hl]/index.html"
+  // If empty, sharing will be unavailable. Introduced in 6.2.
+  optional StringIdOrValueProto sharing_url = 58;
+
+  // URL for the privacy policy. Use Google-wide policy, as we don't have
+  // a specific Earth privacy policy.
+  // sample value: http://www.google.com/intl/$[hl]/privacy/
+  optional StringIdOrValueProto privacy_policy_url = 59;
+
+  // If true, the client will check to see if a logged-in user has signed up
+  // for Google+ and grey out the menu item if not.  The standalone
+  // sharebox should eventually handle this for us, at which point this should
+  // be turned off forever.
+  optional bool do_gplus_user_check = 60 [default = false];
+
+  // Data for the client to connect to a server for RockTree (EOS3D) data.
+  message RockTreeDataProto {
+    optional StringIdOrValueProto url = 1;
+  }
+
+  optional RockTreeDataProto rocktree_data_proto = 61;
+  // Configuration for the filmstrip view.
+
+  message FilmstripConfigProto {
+    // Client requirements for using the templates listed below.
+    optional RequirementProto requirements = 1;
+
+    // Template for the alleycat server URL that should be queried for the
+    // filmstrip items at a given viewport.
+    //
+    // Template can be different depending on the user agent or client version.
+    // For example, Linux -7.0 can use default config with only Earth Tours,
+    // and Android 7.2- can use new URL with panoramas. Add new FilmstripConfig
+    // message to the snippet along with user agent / version requirement to
+    // use non-default URL.
+    //
+    // Android example: go/filmstripdbrootconfig
+    //
+    // Server API: go/getbestview
+    //
+    // For this template, the following properties apply:
+    //   - The URL *must* be absolute.
+    //   - $[max] will be replaced with the maximum number of results (specified
+    //         by the client implementation).
+    //   - $[focus] will be replaced with the current focus point as a comma-
+    //         separated lat-lon pair.
+    //   - $[polygon] will be replaced with a comma-separated list of
+    //         comma-separated lat-lon pairs representing the viewport.
+    //
+    // Examples:
+    //     Current API:
+    //     http://cbk0.google.com/cbk?output=polygon&it=8:$[max]
+    //         &polygon=$[polygon]&ll=$[focus]&rank=closest
+    //
+    //     Proposed example future API:
+    //      1. 40% of Earth Tours, 40% of UGC Panos, 20% of Art Project
+    //      http://cbk1.google.com/cbk?output=polygon&cb_client=earth
+    //        &it=8:$[max:0.4],11:$[max:0.4],4:$[max:0.2]&polygon=$[polygon]
+    //        &ll=$[focus]&rank=centered
+    //
+    //      2. Best $[max] items in view of either Earth Tour or UGC Pano type
+    //         (types are crossranked, number of each type is variable).
+    //      http://cbk1.google.com/cbk?output=polygon&cb_client=earth
+    //        &it=8:1,11:1&polygon=$[polygon]
+    //        &ll=$[focus]&rank=centered&rs=$[max]
+    optional StringIdOrValueProto alleycat_url_template = 2;
+
+    // Secondary alleycat server URL template.  This will be used during
+    // viewport fallback.
+    // For this template, the following properties apply:
+    //   - The URL *must* be absolute.
+    //   - $[max] will be replaced with the maximum number of results (specified
+    //         by the client implementation).
+    //   - $[focus] will be replaced with the current focus point as a comma-
+    //         separated lat-lon pair.
+    //
+    // Examples:
+    //     Current API:
+    //     http://cbk0.google.com/cbk?output=polygon&it=8:$[max]
+    //         &radius=120000&rank=closest
+    //
+    //     Proposed future API:
+    //     http://cbk0.google.com/cbk?output=polygon&it=8:5,14:100&mix=1
+    //         &max=$[max]&radius=120000&rank=closest
+    optional StringIdOrValueProto fallback_alleycat_url_template = 9;
+
+    // For all the templates below, the following properties apply:
+    //   - URLs *must* be absolute.
+    //   - $[id] will be replaced with the ID string of the filmstrip item.
+    //   - $[hl] will be replaced by the currently active language code.
+
+    // Template for the URL at which the metadata for a given ID can be found.
+    // Ex: http://mw1.google.com/mw-earth-vectordb/tourguide/json/$[id].json
+    // DEPRECATED. Used by clients that get config from default dbroot snippet.
+    // See AlleycatImageryTypeProto imagery_types below for recommended format.
+    optional StringIdOrValueProto metadata_url_template = 3;
+
+    // Template for the URL at which the thumbnail for a given ID can be found.
+    // Ex: http://mw1.google.com/mw-earth-vectordb/tourguide/thumbnails/$[id].jpg
+    // DEPRECATED. Used by clients that get config from default dbroot snippet.
+    // See AlleycatImageryTypeProto imagery_types below for recommended format.
+    optional StringIdOrValueProto thumbnail_url_template = 4;
+
+    // Template for the URL at which the KML for a given ID can be found.
+    // Ex: http://mw1.google.com/mw-earth-vectordb/tourguide/tours/$[id]_$[hl].kml
+    // DEPRECATED. Used by clients that get config from default dbroot snippet.
+    // See AlleycatImageryTypeProto imagery_types below for recommended format.
+    optional StringIdOrValueProto kml_url_template = 5;
+
+    // URL at which the featured tours JSON file can be found.
+    // Ex: http://mw1.google.com/mw-earth-vectordb/tourguide/featured.json
+    // Note: Since this is not a template, $[id] will not be replaced by
+    // anything, but $[hl] will still be resolved as above.
+    optional StringIdOrValueProto featured_tours_url = 6;
+
+    // Whether to perform client-side viewport fallback.
+    optional bool enable_viewport_fallback = 7;
+
+    // DEPRECATED. Unused. Specify fallback_alleycat_url_template instead.
+    optional uint32 viewport_fallback_distance = 8;
+
+    // Each alleycat imagery type supported by Earth filmstrip needs to be
+    // described. Some imagery types might have one or more empty URL
+    // templates, meaning no additional request needs to be made to handle
+    // image of that type.
+    //
+    // Example use: go/filmstripdbrootconfig
+    message AlleycatImageryTypeProto {
+      // Alleycat Imagery type id. E.g. 8 for Earth Tour.
+      // Reference: go/bestview/imagery-types
+      optional int32 imagery_type_id = 1;
+
+      // Imagery Type label. E.g. "Earth Tour". Untranslated - don't show to
+      // user. Currently only used for developers' information.
+      optional string imagery_type_label = 2;
+
+      // URL template for fetching additional metadata. "" if not needed.
+      optional StringIdOrValueProto metadata_url_template = 3;
+
+      // URL template for fetching thumbnail. "" if not needed.
+      optional StringIdOrValueProto thumbnail_url_template = 4;
+
+      // URL template for fetching KML. "" if not needed
+      // (e.g. if KML is generated on client side).
+      optional StringIdOrValueProto kml_url_template = 5;
+    }
+
+    // See comments and example above.
+    repeated AlleycatImageryTypeProto imagery_type = 10;
+  }
+
+  // List of filmstrip configs.  All client versions that support the filmstrip
+  // must have a filmstrip config that applies to them.  If more than one
+  // filmstrip config has satisfied requirements, the first one encountered will
+  // be used and the rest will be ignored.
+  repeated FilmstripConfigProto filmstrip_config = 62;
+
+  // If true, shows the signin button in the upper right corner.
+  optional bool show_signin_button = 63;
+
+  // The URL for the Google Earth Pro upsell web view in the Measure dialog.
+  // (Only relevant for free clients.)
+  optional StringIdOrValueProto pro_measure_upsell_url = 65;
+
+  // The URL for the Google Earth Pro upsell in the Print dialog.
+  // (Only relevant for free clients.)
+  optional StringIdOrValueProto pro_print_upsell_url = 66;
+
+  // Data for the client to connect to a server for star data.
+  message StarDataProto {
+    optional StringIdOrValueProto url = 1;
+  }
+
+  optional StarDataProto star_data_proto = 67;
+
+  // The URL for the gFeedback dialog.  If not specified, the feedback feature
+  // will be disabled.
+  optional StringIdOrValueProto feedback_url = 68;
+
+  // The URL the client should use to perform an OAuth2 login.
+  optional StringIdOrValueProto oauth2_login_url = 69;
+}
+
+// Message that references another portion of dbroot that should be fetched
+// and merged with this dbroot. This is the main feature of DbRootProto which
+// allows DbRoot to be split into multiple, hierarchical dbroots that the client
+// will fetch and merge together.
+message DbRootRefProto {
+  // Location of other dbroot. URL can be relative (to this document) or
+  // absolute. URL must be resolved by client. Do not forget that the client
+  // fetching dbroot objects *always* appends query parameters identifying its
+  // language and platform.
+  required string url = 2;
+
+  // Flag that tells whether or not this object must be downloaded
+  // before showing the planet. By default only the first object is
+  // critical (the client cannot show the planet before knowing what the
+  // database contains).
+  // Note: non-critical objects cannot reference critical objects (these will
+  // not be counted as "critical", because the client has no way to know that a
+  // non-critical object that it contains any critical object before fetching
+  // and parsing it.
+  optional bool is_critical = 1 [default = false];
+
+  // optional requirements - object will only be downloaded if requirements
+  // are met. This can be used to selectively exclude an object based on client
+  // capabilities. See definition of RequirementProto for more details.
+  optional RequirementProto requirements = 3;
+}
+
+message DatabaseVersionProto {
+  // Number that indicates the "version" of the quad-tree - used to be
+  // 'qtDataVersion' in the flatfile protocol (in the preamble of dbroot), and
+  // is also known as "epoch".
+  required uint32 quadtree_version = 1;
+}
+
+// The central part of DbRoot, which aggregates information about the database.
+// Next id: 17
+message DbRootProto {
+  // Name of the database that should appear as layer name in the layers panel.
+  optional StringIdOrValueProto database_name = 15;
+
+  // Describes whether this database contains imagery.
+  optional bool imagery_present = 1 [default = true];
+
+  // True if the imagery packets are going to be served as protocol buffers.
+  optional bool proto_imagery = 14 [default = false];
+
+  // Describes whether this database contains terrain.
+  optional bool terrain_present = 2 [default = false];
+
+  // Stores information about the data provider and copyright information.
+  repeated ProviderInfoProto provider_info = 3;
+
+  // List of "layers" that are available in database.
+  repeated NestedFeatureProto nested_feature = 4;
+
+  // List of styles referenced by style maps.
+  repeated StyleAttributeProto style_attribute = 5;
+
+  // List of style maps used by layers.
+  repeated StyleMapProto style_map = 6;
+
+  // Miscellaneous configuration options for database.
+  optional EndSnippetProto end_snippet = 7;
+
+  // List of id/string value pairs - this constitutes the translation table for
+  // all messages used in dbroot.
+  repeated StringEntryProto translation_entry = 8;
+
+  // The language associated with this DbRoot.  This is a language
+  // code compatible with the Google III language API, meaning that it
+  // should be treated as an opaque identifier that can denote
+  // language, script, country, and a bunch of other stuff.
+  optional string language = 9 [default = "en"];
+
+  // The dbroots use a versioning system. Newer clients will look for
+  // version 6. If they don't find it they will request version 5 and so on.
+  // Currently the only dbroot version supported is v5.
+  optional int32 version = 10 [default = 5];
+
+  // List of objects that should be downloaded to make this dbroot complete.
+  // For instance, the translation table for all string IDs used in this dbroot
+  // might be located in another dbroot object. It is a good idea to group
+  // together information that does not change across languages or platforms and
+  // build different dbroots per platform or language that clients will request
+  // depending on their configuration.
+  repeated DbRootRefProto dbroot_reference = 11;
+
+  // This should be set in main part to let the client know the current quadtree
+  // version number. However, it's legal to build dbroot parts without this
+  // message - the epoch of the database is typically known late in the
+  // production pipeline.
+  optional DatabaseVersionProto database_version = 13;
+
+  // Indicates how often this should be refreshed from server. Value is
+  // interpreted in seconds. 0 turns off refreshing.
+  // Supported as of Earth 7.1 for side databases only.
+  optional int32 refresh_timeout = 16;
+}
+
+// Message that contains an encrypted and compressed version of dbroot.
+message EncryptedDbRootProto {
+  // List of all known encryption types for the encrypted buffer.
+  enum EncryptionType {
+    ENCRYPTION_XOR = 0;  // Modified XOR algorithm (used in flatfile protocol).
+  };
+
+  optional EncryptionType encryption_type = 1;
+
+  // Depending on encryption type, this can contain information on the key.
+  optional bytes encryption_data = 2;
+
+  // Compressed and encrypted bytes of dbroot data. Once decompressed and
+  // decrypted, the bytes can be parsed as a DbRootProto message.
+  optional bytes dbroot_data = 3;
+}

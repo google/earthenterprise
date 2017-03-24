@@ -1,0 +1,20 @@
+--- geos-3.1.1.orig/source/geomgraph/index/SegmentIntersector.cpp	2009-04-08 18:00:16.000000000 +0200
++++ geos-3.1.1/source/geomgraph/index/SegmentIntersector.cpp	2009-09-29 15:46:49.012412357 +0200
+@@ -16,6 +16,7 @@
+ 
+ 
+ #include <vector>
++#include <stdlib.h>
+ 
+ #include <geos/geomgraph/index/SegmentIntersector.h>
+ #include <geos/geomgraph/Edge.h>
+--- geos-3.1.1.orig/tests/xmltester/XMLTester.cpp	2009-04-08 18:00:36.000000000 +0200
++++ geos-3.1.1/tests/xmltester/XMLTester.cpp	2009-09-29 15:46:23.718105044 +0200
+@@ -57,6 +57,7 @@
+ #include <functional>
+ #include <stdexcept>
+ #include <cmath>
++#include <algorithm>
+ 
+ #ifdef _MSC_VER
+ #include <windows.h

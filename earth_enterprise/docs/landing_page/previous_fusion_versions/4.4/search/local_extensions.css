@@ -1,0 +1,46 @@
+
+
+/* ----  do not change  ---- */
+table, td, h2 {
+	background-color: #fff;
+	}
+/* ------------------------- */
+	
+/*  ---- COLORS ----
+
+--RED--
+	background-color: #efefef;
+	border-color: #aa0033;
+
+--YELLOW--
+	background-color: #fff4c2; 
+	border-color: #ffcc33;  
+
+--GREEN--
+	background-color: #ddf8cc;
+	border-color: #008000;
+
+--BLUE--
+	background-color: #e5ecf9;
+	border-color: #224499;
+	
+	
+ ---- END COLORS ---- */
+ 
+
+/* ---- PAGE ID TAGS ---- */
+
+#index #index_link,
+#template_elements #template_elements_link,
+#template_faq #template_faq_link,
+#ezt_intro #ezt_intro_link,
+#ezt_template_guide #ezt_template_guide_link, 
+#ezt_faq #ezt_faq_link,
+#template_doc #template_doc_link,
+#template_refs #template_refs_link{
+
+/* ----  do not change  ---- */
+	color:#000;
+	text-decoration:none;
+	}
+/* ------------------------ */

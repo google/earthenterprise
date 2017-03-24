@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/articles/mvcfun/twittersearch.html";
+    </script>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Twitter Location Search</title>
+
+    <link href="style.css" type="text/css" rel="stylesheet">
+
+    <script type="text/javascript" src="http://www.google.com/jsapi?autoload={'modules':[{name:'maps',version:3,other_params:'sensor=false'},{'name':'jquery','version':'1.4.2'}]}"></script>
+    <script type="text/javascript" src="distancewidget.js"></script>
+    <script type="text/javascript" src="twitter.js"></script>
+  </head>
+  <body>
+    <div id="search">
+      <form action="twittersearch.html" method="" id="s">
+        <div>
+          <label>Search twitter for</label>
+          <input type="search" value="#google" id="q"/>
+          <label>within <span id="dist"></span> km
+          <span id="of"></span></label>
+          <input type="submit" value="Search!" id="btn"/>
+        </div>
+      </form>
+    </div>
+
+    <div id="cols">
+      <div id="map-wrapper">
+        <div id="map"></div>
+      </div>
+
+      <div id="results-wrapper">
+        <a href="#" id="close">x</a>
+        <div id="results"></div>
+      </div>
+    </div>
+  </body>
+</html>

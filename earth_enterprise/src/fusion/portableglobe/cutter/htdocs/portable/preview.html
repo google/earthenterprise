@@ -1,0 +1,199 @@
+<!--
+  Copyright 2017 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+
+<title>GEE Server Viewer</title>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<link rel="apple-touch-icon-precomposed" href="/shared_assets/images/apple_icon.png"/>
+<link rel="apple-touch-startup-image" href="/shared_assets/images/apple_start.png"/>
+
+<script type="text/javascript">
+
+  // Define base url.
+  var GEE_HOST = window.location.host;
+  var GEE_BASE_URL = window.location.protocol + '//' + GEE_HOST;
+</script>
+
+  <script src="/js/jquery.js" type="text/javascript"></script>
+  <script src="/js/gees_utilities.js" type="text/javascript"></script>
+  <script src="/js/togeojson.js"></script>
+
+  <script src="/maps/api/bootstrap.js"></script>
+  <script src="/maps/api/fusion_extended_map.js"></script>
+  <script src="/maps/api/earth_plugin_loader.js"></script>
+  <script src="/shared_assets/polygon_tools.js"></script>
+  <script src="/shared_assets/serving_layer_tools.js"></script>
+  <script src="/shared_assets/serving_search_tools.js"></script>
+
+  <LINK href="/shared_assets/shared.css" rel="stylesheet" type="text/css">
+  <LINK rel="icon" type="image/png" href="/shared_assets/images/google_favicon.ico">
+
+  <script type="text/javascript">
+
+// Small preview utility for Published portables and databases.
+var geeServerDefs = gees.requests.getServerDefs(window.location.href);
+var isServing;
+
+// Decide whether to load Maps or Earth plugin.
+function init() {
+  if (gees.tools.dbIsServing2d(geeServerDefs)) {
+    isServing = '2D';
+    loadMapDiv();
+    gees.dom.hide('earth');
+  } else {
+    isServing = '3D';
+    initEarth();
+    gees.dom.hide('map');
+  }
+}
+
+// Create and load a Map.
+function loadMapDiv() {
+  gees.dom.hide('earth');
+  // Define map.
+  var map_opts = {
+      zoom: 3,
+      center: new google.maps.LatLng(44, 0),
+      mapTypeControl: false,
+      panControl: false,
+      zoomControl: false,
+      scaleControl: true,
+      streetViewControl: false
+  };
+  // Create map.
+  geeMap = geeCreateFusionMap('map', geeServerDefs, map_opts);
+  populateServerName();
+  getMapLayers();
+  initSearch();
+  checkIfMobile();
+ }
+
+function initEarth() {
+  gees.dom.hide('map');
+  gees.dom.hide('ZmControls');
+  earthArgs = {database: window.location.href};
+  google.earth.createInstance(
+      'earth', initCB, failureCB, earthArgs);
+}
+
+// Earth Callback function.  Sets controls for Earth.
+function initCB(earth) {
+  ge = earth;
+  ge.getWindow().setVisibility(true);
+
+  // Check out the Google Earth Plugin API Reference Guide for
+  // many other navigation control settings & options.
+  // https://developers.google.com/earth/
+  ge.getNavigationControl().setVisibility(ge.VISIBILITY_AUTO);
+  getEarthLayers();
+  initSearch();
+}
+
+function failureCB(earth) {
+  alert('ALERT! The Google Earth Plugin failed to load!');
+}
+
+function populateServerName() {
+  gees.dom.clearHtml('LayerDiv');
+  var targetPath = geeServerDefs.serverTargetPath;
+  var div = gees.dom.get('LayerDiv');
+  gees.dom.setHtml(div, '<span><h2>Viewing: ' + targetPath + '</h2></span>');
+  // Create a button for options.
+  div.innerHTML += '<div id="PreviewOptionsButton"' +
+      ' onclick="togglePreviewOptions()"></div>' +
+      '<div id="PreviewOptions" style="display:none;">' +
+      '<em onclick="toggleOverlayElements()">Toggle overlays' +
+      ' (alt-shift-h)</em></div>';
+}
+
+//Zooming effects (2D Only)
+function ZoomTheMap(action) {
+  var CurZm = geeMap.zoom;
+  if ((action == 'out') && (CurZm > 1)) {
+    if (CurZm == null || CurZm == undefined) {
+      CurZm = 1;
+    }
+    var NewZm = CurZm - 1;
+    geeMap.setZoom(NewZm);
+  }
+  if ((action == 'in') && (CurZm < 19)) {
+    if (CurZm == null || CurZm == undefined) {
+      CurZm = 19;
+    }
+    NewZm = CurZm + 1;
+    geeMap.setZoom(NewZm);
+  }
+}
+
+  </script>
+
+</head>
+<body onload="init()">
+
+<div id="Header">
+  <div id="GoogImg">
+   <img src="/shared_assets/images/GEE_Server_Header.png" width="103px" height="36px" border="0">
+   <label>Earth Enterprise Server</label>
+  </div>
+  <iframe class="IframeHeader" id="IframeHeader" frameborder="0" scrolling="no" style="display: none;">
+    <html><head></head><body></body></html>
+  </iframe>
+</div>
+
+<div id="map"></div>
+<div id="earth"></div>
+
+<div id="LayersHolder">
+  <div id="LayerDiv"></div>
+  <div id="SearchDiv"></div>
+  <div id="SearchResults">
+    <span>Search results
+      <img onclick="toggleResultsDiv()" id="ResultsArrow" src='/shared_assets/images/arrow_open.png'/>
+      <div onclick="hideResults()" id="CloseResults">x</div>
+    </span>
+    <div id="ResultsDiv" style="display:block;"></div>
+  </div>
+  <iframe class="IframeLayers" id="IframeLayers" frameborder="0" scrolling="no" style="display: none;">
+    <html><head></head><body></body></html>
+  </iframe>
+</div>
+
+<div id="ZmControls">
+  <div id="ZmIn" onclick="ZoomTheMap('in');" title="Zoom In"><img src="/shared_assets/images/zoom_plus_16_v1.png">
+  <span></span></div>
+  <div id="ZmOut" onclick="ZoomTheMap('out');" title="Zoom Out"><img src="/shared_assets/images/zoom_minus_16_v1.png"></div>
+</div>
+
+<!-- BUTTER BAR -->
+
+<div id="ButterBar">
+  <span id="ButterBarMessage"></span>
+  <a href="#" onclick="gees.dom.hide('ButterBar');">close</a>
+</div>
+
+<!-- ERROR BAR -->
+
+<div id="ErrorBar">
+  <span id="ErrorBarMessage"></span>
+  <a href="#" onclick="gees.dom.hide('ErrorBar');">close</a>
+</div>
+
+<div id="SearchScriptHolder"></div>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+/* XPM */
+static const char * const folder_xpm[]={
+    "16 16 6 1",
+    ". c None",
+    "b c #ffff00",
+    "d c #000000",
+    "* c #999999",
+    "a c #cccccc",
+    "c c #ffffff",
+    "................",
+    "................",
+    "..*****.........",
+    ".*ababa*........",
+    "*abababa******..",
+    "*cccccccccccc*d.",
+    "*cbababababab*d.",
+    "*cabababababa*d.",
+    "*cbababababab*d.",
+    "*cabababababa*d.",
+    "*cbababababab*d.",
+    "*cabababababa*d.",
+    "*cbababababab*d.",
+    "**************d.",
+    ".dddddddddddddd.",
+    "................"};
+

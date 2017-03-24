@@ -1,0 +1,10 @@
+URL:  https://code.google.com/p/modwsgi/
+Version: 4.5.14
+License: Apache 2.0
+License File: LICENSE
+
+Description:
+The mod_wsgi is Apache module to host Python application which supports the Python WSGI interface.
+
+Local Modifications:
+None

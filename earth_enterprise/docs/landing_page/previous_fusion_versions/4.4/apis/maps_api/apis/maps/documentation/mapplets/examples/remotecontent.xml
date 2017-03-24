@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="Accessing Content from Other Websites" height="300">
+  <Require feature="sharedmap"/>
+</ModulePrefs>
+<Content type="html"><![CDATA[
+
+<small>
+This example fetches the coordinates of the 
+<a href="http://mapgadgets.googlepages.com/cta_red.xml">
+CTA red train line</a> and draws the train line
+and adds markers for each station.
+</small>
+
+<script>
+var map = new GMap2();
+
+// Go to Chicago
+map.setCenter(new GLatLng(41.882853, -87.642059), 11);   
+
+// Render the red train line and stations from a remote XML file
+var url = "http://mapgadgets.googlepages.com/cta_red.xml";
+_IG_FetchXmlContent(url, function(response) {
+  var trainline = [];
+  var points = response.getElementsByTagName("point");
+
+  for (var i = 0; i < points.length; i++) {
+    var point = points.item(i);
+    var lat  = point.getAttribute("lat");
+    var lng  = point.getAttribute("lng");
+    var latlng = new GLatLng(lat, lng);
+
+    trainline.push(latlng);
+    if (point.firstChild) {
+      var station = point.firstChild.nodeValue;
+      var marker = createMarker(latlng, station);
+      map.addOverlay(marker);
+    }
+  }
+
+  var polyline = new GPolyline(trainline, "#ff0000", 3, 1);
+  map.addOverlay(polyline);
+});
+
+// Creates a marker at the given point with the given name
+function createMarker(point, name) {
+  var marker = new GMarker(point);
+  GEvent.addListener(marker, "click", function() {
+    marker.openInfoWindowHtml(name);
+  });
+  return marker;
+}
+</script>
+
+]]></Content>
+</Module>

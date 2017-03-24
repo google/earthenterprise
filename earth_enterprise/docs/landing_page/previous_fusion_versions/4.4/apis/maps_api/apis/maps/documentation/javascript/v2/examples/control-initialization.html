@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/v2/examples/control-initialization.html";
+    </script>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>Control Initialization</title>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSosDVG8KKPE1-m51RBrvYughuyMxQ-i1QfUnH94QxWIa6N4U6MouMmBA" type="text/javascript"></script>
+    <script type="text/javascript">
+    //<![CDATA[
+
+    function initialize() {
+      if (GBrowserIsCompatible()) {
+        // define the crosshair tile layer and its required functions
+        var crossLayer = new GTileLayer(new GCopyrightCollection(""), 0, 15);
+        crossLayer.getTileUrl =  function(tile, zoom) {
+          return "./include/tile_crosshairs.png";
+        }
+        crossLayer.isPng = function() {return true;}
+
+        // Create a new map type incorporating the tile layer
+        var layerTerCross = [ G_PHYSICAL_MAP.getTileLayers()[0],
+                              crossLayer ];
+        var mtTerCross = new GMapType(layerTerCross,
+                                      G_PHYSICAL_MAP.getProjection(), "Ter+");
+
+        var map = new GMap2(document.getElementById("map_canvas"),
+            { size: new GSize(640,320) } );
+        map.addMapType(G_PHYSICAL_MAP);
+        map.addMapType(mtTerCross);
+        map.setCenter(new GLatLng(37.4419, -122.1419), 4);
+        map.addControl(new GLargeMapControl())
+
+        var mapControl = new GHierarchicalMapTypeControl();
+        
+        // Set up map type menu relationships
+        mapControl.clearRelationships();
+        mapControl.addRelationship(G_SATELLITE_MAP, G_HYBRID_MAP, "Labels", false);
+        mapControl.addRelationship(G_PHYSICAL_MAP, mtTerCross, "Crosshairs");
+  
+        // Add control after you've specified the relationships
+        map.addControl(mapControl);
+      }
+    }
+    //]]>
+    </script>
+  </head>
+
+  <body onload="initialize()" onunload="GUnload()">
+    <div id="map_canvas" style="width: 640px; height: 320px"></div>
+  </body>
+</html>

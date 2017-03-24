@@ -1,0 +1,42 @@
+<etSite> [South Pacific Ocean] {
+    [minLevel] 4
+    [maxLevel] 30
+    [texId]    0
+    [style]    452
+    [pt] :1	{ -0.7500000000000000 -0.1666666666666666 }
+}
+<etSite> [South Atlantic Ocean] {
+    [minLevel] 4
+    [maxLevel] 30
+    [texId]    0
+    [style]    452
+    [pt] :1	{ -0.0913519071124629 -0.1227389340693475 }
+}
+<etSite> [Indian Ocean] {
+    [minLevel] 4
+    [maxLevel] 30
+    [texId]    0
+    [style]    452
+    [pt] :1	{ 0.4166666666666667 -0.1666666666666666 }
+}
+<etSite> [North Pacific Ocean] {
+    [minLevel] 4
+    [maxLevel] 30
+    [texId]    0
+    [style]    452
+    [pt] :1	{ -0.9444444444444444 0.2222222222222223 }
+}
+<etSite> [North Atlantic Ocean] {
+    [minLevel] 4
+    [maxLevel] 30
+    [texId]    0
+    [style]    452
+    [pt] :1	{ -0.1833333333333333 0.1833333333333333 }
+}
+<etSite> [Arctic Ocean] {
+    [minLevel] 4
+    [maxLevel] 30
+    [texId]    0
+    [style]    452
+    [pt] :1	{ 1.0000000000000000 0.4611111111111110 }
+}

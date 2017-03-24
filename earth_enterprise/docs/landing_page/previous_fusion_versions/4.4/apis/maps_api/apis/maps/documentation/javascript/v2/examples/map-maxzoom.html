@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/v2/examples/map-maxzoom.html";
+    </script>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>Maps API Example: Maximum Zoom Levels in Map Types</title>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSosDVG8KKPE1-m51RBrvYughuyMxQ-i1QfUnH94QxWIa6N4U6MouMmBA" type="text/javascript"></script>
+    <script type="text/javascript">
+    
+    var map;
+    function initialize() {
+      if (GBrowserIsCompatible()) {
+        map = new GMap2(document.getElementById("map_canvas"));
+        map.setCenter(new GLatLng(55.366625,-131.660156), 7);
+        map.setMapType(G_SATELLITE_MAP);
+        map.setUIToDefault();
+        GEvent.addListener(map, 'click', function(overlay, latlng) {
+          showMaxZoom(latlng);
+        });
+      }
+    }
+    
+    function showMaxZoom(latlng) {
+      G_SATELLITE_MAP.getMaxZoomAtLatLng(latlng, function(response) {
+        if (response && response['status'] == G_GEO_SUCCESS) {
+          alert("The maximum zoom level where satellite imagery is available at this location is: " + response['zoom']);
+        }
+      });
+    }
+    </script>
+  </head>
+
+  <body onload="initialize()" onunload="GUnload()">
+    <div id="map_canvas" style="width: 400px; height: 400px"></div>
+  </body>
+</html>

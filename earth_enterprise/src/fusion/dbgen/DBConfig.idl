@@ -1,0 +1,125 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+
+#include <string>
+#include <vector>
+#include <khTypes.h>
+#include <searchtabs/.idl/SearchTabs.h>
+
+#cppquote
+#include <khConstants.h>
+#include <khFileUtils.h>
+#include <searchtabs/.idl/SearchTabs_impl.h>
+#/cppquote
+// written by gedbgen, read by gedbManifest
+class DbHeader
+{
+  enum DbType {TYPE_GEDB=0, TYPE_MAPSDB=1};
+  std::string index_path_ = std::string();
+  std::vector<std::string> toc_paths_ = std::vector<std::string>();
+  // TODO: deprecate search_tabs_ attribute.
+  std::vector<SearchTabDefinition> search_tabs_ = std::vector<SearchTabDefinition>();
+  std::vector<std::string> poi_file_paths_ = std::vector<std::string>();
+  std::vector<std::string> icons_dirs_ = std::vector<std::string>();
+  uint database_version_ = uint(0);
+  DbType db_type_ = DbHeader::TYPE_GEDB;
+  bool use_google_imagery_ = false;
+  bool is_mercator_ = false;
+  std::string fusion_host_ = std::string();
+
+#hquote
+  // defined in DBConfigImpl.cpp
+  bool LoadAndResolvePaths(const std::string& gedb_path, const std::string& header_file, std::string* prefix);
+  void CheckAndResolvePath(const std::string& gedb_path, std::string& path);
+#/hquote
+
+#pragma LoadAndSave
+};
+
+#cppquote
+void DbHeader::CheckAndResolvePath(const std::string& gedb_path,
+                                   std::string& path) {
+  if (path[0] == '/')
+    return;
+  path = khNormalizeDir(gedb_path + "/" + path, false);
+}
+
+
+bool DbHeader::LoadAndResolvePaths(const std::string& gedb_path,
+                                   const std::string& header_file,
+                                   std::string* prefix) {
+  const std::string xml_header = khComposePath(gedb_path, header_file);
+  if (!Load(xml_header))
+    return false;
+  CheckAndResolvePath(gedb_path, index_path_);
+  std::string db_prefix_from_index_path = khGetDbPrefix(
+      index_path_, kUnifiedIndexKey);
+  std::string db_prefix_from_xml_header = khGetDbPrefix(
+      xml_header, db_type_ == DbHeader::TYPE_GEDB ? kGedbKey : kMapdbKey);
+  std::string::size_type pos =
+      db_prefix_from_xml_header.find(db_prefix_from_index_path);
+  if (pos == std::string::npos) {
+    return false;
+  }
+  *prefix = db_prefix_from_xml_header.substr(0, pos);
+  for (uint i = 0; i < toc_paths_.size(); ++i) {
+    CheckAndResolvePath(gedb_path, toc_paths_[i]);
+  }
+  for (uint i = 0; i < poi_file_paths_.size(); ++i)
+    CheckAndResolvePath(gedb_path, poi_file_paths_[i]);
+  for (uint i = 0; i < icons_dirs_.size(); ++i) {
+    CheckAndResolvePath(gedb_path, icons_dirs_[i]);
+  }
+
+  return true;
+}
+#/cppquote
+
+
+// written by GEDB plugin, read by gedbgen
+class GEDBGenConfig {
+  std::string index_path_;
+  std::string vector_dbroot_path_;
+  std::string imagery_dbroot_path_;
+  std::string terrain_dbroot_path_;
+  // TODO: deprecate search_tabs_ attribute.
+  std::vector<SearchTabDefinition> search_tabs_;
+  std::vector<std::string> poi_file_paths_;
+  uint database_version_;
+  deprecated bool search_tabs_enabled_ = true;
+  // fusion_version_ never really used here.
+  deprecated std::string fusion_version_ = std::string("");
+  bool imagery_has_timemachine_ = false;
+
+#pragma LoadAndSave
+};
+
+
+// written by MAPSDB plugin, read by mapsdbgen
+class MapDBGenConfig {
+  std::string index_path_;
+  std::string map_layerdefs_path_;
+  std::string imagery_layerdefs_path_;
+  // TODO: deprecate search_tabs_ attribute.
+  std::vector<SearchTabDefinition> search_tabs_;
+  std::vector<std::string> poi_file_paths_;
+  uint database_version_;
+  deprecated bool search_tabs_enabled_ = true;
+  bool use_google_imagery_ = false;
+  bool is_mercator_ = false;
+  std::string fusion_version_ = std::string("");  // Keep track of the originating Fusion version number.
+
+#pragma LoadAndSave
+};

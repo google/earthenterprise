@@ -1,0 +1,193 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>PlacemarkEditBase</class>
+<comment>  Copyright 2017 Google Inc.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+</comment>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>PlacemarkEditBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>528</width>
+            <height>173</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Edit Favorite</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QLineEdit" row="1" column="1">
+            <property name="name">
+                <cstring>latitudeEdit</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="0" column="1">
+            <property name="name">
+                <cstring>nameEdit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>TextLabel2</cstring>
+            </property>
+            <property name="text">
+                <string>Name:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>nameEdit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>TextLabel2_2</cstring>
+            </property>
+            <property name="text">
+                <string>Latitude:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>latitudeEdit</cstring>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget" row="4" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>Layout3</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>Spacer3</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>291</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>okBtn</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="text">
+                        <string>OK</string>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>cancelBtn</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Cancel</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>TextLabel2_3</cstring>
+            </property>
+            <property name="text">
+                <string>Longitude:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>longitudeEdit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="3" column="0">
+            <property name="name">
+                <cstring>TextLabel2_3_2</cstring>
+            </property>
+            <property name="text">
+                <string>Level:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>levelEdit</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="2" column="1">
+            <property name="name">
+                <cstring>longitudeEdit</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="3" column="1">
+            <property name="name">
+                <cstring>levelEdit</cstring>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>cancelBtn</sender>
+        <signal>released()</signal>
+        <receiver>PlacemarkEditBase</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>okBtn</sender>
+        <signal>pressed()</signal>
+        <receiver>PlacemarkEditBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>nameEdit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>PlacemarkEditBase</receiver>
+        <slot>nameChanged(const QString&amp;)</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>nameEdit</tabstop>
+    <tabstop>latitudeEdit</tabstop>
+    <tabstop>longitudeEdit</tabstop>
+    <tabstop>levelEdit</tabstop>
+    <tabstop>okBtn</tabstop>
+    <tabstop>cancelBtn</tabstop>
+</tabstops>
+<slots>
+    <slot>nameChanged( const QString &amp; )</slot>
+</slots>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

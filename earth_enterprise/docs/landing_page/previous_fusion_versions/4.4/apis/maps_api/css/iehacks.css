@@ -1,0 +1,37 @@
+/**
+ * Licensed under the Apache License, v. 2.0
+ * (http://www.apache.org/licenses/)
+ *
+ * Internet Explorer hacks for Google Code (http://code.google.com).
+ */
+
+/* Without this sheet, if elements inside #pagecontent are wider than
+ *    the window, IE will expand the width of #pagecontent to fit the
+ *    contents (expanding box bug), which causes float drops.
+ */
+
+/* IE7 float-drop fix.
+   This tells pagecontent that its width should be the size of the window,
+   minus its distance from the left edge of the window. 
+#pagecontent{
+  width: expression(document.body.offsetWidth - 197);
+}	
+	
+/* IE6 float-drop fix.
+   In this case, we want the sidenav to be invisible to the pagecontent,
+   so we give the sidenav absolute position. 
+   The pagecontent stays in place thanks to its left-margin.  */
+* html #gc-toc {
+  position: absolute;
+  left: 0;
+}
+	
+/* Follow-up to above IE6 fix.
+   The above fix also makes the sidenav invisible to the footer, so it will 
+   float up and overlap the sidenav content if the pagecontent has a smaller
+   height than the sidenav. To fix this, we read the height of the sidenav
+   and use that height for the height of the pagecontent. */
+* html #gc-pagecontent {
+  width: auto;  /* overwrite the width above, which is intended only for IE7  */
+  height: expression(((document.getElementById("gc-toc").clientHeight > document.getElementById("gc-pagecontent").clientHeight) ? document.getElementById("gc-toc").clientHeight : " " ));
+}

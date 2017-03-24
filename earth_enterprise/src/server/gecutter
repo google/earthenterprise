@@ -1,0 +1,124 @@
+#!/opt/google/gepython/Python-2.7.5/bin/python
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+"""Convenience script for enabling/disabling Cutter.
+
+This script is useful because it ensures that not only is the Cutter
+enabled/disabled, but that the mod_fdb Apache module is updated to match
+the Cutter state.
+"""
+
+import httplib
+import os
+import stat
+import sys
+import urllib2
+
+bin_path = os.path.dirname(__file__)
+opt_google_path = os.path.dirname(bin_path)
+ge_python_libs = os.path.realpath(
+    "{}/gehttpd/wsgi-bin".format(opt_google_path))
+sys.path.append(ge_python_libs)
+
+from common import utils
+
+geportableglobebuilder_path = os.path.realpath(
+    "{}/geportableglobebuilder".format(bin_path))
+
+def IsExecutable(file_path):
+  """Returns whether file is executable."""
+  status = os.stat(file_path)
+  return bool(status.st_mode & stat.S_IXUSR)
+
+
+def DisableCutter(server_url):
+  """Disables Cutter and updates mod_fdb in Earth Server."""
+  os.system("sudo %s/geserveradmin --disable_cutter" % bin_path)
+  if not IsExecutable(geportableglobebuilder_path):
+    print "Cutter disabled."
+    try:
+      url_opener = utils.UrlOpener()
+      results = url_opener.Open("{}/fdb/disable_cut".format(server_url))
+    except urllib2.URLError as e:
+      if hasattr(e, "code"):  # HTTPError
+        print "Failed to block server from cutting."
+        print "Error: {}".format(httplib.responses[e.code])
+      elif hasattr(e, "reason"):  # URLError
+        print "Failed to reach server blocking from cutting."
+        print "Reason: {}".format(e.reason)
+    else:
+      if "cutting disabled" in results:
+        print "Server blocked from cutting."
+      else:
+        print "** WARNING ** Unable to block server from cutting."
+        print "If server is not running, Cutter should be disabled when "
+        print "it is started."
+  else:
+    print "** ERROR ** Unable to disable Cutter."
+
+
+def EnableCutter(server_url):
+  """Enables Cutter and updates mod_fdb in Earth Server."""
+  os.system("sudo %s/geserveradmin --enable_cutter" % bin_path)
+  if IsExecutable(geportableglobebuilder_path):
+    print "Cutter enabled."
+    try:
+      url_opener = utils.UrlOpener()
+      results = url_opener.Open("{}/fdb/enable_cut".format(server_url))
+    except urllib2.URLError as e:
+      if hasattr(e, "code"):  # HTTPError
+        print "Failed to update server for cutting."
+        print "Error: {}".format(httplib.responses[e.code])
+      elif hasattr(e, "reason"):  # URLError
+        print "Failed to reach server updating for cutting."
+        print "Reason: {}".format(e.reason)
+    else:
+      if "cutting enabled" in results:
+        print "Server updated for cutting."
+      else:
+        print "** WARNING ** Unable to update server for cutting."
+        print "If server is not running, Cutter should be enabled when "
+        print "it is started."
+
+  else:
+    print "** ERROR ** Unable to enable Cutter."
+
+
+def Usage(cmd):
+  """Show proper usage for this command."""
+  print "usage: %s enable/disable" % cmd
+  exit(1)
+
+
+def main(args):
+  if len(args) != 2:
+    Usage(args[0])
+
+  server_url = utils.BuildServerUrl("localhost")
+  if not server_url:
+    print "** ERROR ** Couldn't get self-referential server URL."
+    return
+
+  if args[1] == "enable":
+    EnableCutter(server_url)
+  elif args[1] == "disable":
+    DisableCutter(server_url)
+  else:
+    Usage(args[0])
+
+if __name__ == "__main__":
+  main(sys.argv)

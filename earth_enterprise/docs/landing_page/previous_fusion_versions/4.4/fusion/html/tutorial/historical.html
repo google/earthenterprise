@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Building a Historical Imagery Project</title>
+</head>
+
+
+<body>
+<a name="top"></a>
+  
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo"><img alt="Google Earth Enterprise" border=0 src="images/index.gif" /></div>
+  <h1 id="doc_title">Tutorial</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Tutorial</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="setup.html">Setting Up  the Tutorial</a></li>
+    <li><a href="resources.html">Defining and Building Resources</a></li>
+    <li><a href="projects.html">Defining and Building Projects</a></li>
+    <li><a href="database.html">Defining and Building Databases</a></li>
+    <li><a href="publish.html">Publishing and Viewing a Database</a></li>
+    <li><a href="points.html">Configuring Display Rules for Point Data</a></li>
+    <li><a href="polygons.html">Configuring Display Rules for Polygon Data</a></li>
+    <li><a href="importExport.html">Importing and Exporting Style Templates</a></li>
+    <li><a href="searchTabs.html">Configuring a Searchable Database</a></li>
+    <li><a href="searchLayers.html">Specifying Search Fields for Individual Layers</a></li>
+    <li><a href="maps.html">Creating a Map Database</a></li>
+    <li><a href="mosaics.html">Creating Imagery Mosaics</a></li>
+    <li><a href="split.html">Segmenting Large Imagery Files</a></li>
+    <li><a href="historical.html" id="selected">Building a Historical Imagery Project</a></li>
+    <li><a href="dataFiles.html">Sample Data Files</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+<h1 id="building_a_historical_imagery_project">Building a Historical Imagery Project</h1>
+
+<p>To build a historical imagery project:</p>
+<ol>
+  <li>
+    <p>Follow the steps  in <a href="resources.html">Defining
+      and Building Resources</a> to define and build the following:</p>
+
+    <table>
+      <tr>
+        <th>Name<br />
+          (Resources/Imagery/...)</th>
+        <th>Acquisition Date</th>
+        <th>Provider</th>
+        <th>Mask</th>
+        <th>Source file</th>
+      </tr>
+      <tr>
+        <td><strong>BlueMarble</strong></td>
+        <td>Any date. The date of the base image does not affect
+          historical imagery browsing.</td>
+        <td>NASA Imagery</td>
+        <td><strong>No Mask</strong></td>
+        <td><code>bluemarble_4km.jp2</code></td>
+      </tr>
+      <tr>
+        <td><strong>SFBayAreaLanSat_20021010</strong></td>
+        <td>2002-10-10</td>
+        <td>USGS Imagery</td>
+        <td><strong>Auto Mask</strong><br />
+          <strong>Tolerance</strong>: 2<br />
+Default for all other mask values.</td>
+        <td><code>usgsLanSat.jp2</code></td>
+      </tr>
+      <tr>
+        <td><strong>i3_15Meter_20041010</strong></td>
+        <td>2004-10-10</td>
+        <td>i3</td>
+        <td><p><strong>Auto Mask</strong><br />
+          Default values.</p></td>
+        <td><code>i3SF15-meter.tif</code></td>
+      </tr>
+      <tr>
+        <td><strong>SFHighResInset_20061010</strong></td>
+        <td>2006-10-10</td>
+        <td>USGS Imagery</td>
+        <td><strong>Auto Mask</strong><br />
+Default values.</td>
+        <td><code>usgsSFHiRes.tif</code></td>
+      </tr>
+    </table>
+  </li>
+  </li>
+  <li>Open a new Imagery Project and add each of the image resources to the project:
+    <ul>
+         <br />
+         <li><strong>Resources/Imagery/BlueMarble</strong></li>
+         <li><strong>Resources/Imagery/SFBayAreaLanSat_20021010</strong></li>
+         <li><strong>Resources/Imagery/i3_15Meter_20041010</strong></li>
+         <li><strong>Resources/Imagery/SFHighResInset_20061010</strong></li>
+      </ul>
+   </li>
+   <br />
+   <li>Select the <strong>Support Historical Imagery</strong> checkbox and accept all of the default
+      values in the <strong>Legend</strong> area.</li>
+   <li>Enter <strong>Projects/Imagery/SFBayAreaHistorical</strong> as the name of
+      your project, and <strong>Save</strong>.</li>
+   <li>Build the <strong>SFBayAreaHistorical</strong> project.</li>
+   <li>Create a new Earth Database and add the <strong>SFBayAreaHistorical</strong> project.</li>
+   <li>Save the new database as <strong>Databases/Historical</strong>.</li>
+   <li>Build the database, and publish it to the <code>default_ge</code> virtual
+      server.</li>
+   <li>Open <code>http://<em>your_hostname</em>/default_ge</code> (replace <code><em>your_hostname</em></code>
+      with the IP address or name of your server).</li>
+   <li>Navigate to the San Francisco Bay Area.</li>
+   <li>Select the <strong>Historical Imagery</strong> toolbar button <img src="images/historical_imagery_button.png" /> to display a
+      time slider. The time slider allows you to move the view through time.</li>
+</ol>
+<p>The following two screens show how this project is displayed in the Google Earth
+   EC client. Notice the timeslider is visible and the differences between the imagery
+   dates and content.<br />
+   <img src="images/EC_Historical1.png" /></p>
+<p><img src="images/EC_Historical2.png" /></p>
+<p>
+</p>
+</div>
+	<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+	<!-- END WRAPPER -->
+
+
+
+
+</body>
+</html>

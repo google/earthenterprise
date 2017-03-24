@@ -1,0 +1,11 @@
+--- libcap-2.19.orig/Make.Rules	2012-09-28 13:15:53.813780195 -0700
++++ libcap-2.19/Make.Rules	2012-09-28 13:13:54.801992321 -0700
+@@ -56,7 +56,7 @@
+         -Wpointer-arith -Wcast-qual -Wcast-align \
+         -Wstrict-prototypes -Wmissing-prototypes \
+         -Wnested-externs -Winline -Wshadow
+-LD=$(CC) -Wl,-x -shared
++LD=$(CC) -shared
+ LDFLAGS := #-g
+ 
+ SYSTEM_HEADERS = /usr/include

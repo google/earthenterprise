@@ -1,0 +1,136 @@
+#-*- Python -*-
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+Import('env', 'commonobj', 'plugins')
+import string
+
+# let subdirs refer to headers as relative to the sysman directory
+env = env.Clone();
+env.Append(CPPPATH = ['#fusion/autoingest/sysman', # static headers
+                      ])
+
+idlfiles = [ 'NextTaskId', 'JobStorage', 'TaskStorage', 'TaskRule',
+             'FusionUniqueId' ]
+
+env.idl(map(lambda n: n+'.idl', idlfiles))
+
+TaskStorageObj = env.SharedObject('.idl/TaskStorage.cpp')
+JobStorageObj  = env.SharedObject('.idl/JobStorage.cpp')
+NextTaskIdObj  = env.SharedObject('.idl/NextTaskId.cpp')
+TaskRuleObj    = env.SharedObject('.idl/TaskRule.cpp')
+FusionUniqueIdObj  = env.SharedObject('.idl/FusionUniqueId.cpp')
+
+
+for plugin in plugins:
+    src = '../plugins.src/'+plugin+'.src'
+    env.Command('plugins/'+plugin+'AssetD.h',
+                [ '../AssetGenDaemonH.pl', '../AssetGen.pm', src ],
+                [ "${SOURCES[0]} ${SOURCES[2]} $TARGET" ])
+    env.Command('plugins/'+plugin+'AssetD.cpp',
+                [ '../AssetGenDaemonCpp.pl', '../AssetGen.pm', src ],
+                [ "${SOURCES[0]} ${SOURCES[2]} $TARGET" ])
+
+
+env.Command('SysManFromStorage.cpp',
+            [ '../FromStorageGen.pl' ],
+            [ "$SOURCE --daemon --cppfile $TARGET " + string.join(plugins, ' ') ])
+
+env.Command('khAssetManagerDispatch.cpp',
+            [ '../ProtocolGen.pl', '../AssetManager.protocol' ],
+            [ "${SOURCES[0]} --dispatchthunks --handlercpp $TARGET ${SOURCES[1]}" ])
+
+
+# Resource Manager Protocol
+env.Command('khResourceProviderProxyDispatch.cpp',
+            [ '../ProtocolGen.pl', 'ResourceManager.protocol' ],
+            [ "${SOURCES[0]} --dispatchthunks --handlerclass khResourceProviderProxy --handlercpp $TARGET ${SOURCES[1]}" ])
+
+env.Command('khResourceManagerProxy.h',
+            [ '../ProtocolGen.pl', 'ResourceManager.protocol' ],
+            [ "${SOURCES[0]} --notry --proxyh $TARGET ${SOURCES[1]}" ])
+
+env.Command('khResourceManagerProxy.cpp',
+            [ '../ProtocolGen.pl', 'ResourceManager.protocol' ],
+            [ "${SOURCES[0]} --notry --proxycpp $TARGET ${SOURCES[1]}" ])
+
+
+
+# Resource Provider Protocol
+env.Command('khResourceProviderDispatch.cpp',
+            [ '../ProtocolGen.pl', 'ResourceProvider.protocol' ],
+            [ "${SOURCES[0]} --dispatchthunks --handlerclass khResourceProvider --handlercpp $TARGET ${SOURCES[1]}" ])
+
+env.Command('ResourceProviderProxy.h',
+            [ '../ProtocolGen.pl', 'ResourceProvider.protocol' ],
+            [ "${SOURCES[0]} --proxyh $TARGET ${SOURCES[1]}" ])
+
+env.Command('ResourceProviderProxy.cpp',
+            [ '../ProtocolGen.pl', 'ResourceProvider.protocol' ],
+            [ "${SOURCES[0]} --proxycpp $TARGET ${SOURCES[1]}" ])
+
+
+extraObjs = [
+    'fusion/geindexgen/.idl/BlendStack',
+    'fusion/geindexgen/.idl/VectorStack',
+    'fusion/geindexgen/.idl/UnifiedConfig',
+    'fusion/dbgen/.idl/DBConfig',
+    'fusion/geqtgen/.idl/Config',
+    'fusion/gemaptilegen/.idl/Config',
+    ]
+
+gesystemmanager = env.executable('gesystemmanager',
+    commonobj +
+    map(lambda p: 'plugins/'+p+'AssetD.cpp', plugins) +
+    [ 'gesystemmanager_main.cpp',
+      'AssetD.cpp', 'AssetVersionD.cpp',
+      'khSystemManager.cpp',
+      'khAssetManager.cpp', 'khAssetManagerDispatch.cpp',
+      'khResourceManager.cpp', 'khTask.cpp', 'TaskRequirements.cpp',
+      'khResourceProviderProxy.cpp', 'khResourceProviderProxyDispatch.cpp',
+      'ResourceProviderProxy.cpp', 'Reservation.cpp',
+      'SysManExtra.cpp', 'SysManFromStorage.cpp', 'InsetInfo.cpp',
+      TaskStorageObj, JobStorageObj, NextTaskIdObj, TaskRuleObj,
+      FusionUniqueIdObj,
+      env['FUSIONVER'],
+      ] +
+    env.ObjFromOtherDir(extraObjs),
+    LIBS=['gegdal', 'geraster', 'gesearchtabs', 'genet', 'gepublish',
+          'geindex_r', 'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'qt-mt', 'xerces-c', 'geos']
+    )
+
+geresourceprovider = env.executable('geresourceprovider',
+    ['geresourceprovider_main.cpp',
+     'khResourceProvider.cpp',
+     'khResourceManagerProxy.cpp', 'khResourceProviderDispatch.cpp',
+     TaskStorageObj, JobStorageObj,
+     env['FUSIONVER'],
+     env['BUILDDATE'],
+     ],
+    LIBS=['geautoingest', 'geconfigutil', 'gefconfigutil', 'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'xerces-c', 'qt-mt'])
+
+gestartdaemon = env.executable('gestartdaemon',
+                               ['gestartdaemon.cpp'],
+                               LIBS=['geutil', 'gecommon', 'gemiscconfig'])
+
+gestopdaemon = env.executable('gestopdaemon',
+                              ['gestopdaemon.cpp'],
+                              LIBS=['geutil', 'gecommon'])
+
+
+env.install('fusion_bin', [ gesystemmanager, geresourceprovider,
+                     gestartdaemon, gestopdaemon ] )
+env.install('fusion_root', [ 'gefusion' ], 'etc/init.d')

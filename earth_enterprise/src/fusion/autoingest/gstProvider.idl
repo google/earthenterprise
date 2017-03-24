@@ -1,0 +1,209 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+
+#include <string>
+#include <vector>
+#include <qstring.h>
+#include <qstringlist.h>
+#include <khTypes.h>
+
+class gstProvider
+{
+  QString name;
+  std::string key;
+  QString copyright;
+  int32  copyrightVerticalPos = -1
+  bool  report = false;
+  int32 copyrightPriority = 256;
+  uint32 id = uint32(0);
+};
+
+class gstProviderSet
+{
+  std::vector<gstProvider> items;
+  uint32 next_id = uint32(1);
+
+#pragma AfterLoad
+#pragma LoadAndSave
+
+#hquote
+  static std::string ProvidersFilename(void);
+  bool Load(void);
+  bool Save(void);
+  void AfterLoad(void);
+  uint32 GetNextId(void);
+  QStringList GetKeys(void) const;
+  QStringList GetNames(void) const;
+  std::vector<uint32> GetIds(void) const;
+  uint32 GetIdFromKey(const std::string &key) const;
+  bool ValidateProvider(const std::string &key) const;
+  static bool LoadAndValidateProvider(const std::string &key);
+  bool ValidateProvider(uint32 id) const;
+  static bool LoadAndValidateProvider(uint32 id);
+
+  static uint32 LoadAndGetIdFromKey(const std::string &key);
+#/hquote
+
+#cppquote
+#include <autoingest/.idl/storage/AssetDefs.h>
+#include <autoingest/geAssetRoot.h>
+#include <khFileUtils.h>
+
+  QStringList gstProviderSet::GetNames() const {
+    QStringList list;
+    for (uint p = 0; p < items.size(); ++p)
+      list << items[p].name;
+    return list;
+  }
+
+  QStringList gstProviderSet::GetKeys() const {
+    QStringList list;
+    for (uint p = 0; p < items.size(); ++p)
+      list << QString::fromUtf8(items[p].key.c_str());
+    return list;
+  }
+
+  std::vector<uint32> gstProviderSet::GetIds(void) const {
+    std::vector<uint32> ids;
+    ids.resize(items.size());
+    for (uint p = 0; p < items.size(); ++p) {
+      ids[p] = items[p].id;
+    }
+    return ids;
+  }
+
+  std::string
+  gstProviderSet::ProvidersFilename(void)
+  {
+    return khComposePath(geAssetRoot::Dirname(AssetDefs::AssetRoot(),
+                                              geAssetRoot::UserDataDir),
+                         "providers.xml");
+  }
+
+  bool
+  gstProviderSet::Load(void)
+  {
+    std::string filename = ProvidersFilename();
+    if (!khExists(filename)) {
+      // missing providers file means empty, it's not an error
+      return true;
+    }
+    return Load(filename.c_str());
+  }
+
+  bool
+  gstProviderSet::Save(void)
+  {
+    std::string filename = ProvidersFilename();
+    if (Save(filename)) {
+      khChmod(filename, 0666); // in case the umask trimmed any permissions
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void gstProviderSet::AfterLoad(void) {
+    if (items.size() && (items[0].id == 0)) {
+      // first time loading after id was added
+      for (uint i = 0; i < items.size(); ++i) {
+        items[i].id = GetNextId();
+      }
+    }
+  }
+
+  uint32 gstProviderSet::GetNextId(void) {
+    uint32 start = next_id;
+    while (1) {
+      bool dup = false;
+      for (uint i = 0; i < items.size(); ++i) {
+        if (items[i].id == next_id) {
+          dup = true;
+          break;
+        }
+      }
+      if (!dup) {
+        break;
+      } else {
+        ++next_id;
+        // protocol only allows shorts for now
+        next_id &= 0xFFFF;
+        if (next_id == 0) {
+          next_id = 1;
+        }
+
+        if (next_id == start) {
+          throw khException("Unable to find an unused provider id\n");
+        }
+      }
+    }
+    return next_id++;
+  }
+
+  uint32 gstProviderSet::GetIdFromKey(const std::string &key) const {
+    for (uint i = 0; i < items.size(); ++i) {
+      if (items[i].key == key) {
+        return items[i].id;
+      }
+    }
+    return 0;
+  }
+
+  // static version
+  uint32 gstProviderSet::LoadAndGetIdFromKey(const std::string &key) {
+    gstProviderSet providers;
+    if (providers.Load()) {
+      return providers.GetIdFromKey(key);
+    }
+    return 0;
+  }
+
+  bool gstProviderSet::ValidateProvider(const std::string &key) const {
+    for (std::vector<gstProvider>::const_iterator p = items.begin();
+         p != items.end(); ++p) {
+      if (p->key == key)
+        return true;
+    }
+    return false;
+  }
+  bool gstProviderSet::LoadAndValidateProvider(const std::string &key) {
+    gstProviderSet providers;
+    if (providers.Load()) {
+      return providers.ValidateProvider(key);
+    }
+    return false;
+  }
+
+  bool gstProviderSet::ValidateProvider(uint32 id) const {
+    for (std::vector<gstProvider>::const_iterator p = items.begin();
+         p != items.end(); ++p) {
+      if (p->id == id)
+        return true;
+    }
+    return false;
+  }
+  bool gstProviderSet::LoadAndValidateProvider(uint32 id) {
+    gstProviderSet providers;
+    if (providers.Load()) {
+      return providers.ValidateProvider(id);
+    }
+    return false;
+  }
+
+
+#/cppquote
+
+};
+

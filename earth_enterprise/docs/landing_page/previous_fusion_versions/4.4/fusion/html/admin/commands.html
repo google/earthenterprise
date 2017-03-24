@@ -1,0 +1,797 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html><head>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+  
+  <link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+
+  
+  <link rel="stylesheet" type="text/css" href="local_extensions.css" />
+
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+  <title>Command Reference</title>
+
+  
+  
+  <style type="text/css">
+<!--
+.style1 {font-family: "Courier New", Courier, monospace}
+-->
+  </style>
+</head><body>
+<a name="top"><!-- BEGIN HEADER -->
+</a>
+<div id="header">
+<div id="logo"><a name="top"><img alt="Google Earth Enterprise" src="images/index.gif" border="0" /></a></div>
+<h1 id="doc_title"><a name="top">Administration Guide</a></h1>
+</div>
+
+<!-- END HEADER -->
+<!-- BEGIN WRAPPER -->
+<div id="wrapper"><!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+<ul>
+  <a name="top"> </a>
+  <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+  <div class="line">
+  <li><strong>Administration Guide</strong></li>
+  <li><a href="index.html">Home</a></li>
+  <li><a href="server.html">Configuring GEE Server</a></li>
+  <li><a href="fusion.html">Configuring Fusion</a></li>
+  <li><a href="tutorial.html">Configuring Tutorial Work Space</a></li>
+  <li><a href="commands.html" id="selected">Command Reference</a></li>
+  <li><a href="errors.html">Common Server Error Messages</a></li>
+  <li><a href="mult_db.html">Multiple Database Support</a></li>
+  <div class="line">
+  <li><a href="notices.html">Legal Notices</a></li>
+  </div>
+  </div>
+</ul>
+</div>
+<!-- END LEFT NAV BAR -->
+<!-- BEGIN PAGE CONTENT -->
+<div id="pagecontent">
+<h1><a id="67401">Command Reference</a></h1>
+<p><a id="67401">This appendix describes all of the command line tools
+for system
+administrations in alphabetical order. If you prefer, you can find each
+tool’s syntax by entering the name of the tool with the <code>--help</code>
+option, for example:
+</a></p>
+<pre><code><a id="67401">geconfigureassetroot --help</a></code></pre>
+<p><a id="67401">This appendix uses the following typographic
+conventions:
+</a></p>
+<table>
+  <tbody>
+    <tr>
+      <td><i>Italic</i><code> </code> </td>
+      <td>Information that the user must supply </td>
+    </tr>
+    <tr>
+      <td><b>Bold &nbsp;</b> </td>
+      <td>Text that the user must type exactly as shown </td>
+    </tr>
+    <tr>
+      <td>Ellipsis <b>...</b> </td>
+      <td>Argument that can be repeated several times in a command </td>
+    </tr>
+    <tr>
+      <td>Square brackets <b>[ ]</b> </td>
+      <td>Optional commands or arguments </td>
+    </tr>
+    <tr>
+      <td>Curly braces <b>{ }</b> with options separated by pipes <b>|</b>;
+for example: <b>{even | odd}</b> </td>
+      <td>Lists a set of choices from which the user can select only
+one </td>
+    </tr>
+    <tr>
+      <td>Parentheses <b>( )</b> </td>
+      <td>Grouped items that function together </td>
+    </tr>
+    <tr>
+      <td><code>Courier font</code> </td>
+      <td>Code or program output </td>
+    </tr>
+  </tbody>
+</table>
+<h2><a id="63542"><b>geconfigureassetroot
+</b></a></h2>
+<pre><code><b><a><b>geconfigureassetroot</b> {<b>--new</b> <b>--assetroot </b><i>path </i>| <b>--repair</b> | <b>--editvolumes</b> | <b>--fixmasterhost</b> | <strong>--noprompt</strong>} [<b>--srcvol </b><i>path</i>]</a></b></code></pre>
+<h4><b><a>Purpose
+</a></b></h4>
+<p><b><a>To add volume definitions or edit existing volume
+definitions.
+</a></b></p>
+<p class="note"><b><a><strong>Note:</strong> You must stop
+the system manager
+before using this command and then start it again after you are done.
+You must also run this command as root.
+</a></b></p>
+<h4><b><a>Example
+</a></b></h4>
+<pre><code><b><a>geconfigureassetroot --new --assetroot /gevol/assets<br />geconfigureassetroot --new --assetroot /gevol/assets --srcvol /data1/src<br />geconfigureassetroot --repair<br />geconfigureassetroot --editvolumes</a></b></code></pre>
+<h4><b><a>Commands
+</a></b></h4>
+<pre><code><b><a><b>--new --assetroot </b><i>path</i></a></b></code></pre>
+<p><b><a><i>Optional</i>. Specify the path to the new asset
+root.
+</a></b></p>
+<p class="note"><b><a><strong>Note:</strong> If you omit all
+options, the
+system creates <code>/gevol/assets</code>.
+</a></b></p>
+<pre><code><b><a><b>--repair</b></a></b></code></pre>
+<p><b><a><i>Optional</i>. Repairs various inconsistencies in
+the asset root
+(such as permissions, ownership, missing ID files, and so on). When you
+run this command, the tool auto-detects the problems that need to be
+repaired and fixes them.
+</a></b></p>
+<p class="note"><b><a><strong>Note:</strong> Do not use this
+command unless
+you see a system message instructing you to do so.
+</a></b></p>
+<pre><code><b><a><b>--editvolumes</b></a></b></code></pre>
+<p><b><a><i>Optional</i>. Follow the prompts to add a volume
+to the selected
+asset root or, modify the <code>localpath</code> definition for an
+existing volume, or to add a volume definition.
+</a></b></p>
+<pre><code><b><a><b>--fixmasterhost</b></a></b></code></pre>
+<p><b><a><i>Optional</i>. Change the <i>assetroot host</i>
+entry to match
+the current host name. (This command corrects cases where a host name
+is changed after installing and configuring Fusion.)</a></b></p>
+<pre><code><b><a><b>--noprompt</b></a></b></code></pre>
+<p><b><a><i>Optional</i>. Perform the command without
+prompting the user for
+any input. This option requires that some commands have arguments
+specified on the command line.</a></b></p>
+<pre><code><b><a><b>--srcvol</b> <i>path</i></a></b></code></pre>
+<p><b><a><i>Optional</i>. Specify the path to the source
+volume.
+</a></b></p>
+<h2><b><a id="30644">geconfigurepublishroot
+</a></b></h2>
+<pre><b><a>geconfigurepublishroot [--path=<em>path</em>] [--allow_symlinks] [--noprompt]</a></b></pre>
+<h4><b><a>Purpose
+</a></b></h4>
+<p><b><a>To specify the path where you want to publish
+databases for the
+current GEE Server. Follow the prompts.
+</a></b></p>
+<p class="note"><b><a><strong>Note:</strong> You must run
+this command as
+root.
+</a></b></p>
+<h4><b><a>Example</a></b></h4>
+<pre><b><a>geconfigurepublishroot --path /gevol/published_dbs --allow_symlinks</a></b></pre>
+<h4><b><a>Commands</a></b></h4>
+<pre><b><a>--path=<em>path</em></a></b></pre>
+<p><b><a><em>Optional</em>. The path to the publish root.
+Default value is <code>/gevol/published_dbs</code>.</a></b></p>
+<pre><b><a>--allow_symlinks</a></b></pre>
+<p><b><a><em>Optional</em>. Configures the publisher to
+accept symbolic
+links. Useful when the publish root is on a separate logical volume
+from the asset root. Default is no.</a></b></p>
+<pre><b><a>--noprompt</a></b></pre>
+<p><b><a><i>Optional</i>. Perform the command without
+prompting the user for
+any input. This option requires that some commands have arguments
+specified on the command line. If the arguments are insufficient or the
+configuration fails, the program will return -1 (0 is returned on
+success). </a></b></p>
+<p class="caution"><b><a><strong>Caution:</strong> Do not
+create more than
+one publish root for a single asset root. That configuration produces
+unpredictable or undesirable results, including the inability to
+publish at all from that asset root. </a></b></p>
+<h2><b><a id="86584">gedisconnectedclean</a></b></h2>
+<pre><b><a id="86584"><b>gedisconnectedclean</b> [<b>--dbpath</b> <i>dbpath</i>] [<b>--list</b> <i>assetroot</i>]</a></b></pre>
+<h4><b><a id="86584">Purpose</a></b></h4>
+<p><b><a id="86584">To clean a disconnected database from a
+disconnected mock asset root.</a></b></p>
+<h4><b><a id="86584">Example</a></b></h4>
+<pre><b><a id="86584">gedisconnectedclean --dbpath /gevol/assets/Databases/MyPOIs.kdatabase</a></b></pre>
+<h4><b><a id="86584">Commands</a></b></h4>
+<pre><code><b><a id="86584"><b>--dbpath</b> <i>dbpath</i></a></b></code></pre>
+<p><b><a id="86584"> <em>Required</em>. Specify the database path to
+clean. This must
+be a low-level path to a database directory (one of the entries in the <code><em>assetroot</em>/dbpaths.list</code>
+file). See <code>--list</code> command option to find databases stored
+within the mock asset root.</a></b></p>
+<pre><code><b><a id="86584"><b>--list</b> <i>assetroot</i></a></b></code></pre>
+<p><b><a id="86584"><i>Optional</i>. List all dbpaths currently in
+disconnected asset
+root
+</a></b></p>
+<h2><b><a id="64282">gedisconnectedpublish
+</a></b></h2>
+<pre><code><b><a id="64282"><b>gedisconnectedpublish</b> [<i>db_alias</i>] <i>db_name</i></a></b></code></pre>
+<h4><b><a id="64282">Purpose
+</a></b></h4>
+<p><b><a id="64282">To publish a database on a disconnected server.
+</a></b></p>
+<h4><b><a id="64282">Example
+</a></b></h4>
+<pre><code><b><a id="64282">gedisconnectedpublish MyPOIs</a></b></code></pre>
+<h4><b><a id="64282">Commands
+</a></b></h4>
+<pre><code><b><a id="64282"><i>db_alias</i></a></b></code></pre>
+<p><b><a id="64282"><i>Optional</i>. Since <i>db_name</i> is the
+“low-level” name of
+the database, <i>db_alias</i> allows you to enter a name that is
+easier to remember, for example, <code>Databases/SF
+Highways.kdabase?ver=1</code>. </a></b></p>
+<pre><code><b><a id="64282"><i>db_name</i> </a></b></code></pre>
+<p><b><a id="64282"><i>Required</i>. The full, “low-level” name of the
+database you want
+to publish.
+</a></b></p>
+<h2><b><a id="61455">gedisconnectedreceive</a></b></h2>
+<p class="deprecated"><b><a id="61455"><strong>Deprecated in version 4.0</strong><br />
+<code>gedisconnectedreceive</code> is required only when the
+disconnected database was sent with an older (pre 4.0) version of
+Fusion.</a></b></p>
+<pre><code><b><a id="61455"><b>gedisconnectedreceive</b> <b>--input</b> <i>dirname</i></a></b></code></pre>
+<h4><b><a id="61455">Purpose</a></b></h4>
+<p><b><a id="61455">To copy a disconnected database from either
+detachable media or
+local storage into the mock asset root.</a></b></p>
+<h4><b><a id="61455">Example</a></b></h4>
+<p><b><a id="61455">For detachable media:</a></b></p>
+<pre><b><a id="61455">gedisconnectedreceive --input /mnt/usbdrive/SFHighways_3dDatabase_v20</a></b></pre>
+<p><b><a id="61455">For local storage:</a></b></p>
+<pre><b><a id="61455">gedisconnectedreceive --input<br />   /gevol/src/disconnected_databases/SFHighways_3dDatabase_v20</a></b></pre>
+<h4><b><a id="61455">Commands</a></b></h4>
+<pre><code><b><a id="61455"><b>--input</b> <i>dirname</i></a></b></code></pre>
+<p><b><a id="61455"><i>Required</i>. Specify the directory that
+contains the files to be
+copied. This is typically the mount point of a hard drive.</a></b></p>
+<p class="note"><b><a id="61455"> <strong>Notes:</strong><br />
+The <code>gedisconnectedreceive</code> command will create an asset
+tree that mirrors the asset tree of the Fusion system that built the
+database.<br />
+<br />
+The <code>gedisconnectedreceive</code> command will copy data to the
+mock asset root if the input folder is on a separate volume than the
+mock asset root.&nbsp; Links to the input folder to the mock asset root
+will be created if both the input and mock asset root folders on the
+same volume. </a></b></p>
+<h2><b><a id="95832">gedisconnectedsend</a></b></h2>
+<pre><code><b><a id="95832"><b>gedisconnectedsend</b> [<b>--extra</b> <i>filename</i>] [<b>--havepath</b> <i>dbpath</i>] [<b>--havepathfile</b> <i>file</i>]<br />   <b>--output</b> <i>dirname </i>[<b>--sendpath</b> <i>dbpath</i>]<b> </b>[<b>--sendver</b> <i>dbver</i>]</a></b></code></pre>
+<h4><b><a id="95832">Purpose</a></b></h4>
+<p><b><a id="95832">To gather all the files from a Fusion asset root
+necessary for a
+disconnected publish, for either publishing new databases or publishing
+"delta" updates.</a></b></p>
+<h4><b><a id="95832">Example</a></b></h4>
+<pre><b><a id="95832">gedisconnectedsend --sendver Databases/SFHighways.kdatabase?version=2<br />   --output /gevol/src/disconnected_databases/SFHighways_3dDatabase_v2</a></b></pre>
+<h4><b><a id="95832">Commands</a></b></h4>
+<pre><code><b><a id="95832">--extra filename</a></b></code></pre>
+<p><b><a id="95832"><i>Optional</i>. Specify an extra file to package.
+This is typically
+used to repair broken files.
+</a></b></p>
+<pre><code><b><a id="95832">--havepath dbpath</a></b></code></pre>
+<p><b><a id="95832"><i>Optional</i>. Specify which database path
+already exists on the
+target server. This must be a low-level path to a database directory
+and may be specified more than once.
+</a></b></p>
+<pre><code><b><a id="95832">--havepathfile file </a></b></code></pre>
+<p><b><a id="95832"><i>Optional</i>. Specify the file that contains the
+list of existing
+database paths (copy of <i>assetroot</i><code>/dbpaths.list</code>
+from the remote server).
+</a></b></p>
+<pre><code><b><a id="95832">--output dirname</a></b></code></pre>
+<p><b><a id="95832"><i>Required</i>. Specify where to gather the files.
+The directory
+must already exists and be empty. This is typically the mount point of
+a hard drive.
+</a></b></p>
+<pre><code><b><a id="95832">--sendpath dbpath</a></b></code></pre>
+<p><b><a id="95832"><i>Optional</i>. Specify which database path to
+send. This must be a
+low-level path to a database directory. You can determine this path by
+entering <code>gequery --outfiles </code><i>dbver</i> on the source
+server.
+</a></b></p>
+<pre><code><b><a id="95832">--sendver dbver </a></b></code></pre>
+<p><b><a id="95832"><i>Optional</i>. Specify which database version to
+send. Use the <code>?version=...</code>
+syntax. Available database versions may be found with the <code>gequery
+--versions</code> command. </a></b></p>
+<p class="note"><b><a id="95832"> <strong>Note</strong>: The <code>gedisconnectedpublish</code>
+command may be used for publishing new databases to a remote server, or
+for "delta" publishes (which include only changes between versions) to
+a remote server. </a></b></p>
+<h2><b><a id="95832">geindexcheck</a></b></h2>
+<pre><code><b><a id="95832"><b>geindexcheck</b> [<b>--mode= {index | all}</b>] [<b>--verbose=</b> <i>n</i>] [<b>--progress</b> <i>n</i>]<br />
+   [<b>--help</b>] { <b>--index=</b><i>index_path</i> | <b>--database=</b><i>database_name </i>}</a></b></code></pre>
+<h4><b><a id="95832">Purpose</a></b></h4>
+<p><b><a id="95832">To diagnose problems with Fusion databases. You can run geindexcheck on either the unified index or intermediate indexes. The most common errors geindexcheck detects are CRC errors and missing files. For missing files, it reports the full file path. For CRC errors, it reports the full file path and the position within the file where the error occurred. After reporting an error, geindexcheck stops searching. This is because searching a corrupt index usually generates large numbers of redundant or irrelevant error messages caused by the initial error.</a></b></p>
+<h4><b><a id="95832">Example</a></b></h4>
+<pre><b><a id="95832">geindexcheck --mode all --database /gevol/published_dbs/stream_space/<i>your_server</i>/gevol/assets/Databases/igain.kdatabase/gedb.kda/ver001/gedb</a></b></pre>
+<h4><b><a id="95832">Commands</a></b></h4>
+<pre><code><b><a id="95832"><b>--mode= {index | all}</b></a></b></code></pre>
+<p><b><a id="958322"><i>Optional</i>. Search the index only (default) or specify &quot;all&quot; to search both the index and packet files (in index order). </a></b></p>
+<pre><code><b><a id="95832">--<b>verbose=</b> <i>n</i></a></b></code></pre>
+<p><b><a id="9583222"><i>Optional</i>. Specify the level of error reporting from 0 (fatal error) to 7 (all messages). The default is 3. This overrides KH_NFY_LEVEL. </a></b></p>
+<pre><code><b><a id="95832">--<b>progress</b> <i>n</i></a></b></code></pre>
+<p><b><a id="95832222"><i>Optional</i>. Request progress messages every n index locations. The default is 100000. To disable, set to 0. </a></b></p>
+<p><b><a>Note: If enabled, this requires a verbose level of 3 or greater.</a></b></p>
+<pre><code><b><a id="95832">--<b>help</b></a></b></code></pre>
+<p><b><a id="958322222"><i>Optional</i>. Print the error message. </a></b></p>
+<pre><code><b><a id="95832">--<b>index=</b><i>index_path</i> | <b>--database=</b><i>database_name</i></a></b></code></pre>
+
+<p><b><b><a id="759142"><i>Required</i>. Specify either the index or the database parameter, but not both. </a></b></b>
+
+<b><b><a>For index, specify the path to the index to search. The index can be of any type. </a></b></b>
+
+<b><b><a>For database, specify the path from the asset root to the database.</a></b></b>
+
+<b><b><a>The unified index for the database is searched. Defaults to the latest version. To override the default, append &quot;?version=n&quot;, where &quot;n&quot; is the version number.</a></b></b></p>
+
+<h2><b><a id="95832">gepublishdatabase
+</a></b></h2>
+<p class="deprecated"><b><a id="95832"><strong>Deprecated in version 4.0</strong><br />
+<code>You can now publish databases using either the geserveradmin tool
+or the Fusion GUI</code>.</a></b></p>
+<pre><code><b><a><b>gepublishdatabase</b> [<b>--delete </b><i>db_name</i><b> </b>[<b>--serverurl</b> <i>url</i>]][<b>--listdbs</b> [<b>--serverurl</b> <i>url</i>]][<b>--publish </b><i>dbname</i> [<b>--server</b> <i>nickname</i>]][<b>--publisheddbs</b> [<b>--serverurl</b> <i>url</i>]]</a></b></code></pre>
+<h4><b><a id="95832">Purpose
+</a></b></h4>
+<p><b><a id="95832">To publish a database.
+</a></b></p>
+<h4><b><a id="95832">Examples
+</a></b></h4>
+<pre><code><b><a>gepublishdatabase --publish msDelta<br />gepublishdatabase --publish msDelta --server mainServer<br />gepublishdatabase --listdbs --serverurl http://private.company.com</a></b></code></pre>
+<h4><b><a id="95832">Commands
+</a></b></h4>
+<pre><code><b><a id="95832"><b>--delete </b><i>db_name</i></a></b></code></pre>
+<p><b><a id="95832">Delete a registered database from the server.
+</a></b></p>
+<pre><code><b><a id="95832"><b>--serverurl</b> <i>url</i></a></b></code></pre>
+<p><b><a id="95832"><i>Optional.</i> Use a specific server URL, such as
+http://private.company.com.
+</a></b></p>
+<pre><code><b><a id="95832"><b>--listdbs</b></a></b></code></pre>
+<p><b><a id="95832">List all databases registered on the server.
+</a></b></p>
+<pre><code><b><a id="95832"><b>--serverurl</b> <i>url</i></a></b></code></pre>
+<p><b><a id="95832"><i>Optional.</i> Use a specific server URL, such as
+http://private.company.com.
+</a></b></p>
+<pre><code><b><a id="95832"><b>--publish </b><i>dbname</i></a></b></code></pre>
+<p><b><a id="95832">Specify the location and name of the database that
+you want to
+publish relative to the asset root, for example, <code>Databases/databaseA</code>.
+</a></b></p>
+<pre><code><b><a id="95832"><b>--server</b> <i>nickname</i></a></b></code></pre>
+<p><b><a id="95832"><i>Optional.</i> Specify the nickname of the server
+association to
+which you want to publish. If you omit the server specification,&nbsp;
+Fusion publishes to the default server. (Consult your administrator or
+refer to the <i>Google Earth Enterprise Administration Guide</i> for
+information about setting up server associations.)
+</a></b></p>
+<pre><code><b><a id="95832"><b>--publisheddbs</b></a></b></code></pre>
+<p><b><a id="95832">List all of the published databases on the server.
+</a></b></p>
+<pre><code><b><a id="95832"><b>--serverurl</b> <i>url</i></a></b></code></pre>
+<p><b><a id="95832"><i>Optional.</i> Use a specific server URL, such as
+http://private.company.com.
+</a></b></p>
+<h2><b><a id="13019">geselectassetroot
+</a></b></h2>
+<pre><code><b><a><b>geselectassetroot</b> <b>[<b>--lock</b>] [--<strong>noprompt</strong>] [<b>--unlock</b>]<br />   ( [<b>--assetroot</b> <i>path</i> [<b>--role</b> {<b>master</b> | <b>slave</b>}] [<b>--numcpus</b> <i>num</i>]] )</b></a></b></code></pre>
+<h4><b><a><b>Purpose
+</b></a></b></h4>
+<p><b><a><b>To perform a variety of operations related to
+existing asset roots
+on the current machine.
+</b></a></b></p>
+<p class="note"><b><a><b><strong>Note:</strong> You must
+stop the system manager
+before using this command and then start it again after you are done.
+You must also run this command as root.
+</b></a></b></p>
+<h4><b><a><b>Example
+</b></a></b></h4>
+<pre><code><b><a><b>geselectassetroot --lock<br />geselectassetroot --unlock<br />geselectassetroot --assetroot /gevol/assets<br />geselectassetroot --assetroot /gevol/assets --role slave --numcpus 3</b></a></b></code></pre>
+<h4><b><a><b>Commands
+</b></a></b></h4>
+<pre><code><b><a><b><b>--lock</b></b></a></b></code></pre>
+<p><b><a><b><i>Optional. </i>Disables the ability to select
+a different asset
+root on this machine.</b></a></b></p>
+<pre><code><b><a><b><b>--noprompt</b></b></a></b></code></pre>
+<p><b><a><b><i>Optional</i>. Perform the command without
+prompting the user for
+any input. This option requires that some commands have arguments
+specified on the command line.</b></a></b></p>
+<pre><code><b><a><b><b>--unlock</b></b></a></b></code></pre>
+<p><b><a><b><i>Optional. </i>Enables the ability to select
+a different asset
+root on this machine. (Use only if <code>--lock</code> is enabled.)
+</b></a></b></p>
+<pre><code><b><a><b><b>--assetroot</b> <i>path</i></b></a></b></code></pre>
+<p><b><a><b><i>Optional. </i>Specify the path to the asset
+root for this
+machine.
+</b></a></b></p>
+<pre><code><b><a><b><b>--role</b> {<b>master</b> | <b>slave</b>}</b></a></b></code></pre>
+<p><b><a><b><i>Optional. </i>Specify this machine's role in
+the asset root
+(master or slave). The default role is master. This command is
+available only in combination with --<code>assetroot</code>.
+</b></a></b></p>
+<pre><code><b><a><b><b>--numcpus</b> <i>num</i></b></a></b></code></pre>
+<p><b><a><b><i>Optional. </i>Specify the number of CPUs on
+this machine to use
+for processing. The default will be the maximum number of CPUs detected
+on the machine during installation. This command is available only in
+combination with --<code>assetroot</code>.</b></a></b></p>
+<h2><b><a id="90064"><b>geselectpublishroot
+</b></a></b></h2>
+<pre><code><b><b><a>geselectpublishroot <i>path</i></a></b></b></code><b><b><a> [--<strong>noprompt</strong>]</a></b></b></pre>
+<h4><b><b><a>Purpose
+</a></b></b></h4>
+<p><b><b><a>To specify a different publish root. The
+specified path must exist.
+If you want to create a publish root, see </a><a href="#30644">geconfigurepublishroot</a>.
+</b></b></p>
+<h4><a><b><b>Example
+</b></b></a></h4>
+<pre><code><a><b><b>geselectpublishroot /gevol/published_dbs</b></b></a></code></pre>
+<h4><a><b><b>Arguments
+</b></b></a></h4>
+<p><code><a><b><b><i>path</i></b></b></a></code>
+</p>
+<p><a><b><b><i>Required</i>. Specify the path to the desired publish root.</b></b></a></p>
+<h4><b><b><a>Options</a></b></b></h4>
+<pre><code><b><b><b><a>--noprompt</a></b></b></b></code></pre>
+<p><a><b><b><i>Optional</i>. Perform the command without prompting the
+user for
+any input. This option requires that some commands have arguments
+specified on the command line.</b></b></a></p>
+<h2><b><b><a id="75914">geserveradmin
+</a></b></b></h2>
+<pre><code><b><b><a><b>geserveradmin</b> [<i>options</i>] <i>commands</i></a></b></b></code></pre>
+<h4><b><b><a>Purpose
+</a></b></b></h4>
+<p><b><b><a>To configure your GEE Server. This section
+breaks down the <code>geserveradmin</code>
+commands into the following categories:
+</a></b></b></p>
+<ul>
+  <b><b><a> </a></b></b>
+  <li><b><b><a>Database</a></b></b></li>
+  <b><b><a> </a></b></b>
+  <li><b><b><a>Virtual server</a></b></b></li>
+  <b><b><a> </a></b></b>
+  <li><b><b><a>Search plug-in</a></b></b></li>
+  <b><b><a> </a></b></b>
+  <li><b><b><a>Admin</a></b></b></li>
+  <b><b><a> </a></b></b>
+  <li><b><b><a>Miscellaneous</a></b></b></li>
+</ul>
+<p><b><b><a>All of the commands of each type are described
+below. At least one
+command is required.
+</a></b></b></p>
+<h4><b><b><a>Examples
+</a></b></b></h4>
+<pre><code><b><b><a>geserveradmin --listdbs<br />geserveradmin --listplugins<br />geserveradmin --server_type map --dbdetails /gevol/assets/Databases/USCounties.kdatabase/gedb.kda/ver001/gedb<br />geserveradmin --server_type map --dbdetails “/gevol/assets/Databases/SF Neighborhoods.kdatabase/gedb.kda/ver001/gedb”<br />geserveradmin --addvs private --vstype ge<br />geserveradmin --disablevs private<br />geserveradmin --addplugin ExamplePlugin --jar_path /your_path/ExamplePlugin.jar--class com.google.earth.search.plugin.ExamplePlugin</a></b></b></code></pre>
+<h4><b><b><a>Options
+</a></b></b></h4>
+<pre><code><b><b><a><b>--stream_server_url</b> <i>url</i></a></b></b></code></pre>
+<p><b><b><a><i>Optional</i>. Specify a stream server other
+than the default. The
+default is the current server.
+</a></b></b></p>
+<pre><code><b><b><a><b>--search_server_url</b> <i>url</i></a></b></b></code></pre>
+<p><b><b><a><i>Optional</i>. Specify a search server other
+than the default. The
+default is the current server.
+</a></b></b></p>
+<pre><code><b><b><a><b>--server_type </b>{<b>stream</b> | <b>search</b>}</a></b></b></code></pre>
+<p><b><b><a><i>Optional</i>. Specify whether the servers in
+question are stream
+or search servers. The default is stream. If you want to reference a
+search server, this option is required with the <code>listdbs</code>, <code>dbdetails</code>,
+<code>listvss</code>, <code>vsdetails</code>, <code>addvs</code>, <code>deletevs</code>,
+<code>disablevs</code>, and <span class="style1">garbagecollect</span>
+commands.</a></b></b></p>
+<h4><b><b><a>Commands
+</a></b></b></h4>
+<h5><b><b><a>Database
+</a></b></b></h5>
+<p><b><b><a>Each of the database commands is listed below,
+along with its syntax
+and description. If the name of the database contains one or more
+spaces, double quote the entire path. (See the examples above.)
+</a></b></b></p>
+<pre><code><b><b><a><b>--adddb</b> <i>db_name </i>[--dbalias <i>alias</i>]</a></b></b></code></pre>
+<p><b><b><a>Register a new database with the specified name.
+</a></b></b></p>
+<pre><code><b><b><a>--dbalias <i>alias</i></a></b></b></code></pre>
+<p><b><b><a><i>Optional</i>. Specifies a user-friendly name
+for the database.
+</a></b></b></p>
+<pre><code><b><b><a><b>--dbdetails </b><i>db_name</i></a></b></b></code></pre>
+<p><b><b><a>Provides a list of all of the files required by
+the specified
+database. If omitted, the server type defaults to <code>stream</code>.
+</a></b></b></p>
+<pre><code><b><b><a><b>--deletedb </b><i>db_name</i></a></b></b></code></pre>
+<p><b><b><a>Deletes the specified database entry from the
+server. Does not
+delete the actual files. (This command is similar to putting files in
+the trash on a Windows or Macintosh desktop. See also <code>--garbagecollect</code>.)
+</a></b></b></p>
+<p class="note"><b><b><a><strong>Note:</strong> If you want
+to delete a
+currently published database, you can either publish a different
+database to the same virtual server or disable the virtual server on
+which it is published. Then you can delete the database. (See also <code>--disablevs</code>.)
+</a></b></b></p>
+<pre><code><b><b><a><b>--listdbs</b></a></b></b></code></pre>
+<p><b><b><a>Lists all databases ever published (except any
+deleted databases) on
+the server. If the server type is omitted, the server type defaults to <code>stream</code>.
+</a></b></b></p>
+<pre><code><b><b><a><b>--listplugins</b></a></b></b></code></pre>
+<p><b><b><a>Lists all plug-ins used on the server. </a></b></b></p>
+<pre><code><b><b><a><b>--publishdb</b> <i>db_name</i> [<b>--push</b>] [<b>--streamvs</b> <i>vs_name</i>] [<b>--searchvs</b> <i>vs_name</i>]</a></b></b></code></pre>
+<p><b><b><a>Publish one or more databases on the specified
+virtual server. If
+the virtual server name is omitted, it publishes to the default server.
+</a></b></b></p>
+<pre><code><b><b><a><b>--push</b></a></b></b></code></pre>
+<p><b><b><a><i>Optional</i>. Push the specified database to
+the virtual server.
+</a></b></b></p>
+<pre><code><b><b><a><b>--streamvs</b> <i>vs_name</i></a></b></b></code></pre>
+<p><b><b><a><i>Optional</i>. Specify the name of the stream
+server.
+</a></b></b></p>
+<pre><code><b><b><a><b>--searchvs</b> <i>vs_name</i></a></b></b></code></pre>
+<p><b><b><a><i>Optional</i>. Specify the name of the search
+server.
+</a></b></b></p>
+<pre><code><b><b><a><b>--publisheddbs</b></a></b></b></code></pre>
+<p><b><b><a>Lists the databases currently published on the
+server. If the server
+type is omitted, the server type defaults to <code>stream</code>. </a></b></b></p>
+<pre><code><b><b><a><b>--pushdb</b> <i>db_name...</i></a></b></b></code></pre>
+<p><b><b><a>Push one or more databases to the server.
+</a></b></b></p>
+<h5><b><b><a>Virtual Server </a></b></b></h5>
+<p><b><b><a>Each of the virtual server commands is listed
+below, along with its
+syntax and description.
+</a></b></b></p>
+<p class="caution"><b><b><a><strong>Caution:</strong>
+Publishing to virtual
+servers other than the default server is supported only in version 4.2
+or later of Google EC. If you are using version 4.0 or earlier, only
+databases that you publish to the default server can be accessed by
+Google EC. </a></b></b></p>
+<pre><code><b><b><a><b>--addvs </b><i>vs_name</i> [<b>--vstype</b> {<b>ge</b> | <b>map</b>}] <b>--vsurl</b> <i>url</i> [<b>--vscachelevel</b> <i>num</i>]</a></b></b></code></pre>
+<p><b><b><a>Registers a new virtual server with the
+specified name. Spaces are
+not allowed in the virtual server name. If the server type is omitted,
+the server type defaults to <code>stream</code>.
+</a></b></b></p>
+<pre><code><b><b><a><b>--vstype</b> {<b>ge</b> | <b>map</b>}</a></b></b></code></pre>
+<p><b><b><a><i>Optional for stream servers</i>. Specify the
+type of databases to
+be published to the new virtual server. If omitted, the <code>virtual
+server type </code>defaults to <code>ge</code>. </a></b></b></p>
+<pre><code><b><b><a><b>--vsurl</b> <i>url</i></a></b></b></code></pre>
+<p><b><b><a><i>Required</i>. The <code>vsurl</code>
+specifies the location of
+the virtual server. It must match the corresponding server-side virtual
+server configuration. There are three ways to specify the <code>vsurl</code>:
+</a></b></b></p>
+<ul>
+  <b><b><a> </a></b></b>
+  <li><b><b><a>Location-based URL, such as <code>/private_ge</code>.
+For
+example, if the entire URL is <code>http://www.company.com/private_ge</code>,
+you enter <code>/private_ge</code>. </a></b></b>
+    <p class="note"><b><b><a><strong>Note:</strong> Google
+recommends that you
+use the <code>_ge</code> and <code>_map</code> naming convention to
+make it easier to distinguish between virtual server types. </a></b></b></p>
+    <b><b><a> </a></b></b></li>
+  <b><b><a> </a></b></b>
+  <li><b><b><a>Port-based URL, such as: </a></b></b>
+    <pre><code><b><b><a>http://www.company.com:1234</a></b></b></code></pre>
+    <b><b><a> </a></b></b>
+    <p><b><b><a>The entire URL, including protocol, server
+name, path (if
+applicable), and port are required. </a></b></b></p>
+    <b><b><a> </a></b></b></li>
+  <b><b><a> </a></b></b>
+  <li><b><b><a>Name-based URL, such as: </a></b></b>
+    <pre><code><b><b><a>http://corp.company.com</a></b></b></code></pre>
+    <b><b><a> </a></b></b></li>
+</ul>
+<p><b><b><a>For this type of specification, you must modify
+your DNS
+appropriately for the virtual server. </a></b></b></p>
+<p><b><b><a>After you use this command, you must create a
+configuration file for
+the new virtual server. (See </a><a href="server.html#95347"><em>Configuring
+Virtual Servers</em></a><a> for details.)</a> </b></b></p>
+<pre><code><b><b><b><a>--vscachelevel <i>num</i></a></b></b></b></code></pre>
+<p><b><b><a><i>Optional</i>. Specify a cache level (<code>1</code>, <code>2</code>,
+or <code>3</code>) for the virtual server. The default is <code>2</code>.</a>
+</b></b></p>
+<p><b><b><a>This cache is different than the client cache. This option
+caches
+only the index nodes at display levels 4, 8, and 12 (not data packets).
+If you increase this setting,&nbsp; Fusion caches more of the index in
+RAM, thereby decreasing server latency at the cost of server RAM. Level
+3 uses approximately 1 GB of RAM. Level 2 uses approximately 4 MB of
+RAM. Level 1 uses approximately 16 KB of RAM. Each additional cache
+level consumes 256 times the RAM as the previous level and saves one
+disk read per packet served.</a></b></b></p>
+<p><b><b><a>The server makes no checks that the RAM needed for caching
+does not
+exceed the total RAM on the machine. For example, if you have three
+virtual servers set to cache at level 3 on a machine that has only2 GB
+of RAM, the machine will thrash memory. The default is Level 2, so you
+should be able to create as many virtual servers as you want at the
+default cache level without worrying about running out of RAM. </a></b></b></p>
+<p><b><b><a>Typically, users increase only a small number of virtual
+servers to
+cache level 3 on production servers and leave the rest of them at level
+2. On servers that share a machine with&nbsp; Fusion, do not increase
+the level to 3. Google Earth Enterprise Fusion needs more RAM than the
+server does.</a></b></b></p>
+<pre><code><b><b><b><a>--deletevs</a></b> <a><i>vs_name</i></a></b></b></code></pre>
+<p><b><b><a>Permanently delete the specified virtual server. If the server
+type
+is omitted, the server type defaults to <code>stream</code>. </a></b></b></p>
+<pre><code><b><b><b><a>--disablevs</a></b> <a><i>vs_name</i></a></b></b></code></pre>
+<p><b><b><a>Temporarily disable the specified virtual server, primarily to
+prevent Google EC users from connecting to that server temporarily. If
+the server type is omitted, the server type defaults to <code>stream</code>.
+</a></b></b></p>
+<p class="note"><b><b><a><strong>Note:</strong> To re-enable a disabled
+virtual
+server, simply publish a database to it. </a></b></b></p>
+<pre><code><b><b><b><a>--listvss</a></b></b></b></code></pre>
+<p><b><b><a>Provides a list of all virtual servers configured for the
+current
+machine. If the server type is omitted, the server type defaults to <code>stream</code>.</a>
+</b></b></p>
+<pre><code><b><b><b><a>--vsdetails</a></b><a><i> vs_name</i></a></b></b></code></pre>
+<p><b><b><a>Displays the name and URL of the specified virtual server. If
+the
+server type is omitted, the server type defaults to <code>stream</code>.
+</a></b></b></p>
+<h5><b><b><a id="10143">Search Plug-in </a></b></b></h5>
+<p><b><b><a>Each of the search plug-in commands is listed
+below, along with its
+syntax and description. </a></b></b></p>
+<p class="note"><b><b><a><strong>Note:</strong> These
+commands are available on
+search servers only.
+</a></b></b></p>
+<pre><code><b><b><a><b>--addplugin</b> <i>plugin_name</i> --jar_path <i>path</i> --class <i>class_name</i></a></b></b></code></pre>
+<p><b><b><a>Registers a new search plug-in.
+</a></b></b></p>
+<pre><code><b><b><a><b>--jar_path</b> <i>path</i></a></b></b></code></pre>
+<p><b><b><a><i>Required</i>. Specify the path to the <code>.jar</code>
+file for
+the plug-in.
+</a></b></b></p>
+<pre><code><b><b><a><b>--class</b> <i>class_name</i></a></b></b></code></pre>
+<p><b><b><a><i>Required</i>. Specify a fully qualified class
+name for the
+plug-in.
+</a></b></b></p>
+<pre><code><b><b><a><b>--deleteplugin</b> <i>plugin_name</i></a></b></b></code></pre>
+<p><b><b><a>Deletes the specified search plug-in.
+</a></b></b></p>
+<pre><code><b><b><a><b>--listplugins</b></a></b></b></code></pre>
+<p><b><b><a>Lists all registered plugins.</a></b></b></p>
+<h5><b><b><a>Admin
+</a></b></b></h5>
+<p><b><b><a>Each of the admin commands is listed below,
+along with its syntax
+and description. </a></b></b></p>
+<pre><code><b><b><a><b>--garbagecollect</b></a></b></b></code></pre>
+<p><b><b><a>Permanently deletes the files for databases that
+have been selected
+for deletion. Generally, you run this command nightly to remove the
+files for databases that users have deleted to free up space on the
+storage device. (This command is similar to emptying the trash on a
+Windows or Macintosh desktop. See also <code>--deletedb</code>.)
+</a></b></b></p>
+<p class="note"><b><b><a><strong>Note:</strong> Deletes only
+those files that
+are not used by other databases on that server.
+</a></b></b></p>
+<h5><b><b><a>Miscellaneous</a></b></b></h5>
+<p><b><b><a>Each of the miscellaneous commands is listed
+below, along with its
+syntax and description.</a></b></b></p>
+<pre><b><b><a><strong>--enable_cutter</strong></a></b></b></pre>
+<p><b><b><a>Enables cutting of portable globes. For more
+information about
+portable globes, please refer to the <strong>Portable Globe and Server</strong>
+guide.</a></b></b></p>
+<pre><b><b><a><strong>--disable_cutter</strong></a></b></b></pre>
+<p><b><b><a>Disables cutting of portable globes.</a></b></b></p>
+<h2><b><b><a id="69541">getop
+</a></b></b></h2>
+<pre><code><b><b><a><b>getop --delay </b><i>seconds</i></a></b></b></code></pre>
+<h4><b><b><a>Purpose
+</a></b></b></h4>
+<p><b><b><a>To display a list of what&nbsp; Fusion is
+currently working on and
+whether <code>gesystemmanager</code> and <code>geresourceprovider </code>are
+currently running. </a></b></b></p>
+<p><b><b><a>Enter <b>Ctrl-C </b>to exit and return to the
+prompt.
+</a></b></b></p>
+<h4><b><b><a>Example
+</a></b></b></h4>
+<pre><code><b><b><a>getop --delay 30</a></b></b></code></pre>
+<h4><b><b><a>Commands
+</a></b></b></h4>
+<pre><code><b><b><a><b>--delay</b> <i>seconds</i></a></b></b></code></pre>
+<p><b><b><a><i>Optional</i>. Specify the number of seconds
+delay between
+refreshes. For example, if you specify <code>30</code>, <code>getop</code>
+runs every 30 seconds. If you do not specify the delay, it does not
+refresh.
+</a></b></b></p>
+<h2><b><b><a>geupgradeassetroot </a></b></b></h2>
+<pre><code><b><b><a><b>geupgradeassetroot</b> <b>--assetroot</b> <i>path</i></a></b></b></code><b><b><a> [--<strong>noprompt</strong>]</a></b></b></pre>
+<h4><b><b><a>Purpose
+</a></b></b></h4>
+<p><b><b><a>To upgrade an existing asset root after
+installing a later version
+of the software.
+</a></b></b></p>
+<p class="note"><b><b><a><strong>Note:</strong> You must
+stop the system manager
+before using this command and then start it again after you are done.
+You must also run this command as root.
+</a></b></b></p>
+<h4><b><b><a>Example
+</a></b></b></h4>
+<pre><code><b><b><a>geupgradeassetroot --assetroot /data1/assets</a></b></b></code></pre>
+<h4><b><b><a>Commands
+</a></b></b></h4>
+<pre><code><b><b><a><b>--assetroot</b> <i>path</i></a></b></b></code></pre>
+<p><b><b><a><i>Required</i>. Specify the path to the asset
+root. If omitted, the
+asset root defaults to <code>/gevol/assets</code>.</a></b></b></p>
+<pre><code><b><b><a><b>--noprompt</b></a></b></b></code></pre>
+<p><b><b><a><i>Optional</i>. Perform the upgrade without
+prompting the user for
+any input. This option requires that some commands have arguments
+specified on the command line.</a></b></b></p>
+<p>
+</p>
+</div>
+<!-- END PAGE CONTENT -->
+<p class="backtotop"><b><b><a href="#top">Back to top</a></b></b></p>
+</div>
+
+<!-- END WRAPPER --><!-- BEGIN FOOTER --><!-- END FOOTER -->
+</body></html>

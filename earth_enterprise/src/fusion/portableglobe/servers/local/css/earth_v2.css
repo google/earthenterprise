@@ -1,0 +1,148 @@
+/*
+ * Copyright 2017 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* TODO: High-level file comment. */
+html, body {
+  border: none;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  color: #222222;
+}
+#map {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+}
+#layers {
+  background-color: #FFFFFF;
+  opacity: 0.9;
+  overflow: auto;
+  max-height: 888px;
+  width: 306px;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  z-index: 5;
+  box-shadow:0 2px 4px rgba(0,0,0,0.4);
+  -moz-box-shadow:0 2px 4px rgba(0,0,0,0.4);
+  -webkit-box-shadow:0 2px 4px rgba(0,0,0,0.4)
+}
+#layersInner {
+  padding: 20px;
+}
+#layersInner h1 {
+  margin: 0;
+  padding: 2px 0px 8px 0px;
+  font-weight: normal;
+  font-size: 18px;
+  color: #DD4B39;
+}
+#layersList ul {
+  margin: 0;
+  padding: 0 0 0 20px;
+  list-style-type: none;
+}
+#globesList select {
+  width: 100%;
+}
+#layersCollapse {
+  position: absolute;
+  top: 5px;
+  left: 287px;
+  z-index: 10;
+  height: 23px;
+  width: 23px;
+  border: 1px solid #E0E0E0;
+  border-width: 0 0 1px 1px;
+  opacity: 0.9;
+  box-shadow: none;
+}
+#layersCollapse div {
+  height: 12px;
+  width: 6px;
+  opacity: 0.7;
+  margin: 6px 0 0 8px;
+  background-attachment: scroll;
+  background-clip: border-box;
+  background-image: url('/local/images/hpimgs28.png');
+  background-position: -132px -26px;
+}
+.collapsed {
+  background-color: #FFFFFF;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px 0px;
+  border-width: 1px;
+  height: 22px;
+  width: 22px;
+}
+#search {
+  position: absolute;
+  top: 5px;
+  left: 320px;
+  z-index: 5;
+  opacity: 0.9;
+}
+#search .control {
+  width: 250px;
+  margin-bottom: 5px;
+  border-color: #717B87;
+  border-width: 1px 1px 1px 8px;
+  border-style: solid;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px 0px;
+  background-color: #FFFFFF;
+}
+#searchResults {
+  background-color: #FFFFFF;
+  opacity: 0.9;
+  overflow: auto;
+  max-height: 580px;
+  width: 259px;
+  box-shadow:0 2px 4px rgba(0,0,0,0.4);
+  -moz-box-shadow:0 2px 4px rgba(0,0,0,0.4);
+  -webkit-box-shadow:0 2px 4px rgba(0,0,0,0.4);
+}
+#searchResultsInner {
+  padding: 20px;
+}
+#search input, #search select {
+  width: 246px;
+  border: none;
+  margin: 0;
+  padding: 2px;
+}
+#searchResultsInner ul {
+  list-style-type: none;
+  padding: 0px;
+  margin: 0;
+}
+#searchResultsInner li:first-child {
+   padding-top: 0px;
+}
+#searchResultsInner li {
+  padding: 0;
+  padding-top: 14px;
+  margin: 0;
+  clear: both;
+}
+#searchResultsInner img {
+  float: left;
+  padding-right: 6px;
+  clear: both;
+}

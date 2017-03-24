@@ -1,0 +1,35 @@
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# This is an example of a port-based GE virtual server
+# Substitute appropriate values in the following variables
+# 1. <IP_ADDRESS> : IP address of this host
+# 2. <PORT>       : Port you want to listen to
+# 3. <VS_NAME>    : The virtual server name used to create the virtual 
+#                   server with geserveradmin
+
+
+
+Listen <IP_ADDRESS_>:<PORT>
+
+<VirtualHost <IP_ADDRESS>:<PORT>>
+  RewriteEngine on
+  RewriteRule  ^/$  /earth/earth_local.html [PT]
+  Include conf.d/virtual_servers/runtime/<VS_NAME>_runtime
+</VirtualHost>
+
+
+

@@ -1,0 +1,387 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../fusion/html/css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Search Framework API</title>
+</head>
+
+<body>
+
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border="0" src="../fusion/html/images/index.gif" />
+  </div>
+  <h1 id="doc_title">Search Framework API</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../index.html">4.4 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Search Framework API</strong></li>
+    <li><a href="index.html">Overview</a></li>
+    <li><a href="JavaClassLibrary.html">Java Class Library</a></li>
+    <li><a href="CreatingAPlugin.html" id="selected">Creating a Plug-in</a></li>
+    <li><a href="samples.html">Sample Plug-ins</a></li>
+    <li><a href="docs/index.html">Class Reference</a></li>
+  </ul>
+</div> 
+<!-- ########## END SIDE NAVIGATION ########## -->
+
+<!-- ########## PAGE CONTENT ########## -->
+<div id="pagecontent">
+
+<h1>Creating a Plug-in</h1>
+
+<ol class="toc">
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#basic_tasks">Basic Tasks</a></li>
+  <li><a href="#populating">Populating the Search Response</a></li>
+  <li><a href="#sample">Sample KML Response</a></li>
+  <li><a href="#error">Error Handling</a></li>
+</ol>
+
+
+<h1 id="overview">Overview</h1>
+
+<p>The Search Framework includes a sample plug-in application that illustrates the basic tasks involved in writing a plug-in (<code>ExamplePlugin.java</code>). This plug-in queries a relational database (also included in this software distribution) with spatial data for 88 San Francisco neighborhoods. The name of the database is <code>san_francisco_neighborhoods</code>. In addition to the polygon descriptions for each neighborhood, the database includes associated attribute data. </p>
+<p>You can explore the sample database using this command:</p>
+
+<pre>$psql -U geuser searchexample</pre>
+
+<p>To test the sample plug-in, you can create a custom search tab using the Search Tab Manager in Google Earth Enterprise Fusion. See the &quot;Defining Search Tabs&quot; lesson in the <em>Google Earth Enterprise Fusion Tutorial</em> for details.</p>
+
+<h2>Create the JAR File</h2>
+
+<p>After you write your plug-in, you need to package it in a standard Java&#8482; Archive (JAR) file. An example of using the <code>jar</code> command to create this file is</p>
+<pre>jar -cvf MyPlugin.jar /path/to/java/file/MyPlugin.java
+</pre>
+<p>To use the Search Framework Java Class Library, you need to include this line in your code to refer to the <code>SearchAPI.jar</code> file:</p>
+<pre>import com.google.earth.search.api.*;
+</pre>
+<p>Be sure the <code>SearchAPI.jar</code> file is in your CLASSPATH.</p>
+
+<h2>Register the Plug-in  </h2>
+<p>You also need to register your plug-in with the Search Framework. See the <em>Google Earth Enterprise Administration Guide</em>, Chapter 4, for instructions on how to register your plug-in. </p>
+
+<h1 id="basic_tasks">Basic Tasks</h1>
+<p>The search plug-in application performs the following basic tasks, as illustrated in the sample program. You are required to implement the <code>SearchPlugin</code> interface, which includes the <code>init()</code> and <code>doSearch()</code> methods. </p>
+
+<ol>
+  <li>Implements the <code>SearchPlugin</code> interface, which constructs the plug-in. The <code>init()</code> method is called by the plug-in factory to perform initialization checks when the Search Framework Service is started.  Typically, you would check database connections here.<br />
+    <br />
+Here is the <code>init()</code> method in <code>ExamplePlugin.java</code>:
+
+<pre>public boolean init() {
+  // Assume the connection will be successful
+  boolean status = true;
+
+
+  // Define a connection string to the PostgreSQL database, 'ExampleDatabase'
+  String url = &quot;jdbc:postgresql://localhost/searchexample&quot;;
+  Properties props = new Properties();
+  props.setProperty(&quot;user&quot;,&quot;geuser&quot;);
+  props.setProperty(&quot;password&quot;,&quot;&quot;);
+
+    // Try to connect
+    try {
+    conn = DriverManager.getConnection(url, props);
+    } 
+    catch(SQLException e) {
+      status = false;
+    }
+    return status;
+  }
+}</pre>
+  </li>
+	<li> Implements the <code>doSearch()</code> method. This method is where the plug-in does most of its work. The Adapter calls <code>doSearch()</code> on the plug-in when it sends a search request to the plug-in. The <code>doSearch()</code> method performs the following tasks:
+	  <ul>
+		<li>Checks that the search request is valid. A search request is a collection of key/value pairs. The <code>doSearch()</code> method in the example looks for the term &quot;neighborhood,&quot; which is the specific search key that this plug-in depends upon:</li>
+    <pre>public boolean doSearch(SearchContainer searchContainer) {
+  boolean status = true;
+  SearchResponse exampleSearchResponse = new SearchResponse();
+  exampleSearchResponse.setDataStoreName(&quot;Example Database&quot;);
+
+  // Attempt to extract the search term 'neighborhood' from the query string
+  if (searchContainer.getSearchRequest().contains(&quot;neighborhood&quot;)) {
+
+  String neighborhoodSearchTerm = searchContainer.getSearchRequest().getItem(
+			&quot;neighborhood&quot;);
+.
+.
+.
+</pre>
+	    </p>
+	  <li>Queries  the data store for the key/value pairs contained in the search request. In this example, the key/value pair is <code>neighborhood = pac</code>.</li>
+	  <li>Receives the response from the data store, creates a Search Response object, and adds it to the Search Container. A given plug-in application creates one Search Response, which is actually a <em>collection</em> of all resulting matches to the search request. </li>
+	  <li>Creates a Search Result for each match and populates it with geometry, style, and metadata information for the match. </li>
+	  <li>Adds all Search Results to the Search Response. </li>
+	  <li>Returns the Search Container to the Adapter. </li>
+	  </ul>
+	</li>
+</ol>
+
+<h1 id="populating">Populating the Search Response</h1>
+
+<p>The main task of the Search Plug-in is to populate the Search Response with the set of defined display styles and the Search Results for each match.</p>
+<p>As you read the sample code, keep in mind the structure of the Search Response, as shown here:</p>
+<p><img src="Images/SearchContainer.gif" width="604" height="421" /></p>
+<p>Each Search Result contains the objects shown here:</p>
+<p><img src="Images/SearchResult.gif" width="350" height="216" /> 
+</p>
+<h2>Create the Metadata</h2>
+
+<p>The metadata includes the <em>name</em>, <em>snippet</em>, and <em>description</em> that are used to annotate the geometry object. After the metadata hash map is fillled in, it is associated with the geometry object using the <code>setUserData()</code> method. For example: </p>
+
+<pre>geomMeta = new GeomMetaBlock();<br />geomMeta.name = &quot;Paris, France&quot;;<br />geomMeta.snippet = &quot;City of Light&quot;;<br />geomMeta.description = &quot;Be sure to visit the Eiffel Tower, with 1660 steps and a fabulous view at the top.&quot;;<br />jtsPointGeometry.setUserData(geomMeta);</pre>
+
+<p>Here is how the metadata is created in the sample program ( <code>ExamplePlugin.java</code>):</p>
+
+<pre>// Create the HashMap we'll use to populate with results
+<strong>HashMap&lt;String, Object&gt; searchResult = new HashMap&lt;String, Object&gt;();</strong>
+						
+// Create an instance of a GeomMetadata
+GeomMetadata geomMeta = new GeomMetadata();
+
+// Add name meta block
+geomMeta.name = results.getString(&quot;nbrhood&quot;);
+geomMeta.snippet = results.getString(&quot;sfar_distr&quot;);
+geomMeta.description = &quot;The total area in decimal degrees of &quot; + results.getString(&quot;nbrhood&quot;) + 
+is: &quot; + results.getString(&quot;area&quot;) + &quot;&lt;br&gt;&quot;;
+geomMeta.description + =  &quot;The total perimeter in decimal degrees of &quot; + 
+results.getString(&quot;nbrhood&quot;) + &quot; is: &quot; + results.getString(&quot;perimeter&quot;);</pre>
+
+<h2>Create the Geometry Collection</h2>
+
+<p>Points, lines, and polygons are created using the Java JTS Library. 
+  With JTS, a geometry object is always contained in a geometry array,
+  even if there is only one geometry object. For example:</p>
+
+<pre>Coordinate coordinates = new Coordinate(82.724077, 29.238066);
+Geometry jtsPointGeometry = new GeometryFactory().createPoint(coordinates);
+Geometry[] geomArray = new Geometry[1];
+geomArray[0] = jtsPointGeometry;</pre>
+
+<p>In the sample program (<code>ExamplePlugin.java</code>), the geometry object
+  is constructed by the helper function <code>geometryFromWKBResultSet()</code>.
+  This function generates JTS geometry from polygons that are stored in the
+  Well-Known Binary (WKB) format:</p>
+
+<pre>private Geometry geometryFromWKBResultSet(byte[] bytes) throws IOException {
+
+  // Instantiate a WKB Reader object
+  org.geotools.data.postgis.attributeio.WKBReader wkbReader = new org.geotools.data.postgis.attributeio.WKBReader();
+  
+  // Decode the result
+  byte[] b = org.geotools.data.postgis.attributeio.Base64.decode(bytes);
+  
+  // WKB-&gt;JTS Geom
+  Geometry wkbGeometry = wkbReader.read(b);
+
+  // Return new JTS geometry
+  return new GeometryFactory().createGeometry(wkbGeometry);
+}</pre>
+
+<p> After the geometry is created, it is added to the JTS Geometry collection:</p>
+
+<pre>Geometry geom = geometryFromWKBResultSet(results.getBytes(&quot;the_geom&quot;));
+
+// Add our metadata block to the geometry
+<strong>geom.setUserData(geomMeta);</strong>
+
+// Create a JTS GeometryCollection and place our new Geometry in it.
+Geometry[] geoms = new Geometry[1];
+geoms[0] = geom;
+GeometryCollection geomCollection = new GeometryFactory().createGeometryCollection(geoms);
+
+// Add our JTS Geometry to the HashMap
+<strong>searchResult.put(&quot;geometry&quot;, geomCollection);</strong>
+</pre>
+	
+<p>This excerpt also shows adding the GeomMetadata to the geometry object (<code>geom.setUserData</code>). </p>
+
+<h2>Create the Styles</h2>
+
+<p>The Styles are created in their own collection with an ID so that the geometry and metadata elements in each Search Result can reference the same styles.</p>
+<p>For example, the <em>ExamplePlugin.java</em> sample sets the style for the KML
+  response using the following:</p>
+
+<pre>setStyle(exampleSearchResponse, preferences, NEIGHBORHOOD_STYLE);</pre>
+
+<p>It uses the KMLPluginPreferences &quot;<span class="style1">preferences</span>&quot; values to set the style and assigns this Style ID &quot;<span class="style1">neighborhood_style</span>.&quot;</p>
+<p>To customize these styles for your plug-in, choose from one of the following options:</p>
+
+<ul>
+  <li>Specify the specify the defaults in the properties file for your plug-in, which will be compiled into your JAR file and can be overriden by a properties file placed in:
+    <pre>/opt/google/getomcat/conf</pre>
+    <p>An example properties file is in: <code>/opt/google/search/plugins/ExamplePlugin.properties</code></p>
+
+<pre>balloonStyle.bgColor=ffffffff
+balloonStyle.textColor=ff000000
+balloonStyle.text=$[description]
+lineStyle.width=5
+lineStyle.color=7fFFFF00
+iconStyle.scale=1
+iconStyle.href=../../icons/icon52.png
+polyStyle.color=7f66ffff
+polyStyle.colorMode=normal
+polyStyle.fill=true
+polyStyle.outline=true</pre>
+
+    <p>Colors are specified using hexadecimal numbers of the form &quot;<span class="style1">AARRGGBB</span>&quot; where:
+      <span class="style1">AA</span> is the alpha value between &quot;
+      <span class="style1">00</span>&quot; (transparent) and &quot;<span class="style1">ff</span>&quot; (opaque)
+      <span class="style1">RR</span> is the red value between &quot;<span class="style1">00</span>&quot; (black)
+      and &quot;<span class="style1">ff</span>&quot; (red)
+      <span class="style1">GG</span> is the green value between &quot;<span class="style1">00</span>&quot; (black)
+      and &quot;<span class="style1">ff</span>&quot; (green)
+      <span class="style1">GG</span> is the blue value between &quot;<span class="style1">00</span>&quot; (black)
+      and &quot;<span class="style1">ff</span>&quot; (blue)
+    </p>
+  </li>
+  <li>Override the defaults to any plug-in property in the Additional Query Parameters
+    field in the Search Tabs Manager. For example, add the Additional Query Parameter:
+    <code> balloonStyle.bgColor=ff000000</code> code overrides the defaults to set the
+    balloon background color to black.
+  </li>
+  <li>Override them programmatically in ExamplePlugin.java
+    by passing your own custom KMLPluginPreferences value into the <span class="style1">setStyle</span> method.
+    For example, you could programmatically override the polygon fill style using:
+    <pre>preferences.setPreference(KmlProperties.POLYSTYLE_FILL , &quot;false&quot;);</pre>
+  </li>
+</ul>
+
+<p>See the documentation on <code>KmlProperties</code> for the complete list of KML style preferences used by the search framework.</p>
+<p>When building a new search plug-in, it is recommended that you  inherit from <span class="style1">KmlSearchPlugin,</span> as this parent class will automatically give you a good set of default KML style preferences.</p>
+
+<h2>Add the Geometry and the Style ID to the Search Result </h2>
+
+<p>The following code adds the JTS Geometry and the Style ID (&quot;neighborhood_style&quot;) to the Result Map.</p>
+<pre>// Add the JTS Geometry to the HashMap<br />searchResult.put(&quot;geometry&quot;, geomCollection);
+
+// Add the default style to the HashMap<br />searchResult.put(&quot;styleID&quot;, &quot;neighborhood_style&quot;);</pre>
+
+<h2>Add the Search Result to the Search Response</h2>
+
+<p>The last step is to add the Search Result to the Search Response. The Adapter sends the completed Search Container back to the calling application (here, Google Earth).</p>
+<pre>exampleSearchResponse.addSearchResponse(searchResult);</pre>
+<p>See the section <a href="#KmlResponse"><em>Sample KML Response</em></a> for an example of the KML the Adapter returns to Google Earth. </p>
+    
+<h1 id="sample">Sample KML Response</h1>
+
+<p>Here is the KML response the Adapter returns to Google Earth when the sample program is run using &quot;pac&quot; as a search term.  Two neighborhoods match the term (Lower Pacific Heights and Pacific Heights). The response includes the coordinates for the polygon that represents the neighborhood, as well as a short specification of the neighborhood (in the &lt;Snippet&gt;) and statements about the area and perimeter of the neighborhood (in the &lt;description&gt;). The response defines styles for the icon to use when the information is displayed in Google Earth, the line style and width, the polygon colors, and the balloon background and text colors.</p>
+
+<pre>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;
+&lt;kml xmlns=&quot;http://earth.google.com/kml/2.1&quot;&gt;
+  &lt;Document&gt;
+    &lt;name&gt;pac&lt;/name&gt;
+    &lt;open&gt;true&lt;/open&gt;
+    &lt;Style id=&quot;-50423801&quot;&gt;
+    &lt;IconStyle&gt;
+      &lt;scale&gt;1.0&lt;/scale&gt;
+      &lt;Icon&gt;
+        &lt;href&gt;http://maps.google.com/mapfiles/kml/pal3/icon52.png&lt;/href&gt;
+      &lt;/Icon&gt;
+    &lt;/IconStyle&gt;
+    &lt;LineStyle&gt;
+      &lt;color&gt;7FFFFF00&lt;/color&gt;
+      &lt;width&gt;5.0&lt;/width&gt;
+    &lt;/LineStyle&gt;
+    &lt;PolyStyle&gt;
+      &lt;color&gt;7F66FFFF&lt;/color&gt;
+      &lt;colorMode&gt;normal&lt;/colorMode&gt;
+      &lt;fill&gt;true&lt;/fill&gt;
+      &lt;outline&gt;true&lt;/outline&gt;
+    &lt;/PolyStyle&gt;
+    &lt;BalloonStyle&gt;
+      &lt;bgColor&gt;FFFFFFFF&lt;/bgColor&gt;
+      &lt;textColor&gt;FF000000&lt;/textColor&gt;
+      &lt;text&gt;$[description]&lt;/text&gt;
+    &lt;/BalloonStyle&gt;
+  &lt;/Style&gt;
+  &lt;Folder&gt;
+    &lt;name&gt;Example Database : pac (2)&lt;/name&gt;
+    &lt;open&gt;true&lt;/open&gt;
+    &lt;Placemark&gt;
+      &lt;name&gt;Lower Pacfic Heights&lt;/name&gt;
+      &lt;Snippet&gt;District 6 - Central North&lt;/Snippet&gt;
+      &lt;description&gt;The total area in decimal degrees of Lower Pacfic Heights is: 9.30182244225364e-05&amp;lt;br&amp;gt;
+        The total perimeter in decimal degrees of Lower Pacfic Heights is: 0.0514157578838219
+      &lt;/description&gt;
+      &lt;styleUrl&gt;-50423801&lt;/styleUrl&gt;
+      &lt;MultiGeometry&gt;
+        &lt;Polygon&gt;
+          &lt;outerBoundaryIs&gt;
+            &lt;LinearRing&gt;
+              &lt;coordinates&gt;-122.44687689905778,37.787129435519944,0.0 
+                -122.42571018545522,37.78982222179978,0.0 
+                -122.4248484613893,37.78555522846147,0.0 
+                -122.43968850285422,37.78364257657305,0.0 
+                -122.44600959570256,37.78282695735555,0.0 
+                -122.44687689905778,37.787129435519944,0.0 
+              &lt;/coordinates&gt;
+            &lt;/LinearRing&gt;
+          &lt;/outerBoundaryIs&gt;
+        &lt;/Polygon&gt;
+      &lt;/MultiGeometry&gt;
+    &lt;/Placemark&gt;
+    &lt;Placemark&gt;
+      &lt;name&gt;Pacific Heights&lt;/name&gt;
+      &lt;Snippet&gt;District 7 - North&lt;/Snippet&gt;
+      &lt;description&gt;The total area in decimal degrees of Pacific Heights is: 0.000203463059316178&amp;lt;br&amp;gt;
+        The total perimeter in decimal degrees of Pacific Heights is: 0.0664409249373422
+      &lt;/description&gt;
+      &lt;styleUrl&gt;-50423801&lt;/styleUrl&gt;
+      &lt;MultiGeometry&gt;
+        &lt;Polygon&gt;
+          &lt;outerBoundaryIs&gt;
+            &lt;LinearRing&gt;
+              &lt;coordinates&gt;-122.4467190122819,37.795564413628355,0.0 
+                -122.42374705552396,37.79848642852926,0.0 
+                -122.42322064305651,37.79587171870621,0.0 
+                -122.42209284430686,37.790282293885255,0.0 
+                -122.42571018545522,37.78982222179978,0.0 
+                -122.44687689905778,37.787129435519944,0.0 
+                -122.44783765823885,37.791889784713526,0.0 
+                -122.44647351227088,37.79214167975448,0.0 
+                -122.4469944571491,37.79550767417969,0.0 
+                -122.4467190122819,37.795564413628355,0.0 
+              &lt;/coordinates&gt;
+            &lt;/LinearRing&gt;
+           &lt;/outerBoundaryIs&gt;
+          &lt;/Polygon&gt;
+        &lt;/MultiGeometry&gt;
+      &lt;/Placemark&gt;
+    &lt;/Folder&gt;
+  &lt;/Document&gt;
+&lt;/kml&gt;</pre>
+              
+<p>Here are the results in Google Earth:</p>
+<p>&nbsp;<img src="Images/SampleKmlResults.gif" width="459" height="321" /></p>
+
+<h1 id="error">Error Handling</h1>
+
+<p>Be sure to handle failure conditions gracefully in your code. When the plug-in
+  returns an empty Search Container, the Adapter generates an &quot;Empty response&quot; error
+  message. </p>
+
+
+</div> 
+<!-- ########## END PAGE CONTENT ########## -->
+
+</div><!-- end wrapper -->
+
+</body>
+</html>

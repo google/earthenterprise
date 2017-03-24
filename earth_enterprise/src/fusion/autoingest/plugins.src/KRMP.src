@@ -1,0 +1,113 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#config Name       KRMP
+#config Base       Leaf
+#config Config     KRMPConfig
+#config Subtype    KRMP
+// #config FixedType
+#config WithReuse 1
+
+
+// ===== KRMPAsset.h =====
+#include <autoingest/.idl/storage/KRMPConfig.h>
+
+// ===== KRMPAsset.cpp =====
+
+// ===== KRMPAssetD.h =====
+
+// ===== KRMPAssetD.cpp =====
+#include <khgdal/khGDALDataset.h>
+#include <khraster/khRasterProduct.h>
+
+
+uint64
+GetMaskSizeEstimate(const std::string &maskfile,
+                    const std::string &datafile)
+{
+  khGDALDataset srcDS;
+
+  // see if we can load the maskfile and get the
+  // geoExtents from it. Ignore the exceptions, we'll check srcDS later
+  try {
+    srcDS = khGDALDataset(maskfile);
+  } catch (...) {
+  }
+
+  if (!srcDS) {
+    // extract the geo information from the datafile
+    khExtents<double> dataExtents;
+    std::string dataSRS;
+
+    // check if the datafile is a raster product
+    khDeleteGuard<khRasterProduct> dataRP(khRasterProduct::Open(datafile));
+    if (dataRP) {
+      // the datafile is a raster product
+      dataExtents  = dataRP->degOrMeterExtents();
+      dataSRS      = GetWGS84ProjString();
+    } else {
+      // Open the datafile via GDAL
+      khGDALDataset dataDS(datafile);
+      dataExtents  = dataDS.geoExtents().extents();
+      dataSRS      = dataDS->GetProjectionRef();
+    }
+
+    // now make the srcDS, overriding the srs and extents
+    srcDS = khGDALDataset(maskfile, dataSRS, dataExtents);
+  }
+
+
+  khSize<uint32> rasterSize = srcDS.normalizedRasterSize();
+  // LZ compression will normally be about 10x or more. we'll assume 2x
+  return ((uint64)rasterSize.width *
+          (uint64)rasterSize.height *
+          1 * sizeof(uchar)) / 2;
+
+
+}
+
+
+
+void
+KRMPAssetVersionImplD::DoSubmitTask(void)
+{
+  TaskDef task(*this);
+  std::vector<std::string> inputs;
+  GetInputFilenames(inputs);
+  task.AddInputs(inputs);
+  if (inputs.size() != 2) {
+    throw khException("Internal Error: KRMP num inputs != 2");
+  }
+
+  // Estimate resultant product size
+  uint64 sizeEstimate = 0;
+  sizeEstimate = GetMaskSizeEstimate(inputs[1], inputs[0]);
+
+  task.AddOutput(WorkingFileRef("mask.kmp"),
+                 sizeEstimate);
+
+  task << "gerasterimport"
+       << "--alphamask" << "$INPUTS[1]"
+       << "--dataproduct" << "$INPUTS[0]"
+       << "-o" << "$OUTPUT";
+  if (!config.overridesrs.empty()) {
+    task << "--srs" << config.overridesrs;
+  }
+  if (config.useMercatorProjection) {
+    task << "--mercator";
+  }
+
+  // priority of -1 means slightly higher priority than the default 0
+  theAssetManager.SubmitTask(GetRef(), task, -1);
+}

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/examples/streetview-service.html";
+    </script>
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Google Maps JavaScript API Example: Street View Service</title>
+<link href="http://code.google.com/apis/maps/documentation/javascript/examples/standard.css" rel="stylesheet" type="text/css" />
+<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+<script type="text/javascript">
+  var map;
+  var berkeley = new google.maps.LatLng(37.869085,-122.254775);
+  var sv = new google.maps.StreetViewService();
+
+  var panorama;
+
+  function initialize() {
+
+    panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"));
+    
+    // Set up the map
+    var mapOptions = {
+      center: berkeley,
+      zoom: 16,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      streetViewControl: false
+    };
+    map = new google.maps.Map(document.getElementById('map_canvas'),
+        mapOptions);
+
+    // getPanoramaByLocation will return the nearest pano when the
+    // given radius is 50 meters or less.
+    google.maps.event.addListener(map, 'click', function(event) {
+        sv.getPanoramaByLocation(event.latLng, 50, processSVData);
+    });
+  }
+
+  function processSVData(data, status) {
+    if (status == google.maps.StreetViewStatus.OK) {
+      var marker = new google.maps.Marker({
+        position: data.location.latLng,
+        map: map,
+        title: data.location.description
+      });
+      
+      panorama.setPano(data.location.pano);
+      panorama.setPov({
+        heading: 270,
+        pitch: 0,
+        zoom: 1
+      });
+      panorama.setVisible(true);
+      
+      google.maps.event.addListener(marker, 'click', function() {
+      
+        var markerPanoID = data.location.pano;
+        // Set the Pano to use the passed panoID
+        panorama.setPano(markerPanoID);
+        panorama.setPov({
+          heading: 270,
+          pitch: 0,
+          zoom: 1
+        });
+        panorama.setVisible(true);
+      });
+    } else {
+      alert("Street View data not found for this location.");
+    }
+  }
+</script>
+</head>
+<body onload="initialize()">
+  <div id="map_canvas" style="width: 425px; height: 400px;float:left"></div>
+  <div id="pano" style="width: 425px; height: 400px;float:left"></div>
+</body>
+</html>

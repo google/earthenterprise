@@ -1,0 +1,122 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#config Name      VectorLayer
+#config Base      Composite
+#config ConfigHistory LayerConfig,VectorLayerAssetConfig
+#config Subtype   VectorLayer
+#config FixedType Vector
+
+
+// ===== VectorLayerAsset.h =====
+#include <autoingest/.idl/storage/VectorLayerAssetConfig.h>
+
+class VectorLayerAssetVersionImpl {
+ public:
+  std::string GetPOIFile(void) const;
+};
+
+
+// ===== VectorLayerAsset.cpp =====
+std::string VectorLayerAssetVersionImpl::GetPOIFile(void) const {
+  if (children.size() > 2) {
+    AssetVersion child(children[2]);
+    if (child->subtype == "VectorPOI") {
+      return child->GetOutputFilename(0);
+    }
+  }
+  return std::string();
+}
+
+
+// ===== VectorLayerAssetD.h =====
+class VectorLayerAssetVersionImplD {
+ public:
+  virtual bool MustForceUpdate(void) const;
+};
+
+
+// ===== VectorLayerAssetD.cpp =====
+#include <autoingest/sysman/plugins/VectorQueryAssetD.h>
+#include <autoingest/sysman/plugins/VectorFuseAssetD.h>
+#include <autoingest/sysman/plugins/VectorPOIAssetD.h>
+#include <khFileUtils.h>
+#include <khstl.h>
+#include <qstringlist.h>
+
+bool VectorLayerAssetVersionImplD::MustForceUpdate(void) const {
+  return (!config.poi_config_.empty() && (children.size() < 3));
+}
+
+void
+VectorLayerAssetVersionImplD::UpdateChildren(void)
+{
+  std::string assetRef = GetAssetRef();
+
+  // ***** load my input versions (only if they aren't already loaded)
+  // I'll use this list of my inputs to pass to my children so they don't
+  // have to look them up over and over again
+  InputVersionGuard guard(this);
+
+  AssetVersion source = guard->inputvers[0];
+
+
+  // ********** VectorQueryAsset child **********
+  MutableAssetVersionD query =
+    VectorQueryFactory::FindMakeAndUpdateSubAsset
+    (assetRef, "query",
+     makevec1(source->GetRef()),
+     khMetaData(),
+     config.query_config_,
+     makevec1(source));
+
+
+  // ********** VectorFuseAsset child **********
+  // build the name of my fuse child from the name of this layer asset
+  // so it will be unique when we symlink it into the same dir as the index
+  std::string fusename=khReplaceExtension(khBasename(assetRef),"packet");
+  // Update my fuse child
+  MutableAssetVersionD fuse =
+    VectorFuseFactory::FindMakeAndUpdateSubAsset(assetRef, fusename,
+                                                 makevec2(source->GetRef(),
+                                                          query->GetRef()),
+                                                 khMetaData(),
+                                                 config.fuse_config_,
+                                                 makevec2(source, (AssetVersion&)query));
+
+
+  // add my fuse child to myself
+  AddChild(fuse);
+
+  // Now, also add my query as my SECOND child
+  // Older versions of the software didn't add the query as a child, so
+  // others can't rely on me having a second child. But adding it as a
+  // child will keep it from being cleaned while I am still
+  // successful. This means than a subsequent version has a better chance of
+  // being able to reuse the query.
+  AddChild(query);
+
+  // ********** VectorPOIAsset child **********
+  if (!config.poi_config_.empty()) {
+    MutableAssetVersionD poi =
+      VectorPOIFactory::FindMakeAndUpdateSubAsset
+      (assetRef, "poi",
+       makevec2(source->GetRef(), query->GetRef()),
+       khMetaData(),
+       config.poi_config_,
+       makevec2(source, (AssetVersion&)query));
+
+    AddChild(poi);
+  }
+}

@@ -1,0 +1,48 @@
+# Master permissions file for Google Earth Enterprise.
+# CSV file, each line has: path, owner, group, mode, recursion level
+# Recursion level specifies how many directory levels down the ownership checks will
+# go below a directory. Use 100 to recurse all the way down, or 0 for none at all.
+# Empty lines and comments are ignored.
+/tmp, root, root, 41777, 0
+
+/opt/google/, root, root, 40755, 0
+/opt/google/gehttpd/, root, root, 40755, 100
+/opt/google/gehttpd/logs/, root, root, 40755, 0
+/opt/google/gehttpd/htdocs/cutter/globes/, geapacheuser, gegroup, 40755, 100
+/opt/google/gehttpd/conf.d/virtual_servers/runtime/, geapacheuser, gegroup, 40775, 0
+/opt/google/share/, root, root, 40755, 100
+/opt/google/lib/, root, root, 40755, 100
+/opt/google/bin/, root, root, 40755, 100
+/opt/google/etc/, root, root, 40755, 0
+/opt/google/log/, root, gegroup, 40775, 0
+/opt/google/run/, root, gegroup, 40775, 0
+/opt/google/search/, root, root, 40755, 100
+/opt/google/qt/, root, root, 40755, 100
+#
+/etc/opt/google/, root, root, 40755, 0
+/etc/opt/google/openldap/, root, root, 40755, 0
+/etc/opt/google/systemrc, gefusionuser, gegroup, 100644, 0
+/opt/google/etc/systemrc, gefusionuser, gegroup, 100644, 0
+#
+/var/opt/google/, root, root, 40755, 0
+/var/opt/google/log/, root, gegroup, 40775, 0
+/var/opt/google/pgsql/, gepguser, gegroup, 40700, 100
+#
+/opt/google/getomcat/, root, root, 40755, 0
+/opt/google/getomcat/temp/, getomcatuser, gegroup, 40755, 100
+/opt/google/getomcat/work/, getomcatuser, gegroup, 40755, 100
+/opt/google/getomcat/logs/, getomcatuser, gegroup, 40755, 100
+/opt/google/getomcat/webapps/, getomcatuser, gegroup, 40755, 0
+/opt/google/getomcat/webapps/ROOT/, getomcatuser, gegroup, 40755, 100
+#
+/var/opt/google/run/, root, gegroup, 40775, 0
+/var/opt/google/run/gesystemmanager.pid, gefusionuser, gegroup, 100664, 100
+/var/opt/google/run/geresourceprovider.pid, gefusionuser, gegroup, 100664, 100
+#
+/etc/profile.d/ge-fusion.csh, root, root, 100775, 0
+/etc/profile.d/ge-fusion.sh, root, root, 100775, 0
+
+#
+/etc/init.d/gevars.sh, root, root, 100755, 0
+/etc/init.d/geserver, root, root, 100755, 0
+/etc/init.d/gefusion, root, root, 100775, 0

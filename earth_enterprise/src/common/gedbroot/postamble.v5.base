@@ -1,0 +1,178 @@
+<etStruct> [templates]
+{
+    <etTemplate> [<etLayer>]
+    {
+        <etString> [image]  ""
+        <etFloat>  [state]  0.0
+        <etInt>    [index]  -1
+        <etBool>   [showMe] false
+        <etString> [legend] ""
+        <etInt>    [preserveTextLevel] 30
+    }
+
+    <etTemplate> [<etNestedLayer>]
+    {
+        <etInt>     [channelId]            -1
+        <etString>  [assetUUID]            ""
+        <etString>  [displayName]          ""
+        <etString>  [parentName]           ""
+        <etBool>    [isFolder]             false
+        <etBool>    [isVisible]            false
+        <etBool>    [isEnabled]            true
+        <etBool>    [isChecked]            false
+        <etBool>    [isExpandable]         true
+        <etString>  [labels]               ""
+        <etInt>     [preserveTextLevel]    30
+        <etString>  [layerIcon]            ""
+        <etString>  [description]          ""
+        <etString>  [lookAt]               ""
+        <etString>  [kmlUrl]               ""
+        <etString>  [kmlLayerUrl]          ""
+        <etBool>    [saveLocked]           true
+        <etString>  [requiredVRAM]         ""
+        <etString>  [requiredClientVer]    ""
+        <etString>  [probability]          ""
+        <etString>  [requiredUserAgent]    ""
+        <etString>  [requiredClientCapabilities]   ""
+        <etString>  [clientConfigScriptName] ""
+        <etInt>     [dioramaDataChannelBase] -1
+        <etInt>     [replicaDataChannelBase] -1
+    }
+
+    <etTemplate> [<etStyleAttr>]
+    {
+        <etString>  [providerName]  ""
+        <etInt>     [polyColor]     0xffffffff
+        <etInt>     [lineColor]     0xffffffff
+        <etInt>     [iconColor]     0xffffffff
+        <etInt>     [labelColor]    0xffffffff
+        <etFloat>   [linewidth]     1.0
+        <etFloat>   [iconScale]    1.0
+        <etFloat>   [labelScale]   1.0
+        <etInt>     [drawFlags]     0x00000000
+        <etString>  [iconHref]      ""
+        <etInt>     [iconX]         0
+        <etInt>     [iconY]         0
+        <etInt>     [iconW]         32
+        <etInt>     [iconH]         32
+        <etString>  [balloonText]       ""
+        <etInt>     [balloonColor]      0xffffffff
+        <etInt>     [balloonTextColor]  0xff000000
+    }
+
+    <etTemplate> [<etStyleMap>]
+    {
+        <etString>     [normalStyleId]        ""
+        <etString>     [highlightStyleId]     ""
+    }
+
+    <etTemplate> [<etLabel>]
+    {
+            <etString>                [description]                ""
+            <etInt>                   [priority]                   -1
+    }
+
+    <etTemplate> [<etLayerShortcut>]
+    {
+        <etBoolean> [enabled] true
+        <etInt>     [layerIndex] -1
+        <etString>  [label] ""
+        <etString>  [icon] ""
+    }
+
+    <etTemplate> [<etLayerInfo>]
+    {
+        <etInt>     [index]    -1
+        <etString>  [description]  ""
+        <etString>  [reserved]   ""
+        <etString>  [metaData]   ""
+    }
+
+    <etTemplate> [<etProviderInfo>]
+    {
+        <etInt>     [id]            -1
+        <etString>  [copyright]     ""
+        <etInt>     [copyrightY]    -1
+        <etBool>    [report]        false
+        <etInt>     [copyrightPri]  256
+    }
+
+    <etTemplate> [<etChannelLOD>]
+    {
+        <etInt> [channelIndex] -1
+        <etInt> [lodFlags]      0
+        <etFloat> [level0] 0
+        <etFloat> [level1] 0
+        <etFloat> [level2] 0
+        <etFloat> [level3] 0
+        <etFloat> [level4] 0
+        <etFloat> [level5] 0
+        <etFloat> [level6] 0
+        <etFloat> [level7] 0
+        <etFloat> [level8] 0
+        <etFloat> [level9] 0
+        <etFloat> [level10] 0
+        <etFloat> [level11] 0
+        <etFloat> [level12] 0
+        <etFloat> [level13] 0
+        <etFloat> [level14] 0
+        <etFloat> [level15] 0
+        <etFloat> [level16] 0
+        <etFloat> [level17] 0
+        <etFloat> [level18] 0
+        <etFloat> [level19] 0
+        <etFloat> [level20] 0
+        <etFloat> [level21] 0
+        <etFloat> [level22] 0
+        <etFloat> [level23] 0
+        <etFloat> [level24] 0
+    }
+
+    <etTemplate> [<etSearchTab>] {
+        <etBool>   [visible] true
+        <etString> [label] ""
+        <etString> [host] ""
+        <etInt>    [port] 80
+        <etBool>   [secure] false
+        <etString> [path] "/"
+        <etString> [inputLabel1] ""
+        <etString> [inputQueryVerb1] ""
+        <etString> [inputLabel2] ""
+        <etString> [inputQueryVerb2] ""
+        <etString> [viewportPrefix]   ""
+        <etString> [inputQueryPrepend1] ""
+        <etString> [inputQueryPrepend2] ""
+    }
+
+    <etTemplate> [<etCobrandInfo>] {
+      <etString> [logoUrl]         ""
+      <etDouble> [xCoord]          0.0
+      <etDouble> [yCoord]          0.0
+      <etBool>   [xCoordRelative]  false
+      <etBool>   [yCoordRelative]  false
+      <etString> [tiePoint]        bottom-left
+      <etDouble> [screenWidthSize] 0.0
+    }
+}
+
+[export.categories]
+{
+    <etInt> [All] 0
+    <etInt> [Banks] 0
+    <etInt> [Bars/Clubs] 0
+    <etInt> [Cleaners] 0
+    <etInt> [Clinics] 0
+    <etInt> [Colleges and Universities] 0
+    <etInt> [Convenience Stores] 0
+    <etInt> [Dining] 0
+    <etInt> [Elementary and Secondary Schools] 0
+    <etInt> [Florists] 0
+    <etInt> [Grocery Stores] 0
+    <etInt> [Laundromats] 0
+    <etInt> [Libraries] 0
+    <etInt> [Lodging] 0
+    <etInt> [Parks] 0
+    <etInt> [Post Offices] 0
+}
+
+[authInfo.disableAuthKey] 0x13578642

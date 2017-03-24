@@ -1,0 +1,712 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>TextStyleBase</class>
+<comment>  Copyright 2017 Google Inc.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+</comment>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>TextStyleBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>380</width>
+            <height>412</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Text Style</string>
+    </property>
+    <property name="sizeGripEnabled">
+        <bool>true</bool>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget" row="2" column="0">
+            <property name="name">
+                <cstring>layout132</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>Horizontal Spacing2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonOk</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;OK</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonCancel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>textLabel1_6</cstring>
+            </property>
+            <property name="text">
+                <string>Drag the preview over any button to save the text style.</string>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget" row="0" column="0">
+            <property name="name">
+                <cstring>layout5</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QButtonGroup" row="0" column="0" rowspan="4" colspan="1">
+                    <property name="name">
+                        <cstring>saved_buttongroup</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="lineWidth">
+                        <number>0</number>
+                    </property>
+                    <property name="title">
+                        <string>Saved Styles</string>
+                    </property>
+                    <property name="exclusive">
+                        <bool>false</bool>
+                    </property>
+                    <property name="radioButtonExclusive">
+                        <bool>false</bool>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>1</number>
+                        </property>
+                        <widget class="StyleSaveButton" row="0" column="0">
+                            <property name="name">
+                                <cstring>saved1</cstring>
+                            </property>
+                            <property name="acceptDrops">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="StyleSaveButton" row="1" column="0">
+                            <property name="name">
+                                <cstring>saved2</cstring>
+                            </property>
+                            <property name="acceptDrops">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="StyleSaveButton" row="2" column="0">
+                            <property name="name">
+                                <cstring>saved3</cstring>
+                            </property>
+                            <property name="acceptDrops">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="StyleSaveButton" row="3" column="0">
+                            <property name="name">
+                                <cstring>saved4</cstring>
+                            </property>
+                            <property name="acceptDrops">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="StyleSaveButton" row="4" column="0">
+                            <property name="name">
+                                <cstring>saved5</cstring>
+                            </property>
+                            <property name="acceptDrops">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="StyleSaveButton" row="5" column="0">
+                            <property name="name">
+                                <cstring>saved6</cstring>
+                            </property>
+                            <property name="acceptDrops">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="StyleSaveButton" row="6" column="0">
+                            <property name="name">
+                                <cstring>saved7</cstring>
+                            </property>
+                            <property name="acceptDrops">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="StyleSaveButton" row="7" column="0">
+                            <property name="name">
+                                <cstring>saved8</cstring>
+                            </property>
+                            <property name="acceptDrops">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="StyleSaveButton" row="8" column="0">
+                            <property name="name">
+                                <cstring>saved9</cstring>
+                            </property>
+                            <property name="acceptDrops">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="StyleSaveButton" row="9" column="0">
+                            <property name="name">
+                                <cstring>saved10</cstring>
+                            </property>
+                            <property name="acceptDrops">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QLabel" row="2" column="2">
+                    <property name="name">
+                        <cstring>textLabel1_5</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>32767</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>Preview:</string>
+                    </property>
+                </widget>
+                <spacer row="1" column="1">
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Fixed</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>16</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QButtonGroup" row="1" column="2">
+                    <property name="name">
+                        <cstring>outline_button_group</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>true</bool>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="title">
+                        <string>Draw Background</string>
+                    </property>
+                    <property name="checkable">
+                        <bool>true</bool>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>3</number>
+                        </property>
+                        <property name="spacing">
+                            <number>2</number>
+                        </property>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout38</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel2</cstring>
+                                    </property>
+                                    <property name="enabled">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="text">
+                                        <string>Size:</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>AlignVCenter|AlignLeft</set>
+                                    </property>
+                                </widget>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer20</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>61</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                                <widget class="QLineEdit">
+                                    <property name="name">
+                                        <cstring>outline_thickness_edit</cstring>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>60</width>
+                                            <height>32767</height>
+                                        </size>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout39</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel3</cstring>
+                                    </property>
+                                    <property name="enabled">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="text">
+                                        <string>Color:</string>
+                                    </property>
+                                </widget>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer21</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>71</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                                <widget class="QPushButton">
+                                    <property name="name">
+                                        <cstring>outline_color_button</cstring>
+                                    </property>
+                                    <property name="enabled">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>30</width>
+                                            <height>30</height>
+                                        </size>
+                                    </property>
+                                    <property name="paletteBackgroundColor">
+                                        <color>
+                                            <red>255</red>
+                                            <green>255</green>
+                                            <blue>255</blue>
+                                        </color>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QFrame" row="0" column="2">
+                    <property name="name">
+                        <cstring>frame3</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="frameShape">
+                        <enum>NoFrame</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Raised</enum>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>2</number>
+                        </property>
+                        <widget class="QSpinBox" row="2" column="1">
+                            <property name="name">
+                                <cstring>size_spin</cstring>
+                            </property>
+                            <property name="maxValue">
+                                <number>100</number>
+                            </property>
+                            <property name="minValue">
+                                <number>8</number>
+                            </property>
+                            <property name="value">
+                                <number>18</number>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox" row="0" column="1">
+                            <item>
+                                <property name="text">
+                                    <string>Sans</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Serif</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>CJK</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>font_combo</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox" row="1" column="1">
+                            <item>
+                                <property name="text">
+                                    <string>Regular</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Bold</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Italic</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Bold Italic</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>style_combo</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="3" column="1">
+                            <property name="name">
+                                <cstring>color_button</cstring>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>30</width>
+                                    <height>30</height>
+                                </size>
+                            </property>
+                            <property name="paletteBackgroundColor">
+                                <color>
+                                    <red>0</red>
+                                    <green>0</green>
+                                    <blue>0</blue>
+                                </color>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="2" column="0">
+                            <property name="name">
+                                <cstring>textLabel1_3</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Size:</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="1" column="0">
+                            <property name="name">
+                                <cstring>textLabel1_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Style:</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>textLabel1</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Font:</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="3" column="0">
+                            <property name="name">
+                                <cstring>textLabel1_4</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Color:</string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="TextPreviewLabel" row="3" column="2">
+                    <property name="name">
+                        <cstring>preview_label</cstring>
+                    </property>
+                    <property name="cursor">
+                        <cursor>13</cursor>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Drag onto button to save</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+    <customwidget>
+        <class>TextPreviewLabel</class>
+        <header location="local">TextStyle.h</header>
+        <sizehint>
+            <width>40</width>
+            <height>40</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
+    </customwidget>
+    <customwidget>
+        <class>StyleSaveButton</class>
+        <header location="local">TextStyle.h</header>
+        <sizehint>
+            <width>120</width>
+            <height>30</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>0</hordata>
+            <verdata>0</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
+        <signal>StyleChanged(QWidget*)</signal>
+    </customwidget>
+</customwidgets>
+<images>
+    <image name="image0">
+        <data format="XPM.GZ" length="5649">789cc597c9721dbb0d86f77e0a95b173a578cfe99995ca42b36c6b9ea5541600d9ad799e2ca5f2eec1c18fa3c443eade64939217fa4c8204c01f40ebb74f33879b6b339f7efbf0f0c88f6769269df2fdcca7fc7475f5fad7bffde5ef1f3e16d5cce45f5bcc141ffff4e163ea67d20c8d8bb2ae6b63312ecba66e272c83735b47e323e34ad71be3d6b9ab3bb3cfc6f53ba77786fda17153722d13e66367a9b3ad37c66d99eadeb876cef560dc4fb919193f380f8df9cf77c69d7269ebf0a7abc6be7efbcee69f7c318e7a3ffc417cb11af9fe43e7b281fff7efccc6888fabba31fbc4c6a2fe27b33f0057b1b57c4b619cd43ff85f81d51f5ba7e85c36965fea9cebc6ce933be7d85a7cd43a4b6bfe0ade2f2b57c6b7ce436bfec98d715f571dfcd9321eaad858be791f5c172df2cdcea5b3f9538caa31de27993e8af19469ddb8a8bbcef2cb4bc665cd1df247ced2217fd7c6d59479cf3975166fb0f88aba12f8472f60dd6fe78505e346fdc57d6be0a688882fbcb3e5834e9c3581b67fd1b855863d3b37d1cea7e77786bf4fc69de6cbf6d306b86e901fde054fede5d13856d9f31bc14d17a18f756766d343289d85e1ffb6316b7cd063e12c9de923dc382730e37db849b0e7d639b3c5cff05f747d6cbce33c5d5f70ee19e799de8ba4fe5bfc01f125d503fac39973037d854d703b66e4d3eab9c8cd80f3097ac9ba6ef9e10de792f1fedbce15233f17ce355b7ee9cdb8d77c203e01bfefc77b0d6d83fd3cefdc8ac51b0ae74ecc3e6c38b320bf560fe568bace164f399eaed39eb3f8fe39e3a2cd82785e9c7be7f377467f49ce83209ff61eda5e7dbf981eb41bb778eff00ceec662fd91bf3917c9f442fbce55b27e10ac9eb47970843e3e83751def6d7a2cdb26419f3c0bee4a9cc7d9b949e827afc65d9d5abb3f209eae65cfafafeb7ebcef8273974c1f01f144bd1ffa1e1bf394f9cdb9757b9c2f7a9fe58b76c16d07bd88f5d3497745bd530077a5a03f225f43edfd90adbf57a37a68b17e056e8b88780ec05a8ee8a7a6d7aa6806f407eac15de3f93f734e884f2cbf55d58c713e9b3f55d3e88b1ac3be8965827e0f9cab8cf7b37e55b56df27af96adc3515ecc9f45169b50bde13fbfb5827f447ab8f5afdc73aaf1aab3e23ec4def75a1fb515f364fb5fb4741bd9f822367d307593fac6b1e65e8e3d2b8e95cff62fd62a2ce88f71bc0b1cfb8dffa51ddb511f90b5760150ce29f731e500f62fdaed669d6e1bde7c1b149987f382f7291cdff64f3a366dd8ffe0fffb84b889f701fc716f6e1c5b9f3f8adffd799c719fd7fd9b8efc6e8bf64fa6c46ba8e786d7ee9ebf6980fe10cace7a37fd87c6d8aaef4fe6df5d9d4b14f88c7be1f26e598ed3d82e9b169b9ccd09bf59ba6ebc67e7e058e85e7dbdebb89ba8e7cbe82f57c7c5f593c4deef485ed3ceb9fed581f00fade0247817ec30a580706f43932d6828e780feb276ddd09e29145701c419f02fbb6cb3e9f2c7fadbe27c35fab577dfd1138981eb55b8e32e683bdaf665304f15f83a5cca667823f830e207c0f2d39738f7ab3fedb8d62e5fed87b69762acc2b3a02eb7edc6ffdaeabf47ef447d837513798fd25580584fe730b96be87beac3f69b58cbd3eec7bb59334823fc1fcedb27086bead9eba9e05fd842bb08ca007317bcdce08f510be8225f7d08fcd8738d6fdb8dff21f55e03e4fc6ce49606ffd5a3f17c6ae07eb07b1e5c6f37be61c316fe812acfee2fbddf41aa39e07ffac7fc7a4f7235ffbe034c2fb24d8671641feed7b260e3c9d7f56cf5ca8dc504fd61fb94ab9c7fb9a5eb8cea31edf93365f35ba0ef5cad8afde201eb27ae15ef7a39eec7c8d36f788cffcd7cf9926e3fd56c0390ed0cfdd3b63bfcd3b695309fd87ceb9427fe69529fb7b5bbf912e573de6b57d6f08a71eef2d567f92753ca25eec3d65481dec83f5ff344a83e7cfe65b2a9278fd677066e447ec7b44bde9d19f04fb755a78fd9c3a773df263f94b9a4fef8f367f52cc63f4efb0e35c66ccaf2be716f90bb3ced1f56cfd2aa99a078b2761bfe4c2cfb3f938f10e7a15ab678d8e7bcb7fb07ce7493ce88fd6ef739d07f82ba64ff5be44bcc9e2d1dd23d42bd9f777965e06cc5ffbfeccbda61bf7637de8e380f77974e601ef2fce3df693cdbbbed2f3f01e36affa5a19f5169dfb01fdcbfce99b5e5c9fb353c67e5a75ceb88fad7ff56d9ffcfc63f0301e508f567fbdb66b3fefcd39633f9bbe26d6b83fe1bc5e19fa303d0da3a119a07ffb7b5757db01f3dffafd50e83af26bf91eca29d38e738b7c30ec2b5d477e6c9e0cf5fbfe0be7d6cfb3f93921cfff8333e37eb1fe3744fd813e6b675f0fcbce3298fe2839a701fdd7f2a9ab82fd543927ec0fd6ff87ac3fa85772ee9dadfe26e47cf4cee88ff7ce0378cbf4320cffe2ffeee7ff691328709090420e7d18c2c9efd9e8fed37016cec345b80c57e13adc84db7017eeffb34d78088fe1293c8797f02dbc86b7301be6c27c58088b61e9d7366139ac84cfe14bf81a56c35a580f1b61336c85edb01376c35ea05fdaec878370188eecf7e3300ae350843254a10e4d6843f7b34d881488884928191f51a69e063aa153fdfd8ccee9e2471bbaa42bbaa61bbaa53bbaa707fbbf477aa2677aa16ff44a6f34fbbd4d38a1399aa7055aa4255aa615fa4c5fe8ab5aadd21aadd3066dd2166d7f6f433bb44b7bb44f07744847744c231a534125555453432d7514397c6fc3c4cc3a4258db1e0f7cc2a77cc6e77cc1977cc5d77cc3b77cc7f73fd83cf0233ff133bff0377ee5379ee5399ee7055ee4255ee615fecc5ff8eb8ff1f02aaff13a6f848237698fb7789b777897f7789f0ff8908ff898473fe68dc75c70c915d7dc70cbfa779704d189273a92c51ab39cfc6823a77226e713c5c9855cca955ccb8ddcca9ddccb833cca933ccbcbcf3a906ff22a6f133f6556e6645e16645196645956e4b37c91afbfd28eacca9aaccb866cca966ccb8eecca9eeccb811cca911c43533feb5a463296424aa9d4ff5e6a69747f2bfa4df5ef55f453fd9ca4907416264929e5a44d3a9da4d33f50a727e92c9da78b7499aed2f51fabeddffbf99f6cfef1e70fff041dbc6db1</data>
+    </image>
+</images>
+<connections>
+    <connection>
+        <sender>buttonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>TextStyleBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>buttonCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>TextStyleBase</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>saved_buttongroup</sender>
+        <signal>clicked(int)</signal>
+        <receiver>TextStyleBase</receiver>
+        <slot>SavedClicked(int)</slot>
+    </connection>
+    <connection>
+        <sender>saved1</sender>
+        <signal>StyleChanged(QWidget*)</signal>
+        <receiver>TextStyleBase</receiver>
+        <slot>StoreStyle(QWidget*)</slot>
+    </connection>
+    <connection>
+        <sender>saved2</sender>
+        <signal>StyleChanged(QWidget*)</signal>
+        <receiver>TextStyleBase</receiver>
+        <slot>StoreStyle(QWidget*)</slot>
+    </connection>
+    <connection>
+        <sender>saved3</sender>
+        <signal>StyleChanged(QWidget*)</signal>
+        <receiver>TextStyleBase</receiver>
+        <slot>StoreStyle(QWidget*)</slot>
+    </connection>
+    <connection>
+        <sender>saved4</sender>
+        <signal>StyleChanged(QWidget*)</signal>
+        <receiver>TextStyleBase</receiver>
+        <slot>StoreStyle(QWidget*)</slot>
+    </connection>
+    <connection>
+        <sender>saved5</sender>
+        <signal>StyleChanged(QWidget*)</signal>
+        <receiver>TextStyleBase</receiver>
+        <slot>StoreStyle(QWidget*)</slot>
+    </connection>
+    <connection>
+        <sender>saved6</sender>
+        <signal>StyleChanged(QWidget*)</signal>
+        <receiver>TextStyleBase</receiver>
+        <slot>StoreStyle(QWidget*)</slot>
+    </connection>
+    <connection>
+        <sender>saved7</sender>
+        <signal>StyleChanged(QWidget*)</signal>
+        <receiver>TextStyleBase</receiver>
+        <slot>StoreStyle(QWidget*)</slot>
+    </connection>
+    <connection>
+        <sender>saved8</sender>
+        <signal>StyleChanged(QWidget*)</signal>
+        <receiver>TextStyleBase</receiver>
+        <slot>StoreStyle(QWidget*)</slot>
+    </connection>
+    <connection>
+        <sender>saved9</sender>
+        <signal>StyleChanged(QWidget*)</signal>
+        <receiver>TextStyleBase</receiver>
+        <slot>StoreStyle(QWidget*)</slot>
+    </connection>
+    <connection>
+        <sender>saved10</sender>
+        <signal>StyleChanged(QWidget*)</signal>
+        <receiver>TextStyleBase</receiver>
+        <slot>StoreStyle(QWidget*)</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>WidgetChanged()</slot>
+    <slot>SavedClicked(int)</slot>
+    <slot>StoreStyle(QWidget*)</slot>
+</slots>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>TextStyle.h</includehint>
+    <includehint>TextStyle.h</includehint>
+    <includehint>TextStyle.h</includehint>
+    <includehint>TextStyle.h</includehint>
+    <includehint>TextStyle.h</includehint>
+    <includehint>TextStyle.h</includehint>
+    <includehint>TextStyle.h</includehint>
+    <includehint>TextStyle.h</includehint>
+    <includehint>TextStyle.h</includehint>
+    <includehint>TextStyle.h</includehint>
+    <includehint>TextStyle.h</includehint>
+</includehints>
+</UI>

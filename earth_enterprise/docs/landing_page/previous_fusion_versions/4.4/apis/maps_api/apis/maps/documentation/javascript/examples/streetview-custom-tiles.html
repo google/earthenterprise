@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/examples/streetview-custom-tiles.html";
+    </script>
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<title>Google Maps JavaScript API Example: Custom StreetView</title>
+<link href="http://code.google.com/apis/maps/documentation/javascript/examples/standard.css" rel="stylesheet" type="text/css" />
+<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+<script type="text/javascript">
+
+  var map;
+  var panorama;
+  
+  // The latlng of the entry point to the Google office on the road.
+  var sydneyOffice = new google.maps.LatLng(-33.867386, 151.195767);
+  
+  // The panorama that will be used as the entry point to the custom
+  // panorama set.
+  var entryPanoId = null;
+
+  function initialize() {
+  
+    startApplication();
+    
+    var panoSearchRadius = 50;
+
+    // Create a StreetViewService object.
+    var client = new google.maps.StreetViewService();
+ 
+    // Compute the nearest panorama to the Google Sydney office
+    // using the service and store that pano ID.  
+    client.getPanoramaByLocation(sydneyOffice, panoSearchRadius, function(result, status) {
+      if (status == google.maps.StreetViewStatus.OK) {
+        entryPanoId = result.location.pano;
+      }  
+    });
+  }
+
+  function startApplication() {
+ 
+    // Set up the map and enable the Street View control.
+    var mapOptions = {
+      center: sydneyOffice,
+      zoom: 16,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+ 
+    panorama = map.getStreetView();
+    // Set up Street View and initially set it visible. Register the
+    // custom panorama provider function.
+    var panoOptions = {
+      position: sydneyOffice,
+      visible: true,
+      panoProvider:  getCustomPanorama
+    }
+    panorama.setOptions(panoOptions);
+
+    // We'll monitor the links_changed event to check if the current pano is either
+    // a custom pano or our entry pano.        
+    google.maps.event.addListener(panorama, 'links_changed', createCustomLinks);
+
+  }
+
+  // Return a pano image given the panoID.
+  function getCustomPanoramaTileUrl(pano,zoom,tileX,tileY) {
+    return 'images/panoReception1024-' + zoom + '-' + tileX + '-' +tileY + '.jpg';
+  }
+
+  function getCustomPanorama(pano,zoom,tileX,tileY) {
+
+    var center;
+
+    switch(pano) {
+
+      case 'reception':
+        center = new google.maps.LatLng(-33.86684, 151.19583);
+        return {
+          location: {
+            pano: 'reception',
+            description: "Google Sydney - Reception",
+            latLng: center
+          },
+          links: [
+            ],
+          // The text for the copyright control.
+          copyright: 'Imagery (c) 2010 Google',
+          // The definition of the tiles for this panorama.
+          tiles: {
+            tileSize: new google.maps.Size(1024, 512),
+            worldSize: new google.maps.Size(2048, 1024),
+            // The heading at the origin of the panorama tile set.
+            centerHeading: 105,
+            getTileUrl: getCustomPanoramaTileUrl
+          }
+        };
+        break;
+      default:
+        return null;
+    }
+  }
+   
+  function createCustomLinks() {
+
+    if (entryPanoId) {
+      var links = panorama.getLinks();
+      var panoId = panorama.getPano();
+
+      switch(panoId) {
+
+        case entryPanoId:
+          // Adding a link in the view from the entrance of the building to
+          // reception.
+          links.push({
+            'heading': 25,
+            'description' : 'Google Sydney',
+            'pano' : 'reception'
+          });
+          break;
+        case 'reception':
+          // Adding a link in the view from the entrance of the office
+          // with an arrow pointing at 100 degrees, with a text of "Exit"
+          // and loading the street entrance of the building pano on click.
+          links.push({
+            'heading': 195,
+            'description' : 'Exit',
+            'pano' : entryPanoId
+          });
+          break;
+        default:
+          return;
+      }
+    }
+  }
+</script>
+</head>
+<body onload="initialize()">
+  <div id="map_canvas" style="width: 500px; height: 400px"></div>
+</body>
+</html>

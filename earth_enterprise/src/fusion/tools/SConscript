@@ -1,0 +1,126 @@
+#-*- Python -*-
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+
+Import('env')
+env = env.Clone()
+env.UpdateCppflagsForSkia()
+
+bundledump = env.executable('bundledump', 'bundledump.cpp',
+                            LIBS=['gegst', 'sgl', 'gif', 'png12', 'jpeg', 'freetype', 'gemiscconfig', 'geutil', 'gecommon', 'geos'])
+
+indexdump = env.executable('indexdump', 'indexdump.cpp',
+                            LIBS=['gegst', 'sgl', 'gif', 'png12', 'jpeg', 'freetype', 'geutil', 'gecommon', 'geindex_r', 'geos'])
+
+shp_verify = env.executable('shp_verify', 'shp_verify.cpp',
+                            LIBS=['geutil', 'gecommon'])
+
+geextracticon = env.executable('geextracticon', 'geextracticon.cpp',
+                               LIBS=['geiconutil', 'gecommon', 'geutil', 'png12', 'geos'])
+
+tiledfloodfill = env.StaticObject('tiledfloodfill.cpp')
+
+boxfilter = env.StaticObject('boxfilter.cpp')
+
+featherer = env.StaticObject('Featherer.cpp')
+
+polymask = env.StaticObject('polymask.cpp')
+
+geimgwriter = env.StaticObject('geImageWriter.cpp')
+
+gemaskgen = env.executable('gemaskgen',
+                           ['gemaskgen.cpp', tiledfloodfill,
+                            featherer, boxfilter, geimgwriter],
+                           LIBS=['geautoingest', 'dbmanifest', 'geraster',
+                            'gegdal', 'gejs', 'gerastergdal',
+                            'curl', 'geqtpacket', 'glutess', 'gdal', 'geutil', 'gecommon', 'qt-mt', 'geos'])
+
+geqtpacketdump = env.executable('geqtpacketdump',
+                               ['geqtpacketdump.cpp'],
+                               LIBS=['geutil', 'gecommon', 'geqtpacket'])
+
+gepolymaskgen = env.executable('gepolymaskgen',
+                               ['gepolymaskgen.cpp', polymask,
+                                featherer, boxfilter, geimgwriter],
+                               LIBS=['geautoingest', 'dbmanifest',
+                                     'geraster', 'gegdal', 'gerastergdal', 'gdal', 'geutil', 'gecommon', 'qt-mt', 'geos'])
+
+gevectorimport = env.executable('gevectorimport', 'gevectorimport.cpp',
+                                LIBS=['gegst', 'sgl', 'gif', 'png12', 'jpeg', 'freetype', 'qt-mt', 'geutil', 'gecommon', 'geos'])
+
+gevectorquery = env.executable('gevectorquery', 'gevectorquery.cpp',
+                               LIBS=['gegst', 'sgl', 'gif', 'png12', 'jpeg', 'freetype', 'qt-mt', 'geutil', 'gecommon', 'geautoingest', 'geos'])
+
+gevectorfuse = env.executable('gevectorfuse', 'gevectorfuse.cpp',
+                              LIBS=['gegst', 'sgl', 'gif', 'png12', 'jpeg', 'freetype', 'qt-mt', 'gecommon', 'geautoingest', 'geos'])
+
+gevectorpoi = env.executable('gevectorpoi', 'gevectorpoi.cpp',
+                              LIBS=['gegst', 'sgl', 'gif', 'png12', 'jpeg', 'freetype', 'qt-mt', 'geutil', 'gecommon', 'geautoingest', 'geos'])
+
+env.executable('gemunge', 'gemunge.cpp',
+               LIBS=['gegdal', 'qt-mt', 'geutil', 'gecommon', 'gdal', 'geos'])
+
+env.test('geunittest', 'geunittest.cpp', LIBS=['gegst', 'sgl', 'gif', 'png12', 'jpeg', 'freetype', 'gecommon', 'qt-mt', 'geautoingest', 'geos', 'geutil'])
+
+env.executable('gemakeogrsql', 'gemakeogrsql.cpp',
+               LIBS=['gegst', 'sgl', 'gif', 'png12', 'jpeg', 'freetype', 'geutil', 'gecommon', 'qt-mt', 'gegdal', 'gdal', 'geos'])
+
+gevectorpackupgrade = env.executable('gevectorpackupgrade',
+                                     'gevectorpackupgrade.cpp',
+                                     LIBS=['geutil', 'gecommon'])
+
+gerasterpackupgrade = env.executable('gerasterpackupgrade',
+                                     'gerasterpackupgrade.cpp',
+                                     LIBS=['geautoingest', 'geraster',
+                                           'khffio', 'geutil', 'gecommon', 'qt-mt'])
+
+env.executable('coverage', 'coverage.cpp',
+               LIBS=['geutil', 'gecommon'])
+
+tiledfloodfill_test = env.test('tiledfloodfill_test',
+                               ['tiledfloodfill_test.cpp', tiledfloodfill],
+                               LIBS=['geutil', 'qt-mt', 'gecommon'])
+
+boxfilter_test = env.test('boxfilter_test',
+                          ['boxfilter_test.cpp', boxfilter],
+                          LIBS=['geutil', 'gecommon', 'qt-mt'])
+
+featherer_test = env.test('Featherer_unittest',
+                          ['Featherer_unittest.cpp', featherer,
+                           boxfilter],
+                          LIBS=['gtest', 'geutil', 'gecommon', 'gegdal', 'gdal', 'qt-mt', 'geos'])
+
+geImageWriter_test = env.test('geImageWriter_unittest',
+                              ['geImageWriter_unittest.cpp', geimgwriter],
+                              LIBS=['gtest', 'geutil', 'geraster',
+                                    'gegdal', 'gerastergdal', 'gecommon', 'gdal', 'geos'])
+
+polymask_test = env.test('polymask_unittest',
+                         ['polymask_unittest.cpp', polymask,
+                          featherer, boxfilter, geimgwriter],
+                         LIBS=['gtest', 'geutil', 'geraster',
+                               'gegdal', 'gerastergdal', 'gdal', 'gecommon', 'qt-mt', 'geos'])
+
+env.install('fusion_bin', [gevectorimport, gevectorquery, gevectorfuse,
+                           gemaskgen, gepolymaskgen, geextracticon,
+                           gevectorpackupgrade, gerasterpackupgrade,
+                           gevectorpoi,
+                          ])
+
+env.install('tools_bin', [geqtpacketdump,
+                          'PushTranslationsToFusion.pl',
+                          'FetchTranslationsFromFusion.pl' ])

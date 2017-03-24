@@ -1,0 +1,1509 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+ 
+
+
+
+  
+
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/v2/overlays.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Google Maps JavaScript API V2 Overlays - Google Maps JavaScript API V2 - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/html/apis/maps/documentation/javascript/v2/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../../css/iehacks.css"><![endif]-->
+
+<link href="../../local_extensions.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container" class="depr">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps JavaScript API V2 (<a href="../../../terms.html#section_4_4">Deprecated</a>)</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="index.html" title="Google Maps JavaScript API V2 home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="basics.html" class="selected" title="Official Google Maps JavaScript API V2 documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../../faq.html" title="Answers to frequently asked questions about Google Maps JavaScript API V2">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="articles.html" title="Focused articles and tutorials for Google Maps JavaScript API V2 developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps JavaScript API V2 blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="forum.html" title="Google Maps JavaScript API V2 developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../../../terms.html" title="Google Maps JavaScript API V2 terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <a name="gc-toc-anchor"></a>  
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../../../index.html">Maps API Family</a></li>
+  <li><a href="../../../signup.html">Sign up for an API key</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index your Maps Content</a></li>
+</ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Javascript API V3</h2>
+        <ul>
+          <li><a href="../index.html">Home Page</a></li>
+          <li><a href="../basics.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+       <div class="line"></div>
+    <ul>
+           <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+             <ul>
+               <li><a class="tlw-expanded" href="index.html">Developer Guide</a>
+                <ul>
+                 <li><a href="introduction.html">Basics</a></li>
+                 <li><a href="events.html">Events</a></li>
+                 <li><a href="controls.html">Controls</a></li>
+                 <li><a href="overlays.html">Overlays</a></li>
+                 <li><a href="services.html">Services</a></li>
+                </ul>
+               </li>
+              <li><a href="reference.html">API Reference</a></li>
+              <li><h2 class="tlw-expanded">Code Samples:</h2>
+               <ul>
+               <li><a href="demogallery.html">Demos</a></li>
+               <li><a href="examples/index.html">Examples</a></li>
+               <li><a href="http://code.google.com/apis/ajax/playground/?exp=maps">Code Playground</a></li>
+               </ul>
+              </li>
+              <li><h2 class="tlw-expanded">More Resources:</h2>
+               <ul>
+               <li><a href="articles.html">Articles</a></li>
+               <li><a href="mediagallery.html">Presentations</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/issues/list?can=2&q=apitype%3AJavascript&colspec=ID+Type+Status+Introduced+Fixed+Summary+Internal+Stars&cells=tiles">Known Issues</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/wiki/JavascriptMapsAPIChangelog">Changelog</a><sup class="new">New!</sup></li>
+               <li><a href="http://code.google.com/p/gmaps-utility-library-dev/">Utility Library</a></li>
+               <li><a href="http://maps.google.com/casestudies/">Case Studies</a></li>
+               </ul>
+              </li>
+             </ul>
+           </li>
+         </ul>
+   <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../../flash/index.html">Home Page</a></li>
+          <li><a href="../../flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+   <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../../mapsdata/index.html">Home Page</a></li>
+          <li><a href="../../mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+     <div class="line"></div>
+      <ul>
+        <li><h2><a href="../../webservices/index.html">Maps API Web Services</a></h2>
+         <ul>
+           <li><a href="../../geocoding/index.html">Geocoding API</a></li>
+           <li><a href="../../directions/index.html">Directions API</a></li>
+           <li><a href="../../elevation/index.html">Elevation API</a></li>
+           <li><a href="../../places/index.html">Places API</a></li>
+         </ul>
+       </li>
+      </ul>
+       <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../../staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../../localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../../localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+    <div class="promo"><p><a href="../../premier/index.html">Google Maps API Premier</a></p>
+    <p>Same great maps plus a SLA, support, and control over ads</p>
+    </div>
+
+      </div>
+      
+      <a name="gc-pagecontent-anchor"></a>   
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Google Maps JavaScript API V2 Overlays</h1>
+
+
+<p class="note">Note: The Google Maps Javascript API Version 2
+has been officially deprecated as of May 19, 2010. The V2 API will continue
+to work as per our <a href="../../../terms.html#section_4_4">deprecation policy</a>,
+but we encourage you to migrate your code to
+<a href="../index.html">version 3 of the Maps
+Javascript API</a>.</p>
+
+
+<div class="toc">
+  <ol>
+  <li><a href="#Overlays_overview">Map Overlays Overview</a>
+  <li><a href="#Markers">Markers</a>
+  <ol>
+    <li><a href="#Draggable_Markers">Draggable Markers</a></li>
+    <li><a href="#Icons_overview">Icons</a></li>
+    <li><a href="#Custom_Icons">Custom Icons</a></li>
+    <li><a href="#Marker_Manager">The Marker Manager</a></li>
+  </ol>
+  </li>
+  <li><a href="#Polylines_Overview">Polylines</a>
+  <ol>
+  	<li><a href="#Drawing_Polylines">Drawing Polylines</a></li>
+    <li><a href="#Great_Circles">Geodesic Polylines</a></li>
+    <li><a href="#Encoded_Polylines">Encoded Polylines</a></li>
+  </ol>
+  </li>
+  <li><a href="#Polygons_Overview">Polygons</a></li>
+  <li><a href="#Ground_Overlays">Ground Overlays</a></li>
+  <li><a href="#Tile_Overlays">Tile Overlays</a>
+  <ol>
+    <li><a href="#MapTypeZoomLevels">MapType Tile Coverage</a></li>
+    <li><a href="#CustomMapTiles">Custom Map Tiles</a></li>
+    <li><a href="#Tile_Layer_Overlays">Tile Layer Overlays</a></li> 
+    <li><a href="#Custom_Map_Types">Custom Map Types</a>
+    <ul>
+      <li><a href="#Google_Maps_Coordinates">Google Maps Coordinates</a></li> 
+      <li><a href="#Copyrights">Copyrights</a></li> 
+      <li><a href="#Projections">Projections</a></li>
+    </ol>
+    </li>
+  </li>
+  <li><a href="#Layers">Layers</a></li>
+  <li><a href="#Custom_Overlays">Custom Overlays</a></li>
+  </ol>
+</div>
+
+<h1 id="Overlays_overview">Map Overlays Overview</h1>
+
+<p>Overlays are objects on the map that are tied to latitude/longitude 
+coordinates, so they move when you drag or zoom the map. Overlays reflect
+objects that you "add" to the map to designate points, lines, or areas.</p>
+
+<p>The Maps API has several types of overlays:
+<ul>
+<li>Points on the map are displayed using <b>markers</b>, and often 
+display a custom icon. Markers are objects of type <code>GMarker</code> 
+and may make use of the <code>GIcon</code> type.</li>
+<li>Lines on the map are displayed using <b>polylines</b> (representing a 
+collection of points). Lines are objects of type <code>GPolyline</code>.</li>
+<li>Areas on the map are displayed either as <b>polygons</b> if they
+are areas of an arbitrary shape or as <b>ground overlays</b> if they
+are rectangular. Polygons are similar to polylines in that they consist 
+of a collection of points with a closed loop and may take any shape. 
+Ground overlays are often used for areas that map either directly or
+indirectly to tiles on the map.</li>
+<li>The map itself is displayed using a <b>tile overlay</b>. You can
+modify this with your own set of tiles by using a 
+<code>GTileLayerOverlay</code> or even by creating your map type
+using a <code>GMapType</code>.</li>
+<li>The <b>info window</b> is also a special kind of overlay. Note, however, that
+the info window is added to the map automatically, and that there can only be one
+object of type <code>GInfoWindow</code> attached to a map.</li>
+</ul>
+
+<p>Each overlay implements the <code>GOverlay</code> interface. Overlays
+can be added to a map using the <code>GMap2.addOverlay()</code> method and
+removed using the <code>GMap2.removeOverlay()</code> method. (Note that
+the info window is added by default to the map.)</p>
+
+<h1 id="Markers">Markers</h1>
+
+<p>Markers identify points on the map. By default, they use use
+<code>G_DEFAULT_ICON</code>, though you can specify a custom icon. The 
+<code>GMarker</code> constructor takes a <code>GLatLng</code> and an 
+optional <code>GMarkerOptions</code> objects as arguments.</p>
+
+<p>Markers are designed to be interactive. By default, they
+receive <code>"click"</code> events, for example, and are often
+used within event listeners to bring up info windows.</p>
+
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById("map_canvas"));
+map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+ 
+// Add 10 markers to the map at random locations
+var bounds = map.getBounds();
+var southWest = bounds.getSouthWest();
+var northEast = bounds.getNorthEast();
+var lngSpan = northEast.lng() - southWest.lng();
+var latSpan = northEast.lat() - southWest.lat();
+for (var i = 0; i < 10; i++) {
+  var point = new GLatLng(southWest.lat() + latSpan * Math.random(),
+	southWest.lng() + lngSpan * Math.random());
+map.addOverlay(new GMarker(point));
+}
+</pre>
+
+<p><a href="examples/marker-simple.html">View example (marker-simple.html)</a></p>
+
+<h2 id="Draggable_Markers">Draggable Markers</h2>
+
+<p>Markers are interactive objects that can be clicked on and dragged to a new location. 
+In this example, we place a draggable marker on the map, and listen to a few of its 
+simpler events. Draggable markers implement four kinds of events: <code>click</code>, 
+<code>dragstart</code>, <code>drag</code> and <code>dragend</code> to indicate their drag status. 
+By default, markers are clickable but not draggable, so they need to be initialized with the 
+additional marker option <code>draggable</code> set to true. Draggable markers are 
+also bouncy by default. If you don't like this behavior, just set the 
+<code>bouncy</code> option to false and it will drop down gracefully.</p>
+
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById(&quot;map_canvas&quot;));
+var center = new GLatLng(37.4419, -122.1419);
+map.setCenter(center, 13);
+
+var marker = new GMarker(center, {draggable: true});
+
+GEvent.addListener(marker, &quot;dragstart&quot;, function() {
+  map.closeInfoWindow();
+  });
+
+GEvent.addListener(marker, &quot;dragend&quot;, function() {
+  marker.openInfoWindowHtml("Just bouncing along...");
+  });
+
+map.addOverlay(marker);
+</pre>
+
+<p><a href="examples/marker-drag.html">View example (marker-drag.html)</a></p>
+
+<h2 id="Icons_overview">Icons</h2>
+
+<p>Markers may define an icon to show in place of the default icon.
+Defining an icon is complex because of the number of different images 
+that make up a single icon in the Maps API. At a minimum, an icon
+must define the foreground image, the size of type <code>GSize</code>,
+and an icon offset to position the icon.</p>
+
+<p>The simplest icons are based on the <code>G_DEFAULT_ICON</code>
+type. Creating an icon based on this type allows you to quickly
+change the default icon by modifying only a few properties.</p>
+
+<p>In the example below, we create an icon using the 
+<code>G_DEFAULT_ICON</code> type, and then modify it to
+use a different image. (Be careful using different images,
+as they need to be set up as the correct size as the default image
+to display properly.)</p>
+
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById("map_canvas"));
+map.addControl(new GSmallMapControl());
+map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+
+// Create our "tiny" marker icon
+var blueIcon = new GIcon(G_DEFAULT_ICON);
+blueIcon.image = "http://www.google.com/intl/en_us/mapfiles/ms/micons/blue-dot.png";
+		
+// Set up our GMarkerOptions object
+markerOptions = { icon:blueIcon };
+
+// Add 10 markers to the map at random locations
+var bounds = map.getBounds();
+var southWest = bounds.getSouthWest();
+var northEast = bounds.getNorthEast();
+var lngSpan = northEast.lng() - southWest.lng();
+var latSpan = northEast.lat() - southWest.lat();
+for (var i = 0; i < 10; i++) {
+  var point = new GLatLng(southWest.lat() + latSpan * Math.random(),
+    southWest.lng() + lngSpan * Math.random());
+  map.addOverlay(new GMarker(point, markerOptions));
+}
+</pre>
+
+<p><a href="examples/icon-simple.html">View example (icon-simple.html)</a></p>
+
+<p>Most icons contain a foreground image and a shadow image. The shadow
+image should be created at a 45 degree angle (upward and to the right) 
+from the foreground image, and the bottom left corner of the 
+shadow image should align with the bottom-left corner of the icon 
+foreground image. Shadow images should be 24-bit PNG images with 
+alpha transparency so that image boundaries appear correctly
+on the map.</p>
+
+<p>This example creates a new type of icon, using the 
+<a href="http://groups.google.com/group/google-chart-api/web/chart-types-for-map-pins?pli=1">
+Google Chart API</a>'s custom map pins. We have to specify a foreground image, the shadow image, and the points at 
+which we anchor the icon to the map and anchor the info window to the icon. Note that
+the icon is passed in options defined in the <code>GMarkerOptions</code> object.</p>
+
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById(&quot;map&quot;));
+map.addControl(new GSmallMapControl());
+map.addControl(new GMapTypeControl());
+map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+
+// Create our &quot;cafe&quot; marker icon
+var cafeIcon = new GIcon();
+cafeIcon.image = &quot;http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=cafe|996600&quot;;
+cafeIcon.shadow = &quot;http://chart.apis.google.com/chart?chst=d_map_pin_shadow&quot;;
+cafeIcon.iconSize = new GSize(12, 20);
+cafeIcon.shadowSize = new GSize(22, 20);
+cafeIcon.iconAnchor = new GPoint(6, 20);
+cafeIcon.infoWindowAnchor = new GPoint(5, 1);
+// Set up our GMarkerOptions object literal
+markerOptions = { icon:cafeIcon };
+
+// Add 10 markers to the map at random locations
+var bounds = map.getBounds();
+var southWest = bounds.getSouthWest();
+var northEast = bounds.getNorthEast();
+var lngSpan = northEast.lng() - southWest.lng();
+var latSpan = northEast.lat() - southWest.lat();
+for (var i = 0; i &lt; 10; i++) {
+  var point = new GLatLng(southWest.lat() + latSpan * Math.random(),
+                          southWest.lng() + lngSpan * Math.random());
+  map.addOverlay(new GMarker(point, markerOptions));
+}
+</pre>
+
+<p>Note that the definition of the <code>GMarkerOptions</code> objects demonstrates usage of <i>object literal</i>
+notation. The object is not instantiated using a constructor; instead, it is simply
+declared using name-value pairs.</p>
+
+<p><a href="examples/icon-complex.html">View example (icon-complex.html)</a></p>
+
+<p>For more information about using the Chart API HTTP Service,
+check out this 
+<a href="http://groups.google.com/group/google-chart-api/web/chart-types-for-map-pins?pli=1">
+Group posting</a>. To create more complex icons, you may also be interested
+in the <a href="http://gmaps-utility-library.googlecode.com/svn/trunk/mapiconmaker/1.1/docs/examples.html">
+<code>MapIconMaker</code></a> and its associated
+<a href="http://gmaps-utility-library.googlecode.com/svn/trunk/mapiconmaker/1.1/examples/markericonoptions-wizard.html">
+<code>MarkerIconOptions</code> Wizard</a>.</p>
+
+<h2 id="Custom_Icons">Custom Icons</h2>
+
+<p><code>GIcon</code> objects also have several other properties 
+that you should set to get maximum browser compatibility and 
+functionality from your icons. For example, the <code>imageMap</code> 
+property specifies the shape of the non-transparent parts of the 
+icon image. If you do not set this property in your icon, the entire 
+icon image (including the transparency) will be clickable in 
+Firefox/Mozilla. See the <a href="reference.html#GIcon">GIcon class 
+reference</a> for more information.</p>
+
+<p>In many cases, your icons may have different foregrounds, but the same shape
+ and shadow. The easiest way to achieve this behavior is to use the copy constructor 
+ for the <code>GIcon</code> class, which copies all the properties over to a new icon 
+ which you can then customize.</p>
+
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById(&quot;map_canvas&quot;));
+map.addControl(new GSmallMapControl());
+map.addControl(new GMapTypeControl());
+map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+
+// Create a base icon for all of our markers that specifies the
+// shadow, icon dimensions, etc.
+var baseIcon = new GIcon(G_DEFAULT_ICON);
+baseIcon.shadow = &quot;http://www.google.com/mapfiles/shadow50.png&quot;;
+baseIcon.iconSize = new GSize(20, 34);
+baseIcon.shadowSize = new GSize(37, 34);
+baseIcon.iconAnchor = new GPoint(9, 34);
+baseIcon.infoWindowAnchor = new GPoint(9, 2);
+
+// Creates a marker whose info window displays the letter corresponding
+// to the given index.
+function createMarker(point, index) {
+  // Create a lettered icon for this point using our icon class
+  var letter = String.fromCharCode(&quot;A&quot;.charCodeAt(0) + index);
+  var letteredIcon = new GIcon(baseIcon);
+  letteredIcon.image = &quot;http://www.google.com/mapfiles/marker&quot; + letter + &quot;.png&quot;;
+
+  // Set up our GMarkerOptions object
+  markerOptions = { icon:letteredIcon };
+  var marker = new GMarker(point, markerOptions);
+
+  GEvent.addListener(marker, &quot;click&quot;, function() {
+    marker.openInfoWindowHtml(&quot;Marker &lt;b&gt;&quot; + letter + &quot;&lt;/b&gt;&quot;);
+  });
+  return marker;
+}
+
+// Add 10 markers to the map at random locations
+var bounds = map.getBounds();
+var southWest = bounds.getSouthWest();
+var northEast = bounds.getNorthEast();
+var lngSpan = northEast.lng() - southWest.lng();
+var latSpan = northEast.lat() - southWest.lat();
+for (var i = 0; i &lt; 10; i++) {
+  var point = new GLatLng(southWest.lat() + latSpan * Math.random(),
+                          southWest.lng() + lngSpan * Math.random());
+  map.addOverlay(createMarker(point, i));
+}
+</pre>
+
+<p><a href="examples/icon-custom.html">View example (icon-custom.html)</a></p>
+
+<h2 id="Marker_Manager">Using the Marker Manager</h2>
+
+<p>Adding a large number of markers to a Google map may both slow down rendering of 
+the map and introduce too much visual clutter, especially at certain zoom levels. The 
+marker manager utility provides a solution to both of these issues, allowing efficient 
+display of hundreds of markers on the same map and the ability to specify at which zoom 
+levels markers should appear.</p>
+
+<p>The marker manager utility is provided within the 
+<a href="http://gmaps-utility-library.googlecode.com/svn/trunk/">GMaps Utility Library</a>.
+This library is open source, and contains utilities that are not part of the core Google
+Maps API. To add utilities contained within this library, you add the JavaScript source
+directly with a <code>&lt;script&gt;</code> tag.
+
+<pre class="prettyprint">
+&lt;script src=&quot;http://gmaps-utility-library.googlecode.com/svn/trunk/markermanager/release/src/markermanager.js&quot;&gt;</script>
+</pre>
+
+<p>The <code>MarkerManager</code> object within the <code>markermanager.js</code> library 
+offloads management of markers registered with the utility, keeping 
+track of which markers are visible at certain zoom levels within the current view, and 
+passing only these markers to the map for drawing purposes. The manager monitors the map's 
+current viewport and zoom level, dynamically adding or removing markers from the map as 
+they become active. In addition, by allowing markers to specify the zoom levels at which 
+they display themselves, developers can implement marker clustering. Such management can 
+greatly speed up map rendering and reduce visual clutter.</p>
+
+<p>To use a marker manager, create a <code>MarkerManager</code> object. In the 
+simplest case, just pass a map to it.</p>
+
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById("map_canvas"));
+map.setCenter(new GLatLng(41, -98), 4);
+var mgr = new MarkerManager(map);
+</pre>
+
+<p>
+You may also specify a number of options to fine-tune the marker 
+manager's performance. These options are passed via a 
+<code>MarkerManagerOptions</code> 
+object, which contains the following fields:</p>
+
+<ul>
+  <li><code>maxZoom</code>: specifies the maximum zoom level monitored by 
+  this marker manager. The default value is the highest zoom level supported by Google maps.</li>
+  <li><code>borderPadding</code>: specifies the extra padding, in pixels, 
+  monitored by the manager outside the current viewport. This allows for 
+  markers just out of sight to be displayed on the map, improving panning 
+  over small ranges. The default value is 100.</li>
+  <li><code>trackMarkers</code>: specifies whether movement of movements 
+  of markers should be tracked by the marker manager. If you wish to have
+   managed markers that change their positions through the <code>setPoint()</code> 
+   method, set this value to <code>true</code>. By default, this flag 
+   is set to <code>false</code>. Note that if you move markers with this 
+   value set to <code>false</code>, they will appear in both the original 
+   location and the new location(s).</li>
+</ul>
+
+<p>The <code>MarkerManagerOptions</code> object is an object literal, so you 
+simply declare the object without a constructor:</p>
+
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById("map_canvas"));
+var mgrOptions = { borderPadding: 50, maxZoom: 15, trackMarkers: true };
+var mgr = new MarkerManager(map, mgrOptions);
+</pre>
+
+<p>Once you create a manager, you will want to add markers to it. 
+<code>MarkerManager</code> supports adding single markers one at a 
+time using the <code>addMarker()</code> method or a collection passed 
+as an array using the <code>addMarkers()</code> method. Single markers 
+added using <code>addMarker()</code> will appear immediately on the map 
+provided that they fall within the current view and specified zoom 
+level constraints.</p>
+
+<p>Adding markers collectively using <code>addMarkers()</code> is 
+recommended as it is more efficient. Markers added using the 
+<code>addMarkers()</code> method will not appear on the map until 
+you explicitly call the <code>MarkerManager</code>'s 
+<code>refresh()</code> method, which adds all markers within the 
+current viewport and border padding region to the map. After this 
+initial display, <code>MarkerManager</code> takes care of all 
+visual updates by monitoring the map's "moveend" events.</p>
+
+<h2 id="Marker_Manager_Weather">Zoom Level Example: Weather Map</h2>
+
+<p>The following example creates a mock weather map for Europe. At 
+zoom level 3, 20 randomly distributed weather icons are displayed. 
+At level 6, when all 200 cities with population over 300,000 are 
+easily distinguished, an additional 200 markers are shown. Finally, 
+at level 8, 1000 markers are shown. (Note: to simplify the example, 
+markers will be added at random locations.)</p>
+
+<pre class="prettyprint">
+function setupMap() {
+  if (GBrowserIsCompatible()) {
+    map = new GMap2(document.getElementById("map_canvas"));
+    map.addControl(new GLargeMapControl());
+    map.setCenter(new GLatLng(41, -98), 4);
+    window.setTimeout(setupWeatherMarkers, 0);
+  }
+}
+
+function getWeatherMarkers(n) {
+  var batch = [];
+  for (var i = 0; i < n; ++i) {
+    batch.push(new GMarker(getRandomPoint(), { icon: getWeatherIcon() }));
+  }
+  return batch;
+}
+
+function setupWeatherMarkers() {
+  mgr = new MarkerManager(map);
+  mgr.addMarkers(getWeatherMarkers(20), 3);
+  mgr.addMarkers(getWeatherMarkers(200), 6);
+  mgr.addMarkers(getWeatherMarkers(1000), 8);
+  mgr.refresh();
+}
+</pre>
+
+<p><a href="http://gmaps-utility-library.googlecode.com/svn/trunk/markermanager/release/examples/weather_map.html">
+View example (weather_map.html)</a></p>
+
+<h2 id="Marker_Manager_Offices">Clustering Example: Google Offices</h2>
+
+<p>The marker manager can also perform simple clustering of markers. 
+While it does not do so automatically, you can achieve the desired 
+effect by setting both the minimum and maximum zoom at which a given 
+marker is shown. In this example we create a map of Google offices 
+in North America. At the highest level we show flags of countries 
+in which offices are located. For zoom levels 3 to 7 we show icons 
+over population centers where one or more offices are located. 
+Finally, at levels 8 or higher, we show individual markers for each office.</p>
+
+<pre class="prettyprint">
+var officeLayer = [
+  {
+    "zoom": [0, 3],
+    "places": [
+      { "name": "US Offices", "icon": ["us", "flag-shadow"], "posn": [40, -97] },
+      { "name": "Canadian Offices", "icon": ["ca", "flag-shadow"], "posn": [58, -101] }
+    ]
+  },
+  ...
+};
+
+function setupOfficeMarkers() {
+  var mgr = new MarkerManager(map);
+  for (var i in officeLayer) {
+    var layer = officeLayer[i];
+    var markers = [];
+    for (var j in layer["places"]) {
+      var place = layer["places"][j];
+      var icon = getIcon(place["icon"]);
+      var posn = new GLatLng(place["posn"][0], place["posn"][1]);
+      markers.push(new GMarker(posn, { title: place["name"], icon: icon }));
+    }
+    mgr.addMarkers(markers, layer["zoom"][0], layer["zoom"][1]);
+  }
+  mgr.refresh();
+}
+</pre>
+
+<p><a href="http://gmaps-utility-library.googlecode.com/svn/trunk/markermanager/release/examples/google_northamerica_offices.html">
+View example (google_northamerica_offices.html)</a></p>
+
+<p>For more information, see the reference documentation for the 
+<a href="http://gmaps-utility-library.googlecode.com/svn/trunk/markermanager/release/docs/reference.html">
+Open Source Marker Manager</a>.</p>
+
+<h1 id="Polylines_Overview">Polylines</h1>
+
+<p><code>GPolyline</code> objects create a linear overlay on the map. A 
+<code>GPolyline</code> consists of a series of points and creates a series 
+of line segments that connect those points in an ordered sequence.
+
+<h2 id="Drawing_Polylines">Drawing Polylines</h2>
+
+<p>Polylines are drawn as a series of straight segments on the map. You can specify 
+custom colors, weights, and opacities for the line. Colors should be in hexadecimal 
+numeric HTML style, e.g., use <code>#ff0000</code> instead of <code>red</code>. 
+<code>GPolyline</code> does not understand named colors.</p>
+
+<p><code>GPolyline</code> objects use the vector drawing capabilities 
+of the browser, if available. In Internet Explorer, Google Maps uses 
+VML (see <a href="../index.html#XHTML_and_VML">XHTML and VML</a>) to draw polylines;
+in other browsers SVG is used if available. In all other circumstances, we request an 
+image of the line from Google servers and overlay that image on the 
+map, refreshing the image as necessary as the map is zoomed and dragged around.</p>
+
+<p>The following code snippet creates a 10-pixel-wide red polyline between two points:</p>
+
+<pre class="prettyprint">
+var polyline = new GPolyline([
+  new GLatLng(37.4419, -122.1419),
+  new GLatLng(37.4519, -122.1519)
+], "#ff0000", 10);
+map.addOverlay(polyline);
+</pre>
+
+<p><a href="examples/polyline-simple.html">View example 
+(polyline-simple.html)</a></p>
+
+<h2 id="Great_Circles">Geodesic Polylines</h2>
+
+<p>Polylines represented on the map are straight lines conforming to the 
+current projection. That is, they appear straight on the map, but may in fact
+not properly account for the curvature of the earth. If you instead wish 
+to draw a geodesic (a segment of a "great circle" representing the shortest
+distance between two points on the surface of the earth), you
+will need to pass <code>geodesic:true</code> in the <code>GPolylineOptions</code>
+argument of the <code>GPolyline</code>.</p>
+
+<p>The <code>GPolylineOptions</code> object is an example of an object literal.
+With object literals, you don't construct an object. Instead, you pass
+the arguments as a series of name/value pairs within curly brackets.
+Object literals are used often in those cases where instantiating an
+object is unnecessary.</p>
+
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById("map_canvas"));
+map.setCenter(new GLatLng(45.828799,-105.292969), 2);
+
+// Create GPolylineOptions argument as an object literal.
+// Note that we don't use a constructor.
+
+var polyOptions = {geodesic:true};
+var polyline = new GPolyline([
+  new GLatLng(40.65642, -73.7883),
+  new GLatLng(61.1699849, -149.944496)
+  ], "#ff0000", 10, 1, polyOptions);
+  map.addOverlay(polyline);
+</pre>
+
+<p><a href="examples/polyline-geodesic.html">View example 
+(polyline-geodesic.html)</a></p>
+
+<h2 id="Encoded_Polylines">Encoded Polylines</h2>
+
+<p>The <code>GPolyline</code> object within a Google map denotes a line as a 
+series of points, making it easy to use but not necessarily compact. Long and 
+complicated lines require a fair amount of memory, and often may take longer to 
+draw. Also, the individual segments within an unencoded polyline are drawn on the
+map regardless of their resolution at larger zoom levels.</p>
+
+<p>The Google Maps API allows you to represent paths using encoded polylines, 
+which specify a series of points within a <code>GPolyline</code> using a 
+compressed format of ASCII characters. The encoded polyline also allows you 
+to specify groups of zoom levels that should be ignored when drawing line 
+segments; doing so allows you to specify how detailed a polyline should be 
+at a given zoom level. Although more difficult to set up, encoded polylines 
+can make your overlays draw much more efficiently.
+</p>
+
+<p>For example, a <code>GPolyline</code> of 3 points (2 line segments) is normally represented as:</p>
+
+<pre class="prettyprint">
+var polyline = new GPolyline([
+    new GLatLng(37.4419, -122.1419),
+    new GLatLng(37.4519, -122.1519),
+    new GLatLng( 37.4619, -122.1819)
+], "#FF0000", 10);
+map.addOverlay(polyline);
+</pre>
+
+<p>An encoded <code>GPolyline</code> of these same points appears below 
+(for now, don't worry about particulars of the encoding algorithm).</p>
+
+<pre class="prettyprint">
+var encodedPolyline = new GPolyline.fromEncoded({
+    color: "#FF0000",
+    weight: 10,
+    points: "yzocFzynhVq}@n}@o}@nzD",
+    levels: "BBB",
+    zoomFactor: 32,
+    numLevels: 4
+});
+map.addOverlay(encodedPolyline);
+</pre>
+
+<p>There are two things to notice about this code.
+<ol>
+<li>
+First, the series of points is represented as a series of ASCII characters in 
+the encoded polyline, while familiar latitude and longitudes are used in the 
+basic <code>GPolyline</code>. The algorithm for creating these points as a 
+series of encoded ASCII values is documented 
+<a href="../../utilities/polylinealgorithm.html">
+here</a>. This algorithm is needed if you wish to calculate encoded polylines 
+on the fly via a server process, for example. However, if you just wish to 
+convert existing points given latitudes and longitudes, you can use our 
+<a href="../../utilities/polylineutility.html">
+interactive utility</a>.
+</li>
+<li>
+Second, the encoded polyline also allows you to specify the maximum zoom level for each line segment 
+to draw itself on a Google map. If a point is not shown on a higher zoom level, the path is simply drawn 
+from the previous displayable point to the next displayable point. Note that this feature is not available 
+within non-encoded <code>GPolyline</code>s and is especially useful for allowing fast drawing at high zoom 
+levels, where the details of some line segments may not be relevant. For example, an encoded polyline 
+representing a drive from New York City to Chicago should not care about the line segments representing 
+particular streets in Manhattan when the map is zoomed out to the state level.
+</li>
+</ol>
+
+<p><a href="examples/polyline-encoding.html">View example (polyline-encoding.html)</a></p>
+
+<p><a href="../../utilities/polylineutility.html">
+Interactive Encoded Polyline Utility</a></p>
+
+<p>See <a href="../../utilities/polylinealgorithm.html">
+Polyline algorithm</a> for information on the underlying
+encoded polyline algorithm.</p>
+
+<h1 id="Polygons_Overview">Polygons</h1>
+
+<p><code>GPolygon</code> objects are similar to <code>GPolyline</code> objects
+in that they consist of a series of points in an ordered sequence. However,
+instead of being open-ended, polygons are designed to define regions within a
+closed loop. As with polylines, you can define custom colors, weights, and
+ opacities for the edge of the polygon (the "line") and custom colors and
+ opacities for the fill area within the enclosed region. Colors should be 
+ in hexadecimal numeric HTML style.</p>
+
+<p><code>GPolygon</code> objects, like <code>GPolyline</code> objects, use 
+the vector drawing capabilities of the browser, if available.</p>
+
+<p>The following code snippet creates a 10-pixel-wide box around four points.
+Note that this polygon is "closed" by returning the segment path
+to its initial point; you should always close polygons to avoid 
+undefined behavior.</p>
+
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById("map_canvas"));
+map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+map.addControl(new GSmallMapControl());
+GEvent.addListener(map, 'click', function(overlay, latlng) {
+  var lat = latlng.lat();
+  var lon = latlng.lng();
+  var latOffset = 0.01;
+  var lonOffset = 0.01;
+  var polygon = new GPolygon([
+    new GLatLng(lat, lon - lonOffset),
+    new GLatLng(lat + latOffset, lon),
+    new GLatLng(lat, lon + lonOffset),
+    new GLatLng(lat - latOffset, lon),
+    new GLatLng(lat, lon - lonOffset)
+  ], "#f33f00", 5, 1, "#ff0000", 0.2);
+  map.addOverlay(polygon);
+});
+</pre>
+
+<p><a href="examples/polygon-simple.html">View example 
+(polygon-simple.html)</a></p>
+
+<h1 id="Ground_Overlays">Ground Overlays</h1>
+
+<p>Polygons are useful overlays to represent arbitrarily-sized areas, but they
+ cannot display images. If you have an image that you wish to place on a map,
+ you can use a <code>GGroundOverlay</code> object. The constructor for a <code>
+GGroundOverlay</code> a URL of an image and the <code>GLatLngBounds</code> of the image
+as parameters. 
+
+<p>The following example places an antique map of Newark, NJ on the map as an overlay:</p>
+
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById("map_canvas"));
+map.setCenter(new GLatLng(40.740, -74.18), 12);
+// ground overlay
+ 
+var boundaries = new GLatLngBounds(new GLatLng(40.716216,-74.213393), new GLatLng(40.765641,-74.139235));
+var oldmap = new GGroundOverlay("http://www.lib.utexas.edu/maps/historical/newark_nj_1922.jpg", boundaries);
+map.addControl(new GSmallMapControl());
+map.addControl(new GMapTypeControl());
+map.addOverlay(oldmap);
+</pre>
+
+<p><a href="examples/groundoverlay-simple.html">View example 
+(groundoverlay-simple.html)</a></p>
+
+<h1 id="Tile_Overlays">Tile Overlays</h1>
+
+<p>The map within the Google Maps API consist of a set of tiles, 
+covering the entire surface of the earth, at each zoom level. Tiles
+exist for each map type in use: <code>G_NORMAL_MAP</code>, 
+<code>G_SATELLITE_MAP</code>, <code>G_HYBRID_MAP</code>, and 
+<code>G_PHYSICAL_MAP</code>.</p>
+
+<h2><a name="MapTypeZoomLevels" id="MapTypeZoomLevels"></a>MapType Tile Coverage</h2>
+
+<p>Tiles do not cover all regions at all zoom levels. Different areas 
+of the map may contain tiles at varying resolutions, and therefore 
+varying zoom levels. As a result, tile coverage of any map type varies 
+based on location. Many areas of the Pacific Ocean do not appear at high 
+zoom levels, for example, while Manhattan may have very detailed
+satellite images.</p>
+
+<p>At the lowest zoom level (level 0), one tile represents the entire earth:</p>
+
+<div>
+<img src="images/worldTile.png"/>
+</div>
+
+<p>Each succeeding zoom level divides the map into <i>4
+<span class="superscript">N</span></i> tiles, where <i>N</i> refers to 
+the zoom level. For example, at zoom level 1, Google Maps divides the world up 
+into a 2x2 grid for a total of 4 tiles; at zoom level 2, Google Maps divides up 
+the world into a 4x4 grid for a total of 16 tiles, etc.</p>
+
+<p>For satellite map types (map types of <code>G_SATELLITE_MAP</code> and 
+<code>G_HYBRID_MAP</code>), you can determine the maximum zoom level where 
+satellite images are available at a particular location using the 
+<code>GMapType.getMaxZoomAtLatLng()</code> method.</p>
+
+<p>The following example captures user clicks, and determines the 
+highest zoom level for satellite imagery at that location. Note that
+you don't need to be viewing a satellite map to determine the
+maximum zoom level.</p>
+
+<pre class="prettyprint">
+var map;
+function initialize() {
+  if (GBrowserIsCompatible()) {
+    map = new GMap2(document.getElementById("map_canvas"));
+    map.setCenter(new GLatLng(55.366625,-131.660156), 7);
+    map.setMapType(G_SATELLITE_MAP);
+    map.setUIToDefault();
+    GEvent.addListener(map, 'click', function(overlay, latlng) {
+      showMaxZoom(latlng);
+    });
+  }
+}
+    
+function showMaxZoom(latlng) {
+  G_SATELLITE_MAP.getMaxZoomAtLatLng(latlng, function(response) {
+    if (response && response['status'] == G_GEO_SUCCESS) {
+      alert("The maximum zoom level where satellite imagery is available at this location is: " + response['zoom']);
+    }
+  });
+}
+</pre>
+
+<p><a href="examples/map-maxzoom.html">View example 
+(map-maxzoom.html)</a></p>
+
+<h2><a name="CustomMapTiles" id="CustomMapTules"></a>Custom Map Tiles</h2>
+
+<p>If you wish to modify display of map tiles, you have two options:</p>
+
+<ul>
+<li>Implement your own tile overlay on existing map types
+using <code>GTileLayerOverlay</code></li>
+<li>Implement your own custom map type using <code>GMapType</code></li>
+</ul>
+
+<p>The first case is much simpler but is more limited in usage, while
+the second case allows you more control over display within
+your application. Each case is discussed below, although
+full implementation of a custom map type is not covered in this 
+documentation.</p>
+
+<p>Each case requires you to implement three abstract methods from the
+<code>GTileOverlay</code> interface:</p>
+
+<ul>
+<li><code>getTileUrl()</code> returns to the map a URL containing the tile image, given
+a passed <code>GPoint</code> and zoom level.</li>
+<li><code>isPng()</code> returns to the map a <code>Boolean</code> indicating whether the image
+is a PNG file (which can be displayed transparently). If <code>true</code>, the image
+is assumed to be a PNG.</li>
+<li><code>getOpacity()</code> returns a value between 0.0 and 1.0 indicating the level
+of opacity to display this image.</li>
+</ul>
+
+<p>We will discuss the different approaches in the next two sections.</p>
+
+<h2 id="Tile_Layer_Overlays">Tile Layer Overlays</h2>
+
+<p>If you want an overlay to appear on an existing map type, use the 
+<code>GTileLayerOverlay</code> object. This object requires you to
+create a <code>GCopyrightCollection</code> and attach it to the
+tile layer to indicate permission for use of the image or images.</p>
+
+<p>The following code displays a simple transparent overlay
+on each tile at all zoom levels, denoting the outline of the 
+tiles between floating crosshairs.</p>
+
+<pre class="prettyprint">
+// Set up the copyright information
+// Each image used should indicate its copyright permissions
+var myCopyright = new GCopyrightCollection("&copy; ");
+myCopyright.addCopyright(new GCopyright('Demo',
+  new GLatLngBounds(new GLatLng(-90,-180), new GLatLng(90,180)),
+  0,'&copy;2007 Google'));
+
+// Create the tile layer overlay and 
+// implement the three abstract methods   		
+var tilelayer = new GTileLayer(myCopyright);
+tilelayer.getTileUrl = function() { return "../include/tile_crosshairs.png"; };
+tilelayer.isPng = function() { return true;};
+tilelayer.getOpacity = function() { return 1.0; }
+
+var myTileLayer = new GTileLayerOverlay(tilelayer);
+var map = new GMap2(document.getElementById("map_canvas"));
+map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+map.addOverlay(myTileLayer);
+
+</pre>
+
+<p><a href="examples/tileoverlay-simple.html">View example 
+(tileoverlay-simple.html)</a></p>
+
+<h2 id="Custom_Map_Types">Custom Map Types</h2>
+
+<p><span class="new">Note: This is an Advanced Topic</span></p>
+
+<p>If you find the <code>GTileLayerOverlay</code> too limiting,
+you can define your own custom map type, and develop an entirely new
+display paradigm. To do so, construct a <code>GMapType</code> object
+and add it to the map using the <code>GMap2.addMapType()</code> method.</p>
+
+<p>Constructing a map type from scratch is an involved process. You will
+need to build a way to define and retrieve dynamic data to display
+on the map given current coordinates, and you will need to determine
+yourself how to reference and display tile images. How you do that is up to
+you; however, we can help you a little by explaining how Google Maps implements
+its tile references.</p>
+
+<h3 id="Google_Maps_Coordinates">Google Maps Coordinates</h3>
+
+<p>There are three coordinate systems that the Google Maps API uses:</p>
+
+<ul>
+<li>Pixel coordinates referencing a point on an image tile</li>
+<li>Tile coordinates referencing a tile within a tile layer</li>
+<li>The zoom layer, which defines the total number of tiles</li>
+</ul>
+
+<p>Each system is discussed below.</p>
+
+<h4>Pixel Coordinates</h4>
+
+<p>Each tile within Google Maps consists of 256 x 256 pixels. A point on a 
+particular tile can therefore be referenced using a <code>GPoint</code> <i>x,y</i> 
+pair. The origin <code>(0,0)</code> for each tile is denoted at the 
+northwest corner of the tile. Therefore, for the single tile which represents
+the entire earth, the origin is set to lie at the North Pole and -180 degrees 
+longitude, where you see Alaska. <code>x</code> (longitude) values increase 
+east, while <code>y</code> (latitude) values increase south to the
+the southeast point <code>(255,255)</code>.</p>
+
+<div>
+<img src="images/pixelCoordinates.png"/>
+</div>
+
+<p>At higher zoom levels, the pixel space expands by doubling in both the
+<i>x</i> and <i>y</i> directions. For example, at zoom
+level 1, the map consists of 4 256x256 pixels tiles, resulting in
+a pixel space from 512x512. At zoom level 19, each <i>x</i> and <i>y</i>
+pixel on the map can be referenced using a value between 0 and 256 * 
+<i>2<span class="superscript">19</span></i>.</p>
+
+<h4>Tile Coordinates</h4>
+
+<p>Referencing such a point uniquely on the entire map
+is often not practical. At higher zoom levels, the Google Maps API
+could not use one image file to display the entire earth. It is 
+therefore useful to determine which image tile is in use, and then
+compute the pixel coordinate relative to the origin of that tile. Any
+custom map you implement will need to do the same evaluation.</p>
+
+<p>Tiles in Google Maps are numbered from the same origin as that for
+pixels, so that the origin tile is always at the northwest corner 
+of the map. Tiles are indexed using <code>x,y</code> coordinates 
+from that origin. For example, at zoom level 2, when the earth
+is divided up into 16 tiles, each tile can be referenced by a
+unique <code>x,y</code> pair:</p>
+
+<div>
+<img src="images/tileCoordinates.png"/>
+</div>
+
+<p>Indexing a particular point on a particular zoom level can therefore use two
+<code>GPoint</code> values: one to reference the tile in usage, and one to 
+reference the coordinate within the tile's pixel on that 256 x 256 image.</p>
+
+<p>Implementing a tile overlay for other than a few simple zoom levels can
+be an onerous task, as you would need to add logic to determine which
+particular tile image to serve. The Google Maps API allows you to construct
+a <code>GTileLayer</code> passing a <code>GTileLayerOptions</code> argument
+as an object literal. The <code>GTileLayerOptions</code> argument contains
+a <code>tileUrlTemplate</code> property that maps tile requests to URLs
+based on tile coordinates. The constructor for an overlay would look something 
+like this:</p>
+
+<pre class="prettyprint">
+var tileLayerOverlay = new GTileLayerOverlay(
+  new GTileLayer(null, null, null, {
+    tileUrlTemplate: 'http://domain.com/myimage_{Z}_{X}_{Y}.png', 
+    isPng:true,
+    opacity:1.0
+  })
+);
+
+map.addOverlay(tlo); 
+</pre>
+
+<p>This template scheme allows you to address a collection of tile images 
+named using tile coordinates as they are done within Google Maps.</p>
+
+<h3 id="Copyrights">Handling Copyright Information</h3>
+
+<p>Maps usually have imagery which is either purchased, generated or licensed
+from some external entity. Those images often require copyright information
+to be displayed, and in certain cases (such as satellite data), the imagery
+may come from different sources at different locations on the map. In order to 
+provide the ability to display dynamic copyright information on your custom 
+map types, the Maps API provides a number of objects to hold 
+copyright information, and provides methods and interfaces for implementing 
+retrieval of this copyright information based on the current viewport and zoom level.</p>
+
+<h4 id="GCopyright_Objects">Copyright Objects</h4>
+
+<p>The <code>GCopyright</code> object is a simple object that holds basic copyright 
+information. This object's <code>minZoom</code> and <code>bounds</code> 
+properties define the constraints under which this copyright information is valid
+with <code>text</code> containing the copyright string to display under those
+conditions.</p>
+
+<p>Sets of <code>GCopyright</code> objects are collected into a 
+<code>GCopyrightCollection</code>. The <code>GCopyrightCollection</code> constructor
+allows you to define a text prefix (such as "Imagery &copy; 2007") to attach to all
+copyright notices. Note that you cannot add copyrights to the <code>GCopyrightCollection</code> 
+directly within the constructor. You must call the <code>addCopyright</code> 
+method to add individual <code>GCopyright</code> objects to the collection after it is
+constructed.</p>
+
+<p>The <code>GTileLayer</code> interface requires a <code>copyrights</code> argument 
+in its constructor. Classes which handle these tile layers
+(such as <code>GTileLayerOverlay</code> and <code>GMapType</code>) need to create a 
+<code>GCopyrightCollection</code> object beforehand and pass that object to the 
+constructor of the tile layer.</p>
+
+<p>The Google Maps API implements the following methods for displaying copyright 
+information, which you may override to provide custom behavior:</p>
+<ul>
+<li><code>GMapType.getCopyrights()</code> invokes <code>GTileLayer.getCopyright()</code>
+on all its child tile layers.</li>
+<li>Each <code>GTileLayer.getCopyright()</code> invokes <code>GCopyrightCollection.getCopyrightNotice()</code>
+on its copyright collection.</li>
+<li><code>GCopyrightCollection.getCopyrightNotice()</code> returns the copyright notice(s) attached to
+this object, checking whether the given <code>bounds</code> and <code>zoom</code> applies to
+each of its child <code>GCopyright</code> objects.</li>
+</ul>
+
+<p>Each of these methods contains <code>bounds</code> and <code>zoom</code> parameters 
+which you can override and inspect to decide what copyright information to display.</p>
+
+<p>By default, whenever the Google Maps API displays a tile layer within a map type, 
+it retrieves the current copyrights in use via the <code>GTileLayer.getCopyright()</code> 
+method. Some map types may include multiple tile layers, which may mean that information from 
+multiple <code>GCopyrightCollection</code> objects may need to be displayed concurrently. 
+(The <code>G_HYBRID_MAP</code> map type implements both a satellite layer and a map layer, 
+for example.) This concurrent information is displayed by concatenating copyright notices
+from multiple copyright collections.</p>
+
+<h3 id="Projections">Converting Projection Coordinates</h3>
+
+<p>The earth is a sphere, while a map is a flat two-dimensional object. The map
+that you see within the Google Maps API is a <i>projection</i> of that sphere onto
+a flat surface. Projections in the Google Maps API are implemented using the 
+<code>GProjection</code> interface. Only one projection is currently
+implemented in the Google Maps API: <code>GMercatorProjection</code>. In 
+its simplest terms, a projection can be defined as a one-to-one
+correspondence of <code>GLatLng</code> values into coordinates on the map
+and the <code>GProjection</code> interface provides conversion utilities
+for this purpose.</p>
+
+<p>The <code>GProjection.fromLatLngToPixel()</code> method converts a
+<code>GLatLng</code> value into a pixel coordinate at the given zoom level.
+Similarly, the <code>GProjection.fromPixelToLatLng()</code> method converts 
+a pixel coordinate at a given zoom level into a <code>GLatLng</code> value.
+These methods are useful when implementing a map type, as they allow you
+to determine which tiles to show, how to display them, and at what offset
+to display them.</p>
+
+<p>The following example handles click events by calculating the pixel
+coordinates at the current zoom level, and returns both the pixel
+coordinates and tile coordinates for that location:</p>
+
+<p><a href="examples/tile-detector.html">View example (tile-detector.html)</a></p>
+
+<p>For more information about implementing map types, consult the 
+<a href="reference.html#GMapType">GMapType reference</a>.</p>
+
+<h1 id="Layers">Layers</h1>
+
+<p><code>GLayer</code> objects are overlay objects that store a set of 
+third-party geographic information. <i>Layers</i> are sets of 
+geographically-related features that share some common function, and are 
+displayed on a map as a group. Google provides these sets from
+data obtained from other sources, and bundles them together within a
+a single layer.</p>
+
+<p>Layers generally consist of a variety of items &mdash; typically markers, 
+polylines, and polygons &mdash; though they are not considered separate objects. 
+The layer itself (and all of its components) is considered a single overlay 
+to the Maps API, and is added to the map via the standard 
+<code>addOverlay()</code> method. The layer may also be interactive,
+allowing actions on components to bring up info windows, for example.</p>
+
+<p>Layers each contain a unique namespace ID so that they can be easily 
+referenced and addressed uniquely. This namespace ID is currently based on the 
+domain of the source layer. The English <i>Geotagged Wikipedia &copy; 
+Articles</i> layer, for example, has a namespace ID of 
+"<code>org.wikipedia.en</code>".</p>
+
+<p>The Google Maps API currently has access to these 
+<a href="http://spreadsheets.google.com/pub?key=p9pdwsai2hDN-cAocTLhnag">public 
+layers</a>. New layers will periodically be added to the Maps API. We will 
+maintain this list at
+<a href="http://spreadsheets.google.com/pub?key=p9pdwsai2hDN-cAocTLhnag">this spreadsheet</a>.</p>
+
+<p>The following code snippet adds an English Wikipedia layer to Greenwich 
+Village, New York City:</p>
+
+<pre class="prettyprint">
+function initialize() {
+  if (GBrowserIsCompatible()) {
+    var map = new GMap2(document.getElementById("map_canvas"));
+    map.setCenter(new GLatLng(40.730885,-73.997383), 15);
+    var myLayer = new GLayer("org.wikipedia.en");
+    map.addOverlay(myLayer);
+  }
+}
+</pre>
+
+<p><a href="examples/layer-simple.html">View example (layer-simple.html)</a></p>
+
+<h1 id="Custom_Overlays">Custom Overlays</h1>
+
+<p>The Google Maps API also allows you to create custom 
+overlay objects by implementing the <code>GOverlay</code> interface. The Google Maps
+API provides several services, such as <code>GTrafficOverlay</code>,<code>GGeoXml</code>, 
+and <code>GStreetviewPanorama</code> objects, through implementation of the 
+<code>GOverlay</code> interface. (These services
+are documented in the <a href="services.html">Services</a> section.)</p>
+
+<p>The <code>GOverlay</code> interface requires you to implement four abstract methods:</p>
+
+<ul>
+<li><code>initialize()</code> called in response to <code>GMap2.addOverlay()</code></li>
+<li><code>remove()</code> called in response to <code>GMap2.removeOverlay()</code></li>
+<li><code>copy()</code> to allow templating of the new overlay</li>
+<li><code>redraw()</code> called in response to a display change within the map</li>
+</ul>
+
+<p>Google Maps API interfaces are implemented within JavaScript through assignment of the 
+<code>prototype</code> property to an instance of the inherited object. 
+For example, a <code>Rectangle</code> object inherits from the 
+<code>GOverlay</code> interface using the following code:</p>
+
+<pre class="prettyprint">
+OverlaySubclass.prototype = new GOverlay();
+</pre>
+
+<p>Implementation of the abstract methods in the <code>GOverlay</code> interface
+is facilitated through assignment of these methods on the object's 
+<code>prototype</code>:</p>
+
+<pre class="prettyprint">
+OverlaySubclass.prototype.initialize = myInitializeMethod;
+OverlaySubclass.prototype.remove = myRemoveMethod;
+OverlaySubclass.prototype.copy = myCopyMethod;
+OverlaySubclass.prototype.redraw = myRedrawMethod;
+</pre>
+
+<p>In the following example, we create a <code>Rectangle</code> overlay that outlines 
+a geographic region on the map. The <code>Rectangle</code> class defines the 
+four required methods of the <code>GOverlay</code> interface. Specifically,
+make note of the <code>initialize()</code> method, which creates the DOM elements 
+representing our overlay, and the <code>redraw()</code> method, which positions 
+and sizes the overlay on the map based on the current projection and zoom level.</p>
+
+<p>Every DOM element that makes up an overlay exists on a <i>map pane</i> 
+that defines the z-order at which it will be drawn.  For example, polylines 
+are flat against the map, so they are drawn in the lowest <code>G_MAP_MAP_PANE</code>. 
+Markers place their shadow elements in the <code>G_MAP_MARKER_SHADOW_PANE</code> 
+and their foreground elements in the <code>G_MAP_MARKER_PANE</code>. 
+Placing your overlay elements in the correct panes ensures that polylines are 
+drawn below marker shadows and the info window is drawn above other overlays 
+on the map.  In this example, our overlay is flat against the map, so we 
+add it to the lowest z-order pane <code>G_MAP_MAP_PANE</code>, just like 
+<code>GPolyline</code>.  See the <a href="reference.html">class reference</a> 
+for a complete list of map panes.</p>
+
+<pre class="prettyprint">
+// A Rectangle is a simple overlay that outlines a lat/lng bounds on the
+// map. It has a border of the given weight and color and can optionally
+// have a semi-transparent background color.
+function Rectangle(bounds, opt_weight, opt_color) {
+  this.bounds_ = bounds;
+  this.weight_ = opt_weight || 2;
+  this.color_ = opt_color || &quot;#888888&quot;;
+}
+Rectangle.prototype = new GOverlay();
+
+// Creates the DIV representing this rectangle.
+Rectangle.prototype.initialize = function(map) {
+  // Create the DIV representing our rectangle
+  var div = document.createElement(&quot;div&quot;);
+  div.style.border = this.weight_ + &quot;px solid &quot; + this.color_;
+  div.style.position = &quot;absolute&quot;;
+
+  // Our rectangle is flat against the map, so we add our selves to the
+  // MAP_PANE pane, which is at the same z-index as the map itself (i.e.,
+  // below the marker shadows)
+  map.getPane(G_MAP_MAP_PANE).appendChild(div);
+
+  this.map_ = map;
+  this.div_ = div;
+}
+
+// Remove the main DIV from the map pane
+Rectangle.prototype.remove = function() {
+  this.div_.parentNode.removeChild(this.div_);
+}
+
+// Copy our data to a new Rectangle
+Rectangle.prototype.copy = function() {
+  return new Rectangle(this.bounds_, this.weight_, this.color_,
+                       this.backgroundColor_, this.opacity_);
+}
+
+// Redraw the rectangle based on the current projection and zoom level
+Rectangle.prototype.redraw = function(force) {
+  // We only need to redraw if the coordinate system has changed
+  if (!force) return;
+
+  // Calculate the DIV coordinates of two opposite corners of our bounds to
+  // get the size and position of our rectangle
+  var c1 = this.map_.fromLatLngToDivPixel(this.bounds_.getSouthWest());
+  var c2 = this.map_.fromLatLngToDivPixel(this.bounds_.getNorthEast());
+
+  // Now position our DIV based on the DIV coordinates of our bounds
+  this.div_.style.width = Math.abs(c2.x - c1.x) + &quot;px&quot;;
+  this.div_.style.height = Math.abs(c2.y - c1.y) + &quot;px&quot;;
+  this.div_.style.left = (Math.min(c2.x, c1.x) - this.weight_) + &quot;px&quot;;
+  this.div_.style.top = (Math.min(c2.y, c1.y) - this.weight_) + &quot;px&quot;;
+}
+
+var map = new GMap2(document.getElementById(&quot;map&quot;));
+map.addControl(new GSmallMapControl());
+map.addControl(new GMapTypeControl());
+map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+
+// Display a rectangle in the center of the map at about a quarter of
+// the size of the main map
+var bounds = map.getBounds();
+var southWest = bounds.getSouthWest();
+var northEast = bounds.getNorthEast();
+var lngDelta = (northEast.lng() - southWest.lng()) / 4;
+var latDelta = (northEast.lat() - southWest.lat()) / 4;
+var rectBounds = new GLatLngBounds(
+    new GLatLng(southWest.lat() + latDelta, southWest.lng() + lngDelta),
+    new GLatLng(northEast.lat() - latDelta, northEast.lng() - lngDelta));
+map.addOverlay(new Rectangle(rectBounds));</pre>
+
+<p><a href="examples/overlay-custom.html">View example (overlay-custom.html)</a></p>
+
+        <!-- end body text -->
+
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

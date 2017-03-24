@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<TaskRule>
+  <taskname>MapLayerLevel</taskname>
+  <inputConstraints/>
+  <outputConstraints/>
+  <cpuConstraint>
+  <minNumCPU>4</minNumCPU>
+  <maxNumCPU>4</maxNumCPU>
+  </cpuConstraint>
+</TaskRule>

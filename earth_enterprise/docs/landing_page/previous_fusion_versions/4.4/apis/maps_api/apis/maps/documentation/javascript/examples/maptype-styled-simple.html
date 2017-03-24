@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html> 
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/examples/maptype-styled-simple.html";
+    </script>
+    
+<title>Google Maps JavaScript API v3 Example: Styled MapTypes</title>
+<link href="http://code.google.com/apis/maps/documentation/javascript/examples/standard.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>  
+<script>
+
+var map;
+var brooklyn = new google.maps.LatLng(40.6743890, -73.9455);
+
+var MY_MAPTYPE_ID = 'hiphop';
+
+function initialize() {
+    
+  var stylez = [
+    {
+      featureType: "road",
+      elementType: "geometry",
+      stylers: [
+        { hue: "#00ff00" },
+        { saturation: 100 }
+      ]
+    },
+    {
+      featureType: "landscape",
+      elementType: "geometry",
+      stylers: [
+        { hue: "#000000" },
+        { saturation: 75 },
+        { lightness: -100}
+      ]
+    }
+  ];
+
+  var mapOptions = {
+    zoom: 12,
+    center: brooklyn,
+    mapTypeControlOptions: {
+       mapTypeIds: [google.maps.MapTypeId.ROADMAP, MY_MAPTYPE_ID]
+    },
+    mapTypeId: MY_MAPTYPE_ID
+  };
+
+  map = new google.maps.Map(document.getElementById("map_canvas"),
+      mapOptions);
+      
+  var styledMapOptions = {
+    name: "Hip-Hop"
+  };
+
+  var jayzMapType = new google.maps.StyledMapType(stylez, styledMapOptions);
+  
+  map.mapTypes.set(MY_MAPTYPE_ID, jayzMapType);
+}
+</script> 
+</head> 
+<body onload="initialize()"> 
+  <div id="map_canvas" style="width: 640px; height: 480px;"></div> 
+</body> 
+</html> 

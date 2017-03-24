@@ -1,0 +1,623 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+ 
+ 
+
+
+ 
+
+  
+  
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/articles/yourfirstmap.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Tutorial: Creating Your First Map - Google Maps API Family - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/maps/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../css/iehacks.css"><![endif]-->
+
+    <link href="../../../css/semantic_headers.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    
+    
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  <a href="#gc-pagecontent">Skip to page content</a>
+  <a href="#gc-toc">Skip to main navigation</a>
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps API Family</h1>
+  <ul id="articles" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="../index.html" title="Google Maps API Family home page">Home</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../faq.html" title="Answers to frequently asked questions about Google Maps API Family">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="index.html" class="selected" title="Focused articles and tutorials for Google Maps API Family developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps API Family blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="../forum/index.html" title="Google Maps API Family developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../terms.html" title="Google Maps API Family terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../index.html">Maps API Family</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps Javascript API V3</h2>
+         <ul>
+           <li><a href="../documentation/javascript/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+      <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../documentation/javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+  <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../documentation/flash/index.html">Home Page</a></li>
+          <li><a href="../documentation/flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../documentation/mapsdata/index.html">Home Page</a></li>
+          <li><a href="../documentation/mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+     <div class="line"></div>
+      <ul>
+        <li><h2><a href="../documentation/webservices/index.html">Maps Web Services</a></h2>
+         <ul>
+           <li><a href="../documentation/geocoding/index.html">Geocoding Guide</a></li>
+           <li><a href="../documentation/directions/index.html">Directions Guide</a></li>
+           <li><a href="../documentation/elevation/index.html">Elevation Guide</a></li>
+           <li><a href="../documentation/places/index.html">Places Guide</a></li>
+         </ul>
+       </li>
+      </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../documentation/staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li>
+            <h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../documentation/localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../documentation/localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+      <div class="promo">
+     <p><a href="../documentation/premier/index.html">Google Maps API Premier</a></p><p>Includes enterprise licensing and support</p></div>
+
+        <a class="hidden" href="#gc-topnav-anchor">More Google Maps API Family resource links</a>
+      </div>
+      
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Tutorial: Creating Your First Map</h1>
+
+
+<!-- ########## PAGE CONTENT ########## -->
+  
+<div class=i>
+<style type="text/css">
+.inlinepic {
+  border: 1px solid black;
+  margin: 20px;
+}
+ol li{
+  margin-bottom: 20px;
+}
+.funcTable {
+  margin-left: 30px;
+}
+.funcTable td {
+  border: 1px solid grey;
+  padding: 5px;
+  font-size: 11px;
+  text-align: center;
+}
+h3 {
+  border-bottom: 1px solid grey;
+}
+</style>
+<em>Pamela Fox, Google Maps API Team
+<br />August 2007</em>
+<h4>Goal</h4>
+
+<p class="para">
+This tutorial guides you through the steps of creating your first working map using the <a href="http://www.google.com/apis/maps/" target="_blank">Google Maps API</a>. It covers publishing the map online on a <a href="http://pages.google.com">Google Pages account</a>, and customizing it to show the location of your choice, complete with marker and info window.
+</p>
+<p class="warning">
+Google Pages is no longer open for new accounts. If you already have
+a Google Pages account, you can follow the steps here. Otherwise, you
+can use your own server, a similar service like Yahoo! Geocities, or
+just work from your file system.
+</p>
+<h4>Time to Complete</h4>
+<p class="para">
+Approximately 60 minutes
+</p>
+<h4>Prerequisites</h4>
+<p class="para">
+Before you begin this tutorial, you must have the following:
+</p>
+<ul>
+  <li>A GMail account</li>
+
+  <li>A basic knowledge of HTML</li>
+  <li>A basic knowledge of JavaScript</li>
+</ul>
+<h4>Index</h4>
+<p class="para">
+This tutorial is divided into the following sections:
+</p>
+<ul>
+  <li><a href="#section1">Section 1: Setting Up a Google Pages Account</a></li>
+  <li><a href="#section2">Section 2: Getting a Working Map Online</a></li>
+
+  <li><a href="#section3">Section 3: Finding the Latitude/Longitude of Your Location</a></li>
+  <li><a href="#section4">Section 4: Customizing the Map</a></li>
+  <li><a href="#summary">Summary</a></li>
+</ul>
+<br/>
+<a name="section1"></a><h3>Section 1: Setting Up a Google Pages Account</h3>
+<p class="para">
+For the purposes of this tutorial, we will be using Google Pages to host the map page(s) you create. You can certainly host your map on your own server as well. If you are already familiar with Google Pages or are using your own server, you can skip this section and go to <a href="#section2">Section 2</a>.
+
+</p>
+<ol class="steps">
+<li>
+Sign in to <a href="http://pages.google.com" target="_blank">http://pages.google.com</a> with your GMail account. If it's your first time using Google Pages, you'll be presented with the Terms & Conditions page. Please read the info and accept the terms to continue.
+<br/>
+<img src="http://www.google.com/help/hc/images/simplemap_googlepages_signin.jpg" class="inlinepic"/>
+</li>
+<li>
+You'll then see the interface that will allow you to create a new page. Besides providing a WYSIWYG HTML editor, Google Pages also allows you to upload pages from your hard drive. We'll use that option to upload HTML we create outside of Google Pages. On the <strong>Edit page</strong>, click 'Back to Site Manager' and the <strong>Site Manager</strong> page appears.
+
+<br/>
+<img src="http://www.google.com/help/hc/images/simplemap_googlepages_backtositemanager.jpg" class="inlinepic"/>
+</li>
+<li>
+You should now see the <strong>Site Manager</strong> interface. It consists of pages you've created with the page editing interface on the left, <em>Uploaded Stuff</em> on the right, and your site's unique URL in the upper left. Keep this page open for later in the tutorial.
+<br/>
+<img src="http://www.google.com/help/hc/images/simplemap_googlepages_sitemanager.jpg" class="inlinepic"/>
+</li>
+</ol>
+<a name="section2"></a><h3>Section 2: Getting a Working Map Online</h3>
+
+<ol class="steps">
+<li>
+To include a Google map on an online site, you'll need an API key which is tied to your site URL and your GMail account. First, visit <a href="http://www.google.com/apis/maps/signup.html" target="_blank">
+http://www.google.com/apis/maps/signup.html</a>. Make sure to read through the terms of use &mdash; there are some uses of the Maps API which are not allowed that you should be aware of.
+</li>
+<li>
+Enter the URL for your Google Pages account in the 'My web site URL' box. This is the same URL that is shown at the top of your Site Manager, as circled in the screenshot from step 4 of <a href="#section1">Section 1</a>. It should be a domain name like <em>http://<span style="color:blue">&lt;username&gt;</span>.googlepages.com</em>. Check the box indicating you agree with the terms, then press the 'Generate API Key' button.
+
+<br/>
+<img src="http://www.google.com/help/hc/images/simplemap_defaultmap_signupurl.jpg" class="inlinepic"/>
+</li>
+<li>
+You should now see the sign-up thank you page, which tells you your key (a long string of random characters), the directory/domain it's valid for, and sample code for your first map which includes your API key. You can see the API key appended to the end of the script tag that loads the Maps API into the page. Keep this page open in your browser.
+<br/>
+<img src="http://www.google.com/help/hc/images/simplemap_defaultmap_signupthankyou.jpg" class="inlinepic"/>
+</li>
+<li>
+Open a text editor like Notepad on Windows or TextEdit on Macs. Copy and paste the HTML from the thank you page into a blank document, and save it as <em>mymap.html</em>.
+<br/>
+<img src="http://www.google.com/help/hc/images/simplemap_defaultmap_copypastehtml.jpg" class="inlinepic"/>
+</li>
+<li>
+Go back to the Google Pages Site Manager we left open from Step 4 of <a href="#section1">Section 1</a>. Click the 'upload' link at the bottom of <strong>Uploaded stuff</strong>.
+
+<br/>
+Click 'Browse' and you'll be greeted with a file explorer. Find where you saved <em>mymap.html</em> and select it.
+<br/>
+<img src="http://www.google.com/help/hc/images/simplemap_defaultmap_uploadclick.jpg" class="inlinepic"/>
+</li>
+<li>
+You'll see a brief indicator while the file is uploading. When the file has successfully uploaded, you'll see a file size next to it and a trash can (which you can use to delete it later).
+<br />
+<img src="http://www.google.com/help/hc/images/simplemap_defaultmap_uploadsuccess.jpg" class="inlinepic"/>
+</li>
+<li>
+It's time to test it out! Click on the 'mymap.html' link listed in <strong>Uploaded Stuff</strong>, and you'll see a browser window open up to <em>http://<span style="color:blue">&lt;username&gt;</span>.googlepages.com/mymap.html</em>. If you did all the steps correctly, you should now see a map centered on Palo Alto, California like this one: <br/>
+
+<a href="http://maps.examples.googlepages.com/mymap.html" target="_blank">
+http://maps.examples.googlepages.com/mymap.html
+</a>
+<br/><br/>
+ If you're getting an error about the key being registered for a different site, then you probably entered in the wrong URL when you signed up for the API key. Go back to Step 2 of this section and make sure you enter the domain name that you see in the browser window for the page.
+<br/><br/>
+ If you're not seeing a map and are just seeing a blank page, you probably made a copy & paste error. Go back to Step 4, and make sure you copy and paste all and only the HTML given to you in the textbox.
+</li>
+</ol>
+<a name="section3"></a><h3>Section 3: Finding the latitude/longitude of your location</h3>
+<p class="para">
+The first customization that you'll want to make to the map is to center it at the location of your house, business, etc. To do this, you'll need to know the latitude and longitude of that location, but you probably only know the address right now. The process of turning an address into a set of coordinates is known as geocoding, and it's what maps.google.com does when you enter an address. Since maps.google.com has one of the best geocoders around, we'll use it in this workshop to turn your address into a latitude/longitude.
+</p>
+
+<ol class="steps">
+<li>
+Visit <a href="http://maps.google.com" target="_blank">http://maps.google.com</a>.
+<br/>
+<img src="http://www.google.com/help/hc/images/simplemap_custommap_mapsgooglecom.jpg" class="inlinepic"/>
+</li>
+<li>
+Enter the address of your location in the text box, and press the 'Search Maps' button. If your address is found, a marker is placed at the location. If your search criteria produces multiple matches, then you're asked to select the best match.
+<br/>
+<img src="http://www.google.com/help/hc/images/simplemap_custommap_addressentered.jpg" class="inlinepic"/>
+</li>
+<li>
+Geocoding an address is not an exact science, and sometimes Google Maps will not get the exact location of an address &mdash; the green marker may show up in the middle of the street, slightly down the road, etc. All you need to do is double-click on the map exactly where you'd like the coordinates for. The map should re-center itself on the double-clicked location.
+
+<br/>
+<img src="http://www.google.com/help/hc/images/simplemap_custommap_centermapbldg.jpg" class="inlinepic"/>
+</li>
+<li>
+Once you're happy with the location of the map center, it's time to retrieve the coordinates. Click on 'Link to this page' and a box will pop up with a URL that looks something like: <br/>
+<a href="http://maps.google.com/maps?f=q&hl=en&q=3650+McClintock+Ave+Los+Angeles+CA&sll=34.019963,-118.290047&sspn=0.00482,0.006856&ie=UTF8&ll=34.019968,-118.289988&spn=0.001205,0.001714&t=k&z=19&om=1i" target="_blank">
+http://maps.google.com/maps?f=q&hl=en&q=3650+McClintock+Ave+Los+Angeles+CA&sll=34.019963,-118.290047&sspn=0.00482,0.006856&ie=UTF8&ll=34.019968,-118.289988&spn=0.001205,0.001714&t=k&z=19&om=1
+
+</a>
+<br/>
+<img src="http://www.google.com/help/hc/images/simplemap_custommap_linktothispage.jpg" class="inlinepic"/>
+</li>
+<li>
+In that long URL of gobbledygook is the morsel of information we're looking for: the latitude and longitude of the map center. Find the <code>ll</code> parameter, and copy the two numbers that come after it. In my case, my address is at: 34.019968,-118.289988. Remember this latitude and longitude for the next step. If you also like the zoom level that the map is at right now, copy the <code>z</code> parameter. It should be a number from 0 to 17. (<strong>Be warned</strong>: The Maps API and Google Maps use slightly different tile sets, so it's possible your Maps API map will not be able to zoom in as much as Google Maps.)
+</li>
+</ol>
+<a name="section4"></a><h3>Section 4: Customizing the Map</h3>
+
+<p class="para">
+Get ready to code!
+In this section, we'll be making changes and additions to the map HTML file to customize the map based on your preferences. Each time you make a change, you'll want to repeat Steps 5-8 from <a href="#section2">Section 2</a> to re-upload the file and see the changes in the browser. If you'd like, you can save your file with a different filename each time in case you want to go back to a previous version or if you are worried about breaking the code.
+</p>
+<ol class="steps">
+<li>
+If you don't still have <em>mymap.html</em> opened in a text editor, open it now.
+</li>
+<li>
+Add the code to center the map at the latitude/longitude you found in <a href="#section3">Section 3</a>. The line that centers the map in the current code is:
+
+<pre>
+map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+</pre>
+This line calls <code>setCenter</code> on the map object, and passes in a <code>GLatLng</code> for the center, and a number for the zoom level. Change the two parameters of <code>GLatLng</code> to the latitude/longitude you found, and if you'd like, change the zoom parameter. Zoom level 0 is the lowest zoom level (showing all of the world), and increasing numbers zoom in closer.
+<br/><br/>
+Upload the page and preview it now. You should see it centered at your address, like:<br/>
+<a href="http://maps.examples.googlepages.com/mymap_centered.html" target="_blank">
+
+http://maps.examples.googlepages.com/mymap_centered.html
+</a>
+</li>
+<li>
+Add code to change the default map type. Currently the map is showing the <em>Map</em> map type, which shows street names, country borders, etc. The other two options are the <em>Satellite</em> and <em>Hybrid</em> map types. You can see the difference at <A href="http://maps.google.com" target="_blank">http://maps.google.com</a> by pressing each of the three buttons in the top right corner. The line of code to change the map type is:
+
+<br/><br/>
+<table class="funcTable">
+<tr>
+<td><code>map.setMapType(G_NORMAL_MAP);</code></td>
+<td><img src="http://www.google.com/help/hc/images/simplemap_custommap_maptype.jpg" class="inlinepic2"/></td>
+</tr>
+<tr>
+<td><code>map.setMapType(G_SATELLITE_MAP);</code></td>
+<td><img src="http://www.google.com/help/hc/images/simplemap_custommap_satellitetype.jpg" class="inlinepic2"/></td>
+</tr>
+<tr>
+<td><code>map.setMapType(G_HYBRID_MAP);</code></td>
+<td><img src="http://www.google.com/help/hc/images/simplemap_custommap_hybridtype.jpg" class="inlinepic2"/></td>
+</tr>
+
+</table>
+<br/>
+The default that it's already using is <code>G_NORMAL_MAP</code>, so if you want to change it, use either <code>G_SATELLITE_MAP</code> or <code>G_HYBRID_MAP</code>. Add this line of code after the <code>map.setCenter</code> code.
+<br/><br/>
+Upload the page and preview it now. You should see the changed map type, like:
+<br>
+<a href="http://maps.examples.googlepages.com/mymap_maptypechange.html" target="_blank">
+
+http://maps.examples.googlepages.com/mymap_maptypechange.html
+</a>
+</li>
+<li>
+Add the code to create a marker at the center of the map, like the markers you see when you find businesses on Google Maps.
+The line of code to create a marker is:
+<pre>
+var marker = new GMarker(new GLatLng(34.019968,-118.289988));
+</pre>
+The line of code to add a marker to the map is:
+<pre>
+map.addOverlay(marker);
+</pre>
+You just need to change the values in <code>GLatLng</code> to match the latitude/longitude you found, just as you changed the <code>map.setCenter</code> parameter in Step 1.
+
+<br/><br/>
+Upload the page and preview it now. You should see the a marker at the center of the map, like:
+<br/>
+<a href="http://maps.examples.googlepages.com/mymap_markeradded.html" target="_blank">
+http://maps.examples.googlepages.com/mymap_markeradded.html
+</a>
+</li>
+<li>
+Add the code to open an info window (bubble) over the marker and add some information about the location.
+<br/><br/>
+The code to open an info window over a marker is:
+<pre>
+var html="&lt;img src='simplemap_logo.jpg'" +
+         "width='128' height='41'/&gt; &lt;br/&gt;" +
+         "USC GamePipe Lab&lt;br/&gt;" +
+         "3650 McClintock Ave, Los Angeles CA";
+marker.openInfoWindowHtml(html);
+
+</pre>
+As you can see from my example, you can pass any HTML into the info window. You do need to be careful about quotation marks in the HTML, however. Here, I've used double quotation marks around the HTML, and single quotation marks around attributes in the HTML tags.
+<br/><br/>
+If you include an IMG tag in the HTML, you should define the width and height attributes of the image so that the info window is sized correctly to fit the image inside.
+<br/><br/>
+You can take that line of code and change it to display whatever you want inside the info window. When you're done, upload the page and preview it. You should see the info window displayed above the marker when the page loads, like:
+<br/>
+<a href="http://maps.examples.googlepages.com/mymap_infowindow.html" target="_blank">
+http://maps.examples.googlepages.com/mymap_infowindow.html
+</a>
+</li>
+<li>
+Add the code to add controls to the map. On the maps.google.com map, you'll notice multiple controls overlaid on the map that aid you in navigation and changing the map view. With the API, you can add any of these controls to your map, and you may want to do so to let people visiting your map view the area around your map. Here are the various controls options:
+<br/>
+<br/>
+<table class="funcTable">
+<tr>
+
+<td><code>map.addControl(new GSmallMapControl());</code></td>
+<td><img src="http://www.google.com/help/hc/images/simplemap_custommap_smallmapcontrol.jpg"/></td>
+</tr>
+<tr>
+<td><code>map.addControl(new GLargeMapControl());</code></td>
+<td><img src="http://www.google.com/help/hc/images/simplemap_custommap_largemapcontrol.jpg"/></td>
+</tr>
+<tr>
+<td><code>map.addControl(new GSmallZoomControl());</code></td>
+<td><img src="http://www.google.com/help/hc/images/simplemap_custommap_smallzoomcontrol.jpg"/></td>
+</tr>
+<tr>
+<td><code>map.addControl(new GScaleControl());</code></td>
+
+<td><img src="http://www.google.com/help/hc/images/simplemap_custommap_scalecontrol.jpg"/></td>
+</tr>
+<tr>
+<td><code>map.addControl(new GMapTypeControl());</code></td>
+<td><img src="http://www.google.com/help/hc/images/simplemap_custommap_maptypecontrol.jpg"/></td>
+</tr>
+<tr>
+<td><code>map.addControl(new GOverviewMapControl());</code></td>
+<td><img src="http://www.google.com/help/hc/images/simplemap_custommap_overviewmapcontrol.jpg"/></td>
+</tr>
+</table>
+<br/>
+You should only add one of the zoom/pan controls: either <code>GSmallMapControl</code>, <code>GLargeMapControl</code>, or <code>GSmallZoomControl</code>, since they show up in the same location and accomplish similar things. You can add any or all of the other controls, as you so desire. These lines of code should be added anywhere under the <code>map.setCenter</code> line.
+
+<br/>
+Upload the page and preview it now. You should see controls added to your map, like:
+<br/>
+<a href="http://maps.examples.googlepages.com/mymap_controls.html" target="_blank">
+http://maps.examples.googlepages.com/mymap_controls.html
+</a>
+</li>
+<li>
+Change the HTML to resize the map. The default map has dimension of 500x300 pixels. You may want your map to be larger or smaller than that. The map size is dependent on the size of the <code>div</code> that the map is initialized within, so you'll need to change the dimensions of that <code>div</code> to your desired dimensions. Find the following line of code and replace the default width and height to whatever you want:
+<pre>
+&lt;div id="map" style="width: 500px; height: 300px"&gt;&lt;/div&gt;
+
+</pre>
+<br/><br/>
+Upload the page and preview it now. You should see a resized map, like:
+<br/>
+<a href="http://maps.examples.googlepages.com/mymap_resized.html" target="_blank">
+http://maps.examples.googlepages.com/mymap_resized.html
+</a>
+</li>
+</ol>
+<a name="summary"></a>
+<h3>Summary</h3>
+Congratulations, you've completed this tutorial and have created your own custom Google Map online. For information on adding more functionality or customization to your map, read through the <a href="http://www.google.com/apis/maps/documentation/">documentation</a>. If you have questions, please post in the <a href="http://groups-beta.google.com/group/Google-Maps-API">Maps API forum</a>.
+
+</div>
+
+<!-- ########## END PAGE CONTENT ########## -->
+  
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

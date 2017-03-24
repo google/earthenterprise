@@ -1,0 +1,399 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// Note: need to keep this synced with RasterProduct.src
+
+#config Name      MercatorRasterProduct
+#config Base      Composite
+#config Config    RasterProductConfig
+#config Subtype   MercatorProduct
+#config FixedType  Imagery
+
+
+// ===== MercatorRasterProductAsset.h =====
+#include <autoingest/.idl/storage/RasterProductConfig.h>
+#include <common/khConstants.h>
+#include <khExtents.h>
+#include <khstl.h>
+#include <khInsetCoverage.h>
+
+class MercatorRasterProductAssetImpl {
+ public:
+  uint              GetMaxLevel(void) const;
+  virtual void      AfterLoad(void);
+
+  // Return the acquisition date from the Raster product.
+  // The date is stored in the meta data of the MercatorRasterProductAsset (not in
+  // the version!).
+  // String is of form "YYYY-MM-DD".
+  // If no image date is available, returns "0000-00-00" for "unknown date".
+  std::string GetAcquisitionDate(void) const {
+    std::string acquisition_date = meta.GetValue("sourcedate", kUnknownDate);
+    return acquisition_date;
+  }
+};
+
+class MercatorRasterProductAssetVersionImpl {
+ public:
+  khExtents<double> GetExtents(void) const;
+  uint              GetMaxLevel(void) const;
+  virtual void      AfterLoad(void);
+
+  // Return the acquisition date from the Raster product.
+  // The date is stored in the meta data of the RasterProductAsset (not in
+  // the version!).
+  // String is of form "YYYY-MM-DD".
+  // If no image date is available, returns "0000-00-00" for "unknown date".
+  std::string GetAcquisitionDate(void) const {
+    std::string acquisition_date = meta.GetValue("sourcedate", kUnknownDate);
+    return acquisition_date;
+  }
+};
+
+// ===== MercatorRasterProductAsset.cpp =====
+#include <autoingest/.idl/gstProvider.h>
+
+namespace {
+void GetProviderFromMeta(RasterProductConfig &config, khMetaData &meta) {
+  if (config.provider_id_ == 0) {
+    std::string providerkey = meta.GetValue("provider");
+    if (!providerkey.empty()) {
+      config.provider_id_ = gstProviderSet::LoadAndGetIdFromKey(providerkey);
+      meta.Erase("provider");
+    }
+  }
+}
+
+uint GetMaxLevelFromMeta(const khMetaData& meta) {
+  uint prodMaxLevel = 0;
+  FromString(meta.GetValue("maxlevel"), prodMaxLevel);
+  return prodMaxLevel;
+}
+
+}  // namespace
+
+
+uint
+MercatorRasterProductAssetImpl::GetMaxLevel(void) const
+{
+  uint prodMaxLevel = GetMaxLevelFromMeta(meta);
+  if (!prodMaxLevel) {
+    throw khException(kh::tr("Unable to get maxlevel for ")
+                      + GetRef());
+  }
+  return prodMaxLevel;
+}
+
+
+void MercatorRasterProductAssetImpl::AfterLoad(void) {
+  GetProviderFromMeta(config, meta);
+}
+
+
+khExtents<double>
+MercatorRasterProductAssetVersionImpl::GetExtents(void) const
+{
+  std::string extents = meta.GetValue("extents");
+  std::vector<std::string> coords;
+  // split out coords (N,S,E,W)
+  split(extents, ",", back_inserter(coords));
+
+  if (coords.size() == 4) {
+    double N, S, E, W;
+    FromString(coords[0], N);
+    FromString(coords[1], S);
+    FromString(coords[2], E);
+    FromString(coords[3], W);
+
+    return khExtents<double>(NSEWOrder, N, S, E, W);
+  }
+
+  throw khException(kh::tr("Unable to get extents for ")
+                    + GetRef());
+}
+
+
+uint
+MercatorRasterProductAssetVersionImpl::GetMaxLevel(void) const
+{
+  uint prodMaxLevel = GetMaxLevelFromMeta(meta);
+  if (!prodMaxLevel) {
+    throw khException(kh::tr("Unable to get maxlevel for ")
+                      + GetRef());
+  }
+  return prodMaxLevel;
+}
+
+
+void MercatorRasterProductAssetVersionImpl::AfterLoad(void) {
+  GetProviderFromMeta(config, meta);
+}
+
+
+// ===== MercatorRasterProductAssetD.h =====
+class MercatorRasterProductAssetImplD {
+ protected:
+  virtual bool FixConfigBeforeUpdateCheck(void) const;
+ public:
+  static void HandleImportRequest(const RasterProductImportRequest &);
+};
+
+class MercatorRasterProductAssetVersionImplD {
+ protected:
+  virtual void OnStateChange(AssetDefs::State newstate,
+                             AssetDefs::State oldstate);
+};
+
+
+// ===== MercatorRasterProductAssetD.cpp =====
+#include <autoingest/sysman/plugins/CombinedRPAssetD.h>
+#include <autoingest/sysman/plugins/SourceAssetD.h>
+#include <khraster/khRasterProduct.h>
+#include <autoingest/khFusionURI.h>
+#include <khgdal/khGDALDataset.h>
+#include <khException.h>
+#include <autoingest/sysman/.idl/FusionUniqueId.h>
+#include <autoingest/.idl/gstProvider.h>
+#include <mttypes/Semaphore.h>
+
+bool
+MercatorRasterProductAssetImplD::FixConfigBeforeUpdateCheck(void) const
+{
+  bool changed = false;
+  if (config.fuid_resource_ == 0) {
+    MutableMercatorRasterProductAssetD self(GetRef());
+    self->config.fuid_resource_ =
+      FusionUniqueId::Get(FusionUniqueId::Resource);
+    changed = true;
+  }
+  return changed;
+}
+
+
+void
+MercatorRasterProductAssetImplD::HandleImportRequest(
+    const RasterProductImportRequest &req)
+{
+  // Make sure the provider exists.
+  if ((req.config.provider_id_ != 0) &&
+      !gstProviderSet::LoadAndValidateProvider(req.config.provider_id_)) {
+    throw khException(kh::tr("Invalid provider id: %1")
+                      .arg(req.config.provider_id_));
+  }
+
+  // Make sure we have at least one source.
+  if (req.sources.sources.empty()) {
+    throw khException(kh::tr("No sources provided"));
+  }
+
+  // Normalize the supplied asset name.
+  std::string assetname =
+    AssetDefs::NormalizeAssetName(req.assetname, req.type,
+                                  kMercatorProductSubtype);
+
+  // Get other info about our (first) source.
+  uint toplevel = 0;
+  khFusionURI uri = req.sources.sources.front().uri;
+  std::string srcfile;
+  if (uri.Valid())
+    srcfile = uri.NetworkPath();
+  else
+    srcfile = req.sources.sources.front().uri;
+
+  if (req.config.sourceIsProduct) {
+    khDeleteGuard<khRasterProduct> rptr(khRasterProduct::Open(srcfile));
+    if (rptr) {
+      toplevel = rptr->maxLevel();
+    } else {
+      throw khException(kh::tr("Unable to open product file %1")
+                        .arg(srcfile));
+    }
+  } else {
+    if (!khIsURI(srcfile) && (khExtension(srcfile) == ".pyr")) {
+      if (req.sources.sources.size() > 1) {
+        throw khException(
+            kh::tr(".pyr import only supported with single source files"));
+      }
+
+      toplevel = pyrio::FindHighestResPyramidFile(srcfile, &srcfile);
+      if (!toplevel) {
+        throw khException(kh::tr("Unable to find toplevel for %1")
+                          .arg(srcfile));
+      }
+    } else {
+      // For mosaics that will be reprojected, this is only an
+      // estimate (although a really good one). If the toplevel ends
+      // up being different, that's OK because the "maxlevel" meta
+      // field will be updated when the build is done and any projects
+      // that have it in the wrong order will get restacked when they
+      // build the first time.
+      khGDALDataset srcDS(srcfile, std::string(), khExtents<double>(),
+                          khTilespace::MERCATOR_PROJECTION);
+      toplevel = srcDS.normalizedTopLevel();
+    }
+  }
+
+
+  // Modified FindMake to preserve fuid_resource_.
+  // The inputs are empty for now. We'll fill them in below.
+  MutableMercatorRasterProductAssetD asset =
+    MercatorRasterProductFactory::Find(assetname);
+  if (asset) {
+    // It is a regular (editing the same asset) or "SaveAs" re-writing request.
+    // If this request is going to set the fuid_resource to 0, restore from
+    // previous version of the asset config.
+    // Make a copy we can play with.
+    RasterProductConfig product_config = req.config;
+
+    if (product_config.fuid_resource_ == 0) {
+      product_config.fuid_resource_ = asset->config.fuid_resource_;
+    }
+    asset->Modify(std::vector<std::string>(), req.meta, product_config);
+  } else {
+    // It is a "Save" or "SaveAs" request when creating a new asset.
+    asset = MercatorRasterProductFactory::Make(assetname,
+                                               std::vector<std::string>(),
+                                               req.meta, req.config);
+  }
+  if (!asset) {
+    throw khException(kh::tr("Unable to create %1 asset %2")
+                      .arg(ToQString(req.type), ToQString(assetname)));
+  }
+
+
+  // Update the inset meta data - so these can be added to projects
+  // even before they are built.
+  asset->meta.SetValue("maxlevel", toplevel);
+  asset->meta.SetValue("minlevel",
+                       khRasterProduct::DefaultStartLevel
+                       ((req.type == AssetDefs::Imagery) ?
+                        khRasterProduct::Imagery :
+                        khRasterProduct::Heightmap));
+
+
+  // Get our source asset.
+  MutableAssetVersionD source =
+      SourceFactory::ReuseOrMakeAndUpdateSubAsset(asset->GetRef(),
+                                                  asset->type,
+                                                  "source",
+                                                  khMetaData(),
+                                                  req.sources);
+  asset->inputs.push_back(source->GetRef());
+
+
+  // See if the image has a supplied mask.
+  if (req.config.havemask) {
+    if (req.sources.sources.size() > 1) {
+      throw khException(
+          kh::tr("havemask only supported with single source files"));
+    }
+
+    // Find the matching maskfile.
+    std::string maskfile;
+    if (!khIsURI(srcfile)) {
+      if (khExtension(srcfile) == ".pyr") {
+        if (!pyrio::FindHighestResMaskPyramidFile(srcfile, &maskfile)) {
+          throw khException
+            (kh::tr("Unable to find toplevel mask for %1")
+             .arg(srcfile));
+        }
+      } else if (req.config.sourceIsProduct) {
+        maskfile = khReplaceExtension(srcfile, ".kmp");
+      } else {
+        std::string ext = khExtension(srcfile);
+        std::string sans = khDropExtension(srcfile);
+        maskfile = sans + "-mask" + ext;
+        if (!khExists(maskfile)) {
+          maskfile = khReplaceExtension(maskfile, ".tif");
+        }
+      }
+      if (!khExists(maskfile)) {
+        throw khException(kh::tr("Unable to find maskfile for ") + srcfile);
+      }
+    } else {
+      throw khException(kh::tr("havemask only supported with file sources"));
+    }
+
+    // Make a masksource and add it as the second input.
+    SourceConfig sourceConfig;
+    sourceConfig.AddFile(maskfile);
+    MutableAssetVersionD masksource =
+        SourceFactory::ReuseOrMakeAndUpdateSubAsset(asset->GetRef(),
+                                                    asset->type,
+                                                    "masksource",
+                                                    khMetaData(),
+                                                    sourceConfig);
+    asset->inputs.push_back(masksource->GetRef());
+  }
+}
+
+void
+MercatorRasterProductAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
+                                              AssetDefs::State oldstate)
+{
+  CompositeAssetVersionImplD::OnStateChange(newstate, oldstate);
+  if (state == AssetDefs::Succeeded) {
+    // go extract the extents from my CombinedRP Child
+    CombinedRPAssetVersion crp(children[0]);
+    QString tmp = crp->meta.GetValue("extents");
+    if (!tmp.isEmpty()) {
+      meta.SetValue("extents", tmp);
+    }
+
+    tmp = crp->meta.GetValue("maxlevel");
+    if (!tmp.isEmpty()) {
+      meta.SetValue("maxlevel", tmp);
+    }
+
+    tmp = crp->meta.GetValue("minlevel");
+    if (!tmp.isEmpty()) {
+      meta.SetValue("minlevel", tmp);
+    }
+  }
+}
+
+
+void
+MercatorRasterProductAssetVersionImplD::UpdateChildren(void)
+{
+  std::string assetRef = GetAssetRef();
+
+  // ***** load my input versions (only if they aren't already loaded)
+  // I'll use this list of my inputs to pass to my children so they don't
+  // have to look them up over and over again
+  InputVersionGuard guard(this);
+
+  // figure out how many raw source files (non-mask files) we have
+  // the only reason why we can access outputs this early
+  // is because we know that source asset versions prefill
+  // them
+  AssetVersion source(guard->inputvers[0]);
+  std::vector<std::string> srcfiles;
+  source->GetOutputFilenames(srcfiles);
+  uint32 num_sources = srcfiles.size();
+
+  MutableCombinedRPAssetVersionD crp =
+    CombinedRPFactory::FindMakeAndUpdateSubAsset
+      (assetRef, type, kCombinedRPSubtype,
+       inputs,
+       khMetaData(),
+       CombinedRPConfig(num_sources, config),
+       guard->inputvers);
+
+  // save the location of the preview file
+  meta.SetValue("preview", crp->PreviewRef());
+
+  // Add my kids
+  AddChild(crp);
+}

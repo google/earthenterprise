@@ -1,0 +1,24 @@
+diff -uNr gdal-1.3.2.orig/v5_2_2-00418C/apps/make/Makefile-Linux-x86-gcc gdal-1.3.2/v5_2_2-00418C/apps/make/Makefile-Linux-x86-gcc
+--- gdal-1.3.2.orig/v5_2_2-00418C/apps/make/Makefile-Linux-x86-gcc	2006-09-19 13:55:20.000000000 -0700
++++ gdal-1.3.2/v5_2_2-00418C/apps/make/Makefile-Linux-x86-gcc	2006-09-19 13:57:46.000000000 -0700
+@@ -5,6 +5,7 @@
+ 
+ INCLUDES = -I../../coresys/common -I../args -I../image -I../compressed_io -I../support
+ C_OPT = -O2 -DNDEBUG -Wall -Wno-uninitialized -Wno-deprecated $(KDU_GLIBS)
++C_OPT += -fPIC # Some 64-bit builds may need this to build the shared library
+ C_OPT += -DKDU_PENTIUM_GCC # Alternatively, comment this out and uncomment the
+                            #  line below.  See which produces the fastest code.
+ # C_OPT += -DKDU_X86_INTRINSICS -msse2
+diff -uNr gdal-1.3.2.orig/v5_2_2-00418C/coresys/make/Makefile-Linux-x86-gcc gdal-1.3.2/v5_2_2-00418C/coresys/make/Makefile-Linux-x86-gcc
+--- gdal-1.3.2.orig/v5_2_2-00418C/coresys/make/Makefile-Linux-x86-gcc	2006-09-19 13:55:20.000000000 -0700
++++ gdal-1.3.2/v5_2_2-00418C/coresys/make/Makefile-Linux-x86-gcc	2006-09-19 13:57:36.000000000 -0700
+@@ -5,7 +5,7 @@
+ 
+ INCLUDES = -I../common
+ C_OPT =  -O2 -DNDEBUG -Wall -Wno-uninitialized $(KDU_GLIBS)
+-#C_OPT += -fPIC # Some 64-bit builds may need this to build the shared library
++C_OPT += -fPIC # Some 64-bit builds may need this to build the shared library
+-#C_OPT += -DKDU_NO_CPUID_TEST # Some Linux installations disable the CPUID
++C_OPT += -DKDU_NO_CPUID_TEST # Some Linux installations disable the CPUID
+     # instruction by default; Add this directive if you would like to skip the
+     # test for processor features, based on the CPUID instruction, making

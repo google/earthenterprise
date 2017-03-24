@@ -1,0 +1,28 @@
+Layout {
+  FileType : "Delimited"
+  Delimiter : "	"
+  Latitude : "2"
+  Longitude : "1"
+  FieldDefinitions {
+    0 {
+      Name : "Name"
+      Type : "string"
+    }
+    1 {
+      Name : "Longitude"
+      Type : "double"
+    }
+    2 {
+      Name : "Latitude"
+      Type : "double"
+    }
+    3 {
+      Name : "Comments"
+      Type : "string"
+    }
+    4 {
+      Name : "URL"
+      Type : "string"
+    }
+  }
+}

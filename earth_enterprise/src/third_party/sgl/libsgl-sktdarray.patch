@@ -1,0 +1,203 @@
+*** skia.0.8.unmod/include/SkTDArray.h	2007-07-19 12:42:20.000000000 -0700
+--- skia.0.8/include/SkTDArray.h	2007-07-19 12:43:02.000000000 -0700
+***************
+*** 30,36 ****
+          fData = NULL;
+  #endif
+      }
+!     SkTDArray(const T src[], U16CPU count)
+      {
+          SkASSERT(src || count == 0);
+  
+--- 30,36 ----
+          fData = NULL;
+  #endif
+      }
+!     SkTDArray(const T src[], size_t count)
+      {
+          SkASSERT(src || count == 0);
+  
+***************
+*** 47,53 ****
+              (T*&)fData = fArray;
+  #endif
+              memcpy(fArray, src, sizeof(T) * count);
+!             fReserve = fCount = SkToU16(count);
+          }
+      }
+      SkTDArray(const SkTDArray<T>& src)
+--- 47,53 ----
+              (T*&)fData = fArray;
+  #endif
+              memcpy(fArray, src, sizeof(T) * count);
+!             fReserve = fCount = count;
+          }
+      }
+      SkTDArray(const SkTDArray<T>& src)
+***************
+*** 122,141 ****
+          }
+      }
+  
+!     void setCount(U16CPU count)
+      {
+          if (count > fReserve)
+              this->growBy(count - fCount);
+          else
+!             fCount = SkToU16(count);
+      }
+  
+!     void setReserve(U16CPU reserve)
+      {
+          if (reserve > fReserve)
+          {
+              SkASSERT(reserve > fCount);
+!             uint16_t count = fCount;
+              this->growBy(reserve - fCount);
+              fCount = count;
+          }
+--- 122,141 ----
+          }
+      }
+  
+!     void setCount(size_t count)
+      {
+          if (count > fReserve)
+              this->growBy(count - fCount);
+          else
+!             fCount = count;
+      }
+  
+!     void setReserve(size_t reserve)
+      {
+          if (reserve > fReserve)
+          {
+              SkASSERT(reserve > fCount);
+!             size_t count = fCount;
+              this->growBy(reserve - fCount);
+              fCount = count;
+          }
+***************
+*** 149,155 ****
+      }
+  
+      T* append() { return this->append(1, NULL); }
+!     T* append(U16CPU count, const T* src = NULL)
+      {
+          unsigned oldCount = fCount;
+          if (count)
+--- 149,155 ----
+      }
+  
+      T* append() { return this->append(1, NULL); }
+!     T* append(size_t count, const T* src = NULL)
+      {
+          unsigned oldCount = fCount;
+          if (count)
+***************
+*** 171,178 ****
+          return result;
+      }
+  
+!     T* insert(U16CPU index) { return this->insert(index, 1, NULL); }
+!     T* insert(U16CPU index, U16CPU count, const T* src = NULL)
+      {
+          SkASSERT(count);
+          int oldCount = fCount;
+--- 171,178 ----
+          return result;
+      }
+  
+!     T* insert(size_t index) { return this->insert(index, 1, NULL); }
+!     T* insert(size_t index, size_t count, const T* src = NULL)
+      {
+          SkASSERT(count);
+          int oldCount = fCount;
+***************
+*** 184,201 ****
+          return dst;
+      }
+  
+!     void remove(U16CPU index, U16CPU count = 1)
+      {
+          SkASSERT(index + count <= fCount);
+!         fCount = SkToU16(fCount - count);
+          memmove(fArray + index, fArray + index + count, sizeof(T) * (fCount - index));
+      }
+  
+!     void removeShuffle(U16CPU index)
+      {
+          SkASSERT(index < fCount);
+          unsigned newCount = fCount - 1;
+!         fCount = SkToU16(newCount);
+          if (index != newCount)
+              memcpy(fArray + index, fArray + newCount, sizeof(T));
+      }
+--- 184,201 ----
+          return dst;
+      }
+  
+!     void remove(size_t index, size_t count = 1)
+      {
+          SkASSERT(index + count <= fCount);
+!         fCount = fCount - count;
+          memmove(fArray + index, fArray + index + count, sizeof(T) * (fCount - index));
+      }
+  
+!     void removeShuffle(size_t index)
+      {
+          SkASSERT(index < fCount);
+          unsigned newCount = fCount - 1;
+!         fCount = newCount;
+          if (index != newCount)
+              memcpy(fArray + index, fArray + newCount, sizeof(T));
+      }
+***************
+*** 277,289 ****
+      };
+      T(* fData)[kDebugArraySize];
+  #endif
+!     T*       fArray;
+!     uint16_t fReserve, fCount;
+  
+!     void growBy(U16CPU extra)
+      {
+          SkASSERT(extra);
+-         SkASSERT(fCount + extra <= 0xFFFF);
+  
+          if (fCount + extra > fReserve)
+          {
+--- 277,288 ----
+      };
+      T(* fData)[kDebugArraySize];
+  #endif
+!     T*      fArray;
+!     size_t  fReserve, fCount;
+  
+!     void growBy(size_t extra)
+      {
+          SkASSERT(extra);
+  
+          if (fCount + extra > fReserve)
+          {
+***************
+*** 295,303 ****
+          //  fData = (T (*)[kDebugArraySize]) fArray;
+              (T*&)fData = fArray;
+  #endif
+!             fReserve = SkToU16((U16CPU)size);
+          }
+!         fCount = SkToU16(fCount + extra);
+      }
+  };
+  
+--- 294,302 ----
+          //  fData = (T (*)[kDebugArraySize]) fArray;
+              (T*&)fData = fArray;
+  #endif
+!             fReserve = size;
+          }
+!         fCount += extra;
+      }
+  };
+  

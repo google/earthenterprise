@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Google Earth Plugin Support</title>
+</head>
+
+<body>
+
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" />
+  </div>
+  <h1 id="doc_title">Reference Guide</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Reference Guide</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="intro.html">Introduction</a></li>
+    <li><a href="fundamentals.html">Fundamentals</a></li>
+    <li><a href="setup.html">Setting Up Your Workspace</a></li>
+    <li><a href="resources.html">Defining Resources</a></li>
+    <li><a href="projects.html">Defining Projects</a></li>
+    <li><a href="databases.html">Defining and Publishing Databases</a></li>
+    <li><a href="building.html">Building Assets</a></li>
+    <li><a href="maps.html">Preparing Data for Google Maps</a></li>
+    <li><a href="commands.html">Command Line Reference</a></li>
+    <li><a href="createOwnData.html">Creating Your Own Source Data, Icons, and Masks</a></li>
+    <li><a href="htmlTags.html">HTML Tags Allowed</a></li>
+    <li><a href="plugins.html" id="selected">Google Earth Plugin</a></li>
+    <li><a href="errors.html">Common Error Messages</a></li>
+    <li><a href="glossary.html">Glossary</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+  
+<h1><a id="52648"></a>Google Earth Plugin Support</h1>
+<p>Google Earth Enterprise supports the Google Earth Plugin and its API. The Google
+   Earth Plugin supports connections to non-Google databases.</p>
+<p>Included with Google
+  Earth Enterprise is an example of how to implement the Google Earth Plugin
+  in <code>/opt/google/gehttpd/htdocs/earth/earth_local.html</code>.
+  By default, the virtual servers point to <code>earth_local.html</code> when
+  accessing through a web browser. </p>
+<p>The following is the content of the <code>earth_local.html</code> file.</p>
+
+<pre>&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Google Earth Enterprise Earth Plug-in: Local Example&lt;/title&gt;
+  &lt;link rel='stylesheet' type='text/css' href='/earth/earth.css' /&gt;
+  
+  &lt;script type='text/javascript'&gt;
+    // To serve your static content from a different server, simply override
+    // GEE_SERVER_URL to the URL of your GEE Server, e.g.:
+    // &quot;http://yourhost.com/default_ge/&quot;
+    var GEE_SERVER_URL = &quot;&quot;;
+  &lt;/script&gt;
+  
+  &lt;!-- Load the required Javascript files.
+       The loader for the Earth Plug-in API: earth_plugin_loader.js.
+       Utilities for this example UI: fusion_utils.js and search_tabs.js
+       The main routine: geeInit() is found in fusion_earthplugin.js which
+       defines the example UI and behaviors.
+    --&gt;
+  &lt;script type='text/javascript' src='/js/earth_plugin_loader.js'&gt;&lt;/script&gt;
+  &lt;script type='text/javascript' src='/js/fusion_utils.js'&gt;&lt;/script&gt;
+  &lt;script type='text/javascript' src='/js/search_tabs.js'&gt;&lt;/script&gt;
+  &lt;script type='text/javascript' src='/js/fusion_earthplugin.js'&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body onload='geeInit()' onresize='geeResizeDivs();'&gt;
+
+  &lt;div id='header'&gt;
+    &lt;div id='logo'&gt;
+      &lt;img src=&quot;/earth/images/gee.gif&quot; align=&quot;left&quot; /&gt;
+      &lt;/div&gt;
+    &lt;div id='search_tabs'&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  
+  &lt;div style=&quot;clear: both;&quot;&gt;&lt;/div&gt;
+  
+  &lt;table cellspacing=&quot;0&quot; cellpadding=&quot;0&quot; width=&quot;100%&quot;&gt;
+    &lt;tr valign=&quot;top&quot;&gt;
+      &lt;td id='left_panel_cell'&gt;
+        &lt;div id='left_panel'&gt;&lt;/div&gt;
+      &lt;/td&gt;
+      &lt;td&gt;
+        &lt;div id='map'&gt;&lt;/div&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/table&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+  <p>In order for your users to be able to view your content in a browser, they must
+   install the Google Earth Plugin.</p>
+  <p>The plugin installer should be placed in the following directory:</p>
+  <pre>/opt/google/gethttpd/htdocs/earth/plugin</pre>
+  <p>Users are automatically directed here from <code>earth_local.html</code>'s
+    default error page. There are two installers, which should be renamed as follows:</p>
+  <ul>
+     <li><code>/opt/google/gehttpd/htdocs/earth/plugin/GoogleEarth-Mac-Plugin-Latest.dmg</code></li>
+     <li><code>/opt/google/gehttpd/htdocs/earth/plugin/GoogleEarth-Windows-Plugin-Latest.msi</code></li>
+  </ul>
+  <p>These installers do not require administrative rights on the end-user's machine.
+     They also do not auto-update. If users are unable to download the installer
+     from this location, they should contact their system administrator.</p>
+  <p>If the user has internet access, they can download an auto-updating installer
+     from <a href="http://code.google.com/apis/earth">http://code.google.com/apis/earth</a>. This installer requires admin rights
+     when installing to Internet Explorer on Windows.</p>
+
+</div>
+	<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+<!-- END WRAPPER -->
+
+</body>
+</html>

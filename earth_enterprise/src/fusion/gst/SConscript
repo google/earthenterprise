@@ -1,0 +1,158 @@
+#-*- Python -*-
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+Import('env')
+
+env = env.Clone()
+env.UpdateCppflagsForSkia()
+
+env.idl([ 'gstPlacemark.idl',
+          'gstKVPAsset.idl', 'gstFormatRule.idl',
+          'gstDBSource.idl'])
+
+sources = [
+        'font.cpp',
+        'gstAssetGroup.cpp',
+        'gstAssetManager.cpp',
+        'gstBoxCutter.cpp',
+        'gstDBFTable.cpp',
+        'gstEarthStream.cpp',
+        'gstExport.cpp',
+        'gstFeature.cpp',
+        'gstFileUtils.cpp',
+        'gstFilter.cpp',
+        'gstFormat.cpp',
+        'gstFormatManager.cpp',
+        'gstFormatRules.cpp',
+        'gstGDALFormat.cpp',
+        'gstGDTFormat.cpp',
+        'gstGeode.cpp',
+        'gstGeometry.cpp',
+        'gstGeometryChecker.cpp',
+        'gstGeomUtils.cpp',
+        'gstGeoIndex.cpp',
+        'gstGridUtils.cpp',
+        'gstIconManager.cpp',
+        'gstInit.cpp',
+        'gstJobStats.cpp',
+        'gstKMLFormat.cpp',
+        'gstKVPFile.cpp',
+        'gstKVPTable.cpp',
+        'gstLayer.cpp',
+        'gstLayerBase.cpp',
+        'gstMemoryPool.cpp',
+        'gstMultiGeode.cpp',
+        'gstOGRFormat.cpp',
+        'gstPolygonBuilder.cpp',
+        'gstPolygonCleaner.cpp',
+        'gstPolygonClipper.cpp',
+        'gstPolygonClipper2.cpp',
+        'gstPolygonSimplifier.cpp',
+        'gstProgress.cpp',
+        'gstProjectBase.cpp',
+        'gstRecord.cpp',
+        'gstRegistry.cpp',
+        'gstSelector.cpp',
+        'gstSelectRule.cpp',
+        'gstSimplifier.cpp',
+        'gstSource.cpp',
+        'gstSourceManager.cpp',
+        'gstSite.cpp',
+        'gstSpatialRef.cpp',
+        'gstSRSDefs.cpp',
+        'gstTable.cpp',
+        'gstTexture.cpp',
+        'gstTextureManager.cpp',
+        'gstTXTFormat.cpp',
+        'gstTXTTable.cpp',
+        'gstTypes.cpp',
+        'gstValue.cpp',
+        'gstVectorProject.cpp',
+        'gstKHMFormat.cpp',
+        '.idl/gstPlacemark.cpp',
+        '.idl/gstKVPAsset.cpp',
+        '.idl/gstFormatRule.cpp',
+        '.idl/gstDBSource.cpp',
+        'gstKmeans.cpp',
+        'unzip/unzip.c',
+        'unzip/ioapi.c',
+        'QuadExporter.cpp',
+        'gstRecordJSContext.cpp',
+        'JSDisplayBundle.cpp',
+        'SoftErrorPolicy.cpp',
+        'vectorprep/DisplayRule.cpp',
+        'vectorprep/Layer.cpp',
+        'vectorprep/FusePreparer.cpp',
+        'vectorprep/PolylineJoiner.cpp',
+        'vectorquery/PreviewSelector.cpp',
+        'vectorquery/FilterGeoIndex.cpp',
+        'vectorquery/QuadSelector.cpp',
+        'vectorquery/FuseSelector.cpp',
+        'maprender/Combiner.cpp',
+        'maprender/LabelPaths.cpp',
+        'maprender/Renderer.cpp',
+        'maprender/PointRenderer.cpp',
+        'maprender/PreviewController.cpp',
+        'maprender/TextRenderer.cpp',
+        'maprender/SGLHelps.cpp',
+        'gstGLUtils.cpp',
+        'gstPolygonUtils.cpp',
+        ]
+
+simple_earthstream_sources = [
+        'gstSimpleEarthStream.cpp',
+        'gstSimpleStream.cpp',
+        ]
+
+gegst = env.sharedLib('gegst', sources,
+                      LIBS=['geautoingest', 'dbmanifest', 'geraster',
+                            'gegdal', 'gejs', 'sgl', 'gif',
+                            'curl', 'geqtpacket', 'glutess', 'GL'])
+
+gesimpleearthstream = env.sharedLib('gesimpleearthstream',
+                                    simple_earthstream_sources,
+                                    LIBS=['curl', 'qt-mt'])
+
+# unit tests
+sources_unittest = ['gstUnitTestUtils.cpp']
+
+gstunittest = env.sharedLib('gstunittest',
+                             sources_unittest,
+                             LIBS=['gtest', 'gegst', 'gecommon'])
+
+env.test('gstGeode_unittest', 'gstGeode_unittest.cpp',
+         LIBS=['gegst', 'gtest', 'sgl', 'gif', 'png', 'jpeg', 'freetype', 'geos',
+               'geutil', 'gecommon'])
+env.test('gstPolygonUtils_unittest', 'gstPolygonUtils_unittest.cpp',
+         LIBS=['gegst', 'gtest', 'sgl', 'gif', 'png', 'jpeg', 'freetype', 'geos'])
+
+env.test('gstGeomUtils_unittest', 'gstGeomUtils_unittest.cpp',
+         LIBS=['gstunittest', 'gegst', 'gtest'])
+
+env.test('gstPolygonClipper2_unittest', 'gstPolygonClipper2_unittest.cpp',
+         LIBS=['gstunittest', 'gegst', 'gtest', 'gecommon'])
+
+env.test('gstGeometryChecker_unittest', 'gstGeometryChecker_unittest.cpp',
+         LIBS=['gstunittest', 'gegst', 'gtest', 'gecommon'])
+
+env.test('gstPolygonCleaner_unittest', 'gstPolygonCleaner_unittest.cpp',
+         LIBS=['gstunittest', 'gegst', 'gtest', 'gecommon'])
+
+
+
+env.install('fusion_lib', [gegst])
+env.install('server_lib', [gesimpleearthstream])

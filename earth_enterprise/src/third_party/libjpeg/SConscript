@@ -1,0 +1,116 @@
+# Copyright 2012 Google Inc. All Rights Reserved.
+#-*- Python -*-
+
+
+Import('third_party_env')
+libjpeg_version_arch = 'jpegsrc.v8d1'
+libjpeg_version = 'jpeg-8d1'
+
+num_cpu = GetOption('num_jobs')
+
+ge_version = libjpeg_version.replace('jpeg', 'jpeg-ge')
+current_dir = Dir('.').abspath
+build_root = '%s/%s' % (current_dir, libjpeg_version)
+install_root = '%s/install' % current_dir
+install_root_opt = '%s/opt/google' % install_root
+
+libjpeg_source = File('#/../third_party/libjpeg/%s.tar.gz' %
+                      libjpeg_version_arch).abspath
+
+libjpeg_env = third_party_env.DeepCopy()
+root_dir = Dir(libjpeg_env.exportdirs['root']).abspath
+
+# [1] Extract libjpeg
+libjpeg_target = '%s/.extract' % current_dir
+libjpeg_extract = libjpeg_env.Command(
+    libjpeg_target, libjpeg_source,
+    [libjpeg_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xzf %s\n'
+        'touch %s' % (
+            current_dir, current_dir, libjpeg_source, libjpeg_target))])
+
+if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+  env_opt = 'ac_cv_prog_cc_c99=no'
+else:
+  env_opt = ''
+
+if libjpeg_env['release'] or libjpeg_env['optimize']:
+  config_opt = ''
+else:
+  config_opt = ''
+
+# [3] Configure libjpeg
+libjpeg_target = '%s/.configure' % current_dir
+libjpeg_configure = libjpeg_env.Command(
+    libjpeg_target, libjpeg_extract,
+    [libjpeg_env.MultiCommand(
+        'cd %s\n'
+        '%s%s ./configure --prefix="/" %s\n'
+        'touch %s' % (build_root,
+                      libjpeg_env['ENV']['mod_env'], env_opt,
+                      config_opt,
+                      libjpeg_target))])
+
+# [4] Build
+libjpeg_target = '%s/.build' % current_dir
+libjpeg_build = libjpeg_env.Command(
+    libjpeg_target, libjpeg_configure,
+    [libjpeg_env.MultiCommand(
+        'cd %s\n'
+        '%smake -j%d\n'
+        'touch %s' % (build_root, libjpeg_env['ENV']['mod_env'], num_cpu,
+                      libjpeg_target))])
+
+# [5] Create libjpeg master installer
+libjpeg_target = '%s/.install' % current_dir
+libjpeg_install = libjpeg_env.Command(
+    libjpeg_target, libjpeg_build,
+    [libjpeg_env.MultiCommand(
+        'cd %s\n'
+        '%smake DESTDIR=%s mandir=/share/man install\n'
+        'cd %s\n'
+        'rm -rf lib/libjpeg.a lib/libjpeg.la share/doc/%s\n'
+        'mkdir -p share/doc/packages/%s\n'
+        'cd %s\n'
+        'cp -pr README change.log %s/share/doc/packages/%s\n'
+        'touch %s' % (build_root,
+                      libjpeg_env['ENV']['mod_env'], install_root,
+                      install_root,
+                      libjpeg_version,
+                      ge_version,
+                      build_root,
+                      install_root, ge_version,
+                      libjpeg_target))])
+
+# [6] Install these into various directories as required for build
+libjpeg_target = '%s/.install_for_build' % current_dir
+libjpeg_install_build = libjpeg_env.Command(
+    libjpeg_target, libjpeg_install,
+    [libjpeg_env.rsync_cmd % ('%s/bin/' % install_root,
+                              '%s/bin/' % root_dir),
+     libjpeg_env.rsync_cmd % ('%s/include/' % install_root,
+                              '%s/include/' % root_dir),
+     libjpeg_env.rsync_cmd % ('%s/lib/' % install_root,
+                              '%s/lib/' % root_dir),
+     Touch('$TARGET')])
+
+Default(libjpeg_install_build)
+libjpeg_env.ExecuteOnClean('rm -rf %s' % current_dir)
+
+if 'install' in COMMAND_LINE_TARGETS:
+  libjpeg_env.InstallFileOrDir(
+      '%s/bin/' % install_root,
+      '%s/' % libjpeg_env.installdirs['common_bin'],
+      libjpeg_install_build, 'install')
+  libjpeg_env.InstallFileOrDir(
+      '%s/lib/' % install_root,
+      '%s/' % libjpeg_env.installdirs['common_lib'],
+      libjpeg_install_build, 'install')
+  libjpeg_env.InstallFileOrDir(
+      '%s/share/' % install_root,
+      '%s/' % libjpeg_env.installdirs['common_share'],
+      libjpeg_install_build, 'install')
+
+Return('libjpeg_extract libjpeg_install_build')

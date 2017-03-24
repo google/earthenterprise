@@ -1,0 +1,292 @@
+/*
+ * Copyright 2017 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* TODO: High-level file comment. */
+.BigDrop {
+ font-size: 13px;
+ height: 15px;
+ width: 168px;
+ padding: 4px 6px 4px 6px;
+ margin: 8px 0 16px 0;
+ text-decoration: none;
+ border: 1px solid #DCDCDC;
+}
+
+#current_region {
+ margin-left: 3px;
+}
+
+.DropdownList {
+ position: absolute;
+ display: none;
+ list-style: none;
+ margin: 0;
+ z-index: 250;
+ background-color: #FFF;
+ border: 1px solid #DCDCDC;
+ box-shadow: 1px 1px 3px #DCDCDC;
+}
+
+.DropdownList li {
+ margin-left: -40px;
+ font-size: 11px;
+ color: #666;
+ padding: 6px;
+ width: 168px;
+ max-height: 168px;
+}
+
+.DropdownList li:hover {
+ background-color: #E8E8E8;
+}
+
+.DropdownList a:link,
+.DropdownList a:hover,
+.DropdownList a:active,
+.DropdownList a:visited {
+ color: #666;
+ text-decoration: none;
+}
+
+.DropdownMenu {
+ display: block;
+ background-color: #F1F1F1;
+ color: #5A5A5A;
+ font-family: "Arial", sans-serif;
+ border: 1px solid #DCDCDC;
+ z-index: 150;
+}
+
+.CutterSelect {
+ background-color: #F1F1F1;
+ border: 1px solid #DCDCDC;
+ color: #777;
+ overflow: hidden;
+ appearance: none;
+ -webkit-appearance: none;
+ background:#F1F1F1 url('../images/drop_arrow.png') no-repeat scroll right center;
+ -moz-background: none;
+ border-radius: 0;
+ padding-left: 4px;
+}
+
+.BigSelect {
+ display: block;
+ height: 25px;
+ padding: 3px 20px 3px 3px;
+ width: 182px;
+ max-width: 182px;
+ margin-bottom: 16px;
+ line-height: 16px;
+ margin-top: 8px;
+ overflow: hidden;
+ white-space: nowrap;
+ text-overflow: ellipsis;
+}
+
+.SmallSelect {
+ display: inline-block;
+ margin-left: 4px;
+ height: 18px;
+ width: 40px;
+ max-width: 182px;
+ margin-bottom: 16px;
+ line-height: 16px;
+ font-size: 10px;
+ margin-bottom: -4px;
+ }
+
+.MediumSelect {
+ display: inline-block;
+ margin-left: 4px;
+ height: 20px;
+ width: 80px;
+ max-width: 182px;
+ margin-bottom: 16px;
+ line-height: 16px;
+ font-size: 11px;
+ margin-bottom: -4px;
+}
+
+.BigOption {
+  display: block;
+  padding: 8px;
+}
+
+#list_of_databases {
+ top: 75px;
+ max-width: 18a8px;
+ overflow: hidden;
+ white-space: nowrap;
+ text-overflow: ellipsis;
+ z-index: 150;
+ max-height: 200px;
+ overflow: auto;
+ overflow-x: hidden;
+}
+
+#region_options {
+  display: inline-block;
+  background-color: #F1F1F1;
+  border: 1px solid #DCDCDC;
+}
+
+#region_options a li {
+ width: 77px;
+}
+
+#base_globe_list a li {
+ width: 175px;
+}
+
+#RegionDrop {
+ line-height: 8px;
+}
+
+.SmallDropHolder {
+ font-family: "Arial", sans-serif;
+ font-size: 11px;
+ font-weight: normal;
+ margin-top: 8px;
+}
+
+.SmallDropHolder em {
+ font-style: normal;
+ margin-left: 8px;
+ width: 30px;
+ display: inline-block;
+ text-align: right;
+}
+
+.SmallDropHolder label {
+ display: inline-block;
+ width: 95px;
+ line-height: 22px;
+}
+
+.SmallDropHolder a {
+ display: inline-block;
+ position: absolute;
+ text-decoration: none;
+ color: #666;
+ background-color: #F1F1F1;
+ border: 1px solid #DCDCDC;
+ padding: 5px;
+ width: 80px;
+ right: 20px;
+ height: 10px;
+}
+
+.SmallDropHolder a span {
+ display: block;
+ min-width: 90%;
+ margin-left: 4px;
+}
+
+.SmallDropDownList {
+ position: absolute;
+ right: 20px;
+ border: 1px solid #DCDCDC;
+ max-height: 150px;
+ overflow: auto;
+ overflow-x: hidden;
+}
+
+.MedDropHolder {
+ font-family: "Arial", sans-serif;
+ font-size: 11px;
+ font-weight: normal;
+ margin-top: 8px;
+}
+
+.MedDropHolder em {
+ font-style: normal;
+ margin-left: 8px;
+ width: 15px;
+}
+
+.MedDropHolder label {
+ display: inline-block;
+ width: 95px;
+ line-height: 22px;
+ font-style: 12px;
+}
+
+.MedDropHolder a {
+ display: inline-block;
+ position: absolute;
+ text-decoration: none;
+ color: #666;
+ background-color: #F1F1F1;
+ border: 1px solid #DCDCDC;
+ padding: 5px;
+ width: 175px;
+ height: 15px;
+}
+
+.MedDropHolder a span {
+ display: block;
+ width: 140px;
+ margin-left: 4px;
+ height: 15px;
+ overflow: hidden;
+ white-space: nowrap;
+ text-overflow: ellipsis;
+ border: 0;
+ padding: 0;
+}
+
+.MedDropDownList {
+ position: absolute;
+ left: 206px;
+ margin-top: 2px;
+ border: 1px solid #DCDCDC;
+ max-height: 150px;
+ margin-top: 2px;
+ overflow: auto;
+ overflow-x: hidden;
+}
+
+.Closed {
+ background:#F1F1F1 url('../images/drop_arrow.png') no-repeat scroll right center;
+}
+
+input[type="radio"] {
+ background-color: #fff;
+ border-radius: 10px;
+ border: 1px solid #DCDCDC;
+ cursor: pointer;
+ display: inline-block;
+ height: 15px;
+ width: 15px;
+ -webkit-appearance: none;
+ margin-bottom: -3px;
+}
+input[type="radio"]:after {
+ background-color: #FFF;
+ border-radius: 50%;
+ content: '';
+ display: block;
+ height: 7px;
+ left: 3px;
+ position: relative;
+ top: 3px;
+ width: 7px;
+}
+input[type="radio"]:checked:after {
+ background-color: #666;
+ border-radius: 10px;
+}​

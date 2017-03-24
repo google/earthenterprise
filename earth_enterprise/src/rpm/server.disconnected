@@ -1,0 +1,20 @@
+%defattr(555,root,root)
+%{gebindir}/geserveradmin
+%{gebindir}/gedisconnectedreceive
+%{gebindir}/gedisconnectedclean
+%{gebindir}/gedisconnectedpublish
+
+
+%defattr(755,root,root)
+%{gelibdir}/libgepublish.so
+%{gelibdir}/libgeutil.so
+%{gelibdir}/libdbmanifest.so
+%{gelibdir}/libserverdb.so
+%{gelibdir}/libgesearchtabs.so
+%{gelibdir}/libgexml.so
+
+%attr(755,root,root) %dir %{gesharedir}/dbroot
+%defattr(444,root,root)
+%{gesharedir}/dbroot/template
+%{gesharedir}/dbroot/header
+

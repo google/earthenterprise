@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<TaskRule>
+   <taskname>KRP</taskname>
+   <inputConstraints/>
+   <outputConstraints>
+      <outputConstraint>
+         <num>0</num>
+         <requiredVolume>products</requiredVolume>
+         <pathPattern>${assetref:dirname:sansext}-${vernum}${defaultpath:ext}</pathPattern>
+      </outputConstraint>
+   </outputConstraints>
+   <cpuConstraint>
+      <minNumCPU>1</minNumCPU>
+      <maxNumCPU>1</maxNumCPU>
+   </cpuConstraint>
+</TaskRule>

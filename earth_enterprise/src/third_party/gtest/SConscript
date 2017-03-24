@@ -1,0 +1,60 @@
+#-*- Python -*-
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Scons build file for gtest library.
+
+Import('env')
+
+buildGtest = False
+
+# Check environment for libgtest.so
+conf = Configure(env)
+if not conf.CheckLib('gtest'):
+    buildGtest = True
+
+env = conf.Finish()
+
+
+# Build libgtest as a shared library. If we make gtest static it forces all
+# executables linked against it to link statically and that messes up the
+# transitive dynamic lib includes that we get for free when we link
+# everything dynamically. The result is that we need to specify more libs on
+# each link line for our test cases.
+# Making libgtest shared lets us specify fewer libs when defining each test
+# executable.
+
+# gtest-all.cc has references to other *.cc files from
+# /usr/src/gtest. These files have been included using the "#include "
+# directive like it is done with header files though the
+# extension is ".cc" in gtest-all.cc
+# Hence, adding the path using "-I" option.
+#
+# Add '/usr/src/gtest' path to CPPPATH.
+if buildGtest:
+    gtest_path = '/usr/src/gtest'
+
+    gtest_env = env.Clone()
+    gtest_env.Append(CPPPATH = [gtest_path])
+
+    cpps = ['src/gtest-all.cc']
+    objects = map(lambda f:
+                gtest_env.SharedObject(
+                    target = gtest_env.exportdirs['root'] + '/' + f[0:-2] + 'so',
+                    source = gtest_path + '/' + f), cpps)
+
+    gtest = gtest_env.sharedLib('gtest', objects)
+    Return('objects gtest')
+

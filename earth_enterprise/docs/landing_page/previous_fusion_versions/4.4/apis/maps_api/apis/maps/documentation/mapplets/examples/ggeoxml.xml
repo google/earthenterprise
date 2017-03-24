@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="KML and GeoRSS Overlays" height="300">
+  <Require feature="sharedmap"/>
+</ModulePrefs>
+<Content type="html"><![CDATA[
+
+<small>
+The following example displays all the Chicago Transit Authority 
+train lines from <a href="http://mapgadgets.googlepages.com/cta.kml">
+http://mapgadgets.googlepages.com/cta.kml</a>
+</small>
+
+<script>
+var map = new GMap2();
+var geoXml = new GGeoXml("http://mapgadgets.googlepages.com/cta.kml");
+
+map.setCenter(new GLatLng(41.882853, -87.642059), 11);
+map.addOverlay(geoXml);
+</script>
+
+]]></Content>
+</Module>

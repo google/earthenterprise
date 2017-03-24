@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/examples/groundoverlay-simple.html";
+    </script>
+    
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<title>Google Maps JavaScript API v3 Example: Ground Overlays</title>
+<link href="http://code.google.com/apis/maps/documentation/javascript/examples/default.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
+function initialize() {
+
+  var newark = new google.maps.LatLng(40.740, -74.18);
+  var imageBounds = new google.maps.LatLngBounds(
+      new google.maps.LatLng(40.712216,-74.22655),
+      new google.maps.LatLng(40.773941,-74.12544));
+
+  var myOptions = {
+    zoom: 13,
+    center: newark,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  }
+
+  var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+  var oldmap = new google.maps.GroundOverlay(
+      "http://www.lib.utexas.edu/maps/historical/newark_nj_1922.jpg",
+      imageBounds);
+  oldmap.setMap(map);
+}
+</script>
+</head>
+<body onload="initialize()">
+  <div id="map_canvas"></div>
+</body>
+</html>

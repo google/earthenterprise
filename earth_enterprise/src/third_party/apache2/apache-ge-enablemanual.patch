@@ -1,0 +1,12 @@
+diff -uNr httpd-2.2.2.orig/docs/conf/httpd.conf.in httpd-2.2.2/docs/conf/httpd.conf.in
+--- httpd-2.2.2.orig/docs/conf/httpd.conf.in	2005-11-29 08:10:50.000000000 -0800
++++ httpd-2.2.2/docs/conf/httpd.conf.in	2006-07-20 16:50:36.000000000 -0700
+@@ -386,7 +386,7 @@
+ #Include @rel_sysconfdir@/extra/httpd-vhosts.conf
+ 
+ # Local access to the Apache HTTP Server Manual
+-#Include @rel_sysconfdir@/extra/httpd-manual.conf
++Include @rel_sysconfdir@/extra/httpd-manual.conf
+ 
+ # Distributed authoring and versioning (WebDAV)
+ #Include @rel_sysconfdir@/extra/httpd-dav.conf

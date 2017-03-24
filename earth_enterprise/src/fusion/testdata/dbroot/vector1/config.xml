@@ -1,0 +1,2657 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<DBRootGenConfig>
+
+  <layers>
+    <layer>
+      <channelId>7</channelId>
+      <assetRef></assetRef>
+      <legend></legend>
+      <lodForce/>
+      <displayRules/>
+      <preserveTextLevel>24</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>1</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>1</isExpandable>
+      <asset_uuid>87ca28fe-8d26-11e0-a6e6-c3b52aa1d7b4</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">Counties</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">0</is_checked>
+        <desc useDefault="0"></desc>
+        <look_at useDefault="0"></look_at>
+        <kml_layer_url useDefault="0"></kml_layer_url>
+        <required_client_version useDefault="0"></required_client_version>
+        <required_client_vram useDefault="0"></required_client_vram>
+        <probability useDefault="0"></probability>
+        <save_locked useDefault="0">1</save_locked>
+        <required_user_agent useDefault="0"></required_user_agent>
+        <required_client_capabilities useDefault="0"></required_client_capabilities>
+        <client_config_script_name useDefault="0"></client_config_script_name>
+        <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales/>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+    <layer>
+      <channelId>5</channelId>
+      <assetRef>USCounties.kvasset</assetRef>
+      <legend>Counties</legend>
+      <lodForce/>
+      <displayRules>
+        <displayRule>
+          <name>default select all</name>
+          <feature>
+            <style>
+              <id>1</id>
+              <polyColor>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+              </polyColor>
+              <lineColor>
+                <lineColor_element>17</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>0</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+              </lineColor>
+              <lineWidth>1</lineWidth>
+              <altitudeMode>ClampToGround</altitudeMode>
+              <extrude>0</extrude>
+              <enableCustomHeight>0</enableCustomHeight>
+              <customHeightVariableName></customHeightVariableName>
+              <customHeightOffset>0</customHeightOffset>
+              <customHeightScale>1</customHeightScale>
+              <icon>
+                <type>Internal</type>
+                <href>771</href>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+              </icon>
+              <label>
+                <label></label>
+                <reformat>0</reformat>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+                <labelMode>Original</labelMode>
+              </label>
+            </style>
+            <maxLevel>18</maxLevel>
+            <featureType>PolygonZ</featureType>
+            <minLevel>4</minLevel>
+            <drawAsRoads>0</drawAsRoads>
+            <roadLabelType>Label</roadLabelType>
+            <polygonDrawMode>OutlineOnly</polygonDrawMode>
+            <maxError>0.5</maxError>
+            <maxBuildLevel>12</maxBuildLevel>
+          </feature>
+          <site>
+            <enabled>1</enabled>
+            <style>
+              <id>4</id>
+              <polyColor>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+              </polyColor>
+              <lineColor>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+              </lineColor>
+              <lineWidth>1</lineWidth>
+              <altitudeMode>ClampToGround</altitudeMode>
+              <extrude>0</extrude>
+              <enableCustomHeight>0</enableCustomHeight>
+              <customHeightVariableName></customHeightVariableName>
+              <customHeightOffset>0</customHeightOffset>
+              <customHeightScale>1</customHeightScale>
+              <icon>
+                <type>Internal</type>
+                <href>1026</href>
+                <normalColor>
+                  <normalColor_element>85</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>170</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1.5</highlightScale>
+              </icon>
+              <label>
+                <label>«COUNTY»</label>
+                <reformat>0</reformat>
+                <normalColor>
+                  <normalColor_element>0</normalColor_element>
+                  <normalColor_element>0</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>0</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>2</highlightScale>
+                <labelMode>Original</labelMode>
+              </label>
+            </style>
+            <position>AreaCenter</position>
+            <enablePopup>1</enablePopup>
+            <maxLevel>24</maxLevel>
+            <maxQuadCount>100</maxQuadCount>
+            <minLevel>5</minLevel>
+            <popupText>«STATE»: «COUNTY»</popupText>
+            <decimationMode>MaxFit</decimationMode>
+            <suppressDuplicateSites>0</suppressDuplicateSites>
+            <minQuadCount>0</minQuadCount>
+            <decimationRatio>0.5</decimationRatio>
+            <popupTextMode>Original</popupTextMode>
+            <balloonText></balloonText>
+            <balloonBgColor>
+              <balloonBgColor_element>170</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+            </balloonBgColor>
+            <balloonFgColor>
+              <balloonFgColor_element>85</balloonFgColor_element>
+              <balloonFgColor_element>170</balloonFgColor_element>
+              <balloonFgColor_element>127</balloonFgColor_element>
+              <balloonFgColor_element>255</balloonFgColor_element>
+            </balloonFgColor>
+            <balloonStyleMode>Basic</balloonStyleMode>
+            <balloonInsertHeader>0</balloonInsertHeader>
+            <balloonInsertDirections>0</balloonInsertDirections>
+          </site>
+          <filter>
+            <match>MatchAll</match>
+            <selectRules/>
+            <matchScript></matchScript>
+          </filter>
+        </displayRule>
+      </displayRules>
+      <preserveTextLevel>24</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>1</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>1</isExpandable>
+      <asset_uuid>360b6538-8ba9-11e0-97e0-836cd7a7a162</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">USCounties</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">1</is_checked>
+        <desc useDefault="0">Us County Layer Description</desc>
+        <look_at useDefault="0"></look_at>
+        <kml_layer_url useDefault="0"></kml_layer_url>
+        <required_client_version useDefault="0"></required_client_version>
+        <required_client_vram useDefault="0"></required_client_vram>
+        <probability useDefault="0"></probability>
+        <save_locked useDefault="0">1</save_locked>
+        <required_user_agent useDefault="0"></required_user_agent>
+        <required_client_capabilities useDefault="0"></required_client_capabilities>
+        <client_config_script_name useDefault="0"></client_config_script_name>
+        <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales>
+        <item config_version="1" key="it">
+          <name useDefault="0">Italian trans US counties</name>
+          <icon useDefault="1"/>
+          <labels useDefault="1"/>
+          <is_checked useDefault="0">1</is_checked>
+          <desc useDefault="0">Italian trans descrip US counties</desc>
+          <look_at useDefault="1"/>
+          <kml_layer_url useDefault="1"/>
+          <required_client_version useDefault="1"/>
+          <required_client_vram useDefault="1"/>
+          <probability useDefault="1"/>
+          <save_locked useDefault="1"/>
+          <required_user_agent useDefault="1"/>
+          <required_client_capabilities useDefault="1"/>
+          <client_config_script_name useDefault="1"/>
+          <diorama_data_channel_base useDefault="1"/>
+          <diorama_replica_data_channel_base useDefault="1"/>
+        </item>
+      </locales>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+    <layer>
+      <channelId>8</channelId>
+      <assetRef>CACounties.kvasset</assetRef>
+      <legend>Counties</legend>
+      <lodForce/>
+      <displayRules>
+        <displayRule>
+          <name>default select all</name>
+          <feature>
+            <style>
+              <id>3</id>
+              <polyColor>
+                <polyColor_element>170</polyColor_element>
+                <polyColor_element>0</polyColor_element>
+                <polyColor_element>127</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+              </polyColor>
+              <lineColor>
+                <lineColor_element>179</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>0</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+              </lineColor>
+              <lineWidth>1</lineWidth>
+              <altitudeMode>ClampToGround</altitudeMode>
+              <extrude>0</extrude>
+              <enableCustomHeight>0</enableCustomHeight>
+              <customHeightVariableName></customHeightVariableName>
+              <customHeightOffset>0</customHeightOffset>
+              <customHeightScale>1</customHeightScale>
+              <icon>
+                <type>Internal</type>
+                <href>771</href>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+              </icon>
+              <label>
+                <label></label>
+                <reformat>0</reformat>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+                <labelMode>Original</labelMode>
+              </label>
+            </style>
+            <maxLevel>18</maxLevel>
+            <featureType>PolygonZ</featureType>
+            <minLevel>8</minLevel>
+            <drawAsRoads>0</drawAsRoads>
+            <roadLabelType>Label</roadLabelType>
+            <polygonDrawMode>FillOnly</polygonDrawMode>
+            <maxError>0.5</maxError>
+            <maxBuildLevel>16</maxBuildLevel>
+          </feature>
+          <filter>
+            <match>MatchAll</match>
+            <selectRules/>
+            <matchScript></matchScript>
+          </filter>
+        </displayRule>
+      </displayRules>
+      <preserveTextLevel>24</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>1</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>1</isExpandable>
+      <asset_uuid>37a2aa06-8d42-11e0-9ee4-0385e0ab54e5</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">CACounties</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">0</is_checked>
+        <desc useDefault="0">Nested CA Counties</desc>
+        <look_at useDefault="0"></look_at>
+        <kml_layer_url useDefault="0"></kml_layer_url>
+        <required_client_version useDefault="0"></required_client_version>
+        <required_client_vram useDefault="0"></required_client_vram>
+        <probability useDefault="0"></probability>
+        <save_locked useDefault="0">1</save_locked>
+        <required_user_agent useDefault="0"></required_user_agent>
+        <required_client_capabilities useDefault="0"></required_client_capabilities>
+        <client_config_script_name useDefault="0"></client_config_script_name>
+        <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales/>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+    <layer>
+      <channelId>6</channelId>
+      <assetRef>CACounties.kvasset</assetRef>
+      <legend></legend>
+      <lodForce/>
+      <displayRules>
+        <displayRule>
+          <name>default select all</name>
+          <feature>
+            <style>
+              <id>2</id>
+              <polyColor>
+                <polyColor_element>85</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+              </polyColor>
+              <lineColor>
+                <lineColor_element>0</lineColor_element>
+                <lineColor_element>0</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+              </lineColor>
+              <lineWidth>1</lineWidth>
+              <altitudeMode>ClampToGround</altitudeMode>
+              <extrude>0</extrude>
+              <enableCustomHeight>0</enableCustomHeight>
+              <customHeightVariableName></customHeightVariableName>
+              <customHeightOffset>0</customHeightOffset>
+              <customHeightScale>1</customHeightScale>
+              <icon>
+                <type>Internal</type>
+                <href>771</href>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+              </icon>
+              <label>
+                <label></label>
+                <reformat>0</reformat>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+                <labelMode>Original</labelMode>
+              </label>
+            </style>
+            <maxLevel>24</maxLevel>
+            <featureType>PolygonZ</featureType>
+            <minLevel>4</minLevel>
+            <drawAsRoads>0</drawAsRoads>
+            <roadLabelType>Label</roadLabelType>
+            <polygonDrawMode>FillAndOutline</polygonDrawMode>
+            <maxError>0.5</maxError>
+            <maxBuildLevel>16</maxBuildLevel>
+          </feature>
+          <filter>
+            <match>MatchAll</match>
+            <selectRules/>
+            <matchScript></matchScript>
+          </filter>
+        </displayRule>
+      </displayRules>
+      <preserveTextLevel>24</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>1</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>1</isExpandable>
+      <asset_uuid>360b690c-8ba9-11e0-99c3-836cd7a7a162</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">CACounties</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">0</is_checked>
+        <desc useDefault="0">CACounties Description</desc>
+        <look_at useDefault="0"></look_at>
+        <kml_layer_url useDefault="0"></kml_layer_url>
+        <required_client_version useDefault="0"></required_client_version>
+        <required_client_vram useDefault="0"></required_client_vram>
+        <probability useDefault="0"></probability>
+        <save_locked useDefault="0">1</save_locked>
+        <required_user_agent useDefault="0"></required_user_agent>
+        <required_client_capabilities useDefault="0"></required_client_capabilities>
+        <client_config_script_name useDefault="0"></client_config_script_name>
+        <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales/>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+    <layer>
+      <channelId>9</channelId>
+      <assetRef>CARoads.kvasset</assetRef>
+      <legend></legend>
+      <lodForce/>
+      <displayRules>
+        <displayRule>
+          <name>Principal Highways</name>
+          <feature>
+            <style>
+              <id>5</id>
+              <polyColor>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+              </polyColor>
+              <lineColor>
+                <lineColor_element>0</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>183</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+              </lineColor>
+              <lineWidth>1</lineWidth>
+              <altitudeMode>ClampToGround</altitudeMode>
+              <extrude>0</extrude>
+              <enableCustomHeight>0</enableCustomHeight>
+              <customHeightVariableName></customHeightVariableName>
+              <customHeightOffset>0</customHeightOffset>
+              <customHeightScale>1</customHeightScale>
+              <icon>
+                <type>Internal</type>
+                <href>shield1</href>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>0.75</normalScale>
+                <highlightScale>1</highlightScale>
+              </icon>
+              <label>
+                <label>«NAME»</label>
+                <reformat>1</reformat>
+                <normalColor>
+                  <normalColor_element>85</normalColor_element>
+                  <normalColor_element>0</normalColor_element>
+                  <normalColor_element>0</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1.1000000238418579</normalScale>
+                <highlightScale>1</highlightScale>
+                <labelMode>Original</labelMode>
+              </label>
+            </style>
+            <maxLevel>24</maxLevel>
+            <featureType>LineZ</featureType>
+            <minLevel>4</minLevel>
+            <drawAsRoads>1</drawAsRoads>
+            <roadLabelType>Shield</roadLabelType>
+            <polygonDrawMode>FillAndOutline</polygonDrawMode>
+            <maxError>0.5</maxError>
+            <maxBuildLevel>18</maxBuildLevel>
+          </feature>
+          <filter>
+            <match>JSExpression</match>
+            <selectRules>
+              <selectRule>
+                <op>Equal</op>
+                <fieldNum>6</fieldNum>
+                <rvalue></rvalue>
+              </selectRule>
+            </selectRules>
+            <matchScript>(fields.FEATURE=="Principal Highway")||(fields.FEATURE=="Principal Highway   Business Route")</matchScript>
+          </filter>
+        </displayRule>
+        <displayRule>
+          <name>Rest</name>
+          <feature>
+            <style>
+              <id>6</id>
+              <polyColor>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+              </polyColor>
+              <lineColor>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>85</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+              </lineColor>
+              <lineWidth>1</lineWidth>
+              <altitudeMode>ClampToGround</altitudeMode>
+              <extrude>0</extrude>
+              <enableCustomHeight>0</enableCustomHeight>
+              <customHeightVariableName></customHeightVariableName>
+              <customHeightOffset>0</customHeightOffset>
+              <customHeightScale>1</customHeightScale>
+              <icon>
+                <type>Internal</type>
+                <href>771</href>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+              </icon>
+              <label>
+                <label>«NAME»</label>
+                <reformat>1</reformat>
+                <normalColor>
+                  <normalColor_element>0</normalColor_element>
+                  <normalColor_element>85</normalColor_element>
+                  <normalColor_element>0</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1.1000000238418579</normalScale>
+                <highlightScale>1</highlightScale>
+                <labelMode>Original</labelMode>
+              </label>
+            </style>
+            <maxLevel>24</maxLevel>
+            <featureType>LineZ</featureType>
+            <minLevel>10</minLevel>
+            <drawAsRoads>1</drawAsRoads>
+            <roadLabelType>Label</roadLabelType>
+            <polygonDrawMode>FillAndOutline</polygonDrawMode>
+            <maxError>0.5</maxError>
+            <maxBuildLevel>18</maxBuildLevel>
+          </feature>
+          <filter>
+            <match>MatchAll</match>
+            <selectRules/>
+            <matchScript></matchScript>
+          </filter>
+        </displayRule>
+      </displayRules>
+      <preserveTextLevel>24</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>1</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>1</isExpandable>
+      <asset_uuid>100b9944-9080-11e0-90e5-fba3d7728f69</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">CARoads</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>shield1</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">0</is_checked>
+        <desc useDefault="0">Roads in CA</desc>
+        <look_at useDefault="0"></look_at>
+        <kml_layer_url useDefault="0"></kml_layer_url>
+        <required_client_version useDefault="0"></required_client_version>
+        <required_client_vram useDefault="0"></required_client_vram>
+        <probability useDefault="0"></probability>
+        <save_locked useDefault="0">1</save_locked>
+        <required_user_agent useDefault="0"></required_user_agent>
+        <required_client_capabilities useDefault="0"></required_client_capabilities>
+        <client_config_script_name useDefault="0"></client_config_script_name>
+        <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales/>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+    <layer>
+      <channelId>10</channelId>
+      <assetRef>CAWater.kvasset</assetRef>
+      <legend></legend>
+      <lodForce/>
+      <displayRules>
+        <displayRule>
+          <name>default select all</name>
+          <feature>
+            <style>
+              <id>7</id>
+              <polyColor>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+              </polyColor>
+              <lineColor>
+                <lineColor_element>170</lineColor_element>
+                <lineColor_element>170</lineColor_element>
+                <lineColor_element>0</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+              </lineColor>
+              <lineWidth>2</lineWidth>
+              <altitudeMode>ClampToGround</altitudeMode>
+              <extrude>0</extrude>
+              <enableCustomHeight>0</enableCustomHeight>
+              <customHeightVariableName></customHeightVariableName>
+              <customHeightOffset>0</customHeightOffset>
+              <customHeightScale>1</customHeightScale>
+              <icon>
+                <type>Internal</type>
+                <href>771</href>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+              </icon>
+              <label>
+                <label></label>
+                <reformat>0</reformat>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+                <labelMode>Original</labelMode>
+              </label>
+            </style>
+            <maxLevel>24</maxLevel>
+            <featureType>LineZ</featureType>
+            <minLevel>4</minLevel>
+            <drawAsRoads>0</drawAsRoads>
+            <roadLabelType>Label</roadLabelType>
+            <polygonDrawMode>FillAndOutline</polygonDrawMode>
+            <maxError>0.5</maxError>
+            <maxBuildLevel>18</maxBuildLevel>
+          </feature>
+          <filter>
+            <match>MatchAll</match>
+            <selectRules/>
+            <matchScript></matchScript>
+          </filter>
+        </displayRule>
+      </displayRules>
+      <preserveTextLevel>19</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>1</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>1</isExpandable>
+      <asset_uuid>03dec374-9082-11e0-93fd-fba3d7728f69</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">CAWater</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">0</is_checked>
+        <desc useDefault="0"></desc>
+        <look_at useDefault="0">-72.503364|-13.209676|14794.882995|66.768762|71.131493</look_at>
+        <kml_layer_url useDefault="0"></kml_layer_url>
+        <required_client_version useDefault="0"></required_client_version>
+        <required_client_vram useDefault="0"></required_client_vram>
+        <probability useDefault="0"></probability>
+        <save_locked useDefault="0">1</save_locked>
+        <required_user_agent useDefault="0"></required_user_agent>
+        <required_client_capabilities useDefault="0"></required_client_capabilities>
+        <client_config_script_name useDefault="0"></client_config_script_name>
+        <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales/>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+    <layer>
+      <channelId>11</channelId>
+      <assetRef>CAPlaces.kvasset</assetRef>
+      <legend></legend>
+      <lodForce/>
+      <displayRules>
+        <displayRule>
+          <name>default select all</name>
+          <site>
+            <enabled>1</enabled>
+            <style>
+              <id>8</id>
+              <polyColor>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+              </polyColor>
+              <lineColor>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+              </lineColor>
+              <lineWidth>1</lineWidth>
+              <altitudeMode>ClampToGround</altitudeMode>
+              <extrude>0</extrude>
+              <enableCustomHeight>0</enableCustomHeight>
+              <customHeightVariableName></customHeightVariableName>
+              <customHeightOffset>0</customHeightOffset>
+              <customHeightScale>1</customHeightScale>
+              <icon>
+                <type>Internal</type>
+                <href>green_dot</href>
+                <normalColor>
+                  <normalColor_element>85</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>0</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>170</highlightColor_element>
+                  <highlightColor_element>0</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1.059999942779541</normalScale>
+                <highlightScale>1.0499999523162842</highlightScale>
+              </icon>
+              <label>
+                <label>«NAME», «COUNTY»</label>
+                <reformat>0</reformat>
+                <normalColor>
+                  <normalColor_element>170</normalColor_element>
+                  <normalColor_element>0</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>170</highlightColor_element>
+                  <highlightColor_element>170</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1.1499999761581421</normalScale>
+                <highlightScale>1.5</highlightScale>
+                <labelMode>Original</labelMode>
+              </label>
+            </style>
+            <position>AreaCenter</position>
+            <enablePopup>1</enablePopup>
+            <maxLevel>24</maxLevel>
+            <maxQuadCount>100</maxQuadCount>
+            <minLevel>5</minLevel>
+            <popupText>Name: «NAME»
+Population: «POP_RANGE»
+Coords: «Latitude» «Longitude»
+</popupText>
+            <decimationMode>MaxFit</decimationMode>
+            <suppressDuplicateSites>0</suppressDuplicateSites>
+            <minQuadCount>0</minQuadCount>
+            <decimationRatio>0.5</decimationRatio>
+            <popupTextMode>Original</popupTextMode>
+            <balloonText></balloonText>
+            <balloonBgColor>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>0</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+            </balloonBgColor>
+            <balloonFgColor>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>85</balloonFgColor_element>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>255</balloonFgColor_element>
+            </balloonFgColor>
+            <balloonStyleMode>Basic</balloonStyleMode>
+            <balloonInsertHeader>1</balloonInsertHeader>
+            <balloonInsertDirections>1</balloonInsertDirections>
+          </site>
+          <filter>
+            <match>MatchAll</match>
+            <selectRules/>
+            <matchScript></matchScript>
+          </filter>
+        </displayRule>
+      </displayRules>
+      <preserveTextLevel>24</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>1</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>1</isExpandable>
+      <asset_uuid>3bb9e48e-9084-11e0-b9b1-fba3d7728f69</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">CAPlaces</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">0</is_checked>
+        <desc useDefault="0"></desc>
+        <look_at useDefault="0"></look_at>
+        <kml_layer_url useDefault="0"></kml_layer_url>
+        <required_client_version useDefault="0"></required_client_version>
+        <required_client_vram useDefault="0"></required_client_vram>
+        <probability useDefault="0"></probability>
+        <save_locked useDefault="0">1</save_locked>
+        <required_user_agent useDefault="0"></required_user_agent>
+        <required_client_capabilities useDefault="0"></required_client_capabilities>
+        <client_config_script_name useDefault="0"></client_config_script_name>
+        <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales/>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+    <layer>
+      <channelId>12</channelId>
+      <assetRef>USPlaces.kvasset</assetRef>
+      <legend></legend>
+      <lodForce/>
+      <displayRules>
+        <displayRule>
+          <name>default select all</name>
+          <site>
+            <enabled>1</enabled>
+            <style>
+              <id>9</id>
+              <polyColor>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+              </polyColor>
+              <lineColor>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+              </lineColor>
+              <lineWidth>1</lineWidth>
+              <altitudeMode>ClampToGround</altitudeMode>
+              <extrude>0</extrude>
+              <enableCustomHeight>0</enableCustomHeight>
+              <customHeightVariableName></customHeightVariableName>
+              <customHeightOffset>0</customHeightOffset>
+              <customHeightScale>1</customHeightScale>
+              <icon>
+                <type>Internal</type>
+                <href>771</href>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+              </icon>
+              <label>
+                <label></label>
+                <reformat>0</reformat>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+                <labelMode>Original</labelMode>
+              </label>
+            </style>
+            <position>AreaCenter</position>
+            <enablePopup>1</enablePopup>
+            <maxLevel>24</maxLevel>
+            <maxQuadCount>100</maxQuadCount>
+            <minLevel>5</minLevel>
+            <popupText>«FEATURE»</popupText>
+            <decimationMode>MaxFit</decimationMode>
+            <suppressDuplicateSites>0</suppressDuplicateSites>
+            <minQuadCount>0</minQuadCount>
+            <decimationRatio>0.5</decimationRatio>
+            <popupTextMode>Original</popupTextMode>
+            <balloonText>&lt;h3&gt;$[name]&lt;/h3&gt;Description: $[description]&lt;br&gt;&lt;br&gt;&lt;hr/&gt;$[geDirections]</balloonText>
+            <balloonBgColor>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+            </balloonBgColor>
+            <balloonFgColor>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>255</balloonFgColor_element>
+            </balloonFgColor>
+            <balloonStyleMode>Advanced</balloonStyleMode>
+            <balloonInsertHeader>0</balloonInsertHeader>
+            <balloonInsertDirections>0</balloonInsertDirections>
+          </site>
+          <filter>
+            <match>MatchAll</match>
+            <selectRules/>
+            <matchScript></matchScript>
+          </filter>
+        </displayRule>
+      </displayRules>
+      <preserveTextLevel>24</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>1</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>1</isExpandable>
+      <asset_uuid>fa59f488-9084-11e0-8a90-fba3d7728f69</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">USPlaces</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">0</is_checked>
+        <desc useDefault="0"></desc>
+        <look_at useDefault="0"></look_at>
+        <kml_layer_url useDefault="0"></kml_layer_url>
+        <required_client_version useDefault="0">5.6</required_client_version>
+        <required_client_vram useDefault="0">4M</required_client_vram>
+        <probability useDefault="0">.75</probability>
+        <save_locked useDefault="0">0</save_locked>
+        <required_user_agent useDefault="0">EC</required_user_agent>
+        <required_client_capabilities useDefault="0">suid</required_client_capabilities>
+        <client_config_script_name useDefault="0">bobsyouruncle</client_config_script_name>
+        <diorama_data_channel_base useDefault="0">5000</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">6000</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales/>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+    <layer>
+      <channelId>13</channelId>
+      <assetRef></assetRef>
+      <legend></legend>
+      <lodForce/>
+      <displayRules/>
+      <preserveTextLevel>24</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>1</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>1</isExpandable>
+      <asset_uuid>927ab146-9132-11e0-94b1-53ca0efc27a9</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">folder 1</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">0</is_checked>
+        <desc useDefault="0"></desc>
+        <look_at useDefault="0"></look_at>
+        <kml_layer_url useDefault="0"></kml_layer_url>
+        <required_client_version useDefault="0"></required_client_version>
+        <required_client_vram useDefault="0"></required_client_vram>
+        <probability useDefault="0"></probability>
+        <save_locked useDefault="0">1</save_locked>
+        <required_user_agent useDefault="0"></required_user_agent>
+        <required_client_capabilities useDefault="0"></required_client_capabilities>
+        <client_config_script_name useDefault="0"></client_config_script_name>
+        <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales/>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+    <layer>
+      <channelId>14</channelId>
+      <assetRef>CAPlaces.kvasset</assetRef>
+      <legend>folder 1</legend>
+      <lodForce/>
+      <displayRules>
+        <displayRule>
+          <name>default select all</name>
+          <site>
+            <enabled>1</enabled>
+            <style>
+              <id>10</id>
+              <polyColor>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+              </polyColor>
+              <lineColor>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+              </lineColor>
+              <lineWidth>1</lineWidth>
+              <altitudeMode>ClampToGround</altitudeMode>
+              <extrude>0</extrude>
+              <enableCustomHeight>0</enableCustomHeight>
+              <customHeightVariableName></customHeightVariableName>
+              <customHeightOffset>0</customHeightOffset>
+              <customHeightScale>1</customHeightScale>
+              <icon>
+                <type>Internal</type>
+                <href>771</href>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+              </icon>
+              <label>
+                <label></label>
+                <reformat>0</reformat>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+                <labelMode>Original</labelMode>
+              </label>
+            </style>
+            <position>AreaCenter</position>
+            <enablePopup>1</enablePopup>
+            <maxLevel>24</maxLevel>
+            <maxQuadCount>100</maxQuadCount>
+            <minLevel>5</minLevel>
+            <popupText></popupText>
+            <decimationMode>MaxFit</decimationMode>
+            <suppressDuplicateSites>0</suppressDuplicateSites>
+            <minQuadCount>0</minQuadCount>
+            <decimationRatio>0.5</decimationRatio>
+            <popupTextMode>Original</popupTextMode>
+            <balloonText></balloonText>
+            <balloonBgColor>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+            </balloonBgColor>
+            <balloonFgColor>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>255</balloonFgColor_element>
+            </balloonFgColor>
+            <balloonStyleMode>Basic</balloonStyleMode>
+            <balloonInsertHeader>0</balloonInsertHeader>
+            <balloonInsertDirections>0</balloonInsertDirections>
+          </site>
+          <filter>
+            <match>MatchAll</match>
+            <selectRules/>
+            <matchScript></matchScript>
+          </filter>
+        </displayRule>
+      </displayRules>
+      <preserveTextLevel>24</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>1</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>1</isExpandable>
+      <asset_uuid>927ab222-9132-11e0-9d96-53ca0efc27a9</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">CAPlaces (7)</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">0</is_checked>
+        <desc useDefault="0"></desc>
+        <look_at useDefault="0"></look_at>
+        <kml_layer_url useDefault="0"></kml_layer_url>
+        <required_client_version useDefault="0"></required_client_version>
+        <required_client_vram useDefault="0"></required_client_vram>
+        <probability useDefault="0"></probability>
+        <save_locked useDefault="0">1</save_locked>
+        <required_user_agent useDefault="0"></required_user_agent>
+        <required_client_capabilities useDefault="0"></required_client_capabilities>
+        <client_config_script_name useDefault="0"></client_config_script_name>
+        <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales/>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+    <layer>
+      <channelId>15</channelId>
+      <assetRef>CAPlaces.kvasset</assetRef>
+      <legend>folder 1</legend>
+      <lodForce/>
+      <displayRules>
+        <displayRule>
+          <name>default select all</name>
+          <site>
+            <enabled>1</enabled>
+            <style>
+              <id>11</id>
+              <polyColor>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+              </polyColor>
+              <lineColor>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+              </lineColor>
+              <lineWidth>1</lineWidth>
+              <altitudeMode>ClampToGround</altitudeMode>
+              <extrude>0</extrude>
+              <enableCustomHeight>0</enableCustomHeight>
+              <customHeightVariableName></customHeightVariableName>
+              <customHeightOffset>0</customHeightOffset>
+              <customHeightScale>1</customHeightScale>
+              <icon>
+                <type>Internal</type>
+                <href>771</href>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+              </icon>
+              <label>
+                <label></label>
+                <reformat>0</reformat>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+                <labelMode>Original</labelMode>
+              </label>
+            </style>
+            <position>AreaCenter</position>
+            <enablePopup>1</enablePopup>
+            <maxLevel>24</maxLevel>
+            <maxQuadCount>100</maxQuadCount>
+            <minLevel>5</minLevel>
+            <popupText></popupText>
+            <decimationMode>MaxFit</decimationMode>
+            <suppressDuplicateSites>0</suppressDuplicateSites>
+            <minQuadCount>0</minQuadCount>
+            <decimationRatio>0.5</decimationRatio>
+            <popupTextMode>Original</popupTextMode>
+            <balloonText></balloonText>
+            <balloonBgColor>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+            </balloonBgColor>
+            <balloonFgColor>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>255</balloonFgColor_element>
+            </balloonFgColor>
+            <balloonStyleMode>Basic</balloonStyleMode>
+            <balloonInsertHeader>0</balloonInsertHeader>
+            <balloonInsertDirections>0</balloonInsertDirections>
+          </site>
+          <filter>
+            <match>MatchAll</match>
+            <selectRules/>
+            <matchScript></matchScript>
+          </filter>
+        </displayRule>
+      </displayRules>
+      <preserveTextLevel>24</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>1</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>1</isExpandable>
+      <asset_uuid>e2c71c44-9131-11e0-8269-53ca0efc27a9</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">CAPlaces (2)</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">1</is_checked>
+        <desc useDefault="0"></desc>
+        <look_at useDefault="0"></look_at>
+        <kml_layer_url useDefault="0"></kml_layer_url>
+        <required_client_version useDefault="0"></required_client_version>
+        <required_client_vram useDefault="0"></required_client_vram>
+        <probability useDefault="0"></probability>
+        <save_locked useDefault="0">1</save_locked>
+        <required_user_agent useDefault="0"></required_user_agent>
+        <required_client_capabilities useDefault="0"></required_client_capabilities>
+        <client_config_script_name useDefault="0"></client_config_script_name>
+        <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales/>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+    <layer>
+      <channelId>16</channelId>
+      <assetRef></assetRef>
+      <legend></legend>
+      <lodForce/>
+      <displayRules/>
+      <preserveTextLevel>24</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>1</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>1</isExpandable>
+      <asset_uuid>927ab268-9132-11e0-ab47-53ca0efc27a9</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">folder 2</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">0</is_checked>
+        <desc useDefault="0"></desc>
+        <look_at useDefault="0"></look_at>
+        <kml_layer_url useDefault="0"></kml_layer_url>
+        <required_client_version useDefault="0"></required_client_version>
+        <required_client_vram useDefault="0"></required_client_vram>
+        <probability useDefault="0"></probability>
+        <save_locked useDefault="0">1</save_locked>
+        <required_user_agent useDefault="0"></required_user_agent>
+        <required_client_capabilities useDefault="0"></required_client_capabilities>
+        <client_config_script_name useDefault="0"></client_config_script_name>
+        <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales/>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+    <layer>
+      <channelId>17</channelId>
+      <assetRef></assetRef>
+      <legend>folder 2</legend>
+      <lodForce/>
+      <displayRules/>
+      <preserveTextLevel>24</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>1</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>1</isExpandable>
+      <asset_uuid>927ab2ae-9132-11e0-813d-53ca0efc27a9</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">folder 2.1</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">0</is_checked>
+        <desc useDefault="0"></desc>
+        <look_at useDefault="0"></look_at>
+        <kml_layer_url useDefault="0"></kml_layer_url>
+        <required_client_version useDefault="0"></required_client_version>
+        <required_client_vram useDefault="0"></required_client_vram>
+        <probability useDefault="0"></probability>
+        <save_locked useDefault="0">1</save_locked>
+        <required_user_agent useDefault="0"></required_user_agent>
+        <required_client_capabilities useDefault="0"></required_client_capabilities>
+        <client_config_script_name useDefault="0"></client_config_script_name>
+        <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales/>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+    <layer>
+      <channelId>18</channelId>
+      <assetRef>CAPlaces.kvasset</assetRef>
+      <legend>folder 2|folder 2.1</legend>
+      <lodForce/>
+      <displayRules>
+        <displayRule>
+          <name>default select all</name>
+          <site>
+            <enabled>1</enabled>
+            <style>
+              <id>12</id>
+              <polyColor>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+              </polyColor>
+              <lineColor>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+              </lineColor>
+              <lineWidth>1</lineWidth>
+              <altitudeMode>ClampToGround</altitudeMode>
+              <extrude>0</extrude>
+              <enableCustomHeight>0</enableCustomHeight>
+              <customHeightVariableName></customHeightVariableName>
+              <customHeightOffset>0</customHeightOffset>
+              <customHeightScale>1</customHeightScale>
+              <icon>
+                <type>Internal</type>
+                <href>771</href>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+              </icon>
+              <label>
+                <label></label>
+                <reformat>0</reformat>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+                <labelMode>Original</labelMode>
+              </label>
+            </style>
+            <position>AreaCenter</position>
+            <enablePopup>1</enablePopup>
+            <maxLevel>24</maxLevel>
+            <maxQuadCount>100</maxQuadCount>
+            <minLevel>5</minLevel>
+            <popupText></popupText>
+            <decimationMode>MaxFit</decimationMode>
+            <suppressDuplicateSites>0</suppressDuplicateSites>
+            <minQuadCount>0</minQuadCount>
+            <decimationRatio>0.5</decimationRatio>
+            <popupTextMode>Original</popupTextMode>
+            <balloonText></balloonText>
+            <balloonBgColor>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+            </balloonBgColor>
+            <balloonFgColor>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>255</balloonFgColor_element>
+            </balloonFgColor>
+            <balloonStyleMode>Basic</balloonStyleMode>
+            <balloonInsertHeader>0</balloonInsertHeader>
+            <balloonInsertDirections>0</balloonInsertDirections>
+          </site>
+          <filter>
+            <match>MatchAll</match>
+            <selectRules/>
+            <matchScript></matchScript>
+          </filter>
+        </displayRule>
+      </displayRules>
+      <preserveTextLevel>24</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>1</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>1</isExpandable>
+      <asset_uuid>927ab2f4-9132-11e0-8dbf-53ca0efc27a9</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">CAPlaces (6)</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">0</is_checked>
+        <desc useDefault="0"></desc>
+        <look_at useDefault="0"></look_at>
+        <kml_layer_url useDefault="0"></kml_layer_url>
+        <required_client_version useDefault="0"></required_client_version>
+        <required_client_vram useDefault="0"></required_client_vram>
+        <probability useDefault="0"></probability>
+        <save_locked useDefault="0">1</save_locked>
+        <required_user_agent useDefault="0"></required_user_agent>
+        <required_client_capabilities useDefault="0"></required_client_capabilities>
+        <client_config_script_name useDefault="0"></client_config_script_name>
+        <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales/>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+    <layer>
+      <channelId>19</channelId>
+      <assetRef></assetRef>
+      <legend>folder 2</legend>
+      <lodForce/>
+      <displayRules/>
+      <preserveTextLevel>24</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>1</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>1</isExpandable>
+      <asset_uuid>927ab330-9132-11e0-9ba8-53ca0efc27a9</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">folder 2.2</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">0</is_checked>
+        <desc useDefault="0"></desc>
+        <look_at useDefault="0"></look_at>
+        <kml_layer_url useDefault="0"></kml_layer_url>
+        <required_client_version useDefault="0"></required_client_version>
+        <required_client_vram useDefault="0"></required_client_vram>
+        <probability useDefault="0"></probability>
+        <save_locked useDefault="0">1</save_locked>
+        <required_user_agent useDefault="0"></required_user_agent>
+        <required_client_capabilities useDefault="0"></required_client_capabilities>
+        <client_config_script_name useDefault="0"></client_config_script_name>
+        <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales/>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+    <layer>
+      <channelId>20</channelId>
+      <assetRef></assetRef>
+      <legend>folder 2|folder 2.2</legend>
+      <lodForce/>
+      <displayRules/>
+      <preserveTextLevel>24</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>1</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>1</isExpandable>
+      <asset_uuid>927ab36c-9132-11e0-aef0-53ca0efc27a9</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">folder 2.2.1</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">0</is_checked>
+        <desc useDefault="0"></desc>
+        <look_at useDefault="0"></look_at>
+        <kml_layer_url useDefault="0"></kml_layer_url>
+        <required_client_version useDefault="0"></required_client_version>
+        <required_client_vram useDefault="0"></required_client_vram>
+        <probability useDefault="0"></probability>
+        <save_locked useDefault="0">1</save_locked>
+        <required_user_agent useDefault="0"></required_user_agent>
+        <required_client_capabilities useDefault="0"></required_client_capabilities>
+        <client_config_script_name useDefault="0"></client_config_script_name>
+        <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales/>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+    <layer>
+      <channelId>21</channelId>
+      <assetRef>CAPlaces.kvasset</assetRef>
+      <legend>folder 2|folder 2.2|folder 2.2.1</legend>
+      <lodForce/>
+      <displayRules>
+        <displayRule>
+          <name>default select all</name>
+          <site>
+            <enabled>1</enabled>
+            <style>
+              <id>13</id>
+              <polyColor>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+              </polyColor>
+              <lineColor>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+              </lineColor>
+              <lineWidth>1</lineWidth>
+              <altitudeMode>ClampToGround</altitudeMode>
+              <extrude>0</extrude>
+              <enableCustomHeight>0</enableCustomHeight>
+              <customHeightVariableName></customHeightVariableName>
+              <customHeightOffset>0</customHeightOffset>
+              <customHeightScale>1</customHeightScale>
+              <icon>
+                <type>Internal</type>
+                <href>771</href>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+              </icon>
+              <label>
+                <label></label>
+                <reformat>0</reformat>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+                <labelMode>Original</labelMode>
+              </label>
+            </style>
+            <position>AreaCenter</position>
+            <enablePopup>1</enablePopup>
+            <maxLevel>24</maxLevel>
+            <maxQuadCount>100</maxQuadCount>
+            <minLevel>5</minLevel>
+            <popupText></popupText>
+            <decimationMode>MaxFit</decimationMode>
+            <suppressDuplicateSites>0</suppressDuplicateSites>
+            <minQuadCount>0</minQuadCount>
+            <decimationRatio>0.5</decimationRatio>
+            <popupTextMode>Original</popupTextMode>
+            <balloonText></balloonText>
+            <balloonBgColor>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+            </balloonBgColor>
+            <balloonFgColor>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>255</balloonFgColor_element>
+            </balloonFgColor>
+            <balloonStyleMode>Basic</balloonStyleMode>
+            <balloonInsertHeader>0</balloonInsertHeader>
+            <balloonInsertDirections>0</balloonInsertDirections>
+          </site>
+          <filter>
+            <match>MatchAll</match>
+            <selectRules/>
+            <matchScript></matchScript>
+          </filter>
+        </displayRule>
+      </displayRules>
+      <preserveTextLevel>24</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>1</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>1</isExpandable>
+      <asset_uuid>927ab3b2-9132-11e0-aa22-53ca0efc27a9</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">CAPlaces (5)</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">0</is_checked>
+        <desc useDefault="0"></desc>
+        <look_at useDefault="0"></look_at>
+        <kml_layer_url useDefault="0"></kml_layer_url>
+        <required_client_version useDefault="0"></required_client_version>
+        <required_client_vram useDefault="0"></required_client_vram>
+        <probability useDefault="0"></probability>
+        <save_locked useDefault="0">1</save_locked>
+        <required_user_agent useDefault="0"></required_user_agent>
+        <required_client_capabilities useDefault="0"></required_client_capabilities>
+        <client_config_script_name useDefault="0"></client_config_script_name>
+        <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales/>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+    <layer>
+      <channelId>22</channelId>
+      <assetRef></assetRef>
+      <legend>folder 2|folder 2.2</legend>
+      <lodForce/>
+      <displayRules/>
+      <preserveTextLevel>24</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>1</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>1</isExpandable>
+      <asset_uuid>927ab3f8-9132-11e0-90d1-53ca0efc27a9</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">folder 2.2.2</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">0</is_checked>
+        <desc useDefault="0"></desc>
+        <look_at useDefault="0"></look_at>
+        <kml_layer_url useDefault="0"></kml_layer_url>
+        <required_client_version useDefault="0"></required_client_version>
+        <required_client_vram useDefault="0"></required_client_vram>
+        <probability useDefault="0"></probability>
+        <save_locked useDefault="0">1</save_locked>
+        <required_user_agent useDefault="0"></required_user_agent>
+        <required_client_capabilities useDefault="0"></required_client_capabilities>
+        <client_config_script_name useDefault="0"></client_config_script_name>
+        <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales/>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+    <layer>
+      <channelId>23</channelId>
+      <assetRef>CAPlaces.kvasset</assetRef>
+      <legend>folder 2|folder 2.2|folder 2.2.2</legend>
+      <lodForce/>
+      <displayRules>
+        <displayRule>
+          <name>default select all</name>
+          <site>
+            <enabled>1</enabled>
+            <style>
+              <id>14</id>
+              <polyColor>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+              </polyColor>
+              <lineColor>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+              </lineColor>
+              <lineWidth>1</lineWidth>
+              <altitudeMode>ClampToGround</altitudeMode>
+              <extrude>0</extrude>
+              <enableCustomHeight>0</enableCustomHeight>
+              <customHeightVariableName></customHeightVariableName>
+              <customHeightOffset>0</customHeightOffset>
+              <customHeightScale>1</customHeightScale>
+              <icon>
+                <type>Internal</type>
+                <href>771</href>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+              </icon>
+              <label>
+                <label></label>
+                <reformat>0</reformat>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+                <labelMode>Original</labelMode>
+              </label>
+            </style>
+            <position>AreaCenter</position>
+            <enablePopup>1</enablePopup>
+            <maxLevel>24</maxLevel>
+            <maxQuadCount>100</maxQuadCount>
+            <minLevel>5</minLevel>
+            <popupText></popupText>
+            <decimationMode>MaxFit</decimationMode>
+            <suppressDuplicateSites>0</suppressDuplicateSites>
+            <minQuadCount>0</minQuadCount>
+            <decimationRatio>0.5</decimationRatio>
+            <popupTextMode>Original</popupTextMode>
+            <balloonText></balloonText>
+            <balloonBgColor>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+            </balloonBgColor>
+            <balloonFgColor>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>255</balloonFgColor_element>
+            </balloonFgColor>
+            <balloonStyleMode>Basic</balloonStyleMode>
+            <balloonInsertHeader>0</balloonInsertHeader>
+            <balloonInsertDirections>0</balloonInsertDirections>
+          </site>
+          <filter>
+            <match>MatchAll</match>
+            <selectRules/>
+            <matchScript></matchScript>
+          </filter>
+        </displayRule>
+      </displayRules>
+      <preserveTextLevel>24</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>1</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>1</isExpandable>
+      <asset_uuid>927ab434-9132-11e0-b63d-53ca0efc27a9</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">CAPlaces (4)</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">0</is_checked>
+        <desc useDefault="0"></desc>
+        <look_at useDefault="0"></look_at>
+        <kml_layer_url useDefault="0"></kml_layer_url>
+        <required_client_version useDefault="0"></required_client_version>
+        <required_client_vram useDefault="0"></required_client_vram>
+        <probability useDefault="0"></probability>
+        <save_locked useDefault="0">1</save_locked>
+        <required_user_agent useDefault="0"></required_user_agent>
+        <required_client_capabilities useDefault="0"></required_client_capabilities>
+        <client_config_script_name useDefault="0"></client_config_script_name>
+        <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales/>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+    <layer>
+      <channelId>24</channelId>
+      <assetRef></assetRef>
+      <legend></legend>
+      <lodForce/>
+      <displayRules/>
+      <preserveTextLevel>24</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>1</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>0</isExpandable>
+      <asset_uuid>a04f1c9a-9131-11e0-a7a4-53ca0efc27a9</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">folder 3</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">0</is_checked>
+        <desc useDefault="0"></desc>
+        <look_at useDefault="0"></look_at>
+        <kml_layer_url useDefault="0"></kml_layer_url>
+        <required_client_version useDefault="0"></required_client_version>
+        <required_client_vram useDefault="0"></required_client_vram>
+        <probability useDefault="0"></probability>
+        <save_locked useDefault="0">1</save_locked>
+        <required_user_agent useDefault="0"></required_user_agent>
+        <required_client_capabilities useDefault="0"></required_client_capabilities>
+        <client_config_script_name useDefault="0"></client_config_script_name>
+        <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales/>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+    <layer>
+      <channelId>25</channelId>
+      <assetRef>CAPlaces.kvasset</assetRef>
+      <legend>folder 3</legend>
+      <lodForce/>
+      <displayRules>
+        <displayRule>
+          <name>default select all</name>
+          <site>
+            <enabled>1</enabled>
+            <style>
+              <id>15</id>
+              <polyColor>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+              </polyColor>
+              <lineColor>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+              </lineColor>
+              <lineWidth>1</lineWidth>
+              <altitudeMode>ClampToGround</altitudeMode>
+              <extrude>0</extrude>
+              <enableCustomHeight>0</enableCustomHeight>
+              <customHeightVariableName></customHeightVariableName>
+              <customHeightOffset>0</customHeightOffset>
+              <customHeightScale>1</customHeightScale>
+              <icon>
+                <type>Internal</type>
+                <href>771</href>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+              </icon>
+              <label>
+                <label></label>
+                <reformat>0</reformat>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+                <labelMode>Original</labelMode>
+              </label>
+            </style>
+            <position>AreaCenter</position>
+            <enablePopup>1</enablePopup>
+            <maxLevel>24</maxLevel>
+            <maxQuadCount>100</maxQuadCount>
+            <minLevel>5</minLevel>
+            <popupText></popupText>
+            <decimationMode>MaxFit</decimationMode>
+            <suppressDuplicateSites>0</suppressDuplicateSites>
+            <minQuadCount>0</minQuadCount>
+            <decimationRatio>0.5</decimationRatio>
+            <popupTextMode>Original</popupTextMode>
+            <balloonText></balloonText>
+            <balloonBgColor>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+            </balloonBgColor>
+            <balloonFgColor>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>255</balloonFgColor_element>
+            </balloonFgColor>
+            <balloonStyleMode>Basic</balloonStyleMode>
+            <balloonInsertHeader>0</balloonInsertHeader>
+            <balloonInsertDirections>0</balloonInsertDirections>
+          </site>
+          <filter>
+            <match>MatchAll</match>
+            <selectRules/>
+            <matchScript></matchScript>
+          </filter>
+        </displayRule>
+      </displayRules>
+      <preserveTextLevel>24</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>1</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>1</isExpandable>
+      <asset_uuid>927ab47a-9132-11e0-9896-53ca0efc27a9</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">CAPlaces (2)</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">0</is_checked>
+        <desc useDefault="0"></desc>
+        <look_at useDefault="0"></look_at>
+        <kml_layer_url useDefault="0"></kml_layer_url>
+        <required_client_version useDefault="0"></required_client_version>
+        <required_client_vram useDefault="0"></required_client_vram>
+        <probability useDefault="0"></probability>
+        <save_locked useDefault="0">1</save_locked>
+        <required_user_agent useDefault="0"></required_user_agent>
+        <required_client_capabilities useDefault="0"></required_client_capabilities>
+        <client_config_script_name useDefault="0"></client_config_script_name>
+        <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales/>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+    <layer>
+      <channelId>26</channelId>
+      <assetRef>CAPlaces.kvasset</assetRef>
+      <legend>folder 3</legend>
+      <lodForce/>
+      <displayRules>
+        <displayRule>
+          <name>default select all</name>
+          <site>
+            <enabled>1</enabled>
+            <style>
+              <id>16</id>
+              <polyColor>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+              </polyColor>
+              <lineColor>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+              </lineColor>
+              <lineWidth>1</lineWidth>
+              <altitudeMode>ClampToGround</altitudeMode>
+              <extrude>0</extrude>
+              <enableCustomHeight>0</enableCustomHeight>
+              <customHeightVariableName></customHeightVariableName>
+              <customHeightOffset>0</customHeightOffset>
+              <customHeightScale>1</customHeightScale>
+              <icon>
+                <type>Internal</type>
+                <href>771</href>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+              </icon>
+              <label>
+                <label></label>
+                <reformat>0</reformat>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+                <labelMode>Original</labelMode>
+              </label>
+            </style>
+            <position>AreaCenter</position>
+            <enablePopup>1</enablePopup>
+            <maxLevel>24</maxLevel>
+            <maxQuadCount>100</maxQuadCount>
+            <minLevel>5</minLevel>
+            <popupText></popupText>
+            <decimationMode>MaxFit</decimationMode>
+            <suppressDuplicateSites>0</suppressDuplicateSites>
+            <minQuadCount>0</minQuadCount>
+            <decimationRatio>0.5</decimationRatio>
+            <popupTextMode>Original</popupTextMode>
+            <balloonText></balloonText>
+            <balloonBgColor>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+            </balloonBgColor>
+            <balloonFgColor>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>255</balloonFgColor_element>
+            </balloonFgColor>
+            <balloonStyleMode>Basic</balloonStyleMode>
+            <balloonInsertHeader>0</balloonInsertHeader>
+            <balloonInsertDirections>0</balloonInsertDirections>
+          </site>
+          <filter>
+            <match>MatchAll</match>
+            <selectRules/>
+            <matchScript></matchScript>
+          </filter>
+        </displayRule>
+      </displayRules>
+      <preserveTextLevel>24</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>0</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>1</isExpandable>
+      <asset_uuid>927ab4b6-9132-11e0-b654-53ca0efc27a9</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">CAPlaces (3)</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">0</is_checked>
+        <desc useDefault="0"></desc>
+        <look_at useDefault="0"></look_at>
+        <kml_layer_url useDefault="0"></kml_layer_url>
+        <required_client_version useDefault="0"></required_client_version>
+        <required_client_vram useDefault="0"></required_client_vram>
+        <probability useDefault="0"></probability>
+        <save_locked useDefault="0">1</save_locked>
+        <required_user_agent useDefault="0"></required_user_agent>
+        <required_client_capabilities useDefault="0"></required_client_capabilities>
+        <client_config_script_name useDefault="0"></client_config_script_name>
+        <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales/>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+    <layer>
+      <channelId>27</channelId>
+      <assetRef></assetRef>
+      <legend></legend>
+      <lodForce/>
+      <displayRules/>
+      <preserveTextLevel>24</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>1</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>1</isExpandable>
+      <asset_uuid>5aa42f54-9132-11e0-a905-53ca0efc27a9</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">folder 4</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">0</is_checked>
+        <desc useDefault="0"></desc>
+        <look_at useDefault="0"></look_at>
+        <kml_layer_url useDefault="0">http://bob/foo.kml</kml_layer_url>
+        <required_client_version useDefault="0"></required_client_version>
+        <required_client_vram useDefault="0"></required_client_vram>
+        <probability useDefault="0"></probability>
+        <save_locked useDefault="0">1</save_locked>
+        <required_user_agent useDefault="0"></required_user_agent>
+        <required_client_capabilities useDefault="0"></required_client_capabilities>
+        <client_config_script_name useDefault="0"></client_config_script_name>
+        <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales/>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+    <layer>
+      <channelId>28</channelId>
+      <assetRef>USPlaces.kvasset</assetRef>
+      <legend>folder 4</legend>
+      <lodForce/>
+      <displayRules>
+        <displayRule>
+          <name>default select all</name>
+          <site>
+            <enabled>1</enabled>
+            <style>
+              <id>17</id>
+              <polyColor>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+                <polyColor_element>255</polyColor_element>
+              </polyColor>
+              <lineColor>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+                <lineColor_element>255</lineColor_element>
+              </lineColor>
+              <lineWidth>1</lineWidth>
+              <altitudeMode>ClampToGround</altitudeMode>
+              <extrude>0</extrude>
+              <enableCustomHeight>0</enableCustomHeight>
+              <customHeightVariableName></customHeightVariableName>
+              <customHeightOffset>0</customHeightOffset>
+              <customHeightScale>1</customHeightScale>
+              <icon>
+                <type>Internal</type>
+                <href>771</href>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+              </icon>
+              <label>
+                <label></label>
+                <reformat>0</reformat>
+                <normalColor>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                  <normalColor_element>255</normalColor_element>
+                </normalColor>
+                <highlightColor>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                  <highlightColor_element>255</highlightColor_element>
+                </highlightColor>
+                <normalScale>1</normalScale>
+                <highlightScale>1</highlightScale>
+                <labelMode>Original</labelMode>
+              </label>
+            </style>
+            <position>AreaCenter</position>
+            <enablePopup>1</enablePopup>
+            <maxLevel>24</maxLevel>
+            <maxQuadCount>100</maxQuadCount>
+            <minLevel>5</minLevel>
+            <popupText></popupText>
+            <decimationMode>MaxFit</decimationMode>
+            <suppressDuplicateSites>0</suppressDuplicateSites>
+            <minQuadCount>0</minQuadCount>
+            <decimationRatio>0.5</decimationRatio>
+            <popupTextMode>Original</popupTextMode>
+            <balloonText></balloonText>
+            <balloonBgColor>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+              <balloonBgColor_element>255</balloonBgColor_element>
+            </balloonBgColor>
+            <balloonFgColor>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>0</balloonFgColor_element>
+              <balloonFgColor_element>255</balloonFgColor_element>
+            </balloonFgColor>
+            <balloonStyleMode>Basic</balloonStyleMode>
+            <balloonInsertHeader>0</balloonInsertHeader>
+            <balloonInsertDirections>0</balloonInsertDirections>
+          </site>
+          <filter>
+            <match>MatchAll</match>
+            <selectRules/>
+            <matchScript></matchScript>
+          </filter>
+        </displayRule>
+      </displayRules>
+      <preserveTextLevel>24</preserveTextLevel>
+      <allowFeatureDuplication>0</allowFeatureDuplication>
+      <isVisible>1</isVisible>
+      <isEnabled>1</isEnabled>
+      <isExpandable>1</isExpandable>
+      <asset_uuid>1c59fc96-913d-11e0-8957-bf2586c421d4</asset_uuid>
+      <defaultLocale config_version="1">
+        <name useDefault="0">USPlaces (2)</name>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+        <labels useDefault="0">
+          <label>0</label>
+        </labels>
+        <is_checked useDefault="0">0</is_checked>
+        <desc useDefault="0"></desc>
+        <look_at useDefault="0"></look_at>
+        <kml_layer_url useDefault="0"></kml_layer_url>
+        <required_client_version useDefault="0">3.4.5</required_client_version>
+        <required_client_vram useDefault="0"></required_client_vram>
+        <probability useDefault="0"></probability>
+        <save_locked useDefault="0">1</save_locked>
+        <required_user_agent useDefault="0"></required_user_agent>
+        <required_client_capabilities useDefault="0"></required_client_capabilities>
+        <client_config_script_name useDefault="0"></client_config_script_name>
+        <diorama_data_channel_base useDefault="0">-1</diorama_data_channel_base>
+        <diorama_replica_data_channel_base useDefault="0">-1</diorama_replica_data_channel_base>
+      </defaultLocale>
+      <locales/>
+      <layerContextScript></layerContextScript>
+      <allowEmptyLayer>0</allowEmptyLayer>
+      <skipLayer>0</skipLayer>
+      <searchFields/>
+      <meta/>
+      <searchStyle></searchStyle>
+    </layer>
+  </layers>
+
+  <layerLODFiles>
+    <layerLODFile></layerLODFile>
+    <layerLODFile>lodtable.005</layerLODFile>
+    <layerLODFile>lodtable.008</layerLODFile>
+    <layerLODFile>lodtable.006</layerLODFile>
+    <layerLODFile>lodtable.009</layerLODFile>
+    <layerLODFile>lodtable.010</layerLODFile>
+    <layerLODFile>lodtable.011</layerLODFile>
+    <layerLODFile>lodtable.012</layerLODFile>
+    <layerLODFile></layerLODFile>
+    <layerLODFile>lodtable.014</layerLODFile>
+    <layerLODFile>lodtable.015</layerLODFile>
+    <layerLODFile></layerLODFile>
+    <layerLODFile></layerLODFile>
+    <layerLODFile>lodtable.018</layerLODFile>
+    <layerLODFile></layerLODFile>
+    <layerLODFile></layerLODFile>
+    <layerLODFile>lodtable.021</layerLODFile>
+    <layerLODFile></layerLODFile>
+    <layerLODFile>lodtable.023</layerLODFile>
+    <layerLODFile></layerLODFile>
+    <layerLODFile>lodtable.025</layerLODFile>
+    <layerLODFile>lodtable.026</layerLODFile>
+    <layerLODFile></layerLODFile>
+    <layerLODFile>lodtable.028</layerLODFile>
+  </layerLODFiles>
+
+  <layerProviderIds>
+    <layerProviderId>0</layerProviderId>
+    <layerProviderId>1</layerProviderId>
+    <layerProviderId>2</layerProviderId>
+    <layerProviderId>2</layerProviderId>
+    <layerProviderId>2</layerProviderId>
+    <layerProviderId>1</layerProviderId>
+    <layerProviderId>0</layerProviderId>
+    <layerProviderId>2</layerProviderId>
+    <layerProviderId>0</layerProviderId>
+    <layerProviderId>0</layerProviderId>
+    <layerProviderId>0</layerProviderId>
+    <layerProviderId>0</layerProviderId>
+    <layerProviderId>0</layerProviderId>
+    <layerProviderId>0</layerProviderId>
+    <layerProviderId>0</layerProviderId>
+    <layerProviderId>0</layerProviderId>
+    <layerProviderId>0</layerProviderId>
+    <layerProviderId>0</layerProviderId>
+    <layerProviderId>0</layerProviderId>
+    <layerProviderId>0</layerProviderId>
+    <layerProviderId>0</layerProviderId>
+    <layerProviderId>0</layerProviderId>
+    <layerProviderId>0</layerProviderId>
+    <layerProviderId>2</layerProviderId>
+  </layerProviderIds>
+
+</DBRootGenConfig>

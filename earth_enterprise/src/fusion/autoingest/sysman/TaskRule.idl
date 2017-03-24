@@ -1,0 +1,55 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+
+#include <string>
+#include <vector>
+
+class TaskRule {
+  enum Preference { DontCare, Prefer, Must };
+
+  class InputConstraint {
+    int num;       // -1 => all inputs
+    TaskRule::Preference localToJob;
+  };
+
+  class OutputConstraint {
+    class InputPref {
+      int num;    // -1 => all inputs
+      TaskRule::Preference pref;
+    }
+
+    uint num;
+    TaskRule::Preference localToJob = TaskRule::DontCare;
+    std::string requiredVolume = std::string();
+    std::string pathPattern    = std::string();
+    std::vector<TaskRule::OutputConstraint::InputPref> differentVolumes = std::vector<TaskRule::OutputConstraint::InputPref>();
+
+// re-enable when we define SUPPORT_TASK_RELOCATE
+//   std::string relocateVolume  = std::string();
+//   std::string relocatePattern = std::string();
+  };
+
+  class CPUConstraint {
+    uint minNumCPU = uint(1);
+    uint maxNumCPU = uint(1);
+  };
+
+  std::string taskname;
+  std::vector<InputConstraint>  inputConstraints;
+  std::vector<OutputConstraint> outputConstraints;
+  CPUConstraint cpuConstraint = TaskRule::CPUConstraint();
+
+#pragma LoadAndSave
+};

@@ -1,0 +1,414 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>VectorProductBase</class>
+<comment>  Copyright 2017 Google Inc.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+</comment>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>VectorProductBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>432</width>
+            <height>441</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Vector Product</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QLabel" row="3" column="0">
+            <property name="name">
+                <cstring>TextLabel3_3</cstring>
+            </property>
+            <property name="text">
+                <string>Provider:</string>
+            </property>
+        </widget>
+        <widget class="QGroupBox" row="5" column="0" rowspan="1" colspan="8">
+            <property name="name">
+                <cstring>GroupBox7</cstring>
+            </property>
+            <property name="title">
+                <string>Bounding Box</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QLayoutWidget" row="0" column="0">
+                    <property name="name">
+                        <cstring>Layout22</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>xminLabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>X Min:</string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>xmin</cstring>
+                            </property>
+                            <property name="readOnly">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget" row="0" column="1">
+                    <property name="name">
+                        <cstring>Layout22_4</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>xmaxLabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>X Max:</string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>xmax</cstring>
+                            </property>
+                            <property name="readOnly">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget" row="1" column="1">
+                    <property name="name">
+                        <cstring>Layout22_3</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>ymaxLabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Y Max:</string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>ymax</cstring>
+                            </property>
+                            <property name="readOnly">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget" row="1" column="0">
+                    <property name="name">
+                        <cstring>Layout22_2</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>yminLabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Y Min:</string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>ymin</cstring>
+                            </property>
+                            <property name="readOnly">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QLabel" row="4" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>TextLabel1_5</cstring>
+            </property>
+            <property name="text">
+                <string>Aquisition Date:</string>
+            </property>
+        </widget>
+        <widget class="QDateTimeEdit" row="4" column="3" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>aquisitionDate</cstring>
+            </property>
+        </widget>
+        <spacer row="4" column="7">
+            <property name="name">
+                <cstring>Spacer35</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>146</width>
+                    <height>0</height>
+                </size>
+            </property>
+        </spacer>
+        <spacer row="6" column="6" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>Spacer36</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>201</width>
+                    <height>0</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLayoutWidget" row="8" column="0" rowspan="1" colspan="8">
+            <property name="name">
+                <cstring>Layout26</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QTable">
+                    <column>
+                        <property name="text">
+                            <string>Field Name</string>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                    </column>
+                    <column>
+                        <property name="text">
+                            <string>Field Type</string>
+                        </property>
+                        <property name="pixmap">
+                            <pixmap></pixmap>
+                        </property>
+                    </column>
+                    <property name="name">
+                        <cstring>layerTable</cstring>
+                    </property>
+                    <property name="numRows">
+                        <number>0</number>
+                    </property>
+                    <property name="numCols">
+                        <number>2</number>
+                    </property>
+                    <property name="readOnly">
+                        <bool>true</bool>
+                    </property>
+                    <property name="selectionMode">
+                        <enum>SingleRow</enum>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLabel" row="6" column="0" rowspan="1" colspan="5">
+            <property name="name">
+                <cstring>TextLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Number of Features:</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="6" column="5">
+            <property name="name">
+                <cstring>featureCountTxt</cstring>
+            </property>
+            <property name="font">
+                <font>
+                    <family>Helvetica [Greek]</family>
+                    <pointsize>8</pointsize>
+                    <bold>1</bold>
+                </font>
+            </property>
+            <property name="text">
+                <string>0</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="7" column="0" rowspan="1" colspan="5">
+            <property name="name">
+                <cstring>TextLabel1_2</cstring>
+            </property>
+            <property name="text">
+                <string>Number of Fields:</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="7" column="5">
+            <property name="name">
+                <cstring>fieldCountTxt</cstring>
+            </property>
+            <property name="font">
+                <font>
+                    <family>Helvetica [Greek]</family>
+                    <pointsize>8</pointsize>
+                    <bold>1</bold>
+                </font>
+            </property>
+            <property name="text">
+                <string>0</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>TextLabel1_3_2</cstring>
+            </property>
+            <property name="text">
+                <string>Data Type:</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="2" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>productTypeLabel</cstring>
+            </property>
+            <property name="font">
+                <font>
+                    <family>Helvetica [Greek]</family>
+                    <pointsize>8</pointsize>
+                    <bold>1</bold>
+                </font>
+            </property>
+            <property name="text">
+                <string>Vector</string>
+            </property>
+        </widget>
+        <spacer row="2" column="4" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>Spacer12</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>288</width>
+                    <height>0</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>TextLabel3_2</cstring>
+            </property>
+            <property name="text">
+                <string>Source:</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>TextLabel3</cstring>
+            </property>
+            <property name="text">
+                <string>Name:</string>
+            </property>
+        </widget>
+        <widget class="QComboBox" row="3" column="1" rowspan="1" colspan="6">
+            <property name="name">
+                <cstring>vendorCombo</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="7">
+            <property name="name">
+                <cstring>productNameEdit</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="7">
+            <property name="name">
+                <cstring>srcName</cstring>
+            </property>
+            <property name="readOnly">
+                <bool>true</bool>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

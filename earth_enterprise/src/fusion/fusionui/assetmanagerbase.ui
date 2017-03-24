@@ -1,0 +1,884 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>AssetManagerBase</class>
+<comment>  Copyright 2017 Google Inc.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+</comment>
+<widget class="QMainWindow">
+    <property name="name">
+        <cstring>AssetManagerBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>816</width>
+            <height>646</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Asset Manager</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>4</number>
+        </property>
+        <property name="spacing">
+            <number>4</number>
+        </property>
+        <widget class="QSplitter" row="1" column="0">
+            <property name="name">
+                <cstring>folder_splitter</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <widget class="QListView">
+                <column>
+                    <property name="text">
+                        <string>Folders</string>
+                    </property>
+                    <property name="clickable">
+                        <bool>false</bool>
+                    </property>
+                    <property name="resizable">
+                        <bool>false</bool>
+                    </property>
+                </column>
+                <property name="name">
+                    <cstring>categories</cstring>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>200</width>
+                        <height>0</height>
+                    </size>
+                </property>
+                <property name="defaultRenameAction">
+                    <enum>Accept</enum>
+                </property>
+            </widget>
+            <widget class="QLayoutWidget">
+                <property name="name">
+                    <cstring>layout134</cstring>
+                </property>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QFrame">
+                        <property name="name">
+                            <cstring>filterFrame</cstring>
+                        </property>
+                        <property name="frameShape">
+                            <enum>NoFrame</enum>
+                        </property>
+                        <property name="frameShadow">
+                            <enum>Raised</enum>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <property name="spacing">
+                                <number>15</number>
+                            </property>
+                            <widget class="QLayoutWidget" row="0" column="0">
+                                <property name="name">
+                                    <cstring>layout6</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>textLabel1_3</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Type:</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QComboBox">
+                                        <item>
+                                            <property name="text">
+                                                <string>All</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>Vector</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>Imagery</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>Terrain</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>Map</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>Earth</string>
+                                            </property>
+                                        </item>
+                                        <property name="name">
+                                            <cstring>typeCombo</cstring>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                            <widget class="QLayoutWidget" row="0" column="1">
+                                <property name="name">
+                                    <cstring>layout7</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>textLabel2</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Category:</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QComboBox">
+                                        <item>
+                                            <property name="text">
+                                                <string>All</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>Resource</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>Layer</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>Project</string>
+                                            </property>
+                                        </item>
+                                        <item>
+                                            <property name="text">
+                                                <string>Database</string>
+                                            </property>
+                                        </item>
+                                        <property name="name">
+                                            <cstring>subtypeCombo</cstring>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                            <spacer row="0" column="2">
+                                <property name="name">
+                                    <cstring>spacer11_3</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>210</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QCheckBox" row="0" column="3">
+                                <property name="name">
+                                    <cstring>showHiddenCheck</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Show hidden assets</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QTabWidget">
+                        <property name="name">
+                            <cstring>assetTabWidget</cstring>
+                        </property>
+                        <property name="tabPosition">
+                            <enum>Bottom</enum>
+                        </property>
+                        <widget class="QWidget">
+                            <property name="name">
+                                <cstring>tab</cstring>
+                            </property>
+                            <attribute name="title">
+                                <string>List</string>
+                            </attribute>
+                            <grid>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="AssetTableView" row="0" column="0">
+                                    <property name="name">
+                                        <cstring>assetTableView</cstring>
+                                    </property>
+                                </widget>
+                            </grid>
+                        </widget>
+                        <widget class="QWidget">
+                            <property name="name">
+                                <cstring>tab</cstring>
+                            </property>
+                            <attribute name="title">
+                                <string>Thumbnail</string>
+                            </attribute>
+                            <grid>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <property name="margin">
+                                    <number>0</number>
+                                </property>
+                                <property name="spacing">
+                                    <number>0</number>
+                                </property>
+                                <widget class="QLayoutWidget" row="0" column="0">
+                                    <property name="name">
+                                        <cstring>Layout27</cstring>
+                                    </property>
+                                    <vbox>
+                                        <property name="name">
+                                            <cstring>unnamed</cstring>
+                                        </property>
+                                        <property name="margin">
+                                            <number>0</number>
+                                        </property>
+                                        <property name="spacing">
+                                            <number>2</number>
+                                        </property>
+                                        <widget class="QSlider">
+                                            <property name="name">
+                                                <cstring>scale_slider</cstring>
+                                            </property>
+                                            <property name="sizePolicy">
+                                                <sizepolicy>
+                                                    <hsizetype>0</hsizetype>
+                                                    <vsizetype>0</vsizetype>
+                                                    <horstretch>0</horstretch>
+                                                    <verstretch>0</verstretch>
+                                                </sizepolicy>
+                                            </property>
+                                            <property name="minimumSize">
+                                                <size>
+                                                    <width>0</width>
+                                                    <height>110</height>
+                                                </size>
+                                            </property>
+                                            <property name="maximumSize">
+                                                <size>
+                                                    <width>17</width>
+                                                    <height>100</height>
+                                                </size>
+                                            </property>
+                                            <property name="minValue">
+                                                <number>128</number>
+                                            </property>
+                                            <property name="maxValue">
+                                                <number>512</number>
+                                            </property>
+                                            <property name="orientation">
+                                                <enum>Vertical</enum>
+                                            </property>
+                                        </widget>
+                                        <spacer>
+                                            <property name="name">
+                                                <cstring>Spacer14</cstring>
+                                            </property>
+                                            <property name="orientation">
+                                                <enum>Vertical</enum>
+                                            </property>
+                                            <property name="sizeType">
+                                                <enum>Expanding</enum>
+                                            </property>
+                                            <property name="sizeHint">
+                                                <size>
+                                                    <width>0</width>
+                                                    <height>350</height>
+                                                </size>
+                                            </property>
+                                        </spacer>
+                                    </vbox>
+                                </widget>
+                                <widget class="AssetIconView" row="0" column="1">
+                                    <property name="name">
+                                        <cstring>assetIconView</cstring>
+                                    </property>
+                                </widget>
+                            </grid>
+                        </widget>
+                    </widget>
+                </vbox>
+            </widget>
+        </widget>
+        <widget class="QLayoutWidget" row="0" column="0">
+            <property name="name">
+                <cstring>layout14</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>Layout3</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
+                        </property>
+                        <property name="spacing">
+                            <number>6</number>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>TextLabel1</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Location:</string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>locationLineEdit</cstring>
+                            </property>
+                            <property name="readOnly">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>refreshBtn</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Refresh</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </grid>
+</widget>
+<menubar>
+    <property name="name">
+        <cstring>MenuBar</cstring>
+    </property>
+    <item text="&amp;File" name="fileMenu">
+        <action name="fileNewAction"/>
+    </item>
+    <item text="&amp;Window" name="Window">
+        <action name="windowCloseAllAction"/>
+        <action name="windowCascadeAction"/>
+        <separator/>
+    </item>
+</menubar>
+<toolbars>
+    <toolbar dock="2">
+        <property name="name">
+            <cstring>Toolbar</cstring>
+        </property>
+        <property name="label">
+            <string>Toolbar</string>
+        </property>
+        <widget class="QComboBox">
+            <item>
+                <property name="text">
+                    <string>Earth Tools (3D)</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Mercator Map Tools (2D)</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Flat Projection Map Tools (2D)</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>toolbar_chooser_combo</cstring>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Select Desired Earth(3D) or Map(2D) Toolset</string>
+            </property>
+        </widget>
+        <action name="newVectorResourceAction"/>
+        <action name="newVectorProjectAction"/>
+        <action name="newImageryResourceAction"/>
+        <action name="newImageryProjectAction"/>
+        <action name="newTerrainResourceAction"/>
+        <action name="newTerrainProjectAction"/>
+        <action name="newDatabaseAction"/>
+        <action name="newImageryResourceMercatorAction"/>
+        <action name="newImageryProjectMercatorAction"/>
+        <action name="newMapLayerAction"/>
+        <action name="newMapProjectAction"/>
+        <action name="newMapDatabaseMercatorAction"/>
+        <action name="newMapDatabaseAction"/>
+    </toolbar>
+</toolbars>
+<customwidgets>
+    <customwidget>
+        <class>AssetIconView</class>
+        <header location="global">AssetIconView.h</header>
+        <sizehint>
+            <width>100</width>
+            <height>100</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
+    </customwidget>
+    <customwidget>
+        <class>AssetTableView</class>
+        <header location="global">AssetTableView.h</header>
+        <sizehint>
+            <width>100</width>
+            <height>100</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+        <pixmap>image0</pixmap>
+    </customwidget>
+</customwidgets>
+<actions>
+    <action>
+        <property name="name">
+            <cstring>fileNewAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>filenew</iconset>
+        </property>
+        <property name="text">
+            <string>New Asset</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;New Asset</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+N</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>newVectorResourceAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>vector_asset.png</iconset>
+        </property>
+        <property name="text">
+            <string>New Vector Resource</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>newImageryResourceAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>imagery_asset.png</iconset>
+        </property>
+        <property name="text">
+            <string>New Imagery Resource</string>
+        </property>
+        <property name="toolTip">
+            <string>New Imagery Resource</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>newTerrainResourceAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>terrain_asset.png</iconset>
+        </property>
+        <property name="text">
+            <string>New Terrain Resource</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>newVectorProjectAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>vector_project.png</iconset>
+        </property>
+        <property name="text">
+            <string>New Vector Project</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>newImageryProjectAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>imagery_project.png</iconset>
+        </property>
+        <property name="text">
+            <string>New Imagery Project</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>newTerrainProjectAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>terrain_project.png</iconset>
+        </property>
+        <property name="text">
+            <string>New Terrain Project</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>newMapLayerAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>map_layer.png</iconset>
+        </property>
+        <property name="text">
+            <string>New Map Layer</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>newMapProjectAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>map_project.png</iconset>
+        </property>
+        <property name="text">
+            <string>New Map Project</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>newDatabaseAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>database.png</iconset>
+        </property>
+        <property name="text">
+            <string>New Earth (3D) Database</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>windowCloseAllAction</cstring>
+        </property>
+        <property name="text">
+            <string>Close All</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Close All</string>
+        </property>
+        <property name="toolTip">
+            <string>Close All Asset Windows</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>windowCascadeAction</cstring>
+        </property>
+        <property name="text">
+            <string>Cascade</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>newMapDatabaseAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>map_database.png</iconset>
+        </property>
+        <property name="text">
+            <string>New Map (Flat Projection) Database</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>Action</cstring>
+        </property>
+        <property name="text">
+            <string>Unnamed</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>newImageryResourceMercatorAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>imagery_asset_mercator.png</iconset>
+        </property>
+        <property name="text">
+            <string>New Mercator Imagery Resource</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>newImageryProjectMercatorAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>imagery_project_mercator.png</iconset>
+        </property>
+        <property name="text">
+            <string>New Mercator Imagery Project</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>newMapDatabaseMercatorAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>map_database_mercator.png</iconset>
+        </property>
+        <property name="text">
+            <string>New Mercator Map Database</string>
+        </property>
+    </action>
+</actions>
+<images>
+    <image name="image0">
+        <data format="XBM.GZ" length="79">789c534e494dcbcc4b554829cdcdad8c2fcf4c29c95030e0524611cd48cd4ccf28010a1797249664262b2467241641a592324b8aa363156c15aab914146aadb90067111b1f</data>
+    </image>
+</images>
+<connections>
+    <connection>
+        <sender>categories</sender>
+        <signal>selectionChanged()</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>selectFolder()</slot>
+    </connection>
+    <connection>
+        <sender>scale_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>resizeIconView(int)</slot>
+    </connection>
+    <connection>
+        <sender>refreshBtn</sender>
+        <signal>released()</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>refresh()</slot>
+    </connection>
+    <connection>
+        <sender>typeCombo</sender>
+        <signal>activated(int)</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>filterType(int)</slot>
+    </connection>
+    <connection>
+        <sender>subtypeCombo</sender>
+        <signal>activated(int)</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>filterSubType(int)</slot>
+    </connection>
+    <connection>
+        <sender>showHiddenCheck</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>showHiddenAssets(bool)</slot>
+    </connection>
+    <connection>
+        <sender>categories</sender>
+        <signal>collapsed(QListViewItem*)</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>childCollapsed(QListViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>fileNewAction</sender>
+        <signal>activated()</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>CreateNewAsset()</slot>
+    </connection>
+    <connection>
+        <sender>newDatabaseAction</sender>
+        <signal>activated()</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>NewDatabase()</slot>
+    </connection>
+    <connection>
+        <sender>newVectorResourceAction</sender>
+        <signal>activated()</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>NewVectorAsset()</slot>
+    </connection>
+    <connection>
+        <sender>newVectorProjectAction</sender>
+        <signal>activated()</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>NewVectorProject()</slot>
+    </connection>
+    <connection>
+        <sender>newTerrainResourceAction</sender>
+        <signal>activated()</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>NewTerrainAsset()</slot>
+    </connection>
+    <connection>
+        <sender>newTerrainProjectAction</sender>
+        <signal>activated()</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>NewTerrainProject()</slot>
+    </connection>
+    <connection>
+        <sender>newImageryResourceAction</sender>
+        <signal>activated()</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>NewImageryAsset()</slot>
+    </connection>
+    <connection>
+        <sender>newImageryProjectAction</sender>
+        <signal>activated()</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>NewImageryProject()</slot>
+    </connection>
+    <connection>
+        <sender>newMapLayerAction</sender>
+        <signal>activated()</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>NewMapLayer()</slot>
+    </connection>
+    <connection>
+        <sender>newMapProjectAction</sender>
+        <signal>activated()</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>NewMapProject()</slot>
+    </connection>
+    <connection>
+        <sender>windowCloseAllAction</sender>
+        <signal>activated()</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>CloseAllWindows()</slot>
+    </connection>
+    <connection>
+        <sender>windowCascadeAction</sender>
+        <signal>activated()</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>CascadeWindows()</slot>
+    </connection>
+    <connection>
+        <sender>newMapDatabaseAction</sender>
+        <signal>activated()</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>NewMapDatabase()</slot>
+    </connection>
+    <connection>
+        <sender>newImageryProjectMercatorAction</sender>
+        <signal>activated()</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>NewMercatorImageryProject()</slot>
+    </connection>
+    <connection>
+        <sender>newMapDatabaseMercatorAction</sender>
+        <signal>activated()</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>NewMercatorMapDatabase()</slot>
+    </connection>
+    <connection>
+        <sender>newImageryResourceMercatorAction</sender>
+        <signal>activated()</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>NewMercatorImageryAsset()</slot>
+    </connection>
+    <connection>
+        <sender>toolbar_chooser_combo</sender>
+        <signal>activated(int)</signal>
+        <receiver>AssetManagerBase</receiver>
+        <slot>ToolbarChooserComboActivated(int)</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>categories</tabstop>
+    <tabstop>assetTabWidget</tabstop>
+    <tabstop>scale_slider</tabstop>
+    <tabstop>locationLineEdit</tabstop>
+</tabstops>
+<signals>
+    <signal>locationChanged( const QString &amp; )</signal>
+</signals>
+<slots>
+    <slot>addAsset()</slot>
+    <slot>clearSearch()</slot>
+    <slot>deleteAsset()</slot>
+    <slot>resizeIconView( int )</slot>
+    <slot>searchNow()</slot>
+    <slot>selectFolder()</slot>
+    <slot>refresh()</slot>
+    <slot>filterType( int )</slot>
+    <slot>filterSubType( int )</slot>
+    <slot>childCollapsed( QListViewItem * )</slot>
+    <slot>showHiddenAssets( bool )</slot>
+    <slot>CreateNewAsset()</slot>
+    <slot>NewVectorAsset()</slot>
+    <slot>NewVectorProject()</slot>
+    <slot>NewImageryAsset()</slot>
+    <slot>NewImageryProject()</slot>
+    <slot>NewTerrainAsset()</slot>
+    <slot>NewTerrainProject()</slot>
+    <slot>NewMapLayer()</slot>
+    <slot>NewMapProject()</slot>
+    <slot>NewKMLProject()</slot>
+    <slot>NewDatabase()</slot>
+    <slot>CloseAllWindows()</slot>
+    <slot>CascadeWindows()</slot>
+    <slot>NewMapDatabase()</slot>
+    <slot>NewMercatorImageryProject()</slot>
+    <slot>NewMercatorMapDatabase()</slot>
+    <slot>New()</slot>
+    <slot>NewMercatorImageryAsset()</slot>
+    <slot>ToolbarChooserComboActivated( int )</slot>
+</slots>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>AssetTableView.h</includehint>
+    <includehint>AssetIconView.h</includehint>
+</includehints>
+</UI>

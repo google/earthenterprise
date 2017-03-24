@@ -1,0 +1,31 @@
+   _        ___  ____ ____  ____
+  |_|_ _   / _ \/ ___/ ___||  _ \   _ __ ___  _ __ ___
+  _|_||_| | | | \___ \___ \| |_) | | '_ ` _ \| '_ ` _ \
+ |_||_|_| | |_| |___) |__) |  __/  | | | | | | | | | | |
+  |_|_|_|  \___/|____/____/|_|     |_| |_| |_|_| |_| |_|
+
+  OSSP mm - Shared Memory Allocation
+  Copyright (c) 1999-2006 Ralf S. Engelschall <rse@engelschall.com>
+  Copyright (c) 1999-2006 The OSSP Project <http://www.ossp.org/>
+  Version 1.4.2 (15-Aug-2006)
+
+  OSSP mm is a 2-layer abstraction library which simplifies the usage of
+  shared memory between forked (and this way strongly related) processes
+  under Unix platforms. On the first (lower) layer it hides all platform
+  dependent implementation details (allocation and locking) when dealing
+  with shared memory segments and on the second (higher) layer it
+  provides a high-level malloc(3)-style API for a convenient and well
+  known way to work with data-structures inside those shared memory
+  segments.
+
+  This library was successfully tested on FreeBSD, OpenBSD, NetBSD,
+  BSDI, Linux, SunOS, Solaris, Tru64, AIX, A/UX, HP-UX, ReliantUNIX,
+  IRIX, UnixWare and even Win32 Cygwin, BeOS and OS/390.
+
+  The documentation and latest release can be found on
+  http://www.ossp.org/pkg/lib/mm/
+
+                                       Ralf S. Engelschall
+                                       rse@engelschall.com
+                                       www.engelschall.com
+

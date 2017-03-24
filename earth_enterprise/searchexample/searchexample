@@ -1,0 +1,47 @@
+#!/bin/bash
+# Copyright 2008 Google Inc. All Rights Reserved.
+
+set -e
+
+VARDIR=/var/opt/google/pgsql
+SHAREDIR=/opt/google/share
+SQLDIR=$SHAREDIR/postgresql/contrib
+BINDIR=/opt/google/bin
+
+if [ ! -n "$1" ]
+then
+  echo "Usage: search {create|delete}"
+  exit 1
+fi
+
+# Start postmaster.
+if [ ! -f $VARDIR/data/postmaster.pid ] 
+then
+  echo You must start the postmaster...exiting.
+  exit 1
+fi
+
+if [ $1 == "create" ]
+then
+  echo "Creating SEARCH EXAMPLE database..."
+  query="select count(1) from pg_catalog.pg_database where datname = 'searchexample'"
+  cmd="$BINDIR/psql  -U geuser -t -c \"$query\" template1"
+  db_exists=`eval $cmd`
+  if [ $db_exists -eq 1 ] ; then
+    echo SEARCH EXAMPLE database already exists...exiting.
+    exit 0
+  fi
+  $BINDIR/createdb -U geuser --owner=geuser searchexample
+  $BINDIR/createlang -U geuser plpgsql searchexample
+  $BINDIR/psql -q -U geuser -d searchexample -f $SQLDIR/postgis.sql 2>/dev/null >/dev/null
+#  $BINDIR/psql -q -U geuser -d searchexample -f $SQLDIR/postgis_upgrade.sql 2>/dev/null >/dev/null
+  $BINDIR/psql -q -U geuser -d searchexample -f $SQLDIR/spatial_ref_sys.sql 2>/dev/null >/dev/null
+  zcat $SHAREDIR/searchexample/searchexample_db.gz | $BINDIR/psql -q -U geuser -d searchexample 2>/dev/null >/dev/null
+else
+  if [ $1 == "delete" ]
+  then
+    echo "Deleting searchexample database..."
+    $BINDIR/dropdb -U geuser searchexample
+  fi
+fi
+

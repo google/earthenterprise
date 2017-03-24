@@ -1,0 +1,106 @@
+<!--
+  Copyright 2017 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE html>
+<head>
+
+  <script type="text/javascript" src="../js/jquery.js"></script>
+  <script type="text/javascript" src="/js/gees_utilities.js"></script>
+  <script type="text/javascript" src="/js/gees_initialize.js"></script>
+  <script type="text/javascript" src="/js/togeojson.js"></script>
+  <script type="text/javascript" src="/cutter/js/glc_tools.js"></script>
+
+  <LINK href="/cutter/css/style.css" rel="stylesheet" type="text/css">
+  <LINK href="/cutter/css/buttons.css" rel="stylesheet" type="text/css">
+  <LINK href="/cutter/css/dropdown.css" rel="stylesheet" type="text/css">
+  <LINK href="/cutter/css/glc_style.css" rel="stylesheet" type="text/css">
+  <LINK rel="icon" type="image/png" href="/shared_assets/images/google_favicon.ico">
+
+  <title>GEE Server - GLC disassembly</title>
+
+<style type="text/css">
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  background:#F1F1F1 url('images/drop_arrow.png') no-repeat scroll right center;
+  -moz-background: none;
+  padding: 4px 8px;
+  background-color: #F1F1F1;
+  border: 1px solid #DCDCDC;
+  border-radius: 1px;
+}
+
+</style>
+
+</head>
+<body>
+
+<div id="header_glc">
+  <div id="goog_img">
+    <img src="/shared_assets/images/GEE_Server_Header.png" width="103px" height="36px" border="0">
+    <label>Earth Enterprise Server</label>
+  </div>
+</div>
+
+<div id="top_bar">GLC disassembly tool</div>
+
+<div id="right_bar">
+  <span>
+    <label>Glc path</label>
+    <select type="text" name="path" class="glc_name_field" id="GlcSelect" onchange="updateDisassemblyDisplay()"></select>
+  </span>
+  <span>
+    <label>New output directory</label>
+    <input type="text" name="dir" class="glc_name_field" id="output_directory" placeholder="new output directory">
+    <em></em>
+  </span>
+  <input id="DisassembleButton" type="submit" value="Disassemble glc" class="button blue Muted" onclick="disassembleGlc()">
+</div>
+
+<!-- ERROR BAR -->
+
+<div id="ErrorBar">
+  <span id="ErrorBarMessage"></span>
+  <a href="#" onclick="gees.dom.hide('ErrorBar');">close</a>
+</div>
+
+<div id="ClearOverlay" onclick="closeDropDown()"></div>
+
+<div id="BuildProgress">
+  <h1>Disassembly details
+    <a href="#" onclick="gees.dom.hide('BuildProgress');">close</a>
+  </h1>
+  <span id="status">Build in progress...</span>
+</div>
+
+<script type="text/javascript">
+  var select = gees.dom.get('GlcSelect');
+  var option = gees.dom.create('option');
+  gees.dom.setHtml(option, '-- select a glc to disassemble --');
+  select.appendChild(option);
+  for (var i = 0; i < gees.assets.portables.length; i++) {
+    var item = gees.assets.portables[i];
+    if (gees.tools.isGlcPortable(item)) {
+      option = gees.dom.create('option');
+      var name = '/opt/google/gehttpd/htdocs/cutter/globes/' + item.name;
+      gees.dom.setHtml(option, name);
+      select.appendChild(option);
+    }
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,725 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Fundamentals</title>
+</head>
+
+<body>
+
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" />
+  </div>
+  <h1 id="doc_title">Reference Guide</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Reference Guide</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="intro.html">Introduction</a></li>
+    <li><a href="fundamentals.html" id="selected">Fundamentals</a></li>
+    <li><a href="setup.html">Setting Up Your Workspace</a></li>
+    <li><a href="resources.html">Defining Resources</a></li>
+    <li><a href="projects.html">Defining Projects</a></li>
+    <li><a href="databases.html">Defining and Publishing Databases</a></li>
+    <li><a href="building.html">Building Assets</a></li>
+    <li><a href="maps.html">Preparing Data for Google Maps</a></li>
+    <li><a href="commands.html">Command Line Reference</a></li>
+    <li><a href="createOwnData.html">Creating Your Own Source Data, Icons, and Masks</a></li>
+    <li><a href="htmlTags.html">HTML Tags Allowed</a></li>
+    <li><a href="plugins.html">Google Earth Plugin</a></li>
+    <li><a href="errors.html">Common Error Messages</a></li>
+    <li><a href="glossary.html">Glossary</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+
+<h1>Fundamentals</h1>
+<p>Before using Google Earth Enterprise Fusion, review the content of this chapter, which explains concepts and components fundamental to the software.
+</p>
+<ol class="toc">
+  <li><a href="#launching">Launching Fusion</a></li>
+  <li><a href="#using">Using the  Fusion GUI</a></li>
+  <li><a href="#previewing">Previewing Data</a></li>
+  <li><a href="#using_the_asset_manager">Using the Asset Manager</a></li>
+  <li><a href="#editors">Using the Asset Editors</a></li>
+</ol>
+<h2 id="launching">Launching  Fusion
+</h2>
+<p>To launch the Google Earth Enterprise Fusion GUI, open a terminal window, and enter <code>fusion</code> at the prompt. When the applications starts, the Google Earth Enterprise Fusion GUI appears.
+</p>
+<h2 id="using">Using the  Fusion GUI
+</h2>
+<p>Google Earth Enterprise Fusion integrates the Google Earth patent-pending software with your source data--imagery, terrain, vector, even your own comma-separated (<code>.csv</code>) data. Using the Google Earth Enterprise Fusion GUI, you can import source data, configure the display of data, and publish your work to a Google Earth server.
+</p>
+<p>If you prefer, you can perform many of these steps from the command line. For complete information about how to perform these steps from the command line, see the <a href="commands.html"> Command Line Reference</a> chapter.
+</p>
+<p>The Google Earth Enterprise Fusion GUI provides a multi-paned workspace that allows you to manage assets and the process of building a publishable database. You can also use the GUI to view the internal data fields for vector files and additional data that you enter for your assets.
+</p>
+<img src="images/workspaceBlank.png"  />
+<h3>The Data Preview Panes
+</h3>
+<p>The Google Earth Enterprise Fusion GUI provides three data preview panes:
+</p>
+<ul>
+  <li>Preview pane: List of data sources and assets that are displayed in the Preview pane</li>
+  <li>Preview List pane: Preview of vector and imagery data</li>
+  <li>Attribute Table: The selected data in the displayed vector file in row and column format</li>
+</ul>
+<h4>Customizing the Preview Panes</h4>
+<p>You can show or hide the Preview List and Attribute Table panes individually.
+</p>
+<p>You can also dock the Preview List and Attribute Table panes to any side of the main window or position them on your desktop as independent windows. To move a pane, grab the docking handle on the top or left side of the pane with your mouse and drag it to its new location.
+</p>
+<p>Use the close boxes (<strong>X</strong>) at the top of the Preview List or Attribute Tables to hide them. The remaining panes fill the GUI. 
+</p>
+<ul>
+  <li>To show the Attribute Table when it is hidden, select <strong>View &gt; Attribute Table</strong>. </li>
+  <li>To show the Preview List pane when it is hidden, select <strong>View &gt; Preview List</strong>. </li>
+</ul>
+<p>When each pane is redisplayed, it appears in the same position it was in when it was hidden.
+</p>
+<p>You can customize these panes to suit your preferences and make the best use of available screen space. If you exit Google Earth Enterprise Fusion and later restart it, the GUI configuration is the same as it was when you exited.
+</p>
+
+<h5>Controlling Automatic Display of the Attribute Table</h5>
+
+<p>When working with the Preview pane, it is common to close the Attribute Table to allow more space for the imagery display. However, when working with vector data, you can set a preference to automatically display the Attribute Table when vector features are selected. To do so, select <strong>Auto-Show Selected Data</strong> in the Attribute Table section of the Preferences dialog.</p>
+<p>See <a href="setup.html#setting_your_preferences">Setting Your Preferences</a> in the <strong>Setting Up Your Workspace</strong> chapter for more information.</p>
+
+<h3 id="the_menu_bar">The Menu Bar</h3>
+<p><img src="images/menubarMain.png" /></p>
+<p>The menu bar provides options from six menus. The menus and their options are:
+</p>
+<ul>
+  <li><strong>File Menu</strong>
+    <ul>
+      <li><strong>Open</strong> - Open an asset in the Preview pane. See the <a href="fundamentals.html#51354">Previewing Data</a> section of this chapter for more information about the Preview pane.</li>
+      <li><strong>Exit</strong> - Close the Google Earth Enterprise Fusion GUI.      </li>
+    </ul>
+  </li>
+  <li><strong>Edit Menu</strong>
+    <ul>
+      <li><strong>Enable All Layers</strong> - Check all check boxes in the Preview List pane.      </li>
+      <li><strong>Disable All Layers</strong> - Uncheck all check boxes in the Preview List pane.      </li>
+      <li><strong>Expand All Layers</strong> - Show the display rules for all layers listed in the Preview List pane. When the layers are expanded, you can right-click the name of a display rule for a layer and select <strong>Configure Display Rules</strong> to display the Display Rules dialog for that rule.
+        <p>See the <a href="projects.html#configuring_display_rules">Configuring Display Rules</a> section of the <strong>Defining Projects</strong> chapter for more information.</p>
+      </li>
+      <li><strong>Collapse All Layers</strong> - Hide the display rules for all layers listed in the Preview List pane.      </li>
+      <li><strong>Preferences</strong> - Open the Preferences dialog to set your preferences. These are described in the <a href="setup.html#setting_your_preferences">Setting Your Preferences</a> section of the chapter on <strong>Setting Up Your Workspace</strong>.</li>
+    </ul>
+  </li>
+  <li><strong>Tools Menu</strong>
+    <ul>
+      <li><strong>Asset Manager</strong> - See the section on <a href="fundamentals.html#using_the_asset_manager">Using the Asset Manager</a> in this chapter for details on managing your assets.      </li>
+      <li><strong>DB Snippet Manager </strong>- Manage your preferences to the DBRoot.
+          Many of these preferences (or snippets) apply to display characteristics,
+          such as showing or hiding the Google logo in Google Earth EC. Please refer to the <strong>Administration Guide</strong> for more information.</li>
+      <li><strong>Favorites Manager - </strong>Manage your list of favorites in Google Earth Enterprise Fusion. More on <a href="fundamentals.html#35107">Adding and Managing Favorites</a> can be found later in this chapter.</li>
+      <li><strong>Icon Manager</strong> - Create, import, and manage custom icons. See the <a href="setup.html#52623"> Managing Icons</a> section of the <strong>Setting Up Your Workspace</strong> chapter. </li>
+      <li><strong>Label Manager</strong> - Specify custom labels for layers in vector projects. See <a href="setup.html#89468">Managing Labels</a> in  the <strong>Setting Up Your Workspace</strong> chapter.</li>
+      <li><strong>Locale Manager</strong> - Set up and manage the locales you intend to support in your databases. See <a href="setup.html#33187">Managing Locales</a>.</li>
+      <li><strong>Provider Manager</strong> - Set up and manage the list of providers from whom you receive source data. See <a href="setup.html#79671">Managing Data Providers</a> for more information.      </li>
+      <li><strong>Search Tab Manager</strong> - Add and pre-configure the search tabs that you can add to your databases later. Refer to <a href="setup.html#12547">Managing Search Tabs</a>. </li>
+      <li><strong>Server Associations Manager</strong> - Specify server associations
+          in preparation for publishing your databases. Refer to the <strong>Administration Guide</strong> for more information.</li>
+      <li><strong>System Manager</strong> - Track the progress of various processes in the Google Earth Enterprise Fusion system. Please read the section on <a href="building.html#45648">Monitoring Current and Recent Activity</a> in the <strong>Building Assets</strong> chapter.</li>
+    </ul>
+  </li>
+  <li><strong><a id="marker-1031232"></a>Navigation Menu</strong>
+    <ul>
+      <li><strong>Add Favorite</strong> - Add the current location to your Favorites list, so you can find it again quickly in Google Earth Enterprise Fusion. See <a href="fundamentals.html#35107">Adding and Managing Favorites</a>. </li>
+      <li><strong>Reset View</strong> - Reset the Preview pane to the default view.      </li>
+    </ul>
+  </li>
+  <li><strong><a id="marker-1031233"></a>View Menu</strong>
+    <ul>
+      <li><strong>Preview List </strong>- Display or hide the Preview List pane. See <a href="fundamentals.html#51354">Previewing Data</a>. </li>
+      <li><strong>Attribute Table </strong>- Display or hide the Attribute Table, which lists the attribute data for the features selected in the Preview pane.      </li>
+      <li><strong>Toggle Textures</strong> - Display or hide the imagery in the Preview pane. Use this option when you have a vector layer that you want to examine without underlying imagery. This can be helpful when the color of the data does not contrast enough with the underlying texture, and you want to see the lines more clearly.      </li>
+      <li><strong>Toggle Base Texture</strong> - Display or hide the base texture (the default imagery) in the Preview pane. Use this feature when you have an imagery <i>inset</i> positioned over a base texture, and you want to see the inset separately from the base texture.      </li>
+      <li><strong>Cycle Mask Textures </strong>- Cycle through four ways to view the mask for an imagery inset.
+        <ul>
+          <li>Render the imagery with the transparent portion of the mask showing through to the base texture. This view is most representative of how the imagery will look in Google Earth EC (default view).          </li>
+          <li>Render the imagery as red with the transparent portion of the mask showing through to the base texture. This is a good way to view the cropped coverage of the imagery with the mask when the original imagery is very close in color to the background.          </li>
+          <li>Render the imagery as red and the transparent portion of the mask as blue. This is a good way to visualize the effect of the current feathering setting.          </li>
+          <li>Render the original imagery with no masking. This is good way to look at the original data to help debug masking problems.          </li>
+        </ul>
+      </li>
+      <li><strong>Snap to Level</strong> - Lock zooming to integral zoom levels (such as 1, 2, 3, 4, and so on) to allow you to preview map tiles, which are not scalable in your web browser.      </li>
+    </ul>
+  </li>
+  <li><strong><a id="marker-1031234"></a>Help Menu</strong>
+    <ul>
+      <li><strong>Contents</strong> - Display the table of contents for the Google Earth Enterprise Fusion online help system.      </li>
+      <li><strong>About</strong> - Display version and other configuration information about the current installation of Google Earth Enterprise Fusion.      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3><a id="74193"></a>The Toolbar</h3>
+<p><img src="images/toolbarMain.png" /></p>
+<p><a id="marker-1031047"></a>The toolbar provides quick access to the most common Google Earth Enterprise Fusion actions. The toolbar buttons and their actions are:
+</p>
+
+<table class="no_border">
+  <tr>
+    <td>
+      <img src="images/iconOpenFile.png" />
+    </td>
+    <td><strong>Open File</strong> - Open a source file in the Preview pane.Click this icon, navigate to and select the source you want to view, and click <strong>Open</strong>. The source appears in the Preview List pane. See the <a href="resources.html#61304"> Supported Source File Formats</a> section of the <strong>Defining Resources</strong> chapter for details.</td>
+  </tr>
+  <tr>
+    <td>
+      <img src="images/iconSelectMode.png" />
+    </td>
+    <td><strong>Select </strong>- Select a region of the image in the Preview pane. Select the resource in the preview list pane, and select this icon; then click and drag the mouse to highlight a region in the Preview pane. The Preview pane highlights everything you touch in the selected resource (even if you only touch a corner of it) and displays the data for the highlighted features in the Attribute Table. If you are previewing multiple resources, you can select a region in each resource, and then toggle between them to compare their data in the Attribute Table.</td>
+  </tr>
+  <tr>
+    <td>
+      <img src="images/iconZoomBoxMode.png" />
+    </td>
+    <td><strong>Zoom Box </strong>- Outline the zoom area of the imagery displayed in the Preview pane to select precisely the region you want to view. Select (highlight) an item in the Preview List pane, select this icon, and then click and drag a rectangle around the region you want to view. The contents of the selected region replaces the previous view. Press <strong>Ctrl+r</strong> to return to the default view.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="images/iconZoomDragMode.png" />
+    </td>
+    <td><strong>Zoom Drag </strong>- Zoom in or out on the Preview pane.Select this icon and then:
+      <ul>
+        <li>Hold down the left mouse button and push the mouse away from you to zoom out.
+        </li>
+        <li>Hold down the left mouse button and pull the mouse toward you to zoom in.
+        </li>
+      </ul>Press <strong>Ctrl+r</strong> to return to the default view.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="images/iconPanMode.png" />
+    </td>
+    <td><strong>Pan </strong>- Move the imagery around in the Preview pane.Select this icon and then click and drag the view to pan in any direction. Press <strong>Ctrl+r</strong> to return to the default view.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="images/iconToggleTileGrids.png" />
+    </td>
+    <td><strong>Toggle Tile Grid </strong>- Toggle between showing and hiding the <i>tile</i> grid.Select this icon to turn on the grid; unselect it to turn it off.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="images/iconDisplayLevel.png" />
+    </td>
+    <td><strong>Display Level</strong> - The current display level; also referred to as <i>LOD</i> - level of detail. The general display level for:
+      <ul>
+        <li>the world is about 2.5.
+        </li>
+        <li>a continent is about 4.5.
+        </li>
+        <li>a country the size of the United States is about 5.
+        </li>
+        <li>a city is about 10.
+        </li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="images/iconDisplayLevelOffset.png" />
+    </td>
+    <td><p><strong>Display Level Offset</strong> - Set the value added to or subtracted from the display level set in the data to a whole number between -5 and +5. See <a href="fundamentals.html#74493">Adjusting Vector Data Display Levels</a> for details.</p>
+      <p>Select the value and enter a new one, or use the up and down arrow keys to change the value. Press <strong>Ctrl+r</strong> to return to the default view.
+      </p></td>
+  </tr>
+</table>
+<table class="no_border">
+  <tr>
+    <td>
+      <img src="images/iconFavorites.png" />
+    </td>
+    <td><strong>Favorites Menu </strong>- Quickly return to a saved location. See the next section, <a href="fundamentals.html#35107">Adding and Managing Favorites</a> for details.
+    </td>
+  </tr>
+  <tr>
+     <td><img src="images/icon_preview_projection.png" /></td>
+     <td><strong>Preview Projection</strong> - choose between preview of Mercator and Flat projections</td>
+  </tr>
+</table>
+<p>In addition, you can:
+</p>
+<ul>
+  <li>Click the middle button (or wheel) on your mouse and drag the view to pan in any direction.
+  </li>
+  <li>Scroll the wheel on your mouse to zoom in and out.
+  </li>
+</ul>
+<h4><a id="35107"></a>Adding and Managing Favorites
+</h4>
+<p><a id="marker-1038436"></a>After you find a favorite location, you can add it to the Favorites menu, so you can find that location again quickly.
+</p>
+
+<h4>To add a favorite:</h4>
+<br />
+<ol>
+  <li>Navigate to the desired location in the Preview pane.</li>
+  <li>Select <strong>Navigate &gt; Add Favorite</strong>. The <strong>New Favorite</strong> dialog appears.  </li>
+  <li>Enter a name for the favorite that will help you recognize it later, and click <strong>OK</strong>. Google Earth Enterprise Fusion adds the new favorite name to the Favorites drop-down list.
+    <p><img src="images/favoritesMenu.png" width="138" height="102" /></p>
+    <p class="note"><strong>Note:</strong> The Favorites menu in Google Earth Enterprise Fusion is unrelated to placemarks in Google Earth EC.</p>
+  </li>
+</ol>
+<p>After you add some locations to the Favorites menu, you can use the <strong>Favorites Manager</strong> to rename, remove, or reorder the list. </p>
+
+<h4>To manage your favorites:</h4>
+<br />
+<ol>
+  <li>Select <strong>Tools &gt; Favorites Manager</strong>. The Favorites Manager displays all of your favorites in the order in which you added them.
+    <p><img src="images/favoritesManager.png" /></p>
+  </li>
+  <li>Use the Favorites Manager to perform any of the following tasks:
+    <ul>
+      <li><strong>Create a new favorite: </strong>Click 
+          <img src="images/icon_new.gif" />. The Edit Favorite dialog appears. 
+        Enter the data for a favorite and  click <strong>OK</strong>. (Unless you know the exact latitude and longitude of a location, it is often easier to find the location in the Preview pane and then select <strong>Add Favorite</strong> from the Navigation menu to create a new favorite.)</li>
+      <br />
+      <li><strong>Change the name or position of an existing favorite: </strong>Double-click the name of a favorite. The Edit Favorite dialog appears. Change the name or the latitude, longitude, or display level of the favorite.
+      </li>
+      <br />
+      <li><strong>Delete a favorite: </strong>Select a favorite and click 
+          <img src="images/iconDelete.png" />.</li><br />
+      <li><strong>Change the favorite order: </strong>Select a favorite and click <img src="images/iconUp.png" /> or 
+          <img src="images/iconDown.png" /> to move it up or down.</li><br />
+    </ul>
+  </li>
+</ol>
+<h2 id="previewing"><a id="51354"></a><a id="78985"></a>Previewing Data<a id="marker-1021185"></a>
+</h2>
+<p><a id="marker-1031284"></a>You can use the preview panes to inspect imagery, vector, or terrain data in either source data or resource form. You can also open different types of data files at the same time using the preview panes. For example, you might preview an imagery resource along with vector source data to confirm that the vector data aligns properly with the imagery data. Previewing data is a great “litmus test” of how the data will look in Google Earth EC.
+</p>
+<p class="note"><strong>Note:</strong> Although you can preview source files anytime, you must build resources before you can preview them.
+</p>
+<p><a id="marker-1031302"></a>Some applications for the preview panes are:
+</p>
+<ul>
+  <li>Determine the correct encoding to use for vector source data before converting the source to a resource.
+  </li>
+  <li>Determine which layers of a multi-layer vector source file to use in a resource.
+  </li>
+  <li>Test simple display rule settings before defining a vector resource in a project.
+  </li>
+  <li>Determine whether the Auto Mask feature sets the mask properties for an imagery resource appropriately before using it in a project.
+  </li>
+  <li>Inspect transitions between adjacent source imagery files.
+  </li>
+</ul>
+<p>Although certain limitations apply to viewing your original raw data source files in the preview panes, you have full access to all of the preview functionality when you preview built resources. If you preview raw imagery source files, only a bounding box appears in the Preview pane. If you preview built imagery resources, the actual imagery appears in the Preview pane. The following <a id="marker-1041207"></a>limitations apply to previewing data:
+</p>
+<ul>
+  <li>The following display rule settings are ignored:
+    <ul>
+      <li>Simplification method
+      </li>
+      <li>Suppress duplicates
+      </li>
+      <li>Elevation/height
+      </li>
+      <li>Highlight style
+      </li>
+      <li>Road label
+      </li>
+      <li>Road shield
+      </li>
+    </ul>
+  </li>
+  <li>Lines and polygons are drawn as lines only (not filled), so use Line Color or Outline Color, if you want to see the colors of lines or polygons in the Preview pane.
+  </li>
+  <li>Labels appear in the assigned color, but scaling and centering are ignored for labels.
+  </li>
+  <li>Icons do appear in the Preview pane, but any style settings (color, scale) are ignored. 
+  </li>
+  <li>Icons are not selectable, and their pop-up text is not displayed.
+  </li>
+</ul>
+<h4><a id="marker-1031311"></a>To preview a source file:
+</h4>
+<br />
+
+<ol>
+  <li>Click <img src="images/iconOpenFile.png" />. The <strong>Open</strong> dialog appears.
+    <p><img src="images/fileBrowser.png" /></p>
+  </li>
+  <li>Navigate to the location that contains the desired file.
+    <p>You can set the <strong>File type</strong> selector to display only files of a particular format, such as ESRI Shape files, or you can display all files in each folder. </p>
+  </li>
+  <li>Select the file  to preview.  </li>
+  <li>Select the appropriate encoding type for the selected data, if you know it (optional).
+    <p class="note"><strong>Notes:</strong> Encoding applies only to vector data. For example, the <code>geonames-cities500000.csv</code> vector source file provided with your Google Earth Enterprise Fusion tutorial installation uses UTF-8 character encoding. To see the data from specially-encoded files such as this, specify the correct encoding. <br /><br />
+	If you do not specify the correct encoding type for such files, special characters might not display properly. For example, with default character encoding specified, é appears as .    </p>
+  </li>
+  <li>Click <strong>Open</strong>. The file appears as a layer in the Preview List pane with its check box unchecked by default.    </li>
+  <li>Select the check box next to a layer in the Preview List pane.<br />
+    <img src="images/previewList.png"  />
+    <p>This action displays the data in the Preview pane; however, you might not see it, if your current display level is too high or too low.</p>
+  </li>
+  <li>Right-click the layer, and select <strong>Zoom to Layer</strong> from the context menu.<br />
+    <img src="images/zoomToLayer.png" />
+    <p>This action resets the view to encompass the entire area of the data layer.    </p>
+    <p class="note"><strong>Note:</strong> If the data in the layer extends off of one side of the picture of the Earth and onto the other side, sometimes using the Zoom to Layer feature does not look like it zoomed in at all. That is because the preview must include both sides of the picture of the Earth.<a id="marker-1038053"></a>    </p>
+  </li>
+</ol>
+<h4><a id="marker-1038059"></a>To preview a resource:</h4>
+<br />
+<ol>
+  <li>Select <strong>Tools &gt; Asset Manager</strong>. The Asset Manager appears.    </li>
+  <li>Navigate to the folder that contains the resource you want to preview.
+  </li>
+  <li>Drag and drop the resource onto the Preview List pane.
+    <p class="note"><strong>Note:</strong> You must build resources before you can preview them.
+    </p>
+  </li>
+</ol>
+<h3>Using Preview Options
+</h3>
+<p><a id="marker-1031353"></a>After you open a layer in the Preview List pane, you can right-click its name, and select any of the following options from the context menu:
+</p>
+<ul>
+  <li><strong><a id="marker-1031354"></a>Zoom to Layer</strong>
+    <p>Allows you to reset the Preview pane to the entire selected layer. For example, if the Preview pane is displaying a portion of the layer, selecting <strong>Zoom to Layer</strong> causes the Preview pane to zoom out to display the entire layer. Likewise, if the Preview pane is displaying an area larger than the data in the selected layer, selecting <strong>Zoom to Layer</strong> causes the Preview pane to zoom in to display the area covered in the selected layer. 
+    </p>
+  </li>
+  <li><strong><a id="marker-1038068"></a>Configure Display Rules</strong>
+    <p>Allows you to specify the display properties for vector source data and resources. See <a href="projects.html#92365">Configuring Display Rules</a> in the <strong>Defining Projects</strong> chapter for details. </p>
+    <p class="note"><strong>Note:</strong> This option applies to vector source data and resources only, since the display rules for imagery or terrain data are set when you import the source data as a resource. Although you can actually set display rules for imagery and terrain source data, the preview of that data appears as an outline. Any display rule configurations applied to imagery or terrain data in the Preview pane affect only the outline of the image. See the next section, <a href="fundamentals.html#27094">Previewing Imagery and Terrain Source Data</a> for more information.</p>
+  </li>
+  <li><strong>Import / Export Configuration as Template</strong>
+    <p><a id="marker-1038069"></a>Allows you to save display rules as template files and reapply them to other layers. See the sections on <a href="projects.html#60429">Exporting Display Rules</a> and <a href="projects.html#47819">Importing Display Rules</a> in the <strong>Defining Projects</strong> chapter for more information.</p>
+  </li>
+  <li><strong><a id="marker-1031357"></a>Remove Layer / Remove All Layers</strong>
+    <p>Allows you to remove individual layers or all layers from the preview panes. 
+    </p>
+    <p class="note"><strong>Note:</strong> Removing layers from the preview panes does not delete the data source files or the resource. It simply removes them from the preview.
+    </p>
+  </li>
+</ul>
+<h3><a id="27094"></a>Previewing Imagery and Terrain Source Data<a id="marker-1021260"></a>
+</h3>
+<p>When you preview terrain or imagery source data, you view only the boundaries of the data, not the imagery itself, in the Preview pane. In order to see the full imagery or terrain data in the Preview pane, you must create a resource from the source data and build the resource.
+</p>
+<p>Note: Google Earth Enterprise supports preview of both Mercator and Flat Projection
+   imagery. When previewing imported imagery resources, make sure the desired <strong>Preview
+   Projection</strong> is selected in the toolbar.</p>
+<p>When you open imagery or terrain source data in the Preview pane, Google Earth Enterprise Fusion draws a bounding box for the imagery. The bounding box is the outermost region of the image data.
+</p>
+<img src="images/previewSource.png" width="400" />
+<p>When you open imagery or terrain resources in the Preview pane, the full imagery is displayed within the bounding box.
+</p>
+<img src="images/previewResource.png" width="400" />
+<h4><a id="60481"></a><a id="21257"></a>Viewing Imagery Tiles
+</h4>
+<p><a id="marker-1030359"></a>You can use the tile grid toggle button 
+  <img src="images/iconToggleTileGrids.png" /> to turn on the tile grid, so you can examine the tiling of imagery data, as well as the resolution levels and geospatial boundaries of imagery insets.
+</p>
+<p>Although it is easy to visually determine at which display level a vector resource appears or changes, it is not always apparent with imagery insets. When you click the tile grid toggle button, a grid in a contrasting color overlays the current view. As you zoom in or out of this view and move through various levels, the grid updates its size and changes color to provide information about the imagery.
+</p>
+<h4><strong><a id="marker-1031408"></a>How many imagery tiles are present at a particular display level?</strong>
+</h4>
+<p>Google Earth Enterprise Fusion provides 24 display levels. When you turn on the grid, at level 0, there is only one <i>tile</i>, or grid square (256 pixels x 256 pixels) for the entire Earth. The number of tiles displayed quadruples at each display level.    </p>
+    <p>When you use the Zoom to Layer feature, all of the grid squares are the same color. This is the lowest display level number (the highest elevation) at which you can view the full extents of the inset. In the following examples, consider Zoom To Layer the starting point.    </p>
+    <img src="images/previewGridStart.png" />
+    <p><a id="marker-1038140"></a>If you zoom out from the starting point, the grid squares change color, indicating areas of different resolution in the imagery. In the following example, the blue grid squares indicate high-resolution imagery, and the pink squares indicate lower-resolution imagery.    </p>
+    <p class="note"><strong>Note:</strong> The blue grid squares do not indicate the boundaries of the high-resolution imagery. Any grid square that touches any part of the high-resolution imagery appears in blue. The bounding box indicates the actual boundaries of the high-resolution imagery.    </p>
+    <p>If you zoom in from the starting point, the grid squares are all the same color, are larger, and there are fewer of them in the Preview pane until you get to the next level. Then they appear smaller and are more numerous again.</p>
+    <p><img src="images/previewGridZoomOut.png" /></p>
+    <p><img src="images/previewGridZoomIn.png" /></p>
+    <p class="note"><strong>Note:</strong> All references to the grid refer to the semi-transparent lines, not the thin solid lines that designate the borders of the grid squares.    </p>
+
+<h4><a id="marker-1031440"></a>Showing and Hiding Imagery
+</h4>
+<p>You can use the texture viewing features on the View menu to control the display of imagery and terrain data when you want to debug data in the Preview pane. Using these features, you can:
+</p>
+<ul>
+  <li><strong><a id="marker-1031441"></a>Toggle Textures</strong>
+    <p>Turn off all textures in the Preview pane. 
+    </p>
+  </li>
+  <li><strong><a id="marker-1031442"></a>Toggle Base Texture</strong>
+    <p>Turn on or off only the base texture in the Preview pane.
+    </p>
+  </li>
+  <li><strong><a id="marker-1033524"></a><a id="marker-1033525"></a>Cycle Mask Textures</strong>
+    <p>Cycle through four ways to view the mask for an imagery inset.
+    </p>
+  </li>
+</ul>
+<p>(See <a href="fundamentals.html#the_menu_bar">The Menu Bar</a> for more information about these features.)
+</p>
+<h3>Previewing Vector Data<a id="marker-1021314"></a>
+</h3>
+<p>You can preview vector source data and resources to explore preliminary display settings, properties, and groupings for resources you are considering using in a project. Keep in mind that you cannot save the display settings you create in the Preview pane, so it is recommended that you set only the most basic display rules in Preview pane.
+</p>
+<p class="note"><strong>Tip:</strong> If you create display rules for vector data in the Preview pane, you can select <strong>Export Configuration as Template</strong> from the context menu to save and re-use those settings for an actual layer in a project. See <a href="projects.html#60429">Exporting Display Rules</a> in the <strong>Defining Projects</strong> chapter.</p>
+<p>You can view the internal data fields of vector resources that you can see in the Preview pane. After you select vector fields for display, you can manipulate the display of that view and see even more detailed information about specific entries.
+</p>
+<h4>To select and view vector data fields:
+</h4>
+<br />
+
+<ol>
+  <li>Select the layer whose data you want to view.
+  </li>
+  <li>Select 
+    <img src="images/iconSelectMode.png" />, if it is not already selected.
+  </li>
+  <li>Drag a region box around some of the data features you want to view.<br />
+    <img src="images/selectDataPoints.jpg" />
+    <p>The internal data for each selected element appears as a row in the Attribute Table. 
+    </p>
+    <img src="images/selectedDataFields.png" width="459" height="321" />  </li>
+</ol>
+<h4><a id="74493"></a>Adjusting Vector Data Display Levels<a id="marker-1034902"></a>
+</h4>
+<p>While using the interactive zoom features, you might notice that vector features appear and disappear, depending on your viewing elevation. When this happens, note the number that appears in the Display Level indicator, which increases as the view gets closer to the Earth. 
+</p>
+<img src="images/viewLevel.jpg" width="144" height="44" />
+<p>The value shown in the Display Level indicator corresponds to your viewing elevation in the Preview pane. Data that you import into projects can be configured to appear at a specific level--a number that you provide in the display rules for vector data. (See <a href="projects.html#92365">Configuring Display Rules</a> in the <strong>Defining Projects</strong> chapter for details.) </p>
+<p><a id="marker-1034918"></a>You can use the Display Level indicator as an analysis tool to determine the appropriate display levels for resources. By setting the correct display level for vector data, you can prevent informational clutter in Google Earth EC.
+</p>
+<p>To the right of the Display Level indicator is the Display Level Offset. You can adjust this selection to whole number values between -5 and +5. Google Earth Enterprise Fusion adds or subtracts the value in this window to the display level set in the data. You can use this feature to quickly adjust the level at which vector features are displayed in the Preview pane without having to reset the value in the display rule. When you find the optimal display level, you can reset the value in the project’s display rule.
+</p>
+<p>For example, if you define a feature to be drawn at level 10, it does not appear in the Preview pane at level 9.2. However, if you set the Display Level Offset to <strong>1</strong>, you can see the feature at level 9.2. Google Earth Enterprise Fusion adds 1 (the offset) to 9.2 (your current display level) to adjust your viewing elevation to 10.2. 
+</p>
+<p><a id="marker-1034931"></a>The following illustration shows two examples of how you can adjust viewing elevation to display the data at a higher or lower elevation perspective.
+</p>
+<img src="images/viewingElevationAdjust.png" />
+<h3><a id="marker-1031469"></a>Manipulating Data in the Attribute Table
+</h3>
+<p>When vector data is displayed in the Attribute Table, Google Earth Enterprise Fusion provides several options on a context menu to help you work with that data. To access the options, right-click the data in a cell in the Attribute Table, and select one of the following options from the context menu (where <i>Column</i> is the name of the selected column):
+</p>
+<ul>
+  <li><strong><a id="marker-1031470"></a>Sort by <i>Column</i> Ascending</strong>
+    <p>Reorders all data in the Attribute Table in ascending order based on the selected column. For example, for a numeric column, it reorders the data in that column from the smallest to the largest number. For a text column, it reorders the data in that column from A to Z.
+    </p>
+  </li>
+  <li><strong>Sort by <i>Column</i> Descending</strong>
+    <p>Reorders all data in the Attribute Table in descending order based on the selected column. For example, for a numeric column, it reorders the data in that column from the largest to the smallest number. For a text column, it reorders the data in that column from Z to A.
+    </p>
+  </li>
+  <li><strong><a id="marker-1031471"></a>Export <i>Column</i> Column</strong>
+    <p>Exports the values of the entire column to a comma-separated value (CSV) text file using this option.
+    </p>
+  </li>
+  <li><strong>Export All Columns</strong>
+    <p>Exports all of the data in the Attribute Table to a CSV text file.
+    </p>
+  </li>
+  <li><strong>Feature Details</strong>
+    <p>Displays detailed information about the selected feature in the Feature Detail dialog, including all of the column attributes of the selected row, the number of vertices making up the vector feature, and the latitude and longitude of each vertex or part.</p>
+    <p><img src="images/featureDetails.png" /></p>
+  </li>
+  <li><strong>Zoom to Feature</strong>
+    <p>Zooms to the selected feature.
+    </p>
+  </li>
+  <li><strong>Copy Cell Contents</strong>
+    <p>Copies the contents of the cell to the window manager’s clipboard. Then you can paste the contents of the cell into Google Earth Enterprise Fusion or another application.
+    </p>
+    <p class="note"><strong>Tip:</strong> For example, when you are filtering data with international characters, and you do not know how to enter those characters from your English keyboard, you can use this option to copy the string from the actual data and paste it into the filter expression.
+    </p>
+  </li>
+</ul>
+
+<h2 id="using_the_asset_manager">Using the Asset Manager</h2>
+
+<p><a id="marker-1031539"></a>The Asset Manager is the main tool you use in Google Earth Enterprise Fusion. You use it to import and build all of your assets in preparation for publishing your Google Earth and Google Maps databases, so it is important for you to become very familiar with it.
+</p>
+      <p class="caution"><strong>Caution:</strong> <a id="marker-1035623"></a>If you are working with multiple Google Earth Enterprise Fusion users on multiple workstations, it is important to remember that all managers on the Tools menu can be accessed by all users at the same time. If multiple users are working with the same manager at the same time, whoever saves an object last overwrites any previous versions of that object. So if you are working in a multi-user environment, be sure to coordinate with the other users to be sure you do not clobber each other’s work.</p>
+      </p>If it is likely that several people will be working in the Asset Manager at the same time, it is particularly important to ensure that no two users are working on the same asset at the same time.
+<p><a id="marker-1031541"></a>To access the Asset Manager, select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu. </p>
+<img src="images/assetManager.png" />
+<p>The title bar of the Asset Manager identifies the name of the host on which you started the Google Earth Enterprise Fusion GUI.
+</p>
+<p><a id="marker-1031544"></a>The Asset Manager’s menu bar provides two menus with the following options:
+</p>
+<p><strong>File</strong></p>
+<ul>
+  <li><strong>New Asset</strong> - Displays the New Asset dialog (See the chapter on <a href="resources.html#79906">Defining Resources</a> for more information about the New Asset dialog.</li>
+  </ul>
+<p><strong>Window</strong>
+</p>
+<ul>
+  <li><strong>Close All</strong> - Closes all open asset editors
+  </li>
+  <li><strong>Cascade</strong> - Rearranges all open asset editors in a cascading pattern
+  </li>
+</ul>
+<p>Below the <strong>File</strong> and <strong>Window</strong> menus, a selection box provides access to three groups
+  of toolbar buttons. The available selections are:</p>
+<ul>
+   <li><strong>Earth Tools (3D)</strong>: for Google Earth databases</li>
+   <li><strong>Mercator Map Tools (2D)</strong>: for Mercator Projection Maps databases</li>
+   <li><strong>Flat Projection Map Tools (2D)</strong>: for Flat Projection Maps
+      databases</li>
+</ul>
+<p><a id="marker-1039601"></a>The Asset Manager’s toolbar provides the following
+   icons so you can create new resources, projects, and databases. You will see only
+   a subset of these icons at any time, depending on your <strong>Tools</strong> selection
+   above.</p>
+
+
+
+<table width="60%" class="no_border">
+  <tr>
+    <td><img src="images/iconResVector.png" /> Vector Resource</td>
+    <td><img src="images/iconProjVector.png" /> Vector Project </td>
+  </tr>
+  <tr>
+    <td><img src="images/iconResImagery.png" /> Imagery Resource </td>
+    <td><img src="images/iconProjImagery.png" width="22" height="20" /> Imagery Project </td>
+  </tr>
+  <tr>
+    <td><img src="images/iconmercatorimage.png" /> Mercator Imagery Resource </td>
+    <td><img src="images/iconmercatorproject.png" /> Mercator Imagery Project</td>
+  </tr>
+  <tr>
+    <td><img src="images/iconResTerrain.png" /> Terrain Resource </td>
+    <td><img src="images/iconProjTerrain.png" /> Terrain Project </td>
+  </tr>
+  <tr>
+    <td><img src="images/iconLayerMaps.png" /> Map Layer </td>
+    <td><img src="images/iconProjMaps.png" /> Map Project </td>
+  </tr>
+  <tr>
+    <td><img src="images/iconDatabase.png" /> Database </td>
+    <td><img src="images/iconDatabaseMap.png" /> Map Database </td>
+  </tr>
+  <tr>
+    <td><img src="images/iconmercatordb.png" /> Mercator Map Database</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<p><a id="marker-1031643"></a>Click the icon for the type of asset you want to create. The appropriate type of new asset window appears. Refer to the appropriate chapter of this Reference Guide for information on adding specific types of assets.</p>
+<p class="note"><strong>Note</strong>: Mercator imagery resources are different than Flat Projection imagery resources.
+  If you wish to use the same imagery for both an Earth database and a Mercator
+  Maps database, you must import and store two copies of the imagery resources.
+  Using google.com map base layers requires a Mercator Map database.<br /><br />
+You can, however, share imagery resources between an Earth database and a Flat Projection
+Maps database.</p>
+<p><a id="marker-1035373"></a>The Location field at the top of the Asset Manager window displays the asset root. The asset root is the main location where you store all of your Google Earth Enterprise Fusion data. Depending on how you set your preferences, the location displays as either <code>ASSET_ROOT</code> or as the full path to the asset root (such as <code>/gevol/assets/</code>).</p>
+<p>See <a href="setup.html#91062">Setting Your Preferences</a> in the chapter on <strong>Setting Up Your Workspace</strong> for more information about setting this preference.</p>
+<p class="note"><strong>Note:</strong> <a id="marker-1035546"></a>You cannot edit the <strong>Location</strong> field. </p>
+<p><a id="marker-1038345"></a>The asset navigation tree appears on the left side of the Asset Manager. When you first start using Google Earth Enterprise Fusion, only the asset root appears. As you add subfolders to the asset root, they appear hierarchically in the asset navigation tree. (See <a href="setup.html#56245">Organizing Assets</a> for more information.) All of the data you create with Google Earth Enterprise Fusion is stored in subfolders of the asset root.
+</p>
+<p>As you navigate through the folders in the asset navigation tree, the <strong>Location</strong> field displays the full path of the selected folder. </p>
+<p>The right side of the window contains two tabs:
+</p>
+<ul>
+  <li>List
+  </li>
+  <li>Thumbnail
+  </li>
+</ul>
+<p>The contents of these tabs are described in the following sections.
+</p>
+<h3><a id="49187"></a>List Tab
+</h3>
+<p><a id="marker-1031653"></a>The List tab displays the list of assets in the folder that is selected in the navigation tree on the left.
+</p>
+<img src="images/assetManager_AssetList.png" />
+<p><a id="marker-1031658"></a>You can double-click the name of any asset on the list to display its properties in an editor, so you can modify the asset. You can double-click an asset’s current version or current state to display the Version Properties dialog for that asset. (See <a href="building.html#83928">Debugging Asset Builds</a> in the <strong>Building Assets</strong> chapter for more information about this dialog.) </p>
+<p>You can click the <strong>Refresh</strong> button to the right of the Location field at any time to refresh the status of the assets displayed on the List tab.
+</p>
+<p>Above the asset list are two filters:
+</p>
+<ul>
+  <li><strong>Type</strong><a id="marker-1031659"></a> - If you select <strong>Vector</strong>, <strong>Imagery</strong>, <strong>Terrain</strong>, or <strong>Map </strong>from the Type drop-down list, only the selected type of assets appear on the list. If you select <strong>All</strong>, all of the assets in the selected folder appear on the list.
+  </li>
+  <li><strong>Category</strong> - If you select <strong>Resource</strong>, <strong>Layer</strong>, <strong>Project</strong>, or <strong>Database</strong> from the Category drop-down list, only the selected category of assets appear on the list. If you select <strong>All</strong>, all of the assets in the selected folder appear on the list.
+  </li>
+</ul>
+<p><a id="marker-1031665"></a>In addition, you can display hidden assets by checking the box next to <strong>Show hidden assets</strong>. Hidden assets are those assets that you do not need to display regularly, such as assets that are incorrectly named. See <a href="fundamentals.html#79179">Using the Asset Editors</a> for information on how to designate assets as hidden.)
+</p>
+<h3>Thumbnail Tab
+</h3>
+<p><a id="marker-1031672"></a>The Thumbnail tab displays a thumbnail image of each asset in the folder that is selected in the navigation tree on the left.
+</p>
+<p class="note"><strong>Note:</strong> The Thumbnail tab is useful for raster (imagery and terrain) data only.
+</p>
+<p><a id="marker-1031695"></a>In addition to the Type and Category filters and the <strong>Show hidden assets</strong> check box, which are available for this tab as well, this tab provides a zoom bar. You can drag the zoom bar down to enlarge the thumbnail images.
+</p>
+<img src="images/assetManager_ThumbnailTabZoomed.png" />
+<p>To close the Asset Manager, click the close box (<strong>X</strong>) in the top  corner.
+</p>
+<h2 id="editors"><a id="79179"></a>Using the Asset Editors
+</h2>
+<p><a id="marker-1031698"></a>You use the asset editors (such as the Resource Editor, the Project Editor, and the Database Editor) to define and build your assets. When you finish using any of the asset editors (such as the Imagery Resource Editor used in this exercise), you can either leave it open and move it to the side or close it. Generally, if you know you have more work to do on a given asset, you leave the editor open. If you know you are done with an asset for now, you can close it and get it out of the way.
+</p>
+      <p class="caution"><strong>Caution:</strong> <a id="marker-1031699"></a>It is important to remember that you  cannot delete assets after you save them. You can clean them, so they are no longer available to use in Google Earth Enterprise Fusion; however, you can never really eliminate them. See <a href="building.html#85338">Cleaning Asset Versions</a> in the <strong>Building Assets</strong> chapter for more information.</p>
+<p>All of the asset editors provide menu options that allow you to perform specific tasks on the assets you are editing.
+</p>
+<p>The menu options are:
+</p>
+<p><strong>File</strong>:</p>
+
+<ul>
+  <li><strong>Save</strong><a id="marker-1031700"></a> - Saves the asset. The first time you save an asset, you can specify its name and location. After that, Google Earth Enterprise Fusion saves the asset with the same name and location.
+  </li>
+  <li><strong>Save As</strong> - Saves a copy of the asset with a new name and location that you specify.
+  </li>
+  <li><strong>Build</strong> - Builds the asset. If you have made changes to the asset that are not saved, Google Earth Enterprise Fusion prompts you to save it before it builds it.
+  </li>
+  <li><strong>Close</strong> - Closes the asset editor. If you have made changes to the asset, a message prompts you to save it.
+  </li>
+</ul>
+
+<p><strong>Edit</strong>:</p>
+<ul>
+  <li><strong>Notes</strong><a id="marker-1032232"></a> - Displays a dialog that allows you to enter notes about the asset. Simply enter the text of your note. <a id="marker-1032238"></a>To insert the current date and time, click <strong>Insert Timestamp</strong>.
+  <p>When you finish composing your note, click <strong>OK</strong>.
+    </p>
+  <p class="note"><strong>Note:</strong> The notes appear in Google Earth Enterprise Fusion only.
+    </p>
+  </li>
+</ul>
+  </li>
+  <li><strong>Hidden</strong><a id="marker-1038391"></a> - Toggles the <strong>Hidden</strong> setting on and off for the asset.
+    <p>You can check this option to hide assets that you do not need to display regularly, such as assets that are incorrectly named. Check it again to allow the asset to show.
+      </p>
+    <p class="note"><strong>Note:</strong> You can display hidden assets by checking the box next to <strong>Show hidden assets</strong> on the List Tab in the Asset Manager. See the <a href="fundamentals.html#49187"> List Tab</a> section for more information.</p>
+  </li>
+</ul>
+
+</div>
+<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+<!-- END WRAPPER -->
+
+</body>
+</html>

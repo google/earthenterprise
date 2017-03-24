@@ -1,0 +1,103 @@
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/samples/html_div_balloon_example.html";
+    </script>
+    
+   <title>html_div_balloon_example.html</title>
+   <link href="html_div_balloon_example.css" rel="stylesheet" type="text/css" />
+   <script src="http://code.google.com/www.google.com/jsapi?key=ABQIAAAA5El50zA4PeDTEMlv-sXFfRSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xTdBhxbkZWuzyYTVeclkwYHpb17ZQ"></script>
+   <script type="text/javascript">
+      var ge;
+      var placemark0;
+      var placemark1;
+      var placemark2;
+
+      google.load("earth", "1");
+
+      function init() {
+         google.earth.createInstance('map3d', initCB, failureCB);
+      }
+
+      function initCB(instance) {
+
+         ge = instance;
+         ge.getWindow().setVisibility(true);
+         ge.getNavigationControl().setVisibility(ge.VISIBILITY_SHOW);
+
+         // Create the placemarks and points.
+         window.placemark0 = ge.createPlacemark('');
+         var point0 = ge.createPoint('');
+         point0.setLatitude(12.342);
+         point0.setLongitude(54.321);
+         placemark0.setGeometry(point0);
+
+         placemark1 = ge.createPlacemark('');
+         var point1 = ge.createPoint('');
+         point1.setLatitude(12.345);
+         point1.setLongitude(54.321);
+         placemark1.setGeometry(point1);
+
+         placemark2 = ge.createPlacemark('');
+         var point2 = ge.createPoint('');
+         point2.setLatitude(12.348);
+         point2.setLongitude(54.321);
+         placemark2.setGeometry(point2);
+
+         // Add the placemarks to Earth.
+         ge.getFeatures().appendChild(placemark0);
+         ge.getFeatures().appendChild(placemark1);
+         ge.getFeatures().appendChild(placemark2);
+
+         // Move the camera.
+         var la = ge.createLookAt('');
+         la.set(12.345, 54.321, 0, ge.ALTITUDE_RELATIVE_TO_GROUND, -8.541, 66.213, 1000);
+         ge.getView().setAbstractView(la);
+
+         // Add an event listener to each of the 'results' list items.
+         // If/else statement is a fix for IE behavior.
+         var divs = document.getElementById('results').getElementsByTagName('li');
+         for (var i = 0; i < divs.length; i++) {
+            var singleDiv = divs[i];
+            if (singleDiv.addEventListener)
+               singleDiv.addEventListener('click', makeClickHandler(divs[i].id), false);
+            else if (singleDiv.attachEvent)
+               singleDiv.attachEvent('onclick', makeClickHandler(divs[i].id));
+         }
+      }
+
+      // Returns a click handler function for each div.
+      function makeClickHandler(id) {
+         return function() {
+            var balloon = ge.createHtmlDivBalloon('');
+            // Attach this balloon to the placemark
+            balloon.setFeature(window['placemark' + id]);
+            var div = document.createElement('DIV');
+            // populate the new div with the appropriate list item from the 'results' div
+            div.innerHTML = document.getElementById('results').getElementsByTagName('li')[id].innerHTML;
+            balloon.setContentDiv(div);
+            ge.setBalloon(balloon);
+         }
+      } 
+
+      function failureCB(errorCode) {
+      }
+
+      google.setOnLoadCallback(init);
+   </script>
+
+</head>
+<body>
+
+   <div id="map3d" style="height:400px; width:600px;"></div>
+   <div id="results">
+      <p><strong>Show:</strong></p>
+      <ul>
+         <li id="0">great swimming</li>
+         <li id="1">sharks!</li>
+         <li id="2">sea lions</li>
+      </ul>
+   </div>
+
+</body>
+</html>

@@ -1,0 +1,8 @@
+.sconsign.dblite
+DBG-x86_64/
+OPT-x86_64/
+REL-x86_64/
+NATIVE-DBG-x86_64/
+NATIVE-OPT-x86_64/
+NATIVE-REL-x86_64/
+*.pyc

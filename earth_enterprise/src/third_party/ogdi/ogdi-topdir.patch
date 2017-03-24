@@ -1,0 +1,28 @@
+diff -uNr ogdi-3.1.1.orig/configure ogdi-3.1.1/configure
+--- ogdi-3.1.1.orig/configure	Thu Feb 21 08:41:38 2002
++++ ogdi-3.1.1/configure	Mon Aug  4 13:50:39 2003
+@@ -542,7 +542,7 @@
+ 
+ 
+ if test "$TOPDIR" = "" ; then
+-  { echo "configure: error: Required TOPDIR environment variable not set, see README." 1>&2; exit 1; }
++    export TOPDIR=`pwd`
+ fi
+ 
+ if test "$OS" = "Windows_NT" ; then
+diff -uNr ogdi-3.1.1.orig/makefile ogdi-3.1.1/makefile
+--- ogdi-3.1.1.orig/makefile	Mon Apr 16 12:50:20 2001
++++ ogdi-3.1.1/makefile	Mon Aug  4 13:52:19 2003
+@@ -12,6 +12,12 @@
+ 
+ EXTRA_INSTALL_TARGETS	=	mk_nonlocal_install_dirs
+ 
++ifeq ($(TOPDIR),)
++export TOPDIR=$(shell pwd)
++endif
++
++
++
+ include $(TOPDIR)/config/common.mak
+  
+ #

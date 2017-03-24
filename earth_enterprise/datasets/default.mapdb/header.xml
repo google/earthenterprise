@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!-- Copyright 2008 Google Inc. All Rights Reserved. -->
+<DbHeader>
+
+  <index_path>../.files/indexes/index.001</index_path>
+
+  <toc_paths>
+    <toc_path>tocs/layers.js.DEFAULT</toc_path>
+  </toc_paths>
+
+  <search_tabs/>
+
+  <poi_file_paths/>
+
+  <icons_dirs>
+    <icons_dir>../.files/icons/icons.001</icons_dir>
+  </icons_dirs>
+
+  <database_version>3</database_version>
+
+  <db_type>TYPE_MAPSDB</db_type>
+
+</DbHeader>

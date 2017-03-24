@@ -1,0 +1,68 @@
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/samples/underwater_polygon_example.html";
+    </script>
+    
+   <title>underwater_polygon_example.html</title>
+   <script src="http://code.google.com/www.google.com/jsapi?key=ABQIAAAA5El50zA4PeDTEMlv-sXFfRSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xTdBhxbkZWuzyYTVeclkwYHpb17ZQ"></script>
+   <script type="text/javascript">
+      var ge;
+      google.load("earth", "1");
+
+      function init() {
+         google.earth.createInstance('map3d', initCB, failureCB);
+      }
+
+      function initCB(instance) {
+
+         ge = instance;
+         ge.getWindow().setVisibility(true);
+         ge.getNavigationControl().setVisibility(ge.VISIBILITY_SHOW);
+
+         // Create the placemark.
+         var polygonPlacemark = ge.createPlacemark('');
+
+         // Create the polygon and set the altitude mode.
+         var polygon = ge.createPolygon('');
+			var outer = ge.createLinearRing('');
+         polygon.setAltitudeMode(ge.ALTITUDE_CLAMP_TO_SEA_FLOOR);
+
+         // Add points for the shape.
+         
+         outer.getCoordinates().pushLatLngAlt(48.303, -126.344, 700);
+         outer.getCoordinates().pushLatLngAlt(48.276, -126.366, 700);
+         outer.getCoordinates().pushLatLngAlt(48.273, -126.331, 700);
+         outer.getCoordinates().pushLatLngAlt(48.307, -126.311, 700);
+         polygon.setOuterBoundary(outer);
+
+         // Create a style and set width and color of line.
+         polygonPlacemark.setStyleSelector(ge.createStyle(''));
+         var lineStyle = polygonPlacemark.getStyleSelector().getLineStyle();
+         lineStyle.setWidth(10);
+         lineStyle.getColor().set('ff00ffff');
+         
+         // Add the placemark to Earth.
+			polygonPlacemark.setGeometry(polygon);
+         ge.getFeatures().appendChild(polygonPlacemark);
+         
+         // Move the camera.
+         var la = ge.createLookAt('');
+         la.set(48.2793, -126.3358, 0, ge.ALTITUDE_RELATIVE_TO_SEA_FLOOR, 42.7, 71, 4250);
+         ge.getView().setAbstractView(la);
+      }
+      
+      function failureCB(errorCode) {
+      }
+      
+      google.setOnLoadCallback(init);
+   </script>
+
+</head>
+
+<body>
+
+   <div id="map3d" style="height:400px; width:600px;"></div>
+
+</body>
+</html>

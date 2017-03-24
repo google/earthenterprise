@@ -1,0 +1,8 @@
+# Entries in this file should be in the following format:
+# font_name TTF_file is_bold is_italic
+
+Sans /opt/google/share/fonts/luxisr.ttf 0 0
+
+# Empty lines as well as lines starting with # as first non blank character
+# in the configuration file are ignored and may be used as desired. All entries
+# after 4th word are also ignored and can be used as desired.

@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <link href="user_docs.css" rel="stylesheet" type="text/css">
+    <link href="local_extensions.css" rel="stylesheet" type="text/css">
+    <title>
+      Editing Places and Folders - Google Earth User Guide
+    </title>
+    <style type="text/css">
+/*<![CDATA[*/
+    table.c4 {background-color: #FFFFFF}
+    td.c3 {background-color: #FFFFFF}
+    form.c2 {margin-bottom: 0;margin-top: 0;}
+    span.c1 {font-size: 100%;}
+    /*]]>*/
+    </style>
+  </head>
+  <body id="index">
+    <a id="top" name="top"></a>
+    <div id="header">
+      <div id="logo">
+        <a href="http://earth.google.com"><img alt="Return to earth.google.com" border="0" src=
+        "http://www.google.com/intl/en/images/logos/earth_logo.gif"></a>
+      </div>
+      <h1 id="doc_title">
+        Google Earth User Guide
+      </h1>
+    </div>
+    <div id="wrapper">
+      <div id="sidenav">
+        <form action="http://www.google.com/search" class="c2" method="get">
+          <span class="c1">Search Google Earth<br>
+          User Guide</span><br>
+          <form action="http://www.google.com/cse" id="cse-search-box" name="cse-search-box">
+            <div>
+              <input name="cx" type="hidden" value="006447561658385433045:da9zsap5cmm">
+              <input name="q" size="18" type="text"> <input name="sa" type="submit" value="Search">
+            </div>
+          </form>
+          <ul>
+            <li>
+              <h1>
+                <a href="ug_toc.html">Table of Contents</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="index.html">Introduction</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_findplaces.html">Finding Places and Directions</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_placemarks.html">Marking Places</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_layers.html">Using Layers</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_mapfeatures.html">Using Map Features</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_places.html">Using Places</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_kml.html">About KML</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_sharingplacedata.html">Sharing Places Information</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_touringplaces.html">Using Tours</a>
+              </h1>
+            </li>
+            <li class="selected">
+              <h1>
+                Editing Places and Folders
+              </h1>
+              <ul>
+                <li>
+                  <a href="#respositioning">Repositioning Placemarks</a>
+                  <ul>
+                    <li>
+                      <a href="#dragging">Dragging the Placemark</a>
+                    </li>
+                    <li>
+                      <a href="#locking">Locking a Placemark to the Center of the View</a>
+                    </li>
+                    <li>
+                      <a href="#entering">Entering Advanced Coordinates</a>
+                    </li>
+                    <li>
+                      <a href="#setview">Setting the View</a>
+                    </li>
+                    <li>
+                      <a href="#newview">Applying a New View</a>
+                    </li>
+                    <li>
+                      <a href="#defaultview">Returning to the Default, Top-Down View</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_searchresults.html">Managing Search Results</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_measuring.html">Measuring Distances and Areas</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_sky.html">Viewing Sky</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_drawing.html">Drawing Paths and Polygons</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_imageoverlays.html">Using Image Overlays and 3D Models</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_flightsim.html">Using the Flight Simulator</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_importdata.html">Importing Your Data Into Google Earth</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_styles.html">Using Style Templates</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_gps.html">Viewing Timelines</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_movies.html">Making Movies with Google Earth</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_keyboard.html">Keyboard Controls</a>
+              </h1>
+            </li>
+            <li>
+              <h1>
+                <a href="ug_3dviewer.html">3D Viewer Options</a>
+              </h1>
+            </li>
+          </ul>
+        </form>
+      </div>
+      <div id="pagecontent">
+        <h2>
+          <a id="top" name="top"></a>Editing Places and Folders
+        </h2>
+        <p>
+          Once you have become familiar with the basic steps involved in creating and organizing
+          places and folders, you can use this section to learn how you can further modify the
+          appearance of places and folders that you have saved. You can edit the style settings,
+          position, and view for an individual placemark or a folder that contains place data.
+        </p>
+        <p>
+          To do this, right-click (CTRL click on the Mac) on the icon or folder in the
+          <em>Places</em> panel and select <em>Properties</em> from the pop-up menu. The
+          <em>Edit</em> dialog box for that item appears. Enable the relevant <em>Style</em>,
+          <em>Location</em>, and <em>View</em> properties for the folder or placemark.
+        </p>
+        <div class="note">
+          <strong>Note</strong> - Elements in the Style tab dynamically update to reflect the type
+          of place data being selected.
+        </div>
+        <p>
+          To learn about these features and how they apply to folders and individual items, see the
+          following topics:
+        </p>
+        <ul>
+          <li>
+            <a href="#respositioning">Repositioning Placemarks</a>
+          </li>
+          <li>
+            <a href="#setview">Setting the View</a>
+          </li>
+          <li>
+            <a href="#writing">Writing Descriptions</a>
+          </li>
+          <li>
+            <a href="#changing">Changing Labels</a>
+          </li>
+          <li>
+            <a href="#seticons">Setting Icons for Places and Folders</a>
+          </li>
+          <li>
+            <a href="#setline">Setting Line Color and Width</a>
+          </li>
+          <li>
+            <a href="#setaltitude">Setting Altitude</a>
+          </li>
+          <li>
+            <a href="#foldersettings">Modifying Folder Settings</a>
+          </li>
+          <li>
+            <a href="#itemsettings">Modifying Settings for a Single Item</a>
+          </li>
+        </ul>
+        <h2>
+          <a id="respositioning" name="respositioning"></a>Repositioning Placemarks
+        </h2>
+        <p>
+          When editing placemarks or geometry, you might want to reposition their location on the
+          earth. The <em>Edit Placemark</em> dialog box offers a number of ways to <a href=
+          "#dragging">reposition a placemark</a>.
+        </p>
+        <h3>
+          <a id="dragging" name="dragging"></a>Dragging the Placemark
+        </h3>
+        <p>
+          When you edit a placemark, a yellow square appears around the icon, indicating that you
+          can reposition the icon if you desire. Just click within the square and drag the icon to
+          the new location. If you need to move the earth to get a better view of the icon relative
+          to other things, position the mouse outside the square to move the 3D viewer.
+        </p>
+        <p>
+          You can also <a href="#locking">lock the placemark to the center of the view</a>.
+        </p>
+        <h3>
+          <a id="locking" name="locking"></a>Locking a Placemark to the Center of the View
+        </h3>
+        <p>
+          With this feature, you reposition the earth under the placemark, rather than
+          repositioning the placemark over the earth. This feature is useful if you want to move a
+          placemark a distance that extends beyond the view, and using drag and drop is
+          inconvenient as you switch from dragging the icon to repositioning the earth.
+        </p>
+        <p>
+          Click on the <em>View</em> tab and select the <em>Center in View</em> check box. When you
+          choose this option, the placemark moves to the center of the 3D viewer and cannot be
+          repositioned by dragging. Instead, you position the icon by <em>dragging the earth</em>,
+          which then moves independently of the placemark. This feature allows you to easily
+          position an icon to a new location beyond your current screen space.
+        </p>
+        <h3>
+          <a id="entering" name="entering"></a>Entering Advanced Coordinates
+        </h3>
+        <p class="note">
+          <strong>Tip</strong> - You can <a href="ug_3dviewer.html#viewprefs">change how Google
+          Earth displays coodinates</a> in the 3D viewer.
+        </p>
+        <p>
+          If you know the latitude and longitude for the placemark you are editing, click the View
+          tab and enter coordinates to reposition the geographic point for the placemark. The
+          placemark adjusts its position to the new values.
+        </p>
+        <p>
+          <strong>Latitude and Longitude</strong> values can be set using the following notations:
+        </p>
+        <ul>
+          <li>
+            <strong>Decimal Degrees</strong> (DDD) - In this notation, decimal precision is set in
+            the <em>degree</em> coordinate. For example, 49.11675953666N.
+          </li>
+          <li>
+            <strong>Degrees, Minutes, and Seconds</strong> (DMS) - In this notation, decimal
+            precision is set in the <em>seconds</em> coordinate. For example, 49 7'20.06"N.
+          </li>
+          <li>
+            <strong>Degrees, Minutes with Decimal Seconds</strong> (DMM) - In this notation,
+            decimal precision is set in the <em>minutes</em> coordinate. For example, 49
+            7.0055722"N. (Here, 20.06 seconds above is divided by 3600 to get the decimal minute
+            value for 20.06 seconds.)
+          </li>
+        </ul>
+        <p>
+          Latitude and Longitude syntax is specified as follows:
+        </p>
+        <ul>
+          <li>
+            <strong>Numeric Values</strong> - Simply separate each coordinate notation with a white
+            space and the entry will be recognized correctly. For example, you can indicate a DMS
+            notation as: 37 24 23.3. You could indicate a DMM notation as 49 7.0055722.<br>
+            <br>
+            You can also use the single quote mark (') for minutes and the double quote mark (")
+            for seconds, as follows: 49 7'20.06"<br>
+            <br>
+            Alternatively, you can use the Character Map utility in Windows to copy the degree
+            symbol and paste it into the Latitude/Longitude input boxes. To do this, select Start -
+            All Programs - Accessories - System Tools, and then click Character Map. The degree
+            symbol with Arial font is the second entry past the registration symbol. Click on the
+            symbol, click the Copy button and paste it into the input box.<br>
+            <br>
+            On the Mac, open TextEdit. Press Shift + Option +8. The degree symbol appears. Copy and
+            paste this into the input box.
+          </li>
+          <li>
+            <strong>Direction Notation (North/South, East/West)</strong><br>
+            <br>
+            Use <em>N</em>, <em>S</em>, <em>E</em>, or <em>W</em> to indicate direction. The letter
+            can be entered either upper or lower case and it can be placed before or after the
+            coordinate value. For example:<br>
+            N 37 24 23.3 is the same as 37 24 23.3 N<br>
+            <br>
+            You can also use the minus sign (-) to indicate a westerly or southerly position. When
+            you use this kind of notation, do not specify a letter symbol. Additionally, you do not
+            need to use a plus sign (+) to indicate northerly/easterly directions. So, for example
+            this is a valid entry:<br>
+            37 25 19.07, -122 05 08.40<br>
+            <br>
+            The following is NOT a valid entry:<br>
+            37 25 19.07 N, -122 05 08.40
+          </li>
+          <li>
+            <strong>Entering Latitude, Longitude Pairs</strong><br>
+            <br>
+            When entering latitudinal or longitudinal pairs, the first coordinate is interpreted as
+            latitude unless you use a direction letter to clarify (E or W). For example, you can
+            enter longitude first as:<br>
+            122 05 08.40 W 37 25 19.07 N<br>
+            <br>
+            However, you cannot use the minus sign to enter longitude first:<br>
+            -122 05 08.40 37 25 19.07<br>
+            <br>
+            You can separate pair entries with a space, a comma, or a slash:<br>
+            37.7 N 122.2 W<br>
+            37.7 N,122.2 W<br>
+            37.7 N/122.2 W
+          </li>
+        </ul>
+        <div class="note">
+          <strong>Tip</strong> - When entering advanced coordinates, the location for your
+          placemark will adjust as soon as your cursor exits the input box, but the view will
+          remain the same. Your placemark will seem to disappear from view. To see the placemark in
+          the 3D viewer, click the <em>View</em> tab and click the <em>Reset to default view</em>
+          button. Your 3D viewer will now be positioned over the placemark in its new location.
+        </div>
+        <h3>
+          <a id="setview" name="setview"></a>Setting the View
+        </h3>
+        <p>
+          When you create a new placemark, the view for that placemark (i.e., how it is seen in the
+          3D viewer) is automatically set to the current view on creation. However, you can change
+          the view for any placemark and save it so that each visit to the placemark shows the
+          saved view. This involves specifying a particular orientation around a given place and
+          then setting the orientation.
+        </p>
+        <p>
+          For example, after first viewing a particular place, you might subsequently find a
+          position that you like to view it from, such as at a specific tilt angle and from a
+          southerly direction. Rather than the default north-south, overhead viewpoint of a
+          location, you can specify your preferred position as the view for every time you visit.
+        </p><br>
+        <table border="0" cellpadding="0" cellspacing="0" class="c4" width="522">
+          <tr>
+            <td align="left" class="c3" valign="top">
+              <img alt="spacer" height="1" src="images/spacer.gif" width="25">
+            </td>
+            <td align="left" class="c3" valign="top">
+              <img alt="Top-down, north up view" height="224" src="images/flat.jpg" width=
+              "286"><br>
+              Top-down, north up view
+            </td>
+            <td align="left" class="c3" valign="top">
+              <img alt="spacer" height="1" src="images/spacer.gif" width="20">
+            </td>
+            <td align="left" class="c3" valign="top">
+              <img alt="Tilted and rotated view" height="224" src="images/tilt.jpg" width=
+              "285"><br>
+              Tilted and rotated view
+            </td>
+          </tr>
+        </table>
+        <p>
+          Setting a view for a folder serves a different purpose than for an individual item.
+        </p>
+        <h3>
+          <a id="newview" name="newview"></a>Applying a New View
+        </h3>
+        <p>
+          First, position the 3D viewer at the viewing orientation you desire and then choose one
+          of the following options:
+        </p>
+        <ul>
+          <li>
+            <strong>Right-click (CTRL click on the Mac) on the item</strong> in the list view or
+            the 3D view and select <em>Snapshot View</em> from the pop-up menu.<br>
+            <br>
+            The current view inside the Google Earth client 3D viewer is then set as the view for
+            the selected placemark or folder. You can examine the actual settings for the view by
+            editing the placemark or folder and clicking on the <em>View</em>.
+          </li>
+          <li>
+            <strong>Edit the placemark or folder</strong> - Right-click (CTRL click on the Mac) on
+            the folder or icon and select <em>Properties</em> from the pop-up menu. Click on the
+            <em>View</em> tab in the Edit... dialog box. The current values for the view are
+            displayed. When you are ready to set the view (you can still position the view at this
+            point), click on the <em>Snapshot current view</em> button.<br>
+            <br>
+            Alternatively, you can manually enter the settings if you have them. Click the
+            <em>OK</em> button to see the changes in the 3D viewer.
+          </li>
+        </ul>
+        <div class="note">
+          <strong>Note</strong> - When you change the values for a view, the 3D viewer changes
+          <em>only the view</em> for the selected item, not the position of the placemark (or
+          folder) itself. Conceivably, you could even set the view for a placemark so that the
+          placemark icon is not visible in the 3D viewer.
+        </div>
+        <h3>
+          <a id="defaultview" name="defaultview"></a>Returning to the Default, Top-Down View
+        </h3>
+        <p>
+          Right-click (CTRL click on the Mac) on the folder or icon and select <em>Edit...</em>
+          from the pop-up menu. Click on the <em>View</em> tab in the Edit... dialog box. Click the
+          <em>Reset view</em>. The view updates to the default orientation for the selected item.
+        </p>
+        <h2>
+          <a id="writing" name="writing"></a>Writing Descriptions
+        </h2>
+        <p>
+          The description field for places and folder can contain a lengthy amount of text,
+          sufficient for detailed descriptions. When you click on a placemark icon in the 3D
+          viewer, the description for that place appears in the information balloon that pops up. A
+          scroll bar appears when the description is too long to fit in the entire balloon.<br>
+          <br>
+          <img alt=
+          "When you click on a placemark icon in the 3D viewer, the description for that place appears in the information balloon that pops up"
+          border="0" height="365" src="images/editing-writingdesc1.jpg" width="373">
+        </p>
+        <p>
+          In the <em>Places</em> panel, a small amount, or snippet, of the description appears
+          beneath the folder or item.<br>
+          <br>
+          <img alt=
+          "In the Places pane, a small amount, or snippet of the description appears beneath the folder or item"
+          border="0" height="180" src="images/editing-writingdesc2.png" width="290">
+        </p>
+        <p>
+          Keep in mind the following points about text in the Description field:
+        </p>
+        <ul>
+          <li>
+            <strong>Valid web URLs</strong> are automatically converted to HTML and can be clicked
+            on from the info balloon to produce the related web page in the web window.
+          </li>
+          <li>
+            <strong>Many HTML tags are respected,</strong> such as font, style, and table tags. If
+            you are familiar with HTML, you can be quite creative in how your descriptions are
+            formatted! All HTML tags should be properly closed.
+          </li>
+          <li>
+            <strong>You can include images in your description</strong> using the IMG HTML tag to
+            refer to either:
+            <ul>
+              <li>Images stored on your computer's hard drive (e.g., &lt;img src="C:\Documents and
+              Settings\HP\My Documents\Pictures\myDescriptiveImage.jpg"&gt;)
+              </li>
+              <li>Images on the internet (e.g. &lt;img
+              src="http://www.test.com/images/myDescriptiveImage.jpg"&gt;).
+              </li>
+            </ul>When you email that placemark to another person, local images are included.
+          </li>
+        </ul>
+        <div class="note">
+          <strong>Note</strong> - While theoretically the amount of text that you can enter into a
+          description is unlimited, an extremely lengthy description can negatively impact the
+          performance of Google Earth.
+        </div>
+        <h2>
+          <a id="changing" name="changing"></a>Changing Labels
+        </h2>
+        <p>
+          When you <a href="ug_placemarks.html">create or edit a placemark or folder</a>, you can
+          change the label for that item by typing in your text in the <em>Name</em> field. By
+          selecting the <em>Style, Color</em> tab in the <em>Edit Placemark</em> dialog box, you
+          can also change the following features for a label.
+        </p>
+        <ul>
+          <li>
+            <strong>Color</strong> - To set the color for a label, click on the <em>Color</em>
+            swatch and choose a color using the standard color selector. You can choose preset
+            colors or define your own in a variety of ways. When you select this color, the label
+            updates before the <em>Edit</em> dialog box is closed, so you can view your changes and
+            modify them easily.
+          </li>
+          <li>
+            <strong>Size</strong> - To change the display size for a label, enter a value in the
+            <em>Scale</em> field or click on the <em>Scale</em> button and use the slider to adjust
+            the size of the label to your preference. The maximum scale value for an icon is 4
+            pixels.
+          </li>
+          <li>
+            <strong>Opacity</strong> - The opacity setting indicates how transparent the label is
+            relative to the imagery beneath it. By default, the opacity is 100%, which means that
+            it completely obscures any imagery beneath it. If you have changed the size and color
+            of your label, you might want it to be partially transparent so imagery beneath is
+            visible. To do this, enter a percentage opacity in the <em>Opacity</em> field.
+          </li>
+        </ul>
+        <h2>
+          <a id="seticons" name="seticons"></a>Setting Icons for Places and Folders
+        </h2>
+        <p>
+          When you create or edit a placemark or folder, you can change the icon for that item by
+          clicking on the icon button to the right of the <em>Name</em> field and choosing a new
+          icon from the palette.
+        </p>
+        <div class="note">
+          <strong>Note</strong> - You cannot set the icon for a folder if that folder contains a
+          mixture of placemark data such as a combination of placemarks and overlays. To set icons
+          and their values for folders, you must <a href="#foldersettings">enable shared
+          styles</a>.
+        </div>
+        <h3>
+          <a id="customicons" name="customicons"></a>Using Custom Icons
+        </h3>
+        <p>
+          For single placemarks and folders of placemarks, you can select a custom image to use as
+          an icon rather than one of the default set of icons available to all placemarks. When you
+          set a custom icon for a single placemark, the new icon appears for that placemark only.
+          You can also set a custom icon for a folder if style sharing is enabled. In that case,
+          any change to the folder applies to all of the items in the folder.
+        </p>
+        <div class="note">
+          <strong>Note</strong> - As with images on web page graphics, custom icons with smaller
+          file sizes work best.
+        </div>
+        <p>
+          To choose a custom icon:
+        </p>
+        <ol>
+          <li>Click the icon in the top right corner of the Edit Placemark/Folder dialog box.
+          </li>
+          <li>Choose <em>custom</em> from the icon palette.
+          </li>
+          <li>Indicate a valid path or Web URL in the field beneath the <em>Icon File/URL</em>
+          label or click <em>Browse</em> to specify the file on your computer or network. If you
+          refer to an image on the web, be sure you have entered the path to the <em>image
+          itself</em>, not the web page containing the image.
+          </li>
+        </ol>
+        <h3>
+          <a id="setline" name="setline"></a>Setting Line Color and Width
+        </h3>
+        <p>
+          When your placemark data consists of lines, such as with saved directions, you can use
+          the <em>Line</em> properties in the <em>Style</em> tab to modify the display of the line
+          in the 3D viewer.
+        </p>
+        <p>
+          <img alt="Edit Folder dialog box" height="221" src="images/label.png" width="347">
+        </p>
+        <ul>
+          <li>
+            <strong>Color</strong> - To set the color for a line, click on the <em>Color</em>
+            swatch and choose a color using the standard color selector. You can choose preset
+            colors or define your own in a variety of ways. Your color choice is added to that of
+            the existing line data in the same way as icon color is modified. In addition, the
+            alpha channel available in the color picker adjusts the opacity of the line in the same
+            way as the <em>Opacity</em> setting does.
+          </li>
+          <li>
+            <strong>Width</strong> - The default setting for line width is 1 pixel. You can adjust
+            the thickness of the line from 0 to 4 pixels by clicking on the <em>Width</em> button
+            and using the up and down arrows to adjust the width within the allowed range. You can
+            enter other values for the line width by typing in a number in the <em>Width</em>
+            field. <em>Note that DirectX users cannot adjust line width.</em>
+          </li>
+          <li>
+            <strong>Opacity</strong> - The opacity setting indicates how transparent the line is
+            relative to the imagery beneath it. By default, the opacity is 100%, which means that
+            it completely obscures any imagery beneath it. If you have changed the width and color
+            of your line, you might want it to be partially transparent so imagery beneath is
+            visible. To do this, enter a percentage opacity in the <em>Opacity</em> field or click
+            on the <em>Opacity</em> button and use the slider to adjust transparency to your
+            preference.
+          </li>
+        </ul>
+        <h2>
+          <a id="setaltitude" name="setaltitude"></a>Setting Altitude
+        </h2>
+        <p>
+          You can change altitude settings in the Altitude tab of the Edit Placemark/Folder dialog
+          box (<em>Edit &gt; Properties</em>). Altitude values can be set on a single item, across
+          all items in a folder using shared styles, or using a mixture of altitude settings for
+          items in a folder. Unlike other shared elements, modifying one item in a folder does not
+          disable the shared style feature for other elements such as color and scale. If your
+          folder contains items with different altitude settings, the parent folder indicates
+          <em>Mixed Modes</em> as the altitude settings.
+        </p>
+        <p>
+          Finally, you can use the values set in the <em>Altitude</em> area to extrude geometry.
+        </p>
+        <h3>
+          <a id="altitudesettings" name="altitudesettings"></a>Altitude Settings
+        </h3>
+        <p>
+          There are three options for altitude:
+        </p>
+        <ul>
+          <li>
+            <strong>Clamped to ground</strong> - By default, all folders and placemarks are set to
+            this option. Here, because the altitude for the placemark is locked to the ground, no
+            height value is allowed for altitude. This ensures that the placemark remains fixed to
+            the earth, regardless of whether terrain is on or off.
+          </li>
+          <li>
+            <strong>Relative to ground</strong> - When this option is selected, altitude of the
+            placemark is relative to the actual ground elevation of the view. For example, if you
+            set 9 meters as the altitude of a placemark in Venice, Italy, the elevation of the
+            placemark will be 9 meters above the ground because Venice is at sea level. However, if
+            you set the same placemark above Denver, Colorado, the elevation of the placemark will
+            be 1616 meters, because the elevation of Denver is 1607 meters. You can see this how
+            this appears in the 3D viewer by setting elevation, tilting the view, and turning
+            terrain on and off.<br>
+            <br>
+            <table border="0" cellpadding="0" cellspacing="0" class="c4" width="522">
+              <tr>
+                <td align="left" class="c3" valign="top">
+                  <img alt=
+                  "Placemark over the Google campus with relative altitude set to nine meters, terrain off "
+                  height="250" src="images/editing_altitude1.jpg" width="250"><br>
+                  Placemark over the Google campus with relative altitude set to nine meters,
+                  terrain off
+                </td>
+                <td align="left" class="c3" valign="top">
+                  <img alt="spacer" height="1" src="images/spacer.gif" width="20">
+                </td>
+                <td align="left" class="c3" valign="top">
+                  <img alt="Same placemark, terrain on" height="250" src=
+                  "images/editing_altitude2.jpg" width="250"><br>
+                  Same placemark, terrain on
+                </td>
+              </tr>
+            </table><br>
+            You can adjust the altitude using the slider or by entering a value in meters in the
+            <em>Altitude</em> field.
+          </li>
+          <li>
+            <strong>Absolute</strong> - When this option is selected, altitude of the Placemark is
+            above sea level. In the example above, if you have terrain on and keep altitude to 9
+            meters but set the altitude type to <em>Absolute</em>, the icon would disappear from
+            view because it is actually below the level of the terrain at Denver, Colorado. You can
+            adjust the altitude using the slider or by entering a value in meters in the
+            <em>Altitude</em> field.
+          </li>
+        </ul>
+        <h3>
+          <a id="extruding" name="extruding"></a>Drawing Lines With Skirting
+        </h3>
+        <p>
+          Once you set an altitude value for a folder or a placemark, you can check <em>Extend to
+          ground</em>. This drwas a single line appears from the earth's surface to the placemark.
+          When a line or a path is drawn with skirting, a geometric shape is drawn from the earth's
+          surface to the path.
+        </p>
+        <h2>
+          <a id="foldersettings" name="foldersettings"></a>Modifying Folder Settings
+        </h2>
+        <p>
+          Applying description, label, and advanced settings to a folder provides display
+          characteristics that differ from settings applied to individual placemarks or other
+          geometry features. These differences are described here. For more information on how to
+          apply these settings, see the rest of the topics in this section.
+        </p>
+        <ul>
+          <li>
+            <strong>Folder name and description</strong> - The name and description that you
+            provide when you edit a folder applies only to that folder and not to the items it
+            contains. Use these fields to identify the folder and describe its contents.
+          </li>
+          <li>
+            <strong>Folder view</strong> - As with the name and description, the view applies
+            <em>only to the folder</em>. Setting a view for a folder is useful when you want to
+            create a viewing angle to encompass all the items contained by the folder. For example,
+            you might have a folder containing placemarks of your favorite golf clubs in a specific
+            region, each with a separate viewing angle. You can place them all in a folder and set
+            a viewing angle for the folder in order to display all of the placemarks from a
+            consistent viewing angle, if desired. See <a href="#setview">Setting the View</a>.
+          </li>
+          <li>
+            <strong>Shared styles</strong> - You can define a single style for a folder and have
+            the style elements apply to all folder items when you want them to have the same line,
+            label, and icon appearance. This is accomplished first by enabling the "sharing" state
+            for the folder, if it is not already available.<br>
+            <br>
+            By default, when all items in a folder have either the exact same styles (same line,
+            label, and icon settings) or <em>no</em> styles set, sharing is enabled for the parent
+            folder. This means that setting universal styles for all folder items is simply a
+            matter of setting the style for the parent folder.<br>
+            <br>
+            If the individual items within the folder have different style settings, sharing is
+            turned off for the parent folder.<br>
+            <br>
+            You can click the <em>Share Style</em> button to enable style sharing for all items.
+            Subsequent changes to the settings in this panel <em><strong>over-write</strong></em>
+            any style modifications you have made to individual items within the folder.
+          </li>
+          <li>
+            <strong>Shared altitude settings</strong> - As with styles, altitude settings can apply
+            to all items in the folder once style sharing is enabled (see above). This includes
+            subfolders. Altitude settings apply to all geometry within the folder. However, if you
+            set different altitude options for individual items within a folder, the altitude
+            option for the folder indicates a setting of "mixed modes."
+          </li>
+        </ul>
+        <h3>
+          <a id="itemsettings" name="itemsettings"></a>Modifying Settings for a Single Item
+        </h3>
+        <p>
+          You can modify all settings for a single item to affect the display of that item only.
+          When you change the style and altitude settings for an item in a folder, style sharing is
+          disabled for that folder. However, styles that have been previously applied via the
+          shared styles are preserved for other items in the folder.
+        </p>
+        <div class="note">
+          <strong>Note</strong> - The recommended process of using a combination of shared styles
+          with individual placemark modifications is to first apply shared settings to the folder
+          to establish all desired common elements (e.g., icon scale and line color). At that
+          point, you can modify individual items without affecting the general style settings for
+          the other items. However, should you later re-enable shared styles, any individual
+          modifications are overwritten.
+        </div>
+        <p>
+          <a href="#top">Other topics in this section</a> describe the features you can apply to
+          individual place items.
+        </p>
+      </div>
+    </div>
+    <div id="footer">
+      <div id="footerlogo">
+        <img alt="Google color balls" height="53" src="http://earth.google.com/images/art.gif"
+        width="143">
+      </div>
+      <div id="copyright">
+        <p>
+          &copy;2010 Google - <a href="http://www.google.com/privacy.html">Privacy Policy</a> -
+          <a href="http://www.google.com/terms_of_service.html">Terms and Conditions</a> - <a href=
+          "http://www.google.com/about.html">About Google</a>
+        </p>
+      </div>
+    </div>
+    <p id="date">
+      Updated on <script type="text/javascript">
+//<![CDATA[
+      <!-- hide script from old browsers
+      var lm = new Date(document.lastModified);
+      document.write(lm.toDateString());
+      //-->
+      //]]>
+      </script>
+    </p><script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript">
+</script><script type="text/javascript">
+//<![CDATA[
+    _uacct="UA-18031-5";
+    _utcp="/userguide/";
+    _uanchor=1;
+    urchinTracker();
+    //]]>
+    </script>
+  </body>
+</html>

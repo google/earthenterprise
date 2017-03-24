@@ -1,0 +1,23 @@
+diff -u -U3 qt-x11-commercial-3.3.6.orig/src/tools/qmap.h qt-x11-commercial-3.3.6/src/tools/qmap.h
+--- qt-x11-commercial-3.3.6.orig/src/tools/qmap.h	2013-12-03 19:44:03.572417117 +0100
++++ qt-x11-commercial-3.3.6/src/tools/qmap.h	2013-12-03 02:20:40.965944560 +0100
+@@ -47,6 +47,7 @@
+ #endif // QT_H
+ 
+ #ifndef QT_NO_STL
++#include <cstddef>
+ #include <iterator>
+ #include <map>
+ #endif
+
+diff -u -U3  qt-x11-commercial-3.3.6.orig/src/tools/qvaluelist.h qt-x11-commercial-3.3.6/src/tools/qvaluelist.h
+--- qt-x11-commercial-3.3.6.orig/src/tools/qvaluelist.h 2013-12-04 02:14:27.128818111 +0100
++++ qt-x11-commercial-3.3.6/src/tools/qvaluelist.h      2013-12-04 02:16:07.159608752 +0100
+@@ -45,6 +45,7 @@
+ #endif // QT_H
+ 
+ #ifndef QT_NO_STL
++#include <cstddef>
+ #include <iterator>
+ #include <list>
+ #endif

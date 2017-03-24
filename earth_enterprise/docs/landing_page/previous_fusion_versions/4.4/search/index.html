@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../fusion/html/css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Search Framework API</title>
+</head>
+
+<body>
+
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="../fusion/html/images/index.gif" />
+  </div>
+  <h1 id="doc_title">Search Framework API</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../index.html">4.4 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Search Framework API</strong></li>
+    <li><a href="index.html" id="selected">Overview</a></li>
+    <li><a href="JavaClassLibrary.html">Java Class Library</a> </li>
+    <li><a href="CreatingAPlugin.html">Creating a Plug-in</a> </li>
+    <li><a href="samples.html">Sample Plug-ins</a></li>
+    <li><a href="docs/index.html">Class Reference</a></li>
+  </ul>
+</div> 
+<!-- ########## END SIDE NAVIGATION ########## -->
+
+<!-- ########## PAGE CONTENT ########## -->
+<div id="pagecontent">
+
+<h1>Developer Guide Overview</h1>
+
+<p>This guide explains how to use the Search Framework Java API to write a plug-in application for Google Earth or Google Maps to search a custom data source. The plug-in creates requests and responses in the framework's Common Search Format, a generic format that can be adapted to deal with spatial data from any data store.</p>
+
+<h2>Audience</h2>
+<p>The Search Framework  is for developers who are familiar with Java. This API also requires use of the <a href="http://www.vividsolutions.com/jts/jtshome.htm">JTS Topology Suite</a>, an API that includes 2D spatial functions and elements.</p>
+
+<h2>Search Framework Components</h2>
+<p>In addition to the Developer Guide you are currently reading, the Google Earth Enterprise Search Framework contains the following components:</p>
+<ul>
+  <li><strong>Search Framework Java Class Library</strong> and reference documentation</li>
+  <li><strong>JTS Topology Suite</strong> </li>
+  <li><strong>Sample Plug-in Application</strong> (<code>ExamplePlugin.java</code>) - This basic sample shows how a search plug-in can query a database, create geometries based on the search results, associate styles with them, and return them to the calling application. </li>
+  </ul>
+<h2>Related Information</h2>
+<p>The following references provide useful related information:</p>
+<ul>
+  <li><em>Google Earth Enterprise Fusion Reference</em> - You can replace the standard search tabs in Google Earth EC <em>(Fly To / Local Search / Directions)</em> with tabs configured for your search plug-in. This reference describes how to configure custom search tabs in the Google Earth EC user interface. </li>
+  <li>For more information on Java, check out the <a href="http://java.sun.com/">Sun Developer Network</a>. This Sun website provides extensive information on Java for both novice and experienced Java programmers. </li>
+  <li><a href="http://www.vividsolutions.com/JTS/JTSHome.htm">JTS Topology Suite</a> - This website provides documentation, examples, and support for the JTS Topology Suite. </li>
+</ul>
+<h2>Key Concepts</h2>
+<p>A custom search plug-in application allows a standard application, such as Google Earth or Google Maps, to issue search requests to a custom data store, as shown in Figure 1.</p>
+<p>The client application (Google Earth or Google Maps) communicates with the plug-in through a specialized Adapter, as follows:</p>
+<ol>
+  <li>The Adaper captures the search request from the client application and inserts the request into  a <a href="#search">Search Container</a> that uses the <a href="#commonSearchFormat">Common Search Format</a>.</li>
+  <li>The Adapter then sends the Search Container  to the plug-in application.</li>
+  <li>The plug-in handles communication with a specific data store, validating the original request and querying the data store based on the request.</li>
+  <li>The data store returns its responses to the plug-in, which creates the search response and then returns the container to the Adapter. </li>
+  <li>When the Adapter receives the Search Container from the plug-in, the Adapter translates the responses back into the format expected by the calling application. For Google Earth, the format used is KML. For Google Maps, the language is a Javascript-based structure. </li>
+  </ol>
+<p>Your job as a developer is to write the code for the search plug-in; the Adapters are provided as part of the Search Framework software. </p>
+<p><strong>Figure 1. Path of a search query </strong></p>
+
+
+<p>&nbsp;</p>
+<a name="search" id="search"></a> <img src="Images/SearchFrameworkOverview.gif" width="598" height="303" /><h3><strong>SearchContainer</strong></h3>
+<p>The Search Container encapsulates the request and response in a common format understood by all Adapters and plug-ins. All responses to the original request are collected into one Search Container that is returned to the Adapter. Figure 2 shows the contents of a Search Container, including a detailed breakdown of a search response.</p>
+<p>The search response contains a collection of Styles and a collection of Search Results with geometry and related descriptive data. The Styles describe how to display text balloons, polygons, lines, and icons. Each Style has an ID so that it can be referenced multiple times by different geometry objects. </p>
+<p><strong>Figure 2. Contents of a Search Container </strong></p>
+<img src="Images/SearchContainer.gif" width="604" height="421" /></strong>
+
+<p><strong>Figure 3 </strong>shows the components of a Search Result. The two main elements of a Search Result are <em>geometry</em> and a <em>Style ID</em> that refers to the Style that describes how to display the geometry. The geometry itself is defined using JTS Topology Suite functions. The <code>GeomMetaData</code> is metadata such as a <code>name</code>, <code>snippet</code> (brief description), and <code>description</code> (possibly lengthy description with standard HTML elements). This metadata is also usually displayed along with the geometry by the calling application (Google Earth or Google Maps). </p>
+<p><strong>Figure 3.  Contents of a Search Result</strong></p>
+<p><img src="Images/SearchResult.gif" width="350" height="216" />
+</p>
+<a name="commonSearchFormat" id="commonSearchFormat"></a>
+<h3>Common Search Format</h3>
+<p>The following Style elements are supported in KML for Google Earth plug-ins: </p>
+<ul>
+  <li>balloonStyle
+    <ul>
+      <li>bgColor </li>
+	    <li>textColor</li>
+	    <li>text</li>
+	  </ul>
+	</li>
+  <li>iconStyle
+    <ul>
+      <li>color</li>
+			<li>scale</li>
+      <li>href</li>
+    </ul>
+  </li>
+  <li>lineStyle
+    <ul>
+      <li>color</li>
+      <li>width</li>
+    </ul>
+  </li>
+  <li>polyStyle
+	<ul>
+    <li>color</li>
+		<li>colorMode</li>
+	  <li>fill</li>
+	  <li>outline</li>
+	 </ul>
+	</li>
+</ul>
+<p>Plug-ins for Google Maps support only points (no lines or polygons). The Adapter for Google Maps generates centroid points for lines and polygons.</p>
+
+</div> 
+<!-- ########## END PAGE CONTENT ########## -->
+
+</div>
+<!-- end wrapper -->
+
+
+
+</body>
+</html>

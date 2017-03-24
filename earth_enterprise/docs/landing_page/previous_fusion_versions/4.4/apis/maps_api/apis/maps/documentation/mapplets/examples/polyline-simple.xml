@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="Adding a Polyline to the Map" height="300">
+  <Require feature="sharedmap"/>
+</ModulePrefs>
+<Content type="html"><![CDATA[
+
+<small>
+This example displays a polyline with 5 random points. 
+The polyline is red, 5 pixels thick, and has 70% opacity.
+</small>
+
+<script>
+var map = new GMap2();
+
+map.getBoundsAsync(function(bounds) {
+  var southWest = bounds.getSouthWest();
+  var northEast = bounds.getNorthEast();
+  var lngSpan = northEast.lng() - southWest.lng();
+  var latSpan = northEast.lat() - southWest.lat();
+
+  var points = [];
+  for (var i = 0; i < 5; i++) {
+    points.push(new GLatLng(southWest.lat() + latSpan * Math.random(),
+                            southWest.lng() + lngSpan * Math.random()));
+  }
+
+  map.addOverlay(new GPolyline(points, "#ff0000", 5, 0.7));
+});
+</script>
+
+]]></Content>
+</Module>

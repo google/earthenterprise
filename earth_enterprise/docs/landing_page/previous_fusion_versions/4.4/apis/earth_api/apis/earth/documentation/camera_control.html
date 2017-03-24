@@ -1,0 +1,434 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+
+ 
+
+
+   
+  
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/camera_control.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Camera Control - Google Earth API - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/earth/documentation/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../css/iehacks.css"><![endif]-->
+
+    <link href="../../../css/semantic_headers.css" rel="stylesheet" type="text/css" />
+       <script src="addCommentsToToc.js" type="text/javascript"></script>
+  </head>
+
+  <body class="gc-documentation">
+
+    
+    
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" class="dropdown" href="http://code.google.com" onclick="return false;"><img width="13" height="13" class="globeicon" src="../../../images/globe2_small.png"
+     ><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  <a href="#gc-pagecontent">Skip to page content</a>
+  <a href="#gc-toc">Skip to main navigation</a>
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../../../images/code_logo.png" height="40" width="161" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "ajax apis" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+<h2 id="googlecode-promo">Make web development faster with these <a href="http://chrome.google.com/extensions/featured/web_dev" onclick="siteTracker._trackEvent('Promos','Web Development',this.href);">Chrome Extensions</a>!</h2>
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Earth API</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="../index.html" title="Google Earth API home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="index.html" class="selected" title="Official Google Earth API documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../faq.html" title="Answers to frequently asked questions about Google Earth API">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="../articles/index.html" title="Focused articles and tutorials for Google Earth API developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Earth API blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="http://groups.google.com/group/google-earth-browser-plugin/topics" title="Google Earth API developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="http://code.google.com/apis/maps/terms.html" title="Google Earth API terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="http://code.google.com/apis/maps/signup.html">Sign up for a Maps API key</a></li>
+</ul>
+
+<div class="line"></div>
+
+<ul>
+
+  <li>
+    <h2><a href="reference/#">API Reference</a></h2>
+    <div class="line"></div>
+  </li>
+  <li><h2>Developer's Guide</h2>
+    <ul>
+      <li><a href="index.html">Introduction</a></li>
+      <li><a href="placemarks.html">Placemarks</a></li>
+      <li><a href="balloons.html">Balloons</a></li>
+      <li><a href="geometries.html">Geometries & Overlays</a></li>
+      <li><a href="camera_control.html">Camera Control</a></li>
+      <li><a href="layers.html">Layers & Controls</a></li>
+      <li><a href="time.html">Time</a> <sup class="new">Updated</sup></li>
+      <li><a href="ocean.html">Ocean</a></li>
+      <li><a href="sky_mars_moon.html">Sky, Mars, & Moon</a></li>
+      <li><a href="touring.html">Touring</a></li>
+      <li><a href="events.html">Events</a></li>
+      <li><a href="accessors.html">Accessors</a> <sup class="new">New!</sup></li>
+      <li><a href="containers.html">Object Containers</a></li>
+      <li><a href="kml.html">KML</a></li>
+      <li><a href="options.html">Options</a></li>
+      <li><a href="debugging.html">Debugging</a></li>
+    </ul>
+  </li>
+        
+  <div class="line"></div>
+    
+  <li><h2 class="tlw-expanded">Code Samples</h2>
+    <ul>
+      <li><a href="examples.html">Examples</a></li>
+      <li><a href="demogallery.html">Demo Gallery</a>
+      </li>
+      <li><a href="http://code.google.com/apis/ajax/playground/?exp=earth">Code Playground</a></li>
+    </ul>
+  </li>
+    
+  <div class="line"></div>
+    
+  <li><h2 class="tlw-expanded">More Resources</h2>
+    <ul>
+      <li><a href="mediagallery.html">Media</a></li>
+      <li><a href="releasenotes.html">Release Notes</a></li>
+      <li><a href="http://code.google.com/p/earth-api-utility-library">Utility Library</a></li>
+      <li><a href="http://code.google.com/p/earth-api-samples/issues/list?q=label%3AType-Defect">Known Issues</a></li>
+    </ul>
+  </li>
+</ul>
+
+<div class="line"></div>
+<ul>
+ <li>
+    <h2>Related Docs</h2>
+    <ul>                
+      <li><a href="http://code.google.com/apis/kml/documentation/index.html">KML</a></li>
+      <li><a href="http://code.google.com/apis/maps/documentation/index.html">Maps API</a></li>
+    </ul>                
+ </li>
+</ul>
+        <a class="hidden" href="#gc-topnav-anchor">More Google Earth API resource links</a>
+      </div>
+
+      <div class="g-unit" id="gc-pagecontent">
+        <script type="text/javascript">CODESITE_docEarlyProcessing();</script>
+
+
+        <h1 class="page_title">Camera Control</h1>
+
+
+
+<div class="toc">
+<ol>
+   <li><a href="#intro">Introduction</a></li>
+   <li><a href="#current_view">Getting the current view</a></li>
+   <li><a href="#pan">Pan</a></li>
+   <li><a href="#tilt">Tilt</a></li>
+   <li><a href="#zoom">Zoom</a></li>
+   <li><a href="#flytospeed">Setting the FlyTo speed</a></li>
+</ol>
+</div>
+
+<h2 id="intro">Introduction</h2>
+
+<p>The 'view' in Google Earth is the image you see in the plugin window; the 'camera' is the viewer's location in space. There are two different ways to define a view:</p>
+<ul>
+   <li><strong>Camera</strong>: with the Camera view, the point you specify defines the location of the viewer in space. Setting a latitude and longitude moves the viewer to a specific location; the viewer can then be hoisted into space (or underwater) and rotated around the x, y, and z axes until the view is as desired.</li>
+   <li><strong>LookAt</strong>: with a LookAt, the point being specified in the code is the point being viewed. Changing the range, tilt, and heading values will never change the absolute point in space at which the view is aimed. </li>
+   </ul>
+<p>You can read more about views in the KML developer's guide <a href="http://code.google.com/apis/kml/documentation/cameras.html">Cameras</a> documentation.</p>
+
+<h2 id="current_view">Getting the current view</h2>
+<p>You can use the <code>copyAsLookAt()</code> function to return the latitude and longitude of the point at which the camera is looking, the altitude at which the camera is set, its tilt, and the compass heading in degrees. Below, the returned values are passed to a new lookAt object:</p>
+<pre class="prettyprint">
+var lookAt = ge.getView().copyAsLookAt(ge.ALTITUDE_RELATIVE_TO_GROUND);
+</pre>
+
+<p>Similarly, the view can be returned as a Camera value: </p>
+<pre class="prettyprint">
+var camera = ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
+</pre>
+
+<h2 id="pan">Panning the camera</h2>
+<p>The camera can be moved to either an absolute location, defined by a Camera or LookAt, or to a position relative to its current view.</p>
+<h3>Panning to an absolute location</h3>
+<p>Locations on the globe are specified by their latitude and longitude values. The Google Earth Plugin accepts values with up to six digits of precision (0.123456).</p>
+<p>To move from the current view to an absolute location, while retaining the tilt, range, heading, and altitude values:</p>
+<pre class="prettyprint">
+// Get the current view
+var lookAt = ge.getView().copyAsLookAt(ge.ALTITUDE_RELATIVE_TO_GROUND);
+
+// Set new latitude and longitude values
+lookAt.setLatitude(36.584207);
+lookAt.setLongitude(-121.754322);
+
+// Update the view in Google Earth
+ge.getView().setAbstractView(lookAt);
+</pre>
+
+<p>Alternatively, you can define a new LookAt or Camera object, then set the new object as the view:
+
+<pre class="prettyprint">
+// Create a new LookAt
+var lookAt = ge.createLookAt('');
+
+// Set the position values
+lookAt.setLatitude(36.584207);
+lookAt.setLongitude(-121.754322);
+lookAt.setRange(5000.0); //default is 0.0
+
+// Update the view in Google Earth
+ge.getView().setAbstractView(lookAt);
+</pre>
+<h3>Panning relative to the current view</h3>
+<p>The view can be moved in any direction relative to its current position. The following example moves the camera north by 25 degrees longitude and east by 25 degrees latitude:</p>
+<pre class="prettyprint">
+// Get the current view
+var lookAt = ge.getView().copyAsLookAt(ge.ALTITUDE_RELATIVE_TO_GROUND);
+
+// Add 25 degrees to the current latitude and longitude values
+lookAt.setLatitude(lookAt.getLatitude() + 25.0);
+lookAt.setLongitude(lookAt.getLongitude() + 25.0);
+
+// Update the view in Google Earth
+ge.getView().setAbstractView(lookAt);
+</pre>
+
+<h2 id="tilt">Tilting the camera</h2>
+<p>A LookAt can contain a tilt value between 0 and 90 degrees inclusive, with 0 being directly above the viewed point, and 90 viewing along the horizon.</p>
+<p>A Camera can contain a tilt value between 0 and 360 degrees. 0 degrees is a view directly down from the specified point; 90 sets a view along the horizon; 180 views directly up into the sky. In addition, a Camera accepts a roll attribute, which rotates the viewer around the z axis.</p>
+<p>Tilting a LookAt:</p>
+<pre class="prettyprint">
+// Get the current view
+var lookAt = ge.getView().copyAsLookAt(ge.ALTITUDE_RELATIVE_TO_GROUND);
+
+// Add 15 degrees to the current tilt
+lookAt.setTilt(lookAt.getTilt() + 15.0);
+
+// Update the view in Google Earth
+ge.getView().setAbstractView(lookAt);
+</pre>
+
+<p>Tilting a Camera:
+<pre class="prettyprint">
+// Get the current view
+var camera = ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
+
+// Add 30 degrees to the current tilt
+// and 45 to the roll
+camera.setTilt(camera.getTilt() + 30.0);
+camera.setRoll(camera.getRoll() + 45.0);
+
+// Update the view in Google Earth
+ge.getView().setAbstractView(camera);
+</pre>
+
+<h2 id="zoom">Zooming the camera</h2>
+<p>Zooming in and out is controlled by the <code>range</code> attribute for LookAts, and the <code>altitude</code> attribute for Cameras. </p>
+<p>Note that changing the altitude attribute of a LookAt changes the altitude
+   of the point being viewed. Because the viewer range is relative to this point,
+   the viewer's altitude is also changed.</p>
+
+<p>LookAt:</p>
+<pre class="prettyprint">
+// Get the current view
+var lookAt = ge.getView().copyAsLookAt(ge.ALTITUDE_RELATIVE_TO_GROUND);
+
+// Zoom out to twice the current range
+lookAt.setRange(lookAt.getRange() * 2.0);
+
+// Update the view in Google Earth
+ge.getView().setAbstractView(lookAt);
+</pre>
+
+<p>Camera:</p>
+<pre class="prettyprint">
+// Get the current view
+var camera = ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
+
+// Zoom out to twice the current distance
+camera.setAltitude(camera.getAltitude() + 5000);
+
+// Update the view in Google Earth
+ge.getView().setAbstractView(camera);
+</pre>
+
+<h2 id="flytospeed">Setting the FlyTo speed</h2>
+<p>You can control the speed at which the plugin moves to newly-specified locations. <code>GEOptions.setFlyToSpeed()</code> accepts a float from 0.0 to 5.0, inclusive, as well as <code>SPEED_TELEPORT</code>. Speed increases with the value; <code>SPEED_TELEPORT</code> moves to the specified location instantly.</p>
+<pre class="prettyprint">
+// Set the FlyTo speed
+ge.getOptions().setFlyToSpeed(ge.SPEED_TELEPORT);  <br />  
+// Get the current view
+var lookAt = ge.getView().copyAsLookAt(ge.ALTITUDE_RELATIVE_TO_GROUND);
+
+// Add 15 degrees to the current tilt
+lookAt.setTilt(lookAt.getTilt() + 15.0);
+
+// Update the view in Google Earth
+ge.getView().setAbstractView(lookAt);
+</pre>
+
+
+
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

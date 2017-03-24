@@ -1,0 +1,70 @@
+#-*- Python -*-
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+Import('env')
+import os
+
+env = env.Clone();
+env.Append(CPPPATH = ['#common/geindex'])
+
+module = env.sharedLib('mod_fdb',
+               ['mod_fdb.c', 'mod_fdb_impl.cpp', 'apache_fdb_reader.cpp',
+                'unpackermanager.cpp', 'fdb_reader_manager.cpp',
+                'fdbservice.cpp', 'portableservice.cpp', 'fusiondbservice.cpp',
+                'tileservice.cpp', 'motf_generator.cpp',
+                env['SERVERVER'] ],
+               LIBS=['glb', 'qtutils', 'serverdb',
+                     'serverdb_r', 'cutspec', 'gdal'],
+               LINK=['g++'])
+
+# Install /opt/google/gehttpd/auth directory only
+auth_dir = env.installdirs['httpd'].entry_abspath('auth')
+if (not os.path.exists(auth_dir)):
+    os.makedirs(auth_dir)
+
+env.install('httpdmodules', [module])
+
+env.install('httpdconf', ['conf.d/gemodules.conf',
+                          'conf.d/security.conf',
+                          'conf.d/dav_setup.conf',
+                          'conf.d/portable.conf',
+                          'conf.d/worker_mpm.conf'])
+
+# TODO: update examples.
+env.install('httpdconfex', ['conf.d/examples/location_based_ge_vs_example.location',
+                            'conf.d/examples/location_based_map_vs_example.location',
+                            'conf.d/examples/name_based_ge_vs_example.vhost',
+                            'conf.d/examples/name_based_map_vs_example.vhost',
+                            'conf.d/examples/port_based_ge_vs_example.vhost',
+                            'conf.d/examples/port_based_map_vs_example.vhost',
+                            'conf.d/examples/publisher_ldap_auth.conf',
+                            'conf.d/examples/publisher_digest_auth.conf',
+                            'conf.d/examples/default_ge_digest.location'], 'previous_version/')
+
+env.install('httpdconfex', ['conf.d/examples/public_host.location',
+                            'conf.d/examples/secure_host.location'])
+
+env.install('httpdconfvs', ['conf.d/virtual_servers/.vhpasswd',
+                            'conf.d/virtual_servers/fdb.location',
+                            'conf.d/virtual_servers/public_host.location',
+                            'conf.d/virtual_servers/local_host.location',
+                            'conf.d/virtual_servers/secure_host.location'])
+
+# Deprecated in GEE-5.1.0: all rewritings are implemented in mod_fdb.
+# env.install('httpdconfvscmn', ['conf.d/virtual_servers/common/rewrite_rules.conf'])
+
+env.install('httpdconfvsrt', ['conf.d/virtual_servers/runtime/fdb_runtime'])

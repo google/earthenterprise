@@ -1,0 +1,57 @@
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/samples/getkml_example.html";
+    </script>
+    
+   <title>getkml_example.html</title>
+   <script src="http://code.google.com/www.google.com/jsapi?key=ABQIAAAA5El50zA4PeDTEMlv-sXFfRSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xTdBhxbkZWuzyYTVeclkwYHpb17ZQ"></script>
+   <script type="text/javascript">
+      var ge;
+      google.load("earth", "1");
+
+      function init() {
+         google.earth.createInstance('map3d', initCB, failureCB);
+      }
+
+      function initCB(instance) {
+         ge = instance;
+         ge.getWindow().setVisibility(true);
+
+         var placemark = ge.createPlacemark('');
+         var point = ge.createPoint('');
+         point.setLatLng(37.802907, -122.448425);
+         placemark.setName('Placemark from Earth API');
+         placemark.setGeometry(point);
+         ge.getFeatures().appendChild(placemark);
+
+         var output = placemark.getKml();
+         output = formatKmlForHtml(output);
+         document.getElementById('output_div').innerHTML = '<pre>' + output + '</pre>';
+
+         var la = ge.createLookAt('');
+         la.set(37.802907, -122.448425, 0, ge.ALTITUDE_RELATIVE_TO_GROUND, 0, 0, 1000);
+         ge.getView().setAbstractView(la);
+      }
+
+      function failureCB(errorCode) {
+      }
+
+      function formatKmlForHtml(output) {
+         output = output.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+         output = output.replace(/\t/g, '  ');
+         output = output.replace(/\" xmlns/g, '\"\n     xmlns');
+         return output;
+      }
+
+      google.setOnLoadCallback(init);
+   </script>
+
+</head>
+<body>
+
+   <div id="map3d" style="height:400px; width:600px;"></div>
+   <div id="output_div"></div>
+
+</body>
+</html>

@@ -1,0 +1,938 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Defining Resources</title>
+</head>
+
+<body>
+
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" />
+  </div>
+  <h1 id="doc_title">Reference Guide</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Reference Guide</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="intro.html">Introduction</a></li>
+    <li><a href="fundamentals.html">Fundamentals</a></li>
+    <li><a href="setup.html">Setting Up Your Workspace</a></li>
+    <li><a href="resources.html" id="selected">Defining Resources</a></li>
+    <li><a href="projects.html">Defining Projects</a></li>
+    <li><a href="databases.html">Defining and Publishing Databases</a></li>
+    <li><a href="building.html">Building Assets</a></li>
+    <li><a href="maps.html">Preparing Data for Google Maps</a></li>
+    <li><a href="commands.html">Command Line Reference</a></li>
+    <li><a href="createOwnData.html">Creating Your Own Source Data, Icons, and Masks</a></li>
+    <li><a href="htmlTags.html">HTML Tags Allowed</a></li>
+    <li><a href="plugins.html">Google Earth Plugin</a></li>
+    <li><a href="errors.html">Common Error Messages</a></li>
+    <li><a href="glossary.html">Glossary</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+
+<a id="70602"></a><h1><a id="79906"></a>Defining Resources</h1>
+
+<ol class="toc">
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#supported_source_file_formats">Supported Source File Formats</a></li>
+  <li><a href="#supported_data_projections">Supported Data Projections</a></li>
+  <li><a href="#defining_resources">Defining Resources</a></li>
+  <li><a href="#importing_preprocessed_resources">Importing Preprocessed Resources</a></li>
+  <li><a href="#modifying_resources">Modifying Resources</a></li>
+</ol>
+
+<h2 id="overview">Overview</h2>
+
+<p><a id="marker-1023116"></a>This chapter describes key concepts related to importing imagery, terrain, and vector source data to define resources in Google Earth Enterprise Fusion. It describes all of the tasks related to creating, modifying, organizing, and managing resources. For information about building resources and other assets, see the chapter titled <a href="building.html#70505">Building Assets</a>.</p>
+<p><a id="marker-1023120"></a>You first import your source data into Google Earth Enterprise Fusion as a resource. There is a one-to-one correspondence between the type of source file and the type of resource that is created from it: 
+</p>
+<ul>
+  <li>Vector resources are created from vector data.
+  </li>
+  <li>Imagery resources are created from imagery data.
+  </li>
+  <li>Terrain resources are created from terrain data.
+  </li>
+</ul>
+<p>You can create a single resource from a single source file, or you can create a single resource from many different source files. See <a href="resources.html#39098">Defining Resources</a> for more information.</p>
+<p><a id="marker-1027430"></a>Providers often split large source files into several smaller source files to make them more acceptable to download. The main purpose of grouping multiple source files into a single resource in Google Earth Enterprise Fusion is to return source files that were split up for artificial reasons (such as file size) to their original state as a single entity. For example, you might acquire four source files that together comprise a large single data set, such as an image of the state of Texas. You combine all four source files into a single resource to put the original data back together.
+</p>
+<p>When you combine source files in a single resource, the source files must be of the same type (imagery, terrain, or vector). In addition, they must be similar in other ways. 
+</p>
+<ul>
+  <li>For raster (imagery and terrain) resources, the source files must be of the same resolution and geographic proximity. 
+  </li>
+  <li>For vector resources, the source files must contain the same columns of data.
+  </li>
+</ul>
+<p><a id="marker-1023129"></a>An important difference between vector resources and raster (imagery and terrain) resources is that the display rules for vector data can differ between projects. You can use different colors, icons, and filters for the same resource in different projects. With raster resources, however, most of the display settings are specified when you first import the imagery or terrain resource. These settings “stick” with the resource, regardless of which project is using it.
+</p>
+<h2 id="supported_source_file_formats">Supported Source File Formats
+</h2>
+<p><a id="marker-1030005"></a>The following tables list the raster data (imagery and terrain) file formats and the vector file formats that are supported by Google Earth Enterprise Fusion.
+</p>
+<p>All raster (imagery and terrain) data must have geographic coordinates and projection information included in the file headers or contained in external text-based world files and projection files. All imagery data must be in 8-bit format with either one band for panchromatic or three bands for color. All terrain data can be in 16-bit or 32-bit format with a single band.
+</p>
+<a id="69524"></a>
+
+<h4>Supported Imagery and Terrain Formats</h4><a id="marker-1028790"></a> 
+
+<table width="60%">
+  <tr>
+    <th>File Format</th>
+    <th>Notes</th>
+  </tr>
+  <tr>
+    <td>DTED</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Erdas Imagine (IMG)</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>GeoTIFF</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>GIF</td>
+    <td>Geographic coordinates and projection information must be accompanied by external world and projection files.</td>
+  </tr>
+  <tr>
+    <td>JPEG</td>
+    <td>Geographic coordinates and projection information must be accompanied by external world and projection files.</td>
+  </tr>
+  <tr>
+    <td>JPEG2000</td>
+    <td></td>
+  </tr>
+  <tr>
+      <td>Microstation (DGN)</td>
+      <td>Microstation DGN files from prior to version 8 are supported. Versions
+        8 and later are not supported.
+      </td>
+  </tr>
+  <tr>
+    <td>MrSID</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>NITF</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>PNG</td>
+    <td>Geographic coordinates and projection information must be accompanied by external world and projection files.</td>
+  </tr>
+  <tr>
+    <td>TAB</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>TIF</td>
+    <td>Geographic coordinates and projection information must be accompanied by external world and projection files.</td>
+  </tr>
+  <tr>
+    <td>USGS ASCII DEM</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>USGS SDTS DEM</td>
+    <td></td>
+  </tr>
+</table>
+
+<p class="note"><strong>Note:</strong> Google Earth Enterprise Fusion does not allow you to import imagery resources larger than 80GB in raw size. (Raw size = number of pixels width * number of pixels height * 3.)
+</p>
+<h4><a id="86180"></a>Supported Vector Formats</h4>
+
+<table width="60%">
+  <tr>
+    <th>File Format
+    </th>
+    <th>Notes
+    </th>
+  </tr>
+  <tr>
+    <td>ESRI Shape File (<code>.shp</code>)
+    </td>
+    <td>For each ESRI shape file you import into Google Earth Enterprise Fusion, one DBF and one SHX configuration file, each with the same name as the original and the appropriate extension (.dbf and .shx) must be located in the same folder. In addition, if there is any projection in the image, a PRJ file with the same name as the original file and the appropriate extension (.prj) must be located in the same folder. Other associated files you can include with each SHP file are SBN, SBX, CPG, and LYR.
+    </td>
+  </tr>
+  <tr>
+    <td>Generic ASCII
+    </td>
+    <td>Point data only in comma-separated values or tab-delimited text format.
+    </td>
+  </tr>
+  <tr>
+    <td>KML/KMZ
+    </td>
+    <td>
+    </td>
+  </tr>
+  <tr>
+    <td>MapInfo File (<code>.tab</code>)
+    </td>
+    <td>
+    </td>
+  </tr>
+  <tr>
+    <td>US Census Tiger Line Files
+    </td>
+    <td>
+    </td>
+  </tr>
+</table>
+<h2 id="supported_data_projections">Supported Data Projections
+</h2>
+<p><a id="marker-1030331"></a>All raster data imported into Google Earth Enterprise Fusion must include geographic coordinates as well as information about the projection used to create the data. The supported data projections are:
+</p>
+<table width="80%">
+  <tr>
+    <td>Albers Equal-Area Conic
+    </td>
+    <td>Lambert Azimuthal Equal Area
+    </td>
+    <td>Polar Stereographic
+    </td>
+  </tr>
+  <tr>
+    <td>Azimuthal Equidistant
+    </td>
+    <td>Lambert Conic Conformal (1SP)
+    </td>
+    <td>Polyconic
+    </td>
+  </tr>
+  <tr>
+    <td>Cassini-Soldner
+    </td>
+    <td>Lambert Conic Conformal (2SP)
+    </td>
+    <td>Robinson
+    </td>
+  </tr>
+  <tr>
+    <td>Cylindrical Equal Area
+    </td>
+    <td>Lambert Conic Conformal (2SP Belgium)
+    </td>
+    <td>Rosenmund Oblique Mercator
+    </td>
+  </tr>
+  <tr>
+    <td>Eckert IV
+    </td>
+    <td>Lambert Cylindrical Equal Area
+    </td>
+    <td>Sinusoidal
+    </td>
+  </tr>
+  <tr>
+    <td>Eckert VI
+    </td>
+    <td>Mercator (1SP)
+    </td>
+    <td>Stereographic
+    </td>
+  </tr>
+  <tr>
+    <td>Equidistant Conic
+    </td>
+    <td>Mercator (2SP)
+    </td>
+    <td>Swiss Oblique Cylindrical
+    </td>
+  </tr>
+  <tr>
+    <td>Equi-rectangular
+    </td>
+    <td>Miller Cylindrical
+    </td>
+    <td>Swiss Oblique Mercator
+    </td>
+  </tr>
+  <tr>
+    <td>Gall Stereographic
+    </td>
+    <td>Mollweide
+    </td>
+    <td>Transverse Mercator
+    </td>
+  </tr>
+  <tr>
+    <td>Gauss-Kruger
+    </td>
+    <td>New Zealand Map Grid
+    </td>
+    <td>Transverse Mercator (Modified Alaska)
+    </td>
+  </tr>
+  <tr>
+    <td>Gnomonic
+    </td>
+    <td>Oblique Mercator
+    </td>
+    <td>Transverse Mercator (South Oriented)
+    </td>
+  </tr>
+  <tr>
+    <td>Hotine Oblique Mercator
+    </td>
+    <td>Oblique Stereographic
+    </td>
+    <td>Tunisia Mining Grid
+    </td>
+  </tr>
+  <tr>
+    <td>Laborde Oblique Mercator
+    </td>
+    <td>Orthographic
+    </td>
+    <td>Van der Grinten
+    </td>
+  </tr>
+</table>
+<h3><a id="72206"></a>Special Cases<a id="marker-1023555"></a>
+</h3>
+<p>The GIS tool you use to create your source data generally embeds projection and geotransform information in your source data file. Sometimes, however, the GIS tool improperly encodes this information or leaves it out altogether. The result is that Google Earth Enterprise Fusion cannot properly locate your source data on the globe.
+</p>
+<p>When the projection and geotransform information is missing or inaccurate, you can provide the required data in the form of auxiliary files to ensure that Google Earth Enterprise Fusion properly converts your data. The auxiliary files must have the same file name as the source file, be located in the same folder, and have the appropriate extension, such as:
+</p>
+<ul>
+  <li><code>.prj</code> - Provides projection information
+  </li>
+  <li><code>.tfw</code> - Provides geo-transform information
+  </li>
+</ul>
+<p>In addition to the standard PRJ format (OpenGIS well known text), Google Earth Enterprise Fusion supports two other file formats for projection data:
+</p>
+<ul>
+  <li><code>EPSG:</code><i>x</i> where <i>x</i> is a valid EPSG projection number</li>
+  <li>PROJ.4 projection specification, such as:<code>+proj=latlong +ellps=GRS80 +towgs84=-199.87,74.79,246.62</code></li>
+</ul>
+
+<h2 id="defining_resources">Defining Resources<a id="marker-1012838"></a><a id="39098"></a><a id="23048"></a><a id="87649"></a></h2>
+
+<ol class="toc">
+  <li><a href="#defining_vector_resources">Defining Vector Resources</a></li>
+  <li><a href="#defining_imagery_resources">Defining Imagery Resources</a></li>
+  <li><a href="#defining_terrain_resources">Defining Terrain Resources</a></li>
+  <li></li>
+</ol>
+
+<p>The first step in preparing your GIS data for use in Google Earth Enterprise Fusion involves importing it into the Asset Manager. When you import source data using the Asset Manager, Google Earth Enterprise Fusion creates a resource that you can add into your projects. The Asset Manager is available both with shell commands entered at the command line and as part the Google Earth Enterprise Fusion GUI. For information on importing large batches of source data, see the <a href="commands.html#59907">Command Line Reference</a>.</p>
+<p>As you import more data into the Asset Manager, you create a collection of resources that can be used in different projects. When you create resources for use in Google Earth Enterprise Fusion projects, keep in mind the following:
+</p>
+<ul>
+  <li><strong><a id="marker-1023135"></a>Configuration settings differ depending on the type of source data.</strong>
+    <p>In general, when you create a resource from vector data, you are setting metadata for that resource, such as the source date, provider, and character encoding. On the other hand, when you create a resource from imagery and terrain data, your settings also affect the display of the data itself, such as mask, fill values, and mosaic options. Settings that affect the display of vector data are defined in the project that contains the vector resource.
+    </p>
+  </li>
+  <li><strong>You create a single resource at a time, whether you use a single source or multiple sources<a id="marker-1012860"></a>.</strong>
+    <p>Each new resource creation command creates a single resource. If you select multiple source data files, you are creating a single resource that is a composite of multiple sources. The source imagery must have identical resolution.
+    </p>
+    <p>On the other hand, if you want to import several source files where each one is created as a single resource, you must issue a separate New command for each source file you want to import. Refer to the <a href="commands.html#59907"> Command Line Reference</a> for information on how to use batch commands for adding source data.</p>
+  </li>
+  <li><strong><a id="marker-1023139"></a>Composite resources require similar source data.</strong>
+    <p>Typically, vector resources are created from multiple sources when you have contiguous data of the same type. For example, you can create a single resource that displays all of the zip code boundaries for a state by importing several vector files that each contain the zip code boundaries for a specific county. When combining vector source files in this manner, the data itself must have the same projection, and the attribute headers must match in order for the import to be successful.
+    </p>
+    <p>For imagery data, large images are frequently cut in to smaller pieces, so each piece fits on a single CD. When you use data in this format, you must add all of the imagery source files to a single resource, rather than creating a separate resource for each source file.
+    </p>
+    <p class="note"><strong>Note:</strong> Recombining multiple imagery source files that were created by artificially splitting a large image is the only intended use for this process. It is not a general purpose, multi-resolution mosaic tool.
+    </p>
+  </li>
+  <li><strong><a id="marker-1023144"></a>New resources must have unique names.</strong>
+    <p>You can create a new resource only if a resource of that name/type does not already exist in the target folder. However, because imagery, terrain, and vector resources have different file extensions, you can use the same file name once for each type of resource. 
+    </p>
+    <p class="note"><strong>Note:</strong> Because resources can be flagged as hidden so that they don’t appear in the Asset Manager, be aware that a name for a resource you create might be used by a hidden resource. Select the <strong>Show hidden resources</strong> check box before creating new resources if you have many hidden resources in your tree.
+    </p>
+    <p>Each resource is a separate entity from the source file or files. If you want to specify a different (or updated) source file for an existing resource, you use a different command. See <a href="resources.html#13569">Modifying Resources</a> for more information.</p>
+    <p class="note"><strong>Note:</strong> Certain characters in Fusion asset names caused problems with the Publisher and Server. Fusion prevents the creation and use of assets with invalid characters in their names. <strong>The following characters are no longer allowed in Fusion asset names:</strong>      <br />
+      <br />
+      & % ' \ " * = + ~ ` ? < > : ; and the space character<br />
+      <br />
+      If any assets have a name containing any of the characters mentioned previously, rename the asset (and path) to a valid name that does not include and of those characters. This requires you to rebuild the assets, as well as the projects and databases that contain them. <br />
+<br />
+The Fusion installer checks the current asset root (if any) to detect, and subsequently warn, if invalid asset names exists before installation will continue. 
+
+In cases where creating new copies of the assets requires too much effort or expensive rebuilding of resources, a script is available from Google Earth Enterprise Support that will rename the assets automatically. This script requires using great care, and that is why it is not run automatically.</li>
+  <li><strong><a id="marker-1027461"></a>You can update an existing resource with new source data.</strong>
+    <p>When you acquire updated source data for a resource that is already included in a Google Earth Enterprise Fusion database, you can easily replace the old source data with the new source data. If the new source file has the same name as the old source file and you are not changing anything else, simply replace the old source file with the new source file on disk, and rebuild the database. The next time you publish the database, everything else remains the same except for the new source data.
+    </p>
+  </li>
+</ul>
+
+<h3 id="defining_vector_resources"><a id="34611"></a>Defining Vector Resources<a id="marker-1012928"></a><a id="marker-1023364"></a></h3>
+
+<ol class="toc">
+  <li><a href="#the_vector_resource_editor">The Vector Resource Editor</a></li>
+  <li><a href="x">Define Vector Properties</a></li>
+  <li><a href="x">Adding a Source File to a Resource</a></li>
+  <li><a href="x">Adding KML/KMZ Source Files to a Resource</a></li>
+</ol>
+
+<h4 id="the_vector_resource_editor">The Vector Resource Editor</h4>
+<br />
+
+<ol>
+  <li>Select <strong>Tools &gt; Asset Manager</strong>. The <strong>Asset Manager</strong> appears. </li>
+  <li>Click 
+    <img src="images/iconResVector.png" />. The <strong>Vector Resource Editor</strong> appears.</li>
+  <li>Define the properties of the vector resource as described in the next section, <a href="resources.html#18583">Define Vector Properties</a>.
+  </li>
+  <li>When you finish defining the properties for the resource, select <strong>Save</strong> from the File menu.
+    <p>The first time you save a new resource, the <strong>Save</strong> dialog appears. Navigate to the folder where you want to save the resource, provide a unique name for it, and click <strong>Save</strong>.
+    </p>
+  </li>
+</ol>
+      <p class="caution"><strong>Caution:</strong> Assets can not be deleted once they are saved. They can be <em>cleaned</em>, so that they are no longer available to use in Google Earth Enterprise Fusion; see <a href="building.html#85338">Cleaning Asset Versions</a> in the <strong>Building Assets</strong> chapter for more information.</p>
+<p><a id="marker-1029647"></a>When you finish defining each resource, you can build it individually or build several resources at the same time; however, you must build a vector resource before you can include it in a project. See the <a href="building.html#70505">Building Assets</a> chapter for complete details.</p>
+<h4><a id="18583"></a>Define Vector Properties
+</h4>
+<p>You use the Vector Resource Editor to define the following properties:
+</p>
+<ul>
+  <li><strong>Acquisition Date<a id="marker-1023189"></a></strong>
+    <p>The acquisition date appears in year-month-day format. 
+    </p>
+    <p class="note"><strong>Note:</strong> You can decide whether to use the date you acquire the data, the date you import it into Google Earth Enterprise Fusion, or the actual date of the source image. Regardless of which method you use, it is best to adopt a consistent policy for all your resources to avoid confusion.
+    </p>
+    <p>Click each section of the date and enter the values. Alternatively, you can use the right and left arrow keys to move among the three parts of the date.
+    </p>
+  </li>
+  <li><strong>Provider<a id="marker-1023201"></a></strong>
+    <p>Select the source provider from the Provider drop-down list. The provider identifies the source of the data and its copyright information in Google Earth EC.
+    </p>
+    <p class="note"><strong>Note:</strong> If you specify the same provider for multiple resources that end up appearing together in Google Earth EC, Google Earth EC is smart enough to display the provider’s name and copyright information only once.
+    </p>
+    <p>The providers that appear on the list are defined in the Provider Manager. See the section on <a href="setup.html#79671">Managing Data Providers</a> in the <strong>Setting Up Your Workspace</strong> chapter for more information.</p>
+  </li>
+  <li><strong>Encoding<a id="marker-1027778"></a></strong>
+    <p>If the field data in your vector resource has a particular encoding for characters, such as ISO8859-1, select the appropriate option, so your data is displayed correctly in Google Earth EC. If you do not select an encoding option, the character encoding defaults to ASCII (plain text).
+    </p>
+  </li>
+  <li><strong>Layer <a id="marker-1017224"></a></strong>
+    <p>Use this option if your source data contains multiple layers and you want to extract a specific layer from the data for your resource. If you leave this option set to <strong>0</strong> and your source data contains more than one layer, Google Earth Enterprise Fusion extracts the first layer of the source file to create the resource. 
+    </p>
+    <p class="note"><strong>Note:</strong> In most cases, source vector data has only one layer; however, Tiger vector data can contain multiple layers. Because there is a one-to-one correspondence between a vector resource and a single vector source layer, resource creation from multi-layer source data must specify a layer. 
+	<br /><br />
+    If you are unsure which layer to indicate when creating a resource from multi-layer source data, you can open the vector source file in Preview pane to display all of the layers in the source data. Examine each layer, and select the appropriate layer to import.
+    </p>
+  </li>
+  <li><strong><strong>Elevation Units</strong><a id="marker-1023220"></a></strong>
+    <p>Google Earth Enterprise Fusion interprets elevation in meters, so the default selection for this option is <strong>Meters</strong>. 
+    </p>
+    <ul>
+      <li>If the unit of measure for elevation in your source data is feet, select either <strong>Feet (International)</strong> or <strong>Feet (US Survey)</strong>, whichever applies. Google Earth Enterprise Fusion converts the feet data to its metric equivalent.
+      </li>
+      <li>If you select <strong>Other</strong>, the Custom Unit Conversion Factor dialog appears.
+        <p><img src="images/customUnit.png" /></p>
+        <p>Enter the multiplier for Google Earth Enterprise Fusion to use to convert the data to meters. For example, if the elevation is in yards, enter <strong>0.9144</strong>. When you click <strong>OK</strong>, the number you enter here appears as the <strong>Elevation Units</strong> value. </p>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Feature Type Converting</strong>
+    <p>Google Earth Enterprise Fusion imports polygon features as they are classified in the data set, so the default selection for this option is  <strong>None</strong>. But if for some reason polygon features in the data set are classified incorrectly, you can apply force conversion.
+    </p>
+      <ul>
+        <li><strong>force 2D</strong>
+          <p>Select force 2D to force conversion of 2.5D polygon features to 2D polygon features.            </p>
+        </li>
+        <li><strong>force 2.5D</strong>
+          <p>Select force 2.5D to force conversion of 2D polygon features to 2.5D polygon features.          </p>
+        </li>
+      </ul>
+    <p class="note"><strong>Note:</strong> The 2.5D polygonal features are mainly used in “buildings” data sets. Fusion does an analysis of area of features during the vector resource import and based on the result of this analysis it can propose force converting to 2D for source data set originally classified as 2.5D polygonal resource. Information is reported in resource import log: “Found number of very large features classified as Polygon25D. Possibly the source data is classified incorrectly. Consider importing with --force2D".
+    </p>
+  </li>
+  <li><strong>Ignore Bad Features</strong>
+    <p>By default, if there are <i>bad features</i> in a source file, Google Earth Enterprise Fusion fails to build the resource. The error log states that there are bad features. If you check the box next to <strong>Ignore Bad Features</strong>, Google Earth Enterprise Fusion ignores the bad features and builds the resource anyway.
+    </p>
+  </li>
+  <li><strong>Don't Fix Invalid Geometries</strong>
+    <p>By default, if there are <i>invalid geometries</i> in a source file Google Earth Enterprise Fusion detects and tries to fix them. It removes zero length edges and "spikes" in polygonal geometry. As a result of removing <i>invalid geometries</i> polygonal features may become degenerate (zero area polygon). The resource import log states that there are degenerate features and they are skipped. If you check the box next to <strong>Don't Fix Invalid Geometries</strong>, Google Earth Enterprise Fusion does not clean up <i>invalid geometries</i> and builds the resource anyway.
+    </p>
+  </li>
+  <li><strong><a id="marker-1023221"></a>Source Files</strong>
+    <p>The Source Files list displays the names of the source files selected for this resource. Click <strong>Add</strong> to add a source file. See the next section, <a href="resources.html#50200">Adding a Source File to a Resource</a>, for more information.</p>
+    <p>To delete a file on the Source Files list and no longer associate it with this resource, select the file and click <strong>Delete</strong>. A message prompts you to confirm the deletion. Click <strong>OK</strong>. The file no longer appears on the list.
+    </p>
+    <p class="note"><strong>Note:</strong> You can select one or more source files to create a single resource, such as an imagery mosaic or a vector composite. If you use more than one source data file for a single resource, all of the raster data must have the same projection and attribute values, and all of the vector data must be of the same type (lines, points, or polygons).
+    </p>
+  </li>
+</ul>
+<h4><a id="50200"></a>Adding a Source File to a Resource
+</h4>
+<p><a id="marker-1023232"></a>Each resource must contain at least one data source file. Perform the following procedure for each source file you want to add.
+</p>
+<ol>
+  <li><a id="51968"></a>In the Vector Resource Editor, click <strong>Add</strong>. The Open Source dialog appears.
+  </li>
+  <li>Navigate to the folder containing the source data file(s) you want to add.  </li>
+  <li>Select the desired source data file(s), and click <strong>Open</strong>. The new source data file(s) appear on the Source File(s) list.
+    </li>
+</ol>
+<h4>Adding KML/KMZ Source Files to a Resource
+</h4>
+<p><a id="marker-1023234"></a>You can import KML or KMZ files created in Google Earth as resources in Google Earth Enterprise Fusion. There are a few limitations on the type of KML files that Google Earth Enterprise Fusion can import:
+</p>
+<ul>
+  <li>You can import the name, description, LookAt, and geometry only, not style information or custom icons.
+  </li>
+  <li>You can import point and line geometry in 2D only; however, you can import polygons in 2D or 2.5D.
+  </li>
+  <li>You cannot import networked KML or super-overlay KML.
+  </li>
+</ul>
+<p>To import KML/KMZ files:
+</p>
+<ol>
+  <li>In the Vector Resource Editor, click <strong>Add</strong>. The Open Source dialog appears.
+    
+    </li>
+  <li>Select <strong>Keyhole Markup Language </strong>(or <strong>All Files</strong>) for the file type to display.
+  </li>
+  <li>Navigate to the folder containing the KML or KMZ file you want to add.
+  </li>
+  <li>Select the desired KML or KMZ file, and click <strong>Open</strong>. The new source data file appears on the Source File(s) list.
+    
+  </li>
+</ol>
+<h3><a id="99965"></a>Defining Imagery Resources<a id="marker-1023241"></a><a id="marker-1023369"></a>
+</h3>
+<ol>
+  <li>Select <strong>Tools &gt; Asset Manager</strong>. The Asset Manager appears.    
+  </li>
+  <li>Click 
+    <img src="images/iconResImagery.png" />. The Imagery Resource Editor appears.    
+    <img src="images/imageryResImportdia.png" /></li>
+  <li>Define the properties of the imagery resource as described in the next section, <a href="resources.html#69598">Define Imagery Properties</a>.</li>
+  <li>When you finish defining the properties for the resource, click <strong>Save</strong>.
+    <p>The first time you save a new resource, the Save dialog appears. Navigate to the folder where you want to save the resource, provide a unique name for it, and click <strong>Save</strong>.    </p>
+  </li>
+</ol>
+    <p class="caution"><strong>Caution:</strong> Assets can not be deleted once they are saved. They can be <em>cleaned</em>, so that they are no longer available to use in Google Earth Enterprise Fusion; see <a href="building.html#85338">Cleaning Asset Versions</a> in the <strong>Building Assets</strong> chapter for more information.</p>
+<p><a id="marker-1029620"></a>When you finish defining each resource, you can build it individually or build several resources at the same time. See the <a href="building.html#70505">Building Assets</a> chapter for complete details.</p>
+<h4><a id="69598"></a>Define Imagery Properties
+</h4>
+<p>Use the Imagery Resource Editor to define the following properties:
+</p>
+<ul>
+  <li><strong><a id="marker-1023249"></a>Acquisition Date</strong>
+    <p>The acquisition date appears in year-month-day format. <strong>This is required for historical imagery projects</strong>.</p>
+  
+  <p>The date you set for the 
+    Imagery Acquisition Date is  visible in the Google Earth Client when hovering the cursor over a tile. This requires that the imagery resource has acquisition dates recorded with it and  requires a rebuild of the imagery project (since for this feature the date needs to be encoded in the JPEG tiles). Imagery and Vector Resource dialogs now support an improved acquistion date format: unspecified days and months are now supported, for example:
+  <ul>
+    <li>2008-01-00 indicates January 2008 </li>
+    <li>2008-00-00 indicates 2008</li>
+    <li>0000-00-00 indicates undefined. Leading 0's are not necessary in specifying dates. </li>
+  </ul>
+  <p>Google Earth Enterprise supports the creation and displaying of historical imagery that works just as the historical imagery in the Google Earth client. </p>
+  </li>
+ 
+  <li>
+    <p class="note"><strong>Note:</strong> You can decide whether to use the date you acquire the data, the date you import it into Google Earth Enterprise Fusion, or the actual date of the source image. Regardless of which method you use, it is best to adopt a consistent policy for all your resources to avoid confusion.    </p>
+    <p>Click each section of the date and enter the values. Alternatively, you can use the right and left arrow keys to move among the three parts of the date.    </p>
+  </li>
+  <li><strong>Provider<a id="marker-1027891"></a></strong>
+    <p>Select the source provider from the Provider drop-down list. The provider identifies the source of the data and its copyright information in Google Earth EC.    </p>
+    <p class="note"><strong>Note:</strong> If you specify the same provider for multiple resources that end up appearing together in Google Earth EC, Google Earth EC will display the provider’s name and copyright information only once.    </p>
+    <p>The providers that appear on the list are defined in the Provider Manager. See <a href="setup.html#79671">Managing Data Providers</a> in the <strong>Setting Up Your Workspace</strong> chapter for more information.</p>
+    <p class="note"><strong>Tip:</strong> If you create a single resource from multiple source files that you received from multiple providers, you can create a special entry in the Provider Manager that gives credit to all providers who contributed to that resource. For example, if you combine source files from USGS and i3 into one resource, you can use the Provider Manager to create a special provider called <strong>USGS/i3</strong>. In the copyright field, you can enter <strong>Imagery © USGS 2005 and i3 2006</strong>. When you define the resource, select <strong>USGS/i3</strong>.    </p>
+  </li>
+  <li><strong><a id="marker-1023250"></a><a id="91291"></a>Mask Options</strong>
+    <p>When image data is captured, certain areas contain unusable data. This unusable data is called <i>fill</i>, since it exists simply to fill out the rest of the tile or tiles. Fill data is usually true black (0,0,0), true white (255,255,255), or a value close to one of those two values.    </p>
+    <img src="images/imageArea.png" />
+    <p>Since the fill data contains no useful information, Google Earth Enterprise Fusion needs to <i>mask</i> the fill areas, allowing the underlying image layers (with usable data) to show through. You can create a mask for a given area yourself, or you can allow Google Earth Enterprise Fusion to create a mask for the fill area automatically. The Auto Mask feature is sufficient in most cases.    </p>
+    <p>If you create a mask yourself, it must either be of the same file format as the original image file, or it must be a TIFF file. See <a href="createOwnData.html#77793">Creating Custom Masks</a> for more information.</p>
+    <p>If you select <strong>Auto Mask</strong> for an image, you can set some options to adjust the mask you create. The values you can adjust are described in the following sections.</p>
+    <p>Select the mask type from the Mask Type drop-down list.</p>
+    <ul>
+      <li><strong>Auto Mask</strong><a id="marker-1023251"></a> (the default)
+        <p>In most situations, particularly when you are creating a mosaic from contiguous source imagery, the <strong>Auto Mask</strong> setting is the best choice. For example, if you have four square contiguous pieces of imagery that are bounded by land on all sides, you would likely select <strong>Auto Mask</strong>. The Auto Mask function automatically uses a fill value based on the colors in the four corners of the source imagery to create the mask.        </p>
+        <p>If you select <strong>Auto Mask</strong>, you can set the following options:        </p>
+        <ul>
+          <li><strong>Feather</strong><a id="marker-1023256"></a>
+            <p>The feathering value allows you to provide a smooth transition between the image (usable) data and the fill (unusable) data. You use the feathering option to define a blending region between the actual image and the transparent mask.            </p>
+            <p>At the edge of the feather area closest to the image, 100 percent of the image area is visible. From this point to the edge of the mask, the transparency of the image increases and its opacity decreases. At the same time, the opacity of the mask increases and its transparency decreases. At the edge of the feather area closest to the mask, the image value is 100 percent transparent, and the underlying imagery shows through completely.            </p>
+            <img src="images/feathering.png" />
+            <p>The default feather value is <strong>100</strong> pixels. If the default feather value results in masking out too much data, you can specify a lower value (that is, a narrower band of blending) and experiment with the results. However, if you specify a value that is too low, you could create sharp edges between insets, possibly even leaving black lines between insets. See <a href="resources.html#42194">Defining Terrain Resources</a> for more  information. See also the <strong> Tutorial</strong> for an example.</p>
+          </li>
+          <li><strong>Band</strong><a id="marker-1023257"></a>
+            <p>Use this option to indicate which channel to use when generating the mask (<strong>Red</strong>, <strong>Green</strong>, or <strong>Blue</strong>). Typically, <strong>green</strong> provides the best contrast between Earth data and no data and is, consequently, the default. However, some data works best when the blue channel is used for mask selection.            </p>
+          </li>
+          <li><strong>Tolerance</strong><a id="marker-1023260"></a><a id="77447"></a>
+            <p>Tolerance specifies the color range for mask selection. The default tolerance is <strong>0</strong>, which is adequate for many fill colors that are pure black or pure white. However, when data is compressed and uncompressed, it is sometimes modified slightly. Although these modifications are imperceptible to the human eye, a computer can detect them. A fill pixel with an original value of (0,0,0), for example, might decompress to a value of (0,1,0).            </p>
+            <p>If you want to ignore slight variations in fill color values, you can specify a tolerance value, which represents the amount of variation from true black or true white that Google Earth Enterprise Fusion ignores when it creates the Auto Mask. Typically, a setting of 1 or 2 is adequate.            </p>
+          </li>
+          <li><strong>Hole Size</strong><a id="marker-1023262"></a>
+            <p>Use this option if you have fill regions inside the boundaries of your imagery data. The default setting for hole size is <strong>0</strong>, which is off.</p>
+            <p>The hole size indicates the number of contiguous pixels Google Earth Enterprise Fusion uses when matching any color region inside your imagery with the same value specified as your fill. For example, if you set the Hole Size value to 100 and the imagery has a block of pixels that is 100 or more pixels in width or height with the same color as one of the corners (fill value), Google Earth Enterprise Fusion treats that area as a <i>hole</i> in the data and applies the mask to it. The end result is that whatever data is under the masked data shows through.            </p>
+            <p>Be aware that if you use the hole-checking feature, there are trade-offs that can dramatically increase the time it takes to generate a mask, including:</p>
+            <ul>
+              <li>Images photographed late in the day often contain shadows that look like holes.</li>
+              <li>If the specified hole size is too small, it could slow performance.</li>
+              <li>If the specified hole size is too large, medium-sized holes could be overlooked.
+                <p>Specifying an appropriate hole size involves some familiarity with the actual data.</p>
+              </li>
+            </ul>
+          </li>
+          <li><strong>Fill White</strong><a id="marker-1023303"></a>
+            <p>Fill data is usually indicated by areas of black pixels, so the default fill color is black (0,0,0). If you know that the vendor has used white (255,255,255) as well as black as a fill color, be sure to check the <strong>Fill White</strong> box when you import the imagery. Checking this box allows both black and white to be considered as fill data when the Auto Mask is created. The following image is an example of source imagery with both black and white fill data.</p>
+            <p><img src="images/twotoneSquare.png" /></p>
+          </li>
+        </ul>
+      </li>
+      <li><strong>No Data </strong>
+         <p>Use this option to specify the pixel value for NoData in the terrain
+            data (the pixel values to include in the mask). Multiple values may be
+            specified in this field, including ranges (two numbers separated by a
+            colon &quot;:&quot;) and individual values. For example,
+            <code>-99999:0</code> is
+            the default which will mask any pixel value from <code>-99999</code>
+            through <code>0</code>, inclusive.
+            The values <code>-99999</code> and <code>0</code> alone, can be masked
+            by using <code>-99999, 0</code> instead
+            of <code>-99999:0</code>. Alternatively,
+            <code>‘-99999:-32768, 32768:999999’</code> means mask
+            pixel values <code>-99999</code> through <code>-32768</code> and
+            <code>32768</code> through <code>999999</code>.</p>
+      </li>
+      <li><strong>Have Mask</strong><a id="marker-1023263"></a>
+        <p>Select <strong>Have Mask</strong> if you have a corresponding alpha mask or file for your source. (See <a href="createOwnData.html#77793">Creating Custom Masks</a> for details about creating your own custom masks.) Google Earth Enterprise Fusion automatically applies the mask file to the source file. The mask for your input must be located in the same folder as the source file, and the file name must match the name of the source file with <code>-mask</code> appended. For example, if your source file is called <code>NewYork.tif</code>, its mask file must be named <code>NewYork-mask.tif</code>.</p>
+        <p>You might select the <strong>Have Mask</strong> option in a situation where your source file imagery is bounded by water, and a significant portion of the image is water. In that case, you would likely create a mask by hand in order to preserve the high-resolution detail around your shoreline while masking the water imagery.        </p>
+        <p>If you are creating a resource from multiple imagery source files, you cannot select <strong>Have Mask</strong> as the mask setting value.</p>
+      </li>
+      <li><strong>No Mask</strong> 
+        <p>Select <strong>No Mask</strong> only for base map imagery that extends to the entire database, such as the NASA Blue Marble imagery.        </p>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Mosaic Options<a id="marker-1023264"></a></strong>
+    <p>The simplest way to import source data is to create one resource from each data file. In some cases, though, it is actually necessary or just more efficient to import multiple source images into a single resource, called a <i>mosaic</i>. To create a mosaic, the source images must meet the following requirements:    </p>
+    <ul>
+      <li>Source images must be in the same projection and use the same coordinate system.      </li>
+      <li>Source images must have the same resolution.      </li>
+      <li>Source images must have geographic proximity to each other.      </li>
+      <li>There should be no gaps between the individual source images.      </li>
+	  </ul>
+        <p>Use the Mosaic Options area for setting the tile fill values and fill tolerance for fill areas of overlapping imagery tiles. These options are available only when you import more than one imagery file.        </p>
+        <p class="note"><strong>Note:</strong> This process of recombining images that were artificially split is the only intended use for combining multiple imagery source files into a single resource. It is not a general purpose, multi-resolution mosaic tool.        </p>
+		<ul>
+          <li><strong>Tile Fill</strong><a id="marker-1023266"></a>
+            <p>When there is an overlap between the tiles, the pixels in the top tile obscure the pixels in lower tiles. To expose the pixel beneath the top tile, you specify the color to make transparent.            </p>
+            <p class="note"><strong>Note:</strong> The Tile Fill setting makes the specified pixels <i>transparent</i>. Masking <i>blocks</i> the specified pixels. Both methods, however, define the pixels to be maintained and the pixels that show through.            </p>
+            <p>For example:            </p>
+	<ul>
+      <li>If the top pixel is black and you want to expose the pixels beneath it (on a lower tile in the stack), select <strong>Black</strong> to make transparent.      </li>
+      <li>If the top pixel is white and you want to expose the pixels beneath it, select <strong>White</strong> to make transparent.      </li>
+      <li>If the top pixel is a color other than black or white and you want to expose the pixels beneath it, select <strong>Other</strong>. The Select Color dialog appears, and you can select the desired color to make transparent.      </li>
+      <li>If you select <strong>None</strong>, Google Earth Enterprise Fusion applies no tile fill to the adjacent imagery. That is, any overlapping pixels in the top tile obscure the pixels in the tile beneath it.          </li>
+	</ul>
+        <p class="note"><strong>Note:</strong> Google Earth Enterprise Fusion applies the Tile Fill setting and other mosaic-related settings to the imagery to create a single larger image before it applies the mask. Any fill value you set here has no impact on the mask you use for the entire image.        </p>
+          <li><strong>Fill Tolerance</strong><a id="marker-1023267"></a>
+            <p>The tolerance setting functions just as it does for fill values on the Auto Mask. See <a href="resources.html#77447">Tolerance</a> under the <strong>Auto Mask</strong> bullet above.            </p>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong><a id="marker-1023268"></a>Source Files</strong>
+    <p>The Source Files list displays the names of the source files selected for this resource. Click <strong>Add</strong> to add a source file. See  <a href="resources.html#50200">Adding a Source File to a Resource</a> for more information.</p>
+    <p class="note"><strong>Note:</strong> You can select one or more source files to create a single resource, such as an imagery mosaic or a vector composite. If you use more than one source data file for a single resource, all of the source data must have the same projection and attribute values.
+    <br /><br />
+    Google Earth Enterprise Fusion does not allow you to import raw imagery source files larger than 80 GB. (Raw size = number of pixels width * number of pixels height * 3.) Therefore, if you have an imagery source file that is larger than 80GB, you can create two or more source files using the <code>gesplitkhvr</code> command. (See <a href="commands.html#11666">gesplitkhvr</a> in the <strong>Command Line Reference</strong> chapter for details.) </p>
+  </li>
+</ul>
+
+<h3><a id="42194"></a><a id="15592"></a>Defining Terrain Resources<a id="marker-1026158"></a><a id="marker-1026159"></a></h3>
+
+<ol>
+  <li>Select <strong>Tools &gt; Asset Manager</strong>. The Asset Manager appears.    
+  </li>
+  <li>Click 
+    <img src="images/iconResTerrain.png" />. The <strong>Terrain Resource Editor</strong> appears. </li>
+  <li>Define the properties of the imagery resource as described in the next section, <a href="resources.html#34529">Define Terrain Properties</a>.</li>
+  <li>When you finish defining the properties for the resource, select <strong>Save</strong> from the File menu.
+    <p>The first time you save a new resource, the Save dialog appears. Navigate to the folder where you want to save the resource, provide a unique name for it, and click <strong>Save</strong>.    </p>
+  </li>
+</ol>
+      <p class="caution"><strong>Caution:</strong> Assets can not be deleted once they are saved. They can be <em>cleaned</em>, so that they are no longer available to use in Google Earth Enterprise Fusion; see <a href="building.html#85338">Cleaning Asset Versions</a> in the <strong>Building Assets</strong> chapter for more information.</p>
+<p><a id="marker-1029560"></a>When you finish defining each resource, you can build it individually or build several resources at the same time.</p>
+
+<h4><a id="34529"></a>Define Terrain Properties</h4>
+<br />
+
+<p>Use the Terrain Resource Editor to define the following properties:
+</p>
+<ul>
+  <li><strong>Acquisition Date<a id="marker-1018288"></a></strong>
+    <p>The acquisition date appears in year-month-day format.    </p>
+    <p class="note"><strong>Note:</strong> You can decide whether to use the date
+        you acquire the data, the date you import it into Google Earth Enterprise
+        Fusion, or the actual date of the source image. Regardless of which method
+        you use, it is best to adopt a consistent policy for all your resources to
+        avoid confusion.    </p>
+    <p>Click each section of the date and enter the values. Alternatively, you can
+        use the right and left arrow keys to move among the three parts of the date.    </p>
+  </li>
+  <li><strong><a id="marker-1023295"></a>Mask Options</strong>
+    <p>When terrain data is captured, certain areas contain unusable data. This unusable
+        data is called <i>fill</i>, since it exists simply to fill out the rest of
+        the tile or tiles.    </p>
+    <img src="images/imageArea.png" width="281" height="128" />
+    <p><a id="marker-1027534"></a>Since the fill data contains no useful information,
+        Google Earth Enterprise Fusion needs to <i>mask</i> the fill areas, allowing
+        the underlying terrain layers (with usable data) to show through. You can
+        create a mask for a given area yourself, or you can allow Google Earth Enterprise
+        Fusion to create a mask for the fill area automatically. The Auto Mask feature
+        is sufficient in most cases.    </p>
+    <p>If you create a mask yourself, it must either be of the same file format as
+        the original image file, or it must be a TIFF file. See <a href="createOwnData.html#77793">Creating
+        Custom Masks</a> in the chapter titled <strong>Creating Your Own Source Data, Icons, and Masks</strong> for more information.</p>
+    <p>If you select <strong>Auto Mask</strong> for terrain data, you can set some options to adjust
+        the mask you create. The values you can adjust are described in the following
+        sections. </p>
+    <p>Select the mask type from the Mask Type drop-down list.    </p>
+    <ul>
+      <li><strong>Auto Mask</strong><a id="marker-1023293"></a> (the default)
+        <p>In most situations, particularly when you are creating a mosaic from contiguous
+            terrain source data, the <strong>Auto Mask</strong> setting is the best choice.
+            The Auto Mask function automatically uses a fill value based on the elevation
+            value in the four corners of the source terrain to create the mask.        </p>
+        <p>If you select <strong>Auto Mask</strong>, you can set the following options:        </p>
+        <ul>
+          <li><strong>Feather</strong><a id="marker-1023282"></a>
+            <p>Feathering blends the edges of your terrain tile into adjacent areas
+                for a smoother transition. The default feather value for Auto Mask
+                is <strong>100</strong> pixels, but you can adjust it for a wider or narrower
+                margin, if desired. See <a href="resources.html#99965">Defining
+                Imagery Resources</a> for more details about feathering.</p>
+          </li>
+          <li><strong>Hole Size</strong><a id="marker-1023291"></a>
+            <p>Use this option if you have masked regions inside the boundaries of
+                your terrain data. The default setting for hole size is <strong>0</strong>,
+                which is off. See <a href="resources.html#99965">Defining Imagery
+                Resources</a> for more details about hole size.</p>
+          </li>
+          <li><strong>No Data </strong>
+          <p>Use this option to specify the 	pixel value for NoData in the terrain
+              data (the pixel values to include in the mask). Multiple values
+              may be specified in this field, including ranges (two numbers separated
+              by a colon &quot;:&quot;) and individual values. For example,
+              <code>-99999:0</code> is
+            the default which will mask any pixel value from <code>-99999</code> through <code>0</code>, inclusive.
+            The values <code>-99999</code> and <code>0</code> alone, can be masked
+            by using <code>-99999, 0</code> instead
+            of <code>-99999:0</code>. Alternatively, <code>‘-99999:-32768, 32768:999999’</code> means mask
+            pixel values <code>-99999</code> through <code>-32768</code> and <code>32768</code> through <code>999999</code>.</p>
+          </li>
+          </ul>
+      </li>
+      <li><strong>Have Mask</strong><a id="marker-1023305"></a>
+        <p>Select <strong>Have Mask</strong> if you have a corresponding alpha mask or file
+            for your source. Google Earth Enterprise Fusion automatically applies
+            the mask file to the source file. The mask for your input must be located
+            in the same folder as the source file, and the file name must match the
+            name of the source file with <code>-mask</code> appended. For example,
+            if your source file is called <code>NewYork.tif</code>, its mask file
+            must be named <code>NewYork-mask.tif</code>.</p>
+        <p>You might select the <strong>Have Mask</strong> option in a situation where your
+            terrain data is bounded by water, and a significant portion of the terrain
+            is water. In that case, you would likely create a mask by hand in order
+            to avoid processing the water data.</p>
+        <p>If you are creating a resource from multiple terrain source files, you
+            cannot select <strong>Have Mask</strong> as the mask setting value.</p>
+      </li>
+      <li><strong>No Mask</strong> 
+        <p>Select <strong>No Mask</strong> only for base map terrain that extends to the entire
+            database, such as the <code>gtopo30_4km</code> terrain data.</p>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Mosaic Options<a id="marker-1023307"></a></strong>
+    <p>The simplest way to import source data is to create one resource from each
+        data file. In some cases, though, it is actually necessary or just more efficient
+        to import multiple source files into a single resource, called a <i>mosaic</i>.
+        See <strong>Mosaic Options</strong> in <a href="resources.html#99965">Defining Imagery
+        Resources</a> for details.</p>
+    <ul>
+      <li><strong>Tile Fill</strong><a id="marker-1023310"></a>
+        <p>When there is an overlap between the tiles, the pixels in the top tile
+            obscure the elevation samples in lower tiles. To expose the elevation
+            samples beneath the top tile, you specify the elevation value to make
+            transparent.</p>
+        <p class="note"><strong>Note:</strong> The Tile Fill setting makes the specified
+            pixels <i>transparent</i>. Masking <i>blocks</i> the specified pixels.
+            Both methods, however, define the pixels to be maintained and the pixels
+            that show through.</p>
+        <p>For example:</p>
+        <ul>
+          <li>If you want to expose the pixels beneath the overlap, select <strong>Other</strong>.
+              The Custom Mosaic Fill Color dialog appears, and you can enter the
+              desired elevation to make transparent.</li>
+          <li>You can specify negative values so that NoData pixels
+              are excluded from terrain mosaics. Setting the value to -9999 directs
+              Fusion to exclude pixels with value -9999 from the merged mosaic during
+              Fusion terrain resource import.</li>
+          <li>If you select <strong>None</strong>, Google Earth Enterprise Fusion applies no
+              tile fill to the adjacent terrain. That is, any overlapping pixels
+              in the top tile obscure the pixels in the tile beneath it.
+            <p class="note"><strong>Note:</strong> 1.Google Earth Enterprise Fusion
+                applies the Tile Fill setting and other mosaic-related settings to
+                the terrain to create a single larger image before it applies the
+                mask. Any fill value you set here has no impact on the mask you use
+                for the entire image.            </p>
+          </li>
+        </ul>
+      </li>
+      <li><strong>Fill Tolerance</strong><a id="marker-1023312"></a>
+        <p>The tolerance setting functions just as it does for fill values on the
+            Auto Mask. The default tolerance is <strong>0</strong>, which is adequate for most
+            terrain data. However, you can adjust the tolerance to compensate for
+            any possible loss in precision. Typically, a setting of 1 or 2 is the
+            highest tolerance value required.        </p>
+      </li>
+    </ul>
+  </li>
+  <li><strong><a id="marker-1023314"></a>Elevation Units</strong>
+    <p>Google Earth Enterprise Fusion interprets elevation in meters, so the default
+        selection for this option is <strong>Meters</strong>.</p>
+    <ul>
+      <li>If the unit of measure for elevation in your source data is feet, select
+          either <strong>Feet (International)</strong> or <strong>Feet (US Survey)</strong>, whichever
+          applies. Google Earth Enterprise Fusion converts the feet data to its metric
+          equivalent.      </li>
+      <li>If you select <strong>Other</strong>, the Custom Unit Conversion Factor dialog appears.<br />
+        <img src="images/customUnit.png" />
+        <p>Enter the multiplier for Google Earth Enterprise Fusion to use when it
+            converts the data to its metric equivalent. When you click <strong>OK</strong>,
+            the number you enter here appears as the Elevation Units value.</p>
+        </li>
+        </ul>
+    </li>
+  <li><strong>Set Negative
+      Elevation to</strong> <strong>0 (Preview Feature) </strong>: Resets all negative
+      elevation values in the source files to zero during resource import. This option
+      must be unchecked to import and use negative elevation data. This option
+      can be checked for positive and negative elevation datasets.  This option
+      is checked by default for any resources that were originally imported
+      with Fusion 3.0.x or earlier, to preserve the
+      original behavior of those resources.  </li>
+  <li><a id="marker-1023315"></a><a id="marker-1023315"></a><strong>Source Files</strong>
+     <p>The Source Files list displays the names of the source files selected
+        for this resource. Click <strong>Add</strong> to add a source file. See <a href="resources.html#50200">Adding
+           a Source File to a Resource</a> for more information.</p>
+     <p class="note"><strong>Note:</strong> You can select one or more source files
+        to create a single resource, such as an terrain mosaic or a vector composite.
+        If you use more than one source data file for a single resource, all of
+        the source data must have the same projection and attribute values.    </p>
+  </li>
+</ul>
+<h4>Using Negative Elevation Terrain Resources </h4>
+<p>By using negative elevation resources, you can   build elevation models for
+    the world sea floors, lake beds, and below sea surface locations (Death Valley,
+    CA) along with positive value terrain data for land masses. Properly importing
+    negative elevation terrain requires additional
+     data preparation, however, the end-to-end data workflow is the
+    same for importing terrain resources and building terrain projects. </p>
+<p>Previous versions of Fusion Pro would impose an artificial elevation floor value
+    of 0 to any data sets with negative elevation values. This restriction was enforced
+    because the Google Earth Enterprise Client (EC) could not display negative elevations.
+    The Google Earth Enterprise Client software can display negative elevation
+    models, as of version 5.0, and the Fusion artificial elevation ‘floor’ is no
+    longer  imposed. Data users can build terrain models with only
+    positive values only – if no negative elevation terrain is available – or 
+    build terrain models with both positive and negative elevation data.</p>
+<p>In the following example, a terrain project is  built from the GTOPO world
+    terrain dataset (1-kilometer resolution). It includes  positive elevation
+    values for land, a NoData value of -9999, a pixel value of 0 for the oceans and
+    lakes, and a world-wide bathymetric terrain dataset with a NoData value of -9999
+    for all pixels out of the oceans and on the land. The entire globe has terrain
+    coverage:</p>
+<p><img src="images/negative_example.png" /></p>
+<h2 id="importing_preprocessed_resources">Importing Preprocessed Resources
+</h2>
+<p><a id="marker-1027561"></a>If you purchase preprocessed data from Google or receive preprocessed data from another Google Earth Enterprise Fusion user, it arrives as a complementary pair of folders. These folders share the same name but have different extensions. Folders with a <code>.kip</code> extension are imagery data. Folders with a <code>.ktp</code> extension are terrain data. Folders with a <code>.kmp</code> extension are mask files.
+</p>
+<p>You must use the Google Earth Enterprise Fusion shell commands to add preprocessed data to your asset root. See <a href="commands.html#30885">Importing Preprocessed Resources</a> in the <strong>Command Line Reference</strong> chapter for complete details.</p>
+<h2 id="modifying_resources"><a id="56758"></a><a id="98230"></a><a id="13569"></a>Modifying Resources<a id="marker-1013090"></a>
+</h2>
+<p>After you create any type of resource, you can use the Asset Manager to modify it in any of the following ways:
+</p>
+<ul>
+  <li>Associate a newer version of the original source data file, if it changes.
+  </li>
+  <li>Add another source file.
+  </li>
+  <li>Delete a previously associated source file.
+  </li>
+  <li>Modify the resource’s properties, such as its fill value or mask settings. 
+  </li>
+  <li><a id="marker-1023107"></a>Hide the resource so it does not appear in the Asset Manager unless the <strong>Show hidden resources</strong> check box is selected. With this feature, you can “turn off” resources you do not need to display regularly, such as those that are incorrectly named.
+  </li>
+</ul>
+    <p class="note"><strong>Note:</strong> When you save a modified resource, Google Earth Enterprise Fusion replaces the old resource definition with the new one. When you build that new resource, Google Earth Enterprise Fusion creates a new version. When you select a resource to include in a project, it is always the latest version of the resource. However, your modifications to a resource have no effect on earlier versions of that resource that were previously built into a database.
+    </p>
+<h4>To modify an existing resource:
+</h4>
+<br />
+
+<ol>
+  <li>Right-click the name of the resource you want to redefine in the Asset Manager, and select <strong>Modify</strong> from the context menu (or double-click the name of the resource).
+    <p>The Resource Editor for that resource type displays all of the current settings.
+    </p>
+<img src="images/imageryResImportdia-full.png" />  </li>
+  <li>Make the appropriate modifications.
+    <p>See the section on defining <a href="resources.html#34611"> Vector</a>, <a href="resources.html#99965"> Imagery</a>, or <a href="resources.html#15592"> Terrain</a> resources for details about each option.</p>
+    <p>If one or more source files have changed since you last saved the resource, a message at the bottom of this dialog informs you that the original source files have changed on disk.
+    You do not have to change anything to take advantage of the updated source files; Google Earth Enterprise Fusion automatically includes any updated source files when you save the resource.
+    </p>
+</li>
+  <li>When you finish modifying the settings for the resource, select <strong>File &gt; Save</strong>.
+<p>Google Earth Enterprise Fusion saves the resource in the same place with the same name. If you have already built the resource, you must rebuild it after making changes.
+    </p>
+  </li>
+</ol>
+<p>
+</p>
+</div>
+<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+
+<!-- END WRAPPER -->
+
+</body>
+</html>

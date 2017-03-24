@@ -1,0 +1,921 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>RasterAssetWidgetBase</class>
+<comment>  Copyright 2017 Google Inc.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+</comment>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>RasterAssetWidgetBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>740</width>
+            <height>426</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Raster Asset Widget</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QLayoutWidget" row="1" column="0">
+            <property name="name">
+                <cstring>layout33</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="1">
+                    <property name="name">
+                        <cstring>lutfile_name_label</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>2</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>&lt;none&gt;</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="0" column="3">
+                    <property name="name">
+                        <cstring>lutfile_delete_btn</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>30</width>
+                            <height>30</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>30</width>
+                            <height>30</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap>delete.png</pixmap>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Delete LUT File</string>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="4">
+                    <property name="name">
+                        <cstring>layout118</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>Layout42</cstring>
+                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <property name="margin">
+                                    <number>0</number>
+                                </property>
+                                <property name="spacing">
+                                    <number>6</number>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>TextLabel2</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="text">
+                                        <string>Source File(s):</string>
+                                    </property>
+                                </widget>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>Spacer18</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Vertical</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>0</width>
+                                            <height>51</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                            </vbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout117</cstring>
+                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QListBox">
+                                    <property name="name">
+                                        <cstring>source_list</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>source_changed_label</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&lt;font color="#ff0000"&gt;* One or more sources has changed&lt;/font&gt;</string>
+                                    </property>
+                                </widget>
+                            </vbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>Layout41</cstring>
+                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <property name="margin">
+                                    <number>0</number>
+                                </property>
+                                <property name="spacing">
+                                    <number>6</number>
+                                </property>
+                                <widget class="QPushButton">
+                                    <property name="name">
+                                        <cstring>add_src_btn</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="text">
+                                        <string>Add</string>
+                                    </property>
+                                </widget>
+                                <widget class="QPushButton">
+                                    <property name="name">
+                                        <cstring>delete_src_btn</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="text">
+                                        <string>Delete</string>
+                                    </property>
+                                </widget>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>Spacer17</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Vertical</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>0</width>
+                                            <height>21</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                            </vbox>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>lutfile_label</cstring>
+                    </property>
+                    <property name="text">
+                        <string>LUT File:</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="0" column="2">
+                    <property name="name">
+                        <cstring>lutfile_chooser_btn</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>30</width>
+                            <height>30</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>30</width>
+                            <height>30</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap>filenew</pixmap>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Choose LUT File</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QLayoutWidget" row="0" column="0">
+            <property name="name">
+                <cstring>layout32</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="14">
+                    <property name="name">
+                        <cstring>layout31</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QGroupBox" row="1" column="0">
+                            <property name="name">
+                                <cstring>automask_box_2</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>1</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="title">
+                                <string>Bounding Box to Limit Import</string>
+                            </property>
+                            <grid>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel" row="0" column="0">
+                                    <property name="name">
+                                        <cstring>mask_tolerance_label_2</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>South:</string>
+                                    </property>
+                                </widget>
+                                <widget class="QLineEdit" row="0" column="1">
+                                    <property name="name">
+                                        <cstring>south_boundary</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="QLineEdit" row="0" column="7">
+                                    <property name="name">
+                                        <cstring>east_boundary</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel" row="0" column="6">
+                                    <property name="name">
+                                        <cstring>mask_holesize_label_2</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>East:</string>
+                                    </property>
+                                </widget>
+                                <widget class="QLineEdit" row="0" column="5">
+                                    <property name="name">
+                                        <cstring>west_boundary</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel" row="0" column="4">
+                                    <property name="name">
+                                        <cstring>mask_nodata_label_2</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>West:</string>
+                                    </property>
+                                </widget>
+                                <widget class="QLineEdit" row="0" column="3">
+                                    <property name="name">
+                                        <cstring>north_boundary</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel" row="0" column="2">
+                                    <property name="name">
+                                        <cstring>mask_feather_label_2</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>North:</string>
+                                    </property>
+                                </widget>
+                            </grid>
+                        </widget>
+                        <widget class="QLayoutWidget" row="0" column="0">
+                            <property name="name">
+                                <cstring>layout29</cstring>
+                            </property>
+                            <grid>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QGroupBox" row="0" column="0" rowspan="2" colspan="1">
+                                    <property name="name">
+                                        <cstring>automask_box</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>5</hsizetype>
+                                            <vsizetype>1</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="title">
+                                        <string>Mask Options</string>
+                                    </property>
+                                    <grid>
+                                        <property name="name">
+                                            <cstring>unnamed</cstring>
+                                        </property>
+                                        <widget class="QSpinBox" row="1" column="1">
+                                            <property name="name">
+                                                <cstring>mask_feather_spin</cstring>
+                                            </property>
+                                            <property name="maxValue">
+                                                <number>255</number>
+                                            </property>
+                                            <property name="minValue">
+                                                <number>0</number>
+                                            </property>
+                                            <property name="value">
+                                                <number>100</number>
+                                            </property>
+                                        </widget>
+                                        <widget class="QComboBox" row="1" column="3">
+                                            <item>
+                                                <property name="text">
+                                                    <string>Red</string>
+                                                </property>
+                                            </item>
+                                            <item>
+                                                <property name="text">
+                                                    <string>Green</string>
+                                                </property>
+                                            </item>
+                                            <item>
+                                                <property name="text">
+                                                    <string>Blue</string>
+                                                </property>
+                                            </item>
+                                            <property name="name">
+                                                <cstring>mask_band_combo</cstring>
+                                            </property>
+                                        </widget>
+                                        <widget class="QCheckBox" row="3" column="2" rowspan="1" colspan="2">
+                                            <property name="name">
+                                                <cstring>mask_fillwhite_check</cstring>
+                                            </property>
+                                            <property name="sizePolicy">
+                                                <sizepolicy>
+                                                    <hsizetype>5</hsizetype>
+                                                    <vsizetype>0</vsizetype>
+                                                    <horstretch>0</horstretch>
+                                                    <verstretch>0</verstretch>
+                                                </sizepolicy>
+                                            </property>
+                                            <property name="text">
+                                                <string>Fill White</string>
+                                            </property>
+                                        </widget>
+                                        <widget class="QLabel" row="1" column="0">
+                                            <property name="name">
+                                                <cstring>mask_feather_label</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>Feather:</string>
+                                            </property>
+                                        </widget>
+                                        <widget class="QLabel" row="1" column="2">
+                                            <property name="name">
+                                                <cstring>mask_band_label</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>Band:</string>
+                                            </property>
+                                        </widget>
+                                        <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="3">
+                                            <property name="name">
+                                                <cstring>layout5</cstring>
+                                            </property>
+                                            <hbox>
+                                                <property name="name">
+                                                    <cstring>unnamed</cstring>
+                                                </property>
+                                                <widget class="QLabel">
+                                                    <property name="name">
+                                                        <cstring>TextLabel3_3_2</cstring>
+                                                    </property>
+                                                    <property name="text">
+                                                        <string>Mask Type:</string>
+                                                    </property>
+                                                </widget>
+                                                <widget class="QComboBox">
+                                                    <item>
+                                                        <property name="text">
+                                                            <string>Auto Mask</string>
+                                                        </property>
+                                                    </item>
+                                                    <item>
+                                                        <property name="text">
+                                                            <string>Have Mask</string>
+                                                        </property>
+                                                    </item>
+                                                    <item>
+                                                        <property name="text">
+                                                            <string>No Mask</string>
+                                                        </property>
+                                                    </item>
+                                                    <property name="name">
+                                                        <cstring>mask_type_combo</cstring>
+                                                    </property>
+                                                </widget>
+                                            </hbox>
+                                        </widget>
+                                        <widget class="QLabel" row="4" column="0">
+                                            <property name="name">
+                                                <cstring>mask_nodata_label</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>NoData:</string>
+                                            </property>
+                                        </widget>
+                                        <widget class="QLabel" row="3" column="0">
+                                            <property name="name">
+                                                <cstring>mask_holesize_label</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>Hole Size:</string>
+                                            </property>
+                                        </widget>
+                                        <widget class="QSpinBox" row="3" column="1">
+                                            <property name="name">
+                                                <cstring>mask_holesize_spin</cstring>
+                                            </property>
+                                            <property name="maxValue">
+                                                <number>100000</number>
+                                            </property>
+                                            <property name="minValue">
+                                                <number>0</number>
+                                            </property>
+                                            <property name="value">
+                                                <number>100000</number>
+                                            </property>
+                                        </widget>
+                                        <widget class="QLabel" row="2" column="0">
+                                            <property name="name">
+                                                <cstring>mask_tolerance_label</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>Tolerance:</string>
+                                            </property>
+                                        </widget>
+                                        <widget class="QSpinBox" row="2" column="1">
+                                            <property name="name">
+                                                <cstring>mask_tolerance_spin</cstring>
+                                            </property>
+                                            <property name="maxValue">
+                                                <number>255</number>
+                                            </property>
+                                            <property name="minValue">
+                                                <number>0</number>
+                                            </property>
+                                            <property name="value">
+                                                <number>100</number>
+                                            </property>
+                                        </widget>
+                                        <widget class="QLineEdit" row="4" column="1" rowspan="1" colspan="2">
+                                            <property name="name">
+                                                <cstring>mask_nodata_lineedit</cstring>
+                                            </property>
+                                        </widget>
+                                    </grid>
+                                </widget>
+                                <widget class="QGroupBox" row="1" column="1">
+                                    <property name="name">
+                                        <cstring>terrain_group_box</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>5</hsizetype>
+                                            <vsizetype>1</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="title">
+                                        <string>Terrain Options</string>
+                                    </property>
+                                    <grid>
+                                        <property name="name">
+                                            <cstring>unnamed</cstring>
+                                        </property>
+                                        <widget class="QComboBox" row="0" column="1">
+                                            <property name="name">
+                                                <cstring>elev_units_combo</cstring>
+                                            </property>
+                                        </widget>
+                                        <widget class="QLabel" row="0" column="0">
+                                            <property name="name">
+                                                <cstring>elev_units_label</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>Elevation Units:</string>
+                                            </property>
+                                        </widget>
+                                        <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="2">
+                                            <property name="name">
+                                                <cstring>clamp_elev_check</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>Set Negative Elevations to 0</string>
+                                            </property>
+                                        </widget>
+                                    </grid>
+                                </widget>
+                                <widget class="QGroupBox" row="0" column="1">
+                                    <property name="name">
+                                        <cstring>mosaic_group_box</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>5</hsizetype>
+                                            <vsizetype>5</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="title">
+                                        <string>Mosaic Options</string>
+                                    </property>
+                                    <grid>
+                                        <property name="name">
+                                            <cstring>unnamed</cstring>
+                                        </property>
+                                        <widget class="QLabel" row="0" column="0">
+                                            <property name="name">
+                                                <cstring>mosaic_fill_label</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>Tile Fill:</string>
+                                            </property>
+                                        </widget>
+                                        <widget class="QLabel" row="1" column="0">
+                                            <property name="name">
+                                                <cstring>mosaic_tolerance_label</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>Fill Tolerance:</string>
+                                            </property>
+                                        </widget>
+                                        <widget class="QSpinBox" row="1" column="1">
+                                            <property name="name">
+                                                <cstring>mosaic_tolerance_spin</cstring>
+                                            </property>
+                                            <property name="maxValue">
+                                                <number>255</number>
+                                            </property>
+                                            <property name="minValue">
+                                                <number>0</number>
+                                            </property>
+                                            <property name="value">
+                                                <number>100</number>
+                                            </property>
+                                        </widget>
+                                        <widget class="QComboBox" row="0" column="1">
+                                            <item>
+                                                <property name="text">
+                                                    <string>None</string>
+                                                </property>
+                                            </item>
+                                            <item>
+                                                <property name="text">
+                                                    <string>Other...</string>
+                                                </property>
+                                            </item>
+                                            <property name="name">
+                                                <cstring>mosaic_fill_combo</cstring>
+                                            </property>
+                                        </widget>
+                                    </grid>
+                                </widget>
+                            </grid>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QGroupBox" row="0" column="0" colspan="14">
+                    <property name="name">
+                        <cstring>acquisition_provider_group_box</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>1</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="title">
+                        <string>Acquisition </string>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLineEdit" row="0" column="1">
+                            <property name="name">
+                                <cstring>acquisition_date_year</cstring>
+                            </property>
+                            <property name="text">
+                                <string>0000</string>
+                            </property>
+                            <property name="maxLength">
+                                <number>4</number>
+                            </property>
+                            <property name="minimumSize">
+                               <size>
+                                  <width>60</width>
+                               </size>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="2">
+                            <property name="name">
+                                <cstring>TextLabel_year</cstring>
+                            </property>
+                            <property name="text">
+                                <string>-</string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit" row="0" column="3">
+                            <property name="name">
+                                <cstring>acquisition_date_month</cstring>
+                            </property>
+                            <property name="text">
+                                <string>00</string>
+                            </property>
+                            <property name="maxLength">
+                                <number>2</number>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="4">
+                            <property name="name">
+                                <cstring>TextLabel_month</cstring>
+                            </property>
+                            <property name="text">
+                                <string>-</string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit" row="0" column="5">
+                            <property name="name">
+                                <cstring>acquisition_date_day</cstring>
+                            </property>
+                            <property name="text">
+                                <string>00</string>
+                            </property>
+                            <property name="maxLength">
+                                <number>2</number>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="6">
+                            <property name="name">
+                                <cstring>acquisition_time_label</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Time (hh:mm:ss)</string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit" row="0" column="7">
+                            <property name="name">
+                                <cstring>acquisition_date_hours</cstring>
+                            </property>
+                            <property name="text">
+                                <string>00</string>
+                            </property>
+                            <property name="maxLength">
+                                <number>2</number>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="8">
+                            <property name="name">
+                                <cstring>acquisition_time_seperator_label1</cstring>
+                            </property>
+                            <property name="text">
+                               <string>:</string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit" row="0" column="9">
+                            <property name="name">
+                                <cstring>acquisition_date_minutes</cstring>
+                            </property>
+                            <property name="text">
+                                <string>00</string>
+                            </property>
+                            <property name="maxLength">
+                               <number>2</number>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="10">
+                           <property name="name">
+                               <cstring>acquisition_time_seperator_label2</cstring>
+                           </property>
+                           <property name="text">
+                               <string>:</string>
+                           </property>
+                        </widget>
+                        <widget class="QLineEdit" row="0" column="11">
+                            <property name="name">
+                                <cstring>acquisition_date_seconds</cstring>
+                            </property>
+                            <property name="text">
+                                <string>00</string>
+                            </property>
+                            <property name="maxLength">
+                                <number>2</number>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>acquisition_date_label</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Date (YYYY-MM-DD)</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="12">
+                            <property name="name">
+                                <cstring>provider_label</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Provider</string>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox" row="0" column="13">
+                            <item>
+                                <property name="text">
+                                    <string>&lt;none&gt;</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>provider_combo</cstring>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>add_src_btn</sender>
+        <signal>clicked()</signal>
+        <receiver>RasterAssetWidgetBase</receiver>
+        <slot>AddSource()</slot>
+    </connection>
+    <connection>
+        <sender>delete_src_btn</sender>
+        <signal>clicked()</signal>
+        <receiver>RasterAssetWidgetBase</receiver>
+        <slot>DeleteSource()</slot>
+    </connection>
+    <connection>
+        <sender>mask_type_combo</sender>
+        <signal>activated(int)</signal>
+        <receiver>RasterAssetWidgetBase</receiver>
+        <slot>ChangeMaskType(int)</slot>
+    </connection>
+    <connection>
+        <sender>lutfile_chooser_btn</sender>
+        <signal>clicked()</signal>
+        <receiver>RasterAssetWidgetBase</receiver>
+        <slot>ChooseLutfile()</slot>
+    </connection>
+    <connection>
+        <sender>lutfile_delete_btn</sender>
+        <signal>clicked()</signal>
+        <receiver>RasterAssetWidgetBase</receiver>
+        <slot>DeleteLutfile()</slot>
+    </connection>
+    <connection>
+        <sender>mosaic_fill_combo</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>RasterAssetWidgetBase</receiver>
+        <slot>MosaicFillActivated(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>elev_units_combo</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>RasterAssetWidgetBase</receiver>
+        <slot>CustomConversion(const QString&amp;)</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>acquisition_date_year</tabstop>
+    <tabstop>acquisition_date_month</tabstop>
+    <tabstop>acquisition_date_day</tabstop>
+    <tabstop>acquisition_date_hours</tabstop>
+    <tabstop>acquisition_date_minutes</tabstop>
+    <tabstop>acquisition_date_seconds</tabstop>
+    <tabstop>provider_combo</tabstop>
+    <tabstop>mask_type_combo</tabstop>
+    <tabstop>mask_feather_spin</tabstop>
+    <tabstop>mask_band_combo</tabstop>
+    <tabstop>mask_tolerance_spin</tabstop>
+    <tabstop>mask_holesize_spin</tabstop>
+    <tabstop>mask_fillwhite_check</tabstop>
+    <tabstop>mask_nodata_lineedit</tabstop>
+    <tabstop>mosaic_fill_combo</tabstop>
+    <tabstop>mosaic_tolerance_spin</tabstop>
+    <tabstop>elev_units_combo</tabstop>
+    <tabstop>clamp_elev_check</tabstop>
+    <tabstop>lutfile_chooser_btn</tabstop>
+    <tabstop>lutfile_delete_btn</tabstop>
+    <tabstop>source_list</tabstop>
+    <tabstop>add_src_btn</tabstop>
+    <tabstop>delete_src_btn</tabstop>
+</tabstops>
+<slots>
+    <slot>AddSource()</slot>
+    <slot>DeleteSource()</slot>
+    <slot>ChangeMaskType(int)</slot>
+    <slot>ChooseLutfile()</slot>
+    <slot>DeleteLutfile()</slot>
+    <slot>MosaicFillActivated(const QString&amp;)</slot>
+    <slot>CustomConversion(const QString&amp;)</slot>
+</slots>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

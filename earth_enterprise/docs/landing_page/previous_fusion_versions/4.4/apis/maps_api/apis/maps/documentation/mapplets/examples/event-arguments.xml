@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="Event Arguments" height="300">
+  <Require feature="sharedmap"/>
+</ModulePrefs>
+<Content type="html"><![CDATA[
+
+<small>
+In this example, we add an event listener to the map to listen to a
+"click" event and if we don't click on an overlay, we display the current
+pixel value of that point.
+</small>
+
+<script>
+var map = new GMap2();
+map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+
+GEvent.addListener(map,"click", function(overlay,point) {
+  if (point) {
+    GAsync(map, 'fromLatLngToDivPixel', [point], 'getZoom', function(divPixel, zoom) {
+      var myHtml = "The GPoint value is: " + divPixel + " at zoom level " + zoom;
+    map.openInfoWindow(point, myHtml);
+    });
+  }
+});
+</script>
+
+]]></Content>
+</Module>

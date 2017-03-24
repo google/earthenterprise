@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+Same as maps_google.html except that it doesn't load the maps API
+from google.com.
+Please mirror all changes here in maps_google.html.
+-->
+<html>
+<head>
+<title>GEE Server Viewer</title>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<link rel="apple-touch-icon-precomposed" href="/shared_assets/images/apple_icon.png"/>
+<link rel="apple-touch-startup-image" href="/shared_assets/images/apple_start.png"/>
+
+  <script src="/js/jquery.js" type="text/javascript"></script>
+  <script src="/js/togeojson.js" type="text/javascript"></script>
+  <script src="/js/gees_utilities.js" type="text/javascript"></script>
+
+  <script type="text/javascript">
+    var GEE_HOST = window.location.host;
+    var GEE_BASE_URL = window.location.protocol + '//' + GEE_HOST;
+    var geeServerDefs = gees.requests.getServerDefs(window.location.href);
+  </script>
+
+  <script src="/maps/api/bootstrap.js" type="text/javascript"></script>
+  <script src="/maps/api/fusion_extended_map.js" type="text/javascript"></script>
+  <script src="/shared_assets/polygon_tools.js"></script>
+  <script src="/shared_assets/serving_layer_tools.js"></script>
+  <script src="/shared_assets/serving_search_tools.js"></script>
+
+  <LINK href="/shared_assets/shared.css" rel="stylesheet" type="text/css">
+  <LINK rel="icon" type="image/png" href="/shared_assets/images/google_favicon.ico">
+
+</head>
+<body>
+
+  <div id="Header">
+    <div id="GoogImg">
+      <img src="/shared_assets/images/GEE_Server_Header.png" width="103px" height="36px" border="0">
+      <label>Earth Enterprise Server</label>
+    </div>
+  </div>
+
+  <div id='map'></div>
+
+  <div id="LayersHolder">
+    <div id="LayerDiv"></div>
+    <div id="SearchDiv"></div>
+    <div id="SearchResults">
+      <span>Search results
+        <img onclick="toggleResultsDiv()" id="ResultsArrow" src='/shared_assets/images/arrow_open.png'/>
+        <div onclick="hideResults()" id="CloseResults">x</div>
+      </span>
+      <div id="ResultsDiv" style="display:block;"></div>
+    </div>
+  </div>
+
+  <div id="ZmControls">
+    <div id="ZmIn" onclick="ZoomTheMap('in');" title="Zoom In"><img src="/shared_assets/images/zoom_plus_16_v1.png"><span></span></div>
+    <div id="ZmOut" onclick="ZoomTheMap('out');" title="Zoom Out"><img src="/shared_assets/images/zoom_minus_16_v1.png"></div>
+  </div>
+
+  <!-- BUTTER BAR -->
+
+  <div id="ButterBar">
+    <span id="ButterBarMessage"></span>
+    <a href="#" onclick="getElement('ButterBar').style.display='none';">close</a>
+  </div>
+
+  <!-- ERROR BAR -->
+
+  <div id="ErrorBar">
+    <span id="ErrorBarMessage"></span>
+    <a href="#" onclick="getElement('ErrorBar').style.display='none';">close</a>
+  </div>
+
+  <div id="SearchScriptHolder"></div>
+
+<script type='text/javascript'>
+// Let the page load before attempting to load to map element.
+
+// Define map.
+var map_opts = {
+    zoom: 3,
+    center: new google.maps.LatLng(44, 0),
+    mapTypeControl: false,
+    panControl: false,
+    zoomControl: false,
+    scaleControl: true,
+    streetViewControl: false
+};
+// Create map.
+geeServerDefs.serverUrl = window.location.href;
+geeMap = geeCreateFusionMap('map', geeServerDefs, map_opts);
+GetServerDetails();
+initSearch();
+checkIfMobile();
+isServing = '2D';
+
+// Shows database that is being served.
+function PopulateServerName() {
+  // Remove leading and trailing slashes from database name
+  var dbName = window.location.pathname.replace(/^\/|\/$/g, '');
+  var div = document.getElementById('LayerDiv');
+  div.innerHTML = '<span><h2>Viewing: <b>' + dbName + '</b></h2></span>';
+  // Create a button for options.
+  div.innerHTML += '<div id="PreviewOptionsButton"' +
+      ' onclick="togglePreviewOptions()"></div>' +
+      '<div id="PreviewOptions" style="display:none;">' +
+      '<em onclick="toggleOverlayElements()">Toggle overlays' +
+      ' (alt-shift-h)</em></div>';
+}
+
+// Some initialization functions.
+function GetServerDetails() {
+  document.getElementById('LayerDiv').innerHTML = '';;
+  PopulateServerName();
+  getMapLayers();
+}
+
+// Zooming effects (2D Only)
+function ZoomTheMap(action) {
+  var CurZm = geeMap.zoom;
+  if ((action == 'out') && (CurZm > 1)) {
+    if (CurZm == null || CurZm == undefined) {
+      CurZm = 1;
+    }
+    var NewZm = CurZm - 1;
+    geeMap.setZoom(NewZm);
+  }
+  if ((action == 'in') && (CurZm < 19)) {
+    if (CurZm == null || CurZm == undefined) {
+      CurZm = 19;
+    }
+    NewZm = CurZm + 1;
+    geeMap.setZoom(NewZm);
+  }
+}
+
+</script>
+
+</body>
+</html>

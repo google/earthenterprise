@@ -1,0 +1,60 @@
+#-*- Python -*-
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+Import('env')
+
+build_root = Dir('.').abspath
+
+libglb_sources = ['glc_unpacker.cpp',
+                  'file_unpacker.cpp',
+                  'file_package.cpp',
+                  'packetbundle.cpp',
+                  'packetbundle_finder.cpp',
+                  'dbroot_info_reader.cpp']
+
+# Creates libglb.so
+glb = env.sharedLib('glb', libglb_sources, LIBS=['gedbroot'])
+
+# Install for use by Apache fdb_module.
+env.install('server_lib', [glb])
+
+portable_glc_reader_sobj = env.SharedObject('portable_glc_reader.cpp')
+
+swig_env = env.DeepCopy()
+cc_flags = swig_env['CCFLAGS']
+cc_flags.remove('-Werror')
+swig_env['CCFLAGS'] = cc_flags
+swig_env['CPPFLAGS'] += ['-fPIC']  # Needed for 64-bit compilation.
+root_dir = Dir(swig_env.exportdirs['root']).abspath
+swig_env['CPPFLAGS'] += ['-I%s' % swig_env['python_include']]
+swig_env.Append(SWIGFLAGS = ['-python', '-c++'])
+
+libglc_unpacker = swig_env.sharedLib('libglc_unpacker',
+                                     ['libglc_unpacker.i', portable_glc_reader_sobj],
+                                     LIBS=['glb'])
+
+# Install _glc_unpacker.so, glc_unpacker.py into 'gehttpd/cgi-bin/common'
+# and 'gehttpd/wsgi-bin/common'
+env.installAs('httpdcgi', [libglc_unpacker], '_glc_unpacker.so', 'common')
+env.installAs('httpdwsgi', [libglc_unpacker], '_glc_unpacker.so', 'common')
+env.InstallFileOrDir(
+    '%s/glc_unpacker.py' % build_root,
+    '%s/common' % env.installdirs['httpdcgi'],
+    libglc_unpacker, 'install')
+env.InstallFileOrDir(
+    '%s/glc_unpacker.py' % build_root,
+    '%s/common' % env.installdirs['httpdwsgi'],
+    libglc_unpacker, 'install')

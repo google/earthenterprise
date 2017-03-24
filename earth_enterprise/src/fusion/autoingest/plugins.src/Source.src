@@ -1,0 +1,68 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#config Name      Source
+#config Base      Leaf
+#config Config    SourceConfig
+#config Subtype   Source
+//#config FixedType
+#config MissingConfigOK 1
+#config WithReuse 1
+#config NoInputs 1
+
+
+// ===== SourceAsset.h =====
+#include <autoingest/.idl/storage/SourceConfig.h>
+
+// ===== SourceAsset.cpp =====
+
+// ===== SourceAssetD.h =====
+
+// ===== SourceAssetD.cpp =====
+#include <khstl.h>
+#include <khException.h>
+#include <khVolumeManager.h>
+
+void
+SourceAssetVersionImplD::DoSubmitTask(void)
+{
+  // We don't really need to submit a task
+  // All we need to do is set our output files and our state
+  for (std::vector<SourceConfig::FileInfo>::const_iterator s =
+         config.sources.begin();
+       s != config.sources.end(); ++s) {
+    if (StartsWith(s->uri, "khfile://")) {
+      // reference to keyhole file URI (volume & path)
+
+      // With help from volume manager, get network path to file
+      khFusionURI uri(s->uri);
+      if (!uri.Valid()) {
+        throw khException(kh::tr("Invalid fusion URI '%1'")
+                          .arg(ToQString(s->uri)));
+      }
+
+      std::string filename = theVolumeManager.NetworkPathOf(uri);
+      if (filename.empty()) {
+        throw khException(kh::tr("Unable to get network path for '%1'")
+                          .arg(ToQString(s->uri)));
+      }
+
+      outfiles.push_back(filename);
+    } else {
+      outfiles.push_back(s->uri);
+    }
+  }
+
+  SetState(AssetDefs::Succeeded);
+}

@@ -1,0 +1,138 @@
+# Copyright 2009 Google Inc. All Rights Reserved.
+#-*- Python -*-
+
+
+Import('third_party_env')
+
+openldap_version = 'openldap-2.4.40'
+ge_version = openldap_version.replace('openldap', 'openldap-ge')
+num_cpu = GetOption('num_jobs')
+
+current_dir = Dir('.').abspath
+build_root = '%s/%s' % (current_dir, openldap_version)
+
+openldap_dir = Dir('#/third_party/openldap').abspath
+openldap_source = File('#/../../earth_enterprise/third_party/openldap/%s'
+                       '.tgz' % openldap_version).abspath
+
+openldap_env = third_party_env.DeepCopy()
+
+# [1] Extract openldap
+openldap_target = '%s/.extract' % current_dir
+openldap_extract = openldap_env.Command(
+    openldap_target, openldap_source,
+    [openldap_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xzf %s\n'
+        'touch %s' % (
+            current_dir, current_dir, openldap_source, openldap_target))])
+
+# [2] Find out whether optimize or debug and set variables accordingly
+if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+  env_opt = 'ol_cv_linux_threads=yes'
+else:
+  env_opt = ''
+
+if openldap_env['release'] or openldap_env['optimize']:
+  config_opt = '--disable-debug'
+else:
+  config_opt = '--enable-debug'
+
+# [3] Configure openldap
+openldap_target = '%s/.configure' % current_dir
+openldap_configure = openldap_env.Command(
+    openldap_target, openldap_extract,
+    [openldap_env.MultiCommand(
+        'cd %s\n'
+        '%s%s ./configure --prefix=/opt/google --mandir=/opt/google/share/man '
+        '--sysconfdir=/etc/opt/google --disable-dependency-tracking '
+        '--disable-slapd --disable-slurpd --with-threads --with-tls %s\n'
+        'touch %s' % (build_root, openldap_env['ENV']['mod_env'], env_opt,
+                      config_opt, openldap_target))])
+
+# [4] Build
+openldap_target = '%s/.build' % current_dir
+openldap_build = openldap_env.Command(
+    openldap_target, openldap_configure,
+    [openldap_env.MultiCommand(
+        'cd %s\n'
+        '%smake -j%d\n'
+        'touch %s' % (build_root, openldap_env['ENV']['mod_env'], num_cpu,
+                      openldap_target))])
+
+# [5] Create openldap master installer
+install_root = '%s/install' % current_dir
+install_root_opt = '%s/opt/google' % install_root
+openldap_target = '%s/.install' % current_dir
+openldap_install = openldap_env.Command(
+    openldap_target, openldap_build,
+    [openldap_env.MultiCommand(
+        'cd %s\n'
+        'make DESTDIR=%s install\n'
+        'cd %s/share/man\n'
+        'rm -rf man3 man8\n'
+        'cd man5\n'
+        'rm -rf slapd.access.5 slapd.backends.5 slapd-bdb.5 slapd.conf.5 '
+        'slapd-config.5 slapd-dnssrv.5 slapd-hdb.5 slapd-ldap.5 slapd-ldbm.5 '
+        'slapd-ldif.5 slapd-meta.5 slapd-monitor.5 slapd-null.5 '
+        'slapd.overlays.5 slapd-passwd.5 slapd-perl.5 slapd.plugin.5 '
+        'slapd-relay.5 slapd-shell.5 slapd-sock.5 slapd-sql.5 '
+        'slapo-accesslog.5 slapo-auditlog.5 slapo-chain.5 slapo-constraint.5 '
+        'slapo-dds.5 slapo-dyngroup.5 slapo-dynlist.5 slapo-memberof.5 '
+        'slapo-pcache.5 slapo-ppolicy.5 slapo-refint.5 slapo-retcode.5 '
+        'slapo-rwm.5 slapo-sock.5 slapo-syncprov.5 slapo-translucent.5 '
+        'slapo-unique.5 slapo-valsort.5\n'
+        'cd %s\n'
+        'rm -rf lib/*.a* lib/*.la*\n'
+        'rm -rf include/slapi-plugin.h\n'
+        'rm -rf share/doc/packages/%s\n'
+        'mkdir -p share/doc/packages/%s\n'
+        'cd %s\n'
+        'cp -pr ANNOUNCEMENT CHANGES COPYRIGHT LICENSE README '
+        '%s/share/doc/packages/%s\n'
+        'touch %s' % (
+            build_root, install_root, install_root_opt, install_root_opt,
+            ge_version, ge_version, build_root, install_root_opt,
+            ge_version, openldap_target))])
+
+# [6] Install these into various directories as required for build
+openldap_target = '%s/.install_for_build' % current_dir
+openldap_install_build = openldap_env.Command(
+    openldap_target, openldap_install,
+    [openldap_env.rsync_cmd % (
+        '%s/include/' % install_root_opt,
+        '%s/' % Dir('%s/include' % openldap_env.exportdirs['root']).abspath),
+     openldap_env.rsync_cmd % (
+         '%s/lib/' % install_root_opt,
+         '%s/' % Dir('%s/lib' % openldap_env.exportdirs['root']).abspath),
+     openldap_env.rsync_cmd % (
+         '%s/share/' % install_root_opt,
+         '%s/' % Dir('%s/share' % openldap_env.exportdirs['root']).abspath),
+     Touch('$TARGET')])
+
+Default(openldap_install_build)
+openldap_env.ExecuteOnClean('rm -rf %s' % current_dir)
+
+if 'install' in COMMAND_LINE_TARGETS:
+  openldap_env.InstallFileOrDir(
+      '%s/etc/' % install_root,
+      '%s/user_magic/etc/' % Dir(openldap_env.installdirs['common_root']).abspath,
+      openldap_install_build, 'install')
+  openldap_env.InstallFileOrDir(
+      '%s/opt/google/bin/' % install_root,
+      '%s/opt/google/bin/' % Dir(
+          openldap_env.installdirs['common_root']).abspath,
+      openldap_install_build, 'install')
+  openldap_env.InstallFileOrDir(
+      '%s/opt/google/lib/' % install_root,
+      '%s/opt/google/lib/' % Dir(
+          openldap_env.installdirs['common_root']).abspath,
+      openldap_install_build, 'install')
+  openldap_env.InstallFileOrDir(
+      '%s/opt/google/share/' % install_root,
+      '%s/opt/google/share/' % Dir(
+          openldap_env.installdirs['common_root']).abspath,
+      openldap_install_build, 'install')
+
+Return('openldap_extract openldap_install_build')

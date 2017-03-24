@@ -1,0 +1,148 @@
+#-*- Python -*-
+# Copyright 2008 Google Inc. All Rights Reserved.
+# Author markwheeler 2008-09-15
+
+import sys
+import os
+import commands
+
+sys.path = sys.path + ['src/scons']
+from khEnvironment import khEnvironment
+
+EnsureSConsVersion(0, 96, 92)
+
+# only accept known arguments
+ValidOptions = { 'installdir' : 1,
+               }
+for argkey in ARGUMENTS.keys():
+   if argkey not in ValidOptions:
+      print "Unrecognized option: '" + argkey + "'"
+      Exit(1)
+
+# process commandline arguments
+installdir = ARGUMENTS.get('installdir', 0)
+
+# this fallback really shouldn't be used, whenever you specify the install
+# target you should also specify an install dir.
+# But having a default makes the rest of the SCons code easier
+if (not installdir) and ('install' in COMMAND_LINE_TARGETS):
+   print "installdir=... must be specified with install target"
+   Exit(1)
+
+installdir = Dir(installdir)
+def dir_cat(installdir, subdir1, subdir2):
+   if (len(subdir2) > 0):
+      return Dir(subdir1 + subdir2, installdir)
+   else:
+      return Dir(subdir1, installdir)
+
+def inst_common_dir(subdir):
+   return dir_cat(installdir, 'common/opt/google/', subdir)
+def inst_manual_dir(subdir):
+   return dir_cat(installdir, 'manual/opt/google/', subdir)
+def inst_fusion_dir(subdir):
+   return dir_cat(installdir, 'fusion/opt/google/', subdir)
+def inst_server_dir(subdir):
+   return dir_cat(installdir, 'server/opt/google/', subdir)
+def inst_tools_dir(subdir):
+   return dir_cat(installdir, 'tools/opt/google/', subdir)
+def inst_disconnected_dir(subdir):
+   return dir_cat(installdir, 'disconnected/opt/google/', subdir)
+def inst_geplaces_dir(subdir):
+   return dir_cat(installdir, 'geplaces/opt/google/', subdir)
+def inst_searchexample_dir(subdir):
+   return dir_cat(installdir, 'searchexample/opt/google/', subdir)
+
+# We have 5 install directories:
+#   Common: installed in both Fusion and Server
+#   Fusion: the fusion client
+#   Server: apache module and configuration and helper files
+#   Tools:  internal only tools
+#   Disconnected: disconnected publisher libs and binaries
+installdirs = {
+   'root':              installdir,
+
+   'common_lib':        inst_common_dir('lib'),
+   'common_share':      inst_common_dir('share'),
+
+   'manual_share':      inst_manual_dir('share'),
+
+   'fusion_bin':        inst_fusion_dir('bin'),
+   'fusion_etc':        Dir('fusion/etc/opt/google', installdir),
+   'fusion_lib':        inst_fusion_dir('lib'),
+   'fusion_root':       Dir('fusion/', installdir),
+   'fusion_share':      inst_fusion_dir('share'),
+
+   'disconnected_bin':  inst_disconnected_dir('bin'),
+   'disconnected_lib':  inst_disconnected_dir('lib'),
+   'disconnected_share': inst_disconnected_dir('share'),
+
+   'tools_bin':         inst_tools_dir('bin'),
+   'tools_lib':         inst_tools_dir('lib'),
+
+   'server_bin':        inst_server_dir('bin'),
+   'server_etc':        Dir('server/etc/opt/google', installdir),
+   'server_lib':        inst_server_dir('lib'),
+   'server_root':       Dir('server/', installdir),
+   'server_share':      inst_server_dir('share'),
+
+   'httpd':             inst_server_dir('gehttpd'),
+   'httpdmodules':      inst_server_dir('gehttpd/modules'),
+   'httpdcgi':          inst_server_dir('gehttpd/cgi-bin'),
+   'httpdconf':         inst_server_dir('gehttpd/conf.d'),
+   'httpdconfex':       inst_server_dir('gehttpd/conf.d/examples'),
+   'httpdconfvs':       inst_server_dir('gehttpd/conf.d/virtual_servers'),
+   'httpdconfvscmn':    inst_server_dir('gehttpd/conf.d/virtual_servers/common'),
+   'httpdconfvsrt':     inst_server_dir('gehttpd/conf.d/virtual_servers/runtime'),
+   'httpdicons':        inst_server_dir('gehttpd/htdocs/icons'),
+   'maps':              inst_server_dir('gehttpd/htdocs/maps'),
+   'httpddocs':         inst_server_dir('gehttpd/htdocs/shared_assets/docs'),
+
+
+   'getomcat_webapps':           inst_server_dir('getomcat/webapps'),
+   'getomcat_lib':           inst_server_dir('getomcat/lib'),
+   'search_plugins':    inst_server_dir('search/plugins'),
+   'search_tabs':       inst_server_dir('search/tabs'),
+   'search_api':        inst_server_dir('search/api'),
+
+   'searchexample':     inst_searchexample_dir('share/searchexample/'),
+   'geplaces':          inst_geplaces_dir('share/geplaces/'),
+   }
+
+# Define exportdirs because khEnvironment expects it.
+exportdirs = {
+           'root': '.',
+           'lib':  '.',
+           'bin':  '.',
+           }
+
+# create the environment that controls the builds
+env = khEnvironment(ENV={'PATH' : '/bin:/bin:/usr/bin'},
+                    exportdirs=exportdirs,
+                    installdirs=installdirs,
+                    JAVA_HOME="/opt/google/java")
+env.Alias('install', installdirs['root'])
+Export('env')
+Export('installdir')
+
+# Note that "src" is not built from this SConstruct currently.
+# May want to do this eventually. This SConstruct is purely for installer
+# building, not for temp or debug builds.
+# Tutorial is not "installed" at the moment due to the cost involved, the
+# installer simply references those files directly at install time.
+SConscript(dirs=['datasets', 'geplaces', 'searchexample', 'docs'],
+           exports=['env', 'installdir'])
+
+# The following target is added to phony_target(or alias_target) 'install'
+# so that it will be executed last while trying to create target install
+this_dict = {'install': ['/bin/bash ./installer/Scripts/verify_installerdir.sh %s' % installdir]}
+env.PhonyTargets(**this_dict)
+
+# Clean install dir (note: the current sconscripts leave stuff behind, like
+# directories).
+if env.GetOption('clean'):
+    # clean the search and getomcat install folders.
+    file = installdir.get_path()
+    commands.getstatusoutput("rm -rf " + file)
+
+

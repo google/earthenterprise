@@ -1,0 +1,482 @@
+/*
+ * Copyright 2017 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* TODO: High-level file comment. */
+body {
+  font-family: "Arial", sans-serif;
+  font-style: 13px;
+  color: #333;
+}
+
+#top_bar,
+#right_bar {
+  padding: 16px 0 0 30px;
+}
+
+#top_bar {
+  display: block;
+  position: absolute;
+  top: 65px;
+  left: 0;
+  right: 0;
+  height: 32px;
+  border-bottom: 1px solid #DCDCDC;
+}
+
+#right_bar {
+  display: block;
+  position: absolute;
+  top: 110px;
+  left: 0px;
+  right: 0;
+  bottom: 0;
+}
+
+#right_bar h2 {
+  padding: 0;
+}
+
+#right_bar p {
+  width: 95%;
+}
+
+#right_bar em {
+  color: #d14836;
+  font-size: 12px;
+}
+
+#right_bar span {
+  display: block;
+  border: 0;
+  margin-left: 8px;
+  margin-bottom: 32px;
+  height: auto;
+  font-size: 13px;
+}
+
+#right_bar span label {
+  display: inline-block;
+  font-size: 13px;
+  margin-right: 16px;
+  width: 135px;
+  vertical-align: top;
+  color: #666;
+}
+
+#CreateModal {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  top: 15%;
+  left: 15%;
+  right: 15%;
+  bottom: 15%;
+  box-shadow: 1px 1px 2px #DCDCDC;
+  z-index: 250;
+  border: 1px solid #DCDCDC;
+  padding: 16px;
+}
+
+#AvailableGlobes {
+  display: none;
+  z-index: 250;
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  right: 10%;
+  min-height: 200px;
+  max-height: 700px;
+  overflow: auto;
+  padding: 16px;
+  border: 1px solid #DCDCDC;
+  background-color: #FFF;
+  box-shadow: 1px 1px 3px #DCDCDC;
+}
+
+#AvailableGlobes label {
+  display: inline-block;
+  padding: 10px;
+  vertical-align: middle;
+}
+
+#AvailableGlobes span {
+  display: block;
+  font-size: 13px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+#AvailableGlobes span label {
+  display: inline-block;
+  margin-left: 22px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.glc_label {
+  width: 90px;
+}
+
+.glc_label_lg {
+  width: 200px;
+}
+
+#layer_list_button {
+  margin-top: 16px;
+}
+
+#selected_layer_list,
+#base_globe_options {
+  transition: all .1s;
+  -webkit-transition: all .1s;
+  display: none;
+  width: 800px;
+  margin-left: 24px;
+}
+
+#selected_layer_list {
+  border-left: 1px solid #DCDCDC;
+}
+
+#base_globe_options {
+  border-left: 1px solid #DCDCDC;
+  margin-left: 24px;
+}
+
+#selected_layer_list span {
+  display: inline-block;
+  font-size: 12px;
+}
+
+#base_globe_options span {
+  display: block;
+  font-size: 12px;
+}
+
+#selected_layer_list span {
+  padding: 8px;
+  border: 1px solid #FFF;
+  margin-bottom: 16px;
+}
+
+#selected_layer_list span {
+  margin-top: 4px;
+}
+
+#selected_layer_list span:hover {
+  background-color: #FCFCFC;
+}
+
+#selected_layer_list span label,
+#base_globe_options span label {
+  display: inline-block;
+  width: 200px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  font-size: 12px;
+  color: #333;
+  font-weight: normal;
+}
+
+#base_globe_options span label {
+  width: 120px;
+}
+
+.delete_list_link {
+  color: #4d90fe;
+  text-decoration: none;
+  margin-left: 8px;
+}
+
+#search_data {
+  margin-left: 8px;
+  font-style: 12px;
+  opacity: .8;
+}
+
+#commit_button {
+  margin: 16px 0 16px 0;
+}
+
+#starting_warning,
+#layer_warning {
+  color: red;
+  font-size: 11px;
+  margin-left: 4px;
+}
+
+#arrows {
+  display: inline-block;
+  vertical-align: top;
+  margin-left: 8px;
+}
+
+#arrows label {
+  vertical-align: top;
+  display: inline-block;
+  border: 1px solid #DCDCDC;
+  margin-top: 26px;
+  color: #333;
+  border-radius: 1px;
+  font-weight: bold;
+  background-color: #f5f5f5;
+  margin-left: 2px;
+  padding: 2px 4px;
+  font-size: 16px;
+}
+
+#arrows label:hover {
+  opacity: 0.6;
+}
+
+#name_field,
+#text_field,
+#kml_field,
+.glc_name_field,
+.glc_path_field,
+.glc_text_field,
+.glc_name_field,
+.glc_poly_field {
+  font-family: "Arial", sans-serif;
+  font-size: 12px;
+  padding: 6px 14px 6px 6px;
+  resize: none;
+  border: 1px solid #DCDCDC;
+}
+
+.glc_name_field,
+.glc_path_field {
+  width: 400px;
+}
+
+option {
+  font-size: 22px;
+}
+
+.glc_text_field {
+  width: 325px;
+}
+
+.glc_poly_field {
+  height: 100px;
+  width: 325px;
+}
+
+em {
+  color: #d14836;
+  font-size: 11px;
+  margin-left: 12px;
+}
+
+#AvailableLayers {
+  display: none;
+  margin-top: 16px;
+  width: 449px;
+  padding: 8px;
+  background-color: #F1F1F1;
+  vertical-align: middle;
+  margin-left: 16px;
+}
+
+#BaseGlobeOptions {
+  margin-top: 16px;
+  display: block;
+  width: 449px;
+  padding: 8px;
+  background-color: #F1F1F1;
+  vertical-align: middle;
+  margin-left: 16px;
+}
+
+#AvailableLayers h1,
+#BaseGlobeOptions h1 {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: normal;
+}
+
+#AvailableLayers select,
+#BaseGlobeOptions select {
+  font-size: 13px;
+  display: inline-block;
+  width: 254px;
+  border: 1px solid #DCDCDC;
+  border-radius: 2px;
+  appearance: none;
+  -webkit-appearance: none;
+  margin-left: 24px;
+  height: 24px;
+  background:#F1F1F1 url('../images/drop_arrow.png') no-repeat scroll right center;
+}
+
+#AvailableLayers select option,
+#BaseGlobeOptions select option {
+  font-size: 13px;
+}
+
+
+#BaseGlobeOptions h1 {
+  width: 165px;
+}
+
+#BaseGlobeOptions span {
+  margin: 0;
+  padding: 8px;
+}
+
+#BaseGlobeOptions span label {
+  width: 150px;
+  margin-left: 24px;
+  color: #333;
+  font-style: italic;
+}
+
+#SelectedLayers {
+  display: block;
+  padding: 8px;
+  border: 1px solid #DCDCDC;
+  border-radius: 2px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+#SelectedLayers em {
+  margin: 0 auto;
+  margin-bottom: 0px;
+}
+
+#SelectedLayers span {
+  display: block;
+  padding: 4px 0;
+  margin: 0;
+  text-align: left;
+  overflow: hidden;
+}
+
+#SelectedLayers span label {
+  display: inline-block;
+  overflow: hidden;
+  text-align: left;
+  color: #333;
+  width: 50px;
+  overflow: visible;
+  height: 22px;
+  padding: 2px;
+  white-space: nowrap;
+  vertical-align: baseline;
+  margin-right: 2px;
+}
+
+#SelectedLayers span em {
+  margin: 0;
+  margin-left: 24px;
+  font-style: normal;
+  color: #333;
+  font-size: 12px;
+}
+
+#SelectedLayers span a {
+  margin-left: 24px;
+  text-decoration: none;
+  color: #d14836;
+}
+
+#SelectedLayers span input[type=text] {
+  display: inline-block;
+  width: 180px;
+  overflow: hidden;
+  text-align: left;
+  color: #333;
+  height: 20px;
+  padding: 2px 6px;
+  margin-right: 8px;
+  border: 1px solid #DCDCDC
+}
+
+input[type=checkbox] {
+ -webkit-appearance: none;
+ appearance: none;
+ width: 16px;
+ height: 16px;
+ border-radius:1px;
+ cursor:pointer;
+ margin-right: 8px;
+ border: 1px solid #DCDCDC;
+ content: url('/shared_assets/images/unchecked.png');
+ position: absolute;
+ margin-top: 6px;
+}
+input[type=checkbox]:checked {
+ content: url('/shared_assets/images/checked.png');
+}
+input[type=radio] {
+ border-radius:50%;
+ width: 15px;
+ height: 15px;
+}
+input[type=checkbox]:focus {
+ outline: none;
+ border-color:#4d90fe;
+}
+
+#BuildProgress {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  right: 32px;
+  width: 475px;
+  background-color: #3079ed;
+  border: 1px solid #666;
+  border-bottom: 0;
+  box-shadow: 0 0 2px #999;
+}
+
+#BuildProgress h1 {
+  margin: 0;
+  font-weight: normal;
+  padding: 4px 8px;
+  color: #fff;
+  font-size: 13px;
+}
+
+#BuildProgress a {
+  color: #3079ed;
+  font-size: 12px;
+  font-weight: bold;
+  display: block;
+  padding: 2px;
+}
+
+#BuildProgress h1 a {
+  color: #fff;
+  position: absolute;
+  right: 10px;
+  text-decoration: none;
+  font-size: 11px;
+  display: inline-block;
+}
+
+#BuildProgress span {
+  display: block;
+  font-size: 12px;
+  color: #333;
+  padding: 8px;
+  overflow: auto;
+  background-color: #fff;
+}

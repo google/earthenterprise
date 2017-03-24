@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="The Hello World of Mapplets" 
+                description="Displays a Hello World message on the map!"
+                author="Your name"
+                author_email="your-email@gmail.com"
+                height="150">
+  <Require feature="sharedmap"/>
+</ModulePrefs>
+<Content type="html"><![CDATA[
+
+<h2>Hello World!</h2>
+
+<script>
+  // Center the map in the Mediterranean and zoom out to a world view
+  var map = new GMap2();
+  var point = new GLatLng(37.71859, 6.679688);
+  map.setCenter(point, 2);
+
+  // Add a marker to the center of the map
+  var marker = new GMarker(point);
+  map.addOverlay(marker);
+
+  // Open a "Hello World" info window
+  var message = "Hello World!";
+  marker.openInfoWindowHtml(message);
+</script>
+
+]]></Content>
+</Module>

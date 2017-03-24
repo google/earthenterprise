@@ -1,0 +1,183 @@
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#-*- Python -*-
+
+Import('env')
+import os
+
+SConscript('khxml/SConscript')
+SConscript('khnet/SConscript')
+SConscript('config/SConscript')
+SConscript('khjs/SConscript')
+SConscript('tests/SConscript')
+SConscript('geindex/SConscript')
+SConscript('serverdb/SConscript')
+SConscript('gedbroot/SConscript')
+SConscript('qtpacket/SConscript')
+
+def emitEnableInternalUseFlag(env, target, source):
+   file = open(str(target[0]), 'w')
+   file.writelines(['// DO NOT MODIFY - auto-generated file\n',
+                    '// run scons with internal=[0|1]\n',
+                    '\n'])
+   if env['internal']:
+      file.writelines(['#define GEE_INTERNAL_USE_ONLY\n'])
+   else:
+      file.writelines(['#undef GEE_INTERNAL_USE_ONLY\n'])
+env.Command('enableInternalUseFlag.h', [env.Value(env['internal'])],
+            [emitEnableInternalUseFlag])
+
+streaming_imagery = env.ProtocolBuffer(
+     '#/keyhole/proto/streaming_imagery.proto');
+
+commonsources = [ '../third_party/rsa_md5/md5c.c',
+                  'notify.cpp',
+                  '../third_party/rsa_md5/crc.cpp',
+                  '../third_party/rsa_md5/crc32.cpp',
+                  'filebundle/filebundle.cpp',
+                  'filebundle/filebundlereader.cpp',
+                  'filebundle/cachedreadaccessor.cpp',
+                  'geFilePool.cpp',
+                  'khThread.cpp',
+                  'khBackTrace.cpp',
+                  'geFileUtils.cpp',
+                  'geGdalUtils.cpp',
+                  'khFileUtils.cpp',
+                  'khGeomUtils.cpp',
+                  'khStringUtils.cpp',
+                  'khstrconv.cpp',
+                  'packetfile/packetindex.cpp',
+                  'packetfile/packetfile.cpp',
+                  'khEndian.cpp',
+                  'khConstants.cpp',
+                  'packetcompress.cpp',
+                  'quadtreepath.cpp',
+                  'geInstallPaths.cpp',
+                  'projection.cpp',
+                  'ScopeCounter.cpp',
+                  'SignalHandler.cpp',
+                  'compressor.cpp',
+                  'tile_resampler.cpp',
+                  'khGetopt.cpp',
+                  'etencoder.cc',
+                  'LoggingManager.cpp',
+                  'proto_streaming_imagery.cpp',
+                  streaming_imagery[0]  # generated .cc file
+                 ]
+# Check environment for png.h file
+conf = Configure(env)
+
+if conf.CheckCHeader('libpng12/png.h'):
+    conf.env.Append(CXXFLAGS = '-I/usr/include/libpng12')
+else:
+    print "libpng12 must be installed!"
+    Exit(1)
+
+env = conf.Finish()
+
+# TODO: consider to move geGdalUtils to khgdal?!
+gecommon = env.sharedLib('gecommon', commonsources,
+                         LIBS = ['keyholeutils', 'geprotobuf', 'z', 'jpeg', 'png12', 'gdal'])
+
+utilsources = [
+    'ff.cpp',
+    'kbf.cpp',
+    'verref_storage.cpp',
+    'khTypes.cpp',
+    'khThreadPool.cpp',
+    'khException.cpp',
+    'khAbortedException.cpp',
+    'khProgressMeter.cpp',
+    'khTileAddr.cpp',
+    'khInsetCoverage.cpp',
+    'khLevelPresenceMask.cpp',
+    'khPresenceMask.cpp',
+    'khCoverageMask.cpp',
+    'RuntimeOptions.cpp',
+    'packet.cpp',
+    'filebundle/filebundlewriter.cpp',
+    'packetfile/packetindexwriter.cpp',
+    'packetfile/packetfilewriter.cpp',
+    'packetfile/packetfilereaderpool.cpp',
+    'khSpawn.cpp',
+    'mttypes/WaitBase.cpp',
+    'mttypes/WaitBaseManager.cpp',
+    'mttypes/Semaphore.cpp',
+    'DottedVersion.cpp',
+    'geLockfileGuard.cpp',
+    'geUsers.cpp',
+    'geConsoleProgress.cpp',
+    'geConsoleAuth.cpp',
+    'procpidstats.cpp',
+    '../third_party/rfc_uuid/uuid.cpp',
+    '../third_party/rfc_uuid/rfc_uuid.c',
+    '../third_party/rfc_uuid/sysdep.c'
+    ]
+# TODO: consider to remove dependency from qt
+geutil = env.sharedLib('geutil', utilsources,
+                       LIBS = ['gecommon', 'qt-mt'])
+
+# Unit test executables
+env.test('quadtreepath_unittest',
+         'quadtreepath_unittest.cpp',
+         LIBS=['geutil', 'gecommon', 'qt-mt'])
+
+env.test('crc_unittest',
+         '../third_party/rsa_md5/crc_unittest.cpp',
+         LIBS=['gecommon'])
+
+env.test('filebundle_unittest',
+         'filebundle/filebundle_unittest.cpp',
+         LIBS=['geutil', 'gecommon', 'qt-mt'])
+
+env.test('cachedreadaccessor_unittest',
+         'filebundle/cachedreadaccessor_unittest.cpp',
+         LIBS=['gecommon', 'geutil'])
+
+env.test('merge_unittest',
+         'merge/merge_unittest.cpp',
+         LIBS=['gecommon', 'geutil'])
+
+env.test('packetfile_unittest',
+         ['packetfile/packetfile_unittest.cpp'],
+         LIBS=['geutil', 'gecommon', 'getests'])
+
+env.test('packetcompress_unittest',
+         'packetcompress_unittest.cpp',
+         LIBS=['geutil', 'gecommon', 'qt-mt'])
+
+env.test('uuid_unittest',
+         '../third_party/rfc_uuid/uuid_unittest.cpp',
+         LIBS=['geutil'])
+
+env.test('khTimer_unittest',
+         'khTimer_unittest.cpp',
+         LIBS=['geutil'])
+
+env.test('procpidstats_unittest',
+         'procpidstats_unittest.cpp',
+         LIBS=['geutil'])
+
+env.test('tile_resampler_unittest',
+         'tile_resampler_unittest.cpp',
+         LIBS=['gecommon', 'gtest', 'qt-mt'])
+
+env.test('verref_storage_unittest',
+         'verref_storage_unittest.cpp',
+         LIBS=['geutil', 'gecommon', 'gtest'])
+
+env.install('common_lib', [gecommon])
+env.install('common_lib', [geutil])

@@ -1,0 +1,459 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+ 
+
+
+
+  
+
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/v2/examples/index.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Google Maps API Examples - Google Maps JavaScript API V2 - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/html/apis/maps/documentation/javascript/v2/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../../../css/iehacks.css"><![endif]-->
+
+  </head>
+
+  <body class="gc-documentation">
+
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container" class="depr">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps JavaScript API V2 (<a href="../../../../terms.html#section_4_4">Deprecated</a>)</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="../index.html" title="Google Maps JavaScript API V2 home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="../basics.html" class="selected" title="Official Google Maps JavaScript API V2 documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../../../faq.html" title="Answers to frequently asked questions about Google Maps JavaScript API V2">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="../articles.html" title="Focused articles and tutorials for Google Maps JavaScript API V2 developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps JavaScript API V2 blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="../forum.html" title="Google Maps JavaScript API V2 developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../../../../terms.html" title="Google Maps JavaScript API V2 terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <a name="gc-toc-anchor"></a>  
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../../../../index.html">Maps API Family</a></li>
+  <li><a href="../../../../signup.html">Sign up for an API key</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index your Maps Content</a></li>
+</ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Javascript API V3</h2>
+        <ul>
+          <li><a href="../../index.html">Home Page</a></li>
+          <li><a href="../../basics.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+       <div class="line"></div>
+    <ul>
+           <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+             <ul>
+               <li><a class="tlw-expanded" href="../index.html">Developer Guide</a>
+                <ul>
+                 <li><a href="../introduction.html">Basics</a></li>
+                 <li><a href="../events.html">Events</a></li>
+                 <li><a href="../controls.html">Controls</a></li>
+                 <li><a href="../overlays.html">Overlays</a></li>
+                 <li><a href="../services.html">Services</a></li>
+                </ul>
+               </li>
+              <li><a href="../reference.html">API Reference</a></li>
+              <li><h2 class="tlw-expanded">Code Samples:</h2>
+               <ul>
+               <li><a href="../demogallery.html">Demos</a></li>
+               <li><a href="index.html">Examples</a></li>
+               <li><a href="http://code.google.com/apis/ajax/playground/?exp=maps">Code Playground</a></li>
+               </ul>
+              </li>
+              <li><h2 class="tlw-expanded">More Resources:</h2>
+               <ul>
+               <li><a href="../articles.html">Articles</a></li>
+               <li><a href="../mediagallery.html">Presentations</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/issues/list?can=2&q=apitype%3AJavascript&colspec=ID+Type+Status+Introduced+Fixed+Summary+Internal+Stars&cells=tiles">Known Issues</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/wiki/JavascriptMapsAPIChangelog">Changelog</a><sup class="new">New!</sup></li>
+               <li><a href="http://code.google.com/p/gmaps-utility-library-dev/">Utility Library</a></li>
+               <li><a href="http://maps.google.com/casestudies/">Case Studies</a></li>
+               </ul>
+              </li>
+             </ul>
+           </li>
+         </ul>
+   <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../../../flash/index.html">Home Page</a></li>
+          <li><a href="../../../flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+   <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../../../mapsdata/index.html">Home Page</a></li>
+          <li><a href="../../../mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+     <div class="line"></div>
+      <ul>
+        <li><h2><a href="../../../webservices/index.html">Maps API Web Services</a></h2>
+         <ul>
+           <li><a href="../../../geocoding/index.html">Geocoding API</a></li>
+           <li><a href="../../../directions/index.html">Directions API</a></li>
+           <li><a href="../../../elevation/index.html">Elevation API</a></li>
+           <li><a href="../../../places/index.html">Places API</a></li>
+         </ul>
+       </li>
+      </ul>
+       <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../../../staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../../../localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../../../localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+    <div class="promo"><p><a href="../../../premier/index.html">Google Maps API Premier</a></p>
+    <p>Same great maps plus a SLA, support, and control over ads</p>
+    </div>
+
+      </div>
+      
+      <a name="gc-pagecontent-anchor"></a>   
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Google Maps API Examples</h1>
+
+
+<p>All of the examples contained in the Google Maps API documentation set are listed below for 
+quick reference.</p>
+
+<div class="special">
+<p><span style="color:red">Note: </span> We're also providing these examples in the  
+<a href="http://code.google.com/apis/ajax/playground/?exp=maps">AJAX API Playground</a>.</p>
+<p>
+Please <a href="http://spreadsheets.google.com/viewform?hl=en&formkey=cFM5OU5yN3BrRzhOOEhFc2VBMmlQU2c6MA">
+send feedback on the API Playground</a>, noting any features you might like to see.</p>
+</div>
+
+<h1>Map Examples</h1>
+<ul>
+<li><a href="map-simple.html"><b>Simple Map</b></a></li>
+<li><a href="map-markers.html"><b>Using Latitudes and Longitudes</b></a></li>
+<li><a href="aerial-simple.html"><b>Enabling Rotation on map types</b></li>
+<li><a href="aerial-rotation.html"><b>Rotating Maps with Aerial Imagery</b><lip>
+<li><a href="map-animate.html"><b>Interacting With the Map</b></a></li>
+<li><a href="map-infowindow.html"><b>Using the <code>GInfoWindow</code> Object</b></a></li>
+</ul>
+
+<p>For more information, see the <a href="../../../introduction.html">Map Basics</a>
+conceptual documentation.</p>
+
+<h1>Event Examples</h1>
+</h1>
+<ul>
+<li><a href="event-simple.html"><b>Simple Events</b></a></li>
+<li><a href="event-closure.html"><b>Using Closures to Store Private Data</b></a></li>
+<li><a href="event-arguments.html"><b>Using Arguments in Event Handlers</b></a></li>
+<li><a href="event-bind.html"><b>Binding Events to Objects</b></a></li>
+<li><a href="event-removal.html"><b>Removing Events</b></a></li>
+</ul>
+
+<p>For more information, see the <a href="../../../events.html">Events</a>
+conceptual documentation.</p>
+
+<h1>Controls Examples</h1>
+<ul>
+<li><a href="control-simple.html"><b>Simple Controls</b></a></li>
+<li><a href="control-positioning.html"><b>Positioning Controls</b></a></li>
+<li><a href="control-custom.html"><b>Creating Custom Controls</b></a></li>
+<li><a href="control-googlebar.html"><b>Using the GoogleBar to add Local Search Capabilities</b></a></li>
+<li><a href="control-googlebar-ads.html"><b>Specifying AdSense Parameters within the GoogleBar</b></a></li>
+<li><a href="control-maptypes.html"><b>Using MapType Controls</b></a></li>
+<li><a href="control-navlabel.html"><b>Using a <code>GNavLabelControl</code> to Show Address Information</b></a></li>
+<li><a href="control-initialization.html"><b>Using Controls Requiring Initialization</b></a></li>
+</ul>
+
+<p>For more information, see the <a href="../../../controls.html">Controls</a>
+conceptual documentation.</p>
+
+<h1>Marker Examples</h1>
+<ul>
+<li><a href="marker-simple.html"><b>Simple Markers</b></a></li>
+<li><a href="marker-drag.html"><b>Draggable Markers</b></a></li>
+<li><a href="icon-simple.html"><b>Creating Simple Icons</b></a></li>
+<li><a href="icon-custom.html"><b>Creating Complex Icons</b></a></li>
+<li><a href="http://gmaps-utility-library.googlecode.com/svn/trunk/markermanager/release/examples/weather_map.html">
+<b>Handling Large Numbers of Markers</b></a></li>
+<li><a href="http://gmaps-utility-library.googlecode.com/svn/trunk/markermanager/release/examples/google_northamerica_offices.html">
+<b>Showing Markers Based on Zoom Levels</b></a></li>
+</ul>
+
+<p>For more information, see the <a href="../../../overlays.html#Markers">Markers</a>
+conceptual documentation.</p>
+
+<h1>Line and Shape Examples</h1>
+
+<ul>
+<li><a href="polyline-simple.html"><b>Drawing Simple Polylines</b></a></li>
+<li><a href="polyline-geodesic.html"><b>Drawing Great Circles</b></a></li>
+<li><a href="polyline-encoding.html"><b>Compressing Polylines Using Encoding</b></a></li>
+<li><a href="polygon-simple.html"><b>Creating Simple Polygons</b></a></li>
+</ul>
+
+<p>For more information, see the
+<a href="../../../overlays.html#Polylines_Overview">Polylines</a> and
+<a href="../../../overlays.html#Polygons_Overview">Polygons</a>
+conceptual documentation.</p>
+
+<h1>Image Overlay Examples</h1>
+
+<ul>
+<li><a href="groundoverlay-simple.html"><b>Overlaying Images on the Map</b></a></li>
+<li><a href="tileoverlay-simple.html"><b>Customizing Map Tiles</b></a></li>
+<li><a href="tile-detector.html"><b>Determining Tile Set Coordinates</b></a></li>
+<li><a href="layer-simple.html"><b>Adding Data Layers</b></a></li>
+</ul>
+
+<p>For more information, see the 
+<a href="../../../overlays.html#Ground_Overlays">Ground Overlays</a>,
+<a href="../../../overlays.html#Tile_Overlays">Tile Overlays</a>, and
+<a href="../../../overlays.html#Layers">Layers</a>
+conceptual documentation.</p>
+
+<h1>Custom Overlay Examples</h1>
+
+<ul>
+<li><a href="overlay-custom.html"><b>Creating Custom Overlays</b></a></li>
+</ul>
+
+<p>For more information, see the <a href="../../../overlays.html#Custom_Overlays">
+Custom Overlays</a> conceptual documentation.</p>
+
+<h1>Services Examples</h1>
+
+<ul>
+<li><a href="xhr-requests.html"><b>Data Processing</b></a></li>
+<li><a href="geocoding-simple.html"><b>Simple Geocoding</b></a></li>
+<li><a href="geocoding-extraction.html"><b>Extracting Structured Geocoding Data</b></a></li>
+<li><a href="geocoding-reverse.html"><b>Reverse Geocoding</b></a></li>
+<li><a href="geocoding-cache.html"><b>Pre-Fetching Geocoding Data</b></a></li>
+<li><a href="geoxml-rss.html"><b>Accessing Geocoded Data via RSS</b></a></li>
+<li><a href="geoxml-kml.html"><b>Accessing and Displaying KML Data</b></a></li>
+<li><a href="adsmanager-adunit.html"><b>Adding Advertising to your Map</b></a></li>
+<li><a href="trafficOverlay.html"><b>Using Traffic Overlays</b></a></li>
+<li><a href="directions-simple.html"><b>Showing Simple Directions</b></a></li>
+<li><a href="directions-advanced.html"><b>Processing Directions</b></a></li>
+<li><a href="streetview-simple.html"><b>Adding Simple Street View Objects</b></a></li>
+<li><a href="streetview-object.html"><b>Setting Street View Properties</b></a></li>
+<li><a href="streetview-layer.html"><b>Showing Street View Support on the Map</b></a></li>
+<li><a href="streetview-data.html"><b>Accessing Street View Data</b></a>
+</li>
+</ul>
+
+<p>For more information, see the <a href="../../../services.html">
+Services</a> conceptual documentation.</p>
+
+        <!-- end body text -->
+
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

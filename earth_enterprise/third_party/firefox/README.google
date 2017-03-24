@@ -1,0 +1,23 @@
+URL: http://www.mozilla.org/
+Version: 1.5.0.1
+License: MPL 1.1
+License File: LICENSE
+
+Description:
+firefox: Mozilla's open source web browser.
+
+Local Modifications:
+Following modifications in extracted directory v1_5_0_1/, as svn cannot accept
+blank in filename.
+
+mv "directory/c-sdk/ldap/examples/macintosh/asearch (2i).68k.u" "directory/c-sdk/ldap/examples/macintosh/asearch_(2i).68k.u"
+mv "directory/c-sdk/ldap/examples/macintosh/asearch (4i).68k.u" "directory/c-sdk/ldap/examples/macintosh/asearch_(4i).68k.u
+mv "directory/c-sdk/ldap/examples/macintosh/asearch PPC.u" "directory/c-sdk/ldap/examples/macintosh/asearch_PPC.u
+mv "modules/plugin/tools/sdk/samples/basic/mac/Basic Plugin.mcp" "modules/plugin/tools/sdk/samples/basic/mac/Basic_Plugin.mcp
+mv "modules/plugin/tools/sdk/samples/basic/mac/Basic Plugin.xml" "modules/plugin/tools/sdk/samples/basic/mac/Basic_Plugin.xml
+mv "modules/plugin/tools/sdk/samples/scriptable/mac/Scriptable Plugin.mcp" "modules/plugin/tools/sdk/samples/scriptable/mac/Scriptable_Plugin.mcp
+mv "modules/plugin/tools/sdk/samples/scriptable/mac/Scriptable Plugin.xml" "modules/plugin/tools/sdk/samples/scriptable/mac/Scriptable_Plugin.xml
+mv "modules/plugin/tools/sdk/samples/scriptable/mac/Scriptable PluginIDL.mcp" "modules/plugin/tools/sdk/samples/scriptable/mac/Scriptable_PluginIDL.mcp
+mv "modules/plugin/tools/sdk/samples/scriptable/mac/Scriptable PluginIDL.xml" "modules/plugin/tools/sdk/samples/scriptable/mac/Scriptable_PluginIDL.xml
+mv "gc/boehm/MetroNubUtils/About MetroNub Utilities" "gc/boehm/MetroNubUtils/About_MetroNub_Utilities
+mv "layout/html/tests/printer/js/change_while_in printdialog.html" "layout/html/tests/printer/js/change_while_in_printdialog.html

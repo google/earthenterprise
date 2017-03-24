@@ -1,0 +1,40 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+
+#include <vector>
+#include <qstring.h>
+
+class SelectRuleConfig {
+  enum Operator { Equal = 0, LEqual = 1, GEqual = 2, Less = 3, Greater = 4, NEqual = 5, RegExpMatch = 6, NotRegExpMatch = 7 };
+  Operator op;
+  uint fieldNum;
+  QString rvalue;
+#pragma GenerateIsUpToDate
+};
+
+class FilterConfig {
+  enum MatchType { MatchAll = 0, MatchAny = 1, JSExpression = 2};
+  MatchType match = FilterConfig::MatchAll;
+  IsUpToDateIgnoreIf(match==JSExpression) std::vector<SelectRuleConfig> selectRules = std::vector<SelectRuleConfig>();
+  IsUpToDateIgnoreIf(match!=JSExpression) QString matchScript = QString("");
+#hquote
+  inline bool HasJS(void) const {
+    return ((match == JSExpression) && !matchScript.isEmpty());
+  }
+#/hquote
+
+#pragma GenerateIsUpToDate
+
+};

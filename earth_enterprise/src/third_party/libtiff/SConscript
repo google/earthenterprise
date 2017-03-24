@@ -1,0 +1,116 @@
+# Copyright 2013 Google Inc. All Rights Reserved.
+#-*- Python -*-
+
+
+Import('third_party_env')
+libtiff_version = 'tiff-4.0.3'
+
+num_cpu = GetOption('num_jobs')
+
+ge_version = libtiff_version.replace('tiff', 'tiff-ge')
+current_dir = Dir('.').abspath
+build_root = '%s/%s' % (current_dir, libtiff_version)
+install_root = '%s/install' % current_dir
+install_root_opt = '%s/opt/google' % install_root
+
+libtiff_source = File('#/../third_party/libtiff/%s.tar.gz' %
+                      libtiff_version).abspath
+
+libtiff_env = third_party_env.DeepCopy()
+
+# [1] Extract libtiff
+libtiff_target = '%s/.extract' % current_dir
+libtiff_extract = libtiff_env.Command(
+    libtiff_target, libtiff_source,
+    [libtiff_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xzf %s\n'
+        'touch %s' % (
+            current_dir, current_dir, libtiff_source, libtiff_target))])
+
+if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+  env_opt = 'ac_cv_prog_cc_c99=no'
+else:
+  env_opt = ''
+
+if libtiff_env['release'] or libtiff_env['optimize']:
+  config_opt = ''
+else:
+  config_opt = ''
+
+# [3] Configure libtiff
+libtiff_target = '%s/.configure' % current_dir
+libtiff_configure = libtiff_env.Command(
+    libtiff_target, libtiff_extract,
+    [libtiff_env.MultiCommand(
+        'cd %s\n'
+        '%s%s ./configure --prefix=/opt/google --without-x --without-gl '
+        '--without-glut --disable-cxx --enable-shared --disable-static %s\n'
+        'touch %s' % (build_root, libtiff_env['ENV']['mod_env'], env_opt,
+                      config_opt, libtiff_target))])
+
+# [4] Build
+libtiff_target = '%s/.build' % current_dir
+libtiff_build = libtiff_env.Command(
+    libtiff_target, libtiff_configure,
+    [libtiff_env.MultiCommand(
+        'cd %s\n'
+        '%smake -j%d\n'
+        'touch %s' % (build_root, libtiff_env['ENV']['mod_env'], num_cpu,
+                      libtiff_target))])
+
+# [5] Create libtiff master installer
+libtiff_target = '%s/.install' % current_dir
+libtiff_install = libtiff_env.Command(
+    libtiff_target, libtiff_build,
+    [libtiff_env.MultiCommand(
+        'cd %s\n'
+        '%smake DESTDIR=%s mandir=/opt/google/share/man install\n'
+        'cd %s\n'
+        'rm -rf lib/libtiff.a lib/libtiff.la share/doc/%s\n'
+        'mkdir -p share/doc/packages/%s\n'
+        'cd %s\n'
+        'cp -pr COPYRIGHT README VERSION %s/share/doc/packages/%s\n'
+        'touch %s' % (build_root,
+                      libtiff_env['ENV']['mod_env'], install_root,
+                      install_root_opt,
+                      libtiff_version,
+                      ge_version,
+                      build_root,
+                      install_root_opt, ge_version,
+                      libtiff_target))])
+
+# [6] Install these into various directories as required for build
+libtiff_target = '%s/.install_for_build' % current_dir
+libtiff_install_build = libtiff_env.Command(
+    libtiff_target, libtiff_install,
+    [libtiff_env.rsync_cmd % (
+        '%s/bin/' % install_root_opt,
+        '%s/bin/' % libtiff_env.exportdirs['root']),
+     libtiff_env.rsync_cmd % (
+         '%s/include/' % install_root_opt,
+         '%s/include/' % libtiff_env.exportdirs['root']),
+     libtiff_env.rsync_cmd % (
+         '%s/lib/' % install_root_opt,
+         '%s/lib/' % libtiff_env.exportdirs['root']),
+     Touch('$TARGET')])
+
+Default(libtiff_install_build)
+libtiff_env.ExecuteOnClean('rm -rf %s' % current_dir)
+
+if 'install' in COMMAND_LINE_TARGETS:
+  libtiff_env.InstallFileOrDir(
+      '%s/opt/google/bin/' % install_root,
+      '%s/opt/google/bin/' % libtiff_env.installdirs['common_root'],
+      libtiff_install_build, 'install')
+  libtiff_env.InstallFileOrDir(
+      '%s/opt/google/lib/' % install_root,
+      '%s/opt/google/lib/' % libtiff_env.installdirs['common_root'],
+      libtiff_install_build, 'install')
+  libtiff_env.InstallFileOrDir(
+      '%s/opt/google/share/' % install_root,
+      '%s/opt/google/share/' % libtiff_env.installdirs['common_root'],
+      libtiff_install_build, 'install')
+
+Return('libtiff_extract libtiff_install_build')

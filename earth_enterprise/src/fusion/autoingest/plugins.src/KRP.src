@@ -1,0 +1,112 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#config Name       KRP
+#config Base       Leaf
+#config Config     KRPConfig
+#config Subtype    KRP
+// #config FixedType
+#config WithReuse 1
+
+
+// ===== KRPAsset.h =====
+#include <autoingest/.idl/storage/KRPConfig.h>
+
+class KRPAssetVersionImpl {
+ public:
+  std::string PreviewRef(void) const { return WorkingFileRef("preview.png"); }
+}
+
+// ===== KRPAsset.cpp =====
+
+// ===== KRPAssetD.h =====
+
+// ===== KRPAssetD.cpp =====
+#include <khException.h>
+#include <khGuard.h>
+#include <khgdal/khGDALDataset.h>
+
+void
+KRPAssetVersionImplD::DoSubmitTask(void)
+{
+  TaskDef task(*this);
+  std::vector<std::string> inputs;
+  GetInputFilenames(inputs);
+  task.AddInputs(inputs);
+  if (inputs.size() != 1) {
+    throw khException("Internal Error: KRP num inputs != 1");
+  }
+
+  // Estimate resultant product size
+  uint64 sizeEstimate = 0;
+  khGDALDataset srcDS(inputs[0]);
+  khSize<uint32> rasterSize = srcDS.normalizedRasterSize();
+  if (type == AssetDefs::Imagery) {
+    // the compression is normally 4x - 5x
+    sizeEstimate = ((uint64)rasterSize.width *
+                    (uint64)rasterSize.height *
+                    3 * sizeof(char)) / 4;
+
+  } else {
+    // the product could save as float or int16, we'll assume float
+    // LZ compression will normally be about 2x
+    sizeEstimate = ((uint64)rasterSize.width *
+                    (uint64)rasterSize.height *
+                    1 * sizeof(float)) / 2;
+  }
+  // give a slight margin of error
+  sizeEstimate = (uint64)(sizeEstimate * 1.25);
+
+  task.AddOutput(type == AssetDefs::Imagery
+                 ? WorkingFileRef("raster.kip")
+                 : WorkingFileRef("raster.ktp"),
+                 sizeEstimate);
+
+  task << "gerasterimport"
+       << (type == AssetDefs::Imagery ? "--imagery" : "--heightmap")
+       << "$INPUT"
+       << "-o" << "$OUTPUT";
+  if (type == AssetDefs::Terrain) {
+    if (config.scale != 1.0) {
+      task << "--scale" << config.scale;
+    }
+    if (config.clampNonnegative) {
+      task << "--nonegatives";
+    }
+  }
+  if (config.useMercatorProjection) {
+    task << "--mercator";
+  }
+  if (!config.overridesrs.empty()) {
+    task << "--srs" << config.overridesrs;
+  }
+  task << "--north_boundary" << config.north_boundary;
+  task << "--south_boundary" << config.south_boundary;
+  task << "--east_boundary" << config.east_boundary;
+  task << "--west_boundary" << config.west_boundary;
+
+  if (MiscConfig::Instance().GenerateProductPreviews) {
+    // fully bound name for preview file
+    std::string preview = WorkingFilename("preview.png");
+
+    task.StartNewCommand();
+    task << "gemaskgen" << "--oformat=PNG"
+         << "--preview"
+         << "--maxsize=1024"
+         << "$OUTPUT" << preview;
+  }
+
+  // priority of -2 means slightly higher priority than the default 0
+  theAssetManager.SubmitTask(GetRef(), task, -2);
+}

@@ -1,0 +1,16 @@
+tile_layer_defs.push(
+{
+  img: stream_url + "/query?request=Icon&icon_path=icons/773_l.png",
+  txt: "Imagery",
+  initial_state: true,
+  opacity: 1.0,
+  is_png: false,
+  fetch_func: function(addr, level) {
+    return stream_url + "/query?request=ImageryMaps"
+           + "&level=" + level
+           + "&row=" + addr.y
+           + "&col=" + addr.x
+           + "&channel=2003"
+           + "&version=2";
+  }
+} );

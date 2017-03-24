@@ -1,0 +1,59 @@
+# Copyright 2008 Google Inc. All Rights Reserved.
+#-*-perl-*-
+
+package GEServerDisconnected;
+
+use strict;
+use Product;
+use Users;
+use RPMHelps;
+use InstallUtils;
+use TermHelps;
+use prompt;
+
+our( @ISA );
+@ISA = ("Product");
+
+our $ServerRPM  = "GoogleEarthServerDisconnected";
+
+sub new {
+    my ($class) = @_;
+    my $self = $class->SUPER::new();
+    $self->{prettyname} =
+        "Google Earth Enterprise Server - Disconnected Add-On";
+    return $self;
+}
+
+sub SortPrimaryKey {
+    return 300;
+}
+
+sub PrimaryRPM {
+    my $self = shift;
+    return $ServerRPM;
+}
+
+sub InstallExclusiveList {
+    return ('GEFusionLT', 'GEFusionPro', 'GEFusionGoogle',
+            'GEServerDisconnected');
+}
+
+sub DependsList {
+    return ('GEServerBase');
+}
+
+sub RPMList {
+    my $self = shift;
+    return ('gcc-ge-runtime',
+            'expat-ge',
+            'libcurl-ge',
+            'qt-ge',
+            'xerces-c-ge',
+            $ServerRPM,
+            );
+}
+
+push @Product::AllProductList, new GEServerDisconnected();
+
+
+1;

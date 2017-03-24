@@ -1,0 +1,254 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#config Name      CombinedRP
+#config Base      Composite
+#config Config    CombinedRPConfig
+#config Subtype   CombinedRP
+// #config FixedType
+
+
+// ===== CombinedRPAsset.h =====
+#include <autoingest/.idl/storage/CombinedRPConfig.h>
+#include <khExtents.h>
+#include <khstl.h>
+#include <khInsetCoverage.h>
+
+class CombinedRPAssetVersionImpl {
+ public:
+  khExtents<double> GetExtents(void) const;
+  uint              GetMaxLevel(void) const;
+  std::string       PreviewRef(void) const;
+};
+
+// ===== CombinedRPAsset.cpp =====
+#include <autoingest/plugins/KRPAsset.h>
+
+khExtents<double>
+CombinedRPAssetVersionImpl::GetExtents(void) const
+{
+  std::string extents = meta.GetValue("extents");
+  std::vector<std::string> coords;
+  // split out coords (N,S,E,W)
+  split(extents, ",", back_inserter(coords));
+
+  if (coords.size() == 4) {
+    double N, S, E, W;
+    FromString(coords[0], N);
+    FromString(coords[1], S);
+    FromString(coords[2], E);
+    FromString(coords[3], W);
+
+    return khExtents<double>(NSEWOrder, N, S, E, W);
+  }
+
+  throw khException(kh::tr("Unable to get extents for ")
+                    + GetRef());
+}
+
+
+uint
+CombinedRPAssetVersionImpl::GetMaxLevel(void) const
+{
+  uint prodMaxLevel = 0;
+  FromString(meta.GetValue("maxlevel"), prodMaxLevel);
+  if (!prodMaxLevel) {
+    throw khException(kh::tr("Unable to get maxlevel for ")
+                      + GetRef());
+  }
+  return prodMaxLevel;
+}
+
+std::string
+CombinedRPAssetVersionImpl::PreviewRef(void) const
+{
+  AssetVersion ver(children[0]);
+  if (ver->subtype == "KRP") {
+    KRPAssetVersion krp(ver);
+    return krp->PreviewRef();
+  }
+  return std::string();
+}
+
+
+// ===== CombinedRPAssetD.h =====
+class CombinedRPAssetVersionImplD {
+ protected:
+  virtual void OnStateChange(AssetDefs::State newstate,
+                             AssetDefs::State oldstate);
+  virtual void ChildrenToCancel(std::vector<AssetVersion> &out);
+};
+
+
+// ===== CombinedRPAssetD.cpp =====
+#include <autoingest/sysman/plugins/MosaicAssetD.h>
+#include <autoingest/sysman/plugins/KRPAssetD.h>
+#include <autoingest/sysman/plugins/KRMPAssetD.h>
+#include <autoingest/sysman/plugins/MaskgenAssetD.h>
+#include <khraster/khRasterProduct.h>
+#include <khgdal/khGDALDataset.h>
+#include <khException.h>
+
+
+void
+CombinedRPAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
+                                              AssetDefs::State oldstate)
+{
+  CompositeAssetVersionImplD::OnStateChange(newstate, oldstate);
+  if (state == AssetDefs::Succeeded) {
+    // go extract the extents from my KRP's output file
+    std::string krpfile = AssetVersion(children[0])->GetOutputFilename(0);
+    khDeleteGuard<khRasterProduct> rptr(khRasterProduct::Open(krpfile));
+    if (rptr) {
+      meta.SetValue("extents",
+                    ToString(rptr->degOrMeterNorth()) + "," +
+                    ToString(rptr->degOrMeterSouth()) + "," +
+                    ToString(rptr->degOrMeterEast())  + "," +
+                    ToString(rptr->degOrMeterWest()));
+      meta.SetValue("maxlevel", rptr->maxLevel());
+      meta.SetValue("minlevel", rptr->minLevel());
+    }
+  }
+}
+
+
+void
+CombinedRPAssetVersionImplD::ChildrenToCancel(std::vector<AssetVersion> &out)
+{
+  if (config.source_is_product_) {
+    // nothing to cancel in this case
+    return;
+  }
+
+  // my direct children (KRP & optionally KRMP) need to be canceled
+  copy(children.begin(), children.end(), back_inserter(out));
+
+  // my KRP's inputs _may_ by my subassets as well
+  // and it cascades up until you hit a 'Source'
+  AssetVersion krp(children[0]);
+  AssetVersion source(krp->inputs[0]);
+  while (source->subtype != "Source") {
+    out.push_back(source);
+    source = source->inputs[0];
+  }
+
+  // my KRMP may also have a subasset input
+  // the second input of the mask product is either Source or Maskgen
+  if (children.size() > 1) {
+    AssetVersion krmp(children[1]);
+    AssetVersion maskgen(krmp->inputs[1]);
+    if (maskgen->subtype != "Source") {
+      out.push_back(maskgen);
+    }
+  }
+}
+
+
+void
+CombinedRPAssetVersionImplD::UpdateChildren(void)
+{
+  std::vector<MutableAssetVersionD> kids;
+
+  // We want to make our children as siblings in the assetroot.
+  // This is so we can reuse the old ones built before CombinedRP existed.
+  std::string assetRef = khDirname(GetAssetRef());
+
+  // ***** load my input versions (only if they aren't already loaded)
+  // I'll use this list of my inputs to pass to my children so they don't
+  // have to look them up over and over again
+  InputVersionGuard guard(this);
+
+  MutableAssetVersionD krp;
+  if (config.source_is_product_) {
+    krp = guard->inputvers[0];
+  } else {
+    AssetVersion source(guard->inputvers[0]);
+
+    // see if I need to khvr the source
+    if (config.need_khvr_) {
+      source = MosaicFactory::ReuseOrMakeAndUpdateSubAsset
+               (assetRef, type, "mosaic",
+                makevec1(source->GetRef()),
+                khMetaData(),
+                config.khvr_config_,
+                makevec1(source));
+    }
+
+    // tell my raster child about the new source & have it update itself
+    MutableKRPAssetVersionD krp2 =
+      KRPFactory::ReuseOrMakeAndUpdateSubAsset
+      (assetRef, type, "product",
+       makevec1(source->GetRef()),
+       khMetaData(),
+       config.krp_config_,
+       makevec1(source));
+
+    // save the location of the preview file
+    meta.SetValue("preview", krp2->PreviewRef());
+    krp = krp2;
+  }
+  kids.push_back(krp);
+
+  switch (config.mask_mode_) {
+    case CombinedRPConfig::NoMask:
+      // nothing to do
+      break;
+    case CombinedRPConfig::HaveMask: {
+      MutableAssetVersionD krmp;
+      if (config.source_is_product_) {
+        if (guard->inputvers.size() < 2) {
+          throw khException(
+              kh::tr("Internal error: havemask set, but no mask input"));
+        } else {
+          krmp = guard->inputvers[1].Ref();
+        }
+      } else {
+        krmp =
+          KRMPFactory::ReuseOrMakeAndUpdateSubAsset
+          (assetRef, type, "maskproduct",
+           makevec2(krp->GetRef(), inputs[1]),
+           khMetaData(),
+           KRMPConfig(config.krp_config_.overridesrs,
+                      config.krp_config_.useMercatorProjection),
+           makevec2(AssetVersion(krp), guard->inputvers[1]));
+      }
+      kids.push_back(krmp);
+      break;
+    }
+    case CombinedRPConfig::AutoMask: {
+      // tell my maskgen child about the new raster, have it update
+      AssetVersion maskgen =
+        MaskgenFactory::ReuseOrMakeAndUpdateSubAsset
+        (assetRef, type, "maskgen",
+         makevec1(krp->GetRef()),
+         khMetaData(),
+         config.maskgen_config_,
+         makevec1(AssetVersion(krp)));
+
+      // tell my KRMP child about the new raster & mask
+      MutableAssetVersionD krmp =
+        KRMPFactory::ReuseOrMakeAndUpdateSubAsset
+        (assetRef, type, "maskproduct",
+         makevec2(krp->GetRef(), maskgen->GetRef()),
+         khMetaData(),
+         KRMPConfig("", config.krp_config_.useMercatorProjection),
+         makevec2(AssetVersion(krp), maskgen));
+      kids.push_back(krmp);
+      break;
+    }
+  }
+
+  // Add my kids
+  AddChildren(kids);
+}

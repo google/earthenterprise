@@ -1,0 +1,301 @@
+<etSite> [Bellingshausen Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ -0.4555555555555556 -0.3777777777777778 }
+}
+<etSite> [Scotia Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ -0.2277777777777776 -0.3222222222222222 }
+}
+<etSite> [Weddel Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ -0.2500000000000000 -0.3666666666666667 }
+}
+<etSite> [Mozambique Channel] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.2108961594057313 -0.1162140428907747 }
+}
+<etSite> [Java Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.6111111111111112 -0.0277777777777778 }
+}
+<etSite> [Tasman Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.8968997946641522 -0.2104662559949712 }
+}
+<etSite> [Arafura Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.7359809148932892 -0.0522176781491959 }
+}
+<etSite> [Coral Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.8662140428907747 -0.0919890942247366 }
+}
+<etSite> [Gulf of California] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ -0.6212942543053063 0.1553406038501755 }
+}
+<etSite> [Bering Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ -0.9888888888888889 0.3277777777777777 }
+}
+<etSite> [Gulf of Alaska] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ -0.8111111111111111 0.3277777777777777 }
+}
+<etSite> [Chukchi Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ -0.9431092934819005 0.3833106129682011 }
+}
+<etSite> [Beaufort Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ -0.7582031371155113 0.4026703019250877 }
+}
+<etSite> [Caribbean Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ -0.4166666666666665 0.0833333333333333 }
+}
+<etSite> [Gulf of Mexico] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ -0.5000000000000000 0.1499999999999999 }
+}
+<etSite> [Hudson Bay] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ -0.4726951775816608 0.3302557836612876 }
+}
+<etSite> [Labrador Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ -0.3166666666666667 0.3277777777777777 }
+}
+<etSite> [Baffin Bay] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ -0.4102740246547232 0.4171192904425587 }
+}
+<etSite> [Lincoln Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ -0.3055555555555556 0.4500000000000000 }
+}
+<etSite> [Norwegian Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ -0.0444444444444444 0.3694444444444445 }
+}
+<etSite> [Mediterranean Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.0960290831091679 0.1908974052657146 }
+}
+<etSite> [Red Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.2083333333333333 0.1250000000000000 }
+}
+<etSite> [Black Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.1896114726854405 0.2397772956786721 }
+}
+<etSite> [Gulf of Aden] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.2722222222222221 0.0722222222222222 }
+}
+<etSite> [Arabian Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.3574219598085793 0.0953496919962282 }
+}
+<etSite> [Bay of Bengal] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.4853360597771492 0.0882440337727490 }
+}
+<etSite> [Persian Gulf] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.2793462014147052 0.1555555555555554 }
+}
+<etSite> [Caspian Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.2777777777777777 0.2333333333333334 }
+}
+<etSite> [Gulf of Oman] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.3290373584364408 0.1364092554539795 }
+}
+<etSite> [Baltic Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.1114625210387827 0.3272803087980829 }
+}
+<etSite> [North Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.0125496907238114 0.3177801882733065 }
+}
+<etSite> [Greenland Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.0000000000000000 0.4222222222222223 }
+}
+<etSite> [Barents Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.2026930222902199 0.4119936382977631 }
+}
+<etSite> [Kara Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.3463108486974682 0.4050802114145315 }
+}
+<etSite> [Andaman Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.5328807095574415 0.0595382880780553 }
+}
+<etSite> [South China Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.6388888888888888 0.0833333333333333 }
+}
+<etSite> [Philippine Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.7222222222222223 0.1000000000000001 }
+}
+<etSite> [East China Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.6944444444444444 0.1666666666666667 }
+}
+<etSite> [Yellow Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.6835710054038453 0.1957568750418561 }
+}
+<etSite> [Sea of Japan/East Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.7479972735561842 0.2239872765955262 }
+}
+<etSite> [Laptev Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.6648561715630987 0.4206721195542984 }
+}
+<etSite> [Sea of Okhotsk] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.8277777777777777 0.3008825271866520 }
+}
+<etSite> [East Siberian Sea] {
+    [minLevel] 5
+    [maxLevel] 30
+    [texId]    0
+    [style]    453
+    [pt] :1	{ 0.9277777777777778 0.4111111111111112 }
+}

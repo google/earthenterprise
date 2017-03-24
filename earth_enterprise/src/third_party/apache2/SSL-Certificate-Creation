@@ -1,0 +1,17 @@
+o   The complete mod_ssl documentation is included in the mod_ssl package and
+    browseable under http://localhost/manual/mod/mod_ssl/.
+
+o   To generate a certificate signing request suitable for submission to a
+    Certificate Authority, execute the following commands:
+
+	cd /etc/httpd/conf
+	make genkey
+	make certreq
+
+    ...and then look in the file named "/etc/httpd/conf/ssl.csr/server.csr".
+
+o   To generate a self signed certificate, execute the following commands:
+
+	cd /etc/httpd/conf
+	make genkey
+	make testcert

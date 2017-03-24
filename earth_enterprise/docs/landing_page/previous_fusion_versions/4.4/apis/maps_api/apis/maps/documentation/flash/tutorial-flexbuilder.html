@@ -1,0 +1,1005 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+ 
+  
+
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/flash/tutorial-flexbuilder.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Google Maps API for Flash - FlexBuilder Tutorial - Google Maps API for Flash - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/html/apis/maps/documentation/flash/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../css/iehacks.css"><![endif]-->
+
+<link href="../local_extensions.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps API for Flash</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="index.html" title="Google Maps API for Flash home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="intro.html" class="selected" title="Official Google Maps API for Flash documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../faq.html" title="Answers to frequently asked questions about Google Maps API for Flash">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="articles.html" title="Focused articles and tutorials for Google Maps API for Flash developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps API for Flash blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="forum.html" title="Google Maps API for Flash developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../../terms.html" title="Google Maps API for Flash terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <a name="gc-toc-anchor"></a>  
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../../index.html">Maps API Family</a></li>
+  <li><a href="../../signup.html">Sign up for an API key</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+  <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a class="tlw-expanded" href="intro.html">Developer Guide</a>
+            <ul>
+              <li><h2 class="tlw-expanded">Tutorials</h2>
+                <ul>
+                  <li><a href="tutorial-flex.html">Flex SDK</a></li>
+                  <li><a href="tutorial-flexbuilder.html">FlexBuilder</a></li>
+                  <li><a href="tutorial-flash.html">Flash CS3</a></li>                
+                </ul>              
+              </li>
+              <li><a href="basics.html">Basics</a></li>
+              <li><a href="events.html">Events</a></li>
+              <li><a href="controls.html">Controls</a></li>
+              <li><a href="overlays.html">Overlays</a></li>
+              <li><a href="services.html">Services</a></li>
+              <li><a href="maptypes.html">Map Types</a></li>           
+              <li><a href="3d-maps.html">3D Maps</a></li>
+            </ul>                                
+          </li>
+          <li><a href="reference.html">API Reference</a></li>
+          <li><h2 class="tlw-expanded">Code Samples:</h2>
+            <ul>
+              <li><a href="demogallery.html">Demos</a></li>
+              <li><a href="examples/index.html">Examples</a></li>
+            </ul>
+          </li>
+          <li><h2 class="tlw-expanded">More Resources:</h2>
+               <ul>
+               <li><a href="articles.html">Articles</a></li>
+               <li><a href="mediagallery.html">Presentations</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/issues/list?can=2&q=apitype%3AFlash&colspec=ID+Type+Status+Introduced+Fixed+Summary+Internal+Stars&cells=tiles">Known Issues</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/wiki/MapsAPIforFlashChangelog">Changelog</a><sup class="new">New!</sup></li>
+               <li><a href="http://code.google.com/p/gmaps-utility-library-flash/">Utility Library</a></li>
+              </ul>
+           </li>
+        </ul>
+      </li>
+    </ul>    
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps JavaScript API V3</h2>
+         <ul>
+           <li><a href="../javascript/index.html">Home Page</a></li>
+           <li><a href="../javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+            <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../mapsdata/index.html">Home Page</a></li>
+          <li><a href="../mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+      <ul>
+        <li><h2><a href="../webservices/index.html">Maps API Web Services</a></h2>
+         <ul>
+           <li><a href="../geocoding/index.html">Geocoding API</a></li>
+           <li><a href="../directions/index.html">Directions API</a></li>
+           <li><a href="../elevation/index.html">Elevation API</a></li>
+           <li><a href="../places/index.html">Places API</a></li>
+         </ul>
+       </li>
+      </ul>
+       <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+    <div class="promo">
+      <p><a href="../premier/index.html">Google Maps API Premier</a></p>
+      <p>Includes enterprise licensing and support</p>
+    </div>
+
+      </div>
+      
+      <a name="gc-pagecontent-anchor"></a>   
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Google Maps API for Flash - FlexBuilder Tutorial</h1>
+
+
+<div class="toc">
+  <ol>
+  <li><a href="#SettingUp">Setting Up Your FlexBuilder Environment</a>
+    <ol class="toc">
+      <li><a href="#FlexBuilder">Setting Up FlexBuilder</a></li>
+      <li><a href="#Source">Setting Up Your Development Directories</a></li>
+      <li><a href="#Namespaces">Using Namespaces to Manage Extensions</a></li>   
+    </ol>  
+  </li>
+  <li><a href="#HelloWorld">Writing the "Hello World" of the Maps API for Flash</a>
+   <ol class="toc">
+    <li><a href="#MXML">MXML Declarations</a></li>
+    <li><a href="#DeclaringApplications">Declaring Applications</a></li>
+    <li><a href="#DeclaringMaps">Declaring the Map</a></li>
+    <li><a href="#ScriptCode">Writing the ActionScript Code</a></li>
+    <li><a href="#ImportingLibraries">Importing ActionScript Libraries</a></li>
+    <li><a href="#EventListeners">Setting Up Event Listeners</a></li>
+    <li><a href="#Compiling">Compiling Your SWF File</a></li>  
+    <li><a href="#Hosting">Hosting Your SWF File in a Web Page</a></li>  
+   </ol>
+  </li>
+  <li><a href="#AIRDevelopment">Developing AIR Applications</a> <span class="exp-feat">(Experimental)</span>
+   <ol class="toc">
+    <li><a href="#AIRSummary">What is AIR?</a></li>
+    <li><a href="#InstallingAIR">Installing the AIR Installer</a></li>
+    <li><a href="#CreatingAIRProjects">Creating an AIR Project in FlexBuilder</a></li>
+    <li><a href="#Certificates">Signing Certificates</a></li>
+    <li><a href="#CodingAIRApplications">Code Changes for AIR Applications</a></li>
+    <li><a href="#ExportingAIR">Exporting AIR Applications</a></li>
+   </ol>
+  </li>
+  </ol>
+</div>
+
+<h1 id="SettingUp">Setting Up Your FlexBuilder Environment</h1>
+
+<p><span style="color:red">Note: </span> Before proceeding with this tutorial, make sure
+you've installed the Maps API for Flash SDK and obtained a Maps API key as indicated in 
+<a href="http://code.google.com/apis/maps/documentation/flash/intro.html#SettingUp">
+Setting Up Your Development Environment</a>.</p>
+
+<p>This section discusses how to obtain and set up Adobe FlexBuilder, how to reference the
+Google Maps API for Flash library, and how to set up your development environment to get 
+you ready to program in ActionScript and build your first Google Maps API for Flash map
+using Adobe's FlexBuilder IDE.</p>
+
+<p><span style="color:red">Note: </span> If you wish to use the Free Flex SDK,
+see the <a href="tutorial-flex.html">Flex SDK Tutorial</a>
+instead.</p>
+
+<h2 id="FlexBuilder">Setting Up FlexBuilder</h2>
+
+<p>Incorporating Google Maps into your Flex application requires requires understanding
+not only ActionScript code but Flex MXML files. This tutorial illustrates how to 
+get a map application up and running within FlexBuilder &mdash;Adobe's IDE for Flex development 
+&mdash; available at the following URL:</p>
+
+<p><code><a href="http://www.adobe.com/products/flex/features/flex_builder/">
+http://www.adobe.com/products/flex/features/flex_builder/</a></code></p>
+
+<p>This tutorial assumes you have purchased and set up the FlexBuilder application.</p>
+
+<h3 id="CreatingProject">Creating Your Project</h3>
+
+<p>Before you begin coding your application, you should first set up a project within
+FlexBuilder. To do so, follow these simple steps:</p>
+
+<ol>
+<li>Select <b>File->New->Flex Project</b> within FlexBuilder. The <b>New Flex 
+Project</b> dialog box appears. Enter in the name for your project and a location to 
+store files related to the project, leaving the <b>Application Type</b> as a <b>Web 
+Application</b>.</p>
+
+<img src="images/flex_createProject.png"/>
+</li>
+
+<li>
+<p>Click <b>Finish</b> and your project will be created. FlexBuilder will also automatically
+create a template <code>MXML</code> file, as shown below:</p>
+
+<img src="images/flex_newProject.png"/>
+</li>
+
+<h3 id="LinkingLibrary">Linking to the Google Maps API for Flash Library</h3>
+
+<li>
+<p>Before you can compile your code, you will need to link it to the Google Maps API for Flash
+SWC file. To do so, select <b>Project->Properties</b>. A <b>Properties</b> dialog box will appear
+for your project. Click on <b>Flex Build Path</b> and then select the <b>Library Path</b>
+tab:</p>
+
+<img src="images/flex_buildPath.png"/>
+</li>
+
+<li>
+<p>Click <b>Add SWC...</b>  within the <b>Library Path</b> pane. An <b>Add SWC</b> dialog box
+will appear. Navigate to the location where you saved the Google Maps API for Flash SDK and
+select the appropriate <code>lib/map_flex_*.swc</code> file and click <b>OK</b>. (<span
+style="color:red">Note: </span> Make sure you select the correct SWC. FlexBuilder will not
+be able to use the non-Flex SWC library.) Your dialog box should now look like the following:</p>
+
+<img src="images/flex_addSwc.png"/>
+</li>
+
+<li>
+
+<p>Click <b>OK</b>. FlexBuilder will update your project and return you to the Flex Development 
+Perspective showing your skeleton MXML file.</p>
+<img src="images/flex_createActionScript.png"/>
+</li>
+
+<p>You may wish to test compilation of your skeleton MXML file at this point to ensure your
+development environment is working correctly.</p>
+
+</ol>
+
+<h2 id="Source">Setting Up Your Development Directories</h2>
+
+<p><span style="color.red">New!</span> The Google Maps API for Flash now offers 
+native support for the <code>com.google.maps.Map</code> object within Flex. You no 
+longer need to extend the <code>Map</code> class to define your Map application class,
+and you can use a Map component directly within Flex.</p>
+
+<p>Flex applications are defined within <code>MXML</code> declarations. Generally, you
+should provide these <code>MXML</code> application definitions in the root of your
+source code directory. By default, FlexBuilder creates a <code>src</code> directory
+within your project to place source code, and MXML files should reside at the root
+of that directory.</p>
+
+<p>Create a new MXML file by selecting <b>File->New->MXML Application</b>. name the MXML
+file <code>HelloWorld.mxml</code>. We'll fill in this skeletal MXML application in the
+following sections.</p>
+
+<h2 id="Namespaces">Using Namespaces to Manage Extensions</h2>
+
+<p>Components that <i>extend</i> any existing Google Maps API for Flash components 
+should generally be provided as ActionScript files within a unique namespace. 
+Google recommends that you use a namespace which you own to prevent collisions 
+with other applications; this is especially important if you will have many developers 
+working on multiple flash applications at the same time. Using namespaces also 
+allows you to bundle your application code into <i>packages</i>, which allow easier 
+sharing of common code.</p>
+
+<p>Packages and namespaces should be defined using your <a href="http://en.wikipedia.org/wiki/Top-level_domain">
+top level domain</a>, your organization domain, and sub-domain. For example, the Google Maps namespace is defined
+as <code>com.google.maps</code> and an <code>examples</code> package within that namespace would be defined
+as <code>com.google.maps.examples</code>. You can then use this namespace to implicitly define the directory 
+structure of your application (e.g. <code>com/google/maps/examples/</code>).</p>
+
+<p>You use this namespace to define a package within your ActionScript code, 
+and to define your application within the <code>MXML</code> declaration. Generally, 
+ActionScript code (<code>*.as</code> files) reside within the bottommost directory 
+of whatever namespace is defined, while the MXML declarations (<code>*.mxml</code> files) 
+reside at the "root" of the directory structure.</p>
+
+<h1 id="HelloWorld">Writing the "Hello World" of the Maps API for Flash</h1>
+
+<p>The easiest way to start learning about the Google Maps API for Flash is to 
+see a simple example. In this tutorial, using FlexBuilder we'll create a simple MXML file,
+add some ActionScript code, compile that file into a SWF file using the Flex SDK, and 
+launch the file for visual inspection.</p>
+
+<h2 id="MXML">MXML Declarations</h2>
+
+<p>The MXML declaration defines UI elements within a Flex application, while embedded 
+ActionScript code within the <code>&lt;mx:Script&gt;</code> tag defines actions on those UI 
+elements. In the simplest case, you simply declare a <code>com.google.maps.Map</code>
+object within MXML and initialize the map with ActionScript code:</p>
+
+<p>Modify your <code>HelloWorld.mxml</code> file until it appears as shown below. We'll
+walk through and explain the code within this file.</p>
+
+<pre class="prettyprint">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"&gt;
+&lt;maps:Map xmlns:maps="com.google.maps.*" id="map" mapevent_mapready="onMapReady(event)" width="100%" height="100%" key="<i>your_api_key</i>" sensor="<i>true_or_false</i>"/&gt;
+&lt;mx:Script&gt;
+    &lt;![CDATA[
+   
+    import com.google.maps.LatLng;
+    import com.google.maps.Map;
+    import com.google.maps.MapEvent;
+    import com.google.maps.MapType;
+
+    private function onMapReady(event:Event):void {
+      this.map.setCenter(new LatLng(40.736072,-73.992062), 14, MapType.NORMAL_MAP_TYPE);
+    }
+    ]]&gt;
+&lt;/mx:Script&gt;
+&lt;/mx:Application&gt;
+</pre>
+
+<p>This example is located at 
+<a href="http://gmaps-samples-flash.googlecode.com/svn/trunk/examples/HelloWorld.html">
+gmaps-samples-flash.googlecode.com/svn/trunk/examples/HelloWorld.html</a>. (MXML source is 
+located 
+<a href="http://code.google.com/p/gmaps-samples-flash/source/browse/trunk/samplecode/HelloWorld.mxml">
+here</a>.) Note that you'd need to build your own SWF file, with your own API key, for this example
+to appear on your website.</p>
+
+<p>Even in this simple example, there are several things to note:</p>
+<ol>
+<li>We declare an initial <code>&lt;mx:Application&gt;</code> to hold all of our code, 
+as is required for Flex applications. Within this <code>&lt;mx:Application&gt;</code> object, 
+we declare an <code>mx</code> namespace to reference the standard Flex components.</li>
+<li>We declare a <code>Map</code> object as a child of the <code>&lt;mx:Application&gt;</code>
+and define a <code>maps</code> namespace to reference code from <code>com.google.maps.*</code>. We also
+define parameters including an <code>id</code>, a <code>mapevent_mapready</code> handler, 
+an API <code>key</code>, and a <code>sensor</code> state. These parameters will be explained later.</li>
+<li>We define ActionScript code within a child <code>&lt;mx:Script&gt;</code> object.</li>
+<li>Within that ActionScript code, we center the map on a location upon receipt of the
+<code>mapevent_mapready</code> event.</li>
+</ol>
+
+<p>These steps are explained in more detail below.</p>
+
+<h2 id="DeclaringApplications">Declaring Applications</h2>
+
+<pre class="prettyprint">
+&lt;mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"&gt;
+</pre>
+
+<p>Google Maps Flash applications require not only ActionScript code but also a
+user interface framework to display the map and any associated UI elements on a web page. Within
+the Flex framework, these UI components are specified within an <code>MXML</code> declaration. An
+MXML declaration consists of a configuration file with the <code>.mxml</code> suffix. This
+<code>MXML</code> file commonly resides in the <i>root</i> of your ActionScript development 
+directory.</p>
+
+<p>To display your Flash map on a webpage, you will need at least one MXML declaration.
+All MXML declarations require a root <code>&lt;mx:Application&gt;</code> component.
+Additionally, the &lt;mx:Application&gt; also registers the <code>mx</code> prefix
+to reference standard Flex components.</p>
+
+<p>Note that MXML declarations can be quite complex, and the layout of UI components within an 
+MXML declaration is beyond the scope of this documentation. For more information, see the 
+provided examples and consult the Flex SDK documentation.</p>
+
+<h2 id="DeclaringMaps">Declaring the Map</h2>
+
+<pre class="prettyprint">
+&lt;maps:Map xmlns:maps="com.google.maps.*" id="map" mapevent_mapready="onMapReady(event)" width="100%" height="100%" key="<i>your_api_key</i>" sensor="<i>true_or_flase</i>/&gt;
+</pre>
+
+<p>The Google Maps API for Flash now includes native support for the <code>Map</code>
+object defined within the <code>com.google.maps.*</code> package. We add a <code>Map</code>
+here as a child of the <code>&lt;mx:Application&gt;</code>, define its namespace as 
+<code>maps</code> (linking it to the <code>com.google.maps.*</code> code), set an <code>id</code>
+which we can reference the map from within the ActionScript code, and define a 
+<code>mapevent_mapready</code> handler. (See <a href="#EventHandling">Event Handling</a> below.)</p>
+
+<p>The <code>&lt;maps:Map&gt;</code> declaration also specifies <code>width</code> and <code>height</code> 
+parameters to define how the Map will appear within the application. More importantly, the MXML 
+declaration acts as a convenient location to place your unique API <code>key</code>.</p>
+
+<h2 id="ScriptCode">Writing the ActionScript Code</h2>
+
+<pre class="prettyprint">
+&lt;mx:Script&gt;
+    &lt;![CDATA[
+    
+    // ActionScript Code
+    
+    ]]&gt;
+&lt;/mx:Script&gt;
+</pre>
+
+<p>Maps within the Google Maps API for Flash are manipulated using ActionScript 3.0 code. 
+This tutorial will not attempt to teach the nuances of ActionScript. Online tutorials on 
+ActionScript are available at the following locations:</p>
+
+<ul>
+<li><a href="http://livedocs.adobe.com/flash/9.0/ActionScriptLangRefV3/">
+http://livedocs.adobe.com/flash/9.0/ActionScriptLangRefV3/</a></li>
+<li><a href="http://www.adobe.com/devnet/flex/quickstart/coding_with_mxml_and_actionscript/">
+http://www.adobe.com/devnet/flex/quickstart/coding_with_mxml_and_actionscript/</a></li>
+</ul>
+
+<p>The <code>&lt;mx:Script&gt;</code> object is a Flex component that holds a reference to the
+ActionScript code. Because MXML is a variant of XML, we also need to inform the MXML parser
+to ignore the ActionScript code within this file through use of the <code>&lt;![CDATA[</code>
+and <code>]]&gt;</code> delimiters.</p>
+
+<p><span style="color.red">Note: </span> you may instead wish to provide your ActionScript
+within separate ActionScript (<code>*.as</code>) files. If you do so, you can reference the
+ActionScript file by including a <code>source</code> parameter in the <code>&lt;mx:Script&gt;</code>
+tag:</p>
+
+<pre class="prettyprint">
+&lt;mx:Script&gt; source="HelloWorld.as">&lt;/mx:Script&gt;
+</pre>
+
+<p>Placing code within separate files often makes sense if you have large or complex applications.
+However, within this document base, we will show all code inline within MXML declarations for
+simplicity.</p>
+
+<h2 id="ImportingLibraries">Importing Libraries</h2>
+
+<pre class="prettyprint">
+    import com.google.maps.LatLng;
+    import com.google.maps.Map;
+    import com.google.maps.MapEvent;
+    import com.google.maps.MapType;
+</pre>
+
+<p>ActionScript libraries are imported with the <code>import</code> declaration. In the sample
+code above, we import several Google Maps Flash libraries.</p> 
+
+<p>You should ensure that you import libraries for types that you use within your sample code. 
+We recommend that you import only those classes you need. In most of the examples within
+this documentation, we structure our code so that the <code>&lt;mx:Application&gt;</code> 
+does not use Flex UI components. Doing so provides a basic lightweight map. Note that 
+including any Flex libraries may substantially increase the size of your SWF files, 
+even if you only need one particular Flex component (such as a button).</p>
+
+<h2 id="EventListeners">Setting Up Event Listeners</h2>
+
+<p>ActionScript, like JavaScript, is an event-driven programming language. Interactions with users
+within Flash objects are handled by registering event listeners on objects for specific
+events.</p>
+
+<p>In the code snippet in the previous section, the <code>Map</code> declaration added
+an event listener to the <code>Map</code> object for the <code>MapEvent.MAP_READY</code> event
+through the use of the special parameter <code>mapevent_mapready</code>. This event handler
+acts as the "hook" for initialization of the Google Maps API for Flash application.
+When the map receives that event, it calls the <code>onMapReady</code> function, 
+which is shown below.</p>
+
+<pre class="prettyprint">
+function onMapReady(event:MapEvent):void {
+  setCenter(new LatLng(40.736072,-73.992062), 14, MapType.NORMAL_MAP_TYPE);
+}
+</pre>
+
+<p>This <code>onMapReady()</code> function passes an <code>event</code> parameter of type 
+<code>MapEvent</code> (which is ignored in this case) and then calls <code>setCenter()</code>
+using the given parameters (which define a location, a zoom level, and the type of map to show).</p>
+
+<p>In general, it is good to "initialize" your map in such a manner by intercepting and handling the
+<code>MapEvent.MAP_READY</code> event. Events are discussed in more detail within the
+<a href="events.html">Map Events</a> section of the Google Maps Flash documentation.</p>
+
+<p><span style="color:red">Note:</span> You may also initialize your map by intercepting and 
+handling the <code>MapEvent.MAP_PREINITIALIZE</code> event instead. For information on this 
+event, see the discussion of <a href="basics.html#MapOptions"><code>MapOptions</code></a>.</p>
+
+<p>Events are discussed in more detail within the <a href="events.html">Map Events</a> 
+section of the Google Maps Flash documentation.</p>
+
+<h2 id="Compiling">Compiling Your SWF File</h2>
+
+<p>We now have a <code>HelloWorld.mxml</code> within our source's root directory and
+ActionScript code within that file's <code>&lt;mx:Script&gt;</code> object. We are ready to 
+compile our code into a SWF (Shockwave Flash) file. We can do so dirctly within FlexBuilder.</p>
+
+<p>To execute FlexBuilder's compiler and launch the debug version of the Flash player, click one of the
+<b>Run Tools</b> located in FlexBuilder's toolbar. There are options to launch an optimized version,
+a debug version, or a version for profiling.</p>
+&nbsp;
+<img src="images/flex_builder-toolbar.png"/>
+
+<p>FlexBuilder will compile the MXML application, build a SWF file, and automatically bring up your
+browser, displaying the following Flash SWF:</p>
+
+<img src="images/flex_helloworld.png"/>
+
+<h2 id="Hosting">Hosting Your SWF File in a Web Page</h2>
+
+<p>Google Maps Flash SWF files, if they are compiled with the API key included, can simply be 
+displayed as standalone files. This is useful for testing, but may not be practical for proper page 
+layout. As a result, you will likely want to set up an HTML page to contain the SWF file. To ensure 
+your SWF file executes within both Internet Explorer and other browsers, you should add the SWF 
+within both <code>object</code> and <code>embed</code> tags.</p>
+
+<p>A simple HTML page that contains our <code>HelloWorld.swf</code> file appears below. For the 
+map to display on a web page, we must reserve a spot for it. We do so in this example by creating 
+a named <code>div</code> element and adding the <code>object</code> element to it.</p>
+
+<pre class="prettyprint">
+  &lt;div id="map_canvas" name="map_canvas"&gt;
+    &lt;object
+      classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+      codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0"
+      width="800px"
+      height="600px">
+      &lt;param name="movie" value="helloworld.swf"&gt;
+      &lt;param name="quality" value="high"&gt;
+      &lt;param name="flashVars" value="key=<i>your_api_key</i>&sensor=<i>true_or_false</i>"&gt;
+      &lt;embed
+        width="800px"
+        height="600px"
+        src="helloworld.swf"
+        quality="high"
+        flashVars="key=<i>your_api_key</i>&sensor=<i>true_or_false</i>"
+        pluginspage="http://www.macromedia.com/go/getflashplayer"
+        type="application/x-shockwave-flash"&gt;
+      &lt;/embed&gt;
+    &lt;/object&gt;
+  &lt;/div&gt;
+</pre>
+
+<p>Note that we add the API <code>key</code> and <code>sensor</code> parameters within a
+<code><i>flashVars</i></code> parameter, separated by an <code>&amp;</code> character. This 
+registration method is an alternative to compiling your key and sensor into the SWF file
+within the MXML declaration. If values are specified here, they override values contained
+within the SWF file or MXML declaration. Also note that the API key must match the domain
+where the <i>SWF</i> file is hosted, not the domain where the HTML file may be hosted.</p>
+
+<p>The resulting HTML page is shown below.</p>
+<p>&nbsp;
+
+<iframe frameborder="0" width="90%" height="450" scrolling="no" 
+src="http://gmaps-samples-flash.googlecode.com/svn/trunk/examples/HelloWorld.html"></iframe></p>
+
+<p><a href="http://code.google.com/p/gmaps-samples-flash/source/browse/trunk/samplecode/HelloWorld.mxml">
+View Source (HelloWorld.mxml)</a></p>
+</p>
+
+<p>Congratulations! You've written your first Google Maps Flash application!</p>
+
+<h1 id="AIRDevelopment">Developing Adobe AIR&reg; Applications <span class="exp-feat">(<a href="http://code.google.com/labs/faq.html#experimental">Experimental</a>)</span></h1>
+
+<p>The Google Maps API for Flash now not only supports development of Flash applications 
+within the browser, but there's also an experimental feature that supports Adobe AIR&reg; applications running on the desktop.
+AIR applications provide additional capabilities not available to applications running 
+within a browser, including file and local network access, application state persistence, 
+and data access.</p>
+
+<h2 id="AIRSummary">What is AIR?</h2>
+
+<p>AIR is a runtime environment that allows applications to run natively within
+a variety of operating systems from a common code base. An AIR Installer compiles this
+code into a format usable by the runtime environment. AIR applications allow you the freedom 
+to interact directly with the desktop, providing file access, data storage, and robust user interface 
+components across operating systems.</p>
+
+<p>More information on Adobe AIR is located at <a href="http://www.adobe.com/products/air/">
+http://www.adobe.com/products/air/</a>.</p>
+
+<h2 id="InstallingAIR">Installing AIR</h2>
+
+<p>To run Adobe AIR applications, you will need to download and install Adobe's AIR runtime environment.
+This installation includes Adobe's AIR installer, which converts Adobe AIR executable files into 
+applications which can run on your operating system. Make sure you're also using version 1.8 or higher
+of the <a href="http://maps.googleapis.com/maps/flash/release/sdk.zip">Google Maps API for Flash SWC 
+file</a>, which adds AIR support.</p>
+
+<p>The latest AIR release is available at: <a href="http://get.adobe.com/air/">http://get.adobe.com/air/</a>.
+Download the file from this location and install it per Adobe's instructions. This tutorial was developed
+using the Adobe AIR 1.1 Installer.</p>
+
+<p>(Note: Mac OS X developers who have trouble running AIR might want to check out
+<a href="http://andrewapeterson.com/2008/08/09/os-x-adobe-air-installation-problem-solved"/>this fix</a>.)</p>
+
+<h2 id="CreatingAIRProjects">Creating an AIR Project in FlexBuilder</h2>
+
+<p>FlexBuilder is capable of creating either Flash applications for use within the
+Flash plugin within a browser, or standalone AIR applications for use within the
+operating system.</p>
+
+<p>Before you begin coding your AIR application, you should first set up an
+AIR-compatible project within FlexBuilder. To do so, follow these simple steps:</p>
+
+<ol>
+<li>Select <b>File->New->Flex Project</b> within FlexBuilder. The <b>New Flex 
+Project</b> dialog box appears. Enter the name for your project, a location to 
+store files related to the project, and set the <b>Application Type</b> to <b>Desktop 
+Application (runs in Adobe AIR)</b>.</p>
+&nbsp;
+<img src="images/air_createProject.png"/>
+</li>
+
+<li>
+<p>Click <b>Next</b>, specify an output folder (leaving the default as <code>bin-debug</code> 
+is fine), and then click <b>Next</b> again. You will be brought to the <b>Source path</b> and 
+<b>Library path</b> configuration panel. Select a name for your <b>Main application file</b>
+and add an <b>Application ID</b>, which should generally be "package-like" (for example:
+<code>com.google.maps.examples.air</code>).</p>
+
+<img src="images/air_newProject.png"/>
+</li>
+
+<li>
+<p>Before you can compile your code, you will need to link it to the Google Maps API for Flash
+SWC file. To do so, click the <b>Library Path</b> tab and click <b>Add SWC...</b>. An 
+<b>Add SWC</b> dialog box will appear. Navigate to the location where you saved the Google Maps 
+API for Flash SDK and select the appropriate <code>lib/map_flex_*.swc</code> file and click 
+<b>OK</b>. (<span style="color:red">Note: </span> Make sure you select the correct SWC. FlexBuilder 
+will not be able to use the non-Flex SWC library.) Your dialog box should now look like the 
+following:</p></p>
+
+<img src="images/air_buildPath.png"/>
+</li>
+
+<li>
+
+<p>Click <b>Finish</b>. FlexBuilder will update your project and you return you to the Flex Development 
+Perspective showing a skeleton MXML file.</p>
+
+<img src="images/air_skeletonFile.png"/>
+</li>
+
+<p>You may wish to test compilation of your skeleton MXML file at this point to ensure your
+development environment is working correctly. Since the file is empty except for a single
+<code>mx:WindowedComponent</code> object, you will only see a blank window appear.</p>
+
+</ol>
+
+<h2 id="CodingAIRApplications">Code Changes for AIR Applications</h2>
+
+<p>Creating Google Maps API for Flash AIR applications is similar to creating SWF files for
+use within a browser with two exceptions:</p>
+
+<ol>
+<li>Instead of an <code>mx:Application</code>, the root of the AIR application is a 
+<code>mx:WindowedApplication</code>. This should be created by default when you create your initial project.</li>
+<li><code>Map</code> objects within AIR applications properties must have a <code>url</code>
+property set to an online location where the purpose and scope of the application is described. This <code>url</code>
+must be the same URL that your registered when signing up for an <a href="../../signup.html">API key</a>.</li>
+</ol>
+
+<p>Because AIR applications have access to the file system, they can perform tasks that browser-based applications
+cannot easily do. We'll add some code to our test application that responds to user clicks by writing
+the clicked latitude/longitude value to a text file.</p>
+
+<p>Within the Flex Development Perspective of FlexBuilder, copy the following code (this code is the same
+as the code in the "Hello World" tutorial above except that the <code>mx:Application</code> has been changed
+to an <code>mx:WindowedApplication</code> and the <code>Map.url</code> property has been set.</p>
+
+<pre class="prettyprint">
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"&gt;
+&lt;maps:Map xmlns:maps="com.google.maps.*" id="map" mapevent_mapready="onMapReady(event)" width="100%" height="100%" 
+    url="http://code.google.com/apis/maps/" key="<i>your_api_key</i>" sensor="<i>true_or_false</i>"/&gt;
+&lt;mx:Script&gt;
+    &lt;![CDATA[
+   
+    import com.google.maps.LatLng;
+    import com.google.maps.Map;
+    import com.google.maps.MapEvent;
+    import com.google.maps.MapType;
+
+    private function onMapReady(event:Event):void {
+      this.map.setCenter(new LatLng(40.736072,-73.992062), 14, MapType.NORMAL_MAP_TYPE);
+    }
+    ]]&gt;
+&lt;/mx:Script&gt;
+&lt;/mx:WindowedApplication&gt;
+</pre>
+
+<p>Now that we have this skeleton file, we'll add the capability to process event clicks and write the
+current location to a text file.</p>
+
+<ol>
+<li>
+<p>Add this additional <code>import</code> statement to add <code>MapMouseEvent</code> functionality:</p>
+
+<pre class="prettyprint">
+    import com.google.maps.MapMouseEvent;
+</pre>
+</li>
+<li>
+<p>Within the existing <code>onMapReady</code> event handler, add the following code to register an <i>event
+listener</i> for mouse clicks, and create an <code>onMapClick</code> event handler:</p>
+<pre class="prettyprint">
+    private function onMapReady(event:Event):void {
+      this.map.setCenter(new LatLng(40.736072,-73.992062), 14, MapType.NORMAL_MAP_TYPE);
+      <b>this.map.addEventListener(MapMouseEvent.CLICK, onMapClick);</b>
+    }
+    <b>
+    private function onMapClick(event:MapMouseEvent):void {
+    
+    }
+    </b>
+</pre>
+</li>
+<li>
+<p>Within the <code>onMapClick</code> function, add the following code to process the current mouse location
+as a latitude/longitude and write the output to a file named <code>"locations.txt"</code>. Note that because
+AIR applications are Operating-System neutral, we need to obtain a reference to this file via the 
+<code>resolvePath</code> method.</p>
+
+<pre class="prettyprint">
+   private function onMapClick(event:MapMouseEvent):void {
+     <b>var file:File = File.documentsDirectory.resolvePath("airTest/locations.txt");
+     var fileStream:FileStream = new FileStream();
+     fileStream.open(file, FileMode.APPEND);
+     fileStream.writeUTF(event.latLng.toString());
+     fileStream.writeUTF("\n");
+     fileStream.close();
+  </b>
+    }
+</pre>
+</li>
+
+<li>
+<p>Now we can test our application by clicking the <b>Run</b> button in FlexBuilder's menu bar:</p>
+&nbsp;
+<img src="images/flex_builder-toolbar.png"/>
+
+<p>FlexBuilder will compile the application and bring up a window displaying Manhattan.</p>
+
+<img src="images/air_application.png"/>
+
+<p>Click on any point on the map. The application will then write a <code>"locations.txt"</code> 
+file within an <code>"airTest"</code> directory in your <b>Documents</b> directory 
+(<code>/Users/<i>username</i>/Documents/</code> in Mac OS, <code>C:My Documents\</code> in 
+Windows). Opening that text file, you should see a simple latitude/longitude
+for the location you clicked:</p>
+
+<img src="images/air_locationsTxtFile.png"/>
+</li>
+
+</ol>
+<h2 id="ExportingAIR">Exporting AIR Applications</h2>
+
+<p>AIR applications run natively within the operating system, and often have access to sensitive information,
+such as the file system. Because of this, it is important to trust the applications that
+run on the desktop. All AIR applications must be digitally signed by a certificate authority, and FlexBuilder
+allows you to specify this certificate when generating the release build.</p>
+
+<p>FlexBuilder also allows you to "self-sign" your own applications for testing purposes or internal 
+applications, but if you plan to provide your application to other users, you should obtain a commercial 
+certificate from a certification authority such as Thawte or VeriSign.</p>
+
+<p>More information about digitally signing your Adobe AIR applications is available at: 
+<a href="http://www.adobe.com/devnet/air/articles/signing_air_applications_print.html">
+http://www.adobe.com/devnet/air/articles/signing_air_applications_print.html</a>.</p>
+
+<p>We'll now want to export an AIR installation file (denoted with an <code>*.air</code> suffix). To do so, we'll need
+to create a test certificate and generate a <i>release build</i> from FlexBuilder.</p>
+
+<li>
+<p>Within FlexBuilder, select <b>Project->Export Release Build</b>. The <b>Export Release Build</b> dialog box will
+appear:</p>
+
+<img src="images/air_exportRelease.png"/>
+</li>
+
+<li>
+<p>Make sure the correct project and application are selected and click <b>Next</b>. The <b>Digital Signature</b> 
+panel will appear. Ensure that <b>Export and sign an AIR file with a digital certificate</b> is currently 
+selected. If you have a commercial certificate, you can browse and select that certificate, supply its 
+password and click <b>Finish</b>. However, if you don't currently have a certificate, select <b>Create</b> 
+and the <b>Create Self-Signed Digital Certificate</b> dialog box will appear:</p>
+
+<img src="images/air_createCertificate.png"/>
+</li>
+
+<li>
+<p>Within the <b>Create Self-Signed Digital Certificate</b> dialog box, enter a <b>Publisher</b> name,
+a password, and a filename for the certificate. Click <b>OK</b> and the <b>Export Release Build</b>
+dialog box will be populated with this certificate information. Click <b>Finish</b>. FlexBuilder will
+compile your application and generate an <code>*.air</code> file. This file can then be installed as
+an application via the AIR Application Installer.</p>
+</li>
+
+<h2 id="RunningAIR">Installing and Running Your AIR Application</h2>
+
+<p>We now have an AIR installation file located in our output directory. To install this AIR application:</p>
+
+<ol>
+<li>
+<p>Double-click on the <b>MapSimple.air</b> file. The <b>Application Install</b> dialog box will appear:</p>
+
+<img src="images/air_trustCertificate.png"/>
+</li>
+<li>
+<p>Since this application is self-signed, the AIR Installer will warn you that the Publisher of the application 
+is UNKNOWN and that the application has <b>UNRESTRICTED</b> System Access. As we've generated this file ourselves,
+we don't need to worry, so click <b>Install</b>. The Installation dialog box will then ask you to specify 
+an installation location:</p>
+
+<img src="images/air_installApp.png"/>
+</li>
+<li>
+<p>Select an <b>Installation Location</b>, leave the <b>Start application after installation</b> checkbox checked,
+and the MapSimple application will appear:</p>
+
+<img src="images/air_application.png"/>
+</li>
+</ol>
+
+<p>Congratulations! You've written your first Google Maps AIR application!</p>
+
+        <!-- end body text -->
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

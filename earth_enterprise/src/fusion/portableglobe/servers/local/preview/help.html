@@ -1,0 +1,358 @@
+<!--
+  Copyright 2017 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>Google Earth Enterprise Portable Help</title>
+
+<style type="text/css">
+
+body {
+  font-family: "Arial", sans-serif;
+  font-style: 13px;
+  color: #333;
+}
+
+a:link,
+a:visited,
+a:active {
+  color: #017DC9;
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+@font-face {
+  font-family: "Open Sans";
+  src: url('css/OpenSans-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Open Sans Light";
+  src: url('css/OpenSans-Light.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+#GoogImg {
+  position: absolute;
+  margin-top: 0px;
+  margin-left: 45px;
+  margin-top: 23px;
+  height: 71px;
+  width: 500px;
+}
+
+#GoogImg label {
+  font-family: "Open Sans Light", sans-serif;
+  font-size: 28px;
+  position: absolute;
+  color: #777;
+  margin-left: 8px;
+  margin-top: -5px;
+}
+
+#GoogImgOther {
+  position: absolute;
+  margin-top: 0px;
+  margin-left: 45px;
+  margin-top: 15px;
+  height: 71px;
+  width: 117px;
+}
+
+#top_of_page {
+  z-index: 3000;
+  position: absolute;
+  width: 100%;
+  height:76px;
+  border-style: solid;
+  border-width: 0px 0px 1px 0px;
+  border-color: #E8E8E8;
+  background-color: #F1F1F1;
+  opacity: .9;
+  box-shadow: 0px 0px 8px 1px #696969;
+  margin-left: -8px;
+  top: 0;
+}
+
+h2 {
+  margin-top: 96px;
+}
+
+h2,
+h3,
+ol {
+  margin-left: 45px;
+  vertical-align: middle;
+}
+
+h4,
+p,
+ul {
+  margin-left: 53px;
+}
+
+ul li {
+  list-style: none;
+}
+
+h3 a:link,
+h3 a:visited
+h3 a:active {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 11px;
+  font-weight: normal;
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+.menu {
+  margin-bottom: -6px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="top_of_page">
+  <div id="GoogImg" >
+    <a href="/">
+      <img src="images/Google.png" width="103px" height="36px" border="0">
+    </a>
+    <label>Earth Enterprise Portable</label>
+  </div>
+</div>
+
+<h2>Google Earth Enterprise Portable Help</h2>
+<h3>Contents</h3>
+
+<ul>
+  <li><a href="#introduction">Introduction</a></li>
+  <li><a href="#globe_storage">Globe storage</a></li>
+  <li><a href="#serve_a_globe">Serve a globe</a></li>
+  <li><a href="#broadcast_a_globe">Broadcast a globe</a></li>
+  <li><a href="#change_the_globe_being_served">Change the globe being served</a></li>
+  <li><a href="#serve_GEE_Server">Serve a globe using GEE Server</a></li>
+  <li><a href="#connect_GEE_portable">Connect using GEE Portable</a></li>
+  <li><a href="#google_earth_ec">Connect using Google Earth EC</a></li>
+  <li><a href="#google_earth_api">Connect using Google Earth API</a></li>
+  <li><a href="#GetInfo">Get information about your globe or map</a></li>
+  <li><a href="#portable_cfg">Define options in portable.cfg</a></li>
+  <li><a href="#resources">Additional resources</a></li>
+</ul>
+
+<h3 id="introduction">
+  Introduction
+  <a href="#top_of_page" class="top_of_page">top of page</a>
+</h3>
+<p>The Google Earth Enterprise Portable server is a  lightweight web server that runs on Mac OS X, Linux or Windows. The web server starts within seconds and begins serving one of the globes that has been saved to the Data directory. After the globe is served, a web browser automatically launches to display the globe. </p>
+
+<h3 id="globe_storage">
+  Globe storage
+  <a href="#top_of_page" class="top_of_page">top of page</a>
+</h3>
+<p>You store your globes or maps in the <code>Data</code> or <code>maps</code> folder, depending on your OS. The GEE Portable interface lists all the globes and maps that you place in this folder. If you no longer want a globe or map to appear in the list, simply remove it from the folder.</p>
+<p>The default location for globes in Windows is: <code>C:/Program Files/Google/Google Earth Enterprise/Portable/Data/</code>.</p>
+<p>In Mac OS X, the path is: <code>(your install location)/Google_Earth_Portable/maps</code>.</p>
+<p>In Linux, the path is: <code>(your install location)/Google_Earth_Portable/maps</code>.</p>
+<p>You can change the default globe location.  It is specified as <code>globes_directory</code> in <code>portable.cfg</code>.
+
+
+<h3 id="serve_a_globe">
+  Serve a globe
+  <a href="#top_of_page" class="top_of_page">top of page</a>
+</h3>
+<h4>Windows</h4>
+<p>Double-click the <strong>Google Earth Enterprise Portable</strong> desktop shortcut created during installation.</p>
+<p>A browser will automatically launch, pointing to http://localhost:9335, or your default address.</p>
+
+<h4>Max OS X</h4>
+<p>From your install location, open the <strong>Google_Earth_Portable</strong> folder and double-click<strong> Google Earth Portable</strong>.</p>
+<p>A browser will automatically launch, pointing to http://localhost:9335, or your default address.</p>
+
+<h4>Linux</h4>
+<p>In Terminal, navigate to your <strong>Google_Earth_Portable</strong> directory.</p>
+<p>Run the portable application (<code>./portable</code>).  You may need to <code>chmod</code> or <code>chown</code> the file if you do not have the required permissions.</p>
+
+<h4>Stop serving</h4>
+<p>To stop serving your globe, click the menu icon (<img src="images/show_all_sheet.png" class="menu">) and select <strong>quit</strong> from the menu.</p>
+
+<p><i>Note: You can also double click a globe from your globes directory to begin serving it.</i></p>
+
+<h3 id="broadcast_a_globe">
+  Broadcast a globe
+  <a href="#top_of_page" class="top_of_page">top of page</a>
+</h3>
+<h4>To share a globe or map with others on your network:</h4>
+
+<p>When <code>disable_broadcasting</code> is set to <code>False</code> in <code>portable.cfg</code>, you can enable broadcasting using either of the following methods:</p>
+  <ul>
+    <li><code>http://localhost:9335/?cmd=set_key&amp;accept_all_requests=t</code></li>
+    <br>
+    <li>Add <code>accept_all_requests True</code> to your <code>portable.cfg</code> file</li>
+  </ul>
+<p><strong>Note:</strong> By default, broadcasting is off and cannot be turned on via an http call to the API. This feature is controlled by the <code>disable_broadcasting</code> flag, which is set to <code>True</code>in <code>portable.cfg</code>. However, if you set <code>accept_all_requests</code> to <code>True</code> in <code>portable.cfg</code>, then broadcasting is enabled, regardless of the <code>disable_broadcasting</code> state.</p>
+
+<p>See <a href="#connect_to_portable_globe">Connect to a Portable globe</a></p>
+
+<h3 id="change_the_globe_being_served">
+  Change the globe being served
+  <a href="#top_of_page" class="top_of_page">top of page</a>
+</h3>
+<p>To change the globe being served, point your browser to <a href="http://localhost:9335">http://localhost:9335</a>.  Click the folder icon (<img src="images/open_globe.png" class="menu">) and select your globe. You can also double-click the globe file from your system (see <a href="#globe_storage">Globe storage</a>).</p>
+
+<p>If you're accessing the globe with the Google Earth Enterprise Client, log out of the client and log back in to <code>http://localhost:9335</code>.</p>
+
+<h3 id="serve_GEE_Server">
+  Serve a Portable globe or map from GEE Server
+  <a href="#top_of_page" class="top_of_page">top of page</a>
+</h3>
+<p>If you want to serve a globe or map to a large number of users, you can use a Google Earth Enterprise Server (GEE Server) on a Linux machine instead of buying a GEE Portable license for each user's machine. A GEE Server license allows 10,000 users. In contrast, each GEE Portable license allows either 1 or 10 users. GEE Servers also let you:</p>
+    <ul>
+       <li>serve multiple globes and maps simultaneously</li>
+       <li>serve globes and maps on your own private network so that only authorized users can connect</li>
+    </ul>
+
+<h4>To serve a map or globe from GEE Server:</h4>
+
+<ol>
+  <li>Enable the GEE Server Cutter tool on the command line:
+    <br>
+    <ul>
+      <li>In GEE 5.0: <code>gecutter enable</code></li>
+      <li>In earlier versions: <code>geserveradmin --enable_cutter</code></li>
+    </ul>
+    <p>By default, the cut globes are stored in the <code>/opt/google/gehttpd/htdocs/cutter/globes</code> directory. </p>
+  </li>
+  <li>Access the Google Earth Enterprise Server Admin console in a browser window by going to <code><em>myserver.mydomainname.com</em>/admin</code>, replacing <em>myserver</em> and <em>mydomainname</em></code> with your server and domain.
+  </li>
+  <li>Sign in with the default credentials or the username and password assigned to you:
+  <br>
+    <ul>
+      <li>Default username: <em>geapacheuser</em></li>
+      <li>Default password: <em>geeadmin</em></li>
+    </ul>
+    <div class="note"><p><strong>Note:</strong> If you do not know your username and password, contact your Google Earth Enterprise Server System Administrator.
+    </p></div>
+  </li>
+  <li>Click <strong>Manage Portable</strong> to display the list of portable files in the <code>/opt/google/gehttpd/htdocs/cutter/globes</code> directory (by default).
+  </li>
+  <li>Click <strong>Register</strong> next to the portable file you want to connect to.  A message appears to indicate that your portable map or globe has been registered to GEE Server. Close the Manage portable globes window.
+ <p>If you want to download the file, click the file name.</p>
+  <p>The registered portable map or globe now appears in the Databases list of the GEE Server Admin console.</p>
+  </li>
+  <li>Check the box next to the portable file name, then click <strong>Publish</strong>. The Publish dialog appears.
+  </li>
+  <li>Enter a Publish point or accept the default. For example, the Publish point <strong>MyCutGlobe</strong> would result in a serving URL <code><em>myserver.mydomainname.com</em>/MyCutGlobe</code>, where <em>myserver</em> and <em>mydomainname</em> are specific to your server.
+  </li>
+  <li>Specify a virtual host and optionally turn on WMS.
+  </li>
+  <li>Click <strong>Publish</strong> to publish the portable file.
+  <p>A message appears to indicate that your portable map or globe has been published and the Publish point updates in the Databases list.</p></li>
+  <li>Click the Publish point link to view the portable map or globe in a new browser tab.</li>
+</ol>
+
+
+
+<h3 id="connect_to_portable_globe">
+  Connect to a Portable globe
+  <a href="#top_of_page" class="top_of_page">top of page</a>
+</h3>
+<p>You can connect to a portable globe with the GEE Portable server, Google Earth Enterprise Client (EC), or the Google Earth API.</p>
+
+<h3 id="connect_GEE_portable">
+   Connect using GEE Portable
+  <a href="#top_of_page" class="top_of_page">top of page</a>
+</h3>
+<p>For Windows, double-click the GEE Portable desktop shortcut created during installation. For Mac OS X, from the <code>Applications</code> folder, open the <code>Google Earth Portable</code> folder and double-click Google Earth Portable to launch it. After it launches, click the <strong>Folder</strong>, then select the globe or map you want to view. You can view only one globe or map at a time.<br />
+
+<p>Globes and maps that are broadcast on your local network might require an access key. If prompted, enter the key to view the globe or map. You can obtain the key from the person who is broadcasting the globe or map.</p>
+
+<h3 id="google_earth_ec">
+  Connect using Google Earth EC
+  <a href="#top_of_page" class="top_of_page">top of page</a>
+</h3>
+<p>Launch the Google Earth EC client. When prompted for a server address, enter <code>http://localhost:9335</code>. If you've changed the default port in <code>portable.cfg</code>, use the new port value instead.</p>
+
+<h3 id="google_earth_api">
+  Connect using Google Earth API
+  <a href="#top_of_page" class="top_of_page">top of page</a>
+</h3>
+<p>The GEE Portable server comes with a preconfigured HTML page called <code>earth_local.html</code>that displays your globe using the Earth API. </p>
+<p>If you'd like to make your own custom Earth API application, start by making a copy of <code>earth_local.html</code> and then add your own edits. </p>
+<p>It's at <code>http://localhost:9335/earth/earth_local.html</code>. To  access the page, go to the administration page at <code>http://localhost:9335</code> and click <strong>view in browser</strong>.</p>
+
+<h3 id="GetInfo">
+  Get info about your globe or map
+  <a href="#top_of_page" class="top_of_page">top of page</a>
+</h3>
+
+<p>Click the <strong>Folder</strong> to view a list of the globes and maps you can access. Each globe or map is listed with its file name, description, creation date, and size.<br />
+<p>Select a globe or map, then click the<strong> Menu </strong> then select <strong>Show layer list</strong> to see all the layers for that globe or map. You can use the list to select the layers you want the globe or map to display. To hide the layer list, click the <strong>Menu</strong>, then select <strong>Hide layer list</strong>.<br />
+
+
+<h3 id="portable_cfg">
+  Define options in portable.cfg
+  <a href="#top_of_page" class="top_of_page">top of page</a>
+</h3>
+<p>The Google Earth Portable directory contains the <code>portable.cfg</code> configuration file, either inside the <code>Tools</code> subdirectory (Windows) or the <code>.apps</code> subdirectory (OS X ). For Linux, the configuration file is at <code>/gevol/portable/server/portable.cfg.</code></p>
+<p>The Portable configuration file defines the editable options listed below.</p>
+
+<ul>
+  <li><code><strong>port</strong></code>. The port on which to serve the globe or map. The default is 9335. If you change the port, you must re-cut your globes and maps with the new port number.</li>
+    <br />
+  <li><code><strong>globes_directory</strong></code>. The directory that contains the globe and map files.</li>
+    <br />
+  <li><code><em><strong>map_name</strong></em></code>. The default globe or map to serve when GEE Portable launches.</li>
+  <br />
+  <li><code><strong>fill_missing_map_tiles</strong></code>. If set to <code>True</code>, enables pixel-filling from the ancestor map tile when there are no more tile descendants. Set this to <code>False</code> if you want to clearly indicate areas that are beyond their natural resolution, or if you just want to improve performance. You can also improve performance by lowering the value of the <code>max_missing_maps_tile_ancestor</code> option below.</li>
+    <br />
+  <li><code><strong>max_missing_maps_tile_ancestor</strong></code>. If the <code>fill_missing_map_tiles</code> option (above) is set to <code>True</code> and no tiles exist at your current display level, this option specifies the maximum number of tiles to create from samples of the ancestor tiles. Using a lower value can improve performance because the server creates fewer tiles. The value is written as 2<sup>x</sup> by 2<sup>x</sup> sized pixels. By default, <sup>x</sup> = 3. (Or 23 by 23 pixels, which equals 8 x 8 pixels. This is Display Level 6, or 24 tiles). To lower the value, replace <sup>x</sup> with a number lower than 3.</li>
+    <br />
+  <li><code><strong>local_override</strong></code>. If set to <code>True</code>, GEE Portable looks for all the files on the server first before looking for them on your machine.</li>
+    <br />
+  <li><code><strong>disable_broadcasting</strong></code>. By default,  this flag is set to True, preventing broadcasting from being turned on via an http call to the API. However, if you set <code>accept_all_requests</code> to <code>True</code> in <code>portable.cfg</code>, then broadcasting is enabled, regardless of the <code>disable_broadcasting</code> state.</li>
+    <br />
+  <li><code><strong>accept_all_requests</strong></code>. If set to True, GEE Portable accepts all requests to the server, and thus enables broadcasting, regardless of the state of the <code>disable_broadcasting</code> flag. Note that this applies to <em>serving</em> requests. Changing the globe or map that is being served must always be done from the local server.</li>
+</ul>
+
+
+
+<h3 id="resources">
+  Additional resources
+  <a href="#top_of_page" class="top_of_page">top of page</a>
+</h3>
+<p>Here are links to related topics:</p>
+<ul>
+  <li>
+    <a class="guide_link" href="http://support.google.com/earthenterprise/answer/3230777">Create portable globes and maps</a>: Earth Enterprise users can learn how to cut globes to serve from GEE Portable.
+  </li>
+  <li>
+    <a class="guide_link" href="https://support.google.com/earthenterprise/answer/3230807">Portable Developer Guide</a>: Help for software developers who want to create applications that work with the GEE Portable server.
+  </li>
+  <li>
+<!--    <a class="guide_link" href="http://support.google.com/coordinate/?hl=en$topic=2492331">Google Coordinate Help</a>: Help for users of the GEE Portable server on Android.
+  </li> -->
+</ul>
+
+
+ </body>
+ </html>

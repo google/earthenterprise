@@ -1,0 +1,315 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Configuring Display Rules for Polygon Data</title>
+</head>
+
+
+<body>
+<a name="top"></a>
+  
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo"><img alt="Google Earth Enterprise" border=0 src="images/index.gif" /></div>
+  <h1 id="doc_title">Tutorial</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Tutorial</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="setup.html">Setting Up For the Tutorial</a></li>
+    <li><a href="resources.html">Defining and Building Resources</a></li>
+    <li><a href="projects.html">Defining and Building Projects</a></li>
+    <li><a href="database.html">Defining and Building Databases</a></li>
+    <li><a href="publish.html">Publishing and Viewing a Database</a></li>
+    <li><a href="points.html">Configuring Display Rules for Point Data</a></li>
+    <li><a href="polygons.html" id="selected">Configuring Display Rules for Polygon Data</a></li>
+    <li><a href="importExport.html">Importing and Exporting Style Templates</a></li>
+    <li><a href="searchTabs.html">Configuring a Searchable Database</a></li>
+    <li><a href="searchLayers.html">Specifying Search Fields for Individual Layers</a></li>
+    <li><a href="maps.html">Creating a Map Database</a></li>
+    <li><a href="mosaics.html">Creating Imagery Mosaics</a></li>
+    <li><a href="split.html">Segmenting Large Imagery Files</a></li>
+    <li><a href="historical.html">Building a Historical Imagery Project</a></li>
+    <li><a href="dataFiles.html">Sample Data Files</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+<h1><a id="31467"></a>Configuring Display Rules for Polygon Data
+</h1>
+<p>You can use elevation, color, and text labels to distinguish the characteristics of polygon shapes in your data. This lesson guides you through the process of graphically distinguishing the population in each county in California using display rules.</p>
+<h2><a id="93472"></a>Define and Build a Vector Resource Using Polygon Data
+</h2>
+<p>This exercise walks you through the process of defining and building a vector resource using US census data for the state of California organized by county.
+</p>
+<h4>To define and build a vector resource using polygon data:
+</h4>
+<ol>
+  <li>Select <b>Asset Manager</b> from the Tools menu. 
+    <p>The Asset Manager appears.
+    </p>
+  </li>
+  <li>Click 
+    <img src="images/iconResVector.png" /> on the toolbar.
+    <p>The Vector Resource Editor appears.
+    </p>
+    </li>
+  <li>Set the acquisition date to today’s date in year-month-day format by clicking each section of the date and enter the values.
+  </li>
+  <li>Select <b>GNIS/US Census Bureau </b>from the Provider drop-down list.
+  </li>
+  <li>Click <b>Add</b>.
+    <p>The Open Source dialog appears.
+    </p>
+  </li>
+  <li>Navigate to the <code>/opt/google/share/tutorials/fusion/Vector</code> folder.
+  </li>
+  <li>Select the <code>cal_counties_census.shp</code> file, and click <b>Open</b>.
+    <p>The selected file appears on the Source File(s) list.
+    </p>
+    </li>
+  <li>Select <strong>File &gt; Save</strong>.
+    <p>The Save dialog appears.
+    </p>
+  </li>
+  <li>Navigate to the <code>/ASSET_ROOT/Resources/Vector</code> folder you created in <a href="setup.html#24546">Lesson 1</a>.  </li>  
+  <li>Under <b>Label Properties</b>, select <b>Text</b> from the drop-down list, and then click the empty text
+field.</li>
+  <li>Enter the name <b>CACountyPopulation </b>for the resource, and click <b>Save</b>.
+    <p>The name of the resource appears on the right when you select the <code>/ASSET_ROOT/Resources/Vector </code>folder in the asset navigation tree.
+    </p>
+    </li>
+  <li>Right-click <b>CACountyPopulation</b>, and select <b>Build</b> from the context menu.
+    <p>Fusion builds the resource.
+    </p>
+  </li>
+</ol>
+<h2><a id="78762"></a>Define, Configure, and Build a Vector Project
+</h2>
+<p>This exercise walks you through the process of defining, configuring, and building a vector project using the resource you created in the previous exercise.
+</p>
+<h4>To define and build a vector project and configure display rules for polygons:
+</h4>
+<ol>
+  <li>Click 
+    <img src="images/iconProjVector.png" /> on the toolbar. The Vector Project Editor appears.
+  </li>
+  <li><a id="54569"></a>Click 
+    <img src="images/icon_new.gif" />.
+    <p>The Open dialog appears.    </p>
+  </li>
+  <li>Navigate to the <code>ASSET_ROOT/Resources/Vector</code> folder.  </li>
+  <li><a id="64273"></a>Select <b>CACountyPopulation</b>, and click <b>Open</b>.
+    <p>The CACountyPopulation resource appears in the Vector Project Editor.    </p>
+    </li>
+  <li>Right-click <b>CACountyPopulation</b>, and select <b>Configure Display Rules</b> from the context menu. 
+    <p>The Display Rules dialog appears with the Feature tab in the foreground and the <b>default select all</b> rule highlighted.    </p>
+    </li>
+  <li>Specify the geometry characteristics of the polygons (in this case, the counties):
+    <ol class="alpha">
+      <li>For Draw Features As, select <b>Polygons</b>.      </li>
+      <li>For Visibility, accept the default range, <b>4</b> through <b>24</b>.      </li>
+      <li>For Maximum Simplification Error, accept the default setting, <b>0.5</b>.      </li>
+      <li>Under Draw Style, set:
+        <ul>
+          <li>Mode to <b>Outlined and Filled.</b>          </li>
+          <li>Fill Color to medium green.
+            <p class="note"><strong>Tip:</strong> When you set fill color, specify a value of 125 for the alpha channel instead of 255. This makes the fill color semi-transparent instead of opaque.</p></li>
+          <li>Outline Color to black.          </li>
+          <li>Outline Width to <b>1.</b></li>
+        </ul>
+            <p>The result of these settings is that Google Earth EC displays each county as a green polygon with a black outline.            </p>
+      </li>
+      <li>Under Elevation/Height, set:
+        <ul>
+          <li>Mode to <b>Relative.</b>          </li>
+          <li>Check the box next to <b>Extrude</b>.          </li>
+          <li>Check the box next to <b>User-Defined Height</b>.          </li>
+          <li>Height Variable to <b>POP2000</b>. (Click the empty text field, select <b>POP2000</b> from Insert Field the drop-down list, and click <b>OK</b>.)          </li>
+          <li>Offset to <b>0</b>.          </li>
+          <li>Scale to <b>0.05</b>.</li>
+        </ul>
+            <p>The result of these settings is that Google Earth EC displays each county at an elevation relative to its population. That is, counties with higher population appear <i>taller</i>. Counties with lower population appear <i>shorter</i>. (Refer to the <i>Google Earth Enterprise Fusion Reference Guide</i> for complete details about each of the settings in this dialog.)            </p>
+      </li>
+    </ol>
+  </li>
+  <li>On the right side of the dialog, check the box next to <b>Draw Label</b>.
+    <p>This allows you to specify the content of a text label for each county.    </p>
+  </li>
+  <li>For Visibility, set the range to <b>4</b> through <b>24</b>.  </li>
+  <li>Under Label Properties, select <b>Text</b> from the drop-down list, and then click the empty text field.
+    <p>The Format Label dialog appears.    </p>
+    <ol class="alpha">
+      <li>Select <b>COUNTY </b>from the Insert Field drop-down list, and click <b>OK</b>.      </li>
+      <li>For Highlight, set:
+        <ul>
+          <li>Color to pale yellow.          </li>
+          <li>Scale to <b>1</b>.         </li>
+        </ul>
+            <p>The result of these settings is that Google Earth EC displays each county’s name in bright yellow text. Each text label is centered within its county            </p>
+       </li>
+      <li>For Normal, set:
+        <ul>
+          <li>Color to bright yellow.          </li>
+          <li>Scale to <b>1</b>.          </li>
+        </ul>
+      </li>
+      <li>Check the box next to <b>Center Label</b>.
+       
+        </li>
+    </ol>
+  </li>
+  <li>Click <b>OK</b>.
+    <p>You return to the Vector Project Editor.    </p>
+  </li>
+  <li>Select <strong>File &gt; Save</strong>.
+    <p>The Save dialog appears.    </p>
+  </li>
+  <li>Navigate to the <code>ASSET_ROOT/Projects/Vector </code>folder.  </li>
+  <li>Enter <b>CACountyPopulation </b>as the name of your project, and click <b>Save</b>.
+    <p class="note"><strong>Note:</strong> Although this is the same name as the resource, Fusion allows it, because they are different asset types and, therefore, have different file name extensions. In addition, they are being stored in different folders.    </p>
+    <p>The new project appears in the Asset Manager when you select <b>ASSET_ROOT/Projects/Vector</b> in the asset navigation tree.    </p>
+    </li>
+  <li>Right-click <b>CACountyPopulation</b>, and select <b>Build</b> from the context menu.
+    <p>Fusion builds the project.    </p>
+  </li>
+</ol>
+<h2><a id="24787"></a>Define and Build an Imagery Project
+</h2>
+<p>Although you can build and publish a database that includes a vector project only, you cannot connect directly to your server with Google Earth EC to view that data unless your database also includes an imagery project. If you publish a database that includes a vector project only, you must use the <b>Add Database</b> command on the File menu in Google Earth EC to add the database to the to the base imagery after logging in to <code>kh.google.com</code> or some other server that serves a database that includes imagery.
+</p>
+<p>This exercise walks you through the process of defining and building an imagery project using a resource you created in <a href="FusionTut_2_Resources.html#75802">Lesson 2</a>. Since the focus of this lesson is on polygon display rules, it is not desirable to spend a lot of time building a large imagery project. So this exercise walks you through creating a small and simple imagery project.
+</p>
+<p class="note"><strong>Note:</strong> If you have already completed this exercise in <a href="points.html#31467">Lesson 6</a>, skip this exercise and move on to <a href="#49130">Define, Build, and Publish a Database for the Polygon Data</a>.</p>
+<p>
+</p>
+
+<h4>To define and build an imagery project:
+</h4>
+<ol>
+  <li>Click 
+    <img src="images/iconProjImagery.png" /> on the toolbar.
+    <p>The Imagery Project Editor appears.    </p>
+    </li>
+  <li>Accept all of the default values in the Legend area. (Refer to the <i>Google Earth Enterprise Fusion Reference Guide</i> for details about these settings.)  </li>
+  <li><a id="68889"></a>Click 
+    <img src="images/icon_new.gif" />.
+    <p>The Open dialog appears.    </p>
+  </li>
+  <li>Navigate to the <code>ASSET_ROOT/Resources/Imagery</code> folder.  </li>
+  <li>Select <b>BlueMarble</b>, and click <b>Open</b>.<br />
+    <p>The BlueMarble resource appears in the Imagery Project Editor.    </p>
+    
+    </li>
+  <li>Select <strong>File &gt; Save</strong>.
+    <p>The Save dialog appears.    </p>
+  </li>
+  <li>Navigate to the <code>ASSET_ROOT/Projects/Imagery </code>folder.  </li>
+  <li>Enter <b>BlueMarble </b>as the name of your project, and click <b>Save</b>.
+    <p>The new project appears in the Asset Manager when you select <b>ASSET_ROOT/Projects/Imagery</b> in the asset navigation tree.    </p>
+    </li>
+  <li>Right-click <b>BlueMarble</b>, and select <b>Build</b> from the context menu.
+    <p>Fusion builds the project.    </p>
+  </li>
+</ol>
+<h2><a id="49130"></a>Define, Build, and Publish a Database for the Polygon Data
+</h2>
+<p>This exercise walks you through the process of defining, building, and publishing a database using the projects you created in the previous exercise.
+</p>
+<h4>To define, build, and publish a database:
+</h4>
+<ol>
+  <li>Click 
+    <img src="images/iconDatabase.png" width="23" height="23" /> on the toolbar.
+    <p>The Database Editor appears with no projects selected.    </p>
+    </li>
+  <li><a id="59253"></a>Click 
+    <img src="images/icon_new.gif" /> next to Vector Project.
+    <p>The Open dialog appears.    </p>
+  </li>
+  <li><a id="25862"></a>Navigate to <code>ASSET_ROOT/Projects/Vector</code>.  </li>
+  <li><a id="47673"></a>Select the <b>CACountyPopulation </b>project, and click <b>Open</b>.
+    <p>The CACountyPopulation project appears in the Database Editor next to Vector Project.    </p>
+  </li>
+  <li>Repeat steps <a href="#59253">2</a> through <a href="#47673">4</a> to add <b>BlueMarble</b> as the imagery project.
+    <p>You do not need to add a terrain project for this exercise. Both projects appear on the list.    </p>
+    </li>
+  <li>Select <strong>File &gt; Save</strong>.
+    <p>The Save dialog appears.    </p>
+
+  </li>
+  <li><a id="70068"></a>Navigate to the <code>ASSET_ROOT/Databases </code>folder.  </li>
+  <li>Enter <b>CACountyPopulation </b>for the name of your database, and click <b>Save</b>.
+    <p>The name of the database appears on the right when you select the <code>/ASSET_ROOT/Databases </code>folder in the asset navigation tree.    </p>
+    </li>
+  <li>Right-click <b>CACountyPopulation</b>, and select <b>Build</b> from the context menu.
+    <p>Fusion builds the database.    </p>
+  </li>
+  <li>Right-click <b>CACountyPopulation</b>, and select <b>Publish</b> from the context menu.
+    <p>The Publish Database dialog appears.    </p>
+  </li>
+  <li>Click <b>Publish</b>.
+    <p>Fusion runs the publishing process on the database, and displays a success message when it is done.    </p>
+  </li>
+</ol>
+<h2>View Your Database in Google Earth EC
+</h2>
+<p>This exercise walks you through the process of viewing your database in Google Earth EC.
+</p>
+<h4>To view your database:
+</h4>
+<ol>
+  <li>Launch Google Earth EC. The Login dialog appears.    </li>
+  <li>Enter or select the host name or IP address of your server in the Server field, and accept the default setting, <b>80</b>, in the Port field (unless you know that your server uses a different port).
+  </li>
+  <li>Click <b>Login</b>.
+      <p class="caution"><strong>Caution:</strong> If you have logged in to this server with Google Earth EC previously, log out, clear your cache, and log back in. For help with clearing your cache, refer to the <i>Google Earth User Guide</i>. </p></li>
+  <li>Zoom in to the west coast of the US. 
+    <p>Google Earth EC displays all of the counties in California labeled with the names of the counties. The closer you zoom in, the more spread out the counties look and the more county names you can see.
+    </p>
+    <p class="note"><strong>Note:</strong> If you cannot see the vector data, make
+       sure the checkbox next to <b>CACountyPopulation</b> in the Layers panel
+       is checked.
+    </p>
+  </li>
+  <li>Turn and tilt the Earth so you can see the <i>heights</i> of the counties.
+    <p>Each county’s height indicates its relative population. Counties with higher populations are <i>taller</i>, and counties with lower populations are <i>shorter</i>. 
+    </p>
+    <p><img src="images/Page_75.png" />    </li>
+</ol>
+<p>
+</p>
+</div>
+	<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+	<!-- END WRAPPER -->
+
+
+
+
+</body>
+</html>

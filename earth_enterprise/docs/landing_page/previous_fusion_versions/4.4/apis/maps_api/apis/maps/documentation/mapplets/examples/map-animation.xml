@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="Map Movement and Animation" height="300">
+  <Require feature="sharedmap"/>
+</ModulePrefs>
+<Content type="html"><![CDATA[
+
+<small>
+The following example jumps to Palo Alto, waits two seconds, and then pans to a new center point.
+</small>
+
+<script>
+var map = new GMap2();
+map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+window.setTimeout(function() {
+  map.panTo(new GLatLng(37.4569, -122.1569));
+}, 2000);
+</script>
+
+]]></Content>
+</Module>

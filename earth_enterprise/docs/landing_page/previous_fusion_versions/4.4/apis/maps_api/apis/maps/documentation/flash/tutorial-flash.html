@@ -1,0 +1,653 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+ 
+  
+
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/flash/tutorial-flash.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Google Maps API for Flash - Flash CS3 Tutorial - Google Maps API for Flash - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/html/apis/maps/documentation/flash/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../css/iehacks.css"><![endif]-->
+
+<link href="../local_extensions.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps API for Flash</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="index.html" title="Google Maps API for Flash home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="intro.html" class="selected" title="Official Google Maps API for Flash documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../faq.html" title="Answers to frequently asked questions about Google Maps API for Flash">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="articles.html" title="Focused articles and tutorials for Google Maps API for Flash developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps API for Flash blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="forum.html" title="Google Maps API for Flash developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../../terms.html" title="Google Maps API for Flash terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <a name="gc-toc-anchor"></a>  
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../../index.html">Maps API Family</a></li>
+  <li><a href="../../signup.html">Sign up for an API key</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+  <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a class="tlw-expanded" href="intro.html">Developer Guide</a>
+            <ul>
+              <li><h2 class="tlw-expanded">Tutorials</h2>
+                <ul>
+                  <li><a href="tutorial-flex.html">Flex SDK</a></li>
+                  <li><a href="tutorial-flexbuilder.html">FlexBuilder</a></li>
+                  <li><a href="tutorial-flash.html">Flash CS3</a></li>                
+                </ul>              
+              </li>
+              <li><a href="basics.html">Basics</a></li>
+              <li><a href="events.html">Events</a></li>
+              <li><a href="controls.html">Controls</a></li>
+              <li><a href="overlays.html">Overlays</a></li>
+              <li><a href="services.html">Services</a></li>
+              <li><a href="maptypes.html">Map Types</a></li>           
+              <li><a href="3d-maps.html">3D Maps</a></li>
+            </ul>                                
+          </li>
+          <li><a href="reference.html">API Reference</a></li>
+          <li><h2 class="tlw-expanded">Code Samples:</h2>
+            <ul>
+              <li><a href="demogallery.html">Demos</a></li>
+              <li><a href="examples/index.html">Examples</a></li>
+            </ul>
+          </li>
+          <li><h2 class="tlw-expanded">More Resources:</h2>
+               <ul>
+               <li><a href="articles.html">Articles</a></li>
+               <li><a href="mediagallery.html">Presentations</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/issues/list?can=2&q=apitype%3AFlash&colspec=ID+Type+Status+Introduced+Fixed+Summary+Internal+Stars&cells=tiles">Known Issues</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/wiki/MapsAPIforFlashChangelog">Changelog</a><sup class="new">New!</sup></li>
+               <li><a href="http://code.google.com/p/gmaps-utility-library-flash/">Utility Library</a></li>
+              </ul>
+           </li>
+        </ul>
+      </li>
+    </ul>    
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps JavaScript API V3</h2>
+         <ul>
+           <li><a href="../javascript/index.html">Home Page</a></li>
+           <li><a href="../javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+            <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../mapsdata/index.html">Home Page</a></li>
+          <li><a href="../mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+      <ul>
+        <li><h2><a href="../webservices/index.html">Maps API Web Services</a></h2>
+         <ul>
+           <li><a href="../geocoding/index.html">Geocoding API</a></li>
+           <li><a href="../directions/index.html">Directions API</a></li>
+           <li><a href="../elevation/index.html">Elevation API</a></li>
+           <li><a href="../places/index.html">Places API</a></li>
+         </ul>
+       </li>
+      </ul>
+       <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+    <div class="promo">
+      <p><a href="../premier/index.html">Google Maps API Premier</a></p>
+      <p>Includes enterprise licensing and support</p>
+    </div>
+
+      </div>
+      
+      <a name="gc-pagecontent-anchor"></a>   
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Google Maps API for Flash - Flash CS3 Tutorial</h1>
+
+
+<div class="toc">
+  <ol>
+  <li><a href="#SettingUp">Setting Up Flash CS3</a></li>
+  <li><a href="#HelloWorld">Writing the "Hello World" of the Maps API for Flash</a>
+   <ol class="toc">
+   <li><a href="#CreatingProject">Creating Your Project</a></li>
+   <li><a href="#WritingCode">Writing Code</a>
+     <ul>
+        <li><a href="#ActionScriptWindow">Opening the Actions Editor</a></li>
+        <li><a href="#ImportingLibraries">Importing Libraries</a></li>   
+        <li><a href="#DeclaringMaps">Declaring the Map</a></li>   
+        <li><a href="#SettingSize">Setting the Map Size</a></li>   
+        <li><a href="#EventListeners">Setting Up Event Listeners</a></li>   
+        <li><a href="#AttachingMap">Attaching the Map</a></li>      
+     </ul>
+   </li>
+   <li><a href="#TestingMovie">Testing Our Flash Movie</a></li>
+   <li><a href="#ExportingMovie">Exporting Our SWF File</a></li>
+   <li><a href="#Hosting">Hosting Your SWF File in a Web Page</a></li>
+
+   </ol>
+  </li>
+  </ol>
+</div>
+
+<p>This tutorial assumes you have purchased and installed the Flash CS3 
+application. More on the Flash authoring application is available at 
+<a href="http://www.adobe.com/products/flash/">http://www.adobe.com/products/flash/</a>. 
+</p>
+
+<p>Development within Flash CS3 does not require understanding of Flex. If instead, 
+you wish to develop a Flash application using the Flex framework,
+consult either the <a href="tutorial-flexbuilder.html">FlexBuilder Tutorial</a>
+or the <a href="tutorial-flex.html">Flex SDK Tutorial</a>.</p>
+
+<h1 id="Setting Up">Setting Up Flash CS3</h1>
+
+<p><span style="color:red">Note: </span> Before proceeding with this tutorial, make sure
+you've installed the Maps API for Flash SDK and obtained a Maps API key as indicated in 
+<a href="http://code.google.com/apis/maps/documentation/flash/intro.html#SettingUp">
+Setting Up Your Development Environment</a>.</p>
+
+<p>Before you begin authoring a Google Maps application within Flash CS3, you first need
+to add the Google Maps API for Flash SWC component to Flash CS3. To do so:</p>
+
+<ol>
+  <li><p>If you have Flash CS3 currently open, quit the application.</p></li>
+  <li><p>Navigate to the location where you saved the Google Maps API for Flash SDK and
+    find the non-Flex version of the interface library (e.g. <code>lib/map_1.7.swc</code>).</p></li>
+  <li><p>Create a "Google" directory in one of the following locations and copy the SWC file there:</p>
+    <ul>
+      <li>(Windows) <code>C:\Program Files\Adobe\Adobe Flash CS3\<i>language</i>\Configuration\Components</code><br/>
+	<p><i>(Note that there is a separate directory for each language supported
+in Flash CS3. Place the SWC within whatever language directory you will be
+authoring Flash content.)</i></p></li>
+      <li>(Mac OS X) <code>Macintosh HD/Applications/Adobe Flash CS3/Configuration/Components</code></li>
+    </ul>
+    <p>Do not copy the Flex version of this file. The Flex version is only
+	supported for FlexBuilder or Flex SDK development.</p>
+  </li>
+</ol>
+
+<p>Flash CS3 is now set up to support the Google Maps API for Flash.</p>
+
+<h1 id="HelloWorld">Writing the "Hello World" of the Maps API for Flash</h1>
+
+<p>The easiest way to understand how to build a Google Maps API for Flash application
+within Flash CS3 is to see a simple example. In this tutorial, we'll create a simple 
+Flash movie, add some ActionScript code, export that file as a SWF file, and 
+launch the file within a browser for visual inspection.</p>
+
+<h2 id="CreatingProject">Creating Your Project</h2>
+
+<p>Once you have added the Google Maps API for Flash component to Flash CS3, start
+the Flash application and select <b>Create New -> Flash File (ActionScript 3.0)</b> on
+the Welcome screen.</p>
+
+<img src="images/flash_newProject.png"/>
+
+<p>(If you don't see the welcome screen, select <b>File -> New</b> and select <b>Flash File 
+(ActionScript 3.0)</b> from the <b>New Document</b> dialog box.)</p>
+
+<p>Flash CS3 starts up and displays a blank canvas (known as the "Stage"). If the 
+<b>Timeline</b> pane is not already present, select it via  <b>Window -> Timeline</b>.</p>
+&nbsp;
+<img src="images/flash_blankStage.png"/>
+
+<p>Select <b>Window -> Components</b>. A <b>Components</b> dialog box will appear. Click on the 
+<b>Google</b> selector to display the <b>GoogleMapsLibrary</b> component.</p>
+
+<img src="images/flash_componentsWindow.png"/>
+
+<p>Click on the <b>GoogleMapsLibrary</b> and drag it onto the Stage. A thin blue bounding box will 
+appear on the blank stage. Don't worry about positioning this component correctly, as this box does not
+affect the map's true positioning.</p>
+
+<h2 id="WritingCode">Writing Code</h2>
+
+<p>Maps within the Google Maps API for Flash are manipulated using ActionScript 3.0 code. 
+This tutorial will not attempt to teach the nuances of ActionScript. Online tutorials on 
+ActionScript are available at the following locations:</p>
+
+<ul>
+<li><a href="http://livedocs.adobe.com/flash/9.0/ActionScriptLangRefV3/">
+http://livedocs.adobe.com/flash/9.0/ActionScriptLangRefV3/</a></li>
+<li><a href="http://www.adobe.com/devnet/flex/quickstart/coding_with_mxml_and_actionscript/">
+http://www.adobe.com/devnet/flex/quickstart/coding_with_mxml_and_actionscript/</a></li>
+</ul>
+
+<h3 id="ActionScriptWindow">Opening the Actions Editor</h2>
+
+<p>Within Flash CS3's <b>Timeline</b> window, right-click within a frame of your choosing
+and select the <b>Actions</b> option. An <b>Actions - Frame</b> dialog box appears. Ensure
+<b>ActionScript 3.0</b> is selected from the drop-down menu, and enter the following code
+in the editing area. (We will explain this code in the following section.)</p>
+
+<img src="images/flash_actionScriptWindow.png"/>
+
+<p>(This code is provided below for you to cut and paste.)</p>
+
+<pre class="prettyprint">
+import com.google.maps.LatLng;
+import com.google.maps.Map;
+import com.google.maps.MapEvent;
+import com.google.maps.MapType;
+
+var map:Map = new Map();
+map.key = "<i>your_api_key</i>";
+map.sensor = "<i>true_or_false</i>";
+map.setSize(new Point(stage.stageWidth, stage.stageHeight));
+map.addEventListener(MapEvent.MAP_READY, onMapReady);
+this.addChild(map);
+
+function onMapReady(event:Event):void {
+  map.setCenter(new LatLng(40.736072,-73.992062), 14, MapType.NORMAL_MAP_TYPE);
+}
+</pre>
+
+<p>Even in this simple code snippet, there are several things to note:</p>
+<ol>
+<li><p>We import a set of libraries from the <code>com.google.maps.*</code> namespace.</p></li>
+<li><p>We instantiate a <code>Map</code> object and set the <code>map</code>'s API key.</p></li>
+<li><p>We set the <code>map</code>'s sensor state to <code>"true"</code> or <code>"false"</code>.</p></li>
+<li><p>We set the <code>map</code>'s size to match that of the stage.</p></li>
+<li><p>We add an event listener to notify us when the map is ready to display.</p></li>
+<li><p>We attach the map to the Flash movie.</p></li>
+<li><p>Within that event listener, we center the map on Manhattan.</p></li>
+</ol>
+
+<p>These steps are explained in more detail below.</p>
+
+<h3 id="ImportingLibraries">Importing Libraries</h3>
+
+<pre class="prettyprint">
+    import com.google.maps.LatLng;
+    import com.google.maps.Map;
+    import com.google.maps.MapEvent;
+    import com.google.maps.MapType;
+</pre>
+
+<p>ActionScript libraries are imported with the <code>import</code> declaration. In the sample
+code above, we import several Google Maps Flash libraries. To compile your SWF file successfully,
+you should ensure that you import libraries for types that you use within your sample code. 
+We recommend that you import only those classes you need.</p>
+
+<h3 id="DeclaringMaps">Declaring the Map</h3>
+
+<pre class="prettyprint">
+var map:Map = new Map();
+map.key = "<i>your_api_key</i>";
+map.sensor = "<i>true_or_false</i>";
+</pre>
+
+<p>The <code>com.google.maps.Map</code> object is the fundamental object within the Google Maps
+API for Flash library. Here we instantiate a <code>Map</code> object and assign it to the 
+<code>map</code> variable. We then set the <code>map</code>'s <code>key</code> property to a
+registered API key. We also explicitly set the <code>map</code>'s <code>sensor</code> property
+to either <code>"true"</code> or <code>"false"</code>, indicating whether we are detecting
+the user's location (via a GPS sensor, for example). (See
+<a href="intro.html#SpecifyingSensor">Specifying the Sensor
+Parameter</a> for more information.)</p>
+
+<p><span style="color:red">Note: </span> Except within this tutorial, the code examples in this 
+documentation set use the Flex framework. For the most part, that code can be used within Flash CS3. 
+However, you will need to at least create a <code>map</code> variable as shown here to refer to the 
+<code>Map</code> instance, and you will need to set up the <code>map</code> and attach it to
+the Flash movie object directly as shown in this tutorial.</p>
+
+<h3 id="SettingSize">Setting the Map Size</h3>
+
+<pre class="prettyprint">
+map.setSize(new Point(stage.stageWidth, stage.stageHeight));
+</pre>
+
+<p>For simplicity, we wish to have the map fit the size of the Flash stage. We can enforce this
+restriction by setting the size of the <code>map</code> to the global <code>stage</code> object's
+<code>stageHeight</code> and <code>stageWidth</code> properties.</p>
+
+<p><span style="color:red">Note! </span> In the Flex examples provided in this documentation set, 
+there is no need to set an explicit size using the <code>setSize</code> method. However, Flash CS3
+developers will need to add this method to use those examples.</p>
+
+<h3 id="EventListeners">Setting Up Event Listeners</h3>
+
+<pre class="prettyprint">
+map.addEventListener(MapEvent.MAP_READY, onMapReady);
+</pre>
+
+<p>ActionScript, like JavaScript, is an event-driven programming language. User interactions
+within Flash objects are handled by registering event listeners on objects for specific
+events.</p>
+
+<p>Here we add an event listener to the <code>Map</code> object for the 
+<code>MapEvent.MAP_READY</code> event. This event handler acts as a "hook" for initialization 
+of the Google Maps API for Flash application. When the map receives that event, it calls the 
+<code>onMapReady</code> function, which is shown below.</p>
+
+<pre class="prettyprint">
+function onMapReady(event:MapEvent):void {
+  setCenter(new LatLng(40.736072,-73.992062), 14, MapType.NORMAL_MAP_TYPE);
+}
+</pre>
+
+<p>This <code>onMapReady()</code> function passes an <code>event</code> parameter of type 
+<code>MapEvent</code> (which is ignored in this case) and then calls <code>setCenter()</code>
+using the given parameters (which define a location, a zoom level, and the type of map to show).</p>
+
+<p><span style="color:red">Note:</span> You may also initialize your map by intercepting and 
+handling the <code>MapEvent.MAP_PREINITIALIZE</code> event instead. For information on this 
+event, see the discussion of <a href="basics.html#MapOptions"><code>MapOptions</code></a>.</p>
+
+<p>Events are discussed in more detail within the <a href="events.html">Map Events</a> 
+section of the Google Maps Flash documentation.</p>
+
+<h3 id="AttachingMap">Attaching the Map</h3>
+
+<pre class="prettyprint">
+this.addChild(map);
+</pre>
+
+<p>Finally, we need to attach the <code>map</code> to the Flash movie itself. We do this by calling
+<code>this.addChild(map)</code>. Note that we use the <code>this</code> keyword to access the Flash
+root component directly (in this case, the <b>Timeline</b> object.)</p>
+
+<h2 id="TestingMovie">Testing Our Flash Movie</h2>
+
+<p>We are now ready to launch our Flash movie. Select <b>Control -> Test Movie</b>. Flash CS3 
+will compile the ActionScript code and launch an internal Flash player for debugging purposes. You 
+should see a small map centered on Manhattan.</p>
+
+<img src="images/flash_testMovie.png"/>
+
+<p>Note that since this SWF file is accessed via a local file system, it is shown in Debug mode.</p>
+
+<h2 id="ExportingMovie">Exporting Our SWF File</h2>
+
+<p>If everything works as intended, we will want to create a SWF file, which we can then post
+for external use on a publically available website. To do so:</p>
+
+<ol>
+<li><p>Select <b>File -> Export</b>. The <b>Export Movie</b> dialog box will appear.</p>
+<img src="images/flash_exportMovie.png"/>
+</li>
+<li><p>Select a name for your file (e.g. <b>MapSimple.swf</b> and leave the format as a 
+<b>Flash Movie</b>. The <b>Export Flash Player</b> dialog box appears.</p>
+<img src="images/flash_exportMovieOptions.png"/>
+</li>
+<li><p>Ensure that <b>Local playback security:</b> is set to <b>Access network only</b>. This ensures
+that the Flash player can communicate with Google's servers to retrieve the Maps API library.</p>
+</li>Click <b>OK</b> and your SWF file will be created.</p></li>
+</ol>
+
+<p>If we double-click on this file, our default browser will launch and we can inspect the SWF file directly.
+Note again that since this file is accessed via a local file system, it displays in Debug mode.</p>
+
+<img src="images/flash_simpleMap.png"/>
+
+<h2 id="Hosting">Hosting Your SWF File in a Web Page</h2>
+
+<p>Google Maps Flash SWF files, if they are compiled with the API key included, can simply be 
+displayed as standalone files. This is useful for testing, but may not be practical for proper page 
+layout. As a result, you will likely want to set up an HTML page to contain the SWF file. To ensure 
+your SWF file executes within both Internet Explorer and other browsers, you should add the SWF 
+within both <code>object</code> and <code>embed</code> tags.</p>
+
+<p>A simple HTML page that contains our <code>MapSimple.swf</code> file appears below. For the 
+map to display on a web page, we must reserve a spot for it. We do so in this example by creating 
+a named <code>div</code> element and adding the <code>object</code> element to it.</p>
+
+<pre class="prettyprint">
+  &lt;div id="map_canvas" name="map_canvas"&gt;
+    &lt;object
+      classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+      codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0"
+      width="800px"
+      height="600px">
+      &lt;param name="movie" value="MapSimple.swf"&gt;
+      &lt;param name="quality" value="high"&gt;
+      &lt;param name="flashVars" value="key=<i>your_api_key</i>&sensor=<i>true_or_false</i>"&gt;
+      &lt;embed
+        width="800px"
+        height="600px"
+        src="MapSimple.swf"
+        quality="high"
+        flashVars="key=<i>your_api_key</i>&sensor=<i>true_or_false</i>"
+        pluginspage="http://www.macromedia.com/go/getflashplayer"
+        type="application/x-shockwave-flash"&gt;
+      &lt;/embed&gt;
+    &lt;/object&gt;
+  &lt;/div&gt;
+</pre>
+
+<p>Note that we add the API <code>key</code> and <code>sensor</code> parameters within a
+<code><i>flashVars</i></code> parameter, separated by an <code>&amp;</code> character. This 
+registration method is an alternative to compiling your key and sensor into the SWF file
+within the ActionScript code directly (though the <code>map.key</code> assignment). If values
+are specified here, they override values contained within the SWF file. Also note that the API
+key must match the domain where the <i>SWF</i> file is hosted, not the domain where the
+HTML file may be hosted.</p>
+
+<p>The resulting HTML page is shown below.</p>
+<p>&nbsp;
+
+<iframe frameborder="0" width="90%" height="450" scrolling="no" 
+src="http://gmaps-samples-flash.googlecode.com/svn/trunk/examples/MapSimple.html"></iframe></p>
+
+<p><a href="http://gmaps-samples-flash.googlecode.com/svn/trunk/samplecode/MapSimple.fla">
+Download Flash file (SimpleMap.fla)</a></p>
+</p>
+
+<p>Congratulations! You've written your first Google Maps Flash application!</p>
+
+
+        <!-- end body text -->
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

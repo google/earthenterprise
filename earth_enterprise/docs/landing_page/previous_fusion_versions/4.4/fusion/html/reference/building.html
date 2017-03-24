@@ -1,0 +1,304 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Building Assets</title>
+</head>
+
+<body>
+
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" />
+  </div>
+  <h1 id="doc_title">Reference Guide</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Reference Guide</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="intro.html">Introduction</a></li>
+    <li><a href="fundamentals.html">Fundamentals</a></li>
+    <li><a href="setup.html">Setting Up Your Workspace</a></li>
+    <li><a href="resources.html">Defining Resources</a></li>
+    <li><a href="projects.html">Defining Projects</a></li>
+    <li><a href="databases.html">Defining and Publishing Databases</a></li>
+    <li><a href="building.html" id="selected">Building Assets</a></li>
+    <li><a href="maps.html">Preparing Data for Google Maps</a></li>
+    <li><a href="commands.html">Command Line Reference</a></li>
+    <li><a href="createOwnData.html">Creating Your Own Source Data, Icons, and Masks</a></li>
+    <li><a href="htmlTags.html">HTML Tags Allowed</a></li>
+    <li><a href="plugins.html">Google Earth Plugin</a></li>
+    <li><a href="errors.html">Common Error Messages</a></li>
+    <li><a href="glossary.html">Glossary</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+
+<h1>Building Assets</h1>
+
+<ol class="toc">
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#building_an_asset">Building an Asset</a></li>
+  <li><a href="#debugging_asset_builds">Debugging Asset Builds</a></li>
+  <li><a href="#resuming_failed_asset_builds">Resuming Failed Asset Builds</a></li>
+  <li><a href="#marking_asset_versions_as_bad">Marking Asset Versions as Bad</a></li>
+  <li><a href="#cleaning_asset_versions">Cleaning Asset Versions</a></li>
+  <li><a href="#monitoring_current_and_recent_activity">Monitoring Current and Recent Activity</a></li>
+</ol>
+
+<h2 id="overview">Overview</h2>
+
+<p><a id="marker-1015338"></a>Building assets is the process of preparing each asset for inclusion in another asset--for example, building resources before you include them in a project.
+</p>
+<p>Google Earth Enterprise Fusion allows you to build each project separately or together with its associated database. You can also build imagery and terrain resources and map layers with their associated projects or databases. You must build vector resources separately, however, before you can add them to a project. In fact, most of the work is done at the database level, so building projects is unnecessary.
+</p>
+<p>You can sometimes optimize your work, however, by building one asset while working on another.
+</p>
+<p class="note"><strong>Tip:</strong> Since builds occur in the background and Google Earth Enterprise Fusion is always running, you can close the Google Earth Enterprise Fusion GUI after you start a build, if you do not need to use it for anything else. In fact, this is a good practice, because it frees up RAM and CPU cycles on the workstation, which can improve build performance.
+</p>
+<h2 id="building_an_asset">Building an Asset</h2>
+<p>The building process is the same for all assets--resources, map layers, projects, and databases. This section describes how to build assets, as well as how to debug and resume failed builds, and clean or mark asset versions as bad.
+</p>
+<h4>To build an asset:
+</h4>
+<br />
+
+<ol>
+  <li>In the Asset Manager, right-click the asset you want to build.
+  </li>
+  <li>Select <strong>Build</strong> from the context menu.
+    <p>The status of the asset immediately changes to <strong>Queued</strong>. If no other jobs are waiting, the status changes to <strong>In Progress</strong>. 
+    </p>
+    <p class="note"><strong>Note:</strong> Sometimes the status changes so fast that it appears to change directly to <strong>In Progress</strong>. For very large projects (such as an imagery project with thousands of resources), however, it can take several minutes before the state changes to <strong>Queued</strong> or <strong>In Progress</strong>. In extreme cases, it can take 30 minutes or longer. During this time, the Google Earth Enterprise Fusion GUI is unresponsive. Please wait for the GUI to respond.
+    </p>
+  </li>
+</ol>
+<p><a id="marker-1014428"></a>You can view the progress of the build by double-clicking the <strong>Current Version</strong> or <strong>Current State</strong> column for the asset. The <strong>Version Properties</strong> dialog displays the most recent version of that asset. You can expand the version tree to view the status of the build in real time by clicking the <strong>+</strong> signs.
+</p>
+<p class="note"><strong>Note:</strong> You can use the shell commands to set up automatic, successive builds for the same database to ensure that you always have the most up-to-date work for a particular data set. See the <a href="commands.html#59907">Command Line Reference</a> chapter for more information.</p>
+<p>After you build an asset, it is ready to be included in the next step.</p>
+<h2><a id="83928"></a>Debugging Asset Builds
+</h2>
+<p><a id="marker-1014198"></a>When you build a new or modified asset, Google Earth Enterprise Fusion assigns it a version number. Using the Asset Manager, you can determine the status of each version, as well as the availability of older versions of assets.The table below lists the possible states for each asset.
+</p>
+  <h4><a id="56811"></a>Asset States
+  </h4>
+<table>
+  <tr>
+    <th>Status
+    </th>
+    <th>Description
+    </th>
+  </tr>
+  <tr>
+    <td><strong>Waiting</strong>
+    </td>
+    <td>The asset is waiting for its included assets to finish building.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Blocked</strong>
+    </td>
+    <td>The asset build cannot proceed. One or more of its data sources or subcomponents has failed, is marked bad, or is otherwise unavailable. The responsible component is listed.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Queued</strong>
+    </td>
+    <td>The asset (or its subcomponents) is queued and waiting to be built.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>In Progress</strong>
+    </td>
+    <td>The asset (or subcomponents) is actively being built.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Failed</strong>
+    </td>
+    <td>The asset build failed. Click 
+      <img src="images/iconLog.png" /> next to the failed build in the Version Properties dialog to see the Asset Log. See <a href="errors.html#61436">Common Error Messages</a> for more information about each error message that might appear in the log.</td>
+  </tr>
+  <tr>
+    <td><strong>Succeeded</strong>
+    </td>
+    <td>The asset build (and subcomponents) succeeded.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Canceled</strong>
+    </td>
+    <td>The asset build was canceled by a user. 
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Cleaned</strong>
+    </td>
+    <td>The asset version is unavailable, because it has been cleaned.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Bad</strong>
+    </td>
+    <td>The asset version is unavailable, because it has been marked as bad.
+    </td>
+  </tr>
+</table>
+<h4><a id="marker-1014207"></a>To view an asset’s build versions:
+</h4>
+<br />
+
+<ol>
+  <li>In the Asset Manager, right-click the asset whose version history you want to see, and select <strong>Asset Versions </strong>from the context menu.
+    <p>The <strong>Properties</strong> dialog displays a list of all of the build versions for that asset, including the state of each build. The most recent build appears at the bottom of the list. </p>
+    <p><img src="images/assetPropertiesDia.png" /></p></li>
+  <li>Double-click the build version you want to investigate.
+    <p>The <strong>Version Properties</strong> dialog displays the hierarchical relationship of the asset and its subcomponents. </p>
+    <p class="note"><strong>Note:</strong> You can go directly to the <strong>Version Properties</strong> dialog for the latest asset version simply by double-clicking its <strong>Current Version</strong> or <strong>Current State</strong> field in the Asset Manager. </p>
+    <p><img src="images/assetVersionProperties.png" /></p></li>
+  <li>Expand the tree by clicking the <strong>+</strong> next to each version until you display the element that caused the build failure.
+  </li>
+  <li>Click 
+    <img src="images/iconLog.png" /> next to the failed build to view the details about a particular failed process.
+    <p><img src="images/assetLog.png" />      </li>
+</ol>
+<p>The log file provides one or more error messages that describe the problem--typically at or near the end of the command output. With long logs, scroll to the end and then look back for the error messages. See the <a href="errors.html#61436">Common Error Messages</a> chapter of this guide for more information about the error messages in the log.</p>
+<h2 id="resuming_failed_asset_builds"><a id="94252"></a>Resuming Failed Asset Builds<a id="marker-1014896"></a>
+</h2>
+<p>If an asset build fails for an external reason (such as running out of disk space or incorrect file permission settings), you can resume the build after correcting the cause of the failure. When you resume the build, it starts from the point at which failure occurred, rather than repeating the entire build process from the start. 
+</p>
+<p>In the example shown in the previous section, the error message is <code>Fusion Warning: Failed to open source</code> and the path and file name that could not open. In that case, the permissions were set wrong on the source file. After you change permission on that file, so that Google Earth Enterprise Fusion can open it, your build should be successful.
+</p>
+<p class="note"><strong>Note:</strong> The <strong>Resume</strong> command is available for assets with a status of <strong>Failed</strong> or <strong>Canceled</strong> only. Its purpose is to continue a build on an asset where there has been no change to the data itself or to the configuration of the asset. If you change the source data or any configuration detail for the asset, you must start the build from the beginning using the <strong>Build</strong> command instead of the <strong>Resume</strong> command.
+<br /><br />
+When Google Earth Enterprise Fusion successfully completes a build that failed in the past, it uses the same version number for that build as for the previously failed build.
+</p>
+<h4>To resume a failed build after correcting the cause of the failure:
+</h4>
+<br />
+
+<ol>
+  <li>In the <strong>Version Properties</strong> window, right-click the line that shows the failed build. </li>
+  <li>Select <strong>Resume</strong>.
+    <p><img src="images/buildResume.png" /></p>
+    <p>The asset build continues from that point forward.
+    </p>
+  </li>
+</ol>
+<p>For more details on resuming asset builds, see <a href="commands.html#97528">Handling Asset Build Failures</a> in the <strong>Command Line Reference</strong> chapter. </p>
+
+<h2 id="marking_asset_versions_as_bad"><a id="22520"></a>Marking Asset Versions as Bad</h2>
+
+<p><a id="marker-1014527"></a>You can mark a successfully built asset version as <strong>Bad</strong> to prevent it from being used by any project or database. For example, you might successfully build an asset, but when you preview it, you realize that it does not look the way you intended.</p>
+
+<h4>To mark an asset as Bad:</h4>
+<br />
+
+<ol>
+  <li>In the Asset Manager, right-click the desired asset, and select <strong>Current Version Properties</strong> from the context menu. The <strong>Version Properties</strong> dialog appears. </li>
+  <li>Right-click the version you want to mark as <strong>Bad</strong>, and select <strong>Mark as bad</strong> from the context menu.
+    <p>Google Earth Enterprise Fusion immediately changes the state of the asset to <strong>Bad</strong>.</p>
+  </li>
+</ol>
+
+<h2><a id="85338"></a>Cleaning Asset Versions<a id="marker-1014996"></a></h2>
+<p>Each asset you build in Google Earth Enterprise Fusion has a version number, so you can easily track successive updates to a particular asset. Each version of an asset is saved as a separate group of data files. Since assets with many versions can take up a significant amount of disk space, you can use the Asset Manager to <i>clean </i>unused asset versions. 
+</p>
+<p>The clean-up process:
+</p>
+<ul>
+  <li>Removes the data files for all asset versions associated with the selected version that are not used by other assets.
+  </li>
+  <li>Cleans downward. 
+    <p>That is, if you clean a database version, it cleans the associated projects and resources as well. If you clean a project version, however, it cleans only the associates resources, not any databases with which the project might be associated. If you clean a resource version, it cleans that resource version only.
+    </p>
+  </li>
+  <li>Changes the state of the asset version to <strong>Cleaned</strong>, which makes that version of the asset unavailable for use by any other asset.
+  </li>
+</ul>
+<p>Cleaning an asset version DOES NOT remove:
+</p>
+<ul>
+  <li>Any raw source files associated with the selected asset.
+  </li>
+  <li>Any other versions of the selected asset.
+  </li>
+  <li>The metadata associated with the asset (such as the version’s build history and the names of the assets associated with it).
+  </li>
+  <li>Any asset version that is currently being used in a project or a database. 
+    <p>If you attempt to clean an asset version that is used in another asset, the operation fails, and Google Earth Enterprise Fusion displays a list of related assets.
+    </p>
+  </li>
+  <li>Any asset version with an active status (such as <strong>In Progress</strong> or<code> </code><strong>Queued</strong>).
+    <p>If you attempt to clean an asset version that is in the process of being built, Google Earth Enterprise Fusion prompts you to cancel the build before cleaning it.
+    </p>
+  </li>
+  <li>The last good version of resources or projects.
+  </li>
+</ul>
+<h4>To clean an asset version:
+</h4>
+<br />
+
+<ol>
+  <li>In the Asset Manager, right-click the asset you want to clean, and select <strong>Current Version Properties </strong>from the context menu. The <strong>Version Properties</strong> dialog appears. </li>
+  <li>Right-click the version that you want to clean, and select <strong>Clean</strong> from the context menu.
+    <p>A message prompts you to confirm that you want to clean the asset.
+    </p>
+  </li>
+  <li>Click <strong>Clean</strong>.
+    <p>Google Earth Enterprise Fusion cleans the selected asset version and changes its state to <strong>Cleaned</strong>.
+    </p>
+  </li>
+</ol>
+    <p class="note"><strong>Tip:</strong> When you want to clean asset versions, start by cleaning databases, working from the oldest to the most current. In most cases, this process cleans old versions of all of the projects and resources related to that database.
+    </p>
+<h2 id="monitoring_current_and_recent_activity"><a id="45648"></a><a id="76600"></a>Monitoring Current and Recent Activity<a id="marker-1014259"></a>
+</h2>
+<p>The System Manager allows you to view the recent activity log and monitor the progress of background tasks, such as building a database.
+</p>
+<h4>To monitor current or recent activity:
+</h4>
+<br />
+
+<ol>
+  <li>Select <strong>Tools &gt; System Manager</strong>. The System Manager appears.
+    <p><img src="images/systemManager.png" /></p>
+  </li>
+</ol>
+
+<p class="note"><strong>Note:</strong> No user operations are allowed in the System Manager. It is for monitoring purposes only. See <a href="commands.html#25787">getop</a> in the <strong>Command Line Reference</strong> chapter for the command line equivalent of this information. </p>
+
+</div>
+	<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+	<!-- END WRAPPER -->
+
+</body>
+</html>

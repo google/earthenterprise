@@ -1,0 +1,699 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+  
+
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/events.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Google Maps Javascript API V3 Events - Google Maps JavaScript API V3 - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/html/apis/maps/documentation/javascript/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../css/iehacks.css"><![endif]-->
+
+<link href="../local_extensions.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps JavaScript API V3</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="index.html" title="Google Maps JavaScript API V3 home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="basics.html" class="selected" title="Official Google Maps JavaScript API V3 documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../faq.html" title="Answers to frequently asked questions about Google Maps JavaScript API V3">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="articles.html" title="Focused articles and tutorials for Google Maps JavaScript API V3 developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps JavaScript API V3 blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="forum.html" title="Google Maps JavaScript API V3 developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../../terms.html" title="Google Maps JavaScript API V3 terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <a name="gc-toc-anchor"></a>  
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../../index.html">Maps API Family</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+ <div class="line"></div>
+    <ul>
+      <li><h2>Maps Javascript API V3</h2>
+        <ul>
+          <li><a class="tlw-expanded" href="index.html">Home Page</a>
+            <ul>
+              <li><a href="basics.html">Basics</a></li>
+              <li><a href="tutorial.html">Tutorial</a></li>
+              <li><a href="events.html">Events</a></li>
+              <li><a href="controls.html">Controls</a></li>
+              <li><a href="overlays.html">Overlays</a></li>
+              <li><a href="services.html">Services</a></li>
+              <li><a href="maptypes.html">Map Types</a></li>
+            </ul>
+          </li>
+          <li><a class="tlw-collapsed" href="reference.html">API Reference</a>
+            <ul>
+              <li><a href="reference.html">3.3</a></li>
+              <li><a href="3.2/reference.html">3.2</a></li>
+              <li><a href="3.1/reference.html">3.1</a></li>
+            </ul>
+          </li>
+          <li><h2 class="tlw-expanded">Code Samples:</h2>
+            <ul>
+              <li><a href="examples/index.html">Samples</a></li>
+              <li><a href="demogallery.html">Demo Gallery</a></li>
+            </ul>
+          </li>
+          <li><h2 class="tlw-expanded">More Resources:</h2>
+            <ul>
+               <li><a href="articles.html">Articles</a><sup class="new">New!</sup></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/issues/list?can=2&q=apitype:Javascript3&colspec=ID+Type+Status+Introduced+Fixed+Summary+Internal+Stars&cells=tiles">Known Issues</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/wiki/JavascriptMapsAPIv3Changelog">Changelog</a></li>
+               <li><a href="http://code.google.com/p/google-maps-utility-library-v3/">Utility Library</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+       <div class="line"></div>
+       <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="v2/index.html">Home Page</a></li>
+           <li><a href="v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+   <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../flash/index.html">Home Page</a></li>
+          <li><a href="../flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../mapsdata/index.html">Home Page</a></li>
+          <li><a href="../mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+        <li><h2><a href="../webservices/index.html">Maps API Web Services</a></h2>
+        <ul>
+          <li><a href="../geocoding/index.html">Geocoding API</a></li>
+          <li><a href="../directions/index.html">Directions API</a></li>
+          <li><a href="../elevation/index.html">Elevation API</a></li>
+          <li><a href="../places/index.html">Places APl</a></li>
+        </ul>
+      </li>
+    </ul>
+       <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+    <div class="promo"><p><a href="../premier/index.html">Google Maps API Premier</a></p>
+    <p>Same great maps plus a SLA, support, and control over ads</p>
+    </div>
+
+      </div>
+      
+      <a name="gc-pagecontent-anchor"></a>   
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Google Maps Javascript API V3 Events</h1>
+
+
+<p class="note">Note: The Google Maps Javascript API Version 3 documented within
+these pages is now the official Javascript API. Version 2 of this API has been
+officially deprecated as per our deprecation policy. We encourage you to migrate
+your code to this newly updated and enhanced version!</p>
+
+<div class="toc">
+  <ol>
+  <li><a href="#EventsOverview">Map Events Overview</a>
+    <ol>
+      <li><a href="#UIEvents">UI Events</a></li>
+      <li><a href="#MVCStateChanges">MVC State Changes</a></li>    
+    </ol>
+  </li>
+  <li><a href="#EventListeners">Event Listeners</a></li>
+  <li><a href="#EventArguments">Event Arguments</a></li>
+  <li><a href="#EventClosures">Event Closures</a></li>
+  <li><a href="#EventProperties">Getting and Setting MVC
+  Properties Within Event Handlers</a></li>
+  <li><a href="#DomEvents">Listening to DOM Events</a></li>
+  </ol>
+</div>
+
+<h1><a name="EventsOverview" id="EventsOverview"></a>Map Events Overview</h1>
+
+<p>JavaScript within the browser is <i>event driven</i>, meaning that
+JavaScript responds to interactions by generating events, and expects
+a program to <i>listen</i> to interesting events. The event model for 
+the Google Maps API V3 is similar to that used in V2 of the API, though much 
+has changed under the hood. There are two types of events:</p>
+
+<ul>
+<li>User events (such as "click" mouse events) are propagated from the DOM to the 
+Google Maps API. These events are separate and distinct from standard DOM events.</li>
+<li>MVC state change notifications reflect changes in Maps API objects and are named 
+using a <code><i>property</i>_changed</code> convention</li>
+</ul>
+
+<p>Each Maps API object exports a number of named events. Programs interested in certain 
+events will register JavaScript <b>event listeners</b> for those events and execute 
+code when those events are received by registering <code>addListener()</code> event handlers on the 
+<code>google.maps.event</code> namespace. Developers of V2 of the Google Maps API will 
+be familiar with this usage.</p>
+
+<p>For a complete list of events, consult the <a href="reference.html">Maps API Reference</a>.
+Events are listed in a separate section for each object which contains events.</p>
+
+<h2><a name="UIEvents" id="UIEvents"></a>UI Events</h2>
+
+<p>Some objects within the Maps API are designed to respond to user events 
+such as mouse or keyboard events. A <code>google.maps.Marker</code> object 
+can listen to the following user events, for example:</p>
+
+<ul>
+  <li><code>'click'</code></li>
+  <li><code>'dblclick'</code></li>
+  <li><code>'mouseup'</code></li>
+  <li><code>'mousedown'</code></li>
+  <li><code>'mouseover'</code></li>
+  <li><code>'mouseout'</code></li>
+</ul>	
+	
+<p>These events may look like standard DOM events, but they are actually part of the
+Maps API. Because different browsers implement different DOM event models, the Maps API
+provides these mechanisms to listen for and respond to DOM events without needing to handle the 
+various cross-browser peculiarities. These events also typically pass arguments within
+the event noting some UI state (such as the mouse position).</p>
+
+<h2><a name="MVCStateChanges" id="MVCStateChanges"></a>MVC State Changes</h2>
+
+<p>MVC objects typically contain state. Whenever an object's property changes, the
+API will fire an event that the property has changed. For example, the API will fire 
+a <code>zoom_changed</code> event on a map when the map's zoom level changes. You can 
+intercept these state changes by registering <code>addListener()</code> event 
+handlers on the <code>event</code> namespace method as well.</p>
+
+<p>User events and MVC state changes may look similar, but you generally wish to 
+treat them differently in your code. MVC events, for example, do not pass
+arguments within their event. You will want to inspect
+the property that changed on an MVC state change by calling the appropriate
+<code>get<i>Property</i></code> method on that object.</p>
+
+<h1><a name="EventListeners" id="EventListeners"></a>Map Events</h1>
+
+<p>You register for event notifications using the  <code>addListener()</code> event 
+handler. That method takes an object, an event to listen for, and a function to 
+call when the specified event occurs. </p>
+
+<p>The following code mixes user events with state change events. We attach an 
+event handler to a marker that zooms the map when clicked. We also add an event 
+handler to the map for changes to the 'zoom' property and move the map to Darwin, 
+Northern Territory, Australia on receipt of the <code>zoom_changed</code>
+event:</p>
+
+<pre class="prettyprint lang-javascript">
+var map;
+function initialize() {
+  var myLatlng = new google.maps.LatLng(-25.363882,131.044922);
+  var myOptions = {
+    zoom: 4,
+    center: myLatlng,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  }
+  map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  
+  google.maps.event.addListener(map, 'zoom_changed', function() {
+    setTimeout(moveToDarwin, 3000);
+  });
+  
+  var marker = new google.maps.Marker({
+      position: myLatlng, 
+      map: map,
+      title:"Hello World!"
+  });
+  google.maps.event.addListener(marker, 'click', function() {
+    map.setZoom(8);
+  });
+}
+  
+function moveToDarwin() {
+  var darwin = new google.maps.LatLng(-12.461334, 130.841904);
+  map.setCenter(darwin);
+}
+</pre>
+
+<p><a href="examples/event-simple.html">View example (event-simple.html)</a></p>
+
+<p><span style="color:red">Note: </span> If you are trying to detect a change in
+the viewport, be sure to use the specific <code>bounds_changed</code> event
+rather than constituent <code>zoom_changed</code> and <code>center_changed</code>
+events. Because the Maps API fires these latter events independently, 
+<code>getBounds()</code> may not report useful results until after the viewport
+has authoritatively changed. If you wish to <code>getBounds()</code> after such
+an event, be sure to listen to the <code>bounds_changed</code> event instead.</p>
+
+<h1><a name="EventArguments" id="EventArguments"></a>Accessing Arguments in UI Events</h1>
+
+<p>UI events within the Google Maps API V3 typically pass an event argument, which
+can be accessed by the event listener, noting the UI state when the event occurred. 
+For example, a UI <code>'click'</code> event typically passes a <code>MouseEvent</code> 
+containing a <code>latLng</code> property denoting the clicked location on the map.
+Note that this behavior is unique to UI events; MVC state changes do not pass arguments in 
+their events.</p>
+
+<p>You can access the event's arguments within an event listener the same way you would
+access an object's properties. The following example adds an event listener for the map, 
+and creates a marker when the user clicks on the map at the clicked location.</p>
+
+<pre class="prettyprint lang-javascript">
+var map;
+function initialize() {
+  var myLatlng = new google.maps.LatLng(-25.363882,131.044922);
+  var myOptions = {
+    zoom: 4,
+    center: myLatlng,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  }
+  map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  
+  google.maps.event.addListener(map, 'click', function(event) {
+    placeMarker(event.latLng);
+  });
+}
+  
+function placeMarker(location) {
+  var marker = new google.maps.Marker({
+      position: location, 
+      map: map
+  });
+
+  map.setCenter(location);
+}
+</pre>
+
+<p><a href="examples/event-arguments.html">View example (event-arguments.html)</a></p>
+
+<h1><a name="EventClosures" id="EventClosures"></a>Using Closures in Event Listeners</h1>
+
+<p>When executing an event listener, it is often advantageous to have both private and persistent 
+data attached to an object. JavaScript does not support "private" instance data, but it does
+support <a href="http://www.jibbering.com/faq/faq_notes/closures.html" rel="nofollow">closures</a>
+which allows inner functions to access outer variables. Closures are useful within event
+listeners to access variables not normally attached to the objects on which events occur.</p>
+
+<p>The following example uses a function closure in the event listener to assign a secret 
+message to a set of markers. Clicking on each marker will review a portion of the
+secret message, which is not contained within the marker itself.</p>
+
+<pre class="prettyprint lang-javascript">
+var map;
+function initialize() {
+  var myLatlng = new google.maps.LatLng(-25.363882,131.044922);
+  var myOptions = {
+    zoom: 4,
+    center: myLatlng,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  }
+
+  map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+  // Add 5 markers to the map at random locations
+  var southWest = new google.maps.LatLng(-31.203405,125.244141);
+  var northEast = new google.maps.LatLng(-25.363882,131.044922);
+  var bounds = new google.maps.LatLngBounds(southWest,northEast);
+  map.fitBounds(bounds);
+  var lngSpan = northEast.lng() - southWest.lng();
+  var latSpan = northEast.lat() - southWest.lat();
+  for (var i = 0; i < 5; i++) {
+    var location = new google.maps.LatLng(southWest.lat() + latSpan * Math.random(),
+        southWest.lng() + lngSpan * Math.random());
+    var marker = new google.maps.Marker({
+        position: location, 
+        map: map
+    });
+    var j = i + 1;
+    marker.setTitle(j.toString());
+    attachSecretMessage(marker, i);
+  }
+}
+
+// The five markers show a secret message when clicked
+// but that message is not within the marker's instance data
+
+function attachSecretMessage(marker, number) {
+  var message = ["This","is","the","secret","message"];
+  var infowindow = new google.maps.InfoWindow(
+      { content: message[number],
+        size: new google.maps.Size(50,50)
+      });
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindow.open(map,marker);
+  });
+}
+</pre>
+
+<p><a href="examples/event-closure.html">View example (event-closure.html)</a></p>
+
+<h1><a name="EventProperties" id="EventProperties"></a>Getting and Setting Properties Within Event Handlers</h1>
+
+<p>None of the MVC state change events in the Maps API event system pass 
+arguments when the event is triggered. (User events do
+pass arguments which can be inspected.) If you need to inspect a property 
+on an MVC state change, you should explicitly call the appropriate 
+<code>get<i>Property</i>()</code> method on that object. This 
+inspection will always retrieve the <i>current state</i> of the MVC
+object, which may not be the state when the event was first fired.</p>
+
+<p><span style="color:red">Note:</span> explicitly setting a property within 
+an event handler which responds to a state change of <i>that particular 
+property</i> may produce unpredictable and/or unwanted behavior. Setting
+such a property will trigger a new event, for example, and if you always
+set a property within this event handler, you may end up creating an
+infinite loop.</p>
+
+<p>In the example below, we set up an event handler to respond to
+zoom events by bringing up an info window displaying that level. We
+also check whether the map is fully zoomed-out and zoom in to
+zoom level 17 if so.</p>
+
+<pre class="prettyprint lang-javascript">
+var map;
+function initialize() {
+  var myLatlng = new google.maps.LatLng(-25.363882,131.044922);
+  var myOptions = {
+    zoom: 4,
+    center: myLatlng,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  }
+  map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  
+  var zoomLevel;
+  var infowindow = new google.maps.InfoWindow(
+    { content: 'Zoom Level Test',
+        size: new google.maps.Size(50,50),
+        position: myLatlng
+    });
+  infowindow.open(map);
+    
+  google.maps.event.addListener(map, 'zoom_changed', function() {
+    zoomLevel = map.getZoom();
+    infowindow.setContent("Zoom: " + zoomLevel);
+    if (zoomLevel == 0) {
+      map.setZoom(10);
+    }      
+  });
+}
+</pre>
+
+<p><a href="examples/event-properties.html">View example (event-properties.html)</a></p>
+
+<h1 id="DomEvents">Listening to DOM Events</h1>
+
+<p>The Google Maps Javascript API event model creates and manages its own custom
+events. However, the DOM (Document Object Model) within the browser also creates and
+dispatches its own events, according to the particular browser event model in use. If you
+wish to capture and respond to these events, the Maps API provides the
+<code>addDomListener()</code> static method to listen to and bind to DOM events.</p>
+
+<p>This convenience method has a signature as shown below:</p>
+
+<pre class="prettyprint lang-javascript">
+addDomListener(instance:Object, eventName:string, handler:Function)
+</pre>
+
+<p>where <code>instance</code> may be any DOM element supported by the browser,
+including:</p>
+
+<ul>
+  <li>Hierarchical members of the DOM such as <code>window</code> or
+  <code>document.body.<i>myform</i></code></li>  
+  <li>Named elements such as <code>document.getElementById("foo")</code></li>
+</ul>
+
+<p>Note that <code>addDomListener()</code> simply passes the indicated event
+to the browser, which handles it according to the browser's DOM event model;
+however, almost all modern browsers at least support DOM Level 2. (For more
+information on DOM level events, see the
+<a href="https://developer.mozilla.org/en/DOM_Levels">Mozilla DOM Levels</a>
+reference.)</p>
+
+<p>If you've been reading the documentation this far, you're probably already
+familiar with one DOM event: the <code>window.onload</code> event, which we've
+handled within the <code>&lt;body&gt;</code> tag. We use this event to trigger
+the initial Javascript code once an HTML page is fully loaded, as shown below:</p>
+
+<pre class="prettyprint lang-html">
+&lt;script&gt;
+  function initialize() {
+
+    // Map initialization
+
+  }
+&lt;/script&gt;
+&lt;body onload="initialize()"&gt;
+  &lt;div id="map_canvas"&gt;&lt;/div&gt;
+&lt;/body&gt;
+</pre>
+
+<p>Although this event is attached to the <code>&lt;body&gt;</code> element here,
+this event is really a <code>window</code> event indicating that the DOM hierarchy
+below the <code>window</code> element has been fully built out and rendered.</p>
+
+<p>Although easy to understand, having an <code>onload</code> event within a
+<code>&lt;body&gt;</code> tag mixes content with behavior. Generally, it is good
+practice to separate your content code (HTML) from your behavioral code (Javascript)
+and provide your presentation code (CSS) separately as well. You can do so by replacing
+the inline <code>onload</code> event handler with a DOM listener within your Maps API
+Javascript code like so:</p>
+
+<pre class="prettyprint lang-javascript">
+&lt;script&gt;
+  function initialize() {
+
+    // Map initialization
+
+  }
+  
+  google.maps.event.addDomListener(window, 'load', initialize);
+&lt;/script&gt;
+&lt;body&gt;
+  &lt;div id="map_canvas"&gt;&lt;/div&gt;
+&lt;/body&gt;
+</pre>
+
+<p><a href="examples/event-domListener.html">View example (event-domListener.html)</a></p>
+
+<p>Although the above code is Maps Javascript API code, the <code>addDomListener()</code>
+method binds to the <code>window</code> object of the browser and allows the API to
+communicate with objects outside of the API's normal domain.</p>
+
+        <!-- end body text -->
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

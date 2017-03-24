@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="Event Context" height="300">
+  <Require feature="sharedmap"/>
+</ModulePrefs>
+<Content type="html"><![CDATA[
+
+<small>
+In the following example code, we display the latitude and 
+longitude of the center of the map after the user drags the map.
+</small>
+
+<script>
+var map = new GMap2();
+GEvent.addListener(map, "moveend", function() {
+  map.getCenterAsync(function(center) {
+    map.openInfoWindowHtml(center, center.toString());
+  });
+});
+map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+</script>
+
+]]></Content>
+</Module>

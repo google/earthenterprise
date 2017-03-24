@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>System Requirements</title>
+</head>
+
+<body>
+<a name="top"></a>
+
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" />
+  </div>
+  <h1 id="doc_title">Installation Guide</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Installation Guide</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="system_requirements.html" id="selected">System Requirements</a></li>
+    <li><a href="before_you_install.html">Before you Install</a></li>
+    <li><a href="gui_install.html">GUI Installer</a></li>
+    <li><a href="cl_install.html">Command Line Installer</a></li>
+    <li><a href="system_manager.html">Verifying and Troubleshooting</a></li>
+    <li><a href="uninstalling.html">Uninstalling</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+<h1>System Requirements</h1>
+
+<h2>Hardware</h2>
+
+<p>Minimum requirements are:</p>
+
+<ul>
+  <li>Minimum 2 dual-core Intel or AMD CPUs.</li>
+  <li>Minimum 4GB RAM; 8 GB RAM per core recommended.</li>
+  <li>The amount of storage space needed to build and host customized 3D and 2D
+    globes will depend on how much source data is imported, scaling from
+    several gigabytes to many terabytes. The main driver for disk space is the
+    amount of imagery that is added to the globe. A simple proof of concept
+    server can be installed on less than 10GB of storage space. The recommended
+    minimum for a production globe is 500GB of space.
+    <p>The installed software itself requires 3.0GB total (1.5GB each for Server
+      and Fusion).</p>
+  </li>
+  <li>DVD drive.</li>
+  <li>A graphics card with at least 64MB video RAM (NVIDIA GeForce4 or higher preferred
+    - for Google Earth Enterprise Fusion GUI only). You can install this graphics card in a different
+      workstation that accesses Google Earth Enterprise Fusion.</li>
+</ul>
+
+<h2>Operating System</h2>
+
+<p>Google Earth Enterprise is supported on the <strong>64-bit versions</strong> of the following operating systems:</p>
+<ul>
+  <li>Red Hat Enterprise Linux versions 5.6 to 6.2, including the most recent security patches</li>
+  <li>Ubuntu 10.04 LTS</li>
+</ul>
+<p>Customers with previous patch releases of these operating systems are advised to update to the latest patches. Google will continue to test the Google Earth Enterprise software with the latest patch releases as those releases become available.  Please contact the Google Enterprise Support team for the most current Linux distribution supported with your version of Google Earth Enterprise. </p>
+<p><i>Note on virtual machines</i>: Google Earth Enterprise Fusion can be both CPU and I/O intensive; therefore we recommend that it be installed only on real (non-virtual) machines for optimal, stable performance.  On the other hand, Google Earth Enterprise Server may be run on a virtualized platform provided the guest OS is one of our supported 64-bit distributions and sufficient resources are allocated to the VM.</p>
+<h2>Software</h2>
+
+<ul>
+  <li>Oracle (Sun) Java Runtime Environment (JRE) or Java Development Kit (JDK),
+    current version 1.6.0.x</li>
+  <li>Python (the latest version available for your platform)</li>
+  <li>
+    X11 libraries, including Mesa (for disconnected production servers only)
+  </li>
+</ul>
+
+<h2>Network</h2>
+<p>You must fully configure the hostname, DNS, and IP address of each destination server prior to installing Google Earth Enterprise, and you must not change these settings. The hostname <strong>must</strong> be the full DNS name of your destination server; for example, <code>myserver.mydomainname.com</code>. Ensure that the DNS entry for your server matches its hostname exactly.</p>
+<p>You can verify the hostname of your workstation by entering <code>hostname</code> at a shell prompt, and you can verify the network connection by using the <code>ping</code> command to reach other hosts in the same network.</p>
+<h3>Configuration for searchable databases</h3>
+
+<p>When you publish a searchable database to a virtual server with a relative URL (such as <code>/default_ge</code> or <code>/default_map</code>), Google Earth Enterprise Fusion requests the hostname from the server to which you are publishing and then writes that hostname out to the search section of DBRoot. When Google Earth EC or Google Maps configures its search tabs, it uses the hostname specified in the search section of DBRoot and constructs all search requests using that hostname. If Google Earth EC or Google Maps is unable to resolve the fully qualified hostname for the search server, the search fails.</p>
+
+<p>Therefore, if you plan to publish searchable databases, you must use one of the following configurations for your servers:</p>
+
+<ul>
+  <li>Create a name-based virtual server. (See <a href="../admin/server.html#95347">Configuring Virtual Servers</a> in the <strong>Administration Guide</strong> for details.) </li>
+	<li>If you have a small number of Google Earth EC and Google Maps users
+	  accessing your searchable database, you can add an entry to each user’s <code>hosts</code> file
+	  to resolve the URL/hostname you provide to the IP address of the actual
+    server.</li>
+	<li>Ensure that the DNS entry for your server matches its hostname exactly. </li>
+	</ul>
+
+<h2>Supported Configurations</h2>
+<p> Google Earth Enterprise products are tested and developed per the
+hardware and software requirements listed above. The products are
+intended to be installed according to the processes described in
+this documentation.</p>
+<p>When installing Google Earth Enterprise in an unsupported environment,
+  there are risks that the products may not operate as intended. If
+  Technical Support assistance is required, reasonable effort will be
+  extended to troubleshoot the issue. If an unsupported environmental
+  factor is determined to be the cause, you may be asked to install the
+  products in a supported environment for further testing.</p>
+<p>Some   factors that could affect your installation and deployment are:</p>
+<ul>
+  <li>Installations on unsupported operating systems.</li>
+  <li>Improperly configured DNS.</li>
+  <li>3rd party or non-default permissions or security measures (no root
+    access, sudo blockers, etc.).</li>
+  <li>Complex proxy configurations that prevent the network communications
+    from operating as intended.</li>
+</ul>
+<p>We encourage you to contact Support or a Google Partner if you have
+  further questions regarding your operating environment.</p>
+
+<h2>Important System Security Information</h2>
+
+<p>Google strongly recommends users who wish to host 3D and 2D globes online
+  with Google Earth Enterprise should follow industry standard security
+  practices and review for their systems and networks before enabling access.
+  Although Google takes every precaution to secure the information, there is
+  always the risk of  unauthorized access outside of a closed
+  or protected network.</p>
+
+<p>For more information on setting up authentication, please
+  refer to the Administration Guide</a>.</p>
+
+</div> 
+<!-- END PAGE CONTENT -->
+  
+<p class="backtotop"><a href="#top">Back to top</a></p> 
+</div> 
+
+<!-- END WRAPPER --> 
+ 
+</body> 
+</html>

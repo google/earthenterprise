@@ -1,0 +1,55 @@
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/samples/groundoverlay_example.html";
+    </script>
+    
+   <title>groundoverlay_example.html</title>
+   <script src="http://code.google.com/www.google.com/jsapi?key=ABQIAAAA5El50zA4PeDTEMlv-sXFfRSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xTdBhxbkZWuzyYTVeclkwYHpb17ZQ"></script>
+   <script type="text/javascript">
+      var ge;
+      google.load("earth", "1");
+
+      function init() {
+         google.earth.createInstance('map3d', initCB, failureCB);
+      }
+
+      function initCB(instance) {
+         ge = instance;
+         ge.getWindow().setVisibility(true);
+         ge.getNavigationControl().setVisibility(ge.VISIBILITY_SHOW);
+
+         var la = ge.createLookAt('');
+         la.set(48.761, -121.794, 0, ge.ALTITUDE_RELATIVE_TO_GROUND, -8.541, 66.213, 20000);
+         ge.getView().setAbstractView(la);
+
+         // Create the GroundOverlay.
+         var groundOverlay = ge.createGroundOverlay('');
+
+         // Specify the image path and assign it to the GroundOverlay.
+         var icon = ge.createIcon('');
+         icon.setHref("http://www.google.com/logos/earthday08.gif");
+         groundOverlay.setIcon(icon);
+
+         // Specify the geographic location.
+         var latLonBox = ge.createLatLonBox('');
+         latLonBox.setBox(48.80, 48.75, -121.77, -121.85, 0);
+         groundOverlay.setLatLonBox(latLonBox);
+
+         // Add the GroundOverlay to Earth.
+         ge.getFeatures().appendChild(groundOverlay);
+      }
+
+      function failureCB(errorCode) {
+      }
+
+      google.setOnLoadCallback(init);
+   </script>
+
+</head>
+<body>
+
+   <div id="map3d" style="height:400px; width:600px;"></div>
+
+</body>
+</html>

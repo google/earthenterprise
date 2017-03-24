@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<title>GEE Server Viewer</title>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<link rel="apple-touch-icon-precomposed" href="/shared_assets/images/apple_icon.png"/>
+<link rel="apple-touch-startup-image" href="/shared_assets/images/apple_start.png"/>
+
+  <script src="/js/jquery.js" type="text/javascript"></script>
+  <script src="/js/togeojson.js" type="text/javascript"></script>
+  <script src="/js/gees_utilities.js" type="text/javascript"></script>
+
+  <script type="text/javascript">
+    var GEE_HOST = window.location.host;
+    var GEE_BASE_URL = window.location.protocol + '//' + GEE_HOST;
+    var geeServerDefs = gees.requests.getServerDefs(window.location.href);
+  </script>
+
+  <script src="/maps/api/earth_plugin_loader.js" type="text/javascript"></script>
+  <script src="/shared_assets/polygon_tools.js"></script>
+  <script src="/shared_assets/serving_layer_tools.js"></script>
+  <script src="/shared_assets/serving_search_tools.js"></script>
+
+  <LINK href="/shared_assets/shared.css" rel="stylesheet" type="text/css">
+  <LINK rel="icon" type="image/png" href="/shared_assets/images/google_favicon.ico">
+
+</head>
+<body>
+
+  <div id="Header">
+    <div id="GoogImg">
+      <img src="/shared_assets/images/GEE_Server_Header.png" width="103px" height="36px" border="0">
+      <label>Earth Enterprise Server</label>
+    </div>
+    <iframe class="IframeHeader" id="IframeHeader" frameborder="0" scrolling="no" style="display: none;">
+      <html><head></head><body></body></html>
+    </iframe>
+  </div>
+
+  <div id='earth'></div>
+
+  <div id="LayersHolder">
+    <div id="LayerDiv"></div>
+    <div id="SearchDiv"></div>
+    <div id="SearchResults">
+      <span>Search results
+        <img onclick="toggleResultsDiv()" id="ResultsArrow" src='/shared_assets/images/arrow_open.png'/>
+        <div onclick="hideResults()" id="CloseResults">x</div>
+      </span>
+      <div id="ResultsDiv" style="display:block;"></div>
+    </div>
+    <iframe class="IframeLayers" id="IframeLayers" frameborder="0" scrolling="no" style="display: none;">
+      <html><head></head><body></body></html>
+    </iframe>
+  </div>
+
+  <!-- BUTTER BAR -->
+
+  <div id="ButterBar">
+    <span id="ButterBarMessage"></span>
+    <a href="#" onclick="getElement('ButterBar').style.display='none';">close</a>
+  </div>
+
+  <!-- ERROR BAR -->
+
+  <div id="ErrorBar">
+    <span id="ErrorBarMessage"></span>
+    <a href="#" onclick="getElement('ErrorBar').style.display='none';">close</a>
+  </div>
+
+  <div id="SearchScriptHolder"></div>
+
+<script type='text/javascript'>
+// Note: we let the page load before attempting to load to earth element.
+initEarth();
+
+function initEarth() {
+  earthArgs = {database: window.location.href};
+  google.earth.createInstance(
+      'earth', initCB, failureCB, earthArgs);
+}
+
+// Earth Callback function.  Sets controls for Earth.
+function initCB(earth) {
+  ge = earth;
+  ge.getWindow().setVisibility(true);
+
+  ge.getNavigationControl().setVisibility(ge.VISIBILITY_AUTO);
+  getEarthLayers();
+  initSearch();
+  isServing = '3D';
+}
+
+function failureCB(earth) {
+  alert('ALERT! The Google Earth Plugin failed to load!');
+}
+
+</script>
+
+</body>
+</html>

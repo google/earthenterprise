@@ -1,0 +1,124 @@
+#-*- Python -*-
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+
+Import('third_party_env')
+
+proj_version = 'proj-4.7.0'
+datum_grid_patch = 'proj-datumgrid-1.5.zip'
+
+ge_version = proj_version.replace('proj', 'proj-ge')
+current_dir = Dir('.').abspath
+build_root = '%s/%s' % (current_dir, proj_version)
+install_root = '%s/install' % current_dir
+source = File('#/../third_party/proj/%s.tar.gz' % proj_version).abspath
+
+proj_env = third_party_env.DeepCopy()
+root_dir = Dir(proj_env.exportdirs['root']).abspath
+
+# [1] Extract
+proj_target = '%s/.extract' % current_dir
+proj_extract = proj_env.Command(
+    proj_target, source,
+    [proj_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xzf %s\n'
+        'touch %s' % (
+            current_dir, current_dir, source, proj_target))])
+
+# [2] Patch
+proj_target = '%s/.patch' % current_dir
+proj_patch = proj_env.Command(
+    proj_target, [proj_extract, proj_env.GetBuildPath(datum_grid_patch)],
+    [proj_env.MultiCommand(
+        'cd %s/nad\n'
+        'unzip -u %s\n'
+        'touch %s' % (
+            build_root, proj_env.GetBuildPath(datum_grid_patch), proj_target))])
+
+# [ ] Configure
+proj_target = '%s/.configure' % current_dir
+proj_configure = proj_env.Command(
+    proj_target, proj_patch,
+    [proj_env.MultiCommand(
+        'cd %s\n'
+        '%s ./configure --prefix=/opt/google\n'
+        'touch %s' % (build_root, proj_env['ENV']['mod_env'], proj_target))])
+
+# [3] Build
+proj_target = '%s/.build' % current_dir
+make_cmd = 'make CC="%s" CFLAGS="" CXXFLAGS="" -j%d' % (
+    proj_env['ENV']['CC'], GetOption('num_jobs'))
+proj_build = proj_env.Command(
+    proj_target, proj_configure,
+    [proj_env.MultiCommand(
+        'cd %s\n'
+        '%s %s\n'
+        'touch %s'% (build_root, proj_env['ENV']['mod_env'], make_cmd,
+                     proj_target))])
+
+# [4] Create installer
+# [4.1] headers, libraries and binaries
+# [4.2] documents
+proj_target = '%s/.install' % current_dir
+proj_install = proj_env.Command(
+    proj_target, proj_build,
+    [proj_env.MultiCommand(
+        'cd %s\n'
+        'make prefix=%s mandir=%s/share/man install\n'
+        'cd %s\n'
+        'rm -rf lib/libproj.a lib/libproj.la share/doc/packages/%s\n'
+        'mkdir -p share/doc/packages/%s\n'
+        'cd %s\n'
+        'cp -pr AUTHORS COPYING ChangeLog README %s/share/doc/packages/%s\n'
+        'touch %s' % (
+            build_root, install_root, install_root, install_root, ge_version,
+            ge_version, build_root, install_root, ge_version, proj_target))])
+
+# [5] Install
+# [5.1] headers
+# TODO: Bring all proj dependent libraries to Perforce similar to
+# proj and make sure that those use proper header files.
+# [5.2] libraries
+proj_target = '%s/.install_for_build' % current_dir
+proj_install_build = proj_env.Command(
+    proj_target, proj_install,
+    [proj_env.rsync_cmd % ('%s/bin/' % install_root,
+                           '%s/bin/' % root_dir),
+     proj_env.rsync_cmd % (
+         '%s/include/' % install_root,
+         '%s/include/' % root_dir),
+     proj_env.rsync_cmd % ('%s/lib/' % install_root,
+                           '%s/lib/' % root_dir),
+     Touch('$TARGET')])
+
+Default(proj_install_build)
+proj_env.ExecuteOnClean('rm -rf %s' % build_root)
+
+if 'install' in COMMAND_LINE_TARGETS:
+  proj_env.InstallFileOrDir('%s/bin/' % install_root,
+                      '%s/' % proj_env.installdirs['common_bin'],
+                      proj_install_build, 'install')
+  proj_env.InstallFileOrDir('%s/lib/' % install_root,
+                      '%s/' % proj_env.installdirs['common_lib'],
+                      proj_install_build, 'install')
+  proj_env.InstallFileOrDir('%s/share/' % install_root,
+                      '%s/' % proj_env.installdirs['common_share'],
+                      proj_install_build, 'install')
+
+Return('proj_extract proj_install_build')

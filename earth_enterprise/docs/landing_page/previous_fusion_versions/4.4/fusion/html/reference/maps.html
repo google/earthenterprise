@@ -1,0 +1,596 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Preparing Data for Google Maps</title>
+</head>
+
+<body>
+
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" />
+  </div>
+  <h1 id="doc_title">Reference Guide</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Reference Guide</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="intro.html">Introduction</a></li>
+    <li><a href="fundamentals.html">Fundamentals</a></li>
+    <li><a href="setup.html">Setting Up Your Workspace</a></li>
+    <li><a href="resources.html">Defining Resources</a></li>
+    <li><a href="projects.html">Defining Projects</a></li>
+    <li><a href="databases.html">Defining and Publishing Databases</a></li>
+    <li><a href="building.html">Building Assets</a></li>
+    <li><a href="maps.html" id="selected">Preparing Data for Google Maps</a></li>
+    <li><a href="commands.html">Command Line Reference</a></li>
+    <li><a href="createOwnData.html">Creating Your Own Source Data, Icons, and Masks</a></li>
+    <li><a href="htmlTags.html">HTML Tags Allowed</a></li>
+    <li><a href="plugins.html">Google Earth Plugin</a></li>
+    <li><a href="errors.html">Common Error Messages</a></li>
+    <li><a href="glossary.html">Glossary</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+<a id="37363"></a><h1><a id="70505"></a>Preparing Data for Google Maps</h1>
+
+<ol class="toc">
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#google_maps_browser_support">Google Maps Browser Support</a></li>
+  <li><a href="#defining_a_map_layer">Defining a Map Layer</a></li>
+  <li><a href="#defining_a_map_project">Defining a Map Project</a></li>
+  <li><a href="#defining_a_map_database">Defining a Map Database</a></li>
+  <li><a href="#publishing_a_map_database">Publishing a Map Database</a></li>
+  <li><a href="#viewing_a_map_database">Viewing a Map Database</a></li>
+  <li><a href="#using_the_fusion_maps_api">Using the Fusion Maps API</a></li>
+</ol>
+
+<h2 id="overview">Overview</h2>
+
+<p><a id="marker-1021306"></a><a id="marker-1021699"></a>In addition to using Google
+  Earth Enterprise Fusion to prepare and publish data in Google Earth, you can
+  use it to prepare and publish 2D map data in Google Maps. This chapter describes
+  all of the steps to prepare your data for Google Maps. It also describes 
+  the <a href="#using_the_fusion_maps_api">Google Fusion Maps API</a>.</p>
+<p>The first step in preparing any data for publication is to import the source data as Google Earth Enterprise Fusion resources. You can use the same vector resources you defined in the <a href="resources.html#79906">Defining Resources</a> chapter for Google Maps.
+</p>
+<p class="note"><strong>Note:</strong> For Google Maps, you define vector data only. You can use the same imagery project for both Google Maps and Google Earth EC databases
+</p>
+<p>
+</p>
+<p><a id="marker-1018670"></a>After you define and build your vector resources, Google Maps requires an additional step. You must define and build at least one map layer for each map project. The  <a href="maps.html#20348">Defining a Map Layer</a>section describes how to do so.
+</p>
+<p>The remaining steps are similar for Google Maps data as for Google Earth EC data.</p>
+
+<ol>
+  <li><a href="#defining_a_map_project">Define and build a project</a>.</li>
+  <li><a href="#defining_a_map_database">Define and build a database</a>.</li>
+  <li><a href="#publishing_a_map_database">Publish the map database</a>.</li>
+</ol>
+
+<h2 id="google_maps_browser_support"><a id="66107"></a>Google Maps Browser Support and Incompatibilities</h2>
+<p>Google Maps is supported by the following browsers:
+</p>
+<ul>
+  <li>Microsoft Internet Explorer (IE) 7.0 and later (for Windows)</li>
+  <li>Firefox 3.6 and later (for Windows, Mac, and Linux)</li>
+  <li>Safari 3.1 and later (for Mac and Windows)</li>
+  <li>Google Chrome (for Windows and Mac)</li>
+</ul>
+<p>Even if you are using a supported browser, there are some features in Google Earth Enterprise Fusion that are not supported by some browsers on certain operating systems. As long as you are connected to the Internet and have a license key for the Google Maps API, there is no problem (regardless of your platform), since your server contacts Google’s servers for functions that are not supported in the browser. 
+</p>
+<p>If you do not have a license key or access to the Internet, however, the following features will not work, since these features require that you connect to a Google server:
+</p>
+<ul>
+  <li>Directions
+  </li>
+  <li>Traffic
+  </li>
+  <li>KML overlays
+  </li>
+  <li>Geocoding
+  </li>
+  <li>LocalSearch
+  </li>
+</ul>
+<p>In addition, drawing polylines on maps requires the vector drawing facilities of the browser. If a browser does not support drawing polylines, Google Maps gets the support it requires from the Google servers via the Internet. If your server does not have access to the Internet and the browser does not have the required vector drawing facilities, polylines will not appear in Google Maps. See <a href="http://www.google.com/apis/maps/documentation/reference.html#GPolyline">http://www.google.com/apis/maps/documentation/reference.html#GPolyline</a> for more information.</p>
+<p>Google provides a sample application with Google Earth Enterprise Fusion to support drawing polylines, if you are not connected to the Internet or do not have a license key for the Google Maps API. The sample application is in:</p>
+<pre><code>/opt/google/gehttpd/htdocs/maps</code></pre>
+<p>The sample application files are:
+</p>
+
+<pre>example_google.html
+example_local.html
+maps_google.html
+maps_local.html</pre>
+
+<p>To create your own application, make a back-up copy of these files, and then edit them for the desired results.
+</p>
+      <p class="caution"><strong>Caution:</strong> Neither this document nor the sample application is intended to teach you how to write JavaScript. You must test your application during run-time to ensure that it works correctly on all browsers you intend to support.
+      </p>
+<h2 id="defining_a_map_layer"><a id="20348"></a>Defining a Map Layer
+</h2>
+<p><a id="marker-1026193"></a>Google Earth Enterprise supports the following types of imagery for a map layer:</p>
+<ul>
+  <li><em>Mercator Map</em>. The Mercator Map includes the Google Maps layer and uses the Google Maps API from google.com. It also uses a local copy of the Google Maps API and has no communication with google.com.</li>
+  </ul>
+
+  <ul>
+  <li><em>Flat Projection Map</em>. The Flat Projection Map uses the local copy of the Google Maps API and has no communication with google.com. The Flat Projection map is useful because the imagery layers for Google Earth and Maps can share the same database. </li>
+  </ul>
+  <p class="note"><strong>Note:</strong> The Flat Projection Map us not compatible with the maps.google.com layers that are in the Mercator Map projection. A Mercator Map and Google Google Earth database require separate copies of the imagery to work together.
+  <p>Defining a map layer consists of adding resources to the layer and defining the display rules and filters for the layer. This section describes how to do so. </p>
+<h4>To define a map layer:
+</h4>
+<br />
+
+<ol>
+  <li>Select <strong>Tools &gt; Asset Manager</strong>. The Asset Manager appears.    </li>
+  <li>From the drop-down menu, select <strong>Mercator Maps Tools (2D)</strong> or<strong> Flat Projection Map Tools (2D)</strong>.</li>
+  <li>Click 
+    <img src="images/iconLayerMaps.png" />. The Map Layer Editor appears.    
+  </li>
+  <li>Specify values in the Legend area for the entire map layer by clicking the following fields under <strong>default</strong>:
+    <ul>
+      <li><strong><a id="marker-1018674"></a>Icon</strong>: The icon that appears in the legend in Google Maps.</li>
+      <li><strong>Name</strong>: The text label that appears in the legend in Google Maps.</li>
+      <li><strong>Initial State</strong>: Determines whether the map layer is turned on or off by default in Google Maps. The first time a user connects to the database containing this map layer:
+        <ul>
+          <li>If you select <strong>On</strong> as the initial state here, the check box for the map layer is automatically checked.</li>
+          <li>If you select <strong>Off</strong> as the initial state here, the check box for the map layer is automatically unchecked.</li>
+        </ul>
+        <p>Google Maps saves the state of the check box when a user disconnects from the database. For example, if you set the initial state to <strong>Off</strong>, and then a user subsequently checks the box for a map layer in Google Maps and then disconnects from the database, the next time that user connects to that database, the state of the check box for that map layer is the same as when the user disconnected; that is, the box is checked.</p>
+        <p class="caution"><strong>Caution:</strong> If you select <strong>On</strong> as the initial state for the map layer, be aware of the performance impact on Google Maps. If a user selects too many map layers simultaneously in Google Maps, it can seriously impact performance. So it is best not to turn on too many map layers at the same time. In most situations, setting the initial state to <strong>Off</strong> is the best choice.</p>
+      </li>
+      <li><strong>Thematic Filters</strong>
+        <p>Determines which type of thematic information you want displayed in your map layer. Thematic filters are used to show variations of colors for different values of vector features.</p>
+        <p>For example, you can use color polygons to show population differences for different counties in a state. You can set the filter to analyze the distribution of populations for the set and then apply a gradient of color to each polygon that represents a county.</p>
+      </li>
+      <li><strong>Allow Feature Duplication</strong>
+        <p>Determines if the same map feature is displayed.</p>
+      </li> 
+      <li><strong>Allow Empty Layer</strong>
+        <p>Determines if an empty layer in the map is allowed.</p>
+      </li>
+    </ul>
+  </li>
+  <li>If you want to add language support for additional locales, uncheck the box next to <strong>Hide unspecialized locales</strong>. See the <a href="projects.html#17160">Legend Tab</a> section of the <strong>Defining Projects</strong> for more information about this option.</li>
+  <li><a id="43318"></a>Click <strong>Add Resource</strong>. The <strong>Open</strong> dialog appears.
+    <p><img src="images/mapLayer_AddRes.png" /></p>
+  </li>
+  <li><a id="marker-1021739"></a><a id="44196"></a>Navigate to and select the vector resource you want to add to the map layer, and click <strong>Open</strong>. The selected resource appears on the list on the left of the Map Layer Editor.
+  </li>
+  <li>Repeat steps <strong>6</strong> and <strong>7</strong> to add more resources to the map layer.</li>
+  <li>If you want to change the order of the resources on the list, use the 
+    <img src="images/arrowUp.gif" /> or 
+    <img src="images/arrowDown.gif" /> to move them up or down.
+    <p class="note"><strong>Note:</strong> The order in which the resources are listed in this dialog reflects the order in which they are rendered in Google Maps, which affects visibility and label placement. The resource at the bottom of the list is rendered first and the resource at the top of the list is rendered last. So the resource at the top of the list is always visible.    </p>
+    <p>For complete details about the buttons below the list of rules, see <a href="projects.html#45981">Additional Rule Configuration Options</a> in the <strong>Defining Projects</strong> chapter.</p>
+  </li>
+  <li>Select a display rule for a resource on the list. The <strong>Feature</strong> and <strong>Filter</strong> tabs appear on the right.
+<p>The first option on the <strong>Feature</strong> tab is <strong>Draw Features As</strong>. Your selection determines the options available for you to specify:</p>
+    <ul>
+      <li><a href="maps.html#56136">Label Only</a></li>
+      <li><a href="maps.html#95336">Lines</a></li>
+      <li><a href="maps.html#87012">Polygons</a></li>
+      <li><a href="#points">Points</a></li>
+    </ul>
+  </li>
+  <li>When you finish specifying all of the feature options for the selected display rule, you can specify one or more filters for each rule. See <a href="maps.html#90461">Specifying Filters for a Map Layer</a>.</li>
+  <li>When you finish defining display rules and filters for the resources, select <strong>File &gt; Save</strong>.</li>
+  <li>Navigate to the folder where you want
+      to save your map layer, or click <img src="images/iconCreateNewFolder.png" /> to
+      create a new folder in the desired location. </li>
+  <li><a id="marker-1023056"></a>Enter the name of your map layer, and click <strong>Save</strong>. The new map layer name appears in the Asset Manager’s asset list.</li>
+</ol>
+
+<p class="caution"><strong>Caution:</strong> Assets can not be deleted once they are saved. They can be <em>cleaned</em>, so that they are no longer available to use in Google Earth Enterprise Fusion; see <a href="building.html#85338">Cleaning Asset Versions</a> in the <strong>Building Assets</strong> chapter for more information.</p>
+
+<h4><a id="56136"></a>Label Only</h4>
+<p><a id="marker-1018747"></a>This section describes your options when you select <strong>Label Only</strong> for <strong>Draw Features As</strong> in the Map Layer Editor. </p>
+<h4>To define a display rule for a label:
+</h4>
+<br />
+
+<ol>
+  <li>Select <strong>Text</strong> or <strong>JS Text</strong>.
+  </li>
+  <li>Either enter the text you want to appear for all features or click the text insertion button (<strong>...</strong>) to the right of the empty text field. If you click the text insertion button:
+    <ul>
+      <li><strong>Text</strong> - The Label Format dialog appears.<br />
+        <p>The Insert Field drop-down list contains the names of all of the fields in your source data. Select a field name from the list, and click <strong>OK</strong>. For example, if you select <strong>NAME</strong>, the names of the roads appear in Google Earth EC.
+</p>
+      </li>
+  <li><strong>JS Text</strong> - The JavaScript Editor appears, and you can compose a JavaScript expression, which returns the string to use as the label. See <a href="projects.html#87632">Label Properties</a> in the <strong>Defining Projects</strong> chapter for more information about this editor.) </li>
+    </ul>
+  </li>
+  <li>Specify the visibility range for the layer.
+    <p>The visibility range refers to the zoom level at which your labels are visible in Google Maps. The default values for the range are <strong>8</strong> and <strong>14</strong>. That means that when a Google Maps user has a zoom level setting below <strong>8</strong> and above <strong>14</strong>, the labels are not visible.
+    </p>
+      <p class="caution"><strong>Caution:</strong> The default visibility range is much smaller that the default visibility range for vector layers destined for Google Earth EC. The reason is that building Google Maps databases can take significantly longer than building the same data for Google Earth EC. Even small increases to the end level of the range can add significant time to the build time.
+      </p>
+  </li>
+  <li>The default text style is black on white in the Sans 12 font. Click the text style button to specify a different text style for the labels.
+    <p>The <strong>Text Style</strong> dialog appears.</p>
+    <p><img src="images/mapLayerDia_LabelTextStyle.png" /></p>
+  </li>
+  <li>Select a different option, if desired, for the <strong>Size</strong> or <strong>Color</strong> of the text.
+    <p class="note"><strong>Note:</strong> The only font that Fusion provides by default is <i>Sans regular</i>. To add fonts, including international fonts such as Chinese, Japanese, or Hebrew, you can create a configuration file called a &quot;font list&quot; file. See <i>Configuring Fonts For the Text Style Dialog</i> in the <i>Administration Guide</i>.</p>
+  </li>
+  <li>Select <strong>Draw Background</strong> if you want to highlight your labels with a background color.
+    <p>If you select <strong>Draw Background</strong>, you can specify the size and color of the background. The Preview area provides a preview of a sample label as you make changes.
+    </p>
+    <ul>
+      <li>The default background size is <strong>4</strong>. To change the background size, enter the desired value. The larger the number, the larger the background.
+<p class="note"><strong>Note:</strong> Setting the background size to less than 4 could potentially crop the edges of the text. Specifying too large a number can result in overlapping labels.
+</p>
+      </li>
+  <li>Click the  <strong>Color</strong> button and select a color for the background.</li>
+  </ul>
+  </li>
+  <li>To save the text style settings, drag the preview over any button on the left.
+    <p>The new style is stored on that button, replacing any style previously assigned to that button. Each button name reflects the font face and size of the style, and it appears with the selected color and outline attributes. 
+    </p>
+    <p>After you save a style to a button, you can simply click that button to automatically select its text style settings for another label in the future.
+    </p>
+  </li>
+  <li>Click <strong>OK</strong>.</li>
+</ol>
+<h4><a id="95336"></a>Lines
+</h4>
+<p><a id="marker-1018736"></a>This section describes your options when you select <strong>Lines</strong> for <strong>Draw Features As</strong> in the Map Layer Editor. </p>
+<h4>To define a display rule for lines:
+</h4>
+<br />
+
+<ol>
+  <li>Specify the visibility range for the lines.
+    <p>The visibility range refers to the zoom level at which your labels are visible in Google Maps. The default values for the range are <strong>8</strong> and <strong>14</strong>. That means that when a Google Maps user has a zoom level setting below <strong>8</strong> and above <strong>14</strong>, the labels are not visible.    </p>
+      <p class="caution"><strong>Caution:</strong> The default visibility range is much smaller that the default visibility range for vector layers destined for Google Earth EC. The reason is that building Google Maps databases can take significantly longer than building the same data for Google Earth EC. Even small increases to the end level of the range can add significant time to the build time.      </p>
+      </li>
+  <li>Specify the color of the lines by clicking the button next to <strong>Color</strong> and selecting a color.</li>
+  <li>Specify the width of the lines.
+    <p>The default line width is <strong>2</strong>. To change the line width, enter the desired value next to Line Width. The larger the number, the thicker the line.    </p>
+    <p class="note"><strong>Note:</strong> Setting the outline width to less than 1 could potentially make it invisible.    </p>
+  </li>
+  <li>Select <strong>Label</strong> if you want to include a text label, and specify the options for the label. The label generally appears along the line, such as a street name. See <a href="maps.html#56136">Label Only</a> for more information.</li>
+  <li>Select <strong>Shield</strong> if you want to include a shield for road data, and specify the Shield options.
+    <p>The Shield options are the same as the Label options, except that you can also specify the Outline Color for the shield. To do so, click the button next to <strong>Outline</strong> <strong>Color</strong>, and select a color.</p>
+  </li>
+</ol>
+<h4><a id="87012"></a>Polygons
+</h4>
+<p><a id="marker-1018763"></a>This section describes your options when you select <strong>Polygons</strong> for <strong>Draw Features As</strong> in the Map Layer Editor. </p>
+<h4>To define a display rule for polygons:
+</h4>
+<br />
+
+<ol>
+  <li>Specify the visibility range for the polygons.
+    <p>The visibility range refers to the zoom level at which your labels are visible in Google Maps. The default values for the range are <strong>8</strong> and <strong>14</strong>. That means that when a Google Maps user has a zoom level setting below <strong>8</strong> and above <strong>14</strong>, the labels are not visible.    </p>
+      <p class="caution"><strong>Caution:</strong> The default visibility range is much smaller that the default visibility range for vector layers destined for Google Earth EC. The reason is that building Google Maps databases can take significantly longer than building the same data for Google Earth EC. Even small increases to the end level of the range can add significant time to the build time.      </p>
+</li>
+  <li>Select a mode from the drop-down list.
+    <p>The mode indicates whether the polygons appears as outlined, filled, or both in Google Maps.    If you select:    </p>
+    <ul>
+      <li><strong>Fill Only</strong> - You can set the fill color by clicking the color button.</li>
+      <li><strong>Outline Only</strong> - You can set the outline width and outline color.
+        <p>The default outline width is <strong>2</strong>. To change the outline width, edit the value in the text field. The larger the number, the thicker the outline.</p>
+        <p class="note"><strong>Note:</strong> Setting the outline width to less than 1 could potentially make it invisible.</p>
+        </li>
+      <li><strong>Outline and Fill</strong> - You can set the fill color, outline width, and outline color.      </li>
+    </ul>
+  </li>
+  <li>Select <strong>Center Label</strong> if you want to include a text label in the center of the polygon, and specify the options for the label. See <a href="maps.html#56136">Label Only</a> for more information.)  </li>
+  <li>If you selected <strong>Outline and Fill</strong> or <strong>Outline Only</strong>, select <strong>Outline Label</strong> if you want to include an outline label, and specify the options for the label. See <a href="maps.html#56136">Label Only</a> for more information.</li>
+  </ol>
+
+<h4><a name="points" id="points"></a>Points</h4>
+<p>This section describes your options when you select <strong>Points</strong> for
+    <strong>Draw Features As</strong> in the Map Layer Editor. </p>
+	
+     
+<h4>To define a display rule for points: </h4>
+<br />
+
+<ol>
+  <li>Specify the visibility range for the points. 
+	  <p>The visibility range refers to the zoom level at which your labels are visible in Google Maps. The default values for the range are <strong>8</strong> and <strong>14</strong>. That means that when a Google Maps user has a zoom level setting below <strong>8</strong> and above <strong>14</strong>, the labels are not visible.</p>
+	  <p class="caution"><strong>Caution:</strong> The default visibility range is much smaller that the default visibility range for vector layers destined for Google Earth EC. The reason is that building Google Maps databases can take significantly longer than building the same data for Google Earth EC. Even small increases to the end level of the range can add significant time to the build time.</p>
+ 
+    <p><img src="images/points.jpg" /></p>
+  </li>
+	<li> Specify the <strong>Marker Type</strong> from the drop-down menu. 
+    <p>If you select: </p>
+    <ul>
+      <li><strong>Circle </strong>- You can set width. </li>
+      <li><strong>Oval</strong> - You can set width and height. </li>
+      <li><strong>Square</strong> - You can set the width.</li>
+      <li><strong>Rectangle</strong> - You can set the width and height.</li>
+      <li><strong>Equilateral Triangle</strong> - You can set the width.</li>
+      <li><strong>Triangle</strong> - You can set the width and height.</li>
+      <li><strong>Icon  </strong>- You <em>cannot</em> set width or height. </li>
+      <li>The default outline width is <strong>2</strong>. To change the outline width,
+        edit the value in the text field. The larger the number, the thicker
+        the outline.
+        <p class="note"><strong>Note:</strong> Setting the outline width
+          to less than 1 could potentially make it invisible.</p>
+      </li>
+      <li><strong>Outline and Fill</strong> - You can set the fill color, outline width,
+          and outline color.</li>
+    </ul>
+  </li>
+  <li>Specify the <strong>Center Label </strong>type  from the drop-down
+     menu. You can choose Text to JavaScript text.</li>
+  <li>Specify the <strong>Style</strong> and <strong>Margins</strong> for the text within the point.</li>
+  <li>Specify the <strong>Outer</strong> <strong>Label</strong> text, style, and label position relative to the point.</li>
+</ol>
+
+<p>The following is an example of points that use a center label:</p>
+<p><img src="images/pointcenterlabel.jpg" /></p>
+<p>This example shows points with an icon marker type and an outer label:</p>
+<p><img src="images/pointiconoutlabel1.jpg" /></p>
+<p>This example shows a square marker type with a border:</p>
+<p><img src="images/points_square_wborder1.jpg"  /></p>
+
+<h3><a id="90461"></a>Specifying Filters for a Map Layer</h3>
+<p><a id="marker-1023230"></a>A filter is a pattern expression that is applied to a specific field of a map layer. When the pattern expression matches the specified field in the associated vector data, Google Earth Enterprise Fusion selects the matching records and applies the feature settings for the rule to those records. Filters are inclusive. Specifying filters for map layers is identical to specifying filters for vector projects.
+</p>
+<p class="note"><strong>Note:</strong> Filters match string and numeric data only, not dates and other complex patterns.<a id="marker-1023243"></a>
+</p>
+<h2 id="defining_a_map_project"><a id="25717"></a>Defining a Map Project
+</h2>
+<p><a id="marker-1018786"></a>This section describes defining map projects for Google Maps only. For information about defining vector projects for Google Earth EC, see the chapter titled <a href="projects.html#61436">Defining Projects</a>.
+</p>
+<h3><a id="33138"></a>Creating a Map Project
+</h3>
+<p>The first step in defining a map project is to specify which map layers to include and give the project a name.
+</p>
+<h4>To create a map project:
+</h4>
+<br />
+
+<ol>
+  <li>Select <strong>Tools &gt; Asset Manager</strong>. The Asset Manager appears.    </li>
+  <li>Click 
+    <img src="images/iconProjMaps.png" />. The Map Project Editor appears.</li>
+  <li><a id="68889"></a>Click 
+    <img src="images/icon_new.gif" />. The Open dialog appears.</li>
+  <li>Navigate to the folder that contains your map layers.
+    <p class="note"><strong>Note:</strong> The selection in the Type drop-down list near the bottom of this dialog determines the type of assets that appear on the list. Map Layer is automatically selected when you open this dialog from the Map Project Editor, so only map layers appear on the list.    </p>
+  </li>
+  <li><a id="47673"></a>Select the map layer you want to add to the project, and click <strong>Open</strong>.
+    <p>The selected map layer appears in the Map Project Editor.    </p>
+    <p>The value defined in the layer&apos;s <strong>Name</strong> field (at the top of the Map Layer Editor) appears under <strong>Legend Name</strong>, and the path and layer name appears under Layer. </p>
+  </li>
+  <li>If you want to override the default icon, legend name, or initial state setting, double-click the value under <strong>Legend Name</strong>.
+    <p>The <strong>Layer Legend</strong> dialog appears.</p>
+    <p><img src="images/layerLegendDia.png" /></p>
+  </li>
+  <li><a id="19762"></a>Change the desired value(s), and click <strong>OK</strong>.
+    <p>The new legend name appears in the Map Project Editor.    </p>
+    <p class="note"><strong>Tip:</strong> If you ever want to return to the default label and initial state settings, right-click the layer and select <strong>Use Layer Defaults</strong> from the context menu.</p>
+    </li>
+  <li>Repeat steps <strong>3</strong> through <strong>7</strong> for each additional map layer you want to include in the project.  </li>
+  <li>To remove a layer from a project, select the layer you want to remove, and click 
+    <img src="images/removeLayer.gif" />.
+    <p>Alternatively, you can right-click the layer, and select <strong>Remove Layer </strong>from the context menu.    </p>
+  </li>
+  <li><a id="marker-1023301"></a><a id="54351"></a>To reorder layers in a project:
+    <ol class="alpha">
+      <li><a id="72187"></a>Select the layer you want to move.<br />
+      </li>
+      <li><a id="55826"></a>Click <img src="images/arrowUp.gif" /> or <img src="images/arrowDown.gif" /> to move the selected layer until it appears where you want it on the list. 
+        <p>Alternatively, you can right-click the layer, and select <strong>Move Layer Up</strong> or <strong>Move Layer Down</strong> from the context menu.        </p>
+      </li>
+      <li>Repeat the steps<a href="maps.html#55826"></a> until the layers are in the order in which you want them to appear in the Layers panel of Google Earth EC.</li>
+    </ol>
+  </li>
+  <li>When you finish adding/modifying map layers, <a id="64792"></a>select <strong>Save</strong> from the <strong>File</strong> menu.</li>
+  <li><a id="70068"></a>Navigate to the folder where you want to save your project, or click 
+    <img src="images/iconCreateNewFolder.png" /> to create a new folder in the desired location.</li>
+  <li>Enter the name of your project, and click <strong>Save</strong>.
+    <p>The new map project name appears in the Asset Manager’s asset list.    </p>
+    <p><img src="images/assetManager_newMapProject.png" /></p>
+  </li>
+</ol>
+    <p class="caution"><strong>Caution:</strong> Assets can not be deleted once they are saved. They can be <em>cleaned</em>, so that they are no longer available to use in Google Earth Enterprise Fusion; see <a href="building.html#85338">Cleaning Asset Versions</a> in the <strong>Building Assets</strong> chapter for more information.</p>
+<p>When you finish defining your map project, you can build it individually, build several projects at the same time, or wait until you build your database to build all of its projects at the same time. </p>
+<p>When you modify and then save a map project, Google Earth Enterprise Fusion saves it in the same place with the same name as the original. If you modify a map project that you have already built, you must build a new version to make the changes available for use in a database.<a id="marker-1018793"></a>
+</p>
+<h3><a id="marker-1021849"></a>Modifying Map Projects
+</h3>
+<p>After you create a map project, you can use the Asset Manager to modify it. Modifying a map project is exactly the same as modifying any vector project. </p>
+<p>See <a href="projects.html#44960">Modifying Projects</a> in the <strong>Defining Projects</strong> chapter for complete information.</p>
+<h2 id="defining_a_map_database"><a id="43488"></a>Defining a Map Database
+</h2>
+<p><a id="marker-1018796"></a>This section provides information on defining map databases for Google Maps only. For information about defining databases for Google Earth EC, refer to the chapter titled <a href="databases.html#61436">Defining and Publishing Databases</a>.
+</p>
+
+</p>
+<h4>To define a map database:
+</h4>
+<br />
+
+<ol>
+  <li>Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu. The Asset Manager appears.
+    
+  </li>
+  <li>From the selection box, select <strong>Mercator Map Tools (2D)</strong> and click the <strong>New
+        Mercator Map Database</strong> icon.
+<p>The Map Database Editor appears with no projects selected.
+</p>
+    </li>
+  <li><a id="59253"></a>Click 
+    <img src="images/icon_new.gif" /> next to <strong>Map Project</strong>.  </li>
+  <li><a id="25862"></a>Navigate to the folder that contains your Map projects.
+    <p class="note"><strong>Note:</strong> The selection in the <strong>Type</strong> drop-down list near the bottom of this dialog determines the type of projects that appear on the list. <strong>Map Project</strong> is automatically selected, so only map projects appear on the list. </p>
+  </li>
+  <li>Select the Map project you want to add to the database, and click <strong>Open</strong>.
+    <p>The selected project appears in the Map Database Editor next to Map Project.
+    </p>
+    
+  </li>
+  <li><a id="68958"></a><strong>Mercator Map Databases only</strong>: If you have
+     a license for the Google Geo Database and would like to use it as the imagery
+     for this database, select the <strong>Use Google Geo Database</strong> checkbox. This option
+     will not be available when creating Flat Projection Map Databases.
+    <p>If you check this box, you cannot select an imagery project. In those cases, the imagery is supplied by Google, and you can skip step 7.</p>
+    <p><img src="images/mapDatabaseEditor_GeoChecked.png" /></p>
+    <p class="note"><strong>Note:</strong> Any server that hosts a Google Geo Database
+      must have access to the Internet. If you are not licensed to use the Google
+     Geo Database and would like to know more about it, please contact Google Enterprise
+     Support at <a href="mailto:enterprise-support@google.com">enterprise-support@google.com</a>.</p>
+  </li>
+  <li><a id="25002"></a>Repeat steps <strong>3</strong> through <strong>5</strong> to add an imagery project, if you did not check the box next to <strong>Google Geo Database</strong>.
+    <p>Both projects appear on the list.
+    </p>
+    <p class="note"><strong>Note:</strong> This imagery project can be the same as one you use in a database that you publish to Google Earth EC.
+    </p>
+  </li>
+  <li>If you want to configure search tabs for the database, click <strong>Search Tabs</strong>. See <a href="databases.html#48752">Adding Search Tabs to a Database</a> in the <strong>Defining and Publishing Databases</strong> chapter for details. </li>
+  <li>When you finish defining your database, select <strong>Save</strong> from the File menu.  </li>
+  <li>Navigate to the folder where you want to save your database, or click 
+    <img src="images/iconCreateNewFolder.png" /> to create a new folder in the desired location.
+  </li>
+  <li>Enter the name of your database, and click <strong>Save</strong>.
+  </li>
+</ol>
+<p>Now you are ready to build your database. See the <a href="building.html#70505">Building Assets</a> chapter for complete details.
+</p>
+      <p class="caution"><strong>Caution:</strong> Assets can not be deleted once they are saved. They can be <em>cleaned</em>, so that they are no longer available to use in Google Earth Enterprise Fusion; see <a href="building.html#85338">Cleaning Asset Versions</a> in the <strong>Building Assets</strong> chapter for more information.</p>
+<h2 id="publishing_a_map_database"><a id="63228"></a>Publishing a Map Database<a id="marker-1018801"></a>
+</h2>
+<p><a id="marker-1025907"></a>Publishing a database for Google Maps is exactly the same as publishing a database for Google Earth EC, although the list of server associations is different.</p>
+<p>See <a href="databases.html#76398">Publishing a Database</a> for complete details. You can publish a map database only to the server associations designated as MAP type.
+</p>
+<h2 id="viewing_a_map_database">Viewing a Map Database
+</h2>
+<p><a id="marker-1025908"></a>After you publish your database, you can view it in a browser.
+</p>
+<h4>To view your map database:
+</h4>
+<br />
+
+<ol>
+  <li>Launch any web browser.  </li>
+  <li>Point your browser to:<pre><code><i>serverURL</i>/default_map</code></pre>
+    <p>where <i>serverURL</i> is the full URL of the stream server to which you published the map database, including the protocol, the server location, and the port (if the port is other than the default, port 80). For example:    </p>
+    <pre><code>http://my_host_name/default_map</code></pre>
+    <p>If you are not sure which server you published to, contact your Google Earth Enterprise Server administrator for help.    </p>
+    <p>Google Maps displays your database.    </p>
+  </li>
+</ol>
+
+<h2 id="using_the_fusion_maps_api"><a name="mapsapi"></a>Using the Fusion Maps API</h2> 
+<p>The Fusion Maps API is used to create and interact with map layers created in Google Earth Enterprise. The API is based on the Google Maps API but includes an additional <code>GFusionMap</code> class that will make it easier to interact with map layers generated by Google Earth Enterprise.  The documentation for the Google Maps API is available at: <a href="http://code.google.com/apis/maps/" target="_blank">http://code.google.com/apis/<WBR>maps</a>.</p> 
+<p>Note that the Fusion Maps API does not currently support objects that require
+    calling URLs hosted at Google to operate. Objects that are not supported in the
+    Fusion Maps API include: <code>GGeoXML</code>, <code>GClientGeocoder</code>, <code>GDirections</code>, <code>GAdsManager</code>, <code>GGoogleBarOptions</code>, <code>GDirections</code>, <code>GTrafficOverlay</code>, <code>GStreetViewPanorama</code>, <code>GStreetviewOverlay</code> 
+<h3>class GFusionMap </h3> 
+<p>Instantiate class <code>GFusionMap</code> in order to create a Fusion map. This is an extension of the <code>GMap2</code> class, and the <code>GFusionMap</code> class should be used instead of <code>GMap2</code> to create applications will use layers from Google Earth Enterprise.</p> 
+<h4>Constructor</h4> 
+<table style="width:90%" summary="class GPolygon - Constructor"> 
+<tr> 
+<th>Constructor</th> 
+<th>Description</th> 
+ 
+</tr> 
+<tr> 
+<td><code>GFusionMap(container, opts?) </code></td> 
+<td>Creates a new Fusion map inside of the given HTML container, which is typically a DIV element.  The options are the same as the options for GMap2.  However, if a map type is passed in to the options, the Fusion maps server will override these if an imagery layer is included in the Fusion Maps Database. After this constructor is invoked, the <code>setCenter()</code> method should be called before any methods that display Fusion layers on top of the map.</td> 
+ 
+</tr> 
+</table> 
+<h4>Methods</h4> 
+<table style="width:90%" summary="class GPolygon - Methods"> 
+<tr> 
+<th>Methods</th> 
+<th>Return Value</th> 
+<th>Description</th> 
+</tr> 
+<tr> 
+<td><code>showInitialFusionLayers()</code></td> 
+<td><code>none</code></td> 
+<td>Show all layers that are enabled by default.  This method should only be invoked after the <code>setCenter()</code> method has been called to initially draw the map.</td> 
+</tr> 
+<tr> 
+<td><code>getFusionLayerCount()</code></td> 
+<td><code>Number</code></td> 
+<td>Returns the number of Fusion map layers.  This does not include the base imagery layer, which is built as a custom map type and serves as the background of the map.</td> 
+</tr> 
+<tr> 
+<td><code>isFusionLayerVisible(index)</code></td> 
+<td><code>Boolean</code></td> 
+<td>Returns true if the layer is currently shown on the map and false if it is hidden. </td> 
+	   </tr> 
+<tr> 
+    <td><code>showFusionLayer(index) </code></td> 
+    <td><code>none</code></td> 
+    <td>Shows a previously hidden Fusion map layer. This method should only be invoked after the <code>setCenter()</code> method has been called to initially draw the map.</td> 
+</tr> 
+<tr> 
+    <td><code>hideFusionLayer(index) </code></td> 
+    <td><code>none</code></td> 
+    <td>Hides the specified Fusion map layer. </td> 
+</tr> 
+<tr> 
+    <td><code>getFusionLayerName(index) </code></td> 
+    <td><code>String</code></td> 
+    <td>Returns the name of the specified layer.</td> 
+</tr> 
+<tr> 
+    <td><code>getFusionLayerIcon(index) </code></td> 
+    <td><code>String</code></td> 
+    <td>Returns the URL of the icon associated with the specified layer. </td> 
+</tr> 
+</table> 
+ 
+ 
+<h4>Examples</h4> 
+ 
+<p>Several  examples are installed by default  illustrate how to use the Fusion Maps
+    API. You can find these examples in:</p> 
+    
+<pre>/opt/google/gehttpd/htdocs/<WBR>maps</pre> 
+
+<p>See the following files:</p> 
+<pre>maps_local.html
+maps_google.html
+example_google.html
+example_local.html</pre>
+
+</div>
+
+<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+	<!-- END WRAPPER -->
+
+</body>
+</html>

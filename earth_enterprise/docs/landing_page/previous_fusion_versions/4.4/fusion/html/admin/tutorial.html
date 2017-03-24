@@ -1,0 +1,229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Configuring the Tutorial Work Space</title>
+</head>
+
+
+<body>
+<a name="top"></a>
+  
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" />
+  </div>
+  <h1 id="doc_title">Administration Guide</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+<ul>
+  <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+  <div class="line"></div>
+  <li><strong>Administration Guide</strong></li>
+  <li><a href="index.html">Home</a></li>
+  <li><a href="server.html">Configuring Server</a></li>
+  <li><a href="fusion.html">Configuring Fusion</a></li>
+  <li><a href="tutorial.html" id="selected">Configuring Tutorial Work Space</a></li>
+  <li><a href="commands.html">Command Reference</a></li>
+  <li><a href="errors.html">Common Server Error Messages</a></li>
+  <li><a href="mult_db.html">Multiple Database Support</a></li>
+  <div class="line"></div>
+  <li><a href="notices.html">Legal Notices</a></li>
+</ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+<h1><a id="79906"></a>Configuring the Tutorial Work Space
+</h1>
+<p>In order to accommodate users who are working through the tutorial at the same time other users (or even those same users) are working on production data, Google recommends that you configure a tutorial work space on each workstation where you install the tutorial data. That way, you can keep the tutorial source volume and asset root separate from your production source volume(s) and asset root. 
+</p>
+<p>In addition, for any user who plans to work through the tutorial lessons on search tabs and search layers, you must register the search plug-in.
+</p>
+<p>This chapter describes how to configure the tutorial work space and register the search plug-in. It also provides instructions for users who need to switch back and forth between the tutorial asset root and the production asset root, and instructions for cleaning up the tutorial files when they are no longer needed.
+</p>
+<h2><a id="96185"></a>Configuring the Tutorial Asset Root and Source Volume
+</h2>
+<p>When you install Google Earth Enterprise, you configure a source volume and asset root for your production data. If you accepted the default values, they are <code>/gevol/src</code> and <code>/gevol/assets</code>, respectively.</p>
+<p>The installation script installs the tutorial files in <code>/opt/google/share/tutorials/fusion</code>, so you must add that path as the source volume for the tutorial. In addition, Google recommends that you add a tutorial asset root for users to store the data they create with Google Earth Enterprise Fusion while working through the tutorial.</p>
+<p>The following procedure describes how to configure an asset root and the tutorial source volume for each tutorial user. You must configure them for <i>each</i> user on <i>each</i> workstation where you install the Google Earth Enterprise Fusion tutorial files.</p>
+<h4>To configure a tutorial asset root and source volume:
+</h4>
+<ol>
+  <li>On the command line, log in as root.
+  </li>
+  <li>Stop the system manager by entering:<pre><code>/etc/init.d/gefusion stop</code></pre>
+  </li>
+  <li><a id="34655"></a>Enter:<pre><code>geconfigureassetroot --new --assetroot /<i>username</i>/assets</code></pre>
+    <p>where <i>username</i> is the name of the user.
+    </p>
+    <p>The <i>username</i> does not have to be the user’s official account name. It can be anything that distinguishes that user from other users on that particular workstation, such as <code>edaniels</code> or just <code>Emily</code>.
+    </p>
+    <p class="note"><strong>Note:</strong> Google recommends that you place the tutorial asset root on the same partition as the publish root, so the publisher uses hard links instead of making copies of the tutorial databases. (See <em>Planning the Location of Your Publish Root</em> for more information.)<br /><br />
+	If you place the tutorial asset root on the root partition, ensure that there is enough disk space for the data created by each user working through the tutorial. If a user completes all lessons in the tutorial, allow 1.5 GB of disk space.
+    </p>
+    <p>The tool asks if you want to create a new source volume.
+    </p>
+  </li>
+  <li>Enter <code>Y</code>, and press <b>Enter</b>.
+    <p>You are prompted to enter a directory for the source volume.
+    </p>
+  </li>
+  <li><a id="75195"></a>Enter <code>/opt/google/share/tutorials/fusion</code>, and press <b>Enter</b>.
+    <p>The tool asks if you want to add more volumes.
+    </p>
+  </li>
+  <li>If you want to create tutorial work spaces for more users, enter <code>Y</code>, press <b>Enter</b>, and repeat steps <strong>3</strong> through <strong>5</strong>. If not, skip this step.
+  Otherwise, enter <code>N</code>, and press <b>Enter</b>.
+    <p>The tool displays the message “Configured <code>/</code><i>username</i><code>/assets</code>” and returns you to the command line prompt. 
+    </p>
+  </li>
+  <li>Log out as root.
+  </li>
+  <li>Start the system manager by entering:<pre><code>/etc/init.d/gefusion start</code></pre>
+    <p class="note"><strong>Note:</strong> The new source volume and asset root are automatically selected for you. You do not have to run the <code>geselectassetroot</code> command. (See the next section, <a href="#30190">Selecting the Tutorial Asset Root</a>, for more information about selecting different asset roots.)
+    </p>
+  </li>
+</ol>
+<h2><a id="30190"></a>Selecting the Tutorial Asset Root
+</h2>
+<p>There are two occasions when users must select a different asset root:
+</p>
+<ul>
+  <li>When multiple users share a single workstation, each user must select his or her own tutorial asset root.
+  </li>
+  <li>When a user switches from the tutorial data to real production data, he or she must select the appropriate asset root.
+  </li>
+</ul>
+<p>This section explains how to select a different asset root.</p>
+      <p class="caution"><strong>Caution:</strong> Note that even though your source volumes and asset roots are separate for each user or for the tutorial and production data, there is only one publish root on each virtual server for Earth databases and one for Map databases. 
+      </p>
+      <p>When two users are sharing a single workstation, they are both publishing to the same publish root. When one user publishes a database on that workstation, it overwrites any database that might have been published previously by another user on that same workstation. Likewise, if a user is switching back and forth between tutorial and production data on the same workstation, it is possible to overwrite a production database with a tutorial database and vice versa. Of course, the user can simply republish the desired database to make it available to Google Earth EC again.</p>
+<h4>To select the tutorial asset root:
+</h4>
+<ol>
+  <li>On the command line, log in as root.
+  </li>
+  <li>Stop the system manager by entering:<pre><code>/etc/init.d/gefusion stop</code></pre>
+  </li>
+  <li>Enter:<pre><code>geselectassetroot --assetroot /<i>username</i>/assets</code></pre>
+    <p>where <i>username</i> is the name you used in step <strong>3</strong> of <a href="#96185">Configuring the Tutorial Asset Root and Source Volume</a>.</p>
+  </li>
+  <li>Log out as root.
+  </li>
+  <li>Start the system manager by entering:<pre><code>/etc/init.d/gefusion start</code></pre>
+  </li>
+</ol>
+<h2>Registering the Search Plug-In
+</h2>
+<p>When you install the Google Earth Enterprise software, it installs a sample plug-in (called <code>ExamplePlugin</code>) in <code>/opt/google/share/searchexample</code>. Users are instructed to reference that plug-in in the <strong>Defining Search Tabs</strong> lesson in the tutorial. </p>
+<p>You must register the plug-in before users can reference it. (See <a href="commands.html#10143">Search Plug-in</a> in the <strong>Command Reference</strong> chapter for more information about the search plug-in commands for the <code>geserveradmin</code> tool.)
+</p>
+<p>To register the sample plug-in for tutorial users, on the command line, enter:</p>
+
+<pre>geserveradmin --addplugin ExamplePlugin --jar_path \
+  /opt/google/search/plugins/ExamplePlugin.jar \
+  --class com.google.earth.search.plugin.ExamplePlugin</pre>
+
+<p>This command registers the plug-in and makes it available for users to reference on search tabs.
+</p>
+<h2><a id="49921"></a>Cleaning Up the Tutorial Work Space
+</h2>
+<p>When a user completes the tutorial or no longer needs the tutorial data, you can clean up that tutorial work space, if desired, by removing the tutorial source files, asset root, and published databases. This section describes the best way to perform that clean-up.
+</p>
+<p class="note"><strong>Note:</strong> Google recommends that you keep the tutorial files intact, since they use very little space and can come in handy for users to practice, even after they have quite a bit of experience with Google Earth Enterprise Fusion.
+</p>
+<h4>To remove the tutorial source files, asset root, and databases:
+</h4>
+<ol>
+  <li>At the command line prompt, log in as root.
+  </li>
+  <li>Stop the system manager by entering:<pre><code>/etc/init.d/gefusion stop</code></pre>
+  </li>
+  <li>Select the production asset root by entering:<pre><code>geselectassetroot --assetroot /gevol/assets</code></pre>
+    <p>Substitute the appropriate asset root path, if necessary.
+    </p>
+  </li>
+  <li>Stop the Google Earth Enterprise Server:
+    <pre>/etc/init.d/geserver stop</pre>
+    <p class="note"><strong>Note:</strong> If you are upgrading from version 2.4
+        to 3.x for the first time, the command to stop the server is <code>/etc/init.d/khhttpd
+        stop</code>.
+    </p>
+  </li>
+  <li><a id="81902"></a>Insert the distribution DVD, and mount the DVD drive.
+  </li>
+  <li>Run the installer from any directory.<br />
+     <br />
+     Command-line installer:<br />
+     <pre>/media/cdrom/InstallGEFusion.sh</pre>
+     GUI installer:<br />
+     <pre>/media/cdrom/InstallGEFusionGUI.sh</pre>
+    <p>Substitute the designation for your DVD drive for <code>cdrom</code>, if necessary.
+    </p>
+    <p>The installation script starts running, and the first prompt asks what product(s) you want to install.
+    </p>
+  </li>
+  <li>Enter <b>3</b> for the Google Earth Enterprise Fusion Tutorial.
+    <p>The <b>X</b> next to Google Earth Enterprise Fusion Tutorial disappears. Removing the <b>X</b> causes the installation script to remove the tutorial files.
+    </p>
+  </li>
+  <li>Enter <b>F</b> to finish selecting products.
+  </li>
+  <li>Follow  the rest of the prompts.
+    <p>The installer removes the tutorial files but does not change any of your other installed products. When it completes the installation, it returns you to the prompt.
+    </p>
+  </li>
+  <li>Delete the user’s tutorial asset root by entering:<pre><code>rm -Rf /<i>username</i>/assets</code></pre>
+    <p>where <i>username</i> is the name of the user you specified when you configured the tutorial work space.
+    </p>
+    <p class="caution"><strong>Caution:</strong> Make sure you are removing the tutorial asset root, not the production root. If you delete the production root, there is no way to recover it (other than from back-ups, if available).
+    </p>
+  </li>
+  <li>Start the Google Earth Enterprise Fusion system manager and Google Earth Enterprise Server:<pre><code>/etc/init.d/gefusion start
+/etc/init.d/geserver start</code></pre>
+    <p>The order in which you start them does not matter.
+    </p>
+  </li>
+  <li>List the databases on the current server by entering:<pre><code>geserveradmin --listdbs</code></pre>
+    <p>The tool displays a list of all databases ever published (except any deleted databases) on the server. If the server type is omitted, the server type defaults to <code>stream</code>.</p>
+  </li>
+  <li>Select the database you want to remove by entering:
+      <pre><code>geserveradmin --deletedb <i>db_name...</i></code></pre>
+    <p>where <i>db_name</i> is the name of the database you want to delete.    </p>
+    <p class="note"><strong>Note:</strong> If you want to delete a currently published database, you can either publish a different database to the same virtual server or disable the virtual server on which it is published. Then you can delete the database.</p>
+    <p>This tool does not delete the actual files. It is similar to putting files in the trash on a Windows or Macintosh desktop.    </p>
+  </li>
+  <li>Permanently delete the selected databases by entering:<pre><code>geserveradmin --garbagecollect</code></pre>
+  </li>
+</ol>
+<p>
+</p>
+</div>
+	<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+	<!-- END WRAPPER -->
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,98 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#config Name    MapLayerLevel
+#config Base    Leaf
+#config Config  MapLayerLevelConfig
+#config Subtype MapLayerLevel
+#config FixedType Map
+
+
+// ===== MapLayerLevelAsset.h =====
+#include <autoingest/.idl/storage/MapLayerLevelConfig.h>
+
+// ===== MapLayerLevelAsset.cpp =====
+
+// ===== MapLayerLevelAssetD.h =====
+
+// ===== MapLayerLevelAssetD.cpp =====
+#include <gemaptilegen/.idl/Config.h>
+
+void
+MapLayerLevelAssetVersionImplD::DoSubmitTask(void)
+{
+  // ***** load my input versions (only if they aren't already loaded)
+  // I'll use this list of my inputs to pass to my children so they don't
+  // have to look them up over and over again
+  // My inputs are VectorProductRefs
+  InputVersionGuard guard(this);
+
+  // get my input filenames so I can pass them to the TaskDef
+  std::vector<std::string> inputFilenames;
+  inputFilenames.reserve(inputs.size()*3);
+  GetInputFilenames(inputFilenames);
+
+  // write out the config XML file used by gemaptilegen
+  gemaptilegen::Config task_config(config.level_,
+                                   config.projection_);
+  task_config.sub_layers_.resize(config.sub_layers_.size());
+  uint next_input = 0;
+  for (uint sl = 0; sl < config.sub_layers_.size(); ++sl) {
+    AssetVersion prodver = guard->inputvers[next_input++];
+    std::string prodfile = prodver->GetOutputFilename(0);
+    AssetVersion queryver = guard->inputvers[next_input++];
+    gemaptilegen::Config::SubLayer &out_layer = task_config.sub_layers_[sl];
+    MapLayerLevelConfig::SubLayer  &in_layer  = config.sub_layers_[sl];
+    out_layer.vector_product_ = prodfile;
+    out_layer.context_script_ = in_layer.context_script_;
+    std::vector<std::string> selectfiles;
+    queryver->GetOutputFilenames(selectfiles);
+    assert(selectfiles.size() == in_layer.display_rules_.size());
+
+    out_layer.display_rules_.reserve(selectfiles.size());
+    for (uint dr = 0; dr < in_layer.display_rules_.size(); ++dr) {
+      if (in_layer.display_rules_[dr].name.isEmpty()) {
+        continue;
+      }
+      out_layer.display_rules_.push_back(
+          gemaptilegen::Config::DisplayRule(
+              selectfiles[dr],
+              in_layer.display_rules_[dr].name,
+              in_layer.display_rules_[dr].feature,
+              in_layer.display_rules_[dr].site));
+    }
+  }
+  std::string configfile = WorkingFilename("config.xml");
+  task_config.Save(configfile);
+
+
+  // generate packet filename based on my name
+  std::string outdir =
+    WorkingFileRef(khReplaceExtension(khBasename(GetAssetRef()),
+                                      ".kmpacket"));
+
+  // create and submit the task
+  TaskDef task(*this);
+  task.AddInputs(inputFilenames);
+
+  // TODO: - estimate output size
+  task.AddOutput(outdir, 0 /* size estimate */);
+
+
+  task << "gemaptilegen"
+       << "--config"  << configfile
+       << "--output"  << "$OUTPUT"
+       << "--numcpus" << "$NUMCPU";
+  theAssetManager.SubmitTask(GetRef(), task);
+}

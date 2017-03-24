@@ -1,0 +1,71 @@
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/samples/html_string_balloon_example.html";
+    </script>
+    
+   <title>html_string_balloon_example.html</title>
+   <script src="http://code.google.com/www.google.com/jsapi?key=ABQIAAAA5El50zA4PeDTEMlv-sXFfRSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xTdBhxbkZWuzyYTVeclkwYHpb17ZQ"></script>
+   <script type="text/javascript">
+      var ge;      
+      google.load("earth", "1");
+
+      function init() {
+         google.earth.createInstance('map3d', initCB, failureCB);
+      }
+
+      function initCB(instance) {
+
+         ge = instance;
+         ge.getWindow().setVisibility(true);
+         ge.getNavigationControl().setVisibility(ge.VISIBILITY_SHOW);
+
+         placemark = ge.createPlacemark('');
+         var point = ge.createPoint('');
+         point.setLatitude(12.310);
+         point.setLongitude(54.321);
+         placemark.setGeometry(point);
+         placemark.setDescription('This is a feature balloon, '
+                                  + 'showing the feature\'s description. '
+                                  + 'To show the HTML string balloon when '
+                                  + 'this feature is clicked, see '
+                                  + '<a href="../'
+                                  + 'balloons.html#appear_when_clicked">'
+                                  + 'Making your HTML balloon appear when '
+                                  + 'a feature is clicked</a>.'); 
+         ge.getFeatures().appendChild(placemark);
+
+         // Show an HTML string balloon, overriding the feature's
+			// description when showing a balloon with setBalloon.
+         var balloon = ge.createHtmlStringBalloon('');
+         balloon.setFeature(placemark); // optional
+         balloon.setContentString(
+            ' <object width="200" height="150"><param name="movie" '
+            + 'value="http://www.youtube.com/v/6mrG_bsqC6k&hl=en&fs=1"/>'
+            + '<param name="allowFullScreen" value="true"/>'
+            + '<embed src="http://www.youtube.com/v/6mrG_bsqC6k&hl=en&fs=1" '
+            + 'type="application/x-shockwave-flash" allowfullscreen="true" '
+            + 'width="200" height="150"></embed></object>');
+         balloon.setBackgroundColor('#999999');
+         ge.setBalloon(balloon);
+
+         // Move the camera.
+         var la = ge.createLookAt('');
+         la.set(12.345, 54.321, 0, ge.ALTITUDE_RELATIVE_TO_GROUND, -8.541, 66.213, 10000);
+         ge.getView().setAbstractView(la);
+
+      }
+
+      function failureCB(errorCode) {
+      }
+
+      google.setOnLoadCallback(init);
+   </script>
+
+</head>
+<body>
+
+   <div id="map3d" style="height:400px; width:600px;"></div>
+
+</body>
+</html>

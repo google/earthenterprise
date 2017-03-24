@@ -1,0 +1,87 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#include <string>
+#include <autoingest/.idl/AssetStorage.h>
+#include <autoingest/.idl/TaskLists.h>
+#include <autoingest/.idl/storage/DatabaseConfig.h>
+#include <autoingest/.idl/storage/MapLayerConfig.h>
+#include <autoingest/.idl/storage/MapProjectConfig.h>
+#include <autoingest/.idl/storage/MapDatabaseConfig.h>
+#include <autoingest/.idl/storage/RasterProductConfig.h>
+#include <autoingest/.idl/storage/RasterProjectConfig.h>
+#include <autoingest/.idl/storage/VectorProductConfig.h>
+#include <autoingest/.idl/storage/VectorLayerXConfig.h>
+#include <autoingest/.idl/storage/VectorProjectConfig.h>
+#include <autoingest/.idl/storage/KMLProjectConfig.h>
+
+class khAssetManager {
+request:
+    // returns true if a build was started
+    bool BuildAsset(const std::string &assetref);
+    void CancelVersion(const std::string &verref);
+    void RebuildVersion(const std::string &verref);
+    void SetBadVersion(const std::string &verref);
+    void ClearBadVersion(const std::string &verref);
+    void CleanVersion(const std::string &verref);
+
+    void RasterProductImport(const RasterProductImportRequest &req);
+    void MercatorRasterProductImport(const RasterProductImportRequest &req);
+    void RasterProjectEdit(const RasterProjectEditRequest &req);
+    void RasterProjectNew(const RasterProjectModifyRequest& req);
+    void RasterProjectModify(const RasterProjectModifyRequest& req);
+    void RasterProjectAddTo(const RasterProjectModifyRequest& req);
+    void RasterProjectDropFrom(const RasterProjectDropFromRequest& req);
+    void MercatorRasterProjectEdit(const RasterProjectEditRequest &req);
+    void MercatorRasterProjectNew(const RasterProjectModifyRequest& req);
+    void MercatorRasterProjectModify(const RasterProjectModifyRequest& req);
+    void MercatorRasterProjectAddTo(const RasterProjectModifyRequest& req);
+    void MercatorRasterProjectDropFrom(const RasterProjectDropFromRequest& req);
+
+    void VectorProductImport(const VectorProductImportRequest &req);
+    void VectorLayerXEdit(const VectorLayerXEditRequest &req);
+    void VectorProjectEdit(const VectorProjectEditRequest &req);
+    void VectorProjectNew(const VectorProjectNewRequest& req);
+    void VectorProjectModify(const VectorProjectModifyRequest& req);
+    void VectorProjectAddTo(const VectorProjectModifyRequest& req);
+    void VectorProjectDropFrom(const VectorProjectDropFromRequest& req);
+
+    void DatabaseEdit(const DatabaseEditRequest &req);
+    void DatabaseNew(const DatabaseEditRequest &req);
+    void DatabaseModify(const DatabaseEditRequest &req);
+
+    // this is here instead of in ResourceManager.protocol because the
+    // resource manager is coded to only be able to talk to resource
+    // providers
+    TaskLists GetCurrTasks(const std::string &dummy);
+    void ReloadConfig(const std::string &dummy);
+
+    void MapProjectEdit(const MapProjectEditRequest &req);
+    void MapLayerEdit(const MapLayerEditRequest &req);
+    void MapDatabaseEdit(const MapDatabaseEditRequest &req);
+    void MapDatabaseNew(const MapDatabaseEditRequest &req);
+    void MapDatabaseModify(const MapDatabaseEditRequest &req);
+    void MercatorMapDatabaseEdit(const MapDatabaseEditRequest &req);
+    void MercatorMapDatabaseNew(const MapDatabaseEditRequest &req);
+    void MercatorMapDatabaseModify(const MapDatabaseEditRequest &req);
+
+    // Refresh the sources of a product, re-import if necessary.
+    bool ProductReImport(const std::string &assetref);
+    
+    void KMLProjectEdit(const KMLProjectEditRequest &req);
+
+    // assetdir must be relative to the assetmanager
+    void MakeAssetDir(const std::string &assetdir);
+};
+

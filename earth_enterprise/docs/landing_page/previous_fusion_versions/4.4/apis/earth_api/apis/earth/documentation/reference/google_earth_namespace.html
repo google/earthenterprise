@@ -1,0 +1,617 @@
+
+
+
+
+
+
+
+
+
+ 
+
+
+   
+  
+  
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/reference/google_earth_namespace.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>google.earth Namespace Reference - Google Earth API - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/earth/documentation/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../css/iehacks.css"><![endif]-->
+
+    <link href="../../../../css/semantic_headers.css" rel="stylesheet" type="text/css" />
+    <link href="stylesheet.css" rel="stylesheet" type="text/css">
+    <link href="tabs.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body class="gc-documentation">
+
+    
+    
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" class="dropdown" href="http://code.google.com" onclick="return false;"><img width="13" height="13" class="globeicon" src="../../../../images/globe2_small.png"
+     ><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  <a href="#gc-pagecontent">Skip to page content</a>
+  <a href="#gc-toc">Skip to main navigation</a>
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../../../../images/code_logo.png" height="40" width="161" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "ajax apis" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+<h2 id="googlecode-promo">Make web development faster with these <a href="http://chrome.google.com/extensions/featured/web_dev" onclick="siteTracker._trackEvent('Promos','Web Development',this.href);">Chrome Extensions</a>!</h2>
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Earth API</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="../../index.html" title="Google Earth API home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="../index.html" class="selected" title="Official Google Earth API documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../faq.html" title="Answers to frequently asked questions about Google Earth API">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="../../articles/index.html" title="Focused articles and tutorials for Google Earth API developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Earth API blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="http://groups.google.com/group/google-earth-browser-plugin/topics" title="Google Earth API developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="http://code.google.com/apis/maps/terms.html" title="Google Earth API terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="http://code.google.com/apis/maps/signup.html">Sign up for a Maps API key</a></li>
+</ul>
+
+<div class="line"></div>
+
+<ul>
+
+  <li>
+    <h2><a href="#">API Reference</a></h2>
+    <div class="line"></div>
+  </li>
+  <li><h2>Developer's Guide</h2>
+    <ul>
+      <li><a href="../index.html">Introduction</a></li>
+      <li><a href="../placemarks.html">Placemarks</a></li>
+      <li><a href="../balloons.html">Balloons</a></li>
+      <li><a href="../geometries.html">Geometries & Overlays</a></li>
+      <li><a href="../camera_control.html">Camera Control</a></li>
+      <li><a href="../layers.html">Layers & Controls</a></li>
+      <li><a href="../time.html">Time</a> <sup class="new">Updated</sup></li>
+      <li><a href="../ocean.html">Ocean</a></li>
+      <li><a href="../sky_mars_moon.html">Sky, Mars, & Moon</a></li>
+      <li><a href="../touring.html">Touring</a></li>
+      <li><a href="../events.html">Events</a></li>
+      <li><a href="../accessors.html">Accessors</a> <sup class="new">New!</sup></li>
+      <li><a href="../containers.html">Object Containers</a></li>
+      <li><a href="../kml.html">KML</a></li>
+      <li><a href="../options.html">Options</a></li>
+      <li><a href="../debugging.html">Debugging</a></li>
+    </ul>
+  </li>
+        
+  <div class="line"></div>
+    
+  <li><h2 class="tlw-expanded">Code Samples</h2>
+    <ul>
+      <li><a href="../examples.html">Examples</a></li>
+      <li><a href="../demogallery.html">Demo Gallery</a>
+      </li>
+      <li><a href="http://code.google.com/apis/ajax/playground/?exp=earth">Code Playground</a></li>
+    </ul>
+  </li>
+    
+  <div class="line"></div>
+    
+  <li><h2 class="tlw-expanded">More Resources</h2>
+    <ul>
+      <li><a href="../mediagallery.html">Media</a></li>
+      <li><a href="../releasenotes.html">Release Notes</a></li>
+      <li><a href="http://code.google.com/p/earth-api-utility-library">Utility Library</a></li>
+      <li><a href="http://code.google.com/p/earth-api-samples/issues/list?q=label%3AType-Defect">Known Issues</a></li>
+    </ul>
+  </li>
+</ul>
+
+<div class="line"></div>
+<ul>
+ <li>
+    <h2>Related Docs</h2>
+    <ul>                
+      <li><a href="http://code.google.com/apis/kml/documentation/index.html">KML</a></li>
+      <li><a href="http://code.google.com/apis/maps/documentation/index.html">Maps API</a></li>
+    </ul>                
+ </li>
+</ul>
+        <a class="hidden" href="#gc-topnav-anchor">More Google Earth API resource links</a>
+      </div>
+
+      <div class="g-unit" id="gc-pagecontent">
+
+<div id="doxygen-ref">
+<!-- Generated by Doxygen 1.5.8 -->
+<div class="navigation" id="top">
+</div>
+<div class="contents">
+<h1>google.earth Namespace Reference</h1><!-- doxytag: class="google.earth" -->
+<p>
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td></td></tr>
+<tr><td colspan="2"><br><h2>Public Functions</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="google_earth_namespace.html#44d6f81acf20268936d9b9b6728bf83e">isSupported</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="google_earth_namespace.html#246b165f799202509fb93fa821872a87">isInstalled</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="google_earth_namespace.html#70288485024d8129dd1c290fb2e5553b">createInstance</a> (object domNode, function initCallback, function failureCallback,[optional] object options)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="google_earth_namespace.html#e581ba393326484f4f4fcb916ff81a80">addEventListener</a> (object targetObject, string eventID, function listenerCallback,[optional] bool useCapture)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="google_earth_namespace.html#4367d554eb492adcafa52925ddbf0c71">removeEventListener</a> (object targetObject, string eventID, function listenerCallback,[optional] bool useCapture)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="google_earth_namespace.html#fca518f43d5f863b254c5fa23a5967f2">fetchKml</a> (<a class="el" href="interface_g_e_plugin.html">GEPlugin</a> pluginInstance, string url, function completionCallback)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="google_earth_namespace.html#b26414915202d39cad12bcd5bd99e739">executeBatch</a> (<a class="el" href="interface_g_e_plugin.html">GEPlugin</a> pluginInstance, function batchFunction)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="google_earth_namespace.html#e4b4da385641bf1a1df7e9950aa643f6">setLanguage</a> (string languageCode)</td></tr>
+
+</table>
+<hr><a name="_details"></a><h2>Detailed Description</h2>
+The <code>google.earth</code> namespace contains global functions that aid in the process of using the Earth API interfaces. For example, instantiation of Google Earth Browser Plug-in objects is done via the <code>google.earth.createInstance</code> method and event handling can be accomplished via the <code>google.earth.addEventListener</code> and <code>google.earth.removeEventListener</code> methods. <hr><h2>Function Documentation</h2>
+<a class="anchor" name="44d6f81acf20268936d9b9b6728bf83e"></a><!-- doxytag: member="google.earth.isSupported" ref="44d6f81acf20268936d9b9b6728bf83e" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool google.earth.isSupported           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Whether or not the Google Earth Browser Plug-in and API are supported on the current browser and operating system. 
+</div>
+</div><p>
+<a class="anchor" name="246b165f799202509fb93fa821872a87"></a><!-- doxytag: member="google.earth.isInstalled" ref="246b165f799202509fb93fa821872a87" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool google.earth.isInstalled           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Whether or not the Google Earth Browser Plug-in is currently installed on the user's machine.<p>
+<em>Note: if the plug-in is not installed, the user will be presented with a 'download' link upon calls to google.earth.createInstance().</em> 
+</div>
+</div><p>
+<a class="anchor" name="70288485024d8129dd1c290fb2e5553b"></a><!-- doxytag: member="google.earth.createInstance" ref="70288485024d8129dd1c290fb2e5553b" args="(object domNode, function initCallback, function failureCallback,[optional] object options)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void google.earth.createInstance           </td>
+          <td>(</td>
+          <td class="paramtype">object&nbsp;</td>
+          <td class="paramname"> <em>domNode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">function&nbsp;</td>
+          <td class="paramname"> <em>initCallback</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">function&nbsp;</td>
+          <td class="paramname"> <em>failureCallback</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">[optional] object&nbsp;</td>
+          <td class="paramname"> <em>options</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Attempts to create an instance of the plugin under the given web browser HTML DOM node. Upon success, calls the function passed in as the <em>initCallback</em> argument. Upon failure, calls the function passed in as the <em>failureCallback</em> argument and displays an error message to the user in place of the plug-in object.<p>
+<em>Note: The HTML DOM must be loaded before this function can be called. Common usage is to call this function upon the <code>&lt;body&gt;</code>'s <code>load</code> event, or to use <code>google.setOnLoadCallback</code>.</em><p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>domNode</em>&nbsp;</td><td>Either the string ID of the HTML DOM element or the DOM element itself (usually a <code>&lt;div&gt;</code>) that will contain the plug-in instance or error message. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>initCallback</em>&nbsp;</td><td>A function that will be called with an instance of <a class="el" href="interface_g_e_plugin.html">GEPlugin</a> as the first parameter upon successful instantiation of the plugin. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>failureCallback</em>&nbsp;</td><td>A function that will be called upon failure to instantiate the plugin. The user will also be shown a graphical error description page in place of the plugin. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>options</em>&nbsp;</td><td>(optional) A JavaScript object literal (i.e, <code>{ option1: 'value1', option2: 'value2' }</code>) containing extra initialization options. The following options are recognized: <dl>
+<dt>database </dt>
+<dd><p>
+The URL of an alternative Earth Enterprise database to connect to instead of the default database. <p>
+<em>Note: Certain changes may be required to your <a href="http://earth.google.com/enterprise/earth_server.html">Google Earth Server</a> configuration before Google Earth Plugin instances will be able to connect to it using this method. Google Earth Server versions 3.2 and higher are already pre-configured for connectivity with the plugin. Contact Google Earth Enterprise support for more details.</em> <p>
+<em>Note: Keep in mind the <a href="http://code.google.com/apis/maps/terms.html">Google Earth API Terms of Service</a> while using this parameter. </em>  </dd>
+<dt>language </dt>
+<dd><p>
+The language code specifying the language to use for road and border labels, Terms of Use text, and error messages. Supported language codes are listed in the <a href="http://spreadsheets.google.com/pub?key=p9pdwsai2hDMsLkXsoM05KQ&gid=1">Google Maps API Coverage</a> document. Note that we often update the languages that we support, so this list may not be exhaustive.  </dd>
+</dl>
+</td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="e581ba393326484f4f4fcb916ff81a80"></a><!-- doxytag: member="google.earth.addEventListener" ref="e581ba393326484f4f4fcb916ff81a80" args="(object targetObject, string eventID, function listenerCallback,[optional] bool useCapture)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void google.earth.addEventListener           </td>
+          <td>(</td>
+          <td class="paramtype">object&nbsp;</td>
+          <td class="paramname"> <em>targetObject</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>eventID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">function&nbsp;</td>
+          <td class="paramname"> <em>listenerCallback</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">[optional] bool&nbsp;</td>
+          <td class="paramname"> <em>useCapture</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Attaches a listener to a given object for a specific event; when the event occurs on the object, the given callback is invoked.<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>targetObject</em>&nbsp;</td><td>The object on which to listen to the event. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>eventID</em>&nbsp;</td><td>The event string (i.e. 'click', 'mouseover', 'frameend', etc.) identifying the event to listen for. See the individual class reference pages for available events. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>listenerCallback</em>&nbsp;</td><td>A function that will be called with an instance of <a class="el" href="interface_kml_event.html">KmlEvent</a> when the event occurs on the object. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>useCapture</em>&nbsp;</td><td>(optional) Whether or not this listener should initiate capture. For more details on event capture and bubbling, see the relevant <a href="http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-flow-capture">W3C DOM documentation</a>. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="4367d554eb492adcafa52925ddbf0c71"></a><!-- doxytag: member="google.earth.removeEventListener" ref="4367d554eb492adcafa52925ddbf0c71" args="(object targetObject, string eventID, function listenerCallback,[optional] bool useCapture)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void google.earth.removeEventListener           </td>
+          <td>(</td>
+          <td class="paramtype">object&nbsp;</td>
+          <td class="paramname"> <em>targetObject</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>eventID</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">function&nbsp;</td>
+          <td class="paramname"> <em>listenerCallback</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">[optional] bool&nbsp;</td>
+          <td class="paramname"> <em>useCapture</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Removes an event listener previously added using google.earth.addEventListener() from the event chain.<p>
+<em>Note: You must pass in the exact same function object as was passed to addEventListener. If you are using an anonymous function callback, it will need to be refactored into its own variable.</em><p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>targetObject</em>&nbsp;</td><td>The object on which to stop listening to the event. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>eventID</em>&nbsp;</td><td>The event string (i.e. 'click', 'mouseover', 'frameend', etc.) identifying the event to stop listening for. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>listenerCallback</em>&nbsp;</td><td>The function, originally passed to google.earth.addEventListener(), that should no longer be called when the event occurs. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>useCapture</em>&nbsp;</td><td>(optional) Whether or not the originally added listener was set to initiate capture. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="fca518f43d5f863b254c5fa23a5967f2"></a><!-- doxytag: member="google.earth.fetchKml" ref="fca518f43d5f863b254c5fa23a5967f2" args="(GEPlugin pluginInstance, string url, function completionCallback)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void google.earth.fetchKml           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interface_g_e_plugin.html">GEPlugin</a>&nbsp;</td>
+          <td class="paramname"> <em>pluginInstance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>url</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">function&nbsp;</td>
+          <td class="paramname"> <em>completionCallback</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Retrieves and parses a KML or KMZ file at the given URL and returns an instance of a KmlFeature-derived class representing the parsed KML object model.<p>
+<em>Note: This function does not display the feature on the Earth. See below for more information.</em><p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pluginInstance</em>&nbsp;</td><td>The instance of <a class="el" href="interface_g_e_plugin.html">GEPlugin</a> that will perform the URL fetching and parsing. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>url</em>&nbsp;</td><td>The URL at which the KML or KMZ content is posted. This URL should serve either the <a href="http://code.google.com/apis/kml/documentation/kml_tut.html#kml_server">KML or KMZ content type</a>. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>completionCallback</em>&nbsp;</td><td>A function that will be called with an instance of a KmlFeature-derived class as the first parameter upon successful fetching/parsing of the KML or KMZ content. If an error occurs, this function will be passed a null value.<br>
+<br>
+ <em>Note: In this function, you can display the loaded KML in Earth by calling <code>ge.getFeatures().appendChild(object)</code>, assuming 'ge' is the <a class="el" href="interface_g_e_plugin.html">GEPlugin</a> instance variable in the callback function's scope and 'object' is the name of the first parameter to your callback function.</em> </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="b26414915202d39cad12bcd5bd99e739"></a><!-- doxytag: member="google.earth.executeBatch" ref="b26414915202d39cad12bcd5bd99e739" args="(GEPlugin pluginInstance, function batchFunction)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void google.earth.executeBatch           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interface_g_e_plugin.html">GEPlugin</a>&nbsp;</td>
+          <td class="paramname"> <em>pluginInstance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">function&nbsp;</td>
+          <td class="paramname"> <em>batchFunction</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Efficiently executes an arbitrary, user-defined function (the batch function), minimizing the amount of overhead incurred during cross-process communication between the web browser and Google Earth Plugin. This method is useful for batching together a large set of calls to the Earth API, for example, a large number of consecutive calls to <a class="el" href="interface_kml_coord_array.html#1112bd0d4ea775ffdab8dee91b9f8d26">KmlCoordArray.pushLatLngAlt</a>. <dl class="note" compact><dt><b>Note:</b></dt><dd>This method is guaranteed to run synchronously; that is, executeBatch blocks and does not return until the batch function has completed. In fact there should be no difference between calling <code>executeBatch(fn)</code> and <code>fn()</code> besides execution performance. </dd></dl>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>pluginInstance</em>&nbsp;</td><td>The instance of <a class="el" href="interface_g_e_plugin.html">GEPlugin</a> that batched API calls will be executed on. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>batchFunction</em>&nbsp;</td><td>The function containing the code to be executed. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="e4b4da385641bf1a1df7e9950aa643f6"></a><!-- doxytag: member="google.earth.setLanguage" ref="e4b4da385641bf1a1df7e9950aa643f6" args="(string languageCode)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void google.earth.setLanguage           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>languageCode</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Sets the language to be used for new instances of the plugin. Needs to be called before google.earth.createInstance(). Affects road and border labels, the error message displayed when the plugin fails to load, as well as the language of the Terms of Use page linked from the plugin. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>languageCode</em>&nbsp;</td><td>Supported language codes are listed in the <a href="http://spreadsheets.google.com/pub?key=p9pdwsai2hDMsLkXsoM05KQ&gid=1">Google Maps API Coverage</a> document. Note that we often update the languages that we support, so this list may not be exhaustive. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+</div>
+</div><!-- end doxygen-ref -->
+
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

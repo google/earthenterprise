@@ -1,0 +1,626 @@
+# This is a generated file, composed of the following suppression rules:
+#
+#       glibc-2.2.supp xfree-4.supp xfree-3.supp
+#
+
+
+##----------------------------------------------------------------------##
+
+# Errors to suppress by default with glibc 2.2.4 / 2.2.5
+
+# Format of this file is:
+# {
+#     name_of_suppression
+#     kind: one of Param Value1 Value2 Value4 Value8
+#                   Free Addr1 Addr2 Addr4 Addr8
+#                   Cond (previously known as Value0)
+#     (if Param: name of system call param, if Free: name of free-ing fn)
+#     caller0 name, or /name/of/so/file.so
+#     caller1 name, or ditto
+#     (optionally: caller2 name)
+#     (optionally: caller3 name)
+# }
+
+#-------- For R H 7.3 on i686
+{
+   _dl_relocate_object*/*libc-2.2.?.so/_dl_catch_error*(Cond)
+   Cond
+   fun:_dl_relocate_object*
+   obj:*libc-2.2.?.so
+   fun:_dl_catch_error*
+}
+
+#-------- SuSE 8.1 stuff (gcc-3.2, glibc-2.2.5 + SuSE's hacks)
+{
+   __stpcpy/*
+   Cond
+   fun:__stpcpy
+   fun:*
+}
+{
+   strlen/decompose_rpath/_dl_map_object
+   Cond
+   fun:strlen
+   fun:decompose_rpath
+   fun:_dl_map_object
+}
+{
+   strlen/_dl_sym/dlsym_doit
+   Cond
+   fun:strlen
+   fun:_dl_sym
+   fun:dlsym_doit
+}
+{
+   trecurse/__gconv_release_shlib(Addr4)
+   Addr4
+   fun:trecurse
+   fun:__gconv_release_shlib
+}
+{
+   do_release_shlib/trecurse(Addr4)
+   Addr4
+   fun:do_release_shlib
+   fun:trecurse
+}
+
+#-------- R H Limbo (glibc-2.2.90) stuff
+{
+   elf_dynamic_do_rela.8/_dl_relocate_object_internal
+   Cond
+   fun:elf_dynamic_do_rela.8
+   fun:_dl_relocate_object_internal
+}
+
+{
+   __strnlen/_nl_make_l10nflist(Cond)
+   Cond
+   fun:__strnlen
+   fun:_nl_make_l10nflist
+}
+
+{
+   __strnlen/*vfprintf*
+   Cond
+   fun:__strnlen
+   fun:*vfprintf*
+}
+
+{
+   libXaw.so.7.0(Cond)
+   Cond
+   obj:*libXaw.so.7.0
+}
+
+#-------- Suppress errors appearing as a result of calling
+#-------- __libc_freeres()
+
+{
+   __twalk/*(Addr4)
+   Addr4
+   fun:__twalk
+}
+
+{
+   do_release_shlib/__twalk(Addr4)
+   Addr4
+   fun:do_release_shlib
+   fun:__twalk
+}
+
+{
+   __libc_freeres/free_mem/free(Free)
+   Free
+   fun:free
+   fun:free_mem
+   fun:__libc_freeres
+}
+
+#-------- Threading bugs?
+
+{
+   pthread_error/__pthread_mutex_destroy/__closedir
+   PThread
+   fun:pthread_error
+   fun:__pthread_mutex_destroy
+   fun:__closedir
+}
+
+{
+   pthread_error/__pthread_mutex_destroy/_IO_default_finish
+   PThread
+   fun:pthread_error
+   fun:__pthread_mutex_destroy
+   fun:_IO_default_finish*
+}
+
+{
+   __pthread_mutex_unlock/_IO_funlockfile
+   PThread
+   fun:__pthread_mutex_unlock
+   fun:_IO_funlockfile
+}
+
+{
+   __pthread_mutex_unlock/__register_frame_info
+   PThread
+   fun:__pthread_mutex_unlock
+   fun:__register_frame_info
+}
+
+# even more glibc suppressions ?
+{
+   libc-2.2.4.so/libc-2.2.4.so/libc-2.2.4.so(Cond)
+   Cond
+   obj:*libc-2.2.?.so
+   obj:*libc-2.2.?.so
+   obj:*libc-2.2.?.so
+}
+{
+   libc-2.2.4.so/libc-2.2.4.so/libc-2.2.4.so(Value4)
+   Value4
+   obj:*libc-2.2.?.so
+   obj:*libc-2.2.?.so
+   obj:*libc-2.2.?.so
+}
+
+##### glibc 2.2.5 stuff perhaps?
+##### suppressions for coolo
+{
+   strchr/dl_open_worker(Cond)
+   Cond
+   fun:strchr
+   fun:dl_open_worker
+}
+{ 
+   __rawmemchr(Cond)
+   Cond 
+   fun:__rawmemchr
+} 
+{ 
+   _IO_vfprintf/__strnlen(Cond)
+   Cond 
+   fun:__strnlen
+   fun:_IO_vfprintf
+} 
+{ 
+   __strchrnul/gethostbyname*(Cond)
+   Cond 
+   fun:__strchrnul
+   fun:gethostbyname*
+} 
+
+
+##----
+{
+   strlen/*dl_map_object*(Cond)
+   Cond
+   fun:strlen
+   fun:*dl_map_object*
+}
+
+{
+   strlen/*dl_open_worker*(Cond)
+   Cond
+   fun:strlen
+   fun:*dl_open_worker*
+}
+
+{
+   *rawmemchr*/*nss*(Cond)
+   Cond
+   fun:*rawmemchr*
+   fun:*nss*
+}
+
+{
+   *strchrnul*/*nss*(Cond)
+   Cond
+   fun:*strchrnul*
+   fun:*nss*
+}
+
+# gcc version 2.96 20000731 (Red Hat Linux 7.1 2.96-98)
+# on Red Hat 7.2 (x86) miscompiles __mpn_construct_double in
+# __mpn_construct_double (../sysdeps/ieee754/dbl-64/mpn2dbl.c:45)
+# (glibc-2.2.4) to read and write below %esp.  Hence the following
+# two:
+{
+   __mpn_construct_double/*(Addr4)
+   Addr4
+   fun:__mpn_construct_double
+   fun:*
+}
+{
+   __mpn_construct_double/*(Addr8)
+   Addr8
+   fun:__mpn_construct_double
+   fun:*
+}
+
+# More of the same (gcc bug, I'm pretty sure)
+{
+   __fabs/*(Addr4)
+   Addr4
+   fun:__fabs
+   fun:*
+}
+{
+   __fabs/*(Addr8)
+   Addr8
+   fun:__fabs
+   fun:*
+}
+
+
+# Not sure what this is about ... but anyway
+{
+   pthread_sighandler/*(Addr4)
+   Addr4
+   fun:pthread_sighandler
+   fun:*
+}
+
+
+# More glibc stuff, AFAICS
+
+{
+   __strnlen/__argz_stringify/_nl_make_l10nflist(Cond)
+   Cond
+   fun:__strnlen
+   fun:__argz_stringify
+   fun:_nl_make_l10nflist
+}
+
+#--------------
+{
+   _dl_relocate_object*/dl_open_worker/_dl_catch_error*(Cond)
+   Cond
+   fun:_dl_relocate_object*
+   fun:dl_open_worker
+   fun:_dl_catch_error*
+}
+{
+   _dl_relocate_object/libc-2.2.4.so/_dl_catch_error(Cond)
+   Cond
+   fun:_dl_relocate_object
+   obj:*libc-2.2.?.so
+   fun:_dl_catch_error
+}
+
+{
+   strrchr/_dl_map_object_from_fd/_dl_map_object(Cond)
+   Cond
+   fun:strrchr
+   fun:_dl_map_object_from_fd
+   fun:_dl_map_object
+}
+
+#-------------------
+{
+   socketcall.connect(serv_addr)/__libc_connect/*
+   Param
+   socketcall.connect(serv_addr)
+   fun:__libc_connect
+   fun:*
+}
+{
+   socketcall.connect(serv_addr)/libc-2.2.4.so/libc-2.2.4.so
+   Param
+   socketcall.connect(serv_addr)
+   obj:*libc-2.2.?.so
+   obj:*libc-2.2.?.so
+}
+
+#----------------------
+{
+   write(buf)/__libc_write/libX11.so.6.2/libX11.so.6.2(Param)
+   Param
+   write(buf)
+   fun:__libc_write
+   obj:/usr/X11R6/lib/libX11.so.6.2
+   obj:/usr/X11R6/lib/libX11.so.6.2
+}
+{
+   write(buf)/libc-2.2.4.so/libX11.so.6.2/libX11.so.6.2(Param)
+   Param
+   write(buf)
+   obj:*libc-2.2.?.so
+   obj:/usr/X11R6/lib/libX11.so.6.2
+   obj:/usr/X11R6/lib/libX11.so.6.2
+}
+
+#{
+#   llseek(result)/__libc_lseek64/_IO_file_seek(Param)
+#   Param
+#   llseek(result)
+#   fun:__libc_lseek64
+#   fun:_IO_file_seek
+#}
+
+{
+   writev(vector[...])/__writev/libX11.so.6.2/libX11.so.6.2
+   Param
+   writev(vector[...])
+   fun:__writev
+   obj:/usr/X11R6/lib/libX11.so.6.2
+   obj:/usr/X11R6/lib/libX11.so.6.2
+}
+
+#----------------
+{
+   __rawmemchr/libXt.so.6.0/libXt.so.6.0
+   Cond
+   fun:__rawmemchr
+   obj:/usr/X11R6/lib/libXt.so.6.0
+   obj:/usr/X11R6/lib/libXt.so.6.0
+}
+{
+   libc-2.2.4.so/libXt.so.6.0/libXt.so.6.0
+   Cond
+   obj:*libc-2.2.?.so
+   obj:/usr/X11R6/lib/libXt.so.6.0
+   obj:/usr/X11R6/lib/libXt.so.6.0
+}
+
+##----------------------------------------------------------------------##
+
+
+##----------------------------------------------------------------------##
+
+# Errors to suppress by default with XFree86 4.1.0)
+
+# Format of this file is:
+# {
+#     name_of_suppression
+#     kind: one of Param Value1 Value2 Value4 Value8
+#                   Free Addr1 Addr2 Addr4 Addr8
+#                   Cond (previously known as Value0)
+#     (if Param: name of system call param, if Free: name of free-ing fn)
+#     caller0 name, or /name/of/so/file.so
+#     caller1 name, or ditto
+#     (optionally: caller2 name)
+#     (optionally: caller3 name)
+#  }
+
+
+{
+   libX11.so.6.2/libX11.so.6.2/libX11.so.6.2(Cond)
+   Cond
+   obj:/usr/X11R6/lib/libX11.so.6.2
+   obj:/usr/X11R6/lib/libX11.so.6.2
+   obj:/usr/X11R6/lib/libX11.so.6.2
+}
+
+{
+   libXt.so.6.2/libXt.so.6.2/libXt.so.6.2(Cond)
+   Cond
+   obj:/usr/X11R6/lib/libXt.so.6.0
+   obj:/usr/X11R6/lib/libXt.so.6.0
+   obj:/usr/X11R6/lib/libXt.so.6.0
+}
+
+
+{
+   libXaw.so.7.0/libXaw.so.7.0/libXaw.so.7.0(Cond)
+   Cond
+   obj:/usr/X11R6/lib/libXaw.so.7.0
+   obj:/usr/X11R6/lib/libXaw.so.7.0
+   obj:/usr/X11R6/lib/libXaw.so.7.0
+}
+
+{
+   libXmu.so.6.2/libXmu.so.6.2/libXmu.so.6.2(Cond)
+   Cond
+   obj:/usr/X11R6/lib/libXmu.so.6.2
+   obj:/usr/X11R6/lib/libXmu.so.6.2
+   obj:/usr/X11R6/lib/libXmu.so.6.2
+}
+
+{
+   libXt.so.6.0/libXt.so.6.0/libXaw.so.7.0(Cond)
+   Cond
+   obj:/usr/X11R6/lib/libXt.so.6.0
+   obj:/usr/X11R6/lib/libXt.so.6.0
+   obj:/usr/X11R6/lib/libXaw.so.7.0
+}
+
+{
+   libXaw.so.7.0/libXaw.so.7.0/libXt.so.6.0(Value4)
+   Value4
+   obj:/usr/X11R6/lib/libXaw.so.7.0
+   obj:/usr/X11R6/lib/libXaw.so.7.0
+   obj:/usr/X11R6/lib/libXt.so.6.0
+}
+
+{
+   libXaw.so.7.0/libXaw.so.7.0/libXt.so.6.0(Cond)
+   Cond
+   obj:/usr/X11R6/lib/libXaw.so.7.0
+   obj:/usr/X11R6/lib/libXaw.so.7.0
+   obj:/usr/X11R6/lib/libXt.so.6.0
+}
+
+{
+   libX11.so.6.2/libX11.so.6.2/libXaw.so.7.0(Cond)
+   Cond
+   obj:/usr/X11R6/lib/libX11.so.6.2
+   obj:/usr/X11R6/lib/libX11.so.6.2
+   obj:/usr/X11R6/lib/libXaw.so.7.0
+}
+
+{
+   libX11.so.6.2/libXaw.so.7.0/libXaw.so.7.0(Cond)
+   Cond
+   obj:/usr/X11R6/lib/libX11.so.6.2
+   obj:/usr/X11R6/lib/libXaw.so.7.0
+   obj:/usr/X11R6/lib/libXaw.so.7.0
+}
+
+{
+   libXpm.so.4.11/libXpm.so.4.11/libXpm.so.4.11
+   Cond
+   obj:/usr/X11R6/lib/libXpm.so.4.11
+   obj:/usr/X11R6/lib/libXpm.so.4.11
+   obj:/usr/X11R6/lib/libXpm.so.4.11
+}
+
+
+##----------------------------------------------------------------------##
+
+
+##----------------------------------------------------------------------##
+
+# Errors to suppress by default with XFree86 3.3.6)
+
+# Format of this file is:
+# {
+#     name_of_suppression
+#     kind: one of Param Value1 Value2 Value4 Value8
+#                   Free Addr1 Addr2 Addr4 Addr8
+#                   Cond (previously known as Value0)
+#     (if Param: name of system call param, if Free: name of free-ing fn)
+#     caller0 name, or /name/of/so/file.so
+#     caller1 name, or ditto
+#     (optionally: caller2 name)
+#     (optionally: caller3 name)
+#  }
+
+##----------------------------------------------------------------------##
+
+{
+   X11-Cond-0
+   Cond
+   obj:*libXt.so.6.0
+   obj:*libXt.so.6.0
+   obj:*libXt.so.6.0
+}
+{
+   X11-Cond-1
+   Cond
+   fun:__rawmemchr
+   obj:*libXt.so.6.0
+   obj:*libXt.so.6.0
+}
+
+
+# Suppressions for XFree86-3.3.X
+
+{
+   X11-Addr4-1
+   Addr4
+   obj:/usr/X11R6/lib/libX11.so.6.1
+   obj:/usr/X11R6/lib/libX11.so.6.1
+   obj:/usr/X11R6/lib/libX11.so.6.1
+}
+
+{
+   X11-Addr4-2
+   Addr4
+   obj:/usr/X11R6/lib/libX11.so.6.1
+   obj:/usr/X11R6/lib/libX11.so.6.1
+   obj:/usr/X11R6/lib/libXt.so.6.0
+}
+
+{
+   X11-Addr4-3
+   Addr4
+   obj:/usr/X11R6/lib/libXt.so.6.0
+   obj:/usr/X11R6/lib/libXt.so.6.0
+   obj:/usr/X11R6/lib/libXt.so.6.0
+}
+
+{
+   X11-Addr4-4
+   Addr4
+   obj:/usr/X11R6/lib/libX11.so.6.1
+   obj:/usr/X11R6/lib/libXt.so.6.0
+   obj:/usr/X11R6/lib/libXt.so.6.0
+}
+
+{
+   X11-Addr4-5
+   Addr4
+   fun:__rawmemchr
+   obj:/usr/X11R6/lib/libXt.so.6.0
+   obj:/usr/X11R6/lib/libXt.so.6.0
+}
+
+{
+   X11-Addr4-6
+   Addr4
+   obj:/usr/X11R6/lib/libXmu.so.6.0
+   obj:/usr/X11R6/lib/libXmu.so.6.0
+   obj:/usr/X11R6/lib/libXt.so.6.0
+}
+
+{
+   X11-Addr4-7
+   Addr4
+   obj:/usr/X11R6/lib/libXt.so.6.0
+   obj:/usr/X11R6/lib/libXt.so.6.0
+   obj:/usr/X11R6/lib/libXawXpm_posing_as_Xaw.so.6.1
+}
+
+{
+   X11-Param-1
+   Param
+   write(buf)
+   fun:__libc_write
+   obj:/usr/X11R6/lib/libX11.so.6.1
+   obj:/usr/X11R6/lib/libX11.so.6.1
+}
+
+{
+   X11-Addr4-8
+   Addr4
+   obj:/usr/X11R6/lib/libX11.so.6.1
+   obj:/usr/X11R6/lib/libXpm.so.4.11
+   obj:/usr/X11R6/lib/libXpm.so.4.11
+}
+
+{
+   X11-Addr4-8
+   Addr4
+   obj:/usr/X11R6/lib/libXt.so.6.0
+   obj:/usr/X11R6/lib/libXawXpm_posing_as_Xaw.so.6.1
+   obj:/usr/X11R6/lib/libXt.so.6.0
+}
+
+{
+   X11-Addr4-9
+   Addr4
+   obj:/usr/X11R6/lib/libXaw.so.6.1
+   obj:/usr/X11R6/lib/libXt.so.6.0
+   obj:/usr/X11R6/lib/libXt.so.6.0
+}
+
+{
+   X11-Addr4-10
+   Addr4
+   obj:/usr/X11R6/lib/libXaw.so.6.1
+   obj:/usr/X11R6/lib/libXaw.so.6.1
+   obj:/usr/X11R6/lib/libXt.so.6.0
+}
+
+{
+   X11-Addr4-11
+   Addr4
+   obj:/usr/X11R6/lib/libXt.so.6.0
+   obj:/usr/X11R6/lib/libXt.so.6.0
+   obj:/usr/X11R6/lib/libXaw.so.6.1
+}
+
+
+
+##----------------------------------------------------------------------##
+{
+    QT-bugs
+    Value4
+    obj:/usr/lib/qt-3.0.3/lib/libqt-mt.so.3.0.3
+}
+{
+    QT-bugs2
+    Addr4
+    obj:/usr/lib/qt-3.0.3/lib/libqt-mt.so.3.0.3
+}

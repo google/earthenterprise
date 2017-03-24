@@ -1,0 +1,393 @@
+<!--
+  Copyright 2017 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE html><html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta http-equiv="cache-control" content="max-age=0" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="expires" content="0" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta name="google" content="notranslate">
+<meta http-equiv="Content-Language" content="en" />
+<title>Google Earth Enterprise Server</title>
+
+<LINK href="css/fonts.css" rel="stylesheet" type="text/css">
+<LINK href="css/header.css" rel="stylesheet" type="text/css">
+<LINK href="css/style.css" rel="stylesheet" type="text/css">
+<LINK href="css/buttons.css" rel="stylesheet" type="text/css">
+<LINK rel="icon" type="image/png" href="/shared_assets/images/google_favicon.ico">
+
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/gees_utilities.js"></script>
+<script type="text/javascript" src="/js/gees_initialize.js"></script>
+<script type="text/javascript" src="/admin/js/admin_tools.js"></script>
+<script type="text/javascript" src="/admin/js/database_view.js"></script>
+<script type="text/javascript" src="/admin/js/dashboard_view.js"></script>
+<script type="text/javascript" src="/admin/js/snippet_view.js"></script>
+<script type="text/javascript" src="/admin/js/search_view.js"></script>
+
+</head>
+
+<body onload="gees.admin.init()" id="body">
+
+<div id="Header">
+  <div id="GoogImg">
+   <img src="/shared_assets/images/GEE_Server_Header.png" width="103px" height="36px" border="0">
+   <label>Earth Enterprise Server</label>
+  </div>
+</div>
+
+<input type="submit" id="RegisterButton" class="StandardButton BlueButton" onclick="gees.admin.databaseView.portableManager.init()" value="Manage Portables">
+<input type="submit" id="RefreshButton" class="StandardButton" onclick="gees.admin.updateItemList()" value="">
+<input type="submit" id="SettingsButton" class="StandardButton" onclick="gees.admin.settingsDropdown()" value="">
+
+  <div id="SettingsPop" style="display:none;">
+    <div class="SettingsLabel">Tools</div>
+    <a href="javascript:void(0)" onclick="gees.tools.launch.glcAssembly();gees.admin.settingsDropdown()">Glc Assembly</a>
+    <a href="javascript:void(0)" onclick="gees.tools.launch.glcDisassembly();gees.admin.settingsDropdown()">Glc Disassembly</a>
+    <a href="/cutter/" onclick="gees.admin.settingsDropdown()" target="new">Launch Cutter</a>
+    <div class="SettingsLabel">Support</div>
+    <a href="/shared_assets/docs/manual/" target="new">Documentation</a>
+    <a href="javascript:void(0)" onclick="gees.tools.launch.apacheLogs();gees.admin.settingsDropdown()">Apache logs</a>
+    <a href="geecheck.html" onclick="gees.admin.settingsDropdown()" target="new">Diagnostics</a>
+
+  </div>
+
+  <div id="HeaderLinks">
+    <!-- Do not rename elements.  admin-header name is used by javascript to update styles. -->
+    <a name="admin-header" href="javascript:void(0)" onclick="gees.admin.dashboardView.init()" id="DASHBOARDHEADER">Dashboard</a>
+    <a name="admin-header" href="javascript:void(0)" onclick="gees.admin.databaseView.init()" id="DATABASEHEADER">Databases</a>
+    <a name="admin-header" href="javascript:void(0)" onclick="gees.admin.searchView.init()" id="SEARCHHEADER">Search tabs</a>
+    <a name="admin-header" href="javascript:void(0)" onclick="snippetView()" id="SNIPPETHEADER">Snippet profiles</a>
+  </div> <!--header links end-->
+
+<div id="RightPanel">
+
+<div id="DashboardPanel" style="display:none;">
+
+ <div class="dash_line">
+  <span class="dash_box leftbox greenfont" id="TotalFusion">-</span>
+  <span class="dash_box rightbox"><a href="javascript:void(0)">Total<br>Fusion<br>databases</a></span>
+  <span class="dash_divider">&nbsp;</span>
+  <span class="dash_box leftbox yellowfont" id="PublishedFusion">-</span>
+  <span class="dash_box rightbox"><a href="javascript:void(0)">Published<br>Fusion<br>databases</a></span>
+  <span class="dash_divider">&nbsp;</span>
+  <span class="dash_box leftbox redfont" id="FusionData">-</span>
+  <span class="dash_box rightbox"><a href="javascript:void(0)">Total<br>Fusion<br>data<br></a></span>
+ </div>
+
+ <div class="dash_line">
+  <span class="dash_box leftbox redfont" id="TotalPortables">-</span>
+  <span class="dash_box rightbox"><a href="javascript:void(0)">Total<br>Portable<br>databases</a></span>
+  <span class="dash_divider">&nbsp;</span>
+  <span class="dash_box leftbox bluefont" id="PublishedPortables">-</span>
+  <span class="dash_box rightbox"><a href="javascript:void(0)">Published<br>Portable<br>databases</a></span>
+  <span class="dash_divider">&nbsp;</span>
+  <span class="dash_box leftbox greenfont" id="PortableData">-</span>
+  <span class="dash_box rightbox"><a href="javascript:void(0)">Total<br>Portable<br>data</a></span>
+ </div>
+
+ <div class="dash_line">
+  <span class="dash_box leftbox yellowfont" id="CutterStatus">-</span>
+  <span class="dash_box rightbox"><a href="javascript:void(0)">Cutter<br>status</a></span>
+  <span class="dash_divider">&nbsp;</span>
+  <span class="dash_box leftbox greenfont" id="TotalSearchTabs"></span>
+  <span class="dash_box rightbox"><a href="javascript:void(0)">Total<br>search tabs</a></span>
+  <span class="dash_divider">&nbsp;</span>
+  <span class="dash_box leftbox bluefont" id="TotalSnippetProfiles">-</span>
+  <span class="dash_box rightbox"><a href="javascript:void(0)">Snippet<br>profiles</a></span>
+ </div>
+
+</div>
+
+<!-- Do not rename buttons with name admin-button. Name is used by javascript to reveal/hide buttons. -->
+<div id="MenuButtons">
+  <input name="admin-button" type="submit" id="PublishButton" class="StandardButton" onclick="gees.admin.popupOpen('PublishDatabasePopup');" value="Publish" style="display:none;">
+  <input name="admin-button" type="submit" id="DeleteFusionButton" class="StandardButton" onclick="gees.admin.databaseView.remove.init()" value="Remove" style="display:none;">
+  <input name="admin-button" type="submit" id="RepublishButton" class="StandardButton" onclick="republish()" value="Re-publish" style="display:none;">
+  <input name="admin-button" type="submit" id="UnpublishButton" class="StandardButton" onclick="gees.admin.databaseView.unpublish.init()" value="Unpublish" style="display:none;">
+  <input name="admin-button" type="submit" id="PreviewButton" class="StandardButton" onclick="gees.admin.databaseView.previewDatabase()" value="Preview" style="display:none;">
+  <input name="admin-button" type="submit" id="CreateSearchDefButton" class="StandardButton" onclick="gees.admin.searchView.searchDefForm.openInCreateMode()" value="Create new" style="display:none;">
+  <input name="admin-button" type="submit" id="CreateSnippetButton" class="StandardButton" onclick="gees.admin.popupOpen('SnippetPopup')" value="Create new" style="display:none;">
+  <input name="admin-button" type="submit" id="DeleteSearchDefButton" class="StandardButton" onclick="gees.admin.searchView.deleteSearchDefDialog.create()" value="Delete" style="display:none;">
+  <input name="admin-button" type="submit" id="EditSearchDefButton" class="StandardButton" onclick="gees.admin.searchView.searchDefForm.openInEditMode()" value="Edit" style="display:none;">
+  <input name="admin-button" type="submit" id="EditSnippetButton" class="StandardButton" onclick="snippetChange()" value="Edit" style="display:none;">
+  <input type="submit" id="PageRight" onclick="gees.admin.paging.right()" class="" value="">
+  <input type="submit" id="PageLeft" onclick="gees.admin.paging.left()" class="disabled" value="">
+  <div id="PageLabel"></div>
+</div>
+
+<div id="MenuRight"></div>
+<div id="ExistingSnippets"></div>
+<div id="SnippetEditor"></div>
+<div id="LastUpdate"></div>
+
+</div>
+
+<!-- PUBLISH DATABASE MODAL -->
+
+<div id="PublishDatabasePopup" class="kd-settings visible demo" style="clear: both;">
+  <div class="kd-settings-hd">
+    <div class="kd-formbuttons">
+      <input type="submit" class="StandardButton" onclick="gees.admin.popupClose('PublishDatabasePopup')" value="Cancel">&nbsp;&nbsp;&nbsp;<input type="submit" class="StandardButton BlueButton" onclick="gees.admin.databaseView.publish.validateForm()" value="Publish">
+    </div>
+      <h1 id='PublishHead' style="margin-top:0;">Publish database</h1>
+    </div>
+    <div class="kd-settings-content" id="kd-settings-content">
+      <div class="kd-settings-pane general selected">
+      <div class="kd-settings-pane-section">
+        <div class="setting-label">
+          Publish point
+        </div>
+
+        <input type="text" id="NewGlobePublishPoint" class="PublishText" placeholder="ex: your_desired_publish_point"/>
+        <em id="NoPublishName">Please specify a publish point</em>
+        <label id="ShowSelectedSearchTabs"></label>
+      </div>
+
+      <div class="kd-settings-pane-section" name="FusionOnlyPublish" id="POIDiv">
+        <div class="setting-label">
+          Search options
+        </div>
+        <div class="setting-content">
+          POI Search:
+          <input id="poi_radio_off" type="radio" name="poi" onclick="gees.admin.databaseView.publish.ui.toggleEnhancedPoi()">Off
+          <input id="poi_radio" type="radio" name="poi" onclick="gees.admin.databaseView.publish.ui.toggleEnhancedPoi()" checked>On
+          <span id="EnhancedSearchOption">
+            + Enhanced Search:
+            <input type="radio" name="enhanced" >Off
+            <input id="enhanced_search_radio" type="radio" name="enhanced" checked>On
+          </span>
+          <p class="poi_suggestion" id="poi_suggestion_label">Suggestion: <input type="text" id="poi_suggestion" placeholder="Points of interest" size="40"/>
+        </div>
+      </div>
+
+      <div class="kd-settings-pane-section" name="FusionOnlyPublish">
+        <div class="setting-label">
+          Search Tabs
+        </div>
+        <span id="SearchTabsInset"></span>
+        <span id="AddSearchTabs"></span>
+      </div>
+
+      <div class="kd-settings-pane-section" name="FusionOnlyPublish" id="SupplementalSearchOptions">
+        <div class="setting-label">
+          Supplemental Search Tabs
+        </div>
+        <span id="SupplementalSearchTabsInset"></span>
+        <span id="SupplementalAddSearchTabs"></span>
+      </div>
+
+      <div class="kd-settings-pane-section" name="FusionOnlyPublish" id="SupplementalSearchLabel">
+        <div class="setting-label">
+          Supplemental Search Label
+        </div>
+        <input type="text" id="SupplementalSearchLabelInput" class="PublishText" placeholder="ex: Label for supplemental search.  Default: More..."/>
+      </div>
+
+      <div class="kd-settings-pane-section" name="FusionOnlyPublish" id="SnippetPublishOptions">
+        <div class="setting-label">
+          Snippet profiles
+        </div>
+        <span id="PublishMenuSnippets"></span>
+      </div>
+
+      <div class="kd-settings-pane-section">
+        <div class="setting-label">
+          Virtual host
+        </div>
+        <span id="PublishVirtualHost"></span>
+      </div>
+
+      <div class="kd-settings-pane-section" id="WmsOption">
+        <div class="setting-label">
+          Serve WMS
+        </div>
+      <input id="wms_radio_off" type="radio" name="wms" checked>Off
+      <input id="wms_radio" type="radio" name="wms">On
+      </div>
+
+    </div>
+  </div>
+ </div>
+</div>
+
+
+<!-- SEARCH TAB MODAL -->
+
+<div id="CreateSearchPopup" class="kd-settings visible demo" style="clear: both;">
+  <div class="kd-settings-hd">
+    <div class="kd-formbuttons">
+      <input type="submit" class="StandardButton" onclick="gees.admin.searchView.searchDefForm.close()" id="SearchDefCancelButton" value="Cancel">&nbsp;&nbsp;&nbsp;
+      <input type="submit" class="StandardButton BlueButton" onclick="gees.admin.searchView.searchDefForm.validate()" id="SearchDefSaveButton" value="Save">
+    </div>
+      <h1 id='SearchDefHead' style="margin-top:0;"></h1>
+    </div>
+    <div class="kd-settings-content" id="kd-settings-content">
+      <div class="kd-settings-pane general selected">
+
+      <div class="kd-settings-pane-section">
+        <div class="setting-label">
+          Name
+        </div>
+      <input type="text" id="SearchDefName" class="PublishText" placeholder="name your search tab" name="Name"/>
+      </div>
+
+      <div class="kd-settings-pane-section">
+        <div class="setting-label">
+          Label
+        </div>
+      <input type="text" id="SearchDefLabel" class="PublishText" placeholder="enter label here" name="Label"/>
+      </div>
+
+      <div class="kd-settings-pane-section">
+        <div class="setting-label">
+          URL
+        </div>
+      <input type="text" id="SearchDefUrl" class="PublishText" placeholder="enter key here" name="URL"/>
+      </div>
+
+      <div class="kd-settings-pane-section">
+        <div class="setting-label">
+          Additional query parameters
+        </div>
+      <input type="text" id="SearchDefQueryParams" class="PublishText" placeholder="enter query parameters here"/>
+      </div>
+
+      <div class="kd-settings-pane-section">
+        <div class="setting-label">
+          Additional config parameters
+        </div>
+      <input type="text" id="SearchDefConfigParams" class="PublishText" placeholder="enter config parameters here"/>
+      </div>
+
+      <div class="kd-settings-pane-section">
+        <div class="setting-label">
+          Advanced options for 3D databases
+        </div>
+      <button class="advanced3DOptionsToggle" id="advanced3DOptionsToggle" onclick="gees.admin.searchView.searchDefForm.toggle3DSearchOptions()">
+        show advanced 3D options
+      </button>
+
+      <div class="advanced3DSearchTabOptions" id="advanced3DSearchTabOptions">
+        <span>
+          <label>Result type</label>
+          <label>
+            <input type="radio" name="3DSearchOptionResultTypeRadio" id="3DSearchOptionResultTypeKML" value="KML" checked>
+            <em>KML</em>
+            <input type="radio" name="3DSearchOptionResultTypeRadio" id="3DSearchOptionResultTypeXML" value="XML">
+            <em>XML</em>
+          </label>
+        </span>
+        <span>
+          <label>HTML transform url</label>
+          <input type="text" id="3DSearchOptionHtmlTransformUrl" placeholder="default: about:blank">
+        </span>
+        <span>
+          <label>KML transform url</label>
+          <input type="text" id="3DSearchOptionKmlTransformUrl" placeholder="default: about:blank">
+        </span>
+        <span>
+          <label>Suggest server</label>
+          <input type="text" id="3DSearchOptionSuggestServer" placeholder="default: about:blank">
+        </span>
+      </div>
+
+      </div>
+
+      <div class="kd-settings-pane-section search_defs_section" id="SearchDefFieldListing">
+
+      </div>
+      <a href="javascript:void(0)" onclick="gees.admin.searchView.searchDefForm.searchFieldDefinitionList.newElement()" class="search_link" id="add_field_link"
+     > add field</a>
+     <a href="javascript:void(0)" style="display:none" onclick="gees.admin.searchView.searchDefForm.searchFieldDefinitionList.removeLastElement()" class="remove_link" id="remove_field_link"
+     > remove last field</a>
+      </div>
+
+    </div>
+  </div>
+ </div>
+</div>
+
+<div id="SnippetPopup" class="kd-settings visible demo" style="clear: both;">
+  <div class="kd-settings-hd">
+    <div class="kd-formbuttons">
+      <input type="submit" class="StandardButton" onclick="gees.admin.popupClose('SnippetPopup')" value="Cancel">&nbsp;&nbsp;&nbsp;<input type="submit" class="StandardButton BlueButton" onclick="newSnippetProfile()" value="Create">
+    </div>
+      <h1 id='PublishHead' style="margin-top:0;">Create new snippet profile</h1>
+    </div>
+    <div class="kd-settings-content" id="kd-settings-content">
+      <div class="kd-settings-pane general selected">
+      <div class="kd-settings-pane-section">
+        <div class="setting-label">
+          Profile name
+        </div>
+        <input type="text" id="NewProfileName" class="PublishText" placeholder="ex: profile_name"/>
+      </div>
+    </div>
+  </div>
+ </div>
+</div>
+
+<!-- REGISTER PORTABLE MODAL -->
+
+<div id="RegisterPopup">
+  <h1>
+    Manage portable globes
+    <input type="submit" id="ClosePortableButton" onclick="gees.admin.closeAllPopups()" class="StandardButton" value="Close">
+    <input type="submit" id="RefreshPortableButton" onclick="gees.admin.databaseView.portableManager.refresh()" class="StandardButton" value="">
+  </h1>
+  <p id="PortableGlobeHeader">
+    <span>
+      <label class="large_label port_legend">Name/Download</label>
+      <label class="large_label port_legend">Description</label>
+      <label class="small_label port_legend">Size</label>
+      <label class="small_label port_legend">Date</label>
+      <label class="small_label port_legend">Register</label>
+    </span>
+  </p>
+  <p id="PortableGlobeRegistry"></p>
+  <p>
+    <span id="PortableGlobeSummary"></span>
+  </p>
+</div>
+
+<!-- BUTTER BAR -->
+
+<div name="admin-popup" id="ButterBar">
+  <span id="ButterBarMessage"></span>
+  <a href="javascript:void(0)" onclick="gees.dom.hide('ButterBar');">close</a>
+</div>
+
+<!-- ERROR BAR -->
+
+<div name="admin-popup" id="ErrorBar">
+  <span id="ErrorBarMessage"></span>
+  <a href="javascript:void(0)" onclick="gees.dom.hide('ErrorBar');">close</a>
+</div>
+
+<div id="SettingsOverlay" onclick="gees.admin.settingsDropdown()" style="display: none"></div>
+
+<div name="admin-popup" id="NotificationModal" style="display:none;">
+  <h1 id='NoteTitle'></h1>
+  <span id="NoteContents"></span>
+  <div id="NoteButtons"></div>
+</div>
+
+<div name="admin-popup" id="WhiteOverlay" onclick="gees.admin.closeAllPopups()"></div>
+
+</body>
+</html>

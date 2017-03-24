@@ -1,0 +1,978 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+  
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/geocoding/v2/index.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Geocoding API V2 - Google Maps Geocoding API V2 - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/maps/documentation/geocoding/v2/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../../css/iehacks.css"><![endif]-->
+
+<link href="../../local_extensions.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container" class="depr">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps Geocoding API V2 (<a href="../../../terms.html#section_4_4">Deprecated</a>)</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="../index.html" title="Google Maps Geocoding API V2 home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="../index.html" class="selected" title="Official Google Maps Geocoding API V2 documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../../faq.html" title="Answers to frequently asked questions about Google Maps Geocoding API V2">FAQ</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps Geocoding API V2 blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="http://groups-beta.google.com/group/Google-Maps-API" title="Google Maps Geocoding API V2 developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../../../terms.html" title="Google Maps Geocoding API V2 terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <a name="gc-toc-anchor"></a>  
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../../../index.html">Maps API Family</a></li>
+  <li><a href="../../../signup.html">Sign Up for an API Key</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+    <div class="line"></div>
+      <ul>
+        <li><h2><a href="../../webservices/index.html">Maps API Web Services</a></h2>
+         <ul>
+           <li><a href="../index.html">Geocoding API</a></li>
+           <li><a href="index.html">Geocoding API V2</a></li>
+           <li><a href="../../directions/index.html">Directions API</a></li>
+           <li><a href="../../elevation/index.html">Elevation API</a></li>
+           <li><a href="../../places/index.html">Places API</a></li>
+         </ul>
+       </li>
+      </ul>
+<div class="line"></div>
+<ul>
+  <li><h2>Maps JavaScript API V3</h2>
+    <ul>
+      <li><a href="../../javascript/index.html">Home Page</a></li>
+      <li><a href="../../javascript/basics.html">Documentation</a></li>
+    </ul>
+  </li>
+</ul>
+      <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../../javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../../javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+<div class="line"></div>
+<ul>
+  <li><h2>Maps API for Flash</h2>
+    <ul>
+      <li><a href="../../flash/index.html">Home Page</a></li>
+      <li><a href="../../flash/intro.html">Documentation</a></li>
+    </ul>
+  </li>
+</ul>
+   <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../../mapsdata/index.html">Home Page</a></li>
+          <li><a href="../../mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+       <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../../staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+<div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../../localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../../localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+   <div class="line"></div>
+<div class="promo">
+<p><a href="../../premier/index.html">Google Maps API Premier</a></p>
+<p>Includes enterprise licensing and support</p>
+</div>
+
+      </div>
+      
+      <a name="gc-pagecontent-anchor"></a>   
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Geocoding API V2</h1>
+
+
+<p class="note">Note: The Google Maps Geocoding API Version 2
+has been officially deprecated as of March 8, 2010. The V2 API will continue
+to work as per our <a href="../../../terms.html#section_4_4">deprecation policy</a>,
+but we encourage you to migrate your code to the new
+<a href="../index.html">Geocoding API</a>.</p>
+
+
+<div class="toc">
+  <ol>
+  <li><a href="#Geocoding">What is Geocoding?</a></li>
+  <li><a href="#Limits">Usage Limits</a></li>
+  <li><a href="#GeocodingRequests">Geocoding Requests</a></li>
+  <li><a href="#GeocodingResponses">Geocoding Responses</a>
+  <ol>
+    <li><a href="#JSON">JSON</a>
+    <li><a href="#KML">XML and KML</a>
+    <li><a href="#CSV">CSV</a>
+    <li><a href="#StatusCodes">Status Codes</a></li>
+  </ol>
+  </li>
+  <li><a href="#ReverseGeocoding">Reverse Geocoding</a>&nbsp;<sup class="new">New!</sup></li>
+  <li><a href="#Viewports">Viewport Biasing</a></li>
+  <li><a href="#CountryCodes">Country Code Biasing</a></li>
+  <li><a href="#GeocodingAccuracy">Geocoding Accuracy</a></li>
+  </ol>
+</div>
+
+<div class="special">
+<p><span style="color:red; ">Note:</span> This document discusses the V2 HTTP Geocoder,
+currently used by the Google Maps JavaScript API V2. This geocoder has now been
+deprecated in favor of the <a href="../index.html">
+Geocoding API V3</a>.</p>
+</div>
+
+<h1><a name="Geocoding" id="Geocoding"></a>What is Geocoding?</h1>
+
+<p>Geocoding is the process of converting addresses (like "1600 Amphitheatre 
+Parkway, Mountain View, CA") into geographic coordinates (like latitude 
+37.423021 and longitude -122.083739), which you can use to place markers or 
+position the map. The Google Geocoding API provides a direct way
+to access a geocoder via an HTTP request.</p>
+
+<p><span style="color:red">Note: </span> the Geocoding API may only be
+used in conjunction with displaying results on a Google map; geocoding
+results without displaying them on a map is prohibited. For complete
+details on allowed usage, consult the 
+<a href="../../../terms.html#section_10_12">Maps API Terms of Service
+License Restrictions</a>.</p>
+
+<p>This service is designed for geocoding static (known) addresses using a REST
+interface, for placement of application content on a map. For dynamic geocoding
+of user-defined addresses (for example, within a user interface element),
+consult the documentation for the
+<a href="../../services.html#Geocoding">JavaScript
+Client Geocoder</a> or the <a href="../../flash/services.html#Geocoding">
+Maps API for Flash Client Geocoder</a>.</p>
+
+<p>Geocoding is a time and resource intensive task. Whenever possible,
+pre-geocode known addresses (using the Geocoding API described here or another 
+geocoding service), and store your results in a temporary cache of your own design.</p>
+
+<h1 id="Limits">Usage Limits</h1> 
+ 
+<p>Use of the Google Geocoding V2 API is subject to a query limit of
+15,000 geolocation requests per day.
+This limit is enforced to prevent abuse and/or repurposing of the
+Geocoding API, and this limit may be changed in the future without notice.
+Additionally, we enforce a request rate limit to prevent abuse of the service.
+If you exceed the 24-hour limit or otherwise abuse the service, the Geocoding
+API may stop working for you temporarily. If you continue to exceed this
+limit, your access to the Geocoding API may be blocked.</p> 
+ 
+<p><span style="color:red">Note: </span> the Geocoding API may
+only be used in conjunction with a Google map; geocoding
+results without displaying them on a map is prohibited. For complete
+details on allowed usage, consult the
+<a href="../../../terms.html#section_10_12">Maps API Terms of Service
+License Restrictions</a>.</p> 
+
+<h1><a name="GeocodingRequests" id="GeocodingRequests"></a>Geocoding Requests</h1>
+
+<p>You may access the Google Geocoding API directly over HTTP.
+To access the geocoder, send
+a request to <a href="http://maps.google.com/maps/geo?">http://maps.google.com/maps/geo?</a>
+with the following parameters in the URL:
+</p>
+
+<ul>
+  <li><code>q</code> (<i>required</i>) &mdash; The address that you want to geocode.<span
+  style="color:red">*</span></li>
+  <li><code>key</code> (<i>required</i>) &mdash; Your API key.</li>
+  <li><code>sensor</code> (<i>required</i>) &mdash; Indicates whether or not the geocoding request comes 
+  from a device with a location sensor. This value must be either <code>true</code> or <code>false</code>.
+  (Note that devices with sensors generally perform their own geocoding by definition; therefore,
+  most geocoding requests to the Geocoding API should set <code>sensor</code> to <code>false</code>.)</li>
+  <li><code>output</code> (<i>required</i>) &mdash; The format in which the output should be generated. 
+  The options are <code>xml</code>, <code>kml</code>, <code>csv</code>, or (default) <code>json</code>.
+  (For more information, see <a href="#Responses">Geocoding Responses</a> below.)</li>
+  <li><code>hl</code> (<i>optional</i>) &mdash; The language in which to return results. See the 
+  <a href="../../../faq.html#languagesupport">supported list of domain languages</a>. Note that we often 
+  update supported languages so this list may not be exhaustive. If <code>hl</code> is not supplied,
+  the geocoder will attempt to use the native language of the domain from which the request is sent 
+  wherever possible.</li> 
+  <li><code>ll</code> (<i>optional</i>) &mdash; The {latitude,longitude} of the viewport center 
+  expressed as a comma-separated string (e.g. "ll=40.479581,-117.773438" ). This parameter
+  only has meaning if the <code>spn</code> parameter is also passed to the geocoder.
+  (For more information see <a href="#Viewports">Viewport Biasing</a> below.)</li>
+  <li><code>spn</code> (<i>optional</i>) &mdash; The "span" of the viewport expressed as a 
+  comma-separated string of {latitude,longitude} (e.g. "spn=11.1873,22.5" ). This parameter
+  only has meaning if the <code>ll</code> parameter is also passed to the
+  geocoder. (For more information see <a href="#Viewports">Viewport Biasing </a> below.)</li>
+  <li><code>gl</code> (<i>optional</i>) &mdash; The country code, specified as a ccTLD 
+  ("top-level domain") two-character value. (For more information see 
+  <a href="#CountryCodes">Country Code Biasing</a> below.)</li>
+</ul>
+
+<p>Note: The <code>gl</code> and <code>spn,ll</code> viewport parameters will 
+only influence, not fully restrict, results from the geocoder.</p>
+
+<p><span style="color:red">*</span> Note that if you supply a textual latitude/longitude value in the 
+<code>q</code> parameter, this query initiates a <i>reverse geocode</i>. For more information, see 
+<a href="#ReverseGeocoding">
+Reverse Geocoding</a> below.</p>
+
+<p>In this example, we request the geographic coordinates of Google's headquarters:</p>
+
+<pre class="prettyprint">
+http://maps.google.com/maps/geo?q=1600+Amphitheatre+Parkway,+Mountain+View,+CA&amp;output=json&amp;sensor=<i>true_or_false</i>&amp;key=<i>your_api_key</i>
+</pre>
+
+<p>We've left the <code>sensor</code> parameter in this example as a variable <i>true_or_false</i> 
+to emphasize that you <b>must</b> set this value to either <code>true</code> or 
+<code>false</code> explicitly.</p>
+
+<h1><a name="GeocodingResponses" id="GeocodingResponses"></a>Geocoding Responses</h1>
+
+<p>The <code>output</code> parameter specifies the format of the response from the
+Geocoding API. Each output has a slightly different format, though
+most share common structure and element names. The following values for <code>output</code> 
+are supported:</p>
+
+<ul>
+  <li><code>json</code> (default) &mdash; The response is formatted as a JSON object. This format
+  is preferred as it is generally more compact.</li>
+  <li><code>kml</code> &mdash; The response is returned as KML with a kml MIME type.</li>
+  <li><code>xml</code> &mdash; The response is returned as KML with an xml MIME type.</li>
+  <li><code>csv</code> &mdash; The response is returned as a comma-seperated value, 
+  described below.</li>
+</ul>
+
+<h2><a name="JSON" id="JSON"></a>JSON</h2>
+
+<p>In this example, the Geocoding API returns the following response for a query on
+"1600 amphitheatre mountain view ca" when requesting JSON. (Note that actual JSON
+may contain less whitespace.)</p>
+
+<pre class="prettyprint">
+{
+  "name": "1600 Amphitheatre Parkway, Mountain View, CA",
+  "Status": {
+    "code": 200,
+    "request": "geocode"
+  },
+  "Placemark": [ {
+    "id": "p1",
+    "address": "1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA",
+    "AddressDetails": {
+      "Country":{
+        "CountryNameCode": "US",
+        "CountryName": "USA",
+        "AdministrativeArea":{
+          "AdministrativeAreaName": "CA",
+          "Locality":{
+            "LocalityName": "Mountain View",
+            "Thoroughfare":{
+              "ThoroughfareName": "1600 Amphitheatre Pkwy"
+            },
+            "PostalCode":{
+              "PostalCodeNumber": "94043"
+            }
+          }
+        }
+      },
+      "Accuracy": 8
+    },
+    "Point": {
+      "coordinates": [ -122.0841430, 37.4219720, 0 ]
+    }
+  } ]
+}
+</pre>
+
+<p>Note that the JSON response contains three root elements:</p>
+<ul>
+<li><code>"name"</code> contains the original query.</li>
+<li><code>"Status"</code> contains metadata on the request. See <a href="#StatusCodes">Status Codes</a> below.</li>
+<li><code>"Placemark"</code> contains address information of the geocoded result.</li>
+</ul>
+
+<p>Generally, only one <code>"Placemark"</code> is returned, though the geocoder may return
+several results when address queries are ambiguous.</p>
+ 
+<h3><a name="KML" id="KML"></a>XML and KML</h3>
+
+<p>If you wish, you may also retrieve geocoding responses in XML or KML. Both outputs 
+retrieve identical structured data except that their MIME types are set to <code>kml</code>
+or <code>xml</code>. If you request a geocode and specify an output as KML, for example, 
+the geocoding response may launch Google Earth to display to the result.</p>
+
+<p>The equivalent response to the above example as KML is shown below.</p>
+
+<pre class="prettyprint">
+&lt;kml xmlns=&quot;http://earth.google.com/kml/2.0&quot;&gt;
+  &lt;Response&gt;
+    &lt;name&gt;1600 amphitheatre mountain view ca&lt;/name&gt;
+    &lt;Status&gt;
+      &lt;code&gt;200&lt;/code&gt;
+      &lt;request&gt;geocode&lt;/request&gt;
+    &lt;/Status&gt;
+    &lt;Placemark&gt;
+      &lt;address&gt; 
+        1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA
+      &lt;/address&gt;
+      &lt;AddressDetails Accuracy="8"&gt;
+        &lt;Country&gt;
+          &lt;CountryNameCode&gt;US&lt;/CountryNameCode&gt;
+ 	  &lt;AdministrativeArea&gt;
+            &lt;AdministrativeAreaName&gt;CA&lt;/AdministrativeAreaName&gt;
+           &lt;SubAdministrativeArea&gt;
+             &lt;SubAdministrativeAreaName&gt;Santa Clara&lt;/SubAdministrativeAreaName&gt;
+             &lt;Locality&gt;
+               &lt;LocalityName&gt;Mountain View&lt;/LocalityName&gt;
+    	       &lt;Thoroughfare&gt;
+                 &lt;ThoroughfareName&gt;1600 Amphitheatre Pkwy&lt;/ThoroughfareName&gt;
+               &lt;/Thoroughfare&gt;
+               &lt;PostalCode&gt;
+                 &lt;PostalCodeNumber&gt;94043&lt;/PostalCodeNumber&gt;
+               &lt;/PostalCode&gt;
+             &lt;/Locality&gt;
+           &lt;/SubAdministrativeArea&gt;
+         &lt;/AdministrativeArea&gt;
+       &lt;/Country&gt;
+     &lt;/AddressDetails&gt;
+     &lt;Point&gt;
+       &lt;coordinates&gt;-122.083739,37.423021,0&lt;/coordinates&gt;
+     &lt;/Point&gt;
+   &lt;/Placemark&gt;
+  &lt;/Response&gt;
+&lt;/kml&gt;
+</pre>
+
+<p>Note that the KML response is structurally identical to the JSON output.</p>
+
+<h3><a name="CSV" id="CSV"></a>CSV</h3>
+
+<p>If you prefer a shorter response that is easier to parse and don't need 
+special features such as structured data, the Geocoding API also 
+provides a <code>csv</code> output. A reply returned in the <code>csv</code> 
+format consists of four numbers, separated by commas:</p>
+
+<ul>
+<li>HTTP status code</li>
+<li>accuracy (See <a href="GeocodingAccuracy">Geocoding Accuracy</a> below)</li>
+<li>latitude</li>
+<li>longitude</li>
+</ul>
+
+<p>The following examples show replies for three addresses, in increasing 
+order of accuracy: "State St, Troy, NY", "2nd st &amp; State St, Troy, NY" 
+and "7 State St, Troy, NY"</p>
+<pre class="prettyprint">
+200,6,42.730070,-73.690570
+200,7,42.730210,-73.691800
+200,8,42.730287,-73.692511
+</pre>
+
+<h2><a name="StatusCodes" id="StatusCodes"></a>Status Codes</h2>
+
+<p></p>
+
+<table>
+<tr>
+<th>Code</th>
+<th>Equivalent <a href="../../reference.html#GGeoStatusCode">GGeoStatusCode</a></th>
+<th>Description</th>
+</tr>
+<tr id="GGeoStatusCode.G_GEO_SUCCESS">
+<td>200</td>
+<td><code>G_GEO_SUCCESS</code></td>
+<td>
+No errors occurred; the address was successfully parsed and its
+geocode was returned.
+</td>
+</tr>
+<tr>
+<td>500</td>
+<td><code>G_GEO_SERVER_ERROR</code></td>
+<td>
+A geocoding or directions request could not be successfully processed,
+yet the exact reason for the failure is unknown.
+</td>
+</tr>
+<tr>
+<td>601</td>
+<td><code>G_GEO_MISSING_QUERY</code></td>
+<td>
+An empty address was specified in the HTTP <code>q</code> parameter.
+</td>
+</tr>
+<tr>
+<td>602</td>
+<td><code>G_GEO_UNKNOWN_ADDRESS</code></td>
+<td>
+No corresponding geographic location could be found for the
+specified address, possibly because the address
+is relatively new, or because it may be incorrect.
+</td>
+</tr>
+<tr>
+<td>603</td>
+<td><code>G_GEO_UNAVAILABLE_ADDRESS</code></td>
+<td>
+The geocode for the given address or the route for the given directions
+query cannot be returned due to legal or contractual reasons.
+</td>
+</tr>
+
+<tr>
+<td>610</td>
+<td><code>G_GEO_BAD_KEY</code></td>
+<td>
+The given key is either invalid or does not match the domain
+for which it was given.
+</td>
+</tr>
+<tr>
+<td>620</td>
+<td><code>G_GEO_TOO_MANY_QUERIES</code></td>
+<td>
+The given key has gone over the requests limit in the 24 hour period
+or has submitted too many requests in too short a period of time.
+If you're sending multiple requests in parallel or in a tight loop,
+use a timer or pause in your code to make sure you don't send the
+requests too quickly.
+</td>
+</tr>
+</table>
+
+<h1><a name="ReverseGeocoding" id="ReverseGeocoding"></a>Reverse Geocoding (Address Lookup)</h1>
+
+<p>The term <i>geocoding</i> generally refers to translating a human-readable
+address into a location on a map. The process of doing the converse,
+translating a location on the map into a human-readable address, is known as 
+<i>reverse geocoding</i>.</p>
+
+<p>The HTTP Geocoder supports reverse geocoding directly using the 
+<code>q</code> parameter. Instead of supplying a textual address as the query 
+parameter, supply a comma-separated latitude/longitude 
+pair. For example, the following query contains the latitude/longitude value 
+for a location in Brooklyn:</p>
+
+<pre class="prettyprint">
+http://maps.google.com/maps/geo?q=40.714224,-73.961452&amp;output=json&amp;sensor=<i>true_or_false</i>&amp;key=<i>your_api_key</i>
+</pre>
+
+<p><span style="color:red">Note: </span> Ensure that no space exists between
+the latitude and longitude values when passed in the <code>q</code>
+parameter.</p>
+
+<p>This query returns the following result:</p>
+
+<pre class="prettyprint">
+{
+  "name": "40.714224,-73.961452",
+  "Status": {
+    "code": 200,
+    "request": "geocode"
+  },
+  "Placemark": [ {
+    "id": "p1",
+    "address": "275-291 Bedford Ave, Brooklyn, NY 11211, USA",
+    "AddressDetails": {
+      "Country": {
+        "CountryNameCode": "US",
+        "CountryName": "USA",
+        "AdministrativeArea": {
+          "AdministrativeAreaName": "NY",
+          "Locality": {
+            "LocalityName": "Brooklyn",
+            "Thoroughfare":{
+              "ThoroughfareName": "275-291 Bedford Ave"
+            },
+            "PostalCode": {
+              "PostalCodeNumber": "11211"
+            }
+          }
+        }
+      },
+      "Accuracy": 8
+    },   
+    "Point": {
+      "coordinates": [ -73.9614669, 40.7142298, 0 ]
+    }
+  }
+ 
+  // Additional Placemarks ...
+</pre>
+
+<p>Note that the reverse geocoder returned more than one result, with each
+result tagged with a sequential <code>"id"</code> ("p1","p2",etc.). Geocoding
+"addresses" are not just postal addresses, but any way to geographically name
+a location. For example, when geocoding a point in the city of Chicago, the
+geocoded point may be labeled as a street address, as the city (Chicago), as
+its state (Illinois) or as a country (The United States). All are addresses to
+the geocoder. The reverse geocoder returns all of these results.</p>
+
+<p>The reverse geocoder matches political entities (countries, provinces,
+cities and neighborhoods), street addresses, and postal codes.</p>
+
+<p>The full list of addresses returned by the previous query are shown
+below.</p>
+<pre class="prettyprint">
+"address": "275-291 Bedford Ave, Brooklyn, NY 11211, USA",
+"address": "Williamsburg, NY, USA",
+"address": "New York 11211, USA",
+"address": "Kings, New York, USA",
+"address": "Brooklyn, New York, USA",
+"address": "New York, New York, USA",
+"address": "New York, USA",
+"address": "United States"
+</pre>
+
+<p>Addresses are returned in the order of best to least matches. Generally,
+the more exact address is the most prominent result, as it is in this case.
+Note that we return different types of addresses, from the most specific
+street address to less specific political entities such as neighborhoods,
+cities, counties, states, etc. If you wish to match a more general address,
+you may wish to inspect the <code>Accuracy</code> field of the returned
+<code>Placemark</code>s. (See <a href="GeocodingAccuracy">Geocoding 
+Accuracy</a> below.)</p>
+
+<p><span style="color:red">Note:</span> Reverse geocoding is not an exact
+science. The geocoder will attempt to find the closest addressable location
+within a certain tolerance; if no match is found, the geocoder will usually
+return a <code>G_GEO_UNKNOWN_ADDRESS</code> (602) status code.</p>
+
+<h1><a name="Viewports" id="Viewports"></a>Viewport Biasing</h1>
+
+<p>You can also instruct the Geocoding service to prefer results within a given 
+viewport (expressed as a bounding box). You do so within the request URL by 
+setting two values: <code>ll</code> and <code>spn</code>, which together define 
+this bounding box.</p>
+
+<p>The <code>ll</code> parameter defines the latitude/longitude coordinates of the center 
+of this bounding box, while the <code>spn</code> parameter defines the latitude/longitude 
+"span" of this bounding box in both vertical and horizontal dimensions.</p>
+
+<p>For example, a geocode for "Winnetka" generally returns this suburb of Chicago:</p>
+
+<pre>
+http://maps.google.com/maps/geo?q=Winnetka&amp;output=json&amp;sensor=false&amp;key=<i>your_key_here</i>
+#
+# Returns
+#
+{
+  "name": "Winnetka",
+  "Status": {
+    "code": 200,
+    "request": "geocode"
+  },
+  "Placemark": [ {
+    "id": "p1",
+    "address": "Winnetka, IL, USA",
+    "AddressDetails": {"Country": {"CountryNameCode": "US","CountryName": "USA","AdministrativeArea": {"AdministrativeAreaName": "IL","Locality": {"LocalityName": "Winnetka"}}},"Accuracy": 4},
+    "Point": {
+      "coordinates": [ -87.7417070, 42.1083080, 0 ]
+    }
+  } ]
+}
+</pre>
+
+<p>However, adding <code>ll</code> and <code>spn</code> arguments defining a bounding box for
+the San Fernando Valley of Los Angeles results in this geocode returning the neighborhood
+named "Winnetka" in that location:</p>
+
+<pre>
+http://maps.google.com/maps/geo?q=Winnetka&amp;output=json&amp;sensor=false&amp;key=<i>your_api_key</i>&amp;ll=34.197605,-118.546944&amp;spn=0.247048,0.294914
+#
+# Returns:
+#
+{
+  "name": "Winnetka",
+  "Status": {
+    "code": 200,
+    "request": "geocode"
+  },
+  "Placemark": [ {
+    "id": "p1",
+    "address": "Winnetka, California, USA",
+    "AddressDetails": {"Country": {"CountryNameCode": "US","CountryName": "USA","AdministrativeArea": {"AdministrativeAreaName": "CA","AddressLine":Winnetka}},"Accuracy": 4},
+    "Point": {
+      "coordinates": [ -118.5710220, 34.2131710, 0 ]
+    }
+  } ]
+}
+</pre>
+
+<h1><a name="CountryCodes" id="CountryCodes"></a>Country Code Biasing</h1>
+
+<p>The Google Geocoding API returns address results influenced
+by the domain (country) from which the request is sent. For
+example, searches for "San Francisco" may return different results if sent
+from a domain within the United States than one sent from Spain.</p>
+
+<p>You can also set the Geocoding service to return results biased to a 
+particular country using the <code>gl</code> parameter. This parameter
+takes a <a href="http://en.wikipedia.org/wiki/CcTLD">ccTLD</a> (county code 
+top-level domain) argument specifying the country bias. Most ccTLD codes are 
+identical to ISO 3166-1 codes, with some notable exceptions. For example, 
+Great Britain's ccTLD is "uk" (<code>.co.uk</code>) while its ISO 3166-1 
+code is "GB."</p>
+
+<p>Geocoding requests can be sent for every domain in which the main 
+Google Maps application offers geocoding.</p>
+
+<p>For example, a geocode for "Toldeo" returns this result, as the default
+domain for the Geocoding API is set to the United States:</p>
+
+<pre>
+http://maps.google.com/maps/geo?q=Toledo&amp;output=json&amp;sensor=false
+# Returns:
+#
+{
+  "name": "Toledo",
+  "Status": {
+    "code": 200,
+    "request": "geocode"
+  },
+  "Placemark": [ {
+    "id": "p1",
+    "address": "Toledo, OH, USA",
+    "AddressDetails": {"Country": {"CountryNameCode": "US","CountryName": "USA","AdministrativeArea": {"AdministrativeAreaName": "OH","Locality": {"LocalityName": "Toledo"}}},"Accuracy": 4},
+    "Point": {
+      "coordinates": [ -83.5777820, 41.6529200, 0 ]
+    }
+  } ]
+}
+</pre>
+
+<p>A geocode for "Toledo" with <code>gl=es</code> (Spain) will return the Spanish city:</p>
+
+<pre>
+http://maps.google.com/maps/geo?q=Toledo&amp;output=json&amp;sensor=false&amp;gl=es
+#
+# Returns
+#
+{
+  "name": "Toledo",
+  "Status": {
+    "code": 200,
+    "request": "geocode"
+  },
+  "Placemark": [ {
+    "id": "p1",
+    "address": "Toledo, Spain",
+    "AddressDetails": {"Country": {"CountryNameCode": "ES","CountryName": "Spain","AdministrativeArea": {"AdministrativeAreaName": "CM","SubAdministrativeArea": {"SubAdministrativeAreaName": "Toledo","Locality": {"LocalityName": "Toledo"}}}},"Accuracy": 4},
+    "Point": {
+      "coordinates": [ -4.0244759, 39.8567775, 0 ]
+    }
+  } ]
+}
+</pre>
+
+<h1><a name="GeocodingAccuracy" id="GeocodingAccuracy"></a>Geocoding Accuracy</h1>
+
+<p>The Google Geocoding API returns an <code>Accuracy</code> value
+within each returned <code>Placemark</code>. 
+This value indicates the <i>resolution</i> of the given result, but not necessarily 
+the <i>correctness</i> 
+of the result. For example, a geocode of "111 8th Avenue, New York, NY" may return 
+<code>8</code> (Address) level accuracy, indicating that the geocode is on the 
+order of resolution of a street address. A geocode for "France" would only return 
+<code>1</code> (Country) level accuracy.</p>
+
+<p>The following table lists the geocoding accuracy values returned by the Geocoding
+API. Note that these accuracy values only indicate the expected resolution. They do not
+indicate the confidence level of the geocode.</p>
+
+<table style="width:90%" summary="Geocoding Accuracy Values">
+<tr>
+<th>Accuracy Value</th>
+<th>Description</th>
+</tr>
+<tr class="odd">
+<td><code>0</code></td>
+<td>Unknown accuracy.</td>
+</tr>
+<tr class="even">
+<td><code>1</code></td>
+<td>Country level accuracy.
+</td>
+</tr>
+<tr class="odd">
+<td><code>2</code></td>
+<td>Region (state, province, prefecture, etc.) level accuracy.
+</td>
+</tr>
+<tr class="even">
+<td><code>3</code></td>
+<td>Sub-region (county, municipality, etc.) level accuracy.
+</td>
+</tr>
+<tr class="odd">
+<td><code>4</code></td>
+<td>Town (city, village) level accuracy.
+</td>
+</tr>
+<tr class="even">
+<td><code>5</code></td>
+<td>Post code (zip code) level accuracy.
+</td>
+</tr>
+<tr class="odd">
+<td><code>6</code></td>
+<td>Street level accuracy.</td>
+</tr>
+<tr class="even">
+<td><code>7</code></td>
+<td>Intersection level accuracy.</td>
+</tr>
+<tr class="odd">
+<td><code>8</code></td>
+<td>Address level accuracy.</td>
+</tr>
+<tr class="even">
+<td><code>9</code></td>
+<td>Premise (building name, property name, shopping center, etc.) level accuracy.</td>
+</tr>
+</table>
+        <!-- end body text -->
+
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

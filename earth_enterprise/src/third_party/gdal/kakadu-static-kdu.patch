@@ -1,0 +1,12 @@
+env LC_ALL=C TZ=UTC0 diff -Naur v5_2_6-00418C/apps/make/Makefile-Linux-x86-gcc v5_2_6-00418C.changed/apps/make/Makefile-Linux-x86-gcc
+--- v5_2_6-00418C/apps/make/Makefile-Linux-x86-gcc	2009-10-26 14:41:12.000000000 +0000
++++ v5_2_6-00418C.changed/apps/make/Makefile-Linux-x86-gcc	2009-10-26 14:53:48.000000000 +0000
+@@ -18,7 +18,7 @@
+ 
+ BIN_DIR = ../../bin/Linux-x86-gcc
+ LIB_DIR = ../../lib/Linux-x86-gcc
+-LIB_SRC = libkdu_v52R.so # Change to $(LIB_DIR)/libkdu.a for static linking
++LIB_SRC = $(LIB_DIR)/libkdu.a
+ 
+ all :: kdu_compress kdu_expand kdu_buffered_compress kdu_buffered_expand kdu_transcoder kdu_maketlm kdu_render simple_example_c simple_example_d kdu_v_compress kdu_v_expand kdu_merge kdu_hyperdoc kdu_text_extractor
+ 

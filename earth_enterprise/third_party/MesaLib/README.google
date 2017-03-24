@@ -1,0 +1,10 @@
+URL: http://www.mesa3d.org/
+Version: 7.11
+License: LGPL v2.1
+License File: COPYING
+
+Description:
+  Mesa = The Mesa 3D Graphics Library.
+
+Local Modifications:
+No Modifications.

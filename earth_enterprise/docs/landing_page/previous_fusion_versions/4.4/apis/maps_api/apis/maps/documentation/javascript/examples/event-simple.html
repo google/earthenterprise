@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/examples/event-simple.html";
+    </script>
+    
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<title>Google Maps JavaScript API v3 Example: Event Simple</title>
+<link href="http://code.google.com/apis/maps/documentation/javascript/examples/default.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
+  var map;
+  function initialize() {
+    var myLatlng = new google.maps.LatLng(-25.363882,131.044922);
+    var myOptions = {
+      zoom: 4,
+      center: myLatlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+    google.maps.event.addListener(map, 'zoom_changed', function() {
+      setTimeout(moveToDarwin, 1500);
+    });
+
+    var marker = new google.maps.Marker({
+        position: myLatlng, 
+        map: map, 
+        title:"Hello World!"
+    });
+    google.maps.event.addListener(marker, 'click', function() {
+      map.setZoom(8);
+    });
+  }
+
+  function moveToDarwin() {
+    var darwin = new google.maps.LatLng(-12.461334, 130.841904);
+    map.setCenter(darwin);
+  }
+
+</script>
+</head>
+<body onload="initialize()">
+  <div id="map_canvas"></div>
+</body>
+</html>

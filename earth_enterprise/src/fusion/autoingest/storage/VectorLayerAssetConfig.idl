@@ -1,0 +1,81 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+
+#include <autoingest/.idl/storage/QueryConfig.h>
+#include <autoingest/.idl/storage/VectorFuseAssetConfig.h>
+#include <autoingest/.idl/storage/VectorPOIAssetConfig.h>
+#include <khxml/geVersionedEnum.h>
+
+
+#cppquote
+#include <autoingest/.idl/storage/QueryConfig_impl.h>
+#include <autoingest/.idl/storage/VectorFuseAssetConfig_impl.h>
+#include <autoingest/.idl/storage/VectorPOIAssetConfig_impl.h>
+#/cppquote
+
+// ********** used by VectorLayerAsset **********
+class VectorLayerAssetConfig {
+  QueryConfig           query_config_;
+  VectorFuseAssetConfig fuse_config_;
+  VectorPOIAssetConfig  poi_config_ = VectorPOIAssetConfig();
+
+#pragma GenerateIsUpToDate
+
+#hquote
+  VectorLayerAssetConfig(const LayerConfig &layerConfig);
+  VectorLayerAssetConfig(const LayerConfig &layer_config, geVersionedEnum);
+#/hquote
+
+#cppquote
+  // Create a VectorLayerAssetConfig with the necessary pieces from LayerConfig
+  VectorLayerAssetConfig::VectorLayerAssetConfig(
+      const LayerConfig &layer_config):
+
+      // build a QueryConfig by extracting the appropriate piece
+      // from my LayerConfig. QueryConfig has a dedicated constructor to
+      // do this for us.
+      // The context scripts have already been concatenated into the single
+      // context script in the LayerConfig, so we don't have any more
+      // to pass in.
+      query_config_(layer_config, QStringList()),
+
+      // build a VectorFuseAssetConfig by extracting the appropriate pieces
+      // from the LayerConfig. VectorFuseAssetConfig has a
+      // constructor that does that for me.
+      fuse_config_(layer_config),
+
+      // build a VectorPOIAssetConfig by extracting the appropriate pieces
+      // from the LayerConfig. VectorPOIAssetConfig has a
+      // constructor that does that for me.
+      poi_config_(layer_config)
+  {
+  }
+
+  // like above, but called when upgrading the config of an older VectorLayer
+  // Asset
+  VectorLayerAssetConfig::VectorLayerAssetConfig(
+      const LayerConfig &layer_config, geVersionedEnum) :
+      query_config_(layer_config, QStringList()),
+      fuse_config_(layer_config),
+      poi_config_(layer_config)
+  {
+    // This really is an old fuse config, but the process of upgrading it from
+    // the old LayerConfig lost that fact.
+    // set the version back on the fuse config.
+    fuse_config_.config_version = 0;
+  }
+#/cppquote
+};
+

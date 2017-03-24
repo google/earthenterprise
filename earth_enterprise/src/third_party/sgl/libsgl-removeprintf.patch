@@ -1,0 +1,24 @@
+diff -c -r skia.0.8.unmod/src/SkGlyphCache.cpp skia.0.8/src/SkGlyphCache.cpp
+*** skia.0.8.unmod/src/SkGlyphCache.cpp	2007-02-20 08:29:46.000000000 -0800
+--- skia.0.8/src/SkGlyphCache.cpp	2007-03-02 12:48:23.000000000 -0800
+***************
+*** 323,331 ****
+      globals->fTotalMemoryUsed -= bytesFreed;
+      SkASSERT(globals->fTotalMemoryUsed == ComputeMemoryUsed(cache));
+  
+! if (count) printf("purging %dK from font cache [%d entries]\n", (int)(bytesFreed >> 10), count);
+  
+      globals->fHead = cache;
+      return bytesFreed;
+  }
+- 
+--- 323,331 ----
+      globals->fTotalMemoryUsed -= bytesFreed;
+      SkASSERT(globals->fTotalMemoryUsed == ComputeMemoryUsed(cache));
+  
+! 
+! //if (count) printf("purging %dK from font cache [%d entries]\n", (int)(bytesFreed >> 10), count);
+  
+      globals->fHead = cache;
+      return bytesFreed;
+  }

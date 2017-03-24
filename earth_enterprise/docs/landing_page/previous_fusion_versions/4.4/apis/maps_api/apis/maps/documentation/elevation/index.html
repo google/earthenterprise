@@ -1,0 +1,827 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+ 
+  
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/elevation/index.html";
+    </script>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Google Maps API Web Services - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/maps/documentation/webservices/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+  </head>
+  <body>
+    <a id="top" name="top"></a>
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps API Web Services</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="index.html" title="Google Maps API Web Services home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="index.html" class="selected" title="Official Google Maps API Web Services documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../faq.html" title="Answers to frequently asked questions about Google Maps API Web Services">FAQ</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps API Web Services blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="../webservices/forum.html" title="Google Maps API Web Services developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../../terms.html" title="Google Maps API Web Services terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <a name="gc-toc"></a>  
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../../index.html">Maps API Family</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+    <div class="line"></div>
+      <ul>
+        <li><h2><a href="../webservices/index.html">Maps API Web Services</a></h2>
+         <ul>
+           <li><a href="../geocoding/index.html">Geocoding API</a></li>
+           <li><a href="../directions/index.html">Directions API</a></li>
+           <li><a href="index.html">Elevation API</a></li>
+           <li><a href="../places/index.html">Places API</a></li>
+         </ul>
+       </li>
+      </ul>
+<div class="line"></div>
+<ul>
+  <li><h2>Maps JavaScript API V3</h2>
+    <ul>
+      <li><a href="../javascript/index.html">Home Page</a></li>
+      <li><a href="../javascript/basics.html">Documentation</a></li>
+    </ul>
+  </li>
+</ul>
+      <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+<div class="line"></div>
+<ul>
+  <li><h2>Maps API for Flash</h2>
+    <ul>
+      <li><a href="../flash/index.html">Home Page</a></li>
+      <li><a href="../flash/intro.html">Documentation</a></li>
+    </ul>
+  </li>
+</ul>
+   <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../mapsdata/index.html">Home Page</a></li>
+          <li><a href="../mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+       <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+<div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+   <div class="line"></div>
+<div class="promo">
+<p><a href="../premier/index.html">Google Maps API Premier</a></p>
+<p>Includes enterprise licensing and support</p>
+</div>
+
+      </div>
+      
+      <a name="gc-pagecontent"></a>   
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">The Google Elevation API</h1>
+
+
+<p>Welcome to the developer documentation for the Google Elevation
+API! The Google Elevation API provides you a simple
+interface to query locations on the earth for elevation data.
+Additionally, you may request sampled elevation data along paths,
+allowing you to calculate elevation changes along routes.</p>
+
+<p class="note"><span style="color:red">Note:</span> This API does not
+require a Maps API key!<br /><br />Google Maps API Premier
+customers should instead <i>sign</i> their URLs using a new
+cryptographic key which will be sent to you. See the
+<a href="../premier/guide.html#URLSigning">
+Premier documentation</a> for more information.</p>
+
+<div class="toc">
+  <ol>
+  <li><a href="#Introduction">What Can You Do with the Elevation API?</a></li>
+  <li><a href="#Audience">Audience</a></li>
+  <li><a href="#Limits">Usage Limits</a></li>
+  <li><a href="#ElevationRequests">Elevation Requests</a>
+    <ol>
+     <li><a href="#OutputFormats">Output Formats</a></li>
+     <li><a href="#Usage">Parameter Usage</a>
+     <li><a href="#Locations">Specifying Locations</a>
+     <li><a href="#Paths">Specifying Paths</a></li>
+     <li><a href="#Sensor">Denoting Sensor Usage</a></li>
+    </ol>
+  <li><a href="#ElevationResponses">Elevation Responses</a>
+    <ol>
+      <li><a href="#PointElevation">Positional Elevation Examples</a></li>
+      <li><a href="#LineElevation">Sampled Path Examples</a></li>
+      <li><a href="#CreatingElevationCharts">CreatingElevationCharts</a></li>
+    </ol>
+  </li>
+  </ol>
+</div>
+
+<h1 id="Introduction">What Can You Do With the Elevation API?</h1>
+
+<p>The Elevation API provides elevation data for all locations on the
+surface of the earth, including depth locations on the ocean floor (which
+return negative values). In those cases where Google does not possess
+exact elevation measurements at the precise location you request, the
+service will interpolate and return an averaged value using the four
+nearest locations.</p>
+
+<p>With the Elevation API, you can develop hiking and biking
+applications, mobile positioning applications, or low resolution
+surveying applications.</p>
+
+<p>You access the Elevation API through an HTTP interface
+Users of the Google JavaScript API V3
+may also access this API directly by using the
+<code>ElevationService()</code> object. (See
+<a href="../javascript/services.html#Elevation">
+Elevation Service</a> for more information.)</p>
+
+<p>The Elevation API is a new service; we encourage you to
+join the <a href="https://groups.google.com/group/Google-Maps-API">
+Maps API discussion group</a> to give us feedback.</p>
+
+<h1 name="Audience" id="Audience">Audience</h1>
+
+<p>This document is intended for website and mobile developers who want to
+use elevation data within maps provided by one of the Google Maps APIs.
+It provides an introduction to using the API and reference material 
+on the available parameters.</p>
+
+<h1 name="Limits" id="Limits">Usage Limits</h1>
+
+<p>Use of the Google Elevation API is subject to a limit of
+2,500 requests per day (Premier users may send up to
+100,000 requests per day). In each given request you
+may query the elevation of up to 512 locations, but
+you may not exceed 25,000 total locations per day
+(1,000,000 for Premier users). This limit is enforced to
+prevent abuse and/or repurposing of the Elevation API, and this limit may be
+changed in the future without notice. Additionally, we enforce a request rate
+limit to prevent abuse of the service. If you exceed the 24-hour limit or
+otherwise abuse the service, the Elevation API may stop working for you
+temporarily. If you continue to exceed this limit, your access to the Elevation
+API may be blocked.</p>
+
+<p>The Elevation API returns data for single point queries of the
+highest accuracy possible. Batch queries involving multiple locations
+may return data with less accuracy, especially if the locations are
+spread apart, as some smoothing of data occurs.</p>
+
+<p>Additionally, note that Elevation API URLs are restricted to 2048 characters,
+before <a href="../webservices/index.html#BuildingURLs">
+URL Encoding</a>. As some Elevation service URLs may involve many points,
+be aware of this limit when constructing your URLs.</p>
+
+<p><span style="color:red">Note: </span> the Elevation API may only be
+used in conjunction with displaying results on a Google map; using
+elevation data without displaying a map for which elevation data was
+requested is prohibited. For complete details on allowed usage, consult the 
+<a href="../../terms.html#section_10_12">Maps API Terms of Service
+License Restrictions</a>.</p>
+
+<h1 id="ElevationRequests">Elevation Requests</h1>
+
+<p>The Elevation API returns elevation data for locations on the earth.
+You specify location data in one of two ways:</p>
+
+<ul>
+  <li>As a set of one or more <code>locations</code>.</li>
+  <li>As a series of connected points along a <code>path</code>.</li>
+</ul>
+
+<p>Either of these approachs uses latitude/longitude coordinates to
+identify the locations or path vertices. This document describes the
+required format of Elevation API URLs and the available parameters.</p>
+
+<p>A Google Elevation API URL must be of the following form:</p>
+<p><code>http://maps.googleapis.com/maps/api/elevation/<i>outputFormat</i>?<i>parameters</i></code></p>
+
+<h2 id="OutputFormats">Output Formats</h2>
+
+<p>Outputs formats are specified using the trailing service flag
+in the request URL. The Elevation API currently supports the following
+output formats:</p>
+
+<ul>
+  <li><code>/json</code> returns results in
+  <a href="http://en.wikipedia.org/wiki/JSON">JavaScript Object
+  Notation</a> (JSON).</li>
+  <li><code>/xml</code> returns results in XML, wrapped within a 
+  <code>&lt;ElevationResponse&gt;</code> node.</li>
+</ul>
+
+<h2 id="Usage">Parameter Usage</h2>
+
+<p>Requests to the Elevation API utilize different parameters
+based on whether the request is for discrete locations or for an
+ordered path. For discrete locations, requests for elevation return
+data on the specific locations passed in the request; for paths,
+elevation requests are instead <i>sampled</i> along the given path.</p>
+
+<p>As is standard in all URLs, parameters are separated
+using the ampersand (<code>&amp;</code>) character. The list of parameters
+and their possible values are denoted below.</p>
+<ul>
+
+<p><b>Positional Requests:</b></p>
+
+<li><code>locations</code> (required) defines the location(s) on the earth
+from which to return elevation data. This parameter takes either a single
+location as a comma-separated {latitude,longitude} pair
+(e.g. "40.714728,-73.998672") or multiple latitude/longitude pairs
+passed as an array or as an encoded polyline. For more information,
+see <a href="#Locations">Specifying Locations</a> below.</li>
+
+<p><b>OR</b></p>
+
+<p><b>Sampled Path Requests:</b></p>
+
+<li><code>path</code> (required) defines a path on the earth
+for which to return elevation data. This parameter defines a set
+of two or more ordered {latitude,longitude} pairs defining a
+path along the surface of the earth. This parameter must be used
+in conjunction with the <code>samples</code> parameter described
+below. For more information,
+see <a href="#Paths">Specifying Paths</a> below.</li>
+
+<li><code>samples</code> (required) specifies the number of sample
+points along a path for which to return elevation data. The
+<code>samples</code> parameter divides the given <code>path</code>
+into an ordered set of equidistant points along the path.</li>
+
+<p><b>Reporting Parameters:</b></p>
+
+<li><code>sensor</code> (required) specifies whether the
+application requesting elevation data is using a sensor to
+determine the user's location. This parameter is required for all
+elevation requests. For more information, see
+<a href="#Sensor">Denoting Sensor Usage</a> below.</li>
+</ul>
+
+<h2 id="Locations">Specifying Locations</h2>
+
+<p>Positional requests are indicated through use of the
+<code>locations</code> parameter, indicating elevation requests
+for the specific locations passed as
+latitude/longitude values.</p>
+
+<p>The <code>locations</code> parameter may take the following
+arguments:</p>
+
+<ul>
+  <li>A single coordinate: <code>locations=40.714728,-73.998672</code></li>
+  <li>An array of coordinates separated using the pipe ('<code>|</code>')
+  character: <code>locations=40.714728,-73.998672|-34.397,150.644</code></li>
+  <li>A set of encoded coordinates using the
+  <a href="../polylinealgorithm.html">Encoded
+  Polyline Algorithm</a>: <code>locations=enc:gfo}EtohhU</code></li>
+</ul>
+
+<p>Latitude and longitude coordinate strings are defined using numerals
+within a comma-separated text string. For example, "40.714728,-73.998672"
+is a valid <code>locations</code> value. Latitude and
+longitude values must correspond to a valid location
+on the face of the earth. Latitudes can take any value between
+<code>-90</code> and <code>90</code> while longitude values can take
+any value between <code>-180</code> and <code>180</code>. If you specify
+an invalid latitude or longitude value, your request will be rejected
+as a bad request.</p>
+
+<p>You may pass any number of multiple coordinates within an array
+or encoded polyline, as long as you don't exceed the <a href="#Limits">
+service quotas</a>, while still constructing a valid URL. Note that
+when passing multiple coordinates, the accuracy of any returned data may
+be of lower resolution than when requesting data for a single coordinate.</p>
+
+<h2 id="Paths">Specifying Paths</h2>
+
+<p>Sampled path requests are indicated through use of the <code>path</code>
+and <code>samples</code> parameters, indicating a request for elevation data
+along a path at specified intervals. As with positional requests using the
+<code>locations</code> parameter, the <code>path</code> parameter specifies
+a set of latitude and longitude values. Unlike a positional request, however,
+the <code>path</code> specifies an ordered set of vertices. Rather than return
+elevation data only at the vertices, path requests are sampled <i>along the
+length of the path</i>, based on the number of <code>samples</code>
+specified (inclusive of the endpoints).</p>
+
+<p>The <code>path</code> parameter may take either of the following
+arguments:</p>
+
+<ul>
+  <li>An array of two or more comma-separated coordinate text strings
+  separated using the pipe ('<code>|</code>')
+  character: <code>path=40.714728,-73.998672|-34.397,150.644</code></li>
+  <li>Encoded coordinates using the
+  <a href="../polylinealgorithm.html">Encoded
+  Polyline Algorithm</a>: <code>path=enc:gfo}EtohhUxD@bAxJmGF</code></li>
+</ul>
+
+<p>Latitude and longitude coordinate strings are defined using numerals
+within a comma-separated text string. For example,
+"40.714728,-73.998672|-34.397, 150.644" is a valid
+<code>path</code> value. Latitude and longitude values must correspond
+to a valid location
+on the face of the earth. Latitudes can take any value between
+<code>-90</code> and <code>90</code> while longitude values can take
+any value between <code>-180</code> and <code>180</code>. If you specify
+an invalid latitude or longitude value, your request will be rejected
+as a bad request.</p>
+
+<p>You may pass any number of multiple coordinates within an array
+or encoded polyline, as long as you don't exceed the <a href="#Limits">
+service quotas</a>, while still constructing a valid URL. Note that
+when passing multiple coordinates, the accuracy of any returned data may
+be of lower resolution than when requesting data for a single coordinate.</p>
+
+<h2 id="Sensor">Denoting Sensor Usage</h2>
+
+<p>Use of the Google Elevation API requires that you indicate whether
+your application is using a "sensor" (such as a GPS locator) to determine
+the user's location. This is especially important for mobile devices.</p>
+
+<p>Applications that determine the user's location via a sensor must
+pass <code>sensor=true</code> within your Elevation API request URL.
+If your application does not use a sensor, pass <code>sensor=false</code>.</p>
+
+<h1 id="ElevationResponses">Elevation Responses</h1>
+
+<p>For each valid request, the Elevation service will return an Elevation
+response in the format indicated within the request URL. Each response will
+contain the following elements:</p>
+
+<ul>
+  <li>An Elevation <code>status</code> code, which may be one of the following:
+    <ol>
+      <li><code>OK</code> indicating the API request was successful</li>
+      <li><code>INVALID_REQUEST</code> indicating the API request was malformed</li>
+      <li><code>OVER_QUERY_LIMIT</code> indicating the requestor has exceeded quota</li>
+      <li><code>REQUEST_DENIED</code> indicating the API did not complete
+      the request, likely because the requestor failed to include a valid <code>sensor</code>
+      parameter</li>
+      <li><code>UNKNOWN_ERROR</code> indicating an unknown error</li>
+    </ol></ul>
+</li>
+  <li><p>An array of <code>results</code> containing the following
+  elements:</p>
+  <ul>
+    <li>A <code>location</code> element (containing <code>lat</code>
+    and <code>lng</code> elements) of the position for which
+    elevation data is being computed. Note that for path requests,
+    the set of <code>location</code> elements will contain the sampled
+    points along the path.</li>
+    <li>An <code>elevation</code> element indicating the elevation of
+    the location in meters.</li>  
+  </ul>
+  
+<h2 id="PointElevation">Positional Elevation Examples</h2>
+
+<p>The following example requests the elevation for Denver,
+Colorado, the "Mile High City" in the JSON format:</p>
+
+<pre class="prettyprint">
+http://maps.googleapis.com/maps/api/elevation/json?locations=39.7391536,-104.9847034&sensor=<i>true_or_false</i>
+</pre>
+
+
+<pre class="prettyprint">
+{
+  "status": "OK",
+  "results": [ {
+    "location": {
+      "lat": 39.7391536,
+      "lng": -104.9847034
+    },
+    "elevation": 1608.8402100
+  } ]
+}
+</pre>
+
+
+<p>The following example shows multiple responses (for Denver, CO and for
+Death Valley, CA) in the JSON format:</p>
+
+<pre class="prettyprint">
+http://maps.googleapis.com/maps/api/elevation/json?locations=39.7391536,-104.9847034|36.455556,-116.866667&sensor=<i>true_or_false</i>
+</pre>
+
+
+<pre class="prettyprint">
+{
+  "status": "OK",
+  "results": [ {
+    "location": {
+      "lat": 39.7391536,
+      "lng": -104.9847034
+    },
+    "elevation": 1608.8402100
+  }, {
+    "location": {
+      "lat": 36.4555560,
+      "lng": -116.8666670
+    },
+    "elevation": -50.7890358
+  } ]
+}
+</pre>
+
+
+<p>The following request is identical to the one above, except that the request indicates that an output format of XML
+is desired, through use of the <code>/xml</code> service flag:</p>
+
+<pre class="prettyprint">
+http://maps.googleapis.com/maps/api/elevation/xml?locations=39.7391536,-104.9847034|36.455556,-116.866667&sensor=<i>true_or_false</i>
+</pre>
+
+<pre class="prettyprint">
+&lt;ElevationResponse&gt;
+ &lt;status&gt;OK&lt;/status&gt; 
+ &lt;result&gt; 
+  &lt;location&gt; 
+   &lt;lat&gt;39.7391536&lt;/lat&gt; 
+   &lt;lng&gt;-104.9847034&lt;/lng&gt; 
+  &lt;/location&gt; 
+  &lt;elevation&gt;1608.8402100&lt;/elevation&gt; 
+ &lt;/result&gt; 
+ &lt;result&gt; 
+  &lt;location&gt; 
+   &lt;lat&gt;36.4555560&lt;/lat&gt; 
+   &lt;lng&gt;-116.8666670&lt;/lng&gt; 
+  &lt;/location&gt; 
+  &lt;elevation&gt;-50.7890358&lt;/elevation&gt; 
+ &lt;/result&gt; 
+&lt;/ElevationResponse&gt;
+</pre>
+
+<h2 id="LineElevation">Path Elevation Examples</h2>
+
+<p>The following examples requests elevation data along a straight line
+<code>path</code> from Mt. Whitney, CA to Badwater, CA, the highest and
+lowest points in the continental United States. We ask for three
+<code>samples</code>, so that will include the two endpoints and the
+halfway point.</p>
+
+<pre class="prettyprint">
+http://maps.googleapis.com/maps/api/elevation/json?path=36.578581,-118.291994|36.23998,-116.83171&samples=3&sensor=<i>true_or_false</i>
+</pre>
+
+
+<pre class="prettyprint">
+{
+  "status": "OK",
+  "results": [ {
+    "location": {
+      "lat": 36.5785810,
+      "lng": -118.2919940
+    },
+    "elevation": 4411.9418945
+  }, {
+    "location": {
+      "lat": 36.4115029,
+      "lng": -117.5602608
+    },
+    "elevation": 1381.8616943
+  }, {
+    "location": {
+      "lat": 36.2399800,
+      "lng": -116.8317100
+    },
+    "elevation": -84.6169968
+  } ]
+}
+</pre>
+
+
+<h2 id="CreatingElevationCharts">Creating Elevation Charts</h2>
+
+<p>Elevation data must be used in conjunction with a display of
+data on a Google Map. The Chart API (
+<code>http://code.google.com/apis/chart/</code>) is well-suited to
+creating elevation charts which you can display alongside
+your maps.</p>
+
+<p>The following Python example calculates elevation data
+between Mt. Whitney and Badwater, Death Valley and 
+uses those values to create en elevation chart:</p>
+
+
+<pre class="prettyprint">
+import simplejson
+import urllib
+
+ELEVATION_BASE_URL = 'http://maps.googleapis.com/maps/api/elevation/json'
+CHART_BASE_URL = 'http://chart.apis.google.com/chart'
+
+def getChart(chartData, chartDataScaling="-500,5000", chartType="lc",chartLabel="Elevation in Meters",chartSize="500x160",chartColor="orange", **chart_args):
+    chart_args.update({
+      'cht': chartType,
+      'chs': chartSize,
+      'chl': chartLabel,
+      'chco': chartColor,
+      'chds': chartDataScaling,
+      'chxt': 'x,y',
+      'chxr': '1,-500,5000'
+    })
+
+    dataString = 't:' + ','.join(str(x) for x in chartData)
+    chart_args['chd'] = dataString.strip(',')
+
+    chartUrl = CHART_BASE_URL + '?' + urllib.urlencode(chart_args)
+
+    print chartUrl
+
+    def getElevation(path="36.578581,-118.291994|36.23998,-116.83171",samples="100",sensor="false", **elvtn_args):
+      elvtn_args.update({
+        'path': path,
+        'samples': samples,
+        'sensor': sensor
+      })
+
+      url = ELEVATION_BASE_URL + '?' + urllib.urlencode(elvtn_args)
+      response = simplejson.load(urllib.urlopen(url))
+
+      # Create a dictionary for each results[] object
+      elevationArray = []
+
+      for resultset in response['results']:
+        elevationArray.append(resultset['elevation'])
+
+      # Create the chart passing the array of elevation data
+      getChart(chartData=elevationArray)
+
+if __name__ == '__main__':
+    # Mt. Whitney
+    startStr = "36.578581,-118.291994"
+    # Death Valley
+    endStr = "36.23998,-116.83171"
+
+    pathStr = startStr + "|" + endStr
+
+    getElevation(pathStr)
+</pre>
+
+
+<p>The following images show how this information might be displayed
+on a map and/or chart:</p>
+
+<div>
+<img src="http://maps.google.com/maps/api/staticmap?markers=36.287283,-116.985242|36.578581,-118.291994&path=36.287283,-116.985242|36.578581,-118.291994&size=500x300&sensor=false" />
+<img src="http://chart.apis.google.com/chart?chxt=x,y&chds=-500,5000&chs=500x160&cht=lc&chxr=1,-500,5000&chd=t:4350.9604492,3695.5673828,3320.6970215,3638.1938477,3239.4702148,3505.3806152,3048.6586914,2261.7397461,2084.923584,1880.2818604,1743.9295654,1655.286499,1552.7321777,1476.6950684,1429.6925049,1350.4720459,1269.1772461,1117.0939941,1085.4562988,1084.5710449,1086.1998291,1088.1595459,1088.0371094,1087.8345947,1086.7521973,1087.4533691,1089.0228271,1091.4246826,1095.795166,1104.1627197,1161.7850342,1260.6739502,1350.1064453,1493.5717773,1621.7398682,1730.0119629,2115.3327637,2242.8352051,2113.4902344,1917.701416,1843.8322754,1728.1306152,1629.0892334,1605.253418,1594.5026855,1635.6746826,1532.8140869,1463.6828613,1420.0058594,1367.6060791,1368.3721924,1282.2685547,1186.4229736,744.8394165,541.9858398,491.5787048,490.2341614,487.8714294,483.0317688,475.1685181,470.9011841,477.4848022,525.8674927,595.0737915,690.8172607,813.9232178,935.8031006,1090.015625,1286.1986084,1507.5947266,1693.2481689,1710.4168701,1920.7315674,1869.0228271,1711.6784668,1612.8051758,1597.7486572,1657.2667236,1712.5021973,1876.2019043,1993.0300293,2201.0146484,1897.0775146,2044.3325195,1514.5831299,1974.8061523,1905.9116211,1358.0830078,1074.883667,703.616394,460.0742188,281.2234497,241.1877441,134.2240143,24.5110569,-53.0157394,-82.569252,-84.5685806,-84.6138992,-84.6169968&chco=orange&chl=Elevation+in+Meters" />
+</div>
+
+<p>Download the
+<a href="http://gmaps-samples.googlecode.com/svn/trunk/elevation/python/ElevationChartCreator.py">
+ElevationChartCreator.py</a> code from gmaps-samples.</p>
+
+        
+
+      </div><!-- end g-c-gc-home -->
+    </div><!-- end g-unit -->
+  </div><!-- end g-section -->
+
+</div><!-- end gc-home -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

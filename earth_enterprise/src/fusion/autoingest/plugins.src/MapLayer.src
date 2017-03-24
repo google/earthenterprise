@@ -1,0 +1,198 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#config Name      MapLayer
+#config Base      Composite
+#config Config    MapLayerConfig
+#config Subtype   Layer
+#config FixedType Map
+
+
+// ===== MapLayerAsset.h =====
+#include <autoingest/.idl/storage/MapLayerConfig.h>
+
+class MapLayerAssetVersionImpl {
+ public:
+  std::vector<std::string> GetPOIFiles(void) const;
+};
+
+
+// ===== MapLayerAsset.cpp =====
+std::vector<std::string> MapLayerAssetVersionImpl::GetPOIFiles(void) const {
+  std::vector<std::string> results;
+  if (children.size() > 2) {
+    for (std::vector<std::string>::const_iterator iter = children.begin() + 2;
+         iter != children.end(); ++iter ) {
+      AssetVersion child(*iter);
+      if (child->subtype == "MapPOI") {
+        results.push_back(child->GetOutputFilename(0));
+      }
+    }
+  }
+  return results;
+}
+
+
+// ===== MapLayerAssetD.h =====
+#include <climits>
+class MapLayerAssetImplD {
+ protected:
+  bool FixConfigBeforeUpdateCheck(void) const;
+ public:
+  static void HandleEditRequest(const MapLayerEditRequest &);
+};
+
+class MapLayerAssetVersionImplD {
+ public:
+};
+
+
+
+// ===== MapLayerAssetD.cpp =====
+#include <khstl.h>
+#include <autoingest/sysman/plugins/VectorProductAssetD.h>
+#include <autoingest/sysman/plugins/MapLayerLevelAssetD.h>
+#include <autoingest/sysman/plugins/VectorQueryAssetD.h>
+#include <autoingest/sysman/plugins/MapPOIAssetD.h>
+#include <autoingest/sysman/.idl/FusionUniqueId.h>
+
+void
+MapLayerAssetImplD::HandleEditRequest(const MapLayerEditRequest &req)
+{
+  // Validate our inputs (Make sure they are all VectorProducts)
+  std::vector<std::string> productrefs;
+  productrefs.reserve(req.config.subLayers.size());
+  for (uint s = 0; s < req.config.subLayers.size(); ++s) {
+    VectorProductFactory::ValidateRefForInput
+      (req.config.subLayers[s].asset_ref);
+    productrefs.push_back(req.config.subLayers[s].asset_ref);
+  }
+
+  // Normalize our asset name
+  std::string assetname =
+    khEnsureExtension(req.assetname,
+                      AssetDefs::FileExtension(AssetDefs::Map,
+                                               kLayer));
+
+
+  // Custom FindMake:
+  // We need to make sure we don't clobber an existing fuid_channel.
+  MutableMapLayerAssetD maplayer = MapLayerFactory::Find(assetname);
+
+  if (maplayer) {
+    // It is a regular (editing the same asset) or "SaveAs" re-writing edit
+    // request.
+    // If this edit request is going to set the fuid_channel_ back to zero,
+    // recover from previous version of asset config.
+    // Make a copy we can play with.
+    MapLayerConfig layer_config = req.config;
+    if (layer_config.fuid_channel_ == 0) {
+      layer_config.fuid_channel_ = maplayer->config.fuid_channel_;
+    }
+    maplayer->Modify(productrefs, req.meta, layer_config);
+  } else {
+    // It is a "Save" or "SaveAs" edit request when creating a new asset.
+    maplayer = MapLayerFactory::Make(assetname,
+                                     productrefs,
+                                     req.meta,
+                                     req.config);
+  }
+}
+
+bool
+MapLayerAssetImplD::FixConfigBeforeUpdateCheck(void) const
+{
+  // Make sure we have a valid fuid_channel_ before we build
+  bool changed = false;
+  if (config.fuid_channel_ == 0) {
+    MutableMapLayerAssetD self(GetRef());
+    self->config.fuid_channel_ = FusionUniqueId::Get(FusionUniqueId::Channel);
+    changed = true;
+  }
+  return changed;
+}
+
+
+void
+MapLayerAssetVersionImplD::UpdateChildren(void)
+{
+  std::string assetRef = GetAssetRef();
+
+  // ***** load my input versions (only if they aren't already loaded)
+  // I'll use this list of my inputs to pass to my children so they don't
+  // have to look them up over and over again
+  // My inputs are VectorProductRefs
+  InputVersionGuard guard(this);
+
+  AssetVersion source = guard->inputvers[0];
+
+  std::vector<AssetVersion> queries;
+  std::vector<std::string> queryRefs;
+  queries.push_back(source);
+  queryRefs.push_back(source->GetRef());
+
+  std::vector< MapPOIAssetConfig::SearchFields > all_search_fields;
+  int numberOfSearchFields = 0;
+
+  // Make the Query assets for each sub layer
+  for (uint sl = 0; sl < config.subLayers.size(); ++sl) {
+    const MapSubLayerConfig &sl_config = config.subLayers[sl];
+
+    // *** create the query sub assets ***
+    // build a QueryConfig by extracting the appropriate piece
+    // from my display rule configs. QueryConfig has a dedicated constructor to
+    // do this for us.
+    // The context scripts have already been concatenated into the single
+    //  contextscript in the config, so we don't have any more to pass in.
+    QueryConfig queryconfig = QueryConfig(sl_config,
+                                          QStringList() /* contextScripts */);
+
+    char queryname[32];
+    snprintf(queryname, sizeof(queryname), "query%02u", sl);
+    MutableAssetVersionD query_version =
+      VectorQueryFactory::FindMakeAndUpdateSubAsset
+      (assetRef, queryname,
+       makevec1(guard->inputvers[sl]->GetRef()),
+       khMetaData(),
+       queryconfig,
+       makevec1(guard->inputvers[sl]));
+
+    AddChild(query_version);
+
+    queries.push_back(query_version);
+    queryRefs.push_back(query_version->GetRef());
+
+    MapPOIAssetConfig::SearchFields searchFields;
+    for (std::vector<SearchField>::const_iterator iter = sl_config.searchFields.begin();
+      iter != sl_config.searchFields.end(); ++iter) {
+      searchFields.search_fields_.push_back(*iter);
+      numberOfSearchFields++;
+    }
+    searchFields.assetref_ = sl_config.asset_ref;
+    all_search_fields.push_back( searchFields );
+  }
+
+  // ********** MapPOIAsset child **********
+  if (numberOfSearchFields > 0) {
+    MapPOIAssetConfig poiconfig(all_search_fields);
+    MutableAssetVersionD poi =
+      MapPOIFactory::FindMakeAndUpdateSubAsset
+    (assetRef, "poi",
+     queryRefs,
+     khMetaData(),
+     poiconfig,
+     queries);
+    AddChild(poi);
+  }
+}

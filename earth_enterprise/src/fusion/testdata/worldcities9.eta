@@ -1,0 +1,751 @@
+<etSite> [Santiago] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] CI
+    [phone] 1
+    [pt] :1	{ -0.3925431372072448 -0.1860146704252876 }
+}
+<etSite> [Buenos Aires] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    455
+    [street] AR
+    [phone] 1
+    [pt] :1	{ -0.3245215998231497 -0.1923212835598365 }
+}
+<etSite> [Porto Alegre] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] BR
+    [pt] :1	{ -0.2838165979254841 -0.1672559956486930 }
+}
+<etSite> [Sao Paulo] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] BR
+    [pt] :1	{ -0.2589673951472198 -0.1308196342019996 }
+}
+<etSite> [Lima] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] PE
+    [phone] 1
+    [pt] :1	{ -0.4283758142919497 -0.0668965082453977 }
+}
+<etSite> [Rio de Janeiro] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] BR
+    [pt] :1	{ -0.2405188501094226 -0.1269655567534356 }
+}
+<etSite> [Belo Horizonte] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] BR
+    [pt] :1	{ -0.2442258904865662 -0.1106390731408317 }
+}
+<etSite> [Salvador] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] BR
+    [pt] :1	{ -0.2137752967550148 -0.0721120279984760 }
+}
+<etSite> [Recife] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] BR
+    [pt] :1	{ -0.1938389197206952 -0.0446091964197201 }
+}
+<etSite> [Fortaleza] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] BR
+    [pt] :1	{ -0.2142201981496935 -0.0207922085639729 }
+}
+<etSite> [Cape Town] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] SF
+    [phone] 1
+    [pt] :1	{ 0.1023533707084556 -0.1884488749686396 }
+}
+<etSite> [Maputo] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] MZ
+    [phone] 1
+    [pt] :1	{ 0.1810509261111111 -0.1442515433333333 }
+}
+<etSite> [Kinshasa] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] CG
+    [phone] 1
+    [pt] :1	{ 0.0850000000000000 -0.0238888888888888 }
+}
+<etSite> [Jakarta] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.5934537038888890 -0.0342716050000000 }
+}
+<etSite> [Bandung] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.5977919840782475 -0.0383826208335735 }
+}
+<etSite> [Melbourne] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.8053703705555555 -0.2100925927777778 }
+}
+<etSite> [Sydney] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.8400925927777778 -0.1882407405555555 }
+}
+<etSite> [Guadalajara] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] MX
+    [pt] :1	{ -0.5742095928839133 0.1149020204622382 }
+}
+<etSite> [Mexico City] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] MX
+    [phone] 1
+    [pt] :1	{ -0.5505946445165326 0.1079324023124519 }
+}
+<etSite> [Monterrey] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] MX
+    [pt] :1	{ -0.5572289845411895 0.1427637860881092 }
+}
+<etSite> [Bogota] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] CO
+    [phone] 1
+    [pt] :1	{ -0.4117416816987867 0.0256300479155100 }
+}
+<etSite> [Medellin] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] CO
+    [pt] :1	{ -0.4199363820932225 0.0346739528094739 }
+}
+<etSite> [Santo Domingo] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] DR
+    [phone] 1
+    [pt] :1	{ -0.3883333333333334 0.1025925927777778 }
+}
+<etSite> [Caracas] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] VE
+    [phone] 1
+    [pt] :1	{ -0.3717025771943864 0.0583120774895616 }
+}
+<etSite> [Toronto] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] CA
+    [pt] :1	{ -0.4412037038888890 0.2425925927777777 }
+}
+<etSite> [Abidjan] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] IV
+    [phone] 1
+    [pt] :1	{ -0.0224074072222222 0.0295370372222221 }
+}
+<etSite> [Casablanca] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] MO
+    [pt] :1	{ -0.0423132716666667 0.1866280866666667 }
+}
+<etSite> [Madrid] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] SP
+    [phone] 1
+    [pt] :1	{ -0.0204629627777778 0.2244444444444444 }
+}
+<etSite> [Montréal] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] CA
+    [pt] :1	{ -0.4087962961111111 0.2527777777777778 }
+}
+<etSite> [London] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] UK
+    [phone] 1
+    [pt] :1	{ -0.0006481483333334 0.2861111111111112 }
+}
+<etSite> [Lagos] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] NI
+    [pt] :1	{ 0.0188657405555555 0.0358503088888888 }
+}
+<etSite> [Adis Abeba] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] ET
+    [phone] 1
+    [pt] :1	{ 0.2150000000000001 0.0501851666666666 }
+}
+<etSite> [Algiers] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] AG
+    [phone] 1
+    [pt] :1	{ 0.0169475311111111 0.2042391977777778 }
+}
+<etSite> [Naples] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] IT
+    [pt] :1	{ 0.0794539400006853 0.2270422030726613 }
+}
+<etSite> [Cairo] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] EG
+    [phone] 1
+    [pt] :1	{ 0.1736111111111112 0.1669444444444443 }
+}
+<etSite> [Alexandria] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] EG
+    [pt] :1	{ 0.1662175927777778 0.1733225311111111 }
+}
+<etSite> [Baghdad] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.2466327161111110 0.1852145061111110 }
+}
+<etSite> [Athens] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] GR
+    [phone] 1
+    [pt] :1	{ 0.1318518516666667 0.2110185183333333 }
+}
+<etSite> [Istanbul] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] TU
+    [pt] :1	{ 0.1609368940778109 0.2279034494899128 }
+}
+<etSite> [Ankara] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] TU
+    [phone] 1
+    [pt] :1	{ 0.1824074072222222 0.2217592594444444 }
+}
+<etSite> [Bangalore] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.4310185183333333 0.0721296294444445 }
+}
+<etSite> [Mumbai] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.4045879627777778 0.1054166666666667 }
+}
+<etSite> [Pune] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.4097222222222223 0.1041666666666667 }
+}
+<etSite> [Hyderabad] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.4359259261111110 0.0965740738888889 }
+}
+<etSite> [Riyadh] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.2518518516666666 0.1296296294444443 }
+}
+<etSite> [Karachi] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.3725000000000001 0.1381481481666667 }
+}
+<etSite> [Tehran] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.2856913577777778 0.1981774688888889 }
+}
+<etSite> [Ahmadabad] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.4032396164975682 0.1374391116956648 }
+}
+<etSite> [Delhi] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.4289814816666666 0.1592592594444444 }
+}
+<etSite> [Lahore] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.4128391132101568 0.1752253277020519 }
+}
+<etSite> [Calcutta] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.4909429011111111 0.1253873455555556 }
+}
+<etSite> [Paris] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] FR
+    [phone] 1
+    [pt] :1	{ 0.0129629627777779 0.2714814816666666 }
+}
+<etSite> [Milano] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] IT
+    [pt] :1	{ 0.0511111111111111 0.2525925927777777 }
+}
+<etSite> [Frankfurt] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] GM
+    [pt] :1	{ 0.04878269614033285944 0.27839744706857057222 }
+}
+<etSite> [Essen] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] GM
+    [pt] :1	{ 0.03895426241606369611 0.28606978245638840555 }
+}
+<etSite> [Dusseldorf] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] GM
+    [pt] :1	{ .03778980629041828666 0.28463452653077021666 }
+}
+<etSite> [Berlin] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [street] GM
+    [phone] 1
+    [pt] :1	{ 0.0744444444444445 0.2917592594444445 }
+}
+<etSite> [Moscow] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.2089753088888888 0.3097345677777779 }
+}
+<etSite> [St. Petersburg] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.1681520638610137 0.3329007882457682 }
+}
+<etSite> [Singapore] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.5766666666666667 0.0075925927777778 }
+}
+<etSite> [Bangkok] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.5584259261111111 0.0763888888888888 }
+}
+<etSite> [Yangon] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.5342592594444444 0.0932407405555555 }
+}
+<etSite> [Hanoi] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.5882407405555556 0.1173148150000001 }
+}
+<etSite> [Manila] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.6723115617102329 0.0810386104331273 }
+}
+<etSite> [Hong Kong] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.6345708565409682 0.1235830290173321 }
+}
+<etSite> [Dhaka] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.5022700616666667 0.1317947533333332 }
+}
+<etSite> [Chongging] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.5918902588108266 0.1641044943540582 }
+}
+<etSite> [Chengdu] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.5781481483333333 0.1703703705555555 }
+}
+<etSite> [Jinan] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.5755555555555556 0.1811111111111112 }
+}
+<etSite> [Guangzhou] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.6291666666666667 0.1284259261111111 }
+}
+<etSite> [Wuhan] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.6348148149999999 0.1699074072222222 }
+}
+<etSite> [Hangzhou] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.6676049383333333 0.1680848766666667 }
+}
+<etSite> [Nanjing] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.6598832995099024 0.1779272013991684 }
+}
+<etSite> [Shanghai] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.6746949906040371 0.1735500062008370 }
+}
+<etSite> [Naha] {
+    [minLevel] 9
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.7092944591623165 0.1455705372160796 }
+}
+<etSite> [Fukuoka] {
+    [minLevel] 8
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [HTML]     http://www.city.fukuoka.jp/index-e.html
+    [pt] :1	{ 0.7246196080531990 0.1866031793913576 }
+}
+<etSite> [Xi'an] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.6313906981791675 0.1931895218350421 }
+}
+<etSite> [Handan] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.6359320988888888 0.2033364200000001 }
+}
+<etSite> [Tianjin] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.6509814816666666 0.2174567900000000 }
+}
+<etSite> [Qingdao] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.6685370372222221 0.2004521605555556 }
+}
+<etSite> [Dalian] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.6756093027229120 0.2162229244888367 }
+}
+<etSite> [Beijing] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.6466778031331695 0.2215694444444445 }
+}
+<etSite> [Shenyang] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.6857376544444445 0.2321790122222223 }
+}
+<etSite> [Pusan] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.7168796294444444 0.1951018516666667 }
+}
+<etSite> [Seoul] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.7055540122222221 0.2087021605555555 }
+}
+<etSite> [Kitakyushu] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [HTML]     http://www.city.kitakyushu.jp/~english
+    [pt] :1	{ 0.7271069708687161 0.1883835824471523 }
+}
+<etSite> [Hiroshima] {
+    [minLevel] 8
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [HTML]     http://www.city.hiroshima.jp/index-E.html
+    [pt] :1	{ 0.7358261496894487 0.1909462176095604 }
+}
+<etSite> [Changchun] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.6959958150102838 0.2438286598889663 }
+}
+<etSite> [Osaka] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [HTML]     http://www.city.osaka.jp/english/index.html
+    [pt] :1	{ 0.7527481840747607 0.1926516524355248 }
+}
+<etSite> [Nagoya] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [HTML]     http://www.city.nagoya.jp/indexe.htm
+    [pt] :1	{ 0.7605055351917627 0.1948846574193699 }
+}
+<etSite> [Kobe] {
+    [minLevel] 8
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [HTML]     http://www.city.kobe.jp/index-e.html
+    [pt] :1	{ 0.7510492405284055 0.1926473802379243 }
+}
+<etSite> [Kyoto] {
+    [minLevel] 8
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [HTML]     http://www.pref.kyoto.jp/index_e.html
+    [pt] :1	{ 0.7545638778494852 0.1944621209183841 }
+}
+<etSite> [Yokohama] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [HTML]     http://www.city.yokohama.jp/indexE.html
+    [pt] :1	{ 0.7757795181823894 0.1962104108271887 }
+}
+<etSite> [Tokyo] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [HTML]     http://www.metro.tokyo.jp/INET/ETC/ENGLISH/ENGINDEX.HTM
+    [pt] :1	{ 0.7764027777777778 0.1982561727777779 }
+}
+<etSite> [Kawasaki] {
+    [minLevel] 8
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [HTML]     http://www.city.kawasaki.jp/index_e.htm
+    [pt] :1	{ 0.7756389352851942 0.1970161110452735 }
+}
+<etSite> [Sapporo] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [HTML]     http://www.global.city.sapporo.jp/
+    [pt] :1	{ 0.7864067997124617 0.2391902816819296 }
+}
+<etSite> [Harbin] {
+    [minLevel] 7
+    [maxLevel] 30
+    [texId]    773
+    [style]    454
+    [pt] :1	{ 0.7036111111111112 0.2541666666666667 }
+}

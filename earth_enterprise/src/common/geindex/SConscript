@@ -1,0 +1,97 @@
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+#-*- Python -*-
+
+Import('env')
+import os
+
+readsources = [ 'shared.cpp',
+                'Entries.cpp',
+                'IndexBundle.cpp',
+                'IndexBundleReader.cpp',
+                'Reader.cpp',
+                'IndexManifest.cpp',
+                ]
+writesources = ['Writer.cpp',
+                'IndexBundleWriter.cpp',
+                'Traverser.cpp',
+                'PacketFileAdaptingTraverser.cpp',
+               ]
+
+file_bundle_port_sources = [
+  '../../third_party/rsa_md5/crc32.os',
+  '../../third_party/rsa_md5/crc.os',
+  '../../third_party/rsa_md5/md5c.os',
+  '../filebundle/cachedreadaccessor.os',
+  '../filebundle/filebundle.os',
+  '../filebundle/filebundlereader.os',
+  '../filebundle/filebundlewriter.os',
+  '../geFilePool.os',
+  '../khConstants.os',
+  '../khEndian.os',
+  '../khFileUtils.os',
+  '../khStringUtils.os',
+  '../khThread__port.cpp',
+  '../notify.os',
+  '../packetfile/packetfile.os',
+  '../packetfile/packetindex.os',
+  '../quadtreepath.os',
+  'Entries.os',
+  'IndexBundleReader__port.cpp',
+  'IndexBundleWriter__port.cpp',
+  'IndexBundle.os',
+  'IndexManifest.os',
+  'Reader.os',
+  'Writer.os',
+  'shared.os'
+]
+
+
+geindex_r = env.sharedLib('geindex_r', readsources,
+                          LIBS=['gecommon'])
+geindex_rw = env.sharedLib('geindex_rw', writesources,
+                           LIBS=['geindex_r'])
+single_thread_env = env.Clone()
+single_thread_env['LINKFLAGS'].remove('-pthread')
+file_bundle = single_thread_env.sharedLib(
+    'filebundle__port', file_bundle_port_sources, LIBS=['keyholeutils'])
+
+env.install('common_lib', [geindex_r, geindex_rw])
+
+# # Unit test executables
+# env.test('geindex_tests', 'geindex_tests.cpp',
+#          LIBS=['geindex_rw'])
+env.test('WriterReader_tests',
+         'WriterReader_tests.cpp',
+         LIBS=['getests', 'geindex_r', 'geindex_rw', 'geutil', 'gecommon',
+               'qt-mt', 'gtest'])
+
+env.test('WriterReader_tests__port',
+         [
+          'WriterReader_tests__port.cpp'
+         ],
+         LIBS=['filebundle__port', 'getests', 'gtest'])
+
+single_thread_env.test('filebundle_unittest__port',
+         [
+          '../filebundle/filebundle_unittest__port.cpp',
+         ],
+         LIBS=['filebundle__port'])
+
+env.test('IndexManifest_unittest',
+               'IndexManifest_unittest.cpp',
+               LIBS=['getests', 'geindex_r', 'geindex_rw', 'geutil', 'gecommon', 'qt-mt', 'png12'])

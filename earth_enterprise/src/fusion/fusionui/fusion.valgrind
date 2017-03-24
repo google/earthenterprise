@@ -1,0 +1,117 @@
+{
+   GL Crap
+   Memcheck:Param
+   modify_ldt(ptr)(func=1 or 0x11)
+   obj:/usr/lib/libGL.so.1.0.5336
+}
+
+{
+   Set window manager rproperties
+   Memcheck:Param
+   write(buf)
+   fun:__GI___libc_write
+   fun:_X11TransWrite
+   fun:_XFlushInt
+   fun:_XReply
+}
+
+{
+   Xlsfonts
+   Memcheck:Param
+   writev(vector[...])
+   fun:vgAllRoadsLeadToRome_writev
+   fun:__writev
+   fun:_X11TransSocketWritev
+   fun:_X11TransWritev
+}
+
+{
+   IceConnection
+   Memcheck:Param
+   write(buf)
+   fun:__GI___libc_write
+   fun:_IceTransWrite
+   fun:_IceWrite
+   fun:IceFlush
+}
+
+{
+   QDockArea
+   Memcheck:Param
+   write(buf)
+   fun:__GI___libc_write
+   fun:_X11TransWrite
+   fun:_XFlushInt
+   fun:_XFlush
+}
+
+{
+   GLcore crap
+   Memcheck:Param
+   ioctl(generic)
+   fun:__GI___ioctl
+   obj:/usr/lib/libGLcore.so.1.0.5336
+}
+
+{
+   GLcore crap 2
+   Memcheck:Cond
+   obj:/usr/lib/libGLcore.so.1.0.5336
+}
+
+{
+   GLCore crap 3
+   Memcheck:Cond
+   fun:_nv000018gl
+   obj:/usr/lib/libGLcore.so.1.0.5336
+}
+
+{
+   GLCore crap 4
+   Memcheck:Cond
+   fun:_nv000019gl
+   obj:/usr/lib/libGLcore.so.1.0.5336
+   obj:/usr/lib/libGLcore.so.1.0.5336
+}
+
+{
+   GLCore crap 5
+   Memcheck:Addr4
+   obj:/usr/lib/libGL.so.1.0.5336
+}
+
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:NewDatabase
+   fun:XrmGetStringDatabase
+   fun:InitDefaults
+}
+
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+   obj:/usr/lib/libGL.so.1.0.5336
+}
+
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:XOpenDisplay
+   fun:_Z16qt_init_internalPiPPcP9_XDisplaymm
+   fun:_Z7qt_initPiPPcN12QApplication4TypeE
+}
+
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XimOpenIM
+   fun:_XDynamicOpenIM
+   fun:_XimRegisterIMInstantiateCallback
+}

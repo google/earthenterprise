@@ -1,0 +1,415 @@
+   _        ___  ____ ____  ____
+  |_|_ _   / _ \/ ___/ ___||  _ \   _ __ ___  _ __ ___
+  _|_||_| | | | \___ \___ \| |_) | | '_ ` _ \| '_ ` _ \
+ |_||_|_| | |_| |___) |__) |  __/  | | | | | | | | | | |
+  |_|_|_|  \___/|____/____/|_|     |_| |_| |_|_| |_| |_|
+
+ OSSP mm - Shared Memory Allocation
+
+ ChangeLog
+ =========
+
+ Changes between 1.4.1 and 1.4.2 (10-Aug-2006 to 15-Aug-2006)
+
+  *) Remove a trailing whitespace in mm.pod which
+     confused pod2html(1) and generated bad output.
+     [Neil Conway <neilc@samurai.com>]
+
+ Changes between 1.4.0 and 1.4.1 (02-Sep-2005 to 10-Aug-2006)
+
+  *) Add new API function MM_reset() and mm_reset().
+     [Neil Conway <neilc@samurai.com>]
+
+  *) Upgraded build environment to GNU shtool 2.0.6,
+     GNU libtool 1.5.22 and GNU autoconf 2.60.
+     [Ralf S. Engelschall]
+
+  *) Fix spelling errors in manual page mm(3) and corrected
+     description of mm_sizeof() function.
+     [Neil Conway <neilc@samurai.com>]
+
+ Changes between 1.3.1 and 1.4.0 (12-Sep-2003 to 02-Sep-2005)
+
+  *) Optimize insertion of free memory chunks by merging with
+     the spare area if possible to decrease memory fragmentation.
+     [<gennadyd@yahoo.com>]
+
+  *) Fix mm_realloc() function: If the memory chunk passed to mm_realloc()
+     can't be extended and a new chunk must be allocated, the old memory
+     is copied into the new chunk with a call to memcpy(3). However, the
+     used size is the length of the new data and will cause memcpy(3) to
+     access memory beyond the old data chunk's boundaries.
+     [Kirk Petersen <kirk.petersen@watchguard.com>]
+
+  *) Upgraded build environment to GNU Libtool 1.5.20 and GNU shtool 2.0.2
+     [Ralf S. Engelschall]
+  
+  *) Updated all copyright messages for year 2005.
+     [Ralf S. Engelschall]
+
+ Changes between 1.3.0 and 1.3.1 (07-Mar-2003 to 12-Sep-2004)
+
+  *) Upgraded build environment to GNU Shtool 2.0.1,
+     GNU Libtool 1.5.8 and Autoconf 2.59.
+     [Ralf S. Engelschall]
+
+ Changes between 1.2.2 and 1.3.0 (23-Dec-2002 to 07-Mar-2003)
+
+  *) Correctly cleanup under MM_SHMT_MMZERO in case of a shared
+     memory segment creation error.
+     [Ralf S. Engelschall]
+
+  *) Close the filedescriptor of the underlying object immediately
+     after mmap(2)'ing it in case of MM_SHMT_MMPOSX, MM_SHMT_MMZERO
+     and MM_SHMT_MMFILE.
+     [Ralf S. Engelschall, Joe Orton <jorton@redhat.com>]
+
+ Changes between 1.2.1 and 1.2.2 (28-Jul-2002 to 23-Dec-2002)
+
+  *) Stripped trailing whitespaces from all files in source tree.
+     [Ralf S. Engelschall]
+
+  *) Upgraded build environment to GNU Shtool 1.6.2, Libtool 1.4.3
+     and Autoconf 2.57.
+     [Ralf S. Engelschall]
+
+  *) Use "close-on-exec" semantic on internal file descriptors if
+     underlying platform supports this feature. This makes sure the file
+     descriptors are closed by the kernel upon execution of exec(3) by
+     the application.
+     [Ralf S. Engelschall, Martin Kraemer <Martin.Kraemer@Fujitsu-Siemens.com>]
+
+  *) Fixed Makefile.in: $(TRUE) was not defined.
+     [Will Day <wd@hpgx.net>]
+
+  *) Updated all copyright messages with forthcoming year 2003,
+     added OSSP project as secondary copyright holder, added standard
+     OSSP ASCII-art logo to documents, etc.
+     [Ralf S. Engelschall]
+
+ Changes between 1.2.0 and 1.2.1 (26-Jul-2002 to 28-Jul-2002)
+
+  *) Fixed the package rolling: configure.ac was missing because
+     of a bug in devtool.conf.
+     [Kean Johnston <jkj@armory.com>]
+
+ Changes between 1.1.3 and 1.2.0 (01-Jul-2000 to 26-Jul-2002)
+
+  *) Fixed race condition in temporary file creation.
+     [Sebastian Krahmer, SuSE Security]
+
+  *) Make sure that under MM_SEMT_IPCSEM (mutex implementation method is
+     SysV IPC semget) the {mm,MM}_permission() also changes the owner of
+     the semaphore.
+     [Jonathan Kamens <jonathank@worldwinner.com>]
+
+  *) Add support for IRIX 6.5 and other Unix flavors which have
+     MAXPATHLEN in <sys/param.h>
+     [Joe Orton <jorton@redhat.com>]
+
+  *) Removed the old fbtool stuff for reporting the success/failure
+     because after 3 years of existence we really know that OSSP mm
+     works on every reasonable Unix flavor on this earth.
+     [Ralf S. Engelschall]
+
+  *) Upgraded to GNU autoconf 2.53, GNU libtool 1.4.2 and GNU shtool
+     1.6.1 build environment (using OSSP devtool).
+     [Ralf S. Engelschall]
+
+  *) Changed home from http://www.engelschall.com/sw/mm/ to OSSP
+     http://www.ossp.org/pkg/lib/mm/ and official name from "MM" to
+     "OSSP mm" to follow name conventions in the OSSP project.
+     [Ralf S. Engelschall]
+
+  *) Removed variables from ANSI C function prototypes in mm.h
+     to avoid any potential conflicts in advance.
+     [Ralf S. Engelschall]
+
+  *) Adjusted year in copyright messages for 2002.
+     [Ralf S. Engelschall]
+
+  *) From Apache 2.0's MM patch set:
+     Make Autoconf test for maximum shared memory size support BEOS and
+     make decision cacheable.
+     [The Apache Software Foundation]
+
+  *) Fixed initializations of fdxxx variables in mm_core.c
+     [Alexander Farber <farber@cpan.org>]
+
+  *) Added $(DESTDIR) support to Makefile.in. This makes life easier
+     for RPM package building.
+     [Brad <brad@openbsd.org>, Ralf S. Engelschall]
+
+  *) Fixed typo in mm.h: (still unused) definition of SIZEOF_mem_core_fd
+     lacked a closing parenthesis.
+     [Alexander Farber <farber@cpan.org>]
+
+  *) Added required "(void *)" cast to MAP_FAILED in Autoconf stuff.
+     [Albert Chin-A-Young <china@thewrittenword.com>,
+     Joe Orton <jorton@redhat.com>]
+
+ Changes between 1.1.2 and 1.1.3 (21-May-2000 to 01-Jul-2000)
+
+  *) Upgraded to GNU libtool from version 1.3.4 to 1.3.5
+     and upgraded GNU shtool from version 1.4.9 to 1.5.0
+     [Ralf S. Engelschall]
+
+  *) Added OS/390 support to config.sub.
+     [Greg Ames <gregames@raleigh.ibm.com>]
+
+  *) Fixed type-warnings related to `char' vs. `unsigned char' in mm_test.c
+     [Ralf S. Engelschall]
+
+  *) Let the internal mm_insert_chunk() function detect the situation
+     where a chunk of memory is inserted twice (usually caused by the
+     application through multiple and this way illegal calls to mm_free() with
+     the same argument). This especially makes sure the internal list
+     of free chunks is not corrupted.
+     [Jeffrey Hsu <hsu@FreeBSD.ORG>, Ralf S. Engelschall]
+
+  *) Fixed typos in mm.pod.
+     [Ralf S. Engelschall]
+
+ Changes between 1.1.1 and 1.1.2 (30-Apr-2000 to 21-May-2000)
+
+  *) Fixed some logic in mm's configuration that removes -g from CFLAGS.
+     It incorrectly collapsed " -g " to "", which leaded to invalid CFLAGS.
+     [Jeff Trawick <trawickj@bellsouth.net>]
+
+  *) Fixed shared memory decisions on Linux:
+     We now avoid using MM_SHMT_MMANON (seems to be completely
+     broken on 2.0), MM_SHMT_MMZERO (seems like Linux 2.0 hates this
+     classical combination and return EINVAL for unknown reasons) and
+     MM_SHMT_IPCSHM (requires that a IPC shm filesystem is mounted
+     since 2.3). So, technically MM_SHMT_IPCSHM is preferred if the shm
+     filesystem exists, else we count on MM_SHMT_MMFILE now.
+     [Ralf S. Engelschall]
+
+ Changes between 1.1.0 and 1.1.1 (30-Apr-2000 to 30-Apr-2000)
+
+  *) Fixed compilation under Solaris where the SunOS4 and BS2000 kludges
+     for <sys/shm.h> conflicted with the Sun vendor includes (which
+     unfortunately use the defines).
+     [Ralf S. Engelschall, Jeff Beard <jeff@cyberxape.com>]
+
+ Changes between 1.0.12 and 1.1.0 (28-Sep-1999 to 30-Apr-2000)
+
+  *) Fixed `make test' feedback procedure in Makefile.in now that the
+     platform list is stored in the PORTING file.
+     [Ralf S. Engelschall]
+
+  *) Renamed file CHANGES to ChangeLog.
+     [Ralf S. Engelschall]
+
+  *) Fixed pointer arithmentic in memset/memcpy replacements
+     by casting `void *' arguments to `char *'.
+     [Sascha Schumann <sascha@schumann.cx>]
+
+  *) Added BS2000 support for <sys/shm.h> stuff.
+     [Martin Kraemer <Martin.Kraemer@Fujitsu-Siemens.com>]
+
+  *) Added an include for <fcntl.h> to maximum shared mem segment size
+     check in aclocal.m4. This especially fixes compile problems under for
+     Solaris 8.
+     [Alexander Demenchuk <alder@untech.com>, Greg Gears <gears@netair.com>]
+
+  *) Fixed a warning under IRIX related to size_t comparisons
+     [Ralf S. Engelschall]
+
+  *) Added support for IBM OS/390
+     [Jeff Trawick <trawick@ibm.net>]
+
+  *) Upgraded to GNU libtool from version 1.3.3 to 1.3.4
+     and upgraded GNU shtool from version 1.4.6 to 1.4.9
+     [Ralf S. Engelschall]
+
+  *) Upgraded config.guess to GNU Pth's version and
+     use "/sbin/sysctl" under FreeBSD instead of just "sysctl"
+     [Jeff Trawick <trawick@ibm.net>]
+
+  *) Added platform support for the esoteric Unix look-alike BeOS
+     [David Reid" <dreid@jetnet.co.uk>]
+
+  *) Added `make check' as an alias for `make test'
+     [Ralf S. Engelschall]
+
+  *) Adjusted copyright messages for year 2000
+     [Ralf S. Engelschall]
+
+  *) Fixed Autoconf checks for SunOS
+     [Ralf S. Engelschall]
+
+  *) Fixed a bug in aclocal.m4's AC_CHECK_DEFINE macro.
+     [Ralf S. Engelschall]
+
+  *) Updated the manual page (typos, fixes, etc.)
+     [Ralf S. Engelschall]
+
+  *) Splitted README into README, PORTING and THANKS document.
+     [Ralf S. Engelschall]
+
+ Changes between 1.0.11 and 1.0.12 (06-Sep-1999 to 28-Sep-1999)
+
+  *) Recreated configure with latest Autoconf 2.13.1 (snapshot)
+  *) Always use --mode=xxx for libtool calls to avoid problems under
+     situations where $CC doesn't allow libtool to guess the mode
+     correctly.
+
+ Changes between 1.0.10 and 1.0.11 (27-Aug-1999 to 06-Sep-1999)
+
+  *) Cleaned up various file permission in source tree
+  *) Enhanced mm-config.in: new --all option and less newlines
+  *) Added support --silent to libtool glue code in aclocal.m4
+  *) Upgraded to GNU Pth's more recent config.{guess,sub}
+  *) Upgraded to GNU shtool 1.4.6
+  *) Fixed --section for mm-config in Makefile.in
+  *) Added `void *' casts to MAP_FAILED (= -1) values to avoid
+     warnings under some platforms.
+  *) Fixed a few typos in mm.pod
+
+ Changes between 1.0.9 and 1.0.10 (02-Jul-1999 to 27-Aug-1999)
+
+  *) Changed "make dist" and "make snap" to use "shtool tarball"
+  *) Added #define KERNEL for SunOS to get SHM_R und SHM_W values.
+  *) Upgraded to GNU libtool 1.3.3
+  *) Upgraded to GNU shtool 1.4.5
+  *) Downgraded required Autoconf version to 2.12
+  *) Added MM version number to test report
+  *) Added --enable-batch
+  *) Moved mm_lock_mode in mm.h to top to avoid warnings
+
+ Changes between 1.0.8 and 1.0.9 (24-Jun-1999 to 02-Jul-1999)
+
+  *) Fixed a nasty bug related to {MM,mm}_[un]lock():
+     an additional semicolon broke the semantics.
+  *) Upgraded to released shtool 1.4.0
+  *) Fixed `make test'
+
+ Changes between 1.0.7 and 1.0.8 (22-Jun-1999 to 24-Jun-1999)
+
+  *) Added important MAP_FAILED fallback also to Autoconf stuff
+  *) Upgraded to latest shtool 1.3.0-dev to fix two Awk problems
+
+ Changes between 1.0.6 and 1.0.7 (06-Jun-1999 to 22-Jun-1999)
+
+  *) Upgraded to latest shtool 1.3.0-dev
+  *) Avoid -g under non-debugging situation
+  *) Complain with a fatal error message when MM_SHM_MAXSEGSIZE
+     couldn't be determined.
+  *) Updated config.guess/config.sub
+  *) Fixed a nasty permission bug for the lock files:
+     they were opened write-only, but at least fcntl()
+     requires them to be opened read-write.
+  *) Check return value of mm_core_lock() in mm_alloc.c
+
+ Changes between 1.0.5 and 1.0.6 (02-Jun-1999 to 06-Jun-1999)
+
+  *) Fixed mm_malloc() function: it returned the wrong pointer when a chunk
+     was reused and forgot to lock/unlock the data structures.
+  *) Fixed internal best-fit algorithm for finding a free memory chunk:
+     - things got inserted out of order in the list
+     - when chunk is found which matches size exactly it stops immediately
+     - lowered chunk splitting threshold to MIN(2*size,128)
+  *) Moved internal definitions in mm.h to private section
+
+ Changes between 1.0.4 and 1.0.5 (21-May-1999 to 02-Jun-1999)
+
+  *) Fixed output of mm-config.in
+  *) Fixed output of configure --help
+  *) Upgraded to GNU libtool 1.3.2
+  *) Upgraded to shtool 1.2.9
+  *) Made libtool calls visible but use --quiet
+  *) Hint user to send feedback only on errors or for new platform
+  *) Removed unnecessary "elf" hint for FreeBSD from config.guess
+
+ Changes between 1.0.3 and 1.0.4 (15-May-1999 to 21-May-1999)
+
+  *) Fixed maximum memory size determination and internal handling
+  *) Documented the mm_lib_xxx() functions.
+
+ Changes between 1.0.2 and 1.0.3 (26-Apr-1999 to 15-May-1999)
+
+  *) Added {MM,mm,mm_core}_permission() function
+  *) Fixed version information and mod_ssl URL in manual page
+  *) Upgraded config.{guess,sub} from libtool 1.3 distribution
+  *) Upgraded to GNU libtool 1.3
+  *) Upgraded to shtool 1.2.7
+  *) Fixed public includes for xx_t types
+  *) Fixed mm_vers.c and shtool type inside CVS
+
+ Changes between 1.0.1 and 1.0.2 (18-Apr-1999 to 26-Apr-1999)
+
+  *) Upgraded to GNU libtool 1.2f
+  *) Upgraded to shtool 1.1.0
+
+ Changes between 1.0.0 and 1.0.1 (18-Mar-1999 to 18-Apr-1999)
+
+  *) Fixed "dist" Makefile target to not distribute CVS stuff
+  *) Upgraded lshtool to the latest version
+  *) Const'ification of the API
+
+ Changes between 1.0b6 and 1.0.0 (18-Mar-1999 to 28-Mar-1999)
+
+  *) Finally cleaned up and polished the mm.pod manual page.
+  *) Fixed mm-config program
+
+ Changes between 1.0b5 and 1.0b6 (18-Mar-1999 to 18-Mar-1999)
+
+  *) Added {MM,mm}_maxsize() to manual page
+  *) Changed MM_create() signature to match mm_create()
+
+ Changes between 1.0b4 and 1.0b5 (15-Mar-1999 to 18-Mar-1999)
+
+  *) Make sure the maximum allocateable size takes
+     the overhead of the memory pool into account.
+  *) Fixed lshtool and this way hex version string
+  *) Fixed Makefile for mm_test target dependecies
+  *) Added {MM,mm}_maxsize() function to let one
+     determine in advance the maximum allocateable pool
+
+ Changes between 1.0b3 and 1.0b4 (15-Mar-1999 to 15-Mar-1999)
+
+  *) Added mm-config.pod manpage
+  *) Split mm-config --ldflags into --ldflags and --libs
+  *) Removed TODO and fulltest files
+
+ Changes between 1.0b2 and 1.0b3 (13-Mar-1999 to 15-Mar-1999)
+
+  *) Added Autoconf check for determining max shared mem segment size
+  *) Changed -1 to MAP_FAILED when available
+  *) Replaced 8KB default shared memory segment size with max size
+  *) Added mm_core_maxsegsize() function
+  *) Use a remembered offset for mmap() on temporary files
+  *) Imported source tree into CVS
+  *) Added read-only locking support
+  *) Fixed MMFILE and MMZERO variants
+
+ Changes between 1.0b1 and 1.0b2 (12-Mar-1999 to 13-Mar-1999)
+
+  *) Updated the mm.pod manual page.
+  *) Split README into README and LICENSE files
+  *) Fixed becho problems
+  *) Added a test suite summary
+  *) Added INSTALL file
+  *) Reduced mm_test's memory size from 1MB to 512KB
+  *) Fixed unsigned long and %X related warnings
+
+ Changes between 1.0b0 and 1.0b1 (11-Mar-1999 to 12-Mar-1999)
+
+  *) Enhanced mm_test
+  *) Added {MM,mm}_available() function
+  *) Fixed MMZERO
+  *) Fixed IPC Semaphore initialization
+  *) Added --with-{sem,shm}=TYPE options
+  *) Fixed "make test" and mm_memory_display() function
+  *) Added mm_lib.c source with mm_lib_xx() functions
+
+ Changes between 0.9.0 and 1.0b0 (10-Mar-1999 to 11-Mar-1999)
+
+  *) Switched to GNU Autoconf and GNU Libtool
+
+ Changes between GENESIS and 0.9.0 (Jan-1999 to 10-Mar-1999)
+
+  *) Created initial version on FreeBSD
+  *) Ported to Linux and Solaris
+

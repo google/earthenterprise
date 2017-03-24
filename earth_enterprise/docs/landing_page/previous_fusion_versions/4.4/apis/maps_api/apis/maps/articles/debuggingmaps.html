@@ -1,0 +1,556 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+ 
+ 
+
+
+ 
+
+  
+  
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/articles/debuggingmaps.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Using Debugging Tools with the Google Maps API - Google Maps API Family - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/maps/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../css/iehacks.css"><![endif]-->
+
+    <link href="../../../css/semantic_headers.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    
+    
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  <a href="#gc-pagecontent">Skip to page content</a>
+  <a href="#gc-toc">Skip to main navigation</a>
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps API Family</h1>
+  <ul id="articles" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="../index.html" title="Google Maps API Family home page">Home</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../faq.html" title="Answers to frequently asked questions about Google Maps API Family">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="index.html" class="selected" title="Focused articles and tutorials for Google Maps API Family developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps API Family blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="../forum/index.html" title="Google Maps API Family developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../terms.html" title="Google Maps API Family terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../index.html">Maps API Family</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps Javascript API V3</h2>
+         <ul>
+           <li><a href="../documentation/javascript/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+      <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../documentation/javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+  <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../documentation/flash/index.html">Home Page</a></li>
+          <li><a href="../documentation/flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../documentation/mapsdata/index.html">Home Page</a></li>
+          <li><a href="../documentation/mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+     <div class="line"></div>
+      <ul>
+        <li><h2><a href="../documentation/webservices/index.html">Maps Web Services</a></h2>
+         <ul>
+           <li><a href="../documentation/geocoding/index.html">Geocoding Guide</a></li>
+           <li><a href="../documentation/directions/index.html">Directions Guide</a></li>
+           <li><a href="../documentation/elevation/index.html">Elevation Guide</a></li>
+           <li><a href="../documentation/places/index.html">Places Guide</a></li>
+         </ul>
+       </li>
+      </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../documentation/staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li>
+            <h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../documentation/localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../documentation/localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+      <div class="promo">
+     <p><a href="../documentation/premier/index.html">Google Maps API Premier</a></p><p>Includes enterprise licensing and support</p></div>
+
+        <a class="hidden" href="#gc-topnav-anchor">More Google Maps API Family resource links</a>
+      </div>
+      
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Using Debugging Tools with the Google Maps API</h1>
+
+
+<!-- ########## PAGE CONTENT ########## -->
+<div class=i>
+<script src="http://code.google.com/js/collapsible.js" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" href="http://code.google.com/css/collapsible.css" type="text/css" media="screen" title="no title" charset="utf-8">
+<style type="text/css">
+.inlinepic {
+  border: 1px solid black;
+  margin: 20px;
+}
+ol li{
+  margin-bottom: 20px;
+}
+.funcTable {
+  margin-left: 30px;
+}
+.funcTable td {
+  border: 1px solid grey;
+  padding: 5px;
+  font-size: 11px;
+  text-align: center;
+}
+h3 {
+  border-bottom: 1px solid grey;
+}
+.collapsible {
+  width: 400px;
+  border:1px solid #00c;
+}
+.title {
+  border-bottom:1px solid #00c;
+  background: cornflowerblue;
+  color: white;
+  padding: 2px;
+  font-family: sans-serif;
+  cursor: pointer;
+}
+.collapsible-content {
+  border-top: 1px solid black;
+  padding: 3px;
+}
+img.collapsible-control {
+  vertical-align:bottom;
+}
+</style>
+<em>Pamela Fox, Google Geo APIs Team
+<br/>
+
+January 2008</em>
+<p class="para">
+Web programming can be difficult without debugging tools, especially when dealing with JavaScript and HTTP requests. This series of screencasts shows you how to use several tools that can help you develop and debug yours Maps API mashups faster. The <a href="#Resources">resources</a> section has links to download sites for some of the tools used (Web Developer Toolbar, Firebug), which you can download before watching the screencasts if you'd like.
+</p>
+<ul>
+<li><a href="#Screencast">Screencast</a></li>
+<li><a href="#Resources">Resources</a></li>
+</ul>
+<a name="Screencast"></a><h3>Screencast</h3>
+<p class="para">
+
+Click on the screenshots below to open the screencasts. Watching a screencast requires the Adobe Flash Player plug-in. You can navigate through a screencast by moving the slider or pressing the backwards/forwards buttons.
+</p>
+<a href="http://gmaps-samples.googlecode.com/svn/trunk/articles-debuggingmaps/debuggingmaps_webdevelopertoolbar.swf">
+<img style="border:1px solid blue" src="http://gmaps-samples.googlecode.com/svn/trunk/articles-debuggingmaps/debuggingmaps_webdevelopertoolbar_screenshot.jpg"></a>
+<br/>
+<div class="collapsible">
+<div class="title collapsible-controls">Screencast Transcript</div>
+<div class="collapsible-content">
+<ul><li>
+This Firefox extension adds a toolbar with all sorts of nifty tools for web developers.
+</li><li>
+This screencast just shows how a few of them relate to the Maps API, but you should experiment with all the tools and see how you might use them in the future.
+</li><li>
+Outline Images
+</li><li>
+This tool is useful for understanding what parts of a page are images and how those images are positioned and sized. In the case of Maps, it shows you how the Maps API is really composed of many images tiled in a div.
+
+</li><li>
+Now you can see the map is just a series of 256*256 tiles.
+</li><li>
+Image Information
+</li><li>
+This tool is useful for seeing all the images that make up a page in their original, un-scaled and un-repeated form. It's a good way of seeing how a web designer has manipulated images with CSS in order to create their site.
+</li><li>
+Notice the URL gives an x, y, and zoom level (this is used in the getTileUrl function for map types).
+</li><li>
+Ruler
+</li><li>
+The Web Developer Toolbar comes with a Ruler that can be used to figure out exact measurements where pixel positioning is necessary, like with Maps API controls.
+</li><li>
+Drag the ruler to the new position where you'd like to put the control.
+</li></ul>
+</div>
+
+</div>
+<br/>
+<a href="http://gmaps-samples.googlecode.com/svn/trunk/articles-debuggingmaps/debuggingmaps_firefoxerrorconsole.swf">
+<img style="border:1px solid blue" src="http://gmaps-samples.googlecode.com/svn/trunk/articles-debuggingmaps/debuggingmaps_firefoxerrorconsole_screenshot.jpg"></a>
+<br/>
+<div class="collapsible">
+<div class="title collapsible-controls">Screencast Transcript</div>
+<div class="collapsible-content">
+<ul><li>
+Firefox browsers come with a native Error Console, which outputs any JavaScript/CSS/HTML errors or warnings encountered while rendering a page.
+</li><li>
+This example is meant to display 3 markers based on data in an XML file. Clearly, that hasn't happened. I can check the Error Console for any JavaScript errors outputted before I go on to more sophisticated debugging.
+</li><li>
+The Error Console is natively available in all Firefox browsers.
+</li><li>
+Errors such as undefined variables or functions will show up here, with a pointer to the line number if available.
+
+</li><li>
+Now it becomes obvious my error: I tried using the variable 'point' though I'd defined 'latlng'.
+</li></ul>
+</div>
+</div>
+<br/>
+<a href="http://gmaps-samples.googlecode.com/svn/trunk/articles-debuggingmaps/debuggingmaps_iescriptdebugger.swf">
+<img style="border:1px solid blue" src="http://gmaps-samples.googlecode.com/svn/trunk/articles-debuggingmaps/debuggingmaps_iescriptdebugger_screenshot.jpg"></a>
+<div class="collapsible">
+<div class="title collapsible-controls">Screencast Transcript</div>
+<div class="collapsible-content">
+<ul><li>
+Internet Explorer can be configured to display script errors and open problematic JavaScript files in a Script Debugger. Since the debugging process in IE takes a bit longer, it's recommended to debug in Firefox first and only in IE for IE-specific errors.
+</li><li>
+First we need to enable debugging (off by default).
+</li><li>
+
+Turn both of the disable script debugging options off.
+</li><li>
+IE will halt execution of the script with the error and line number. If you want to see the actual script causing the error, click "Yes."
+</li><li>
+The arrow points to the problem line. It is now obvious our error of defining 'latlng' and using 'point' instead.
+</li><li>
+If you don't "stop debugging", IE will stay in a halted state of execution and be unusable.
+</li></ul>
+</div>
+</div>
+<br/>
+<br/>
+<a href="http://gmaps-samples.googlecode.com/svn/trunk/articles-debuggingmaps/debuggingmaps_firebug.swf">
+<img style="border:1px solid blue" src="http://gmaps-samples.googlecode.com/svn/trunk/articles-debuggingmaps/debuggingmaps_firebug_screenshot.jpg"></a>
+<br/>
+<div class="collapsible">
+<div class="title collapsible-controls">Screencast Transcript</div>
+
+<div class="collapsible-content">
+<ul><li>
+Firebug is a Firefox extension that places a icon in your status bar that can be expanded to provide a multiple tab UI with various web development and debugging tools, a few of which we'll review in this screencast. It is an incredibly powerful tool - just be aware that having it enabled all the time may slow down your normal browsing experience.
+</li><li>
+SCRIPT tab
+</li><li>
+This tab will show you all the SCRIPT includes that are used on a webpage. It's useful for quickly checking your own JavaScript, but especially useful for studying the code used on other developer's websites.
+</li><li>
+Click on Firebug icon
+</li><li>
+The Maps API loader script.
+</li><li>
+This script tag is loading in v=2.93
+</li><li>
+The additional javascript file added by the Maps API loader script.
+</li><li>
+Obfuscated JavaScript. Not pretty (but it's a smaller download)!
+
+</li><li>
+NET tab
+</li><li>
+This tab shows you all the requests going over the network: retrievals of script files, images, xml http requests, etc. This is useful for debugging Maps API classes that make calls over the network for information: GClientGeocoder, GGeoXML, and GDirections.
+</li><li>
+This calls GClientGeocoder.getLatLng() which just returns a point.
+</li><li>
+Click on Firebug icon
+</li><li>
+Geocode request.
+</li><li>
+Click params to see what the request sent.
+</li><li>
+Click Response tab to see the server response.
+</li><li>
+The status code correlates to the GGeoStatusCode.
+</li><li>
+
+You can see that 200 is a successful query, as expected.
+</li><li>
+Let's try a query that definitely doesn't exist in the world.
+</li><li>
+The new query.
+</li><li>
+The new GGeoStatusCode.
+</li><li>
+This indicates a bad address, as expected.
+</li><li>
+HTML tab
+</li><li>
+The HTML tab in Firebug lets you inspect the DOM elements on the page, as well as edit their HTML and CSS styles. This lets you quickly play with small changes in style or content.
+</li><li>
+Mouseover parts of the page to have their HTML and CSS highlighted in the HTML tab.
+</li><li>
+You can edit the HTML here.
+
+</li><li>
+You can edit styles and add more here. Note that this shows where styles have cascaded from for the selected element.
+</li><li>
+Console tab
+</li><li>
+The Console tab in Firebug lets you run JavaScript on the current page, and output debug messages from console.log() statements in the current page's JavaScript. It's a powerful Firefox-only alternative for debugging.
+</li><li>
+Click for Firebug console
+</li><li>
+The console can output String messages similar to GLog.write.
+</li><li>
+The output is easy to copy and paste to elsewhere.
+</li><li>
+The console can also output more detailed information about non-String variables in your code (in this case, a GLatLng object), simply by writing console.log(variableName).
+</li><li>
+Clicking on the console output will bring you to the DOM tab with a detailed breakdown of the object's member functions and properties.
+</li><li>
+
+You can execute any line of JavaScript here, and it can be used to act on any global variables or IDs in the page.
+</li><li>
+Click here to toggle between single-line and multi-line JavaScript input.
+</li><li>
+The console output is displayed on the left-hand side.
+</li></ul>
+</div>
+</div>
+<br/>
+<a href="http://gmaps-samples.googlecode.com/svn/trunk/articles-debuggingmaps/debuggingmaps_glog.swf">
+<img style="border:1px solid blue" src="http://gmaps-samples.googlecode.com/svn/trunk/articles-debuggingmaps/debuggingmaps_glog_screenshot.jpg"></a>
+<br/>
+<div class="collapsible">
+<div class="title collapsible-controls">Screencast Transcript</div>
+<div class="collapsible-content">
+<ul><li>
+
+The Maps API comes with its own debug console, GLog. Though it doesn't provide the same variable inspection functionality as Firebug, it has the advantage of working on every browser in the same way and is a great alternative to alert().
+</li><li>
+This example downloads an XML file and creates markers based on lat/lng attributes in it. We'll demonstrate debugging the lat/lng with alert vs. GLog.
+</li><li>
+Now we'll add the alert() statement in the for loop.
+</li><li>
+Remember that alerts break execution of the JavaScript until the "OK" button is pressed. This can be time consuming and deceiving, as it changes the natural timing of your page functions.
+</li><li>
+Now we'll replace the alert with GLog.write().
+</li><li>
+GLog outputs your statement in a scrolling console with timestamps.
+</li></ul>
+</div>
+</div>
+</p>
+<a name="Resources"></a><h3>Resources</a></h3>
+
+<p class="para">
+The following links should be useful for you in following this screencast or finding out more about debugging:
+</p>
+<ul>
+ <li><a href="https://addons.mozilla.org/en-US/firefox/addon/60">Web Developer Toolbar Firefox Add-ons Download</a></li>
+ <li><a href="https://addons.mozilla.org/en-US/firefox/addon/1843">Firebug Firefox Add-ons Download</a></li>
+ <li><a href="http://groups.google.com/group/Google-Maps-API/">Google Maps API Group</a>: Post questions here.</li>
+</ul>
+</div>
+<!-- ########## END PAGE CONTENT ########## -->
+  
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

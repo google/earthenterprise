@@ -1,0 +1,157 @@
+# Copyright 2008 Google Inc. All Rights Reserved.
+#-*- Python -*-
+
+import time
+import os
+Import('third_party_env')
+
+current_dir = Dir('.').abspath
+skia_version = 'skia-5.1.2'
+
+# Build third_party libraries
+
+sgl_cpps = Glob('src/[!FlingState].cpp', True, False, True)
+sgl_cpps.extend(Glob('src/core/*.cpp', True, False, True))
+sgl_cpps.extend(Glob('src/effects/*.cpp', True, False, True))
+sgl_cpps.extend(Glob('src/effects/gradients/*.cpp', True, False, True))
+sgl_cpps.extend(Glob('src/gpu/*.cpp', True, False, True))
+sgl_cpps.extend(Glob('src/gpu/gl/*.cpp', True, False, True))
+sgl_cpps.extend(Glob('src/gpu/effects/*.cpp', True, False, True))
+sgl_cpps.extend(Glob('src/images/*.cpp', True, False, True))
+sgl_cpps.extend(Glob('src/image/*.cpp', True, False, True))
+sgl_cpps.extend(Glob('src/pathops/*.cpp', True, False, True))
+sgl_cpps.extend(Glob('src/utils/*[!SkDeferredCanvas|SkLua|SkThreadUtils_pthread_mach|SkThreadUtils_win]*.cpp', True, False, True))
+
+# SkForceLinking.cpp is added before Skia has been extracted, but it should be
+# the only one
+if len(sgl_cpps) > 1:
+  sgl_cpps.remove('src/images/SkForceLinking.cpp')
+  sgl_cpps.remove('src/images/SkImageDecoder_libwebp.cpp')
+  sgl_cpps.remove('src/pathops/main.cpp')
+  sgl_cpps.remove('src/gpu/GrAddPathRenderers_none.cpp')
+  sgl_cpps.remove('src/gpu/FlingState.cpp')
+  sgl_cpps.remove('src/gpu/GrRectanizer_fifo.cpp')
+sgl_cpps.extend([
+  'src/ports/SkFontHost_FreeType.cpp',
+  'src/ports/SkFontHost_FreeType_common.cpp',
+  'src/ports/SkFontHost_linux.cpp',
+  'src/ports/SkOSFile_stdio.cpp',
+  'src/ports/SkOSFile_posix.cpp',
+  'src/ports/SkThread_pthread.cpp',
+  'src/ports/SkTime_Unix.cpp',
+  'src/ports/SkTLS_pthread.cpp'
+])
+sgl_cpps.extend([
+  'src/gpu/GrContext.cpp',
+  'src/gpu/GrEffect.cpp',
+  'src/gpu/effects/GrSimpleTextureEffect.cpp',
+  'src/gpu/effects/GrSingleTextureEffect.cpp',
+  'src/gpu/GrTextureAccess.cpp',
+  'src/gpu/GrGpu.cpp',
+  'src/gpu/GrDrawTarget.cpp',
+  'src/gpu/GrRenderTarget.cpp',
+  'src/gpu/GrMemory.cpp',
+  'src/gpu/GrMemoryPool.cpp',
+  'src/gpu/GrAllocPool.cpp',
+  'src/gpu/SkGr.cpp',
+])
+
+sgl_opts_cpps = [
+  'opts/opts_check_SSE2.cpp',
+  'opts/SkBitmapProcState_opts_SSE2.cpp',
+  'opts/SkBitmapFilter_opts_SSE2.cpp',
+  'opts/SkBlitRow_opts_SSE2.cpp',
+  'opts/SkBlitRect_opts_SSE2.cpp',
+  'opts/SkUtils_opts_SSE2.cpp',
+  ]
+
+sgl_opts_ssse3_cpps = [
+  'opts/SkBitmapProcState_opts_SSSE3.cpp',
+]
+
+if third_party_env['release'] or third_party_env['optimize']:
+  pass
+else:
+  sgl_cpps.append('src/ports/SkDebug_stdio.cpp')
+
+export_root = third_party_env.exportdirs['root']
+skia_rel_dir = third_party_env['skia_rel_dir']
+sgl_src_abs_dir = os.path.join(export_root, skia_rel_dir, 'src')
+sgl_inc_abs_dir = os.path.join(export_root, skia_rel_dir, 'include')
+
+# Configure build environment.
+sgl_env = third_party_env.DeepCopy()
+sgl_env.UpdateCppflagsForSkia()
+
+cxx_flags = sgl_env['CXXFLAGS']
+cxx_flags.remove('-Werror')
+sgl_env['CXXFLAGS'] = cxx_flags
+sgl_env['CPPFLAGS'] += [
+  '-DPNG_HANDLE_CHUNK_ALWAYS=3',
+  '-I' + os.path.join(sgl_inc_abs_dir, 'config'),
+  '-I' + os.path.join(sgl_inc_abs_dir, 'gpu'),
+  '-I' + os.path.join(sgl_inc_abs_dir, 'pathops'),
+  '-I' + os.path.join(sgl_inc_abs_dir, 'ports'),
+  '-I' + os.path.join(sgl_inc_abs_dir, 'utils'),
+  '-I' + os.path.join(sgl_inc_abs_dir, 'xml'),
+  '-I' + os.path.join(sgl_src_abs_dir, 'core'),
+  '-I' + os.path.join(sgl_src_abs_dir, 'gpu'),  # SkGradientShader dependencies.
+  '-I' + os.path.join(sgl_src_abs_dir, 'image'),
+  '-I' + os.path.join(sgl_src_abs_dir, 'utils'),
+  '-I' + os.path.join('/usr/include', 'freetype2')
+  ]
+
+sgl_opts_env = sgl_env.Clone()
+sgl_opts_ssse3_env = sgl_env.Clone()
+
+sgl_core_objects = map(
+    lambda f: sgl_env.Object(f), sgl_cpps)
+
+cxx_flags = sgl_opts_env['CXXFLAGS']
+cxx_flags.append('-msse2')
+sgl_opts_env['CXXFLAGS'] = cxx_flags
+
+sgl_opts_objects = map(
+    lambda f: sgl_opts_env.Object(os.path.join(sgl_src_abs_dir, f)), sgl_opts_cpps)
+
+
+cxx_flags = sgl_opts_ssse3_env['CXXFLAGS']
+cxx_flags.append('-mssse3')
+sgl_opts_ssse3_env['CXXFLAGS'] = cxx_flags
+
+sgl_opts_ssse3_objects = map(
+    lambda f: sgl_opts_ssse3_env.Object(os.path.join(sgl_src_abs_dir, f)), sgl_opts_ssse3_cpps)
+
+sgl_opts_files = map(lambda f: os.path.join(sgl_src_abs_dir, f), sgl_opts_cpps)
+sgl_opts_ssse3_files = map(lambda f: os.path.join(sgl_src_abs_dir, f), sgl_opts_ssse3_cpps)
+
+skia_source = File('#/../../earth_enterprise/third_party/skia/%s.tar.gz'
+                   % skia_version).abspath
+
+skia_source_files = sgl_opts_files + sgl_opts_ssse3_files + sgl_cpps
+skia_target = '%s/.extract_skia' % current_dir
+skia_extract = sgl_env.Command(
+     [skia_target] + skia_source_files, skia_source,
+     [sgl_env.MultiCommand(
+          'rm -rf %s\n'
+          'mkdir -p %s\n'
+          'cd %s\n'
+          'tar xzf %s\n'
+          'touch %s' % (current_dir, current_dir, current_dir, skia_source,
+                        skia_target))])
+
+sgl = sgl_env.staticLib('sgl', sgl_core_objects + sgl_opts_objects + sgl_opts_ssse3_objects)
+
+Default(sgl)
+sgl_env.ExecuteOnClean('rm -rf %s' % current_dir)
+
+if 'install' in COMMAND_LINE_TARGETS:
+  sgl_env.install('common_fonts', 'fontlist')
+  current_dir = Dir('.').abspath
+  for ttf_file in ['luxisr.ttf', 'sans.ttf']:
+    sgl_env.InstallFileOrDir(
+        '%s' % sgl_env.GetBuildPath(ttf_file),
+        '%s/opt/google/share/fonts/' % sgl_env.installdirs['fusion_root'],
+            sgl_env.GetBuildPath(ttf_file), 'install')
+
+Return('skia_extract sgl')

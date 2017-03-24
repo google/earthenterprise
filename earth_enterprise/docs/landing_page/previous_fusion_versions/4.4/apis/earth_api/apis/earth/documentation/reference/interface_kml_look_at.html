@@ -1,0 +1,666 @@
+
+
+
+
+
+
+
+
+
+ 
+
+
+   
+  
+  
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/reference/interface_kml_look_at.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>KmlLookAt Interface Reference - Google Earth API - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/earth/documentation/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../css/iehacks.css"><![endif]-->
+
+    <link href="../../../../css/semantic_headers.css" rel="stylesheet" type="text/css" />
+    <link href="stylesheet.css" rel="stylesheet" type="text/css">
+    <link href="tabs.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body class="gc-documentation">
+
+    
+    
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" class="dropdown" href="http://code.google.com" onclick="return false;"><img width="13" height="13" class="globeicon" src="../../../../images/globe2_small.png"
+     ><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  <a href="#gc-pagecontent">Skip to page content</a>
+  <a href="#gc-toc">Skip to main navigation</a>
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../../../../images/code_logo.png" height="40" width="161" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "ajax apis" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+<h2 id="googlecode-promo">Make web development faster with these <a href="http://chrome.google.com/extensions/featured/web_dev" onclick="siteTracker._trackEvent('Promos','Web Development',this.href);">Chrome Extensions</a>!</h2>
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Earth API</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="../../index.html" title="Google Earth API home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="../index.html" class="selected" title="Official Google Earth API documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../faq.html" title="Answers to frequently asked questions about Google Earth API">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="../../articles/index.html" title="Focused articles and tutorials for Google Earth API developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Earth API blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="http://groups.google.com/group/google-earth-browser-plugin/topics" title="Google Earth API developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="http://code.google.com/apis/maps/terms.html" title="Google Earth API terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="http://code.google.com/apis/maps/signup.html">Sign up for a Maps API key</a></li>
+</ul>
+
+<div class="line"></div>
+
+<ul>
+
+  <li>
+    <h2><a href="#">API Reference</a></h2>
+    <div class="line"></div>
+  </li>
+  <li><h2>Developer's Guide</h2>
+    <ul>
+      <li><a href="../index.html">Introduction</a></li>
+      <li><a href="../placemarks.html">Placemarks</a></li>
+      <li><a href="../balloons.html">Balloons</a></li>
+      <li><a href="../geometries.html">Geometries & Overlays</a></li>
+      <li><a href="../camera_control.html">Camera Control</a></li>
+      <li><a href="../layers.html">Layers & Controls</a></li>
+      <li><a href="../time.html">Time</a> <sup class="new">Updated</sup></li>
+      <li><a href="../ocean.html">Ocean</a></li>
+      <li><a href="../sky_mars_moon.html">Sky, Mars, & Moon</a></li>
+      <li><a href="../touring.html">Touring</a></li>
+      <li><a href="../events.html">Events</a></li>
+      <li><a href="../accessors.html">Accessors</a> <sup class="new">New!</sup></li>
+      <li><a href="../containers.html">Object Containers</a></li>
+      <li><a href="../kml.html">KML</a></li>
+      <li><a href="../options.html">Options</a></li>
+      <li><a href="../debugging.html">Debugging</a></li>
+    </ul>
+  </li>
+        
+  <div class="line"></div>
+    
+  <li><h2 class="tlw-expanded">Code Samples</h2>
+    <ul>
+      <li><a href="../examples.html">Examples</a></li>
+      <li><a href="../demogallery.html">Demo Gallery</a>
+      </li>
+      <li><a href="http://code.google.com/apis/ajax/playground/?exp=earth">Code Playground</a></li>
+    </ul>
+  </li>
+    
+  <div class="line"></div>
+    
+  <li><h2 class="tlw-expanded">More Resources</h2>
+    <ul>
+      <li><a href="../mediagallery.html">Media</a></li>
+      <li><a href="../releasenotes.html">Release Notes</a></li>
+      <li><a href="http://code.google.com/p/earth-api-utility-library">Utility Library</a></li>
+      <li><a href="http://code.google.com/p/earth-api-samples/issues/list?q=label%3AType-Defect">Known Issues</a></li>
+    </ul>
+  </li>
+</ul>
+
+<div class="line"></div>
+<ul>
+ <li>
+    <h2>Related Docs</h2>
+    <ul>                
+      <li><a href="http://code.google.com/apis/kml/documentation/index.html">KML</a></li>
+      <li><a href="http://code.google.com/apis/maps/documentation/index.html">Maps API</a></li>
+    </ul>                
+ </li>
+</ul>
+        <a class="hidden" href="#gc-topnav-anchor">More Google Earth API resource links</a>
+      </div>
+
+      <div class="g-unit" id="gc-pagecontent">
+
+<div id="doxygen-ref">
+<!-- Generated by Doxygen 1.5.8 -->
+<div class="navigation" id="top">
+</div>
+<div class="contents">
+<h1>KmlLookAt Interface Reference</h1><!-- doxytag: class="KmlLookAt" --><!-- doxytag: inherits="KmlAbstractView" --><div class="dynheader">
+Inheritance diagram for KmlLookAt:</div>
+<div class="dynsection">
+
+<p><center><img src="interface_kml_look_at.png" usemap="#KmlLookAt_map" border="0" alt=""></center>
+<map name="KmlLookAt_map">
+<area href="interface_kml_abstract_view.html" alt="KmlAbstractView" shape="rect" coords="0,112,107,136">
+<area href="interface_kml_object.html" alt="KmlObject" shape="rect" coords="0,56,107,80">
+<area href="interface_g_e_event_emitter.html" alt="GEEventEmitter" shape="rect" coords="0,0,107,24">
+</map>
+</div>
+
+<p>
+<a href="interface_kml_look_at-members.html">List of all members.</a><table border="0" cellpadding="0" cellspacing="0">
+<tr><td></td></tr>
+<tr><td colspan="2"><br><h2>Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_kml_look_at.html#4bba37802619ec5b458aa7ace2ec41b9">set</a> (double latitude, double longitude, double altitude, KmlAltitudeModeEnum altitudeMode, double heading, double tilt, double range)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_kml_look_at.html#f533af6182f306286e2093782a8e3da5">getLatitude</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_kml_look_at.html#65446d49b12b69ed8052303ef38a549a">setLatitude</a> (double latitude)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_kml_look_at.html#2ebca92d45c92cb770748ff53e7f53a8">getLongitude</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_kml_look_at.html#d964fe0fc6c2acdd7424af6f500dbecc">setLongitude</a> (double longitude)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_kml_look_at.html#865bd074af5cc4bad2bb4124df5761ff">getRange</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_kml_look_at.html#d98c3ff2c52e534ca64101c76ce05829">setRange</a> (double range)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_kml_look_at.html#99f3f13b053031541cedd3c4bc757add">getTilt</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_kml_look_at.html#8d307d308e64c137452c20b1d62fc054">setTilt</a> (double tilt)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_kml_look_at.html#225e831dbd8061dcc764adcc9a86f27e">getHeading</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_kml_look_at.html#ac6828f261ee45d9cce6e84aea0014b8">setHeading</a> (double heading)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_kml_look_at.html#a6bb6eef8d51179bbf9bd711175d11dd">getAltitude</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_kml_look_at.html#f5e530d5776940917819e9a79ea2de32">setAltitude</a> (double altitude)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">KmlAltitudeModeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_kml_look_at.html#9fb12b61224c1bf881316aa43c5d4e1b">getAltitudeMode</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_kml_look_at.html#65992bc21b3ea306126af5599aea94fd">setAltitudeMode</a> (KmlAltitudeModeEnum altitudeMode)</td></tr>
+
+</table>
+<hr><a name="_details"></a><h2>Detailed Description</h2>
+Defines a  camera that is associated with anything derived from feature. The LookAt element positions the "camera" in relation to the object that is being viewed. This class either positions the relative to a feature, or you can manually change the view, using ge.getView().setAbstractView(). <hr><h2>Member Function Documentation</h2>
+<a class="anchor" name="4bba37802619ec5b458aa7ace2ec41b9"></a><!-- doxytag: member="KmlLookAt.set" ref="4bba37802619ec5b458aa7ace2ec41b9" args="(double latitude, double longitude, double altitude, KmlAltitudeModeEnum altitudeMode, double heading, double tilt, double range)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KmlLookAt.set           </td>
+          <td>(</td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>latitude</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>longitude</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>altitude</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">KmlAltitudeModeEnum&nbsp;</td>
+          <td class="paramname"> <em>altitudeMode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>heading</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>tilt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>range</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Sets the latitude, longitude, altitude, altitudeMode, heading, tilt, and range for the  camera. 
+</div>
+</div><p>
+<a class="anchor" name="f533af6182f306286e2093782a8e3da5"></a><!-- doxytag: member="KmlLookAt.getLatitude" ref="f533af6182f306286e2093782a8e3da5" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double KmlLookAt.getLatitude           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Latitude of the point the camera is looking at. Degrees north or south of the Equator (0 degrees). Values range from -90 degrees (South Pole) to 90 degrees (North Pole). 
+</div>
+</div><p>
+<a class="anchor" name="65446d49b12b69ed8052303ef38a549a"></a><!-- doxytag: member="KmlLookAt.setLatitude" ref="65446d49b12b69ed8052303ef38a549a" args="(double latitude)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KmlLookAt.setLatitude           </td>
+          <td>(</td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>latitude</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Latitude of the point the camera is looking at. Degrees north or south of the Equator (0 degrees). Values range from -90 degrees (South Pole) to 90 degrees (North Pole). 
+</div>
+</div><p>
+<a class="anchor" name="2ebca92d45c92cb770748ff53e7f53a8"></a><!-- doxytag: member="KmlLookAt.getLongitude" ref="2ebca92d45c92cb770748ff53e7f53a8" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double KmlLookAt.getLongitude           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Longitude of the point the camera is looking at. Angular distance in degrees, relative to the Prime Meridian. Values west of the Meridian range from -180 to 0 degrees. Values east of the Meridian range from 0 to 180 degrees. 
+</div>
+</div><p>
+<a class="anchor" name="d964fe0fc6c2acdd7424af6f500dbecc"></a><!-- doxytag: member="KmlLookAt.setLongitude" ref="d964fe0fc6c2acdd7424af6f500dbecc" args="(double longitude)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KmlLookAt.setLongitude           </td>
+          <td>(</td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>longitude</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Longitude of the point the camera is looking at. Angular distance in degrees, relative to the Prime Meridian. Values west of the Meridian range from -180 to 0 degrees. Values east of the Meridian range from 0 to 180 degrees. 
+</div>
+</div><p>
+<a class="anchor" name="865bd074af5cc4bad2bb4124df5761ff"></a><!-- doxytag: member="KmlLookAt.getRange" ref="865bd074af5cc4bad2bb4124df5761ff" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double KmlLookAt.getRange           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+The distance in meters from the point specified by longitude, latitude, and altitude for the LookAt position. 
+</div>
+</div><p>
+<a class="anchor" name="d98c3ff2c52e534ca64101c76ce05829"></a><!-- doxytag: member="KmlLookAt.setRange" ref="d98c3ff2c52e534ca64101c76ce05829" args="(double range)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KmlLookAt.setRange           </td>
+          <td>(</td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>range</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+The distance in meters from the point specified by longitude, latitude, and altitude for the LookAt position. 
+</div>
+</div><p>
+<a class="anchor" name="99f3f13b053031541cedd3c4bc757add"></a><!-- doxytag: member="KmlLookAt.getTilt" ref="99f3f13b053031541cedd3c4bc757add" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double KmlLookAt.getTilt           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Angle between the direction of the LookAt position and the normal to the surface of the earth. Values range from 0 to 90 degrees. Values for tilt cannot be negative. A tilt value of 0 degrees indicates viewing from directly above. A tilt value of 90 degrees indicates viewing along the horizon. 
+</div>
+</div><p>
+<a class="anchor" name="8d307d308e64c137452c20b1d62fc054"></a><!-- doxytag: member="KmlLookAt.setTilt" ref="8d307d308e64c137452c20b1d62fc054" args="(double tilt)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KmlLookAt.setTilt           </td>
+          <td>(</td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>tilt</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Angle between the direction of the LookAt position and the normal to the surface of the earth. Values range from 0 to 90 degrees. Values for tilt cannot be negative. A tilt value of 0 degrees indicates viewing from directly above. A tilt value of 90 degrees indicates viewing along the horizon. 
+</div>
+</div><p>
+<a class="anchor" name="225e831dbd8061dcc764adcc9a86f27e"></a><!-- doxytag: member="KmlLookAt.getHeading" ref="225e831dbd8061dcc764adcc9a86f27e" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double KmlLookAt.getHeading           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Direction (that is, North, South, East, West), in degrees. Default=0 (North). Values range from 0 to 360 degrees. 
+</div>
+</div><p>
+<a class="anchor" name="ac6828f261ee45d9cce6e84aea0014b8"></a><!-- doxytag: member="KmlLookAt.setHeading" ref="ac6828f261ee45d9cce6e84aea0014b8" args="(double heading)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KmlLookAt.setHeading           </td>
+          <td>(</td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>heading</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Direction (that is, North, South, East, West), in degrees. Default=0 (North). Values range from 0 to 360 degrees. 
+</div>
+</div><p>
+<a class="anchor" name="a6bb6eef8d51179bbf9bd711175d11dd"></a><!-- doxytag: member="KmlLookAt.getAltitude" ref="a6bb6eef8d51179bbf9bd711175d11dd" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double KmlLookAt.getAltitude           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Distance from the earth's surface, in meters. 
+</div>
+</div><p>
+<a class="anchor" name="f5e530d5776940917819e9a79ea2de32"></a><!-- doxytag: member="KmlLookAt.setAltitude" ref="f5e530d5776940917819e9a79ea2de32" args="(double altitude)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KmlLookAt.setAltitude           </td>
+          <td>(</td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>altitude</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Distance from the earth's surface, in meters. 
+</div>
+</div><p>
+<a class="anchor" name="9fb12b61224c1bf881316aa43c5d4e1b"></a><!-- doxytag: member="KmlLookAt.getAltitudeMode" ref="9fb12b61224c1bf881316aa43c5d4e1b" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">KmlAltitudeModeEnum KmlLookAt.getAltitudeMode           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Specifies how altitude components in the coordinates element are interpreted. 
+</div>
+</div><p>
+<a class="anchor" name="65992bc21b3ea306126af5599aea94fd"></a><!-- doxytag: member="KmlLookAt.setAltitudeMode" ref="65992bc21b3ea306126af5599aea94fd" args="(KmlAltitudeModeEnum altitudeMode)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KmlLookAt.setAltitudeMode           </td>
+          <td>(</td>
+          <td class="paramtype">KmlAltitudeModeEnum&nbsp;</td>
+          <td class="paramname"> <em>altitudeMode</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Specifies how altitude components in the coordinates element are interpreted. 
+</div>
+</div><p>
+</div>
+</div><!-- end doxygen-ref -->
+
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

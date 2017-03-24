@@ -1,0 +1,1453 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+function toggle(id,iconid)
+{
+ var element = document.getElementById(id);
+ var icon = document.getElementById(iconid);
+ if (element.style.display == "none") {
+   element.style.display = "block";
+   icon.src = "/apis/maps/documentation/images/minus.png";
+ } else {
+   element.style.display = "none";
+   icon.src = "/apis/maps/documentation/images/plus.png";
+ }
+}
+</script>
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/maptypes.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Google Map Javascript API V3 - Map Types - Google Maps JavaScript API V3 - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/html/apis/maps/documentation/javascript/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../css/iehacks.css"><![endif]-->
+
+<link href="../local_extensions.css" rel="stylesheet"
+    type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps JavaScript API V3</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="index.html" title="Google Maps JavaScript API V3 home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="basics.html" class="selected" title="Official Google Maps JavaScript API V3 documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../faq.html" title="Answers to frequently asked questions about Google Maps JavaScript API V3">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="articles.html" title="Focused articles and tutorials for Google Maps JavaScript API V3 developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps JavaScript API V3 blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="forum.html" title="Google Maps JavaScript API V3 developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../../terms.html" title="Google Maps JavaScript API V3 terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <a name="gc-toc-anchor"></a>
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../../index.html">Maps API Family</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+ <div class="line"></div>
+    <ul>
+      <li><h2>Maps Javascript API V3</h2>
+        <ul>
+          <li><a class="tlw-expanded" href="index.html">Home Page</a>
+            <ul>
+              <li><a href="basics.html">Basics</a></li>
+              <li><a href="tutorial.html">Tutorial</a></li>
+              <li><a href="events.html">Events</a></li>
+              <li><a href="controls.html">Controls</a></li>
+              <li><a href="overlays.html">Overlays</a></li>
+              <li><a href="services.html">Services</a></li>
+              <li><a href="maptypes.html">Map Types</a></li>
+            </ul>
+          </li>
+          <li><a class="tlw-collapsed" href="reference.html">API Reference</a>
+            <ul>
+              <li><a href="reference.html">3.3</a></li>
+              <li><a href="3.2/reference.html">3.2</a></li>
+              <li><a href="3.1/reference.html">3.1</a></li>
+            </ul>
+          </li>
+          <li><h2 class="tlw-expanded">Code Samples:</h2>
+            <ul>
+              <li><a href="examples/index.html">Samples</a></li>
+              <li><a href="demogallery.html">Demo Gallery</a></li>
+            </ul>
+          </li>
+          <li><h2 class="tlw-expanded">More Resources:</h2>
+            <ul>
+               <li><a href="articles.html">Articles</a><sup class="new">New!</sup></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/issues/list?can=2&q=apitype:Javascript3&colspec=ID+Type+Status+Introduced+Fixed+Summary+Internal+Stars&cells=tiles">Known Issues</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/wiki/JavascriptMapsAPIv3Changelog">Changelog</a></li>
+               <li><a href="http://code.google.com/p/google-maps-utility-library-v3/">Utility Library</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+       <div class="line"></div>
+       <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="v2/index.html">Home Page</a></li>
+           <li><a href="v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+   <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../flash/index.html">Home Page</a></li>
+          <li><a href="../flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../mapsdata/index.html">Home Page</a></li>
+          <li><a href="../mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+        <li><h2><a href="../webservices/index.html">Maps API Web Services</a></h2>
+        <ul>
+          <li><a href="../geocoding/index.html">Geocoding API</a></li>
+          <li><a href="../directions/index.html">Directions API</a></li>
+          <li><a href="../elevation/index.html">Elevation API</a></li>
+          <li><a href="../places/index.html">Places APl</a></li>
+        </ul>
+      </li>
+    </ul>
+       <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+    <div class="promo"><p><a href="../premier/index.html">Google Maps API Premier</a></p>
+    <p>Same great maps plus a SLA, support, and control over ads</p>
+    </div>
+
+      </div>
+
+      <a name="gc-pagecontent-anchor"></a>
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Google Map Javascript API V3 - Map Types</h1>
+
+
+<p class="note">Note: The Google Maps Javascript API Version 3 documented within
+these pages is now the official Javascript API. Version 2 of this API has been
+officially deprecated as per our deprecation policy. We encourage you to migrate
+your code to this newly updated and enhanced version!</p>
+
+<div class="toc">
+  <ol>
+  <li><a href="#MapTypes">Map Types</code></a></li>
+  <li><a href="#BasicMapTypes">Basic Map Types</a></li>
+  <li><a href="#MapTypeRegistry">Modifying the Map Type Registry</a></li>
+  <li><a href="#StyledMaps">Styled Maps</a>
+    <ol>
+      <li><a href="#StyledMapFeatures">Features</a></li>
+      <li><a href="#StyledMapStylers">Stylers</a></li>
+    </ol>
+  </li>
+  <li><a href="#CustomMapTypes">Custom Map Types</a>
+    <ol>
+      <li><a href="#MapCoordinates">Map Coordinates</a>
+        <ol>
+          <li><a href="#WorldCoordinates">World Coordinates</a></li>
+          <li><a href="#PixelCoordinates">Pixel Coordinates</a></li>
+          <li><a href="#TileCoordinates">Tile Coordinates</a></li>
+        </ol>
+      </li> 
+      <li><a href="#MapTypeInterface">The <code>MapType</code> Interface</a>
+        <ol>
+          <li><a href="#BaseMapTypes">Base Map Types</a></li>
+          <li><a href="#OverlayMapTypes">Overlay Map Types</a></li>
+          <li><a href="#ImageMapTypes">Image Map Types</a></li>
+        </ol>
+      </li>
+   </ol>
+  </li>
+  <li><a href="#Projections">Custom Projections</a>
+    <ol>
+      <li><a href="#ProjectionImplemention">Implementing the Projection
+      Interface</a></li>
+      <li><a href="#ProjectionTransformation">Coordinate Transformation in Projections</a></li>
+      <li><a href="#ProjectionTileUsage">Tile Selection in Projections</a></li>        
+    </ol>      
+  </li>  
+  </ol>
+</div>
+
+<h1 id="MapTypes">Map Types</h1>
+
+<p>This document discusses the types of maps you can display using the
+Google Maps Javascript API. The API uses a <code>MapType</code>
+object to hold information about these maps. A <code>MapType</code>
+is an interface that defines the display and usage of map tiles and
+the translation of coordinate systems from screen coordinates to world
+coordinates (on the map). Each <code>MapType</code> must contain a
+few methods to handle retrieval and release of tiles, and properties
+that define its visual behavior.</p>
+
+<p>The inner workings of map types within the Maps API is an advanced
+topic. Most developers can simply use the <a href="#BasicMapTypes">
+basic map types</a> noted below. However, you can also define your own
+map tiles using <a href="#CustomMapTypes">custom map types</a>
+or modify the presentation of existing map types using
+<a href="#StyledMaps">Styled Maps</a>. When providing custom map
+types, you will need to understand how to modify the map's
+<a href="#MapTypeRegistry">Map Type Registry</a>.</p>
+
+<h1 id="BasicMapTypes">Basic Map Types</h1>
+
+<p>There are many types of maps available within the Google Maps API. In
+addition to the familiar "painted" road map tiles, the Google Maps API also
+supports other maps types.</p>
+
+<p>The following map types are available in the Google Maps API:</p>
+
+<ul>
+<li><code>MapTypeId.ROADMAP</code> displays the default road map view</li>
+<li><code>MapTypeId.SATELLITE</code> displays Google Earth satellite
+images</li>
+<li><code>MapTypeId.HYBRID</code> displays a mixture of normal and satellite
+views</li>
+<li><code>MapTypeId.TERRAIN</code> displays a physical map based on terrain
+information.
+</ul>
+
+<p>You modify the map type in use by the <code>Map</code> by setting its
+<code>mapTypeId</code> property, either within the constructor via setting
+its <code><i>Map options</i></code> object, or by calling the map's
+<code>setMapTypeId()</code> method.</p>
+
+<pre class="prettyprint lang-javascript">
+#
+# Setting the mapTypeId upon construction
+#
+var myLatlng = new google.maps.LatLng(-34.397, 150.644);
+var myOptions = {
+  zoom: 8,
+  center: myLatlng,
+  mapTypeId: google.maps.MapTypeId.ROADMAP
+};
+var map = new google.maps.Map(document.getElementById("map_canvas"),
+    myOptions);
+
+#
+# Modifying the mapTypeId dynamically
+#
+map.setMapTypeId(google.maps.MapTypeId.TERRAIN);
+</pre>
+
+<p>Note that you don't actually set the map's map type directly,
+but instead set its <code>mapTypeId</code> to reference a
+<code>MapType</code> using an identifier. The Maps Javascript API
+V3 uses a map type registry, explained below, to manage these
+references.</p>
+
+<h1 id="#MapTypeRegistry">Modifying the Map Type Registry</h1>
+
+<p>A map's <code>mapTypeId</code> is a string identifier
+that is used to associate a <code>MapType</code> with a
+unique value. Each <code>Map</code> object maintains a
+<code>MapTypeRegistry</code> which contains the collection of
+available <code>MapType</code>s for that map. This registry
+is used to select the types of maps which are available in
+the Map's MapType control, for example.</p>
+
+<p>You do not read directly from the map type registry. Instead,
+you modify the registry by adding custom map types and associating
+them with a string identifier of your choosing. You cannot modify
+or alter the basic map types (though you can remove them from the
+map by altering the appearance of the map's associated
+<code>mapTypeControlOptions</code>.</p>
+
+<p>The following code sets the map to show only
+two map types in the map's <code>mapTypeControlOptions</code>
+and modifies the registry to add the association with
+this identifier to the actual implementation of the
+<code>MapType</code> interface. <span style="color:red">
+Note: </span> we purposefully did not
+document the creation of the custom map type itself in the previous
+code. See <a href="#StyledMaps">Styled Maps</a> or
+<a href="#CustomMapTypes">Custom Map Types</a> below for information
+on constructing a map type.</p></p>
+
+<pre class="prettyprint lang-javascript">
+# Modify the control to only display two maptypes, the
+# default ROADMAP and the custom 'mymap'.
+# Note that because this is simply an association, we
+# don't need to modify the MapTypeRegistry beforehand.
+
+var MY_MAPTYPE_ID = 'mymaps';
+
+var mapOptions = {
+  zoom: 12,
+  center: brooklyn,
+  mapTypeControlOptions: {
+     mapTypeIds: [google.maps.MapTypeId.ROADMAP, MY_MAPTYPE_ID]
+  },
+  mapTypeId: MY_MAPTYPE_ID
+};
+
+# Create our map. This creation will implicitly create a
+# map type registry.
+map = new google.maps.Map(document.getElementById("map_canvas"),
+    mapOptions);
+
+# Create your custom map type using your own code.
+# (See below.)
+var myMapType = new <i>MyMapType</i>();
+
+# Set the registry to associate 'mymap' with the
+# custom map type we created, and set the map to
+# show that map type.
+map.mapTypes.set(MY_MAPTYPE_ID, myMapType);
+</pre>
+
+<h1 id="StyledMaps">Styled Maps</h1>
+
+<p>The <code>StyledMapType</code> allows you to customize the presentation
+of the standard Google base maps, changing the visual display of such elements
+as roads, parks, and built-up areas to reflect a different style than that used
+in the default map type. These components are known as <i>features</i> and
+a <code>StyledMapType</code> allows you to select these features and apply
+visual styles to their display (including hiding them entirely). With
+these changes, the map can be made to emphasize particular components or
+complement content within the surrounding page.</p>
+
+<p>The <code>StyledMapType()</code> constructor takes an array of
+<code>MapTypeStyles</code>, each of which is composed of <i>selectors</i>
+and <i>stylers</i>.  Selectors specify what map components should be
+selected for styling, while stylers specify the visual modification
+of those elements.</p>
+
+<h2 id="StyledMapFeatures">Map Features</h2>
+
+<p>A map consists of a set of <i>features</i>, such as a road
+or park, which are specified using a <code>MapTypeStyleFeatureType</code>.
+The feature types form a category tree, with <code>all</code>
+as the root. The full list of features for selection within
+a map is documented in the
+<a href="reference.html#MapTypeStyleFeatureType">
+Maps Javascript API V3 reference</a>. Specifying the feature as
+<code>all</code> will select all map elements.</p>
+
+<p>Some feature type categories contain sub-categories which are specified
+using a dotted notation (<code>landscape.natural</code> or
+<code>road.local</code>, for example). If the parent feature
+(<code>road</code>, for example) is specified, then styles applied to this
+selection will be applied to all roads, including sub-categories.</p>
+
+<p>Additionally, some features on a map typically consist of different
+<i>elements</i>. A road, for example, consists of not only the graphical
+line (geometry) on the map, but the text denoting its name (labels)
+attached the map. Elements within features are selected by specifying
+a category of type <code>MapTypeStyleElementType</code>. The
+following element types are supported:</p>
+
+<ul>
+  <li><code>all</code> (default) selects all elements of that feature.</li>
+  <li><code>geometry</code> selects only geometric elements of that
+  feature.</li>
+  <li><code>labels</code> selects only textual labels associated with that
+  feature.</li>
+</ul>
+
+<p>If no element type is specified, the styles will be applied to all elements
+regardless of element type.</p>
+
+<p>The following specification selects the labels for all local roads:</p>
+
+<pre class="prettyprint lang-javascript">
+{
+  featureType: "road.local",
+  elementType: "labels"
+}
+</pre>
+
+<h2 id="StyledMapStylers">Stylers</h2>
+
+<p>Stylers are formatting options of type <code>MapTypeStyler</code> which
+are applied to the features and elements specified within each
+<code>MapTypeStyle</code> rule. The following <code>MapTypeStyler</code>
+options are currently supported:</p>
+
+<ul>
+  <li><code>hue</code> (an RGB hex string) indicates the basic color.
+  (<span style="color:red">*</span> See usage note below.)</li>
+  <li><code>lightness</code> (a floating point value between
+  <code>-100</code> and <code>100</code>) indicates the percentage
+  change in brightness of the element. Negative
+  values increase darkness (where -100 specifies black) while positive
+  values increase brightness (where +100 specifies white).</li>
+  <li><code>saturation</code> (a floating point value between
+  <code>-100</code> and <code>100</code>) indicates the percentage
+  change in intensity of the basic color to apply to the element.</li>
+  <li><code>gamma</code> (a floating point value between <code>0.01</code>
+  and <code>10.0</code>, where <code>1.0</code> applies no correction)
+  indicates the amount of gamma correction to apply to the element. Gammas
+  modify the lightness of hues in a non-linear fashion, while unaffecting
+  white or black values. Gammas are typically used to modify the contrast
+  of multiple elements. For example, you could modify the gamma to
+  increase or decrease the contrast between the edges and interiors of
+  elements. Low gamma values (&lt; 1) increase contrast, while high
+  values (&gt; 1) decrease contrast.</li>
+  <li><code>inverse_lightness</code> (if <code>true</code>) simply
+  inverts the existing lightness.</li>
+  <li><code>visibility</code> (<code>on</code>, <code>off</code>,
+  or <code>simplified</code>) indicates whether and how the element
+  appears on the map. A <code>simplified</code> visibility indicates
+  that the map should simplify the presentation of those elements as
+  it sees fit. (A simplified road structure may show fewer roads, for
+  example.)</li>
+</ul>
+
+<p>Styler rules must be applied as separate, distinct operations, and are
+applied in the order they appear within the <code>MapTypeStyler</code>
+array. Do not combine multiple operations into a single styler operation;
+instead, define each operation as a separate element in the styler
+array. Order is important, as some operations are not commutative. Features
+and/or elements that are modified through styler operations
+(usually) already have existing styles; the operations act on those existing
+styles, if present.</p>
+
+<p>Note that we use the <a href="http://en.wikipedia.org/wiki/HSL_and_HSV">
+Hue, Saturation, Lightness (HSL)</a> model to denote color within the
+styler operations.  These operations to define color are common within
+graphic design. <i>Hue</i> indicates the basic color, <i>saturation</i>
+indicates the intensity of that color, and <i>lightness</i> indicates the
+relative amount of white or black in the constituent color. All three
+HSL values can be mapped to RGB values (and vice versa).
+<a href="http://en.wikipedia.org/wiki/Gamma_correction">Gamma
+correction</a> acts to modify saturation over the color space, generally
+to increase or decrease contrast. Additionally, the HSL model defines color
+within a coordinate space where <code>hue</code> indicates the orientation
+within a color wheel, while saturation and lightness indicate amplitudes
+along different axes. Hues are measured within an RGB color space,
+which is similar to most RGB color spaces, except that shades of white and
+black are absent.</p>
+
+<p style="text-align:center"><img src="images/colorwheel.png" /></p>
+<p style="text-align:center"><b>An RGB Color Wheel</b></p>
+
+<p><span style="color:red">Note: </span> while <code>hue</code> takes
+an HTML hex color value, it only uses this value to determine the basic
+color (its orientation around the color wheel), not its saturation or
+lightness, which are indicated separately as percentage changes. For
+example, the hue for pure green may be defined
+as "#00ff00" or "#000100" within the <code>hue</code> property and
+both hues will be identical. (Both values point to pure green in
+the HSL color model.) RGB <code>hue</code> values which consist
+of equal parts Red, Green and Blue &mdash; such as "#000000" (black)
+and "#FFFFFF" (white) and all the pure shades of grey &mdash;
+do not indicate a hue whatsoever, as none of those values
+indicate an orientation in the HSL coordinate space. To indicate
+black, white or grey, you must remove all <code>saturation</code> (set
+the value to <code>-100</code>) and adjust <code>lightness</code>
+instead.</p>
+
+<p>Additionally, when modifying existing features which already have a
+color scheme, changing a value such as <code>hue</code> does not change
+its existing <code>saturation</code> or <code>lightness</code>.
+
+<p>The following example displays a map of Brooklyn where roads have been
+changed to bright green and the residential areas have been changed to
+black:</p>
+
+
+<pre class="prettyprint lang-javascript">
+var map;
+var brooklyn = new google.maps.LatLng(40.6743890, -73.9455);
+
+function initialize() {
+
+  var stylez = [
+    {
+      featureType: "road.local",
+      elementType: "geometry",
+      stylers: [
+        { hue: "#00ff00" },
+        { saturation:100 }
+      ]
+    },
+    {
+      featureType: "landscape",
+      elementType: "geometry",
+      stylers: [
+        { lightness: -100 }
+      ]
+    }
+  ];
+
+  var mapOptions = {
+    zoom: 11,
+    center: brooklyn,
+    mapTypeControlOptions: {
+       mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'hiphop']
+    }
+  };
+  map = new google.maps.Map(document.getElementById("map_canvas"),
+      mapOptions);
+
+  var styledMapOptions = {
+      name: "Hip-Hop"
+  }
+
+  var jayzMapType = new google.maps.StyledMapType(
+      stylez, styledMapOptions);
+
+  map.mapTypes.set('hiphop', jayzMapType);
+  map.setMapTypeId('hiphop');
+}
+</pre>
+
+<p><a href="examples/maptype-styled-simple.html">View example
+(maptype-styled-simple.html)</a></p>
+
+<p>The following more complicated example uses several operations and
+simplifications to approximate the look of a US road atlas:</p>
+
+
+<pre class="prettyprint lang-javascript">
+var map;
+var chicago = new google.maps.LatLng(41.850033, -87.650052);
+
+function initialize() {
+
+  var roadAtlasStyles = [
+    {
+      featureType: "road.highway",
+      elementType: "geometry",
+      stylers: [
+        { hue: "#ff0022" },
+        { saturation: 60 },
+        { lightness: -20 }
+      ]
+    },{
+      featureType: "road.arterial",
+      elementType: "all",
+      stylers: [
+        { hue: "#2200ff" },
+        { lightness: -40 },
+        { visibility: "simplified" },
+        { saturation: 30 }
+      ]
+    },{
+      featureType: "road.local",
+      elementType: "all",
+      stylers: [
+        { hue: "#f6ff00" },
+        { saturation: 50 },
+        { gamma: 0.7 },
+        { visibility: "simplified" }
+      ]
+    },{
+      featureType: "water",
+      elementType: "geometry",
+      stylers: [
+        { saturation: 40 },
+        { lightness: 40 }
+      ]
+    },{
+      featureType: "road.highway",
+      elementType: "labels",
+      stylers: [
+        { visibility: "on" },
+        { saturation: 98 }
+      ]
+    },{
+      featureType: "administrative.locality",
+      elementType: "labels",
+      stylers: [
+        { hue: "#0022ff" },
+        { saturation: 50 },
+        { lightness: -10 },
+        { gamma: 0.9 }
+      ]
+    },{
+      featureType: "transit.line",
+      elementType: "geometry",
+      stylers: [
+        { hue: "#ff0000" },
+        { visibility: "on" },
+        { lightness: -70 }
+      ]
+    }
+  ];
+
+  var mapOptions = {
+    zoom: 12,
+    center: chicago,
+    mapTypeControlOptions: {
+       mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'usroadatlas']
+    }
+  };
+
+  map = new google.maps.Map(document.getElementById("map_canvas"),
+      mapOptions);
+  var styledMapOptions = {
+     name: "US Road Atlas"
+  }
+
+  var usRoadMapType = new google.maps.StyledMapType(
+      roadAtlasStyles, styledMapOptions);
+      map.mapTypes.set('usroadatlas', usRoadMapType);
+  map.setMapTypeId('usroadatlas');
+}
+</pre>
+
+
+<p><a href="examples/maptype-styled-complex.html">View example
+(maptype-styled-complex.html)</a></p>
+
+<p>Creating styles by hand and testing your code to see how they look
+is potentially time-consuming. Instead, you can use the following
+<a href="http://gmaps-samples-v3.googlecode.com/svn/trunk/styledmaps/wizard/index.html">
+Styled Map Wizard</a> to help you set up the JSON for your
+<code>StyledMapStyle</code>s. The wizard allows you to select features
+and elements within features, apply operations to those features, and save
+the styles to JSON, which you can copy and paste into your application.</p>
+
+<h1 id="CustomMapTypes">Custom Map Types</h1>
+
+<p><span class="new">Note: This is an Advanced Topic</span></p>
+
+<p>The Google Maps JavaScript API V3 now supports the display
+and management of custom map types, allowing you to implement
+your own map imagery or tile overlays.</p>
+
+<p>Several possible map type implementations exist within the
+V3 API:</p>
+
+<ul>
+  <li>Standard <i>tile sets</i> consisting of images which
+  collectively constitute full cartographic maps. These tile
+  sets are also known as <i>base</i> map types. These map types
+  act and behave like the existing default map types:
+  <code>ROADMAP</code>, <code>SATELLITE</code>,
+  <code>HYBRID</code> and <code>TERRAIN</code>. You can add your
+  custom map type to a Map's <code>mapTypes</code> array to
+  allow the UI within the Maps API to treat your custom map
+  type as a standard map type (by including it in the MapType
+  control, for example).</li>
+  <li>Image tile <i>overlays</i> which display on top of
+  existing base map types. Generally, these map types are
+  used to augment an existing map type to display additional
+  information and are often constrained to specific locations
+  and/or zoom levels. Note that these tiles may be transparent,
+  allowing you to add features to existing maps.</li>
+  <li>Non-image map types, which allow you to manipulate
+  the display of map information at its most fundamental level.</li>
+</ul>
+
+<p>Each of these options relies on creating a class that
+implements the <a href="#MapTypeInterface"><code>MapType</code></a>
+interface. Additionally, the <a href="#ImageMapTypes">
+<code>ImageMapType</code></a> class provides some built-in
+behavior to simplify the creation of imagery <code>MapType</code>s.</p>
+
+<p>Before we explain classes which implement <code>MapType</code>,
+it is important to understand how Google Maps determines coordinates
+and decides which parts of the map to show. You will need to
+implement similar logic for any base or overlay
+<code>MapType</code>s.</p>
+
+<h2 id="MapCoordinates">Map Coordinates</h2>
+
+<p>There are several coordinate systems that the Google Maps
+API uses:</p>
+
+<ul>
+<li>Latitude and Longitude values which reference a point on the
+world uniquely. (Google uses the
+<a href="http://en.wikipedia.org/wiki/World_Geodetic_System">
+World Geodetic System WGS84</a> standard.)</li>
+<li>World coordinates which reference a point on the map uniquely</li>
+<li>Tile coordinates which reference a specific tile on the map at the
+specific zoom level</li>
+</ul>
+
+<h3 id="WorldCoordinates">World Coordinates</h3>
+
+<p>Whenever the Maps API needs to translate a location in the world to
+a location on a map (the screen), it needs to first translate latitude
+and longitude values into a "world" coordinate. This translation is
+accomplished using a map <i>projection</i>. Google Maps uses the
+<a href="http://en.wikipedia.org/wiki/Mercator_projection">
+Mercator projection</a> for this purpose. You may also define your own
+projection implementing the <code>google.maps.Projection</code> interface.
+(Note that interfaces in V3 are not classes you "subclass" but instead
+are simply specifications for classes you define yourself.)</p>
+
+<p>For convenience in the calculation of pixel coordinates (see below)
+we assume a map at zoom level 0 is a single tile of the base tile size.
+We then define world coordinates relative to pixel coordinates at zoom
+level 0, using the projection to convert latitudes & longitudes to
+pixel positions on this base tile. This world coordinate is a floating
+point value measured from the origin of the map's projection to the
+specific location. Note that since this value is a floating point value,
+it may be much more precise than the current resolution of the map image
+being shown. A world coordinate is independent of the current zoom level,
+in other words.</p>
+
+<p>World coordinates in Google Maps are measured from the Mercator
+projection's origin (the northwest corner of the map at 180 degrees
+longitude and approximately 85 degrees latitude) and increase in
+the <code>x</code> direction towards the east (right) and increase in
+the <code>y</code> direction towards the south (down). Because the
+basic Mercator Google Maps tile is 256 x 256 pixels, the usable world
+coordinate space is <code>{0-256}, {0-256}</code> (See below.)</p>
+<P></P>
+<div>
+<img src="images/pixelCoordinates.png"/>
+</div>
+
+<p><span class="note">Note that a Mercator projection has a finite
+width longitudinally but an infinite height latitudinally. We "cut off"
+base map imagery utilizing the Mercator projection at approximately
++/- 85 degrees to make the resulting map shape square, which allows
+easier logic for tile selection. Note that a projection may produce
+world coordinates outside the base map's usable coordinate space
+if you plot very near the poles, for example.</span></p>
+
+<h3 id="PixelCoordinates">Pixel Coordinates</h3>
+
+<p>World coordinates reflect absolute locations on a given projection,
+but we need to translate these into pixel coordinates to determine
+the "pixel" offset at a given zoom level. These pixel coordinates
+are calculated using the following formula:</p>
+
+<pre class="prettyprint">
+pixelCoordinate = worldCoordinate * 2<span class="superscript">zoomLevel</span>
+</pre>
+
+<p>From the above equation, note that each increasing zoom level
+is twice as large in both the <code>x</code> and <code>y</code>
+directions. Therefore, each higher zoom level contains four times as
+much resolution as the preceding level. For example, at zoom level 1,
+the map consists of 4 256x256 pixels tiles, resulting in a pixel space
+from 512x512. At zoom level 19, each <i>x</i> and <i>y</i> pixel on the
+map can be referenced using a value between
+0 and 256 * <i>2<span class="superscript">19</span></i></p>
+
+<p>Because we based world coordinates on the map's tile size, a
+pixel coordinates' integer part has the effect of identifying the exact pixel
+at that location in the current zoom level. Note that for zoom level 0, the
+pixel coordinates are equal to the world coordinates.</p>
+
+
+
+<p>We now have a way to accurately denote each location on the map,
+at each zoom level. The Maps API constructs a viewport given the
+zoom level center of the map (as a <code>LatLng</code>), and the
+size of the containing DOM element and
+translates this bounding box into pixel coordinates. The API then determines
+logically all map tiles which lie within the given pixel bounds. Each of
+these map tiles are referenced using <a href="#TileCoordinates">
+Tile Coordinates</a> which greatly simplify the displaying of map
+imagery.</p>
+
+<h3 id="TileCoordinates">Tile Coordinates</h3>
+
+<p>The Google Maps API could not possibly load all map imagery at
+the higher zoom levels that are most useful; instead, the Maps API
+breaks up imagery at each zoom level into a set of map tiles,
+which are logically arranged in an order which the application
+understands. When a map scrolls to a new location, or to a new
+zoom level, the Maps API determines which tiles are needed
+using pixel coordinates, and translates those values into a set
+of tiles to retrieve. These tile coordinates are assigned using
+a scheme which makes it logically easy to determine which tile contains
+the imagery for any given point.</p>
+
+<p>Tiles in Google Maps are numbered from the same origin as that for
+pixels. For Google's implementation of the Mercator projection, the
+origin tile is always at the northwest corner 
+of the map, with <code>x</code> values increasing from west to
+east and <code>y</code> values increasing from north to south. Tiles
+are indexed using <code>x,y</code> coordinates from that origin. For
+example, at zoom level 2, when the earth is divided up into 16 tiles,
+each tile can be referenced by a unique <code>x,y</code> pair:</p>
+<P></P>
+<div>
+<img src="images/tileCoordinates.png"/>
+</div>
+
+<p>Note that by dividing the pixel coordinates by the tile size and
+taking the integer parts of the result, you produce as a by-product
+the tile coordinate at the current zoom level.</p>
+
+<p>The following example displays coordinates &mdash; <code>LatLng</code>
+values, world coordinates, pixel coordinates, and tile coordinates &mdash; 
+for Chicago, IL at different zoom levels:</p>
+
+<p><a href="examples/map-coordinates.html">View example
+(map-coordinates.html)</a></p>
+
+<h2 id="MapTypeInterface">The <code>MapType</code> Interface</h2>
+
+<p>Custom map types must implement the <code>MapType</code>
+interface. This interface specifies certain properties and
+methods that allow the API to initiate requests to your map
+type(s) when the API determines that it needs to display map
+tiles within the current viewport and zoom level. You handle
+these requests to decide which tile to load.</p>
+
+<p>(<span style="color:red">Note:</span> You may create your
+own class to implement this interface, or &mdash;if you have
+compatible imagery &mdash; use the <a href="#ImageMapTypes">
+<code>ImageMapType</code></a> class which already implements
+this interface.)</p>
+
+<p>Classes implementing the <code>MapType</code> interface
+require that you define and populate the following properties:</p>
+
+<ul>
+  <li><code>tileSize</code> (required) specifies the size of the tile
+  (of type <code>google.maps.Size</code>). Sizes must be rectangular
+  though they need not be square.</li>
+  <li><code>maxZoom</code> (required) specifies the maximum zoom
+  level at which to display tiles of this map type.</li>
+  <li><code>minZoom</code> (optional) specifies the minimum zoom
+  level at which  to display tile of this map type. By default,
+  this value is <code>0</code> indicating that no minimum
+  zoom level exists.</li>
+  <li><code>name</code> (optional) specifies the name for this map
+  type. This property is only necessary if you want this map type
+  to be selectable within a MapType control. (See <a href="#MapTypeControls">
+  Adding <code>MapType</code> Controls</a> below.)</li>
+  <li><code>alt</code> (optional) specifies the alternate text for this
+  map type, exhibited as hover text. This property is only necessary
+  if you want this map type to be selectable within a MapType control.
+  (See <a href="#MapTypeControls">Adding <code>MapType</code> Controls
+  </a> below.)</li>
+</ul>
+
+<p>Additionally, classes implementing the <code>MapType</code> interface
+need to implement the following methods:</p>
+
+<ul>
+  <li><p><code>getTile()</code> (required) is called whenever the API
+  determines that the map needs to display new tiles for the given
+  viewport. The <code>getTile()</code> method must have the following
+  signature:</p>
+  <p><code>getTile(tileCoord:Point,zoom:number,ownerDocument:Document):Node</code></p>
+  <p>The API determines whether it needs to call <code>getTile()</code>
+  based on the <code>MapType</code>'s <code>tileSize</code>,
+  <code>minZoom</code>, and <code>maxZoom</code>
+  properties and the map's current viewport and zoom level. The handler
+  for this method should return an HTML element given a passed coordinate,
+  zoom level, and DOM element on which to append the tile image.</p></li>
+  <li><p><code>releaseTile()</code> (optional) is called whenever the API
+  determines that the map needs to remove a tile as it falls out of view.
+  This method must have the following signature:</p>
+  <p><code>releaseTile(tile:Node)</code></p>
+  <p>You typically should handle removal of any elements
+  that were attached to the map tiles upon addition to the map.
+  For example, if you attached event listeners to map tile
+  overlays, you should remove them here.</p></li>
+</ul>
+
+<p>The <code>getTile()</code> method acts as the main controller for
+determining which tiles to load within a given viewport.</p>
+
+<h3 id="BaseMapTypes">Base Map Types</h3>
+
+<p>Map types which you construct in this manner may either stand
+alone or be combined with other map types as overlays. Standalone
+map types are known as <i>base map types</i>. You may wish to have the API
+treat such custom <code>MapType</code>s as it would any other existing
+base map type (<code>ROADMAP</code>, <code>TERRAIN</code>, etc.). To do
+so, add your custom <code>MapType</code> to the <code>Map</code>'s
+<code>mapTypes</code> property. This property is of type
+<code>MapTypeRegistry</code>.</p>
+
+<p>The following code creates a base <code>MapType</code> to display
+a map's tile coordinates and draws an outline of the tiles:</p>
+
+<pre class="prettyprint lang-javascript">
+function CoordMapType() {
+}
+
+CoordMapType.prototype.tileSize = new google.maps.Size(256,256);
+CoordMapType.prototype.maxZoom = 19;
+
+CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
+  var div = ownerDocument.createElement('DIV');
+  div.innerHTML = coord;
+  div.style.width = this.tileSize.width + 'px';
+  div.style.height = this.tileSize.height + 'px';
+  div.style.fontSize = '10';
+  div.style.borderStyle = 'solid';
+  div.style.borderWidth = '1px';
+  div.style.borderColor = '#AAAAAA';
+  return div;
+};
+
+CoordMapType.prototype.name = "Tile #s";
+CoordMapType.prototype.alt = "Tile Coordinate Map Type";
+
+var map;
+var chicago = new google.maps.LatLng(41.850033,-87.6500523);
+var coordinateMapType = new CoordMapType();
+
+function initialize() {
+  var mapOptions = {
+    zoom: 10,
+    center: chicago,
+    mapTypeControlOptions: {
+      mapTypeIds: ['coordinate', google.maps.MapTypeId.ROADMAP],
+      style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+    }
+  };
+  map = new google.maps.Map(document.getElementById("map_canvas"),
+      mapOptions);
+      
+  // Now attach the coordinate map type to the map's registry
+  map.mapTypes.set('coordinate',coordinateMapType);
+
+  // We can now set the map to use the 'coordinate' map type
+  map.setMapTypeId('coordinate');
+}
+</pre>
+
+<p><a href="examples/maptype-base.html">View example
+(maptype-base.html)</a></p>
+
+<h3 id="OverlayMapTypes">Overlay Map Types</h3>
+
+<p>Some map types are designed to work on top of existing map
+types. Such map types may have transparent layers indicating
+points of interest, or showing additional data to the user.
+(Google's traffic layer is an example of such a map type.)</p>
+
+<p>In these cases, you do not wish to have the map type treated
+as a separate entity. Instead, you can add the map type to
+an existing <code>MapType</code> directly using the <code>Map</code>'s
+<code>overlayMapTypes</code> property. This property contains
+an <code>MVCArray</code> of <code>MapType</code>s. All map types
+(base and overlay) are rendered within the
+<a href="reference.html#MapPanes"><code>mapPane</code></a>
+layer. Overlay map types will display on top of any base map they
+are attached to, in the order in which they appear in the
+<code>Map.overlayMapTypes</code> array.</p>
+
+<p>The following example is identical to the previous one
+except that we've created a tile overlay <code>MapType</code>
+on top of the <code>ROADMAP</code> map type:</p>
+
+<pre class="prettyprint lang-javascript">
+function CoordMapType(tileSize) {
+  this.tileSize = tileSize;
+}
+
+CoordMapType.prototype.getTile = function(coord, zoom, ownerDocument) {
+  var div = ownerDocument.createElement('DIV');
+  div.innerHTML = coord;
+  div.style.width = this.tileSize.width + 'px';
+  div.style.height = this.tileSize.height + 'px';
+  div.style.fontSize = '10';
+  div.style.borderStyle = 'solid';
+  div.style.borderWidth = '1px';
+  div.style.borderColor = '#AAAAAA';
+  return div;
+};
+ 
+var map;
+var chicago = new google.maps.LatLng(41.850033,-87.6500523);
+  
+function initialize() {
+  var mapOptions = {
+    zoom: 10,
+    center: chicago,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  map = new google.maps.Map(document.getElementById("map_canvas"),
+      mapOptions);
+
+  // Insert this overlay map type as the first overlay map type at
+  // position 0. Note that all overlay map types appear on top of
+  // their parent base map.
+  map.overlayMapTypes.insertAt(0, new CoordMapType(new google.maps.Size(256, 256)));
+}
+</pre>
+
+<p><a href="examples/maptype-overlay.html">View example
+(maptype-overlay.html)</a></p>
+
+<h3 id="ImageMapTypes">Image Map Types</h3>
+
+<p>Implementing a <code>MapType</code> to act as a base map
+type can be a time-consuming and laborious task. The API
+provides a special class that implements the <code>MapType</code>
+interface for the most common map types: map types that consist
+of tiles made up of single image files.</p>
+
+<p>This class, the <code>ImageMapType</code> class,
+is constructed using an <code>ImageMapTypeOptions</code>
+object specification defining the following required
+properties:</p>
+
+<ul>
+  <li><code>tileSize</code> (required) specifies the size of the tile
+  (of type <code>google.maps.Size</code>). Sizes must be rectangular
+  though they need not be square.</li>
+  <li><code>getTileUrl</code> (required) specifies the function, 
+  usually provided as an inline function literal, to handle
+  selection of the proper image tile based on supplied
+  world coordinates and zoom level.</li>
+</ul>
+
+<p></p>
+
+<p>The following code implements a basic <code>ImageMapType</code>
+using Google's traffic tiles. Note that the map type is
+inserted into the map's <code>overlayMapTypes</code> array:</p>
+
+<pre class="prettyprint lang-javascript">
+var trafficOptions = {
+  getTileUrl: function(coord, zoom) {
+    return "http://mt3.google.com/mapstt?" +
+    "zoom=" + zoom + "&x=" + coord.x + "&y=" + coord.y + "&client=api";
+  },
+  tileSize: new google.maps.Size(256, 256),
+  isPng: true
+};
+
+var trafficMapType = new google.maps.ImageMapType(trafficOptions);
+ 
+var map;
+function initialize() {
+  map = new google.maps.Map(document.getElementById("map_canvas"));
+  map.setCenter(new google.maps.LatLng(37.76, -122.45));
+  map.setZoom(12);
+  map.setMapTypeId('satellite');
+  map.overlayMapTypes.insertAt(0, trafficMapType);
+}
+</pre>
+
+<p><a href="examples/maptype-traffic.html">View example
+(maptype-traffic.html)</a></p>
+
+<h1 id="Projections">Projections</h1>
+
+<p>The Earth is a three-dimensional sphere (approximately), while a
+map is a flat two-dimensional surface. The map that you see within
+the Google Maps API, like any flat map of the Earth, is a
+<i>projection</i> of that sphere onto a flat surface. In its simplest
+terms, a projection can be defined as a mapping of
+latitude/longitude values into coordinates on the projection's map.</p>
+
+<p>Projections in the Google Maps API must implement the
+<code>Projection</code> interface. A <code>Projection</code>
+implementation must provide not only a mapping from one coordinate
+system to another, but a bi-directional mapping. That is, you must
+define how to translate from Earth coordinates (<code>LatLng</code>s)
+to the <code>Projection</code>'s <a href="#WorldCoordinates">world
+coordinate</a> system, and vice versa. Google Maps uses
+the Mercator projection to create its maps
+from geographic data and convert events on the map into
+geographic coordinates. You can obtain this projection by
+calling <code>getProjection()</code> on the <code>Map</code>
+(or any of the standard base <code>MapType</code>s.) For most uses,
+this standard <code>Projection</code> will suffice, but you may also
+define and use your own custom projections.</p>
+
+<h2 id="ProjectionImplemention">Implementing a Projection</h2>
+
+<p>When implementing a custom projection, you will need to define
+a few things:</p>
+
+<ul>
+  <li>The formulae for mapping latitude and longitude coordinates into
+  a Cartesian plane and vice versa. (The <code>Projection</code> interface only
+  supports transformations into rectilinear coordinates.)</li>
+  <li>The base tile size. All tiles must be rectangular.</li>
+  <li>The "world size" of a map using the base tile set at zoom level 0.
+  Note that for maps consisting of one tile at zoom 0, the world size
+  and base tile size are identical </li>
+</ul>
+
+<h3 id="ProjectionTransformation">Coordinate Transformations in Projections</h3>
+
+<p>Each projection provides two methods which translate between these two
+coordinate systems, allowing you to convert between geographic and
+world coordinates:</p>
+
+<ul>
+  <li>The <code>Projection.fromLatLngToPoint()</code> method converts a
+  <code>LatLng</code> value into a world coordinate. This method is used
+  to position overlays on the map (and to position the map itself).</li>
+  <li>The <code>Projection.fromPointToLatLng()</code> method converts
+  a world coordinate into a <code>LatLng</code> value.</code> This
+  method is used to convert events such as clicks that happen on the
+  map into geographic coordinates.</li>
+</ul>
+
+<p>Google Maps assumes that projections are rectilinear.</p>
+
+<p>Generally, you may use a projection for two cases: to create a
+map of the world, or to create a map of a local area. In the former case,
+you should ensure that your projection is also rectilinear and normal
+at all longitudes. Some projections (especially conic projections)
+may be "locally normal" (i.e. point north) but deviate from true north,
+for example, the further the map is positioned relative to some
+reference longitude. You may use such a projection locally, but be
+aware that the projection is necessarily imprecise and transformation
+errors will become increasingly apparently the further away from
+the reference longitude you deviate.</p>
+
+<h3 id="ProjectionTileUsage">Map Tile Selection in Projections</h3>
+
+<p>Projections are not only useful for determining the positions of
+locations or overlays, but for positioning the map tiles themselves.
+The Maps API renders base maps using a <code>MapType</code> interface,
+which must declare both a <code>projection</code> property for
+identifying the map's projection and a <code>getTile()</code>
+method for retrieving map tiles based on <a href="#TileCoordinates">
+Tile Coordinate</a> values. Tile coordinates are based on
+both your basic tile size (which must be rectangular) and the "world
+size" of your map, which is the pixel size of your map world
+at zoom level 0. (For maps consisting of one tile at zoom 0, the tile
+size and world size are identical.)</p>
+
+<p>You define the base tile size within your <code>MapType</code>'s
+<code>tileSize</code> property. You define the world size implicitly
+within your projection's <code>fromLatLngToPoint()</code>
+and <code>fromPointToLatLng()</code> methods.</p>
+
+<p>Since image selection depends on these passed values, it is useful
+to name images that can be selected programmatically given those
+passed values, such as
+<code><i>map</i>_<i>zoom</i>_<i>tileX</i>_<i>tileY</i>.png</code>.</p>
+
+<p>The following example defines an <code>ImageMapType</code>
+using the
+<a href="http://en.wikipedia.org/wiki/Gall%E2%80%93Peters_projection">
+Gall-Peters</a> projection:</p>
+
+<pre class="prettyprint lang-javascript">
+// Note: this value is exact as the map projects a full 360 degrees of longitude
+var GALL_PETERS_RANGE_X = 800;
+
+// Note: this value is inexact as the map is cut off at ~ +/- 83 degrees.
+// However, the polar regions produce very little increase in Y range, so
+// we will use the tile size.
+var GALL_PETERS_RANGE_Y = 510;
+
+function degreesToRadians(deg) {
+  return deg * (Math.PI / 180);
+}
+
+function radiansToDegrees(rad) {
+  return rad / (Math.PI / 180);
+}
+ 
+function GallPetersProjection() {
+
+  // Using the base map tile, denote the lat/lon of the equatorial origin.
+  this.worldOrigin_ = new google.maps.Point(GALL_PETERS_RANGE_X * 400 / 800,
+      GALL_PETERS_RANGE_Y / 2);
+
+  // This projection has equidistant meridians, so each longitude degree is a linear
+  // mapping.  
+  this.worldCoordinatePerLonDegree_ = GALL_PETERS_RANGE_X / 360;
+
+  // This constant merely reflects that latitudes vary from +90 to -90 degrees.
+  this.worldCoordinateLatRange = GALL_PETERS_RANGE_Y / 2;
+};
+
+GallPetersProjection.prototype.fromLatLngToPoint = function(latLng) {
+
+  var origin = this.worldOrigin_;
+  var x = origin.x + this.worldCoordinatePerLonDegree_ * latLng.lng();
+
+  // Note that latitude is measured from the world coordinate origin
+  // at the top left of the map.
+  var latRadians = degreesToRadians(latLng.lat());
+  var y = origin.y - this.worldCoordinateLatRange * Math.sin(latRadians);
+ 
+  return new google.maps.Point(x, y);
+};
+
+GallPetersProjection.prototype.fromPointToLatLng = function(point) {
+
+  var y = point.y;
+  var x = point.x;
+  
+  if (y < 0) {
+    y = 0;
+  }
+  if (y >= GALL_PETERS_RANGE_Y) {
+    y = GALL_PETERS_RANGE_Y;
+  }
+ 
+  var origin = this.worldOrigin_;
+  var lng = (x - origin.x) / this.worldCoordinatePerLonDegree_;
+  var latRadians = Math.asin((origin.y - y) / this.worldCoordinateLatRange);
+  var lat = radiansToDegrees(latRadians);
+  return new google.maps.LatLng(lat, lng);
+};
+  
+function initialize() {
+
+  var gallPetersMap;
+
+  var gallPetersMapType = new google.maps.ImageMapType({
+    getTileUrl: function(coord, zoom) {
+      var numTiles = 1 << zoom;
+
+      // Don't wrap tiles vertically.
+      if (coord.y < 0 || coord.y >= numTiles) {
+        return null;
+      }
+
+      // Wrap tiles horizontally.
+      var x = ((coord.x % numTiles) + numTiles) % numTiles;  
+
+      // For simplicity, we use a tileset consisting of 1 tile at zoom level 0
+      // and 4 tiles at zoom level 1.
+      var baseURL = 'images/';
+      baseURL += 'gall-peters_' + zoom + '_' + x + '_' + coord.y + '.png';
+      return baseURL;
+    },
+    tileSize: new google.maps.Size(800, 512),
+    isPng: true,
+    minZoom: 0,
+    maxZoom: 1,
+    name: 'Gall-Peters'
+  });
+  
+  gallPetersMapType.projection = new GallPetersProjection();  
+  
+  var mapOptions = {
+    zoom: 0,
+    center: new google.maps.LatLng(0,0)
+  };
+  gallPetersMap = new google.maps.Map(document.getElementById("gallPetersMap"),
+      mapOptions);
+
+  gallPetersMap.mapTypes.set('gallPetersMap', gallPetersMapType);
+  gallPetersMap.setMapTypeId('gallPetersMap');
+  gallPetersMap.overlayMapTypes.insertAt(0, gallPetersMapType);
+
+}b
+
+</pre>
+
+<p><a href="examples/map-projection-simple.html">View example
+(map-projection-simple.html)</a></p>
+
+        <!-- end body text -->
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

@@ -1,0 +1,1855 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/mapsdata/developers_guide_protocol.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Developer Guide: HTTP Protocol - Google Maps Data API - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/maps/documentation/mapsdata/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../css/iehacks.css"><![endif]-->
+
+<link href="mapsdata.css" type="text/css" rel="stylesheet">
+  </head>
+
+  <body class="gc-documentation">
+
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container" class="depr">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps Data API (<a href="http://googlegeodevelopers.blogspot.com/2010/11/maps-data-api-deprecation-announcement.html">Deprecated</a>)</h1>
+  <ul id="Docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="index.html" title="Google Maps Data API home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="developers_guide.html" class="selected" title="Official Google Maps Data API documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../faq.html" title="Answers to frequently asked questions about Google Maps Data API">FAQ</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps Data API blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="forum.html" title="Google Maps Data API developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="terms.html" title="Google Maps Data API terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <a name="gc-toc-anchor"></a>  
+      <div class="g-unit g-first" id="gc-toc">
+          <ul>
+    <li><a href="../../index.html">Maps API Family</a></li>
+    <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+  </ul>
+  <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="index.html">Home Page</a></li>
+          <li><a class="tlw-expanded" href="developers_guide.html">Developer's Guide</a>
+            <ul>
+              <li><a href="developers_guide_protocol.html">HTTP Protocol Guide</a>
+              <li><a href="developers_guide_java.html">Java Developer's Guide</a></li>
+              <li><a href="developers_guide_javascript.html">JavaScript Developer's Guide</a></li>
+            </ul>
+          <li><a href="reference.html">HTTP Reference</a></li>
+          <li><a href="libraries.html">Client Libraries</a></li>
+          <li><a href="examples.html">Examples</a></li>
+          <li><a href="http://code.google.com/p/gmaps-api-issues/issues/list?can=2&q=apitype:MapsData&colspec=ID+Type+Status+Introduced+Fixed+Summary+Internal+Stars&cells=tiles">Known Issues</a></li>
+        </ul>
+        <div class="line"></div>
+        <ul>
+          <li><h2>GData APIs</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/gdata/overview.html">Overview</a></li>
+              <li><a href="http://code.google.com/apis/gdata/auth.html">Authentication</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>   
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps JavaScript API V3</h2>
+         <ul>
+           <li><a href="../javascript/index.html">Home Page</a></li>
+           <li><a href="../javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+      <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+        <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../flash/index.html">Home Page</a></li>
+          <li><a href="../flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+        <li><h2><a href="../webservices/index.html">Maps API Web Services</a></h2>
+        <ul>
+          <li><a href="../geocoding/index.html">Geocoding API</a></li>
+          <li><a href="../directions/index.html">Directions API</a></li>
+          <li><a href="../elevation/index.html">Elevation API</a></li>
+          <li><a href="../places/index.html">Places APl</a></li>
+        </ul>
+      </li>
+    </ul>
+       <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+          <div class="promo"><p><a href="../premier/index.html">Google Maps API Premier</a></p><p>Includes enterprise licensing and support</p></div>
+
+      </div>
+      
+      <a name="gc-pagecontent-anchor"></a>   
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Developer Guide: HTTP Protocol</h1>
+
+
+<p>The Maps Data API allows client applications to view and update maps (and 
+features on those maps) through the use of Google Data API feeds. These feeds 
+are provided as URLs using the popular 
+<a href="http://en.wikipedia.org/wiki/Atom_(standard)">Atom standard</a>. You 
+programmatically create, alter and delete data using HTTP requests.</p>
+
+<p>In addition to providing some background on the capabilities of the Maps Data 
+API, this document provides a conceptual overview of Data API interactions using
+"raw" XML and HTTP operations.</p>
+
+<p>In practical usage, you will likely not use raw HTTP request to 
+perform these operations. As a result, we've provided client libraries for the
+Maps Data API in Java and JavaScript, which you can use in the development of
+your applications. You can learn more about interacting with the API using these 
+<a href="http://code.google.com/apis/gdata/clientlibs.html">client libraries</a> by reading the 
+programming-language-specific sections of this developer's guide.</p>
+
+<h2>Contents</h2>
+<div class="toc">
+  <ol>
+    <li><a href="#Audience">Audience</a></li>
+    <li><a href="#GettingStarted">Getting Started</a>
+      <ol>
+        <li><a href="#CreatingAccount">Creating a Maps Data API Account</a></li>
+        <li><a href="#Authenticating">Authenticating to the Maps Data API Service</a>
+        <ol>
+          <li><a href="#AuthSub">AuthSub Proxy Authentication</a></li>
+          <li><a href="#ClientLogin">ClientLogin Authentication</a></li>
+        </ol>
+      </li>
+      </ol>
+    </li> 
+    <li><a href="#RetrievingMetafeed">Retrieving a List of Maps</a></li>
+    <li><a href="#Maps">Maps</a>
+<ol>
+        <li><a href="#RetrievingMaps">Retrieving Maps</a></li>
+        <li><a href="#CreatingMaps">Creating Maps</a>
+          <ol>
+            <li><a href="#uploading_xml">Uploading XML</a></li>
+            <li><a href="#uploading_csv">Uploading CSV</a></li>
+            <li><a href="#uploading_kml">Uploading KML</a></li>
+          </ol>
+        </li>
+        <li><a href="#UpdatingMaps">Updating Maps</a></li>
+        <li><a href="#DeletingMaps">Deleting Maps</a></li>
+      </ol>
+    </li>
+    <li><a href="#Features">Map Features</a>
+<ol>
+        <li><a href="#RetrievingFeatures">Retrieving Map Features</a></li>
+        <li><a href="#CreatingFeatures">Creating Map Features</a></li>
+        <li><a href="#UpdatingFeatures">Updating Map Features</a></li>
+        <li><a href="#DeletingFeatures">Deleting Map Features</a></li>
+      </ol>
+    </li>
+    <li><a href="#Search">Searching Over Maps</a>
+      <ol>
+        <li><a href="#SpatialSearch">Spatial Search</a></li>
+        <li><a href="#AttributeSearch">Attribute Search</a></li>
+        <li><a href="#SortingSearches">Sorting Searches</a></li>
+      </ol>
+    </li>
+    <li><a href="#acls">Controlling Access to Maps</a>
+      <ol>
+        <li><a href="#scopes_and_roles">Scopes and Roles</a></li>
+        <li><a href="#retrieving_an_acl">Retrieving an ACL</a></li>
+        <li><a href="#retrieving_an_acl_entry">Retrieving an ACL Entry</a></li>
+        <li><a href="#adding_or_updating_an_acl_entry">Adding or Updating an ACL Entry</a></li>
+        <li><a href="#deleting_an_acl_entry">Deleting an ACL Entry</a></li>
+      </ol>
+    </li>
+  </ol>
+</div>
+
+<h1 id="Audience">Audience</h1>
+
+<p>This document is intended for programmers who want to write client 
+applications that can interact with Google Maps Data API using XML and HTTP.
+Users who are using a client library instead of HTTP may also find this 
+document helpful for a basic understanding of how the Maps Data API works 
+"under the hood."</p>
+
+<p>This document assumes that you understand the general ideas behind the
+<a href="http://code.google.com/apis/gdata/basics.html"> Google Data APIs protocol</a>, and that 
+you're familiar with KML, Google Maps, and how data is typically presented
+on Google Maps.</p>
+
+<p>If you're using a UNIX system and you want to try initiating requests in this 
+document without writing any code, you may find the UNIX command-line utilities 
+<code>curl</code> or <code>wget</code> useful; for more information, see the 
+manual pages for those utilities.</p>
+
+<p>For Maps Data API reference information, consult the <a href="reference.html">
+HTTP Protocol Reference</a>. That document contains a complete reference of
+all HTTP operations provided by the Maps Data API. Each supported client library
+also has an associated reference as well.</p>
+
+<h1 id="GettingStarted">Getting Started</h1>
+
+<p>Using the Maps Data API requires the following:</p>
+
+<ul>
+<li>A Google user account, used for associating your data.</li>
+<li>An appropriate Authentication scheme, used for validating
+permissible operations.</li>
+<li>A means to initiate HTTP <code>GET</code>,<code>PUT</code>, <code>POST
+</code> and <code>DELETE</code> requests. See <a href="http://code.google.com/apis/gdata/articles/using_cURL.html">Using cURL to interact with Google Data services</a> for step-by-step instructions.</li>
+<li>A browser or XML editor to inspect data.</li>
+</ul>
+
+<p>The following sections describe these concepts in detail.</p>
+
+<h2 id="CreatingAccount">Creating a Maps Data API Account</h2>
+
+<p>Maps are stored and associated with user IDs attached to a
+<a href="https://www.google.com/accounts/Login">Google Account</a>. If you do 
+not currently have a Google account, 
+<a href="https://www.google.com/accounts/NewAccount"> sign up for one here</a>.
+</p>
+
+<p>The Maps Data API manipulates maps which appear within the MyMaps feature
+on Google Maps. MyMaps includes two types of maps: 
+<b>Public</b>, and <b>Unlisted</b>. A sample MyMap is shown below:</p>
+<br/>
+<img src="images/mymaps_example.png" width="640" height=""/>
+
+<p>You can use MyMaps within your browser to inspect the state of your map after
+data updates. Additionally, if you create Public maps, these will be indexed and
+may show up in search results. Note that you do not need to use MyMaps to
+present your data. Any application that can present KML is an appropriate
+"browser" for data returned by the Maps Data API.</p>
+
+<h2 id="Authenticating">Authenticating to the Maps Data API Service</h2>
+
+<p>You may only access your own maps using the Maps Data API. You must authenticate 
+to read private maps within a maps feeds. It can authenticate using either of 
+two approaches:</p>
+
+<ul>
+<li><a href="#AuthSub">AuthSub</a> proxy authentication</li>
+<li><a href="#ClientLogin">ClientLogin</a> username/password authentication</li>
+</ul>
+
+<p>Note: Map feeds which contain both public and unlisted maps are denoted as 
+<i>private</i> map feeds within this document.</p>
+
+<p>For more information about authentication with Google Data APIs in general, 
+see the <a href="http://code.google.com/apis/gdata/auth.html">authentication documentation</a>.</p>
+
+<h3 id="AuthSub">AuthSub Proxy Authentication</h3>
+
+<p>AuthSub Proxy Authentication is used by web applications that need to 
+authenticate to a (Google Account) user's data. Rather than authenticating
+directly, applications using <code>AuthSub</code> will first make an <code>AuthSub</code> HTTP request
+for a particular user's data. This request will trigger a notification to the
+user, who can either approve or deny the request. If approved, the AuthSub
+service generates an authentication <i>token</i> which the web application can 
+use for authentication purposes.</p>
+
+<p>The <code>AuthSub</code> authentication mechanism allows Maps Data API users to grant 
+access to web applications without needing to provide the third-party with 
+username or password details. Tokens may be provided for single-usage
+or as "session" tokens, which don't expire. Additionally, secure tokens may also
+be generated, though only for applications which are registered with Google and
+have a security certificate on file.</p>
+
+<p>For more detailed information, see the 
+<a href="http://code.google.com/apis/accounts/docs/AuthSub.html">AuthSub documentation</a>.</p>
+
+<p>When a user first visits your application, they have not yet been 
+authenticated. You should display appropriate information alerting them of this
+and provide a link to the Google <code>AuthSubRequest</code> URL:</p>
+
+<pre class="prettyprint">
+https://www.google.com/accounts/AuthSubRequest
+</pre>
+
+<p>An <code>AuthSub</code> is initiated via an <code>AuthSubRequest</code> 
+request URL with the following parameters:</p>
+<dl>
+  <dt>next</dt>
+  <dd>URL of the page to which Google should redirect the user after 
+  authentication. (This parameter should be URL-encoded.)</dd>
+  <dt>scope</dt>
+  <dd>URL identifying the service to be accessed. For Maps Data feeds, this URL
+  is  <code>http://maps.google.com/maps/feeds/</code>. (This parameter
+  should be URL-encoded.)</dd>
+  <dt>session</dt>
+  <dd>Boolean flag indicating whether the one-time-use token may be exchanged 
+  for a session token (1) or not (0).</dd>
+  <dt>secure</dt>
+  <dd>Boolean flag indicating whether the authentication transaction should 
+  issue a secure token (1) or a non-secure token (0). Secure tokens are 
+  available to registered applications only.</dd>
+</dl>
+
+<p>A typical Maps Data API AuthSubRequest URL might look like this:</p>
+
+<pre class="prettyprint">
+https://www.google.com/accounts/AuthSubRequest?scope=http%3A%2F%2Fmaps.google.com%2Fmaps%2Ffeeds%2Fmaps%2F&amp;session=1&amp;secure=0&amp;next=http%3A%2F%2Fwww.example.com%2Fwelcome.html
+</pre>
+
+<p>Note that this URL is URL-encoded. For more information about URL encoding,
+see <a href="http://en.wikipedia.org/wiki/Percent-encoding">
+http://en.wikipedia.org/wiki/Percent-encoding</a>.</p>
+
+<p>Once the user authenticates, the <code>AuthSub</code> system will redirect them to the URL
+you specified in the <code>next</code> query parameter of the AuthSubRequest 
+URL. The <code>AuthSub</code> system appends an authentication token to that URL, as the 
+value of the <code>token</code> query parameter. For example:</p>
+
+<pre class="prettyprint">
+http://www.example.com/welcome.html?token=<i>authorization_token</i></pre>
+
+<p>Since all requests to private map feeds require authentication you must 
+set an <code>Authorization</code> header in all 
+subsequent interactions with the Maps Data API, using the following format:</p>
+
+<pre class="prettyprint">
+Authorization: AuthSub auth=<i>authorization_token</i></pre>
+
+
+<p>For complete information about <code>AuthSub</code> authentication, consult the 
+<a href="http://code.google.com/apis/accounts/docs/AuthSub.html">AuthSub Authentication for Web
+Applications</a> documentation.</p>
+
+<h3 id="ClientLogin">ClientLogin <i>username/password</i> Authentication</h3>
+
+<p>ClientLogin authentication uses more traditional username/password requests
+to authenticate an application. Typically, this authentication scheme is useful
+for standalone, single-user clients (such as a desktop application). ClientLogin
+is also useful for testing purposes. The <code>ClientLogin</code> scheme generates an 
+authentication token so that future actions can reference the token rather
+than require further username/password authentications. Additionally,
+ClientLogin authentication can be extended to use CAPTCHAs&#8482; or other
+enhancements.</p>
+
+<p>To request an authentication token using the <code>ClientLogin</code> mechanism, send a
+secure HTTP (HTTPS) <code>POST</code> request to the <code>ClientLogin</code> URL:</p>
+
+<pre class="prettyprint">
+https://www.google.com/accounts/ClientLogin
+</pre>
+
+<p>The <code>POST</code> body must be constructed as a form post with default
+encoding <code>application/x-www-form-urlencoded</code>. The body of the POST 
+request should specify the set of query parameters:</p>
+<dl>
+  <dt>accountType</dt>
+  <dd>Type of account to be authenticated. The default is <code>GOOGLE</code>; 
+  if you want to support Google Apps for Your Domain users, use 
+  <code>HOSTED_OR_GOOGLE</code>.</dd>
+  <dt>Email</dt>
+  <dd>The user's email address.</dd>
+  <dt>Passwd</dt>
+  <dd>The user's password.</dd>
+  <dt>service</dt>
+  <dd>The Maps Data API service name (<code>local</code>). (For other service 
+  names, see the 
+  <a href="http://code.google.com/support/bin/answer.py?answer=62712&amp;topic=10433">
+  service name list</a>.)</dd>
+  <dt>source</dt>
+  <dd>Short name identifying your client application, used for logging purposes.
+  This string should take the form <i>companyName</i>-<i>applicationName</i>-
+  <i>versionID</i>.</dd>
+</dl>
+
+<p>Upon successful authentication, the server returns an HTTP <code>200 OK
+</code> status code, plus three alphanumeric codes in the body of the response: 
+<code>SID</code>, <code>LSID</code>, and <code>Auth</code>. The <code>Auth
+</code> value contains the authorization token that you'll use to authenticate 
+to the Maps Data API on subsequent maps-feed requests. (You can ignore the 
+<code>SID</code> and <code>LSID</code> values.)</p>
+
+<p>Since all requests to private map feeds require authentication you must set 
+an <code>Authorization</code> header in all 
+subsequent interactions with the Maps Data API, using the following format:</p>
+
+<pre class="prettyprint">
+Authorization: GoogleLogin auth=<i>authorization_token</i></pre>
+
+<p>For more information about <code>ClientLogin</code> authentication, including sample 
+requests and responses, see the 
+<a href="http://code.google.com/apis/accounts/AuthForInstalledApps.html">Authentication for Installed 
+Applications</a> documentation.</p>
+
+<h1 id="RetrievingMetafeed">Retrieving a List of Maps</h1>
+
+<p>The Maps Data API provides a feed that lists the maps created by a particular
+user; this feed is known as a &quot;metafeed&quot;. A typical Maps Data API
+metafeed is a <code>GET</code> request of the following form:</p>
+
+<pre class="prettyprint">
+#
+# The default feed requests all maps associated with the authenticated user
+#
+GET http://maps.google.com/maps/feeds/maps/default/full
+Authorization: GoogleLogin auth="<i>authorization_token</i>"
+#
+# The standard metafeed requests all maps associated with the 
+# associated <i>userID</i>
+#
+GET http://maps.google.com/maps/feeds/maps/<i>userID</i>/full
+Authorization: GoogleLogin auth="<i>authorization_token</i>"
+</pre>
+
+<p>Note that both <code>GET</code> requests require an <code>Authorization
+</code> HTTP header, passing an <code>AuthSub</code> or <code>GoogleLogin</code>
+token, depending on which authentication scheme you've implemented. (The <code>
+GoogleLogin</code> token corresponds to the <code>ClientLogin</code> authentication
+process.)</p>
+
+<p>The default metafeed requests all maps created by the user associated with 
+the passed authentication token. (Additionally the default metafeed is
+useful for determing your <i>userID</i>, which is included in the response.)</p>
+
+<p>The standard metafeed returns all feeds associated with a given 
+<i>userID</i>. If the <i>userID</i> matches your authentication token, all
+private, public and unlisted maps will be returned. This 
+<i>userID</i> is a unique token associated with your Google account username and
+is returned by the default metafeed noted above.</p>
+
+<p>The metafeed request generates an XML response that looks like the following:
+</p>
+
+<pre class="prettyprint">
+&lt;?xml version='1.0' encoding='utf-8'?&gt;
+&lt;feed xmlns='http://www.w3.org/2005/Atom'
+xmlns:openSearch='http://a9.com/-/spec/opensearchrss/1.0/'
+xmlns:batch='http://schemas.google.com/gdata/batch'
+xmlns:gd='http://schemas.google.com/g/2005'&gt;
+  &lt;id&gt;
+  http://maps.google.com/maps/feeds/maps/<i>userID</i>/full&lt;/id&gt;
+  &lt;updated&gt;2009-04-15T18:46:47.269Z&lt;/updated&gt;
+  &lt;category scheme='http://schemas.google.com/g/2005#kind'
+  term='http://schemas.google.com/maps/2008#map' /&gt;
+  &lt;title type='text'&gt;My maps&lt;/title&gt;
+  &lt;link rel='alternate' type='text/html'
+  href='http://maps.google.com/maps/ms?msa=1' /&gt;
+  &lt;link rel='http://schemas.google.com/g/2005#feed'
+  type='application/atom+xml'
+  href='http://maps.google.com/maps/feeds/maps/<i>userID</i>/full' /&gt;
+  &lt;link rel='http://schemas.google.com/g/2005#batch'
+  type='application/atom+xml'
+  href='http://maps.google.com/maps/feeds/maps/<i>userID</i>/full/batch' /&gt;
+  &lt;link rel='http://schemas.google.com/g/2005#post'
+  type='application/atom+xml'
+  href='http://maps.google.com/maps/feeds/maps/<i>userID</i>/full' /&gt;
+  &lt;author&gt;
+    &lt;name&gt;Tom&lt;/name&gt;
+  &lt;/author&gt;
+  &lt;openSearch:totalResults&gt;3&lt;/openSearch:totalResults&gt;
+  &lt;openSearch:startIndex&gt;1&lt;/openSearch:startIndex&gt;
+  &lt;openSearch:itemsPerPage&gt;3&lt;/openSearch:itemsPerPage&gt;
+  +&lt;entry&gt;
+  +&lt;entry&gt;
+  +&lt;entry&gt;
+  ...
+&lt;/feed&gt;
+</pre>
+
+<p>The XML response contains an <code>&lt;id&gt;</code> element which
+defines the metafeed for this user account. Within that URL is the requestor's
+<i>userID</i> which you can use within additional requests. (You can also use 
+the explicit Google account email address associated with this user in place of
+this <i>userID</i>.</p>
+
+<p>The XML response also contains <code>&lt;entry&gt;</code> elements for each
+map available for access by the authenticated user. These <code>&lt;entry&gt;
+</code> elements only contain meta information about the map; they do not 
+contain specific feature information about maps. You will need to request 
+specific information about a map to gain a full listing of features attached to
+the map. (See <a href="#RetrievingFeatures">Retrieving Features</a> below.)</p>
+
+<p>Additionally the response contains several link elements:</p>
+
+<ul>
+  <li><code>#feed</code> which defines the full maps metafeed</li>
+  <li><code>#batch</code> which defines a URL for 
+  <a href="http://code.google.com/apis/gdata/batch.html">batch processing</a>
+  </li>
+  <li><code>#post</code> which defines a URL for <code>POST</code> new map elements</li>
+</ul>
+
+<p><span style="color:red">Note: </span> if you request a feed for a non-authenticated
+user (i.e. not yourself), you will not receive a <code>#post</code> feed URL.</p>
+
+<p>Each <code>&lt;entry&gt;</code> also contains a number of elements that
+contain more information about a specific map. A sample entry returned by the 
+metafeed is shown below:</p>
+
+<pre class="prettyprint">
+ &lt;entry&gt;
+    &lt;id&gt;
+    http://maps.google.com/maps/feeds/maps/<i>userID</i>/full/<i>elementID</i>&lt;/id&gt;
+    &lt;published&gt;2009-04-14T05:36:43.283Z&lt;/published&gt;
+    &lt;updated&gt;2009-04-14T05:41:44.564Z&lt;/updated&gt;
+    &lt;app:edited xmlns:app='http://www.w3.org/2007/app'&gt;
+    2009-04-16T20:45:16.072Z&lt;/app:edited&gt;
+    &lt;app:control xmlns:app='http://www.w3.org/2007/app'&gt;
+      &lt;app:draft&gt;yes&lt;/app:draft&gt;
+    &lt;/app:control&gt;
+    &lt;category scheme='http://schemas.google.com/g/2005#kind'
+    term='http://schemas.google.com/maps/2008#map' /&gt;
+    &lt;title type='text'&gt;Bike Ride, 10 Years Old&lt;/title&gt;
+    &lt;summary&gt;This was my first long trip on a bicycle
+    that I remember as a child.&lt;/summary&gt;
+    &lt;content src='http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>elementID</i>/full'/&gt;
+    &lt;link rel='self' type='application/atom+xml'
+    href='http://maps.google.com/maps/feeds/maps/<i>userID</i>/full/<i>elementID</i>' /&gt;
+    &lt;link rel='edit' type='application/atom+xml'
+    href='http://maps.google.com/maps/feeds/maps/<i>userID</i>/full/<i>elementID</i>' /&gt;
+    &lt;author&gt;
+      &lt;name&gt;Tom&lt;/name&gt;
+    &lt;/author&gt;
+  &lt;/entry&gt;
+</pre>
+
+<p>Note that each entry contains:</p>
+
+<ul>
+<li>An <code>&lt;id&gt;</code> element containing a URL used to specify this 
+particular entry (map).</li>
+<li>Additional meta information for date of publication and modification</li>
+<li>A <code>&lt;title&gt;</code> and <code>&lt;summary&gt;</code> element, which
+correspond to the title and description entered within the My Maps editor.</li>
+<li><p><code>&lt;link&gt;</code> elements containing URLS for performing 
+operations on this map:</p>
+<ul>
+  <li><code>self</code> for requesting this information on this element.
+  This feed simply returns the entry you see here.</li>
+  <li><code>edit</code> for <code>PUT</code> requests to update information in 
+  this element</li>
+</ul>
+</li>
+<li><code>&lt;author&gt;</code> and <code>&lt;name&gt;</code> elements 
+describing the author of this map.</li>
+<li>A <code>&lt;content&gt;</code> element whose <code>src</code> attribute specifies the
+feed for retrieving the full list of features for this map.</li>
+</ul>
+
+<p>Note that the map entry does not itself describe any of its feature
+content (markers, polylines,polygons, etc.) To retrieve that additional 
+information, you will need to request a feature feed on a map. (See 
+<a href="#FeatureFeeds">Requesting Features</a> below.)
+
+<p>For complete information about these elements, consult the 
+<a href="reference.html#Elements">Maps Data API feed elements reference 
+guide</a>, <a href="http://code.google.com/apis/gdata/reference.html#Document-format">Google Data 
+APIs Protocol Reference</a> document, or the 
+<a href="http://www.atomenabled.org/developers/syndication/atom-format-spec.php">
+Atom 1.0 specification</a>.</p>
+
+<h1 id="AdditionalMetaFeeds">Additional Metafeeds</h1>
+
+<p>In addition to <code>http://maps.google.com/maps/feeds/maps/default/full</code>, which
+retrieves all feeds associated with a given user, the following subsets are available:</p>
+
+<ul>
+<li><code>http://maps.google.com/maps/feeds/maps/default/owned</code> returns all maps
+created by the user</li>
+<li><code>http://maps.google.com/maps/feeds/maps/default/public</code> returns all 
+public maps created by the user</li>
+<li><code>http://maps.google.com/maps/feeds/maps/default/unlisted</code> returns all 
+unlisted maps created by the user</li>
+</ul>
+
+<h1 id="Maps">Maps</h1>
+
+<p>The fundamental <code>&lt;entry&gt;</code> within a Maps Data API feed is an
+instance of a map. Using the Maps Data API, you may perform the following
+operations on maps:</p>
+
+<ul>
+  <li>Retrieving Individual Maps</li>
+  <li>Creating New Maps</li>
+  <li>Updating Map Information</li>
+  <li>Deleting Maps</li>
+</ul>
+
+<p>Each of these operations is discussed in the following sections.</p>
+
+<h1 id="RetrievingMaps">Retrieving a Map</h1>
+
+<p>To retrieve a map, simply initiate a <code>GET</code> request to the 
+<code>self</code> URL specified within the map's entry.</p>
+
+<pre class="prettyprint">
+GET http://maps.google.com/maps/feeds/maps/<i>userID</i>/full/<i>mapID</i>
+Authorization: GoogleLogin auth="<i>authorization_token</i>"
+</pre>
+
+<p>Upon success, the server responds:</p>
+
+<pre class="prettyprint lang-xml">
+200 OK
+
+&lt;?xml version='1.0' encoding='utf-8'?&gt;
+ &lt;entry xmlns='http://www.w3.org/2005/Atom'
+    xmlns:batch='http://schemas.google.com/gdata/batch'
+    xmlns:gd='http://schemas.google.com/g/2005'&gt;
+    &lt;id&gt;
+    http://maps.google.com/maps/feeds/maps/<i>userID</i>/full/<i>elementID</i>&lt;/id&gt;
+    &lt;published&gt;2009-04-14T05:36:43.283Z&lt;/published&gt;
+    &lt;updated&gt;2009-04-14T05:41:44.564Z&lt;/updated&gt;
+    &lt;app:edited xmlns:app='http://www.w3.org/2007/app'&gt;
+    2009-04-16T20:45:16.072Z&lt;/app:edited&gt;
+    &lt;app:control xmlns:app='http://www.w3.org/2007/app'&gt;
+      &lt;app:draft&gt;yes&lt;/app:draft&gt;
+    &lt;/app:control&gt;
+    &lt;category scheme='http://schemas.google.com/g/2005#kind'
+    term='http://schemas.google.com/maps/2008#map' /&gt;
+    &lt;title type='text'&gt;Bike Ride, 10 Years Old&lt;/title&gt;
+    &lt;summary&gt;This was my first long trip on a bicycle
+    that I remember as a child.&lt;/summary&gt;
+    &lt;content src='http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>elementID</i>/full' /&gt;
+    &lt;link rel='self' type='application/atom+xml'
+    href='http://maps.google.com/maps/feeds/maps/<i>userID</i>/full/<i>elementID</i>' /&gt;
+    &lt;link rel='edit' type='application/atom+xml'
+    href='http://maps.google.com/maps/feeds/maps/<i>userID</i>/full/<i>elementID</i>' /&gt;
+    &lt;author&gt;
+      &lt;name&gt;Tom&lt;/name&gt;
+    &lt;/author&gt;
+  &lt;/entry&gt;
+</pre>
+
+<p>Note that this entry is identical to the entry returned within the full
+maps metafeed. Generally, you either use the maps metafeed or <code>GET</code>
+a specific map, but there's usually not a reason to do both.</p>
+
+<h1 id="CreatingMaps">Creating Maps</h1>
+
+<p>Authenticated applications can publish new maps by using the metafeed's
+<code>#post</code> URL. The Maps Data API accepts uploads in <a href="#uploading_xml">XML</a>, <a href="#uploading_csv">CSV</a>, and <a href="#uploading_kml">KML</a> formats.</p>
+<h2 id="uploading_xml">Uploading XML</h2>
+
+<p>To create a new map, first create an XML representation of the map to 
+publish. This XML needs to be in the form of an Atom <code>&lt;entry&gt;</code> 
+element, which typically looks like this:</p>
+
+<pre class="prettyprint">
+&lt;entry xmlns="http://www.w3.org/2005/Atom"&gt;
+  &lt;title&gt;Bike Ride, 10 Years Old&lt;/title&gt;
+  &lt;summary&gt;&lt;/summary&gt;
+&lt;/entry&gt;
+</pre>
+
+<p>To publish this entry, send the XML file to the map's post URL as follows:
+</p>
+<ol><li>First, place your Atom <code>&lt;entry&gt;</code> element in the body of
+a new <code>POST</code> request, using the <code>application/atom+xml</code> 
+content type. Make sure to declare <code>xmlns="http://www.w3.org/2005/Atom"</code>
+as the default namespace.</li>
+<li><p>Second, find the map's <code>POST</code> URL in the metafeed by locating the 
+<code>&lt;link&gt;</code> element which contains s <code>rel</code> attribute 
+ending with <code>#post</code>.This post URL is of this format:</p>
+<pre class="prettyprint">
+http://maps.google.com/maps/feeds/maps/<i>userID</i>/full
+</pre>
+</li>
+<li><p>Initiate the <code>POST</code> request as follows:<p>
+<pre class="prettyprint lang-xml">
+POST http://maps.google.com/maps/feeds/maps/<i>userID</i>/full
+Content-type: application/atom+xml
+Authorization: GoogleLogin auth="<i>authorization_token</i>"
+
+&lt;entry xmlns="http://www.w3.org/2005/Atom"&gt;
+  &lt;title&gt;My Map&lt;/title&gt;
+  &lt;summary&gt;My Description&lt;/summary&gt;
+&lt;/entry&gt;
+</pre>
+</li>
+
+<p>The Maps Data API creates a map using the entry you sent, then returns an 
+HTTP <code>201 CREATED</code> status code, along with a copy of the new map in 
+the form of an <code>&lt;entry&gt;</code> element. The entry returned is the 
+same one you sent, but also contains various elements added by Maps Data API,
+such as an <code>&lt;id&gt;</code> element and creation information.</p>
+
+<p>If your request fails for some reason, the Maps Data API may return a 
+different status code. For information about the status codes, see the 
+<a href="http://code.google.com/apis/gdata/reference.html">Google Data API protocol reference 
+document</a>.</p>
+
+<h2 id="uploading_csv">Uploading CSV</h2>
+
+<p>CSV files can be uploaded to the Maps Data API, to create a new map containing the specified Point Placemarks.</p>
+
+<pre>POST http://maps.google.com/maps/feeds/maps/default/full
+GData-Version: 2.0
+Authorization: GoogleLogin auth=&quot;<em>authorization_token</em>&quot;
+Content-Type: text/csv
+Slug: A new map
+
+name,latitude,longitude,description
+Hello,-77.066395,-11.968312,Greetings from Lima!
+There,145.34502,-38.51512,Out There Down Under
+How,-88.421001,44.970465,How is Wisconsin?
+Are,13.084501,63.399164,Sorry about that
+You,140.637898,42.842568,I love you Hokkaido</pre>
+
+<p>The map's title will be set to the value specified in the <code>Slug</code> header. In the example above, the title is set to "A new map".</p>
+
+<h3>Format Details</h3>
+<p>The CSV file must contain a schema line as the first line of the file. This line <em>must</em> include <code>latitude</code> and <code>longitude</code> labels (case insensitive) and can also include any number of additional labels. Reserved labels are:</p>
+
+<ul>
+  <li><strong>latitude</strong>: Specifies the latitude component of the Point's
+	<code>&lt;coordinates&gt;</code> element.</li>
+  <li><strong>longitude</strong>: Specifies the longitude component of the 
+    Point's <code>&lt;coordinates&gt;</code> element.</li>
+  <li><strong>name</strong>: (optional) Specifies the contents of each 
+    placemark's <code>&lt;name&gt;</code> element.</li>
+  <li><strong>description</strong>: (optional) Added to the placemark's
+	<code>&lt;description&gt;</code> element.</li>
+  <li><strong>feature-id</strong>: (optional) Added to the placemark's
+    <code>id</code> attribute as <code>feature-<em>xxx</em></code>.
+    For example, an entry in the <code>feature-id</code> column of 
+    <strong>46</strong> would result in
+    <code>&lt;Placemark id="feature-46"&gt;</code>.</li>
+</ul>
+
+<p>Labels can be in any order:</p>
+
+<pre>name,latitude,longitude,description,type,population</pre>
+
+<p>Additional labels will be saved as <code>&lt;ExtendedData&gt;</code> elements.</p>
+<p>For example, the following line of CSV, using the schema above:</p>
+<pre>Hello,-77.066395,-11.968312,Greetings from Lima!,capital,7605743</pre>
+<p>will result in the following KML:</p>
+<pre class="prettyprint lang-xml">
+&lt;Placemark&gt;
+  &lt;name&gt;Hello&lt;/name&gt;
+  &lt;description&gt;Greetings from Lima!&lt;/description&gt;
+  &lt;ExtendedData&gt;
+    &lt;Data name=&quot;type&quot;&gt;&lt;value&gt;capital&lt;/value&gt;&lt;/Data&gt;
+    &lt;Data name=&quot;population&quot;&gt;&lt;value&gt;7605743&lt;/value&gt;&lt;/Data&gt;
+  &lt;/ExtendedData&gt;
+  &lt;Point&gt;
+    &lt;coordinates&gt;-11.968312,-77.066395&lt;/coordinates&gt;
+  &lt;/Point&gt;
+&lt;/Placemark&gt;</pre>
+
+<h3>Using commas and quotation marks</h3>
+
+<p>If your data includes a comma in any of its fields, you must surround that field with quotation marks:</p>
+<pre>Name,Longitude,Latitude,Description
+&quot;White Bear Lake, MN&quot;,-93.00994,45.08468,Somewhere I once lived.</pre>
+
+<p>To use quotation marks in any field, you must surround the field <em>and</em> the quote with quotation marks:</p>
+<pre>Somewhere,-98.484246,39.011902,&quot;This is where &quot;&quot;Somewhere Over the Rainbow&quot;&quot; is from&quot;</pre>
+
+<p class="note"><strong>Tip:</strong> A <a href="http://docs.google.com">Google Docs</a> spreadsheet's <strong>Save as CSV</strong> option uses the same escaping rules as are detailed above. A spreadsheet exported with the <strong>Save as CSV</strong> option can be uploaded directly to the Google Maps Data API.</p>
+
+<h3>Server responses</h3>
+<p>If the new map creation is successful, the server will respond with an HTTP <code>201 CREATED</code> status code, along with a copy of the new map and its features as an Atom-formatted entry.</p>
+<p>If there are errors creating the map, a detailed report of the failures is returned. Check that all lines in your CSV file contain the same number of columns, and that latitude and longitude are in decimal degrees.</p>
+
+<h2 id="uploading_kml">Uploading KML</h2>
+<p>KML files can be uploaded to the map feed URL to create a new map in the user's account.</p>
+
+<pre class="prettyprint">
+POST http://maps.google.com/maps/feeds/maps/default/full
+GData-Version: 2.0
+Authorization: GoogleLogin auth=&quot;<em>authorization_token</em>&quot;
+Content-Type: application/vnd.google-earth.kml+xml
+
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;kml xmlns=&quot;http://www.opengis.net/kml/2.2&quot;&gt;
+  &lt;Folder&gt;
+    &lt;Placemark&gt;
+      &lt;name&gt;Hello&lt;/name&gt;
+      &lt;Style /&gt;
+      &lt;description&gt;Greetings from Lima!&lt;/description&gt;
+      &lt;Point&gt;
+        &lt;coordinates&gt;-11.968312,-77.066395&lt;/coordinates&gt;
+      &lt;/Point&gt;
+    &lt;/Placemark&gt;
+    &lt;Placemark&gt;
+      &lt;name&gt;There&lt;/name&gt;
+      &lt;Style /&gt;
+      &lt;description&gt;Out There Down Under&lt;/description&gt;
+      &lt;Point&gt;
+        &lt;coordinates&gt;-38.51512,145.34502&lt;/coordinates&gt;
+      &lt;/Point&gt;
+    &lt;/Placemark&gt;
+  &lt;/Folder&gt;
+&lt;/kml&gt;
+</pre>
+
+<h3>Format Details</h3>
+
+<p>The <code>Content-Type</code> must be set as <code>application/vnd.google-earth.kml+xml</code>.</p>
+
+<p>The Maps Data API recognizes point, polygon, and line string placemarks. Any elements of the KML file that are not supported by the Maps Data API will not be saved; this includes but is not limited to LookAts, Camera elements, Documents and Folders, TimeStamps and TimeSpans.</p>
+
+<p>Styles are inlined if a <code>styleUrl</code> is used that resolves to the uploaded KML file. IconStyle, LineStyle, and PolyStyle are the only styles saved.</p>
+
+<p>KMZ files are not supported.</p>
+
+<p>A map title can not be specified in the KML upload. To update a map's title after the map has been created, refer to <a href="#UpdatingMaps">Updating Maps</a>, below.</p>
+ 
+<h1 id="UpdatingMaps">Updating Maps</h1>
+
+<p>To update an existing map, first retrieve the entry you want to update, 
+modify its XML, and then send a <code>PUT</code> request to the map's edit 
+URL, passing the updated XML. Be sure to set the <code>application/atom+xml
+</code> content type within the <code>PUT</code> request's header. Also ensure
+that the <code>&lt;id&gt;</code> value in the entry you <code>PUT</code> exactly
+matches the <code>&lt;id&gt;</code> of the existing entry.</p>
+
+<p>In the following example, we simply change the map's description:</p>
+
+<pre class="prettyprint lang-xml">
+PUT http://maps.google.com/maps/feeds/maps/<i>userID</i>/full/<i>mapID</i>
+Content-type: application/atom+xml
+Authorization: GoogleLogin auth="<i>authorization_token</i>"
+
+&lt;entry xmlns="http://www.w3.org/2005/Atom"&gt;
+  &lt;title&gt;My Map&lt;/title&gt;
+  &lt;summary&gt;My newly Revised and Updated 
+  Description&lt;/summary&gt;
+  &lt;author&gt;
+    &lt;name&gt;Tom&lt;/name&gt;
+  &lt;/author&gt;
+&lt;/entry&gt;
+</pre>
+
+<p class="note"><strong>Troubleshooting Tip</strong>: Some firewalls block HTTP 
+<code>PUT</code> requests. As a workaround, you can include a 
+<code>X-HTTP-Method-Override: PUT</code> header in a <code>POST</code> request. 
+For details, see the <a href="http://code.google.com/apis/gdata/basics.html">Google Data API protocol 
+basics</a> document.</p>
+
+<h1 id="DeletingMaps">Deleting Maps</h1>
+
+<p>To delete a map, send a <code>DELETE</code> request to the map's edit URL. 
+This is the same URL used to <a href="#UpdatingEntries">update a map</a>.</p>
+
+<pre class="prettyprint">
+DELETE http://maps.google.com/maps/feeds/maps/<i>userID</i>/full/<i>mapID</i>
+Authorization: GoogleLogin auth="<i>authorization_token</i>"
+</pre>
+
+<p class="note"><strong>Troubleshooting Tip</strong>: Some firewalls block HTTP 
+<code>DELETE</code> messages. To get around this, you can include a 
+<code>X-HTTP-Method-Override: DELETE</code> header in a <code>POST</code> 
+request. For details, see the <a href="http://code.google.com/apis/gdata/basics.html">Google Data API 
+protocol basics</a> document.</p>
+
+<p class="note"><strong>Note</strong>: To update existing maps, see 
+<a href="#UpdatingEntries">Updating Maps</a>; don't update maps by deleting and 
+then re-adding them.</p>
+
+<h1 id="Features">Map Features</h1>
+
+<p>So far, we have only discussed maps, but we haven't discussed the things we
+want to put on maps: markers, lines, shapes, etc. These elements are known as
+<i>features</i> in the Maps Data API. Each map contains a <i>feature feed</i>
+which returns a list of the features attached to a map. You may then add,
+modify, or delete features using this feed.</p>
+
+<p>This chapter discusses the feature feed, what makes up a feature in the Maps
+Data API, and how to perform the following functions: </p>
+
+<ul>
+  <li>Retrieving Individual Features</li>
+  <li>Creating New Features</li>
+  <li>Updating Features</li>
+  <li>Deleting Features</li>
+</ul>
+
+<h2 id="FeatureFeeds">Feature Feeds</h2>
+
+<p>A map's feature feed is published in the map's <code>&lt;content&gt;
+</code> tag within its <code>src</code> attibute. The feature feed not only
+contains a <i>userID</i> but also a <i>mapID</i> of the map in question. To
+retrieve the feature feed for a particular map, send a <code>GET</code> request
+to this URL:</p>
+
+<pre class="prettyprint">
+GET http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full
+Authorization: GoogleLogin auth="<i>authorization_token</i>"
+</pre>
+
+<p>Upon success, a feature feed will return containing information about the
+map in question and a list of <code>&lt;entry&gt;</code> elements for each
+feature.</p>
+
+<pre class="prettyprint">
+&lt;?xml version='1.0' encoding='utf-8'?&gt;
+&lt;atom:feed xmlns='http://www.opengis.net/kml/2.2'
+    xmlns:atom='http://www.w3.org/2005/Atom'
+    xmlns:openSearch='http://a9.com/-/spec/opensearchrss/1.0/'
+    xmlns:batch='http://schemas.google.com/gdata/batch'
+    xmlns:gd='http://schemas.google.com/g/2005'
+    gd:etag='W/"<i>ETag</i>"'&gt;
+  &lt;atom:id&gt;
+  http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full&lt;/atom:id&gt;
+  &lt;atom:updated&gt;2009-04-16T18:31:57.271Z&lt;/atom:updated&gt;
+  &lt;atom:category scheme='http://schemas.google.com/g/2005#kind'
+  term='http://schemas.google.com/maps/2008#feature' /&gt;
+  &lt;atom:title type='text'&gt;Bike Ride, 10 Years Old&lt;/atom:title&gt;
+  &lt;atom:link rel='http://schemas.google.com/g/2005#feed' type='application/atom+xml'
+  href='http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full' /&gt;
+  &lt;atom:link rel='self' type='application/atom+xml'
+  href='http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full' /&gt;
+  &lt;atom:link rel='http://schemas.google.com/g/2005#batch' type='application/atom+xml'
+  href='http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full/batch' /&gt;
+  &lt;atom:link rel='http://schemas.google.com/g/2005#post' type='application/atom+xml'
+  href='http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full' /&gt;
+  &lt;atom:link rel='next' type='application/atom+xml'
+  href='http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full?previd=<i>featureID</i>' /&gt;
+  &lt;openSearch:totalResults&gt;1&lt;/openSearch:totalResults&gt;
+  &lt;openSearch:startIndex&gt;1&lt;/openSearch:startIndex&gt;
+  &lt;openSearch:itemsPerPage&gt;1&lt;/openSearch:itemsPerPage&gt;
+  +&lt;atom:entry&gt;
+  +&lt;atom:entry&gt;
+  +&lt;atom:entry&gt;
+  ...
+&lt;/atom:feed&gt;
+</pre>
+
+<p>There are several things to notice about this feed:</p>
+
+<ul>
+  <li>It has a default namespace for KML. This allows you to retrieve and
+  modify KML without needing to namespace the KML entities individually. (For
+  example as <code>&lt;kml:Placemark&gt;</code> elements.)</li>
+  <li>The <code>&lt;id&gt;</code> consists of a URL containing both a 
+  <i>userID</i> and the <i>mapID</i> of the corresponding map entry in the Maps
+  Data API metafeed. This is the same URL as that displayed in the maps
+  metafeed for the map in question.</li>
+  <li><p>It contains a set of links for performing the following operations:</p>
+    <ul>
+      <li><code>#feed</code> which defines the full feature feed for this map</li>
+      <li><code>#batch</code> which defines a URL for 
+  <a href="http://code.google.com/apis/gdata/batch.html">batch processing</a>.</li>
+      <li><code>#post</code> which defines a URL for <code>POST</code>ing of
+      new feature elements</li>
+      <li><code>self</code> which identifies this feed. This feed is identical
+      to <code>#feed</code> above.</li>
+      <li><code>next</code> which identifies the last element in this
+      feature feed.</li>
+    </ul>
+  <li>It contains a set of <code>&lt;entry&gt;</code> elements for each feature
+  contained within the map. These features consist of KML within each 
+  <code>&lt;entry&gt;</code>'s content tag.</li>
+</ul>
+
+<h2 id="KMLFeatures">KML Features</h2>
+
+<p>Features are added to maps as <a href="http://code.google.com/apis/kml">KML</a> Placemarks within
+the feature's <code>&lt;content&gt;</code>. Since KML is already an XML language
+it does not need to be escaped within the feature XML.</p>
+
+Currently each feature maps to one (and only one) <code>&lt;Placemark&gt;</code>
+of the following types:
+
+<ul>
+  <li><code>&lt;Point&gt;</code></li>
+  <li><code>&lt;LineString&gt;</code></li>
+  <li><code>&lt;Polygon&gt;</code></li>
+</ul>
+
+<p>The <code>&lt;Placemark&gt;</code> must contain a <code>&lt;Style&gt;</code> tag, 
+even if it is empty.  To define a style, the <code>&lt;Style&gt;</code> may contain 
+elements of the following types:</p>
+
+<ul>
+  <li><code>&lt;IconStyle&gt;</code> for <code>&lt;Point&gt;</code> elements</li>
+  <li><code>&lt;LabelStyle&gt;</code></li>
+  <li><code>&lt;LineStyle&gt;</code> for <code>&lt;LineString&gt;</code> elements</li>
+  <li><code>&lt;PolyStyle&gt;</code> for <code>&lt;Polygon&gt;</code> elements</li>
+</ul>
+
+<p><code>&lt;Placemark&gt;</code>s may also contain the following additional elements:</p>
+
+<ul>
+  <li>An <code>&lt;atom:author&gt;</code> to denote the author of a feature. This
+  allows you to create community maps, for example, where features have
+  different authors than the underlying map.</li>
+  <li>An <code>&lt;atom:link&gt;</code> element containing a client-supplied
+  URL to be indexed in search results, if the feed is public.</li>
+  <li>A <code>&lt;kml:address&gt;</code> element to contain the unstructured 
+  (human-readable) address of this feature.</li>
+</ul>
+
+<p>At this time, the Maps Data API does not support the full KML specification
+(including elements not noted above, or nested folder operations), and does not 
+support multiple <code>&lt;Placemark&gt;</code> elements within one feature. 
+(Adding multiple <code>&lt;Placemark&gt;</code>s will generate an error.) We intend 
+to add more KML support in the future.</p>
+
+<h1 id="RetrievingFeatures">Retrieving Features</h1>
+
+<p>To retrieve a specific feature, simply initiate a <code>GET</code> request 
+to the <code>self</code> URL specified within the feature's entry.</p>
+
+<pre class="prettyprint">
+GET http://maps.google.com/maps/feeds/maps/<i>userID</i>/<i>mapID</i>/full/<i>featureID</i>
+Authorization: GoogleLogin auth="<i>authorization_token</i>"
+</pre>
+
+<p>Upon success, the server responds:</p>
+
+<pre class="prettyprint lang-xml">
+200 OK
+
+&lt;atom:entry xmlns='http://www.opengis.net/kml/2.2'
+    xmlns:atom='http://www.w3.org/2005/Atom'
+    xmlns:batch='http://schemas.google.com/gdata/batch'
+    xmlns:gd='http://schemas.google.com/g/2005'&gt;
+  &lt;atom:id&gt;
+  http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full/<i>featureID</i>&lt;/atom:id&gt;
+  &lt;atom:published&gt;2008-08-14T17:46:06.462Z&lt;/atom:published&gt;
+  &lt;atom:updated&gt;2008-08-14T18:12:31.589Z&lt;/atom:updated&gt;
+  &lt;atom:category scheme='http://schemas.google.com/g/2005#kind' 
+  term='http://schemas.google.com/maps/2008#feature' /&gt;
+  &lt;atom:title type='text'  &gt;East River Line&lt;/atom:title&gt;
+  &lt;atom:content type='application/vnd.google-earth.kml+xml'&gt;
+    &lt;Placemark xmlns="http://www.opengis.net/kml/2.2"&gt;
+      &lt;name&gt;East River Line&lt;/name&gt;
+      &lt;description&gt;
+        &lt;![CDATA[A streetcar proposal for New York's Brooklyn and Queens
+        waterfront]]&gt;
+      &lt;/description&gt;
+      &lt;Style&gt;
+        &lt;LineStyle&gt;
+          &lt;color&gt;73FF0000&lt;/color&gt;
+          &lt;width&gt;5&lt;/width&gt;
+        &lt;/LineStyle&gt;
+      &lt;/Style&gt;
+      &lt;LineString&gt;
+        &lt;tessellate&gt;1&lt;/tessellate&gt;
+        &lt;coordinates&gt;-73.872446,40.774481,0.0
+        ...
+        -74.005537,40.671329,0.0&lt;/coordinates&gt;
+      &lt;/LineString&gt;
+    &lt;/Placemark&gt;
+  &lt;/atom:content&gt;
+  &lt;atom:link rel='self' type='application/atom+xml'
+  href='http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full/<i>featureID</i>' /&gt;
+  &lt;atom:link rel='edit' type='application/atom+xml'
+  href='http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full/<i>featureID</i>' /&gt;
+  &lt;atom:author&gt;
+    &lt;atom:name&gt;Tom&lt;/atom:name&gt;
+  &lt;/atom:author&gt;
+  &lt;atom:contributor&gt;
+    &lt;atom:name&gt;Tom&lt;/atom:name&gt;
+  &lt;/atom:contributor&gt;
+&lt;/atom:entry&gt;
+</pre>
+
+<p>This feature entry looks similar to a map entry but there are some 
+differences.</p>
+
+<p>First, the elements within this entry generally contain
+an <code>atom:</code> namespace prefix with KML specified as the default
+namespace. This allows you to extract and replace KML without needing to
+preface the KML elements with a <code>kml:</code> namespace.</p>
+
+<p>Second, the <code>&lt;content&gt;</code> element has a type set to
+<code>application/vnd.google-earth.kml+xml</code>. You must use this content
+type when adding or updating feature elements.</p>
+
+<p>Third, the content consists of standard KML (which has been abbreviated for
+clarity).</p>
+
+<p>Note that this feature entry is identical to the feature entry returned 
+within the full feature feed. Generally, you either use the feature feed or 
+<code>GET</code> a specific feature, but there's usually not a reason to do 
+both.</p>
+
+<h1 id="CreatingFeatures">Creating Features</h1>
+
+<p>Authenticated applications can publish new features to maps by using the 
+feature feed's <code>#post</code> URL.</p>
+
+<p>To create a new feature, first create an KML <code>&lt;Placemark&gt;</code>
+as noted above.  This KML needs to be in the form of an Atom 
+<code>&lt;entry&gt;</code> element, which typically looks like this:</p>
+
+<pre class="prettyprint">
+&lt;atom:entry xmlns='http://www.opengis.net/kml/2.2'
+    xmlns:atom='http://www.w3.org/2005/Atom'&gt;
+   &lt;atom:title type='text'&gt;Faulkner's Birthplace&lt;/atom:title&gt;
+   &lt;atom:content type='application/vnd.google-earth.kml+xml'&gt;
+     &lt;Placemark&gt;
+       &lt;name&gt;Faulkner's Birthplace&lt;/name&gt;
+       &lt;description/&gt;
+       &lt;Point&gt;
+         &lt;coordinates&gt;-89.520753,34.360902,0.0&lt;/coordinates&gt;
+       &lt;/Point&gt;
+     &lt;/Placemark&gt;
+   &lt;/atom:content&gt;
+&lt;/atom:entry&gt;
+</pre>
+
+<p><span style="color:red">Note: </span> KML presents geographic coordinates
+in the order of {longitude,latitude,elevation} which is different than the
+standard Maps API usage of {latitude,longitude}.</p>
+
+<p>To publish this feature entry, send the XML file to the map's post URL as 
+follows:</p>
+
+<ol><li>First, place your Atom feature <code>&lt;entry&gt;</code> element in the
+body of a new <code>POST</code> request, using the 
+<code>application/atom+xml</code> content type. Note that you should declare the
+default namespace for KML and use <code>atom:</code> prefixes for the Atom 
+namespace.</li>
+<li><p>Second, find the feature's <code>POST</code> URL in the feature feed by 
+locating the <code>&lt;link&gt;</code> element which contains a 
+<code>rel</code> attribute ending with <code>#post</code>.This post URL is of 
+this format:</p>
+<pre class="prettyprint">
+http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full
+</pre>
+</li>
+<li><p>Initiate the <code>POST</code> request as follows:<p>
+<pre class="prettyprint lang-xml">
+POST http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full
+Content-type: application/atom+xml
+Authorization: GoogleLogin auth="<i>authorization_token</i>"
+
+&lt;atom:entry xmlns='http://www.opengis.net/kml/2.2'
+    xmlns:atom='http://www.w3.org/2005/Atom'&gt;
+   &lt;atom:title type='text'&gt;Faulkner's Birthplace&lt;/atom:title&gt;
+   &lt;atom:content type='application/vnd.google-earth.kml+xml'&gt;
+     &lt;Placemark&gt;
+       &lt;name&gt;Faulkner's Birthplace&lt;/name&gt;
+       &lt;description/&gt;
+       &lt;Point&gt;
+         &lt;coordinates&gt;-89.520753,34.360902,0.0&lt;/coordinates&gt;
+       &lt;/Point&gt;
+     &lt;/Placemark&gt;
+   &lt;/atom:content&gt;
+&lt;/atom:entry&gt;
+</pre>
+</li>
+
+<p>The Maps Data API creates a new feature attached to the map using the entry 
+you sent, then returns an HTTP <code>201 CREATED</code> status code, along with
+a copy of the new feature in the form of an <code>&lt;atom:entry&gt;</code> element. 
+The entry returned is the same one you sent, but also contains various elements 
+added by Maps Data API, such as an <code>&lt;atom:id&gt;</code> element and creation 
+information.</p>
+
+<p>If your request fails for some reason, the Maps Data API may return a 
+different status code. For information about the status codes, see the 
+<a href="http://code.google.com/apis/gdata/reference.html">Google Data API protocol reference 
+document</a>.</p>
+
+<h1 id="UpdatingFeatures">Updating Features</h1>
+
+<p>To update an existing feature, first retrieve the feature entry you want to 
+update, modify its XML, and then send a <code>PUT</code> request to the 
+feature's edit URL, passing the updated XML. Be sure to set the 
+<code>application/atom+xml</code> content type within the <code>PUT</code> 
+request's header. Also ensure that the <code>&lt;id&gt;</code> value in the 
+entry you <code>PUT</code> exactly matches the <code>&lt;id&gt;</code> of the 
+existing feature.</p>
+
+<p>In the following example, we change the feature's description by adding
+some HTML within a CDATA element:</p>
+
+<pre class="prettyprint lang-xml">
+PUT http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full/<i>featureID</i>
+Content-type: application/atom+xml
+Authorization: GoogleLogin auth="<i>authorization_token</i>"
+
+&lt;atom:entry xmlns='http://www.opengis.net/kml/2.2'
+    xmlns:atom='http://www.w3.org/2005/Atom'&gt;
+   &lt;atom:title type='text'&gt;Faulkner&apos;s Birthplace&lt;/title&gt;
+   &lt;atom:content type='application/vnd.google-earth.kml+xml'&gt;
+     &lt;Placemark&gt;
+       &lt;name&gt;Faulkner&apos;s Birthplace&lt;/name&gt;
+       &lt;description&gt;
+         &lt;![CDATA[
+           &lt;p&gt;&lt;b&gt;William Faulkner&lt;/b&gt; adopted Oxford, Mississippi as his 
+           hometown when his family moved to Oxford from nearby New Albany 
+           when he was three.&lt;/p&gt;    
+         ]]&gt;
+       &lt;/description&gt;
+       &lt;Point&gt;
+         &lt;coordinates&gt;-89.520753,34.360902,0.0&lt;/coordinates&gt;
+       &lt;/Point&gt;
+     &lt;/Placemark&gt;
+   &lt;/atom:content&gt;
+   &lt;atom:author&gt;
+     &lt;atom:name&gt;Tom&lt;/name&gt;
+   &lt;/atom:author&gt;
+&lt;/atom:entry&gt;
+</pre>
+
+<p class="note"><strong>IMPORTANT</strong>: To ensure forward compatibility, 
+be sure that when you <code>PUT</code> an updated entry, you preserve 
+<em>all</em> XML that was present when you retrieved the entry from Maps 
+Data API. Otherwise, when we implement new functionality and include 
+<code>&lt;new-awesome-feature&gt;</code> elements in the feed, your client 
+won't return them and your users will miss out. The 
+<a href="http://code.google.com/apis/gdata/clientlibs.html">Google Data API client libraries</a> all 
+handle this correctly, so if you're using one of the libraries you're all set.
+</p>
+
+<p class="note"><strong>Troubleshooting Tip:</strong> Some firewalls block HTTP 
+<code>PUT</code> requests. As a workaround, you can include a 
+<code>X-HTTP-Method-Override: PUT</code> header in a <code>POST</code> request. 
+For details, see the <a href="http://code.google.com/apis/gdata/basics.html">Google Data API protocol 
+basics</a> document.</p>
+
+<h1 id="DeletingFeatures">Deleting Features</h1>
+
+<p>To delete a feature, send a <code>DELETE</code> request to the feature's 
+edit URL. This is the same URL used to <a href="#UpdatingEntries">update a 
+feature</a>.</p>
+
+<pre class="prettyprint">
+DELETE http://maps.google.com/maps/feeds/features/<i>userID</i>/<i>mapID</i>/full/<i>featureID</i>
+Authorization: GoogleLogin auth="<i>authorization_token</i>"
+</pre>
+
+<p class="note"><strong>Troubleshooting Tip</strong>: Some firewalls block HTTP 
+<code>DELETE</code> messages. To get around this, you can include a 
+<code>X-HTTP-Method-Override: DELETE</code> header in a <code>POST</code> 
+request. For details, see the <a href="http://code.google.com/apis/gdata/basics.html">Google Data API 
+protocol basics</a> document.</p>
+
+<p class="note"><strong>Note</strong>: To update existing features, see 
+<a href="#UpdatingFeatures">Updating Features</a>; don't update features by 
+deleting and then re-adding them.</p>
+
+<h1 id="Search">Searching Over Maps</h1>
+
+<p>The Maps Data API can potentially involve large datasets. We've implemented
+programmatic search to allow you to select features on a map according to different
+search criteria. Currently, the Maps Data API supports spatial search (search over
+an area of the map) as well as attribute search (search over the attributes of features
+of the map). Each of these searches is accomplished by appending search parameters to
+a <a href="#SearchFeed">Search Feed</a>.</p>
+
+<h2 id="SearchFeed">Search Feeds</h2>
+
+<p>Search feed URLs are similar to <a href="#FeatureFeeds">Feature Feed URLs</a>
+and of the following form:</p>
+
+<pre class="prettyprint">
+GET http://maps.google.com/maps/feeds/features/userID/mapID/snippet?<i>searchParameters</i>
+Authorization: GoogleLogin auth="authorization_token"
+</pre>
+
+<p>The following search parameters are currently supported:</p>
+
+<ul>
+  <li><code>mq</code> implements a maps query, passing an array of one or more
+  attribute matches. (See <a href="#AttributeSearch">Attribute Search</a> below.)</li>
+  <li><code>box</code> specifies the bounding box of a geographic area over which to
+  implement the search. The <code>box</code> parameter takes four comma-separate
+  arguments in the order <i>west,south,east,north</i>. (See <a href="#SpatialSearch">
+  Spatial Search</a> below.)</li>
+  <li><code>lat</code> and <code>lng</code> specifies a center point from which
+  to implement the search. This location is used in conjunction with the
+  <code>radius</code> argument to specify a circular area over which to search.
+  (See <a href="#SpatialSearch">Spatial Search</a> below.)</li>
+  <li><code>radius</code> specifies the radius, in meters, from a center point
+  (specified in the <code>lat</code> and <code>lng</code> parameters), over which
+  to implement a search. (See <a href="#SpatialSearch">Spatial Search</a> below.)</li>
+  <li><code>sortby</code> indicates that the results should be returned sorted by
+  a passed constraint. Currently, only <code>sortby=distance</code> is supported.
+  (See <a href="#SortingSearches">Sorting Searches</a> below.)</li>
+</ul>
+
+<p>The <code>/snippet</code> suffix indicates that the feed returns only summary information
+on matched features, rather than complete features. As with Feature Feeds, you will need
+to request individual features via their ID values to get complete information for the
+matched features.</p>
+
+<h2 id="SpatialSearch">Spatial Search</h2>
+
+<p>Spatial searches are implemented within the Maps Data API by restricting matched
+features to those within a certain defined area. This area may be defined in two
+ways:</p>
+
+<ul>
+  <li>As a bounding box (rectangle)</li>
+  <li>As a circle of a certain radius</li>
+</ul>
+
+<p>To define a bounding box, pass <code>box=<i>west,south,east,north</i></code>,
+where each boundary defines the latitude (north, south) or longitude (east,west)
+of the bounding box.</p>
+
+<p>The following example restricts a search to (roughly) Colorado:</p>
+
+<pre class="prettyprint">
+GET http://maps.google.com/maps/feeds/features/userID/mapID/snippet?box=-109,37,-102,41
+Authorization: GoogleLogin auth="authorization_token"
+</pre>
+
+
+
+<p>To define a circular area, pass a center location within the <code>lat</code>
+and <code>lng</code> parameters, and a <code>radius</code> in meters.</p>
+
+<p>The following example restricts a search to within 10 kilometers of
+New York's City Hall:</p>
+
+<pre class="prettyprint">
+GET http://maps.google.com/maps/feeds/features/userID/mapID/snippet?lat=40.7142691&lng=-74.0059729&radius=10000
+Authorization: GoogleLogin auth="authorization_token"
+</pre>
+
+
+
+<p><span style="color:red">Note: </span> the <code>lat</code> and <code>lng</code> areas may
+also be used within bounding boxes to define an optional center point. This center
+point may be useful if you wish to sort the returned features based on distance.
+(See <a href="#SortingSearches">Sorting Searches</a> below.)</p>
+
+
+
+<h2 id="AttributeSearch">Attribute Search</h2>
+
+<p>In addition to a spatial search, you can also implement an attribute search over
+your feature's structured data. Structured queries are implemented with the <code>mq</code>
+parameter, which passes an array of one or more key/value pairs to match within the map's
+set of features.</p>
+
+<p>For example, the following query would implement a search over all features in a
+map containing attributes <code>pool:true</code> and <code>price:budget</code>:</p>
+
+
+<pre class="prettyprint">
+GET http://maps.google.com/maps/feeds/features/userID/mapID/snippet?mq=[pool:true][price:budget]
+Authorization: GoogleLogin auth="authorization_token"
+</pre>
+
+
+<p>Searching over attributes requires that your passed <i>key/value</i> pairs
+match equivalent <i>key/value</i> pairs within the feature element's structured
+data. Matches must be exact for both keys and values.</p>
+
+<p>Attributes may be stored within a feature using one of two ways:</p>
+
+<ul>
+  <li>As custom properties within the feature's <code>&lt;gd:customProperty&gt;</code> element.
+  In this case, the search <i>key</i> must match the property's <code>name</code> attribute, while
+  the search's <i>value</i> must match the contents of the element.</li>
+  <li>As <code>&lt;Data&gt;</code> elements within a KML feature's <code>&lt;ExtendedData&gt;</code>.
+  In this case, the search <i>key</i> must match the <code>&lt;Data&gt;</code> element's <code>name</code>
+  attribute, while the search's <i>value</i> must match the <code>&lt;Data&gt;</code> element's
+  <code>value</code> element.</li>
+</ul>
+
+<p>A sample custom property is shown below:</p>
+
+<pre class="prettyprint">
+&lt;gd:customProperty name='pool'&gt;true&lt;/gd:customProperty&gt;
+&lt;gd:customProperty name='price'&gt;budget&lt;/gd:customProperty&gt;
+</pre>
+
+<p>The same property as <code>&lt;ExtendedData&gt;</code> in KML is shown below:</p>
+
+<pre class="prettyprint">
+&lt;ExtendedData&gt;
+  &lt;Data name="pool"&gt;&lt;value&gt;true&lt;/value&gt;&lt;/Data&gt;
+  &lt;Data name="price"&gt;&lt;value&gt;budget&lt;/value&gt;&lt;/Data&gt;
+&lt;/ExtendedData&gt;
+</pre>
+
+<h2 id="SortingSearches">Sorting Searches</h2>
+
+<p>Normally, results returned from a search may appear in any order. You may wish instead
+to sort the results by passing a <code>sortby</code> parameter which takes the (currently
+only) possible value:</p>
+
+<ul>
+  <li><code>distance</code> indicates that results should be sorted based on distance from
+  a passed <code>lat</code> and <code>lng</code> value. Results closest to the passed
+  location are sorted first.</li>
+</ul>
+
+<p>The following example sorts data based on an attribute search from the distance to
+San Francisco, CA:</p>
+
+
+<pre class="prettyprint">
+GET http://maps.google.com/maps/feeds/features/userID/mapID/snippet?mq=[pool:true][price:budget]&lat=37.7749295&lng=-122.4194155&sortby=distance
+Authorization: GoogleLogin auth="authorization_token"
+</pre>
+
+
+<h1 id="acls">Controlling Access to Maps</h1>
+
+<p>The Google Data API provides methods to control access to your maps.
+  Individual users can be granted  priviledges, and a default access level can
+  be set for all users not specifically named.</p>
+<p>Access control is accomplished using the <code>google.gdata.acl</code> class.
+  Each map  has one ACL feed, containing one or more ACL entries. Each entry
+  specifies a <strong>scope</strong> and a <strong>role</strong>; the
+  <strong>scope</strong> defines the user affected, and the
+  <strong>role</strong> defines their access level. All feeds contain an entry
+  for the <code>default</code> scope, which applies to all users without their
+  own entry.</p>
+  
+<h2 id="scopes_and_roles">Scopes and Roles</h2>
+
+<p>Allowed scopes in the Maps Data API are:</p>
+<ul>
+  <li><strong>default</strong>: everyone</li>
+  <li><strong>user</strong>: a user can be specified with their email address
+    (eg. <em>mike@gmail.com</em>) or by their <em>userID</em>.</li>
+</ul>
+<p>Allowed roles are explained in the table below.</p>
+
+<table class="nowrap">
+  <tr>
+    <th>Role</th>
+    <th>Map</th>
+    <th>Features</th>
+    <th>ACL</th>
+  </tr>
+  <tr>
+    <td><code>owner</code><br />(not valid with <code>default</code> scope)</td>
+    <td>View&nbsp;-&nbsp;Edit</td>
+    <td>View&nbsp;-&nbsp;Add&nbsp;-&nbsp;Edit&nbsp;-&nbsp;Delete</td>
+    <td>View&nbsp;-&nbsp;Edit</td>
+  </tr>
+  <tr class="alt">
+    <td><code>reader</code></td>
+    <td>View</td>
+    <td>View</td>
+    <td>View</td>
+  </tr>
+  <tr>
+    <td><code>writer</code></td>
+    <td>View&nbsp;-&nbsp;Edit</td>
+    <td>View&nbsp;-&nbsp;Add&nbsp;-&nbsp;Edit&nbsp;-&nbsp;Delete</td>
+    <td>View</td>
+  </tr>
+  <tr class="alt">
+    <td><code>appender</code></td>
+    <td>-</td>
+    <td>Add</td>
+    <td>-</td>
+  </tr>
+  <tr>
+    <td><code>readappender</code></td>
+    <td>View</td>
+    <td>View&nbsp;-&nbsp;Add</td>
+    <td>View</td>
+  </tr>
+  <tr class="alt">
+    <td><code>default</code></td>
+    <td colspan="3">Explicitly grants a user the same role as is granted the
+      default scope.</td>
+  </tr>
+  <tr>
+    <td><code>none</code></td>
+    <td colspan="3">Assigning a role of <code>none</code> to a user will remove
+      that user's ACL entry.</td>
+  </tr>
+</table>
+
+<h3 id="creators">Special Rules for Map Creators</h3>
+<p>The creator of a map  always has full permission to the map, its features,
+  and its ACL, regardless of any changes to the owner's ACL entry. A map can
+  only be deleted by its creator.</p>
+
+<h2 id="retrieving_an_acl">Retrieving an ACL</h2>
+
+<p>To retrieve the ACL for a map, initiate a GET request to the ACL URL:
+
+<pre class="prettyprint lang-xml">GET http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full
+Authorization: GoogleLogin auth=&quot;<em>authorization_token</em>&quot;
+</pre>
+
+<p><code>userID</code> and <code>mapID</code> can be obtained by examining the
+  <code>&lt;id&gt;</code> element of a map's XML (see
+  <a href="#RetrievingMetaFeed">Retrieving a List of Maps</a>).</p>
+<p>The response will look similar to the example below:</p>
+
+<pre class="prettyprint lang-xml">
+&lt;?xml version='1.0' encoding='UTF-8'?&gt;
+&lt;feed xmlns='http://www.w3.org/2005/Atom'
+      xmlns:app='http://www.w3.org/2007/app'
+      xmlns:openSearch='http://a9.com/-/spec/opensearch/1.1/'
+      xmlns:gAcl='http://schemas.google.com/acl/2007'&gt;
+  &lt;id&gt;http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full&lt;/id&gt;
+  &lt;updated&gt;2010-02-05T22:40:50.658Z&lt;/updated&gt;
+  &lt;category scheme='http://schemas.google.com/g/2005#kind' term='http://schemas.google.com/acl/2007#accessRule'/&gt;
+  &lt;link rel='http://schemas.google.com/g/2005#feed' type='application/atom+xml' href='http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full'/&gt;
+  &lt;link rel='http://schemas.google.com/g/2005#post' type='application/atom+xml' href='http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full'/&gt;
+  &lt;link rel='self' type='application/atom+xml' href='http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full'/&gt;
+  &lt;openSearch:startIndex&gt;1&lt;/openSearch:startIndex&gt;
+
+  &lt;entry&gt;
+    &lt;id&gt;http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full/user%3Ajohn%40gmail.com&lt;/id&gt;
+    &lt;updated&gt;2010-02-05T22:40:50.658Z&lt;/updated&gt;
+    &lt;app:edited&gt;2010-02-05T22:40:50.658Z&lt;/app:edited&gt;
+    &lt;category scheme='http://schemas.google.com/g/2005#kind' term='http://schemas.google.com/acl/2007#accessRule'/&gt;
+    &lt;title&gt;user:john@gmail.com&lt;/title&gt;
+    &lt;content&gt;user:john@gmail.com&lt;/content&gt;
+    &lt;link rel='self' type='application/atom+xml' href='http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full/user%3Ajohn%40gmail.com'/&gt;
+    &lt;link rel='edit' type='application/atom+xml' href='http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full/user%3Ajohn%40gmail.com'/&gt;
+    &lt;gAcl:role value='appender'/&gt;
+    &lt;gAcl:scope type='user' value='john@gmail.com'/&gt;
+  &lt;/entry&gt;
+
+  &lt;entry&gt;
+    &lt;id&gt;http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full/default&lt;/id&gt;
+    &lt;updated&gt;2010-02-05T22:40:50.658Z&lt;/updated&gt;
+    &lt;app:edited&gt;2010-02-05T22:40:50.658Z&lt;/app:edited&gt;
+    &lt;category scheme='http://schemas.google.com/g/2005#kind' term='http://schemas.google.com/acl/2007#accessRule'/&gt;
+    &lt;title&gt;default&lt;/title&gt;
+    &lt;content&gt;default&lt;/content&gt;
+    &lt;link rel='self' type='application/atom+xml' href='http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full/default'/&gt;
+    &lt;link rel='edit' type='application/atom+xml' href='http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full/default'/&gt;
+    &lt;gAcl:role value='writer'/&gt;
+    &lt;gAcl:scope type='default'/&gt;
+  &lt;/entry&gt;
+
+  &lt;entry&gt;
+    &lt;id&gt;http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full/user%3Abob%40gmail.com&lt;/id&gt;
+    &lt;updated&gt;2010-02-05T22:40:50.658Z&lt;/updated&gt;
+    &lt;app:edited&gt;2010-02-05T22:40:50.658Z&lt;/app:edited&gt;
+    &lt;category scheme='http://schemas.google.com/g/2005#kind' term='http://schemas.google.com/acl/2007#accessRule'/&gt;
+    &lt;title&gt;user:bob@gmail.com&lt;/title&gt;
+    &lt;content&gt;user:bob@gmail.com&lt;/content&gt;
+    &lt;link rel='self' type='application/atom+xml' href='http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full/user%3Abob%40gmail.com'/&gt;
+    &lt;link rel='edit' type='application/atom+xml' href='http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full/user%3Abob%40gmail.com'/&gt;
+    &lt;gAcl:role value='owner'/&gt;
+    &lt;gAcl:scope type='user' value='bob@gmail.com'/&gt;
+  &lt;/entry&gt;
+
+&lt;/feed&gt;</pre>
+
+<h2 id="retrieving_an_acl_entry">Retrieving an ACL Entry</h2>
+
+<p>An individual ACL entry's feed can be retrieved by initiating a GET request
+  to that entry's unique URL. This URL is contained within the ACL feed, or can
+  be created by appending the scope type and scope value to the end of the ACL
+  feed URL, as follows:</p>
+<pre>ACL_feed_URL/scope_type%3Ascope_value</pre>
+<p>For example:</p>
+<pre class="prettyprint lang-xml">GET http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full/user%3Abob%40gmail.com
+Authorization: GoogleLogin auth="authorization_token"
+</pre>
+<p>The response will look similar to the example below:</p>
+
+<pre class="prettyprint">
+&lt;?xml version='1.0' encoding='UTF-8'?&gt;
+&lt;entry xmlns='http://www.w3.org/2005/Atom'
+       xmlns:app='http://www.w3.org/2007/app'
+       xmlns:gAcl='http://schemas.google.com/acl/2007'&gt;
+  &lt;id&gt;http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full/user%3Abob%40gmail.com&lt;/id&gt;
+  &lt;updated&gt;2010-02-06T00:17:42.534Z&lt;/updated&gt;
+  &lt;app:edited&gt;2010-02-06T00:17:42.534Z&lt;/app:edited&gt;
+  &lt;category scheme='http://schemas.google.com/g/2005#kind' term='http://schemas.google.com/acl/2007#accessRule'/&gt;
+  &lt;title&gt;user:bob@gmail.com&lt;/title&gt;
+  &lt;content&gt;user:bob@gmail.com&lt;/content&gt;
+  &lt;link rel='self' type='application/atom+xml' href='http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full/user%3Abob%40gmail.com'/&gt;
+  &lt;link rel='edit' type='application/atom+xml' href='http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full/user%3Abob%40gmail.com'/&gt;
+  &lt;gAcl:role value='owner'/&gt;
+  &lt;gAcl:scope type='user' value='bob@gmail.com'/&gt;
+&lt;/entry&gt;
+</pre>
+
+<h2 id="adding_or_updating_an_acl_entry">Adding or Updating an ACL Entry</h2>
+
+<p>There are two supported ways of adding  a new entry to a list, or updating an
+  existing entry.</p>
+
+<h3>POST to the feed URL</h3>
+<p>Initiating a properly-formatted POST request to the ACL URL will add a new
+  entry to the list. If an entry with the same scope already exists, the role
+  will be updated with the value sent in the POST request.</p>
+<pre class="prettyprint lang-xml">
+POST http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full
+Authorization: GoogleLogin auth="<em>authorization_token</em>"
+
+&lt;entry xmlns='http://www.w3.org/2005/Atom'
+       xmlns:app='http://www.w3.org/2007/app'
+       xmlns:gAcl='http://schemas.google.com/acl/2007'&gt;<br />  &lt;category scheme='http://schemas.google.com/g/2005#kind'
+    term='http://schemas.google.com/acl/2007#accessRule'/&gt;<br />  &lt;gAcl:role value='owner'/&gt;&lt;gAcl:scope type='user' value='mike@gmail.com'/&gt;<br />&lt;/entry&gt;</pre>
+
+<p>The response will look similar to the example below:</p>
+
+<pre class="prettyprint lang-xml">
+&lt;?xml version='1.0' encoding='UTF-8'?&gt;
+&lt;entry xmlns='http://www.w3.org/2005/Atom'
+       xmlns:app='http://www.w3.org/2007/app'
+       xmlns:gAcl='http://schemas.google.com/acl/2007'&gt;
+  &lt;id&gt;http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full/user%mike%40gmail.com&lt;/id&gt;
+  &lt;updated&gt;2010-02-06T00:38:47.023Z&lt;/updated&gt;
+  &lt;app:edited&gt;2010-02-06T00:38:47.023Z&lt;/app:edited&gt;
+  &lt;category scheme='http://schemas.google.com/g/2005#kind'
+    term='http://schemas.google.com/acl/2007#accessRule'/&gt;
+  &lt;title&gt;user:mike@gmail.com&lt;/title&gt;
+  &lt;content&gt;user:mike@gmail.com&lt;/content&gt;
+  &lt;link rel='self' type='application/atom+xml'
+    href='http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full/user%3Amike%40gmail.com'/&gt;
+  &lt;link rel='edit' type='application/atom+xml'
+    href='http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full/user%3Amike%40gmail.com'/&gt;
+  &lt;gAcl:role value='owner'/&gt;
+  &lt;gAcl:scope type='user' value='mike@gmail.com'/&gt;
+&lt;/entry&gt;
+</pre>
+
+<h3>PUT to the edit URL</h3>
+
+<p>A PUT request can be initiated to the entry's edit URL. This URL can be
+  obtained by examining the <code>&lt;link&gt;</code> element containing
+  <code>rel='edit'</code>. The URL can also be calculated by appending the scope
+  type and scope value to the end of the ACL feed URL, as follows:</p>
+<pre>ACL_feed_URL/scope_type%3Ascope_value</pre>
+<p>The appended value must match the scope indicated in the <code>&lt;gAcl:scope&gt;</code> element.</p>
+
+<pre class="prettyprint lang-xml">PUT http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full/user%3Amike%40gmail.com
+Authorization: GoogleLogin auth="<em>authorization_token</em>"
+
+&lt;entry xmlns='http://www.w3.org/2005/Atom'
+       xmlns:app='http://www.w3.org/2007/app'
+       xmlns:gAcl='http://schemas.google.com/acl/2007'&gt;<br />  &lt;category scheme='http://schemas.google.com/g/2005#kind'
+    term='http://schemas.google.com/acl/2007#accessRule'/&gt;<br />  &lt;gAcl:role value='owner'/&gt;&lt;gAcl:scope type='user' value='mike@gmail.com'/&gt;<br />&lt;/entry&gt;</pre>
+
+<p>If an entry with the same scope already exists, the role will be updated with
+  the value sent in the PUT request.
+
+<h2 id="deleting_an_acl_entry">Deleting an ACL Entry</h2>
+<p>To remove an entry from an ACL, you may either initiate a DELETE request
+  against the edit URL of the entry, or you may
+  <a href="#adding_or_updating_an_acl_entry">update the entry</a> to set
+  <code>&lt;gAcl:role value=&quot;none&quot; /&gt;</code>.</p>
+<p>To initiate a DELETE request:</p>
+
+<pre class="prettyprint lang-xml">
+DELETE http://maps.google.com/maps/feeds/acl/maps/<em>userID</em>/<em>mapID</em>/full/user%3Amike%40gmail.com
+Authorization: GoogleLogin auth="<em>authorization_token</em>"</pre>
+
+<p>&nbsp;</p>
+
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

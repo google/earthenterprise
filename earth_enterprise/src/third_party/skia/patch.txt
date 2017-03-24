@@ -1,0 +1,11 @@
+--- googleclient/wireless/third_party/skia/src/effects/SkGradientShader.cpp	2008-11-18 13:40:27.000000000 -0800
++++ googleclient/wireless/third_party/skia/src/effects/SkGradientShader.cpp	2008-11-18 13:49:15.000000000 -0800
+@@ -724,7 +724,7 @@
+ #ifdef TEST_GRADIENT_DITHER
+ static void dither_memset16(uint16_t dst[], uint16_t value, uint16_t other, int count)
+ {
+-    if ((unsigned)dst & 2)
++    if ((unsigned long)dst & 2)
+     {
+         *dst++ = value;
+         count -= 1;

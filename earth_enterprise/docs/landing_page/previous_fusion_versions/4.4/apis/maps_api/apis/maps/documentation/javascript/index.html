@@ -1,0 +1,343 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+  
+
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/index.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>The Google Maps Javascript API V3 - Google Maps JavaScript API V3 - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/html/apis/maps/documentation/javascript/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../css/iehacks.css"><![endif]-->
+
+  </head>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
+   var map;
+   var infowindow;
+   function initialize() {
+     var myLatLng = new google.maps.LatLng(40.7142691, -74.0059729);
+     var myOptions = {
+       zoom: 13,
+       center: myLatLng,
+       mapTypeId: google.maps.MapTypeId.TERRAIN,
+       streetViewControl: true
+     };
+     
+     map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+     
+     infowindow = new google.maps.InfoWindow({
+       content: "<p><b>Welcome to the<br />V3 Maps API!</b></p>",
+       maxWidth: 100
+     });
+
+     google.maps.event.addListener(map, 'click', function(event) {
+       placeInfoWindow(event.latLng);
+     });
+   }
+
+   function placeInfoWindow(location) {
+     infowindow.setPosition(location);
+     infowindow.open(map);
+   }
+</script>
+<style>
+#gc-home img { margin-top: 0px; }
+</style>
+  </head>
+  <body onload="initialize();">
+    <a id="top" name="top"></a>
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps JavaScript API V3</h1>
+  <ul id="home" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="index.html" class="selected" title="Google Maps JavaScript API V3 home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="basics.html" title="Official Google Maps JavaScript API V3 documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../faq.html" title="Answers to frequently asked questions about Google Maps JavaScript API V3">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="articles.html" title="Focused articles and tutorials for Google Maps JavaScript API V3 developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps JavaScript API V3 blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="forum.html" title="Google Maps JavaScript API V3 developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../../terms.html" title="Google Maps JavaScript API V3 terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div id="gc-home">
+      <div class="g-section g-tpl-330-alt">
+
+      <div class="g-unit g-first" >
+        <div class="g-c-gc-home">
+
+
+<div id="right_panel">
+<h2>How Do I Start?</h2>
+
+<ol class="doublespace">
+ <li>Read the <a href="basics.html">Developer's Guide</a>.</li>
+ <li>Follow the <a href="introduction.html">Tutorial</a>.</li>
+ <li>Consult the <a href="reference.html">Reference</a>.</li>
+  <li>
+    <form action="http://groups.google.com/group/google-maps-js-api-v3-notify/boxsubscribe">
+    Join the <a target="_blank" href="http://groups.google.com/group/google-maps-js-api-v3-notify">announcements</a> group to receive important updates.<br/><input type="text" name="email" value="enter email" size="20" style="margin: 0.5em 0.5em 0em 0em; width: 60%"><input type="submit" name="sub" value="Join" style="margin: 0.5em 0.5em 0em 0em; padding: 0em; width: 25%">
+   </form>
+  </li>
+</ol>
+
+<h2>Featured Video</h2>
+
+<object width="300" height="250"><param name="movie" value="http://www.youtube.com/watch?v=HKdsra1O20Y"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/zI8at1EmJjA&hl=en&fs=1&rel=0" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="300" height="250"></embed></object>
+<p align="center">Watch other <a href="../mediagallery.html">Maps API presentations</a></p>
+
+<!-- end div right_panel -->
+</div>
+
+      
+        </div>
+      </div>
+      <div class="g-unit">
+        <div class="g-c-gc-home">
+
+
+<div id="left_panel" style="width:300px;float:left;clear:both;">
+
+<h2>V3: The Solution for Maps Applications for both the Desktop
+and Mobile Devices</h2>
+
+<p class="note">Note: The Google Maps Javascript API Version 3 documented within
+these pages is now the official Javascript API. Version 2 of this API has been
+officially deprecated as per our deprecation policy. We encourage you to migrate
+your code to this newly updated and enhanced version!</p>
+
+<p>The Google Maps Javascript API lets you embed Google Maps in your own
+web pages. Version 3 of this API is especially designed to be faster and
+more applicable to mobile devices, as well as traditional desktop
+browser applications.</p>
+
+<p>The API provides a number of utilities
+for manipulating maps (just like on the <a href="http://maps.google.com">
+http://maps.google.com</a> web page) and adding content to the map through
+a variety of services, allowing you to create robust maps applications
+on your website.</p>
+
+<p>The JavaScript Maps API V3 is a free service, available for any web site
+that is free to consumers. Please see the <a href="../../terms.html">
+terms of use</a> for more information.</p> 
+
+<div class="special">
+<p><span style="color:red">New!</span>
+<a href="services.html#DraggableDirections">
+Draggable Directions</a> within the V3 Maps API. Allow users to modify directions
+and add waypoints by dragging the path on the map!</p>
+</div>
+
+<div class="special">
+<p><span style="color:red">New!</span>
+Create your own
+<a href="services.html#CustomStreetView">
+Custom Panoramas</a> and display them using the V3 Maps API Street View
+service!</p>
+</div>
+
+<!-- end div left_panel -->
+</div>
+
+<div id="mockup" style="width:300px;height:600px;float:left;">
+<div style="background:url('images/nexus-frame.png') no-repeat;height:640px;position:relative;left:50px;top:20px;">
+<div id="map_canvas" style="position:relative;top:78px;left:24px;border:1px solid #979797; background-color:#e5e3df; width:212px; height:340px; z-index:1">
+<div style="padding:1em; color:gray;">Loading...</div>
+</div>
+</div>
+
+<!-- end div mockup -->
+</div>
+
+<div id="bottom_panel" style="clear:both;">
+<table class="ftdpartners" cellpadding="0" cellspacing="0">
+  <tr>
+  <td class="ftdpartners-col">
+    <h4>Who uses Maps APIs?</h4>
+    <p>See what <a href="http://maps.google.com/help/maps/casestudies/">other companies</a> are doing with Google Maps APIs.</p>
+  </td>
+  <td>
+    <a href="http://maps.google.com/help/maps/casestudies/video.html#kayak"><img src="../../images/logo_kayak.png" style="border: 0"></a>
+  </td>
+  <td>
+    <a href="http://maps.google.com/help/maps/casestudies/video.html#nytimes"><img src="../../images/logo_nytimes.png" style="border: 0"></a>
+  </td>
+  <td>
+    <a href="http://maps.google.com/help/maps/casestudies/video.html#yelp"><img src="../../images/logo_yelp.png" style="border: 0"></a>
+  </td>
+  </tr>
+</table>
+
+<!-- end bottom_panel -->
+</div>
+
+        <!-- end body text -->
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

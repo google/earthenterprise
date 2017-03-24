@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+ 
+ 
+ 
+
+
+
+ 
+
+
+
+
+
+     
+   
+                       
+                    
+      
+
+ 
+  
+  
+<html>
+
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/localsearch/devguide.html";
+    </script>
+    
+   
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Local Search API Developer's Guide - Google Local Search API - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/maps/documentation/localsearch/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../css/iehacks.css"><![endif]-->
+ 
+  <link href="../../../../css/semantic_headers.css" rel="stylesheet" type="text/css" />
+  
+</head>
+ 
+<body class="gc-documentation">
+      <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container" class="depr">
+<a id="top"></a>
+<div id="skipto">
+  <a href="#gc-pagecontent">Skip to page content</a>
+  <a href="#gc-toc">Skip to main navigation</a>
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Local Search API (<a href="http://googlecode.blogspot.com/2010/11/introducing-google-apis-console-and-our.html">Deprecated</a>)</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="index.html" title="Google Local Search API home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="start.html" class="selected" title="Official Google Local Search API documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../faq.html" title="Answers to frequently asked questions about Google Local Search API">FAQ</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Local Search API blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="http://groups.google.com/group/google-maps-api" title="Google Local Search API developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../../terms.html" title="Google Local Search API terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+ 
+<div class="g-section g-tpl-170">
+   
+  <div class="g-unit g-first" id="gc-toc">
+     <ul>
+  <li><a href="../../index.html">Maps API Family</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="start.html">Documentation</a>
+              </li>
+              <li>
+                <a href="devguide.html">Developer's Guide</a>
+              </li>
+              <li>
+                <a href="jsondevguide.html">JSON Reference</a>
+              </li>
+              <li>
+                <a href="reference.html">API Reference</a>
+              </li>
+              <li><h2 class="tlw-expanded">Code Samples:</h2>
+                <ul>
+                  <li><a href="http://code.google.com/apis/ajax/playground/#the_hello_world_of_local_search">Code Playground</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps Javascript API V3</h2>
+         <ul>
+           <li><a href="../javascript/index.html">Home Page</a></li>
+           <li><a href="../javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+      <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+  <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../flash/index.html">Home Page</a></li>
+          <li><a href="../flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../mapsdata/index.html">Home Page</a></li>
+          <li><a href="../mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+     <div class="line"></div>
+      <ul>
+        <li><h2><a href="../webservices/index.html">Maps Web Services</a></h2>
+         <ul>
+           <li><a href="../geocoding/index.html">Geocoding Guide</a></li>
+           <li><a href="../directions/index.html">Directions Guide</a></li>
+           <li><a href="../elevation/index.html">Elevation Guide</a></li>
+           <li><a href="../places/index.html">Places Guide</a></li>
+         </ul>
+       </li>
+      </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+      <div class="promo">
+     <p><a href="../premier/index.html">Google Maps API Premier</a></p><p>Includes enterprise licensing and support</p></div>  <a class="hidden" href="#gc-topnav-anchor">More Google Local Search API resource links</a> 
+  </div>
+   
+  <div class="g-unit" id="gc-pagecontent">
+     <script type="text/javascript">CODESITE_docEarlyProcessing();</script>    <h1 class="page_title">Local Search API Developer's Guide</h1> 
+    <p>
+      The Google Local Search API is a JavaScript library that allows you to embed Google Local Search in your web pages and other web applications. For Flash, and other non-JavaScript environments, the API exposes a raw interface that returns JSON-encoded results that are easily processed by most languages and runtimes. Read more in the <a href="jsondevguide.html">JSON Developer's Guide</a>.
+    </p>
+    <h2>Table of Contents</h2>
+    <table width="70%" class="columns">
+      <tr>
+        <td>
+          <ol class="toc">
+            <li>
+              <a href="#introduction">Introduction</a>
+              <ol class="toc">
+                <li>
+                  <a href="#audience">Audience</a>
+                </li>
+                <li>
+                  <a href="#hiworld">The &quot;Hello World&quot; of Local Search</a>
+                </li>
+              </ol>
+            </li>
+            <li>
+              <a href="#getting_started">Getting started</a>
+              <ol class="toc">
+                <li>
+                  <a href="#sign_up_for_an_api_key">Sign up for an API key</a>
+                </li>
+                <li>
+                  <a href="#load_the_javascript_api_and_ajax_search_module">Load the JavaScript API and search module</a>
+                </li>
+              </ol>
+            </li>
+            <li>
+              <a href="#execute_a_search_and_display_results">Building a basic application</a>
+              <ol class="toc">
+                <li>
+                  <a href="#execute">Execute a search</a>
+                </li>
+                <li>
+                  <a href="#setSearchCompleteCallback">Call the search completion handler</a>
+                </li>
+                <li>
+                  <a href="#setOnLoadCallback">Register a handler for intialization</a>
+                </li>
+                <li>
+                  <a href="#getBranding">Add Google branding</a>
+                </li>
+                <li>
+                  <a href="#getAttribution">Display a business listing source attribution</a>
+                </li>
+              </ol>
+            </li>
+          <ol class="toc">
+            <li>
+              <a href="#handle_search_results">Handle search results</a>
+              <ol class="toc">
+                <li>
+                  <a href="#resultstyle">Result properties</a>
+                </li>
+                <li>
+                  <a href="#resultobject">Result styling</a>
+                </li>
+              </ol>
+            </li>
+          </ol>
+          </li>
+        </ol>
+      </td>
+      <td>
+        <ol class="toc">
+          <li>
+            <a href="#configure_optional_methods">Configuring optional methods</a>
+            <ol class="toc">
+              <li>
+                <a href="#setCenterPoint">Target results to a specific location</a>
+              </li>
+              <li>
+                <a href="#setAddressLookupMode">Disable address lookups</a>
+              </li>
+              <li>
+                <a href="#setRestriction">Restrict results by type</a>
+              </li>
+              <li>
+                <a href="#staticMapUrl">Create a static map image</a>
+              </li>
+              <li>
+                <a href="#_resizeStaticMapUrl">Resize the static map image</a>
+              </li>
+              <li>
+                <a href="#setResultSetSize">Specify the size of the result set</a>
+              </li>
+              <li>
+                <a href="#getResultSetSize">Return the current result set size</a>
+              </li>
+              <li>
+                <a href="#clearResults">Clear the current search results</a>
+              </li>
+              <li>
+                <a href="#setNoHtmlGeneration">Prevent the searcher from generating the .html property</a>
+              </li>
+              <li>
+                <a href="#createResultHtml">Create or regenerate the .html property</a>
+              </li>
+              <li>
+                <a href="#cursor">Request additional search parameters</a>
+              </li>
+              <li>
+                <a href="#gotoPage">Request a specific results page</a>
+              </li>
+              <li>
+                <a href="#results">Create an array of search results</a>
+              </li>
+            </ol>
+          <li>
+            <a href="#troubleshooting">Troubleshooting</a>
+          </li>
+        </ol>
+      </td>
+    </tr>
+  </table>
+  <h2><a name="introduction"></a>Introduction</h2>
+  <p>
+    This developer's guide provides a basic model for using the Google Local Search API, along with granular explanations of the API's configurable JavaScript components. You can use this guide to configure Local Search on your page.
+  </p>
+  <h3><a name="audience"></a>Audience</h3>
+  <p>
+    This documentation is intended for developers who wish to add Google Local Search functionality to their pages using the Local Search API.
+  </p>
+<!--Hello World-->
+  <h3 id="hiworld">The &quot;Hello World&quot; of Local Search</h3>
+  <p>
+    The following example creates an instance of Local Search on your page. This Local Search instance is controlled by a text input field and clear button to clear search results after a search.
+  </p>
+  <p class="warning">
+    <strong>Warning:</strong> You need <a href="../../signup.html">your own API key</a> in order to use the Local Search API. In the example below, replace &quot;INSERT-YOUR-KEY&quot; with your own, unique key. Without a unique key, these examples won't work.
+  </p>
+   <pre class="prettyprint">
+&lt;DOCTYPE html&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+  &lt;head&gt;
+    &lt;meta http-equiv="content-type" content="text/html; charset=utf-8"/&gt;
+    &lt;title&gt;Google Search API Sample&lt;/title&gt;
+    &lt;script src="http://www.google.com/jsapi?key=<kbd>INSERT-YOUR-KEY</kbd>"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript"&gt;
+      // This code generates a "Raw Searcher" to handle search queries. The Raw Searcher requires
+      // you to handle and draw the search results manually.
+      google.load('search', '1');
+
+      var localSearch;
+      function searchComplete() {
+
+        // Check that we got results
+        document.getElementById('content').innerHTML = '';
+        if (localSearch.results && localSearch.results.length > 0) {
+          for (var i = 0; i < localSearch.results.length; i++) {
+
+            // Create HTML elements for search results
+            var p = document.createElement('p');
+            var a = document.createElement('a');
+            var b = document.createElement('b');
+            var c = document.createElement('c');
+            a.href = localSearch.results[i].url;
+            a.innerHTML = localSearch.results[i].title;
+            b.innerHTML = "&lt;br&gt;" +
+              localSearch.results[i].streetAddress;
+            c.innerHTML = "&lt;br&gt;" +
+              localSearch.results[i].city + "," +
+              localSearch.results[i].region;
+
+            // Append search results to the HTML nodes
+            p.appendChild(a);
+            p.appendChild(b);
+            p.appendChild(c);
+            document.body.appendChild(p);
+          }
+        }
+      }
+
+      function onLoad() {
+
+        // Create a LocalSearch instance.
+        localSearch = new google.search.LocalSearch();
+
+        // Set the Local Search center point
+        localSearch.setCenterPoint("New York, NY");
+
+        // Set searchComplete as the callback function when a search is complete. The
+        // localSearch object will have results in it.
+        localSearch.setSearchCompleteCallback(this, searchComplete, null);
+
+        // Specify search quer(ies)
+        localSearch.execute('coffee New York NY');
+
+        // Include the required Google branding.
+        // Note that getBranding is called on google.search.Search
+        google.search.Search.getBranding('branding');
+      }
+
+      // Set a callback to call your code when the page loads
+      google.setOnLoadCallback(onLoad);
+
+    &lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body style="font-family: Arial;border: 0 none;"&gt;
+    &lt;div id="branding"  style="float: left;"&gt;&lt;/div&gt;&lt;br /&gt;
+    &lt;div id="content"&gt;Loading...&lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>  <h2><a name="getting_started"></a>Getting started</h2> <h3><a name="sign_up_for_an_api_key"></a>Sign up for an API key</h3>
+  <p>
+    To begin using the Google APIs, first you need to <a href="../../signup.html">sign up for an API key</a>. The API key costs nothing, and allows us to contact you directly if we detect an issue with your site.
+  </p>
+  <h3><a name="load_the_javascript_api_and_ajax_search_module"></a>Load the JavaScript API and search module</h3>
+  <p>
+    To begin using the Local Search API, include the following script in the header of your web page. Enter your <a href="../../signup.html">Google API key</a> where it says <code><kbd>INSERT-YOUR-KEY</kbd></code> in the snippet below.
+  </p>
+  <p class="warning">
+    <strong>Warning:</strong> You need <a href="../../signup.html">your own API key</a> in order to use this API. In the example below, replace &quot;<kbd><code>INSERT-YOUR-KEY</code></kbd>&quot; with your own, unique key. Without your own key, these examples won't work.
+  </p>
+<pre class="prettyprint">&lt;script type="text/javascript" src="http://www.google.com/jsapi?key=<i>INSERT-YOUR-KEY</i>"&gt;&lt;/script&gt;</pre>
+  <p>
+    Next, load the Google search module with <code>google.load(<kbd>module, version</kbd>)</code>, where:
+  </p>
+  <ul>
+    <li>
+      <code>module</code> calls the specific API module you wish to use on your page (in this case, <code>search</code>).
+    </li>
+    <li>
+      <code>version</code> is the version number of the module you wish to load (in this case, <code>1</code>).
+    </li>
+  </ul>
+<pre class="prettyprint">&lt;script type="text/javascript"&gt;
+  google.load("search</kbd>", "1");
+&lt;/script&gt;</pre>
+  <p>
+    You can find out more about google.load in the <a href="http://code.google.com/apis/loader">Google Loader developer's guide</a>.
+  </p>
+  <h2><a name="execute_a_search_and_display_results"></a>Building a basic application</h2>
+  <p>
+    The <code>google.search.LocalSearch</code> constructor initializes the Local Search service so you can execute Local Search queries and display results. The methods and properties described below apply to all objects that inherit from this base class. Each of those objects may supply additional interfaces as well.
+  </p>
+  <h3 id="execute">Execute a search</h3>
+<!--.execute-->
+  <p>
+    <a name="execute"></a><code>.execute(query)</code> initiates a new search, where <code>query</code> supplies the search term(s).
+  </p>
+  <p>
+    This method populates the object with the corresponding set of results, and calls the registered <code>.setSearchCompleteCallback()</code> handler.
+  </p>
+  <p>
+    <code>.execute()</code> has no return value.
+  </p>
+  <h3 id="setSearchCompleteCallback">Call the search completion handler</h3>
+<!--.setSearchCompleteCallback-->
+  <p>
+    <a name="setSearchCompleteCallback"></a><code>.setSearchCompleteCallback(<kbd>object, method, opt_arguments?</kbd>)</code> registers an object and method to notify when a search completes, where:
+  </p>
+  <ul>
+    <li>
+      <code><kbd>object</kbd></code> supplies an application-level object that defines the context in which to call the specified method.
+    </li>
+    <li>
+      <code><kbd>method</kbd></code> supplies the search completion handler function, which checks for results and appends them to HTML nodes.
+    </li>
+    <li>
+      <code><kbd>opt_arguments</kbd></code> allows you to optionally pass in a list of arguments, in order, to the specified method. If you choose to use <code><kbd>opt_arguments</kbd></code>, you must pass in a list (<code><kbd>null</kbd></code> is also acceptable).
+      <br />
+      <br />
+      For example, if you call this method as <code>localSearch.setSearchCompleteCallback(handler, handler.method, [[1, 2, 3]);</code>, then you execute <code>handler.method(1, 2, 3);</code> when the search completes.
+      </p>
+    </li>
+  </ul>
+  <p>
+    In this API, the calls are asynchronous. Therefore, you can't block on the return and then use the results. Rather, you have to use a callback, which will execute a method upon the return of the results.
+  </p>
+  <p>
+    <code>.setSearchCompleteCallback()</code> has no return value.
+  </p>
+  <h3 id="setOnLoadCallback">Register a handler for intialization</h3>
+<!--.setOnLoadCallback-->
+  <p>
+    <a name="setOnLoadCallback"></a><code>.setOnLoadCallback(callback)</code> is a static function that registers the specified handler function to be called once the page containing this call loads, where <code>callback</code> is a required function called when the containing document is loaded and the API is ready for use (e.g., after <code>onLoad</code>). This function is implemented on the <code>google</code> namespace (i.e., <code>google.setOnLoadCallback(callback);</code>)
+  </p>
+  <p>
+    <code>.setOnLoadCallback()</code> has no return value.
+  </p>
+  <p class="note">
+    <strong>Note: </strong>Previous documentation recommended that you use the body element's onload attribute (<code>&lt;body onload=&quot;OnLoad()&quot;&gt;</code>). While this is a fine way to go when you are in complete control of the page and all code loaded by the page, this approach can cause problems with some runtimes that destroy your <code>body.onload</code> handler. <code>setOnLoadCallback()</code> does not have these problems, and therefore is the recommended method of registering a callback that calls your code when the API is fully loaded and ready for use.
+  </p>
+  <h3 id="getBranding">Add Google branding</h3>
+<!--.getBranding-->
+  <p>
+    <a name="getBranding"></a><code>.getBranding(opt_element?, opt_orientation?)</code> is a static helper function that returns a &quot;powered by Google&quot; HTML DOM branding node to your application, and optionally attaches it to your document as the only child of the specified optional element. The purpose of this method is to ensure that your application has a simple way to comply with branding requirements.
+  </p>
+  <p>
+    <a name="getBranding"></a>The branding node, by default, is designed for a horizontal orientation and works well underneath a search form, above or below a collection of results, etc.
+  </p>
+  <ul>
+    <li>
+      <code>opt_element</code> is an optional argument which, if supplied, specifies the HTML DOM node that will be populated with a &quot;powered by Google&quot; branding element.
+      <br />
+    </li>
+    <li>
+      <code>opt_orientation</code> - an optional argument which, if supplied, specifies the orientation of the branding node. Valid values include:
+      <br />
+      <ul>
+        <li>
+          <code>google.search.Search.HORIZONTAL_BRANDING</code> requests horizontal orientation. This is the default behavior.
+          <br />
+        </li>
+        <li>
+          <code>google.search.Search.VERTICAL_BRANDING</code> requests vertical orientation.
+          <br />
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <p>
+    <code>.getBranding()</code> returns a &quot;powered by Google&quot; HTML DOM node that you can attach or clone onto your document.
+    </li>
+    </ul>
+  <p>
+    You must call <code>.getBranding()</code> on <code>google.search.Search</code>, not on <code>google.search.LocalSearch</code>.
+  </p>
+  <p class="warning">
+    <strong>Warning!</strong> This API requires displaying attribution near any API input boxes and the display of results, indicating that it is "Powered by Google". If you choose not to use .getBranding(), you are obligated to provide this branding yourself.
+  </p>
+  <h3 id="getAttribution">Display a business listing source attribution</h3>
+<!--getAttribution-->
+  <p>
+    <a name="getAttribution"></a> <code>.getAttribution()</code> provides an attribution node which is <b>required</b> to be displayed in line with Local Search results. The return value is an HTML node that should be added to each search result. The following snippet demonstrates how to incorporate <code>.getAttribution</code>: <pre class="prettyprint">var attribution = google.search.LocalSearch.getAttribution();
+if (attribution) {
+  var el = document.getElementById("searchwell");
+  el.appendChild(attribution);
+}</pre>
+  </p>
+<!--.results-->
+  <h2 id="handle_search_results"></a>Handling search results</h2>
+  <p>
+    Result objects are produced using a JSON encoding of server search requests. Consequently, we have chosen not to implement formal JavaScript objects, and instead dynamically create these objects from their serialized form.
+  </p>
+  <p>
+    While there is no formal implementation of the objects, they exist, and we document them as if there was a backing JavaScript implementation. The impact of all this is minimal. All that it means is that there is no named constructor. For each result, it's as if the system called <code>new Object()</code> and then set formal properties on that object. These properties are documented below.
+  </p>
+<div class="special">
+  <h4>Important note: Maximum number of search results</h4>
+  <p>
+    The Google Local Search API allows a maximum of 32 results on 4 pages. There is no way to get more than 32 results.
+  </p>
+</div>
+  <h3><a id="resultobject"></a>Result properties</h3>
+  <p>
+    Here are the basic properties allowing you to handle results from the Local Search API.
+  </p>
+  <table class="reftable">
+    <tbody>
+      <tr class="h">
+        <th>
+          Property
+        </th>
+        <th>
+          Description
+        </th>
+      </tr>
+      <tr>
+<!--.addressLines-->
+        <td>
+          <p>
+            <code>addressLines[]</code>
+          </p>
+        </td>
+        <td>
+          <p>
+            <a name="addressLines"></a>Supplies an array consisting of the mailing address lines for this result, for instance: <code>["1600 Amphitheatre Pky", "Mountain View, CA 94043"]</code> or <code>["Via del Corso, 330", "00186 Roma (RM), Italy"]</code>. To correctly render an address associated with a result, either directly use the <code>.html</code> property of the result or iterate through this array and display each <code>addressLine</code> in turn.
+          </p>
+        </td>
+      </tr>
+      <tr class="alt">
+<!--.city-->
+        <td>
+          <p>
+            <code>city</code>
+          </p>
+        </td>
+        <td>
+          <p>
+            <a name="city"></a>Supplies the city name for the result.
+          </p>
+          <p class="note">
+            <strong>Note:</strong> If a city name is not available, this property may be set to <code>&quot;&quot;</code>.
+          </p>
+        </td>
+      </tr>
+      <tr>
+<!--.content-->
+        <td>
+          <p>
+            <code>content</code>
+          </p>
+        </td>
+        <td>
+          <p>
+            <a name="content"></a> For KML results, this property contains a content snippet associated with the KML result.
+          </p>
+          <p class="note">
+            <b>Note:</b> For local results, set this property to <code>""</code>.
+          </p>
+        </td>
+      </tr>
+      <tr class="alt">
+<!--.country-->
+        <td>
+          <p>
+            <code>country</code>
+          </p>
+        </td>
+        <td>
+          <p>
+            <a name="country"></a> Supplies a country name for the result.
+          </p>
+          <p class="note">
+            <strong>Note:</strong> If the country name is not specified, set this property to <code>&quot;&quot;</code>.
+          </p>
+        </td>
+      </tr>
+      <tr>
+<!--.cursor-->
+        <td>
+          <p>
+            <code>cursor</code>
+          </p>
+        </td>
+        <td>
+          <p>
+            <a name="cursor"></a> <code>.cursor</code> is an optional property that is present once a search completes successfully. When present, the property specifies how an application can request additional search results for the current query term, the estimated result count, the current page, and the URL for a search results page. The property has the following structure:
+          </p>
+          <ul>
+            <li>
+              <code>pages[]</code> supplies an array used by <code>start</code> in order to iterate through all available results. Each entry in the array is an object with the following structure:
+              <ul>
+                <li>
+                  <code>start</code> supplies the value that will be used in the <code>&amp;start</code> URL argument to request a bundle of results
+                </li>
+                <li>
+                  <code>label</code> supplies a text label associated with the entry (for example, "1", "2", "3", or "4")
+                </li>
+              </ul>
+            </li>
+            <li>
+              <code>estimatedResultCount</code> supplies the estimated number of results that match the current query. This value will not necessarily match the similar value that is visible on the Google.com search properties.
+            </li>
+            <li>
+              <code>currentPageIndex</code> supplies the index into the <code>pages</code> array of the current set of results.
+            </li>
+            <li>
+              <code>moreResultsUrl</code> supplies a URL to a Google-hosted search page that contains additional search results.
+            </li>
+          </ul>
+          <p class="note">
+            <b>Note:</b> The Local Searcher supports a maximum of 8 result pages. When combined with subsequent requests, a maximum total of 64 results are available. It is not possible to request more than 64 results.
+          </p>
+        </td>
+      </tr>
+      <tr class="alt">
+<!--.ddUrl-->
+        <td>
+          <p>
+            <code>ddUrl</code>
+          </p>
+        </td>
+        <td>
+          <p>
+            <a name="ddUrl"></a>Supplies a URL that you can use to provide driving directions from the center of the set of search results to this search result.
+          </p>
+          <p class="note">
+            <strong>Note:</strong> If a <code><a href="#region">region</a></code> is not available, this property may be missing or null. Always wrap access within a a test of <code>if (result.ddUrl &amp;&amp; result.ddUrl != null)</code>.
+          </p>
+        </td>
+      </tr>
+      <tr>
+<!--.ddUrlToHere-->
+        <td>
+          <p>
+            <code>ddUrlToHere</code>
+          </p>
+        </td>
+        <td>
+          <p>
+            <a name="ddUrlToHere"></a> Supplies a URL that can be used to provide driving directions to a search result from a user-specified location.
+          <p class="note">
+            <strong>Note:</strong> In some cases, this property may be missing or null. Always wrap access within a a test of <code>if (result.ddUrlToHere &amp;&amp; result.ddUrlToHere != null)</code>.
+          </p>
+        </td>
+      </tr>
+      <tr class="alt">
+<!--.ddUrlFromHere-->
+        <td>
+          <p>
+            <code>ddUrlFromHere</code>
+          </p>
+        </td>
+        <td>
+          <p>
+            <a name="ddUrlFromHere"></a> Supplies a URL that can be used to provide driving directions from this search result to a user-specified location.
+          </p>
+          <p class="note">
+            <b>Note:</b> In some cases this property may be missing or null. Always wrap access within a a test of <code>if (result.ddUrlFromHere &amp;&amp; result.ddUrlFromHere != null)</code>.
+          </p>
+        </td>
+      </tr>
+      <tr>
+<!--.GsearchResultClass-->
+        <td>
+          <p>
+            <code>gsearchResultClass</code>
+          </p>
+        </td>
+        <td>
+          <p>
+            <a name="GsearchResultClass"></a>Indicates the type of result (for example, <code>google.search.LocalSearch.RESULT_CLASS</code> indicates <code>GlocalResult</code>).
+          </p>
+        </td>
+      </tr>
+<!--.html-->
+      <tr class="alt">
+        <td>
+          <code>html</code>
+        </td>
+        <td>
+          <p>
+            <a name="html"></a>Supplies the root of an HTML element that may be cloned and attached somewhere into the application's DOM hierarchy. We expect that this is the primary property that applications will use, typically by cloning this node and attaching it to the DOM hierarchy.
+          </p>
+          <p>
+            We expect applications to control styling, as well as which elements are displayed, using CSS. For instance, we expect the following fragment to be common across all applications that wish to copy and paste search results delivered through the Local Search API.
+          </p>
+<pre class="prettyprint">// clone the .html node from the result
+var node = result.html.cloneNode(true);
+
+// attach the node into my dom<br>container.appendChild(node);</pre>
+        </td>
+      </tr>
+      <tr>
+<!--.lat-->
+        <td>
+          <p>
+            <code>lat</code>
+          </p>
+        </td>
+        <td>
+          <p>
+            <a name="lat"></a> Supplies the latitude value of the result. This may be used to construct a <code>GPoint</code> using the following code snippet: <pre>p = new GPoint(parseFloat(result.lng), parseFloat(result.lat));</pre>
+          </p>
+        </td>
+      </tr>
+      <tr class="alt">
+<!--.listingType-->
+        <td>
+          <p>
+            <code>listingType</code>
+          </p>
+        </td>
+        <td>
+          <p>
+            <a name="listingType"></a>This property indicates the type of this result, which can either be <code>"local"</code> (in the case of a local business listing or geocode result), or <code>"kml"</code> in the case of a <a href="http://code.google.com/apis/kml/documentation">KML</a> listing.
+          </p>
+        </td>
+      </tr>
+      <tr>
+<!--.lng-->
+        <td>
+          <p>
+            <code>lng</code>
+          </p>
+        </td>
+        <td>
+          <p>
+            <a name="lng"></a> Supplies the longitude value of the result. This may be used to construct a <code>GPoint</code> as follows: <pre>p = new GPoint(parseFloat(result.lng), parseFloat(result.lat));</pre>
+          </p>
+        </td>
+      </tr>
+      <tr class="alt">
+<!--.phoneNumbers-->
+        <td>
+          <p>
+            <code>phoneNumbers</code>
+          </p>
+        </td>
+        <td>
+          <p>
+            <a name="phoneNumbers"></a>Supplies an array of phone number objects where each object contains a <code>.type</code> property and a <code>.number</code> property. The value of the <code>.type</code> property can be <code>"main"</code>, <code>"fax"</code>, <code>"mobile"</code>, <code>"data"</code>, or <code>&quot;&quot;</code>.
+          </p>
+        </td>
+      </tr>
+      <tr>
+<!--.region-->
+        <td>
+          <p>
+            <code>region</code>
+          </p>
+        </td>
+        <td>
+          <p>
+            <a name="region"></a>Supplies a region name for the result. In the US, the region name is typically a state abbreviation; in other areas it might be a province or other region name as locally applicable.
+          </p>
+          <p class="note">
+            <strong>Note:</strong> If a region name is not available, this property is set to <code>&quot;&quot;</code>. </p
+        </td>
+      </tr>
+      <tr class="alt">
+<!--.results-->
+        <td>
+          <p>
+            <code>results[]</code>
+          </p>
+        </td>
+        <td>
+          <p>
+            <a name="results"></a><code>.results[]</code> contains an array of search result objects, one for each result. Each time a search executes, this property is cleared, and each time a search completes, the array is populated. If there are no results to report, the <code>.length</code> property of this array will be set to 0. Therefore, results will never be null, and you can always safely check for <code>results.length == 0</code>.
+          </p>
+          <ul>
+            <li>
+              The <code>GlocalResult</code> object is produced by <code>google.search.LocalSearch</code>. It is available in that object's <code>.results[]</code> array.
+            </li>
+            <li>
+              This object is indicated by a <code>.GsearchResultClass</code> value of <code>google.search.LocalSearch.RESULT_CLASS</code>.
+            </li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+<!--.staticMapUrl-->
+        <td>
+          <p>
+            <code>staticMapUrl</code>
+          </p>
+        </td>
+        <td>
+          <p>
+            <a name="staticMapUrl"></a>Supplies the URL for a static map image representation of the current result. The image is 150px wide by 100px tall with a single marker representing the current location. Expected usage is to hyperlink this image using the <code>url</code> property. You can resize the image using <code>google.search.LocalSearch.resizeStaticMapUrl()</code>. The <a href="http://www.google.com/uds/samples/apidocs/static-tiles.html">Static Map Tile</a> sample demonstrates one way to use this property.
+          </p>
+        </td>
+      </tr>
+      <tr class="alt">
+<!--.streetAddress-->
+        <td>
+          <p>
+            <code>streetAddress</code>
+          </p>
+        </td>
+        <td>
+          <p>
+            <a name="streetAddress"></a>Supplies the street address and number for the given result.
+          </p>
+          <p class="note">
+            <strong>Note: </strong>If no street address is available, this property is set to <code>&quot;&quot;</code>. </p
+        </td>
+      </tr>
+      <tr>
+<!--.title-->
+        <td>
+          <p>
+            <code>title</code>
+          </p>
+        </td>
+        <td>
+          <p>
+            <a name="title" id="title"></a>Supplies the title for the result. In some cases, the title and the <code>streetAddress</code> are the same. This typically occurs when the search term is a street address such as <b>1231 Lisa Lane, Los Altos, CA</b>.
+          </p>
+        </td>
+      </tr>
+      <tr class="alt">
+<!--.titleNoFormatting-->
+        <td>
+          <p>
+            <code>titleNoFormatting</code>
+          </p>
+        </td>
+        <td>
+          <p>
+            <a name="titleNoFormatting"></a>Supplies the title, but unlike <code>.title</code>, this property is stripped of html markup (e.g., &lt;b&gt;, &lt;i&gt;, etc.). In some cases, the title and the <code>streetAddress</code> are the same. This typically occurs when the search term is a street address such as <b>1231 Lisa Lane, Los Altos, CA</b>.
+          </p>
+        </td>
+      </tr>
+      <tr>
+<!--.url-->
+        <td>
+          <p>
+            <code>url</code>
+          </p>
+        </td>
+        <td>
+          <p>
+            <a name="url"></a>Supplies the URL to a Google Maps Place page associated with the search result.
+          </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="resultstyle">Result styling</h3>
+  <p>
+    The <code>.html</code> property discussed above is built with CSS styling in mind. As a result, each piece of semantic information is enclosed in HTML markup with an appropriate set of class markers. This allows you to use this HTML in conjunction with your own custom CSS rules that style the HTML to meet your needs.
+  </p>
+  <p>
+    The following fragment of HTML illustrates the structure of a Local Search result's <code>.html</code> property. The purpose of this skeleton is to show you the major structural components work, so that you can alter the styling and display of a result. For instance, if you want to suppress the "snippet", a CSS rule of <code>#mysearcher .gs-localResult .gs-snippet { display : none; }</code> would do the trick.
+  </p>
+  <p>
+    Each search result is enclosed in a <code>div</code> element marked with a generic search result class of <code>gs-result</code>, as well as a class specific to the result type (e.g., <code>gs-localResult</code>). This structure allows you to easily define generic CSS rules that are applied to all results, as well as type-specific rules.
+  </p>
+<pre class="prettyprint">&lt;div class=&quot;gs-result gs-localResult&quot;&gt;
+  &lt;!-- Note, a.gs-title can have embedded HTML
+  // so make sure to account for this in your rules.
+  // For instance, to change the title color to red,
+  // use a rule like this:
+  // a.gs-title, a.gs-title * { color : red; }
+  --&gt;
+  &lt;div class=&quot;gs-title&quot;&gt;
+    &lt;a class=&quot;gs-title&quot;&gt;&lt;/a&gt;
+  &lt;/div&gt;
+  &lt;!-- Note, ONLY present for &quot;kml&quot; results --&gt;
+  &lt;div class=&quot;gs-snippet&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;gs-address&quot;&gt;
+    &lt;div class=&quot;gs-street&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;gs-city&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;gs-region&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;gs-country&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;gs-phone&quot;&gt;&lt;/div&gt;
+
+  &lt;!-- This element provides driving directions from
+  // the center point location to this result. This
+  // is the default setting.
+  --&gt;
+  &lt;div class=&quot;gs-directions&quot;&gt;
+    &lt;a class=&quot;gs-directions&quot;&gt;&lt;/a&gt;
+  &lt;/div&gt;
+
+  &lt;!-- This element provides driving directions to/from the search result
+  // with the user supplying the starting/ending point (based on the link
+  // they clicked on). This is an alternate link. If you want this behavior
+  // instead of the default, use a set of rules similar to this:
+  //
+  //  #mycontrol .gs-directions { display : none; }
+  //  #mycontrol .gs-directions-to-from { display : block; }
+  //
+  // Directions here are provided in the form of:
+  //
+  // Get directions: To here - From here
+  --&gt;
+  &lt;div class=&quot;gs-directions-to-from&quot;&gt;
+    &lt;div class=&quot;gs-label&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;gs-secondary-link&quot;&gt;
+      &lt;a class=&quot;gs-secondary-link&quot;&gt;&lt;/a&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;gs-spacer&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;gs-secondary-link&quot;&gt;
+      &lt;a class=&quot;gs-secondary-link&quot;&gt;&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre> <h2 id="configure_optional_methods"></a>Configuring optional methods</h2> <h3 id="setCenterPoint">Target results to a specific location</h3>
+  <p>
+    <a name="setCenterPoint"></a><code>.setCenterPoint(location)</code> targets search results to a specific location, where <code>location</code> supplies the location using one of three possible variants:
+  <ul>
+    <li>
+      The center point of a map, using <code>google.maps.Map2</code> in the presence of a <code>getCenter()</code> property.
+    </li>
+    <li>
+      A latitude/longitude combination, using <code>google.maps.LatLng</code> in the presence of an <code>x</code> property.
+    </li>
+    <li>
+      A <code>string</code> which specifies an address by name. When this argument is presented, searches are scoped as if the user performed a Google Local Search specifying near <i>location</i> as part of their search expression. Note: The string location is resolved into a <code>google.maps.LatLng</code> asynchronously so if this method is used, searches are made relative to this location once the geocoding operation completes with success.
+    </li>
+  </ul>
+  <p>
+    If you do not specify this property, the default location is San Francisco, California.
+  </p>
+  <p>
+    The preferred interface is either <code>google.maps.LatLng()</code> or <code>google.maps.Map2()</code>.
+  </p>
+  <p>
+    <code>.setCenterPoint(location)</code> has no return value.
+  </p>
+  <h3 id="setAddressLookupMode">Disable address lookups</h3>
+<!--setAddressLookupMode-->
+  <p>
+    <a name="setAddressLookupMode"></a> By default, the Local Search API co-mingles address lookup results (e.g., NY, NY) with local search results. However, there are situations where this co-mingled approach is undesirable.
+  </p>
+  <p>
+    For instance, suppose the searcher is centered in Santa Barbara, CA and the user is searching for "Cava". With co-mingled results, the first search result is actually an address match against "Cava Close, Aberdeen City, AB15 UK". The second result is "Cava Restaurant &amp; Bar". Disabling address lookup causes the desired "Cava Restaurant &amp; Bar" to be the first result.
+  </p>
+  <p>
+    <code>.setAddressLookupMode(mode)</code> allows applications to disable or enable address lookup, where <code>mode</code> supplies the desired address lookup mode:
+  </p>
+  <ul>
+    <li>
+      <code>google.search.LocalSearch.ADDRESS_LOOKUP_ENABLED</code> enables address lookup producing co-mingled results. This is the default behavior.
+    </li>
+    <li>
+      <code>google.search.LocalSearch.ADDRESS_LOOKUP_DISABLED</code> disables address lookup and only produces search result titles.
+    </li>
+  </ul>
+  </li>
+  </ul>
+  <p>
+    <code>.setAddressLookupMode(mode)</code> has no return value.
+  </p>
+  <h3 id="setRestriction">Restrict Results by Type</h3>
+<!--setRestriction-->
+  <p>
+    <a name="setRestriction"></a> <code>.setRestriction(type, opt_value)</code> specifies or clears a restriction on the set of results returned by this searcher, where:
+  </p>
+  <ul>
+    <li>
+      <code>type</code> (required) has one possible value for local search: <code>google.search.Search.RESTRICT_TYPE</code>.
+    </li>
+    This value is required to set or clear a restriction.
+    <li>
+      <code>opt_value</code> supplies the value for the specified restriction type, as follows:
+      <ul>
+        <li>
+          <code>google.search.LocalSearch.TYPE_LOCALONLY_RESULTS</code> returns only local listing results results and geocodes. This is the default behavior.
+        </li>
+        <li>
+          <code>google.search.LocalSearch.TYPE_BLENDED_RESULT</code> returns a mix of both <a href="http://code.google.com/apis/kml/">KML</a> results and normal, local listings and geocodes.
+        </li>
+        <li>
+          <code>google.search.LocalSearch.TYPE_KMLONLY_RESULTS</code> returns only KML results and geocodes.
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <p>
+    To return the searcher to its default behavior, clear the restriction by calling this method with no <code>opt_value</code>, as follows: <code>.setRestriction(type)</code>.
+  </p>
+  <p>
+    <code>.setRestriction(type, opt_value)</code> has no return value.
+  </p>
+  <p>
+    The following sample shows how to return only KML results: <pre class="prettyprint">localSearch.setRestriction(google.search.Search.RESTRICT_TYPE,
+  google.search.LocalSearch.TYPE_KMLONLY_RESULTS)</pre>
+  </p>
+  <h3 id="staticMapUrl">Create a static map image</h3>
+  <p>
+    <a name="computeStaticMapUrl"></a><code>.computeStaticMapUrl(results, height, width, opt_zoom?)</code> is a utility function that creates a static map image from the a collection of points specified as a collection of search result objects, objects containing a numeric <code>.lat</code> and <code>.lng</code> property, or <code>google.maps.LatLng</code> objects. Only the first <code>google.search.LocalSearch.STATIC_MAP_MAX_POINTS</code> objects are included. This function is defined as follows:
+  </p>
+  <ul>
+    <li>
+      <code>results</code> supplies an array of objects to be plotted on on a static map image.
+    </li>
+    <li>
+      <code>height</code> supplies the height of the new image, in pixels (maximum height of 640 pixels). This field is required.
+    </li>
+    <li>
+      <code>width</code> supplies the width of the new image, in pixels (maximum width of 640 pixels). This field is required.
+    </li>
+    <li>
+      <code>opt_zoom</code> supplies an optional zoom level for the map. If not specified, the system computes an appropriate zoom level. If supplied, valid values include:
+      <ul>
+        <li>
+          <code>google.search.LocalSearch.STATIC_MAP_ZOOM_CLOSEST</code>
+        </li>
+        <li>
+          <code>google.search.LocalSearch.STATIC_MAP_ZOOM_FARTHEST</code>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <p>
+    <code>.computeStaticMapUrl(results, height, width, opt_zoom?)</code> returns a URL to the static map image.
+  </p>
+  <p>
+    The code sample below creates a static map image from a collection of locations in northern Europe (<a href="http://code.google.com/apis/ajax/playground/#static_map_image">view live sample</a>). This map displays by default when there are no search results. When a search completes, a new map image is computed using the collection of search results.
+  </p>
+<pre class="prettyprint">// demonstrate computeStaticMapUrl with simple point array
+this.worldPointsUrl = google.search.LocalSearch.computeStaticMapUrl(
+                        worldPoints,350, 400);
+document.getElementById("resultsImg").src =
+                        this.worldPointsUrl;
+...
+var worldPoints = [
+  { lat : 48.8565, lng : 2.3509 },      // paris
+  { lat : 52.5238, lng : 13.4119},      // berlin
+  { lat : 52.3738, lng : 4.8909},       // amsterdam
+  { lat : 55.676294, lng : 12.568115},  // copenhagen
+  { lat : 60.160791, lng : 24.952548},  // helsinki
+  { lat : 59.332725, lng : 18.064454},  // stockholm
+  { lat : 59.913820, lng : 10.738741}   // oslo
+];</pre> <h3 id="_resizeStaticMapUrl">Resize the static map image</h3>
+<!--.resizeStaticMapUrl-->
+  <p>
+    <a name="resizeStaticMapUrl"></a><code>.resizeStaticMapUrl(result, height, width, opt_zoom?)</code> is a utility function that resizes the image associated with the <code>staticMapUrl</code> property of the specified result. Upon completion, this property is replaced with a new value that represents the re-sized static map image. This function is defined as follows:
+  </p>
+  <ul>
+    <li>
+      <code>result</code> supplies the result object whose static map image is to be re-sized. Upon completion, the <code>staticMapUrl</code> property of this result object is modified.
+    </li>
+    <li>
+      <code>height</code> supplies the new image height, in pixels (maximum height of 640 pixels). This field is required.
+    </li>
+    <li>
+      <code>width</code> supplies the new image width width, in pixels (maximum width of 640 pixels). This field is required.
+    </li>
+    <li>
+      <code>opt_zoom</code> supplies an optional zoom level for the map, defined as follows:
+      <ul>
+        <li>
+          If you don't specify a zoom, the value is unchanged. The default value is <code>google.search.LocalSearch.STATIC_MAP_ZOOM_DEFAULT</code>.
+        </li>
+        <li>
+          <code>google.search.LocalSearch.STATIC_MAP_ZOOM_CLOSEST</code> defines the closest zoom
+        </li>
+        <li>
+          <code>google.search.LocalSearch.STATIC_MAP_ZOOM_FARTHEST</code> defines the furthest zoom
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <p>
+    <code>.resizeStaticMapUrl(result, height, width, opt_zoom?)</code> returns the new value of the resized <code>staticMapUrl</code>.
+  </p>
+  <p>
+    The <a href="http://code.google.com/apis/ajax/playground/#static_map_image">Static Map Tile</a> sample demonstrates one way to use this method (see the snippet below).
+  </p>
+<pre class="prettyprint">var img = document.createElement(&quot;img&quot;);
+google.search.LocalSearch.resizeStaticMapUrl(result, 80, 120);
+img.src = result.staticMapUrl;
+img.title = result.titleNoFormatting;</pre> <h3 id="setResultSetSize">Specify the size of the result set</h3>
+<!--setResultSetSize-->
+  <p>
+    <a name="setResultSetSize"></a><code>.setResultSetSize(num)</code> specifies the size of the result set, where <code>num</code> supplies the number of results to display per page, from 1-8.
+  <p>
+    <code>.setResultSetSize()</code> has no return value.
+  </p>
+  <h3 id="getResultSetSize">Return the current result set size</h3>
+<!--.getResultSetSize-->
+  <p>
+    <a name="getResultSetSize"></a><code>.getResultSetSize()</code> has no arguments and returns an integer from 1&ndash;8 indicating the current result set size (which is established by <code>.setResultSetSize()</code>. It allows you to determine the result set size returned by the search.
+  </p>
+  <h3 id="createResultHtml">Create or regenerate the .html property</h3>
+<!--.createResultHtml-->
+  <p>
+    <a name="createResultHtml1"></a><code>.createResultHtml(<kbd>result</kbd>)</code> allows the caller to either create or re-generate the <code>.html</code> property of the specified result, where <code><kbd>result</kbd></code> supplies a result object.
+  </p>
+  <p>
+    If the result has no <code>.html</code> property, this call creates one. One circumstance requiring you to create an <code>.html</code> property is if the caller had previously used <code>.setNoHtmlGeneration()</code>.
+  </p>
+  <p>
+    <code>.createResultHtml()</code> has no return value.
+  </p>
+  <h3 id="clearResults">Clear the current search results</h3>
+<!--.clearResults-->
+  <p>
+    <a name="clearResults"></a><code>.clearResults()</code> resets the searcher, clearing all of the results of the previous search. This method is implicitly called prior to executing a new search.
+  </p>
+  <p>
+    <code>.clearResults()</code> has no arguments and no return value.
+  </p>
+  <h3 id="setNoHtmlGeneration">Prevent the searcher from generating the .html property</h3>
+<!--.setNoHtmlGeneration-->
+  <p>
+    <a name="setNoHtmlGeneration"></a><code>.setNoHtmlGeneration()</code> stops your application from generating an <code>.html</code> property, leaving you with only the raw properties valid in a result. This property is useful for optimizing your application, if you want to handle rendering of the results yourself.
+  </p>
+  <p>
+    <code>.setNoHtmlGeneration()</code> has no arguments and no return value.
+  </p>
+  <h3 id="cursor">Request additional search parameters</h3>
+  <p>
+    <a name="cursor"></a> <code>.cursor</code> is an optional property that is present once a search completes successfully. When present, the property specifies how an application can request additional search results for the current query term, the estimated result count, the current page, and the URL for a search results page. The property has the following structure:
+  </p>
+  <ul>
+    <li>
+      <code>pages[]</code> supplies an array used by <code>start</code> in order to iterate through all available results. Each entry in the array is an object with the following structure:
+      <ul>
+        <li>
+          <code>start</code> supplies the value that will be used in the <code>&amp;start</code> URL argument to request a bundle of results
+        </li>
+        <li>
+          <code>label</code> supplies a text label associated with the entry (for example, "1", "2", "3", or "4")
+        </li>
+      </ul>
+    </li>
+    <li>
+      <code>estimatedResultCount</code> supplies the estimated number of results that match the current query. This value will not necessarily match the similar value that is visible on the Google.com search properties.
+    </li>
+    <li>
+      <code>currentPageIndex</code> supplies the index into the <code>pages</code> array of the current set of results.
+    </li>
+    <li>
+      <code>moreResultsUrl</code> supplies a URL to a Google-hosted search page that contains additional search results.
+    </li>
+  </ul>
+  <p class="note">
+    <b>Note:</b> The Local Searcher supports a maximum of 4 result pages. When combined with subsequent requests, a maximum total of 32 results are available. It is not possible to request more than 32 results.
+  </p>
+  <h3 id="gotoPage">Request a specific results page</h3>
+<!--.gotoPage-->
+  <p>
+    <a name="gotoPage"></a><code>.gotoPage(page)</code> requests a specific page of search results after an initial search completes, where <code>page</code> supplies the page number of the results that the application wants. Numbering of results pages begins at 0, and the searcher returns the first page by default.
+  </p>
+  <p>
+    If you specify a page number that is out of range, or if the underlying searcher has no <code>.cursor</code> property, no operation is performed.
+  </p>
+  <p>
+    <code>.gotoPage()</code> has no return value.
+  </p>
+  <h3 id="results">Create an array of search results</h3>
+  <p>
+    <a name="results"></a><code>.results[]</code> contains an array of search result objects, one for each result. Each time a search executes, this property is cleared, and each time a search completes, the array is populated. If there are no results to report, the <code>.length</code> property of this array will be set to 0. Therefore, results will never be null, and you can always safely check for <code>results.length == 0</code>.
+  </p>
+  <ul>
+    <li>
+      The <code>GlocalResult</code> object is produced by <code>google.search.LocalSearch</code>. It is available in that object's <code>.results[]</code> array.
+    </li>
+    <li>
+      This object is indicated by a <code>.GsearchResultClass</code> value of <code>google.search.LocalSearch.RESULT_CLASS</code>.
+    </li>
+  </ul>
+  <h2 id="troubleshooting">Troubleshooting</h2>
+  <p>
+    If you encounter problems with your code:
+  </p>
+  <ul>
+    <li>
+      Make sure your API key is valid.
+    </li>
+    <li>
+      Look for typos. Remember that JavaScript is a case-sensitive language.
+    </li>
+    <li>
+      Use a JavaScript debugger. Google Chrome has a full set of <a href="http://blog.chromium.org/2009/06/developer-tools-for-google-chrome.html">developer tools</a>. In Firefox, you can use the JavaScript console or the <a href="http://www.getfirebug.com/">Firebug</a>. In IE, you can use the <a href="http://msdn2.microsoft.com/en-us/library/ms532989.aspx">Microsoft Script Debugger</a>.
+    </li>
+    <li>
+      Search the <a href="http://groups.google.com/group/Google-Maps-API"> discussion group</a>. If you can't find a post that answers your question, post your question to the group along with a link to a web page that demonstrates the problem.
+    </li>
+  </ul>
+  
+</div>
+<!-- end gc-pagecontent -->
+
+</div>
+<!-- end gooey wrapper -->
+  </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+  
+</body>
+
+</html>
+

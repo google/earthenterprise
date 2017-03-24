@@ -1,0 +1,80 @@
+<!--
+  Copyright 2017 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+<head>
+<title>Google Earth Enterprise Portable</title>
+<link rel='stylesheet' type='text/css' href='/local/css/earth.css' />
+<script type='text/javascript'>
+
+// To serve your static content from a different server, simply override
+// GEE_SERVER_URL to the URL of your GEE Server, e.g.:
+// "http://yourhost.com/default_map/"
+var GEE_SERVER_URL = window.location.protocol + '//'
+                     + window.location.host+ '/';
+var GEE_URL_PREFIX = '/local'
+var GEE_POLYGON_DISPLAY_TIME = 1500;
+
+function InitMap() {
+  // Options passed to the v3 map object.
+  var mapOpts = {
+      zoom: 2,
+      center: new google.maps.LatLng(0, 0),
+      navigationControl: true,
+      mapTypeControl: false,
+      scaleControl: true,
+      streetViewControl: false
+  };
+  geeInitMap(mapOpts, true, true);
+}
+
+</script>
+<!-- Load the required Javascript files.
+     The local Maps API files fusionmaps_local.js and fusionmapobj.js.
+     Utilities for this example UI: fusion_utils.js and search_tabs.js
+     The main routine: geeInit() is found in fusion_maps.js which 
+     defines the example UI and behaviors.
+  -->
+<script type='text/javascript' src='/local/js/jquery.js'></script>
+<script type='text/javascript' src='/local/maps/api/params.js'></script>
+<script type='text/javascript' src='/local/maps/api/pbootstrap_loader.js'></script>
+<script type='text/javascript' src='/local/maps/api/fusion_map_obj_v3.js'></script>
+<script type='text/javascript' src='/local/maps/api/fusion_utils.js'></script>
+<script type='text/javascript' src='/local/maps/api/search_tabs.js'></script>
+<script type='text/javascript' src='/local/maps/api/fusion_maps_v3.js'></script>
+</head>
+<body onload='InitMap()' onresize='geeResizeDivs();'>
+<div id='header'>
+  <div id='logo'>
+    <img src="/earth/images/gee.gif" align="left" />
+  </div>
+  <div id='search_tabs'></div>
+</div>
+<div style="clear: both;"></div>
+<table cellspacing="0" cellpadding="0" width="100%">
+<tr valign="top">
+<td id='left_panel_cell'>
+  <div id='left_panel'></div>
+</td>
+<td valign="top">
+  <div id='map'></div>
+</td>
+</tr>
+</table>
+</body>
+</html>

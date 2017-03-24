@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs
+    title="Storing User Preferences">
+    <Require feature="sharedmap" />
+    <Require feature="setprefs" />
+  </ModulePrefs>
+  <UserPref
+    name="counter"
+    default_value="0"
+    datatype="hidden"/>
+  <Content type="html">
+  <![CDATA[
+
+<small>The following example contains buttons for incrementing a counter and
+resetting the counter. If you reload the Mapplet, you'll notice that the
+value of the counter persists between sessions for that user.</small>
+
+    <input type=button value="Increment Counter" onClick="incrementCounter();">
+    <input type=button value="Reset Counter" onClick="resetCounter();">
+    <div id="message" style="margin-top:1em"></span>
+
+    <script>
+     // Get user preferences
+     var prefs = new _IG_Prefs(__MODULE_ID__);
+     var message = document.getElementById("message");
+     showCounter();
+
+     // Show the current value of the counter
+     function showCounter() {
+       var counter = prefs.getInt("counter");
+       message.innerHTML = "The counter value is " + counter;
+     }
+
+     // Increment value of "counter" user preference
+     function incrementCounter() {
+       var counter = prefs.getInt("counter");
+       prefs.set("counter", counter + 1);
+       showCounter();
+     }
+
+     // Reset value of "counter" userpref to 0
+     function resetCounter(){
+       prefs.set("counter", 0);
+       showCounter();
+     }
+    </script>
+  ]]>
+  </Content>
+</Module>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+
+<Document>
+  <Camera>
+    <longitude>-122.444633</longitude>
+    <latitude>37.801899</latitude>
+    <altitude>139.629438</altitude>
+    <heading>-70.0</heading>
+    <tilt>75</tilt>
+  </Camera>
+
+  <Placemark>
+    <name>Placemark from KML file</name>
+    <Point>
+      <coordinates>-122.448425,37.802907,0</coordinates>
+    </Point>
+  </Placemark>
+
+</Document> 
+</kml>

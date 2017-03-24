@@ -1,0 +1,66 @@
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+import os
+import time
+Import('third_party_env')
+glu_version = 'MesaLib-7.11'
+
+current_dir = Dir('.').abspath
+build_root = '%s/%s' % (current_dir, glu_version.replace('Lib', ''))
+libtess_abs_dir = os.path.join(build_root, 'src/glu/sgi/libtess')
+
+glu_source = File('#/../third_party/MesaLib/%s.tar.gz' % glu_version).abspath
+
+glu_env = third_party_env.DeepCopy()
+
+# build GLU tesselation library : glutess
+glutess_c = map(lambda f: os.path.join(build_root, 'src/glu/sgi/libtess', f), [
+    'dict.c',
+    'geom.c',
+    'memalloc.c',
+    'mesh.c',
+    'normal.c',
+    'priorityq.c',
+    'render.c',
+    'sweep.c',
+    'tess.c',
+    'tessmono.c',
+])
+
+# [1] Extract glu
+glu_target = '%s/.extract' % current_dir
+glu_extract = glu_env.Command(
+    [glu_target] + glutess_c, glu_source,
+    [glu_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xzf %s\n'
+        'touch %s' % (current_dir, current_dir, glu_source, glu_target))])
+
+cc_flags = glu_env['CCFLAGS']
+cc_flags.remove('-Werror')
+glu_env['CPPFLAGS'] += ['-fPIC']  # Needed for 64-bit compilation.
+glu_env['CCFLAGS'] = cc_flags
+glu_env['CPPFLAGS'] += ['-I' + libtess_abs_dir + '/../include']
+glu_env['CPPFLAGS'] += ['-I' + os.path.join(build_root, 'include')]
+
+glutess = glu_env.staticLib('glutess', glutess_c)
+Default(glutess)
+
+glu_env.ExecuteOnClean('rm -rf %s %s' % (current_dir, glutess))
+
+Return('glu_extract glutess')

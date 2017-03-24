@@ -1,0 +1,565 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+  <link rel="stylesheet" type="text/css" href="local_extensions.css" />
+  <!--[if IE]>
+    <link rel="stylesheet" type="text/css" href="iehacks.css" />
+  <![endif]-->
+  <title>Configuring Google Earth Enterprise Server</title>
+</head>
+
+
+<body>
+<a name="top"></a>
+  
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" />
+  </div>
+  <h1 id="doc_title">Administration Guide</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+<ul>
+  <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+  <div class="line"></div>
+  <li><strong>Administration Guide</strong></li>
+  <li><a href="index.html">Home</a></li>
+  <li><a href="server.html" id="selected">Configuring Server</a></li>
+  <li><a href="fusion.html">Configuring Fusion</a></li>
+  <li><a href="tutorial.html">Configuring Tutorial Work Space</a></li>
+  <li><a href="commands.html">Command Reference</a></li>
+  <li><a href="errors.html">Common Server Error Messages</a></li>
+  <li><a href="mult_db.html">Multiple Database Support</a></li>
+  <div class="line"></div>
+  <li><a href="notices.html">Legal Notices</a></li>
+</ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+<h1><a id="61436"></a>Configuring Google Earth Enterprise Server</h1>
+
+<ol class="toc">
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#server_running">Verifying that Server is Running</a></li>
+  <li>Configuring:
+    <ul>
+      <li> <a href="#virtual_servers">Virtual Servers</a></li>
+      <li><a href="#server_associations">Server Associations</a></li>
+      <li> <a href="#secure_servers">Secure Servers</a></li>
+      <li><a href="#publish_root">The Publish Root</a></li>
+      <li><a href="#authentication">Authentication</a></li>
+      <li> <a href="#secure_remote_publishing">Secure Remote Publishing (Using an SSH Tunnel)</a></li>
+    </ul>
+  </li>
+  <li><a href="#disconnected_publishing">Disconnected Publishing</a></li>
+</ol>
+
+<h2 id="overview">Overview</h2>
+<p>Before you use many of the Google Earth Enterprise Server configuration tools, you must stop the Google Earth Enterprise Server and then start it after you change the configuration. To stop/start the Google Earth Enterprise Server, enter:
+</p>
+<pre><code>/etc/init.d/geserver [stop | start | restart]</code></pre>
+<p>In general, no additional configuration is required after you install the Google Earth Enterprise Server. However, there are a number of ways in which you can customize your Google Earth Enterprise Server configuration, if desired. This chapter provides information about those configuration options. (See the <a href="commands.html">Command Reference</a> chapter for a complete list of commands available to system administrators.)
+</p>
+<p>The <code>geserveradmin</code> command handles many of the Google Earth Enterprise Server configuration changes you might want to make. All of the options and uses for <code>geserveradmin </code>are described in the <a href="commands.html#75914">geserveradmin</a> section of the <strong>Command Reference</strong> doc. </p>
+<h2 id="server_running">Verifying That Google Earth Enterprise Server Is Running
+</h2>
+<p>Because Google Earth Enterprise Server is critical to many operations you perform with Google Earth Enterprise Fusion, verify that it is running.
+</p>
+<ol>
+  <li>Open a web browser (either on the machine where the server is installed or any other computer that has network access to that machine).
+  </li>
+  <li>Enter the URL for the server host (such as <code>http://www.example.com</code>).
+    <p>If Google Earth Enterprise Server is running, the browser displays the Google logo.
+    </p>
+    <p>If Google Earth Enterprise Server is not running, the browser displays an error message informing you that the page cannot be found. On the command line, enter:</p>
+    <pre>/etc/init.d/geserver start</pre>
+    <p>If you again reach an error page, make sure that you have network access to the machine on which the server is installed and that the DNS entry for that machine is up-to-date. </p>
+  </li>
+</ol>
+<h2 id="virtual_servers"><a id="95347"></a>Configuring Virtual Servers
+</h2>
+<p>Before publishing to virtual servers other than the default virtual servers, please familiarize yourself with the Apache Virtual Host documentation (<a href="http://httpd.apache.org/docs/2.2/vhosts/">http://httpd.apache.org/docs/2.2/vhosts/</a>).</p>
+<p class="caution"><strong>Caution:</strong> Publishing to virtual servers
+other than the default server is supported only in version 4.2 or later
+of Google Earth EC. If you are using version 4.0 or earlier, only databases
+that you publish to the default server can be accessed by Google Earth EC.
+</p>
+
+<h3>Defining the virtual server</h3>
+
+<p>To define a virtual server, use the <code>geserveradmin</code> command (see <a href="commands.html#75914">geserveradmin</a> for more details):</p>
+<pre>geserveradmin --addvs <em>name</em> --vstype <em>type</em> --vsurl <em>url</em></pre>
+<p>Where:</p>
+<ul>
+  <li><em>name</em> is the name of the virtual server</li>
+  <li><em>type</em> is either <code>ge</code> (for 3D streaming) or <code>map</code> (for maps)</li>
+  <li><em>url</em> is the location of the virtual server. This will usually look like <code>/somename_ge</code>; refer to <a href="commands.html#75914">geserveradmin</a> in the <strong>Command Reference</strong> chapter for more information on the required format.</li>
+</ul>
+<h3>Creating the configuration file</h3>
+
+<p>After defining a virtual server,  create a configuration file that specifies required information for that particular virtual server. To do so:</p>
+
+<ol>
+  <li>Log in to the server you want to configure.
+  </li>
+  <li>Change to the directory where the sample configuration files are stored:<pre><code>cd /opt/google/gehttpd/conf.d/examples</code></pre>
+  </li>
+  <li>Copy a sample configuration file to <code>/opt/google/gehttpd/conf.d/virtual_servers</code> and rename it. For example:
+    
+    <pre><code>cp /opt/google/share/gehttpd/examples/port_based_ge_vs_example.vhost
+  /opt/google/gehttpd/conf.d/virtual_servers/private_ge.vhost</code></pre>
+    
+    <p>When choosing a configuration file to copy, use a file that:</p>
+    <ul>
+      <li>contains <code>_ge_</code> if you are creating a Google Earth Enterprise Fusion virtual server.</li>
+      <li>contains <code>_map_</code> if you are creating a Google Maps virtual server.</li>
+      <li>starts with <code>location_based</code> if you are creating a location-based virtual server.</li>
+      <li>starts with <code>name_based</code> if you are creating a name/domain-based virtual server.</li>
+      <li>starts with <code>port_based</code> if you are creating a port-based virtual server.</li>
+      <p>You must maintain the <code>.location</code> or <code>.vhost</code> extension on the file name.</p>
+    </ul>
+  </li>
+  <li>Edit the new file with the text editor of your choice, making the following changes:
+
+    <p><strong>In a location-based configuration file:</strong></p>
+    <ol class="alpha">
+      <li>Change <code>&lt;LOCATION&gt;</code> to the <code>vsurl</code> value specified in the <code>geserveradmin </code>command you used to register the virtual server.
+        <p class="note"><strong>Note:</strong> For a Google Maps virtual server, you must make this change in five places.
+        </p>
+      </li>
+      <li>Change <code>&lt;VS_NAME&gt;</code> to the <code>addvs</code> name specified in the <code>geserveradmin </code>command you used to register the virtual server.</li>
+    </ol>
+
+    <p><strong>In a name-based configuration file:</strong></p>
+    <ol class="alpha">
+      <li>Change <code>&lt;HOST.DOMAIN&gt;</code> to the desired server name.</li>
+      <li>Change <code>&lt;VS_NAME&gt;</code> to the <code>addvs</code> name specified in the <code>geserveradmin </code>command you used to register the virtual server.</li>
+    </ol>
+
+    <p><strong>In a port-based configuration file:</strong></p>
+    <ol class="alpha">
+      <li>Change <code>&lt;IP_ADDRESS&gt;</code> to the IP address of the host.</li>
+      <li>Change <code>&lt;PORT&gt;</code> to the number of the port you want to use.</li>
+      <li>Change <code>&lt;VS_NAME&gt;</code> to the <code>addvs</code> name specified in the <code>geserveradmin </code>command you used to register the virtual server.</li>
+    </ol>
+    <p class="note"><strong>Note:</strong> You can optionally create combinations of name-based or port-based and location-based virtual servers. If you do, you must create an Apache configuration file with the <code>.vhost</code> extension that references multiple virtual servers. Make sure you create the corresponding virtual servers using the <code>geserveradmin --addvs</code> command. (See <a href="commands.html#75914">geserveradmin</a> for more information.)</p>
+  </li>
+  <li>Save the file.
+  </li>
+</ol>
+<p>Next, you must configure a server association for the new virtual server.</p>
+
+<h2 id="server_associations"><a id="73276"></a><a id="67270"></a>Configuring Server Associations
+</h2>
+<p>The Google Earth Enterprise Server consists of a stream server and a search server. You can publish a Google Earth Enterprise Fusion database to stream and search virtual servers running on your local workstation or on a remote server. Associated stream and search virtual servers can be located on different physical servers or on the same server. 
+</p>
+<p>The <strong>Server Associations Manager</strong> allows you to specify server associations in preparation for publishing your databases. You can specify any number of additional server associations in the Server Associations Manager. Then you can select the desired server association in the <strong>Publish Database</strong> dialog. (Refer to <strong>Publishing a Database</strong> in  the <em>Google Earth Enterprise Fusion Reference Guide</em> for more information.)
+</p>
+      <p class="caution"><strong>Caution:</strong> If you're working with multiple Google Earth Enterprise Fusion users on multiple workstations, it is important to remember that all managers on the <strong>Tools</strong> menu can be accessed by all users at the same time. If multiple users are working with the same manager at the same time, when one user closes the manager, that user’s changes overwrite all previous data for that manager. So if you are working in a multi-user environment, be sure to coordinate with the other users to be sure that only one user has this manager open at a time.    </p>
+    <h4>To specify server associations:
+</h4>
+<ol>
+  <li>Select <b>Tools &gt; Server Associations Manager</b>.
+<p>The Server Associations Manager window appears with two default server associations listed--one for publishing to Google Earth and the other for publishing to Google Maps. The default server associations assume that you have Google Earth Enterprise Server installed on the same workstation as Google Earth Enterprise Fusion.    </p>
+    <img src="images/publishManager.png" width="450px" />  </li>
+  <li><a id="39252"></a>To add a server association, click the page icon 
+    <img src="images/icon_new.gif" />. The Edit Server Association dialog appears.<br />
+    <img src="images/serverAssocDia.png" width="450px" />  </li>
+  <li>Enter a unique name for the server association in the <strong>Nickname</strong> field. (When you're ready to publish a database, the nickname appears on the list of server associations to which you can publish.)</li>
+  <li>For <strong>Type</strong>, select <b>GE</b> for Google Earth databases or <b>MAP</b> for Google Maps databases.  </li>
+  <li>Enter the URL for the Stream Server (and a port number, if other than 80; for example, <code>http://www.example.com:9090</code>).  </li>
+  <li><a id="23365"></a>Click <b>Query</b> to populate the <strong>Virtual Server</strong> drop-down list with all of the virtual servers available at that URL (and port, if specified). </li>
+  <li>Repeat for the Search Server.  </li>
+  <li><a id="34200"></a>Click <b>OK</b>. The new server association appears on the list in the <strong>Server Associations Manager</strong>.<br />
+    <img src="images/publishManager-full.png" width="450px" />
+    <p>Repeat the steps above for each server association you want to add. The server associations appear on this list in the order in which you added them. They also appear on the <strong>Server Associations</strong> drop-down list in the <strong>Publish Database</strong> dialog in the same order. The first server association listed here is the default in the <strong>Publish Database</strong> dialog.</p>
+
+    <p>If you want to reorder the server associations on the list (particularly if you publish to a certain server most of the time and want it to be the default in the Publish Database dialog), select the server association that you want to move, and click the up or down arrows to change that server association's position in the list.</p>
+  </li>
+  <li>When you have finished adding and sorting server associations, click <b>OK</b>. The server associations are ready for you to select when you publish a database. (Refer to <strong>Publishing a Database</strong> in  the <em>Google Earth Enterprise Fusion Reference Guide</em> for more information.)    </li>
+</ol>
+<h2 id="secure_servers">Configuring Secure Servers
+</h2>
+<p>You can configure your Google Earth Enterprise Server to use HTTPS connections by editing the virtual server’s configuration file. Each time you restart Google Earth Enterprise Server, publish a database ,or start Apache,  Apache reads this file.</p>
+<h4>To configure a secure server:
+</h4>
+<ol>
+  <li>Enable the main Apache server to run HTTPS by activating the SSL engine. (If you need assistance with this step, read the Apache HTTP server documentation at <a href="http://httpd.apache.org/docs/2.2/">http://httpd.apache.org/docs/2.2/</a>.) </li>
+  <li>In a text editor, open the configuration file (<code>gehttpd.conf</code>) for the virtual server you want to make secure.
+    <p>The configuration file is stored in <code>/opt/google/gehttpd/conf.d/virtual servers</code>. (See <a href="server.html#95347">Configuring Virtual Servers</a> for details.) The contents of the configuration file look like:
+    </p>
+    <pre><code>&lt;LocationMatch &quot;/private_ge/*&quot;&gt;
+	Include conf.d/virtual_servers/runtime/private_ge_runtime
+&lt;/LocationMatch&gt;</code></pre>
+  </li>
+  <li>Add the two bold lines below to the <code>LocationMatch</code> directive exactly as they appear here:<pre><code>&lt;LocationMatch &quot;/private_ge/*&quot;&gt;
+	Include conf.d/virtual_servers/runtime/private_ge_runtime
+	<b>SSLRequireSSL</b>
+	<b>SSLVerifyClient none</b>
+&lt;/LocationMatch&gt;</code></pre>
+  </li>
+  <li>Save and close the configuration file.
+  </li>
+  <li>Restart the Apache service.
+  </li>
+</ol>
+<p>This procedure gets you to a point where you have “bare bones” security on your server. It requires that users use the HTTPS protocol instead of HTTP when they specify a location. However, if you want to add more security, you can do so by following the instructions provided in the Apache 2.2 documentation at <a href="http://httpd.apache.org">http://httpd.apache.org</a>.
+</p>
+<h2 id="publish_root">Configuring the Publish Root
+</h2>
+<p>When you install the Google Earth Enterprise Server, you specify a location for your publish root, the directory in which all of your published databases are stored.</p>
+<h4>To add a publish root:
+</h4>
+<ol>
+  <li>At the command line prompt, log in as root.
+  </li>
+  <li>Stop the Google Earth Enterprise Server:<pre><code>/etc/init.d/geserver stop</code></pre>
+  </li>
+  <li>Specify the location of the new publish root:<pre><code>geconfigurepublishroot</code></pre>
+    <p> When prompted, enter the path where you want to create the publish root. For example, if you have designated a separate volume for publishing called <code>/gepub</code>, enter <code>/gepub/published_dbs.</code>    </p>
+</li>
+  <li>When you see the success message, start your Google Earth Enterprise Server:<pre><code>/etc/init.d/geserver start</code></pre>
+  </li>
+  <li>Log out as root.
+  </li>
+</ol>
+<p>When you create a new publish root, it is automatically selected. The next time you publish a database, Google Earth Enterprise Fusion stores it in the selected publish root.
+</p>
+<p>If you have multiple publish roots, you can go back and forth among them, using different publish roots for different purposes.
+</p>
+<p class="note"><strong>Note:</strong> If you have multiple publish roots, be sure to select the corresponding <em>asset root</em> for the intended publish root before you publish. Otherwise, it could end up with an incompletely published database. (See <a href="commands.html#90064">geselectpublishroot</a> in the <strong>Command Reference</strong> chapter for more information.) </p>
+
+<h4>To select a different publish root:
+</h4>
+<ol>
+  <li>At the command line prompt, log in as root.
+  </li>
+  <li>Stop the Google Earth Enterprise Server:<pre><code>/etc/init.d/geserver stop</code></pre>
+  </li>
+  <li>Select the desired publish root:<pre><code>geselectpublishroot <i>path</i></code></pre>
+    <p>where <i>path</i> is the full path to the publish root, such as <code>/gepub/published_dbs</code>.
+    </p>
+  </li>
+  <li>When you see the success message, start your Google Earth Enterprise Server:<pre><code>/etc/init.d/geserver start</code></pre>
+  </li>
+  <li>Log out as root.
+  </li>
+</ol>
+<h2 id="authentication">Configuring Authentication
+</h2>
+<p><i>Authentication</i> is the process of verifying the identity of a user, a system, or a process. <i>Controlled access</i> refers to any content or process that requires authentication. The following sections describe how to configure:
+</p>
+<ul>
+  <li>Publishing authentication - To restrict the users allowed to publish databases
+  </li>
+  <li>Client authentication - To restrict the users allowed to view published databases
+  </li>
+</ul>
+<h3><a id="41361"></a>Configuring Publishing Authentication
+</h3>
+<p>By default, Google Earth Enterprise Server does not require authentication for publishing. However, you can configure your server to control access for publishing using standard Apache authentication methods. This section is primarily for system administrators who are unfamiliar with configuring Apache authentication.
+</p>
+<p>First, decide which authentication method you want to use. 
+</p>
+<ul>
+  <li>HTTP Digest authentication (enable the <code>mod_auth_digest</code> Apache module)
+  </li>
+  <li>HTTP Basic authentication (enable the <code>mod_auth_basic</code> Apache module)
+  </li>
+</ul>
+<p>Both methods are essentially the same, except that <code>mod_auth_digest</code> encrypts the users’ password, and <code>mod_auth_basic</code> does not. However, <code>mod_auth_digest</code> is not supported by all browsers. See <a href="http://httpd.apache.org/docs/2.2/mod/mod_auth_digest.html">http://httpd.apache.org/docs/2.2/mod/mod_auth_digest.html</a> and <a href="http://httpd.apache.org/docs/2.2/mod/mod_auth_basic.html">http://httpd.apache.org/docs/2.2/mod/mod_auth_basic.html</a> for complete details on these two authentication methods.</p>
+<p>Google strongly encourages you to use HTTP Digest authentication (<code>mod_auth_digest</code>) instead of HTTP Basic authentication. The following procedure describes configuring publishing authentication using HTTP Digest.
+</p>
+<h4>To configure publishing authentication on your server:
+</h4>
+<ol>
+  <li><a id="33592"></a>Create a password file by entering on the command line:<pre><code>/opt/google/gehttpd/bin/htdigest -c <i>path_to_pwd_file</i> Publisher <i>user_name</i></code></pre>
+    <p>The first part is the path to the Apache utility you use to create the password file, <code>htdigest</code>. The <code>-c</code> option indicates that you are creating a new file. The <i>path_to_pwd_file</i> is the location where you want to store the password file and the name of that file; it can be any name and location you choose. <code>Publisher</code> is the realm, and you must enter it exactly as it appears above. The <i>user_name</i> is the first user name you want to add to the password file.
+    </p>
+    <p>When you press <b>Enter</b>, the utility prompts you to enter a password for the specified user.
+    </p>
+  </li>
+  <li>Enter the password, and retype it when prompted.
+    <p>The <code>htdigest</code> utility creates the password file, which contains only that one user name, the realm, and the encrypted password. For example, if you view the contents of the password file, it might look like this:
+    </p>
+    <pre><code>jsmith:Publisher:f9d3c803aeb515f35568b37ec2d65399</code></pre>
+  </li>
+  <li>Add each user name and password to the same password file by entering:<pre><code>/opt/google/gehttpd/bin/htdigest <i>path_to_pwd_file</i> Publisher <i>user_name</i></code></pre>
+    <p>Use the same <i>path_to_pwd_file</i> as you used for the first user. Do not include the <code>-c</code> option, since you are not creating a new file this time.
+    </p>
+  </li>
+  <li>When you finish adding users to the password file, copy the <code>publisher_digest_auth.conf</code> file from <code>/opt/google/gehttpd/conf.d/examples</code> to <code>/opt/google/gehttpd/conf.d</code>.
+  </li>
+  <li>Open the copy (<code>/opt/google/gehttpd/conf.d/publisher_digest_auth.conf</code>) in an editor and:
+    <ul>
+      <li>Uncomment the <code>&lt;Location&gt;</code> directive(s) for stream publisher and/or search publisher by removing the <code>#</code> at the beginning of each line. (If you want to configure authentication for one type of server only, uncomment only its directive. If you want to configure both the search server and the stream server, uncomment both directives.)
+      </li>
+      <li>Change <code>&lt;&lt;PATH_TO_USER_FILE&gt;&gt;</code> to the password file path (the value of <i>path_to_pwd_file</i> in step <i><a href="server.html#33592"></a>1<i></i>)</i>.
+      </li>
+    </ul>
+  </li>
+  <li>Save and close the <code>publisher_digest_auth.conf</code> file.
+  </li>
+  <li>Restart the server by entering:<pre><code>/etc/init.d/geserver restart</code></pre>
+  </li>
+</ol>
+<p>When a server is configured for publishing authentication, Google Earth Enterprise Fusion users who try to publish to that server must enter their user name and password. Refer to <strong>Publishing a Database</strong> in  the <em>Google Earth Enterprise Fusion Reference Guide</em> for more information.
+</p>
+<h3>Configuring Client Authentication
+</h3>
+<p>Configuring client authentication is very similar to configuring publishing authentication, except that client authentication is specific to each virtual server, whereas publishing authentication is not.
+</p>
+<h4>To configure client authentication for a virtual server:
+</h4>
+<ol>
+  <li><a id="94691"></a>Create a password file by entering on the command line:<pre><code>/opt/google/gehttpd/bin/htdigest -c <i>path_to_pwd_file</i> Client <i>user_name</i></code></pre>
+    <p>The first part is the path to the Apache utility you use to create the password file, <code>htdigest</code>. The <code>-c</code> option indicates that you are creating a new file. The <i>path_to_pwd_file</i> is the location where you want to store the password file and the name of that file; it can be any name and location you choose. <code>Client</code> is the realm. You can use any realm you want; however, you must use the same realm in step <strong>4</strong>. The <i>user_name</i> is the first user name you want to add to the password file.    </p>
+ 
+    <p class="note"><strong>Note</strong>: Set the umask to <code>0022</code> before
+      using <code>htdigest</code> to create the <code>htdigest_password_file</code> or change permissions
+      to <code>rw-r--r-- (644)</code> after the <code>htdigest_password_file</code> is
+      created. Check the permissions for the <code>htdigest_password_file</code> and
+      if the permissions are set to <code>rw-r-----</code>, change the group ownership to
+      <code>gegroup</code>.
+    </p>
+  </li>
+  <li>
+    <p>Press <b>Enter</b>. The utility prompts you to enter a password for the specified user. Enter the password, and retype it when prompted.
+    </p>
+    <p>The <code>htdigest</code> utility creates the password file, which contains only that one user name, the realm, and the encrypted password. For example, if you view the contents of the password file, it might look like this:    </p>
+    <pre><code>jsmith:Client:f9d3c803aeb515f35568b37ec2d65399</code></pre>
+  </li>
+  <li>Add each user name and password to the same password file by entering:<pre><code>/opt/google/gehttpd/bin/htdigest <i>path_to_pwd_file</i> Client <i>user_name</i></code></pre>
+    <p>Use the same <i>path_to_pwd_file</i> as you used for the first user. Do not include the <code>-c</code> option, since you are not creating a new file this time.    </p>
+  </li>
+  <li><a id="40729"></a>When you finish adding users to the password file, open the <code>/opt/google/gehttpd/conf.d/virtual_servers/</code><i>config_file</i> file (where <i>config_file</i> is the configuration file for the virtual server you want to protect) in an editor, and add the following lines at the beginning of the <code>&lt;Location&gt;</code> directive:<pre><code>AuthType Digest
+AuthName &quot;Client&quot;
+AuthDigestProvider file
+AuthUserFile <i>path_to_pwd_file</i>
+Require valid-user</code></pre>
+      <p>Where <code>Client</code> is the exact name of the realm and <i>path_to_pwd_file</i> is the same path you used in the <code>htdigest</code> command in step <strong>1</strong>.    </p>
+    <p>If this is a _ge_ virtual server, add:    </p>
+    <pre><code>BrowserMatch &quot;GoogleEarth&quot; AuthDigestEnableQueryStringHack=On</code></pre>
+    <p>If this is a _map_ virtual server, add:    </p>
+    <pre><code>BrowserMatch &quot;MSIE&quot; AuthDigestEnableQueryStringHack=On</code></pre>
+    <p>For more information about <code>AuthDigestEnableQueryStringHack</code>, refer to the Apache documentation at <a href="http://httpd.apache.org/docs/2.2/mod/mod_auth_digest.html#msie">http://httpd.apache.org/docs/2.2/mod/mod_auth_digest.html#msie</a>.    </p>
+    <p>The final  <code>&lt;Location&gt;</code> directive  looks like:    </p>
+    <pre><code>&lt;LocationMatch /default_ge/*&gt;
+	AuthType Digest
+	AuthName &quot;Client&quot;
+	AuthDigestProvider file
+	AuthUserFile <i>path_to_pwd_file</i>
+	Require valid-user
+	Include conf.d/virtual_servers/runtime/default_ge_runtime
+	BrowserMatch &quot;GoogleEarth&quot; AuthDigestEnableQueryStringHack=On
+&lt;/LocationMatch&gt;</code></pre>
+  </li>
+  <li>Save and close the virtual server configuration file.  </li>
+  <li>Restart the server by entering:<pre><code>/etc/init.d/geserver restart</code></pre>
+  </li>
+</ol>
+<p>&nbsp;</p>
+<h3>Configuring LDAP Authentication For Publishing
+</h3>
+<p>If you use LDAP for user authentication on your network, you can configure LDAP authentication for publishing with Google Earth Enterprise Fusion. Since Basic authentication is used for password challenge, Google suggests that you publish through an SSH tunnel. (See <a href="server.html#95106">Configuring Secure Remote Publishing (Using an SSH Tunnel)</a> for more information about configuring an SSH tunnel.)
+</p>
+<h4>To securely configure LDAP authentication for publishing:
+</h4>
+<ol>
+  <li>Copy the <code>publisher_ldap_auth.conf</code> file from <code>/opt/google/gehttpd/conf.d/examples</code> to <code>/opt/google/gehttpd/conf.d</code>.
+  </li>
+  <li>Open <code>/opt/google/gehttpd/conf.d/publisher_ldap_auth.conf</code> in an editor.
+  </li>
+  <li>Uncomment the following lines to enable LDAP authentication on the stream server:<pre><code>&lt;Location /StreamPublisher/&gt;
+	AuthType Basic
+	AuthName &quot;Publisher&quot;
+	AuthBasicProvider ldap
+	AuthzLDAPAuthoritative off
+	AuthLDAPURL &quot;&lt;&lt;LDAP_SERVER_URL_and_LDAP_SEARCH_PARAMETERS&gt;&gt;&quot;
+	Require valid-user
+&lt;/Location&gt;</code></pre>
+  </li>
+  <li>Change <code>&lt;&lt;LDAP_SERVER_URL_and_LDAP_SEARCH_PARAMETERS&gt;&gt;</code> to the actual path to your LDAP server and any parameters you want to set, for example:<pre><code>ldap://ent-test-ldap.mycompany.com/dc=mycompany,dc=com?uid?sub?(objectClass=*)</code></pre>
+  </li>
+  <li>Uncomment the following lines to enable LDAP authentication on the search server:<pre><code>&lt;Location /SearchPublisher/&gt;
+	AuthType Basic
+	AuthName &quot;Publisher&quot;
+	AuthBasicProvider ldap
+	AuthzLDAPAuthoritative off
+	AuthLDAPURL &quot;&lt;&lt;LDAP_SERVER_URL_and_LDAP_SEARCH_PARAMETERS&gt;&gt;&quot;
+	Require valid-user
+&lt;/Location&gt;</code></pre>
+  </li>
+  <li>Change <code>&lt;&lt;LDAP_SERVER_URL_and_LDAP_SEARCH_PARAMETERS&gt;&gt;</code> to the actual path to your LDAP server and any parameters you want to set.
+  </li>
+  <li>Save the file.
+  </li>
+</ol>
+<h3>Configuring LDAP Authentication For Virtual Servers
+</h3>
+<p>If you use LDAP for user authentication on your network, you can configure LDAP authentication for any virtual servers you configure. As with LDAP authentication for publishing, since the AuthDigestProvider directive does not support LDAP and AuthBasicProvider does not encrypt passwords, please contact Google technical support for help configuring secure LDAP authentication for virtual servers.
+</p>
+<h3>Securing Your Search Server
+</h3>
+<p>If you publish a database that you want to keep private and allow access only to certain users, configuring client authentication provides that security with regard to the stream server. However, if you host a searchable private database on the same server with a publicly accessible database, users who are able to log in to the public database can, theoretically, search the private database on that server. Such a user would need to be very knowledgeable about Google Earth Enterprise Fusion and would need to know the exact URL of the private database, so the likelihood of this breach is small; however, it is possible.
+</p>
+<p>Therefore, to ensure that a database is completely secure (that is, no unauthorized users can view or search the data), you must publish that database on a separate search server host that requires authentication and allows access to only approved users.
+</p>
+<p class="note"><strong>Note:</strong> If you are short of server space, you can publish the private database to a shared stream server (that is, a mix of databases that do and do not require authentication) and just publish the private database to a search server on a separate (authentication only) host.
+</p>
+<h2 id="secure_remote_publishing"><a id="95106"></a>Configuring Secure Remote Publishing (Using an SSH Tunnel)
+</h2>
+<p>When Google Earth Enterprise Fusion publishes a database, it does not encrypt the data. If you want to encrypt the data during the publishing process to a remote server (or even on separate remote stream and search servers), you can use an SSH tunnel.
+</p>
+<h4>To publish securely to a remote server:
+</h4>
+<ol>
+  <li>Open an SSH tunnel by entering on the command line:<pre><code>ssh -L<i> port_num</i>:<i>host_name</i>:80 <i>host_name</i></code></pre>
+    <p>For example:
+    </p>
+    <pre><code>ssh -L 8010:remoteServer:80 remoteServer</code></pre>
+    <p class="note"><strong>Note:</strong> You can use any port that is available, but Google recommends a high number.
+    </p>
+  </li>
+  <li><a id="65956"></a>Follow the instructions in <a href="server.html#73276">Configuring Server Associations</a> to configure a 
+  server association using the local port number you designated in the <code>ssh</code> command, for example:<br />
+    <img src="images/secureServerAssoc.png" width="450" />
+    <p class="note"><strong>Note:</strong> If the remote server requires authentication, it prompts you to log in when you click <b>Query</b>.
+    </p>
+
+  </li>
+  <li>Publish the database to the server association you just created, for example:<br />
+    <img src="images/publish2SecureRemoteSvr.png" width="450" />
+  </li>
+  <li>Close the SSH tunnel by entering <b>Ctrl-D</b> or <code>exit</code> in the  terminal window.
+  </li>
+</ol>
+<p>The next time you want to publish securely to that same remote server, you can skip step <a href="server.html#65956">2</a>.
+</p>
+<h4>To publish securely to separate remote search and stream servers:
+</h4>
+<ol>
+  <li>In one terminal window, open an SSH tunnel to the stream server by entering on the command line:<pre><code>ssh -L <i>port_num</i>:<i>host_name</i>:80 <i>host_name</i></code></pre>
+    <p>For example:
+    </p>
+    <pre><code>ssh -L 8010:remoteServer:80 remoteServer</code></pre>
+    <p class="note"><strong>Note:</strong> You can use any port that is available, but Google recommends a high number.
+    </p>
+  </li>
+  <li>In a different terminal window, open an SSH tunnel to the search server by entering the same command with a different port number, for example:<pre><code>ssh -L 8020:remoteServer:80 remoteServer</code></pre>
+  </li>
+  <li><a id="56399"></a>Follow the instructions in <a href="server.html#73276">Configuring Server Associations</a> to configure a server association:
+    <ul>
+      <li>Use the local port number you designated for the stream server in the Stream Server’s URL field.
+      </li>
+      <li>Use the local port number you designated for the search server in the Search Server’s URL field.</li>
+    </ul>
+  </li>
+  <li>Publish the database to the server association you just created.
+  </li>
+  <li>Close both SSH tunnels by entering <b>Ctrl-D</b> or <code>exit</code> in the terminal windows.
+  </li>
+</ol>
+<p>The next time you want to publish securely to that same remote server association, you can skip step <strong>3</strong>. </p>
+<h2 id="disconnected_publishing"><a id="61320"></a>Disconnected Publishing
+</h2>
+<p>If you want to publish databases on a server that does not have a network connection to your Google Earth Enterprise Fusion workstations, you can configure a server with the disconnected server add-on.</p>
+<p> New in Google Earth Enterprise 4.0 is the ability to combine disconnected publishing and connected publishing together. Prior to 4.0, only one type was supported for a database. With this change, for example, a large database can be copied to portable media and loaded onto the server using disconnected publish, saving the time and bandwidth required to send terabytes of data over the network. Later, deltas for the same databases can be sent over the wire.</p>
+<p class="note"><strong>Note:</strong> Disconnected production servers require X11 libraries, including Mesa. Google Earth Enterprise Server does not require an X server to be running or installed, however. Only the libraries are required.
+</p>
+
+<h3>Prepare a disconnected database</h3>
+<p>To create the disconnected database, use <code>gedisconnectedsend</code> from the command line. In the example below, the <code>--report_size_only</code> flag is turned on; the size of the database should be compared to the free space on your removeable media.</p>
+<pre>gedisconnectedsend --report_size_only --sendpath \
+/gevol/assets/Databases/igain.kdatabase/gedb.kda/ver001/gedb
+
+rm -rf /portable_media/new_dir
+mkdir -p /portable_media/new_dir
+
+gedisconnectedsend --output /portable_media/new_dir \
+--sendpath /gevol/assets/Databases/igain.kdatabase/gedb.kda/ver001/gedb</pre>
+
+<h4>Making delta disconnected databases</h4>
+<p>Use <code>--havepath</code> or <code>--havepathfile</code> to create a delta database.</p>
+<p>When publishing from <code>machine_one</code> to <code>machine_two</code>, for example:</p>
+<p>On <code>machine_two</code>:</p>
+<pre>geserveradmin --fusion_host machine_one --listdbs &gt; /portable_media/dblist</pre>
+<p>On <code>machine_one</code>:</p>
+<pre>gedisconnectedsend --output /portable_media/new_dir \
+--havepathfile /portable_media/dblist \
+--sendpath /gevol/assets/Databases/igain.kdatabase/gedb.kda/ver001/gedb</pre>
+
+<h3>Publish on the remote Server host</h3>
+<p>Connect the portable media to the Server host and mount the drive. Then:</p>
+
+<ol>
+  <li>Add the database manifest to the Server:
+    <pre>geserveradmin -stream_server_url http://<em>your_stream_server</em> \
+--search_server_url http://<em>your_search_server</em> \
+--adddb \
+/portable_media/new_dir/gevol/assets/Databases/igain.kdatabase/gedb.kda/ver001/gedb
+</pre>
+  </li>
+  <li>Push the files to the Server:
+    <pre>geserveradmin --stream_server_url http://<em>your_stream_server</em> \
+--search_server_url http://<em>your_search_server</em> \
+--pushdb \
+/portable_media/new_dir/gevol/assets/Databases/igain.kdatabase/gedb.kda/ver001/gedb</pre>
+  </li>
+  <li>Publish the database on the Server:
+    <pre>geserveradmin --stream_server_url http://<em>your_stream_server</em> \
+--search_server_url http://<em>your_search_server</em> \
+--publishdb \
+/portable_media/new_dir/gevol/assets/Databases/igain.kdatabase/gedb.kda/ver001/gedb</pre>
+  </li>
+  <li>Verify the database manifests:
+    <pre>geserveradmin --stream_server_url http://<em>your_stream_server</em> \
+--search_server_url http://<em>your_search_server</em> \
+--listdbs
+ 
+geserveradmin --stream_server_url http://<em>your_stream_server</em> \
+--search_server_url http://<em>your_search_server</em> \
+--dbdetails \
+/portable_media/new_dir/gevol/assets/Databases/igain.kdatabase/gedb.kda/ver001/gedb</pre>
+  </li>
+  <li>Verify the integrity of files in the published database:
+    <pre>ssh <em>your_server</em> /opt/google/bin/geindexcheck --database \
+/gevol/published_dbs/stream_space/<em>your_server</em>/gevol/assets/
+  Databases/igain.kdatabase/gedb.kda/ver001/gedb
+
+ssh <em>your_server</em> /opt/google/bin/geindexcheck --mode all --database \
+/gevol/published_dbs/stream_space/<em>your_server</em>/gevol/assets/
+  Databases/igain.kdatabase/gedb.kda/ver001/gedb</pre>
+  <p class="note"><strong>Note</strong>: The paths in the examples above were split onto two lines for documentation. They should be entered on one line when completing your commands.</p>
+  </li>
+</ol>
+
+<p>  The steps to delete DBs at end of life, for disconnected servers, is same as what was described in over the wire publishing section.</p>
+<p>
+</p>
+</div>
+	<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+	<!-- END WRAPPER -->
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,171 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#config Name      RasterGEIndex
+#config Base      Leaf
+#config Config    RasterGEIndexConfig
+#config Subtype   RasterGEIndex
+//#config FixedType
+
+
+// ===== RasterGEIndexAsset.h =====
+#include <autoingest/.idl/storage/RasterGEIndexConfig.h>
+
+// ===== RasterGEIndexAsset.cpp =====
+
+
+// ===== RasterGEIndexAssetD.h =====
+class RasterGEIndexAssetImplD {
+ public:
+  void ReuseOldPacketVers(RasterGEIndexConfig &newconfig) const;
+};
+
+class RasterGEIndexAssetVersionImplD {
+ protected:
+  virtual bool OfflineInputsBreakMe(void) const { return true; }
+};
+
+
+// ===== RasterGEIndexAssetD.cpp =====
+#include <khException.h>
+#include <khGuard.h>
+#include <map>
+#include <autoingest/sysman/plugins/deprecated/RasterKHDBAssetD.h>
+#include <geindexgen/.idl/BlendStack.h>
+
+void
+RasterGEIndexAssetImplD::ReuseOldPacketVers(
+    RasterGEIndexConfig &newconfig) const
+{
+  // make a map of my newconfig packetvers so the hit check can be faster
+  std::map<std::string, uint*> packetmap;
+  for (uint i = 0; i < newconfig.packet_insets_.size(); ++i) {
+    for (uint j = 0; j < newconfig.packet_insets_[i].levels_.size(); ++j) {
+      packetmap.insert(make_pair
+                       (newconfig.packet_insets_[i].levels_[j]
+                        .packet_level_verref_,
+                        &newconfig.packet_insets_[i].levels_[j]
+                        .index_version_));
+    }
+  }
+
+  // now walk back the previous AssetVersions and find the index versions
+  // that we can reuse
+  for (uint i = 0; i < versions.size(); ++i) {
+    AssetVersion prevbase(versions[i]);
+    if (prevbase->subtype == "RasterKHDB") {
+      // This is an old one, use the old structures to check for version reuse
+      RasterKHDBAssetVersion prev(versions[i]);
+      if (prev->config.indexVersion <= newconfig.index_version_) {
+        for (uint i = 0; i < prev->config.fusevers.size(); ++i) {
+          std::map<std::string, uint*>::iterator found
+            = packetmap.find(prev->config.fusevers[i].fuseAsset);
+          if (found != packetmap.end()) {
+            *found->second = prev->config.fusevers[i].version;
+          }
+        }
+        if (prev->config.indexVersion < newconfig.index_version_) {
+          // this is a publish boundary, we're done
+          break;
+        }
+      } else {
+        // we've walked past a publish boundary. Stop checking for
+        // versions to use.
+        break;
+      }
+    } else {
+      // This is an new one, use the new structures to check for version reuse
+      RasterGEIndexAssetVersion prev(versions[i]);
+      if (prev->config.index_version_ <= newconfig.index_version_) {
+        for (uint i = 0; i < prev->config.packet_insets_.size(); ++i) {
+          for (uint j = 0; j < prev->config.packet_insets_[i].levels_.size();
+               ++j) {
+            std::map<std::string, uint*>::iterator found
+              = packetmap.find(prev->config.packet_insets_[i].levels_[j]
+                             .packet_level_verref_);
+            if (found != packetmap.end()) {
+              *found->second = prev->config.packet_insets_[i].levels_[j]
+                               .index_version_;
+            }
+          }
+        }
+        if (prev->config.index_version_ < newconfig.index_version_) {
+          // this is a publish boundary, we're done
+          break;
+        }
+      } else {
+        // we've walked past a publish boundary. Stop checking for
+        // versions to use.
+        break;
+      }
+    }
+  }
+}
+
+
+void
+RasterGEIndexAssetVersionImplD::DoSubmitTask(void)
+{
+  if (config.packet_insets_.empty()) {
+    throw khException(kh::tr("No raster packets for indexing"));
+  }
+
+  // ************************************************
+  // Generate the stackfile
+  // Note that in this stackfile the order should be from lower priority layers
+  // to higher priority layers. The top entry in the project (both imagery as
+  // well as terrain) has the highest priority for resultant combined output.
+  // The combineterrain (TerrainCombiner::SelectPacketFromMaxCombiningLayer) has
+  // a dependency on this sequence.
+  // ************************************************
+  geindexgen::BlendStack geindex_stack;
+  geindex_stack.insets_.reserve(config.packet_insets_.size());
+  for (uint i = 0; i < config.packet_insets_.size(); ++i) {
+    geindex_stack.insets_.push_back(geindexgen::BlendStack::Inset());
+    geindex_stack.insets_.back().levels_.reserve(
+        config.packet_insets_[i].levels_.size());
+    for (uint j = 0; j < config.packet_insets_[i].levels_.size(); ++j) {
+      AssetVersion assetver(config.packet_insets_[i].levels_[j]
+                            .packet_level_verref_);
+      std::string packetdir = assetver->GetOutputFilename(0);
+      geindex_stack.insets_.back().levels_.push_back(
+          geindexgen::BlendStack::Level(
+              packetdir, config.packet_insets_[i].levels_[j].index_version_));
+    }
+  }
+  std::string stackfile = WorkingFilename("stackfile"); // fully bound name
+  if (!geindex_stack.Save(stackfile)) {
+    throw khException(kh::tr("Unable to save %1").arg(stackfile));
+  }
+
+
+  // ******************************************************
+  // Create and submit the task that will invoke the script
+  // ******************************************************
+  TaskDef task(*this);
+  std::vector<std::string> inputs;
+  GetInputFilenames(inputs);
+  task.AddInputs(inputs);
+
+  // TODO: - implement size estimate
+  task.AddOutput(WorkingFileRef(config.db_name_ + "-v" +
+                                ToString(config.index_version_) + ".geindex"),
+                 0); // size estimate
+
+  task << "geindexgen"
+       << (type == AssetDefs::Imagery ? "--type=Imagery" : "--type=Terrain")
+       << "--stack"  << stackfile
+       << "--output" << "$OUTPUT";
+  theAssetManager.SubmitTask(GetRef(), task);
+}

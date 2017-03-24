@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<kml xmlns="http://earth.google.com/kml/2.1">
+    <Document>
+        <name>pac</name>
+        <open>true</open>
+        <Style id="-50423801">
+            <IconStyle>
+                <scale>1.0</scale>
+                <Icon>
+                    <href>http://maps.google.com/mapfiles/kml/pal3/icon52.png</href>
+                </Icon>
+            </IconStyle>
+            <LineStyle>
+                <color>7FFFFF00</color>
+                <width>5.0</width>
+            </LineStyle>
+            <PolyStyle>
+                <color>7F66FFFF</color>
+                <colorMode>normal</colorMode>
+                <fill>true</fill>
+                <outline>true</outline>
+            </PolyStyle>
+            <BalloonStyle>
+                <bgColor>FFFFFFFF</bgColor>
+                <textColor>FF000000</textColor>
+                <text>$[description]</text>
+            </BalloonStyle>
+        </Style>
+        <Folder>
+            <name>Example Database : pac (2)</name>
+            <open>true</open>
+            <Placemark>
+                <name>Lower Pacfic Heights</name>
+                <Snippet>District 6 - Central North</Snippet>
+                <description>The total area in decimal degrees of Lower Pacfic Heights is: 9.30182244225364e-05&lt;br&gt;The total perimeter in decimal degrees of Lower Pacfic Heights is: 0.0514157578838219</description>
+                <styleUrl>-50423801</styleUrl>
+                <MultiGeometry>
+                    <Polygon>
+                        <outerBoundaryIs>
+                            <LinearRing>
+                                <coordinates>-122.44687689905778,37.787129435519944,0.0 -122.42571018545522,37.78982222179978,0.0 -122.4248484613893,37.78555522846147,0.0 -122.43968850285422,37.78364257657305,0.0 -122.44600959570256,37.78282695735555,0.0 -122.44687689905778,37.787129435519944,0.0 </coordinates>
+                            </LinearRing>
+                        </outerBoundaryIs>
+                    </Polygon>
+                </MultiGeometry>
+            </Placemark>
+            <Placemark>
+                <name>Pacific Heights</name>
+                <Snippet>District 7 - North</Snippet>
+                <description>The total area in decimal degrees of Pacific Heights is: 0.000203463059316178&lt;br&gt;The total perimeter in decimal degrees of Pacific Heights is: 0.0664409249373422</description>
+                <styleUrl>-50423801</styleUrl>
+                <MultiGeometry>
+                    <Polygon>
+                        <outerBoundaryIs>
+                            <LinearRing>
+                                <coordinates>-122.4467190122819,37.795564413628355,0.0 -122.42374705552396,37.79848642852926,0.0 -122.42322064305651,37.79587171870621,0.0 -122.42209284430686,37.790282293885255,0.0 -122.42571018545522,37.78982222179978,0.0 -122.44687689905778,37.787129435519944,0.0 -122.44783765823885,37.791889784713526,0.0 -122.44647351227088,37.79214167975448,0.0 -122.4469944571491,37.79550767417969,0.0 -122.4467190122819,37.795564413628355,0.0 </coordinates>
+                            </LinearRing>
+                        </outerBoundaryIs>
+                    </Polygon>
+                </MultiGeometry>
+            </Placemark>
+        </Folder>
+    </Document>
+</kml>

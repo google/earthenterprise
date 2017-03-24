@@ -1,0 +1,64 @@
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/samples/feature_balloon_example.html";
+    </script>
+    
+   <title>feature_balloon_example.html</title>
+   <script src="http://code.google.com/www.google.com/jsapi?key=ABQIAAAA5El50zA4PeDTEMlv-sXFfRSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xTdBhxbkZWuzyYTVeclkwYHpb17ZQ"></script>
+   <script type="text/javascript">
+      var ge;
+      var placemark;
+
+      google.load("earth", "1");
+
+      function init() {
+         google.earth.createInstance('map3d', initCB, failureCB);
+      }
+
+      function initCB(instance) {
+
+         ge = instance;
+         ge.getWindow().setVisibility(true);
+         ge.getNavigationControl().setVisibility(ge.VISIBILITY_SHOW);
+
+         // Create the placemark and add it to Earth.
+         placemark = ge.createPlacemark('');
+         placemark.setDescription('Lorem ipsum dolor sit amet,<b>consectetur</b> adipisicing elit,' +
+                                  'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
+
+         // Set the placemark's location.
+         var point = ge.createPoint('');
+         point.setLatitude(12.345);
+         point.setLongitude(54.321);
+         point.setAltitudeMode(ge.ALTITUDE_CLAMP_TO_GROUND);
+         placemark.setGeometry(point);
+
+         // Add the placemark to Earth.
+         ge.getFeatures().appendChild(placemark);
+
+         // Show the feature balloon.
+         var balloon = ge.createFeatureBalloon('');
+         balloon.setFeature(placemark);
+         balloon.setMinWidth(400);
+         ge.setBalloon(balloon);      
+
+         // Move the camera.
+         var la = ge.createLookAt('');
+         la.set(12.345, 54.321, 0, ge.ALTITUDE_RELATIVE_TO_GROUND, -8.541, 66.213, 1000);
+         ge.getView().setAbstractView(la);
+      }
+
+      function failureCB(errorCode) {
+      }
+
+      google.setOnLoadCallback(init);
+   </script>
+
+</head>
+<body>
+
+   <div id="map3d" style="border: 1px solid silver; height: 400px; width: 600px;"></div>
+
+</body>
+</html>

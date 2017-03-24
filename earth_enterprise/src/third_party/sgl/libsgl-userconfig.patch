@@ -1,0 +1,39 @@
+diff -c -r skia.0.8.unmod/include/SkUserConfig.h skia.0.8/include/SkUserConfig.h
+*** skia.0.8.unmod/include/SkUserConfig.h	2007-02-20 08:51:05.000000000 -0800
+--- skia.0.8/include/SkUserConfig.h	2007-02-27 10:24:48.000000000 -0800
+***************
+*** 18,23 ****
+--- 18,43 ----
+  #ifndef SkUserConfig_DEFINED
+  #define SkUserConfig_DEFINED
+  
++ // Definitions for Google Earth Enterprise Fusion
++ 
++ #ifndef SK_SCALAR_IS_FLOAT
++ #define SK_SCALAR_IS_FLOAT
++ #endif
++ 
++ #undef  SK_SCALAR_IS_FIXED
++ 
++ #ifndef SK_CAN_USE_FLOAT
++ #define SK_CAN_USE_FLOAT
++ #endif
++ 
++ #if __BYTE_ORDER == __BIG_ENDIAN
++     #define SK_CPU_BENDIAN
++     #undef  SK_CPU_LENDIAN
++ #else
++     #define SK_CPU_LENDIAN
++     #undef  SK_CPU_BENDIAN
++ #endif
++ 
+  #ifdef ANDROID
+      #include <utils/misc.h>
+  
+***************
+*** 77,80 ****
+  #endif
+  
+  #endif
+- 
+--- 97,99 ----

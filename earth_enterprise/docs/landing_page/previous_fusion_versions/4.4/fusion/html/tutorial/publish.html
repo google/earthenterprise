@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Publishing and Viewing a Database</title>
+</head>
+
+
+<body><a name="top"></a>
+  
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" />
+  </div>
+  <h1 id="doc_title">Tutorial</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Tutorial</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="setup.html">Setting Up For the Tutorial</a></li>
+    <li><a href="resources.html">Defining and Building Resources</a></li>
+    <li><a href="projects.html">Defining and Building Projects</a></li>
+    <li><a href="database.html">Defining and Building Databases</a></li>
+    <li><a href="publish.html" id="selected">Publishing and Viewing a Database</a></li>
+    <li><a href="points.html">Configuring Display Rules for Point Data</a></li>
+    <li><a href="polygons.html">Configuring Display Rules for Polygon Data</a></li>
+    <li><a href="importExport.html">Importing and Exporting Style Templates</a></li>
+    <li><a href="searchTabs.html">Configuring a Searchable Database</a></li>
+    <li><a href="searchLayers.html">Specifying Search Fields for Individual Layers</a></li>
+    <li><a href="maps.html">Creating a Map Database</a></li>
+    <li><a href="mosaics.html">Creating Imagery Mosaics</a></li>
+    <li><a href="split.html">Segmenting Large Imagery Files</a></li>
+    <li><a href="historical.html">Building a Historical Imagery Project</a></li>
+    <li><a href="dataFiles.html">Sample Data Files</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+<h1><a id="34495"></a>Publishing and Viewing a Database
+</h1>
+<p>Publishing a database is the process of making a Google Earth Enterprise Fusion database available on a Google Earth Enterprise Server for viewing with Google Earth EC.
+</p>
+<p class="note"><strong>Note:</strong> This lesson assumes that Google Earth Enterprise Fusion, the Google Earth Enterprise Server, and Google Earth EC are all installed on your local workstation. If any of these applications are installed elsewhere on your network, adjust the instructions in this lesson accordingly.
+</p>
+<h2>Publish Your Database
+</h2>
+<p>After you define and build your database, publishing your database is a breeze!
+</p>
+<h4>To publish a database:
+</h4>
+<ol>
+  <li>Select <b>Asset Manager</b> from the Tools menu. The Asset Manager appears.
+    
+  </li>
+  <li>Navigate to the <b>SFHighways </b>database you built in <a href="database.html#96788">Lesson
+        4</a>.
+  </li>
+  <li>Right-click the name of the database, and select <b>Publish</b> from the context menu.
+    <p>The Publish Database dialog appears. The default server association (default_ge) is the only option on the Server Associations drop-down list. The most recent version of the selected database is the default selection on the Version drop-down list.
+    </p>
+    <p><img name="publishDatabase" src="images/publishDatabase.png" width="300" height="95" border="0" id="publishDatabase" alt="" /></p>
+  </li>
+  <li>Click <b>Publish</b>. Google Earth Enterprise Fusion runs the publishing process on the database, and displays a success message when it is done. 
+    
+    <p class="note"><strong>Note:</strong> If you get an error message, contact your Google Earth Enterprise Server administrator for help, or check the <i>Google Earth Enterprise Administration Guide</i> for more information.
+    </p>
+  </li>
+</ol>
+<h2>View Your Database
+</h2>
+<p>After you publish your database, you can view it in Google Earth EC.
+</p>
+<h4>To view your database:
+</h4>
+<ol>
+  <li>Launch Google Earth EC.
+    <p>The Login dialog appears.    </p>
+    </li>
+  <li>Enter or select the URL or IP address of your server in the Server field, and accept the default setting, <b>80</b>, in the Port field (unless you know that your server uses a different port).  </li>
+  <li>Click <b>Login</b>.  </li>
+      <p class="caution"><strong>Caution:</strong> If you have logged in to this server with Google Earth EC previously, log out, clear your cache, and log back in. For help with clearing your cache, refer to the <i>Google Earth User Guide</i>.      </p>
+<p>Google Earth EC displays your database. The Layers panel shows the terrain, imagery, and vector layers in the database you published in the previous exercise.</p>
+  <li>Double-click <b>CAHighways</b> to zoom in to your road data.</li>
+ 
+  <img src="images/Page_58.png" />
+</ol>
+<p>This concludes the basic lessons in this tutorial. If you want to continue with the advanced lessons, you can work through them in any order you want. Alternatively, you can start working with real data now and come back and work through the advanced lessons as you need them. Be sure to use the <i>Google Earth Enterprise Fusion Reference Guide</i> often, as it contains much more detailed information than this tutorial.
+</p>
+<p>
+</p>
+</div>
+	<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+	<!-- END WRAPPER -->
+
+
+
+
+</body>
+</html>

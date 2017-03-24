@@ -1,0 +1,150 @@
+diff -c -r skia-orig/src/SkImageDecoder.cpp skia-mod/src/SkImageDecoder.cpp
+*** skia-orig/src/SkImageDecoder.cpp	Tue Feb 20 08:30:06 2007
+--- skia-mod/src/SkImageDecoder.cpp	Tue Nov 20 12:30:33 2007
+***************
+*** 19,24 ****
+--- 19,26 ----
+  #include "SkStream.h"
+  #include "SkTemplates.h"
+  
++ #include "SkImageDecoder_Factory.cpp"
++ 
+  static SkBitmap::Config gDeviceConfig = SkBitmap::kNo_Config;
+  
+  SkBitmap::Config SkImageDecoder::GetDeviceConfig()
+***************
+*** 265,268 ****
+      }
+      return NULL;
+  }    
+- 
+--- 267,269 ----
+diff -c -r skia-orig/src/SkImageDecoder_Factory.cpp skia-mod/src/SkImageDecoder_Factory.cpp
+*** skia-orig/src/SkImageDecoder_Factory.cpp	Tue Feb 20 08:30:35 2007
+--- skia-mod/src/SkImageDecoder_Factory.cpp	Tue Nov 20 12:30:18 2007
+***************
+*** 20,49 ****
+  
+  /*  Each of these is in their respective SkImageDecoder_libXXX.cpp file
+  */
+! extern SkImageDecoder* SkImageDecoder_GIF_Factory(SkStream*);
+! extern SkImageDecoder* SkImageDecoder_ICO_Factory(SkStream*);
+! extern SkImageDecoder* SkImageDecoder_JPEG_Factory(SkStream*);
+  extern SkImageDecoder* SkImageDecoder_PNG_Factory(SkStream*);
+! extern SkImageDecoder* SkImageDecoder_ZBM_Factory(SkStream*);
+  
+! typedef SkImageDecoder* (*SkImageDecoderFactoryProc)(SkStream*);
+  
+! static const SkImageDecoderFactoryProc gProc[] = {
+!     SkImageDecoder_ZBM_Factory,
+!     SkImageDecoder_GIF_Factory,
+!     SkImageDecoder_PNG_Factory,
+!     SkImageDecoder_ICO_Factory,
+!     SkImageDecoder_JPEG_Factory // JPEG must be last, as it doesn't have a sniffer/detector yet
+! };
+  
+  SkImageDecoder* SkImageDecoder::Factory(SkStream* stream)
+  {
+!     for (unsigned i = 0; i < SK_ARRAY_COUNT(gProc); i++) {
+!         SkImageDecoder* codec = gProc[i](stream);
+          stream->rewind();
+          if (codec)
+              return codec;
+!     }
+      return NULL;
+  }
+  
+--- 20,49 ----
+  
+  /*  Each of these is in their respective SkImageDecoder_libXXX.cpp file
+  */
+! //extern SkImageDecoder* SkImageDecoder_GIF_Factory(SkStream*);
+! //extern SkImageDecoder* SkImageDecoder_ICO_Factory(SkStream*);
+! //extern SkImageDecoder* SkImageDecoder_JPEG_Factory(SkStream*);
+  extern SkImageDecoder* SkImageDecoder_PNG_Factory(SkStream*);
+! //extern SkImageDecoder* SkImageDecoder_ZBM_Factory(SkStream*);
+  
+! //typedef SkImageDecoder* (*SkImageDecoderFactoryProc)(SkStream*);
+  
+! //static const SkImageDecoderFactoryProc gProc[] = {
+! //    SkImageDecoder_ZBM_Factory,
+! //    SkImageDecoder_GIF_Factory,
+! //    SkImageDecoder_PNG_Factory
+! //    SkImageDecoder_ICO_Factory,
+! //    SkImageDecoder_JPEG_Factory // JPEG must be last, as it doesn't have a sniffer/detector yet
+! //};
+  
+  SkImageDecoder* SkImageDecoder::Factory(SkStream* stream)
+  {
+!     //for (unsigned i = 0; i < SK_ARRAY_COUNT(gProc); i++) {
+!         SkImageDecoder* codec = SkImageDecoder_PNG_Factory(stream);
+          stream->rewind();
+          if (codec)
+              return codec;
+!     //}
+      return NULL;
+  }
+  
+***************
+*** 51,63 ****
+  
+  #ifdef SK_SUPPORT_IMAGE_ENCODE
+  
+! extern SkImageEncoder* sk_create_jpeg_encoder();
+  extern SkImageEncoder* sk_create_png_encoder();
+  
+  SkImageEncoder* SkImageEncoder::Create(Type t)
+  {
+!     if (kJPEG_Type == t)
+!         return sk_create_jpeg_encoder();
+      if (kPNG_Type == t)
+          return sk_create_png_encoder();
+      return NULL;
+--- 51,63 ----
+  
+  #ifdef SK_SUPPORT_IMAGE_ENCODE
+  
+! //extern SkImageEncoder* sk_create_jpeg_encoder();
+  extern SkImageEncoder* sk_create_png_encoder();
+  
+  SkImageEncoder* SkImageEncoder::Create(Type t)
+  {
+!   //    if (kJPEG_Type == t)
+!   //      return sk_create_jpeg_encoder();
+      if (kPNG_Type == t)
+          return sk_create_png_encoder();
+      return NULL;
+diff -c -r skia-orig/src/SkImageDecoder_libpng.cpp skia-mod/src/SkImageDecoder_libpng.cpp
+*** skia-orig/src/SkImageDecoder_libpng.cpp	Tue Feb 20 08:30:05 2007
+--- skia-mod/src/SkImageDecoder_libpng.cpp	Thu Nov  1 15:06:38 2007
+***************
+*** 206,215 ****
+  //  png_set_sig_bytes(png_ptr, 0 /* sig_read */ );
+  
+      // hookup our peeker so we can see any user-chunks the caller may be interested in
+!     png_set_keep_unknown_chunks(png_ptr, PNG_HANDLE_CHUNK_ALWAYS, (png_byte*)"", 0);
+!     if (this->getPeeker()) {
+!         png_set_read_user_chunk_fn(png_ptr, (png_voidp)this->getPeeker(), sk_read_user_chunk);
+!     }
+  
+      /* The call to png_read_info() gives us all of the information from the
+      * PNG file before the first IDAT (image data chunk). */
+--- 206,215 ----
+  //  png_set_sig_bytes(png_ptr, 0 /* sig_read */ );
+  
+      // hookup our peeker so we can see any user-chunks the caller may be interested in
+!     //png_set_keep_unknown_chunks(png_ptr, PNG_HANDLE_CHUNK_ALWAYS, (png_byte*)"", 0);
+!     //if (this->getPeeker()) {
+!     //    png_set_read_user_chunk_fn(png_ptr, (png_voidp)this->getPeeker(), sk_read_user_chunk);
+!     //}
+  
+      /* The call to png_read_info() gives us all of the information from the
+      * PNG file before the first IDAT (image data chunk). */
+***************
+*** 625,629 ****
+  }
+  
+  #endif /* SK_SUPPORT_IMAGE_ENCODE */
+- 
+- 
+--- 625,627 ----

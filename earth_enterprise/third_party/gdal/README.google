@@ -1,0 +1,10 @@
+http://www.gdal.org/
+Version: 2.1.2
+License: MIT
+
+Description:
+GDAL is the Geospatial Data Abstraction Library, for working with various
+large-scale geospatial data formats.
+
+Local Modifications:
+None

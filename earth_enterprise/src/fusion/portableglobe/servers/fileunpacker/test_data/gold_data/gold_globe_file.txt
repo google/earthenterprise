@@ -1,0 +1,37 @@
+Portable Globe
+Copyright 2010 Google Inc. All Rights Reserved.
+portable localhost:9335
+search localhost:9335
+kml localhost:9335
+2010-09-07 17:27:57 GMT
+
+2010-09-07 10:27:57
+Globe description: Test globe.
+
+2010-09-07 10:27:57
+/opt/google/bin/gepolygontoqtnodes --qt_nodes_file=/opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_15521_1283880477.649916/qt_nodes.txt --kml_polygon_file=/opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_15521_1283880477.649916/test/earth/polygon.kml --max_level=18
+
+2010-09-07 10:27:57
+/opt/google/bin/gerewritedbroot --source=http://bplinux.mtv.corp.google.com/default_ge/ --icon_directory=/opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_15521_1283880477.649916/test/icons --dbroot_file=/opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_15521_1283880477.649916/dbroot.v5 --search_server=localhost --search_port=9335 --kml_server=localhost --kml_port=9335 --kml_map_file=/opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_15521_1283880477.649916/kml_map.txt
+
+2010-09-07 10:27:58
+cp /opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_15521_1283880477.649916/dbroot.v5 /opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_15521_1283880477.649916/test/dbroot/dbroot_localhost_9335
+
+2010-09-07 10:27:58
+/opt/google/bin/gekmlgrabber --kml_map_file=/opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_15521_1283880477.649916/kml_map.txt --output_directory=/opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_15521_1283880477.649916/test/kml --source=http://bplinux.mtv.corp.google.com/default_ge/ --kml_server=localhost --kml_port=9335
+
+2010-09-07 10:27:58
+/opt/google/bin/geportableglobebuilder --source=http://bplinux.mtv.corp.google.com/default_ge/ --default_level=3 --max_level=8 --hires_qt_nodes_file=/opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_15521_1283880477.649916/qt_nodes.txt --globe_directory=/opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_15521_1283880477.649916/test --dbroot_file=/opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_15521_1283880477.649916/dbroot.v5 > /opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_15521_1283880477.649916/packet_info.txt &
+
+2010-09-07 10:28:00
+cp -r /opt/google/gehttpd/htdocs/cutter/template/earth/* /opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_15521_1283880477.649916/test/earth
+
+2010-09-07 10:28:00
+cp -r /opt/google/gehttpd/htdocs/cutter/template/maps/* /opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_15521_1283880477.649916/test/maps
+
+2010-09-07 10:28:00
+cp -r /opt/google/gehttpd/htdocs/cutter/template/js/* /opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_15521_1283880477.649916/test/js
+
+2010-09-07 10:28:00
+/opt/google/bin/geportableglobepacker --globe_directory=/opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_15521_1283880477.649916/test --output=/opt/google/gehttpd/htdocs/cutter/globes/test.glb --make_copy 
+

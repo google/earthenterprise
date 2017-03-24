@@ -1,0 +1,13 @@
+--- gdal-1.11.1/alg/gdalwarper.h	2014-09-24 06:48:05.000000000 -0700
++++ gdal-1.11.1.patch/alg/gdalwarper.h	2014-11-10 10:26:18.997533123 -0800
+@@ -339,8 +339,8 @@
+                                       const char *pszType );
+ 
+     /* Unused kept to preserve binary ABI */
+-    CPL_UNUSED void            *unused1;
+-    CPL_UNUSED void            *unused2;
++    void            *unused1;
++    void            *unused2;
+     void            *hIOMutex;
+     void            *hWarpMutex;
+ 

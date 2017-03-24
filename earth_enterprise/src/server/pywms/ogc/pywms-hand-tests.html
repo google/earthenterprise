@@ -1,0 +1,311 @@
+<html>
+<head>
+</head>
+<body>
+
+Unless otherwise noted these all run against localhost, 4.5+ (Mercator) and,
+assume a 'default_map' and an ImageMap layer '1000'.
+<p>
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities"
+>
+GetCapabilities 1.1.1
+</a>
+
+<br>
+
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetCapabilities"
+>
+GetCapabilities 1.3.0
+</a>
+
+<br>
+
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&REQUEST=GetCapabilities"
+>
+GetCapabilities no version - should be the same as 1.3.0
+</a>
+
+<br>
+
+<b>Note: </b>the different 'forms' of download - offer to 'save' vs displaying inline between the two versions - is deliberate, we're following cubewerx' example:
+<br>
+  <a href="http://demo.cubewerx.com/demo/cubeserv/cubeserv.cgi?REQUEST=GetCapabilities&VERSION=1.1.1&SERVICE=WMS">
+    cubewerx 1.1.1 GetCapabilities
+  </a>
+  <br>
+  <a href="http://demo.cubewerx.com/demo/cubeserv/cubeserv.cgi?REQUEST=GetCapabilities&VERSION=1.3.0&SERVICE=WMS">
+    cubewerx 1.3.0 GetCapabilities
+  </a>
+<br>
+-- not because of anything seen in the spec, but just to play it safe.
+<p>
+
+Mercator, 150% of the geographic world, north-south, and east-west. Black bars on top & bottom, 25% wraparound past the int. dateline on both sides.
+<table>
+<tr>
+<td>
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=s0-1000&STYLES=&FORMAT=image%2Fjpeg&SRS=EPSG:3857&BBOX=-30000000,-30000000,30000000,30000000&WIDTH=600&HEIGHT=600"
+>
+1.1.1
+</a>
+</td>
+<td>
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=s0-1000&STYLES=&FORMAT=image%2Fjpeg&CRS=EPSG:3857&BBOX=-30000000,-30000000,30000000,30000000&WIDTH=600&HEIGHT=600"
+>
+1.3.0
+</a>
+</td>
+</tr>
+</table>
+
+<p>
+
+Mercator, 100% of the geographic world, north-south, and east-west, centered on the int. dateline.
+Not sure this is legit per the WMS spec, because we're ignoring the GetCapabilities-stated bounds.
+But, it lets us explicitly test the dateline.
+<table>
+<tr>
+<td>
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=s0-1000&STYLES=&FORMAT=image%2Fjpeg&SRS=EPSG:3857&BBOX=-40000000,-20000000,00000000,20000000&WIDTH=600&HEIGHT=600"
+>
+1.1.1
+</a>
+</td>
+<td>
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=s0-1000&STYLES=&FORMAT=image%2Fjpeg&CRS=EPSG:3857&BBOX=-40000000,-20000000,00000000,20000000&WIDTH=600&HEIGHT=600"
+>
+1.3.0
+</a>
+</td>
+</tr>
+</table>
+
+<p>
+
+Mercator, centered on 0, 0 - in the water under Africa's western bulk.
+<table>
+<tr>
+<td>
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?LAYERS=s0-1000&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&STYLES=&FORMAT=image%2Fjpeg&SRS=EPSG:3857&BBOX=-4000000.0,-4000000.0,4000000.0,4000000.0&WIDTH=500&HEIGHT=500"
+>
+1.1.1
+</a>
+</td>
+<td>
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?LAYERS=s0-1000&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&STYLES=&FORMAT=image%2Fjpeg&CRS=EPSG:3857&BBOX=-4000000.0,-4000000.0,4000000.0,4000000.0&WIDTH=500&HEIGHT=500"
+>
+1.3.0
+</a>
+</td>
+</tr>
+</table>
+
+<p>
+
+Mercator, middle quarter of the top half of the world, showing black at the pole. It's fine that the aspect ratio is off.
+<br>
+<a href=
+   "http://localhost/cgi-bin/ogc/service.py?LAYERS=s0-1000&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&STYLES=&FORMAT=image%2Fjpeg&SRS=EPSG:3857&BBOX=-4000000.0,0.0,4000000.0,25000000.0&WIDTH=500&HEIGHT=500"
+   >
+  1.1.1
+</a>
+<a href=
+   "http://localhost/cgi-bin/ogc/service.py?LAYERS=s0-1000&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&STYLES=&FORMAT=image%2Fjpeg&CRS=EPSG:3857&BBOX=-4000000.0,0.0,4000000.0,25000000.0&WIDTH=500&HEIGHT=500"
+>
+  1.3.0
+</a>
+
+<p>
+
+Vector layer (california freeways, on jeffdonner's machine). Server layer 1001.
+<br>
+<a href="http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=s0-1001&STYLES=&FORMAT=image%2Fpng&SRS=EPSG:2163&BBOX=-13692297.3676,4439106.78725,-13580977.8768,4650301.83674&WIDTH=600&HEIGHT=600"
+>
+1.1.1
+</a>
+<br>
+<a href="http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=s0-1001&STYLES=&FORMAT=image%2Fpng&CRS=EPSG:2163&BBOX=-13692297.3676,4439106.78725,-13580977.8768,4650301.83674&WIDTH=600&HEIGHT=600"
+>
+1.3.0
+</a>
+
+<p>
+
+non-service exception <b>Errors</b>:
+<br>
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=BANANA&VERSION=1.1.1&REQUEST=GetCapabilities"
+>
+service == 'banana', 1.1.1
+</a>
+<br>
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=BANANA&VERSION=1.3.0&REQUEST=GetCapabilities"
+>
+service == 'banana', 1.3.0
+</a>
+
+<br>
+
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.4.0&REQUEST=GetCapabilities"
+>
+Bad version, 1.4.0
+</a>
+
+<br>
+<br>
+
+<b>Service Exceptions</b> proper:
+
+required parameter missing -- missing STYLES<br>
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=s0-1000&FORMAT=image%2Fjpeg&SRS=EPSG:3857&BBOX=-30000000,-30000000,30000000,30000000&WIDTH=600&HEIGHT=600"
+>
+1.1.1
+</a>
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=s0-1000&FORMAT=image%2Fjpeg&CRS=EPSG:3857&BBOX=-30000000,-30000000,30000000,30000000&WIDTH=600&HEIGHT=600"
+>
+1.3.0
+</a>
+
+<br>
+<br>
+
+(test the ones between versions? CRS vs SRS?) -- crs / srs wrong way round:<br>
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=s0-1000&STYLES=&FORMAT=image%2Fjpeg&CRS=EPSG:3857&BBOX=-30000000,-30000000,30000000,30000000&WIDTH=600&HEIGHT=600"
+>
+1.1.1
+</a>
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=s0-1000&STYLES=&FORMAT=image%2Fjpeg&SRS=EPSG:3857&BBOX=-30000000,-30000000,30000000,30000000&WIDTH=600&HEIGHT=600"
+>
+1.3.0
+</a>
+
+<br>
+<br>
+
+layer not defined -- 'not-a-layer':<br>
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=not-a-layer&STYLES=&FORMAT=image%2Fjpeg&SRS=EPSG:3857&BBOX=-30000000,-30000000,30000000,30000000&WIDTH=600&HEIGHT=600"
+>
+1.1.1
+</a>
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=not-a-layer&STYLES=&FORMAT=image%2Fjpeg&CRS=EPSG:3857&BBOX=-30000000,-30000000,30000000,30000000&WIDTH=600&HEIGHT=600"
+>
+1.3.0
+</a>
+
+<br>
+<br>
+
+unsupported CRS/SRS -- 666. Actually we don't check this, because MapServer gets muddled and sends us its own final CRS. At least, jeffdonner thinks this is MapServer's fault. 2013-01-24:<br>
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=s0-1000&STYLES=&FORMAT=image%2Fjpeg&SRS=EPSG:666&BBOX=-30000000,-30000000,30000000,30000000&WIDTH=600&HEIGHT=600"
+>
+1.1.1
+</a>
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=s0-1000&STYLES=&FORMAT=image%2Fjpeg&CRS=EPSG:666&BBOX=-30000000,-30000000,30000000,30000000&WIDTH=600&HEIGHT=600"
+>
+1.3.0
+</a>
+
+<br>
+<br>
+
+unsupported format -- gif:<br>
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=s0-1000&STYLES=&FORMAT=image%2Fgif&SRS=EPSG:3857&BBOX=-30000000,-30000000,30000000,30000000&WIDTH=600&HEIGHT=600"
+>
+1.1.1
+</a>
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=s0-1000&STYLES=&FORMAT=image%2Fgif&CRS=EPSG:3857&BBOX=-30000000,-30000000,30000000,30000000&WIDTH=600&HEIGHT=600"
+>
+1.3.0
+</a>
+
+<br>
+<br>
+
+Not 4 bbox coords. -- 3, 0 resp.:<br>
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=s0-1000&STYLES=&FORMAT=image%2Fjpeg&SRS=EPSG:3857&BBOX=-30000000,30000000,30000000&WIDTH=600&HEIGHT=600"
+>
+1.1.1
+</a>
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=s0-1000&STYLES=&FORMAT=image%2Fjpeg&CRS=EPSG:3857&BBOX=&WIDTH=600&HEIGHT=600"
+>
+1.3.0
+</a>
+
+<br>
+<br>
+
+wrongly-oriented bbox coords:
+<br>
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=s0-1000&STYLES=&FORMAT=image%2Fjpeg&SRS=EPSG:3857&BBOX=30000000,30000000,-30000000,-30000000&WIDTH=600&HEIGHT=600"
+>
+1.1.1
+</a>
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=s0-1000&STYLES=&FORMAT=image%2Fjpeg&CRS=EPSG:3857&BBOX=30000000,30000000,-30000000,-30000000&WIDTH=600&HEIGHT=600"
+>
+1.3.0
+</a>
+
+<br>
+<br>
+TODO: Note that we don't check that the requested BBOX (area to view) is within our GetCapabilities-stated bounds. This is so that we can center the bitmap on eg the international dateline. Another way to do this though would be to make our logical bounds larger than one world's width - the user could see a world's-worth centered anywhere they wanted, and we could then enforce the bounds. (height is no problem, per the spec we just paint past the poles black).
+
+<p>
+<p>
+
+<b>MapServer:</b>
+<br>
+<a href=
+"http://localhost/cgi-bin/mapserv?map=/opt/google/gehttpd/htdocs/uppermidwest.map&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&LAYERS=BlueMarble&STYLES=&FORMAT=image%2Fjpeg&SRS=EPSG:2163&BBOX=201621.496941,-294488.285333,1425518.020722,498254.511514&WIDTH=600&HEIGHT=600"
+>
+mapserv upper midwest
+</a>
+
+<br>
+
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=s0-1000&STYLES=&FORMAT=image%2Fjpeg&CRS=EPSG:3857&BBOX=-10853650.3523,5104192.65579,-9141879.63311,6340548.15169&WIDTH=600&HEIGHT=600"
+>
+'native' upper midwest
+</a>
+
+<p>
+
+<a href=
+"http://localhost/cgi-bin/ogc/service.py?url=http://servername/flatmapdb&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=s0-1011&STYLES=&FORMAT=image%2Fjpeg&CRS=EPSG:3857&BBOX=-180.0,-90.0,180.0,90.0&WIDTH=400&HEIGHT=400"
+>
+World Flat projection
+</a>
+, needs a 4.4 server. This points to Sean Maday's kindly volunteered machine, it seems to be down
+right now. Note the 'url' parameter - this is an officially supported feature that needs documenting.
+
+<p>
+
+<b>Note: </b>if any of these don't work, check the namespace of the layers (that's something that might change).
+
+</body>
+</html>

@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+ 
+ 
+ 
+
+
+
+ 
+
+
+
+
+
+     
+   
+                       
+                    
+      
+
+ 
+  
+   
+<html>
+
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/localsearch/jsondevguide.html";
+    </script>
+    
+   
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>JSON Reference - Google Local Search API - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/maps/documentation/localsearch/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../css/iehacks.css"><![endif]-->
+ 
+  <link href="../../../../css/semantic_headers.css" rel="stylesheet" type="text/css" />
+  
+</head>
+ 
+<body class="gc-documentation">
+      <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container" class="depr">
+<a id="top"></a>
+<div id="skipto">
+  <a href="#gc-pagecontent">Skip to page content</a>
+  <a href="#gc-toc">Skip to main navigation</a>
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Local Search API (<a href="http://googlecode.blogspot.com/2010/11/introducing-google-apis-console-and-our.html">Deprecated</a>)</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="index.html" title="Google Local Search API home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="start.html" class="selected" title="Official Google Local Search API documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../faq.html" title="Answers to frequently asked questions about Google Local Search API">FAQ</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Local Search API blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="http://groups.google.com/group/google-maps-api" title="Google Local Search API developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../../terms.html" title="Google Local Search API terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+ 
+<div class="g-section g-tpl-170">
+   
+  <div class="g-unit g-first" id="gc-toc">
+     <ul>
+  <li><a href="../../index.html">Maps API Family</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="start.html">Documentation</a>
+              </li>
+              <li>
+                <a href="devguide.html">Developer's Guide</a>
+              </li>
+              <li>
+                <a href="jsondevguide.html">JSON Reference</a>
+              </li>
+              <li>
+                <a href="reference.html">API Reference</a>
+              </li>
+              <li><h2 class="tlw-expanded">Code Samples:</h2>
+                <ul>
+                  <li><a href="http://code.google.com/apis/ajax/playground/#the_hello_world_of_local_search">Code Playground</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps Javascript API V3</h2>
+         <ul>
+           <li><a href="../javascript/index.html">Home Page</a></li>
+           <li><a href="../javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+      <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+  <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../flash/index.html">Home Page</a></li>
+          <li><a href="../flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../mapsdata/index.html">Home Page</a></li>
+          <li><a href="../mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+     <div class="line"></div>
+      <ul>
+        <li><h2><a href="../webservices/index.html">Maps Web Services</a></h2>
+         <ul>
+           <li><a href="../geocoding/index.html">Geocoding Guide</a></li>
+           <li><a href="../directions/index.html">Directions Guide</a></li>
+           <li><a href="../elevation/index.html">Elevation Guide</a></li>
+           <li><a href="../places/index.html">Places Guide</a></li>
+         </ul>
+       </li>
+      </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+      <div class="promo">
+     <p><a href="../premier/index.html">Google Maps API Premier</a></p><p>Includes enterprise licensing and support</p></div>  <a class="hidden" href="#gc-topnav-anchor">More Google Local Search API resource links</a> 
+  </div>
+   
+  <div class="g-unit" id="gc-pagecontent">
+     <script type="text/JavaScript">CODESITE_docEarlyProcessing();</script>    <h1 class="page_title">JSON Reference</h1> 
+    <p>
+      The Google Local Search API JSON interface can be used to write local query applications in any language that can handle a <a href="http://www.json.org">JSON</a>-encoded result set with embedded status codes.
+    </p>
+    <p class="note">
+      <strong>Note:</strong> The Google Local Search API must be used for user-generated searches. Automated or batched queries of any kind are strictly prohibited.
+    </p>
+    <h2>Contents</h2>
+    <table class="columns">
+      <tr>
+        <td>
+          <ol class="toc">
+            <li>
+              <a href="#audience">Audience</a>
+            </li>
+            <li>
+              <a href="#prereqs">Application requirements</a>
+            </li>
+            <li>
+              <a href="#using_json">Using the JSON interface</a>
+              <ol class="toc">
+                <li>
+                  <a href="#basic_query">Sending a basic query</a>
+                </li>
+                <li>
+                  <a href="#using_callback">Using the callback argument</a>
+                </li>
+                <li>
+                  <a href="#using_context_argument">Using the context argument</a>
+                </li>
+              </ol>
+            </li>
+            <li>
+              <a href="#json_examples">Code examples</a>
+              <ol class="toc">
+                <li>
+                  <a href="#json_snippets_flash">Using Flash</a>
+                </li>
+                <li>
+                  <a href="#json_snippets_java">Using Java</a>
+                </li>
+                <li>
+                  <a href="#json_snippets_php">Using PHP</a>
+                </li>
+                <li>
+                  <a href="#json_snippets_python">Using Python</a>
+                </li>
+                <li>
+                  <a href="#json_snippets_perl">Using Perl</a>
+                </li>
+              </ol>
+            </li>
+          </ol>
+        </td>
+        <td>
+          <ol class="toc">
+            <li>
+              <a href="#json_reference">JSON reference</a>
+              <ol class="toc">
+                <li>
+                  <a href="#request_format">Request format</a>
+                  <ol class="toc">
+                    <li>
+                      <a href="#json_urlbase">URL base address</a>
+                    </li>
+                    <li>
+                      <a href="#json_args">URL arguments</a>
+                    </li>
+                  </ol>
+                </li>
+                <li>
+                  <a href="#json_response">Response format</a>
+                  <ol>
+                    <li>
+                      <a href="#basic">Basic query</a>
+                    </li>
+                    <li>
+                      <a href="#callback_argument">Callback argument</a>
+                    </li>
+                    <li>
+                      <a href="#context_argument">Context argument</a>
+                    </li>
+                  </ol>
+                </li>
+              </ol>
+            </li>
+          </ol>
+        </td>
+      </tr>
+    </table>
+    <h2 id="audience" name="audience">Audience</h2>
+    <p>
+      The Google Local Search JSON interface, and this guide, are provided for Flash developers, and all other developers who need to access Local Search from other Non-JavaScript environments.
+    </p>
+    <h2 id="prereqs" name="prereqs">Application requirements</h2>
+    <p>
+      Applications that use this interface must abide by all existing <a href="../../terms.html">Terms of Service</a>. Most importantly, you must correctly identify yourself in your requests.
+    </p>
+    <p>
+      Query inputs and results must display "Powered by Google" branding, as described by <a href="reference.html#getBranding">.getBranding</a>.
+    </p>
+     
+    <p>
+      Results must display a business listing source attribution as implemented via <a href="reference.html#getAttribution">.getAttribution</a>.
+    </p>
+     
+    <p>
+      Requests can only be made on behalf of an end user. All results must be displayed.
+    </p>
+    <p>
+      Applications MUST always include a valid and accurate <a href="http://en.wikipedia.org/wiki/HTTP_referer">HTTP referer header</a> in their requests.
+    </p>
+    <p>
+      Each request contains a valid API Key (not required, but highly encouraged). By providing a key, your application provides us with a secondary identification mechanism that is useful in case we need to contact you to correct any problems. Read more about <a href="../../signup.html">why it's useful to have an API key</a>.
+    </p>
+    <p>
+      Your application uses the <a href="#userip"><code>userip</code></a> parameter (not required, but highly encouraged). This parameter supplies the IP address of the end-user who made the request and validates that you are not making automated requests in violation of the <a href="../../terms.html">Terms of Service</a>.
+    </p>
+    <h2 name="using_json" id="using_json"><a name="using_json"></a>Using the JSON interface</h2>
+    <p>
+      The easiest way to start learning about this interface is to try it out. This section shows how to use the <code>curl</code> command line tool to execute sample queries.
+    </p>
+    <h3><a name="basic_query"></a>Sending a basic query</h3> <pre class="prettyprint" style="overflow:hidden;">curl -e http://www.my-ajax-site.com \
+'http://ajax.googleapis.com/ajax/services/search/local?v=1.0&amp;q=Palm%20Springs%20CA'</pre>
+    <p>
+      This command performs a local search (<code>/ajax/services/search/local</code>) for <b>Palm Springs, CA</b> (<code>q=Palm%20Springs%20CA</code>). The response has a <code>Content-Type</code> of <code>text/javascript; charset=utf-8</code>.
+    </p>
+<pre class="prettyprint" style="height:300px;white-space:nowrap">{"responseData": {
+ "results": [
+  {
+   "GsearchResultClass": "GlocalSearch",
+   "listingType": "local",
+   "addressLookupResult": "/maps",
+   "lat": "33.830296",
+   "lng": "-116.545292",
+   "accuracy": "4",
+   "title": "Palm Springs, CA",
+   "titleNoFormatting": "Palm Springs, CA",
+   "ddUrl": "http://www.google.com/maps?source\u003duds\u0026daddr\u003dPalm+Springs%2C+CA%2C+Palm+Springs%2C+California+%28Palm+Springs%2C+CA%29+%4033.830296%2C-116.545292\u0026saddr",
+   "ddUrlToHere": "http://www.google.com/maps?source\u003duds\u0026daddr\u003dPalm+Springs%2C+CA%2C+Palm+Springs%2C+California+%28Palm+Springs%2C+CA%29+%4033.830296%2C-116.545292\u0026iwstate1\u003ddir%3Ato",
+   "ddUrlFromHere": "http://www.google.com/maps?source\u003duds\u0026saddr\u003dPalm+Springs%2C+CA%2C+Palm+Springs%2C+California+%28Palm+Springs%2C+CA%29+%4033.830296%2C-116.545292\u0026iwstate1\u003ddir%3Afrom",
+   "streetAddress": "Palm Springs, CA",
+   "city": "Palm Springs",
+   "region": "California",
+   "country": "US",
+   "staticMapUrl": "http://mt.google.com/mapdata?cc\u003dus\u0026tstyp\u003d5\u0026Point\u003db\u0026Point.latitude_e6\u003d33830296\u0026Point.longitude_e6\u003d-116545292\u0026Point.iconid\u003d15\u0026Point\u003de\u0026w\u003d150\u0026h\u003d100\u0026zl\u003d4",
+   "url": "http://www.google.com/maps?source\u003duds\u0026q\u003dPalm+Springs+CA",
+   "postalCode": "",
+   "maxAge": 604800,
+   "addressLines": [
+    "Palm Springs, CA"
+   ]
+  }
+ ],
+ "cursor": {
+  "moreResultsUrl": "http://www.google.com/local?oe\u003dutf8\u0026ie\u003dutf8\u0026num\u003d4\u0026mrt\u003dyp%2Cloc\u0026sll\u003d37.779160%2C-122.420090\u0026start\u003d0\u0026hl\u003den\u0026q\u003dPalm+Springs+CA"
+ },
+ "viewport": {
+  "center": {
+   "lat": "33.830296",
+   "lng": "-116.545292"
+  },
+  "span": {
+   "lat": "0.29686",
+   "lng": "0.512238"
+  },
+  "sw": {
+   "lat": "33.681866",
+   "lng": "-116.801414"
+  },
+  "ne": {
+   "lat": "33.978725",
+   "lng": "-116.28918"
+  }
+ }
+}
+, "responseDetails": null, "responseStatus": 200}</pre> <h3><a name="using_callback"></a>Using the callback argument </h3>
+    <p>
+      In addition to this response format, the protocol also supports a classic JSON-P style callback which is triggered by specifying a <code>callback</code> argument. When this argument is present, the JSON object is delivered as an argument to the specified callback.
+    </p>
+<pre class="prettyprint" style="overflow:hidden;">curl -e http://www.my-ajax-site.com \
+'http://ajax.googleapis.com/ajax/services/search/local?v=1.0&amp;q=Palm%20Springs%20CA&callback=processResults'
+</pre>
+    <p>
+      This command performs a Local Search that is identical to the previous search, except that it has been altered to pass <code>callback</code>. With this argument in place, instead of a JSON object being returned, a Javascript call is returned in the response and the JSON object is passed via the <code>results</code> parameter.
+    </p>
+<pre class="prettyprint">processResults({"responseData": {
+  "results": [
+    ...            // results array
+   ]
+}});</pre> <h3><a name="using_context_argument"></a>Using the context argument</h3>
+    <p>
+      Finally, the protocol supports a <code>context</code> argument. When both <code>callback</code> and <code>context</code> are specified, the response is encoded as a direct JavaScript call with a signature of: <code>callback(context, results, status, details, unused)</code>. Note the slight difference in the following command and response.
+    </p>
+<pre class="prettyprint">curl -e http://www.your-site-here.com \
+'http://ajax.googleapis.com/ajax/services/search/local?v=1.0& \
+q=Palm%20Springs%20CA&callback=processResults&context=foo'</pre>
+    <p>
+      This command performs a Local Search that is identical to the previous search, except that it has been altered to pass both <code>callback</code> and <code>context</code>. With these arguments in place, instead of a JSON object being returned, a JavaScript call is returned in the response and the JSON object is passed via the <code>results</code> parameter.
+    </p>
+<pre class="prettyprint">processResults('foo',{
+ "results": [
+   ...          // results array
+ ]
+});</pre> <h2><a name="json_examples" id="json_examples"></a>Code examples</h2>
+    <p>
+      The following sections contain code snippets that show how to access the Local Search API from Flash, Java, PHP, Python, and Perl.
+    </p>
+    <p class="warning">
+      <strong>Warning:</strong> You need <a href="../../signup.html">your own API key</a> in order to use the Local Search API. In the example below, replace "INSERT-YOUR-KEY" with your own, unique key. Without a unique key, these examples won't work.
+      <br />
+      <br />
+      In addition to your API key, you should include the <a href="#userip"><code>userip</code></a> parameter, which supplies the IP address of the end-user who made the request and validates that you are not making automated requests in violation of the <a href="terms.html">Terms of Service</a>.
+    </p>
+    <p>
+      If you have trouble processing the JSON response, visit the <a href="http://www.json.org/">JSON.org</a> site, and pay particular attention to the second half of the page where various JSON libraries are referenced. See the <a href="#json_reference">JSON reference</a> section below for details on how the Local Search API is made available through the JSON API.
+    </p>
+    <h3><a name="json_snippets_flash" id="json_snippets_flash"></a>Using Flash</h3>
+    <p>
+      The following code snippet shows how to make a request to the Google Local Search API using Flash. This example uses JSON from the ActionScript 3.0 (AS3) <a href="http://code.google.com/p/as3corelib/">Core Library</a>. <pre class="prettyprint" style="white-space:nowrap">var service:HTTPService = new HTTPService();
+service.url = 'http://ajax.googleapis.com/ajax/services/search/local';
+service.request.v = '1.0';
+service.request.q = 'Palm%20Springs%20CA';
+service.request.key = 'INSERT-YOUR-KEY';
+service.resultFormat = 'text';
+service.addEventListener(ResultEvent.RESULT, onServerResponse);
+service.send();
+
+private function onServerResponse(event:ResultEvent):void {
+  try {
+    var json:Object = JSON.decode(event.result as String);
+    // now have some fun with the results...
+  } catch(ignored:Error) {
+  }
+}</pre> <h3><a name="json_snippets_java" id="json_snippets_java"></a>Using Java</h3>
+    <p>
+      The following code snippet shows how to make a request to the Google Local Search API using Java. This example uses the JSON library from <a href="http://www.json.org/java/">json.org</a>.
+    </p>
+<pre class="prettyprint" style="white-space:nowrap">URL url = new URL("http://ajax.googleapis.com/ajax/services/search/local?" +
+                  "v=1.0&q=barack%20obama&key=INSERT-YOUR-KEY&userip=INSERT-USER-IP");
+URLConnection connection = url.openConnection();
+connection.addRequestProperty("Referer", /* Enter the URL of your site here */);
+
+String line;
+StringBuilder builder = new StringBuilder();
+BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+while((line = reader.readLine()) != null) {
+ builder.append(line);
+}
+
+JSONObject json = new JSONObject(builder.toString());
+// now have some fun with the results...</pre> <h3><a name="json_snippets_php" id="json_snippets_php"></a>Using PHP</h3>
+    <p>
+      The following code snippet shows how to make a request to the Google Local Search API using PHP. This sample assumes PHP 5.2. For older installations of PHP, refer to <a href="http://us.php.net/manual/en/function.json-decode.php#80606">this comment</a>.
+    </p>
+<pre class="prettyprint" style="white-space:nowrap">
+$url = "http://ajax.googleapis.com/ajax/services/search/local?" +
+       "v=1.0&q=barack%20obama&key=INSERT-YOUR-KEY&userip=INSERT-USER-IP";
+
+// sendRequest
+// note how referer is set manually
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_REFERER, /* Enter the URL of your site here */);
+$body = curl_exec($ch);
+curl_close($ch);
+
+// now, process the JSON string
+$json = json_decode($body);
+// now have some fun with the results...
+</pre> <h3><a name="json_snippets_python" id="json_snippets_python"></a>Using Python</h3>
+    <p>
+      The following code snippet shows how to make a request to the Google Local Search API using Python. This sample assumes Python 2.4 or higher. You may need to download and install <a href="http://pypi.python.org/pypi/simplejson/">simplejson</a>.
+    </p>
+<pre class="prettyprint" style="white-space:nowrap">
+import urllib2
+import simplejson
+
+url = ('http://ajax.googleapis.com/ajax/services/search/local?' +
+       'v=1.0&q=barack%20obama&key=INSERT-YOUR-KEY&userip=INSERT-USER-IP')
+
+request = urllib2.Request(url, None, {'Referer': /* Enter the URL of your site here */})
+response = urllib2.urlopen(request)
+
+# Process the JSON string.
+results = simplejson.load(response)
+# now have some fun with the results...
+</pre> <h3><a name="json_snippets_perl" id="json_snippets_perl"></a>Using Perl</h3>
+    <p>
+      The following code snippet shows how to make a request to the Google Local Search API using Perl. This sample relies on the <code>LWP::UserAgent</code> and JSON modules which you can obtain from <a href="http://www.cpan.org/">CPAN</a>. You may also want to use the <code>URI::Escape</code> module.
+    </p>
+<pre class="prettyprint" style="white-space:nowrap">#!/usr/bin/perl
+
+my $url = "http://ajax.googleapis.com/ajax/services/search/local?" +
+          "v=1.0&q=barack%20obama&key=INSERT-YOUR-KEY&userip=INSERT-USER-IP";
+
+# Load our modules
+# Please note that you MUST have LWP::UserAgent and JSON installed to use this
+# You can get both from CPAN.
+use LWP::UserAgent;
+use JSON;
+
+# Initialize the UserAgent object and send the request.
+# Notice that referer is set manually to a URL string.
+my $ua = LWP::UserAgent-&gt;new();
+$ua-&gt;default_header("HTTP_REFERER" =&gt; /* Enter the URL of your site here */);
+my $body = $ua-&gt;get($url);
+
+# process the json string
+my $json = from_json($body-&gt;decoded_content);
+
+# have some fun with the results
+my $i = 0;
+foreach my $result (@{$json-&gt;{responseData}-&gt;{results}}){
+ $i++;
+ print $i.". " . $result-&gt;{titleNoFormatting} . "(" . $result-&gt;{url} . ")\n";
+ # etc....
+}
+if(!$i){
+ print "Sorry, but there were no results.\n";
+}</pre> <h2><a name="json_reference"></a>JSON reference</h2>
+    <p>
+      Unlike the core JavaScript interface, the JSON interface is exposed through a uniform URL that contains CGI arguments. Your application can use an HTTP stack of its choosing. In order to use the JSON interface:
+    </p>
+    <ul>
+      <li>
+        You must construct a properly formatted URL with all necessary CGI arguments.
+      </li>
+      <li>
+        You must send an HTTP referer header that accurately identifies your application.
+      </li>
+      <li>
+        You must process the JSON-encoded response.
+      </li>
+    </ul>
+    <h3><a name="request_format"></a>Request format</h3> <h4><a name="json_urlbase" id="json_urlbase"></a>URL base address</h4>
+    <p>
+      The standard URL for the Google Local Search API is:
+    </p>
+    <p>
+      <code>http://ajax.googleapis.com/ajax/services/search/local</a></code>
+    </p>
+    <h4><a name="json_args" id="json_args"></a>URL arguments</h4>
+    <p>
+      This section describes the arguments that can be used for Local Search requests.
+    </p>
+    <p>
+      The value of a CGI argument must always be properly escaped. This can be done via the functional equivalent of JavaScript's <code>encodeURIComponent()</code> method.
+    </p>
+    <h5 id="required_args" name="required_args">Required URL arguments</h5>
+    <p>
+      The following table lists the required URL arguments.
+    </p>
+    <table class="reftable" width="100%">
+      <tbody>
+        <tr class="h">
+          <th>
+            <p>
+              Argument
+            </p>
+          </th>
+          <th>
+            <p>
+              Example
+            </p>
+          </th>
+          <th>
+            <p>
+              Description
+            </p>
+          </th>
+        </tr>
+        <tr class="alt">
+          <td>
+            <code>
+            <p>
+              q
+            </p>
+          </code>
+        </td>
+        <td>
+          <code>
+          <p>
+            q=Palm%20Springs%20CA
+          </p>
+        </code>
+      </td>
+      <td>
+        <p>
+          This argument supplies the query, or search expression, that is passed into the searcher.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>
+        <p>
+          v
+        </p>
+      </code>
+    </td>
+    <td>
+      <code>
+      <p>
+        v=1.0
+      </p>
+    </code>
+  </td>
+  <td>
+    <p>
+      This argument supplies protocol version number. The only valid value at this point in time is <code>1.0</code>.
+    </p>
+  </td>
+</tr>
+</tbody>
+</table>
+<h5 id="optional_args" name="optional_args">Optional URL arguments</h5>
+<p>
+  The following table lists the optional URL arguments.
+</p>
+<table border="0" cellpadding="4" cellspacing="1" class="reftable">
+  <tbody>
+    <tr class="h">
+      <th>
+        Argument
+      </th>
+      <th>
+        Example
+      </th>
+      <th>
+        Description
+      </th>
+    </tr>
+    <tr>
+      <td>
+        <p>
+          <code>callback</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <code>callback=foo</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          This argument alters the standard response format. When supplied, instead of producing a simple JSON-encoded object, the system produces a JavaScript function call response where the value of <code>callback</code> specifies the name of the function called in the response.<pre class="prettyprint">
+callbackFunction(
+  {"responseData" : {
+      "results" : [],
+      "cursor" : {}
+    },
+    "responseDetails" : null | string-on-error,
+    "responseStatus" : 200 | error-code
+});</pre>
+        </p>
+    </tr>
+    <tr class="alt">
+      <td>
+        <p>
+          <code>context</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <code> context=bar</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          This argument is related to the <code>callback</code> argument. When both are supplied, the value of <code>context</code> alters the normal response format associated with <code>callback</code>. The new format is: <pre class="prettyprint">callbackFunction(
+  contextValue,    // the context arg value
+  responseObject,  // the collection of results and cursor
+  responseStatus,  // 200 on success, non-200 on failure
+  errorDetails)    // error string for non-200 response</pre>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p>
+          <code>hl</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <code>hl=fr</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          This argument supplies the host language of the application making the request. If <code>hl</code> is present in the URL, it will be used. Otherwise, if the <code>Accept-Language</code> HTTP header is present, it will be used. If neither is specified, a value of <code>en</code> is assumed.
+        </p>
+      </td>
+    </tr>
+    <tr class="alt">
+      <td>
+        <p>
+          <code>key</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <code>key=your-key</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          This argument supplies the application's key. You can sign up for an API key <a href="../../signup.html">on the sign-up page</a>.
+        </p>
+        <p>
+          If specified, it must be a valid key associated with your site. The key must be validated against the passed referer header. The advantage of supplying a key is so that we can identify and contact you should something go wrong with your application. Without a key, we will still take the same appropriate measures on our side, but we will not be able to contact you. It is definitely best for you to pass a key.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p>
+          <code>mrt</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <code>mrt=kmlonly</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          This optional argument specifies which type of listing the user is interested in. Valid values include:
+        </p>
+        <ul>
+          <li>
+            <code>blended</code> requests KML, Local Business Listings, and Geocode results
+          </li>
+          <li>
+            <code>kmlonly</code> requests KML and Geocode results
+          </li>
+          <li>
+            <code>localonly</code> requests Local Business Listings and Geocode results
+          </li>
+        </ul>
+        <p>
+          If this argument is not supplied, the default value of <code>localonly</code> is used.
+        </p>
+      </td>
+    </tr>
+    <tr class="alt">
+      <td>
+        <p>
+          <code>rsz</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <code>rsz=4</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          This argument supplies an integer from 1&ndash;8 indicating the number of results to return per page.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p>
+          <code>sll</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <code>sll=48.8565,2.3509</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          This optional argument supplies the search center point for a local search. It's value is a comma separated latitude/longitude pair, e.g., <code>sll=48.8565,2.3509</code>.
+        </p>
+      </td>
+    </tr>
+    <tr class="alt">
+      <td>
+        <p>
+          <code>sspn</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <code>sspn=0.065169,0.194149</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          This optional argument supplies a bounding box that the local search should be relative to. When using a Google Map, the <code>sspn</code> value can be computed using: <code>myMap.getBounds().toSpan().toUrlValue();</code> (e.g., <code>sspn=0.065169,0.194149</code>).
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p>
+          <code>start</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <code>start=4</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          This argument supplies the start index of the first search result. Each successful response contains a <code>cursor</code> object (see below) which includes an array of <code>pages</code>. The <code>start</code> property for a page may be used as a valid value for this argument. For reference, a sample cursor object is shown below: <pre class="prettyprint">"cursor": {
+  "pages": [[
+    { "start": "0", "label": 1 },
+    { "start": "4", "label": 2 },
+    { "start": "8", "label": 3 },
+    { "start": "12","label": 4 } ]],
+  "estimatedResultCount": "48758",
+  "currentPageIndex": 0,
+  "moreResultsUrl": "http://www.google.com/search..."
+}
+</pre>
+        </p>
+      </td>
+    </tr>
+    <tr class="alt">
+      <td>
+        <p>
+          <a name="userip"></a><code>userip</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <code>userip=192.168.0.1</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          This argument supplies the IP address of the end-user on whose behalf the request is being made. Requests that include it are less likely to be mistaken for abuse. In choosing to utilize this parameter, please be sure that you're in compliance with any local laws, including any laws relating to disclosure of personal information being sent.
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h3><a name="json_response" id="json_response"></a>Response format</h3> <h4><a name="basic"></a>Basic query</h4>
+<p>
+  There are two major variations in the response format. When the <code>callback</code> and <code>context</code> arguments are not supplied, the response format is a simple JSON object: <pre class="code">
+{
+  "responseData" : {
+    "results" : [],
+    "cursor" : {}
+  },
+  "responseDetails" : null | string-on-error,
+  "responseStatus" : 200 | error-code
+}
+</pre>
+<p>
+  In the JSON fragment above, note that the <code>responseData</code> property contains a <code>results</code> array and an optional <code>cursor</code>.
+</p>
+<h4 id="results_guaranteed">Results array: guaranteed fields</h4>
+<p>
+  The results array always contains the parameters listed in this section, even if the value is empty.
+</p>
+<table class="reftable">
+  <tbody>
+    <tr class="h">
+      <th>
+        Property
+      </th>
+      <th>
+        Description
+      </th>
+    </tr>
+    <tr>
+<!--.addressLines-->
+      <td>
+        <p>
+          <code>addressLines[]</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <a name="addressLines"></a>Supplies an array consisting of the mailing address lines for this result, for instance: <code>["1600 Amphitheatre Pky", "Mountain View, CA 94043"]</code> or <code>["Via del Corso, 330", "00186 Roma (RM), Italy"]</code>. To correctly render an address associated with a result, either directly use the <code>.html</code> property of the result or iterate through this array and display each <code>addressLine</code> in turn.
+        </p>
+      </td>
+    </tr>
+    <tr class="alt">
+<!--.city-->
+      <td>
+        <p>
+          <code>city</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <a name="city"></a>Supplies the city name for the result.
+        </p>
+        <p class="note">
+          <strong>Note:</strong> If a city name is not available, this property may be set to <code>&quot;&quot;</code>.
+        </p>
+      </td>
+    </tr>
+    <tr>
+<!--.content-->
+      <td>
+        <p>
+          <code>content</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <a name="content"></a> For KML results, this property contains a content snippet associated with the KML result.
+        </p>
+        <p class="note">
+          <b>Note:</b> For local results, set this property to <code>""</code>.
+        </p>
+      </td>
+    </tr>
+    <tr class="alt">
+<!--.country-->
+      <td>
+        <p>
+          <code>country</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <a name="country"></a> Supplies a country name for the result.
+        </p>
+        <p class="note">
+          <strong>Note:</strong> If the country name is not specified, set this property to <code>&quot;&quot;</code>.
+        </p>
+      </td>
+    </tr>
+    <tr>
+<!--.cursor-->
+      <td>
+        <p>
+          <code>cursor</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <a name="cursor"></a> <code>.cursor</code> is an optional property that is present once a search completes successfully. When present, the property specifies how an application can request additional search results for the current query term, the estimated result count, the current page, and the URL for a search results page. The property has the following structure:
+        </p>
+        <ul>
+          <li>
+            <code>pages[]</code> supplies an array used by <code>start</code> in order to iterate through all available results. Each entry in the array is an object with the following structure:
+            <ul>
+              <li>
+                <code>start</code> supplies the value that will be used in the <code>&amp;start</code> URL argument to request a bundle of results
+              </li>
+              <li>
+                <code>label</code> supplies a text label associated with the entry (for example, "1", "2", "3", or "4")
+              </li>
+            </ul>
+          </li>
+          <li>
+            <code>estimatedResultCount</code> supplies the estimated number of results that match the current query. This value will not necessarily match the similar value that is visible on the Google.com search properties.
+          </li>
+          <li>
+            <code>currentPageIndex</code> supplies the index into the <code>pages</code> array of the current set of results.
+          </li>
+          <li>
+            <code>moreResultsUrl</code> supplies a URL to a Google-hosted search page that contains additional search results.
+          </li>
+        </ul>
+        <p class="note">
+          <b>Note:</b> The Local Searcher supports a maximum of 8 result pages. When combined with subsequent requests, a maximum total of 64 results are available. It is not possible to request more than 64 results.
+        </p>
+      </td>
+    </tr>
+    <tr class="alt">
+<!--.ddUrl-->
+      <td>
+        <p>
+          <code>ddUrl</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <a name="ddUrl"></a>Supplies a URL that you can use to provide driving directions from the center of the set of search results to this search result.
+        </p>
+        <p class="note">
+          <strong>Note:</strong> If a <code><a href="#region">region</a></code> is not available, this property may be missing or null. Always wrap access within a a test of <code>if (result.ddUrl &amp;&amp; result.ddUrl != null)</code>.
+        </p>
+      </td>
+    </tr>
+    <tr>
+<!--.ddUrlToHere-->
+      <td>
+        <p>
+          <code>ddUrlToHere</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <a name="ddUrlToHere"></a> Supplies a URL that can be used to provide driving directions to a search result from a user-specified location.
+        <p class="note">
+          <strong>Note:</strong> In some cases, this property may be missing or null. Always wrap access within a a test of <code>if (result.ddUrlToHere &amp;&amp; result.ddUrlToHere != null)</code>.
+        </p>
+      </td>
+    </tr>
+    <tr class="alt">
+<!--.ddUrlFromHere-->
+      <td>
+        <p>
+          <code>ddUrlFromHere</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <a name="ddUrlFromHere"></a> Supplies a URL that can be used to provide driving directions from this search result to a user-specified location.
+        </p>
+        <p class="note">
+          <b>Note:</b> In some cases this property may be missing or null. Always wrap access within a a test of <code>if (result.ddUrlFromHere &amp;&amp; result.ddUrlFromHere != null)</code>.
+        </p>
+      </td>
+    </tr>
+    <tr>
+<!--.GsearchResultClass-->
+      <td>
+        <p>
+          <code>gsearchResultClass</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <a name="GsearchResultClass"></a>Indicates the type of result (for example, <code>google.search.LocalSearch.RESULT_CLASS</code> indicates <code>GlocalResult</code>).
+        </p>
+      </td>
+    </tr>
+<!--.html-->
+    <tr class="alt">
+      <td>
+        <code>html</code>
+      </td>
+      <td>
+        <p>
+          <a name="html"></a>Supplies the root of an HTML element that may be cloned and attached somewhere into the application's DOM hierarchy. We expect that this is the primary property that applications will use, typically by cloning this node and attaching it to the DOM hierarchy.
+        </p>
+        <p>
+          We expect applications to control styling, as well as which elements are displayed, using CSS. For instance, we expect the following fragment to be common across all applications that wish to copy and paste search results delivered through the Local Search API.
+        </p>
+<pre class="prettyprint">// clone the .html node from the result
+var node = result.html.cloneNode(true);
+
+// attach the node into my dom<br>container.appendChild(node);</pre>
+      </td>
+    </tr>
+    <tr>
+<!--.lat-->
+      <td>
+        <p>
+          <code>lat</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <a name="lat"></a> Supplies the latitude value of the result. This may be used to construct a <code>GPoint</code> using the following code snippet: <pre>p = new GPoint(parseFloat(result.lng), parseFloat(result.lat));</pre>
+        </p>
+      </td>
+    </tr>
+    <tr class="alt">
+<!--.listingType-->
+      <td>
+        <p>
+          <code>listingType</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <a name="listingType"></a>This property indicates the type of this result, which can either be <code>"local"</code> (in the case of a local business listing or geocode result), or <code>"kml"</code> in the case of a <a href="http://code.google.com/apis/kml/documentation">KML</a> listing.
+        </p>
+      </td>
+    </tr>
+    <tr>
+<!--.lng-->
+      <td>
+        <p>
+          <code>lng</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <a name="lng"></a> Supplies the longitude value of the result. This may be used to construct a <code>GPoint</code> as follows: <pre>p = new GPoint(parseFloat(result.lng), parseFloat(result.lat));</pre>
+        </p>
+      </td>
+    </tr>
+    <tr class="alt">
+<!--.phoneNumbers-->
+      <td>
+        <p>
+          <code>phoneNumbers</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <a name="phoneNumbers"></a>Supplies an array of phone number objects where each object contains a <code>.type</code> property and a <code>.number</code> property. The value of the <code>.type</code> property can be <code>"main"</code>, <code>"fax"</code>, <code>"mobile"</code>, <code>"data"</code>, or <code>&quot;&quot;</code>.
+        </p>
+      </td>
+    </tr>
+    <tr>
+<!--.region-->
+      <td>
+        <p>
+          <code>region</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <a name="region"></a>Supplies a region name for the result. In the US, the region name is typically a state abbreviation; in other areas it might be a province or other region name as locally applicable.
+        </p>
+        <p class="note">
+          <strong>Note:</strong> If a region name is not available, this property is set to <code>&quot;&quot;</code>. </p
+      </td>
+    </tr>
+    <tr class="alt">
+<!--.results-->
+      <td>
+        <p>
+          <code>results[]</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <a name="results"></a><code>.results[]</code> contains an array of search result objects, one for each result. Each time a search executes, this property is cleared, and each time a search completes, the array is populated. If there are no results to report, the <code>.length</code> property of this array will be set to 0. Therefore, results will never be null, and you can always safely check for <code>results.length == 0</code>.
+        </p>
+        <ul>
+          <li>
+            The <code>GlocalResult</code> object is produced by <code>google.search.LocalSearch</code>. It is available in that object's <code>.results[]</code> array.
+          </li>
+          <li>
+            This object is indicated by a <code>.GsearchResultClass</code> value of <code>google.search.LocalSearch.RESULT_CLASS</code>.
+          </li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+<!--.staticMapUrl-->
+      <td>
+        <p>
+          <code>staticMapUrl</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <a name="staticMapUrl"></a>Supplies the URL for a static map image representation of the current result. The image is 150px wide by 100px tall with a single marker representing the current location. Expected usage is to hyperlink this image using the <code>url</code> property. You can resize the image using <code>google.search.LocalSearch.resizeStaticMapUrl()</code>. The <a href="http://www.google.com/uds/samples/apidocs/static-tiles.html">Static Map Tile</a> sample demonstrates one way to use this property.
+        </p>
+      </td>
+    </tr>
+    <tr class="alt">
+<!--.streetAddress-->
+      <td>
+        <p>
+          <code>streetAddress</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <a name="streetAddress"></a>Supplies the street address and number for the given result.
+        </p>
+        <p class="note">
+          <strong>Note: </strong>If no street address is available, this property is set to <code>&quot;&quot;</code>. </p
+      </td>
+    </tr>
+    <tr>
+<!--.title-->
+      <td>
+        <p>
+          <code>title</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <a name="title" id="title"></a>Supplies the title for the result. In some cases, the title and the <code>streetAddress</code> are the same. This typically occurs when the search term is a street address such as <b>1231 Lisa Lane, Los Altos, CA</b>.
+        </p>
+      </td>
+    </tr>
+    <tr class="alt">
+<!--.titleNoFormatting-->
+      <td>
+        <p>
+          <code>titleNoFormatting</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <a name="titleNoFormatting"></a>Supplies the title, but unlike <code>.title</code>, this property is stripped of html markup (e.g., &lt;b&gt;, &lt;i&gt;, etc.). In some cases, the title and the <code>streetAddress</code> are the same. This typically occurs when the search term is a street address such as <b>1231 Lisa Lane, Los Altos, CA</b>.
+        </p>
+      </td>
+    </tr>
+    <tr>
+<!--.url-->
+      <td>
+        <p>
+          <code>url</code>
+        </p>
+      </td>
+      <td>
+        <p>
+          <a name="url"></a>Supplies the URL to a Google Maps Place page associated with the search result.
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>
+  The <code>responseStatus</code> property contains a value of <code>200</code> on success and a non-200 HTTP error status code on failure. If there is a failure, <code>responseDetails</code> contains a diagnostic string. <h4><a name="callback_argument"></a>Callback argument</h4>
+<p>
+  Applications can use the <code>callback</code> argument as follows to request a JavaScript callback. <pre class="prettyprint">
+callback({
+  "responseData" : {
+    "results" : [],
+    "cursor" : {}
+  },
+  "responseDetails" : null | string-on-error,
+  "responseStatus" : 200 | error-code
+});
+</pre> <h4> <a name="context_argument"></a>Context argument</h4>
+<p>
+  The <code>context</code> argument must always be specified in conjunction with the <code>callback</code> argument. If the application supplies both <code>callback</code> and <code>context</code> arguments, the response is encoded as a JavaScript procedure call. In this mode of operation:
+<ul>
+  <li>
+    The value of <code>callback</code> becomes the procedure call target.
+  </li>
+  <li>
+    The value of <code>context</code> is passed as the first argument.
+  </li>
+  <li>
+    The value of <code>responseData</code> from above is passed as the second argument.
+  </li>
+  <li>
+    The response status is passed as the third argument.
+  </li>
+  <li>
+    The final argument is either <code>null</code> or a diagnostic string.
+  </li>
+</ul>
+<pre class="prettyprint">
+processResults(for',{
+ "results": [[
+  {
+   ...
+  },
+  {
+   ...
+  },
+  ...
+ ]],
+ "cursor": {
+  "pages": [[
+   ...
+  ]],
+  "estimatedResultCount": "n",
+  "currentPageIndex": n,
+  "moreResultsUrl": "..."
+ }
+}
+, 200 | error-code, null | string-on-error)
+</pre> <h2 id="troubleshooting">Troubleshooting</h2>
+<p>
+  If you encounter problems with your code:
+</p>
+<ul>
+  <li>
+    Make sure your API key is valid.
+  </li>
+  <li>
+    Look for typos. Remember that JavaScript is a case-sensitive language.
+  </li>
+  <li>
+    Use a JavaScript debugger. In Firefox, you can use the JavaScript console or the <a href="http://www.getfirebug.com/">Firebug</a>. In IE, you can use the <a href="http://msdn2.microsoft.com/en-us/library/ms532989.aspx">Microsoft Script Debugger</a>.
+  </li>
+  <li>
+    If you need to examine the JSON string returned from the server, you can use <a href="http://www.jsonlint.com">JSON Lint</a> to make a single, long string human readable.
+  </li>
+  <li>
+    Search the <a href="http://groups.google.com/group/Google-Maps-API">API discussion group</a>. If you can't find a post that answers your question, post your question to the group along with a link to a web page that demonstrates the problem.
+  </li>
+</ul>
+</div>
+</div>
+ 
+</div>
+<!-- end gc-pagecontent -->
+
+</div>
+<!-- end gooey wrapper -->
+  </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+  
+</body>
+
+</html>
+

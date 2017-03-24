@@ -1,0 +1,62 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+
+#include <string>
+#include <vector>
+#include <khTypes.h>
+#include <autoingest/.idl/storage/DatedImageryIndexInfo.h>
+
+#cppquote
+#include <autoingest/.idl/storage/DatedImageryIndexInfo_impl.h>
+#/cppquote
+
+// ****************************************************************************
+// ***  QTPacket
+// ***  Note: this config is used for both pre-4.4 and 4.4+ QT Packets
+// ***   4.4 QT packets add the dated_imagery_indexes_ which is ignored by
+// ***   older packet generator.
+// ****************************************************************************
+class QTPacketConfig {
+  IsUpToDateIgnore uint      index_version_;
+  std::string imagery_verref_;                     // RasterGEIndex
+  std::string terrain_verref_;                     // CombinedTerrain
+  std::string vector_verref_;                      // VectorGEIndex
+  std::string imageryproj_verref_ = std::string(); // RasterProject
+  std::string terrainproj_verref_ = std::string(); // RasterProject
+
+  // Acquisition date of the imagery project.
+  std::string imagery_date_string_ = std::string();
+
+  // Store the dated imagery indexes for timemachine imagery.
+  // Only useful for QTPacket2 generator, ignored by QTPacket generator.
+  std::vector<DatedImageryIndexInfo> dated_imagery_indexes_ = std::vector<DatedImageryIndexInfo>();
+
+  // Note: Basic rule for #version: "If the low level tool ever
+  // changes to produce different output from the same config record, then
+  // the version of its config needs to be increased as well as the versions
+  // of all the containing configs all the way up the plugin hierarchy."
+
+  // To force rebuilds, increment this version.
+  // When incrementing this version, you should also increment the
+  // one in DatabaseConfig so this one gets the chance to get checked.
+
+
+// #version 1
+  // 1 -> creating subsampled terrain is switched off (targeted to 4.3).
+  // version commented -> Note: version number reverted back to switch off force
+  // rebuild for terrain project (targeted to 5.0.0)
+
+#pragma GenerateIsUpToDate
+};

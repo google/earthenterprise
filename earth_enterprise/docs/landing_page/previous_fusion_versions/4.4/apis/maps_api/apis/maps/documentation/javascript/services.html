@@ -1,0 +1,3196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/services.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Google Maps Javascript API V3 Services - Google Maps JavaScript API V3 - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/html/apis/maps/documentation/javascript/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../css/iehacks.css"><![endif]-->
+
+<link href="../local_extensions.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps JavaScript API V3</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="index.html" title="Google Maps JavaScript API V3 home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="basics.html" class="selected" title="Official Google Maps JavaScript API V3 documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../faq.html" title="Answers to frequently asked questions about Google Maps JavaScript API V3">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="articles.html" title="Focused articles and tutorials for Google Maps JavaScript API V3 developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps JavaScript API V3 blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="forum.html" title="Google Maps JavaScript API V3 developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../../terms.html" title="Google Maps JavaScript API V3 terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <a name="gc-toc-anchor"></a>  
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../../index.html">Maps API Family</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+ <div class="line"></div>
+    <ul>
+      <li><h2>Maps Javascript API V3</h2>
+        <ul>
+          <li><a class="tlw-expanded" href="index.html">Home Page</a>
+            <ul>
+              <li><a href="basics.html">Basics</a></li>
+              <li><a href="tutorial.html">Tutorial</a></li>
+              <li><a href="events.html">Events</a></li>
+              <li><a href="controls.html">Controls</a></li>
+              <li><a href="overlays.html">Overlays</a></li>
+              <li><a href="services.html">Services</a></li>
+              <li><a href="maptypes.html">Map Types</a></li>
+            </ul>
+          </li>
+          <li><a class="tlw-collapsed" href="reference.html">API Reference</a>
+            <ul>
+              <li><a href="reference.html">3.3</a></li>
+              <li><a href="3.2/reference.html">3.2</a></li>
+              <li><a href="3.1/reference.html">3.1</a></li>
+            </ul>
+          </li>
+          <li><h2 class="tlw-expanded">Code Samples:</h2>
+            <ul>
+              <li><a href="examples/index.html">Samples</a></li>
+              <li><a href="demogallery.html">Demo Gallery</a></li>
+            </ul>
+          </li>
+          <li><h2 class="tlw-expanded">More Resources:</h2>
+            <ul>
+               <li><a href="articles.html">Articles</a><sup class="new">New!</sup></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/issues/list?can=2&q=apitype:Javascript3&colspec=ID+Type+Status+Introduced+Fixed+Summary+Internal+Stars&cells=tiles">Known Issues</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/wiki/JavascriptMapsAPIv3Changelog">Changelog</a></li>
+               <li><a href="http://code.google.com/p/google-maps-utility-library-v3/">Utility Library</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+       <div class="line"></div>
+       <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="v2/index.html">Home Page</a></li>
+           <li><a href="v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+   <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../flash/index.html">Home Page</a></li>
+          <li><a href="../flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../mapsdata/index.html">Home Page</a></li>
+          <li><a href="../mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+        <li><h2><a href="../webservices/index.html">Maps API Web Services</a></h2>
+        <ul>
+          <li><a href="../geocoding/index.html">Geocoding API</a></li>
+          <li><a href="../directions/index.html">Directions API</a></li>
+          <li><a href="../elevation/index.html">Elevation API</a></li>
+          <li><a href="../places/index.html">Places APl</a></li>
+        </ul>
+      </li>
+    </ul>
+       <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+    <div class="promo"><p><a href="../premier/index.html">Google Maps API Premier</a></p>
+    <p>Same great maps plus a SLA, support, and control over ads</p>
+    </div>
+
+      </div>
+      
+      <a name="gc-pagecontent-anchor"></a>   
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Google Maps Javascript API V3 Services</h1>
+
+
+<p class="note">Note: The Google Maps Javascript API Version 3 documented within
+these pages is now the official Javascript API. Version 2 of this API has been
+officially deprecated as per our deprecation policy. We encourage you to migrate
+your code to this newly updated and enhanced version!</p>
+
+<div class="toc">
+  <ol>
+  <li><a href="#Geocoding">Geocoding</a>
+    <ol>
+      <li><a href="#GeocodingRequests">Geocoding Requests</a></li>
+      <li><a href="#GeocodingResponses">Geocoding Responses</a>
+        <ul>
+        <li><a href="#GeocodingResults">Geocode Results</li>
+        <li><a href="#GeocodingAddressTypes">Address Component Types</li>
+        <li><a href="#GeocodingStatusCodes">Status Codes</li>
+        </ul>
+      </li>
+      <li><a href="#ReverseGeocoding">Reverse Geocoding</a></li>
+      <li><a href="#GeocodingViewports">Viewport Biasing</a></li>
+      <li><a href="#GeocodingRegionCodes">Region Code Biasing</a></li>
+    </ol>
+  </li>
+  <li><a href="#Directions">Directions</a>
+    <ol>
+    <li><a href="#DirectionsRequests">Directions Requests</a>
+       <ol>
+        <li><a href="#TravelModes">Travel Modes</a></li>
+        <li><a href="#UnitSystems">Unit Systems</a></li>
+      </ol>
+    </li>
+    <li><a href="#RenderingDirections">Rendering Directions</a>
+      <ol>
+        <li><a href="#DirectionsStatus">Directions Status Codes</a></li>
+        <li><a href="#DisplayingResults">Displaying the <b>DirectionsResult</b></a></li>
+      </ol>
+    </li>
+    <li><a href="#DirectionsResults">The <b>DirectionsResults</b> Object</a>
+      <ol>
+        <li><a href="#Routes">Routes</a></li>
+        <li><a href="#Legs">Legs</a></li>
+        <li><a href="#Steps">Steps</a></li>
+      </ol>
+    </li>
+    <li><a href="#InspectingResults">Inspecting <b>DirectionsResults</b></a>
+    <li><a href="#Waypoints">Using Waypoints in Routes</a>
+    <li><a href="#DraggableDirections">Draggable Directions</a>
+    </ol>
+  </li>
+  <li><a href="#Elevation">Elevation</a>
+    <ol>
+    <li><a href="#ElevationRequests">Elevation Requests</a>
+    <ol>
+     <li><a href="#LocationElevationRequests">Location Elevation Requests</a></li>
+     <li><a href="#PathElevationRequests">Path Elevation Requests</a>
+    </ol>
+  <li><a href="#ElevationResponses">Elevation Responses</a>
+    <ol>
+      <li><a href="#ElevationStatus">Elevation Status</a></li>
+      <li><a href="#ElevationResults">Elevation Results</a></li>
+    </ol>
+  </li>
+  <li><a href="#ElevationSamples">Elevation Samples</a></li>
+  </ol>
+  </li>
+    <li><a href="#StreetView">Street View</a>
+    <ol>
+      <li><a href="#StreetViewMapUsage">Street View Map Usage</a></li>
+      <li><a href="#StreetViewPanoramas">Street View Panoramas</a>
+        <ol>
+          <li><a href="#StreetViewContainers">Street View Containers</a></li>
+          <li><a href="#StreetViewLocations">Street View Locations</a></li>
+          <li><a href="#StreetViewPov">Street View Points of View (POV)</a></li>
+        </ol>
+      </li>
+      <li><a href="#StreetViewOverlays">Overlays within Street View</a></li>
+      <li><a href="#StreetViewEvents">Street View Events</a></li>
+      <li><a href="#StreetViewControls">Customizing Street View Controls</a></li>
+      <li><a href="#StreetViewService">Directly Accessing Street View Data</a></li>
+      <li><a href="#CustomStreetView">Providing Custom StreetView Panoramas</a>
+        <ol>
+          <li><a href="#CreatingPanoramas">Creating Custom Panoramas</a></li>
+          <li><a href="#TilingPanoramas">Creating Custom Panorama Tiles</a></li>
+          <li><a href="#CustomPanoramaMethod">Handling Custom Panorama Requests</a></li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+  </ol>
+</div>
+
+<h1 id="Geocoding">Geocoding</h1>
+
+<p>Geocoding is the process of converting addresses (like "1600 Amphitheatre 
+Parkway, Mountain View, CA") into geographic coordinates (like latitude 
+37.423021 and longitude -122.083739), which you can use to place markers or 
+position the map. </p>
+
+<p>The Google Maps API provides a geocoder class for geocoding addresses
+dynamically from user input. These requests are rate-limited to discourage
+abuse of the service. If instead, you wish to geocode static, known addresses,
+see the <a href="../geocoding/index.html">Geocoding
+API</a> documentation.</p>
+
+<h2 id="GeocodingRequests">Geocoding Requests</h2>
+
+<p>Accessing the Geocoding service is asynchronous, since the Google Maps API
+needs to make a call to an external server. For that reason, you need to pass
+a <i>callback</i> method to execute upon completion of the request. This callback 
+method processes the result(s). Note that the geocoder may return more than one
+result.</p>
+
+<p>You access the Google Maps API geocoding service within your code via the 
+<code>google.maps.Geocoder</code> object. The <code>Geocoder.geocode()</code> method
+initiates a request to the geocoding service, passing it a <i><code>GeocodeRequest</code></i>
+object literal containing the input terms and a callback method to execute upon receipt
+of the response.</p>
+
+<p>The <i><code>GeocodeRequest</code></i> object literal contains the 
+following fields:</p>
+
+<pre class="prettyprint lang-javascript">
+{
+ address: string,
+ latLng: LatLng,
+ bounds: LatLngBounds,
+ language: string,
+ region: string,
+}
+</pre>
+
+<p>These fields are explained below.</p>
+<ul>
+  <li><code>address</code> (<i>required<span style="color:red">*</span></i>)
+  &mdash; The address which you want to geocode.</li>
+  <li><code>latLng</code> (<i>required<span style="color:red">*</span></i>)
+  &mdash; The <code>LatLng</code> for which you wish to obtain the closest,
+  human-readable address.</li>
+  <li><code>bounds</code> (<i>optional</i>) &mdash; The <code>LatLngBounds</code> within which to
+  bias geocode results more prominently. (For more information see 
+  <a href="#GeocodingViewports">Viewport Biasing </a> below.)</li>
+  <li><code>language</code> (<i>optional</i>) &mdash; The language in which to
+  return results.</li>
+  <li><code>region</code> (<i>optional</i>) &mdash; The region code, specified as a
+  <a href="http://www.iana.org/assignments/language-subtag-registry">IANA language
+  <code>region</code> subtag</a>. In most cases, these tags map directly to familiar
+  ccTLD ("top-level domain") two-character values. (For more information see
+  <a href="#GeocodingRegionCodes">Region Code Biasing</a> below.)</li>
+</ul>
+
+<p><span style="color:red">* Note: </span> You may pass either an <code>address</code> or a 
+<code>latLng</code> to lookup. (If you pass a <code>latLng</code>, the geocoder performs what is 
+known as a <i>reverse geocode</i>. See <a href="#ReverseGeocoding">Reverse Geocoding</a> for more 
+information.)</p>
+
+<p>The <code>bounds</code> and <code>region</code> parameters will only influence, not fully 
+restrict, results from the geocoder.</p>
+
+<h2 id="GeocodingResponses">Geocoding Responses</h2>
+
+<p>The Geocoding service requires a callback method to execute upon retrieval of the
+geocoder's results. This callback should pass two parameters to hold the
+<code>results</code> and a <code>status</code> code, in that order. Since the Geocoder
+may return more than one entry, the <i><code>GeocoderResults</code></i> object literal
+is an array.</p>
+
+<h3 id="GeocodingResults">Geocoding Results</h3>
+
+<p>The <i><code>GeocoderResults</code></i> object literal represents a single Geocoding
+result and is an object of the following form:</p>
+
+
+<pre class="prettyprint lang-javascript">
+results[]: {
+ types[]: string,
+ formatted_address: string,
+ address_components[]: {
+   short_name: string,
+   long_name: string,
+   types[]: string
+ },
+ geometry: {
+   location: LatLng,
+   location_type: GeocoderLocationType
+   viewport: LatLngBounds,
+   bounds: LatLngBounds
+ }
+}
+</pre>
+
+
+<p>These fields are explained below:</p>
+
+<ul>
+<li><p><code>types[]</code> is an array indicating the <i>type</i> of the returned result. This
+array contains a set of one or more tags identifying the type of feature returned in the
+result. For example, a geocode of "Chicago" returns "locality" which indicates that "Chicago" is
+a city, and also returns "political" which indicates it is a political entity.</p></li>
+<li><p><code>formatted_address</code> is a string containing the human-readable address
+of this location. Often this address is equivalent to the "postal address," which sometimes
+differs from country to country. (Note that some countries, such as Great Britain, do not
+allow distribution of true postal addresses due to licensing restrictions.) This address 
+is generally composed of one or more <i>address components</i>. For example, the address 
+"111 8th Avenue, New York, NY" contains separate address components for "111 8th Avenue" 
+(a street address), "New York" (the city) and "NY" (the US state). These address components 
+are noted below. (For more information on types, see <a href="#GeocodingAddressTypes">Types</a> below.</p></li>
+<li><p><code>address_component[]</code> is an array containing the separate address components,
+as explained above.</p></li>
+<li><p><code>geometry</code> contains the following information:</p>
+  <ul>
+  <li><code>location</code> contains the geocoded latitude,longitude value. Note that we return
+  this location as a <code>LatLng</code> object, not as a formatted string.</li>
+  <li><p><code>location_type</code> stores additional data about the specified location. The 
+  following values are currently supported:</p>
+  <ul>
+    <li><code>google.maps.GeocoderLocationType.ROOFTOP</code> indicates that the 
+    returned result reflects a precise geocode.</li>
+    <li><code>google.maps.GeocoderLocationType.RANGE_INTERPOLATED</code> indicates 
+    that the returned result reflects an 
+    approximation (usually on a road) interpolated between two precise points (such as intersections). 
+    Interpolated results are generally returned when rooftop geocodes are unavailable for a street
+    address.</li>
+    <li><code>google.maps.GeocoderLocationType.GEOMETRIC_CENTER</code> indicates that 
+    the returned result is the geometric center of
+    a result such as a polyline (for example, a street) or polygon (region).</li>
+    <li><code>google.maps.GeocoderLocationType.APPROXIMATE</code> indicates that the 
+    returned result is approximate.</li>
+  </ul>
+  </li>
+  <li><code>viewport</code> stores the recommended viewport for the returned result.</li>
+  <li><code>bounds</code> (optionally returned) stores the <code>LatLngBounds</code>
+  which can fully contain the returned result. Note that these bounds may not match the 
+  recommended viewport. (For example, San Francisco includes the 
+  <a href="http://en.wikipedia.org/wiki/Farallon_Islands">Farallon islands</a>, which
+  are technically part of the city, but should not be returned in the viewport.)</li>
+  </ul>
+</li>
+</ul>
+
+<h3 id="GeocodingAddressTypes">Address Component Types</h3>
+
+<p>The <code>types[]</code> array within the returned result indicates the <i>address type</i>.
+These types may also be returned within <code>address_components[]</code> arrays to indicate
+the type of the particular address component. Addresses within the geocoder may have
+multiple types; the types may be considered "tags". For example, many cities are tagged
+with the <code>political</code> and <code>locality</code> type.</p>
+
+<p>The following types are supported and returned by the HTTP Geocoder:</p>
+
+<ul>
+<li><code>street_address</code> indicates a precise street address. </li>
+<li><code>route</code> indicates a named route (such as "US 101").</li>
+<li><code>intersection</code> indicates a major intersection, usually of two major roads.</li>
+<li><code>political</code> indicates a political entity. Usually, this type indicates
+a polygon of some civil administration.</li>
+<li><code>country</code> indicates the national political entity, and is typically the
+highest order type returned by the Geocoder.</li>
+<li><code>administrative_area_level_1</code> indicates a first-order civil entity below
+the country level. Within the United States, these administrative levels are states. 
+Not all nations exhibit these administrative levels.</li>
+<li><code>administrative_area_level_2</code> indicates a second-order civil entity below
+the country level. Within the United States, these administrative levels are counties. 
+Not all nations exhibit these administrative levels.</li>
+<li><code>administrative_area_level_3</code> indicates a third-order civil entity below
+the country level. This type indicates a minor civil division. Not all nations exhibit 
+these administrative levels.</li>
+<li><code>colloquial_area</code> indicates a commonly-used alternative name for the
+entity.</li>
+<li><code>locality</code> indicates an incorporated city or town political entity.</li>
+<li><code>sublocality</code> indicates an first-order civil entity below a locality</li>
+<li><code>neighborhood</code> indicates a named neighborhood</li>
+<li><code>premise</code> indicates a named location, usually a building or collection
+of buildings with a common name</li>
+<li><code>subpremise</code> indicates a first-order entity below a named location, usually 
+a singular building within a collection of buildings with a common name</li>
+<li><code>postal_code</code> indicates a postal code as used to address postal mail
+within the country.</li>
+<li><code>natural_feature</code> indicates a prominent natural feature.</li>
+<li><code>airport</code> indicates an airport.</li>
+<li><code>park</code> indicates a named park.</li>
+</ul>
+
+<p>In addition to the above, address components may exhibit the following types:</p>
+
+<ul>
+<li><code>post_box</code> indicates a specific postal box.</li>
+<li><code>street_number</code> indicates the precise street number.</li>
+<li><code>floor</code> indicates the floor of a building address.</li>
+<li><code>room</code> indicates the room of a building address.</li>
+</ul>
+
+<h3 id="GeocodingStatusCodes">Status Codes</h3>
+
+<p>The <code>status</code> code may return one of the following values:</p>
+
+<ul>
+<li><code>google.maps.GeocoderStatus.OK</code> indicates that the geocode was successful.</li>
+<li><code>google.maps.GeocoderStatus.ZERO_RESULTS</code> indicates that the geocode was successful but returned no results. This
+may occur if the geocode was passed a non-existent <code>address</code> or a <code>latng</code> in a remote location.</li>
+<li><code>google.maps.GeocoderStatus.OVER_QUERY_LIMIT</code> indicates that you are over your quota.</li>
+<li><code>google.maps.GeocoderStatus.REQUEST_DENIED</code> indicates that your request was denied for some reason. </li>
+<li><code>google.maps.GeocoderStatus.INVALID_REQUEST</code> generally indicates that the query (<code>address</code> 
+or <code>latLng</code>) is missing.</li>
+</ul>
+
+<p>In this example, we geocode an address and place a marker at the returned latitude
+and longitude values. Note that the handler is passed as an anonymous function 
+literal.</p>
+
+
+<pre class="prettyprint lang-javascript">
+  var geocoder;
+  var map;
+  function initialize() {
+    geocoder = new google.maps.Geocoder();
+    var latlng = new google.maps.LatLng(-34.397, 150.644);
+    var myOptions = {
+      zoom: 8,
+      center: latlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  }
+
+  function codeAddress() {
+    var address = document.getElementById("address").value;
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        map.setCenter(results[0].geometry.location);
+        var marker = new google.maps.Marker({
+            map: map, 
+            position: results[0].geometry.location
+        });
+      } else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
+    });
+  }
+
+&lt;body onload="initialize()"&gt;
+ &lt;div id="map_canvas" style="width: 320px; height: 480px;"&gt;&lt;/div&gt;
+  &lt;div&gt;
+    &lt;input id="address" type="textbox" value="Sydney, NSW"&gt;
+    &lt;input type="button" value="Encode" onclick="codeAddress()"&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+</pre>
+
+
+<p><a href="examples/geocoding-simple.html">View example (geocoding-simple.html)</a></p>
+
+<h2 id="ReverseGeocoding">Reverse Geocoding (Address Lookup)</h2>
+
+<p>The term <i>geocoding</i> generally refers to translating a human-readable
+address into a location on a map. The process of doing the converse,
+translating a location on the map into a human-readable address, is known as 
+<i>reverse geocoding</i>.</p>
+
+<p>The <code>Geocoder</code> supports reverse geocoding directly. Instead of supplying 
+a textual <code>address</code>, supply a comma-separated latitude/longitude pair in the 
+<code>latLng</code> parameter.</p>
+
+<p>The following example geocodes a latitude/longitude value and centers the map
+at that location, bringing up an info window with the formatted address. We return
+the second result, which is less specific than the first (in this case, a neighborhood
+name):</p>
+
+
+<pre class="prettyprint lang-javascript">
+  var geocoder;
+  var map;
+  var infowindow = new google.maps.InfoWindow();
+  var marker;
+  function initialize() {
+    geocoder = new google.maps.Geocoder();
+    var latlng = new google.maps.LatLng(40.730885,-73.997383);
+    var myOptions = {
+      zoom: 8,
+      center: latlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  }
+
+  function codeLatLng() {
+    var input = document.getElementById("latlng").value;
+    var latlngStr = input.split(",",2);
+    var lat = parseFloat(latlngStr[0]);
+    var lng = parseFloat(latlngStr[1]);
+    var latlng = new google.maps.LatLng(lat, lng);
+    geocoder.geocode({'latLng': latlng}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        if (results[1]) {
+          map.setZoom(11);
+          marker = new google.maps.Marker({
+              position: latlng, 
+              map: map
+          }); 
+          infowindow.setContent(results[1].formatted_address);
+          infowindow.open(map, marker);
+        }
+      } else {
+        alert("Geocoder failed due to: " + status);
+      }
+    });
+  }
+</pre>
+
+
+<p>Note that in the previous example we showed the second result (by selecting
+<code>results[1]</code>. The reverse geocoder often returns more than one result. 
+Geocoding "addresses" are not just postal addresses, but any way to geographically 
+name a location. For example, when geocoding a point in the city of Chicago, the
+geocoded point may be labeled as a street address, as the city (Chicago), as
+its state (Illinois) or as a country (The United States). All are addresses to
+the geocoder. The reverse geocoder returns all of these results.</p>
+
+<p>The reverse geocoder matches political entities (countries, provinces,
+cities and neighborhoods), street addresses, and postal codes.</p>
+
+<p>The full list of addresses returned by the previous query are shown
+below.</p>
+
+
+<pre class="prettyprint lang-javascript">
+results[0].formatted_address: "275-291 Bedford Ave, Brooklyn, NY 11211, USA",
+results[1].formatted_address: "Williamsburg, NY, USA",
+results[2].formatted_address: "New York 11211, USA",
+results[3].formatted_address: "Kings, New York, USA",
+results[4].formatted_address: "Brooklyn, New York, USA",
+results[5].formatted_address: "New York, New York, USA",
+results[6].formatted_address: "New York, USA",
+results[7].formatted_address: "United States"
+</pre>
+
+
+<p>Addresses are returned in the order of best to least matches. Generally,
+the more exact address is the most prominent result, as it is in this case.
+Note that we return different types of addresses, from the most specific
+street address to less specific political entities such as neighborhoods,
+cities, counties, states, etc. If you wish to match a more general address,
+you may wish to inspect the <code>results[].types</code> field.</p>
+
+<p><span style="color:red">Note:</span> Reverse geocoding is not an exact
+science. The geocoder will attempt to find the closest addressable location
+within a certain tolerance.</p>
+
+<p><a href="examples/geocoding-reverse.html">View example (geocoding-reverse.html)</a></p>
+
+<h2 id="GeocodingViewports">Viewport Biasing</h2>
+
+<p>You can also instruct the Geocoding Service to prefer results within a given 
+viewport (expressed as a bounding box). You do so by setting the <code>bounds</code> 
+parameter within the <i><code>GeocodeRequest</code></i> object literal to define the bounds
+of this viewport.</p>
+
+<p>For example, a geocode for "Winnetka" generally returns this suburb of Chicago:</p>
+
+
+<pre class="prettyprint lang-javascript">
+{
+  "types":["locality","political"],
+  "formatted_address":"Winnetka, IL, USA",
+  "address_components":[{
+    "long_name":"Winnetka",
+    "short_name":"Winnetka",
+    "types":["locality","political"]
+  },{
+    "long_name":"Illinois",
+    "short_name":"IL",
+    "types":["administrative_area_level_1","political"]
+  },{
+    "long_name":"United States",
+    "short_name":"US",
+    "types":["country","political"]
+  }],
+  "geometry":{
+    "location":[ -87.7417070, 42.1083080],
+    "location_type":"APPROXIMATE"
+  }
+}
+</pre>
+
+
+<p>However, specifying a <code>bounds</code> parameter defining a bounding box for
+the San Fernando Valley of Los Angeles results in this geocode returning the neighborhood
+named "Winnetka" in that location:</p>
+
+
+<pre class="prettyprint lang-javascript">
+{
+  "types":["sublocality","political"],
+  "formatted_address":"Winnetka, California, USA",
+  "address_components":[{
+    "long_name":"Winnetka",
+    "short_name":"Winnetka",
+    "types":["sublocality","political"]
+  },{
+    "long_name":"Los Angeles",
+    "short_name":"Los Angeles",
+    "types":["administrative_area_level_3","political"]
+  },{
+    "long_name":"Los Angeles",
+    "short_name":"Los Angeles",
+    "types":["administrative_area_level_2","political"]
+  },{
+    "long_name":"California",
+    "short_name":"CA",
+    "types":["administrative_area_level_1","political"]
+  },{
+    "long_name":"United States",
+    "short_name":"US",
+    "types":["country","political"]
+  }],
+  "geometry":{
+    "location": [34.213171,-118.571022],
+    "location_type":"APPROXIMATE"
+  }
+}    
+</pre>
+
+
+<h2 id="GeocodingRegionCodes">Region Code Biasing</h2>
+
+<p>You can also set the Geocoding Service to return results biased to a 
+particular region explicitly using the <code>region</code> parameter. This
+parameter takes a region code, specified as a
+<a href="http://www.iana.org/assignments/language-subtag-registry">IANA
+language <code>region</code> subtag</a>. In most cases, these tags map directly
+to familiar ccTLD ("top-level domain") two-character values such as "uk" in
+"co.uk" for example. In some cases, the <code>region</code> tag also supports
+ISO-3166-1 codes, which sometimes differ from ccTLD values ("GB" for "Great
+Britain" for example).</p>
+
+<p>Geocoding requests can be sent for every domain in which the main 
+Google Maps application offers geocoding.</p>
+
+<p>For example, a geocode for "Toledo" returns this result, as the default
+domain for the Geocoding Service is set to the United States:</p>
+
+
+<pre class="prettyprint lang-javascript">
+{
+  "types":["locality","political"],
+  "formatted_address":"Toledo, OH, USA",
+  "address_components":[{
+    "long_name":"Toledo",
+    "short_name":"Toledo",
+    "types":["locality","political"]
+  },{
+    "long_name":"Ohio",
+    "short_name":"OH",
+    "types":["administrative_area_level_1","political"]
+  },{
+    "long_name":"United States",
+    "short_name":"US",
+    "types":["country","political"]
+  }]
+}
+</pre>
+
+
+<p>A geocode for "Toledo" with the <code>region</code> field set to <code>'es'</code> (Spain) will return the Spanish city:</p>
+
+
+<pre class="prettyprint lang-javascript">
+{
+  "types":["locality","political"],
+  "formatted_address":"Toledo, España",
+  "address_components":[{
+    "long_name":"Toledo",
+    "short_name":"Toledo",
+    "types":["locality","political"]
+  },{
+    "long_name":"Toledo",
+    "short_name":"TO",
+    "types":["administrative_area_level_2","political"]
+  },{
+    "long_name":"Castilla-La Mancha",
+    "short_name":"CM",
+    "types":["administrative_area_level_1","political"]
+  },{
+    "long_name":"España",
+    "short_name":"ES",
+    "types":["country","political"]
+  }]
+}
+</pre>
+
+
+<h1 id="Directions">Directions</h1>
+
+<p>You can calculate directions (using a variety of methods
+of transportation) by using the <code>DirectionsService</code>
+object. This object communicates with the Google Maps API
+Directions Service which receives direction requests and
+returns computed results. You may either handle these
+directions results yourself or use the
+<code>DirectionsRenderer</code> object to render these
+results.</p>
+
+<p>Directions may specify origins and destinations either
+as text strings (e.g. "Chicago, IL" or "Darwin, NSW,
+Australia") or as <code>LatLng</code> values. The Directions
+service can return multi-part directions using a series
+of waypoints. Directions are displayed as a polyline drawing
+the route on a map, or additionally as a series of textual
+description within a <code>&lt;div&gt;</code> element (e.g.
+"Turn right onto the Williamsburg Bridge ramp").</p>
+
+<h2 id="DirectionsRequests">Directions Requests</h2>
+
+<p>Accessing the Directions service is asynchronous, since
+the Google Maps API needs to make a call to an external
+server. For that reason, you need to pass a <i>callback</i>
+method to execute upon completion of the request. This
+callback method should process the result(s). Note that the
+Directions service may return more than one possible itinerary 
+as an array of separate <code>routes[]</code>.</p>
+
+<p>To use directions in V3, create an object of type
+<code>DirectionsService</code> and call
+<code>DirectionsService.route()</code> to initiate a request
+to the Directions service, passing it a
+<i><code>DirectionsRequest</code></i> object literal
+containing the input terms and a callback method to execute
+upon receipt of the response.</p>
+
+<p>The <i><code>DirectionsRequest</code></i> object literal
+contains the following fields:</p>
+
+<pre class="prettyprint lang-javascript">
+{
+  origin: LatLng | String,
+  destination: LatLng | String,
+  travelMode: DirectionsTravelMode,
+  unitSystem: DirectionsUnitSystem,
+  waypoints[]: DirectionsWaypoint,
+  optimizeWaypoints: Boolean,
+  provideRouteAlternatives: Boolean,
+  avoidHighways: Boolean,
+  avoidTolls: Boolean
+  region: String
+}
+</pre>
+
+<p>These fields are explained below:</p>
+
+<ul>
+<li><code>origin</code> (<i>required</i>) specifies the start
+location from which to calculate directions. This value may
+either be specified as a <code>String</code> (e.g.
+"Chicago, IL") or as a <code>LatLng</code> value.</li>
+<li><code>destination</code> (<i>required</i>) specifies the end
+location to which to calculate directions. This value may
+either be specified as a <code>String</code> (e.g. "Chicago,
+IL") or as a <code>LatLng</code> value.</li>
+<li><code>travelMode</code> (<i>required</i>) specifies what
+mode of transport to use when calculating directions. Valid
+values are specified in <a href="#TravelModes">Travel Modes</a>
+below.</li>
+<li><p><code>unitSystem</code> (<i>optional</i>) specifies what
+unit system to use when displaying results. Valid values are
+specified in <a href="#UnitSystems">Unit Systems</a> below.</li>
+<li><p><code>waypoints[]</code> (<i>optional</i>) specifies
+an array of <code>DirectionsWaypoint</code>s. Waypoints alter
+a route by routing it through the specified location(s).
+A waypoint is specified as an object literal with fields
+shown below:</p>
+  <ul>
+    <li><code>location</code> specifies the location of the
+    waypoint, either as a <code>LatLng</code> or as a
+    <code>String</code> which will be geocoded.</li>
+    <li><code>stopover</code> is a boolean which indicates
+    that the waypoint is a stop on the route, which has the
+    effect of splitting the route into two routes.</li>
+  </ul>
+<p>(For more information on waypoints, see <a href="#Waypoints">Using
+Waypoints in Routes</a> below.)</p>
+</li>
+<li><code>optimizeWaypoints</code> (<i>optional</i>) specifies that
+the route using the supplied <code>waypoints</code> may be
+optimized to provide the shortest possible route. If <code>true</code>,
+the Directions service will return the reordered <code>waypoints</code>
+in an <code>waypoint_order</code> field.(For more
+information, see <a href="#Waypoints">Using Waypoints in Routes</a>
+below.)</li>
+<li><code>provideRouteAlternatives</code> (<i>optional</i>) when set
+to <code>true</code> specifies that the Directions service may
+provide more than one route alternative in the response. Note that
+providing route alternatives may increase the response time from
+the server.</li>
+<li><code>avoidHighways</code> (<i>optional</i>) when set to
+<code>true</code> indicates that the calculated route(s) should
+avoid major highways, if possible.</li>
+<li><code>avoidTolls</code> (<i>optional</i>) when set to
+<code>true</code> indicates that the calculated route(s) should
+avoid toll roads, if possible.</li>
+<li><code>region</code> (<i>optional</i>) specifies the
+region code, specified as a ccTLD ("top-level domain")
+two-character value. (For more information see
+<a href="#DirectionsRegionBiasing">Region Biasing</a> below.)</li>
+</ul>
+
+<p>A sample <code>DirectionsRequest</code> is shown below:</p>
+
+<pre class="prettyprint lang-javascript">
+{
+  origin: "Chicago, IL",
+  destination: "Los Angeles, CA",
+  waypoints: [
+    {
+      location:"Joplin, MO", 
+      stopover:false
+    },{
+      location:"Oklahoma City, OK",
+      stopover:true
+    }],
+  provideRouteAlternatives: false,
+  travelMode: DirectionsTravelMode.DRIVING,
+  unitSystem: DirectionsUnitSystem.IMPERIAL
+}
+</pre>
+
+<h3 id="TravelModes">Travel Modes</h3>
+
+<p>When you calculate directions, you need to specify
+which transportation mode to use. The following travel
+modes are currently supported:</p>
+
+<ul>
+<li><code>DirectionsTravelMode.DRIVING</code> indicates standard
+driving directions using the road network.</li>
+<li><code>DirectionsTravelMode.WALKING</code> requests walking
+directions via pedestrian paths &amp; sidewalks 
+(where available).</li>
+<li><span style="color:red">New!</span>
+<code>DirectionsTravelMode.BICYCLING</code> requests bicycling
+directions via bicycle paths &amp; preferred streets 
+(currently only available in the US).</li>
+</ul>
+
+<p><span style="color:red; ">Note:</span> Walking directions
+may sometimes not include clear pedestrian paths, so walking
+directions will return warnings in the
+<code>DirectionsResult</code> which you must display if you
+are not using the default <code>DirectionsRenderer</code>.</p>
+
+<h3 id="UnitSystems">Unit Systems</h3>
+
+<p>By default, directions are calculated and displayed using
+the unit system of the origin's country or region.
+(<span style="color:red">Note: </span>origins expressed using
+latitude/longitude coordinates rather than addresses always default
+to metric units.) For example, a route from
+"Chicago, IL" to "Toronto, ONT" will display results in miles, while
+the reverse route will display results in kilometers. You
+may override this unit system by setting one explicitly within the
+request using one of the following <code>DirectionsUnitSystem</code>
+values:</p>
+
+<ul>
+  <li><code>DirectionsUnitSystem.METRIC</code> specifies
+  usage of the metric system. Distances are shown using kilometers.</li>
+  <li><code>DirectionsUnitSystem.IMPERIAL</code> specifies
+  usage of the Imperial (English) system. Distances are shown using miles.</li>
+</ul>
+
+<p><span style="color:red">Note: </span> this unit system setting only
+affects the text displayed to the user. The directions result also
+contains distance <i>values</i>, not shown to the user, which are always
+expressed in meters.</p>
+
+<h3 id="DirectionsRegionBiasing">Region Biasing for Directions</h3>
+
+<p>The Google Maps API Directions Service returns address results influenced
+by the domain (region or country) from which you loaded the JavaScript
+bootstrap. (Since most users load <code>http://maps.google.com/</code>
+this sets an implicit domain to the United States.) If you load the
+bootstrap from a different supported domain, you will get results
+influenced by that domain. For example, searches for "San Francisco" may
+return different results from applications loading
+<code>http://maps.google.com/</code> (the United States) than one loading
+<code>http://maps.google.es/</code> (Spain).</p>
+
+<p>You can also set the Directions service to return results biased to a 
+particular region using the <code>region</code> parameter. This parameter
+takes a region code, specified as a
+<a href="http://www.iana.org/assignments/language-subtag-registry">IANA
+language <code>region</code> subtag</a>. In most cases, these tags map
+directly to ccTLD ("top-level domain") two-character values such as "uk" in
+"co.uk" for example. In some cases, the <code>region</code> tag also supports
+ISO-3166-1 codes, which sometimes differ from ccTLD values ("GB" for "Great
+Britain" for example).</p>
+
+<p>Consult the <a href="http://gmaps-samples.googlecode.com/svn/trunk/mapcoverage_filtered.html">
+Google Maps coverage spreadsheet</a> to determine to what extent
+a country supports directions.</p>
+
+<h2 id="RenderingDirections">Rendering Directions</h2>
+
+<p>Initiating a directions request to the
+<code>DirectionsService</code> with the <code>route()</code> method
+requires passing a callback which executes upon completion of the
+service request. This callback will return a
+<code>DirectionsResult</code> and a <code>DirectionsStatus</code>
+code in the response.</p>
+
+<h3 id="DirectionsStatus">Status of Directions Query</h3>
+
+<p>The <code>DirectionsStatus</code> may return the following
+values:</p>
+
+<ul>
+  <li><code>OK</code> indicates the response contains a
+  valid <code>DirectionsResult</code>.</li>
+  <li><code>NOT_FOUND</code> indicates at least one of the
+  locations specified in the requests's origin, destination, or
+  waypoints could not be geocoded.</li>
+  <li><code>ZERO_RESULTS</code> indicates no route could be found
+  between the origin and destination.</li>
+  <li><code>MAX_WAYPOINTS_EXCEEDED</code> indicates that too
+  many <code>DirectionsWaypoint</code>s were provided
+  in the <code>DirectionsRequest</code>. The maximum allowed
+  waypoints is 8, plus the origin, and
+  destination. Maps API Premier
+  customers are allowed 23 waypoints,
+  plus the origin, and destination.</li>
+  <li><code>INVALID_REQUEST</code> indicates that the
+  provided <code>DirectionsRequest</code> was invalid.</li>
+  <li><code>OVER_QUERY_LIMIT</code> indicates the webpage has
+  sent too many requests within the allowed time period.</li>
+  <li><code>REQUEST_DENIED</code> indicates the webpage is
+  not allowed to use the directions service.</li>
+  <li><code>UNKNOWN_ERROR</code> indicates a directions request
+  could not be processed due to a server error. The request may
+  succeed if you try again.</li>
+</ul>
+
+<p>You should ensure that the directions query returned valid
+results by checking this value before processing the result.</p>
+
+<h3 id="DisplayingResults">Displaying the <b>DirectionsResult</b></h3>
+
+<p>The <code>DirectionsResult</code> contains the result of the
+directions query, which you may either handle yourself, or pass
+to a <code>DirectionsRenderer</code> object, which can
+automatically handle displaying the result on a map.</p>
+
+<p>To display a <code>DirectionsResult</code> using a
+<code>DirectionsRenderer</code>, you simply need to do the
+following:</p>
+
+<ol>
+  <li>Create a <code>DirectionsRenderer</code> object.</li>
+  <li>Call <code>setMap()</code> on the renderer to bind
+  it to the passed map.</li>
+  <li>Call <code>setDirections()</code> on the renderer,
+  passing it the <code>DirectionsResult</code> as noted
+  above. Because the renderer is an <code>MVCObject</code>,
+  it will automatically detect any changes to its properties
+  and update the map when its associated directions have
+  changed.</li>
+</ol>
+
+<p>The following example calculates directions between
+two locations on Route 66, where the origin and destination
+are set by the given <code>"start"</code> and <code>"end"</code>
+values in the dropdown lists. The <code>DirectionsRenderer</code>
+handles display of the polyline between the indicated
+locations, and the placement of markers at the origin,
+destination, and any waypoints, if applicable.</p>
+
+<pre class="prettyprint lang-javascript">
+var directionDisplay;
+var directionsService = new google.maps.DirectionsService();
+var map;
+
+function initialize() {
+  directionsDisplay = new google.maps.DirectionsRenderer();
+  var chicago = new google.maps.LatLng(41.850033, -87.6500523);
+  var myOptions = {
+    zoom:7,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    center: chicago
+  }
+  map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  directionsDisplay.setMap(map);
+}
+  
+function calcRoute() {
+  var start = document.getElementById("start").value;
+  var end = document.getElementById("end").value;
+  var request = {
+    origin:start, 
+    destination:end,
+    travelMode: google.maps.DirectionsTravelMode.DRIVING
+  };
+  directionsService.route(request, function(result, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(result);
+    }
+  });
+}
+
+&lt;div&gt;
+&lt;b&gt;Start: &lt;/b&gt;
+&lt;select id="start" onchange="calcRoute();"&gt;
+  &lt;option value="chicago, il"&gt;Chicago&lt;/option&gt;
+  &lt;option value="st louis, mo"&gt;St Louis&lt;/option&gt;
+  &lt;option value="joplin, mo"&gt;Joplin, MO&lt;/option&gt;
+  &lt;option value="oklahoma city, ok"&gt;Oklahoma City&lt;/option&gt;
+  &lt;option value="amarillo, tx"&gt;Amarillo&lt;/option&gt;
+  &lt;option value="gallup, nm"&gt;Gallup, NM&lt;/option&gt;
+  &lt;option value="flagstaff, az"&gt;Flagstaff, AZ&lt;/option&gt;
+  &lt;option value="winona, az"&gt;Winona&lt;/option&gt;
+  &lt;option value="kingman, az"&gt;Kingman&lt;/option&gt;
+  &lt;option value="barstow, ca"&gt;Barstow&lt;/option&gt;
+  &lt;option value="san bernardino, ca"&gt;San Bernardino&lt;/option&gt;
+  &lt;option value="los angeles, ca"&gt;Los Angeles&lt;/option&gt;
+&lt;/select&gt;
+&lt;b&gt;End: &lt;/b&gt;
+&lt;select id="end" onchange="calcRoute();"&gt;
+  &lt;option value="chicago, il"&gt;Chicago&lt;/option&gt;
+  &lt;option value="st louis, mo"&gt;St Louis&lt;/option&gt;
+  &lt;option value="joplin, mo"&gt;Joplin, MO&lt;/option&gt;
+  &lt;option value="oklahoma city, ok"&gt;Oklahoma City&lt;/option&gt;
+  &lt;option value="amarillo, tx"&gt;Amarillo&lt;/option&gt;
+  &lt;option value="gallup, nm"&gt;Gallup, NM&lt;/option&gt;
+  &lt;option value="flagstaff, az"&gt;Flagstaff, AZ&lt;/option&gt;
+  &lt;option value="winona, az"&gt;Winona&lt;/option&gt;
+  &lt;option value="kingman, az"&gt;Kingman&lt;/option&gt;
+  &lt;option value="barstow, ca"&gt;Barstow&lt;/option&gt;
+  &lt;option value="san bernardino, ca"&gt;San Bernardino&lt;/option&gt;
+  &lt;option value="los angeles, ca"&gt;Los Angeles&lt;/option&gt;
+&lt;/select&gt;
+&lt;/div&gt;
+</pre>
+
+<p><a href="examples/directions-simple.html">View example
+(directions-simple.html)</a></p>
+
+<p>The following example shows directions using different
+modes of travel between the Haight-Ashbury to Ocean Beach in
+San Francisco, CA:</p>
+
+<a name="TravelModeSample"></a>
+<pre class="prettyprint lang-javascript">
+var directionDisplay;
+var directionsService = new google.maps.DirectionsService();
+var map;
+var haight = new google.maps.LatLng(37.7699298, -122.4469157);
+var oceanBeach = new google.maps.LatLng(37.7683909618184, -122.51089453697205);
+
+function initialize() {
+  directionsDisplay = new google.maps.DirectionsRenderer();
+  var myOptions = {
+    zoom: 14,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    center: haight
+  }
+  map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  directionsDisplay.setMap(map);
+}
+  
+function calcRoute() {
+  var selectedMode = document.getElementById("mode").value;
+  var request = {
+      origin: haight, 
+      destination: oceanBeach,
+      // Note that Javascript allows us to access the constant
+      // using square brackets and a string value as its
+      // "property."
+      travelMode: google.maps.DirectionsTravelMode[selectedMode]
+  };
+  directionsService.route(request, function(response, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(response);
+    }
+  });
+}
+&lt;div&gt;
+&lt;b&gt;Mode of Travel: &lt;/b&gt;
+&lt;select id="mode" onchange="calcRoute();"&gt;
+  &lt;option value="DRIVING"&gt;Driving&lt;/option&gt;
+  &lt;option value="WALKING"&gt;Walking&lt;/option&gt;
+  &lt;option value="BICYCLING"&gt;Bicycling&lt;/option&gt;
+&lt;/select&gt;
+&lt;/div&gt;
+</pre>
+
+<p><a href="examples/directions-travel-modes.html">View example
+(directions-travel-modes.html)</a></p>
+
+<p>A <code>DirectionsRenderer</code> not only handles display
+of the polyline and any associated markers, but also can handle
+the textual display of directions as a series of steps. To do
+so, simply call <code>setPanel()</code> on your
+<code>DirectionsRenderer</code>, passing it the
+<code>&lt;div&gt;</code> in which to display this information.
+Doing so also ensures that you display the appropriate copyright
+information, and any warnings which may be associated with the
+result.</p>
+
+<p>Textual directions will be provided using the browser's
+preferred language setting, or the language specified when
+loading the API JavaScript using the <code>language</code>
+parameter. (For more information, see 
+<a href="../v3/index.html#Localization">
+Localization.</a>)</li></p>
+
+<p>The following example is identical to that shown above,
+but includes a <code>&lt;div&gt;</code> panel in which to
+display directions:</p>
+
+<pre class="prettyprint lang-javascript">
+var directionDisplay;
+var directionsService = new google.maps.DirectionsService();
+var map;
+
+function initialize() {
+  directionsDisplay = new google.maps.DirectionsRenderer();
+  var chicago = new google.maps.LatLng(41.850033, -87.6500523);
+  var myOptions = {
+    zoom:7,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    center: chicago
+  }
+  map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  directionsDisplay.setMap(map);
+  directionsDisplay.setPanel(document.getElementById("directionsPanel"));
+}
+  
+function calcRoute() {
+  var start = document.getElementById("start").value;
+  var end = document.getElementById("end").value;
+  var request = {
+    origin:start, 
+    destination:end,
+    travelMode: google.maps.DirectionsTravelMode.DRIVING
+  };
+  directionsService.route(request, function(response, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(response);
+    }
+  });
+}
+
+// select UI elements omitted
+&lt;div&gt;&lt;div id="map_canvas" style="float:left;width:70%; height:100%"&gt;&lt;/div&gt;
+&lt;div id="directionsPanel" style="float:right;width:30%;height 100%"&gt;&lt;/div&gt;   
+</pre>
+
+<p><a href="examples/directions-panel.html">View example
+(directions-panel.html)</a></p>
+
+<h2 id="DirectionsResults">The <b>Directions Results</b> Object</h2>
+
+<p>When sending a directions request to the
+<code>DirectionsService</code>, you receive a response consisting of
+a status code, and a result, which is a <code>DirectionsResult</code>
+object. The <code>DirectionsResult</code> is an object literal
+with a single field:</p>
+
+<ul>
+  <li><code>routes[]</code> contains an array of
+  <code>DirectionsRoute</code> objects. Each route indicates a way to
+  get from the origin to the destination provided in the
+  <code>DirectionsRequest</code>. Generally, only one route
+  is returned for any given request, unless the request's
+  <code>provideRouteAlternatives</code> field is set to
+  <code>true</code>, in which, multiple routes may be returned.</li>
+</ul>
+
+<h3 id="Routes">Directions Routes</h3>
+
+<p class="note">The legacy <code>DirectionsTrip</code> object has
+been renamed <code>DirectionsRoute</code>. Note that a route
+now refers to the entire start to end journey, rather than simply
+a leg of a parent trip.</p>
+
+<p>A <code>DirectionsRoute</code> contains a single result from
+the specified origin and destination. This route may consist of
+one or more legs (of type <code>DirectionsLeg</code>)
+depending on whether any waypoints were specified. As well, the
+route also contains copyright and warning information which must
+be displayed to the user in addition to the routing information.</p>
+
+<p>The <code>DirectionsRoute</code> is an object literal with
+the following fields:</p>
+
+<ul>
+  <li><code>legs[]</code> contains an array of
+  <code>DirectionsLeg</code> objects, each of which contains
+  information about a leg of the route, from two locations
+  within the given route. A separate leg will be present for each
+  waypoint or destination specified. (A route with no waypoints will contain
+  exactly one <code>DirectionsLeg</code>.) Each leg consists
+  of a series of <code>DirectionStep</code>s.</li>
+  <li><code>waypoint_order</code> contains an array
+  indicating the order of any waypoints in the calculated
+  route. This array may contain an altered order if the
+  <code>DirectionsRequest</code> was passed
+  <code>optimizeWaypoints: true</code>.</li>
+  <li><code>overview_path</code> contains an array of
+  <code>LatLng</code>s that represent an approximate (smoothed)
+  path of the resulting directions.</li>
+  <li><code>bounds</code> contains a <code>LatLngBounds</code>
+  indicating the bounds of the polyline along this given route.</li>
+  <li><code>copyrights</code> contains the copyrights text to be
+  displayed for this route. If you do not use the provided
+  <code>DirectionsRenderer</code> object, you must handle and
+  display this information yourself.</li>
+  <li><code>warnings[]</code> contains an array of warnings
+  to be displayed when showing these directions. If you do not
+  use the provided <code>DirectionsRenderer</code> object, you must
+  handle and display these warnings yourself.</li>
+</ul>
+
+<h3 id="Legs">Directions Legs</h3>
+
+<p class="note">The legacy <code>DirectionsRoute</code> object has
+been renamed <code>DirectionsLeg</code>. Note that a leg
+refers to a leg of a parent route.</p>
+
+<p>A <code>DirectionsLeg</code> defines a single leg of a
+journey from the origin to the destination in the calculated route.
+For routes that contain no waypoints, the route will consist of a
+single "leg," but for routes that define one or more waypoints,
+the route will consist of one or more legs, corresponding to the
+specific legs of the journey.</p>
+
+<p>The <code>DirectionsLeg</code> is an object literal with the
+following fields:</p>
+
+<ul>
+  <li><code>steps[]</code> contains an array of
+  <code>DirectionsStep</code> objects denoting information about
+  each separate step of the leg of the journey.</li>
+  <li><p><code>distance</code> indicates the total distance covered
+  by this leg, as a <code>DirectionsDistance</code> object of the
+  following form:</p>
+    <ul>
+      <li><code>value</code> indicates the distance in meters</li>
+      <li><code>text</code> contains a string representation
+      of the distance, which by default is displayed in units as
+      used at the origin. (For example, miles will be used for
+      any origin within the United States.) You may override this
+      unit system by specifically setting a 
+      <code>DirectionsUnitSystem</code> in the original query.
+      Note that regardless of what unit system you use, the
+      <code>distance.value</code> field always contains a value
+      expressed in meters.</li>
+    </ul>
+  <p>These fields may be undefined if the distance is unknown.</p>
+  </li>
+  <li><p><code>duration</code> indicates the total duration of
+  this leg, as a <code>DirectionsDuration</code> object of
+  the following form:</p>
+    <ul>
+      <li><code>value</code> indicates the duration in
+      seconds.</li>
+      <li><code>text</code> contains a string representation
+      of the duration.</li>
+    </ul>
+  <p>These fields may be undefined if the duration is unknown.</p>
+  </li>
+  <li><code>start_location</code> contains the
+  <code>LatLng</code> of the origin of this leg. Because the
+  Directions Web Service calculates directions between locations
+  by using the nearest transportation option (usually a road) at
+  the start and end points, <code>start_location</code> may be
+  different than the provided origin of this leg if, for
+  example, a road is not near the origin.</li>
+  <li><code>end_location</code> contains the <code>LatLng</code>
+  of the destination of this leg. Because the
+  <code>DirectionsService</code> calculates directions between locations
+  by using the nearest transportation option (usually a road) at the
+  start and end points, <code>end_location</code> may be
+  different than the provided destination of this leg if, for
+  example, a road is not near the destination.</li>
+  <li><code>start_address</code> contains the human-readable address
+  (typically a street address) of the start of this leg.</li>
+  <li><code>end_address</code> contains the human-readable address
+  (typically a street address) of the end of this leg.</li>
+</ul>
+
+<h3 id="Steps">Directions Steps</h3>
+
+<p>A <code>DirectionsStep</code> is the most atomic unit of a
+direction's route, containing a single step describing a specific, single
+instruction on the journey. E.g. "Turn left at W. 4th St." The step not
+only describes the instruction but also contains distance and duration
+information relating to how this step relates to the following step.
+For example, a step denoted as "Merge onto I-80 West" may contain a
+duration of "37 miles" and "40 minutes," indicating that the next step
+is 37 miles/40 minutes from this step.</p>
+
+<p>The <code>DirectionsStep</code> is an object literal with the
+following fields:</p>
+
+<ul>
+<li><code>instructions</code> contains instructions for this step
+within a text string.</li>
+<li><code>distance</code> contains the distance covered by this
+step until the next step,
+as a <code>DirectionsDistance</code> object. (See the description
+in <code>DirectionsLeg</code> above.) This field may be undefined
+if the distance is unknown.</li>
+<li><code>duration</code> contains the typical time required to
+perform the step, until the next step, as a
+<code>DirectionsDuration</code> object. (See the description in
+<code>DirectionsLeg</code> above.) This field may be undefined
+if the duration is unknown.</li>
+<li><code>start_location</code> contains the geocoded
+<code>LatLng</code> of the starting point of this step.</li>
+<li><code>end_location</code> contains the <code>LatLng</code> of
+the ending point of this step.</li>
+</ul>
+
+<h2 id="InspectingResults">Inspecting <b>DirectionsResults</b></h2>
+
+<p>The <code>DirectionsResults</code> components &mdash; 
+<code>DirectionsRoute</code>, <code>DirectionsLeg</code>
+and <code>DirectionsStep</code> &mdash; may be inspected
+and used when parsing any directions response.</p>
+
+<p>The following example plots walking directions to certain tourist
+attractions in New York City. We inspect the route's
+<code>DirectionsStep</code> to add markers for each step, and
+attach information to an <code>InfoWindow</code> with instructional
+text for that step.</p>
+
+<p><span style="color:red">Note: </span> since we are calculating
+walking directions, we also display any warnings to the user in
+a separate <code>&lt;div&gt;</code> panel.</p>
+
+
+<pre class="prettyprint lang-javascript">
+var map;
+var directionDisplay;
+var directionsService;
+var stepDisplay;
+var markerArray = [];
+
+function initialize() {
+  // Instantiate a directions service.
+  directionsService = new google.maps.DirectionsService();
+    
+  // Create a map and center it on Manhattan.
+  var manhattan = new google.maps.LatLng(40.7711329, -73.9741874);
+  var myOptions = {
+    zoom: 13,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    center: manhattan
+  }
+  map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    
+  // Create a renderer for directions and bind it to the map.
+  var rendererOptions = {
+    map: map
+  }
+  directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions)
+    
+  // Instantiate an info window to hold step text.
+  stepDisplay = new google.maps.InfoWindow();
+}
+
+function calcRoute() {
+  
+  // First, clear out any existing markerArray
+  // from previous calculations.
+  for (i = 0; i < markerArray.length; i++) {
+    markerArray[i].setMap(null);
+  }
+
+  // Retrieve the start and end locations and create
+  // a DirectionsRequest using WALKING directions.
+  var start = document.getElementById("start").value;
+  var end = document.getElementById("end").value;
+  var request = {
+      origin: start,
+      destination: end,
+      travelMode: google.maps.DirectionsTravelMode.WALKING
+  };
+
+  // Route the directions and pass the response to a
+  // function to create markers for each step.
+  directionsService.route(request, function(response, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+      var warnings = document.getElementById("warnings_panel");
+      warnings.innerHTML = "<b>" + response.routes[0].warnings + "</b>";
+      directionsDisplay.setDirections(response);
+      showSteps(response);
+    }
+  });
+}
+
+function showSteps(directionResult) {
+  // For each step, place a marker, and add the text to the marker's
+  // info window. Also attach the marker to an array so we
+  // can keep track of it and remove it when calculating new
+  // routes.
+  var myRoute = directionResult.routes[0].legs[0];
+
+  for (var i = 0; i < myRoute.steps.length; i++) {
+      var marker = new google.maps.Marker({
+        position: myRoute.steps[i].start_point, 
+        map: map
+      });
+      attachInstructionText(marker, myRoute.steps[i].instructions);
+      markerArray[i] = marker;
+  }
+}
+
+function attachInstructionText(marker, text) {
+  google.maps.event.addListener(marker, 'click', function() {
+    stepDisplay.setContent(text);
+    stepDisplay.open(map, marker);
+  });
+}
+
+&lt;div&gt;
+&lt;b&gt;Start: &lt;/b&gt;
+&lt;select id="start"&gt;
+  &lt;option value="penn station, new york, ny"&gt;Penn Station&lt;/option&gt;
+  &lt;option value="grand central station, new york, ny"&gt;Grand Central Station&lt;/option&gt;
+  &lt;option value="625 8th Avenue New York NY 10018"&gt;Port Authority Bus Terminal&lt;/option&gt;
+  &lt;option value="staten island ferry terminal, new york, ny"&gt;Staten Island Ferry Terminal&lt;/option&gt;
+  &lt;option value="101 E 125th Street, New York, NY"&gt;Harlem - 125th St Station&lt;/option&gt;
+&lt;/select&gt;
+&lt;b&gt;End: &lt;/b&gt;
+&lt;select id="end" onchange="calcRoute();"&gt;
+  &lt;option value="260 Broadway New York NY 10007"&gt;City Hall&lt;/option&gt;
+  &lt;option value="W 49th St & 5th Ave, New York, NY 10020"&gt;Rockefeller Center&lt;/option&gt;
+  &lt;option value="moma, New York, NY"&gt;MOMA&lt;/option&gt;
+  &lt;option value="350 5th Ave, New York, NY, 10118"&gt;Empire State Building&lt;/option&gt;
+  &lt;option value="253 West 125th Street, New York, NY"&gt;Apollo Theatre&lt;/option&gt;
+  &lt;option value="1 Wall St, New York, NY"&gt;Wall St&lt;/option&gt;
+&lt;/select&gt;
+&lt;div&gt;
+</pre>
+
+
+<p><a href="examples/directions-complex.html">View example
+(directions-complex.html)</a></p>
+
+<h2 id="Waypoints">Using Waypoints in Routes</h2>
+
+<p>As noted within the <a href="#DirectionsRequests">
+DirectionsRequest</a>, you may also specify <i>waypoints</i>
+(of type <code>DirectionsWaypoint</code>) when calculating
+routes using the Directions service. Waypoints allow you to
+calculate routes through additional locations, in which
+case the returned route passes through the given waypoints.</p>
+
+<p>A <code>waypoint</code> consists of the following fields:</p>
+
+<ul>
+  <li><code>location</code> (required) specifies the address
+  of the waypoint.</li>
+  <li><code>stopover</code> (optional) indicates whether this
+  waypoint is a actual stop on the route (<code>true</code>)
+  or instead only a preference to route through the indicated
+  location (<code>false</code>). Stopovers are <code>true</code>
+  by default.</li>
+</ul>
+
+<p>By default, the Directions service calculates a route through
+the provided waypoints in their given order. Optionally, you
+may pass <code>optimizeWaypoints: true</code> within the <code>
+DirectionsRequest</code> to allow the Directions service to
+optimize the provided route by rearranging the waypoints in
+a more efficient order. (This optimization is an application of the
+<a href="http://en.wikipedia.org/wiki/Travelling_salesman_problem">
+Travelling Salesman Problem</a>.) All waypoints must be stopovers
+for the Directions service to optimize their route.</p> 
+
+<p>If you instruct the Directions service to optimize the order of
+its waypoints, their order will be returned in the
+<code>optimized_waypoints_order</code> field within the
+<code>DirectionsResult</code> object.</p>
+
+<p>The following example calculates cross-country routes across
+the United States using a variety of start points, end points,
+and waypoints. (To select multiple waypoints, press
+<b>Ctrl-Click</b> when selecting items within the list.)
+Note that we inspect the <code>routes.start_address</code>
+and <code>routes.end_address</code> to provide
+us with the text for each route's start and end point.</p>
+
+
+<pre class="prettyprint lang-javascript">
+var directionDisplay;
+var directionsService = new google.maps.DirectionsService();
+var map;
+
+function initialize() {
+  directionsDisplay = new google.maps.DirectionsRenderer();
+  var chicago = new google.maps.LatLng(41.850033, -87.6500523);
+  var myOptions = {
+    zoom: 6,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    center: chicago
+  }
+  map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  directionsDisplay.setMap(map);
+}
+  
+function calcRoute() {
+  var start = document.getElementById("start").value;
+  var end = document.getElementById("end").value;
+  var waypts = [];
+  var checkboxArray = document.getElementById("waypoints");
+  for (var i = 0; i < checkboxArray.length; i++) {
+    if (checkboxArray.options[i].selected == true) {
+      waypts.push({
+          location:checkboxArray[i].value,
+          stopover:true
+      });
+    }
+  }
+
+  var request = {
+      origin: start, 
+      destination: end,
+      waypoints: waypts,
+      optimizeWaypoints: true,
+      travelMode: google.maps.DirectionsTravelMode.DRIVING
+  };
+  directionsService.route(request, function(response, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(response);
+      var route = response.routes[0];
+      var summaryPanel = document.getElementById("directions_panel");
+      summaryPanel.innerHTML = "";
+      // For each route, display summary information.
+      for (var i = 0; i < route.legs.length; i++) {
+        var routeSegment = i+1;
+        summaryPanel.innerHTML += "&lt;b&gt;Route Segment: " + routeSegment + "&lt;/b&gt;&lt;br /&gt;";
+        summaryPanel.innerHTML += route.legs[i].start_address + " to ";
+        summaryPanel.innerHTML += route.legs[i].end_address + "&lt;br /&gt;";
+        summaryPanel.innerHTML += route.legs[i].distance.text + "&lt;br /&gt;&lt;br /&gt;";
+      }
+    }
+  });
+}
+</pre>
+
+
+<p><a href="examples/directions-waypoints.html">View example
+(directions-waypoints.html)</a></p>
+
+<h2 id="DraggableDirections">Draggable Directions</h2>
+
+<p>Users may modify directions displayed using a
+<code>DirectionsRenderer</code> dynamically if they are
+<i>draggable</i>, allowing a user to select and alter
+routes by clicking and dragging the resulting paths on the map.
+You indicate whether a renderer's display allows draggable
+directions by setting its <code>draggable</code> property
+to <code>true</code>.</p>
+
+<p>When directions are draggable, a user may select any point on
+the path (or waypoint) of the rendered result and move the indicated
+component to a new location. The <code>DirectionsRenderer</code>
+will dynamically update to show the modified path. Upon release, a
+transitional waypoint will be added to the map (indicated by
+a small white marker). Selecting and moving a path segment will
+alter that leg of the route, while selecting and moving
+a waypoint marker (including start and end points) will alter the
+legs of the route passing through that waypoint.</p>
+
+<p>Because draggable directions are modified and rendered client-side,
+you may wish to monitor and handle the <code>directions_changed</code>
+event on the <code>DirectionsRenderer</code> to be notified when the
+user has modified the displayed directions.</p>
+
+<p>The following code shows a round trip from Sydney through the
+New South Wales outback. The code monitors the
+<code>directions_changed</code> event to update the total distance
+of all legs of the journey.</p>
+
+
+<pre class="prettyprint lang-javascript">
+var rendererOptions = {
+  draggable: true
+};
+var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);;
+var directionsService = new google.maps.DirectionsService();
+var map;
+
+var australia = new google.maps.LatLng(-25.274398, 133.775136);
+
+function initialize() {
+
+  var myOptions = {
+    zoom: 7,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    center: australia
+  };
+  map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  directionsDisplay.setMap(map);
+  directionsDisplay.setPanel(document.getElementById("directionsPanel"));
+
+  google.maps.event.addListener(directionsDisplay, 'directions_changed', function() {
+    computeTotalDistance(directionsDisplay.directions);
+  });
+
+  calcRoute();
+}
+
+function calcRoute() {
+
+  var request = {
+    origin: "Sydney, NSW",
+    destination: "Sydney, NSW",
+    waypoints:[{location: "Bourke, NSW"}, {location: "Broken Hill, NSW"}],
+    travelMode: google.maps.DirectionsTravelMode.DRIVING
+  };
+  directionsService.route(request, function(response, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(response);
+    }
+  });
+}
+
+function computeTotalDistance(result) {
+  var total = 0;
+  var myroute = result.routes[0];
+  for (i = 0; i < myroute.legs.length; i++) {
+    total += myroute.legs[i].distance.value;
+  }
+  total = total / 1000.
+  document.getElementById("total").innerHTML = total + " km";
+}   
+</pre>
+
+
+<p><a href="examples/directions-draggable.html">View example
+(directions-draggable.html)</a></p>
+
+<h1 id="Elevation">Elevation</h1>
+
+<p>The Elevation service provides elevation data for locations
+on the surface of the earth, including depth locations on the
+ocean floor (which return negative values). In those cases where
+Google does not possess exact elevation measurements at the precise
+location you request, the service will interpolate and return an
+averaged value using the four nearest locations.</p>
+
+<p>The <code>ElevationService</code> object provides you with
+a simple interface to query locations on the earth for elevation
+data. Additionally, you may request sampled elevation data along
+paths, allowing you to calculate the equidistant elevation changes
+along routes. The <code>ElevationService</code> object communicates
+with the Google Maps API Elevation Service which receives elevation
+requests and returns elevation data.</p>
+
+<p>Note that these requests are rate-limited to discourage abuse of
+the service. If instead you wish to calculate elevations for static,
+known locations, see the
+<a href="../elevation/index.html">Elevation API</a>
+documentation.</p>
+
+<p>With the Elevation service, you can develop hiking and biking
+applications, mobile positioning applications, or low resolution
+surveying applications.</p>
+
+<h2 id="ElevationRequests">Elevation Requests</h2>
+
+<p>Accessing the Elevation service is asynchronous, since
+the Google Maps API needs to make a call to an external
+server. For that reason, you need to pass a <i>callback</i>
+method to execute upon completion of the request. This
+callback method should process the result(s). Note that the
+Elevation service returns a status code
+(<code>ElevationStatus</code>) and an array of separate
+<code>ElevationResult</code> objects.</p>
+
+<p>The <code>ElevationService</code> handles two types of requests:</p>
+
+<ul>
+  <li>Requests for separate, discrete locations using the
+  <code>getElevationForLocations()</code> method, which
+  is passed a list of one or more locations using a
+  <code>LocationElevationRequest</code> object.</li>
+  <li>Requests for elevation on a series of connected points along
+  a path using the <code>getElevationAlongPath()</code> method,
+  which is passed an ordered set of path vertices within a
+  <code>PathElevationRequest</code> object. When requesting
+  elevations along paths, you must also pass a parameter indicating
+  how many samples you wish to take along that path.</li>
+</ul>
+
+<p>Each of these methods must also pass a <i>callback</i>
+method to handle the returned <code>ElevationResult</code>
+and <code>ElevationStatus</code> objects.</p>
+
+<h3 id="LocationElevationRequests">Location Elevation Requests</h3>
+
+<p>A <i><code>LocationElevationRequest</code></i> object literal
+contains the following field:</p>
+
+<pre class="prettyprint lang-javascript">
+{
+  locations[]: LatLng
+}
+</pre>
+
+<p><code>locations</code> (required) defines the location(s) on the earth
+from which to return elevation data. This parameter takes an array of
+<code>LatLng</code>s.</p
+
+<p>You may pass any number of multiple coordinates within an array,
+as long as you don't exceed the service quotas.
+Note that when passing multiple coordinates, the
+accuracy of any returned data may be of lower resolution than when
+requesting data for a single coordinate.</p>
+
+<h3 id="PathElevationRequests">Sampled Path Elevation Requests</h3>
+
+<p>A <i><code>PathElevationRequest</code></i> object literal
+contains the following fields:</p>
+
+<pre class="prettyprint lang-javascript">
+{
+  path[]: LatLng,
+  samples: Number
+}
+</pre>
+
+<p>These fields are explained below:</p>
+
+<ul>
+<li><code>path</code> (required) defines a path on the earth
+for which to return elevation data. The <code>path</code>
+parameter defines a set of two or more ordered {latitude,longitude}
+pairs using an array of two or more <code>LatLng</code> objects.</li>
+
+<li><code>samples</code> (required) specifies the number of sample
+points along a path for which to return elevation data. The
+<code>samples</code> parameter divides the given <code>path</code>
+into an ordered set of equidistant points along the path.</li>
+</ul>
+
+<p>As with positional requests, the <code>path</code> parameter
+specifies a set of latitude and longitude values. Unlike a positional
+request, however, the <code>path</code> specifies an ordered set of
+vertices. Rather than return elevation data at the vertices, path
+requests are sampled <i>along the length of the path</i>, where each
+sample is equidistant from each other (inclusive of the endpoints).</p>
+
+<h2 id="ElevationResponses">Elevation Responses</h2>
+
+<p>For each valid request, the Elevation service will return 
+to the defined callback a set of <code>ElevationResult</code>
+objects along with an <code>ElevationStatus</code> object.</p>
+
+<h3 id="ElevationStatus">Elevation Statuses</h3>
+
+<p>Each elevation request returns an <code>ElevationStatus</code> code
+within its callback function. This <code>status</code> code
+will contain one of the following values:
+
+<ul>
+  <li><code>OK</code> indicating the service request was successful</li>
+  <li><code>INVALID_REQUEST</code> indicating the service request was malformed</li>
+  <li><code>OVER_QUERY_LIMIT</code> indicating that the requestor
+  has exceeded quota</li>
+  <li><code>REQUEST_DENIED</code> indicating the service did not complete 
+  the request, likely because on an invalid parameter</li>
+  <li><code>UNKNOWN_ERROR</code> indicating an unknown error</li>
+</ul>
+
+<p>You should check that your callback succeeded by examining this
+status code for <code>google.maps.ElevationStatus.OK</code>.</p> 
+
+<h3 id="ElevationResults">Elevation Results</h3>
+
+<p>Upon success, the <code>results</code> argument of your callback
+function will contain a set of <code>ElevationResult</code> objects.
+These objects contain the following elements:</p>
+
+<ul>
+  <li>A <code>location</code> element (containing <code>LatLng</code>
+  objects) of the position for which
+ elevation data is being computed. Note that for path requests,
+  the set of <code>location</code> elements will contain the sampled
+  points along the path.</li>
+  <li>An <code>elevation</code> element indicating the elevation of
+  the location in meters.</li>  
+</ul>
+
+<h2 id="ElevationExamples">Elevation Examples</h2>
+
+<p>The following code translates a click on a map into an elevation
+request using the <code>LocationElevationRequest</code> object:</p>
+
+
+<pre class="prettyprint lang-javascript">
+var elevator;
+var map;
+var infowindow = new google.maps.InfoWindow();
+var denali = new google.maps.LatLng(63.3333333, -150.5);
+
+function initialize() {
+  var myOptions = {
+    zoom: 8,
+    center: denali,
+    mapTypeId: 'terrain'
+  }
+  map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+  // Create an ElevationService
+  elevator = new google.maps.ElevationService();
+
+  // Add a listener for the click event and call getElevation on that location
+  google.maps.event.addListener(map, 'click', getElevation);
+}
+
+function getElevation(event) {
+
+  var locations = [];
+
+  // Retrieve the clicked location and push it on the array
+  var clickedLocation = event.latLng;
+  locations.push(clickedLocation);
+
+  // Create a LocationElevationRequest object using the array's one value
+  var positionalRequest = {
+    'locations': locations
+  }
+
+  // Initiate the location request
+  elevator.getElevationForLocations(positionalRequest, function(results, status) {
+    if (status == google.maps.ElevationStatus.OK) {
+
+      // Retrieve the first result
+      if (results[0]) {
+
+        // Open an info window indicating the elevation at the clicked position
+        infowindow.setContent("The elevation at this point <br/>is " + results[0].elevation + " meters.");
+        infowindow.setPosition(clickedLocation);
+        infowindow.open(map);
+      } else {
+        alert("No results found");
+      }
+    } else {
+      alert("Elevation service failed due to: " + status);
+    }
+  });
+}
+</pre>
+
+
+<p><a href="examples/elevation-simple.html">View example
+(elevation-simple.html)</a></p>
+
+<p>The following example constructs a polyline given a set of coordinates
+and displays elevation data along that path using the
+<a href="http://code.google.com/apis/visualization/interactive_charts.html">
+Google Visualization API</a>. (You must load this API using the Google Common
+Loader.) An elevation request is constructed using the
+<code>PathElevationRequest</code>:</p>
+
+
+<pre class="prettyprint lang-javascript">
+var elevator;
+var map;
+var chart;
+var infowindow = new google.maps.InfoWindow();
+var polyline;
+
+// The following path marks a general path from Mt.
+// Whitney, the highest point in the continental United
+// States to Badwater, Death Vallet, the lowest point.
+var whitney = new google.maps.LatLng(36.578581, -118.291994);
+var lonepine = new google.maps.LatLng(36.606111, -118.062778);
+var owenslake = new google.maps.LatLng(36.433269, -117.950916);
+var beattyjunction = new google.maps.LatLng(36.588056, -116.943056);
+var panamintsprings = new google.maps.LatLng(36.339722, -117.467778);
+var badwater = new google.maps.LatLng(36.23998, -116.83171);
+  
+// Load the Visualization API and the columnchart package.
+google.load("visualization", "1", {packages: ["columnchart"]});
+
+function initialize() {
+  var myOptions = {
+    zoom: 8,
+    center: lonepine,
+    mapTypeId: 'terrain'
+  }
+  map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+  // Create an ElevationService.
+  elevator = new google.maps.ElevationService();
+
+  // Draw the path, using the Visualization API and the Elevation service.
+  drawPath();
+}
+
+function drawPath() {
+
+  // Create a new chart in the elevation_chart DIV.
+  chart = new google.visualization.ColumnChart(document.getElementById('elevation_chart'));
+
+  var path = [ whitney, lonepine, owenslake, panamintsprings, beattyjunction, badwater];
+
+  // Create a PathElevationRequest object using this array.
+  // Ask for 256 samples along that path.
+  var pathRequest = {
+    'path': path,
+    'samples': 256
+  }
+
+  // Initiate the path request.
+  elevator.getElevationAlongPath(pathRequest, plotElevation);
+}
+
+// Takes an array of ElevationResult objects, draws the path on the map
+// and plots the elevation profile on a Visualization API ColumnChart.
+function plotElevation(results, status) {
+  if (status == google.maps.ElevationStatus.OK) {
+    elevations = results;
+
+    // Extract the elevation samples from the returned results
+    // and store them in an array of LatLngs.
+    var elevationPath = [];
+    for (var i = 0; i < results.length; i++) {
+      elevationPath.push(elevations[i].location);
+    }
+
+    // Display a polyline of the elevation path.
+    var pathOptions = {
+      path: elevationPath,
+      strokeColor: '#0000CC',
+      opacity: 0.4,
+      map: map
+    }
+    polyline = new google.maps.Polyline(pathOptions);
+
+    // Extract the data from which to populate the chart.
+    // Because the samples are equidistant, the 'Sample'
+    // column here does double duty as distance along the
+    // X axis.
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Sample');
+    data.addColumn('number', 'Elevation');
+    for (var i = 0; i < results.length; i++) {
+      data.addRow(['', elevations[i].elevation]);
+    }
+
+    // Draw the chart using the data within its DIV.
+    document.getElementById('elevation_chart').style.display = 'block';
+    chart.draw(data, {
+      width: 640,
+      height: 200,
+      legend: 'none',
+      titleY: 'Elevation (m)'
+    });
+  }
+}
+</pre>
+
+
+<p><a href="examples/elevation-paths.html">View example
+(elevation-paths.html)</a></p>
+
+<h1 id="StreetView">Street View</h1>
+
+<p>Google Street View provides panoramic 360 degree views from
+designated roads throughout its coverage area. Street View's API
+coverage is the same as that for the Google Maps application
+(<code>http://maps.google.com/</code>). The list of currently
+supported cities for Street View is available at the
+<a href="http://maps.google.com/support/bin/topic.py?topic=11640">
+Google Maps Help Center</a>.</p>
+
+<p>A sample Street View image is shown below.</p>
+<br/>
+
+<iframe width="425" height="240" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" 
+src="examples/streetview-embed.html">
+</iframe>
+
+<p>The Google Maps Javascript API provides a Street View service
+for obtaining and manipulating the imagery used in Google Maps
+Street View. Unlike in the V2 API, the Street View service in
+the Maps Javascript API V3 is supported natively within the
+browser.</p>
+
+<h2 id="StreetViewMapUsage">Street View Map Usage</h2>
+
+<p>Although Street View can be used within a 
+<a href="#StreetViewContainers">standalone DOM element</a>, it is most
+useful when indicating a location on a map. By default, Street View is
+enabled on a map, and a Street View <i>Pegman control</i> appears
+integrated within the navigation control. You may hide this control
+within the map's <code>MapOptions</code> by setting
+<code>streetViewControl</code> to <code>false</code>. You may also change
+the default position of the Street View control by
+setting the <code>Map</code>'s <code>streetViewControlOptions.position</code>
+property to a new <code>ControlPosition</code>.</p>
+
+<p>The Street View Pegman control allows you to view Street View
+panoramas directly within the map. When clicking and holding the Pegman, the
+map updates to show Street View-enabled streets using blue outlines
+on the map:</p>
+
+<p><img src="images/streetviewLayer.png" /></p>
+
+<p>Drop the Pegman marker onto a street and the map will update to
+display a Street View panorama of the indicated location.</p>
+
+<p>The following sample adds a <code>streetViewControl</code> to a map
+of Boston near Fenway Park:</p>
+
+<pre class="prettyprint lang-javascript">
+var fenway = new google.maps.LatLng(42.345573,-71.098326);
+  var mapOptions = {
+    center: fenway,
+    zoom: 14,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);  
+</pre>
+
+<p><a href="examples/streetview-map.html">
+View example (streetview-map.html)</a></p>
+
+<h2 id="StreetViewPanoramas">Street View Panoramas</h2>
+
+<p>Street View images are supported through use of the
+<code>StreetViewPanorama</code> object, which provides an API
+interface to a Street View "viewer." Each map contains a default
+Street View panorama, which you can retrieve by calling the
+map's <code>getStreetView()</code> method. When you add a Street View
+control to the map by setting its <code>streetViewControl</code>
+option to <code>true</code>, you automatically connect the Pegman
+control to this default Street View panorama.</p>
+
+<p>You may also create your own <code>StreetViewPanorama</code>
+object and set the map to use that instead of the default, by
+setting the map's <code>streetView</code> property explicitly to
+that constructed object. You may wish to override the default panorama
+if you want to modify default behavior, such as the automatic
+sharing of overlays between the map and the panorama. (See
+<a href="#StreetViewOverlays">Overlays within Street View</a> below.)</p>
+
+<h2 id="StreetViewContainers">Street View Containers</h2>
+
+<p>You may instead wish to display a <code>StreetViewPanorama</code>
+within a separate DOM element, often a <code>&lt;div&gt;</code> element.
+Simply pass the DOM element within the <code>StreetViewPanorama</code>'s
+constructor. For optimum display of images, we recommend a minimum size of
+200 pixels by 200 pixels.</p>
+
+<p><span style="color:red">Note: </span> although Street View
+functionality is designed to be used in conjunction with a map, this
+usage is not required. You may use a standalone Street View object
+without a map.</p>
+
+<h2 id="StreetViewLocation">Street View Locations and Point-of-View (POV)</h2>
+
+<p>The <code>StreetViewPanorama</code> constructor also allows you to
+set the Street View location and point of view using the
+<code>StreetViewOptions</code> parameter. You may call <code>
+setPosition()</code> and <code>setPov()</code> on the object after
+construction to change its location and POV.</p>
+
+<p>The Street View location defines the placement of the camera locus
+for an image, but it does not define the orientation of the camera
+for that image. For that purpose, the <code>StreetViewPov</code> object
+defines three properties:</p>
+
+<ul>
+  <li><code>heading</code> (default <code>0</code>) defines the rotation angle
+  around the camera locus in degrees relative from true north. Headings are
+  measured clockwise (90 degrees is true east).</li>
+  <li><code>pitch</code> (default <code>0</code>) defines the angle variance
+  "up" or "down" from the camera's initial default pitch, which is often
+  (but not always) flat horizontal. (For example, an image taken on a hill will
+  likely exhibit a default pitch that is not horizontal.) Pitch angles are
+  measured with negative values looking up (to -90 degrees straight up and
+  orthogonal to the default pitch) and positive values looking down (to +90
+  degrees straight down and orthogonal to the default pitch).</li>
+  <li><code>zoom</code> (default <code>1</code>) defines the zoom level of
+  this view (effectively proscribing the "field of view") with <code>0</code>
+  being fully zoomed-out. Most Street View locations support zoom levels from
+  <code>0</code> to <code>3</code>, inclusive.</li>
+</ul>
+
+<p>The following code displays a map of Boston with an initial
+view of Fenway Park. Selecting the Pegman
+and dragging it to a supported location on the map will change
+the Street View panorama:</p>
+
+<pre class="prettyprint lang-javascript">
+var fenway = new google.maps.LatLng(42.345573,-71.098326);
+var mapOptions = {
+  center: fenway,
+  zoom: 14,
+  mapTypeId: google.maps.MapTypeId.ROADMAP
+};
+var map = new google.maps.Map(
+    document.getElementById("map_canvas"), mapOptions);
+var panoramaOptions = {
+  position: fenway,
+  pov: {
+    heading: 34,
+    pitch: 10,
+    zoom: 1
+  }
+};
+var panorama = new  google.maps.StreetViewPanorama(document.getElementById("pano"), panoramaOptions);
+map.setStreetView(panorama);
+</pre>
+
+<p><a href="examples/streetview-simple.html">
+View example (streetview-simple.html)</a></p>
+
+<h2 id="StreetViewOverlays">Overlays within Street View</h2>
+
+<p>The default <code>StreetViewPanorama</code> object supports the native display of
+map <a href="overlays.html">overlays</a>.
+Overlays generally appear at "street level" anchored at <code>LatLng</code>
+positions. (Markers will appear with their tails anchored to the location's
+horizontal plane within the Street View panorama for example.)</p>
+
+<p>Currently, the types of overlays which are supported on Street View panoramas
+are limited to <code>Marker</code>s, <code>InfoWindow</code>s and custom
+<code>OverlayView</code>s. Overlays which you display on a map may
+be displayed on a Street View panorama by treating the panorama as a substitute
+for the <code>Map</code> object, calling <code>setMap()</code> and passing the
+<code>StreetViewPanorama</code> as an argument instead of a map. Info windows
+similarly may be opened within a Street View panorama by calling <code>open()</code>,
+passing the <code>StreetViewPanorama()</code> instead of a map.</p>
+
+<p>Additionally, when creating a map with a default <code>StreetViewPanorama</code>,
+any markers created on a map are shared automatically with the map's associated
+Street View panorama, provided that panorama is visible. To retrieve the default
+Street View panorama, call <code>getStreetView()</code> on the <code>Map</code>
+object. Note that if you explicitly set the map's <code>streetView</code> property
+to a <code>StreetViewPanorama</code> of your own construction, you will override
+the default panorama and disable automatic overlay sharing.</p>
+
+<p>The following example shows markers denoting various locations around Astor Place,
+New York City. Toggle the display to Street View to show the shared markers displaying
+within the <code>StreetViewPanorama</code>.</p>
+
+
+<pre class="prettyprint lang-javascript">
+var map;
+var panorama;
+var astorPlace = new google.maps.LatLng(40.729884, -73.990988);
+var busStop = new google.maps.LatLng(40.729559678851025, -73.99074196815491);
+var cafe = new google.maps.LatLng(40.730031233910694, -73.99142861366272);
+var bank = new google.maps.LatLng(40.72968163306612, -73.9911389350891);
+
+function initialize() {
+
+  // Set up the map
+  var mapOptions = {
+    center: astorPlace,
+    zoom: 18,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    streetViewControl: false
+  };
+  map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+
+  // Setup the markers on the map
+  var cafeMarkerImage =
+      new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=cafe|FFFF00');
+  var cafeMarker = new google.maps.Marker({
+      position: cafe,
+      map: map,
+      icon: cafeMarkerImage,
+      title: 'Cafe'
+  });
+    
+  var bankMarkerImage =
+      new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=dollar|FFFF00');
+  var bankMarker = new google.maps.Marker({
+      position: bank,
+      map: map,
+      icon: bankMarkerImage,
+      title: 'Bank'
+  });
+    
+  var busMarkerImage =
+      new google.maps.MarkerImage('http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=bus|FFFF00');
+  var busMarker = new google.maps.Marker({
+      position: busStop,
+      map: map,
+      icon: busMarkerImage,
+      title: 'Bus Stop'
+  });
+  
+  // We get the map's default panorama and set up some defaults.
+  // Note that we don't yet set it visible.
+  panorama = map.getStreetView();
+  panorama.setPosition(astorPlace);
+  panorama.setPov({
+    heading: 265,
+    zoom:1,
+    pitch:0}
+  );
+}
+  
+function toggleStreetView() {
+  var toggle = panorama.getVisible();
+  if (toggle == false) {
+    panorama.setVisible(true);
+  } else {
+    panorama.setVisible(false);
+  }
+}
+</pre>
+
+
+<p><a href="examples/streetview-overlays.html">
+View example (streetview-overlays.html)</a></p>
+
+<h2 id="StreetViewEvents">Street View Events</h2>
+
+<p>When navigating between Street View or manipulating its
+orientation, you may wish to monitor several events that indicate
+changes to the <code>StreetViewPanorama</code>'s state:</p>
+
+<ul>
+  <li><code>pano_changed</code> fires whenever the individual pano
+  ID changes. This event does not guarantee that any associated data within
+  the panorama (such as the links) has also changed by the time this event
+  is triggered; this event only indicates that a pano
+  ID has changed. Note that the pano ID (which you can use to reference
+  this panorama) is only stable within the current browser session.</li>
+  <li><code>position_changed</code> fires whenever the underlying
+  (<code>LatLng</code>) position of the panorama changes. Rotating
+  a panorama will not trigger this event. Note that you could change
+  a panorama's underlying position without changing the associated
+  pano ID, since the API will automatically associate the nearest
+  pano ID to the panorama's position.</li>
+  <li><code>pov_changed</code> fires whenever the Street View's
+  <code>StreetViewPov</code> changes. Note that this event may fire
+  while the position, and pano ID, remain stable.</li>
+  <li><code>links_changed</code> fires whenever the Street View's
+  links change. Note that this event may fire asynchronously after a
+  change in the pano ID indicated through <code>pano_changed</code>.</li>
+  <li><code>visible_changed</code> fires whenever the Street View's
+  visibility changes. Note that this event may fire asynchronously after a
+  change in the pano ID indicated through <code>pano_changed</code>.</li>
+</ul>
+
+<p>The following code illustrates how these events can be handled
+to collect data about the underlying <code>StreetViewPanorama</code>:</p>
+
+
+<pre class="prettyprint lang-javascript">
+var caffe = new google.maps.LatLng(37.869085,-122.254775);
+
+function initialize() {
+    
+  var panoramaOptions = {
+    position:caffe,
+    pov: {
+      heading: 270,
+      pitch:0,
+      zoom:1
+    },
+    visible:true
+  };
+  var panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"), panoramaOptions);
+
+  google.maps.event.addListener(panorama, 'pano_changed', function() {
+      var panoCell = document.getElementById('pano_cell');
+      panoCell.firstChild.nodeValue = panorama.getPano();
+  });
+        
+  google.maps.event.addListener(panorama, 'links_changed', function() {        
+      var linksTable = document.getElementById('links_table');
+      while(linksTable.hasChildNodes()) {
+        linksTable.removeChild(linksTable.lastChild);
+      };
+      var links =  panorama.getLinks();
+      for (var i in links) {
+        var row = document.createElement("tr");
+        linksTable.appendChild(row);
+        var hCell = document.createElement("td");
+        var hText = "<b>Link: " + i + "</b>";
+        hCell.innerHTML = hText;
+        var vCell = document.createElement("td");
+        var vText = links[i].description;
+        vCell.innerHTML = vText;
+        linksTable.appendChild(hCell);
+        linksTable.appendChild(vCell);
+      }
+  });
+
+  google.maps.event.addListener(panorama, 'position_changed', function() {
+      var positionCell = document.getElementById('position_cell');
+	  positionCell.firstChild.nodeValue = panorama.getPosition();
+  });
+
+  google.maps.event.addListener(panorama, 'pov_changed', function() {
+      var headingCell = document.getElementById('heading_cell');
+      var pitchCell = document.getElementById('pitch_cell');
+      headingCell.firstChild.nodeValue = panorama.getPov().heading;
+      pitchCell.firstChild.nodeValue = panorama.getPov().pitch;
+  });
+
+}
+</pre>
+
+
+<p><a href="examples/streetview-events.html">
+View example (streetview-events.html)</a></p>
+
+<h2 id="StreetViewControls">Street View Controls</h2>
+
+<p>When displaying a <code>StreetViewPanorama</code>, a variety of
+controls appear on the panorama by default. You can enable or disable
+these controls by setting their appropriate fields within the
+Street View's <code>StreetViewPanoramaOptions</code> to <code>true</code>
+or <code>false</code>:</p>
+
+<ul>
+  <li>A <code>navigationControl</code> provides a way to rotate the
+  panorama and zoom within the image. This control
+  appears by default as a standard integrated compass, pan, and zoom control.
+  You may alter   the control's appearance by providing
+  <code>NavigationControlOptions</code> within the
+  <code>navigationControlOptions</code> field.</li>
+  <li>An <code>addressControl</code> provides a textual overlay indicating
+  the address of the associated location. You may alter
+  the control's appearance by providing <code>StreetViewAddressControlOptions</code>
+  within the <code>addressControlOptions</code> field.</li>
+  <li>A <code>linksControl</code> provides guide arrows on the image for
+  travelling to adjacent panorama images.</li>
+</ul>
+
+<p>The following example alters the controls displayed within the associated
+Street View and removes the view's links:</p>
+
+
+<pre class="prettyprint lang-javascript">
+var fenway = new google.maps.LatLng(42.345573,-71.098326);
+
+// Note: constructed panorama objects have visible: true
+// set by default.
+var panoOptions = {
+  position: fenway,
+  addressControlOptions: {
+    position: google.maps.ControlPosition.BOTTOM,
+    style: {
+      "fontWeight" : "bold",
+      "backgroundColor" : "#191970",
+      "color" :"#A9203E"
+    }
+  },
+  linksControl: false,
+  navigationControlOptions: {
+    style: google.maps.NavigationControlStyle.SMALL
+  },
+  enableCloseButton: false,
+  visible:true
+};
+
+var panorama = new google.maps.StreetViewPanorama(
+    document.getElementById("pano"), panoOptions);
+</pre>
+
+
+<p><a href="examples/streetview-controls.html">
+View example (streetview-controls.html)</a></p>
+
+<h2 id="StreetViewService">Directly Accessing Street View Data</h2>
+
+<p>You may wish to programmatically determine the availability of
+Street View data, or return information about particular panoramas,
+without requiring direct manipulation of a map/panorama. You may do so
+using the <code>StreetViewService</code> object, which provides an
+interface to the data stored in Google's Street View service.</p>
+
+<h3 id="StreetViewServiceRequests">Street View Service Requests</h3>
+
+<p>Accessing the Street View service is asynchronous, since the Google Maps API
+needs to make a call to an external server. For that reason, you need to pass
+a <i>callback</i> method to execute upon completion of the request. This
+callback method processes the result.</p>
+
+<p>You may initiate two types of requests to the <code>StreetViewService</code>:</p>
+
+<ul>
+  <li><code>getPanoramaById()</code> returns panorama data given a reference ID which
+  uniquely identifies the panorama. Note that these reference IDs
+  are only stable within the current browser session.</li>
+  <li><code>getPanoramaByLocation()</code> searches for panorama data over
+  a given area, given a passed <code>LatLng</code> and the radius (in meters) over
+  which to search. If the radius is 50 meters or less, the panorama
+  returned will be the nearest panorama to the given location.</li>
+</ul>
+
+<h3 id="StreetViewServiceResponses">Street View Service Responses</h3>
+
+<p>Both <code>getPanoramaByLocation()</code> and <code>getPanoramaById()</code>
+specify a <i>callback</i> function to execute upon retrieval of a result from
+the Street View service. This callback function returns a set of panorama data
+within a <code>StreetViewPanoramaData</code> object and a
+<code>StreetViewStatus</code> code denoting the status of the request, in that
+order.</p>
+
+<p>A <code>StreetViewPanoramaData</code> object specification contains meta-data
+about a Street View panorama of the following form:</p>
+
+<pre class="prettyprint lang-javascript">
+{
+  "location": {
+    "latLng": LatLng,
+    "description": string,
+    "pano": string
+  },
+  "copyright": string,
+  "links": [{
+      "heading": number,
+      "description": string,
+      "pano": string,
+      "roadColor": string,
+      "roadOpacity": number
+    }],
+  "tiles": {
+    "worldSize": Size,
+    "tileSize": Size,
+    "centerHeading": number
+  }
+}
+</pre>
+
+<p>Note that this data object is not a <code>StreetViewPanorama</code>
+object itself. To create a Street View object using this data, you would
+need to create a <code>StreetViewPanorama</code> and call
+<code>setPano()</code>, passing it the ID as noted in the returned
+<code>location.pano</code> field.</p>
+
+<p>The <code>status</code> code may return one of the following values:</p>
+
+<ul>
+  <li><code>OK</code> indicates that the service found a matching panorama.</li>
+  <li><code>ZERO_RESULTS</code> indicates that the service could not find a
+  matching panorama with the passed criteria.</li>
+  <li><code>UNKNOWN_ERROR</code> indicates that a Street View request
+  could not be processed, though the exact reason is unknown.</li>
+</ul>
+
+<p>The following code creates a <code>StreetViewService</code>
+that responds to user clicks on a map by creating markers which,
+when clicked, display a <code>StreetViewPanorama</code> of that
+location. The code uses the contents of <code>StreetViewPanoramaData</code>
+returned from the service.</p>
+
+<pre class="prettyprint lang-javascript">
+var map;
+var berkeley = new google.maps.LatLng(37.869085,-122.254775);
+var sv = new google.maps.StreetViewService();
+
+var panorama;
+
+function initialize() {
+
+  panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"));
+    
+  // Set up the map
+  var mapOptions = {
+    center: berkeley,
+    zoom: 16,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    streetViewControl: false
+  };
+  map = new google.maps.Map(document.getElementById('map_canvas'),
+      mapOptions);
+
+  // getPanoramaByLocation will return the nearest pano when the
+  // given radius is 50 meters or less.
+  google.maps.event.addListener(map, 'click', function(event) {
+      sv.getPanoramaByLocation(event.latLng, 50, processSVData);
+  });
+}
+
+function processSVData(data, status) {
+  if (status == google.maps.StreetViewStatus.OK) {
+    var marker = new google.maps.Marker({
+      position: data.location.latLng,
+      map: map,
+      title: data.location.description
+    });
+      
+    google.maps.event.addListener(marker, 'click', function() {
+      
+      var markerPanoID = data.location.pano;
+      // Set the Pano to use the passed panoID
+      panorama.setPano(markerPanoID);
+      panorama.setPov({
+        heading: 270,
+        pitch: 0,
+        zoom: 1
+      });
+      panorama.setVisible(true);
+    });
+  }
+}
+</pre>
+
+<p><a href="examples/streetview-service.html">
+View example (streetview-service.html)</a></p>
+
+<h2 id="CustomStreetView">Providing Custom StreetView Panoramas</h2>
+
+<p>The Maps Javascript API V3 supports the display of custom panoramas
+within the <code>StreetViewPanorama</code> object. Using custom
+panoramas, you can display the interior of buildings, views from
+scenic locations, or anything from your imagination. You can even
+link these custom panoramas to Google's existing Street View
+panoramas.</p>
+
+<p>Setting up a set of custom panorama imagery involves the
+following steps:</p>
+
+<ul>
+  <li>Create a base panoramic image for each custom panorama. This
+  base image should be at the highest resolution image with which
+  you wish to serve zoomed in imagery.</li>
+  <li>(Optional, but recommended) Create a set of panoramic tiles
+  at different zoom levels from the basic image.</li>
+  <li>Create links between your custom panoramas.</li>
+  <li>(Optional) Designate "entry" panoramas within
+  Google's existing Street View imagery and customize links
+  to/from the custom set to the standard set.</li>
+  <li>Define metadata for each panorama image
+  within a <code>StreetViewPanoramaData</code> object.</li>
+  <li>Implement a method which determines the custom panorama
+  data and images and designate that method as your custom handler
+  within the <code>StreetViewPanorama</code> object.</li>
+</ul>
+
+<p>The following sections explain this process.</p>
+
+<h3 id="CreatingPanoramas">Creating Custom Panoramas</h3>
+
+<p>Each Street View panorama is an image or set of images
+that provides a full 360 degree view from a single location.
+The <code>StreetViewPanorama</code> object
+uses images that conform to the equirectangular (Plate
+Carrée) projection. Such a projection contains 360 degrees
+of horizontal view (a full wrap-around) and 180 degrees of
+vertical view (from straight up to straight down). These fields
+of view result in an image with an aspect ratio of 2:1. A
+full wrap-around panorama is shown below.</p>
+
+<p style="text-align:center"><img src="images/samplePanorama.png" /></p>
+
+<p>Panorama images are generally obtained by taking multiple
+photos from one position and stitching them together using
+panorama software. (See Wikipedia's
+<a href="http://en.wikipedia.org/wiki/Comparison_of_photo_stitching_applications_(software)">
+Comparison of photo stitching applications</a> for more information.)
+Such images should share a single "camera"
+locus, from which each of the panorama images are taken. The
+resulting 360 degree panorama can then define a projection on
+a sphere with the image wrapped to the two-dimensional surface
+of the sphere.</p>
+
+<p style="text-align:center"><img src="images/panoramaSphere.png" /></p>
+
+<p>Treating the panorama as a projection on a sphere with a rectilinear
+coordinate system is advantageous when dividing up the image into
+rectilinear <i>tiles</i>, and serving images based on computed tile
+coordinates.</p>
+
+<h3 id="TilingPanoramas">Creating Custom Panorama Tiles</h3>
+
+<p>Street View also supports different levels of image detail through
+the use of a zoom control, which allows you to zoom in and out from the
+default view. Generally, Street View provides five
+levels of zoom resolution for any given panorama image. If you were to
+rely on a single panorama image to serve all zoom levels, such an image
+would either necessarily be quite large and significantly slow down
+your application, or be of such poor resolution at higher zoom levels
+that you would serve a poorly pixellated image. Luckily, however, we can use
+a similar design pattern used to serve
+<a href="overlays.html#TileCoordinates">
+Google's map tiles</a> at different zoom levels to provide
+appropriate resolution imagery for panoramas at each zoom level.</p>
+
+<p>When a <code>StreetViewPanorama</code> first loads, by default
+it displays an image consisting of 25% (90 degrees of arc) of the
+horizontal breadth of the panorama at zoom level 1. This view
+corresponds roughly with a normal human field of view. Zooming
+"out" from this default view essentially provides a wider arc,
+while zooming in narrows the field of a view to a smaller arc. The
+<code>StreetViewPanorama</code> automatically calculates the
+appropriate field of view for the selected zoom level, and then
+selects imagery most appropriate for that resolution by selecting
+a tile set that roughly matches the dimensions of the horizontal
+field of view. The following fields of view map to Street View
+zoom levels:</p>
+
+<table>
+  <tr>
+  <th>Street View zoom level</th>
+  <th>Field of View (degrees)</th>
+  </tr>
+  <tr>
+  <td>0</td>
+  <td>180</td>
+  </tr>
+  <tr>
+  <td>1 (default)</td>
+  <td>90</td>
+  </tr><tr>
+  <td>2</td>
+  <td>45</td>
+  </tr><tr>
+  <td>3</td>
+  <td>22.5</td>
+  </tr><tr>
+  <td>4</td>
+  <td>11.25</td>
+  </tr>
+</table>
+
+<p>Note that the size of the image shown within Street View is
+entirely dependent on the screen size (width) of the Street View
+container. If you provide a wider container, the service
+will still provide the same field of view for any given
+zoom level, though it may select tiles more appropriate
+for that resolution instead.</p>
+
+<p>Because each panorama consists of an equirectangular projection,
+creating panorama tiles is relatively easy. As the projection
+provides an image with an aspect ratio of 2:1, tiles with 2:1 ratios
+are easier to use, though square tiles may provide better performance
+on square maps (since the field of view will be square).</p>
+
+<p>For 2:1 tiles, a single image encompassing the entire panorama
+represents the entire panorama "world" (the base image) at zoom
+level 0, with each increasing zoom level offering
+4<span class="superscript"><i>zoomLevel</i></span> tiles. (E.g. at
+zoom level 2, the entire panorama consists of 16 tiles.)
+<span style="color:red">Note: </span> zoom levels in Street View
+tiling do not match directly to zoom levels as provided using
+the Street View control; instead the Street View control zoom
+levels select a Field of View (FoV), from which appropriate
+tiles are selected.</p>
+
+<p style="text-align:center"><img src="images/panoramaTiles.png" /></p>
+
+<p>Generally, you will want to name your image tiles so they can be
+selected programmatically. Such a naming scheme is
+discussed below in <a href="#CustomPanoramaMethod">Handling Custom
+Panorama Requests</a>.</p>
+
+<h3 id="CustomPanoramaMethod">Handling Custom Panorama Requests</h3>
+
+<p>Custom Panorama usage is indicated by registering a custom
+panorama method within the <code>StreetViewPanoramaOptions</code>
+<code>panoProvider</code> field or explicitly calling
+<code>StreetViewPanorama.registerPanoProvider()</code>. The
+panorama provider method is a function that returns
+a <code>StreetViewPanoramaData</code> object and has the
+following signature:</p>
+
+<pre class="prettyprint lang-javascript">
+Function(pano,zoom,tileX,tileY):StreetViewPanoramaData
+</pre>
+
+<p>A <code>StreetViewPanoramaData</code> is an object of the following
+form:</p>
+
+
+<pre class="prettyprint lang-javascript">
+{
+  copyright: string,
+  location: {
+    description: string,
+    latLng: google.maps.LatLng,
+    pano: string
+  },
+  tiles: {
+    tileSize: google.maps.Size,
+    worldSize: google.maps.Size,
+    heading: number,
+    getTileUrl: Function
+  },
+  links: [
+    description: string,
+    heading: number,
+    pano: string,
+    roadColor: string,
+    roadOpacity: number
+  ]
+}
+</pre>
+
+
+<p>You can display a custom panorama simply by setting the
+<code>StreetViewPanorama</code>'s <code>pano</code> propety
+to a custom value, setting the <code>panoProvider</code>,
+and then handling that custom <code>pano</code> value within
+the custom panorama provider method, constructing a
+<code>StreetViewPanoramaData</code> object and returning it.</p>
+
+<p class="note">Note: do not directly set a <code>position</code>
+on the <code>StreetViewPanorama</code> when you wish to display
+custom panoramas, as such a position will instruct the Street
+View service to request the default Street View imagery close
+to that location. Instead, set this position within the
+custom <code>StreetViewPanoramaData</code>'s
+<code>location.latLng</code> field.</p>
+
+<p>The following example displays a custom Panorama of the Google Sydney
+office. Note that we don't use a map (or default StreetView imagery) here
+at all:</p>
+
+<pre class="prettyprint lang-javascript">
+var panorama;
+ 
+function initialize() {
+ 
+  // Set up Street View and initially set it visible. Register the
+  // custom panorama provider function. Set the StreetView to display
+  // the custom panorama 'reception' which we check for below.
+  var panoOptions = {
+    pano: 'reception',
+    visible: true,
+    panoProvider: getCustomPanorama
+  }
+
+  panorama = new google.maps.StreetViewPanorama(
+      document.getElementById('pano_canvas'),panoOptions);
+}
+
+// Return a pano image given the panoID.
+function getCustomPanoramaTileUrl(pano,zoom,tileX,tileY) {
+    
+  // Note: robust custom panorama methods would require tiled pano data.
+  // Here we're just using a single tile, set to the tile size and equal
+  // to the pano "world" size.
+  return 'http://code.google.com/apis/maps/documentation/javascript/examples/images/panoReception1024.jpg';
+}
+
+// Construct the appropriate StreetViewPanoramaData given
+// the passed pano IDs.
+function getCustomPanorama(pano,zoom,tileX,tileY) {
+  
+   switch(pano) {
+
+    case 'reception':
+      return {
+        location: {
+          pano: 'reception',
+          description: "Google Sydney - Reception",
+          latLng: sydneyOffice
+        },
+        // The text for the copyright control.
+        copyright: 'Imagery (c) 2010 Google',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(1024, 512),
+          worldSize: new google.maps.Size(1024, 512),
+          // The heading at the origin of the panorama tile set.
+          centerHeading: 105,
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+  }
+}
+</pre>
+
+<p><a href="examples/streetview-custom-simple.html">
+View example (streetview-custom-simple.html)</a></p>
+
+<p>Note that we only returned one image in the previous example
+and that zooming in using that image resulted in poor resolution.
+Instead, we could offer a tile set by creating tile images and
+modifying the <code>panoProvider</code> to return the appropriate
+tile given the passed panorama ID, zoom level, and
+panorama tile coordinate.</p>
+
+<p>Since image selection depends on these passed values, it is useful
+to name images that can be selected programmatically given those
+passed values, such as
+<code><i>pano</i>_<i>zoom</i>_<i>tileX</i>_<i>tileY</i>.png</code>.</p>
+
+<p>The following example is slightly augmented to include two levels of
+zoom, and additionally modifies the default Street View links to add
+a link to the custom imagery:</p>
+
+<pre class="prettyprint lang-javascript">
+var map;
+var panorama;
+  
+// The latlng of the entry point to the Google office on the road.
+var sydneyOffice = new google.maps.LatLng(-33.867386, 151.195767);
+  
+// The panorama that will be used as the entry point to the custom
+// panorama set. We will test for the presence of this value when
+// updating the entry pano to add our custom links.
+var entryPanoId = null;
+
+function initialize() {
+
+  startApplication();
+
+  // Define how far to search for an initial pano from a location, in meters.    
+  var panoSearchRadius = 50;
+
+  // Create a StreetViewService object.
+  var client = new google.maps.StreetViewService();
+ 
+  // Compute the nearest panorama to the Google Sydney office
+  // using the service and store that pano ID. Once that value
+  // is determined, load the application.
+  client.getPanoramaByLocation(sydneyOffice, panoSearchRadius, function(result, status) {
+    if (status == google.maps.StreetViewStatus.OK) {
+      entryPanoId = result.location.pano;
+    }  
+  });
+}
+
+function startApplication() {
+ 
+  // Set up the map and enable the Street View control.
+  var mapOptions = {
+    center: sydneyOffice,
+    zoom: 16,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+   // Get the default StreetViewPanorama object.
+  panorama = map.getStreetView();
+   // Set up Street View and initially set it visible. Register the
+  // custom panorama provider function. Update the StreetViewPanorama.
+  var panoOptions = {
+    position: sydneyOffice,
+    visible: true,
+    panoProvider:  getCustomPanorama
+  }
+  panorama.setOptions(panoOptions);
+
+  // We'll monitor the links_changed event to check if the current pano is either
+  // a custom pano or our entry pano.        
+  google.maps.event.addListener(panorama, 'links_changed', createCustomLinks);
+}
+
+// Return a pano image given the panoID.
+function getCustomPanoramaTileUrl(pano,zoom,tileX,tileY) {
+  return 'images/panoReception1024-' + zoom + '-' + tileX + '-' +tileY + '.jpg';
+}
+
+// Construct the appropriate StreetViewPanoramaData given
+// the passed pano IDs. Note that if no cases match here,
+// we return null, which instructs the service to serve
+// default pano data.
+function getCustomPanorama(pano,zoom,tileX,tileY) {
+   var center;
+   switch(pano) {
+     case 'reception':
+      return {
+        location: {
+          pano: 'reception',
+          description: "Google Sydney - Reception",
+          latLng: sydneyOffice
+        },
+        links: [
+          ],
+        // The text for the copyright control.
+        copyright: 'Imagery (c) 2010 Google',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(1024, 512),
+          worldSize: new google.maps.Size(1024, 512),
+          // The heading at the origin of the panorama tile set.
+          centerHeading: 105,
+          getTileUrl: getCustomPanoramaTileUrl
+        }
+      };
+      break;
+    default:
+      return null;
+  }
+}
+   
+function createCustomLinks() {
+
+  if (entryPanoId) {
+    var links = panorama.getLinks();
+    var panoId = panorama.getPano();
+     switch(panoId) {
+       case entryPanoId:
+        // Adding a link in the view from the entrance of the building to
+        // reception.
+        links.push({
+          'heading': 25,
+          'description' : 'Google Sydney',
+          'pano' : 'reception'
+        });
+        break;
+      case 'reception':
+        // Adding a link in the view from the entrance of the office
+        // with an arrow pointing at 100 degrees, with a text of "Exit"
+        // and loading the street entrance of the building pano on click.
+        links.push({
+          'heading': 195,
+          'description' : 'Exit',
+          'pano' : entryPanoId
+        });
+        break;
+      default:
+        return;
+    }
+  }
+}
+</pre>
+
+<p><a href="examples/streetview-custom-tiles.html">
+View example (streetview-custom-tiles.html)</a></p>
+
+        <!-- end body text -->
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

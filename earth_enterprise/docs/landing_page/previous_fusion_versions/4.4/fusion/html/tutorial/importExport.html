@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Importing and Exporting Style Templates</title>
+</head>
+
+
+<body>
+<a name="top"></a>
+  
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo"><img alt="Google Earth Enterprise" border=0 src="images/index.gif" /></div>
+  <h1 id="doc_title">Tutorial</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Tutorial</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="setup.html">Setting Up For the Tutorial</a></li>
+    <li><a href="resources.html">Defining and Building Resources</a></li>
+    <li><a href="projects.html">Defining and Building Projects</a></li>
+    <li><a href="database.html">Defining and Building Databases</a></li>
+    <li><a href="publish.html">Publishing and Viewing a Database</a></li>
+    <li><a href="points.html">Configuring Display Rules for Point Data</a></li>
+    <li><a href="polygons.html">Configuring Display Rules for Polygon Data</a></li>
+    <li><a href="importExport.html" id="selected">Importing and Exporting Style Templates</a></li>
+    <li><a href="searchTabs.html">Configuring a Searchable Database</a></li>
+    <li><a href="searchLayers.html">Specifying Search Fields for Individual Layers</a></li>
+    <li><a href="maps.html">Creating a Map Database</a></li>
+    <li><a href="mosaics.html">Creating Imagery Mosaics</a></li>
+    <li><a href="split.html">Segmenting Large Imagery Files</a></li>
+    <li><a href="historical.html">Building a Historical Imagery Project</a></li>
+    <li><a href="dataFiles.html">Sample Data Files</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+<h1><a id="97280"></a>Importing and Exporting Style Templates
+</h1>
+<p>Often when you define the display rules for one set of data, you can use the same display rules (sometimes with minor tweaking) for other similar sets of data. In fact, to make your data look consistent across different layers, you probably want to use the same display rules. To do so, you can simply export as a style template the display rules you want to reuse and then import that style template into other projects. 
+</p>
+<p>For example, if a project contains two resources with different providers, and you want the data to look the same except for the copyright information, you can define the display rules for one resource, export the display rules as a template, and then import the template for the other resource. Another example is that you might want to define display rules for a small set of data and then use those same rules on a larger set of data. There are many more circumstances in which you can save time by using style templates.
+</p>
+<p>This lesson guides you through the process of defining display rules for a small set of data (the state of California) and then exporting those rules as a style template. In a subsequent exercise, you import that same style template for a larger set of data (the entire US). Since you already defined display rules for population by county in the state of California in the last chapter, most of the work is already done. 
+</p>
+<p class="note"><strong>Note:</strong> If you have not completed <strong>Configuring Display Rules for Polygon Data</strong>, you must complete at least the first three exercises in that lesson (<a href="polygons.html#93472">Define and Build a Vector Resource Using Polygon Data</a>, <a href="polygons.html#78762">Define, Configure, and Build a Vector Project</a>, and <a href="polygons.html#24787">Define and Build an Imagery Project</a>) before continuing with this lesson.
+</p>
+<h2>Export the Display Rules
+</h2>
+<ol>
+  <li>Select <b>Asset Manager</b> from the Tools menu. 
+    <p>The Asset Manager appears.
+    </p>
+  </li>
+  <li>Navigate to the <code>/ASSET_ROOT/Projects/Vector</code> folder you created in <a href="polygons.html#31467">Lesson 7</a>.
+  </li>
+  <li>Double-click <b>CACountyPopulation</b> to open it in the Vector Project Editor.<br />
+  </li>
+  <li>Right-click <b>CACountyPopulation</b>, and select <b>Export Configuration as Template </b>from the context menu. 
+    <p>The Export Template dialog appears.
+    </p>
+  </li>
+  <li>Navigate to your home folder, and click 
+    <img src="images/iconCreateNewFolder.png" /> to create a new folder; name the new folder <b>templates</b>.
+  </li>
+  <li>Open the templates folder, enter <b>Counties</b> in the File name field, and click <b>Save</b>. 
+    <p>You return to the Vector Project Editor.    
+    </li>
+  <li>Close the Vector Project Editor.
+  </li>
+</ol>
+<h2>Import the Template
+</h2>
+<p>This exercise walks you through importing the template you created in the previous exercise into a new project.
+</p>
+<h4>To define a project and import a template:
+</h4>
+<ol>
+  <li>Click 
+    <img src="images/iconProjVector.png" /> on the toolbar. The Vector Project Editor
+    appears.    </li>
+  <li><a id="54569"></a>Click 
+    <img src="images/icon_new.gif" />. The Open dialog appears.
+    
+  </li>
+  <li>Navigate to the <code>ASSET_ROOT/Resources/Vector</code> folder.
+  </li>
+  <li>Select <b>USPopulation</b>, and click <b>Open</b>.<br />
+    <p>The US Population resource appears in the Vector Project Editor.
+    </p>
+    </li>
+  <li>Right-click <b>USPopulation</b>, and select <b>Import Configuration from Template </b>from
+     the context menu. 
+     <p>The Import Template dialog appears.
+    </p>
+  </li>
+  <li>Navigate to the folder where you saved the template in the previous exercise.
+  </li>
+  <li>Select <b>Counties.khdsp</b>.
+  </li>
+  <li>Check the box next to <b>Apply display rules</b> but not <b>Apply legend settings</b> at the bottom of the dialog.
+    <p>If you check the box next to <b>Apply legend settings</b>, this step would apply all of the legend settings for the project from which the template was created to this project, including changing the name of the layer. (See Chapter 5 in the <i>Google Earth Enterprise Fusion Reference Guide</i> for details about these settings.)<br />
+    </p>
+  </li>
+  <li>Click <b>Open.</b>
+    <p>You return to the Vector Project Editor.
+    </p>
+  </li>
+  <li>Right-click <b>USPopulation</b>, and select <b>Layer Properties </b>from the context menu. 
+    <p>The Layer Properties dialog appears.
+    </p>
+    </li>
+  <li>Click <b>Off</b> next to Initial State to change it to <b>On</b>.
+    <p>Changing the initial state to on results in the US Population layer being automatically checked (turned on) in Google Earth EC.
+    </p>
+  </li>
+  <li>Click <b>OK</b>.
+    <p>You return to the Vector Project Editor.
+    </p>
+  </li>
+  <li>Select <strong>File &gt; Save</strong>.
+    <p>The Save dialog appears.
+    </p>
+  </li>
+  <li>Navigate to the <code>ASSET_ROOT/Projects/Vector </code>folder.
+  </li>
+  <li>Enter <b>USPopulation </b>as the name of your project.
+  </li>
+  <li>Click <b>Save</b>.
+    <p>The new project appears in the Asset Manager when you select <b>ASSET_ROOT/Projects/Vector</b> in the asset navigation tree.
+    </p>
+    </li>
+</ol>
+<h2>Define, Build, and Publish a Database for Your Data
+</h2>
+<p>This exercise walks you through the process of defining, building, and publishing a database using the projects you created in the previous exercise.
+</p>
+<h4>To define, build, and publish a database:
+</h4>
+<ol>
+  <li>Click 
+    <img src="images/iconDatabase.png" /> on the toolbar. The Database Editor appears with no projects selected.    
+    </li>
+  <li><a id="59253"></a>Click 
+    <img src="images/icon_new.gif" /> next to Vector Project. The Open dialog appears.    
+  </li>
+  <li><a id="25862"></a>Navigate to <code>ASSET_ROOT/Projects/Vector</code>.  </li>
+  <li><a id="47673"></a>Select the <b>USPopulation </b>project, and click <b>Open</b>. The US Population project appears in the Database Editor next to Vector Project.    
+  </li>
+  <li>Repeat steps <strong>2</strong> through <strong>4</strong> to add <b>BlueMarble</b> as the imagery project. You do not need to add a terrain project for this exercise. Both projects appear on the list.    
+    </li>
+  <li>Select <strong>File &gt; Save</strong>.    
+  </li>
+  <li><a id="70068"></a>Navigate to the <code>ASSET_ROOT/Databases </code>folder.  </li>
+  <li>Enter <b>USPopulation </b>for the name of your database, and click <b>Save</b>.
+    <p>The name of the database appears on the right when you select the <code>/ASSET_ROOT/Databases </code>folder in the asset navigation tree.    </p>
+    </li>
+  <li>Right-click <b>USPopulation</b>, and select <b>Build</b> from the context menu.
+    <p>Google Earth Enterprise Fusion builds the database. The build process might take a little longer than it has for previous databases, because it is building the project as well, since you did not build the project at the end of the previous exercise.    </p>
+  </li>
+  <li>Right-click <b>USPopulation</b>, and select <b>Publish</b> from the context menu. The Publish Database dialog appears.    
+  </li>
+  <li>Click <b>Publish</b>. Google Earth Enterprise Fusion runs the publishing process on the database, and displays a success message when it is done.    
+  </li>
+</ol>
+<h2>View Your Data in Google Earth EC
+</h2>
+<p>This exercise walks you through the process of building, publishing, and viewing your database in Google Earth EC.
+</p>
+<h4>To build, publish, and view your database:
+</h4>
+<ol>
+  <li>Launch Google Earth EC.
+    <p>The Login dialog appears.
+    </p>
+    </li>
+  <li>Enter or select the host name or IP address of your server in the Server field, and accept the default setting, <b>80</b>, in the Port field (unless you know that your server uses a different port).
+  </li>
+  <li>Click <b>Login</b>.
+  </li>
+</ol>
+      <p class="caution"><strong>Caution:</strong> If you have logged in to this server with Google Earth EC previously, log out, clear your cache, and log back in. For help with clearing your cache, refer to the <i>Google Earth User Guide</i>.
+      </p>
+<ol>
+  <li>Zoom in until you can see part of the US.  </li>
+  <li>Turn and tilt the Earth so you can see the <i>heights</i> of the counties.
+    <p>Google Earth EC displays all of the counties in the US labeled with the names of the counties. The closer you zoom in, the more spread out the counties look and the more county names you can see. As with the database you created in <a href="polygons.html#31467">Lesson 7</a>, each county’s height indicates its relative population. Counties with higher populations are <i>taller</i>, and counties with lower populations are <i>shorter</i>.    </p>
+    <p class="note"><strong>Note:</strong> If you cannot see the vector data, make sure the check box next to <b>CA County Population</b> in the Layers panel is checked.    </p>
+  </li>
+</ol>
+<p>If this were a real project, you might decide that displaying the names of the counties makes this view too cluttered. You can go back into the vector project, modify the display rules, rebuild and publish the database, and then view your data in Google Earth EC again. Repeat this process as many times as required to get the result you want.
+</p>
+<p><img src="images/Page_79.png" /></p>
+</div>
+	<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+	<!-- END WRAPPER -->
+
+
+
+
+</body>
+</html>

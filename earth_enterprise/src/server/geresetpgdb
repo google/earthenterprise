@@ -1,0 +1,322 @@
+#!/bin/bash
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# geresetpgdb modes:
+# Default mode is 'soft' if parameter is not specified.
+#
+# geserve-databases: gestream, geendsnippet, gesearch, gepoi;
+#
+# Resets geserve-databases to default/initial state.
+# 'geresetpgdb soft'
+#    - back up (dump) current geserve-databases;
+#    - delete geserve-databases;
+#    - recreate geserve-databases in their initial state of GEE system;
+#
+# Dumps geserve-databases
+# 'geresetpgdb backup'
+#    - back up (dump) current geserve-databases;
+#
+# Restores geserve-databases from specified dump directory.
+# 'geresetpgdb restore path_to_dump_directory'
+#    - back up (dump) current geserve-databases;
+#    - delete geserve-databases;
+#    - recreate geserve-databases from specified 'path_to_dump_directory';
+#    - update the system configured search services;
+#
+# Administrator tools:
+# Implements 'upgrade'-reset with restoring database state we have before
+# running reset.
+# Used by installer in upgrade procedure for GEE 5.0 and later versions.
+# 'geresetpgdb upgrade'
+#    - back up(dump) current geserve-databases;
+#    - delete data directory;
+#    - recreate postgres db instance;
+#    - recreate superuser;
+#    - recreate geserve-databases from dump;
+#    - update the system configured search services;
+#
+# Note: 'upgrade'-reset deletes geplaces, searchexample databases,
+# but does not restore them.
+# To restore geplaces, searchexample need to run scripts:
+# /opt/google/share/geplaces/geplaces create
+# /opt/google/share/searchexample/searchexample create
+#
+# Implements 'hard'- reset: no back up/restore
+# Used by installer in upgrade procedure from GEE 4.4.1 and less
+# to GEE 5.0.0 and later.
+# 'geresetpgdb hard'
+#    - delete data directory;
+#    - recreate postgres db instance;
+#    - recreate superuser;
+#    - recreate geserve-databases in their initial state of GEE system;
+# Note: 'hard'-reset does not back up/restore geserve-databases.
+# Note: 'hard'-reset deletes geplaces, searchexample databases,
+# but does not restore them.
+# To restore geplaces, searchexample databases need to run scripts:
+# /opt/google/share/geplaces/geplaces create
+# /opt/google/share/searchexample/searchexample create
+
+set -e
+
+VARPGDIR=/var/opt/google/pgsql
+SHAREDIR=/opt/google/share/postgresql/contrib
+BINDIR=/opt/google/bin
+
+if [ ! -n "$1" ]; then
+  type="soft";
+else
+  type="$1";
+fi
+
+if [ $type == "hard" ]; then
+  echo "   WARNING: 'geresetpgdb $type' will completely delete postgresql data"
+  echo "directory, and then recreate the gestream, gesearch, gepoi, gesnippets"
+  echo "databases in their initial state."
+  echo "It does not perform backup."
+  echo "All the information about pushed/published databases, snippets profiles"
+  echo "and custom search tabs will be deleted."
+  echo "It will also delete geplaces, searchexample databases."
+  echo "To restore geplaces and searchexample databases, run scripts:"
+  echo "  /opt/google/share/geplaces/geplaces create"
+  echo "  /opt/google/share/searchexample/searchexample create"
+  echo ""
+  echo "-> 1- Exit"
+  echo "   2- Continue"
+  echo "ENTER THE NUMBER OF THE DESIRED CHOICE, OR PRESS <ENTER> TO ACCEPT THE"
+  echo "DEFAULT: "
+  read -n2 user_choice
+  case "$user_choice" in
+    1)
+      echo "Exiting ..."
+      exit
+      ;;
+    2)
+      echo "Continue ..."
+      ;;
+    *)
+      echo "Exiting ..."
+      exit
+      ;;
+  esac
+elif [ $type == "soft" ]; then
+  echo "    WARNING: 'geresetpgdb $type' will back up the gestream, gesearch,"
+  echo "gepoi and gesnippets databases, and then recreate them in their initial"
+  echo "state."
+  echo "All the information about pushed/published databases, snippets profiles"
+  echo "and custom search tabs will be deleted."
+  echo ""
+  echo "-> 1- Exit"
+  echo "   2- Continue"
+  echo "ENTER THE NUMBER OF THE DESIRED CHOICE, OR PRESS <ENTER> TO ACCEPT THE"
+  echo "DEFAULT: "
+  read -n2 user_choice
+  case "$user_choice" in
+    1)
+      echo "Exiting ..."
+      exit
+      ;;
+    2)
+      echo "Continue ..."
+      ;;
+    *)
+      echo "Exiting ..."
+      exit
+      ;;
+  esac
+elif [ $type == "restore" ]; then
+  if [ ! -n "$2" ]; then
+    echo "WARNING: Path to dump directory is not specified."
+    echo "Usage: $0 restore path_to_dump_dir"
+    exit
+  else
+    dump_path="$2"
+  fi
+fi
+
+
+# Dumps geserve-databases.
+function do_dump {
+  # Start postmaster.
+  if [ ! -f $VARPGDIR/data/postmaster.pid ]; then
+    $BINDIR/pg_ctl -D $VARPGDIR/data -l $VARPGDIR/logs/pg.log start -w
+  fi
+
+  # Dump databases.
+  echo "Keeping a backup of old geserve-databases at $VARPGDIR/data.backup_dump.$$ ..."
+  echo "After verifying that the database is good, you may delete it to recover disk space."
+  mkdir $VARPGDIR/data.backup_dump.$$
+
+  if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w gestream | wc -l` == 1 ]; then
+    $BINDIR/pg_dump gestream > $VARPGDIR/data.backup_dump.$$/gestream.dump
+  fi
+  if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w geendsnippet | wc -l` == 1 ]; then
+    $BINDIR/pg_dump geendsnippet > $VARPGDIR/data.backup_dump.$$/geendsnippet.dump
+  fi
+  if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w gesearch | wc -l` == 1 ]; then
+    $BINDIR/pg_dump gesearch > $VARPGDIR/data.backup_dump.$$/gesearch.dump
+  fi
+  if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w gepoi | wc -l` == 1 ]; then
+    $BINDIR/pg_dump gepoi > $VARPGDIR/data.backup_dump.$$/gepoi.dump
+  fi
+
+  echo "Done."
+
+  # Stop postmaster.
+  $BINDIR/pg_ctl -D $VARPGDIR/data -l $VARPGDIR/logs/pg.log stop
+}
+
+# Deletes old data and recreates db instance.
+function do_reset {
+  if [ -f $VARPGDIR/data/postmaster.pid ]; then
+    $BINDIR/pg_ctl -D $VARPGDIR/data -l $VARPGDIR/logs/pg.log stop
+  fi
+
+  # delete all the db files. not sure if we should do this.
+  rm -Rf $VARPGDIR/data
+
+  # create a new db instance from scratch
+  $BINDIR/initdb --auth=trust -D $VARPGDIR/data >/dev/null
+}
+
+# Check if postmaster is running. If it is then prompt the user to stop the
+# server
+if [ -e $VARPGDIR/data/postmaster.pid ]; then
+  echo "Please stop the server first using the following command";
+  echo "/etc/init.d/geserver stop";
+  exit 1;
+fi
+
+if [ $type == "backup" ]; then
+  if [ ! -e $VARPGDIR/data ]; then
+    echo "WARNING: There is no data to back up."
+  else
+    do_dump
+  fi
+  exit
+fi
+
+# if the data dir does not exist then this has to be a hard reset.
+if [ ! -e $VARPGDIR/data ]; then
+  type="hard";
+fi
+
+if [ $type == "hard" ]; then
+  # Do reset and recreate database instance.
+  do_reset
+else
+  # Do backup for any reset except 'hard'.
+  do_dump
+
+  # Check if PostgreSQL version have been changed.
+  old_version=`cat $VARPGDIR/data/PG_VERSION | cut -c1-3`
+  new_version=`$BINDIR/psql --version | cut -f3 -d' ' | cut -c1-3`
+  if [ "$old_version" != "$new_version" ]; then
+    # PostgreSQL version have been changed - the case of upgrade.
+    if [ $type != "upgrade" ]; then
+      echo "WARNING: PostgresSQL have been updated, please, run 'upgrade' reset first."
+      exit
+    fi
+  fi
+
+  if [ $type == "upgrade" ]; then
+    # Do reset and recreate database instance.
+    do_reset
+  fi
+fi
+
+# Start postmaster.
+if [ ! -f $VARPGDIR/data/postmaster.pid ]; then
+  $BINDIR/pg_ctl -D $VARPGDIR/data -l $VARPGDIR/logs/pg.log start -w
+fi
+
+# Soft reset
+if [ $type == "soft" -o $type == "restore" ]; then
+  if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w gestream | wc -l` == 1 ]; then
+    $BINDIR/dropdb -U geuser gestream
+  fi
+  if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w geendsnippet | wc -l` == 1 ]; then
+    $BINDIR/dropdb -U geuser geendsnippet
+  fi
+  if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w gesearch | wc -l` == 1 ]; then
+    $BINDIR/dropdb -U geuser gesearch
+  fi
+  if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w gepoi | wc -l` == 1 ]; then
+    $BINDIR/dropdb -U geuser gepoi
+  fi
+else
+  $BINDIR/createuser --superuser geuser
+fi
+
+if [ $type == "upgrade" -o $type == "restore" ]; then
+  echo "Creating geserve-databases..."
+  $BINDIR/createdb -T template0 gestream
+  $BINDIR/createdb -T template0 geendsnippet
+  $BINDIR/createdb -T template0 gesearch
+  $BINDIR/createdb -T template0 gepoi
+  echo "Done."
+else
+  echo "Creating geserve-databases..."
+  $BINDIR/createdb --owner=geuser -U geuser gestream
+  $BINDIR/psql -q -d gestream geuser -f $BINDIR/gestream_tables.sql
+
+  $BINDIR/createdb --owner=geuser -U geuser geendsnippet
+  $BINDIR/psql -q -d geendsnippet geuser -f $BINDIR/geendsnippet_tables.sql
+
+  $BINDIR/createdb --owner=geuser -U geuser gesearch
+  $BINDIR/psql -q -d gesearch geuser -f $BINDIR/gesearch_tables.sql
+
+  $BINDIR/createdb -U geuser --owner=geuser gepoi
+  $BINDIR/createlang -U geuser plpgsql gepoi
+  # read -p "wating for you..."
+  $BINDIR/psql -q -U geuser -d gepoi -f $SHAREDIR/postgis.sql 2>/dev/null >/dev/null
+  #$BINDIR/psql -q -U geuser -d gepoi -f $SHAREDIR/postgis_upgrade.sql 2>/dev/null >/dev/null
+  $BINDIR/psql -q -U geuser -d gepoi -f $SHAREDIR/spatial_ref_sys.sql 2>/dev/null >/dev/null
+  echo "Done."
+fi
+
+if [ $type == "upgrade" -o $type == "restore" ]; then
+#  cd "$VARPGDIR"/data.backup.$$
+#  test -f geplaces.dump && /opt/google/share/geplaces/geplaces create
+#  test -f searchexample.dump && /opt/google/share/searchexample/searchexample create
+  shopt -s nullglob  # set nullglob so that bash allows patterns which match no files
+                     # to expand to a null  string,  rather than themselves.
+  if [ $type == "upgrade" ]; then
+    echo "Restoring geserve-databases from dump $VARPGDIR/data.backup_dump.$$ ..."
+    cd $VARPGDIR/data.backup_dump.$$
+  else
+    echo "Restoring geserve-databases from dump $dump_path ..."
+    cd $dump_path
+  fi
+
+  for DB in *.dump; do
+    if [ -s $DB  ]; then
+      $BINDIR/psql -q -d ${DB%?????} -f $DB
+    fi
+  done
+
+  # Update tables/records of gesearch databases.
+  $BINDIR/psql -q -d gesearch geuser -f $BINDIR/gesearch_tables.sql
+
+  # Update tables/records of gestream databases.
+  $BINDIR/psql -q -d gestream geuser -f $BINDIR/gestream_tables.sql
+
+  echo "Done."
+fi
+
+# Stop postmaster
+$BINDIR/pg_ctl -D $VARPGDIR/data -l $VARPGDIR/logs/pg.log stop
+

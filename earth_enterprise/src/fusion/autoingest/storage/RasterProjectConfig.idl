@@ -1,0 +1,206 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+
+#include <vector>
+#include <khConstants.h>
+#include <khTileAddrConsts.h>
+#include <khTypes.h>
+#include <khMetaData.h>
+#include <autoingest/.idl/storage/InsetStackItem.h>
+#include <autoingest/.idl/storage/LayerLegend.h>
+#include <autoingest/.idl/storage/AssetDefs.h>
+#include <third_party/rfc_uuid/uuid.h>
+
+#cppquote
+#include <autoingest/.idl/storage/InsetStackItem_impl.h>
+#include <autoingest/.idl/storage/LayerLegend_impl.h>
+#include <autoingest/.idl/storage/AssetDefs_impl.h>
+#/cppquote
+
+
+class RasterProjectConfig {
+  IsUpToDateIgnore uint indexVersion = uint(1);
+  std::vector<InsetStackItem> insets = std::vector<InsetStackItem>();
+  LayerLegend legend = LayerLegend();
+  uint32      fuid_channel_ = uint32(0);
+  std::string asset_uuid_ = std::string();
+  bool is_timemachine_project_ = false;
+
+  // add(or not) separate alpha_image into imagery-packet.
+  deprecated bool separate_alpha_ = true;
+
+  // "Overlay" terrain project options:
+  // The is_overlay_terrain_project_ specifies special "overlay"-mode for
+  // terrain project. In "overlay"-mode overlay_terrain_resources_min_level_-
+  // value is used to determine which resources are used as "overlay" and
+  // which ones as "filling". Every terrain resource has base level (max
+  // resolution level). The resources with base level less than
+  // overlay_terrain_resources_min_level_ are considered "filling"-resources
+  // and resources with base level equal or greater than
+  // overlay_terrain_resources_min_level_ are considered "overlay"-resources.
+  //
+  // The overlay_terrain_start_level_ specifies "begin project level" for build.
+  // By default it equals 4 (StartTmeshLevel). But for example if base level of
+  // "overlay"-resource equals 17 and we consider that the information we get
+  // from this resource for lower-resolution levels (e.g. 4-10) is insignificant
+  // we can increase "begin project level" for our build. Thereby we get only
+  // significant layers in our DB and reduce "overlay"-DB size.
+  //
+  // Specifies whether this project is "overlay" terrain project or just
+  // regular terrain project.
+  bool is_overlay_terrain_project_ = false;
+
+  // Specifies threshold to partition resources on "overlay" and "filling" by
+  // their base level.
+  // Resources with base level < min_level are used as "Filling"-resources,
+  // >= min_level - as "Overlay"-resources. It is used only in "overlay"-mode.
+  uint32 overlay_terrain_resources_min_level_ = uint32(MaxTmeshLevel/2);
+
+  // Start level for build "overlay" terrain project. It is used only in
+  // "overlay"-mode.
+  uint32 overlay_terrain_start_level_ = uint32(StartTmeshLevel);
+
+
+  // Note: Basic rule for #version: "If the low level tool ever
+  // changes to produce different output from the same config record, then
+  // the version of its config needs to be increased as well as the versions
+  // of all the containing configs all the way up the plugin hierarchy."
+
+  // To force rebuilds, increment this version.
+  // When incrementing this version, you should also increment the
+  // one in Database so this one gets the chance to get checked.
+#version 1
+  // 1 -> gedbrootgen changed to emit protobuf dbroot instead of ETA dbroot
+  // (targeted for 5.0).
+  // 2 -> gepackgen changed to emit protobuf imagery instead of ETA imagery
+  // for Earth's DB and imagery with alpha in 4-channel PNG for Map's DB
+  // (targeted for 5.0).
+  // 2 -> 1 Note: version number reverted back to switch off force
+  // rebuild for imagery project (targeted to 5.0.0).
+
+#pragma GenerateIsUpToDate
+#pragma AfterLoad
+
+#hquote
+ public:
+  RasterProjectConfig(AssetDefs::Type t)
+     : indexVersion(uint(1)),
+     insets(std::vector<InsetStackItem>()),
+     legend((t == AssetDefs::Imagery) ? kImageryType : kTerrainType, true),
+     fuid_channel_(uint32(0)),
+     asset_uuid_(std::string()),
+     is_timemachine_project_(false),
+     is_overlay_terrain_project_(false),
+     overlay_terrain_resources_min_level_(uint32(MaxTmeshLevel/2)),
+     overlay_terrain_start_level_(uint32(StartTmeshLevel)) {
+  }
+
+  void AfterLoad(RasterProjectConfig::DeprecatedMembers &depmembers);
+  void AssignUuidIfEmpty(void);
+
+  // Resets all IDs as it is in a config for a just created asset.
+  void ResetIds(void);
+#/hquote
+
+#cppquote
+#include <khstl.h>
+
+void RasterProjectConfig::AfterLoad(
+    RasterProjectConfig::DeprecatedMembers &depmembers) {
+  if (legend.defaultLocale.name.GetValue().isEmpty() && (insets.size() > 0)){
+    if (EndsWith(insets[0].dataAsset,
+            AssetDefs::FileExtension(AssetDefs::Terrain, kProductSubtype))) {
+      legend.defaultLocale = LegendLocale(kTerrainType, true);
+    } else {
+      legend.defaultLocale = LegendLocale(kImageryType, true);
+    }
+  }
+  // Do not assign the UUID if we don't have one already (i.e., upgrading from pre-3.0.1).
+  // Doing so does not play well with the Project Dialog (it will fill in
+  // a uuid but not mark it as dirty). The Project Dialog will take care of filling
+  // it in.
+}
+
+// Create a UUID for the RasterProjectConfig.
+// Should be called on initialization of a layer and should never change without
+// care.  The UUID should remain constant for the life of the asset.
+// Only assigns a UUID if the UUID is empty.
+void RasterProjectConfig::AssignUuidIfEmpty(void)
+{
+  if (asset_uuid_ == "") {
+    asset_uuid_ = create_uuid_string();
+  }
+}
+
+// Resets all IDs as it is in a config for a just created asset.
+void RasterProjectConfig::ResetIds(void) {
+  indexVersion = 1;
+  fuid_channel_ = 0;
+  asset_uuid_.clear();
+}
+
+#/cppquote
+
+};
+
+// Used only by the GUI
+class RasterProjectEditRequest {
+  AssetDefs::Type type;
+  std::string assetname;
+  RasterProjectConfig config;
+  khMetaData meta;
+
+#hquote
+  RasterProjectEditRequest(AssetDefs::Type t) :
+      type(t),
+      config(t)
+  {
+      // Must create a Uuid here for initializing the GUI.
+      config.AssignUuidIfEmpty();
+  }
+#/hquote
+
+#pragma StrLoadAndSave
+};
+
+class RasterProjectModifyRequest {
+  class Item {
+    std::string dataAsset;
+    uint overridemax;   // 0 -> no override
+    uint peergroup;     // 0 -> not in a peer group
+  };
+
+  std::string assetname;
+  AssetDefs::Type  type;
+  std::vector<Item> items;
+  bool enable_timemachine;
+  bool disable_timemachine;
+#pragma StrLoadAndSave
+#hquote
+  RasterProjectModifyRequest(AssetDefs::Type t)
+  : type(t), enable_timemachine(false), disable_timemachine(false) { }
+#/hquote
+
+};
+
+class RasterProjectDropFromRequest {
+  std::string assetname;
+  AssetDefs::Type  type;
+  std::vector<std::string> productRefs;
+#pragma StrLoadAndSave
+#hquote
+  RasterProjectDropFromRequest(AssetDefs::Type t) : type(t) { }
+#/hquote
+};

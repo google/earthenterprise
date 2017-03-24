@@ -1,0 +1,700 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+ 
+ 
+
+
+ 
+
+  
+  
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/articles/mashupmapplet.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Converting a Maps API Mashup into a Mapplet - Google Maps API Family - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/maps/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../css/iehacks.css"><![endif]-->
+
+    <link href="../../../css/semantic_headers.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    
+    
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  <a href="#gc-pagecontent">Skip to page content</a>
+  <a href="#gc-toc">Skip to main navigation</a>
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps API Family</h1>
+  <ul id="articles" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="../index.html" title="Google Maps API Family home page">Home</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../faq.html" title="Answers to frequently asked questions about Google Maps API Family">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="index.html" class="selected" title="Focused articles and tutorials for Google Maps API Family developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps API Family blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="../forum/index.html" title="Google Maps API Family developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../terms.html" title="Google Maps API Family terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../index.html">Maps API Family</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps Javascript API V3</h2>
+         <ul>
+           <li><a href="../documentation/javascript/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+      <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../documentation/javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+  <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../documentation/flash/index.html">Home Page</a></li>
+          <li><a href="../documentation/flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../documentation/mapsdata/index.html">Home Page</a></li>
+          <li><a href="../documentation/mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+     <div class="line"></div>
+      <ul>
+        <li><h2><a href="../documentation/webservices/index.html">Maps Web Services</a></h2>
+         <ul>
+           <li><a href="../documentation/geocoding/index.html">Geocoding Guide</a></li>
+           <li><a href="../documentation/directions/index.html">Directions Guide</a></li>
+           <li><a href="../documentation/elevation/index.html">Elevation Guide</a></li>
+           <li><a href="../documentation/places/index.html">Places Guide</a></li>
+         </ul>
+       </li>
+      </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../documentation/staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li>
+            <h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../documentation/localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../documentation/localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+      <div class="promo">
+     <p><a href="../documentation/premier/index.html">Google Maps API Premier</a></p><p>Includes enterprise licensing and support</p></div>
+
+        <a class="hidden" href="#gc-topnav-anchor">More Google Maps API Family resource links</a>
+      </div>
+      
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Converting a Maps API Mashup into a Mapplet</h1>
+
+
+<!-- ########## PAGE CONTENT ########## -->
+  
+<div class=i>
+<script type="text/javascript">
+ var allIds = ["removescript", "replacewxml1", "replacewxml2",
+  "replacewxml3", "sharedmap", "maparg", "mapdiv",
+  "replacewxmlA1", "replacewxmlA2", "replacewxmlA3",
+  "noloadfn1", "noloadfn2", "browsercompat1", "browsercompat2"];
+ function highlight(ids, removeStyle) {
+  for (var i=0; i < allIds.length; i++) {
+     document.getElementById(allIds[i]).style.backgroundColor = "#FFFFFF";
+     document.getElementById(allIds[i]).style.textDecoration = "none";
+   }
+
+   for (var i=0; i < ids.length; i++) {
+     document.getElementById(ids[i]).style.backgroundColor = "#FFCC00";
+     if (removeStyle) {
+       document.getElementById(ids[i]).style.textDecoration = "line-through";
+     }
+   }
+ }
+ </script>
+  <style type="text/css">
+  #asyncTable {
+  margin: 30px;
+  }
+  #asyncTable td {
+  border: 1px solid grey;
+  padding: 5px;
+  }
+  .asyncClass {
+  font-weight: bold;
+  background-color: #dddddd;
+  }
+  </style>
+  <em>Pamela Fox, Geo API Team
+
+<br>May 2007</em>
+<ul>
+  <li><a href="#introduction">Introduction</a></li>
+  <li><a href="#section1">Converting HTML to Google Gadget XML</a></li>
+  <li><a href="#section2">Using the Shared Map</a></li>
+  <li><a href="#section3">Using Asynchronous Map Functions</a></li>
+  <li><a href="#section4">Making AJAX Calls the Mapplet Way</a></li>
+
+  <li><a href="#section5">Removing Non-Mapplet-Compatible Features</a></li>
+</ul>
+<a name="introduction"></a>
+<h3>Introduction</h3>
+<p class="para">Google Mapplets allow developers to create Google Gadgets that can be loaded by
+Google Maps users onto the main "shared" map along with other
+Mapplets, enabling the Google Maps user to easily create "mashups of mashups."
+They're a great way to reach a large audience of users, so most maps
+developers should consider creating Mapplet versions of their Maps API mashups.
+With this conversion guide, you should be able to convert your Maps API
+site into a Mapplet (in 60 minutes or less!). Please consult the <a href="http://www.google.com/apis/maps/documentation/mapplets/index.html#Important_Developer_Tools" target="_blank">Mapplets documentation</a> for information on using the Developer Gadget to test that your Mapplet is working on Google Maps.
+</p>
+<a name="section1"></a>
+<h3>Converting HTML to Google Gadget XML</h3>
+<p class="para">
+A Google Gadget is actually just JavaScript, HTML, and CSS tags inside an XML
+wrapper. In order to convert your Maps API site into a Mapplet, you should
+do the following:
+  <ul>
+
+  <li>
+  Replace your <code>HTML</code>/<code>HEAD</code>/<code>BODY</code> tags with the XML that
+defines a Google Gadget. The root tag is named <code>&lt;Module&gt;</code>, and all
+your JavaScript/CSS/HTML now goes inside the <code>&lt;Content&gt;</code> tag.
+  <a href="#mapapicode" onclick="highlight(['replacewxml1', 
+'replacewxml2', 'replacewxml3', 'replacewxmlA1', 'replacewxmlA2', 
+'replacewxmlA3'], false);">
+
+  (Click to highlight)
+  </a></li>
+  <li>
+  Arrange your JavaScript, HTML, and CSS carefully within the
+  <code>&lt;Content&gt;</code>
+  tag. The order that will generally produce the least problems down the road
+is: <code>&lt;style&gt;</code> tags first, HTML next,
+<code>&lt;script&gt;</code> tags last.
+  </li>
+
+  <li>
+  Refactor any map functions that you normally associate with a load function. Since the map is loaded synchronously before your Mapplet code is run,
+you don't need to encapsulate your map functions within a load handler. If you
+structure your Mapplet as recommended above, all page elements will be loaded
+before your script runs; you should be able to safely remove the load function
+wrapping your code.
+  <a href="#mapapicode" onclick="highlight(['noloadfn1', 'noloadfn2'], 
+true);">
+  (Click to highlight)
+  </a>
+  </li>
+  </ul>
+<a name="section2"></a>
+<h3>Using the Shared Map</h3>
+  <ul>
+
+  <li>
+  Add a <code>&lt;Require feature="sharedmap"&gt;</code> in your
+<code>&lt;ModulePrefs&gt;</code> tag so that your Google Gadget can access the Mapplet-specific version of the Maps API.
+  <a href="#mappletcode" onclick="highlight(['sharedmap'], false);">
+  (Click to highlight)
+  </a></li>
+  <li>
+  Remove the script tag that loads in the normal Maps API script. The Google
+  Gadget XML is now loading the Mapplet version of the Maps API for you from
+  the <code>sharedmap</code> feature.
+  <a href="#mapapicode" onclick="highlight(['removescript'], true);">
+
+  (Click to highlight)
+  </a></li>
+  <li>
+  Remove the <code>div</code> that you previously used to load your map into. You're sharing
+  the main map now with other Mapplets, so no <code>div</code> placeholder is needed.
+  <a href="#mapapicode" onclick="highlight(['mapdiv'], true);">
+  (Click to highlight)
+  </a></li>
+
+  <li>
+  Remove the argument from the <code>GMap2</code> constructor. You don't need to tell the
+  constructor where to load the map since the shared map is already loaded.
+  <a href="#mapapicode" onclick="highlight(['maparg'], true);">
+  (Click to highlight)
+  </a></li>
+  <li>
+  Remove the <code>GBrowserIsCompatible</code> check if you're using it now. If a user has loaded your Mapplet onto the map, you can safely assume they're using a browser compatible with Google Maps.
+  <a href="#mapapicode" onclick="highlight(['browsercompat1', 
+'browsercompat2'], true);">
+
+  (Click to highlight)
+  </a></li>
+  </ul>
+<a name="mapapicode"></a>The Maps API Site:
+<pre class="prettyprint">
+<span id="replacewxml1">
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+  &lt;head&gt;
+
+   &lt;meta http-equiv="content-type" content="text/html; 
+charset=utf-8"/&gt;
+
+   &lt;title&gt;Google Maps AJAX + mySQL/PHP 
+Example&lt;/title&gt;</span><span id="removescript">
+
+    &lt;script src="http://maps.google.com/maps?file=api&v=2&key=abc123"
+      type="text/javascript"&gt;&lt;/script&gt;</span>
+    &lt;script type="text/javascript"&gt;
+
+    //&lt;![CDATA[<span id="noloadfn1">
+
+    function load() {</span><span id="browsercompat1">
+
+      if (GBrowserIsCompatible()) {</span>
+        var map = new GMap2(<span 
+id="maparg">document.getElementById("map")</span>);
+        map.setCenter(new GLatLng(37, -122));<span id="browsercompat2">
+
+        }</span>
+
+     <span id="noloadfn2">}</span>
+    //]]>
+  &lt;/script&gt;<span id="replacewxml2">
+
+  &lt;/head&gt;
+  &lt;body onload="load()" onunload="GUnload()"&gt;</span>
+
+   &lt;h2&gt; My Really Simple Map &lt;/h2&gt;<span id="mapdiv">
+
+    &lt;div id="map" style="width: 500px; height: 
+300px"&gt;&lt;/div&gt;</span><span id="replacewxml3">
+  &lt;/body&gt;
+
+&lt;/html&gt;</span>
+</pre>
+<!--</div>-->
+<a name="mappletcode"></a>The Mapplet:
+<!--<div class="code" style="width:500px; height:400px; overflow: scroll; 
+border:2px solid;">-->
+<pre><span id="replacewxmlA1">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+
+&lt;Module&gt;
+&lt;ModulePrefs title="My Simple Map" 
+             description="A converted maps api example"
+             author="Your name"
+             author_email="your-email@google.com"
+             height="150"&gt;</span><span id="sharedmap">
+  &lt;Require feature="sharedmap"/&gt;</span><span id="replacewxmlA2">
+
+&lt;/ModulePrefs&gt;
+
+&lt;Content type="html"&gt;
+&lt;![CDATA[</span>
+
+&lt;h2&gt;My Simple Map&lt;/h2&gt;
+
+&lt;script&gt;
+  var map = new GMap2();
+  map.setCenter(new GLatLng(37, -122));
+&lt;/script&gt;
+
+<span id="replacewxmlA3">
+]]&gt;
+&lt;/Content&gt;
+&lt;/Module&gt;</span>
+</pre>
+<!--</div>-->
+
+<a name="section3"></a>
+<h3>Using Asynchronous Map Functions</h3>
+<p class="para">
+Since we're using a shared map now, some of the maps function calls for
+retrieving information are now asynchronous&mdash;that means that the return value isn't returned to the code instantly but instead is passed into a callback function.
+If you are currently using a function that is now asynchronous in Mapplets, just modify
+your code so that everything that happened after that function (and was
+dependent on the result of it) is now encapsulated inside the callback
+function parameter.
+</p>
+<p class="para">
+The affected functions and their asynchronous versions are listed below. You can read more about them in
+<a href="http://www.google.com/apis/maps/documentation/mapplets/reference.html" target="_blank">the Mapplets reference</a>.
+</p>
+<table id="asyncTable">
+<tr>
+<td colspan="2" class="asyncClass">
+GMap
+</td>
+
+</tr>
+<tr><td><code>getMapTypes()</code></td><td><code>getMapTypesAsync(callback)</code></td></tr>
+<tr><td><code>getCurrentMapType()</code></td><td><code>getCurrentMapTypeAsync(callback)</code></td></tr>
+<tr><td><code>isLoaded()</code></td><td><code>isLoadedAsync(callback)</code></td></tr>
+<tr><td><code>getCenter()</code></td><td><code>getCenterAsync(callback)</code></td></tr>
+<tr><td><code>getBounds()</code></td><td><code>getBoundsAsync(callback)</code></td></tr>
+<tr><td><code>getBoundsZoomLevel(bounds)</code></td><td><code>getBoundsZoomLevelAsync(bounds,
+callback)</code></td></tr>
+
+<tr><td><code>getSize()</code></td><td><code>getSizeAsync(callback)</code></td></tr>
+<tr><td><code>getZoom()</code></td><td><code>getZoomAsync(callback)</code></td></tr>
+<tr><td><code>getInfoWindow()</code></td><td><code>getInfoWindowAsync(callback)</code></td></tr>
+<tr><td><code>fromLatLngToDivPixel(latlng)</code></td><td><code>fromLatLngToDivPixelAsync(latlng,
+callback)</code></td></tr>
+<tr><td><code>fromDivPixelToLatLng(pixel)</code></td><td><code>fromDivPixelToLatLngAsync(pixel,
+callback)</code></td></tr>
+<tr><td><code>fromContainerPixelToLatLng(pixel)</code></td><td><code>fromContainerPixelToLatLngAsync(pixel,
+callback)</code></td></tr>
+
+<tr>
+<td colspan="2" class="asyncClass">
+GMarker:
+</td>
+</tr>
+<tr><td><code>getIcon()</code></td><td><code>getIconAsync(callback)</code></td></tr>
+<tr><td><code>getPoint()</code></td><td><code>getPointAsync(callback)</code></td></tr>
+<tr><td><code>isHidden()</code></td><td><code>isHiddenAsync(callback)</code></td></tr>
+<tr>
+<td colspan="2" class="asyncClass">
+GPolygon/GPolyline:
+
+</td>
+</tr>
+<tr><td><code>getVertexCount()</code></td><td><code>getVertexCountAsync(callback)</code></td></tr>
+<tr><td><code>getVertex(index)</code></td><td><code>getVertexAsync(index,
+callback)</code></td></tr>
+<tr>
+<td colspan="2" class="asyncClass">
+GClientGeocoder
+</td>
+<tr>
+<tr><td><code>getLatLngAsync(address, callback)</code></td><td><code>getLatLng(address,
+callback)</code></td></tr>
+<tr><td><code>getLocationsAsync(address, callback)</code></td><td><code>getLocationsAsync(address,
+callback)</code></td></tr>
+
+</tr>
+</table>
+<p class="para">
+Here's an example from the documentation that uses <code>map.getCenter()</code> and
+needs to be modified to use the asynchronous version of the function.
+</p>
+<pre class="prettyprint">
+var map = new GMap2(document.getElementById("map"));
+GEvent.addListener(map, "moveend", function() {
+  var center = map.getCenter();
+  document.getElementById("message").innerHTML = center.toString();
+});
+map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+</pre>
+<p class="para">
+In the Mapplet version, we replace <code>getCenter()</code> with
+<code>getCenterAsync()</code>, and
+put the code that was supposed to run after that inside a callback
+function.
+
+</p>
+<pre class="prettyprint">
+var map = new GMap2();
+GEvent.addListener(map, "moveend", function() {
+    map.getCenterAsync( function(center) {
+    document.getElementById("message").innerHTML = center.toString();
+  });
+});
+map.setCenter(new GLatLng(37.4419, -122.1419), 13);
+</pre>
+<a name="section4"></a>
+<h3>Making AJAX Calls the Mapplet Way</h3>
+<p class="para">Currently, the Google Maps API methods for making AJAX calls
+(<code>GXml</code>, <code>GXmlHttp</code>, <code>GDownloadUrl</code>) are not supported in the Mapplets API.
+That's okay though, because the Google Gadgets API already has functions
+to help you get remote content into your app:
+<ul>
+<li><code>_IG_FetchContent(url, func)</code></li>
+
+<li><code>_IG_FetchXmlContent(url, func)</code></li>
+<li><code>_IG_FetchFeedAsJSON(url, func, num_entries, get_summaries)</code></li>
+</ul>
+<p class="para">
+The Google Gadget functions differ slightly in the XML they accept and
+their caching behavior, so please read about those differences <a
+href="http://www.google.com/apis/maps/documentation/mapplets/index.html#Proxy">here</a>.
+Additional information about the functions is available in the <a 
+href="http://www.google.com/apis/gadgets/remote-content.html">Google
+Gadgets documentation</a>.
+</p>
+<p class="para">Most likely, your maps application is using <code>GDownloadUrl</code> to download an
+XML file, like in the following example:
+</p>
+
+<pre class="prettyprint">
+GDownloadUrl("markers.xml", function(data) {
+  var xml = GXml.parse(data);
+  var markers = xml.documentElement.getElementsByTagName("marker");
+  for (var i = 0; i < markers.length; i++) {
+    var point = new GLatLng(parseFloat(markers[i].getAttribute("lat")),
+                            parseFloat(markers[i].getAttribute("lng")));
+    map.addOverlay(new GMarker(point));
+  }
+});
+
+
+</pre>
+<p class="para">
+In the Mapplet version, we replace <code>GDownloadUrl</code> with
+<code>_IG_FetchXmlContent</code> which uses the same parameters but returns an already parsed XML document
+in the callback, eliminating our need to parse the XML.
+</p>
+<pre class="prettyprint">
+_IG_FetchXmlContent("markers.xml", function(data) {
+  var markers = data.getElementsByTagName("marker");
+  for (var i = 0; i < markers.length; i++) {
+    var point = new GLatLng(parseFloat(markers[i].getAttribute("lat")),
+                            parseFloat(markers[i].getAttribute("lng")));
+    map.addOverlay(new GMarker(point));
+  }
+});
+</pre>
+
+<a name="section5"></a>
+<h3>Removing Non-Mapplet-Compatible Features</h3>
+<p class="para">
+Some things aren't allowed to be modified in the main map in order to keep a consistent user interface for all the Mapplets sharing the map.
+</p>
+<p class="para">
+Some of these features are:
+<ul>
+<li><strong>Controls:</strong>
+You can't add or remove controls to the map (e.g. <code>map.addControl(new
+  GMapTypeControl())</code>), and along with that, you can't define custom
+controls (by extending <code>GControl</code>). Custom controls are usually just buttons or legends though, so you can move them off the map and into your Mapplet HTML.
+<li><strong>Custom Tile Layers: </strong>
+
+Currently the Maps API functions that enable you to replace the map tiles with
+your own tiles are not supported within Mapplets due to security concerns.
+However, you can use <code>GGroundOverlay</code> with a zoom/pan listener for a similar effect.
+<li><strong>Geocoder Cache:</strong> You can use the API-provided geocoder, but you can't create your own Mapplet-specific cache.
+<li><strong>Custom Overlays:</strong> You're currently limited to using only
+the overlays provided by the API (<code>GGeoXml</code>, <code>GMarker</code>,
+<code>GPolyline</code>, <code>GPolygon</code>). If you've extended <code>GOverlay</code> in your mashup to create your own custom overlays,
+you'll either need to replace them with one of the supported overlays or remove them.
+
+</ul>
+</p>
+<a name="section6"></a>
+<h3>Summary</h3>
+<p class="para">
+Hopefully, this article has helped you convert your Maps API mashup into a Mapplet. Once you've 
+tested that your Mapplet works in Google Maps (in all browsers), you can 
+<a href="http://maps.google.com/gadgets/directory/submit?synd=mpl&pid=mpl" target="_blank">
+submit your mapplet</a> to the Google Mapplets Directory.</a>
+</p>
+<p>For more information, consult the 
+<a href="../documentation/mapplets/guide.html">Mapplets Documentation</a>.
+</p>
+<p class="para">
+If you've run into any issues in creating your Mapplet and have questions, please post in the <a href="http://groups.google.com/group/Google-Maps-API/" target="_blank">Google Maps API Group</a>. The Maps API is constantly evolving, so you should stay tuned to the <a href="http://googlemapsapi.blogspot.com" target="_blank">Google Maps API Blog</a> for announcements about new features.
+
+</p>
+</div>
+
+<!-- ########## END PAGE CONTENT ########## -->
+  
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

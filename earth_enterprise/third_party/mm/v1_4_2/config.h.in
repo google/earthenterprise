@@ -1,0 +1,227 @@
+/* config.h.in.  Generated from configure.ac by autoheader.  */
+
+/* Define to 1 if you have the `bcopy' function. */
+#undef HAVE_BCOPY
+
+/* define to 1 if you have the B_PAGE_SIZE define */
+#undef HAVE_B_PAGE_SIZE
+
+/* define to 1 if you have the CHILD_MAX define */
+#undef HAVE_CHILD_MAX
+
+/* Define to 1 if you have the `create_area' function. */
+#undef HAVE_CREATE_AREA
+
+/* Define to 1 if you have the `create_sem' function. */
+#undef HAVE_CREATE_SEM
+
+/* Define to 1 if you have the <dlfcn.h> header file. */
+#undef HAVE_DLFCN_H
+
+/* Define to 1 if you have the <errno.h> header file. */
+#undef HAVE_ERRNO_H
+
+/* Define to 1 if you have the <fcntl.h> header file. */
+#undef HAVE_FCNTL_H
+
+/* define to 1 if you have the F_SETLK define */
+#undef HAVE_F_SETLK
+
+/* Define to 1 if you have the `getpagesize' function. */
+#undef HAVE_GETPAGESIZE
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* define to 1 if you have the IPC_PRIVATE define */
+#undef HAVE_IPC_PRIVATE
+
+/* Define to 1 if you have the <kernel/OS.h> header file. */
+#undef HAVE_KERNEL_OS_H
+
+/* Define to 1 if you have the <limits.h> header file. */
+#undef HAVE_LIMITS_H
+
+/* define to 1 if you have the LOCK_EX define */
+#undef HAVE_LOCK_EX
+
+/* define to 1 if you have the MAP_ANON define */
+#undef HAVE_MAP_ANON
+
+/* define to 1 if you have the MAXPATHLEN define */
+#undef HAVE_MAXPATHLEN
+
+/* Define to 1 if you have the `memcpy' function. */
+#undef HAVE_MEMCPY
+
+/* Define to 1 if you have the <memory.h> header file. */
+#undef HAVE_MEMORY_H
+
+/* Define to 1 if you have the `memset' function. */
+#undef HAVE_MEMSET
+
+/* Define to 1 if you have the `mmap' function. */
+#undef HAVE_MMAP
+
+/* Define to 1 if you have the `munmap' function. */
+#undef HAVE_MUNMAP
+
+/* define to 1 if you have the PATH_MAX define */
+#undef HAVE_PATH_MAX
+
+/* Define to 1 if you have the `semctl' function. */
+#undef HAVE_SEMCTL
+
+/* Define to 1 if you have the `semget' function. */
+#undef HAVE_SEMGET
+
+/* define to 1 if you have the SEM_UNDO define */
+#undef HAVE_SEM_UNDO
+
+/* Define to 1 if you have the `shmat' function. */
+#undef HAVE_SHMAT
+
+/* Define to 1 if you have the `shmctl' function. */
+#undef HAVE_SHMCTL
+
+/* Define to 1 if you have the `shmdt' function. */
+#undef HAVE_SHMDT
+
+/* Define to 1 if you have the `shmget' function. */
+#undef HAVE_SHMGET
+
+/* Define to 1 if you have the `shm_open' function. */
+#undef HAVE_SHM_OPEN
+
+/* Define to 1 if you have the `shm_unlink' function. */
+#undef HAVE_SHM_UNLINK
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdio.h> header file. */
+#undef HAVE_STDIO_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the `sysconf' function. */
+#undef HAVE_SYSCONF
+
+/* Define to 1 if you have the <sys/file.h> header file. */
+#undef HAVE_SYS_FILE_H
+
+/* Define to 1 if you have the <sys/ipc.h> header file. */
+#undef HAVE_SYS_IPC_H
+
+/* Define to 1 if you have the <sys/mman.h> header file. */
+#undef HAVE_SYS_MMAN_H
+
+/* Define to 1 if you have the <sys/param.h> header file. */
+#undef HAVE_SYS_PARAM_H
+
+/* Define to 1 if you have the <sys/sem.h> header file. */
+#undef HAVE_SYS_SEM_H
+
+/* Define to 1 if you have the <sys/shm.h> header file. */
+#undef HAVE_SYS_SHM_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* define to 1 if you have union semun */
+#undef HAVE_UNION_SEMUN
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* define to 1 if you have the _POSIX_CHILD_MAX define */
+#undef HAVE__POSIX_CHILD_MAX
+
+/* define to 1 if you have the _POSIX_PATH_MAX define */
+#undef HAVE__POSIX_PATH_MAX
+
+/* define to 1 if you have the _SC_PAGESIZE define */
+#undef HAVE__SC_PAGESIZE
+
+/* define to enable debugging */
+#undef MM_DEBUG
+
+/* define to 1 for BeOS support */
+#undef MM_OS_BEOS
+
+/* define to 1 for BS2000 support */
+#undef MM_OS_BS2000
+
+/* define to 1 for SunOS 4.x support */
+#undef MM_OS_SUNOS
+
+/* mutex implementation method: BeOS semaphores */
+#undef MM_SEMT_BEOS
+
+/* mutex implementation method: SVR4-style fcntl() on temporary file */
+#undef MM_SEMT_FCNTL
+
+/* mutex implementation method: 4.2BSD-style flock() on temporary file */
+#undef MM_SEMT_FLOCK
+
+/* mutex implementation method: SysV IPC semget() */
+#undef MM_SEMT_IPCSEM
+
+/* shared memory allocation method: BeOS areas */
+#undef MM_SHMT_BEOS
+
+/* shared memory allocation method: SysV IPC shmget() */
+#undef MM_SHMT_IPCSHM
+
+/* shared memory allocation method: 4.4BSD-style mmap() via MAP_ANON */
+#undef MM_SHMT_MMANON
+
+/* shared memory allocation method: Classical mmap() on temporary file */
+#undef MM_SHMT_MMFILE
+
+/* shared memory allocation method: mmap() via POSIX.1 shm_open() on temporary
+   file */
+#undef MM_SHMT_MMPOSX
+
+/* shared memory allocation method: SVR4-style mmap() on /dev/zero */
+#undef MM_SHMT_MMZERO
+
+/* maximum segment size */
+#undef MM_SHM_MAXSEGSIZE
+
+/* memory page size determination: BeOS B_PAGE_SIZE */
+#undef MM_VMPS_BEOS
+
+/* memory page size determination: 4.2BSD getpagesize() */
+#undef MM_VMPS_GETPAGESIZE
+
+/* memory page size determination: POSIX.1 sysconf(_SC_PAGESIZE) */
+#undef MM_VMPS_SYSCONF
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* Define to 1 if you have the ANSI C header files. */
+#undef STDC_HEADERS

@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Specifying Search Fields for Individual Layers</title>
+</head>
+
+
+<body>
+<a name="top"></a>
+  
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo"><img alt="Google Earth Enterprise" border=0 src="images/index.gif" /></div>
+  <h1 id="doc_title">Tutorial</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../../../index.html">4.4.1 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Tutorial</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="setup.html">Setting Up For the Tutorial</a></li>
+    <li><a href="resources.html">Defining and Building Resources</a></li>
+    <li><a href="projects.html">Defining and Building Projects</a></li>
+    <li><a href="database.html">Defining and Building Databases</a></li>
+    <li><a href="publish.html">Publishing and Viewing a Database</a></li>
+    <li><a href="points.html">Configuring Display Rules for Point Data</a></li>
+    <li><a href="polygons.html">Configuring Display Rules for Polygon Data</a></li>
+    <li><a href="importExport.html">Importing and Exporting Style Templates</a></li>
+    <li><a href="searchTabs.html">Configuring a Searchable Database</a></li>
+    <li><a href="searchLayers.html" id="selected">Specifying Search Fields for Individual Layers</a></li>
+    <li><a href="maps.html">Creating a Map Database</a></li>
+    <li><a href="mosaics.html">Creating Imagery Mosaics</a></li>
+    <li><a href="split.html">Segmenting Large Imagery Files</a></li>
+    <li><a href="historical.html">Building a Historical Imagery Project</a></li>
+    <li><a href="dataFiles.html">Sample Data Files</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+<h1><a id="57763"></a>Specifying Search Fields for Individual Layers
+</h1>
+<p>You can specify one or more fields in your source data on which users can search by configuring layer properties. This lesson guides you through the process of specifying one field on one layer as searchable, using the vector project you created in the <a href="polygons.html">Configuring Display Rules for Polygon Data</a><a href="polygons.html#31467"></a> chapter. If you have not yet completed that chapter, complete at least the first two sections, <a href="polygons.html#93472">Define and Build a Vector Resource Using Polygon Data</a> and <a href="polygons.html#78762">Define, Configure, and Build a Vector Project</a>, before continuing with this lesson.
+</p>
+<h2>Specify Search Fields in Layer Properties
+</h2>
+<h4>To specify the search fields in your data:
+</h4>
+<ol>
+  <li>Select <b>Asset Manager</b> from the Tools menu. 
+    <p>The Asset Manager appears.
+    </p>
+  </li>
+  <li>Navigate to the <code>/ASSET_ROOT/Projects/Vector</code> folder.
+  </li>
+  <li>Right-click <b>CACountyPopulation</b>, and select <b>Layer Properties </b>from the context menu.
+    <p>The Layer Properties dialog appears.
+    </p>
+  </li>
+  <li>Click the <b>Search</b> tab.
+    <p><img src="images/layerProperties_SearchTab.png" /></p>
+    <p>When you specify one or more search fields on this tab, a search tab appears in Google Earth EC that allows users to search for data in the selected field(s).
+    </p>
+  </li>
+  <li>Click 
+    <img src="images/icon_new.gif" />. The <strong>Add Search Field</strong> dialog appears. 
+    <p><img src="images/layerSearchAdd.png" /></p>
+  </li>
+  <li>Select <b>COUNTY</b> from the drop-down list next to Column Name, select <b>Search and Display</b> from the drop-down list next to Use, and then click <b>OK</b>.
+    <p><img src="images/searchField1.png" /></p>
+    <p>These selections allow users to search on the COUNTY field and display the county name in the description balloon.
+    </p>
+  </li>
+  <li>Select <b>POP2000</b> from the drop-down list next to Column Name, select <b>Display Only </b>from the drop-down list next to Use, and then click <b>OK</b>.
+    <p><img src="images/searchField2.png" /></p>
+    <p>These selections result in the county population being displayed in the description balloon for each county that matches the user’s search criteria. The first field selected for display becomes the placemark name. The second field selected for display becomes the snippet. Any additional fields selected for display become the description.
+    </p>
+    <p class="note"><strong>Note:</strong> This is currently an exact search, which means that the Google Earth EC user must enter the value exactly as it appears in the database. It is also a wildcard search, so users can enter part of the text they want to match. For example, if a user enters “dakota” in a state search, it matches “North Dakota” and “South Dakota”.
+    </p>
+    <p>Your selections appear on the list of search fields on the Search tab in the order in which you added them. 
+    </p>
+    <p><img src="images/layerProperties_SearchTab-full.png" /></p>
+    <p>The order in which the fields appear on this list dictates the order in which they appear in the description balloon in Google Earth EC. 
+    </p>
+    <p class="note"><strong>Note:</strong> Since you cannot change the order of the fields after you add them, be sure to add them in the order in which you want them to appear in the description balloon in Google Earth EC.
+    </p>
+  </li>
+  <li>Click <b>OK</b>.
+    <p>The Search Tab Properties fields appear at the bottom of the Vector Project Editor.
+    </p>
+    </li>
+  <li>Change the Tab Label value to <b>County Population Search</b>.
+  </li>
+  <li>Change the Search Field Label value to <b>Enter county name:</b>
+  </li>
+  <li>Save the project.
+  </li>
+</ol>
+<h2>Add Search Tabs To Your Database
+</h2>
+<ol>
+  <li>In the Asset Manager, navigate to the <code>/ASSET_ROOT/Databases</code> folder.  </li>
+  <li>Double-click to open the <b>CACountyPopulation</b> database. Check the box next to <b>Search Tabs</b>.    </li>
+  <li>Click 
+    <img src="images/icon_new.gif" />, and select <b>CountyPopulationSearch</b> from the pop-up list.
+    <p>The County Population Search tab appears in the Search Tabs area.    </p>
+    </li>
+  <li>Save and build the CACountyPopulation database (which also builds the CACountyPopulation project that you modified).  </li>
+  <li>Publish the CACountyPopulation database.  </li>
+  <li>Launch Google Earth EC, and log in to your server.  </li>
+</ol>
+    <p class="caution"><strong>Caution:</strong> If you have logged in to this server with Google Earth EC previously, log out, clear your cache, and log back in. For help with clearing your cache, refer to the <i>Google Earth User Guide</i>.
+      </p>
+<p>Google Earth EC displays your database with the search tab you specified. When you enter a search string, such as “San”, all of the counties containing that string appear in the search results, and POI icons indicate the location of each of the search results on the map.
+</p>
+<p><img src="images/Page_87.png" /></p>
+</div>
+	<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+	<!-- END WRAPPER -->
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+
+#include <string>
+
+// ****************************************************************************
+// ***  KRP - Keyhole Raster Product (low level, Imagery & Terrain)
+// ****************************************************************************
+class KRPConfig {
+  double scale;
+  bool clampNonnegative = true;
+  deprecated bool coerce = false;
+  std::string overridesrs = std::string();
+  bool useMercatorProjection = new:false, load:false;
+  double north_boundary = new:90.0, load:90.0;
+  double south_boundary = new:-90.0, load:-90.0;
+  double east_boundary = new:180.0, load:180.0;
+  double west_boundary = new:-180.0, load:-180.0;
+
+#pragma GenerateIsUpToDate
+};

@@ -1,0 +1,114 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#config Name      KMLProject
+#config Base      Composite
+#config Config    KMLProjectConfig
+#config Subtype   Project
+#config FixedType KML
+
+
+// ===== KMLProjectAsset.h =====
+#include <autoingest/.idl/storage/KMLProjectConfig.h>
+
+
+// ===== KMLProjectAsset.cpp =====
+
+
+// ===== KMLProjectAssetD.h =====
+#include <climits>
+class KMLProjectAssetImplD {
+ protected:
+  void SyncInputRefs(void);
+  void PostUpdate(void) { IncrementIndexVersion(); }
+ public:
+  inline void IncrementIndexVersion(void) {
+    config.indexVersion = (config.indexVersion + 1) % USHRT_MAX;
+  }
+  static void HandleEditRequest(const KMLProjectEditRequest &);
+};
+
+
+
+// ===== KMLProjectAssetD.cpp =====
+//#include <autoingest/sysman/plugins/KMLLayerAssetD.h>
+
+void
+KMLProjectAssetImplD::SyncInputRefs(void)
+{
+  // update my inputs based on which layers have assetRefs
+  inputs.clear();
+  for (std::vector<KMLProjectConfig::LayerItem>::const_iterator layer
+         = config.layers.begin();
+       layer != config.layers.end(); ++layer) {
+
+    // skip layers marked with the 'skip' flag
+    // the fusion user has turned these off and doesn't want them to be
+    // processed at all
+    if (layer->skipLayer) {
+      continue;
+    }
+
+    inputs.push_back(layer->assetRef);
+  }
+}
+
+void
+KMLProjectAssetImplD::HandleEditRequest(const KMLProjectEditRequest &req)
+{
+  // make sure the assetRef's are valid
+  for (std::vector<KMLProjectConfig::LayerItem>::const_iterator layer
+         = req.config.layers.begin();
+       layer != req.config.layers.end(); ++layer) {
+    //KMLLayerFactory::ValidateRefForInput(layer->assetRef);
+  }
+
+  // find/make our target project
+  std::string projname =
+    khEnsureExtension(req.assetname,
+                      AssetDefs::FileExtension(AssetDefs::KML,
+                                               kProjectSubtype));
+  // will be filled in later
+  std::vector<std::string> inputs;
+
+  // custom FindMake - modified to set/preserve indexVersion
+  KMLProjectConfig projConfig = req.config;
+  MutableKMLProjectAssetD project = KMLProjectFactory::Find(projname);
+  if (project) {
+    // We must preserve the indexVersion since the GUI doesn't/can't.
+    // We really should split this KMLProjectConfig into two pieces.
+    projConfig.indexVersion = project->config.indexVersion;
+    project->Modify(inputs, req.meta, projConfig);
+  } else {
+    assert(projConfig.indexVersion == 1);
+    project = KMLProjectFactory::Make(projname, inputs,
+                                      req.meta, projConfig);
+  }
+
+  if (!project)
+    throw khException(kh::tr("Unable to create KML project: ") +
+                      projname);
+
+  //project->config.AssignChannelIdsIfZero();
+  project->SyncInputRefs();
+}
+
+
+
+void
+KMLProjectAssetVersionImplD::UpdateChildren(void)
+{
+  throw khException(kh::tr("KMLProject::UpdateChildren not implemented"));
+}
+

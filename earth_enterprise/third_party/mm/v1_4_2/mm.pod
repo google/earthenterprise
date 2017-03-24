@@ -1,0 +1,647 @@
+## ====================================================================
+## Copyright (c) 1999-2006 Ralf S. Engelschall <rse@engelschall.com>
+## Copyright (c) 1999-2006 The OSSP Project <http://www.ossp.org/>
+##
+## Redistribution and use in source and binary forms, with or without
+## modification, are permitted provided that the following conditions
+## are met:
+##
+## 1. Redistributions of source code must retain the above copyright
+##    notice, this list of conditions and the following disclaimer.
+##
+## 2. Redistributions in binary form must reproduce the above copyright
+##    notice, this list of conditions and the following disclaimer in
+##    the documentation and/or other materials provided with the
+##    distribution.
+##
+## 3. All advertising materials mentioning features or use of this
+##    software must display the following acknowledgment:
+##    "This product includes software developed by
+##     Ralf S. Engelschall <rse@engelschall.com>."
+##
+## 4. Redistributions of any form whatsoever must retain the following
+##    acknowledgment:
+##    "This product includes software developed by
+##     Ralf S. Engelschall <rse@engelschall.com>."
+##
+## THIS SOFTWARE IS PROVIDED BY RALF S. ENGELSCHALL ``AS IS'' AND ANY
+## EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+## IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+## PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL RALF S. ENGELSCHALL OR
+## ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+## SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+## NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+## LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+## HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+## STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+## ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+## OF THE POSSIBILITY OF SUCH DAMAGE.
+## ====================================================================
+
+##
+## mm.pod -- Manpage
+##
+
+=pod
+
+=head1 NAME
+
+B<OSSP mm> - B<Shared Memory Allocation>
+
+=head1 VERSION
+
+OSSP mm MM_VERSION_STR
+
+=head1 SYNOPSIS
+
+ #include "mm.h"
+
+B< Global Malloc-Replacement API>
+
+ int     MM_create(size_t size, const char *file);
+ int     MM_permission(mode_t mode, uid_t owner, gid_t group);
+ void    MM_reset(void);
+ void    MM_destroy(void);
+ int     MM_lock(mm_lock_mode mode);
+ int     MM_unlock(void);
+ void   *MM_malloc(size_t size);
+ void   *MM_realloc(void *ptr, size_t size);
+ void    MM_free(void *ptr);
+ void   *MM_calloc(size_t number, size_t size);
+ char   *MM_strdup(const char *str);
+ size_t  MM_sizeof(void *ptr);
+ size_t  MM_maxsize(void);
+ size_t  MM_available(void);
+ char   *MM_error(void);
+
+B< Standard Malloc-Style API>
+
+ MM     *mm_create(size_t size, char *file);
+ int     mm_permission(MM *mm, mode_t mode, uid_t owner, gid_t group);
+ void    mm_reset(MM *mm);
+ void    mm_destroy(MM *mm);
+ int     mm_lock(MM *mm, mm_lock_mode mode);
+ int     mm_unlock(MM *mm);
+ void   *mm_malloc(MM *mm, size_t size);
+ void   *mm_realloc(MM *mm, void *ptr, size_t size);
+ void    mm_free(MM *mm, void *ptr);
+ void   *mm_calloc(MM *mm, size_t number, size_t size);
+ char   *mm_strdup(MM *mm, const char *str);
+ size_t  mm_sizeof(MM *mm, void *ptr);
+ size_t  mm_maxsize(void);
+ size_t  mm_available(MM *mm);
+ char   *mm_error(void);
+ void    mm_display_info(MM *mm);
+
+B< Low-level Shared Memory API>
+
+ void   *mm_core_create(size_t size, char *file);
+ int     mm_core_permission(void *core, mode_t mode, uid_t owner, gid_t group);
+ void    mm_core_delete(void *core);
+ int     mm_core_lock(void *core, mm_lock_mode mode);
+ int     mm_core_unlock(void *core);
+ size_t  mm_core_size(void *core);
+ size_t  mm_core_maxsegsize(void);
+ size_t  mm_core_align2page(size_t size);
+ size_t  mm_core_align2click(size_t size);
+
+B< Internal Library API>
+
+ void    mm_lib_error_set(unsigned int, const char *str);
+ char   *mm_lib_error_get(void);
+ int     mm_lib_version(void);
+
+=head1 DESCRIPTION
+
+The B<OSSP mm> library is a 2-layer abstraction library which simplifies the usage
+of shared memory between forked (and this way strongly related) processes
+under Unix platforms. On the first (lower) layer it hides all platform
+dependent implementation details (allocation and locking) when dealing with
+shared memory segments and on the second (higher) layer it provides a
+high-level malloc(3)-style API for a convenient and well known way to work
+with data-structures inside those shared memory segments.
+
+The abbreviation B<OSSP mm> is historically and originally comes from the phrase
+``I<memory mapped>'' as used by the POSIX.1 mmap(2) function. Because this
+facility is internally used by this library on most platforms to establish the
+shared memory segments.
+
+=head2 LIBRARY STRUCTURE
+
+This library is structured into three main APIs which are internally based on
+each other:
+
+=over 4
+
+=item B<Global Malloc-Replacement API>
+
+This is the most high-level API which directly can be used as replacement API
+for the POSIX.1 memory allocation API (malloc(2) and friends). This is
+useful when converting I<heap> based data structures to I<shared memory>
+based data structures without the need to change the code dramatically.  All
+which is needed is to prefix the POSIX.1 memory allocation functions with
+`C<MM_>', i.e. `C<malloc>' becomes `C<MM_malloc>', `C<strdup>' becomes
+`C<MM_strdup>', etc. This API internally uses just a global `C<MM *>' pool for
+calling the corresponding functions (those with prefix `C<mm_>') of the
+I<Standard Malloc-Style API>.
+
+=item B<Standard Malloc-Style API>
+
+This is the standard high-level memory allocation API. Its interface is
+similar to the I<Global Malloc-Replacement API> but it uses an explicit `C<MM *>'
+pool to operate on. That is why every function of this API has an argument of
+type `C<MM *>' as its first argument. This API provides a comfortable way to
+work with small dynamically allocated shared memory chunks inside large
+statically allocated shared memory segments. It is internally based on the
+I<Low-Level Shared Memory API> for creating the underlying shared memory
+segment.
+
+=item B<Low-Level Shared Memory API>
+
+This is the basis of the whole B<OSSP mm> library. It provides low-level functions
+for creating shared memory segments with mutual exclusion (in short I<mutex>)
+capabilities in a portable way. Internally the shared memory and mutex
+facility is implemented in various platform-dependent ways. A list of
+implementation variants follows under the next topic.
+
+=back
+
+=head2 SHARED MEMORY IMPLEMENTATION
+
+Internally the shared memory facility is implemented in various
+platform-dependent ways. Each way has its own advantages and disadvantages
+(in addition to the fact that some variants aren't available at all on some
+platforms). The B<OSSP mm> library's configuration procedure tries hard to make a
+good decision. The implemented variants are now given for overview and
+background reasons with their advantages and disadvantages and in an ascending
+order, i.e. the B<OSSP mm> configuration mechanism chooses the last available one
+in the list as the preferred variant.
+
+=over 4
+
+=item Classical mmap(2) on temporary file (MMFILE)
+
+I<Advantage:> maximum portable.
+I<Disadvantage:> needs a temporary file on the filesystem.
+
+=item mmap(2) via POSIX.1 shm_open(3) on temporary file (MMPOSX)
+
+I<Advantage:> standardized by POSIX.1 and theoretically portable.
+I<Disadvantage:> needs a temporary file on the filesystem and is
+is usually not available on existing Unix platform.
+
+=item SVR4-style mmap(2) on C</dev/zero> device (MMZERO)
+
+I<Advantage:> widely available and mostly portable on SVR4 platforms.
+I<Disadvantage:> needs the C</dev/zero> device and a mmap(2)
+which supports memory mapping through this device.
+
+=item SysV IPC shmget(2) (IPCSHM)
+
+I<Advantage:> does not need a temporary file or external device.
+I<Disadvantage:> although available on mostly all modern Unix platforms, it has
+strong restrictions like the maximum size of a single shared memory segment (can
+be as small as 100KB, but depends on the platform).
+
+=item 4.4BSD-style mmap(2) via C<MAP_ANON> facility (MMANON)
+
+I<Advantage:> does not need a temporary file or external device.
+I<Disadvantage:> usually only available on BSD platforms and derivatives.
+
+=back
+
+=head2 LOCKING IMPLEMENTATION
+
+As for the shared memory facility, internally the locking facility is
+implemented in various platform-dependent ways. They are again listed
+in ascending order, i.e. the B<OSSP mm> configuration mechanism chooses the
+last available one in the list as the preferred variant. The list of
+implemented variants is:
+
+=over 4
+
+=item 4.2BSD-style flock(2) on temporary file (FLOCK)
+
+I<Advantage:> exists on a lot of platforms, especially on older Unix
+derivatives. I<Disadvantage:> needs a temporary file on the filesystem and has
+to re-open file-descriptors to it in each(!) fork(2)'ed child process.
+
+=item SysV IPC semget(2) (IPCSEM)
+
+I<Advantage:> exists on a lot of platforms and does not need a temporary file.
+I<Disadvantage:> an unmeant termination of the application leads to a
+semaphore leak because the facility does not allow a ``remove in advance''
+trick (as the IPC shared memory facility does) for safe cleanups.
+
+=item SVR4-style fcntl(2) on temporary file (FCNTL)
+
+I<Advantage:> exists on a lot of platforms and is also the most powerful
+variant (although not always the fastest one). I<Disadvantage:> needs a
+temporary file.
+
+=back
+
+=head2 MEMORY ALLOCATION STRATEGY
+
+The memory allocation strategy the I<Standard Malloc-Style API> functions use
+internally is the following:
+
+=over 4
+
+=item B<Allocation>
+
+If a chunk of memory has to be allocated, the internal list of free chunks
+is searched for a minimal-size chunk which is larger or equal than the size of
+the to be allocated chunk (a I<best fit> strategy).
+
+If a chunk is found which matches this best-fit criteria, but is still a lot
+larger than the requested size, it is split into two chunks: One with exactly
+the requested size (which is the resulting chunk given back) and one with the
+remaining size (which is immediately re-inserted into the list of free
+chunks).
+
+If no fitting chunk is found at all in the list of free chunks, a new one is
+created from the spare area of the shared memory segment until the segment is
+full (in which case an I<out of memory> error occurs).
+
+=item B<Deallocation>
+
+If a chunk of memory has to be deallocated, it is inserted in sorted manner
+into the internal list of free chunks. The insertion operation automatically
+merges the chunk with a previous and/or a next free chunk if possible, i.e.
+if the free chunks stay physically seamless (one after another) in memory, to
+automatically form larger free chunks out of smaller ones.
+
+This way the shared memory segment is automatically defragmented when memory
+is deallocated.
+
+=back
+
+This strategy reduces memory waste and fragmentation caused by small and
+frequent allocations and deallocations to a minimum.
+
+The internal implementation of the list of free chunks is not specially
+optimized (for instance by using binary search trees or even I<splay> trees,
+etc), because it is assumed that the total amount of entries in the list of
+free chunks is always small (caused both by the fact that shared memory
+segments are usually a lot smaller than heaps and the fact that we always
+defragment by merging the free chunks if possible).
+
+=head1 API FUNCTIONS
+
+In the following, all API functions are described in detail. The order
+directly follows the one in the B<SYNOPSIS> section above.
+
+=head2 Global Malloc-Replacement API
+
+=over 4
+
+=item int B<MM_create>(size_t I<size>, const char *I<file>);
+
+This initializes the global shared memory pool with I<size> and I<file> and
+has to be called I<before> any fork(2) operations are performed by the
+application.
+
+=item int B<MM_permission>(mode_t I<mode>, uid_t I<owner>, gid_t I<group>);
+
+This sets the filesystem I<mode>, I<owner> and I<group> for the global shared
+memory pool (has effects only if the underlying shared memory segment
+implementation is actually based on external auxiliary files).  The arguments
+are directly passed through to chmod(2) and chown(2).
+
+=item void B<MM_reset>(void);
+
+This resets the global shared memory pool: all chunks that have been
+allocated in the pool are marked as free and are eligible for reuse. The
+global memory pool itself is not destroyed.
+
+=item void B<MM_destroy>(void);
+
+This destroys the global shared memory pool and should be called I<after> all
+child processes were killed.
+
+=item int B<MM_lock>(mm_lock_mode I<mode>);
+
+This locks the global shared memory pool for the current process in order to
+perform either shared/read-only (I<mode> is C<MM_LOCK_RD>) or
+exclusive/read-write (I<mode> is C<MM_LOCK_RW>) critical operations inside the
+global shared memory pool.
+
+=item int B<MM_unlock>(void);
+
+This unlocks the global shared memory pool for the current process after the
+critical operations were performed inside the global shared memory pool.
+
+=item void *B<MM_malloc>(size_t I<size>);
+
+Identical to the POSIX.1 malloc(3) function but instead of allocating
+memory from the I<heap> it allocates it from the global shared memory pool.
+
+=item void B<MM_free>(void *I<ptr>);
+
+Identical to the POSIX.1 free(3) function but instead of deallocating
+memory in the I<heap> it deallocates it in the global shared memory pool.
+
+=item void *B<MM_realloc>(void *I<ptr>, size_t I<size>);
+
+Identical to the POSIX.1 realloc(3) function but instead of reallocating
+memory in the I<heap> it reallocates it inside the global shared memory pool.
+
+=item void *B<MM_calloc>(size_t I<number>, size_t I<size>);
+
+Identical to the POSIX.1 calloc(3) function but instead of allocating and
+initializing memory from the I<heap> it allocates and initializes it from the
+global shared memory pool.
+
+=item char *B<MM_strdup>(const char *I<str>);
+
+Identical to the POSIX.1 strdup(3) function but instead of creating the
+string copy in the I<heap> it creates it in the global shared memory pool.
+
+=item size_t B<MM_sizeof>(const void *I<ptr>);
+
+This function returns the size in bytes of the chunk starting at I<ptr> when
+I<ptr> was previously allocated with MM_malloc(3). The result is undefined
+if I<ptr> was not previously allocated with MM_malloc(3).
+
+=item size_t B<MM_maxsize>(void);
+
+This function returns the maximum size which is allowed
+as the first argument to the MM_create(3) function.
+
+=item size_t B<MM_available>(void);
+
+Returns the amount in bytes of still available (free) memory in the global
+shared memory pool.
+
+=item char *B<MM_error>(void);
+
+Returns the last error message which occurred inside the B<OSSP mm> library.
+
+=back
+
+=head2 Standard Malloc-Style API
+
+=over 4
+
+=item MM *B<mm_create>(size_t I<size>, const char *I<file>);
+
+This creates a shared memory pool which has space for approximately a total of
+I<size> bytes with the help of I<file>. Here I<file> is a filesystem path to a
+file which need not to exist (and perhaps is never created because this
+depends on the platform and chosen shared memory and mutex implementation).
+The return value is a pointer to a C<MM> structure which should be treated as
+opaque by the application. It describes the internals of the created shared
+memory pool. In case of an error C<NULL> is returned.  A I<size> of 0 means to
+allocate the maximum allowed size which is platform dependent and is between a
+few KB and the soft limit of 64MB.
+
+=item int B<mm_permission>(MM *I<mm>, mode_t I<mode>, uid_t I<owner>, gid_t I<group>);
+
+This sets the filesystem I<mode>, I<owner> and I<group> for the shared memory
+pool I<mm> (has effects only when the underlying shared memory segment
+implementation is actually based on external auxiliary files).  The arguments
+are directly passed through to chmod(2) and chown(2).
+
+=item void B<mm_reset>(MM *I<mm>);
+
+This resets the shared memory pool I<mm>: all chunks that have been
+allocated in the pool are marked as free and are eligible for reuse. The
+memory pool itself is not destroyed.
+
+=item void B<mm_destroy>(MM *I<mm>);
+
+This destroys the complete shared memory pool I<mm> and with it all chunks
+which were allocated in this pool. Additionally any created files on the
+filesystem corresponding to the shared memory pool are unlinked.
+
+=item int B<mm_lock>(MM *I<mm>, mm_lock_mode I<mode>);
+
+This locks the shared memory pool I<mm> for the current process in order to
+perform either shared/read-only (I<mode> is C<MM_LOCK_RD>) or
+exclusive/read-write (I<mode> is C<MM_LOCK_RW>) critical operations inside the
+global shared memory pool.
+
+=item int B<mm_unlock>(MM *I<mm>);
+
+This unlocks the shared memory pool I<mm> for the current process after
+critical operations were performed inside the global shared memory pool.
+
+=item void *B<mm_malloc>(MM *I<mm>, size_t I<size>);
+
+This function allocates I<size> bytes from the shared memory pool I<mm> and
+returns either a (virtual memory word aligned) pointer to it or C<NULL> in
+case of an error (out of memory). It behaves like the POSIX.1 malloc(3)
+function but instead of allocating memory from the I<heap> it allocates it
+from the shared memory segment underlying I<mm>.
+
+=item void B<mm_free>(MM *I<mm>, void *I<ptr>);
+
+This deallocates the chunk starting at I<ptr> in the shared memory pool I<mm>.
+It behaves like the POSIX.1 free(3) function but instead of deallocating
+memory from the I<heap> it deallocates it from the shared memory segment
+underlying I<mm>.
+
+=item void *B<mm_realloc>(MM *I<mm>, void *I<ptr>, size_t I<size>);
+
+This function reallocates the chunk starting at I<ptr> inside the shared
+memory pool I<mm> with the new size of I<size> bytes.  It behaves like the
+POSIX.1 realloc(3) function but instead of reallocating memory in the
+I<heap> it reallocates it in the shared memory segment underlying I<mm>.
+
+=item void *B<mm_calloc>(MM *I<mm>, size_t I<number>, size_t I<size>);
+
+This is similar to mm_malloc(3), but additionally clears the chunk. It behaves
+like the POSIX.1 calloc(3) function.  It allocates space for I<number>
+objects, each I<size> bytes in length from the shared memory pool I<mm>.  The
+result is identical to calling mm_malloc(3) with an argument of ``I<number> *
+I<size>'', with the exception that the allocated memory is initialized to nul
+bytes.
+
+=item char *B<mm_strdup>(MM *I<mm>, const char *I<str>);
+
+This function behaves like the POSIX.1 strdup(3) function.  It allocates
+sufficient memory inside the shared memory pool I<mm> for a copy of the string
+I<str>, does the copy, and returns a pointer to it.  The pointer may
+subsequently be used as an argument to the function mm_free(3). If
+insufficient shared memory is available, C<NULL> is returned.
+
+=item size_t B<mm_sizeof>(MM *I<mm>, const void *I<ptr>);
+
+This function returns the size in bytes of the chunk starting at I<ptr>
+when I<ptr> was previously allocated with mm_malloc(3) inside the
+shared memory pool I<mm>. The result is undefined when I<ptr> was not
+previously allocated with mm_malloc(3).
+
+=item size_t B<mm_maxsize>(void);
+
+This function returns the maximum size which is allowed as the first argument
+to the mm_create(3) function.
+
+=item size_t B<mm_available>(MM *I<mm>);
+
+Returns the amount in bytes of still available (free) memory in the
+shared memory pool I<mm>.
+
+=item char *B<mm_error>(void);
+
+Returns the last error message which occurred inside the B<OSSP mm> library.
+
+=item void B<mm_display_info>(MM *I<mm>);
+
+This is debugging function which displays a summary page for the shared memory
+pool I<mm> describing various internal sizes and counters.
+
+=back
+
+=head2 Low-Level Shared Memory API
+
+=over 4
+
+=item void *B<mm_core_create>(size_t I<size>, const char *I<file>);
+
+This creates a shared memory area which is at least I<size> bytes in size with
+the help of I<file>. The value I<size> has to be greater than 0 and less or
+equal the value returned by mm_core_maxsegsize(3). Here I<file> is a
+filesystem path to a file which need not to exist (and perhaps is never
+created because this depends on the platform and chosen shared memory and
+mutex implementation).  The return value is either a (virtual memory word
+aligned) pointer to the shared memory segment or C<NULL> in case of an error.
+The application is guaranteed to be able to access the shared memory segment
+from byte 0 to byte I<size>-1 starting at the returned address.
+
+=item int B<mm_core_permission>(void *I<core>, mode_t I<mode>, uid_t I<owner>, gid_t I<group>);
+
+This sets the filesystem I<mode>, I<owner> and I<group> for the shared memory
+segment I<code> (has effects only when the underlying shared memory segment
+implementation is actually based on external auxiliary files).  The arguments
+are directly passed through to chmod(2) and chown(2).
+
+=item void B<mm_core_delete>(void *I<core>);
+
+This deletes a shared memory segment I<core> (as previously returned by a
+mm_core_create(3) call). After this operation, accessing the segment starting
+at I<core> is no longer allowed and will usually lead to a segmentation fault.
+
+=item int B<mm_core_lock>(const void *I<core>, mm_lock_mode I<mode>);
+
+This function acquires an advisory lock for the current process on the shared
+memory segment I<core> for either shared/read-only (I<mode> is C<MM_LOCK_RD>)
+or exclusive/read-write (I<mode> is C<MM_LOCK_RW>) critical operations between
+fork(2)'ed child processes.
+
+=item int B<mm_core_unlock>(const void *I<core>);
+
+This function releases a previously acquired advisory lock for the current
+process on the shared memory segment I<core>.
+
+=item size_t B<mm_core_size>(const void *I<core>);
+
+This returns the size in bytes of I<core>. This size is exactly the size which
+was used for creating the shared memory area via mm_core_create(3). The
+function is provided just for convenience reasons to not require the
+application to remember the memory size behind I<core> itself.
+
+=item size_t B<mm_core_maxsegsize>(void);
+
+This returns the number of bytes of a maximum-size shared memory segment which
+is allowed to allocate via the MM library. It is between a few KB and the soft
+limit of 64MB.
+
+=item size_t B<mm_core_align2page>(size_t I<size>);
+
+This is just a utility function which can be used to align the number I<size>
+to the next virtual memory I<page> boundary used by the underlying platform.
+The memory page boundary under Unix platforms is usually somewhere between
+2048 and 16384 bytes. You do not have to align the I<size> arguments of other
+B<OSSP mm> library functions yourself, because this is already done internally.
+This function is exported by the B<OSSP mm> library just for convenience reasons in
+case an application wants to perform similar calculations for other purposes.
+
+=item size_t B<mm_core_align2word>(size_t I<size>);
+
+This is another utility function which can be used to align the number I<size>
+to the next virtual memory I<word> boundary used by the underlying platform.
+The memory word boundary under Unix platforms is usually somewhere between 4
+and 16 bytes.  You do not have to align the I<size> arguments of other B<OSSP mm>
+library functions yourself, because this is already done internally.  This
+function is exported by the B<OSSP mm> library just for convenience reasons in case
+an application wants to perform similar calculations for other purposes.
+
+=back
+
+=head2 Low-Level Shared Memory API
+
+=over 4
+
+=item void B<mm_lib_error_set>(unsigned int, const char *str);
+
+This is a function which is used internally by the various MM function to set
+an error string. It's usually not called directly from applications.
+
+=item char *B<mm_lib_error_get>(void);
+
+This is a function which is used internally by MM_error(3) and mm_error(3)
+functions to get the current error string. It is usually not called directly
+from applications.
+
+=item int B<mm_lib_version>(void);
+
+This function returns a hex-value ``0xI<V>I<RR>I<T>I<LL>'' which describes the
+current B<OSSP mm> library version. I<V> is the version, I<RR> the revisions, I<LL>
+the level and I<T> the type of the level (alphalevel=0, betalevel=1,
+patchlevel=2, etc). For instance B<OSSP mm> version 1.0.4 is encoded as 0x100204.
+The reason for this unusual mapping is that this way the version number is
+steadily I<increasing>.
+
+=back
+
+=head1 RESTRICTIONS
+
+The maximum size of a continuous shared memory segment one can allocate
+depends on the underlying platform. This cannot be changed, of course.  But
+currently the high-level malloc(3)-style API just uses a single shared memory
+segment as the underlying data structure for an C<MM> object which means that
+the maximum amount of memory an C<MM> object represents also depends on the
+platform.
+
+This could be changed in later versions by allowing at least the
+high-level malloc(3)-style API to internally use multiple shared memory
+segments to form the C<MM> object. This way C<MM> objects could have
+arbitrary sizes, although the maximum size of an allocatable continuous
+chunk still is bounded by the maximum size of a shared memory segment.
+
+=head1 SEE ALSO
+
+mm-config(1).
+
+malloc(3), calloc(3), realloc(3), strdup(3), free(3), mmap(2), shmget(2),
+shmctl(2), flock(2), fcntl(2), semget(2), semctl(2), semop(2).
+
+=head1 HOME
+
+http://www.ossp.org/pkg/lib/mm/
+
+=head1 HISTORY
+
+This library was originally written in January 1999 by I<Ralf S.
+Engelschall> <rse@engelschall.com> for use in the B<Extended API> (EAPI)
+of the B<Apache> HTTP server project (see http://www.apache.org/), which
+was originally invented for B<mod_ssl> (see http://www.modssl.org/).
+
+Its base idea (a malloc-style API for handling shared memory) was originally
+derived from the non-publically available I<mm_malloc> library written in
+October 1997 by I<Charles Randall> <crandall@matchlogic.com> for MatchLogic,
+Inc.
+
+In 2000 this library joined the B<OSSP> project where all other software
+development projects of I<Ralf S. Engelschall> are located.
+
+=head1 AUTHOR
+
+ Ralf S. Engelschall
+ rse@engelschall.com
+ www.engelschall.com
+
+=cut
+

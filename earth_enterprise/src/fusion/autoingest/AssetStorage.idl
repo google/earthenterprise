@@ -1,0 +1,172 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#include <string>
+#include <vector>
+#include <deque>
+#include <khTypes.h>
+#include <khMetaData.h>
+#include <autoingest/Misc.h>
+#include <autoingest/.idl/storage/AssetDefs.h>
+#include "common/verref_storage.h"
+
+#cppquote
+#include <autoingest/.idl/storage/AssetDefs_impl.h>
+#/cppquote
+
+
+// ****************************************************************************
+// ***  Base classes
+// ****************************************************************************
+class AssetStorage {
+  //typedef std::deque<std::string> VersionList;
+  typedef VerRefGen VersionList;
+
+  std::string name;
+  AssetDefs::Type type;
+  std::string subtype;
+  std::vector<std::string> inputs;
+  khMetaData          meta;
+  VersionList versions;
+
+#hquote
+ public:
+  void SetInvalid(const std::string &ref) {
+    name  = ref;
+    type  = AssetDefs::Invalid;
+  }
+  static AssetStorage
+  MakeStorage(const std::string &name_,
+              AssetDefs::Type type_,
+              const std::string &subtype_,
+              const std::vector<std::string> &inputs_,
+              const khMetaData &meta_) {
+    AssetStorage storage(name_, type_, subtype_,
+                         inputs_, meta_,
+                         VersionList());
+    return storage;
+  }
+  uint CurrVersionNumber(void) const {
+    if (versions.size()) {
+      AssetVersionRef verref(versions.front());
+      uint vernum;
+      FromString(verref.Version(), vernum);
+      return vernum;
+    } else {
+      return 0;
+    }
+  }
+  std::string CurrVersionRef(void) const {
+    if (versions.size()) {
+      return versions.front();
+    } else {
+      return AssetVersionRef(name, 0); // an invalid version ref
+    }
+  }
+  std::string PrettySubtype(void) const {
+    return AssetDefs::PrettySubtype(subtype);
+  }
+#/hquote
+};
+
+class AssetVersionStorage {
+  std::string  name;
+  AssetDefs::Type  type;
+  std::string  subtype;
+  uint         version;
+  AssetDefs::State state;
+  double       progress;
+  bool         locked;
+  std::vector<std::string> inputs;
+  std::vector<std::string> children;
+  std::vector<std::string> parents;
+  std::vector<std::string> listeners;
+  std::vector<std::string> outfiles;
+  khMetaData               meta;
+  time_t             beginTime = time_t(0);
+  time_t             progressTime = time_t(0);
+  time_t             endTime = time_t(0);
+  uint32                   taskid = uint32(0);
+
+#hquote
+ public:
+  void SetInvalid(const std::string &ref) {
+    name  = ref;
+    type  = AssetDefs::Invalid;
+    version = 0;
+    state = AssetDefs::Bad;
+    progress = 0.0;
+    locked   = true;
+    beginTime = 0;
+    progressTime = 0;
+    endTime = 0;
+    taskid = 0;
+  }
+  static AssetVersionStorage
+  MakeStorageFromAsset(const AssetStorage &asset) {
+    uint vernum = asset.CurrVersionNumber() + 1;
+    AssetVersionStorage storage(AssetVersionRef(asset.name, vernum),
+                                asset.type,
+                                asset.subtype,
+                                vernum,
+                                AssetDefs::New,        // state
+                                0,                // progress
+                                false,             // locked
+                                std::vector<std::string>(),    // inputs
+                                std::vector<std::string>(),    // children
+                                std::vector<std::string>(),    // parents
+                                std::vector<std::string>(),    // listeners
+                                std::vector<std::string>(),    // outfiles
+                                asset.meta,
+                                0,                // beginTime
+                                0,                // progressTime
+                                0,                // endTime
+                                0);                // taskid
+
+    storage.meta.Erase("createdby"); // prune old meta (probably invalid)
+    storage.meta.SetValue("createdtime", GetFormattedTimeString());
+    return storage;
+  }
+  std::string PreviewFilename(void) const;
+  std::string PrettyState(void) const;
+  std::string PrettySubtype(void) const {
+    return AssetDefs::PrettySubtype(subtype);
+  }
+
+#/hquote
+#cppquote
+#include <khFileUtils.h>
+  std::string
+  AssetVersionStorage::PreviewFilename(void) const {
+    std::string preview = meta.GetValue("preview");
+    if (preview.size()) {
+      std::string path = AssetDefs::AssetPathToFilename(preview);
+      if (khExists(path)) {
+        return path;
+      }
+    }
+    return std::string();
+  }
+
+  std::string
+  AssetVersionStorage::PrettyState(void) const {
+    if (state == AssetDefs::Offline) {
+      return "Cleaned";
+    } else {
+      return ToString(state);
+    }
+  }
+#/cppquote
+};
+

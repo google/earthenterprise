@@ -1,0 +1,62 @@
+--- gdal-1.4.2-orig/frmts/mrsid/mrsiddataset.cpp	2008-06-04 12:13:51.000000000 -0700
++++ gdal-1.4.2-new/frmts/mrsid/mrsiddataset.cpp	2008-06-04 12:14:09.000000000 -0700
+@@ -58,6 +58,7 @@
+ #include "lti_sceneBuffer.h"
+ #include "lti_metadataDatabase.h"
+ #include "lti_metadataRecord.h"
++#include "lti_imageReader.h"
+ #include "lti_utils.h"
+ #include "lt_utilStatus.h"
+ #include "MrSIDImageReader.h"
+@@ -161,7 +162,7 @@
+ {
+     friend class MrSIDRasterBand;
+ 
+-    LTIImageReader      *poImageReader;
++    LTIImageFilter      *poImageReader;
+ 
+ #ifdef MRSID_ESDK
+     LTIGeoFileImageWriter *poImageWriter;
+@@ -690,8 +691,10 @@
+     if ( poLTINav )
+         delete poLTINav;
+     if ( poImageReader && !bIsOverview )
+-        delete poImageReader;
+-
++    {
++        poImageReader->release();
++        poImageReader = NULL;
++    }
+     if ( pszProjection )
+         CPLFree( pszProjection );
+     if ( psDefn )
+@@ -1251,14 +1254,25 @@
+     const LTFileSpec    oFileSpec( poOpenInfo->pszFilename );
+ 
+     poDS = new MrSIDDataset();
++    LT_STATUS status = 0;
+ #ifdef MRSID_J2K
+     if ( bIsJP2 )
+-        poDS->poImageReader = new LTIDLLReader<J2KImageReader>( oFileSpec, true );
++    {
++        // was: poDS->poImageReader = new LTIDLLReader<J2KImageReader>( oFileSpec, true );
++        J2KImageReader* pReader = J2KImageReader::create();
++        poDS->poImageReader = pReader;
++        status = pReader->initialize( oFileSpec, true );
++    }
+     else
+ #endif
+-        poDS->poImageReader = new LTIDLLReader<MrSIDImageReader>( oFileSpec, false );
+-
+-    if ( !LT_SUCCESS( poDS->poImageReader->initialize() ) )
++    {
++        // was: poDS->poImageReader = new LTIDLLReader<MrSIDImageReader>( oFileSpec, false );
++        MrSIDImageReader* pReader = MrSIDImageReader::create();
++        poDS->poImageReader = pReader;
++        status = pReader->initialize( oFileSpec, false ); 
++    }
++    // was: if ( !LT_SUCCESS( poDS->poImageReader->initialize(oFileSpec) ) )
++    if ( !LT_SUCCESS( status ) )
+     {
+         delete poDS;
+         CPLError( CE_Failure, CPLE_AppDefined,

@@ -1,0 +1,472 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../css/dev_docs2.css" />
+<link rel="stylesheet" type="text/css" href="local_extensions.css" />
+<!--[if IE]>
+  <link rel="stylesheet" type="text/css" href="iehacks.css" />
+<![endif]-->
+<title>Common Error Messages</title>
+</head>
+
+<body>
+
+<!-- BEGIN HEADER -->
+<div id="header">
+  <div id="logo">
+    <img alt="Google Earth Enterprise" border=0 src="images/index.gif" />
+  </div>
+  <h1 id="doc_title">Reference Guide</h1>
+</div>
+<!-- END HEADER -->
+
+<!-- BEGIN WRAPPER -->
+<div id="wrapper">
+
+<!-- BEGIN LEFT NAV BAR -->
+<div id="sidenav">
+
+  <ul>
+    <li><a href="../../../index.html">4.3 Documentation</a></li>
+    <div class="line"></div>
+    <li><strong>Reference Guide</strong></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="intro.html">Introduction</a></li>
+    <li><a href="fundamentals.html">Fundamentals</a></li>
+    <li><a href="setup.html">Setting Up Your Workspace</a></li>
+    <li><a href="resources.html">Defining Resources</a></li>
+    <li><a href="projects.html">Defining Projects</a></li>
+    <li><a href="databases.html">Defining and Publishing Databases</a></li>
+    <li><a href="building.html">Building Assets</a></li>
+    <li><a href="maps.html">Preparing Data for Google Maps</a></li>
+    <li><a href="commands.html">Command Line Reference</a></li>
+    <li><a href="createOwnData.html">Creating Your Own Source Data, Icons, and Masks</a></li>
+    <li><a href="htmlTags.html">HTML Tags Allowed</a></li>
+    <li><a href="plugins.html">Google Earth Plugin</a></li>
+    <li><a href="errors.html" id="selected">Common Error Messages</a></li>
+    <li><a href="glossary.html">Glossary</a></li>
+    <div class="line"></div>
+    <li><a href="notices.html">Legal Notices</a></li>
+  </ul>
+
+</div>
+<!-- END LEFT NAV BAR -->
+
+<!-- BEGIN PAGE CONTENT -->
+
+<div id="pagecontent">
+<h1><a id="61436"></a>Common Error Messages
+</h1>
+<p><a id="marker-1018308"></a>Error messages appear mainly for three reasons:
+</p>
+<ul>
+  <li>An asset build fails or is blocked (possibly for one of the other two reasons.
+  </li>
+  <li>There is insufficient disk space to save an asset or version.
+  </li>
+  <li>Permissions are set incorrectly, so Google Earth Enterprise Fusion is unable to open or save a file.
+  </li>
+</ul>
+    <p class="note"><strong>Tip:</strong> Google Earth Enterprise Fusion sometimes writes messages to the terminal window from which you launched the GUI. So if an error message pops up in the GUI, but you want more information, check the terminal window for more information.
+    </p>
+<p><a id="marker-1015260"></a>Some actions you can take to troubleshoot any type of error message:
+</p>
+<ul>
+  <li>Check the Asset Log for the asset (resource, map layer, project, or database) where the problem occurred.
+  </li>
+<ol>
+  <li>In the Asset Manager, double-click the value in the Status column for the desired asset.
+  </li>
+  <li>Click 
+next to the process that failed or was blocked.
+    <p>The Asset Log displays information about that part of the process.
+    </p>
+  </li>
+  <li>Read through the log to find the problem, correct the problem, and then rebuild the asset.
+</ol>
+      <li>Check the terminal window from which you launched Google Earth Enterprise Fusion for additional messages that might provide more details about the problem.
+      </li>
+      <li>On command line, run: <code>getop</code>
+<p>This command allows you to see what Google Earth Enterprise Fusion is currently working on and if <code>gesystem</code> and <code>gehttpd</code> are currently running. (See <a href="commands.html#25787">getop</a> in the <strong>Command Line Reference</strong> chapter, as well as  the <strong>Administration Guide</strong> for more information about these commands.) </p>
+      </li>
+      <li>A debug script is available. The script will scan the system and assist
+         in identifying problems:<pre>/opt/google/share/support/geecheck.pl</pre></li>
+    </ul>
+<p>The remainder of this appendix provides additional information about the most common error messages you might see in Google Earth Enterprise Fusion, including:
+</p>
+<ul>
+  <li><a href="#authentication">Authentication required</a>
+  </li>
+  <li><a href="#opensource">Failed to open source</a>
+  </li>
+  <li><a href="#headers">Headers do not match!</a>
+  </li>
+  <li><a href="#mismatch">Invalid protocol version (client/server mismatch)</a>
+  </li>
+  <li><a href="#oldclient">Invalid protocol version (client too old)</a>
+  </li>
+  <li><a href="#features">No features selected by any of the filters. Layer would be empty.</a>
+  </li>
+  <li><a href="#permission">Permission denied</a>
+  </li>
+  <li><a href="#signal6">Process terminated with signal 6</a>
+  </li>
+  <li><a href="#signal11">Process terminated with signal 11</a>
+  </li>
+  <li><a href="#syncfailed">Search server push failed</a>
+  </li>
+  <li><a href="#syncfailed">Stream server push failed</a>
+  </li>
+  <li><a href="#segmentation">Segmentation fault</a>
+  </li>
+  <li><a href="#socket">Socket connect &apos;<i>000.00.000.00:</i>13031&apos;</a>
+  </li>
+  <li><a href="#nocontact">Unable to contact server</a>
+  </li>
+  <li><a href="#nocontact">Unable to contact search server</a>
+  </li>
+  <li><a href="#nocontact">Unable to contact stream server</a>
+  </li>
+  <li><a href="#unable">Unable to write record to index</a>
+  </li>
+  <li><a href="#unrecognized">Unrecognized request</a>
+  </li>
+  <li><a href="#upload">Upload failed</a>
+  </li>
+</ul>
+<h2><a id="authentication"></a>Authentication required
+</h2>
+<h4>Where It Appears
+</h4>
+<p>When you try to publish a database on a server that requires authentication.
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>You entered an invalid user name or password three times.
+</p>
+<h4>Resolution
+</h4>
+<p>Check with your system administrator to be sure you have permission to publish a database and have a valid user name and password. Then try entering the user name and password. 
+</p>
+<p class="note"><strong>Note:</strong> Be sure that CapsLock is not on.
+</p>
+<h2><a id="opensource"></a>Failed to open source: <i>SourceFile</i><a id="marker-1014831"></a>
+</h2>
+<h4>Where It Appears
+</h4>
+<p>In the vector Asset Log.
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>You might not have full read-write-execute permissions set properly. This includes the folders all the way back to the root. 
+</p>
+<h4>Resolution
+</h4>
+<p>Enter the following command at the command line:
+</p><pre><code>sudo chmod -R a+r /gevol
+</code></pre>
+<p>This command corrects the access permission on all Google Earth Enterprise Fusion-related files. (This command assumes that you have specified <code>/gevol</code> as your asset root. If not, substitute the name of your asset root for <code>/gevol</code>.)
+</p>
+<h2><a id="headers"></a><a id="marker-1014833"></a>Headers do not match!
+</h2>
+<h4>Where It Appears
+</h4>
+<p>In the vector Asset Log.
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>There is more than one source file in the resource, and their attributes are not exactly identical. Either the labels are not the same, or one data file has an attribute that the other is missing.
+</p>
+<h4>Resolution
+</h4>
+<p>Make the attribute labels match or, if one data set is lacking an attribute, give it an empty column with the same attribute label. 
+</p>
+<h2><a id="mismatch"></a><a id="marker-1018291"></a>Invalid protocol version (client/server mismatch)
+</h2>
+<h4>Where It Appears
+</h4>
+<p>During the transition from version 3.x to future versions.
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>You tried to use an older or newer version of the Google Earth Enterprise Fusion GUI (or shell command) to connect to the system manager.
+</p>
+<h4>Resolution
+</h4>
+<p>Properly upgrade Google Earth Enterprise Fusion to the latest version you own.
+</p>
+<h2><a id="oldclient"></a><a id="marker-1018292"></a>Invalid protocol version (client too old)
+</h2>
+<h4>Where It Appears
+</h4>
+<p>During the initial transition from tools that do not check for matching versions
+    to the versions that do check (for example, from 2.4.x to 3.x).
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>You tried to use an old version of the Google Earth Enterprise Fusion GUI (or shell command) to connect to a new version of the system manager.
+</p>
+<h4>Resolution
+</h4>
+<p>Properly upgrade Google Earth Enterprise Fusion to the latest version you own.
+</p>
+<h2><a id="features"></a>No features selected by any of the filters. Layer would be empty.
+</h2>
+<h4>Where It Appears
+</h4>
+<p>In the index of the project Asset Log.
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>One of your layers is set to not display any data. 
+</p>
+<h4>Resolution
+</h4>
+<p>This error usually occurs when you make a mistake in the filters. For example, using a comma in a filter value (such as <strong>2,000</strong> instead of <strong>2000</strong>), selecting <strong>Match all of the following</strong> when you mean to select <strong>Match any of the following</strong>, selecting <strong>equals</strong> instead of <strong>does not equal</strong>, and so on. 
+</p>
+<h2><a id="permission"></a>Permission Denied
+</h2>
+<h4>Where It Appears
+</h4>
+<p>In an error message dialog or on the command line in the terminal window from which you launched Google Earth Enterprise Fusion.
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>Google Earth Enterprise Fusion tried to read from or write to disk, and permission was denied, indicating that read/write permissions are not set correctly.
+</p>
+<h4>Resolution
+</h4>
+<p>Enter the following command:
+</p><pre><code>chmod a+r <i>path</i> 
+</code></pre>
+<p>Where <i>path</i> is the full path to the folder you are trying to access.
+</p>
+<h4>Notes
+</h4>
+<p>Background daemons that run as the <code>gefusionuser:gegroup</code> user and group build assets in Google Earth Enterprise Fusion. You must be particularly careful with source files that you create or copy to set permissions that allow the Google Earth Enterprise Fusion daemons to access them. This frequently means read access for all.
+</p>
+<p>Even if a file has the correct permissions set, the Google Earth Enterprise Fusion daemons cannot access it unless all of the parent directories have both read and execute permissions set for <code>gefusionuser:gegroup</code>. 
+</p>
+<h2><a id="signal6"></a><a id="marker-1017643"></a>Process terminated with signal 6
+</h2>
+<h4>Where It Appears
+</h4>
+<p>In the project Asset Log and the terminal window.
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>The application aborts due to a software bug (similar to a segmentation fault).
+</p>
+<h4>Resolution
+</h4>
+<p>Contact Google Earth Enterprise Fusion technical support.
+</p>
+<h2><a id="signal11"></a><a id="marker-1014840"></a>Process terminated with signal 11
+</h2>
+<h4>Where It Appears
+</h4>
+<p>In the project Asset Log and the terminal window.
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>This is the same as <a href="#63542">Segmentation fault</a>.</p>
+<h4>Resolution
+</h4>
+<p>This is the same as <a href="#63542">Segmentation fault</a>.</p>
+<h2><a id="syncfailed"></a>Search server push failed
+</h2>
+<h4>Stream server push failed
+</h4>
+<h4>Where It Appears
+</h4>
+<p>When you try to publish a database.
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>The network connection to the server is down, or permissions are set incorrectly where the publisher is attempting to write data.
+</p>
+<h4>Resolution
+</h4>
+<p>Check your network connections and ensure that the targeted server is running and accessible. Check the access permissions in the publishing root directory. Check the Google Earth Enterprise Server logs.
+</p>
+<p>Run the debug script to scan the system and assist in identifying
+   problems:</p>
+<pre>/opt/google/share/support/geecheck.pl</pre>
+<h2><a id="segmentation"></a><a id="marker-1014841"></a><a id="63542"></a>Segmentation fault
+</h2>
+<h4>Where It Appears
+</h4>
+<p>Can occur anywhere at anytime.
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>This error message usually indicates a bug in the software.
+</p>
+<h4>Resolution
+</h4>
+<p>Please report it to Google Earth Enterprise Fusion technical support.
+</p>
+<h2><a id="socket"></a><a id="marker-1014844"></a>Socket connect &apos;<i>000.00.000.00</i>:13031&apos; 
+</h2>
+<p>(where <i>000.00.000.00</i> is your IP address) 
+</p>
+<h4>Where It Appears
+</h4>
+<p>In the vector Asset Log and when starting Google Earth Enterprise Fusion in shell.
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>You may not have the system daemons running.
+</p>
+<h4>Resolution
+</h4>
+<p>On the command line, enter:
+</p><pre><code>sudo /etc/init.d/gesystem stop
+sudo /etc/init.d/gesystem start
+</code></pre>
+<h2><a id="nocontact"></a>Unable to contact server
+<br />
+Unable to contact search server
+<br />
+Unable to contact stream server
+</h2>
+<h4>Where It Appears
+</h4>
+<p>When you try to publish a database.
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>The specified server is not running, or a service that it requires is not running.
+</p>
+<h4>Resolution
+</h4>
+<p>Enter the following command as root to restart the server:
+</p><pre><code>/etc/init.d/geserver restart
+</code></pre>
+<h2><a id="unable"></a><a id="marker-1014845"></a>Unable to write record to index 
+</h2>
+<p>Full error condition:
+</p>
+<ul>
+  <li>Current state / Version Properties reads “In Progress”.
+  </li>
+  <li>Canceling the project build in the GUI or on the command line causes the program to hang.
+  </li>
+  <li>The project Asset Log lists following error: 
+<pre><code>Fusion Fatal : Unable to write record to index
+- - - - - - End Command Output - - - - - -
+ENDTIME: 2006-05-23 13:53:50
+ELAPSEDTIME: 32 seconds
+FAILED
+</code></pre>
+  </li>
+  <li>Running the command <code>getop</code> causes the program to hang.
+  </li>
+</ul>
+<h4>Where It Appears
+</h4>
+<p>Multiple locations. (See above.)
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>Your hard disk might be full, or a network drive might be disconnected.
+</p>
+<h4>Resolution
+</h4>
+<br />
+
+<ol>
+  <li>Switch to root and enter: <pre><code>/etc/init.d/gesystem stop
+/etc/init.d/gehttpd stop
+sleep 5
+killall -9 gesystemmanager
+killall -9 geresourceprovider
+</code></pre>
+  </li>
+  <li>Enter:<pre><code>ps aux | grep ge
+</code></pre>
+  </li>
+  <li>Look for any Google Earth Enterprise Fusion processes in the output, and kill them.
+  </li>
+  <li>Make sure that you have enough free disk space, and then enter:<pre><code>/etc/init.d/gesystem start
+/etc/init.d/gehttpd start 
+</code></pre>
+  </li>
+  <li>Cancel the build, and then resume it. (See <a href="commands.html#24981">gecancel</a> and <a href="commands.html#93950">geresume</a> in the <strong>Command Line Reference</strong> for details.) </li>
+</ol>
+<h2><a id="unrecognized"></a><a id="marker-1018305"></a>Unrecognized notify command: ValidateProtocolVersion
+</h2>
+<h4>Where It Appears
+</h4>
+<p>During the initial transition from tools that do not check for matching versions
+    to the versions that do check (for example, from 2.4.x to 3.x).
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>You tried to use a later version of the Google Earth Enterprise Fusion GUI (or a shell command) with a previous version of the system manager.
+</p>
+<h4>Resolution
+</h4>
+<p>Properly upgrade Google Earth Enterprise Fusion and the Google Earth Enterprise Server to the latest version you own.
+</p>
+<h2>Upload failed
+</h2>
+<h4>Where It Appears
+</h4>
+<p>When you try to publish a database.
+</p>
+<h4>Why the Error Occurred
+</h4>
+<p>The network connection to the server is down, or permissions are set incorrectly where the publisher is attempting to write data.
+</p>
+<h4>Resolution
+</h4>
+<p>Check your network connections and ensure that the targeted server is running and accessible. Check the access permissions in the publishing root directory. Check the Google Earth Enterprise Server logs.
+</p>
+<h2>Conflicts in Plug-ins
+</h2>
+<h4>Where It Appears
+</h4>
+<p>The first time each user runs the Google Earth Enterprise Fusion GUI, a series of error messages similar to the following appear in the terminal window where you launched Google Earth Enterprise Fusion:
+</p>
+<pre><code>
+Fusion Notice: Saving /gevol/assets/.config/misc.xml with defaults
+Conflict in /opt/kde3/lib/kde3/plugins/styles/keramik.so:
+	Plugin uses incompatible Qt library!
+	expected build key &quot;i686 Linux g++-4 full-config&quot;, 
+	got &quot;i686 Linux g++-3.* ful l-config&quot;.
+Conflict in /opt/kde3/lib/kde3/plugins/styles/kthemestyle.so:
+	Plugin uses incompatible Qt library!
+	expected build key &quot;i686 Linux g++-4 full-config&quot;, 
+	got &quot;i686 Linux g++-3.* ful l-config&quot;.
+Conflict in /opt/kde3/lib/kde3/plugins/styles/highcolor.so:
+	Plugin uses incompatible Qt library!
+	expected build key &quot;i686 Linux g++-4 full-config&quot;, 
+	got &quot;i686 Linux g++-3.* ful l-config&quot;.
+Conflict in /opt/kde3/lib/kde3/plugins/styles/light.so:
+	Plugin uses incompatible Qt library!
+	expected build key &quot;i686 Linux g++-4 full-config&quot;, 
+	got &quot;i686 Linux g++-3.* ful l-config&quot;.
+</code></pre>
+<h4>Why the Error Occurred
+</h4>
+<p>These error messages are caused by an incompatibility between some of the plug-ins (GUI widgets) distributed with the operating system and the Qt library that we compile are incompatible. This is not a problem, because we do not use the incompatible plug-ins. These error messages appear the first time the user launches the Google Earth Enterprise Fusion GUI only.
+</p>
+<h4>Resolution
+</h4>
+<p>No action is necessary.
+</p>
+<h2>Additional Support on the Web
+</h2>
+<p><a id="marker-1018754"></a>For the most up-to-date information about Google Earth
+   Enterprise, please email the Google Enterprise Support Team at <a href="mailto:enterprise-support@google.com">enterprise-support@google.com</a>.</p>
+</div>
+	<!-- END PAGE CONTENT -->
+
+<p class="backtotop"><a href="#top">Back to top</a></p>
+</div>
+	<!-- END WRAPPER -->
+
+</body>
+</html>

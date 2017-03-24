@@ -1,0 +1,897 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+ 
+ 
+
+
+ 
+
+  
+  
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/articles/phpsqlajax.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Using PHP/MySQL with Google Maps - Google Maps API Family - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/maps/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../css/iehacks.css"><![endif]-->
+
+    <link href="../../../css/semantic_headers.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    
+    
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  <a href="#gc-pagecontent">Skip to page content</a>
+  <a href="#gc-toc">Skip to main navigation</a>
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps API Family</h1>
+  <ul id="articles" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="../index.html" title="Google Maps API Family home page">Home</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../faq.html" title="Answers to frequently asked questions about Google Maps API Family">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="index.html" class="selected" title="Focused articles and tutorials for Google Maps API Family developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps API Family blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="../forum/index.html" title="Google Maps API Family developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../terms.html" title="Google Maps API Family terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../index.html">Maps API Family</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps Javascript API V3</h2>
+         <ul>
+           <li><a href="../documentation/javascript/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+      <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../documentation/javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+  <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../documentation/flash/index.html">Home Page</a></li>
+          <li><a href="../documentation/flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../documentation/mapsdata/index.html">Home Page</a></li>
+          <li><a href="../documentation/mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+     <div class="line"></div>
+      <ul>
+        <li><h2><a href="../documentation/webservices/index.html">Maps Web Services</a></h2>
+         <ul>
+           <li><a href="../documentation/geocoding/index.html">Geocoding Guide</a></li>
+           <li><a href="../documentation/directions/index.html">Directions Guide</a></li>
+           <li><a href="../documentation/elevation/index.html">Elevation Guide</a></li>
+           <li><a href="../documentation/places/index.html">Places Guide</a></li>
+         </ul>
+       </li>
+      </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../documentation/staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li>
+            <h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../documentation/localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../documentation/localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+      <div class="promo">
+     <p><a href="../documentation/premier/index.html">Google Maps API Premier</a></p><p>Includes enterprise licensing and support</p></div>
+
+        <a class="hidden" href="#gc-topnav-anchor">More Google Maps API Family resource links</a>
+      </div>
+      
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Using PHP/MySQL with Google Maps</h1>
+
+
+<!-- ########## PAGE CONTENT ########## -->
+  
+<div class=i>
+<i>Pamela Fox, Google Geo Team</i>
+<br>
+<i>With contributions from Lary Stucker, Maps API Developer</i>
+<br>
+<i>April 2007</i>
+
+<br/><br/>
+<p class="para"> This tutorial is intended for developers who are familiar with
+PHP/MySQL, and want to learn how to use Google Maps with a MySQL
+database. After completing this tutorial, you will have a Google Map
+based off a database of places. The map will differentiate between two
+types of places&mdash;restaurants and bars&mdash;by giving their
+markers distinguishing icons. An info window with name and address
+information will display above a marker when clicked.</p>
+<p class="para">
+The tutorial is broken up into the following steps:
+</p>
+<ul>
+<li><a href="#createtable">Creating the table</a></li>
+<li><a href="#populatetable">Populating the table</a></li>
+<li><a href="#outputxml">Outputting XML with PHP</a></li>
+<li><a href="#createmap">Creating the map</a></li>
+
+</ul>
+<br/>
+<a name="createtable"></a><h3>Creating the table</h3>
+<p class="para"> When you create the MySQL table, you want to pay particular
+attention to the <code>lat</code> and <code>lng</code> attributes.
+With the current zoom capabilities of Google Maps, you should only
+need 6 digits of precision after the decimal. To keep the storage
+space required for our table at a minimum, you can specify that the
+<code>lat</code> and <code>lng</code> attributes are floats of size
+(10,6). That will let the fields store 6 digits after the decimal,
+plus up to 4 digits before the decimal, e.g. -123.456789 degrees.
+Your table should also have an <code>id</code> attribute to serve as
+the primary key, and a <code>type</code> attribute to distinguish
+between restaurants and bars. </p>
+
+<p class="para"> <strong>Note:</strong> This tutorial uses location data that
+already have latitude and longitude information needed to plot
+corresponding markers. If you're trying to use your own data that
+don't yet have that information, use a batch geocoding service to
+convert the addresses into latitudes/longitudes. Some sites make the
+mistake of geocoding addresses each time a page loads, but doing so
+will result in slower page loads and unnecessary repeat geocodes. It's
+always better to hardcode the latitude/longitude information when
+possible. This link contains a good list of geocoders: <a
+href="http://groups.google.com/group/Google-Maps-API/web/resources-non-google-geocoders"
+target="_blank">http://groups.google.com/group/Google-Maps-API/web/resources-non-google-geocoders</a>
+</p>
+<p class="para"> If you prefer interacting with your database through the
+phpMyAdmin interface, here's a screenshot of the table creation.
+</p>
+<p class="para">
+<img src="http://www.google.com/help/hc/images/phpsqlgeocode_createtable.jpg" width="600" style="margin-left: 2em; border:1px solid grey"/>
+</p>
+<p class="para"> If you don't have access to phpMyAdmin or prefer using SQL
+commands instead, here's the SQL statement that creates the table (<a
+href="http://gmaps-samples.googlecode.com/svn/trunk/articles-phpsqlajax/phpsqlajax_createtable.sql"
+target="_blank">phpsqlajax_createtable.sql</a>):</p>
+
+<pre class="prettyprint">
+CREATE TABLE `markers` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+  `name` VARCHAR( 60 ) NOT NULL ,
+  `address` VARCHAR( 80 ) NOT NULL ,
+  `lat` FLOAT( 10, 6 ) NOT NULL ,
+  `lng` FLOAT( 10, 6 ) NOT NULL ,
+  `type` VARCHAR( 30 ) NOT NULL
+) ENGINE = MYISAM ;
+</pre>
+<br/>
+<a name="populatetable"></a><h3>Populating the table</h3>
+<p class="para"> After creating the table, it's time to populate it with
+data. Sample data for 10 Seattle places are provided below. In
+phpMyAdmin, you can use the IMPORT tab to import various file
+formats, including CSV (comma-separated values). Microsoft Excel and
+Google Spreadsheets both export to CSV format, so you can easily
+transfer data from spreadsheets to MySQL tables through
+exporting/importing CSV files. </p>
+<p class="para">Here's the sample data in CSV format (<a
+href="http://gmaps-samples.googlecode.com/svn/trunk/articles-phpsqlajax/phpsqlajax_data.csv"
+target="_blank">phpsqlajax_data.csv</a>):</p>
+<pre class="prettyprint">
+Pan Africa Market,"1521 1st Ave, Seattle, WA",47.608941,-122.340145,restaurant
+Buddha Thai & Bar,"2222 2nd Ave, Seattle, WA",47.613591,-122.344394,bar
+The Melting Pot,"14 Mercer St, Seattle, WA",47.624562,-122.356442,restaurant
+Ipanema Grill,"1225 1st Ave, Seattle, WA",47.606366,-122.337656,restaurant
+Sake House,"2230 1st Ave, Seattle, WA",47.612825,-122.34567,bar
+Crab Pot,"1301 Alaskan Way, Seattle, WA",47.605961,-122.34036,restaurant
+Mama's Mexican Kitchen,"2234 2nd Ave, Seattle, WA",47.613975,-122.345467,bar
+Wingdome,"1416 E Olive Way, Seattle, WA",47.617215,-122.326584,bar
+Piroshky Piroshky,"1908 Pike pl, Seattle, WA",47.610127,-122.342838,restaurant
+</pre>
+
+<p class="para">Here's a screenshot of the import options used to transform this
+CSV into table data:</p>
+<p class="para"> 
+<img src="http://www.google.com/help/hc/images/phpsqlgeocode_importdata.jpg"
+style="margin-left: 2em; border:1px solid grey" width="600px"/>
+</p>
+<p class="para">If you'd rather not use the phpMyAdmin interface, here are the SQL
+statements that accomplish the same results ( <a
+href="http://gmaps-samples.googlecode.com/svn/trunk/articles-phpsqlajax/phpsqlajax_data.sql"
+target="_blank">phpsqlajax_data.sql</a>): </p>
+<pre class="prettyprint">
+INSERT INTO `markers` (`name`, `address`, `lat`, `lng`, `type`) VALUES ('Pan Africa Market', '1521 1st Ave, Seattle, WA', '47.608941', '-122.340145', 'restaurant');
+INSERT INTO `markers` (`name`, `address`, `lat`, `lng`, `type`) VALUES ('Buddha Thai & Bar', '2222 2nd Ave, Seattle, WA', '47.613591', '-122.344394', 'bar');
+INSERT INTO `markers` (`name`, `address`, `lat`, `lng`, `type`) VALUES ('The Melting Pot', '14 Mercer St, Seattle, WA', '47.624562', '-122.356442', 'restaurant');
+INSERT INTO `markers` (`name`, `address`, `lat`, `lng`, `type`) VALUES ('Ipanema Grill', '1225 1st Ave, Seattle, WA', '47.606366', '-122.337656', 'restaurant');
+INSERT INTO `markers` (`name`, `address`, `lat`, `lng`, `type`) VALUES ('Sake House', '2230 1st Ave, Seattle, WA', '47.612825', '-122.34567', 'bar');
+INSERT INTO `markers` (`name`, `address`, `lat`, `lng`, `type`) VALUES ('Crab Pot', '1301 Alaskan Way, Seattle, WA', '47.605961', '-122.34036', 'restaurant');
+INSERT INTO `markers` (`name`, `address`, `lat`, `lng`, `type`) VALUES ('Mama\'s Mexican Kitchen', '2234 2nd Ave, Seattle, WA', '47.613975', '-122.345467', 'bar');
+INSERT INTO `markers` (`name`, `address`, `lat`, `lng`, `type`) VALUES ('Wingdome', '1416 E Olive Way, Seattle, WA', '47.617215', '-122.326584', 'bar');
+INSERT INTO `markers` (`name`, `address`, `lat`, `lng`, `type`) VALUES ('Piroshky Piroshky', '1908 Pike pl, Seattle, WA', '47.610127', '-122.342838', 'restaurant');
+</pre>
+<br/>
+<a name="outputxml"></a><h3>Outputting XML with PHP</h3>
+<p class="para"> At this point, you should have a table named <code>markers</code>
+
+filled with sample data. You now need to write some PHP statements to
+export the table data into an XML format that our map can retrieve
+through asynchronous JavaScript calls. If you've never written PHP to
+connect to a MySQL database, you should visit <a
+href="http://www.php.net" target="_blank">php.net</a> and read up
+ on <code>mysql_connect</code>, <code>mysql_select_db</code>, <code>my_sql_query</code>, and <code>mysql_error</code>.
+</p>
+<p class="para"> <strong>Note:</strong> Some tutorials may suggest actually writing
+your map page as a PHP file and outputting JavaScript for each marker
+you want to create, but that technique can be problematic. By using
+an XML file as an intermediary between our database and our Google
+Map, it makes for a faster initial page load, a more flexible map
+application, and easier debugging. You can independently verify the
+XML output from the database and the JavaScript parsing of the
+XML. And at any point, you could even decide to eliminate your
+database entirely and just run the map based on static XML files.
+
+</p>
+<p class="para"> First, you should put your database connection information in a
+separate file. This is generally a good idea whenever you're using PHP
+to access a database, as it keeps your confidential information in a
+file that you won't be tempted to share. In the Maps API forum, we've
+occasionally had people accidentally publish their database connection
+information when they were just trying to debug their XML-outputting
+code. The file should look like this, but with your own database
+information filled in (<a
+href="http://gmaps-samples.googlecode.com/svn/trunk/articles-phpsqlajax/phpsqlajax_dbinfo.php"
+target="_blank">phpsqlajax_dbinfo.php</a>): </p>
+<pre class="prettyprint">
+&lt;?
+$username="username";
+$password="password";
+$database="username-databaseName";
+?&gt;
+</pre>
+<h4>Using PHP's domxml functions to output XML</h4>
+<p class="para"> Check your configuration or try initializing a
+<code>domxml_new_doc()</code> to determine if your server's PHP has
+
+<code>dom_xml</code> functionality on. If you do have access to
+<code>dom_xml</code> functions, you can use them to create XML nodes,
+append child nodes, and output an XML document to the screen. The
+<code>dom_xml</code> functions take care of subtleties such as
+escaping special entities in the XML, and make it easy to create XML
+with more complex structures. </p>
+<p class="para"> In the PHP, first initialize a new XML document and create the
+"markers" parent node. Then connect to the database, execute a
+<code>SELECT *</code> (select all) query on the markers table,
+ and iterate through the results. For each row in the table (each location), create a new XML node with the
+row attributes as XML attributes, and append it to the parent node. Then dump the XML to the screen.
+</p>
+<p class="para">
+
+<strong>Note: </strong> If your database contains international characters or you otherwise need to force UTF-8 output, you can use <code><a href="http://us2.php.net/manual/en/function.utf8-encode.php">utf8_encode</a></code> on the outputted data.
+</p>
+<p class="para"> The PHP file that does all that is shown below (<a
+href="http://gmaps-samples.googlecode.com/svn/trunk/articles-phpsqlajax/phpsqlajax_genxml.php"
+target="_blank">phpsqlajax_genxml.php</a>): </p>
+<pre class="prettyprint">
+&lt;?php
+require("phpsqlajax_dbinfo.php");
+
+// Start XML file, create parent node
+$doc = domxml_new_doc("1.0");
+$node = $doc-&gt;create_element("markers");
+$parnode = $doc-&gt;append_child($node);
+
+// Opens a connection to a MySQL server
+$connection=mysql_connect (localhost, $username, $password);
+if (!$connection) {
+  die('Not connected : ' . mysql_error());
+}
+
+// Set the active MySQL database
+$db_selected = mysql_select_db($database, $connection);
+if (!$db_selected) {
+  die ('Can\'t use db : ' . mysql_error());
+}
+
+// Select all the rows in the markers table
+$query = "SELECT * FROM markers WHERE 1";
+$result = mysql_query($query);
+if (!$result) {
+  die('Invalid query: ' . mysql_error());
+}
+
+header("Content-type: text/xml");
+
+// Iterate through the rows, adding XML nodes for each
+while ($row = @mysql_fetch_assoc($result)){
+  // ADD TO XML DOCUMENT NODE
+  $node = $doc-&gt;create_element("marker");
+  $newnode = $parnode-&gt;append_child($node);
+
+  $newnode-&gt;set_attribute("name", $row['name']);
+  $newnode-&gt;set_attribute("address", $row['address']);
+  $newnode-&gt;set_attribute("lat", $row['lat']);
+  $newnode-&gt;set_attribute("lng", $row['lng']);
+  $newnode-&gt;set_attribute("type", $row['type']);
+}
+
+$xmlfile = $doc-&gt;dump_mem();
+echo $xmlfile;
+
+?&gt;
+
+</pre>
+<h4>Using PHP's echo to output XML</h4>
+<p class="para"> If you don't have access to PHP's <code>dom_xml</code> functions,
+then you can simply output the XML with the <code>echo</code>
+function. When using just the <code>echo</code> function, you'll need
+to use a helper function (e.g. <code>parseToXML</code>)
+ that will correctly encode a few special entities (&lt;,&gt;,",') to be XML friendly.
+
+</p>
+<p class="para"> In the PHP, first connect to the database and execute the
+<code>SELECT *</code> (select all) query on the markers table. Then
+echo out the parent <code>markers</code> node, and iterate through the
+query results. For each row in the table (each location), you need to
+echo out the XML node for that marker, sending the name and address
+fields through the <code>parseToXML</code> function first in case
+there are any special entities in them. Finish the script by echoing
+out the closing <code>markers</code> tag. </p>
+<p class="para">
+
+<strong>Note: </strong> If your database contains international characters or you otherwise need to force UTF-8 output, you can use <code><a href="http://us2.php.net/manual/en/function.utf8-encode.php">utf8_encode</a></code> on the outputted data.
+</p>
+<p class="para">The PHP file that does all this is shown below (<a
+href="http://gmaps-samples.googlecode.com/svn/trunk/articles-phpsqlajax/phpsqlajax_genxml2.php"
+target="_blank">phpsqlajax_genxml2.php</a>): </p>
+<pre class="prettyprint">
+&lt;?php
+require("phpsqlajax_dbinfo.php");
+
+function parseToXML($htmlStr) 
+{ 
+$xmlStr=str_replace('<','&amp;lt;',$htmlStr); 
+$xmlStr=str_replace('>','&amp;gt;',$xmlStr); 
+$xmlStr=str_replace('"','&amp;quot;',$xmlStr); 
+$xmlStr=str_replace("'",'&amp;#39;',$xmlStr); 
+$xmlStr=str_replace("&",'&amp;amp;',$xmlStr); 
+return $xmlStr; 
+} 
+
+// Opens a connection to a MySQL server
+$connection=mysql_connect (localhost, $username, $password);
+if (!$connection) {
+  die('Not connected : ' . mysql_error());
+}
+
+// Set the active MySQL database
+$db_selected = mysql_select_db($database, $connection);
+if (!$db_selected) {
+  die ('Can\'t use db : ' . mysql_error());
+}
+
+// Select all the rows in the markers table
+$query = "SELECT * FROM markers WHERE 1";
+$result = mysql_query($query);
+if (!$result) {
+  die('Invalid query: ' . mysql_error());
+}
+
+header("Content-type: text/xml");
+
+// Start XML file, echo parent node
+echo '&lt;markers&gt;';
+
+// Iterate through the rows, printing XML nodes for each
+while ($row = @mysql_fetch_assoc($result)){
+  // ADD TO XML DOCUMENT NODE
+  echo '&lt;marker ';
+  echo 'name="' . parseToXML($row['name']) . '" ';
+  echo 'address="' . parseToXML($row['address']) . '" ';
+  echo 'lat="' . $row['lat'] . '" ';
+  echo 'lng="' . $row['lng'] . '" ';
+  echo 'type="' . $row['type'] . '" ';
+  echo '/&gt;';
+}
+
+// End XML file
+echo '&lt;/markers&gt;';
+
+?&gt;
+
+</pre>
+<h4>Using PHP's DOM functions to output XML</h4>
+<p class="para">
+First, check your configuration and make sure you are using PHP5. If you aren't, then use one of the previous techniques.
+</p>
+<p class="para">
+In PHP, first initialize a new XML document and create the "markers" parent node. Then connect to the database, execute a <code>SELECT *</code> (select all) query on the markers table, and iterate through the results. For each row in the table (each location), create a new XML node with the row attributes as XML attributes, and append it to the parent node. Then dump the XML to the screen.
+</p>
+<p class="para">
+<strong>Note: </strong> If your database contains international characters or you otherwise need to force UTF-8 output, you can use <code><a href="http://us2.php.net/manual/en/function.utf8-encode.php">utf8_encode</a></code> on the outputted data.
+
+</p>
+<p class="para">The PHP file that does all this is shown below (<a
+href="http://gmaps-samples.googlecode.com/svn/trunk/articles-phpsqlajax/phpsqlajax_genxml3.php"
+target="_blank">phpsqlajax_genxml3.php</a>): </p>
+<pre class="prettyprint">
+&lt;?php  
+
+require("phpsqlajax_dbinfo.php"); 
+
+// Start XML file, create parent node
+
+$dom = new DOMDocument("1.0");
+$node = $dom->createElement("markers");
+$parnode = $dom->appendChild($node); 
+
+// Opens a connection to a MySQL server
+
+$connection=mysql_connect (localhost, $username, $password);
+if (!$connection) {  die('Not connected : ' . mysql_error());} 
+
+// Set the active MySQL database
+
+$db_selected = mysql_select_db($database, $connection);
+if (!$db_selected) {
+  die ('Can\'t use db : ' . mysql_error());
+} 
+
+// Select all the rows in the markers table
+
+$query = "SELECT * FROM markers WHERE 1";
+$result = mysql_query($query);
+if (!$result) {  
+  die('Invalid query: ' . mysql_error());
+} 
+
+header("Content-type: text/xml"); 
+
+// Iterate through the rows, adding XML nodes for each
+
+while ($row = @mysql_fetch_assoc($result)){  
+  // ADD TO XML DOCUMENT NODE  
+  $node = $dom->createElement("marker");  
+  $newnode = $parnode->appendChild($node);   
+  $newnode->setAttribute("name",$row['name']);
+  $newnode->setAttribute("address", $row['address']);  
+  $newnode->setAttribute("lat", $row['lat']);  
+  $newnode->setAttribute("lng", $row['lng']);  
+  $newnode->setAttribute("type", $row['type']);
+} 
+
+echo $dom->saveXML();
+
+?&gt;
+</pre>
+<h4>Checking that XML output works</h4>
+<p class="para"> Call this PHP script from the browser to make sure it's producing
+valid XML. If you suspect there's a problem with connecting to your
+database, you may find it easier to debug if you remove the line in
+the file that sets the header to the <code>text/xml</code> content
+type, as that usually causes your browser to try to parse XML and may
+make it difficult to see your debugging messages. </p>
+<p class="para">
+
+If the script is working correctly, you should see XML output like this (<a href="http://gmaps-samples.googlecode.com/svn/trunk/articles-phpsqlajax/phpsqlajax_expectedoutput.xml" target="_blank">phpsqlajax_expectedoutput.xml</a>):
+</p>
+<pre class="prettyprint">
+&lt;markers&gt;
+&lt;marker name="Pan Africa Market" address="1521 1st Ave, Seattle, WA" lat="47.608940" lng="-122.340141" type="restaurant"/&gt;
+&lt;marker name="Buddha Thai & Bar" address="2222 2nd Ave, Seattle, WA" lat="47.613590" lng="-122.344391" type="bar"/&gt;
+&lt;marker name="The Melting Pot" address="14 Mercer St, Seattle, WA" lat="47.624561" lng="-122.356445" type="restaurant"/&gt;
+&lt;marker name="Ipanema Grill" address="1225 1st Ave, Seattle, WA" lat="47.606365" lng="-122.337654" type="restaurant"/&gt;
+&lt;marker name="Sake House" address="2230 1st Ave, Seattle, WA" lat="47.612823" lng="-122.345673" type="bar"/&gt;
+
+&lt;marker name="Crab Pot" address="1301 Alaskan Way, Seattle, WA" lat="47.605961" lng="-122.340363" type="restaurant"/&gt;
+&lt;marker name="Mama's Mexican Kitchen" address="2234 2nd Ave, Seattle, WA" lat="47.613976" lng="-122.345467" type="bar"/&gt;
+&lt;marker name="Wingdome" address="1416 E Olive Way, Seattle, WA" lat="47.617214" lng="-122.326584" type="bar"/&gt;
+&lt;marker name="Piroshky Piroshky" address="1908 Pike pl, Seattle, WA" lat="47.610126" lng="-122.342834" type="restaurant"/&gt;
+&lt;/markers&gt;
+</pre>
+<br/>
+<a name="createmap"></a><h3>Creating the map</h3>
+<p class="para"> Once the XML is working in the browser, it's time to move on to
+actually creating the map with JavaScript. If you have never created a
+Google Map, please try some of the basic examples in the documentation
+to make sure you understand the basics of creating a Google Map. </p>
+
+<h4>Loading the XML file</h4>
+<p class="para"> To load the XML file into our page, you can take advantage of the
+API function <code>GDownloadURL</code>. <code>GDownloadURL</code> is
+a wrapper for the <code>XMLHttpRequest</code> that's used to request
+an XML file from the server where the HTML page resides. The first
+parameter to <code>GDownloadURL</code> is the path to your
+file&mdash;it's usually easiest to have the XML file in the same
+directory as the HTML so that you can just refer to it by filename.
+The second parameter to <code>GDownloadURL</code> is the function
+that's called when the XML is returned to the JavaScript. </p>
+
+<p class="para"> <strong>Note:</strong> It's important to know that
+<code>GDownloadURL</code> is asynchronous&mdash;the callback function
+won't be called as soon as you invoke <code>GDownloadURL</code>. The
+bigger your XML file, the longer it may take. Don't put any code after
+<code>GDownloadURL</code> that relies on the markers existing
+already&mdash;put it inside the callback function instead. </p>
+<p class="para"> In the callback function, you need to find all the "marker"
+elements in the XML, and iterate through them. For each marker element
+you find, retrieve the name, address, type, and lat/lng attributes
+and pass them to <code>createMarker</code>, which returns a marker
+that you can add to the map.</p>
+
+<pre class="prettyprint">
+GDownloadUrl("phpsqlajax_genxml.php", function(data) {
+  var xml = GXml.parse(data);
+  var markers = xml.documentElement.getElementsByTagName("marker");
+  for (var i = 0; i &lt; markers.length; i++) {
+    var name = markers[i].getAttribute("name");
+    var address = markers[i].getAttribute("address");
+    var type = markers[i].getAttribute("type");
+    var point = new GLatLng(parseFloat(markers[i].getAttribute("lat")),
+                            parseFloat(markers[i].getAttribute("lng")));
+    var marker = createMarker(point, name, address, type);
+    map.addOverlay(marker);
+  }
+});
+</pre>
+<h4>Creating custom icons</h4>
+<p class="para"> You can use the <code>GIcon</code> class to define custom icons
+which can later be assigned to the markers. Start by declaring two
+<code>GIcon</code> objects&mdash;iconBlue and iconRed&mdash;and define
+their properties.</p>
+
+<p class="para"><strong>Warning:</strong> You may get away with specifying fewer
+properties than in the example, but by doing so, you run the risk of
+encountering peculiar errors later. </p>
+<p class="para"> You then create an associative array which associates each
+<code>GIcon</code> with one of your type strings: 'restaurant' or
+'bar.' This makes the icons easy to reference later when you create
+markers from the XML. </p>
+<pre class="prettyprint">
+    var iconBlue = new GIcon(); 
+    iconBlue.image = 'http://labs.google.com/ridefinder/images/mm_20_blue.png';
+    iconBlue.shadow = 'http://labs.google.com/ridefinder/images/mm_20_shadow.png';
+    iconBlue.iconSize = new GSize(12, 20);
+    iconBlue.shadowSize = new GSize(22, 20);
+    iconBlue.iconAnchor = new GPoint(6, 20);
+    iconBlue.infoWindowAnchor = new GPoint(5, 1);
+
+    var iconRed = new GIcon(); 
+    iconRed.image = 'http://labs.google.com/ridefinder/images/mm_20_red.png';
+    iconRed.shadow = 'http://labs.google.com/ridefinder/images/mm_20_shadow.png';
+    iconRed.iconSize = new GSize(12, 20);
+    iconRed.shadowSize = new GSize(22, 20);
+    iconRed.iconAnchor = new GPoint(6, 20);
+    iconRed.infoWindowAnchor = new GPoint(5, 1);
+
+    var customIcons = [];
+    customIcons["restaurant"] = iconBlue;
+    customIcons["bar"] = iconRed;
+</pre>
+<h4>Creating markers & info windows</h4>
+
+<p class="para"> You should have all your marker creation code in a
+<code>createMarker</code> function. You can retrieve the appropriate
+<code>GIcon</code> by using the type as the key for the associative
+array that was globally defined, and pass that into the
+<code>GMarker</code> constructor. Then, construct the HTML that you
+want to show up in the info window by concatenating the name, address,
+and some <b></b> tags to bold the name. </p>
+<p class="para"> <strong>Tip:</strong> Some tutorials instruct you to store
+HTML-formatted descriptions in your database, but doing so means you
+then have to deal with escaping HTML entities, and you'll be bound to
+that HTML output.
+ By waiting until you've retrieved each attribute separately in the
+ JavaScript, you are free to play around with the HTML on the client
+ side and can quickly preview new formatting. </p>
+
+<p class="para">
+After constructing the HTML string, add an event listener to the marker so that when clicked, an info window is displayed.
+</p>
+<pre class="prettyprint">
+function createMarker(point, name, address, type) {
+  var marker = new GMarker(point, customIcons[type]);
+  var html = "&lt;b&gt;" + name + "&lt;/b&gt; &lt;br/&gt;" + address;
+  GEvent.addListener(marker, 'click', function() {
+    marker.openInfoWindowHtml(html);
+  });
+  return marker;
+}
+</pre>
+<h4>Putting it all together</h4>
+<p class="para">Here's the web page that ties the markers, icons, and XML together.
+When the page loads, the <code>load</code> function is called. This
+function sets up the map and then calls
+
+<code>GDownloadUrl</code>. Make sure your <code>GDownloadUrl</code> is
+passing in the file that outputs the XML and that you can preview that
+XML in the browser.</p>
+
+<p class="para">The full HTML that accomplishes this is shown below (<a
+href="http://gmaps-samples.googlecode.com/svn/trunk/articles-phpsqlajax/phpsqlajax_map.htm"
+target="_blank">phpsqlajax_map.htm</a>):</p>
+<pre class="prettyprint">
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+  &lt;head&gt;
+    &lt;meta http-equiv="content-type" content="text/html; charset=utf-8"/&gt;
+    &lt;title&gt;Google Maps AJAX + MySQL/PHP Example&lt;/title&gt;
+    &lt;script src="http://maps.google.com/maps?file=api&v=2&key=ABQIAAAAjU0EJWnWPMv7oQ-jjS7dYxTPZYElJSBeBUeMSX5xXgq6lLjHthSAk20WnZ_iuuzhMt60X_ukms-AUg"
+            type="text/javascript"&gt;&lt;/script&gt;
+
+    &lt;script type="text/javascript"&gt;
+    //&lt;![CDATA[
+
+    var iconBlue = new GIcon(); 
+    iconBlue.image = 'http://labs.google.com/ridefinder/images/mm_20_blue.png';
+    iconBlue.shadow = 'http://labs.google.com/ridefinder/images/mm_20_shadow.png';
+    iconBlue.iconSize = new GSize(12, 20);
+    iconBlue.shadowSize = new GSize(22, 20);
+    iconBlue.iconAnchor = new GPoint(6, 20);
+    iconBlue.infoWindowAnchor = new GPoint(5, 1);
+
+    var iconRed = new GIcon(); 
+    iconRed.image = 'http://labs.google.com/ridefinder/images/mm_20_red.png';
+    iconRed.shadow = 'http://labs.google.com/ridefinder/images/mm_20_shadow.png';
+    iconRed.iconSize = new GSize(12, 20);
+    iconRed.shadowSize = new GSize(22, 20);
+    iconRed.iconAnchor = new GPoint(6, 20);
+    iconRed.infoWindowAnchor = new GPoint(5, 1);
+
+    var customIcons = [];
+    customIcons["restaurant"] = iconBlue;
+    customIcons["bar"] = iconRed;
+
+    function load() {
+      if (GBrowserIsCompatible()) {
+        var map = new GMap2(document.getElementById("map"));
+        map.addControl(new GSmallMapControl());
+        map.addControl(new GMapTypeControl());
+        map.setCenter(new GLatLng(47.614495, -122.341861), 13);
+
+        GDownloadUrl("phpsqlajax_genxml.php", function(data) {
+          var xml = GXml.parse(data);
+          var markers = xml.documentElement.getElementsByTagName("marker");
+          for (var i = 0; i &lt; markers.length; i++) {
+            var name = markers[i].getAttribute("name");
+            var address = markers[i].getAttribute("address");
+            var type = markers[i].getAttribute("type");
+            var point = new GLatLng(parseFloat(markers[i].getAttribute("lat")),
+                                    parseFloat(markers[i].getAttribute("lng")));
+            var marker = createMarker(point, name, address, type);
+            map.addOverlay(marker);
+          }
+        });
+      }
+    }
+
+    function createMarker(point, name, address, type) {
+      var marker = new GMarker(point, customIcons[type]);
+      var html = "&lt;b&gt;" + name + "&lt;/b&gt; &lt;br/&gt;" + address;
+      GEvent.addListener(marker, 'click', function() {
+        marker.openInfoWindowHtml(html);
+      });
+      return marker;
+    }
+    //]]&gt;
+  &lt;/script&gt;
+
+  &lt;/head&gt;
+
+  &lt;body onload="load()" onunload="GUnload()"&gt;
+    &lt;div id="map" style="width: 500px; height: 300px"&gt;&lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p>The map should look like this when loaded:</p>
+<p>
+<img src="http://gmaps-samples.googlecode.com/svn/trunk/images/screenshot_phpsqlajax.png">
+</p>
+</div>
+
+<!-- ########## END PAGE CONTENT ########## -->
+  
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

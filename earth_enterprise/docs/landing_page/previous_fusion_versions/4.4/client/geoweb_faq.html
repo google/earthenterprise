@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <link href="user_docs.css" rel="stylesheet" type="text/css">
+    <link href="local_extensions.css" rel="stylesheet" type="text/css">
+    <title>
+      About the Google Earth Geographic Web Layer
+    </title>
+    <style type="text/css">
+/*<![CDATA[*/
+    <!--
+    .style1 {font-style: italic}
+    -->
+    /*]]>*/
+    </style>
+    <style type="text/css">
+/*<![CDATA[*/
+    form.c2 {margin-bottom: 0;margin-top: 0;}
+    span.c1 {font-size: 100%;}
+    /*]]>*/
+    </style>
+  </head>
+  <body id="index">
+    <a id="top" name="top"></a>
+    <div id="header">
+      <div id="logo">
+        <a href="http://earth.google.com"><img alt="Return to earth.google.com" border="0" src=
+        "http://www.google.com/intl/en/images/logos/earth_logo.gif"></a>
+      </div>
+      <h1 id="doc_title">
+        <strong>About the Google Earth Geographic Web Layer</strong>
+      </h1>
+    </div>
+    <div id="wrapper">
+      <div id="sidenav">
+        <form action="http://www.google.com/search" class="c2" method="get">
+          <span class="c1">Search Google Earth<br>
+          User Guide</span><br>
+          <form action="http://www.google.com/cse" id="cse-search-box" name="cse-search-box">
+            <div>
+              <input name="cx" type="hidden" value="006447561658385433045:da9zsap5cmm">
+              <input name="q" size="18" type="text"> <input name="sa" type="submit" value="Search">
+            </div>
+          </form>
+        </form>
+      </div>
+      <div id="pagecontent">
+        <p>
+          This document answers common questions about the <a href=
+          "http://googleblog.blogspot.com/2006/12/opening-my-eyes-to-whole-new-world.html" title=
+          "Geographic Web Layer">Geographic Web Layer</a> of Google Earth. <a href=
+          "http://earth.google.com/userguide/v4/ug_layers.html" title=
+          "Learn more about layers">Learn more about layers in the Google Earth user guide</a>.
+        </p><br>
+        <p>
+          <strong>I just read an article on <a href="http://wikipedia.org/" target=
+          "_blank">Wikipedia</a>. It has geographic coordinates in the text, but I do not see it in
+          the Google Earth Geographic Web layer. Why not?</strong><br>
+        </p>
+        <p>
+          There are several possible reasons. The article may have been altered after Google
+          processed the last batch of Wikipedia articles. Additionally, it could be that the
+          coordinates are not posted in a way that Google Earth supports (see the next question).
+        </p><br>
+        <p>
+          <strong>How do I get my Wikipedia article to show up in the Google Earth Geographic Web
+          layer?</strong>
+        </p>
+        <p>
+          You must geotag the article. The simplest way to do this is to use the <a href=
+          "http://en.wikipedia.org/wiki/Template:Coord" title="{{coor title d}}">{{coord}}</a>
+          template. This template can be used anywhere within the article text. For example, if the
+          article for San Francisco, California contained this markup anywhere within the article
+          text:
+        </p>
+        <pre>
+{{coord|37|46|N|122|26|W|display=title}}
+</pre>
+        <p>
+          Although the display parameter is not required in this template, you must use it with the
+          title keyword if you want it to appear in the Geographic Web layer. For example, the
+          following <em>would not</em> add an article to the Geographic Web layer:
+        </p>
+        <pre>
+{{coord|38.954|-95.252|display=inline}}
+</pre>
+        <p>
+          However, the following would cause an article to appear in the Geographic Web layer.
+        </p>
+        <pre>
+{{coord|38.954|-95.252|display=inline,title}}
+</pre>
+        <p>
+          Using display=title indicates that the coordinates explicitly refer to the location of
+          the title article, rather than another geographic location that may appear in the article
+          text.
+        </p>
+        <p>
+          Google recognizes this location and includes the article the next time Google publishes
+          the layer.
+        </p><br>
+        <p>
+          <strong>What about other Wikipedia templates?</strong>
+        </p>
+        <p>
+          At the present time, Google recognizes other Wikipedia templates. However, Wikipedia has
+          deprecated these older templates. You should use {{coord}} instead. <a href=
+          "http://en.wikipedia.org/wiki/Template:Coord" target="_blank">Learn more</a>.
+        </p><br>
+        <p>
+          <strong>How do I find the coordinates for a location?</strong>
+        </p>
+        <p>
+          You can move the cursor over any location in the Google Earth 3D viewer and see the
+          coordinates for the location in the status bar at the bottom of the 3D viewer. <a href=
+          "http://earth.google.com/userguide/v4/ug_3dviewer.html#viewprefs" title=
+          "Learn how to change the latitude/longitude display">Learn how to change the
+          latitude/longitude display</a>. You can also create a placemark for a location and view
+          the coordinates for the location in the New Placemark dialog box.
+        </p><br>
+        <p>
+          <strong>Why is a Wikipedia article showing up incorrect location?</strong>
+        </p>
+        <p>
+          Coordinates may be incorrect in the original Wikipedia article. If this is not the case,
+          it may have been only recently changed to use the correct coordinates, but after Google
+          published the most recent Wikipedia layer. Click on the History tab of the Wikipedia
+          article to examine how the article has changed over time. Recent changes to the
+          coordinate markup indicate such a change.
+        </p><br>
+        <p>
+          <strong>When were the pictures chosen for the <a href="http://www.panoramio.com/" target=
+          "_blank">Panoramio</a> layer?</strong><br>
+          Google published much of the Panoramio database as of late December 2006, with occasional
+          updates thereafter.
+        </p><br>
+        <p>
+          <strong>How were the placemarks chosen for the Best of Google Earth Community
+          layer?</strong><br>
+          For this version of the Google Earth Geographic Web, the Best of Google Earth Community
+          layer placemarks were chosen programmatically using a variety of metrics including
+          popularity, uniqueness, and richness of content.
+        </p><br>
+        <p>
+          <strong>How often will the Google Earth Geographic Web layer be updated?</strong>
+        </p>
+        <p>
+          Every one to three months.
+        </p>
+      </div>
+    </div>
+    <div id="footer">
+      <div id="footerlogo">
+        <img alt="Google color balls" height="53" src="http://earth.google.com/images/art.gif"
+        width="143">
+      </div>
+      <div id="copyright">
+        <p>
+          &copy;2010 Google - <a href="http://www.google.com/privacy.html">Privacy Policy</a> -
+          <a href="http://www.google.com/terms_of_service.html">Terms and Conditions</a> - <a href=
+          "http://www.google.com/about.html">About Google</a>
+        </p>
+      </div>
+    </div>
+    <p id="date">
+      Updated on <script type="text/javascript">
+//<![CDATA[
+      <!-- hide script from old browsers
+      var lm = new Date(document.lastModified);
+      document.write(lm.toDateString());
+      //-->
+      //]]>
+      </script>
+    </p><script src="https://ssl.google-analytics.com/urchin.js" type="text/javascript">
+</script><script type="text/javascript">
+//<![CDATA[
+    _uacct="UA-18031-5";
+    _utcp="/userguide/";
+    _uanchor=1;
+    urchinTracker();
+    //]]>
+    </script>
+  </body>
+</html>

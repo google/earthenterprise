@@ -1,0 +1,795 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+  
+
+
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/mapplets/services.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Mapplet Services - Google Mapplets - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/html/apis/maps/documentation/mapplets/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../css/iehacks.css"><![endif]-->
+
+<link href="../local_extensions.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container" class="depr">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Mapplets (<a href="../../terms.html#section_4_4">Deprecated</a>)</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="index.html" title="Google Mapplets home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="guide.html" class="selected" title="Official Google Mapplets documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../faq.html" title="Answers to frequently asked questions about Google Mapplets">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="articles.html" title="Focused articles and tutorials for Google Mapplets developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Mapplets blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="http://groups.google.com/group/google-mapplets/" title="Google Mapplets developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../../terms.html" title="Google Mapplets terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <a name="gc-toc-anchor"></a>
+      <div class="g-unit g-first" id="gc-toc">
+          <ul>
+    <li><a href="../../index.html">Maps API Family</a></li>
+    <li><a href="http://maps.google.com/gadgets/directory?synd=mpl">Mapplets Directory</a></li>
+    </ul>
+  <div class="line"></div>
+    <ul>
+      <li><h2>Mapplets API</h2>
+                <ul>
+                  <li><a class="tlw-expanded" href="guide.html">Developer Guide</a>
+                    <ul>
+                      <li><a href="basics.html">Basics</a></li>
+                      <li><a href="events.html">Events</a></li>
+                      <li><a href="overlays.html">Overlays</a></li>
+                      <li><a href="services.html">Services</a></li>
+                    </ul>                               
+                  </li>
+                  <li><a href="reference.html">API Reference</a></li>
+                  <li><a href="infowindowallowed.html">Content Allowed in Mapplet Info Windows</a></li>
+               <li><h2 class="tlw-expanded">More Resources:</h2>
+               <ul>
+               <li><a href="demogallery.html">Demos</a></li>
+               <li><a href="articles.html">Articles</a></li>
+               <li><a href="mediagallery.html">Presentations</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/issues/list?can=2&q=apitype%3AMapplets&colspec=ID+Type+Status+Introduced+Fixed+Summary+Internal+Stars&cells=tiles">Known Issues</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/wiki/MappletsAPIChangelog">Changelog</a><sup class="new">New!</sup></li>
+              </ul>
+                </ul>
+              </li>
+      </li>
+    </ul>   
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps JavaScript API V3</h2>
+         <ul>
+           <li><a href="../javascript/index.html">Home Page</a></li>
+           <li><a href="../javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+      <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../flash/index.html">Home Page</a></li>
+          <li><a href="../flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+  <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../mapsdata/index.html">Home Page</a></li>
+          <li><a href="../mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+      <div class="line"></div>
+    <ul>
+        <li><h2><a href="../webservices/index.html">Maps API Web Services</a></h2>
+        <ul>
+          <li><a href="../geocoding/index.html">Geocoding API</a></li>
+          <li><a href="../directions/index.html">Directions API</a></li>
+          <li><a href="../elevation/index.html">Elevation API</a></li>
+          <li><a href="../places/index.html">Places APl</a></li>
+        </ul>
+      </li>
+    </ul>
+       <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+          <div class="promo"><p><a href="../premier/index.html">Google Maps API Premier</a></p><p>Includes enterprise licensing and support</p></div>
+
+      </div>
+      
+      <a name="gc-pagecontent-anchor"></a>   
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Mapplet Services</h1>
+
+
+<p class="note">Note: The Google Mapplets API has been officially
+deprecated as of May 19, 2010. Existing Mapplets will continute
+to be supported, but no new Mapplets will be accepted into the
+Mapplets Gallery.</p>
+
+
+<div class="toc">
+  <ol>
+  <li><a href="#Services_Overview">Services Overview</a></li>
+  <li><a href="#Storing_User_Preferences">Storing User Preferences</a></li>
+  <li><a href="#Geocoding">Geocoding</a>
+  <ol>
+	<li><a href="#Geocoding_Object">The Geocoding Object</a></li>
+	<li><a href="#Geocoding_Structured">Extracting Structured Addresses</a></li>
+  </ol>
+  </li>
+  <li><a href="#Retrieving_External_Content">Retrieving External Content</a></li>
+  <li><a href="#XML_Overlays">KML and GeoRSS Overlays</a></li>
+  <li><a href="#Driving_Directions">Driving Directions</a></li>
+  </ol>
+</div>
+
+<h1 id="Services_Overview">Services Overview</h1>
+
+<p>The Google Mapplets API is regularly extended, adding new functionality and features
+that are often released on <a href="http://maps.google.com">maps.google.com</a> first. 
+This section covers these services. Note: because the definition of a "service" is 
+somewhat elusive, this section is somewhat of a catch-all. Basically, this section 
+is where we put all of those neat things that we couldn't put anywhere else.</p>
+
+<h1><a name="Storing_User_Preferences" id="Storing_User_Preferences"></a>Storing User Preferences</h1>
+
+<p>The <code>setprefs</code> feature of the Google Gadgets API allows you store user state in-between sessions.
+To use it, your Mapplet should include:</p>
+
+<ul>
+<li>A <code>&lt;Require feature="setprefs"/&gt;</code> tag (under 
+<code>&lt;ModulePrefs&gt;</code>) to tell the gadget to load the 
+<code>setprefs</code> library.</li>
+<li>A <code>&lt;UserPref&gt;</code> tag inside the Mapplet spec 
+whose value you want to set programmatically and store persistently. 
+If you give this userpref a datatype of <code>hidden</code>, then the 
+user will not be allowed to directly edit it.</li>
+<li>A call to the <code>_IG_Prefs(__MODULE_ID__)</code> constructor. 
+This object has methods for getting and setting preferences.</li>
+</ul>
+
+<p>For more information on manipulating user preferences, see the <a
+href="http://code.google.com/apis/gadgets/docs/fundamentals.html#Datatypes">
+Working with Userpref Data Types</a> section of the Google Gadgets API documentation.</p>
+
+<p>The following example has buttons for incrementing a counter and 
+resetting the counter. If you reload the Mapplet, you'll notice that 
+the value of the counter persists between sessions for that user.</p>
+
+<pre class="prettyprint">
+&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+&lt;Module&gt;
+  &lt;ModulePrefs
+    title="Set Userprefs Demo"&gt;
+    &lt;Require feature="sharedmap" /&gt;
+    &lt;Require feature="setprefs" /&gt;
+  &lt;/ModulePrefs&gt;
+  &lt;UserPref
+    name="counter"
+    default_value="0"
+    datatype="hidden"/&gt;
+  &lt;Content type="html"&gt;
+  &lt;![CDATA[
+    &lt;input type=button value="Increment Counter" onClick="incrementCounter();"&gt;
+    &lt;input type=button value="Reset Counter" onClick="resetCounter();"&gt;
+    &lt;div id="message" style="margin-top:1em"&gt;&lt;/span&gt;
+
+    &lt;script&gt;
+     // Get user preferences
+     var prefs = new _IG_Prefs(__MODULE_ID__);
+     var message = document.getElementById("message");
+     showCounter();
+
+     // Show the current value of the counter
+     function showCounter() {
+       var counter = prefs.getInt("counter");
+       message.innerHTML = "The counter value is " + counter;
+     }
+
+     // Increment value of "counter" user preference
+     function incrementCounter() {
+       var counter = prefs.getInt("counter");
+       prefs.set("counter", counter + 1);
+       showCounter();
+     }
+
+     // Reset value of "counter" userpref to 0
+     function resetCounter(){
+       prefs.set("counter", 0);
+       showCounter();
+     }
+    &lt;/script&gt;
+  ]]&gt;
+  &lt;/Content&gt;
+&lt;/Module&gt;
+</pre>
+
+<p><a href="http://maps.google.com/maps/mpl?moduleurl=http://code.google.com/apis/maps/documentation/mapplets/examples/setprefs.xml">
+Run this example</a> (<a href="examples/setprefs.xml">setprefs.xml</a>)</p>
+
+<h1><a name="Geocoding" id="Geocoding"></a>Geocoding</h1>
+
+<p>Geocoding is the process of converting addresses (like "1600 Amphitheatre 
+Parkway, Mountain View, CA") into geographic coordinates (like latitude 
+37.423021 and longitude -122.083739), which you can use to place markers or 
+position the map.</p>
+
+<h2><a name="Geocoding_Object" id="Geocoding_Object"></a>The Geocoding Object</h2>
+
+<p>You can access the Mapplets API geocoder via the <code>GClientGeocoder</code> 
+object. Use <code>GClientGeocoder.getLatLng()</code> to convert a string address into 
+a <code>GLatLng</code>. This method takes as parameters a string address to convert, 
+and a callback function to execute upon retrieval of the address. The callback function is
+necessary since geocoding involves sending a request to Google's servers and
+can take some time.</p>
+
+<p>In this example, we geocode an address, add a marker at that point, and open 
+an info window displaying the address. Note that the callback is passed as a
+function literal.</p>
+
+<pre class="prettyprint">
+var map = new GMap2();
+var geocoder = new GClientGeocoder();
+showAddress("76 9th ave new york");
+
+function showAddress(address) {
+  geocoder.getLatLngAsync(
+    address,
+    function(latlng) {
+      if (!latlng) {
+        alert(address + " not found");
+      } else {
+        map.setCenter(latlng, 15);
+        var marker = new GMarker(latlng);
+        map.addOverlay(marker);
+        marker.openInfoWindowHtml(address);
+      }
+    }
+  );
+}
+</pre>
+
+<p><a href="http://maps.google.com/maps/mpl?moduleurl=http://code.google.com/apis/maps/documentation/mapplets/examples/geocoding-simple.xml">
+Run this example</a> (<a href="examples/geocoding-simple.xml">geocoding-simple.xml</a>)</p>
+
+<p>If you need to access the geocoder from outside a Mapplet, then please see the 
+<a href="http://code.google.com/apis/maps/documentation/services.html#Geocoding_Direct">
+Geocoding via HTTP</a> section of the standard Google Maps API.</p>
+
+<h2><a name="Geocoding_Structured" id="Geocoding_Structured"></a>Extracting Structured Addresses</h2>
+
+<p>If you would like to access structured information about an address, 
+<code>GClientGeocoder</code> also provides a <code>getLocations()</code> 
+method that returns a JSON object consisting of the following information:</p>
+
+<ul>
+<li><code>Status</code>
+ <ul>
+  <li><code>request</code> -- The request type. In this case, it is always 
+  <code>geocode</code>.</li>
+  <li><code>code</code> -- A response code (similar to HTTP status codes) 
+  indicating whether the geocode request was successful or not.
+  See the <a href="reference.html#GGeoStatusCode">full list of status codes</a>.</li>
+ </ul>
+</li>
+<li><code>Placemark</code> -- Multiple placemarks may be returned 
+if the geocoder finds multiple matches.
+ <ul>
+  <li><code>address</code> -- A nicely formatted and properly capitalized version of the address.</li>
+  <li><code>AddressDetails</code> -- The address formatted as xAL, or 
+  <a href="http://www.oasis-open.org/committees/ciq/ciq.html#6">eXtensible 
+  Address Language</a>, an international standard for address formatting.</li>
+  <li><code>Accuracy</code> -- An attribute indicating how accurately we 
+  were able to geocode the given address. See a 
+  <a href="reference.html#GGeoAddressAccuracy">list of possible values</a>.</li>
+  <li><code>Point</code> -- A point in 3D space, consisting of a 
+  <code>coordinates</code> value -- The longitude, latitude, and 
+    altitude of the address. In this case, the altitude is always set to 0.</li>
+ </li>
+</ul>
+
+<p>Here we show the JSON object returned by the geocoder for the address 
+of Google's headquarters:</p>
+
+<pre class="prettyprint">
+{
+  "name": "1600 Amphitheatre Parkway, Mountain View, CA, USA",
+  "Status": {
+    "code": 200,
+    "request": "geocode"
+  },
+  "Placemark": [
+    {
+      "address": "1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA",
+      "AddressDetails": {
+        "Country": {
+          "CountryNameCode": "US",
+          "AdministrativeArea": {
+            "AdministrativeAreaName": "CA",
+            "SubAdministrativeArea": {
+              "SubAdministrativeAreaName": "Santa Clara",
+              "Locality": {
+                "LocalityName": "Mountain View",
+                "Thoroughfare": {
+                  "ThoroughfareName": "1600 Amphitheatre Pkwy"
+                },
+                "PostalCode": {
+                  "PostalCodeNumber": "94043"
+                }
+              }
+            }
+          }
+        },
+        "Accuracy": 8
+      },
+      "Point": {
+        "coordinates": [-122.083739, 37.423021, 0]
+      }
+    }
+  ]
+}
+</pre>
+
+<p>In this example, we use the <code>getLocations()</code> method to geocode 
+addresses, and extract the nicely formatted version of the address and the 
+two-letter country from the JSON and display it in the info window.</p>
+
+<pre class="prettyprint">
+var map = new GMap2();;
+map.setCenter(new GLatLng(34, 0), 1);
+var geocoder = new GClientGeocoder();;
+
+function addAddressToMap(response) {
+  map.clearOverlays();
+  if (!response || response.Status.code != 200) {
+    alert("\"" + address + "\" not found");
+  } else {
+    place = response.Placemark[0];
+    point = new GLatLng(place.Point.coordinates[1],
+    place.Point.coordinates[0]);
+    marker = new GMarker(point);
+    map.addOverlay(marker);
+    marker.openInfoWindowHtml(place.address + '&lt;br&gt;' +
+      '&lt;b&gt;Country code:&lt;/b&gt; ' + place.AddressDetails.Country.CountryNameCode);
+  }
+}
+
+// showLocation() is called when you click on the Search button
+// in the form.  It geocodes the address entered into the form
+// and adds a marker to the map at that location.
+function showLocation() {
+  var address = document.forms[0].q.value;
+  geocoder.getLocationsAsync(address, addAddressToMap);
+}
+
+// findLocation() is used to enter the sample addresses into the form.
+function findLocation(address) {
+  document.forms[0].q.value = address;
+  showLocation();
+}
+</pre>
+
+<p><a href="http://maps.google.com/maps/mpl?moduleurl=http://code.google.com/apis/maps/documentation/mapplets/examples/geocoding-extraction.xml">
+Run this example</a> <a href="examples/geocoding-extraction.xml">(geocoding-extraction.xml)</a></p>
+
+
+<h1><a name="Retrieving_External_Content" id="Retrieving_External_Content"></a>Retrieving External Content</h1>
+
+<p>All the calls in the <a href="http://code.google.com/apis/gadgets/docs/remote-content.html">Working with 
+Remote Content</a> section of the Gadgets API documentation work inside Mapplets:</p>
+
+<ul>
+<li><code>_IG_FetchContent(url, callback)</code> -- Returns the content at <code>url</code> as text. 
+Use this function to fetch HTML or plain text content.</li>
+<li><code>_IG_FetchXmlContent(url, callback)</code> -- Returns and operates on the XML content at 
+<code>url</code> as a DOM object.  Use this function to fetch XML content which must be parsed.</li>
+</ul>
+
+<p>Suppose you had the following XML file (located at <a href="http://mapgadgets.googlepages.com/cta_red.xml">
+http://mapgadgets.googlepages.com/cta_red.xml</a>) which lists the coordinates of the Chicago Transit 
+Authority red train line. The points that have names are where stations are located.</p>
+
+<pre class="prettyprint">
+&lt;?xml version="1.0" encoding="UTF-8" ?&gt; 
+&lt;points&gt;
+  &lt;point lng="-87.67283499240875" lat="42.019110918045044"&gt;Howard&lt;/point&gt; 
+  &lt;point lng="-87.66907453536987" lat="42.01585473134908"&gt;Jarvis&lt;/point&gt; 
+  &lt;point lng="-87.66744375228882" lat="42.014483688722116" /&gt; 
+  &lt;point lng="-87.66716480255127" lat="42.014228607763144" /&gt; 
+  &lt;point lng="-87.66695022583008" lat="42.01400541108485" /&gt; 
+  &lt;point lng="-87.66682147979736" lat="42.01379815632509" /&gt; 
+  &lt;point lng="-87.66662836074829" lat="42.01357495813621" /&gt; 
+  &lt;point lng="-87.66645669937134" lat="42.0133198735327" /&gt; 
+  &lt;point lng="-87.66634941101074" lat="42.013080730787806" /&gt; 
+  &lt;point lng="-87.66611337661743" lat="42.01263432859157" /&gt; 
+  &lt;point lng="-87.6660704612732" lat="42.012283581810934" /&gt; 
+  &lt;point lng="-87.66602754592896" lat="42.01188500357604" /&gt; 
+  &lt;point lng="-87.66602754592896" lat="42.008010693009815"&gt;Morse&lt;/point&gt; 
+  &lt;!-- ... --&gt;
+&lt;/points&gt;
+</pre>
+
+<p>The following example uses <code>_IG_FetchXmlContent()</code> to download and parse the 
+XML file, and then draws the train line and adds markers for each station.</p>
+
+<pre class="prettyprint">
+var map = new GMap2();
+
+// Go to Chicago
+map.setCenter(new GLatLng(41.882853, -87.642059), 11);   
+
+// Render the red train line and stations from a remote XML file
+var url = "http://mapgadgets.googlepages.com/cta_red.xml";
+_IG_FetchXmlContent(url, function(response) {
+  var trainline = [];
+  var points = response.getElementsByTagName("point");
+
+  for (var i = 0; i &lt; points.length; i++) {
+    var point = points.item(i);
+    var lat  = point.getAttribute("lat");
+    var lng  = point.getAttribute("lng");
+    var latlng = new GLatLng(lat, lng);
+
+    trainline.push(latlng);
+    if (point.firstChild) {
+      var station = point.firstChild.nodeValue;
+      var marker = createMarker(latlng, station);
+      map.addOverlay(marker);
+    }
+  }
+
+  var polyline = new GPolyline(trainline, "#ff0000", 3, 1);
+  map.addOverlay(polyline);
+});
+
+// Creates a marker at the given point with the given name
+function createMarker(point, name) {
+  var marker = new GMarker(point);
+  GEvent.addListener(marker, "click", function() {
+    marker.openInfoWindowHtml(name);
+  });
+  return marker;
+}
+</pre>
+
+<p><a href="http://maps.google.com/maps/mpl?moduleurl=http://code.google.com/apis/maps/documentation/mapplets/examples/remotecontent.xml">
+Run this example</a> (<a href="examples/remotecontent.xml">remotecontent.xml</a>)</p>
+
+<p>Note: The <code>_IG_FetchContent</code> and <code>_IG_FetchXmlContent</code> calls 
+automatically cache the content to reduce the load on your servers.  See the 
+<a href="http://code.google.com/apis/gadgets/docs/remote-content.html#Params">
+Refreshing the Cache</a> section of the Gadgets API documentation for information 
+on how to change the cache duration or disable caching.</p>
+
+<h1><a name="XML_Overlays"></a>KML/GeoRSS Overlays</h1>
+
+<p>Rather than adding points using Javascript, we recommend that you instead store your data 
+in the <a href="http://code.google.com/apis/kml/documentation/">KML</a> or 
+<a href="http://georss.org/">GeoRSS</a> data formats. These data formats are 
+added to a map using the <code>GGeoXml</code> object, whose constructor takes 
+the URL of a publicly accessible XML file. <code>GGeoXml</code> placemarks are 
+rendered as <code>GMarker</code>s, while <code>GGeoXml</code> polylines and
+polygons are rendered as Google Maps API polylines and polygons. 
+<code>&lt;GroundOverlay&gt;</code> elements within KML files are 
+rendered as <code>GGroundOverlay</code> elements on the map.</p>
+
+<p><code>GGeoXml</code> objects are added to a map using the <code>addOverlay()</code> 
+method. (You can remove them from the map using <code>removeOverlay()</code>.) 
+Both KML and GeoRSS XML files are supported.</p>
+
+<p>The following example displays all the Chicago Transit Authority train lines from 
+<a href="http://mapgadgets.googlepages.com/cta.kml">http://mapgadgets.googlepages.com/cta.kml</a> 
+(<a href="http://maps.google.com/maps?q=http://mapgadgets.googlepages.com/cta.kml&amp;mapprev=1">view in 
+Google Maps</a>). Notice how much simpler this is than the above example which uses <code>_IG_FetchXmlContent</code>.</p>
+
+<pre class="prettyprint">
+var map = new GMap2();
+var geoXml = new GGeoXml("http://mapgadgets.googlepages.com/cta.kml");
+
+map.setCenter(new GLatLng(41.882853, -87.642059), 11);
+map.addOverlay(geoXml);
+</pre>
+
+<p><a href="http://maps.google.com/maps/mpl?moduleurl=http://code.google.com/apis/maps/documentation/mapplets/examples/ggeoxml.xml">
+Run this example</a> (<a href="examples/ggeoxml.xml">ggeoxml.xml</a>)</p>
+
+<h1><a name="Driving_Directions" id="Driving_Directions"></a>Driving Directions</h1>
+
+<p>You can add driving directions to your Mapplets by using the <code>GDirections</code>
+object. The <code>GDirections</code> objects requests and receives direction results using either 
+query strings (e.g. "New York, NY to Chicago, IL") or provided textual lat/lons (e.g. "40.712882,
+-73.967257 to 41.943181,-87.770677"). The <code>GDirections</code> object also supports multi-part
+driving directions using a series of points. Directions may be displayed as either a polyline
+drawing the route on a map or retrieved as a JSON structure.</p>
+
+<p>To use directions in the Google Maps API, create an object of type <code>GDirections</code> and 
+designate a <code>GMap2</code> object to receive and display results. By default, the 
+map is centered and bounded by the returned route(s) (though you can change this with parameters 
+within a <code>GDirectionOptions</code> object).</p>
+
+<P>Driving directions are requested using the <code>GDirections.load()</code> method. This method 
+takes a query string and a set of optional <code>GDirectionsOptions</code> parameters. If the 
+<code>GDirections</code> object was constructed with a supplied <code>GMap2</code> object, then 
+the returned directions will contain a polyline overlay.</p>
+
+<p>Note that the directions object is not populated with this return information immediately. For this reason,
+the <code>GDirections</code> object defines a "load" event which you can intercept to determine this state.</p> 
+
+<p>Once directions are returned, the <code>GDirections</code> object will internally store 
+results which you can retrieve using <code>GDirections.getPolyline()</code> and/or 
+<code>GDirections.getRoute(i:Number)</code> methods. Steps within a route can be retrieved 
+using the <code>GRoute.getStep(i:Number)</code> method and  the HTML summary of that step can be
+retrieved using <code>GStep.getDescriptionHtml()</code>.</p>
+
+<pre class="prettyprint">
+// Create a directions object and register a map to hold the 
+// resulting computed directions
+
+var map;
+var directions;
+
+function initialize() {
+  map = new GMap2();
+  map.setCenter(new GLatLng(49.496675,-102.65625), 3);
+  directions = new GDirections(map);
+  directions.load("New York, NY to Chicago, IL");
+}
+</pre>
+
+<p>The <code>GDirections</code> object also supports multi-point directions, 
+which can be constructed using the <code>GDirections.loadFromWaypoints()</code> 
+method. This method takes an array of textual input addresses or textual 
+lat/lon points. The directions from each sequence of waypoints is computed 
+as a separate route and returned in a separate <code>GRoute</code> object, 
+each of which contains a series of <code>GStep</code> objects.</p>
+
+<p><code>GRoute</code> objects store the number of steps (of type 
+<code>GStep</code>) for that route, the starting and ending geocode 
+for that route, and other computed information such as distance, duration, 
+and exact lat/lon of the endpoint (which may be different than the ending 
+geocode if the geocode does not lie on a road segment). Each <code>GStep</code> 
+object also contains the description for that text (e.g. 
+"Merge onto US-101 S via the ramp to San Jose") plus computed information 
+including the distance, duration, and exact lat/lon as well.</p>
+
+<p>The <code>GDirections</code> object fires three events which you can intercept:</p>
+<ul>
+  <li>"<code>load</code>": This event is triggered when a directions result successfully returns,
+  but before any overlay elements are added to the map.</li>
+  <li>"<code>addoverlay</code>": This event is triggered after the polyline directions 
+  components are added to the map.</li>
+   <li>"<code>error</code>": This event is triggered if a directions request 
+        results in an error. Callers can use <code>GDirections.getStatus()</code> to 
+        get more information about the error.</li>
+</ul>
+
+<p>For full documentation of the various objects, methods and events in the Directions API 
+package, consult the <a href="reference.html">API Reference</a>.</p>
+
+<p><a href="http://maps.google.com/maps/mpl?moduleurl=http://code.google.com/apis/maps/documentation/mapplets/examples/directions-simple.xml">
+Run this example</a> <a href="examples/directions-simple.xml">(directions-simple.xml)</a></p>
+
+        <!-- end body text -->
+
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

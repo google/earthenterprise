@@ -1,0 +1,227 @@
+/*
+ * Copyright 2017 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* TODO: High-level file comment. */
+html, body {
+  overflow: hidden;
+}
+body {
+  margin: 0;
+  background: #FFFFFF none repeat scroll 0 0;
+  color: #000000;
+  font-family: Arial, sans-serif;
+}
+form {
+  display: inline;
+}
+table {
+  padding: 0;
+  border-collapse: collapse;
+}
+.padded_floatleft {
+  float: left;
+  padding-right: 3px;
+  clear: both;
+}
+#header {
+  font-size: 13px;
+  float: left;
+}
+#logo {
+  padding: 6px 10px;
+  float: left;
+}
+#search_tabs {
+  float: left;
+  padding: 0px;
+}
+#map {
+  width: 100%;
+  height: 300px;
+  border-top: 1px solid #6784c7;
+  border-bottom: 1px solid #6784c7;
+  border-right: 1px solid #6784c7;
+  border-left-width: 0px;
+}
+#map_inner {
+  overflow: hidden;
+  height: 100%;
+}
+#left_panel_cell {
+  border: none;
+  padding: 0px;
+  width: 15em;
+}
+#left_panel {
+  border: 1px solid #6784c7;
+  font-size: 13px;
+}
+#globes_title {
+  background-color: silver;
+  border-bottom: 1px solid #6784c7;
+  padding-left: 5px;
+  padding-top: 2px;
+  font-weight: bold;
+}
+#globes_container {
+  padding-top: 10px;
+  padding-left: 15px;
+  height: 30px;
+  overflow-y: auto;
+  vertical-align: top;
+ }
+#layers_title {
+  background-color: silver;
+  border-bottom: 1px solid #6784c7;
+  padding-left: 5px;
+  padding-top: 2px;
+  font-weight: bold;
+}
+#layers_container {
+  height: 230px;
+  overflow-y: auto;
+  vertical-align: top;
+ }
+.layer_list {
+  margin-left: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  position: relative;
+  padding-left: 10px;
+  padding-right: 5px;
+}
+.layer_item, .layer_item_selected {
+  background-color: white;
+  list-style: none;
+  width: 100%;
+  padding-bottom: 0px;
+}
+.layer_item_selected {
+  background-color: #ccc;
+}
+.layer_item img, .layer_item_selected img {
+  vertical-align: middle;
+}
+.search_text {
+  width: 20em;
+}
+#search_label_row td {
+  font-size: 11px;
+  color: grey;
+}
+#search_results_title {
+  background-color: silver;
+  border-bottom: 1px solid #6784c7;
+  padding-left: 5px;
+  padding-top: 2px;
+  display: none;
+  font-weight: bold;
+}
+#search_results_title img {
+  padding-right: 2px;
+  float: right;
+}
+#search_results_container {
+  border-bottom: 1px solid #6784c7;
+  overflow-y: auto;
+  vertical-align: top;
+  display: none;
+  max-height: 300px;
+ }
+#search_results_list {
+  background-color: white;
+  margin: 0;
+  padding: 0px;
+}
+.search_result_item, .search_result_item_selected {
+  min-height: 35px;
+  list-style: none;
+  padding-left: 3px;
+  padding-top: 3px;
+  padding-bottom: 2px;
+}
+.search_result_item_selected {
+  background-color: #ccc;
+}
+.search_result_snippet {
+  color: black;
+  font-size:smaller;
+}
+#search_popup_name {
+}
+#search_popup_body {
+}
+#tabLabels .selectedTab {
+  font-size: 13px;
+  background-color: silver;
+  border-left: 1px solid #6784c7;
+  border-right: 1px solid #6784c7;
+  border-top: 1px solid #6784c7;
+  border-bottom-width: 0px;
+  z-index: 3;
+  bottom: -4px;
+  position: relative;
+}
+#tabLabels .selectedTab a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+#tabLabels .unselectedTab {
+  z-index: 1;
+  bottom: -5px;
+  font-size: 12px;
+  position: relative;
+  background-color: white;
+  border-left: 1px solid #6784c7;
+  border-right: 1px solid #6784c7;
+  border-top: 1px solid #6784c7;
+  border-bottom-width: 0px;
+}
+#tabLabels .unselectedTab a {
+  padding-left: 10px;
+  padding-right: 10px;
+  text-decoration: none;
+  color: black;
+}
+#tabPane {
+  padding-top: 2px;
+  padding-bottom: 0px;
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: #6784c7;
+}
+#tabLabels {
+  border-spacing: 0px;
+  vertical-align: top;
+  white-space: nowrap;
+  padding-left: 15px;
+  color: black;
+  border-collapse: collapse;
+  text-indent: 0pt;
+}
+#tabLabels table {
+  border-collapse: collapse;
+}
+#collapsePanel {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  z-index: 11;
+}
+

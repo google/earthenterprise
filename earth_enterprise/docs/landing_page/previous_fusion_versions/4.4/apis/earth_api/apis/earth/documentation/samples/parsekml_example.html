@@ -1,0 +1,63 @@
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/samples/parsekml_example.html";
+    </script>
+    
+   <title>parsekml_example.html</title>
+   <script src="http://code.google.com/www.google.com/jsapi?key=ABQIAAAA5El50zA4PeDTEMlv-sXFfRSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xTdBhxbkZWuzyYTVeclkwYHpb17ZQ"></script>
+   <script type="text/javascript">
+      var ge;
+      var placemark;
+      var object;
+
+      google.load("earth", "1");
+
+      function init() {
+         google.earth.createInstance('map3d', initCB, failureCB);
+      }
+
+      function initCB(instance) {
+         ge = instance;
+         ge.getWindow().setVisibility(true);
+         var kmlString = ''
+                         + '<?xml version="1.0" encoding="UTF-8"?>'
+                         + '<kml xmlns="http://www.opengis.net/kml/2.2">'
+
+                         + '<Document>'
+                         + '  <Camera>'
+                         + '    <longitude>-122.444633</longitude>'
+                         + '    <latitude>37.801899</latitude>'
+                         + '    <altitude>139.629438</altitude>'
+                         + '    <heading>-70.0</heading>'
+                         + '    <tilt>75</tilt>'
+                         + '  </Camera>'
+
+                         + '  <Placemark>'
+                         + '    <name>Placemark from KML string</name>'
+                         + '    <Point>'
+                         + '      <coordinates>-122.448425,37.802907,0</coordinates>'
+                         + '    </Point>'
+                         + '  </Placemark>'
+
+                         + '</Document>'
+                         + '</kml>';
+
+         var kmlObject = ge.parseKml(kmlString);
+         ge.getFeatures().appendChild(kmlObject);
+         ge.getView().setAbstractView(kmlObject.getAbstractView());
+      }
+
+      function failureCB(errorCode) {
+      }
+
+      google.setOnLoadCallback(init);
+   </script>
+
+</head>
+<body>
+
+   <div id="map3d" style="height:400px; width:600px;"></div>
+
+</body>
+</html>

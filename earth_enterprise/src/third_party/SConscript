@@ -1,0 +1,157 @@
+# Copyright 2008 Google Inc. All Rights Reserved.
+#-*- Python -*-
+
+Import('env')
+Import('link_gcc')
+import glob
+import os
+
+third_party_env = env.Clone()
+
+# The order is important as n'th one has no dependency on anything after it
+if third_party_env['bundle_3rd_libs']:
+  third_party_libs = [
+      'gtest',
+      'libjs',
+      'libattr',
+      'libcap',
+      'openssl',
+      'openldap',
+      'expat',
+      'libzlib',
+      'libjpeg',
+      'libmng',  # requires zlib, jpeg.
+      'python',  # requires openssl to build ssl module.
+      'cython',
+      'numpy',
+      'libxml2', # requires python to build and install a Python library module, uses libz.
+      'qt',
+      'xerces-c',
+      'libcurl',
+      'glu',
+      'proj',
+      'ogdi',
+      'geos',
+      'gif',
+      'gdal',
+      'postgresql',
+      'postgis',
+      'apache2',
+      'mod_wsgi',
+      'psycopg2',
+      'setuptools',
+      'mgrs',
+      'PIL',
+      'skia']
+else:
+  third_party_libs = [
+      'gtest',
+      'libjs',
+      'openssl',
+      'openldap',
+      'libcurl',
+      'qt',
+      'glu',
+      'gdal',
+      'postgresql',
+      'postgis',  # requires postgresql config, geos, proj libs.
+      'apache2',
+      'mod_wsgi',
+      'psycopg2', # requires postgresql.
+      'mgrs',
+      'skia']
+
+
+third_party_bin = '%s/bin' % Dir('.').abspath
+
+cflags = ' '.join(env['optflags'] + ['-fPIC'])
+lpaths = ' '.join(map(lambda i: '-L%s' % i, env['rpathlink_dirs']))
+lflags = ' '.join(third_party_env['LINKFLAGS'])
+our_lib = '-L%s' % Dir(env.exportdirs['lib']).abspath
+lpaths = lpaths.replace(our_lib, '')
+lpaths = lpaths.replace('-L/opt/google/lib64/compatibility', '')
+if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+  third_party_env['ENV']['CC'] = '%sgcc %s %s' % (
+      env.exportdirs['bin'], cflags, lflags)
+  third_party_env['ENV']['CXX'] = '%sg++ %s %s' % (
+      env.exportdirs['bin'], cflags, lflags)
+  cc_template = (
+      '#!/bin/bash\n'
+      'tmp_nam=`mktemp`\n'
+      '%%s %s -L/opt/google/lib64/compatibility -I%sinclude "$$@" %%s 2>$$tmp_nam\n'
+      'status=$$?\n'
+      'grep -v "linker input file unused because linking not done" '
+      '$$tmp_nam 1>&2\n'
+      'rm -f $$tmp_nam\n'
+      'exit $$status\n' % (our_lib, env.exportdirs['root']))
+else:
+  if third_party_env['is_hardy']:
+    bin_path = '/usr/bin'
+  else:
+    bin_path = '%s/bin' % env['optdir']
+  third_party_env['ENV']['CC'] = '%s/gcc %s %s' % (bin_path, cflags, lflags)
+  third_party_env['ENV']['CXX'] = '%s/g++ %s %s' % (bin_path, cflags, lflags)
+  cc_template = (
+      '#!/bin/bash\n'
+      'tmp_nam=`mktemp`\n'
+      '%%s %s -I%sinclude "$$@" %%s 2>$$tmp_nam\n'
+      'status=$$?\n'
+      'grep -v "linker input file unused because linking not done" '
+      '$$tmp_nam 1>&2\n'
+      'rm -f $$tmp_nam\n'
+      'exit $$status\n' % (our_lib, env.exportdirs['root']))
+
+third_party_env['ENV']['mod_env'] = 'env CFLAGS="" CXXFLAGS="" '
+
+# [1.5] Create g++ wrappers as some configs don't take those options
+    #'%s -L=/usr/lib64 "$$@" %s 2>$$tmp_nam\n'
+cc_cmd = cc_template % (third_party_env['ENV']['CC'], lpaths)
+cxx_cmd = cc_template % (third_party_env['ENV']['CXX'], lpaths)
+
+cc_target = '%s/gcc' % third_party_bin
+third_party_env.Command(
+    cc_target, link_gcc,
+    [third_party_env.WriteToFile(cc_target, cc_cmd),
+     'chmod 755 %s' % cc_target])
+
+cxx_target = '%s/g++' % third_party_bin
+third_party_env.Command(
+    cxx_target, cc_target,
+    [third_party_env.WriteToFile(cxx_target, cxx_cmd),
+     'chmod 755 %s' % cxx_target])
+
+third_party_env['ENV']['CXX'] = cxx_target
+third_party_env['ENV']['CC'] = cc_target
+third_party_env['ENV']['PATH'] = '%s:%s' % (third_party_bin,
+                                            third_party_env['ENV']['PATH'])
+Export('third_party_env')
+prev = [cc_target, cxx_target]
+
+if not third_party_env['native_cc']:
+  if third_party_env['is_hardy']:
+    cpp_lib_root = third_party_env.Dir(
+        '%s/%s/lib64' % (env['cross_cc_base'], env['cross_cc_target'])).abspath
+    gcc_s_dir = cpp_lib_root
+  else:
+    cpp_lib_root = '/opt/google/lib64'
+    gcc_s_dir = cpp_lib_root
+
+  for file_name in (glob.glob('%s/libstdc++.so*' % cpp_lib_root) +
+                    glob.glob('%s/libgcc_s.so*' % gcc_s_dir)):
+    prev += third_party_env.Command(
+        '%s/lib/%s' % (third_party_env.exportdirs['root'], os.path.basename(file_name)),
+        file_name, [third_party_env.rsync_cmd % (file_name, '$TARGET')])
+
+if 'install' in COMMAND_LINE_TARGETS:
+  if not third_party_env['native_cc']:
+    third_party_env.InstallFileOrDir(
+        '%s/libstdc++.so* %s/libgcc_s.so*' % (cpp_lib_root, gcc_s_dir),
+        '%s/opt/google/lib64/' % third_party_env.installdirs['common_root'],
+        cxx_target, 'install')
+
+for target in third_party_libs:
+  first_and_last = SConscript('%s/SConscript' % target)
+  if first_and_last:
+    Depends(first_and_last[0], prev)
+    prev = first_and_last[1]
+    env.Alias('third_party', prev)

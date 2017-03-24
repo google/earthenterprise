@@ -1,0 +1,153 @@
+diff -uNr ogdi-3.1.2.orig/contrib/gdal/gdal_serv.c ogdi-3.1.2/contrib/gdal/gdal_serv.c
+--- ogdi-3.1.2.orig/contrib/gdal/gdal_serv.c	2001-05-03 20:13:35.000000000 -0700
++++ ogdi-3.1.2/contrib/gdal/gdal_serv.c	2004-03-23 17:25:28.000000000 -0800
+@@ -409,7 +409,7 @@
+ 
+     if( (dfULY+dfLRY)*0.5 < s->currentRegion.south )
+     {
+-        ecs_SetError( &(s->result), 2, "End of selection" );
++        ecs_SetError( &(s->result), 2, "End of selection (gdal_serv)" );
+         return &(s->result);
+     }
+ 
+diff -uNr ogdi-3.1.2.orig/ogdi/driver/adrg/object.c ogdi-3.1.2/ogdi/driver/adrg/object.c
+--- ogdi-3.1.2.orig/ogdi/driver/adrg/object.c	2001-06-22 09:37:50.000000000 -0700
++++ ogdi-3.1.2/ogdi/driver/adrg/object.c	2004-03-23 17:26:05.000000000 -0800
+@@ -187,7 +187,7 @@
+   double pos;
+ 
+   if (l->index >= l->nbfeature) {
+-    ecs_SetError(&(s->result),2,"End of selection");
++    ecs_SetError(&(s->result),2,"End of selection (adrg #1)");
+     return;
+   }
+ 
+@@ -473,7 +473,7 @@
+   double pos;
+ 
+   if (l->index >= l->nbfeature) {
+-    ecs_SetError(&(s->result),2,"End of selection");
++    ecs_SetError(&(s->result),2,"End of selection (adrg #2)");
+     return;
+   }
+ 
+diff -uNr ogdi-3.1.2.orig/ogdi/driver/dted/object.c ogdi-3.1.2/ogdi/driver/dted/object.c
+--- ogdi-3.1.2.orig/ogdi/driver/dted/object.c	2001-04-18 22:04:59.000000000 -0700
++++ ogdi-3.1.2/ogdi/driver/dted/object.c	2004-03-23 17:26:22.000000000 -0800
+@@ -52,7 +52,7 @@
+   double record_y;
+ 
+   if (l->index >= l->nbfeature) {
+-    ecs_SetError(&(s->result),2,"End of selection");
++    ecs_SetError(&(s->result),2,"End of selection (dted)");
+     return;
+   }
+ 
+diff -uNr ogdi-3.1.2.orig/ogdi/driver/rpf/object.c ogdi-3.1.2/ogdi/driver/rpf/object.c
+--- ogdi-3.1.2.orig/ogdi/driver/rpf/object.c	2001-04-12 12:22:46.000000000 -0700
++++ ogdi-3.1.2/ogdi/driver/rpf/object.c	2004-03-23 17:26:42.000000000 -0800
+@@ -105,7 +105,7 @@
+   double pos_y;
+ 
+   if (l->index >= l->nbfeature) {
+-    ecs_SetError(&(s->result),2,"End of selection");
++    ecs_SetError(&(s->result),2,"End of selection (rpf #1)");
+     return;
+   }
+ 
+@@ -522,7 +522,7 @@
+   double pos_y;
+ 
+   if (l->index >= l->nbfeature) {
+-    ecs_SetError(&(s->result),2,"End of selection");
++    ecs_SetError(&(s->result),2,"End of selection (rpf #2)");
+     return;
+   }
+ 
+diff -uNr ogdi-3.1.2.orig/ogdi/driver/skeleton/object.c ogdi-3.1.2/ogdi/driver/skeleton/object.c
+--- ogdi-3.1.2.orig/ogdi/driver/skeleton/object.c	2001-02-18 21:26:32.000000000 -0800
++++ ogdi-3.1.2/ogdi/driver/skeleton/object.c	2004-03-23 17:27:06.000000000 -0800
+@@ -117,7 +117,7 @@
+     */
+ 
+   if (l->index >= l->nbfeature) {
+-    ecs_SetError(&(s->result),2,"End of selection");
++    ecs_SetError(&(s->result),2,"End of selection (skeleton #1)");
+     return;
+   }
+ 
+@@ -501,7 +501,7 @@
+     */
+ 
+   if (l->index >= l->nbfeature) {
+-    ecs_SetError(&(s->result),2,"End of selection");
++    ecs_SetError(&(s->result),2,"End of selection (skeleton #2)");
+     return;
+   }
+ 
+@@ -795,7 +795,7 @@
+     */
+ 
+   if (l->index >= l->nbfeature) {
+-    ecs_SetError(&(s->result),2,"End of selection");
++    ecs_SetError(&(s->result),2,"End of selection (skeleton #3)");
+     return;
+   }
+ 
+@@ -1044,7 +1044,7 @@
+     */
+ 
+   if (l->index >= l->nbfeature) {
+-    ecs_SetError(&(s->result),2,"End of selection");
++    ecs_SetError(&(s->result),2,"End of selection (skeleton #4)");
+     return;
+   }
+ 
+@@ -1305,7 +1305,7 @@
+   lpriv->offsety = (int) ((lpriv->matrixregion.north - s->currentRegion.north)/lpriv->matrixregion.ns_res);
+ 
+   if (l->index >= totalrow) {
+-    ecs_SetError(&(s->result),2,"End of selection");
++    ecs_SetError(&(s->result),2,"End of selection (skeleton #1)");
+     return;
+   }
+ 
+diff -uNr ogdi-3.1.2.orig/ogdi/driver/vrf/object.c ogdi-3.1.2/ogdi/driver/vrf/object.c
+--- ogdi-3.1.2.orig/ogdi/driver/vrf/object.c	2001-08-16 13:40:34.000000000 -0700
++++ ogdi-3.1.2/ogdi/driver/vrf/object.c	2004-03-23 17:29:18.000000000 -0800
+@@ -446,7 +446,7 @@
+       return;
+     l->index++;
+   } else {
+-    ecs_SetError(&(s->result),2,"End of selection");
++    ecs_SetError(&(s->result),2,"End of selection (vrf #1)");
+     return;
+   }
+ 
+@@ -797,7 +797,7 @@
+ 
+   } else {
+     free( primList );
+-    ecs_SetError(&(s->result),2,"End of selection");
++    ecs_SetError(&(s->result),2,"End of selection (vrf #2)");
+     return;
+   }
+ 
+@@ -1103,7 +1103,7 @@
+   if (found) {
+     l->index++;
+   } else {
+-    ecs_SetError(&(s->result),2,"End of selection");
++    ecs_SetError(&(s->result),2,"End of selection (vrf #3)");
+     return;
+   }
+ 
+@@ -1361,7 +1361,7 @@
+   if (found) {
+     l->index++;
+   } else {
+-    ecs_SetError(&(s->result),2,"End of selection");
++    ecs_SetError(&(s->result),2,"End of selection (vrf #4)");
+     return;
+   }
+ 

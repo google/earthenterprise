@@ -1,0 +1,11 @@
+URL: http://www.OpenLDAP.org/
+Version: 2.4.40
+License: OpenLDAP Foundation
+License File: LICENSE
+
+Description:
+OpenLDAP Software is an open source implementation of the
+Lightweight Directory Access Protocol.
+
+Local Modifications:
+None

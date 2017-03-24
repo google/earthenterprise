@@ -1,0 +1,8 @@
+#-*- Python -*-
+# Copyright 2008 Google Inc. All Rights Reserved.
+# Author markwheeler 2008-09-15
+
+import os
+Import('env')
+
+env.install('geplaces', ['geplaces', 'geplaces_db.gz'])

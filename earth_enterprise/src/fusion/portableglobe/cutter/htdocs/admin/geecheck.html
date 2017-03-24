@@ -1,0 +1,74 @@
+<!--
+  Copyright 2017 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE html><html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta http-equiv="cache-control" content="max-age=0" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="expires" content="0" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta name="google" content="notranslate">
+<meta http-equiv="Content-Language" content="en" />
+<title>Google Earth Enterprise Server</title>
+
+<LINK href="css/header.css" rel="stylesheet" type="text/css">
+<LINK href="css/fonts.css" rel="stylesheet" type="text/css">
+<LINK href="css/geecheck.css" rel="stylesheet" type="text/css">
+<LINK rel="icon" type="image/png" href="/shared_assets/images/google_favicon.ico">
+
+</head>
+
+<body id="body">
+
+<div id="Header">
+  <div id="GoogImg">
+   <img src="/shared_assets/images/GEE_Server_Header.png" width="103px" height="36px" border="0">
+   <label>Earth Enterprise Server</label>
+  </div>
+</div>
+
+<h1>Geecheck</h1>
+<h3>Google Earth Enterprise Diagnostics</h3>
+
+<div id="geecheck-loader" class="geecheck-loader">
+  <span>
+    Running tests
+    <em id="progress-indicator"></em>
+  </span>
+</div>
+
+<div class="geecheck-wrapper">
+
+  <div class="error-summary" id="error-summary"></div>
+
+  <div id="test-summary" class="test-summary">
+    <span class="test-summary-header">Test summary</span>
+    <span class="test-summary-content" id="test-summary-content"></span>
+  </div>
+
+  <div id="test-results" class="test-results">
+    <span class="test-results-header">Test detail</span>
+    <span class="test-results-content" id="test-results-content"></span>
+  </div>
+
+  <script type="text/javascript" src="/js/jquery.js"></script>
+  <script type="text/javascript" src="/js/gees_utilities.js"></script>
+  <script type="text/javascript" src="js/geecheck.js"></script>
+
+</div>
+
+</body>
+</html>

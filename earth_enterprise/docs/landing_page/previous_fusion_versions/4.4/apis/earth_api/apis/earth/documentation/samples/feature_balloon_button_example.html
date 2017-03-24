@@ -1,0 +1,74 @@
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/samples/feature_balloon_button_example.html";
+    </script>
+    
+   <title>feature_balloon_button_example.html</title>
+   <script src="http://code.google.com/www.google.com/jsapi?key=ABQIAAAA5El50zA4PeDTEMlv-sXFfRSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xTdBhxbkZWuzyYTVeclkwYHpb17ZQ"></script>
+   <script type="text/javascript">
+      var ge;
+      var placemark;
+
+      google.load("earth", "1");
+
+      function init() {
+         google.earth.createInstance('map3d', initCB, failureCB);
+      }
+
+      function initCB(instance) {
+
+         ge = instance;
+         ge.getWindow().setVisibility(true);
+         ge.getNavigationControl().setVisibility(ge.VISIBILITY_SHOW);
+
+         // Create the placemark and add it to Earth.
+         placemark = ge.createPlacemark('');
+         placemark.setDescription(
+            '<img src="http://code.google.com/www.google.com/intl/en_ALL/images/logo.gif" height="25px" width="75px">' +
+            '<p><em>Feature balloons</em> accept most HTML.</p>' +
+            '<table border="1px"><tr><th>Allowed</th><th>Not allowed</th></tr>' +
+            '<tr><td>Tables</td><td>IFRAMEs</td></tr>' +
+				// Using &#60; and &#62; instead of &lt; and &gt;
+				// A Google Earth Plugin bug prevents rendering of the latter character entities
+            '<tr><td>Font styles</td><td>&#60;embed&#62; and &#60;object&#62; tags</td></tr>' +
+            '<tr><td>etc...</td><td>&nbsp;</td></tr></table>' +
+            '<p>CSS and JavaScript are not supported.</p>');
+
+         // Set the placemark's location.
+         var point = ge.createPoint('');
+         point.setLatitude(12.345);
+         point.setLongitude(54.321);
+         point.setAltitudeMode(ge.ALTITUDE_CLAMP_TO_GROUND);
+         placemark.setGeometry(point);
+
+         // Add the placemark to Earth.
+         ge.getFeatures().appendChild(placemark);
+
+         // Move the camera.
+         var la = ge.createLookAt('');
+         la.set(12.345, 54.321, 0, ge.ALTITUDE_RELATIVE_TO_GROUND, -8.541, 66.213, 1000);
+         ge.getView().setAbstractView(la);
+      }
+
+      function failureCB(errorCode) {
+      }
+
+      function showBalloon() {
+         var balloon = ge.createFeatureBalloon('');
+         balloon.setFeature(placemark);
+         balloon.setMaxWidth(400);
+         ge.setBalloon(balloon); 
+      }
+
+      google.setOnLoadCallback(init);
+   </script>
+
+</head>
+<body>
+
+   <div id="map3d" style="border: 1px solid silver; height: 400px; width: 600px;"></div>
+   <p><input type="button" value="Show balloon" onClick="showBalloon()" /></p>
+
+</body>
+</html>

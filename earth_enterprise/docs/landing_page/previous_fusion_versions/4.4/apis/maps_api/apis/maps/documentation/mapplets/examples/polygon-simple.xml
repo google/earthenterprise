@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="Adding a Polygon to the Map" height="300">
+  <Require feature="sharedmap"/>
+</ModulePrefs>
+<Content type="html"><![CDATA[
+
+<small>
+This example displays a polygon with 3 random vertices. The outline 
+is is red, 5 pixels thick, and has 70% opacity. The polygon 
+is filled with blue with 40% opacity.
+</small>
+
+<script>
+var map = new GMap2();
+
+map.getBoundsAsync(function(bounds) {
+  var southWest = bounds.getSouthWest();
+  var northEast = bounds.getNorthEast();
+  var lngSpan = northEast.lng() - southWest.lng();
+  var latSpan = northEast.lat() - southWest.lat();
+
+  var points = [];
+  for (var i = 0; i < 3; i++) {
+    points.push(new GLatLng(southWest.lat() + latSpan * Math.random(),
+                            southWest.lng() + lngSpan * Math.random()));
+  }
+  points.push(points[0]);   // Close the polygon
+
+  map.addOverlay(new GPolygon(points, "#ff0000", 5, 0.7, "#0000ff", 0.4));
+});
+</script>
+
+]]></Content>
+</Module>

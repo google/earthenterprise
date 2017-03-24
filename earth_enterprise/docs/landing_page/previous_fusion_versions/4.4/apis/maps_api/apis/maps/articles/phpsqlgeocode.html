@@ -1,0 +1,703 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+ 
+ 
+
+
+ 
+
+  
+  
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/articles/phpsqlgeocode.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Geocoding Addresses with PHP/MySQL - Google Maps API Family - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/maps/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../css/iehacks.css"><![endif]-->
+
+    <link href="../../../css/semantic_headers.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    
+    
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  <a href="#gc-pagecontent">Skip to page content</a>
+  <a href="#gc-toc">Skip to main navigation</a>
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps API Family</h1>
+  <ul id="articles" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="../index.html" title="Google Maps API Family home page">Home</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../faq.html" title="Answers to frequently asked questions about Google Maps API Family">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="index.html" class="selected" title="Focused articles and tutorials for Google Maps API Family developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps API Family blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="../forum/index.html" title="Google Maps API Family developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../terms.html" title="Google Maps API Family terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../index.html">Maps API Family</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps Javascript API V3</h2>
+         <ul>
+           <li><a href="../documentation/javascript/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+      <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../documentation/javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../documentation/javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+  <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a href="../documentation/flash/index.html">Home Page</a></li>
+          <li><a href="../documentation/flash/intro.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../documentation/mapsdata/index.html">Home Page</a></li>
+          <li><a href="../documentation/mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+     <div class="line"></div>
+      <ul>
+        <li><h2><a href="../documentation/webservices/index.html">Maps Web Services</a></h2>
+         <ul>
+           <li><a href="../documentation/geocoding/index.html">Geocoding Guide</a></li>
+           <li><a href="../documentation/directions/index.html">Directions Guide</a></li>
+           <li><a href="../documentation/elevation/index.html">Elevation Guide</a></li>
+           <li><a href="../documentation/places/index.html">Places Guide</a></li>
+         </ul>
+       </li>
+      </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../documentation/staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+        <ul>
+          <li>
+            <h2>Local Search API</h2>
+            <p><span style="color:grey">(Deprecated API)</span></p>
+            <ul>
+              <li>
+                <a href="../documentation/localsearch/index.html">Home Page</a>
+              </li>
+              <li>
+                <a href="../documentation/localsearch/start.html">Documentation</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      <div class="line"></div>
+      <div class="promo">
+     <p><a href="../documentation/premier/index.html">Google Maps API Premier</a></p><p>Includes enterprise licensing and support</p></div>
+
+        <a class="hidden" href="#gc-topnav-anchor">More Google Maps API Family resource links</a>
+      </div>
+      
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Geocoding Addresses with PHP/MySQL</h1>
+
+
+<!-- ########## PAGE CONTENT ########## -->
+  
+<i>Pamela Fox & Tom Manshreck, Google Geo Team</i>
+<br/>
+<i>November 2007</i>
+
+<br/><br/>
+<p class="para" style="background-color:#eeeeee; padding:5px">This is the 
+fourth article in our series on using PHP/MySQL with Google Geo APIs. If 
+you're a PHP/MySQL developer, you may also be interested in our articles on 
+<a href="phpsqlajax.html">
+loading markers from a database</a> and 
+<a href="http://code.google.com/apis/kml/articles/phpmysqlkml.html">creating KML from a database</a>.
+</p>
+<h3>Objective</h3>
+<p class="para"> This tutorial is intended for developers who are familiar with
+PHP/MySQL, and want to learn how to use the Google Maps API Geocoder to geocode a database of addresses. 'Geocoding' is the process of converting an address into a set of latitude/longitude coordinates, making it possible to indicate addresses on a map. Though it is possible to geocode addresses on the fly using the Maps API
+<code>GClientGeocoder</code> JavaScript class, it is often preferable to
+pre-geocode addresses if possible to avoid repeated lookups for known
+addresses. This is common, for example, when creating a "store
+finder" to locate a company's businesses geographically on a map.
+Note that this technique should not be used for geocoding databases with thousands of addresses, as this goes against the intended use of this service.
+</p>
+<p class="para">
+
+The tutorial discusses how to set up known addresses within a MySQL database and
+then process those addresses into geographic coordinates, updating the database
+with the results. This tutorial is broken up into the following steps:
+</p>
+<ul>
+<li><a href="#createtable">Creating an Address Table</a></li>
+<li><a href="#populatetable">Populating the Address Table</a></li>
+<li><a href="#geocodephp">Processing the Addresses with PHP</a></li>
+<li><a href="#samplecode">Sample PHP Code</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+<br/>
+<a name="createtable"></a><h3>Creating an Address Table</h3>
+
+<p class="para"> <strong>Note:</strong> this tutorial walks you through creating
+and populating a table of addresses from scratch. If you already have a table of
+addresses available, simply ensure you add <code>'lat'</code> and <code>'lng'</code> fields as described below,
+and skip to the section on <a href="#geocodephp">Processing Addresses with PHP</a>.
+</p>
+<p>In order to store the geocoding information associated with
+addresses, we need to design a proper schema for our data. In our
+example, we wish to show restaurants or bars on a map mashup. A typical
+database table for such establishments should contain fields that
+specify the following required fields:</p>
+<ul>
+<li>The unique <code>id</code> of the address</li>
+
+<li>The address of the establishment as a text string</li>
+<li>The <code>lat</code> and <code>lng</code> values of the geocoded location</li>
+</ul>
+<p>Additionally, we will want our address database to be usable to actual humans, so we
+should probably add a human-readable name for the establishment to uniquely identify
+it and just for fun, a <code>type</code> attribute to distinguish
+between restaurants and bars.</p>
+<ul>
+
+<li>The name of the establishment as a text string</li>
+<li>The <code>type</code> of the establishment (in this case a bar or a restaurant)</li>
+</ul>
+<p class="para">
+When you create your address table, note that
+<code>lat</code> and <code>lng</code> values in the Maps API need only 6 digits of
+precision to identify an establishment uniquely. To keep storage
+space requirements low, we specify <code>lat</code> and
+
+<code>lng</code> fields as numbers of size <code>FLOAT(10,6)</code>.
+Floats of this size will store 6 digits of precision following the
+decimal, plus up to 4 digits before the decimal, e.g. -123.456789 degrees.</p>
+<p class="para">
+A sample definition of our address table using the
+phpMyAdmin interface appears below:
+</p>
+<p class="para">
+<img src="http://www.google.com/help/hc/images/phpsqlgeocode_createtable.jpg" style="border: 1px solid grey; margin-left: 2em;" width="600"/>
+</p>
+<p class="para">
+If you don't have access to phpMyAdmin or prefer using SQL commands instead, the SQL statement to create the address table is shown below (<a href="http://gmaps-samples.googlecode.com/svn/trunk/articles-phpsqlgeocode/phpsqlgeocode_createtable.sql" target="_blank">phpsqlgeocode_createtable.sql</a>):
+</p>
+
+<pre class="code">
+CREATE TABLE `markers` (
+  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+  `name` VARCHAR( 60 ) NOT NULL ,
+  `address` VARCHAR( 80 ) NOT NULL ,
+  `lat` FLOAT( 10, 6 ) NOT NULL ,
+  `lng` FLOAT( 10, 6 ) NOT NULL ,
+  `type` VARCHAR( 30 ) NOT NULL
+) ENGINE = MYISAM ;
+</pre>
+<br/>
+<a name="populatetable"></a><h3>Populating the Address Table</h3>
+<p class="para"> After creating our table of addresses, it's time to populate it with
+(ungeocoded) data.
+Sample data for 10 Seattle establishments is shown below in CSV format (<a href="http://gmaps-samples.googlecode.com/svn/trunk/articles-phpsqlgeocode/phpsqlgeocode_data.csv" target="_blank">phpsqlgeocode_data.csv</a>):</p>
+<pre class="code">
+Pan Africa Market,"1521 1st Ave, Seattle, WA",0.0,0.0,restaurant
+Buddha Thai &amp; Bar,"2222 2nd Ave, Seattle, WA",0.0,0.0,bar
+The Melting Pot,"14 Mercer St, Seattle, WA",0.0,0.0,restaurant
+Ipanema Grill,"1225 1st Ave, Seattle, WA",0.0,0.0,restaurant
+Sake House,"2230 1st Ave, Seattle, WA",0.0,0.0,bar
+Crab Pot,"1301 Alaskan Way, Seattle, WA"0.0,0.0,restaurant
+Mama's Mexican Kitchen,"2234 2nd Ave, Seattle, WA",0.0,0.0,bar
+Wingdome,"1416 E Olive Way, Seattle, WA",0.0,0.0,bar
+Piroshky Piroshky,"1908 Pike pl, Seattle, WA",0.0,0.0,restaurant
+</pre>
+<p class="para">
+
+Microsoft Excel and Google Spreadsheets both export to CSV
+(comma-separated values) format, and phpMyAdmin provides an
+IMPORT tab to import various file formats. A screenshot of phpMyAdmin
+used to transform this CSV into table data is shown below:</p>
+<p class="para"> <img src="http://www.google.com/help/hc/images/phpsqlgeocode_importdata.jpg" style="border: 1px solid grey; margin-left: 2em;" width="600"/>
+</p>
+<p class="para">
+If you'd rather not use the phpMyAdmin interface, the SQL statements that accomplish the same results are show below (<a href="http://gmaps-samples.googlecode.com/svn/trunk/articles-phpsqlgeocode/phpsqlgeocode_data.sql" target="_blank">phpsqlgeocode_data.sql</a>):
+</p>
+<pre class="code">
+INSERT INTO `markers` (`name`, `address`, `lat`, `lng`, `type`) VALUES ('Pan Africa Market', '1521 1st Ave, Seattle, WA', '0.0', '0.0', 'restaurant');
+INSERT INTO `markers` (`name`, `address`, `lat`, `lng`, `type`) VALUES ('Buddha Thai &amp; Bar', '2222 2nd Ave, Seattle, WA', '0.0', '0.0', 'bar');
+INSERT INTO `markers` (`name`, `address`, `lat`, `lng`, `type`) VALUES ('The Melting Pot', '14 Mercer St, Seattle, WA', '0.0', '0.0', 'restaurant');
+INSERT INTO `markers` (`name`, `address`, `lat`, `lng`, `type`) VALUES ('Ipanema Grill', '1225 1st Ave, Seattle, WA', '0.0', '0.0', 'restaurant');
+INSERT INTO `markers` (`name`, `address`, `lat`, `lng`, `type`) VALUES ('Sake House', '2230 1st Ave, Seattle, WA', '0.0', '0.0', 'bar');
+INSERT INTO `markers` (`name`, `address`, `lat`, `lng`, `type`) VALUES ('Crab Pot', '1301 Alaskan Way, Seattle, WA', '0.0', '0.0', 'restaurant');
+INSERT INTO `markers` (`name`, `address`, `lat`, `lng`, `type`) VALUES ('Mama\'s Mexican Kitchen', '2234 2nd Ave, Seattle, WA', '0.0', '0.0', 'bar');
+INSERT INTO `markers` (`name`, `address`, `lat`, `lng`, `type`) VALUES ('Wingdome', '1416 E Olive Way, Seattle, WA', '0.0', '0.0', 'bar');
+INSERT INTO `markers` (`name`, `address`, `lat`, `lng`, `type`) VALUES ('Piroshky Piroshky', '1908 Pike pl, Seattle, WA', '0.0', '0.0', 'restaurant');
+
+</pre>
+<br/>
+<a name="geocodephp"></a><h3>Processing the Addresses with PHP</h3>
+
+<p class="para"> At this point, you should have a table named <code>markers</code>
+filled with sample data. You now need to write some PHP to
+iterate through the table, send a request to the geocoder, handle the response, and
+update the table appropriately.
+</p>
+<p class="para">
+Before you begin, note that you should generally put your database connection information
+in a separate file. This is a good idea whenever you're using PHP
+to access a database, as it keeps confidential information in a
+file that you won't be tempted to share. In the Maps API forum, we've
+occasionally had people accidentally publish their database connection
+information when they were just trying to debug their XML-outputting
+code. The access file should look like this, but with your own database information (<a href="http://gmaps-samples.googlecode.com/svn/trunk/articles-phpsqlgeocode/phpsqlgeocode_dbinfo.php" target="_blank">phpsqlgeocode_dbinfo.php</a>):</p>
+<pre class="code">
+&lt;?
+$username="username";
+$password="password";
+$database="username-databaseName";
+?&gt;
+</pre>
+<p class="para">
+Now, we need to create another PHP file to iterate through these addresses,
+geocode the set of addresses, return the geocoded information, and update the
+fields with geocoded <code>lat</code> and <code>lon</code> values.</p>
+
+<h4>Retrieving the Addresses</h4>
+<p class="para">
+To retrieve our addresses, we need to connect to our MySQL server, select the database in question, and
+run a query on the database to return those rows of interest. To do so, we use
+<a href="http://www.php.net/manual/en/function.mysql-connect.php" target="_blank"><code>mysql_connect</code></a> to establish
+a connection, <a href="http://www.php.net/manual/en/function.mysql-select-db.php" target="_blank"><code>mysql_select_db</code></a>
+to select our particular database, and
+<a href="http://www.php.net/manual/en/function.mysql-query.php" target="_blank"><code>mysql_query</code></a>
+to perform the address lookup on the database. We then use
+<a href="http://www.php.net/manual/en/function.mysql-fetch-assoc.php" target="_blank"><code>mysql_fetch_assoc</code></a>
+to retrieve an associative array representing a row of the query results.
+Your server's PHP must be compiled with mysql functions enabled &mdash; if you get an error about them being undefined,
+read <a href="http://www.php.net/manual/en/ref.mysql.php">this page</a> to learn how to recompile your PHP with mysql enabled.
+
+</p>
+<h4>Choosing Geocoder Output</h4>
+<p class="para">
+The HTTP geocoder can respond with either XML or CSV output through changing the "output" query parameter.
+Examples of both responses are shown in the
+<a href="http://www.google.com/apis/maps/documentation/services.html#Geocoding_Direct">Maps API documentation</a>.
+If your server is enabled with PHP 5 and the <a href="http://www.php.net/manual/en/ref.simplexml.php" target="_blank">SimpleXML extension</a>,
+it is preferable to retrieve XML output. Use the PHP
+<a href="http://www.php.net/manual/en/function.simplexml-load-file.php" target="_blank"><code>simplexml_load_file</code></a>
+function to create an XML object from the geocoder response, and
+use <a href="http://www.w3schools.com/xpath/default.asp" target="_blank">XPath expressions</a>
+to extract the coordinates and status code. </p>
+<p>If you are using PHP4 instead, you can still retrieve CSV output and process those results. Use the PHP function
+ <a href="http://www.php.net/manual/en/function.file-get-contents.php" target="_blank"><code>file_get_contents</code></a>
+
+ to retrieve the CSV response, and then <a href="http://www.php.net/manual/en/function.split.php" target="_blank"><code>split</code></a>
+ to separate out the coordinate values and status code of the returned CSV.</p>
+<h4>Timing the Geocode Requests</h4>
+<p class="para">
+Regardless of what geocoder output you specify, your requests will be subject to the geocoder's maximum
+query rate and 15,000 queries per day based on your IP. Additionally, a status code of <code>620</code>
+will be returned by the geocoder if you query it faster than it can handle. (A full list of status codes is
+<a href="http://www.google.com/apis/maps/documentation/reference.html#GGeoStatusCode">available here</a>).
+To ensure you don't send queries too rapidly to the geocoder, you can specify a delay between each geocode request.
+We can increase this delay each time we receive a <code>620</code> status, and use a <code>while</code> loop to ensure we've successfully geocoded an address before iterating to the next one.
+
+</p>
+<h4>Changing the Base Country</h4>
+<p class="para">
+The Maps geocoder is programmed to bias its results depending on from which domain it receives requests.
+For example, entering "syracuse" in the search box on maps.google.com will geocode the city of "Syracuse, NY",
+while entering the same query on maps.google.it (Italy's domain) will find the city of "Siracusa" in Sicily.
+You would get the same results by sending that query through HTTP geocoding to maps.google.it instead of maps.google.com,
+which you can do by modifying the <code>MAPS_HOST</code> constant in the sample code below.
+<b>Note:</b> You cannot send a request to a non-existent maps.google.* server, so ensure that a country domain
+exists before redirecting your geocoding queries to it.
+</p>
+<h4>Updating the Database</h4>
+<p class="para">
+Now that we've sent off requests to the geocoder and received responses back, we need a way to place that new information
+in the MySQL database. We do so using the MySQL <code>UPDATE</code> command. A sample update command appears below:
+
+</p>
+<pre>
+UPDATE markers SET lat = 45.5644, lng = 56.89 WHERE id = 1 LIMIT 1;",
+
+</pre>
+<p>This command instructs MySQL to update the marker table, setting the <code>lat</code> and <code>lon</code> fields to
+the given values where the <code>id</code> of the row matches the passed id. We also instruct MySQL to update at most
+one row. Once, we've updated the MySQL database for each address, our work here is done.</p>
+<br/><br/>
+<a name="samplecode"></a><h3>Sample PHP Code</h3>
+
+<p>
+Note that the sample code below uses a dummy <code>KEY</code> constant &mdash; you'll need to replace this key with your
+<a href="http://www.google.com/apis/maps/signup.html">own key</a> or all of your requests will return a <code>610</code>
+<a href="http://www.google.com/apis/maps/documentation/reference.html#GGeoStatusCode">status code</a>.</p>
+<p>Sample code for geocoding with PHP 5 and XML output is shown below (<a href="http://gmaps-samples.googlecode.com/svn/trunk/articles-phpsqlgeocode/phpsqlgeocode_xml.php" target="_blank">phpsqlgeocode_xml.php</a>):</p>
+
+<pre>
+&lt;?php
+require("phpsqlgeocode_dbinfo.php");
+
+define("MAPS_HOST", "maps.google.com");
+define("KEY", "abcdefg");
+
+// Opens a connection to a MySQL server
+$connection = mysql_connect("localhost", $username, $password);
+if (!$connection) {
+  die("Not connected : " . mysql_error());
+}
+
+// Set the active MySQL database
+$db_selected = mysql_select_db($database, $connection);
+if (!$db_selected) {
+  die("Can\'t use db : " . mysql_error());
+}
+
+// Select all the rows in the markers table
+$query = "SELECT * FROM markers WHERE 1";
+$result = mysql_query($query);
+if (!$result) {
+  die("Invalid query: " . mysql_error());
+}
+
+// Initialize delay in geocode speed
+$delay = 0;
+$base_url = "http://" . MAPS_HOST . "/maps/geo?output=xml" . "&amp;key=" . KEY;
+
+// Iterate through the rows, geocoding each address
+while ($row = @mysql_fetch_assoc($result)) {
+  $geocode_pending = true;
+
+  while ($geocode_pending) {
+    $address = $row["address"];
+    $id = $row["id"];
+    $request_url = $base_url . "&amp;q=" . urlencode($address);
+    $xml = simplexml_load_file($request_url) or die("url not loading");
+
+    $status = $xml->Response->Status->code;
+    if (strcmp($status, "200") == 0) {
+      // Successful geocode
+      $geocode_pending = false;
+      $coordinates = $xml->Response->Placemark->Point->coordinates;
+      $coordinatesSplit = split(",", $coordinates);
+      // Format: Longitude, Latitude, Altitude
+      $lat = $coordinatesSplit[1];
+      $lng = $coordinatesSplit[0];
+
+      $query = sprintf("UPDATE markers " .
+             " SET lat = '%s', lng = '%s' " .
+             " WHERE id = '%s' LIMIT 1;",
+             mysql_real_escape_string($lat),
+             mysql_real_escape_string($lng),
+             mysql_real_escape_string($id));
+      $update_result = mysql_query($query);
+      if (!$update_result) {
+        die("Invalid query: " . mysql_error());
+      }
+    } else if (strcmp($status, "620") == 0) {
+      // sent geocodes too fast
+      $delay += 100000;
+    } else {
+      // failure to geocode
+      $geocode_pending = false;
+      echo "Address " . $address . " failed to geocoded. ";
+      echo "Received status " . $status . "<br/>\n";
+    }
+    usleep($delay);
+  }
+}
+?&gt;
+
+</pre>
+<p>Sample code for geocoding with PHP 4+ and CSV output is shown below (<a href="http://gmaps-samples.googlecode.com/svn/trunk/articles-phpsqlgeocode/phpsqlgeocode_csv.php" target="_blank">phpsqlgeocode_csv.php</a>):</p>
+<pre>
+&lt;?php
+require("phpsqlgeocode_dbinfo.php");
+
+define("MAPS_HOST", "maps.google.com");
+define("KEY", "abcdefg");
+
+// Opens a connection to a MySQL server
+$connection = mysql_connect("localhost", $username, $password);
+if (!$connection) {
+  die("Not connected : " . mysql_error());
+}
+
+// Set the active MySQL database
+$db_selected = mysql_select_db($database, $connection);
+if (!$db_selected) {
+  die("Can\'t use db : " . mysql_error());
+}
+
+// Select all the rows in the markers table
+$query = "SELECT * FROM markers2 WHERE 1";
+$result = mysql_query($query);
+if (!$result) {
+  die("Invalid query: " . mysql_error());
+}
+
+// Initialize delay in geocode speed
+$delay = 0;
+$base_url = "http://" . MAPS_HOST . "/maps/geo?output=csv&amp;key=" . KEY;
+
+// Iterate through the rows, geocoding each address
+while ($row = @mysql_fetch_assoc($result)) {
+  $geocode_pending = true;
+
+  while ($geocode_pending) {
+    $address = $row["address"];
+    $id = $row["id"];
+    $request_url = $base_url . "&amp;q=" . urlencode($address);
+    $csv = file_get_contents($request_url) or die("url not loading");
+
+    $csvSplit = split(",", $csv);
+    $status = $csvSplit[0];
+    $lat = $csvSplit[2];
+    $lng = $csvSplit[3];
+    if (strcmp($status, "200") == 0) {
+      // successful geocode
+      $geocode_pending = false;
+      $lat = $csvSplit[2];
+      $lng = $csvSplit[3];
+
+      $query = sprintf("UPDATE markers2 " .
+             " SET lat = '%s', lng = '%s' " .
+             " WHERE id = %s LIMIT 1;",
+             mysql_real_escape_string($lat),
+             mysql_real_escape_string($lng),
+             mysql_real_escape_string($id));
+      $update_result = mysql_query($query);
+      if (!$update_result) {
+        die("Invalid query: " . mysql_error());
+      }
+    } else if (strcmp($status, "620") == 0) {
+      // sent geocodes too fast
+      $delay += 100000;
+    } else {
+      // failure to geocode
+      $geocode_pending = false;
+      echo "Address " . $address . " failed to geocoded. ";
+      echo "Received status " . $status . "<br/>\n";
+    }
+    usleep($delay);
+  }
+}
+?&gt;
+
+</pre>
+<a name="conclusion"></a><h3>Conclusion</h3>
+<p class="para">
+If you've followed along, you now know how to geocode sample data, process it using PHP, and store it a MySQL database.
+If you find that you need to geocode more than 15K addresses per day, or that the Google geocoder doesn't cover the
+regions you're interested in, then consider using additional geocoding web services. A list of geocoding resources
+is <a href="http://groups.google.com/group/Google-Maps-API/web/resources-non-google-geocoders" target="_blank">
+available here</a>.
+</p>
+<p class="para">
+Now that you've finished geocoding your addresses, check out our articles on 
+<a href="phpsqlajax.html">loading markers from a database
+</a> and <a href="http://code.google.com/apis/kml/articles/phpmysqlkml.html">
+creating KML from a database</a>.
+If you have any problems with or questions about this tutorial, please post in 
+the
+
+<a href="http://groups-beta.google.com/group/Google-Maps-API" target="_blank">Maps API forum.</a>
+</p>
+</div>
+</div>
+
+<!-- ########## END PAGE CONTENT ########## -->
+  
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

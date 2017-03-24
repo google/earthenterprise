@@ -1,0 +1,75 @@
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/samples/polygon_example.html";
+    </script>
+    
+   <title>polygon_example.html</title>
+   <script src="http://code.google.com/www.google.com/jsapi?key=ABQIAAAA5El50zA4PeDTEMlv-sXFfRSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xTdBhxbkZWuzyYTVeclkwYHpb17ZQ"></script>   <script type="text/javascript">
+      var ge;
+      google.load("earth", "1");
+
+      function init() {
+         google.earth.createInstance('map3d', initCB, failureCB);
+      }
+
+      function initCB(instance) {
+         ge = instance;
+         ge.getWindow().setVisibility(true);
+         ge.getNavigationControl().setVisibility(ge.VISIBILITY_SHOW);
+
+         var la = ge.createLookAt('');
+         la.set(48.761, -121.794, 0, ge.ALTITUDE_RELATIVE_TO_GROUND, -8.541, 66.213, 20000);
+         ge.getView().setAbstractView(la);
+
+         // Create the placemark.
+         var polygonPlacemark = ge.createPlacemark('');
+
+         // Create the polygon.
+         var polygon = ge.createPolygon('');
+         polygon.setAltitudeMode(ge.ALTITUDE_RELATIVE_TO_GROUND);
+         polygonPlacemark.setGeometry(polygon);
+
+         // Add points for the outer shape.
+         var outer = ge.createLinearRing('');
+         outer.setAltitudeMode(ge.ALTITUDE_RELATIVE_TO_GROUND);
+         outer.getCoordinates().pushLatLngAlt(48.80, -121.80, 700);
+         outer.getCoordinates().pushLatLngAlt(48.80, -121.90, 700);
+         outer.getCoordinates().pushLatLngAlt(48.70, -121.90, 700);
+         outer.getCoordinates().pushLatLngAlt(48.70, -121.80, 700);
+         polygon.setOuterBoundary(outer);
+
+         // Add inner points.
+         var inner = ge.createLinearRing('');
+         inner.setAltitudeMode(ge.ALTITUDE_RELATIVE_TO_GROUND);
+         inner.getCoordinates().pushLatLngAlt(48.77, -121.83, 700);
+         inner.getCoordinates().pushLatLngAlt(48.77, -121.87, 700);
+         inner.getCoordinates().pushLatLngAlt(48.73, -121.87, 700);
+         inner.getCoordinates().pushLatLngAlt(48.73, -121.83, 700);
+         polygon.getInnerBoundaries().appendChild(inner);
+
+         //Create a style and set width and color of line
+         polygonPlacemark.setStyleSelector(ge.createStyle(''));
+         var lineStyle = polygonPlacemark.getStyleSelector().getLineStyle();
+         lineStyle.setWidth(5);
+         lineStyle.getColor().set('9900ffff');
+
+         // Add the placemark to Earth.
+         ge.getFeatures().appendChild(polygonPlacemark);
+
+      }
+
+      function failureCB(errorCode) {
+      }
+
+      google.setOnLoadCallback(init);
+   </script>
+
+</head>
+
+<body>
+
+   <div id="map3d" style="height:400px; width:600px;"></div>
+
+</body>
+</html>

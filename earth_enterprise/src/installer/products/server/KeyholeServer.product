@@ -1,0 +1,62 @@
+# Copyright 2008 Google Inc. All Rights Reserved.
+#-*-perl-*-
+
+package KeyholeServer;
+
+use strict;
+use Product;
+use RPMHelps;
+
+our( @ISA );
+@ISA = ("Product");
+
+our $PrettyName = "Keyhole Server";
+our $ServerRPM  = "KeyholeServer";
+
+sub new {
+    my ($class) = @_;
+    my $self = $class->SUPER::new();
+    $self->{prettyname} = $PrettyName;
+    return $self;
+}
+
+sub StartStopCommand {
+    return '/etc/init.d/khhttpd';
+}
+
+sub IsDeprecated {
+    return 1;
+}
+
+sub QueryInstalledVersion {
+    my $self = shift;
+    return RPMHelps::InstalledVersion($ServerRPM);
+}
+
+sub IsRunning {
+    return InstallUtils::ActivePidFile('/usr/keyhole/khhttpd/logs/httpd.pid');
+}
+
+sub RPMList {
+    my $self = shift;
+    return ('KeyholeCommon',
+            'apache-keyhole',
+            'auth_ldap-keyhole',
+            'mod_perl-keyhole',
+            'libghttp-keyhole',
+            'libgeotiff-keyhole',
+            'libtiff-keyhole',
+            'proj-keyhole',
+            'expat-keyhole',
+            $ServerRPM,
+            );
+}
+
+sub PostUninstallHandler {
+    warn "XXX - Implement me";
+}
+
+
+push @Product::AllProductList, new KeyholeServer();
+
+1;

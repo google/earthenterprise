@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/v2/examples/static+js-debug.html";
+    </script>
+    
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<title>Google Maps</title>
+</head>
+<body onunload="GUnload()">
+  <div id="blurb" style="width: 320px;">
+	<p>This page loads a static map first, and then loads the JS API by callback. When the JS API has finished loading, it removes the static map.</p>
+    <div id="mapcontainer" style="position:relative">
+      <img style="position:absolute;z-index:2" id="staticmap" src="http://maps.google.com/maps/api/staticmap?center=-33.8739340,151.1751510&markers=color:green|label:G|-33.889533,151.125862|-33.880777,151.202796|-33.867139,151.207114|-33.883793,151.157057|-33.896449,151.180013|-33.910923,151.157187|-33.851056,151.154542&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSosDVG8KKPE1-m51RBrvYughuyMxQ-i1QfUnH94QxWIa6N4U6MouMmBA&zoom=12&size=320x480&sensor=false">
+      <div id="map" style="position:absolute;width:320px;height:480px;z-index:1"></div>
+    </div>
+  </div>
+</body>
+<script type="text/javascript"> 
+/*
+* Sets up the Dynamic Google Maps API
+*/
+function loadMap() {
+  var map = new GMap2(document.getElementById("map"));
+  map.setCenter(new GLatLng(-33.8739340,151.1751510), 12);
+  map.addControl(new GSmallMapControl());
+
+  //add the store markerS
+
+  var storeMarkers = [
+    [ 'Ashfield NSW',-33.889533,151.125862],
+    [ 'Haymarket NSW',-33.880777,151.202796],
+    [ 'Sydney NSW',-33.867139,151.207114],
+    [ 'Leichhardt NSW',-33.883793,151.157057],
+    [ 'Newtown NSW',-33.896449,151.180013],
+    [ 'Marrickville NSW',-33.910923,151.157187],
+    [ 'Drummoyne NSW',-33.851056,151.154542]
+  ]
+
+  for (var i = 0; i < storeMarkers.length; i++) {
+    var store = storeMarkers[i];
+    var myLatLng = new GLatLng(store[1], store[2]);
+    map.addOverlay(new GMarker(myLatLng));
+  }
+
+  // Add an event listener on the tilesloaded event
+  // When tiles are ready, remove the map
+  GEvent.addListener(map, "tilesloaded", removeStaticMap);
+}
+
+function removeStaticMap() {
+  setTimeout(pushStaticMap,2000);
+  
+  function pushStaticMap() {
+    var image = document.getElementById("staticmap");
+    image.style.zIndex = 0;
+  }
+}
+</script>
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSosDVG8KKPE1-m51RBrvYughuyMxQ-i1QfUnH94QxWIa6N4U6MouMmBA&amp;sensor=false&amp;async=2&amp;callback=loadMap" type="text/javascript">
+</script>
+</html>

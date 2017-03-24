@@ -1,0 +1,4 @@
+Portable Globe Copyright 2011 Google Inc. All Rights Reserved. 
+portable localhost:9335 search localhost:9335 kml localhost:9335 2011-04-20 15:43:24 GMT 
+2010-04-20 15:43:24
+Globe description: Composite globe from hand-cut layers.

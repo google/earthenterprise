@@ -1,0 +1,106 @@
+#-*- Python -*-
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# TODO:
+# - put compiled files into binaries directory (OPT/REL/...).
+# - add build/installer/clean up targets.
+
+import fnmatch
+import os
+import shlex
+import subprocess
+
+Import('env')
+
+cgi_env = env.Clone()
+
+root_dir = Dir(cgi_env.exportdirs['root']).abspath
+python_bin = cgi_env['python_bin']
+compiler_cmd = '%s -m compileall -f' % python_bin
+cgi_src_path = Dir('#/fusion/portableglobe/cutter/cgi-bin').abspath
+
+# List of directories to be compiled for installer.
+compiled_dirs = ['admin', 'core', 'common']
+
+# Note: Added for testing/debugging.
+# It is not used by build system.
+if 'build_py' in COMMAND_LINE_TARGETS:
+  for dir in compiled_dirs:
+    for root, dirnames, filenames in os.walk(dir):
+      py_dir_abspath = os.path.join(cgi_src_path, root)
+      # Check for python files.
+      for file in fnmatch.filter(filenames,'*.py'):
+        python_file = os.path.join(py_dir_abspath, file)
+        # Create '*.pyc' for the python file.
+        command_line = '%s %s' % (compiler_cmd, python_file)
+        print "hello there"
+        print command_line
+        args = shlex.split(command_line)
+        subprocess.Popen(args)
+
+
+if 'install' in COMMAND_LINE_TARGETS:
+  # Install /opt/google/gehttpd/cgi-bin directory
+  cgi_bin_dir = Dir(env.installdirs['httpdcgi']).abspath
+  if not os.path.exists(cgi_bin_dir):
+    os.makedirs(cgi_bin_dir)
+
+  # Special processing for cgi-bin root directory (we do not compile it).
+  py_dir_abspath = cgi_src_path
+  filenames = os.listdir(py_dir_abspath)
+  py_files = []
+  # Collect python files from cgi-bin root directory.
+  for file in fnmatch.filter(filenames, '*.py'):
+    py_files.append(os.path.join(py_dir_abspath, file))
+
+  cgi_env.install('httpdcgi', py_files)
+
+  # List of directories to be bundled into installer without compiling.
+  py_install_dirs = ['search', 'geecheck_tests']
+  for dir in py_install_dirs:
+    for root, dirnames, filenames in os.walk(dir):
+      py_files = []
+      py_dir_abspath = os.path.join(cgi_src_path, root)
+      # Collect python files.
+      for file in fnmatch.filter(filenames, '*.py'):
+        py_files.append(os.path.join(py_dir_abspath, file))
+
+      cgi_env.install('httpdcgi', py_files, root)
+
+  # Compile all *.py files from compiled_dirs and bundle *.pyc files into
+  # installer.
+  for dir in compiled_dirs:
+    for root, dirnames, filenames in os.walk(dir):
+      compiled_files = []
+      py_dir_abspath = os.path.join(cgi_src_path, root)
+
+      # Check for python files.
+      for file in fnmatch.filter(filenames, '*.py'):
+        python_file = os.path.join(py_dir_abspath, file)
+        # Create '*.pyc' for the python file.
+        command_line = '%s %s' % (compiler_cmd, python_file)
+        args = shlex.split(command_line)
+        subprocess.Popen(args)
+        compiled_file = file.split('.')[0] + '.pyc'
+        compiled_files.append(os.path.join(py_dir_abspath, compiled_file))
+
+      cgi_env.install('httpdcgi', compiled_files, root)
+
+
+  # Install 'advanced_cutter.cfg' file under
+  # /opt/google/gehttpd/cgi-bin directory.
+  cgi_env.install('httpdcgi', ['./advanced_cutter.cfg'], '.')

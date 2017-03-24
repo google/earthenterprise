@@ -1,0 +1,118 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#config Name      QTPacket
+#config Base      Leaf
+#config Config    QTPacketConfig
+#config Subtype   QTPacket
+#config FixedType Database
+
+
+// ===== QTPacketAsset.h =====
+#include <autoingest/.idl/storage/QTPacketConfig.h>
+
+// ===== QTPacketAsset.cpp =====
+
+
+// ===== QTPacketAssetD.h =====
+
+
+// ===== QTPacketAssetD.cpp =====
+#include <khException.h>
+#include <geqtgen/.idl/Config.h>
+#include <autoingest/plugins/CombinedTerrainAsset.h>
+#include <autoingest/plugins/RasterProductAsset.h>
+#include <autoingest/plugins/RasterProjectAsset.h>
+
+namespace {
+
+void AddToProviderMap(const RasterProjectAssetVersion &proj,
+                      std::map<uint32,uint32> &map) {
+  for (uint i = 0; i < proj->inputs.size(); ++i) {
+    RasterProductAssetVersion resource(proj->inputs[i]);
+    if (resource->config.provider_id_ != 0) {
+      map[resource->config.fuid_resource_] = resource->config.provider_id_;
+    }
+  }
+}
+
+}
+
+
+
+void
+QTPacketAssetVersionImplD::DoSubmitTask(void)
+{
+
+  // ************************************************
+  // Generate the configfile
+  // ************************************************
+  geqtgen::Config geqtgen_config;
+  geqtgen_config.index_version_ = config.index_version_;
+  if (!config.imagery_verref_.empty()) {
+    AssetVersion assetver(config.imagery_verref_);
+    geqtgen_config.imagery_index_ = assetver->GetOutputFilename(0);
+    geqtgen_config.imagery_date_string_ = config.imagery_date_string_;
+  }
+  if (!config.terrain_verref_.empty()) {
+    CombinedTerrainAssetVersion assetver(config.terrain_verref_);
+    geqtgen_config.terrain_index_ = assetver->GetOutputFilename(0);
+    geqtgen_config.terrain_packet_version_ = assetver->config.index_version_;
+  }
+  if (!config.vector_verref_.empty()) {
+    AssetVersion assetver(config.vector_verref_);
+    geqtgen_config.vector_index_ = assetver->GetOutputFilename(0);
+  }
+  if (!config.imageryproj_verref_.empty()) {
+    RasterProjectAssetVersion assetver(config.imageryproj_verref_);
+    AddToProviderMap(assetver, geqtgen_config.inset_provider_map_);
+  }
+  if (!config.terrainproj_verref_.empty()) {
+    RasterProjectAssetVersion assetver(config.terrainproj_verref_);
+    AddToProviderMap(assetver, geqtgen_config.inset_provider_map_);
+  }
+
+  // Add dated imagery info.
+  geqtgen_config.dated_imagery_indexes_ = config.dated_imagery_indexes_;
+  for(uint i = 0; i < geqtgen_config.dated_imagery_indexes_.size(); ++i) {
+    DatedImageryIndexInfo& info = geqtgen_config.dated_imagery_indexes_[i];
+    AssetVersion assetver(info.imagery_index_version_);
+    info.imagery_index_version_ = assetver->GetOutputFilename(0);
+  }
+
+  std::string configfile = WorkingFilename("config.xml"); // fully bound name
+  if (!geqtgen_config.Save(configfile)) {
+    throw khException(kh::tr("Unable to save %1").arg(configfile));
+  }
+
+  // ******************************************************
+  // Create and submit the task that will invoke the script
+  // ******************************************************
+  TaskDef task(*this);
+  std::vector<std::string> inputs;
+  GetInputFilenames(inputs);
+  task.AddInputs(inputs);
+
+  // TODO: - implement size estimate
+  task.AddOutput(WorkingFileRef("qtpacket"),
+                 0); // size estimate
+  task.AddOutput(WorkingFileRef("qtpacket2"),
+                 0); // size estimate
+
+  task << "geqtgen"
+       << "--config" << configfile
+       << "--output_format1" << "$OUTPUTS[0]"
+       << "--output_format2" << "$OUTPUTS[1]";
+  theAssetManager.SubmitTask(GetRef(), task);
+}

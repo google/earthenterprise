@@ -1,0 +1,83 @@
+.bodytext {
+  font-size:14px;
+  font-weight: normal;
+}
+h1 {
+  font-size:1em;
+  font-weight: bold;
+}
+h2, .header {
+  border-top: 1px solid rgb(0, 102, 51);
+  background-color:#deefe0;
+  font-size:1em;
+  font-weight: bold;
+  padding: 2px;
+}
+h3 {
+  font-size:1em;
+  font-weight:bold;
+}
+h4 {
+  text-decoration:underline;
+  font-weight:normal;
+}
+li {
+  margin-top:0.5em;
+  margin-bottom:0.5em;
+}
+.note {
+  border-width:1px 0px;
+  border-style:solid;
+  border-color:#000000;
+  padding: 5px 0px;
+}
+table#ug {
+border-width:1px 1px 0px 0px;
+border-style:solid;
+border-color:#CCCCCC;
+font-size:1em;
+}
+table#ug th {
+border-width:0px 0px 1px 1px;
+border-style:solid;
+border-color:#CCCCCC;
+background-color:#EEEEEE;
+text-align:left;
+font-weight:bold;
+padding:5px;
+}
+table#ug td {
+border-width:0px 0px 1px 1px;
+border-style:solid;
+border-color:#CCCCCC;
+background-color:#FFFFFF;
+padding:5px;
+vertical-align:top;
+}
+
+ul {
+padding-top:0px;
+margin-top:0px;
+}
+
+#toc {
+}
+#toc ul {
+padding-left:5px;
+margin-left:5px;
+font-size:0.9em;
+}
+#toc li {
+padding-left:0px;
+margin-left:5px;
+}
+#toc .selected {
+color:#006633;
+}
+#toc .header {
+  border-top: 1px solid rgb(0, 102, 51);
+  background-color:#deefe0;
+  font-size:1em;
+  font-weight: bold;
+  padding: 2px;
+}

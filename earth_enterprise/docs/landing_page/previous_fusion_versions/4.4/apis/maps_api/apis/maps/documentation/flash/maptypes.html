@@ -1,0 +1,664 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+ 
+  
+
+  
+
+
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/flash/maptypes.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Google Maps API for Flash Map Types - Google Maps API for Flash - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/html/apis/maps/documentation/flash/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../css/iehacks.css"><![endif]-->
+
+<link href="../local_extensions.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="gc-documentation">
+
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" href="http://code.google.com" onclick="return false;"><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  
+  
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../images/code_logo.gif" height="40" width="167" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "adwords" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Maps API for Flash</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="index.html" title="Google Maps API for Flash home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="intro.html" class="selected" title="Official Google Maps API for Flash documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../faq.html" title="Answers to frequently asked questions about Google Maps API for Flash">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="articles.html" title="Focused articles and tutorials for Google Maps API for Flash developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Maps API for Flash blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="forum.html" title="Google Maps API for Flash developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="../../terms.html" title="Google Maps API for Flash terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <a name="gc-toc-anchor"></a>
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="../../index.html">Maps API Family</a></li>
+  <li><a href="../../signup.html">Sign up for an API key</a></li>
+  <li><a href="http://code.google.com/apis/kml/documentation/kmlSearch.html">Index Your Maps Content</a></li>
+</ul>
+  <div class="line"></div>
+    <ul>
+      <li><h2>Maps API for Flash</h2>
+        <ul>
+          <li><a class="tlw-expanded" href="intro.html">Developer Guide</a>
+            <ul>
+              <li><h2 class="tlw-expanded">Tutorials</h2>
+                <ul>
+                  <li><a href="tutorial-flex.html">Flex SDK</a></li>
+                  <li><a href="tutorial-flexbuilder.html">FlexBuilder</a></li>
+                  <li><a href="tutorial-flash.html">Flash CS3</a></li>                
+                </ul>              
+              </li>
+              <li><a href="basics.html">Basics</a></li>
+              <li><a href="events.html">Events</a></li>
+              <li><a href="controls.html">Controls</a></li>
+              <li><a href="overlays.html">Overlays</a></li>
+              <li><a href="services.html">Services</a></li>
+              <li><a href="maptypes.html">Map Types</a></li>           
+              <li><a href="3d-maps.html">3D Maps</a></li>
+            </ul>                                
+          </li>
+          <li><a href="reference.html">API Reference</a></li>
+          <li><h2 class="tlw-expanded">Code Samples:</h2>
+            <ul>
+              <li><a href="demogallery.html">Demos</a></li>
+              <li><a href="examples/index.html">Examples</a></li>
+            </ul>
+          </li>
+          <li><h2 class="tlw-expanded">More Resources:</h2>
+               <ul>
+               <li><a href="articles.html">Articles</a></li>
+               <li><a href="mediagallery.html">Presentations</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/issues/list?can=2&q=apitype%3AFlash&colspec=ID+Type+Status+Introduced+Fixed+Summary+Internal+Stars&cells=tiles">Known Issues</a></li>
+               <li><a href="http://code.google.com/p/gmaps-api-issues/wiki/MapsAPIforFlashChangelog">Changelog</a><sup class="new">New!</sup></li>
+               <li><a href="http://code.google.com/p/gmaps-utility-library-flash/">Utility Library</a></li>
+              </ul>
+           </li>
+        </ul>
+      </li>
+    </ul>    
+      <div class="line"></div>
+      <ul>
+        <li><h2>Maps JavaScript API V3</h2>
+         <ul>
+           <li><a href="../javascript/index.html">Home Page</a></li>
+           <li><a href="../javascript/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+            <ul>
+        <li><h2>Maps Javascript API V2</h2>
+         <p><span style="color:grey">(Deprecated API)</span></p>
+         <ul>
+           <li><a href="../javascript/v2/index.html">Home Page</a></li>
+           <li><a href="../javascript/v2/basics.html">Documentation</a></li>
+         </ul>
+       </li>
+      </ul>
+    <div class="line"></div>
+    <ul>
+      <li><h2>Maps Data API</h2>
+        <p><span style="color:grey">(Deprecated API)</span></p>
+        <ul>
+          <li><a href="../mapsdata/index.html">Home Page</a></li>
+          <li><a href="../mapsdata/developers_guide_protocol.html">Documentation</a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="line"></div>
+      <ul>
+        <li><h2><a href="../webservices/index.html">Maps API Web Services</a></h2>
+         <ul>
+           <li><a href="../geocoding/index.html">Geocoding API</a></li>
+           <li><a href="../directions/index.html">Directions API</a></li>
+           <li><a href="../elevation/index.html">Elevation API</a></li>
+           <li><a href="../places/index.html">Places API</a></li>
+         </ul>
+       </li>
+      </ul>
+       <div class="line"></div>
+        <ul>
+          <li><h2>Static Maps API</h2>
+            <ul>
+              <li><a href="../staticmaps/index.html">Developer Guide</a></li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+        <ul>
+          <li><h2>Earth API</h2>
+            <ul>
+              <li><a href="http://code.google.com/apis/earth">Home Page</a></li>
+              <li><a href="http://code.google.com/apis/earth/documentation">Documentation</a></li>
+            </ul>
+          </li>
+        </ul>
+    <div class="line"></div>
+    <div class="promo">
+      <p><a href="../premier/index.html">Google Maps API Premier</a></p>
+      <p>Includes enterprise licensing and support</p>
+    </div>
+
+      </div>
+
+      <a name="gc-pagecontent-anchor"></a>
+      <div class="g-unit" id="gc-pagecontent">
+        <h1 class="page_title">Google Maps API for Flash Map Types</h1>
+
+
+<div class="toc">
+  <ol>
+  <li><a href="#MapTypes">Map Types</code></a></li>
+  <li><a href="#BasicMapTypes">Basic Map Types</a></li>
+  <li><a href="#StyledMaps">Styled Maps</a>
+    <ol>
+      <li><a href="#StyledMapSelections">Selecting Map Features</a></li>
+      <li><a href="#StyledMapRules">Style Rules</a></li>
+    </ol>
+  </li>
+  </ol>
+</div>
+
+
+<h1 id="MapTypes">Map Types</h1>
+
+<p>This document discusses the types of maps you can display using the
+Google Maps API for Flash. The API uses a <code>MapType</code>
+object to hold information about these maps. The <code>IMapType</code>
+interface defines the display and usage of map tiles and
+the translation of coordinate systems from screen coordinates to world
+coordinates (on the map). Each <code>MapType</code> must contain a
+few methods to handle retrieval and release of tiles, and properties
+that define its visual behavior.</p>
+
+<p>The inner workings of map types within the Maps API is an advanced
+topic. Most developers simply use the <a href="#BasicMapTypes">
+basic map types</a> noted below. However, you can modify the
+presentation of existing map types using
+<a href="#StyledMaps">Styled Maps</a>.</p>
+
+<h1 id="BasicMapTypes">Basic Map Types</h1>
+
+<p>There are many types of maps available within the Google Maps API for
+Flash. In addition to the familiar "painted" road map tiles, the Google
+Maps API for Flash also supports other maps types.</p>
+
+<p>The following map types are available in the Google Maps API:</p>
+
+<ul>
+<li><code>NORMAL_MAP_TYPE</code>- the default view</li>
+<li><code>SATELLITE_MAP_TYPE</code> - showing Google Earth satellite images</li>
+<li><code>HYBRID_MAP_TYPE</code> - showing a mixture of normal and satellite 
+views</li>
+<li><code>PHYSICAL_MAP_TYPE</code> - showing a physical relief map of the 
+surface of the Earth</li>
+<li><code>DEFAULT_MAP_TYPES</code> - an array of these four types, useful 
+for iterative processing</li>
+
+<p>You can set the map type using the <code>MapOptions</code>' 
+<code>mapType</code> property. For example, the following code sets the map to 
+use the satellite view from Google Earth:</p>
+
+<pre class="prettyprint">
+private function onMapPreinitialize(event:Event):void {
+  var myMapOptions:MapOptions = new MapOptions();
+  myMapOptions.zoom = 14;
+  myMapOptions.center = new LatLng(40.736072,-73.992062);
+  myMapOptions.mapType = MapType.SATELLITE_MAP_TYPE;
+  this.map.setInitOptions(myMapOptions);
+}
+</pre>
+
+<h1 id="StyledMaps">Styled Maps</h1>
+
+<p>The <code>StyledMapType</code> allows you to customize the presentation
+of the standard Google base maps, changing the visual display of such components
+as roads, parks, and built-up areas to reflect a different style than that used
+in the default map type. These components are known as <i>features</i> and
+a <code>StyledMapType</code> allows you to select these features and apply
+visual styles to their display (including hiding them entirely). With
+these changes, the map can be made to emphasize particular components or
+complement content within the surrounding page.</p>
+
+<p>The <code>StyledMapType()</code> constructor takes an array of
+<code>MapTypeStyle</code> objects and an optional <code>StyledMapTypeOptions</code>
+object as arguments. The <code>StyledMapTypeOptions</code> object allows
+you to provide a name for the styled map which can be displayed within a
+map type control.</p>
+
+<p>A styled map contains a set of styles which define <i>rules</i>
+on <i>selections</i>. Each <code>MapTypeStyle</code> object defines the
+following:</p>
+
+<ul>
+  <li>A <code>MapTypeStyleFeatureType</code> defining the type of features
+  this style will affect</li>
+  <li>A <code>MapTypeStyleElementType</code> indicating the scope of the
+  features to select</li>
+  <li>An array of <code>MapTypeStyleRule</code> operations to apply, in order,
+  to the selection</li>
+</ul>
+
+<p>The combination of <i>features</i> and <i>elements</i> defines the
+selection of elements on which to apply <i>operations</i> (known
+as <i>rules</i>).</p>
+
+<h2 id="StyledMapSelections">Selecting Map Features</h2>
+
+<p>A map consists of a set of <i>features</i>, such as roads
+or parks, which are specified using a <code>MapTypeStyleFeatureType</code>.
+The feature types form a category tree, with
+<code>MapTypeStyleFeatureType.ALL</code> as the root. The full list of
+features for selection within a map is documented in the
+<a href="reference.html#MapTypeStyleFeatureType">
+Maps API for Flash reference</a>. Specifying the feature as
+<code>MapTypeStyleFeatureType.ALL</code> will select all map elements.</p>
+
+<p>Some feature type categories contain sub-categories
+(<code>LANDSCAPE_NATURAL</code> or <code>ROAD_LOCAL</code>, for example).
+If the parent feature (<code>ROAD</code>, for example) is specified, then
+styles applied to this selection will be applied to all roads, including
+sub-categories.</p>
+
+<p>Additionally, some features on a map typically consist of different
+<i>elements</i>. A road, for example, consists of not only the graphical
+line (geometry) on the map, but the text denoting its name (labels)
+attached to the map. Elements within features are selected by specifying
+a category of type <code>MapTypeStyleElementType</code>.</p>
+
+<p>The following element types are supported:</p>
+
+<ul>
+  <li><code>ALL</code> (default) selects all elements of that feature.</li>
+  <li><code>GEOMETRY</code> selects only geometric elements of that
+  feature.</li>
+  <li><code>LABELS</code> selects only textual labels associated with that
+  feature.</li>
+</ul>
+
+<p>If no element type is specified, the styles will be applied to all elements
+regardless of element type.</p>
+
+<h2 id="StyledMapStyleRules">Style Rules</h2>
+
+<p>Style rules are formatting options of type <code>MapTypeStyleRule</code>
+which are applied to the features and elements specified within each
+<code>MapTypeStyle</code>.</p>
+
+<p>The following <code>MapTypeStyleRule</code> options are currently
+supported:</p>
+
+<ul>
+  <li><code>hue</code> (the <code>Color</code> indicating an RGB hex value)
+  indicates the "base" color of the element.
+  (<span style="color:red">*</span> See usage note below.)</li>
+  <li><code>lightness</code> (a floating point value between
+  <code>-100</code> and <code>100</code>) indicates the percentage
+  change in brightness of the element. Negative
+  values increase darkness (where -100 specifies black) while positive
+  values increase brightness (where +100 specifies white).</li>
+  <li><code>saturation</code> (a floating point value between
+  <code>-100</code> and <code>100</code>) indicates the percentage
+  change in intensity of the basic color to apply to the element.</li>
+  <li><code>gamma</code> (a floating point value between <code>0.01</code>
+  and <code>10.0</code>, where <code>1.0</code> applies no correction)
+  indicates the amount of gamma correction to apply to the element. Gammas
+  modify the lightness of hues in a non-linear fashion, while ignoring
+  white or black values. Gammas are typically used to modify the contrast
+  of multiple elements. For example, you could modify the gamma to
+  increase or decrease the contrast between the edges and interiors of
+  elements. Low gamma values (&lt; 1) increase contrast, while high
+  values (&gt; 1) decrease contrast.</li>
+  <li><code>inverse_lightness</code> (if <code>true</code>) simply
+  inverts the existing lightness.</li>
+  <li><code>visibility</code> (<code>'on'</code>, <code>'off'</code>,
+  or <code>'simplified'</code>) indicates whether and how the element
+  appears on the map. A <code>simplified</code> visibility indicates
+  that the map should simplify the presentation of those elements as
+  it sees fit. (A simplified road structure may show fewer roads, for
+  example.)</li>
+</ul>
+
+<p>Style rules must be applied as separate, distinct operations, and are
+applied in the order they appear within the <code>MapTypeStyleRule</code>
+array. Do not combine multiple operations into a single rule;
+instead, define each operation as a separate element in the array of rules.
+Order is important, as some rules are not commutative. Features
+and/or elements that are modified through rules
+(usually) already have existing styles; the rules act on those existing
+styles, if present.</p>
+
+<p>Note that we use the <a href="http://en.wikipedia.org/wiki/HSL_and_HSV">
+Hue, Saturation, Lightness (HSL)</a> model to denote color within style
+rules.  These operations to define color are common within
+graphic design. <i>Hue</i> indicates the basic color, <i>saturation</i>
+indicates the intensity of that color, and <i>lightness</i> indicates the
+relative amount of white or black in the constituent color. All three
+HSL values can be mapped to RGB values (and vice versa).
+<a href="http://en.wikipedia.org/wiki/Gamma_correction">Gamma
+correction</a> acts to modify saturation over the color space, generally
+to increase or decrease contrast. Additionally, the HSL model defines color
+within a coordinate space where <code>hue</code> indicates the orientation
+within a color wheel, while saturation and lightness indicate amplitudes
+along different axes. Hues are measured within an RGB color space,
+which is similar to most RGB color spaces, except that shades of white and
+black are absent.</p>
+
+<p style="text-align:center"><img src="images/colorwheel.png" /></p>
+<p style="text-align:center"><b>An RGB Color Wheel</b></p>
+
+<p><span style="color:red">Note: </span> while <code>hue</code> takes
+a <code>Color</code> (<code>uint</code>) corresponding to an HTML hex
+color value, it only uses this value to determine the basic
+color (its orientation around the color wheel), not its saturation or
+lightness, which are indicated separately as percentage changes. For
+example, the hue for pure green may be defined
+as <code>GREEN</code> (<code>0x00ff00</code>) or <code>0x000100</code>
+within the <code>hue</code> property and both hues will be identical.
+(Both values point to pure green in the HSL color model.) RGB
+<code>hue</code> values which consist of equal parts Red, Green and
+Blue &mdash; such as <code>BLACK</code> (<code>0x000000</code>) and
+<code>WHITE</code> (<code>0xffffff</code>) and all the pure shades
+of grey &mdash; do not indicate a hue whatsoever, as none of those
+values indicate an orientation in the HSL coordinate space. To indicate
+black, white or grey, you must remove all <code>saturation</code> (set
+the value to <code>-100</code>) and adjust <code>lightness</code>
+instead.</p>
+
+<p>Additionally, when modifying existing features which already have a
+color scheme, changing a value such as <code>hue</code> does not change
+its existing <code>saturation</code> or <code>lightness</code>.
+
+<p>The following specification selects the geometry for all local roads
+and applies a <code>hue</code> of <code>GREEN</code> and a
+<code>saturation</code> of 100:</p>
+
+<pre class="prettyprint lang-javascript">
+
+var styles:Array = [
+  new MapTypeStyle(MapTypeStyleFeatureType.ROAD_LOCAL,
+                   MapTypeStyleElementType.GEOMETRY,
+                   [MapTypeStyleRule.hue(0x00ff00),
+                   MapTypeStyleRule.saturation(100)])
+     ];
+</pre>
+
+<p>The following example displays a map of Brooklyn where roads have been
+changed to bright green and the residential areas have been changed to
+black:</p>
+
+
+<pre class="prettyprint lang-javascript">
+
+private function onMapReady(event:Event):void {
+
+  var hipHopStyles:Array = [
+      new MapTypeStyle(MapTypeStyleFeatureType.ROAD_LOCAL,
+          MapTypeStyleElementType.GEOMETRY,
+          [MapTypeStyleRule.hue(0x00ff00),
+          MapTypeStyleRule.saturation(100)]),
+      new MapTypeStyle(MapTypeStyleFeatureType.LANDSCAPE,
+          MapTypeStyleElementType.GEOMETRY,
+          [MapTypeStyleRule.lightness(-100)])
+  ];
+
+  var styledMapOptions:StyledMapTypeOptions = new StyledMapTypeOptions({
+      name: 'Hip Hop',
+      alt: 'HipHop'
+  });
+
+  var styledMapType:StyledMapType = new StyledMapType(hipHopStyles, styledMapOptions);
+
+  map.addMapType(styledMapType);
+  map.addControl(new MapTypeControl());
+  map.setCenter(new LatLng(40.6743890, -73.9455), 12, styledMapType);
+}
+</pre>
+
+
+<p><a href="http://gmaps-samples-flash.googlecode.com/svn/trunk/examples/StyledMapSimple.html">
+View example (StyledMapSimple.html)</a></p>
+
+<p><a href="http://code.google.com/p/gmaps-samples-flash/source/browse/trunk/samplecode/StyledMapSimple.mxml">
+View Source (StyledMapSimple.mxml)</a></p>
+
+<p>The following more complicated example uses several operations and
+simplifications to approximate the look of a retro US road atlas:</p>
+
+
+<pre class="prettyprint lang-javascript">
+private var chicago:LatLng = new LatLng(41.850033, -87.650052);
+
+private function onMapReady(event:Event):void {
+
+var roadAtlasStyles:Array = [
+    new MapTypeStyle(MapTypeStyleFeatureType.ROAD_HIGHWAY,
+        MapTypeStyleElementType.GEOMETRY,
+        [MapTypeStyleRule.hue(0xff0022),
+        MapTypeStyleRule.saturation(60),
+        MapTypeStyleRule.lightness(-20)]),
+    new MapTypeStyle(MapTypeStyleFeatureType.ROAD_ARTERIAL,
+        MapTypeStyleElementType.GEOMETRY,
+        [MapTypeStyleRule.hue(0x2200ff),
+        MapTypeStyleRule.lightness(-40),
+        MapTypeStyleRule.visibility("simplified"),
+        MapTypeStyleRule.saturation(30)]),
+    new MapTypeStyle(MapTypeStyleFeatureType.ROAD_LOCAL,
+        MapTypeStyleElementType.ALL,
+        [MapTypeStyleRule.hue(0xf6ff00),
+        MapTypeStyleRule.saturation(50),
+        MapTypeStyleRule.gamma(0.7),
+        MapTypeStyleRule.visibility("simplified")]),
+    new MapTypeStyle(MapTypeStyleElementType.GEOMETRY,
+        MapTypeStyleFeatureType.WATER,
+        [MapTypeStyleRule.saturation(40),
+        MapTypeStyleRule.lightness(40)]),
+    new MapTypeStyle(MapTypeStyleFeatureType.ROAD_HIGHWAY,
+        MapTypeStyleElementType.LABELS,
+        [MapTypeStyleRule.visibility("on"),
+        MapTypeStyleRule.saturation(98)]),
+    new MapTypeStyle(MapTypeStyleFeatureType.ADMINISTRATIVE_LOCALITY,
+        MapTypeStyleElementType.LABELS,
+        [MapTypeStyleRule.hue(0x0022ff),
+        MapTypeStyleRule.saturation(50),
+        MapTypeStyleRule.lightness(-10),
+        MapTypeStyleRule.gamma(0.9)]),
+    new MapTypeStyle(MapTypeStyleFeatureType.TRANSIT_LINE,
+        MapTypeStyleElementType.GEOMETRY,
+        [MapTypeStyleRule.hue(0xff0000),
+        MapTypeStyleRule.visibility("on"),
+        MapTypeStyleRule.lightness(-70)])          
+];
+
+var styledMapOptions:StyledMapTypeOptions = new StyledMapTypeOptions({
+    name: 'Road Atlas',
+    alt: 'USRoadAtlas'
+});
+
+var styledMapType:StyledMapType = new StyledMapType(roadAtlasStyles, styledMapOptions);
+map.addMapType(styledMapType);
+map.addControl(new MapTypeControl());
+map.setCenter(chicago, 12, styledMapType);
+}
+</pre>
+
+
+<p><a href="http://gmaps-samples-flash.googlecode.com/svn/trunk/examples/StyledMapComplex.html">
+View example (StyledMapComplex.html)</a></p>
+
+<p><a href="http://code.google.com/p/gmaps-samples-flash/source/browse/trunk/samplecode/StyledMapComplex.mxml">
+View Source (StyledMapComplex.mxml)</a></p>
+
+
+        <!-- end body text -->
+   
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

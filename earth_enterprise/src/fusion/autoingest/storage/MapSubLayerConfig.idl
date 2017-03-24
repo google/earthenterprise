@@ -1,0 +1,389 @@
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#include <string>
+#include <vector>
+#include <qstring.h>
+#include <qcolor.h>
+#include <khConstants.h>
+#include <khTypes.h>
+#include <khMetaData.h>
+#include <geRange.h>
+#include <geMultiRange.h>
+#include <autoingest/AvailId.h>
+#include <autoingest/.idl/storage/FieldGenerator.h>
+#include <autoingest/.idl/storage/VectorDefs.h>
+#include <autoingest/.idl/storage/FilterConfig.h>
+#include <autoingest/.idl/storage/IconReference.h>
+#include <autoingest/.idl/storage/SearchField.h>
+
+#hquote
+class FieldBinderDef;
+#/hquote
+
+#cppquote
+#include <autoingest/FieldBinderDef.h>
+#include <autoingest/.idl/storage/FieldGenerator_impl.h>
+#include <autoingest/.idl/storage/VectorDefs_impl.h>
+#include <autoingest/.idl/storage/FilterConfig_impl.h>
+#include <autoingest/.idl/storage/SearchField_impl.h>
+#/cppquote
+
+
+class MapTextStyleConfig {
+  enum FontWeight { Regular, Bold, Italic, BoldItalic };
+
+  QString     font   = QString(kDefaultFont);
+  FontWeight  weight = MapTextStyleConfig::Regular;
+  uint        size   = 12U;
+  QColor      color  = Qt::black;
+  bool        drawOutline = true;
+  IsUpToDateIgnoreIf(!drawOutline) float outlineThickness = 4.0F;
+  IsUpToDateIgnoreIf(!drawOutline) QColor outlineColor = Qt::white;
+
+#pragma GenerateIsUpToDate
+};
+
+class MapLabelConfig {
+#pragma DontEmitFunc
+
+  bool               enabled         = false;
+  geRange<uint32>    levelRange      = geRange<uint32>(8, 14);
+  bool               hasOutlineLabel = false;
+  FieldGenerator     text            = FieldGenerator();
+  FieldGenerator     outlineText     = FieldGenerator();
+  MapTextStyleConfig textStyle       = MapTextStyleConfig();
+  // Whether render/place all center labels in 'draw as polygons'- mode.
+  // true - render/place all center labels.
+  // false - only render/place center labels that do not overlap with already
+  // placed.
+  bool               displayAll      = false;
+
+
+#hquote
+  inline bool HasJS(void) const {
+    return text.HasJS() || (hasOutlineLabel && outlineText.HasJS());
+  }
+  void MaybeAddFieldBinderDef(std::vector<FieldBinderDef> *defs,
+                              const QString &fname) const;
+  void MaybeAddFieldBinderDefOutline(std::vector<FieldBinderDef> *defs,
+                              const QString &fname) const;
+  inline bool DontEmitFunc(void) const { return !enabled; }
+  bool EnabledForLevel(uint level) const;
+  void PinToLevel(uint level);
+#/hquote
+#cppquote
+  void MapLabelConfig::MaybeAddFieldBinderDef
+  (std::vector<FieldBinderDef> *defs, const QString &fname) const {
+    if (enabled) {
+      defs->push_back(FieldBinderDef(text, fname, gstTagUnicode));
+    }
+  }
+  void MapLabelConfig::MaybeAddFieldBinderDefOutline
+    (std::vector<FieldBinderDef> *defs, const QString &fname) const {
+    if (enabled) {
+      defs->push_back(FieldBinderDef(outlineText, fname, gstTagUnicode));
+    }
+  }
+
+  bool MapLabelConfig::EnabledForLevel(uint level) const {
+    return (enabled && levelRange.Contains(level));
+  }
+  void MapLabelConfig::PinToLevel(uint level) {
+    if (EnabledForLevel(level)) {
+      levelRange = geRange<uint32>(level, level);
+    } else {
+      enabled = false;
+    }
+  }
+#/cppquote
+
+#pragma GenerateIsUpToDate
+};
+
+class MapShieldConfig : MapLabelConfig {
+
+#hquote
+  static const int curr_config_version = 1;
+
+#/hquote
+
+#pragma AfterLoad
+#pragma DontEmitFunc
+
+  xmlattr int config_version = new:MapShieldConfig::curr_config_version, load:0;
+
+  enum ShieldStyle { BoxStyle, OvalStyle, IconStyle };
+  enum ShieldIconScaling { IconFixedSizeStyle, IconFixedAspectStyle, IconVariableAspectStyle };
+
+  ShieldStyle style_ = new: MapShieldConfig::OvalStyle, load: MapShieldConfig::IconStyle;
+  ShieldIconScaling scaling_ = MapShieldConfig::IconFixedSizeStyle;
+  QColor box_color_ = Qt::black;
+  QColor fill_color_ = Qt::black;
+  std::string icon_href_ = std::string();
+  IconReference::Type icon_type_ = IconReference::Internal;
+  int left_margin_ = 0;
+  int top_margin_ = 0;
+  int right_margin_ = 0;
+  int bottom_margin_ = 0;
+
+#pragma GenerateIsUpToDate
+#hquote
+public:
+
+ void AfterLoad()
+ {
+   // Previously "BoxStyle" actually was drawing an oval:
+   if (config_version == 0) style_= MapShieldConfig::OvalStyle;
+
+   // update the version number now that we've handled the old ones
+   config_version = curr_config_version;
+ }
+#/hquote
+};
+
+class MapFeatureConfig {
+#pragma AfterLoad
+#pragma DontEmitFunc
+
+  MapLabelConfig  label;
+  MapShieldConfig shield;
+
+  VectorDefs::FeatureDisplayType displayType = VectorDefs::PointZ;
+  VectorDefs::PolygonDrawMode polygonDrawMode = VectorDefs::FillAndOutline;
+  QColor fill_color = Qt::white;
+  QColor stroke_color = Qt::white;
+  float stroke_width = 2.0F;
+  geRange<uint32> levelRange = geRange<uint32>(8, 14);
+  bool drawAsRoads = false;
+  VectorDefs::PointMarker pointMarker = VectorDefs::Circle;
+  float pointWidth = 4.0F;
+  float pointHeight = 4.0F;
+  bool isPointLabelEnabled = false;
+  bool isMarkerResizerEnabled = false;
+  VectorDefs::EightSides labelPositionRelativeToPoint = VectorDefs::TopRight;
+
+#hquote
+  inline geMultiRange<uint32> ValidLevels(void) const {
+    if (!Enabled()) {
+      return geMultiRange<uint32>();
+    }
+    geMultiRange<uint32> ret(levelRange);
+    if (label.enabled) {
+      ret = geMultiRange<uint32>::Union(ret, geMultiRange<uint32>(
+                                            label.levelRange));
+    }
+    if (shield.enabled) {
+      ret = geMultiRange<uint32>::Union(ret, geMultiRange<uint32>(
+                                            shield.levelRange));
+    }
+    return ret;
+  }
+  inline bool HasJS(void) const { return label.HasJS() || shield.HasJS(); }
+  inline bool Enabled(void) const {
+    return (displayType != VectorDefs::PointZ &&
+            displayType != VectorDefs::IconZ);
+  }
+  inline bool WantDrawAsRoads(void) const {
+    return ((displayType == VectorDefs::LineZ) && drawAsRoads);
+  }
+  inline bool DontEmitFunc(void) const { return displayType == VectorDefs::PointZ; }
+  inline bool IsCenterLabelDependentIconBoundingBox(void) const {
+    return isPointLabelEnabled && isMarkerResizerEnabled;
+  }
+
+  // implemented in MapProjectConfigImpl.cpp
+  VectorDefs::FeatureReduceMethod ReduceMethod(void) const;
+  // implemented in MapLayer.cpp
+  bool IsValid(std::string& error) const;
+
+  inline VectorDefs::FeatureDisplayType DisplayType(void) const {
+    return displayType;
+  }
+
+  void AfterLoad() {
+    // "Draw As Road"-option is added in "Map Layer"-dialogue and we make
+    // the shield-group disabled if "Draw As Road" is not specified.
+    // To support old configs, where shield could be specified w/o
+    // "Draw As Roads", we set "Draw As Roads" to true if shield is enabled.
+    if (shield.enabled)
+      drawAsRoads = true;
+  }
+
+  void PopulateFieldBinderDefs(std::vector<FieldBinderDef> *defs) const;
+  void PinToLevel(uint level);
+#/hquote
+
+#cppquote
+  void MapFeatureConfig::PopulateFieldBinderDefs
+  (std::vector<FieldBinderDef> *defs) const {
+    label.MaybeAddFieldBinderDef(defs, "label");
+    shield.MaybeAddFieldBinderDef(defs, "shield");
+  }
+  void MapFeatureConfig::PinToLevel(uint level) {
+    if (Enabled()) {
+      if (levelRange.Contains(level)) {
+        levelRange = geRange<uint32>(level, level);
+      } else {
+        levelRange = geRange<uint32>(level+1, level+1);
+      }
+      label.PinToLevel(level);
+      shield.PinToLevel(level);
+    }
+  }
+#/cppquote
+
+#pragma GenerateIsUpToDate
+};
+
+class MapSiteConfig {
+#pragma DontEmitFunc
+
+  MapLabelConfig label;
+  VectorDefs::SiteReduceMethod reduceMethod = VectorDefs::ReduceSiteNone;
+
+#hquote
+  inline geMultiRange<uint32> ValidLevels(void) const {
+    return Enabled() ? geMultiRange<uint32>(label.levelRange) :
+      geMultiRange<uint32>();
+  }
+  inline bool HasJS(void) const { return label.HasJS(); }
+  inline bool Enabled(void) const { return label.enabled; }
+  inline bool DontEmitFunc(void) const { return !Enabled(); }
+  inline VectorDefs::SiteReduceMethod ReduceMethod(void) const {
+    return reduceMethod;
+  }
+  inline VectorDefs::SiteDisplayPosition DisplayPosition(
+    VectorDefs::FeatureDisplayType display_type) const {
+    VectorDefs::SiteDisplayPosition display_position =
+      (display_type == VectorDefs::LineZ) ?
+          VectorDefs::LineCenter : VectorDefs::AreaCenter;
+    return display_position;
+  }
+  void PopulateFieldBinderDefs(std::vector<FieldBinderDef> *defs) const;
+  inline void PinToLevel(uint level) {
+    label.PinToLevel(level);
+  }
+#/hquote
+#cppquote
+  void MapSiteConfig::PopulateFieldBinderDefs
+  (std::vector<FieldBinderDef> *defs) const {
+    label.MaybeAddFieldBinderDef(defs, "label");
+    label.MaybeAddFieldBinderDefOutline(defs, "outline_label");
+  }
+#/cppquote
+
+#pragma GenerateIsUpToDate
+};
+
+
+
+class MapDisplayRuleConfig {
+  IsUpToDateIgnore QString name = QString();  // fusion-only field
+  MapFeatureConfig feature = MapFeatureConfig();
+  MapSiteConfig    site    = MapSiteConfig();
+  FilterConfig     filter  = FilterConfig();
+
+#hquote
+  inline geMultiRange<uint32> ValidLevels(void) const {
+    return geMultiRange<uint32>::Union(feature.ValidLevels(),
+                                       site.ValidLevels());
+  }
+  inline bool HasFilterJS(void) const {
+    return filter.HasJS();
+  }
+  inline bool HasPrepJS(void) const {
+    return (feature.HasJS() || site.HasJS());
+  }
+  inline bool HasJS(void) const {
+    return (HasFilterJS() || HasPrepJS());
+  }
+  inline void PinToLevel(uint level) {
+    feature.PinToLevel(level);
+    site.PinToLevel(level);
+  }
+  inline bool IsValid(std::string& error) const {
+    return feature.IsValid(error);
+  }
+#/hquote
+
+
+#pragma GenerateIsUpToDate
+};
+
+class MapSubLayerConfig {
+#pragma LoadAndSave
+
+  std::string asset_ref;
+  std::vector<MapDisplayRuleConfig> display_rules;
+  bool allowFeatureDuplication = false;  // if true allows every filter to get a
+                                         // a copy of the feature
+  QString contextScript = QString("");
+  std::vector<SearchField> searchFields = std::vector<SearchField>();
+  bool allowEmptyLayer = false;  // If true => empty layer won't stop build.
+                                 // Default is that an empty layer will halt
+                                 // the build indicating a possible data error.
+  #pragma GenerateIsUpToDate
+
+#hquote
+  void ApplyTemplate(const MapSubLayerConfig &templateConfig);
+  bool HasFilterJS(void) const;
+  bool HasJS(void) const;
+  bool HasSearchFields() const;
+
+#/hquote
+#cppquote
+void
+MapSubLayerConfig::ApplyTemplate(const MapSubLayerConfig &templateConfig)
+{
+  // Some things we never take from the template
+  // asset_ref
+
+  display_rules           = templateConfig.display_rules;
+  allowFeatureDuplication = templateConfig.allowFeatureDuplication;
+  allowEmptyLayer         = templateConfig.allowEmptyLayer;
+}
+bool
+MapSubLayerConfig::HasFilterJS(void) const
+{
+  for (std::vector<MapDisplayRuleConfig>::const_iterator disp
+         = display_rules.begin();
+       disp != display_rules.end(); ++disp) {
+    if (disp->HasFilterJS())
+      return true;
+  }
+  return false;
+}
+
+bool
+MapSubLayerConfig::HasJS(void) const
+{
+  for (std::vector<MapDisplayRuleConfig>::const_iterator disp
+         = display_rules.begin();
+       disp != display_rules.end(); ++disp) {
+    if (disp->HasJS())
+      return true;
+  }
+  return false;
+}
+
+bool
+MapSubLayerConfig::HasSearchFields(void) const
+{
+  return searchFields.size()>0;
+}
+
+#/cppquote
+};
+

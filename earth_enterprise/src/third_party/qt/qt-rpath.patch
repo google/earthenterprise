@@ -1,0 +1,36 @@
+diff -uNr qt.orig/mkspecs/linux-g++/qmake.conf qt/mkspecs/linux-g++/qmake.conf
+--- qt.orig/mkspecs/linux-g++/qmake.conf	2006-03-08 08:48:20.000000000 -0800
++++ qt/mkspecs/linux-g++/qmake.conf	2006-07-18 14:28:37.000000000 -0700
+@@ -56,7 +56,7 @@
+ QMAKE_LFLAGS_PLUGIN	= $$QMAKE_LFLAGS_SHLIB
+ QMAKE_LFLAGS_SONAME	= -Wl,-soname,
+ QMAKE_LFLAGS_THREAD	=
+-QMAKE_RPATH		= -Wl,-rpath,
++QMAKE_RPATH		=
+ 
+ QMAKE_LIBS		=
+ QMAKE_LIBS_DYNLOAD	= -ldl
+diff -uNr qt.orig/mkspecs/linux-g++-32/qmake.conf qt/mkspecs/linux-g++-32/qmake.conf
+--- qt.orig/mkspecs/linux-g++-32/qmake.conf	2006-03-08 08:48:20.000000000 -0800
++++ qt/mkspecs/linux-g++-32/qmake.conf	2006-07-18 14:28:21.000000000 -0700
+@@ -56,7 +56,7 @@
+ QMAKE_LFLAGS_PLUGIN	= $$QMAKE_LFLAGS_SHLIB
+ QMAKE_LFLAGS_SONAME	= -Wl,-soname,
+ QMAKE_LFLAGS_THREAD	=
+-QMAKE_RPATH		= -Wl,-rpath,
++QMAKE_RPATH		=
+ 
+ QMAKE_LIBS		=
+ QMAKE_LIBS_DYNLOAD	= -ldl
+diff -uNr qt.orig/mkspecs/linux-g++-64/qmake.conf qt/mkspecs/linux-g++-64/qmake.conf
+--- qt.orig/mkspecs/linux-g++-64/qmake.conf	2006-03-08 08:48:20.000000000 -0800
++++ qt/mkspecs/linux-g++-64/qmake.conf	2006-07-18 14:28:07.000000000 -0700
+@@ -59,7 +59,7 @@
+ QMAKE_LFLAGS_PLUGIN	= $$QMAKE_LFLAGS_SHLIB
+ QMAKE_LFLAGS_SONAME	= -Wl,-soname,
+ QMAKE_LFLAGS_THREAD	=
+-QMAKE_RPATH		= -Wl,-rpath,
++QMAKE_RPATH		=
+ 
+ QMAKE_LIBS		=
+ QMAKE_LIBS_DYNLOAD	= -ldl

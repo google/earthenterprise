@@ -1,0 +1,41 @@
+diff -uNr gdal-1.2.6.orig/configure gdal-1.2.6/configure
+--- gdal-1.2.6.orig/configure	2005-08-01 18:23:12.000000000 -0700
++++ gdal-1.2.6/configure	2005-08-01 18:38:36.000000000 -0700
+@@ -24911,15 +24911,15 @@
+   fi
+ 
+   if test "$with_xerces_lib" != "" ; then
+-    LIBS="$with_xerces_lib $LIBS"
++    XERCES_LIBS="$with_xerces_lib"
+   else
+     if test -f $with_xerces/lib/libxerces-c.so ; then
+-      LIBS="-L$with_xerces/lib -lxerces-c -lpthread $LIBS"
++      XERCES_LIBS="-L$with_xerces/lib -lxerces-c -lpthread"
+     elif test -f $with_xerces/lib/libxerces-c1_6_0.so ; then
+-      LIBS="-lxerces-c1_6_0 -lpthread $LIBS"
+-      LIBS="-L$with_xerces/lib $LIBS"
++      XERCES_LIBS="-lxerces-c1_6_0 -lpthread"
++      XERCES_LIBS="-L$with_xerces/lib $XERCES_LIBS"
+     else
+-      LIBS="-L$with_xerces/lib -lxerces-c -lpthread $LIBS"
++      XERCES_LIBS="-L$with_xerces/lib -lxerces-c -lpthread"
+     fi
+   fi
+   if test "$with_xerces_inc" != "" ; then
+@@ -24933,7 +24933,7 @@
+   echo 'XERCES_CPP_NAMESPACE_USE' >> conftest.cpp
+   echo '#endif' >> conftest.cpp
+   echo 'int main() {  XMLPlatformUtils::Initialize(); }' >> conftest.cpp
+-  CMD="${CXX} ${XERCES_INCLUDE} ${CPPFLAGS} -o conftest conftest.cpp $LIBS"
++  CMD="${CXX} ${XERCES_INCLUDE} ${CPPFLAGS} -o conftest conftest.cpp ${XERCES_LIBS}"
+ 
+   if test -z "`$CMD 2>&1`" ; then
+     HAVE_XERCES=yes
+@@ -24955,6 +24955,7 @@
+   fi
+   rm -f conftest*
+ 
++  LIBS="$XERCES_LIBS $LIBS"
+ fi
+ 
+ HAVE_XERCES=$HAVE_XERCES

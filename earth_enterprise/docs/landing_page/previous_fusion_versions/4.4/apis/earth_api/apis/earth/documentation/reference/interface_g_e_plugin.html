@@ -1,0 +1,2074 @@
+
+
+
+
+
+
+
+
+
+ 
+
+
+   
+  
+  
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/reference/interface_g_e_plugin.html";
+    </script>
+    
+    
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>GEPlugin Interface Reference - Google Earth API - Google Code</title>
+<script type="text/javascript"><!--
+(function(){function a(){this.t={};this.tick=function(c){this.t[c]=(new Date).getTime()};this.tick("start")}var b=new a;window.jstiming={Timer:a,load:b};if(window.external&&window.external.pageT)window.jstiming.pt=window.external.pageT;})();
+
+var _tocPath_ = '/apis/earth/documentation/_toc.ezt';
+var codesite_token = null;
+var logged_in_user_email = null;
+//--></script>
+<link href="../../../../css/codesite.pack.04102009.css" type="text/css" rel="stylesheet">
+<script src="../../../../js/codesite_head.pack.04102009.js" type="text/javascript"></script>
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('bhs');</script>
+<link rel="search" type="application/opensearchdescription+xml" title="Google Code" href="http://code.google.com/osd.xml">
+
+<!--[if IE]><link rel="stylesheet" type="text/css" href="../../../../css/iehacks.css"><![endif]-->
+
+    <link href="../../../../css/semantic_headers.css" rel="stylesheet" type="text/css" />
+    <link href="stylesheet.css" rel="stylesheet" type="text/css">
+    <link href="tabs.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body class="gc-documentation">
+
+    
+    
+    <div id="gb">
+ <span>
+  
+    <a id="lang-dropdown" class="dropdown" href="http://code.google.com" onclick="return false;"><img width="13" height="13" class="globeicon" src="../../../../images/globe2_small.png"
+     ><span style="text-decoration:underline">English</span> <span style="font-size:.75em;">&#9660;</span></a>
+  
+ </span>
+</div>
+
+<div class="gbh" style="left:0px;"></div>
+<div class="gbh" style="right:0px;"></div>
+
+<div id="gc-container">
+<a id="top"></a>
+<div id="skipto">
+  <a href="#gc-pagecontent">Skip to page content</a>
+  <a href="#gc-toc">Skip to main navigation</a>
+</div>
+
+<div id="gc-header">
+  <div id="logo"><a href="http://code.google.com">
+  
+  
+     <img src="../../../../images/code_logo.png" height="40" width="161" alt="Google Code" style="border:0;margin:3px 0 0 0;">
+  
+  
+  </a></div>
+  <div id="search">
+    <div id="searchForm" class="searchForm">
+      <form id="cse" action="http://www.google.com/cse" accept-charset="utf-8" class="gsc-search-box" onsubmit="executeGSearch(document.getElementById('gsearchInput').value); return false;">
+      <noscript>
+      <input type="hidden" name="cref" value="http://code.google.com/cse/googlecode-context.xml">
+      </noscript>
+      <div id="gsc-search-box">
+        <input id="gsearchInput" type="text" name="q" maxlength="2048" class="gsc-input" autocomplete="off" title="Google Code Search" style="width:345px">
+        <div id="cs-searchresults" onclick="event.cancelBubble = true;"></div>
+        <input title="Search" id="gsearchButton" class="gsc-search-button" name="sa" value="Search" type="submit">
+        <div class="greytext">e.g. "ajax apis" or "open source"</div>
+      </div>
+      </form>
+    </div> <!-- end searchForm -->
+  </div> <!-- end search -->
+
+
+
+<h2 id="googlecode-promo">Make web development faster with these <a href="http://chrome.google.com/extensions/featured/web_dev" onclick="siteTracker._trackEvent('Promos','Web Development',this.href);">Chrome Extensions</a>!</h2>
+
+</div> <!-- end gc-header -->
+
+
+<div id="codesiteContent">
+
+<a id="gc-topnav-anchor"></a>
+<div id="gc-topnav">
+  <h1 style="padding:0 0 0 6px;">Google Earth API</h1>
+  <ul id="docs" class="gc-topnav-tabs">
+
+    <li id="home_link">
+      <a href="../../index.html" title="Google Earth API home page">Home</a>
+    </li>
+  
+    <li id="docs_link">
+      <a href="../index.html" class="selected" title="Official Google Earth API documentation">Docs</a>
+    </li>
+  
+    <li id="faq_link">
+      <a href="../../faq.html" title="Answers to frequently asked questions about Google Earth API">FAQ</a>
+    </li>
+  
+    <li id="articles_link">
+      <a href="../../articles/index.html" title="Focused articles and tutorials for Google Earth API developers">Articles</a>
+    </li>
+  
+    <li>
+      <a href="http://googlegeodevelopers.blogspot.com/" title="Official Google Earth API blog">Blog</a>
+    </li>
+  
+    <li>
+      <a href="http://groups.google.com/group/google-earth-browser-plugin/topics" title="Google Earth API developer forum">Forum</a>
+    </li>
+  
+    <li>
+      <a href="http://code.google.com/apis/maps/terms.html" title="Google Earth API terms of service">Terms</a>
+    </li>
+  
+
+  </ul>
+</div> <!-- end gc-topnav -->
+
+    <div class="g-section g-tpl-170">
+
+      <div class="g-unit g-first" id="gc-toc">
+        <ul>
+  <li><a href="http://code.google.com/apis/maps/signup.html">Sign up for a Maps API key</a></li>
+</ul>
+
+<div class="line"></div>
+
+<ul>
+
+  <li>
+    <h2><a href="#">API Reference</a></h2>
+    <div class="line"></div>
+  </li>
+  <li><h2>Developer's Guide</h2>
+    <ul>
+      <li><a href="../index.html">Introduction</a></li>
+      <li><a href="../placemarks.html">Placemarks</a></li>
+      <li><a href="../balloons.html">Balloons</a></li>
+      <li><a href="../geometries.html">Geometries & Overlays</a></li>
+      <li><a href="../camera_control.html">Camera Control</a></li>
+      <li><a href="../layers.html">Layers & Controls</a></li>
+      <li><a href="../time.html">Time</a> <sup class="new">Updated</sup></li>
+      <li><a href="../ocean.html">Ocean</a></li>
+      <li><a href="../sky_mars_moon.html">Sky, Mars, & Moon</a></li>
+      <li><a href="../touring.html">Touring</a></li>
+      <li><a href="../events.html">Events</a></li>
+      <li><a href="../accessors.html">Accessors</a> <sup class="new">New!</sup></li>
+      <li><a href="../containers.html">Object Containers</a></li>
+      <li><a href="../kml.html">KML</a></li>
+      <li><a href="../options.html">Options</a></li>
+      <li><a href="../debugging.html">Debugging</a></li>
+    </ul>
+  </li>
+        
+  <div class="line"></div>
+    
+  <li><h2 class="tlw-expanded">Code Samples</h2>
+    <ul>
+      <li><a href="../examples.html">Examples</a></li>
+      <li><a href="../demogallery.html">Demo Gallery</a>
+      </li>
+      <li><a href="http://code.google.com/apis/ajax/playground/?exp=earth">Code Playground</a></li>
+    </ul>
+  </li>
+    
+  <div class="line"></div>
+    
+  <li><h2 class="tlw-expanded">More Resources</h2>
+    <ul>
+      <li><a href="../mediagallery.html">Media</a></li>
+      <li><a href="../releasenotes.html">Release Notes</a></li>
+      <li><a href="http://code.google.com/p/earth-api-utility-library">Utility Library</a></li>
+      <li><a href="http://code.google.com/p/earth-api-samples/issues/list?q=label%3AType-Defect">Known Issues</a></li>
+    </ul>
+  </li>
+</ul>
+
+<div class="line"></div>
+<ul>
+ <li>
+    <h2>Related Docs</h2>
+    <ul>                
+      <li><a href="http://code.google.com/apis/kml/documentation/index.html">KML</a></li>
+      <li><a href="http://code.google.com/apis/maps/documentation/index.html">Maps API</a></li>
+    </ul>                
+ </li>
+</ul>
+        <a class="hidden" href="#gc-topnav-anchor">More Google Earth API resource links</a>
+      </div>
+
+      <div class="g-unit" id="gc-pagecontent">
+
+<div id="doxygen-ref">
+<!-- Generated by Doxygen 1.5.8 -->
+<div class="navigation" id="top">
+</div>
+<div class="contents">
+<h1>GEPlugin Interface Reference</h1><!-- doxytag: class="GEPlugin" -->
+<p>
+<a href="interface_g_e_plugin-members.html">List of all members.</a><table border="0" cellpadding="0" cellspacing="0">
+<tr><td></td></tr>
+<tr><td colspan="2"><br><h2>Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_object.html">KmlObject</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#cd35e260277fb0ffb86b5b2a962551da">parseKml</a> (string kml)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_g_e_abstract_balloon.html">GEAbstractBalloon</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#d6ff43f5bbbc6173b21b3bd11f64e9f8">getBalloon</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#f8b3ce978de67c29eafbd759c6de52d0">setBalloon</a> (<a class="el" href="interface_g_e_abstract_balloon.html">GEAbstractBalloon</a> newActiveBalloon)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">string&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#00517927aa9aef0d8e6e9bb09401fc12">getEarthVersion</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">string&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#101705622bec3df952e5bd386b5f27e6">getPluginVersion</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">string&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#b51c0b10b416ff99f341eb11a6f01102">getApiVersion</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_g_e_options.html">GEOptions</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#93ebe430c9096811bfcbedde22cb5fff">getOptions</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_g_e_window.html">GEWindow</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#4471b5f2bf0cb14f4a7b2ca315f02651">getWindow</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_g_e_globe.html">GEGlobe</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#fc14b6835b90686b2f52df606344148e">getGlobe</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_g_e_sun.html">GESun</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#e82e5f619758c123ffc1c04cb14ca531">getSun</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_layer_root.html">KmlLayerRoot</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#5cb7a0b522d1a1b7ed81d7aa288397e2">getLayerRoot</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_g_e_view.html">GEView</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#705ba528282cfa404263527a31b54ee1">getView</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_g_e_navigation_control.html">GENavigationControl</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#1e819aa973ed10a7a651494d98773a6f">getNavigationControl</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_g_e_feature_container.html">GEFeatureContainer</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#66d06881570d5ec1eae65b49a5b416f2">getFeatures</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_g_e_tour_player.html">GETourPlayer</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#d7da47caa5b079d61350f2fd13426fee">getTourPlayer</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_g_e_photo_overlay_viewer.html">GEPhotoOverlayViewer</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#5ac07c3e4eb5a8bb19de75e4eec6bedf">getPhotoOverlayViewer</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">float&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#d022bb521e338e9f8453dc0d43a0f946">getStreamingPercent</a> ()</td></tr>
+
+<tr><td colspan="2"><div class="groupHeader">Object Creation Functions</div></td></tr>
+<tr><td colspan="2"><div class="groupText"><br><br></div></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_placemark.html">KmlPlacemark</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#db48f85de97abb87230fafe2403cbd1e">createPlacemark</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_point.html">KmlPoint</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#52a9bc836dec782edafc03306a6a9de3">createPoint</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_line_string.html">KmlLineString</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#cb4079feb6721676957d3a04a33f8866">createLineString</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_folder.html">KmlFolder</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#794db527dd214bac4d5dfa432424f530">createFolder</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_lod.html">KmlLod</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#4a0f14d2f016ef9b744fa18b9ef7d74d">createLod</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_lat_lon_box.html">KmlLatLonBox</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#3fab9085694f8fe93b7858483e1a41f6">createLatLonBox</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_lat_lon_alt_box.html">KmlLatLonAltBox</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#98676df1a780fe394c8d5cf37524a002">createLatLonAltBox</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_document.html">KmlDocument</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#3789e68cd150236bb144ecc0dabaf017">createDocument</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_region.html">KmlRegion</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#eb7284f860d8293a21403d30bf0e0a4b">createRegion</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_location.html">KmlLocation</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#a4129b90561b6d9d3d4d5d2b0d392c31">createLocation</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_orientation.html">KmlOrientation</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#42ed474513a9f4bc60ba31c627879f24">createOrientation</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_scale.html">KmlScale</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#9fe960c3f7d22050e3b435b25150a036">createScale</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_model.html">KmlModel</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#49d905e07cde7af356e5e318b8eacda5">createModel</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_style.html">KmlStyle</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#04f6c900bd032cdd505dc13c9cd257d3">createStyle</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_linear_ring.html">KmlLinearRing</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#e3318f08e28d93450e0ea063569a5e1c">createLinearRing</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_polygon.html">KmlPolygon</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#c83f79dee7b4f37ec50f9bb631e2f9df">createPolygon</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_icon.html">KmlIcon</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#40592a8c1058ed0a35afb4569c4fa95e">createIcon</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_link.html">KmlLink</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#9b6c09eb21bc40eb133bbe8dc66c64a9">createLink</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_ground_overlay.html">KmlGroundOverlay</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#6232adbaa9d2472f233ab550644c087a">createGroundOverlay</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_network_link.html">KmlNetworkLink</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#41b1ce19b86343a309b6f9bf8f78e160">createNetworkLink</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_screen_overlay.html">KmlScreenOverlay</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#06c246aa32dd6d042f9670ac6b121a92">createScreenOverlay</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_multi_geometry.html">KmlMultiGeometry</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#fe3b5fdeac8b23bf599a46be0d1ddc12">createMultiGeometry</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_style_map.html">KmlStyleMap</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#edef83abc5d7fcf475f3841088a2c8c7">createStyleMap</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_look_at.html">KmlLookAt</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#aabcf5c075970ba095bb7a3c5bf02aef">createLookAt</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_kml_camera.html">KmlCamera</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#cda41a9d633e422b343e236c58a10454">createCamera</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_g_e_feature_balloon.html">GEFeatureBalloon</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#6f70f436e1151c96cd8032e8ebdd63dd">createFeatureBalloon</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_g_e_html_string_balloon.html">GEHtmlStringBalloon</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#63323b491d3766bf23dcffd08877cfdf">createHtmlStringBalloon</a> (string id)</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="interface_g_e_html_div_balloon.html">GEHtmlDivBalloon</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#a28fe58bc076354e2ab4616f358b5a01">createHtmlDivBalloon</a> (string id)</td></tr>
+
+<tr><td colspan="2"><div class="groupHeader">Events</div></td></tr>
+<tr><td colspan="2"><div class="groupText"><br><br></div></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#67582fe2ef005025979b9ababa9d5ac1">frameend</a> ()</td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#2d990319bb92b689d527c1e26dbdb8b4">balloonclose</a> ()</td></tr>
+
+<tr><td colspan="2"><br><h2>Public Attributes</h2></td></tr>
+<tr><td colspan="2"><div class="groupHeader">Enums and Constants</div></td></tr>
+<tr><td colspan="2"><div class="groupText"><br><br></div></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly KmlAltitudeModeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#b67a09e2ef810c24bb907d2c4bda0600">ALTITUDE_CLAMP_TO_GROUND</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly KmlAltitudeModeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#8f22cb0f3ba47cbddf0e8ed73dd18f65">ALTITUDE_RELATIVE_TO_GROUND</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly KmlAltitudeModeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#fd3cf265b98ac3d6c532d08e5385f4dd">ALTITUDE_ABSOLUTE</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly KmlAltitudeModeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#0671d9f016bee9d3e4fab3dcf7ba95d6">ALTITUDE_CLAMP_TO_SEA_FLOOR</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly KmlAltitudeModeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#2c335a006efff726cee0ab4ff3d51916">ALTITUDE_RELATIVE_TO_SEA_FLOOR</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly KmlRefreshModeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#b5dae994338298aaa1629a0f8a46c709">REFRESH_ON_CHANGE</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly KmlRefreshModeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#20638c3a1fc3e36245d824b815c41705">REFRESH_ON_INTERVAL</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly KmlRefreshModeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#9afd26bb293deef75980face30eff44c">REFRESH_ON_EXPIRE</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly KmlViewRefreshModeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#f4954123911475dcea557dacd924231d">VIEW_REFRESH_NEVER</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly KmlViewRefreshModeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#147d30a374a47d88fe48062a92c3f6a6">VIEW_REFRESH_ON_STOP</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly KmlViewRefreshModeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#b7ed7a7f9d293072f0a88dffb1d4210e">VIEW_REFRESH_ON_REGION</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly KmlUnitsEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#af884bf423cb747024a1bfc740705987">UNITS_FRACTION</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly KmlUnitsEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#f9e65edeafbe4b4a9dfc3bd90def82bc">UNITS_PIXELS</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly KmlUnitsEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#00d71ce07a2cdcd1be46634971cc682b">UNITS_INSET_PIXELS</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly KmlColorModeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#4d00df02b52140d7bef7c115a361c193">COLOR_NORMAL</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly KmlColorModeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#7f3949e62a13a00e51e5d42553c7d970">COLOR_RANDOM</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly KmlColorModeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#87690f0db415dc7046fcf5cedb4f7cd8">COLOR_INHERIT</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly GEMapTypeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#70f1bb09599e65f2fdb0a45eb77d4f3a">MAP_TYPE_EARTH</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly GEMapTypeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#dd81071d2f9beab0c81e1127772788e7">MAP_TYPE_SKY</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly GEVisibilityEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#cf5e58a6f603433ff91b6a1b739e80f8">VISIBILITY_HIDE</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly GEVisibilityEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#db71690006371732a1f0a63dda50899f">VISIBILITY_SHOW</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly GEVisibilityEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#945f33fac40135b7ad9f5151d3e51496">VISIBILITY_AUTO</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#839da9567637f899cddc875fd7fced4b">SPEED_TELEPORT</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly string&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#b68b78eca8cd4f0471ae50efef001c75">LAYER_TERRAIN</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly string&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#a8593c11e1612d056dab0fa53403c7ed">LAYER_ROADS</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly string&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#3fc6161a66cffdec4ed78b03d57c30c2">LAYER_BUILDINGS</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly string&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#9391a39f7c3b615bbc446edacf715945">LAYER_BUILDINGS_LOW_RESOLUTION</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly string&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#57df69319eab76b46dc2b75ed4ca1b06">LAYER_BORDERS</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly GEHitTestModeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#87338c3acdd56a06a3e309c167a248c9">HIT_TEST_GLOBE</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly GEHitTestModeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#7c2036a5903e1b3b60e2ace06adf7622">HIT_TEST_TERRAIN</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly GEHitTestModeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#493fc62f13bfea9f8b45ab942811644f">HIT_TEST_BUILDINGS</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly KmlListItemTypeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#ec448dfce196d795778d45e3647500d4">LIST_ITEM_CHECK</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly KmlListItemTypeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#921f9ccbc283ae1bfcf00dccdc9694bc">LIST_ITEM_CHECK_OFF_ONLY</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly KmlListItemTypeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#f6d819831f0e7263cfbdf14645d6c208">LIST_ITEM_CHECK_HIDE_CHILDREN</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly KmlListItemTypeEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#d39a6a8ee96831d11d584d6d59fea82b">LIST_ITEM_RADIO_FOLDER</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly GENavigationControlEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#012d17d613882307e957ee2bbcda6926">NAVIGATION_CONTROL_LARGE</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">readonly GENavigationControlEnum&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_g_e_plugin.html#ed7ec0ee8417c409cd66c185e3941a53">NAVIGATION_CONTROL_SMALL</a></td></tr>
+
+</table>
+<hr><a name="_details"></a><h2>Detailed Description</h2>
+The <a class="el" href="interface_g_e_plugin.html">GEPlugin</a> is the Google Earth Plug-in's main object, and this is the object that is returned to the JavaScript application when you first create a plug-in instance. <a class="el" href="interface_g_e_plugin.html">GEPlugin</a> provides factory methods for ructing other objects (placemarks, and so on), and is also used to retrieve the root document objects. <hr><h2>Member Function Documentation</h2>
+<a class="anchor" name="cd35e260277fb0ffb86b5b2a962551da"></a><!-- doxytag: member="GEPlugin.parseKml" ref="cd35e260277fb0ffb86b5b2a962551da" args="(string kml)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_object.html">KmlObject</a> GEPlugin.parseKml           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>kml</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Parse a string of KML and return a handle to the root of the KML object structure that was created. 
+</div>
+</div><p>
+<a class="anchor" name="db48f85de97abb87230fafe2403cbd1e"></a><!-- doxytag: member="GEPlugin.createPlacemark" ref="db48f85de97abb87230fafe2403cbd1e" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_placemark.html">KmlPlacemark</a> GEPlugin.createPlacemark           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates a placemark on the globe. A Placemark is a feature with associated Geometry. A Placemark with a Point has an icon associated with it that marks a point on the Earth in the 3D viewer. (In the Google Earth 3D viewer, a Point Placemark is the only object you can click or roll over. Other Geometry objects do not have an icon in the 3D viewer. To allow the user to click in the 3D viewer, you would need to create a MultiGeometry object that contains both a Point and the other Geometry object.) <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of placemark. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="52a9bc836dec782edafc03306a6a9de3"></a><!-- doxytag: member="GEPlugin.createPoint" ref="52a9bc836dec782edafc03306a6a9de3" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_point.html">KmlPoint</a> GEPlugin.createPoint           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates a point on the globe. Specifies the geographic location defined by longitude, latitude, and (optional) altitude. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of new location </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="cb4079feb6721676957d3a04a33f8866"></a><!-- doxytag: member="GEPlugin.createLineString" ref="cb4079feb6721676957d3a04a33f8866" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_line_string.html">KmlLineString</a> GEPlugin.createLineString           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates a line string on Google Earth. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>location of the new string. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="794db527dd214bac4d5dfa432424f530"></a><!-- doxytag: member="GEPlugin.createFolder" ref="794db527dd214bac4d5dfa432424f530" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_folder.html">KmlFolder</a> GEPlugin.createFolder           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates a folder. A KMLFolder is used to arrange other features hierarchically (Folders, Placemarks, NetworkLinks, or Overlays). A feature is visible only if it and all its ancestors are visible. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of the new folder </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="4a0f14d2f016ef9b744fa18b9ef7d74d"></a><!-- doxytag: member="GEPlugin.createLod" ref="4a0f14d2f016ef9b744fa18b9ef7d74d" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_lod.html">KmlLod</a> GEPlugin.createLod           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates level of detail (LOD). LOD describes the size of the projected region on the screen that is required in order for the region to be considered active. Also specifies the size of the pixel ramp used for fading in (from transparent to opaque) and fading out (from opaque to transparent). <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of the new LOD. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="3fab9085694f8fe93b7858483e1a41f6"></a><!-- doxytag: member="GEPlugin.createLatLonBox" ref="3fab9085694f8fe93b7858483e1a41f6" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_lat_lon_box.html">KmlLatLonBox</a> GEPlugin.createLatLonBox           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates a LatLonBox, a bounding box that describes an area of interest defined by geographic coordinates and altitudes. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of the new LatLonBox </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="98676df1a780fe394c8d5cf37524a002"></a><!-- doxytag: member="GEPlugin.createLatLonAltBox" ref="98676df1a780fe394c8d5cf37524a002" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_lat_lon_alt_box.html">KmlLatLonAltBox</a> GEPlugin.createLatLonAltBox           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates a LatLonAltBox, a bounding box that describes an area of interest defined by geographic coordinates and altitudes. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of the new LatLonAltBox </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="3789e68cd150236bb144ecc0dabaf017"></a><!-- doxytag: member="GEPlugin.createDocument" ref="3789e68cd150236bb144ecc0dabaf017" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_document.html">KmlDocument</a> GEPlugin.createDocument           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates a Document. A Document is a container for features and styles. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of the new KML document. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="eb7284f860d8293a21403d30bf0e0a4b"></a><!-- doxytag: member="GEPlugin.createRegion" ref="eb7284f860d8293a21403d30bf0e0a4b" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_region.html">KmlRegion</a> GEPlugin.createRegion           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates a Region in Google Earth. A Region contains a bounding box that describes an area of interest defined by geographic coordinates and altitudes. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of the new KML region. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="a4129b90561b6d9d3d4d5d2b0d392c31"></a><!-- doxytag: member="GEPlugin.createLocation" ref="a4129b90561b6d9d3d4d5d2b0d392c31" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_location.html">KmlLocation</a> GEPlugin.createLocation           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Specifies the exact coordinates of the Model's origin in latitude, longitude, and altitude. Latitude and longitude measurements are standard lat-lon projection with WGS84 datum. Altitude is distance above the earth's surface, in meters, and is interpreted according to altitudeMode. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of the new KML location. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="42ed474513a9f4bc60ba31c627879f24"></a><!-- doxytag: member="GEPlugin.createOrientation" ref="42ed474513a9f4bc60ba31c627879f24" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_orientation.html">KmlOrientation</a> GEPlugin.createOrientation           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Sets the rotation of a 3D model's coordinate system to position the object in Google Earth. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of the new KMLOrientation. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="9fe960c3f7d22050e3b435b25150a036"></a><!-- doxytag: member="GEPlugin.createScale" ref="9fe960c3f7d22050e3b435b25150a036" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_scale.html">KmlScale</a> GEPlugin.createScale           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Sets the scale of a model along the x, y, and z axes in the model's coordinate space. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of <a class="el" href="interface_kml_scale.html">KmlScale</a>. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="49d905e07cde7af356e5e318b8eacda5"></a><!-- doxytag: member="GEPlugin.createModel" ref="49d905e07cde7af356e5e318b8eacda5" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_model.html">KmlModel</a> GEPlugin.createModel           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates a model. A model is a 3D object described in a COLLADA file. COLLADA files have a .dae file extension. Models are created in their own coordinate space and then located, positioned, and scaled in Google Earth. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of the new <a class="el" href="interface_kml_model.html">KmlModel</a>. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="04f6c900bd032cdd505dc13c9cd257d3"></a><!-- doxytag: member="GEPlugin.createStyle" ref="04f6c900bd032cdd505dc13c9cd257d3" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_style.html">KmlStyle</a> GEPlugin.createStyle           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+A Style defines an addressable style group that can be referenced by StyleMaps and features. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of the new KMLStyle object. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="e3318f08e28d93450e0ea063569a5e1c"></a><!-- doxytag: member="GEPlugin.createLinearRing" ref="e3318f08e28d93450e0ea063569a5e1c" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_linear_ring.html">KmlLinearRing</a> GEPlugin.createLinearRing           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates a LinearRing. A LinearRing defines a closed line string, typically the outer boundary of a Polygon. Optionally, a LinearRing can also be used as the inner boundary of a Polygon to create holes in the Polygon. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of the new <a class="el" href="interface_kml_linear_ring.html">KmlLinearRing</a>. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="c83f79dee7b4f37ec50f9bb631e2f9df"></a><!-- doxytag: member="GEPlugin.createPolygon" ref="c83f79dee7b4f37ec50f9bb631e2f9df" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_polygon.html">KmlPolygon</a> GEPlugin.createPolygon           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates a Polygon. A Polygon is defined by an outer boundary and 0 or more inner boundaries. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of the new Polygon. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="40592a8c1058ed0a35afb4569c4fa95e"></a><!-- doxytag: member="GEPlugin.createIcon" ref="40592a8c1058ed0a35afb4569c4fa95e" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_icon.html">KmlIcon</a> GEPlugin.createIcon           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates an Icon. An icon defines an image associated with an Icon style or overlay. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of the new <a class="el" href="interface_kml_icon.html">KmlIcon</a>. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="9b6c09eb21bc40eb133bbe8dc66c64a9"></a><!-- doxytag: member="GEPlugin.createLink" ref="9b6c09eb21bc40eb133bbe8dc66c64a9" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_link.html">KmlLink</a> GEPlugin.createLink           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates a Link. A Link specifies the location of KML files fetched by network links, image files used in any overlay, or model files used with the Model object. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of the new <a class="el" href="interface_kml_link.html">KmlLink</a>. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="6232adbaa9d2472f233ab550644c087a"></a><!-- doxytag: member="GEPlugin.createGroundOverlay" ref="6232adbaa9d2472f233ab550644c087a" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_ground_overlay.html">KmlGroundOverlay</a> GEPlugin.createGroundOverlay           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates a GroundOverlay. A GroundOverlay draws an image overlay draped onto the terrain. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of the new <a class="el" href="interface_kml_ground_overlay.html">KmlGroundOverlay</a>. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="41b1ce19b86343a309b6f9bf8f78e160"></a><!-- doxytag: member="GEPlugin.createNetworkLink" ref="41b1ce19b86343a309b6f9bf8f78e160" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_network_link.html">KmlNetworkLink</a> GEPlugin.createNetworkLink           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates a NetworkLink. A NetworkLink references a KML file or KMZ archive on a local or remote network. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of the new <a class="el" href="interface_kml_network_link.html">KmlNetworkLink</a>. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="06c246aa32dd6d042f9670ac6b121a92"></a><!-- doxytag: member="GEPlugin.createScreenOverlay" ref="06c246aa32dd6d042f9670ac6b121a92" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_screen_overlay.html">KmlScreenOverlay</a> GEPlugin.createScreenOverlay           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates a ScreenOverlay. A ScreenOverlay draws an image overlay fixed to the screen. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of the new <a class="el" href="interface_kml_screen_overlay.html">KmlScreenOverlay</a>. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="fe3b5fdeac8b23bf599a46be0d1ddc12"></a><!-- doxytag: member="GEPlugin.createMultiGeometry" ref="fe3b5fdeac8b23bf599a46be0d1ddc12" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_multi_geometry.html">KmlMultiGeometry</a> GEPlugin.createMultiGeometry           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates a container for one or more geometry primitives associated with the same feature. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of the new <a class="el" href="interface_kml_multi_geometry.html">KmlMultiGeometry</a> container. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="edef83abc5d7fcf475f3841088a2c8c7"></a><!-- doxytag: member="GEPlugin.createStyleMap" ref="edef83abc5d7fcf475f3841088a2c8c7" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_style_map.html">KmlStyleMap</a> GEPlugin.createStyleMap           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates a StyleMap. A StyleMap maps between two different icon styles. Typically, a StyleMap is used to provide separate normal and highlighted styles for a Placemark, so that the highlighted version appears when the user mouses over the icon in Google Earth. 
+</div>
+</div><p>
+<a class="anchor" name="aabcf5c075970ba095bb7a3c5bf02aef"></a><!-- doxytag: member="GEPlugin.createLookAt" ref="aabcf5c075970ba095bb7a3c5bf02aef" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_look_at.html">KmlLookAt</a> GEPlugin.createLookAt           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates a new LookAt. A LookAt element positions the camera view in relation to an object that is being viewed. 
+</div>
+</div><p>
+<a class="anchor" name="cda41a9d633e422b343e236c58a10454"></a><!-- doxytag: member="GEPlugin.createCamera" ref="cda41a9d633e422b343e236c58a10454" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_camera.html">KmlCamera</a> GEPlugin.createCamera           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates a new Camera. This element positions the camera relative to the Earth's surface and defines the view direction. 
+</div>
+</div><p>
+<a class="anchor" name="6f70f436e1151c96cd8032e8ebdd63dd"></a><!-- doxytag: member="GEPlugin.createFeatureBalloon" ref="6f70f436e1151c96cd8032e8ebdd63dd" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_g_e_feature_balloon.html">GEFeatureBalloon</a> GEPlugin.createFeatureBalloon           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates a Feature balloon. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of <a class="el" href="interface_g_e_feature_balloon.html">GEFeatureBalloon</a>. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="63323b491d3766bf23dcffd08877cfdf"></a><!-- doxytag: member="GEPlugin.createHtmlStringBalloon" ref="63323b491d3766bf23dcffd08877cfdf" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_g_e_html_string_balloon.html">GEHtmlStringBalloon</a> GEPlugin.createHtmlStringBalloon           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates an HTML string balloon. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of <a class="el" href="interface_g_e_html_string_balloon.html">GEHtmlStringBalloon</a>. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="a28fe58bc076354e2ab4616f358b5a01"></a><!-- doxytag: member="GEPlugin.createHtmlDivBalloon" ref="a28fe58bc076354e2ab4616f358b5a01" args="(string id)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_g_e_html_div_balloon.html">GEHtmlDivBalloon</a> GEPlugin.createHtmlDivBalloon           </td>
+          <td>(</td>
+          <td class="paramtype">string&nbsp;</td>
+          <td class="paramname"> <em>id</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Creates an Html Div Balloon. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>id</em>&nbsp;</td><td>ID of <a class="el" href="interface_g_e_html_div_balloon.html">GEHtmlDivBalloon</a>. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="d6ff43f5bbbc6173b21b3bd11f64e9f8"></a><!-- doxytag: member="GEPlugin.getBalloon" ref="d6ff43f5bbbc6173b21b3bd11f64e9f8" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_g_e_abstract_balloon.html">GEAbstractBalloon</a> GEPlugin.getBalloon           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Returns the currently active balloon, or null. 
+</div>
+</div><p>
+<a class="anchor" name="f8b3ce978de67c29eafbd759c6de52d0"></a><!-- doxytag: member="GEPlugin.setBalloon" ref="f8b3ce978de67c29eafbd759c6de52d0" args="(GEAbstractBalloon newActiveBalloon)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GEPlugin.setBalloon           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interface_g_e_abstract_balloon.html">GEAbstractBalloon</a>&nbsp;</td>
+          <td class="paramname"> <em>newActiveBalloon</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Sets the given balloon as the active balloon, replacing any existing active balloon. If the given feature is visible, then the balloon is displayed. Otherwise, the balloon is hidden.<p>
+If the argument is null, then any existing active balloon will be hidden. 
+</div>
+</div><p>
+<a class="anchor" name="00517927aa9aef0d8e6e9bb09401fc12"></a><!-- doxytag: member="GEPlugin.getEarthVersion" ref="00517927aa9aef0d8e6e9bb09401fc12" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">string GEPlugin.getEarthVersion           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Used for debugging purposes; if this value is not equal to the value returned by getPluginVersion then there is a misconfiguration on the end user's system. This check is automatically done during plugin instantiation. 
+</div>
+</div><p>
+<a class="anchor" name="101705622bec3df952e5bd386b5f27e6"></a><!-- doxytag: member="GEPlugin.getPluginVersion" ref="101705622bec3df952e5bd386b5f27e6" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">string GEPlugin.getPluginVersion           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+The version of the Google Earth Plug-in installed on the end user's machine. 
+</div>
+</div><p>
+<a class="anchor" name="b51c0b10b416ff99f341eb11a6f01102"></a><!-- doxytag: member="GEPlugin.getApiVersion" ref="b51c0b10b416ff99f341eb11a6f01102" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">string GEPlugin.getApiVersion           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+The version of the JavaScript API that the Google Earth Plug-in installed on the end user's machine is capable of interfacing with. 
+</div>
+</div><p>
+<a class="anchor" name="93ebe430c9096811bfcbedde22cb5fff"></a><!-- doxytag: member="GEPlugin.getOptions" ref="93ebe430c9096811bfcbedde22cb5fff" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_g_e_options.html">GEOptions</a> GEPlugin.getOptions           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+The options used to manipulate the behavior of the Google Earth plugin. 
+</div>
+</div><p>
+<a class="anchor" name="4471b5f2bf0cb14f4a7b2ca315f02651"></a><!-- doxytag: member="GEPlugin.getWindow" ref="4471b5f2bf0cb14f4a7b2ca315f02651" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_g_e_window.html">GEWindow</a> GEPlugin.getWindow           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Controls the window options. 
+</div>
+</div><p>
+<a class="anchor" name="fc14b6835b90686b2f52df606344148e"></a><!-- doxytag: member="GEPlugin.getGlobe" ref="fc14b6835b90686b2f52df606344148e" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_g_e_globe.html">GEGlobe</a> GEPlugin.getGlobe           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Controls the globe behavior. 
+</div>
+</div><p>
+<a class="anchor" name="e82e5f619758c123ffc1c04cb14ca531"></a><!-- doxytag: member="GEPlugin.getSun" ref="e82e5f619758c123ffc1c04cb14ca531" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_g_e_sun.html">GESun</a> GEPlugin.getSun           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Displays the dawn to dusk views. 
+</div>
+</div><p>
+<a class="anchor" name="5cb7a0b522d1a1b7ed81d7aa288397e2"></a><!-- doxytag: member="GEPlugin.getLayerRoot" ref="5cb7a0b522d1a1b7ed81d7aa288397e2" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_kml_layer_root.html">KmlLayerRoot</a> GEPlugin.getLayerRoot           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Controls built-in layer behavior. 
+</div>
+</div><p>
+<a class="anchor" name="705ba528282cfa404263527a31b54ee1"></a><!-- doxytag: member="GEPlugin.getView" ref="705ba528282cfa404263527a31b54ee1" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_g_e_view.html">GEView</a> GEPlugin.getView           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Controls the plugin viewport. 
+</div>
+</div><p>
+<a class="anchor" name="1e819aa973ed10a7a651494d98773a6f"></a><!-- doxytag: member="GEPlugin.getNavigationControl" ref="1e819aa973ed10a7a651494d98773a6f" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_g_e_navigation_control.html">GENavigationControl</a> GEPlugin.getNavigationControl           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Controls the navigation controls on the globe. 
+</div>
+</div><p>
+<a class="anchor" name="66d06881570d5ec1eae65b49a5b416f2"></a><!-- doxytag: member="GEPlugin.getFeatures" ref="66d06881570d5ec1eae65b49a5b416f2" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_g_e_feature_container.html">GEFeatureContainer</a> GEPlugin.getFeatures           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+The top-level features currently in the Earth object. 
+</div>
+</div><p>
+<a class="anchor" name="d7da47caa5b079d61350f2fd13426fee"></a><!-- doxytag: member="GEPlugin.getTourPlayer" ref="d7da47caa5b079d61350f2fd13426fee" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_g_e_tour_player.html">GETourPlayer</a> GEPlugin.getTourPlayer           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Exposes functionality for interacting with KML tours. 
+</div>
+</div><p>
+<a class="anchor" name="5ac07c3e4eb5a8bb19de75e4eec6bedf"></a><!-- doxytag: member="GEPlugin.getPhotoOverlayViewer" ref="5ac07c3e4eb5a8bb19de75e4eec6bedf" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_g_e_photo_overlay_viewer.html">GEPhotoOverlayViewer</a> GEPlugin.getPhotoOverlayViewer           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Exposes functionality for interacting with photo overlays. 
+</div>
+</div><p>
+<a class="anchor" name="d022bb521e338e9f8453dc0d43a0f946"></a><!-- doxytag: member="GEPlugin.getStreamingPercent" ref="d022bb521e338e9f8453dc0d43a0f946" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float GEPlugin.getStreamingPercent           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Returns a number between 0 and 100 (inclusive) that indicates the progress of the streaming of imagery for the current view.<p>
+A value of 100 means that the imagery is completely streamed in. 
+</div>
+</div><p>
+<a class="anchor" name="67582fe2ef005025979b9ababa9d5ac1"></a><!-- doxytag: member="GEPlugin.frameend" ref="67582fe2ef005025979b9ababa9d5ac1" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GEPlugin.frameend           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Event fired when Earth has finished rendering the viewport. This event will be called many times in succession when the viewport is changing. Add a listener for this event and make incremental changes to the viewport for smooth animation. 
+</div>
+</div><p>
+<a class="anchor" name="2d990319bb92b689d527c1e26dbdb8b4"></a><!-- doxytag: member="GEPlugin.balloonclose" ref="2d990319bb92b689d527c1e26dbdb8b4" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GEPlugin.balloonclose           </td>
+          <td>(</td>
+          <td class="paramname">          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Event fired when the current balloon is closed. 
+</div>
+</div><p>
+<hr><h2>Member Data Documentation</h2>
+<a class="anchor" name="b67a09e2ef810c24bb907d2c4bda0600"></a><!-- doxytag: member="GEPlugin.ALTITUDE_CLAMP_TO_GROUND" ref="b67a09e2ef810c24bb907d2c4bda0600" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly KmlAltitudeModeEnum <a class="el" href="interface_g_e_plugin.html#b67a09e2ef810c24bb907d2c4bda0600">GEPlugin.ALTITUDE_CLAMP_TO_GROUND</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Specifies that altitudes are at ground level. For Ground overlays, this means that the image will be draped over the terrain. 
+</div>
+</div><p>
+<a class="anchor" name="8f22cb0f3ba47cbddf0e8ed73dd18f65"></a><!-- doxytag: member="GEPlugin.ALTITUDE_RELATIVE_TO_GROUND" ref="8f22cb0f3ba47cbddf0e8ed73dd18f65" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly KmlAltitudeModeEnum <a class="el" href="interface_g_e_plugin.html#8f22cb0f3ba47cbddf0e8ed73dd18f65">GEPlugin.ALTITUDE_RELATIVE_TO_GROUND</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Specifies that altitudes are to be interpreted as meters above or below ground level (i.e. the elevation of the terrain at the location). 
+</div>
+</div><p>
+<a class="anchor" name="fd3cf265b98ac3d6c532d08e5385f4dd"></a><!-- doxytag: member="GEPlugin.ALTITUDE_ABSOLUTE" ref="fd3cf265b98ac3d6c532d08e5385f4dd" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly KmlAltitudeModeEnum <a class="el" href="interface_g_e_plugin.html#fd3cf265b98ac3d6c532d08e5385f4dd">GEPlugin.ALTITUDE_ABSOLUTE</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Specifies that altitudes are to be interpreted as meters above or below sea level, regardless of the actual elevation of the terrain beneath the object. For example, if you set the altitude of an object to 10 meters with an absolute altitude mode, the object will appear to be at ground level if the terrain beneath is also 10 meters above sea level. If the terrain is 3 meters above sea level, the object will appear elevated above the terrain by 7 meters. If, on the other hand, the terrain is 15 meters above sea level, the object may be completely invisible. 
+</div>
+</div><p>
+<a class="anchor" name="0671d9f016bee9d3e4fab3dcf7ba95d6"></a><!-- doxytag: member="GEPlugin.ALTITUDE_CLAMP_TO_SEA_FLOOR" ref="0671d9f016bee9d3e4fab3dcf7ba95d6" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly KmlAltitudeModeEnum <a class="el" href="interface_g_e_plugin.html#0671d9f016bee9d3e4fab3dcf7ba95d6">GEPlugin.ALTITUDE_CLAMP_TO_SEA_FLOOR</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Specifies that altitudes are at sea floor level. 
+</div>
+</div><p>
+<a class="anchor" name="2c335a006efff726cee0ab4ff3d51916"></a><!-- doxytag: member="GEPlugin.ALTITUDE_RELATIVE_TO_SEA_FLOOR" ref="2c335a006efff726cee0ab4ff3d51916" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly KmlAltitudeModeEnum <a class="el" href="interface_g_e_plugin.html#2c335a006efff726cee0ab4ff3d51916">GEPlugin.ALTITUDE_RELATIVE_TO_SEA_FLOOR</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Specifies that altitudes are to be interpreted as meters above sea floor (i.e. the elevation of the sea floor at the location). 
+</div>
+</div><p>
+<a class="anchor" name="b5dae994338298aaa1629a0f8a46c709"></a><!-- doxytag: member="GEPlugin.REFRESH_ON_CHANGE" ref="b5dae994338298aaa1629a0f8a46c709" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly KmlRefreshModeEnum <a class="el" href="interface_g_e_plugin.html#b5dae994338298aaa1629a0f8a46c709">GEPlugin.REFRESH_ON_CHANGE</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Refresh when the file is loaded and whenever the Link parameters change. This refresh mode is the default. 
+</div>
+</div><p>
+<a class="anchor" name="20638c3a1fc3e36245d824b815c41705"></a><!-- doxytag: member="GEPlugin.REFRESH_ON_INTERVAL" ref="20638c3a1fc3e36245d824b815c41705" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly KmlRefreshModeEnum <a class="el" href="interface_g_e_plugin.html#20638c3a1fc3e36245d824b815c41705">GEPlugin.REFRESH_ON_INTERVAL</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Refresh every n seconds (specified in refreshInterval). 
+</div>
+</div><p>
+<a class="anchor" name="9afd26bb293deef75980face30eff44c"></a><!-- doxytag: member="GEPlugin.REFRESH_ON_EXPIRE" ref="9afd26bb293deef75980face30eff44c" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly KmlRefreshModeEnum <a class="el" href="interface_g_e_plugin.html#9afd26bb293deef75980face30eff44c">GEPlugin.REFRESH_ON_EXPIRE</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Refresh when the expiration time is reached. If a fetched file has a NetworkLinkControl, the expires time takes precedence over expiration times specified in HTTP headers. If no expires time is specified, the HTTP max-age header is used (if present). If max-age is not present, the Expires HTTP header is used (if present). 
+</div>
+</div><p>
+<a class="anchor" name="f4954123911475dcea557dacd924231d"></a><!-- doxytag: member="GEPlugin.VIEW_REFRESH_NEVER" ref="f4954123911475dcea557dacd924231d" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly KmlViewRefreshModeEnum <a class="el" href="interface_g_e_plugin.html#f4954123911475dcea557dacd924231d">GEPlugin.VIEW_REFRESH_NEVER</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Ignore changes in the view. Also ignore viewFormat parameters, if any. This view refresh mode is the default. 
+</div>
+</div><p>
+<a class="anchor" name="147d30a374a47d88fe48062a92c3f6a6"></a><!-- doxytag: member="GEPlugin.VIEW_REFRESH_ON_STOP" ref="147d30a374a47d88fe48062a92c3f6a6" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly KmlViewRefreshModeEnum <a class="el" href="interface_g_e_plugin.html#147d30a374a47d88fe48062a92c3f6a6">GEPlugin.VIEW_REFRESH_ON_STOP</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Refresh n seconds after movement stops, where n is specified in viewRefreshTime. 
+</div>
+</div><p>
+<a class="anchor" name="b7ed7a7f9d293072f0a88dffb1d4210e"></a><!-- doxytag: member="GEPlugin.VIEW_REFRESH_ON_REGION" ref="b7ed7a7f9d293072f0a88dffb1d4210e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly KmlViewRefreshModeEnum <a class="el" href="interface_g_e_plugin.html#b7ed7a7f9d293072f0a88dffb1d4210e">GEPlugin.VIEW_REFRESH_ON_REGION</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Refresh only when the feature's Region becomes active. 
+</div>
+</div><p>
+<a class="anchor" name="af884bf423cb747024a1bfc740705987"></a><!-- doxytag: member="GEPlugin.UNITS_FRACTION" ref="af884bf423cb747024a1bfc740705987" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly KmlUnitsEnum <a class="el" href="interface_g_e_plugin.html#af884bf423cb747024a1bfc740705987">GEPlugin.UNITS_FRACTION</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Screen coordinates are to be interpreted as a fraction of an item, like an image or Google Earth window. 
+</div>
+</div><p>
+<a class="anchor" name="f9e65edeafbe4b4a9dfc3bd90def82bc"></a><!-- doxytag: member="GEPlugin.UNITS_PIXELS" ref="f9e65edeafbe4b4a9dfc3bd90def82bc" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly KmlUnitsEnum <a class="el" href="interface_g_e_plugin.html#f9e65edeafbe4b4a9dfc3bd90def82bc">GEPlugin.UNITS_PIXELS</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Screen coordinates are to be interpreted as pixels from the left or bottom edge. 
+</div>
+</div><p>
+<a class="anchor" name="00d71ce07a2cdcd1be46634971cc682b"></a><!-- doxytag: member="GEPlugin.UNITS_INSET_PIXELS" ref="00d71ce07a2cdcd1be46634971cc682b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly KmlUnitsEnum <a class="el" href="interface_g_e_plugin.html#00d71ce07a2cdcd1be46634971cc682b">GEPlugin.UNITS_INSET_PIXELS</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Screen coordinates are to be interpreted as pixels from the top or right edge. 
+</div>
+</div><p>
+<a class="anchor" name="4d00df02b52140d7bef7c115a361c193"></a><!-- doxytag: member="GEPlugin.COLOR_NORMAL" ref="4d00df02b52140d7bef7c115a361c193" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly KmlColorModeEnum <a class="el" href="interface_g_e_plugin.html#4d00df02b52140d7bef7c115a361c193">GEPlugin.COLOR_NORMAL</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Apply no color mode effect, i.e. use the base color as is. 
+</div>
+</div><p>
+<a class="anchor" name="7f3949e62a13a00e51e5d42553c7d970"></a><!-- doxytag: member="GEPlugin.COLOR_RANDOM" ref="7f3949e62a13a00e51e5d42553c7d970" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly KmlColorModeEnum <a class="el" href="interface_g_e_plugin.html#7f3949e62a13a00e51e5d42553c7d970">GEPlugin.COLOR_RANDOM</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Apply a random linear scale to the base color. See the KML &lt;colorMode&gt; documentation for more details. 
+</div>
+</div><p>
+<a class="anchor" name="87690f0db415dc7046fcf5cedb4f7cd8"></a><!-- doxytag: member="GEPlugin.COLOR_INHERIT" ref="87690f0db415dc7046fcf5cedb4f7cd8" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly KmlColorModeEnum <a class="el" href="interface_g_e_plugin.html#87690f0db415dc7046fcf5cedb4f7cd8">GEPlugin.COLOR_INHERIT</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Inherit the color mode from ancestor styles. 
+</div>
+</div><p>
+<a class="anchor" name="70f1bb09599e65f2fdb0a45eb77d4f3a"></a><!-- doxytag: member="GEPlugin.MAP_TYPE_EARTH" ref="70f1bb09599e65f2fdb0a45eb77d4f3a" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly GEMapTypeEnum <a class="el" href="interface_g_e_plugin.html#70f1bb09599e65f2fdb0a45eb77d4f3a">GEPlugin.MAP_TYPE_EARTH</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+The Earth map type, used with GEOptions' setMapType 
+</div>
+</div><p>
+<a class="anchor" name="dd81071d2f9beab0c81e1127772788e7"></a><!-- doxytag: member="GEPlugin.MAP_TYPE_SKY" ref="dd81071d2f9beab0c81e1127772788e7" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly GEMapTypeEnum <a class="el" href="interface_g_e_plugin.html#dd81071d2f9beab0c81e1127772788e7">GEPlugin.MAP_TYPE_SKY</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+The Sky map type, used with GEOptions' setMapType 
+</div>
+</div><p>
+<a class="anchor" name="cf5e58a6f603433ff91b6a1b739e80f8"></a><!-- doxytag: member="GEPlugin.VISIBILITY_HIDE" ref="cf5e58a6f603433ff91b6a1b739e80f8" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly GEVisibilityEnum <a class="el" href="interface_g_e_plugin.html#cf5e58a6f603433ff91b6a1b739e80f8">GEPlugin.VISIBILITY_HIDE</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Hide the navigation control. 
+</div>
+</div><p>
+<a class="anchor" name="db71690006371732a1f0a63dda50899f"></a><!-- doxytag: member="GEPlugin.VISIBILITY_SHOW" ref="db71690006371732a1f0a63dda50899f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly GEVisibilityEnum <a class="el" href="interface_g_e_plugin.html#db71690006371732a1f0a63dda50899f">GEPlugin.VISIBILITY_SHOW</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Show the navigation control always. 
+</div>
+</div><p>
+<a class="anchor" name="945f33fac40135b7ad9f5151d3e51496"></a><!-- doxytag: member="GEPlugin.VISIBILITY_AUTO" ref="945f33fac40135b7ad9f5151d3e51496" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly GEVisibilityEnum <a class="el" href="interface_g_e_plugin.html#945f33fac40135b7ad9f5151d3e51496">GEPlugin.VISIBILITY_AUTO</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Automatically show or hide the navigation control depending on user interaction. 
+</div>
+</div><p>
+<a class="anchor" name="839da9567637f899cddc875fd7fced4b"></a><!-- doxytag: member="GEPlugin.SPEED_TELEPORT" ref="839da9567637f899cddc875fd7fced4b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly double <a class="el" href="interface_g_e_plugin.html#839da9567637f899cddc875fd7fced4b">GEPlugin.SPEED_TELEPORT</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Specifies that fly-to should happen immediately, without a smooth transition. 
+</div>
+</div><p>
+<a class="anchor" name="b68b78eca8cd4f0471ae50efef001c75"></a><!-- doxytag: member="GEPlugin.LAYER_TERRAIN" ref="b68b78eca8cd4f0471ae50efef001c75" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly string <a class="el" href="interface_g_e_plugin.html#b68b78eca8cd4f0471ae50efef001c75">GEPlugin.LAYER_TERRAIN</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+The Layer ID of the terrain layer. Use as an argument to getLayerById() or enableLayerById(). 
+</div>
+</div><p>
+<a class="anchor" name="a8593c11e1612d056dab0fa53403c7ed"></a><!-- doxytag: member="GEPlugin.LAYER_ROADS" ref="a8593c11e1612d056dab0fa53403c7ed" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly string <a class="el" href="interface_g_e_plugin.html#a8593c11e1612d056dab0fa53403c7ed">GEPlugin.LAYER_ROADS</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+The Layer ID of the roads layer. Use as an argument to getLayerById() or enableLayerById(). 
+</div>
+</div><p>
+<a class="anchor" name="3fc6161a66cffdec4ed78b03d57c30c2"></a><!-- doxytag: member="GEPlugin.LAYER_BUILDINGS" ref="3fc6161a66cffdec4ed78b03d57c30c2" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly string <a class="el" href="interface_g_e_plugin.html#3fc6161a66cffdec4ed78b03d57c30c2">GEPlugin.LAYER_BUILDINGS</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+The Layer ID of the photorealistic buildings layer. Use as an argument to getLayerById() or enableLayerById(). 
+</div>
+</div><p>
+<a class="anchor" name="9391a39f7c3b615bbc446edacf715945"></a><!-- doxytag: member="GEPlugin.LAYER_BUILDINGS_LOW_RESOLUTION" ref="9391a39f7c3b615bbc446edacf715945" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly string <a class="el" href="interface_g_e_plugin.html#9391a39f7c3b615bbc446edacf715945">GEPlugin.LAYER_BUILDINGS_LOW_RESOLUTION</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+The Layer ID of the low resolution (gray) buildings layer. Use as an argument to getLayerById() or enableLayerById(). Note that as photorealistic buildings continue to be created and added to the LAYER_BUILDINGS layer, the low-resolution version of those buildings will be removed from this layer. This layer will therefore change over time. 
+</div>
+</div><p>
+<a class="anchor" name="57df69319eab76b46dc2b75ed4ca1b06"></a><!-- doxytag: member="GEPlugin.LAYER_BORDERS" ref="57df69319eab76b46dc2b75ed4ca1b06" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly string <a class="el" href="interface_g_e_plugin.html#57df69319eab76b46dc2b75ed4ca1b06">GEPlugin.LAYER_BORDERS</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+The Layer ID of the borders layer. Use as an argument to getLayerById() or enableLayerById(). 
+</div>
+</div><p>
+<a class="anchor" name="87338c3acdd56a06a3e309c167a248c9"></a><!-- doxytag: member="GEPlugin.HIT_TEST_GLOBE" ref="87338c3acdd56a06a3e309c167a248c9" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly GEHitTestModeEnum <a class="el" href="interface_g_e_plugin.html#87338c3acdd56a06a3e309c167a248c9">GEPlugin.HIT_TEST_GLOBE</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+When using the <a class="el" href="interface_g_e_view.html#8e8274c1236b6bbeff60a7a74e15995c">GEView.hitTest</a> method, this mode samples the globe (the earth's sphere at altitude 0, without terrain or buildings). 
+</div>
+</div><p>
+<a class="anchor" name="7c2036a5903e1b3b60e2ace06adf7622"></a><!-- doxytag: member="GEPlugin.HIT_TEST_TERRAIN" ref="7c2036a5903e1b3b60e2ace06adf7622" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly GEHitTestModeEnum <a class="el" href="interface_g_e_plugin.html#7c2036a5903e1b3b60e2ace06adf7622">GEPlugin.HIT_TEST_TERRAIN</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+When using the <a class="el" href="interface_g_e_view.html#8e8274c1236b6bbeff60a7a74e15995c">GEView.hitTest</a> method, this mode samples the earth's terrain (the ground surface, including variations in altitude). 
+</div>
+</div><p>
+<a class="anchor" name="493fc62f13bfea9f8b45ab942811644f"></a><!-- doxytag: member="GEPlugin.HIT_TEST_BUILDINGS" ref="493fc62f13bfea9f8b45ab942811644f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly GEHitTestModeEnum <a class="el" href="interface_g_e_plugin.html#493fc62f13bfea9f8b45ab942811644f">GEPlugin.HIT_TEST_BUILDINGS</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+When using the <a class="el" href="interface_g_e_view.html#8e8274c1236b6bbeff60a7a74e15995c">GEView.hitTest</a> method, this mode samples 3D buildings. 
+</div>
+</div><p>
+<a class="anchor" name="ec448dfce196d795778d45e3647500d4"></a><!-- doxytag: member="GEPlugin.LIST_ITEM_CHECK" ref="ec448dfce196d795778d45e3647500d4" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly KmlListItemTypeEnum <a class="el" href="interface_g_e_plugin.html#ec448dfce196d795778d45e3647500d4">GEPlugin.LIST_ITEM_CHECK</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+The feature's visibility is tied to its list item's checkbox state. 
+</div>
+</div><p>
+<a class="anchor" name="921f9ccbc283ae1bfcf00dccdc9694bc"></a><!-- doxytag: member="GEPlugin.LIST_ITEM_CHECK_OFF_ONLY" ref="921f9ccbc283ae1bfcf00dccdc9694bc" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly KmlListItemTypeEnum <a class="el" href="interface_g_e_plugin.html#921f9ccbc283ae1bfcf00dccdc9694bc">GEPlugin.LIST_ITEM_CHECK_OFF_ONLY</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+When specified for a folder, document or network link, prevents all items from being made visible at once&mdash;that is, the user can turn all children off but cannot turn them all on at the same time. This setting is useful for containers or network links containing large amounts of data. 
+</div>
+</div><p>
+<a class="anchor" name="f6d819831f0e7263cfbdf14645d6c208"></a><!-- doxytag: member="GEPlugin.LIST_ITEM_CHECK_HIDE_CHILDREN" ref="f6d819831f0e7263cfbdf14645d6c208" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly KmlListItemTypeEnum <a class="el" href="interface_g_e_plugin.html#f6d819831f0e7263cfbdf14645d6c208">GEPlugin.LIST_ITEM_CHECK_HIDE_CHILDREN</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Use a normal checkbox for visibility but do not display children in a list view. The item's checkbox should allows the user to toggle visibility of the child objects in the viewport. 
+</div>
+</div><p>
+<a class="anchor" name="d39a6a8ee96831d11d584d6d59fea82b"></a><!-- doxytag: member="GEPlugin.LIST_ITEM_RADIO_FOLDER" ref="d39a6a8ee96831d11d584d6d59fea82b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly KmlListItemTypeEnum <a class="el" href="interface_g_e_plugin.html#d39a6a8ee96831d11d584d6d59fea82b">GEPlugin.LIST_ITEM_RADIO_FOLDER</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+When specified for a container (a folder or a document), only one of the container's items should be visible at a time. 
+</div>
+</div><p>
+<a class="anchor" name="012d17d613882307e957ee2bbcda6926"></a><!-- doxytag: member="GEPlugin.NAVIGATION_CONTROL_LARGE" ref="012d17d613882307e957ee2bbcda6926" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly GENavigationControlEnum <a class="el" href="interface_g_e_plugin.html#012d17d613882307e957ee2bbcda6926">GEPlugin.NAVIGATION_CONTROL_LARGE</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+The large navigation control type, used with <a class="el" href="interface_g_e_navigation_control.html#d7c784e6ad3cd691e826040b940019a3">GENavigationControl.setControlType()</a>. 
+</div>
+</div><p>
+<a class="anchor" name="ed7ec0ee8417c409cd66c185e3941a53"></a><!-- doxytag: member="GEPlugin.NAVIGATION_CONTROL_SMALL" ref="ed7ec0ee8417c409cd66c185e3941a53" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly GENavigationControlEnum <a class="el" href="interface_g_e_plugin.html#ed7ec0ee8417c409cd66c185e3941a53">GEPlugin.NAVIGATION_CONTROL_SMALL</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+The small navigation control type, used with <a class="el" href="interface_g_e_navigation_control.html#d7c784e6ad3cd691e826040b940019a3">GENavigationControl.setControlType()</a>. 
+</div>
+</div><p>
+</div>
+</div><!-- end doxygen-ref -->
+
+      </div><!-- end gc-pagecontent -->
+   </div><!-- end gooey wrapper -->
+
+    </div> <!-- end codesite content -->
+
+
+<div id="gc-footer" dir="ltr">
+  <div class="text">
+    
+    &copy;2010 Google -
+    <a href="http://code.google.com">Code Home</a> -
+    <a href="http://code.google.com/terms.html">Terms of Service</a> -
+    <a href="http://code.google.com/privacy.html">Privacy Policy</a> -
+    <a href="http://code.google.com/more">Site Directory</a>
+    <br> <br>
+    Google Code offered in:
+    <a href="http://code.google.com/intl/en">English</a> -
+    <a href="http://code.google.com/intl/es">Español</a> -
+    <a href="http://code.google.com/intl/ja">日本語</a> -
+    <a href="http://code.google.com/intl/ko">한국어</a> -
+    <a href="http://code.google.com/intl/pt-BR">Português</a> -
+    <a href="http://code.google.com/intl/ru">Pусский</a> -
+    <a href="http://code.google.com/intl/zh-CN">中文(简体)</a> -
+    <a href="http://code.google.com/intl/zh-TW">中文(繁體)</a>
+  </div>
+</div><!-- end gc-footer -->
+
+</div><!-- end gc-container -->
+
+<script type="text/javascript">CODESITE_CSITimer['load'].tick('ats');</script>
+<script src="../../../../js/codesite_tail.pack.04102009.js" type="text/javascript"></script>
+
+
+
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+
+_gaq.push(
+
+
+    ['siteTracker._setAccount', 'UA-18071-1'],
+    ['siteTracker._setDomainName', 'code.google.com'],
+    ['siteTracker._setCookiePath', window.location.pathname.substring(0,
+        window.location.pathname.lastIndexOf('/') + 1)],
+    ['siteTracker._trackPageview']
+);
+(function() {
+  var ga = document.createElement('script');
+
+  ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'http://www.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] ||
+   document.getElementsByTagName('body')[0]).appendChild(ga);
+ })();
+</script>
+
+
+
+
+  </body>
+</html>
+

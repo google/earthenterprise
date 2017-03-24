@@ -1,0 +1,16 @@
+URL: http://www.postgresql.org/developer/
+Version: 8.4.22
+License: BSD
+License File: COPYRIGHT
+
+Description:
+PostgreSQL is an object-relational database system that has the features of
+traditional commercial database systems with enhancements to be found in
+next-generation DBMS  systems. PostgreSQL is free and the complete source
+code is available.
+
+The PostgreSQL source, postgresql-8.4.22.tar.bz2,
+is downloadable from http://www.postgresql.org/ftp/source/
+
+Local Modifications:
+None

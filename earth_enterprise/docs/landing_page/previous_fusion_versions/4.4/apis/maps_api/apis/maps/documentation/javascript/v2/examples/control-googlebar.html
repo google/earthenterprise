@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:v="urn:schemas-microsoft-com:vml">
+  <head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/maps/documentation/javascript/v2/examples/control-googlebar.html";
+    </script>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Google Maps JavaScript API Example: LocalSearch Control</title>
+    <script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSosDVG8KKPE1-m51RBrvYughuyMxQ-i1QfUnH94QxWIa6N4U6MouMmBA"
+      type="text/javascript"></script>
+    <script type="text/javascript">
+      function initialize() {
+        var map;
+        if (GBrowserIsCompatible()) {
+          var mapOptions = {
+            googleBarOptions : {
+              style : "new"
+            }
+          }
+          map = new GMap2(document.getElementById("map_canvas"), mapOptions);
+          map.setCenter(new GLatLng(33.956461,-118.396225), 13);
+          map.setUIToDefault();
+          map.enableGoogleBar();
+        }
+      }
+    </script>
+  </head>
+  <body onload="initialize()" onunload="GUnload()">
+    <div id="map_canvas" style="width: 500px; height: 500px"></div>
+  </body>
+</html>
+

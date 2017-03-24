@@ -1,0 +1,195 @@
+# Copyright 2009 Google Inc. All Rights Reserved.
+#-*- Python -*-
+
+
+Import('third_party_env')
+
+libjs_version = 'js-1.8.0-rc1'
+firefox_version = 'firefox-2.0.0.20'
+libjs_ge_version = 'libjs-ge-2.0.0.20'
+
+libjs_patches = ['gejsapi.h', 'gejsapi.c']
+num_cpu = GetOption('num_jobs')
+
+current_dir = Dir('.').abspath
+build_root = '%s/%s' % (current_dir, libjs_version)
+libjs_source = File('#/../../earth_enterprise/third_party/libjs/'
+                    '%s.tar.gz' % libjs_version).abspath
+firefox_source = File('#/../../earth_enterprise/third_party/firefox/'
+                      '%s-source.tar.bz2' % firefox_version).abspath
+patch_source = Dir('#/../../earth_enterprise/src/third_party/libjs'
+                  ).abspath
+
+libjs_env = third_party_env.DeepCopy()
+libjs_env['ENV']['XCFLAGS'] = ' '.join(libjs_env['optflags'])
+libjs_env['ENV']['JS_THREADSAFE'] = '1'
+
+# [1] Extract firefox
+libjs_target = '%s/.extract' % current_dir
+firefox_extract = libjs_env.Command(
+    libjs_target, [firefox_source],
+    [libjs_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xjf %s mozilla/js/src mozilla/nsprpub\n'
+        'touch %s' % (current_dir, current_dir, firefox_source, libjs_target))])
+
+# [2] Extract libjs
+libjs_target = '%s/.extract_libjs' % current_dir
+libjs_extract = libjs_env.Command(
+    libjs_target, firefox_extract + [libjs_source],
+    [libjs_env.MultiCommand(
+        'cd %s/mozilla\n'
+        'tar xzf %s js/src/config js/src/editline\n'
+        'touch %s' % (current_dir, libjs_source, libjs_target))])
+
+# [3] Patch libjs
+libjs_target = '%s/.patch_libjs' % current_dir
+libjs_patch = libjs_env.Command(
+    libjs_target,
+    libjs_extract +
+    map(libjs_env.GetBuildPath, libjs_patches),
+    map(lambda i: 'cp -f %s %s/mozilla/js/src' % (
+        libjs_env.GetBuildPath(i), current_dir),
+        libjs_patches) + [Touch('$TARGET')])
+
+# Find out whether optimize or debug and set variables accordingly
+if libjs_env['release'] or libjs_env['optimize']:
+  extn = 'OPT'
+  config_opt = '--enable-optimize --disable-debug'
+  env_opt = 'BUILD_OPT=1 '
+else:
+  extn = 'DBG'
+  config_opt = '--enable-debug --disable-optimize'
+  env_opt = ''
+
+
+# [4] Configure libjs
+libjs_target = '%s/.configure_libjs' % current_dir
+libjs_configure = libjs_env.Command(
+    libjs_target, libjs_patch,
+    [libjs_env.MultiCommand(
+        'cd %s/mozilla/nsprpub\n'
+        '%s./configure %s --enable-64bit\n'
+        'touch %s' % (current_dir, libjs_env['ENV']['mod_env'], config_opt,
+                      libjs_target))])
+
+libjs_target = '%s/.build_firefox' % current_dir
+make_options = 'CC="%s"' % libjs_env['ENV']['CC']
+firefox_build = libjs_env.Command(
+    libjs_target, libjs_configure,
+    [libjs_env.MultiCommand(
+        'cd %s/mozilla/nsprpub\n'
+        '%smake -j%d %s\n'
+        'touch %s' % (current_dir, libjs_env['ENV']['mod_env'], num_cpu,
+                      make_options, libjs_target))])
+
+# [5] Build libjs
+if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+  make_options += ' LD="%s"' % libjs_env['ENV']['CC']
+libjs_target = '%s/.build_libjs' % current_dir
+# Note for this target: Don't use -jx as this is not parallel safe
+libjs_build = libjs_env.Command(
+    libjs_target, firefox_build,
+    ['cd %s/mozilla/js/src && '
+     '%s%sINCLUDES=-I../../nsprpub/dist/include/nspr '
+     'OTHER_LIBS=-L../../nsprpub/dist/lib JS_THREADSAFE=1 make %s '
+     '-f Makefile.ref \'LIB_CFILES=$$(JS_CFILES) gejsapi.c\' ' % (
+         current_dir, libjs_env['ENV']['mod_env'], env_opt, make_options),
+     Touch('$TARGET')])
+
+# [6] Create libjs master installer
+install_root = '%s/install' % current_dir
+inc_dir = '%s/include' % install_root
+lib_dir = '%s/lib' % install_root
+lic_dir = '%s/share/doc/packages/%s' % (install_root, libjs_ge_version)
+libjs_target = '%s/.install' % current_dir
+libjs_install = libjs_env.Command(
+    libjs_target, libjs_build,
+    ['install -d -m 755 %s/libjs' % inc_dir,
+     'install -d -m 755 %s' % lib_dir,
+     'install -m 755 %s/mozilla/js/src/Linux_All_%s.OBJ/libjs.so %s' % (
+         current_dir, extn, lib_dir),
+     'install -m 755 %s/mozilla/nsprpub/dist/lib/libnspr4.so %s' % (
+         current_dir, lib_dir),
+     libjs_env.WriteToFile(
+         '%s/gejsapi.h' % inc_dir,
+         '#ifndef _GE_NSAPI\n'
+         '#ifndef XP_UNIX\n'
+         '#define XP_UNIX\n'
+         '#endif\n'
+         '#ifndef SVR4\n'
+         '#define SVR4\n'
+         '#endif\n'
+         '#ifndef SYSV\n'
+         '#define SYSV\n'
+         '#endif\n'
+         '#ifndef _BSD_SOURCE\n'
+         '#define _BSD_SOURCE\n'
+         '#endif\n'
+         '#ifndef POSIX_SOURCE\n'
+         '#define POSIX_SOURCE\n'
+         '#endif\n'
+         '#ifndef HAVE_LOCALTIME_R\n'
+         '#define HAVE_LOCALTIME_R\n'
+         '#endif\n'
+         '#ifndef JS_THREADSAFE\n'
+         '#define JS_THREADSAFE\n'
+         '#endif\n'
+         '\n'
+         '#include <libjs/gejsapi.h>\n'
+         '\n'
+         '#endif /* _GE_NSAPI */\n'),
+     'install -m 644 %s/mozilla/js/src/gejsapi.h  %s/libjs' % (current_dir,
+                                                               inc_dir),
+     'install -m 644 %s/mozilla/js/src/jsapi.h    %s/libjs' % (current_dir,
+                                                               inc_dir),
+     'install -m 644 %s/mozilla/js/src/jspubtd.h  %s/libjs' % (current_dir,
+                                                               inc_dir),
+     'install -m 644 %s/mozilla/js/src/jstypes.h  %s/libjs' % (current_dir,
+                                                               inc_dir),
+     'install -m 644 %s/mozilla/js/src/jscompat.h %s/libjs' % (current_dir,
+                                                               inc_dir),
+     'install -m 644 %s/mozilla/js/src/jsotypes.h %s/libjs' % (current_dir,
+                                                               inc_dir),
+     'install -m 644 %s/mozilla/js/src/jslong.h   %s/libjs' % (current_dir,
+                                                               inc_dir),
+     'install -m 644 %s/mozilla/js/src/jsosdep.h  %s/libjs' % (current_dir,
+                                                               inc_dir),
+     'install -m 644 %s/mozilla/js/src/Linux_All_%s.OBJ/jsautocfg.h %s/libjs' %
+     (current_dir, extn, inc_dir),
+     'install -m 644 %s/mozilla/js/src/jsproto.tbl %s/libjs' % (current_dir,
+                                                                inc_dir),
+     'install -m 644 %s/mozilla/js/src/jsconfig.h %s/libjs' % (current_dir,
+                                                               inc_dir),
+     'mkdir -p %s' % lic_dir,
+     'cat %s/mozilla/js/src/jsapi.h | sed -n -e "1,/END LICENSE BLOCK/P" > '
+     '%s/LICENSE' % (current_dir, lic_dir),
+     'chmod 644 %s/LICENSE' % lic_dir,
+     Touch('$TARGET')])
+
+# [9] Install these into various directories as required for build
+libjs_target = '%s/.install_for_build' % current_dir
+libjs_install_build = libjs_env.Command(
+    libjs_target, libjs_install,
+    [libjs_env.rsync_cmd % ('%s/lib/' % install_root,
+                            '%s/' % Dir(libjs_env.exportdirs['lib']).abspath),
+     libjs_env.rsync_cmd % (
+         '%s/include/' % install_root,
+         '%s/include/' % Dir(libjs_env.exportdirs['root']).abspath),
+     Touch('$TARGET')])
+
+Default(libjs_install_build)
+libjs_env.ExecuteOnClean('rm -rf %s' % current_dir)
+
+if 'install' in COMMAND_LINE_TARGETS:
+  libjs_env.InstallFileOrDir(
+      '%s/lib/' % install_root,
+      '%s/opt/google/lib/' % libjs_env.installdirs['fusion_root'],
+      libjs_install_build, 'install')
+  libjs_env.InstallFileOrDir(
+      '%s/share/' % install_root,
+      '%s/opt/google/share/' % libjs_env.installdirs['fusion_root'],
+      libjs_install_build, 'install')
+
+Return('firefox_extract libjs_install_build')

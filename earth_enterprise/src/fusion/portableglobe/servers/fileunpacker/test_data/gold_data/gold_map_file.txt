@@ -1,0 +1,25 @@
+Portable Globe
+Copyright 2010 Google Inc. All Rights Reserved.
+portable localhost:9335
+search localhost:9335
+kml localhost:9335
+2010-09-07 22:17:43 GMT
+
+2010-09-07 15:17:43
+/opt/google/bin/gepolygontoqtnodes --qt_nodes_file=/opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_22551_1283897863.574470/qt_nodes.txt --kml_polygon_file=/opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_22551_1283897863.574470/test/earth/polygon.kml --max_level=18
+
+2010-09-07 15:17:43
+/opt/google/bin/geportablemapbuilder --source=http://bplinux.mtv.corp.google.com/default_map/ --hires_qt_nodes_file=/opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_22551_1283897863.574470/qt_nodes.txt --map_directory=/opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_22551_1283897863.574470/test  --default_level=3 --max_level=8 &
+
+2010-09-07 15:17:45
+cp -r /opt/google/gehttpd/htdocs/cutter/template/earth/* /opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_22551_1283897863.574470/test/earth
+
+2010-09-07 15:17:45
+cp -r /opt/google/gehttpd/htdocs/cutter/template/maps/* /opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_22551_1283897863.574470/test/maps
+
+2010-09-07 15:17:45
+cp -r /opt/google/gehttpd/htdocs/cutter/template/js/* /opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_22551_1283897863.574470/test/js
+
+2010-09-07 15:17:45
+/opt/google/bin/geportableglobepacker --globe_directory=/opt/google/gehttpd/htdocs/cutter/globes/.globe_builder/test_22551_1283897863.574470/test --output=/opt/google/gehttpd/htdocs/cutter/globes/test.glm --make_copy --is_2d
+

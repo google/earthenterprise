@@ -1,0 +1,69 @@
+<html>
+<head>
+    <script type="text/javascript" language="JavaScript">
+    ORIGINAL_PAGE_PATH = "/apis/earth/documentation/samples/multigeometry_example.html";
+    </script>
+    
+   <title>multigeometry_example.html</title>
+   <script src="http://code.google.com/www.google.com/jsapi?key=ABQIAAAA5El50zA4PeDTEMlv-sXFfRSsTL4WIgxhMZ0ZK_kHjwHeQuOD4xTdBhxbkZWuzyYTVeclkwYHpb17ZQ"></script>
+   <script type="text/javascript">
+      var ge;
+      google.load("earth", "1");
+
+      function init() {
+         google.earth.createInstance('map3d', initCB, failureCB);
+      }
+
+      function initCB(instance) {
+
+         ge = instance;
+         ge.getWindow().setVisibility(true);
+         ge.getNavigationControl().setVisibility(ge.VISIBILITY_SHOW);
+
+         var line1 = ge.createLineString('');
+         line1.getCoordinates().pushLatLngAlt(48.740, -121.820, 0);
+         line1.getCoordinates().pushLatLngAlt(48.800, -121.820, 0);
+         line1.setTessellate(true);
+         line1.setAltitudeMode(ge.ALTITUDE_CLAMP_TO_GROUND);
+
+         var line2 = ge.createLineString('');
+         line2.getCoordinates().pushLatLngAlt(48.740, -121.800, 0);
+         line2.getCoordinates().pushLatLngAlt(48.800, -121.800, 0);
+         line2.setTessellate(true);
+         line2.setAltitudeMode(ge.ALTITUDE_CLAMP_TO_GROUND);
+
+         var multiGeometry = ge.createMultiGeometry('');
+         multiGeometry.getGeometries().appendChild(line1);
+         multiGeometry.getGeometries().appendChild(line2);
+
+         var multGeoPlacemark = ge.createPlacemark('');
+         multGeoPlacemark.setGeometry(multiGeometry);
+
+         multGeoPlacemark.setStyleSelector(ge.createStyle(''));
+         var lineStyle = multGeoPlacemark.getStyleSelector().getLineStyle();
+         lineStyle.setWidth(10);
+         lineStyle.getColor().set('ffff0000');
+
+         ge.getFeatures().appendChild(multGeoPlacemark);
+
+         multGeoPlacemark.setName('Line Strings');
+         multGeoPlacemark.setDescription('Two separate lineStrings, one description.');
+
+         var la = ge.createLookAt('');
+         la.set(48.761, -121.794, 0, ge.ALTITUDE_RELATIVE_TO_GROUND, -8.541, 66.213, 8000);
+         ge.getView().setAbstractView(la);
+      }
+      
+      function failureCB(errorCode) {
+      }
+      
+      google.setOnLoadCallback(init);
+   </script>
+
+</head>
+<body>
+
+   <div id="map3d" style="height:400px; width:600px;"></div>
+
+</body>
+</html>
