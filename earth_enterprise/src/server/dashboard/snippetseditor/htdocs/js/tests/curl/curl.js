@@ -1,1 +1,0 @@
-curl-with-js-and-domReady.js
