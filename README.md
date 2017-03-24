@@ -14,4 +14,4 @@ Earth Enterprise Fusion & Server currently run on 64-bit versions of the followi
 * CentOS 6.0 to 7.2
 * Ubuntu 10.04, 12.04 and 14.04 LTS
 
-Refer to the wiki for instructions on building from source on one of these platforms.
+Refer to the [wiki](https://github.com/google/earthenterprise/wiki/Build-Instructions) for instructions on building from source on one of these platforms.
