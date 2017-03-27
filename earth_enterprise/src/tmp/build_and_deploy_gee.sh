@@ -47,7 +47,7 @@ fi
 
 if [ $do_build -eq 1 ]; then
   # build
-  scons -j8 release=1 third_party
+  scons -j8 release=1 third_party --config=force
   scons -j8 release=1
   # deploy files for packaging.
   scons -j8 release=1 installdir=$PACKAGE_DIR install
