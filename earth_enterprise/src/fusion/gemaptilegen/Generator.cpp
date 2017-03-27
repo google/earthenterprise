@@ -29,7 +29,8 @@
 
 
 namespace {
-
+//#define USE_DEBUG // Uncomment this line to use the following debug function
+#ifdef USE_DEBUG 
 // To print a png file for debugging.
 // Usage: WritePngFileDebug(&context.render_tile_.pixelBuf[0],
 //          task_config_.fusion_tilespace_.tileSize, item->qt_path_.AsString())
@@ -47,7 +48,7 @@ void WritePngFileDebug(char* pixel_buffer, uint tile_size,
   khWriteSimpleFile(file_prefix + ".png",
                     png_compressor->data(), png_compressor->dataLen());
 }
-
+#endif
 }  // namespace
 
 

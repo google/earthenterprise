@@ -64,17 +64,6 @@
 #include "common/khstl.h"
 #include "common/notify.h"
 
-
-
-namespace {
-void AddStringToProto(const std::string& str,
-                      keyhole::dbroot::StringIdOrValueProto* proto) {
-  proto->clear_string_id();
-  proto->set_value(str);
-}
-}  // namespace
-
-
 DbManifest::DbManifest(std::string* db_path)
   : db_path_(*db_path),
     search_prefix_(khGetSearchPrefix(db_path_)),
