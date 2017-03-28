@@ -1,0 +1,14 @@
+- image: earth-space-1600-530.jpg
+  desc_location: left
+  desc:
+    <h2>Google Earth Enterprise Open Source</h2>
+    <p>Harness the power of Google Earth for your organization!</p>
+    <div class='two spacing'></div>
+    <a href="#opengeefeatures" class='button boxed'>View Features</a>
+- image: workwithus_slide.jpg
+  desc_location: left
+  desc:
+    <h2>Get Involved</h2>
+    <p>Join the great team of engineers making Google Earth Enterprise better.</p>
+    <div class='two spacing'></div>
+    <a href="https://github.com/google/earthenterprise/" class='button boxed'>Join Us @ Github</a>
