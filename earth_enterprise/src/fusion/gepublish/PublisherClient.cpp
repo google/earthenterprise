@@ -104,19 +104,6 @@ void AppendMultiPartManifestParam(const std::vector<ManifestEntry> &entries,
   *args += file_sizes;
 }
 
-void AppendMultiPartStringsParam(const std::string &param_prefix,
-                                 const std::vector<std::string> &entries,
-                                 std::string *args) {
-  if (entries.empty())
-    return;
-
-  *args += param_prefix;
-  *args += entries[0];  // Add first item without delimiter.
-  for (size_t i = 1; i < entries.size(); ++i) {
-    *args += kMultiPartParameterDelimiter + entries[i];
-  }
-}
-
 }  // namespace
 
 

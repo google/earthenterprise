@@ -242,25 +242,6 @@ void SetFusionHost(PublisherClient* client,
   client->SetFusionHost(fusion_host.empty() ? default_host : fusion_host);
 }
 
-void CreateApacheFile(std::string path, std::string data) {
-  std::string tmp_file = khTmpFilename(std::string(), 0600);
-  if (!khWriteSimpleFile(tmp_file, data.c_str(), data.size())) {
-    fprintf(stderr, "Unable to create tmp file.");
-    exit(0);
-  }
-  if (!khMove(tmp_file, path)) {
-    fprintf(stderr, "Unable to create %s.\n", path.c_str());
-    exit(0);
-  }
-  std::string system_cmd =  "chown "
-      + ApacheUserNameServerOnly() + ":" + UserGroupnameServerOnly()
-      + " " + path;
-  int ret_status = system(system_cmd.c_str());
-  if (ret_status) {
-    exit(ret_status);
-  }
-}
-
 void DisableCutter() {
   int ret_status =
     system("cd /opt/google/bin; "

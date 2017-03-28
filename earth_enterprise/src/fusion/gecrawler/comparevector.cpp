@@ -31,17 +31,6 @@ struct OffsetSize {
   uint32 size;
 };
 
-bool CompareDataHeaders(const etDataHeader& header_a,
-                        const etDataHeader& header_b);
-bool ComparePolyLinePackets(etPolyLinePacketData* pak_a,
-                            etPolyLinePacketData* pak_b);
-bool CompareStreetPackets(etStreetPacketData* pak_a,
-                          etStreetPacketData* pak_b);
-bool CompareLandmarkPackets(etLandmarkPacketData* pak_a,
-                            etLandmarkPacketData* pak_b);
-bool ComparePolygonPackets(etPolygonPacketData* pak_a,
-                           etPolygonPacketData* pak_b);
-
 inline bool IsAlmostEqual(double a, double b, double epsilon) {
   return (fabs(a-b) < epsilon) ? true : false;
 }
