@@ -6,3 +6,5 @@ NATIVE-DBG-x86_64/
 NATIVE-OPT-x86_64/
 NATIVE-REL-x86_64/
 *.pyc
+.sconf_temp
+config.log
