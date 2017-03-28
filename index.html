@@ -1,0 +1,204 @@
+---
+layout: default
+title: Google Earth Enterprise Open Source
+section_id: home
+usecases:
+  
+  - image: islington.png
+    title: How Islington Council Uses GEE
+    category: Google Earth Enterprise
+    url: usecases/how-islington-council-uses-gee.html
+  - image: gohsep.png
+    title: Louisiana GOHSEP
+    url: usecases/louisiana-gohsep.html
+    category: Google Earth Enterprise
+  - image: virtual_alabama.png
+    title: Virtual Alabama
+    category: Google Earth Enterprise
+    url: usecases/virtual-alabama.html
+  - image: statoilhydro.png
+    title: Statoil Hydro Solution
+    category: Google Earth Enterprise
+    url: usecases/statoil_hydro.pdf
+
+features:
+  -
+    - title: Access
+      icon: monitor
+      desc:
+        Anytime, anywhere access.
+      color:
+    - title: Intuitive Viewers
+      icon: eye
+      desc:
+         Supports Google Earth Desktop Client and Google Maps out of the box.
+      color:
+    - title: More than Just Imagery
+      icon: picture
+      desc:
+        Fuse Vector Maps, 3D models, and 3D Terrain into a 3D Globe or 2D Map.
+      color:
+  -
+    - title: Unlimited Scaleability
+      icon: cloud
+      desc:
+        Use the same platform Google uses for serving up Petabytes of information to your users
+      color: yellow
+    - title: Portable Globes
+      icon: globe
+      desc:
+        Access your geospatial data in the field in a client/disconnected local-server configuration
+      color: yellow
+    - title: Support for OGC Standards
+      icon: map
+      desc:
+        Support for OGC standards like WMS.
+      color: yellow
+
+milestones:
+  - from: 0
+    to: 12
+    title: Years supported and enhanced
+  - from: 0
+    to: 500
+    title: Petabytes of imagery processed
+  - from: 0
+    to: 10000
+    title: Happy Customers
+  - from: 0
+    to: 50000
+    title: Cups of Coffee Consumed by Dev Team
+
+members:
+  - desc:
+      After almost 12 years of updates and enhancements of GEE Fusion, GEE Server, and GEE Portable, the Google Earth Enterprise product is now open source on Github.
+
+    socials:
+      - name: github
+        link: https://github.com/google/earthenterprise/
+        color: yellow
+      - name: mail
+        link: mailto:gee-oss@googlegroups.com
+        color: yellow
+
+---
+
+{% include slider.html %}
+
+{% include whys.html %}
+
+<section id="usecases">
+<div class='full'>
+  <div class='row'>
+    <div class='special-title centered-text'>
+      <i class='icon-star'></i>
+      <h2>Use Cases</h2>
+      <p>Some Google Earth Enterprise tricks.</p>
+      <p class='shortline'></p>
+    </div>
+  </div>
+</div>
+
+<ul class='gallery small-block-grid-2 medium-block-grid-3 large-block-grid-4'>
+  {% for work in page.usecases %}
+    <li>
+      <a href="{{work.url}}">
+        <img src='{{site.github.url}}/images/{{ work.image }}'>
+        <div class='overlay'>
+          <div class='thumb-info'>
+            <h3>{{ work.title }}</h3>
+            <p>{{ work.category }}</p>
+          </div>
+        </div>
+      </a>
+    </li>
+  {% endfor %}
+</ul>
+</section>
+
+<div class='full dark-blue no-padding'>
+  <div class='two spacing'></div>
+  <div class='row'>
+    <div class='call-to-action light'>
+      <div class='medium-9 large-9 columns'>
+        <p class='left'>Join the great team of engineers making Google Earth Enterprise better.</p>
+      </div>
+      <div class='medium-3 large-3 columns'>
+        <a class='button' href='{{site.githuburl}}'>Get Involved</a>
+      </div>
+    </div>
+  </div>
+  <div class='two spacing'></div>
+</div>
+
+<section id="opengeefeatures">
+<div class='full white' id="opengeefeatures">
+  <div class='row'>
+    <div class='special-title centered-text'>
+      <i class='icon-tools'></i>
+      <h2>Features</h2>
+      <p>A production ready open source geospatial solution for everyone!</p>
+      <p class='shortline'></p>
+    </div>
+    <div class='two spacing'></div>
+  </div>
+
+
+  {% for row in page.features %}
+    <div class="row">
+      {% for service in row %}
+        <div class='medium-4 large-4 columns icon-text'>
+          <i class='icon-{{service.icon}} {{service.color}}'></i>
+          <h3>{{service.title}}</h3>
+          <p>{{service.desc}}</p>
+        </div>
+      {% endfor %}
+    </div>
+    {% unless forloop.last %}
+      <div class="spacing"></div>
+    {% endunless %}
+  {% endfor %}
+</div>
+</section>
+
+<div class='full bg-1'>
+  <div class='row'>
+    {% for milestone in page.milestones %}
+      <div class='medium-3 large-3 columns'>
+        <div class='milestone boxed light'>
+          <strong data-from='{{milestone.from}}' data-to='{{milestone.to}}'></strong>
+          <span>{{milestone.title}}</span>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+  <div class='full white'>
+    <div class='row'>
+      {% for member in page.members %}
+        {% if forloop.first %}
+          {% assign active_class = "active" %}
+        {% else %}
+          {% assign active_class = "" %}
+        {% endif %}
+        <div class='member-intro {{active_class}}' id='member-{{forloop.index}}'>
+          <div class='medium-8 large-8 columns'>
+            <p>{{member.desc}}</p>
+          </div>
+          <div class='medium-4 large-4 columns'>
+            <div class='socials'>
+              {% for social in member.socials %}
+                <a href='{{social.link}}'>
+                  <i class='icon-{{social.name}} {{social.color}}'></i>
+                </a>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+
+    </div>
+  </div>
+</div>
+

@@ -1,1 +1,11 @@
-theme: jekyll-theme-cayman
+name: google earth enterprise
+githuburl: https://github.com/google/earthenterprise/
+#markdown: redcarpet
+#highlighter: pygments
+excerpt_separator: <!--more-->
+
+gems:
+  - jekyll-paginate
+
+paginate: 3
+paginate_path: "blog/page:num" 

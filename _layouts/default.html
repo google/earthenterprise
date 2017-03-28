@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html class='no-js' lang='en'>
+    <head>
+      <meta charset="utf-8">
+      <link rel="shortcut icon" href="{{site.github.url}}/images/earth_logo_50.png">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>{{ page.title }}</title>
+      <meta content='width=device-width, initial-scale=1.0' name='viewport'>
+      <link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic|Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+      <link href='{{ site.github.url }}/css/framework.css' rel='stylesheet'>
+      <link href='{{ site.github.url }}/css/syntax.css' rel='stylesheet'>
+      <link href='{{ site.github.url }}/css/style.css' rel='stylesheet'>
+      <link href='{{ site.github.url }}/css/fontello.css' rel='stylesheet'>
+
+      <script src='{{ site.github.url }}/js/modernizr.js'></script>
+
+    </head>
+    <body>
+      <div class='contain-to-grid sticky'>
+        <nav class='top-bar' data-options='sticky_on: large' data-topbar=''>
+          <ul class='title-area'>
+            <li class='name'>
+              <h1 style="font-size:1rem">
+                <img src='{{site.github.url}}/images/earth_logo_50.png'>
+                <a href='{{site.github.url}}/index.html'>{{ site.name }}</a>
+              </h1>
+            </li>
+            <li class='toggle-topbar menu-icon'>
+              <a href='#'>Menu</a>
+            </li>
+          </ul>
+          <section class='top-bar-section'>
+            <ul class="right">
+              {% for item in site.data.nav %}
+                {% if item.section_id == page.section_id %}
+                  {% assign active_class = "active" %}
+                {% else %}
+                  {% assign active_class = "" %}
+                {% endif %}
+
+                {% if item.children %}
+                  <li class="has-dropdown {{active_class}}">
+                    <a href="{{site.github.url}}/{{ item.path }}">{{ item.name }}</a>
+                    <ul class='dropdown'>
+                      {% for child in item.children %}
+                        <li>
+                          <a href="{{site.github.url}}/{{ child.path }}">{{ child.name }}</a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                {% else %}
+                  <li class="{{active_class}}">
+                    <a href="{{site.github.url}}/{{ item.path }}">{{ item.name }}</a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+              <li class="">
+                    <a class="icon-github" href="{{site.githuburl}}">Github</a>
+                  </li>
+            </ul>
+          </section>
+        </nav>
+      </div>
+
+
+      {{ content }}
+
+
+      <div class='footer centered-text'>
+        <div class='spacing'></div>
+        <div class='row'>
+          <div class='large-12 columns'></div>
+          <h1 class='light'>
+            <img src='{{site.github.url}}/images/earth_logo_50.png'>
+            <br>
+            <div class='spacing'></div>
+            {{ site.name }}
+          </h1>
+          <div class='spacing'></div>
+          <div class='spacing'></div>
+          <div class='socials centered-text'>
+            <a href='{{site.githuburl}}'>
+              <i class='icon-github grey'></i>
+            </a>
+            <a href='mailto:gee-oss@googlegroups.com'>
+              <i class='icon-mail grey'></i>
+            </a>
+          </div>
+          <p class='copyright'>Copyright Google Earth Enterprise 2017 </p>
+        </div>
+      </div>
+
+      <script src='{{ site.github.url }}/js/jquery.min.js'></script>
+      <script src='{{ site.github.url }}/js/foundation.min.js'></script>
+      <script src='{{ site.github.url }}/js/jquery.countTo.js'></script>
+      <script src='{{ site.github.url }}/js/jquery.appear.js'></script>
+      <script src='{{ site.github.url }}/js/app.js'></script>
+    </body>
+</html>
