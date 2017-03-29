@@ -38,8 +38,12 @@ def BuildLibrary(os_dir, ignore_results):
 
   os.chdir("dist")
   fp = open("../%s/build_lib" % os_dir)
+  build_vars = {
+      'prefix': sys.prefix,
+      'exec_prefix': sys.exec_prefix
+    }
   for line in fp:
-    result = util.ExecuteCmd(line, use_shell=True)
+    result = util.ExecuteCmd(line.format(**build_vars), use_shell=True)
     if result:
       if ignore_results:
         print result
