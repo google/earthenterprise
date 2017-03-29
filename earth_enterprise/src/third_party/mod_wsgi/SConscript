@@ -61,13 +61,15 @@ if mod_wsgi_env['bundle_3rd_libs']:
    'cd %s\n'
     '%s%s ./configure %s --with-apxs=%s/bin/apxs '
     '--with-python=%s '
+    'LD_RUN_PATH=/opt/google/gepython/Python-%s/lib '
     'CFLAGS="-I%s"\n'
-    'LDFLAGS="-Wl,-rpath=/opt/google/gepython/Python-%s/lib"\n'
+    'LDFLAGS="-L%s/lib/python%s -Wl,-rpath,/opt/google/gepython/Python-%s/lib"\n'
     'touch %s' % (build_root,
                   mod_wsgi_env['ENV']['mod_env'], env_opt, config_opt, root_dir,
                   mod_wsgi_env['python_bin'],
-                  mod_wsgi_env['python_include'],
                   mod_wsgi_env['python_version'],
+                  mod_wsgi_env['python_include'],
+                  root_dir, mod_wsgi_env['python_major_version'], mod_wsgi_env['python_version'],
                   mod_wsgi_target))
 else:
   configure_cmd = (
