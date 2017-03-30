@@ -128,6 +128,7 @@ main_uninstall()
     remove_fusion_daemon
     change_volume_ownership
     remove_files_from_target
+    remove_links
     remove_user
     remove_group    
     show_final_success_message
@@ -569,11 +570,16 @@ remove_files_from_target()
     rm -f $BASEINSTALLDIR_VAR/run/gesystemmanager.pid
     rm -rf $BASEINSTALLDIR_ETC/.fusion_install_mode
 
+    echo "Has Earth Server: $HAS_EARTH_SERVER "
+    pause
+
     if [ $HAS_EARTH_SERVER == false ]; then
+        # don't delete the install log directory (which is where the uninstall log is kept)
+        # rm -rf $BASEINSTALLDIR_OPT/install
+
         rm -rf $BASEINSTALLDIR_ETC
         rm -rf $BASEINSTALLDIR_VAR/log
         rm -rf $BASEINSTALLDIR_VAR/run
-        rm -rf $BASEINSTALLDIR_OPT/install
         rm -rf $BASEINSTALLDIR_OPT/.users
         rm -rf $BASEINSTALLDIR_OPT/qt
         rm -rf $BASEINSTALLDIR_OPT/lib64
@@ -581,6 +587,7 @@ remove_files_from_target()
         rm -rf $BASEINSTALLDIR_OPT/share
         rm -rf $BASEINSTALLDIR_OPT/gepython
         rm -rf $BASEINSTALLDIR_OPT/bin
+        rm -rf $BASEINSTALLDIR_OPT/tutorial
     fi
 
     # final file -- remove systemrc
@@ -602,6 +609,7 @@ remove_links()
 
 show_final_success_message()
 {
+    echo -e "\n-------------------"
     echo -e "\n$GEEF $LONG_VERSION was successfully uninstalled."
     echo -e "The backup configuration files are located in:"
     echo -e "\n$BACKUP_DIR\n"
