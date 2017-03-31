@@ -32,10 +32,42 @@
 <p>This article describes how to configure the tutorial work space and how to switch back and forth between the tutorial asset root and the production asset root. You also learn how to clean up the tutorial files when they are no longer needed.
 </p>
 <ul>
+<li><a href="#download_tutorial_source">Download the Tutorial Source Files</a></li>
 <li><a href="#configure_tutorial_asset_root">Configure the tutorial asset root and source volume</a></li>
 <li><a href="#select_tutorial_asset_root">Select the tutorial asset root</a></li>
 <li><a href="#cleanup_tutorial_workspace">Clean up the tutorial workspace</a></li>
 </ul>
+<h2><a id="download_tutorial_source"></a>Download the Tutorial Source Files
+</h2>
+<p>
+  The tutorial source files are available in the following archives. It can be downloaded all together, or for
+  convenience it can be downloaded in two parts.
+  <ul>
+    <li>
+      <a href="http://data.opengee.org/FusionTutorial-Full.tar.gz">FusionTutorial-Full.tar.gz</a>
+      [<a href="http://data.opengee.org/FusionTutorial-Full.tar.gz.md5">md5</a>]
+      - Contains all the source data needed to complete the tutorial - 600 MB
+    </li>
+    <li>
+      <a href="http://data.opengee.org/FusionTutorial-NoMosaicImagery.tar.gz">FusionTutorial-NoMosaicImagery.tar.gz</a>
+      [<a href="http://data.opengee.org/FusionTutorial-NoMosaicImagery.tar.gz.md5">md5</a>]
+      - Contains all the source data needed to complete the tutorial, except for the Mosaic section - 282 MB
+    </li>
+    <li>
+      <a href="http://data.opengee.org/FusionTutorial-Imagery-mosaic.tar.gz">FusionTutorial-Imagery-mosaic.tar.gz</a>
+      [<a href="http://data.opengee.org/FusionTutorial-Imagery-mosaic.tar.gz.md5">md5</a>]
+      - Contains only the souce data needed to complete the Mosaic section of the tutorial - 318 MB
+    </li>
+  </ul>
+</p>
+<p>
+  Once the source files are downloaded, as root, create the <code>/opt/google/share/tutorials/fusion</code> directory if it doesn't
+  exist. Extract each archive downloaded to that location. Be sure all the files have read permission for all users and directories
+  have read and execute permission for all users.
+</p>
+<p>
+  Note: due to a bug in the current Google Earth Enterprise Open Source version, vector source files also need the write permission.
+</p>
 <h2><a id="configure_tutorial_asset_root"></a>Configuring the tutorial asset root and source volume
 </h2>
 <p>When you install Google Earth Enterprise, you configure a source volume and asset root for your production data. If you accepted the default values, they are <code>/gevol/src</code> and <code>/gevol/assets</code>, respectively.</p>
