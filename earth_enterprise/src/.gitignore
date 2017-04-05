@@ -8,3 +8,4 @@ NATIVE-REL-x86_64/
 *.pyc
 .sconf_temp
 config.log
+third_party/mod_wsgi/conf.d/mod_wsgi-ge.conf

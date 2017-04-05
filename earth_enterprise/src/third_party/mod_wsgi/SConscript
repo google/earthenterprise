@@ -125,6 +125,12 @@ mod_wsgi_env.ExecuteOnClean('rm -rf %s' % current_dir)
 
 if 'install' in COMMAND_LINE_TARGETS:
   server_root = mod_wsgi_env.installdirs['server_root']
+
+  # Configure mod_wsgi-ge.conf with the correct python version
+  mod_wsgi_conf = 'conf.d/mod_wsgi-ge.conf'
+  mod_wsgi_env.Command(mod_wsgi_conf, mod_wsgi_conf + '.in',
+      "sed 's/@PYTHON_VERSION@/%s/' < $SOURCE > $TARGET" % mod_wsgi_env['python_version'])
+
   mod_wsgi_env.install('httpdconf', ['conf.d/mod_wsgi-ge.conf'])
   mod_wsgi_env.InstallFileOrDir(
       '%s/opt/' % install_root,
