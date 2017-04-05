@@ -113,7 +113,8 @@ sgl_env['CPPFLAGS'] += [
   '-I' + os.path.join(sgl_src_abs_dir, 'gpu'),  # SkGradientShader dependencies.
   '-I' + os.path.join(sgl_src_abs_dir, 'image'),
   '-I' + os.path.join(sgl_src_abs_dir, 'utils'),
-  '-I' + os.path.join('/usr/include', 'freetype2')
+  '-I' + os.path.join('/usr/include', 'freetype2'),
+  '-I' + os.path.join('/usr/include', 'libpng12')
   ]
 
 sgl_opts_env = sgl_env.Clone()

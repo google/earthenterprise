@@ -23,7 +23,7 @@ gecombineterrain = env.executable('gecombineterrain',
                                    ],
                                   LIBS=['geindex_rw', 'gefconfigutil', 'gecommon', 'geutil',
                                   'geconfigutil', 'gexml', 'geqtpacket',
-                                  'gegst', 'sgl', 'gif', 'png', 'jpeg', 'freetype',
+                                  'gegst', 'sgl', 'gif', 'png12', 'jpeg', 'freetype',
                                   'qt-mt', 'geindex_r', 'geos', 'genet'])
 
 env.install('fusion_bin', [gecombineterrain])

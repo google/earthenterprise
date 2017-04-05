@@ -40,11 +40,11 @@ env.install('tools_lib', [gecrawllib])
 gecrawler = env.executable('gecrawler',
                            ['gecrawler.cpp',
                             ],
-                            LIBS=['gegst', 'sgl', 'gif', 'png', 'jpeg', 'freetype', 'gecrawllib', 'geutil', 'gecommon', 'geqtpacket', 'geos', 'GL'])
+                            LIBS=['gegst', 'sgl', 'gif', 'png12', 'jpeg', 'freetype', 'gecrawllib', 'geutil', 'gecommon', 'geqtpacket', 'geos', 'GL'])
 
 geqtpdump = env.executable('geqtpdump',
                            ['geqtpdump.cpp',
                             ],
-                           LIBS=['gegst', 'sgl', 'gif', 'png', 'jpeg', 'freetype', 'gecrawllib', 'geutil', 'gecommon', 'geqtpacket', 'geos', 'GL'])
+                           LIBS=['gegst', 'sgl', 'gif', 'png12', 'jpeg', 'freetype', 'gecrawllib', 'geutil', 'gecommon', 'geqtpacket', 'geos', 'GL'])
 
 env.install('tools_bin', [gecrawler,geqtpdump])
