@@ -16,7 +16,6 @@
 // Class for reading the glc file.
 // Simple reader for use on Portable Server.
 //
-// 4/16/2013: bpeterson:
 // Switched to C-based file reading to accommodate
 // Windows problems with big (>2G) files.
 
