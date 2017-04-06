@@ -17,18 +17,18 @@ LoadModule wsgi_module modules/mod_wsgi.so
 
     # Handles publishing requests.
     # Note: Publish service will be initialized on starting httpd server.
-    WSGIDaemonProcess ge_publish_serve threads=5 display-name=%{GROUP} python-path=/opt/google/gepython/Python-2.7.6/lib/python2.7/site-packages:/opt/google/gehttpd/wsgi-bin home=/tmp
+    WSGIDaemonProcess ge_publish_serve threads=5 display-name=%{GROUP} python-path=/opt/google/gepython/Python-@PYTHON_VERSION@/lib/python@PYTHON_MAJOR_VERSION@/site-packages:/opt/google/gehttpd/wsgi-bin home=/tmp
     WSGIScriptAlias /geserve/Publish /opt/google/gehttpd/wsgi-bin/serve/publish/publish_app.wsgi process-group=ge_publish_serve application-group=%{GLOBAL}
 
     # Handles reguest managing of auxiliary publish data.
-    WSGIDaemonProcess ge_publish_aux_serve threads=5 display-name=%{GROUP} python-path=/opt/google/gepython/Python-2.7.6/lib/python2.7/site-packages:/opt/google/gehttpd/wsgi-bin home=/tmp
+    WSGIDaemonProcess ge_publish_aux_serve threads=5 display-name=%{GROUP} python-path=/opt/google/gepython/Python-@PYTHON_VERSION@/lib/python@PYTHON_MAJOR_VERSION@/site-packages:/opt/google/gehttpd/wsgi-bin home=/tmp
     # --Handles Search Definitions managing requests.
     WSGIScriptAlias /geserve/SearchPublish /opt/google/gehttpd/wsgi-bin/serve/publish/search/search_publish_app.wsgi process-group=ge_publish_aux_serve
     # --Handles Snippets profile managing requests.
     WSGIScriptAlias /geserve/Snippets /opt/google/gehttpd/wsgi-bin/serve/snippets/snippets_app.wsgi process-group=ge_publish_aux_serve
 
     # Handles search requests.
-    WSGIDaemonProcess ge_search_serve processes=10 threads=15 display-name=%{GROUP} python-path=/opt/google/gepython/Python-2.7.6/lib/python2.7/site-packages:/opt/google/gehttpd/wsgi-bin home=/tmp
+    WSGIDaemonProcess ge_search_serve processes=10 threads=15 display-name=%{GROUP} python-path=/opt/google/gepython/Python-@PYTHON_VERSION@/lib/python@PYTHON_MAJOR_VERSION@/site-packages:/opt/google/gehttpd/wsgi-bin home=/tmp
     # --Handles Places search requests.
     WSGIScriptAlias /gesearch/PlacesSearch /opt/google/gehttpd/wsgi-bin/search/plugin/geplaces_search_app.py process-group=ge_search_serve
     # --Handles Coordinate search requests.
@@ -47,7 +47,7 @@ LoadModule wsgi_module modules/mod_wsgi.so
     WSGIScriptAlias /gesearch/SearchGoogle /opt/google/gehttpd/wsgi-bin/search/plugin/search_google_app.py process-group=ge_search_serve
 
     # Handles WMS serving requests.
-    WSGIDaemonProcess ge_wms_serve processes=10 threads=15 display-name=%{GROUP} python-path=/opt/google/gepython/Python-2.7.6/lib/python2.7/site-packages:/opt/google/gehttpd/wsgi-bin home=/tmp
+    WSGIDaemonProcess ge_wms_serve processes=10 threads=15 display-name=%{GROUP} python-path=/opt/google/gepython/Python-@PYTHON_VERSION@/lib/python@PYTHON_MAJOR_VERSION@/site-packages:/opt/google/gehttpd/wsgi-bin home=/tmp
     WSGIScriptAlias /wms /opt/google/gehttpd/wsgi-bin/wms/ogc/service/wms_request_app.wsgi process-group=ge_wms_serve
 </IfModule>
 
