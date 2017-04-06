@@ -7,7 +7,7 @@ LoadModule wsgi_module modules/mod_wsgi.so
     WSGIPythonHome /usr
 
     # Handles Fusion requests.
-    WSGIDaemonProcess ge_fusion_serve threads=15 display-name=%{GROUP} python-path=/opt/google/gepython/Python-@PYTHON_VERSION@/lib/python2.7/site-packages:/opt/google/gehttpd/wsgi-bin home=/tmp
+    WSGIDaemonProcess ge_fusion_serve threads=15 display-name=%{GROUP} python-path=/opt/google/gepython/Python-@PYTHON_VERSION@/lib/python@PYTHON_MAJOR_VERSION@/site-packages:/opt/google/gehttpd/wsgi-bin home=/tmp
     # --Handles stream data pushing requests.
     WSGIScriptAlias /geserve/StreamPush /opt/google/gehttpd/wsgi-bin/serve/push/stream/stream_push_app.wsgi process-group=ge_fusion_serve
     # --Handles search data pushing requests.

@@ -115,7 +115,7 @@ mod_wsgi_install = mod_wsgi_env.Command(
         'cp -pr README.rst LICENSE %s' % install_root_doc,
         'mkdir -p %s/gehttpd/conf.d' % install_root_opt,
         'install -m755 %s %s' % (source_conf, target_conf),
-        "sed -i -e 's/@PYTHON_VERSION@/%s/' %s" % (mod_wsgi_env['python_version'], target_conf),
+        "sed -i -e 's/@PYTHON_VERSION@/%s/' -e 's/@PYTHON_MAJOR_VERSION@/%s/' %s" % (mod_wsgi_env['python_version'], mod_wsgi_env['python_major_version'], target_conf),
         'touch %s' % mod_wsgi_target]))])
 
 # [5] Install these into various directories as required for build
