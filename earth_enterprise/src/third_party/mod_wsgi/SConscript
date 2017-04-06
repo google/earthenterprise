@@ -100,6 +100,10 @@ install_root_doc = '%s/opt/google/share/doc/packages/%s' % (
     install_root, mod_wsgi_ge_version)
 
 mod_wsgi_target = '%s/.install' % current_dir
+mod_wsgi_conf_dir = Dir('#third_party/mod_wsgi/conf.d').abspath
+mod_wsgi_conf = 'mod_wsgi-ge.conf'
+source_conf = '%s/%s.in' % (mod_wsgi_conf_dir, mod_wsgi_conf)
+target_conf = '%s/gehttpd/conf.d/%s' % (install_root_opt, mod_wsgi_conf)
 mod_wsgi_install = mod_wsgi_env.Command(
     mod_wsgi_target, mod_wsgi_build,
     [mod_wsgi_env.MultiCommand('\n'.join([
@@ -109,6 +113,9 @@ mod_wsgi_install = mod_wsgi_env.Command(
         'cp src/server/.libs/mod_wsgi.so %s/gehttpd/modules/mod_wsgi.so' % install_root_opt,
         'mkdir -p %s' % install_root_doc,
         'cp -pr README.rst LICENSE %s' % install_root_doc,
+        'mkdir -p %s/gehttpd/conf.d' % install_root_opt,
+        'install -m755 %s %s' % (source_conf, target_conf),
+        "sed -i -e 's/@PYTHON_VERSION@/%s/' -e 's/@PYTHON_MAJOR_VERSION@/%s/' %s" % (mod_wsgi_env['python_version'], mod_wsgi_env['python_major_version'], target_conf),
         'touch %s' % mod_wsgi_target]))])
 
 # [5] Install these into various directories as required for build
@@ -125,7 +132,6 @@ mod_wsgi_env.ExecuteOnClean('rm -rf %s' % current_dir)
 
 if 'install' in COMMAND_LINE_TARGETS:
   server_root = mod_wsgi_env.installdirs['server_root']
-  mod_wsgi_env.install('httpdconf', ['conf.d/mod_wsgi-ge.conf'])
   mod_wsgi_env.InstallFileOrDir(
       '%s/opt/' % install_root,
       '%s/opt/' % server_root,
