@@ -17,7 +17,7 @@ The application suite consists of three core components:
 
 `Client` - The Google Earth Enterprise Client (EC) and Google Maps Javascript API V3 used to view 3D globes and 2D maps, respectively.
 
-For more information, including how to build Google Earth Enterprise, see our Github page [here](https://github.com/google/earthenterprise).
+For more information, including how to build Google Earth Enterprise, see our Github page [here](https://github.com/google/earthenterprise/wiki).
 
 ## How to contribute
 
