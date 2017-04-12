@@ -11,7 +11,3 @@
 - name: Documentation
   path: geedocs
   secion_id: geedocs
-- name: Develop
-  path: development/getting-started.html
-  section_id: develop 
-
