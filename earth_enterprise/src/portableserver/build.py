@@ -26,7 +26,6 @@ import os
 import os.path
 import shutil
 import sys
-import tarfile
 
 SELF_PATH = os.path.realpath(__file__)
 SELF_DIR = os.path.dirname(SELF_PATH)
@@ -68,11 +67,20 @@ class Builder(object):
         self.get_version()
 
         self.package_dir = os.path.join(
-            self.build_dir, 'portableglobe-{}'.format(self.version_string))
+            self.build_dir,
+            'portableserver-{}-{}'.format(self.platform, self.version_string))
         self.resources_dir = os.path.join(
             self.source_dir, 'portableserver', 'resources')
         self.server_dir = os.path.join(self.package_dir, 'server')
-        self.tar_package_name = 'portableglobe-{}'.format(self.version_string)
+        self.tar_package_name = \
+            'portableserver-{}-{}'.format(self.platform, self.version_string)
+        self.zip_package_name = self.tar_package_name
+        if self.platform == 'windows':
+            self.should_create_tar_package = False
+            self.should_create_zip_package = True
+        else:
+            self.should_create_tar_package = True
+            self.should_create_zip_package = False
 
     def build(self):
         """Builds and packages Portable server."""
@@ -84,7 +92,10 @@ class Builder(object):
         self.obtain_server_resources()
         self.build_fileunpacker()
         self.obtain_sample_globes()
-        self.tar_and_compress()
+        if self.should_create_tar_package:
+            self.create_tar_package()
+        if self.should_create_zip_package:
+            self.create_zip_package()
 
     def clean(self):
         """Deletes build files and directories."""
@@ -171,21 +182,34 @@ class Builder(object):
         entries = [
             f
             for f in os.listdir(dist_dir)
-            if f.endswith('.so') or f.endswith('.py') \
+            if os.path.splitext(f)[1].lower() in ['.so', '.pyd', '.dll', '.py'] \
                 and f not in exclude_files]
         copy_from_dir_to_dir(dist_dir, self.server_dir, entries)
 
     def obtain_sample_globes(self):
+        """Copies tutorial globe and map cuts to <data/>."""
+
         globes_dir = os.path.join(
             self.source_dir, 'fusion', 'portableglobe', 'globes')
         distutils.dir_util.copy_tree(
             globes_dir, os.path.join(self.package_dir, 'data'))
 
-    def tar_and_compress(self):
-        output_path = os.path.join(
-            self.build_dir, self.tar_package_name + '.tgz')
-        with tarfile.open(output_path, 'w:gz') as archive:
-            archive.add(self.package_dir, arcname=self.tar_package_name)
+    def create_tar_package(self):
+        """Archives and compresses the install directory."""
+
+        shutil.make_archive(
+            os.path.join(self.build_dir, self.tar_package_name),
+            'gztar',
+            self.package_dir)
+
+    def create_zip_package(self):
+        """Archives and compresses the install directory."""
+
+        shutil.make_archive(
+            os.path.join(self.build_dir, self.zip_package_name),
+            'zip',
+            self.package_dir)
+
 
 def main(argv):
     """Parses command-line arguments, detects build environment, builds, and
