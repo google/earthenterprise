@@ -198,9 +198,10 @@ class Builder(object):
         """Archives and compresses the install directory."""
 
         shutil.make_archive(
-            os.path.join(self.build_dir, self.tar_package_name),
+            os.path.join(self.build_dir, self.zip_package_name),
             'gztar',
-            self.package_dir)
+            os.path.dirname(self.package_dir),
+            os.path.basename(self.package_dir))
 
     def create_zip_package(self):
         """Archives and compresses the install directory."""
@@ -208,7 +209,8 @@ class Builder(object):
         shutil.make_archive(
             os.path.join(self.build_dir, self.zip_package_name),
             'zip',
-            self.package_dir)
+            os.path.dirname(self.package_dir),
+            os.path.basename(self.package_dir))
 
 
 def main(argv):
