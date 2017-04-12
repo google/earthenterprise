@@ -17,7 +17,7 @@
 #
 
 """
-Builds Portable server for the Linux platform.
+Builds Portable server for Linux and Windows.
 """
 
 import datetime
