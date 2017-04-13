@@ -8,3 +8,7 @@ NATIVE-REL-x86_64/
 *.pyc
 .sconf_temp
 config.log
+
+# Eclipse project files
+.cproject
+.project
