@@ -20,6 +20,7 @@
 Builds Portable server for Linux and Windows.
 """
 
+import argparse
 import datetime
 import distutils.dir_util
 import os
@@ -220,24 +221,13 @@ def main(argv):
     build_dir = os.path.join(SELF_DIR, 'build')
     source_dir = os.path.join(SELF_DIR, '..')
 
-    platform = None
-    arg_index = 1
-    while arg_index < len(argv):
-        arg = argv[arg_index]
-        arg_index += 1
-        if arg in ['-p', '--platform']:
-            platform = argv[arg_index].lower()
-            arg_index += 1
-        elif arg.startswith('--platform='):
-            platform = arg[len('--platform='):]
-        elif arg in ['-c', '--clean']:
-            builder = Builder(build_dir, source_dir, platform)
-            builder.clean()
-            return
-        else:
-            print 'Unrecognized command-line argument:', arg
-            return
+    parser = argparse.ArgumentParser(
+        description=__doc__, prog=os.path.basename(argv[0]))
+    parser.add_argument('--platform', '-p', action='store', default=None)
+    parser.add_argument('--clean', '-c', action='store_true')
+    parse_result = parser.parse_args(argv[1:])
 
+    platform = parse_result.platform
     if platform is None:
         platform = sys.platform.lower()
     if platform.startswith('linux'):
@@ -249,8 +239,12 @@ def main(argv):
     else:
         raise ValueError(
             'Unrecognized platform: {}, please specify "linux", "windows", or "mac" on the command line.'.format(platform))
+
     builder = Builder(build_dir, source_dir, platform)
-    builder.build()
+    if parse_result.clean:
+        builder.clean()
+    else:
+        builder.build()
 
 if __name__ == '__main__':
     main(sys.argv)
