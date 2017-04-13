@@ -16,4 +16,4 @@ Earth Enterprise Fusion & Server currently run on 64-bit versions of the followi
 Refer to the [wiki](https://github.com/google/earthenterprise/wiki/Build-Instructions) for instructions on building from source on one of these platforms.
 
 ### Installation
-There is currently no installer for Earth Enterprise Fusion & Server.  For details and workarounds, refer to the [FAQ](https://github.com/google/earthenterprise/wiki/Frequently-Asked-Questions#ive-built-gee-fusion-and-server-now-how-do-i-install-them).
+There is currently no official installer for Earth Enterprise Fusion & Server.  For details and workarounds, refer to the [FAQ](https://github.com/google/earthenterprise/wiki/Frequently-Asked-Questions#ive-built-gee-fusion-and-server-now-how-do-i-install-them).
