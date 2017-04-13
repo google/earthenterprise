@@ -114,7 +114,7 @@ class Builder(object):
         entries = [f
                    for f in os.listdir(servers_dir)
                    if f.lower() not in exclude_entries]
-        copy_from_dir_to_dir(servers_dir, self.server_dir, entries)
+        copy_from_dir_to_dir(servers_dir, self.server_dir, entries=entries)
         copy_from_dir_to_dir(
             os.path.join(servers_dir, self.platform), self.server_dir)
 
@@ -178,14 +178,16 @@ class Builder(object):
         build_and_test.main(['build_and_test.py', self.platform])
 
         # Copy library to package directory:
-        exclude_files = ['test.py', 'util.py']
+        exclude_entries = ['test.py', 'util.py']
         dist_dir = os.path.join(task_build_dir, 'dist')
         entries = [
             f
             for f in os.listdir(dist_dir)
-            if os.path.splitext(f)[1].lower() in ['.so', '.pyd', '.dll', '.py'] \
-                and f not in exclude_files]
-        copy_from_dir_to_dir(dist_dir, self.server_dir, entries)
+            if os.path.splitext(f)[1].lower() in
+            ['.so', '.pyd', '.dll', '.py']
+        ]
+        copy_from_dir_to_dir(dist_dir, self.server_dir, entries=entries,
+            exclude_entries=exclude_entries)
 
     def obtain_sample_globes(self):
         """Copies tutorial globe and map cuts to <data/>."""
@@ -234,7 +236,7 @@ def main(argv):
         platform = 'linux'
     elif platform.startswith('win'):
         platform = 'windows'
-    elif platform.startswith('darwin'):
+    elif platform.startswith('darwin') or platform.startswith('mac'):
         platform = 'mac'
     else:
         raise ValueError(
