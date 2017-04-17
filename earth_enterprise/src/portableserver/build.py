@@ -144,7 +144,7 @@ class Builder(object):
             with open(path, 'r') as input_file:
                 while True:
                     base_version = input_file.readline().strip()
-                    if not base_version.startswith('#'):
+                    if base_version and not base_version.startswith('#'):
                         break
             self.base_version = base_version
 
