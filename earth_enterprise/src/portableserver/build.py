@@ -28,8 +28,7 @@ import os.path
 import shutil
 import sys
 
-SELF_PATH = os.path.realpath(__file__)
-SELF_DIR = os.path.dirname(SELF_PATH)
+SELF_DIR = os.path.dirname(os.path.realpath(__file__))
 
 
 def ensure_directory(path):
