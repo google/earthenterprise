@@ -28,6 +28,13 @@ class OsCommandError(Exception):
   """Thrown if os command fails."""
   pass
 
+def PipePexpectStreamNonBlocking(source_stream, destination_stream):
+  while source_stream.isalive():
+    try:
+      chunk = source_stream.read_nonblocking(timeout=0)
+      destination_stream.write(chunk)
+    except (pexpect.TIMEOUT, pexpect.EOF):
+      return
 
 def ExecuteCmd(os_cmd, use_shell=False):
   """Execute os command and log results."""
@@ -41,19 +48,11 @@ def ExecuteCmd(os_cmd, use_shell=False):
     # process.returncode is None until the subprocess completes. Then, it gets
     # filled in with the subprocess exit code.
     while process.returncode is None:
-      if stdout_stream.isalive():
-        try:
-          stdout_chunk = stdout_stream.read_nonblocking(timeout=0)
-          sys.stdout.write(stdout_chunk)
-        except (pexpect.TIMEOUT, pexpect.EOF):
-          pass
-      if stderr_stream.isalive():
-        try:
-          stderr_chunk = stderr_stream.read_nonblocking(timeout=0)
-          sys.stderr.write(stderr_chunk)
-        except (pexpect.TIMEOUT, pexpect.EOF):
-          pass
+      PipePexpectStreamNonBlocking(stdout_stream, sys.stdout)
+      PipePexpectStreamNonBlocking(stderr_stream, sys.stderr)
       process.poll()
+    PipePexpectStreamNonBlocking(stdout_stream, sys.stdout)
+    PipePexpectStreamNonBlocking(stderr_stream, sys.stderr)
     if process.returncode: # Assume a non-zero exit code means error:
       return "Unable to execute %s" % os_cmd
     return process.returncode
