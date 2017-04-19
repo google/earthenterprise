@@ -45,7 +45,7 @@ gepartialglobebuilder = env.executable(
     ['gepartialglobebuilder.cpp', 'partialglobebuilder.cpp',
      portablepacketwriter],
     LIBS=['sharedportablelib', 'gesimpleearthstream',
-          'sgl', 'gif', 'png', 'jpeg',
+          'sgl', 'gif', 'png12', 'jpeg',
           'freetype', 'geutil', 'gecommon', 'cutspec',
           'geqtpacket', 'geos', 'qtutils'])
 
@@ -58,14 +58,14 @@ gedeltabuilder = env.executable(
     'gedeltabuilder',
     ['gedeltabuilder.cpp', deltabuilder, portablepacketwriter],
     LIBS=['sharedportablelib', 'gesimpleearthstream',
-          'sgl', 'gif', 'png', 'jpeg',
+          'sgl', 'gif', 'png12', 'jpeg',
           'freetype', 'geutil', 'gecommon', 'geqtpacket', 'geos'])
 
 geportableglobebuilder = env.executable(
     'geportableglobebuilder',
     ['geportableglobebuilder.cpp', portableglobebuilder, portablepacketwriter],
     LIBS=['sharedportablelib', 'gesimpleearthstream',
-          'sgl', 'gif', 'png', 'jpeg',
+          'sgl', 'gif', 'png12', 'jpeg',
           'freetype', 'geutil', 'gecommon', 'geqtpacket', 'geos'])
 
 gecreatemetadbroot = env.executable(
@@ -78,7 +78,7 @@ geportablemapbuilder = env.executable(
     ['geportablemapbuilder.cpp', portablemapbuilder,
      portableglobebuilder, portablepacketwriter],
     LIBS=['sharedportablelib', 'gesimpleearthstream',
-          'sgl', 'gif', 'png', 'jpeg',
+          'sgl', 'gif', 'png12', 'jpeg',
           'freetype', 'geutil', 'gecommon', 'geqtpacket', 'geos'])
 
 geportableglobepacker = env.executable(

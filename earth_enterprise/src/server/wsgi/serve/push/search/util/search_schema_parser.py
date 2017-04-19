@@ -33,14 +33,14 @@ import xml.etree.cElementTree
 from common import exceptions
 
 
-# b19268986, memory buffer size for temp file, before it's written
+# Memory buffer size for temp file, before it's written
 _K_SPOOL_SIZE = 1024 * 1024 * 256
 
 # Create logger.
 logger = logging.getLogger("ge_search_publisher")
 
 
-# b19268986 Create point data as a string that psql knows how to import.
+# Create point data as a string that psql knows how to import.
 def _PointFromCoordinates(lon, lat):
   packed_data = pack("<dd", float(lon), float(lat))
   return "0101000020E6100000%s" % binascii.hexlify(packed_data)
@@ -79,6 +79,9 @@ class SearchSchemaParser(object):
   LAT_TAG = "lat"
   LON_TAG = "lon"
   SEARCH_FILE_NAME = "SearchDataFile"
+
+  # Types that need to be UTF-encoded when writing to postgres database.
+  ENCODE_TYPES = ["varchar", "character varying", "character", "text"]
 
   def __init__(self, db_updater):
     """Inits search schema parser.
@@ -125,7 +128,7 @@ class SearchSchemaParser(object):
 
     logger.info("Ingesting POI file %s into parser done.", search_file)
     logger.info("Parsing POI elements and inserting into POI database...")
-    # b19268986 File as temp buffer to store records, for COPY db command
+    # File as temp buffer to store records, for COPY db command
     self.tmp_file = TempFile(max_size=_K_SPOOL_SIZE, suffix=table_name)
     num_elements = 0
     self._element_start = self.__StartElementHeader
@@ -169,8 +172,9 @@ class SearchSchemaParser(object):
       type_val = elem.get("type")
       name_val = elem.get("name")
       use_val = elem.get("use")
-      # b19268986 Catalog field data type, so we know how to write it.
-      if type_val.lower() in self._encode_fields:
+      # Collect fields' names which values need to be UTF-encoded when writing
+      # to postgres database.
+      if type_val.lower() in SearchSchemaParser.ENCODE_TYPES:
         self._encode_fields.append(name_val)
       # Support fields names with spaces.
       display_name_val = elem.get("displayname").lower()
@@ -275,34 +279,37 @@ class SearchSchemaParser(object):
     Args:
       elem: current element.
     """
+    if self._current_tag == SearchSchemaParser.R_TAG:
+      self._within_record = False
+      # Calculate point data structure as hex and write to file
+      point_string = _PointFromCoordinates(self._cur_lon, self._cur_lat)
+      self.tmp_file.write("%s\n" % point_string)
+      return
+    elif self._current_tag == SearchSchemaParser.SEARCH_TABLE_VALUES_TAG:
+      self._element_start = self.__StartElementHeader
+      self._element_end = self.__EndElementHeader
+      return
+
     if self._within_record:
-      # b19268986 Buffer lon/lat fields, otherwise write data to file
+      # Buffer lon/lat fields, otherwise write data to file
       if self._current_tag == SearchSchemaParser.LAT_TAG:
         self._cur_lat = elem.text
       elif self._current_tag == SearchSchemaParser.LON_TAG:
         self._cur_lon = elem.text
       else:
+        # Handle search field values (field#).
         value = elem.text
         if value:
-          if self._current_tag in self._encode_fields:
+          value = value.strip()
+          if value and self._current_tag in self._encode_fields:
             value = elem.text.encode("utf8")
-          self.tmp_file.write("%s\t" % value)
-    if self._current_tag == SearchSchemaParser.R_TAG:
-      self._within_record = False
-      # b19268986 Calculate point data structure as hex and write to file
-      point_string = _PointFromCoordinates(self._cur_lon, self._cur_lat)
-      self.tmp_file.write("%s\n" % point_string)
-    elif self._current_tag == SearchSchemaParser.SEARCH_TABLE_VALUES_TAG:
-      self._element_start = self.__StartElementHeader
-      self._element_end = self.__EndElementHeader
+        self.tmp_file.write("%s\t" % (value if value else ""))
 
   def __StartDocument(self):
     """Start document handler.
 
     It is used to initialize variables before any actual parsing happens.
     """
-    # b19268986 Variables re-arranged into more cohesive groups,
-    # some were deleted as they're no longer used
     self._num_fields = 0
     self._table_fields = []
     self._index_columns = []
@@ -319,8 +326,9 @@ class SearchSchemaParser(object):
     self._cur_lat = ""
     self._cur_lon = ""
 
-    # b19268986 Supported text fields
-    self._encode_fields = ["varchar", "character varying", "character", "text"]
+    # List of fields' names which values need to be UTF-encoded when writing to
+    # postgres database.
+    self._encode_fields = []
 
   def __EndDocument(self):
     """End document handler.
@@ -332,7 +340,6 @@ class SearchSchemaParser(object):
     start = time.time()
     file_size = self.tmp_file.tell()
     if file_size > 0:
-      self.tmp_file.seek()
       logger.info("Importing records into database")
       self.tmp_file.seek(0)
       self._db_updater.CopyFrom(self.tmp_file)
@@ -342,7 +349,7 @@ class SearchSchemaParser(object):
     self.tmp_file.close()  # deletes file
 
     # Finally, run some post insertion commands.
-    # b19268986 Optimize processing time by indexing in the background.
+    # Optimize processing time by indexing in the background.
     indices = []
     name = "the_geom_%s_idx" % self._table_name
     index = (
