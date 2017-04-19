@@ -703,7 +703,7 @@ backup_fusion()
 #-----------------------------------------------------------------
 copy_files_to_target()
 {
-	printf "\nCopying files from source to target directories..."
+	printf "\nCopying files from source to target directories... "
 
 	mkdir -p $BASEINSTALLDIR_OPT/bin
 	mkdir -p $BASEINSTALLDIR_OPT/share/doc
@@ -731,7 +731,6 @@ copy_files_to_target()
 	cp -rf $TMPINSTALLDIR/common/opt/google/qt/lib/pkgconfig $BASEINSTALLDIR_OPT/lib
 	cp -rf $TMPINSTALLDIR/common/opt/google/gepython $BASEINSTALLDIR_OPT
 	cp -rf $TMPINSTALLDIR/manual/opt/google/share/doc/manual $BASEINSTALLDIR_OPT/share/doc
-	cp -rf $TMPINSTALLDIR/tutorial $BASEINSTALLDIR_OPT
 
 	cp -f $TMPINSTALLDIR/fusion/etc/profile.d/ge-fusion.csh $BININSTALLPROFILEDIR
 	cp -f $TMPINSTALLDIR/fusion/etc/profile.d/ge-fusion.sh $BININSTALLPROFILEDIR
@@ -759,6 +758,15 @@ copy_files_to_target()
 	# cp -f $TMPOPENLDAPPATH/<........> $INSTALL_LOG_DIR
 
 	printf "Done\n"
+
+	printf "Copying Fusion Tutorial files... "
+
+	if [ -d "$TMPINSTALLDIR/tutorial" ]; then
+		cp -rf $TMPINSTALLDIR/tutorial $BASEINSTALLDIR_OPT
+		printf "Done\n"
+	else
+		printf "Not found - Skipping tutorial install\n"
+	fi
 }
 
 create_links()
@@ -1050,7 +1058,7 @@ fix_postinstall_filepermissions()
     chmod -R 755 $BASEINSTALLDIR_OPT/qt
     chmod 755 $BASEINSTALLDIR_ETC/openldap
 
-    # Tutorial and Share
+    # Share
     find $BASEINSTALLDIR_OPT/share -type d -exec chmod 755 {} \;
     find $BASEINSTALLDIR_OPT/share -type f -exec chmod 644 {} \;
     chown -R $ROOT_USERNAME:$ROOT_USERNAME $BASEINSTALLDIR_OPT/share
