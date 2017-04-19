@@ -31,7 +31,8 @@ BASEINSTALLDIR_ETC="/etc/opt/google"
 BASEINSTALLDIR_VAR="/var/opt/google"
 INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
 CHKCONFIG="/sbin/chkconfig"
-OS_RELEASE="/etc/os-release"
+OS_RELEASE1="/etc/os-release"
+OS_RELEASE2="/etc/system-release"
 
 # script arguments
 BACKUPFUSION=true
@@ -157,16 +158,21 @@ determine_os()
     local test_os=""
     local test_versionid=""
 
-    if [ -f "$OS_RELEASE" ]; then
-        test_os="$(cat $OS_RELEASE | sed -e 's:\"::g' | grep ^NAME= | sed 's:name=::gI')"
-        test_versionid="$(cat $OS_RELEASE | sed -e 's:\"::g' | grep ^VERSION_ID= | sed 's:version_id=::gI')"
+    if [ -f "$OS_RELEASE1" ] || [ -f "$OS_RELEASE2" ]; then
+		if [ -f "$OS_RELEASE1" ]; then
+	        test_os="$(cat $OS_RELEASE1 | sed -e 's:\"::g' | grep ^NAME= | sed 's:name=::gI')"
+    	    test_versionid="$(cat $OS_RELEASE1 | sed -e 's:\"::g' | grep ^VERSION_ID= | sed 's:version_id=::gI')"
+		else
+			test_os="$(cat $OS_RELEASE2 | sed 's:[0-9\.] *::g')"
+			test_versionid="$(cat $OS_RELEASE2 | sed 's:[^0-9\.]*::g')"
+		fi
 
-        MACHINE_OS_FRIENDLY="$test_os $test_versionid"
-        MACHINE_OS_VERSION=$test_versionid
+		MACHINE_OS_FRIENDLY="$test_os $test_versionid"
+    	MACHINE_OS_VERSION=$test_versionid
 
         if [[ "${test_os,,}" == "ubuntu"* ]]; then
             MACHINE_OS=$UBUNTUKEY
-        elif [ "${test_os,,}" == "red hat"* ]; then
+        elif [[ "${test_os,,}" == "red hat"* ]]; then
             MACHINE_OS=$REDHATKEY
         else
             MACHINE_OS=""
@@ -570,9 +576,6 @@ remove_files_from_target()
     rm -f $BASEINSTALLDIR_VAR/run/gesystemmanager.pid
     rm -rf $BASEINSTALLDIR_ETC/.fusion_install_mode
 
-    echo "Has Earth Server: $HAS_EARTH_SERVER "
-    pause
-
     if [ $HAS_EARTH_SERVER == false ]; then
         # don't delete the install log directory (which is where the uninstall log is kept)
         # rm -rf $BASEINSTALLDIR_OPT/install
@@ -593,7 +596,7 @@ remove_files_from_target()
     # final file -- remove systemrc
     rm -f $SYSTEMRC
 
-	printf "DONE\n"
+	printf "Done\n"
 }
 
 remove_links()
@@ -604,7 +607,7 @@ remove_links()
     rm -rf $BASEINSTALLDIR_OPT/log
     rm -rf $BASEINSTALLDIR_OPT/run
 
-	printf "DONE\n"	
+	printf "Done\n"	
 }
 
 show_final_success_message()
