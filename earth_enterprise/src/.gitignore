@@ -13,3 +13,4 @@ portableserver/build
 # Eclipse project files
 .cproject
 .project
+.pydevproject
