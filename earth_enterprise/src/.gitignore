@@ -12,3 +12,4 @@ config.log
 # Eclipse project files
 .cproject
 .project
+.pydevproject
