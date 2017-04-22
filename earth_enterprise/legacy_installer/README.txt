@@ -1,0 +1,1 @@
+This is the obsolete installer. See ../src/installer for the scripts you want.
