@@ -22,7 +22,7 @@ use File::Basename;
 # gdal_rasterize,...) used in tests.
 $ENV{'PATH'} = join ":", "$Bin/..", $ENV{'PATH'};
 
-my @tests = glob("$Bin/*");
+my @tests = glob("$Bin/*test*");
 
 my $longest = 0;
 foreach my $test (@tests) {
