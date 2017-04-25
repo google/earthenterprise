@@ -35,7 +35,8 @@ BASEINSTALLDIR_VAR="/var/opt/google"
 TMPINSTALLDIR="/tmp/fusion_os_install"
 INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
 CHKCONFIG="/sbin/chkconfig"
-OS_RELEASE="/etc/os-release"
+OS_RELEASE1="/etc/os-release"
+OS_RELEASE2="/etc/system-release"
 
 # script arguments
 BADHOSTNAMELIST=(empty linux localhost dhcp bootp)
@@ -51,7 +52,7 @@ GENERAL_LOG="$BASEINSTALLDIR_VAR/log"
 INSTALL_LOG_DIR="$BASEINSTALLDIR_OPT/install"
 INSTALL_LOG="$INSTALL_LOG_DIR/fusion_install_$(date +%Y_%m_%d.%H%M%S).log"
 SYSTEMRC="$BASEINSTALLDIR_ETC/systemrc"
-BACKUP_DIR="$BASEINSTALLDIR_VAR/fusion-backups/$(date +%Y_%m_%d.%H%M%S)"
+BACKUP_DIR="$BASEINSTALLDIR_VAR/fusion-backups/$(date +%Y_%m_%d.%H%sM%S)"
 FUSIONBININSTALL="$BININSTALLROOTDIR/gefusion"
 SOURCECODEDIR=$(dirname $(dirname $(readlink -f "$0")))
 TOPSOURCEDIR_EE=$(dirname $SOURCECODEDIR)
@@ -76,7 +77,6 @@ HOSTNAME_F="$(hostname -f | $NEWLINECLEANER)"
 HOSTNAME_S="$(hostname -s | $NEWLINECLEANER)"
 HOSTNAME_A="$(hostname -a | $NEWLINECLEANER)"
 NUM_CPUS="$(grep processor /proc/cpuinfo | wc -l | $NEWLINECLEANER)"
-ASSET_ROOT_VOLUME_SIZE=$(df --output=avail $ASSET_ROOT | grep -v Avail)
 
 SOURCE_VOLUME_PREEXISTING=false
 ASSET_ROOT_PREEXISTING=false
@@ -172,10 +172,6 @@ main_preinstall()
 		exit 1
     fi
 
-    if ! check_asset_root_volume_size; then
-        exit 1
-    fi
-
 	if ! prompt_install_confirmation; then
 		exit 1
 	fi
@@ -213,6 +209,16 @@ main_install()
 
 main_postinstall()
 {
+	create_system_main_directories
+
+    if ! compare_asset_root_publishvolume; then
+        exit 1
+    fi
+
+    if ! check_asset_root_volume_size; then
+        exit 1
+    fi
+
     setup_fusion_daemon
 	
 	# store fusion version
@@ -222,24 +228,12 @@ main_postinstall()
 	chmod 755 $BININSTALLPROFILEDIR/ge-fusion.csh
 	chmod 755 $BININSTALLPROFILEDIR/ge-fusion.sh
 
-    if ! compare_assetroot_publishvolume; then
-        exit 1
-    fi
-
-    if [ -d "$ASSET_ROOT" ]; then        
-        ASSET_ROOT_PREEXISTING=true
-    else
-        mkdir -p $ASSET_ROOT
-    fi
-
-    if [ -d "$SOURCE_VOLUME" ]; then
-        SOURCE_VOLUME_PREEXISTING=true
-    else
-        mkdir -p $SOURCE_VOLUME
-    fi
-
     check_fusion_master_or_slave
-    install_or_upgrade_asset_root
+
+	if ! install_or_upgrade_asset_root; then
+		exit 1
+	fi
+
     fix_postinstall_filepermissions
     final_assetroot_configuration
 
@@ -249,7 +243,6 @@ main_postinstall()
 
     # install cleanup
     cleanup_installfiles
-
     show_final_success_message
 }
 
@@ -303,16 +296,21 @@ determine_os()
     local test_os=""
     local test_versionid=""
 
-    if [ -f "$OS_RELEASE" ]; then
-        test_os="$(cat $OS_RELEASE | sed -e 's:\"::g' | grep ^NAME= | sed 's:name=::gI')"
-        test_versionid="$(cat $OS_RELEASE | sed -e 's:\"::g' | grep ^VERSION_ID= | sed 's:version_id=::gI')"
+    if [ -f "$OS_RELEASE1" ] || [ -f "$OS_RELEASE2" ]; then
+		if [ -f "$OS_RELEASE1" ]; then
+	        test_os="$(cat $OS_RELEASE1 | sed -e 's:\"::g' | grep ^NAME= | sed 's:name=::gI')"
+    	    test_versionid="$(cat $OS_RELEASE1 | sed -e 's:\"::g' | grep ^VERSION_ID= | sed 's:version_id=::gI')"
+		else
+			test_os="$(cat $OS_RELEASE2 | sed 's:[0-9\.] *::g')"
+			test_versionid="$(cat $OS_RELEASE2 | sed 's:[^0-9\.]*::g')"
+		fi
 
 		MACHINE_OS_FRIENDLY="$test_os $test_versionid"
-        MACHINE_OS_VERSION=$test_versionid
+    	MACHINE_OS_VERSION=$test_versionid
 
         if [[ "${test_os,,}" == "ubuntu"* ]]; then
             MACHINE_OS=$UBUNTUKEY
-        elif [ "${test_os,,}" == "red hat"* ]; then
+        elif [[ "${test_os,,}" == "red hat"* ]]; then
             MACHINE_OS=$REDHATKEY
         else
             MACHINE_OS=""
@@ -321,10 +319,10 @@ determine_os()
             retval=1
         fi
     else
-        echo -e "\nThe installer could not determine your machine's operating system."
+		echo -e "\nThe installer could not determine your machine's operating system."
         echo -e "Missing file: $OS_RELEASE\n"
-        retval=1
-    fi
+        retval=1		
+	fi
 
     return $retval
 }
@@ -760,7 +758,7 @@ copy_files_to_target()
 	# TODO: final step: copy uninstall script
 	# cp -f $TMPOPENLDAPPATH/<........> $INSTALL_LOG_DIR
 
-	printf "DONE\n"
+	printf "Done\n"
 }
 
 create_links()
@@ -779,7 +777,7 @@ create_links()
 		ln -s $BASEINSTALLDIR_VAR/run $BASEINSTALLDIR_OPT/run
 	fi
 
-	printf "DONE\n"	
+	printf "Done\n"	
 }
 
 #-----------------------------------------------------------------
@@ -794,7 +792,7 @@ setup_fusion_daemon()
 	test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE -f gefusion remove
 	test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE gefusion start 90 2 3 4 5 . stop 10 0 1 6 .
 	
-	printf "Fusion daemon setup ... DONE\n"
+	printf "Fusion daemon setup ... Done\n"
 }
 
 get_array_index()
@@ -860,7 +858,22 @@ prompt_to_quit()
     return $prompt_to_quit_retval
 }
 
-compare_assetroot_publishvolume()
+create_system_main_directories()
+{
+    if [ -d "$ASSET_ROOT" ]; then        
+        ASSET_ROOT_PREEXISTING=true
+    else
+        mkdir -p $ASSET_ROOT
+    fi
+
+    if [ -d "$SOURCE_VOLUME" ]; then
+        SOURCE_VOLUME_PREEXISTING=true
+    else
+        mkdir -p $SOURCE_VOLUME
+    fi
+}
+
+compare_asset_root_publishvolume()
 {    
     local compare_assetroot_publishvolume_retval=0
 
@@ -976,7 +989,6 @@ install_or_upgrade_asset_root()
     else
         # upgrade asset root -- if this is a master
         if [ $IS_SLAVE == false ]; then
-
             # TODO: Verify this logic -- this is what is defined in the installer documentation, but need confirmation            
             if [ $NEW_GEGROUP == true ] || [ $NEW_GEFUSIONUSER == true ]; then
                 NOCHOWN=""
@@ -987,8 +999,9 @@ install_or_upgrade_asset_root()
             fi
 
             echo -e "The asset root must be upgraded to work with the current version of $GEEF $LONG_VERSION."
-            echo -e "You cannot use an upgraded asset root with older versions of $GEEF. Consider backing up your asset root."
-            echo -e "$GEEF will warn you when attempting to run with a non-upgraded asset root."
+            echo -e "You cannot use an upgraded asset root with older versions of $GEEF. "
+			echo -e "Consider backing up your asset root. $GEEF will warn you when"
+            echo -e "attempting to run with a non-upgraded asset root."
             echo -e "$UPGRADE_MESSAGE"
                 
             if ! prompt_to_quit "X (Exit) the installer and backup your asset root - C (Continue) to upgrade the asset root."; then
@@ -1089,7 +1102,7 @@ cleanup_installfiles()
 		# remove the temp files 
 		rm -rf $TMPINSTALLDIR
 
-		printf "DONE\n"
+		printf "Done\n"
 	fi
 }
 
@@ -1146,3 +1159,4 @@ main_install
 # Post-Install Main
 #-----------------------------------------------------------------
 main_postinstall
+
