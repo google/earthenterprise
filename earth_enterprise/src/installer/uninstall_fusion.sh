@@ -565,8 +565,6 @@ remove_files_from_target()
 {
     printf "\nRemove files from target directories..."
 
-    # TODO: What file is this referring to?
-    # rm -f /opt/google/Uninstall_$INSTALLER_TITLE$
     rm -f $BASEINSTALLDIR_VAR/run/geresourceprovider.pid
     rm -f $BASEINSTALLDIR_VAR/run/gesystemmanager.pid
     rm -rf $BASEINSTALLDIR_ETC/.fusion_install_mode
@@ -577,14 +575,12 @@ remove_files_from_target()
         rm -rf $BASEINSTALLDIR_VAR/run
         rm -rf $BASEINSTALLDIR_OPT/install
         rm -rf $BASEINSTALLDIR_OPT/.users
-
-        # TODO: Why are these excluded from the uninstall process (since we exclude servers with ES installed)?
-        # rm -rf /opt/google/qt
-        # rm -rf /opt/google/lib64
-        # rm -rf /opt/google/lib
-        # rm -rf /opt/google/share
-        # rm -rf /opt/google/gepython
-        # rm -rf /opt/google/bin
+        rm -rf $BASEINSTALLDIR_OPT/qt
+        rm -rf $BASEINSTALLDIR_OPT/lib64
+        rm -rf $BASEINSTALLDIR_OPT/lib
+        rm -rf $BASEINSTALLDIR_OPT/share
+        rm -rf $BASEINSTALLDIR_OPT/gepython
+        rm -rf $BASEINSTALLDIR_OPT/bin
     fi
 
     # final file -- remove systemrc
