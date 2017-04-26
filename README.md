@@ -15,3 +15,7 @@ Earth Enterprise Fusion & Server currently run on 64-bit versions of the followi
 * Ubuntu 10.04, 12.04 and 14.04 LTS
 
 Refer to the [wiki](https://github.com/google/earthenterprise/wiki/Build-Instructions) for instructions on building from source on one of these platforms.
+
+### Known Issues
+
+Known issues can be tracked via the GitHub Issues page or the weekly updated [wiki page](https://github.com/google/earthenterprise/wiki/Known-Issues).
