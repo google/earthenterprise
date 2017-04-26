@@ -1,8 +1,8 @@
 *.tif filter=lfs diff=lfs merge=lfs -text
-*.jpg filter=lfs diff=lfs merge=lfs -text
 *.gz filter=lfs diff=lfs merge=lfs -text
 *.pyr filter=lfs diff=lfs merge=lfs -text
 *.jp2 filter=lfs diff=lfs merge=lfs -text
 *.glb filter=lfs diff=lfs merge=lfs -text
 *.glc filter=lfs diff=lfs merge=lfs -text
 *.glm filter=lfs diff=lfs merge=lfs -text
+earth_enterprise/src/fusion/portableglobe/servers/fileunpacker/test_data/** binary
