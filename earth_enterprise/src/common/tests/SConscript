@@ -50,8 +50,16 @@ map(lambda test: env.test(test, [test + '.cc'],
     ['etencoder_tests',
      ])
 
+testdir = os.path.join(env.exportdirs['bin'],'tests')
+env.copyfile(testdir, 'RunAllTests.pl')
 
-env.copyfile(os.path.join(env.exportdirs['bin'],'tests'),
-             'RunAllTests.pl')
+# Drop in the test data
+env.Command(
+    '%s/tests/fusion/' % Dir(env.exportdirs['bin']).abspath, # TARGET
+    Dir('#fusion/testdata').abspath, # SOURCE
+    [env.rsync_cmd % (
+        '$SOURCE',
+        '$TARGET'),
+     Touch('$TARGET')])
 
 env.sharedLib('getests', ['qtpathgen.cpp'])
