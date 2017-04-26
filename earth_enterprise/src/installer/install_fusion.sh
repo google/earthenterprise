@@ -703,9 +703,10 @@ backup_fusion()
 #-----------------------------------------------------------------
 copy_files_to_target()
 {
-	printf "\nCopying files from source to target directories... "
+	printf "\nCopying files from source to target directories..."
 
 	mkdir -p $BASEINSTALLDIR_OPT/bin
+	mkdir -p $BASEINSTALLDIR_OPT/share/datasets
 	mkdir -p $BASEINSTALLDIR_OPT/share/doc
 	mkdir -p $BASEINSTALLDIR_OPT/share/gdal
 	mkdir -p $BASEINSTALLDIR_OPT/share/fonts
@@ -731,7 +732,7 @@ copy_files_to_target()
 	cp -rf $TMPINSTALLDIR/common/opt/google/qt/lib/pkgconfig $BASEINSTALLDIR_OPT/lib
 	cp -rf $TMPINSTALLDIR/common/opt/google/gepython $BASEINSTALLDIR_OPT
 	cp -rf $TMPINSTALLDIR/manual/opt/google/share/doc/manual $BASEINSTALLDIR_OPT/share/doc
-
+	
 	cp -f $TMPINSTALLDIR/fusion/etc/profile.d/ge-fusion.csh $BININSTALLPROFILEDIR
 	cp -f $TMPINSTALLDIR/fusion/etc/profile.d/ge-fusion.sh $BININSTALLPROFILEDIR
 	cp -f $TMPINSTALLDIR/fusion/etc/init.d/gefusion $BININSTALLROOTDIR
