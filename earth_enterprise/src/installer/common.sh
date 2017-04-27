@@ -25,12 +25,19 @@ HOSTNAME_A="$(hostname -a | $NEWLINECLEANER)"
 
 NUM_CPUS="$(grep processor /proc/cpuinfo | wc -l | $NEWLINECLEANER)"
 
+SUPPORTED_OS_LIST=("Ubuntu", "Red Hat Enterprise Linux (RHEL)")
+UBUNTUKEY="ubuntu"
+REDHATKEY="rhel"
+CENTOSKEY="centos"
+OS_RELEASE1="/etc/os-release"
+OS_RELEASE2="/etc/system-release"
+
 software_check()
 {
-	local software_check_retval=0
-	
-	# args: $1: ubuntu package
-	# args: $: rhel package
+    local software_check_retval=0
+    
+    # args: $1: ubuntu package
+    # args: $: rhel package
 
     if [ "$MACHINE_OS" == "$UBUNTUKEY" ]; then
         if [[ -z "$(dpkg --get-selections | sed s:install:: | sed -e 's:\s::g' | grep ^$1\$)" ]]; then
@@ -42,13 +49,13 @@ software_check()
             echo -e "Install $2 and restart the $GEEF $LONG_VERSION uninstaller."
             software_check_retval=1
         fi
-	else 
-		echo -e "\nThe installer could not determine your machine's operating system."
+    else 
+        echo -e "\nThe installer could not determine your machine's operating system."
             echo -e "Supported Operating Systems: ${SUPPORTED_OS_LIST[*]}\n"
             software_check_retval=1
     fi
 
-	return $software_check_retval
+    return $software_check_retval
 }
 
 determine_os()
@@ -57,17 +64,24 @@ determine_os()
     local test_os=""
     local test_versionid=""
 
-    if [ -f "$OS_RELEASE" ]; then
-        test_os="$(cat $OS_RELEASE | sed -e 's:\"::g' | grep ^NAME= | sed 's:name=::gI')"
-        test_versionid="$(cat $OS_RELEASE | sed -e 's:\"::g' | grep ^VERSION_ID= | sed 's:version_id=::gI')"
+    if [ -f "$OS_RELEASE1" ] || [ -f "$OS_RELEASE2" ]; then
+        if [ -f "$OS_RELEASE1" ]; then
+                test_os="$(cat $OS_RELEASE1 | sed -e 's:\"::g' | grep ^NAME= | sed 's:name=::gI')"
+                test_versionid="$(cat $OS_RELEASE1 | sed -e 's:\"::g' | grep ^VERSION_ID= | sed 's:version_id=::gI')"
+        else
+            test_os="$(cat $OS_RELEASE2 | sed 's:[0-9\.] *::g')"
+            test_versionid="$(cat $OS_RELEASE2 | sed 's:[^0-9\.]*::g')"
+        fi
 
-		MACHINE_OS_FRIENDLY="$test_os $test_versionid"
-        MACHINE_OS_VERSION=$test_versionid
+        MACHINE_OS_FRIENDLY="$test_os $test_versionid"
+            MACHINE_OS_VERSION=$test_versionid
 
-        if [[ "${test_os,,}" == "ubuntu"* ]]; then
-            MACHINE_OS=$UBUNTUKEY
-        elif [ "${test_os,,}" == "red hat"* ]; then
-            MACHINE_OS=$REDHATKEY
+            if [[ "${test_os,,}" == "ubuntu"* ]]; then
+                    MACHINE_OS=$UBUNTUKEY
+            elif [[ "${test_os,,}" == "red hat"* ]]; then
+                    MACHINE_OS=$REDHATKEY
+        elif [[ "${test_os,,}" == "centos"* ]]; then
+            MACHINE_OS=$CENTOSKEY
         else
             MACHINE_OS=""
             echo -e "\nThe installer could not determine your machine's operating system."
@@ -76,7 +90,7 @@ determine_os()
         fi
     else
         echo -e "\nThe installer could not determine your machine's operating system."
-        echo -e "Missing file: $OS_RELEASE\n"
+        echo -e "Missing file: $OS_RELEASE1 or $OS_RELEASE2\n"
         retval=1
     fi
 
@@ -94,50 +108,50 @@ run_as_user() {
 
 show_no_tmp_dir_message()
 {
-	echo -e "\nThe temp install directory specified [$1] does not exist."
-	echo -e "Please specify the path of the extracted install files or first run"
+    echo -e "\nThe temp install directory specified [$1] does not exist."
+    echo -e "Please specify the path of the extracted install files or first run"
     echo -e "scons release=1 installdir=$1 install\n"
 }
 
 check_bad_hostname() {
     if [ -z "$HOSTNAME" ] || [[ " ${BADHOSTNAMELIST[*]} " == *"${HOSTNAME,,} "* ]]; then
-		show_badhostname
+        show_badhostname
 
-		if [ $BADHOSTNAMEOVERRIDE == true ]; then
-			echo -e "Continuing the installation process...\n"
-			return 1
-		else
-			echo -e "Exiting the installer.  If you wish to continue, re-run this command with the -hnf 'Hostname Override' flag.\n"
-			return 0
-		fi
-	fi
+        if [ $BADHOSTNAMEOVERRIDE == true ]; then
+            echo -e "Continuing the installation process...\n"
+            return 1
+        else
+            echo -e "Exiting the installer.  If you wish to continue, re-run this command with the -hnf 'Hostname Override' flag.\n"
+            return 0
+        fi
+    fi
 }
 
 show_badhostname()
 {
-	echo -e "\nYour server [$HOSTNAME] contains an invalid hostname value which typically"
-	echo -e "indicates an automatically generated hostname that might change over time."
+    echo -e "\nYour server [$HOSTNAME] contains an invalid hostname value which typically"
+    echo -e "indicates an automatically generated hostname that might change over time."
     echo -e "A subsequent hostname change would cause configuration issues for the "
     echo -e "$SOFTWARE_NAME software.  Invalid values: ${BADHOSTNAMELIST[*]}."
 }
 
 check_mismatched_hostname() {
     if [ $HOSTNAME != $HOSTNAME_F ]; then
-		show_mismatchedhostname
+        show_mismatchedhostname
 
-		if [ $MISMATCHHOSTNAMEOVERRIDE == true ]; then
-			echo -e "Continuing the installation process...\n"
-		else
-			echo -e "Exiting the installer.  If you wish to continue, re-run this command with the -hnmf 'Hostname Mismatch Override' flag.\n"
-			exit 1
-		fi		
-	fi
+        if [ $MISMATCHHOSTNAMEOVERRIDE == true ]; then
+            echo -e "Continuing the installation process...\n"
+        else
+            echo -e "Exiting the installer.  If you wish to continue, re-run this command with the -hnmf 'Hostname Mismatch Override' flag.\n"
+            exit 1
+        fi        
+    fi
 }
 
 show_mismatchedhostname()
 {
-	echo -e "\nThe hostname of this machine does not match the fully-qualified hostname."
-	echo -e "$SOFTWARE_NAME requires that they match for local publishing to function properly."
+    echo -e "\nThe hostname of this machine does not match the fully-qualified hostname."
+    echo -e "$SOFTWARE_NAME requires that they match for local publishing to function properly."
     # Chris: I took out the message about updating the hostname because this script doesn't actually do it.
     # TODO Add some instructions on how to update hostname
 }
@@ -146,42 +160,42 @@ check_group() {
   GROUP_EXISTS=$(getent group $GROUPNAME)
 
   # add group if it does not exist
-	if [ -z "$GROUP_EXISTS" ]; then
-		groupadd -r $GROUPNAME &> /dev/null 
+    if [ -z "$GROUP_EXISTS" ]; then
+        groupadd -r $GROUPNAME &> /dev/null 
         NEW_GEGROUP=true 
-	fi
+    fi
 }
 
 check_username() {
   USERNAME_EXISTS=$(getent passwd $1)
 
   # add user if it does not exist
-	if [ -z "$USERNAME_EXISTS" ]; then
+    if [ -z "$USERNAME_EXISTS" ]; then
     mkdir -p $BASEINSTALLDIR_OPT/.users/$1
-		useradd -d $BASEINSTALLDIR_OPT/.users/$1 -g gegroup $1
+        useradd -d $BASEINSTALLDIR_OPT/.users/$1 -g gegroup $1
     NEW_GEFUSIONUSER=true
   else
     echo "User $1 exists"
     # user already exists -- update primary group
     usermod -g $GROUPNAME $1
-	fi
+    fi
 }
 
 create_links()
 {
-	printf "Setting up system links..."
+    printf "Setting up system links..."
 
-	if [ ! -L "$BASEINSTALLDIR_OPT/etc" ]; then
-		ln -s $BASEINSTALLDIR_ETC $BASEINSTALLDIR_OPT/etc
-	fi 
+    if [ ! -L "$BASEINSTALLDIR_OPT/etc" ]; then
+        ln -s $BASEINSTALLDIR_ETC $BASEINSTALLDIR_OPT/etc
+    fi 
 
-	if [ ! -L "$BASEINSTALLDIR_OPT/log" ]; then
-		ln -s $BASEINSTALLDIR_VAR/log $BASEINSTALLDIR_OPT/log
-	fi
+    if [ ! -L "$BASEINSTALLDIR_OPT/log" ]; then
+        ln -s $BASEINSTALLDIR_VAR/log $BASEINSTALLDIR_OPT/log
+    fi
 
-	if [ ! -L "$BASEINSTALLDIR_OPT/run" ]; then
-		ln -s $BASEINSTALLDIR_VAR/run $BASEINSTALLDIR_OPT/run
-	fi
+    if [ ! -L "$BASEINSTALLDIR_OPT/run" ]; then
+        ln -s $BASEINSTALLDIR_VAR/run $BASEINSTALLDIR_OPT/run
+    fi
 
-	printf "DONE\n"	
+    printf "DONE\n"    
 }

@@ -38,7 +38,6 @@ TMPINSTALLDIR="/tmp/fusion_os_install"
 KH_SYSTEMRC="/usr/keyhole/etc/systemrc"
 INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
 CHKCONFIG="/sbin/chkconfig"
-OS_RELEASE="/etc/os-release"
 
 # script arguments
 BACKUPSERVER=true
@@ -203,7 +202,7 @@ main_postinstall()
   test -f $CHKCONFIG && $CHKCONFIG --add geserver
 
   # 6) Register publish root
-  $BASEINSTALLDIR_OPT/bin/geconfigurepublishroot --noprompt --path=$PUBLISHER_ROOT$
+  $BASEINSTALLDIR_OPT/bin/geconfigurepublishroot --noprompt --path=$PUBLISHER_ROOT
 
   # 7) Install the GEPlaces and SearchExample Databases
   install_search_databases
@@ -456,15 +455,12 @@ show_server_running_message()
 	echo -e "To use this installer to upgrade, you must stop all geserver services.\n"	
 }
 
-# TODO update for proper operation See 
 configure_publish_root()
 {
+  # Update PUBLISHER_ROOT if geserver already installed
   local STREAM_SPACE="$GEHTTPD_CONF/stream_space"
-  echo $STREAM_SPACE
   if [ -e $STREAM_SPACE ]; then
-    echo "Found stream_space!"
-  else 
-    echo "Couldn't find stream_space!"
+    PUBLISHER_ROOT=`cat $STREAM_SPACE |cut -d" " -f3 |sed 's/.\{13\}$//'`
   fi
 }
 

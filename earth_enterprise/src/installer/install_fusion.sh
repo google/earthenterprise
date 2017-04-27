@@ -37,8 +37,6 @@ BASEINSTALLDIR_VAR="/var/opt/google"
 TMPINSTALLDIR="/tmp/fusion_os_install"
 INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
 CHKCONFIG="/sbin/chkconfig"
-OS_RELEASE1="/etc/os-release"
-OS_RELEASE2="/etc/system-release"
 
 # script arguments
 BACKUPFUSION=true
@@ -66,10 +64,7 @@ IS_NEWINSTALL=false
 PUBLISH_ROOT_VOLUME=""
 IS_64BIT_OS=false
 ROOT_USERNAME="root"
-SUPPORTED_OS_LIST=("Ubuntu", "Red Hat Enterprise Linux (RHEL)")
-UBUNTUKEY="ubuntu"
-REDHATKEY="rhel"
-CENTOSKEY="centos"
+
 MACHINE_OS=""
 MACHINE_OS_VERSION=""
 MACHINE_OS_FRIENDLY=""
@@ -277,45 +272,6 @@ load_systemrc_config()
 		GEFUSIONUSER_NAME=$(xmllint --xpath '//Systemrc/fusionUsername/text()' $SYSTEMRC)
 		GROUPNAME=$(xmllint --xpath '//Systemrc/userGroupname/text()' $SYSTEMRC)		
 	fi
-}
-
-determine_os()
-{
-    local retval=0
-    local test_os=""
-    local test_versionid=""
-
-    if [ -f "$OS_RELEASE1" ] || [ -f "$OS_RELEASE2" ]; then
-	if [ -f "$OS_RELEASE1" ]; then
-	        test_os="$(cat $OS_RELEASE1 | sed -e 's:\"::g' | grep ^NAME= | sed 's:name=::gI')"
-    		test_versionid="$(cat $OS_RELEASE1 | sed -e 's:\"::g' | grep ^VERSION_ID= | sed 's:version_id=::gI')"
-	else
-		test_os="$(cat $OS_RELEASE2 | sed 's:[0-9\.] *::g')"
-		test_versionid="$(cat $OS_RELEASE2 | sed 's:[^0-9\.]*::g')"
-	fi
-
-	MACHINE_OS_FRIENDLY="$test_os $test_versionid"
-    	MACHINE_OS_VERSION=$test_versionid
-
-        if [[ "${test_os,,}" == "ubuntu"* ]]; then
-            	MACHINE_OS=$UBUNTUKEY
-        elif [[ "${test_os,,}" == "red hat"* ]]; then
-            	MACHINE_OS=$REDHATKEY
-	elif [[ "${test_os,,}" == "centos"* ]]; then
-		MACHINE_OS=$CENTOSKEY
-        else
-            MACHINE_OS=""
-            echo -e "\nThe installer could not determine your machine's operating system."
-            echo -e "Supported Operating Systems: ${SUPPORTED_OS_LIST[*]}\n"
-            retval=1
-        fi
-    else
-		echo -e "\nThe installer could not determine your machine's operating system."
-        echo -e "Missing file: $OS_RELEASE\n"
-        retval=1		
-	fi
-
-    return $retval
 }
 
 software_check()
@@ -740,28 +696,6 @@ copy_files_to_target()
 	fi
 }
 
-<<<<<<< Updated upstream
-create_links()
-{
-	printf "Setting up system links..."
-
-	if [ ! -L "$BASEINSTALLDIR_OPT/etc" ]; then
-		ln -s $BASEINSTALLDIR_ETC $BASEINSTALLDIR_OPT/etc
-	fi 
-
-	if [ ! -L "$BASEINSTALLDIR_OPT/log" ]; then
-		ln -s $BASEINSTALLDIR_VAR/log $BASEINSTALLDIR_OPT/log
-	fi
-
-	if [ ! -L "$BASEINSTALLDIR_OPT/run" ]; then
-		ln -s $BASEINSTALLDIR_VAR/run $BASEINSTALLDIR_OPT/run
-	fi
-
-	printf "Done\n"	
-}
-
-=======
->>>>>>> Stashed changes
 #-----------------------------------------------------------------
 # Post-install Functions
 #-----------------------------------------------------------------
