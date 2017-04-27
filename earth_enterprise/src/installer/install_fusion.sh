@@ -68,6 +68,7 @@ ROOT_USERNAME="root"
 SUPPORTED_OS_LIST=("Ubuntu", "Red Hat Enterprise Linux (RHEL)")
 UBUNTUKEY="ubuntu"
 REDHATKEY="rhel"
+CENTOSKEY="centos"
 MACHINE_OS=""
 MACHINE_OS_VERSION=""
 MACHINE_OS_FRIENDLY=""
@@ -297,21 +298,23 @@ determine_os()
     local test_versionid=""
 
     if [ -f "$OS_RELEASE1" ] || [ -f "$OS_RELEASE2" ]; then
-		if [ -f "$OS_RELEASE1" ]; then
+	if [ -f "$OS_RELEASE1" ]; then
 	        test_os="$(cat $OS_RELEASE1 | sed -e 's:\"::g' | grep ^NAME= | sed 's:name=::gI')"
-    	    test_versionid="$(cat $OS_RELEASE1 | sed -e 's:\"::g' | grep ^VERSION_ID= | sed 's:version_id=::gI')"
-		else
-			test_os="$(cat $OS_RELEASE2 | sed 's:[0-9\.] *::g')"
-			test_versionid="$(cat $OS_RELEASE2 | sed 's:[^0-9\.]*::g')"
-		fi
+    		test_versionid="$(cat $OS_RELEASE1 | sed -e 's:\"::g' | grep ^VERSION_ID= | sed 's:version_id=::gI')"
+	else
+		test_os="$(cat $OS_RELEASE2 | sed 's:[0-9\.] *::g')"
+		test_versionid="$(cat $OS_RELEASE2 | sed 's:[^0-9\.]*::g')"
+	fi
 
-		MACHINE_OS_FRIENDLY="$test_os $test_versionid"
+	MACHINE_OS_FRIENDLY="$test_os $test_versionid"
     	MACHINE_OS_VERSION=$test_versionid
 
         if [[ "${test_os,,}" == "ubuntu"* ]]; then
-            MACHINE_OS=$UBUNTUKEY
+            	MACHINE_OS=$UBUNTUKEY
         elif [[ "${test_os,,}" == "red hat"* ]]; then
-            MACHINE_OS=$REDHATKEY
+            	MACHINE_OS=$REDHATKEY
+	elif [[ "${test_os,,}" == "centos"* ]]; then
+		MACHINE_OS=$CENTOSKEY
         else
             MACHINE_OS=""
             echo -e "\nThe installer could not determine your machine's operating system."
@@ -339,7 +342,7 @@ software_check()
             echo -e "Install $1 and restart the $GEEF $LONG_VERSION uninstaller."
             software_check_retval=1
         fi
-    elif [ "$MACHINE_OS" == "$REDHATKEY" ]; then
+    elif [ "$MACHINE_OS" == "$REDHATKEY" ] || [ "$MACHINE_OS" == "$CENTOSKEY" ]; then
         if [[ -z "$(rpm -qa | grep ^$2\$)" ]]; then
             echo -e "Install $2 and restart the $GEEF $LONG_VERSION uninstaller."
             software_check_retval=1
@@ -1007,7 +1010,7 @@ install_or_upgrade_asset_root()
                 UPGRADE_MESSAGE=""
             fi
 
-            echo -e "The asset root must be upgraded to work with the current version of $GEEF $LONG_VERSION."
+            echo -e "\nThe asset root must be upgraded to work with the current version of $GEEF $LONG_VERSION."
             echo -e "You cannot use an upgraded asset root with older versions of $GEEF. "
 			echo -e "Consider backing up your asset root. $GEEF will warn you when"
             echo -e "attempting to run with a non-upgraded asset root."
@@ -1130,7 +1133,7 @@ show_final_success_message()
 
     echo -e "\n-------------------"
     echo -e "Congratulations! $GEEF $LONG_VERSION has been successfully $INSTALLED_OR_UPGRADED"
-    echo -e "in [$USER_INSTALL_DIRECTORY].\n"
+    echo -e "in [$USER_INSTALL_DIRECTORY]."
 
     if [ $START_FUSION_DAEMON == true ]; then
         if [ -z "$SYSTEM_MGR_CHECK" ] && [ $IS_SLAVE == false ] || [ -z "$SYSTEM_RPROVIDER_CHECK" ]; then
