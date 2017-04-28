@@ -19,4 +19,4 @@ Refer to the [wiki](https://github.com/google/earthenterprise/wiki/Build-Instruc
 There is currently no official installer for Earth Enterprise Fusion & Server.  For details and workarounds, refer to the [FAQ](https://github.com/google/earthenterprise/wiki/Frequently-Asked-Questions#ive-built-gee-fusion-and-server-now-how-do-i-install-them).
 
 ### Known Issues
-Known issues can be tracked via the GitHub Issues page or the weekly updated [wiki page](https://github.com/google/earthenterprise/wiki/Known-Issues).
+Known issues can be tracked via [wiki page](https://github.com/google/earthenterprise/wiki/Known-Issues), which is updated weekly.
