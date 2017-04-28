@@ -17,12 +17,22 @@
 
 use FindBin qw($Bin $Script);
 use File::Basename;
+use Cwd 'abs_path';
+
+# This script should be run from NATIVE-*-x86_64/bin/tests
+my $scriptDir = dirname(abs_path($0));
+if ($scriptDir !~ /NATIVE-[a-zA-Z0-9_-]*\/bin\/tests$/) {
+    print "This script should be run from <build_dir>/bin/tests.\n";
+    print "<build_dir> is usually something like NATIVE-REL-x86_64.\n";
+    exit;
+}
+chdir($scriptDir);
 
 # Add path to build binary directory for searching executables (ogr2ogr,
 # gdal_rasterize,...) used in tests.
-$ENV{'PATH'} = join ":", "$Bin/..", $ENV{'PATH'};
+$ENV{'PATH'} = join ":", "..", $ENV{'PATH'};
 
-my @tests = glob("$Bin/*");
+my @tests = glob("./*test*");
 
 my $longest = 0;
 foreach my $test (@tests) {

@@ -38,8 +38,12 @@ def BuildLibrary(os_dir, ignore_results):
 
   os.chdir("dist")
   fp = open("../%s/build_lib" % os_dir)
+  build_vars = {
+    'prefix': sys.prefix,
+    'exec_prefix': sys.exec_prefix
+  }
   for line in fp:
-    result = util.ExecuteCmd(line, use_shell=True)
+    result = util.ExecuteCmd(line.format(**build_vars), use_shell=True)
     if result:
       if ignore_results:
         print result
@@ -58,29 +62,29 @@ def RunTests():
   shutil.copyfile("../test.py", "test.py")
 
   old_path = sys.path
-  sys.path = sys.path + [os.getcwd()]
+  sys.path = [os.getcwd()] + sys.path
   import test
   sys.path = old_path
 
   test.main()
 
-def main():
+def main(argv):
   """Main for build and test."""
-  if (len(sys.argv) != 2 or
-      sys.argv[1].lower() not in ["mac", "windows", "linux"]):
+  if (len(argv) != 2 or
+      argv[1].lower() not in ["mac", "windows", "linux"]):
     print "Usage: build_and_test.py <OS_target>"
     print
     print "<OS_target> can be Mac, Windows, or Linux"
     return
 
-  os.chdir(sys.path[0])
-  os_dir = "%s%s" % (sys.argv[1][0:1].upper(), sys.argv[1][1:].lower())
+  os.chdir(os.path.dirname(os.path.realpath(__file__)))
+  os_dir = "%s%s" % (argv[1][0:1].upper(), argv[1][1:].lower())
   print "Build and test file unpacker library for %s Portable Server." % os_dir
 
-  if BuildLibrary(os_dir, sys.argv[1].lower()=="windows"):
+  if BuildLibrary(os_dir, argv[1].lower()=="windows"):
     print "Library built."
     RunTests()
 
 
 if __name__ == "__main__":
-  main()
+  main(sys.argv)
