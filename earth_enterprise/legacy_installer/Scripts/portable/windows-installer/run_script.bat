@@ -26,7 +26,7 @@ argument 1: The script (with its complete unix path) which is to be run
 Rest of the arguments if any will be passed to this script.
 
 usage:
-      c:\pulse_running_dir\run_script.bat root@fusionqahost:%earth_enterprise_root%installer/Scripts/portable/windows-installer/create_windows_installer.bat py2exe
+      c:\pulse_running_dir\run_script.bat root@fusionqahost:%earth_enterprise_root%legacy_installer/Scripts/portable/windows-installer/create_windows_installer.bat py2exe
 :script_documentation
 
 cd %~dp0
