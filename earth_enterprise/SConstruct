@@ -148,7 +148,7 @@ SConscript(dirs=['datasets', 'geplaces', 'searchexample', 'docs'],
 
 # The following target is added to phony_target(or alias_target) 'install'
 # so that it will be executed last while trying to create target install
-this_dict = {'install': ['/bin/bash ./installer/Scripts/verify_installerdir.sh %s' % installdir]}
+this_dict = {'install': ['/bin/bash ./src/installer/scripts/verify_installerdir.sh %s' % installdir]}
 env.PhonyTargets(**this_dict)
 
 # Clean install dir (note: the current sconscripts leave stuff behind, like

@@ -39,7 +39,7 @@ set pscp_path=C:\Googlestuff\Putty\pscp
 set dest_path=%this_script_dir%gold\
 
 REM Step[1.1] copy the installer list file from pulse client
-%pscp_path% -i c:\private.ppk %earth_enterprise_root%installer/Scripts/portable/windows-installer/windows_installer_filelist.txt "%this_script_dir%windows_installer_filelist.txt"
+%pscp_path% -i c:\private.ppk %earth_enterprise_root%legacy_installer/Scripts/portable/windows-installer/windows_installer_filelist.txt "%this_script_dir%windows_installer_filelist.txt"
 
 REM Step[2] create the directory structure for copying installer files.
 cd "%this_script_dir%"

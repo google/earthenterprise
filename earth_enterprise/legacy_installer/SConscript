@@ -133,7 +133,7 @@ ExecEcho(common_libs64_tar_command)
 # Step 0: Build
 enterprise_root = Dir("#/..").abspath
 portable_linux_installer_cmd = (
-    "%s/installer/Scripts/portable/create_linux_installer.sh "
+    "%s/legacy_installer/Scripts/portable/create_linux_installer.sh "
     "%s/common/opt/google/gepython "
     "%s/src/fusion/portableglobe/servers "
     "%s/src/fusion/portableglobe/globes "
