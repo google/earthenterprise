@@ -234,19 +234,19 @@ show_intro()
 # TODO: Update for GEE Server
 show_help()
 {
-  echo -e "\nUsage: \tsudo ./install_fusion.sh [-dir /tmp/fusion_os_install -ar /gevol/assets -sv /gevol/src -u fusionuser"
+  echo -e "\nUsage: \tsudo ./install_server.sh [-dir /tmp/fusion_os_install -ar /gevol/assets -sv /gevol/src -u fusionuser"
   echo -e "\t\t-g gegroup -nobk -nop -hnf -nostart]\n"
 
   echo -e "-h \t\tHelp - display this help screen"
   echo -e "-dir \t\tTemp Install Directory - specify the temporary install directory. Default is [$TMPINSTALLDIR]."
   echo -e "-u \t\tFusion User Name - the user name to use for Fusion. Default is [$GEFUSIONUSER_NAME]. \n\t\tNote: this is only used for new installations."
   echo -e "-g \t\tUser Group Name - the group name to use for the Fusion user. Default is [$GROUPNAME]. \n\t\tNote: this is only used for new installations."
-  echo -e "-ar \t\tAsset Root Mame - the name of the asset root volume.  Default is [$ASSET_ROOT]. \n\t\tNote: this is only used for new installations. Specify absolute paths only."
+  echo -e "-ar \t\tAsset Root Name - the name of the asset root volume.  Default is [$ASSET_ROOT]. \n\t\tNote: this is only used for new installations. Specify absolute paths only."
   echo -e "-sv \t\tSource Volume Name - the name of the source volume.  Default is [$SOURCE_VOLUME]. \n\t\tNote: this is only used for new installations. Specify absolute paths only."
-  echo -e "-nobk \t\tNo Backup - do not backup the current fusion setup. Default is to backup \n\t\tthe setup before installing."
+  echo -e "-nobk \t\tNo Backup - do not backup the current server setup. Default is to backup \n\t\tthe setup before installing."
   echo -e "-nop \t\tNo Purge - do not delete the temporary install directory upon successful run of the installer."
   echo -e "\t\tDefault is to delete the directory after successful installation."
-  echo -e "-nostart \tDo Not Start Fusion - after install, do not start the Fusion daemon.  Default is to start the daemon."
+  echo -e "-nostart \tDo Not Start Server - after install, do not start the server daemon.  Default is to start the daemon."
   echo -e "-hnf \t\tHostname Force - force the installer to continue installing with a bad \n\t\thostname. Bad hostname values are [${BADHOSTNAMELIST[*]}]."
   echo -e "-hnmf \t\tHostname Mismatch Force - force the installer to continue installing with a \n\t\tmismatched hostname.\n"
 }
@@ -286,12 +286,8 @@ parse_arguments()
   local parse_arguments_retval=0
   local show_user_group_recommendation=false
 
-  # TODO: Remove debug
-  echo Num args: $#
-
   while [ $# -gt 0 ]
   do
-    echo Parsing: "${1,,}"
     case "${1,,}" in
       -h|-help|--help)
         show_help
@@ -471,7 +467,7 @@ copy_files_to_target()
 {
   printf "\nCopying files from source to target directories..."
 
-  kdir -p $BASEINSTALLDIR_OPT/share/doc
+  mkdir -p $BASEINSTALLDIR_OPT/share/doc
   mkdir -p $BASEINSTALLDIR_OPT/gehttpd/conf
   mkdir -p $BASEINSTALLDIR_OPT/gehttpd/htdocs/shared_assets/images
   mkdir -p $BASEINSTALLDIR_OPT/search
@@ -570,11 +566,11 @@ setup_geserver_daemon()
 {
   # setup geserver daemon
   # For Ubuntu
-   echo "Setting up the geserver daemon...\n"
-   test -f $CHKCONFIG && $CHKCONFIG --add geserver
-   test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE -f geserver remove
-   test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE geserver start 90 2 3 4 5 . stop 10 0 1 6 .
-   printf "GEE Server daemon setup ... DONE\n"
+  printf "Setting up the geserver daemon...\n"
+  test -f $CHKCONFIG && $CHKCONFIG --add geserver
+  test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE -f geserver remove
+  test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE geserver start 90 2 3 4 5 . stop 10 0 1 6 .
+  printf "GEE Server daemon setup ... DONE\n"
 }
 
 # 6) Install the GEPlaces and SearchExample Databases
