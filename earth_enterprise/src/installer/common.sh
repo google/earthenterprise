@@ -35,7 +35,7 @@ OS_RELEASE2="/etc/system-release"
 software_check()
 {
     local software_check_retval=0
-    
+
     # args: $1: ubuntu package
     # args: $: rhel package
 
@@ -51,8 +51,8 @@ software_check()
         fi
     else 
         echo -e "\nThe installer could not determine your machine's operating system."
-            echo -e "Supported Operating Systems: ${SUPPORTED_OS_LIST[*]}\n"
-            software_check_retval=1
+        echo -e "Supported Operating Systems: ${SUPPORTED_OS_LIST[*]}\n"
+        software_check_retval=1
     fi
 
     return $software_check_retval
@@ -66,20 +66,20 @@ determine_os()
 
     if [ -f "$OS_RELEASE1" ] || [ -f "$OS_RELEASE2" ]; then
         if [ -f "$OS_RELEASE1" ]; then
-                test_os="$(cat $OS_RELEASE1 | sed -e 's:\"::g' | grep ^NAME= | sed 's:name=::gI')"
-                test_versionid="$(cat $OS_RELEASE1 | sed -e 's:\"::g' | grep ^VERSION_ID= | sed 's:version_id=::gI')"
+            test_os="$(cat $OS_RELEASE1 | sed -e 's:\"::g' | grep ^NAME= | sed 's:name=::gI')"
+            test_versionid="$(cat $OS_RELEASE1 | sed -e 's:\"::g' | grep ^VERSION_ID= | sed 's:version_id=::gI')"
         else
             test_os="$(cat $OS_RELEASE2 | sed 's:[0-9\.] *::g')"
             test_versionid="$(cat $OS_RELEASE2 | sed 's:[^0-9\.]*::g')"
         fi
 
         MACHINE_OS_FRIENDLY="$test_os $test_versionid"
-            MACHINE_OS_VERSION=$test_versionid
+        MACHINE_OS_VERSION=$test_versionid
 
-            if [[ "${test_os,,}" == "ubuntu"* ]]; then
-                    MACHINE_OS=$UBUNTUKEY
-            elif [[ "${test_os,,}" == "red hat"* ]]; then
-                    MACHINE_OS=$REDHATKEY
+        if [[ "${test_os,,}" == "ubuntu"* ]]; then
+            MACHINE_OS=$UBUNTUKEY
+        elif [[ "${test_os,,}" == "red hat"* ]]; then
+            MACHINE_OS=$REDHATKEY
         elif [[ "${test_os,,}" == "centos"* ]]; then
             MACHINE_OS=$CENTOSKEY
         else
@@ -98,12 +98,12 @@ determine_os()
 }
 
 run_as_user() {
- use_su="su $1 -c 'echo -n 1' 2> /dev/null  || echo -n 0"
- if [ "$use_su" -eq 1 ] ; then
-    ( cd / ;su $1 -c "$2" )
- else
-    ( cd / ;sudo -u $1 $2 )
- fi
+    use_su="su $1 -c 'echo -n 1' 2> /dev/null  || echo -n 0"
+    if [ "$use_su" -eq 1 ] ; then
+        ( cd / ;su $1 -c "$2" )
+    else
+        ( cd / ;sudo -u $1 $2 )
+    fi
 }
 
 show_no_tmp_dir_message()
@@ -144,7 +144,7 @@ check_mismatched_hostname() {
         else
             echo -e "Exiting the installer.  If you wish to continue, re-run this command with the -hnmf 'Hostname Mismatch Override' flag.\n"
             exit 1
-        fi        
+        fi
     fi
 }
 
@@ -157,9 +157,9 @@ show_mismatchedhostname()
 }
 
 check_group() {
-  GROUP_EXISTS=$(getent group $GROUPNAME)
+    GROUP_EXISTS=$(getent group $GROUPNAME)
 
-  # add group if it does not exist
+    # add group if it does not exist
     if [ -z "$GROUP_EXISTS" ]; then
         groupadd -r $GROUPNAME &> /dev/null 
         NEW_GEGROUP=true 
@@ -167,17 +167,17 @@ check_group() {
 }
 
 check_username() {
-  USERNAME_EXISTS=$(getent passwd $1)
+    USERNAME_EXISTS=$(getent passwd $1)
 
-  # add user if it does not exist
+    # add user if it does not exist
     if [ -z "$USERNAME_EXISTS" ]; then
-    mkdir -p $BASEINSTALLDIR_OPT/.users/$1
+        mkdir -p $BASEINSTALLDIR_OPT/.users/$1
         useradd -d $BASEINSTALLDIR_OPT/.users/$1 -g gegroup $1
-    NEW_GEFUSIONUSER=true
-  else
-    echo "User $1 exists"
-    # user already exists -- update primary group
-    usermod -g $GROUPNAME $1
+        NEW_GEFUSIONUSER=true
+    else
+        echo "User $1 exists"
+        # user already exists -- update primary group
+        usermod -g $GROUPNAME $1
     fi
 }
 
@@ -197,5 +197,5 @@ create_links()
         ln -s $BASEINSTALLDIR_VAR/run $BASEINSTALLDIR_OPT/run
     fi
 
-    printf "DONE\n"    
+    printf "DONE\n"
 }

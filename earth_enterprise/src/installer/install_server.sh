@@ -87,68 +87,68 @@ main_preinstall()
   # 3) Introduction
   show_intro
 
-	# 2) Root/Sudo check
-	if [ "$EUID" != "0" ]; then 
-		show_need_root
-		exit 1
-	fi
+  # 2) Root/Sudo check
+  if [ "$EUID" != "0" ]; then
+    show_need_root
+    exit 1
+  fi
 
   # 5a) Check previous installation
   if [ -f "$SERVERBININSTALL" ]; then
-		IS_NEWINSTALL=false
-	else
-		IS_NEWINSTALL=true
-	fi
+    IS_NEWINSTALL=false
+  else
+    IS_NEWINSTALL=true
+  fi
 
   # Argument check
-	if ! parse_arguments "$@"; then		
-		exit 1
-	fi
-
-	if ! determine_os; then
+  if ! parse_arguments "$@"; then
     exit 1
   fi
-  
+
+  if ! determine_os; then
+    exit 1
+  fi
+
   # 7) Check prerequisite software
   if ! check_prereq_software; then
-		exit 1
-	fi
+    exit 1
+  fi
 
   # check to see if GE Server processes are running
   services_running = check_server_processes_running
-  
-	if [ $services_running -ne 0 ]; then
-		show_server_running_message
-		exit 1
-	fi
+
+  if [ $services_running -ne 0 ]; then
+    show_server_running_message
+    exit 1
+  fi
 
   # tmp dir check
-	if [ ! -d "$TMPINSTALLDIR" ]; then
-		show_no_tmp_dir_message $TMPINSTALLDIR
-		exit 1
-	fi
+  if [ ! -d "$TMPINSTALLDIR" ]; then
+    show_no_tmp_dir_message $TMPINSTALLDIR
+    exit 1
+  fi
 
   # 5b) Perform backup
   if [ $BACKUPSERVER == true ]; then
-		# Backing up current Server Install...
-		backup_server
-	fi
+    # Backing up current Server Install...
+    backup_server
+  fi
 
   # 6) Check valid host properties
- 	if ! check_bad_hostname; then
-		exit 1
-	fi
+   if ! check_bad_hostname; then
+    exit 1
+  fi
 
   if ! check_mismatched_hostname; then
-		exit 1
-	fi
+    exit 1
+  fi
 
   # 64 bit check
-	if [[ "$(uname -i)" == "x86_64" ]]; then 
-        IS_64BIT_OS=true 
-	else
-		echo -e "\n$GEEF $LONG_VERSION can only be installed on a 64 bit operating system."
-		exit 1
+  if [[ "$(uname -i)" == "x86_64" ]]; then
+        IS_64BIT_OS=true
+  else
+    echo -e "\n$GEEF $LONG_VERSION can only be installed on a 64 bit operating system."
+    exit 1
   fi
 
   # 8) Check if group and users exist
@@ -163,24 +163,24 @@ main_preinstall()
 
 check_prereq_software()
 {
-	local check_prereq_software_retval=0
+  local check_prereq_software_retval=0
 
-	if ! software_check "libxml2-utils" "libxml2.*x86_64"; then
-		check_prereq_software_retval=1
-	fi
+  if ! software_check "libxml2-utils" "libxml2.*x86_64"; then
+    check_prereq_software_retval=1
+  fi
 
-	if ! software_check "python2.7" "python-2.7.*"; then
-		check_prereq_software_retval=1
-	fi
+  if ! software_check "python2.7" "python-2.7.*"; then
+    check_prereq_software_retval=1
+  fi
 
 
-	return $check_prereq_software_retval
+  return $check_prereq_software_retval
 }
 
 main_install()
 {
-	copy_files_to_target
-	create_links
+  copy_files_to_target
+  create_links
 }
 
 main_postinstall()
@@ -190,7 +190,7 @@ main_postinstall()
 
   # 2) Set Permissions Before Server Start/Stop
   fix_postinstall_filepermissions
-  
+
   # 3) PostGres DB config
   postgres_db_config
 
@@ -209,16 +209,16 @@ main_postinstall()
 
   # 8) Set permissions after geserver Start/Stop.
   fix_postinstall_filepermissions
-  
+
   # TODO - verify
   # 9) Run geecheck config script
   # If file ‘/opt/google/gehttpd/cgi-bin/set_geecheck_config.py’ exists:
   if [ -f "$GEE_CHECK_CONFIG_SCRIPT" ]; then
-     cd $BASEINSTALLDIR_OPT/gehttpd/cgi-bin
-     python ./set_geecheck_config.py
+    cd $BASEINSTALLDIR_OPT/gehttpd/cgi-bin
+    python ./set_geecheck_config.py
   fi
 
-  # 10) 
+  # 10)
   show_final_success_message
 }
 
@@ -227,41 +227,41 @@ main_postinstall()
 #-----------------------------------------------------------------
 
 show_intro()
-{	
-	echo -e "\nWelcome to the $GEES $LONG_VERSION installer."
+{
+  echo -e "\nWelcome to the $GEES $LONG_VERSION installer."
 }
 
 # TODO: Update for GEE Server
 show_help()
 {
-	echo -e "\nUsage: \tsudo ./install_fusion.sh [-dir /tmp/fusion_os_install -ar /gevol/assets -sv /gevol/src -u fusionuser"
-	echo -e "\t\t-g gegroup -nobk -nop -hnf -nostart]\n"
+  echo -e "\nUsage: \tsudo ./install_fusion.sh [-dir /tmp/fusion_os_install -ar /gevol/assets -sv /gevol/src -u fusionuser"
+  echo -e "\t\t-g gegroup -nobk -nop -hnf -nostart]\n"
 
-	echo -e "-h \t\tHelp - display this help screen"
-	echo -e "-dir \t\tTemp Install Directory - specify the temporary install directory. Default is [$TMPINSTALLDIR]."	
-	echo -e "-u \t\tFusion User Name - the user name to use for Fusion. Default is [$GEFUSIONUSER_NAME]. \n\t\tNote: this is only used for new installations."
-	echo -e "-g \t\tUser Group Name - the group name to use for the Fusion user. Default is [$GROUPNAME]. \n\t\tNote: this is only used for new installations."
-	echo -e "-ar \t\tAsset Root Mame - the name of the asset root volume.  Default is [$ASSET_ROOT]. \n\t\tNote: this is only used for new installations. Specify absolute paths only."
-	echo -e "-sv \t\tSource Volume Name - the name of the source volume.  Default is [$SOURCE_VOLUME]. \n\t\tNote: this is only used for new installations. Specify absolute paths only."
-	echo -e "-nobk \t\tNo Backup - do not backup the current fusion setup. Default is to backup \n\t\tthe setup before installing."
-	echo -e "-nop \t\tNo Purge - do not delete the temporary install directory upon successful run of the installer."
-	echo -e "\t\tDefault is to delete the directory after successful installation."
-	echo -e "-nostart \tDo Not Start Fusion - after install, do not start the Fusion daemon.  Default is to start the daemon."
-	echo -e "-hnf \t\tHostname Force - force the installer to continue installing with a bad \n\t\thostname. Bad hostname values are [${BADHOSTNAMELIST[*]}]."
-	echo -e "-hnmf \t\tHostname Mismatch Force - force the installer to continue installing with a \n\t\tmismatched hostname.\n" 	
+  echo -e "-h \t\tHelp - display this help screen"
+  echo -e "-dir \t\tTemp Install Directory - specify the temporary install directory. Default is [$TMPINSTALLDIR]."
+  echo -e "-u \t\tFusion User Name - the user name to use for Fusion. Default is [$GEFUSIONUSER_NAME]. \n\t\tNote: this is only used for new installations."
+  echo -e "-g \t\tUser Group Name - the group name to use for the Fusion user. Default is [$GROUPNAME]. \n\t\tNote: this is only used for new installations."
+  echo -e "-ar \t\tAsset Root Mame - the name of the asset root volume.  Default is [$ASSET_ROOT]. \n\t\tNote: this is only used for new installations. Specify absolute paths only."
+  echo -e "-sv \t\tSource Volume Name - the name of the source volume.  Default is [$SOURCE_VOLUME]. \n\t\tNote: this is only used for new installations. Specify absolute paths only."
+  echo -e "-nobk \t\tNo Backup - do not backup the current fusion setup. Default is to backup \n\t\tthe setup before installing."
+  echo -e "-nop \t\tNo Purge - do not delete the temporary install directory upon successful run of the installer."
+  echo -e "\t\tDefault is to delete the directory after successful installation."
+  echo -e "-nostart \tDo Not Start Fusion - after install, do not start the Fusion daemon.  Default is to start the daemon."
+  echo -e "-hnf \t\tHostname Force - force the installer to continue installing with a bad \n\t\thostname. Bad hostname values are [${BADHOSTNAMELIST[*]}]."
+  echo -e "-hnmf \t\tHostname Mismatch Force - force the installer to continue installing with a \n\t\tmismatched hostname.\n"
 }
 
 # TODO convert to common function
 show_need_root()
 {
-	echo -e "\nYou must have root privileges to install $GEES.\n"
-	echo -e "Log in as the $ROOT_USERNAME user or use the 'sudo' command to run this installer."
-	echo -e "The installer must exit."
+  echo -e "\nYou must have root privileges to install $GEES.\n"
+  echo -e "Log in as the $ROOT_USERNAME user or use the 'sudo' command to run this installer."
+  echo -e "The installer must exit."
 }
 
 backup_server()
 {
-	export BACKUP_DIR=$BACKUP_DIR
+  export BACKUP_DIR=$BACKUP_DIR
 
   if [ ! -d $BACKUP_DIR ]; then
     mkdir -p $BACKUP_DIR
@@ -283,147 +283,147 @@ backup_server()
 # TODO update for server
 parse_arguments()
 {
-	local parse_arguments_retval=0
-    local show_user_group_recommendation=false
+  local parse_arguments_retval=0
+  local show_user_group_recommendation=false
 
   # TODO: Remove debug
   echo Num args: $#
 
-	while [ $# -gt 0 ]
-	do
+  while [ $# -gt 0 ]
+  do
     echo Parsing: "${1,,}"
-		case "${1,,}" in
-			-h|-help|--help)
-				show_help
-				parse_arguments_retval=1
-				break
-				;;
-			-nobk)
-				BACKUPFUSION=false				
-				;;
-			-hnf)
-				BADHOSTNAMEOVERRIDE=true;
-				;;			
-			-hnmf)
-				MISMATCHHOSTNAMEOVERRIDE=true
-				;;
-            -nostart)
-                START_FUSION_DAEMON=false
-                ;;
-			-nop)
-				PURGE_TMP_DIR=false
-				;;
-			-dir)
-				shift
-					if [ -d "$1" ]; then
-						TMPINSTALLDIR="$1"
-					else
-						show_no_tmp_dir_message $1
-						parse_arguments_retval=-1
-						break		
-					fi
-					;;
-			-ar)
-				if [ $IS_NEWINSTALL == false ]; then
-					echo -e "\nYou cannot modify the asset root using the installer because Fusion is already installed on this server."
-					parse_arguments_retval=1
-					break
-				else
-					shift
+    case "${1,,}" in
+      -h|-help|--help)
+        show_help
+        parse_arguments_retval=1
+        break
+        ;;
+      -nobk)
+        BACKUPFUSION=false
+        ;;
+      -hnf)
+        BADHOSTNAMEOVERRIDE=true;
+        ;;
+      -hnmf)
+        MISMATCHHOSTNAMEOVERRIDE=true
+        ;;
+      -nostart)
+        START_FUSION_DAEMON=false
+        ;;
+      -nop)
+        PURGE_TMP_DIR=false
+        ;;
+      -dir)
+        shift
+        if [ -d "$1" ]; then
+          TMPINSTALLDIR="$1"
+        else
+          show_no_tmp_dir_message $1
+          parse_arguments_retval=-1
+          break
+        fi
+        ;;
+      -ar)
+        if [ $IS_NEWINSTALL == false ]; then
+          echo -e "\nYou cannot modify the asset root using the installer because Fusion is already installed on this server."
+          parse_arguments_retval=1
+          break
+        else
+          shift
 
-					if is_valid_custom_directory ${1// }; then
-						ASSET_ROOT=${1// }
-					else
-						echo -e "\nThe asset root you specified does not appear to be a syntactically valid directory. Please"
-						echo -e "specify the absolute path of a valid directory location. Valid characters are upper/lowercase"
-						echo -e "letters, numbers and the underscore characters for the asset root name. The asset root cannot"
-						echo -e "start with a number or underscore."
-						parse_arguments_retval=1
-						break		
-					fi
-				fi
-				;;
-            -sv)
-                
-                if [ $IS_NEWINSTALL == false ]; then
-					echo -e "\nYou cannot modify the source volume using the installer because Fusion is already installed on this server."
-					parse_arguments_retval=1
-					break
-				else
-					shift
+          if is_valid_custom_directory ${1// }; then
+            ASSET_ROOT=${1// }
+          else
+            echo -e "\nThe asset root you specified does not appear to be a syntactically valid directory. Please"
+            echo -e "specify the absolute path of a valid directory location. Valid characters are upper/lowercase"
+            echo -e "letters, numbers and the underscore characters for the asset root name. The asset root cannot"
+            echo -e "start with a number or underscore."
+            parse_arguments_retval=1
+            break
+          fi
+        fi
+        ;;
+      -sv)
 
-					if is_valid_directory ${1// }; then
-						SOURCE_VOLUME=${1// }
-					else
-						echo -e "\nThe source volume you specified does not appear to be a syntactically valid directory. Please"
-						echo -e "specify the absolute path of a valid directory location. Valid characters are upper/lowercase"
-						echo -e "letters, numbers and the underscore characters for the source volume name. The source volume cannot"
-						echo -e "start with a number or underscore."
-						parse_arguments_retval=1
-						break		
-					fi
-				fi
-                ;;
-			-u)
-                show_user_group_recommendation=true
+        if [ $IS_NEWINSTALL == false ]; then
+          echo -e "\nYou cannot modify the source volume using the installer because Fusion is already installed on this server."
+          parse_arguments_retval=1
+          break
+        else
+          shift
 
-				if [ $IS_NEWINSTALL == false ]; then
-					echo -e "\nYou cannot modify the fusion user name using the installer because Fusion is already installed on this server."
-					parse_arguments_retval=1
-					break
-				else
-					shift
-				
-					if is_valid_alphanumeric ${1// }; then
-						GEFUSIONUSER_NAME=${1// }
-					else
-						echo -e "\nThe fusion user name you specified is not valid. Valid characters are upper/lowercase letters, "
-						echo -e "numbers, dashes and the underscore characters. The user name cannot start with a number or dash."
-						parse_arguments_retval=1					
-						break
-					fi
-				fi
-				;;
-			-g)
-                show_user_group_recommendation=true
+          if is_valid_directory ${1// }; then
+            SOURCE_VOLUME=${1// }
+          else
+            echo -e "\nThe source volume you specified does not appear to be a syntactically valid directory. Please"
+            echo -e "specify the absolute path of a valid directory location. Valid characters are upper/lowercase"
+            echo -e "letters, numbers and the underscore characters for the source volume name. The source volume cannot"
+            echo -e "start with a number or underscore."
+            parse_arguments_retval=1
+            break
+          fi
+        fi
+        ;;
+      -u)
+        show_user_group_recommendation=true
 
-				if [ $IS_NEWINSTALL == false ]; then
-					echo -e "\nYou cannot modify the fusion user group using the installer because Fusion is already installed on this server."
-					parse_arguments_retval=1
-					break
-				else
-					shift
-				
-					if is_valid_alphanumeric ${1// }; then
-						GROUPNAME=${1// }
-					else
-						echo -e "\nThe fusion group name you specified is not valid. Valid characters are upper/lowercase letters, "
-						echo -e "numbers, dashes and the underscore characters. The group name cannot start with a number or dash."
-						parse_arguments_retval=1
-						break			
-					fi
-				fi
-				;;
-			*)
-				echo -e "\nArgument Error: $1 is not a valid argument."
-				show_help
-				parse_arguments_retval=1
-				break
-				;;
-		esac
-	
-		if [ $# -gt 0 ]
-		then
-		    shift
-		fi
-	done	
-	
-	return $parse_arguments_retval;
+        if [ $IS_NEWINSTALL == false ]; then
+          echo -e "\nYou cannot modify the fusion user name using the installer because Fusion is already installed on this server."
+          parse_arguments_retval=1
+          break
+        else
+          shift
+
+          if is_valid_alphanumeric ${1// }; then
+            GEFUSIONUSER_NAME=${1// }
+          else
+            echo -e "\nThe fusion user name you specified is not valid. Valid characters are upper/lowercase letters, "
+            echo -e "numbers, dashes and the underscore characters. The user name cannot start with a number or dash."
+            parse_arguments_retval=1
+            break
+          fi
+        fi
+        ;;
+      -g)
+        show_user_group_recommendation=true
+
+        if [ $IS_NEWINSTALL == false ]; then
+          echo -e "\nYou cannot modify the fusion user group using the installer because Fusion is already installed on this server."
+          parse_arguments_retval=1
+          break
+        else
+          shift
+
+          if is_valid_alphanumeric ${1// }; then
+            GROUPNAME=${1// }
+          else
+            echo -e "\nThe fusion group name you specified is not valid. Valid characters are upper/lowercase letters, "
+            echo -e "numbers, dashes and the underscore characters. The group name cannot start with a number or dash."
+            parse_arguments_retval=1
+            break
+          fi
+        fi
+        ;;
+      *)
+        echo -e "\nArgument Error: $1 is not a valid argument."
+        show_help
+        parse_arguments_retval=1
+        break
+        ;;
+    esac
+
+    if [ $# -gt 0 ]
+    then
+      shift
+    fi
+  done
+
+  return $parse_arguments_retval;
 }
 
 check_server_processes_running()
 {
-	local retval=0
+  local retval=0
 
   # i) Check postgres is running .Store o/p in post_master_running
   local post_master_running=$( ps -ef | grep asd | grep -v grep )
@@ -433,26 +433,26 @@ check_server_processes_running()
   local gehttpd_running=$( ps -ef | grep gehttpd | grep -v grep )
   gehttpd_running_str="false"
 
-	if [ -n "$post_master_running" ]; then 
+  if [ -n "$post_master_running" ]; then
     retval = $((retval + 1))
     post_master_running_str="true"
   fi
   echo "postgres service: $post_master_running_str"
 
   if [ -n "$gehttpd_running" ]; then
-		retval = $((retval + 1))
+    retval = $((retval + 1))
     gehttpd_running_str = "true"
-	fi
+  fi
   echo "gehttpd service: $gehttpd_running_str"
   echo "$retval"
 
-	return $retval
+  return $retval
 }
 
 show_server_running_message()
 {
-	echo -e "\n$GEES has active running processes."
-	echo -e "To use this installer to upgrade, you must stop all geserver services.\n"	
+  echo -e "\n$GEES has active running processes."
+  echo -e "To use this installer to upgrade, you must stop all geserver services.\n"
 }
 
 configure_publish_root()
@@ -469,17 +469,17 @@ configure_publish_root()
 #-----------------------------------------------------------------
 copy_files_to_target()
 {
-	printf "\nCopying files from source to target directories..."
+  printf "\nCopying files from source to target directories..."
 
-	kdir -p $BASEINSTALLDIR_OPT/share/doc
-	mkdir -p $BASEINSTALLDIR_OPT/gehttpd/conf
+  kdir -p $BASEINSTALLDIR_OPT/share/doc
+  mkdir -p $BASEINSTALLDIR_OPT/gehttpd/conf
   mkdir -p $BASEINSTALLDIR_OPT/gehttpd/htdocs/shared_assets/images
   mkdir -p $BASEINSTALLDIR_OPT/search
-	mkdir -p $BASEINSTALLDIR_VAR/openssl/private
-	mkdir -p $BASEINSTALLDIR_VAR/openssl/misc
-	mkdir -p $BASEINSTALLDIR_VAR/openssl/certs
-	mkdir -p $BASEINSTALLDIR_ETC/openldap
-	mkdir -p $BASEINSTALLDIR_VAR/pgsql
+  mkdir -p $BASEINSTALLDIR_VAR/openssl/private
+  mkdir -p $BASEINSTALLDIR_VAR/openssl/misc
+  mkdir -p $BASEINSTALLDIR_VAR/openssl/certs
+  mkdir -p $BASEINSTALLDIR_ETC/openldap
+  mkdir -p $BASEINSTALLDIR_VAR/pgsql
 
   cp -rf $TMPINSTALLDIR/common/opt/google/bin $BASEINSTALLDIR_OPT
   cp -rf $TMPINSTALLDIR/common/opt/google/share $BASEINSTALLDIR_OPT
@@ -499,35 +499,35 @@ copy_files_to_target()
   cp -rf $TMPINSTALLDIR/server/etc/init.d/geserver $BININSTALLROOTDIR
   cp -rf $TMPINSTALLDIR/server/etc/profile.d/ge-server.sh $BININSTALLPROFILEDIR
   cp -rf $TMPINSTALLDIR/server/etc/profile.d/ge-server.csh $BININSTALLPROFILEDIR
-  
+
   cp -rf $TMPINSTALLDIR/server/user_magic/etc/logrotate.d/gehttpd $BASEINSTALLLOGROTATEDIR
   cp -rf $TMPINSTALLDIR/server/user_magic/var/opt/google/pgsql/logs/ $BASEINSTALLDIR_VAR/pgsql
   cp -rf $TMPINSTALLDIR/manual/opt/google/share/doc/manual $BASEINSTALLDIR_OPT/share/doc
   cp -rf $TMPINSTALLDIR/server/opt/google/gehttpd/conf/gehttpd.conf $BASEINSTALLDIR_OPT/gehttpd/conf
   cp -rf $TMPINSTALLDIR/server/opt/google/gehttpd/htdocs/shared_assets/images/location_pin.png $BASEINSTALLDIR_OPT/gehttpd/htdocs/shared_assets/images
 
-	TMPOPENSSLPATH=$TMPINSTALLDIR/common/user_magic/var/opt/google/openssl
+  TMPOPENSSLPATH=$TMPINSTALLDIR/common/user_magic/var/opt/google/openssl
 
-	cp -f $TMPOPENSSLPATH/openssl.cnf $BASEINSTALLDIR_VAR/openssl
-	cp -rf $TMPOPENSSLPATH/private $BASEINSTALLDIR_VAR/openssl
-	cp -f $TMPOPENSSLPATH/misc/CA.sh $BASEINSTALLDIR_VAR/openssl/misc
-	cp -f $TMPOPENSSLPATH/misc/tsget $BASEINSTALLDIR_VAR/openssl/misc
-	cp -f $TMPOPENSSLPATH/misc/c_name $BASEINSTALLDIR_VAR/openssl/misc
-	cp -f $TMPOPENSSLPATH/misc/CA.pl $BASEINSTALLDIR_VAR/openssl/misc
-	cp -f $TMPOPENSSLPATH/misc/c_issuer $BASEINSTALLDIR_VAR/openssl/misc
-	cp -f $TMPOPENSSLPATH/misc/c_info $BASEINSTALLDIR_VAR/openssl/misc
-	cp -f $TMPOPENSSLPATH/misc/c_hash $BASEINSTALLDIR_VAR/openssl/misc
-	cp -rf $TMPOPENSSLPATH/certs $BASEINSTALLDIR_VAR/openssl
+  cp -f $TMPOPENSSLPATH/openssl.cnf $BASEINSTALLDIR_VAR/openssl
+  cp -rf $TMPOPENSSLPATH/private $BASEINSTALLDIR_VAR/openssl
+  cp -f $TMPOPENSSLPATH/misc/CA.sh $BASEINSTALLDIR_VAR/openssl/misc
+  cp -f $TMPOPENSSLPATH/misc/tsget $BASEINSTALLDIR_VAR/openssl/misc
+  cp -f $TMPOPENSSLPATH/misc/c_name $BASEINSTALLDIR_VAR/openssl/misc
+  cp -f $TMPOPENSSLPATH/misc/CA.pl $BASEINSTALLDIR_VAR/openssl/misc
+  cp -f $TMPOPENSSLPATH/misc/c_issuer $BASEINSTALLDIR_VAR/openssl/misc
+  cp -f $TMPOPENSSLPATH/misc/c_info $BASEINSTALLDIR_VAR/openssl/misc
+  cp -f $TMPOPENSSLPATH/misc/c_hash $BASEINSTALLDIR_VAR/openssl/misc
+  cp -rf $TMPOPENSSLPATH/certs $BASEINSTALLDIR_VAR/openssl
 
-	TMPOPENLDAPPATH=$TMPINSTALLDIR/common/user_magic/etc/opt/google/openldap
+  TMPOPENLDAPPATH=$TMPINSTALLDIR/common/user_magic/etc/opt/google/openldap
 
-	cp -f $TMPOPENLDAPPATH/ldap.conf $BASEINSTALLDIR_ETC/openldap
-	cp -f $TMPOPENLDAPPATH/ldap.conf.default $BASEINSTALLDIR_ETC/openldap
+  cp -f $TMPOPENLDAPPATH/ldap.conf $BASEINSTALLDIR_ETC/openldap
+  cp -f $TMPOPENLDAPPATH/ldap.conf.default $BASEINSTALLDIR_ETC/openldap
 
-	# TODO: final step: copy uninstall script
-	# cp -f $TMPOPENLDAPPATH/<........> $INSTALL_LOG_DIR
+  # TODO: final step: copy uninstall script
+  # cp -f $TMPOPENLDAPPATH/<........> $INSTALL_LOG_DIR
 
-	printf "DONE\n"
+  printf "DONE\n"
 }
 
 #-----------------------------------------------------------------
@@ -548,7 +548,7 @@ reset_pgdb()
   # a) Always do an upgrade of the psql db
   echo 2 | run_as_user $GEPGUSER_NAME "/opt/google/bin/geresetpgdb upgrade"
   echo -e "upgrade done"
-  
+
   # b) Check for Success of PostGresDb
   #  If file ‘/var/opt/google/pgsql/data’ doesn’t exist:
 
@@ -560,9 +560,9 @@ reset_pgdb()
   else
     # postgress reset/install failed.
     echo -e "Failed to create PostGresDb."
-    echo -e "The PostgreSQL component of the installation failed 
+    echo -e "The PostgreSQL component of the installation failed
          to install."
-  fi 
+  fi
 }
 
 # 4) Creating Daemon thread for geserver
@@ -576,7 +576,7 @@ setup_geserver_daemon()
    test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE geserver start 90 2 3 4 5 . stop 10 0 1 6 .
    printf "GEE Server daemon setup ... DONE\n"
 }
-  
+
 # 6) Install the GEPlaces and SearchExample Databases
 install_search_databases()
 {
@@ -678,7 +678,7 @@ fix_postinstall_filepermissions()
   # Tutorial and Share
   find /opt/google/share -type d -exec chmod 755 {} \;
   find /opt/google/share -type f -exec chmod 644 {} \;
-  chmod ugo+x /opt/google/share/searchexample/searchexample 
+  chmod ugo+x /opt/google/share/searchexample/searchexample
   chmod ugo+x /opt/google/share/geplaces/geplaces
   chmod ugo+x /opt/google/share/support/geecheck/geecheck.pl
   chmod ugo+x /opt/google/share/support/geecheck/convert_to_kml.pl
@@ -735,17 +735,17 @@ show_final_success_message(){
           /opt/google \n
           Start Google Earth Enterprise Server with the following command:
           $BININSTALLROOTDIR/geserver start"
-  
+
 }
 
 check_server_running()
 {
   # Check that server is setup properly
-  
+
   if ! check_server_processes_running; then
-    echo -e "$GEES service is not running properly. Check the logs in 
-             /opt/google/gehttpd/logs \n 
-             /var/opt/google/pgsql/logs \n 
+    echo -e "$GEES service is not running properly. Check the logs in
+             /opt/google/gehttpd/logs \n
+             /var/opt/google/pgsql/logs \n
              for more details. "
   fi
 }
