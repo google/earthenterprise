@@ -18,7 +18,10 @@
 
 set +x
 
-. common.sh
+# get script directory
+SCRIPTDIR=`dirname $0`
+
+. $SCRIPTDIR/common.sh
 
 # config values
 ASSET_ROOT="/gevol/assets"
