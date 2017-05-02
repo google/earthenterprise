@@ -138,7 +138,7 @@ main_preinstall()
   fi
 
   # 6) Check valid host properties
-   if ! check_bad_hostname; then
+  if ! check_bad_hostname; then
     exit 1
   fi
 
@@ -234,22 +234,13 @@ show_intro()
   echo -e "\nWelcome to the $GEES $LONG_VERSION installer."
 }
 
-# TODO: Update for GEE Server
+# TODO: Add additional parameters for GEE Server
 show_help()
 {
-  echo -e "\nUsage: \tsudo ./install_server.sh [-dir /tmp/fusion_os_install -ar /gevol/assets -sv /gevol/src -u fusionuser"
-  echo -e "\t\t-g gegroup -nobk -nop -hnf -nostart]\n"
+  echo -e "\nUsage: \tsudo ./install_server.sh [-h] [-dir /tmp/fusion_os_install -hnf -hnmf]\n"
 
-  echo -e "-h \t\tHelp - display this help screen"
+  echo -e "-h --help \tHelp - display this help screen"
   echo -e "-dir \t\tTemp Install Directory - specify the temporary install directory. Default is [$TMPINSTALLDIR]."
-  echo -e "-u \t\tFusion User Name - the user name to use for Fusion. Default is [$GEFUSIONUSER_NAME]. \n\t\tNote: this is only used for new installations."
-  echo -e "-g \t\tUser Group Name - the group name to use for the Fusion user. Default is [$GROUPNAME]. \n\t\tNote: this is only used for new installations."
-  echo -e "-ar \t\tAsset Root Name - the name of the asset root volume.  Default is [$ASSET_ROOT]. \n\t\tNote: this is only used for new installations. Specify absolute paths only."
-  echo -e "-sv \t\tSource Volume Name - the name of the source volume.  Default is [$SOURCE_VOLUME]. \n\t\tNote: this is only used for new installations. Specify absolute paths only."
-  echo -e "-nobk \t\tNo Backup - do not backup the current server setup. Default is to backup \n\t\tthe setup before installing."
-  echo -e "-nop \t\tNo Purge - do not delete the temporary install directory upon successful run of the installer."
-  echo -e "\t\tDefault is to delete the directory after successful installation."
-  echo -e "-nostart \tDo Not Start Server - after install, do not start the server daemon.  Default is to start the daemon."
   echo -e "-hnf \t\tHostname Force - force the installer to continue installing with a bad \n\t\thostname. Bad hostname values are [${BADHOSTNAMELIST[*]}]."
   echo -e "-hnmf \t\tHostname Mismatch Force - force the installer to continue installing with a \n\t\tmismatched hostname.\n"
 }
@@ -283,7 +274,7 @@ backup_server()
   chown -R root:root $BACKUP_DIR
 }
 
-# TODO update for server
+# TODO Add additional parameters for server
 parse_arguments()
 {
   local parse_arguments_retval=0
@@ -297,20 +288,11 @@ parse_arguments()
         parse_arguments_retval=1
         break
         ;;
-      -nobk)
-        BACKUPFUSION=false
-        ;;
       -hnf)
         BADHOSTNAMEOVERRIDE=true;
         ;;
       -hnmf)
         MISMATCHHOSTNAMEOVERRIDE=true
-        ;;
-      -nostart)
-        START_FUSION_DAEMON=false
-        ;;
-      -nop)
-        PURGE_TMP_DIR=false
         ;;
       -dir)
         shift
@@ -320,87 +302,6 @@ parse_arguments()
           show_no_tmp_dir_message $1
           parse_arguments_retval=-1
           break
-        fi
-        ;;
-      -ar)
-        if [ $IS_NEWINSTALL == false ]; then
-          echo -e "\nYou cannot modify the asset root using the installer because Fusion is already installed on this server."
-          parse_arguments_retval=1
-          break
-        else
-          shift
-
-          if is_valid_custom_directory ${1// }; then
-            ASSET_ROOT=${1// }
-          else
-            echo -e "\nThe asset root you specified does not appear to be a syntactically valid directory. Please"
-            echo -e "specify the absolute path of a valid directory location. Valid characters are upper/lowercase"
-            echo -e "letters, numbers and the underscore characters for the asset root name. The asset root cannot"
-            echo -e "start with a number or underscore."
-            parse_arguments_retval=1
-            break
-          fi
-        fi
-        ;;
-      -sv)
-
-        if [ $IS_NEWINSTALL == false ]; then
-          echo -e "\nYou cannot modify the source volume using the installer because Fusion is already installed on this server."
-          parse_arguments_retval=1
-          break
-        else
-          shift
-
-          if is_valid_directory ${1// }; then
-            SOURCE_VOLUME=${1// }
-          else
-            echo -e "\nThe source volume you specified does not appear to be a syntactically valid directory. Please"
-            echo -e "specify the absolute path of a valid directory location. Valid characters are upper/lowercase"
-            echo -e "letters, numbers and the underscore characters for the source volume name. The source volume cannot"
-            echo -e "start with a number or underscore."
-            parse_arguments_retval=1
-            break
-          fi
-        fi
-        ;;
-      -u)
-        show_user_group_recommendation=true
-
-        if [ $IS_NEWINSTALL == false ]; then
-          echo -e "\nYou cannot modify the fusion user name using the installer because Fusion is already installed on this server."
-          parse_arguments_retval=1
-          break
-        else
-          shift
-
-          if is_valid_alphanumeric ${1// }; then
-            GEFUSIONUSER_NAME=${1// }
-          else
-            echo -e "\nThe fusion user name you specified is not valid. Valid characters are upper/lowercase letters, "
-            echo -e "numbers, dashes and the underscore characters. The user name cannot start with a number or dash."
-            parse_arguments_retval=1
-            break
-          fi
-        fi
-        ;;
-      -g)
-        show_user_group_recommendation=true
-
-        if [ $IS_NEWINSTALL == false ]; then
-          echo -e "\nYou cannot modify the fusion user group using the installer because Fusion is already installed on this server."
-          parse_arguments_retval=1
-          break
-        else
-          shift
-
-          if is_valid_alphanumeric ${1// }; then
-            GROUPNAME=${1// }
-          else
-            echo -e "\nThe fusion group name you specified is not valid. Valid characters are upper/lowercase letters, "
-            echo -e "numbers, dashes and the underscore characters. The group name cannot start with a number or dash."
-            parse_arguments_retval=1
-            break
-          fi
         fi
         ;;
       *)

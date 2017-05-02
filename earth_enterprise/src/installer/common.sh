@@ -119,10 +119,12 @@ check_bad_hostname() {
 
         if [ $BADHOSTNAMEOVERRIDE == true ]; then
             echo -e "Continuing the installation process...\n"
-            return 1
+            # 0 = true (in bash)
+            return 0
         else
             echo -e "Exiting the installer.  If you wish to continue, re-run this command with the -hnf 'Hostname Override' flag.\n"
-            return 0
+            # 1 = false
+            return 1
         fi
     fi
 }
@@ -141,9 +143,12 @@ check_mismatched_hostname() {
 
         if [ $MISMATCHHOSTNAMEOVERRIDE == true ]; then
             echo -e "Continuing the installation process...\n"
+            # 0 = true (in bash)
+            return 0
         else
             echo -e "Exiting the installer.  If you wish to continue, re-run this command with the -hnmf 'Hostname Mismatch Override' flag.\n"
-            exit 1
+            # 1 = false
+            return 1
         fi
     fi
 }
