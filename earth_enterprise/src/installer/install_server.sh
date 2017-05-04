@@ -79,7 +79,7 @@ PGSQL_PROGRAM="/opt/google/bin/pg_ctl"
 PRODUCT_NAME="Google Earth Enterprise"
 CHECK_POST_MASTER=""
 CHECK_GEHTTPD=""
-START_SERVER_DAEMON=0
+START_SERVER_DAEMON=1
 PROMPT_FOR_START="n"
 
 #-----------------------------------------------------------------
@@ -118,9 +118,7 @@ main_preinstall()
   fi
 
   # check to see if GE Server processes are running
-  services_running = check_server_processes_running
-
-  if [ $services_running -ne 0 ]; then
+  if check_server_processes_running; then
     show_server_running_message
     exit 1
   fi
@@ -148,7 +146,7 @@ main_preinstall()
 
   # 64 bit check
   if [[ "$(uname -i)" == "x86_64" ]]; then
-        IS_64BIT_OS=true
+    IS_64BIT_OS=true
   else
     echo -e "\n$GEEF $LONG_VERSION can only be installed on a 64 bit operating system."
     exit 1
@@ -264,7 +262,7 @@ backup_server()
   # Copy gehttpd directory.
   # Do not back up folder /opt/google/gehttpd/htdocs/cutter/globes.
   # Do not back up folders /opt/google/gehttpd/{bin, lib, manual, modules}
-  rsync -rltpu $INSTALL_DIR/gehttpd $BACKUP_DIR --exclude bin --exclude lib --exclude manual --exclude modules --exclude htdocs/cutter/globes
+  rsync -rltpu $BASEINSTALLDIR_OPT/gehttpd $BACKUP_DIR --exclude bin --exclude lib --exclude manual --exclude modules --exclude htdocs/cutter/globes
 
   # Copy other files.
   cp -f /etc/init.d/gevars.sh $BACKUP_DIR
@@ -323,28 +321,28 @@ parse_arguments()
 
 check_server_processes_running()
 {
-  local retval=0
+  printf "\nChecking geserver services:\n"
+  local retval=1
 
   # i) Check postgres is running .Store o/p in post_master_running
-  local post_master_running=$( ps -ef | grep asd | grep -v grep )
-  post_master_running_str="false"
+  local post_master_running=$( ps -ef | grep postgres | grep -v grep )
+  local post_master_running_str="false"
 
   # ii) Check gehttpd is running  .Store the o/p in gehttpd_running
   local gehttpd_running=$( ps -ef | grep gehttpd | grep -v grep )
-  gehttpd_running_str="false"
+  local gehttpd_running_str="false"
 
   if [ -n "$post_master_running" ]; then
-    retval = $((retval + 1))
+    retval=0
     post_master_running_str="true"
   fi
   echo "postgres service: $post_master_running_str"
 
   if [ -n "$gehttpd_running" ]; then
-    retval = $((retval + 1))
-    gehttpd_running_str = "true"
+    retval=0
+    gehttpd_running_str="true"
   fi
   echo "gehttpd service: $gehttpd_running_str"
-  echo "$retval"
 
   return $retval
 }
@@ -481,20 +479,20 @@ setup_geserver_daemon()
 install_search_databases()
 {
   # a) Start the PSQL Server
-  echo "   # a) Start the PSQL Server "
-  run_as_user $GEPGUSER_NAME $PGSQL_PROGRAM -D $PGSQL_DATA -l $PGSQL_LOGS/pg.log start -w
+  echo "# a) Start the PSQL Server "
+  run_as_user $GEPGUSER_NAME "$PGSQL_PROGRAM -D $PGSQL_DATA -l $PGSQL_LOGS/pg.log start -w"
 
-  echo "  # b) Install GEPlaces Database"
+  echo "# b) Install GEPlaces Database"
   # b) Install GEPlaces Database
   run_as_user $GEPGUSER_NAME "/opt/google/share/geplaces/geplaces create"
 
-  echo  "  # c) Install SearchExample Database "
+  echo "# c) Install SearchExample Database "
   # c) Install SearchExample Database
   run_as_user $GEPGUSER_NAME "/opt/google/share/searchexample/searchexample create"
 
   # d) Stop the PSQL Server
-  echo  "stopping the pgsql instance"
-  run_as_user $GEPGUSER_NAME $PGSQL_PROGRAM -D $PGSQL_DATA stop
+  echo "# d) Stop the PSQL Server"
+  run_as_user $GEPGUSER_NAME "$PGSQL_PROGRAM -D $PGSQL_DATA stop"
 }
 
 modify_files()

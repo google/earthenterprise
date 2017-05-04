@@ -812,7 +812,7 @@ compare_asset_root_publishvolume()
                 echo -e "can be quickly accomplished with hard/soft links without taking the additional space "
                 echo -e "needed for a full copy."
                 echo ""
-        
+
                 if ! prompt_to_quit "X (Exit) the installer and change the asset root location - C (Continue) to use the asset root that you have specified."; then
                     compare_assetroot_publishvolume_retval=1
                 fi                

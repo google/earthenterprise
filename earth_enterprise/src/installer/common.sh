@@ -98,10 +98,12 @@ determine_os()
 }
 
 run_as_user() {
-    use_su="su $1 -c 'echo -n 1' 2> /dev/null  || echo -n 0"
+    local use_su=`su $1 -c 'echo -n 1' 2> /dev/null  || echo -n 0`
     if [ "$use_su" -eq 1 ] ; then
+        >&2 echo "cd / ;su $1 -c \"$2\""
         ( cd / ;su $1 -c "$2" )
     else
+        >&2 echo "cd / ;sudo -u $1 $2"
         ( cd / ;sudo -u $1 $2 )
     fi
 }
