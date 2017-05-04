@@ -166,15 +166,15 @@ main_preinstall()
 check_prereq_software()
 {
   local check_prereq_software_retval=0
+  local script_name="$GEES $LONG_VERSION installer"
 
-  if ! software_check "libxml2-utils" "libxml2.*x86_64"; then
+  if ! software_check "$script_name" "libxml2-utils" "libxml2.*x86_64"; then
     check_prereq_software_retval=1
   fi
 
-  if ! software_check "python2.7" "python-2.7.*"; then
+  if ! software_check "$script_name" "python2.7" "python-2.7.*"; then
     check_prereq_software_retval=1
   fi
-
 
   return $check_prereq_software_retval
 }

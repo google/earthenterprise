@@ -18,6 +18,11 @@
 
 set +x
 
+# get script directory
+SCRIPTDIR=`dirname $0`
+
+. $SCRIPTDIR/common.sh
+
 # config values
 ASSET_ROOT=""
 GEFUSIONUSER_NAME=""
@@ -237,42 +242,15 @@ parse_arguments()
 	return $parse_arguments_retval;
 }
 
-
-software_check()
-{
-	local software_check_retval=0
-	
-	# args: $1: ubuntu package
-	# args: $2: rhel package
-
-    if [ "$MACHINE_OS" == "$UBUNTUKEY" ] && [ ! -z "$1" ]; then
-        if [[ -z "$(dpkg --get-selections | sed s:install:: | sed -e 's:\s::g' | grep ^$1\$)" ]]; then
-            echo -e "Install $1 and restart the $GEEF $LONG_VERSION uninstaller."
-            software_check_retval=1
-        fi
-    elif { [ "$MACHINE_OS" == "$REDHATKEY" ] || [ "$MACHINE_OS" == "$CENTOSKEY" ]; } && [ ! -z "$2" ]; then
-        if [[ -z "$(rpm -qa | grep ^$2\$)" ]]; then
-            echo -e "Install $2 and restart the $GEEF $LONG_VERSION uninstaller."
-            software_check_retval=1
-        fi
-	else 
-		echo -e "\nThe installer could not determine your machine's operating system."
-            echo -e "Supported Operating Systems: ${SUPPORTED_OS_LIST[*]}\n"
-            software_check_retval=1
-    fi
-
-	return $software_check_retval
-}
-
 check_prereq_software()
 {
-	local check_prereq_software_retval=0
+  local check_prereq_software_retval=0
 
-	if ! software_check "libxml2-utils" "libxml2-.*x86_64"; then
-		check_prereq_software_retval=1
-	fi
+  if ! software_check "$GEEF $LONG_VERSION uninstaller" "libxml2-utils" "libxml2-.*x86_64"; then
+    check_prereq_software_retval=1
+  fi
 
-	return $check_prereq_software_retval
+  return $check_prereq_software_retval
 }
 
 check_fusion_processes_running()

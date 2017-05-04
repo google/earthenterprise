@@ -36,21 +36,22 @@ software_check()
 {
     local software_check_retval=0
 
-    # args: $1: ubuntu package
-    # args: $: rhel package
+    # args: $1: name of script
+    # args: $2: ubuntu package
+    # args: $3: rhel package
 
-    if [ "$MACHINE_OS" == "$UBUNTUKEY" ]; then
-        if [[ -z "$(dpkg --get-selections | sed s:install:: | sed -e 's:\s::g' | grep ^$1\$)" ]]; then
-            echo -e "Install $1 and restart the $GEEF $LONG_VERSION uninstaller."
+    if [ "$MACHINE_OS" == "$UBUNTUKEY" ] && [ ! -z "$2" ]; then
+        if [[ -z "$(dpkg --get-selections | sed s:install:: | sed -e 's:\s::g' | grep ^$2\$)" ]]; then
+            echo -e "\nInstall $2 and restart the $1."
             software_check_retval=1
         fi
-    elif [ "$MACHINE_OS" == "$REDHATKEY" ]; then
-        if [[ -z "$(rpm -qa | grep ^$2\$)" ]]; then
-            echo -e "Install $2 and restart the $GEEF $LONG_VERSION uninstaller."
+    elif { [ "$MACHINE_OS" == "$REDHATKEY" ] || [ "$MACHINE_OS" == "$CENTOSKEY" ]; } && [ ! -z "$3" ]; then
+        if [[ -z "$(rpm -qa | grep ^$3\$)" ]]; then
+            echo -e "\nInstall $3 and restart the $1."
             software_check_retval=1
         fi
     else 
-        echo -e "\nThe installer could not determine your machine's operating system."
+        echo -e "\nThe $1 could not determine your machine's operating system."
         echo -e "Supported Operating Systems: ${SUPPORTED_OS_LIST[*]}\n"
         software_check_retval=1
     fi
@@ -242,8 +243,6 @@ check_server_processes_running()
   fi
   echo "wsgi service: $gehttpd_running_str"
 
-  echo
-
   return $retval
 }
 
@@ -267,8 +266,8 @@ backup_server()
   # Change the ownership of the backup folder.
   chown -R root:root $BACKUP_DIR
 
-  echo "The exsiting $GEES $LONG_VERSION configuration files have been backed up to the following location:"
-  echo $BACKUP_DIR
-  echo -e "The source volume(s) and asset root remain unchanged.\n"
+  echo -e "\nThe existing $GEES $LONG_VERSION configuration files have been backed up to the following location:"
+  echo -e $BACKUP_DIR
+  echo -e "The source volume(s) and asset root remain unchanged."
 }
 

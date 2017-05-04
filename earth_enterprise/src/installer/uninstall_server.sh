@@ -22,8 +22,9 @@ SCRIPTDIR=`dirname $0`
 . $SCRIPTDIR/common.sh
 
 # versions and user names
-GEES="Google Earth Enterprise Server"
 GEE="Google Earth Enterprise"
+GEES="$GEE Server"
+GEEF="$GEE Fusion"
 LONG_VERSION="5.1.3"
 SHORT_VERSION="5.1"
 
@@ -36,6 +37,10 @@ GEAPACHEUSER_NAME=""
 GEPGUSER_NAME=""
 GEFUSIONUSER_NAME=""
 GEGROUP_NAME=""
+GEAPACHEUSER_EXISTS=""
+GEPGUSER_EXISTS=""
+GEFUSIONUSER_EXISTS=""
+GEGROUP_EXISTS=""
 
 # base directories
 BININSTALLROOTDIR="/etc/init.d"
@@ -47,9 +52,13 @@ BASEINSTALLDIR_VAR="/var/opt/google"
 
 # derived directories
 BACKUP_DIR="$BASEINSTALLDIR_VAR/server-backups/$(date +%Y_%m_%d.%H%M%S)"
+PUBLISH_ROOT_CONFIG_PATH="$BASEINSTALLDIR_OPT/gehttpd/conf.d"
 
 # additional variables
 HAS_FUSION=false
+DELETE_USERS_GROUPS=true
+SEARCH_SPACE_PATH=""
+STREAM_SPACE_PATH=""
 
 main_preuninstall()
 {
@@ -71,15 +80,6 @@ main_preuninstall()
     exit 1
   fi
 
-  # get the GE user names
-  get_user_names
-
-  # Perform backup
-  if [ $BACKUPSERVER == true ]; then
-    # TODO: verify that the backup succeeded
-    backup_server
-  fi
-
   # Determine if fusion is installed
   if [ -f "$BININSTALLROOTDIR/gefusion" ]; then
     HAS_FUSION=true
@@ -87,21 +87,39 @@ main_preuninstall()
     HAS_FUSION=false
   fi
 
-  # TODO: delete users and groups
+  # get the GE user names
+  get_user_names
+
+  # make sure we can safely delete the users/group if that's what the user requests
+  if ! check_user_group_delete; then
+    exit 1
+  fi
+
+  # find the publish root
+  get_publish_roots
+
+  # Perform backup
+  if [ $BACKUPSERVER == true ]; then
+    # TODO: verify that the backup succeeded
+    backup_server
+  fi
+
 }
 
 main_uninstall()
 {
   remove_server_daemon
   remove_files_from_target
+  change_publish_root_ownership
+  remove_users_groups
   show_final_success_message
 }
 
 show_intro()
 {
-    echo -e "\nUninstalling $GEES $LONG_VERSION"
-    echo -e "\nThis will remove features installed by the GEE Server installer."
-    echo -e "It will NOT remove files and folders created after the installation."
+  echo -e "\nUninstalling $GEES $LONG_VERSION"
+  echo -e "\nThis will remove features installed by the GEE Server installer."
+  echo -e "It will NOT remove files and folders created after the installation."
 }
 
 show_need_root()
@@ -124,6 +142,40 @@ get_user_names()
   GEPGUSER_NAME=`cat $BININSTALLROOTDIR/gevars.sh | grep GEPGUSER | cut  -d'=' -f2`
   GEFUSIONUSER_NAME=`cat $BININSTALLROOTDIR/gevars.sh | grep GEFUSIONUSER | cut  -d'=' -f2`
   GEGROUP_NAME=`cat $BININSTALLROOTDIR/gevars.sh | grep GEGROUP | cut  -d'=' -f2`
+
+  # Make sure the users and group exist
+  GEAPACHEUSER_EXISTS=$(getent passwd $GEAPACHEUSER_NAME)
+  GEPGUSER_EXISTS=$(getent passwd $GEPGUSER_NAME)
+  GEFUSIONUSER_EXISTS=$(getent passwd $GEFUSIONUSER_NAME)
+  GEGROUP_EXISTS=$(getent group $GEGROUP_NAME)
+}
+
+check_user_group_delete()
+{
+  local retval=0
+    
+  if [ $DELETE_USERS_GROUPS == true ] && [ $HAS_FUSION == true ]; then
+    echo -e "\nYou cannot delete the GEE server users [$GEAPACHEUSER_NAME, $GEPGUSER_NAME, $GEFUSIONUSER_NAME]\n"
+    echo -e "and group [$GEGROUP_NAME] because $GEEF is installed on this server."
+    echo -e "$GEEF uses these accounts too."        
+    echo -e "\nExiting the uninstaller.\n"
+    retval=1
+  fi
+
+  return $retval
+}
+
+get_publish_roots()
+{
+  STREAM_SPACE_PATH=$(get_publish_path "stream_space")
+  SEARCH_SPACE_PATH=$(get_publish_path "search_space")
+}
+
+get_publish_path()
+{
+  local config_file="$PUBLISH_ROOT_CONFIG_PATH/$1"
+  local publish_path=`grep $1 "$config_file" | cut -d ' ' -f 3`
+  echo $publish_path
 }
 
 remove_server_daemon()
@@ -157,7 +209,6 @@ remove_files_from_target()
     rm -rf $BASEINSTALLDIR_VAR/openssl
   fi
 
-  rm -rf $BASEINSTALLDIR_OPT/gehttpd/htdocs/shared_assets/apache_logs.html
   rm -rf $BASEINSTALLDIR_OPT/geecheck/geecheck.conf
   if [ -d "$BASEINSTALLDIR_OPT/geecheck" ]; then
     rmdir --ignore-fail-on-non-empty $BASEINSTALLDIR_OPT/geecheck  # Only remove this directory if it's empty
@@ -177,12 +228,46 @@ remove_files_from_target()
   printf "DONE\n"
 }
 
+change_publish_root_ownership()
+{
+  if [ $DELETE_USERS_GROUPS == true ]; then
+    for publish_root in "$STREAM_SPACE_PATH" "$SEARCH_SPACE_PATH"; do
+      if [ -d "$publish_root" ]; then
+        echo -e "\nChanging ownership of $publish_root to $ROOT_USERNAME:$ROOT_USERNAME."
+        chown -R $ROOT_USERNAME:$ROOT_USERNAME "$publish_root"
+      else
+        echo -e "\nPublish root $publish_root does not exist.  Continuing."
+      fi
+    done
+  fi
+}
+
+remove_users_groups()
+{
+  if [ $HAS_FUSION == false ] && [ $DELETE_USERS_GROUPS == true ]; then
+    remove_account $GEAPACHEUSER_NAME "user" "$GEAPACHEUSER_EXISTS"
+    remove_account $GEPGUSER_NAME "user" "$GEPGUSER_EXISTS"
+    remove_account $GEFUSIONUSER_NAME "user" "$GEFUSIONUSER_EXISTS"
+    remove_account $GEGROUP_NAME "group" "$GEGROUP_EXISTS"
+  fi
+}
+
+remove_account() {
+  # arg $1: name of account to remove
+  # arg $2: account type - "user" or "group"
+  # arg $3: non-empty string if the user exists
+  if [ ! -z "$3" ]; then
+    echo -e "Deleting $2 $1"
+    eval "$2del $1"
+  fi
+}
+
 show_final_success_message()
 {
-    echo -e "\n-------------------"
-    echo -e "\n$GEES $LONG_VERSION was successfully uninstalled."
-    echo -e "The backup configuration files are located in:"
-    echo -e "\n$BACKUP_DIR\n"
+  echo -e "\n-------------------"
+  echo -e "\n$GEES $LONG_VERSION was successfully uninstalled."
+  echo -e "The backup configuration files are located in:"
+  echo -e "\n$BACKUP_DIR\n"
 }
 
 #-----------------------------------------------------------------

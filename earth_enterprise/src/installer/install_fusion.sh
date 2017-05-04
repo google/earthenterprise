@@ -277,41 +277,16 @@ load_systemrc_config()
 	fi
 }
 
-software_check()
-{
-	local software_check_retval=0
-	
-	# args: $1: ubuntu package
-	# args: $: rhel package
-
-    if [ "$MACHINE_OS" == "$UBUNTUKEY" ]; then
-        if [[ -z "$(dpkg --get-selections | sed s:install:: | sed -e 's:\s::g' | grep ^$1\$)" ]]; then
-            echo -e "Install $1 and restart the $GEEF $LONG_VERSION uninstaller."
-            software_check_retval=1
-        fi
-    elif [ "$MACHINE_OS" == "$REDHATKEY" ] || [ "$MACHINE_OS" == "$CENTOSKEY" ]; then
-        if [[ -z "$(rpm -qa | grep ^$2\$)" ]]; then
-            echo -e "Install $2 and restart the $GEEF $LONG_VERSION uninstaller."
-            software_check_retval=1
-        fi
-	else 
-		echo -e "\nThe installer could not determine your machine's operating system."
-            echo -e "Supported Operating Systems: ${SUPPORTED_OS_LIST[*]}\n"
-            software_check_retval=1
-    fi
-
-	return $software_check_retval
-}
-
 check_prereq_software()
 {
 	local check_prereq_software_retval=0
+  local script_name="$GEEF $LONG_VERSION installer"
 
-	if ! software_check "libxml2-utils" "libxml2.*x86_64"; then
+	if ! software_check "$script_name" "libxml2-utils" "libxml2.*x86_64"; then
 		check_prereq_software_retval=1
 	fi
 
-	if ! software_check "python2.7" "python-2.7.*"; then
+	if ! software_check "$script_name" "python2.7" "python-2.7.*"; then
 		check_prereq_software_retval=1
 	fi
 
