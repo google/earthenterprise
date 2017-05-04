@@ -18,19 +18,22 @@
 
 set +x
 
-# script arguments
+# get script directory
+SCRIPTDIR=`dirname $0`
+
+. $SCRIPTDIR/common.sh
 
 # config values
-PUBLISHER_ROOT="/usr/local/google/gevol/publish_dbs"
-#SOURCE_VOLUME="/usr/local/google/gevol/src"
-DEFAULTGEFUSIONUSER_NAME="gefusionuser"
+PUBLISHER_ROOT="/gevol/published_dbs"
 DEFAULTGROUPNAME="gegroup"
-GEFUSIONUSER_NAME=$DEFAULTGEFUSIONUSER_NAME
 GROUPNAME=$DEFAULTGROUPNAME
+DEFAULTGEFUSIONUSER_NAME="gefusionuser"
+GEFUSIONUSER_NAME=$DEFAULTGEFUSIONUSER_NAME
 
 # directory locations
 BININSTALLROOTDIR="/etc/init.d"
 BININSTALLPROFILEDIR="/etc/profile.d"
+BASEINSTALLLOGROTATEDIR="/etc/logrotate.d"
 BASEINSTALLDIR_OPT="/opt/google"
 BASEINSTALLDIR_ETC="/etc/opt/google"
 BASEINSTALLDIR_VAR="/var/opt/google"
@@ -38,21 +41,29 @@ TMPINSTALLDIR="/tmp/fusion_os_install"
 KH_SYSTEMRC="/usr/keyhole/etc/systemrc"
 INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
 CHKCONFIG="/sbin/chkconfig"
-OS_RELEASE="/etc/os-release"
+
+# script arguments
+BACKUPSERVER=true
+BADHOSTNAMEOVERRIDE=false
+MISMATCHHOSTNAMEOVERRIDE=false
 
 # derived directories
 BASEINSTALLGDALSHAREDIR="$BASEINSTALLDIR_OPT/share/gdal"
 PATH_TO_LOGS="$BASEINSTALLDIR_VAR/log"
 SYSTEMRC="$BASEINSTALLDIR_ETC/systemrc"
+BACKUP_DIR="$BASEINSTALLDIR_VAR/server-backups/$(date +%Y_%m_%d.%H%M%S)"
 OLD_SYSTEMRC=$SYSTEMRC
 SOURCECODEDIR=$(dirname $(dirname $(readlink -f "$0")))
 TOPSOURCEDIR_EE=$(dirname $SOURCECODEDIR)
-GESERVERBININSTALL="$BININSTALLROOTDIR/gesever"
+GESERVERBININSTALL="$BININSTALLROOTDIR/geserver"
 INSTALL_LOG_DIR="$BASEINSTALLDIR_OPT/install"
 INSTALL_LOG="$INSTALL_LOG_DIR/geserver_install_$(date +%Y_%m_%d.%H%M%S).log"
+GEHTTPD="$BASEINSTALLDIR_OPT/gehttpd"
+GEHTTPD_CONF="$GEHTTPD/conf.d"
 
 # versions and user names
 GEES="Google Earth Enterprise Server"
+SOFTWARE_NAME="$GEES"
 SHORT_VERSION="5.1"
 LONG_VERSION="5.1.3"
 GRPNAME="gegroup"
@@ -68,12 +79,111 @@ PGSQL_PROGRAM="/opt/google/bin/pg_ctl"
 PRODUCT_NAME="Google Earth Enterprise"
 CHECK_POST_MASTER=""
 CHECK_GEHTTPD=""
-START_SERVER_DAEMON=0
+START_SERVER_DAEMON=1
 PROMPT_FOR_START="n"
 
 #-----------------------------------------------------------------
 # Main Functions
 #-----------------------------------------------------------------
+main_preinstall()
+{
+  # 3) Introduction
+  show_intro
+
+  # 2) Root/Sudo check
+  if [ "$EUID" != "0" ]; then
+    show_need_root
+    exit 1
+  fi
+
+  # 5a) Check previous installation
+  if [ -f "$SERVERBININSTALL" ]; then
+    IS_NEWINSTALL=false
+  else
+    IS_NEWINSTALL=true
+  fi
+
+  # Argument check
+  if ! parse_arguments "$@"; then
+    exit 1
+  fi
+
+  if ! determine_os; then
+    exit 1
+  fi
+
+  # 7) Check prerequisite software
+  if ! check_prereq_software; then
+    exit 1
+  fi
+
+  # check to see if GE Server processes are running
+  if check_server_processes_running; then
+    show_server_running_message
+    exit 1
+  fi
+
+  # tmp dir check
+  if [ ! -d "$TMPINSTALLDIR" ]; then
+    show_no_tmp_dir_message $TMPINSTALLDIR
+    exit 1
+  fi
+
+  # 5b) Perform backup
+  if [ $BACKUPSERVER == true ]; then
+    # Backing up current Server Install...
+    backup_server
+  fi
+
+  # 6) Check valid host properties
+  if ! check_bad_hostname; then
+    exit 1
+  fi
+
+  if ! check_mismatched_hostname; then
+    exit 1
+  fi
+
+  # 64 bit check
+  if [[ "$(uname -i)" == "x86_64" ]]; then
+    IS_64BIT_OS=true
+  else
+    echo -e "\n$GEEF $LONG_VERSION can only be installed on a 64 bit operating system."
+    exit 1
+  fi
+
+  # 8) Check if group and users exist
+  check_group
+
+  check_username $GEAPACHEUSER_NAME
+  check_username $GEPGUSER_NAME
+
+  # 10) Configure Publish Root
+  configure_publish_root
+}
+
+check_prereq_software()
+{
+  local check_prereq_software_retval=0
+
+  if ! software_check "libxml2-utils" "libxml2.*x86_64"; then
+    check_prereq_software_retval=1
+  fi
+
+  if ! software_check "python2.7" "python-2.7.*"; then
+    check_prereq_software_retval=1
+  fi
+
+
+  return $check_prereq_software_retval
+}
+
+main_install()
+{
+  copy_files_to_target
+  create_links
+}
+
 main_postinstall()
 {
   # 1) Modify files
@@ -81,7 +191,7 @@ main_postinstall()
 
   # 2) Set Permissions Before Server Start/Stop
   fix_postinstall_filepermissions
-  
+
   # 3) PostGres DB config
   postgres_db_config
 
@@ -93,25 +203,234 @@ main_postinstall()
   test -f $CHKCONFIG && $CHKCONFIG --add geserver
 
   # 6) Register publish root
-  $BASEINSTALLDIR_OPT/bin/geconfigurepublishroot --noprompt --path=$PUBLISHER_ROOT$
+  $BASEINSTALLDIR_OPT/bin/geconfigurepublishroot --noprompt --path=$PUBLISHER_ROOT
 
   # 7) Install the GEPlaces and SearchExample Databases
   install_search_databases
 
   # 8) Set permissions after geserver Start/Stop.
   fix_postinstall_filepermissions
-  
+
   # TODO - verify
   # 9) Run geecheck config script
   # If file ‘/opt/google/gehttpd/cgi-bin/set_geecheck_config.py’ exists:
   if [ -f "$GEE_CHECK_CONFIG_SCRIPT" ]; then
-     cd $BASEINSTALLDIR_OPT/gehttpd/cgi-bin
-     python ./set_geecheck_config.py
+    cd $BASEINSTALLDIR_OPT/gehttpd/cgi-bin
+    python ./set_geecheck_config.py
   fi
 
   # 10)
   show_final_success_message
 }
+
+#-----------------------------------------------------------------
+# Pre-install Functions
+#-----------------------------------------------------------------
+
+show_intro()
+{
+  echo -e "\nWelcome to the $GEES $LONG_VERSION installer."
+}
+
+# TODO: Add additional parameters for GEE Server
+show_help()
+{
+  echo -e "\nUsage: \tsudo ./install_server.sh [-h] [-dir /tmp/fusion_os_install -hnf -hnmf]\n"
+
+  echo -e "-h --help \tHelp - display this help screen"
+  echo -e "-dir \t\tTemp Install Directory - specify the temporary install directory. Default is [$TMPINSTALLDIR]."
+  echo -e "-hnf \t\tHostname Force - force the installer to continue installing with a bad \n\t\thostname. Bad hostname values are [${BADHOSTNAMELIST[*]}]."
+  echo -e "-hnmf \t\tHostname Mismatch Force - force the installer to continue installing with a \n\t\tmismatched hostname.\n"
+}
+
+# TODO convert to common function
+show_need_root()
+{
+  echo -e "\nYou must have root privileges to install $GEES.\n"
+  echo -e "Log in as the $ROOT_USERNAME user or use the 'sudo' command to run this installer."
+  echo -e "The installer must exit."
+}
+
+backup_server()
+{
+  export BACKUP_DIR=$BACKUP_DIR
+
+  if [ ! -d $BACKUP_DIR ]; then
+    mkdir -p $BACKUP_DIR
+  fi
+
+  # Copy gehttpd directory.
+  # Do not back up folder /opt/google/gehttpd/htdocs/cutter/globes.
+  # Do not back up folders /opt/google/gehttpd/{bin, lib, manual, modules}
+  rsync -rltpu $BASEINSTALLDIR_OPT/gehttpd $BACKUP_DIR --exclude bin --exclude lib --exclude manual --exclude modules --exclude htdocs/cutter/globes
+
+  # Copy other files.
+  cp -f /etc/init.d/gevars.sh $BACKUP_DIR
+  cp -rf /etc/opt/google/openldap $BACKUP_DIR
+
+  # Change the ownership of the backup folder.
+  chown -R root:root $BACKUP_DIR
+}
+
+# TODO Add additional parameters for server
+parse_arguments()
+{
+  local parse_arguments_retval=0
+  local show_user_group_recommendation=false
+
+  while [ $# -gt 0 ]
+  do
+    case "${1,,}" in
+      -h|-help|--help)
+        show_help
+        parse_arguments_retval=1
+        break
+        ;;
+      -hnf)
+        BADHOSTNAMEOVERRIDE=true;
+        ;;
+      -hnmf)
+        MISMATCHHOSTNAMEOVERRIDE=true
+        ;;
+      -dir)
+        shift
+        if [ -d "$1" ]; then
+          TMPINSTALLDIR="$1"
+        else
+          show_no_tmp_dir_message $1
+          parse_arguments_retval=-1
+          break
+        fi
+        ;;
+      *)
+        echo -e "\nArgument Error: $1 is not a valid argument."
+        show_help
+        parse_arguments_retval=1
+        break
+        ;;
+    esac
+
+    if [ $# -gt 0 ]
+    then
+      shift
+    fi
+  done
+
+  return $parse_arguments_retval;
+}
+
+check_server_processes_running()
+{
+  printf "\nChecking geserver services:\n"
+  local retval=1
+
+  # i) Check postgres is running .Store o/p in post_master_running
+  local post_master_running=$( ps -ef | grep postgres | grep -v grep )
+  local post_master_running_str="false"
+
+  # ii) Check gehttpd is running  .Store the o/p in gehttpd_running
+  local gehttpd_running=$( ps -ef | grep gehttpd | grep -v grep )
+  local gehttpd_running_str="false"
+
+  if [ -n "$post_master_running" ]; then
+    retval=0
+    post_master_running_str="true"
+  fi
+  echo "postgres service: $post_master_running_str"
+
+  if [ -n "$gehttpd_running" ]; then
+    retval=0
+    gehttpd_running_str="true"
+  fi
+  echo "gehttpd service: $gehttpd_running_str"
+
+  return $retval
+}
+
+show_server_running_message()
+{
+  echo -e "\n$GEES has active running processes."
+  echo -e "To use this installer to upgrade, you must stop all geserver services.\n"
+}
+
+configure_publish_root()
+{
+  # Update PUBLISHER_ROOT if geserver already installed
+  local STREAM_SPACE="$GEHTTPD_CONF/stream_space"
+  if [ -e $STREAM_SPACE ]; then
+    PUBLISHER_ROOT=`cat $STREAM_SPACE |cut -d" " -f3 |sed 's/.\{13\}$//'`
+  fi
+}
+
+#-----------------------------------------------------------------
+# Install Functions
+#-----------------------------------------------------------------
+copy_files_to_target()
+{
+  printf "\nCopying files from source to target directories..."
+
+  mkdir -p $BASEINSTALLDIR_OPT/share/doc
+  mkdir -p $BASEINSTALLDIR_OPT/gehttpd/conf
+  mkdir -p $BASEINSTALLDIR_OPT/gehttpd/htdocs/shared_assets/images
+  mkdir -p $BASEINSTALLDIR_OPT/search
+  mkdir -p $BASEINSTALLDIR_VAR/openssl/private
+  mkdir -p $BASEINSTALLDIR_VAR/openssl/misc
+  mkdir -p $BASEINSTALLDIR_VAR/openssl/certs
+  mkdir -p $BASEINSTALLDIR_ETC/openldap
+  mkdir -p $BASEINSTALLDIR_VAR/pgsql
+
+  cp -rf $TMPINSTALLDIR/common/opt/google/bin $BASEINSTALLDIR_OPT
+  cp -rf $TMPINSTALLDIR/common/opt/google/share $BASEINSTALLDIR_OPT
+  cp -rf $TMPINSTALLDIR/common/opt/google/qt $BASEINSTALLDIR_OPT
+  cp -rf $TMPINSTALLDIR/common/opt/google/qt/lib $BASEINSTALLDIR_OPT
+  cp -rf $TMPINSTALLDIR/common/opt/google/lib $BASEINSTALLDIR_OPT
+  cp -rf $TMPINSTALLDIR/common/opt/google/gepython $BASEINSTALLDIR_OPT
+  cp -rf $TMPINSTALLDIR/server/opt/google/share $BASEINSTALLDIR_OPT
+  cp -rf $TMPINSTALLDIR/server/opt/google/bin $BASEINSTALLDIR_OPT
+  cp -rf $TMPINSTALLDIR/server/opt/google/lib $BASEINSTALLDIR_OPT
+  cp -rf $TMPINSTALLDIR/server/opt/google/gehttpd $BASEINSTALLDIR_OPT
+  cp -rf $TMPINSTALLDIR/server/opt/google/search $BASEINSTALLDIR_OPT
+  cp -rf $TMPINSTALLDIR/searchexample/opt/google/share $BASEINSTALLDIR_OPT
+  cp -rf $TMPINSTALLDIR/geplaces/opt/google/share $BASEINSTALLDIR_OPT
+  cp -rf $TMPINSTALLDIR/server/AppacheSupport/opt/google/gehttpd $BASEINSTALLDIR_OPT
+
+  cp -rf $TMPINSTALLDIR/server/etc/init.d/geserver $BININSTALLROOTDIR
+  cp -rf $TMPINSTALLDIR/server/etc/profile.d/ge-server.sh $BININSTALLPROFILEDIR
+  cp -rf $TMPINSTALLDIR/server/etc/profile.d/ge-server.csh $BININSTALLPROFILEDIR
+
+  cp -rf $TMPINSTALLDIR/server/user_magic/etc/logrotate.d/gehttpd $BASEINSTALLLOGROTATEDIR
+  cp -rf $TMPINSTALLDIR/server/user_magic/var/opt/google/pgsql/logs/ $BASEINSTALLDIR_VAR/pgsql
+  cp -rf $TMPINSTALLDIR/manual/opt/google/share/doc/manual $BASEINSTALLDIR_OPT/share/doc
+  cp -rf $TMPINSTALLDIR/server/opt/google/gehttpd/conf/gehttpd.conf $BASEINSTALLDIR_OPT/gehttpd/conf
+  cp -rf $TMPINSTALLDIR/server/opt/google/gehttpd/htdocs/shared_assets/images/location_pin.png $BASEINSTALLDIR_OPT/gehttpd/htdocs/shared_assets/images
+
+  TMPOPENSSLPATH=$TMPINSTALLDIR/common/user_magic/var/opt/google/openssl
+
+  cp -f $TMPOPENSSLPATH/openssl.cnf $BASEINSTALLDIR_VAR/openssl
+  cp -rf $TMPOPENSSLPATH/private $BASEINSTALLDIR_VAR/openssl
+  cp -f $TMPOPENSSLPATH/misc/CA.sh $BASEINSTALLDIR_VAR/openssl/misc
+  cp -f $TMPOPENSSLPATH/misc/tsget $BASEINSTALLDIR_VAR/openssl/misc
+  cp -f $TMPOPENSSLPATH/misc/c_name $BASEINSTALLDIR_VAR/openssl/misc
+  cp -f $TMPOPENSSLPATH/misc/CA.pl $BASEINSTALLDIR_VAR/openssl/misc
+  cp -f $TMPOPENSSLPATH/misc/c_issuer $BASEINSTALLDIR_VAR/openssl/misc
+  cp -f $TMPOPENSSLPATH/misc/c_info $BASEINSTALLDIR_VAR/openssl/misc
+  cp -f $TMPOPENSSLPATH/misc/c_hash $BASEINSTALLDIR_VAR/openssl/misc
+  cp -rf $TMPOPENSSLPATH/certs $BASEINSTALLDIR_VAR/openssl
+
+  TMPOPENLDAPPATH=$TMPINSTALLDIR/common/user_magic/etc/opt/google/openldap
+
+  cp -f $TMPOPENLDAPPATH/ldap.conf $BASEINSTALLDIR_ETC/openldap
+  cp -f $TMPOPENLDAPPATH/ldap.conf.default $BASEINSTALLDIR_ETC/openldap
+
+  # TODO: final step: copy uninstall script
+  # cp -f $TMPOPENLDAPPATH/<........> $INSTALL_LOG_DIR
+
+  printf "DONE\n"
+}
+
+#-----------------------------------------------------------------
+# Post-install Functions
+#-----------------------------------------------------------------
 
 postgres_db_config()
 {
@@ -121,22 +440,13 @@ postgres_db_config()
   reset_pgdb
 }
 
-run_as_user() {
- use_su="su $1 -c 'echo -n 1' 2> /dev/null  || echo -n 0"
- if [ "$use_su" -eq 1 ] ; then
-    ( cd / ;su $1 -c "$2" )
- else
-    ( cd / ;sudo -u $1 $2 )
- fi
-}
-
 reset_pgdb()
 {
   # TODO check if correct
   # a) Always do an upgrade of the psql db
   echo 2 | run_as_user $GEPGUSER_NAME "/opt/google/bin/geresetpgdb upgrade"
   echo -e "upgrade done"
-  
+
   # b) Check for Success of PostGresDb
   #  If file ‘/var/opt/google/pgsql/data’ doesn’t exist:
 
@@ -148,9 +458,9 @@ reset_pgdb()
   else
     # postgress reset/install failed.
     echo -e "Failed to create PostGresDb."
-    echo -e "The PostgreSQL component of the installation failed 
+    echo -e "The PostgreSQL component of the installation failed
          to install."
-  fi 
+  fi
 }
 
 # 4) Creating Daemon thread for geserver
@@ -158,31 +468,31 @@ setup_geserver_daemon()
 {
   # setup geserver daemon
   # For Ubuntu
-   echo "Setting up the geserver daemon...\n"
-   test -f $CHKCONFIG && $CHKCONFIG --add gefusion
-   test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE -f gefusion remove
-   test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE gefusion start 90 2 3 4 5 . stop 10 0 1 6 .
-   printf "Fusion daemon setup ... DONE\n"
+  printf "Setting up the geserver daemon...\n"
+  test -f $CHKCONFIG && $CHKCONFIG --add geserver
+  test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE -f geserver remove
+  test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE geserver start 90 2 3 4 5 . stop 10 0 1 6 .
+  printf "GEE Server daemon setup ... DONE\n"
 }
-  
+
 # 6) Install the GEPlaces and SearchExample Databases
 install_search_databases()
 {
   # a) Start the PSQL Server
-  echo "   # a) Start the PSQL Server "
-  run_as_user $GEPGUSER_NAME $PGSQL_PROGRAM -D $PGSQL_DATA -l $PGSQL_LOGS/pg.log start -w
+  echo "# a) Start the PSQL Server "
+  run_as_user $GEPGUSER_NAME "$PGSQL_PROGRAM -D $PGSQL_DATA -l $PGSQL_LOGS/pg.log start -w"
 
-  echo "  # b) Install GEPlaces Database"
+  echo "# b) Install GEPlaces Database"
   # b) Install GEPlaces Database
   run_as_user $GEPGUSER_NAME "/opt/google/share/geplaces/geplaces create"
 
-  echo  "  # c) Install SearchExample Database "
+  echo "# c) Install SearchExample Database "
   # c) Install SearchExample Database
   run_as_user $GEPGUSER_NAME "/opt/google/share/searchexample/searchexample create"
 
   # d) Stop the PSQL Server
-  echo  "stopping the pgsql instance"
-  run_as_user $GEPGUSER_NAME $PGSQL_PROGRAM -D $PGSQL_DATA stop
+  echo "# d) Stop the PSQL Server"
+  run_as_user $GEPGUSER_NAME "$PGSQL_PROGRAM -D $PGSQL_DATA stop"
 }
 
 modify_files()
@@ -192,22 +502,20 @@ modify_files()
   # if there are non-OSS installs in the system, it might help cleanup those.
 
   # a) Search and replace the below variables in /etc/init.d/geserver.
-  sed -i 's/IA_GEAPACHE_USER/GEAPACHEUSER_NAME/' $BININSTALLROOTDIR/geserver
-  sed -i 's/IA_GEPGUSER/GEPGUSER_NAME/' $BININSTALLROOTDIR/geserver
+  sed -i "s/IA_GEAPACHE_USER/$GEAPACHEUSER_NAME/" $BININSTALLROOTDIR/geserver
+  sed -i "s/IA_GEPGUSER/$GEPGUSER_NAME/" $BININSTALLROOTDIR/geserver
 
   # b) Search and replace the file ‘/opt/google/gehttpd/conf/gehttpd.conf’
-  sed -i 's/IA_GEAPACHE_USER/GEAPACHEUSER_NAME/' /opt/google/gehttpd/conf/gehttpd.conf
-  sed -i 's/IA_GEPGUSER/GEPGUSER_NAME/' /opt/google/gehttpd/conf/gehttpd.conf
+  sed -i "s/IA_GEAPACHE_USER/$GEAPACHEUSER_NAME/" /opt/google/gehttpd/conf/gehttpd.conf
+  sed -i "s/IA_GEPGUSER/$GEPGUSER_NAME/" /opt/google/gehttpd/conf/gehttpd.conf
+  sed -i "s/IA_GEGROUP/$GRPNAME/" /opt/google/gehttpd/conf/gehttpd.conf
 
   # c) Create a new file ‘/etc/opt/google/fusion_Server_version’ and
   # add the below text to it.
   echo $LONG_VERSION > /etc/opt/google/fusion_Server_version
 
   # d) Create a new file ‘/etc/init.d/gevars.sh’ and prepend the below lines.
-  echo -e 'GEAPACHEUSER=GEAPACHEUSER_NAME \n 
-        GEPGUSER=GEPGUSER_NAME \n
-        GEFUSIONUSER=GEFUSIONUSER_NAME \n
-        GEGROUP=GRPNAME' > $BININSTALLROOTDIR/gevars.sh
+  echo -e "GEAPACHEUSER=$GEAPACHEUSER_NAME\nGEPGUSER=$GEPGUSER_NAME\nGEFUSIONUSER=$GEFUSIONUSER_NAME\nGEGROUP=$GRPNAME" > $BININSTALLROOTDIR/gevars.sh
 }
 
 fix_postinstall_filepermissions()
@@ -224,6 +532,7 @@ fix_postinstall_filepermissions()
   chown -R $GEAPACHEUSER_NAME:$GRPNAME $BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/globes/
   chmod -R 700 $BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/globes/
   chown $GEAPACHEUSER_NAME:$GRPNAME $BASEINSTALLDIR_OPT/gehttpd/htdocs/.htaccess
+  chown -R $GEAPACHEUSER_NAME:$GRPNAME $BASEINSTALLDIR_OPT/gehttpd/logs
 
   # Publish Root
   chmod 775 $PUBLISHER_ROOT/stream_space
@@ -267,7 +576,7 @@ fix_postinstall_filepermissions()
   # Tutorial and Share
   find /opt/google/share -type d -exec chmod 755 {} \;
   find /opt/google/share -type f -exec chmod 644 {} \;
-  chmod ugo+x /opt/google/share/searchexample/searchexample 
+  chmod ugo+x /opt/google/share/searchexample/searchexample
   chmod ugo+x /opt/google/share/geplaces/geplaces
   chmod ugo+x /opt/google/share/support/geecheck/geecheck.pl
   chmod ugo+x /opt/google/share/support/geecheck/convert_to_kml.pl
@@ -324,28 +633,35 @@ show_final_success_message(){
           /opt/google \n
           Start Google Earth Enterprise Server with the following command:
           $BININSTALLROOTDIR/geserver start"
-  
+
 }
 
 check_server_running()
 {
   # Check that server is setup properly
-  # i) Check postgres is running .Store o/p in CHECK_POST_MASTER
-  CHECK_POST_MASTER=$( ps -e | grep postgres)
-  # ii) Check gehttpd is running  .Store the o/p in CHECK_GEHTTPD
-  CHECK_GEHTTPD=$( ps -e| grep gehttpd )
-  if [ -z "$CHECK_POST_MASTER" ] || [ -z "$CHECK_GEHTTPD" ]; then
-    echo -e "$GEES service is not running properly. Check the logs in 
-             /opt/google/gehttpd/logs \n 
-             /var/opt/google/pgsql/logs \n 
+
+  if ! check_server_processes_running; then
+    echo -e "$GEES service is not running properly. Check the logs in
+             /opt/google/gehttpd/logs \n
+             /var/opt/google/pgsql/logs \n
              for more details. "
   fi
 }
 
 #-----------------------------------------------------------------
-# Post-Install Main
+# Pre-Install Main
 #-----------------------------------------------------------------
 mkdir -p $INSTALL_LOG_DIR
 exec 2> $INSTALL_LOG
 
+main_preinstall "$@"
+
+#-----------------------------------------------------------------
+# Install Main
+#-----------------------------------------------------------------
+main_install
+
+#-----------------------------------------------------------------
+# Post-Install Main
+#-----------------------------------------------------------------
 main_postinstall

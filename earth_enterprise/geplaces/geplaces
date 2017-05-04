@@ -51,11 +51,9 @@ then
 
   create_view_cmd="$BINDIR/psql -U geuser -t -c \"$create_view_query\" geplaces"
   view_exists=`eval $create_view_cmd`
-  if [ $view_exists -eq 1 ] ; then
+  if [ "$view_exists" != "CREATE VIEW" ] ; then
     echo GEPLACES cities_utf8 view already exists.
   fi
-
-
 else
   if [ $1 == "delete" ]
   then

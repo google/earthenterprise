@@ -18,6 +18,11 @@
 
 set +x
 
+# get script directory
+SCRIPTDIR=`dirname $0`
+
+. $SCRIPTDIR/common.sh
+
 # config values
 ASSET_ROOT="/gevol/assets"
 SOURCE_VOLUME="/gevol/src"
@@ -35,11 +40,8 @@ BASEINSTALLDIR_VAR="/var/opt/google"
 TMPINSTALLDIR="/tmp/fusion_os_install"
 INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
 CHKCONFIG="/sbin/chkconfig"
-OS_RELEASE1="/etc/os-release"
-OS_RELEASE2="/etc/system-release"
 
 # script arguments
-BADHOSTNAMELIST=(empty linux localhost dhcp bootp)
 BACKUPFUSION=true
 BADHOSTNAMEOVERRIDE=false
 MISMATCHHOSTNAMEOVERRIDE=false
@@ -59,16 +61,13 @@ TOPSOURCEDIR_EE=$(dirname $SOURCECODEDIR)
 
 # additional variables
 GEEF="Google Earth Enterprise Fusion"
+SOFTWARE_NAME="$GEEF"
 LONG_VERSION="5.1.3"
 IS_NEWINSTALL=false
-NEWLINECLEANER="sed -e s:\\n::g"
 PUBLISH_ROOT_VOLUME=""
 IS_64BIT_OS=false
 ROOT_USERNAME="root"
-SUPPORTED_OS_LIST=("Ubuntu", "Red Hat Enterprise Linux (RHEL)")
-UBUNTUKEY="ubuntu"
-REDHATKEY="rhel"
-CENTOSKEY="centos"
+
 MACHINE_OS=""
 MACHINE_OS_VERSION=""
 MACHINE_OS_FRIENDLY=""
@@ -79,9 +78,10 @@ HOSTNAME_S="$(hostname -s | $NEWLINECLEANER)"
 HOSTNAME_A="$(hostname -a | $NEWLINECLEANER)"
 NUM_CPUS="$(grep processor /proc/cpuinfo | wc -l | $NEWLINECLEANER)"
 
+ASSET_ROOT_VOLUME_SIZE=0
 SOURCE_VOLUME_PREEXISTING=false
 ASSET_ROOT_PREEXISTING=false
-ASSET_ROOT_VOLUME_SIZE=0
+
 MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB=1048576
 EXISTING_HOST=""
 IS_SLAVE=false
@@ -142,27 +142,13 @@ main_preinstall()
 		show_invalid_assetroot_name $INVALID_ASSETROOT_NAMES
 		exit 1
 	fi
-    
-	if [ -z "$HOSTNAME" ] || [[ " ${BADHOSTNAMELIST[*]} " == *"${HOSTNAME,,} "* ]]; then
-		show_badhostname
 
-		if [ $BADHOSTNAMEOVERRIDE == true ]; then
-			echo -e "Continuing the installation process...\n"
-		else
-			echo -e "Exiting the installer.  If you wish to continue, re-run this command with the -hnf 'Hostname Override' flag.\n"
-			exit 1
-		fi
+	if ! check_bad_hostname; then
+		exit 1
 	fi
-
-	if [ $HOSTNAME != $HOSTNAME_F ]; then
-		show_mismatchedhostname
-
-		if [ $MISMATCHHOSTNAMEOVERRIDE == true ]; then
-			echo -e "Continuing the installation process...\n"
-		else
-			echo -e "Exiting the installer.  If you wish to continue, re-run this command with the -hnmf 'Hostname Mismatch Override' flag.\n"
-			exit 1
-		fi		
+    
+	if ! check_mismatched_hostname; then
+		exit 1
 	fi
 
 	# 64 bit check
@@ -291,45 +277,6 @@ load_systemrc_config()
 	fi
 }
 
-determine_os()
-{
-    local retval=0
-    local test_os=""
-    local test_versionid=""
-
-    if [ -f "$OS_RELEASE1" ] || [ -f "$OS_RELEASE2" ]; then
-	if [ -f "$OS_RELEASE1" ]; then
-	        test_os="$(cat $OS_RELEASE1 | sed -e 's:\"::g' | grep ^NAME= | sed 's:name=::gI')"
-    		test_versionid="$(cat $OS_RELEASE1 | sed -e 's:\"::g' | grep ^VERSION_ID= | sed 's:version_id=::gI')"
-	else
-		test_os="$(cat $OS_RELEASE2 | sed 's:[0-9\.] *::g')"
-		test_versionid="$(cat $OS_RELEASE2 | sed 's:[^0-9\.]*::g')"
-	fi
-
-	MACHINE_OS_FRIENDLY="$test_os $test_versionid"
-    	MACHINE_OS_VERSION=$test_versionid
-
-        if [[ "${test_os,,}" == "ubuntu"* ]]; then
-            	MACHINE_OS=$UBUNTUKEY
-        elif [[ "${test_os,,}" == "red hat"* ]]; then
-            	MACHINE_OS=$REDHATKEY
-	elif [[ "${test_os,,}" == "centos"* ]]; then
-		MACHINE_OS=$CENTOSKEY
-        else
-            MACHINE_OS=""
-            echo -e "\nThe installer could not determine your machine's operating system."
-            echo -e "Supported Operating Systems: ${SUPPORTED_OS_LIST[*]}\n"
-            retval=1
-        fi
-    else
-		echo -e "\nThe installer could not determine your machine's operating system."
-        echo -e "Missing file: $OS_RELEASE\n"
-        retval=1		
-	fi
-
-    return $retval
-}
-
 software_check()
 {
 	local software_check_retval=0
@@ -421,21 +368,6 @@ show_X11()
 	echo -e "The installer must exit."
 }
 
-show_badhostname()
-{
-	echo -e "\nYour server [$HOSTNAME] contains an invalid hostname value which typically indicates an automatically generated"
-	echo -e "hostname that might change over time.  A subsequent hostname change would cause configuration issues for the "
-	echo -e "$GEEF software.  Invalid values: ${BADHOSTNAMELIST[*]}."
-}
-
-show_mismatchedhostname()
-{
-	echo -e "\nThe hostname of this machine does not match the fully-qualified hostname."
-	echo -e "$GEEF requires that they match for local publishing to function properly."
-	echo -e "To continue, the installer will update the hostname to match "
-	echo -e "the fully-qualified hostname."
-}
-
 is_valid_custom_directory()
 {
 	# Standard function that tests a string to see if it passes the "valid" alphanumeric for asset root/source volume.
@@ -461,12 +393,6 @@ is_valid_alphanumeric()
 	else
 		return 1
 	fi
-}
-
-show_no_tmp_dir_message()
-{
-	echo -e "\nThe temp install directory specified [$1] does not exist."
-	echo -e "Please specify the path of the extracted install files.\n"
 }
 
 parse_arguments()
@@ -773,25 +699,6 @@ copy_files_to_target()
 	fi
 }
 
-create_links()
-{
-	printf "Setting up system links..."
-
-	if [ ! -L "$BASEINSTALLDIR_OPT/etc" ]; then
-		ln -s $BASEINSTALLDIR_ETC $BASEINSTALLDIR_OPT/etc
-	fi 
-
-	if [ ! -L "$BASEINSTALLDIR_OPT/log" ]; then
-		ln -s $BASEINSTALLDIR_VAR/log $BASEINSTALLDIR_OPT/log
-	fi
-
-	if [ ! -L "$BASEINSTALLDIR_OPT/run" ]; then
-		ln -s $BASEINSTALLDIR_VAR/run $BASEINSTALLDIR_OPT/run
-	fi
-
-	printf "Done\n"	
-}
-
 #-----------------------------------------------------------------
 # Post-install Functions
 #-----------------------------------------------------------------
@@ -905,7 +812,7 @@ compare_asset_root_publishvolume()
                 echo -e "can be quickly accomplished with hard/soft links without taking the additional space "
                 echo -e "needed for a full copy."
                 echo ""
-        
+
                 if ! prompt_to_quit "X (Exit) the installer and change the asset root location - C (Continue) to use the asset root that you have specified."; then
                     compare_assetroot_publishvolume_retval=1
                 fi                
