@@ -114,8 +114,8 @@ main_preinstall()
 	fi
 
 	if ! determine_os; then
-        exit 1
-    fi
+            exit 1
+        fi
 
 	if ! check_prereq_software; then
 		exit 1
@@ -153,11 +153,11 @@ main_preinstall()
 
 	# 64 bit check
 	if [[ "$(uname -i)" == "x86_64" ]]; then 
-        IS_64BIT_OS=true 
+            IS_64BIT_OS=true 
 	else
 		echo -e "\n$GEEF $LONG_VERSION can only be installed on a 64 bit operating system."
 		exit 1
-    fi
+	fi
 
 	if ! prompt_install_confirmation; then
 		exit 1

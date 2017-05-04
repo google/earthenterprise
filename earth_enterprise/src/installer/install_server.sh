@@ -71,7 +71,8 @@ GEPGUSER_NAME="gepguser"
 GEAPACHEUSER_NAME="geapacheuser"
 
 #TODO this value could come from the server install script - merge as required (dattam)
-SERVER_UNINSTALL_OR_UPGRADE="uninstall"
+ROOT_USERNAME="root"
+SERVER_INSTALL_OR_UPGRADE="install"
 GEE_CHECK_CONFIG_SCRIPT="/opt/google/gehttpd/cgi-bin/set_geecheck_config.py"
 PGSQL_DATA="/var/opt/google/pgsql/data"
 PGSQL_LOGS="/var/opt/google/pgsql/logs"
@@ -251,27 +252,6 @@ show_need_root()
   echo -e "The installer must exit."
 }
 
-backup_server()
-{
-  export BACKUP_DIR=$BACKUP_DIR
-
-  if [ ! -d $BACKUP_DIR ]; then
-    mkdir -p $BACKUP_DIR
-  fi
-
-  # Copy gehttpd directory.
-  # Do not back up folder /opt/google/gehttpd/htdocs/cutter/globes.
-  # Do not back up folders /opt/google/gehttpd/{bin, lib, manual, modules}
-  rsync -rltpu $BASEINSTALLDIR_OPT/gehttpd $BACKUP_DIR --exclude bin --exclude lib --exclude manual --exclude modules --exclude htdocs/cutter/globes
-
-  # Copy other files.
-  cp -f /etc/init.d/gevars.sh $BACKUP_DIR
-  cp -rf /etc/opt/google/openldap $BACKUP_DIR
-
-  # Change the ownership of the backup folder.
-  chown -R root:root $BACKUP_DIR
-}
-
 # TODO Add additional parameters for server
 parse_arguments()
 {
@@ -317,34 +297,6 @@ parse_arguments()
   done
 
   return $parse_arguments_retval;
-}
-
-check_server_processes_running()
-{
-  printf "\nChecking geserver services:\n"
-  local retval=1
-
-  # i) Check postgres is running .Store o/p in post_master_running
-  local post_master_running=$( ps -ef | grep postgres | grep -v grep )
-  local post_master_running_str="false"
-
-  # ii) Check gehttpd is running  .Store the o/p in gehttpd_running
-  local gehttpd_running=$( ps -ef | grep gehttpd | grep -v grep )
-  local gehttpd_running_str="false"
-
-  if [ -n "$post_master_running" ]; then
-    retval=0
-    post_master_running_str="true"
-  fi
-  echo "postgres service: $post_master_running_str"
-
-  if [ -n "$gehttpd_running" ]; then
-    retval=0
-    gehttpd_running_str="true"
-  fi
-  echo "gehttpd service: $gehttpd_running_str"
-
-  return $retval
 }
 
 show_server_running_message()
@@ -602,7 +554,7 @@ show_final_success_message(){
   INSTALLATION_OR_UPGRADE="installation"
   INSTALLED_OR_UPGRADED="installed"
   # TODO check for "UPGRADE" or case insensitive "upgrade"
-  if  [[ "$SERVER_UNINSTALL_OR_UPGRADE" = *upgrade* ]]; then
+  if  [[ "$SERVER_INSTALL_OR_UPGRADE" = *upgrade* ]]; then
     INSTALLATION_OR_UPGRADE="Upgrade"
     INSTALLED_OR_UPGRADED="upgraded"
   fi

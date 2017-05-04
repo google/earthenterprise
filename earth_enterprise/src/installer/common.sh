@@ -25,7 +25,7 @@ HOSTNAME_A="$(hostname -a | $NEWLINECLEANER)"
 
 NUM_CPUS="$(grep processor /proc/cpuinfo | wc -l | $NEWLINECLEANER)"
 
-SUPPORTED_OS_LIST=("Ubuntu", "Red Hat Enterprise Linux (RHEL)")
+SUPPORTED_OS_LIST=("Ubuntu", "Red Hat Enterprise Linux (RHEL)", "CentOS")
 UBUNTUKEY="ubuntu"
 REDHATKEY="rhel"
 CENTOSKEY="centos"
@@ -206,3 +206,69 @@ create_links()
 
     printf "DONE\n"
 }
+
+check_server_processes_running()
+{
+  printf "\nChecking geserver services:\n"
+  local retval=1
+
+  # i) Check if postgres is running
+  local post_master_running=$( ps -ef | grep postgres | grep -v grep )
+  local post_master_running_str="false"
+
+  # ii) Check if gehttpd is running
+  local gehttpd_running=$( ps -ef | grep gehttpd | grep -v grep )
+  local gehttpd_running_str="false"
+
+  # iii) Check if wsgi is running
+  local wsgi_running=$( ps -ef | grep wsgi:ge_ | grep -v grep )
+  local wsgi_running_str="false"
+
+  if [ -n "$post_master_running" ]; then
+    retval=0
+    post_master_running_str="true"
+  fi
+  echo "postgres service: $post_master_running_str"
+
+  if [ -n "$gehttpd_running" ]; then
+    retval=0
+    gehttpd_running_str="true"
+  fi
+  echo "gehttpd service: $gehttpd_running_str"
+
+  if [ -n "$wsgi_running" ]; then
+    retval=0
+    wsgi_running_str="true"
+  fi
+  echo "wsgi service: $gehttpd_running_str"
+
+  echo
+
+  return $retval
+}
+
+backup_server()
+{
+  export BACKUP_DIR=$BACKUP_DIR
+
+  if [ ! -d $BACKUP_DIR ]; then
+    mkdir -p $BACKUP_DIR
+  fi
+
+  # Copy gehttpd directory.
+  # Do not back up folder /opt/google/gehttpd/htdocs/cutter/globes.
+  # Do not back up folders /opt/google/gehttpd/{bin, lib, manual, modules}
+  rsync -rltpu $BASEINSTALLDIR_OPT/gehttpd $BACKUP_DIR --exclude bin --exclude lib --exclude manual --exclude modules --exclude htdocs/cutter/globes
+
+  # Copy other files.
+  cp -f /etc/init.d/gevars.sh $BACKUP_DIR
+  cp -rf /etc/opt/google/openldap $BACKUP_DIR
+
+  # Change the ownership of the backup folder.
+  chown -R root:root $BACKUP_DIR
+
+  echo "The exsiting $GEES $LONG_VERSION configuration files have been backed up to the following location:"
+  echo $BACKUP_DIR
+  echo -e "The source volume(s) and asset root remain unchanged.\n"
+}
+

@@ -54,7 +54,7 @@ GEE="Google Earth Enterprise"
 GEEF="Google Earth Enterprise Fusion"
 HAS_EARTH_SERVER=false
 ROOT_USERNAME="root"
-SUPPORTED_OS_LIST=("Ubuntu", "Red Hat Enterprise Linux (RHEL)")
+SUPPORTED_OS_LIST=("Ubuntu", "Red Hat Enterprise Linux (RHEL)", "CentOS")
 UBUNTUKEY="ubuntu"
 REDHATKEY="rhel"
 CENTOSKEY="centos"
@@ -88,18 +88,18 @@ main_preuninstall()
         exit 1
     fi
 
-	# check to see if GE Fusion processes are running
-	if ! check_fusion_processes_running; then
-		show_fusion_running_message
-		exit 1
-	fi
+    # check to see if GE Fusion processes are running
+    if ! check_fusion_processes_running; then
+        show_fusion_running_message
+        exit 1
+    fi
 
     if ! load_systemrc_config; then
         exit 1
     fi
 
     GROUP_EXISTS=$(getent group $GROUPNAME)
-	USERNAME_EXISTS=$(getent passwd $GEFUSIONUSER_NAME)
+    USERNAME_EXISTS=$(getent passwd $GEFUSIONUSER_NAME)
 
     if [ -f "$BININSTALLROOTDIR/geserver" ]; then
         HAS_EARTH_SERVER=true
@@ -243,7 +243,7 @@ software_check()
 	local software_check_retval=0
 	
 	# args: $1: ubuntu package
-	# args: $: rhel package
+	# args: $2: rhel package
 
     if [ "$MACHINE_OS" == "$UBUNTUKEY" ] && [ ! -z "$1" ]; then
         if [[ -z "$(dpkg --get-selections | sed s:install:: | sed -e 's:\s::g' | grep ^$1\$)" ]]; then
