@@ -271,3 +271,65 @@ backup_server()
   echo -e "The source volume(s) and asset root remain unchanged."
 }
 
+get_array_index()
+{
+    # need to have a set test value -- technically, the return status is an unsigned 8 bit value, so negative numbers won't work
+    # need a value large enough that can be tested against
+    local get_array_index_retval=$INVALID_INDEX 
+
+    # args $1: array
+    # args $2: choice/selection
+
+    local array_list=("${!1}")
+    local selection=$2
+    
+    for i in "${!array_list[@]}"; 
+    do
+        if [[ "${array_list[$i]}" == "${selection}" ]]; then
+            get_array_index_retval=$i
+            break
+        fi
+    done
+
+    return $get_array_index_retval
+}
+
+prompt_to_action()
+{
+    # args- $1: array
+    # args- $2: repeatable prompt
+    
+    local prompt_to_action_choice=""
+    local prompt_to_action_validAnswers=("${!1}")
+
+    while [[ " ${prompt_to_action_validAnswers[*]} " != *"${prompt_to_action_choice^^} "* ]] || [ -z "$prompt_to_action_choice" ]
+    do
+        printf "$2 "
+        read -r prompt_to_action_choice
+    done
+
+    get_array_index prompt_to_action_validAnswers[@] ${prompt_to_action_choice^^}
+    prompt_to_action_retval=$?
+
+    return $prompt_to_action_retval
+}
+
+prompt_to_quit()
+{
+    # args- $1: repeatable prompt
+    local prompt_to_quit_retval=0
+    local prompt_to_quit_validAnswers=(X C)
+    local prompt_to_quit_index=1
+
+    prompt_to_action prompt_to_quit_validAnswers[@] "$1"
+    prompt_to_quit_index=$?
+
+    if [ $prompt_to_quit_index -eq 1 ]; then
+        prompt_to_quit_retval=0
+    else
+        prompt_to_quit_retval=1
+    fi
+
+    return $prompt_to_quit_retval
+}
+

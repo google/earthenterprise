@@ -103,9 +103,12 @@ main_preuninstall()
   # find the publish root
   get_publish_roots
 
+  if ! prompt_uninstall_confirmation; then
+    exit 1
+  fi
+
   # Perform backup
   if [ $BACKUPSERVER == true ]; then
-    # TODO: verify that the backup succeeded
     backup_server
   fi
 }
@@ -221,6 +224,42 @@ get_publish_path()
   local config_file="$PUBLISH_ROOT_CONFIG_PATH/$1"
   local publish_path=`grep $1 "$config_file" | cut -d ' ' -f 3`
   echo $publish_path
+}
+
+prompt_uninstall_confirmation()
+{
+  local backupStringValue=""
+  local deleteUserValue=""
+  local deleteGroupValue=""
+
+  if [ $BACKUPSERVER == true ]; then
+    backupStringValue="YES"
+  else
+    backupStringValue="NO"
+  fi
+
+  if [ $DELETE_USERS_GROUPS == true ]; then
+    deleteUserValue="YES - Delete GEE users [$GEAPACHEUSER_NAME, $GEPGUSER_NAME, $GEFUSIONUSER_NAME] and group [$GEGROUP_NAME]"
+  else
+    deleteUserValue="NO"
+  fi
+
+  echo -e "\nYou have chosen to uninstall $GEES with the following settings:\n"
+  echo -e "Backup Fusion: \t\t\t$backupStringValue"
+  echo -e "Delete Users and Group: \t$deleteUserValue\n"
+
+  if [ $DELETE_USERS_GROUPS == true ]; then
+    echo -e "You have chosen to remove the GEE users and group."
+    echo -e "Note: it may take some time to change ownership of the publish roots to \"$ROOT_USERNAME\".\n"
+  fi
+
+  if ! prompt_to_quit "X (Exit) the uninstaller and change the above settings - C (Continue) to uninstall."; then
+    echo -e "Exiting the uninstaller.\n"
+    return 1
+  else
+    echo -e "\nProceeding with uninstallation..."
+    return 0
+  fi
 }
 
 remove_server_daemon()
