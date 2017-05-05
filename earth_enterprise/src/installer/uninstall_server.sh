@@ -21,19 +21,11 @@ SCRIPTDIR=`dirname $0`
 
 . $SCRIPTDIR/common.sh
 
-# versions and user names
-GEE="Google Earth Enterprise"
-GEES="$GEE Server"
-GEEF="$GEE Fusion"
-LONG_VERSION="5.1.3"
-SHORT_VERSION="5.1"
-
 # script arguments
 BACKUPSERVER=true
 DELETE_USERS_GROUPS=true
 
 # user names
-ROOT_USERNAME="root"
 GEAPACHEUSER_NAME=""
 GEPGUSER_NAME=""
 GEFUSIONUSER_NAME=""
@@ -43,17 +35,7 @@ GEPGUSER_EXISTS=""
 GEFUSIONUSER_EXISTS=""
 GEGROUP_EXISTS=""
 
-# base directories
-BININSTALLROOTDIR="/etc/init.d"
-BININSTALLPROFILEDIR="/etc/profile.d"
-BASEINSTALLLOGROTATEDIR="/etc/logrotate.d"
-BASEINSTALLDIR_OPT="/opt/google"
-BASEINSTALLDIR_ETC="/etc/opt/google"
-BASEINSTALLDIR_VAR="/var/opt/google"
-
-# derived directories
 BACKUP_DIR="$BASEINSTALLDIR_VAR/server-backups/$(date +%Y_%m_%d.%H%M%S)"
-PUBLISH_ROOT_CONFIG_PATH="$BASEINSTALLDIR_OPT/gehttpd/conf.d"
 
 # additional variables
 HAS_FUSION=false

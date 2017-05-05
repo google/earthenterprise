@@ -36,36 +36,15 @@ BASEINSTALLDIR_ETC="/etc/opt/google"
 BASEINSTALLDIR_VAR="/var/opt/google"
 INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
 CHKCONFIG="/sbin/chkconfig"
-OS_RELEASE1="/etc/os-release"
-OS_RELEASE2="/etc/system-release"
 
 # script arguments
 BACKUPFUSION=true
 DELETE_FUSION_USER=true
 DELETE_FUSION_GROUP=true
 
-# derived directories
-SYSTEMRC="$BASEINSTALLDIR_ETC/systemrc"
-FUSIONBININSTALL="$BININSTALLROOTDIR/gefusion"
-UNUNINSTALL_LOG_DIR="$BASEINSTALLDIR_OPT/install"
-UNINSTALL_LOG="$UNUNINSTALL_LOG_DIR/fusion_uninstall_$(date +%Y_%m_%d.%H%M%S).log"
 BACKUP_DIR="$BASEINSTALLDIR_VAR/fusion-backups/$(date +%Y_%m_%d.%H%M%S)"
-GENERAL_LOG="$BASEINSTALLDIR_VAR/log"
 CONFIG_VOLUME=""
-
-# additional variables
-LONG_VERSION="5.1.3"
-GEE="Google Earth Enterprise"
-GEEF="Google Earth Enterprise Fusion"
 HAS_EARTH_SERVER=false
-ROOT_USERNAME="root"
-SUPPORTED_OS_LIST=("Ubuntu", "Red Hat Enterprise Linux (RHEL)", "CentOS")
-UBUNTUKEY="ubuntu"
-REDHATKEY="rhel"
-CENTOSKEY="centos"
-MACHINE_OS=""
-MACHINE_OS_VERSION=""
-MACHINE_OS_FRIENDLY=""
 
 #-----------------------------------------------------------------
 # Main Functions
@@ -156,45 +135,6 @@ show_need_root()
 	echo -e "\nYou must have root privileges to uninstall $GEEF.\n"
 	echo -e "Log in as the $ROOT_USERNAME user or use the 'sudo' command to run this uninstaller."
 	echo -e "The uninstaller must exit."
-}
-
-determine_os()
-{
-    local retval=0
-    local test_os=""
-    local test_versionid=""
-
-    if [ -f "$OS_RELEASE1" ] || [ -f "$OS_RELEASE2" ]; then
-	if [ -f "$OS_RELEASE1" ]; then
-		test_os="$(cat $OS_RELEASE1 | sed -e 's:\"::g' | grep ^NAME= | sed 's:name=::gI')"
-    	    	test_versionid="$(cat $OS_RELEASE1 | sed -e 's:\"::g' | grep ^VERSION_ID= | sed 's:version_id=::gI')"
-	else
-		test_os="$(cat $OS_RELEASE2 | sed 's:[0-9\.] *::g')"
-		test_versionid="$(cat $OS_RELEASE2 | sed 's:[^0-9\.]*::g')"
-	fi
-
-	MACHINE_OS_FRIENDLY="$test_os $test_versionid"
-    	MACHINE_OS_VERSION=$test_versionid
-
-        if [[ "${test_os,,}" == "ubuntu"* ]]; then
-            MACHINE_OS=$UBUNTUKEY
-        elif [[ "${test_os,,}" == "red hat"* ]]; then
-            MACHINE_OS=$REDHATKEY
-	elif [[ "${test_os,,}" == "centos"* ]]; then
-        	MACHINE_OS=$CENTOSKEY
-        else
-            MACHINE_OS=""
-            echo -e "\nThe uninstaller could not determine your machine's operating system."
-            echo -e "Supported Operating Systems: ${SUPPORTED_OS_LIST[*]}\n"
-            retval=1
-        fi
-    else
-        echo -e "\nThe uninstaller could not determine your machine's operating system."
-        echo -e "Missing file: $OS_RELEASE\n"
-        retval=1
-    fi
-
-    return $retval
 }
 
 show_help()

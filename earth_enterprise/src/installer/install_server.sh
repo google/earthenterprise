@@ -30,54 +30,25 @@ GROUPNAME=$DEFAULTGROUPNAME
 DEFAULTGEFUSIONUSER_NAME="gefusionuser"
 GEFUSIONUSER_NAME=$DEFAULTGEFUSIONUSER_NAME
 
-# directory locations
-BININSTALLROOTDIR="/etc/init.d"
-BININSTALLPROFILEDIR="/etc/profile.d"
-BASEINSTALLLOGROTATEDIR="/etc/logrotate.d"
-BASEINSTALLDIR_OPT="/opt/google"
-BASEINSTALLDIR_ETC="/etc/opt/google"
-BASEINSTALLDIR_VAR="/var/opt/google"
-TMPINSTALLDIR="/tmp/fusion_os_install"
-KH_SYSTEMRC="/usr/keyhole/etc/systemrc"
-INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
-CHKCONFIG="/sbin/chkconfig"
-
 # script arguments
 BACKUPSERVER=true
 BADHOSTNAMEOVERRIDE=false
 MISMATCHHOSTNAMEOVERRIDE=false
 
-# derived directories
-BASEINSTALLGDALSHAREDIR="$BASEINSTALLDIR_OPT/share/gdal"
-PATH_TO_LOGS="$BASEINSTALLDIR_VAR/log"
-SYSTEMRC="$BASEINSTALLDIR_ETC/systemrc"
 BACKUP_DIR="$BASEINSTALLDIR_VAR/server-backups/$(date +%Y_%m_%d.%H%M%S)"
-OLD_SYSTEMRC=$SYSTEMRC
-SOURCECODEDIR=$(dirname $(dirname $(readlink -f "$0")))
-TOPSOURCEDIR_EE=$(dirname $SOURCECODEDIR)
-GESERVERBININSTALL="$BININSTALLROOTDIR/geserver"
-INSTALL_LOG_DIR="$BASEINSTALLDIR_OPT/install"
 INSTALL_LOG="$INSTALL_LOG_DIR/geserver_install_$(date +%Y_%m_%d.%H%M%S).log"
-GEHTTPD="$BASEINSTALLDIR_OPT/gehttpd"
-GEHTTPD_CONF="$GEHTTPD/conf.d"
 
-# versions and user names
-GEES="Google Earth Enterprise Server"
-SOFTWARE_NAME="$GEES"
-SHORT_VERSION="5.1"
-LONG_VERSION="5.1.3"
+# user names
 GRPNAME="gegroup"
 GEPGUSER_NAME="gepguser"
 GEAPACHEUSER_NAME="geapacheuser"
 
-#TODO this value could come from the server install script - merge as required (dattam)
-ROOT_USERNAME="root"
 SERVER_INSTALL_OR_UPGRADE="install"
 GEE_CHECK_CONFIG_SCRIPT="/opt/google/gehttpd/cgi-bin/set_geecheck_config.py"
 PGSQL_DATA="/var/opt/google/pgsql/data"
 PGSQL_LOGS="/var/opt/google/pgsql/logs"
 PGSQL_PROGRAM="/opt/google/bin/pg_ctl"
-PRODUCT_NAME="Google Earth Enterprise"
+PRODUCT_NAME="$GEE"
 CHECK_POST_MASTER=""
 CHECK_GEHTTPD=""
 START_SERVER_DAEMON=1

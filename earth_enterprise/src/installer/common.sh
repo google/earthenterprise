@@ -16,6 +16,43 @@
 
 BADHOSTNAMELIST=(empty linux localhost dhcp bootp)
 
+# versions and user names
+GEE="Google Earth Enterprise"
+GEES="$GEE Server"
+GEEF="$GEE Fusion"
+LONG_VERSION="5.1.3"
+SHORT_VERSION="5.1"
+
+ROOT_USERNAME="root"
+
+MACHINE_OS=""
+MACHINE_OS_VERSION=""
+MACHINE_OS_FRIENDLY=""
+
+# directory locations
+BININSTALLROOTDIR="/etc/init.d"
+BININSTALLPROFILEDIR="/etc/profile.d"
+BASEINSTALLLOGROTATEDIR="/etc/logrotate.d"
+BASEINSTALLDIR_OPT="/opt/google"
+BASEINSTALLDIR_ETC="/etc/opt/google"
+BASEINSTALLDIR_VAR="/var/opt/google"
+TMPINSTALLDIR="/tmp/fusion_os_install"
+INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
+CHKCONFIG="/sbin/chkconfig"
+KH_SYSTEMRC="/usr/keyhole/etc/systemrc"
+
+# derived directories
+BASEINSTALLGDALSHAREDIR="$BASEINSTALLDIR_OPT/share/gdal"
+GENERAL_LOG="$BASEINSTALLDIR_VAR/log"
+INSTALL_LOG_DIR="$BASEINSTALLDIR_OPT/install"
+SYSTEMRC="$BASEINSTALLDIR_ETC/systemrc"
+FUSIONBININSTALL="$BININSTALLROOTDIR/gefusion"
+SOURCECODEDIR=$(dirname $(dirname $(readlink -f "$0")))
+TOPSOURCEDIR_EE=$(dirname $SOURCECODEDIR)
+GESERVERBININSTALL="$BININSTALLROOTDIR/geserver"
+GEHTTPD="$BASEINSTALLDIR_OPT/gehttpd"
+GEHTTPD_CONF="$GEHTTPD/conf.d"
+
 # Get system info values
 NEWLINECLEANER="sed -e s:\\n::g"
 HOSTNAME="$(hostname -f | tr [A-Z] [a-z] | $NEWLINECLEANER)"
@@ -332,4 +369,3 @@ prompt_to_quit()
 
     return $prompt_to_quit_retval
 }
-
