@@ -30,6 +30,7 @@ SHORT_VERSION="5.1"
 
 # script arguments
 BACKUPSERVER=true
+DELETE_USERS_GROUPS=true
 
 # user names
 ROOT_USERNAME="root"
@@ -56,12 +57,16 @@ PUBLISH_ROOT_CONFIG_PATH="$BASEINSTALLDIR_OPT/gehttpd/conf.d"
 
 # additional variables
 HAS_FUSION=false
-DELETE_USERS_GROUPS=true
 SEARCH_SPACE_PATH=""
 STREAM_SPACE_PATH=""
 
 main_preuninstall()
 {
+  # parse command line arguments
+  if ! parse_arguments "$@"; then
+    exit 1
+  fi
+
   show_intro
 
   # Root/Sudo check
@@ -103,7 +108,6 @@ main_preuninstall()
     # TODO: verify that the backup succeeded
     backup_server
   fi
-
 }
 
 main_uninstall()
@@ -113,6 +117,47 @@ main_uninstall()
   change_publish_root_ownership
   remove_users_groups
   show_final_success_message
+}
+
+show_help()
+{
+  echo -e "\nUsage:  sudo ./uninstall_server.sh [-h -ndgu -nobk]\n"
+  echo -e "-h \t\tHelp - display this help screen"
+  echo -e "-ndgu \t\tDo Not Delete GEE Users and Group - do not delete the GEE user accounts and group.  Default is to delete both."
+  echo -e "-nobk \t\tNo Backup - do not backup the current GEE Server setup. Default is to backup the setup before uninstalling.\n"
+}
+
+parse_arguments()
+{
+  local retval=0
+
+  while [ $# -gt 0 ]; do
+    case "${1,,}" in
+      -h|-help|--help)
+        show_help
+        retval=1
+        break
+        ;;
+      -nobk)
+        BACKUPSERVER=false
+        ;;
+      -ndgu)
+        DELETE_USERS_GROUPS=false
+        ;;
+      *)
+        echo -e "\nArgument Error: $1 is not a valid argument."
+        show_help
+        retval=1
+        break
+        ;;
+    esac
+
+    if [ $# -gt 0 ]; then
+      shift
+    fi
+  done
+
+  return $retval;
 }
 
 show_intro()
@@ -273,7 +318,7 @@ show_final_success_message()
 #-----------------------------------------------------------------
 # Pre-Uninstall Main
 #-----------------------------------------------------------------
-main_preuninstall
+main_preuninstall "$@"
 
 #-----------------------------------------------------------------
 # Uninstall Main

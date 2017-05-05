@@ -199,7 +199,7 @@ determine_os()
 
 show_help()
 {
-	echo -e "\nUsage:  sudo ./uninstall_fusion.sh [-f -ndgu]\n"
+	echo -e "\nUsage:  sudo ./uninstall_fusion.sh [-h -ndgu -nobk]\n"
 
 	echo -e "-h \t\tHelp - display this help screen"	
     echo -e "-ndgu \t\tDo Not Delete Fusion User and Group - do not delete the fusion user account and group.  Default is to delete both."
