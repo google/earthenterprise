@@ -1,4 +1,6 @@
-**Earth Enterprise** is the open source release of Google Earth Enterprise, a geospatial application which provides the ability to build and host custom 3D globes and 2D maps.  Earth Enterprise does not provide a private version of Google imagery that's currently available in Google Maps or Earth.
+# Earth Enterprise [![Slack Status](https://img.shields.io/badge/chat-slack-ff69b4.svg)](http://slack.opengee.org) [![Join the chat at https://gitter.im/earthenterprise/Lobby](https://badges.gitter.im/earthenterprise/Lobby.svg)](https://gitter.im/earthenterprise/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+Earth Enterprise is the open source release of Google Earth Enterprise, a geospatial application which provides the ability to build and host custom 3D globes and 2D maps.  Earth Enterprise does not provide a private version of Google imagery that's currently available in Google Maps or Earth.
 
 The application suite consists of three core components:
 * Fusion - imports and 'fuses' imagery, vector and terrain source data in to a single flyable 3D globe or 2D map.
@@ -20,7 +22,4 @@ There is currently no official installer for Earth Enterprise Fusion & Server.  
 
 ### Known Issues
 Known issues can be tracked via [wiki page](https://github.com/google/earthenterprise/wiki/Known-Issues), which is updated weekly.
-
-### Slack
-<img src="https://github.com/google/earthenterprise/blob/master/slack_rgb.png" width="100"> Join the OpenGEE [Slack channel](http://slack.opengee.org)! 
 
