@@ -179,7 +179,7 @@ check_username() {
     # add user if it does not exist
     if [ -z "$USERNAME_EXISTS" ]; then
         mkdir -p $BASEINSTALLDIR_OPT/.users/$1
-        useradd -d $BASEINSTALLDIR_OPT/.users/$1 -g gegroup $1
+        useradd --home $BASEINSTALLDIR_OPT/.users/$1 --system --gid gegroup $1
         NEW_GEFUSIONUSER=true
     else
         echo "User $1 exists"
