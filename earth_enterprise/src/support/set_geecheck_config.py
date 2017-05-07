@@ -1,4 +1,4 @@
-#!/opt/google/gepython/Python-2.7.5/bin/python
+#!/usr/bin/env python
 #
 # Copyright 2017 Google Inc.
 #
