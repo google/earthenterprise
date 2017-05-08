@@ -17,79 +17,22 @@
 <a name="top_of_file"></a>
 <p><img src="../art/common/logo_col_126x48.png" width="126" height="48" alt="Google logo" /></p>
 <h1><a href="../answer/index.html">Google Earth Enterprise Documentation Home</a> | Developers</h1>
-<h2>Add Python Libraries to GEE Python</h2><p>Python v2.7.5 is bundled with GEE, providing functionality such as publishing and custom search plug-ins.</p>
+<h2>Add Python Libraries to GEE Python</h2>
+<p>GEE uses system Python with some extra libraries to support functionality such as publishing and custom search plug-ins.</p>
 
-<p>The standard Python v.2.7.5 libraries are included with GEE. Additional modules specific to GEE are installed in:</p>
+<p>Additional modules specific to GEE are installed in:</p>
 
-<p><code>/opt/google/gepython/Python-2.7.5/lib/python2.7/site-packages</code></p>
+<p><code>/opt/google/gepython/Python-2.7.x/lib/python2.7/site-packages</code> (where x is determined by the system Python version.</p>
 
 <ul>
   <li><code>psycopg2</code> is a PostgreSQL database adapter</li>
-  <li><code>google/protobuf</code> is Google's data storage mechanism</li>
+  <li><code>google/protobuf</code> is Google's serialisation mechanism for structured data.</li>
   <li><code>mgrs</code> provides conversion to and from MGRS</li>
-  <li><code>PIL</code> provides image processing and graphics capabilities, supporting many different file formats</li>
   <li><code>GDAL</code> (Geospatial Data Abstraction Library) Python library</li>
 </ul>
 
 <h3>Add a Python library</h3>
-<p>You add a Python library to <code>/opt/google/gepython/Python-2.7.5</code> for it to be enabled with GEE. One of the easiest ways to install a Python library is to use the Python package tool, <code>pip</code>. You may also need to consider any other dependencies for your newly installed library.</p>
+<p>You can add a Python library to either the system Python path, or to the <code>/opt/google/gepython/Python-2.7.x</code> path for it to be enabled with GEE. One of the easiest ways to install a Python library is to use the Python package tool, <code>pip</code>. You may also need to consider any other dependencies for your newly installed library.</p>
 
-<p>The following example includes steps to test for and to install dependency libraries and to install the <code>lxml</code> library using pip.</p>
-
-<h3>Example: install lxml</h3>
-<p><code>lxml</code> is a library for processing XML and HTML in the Python language. It has been developed as a new Python binding for <code>libxml2</code> and <code>libxslt</code>, completely independent from these existing Python bindings.</p>
-
-<h3>Requirements to install lxml</h3>
-
-<p>You need to install <code>libxml2</code> and <code>libxslt</code>, in particular:
- <code>libxml2 2.6.21</code> or later. It can be found here: <a href="http://xmlsoft.org/downloads.html">http://xmlsoft.org/downloads.html</a>.
-<ul>
-  <li>We recommend <code>libxml2 2.7.8</code> or a later version</li>
-  <li>If you want to use <code>XPath</code>, do not use <code>libxml2 2.6.27</code></li>
-  <li>If you want to use the feed parser interface, especially when parsing from unicode strings, do not use <code>libxml2 2.7.4</code> through <code>2.7.6.</code></li>
-  <li><code>libxslt 1.1.15</code> or later. It can be found here: <a href="http://xmlsoft.org/XSLT/downloads.html">http://xmlsoft.org/XSLT/downloads.html</a>. We recommend libxslt 1.1.26 or later.</li>
-</ul>
-<p>Newer versions generally contain fewer bugs and are therefore recommended. XML Schema support is also still being updated in <code>libxml2</code>, so newer versions will give you better compliance with the <em>W3C</em> spec.</p>
-
-<h4>Install libxml2, libxml2-dev, libxslt1-dev, and libxslt1.1</h4>
-
-<h4>To check if <code>libxml2</code>, <code>libxml2-dev</code> are installed:</h4>
-
-<p><code>$ dpkg --list *xml2*</code></p>
-
-<h4>To install <code>libxml2-dev</code> and <code>libxml</code> if they are not already installed:</h4>
-
-<p><code>$ sudo apt-get install libxml2-dev<br />
-$ sudo apt-get install libxml2</code></p>
-
-<h4>To check if <code>libxslt1.1</code>, <code>libxslt1-dev</code> are installed:</h4>
-
-<p><code>$ dpkg --list *xslt*</code></p>
-
-<h4>To install  <code>libxslt1-dev</code>, and <code>libxslt1.1</code> if they are not already installed:</h4>
-
-<p><code>$ sudo apt-get install libxslt1-dev<br />
-$ sudo apt-get install libxslt1.1</code></p>
-
-
-<h4>Install lxml</h4>
-<p>The best way to install <code>lxml</code> is to get the pip package management tool, <code>python-pip:</code></p>
-
-<h4>To install python-pip, run the following command:</h4>
-
-<p><code>$ sudo apt-get install python-pip</code></p>
-
-<h4>To install lxml:</h4>
-
-<p>Run the following command, specifying the directory where the GEE Python version is installed:</p>
-
-<p><code>$ sudo pip install --install-option="--prefix=/opt/google/gepython/Python-2.7.5" --ignore-installed --verbose lxml==3.3.3</code></p>
-<p>See the <a href="http://www.pip-installer.org/en/latest/reference/pip_install.html#options" target="_blank"><em>pip install 1.5.4 Reference Guide</em></a> for information about install command options.</p>   </div>
-  <div class="footer">
-  <p class="BackToTop"><a href="#top_of_file">Back to top</a>
-  <hr />
-  <p class="copyright">For the latest version of this documentation, go to the <a href="http://support.google.com/earthenterprise" target="_blank">Google Earth Enterprise help center</a>.<br />&copy;2014 Google</p>
-  </div>
-</div>
 </body>
 </html>
