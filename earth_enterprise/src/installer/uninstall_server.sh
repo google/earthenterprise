@@ -36,6 +36,7 @@ GEFUSIONUSER_EXISTS=""
 GEGROUP_EXISTS=""
 
 BACKUP_DIR="$BASEINSTALLDIR_VAR/server-backups/$(date +%Y_%m_%d.%H%M%S)"
+PUBLISH_ROOT_CONFIG_PATH="$BASEINSTALLDIR_OPT/gehttpd/conf.d"
 
 # additional variables
 HAS_FUSION=false
