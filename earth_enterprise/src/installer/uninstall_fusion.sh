@@ -116,7 +116,7 @@ main_uninstall()
     remove_files_from_target
     remove_links
     remove_user
-    remove_group    
+    remove_group
     show_final_success_message
 }
 
@@ -462,7 +462,7 @@ remove_links()
 {
     printf "Removing system links..."
 
-	rm -rf $BASEINSTALLDIR_OPT/etc
+    rm -rf $BASEINSTALLDIR_OPT/etc
     rm -rf $BASEINSTALLDIR_OPT/log
     rm -rf $BASEINSTALLDIR_OPT/run
 
@@ -473,8 +473,11 @@ show_final_success_message()
 {
     echo -e "\n-------------------"
     echo -e "\n$GEEF $LONG_VERSION was successfully uninstalled."
-    echo -e "The backup configuration files are located in:"
-    echo -e "\n$BACKUP_DIR\n"
+    if [ $BACKUPFUSION == true ]; then
+        echo -e "The backup configuration files are located in:"
+        echo -e "\n$BACKUP_DIR"
+    fi
+    echo
 }
 
 #-----------------------------------------------------------------

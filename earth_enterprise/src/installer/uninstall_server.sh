@@ -332,8 +332,11 @@ show_final_success_message()
 {
   echo -e "\n-------------------"
   echo -e "\n$GEES $LONG_VERSION was successfully uninstalled."
-  echo -e "The backup configuration files are located in:"
-  echo -e "\n$BACKUP_DIR\n"
+  if [ $BACKUPSERVER == true ]; then
+    echo -e "The backup configuration files are located in:"
+    echo -e "\n$BACKUP_DIR"
+  fi
+  echo
 }
 
 #-----------------------------------------------------------------
