@@ -183,7 +183,7 @@ main_install()
 	# add user if it does not exist
 	if [ -z "$USERNAME_EXISTS" ]; then
 		mkdir -p $BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER_NAME
-		useradd --home $BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER_NAME --system --gid gegroup $GEFUSIONUSER_NAME
+		useradd --home $BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER_NAME --system --gid $GROUPNAME $GEFUSIONUSER_NAME
 		NEW_GEFUSIONUSER=true
 	else
 		# user already exists -- update primary group
