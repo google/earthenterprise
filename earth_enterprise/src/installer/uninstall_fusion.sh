@@ -95,9 +95,7 @@ main_preuninstall()
         exit 1
     fi
 
-    if ! verify_user_and_group; then
-        exit 1
-    fi
+    verify_group
 
     if ! prompt_uninstall_confirmation; then
         exit 1
@@ -295,27 +293,14 @@ verify_systemrc_config_values()
     fi
 }
 
-verify_user_and_group()
+verify_group()
 {
-    local retval=0
-    
-    if [ $DELETE_FUSION_USER == true ] && [ $HAS_EARTH_SERVER == true ]; then
-        echo -e "\nYou cannot delete the fusion user [$GEFUSIONUSER_NAME] because $GEE is installed on this server."
-        echo -e "$GEE uses this account too."        
-        retval=1
-    fi
-
     if [ $DELETE_FUSION_GROUP == true ] && [ $HAS_EARTH_SERVER == true ]; then
-        echo -e "\nYou cannot delete the fusion group [$GROUPNAME] because $GEE is installed on this server."
-        echo -e "$GEE uses this user group too."
-        retval=1
+        echo -e "\nNote: the GEE group [$GROUPNAME] will not be deleted because $GEES is installed on"
+        echo -e "this server. $GEES uses this account too."
+        echo -e "The group account will be deleted when $GEES is uninstalled."
+        DELETE_FUSION_GROUP=false
     fi
-
-    if [ $retval -eq 1 ]; then
-        echo -e "Exiting the uninstaller.\n"
-    fi
-
-    return $retval
 }
 
 prompt_uninstall_confirmation()
@@ -380,7 +365,7 @@ remove_fusion_daemon()
 
 remove_user()
 {
-    if [ $HAS_EARTH_SERVER == false ] && [ $DELETE_FUSION_USER == true ] && [ ! -z "$USERNAME_EXISTS" ]; then
+    if [ $DELETE_FUSION_USER == true ] && [ ! -z "$USERNAME_EXISTS" ]; then
         echo -e "\nDeleting user $GEFUSIONUSER_NAME"
         userdel $GEFUSIONUSER_NAME
     fi
@@ -388,7 +373,7 @@ remove_user()
 
 remove_group()
 {
-    if [ $HAS_EARTH_SERVER == false ] && [ $DELETE_FUSION_GROUP == true ] && [ ! -z "$GROUP_EXISTS" ]; then
+    if [ $DELETE_FUSION_GROUP == true ] && [ ! -z "$GROUP_EXISTS" ]; then
         echo -e "\nDelete group $GROUPNAME"
         groupdel $GROUPNAME
     fi

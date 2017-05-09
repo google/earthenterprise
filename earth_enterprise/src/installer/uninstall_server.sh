@@ -23,16 +23,15 @@ SCRIPTDIR=`dirname $0`
 
 # script arguments
 BACKUPSERVER=true
-DELETE_USERS_GROUPS=true
+DELETE_USERS=true
+DELETE_GROUP=true
 
 # user names
 GEAPACHEUSER_NAME=""
 GEPGUSER_NAME=""
-GEFUSIONUSER_NAME=""
 GEGROUP_NAME=""
 GEAPACHEUSER_EXISTS=""
 GEPGUSER_EXISTS=""
-GEFUSIONUSER_EXISTS=""
 GEGROUP_EXISTS=""
 
 BACKUP_DIR="$BASEINSTALLDIR_VAR/server-backups/$(date +%Y_%m_%d.%H%M%S)"
@@ -78,10 +77,8 @@ main_preuninstall()
   # get the GE user names
   get_user_names
 
-  # make sure we can safely delete the users/group if that's what the user requests
-  if ! check_user_group_delete; then
-    exit 1
-  fi
+  # check if the group can be safely deleted
+  check_group_delete
 
   # find the publish root
   get_publish_roots
@@ -128,7 +125,8 @@ parse_arguments()
         BACKUPSERVER=false
         ;;
       -ndgu)
-        DELETE_USERS_GROUPS=false
+        DELETE_USERS=false
+        DELETE_GROUP=false
         ;;
       *)
         echo -e "\nArgument Error: $1 is not a valid argument."
@@ -171,29 +169,22 @@ get_user_names()
 {
   GEAPACHEUSER_NAME=`cat $BININSTALLROOTDIR/gevars.sh | grep GEAPACHEUSER | cut  -d'=' -f2`
   GEPGUSER_NAME=`cat $BININSTALLROOTDIR/gevars.sh | grep GEPGUSER | cut  -d'=' -f2`
-  GEFUSIONUSER_NAME=`cat $BININSTALLROOTDIR/gevars.sh | grep GEFUSIONUSER | cut  -d'=' -f2`
   GEGROUP_NAME=`cat $BININSTALLROOTDIR/gevars.sh | grep GEGROUP | cut  -d'=' -f2`
 
   # Make sure the users and group exist
   GEAPACHEUSER_EXISTS=$(getent passwd $GEAPACHEUSER_NAME)
   GEPGUSER_EXISTS=$(getent passwd $GEPGUSER_NAME)
-  GEFUSIONUSER_EXISTS=$(getent passwd $GEFUSIONUSER_NAME)
   GEGROUP_EXISTS=$(getent group $GEGROUP_NAME)
 }
 
-check_user_group_delete()
+check_group_delete()
 {
-  local retval=0
-    
-  if [ $DELETE_USERS_GROUPS == true ] && [ $HAS_FUSION == true ]; then
-    echo -e "\nYou cannot delete the GEE server users [$GEAPACHEUSER_NAME, $GEPGUSER_NAME, $GEFUSIONUSER_NAME]\n"
-    echo -e "and group [$GEGROUP_NAME] because $GEEF is installed on this server."
-    echo -e "$GEEF uses these accounts too."        
-    echo -e "\nExiting the uninstaller.\n"
-    retval=1
+  if [ $DELETE_GROUP == true ] && [ $HAS_FUSION == true ]; then
+    echo -e "\nNote: the GEE group [$GEGROUP_NAME] will not be deleted because $GEEF is installed on"
+    echo -e "this server. $GEEF uses this account too."
+    echo -e "The group account will be deleted when $GEEF is uninstalled."
+    DELETE_GROUP=false
   fi
-
-  return $retval
 }
 
 get_publish_roots()
@@ -221,18 +212,25 @@ prompt_uninstall_confirmation()
     backupStringValue="NO"
   fi
 
-  if [ $DELETE_USERS_GROUPS == true ]; then
-    deleteUserValue="YES - Delete GEE users [$GEAPACHEUSER_NAME, $GEPGUSER_NAME, $GEFUSIONUSER_NAME] and group [$GEGROUP_NAME]"
+  if [ $DELETE_USERS == true ]; then
+    deleteUserValue="YES - Delete GEE users [$GEAPACHEUSER_NAME, $GEPGUSER_NAME]"
   else
     deleteUserValue="NO"
   fi
 
-  echo -e "\nYou have chosen to uninstall $GEES with the following settings:\n"
-  echo -e "Backup Fusion: \t\t\t$backupStringValue"
-  echo -e "Delete Users and Group: \t$deleteUserValue\n"
+  if [ $DELETE_GROUP == true ]; then
+    deleteGroupValue="YES - Delete GEE group [$GEGROUP_NAME]"
+  else
+    deleteGroupValue="NO"
+  fi
 
-  if [ $DELETE_USERS_GROUPS == true ]; then
-    echo -e "You have chosen to remove the GEE users and group."
+  echo -e "\nYou have chosen to uninstall $GEES with the following settings:\n"
+  echo -e "Backup Server: \t$backupStringValue"
+  echo -e "Delete Users: \t$deleteUserValue"
+  echo -e "Delete Group: \t$deleteGroupValue\n"
+
+  if [ $DELETE_USERS == true ] || [ $DELETE_GROUP == true ]; then
+    echo -e "You have chosen to remove the GEE users and/or group."
     echo -e "Note: it may take some time to change ownership of the publish roots to \"$ROOT_USERNAME\".\n"
   fi
 
@@ -297,7 +295,7 @@ remove_files_from_target()
 
 change_publish_root_ownership()
 {
-  if [ $DELETE_USERS_GROUPS == true ]; then
+  if [ $DELETE_USERS == true ] || [ $DELETE_GROUP == true ]; then
     for publish_root in "$STREAM_SPACE_PATH" "$SEARCH_SPACE_PATH"; do
       if [ -d "$publish_root" ]; then
         echo -e "\nChanging ownership of $publish_root to $ROOT_USERNAME:$ROOT_USERNAME."
@@ -311,10 +309,11 @@ change_publish_root_ownership()
 
 remove_users_groups()
 {
-  if [ $HAS_FUSION == false ] && [ $DELETE_USERS_GROUPS == true ]; then
+  if [ $DELETE_USERS == true ]; then
     remove_account $GEAPACHEUSER_NAME "user" "$GEAPACHEUSER_EXISTS"
     remove_account $GEPGUSER_NAME "user" "$GEPGUSER_EXISTS"
-    remove_account $GEFUSIONUSER_NAME "user" "$GEFUSIONUSER_EXISTS"
+  fi
+  if [ $DELETE_GROUP == true ]; then
     remove_account $GEGROUP_NAME "group" "$GEGROUP_EXISTS"
   fi
 }
