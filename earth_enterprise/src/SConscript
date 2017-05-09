@@ -24,6 +24,30 @@ import os
 import time
 Import('env')
 
+# Verify that git lfs is installed by checking that a tar
+# file is valid.  This runs on every build before any
+# targets are executed.
+# If we can't find any tar files in the repo, we give up and
+# assume everything is OK.
+# The valid file size is somewhat arbitrary - it has to be
+# larger than a git lfs pointer but smaller than any valid
+# .tar.gz in the repo.
+MIN_VALID_TAR_FILE_SIZE = 500
+for root, dirs, files in os.walk('..'):
+  tarfiles = [file for file in files if file.endswith('.tar.gz')]
+  if len(tarfiles) > 0:
+    filestat = os.stat(os.path.join(root, tarfiles[0]))
+    if filestat.st_size < MIN_VALID_TAR_FILE_SIZE:
+      print "It appears that git lfs is not installed.  Please"
+      print "install git lfs (instructions are available at"
+      print "https://git-lfs.github.com).  Then run"
+      print "'git lfs pull' to pull down large files before"
+      print "building."
+      Exit(1)
+    else:
+      # If we find one tar file that seems OK, assume all are OK
+      break
+
 # list of dirs to try to build (if present)
 dirs = ['third_party', 'google', 'keyhole', 'common', 'fusion', 'server',
         'maps', 'share/taskrules', 'support', 'earthplugin', 'javascript']
