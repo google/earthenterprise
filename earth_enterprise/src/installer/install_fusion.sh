@@ -692,7 +692,7 @@ copy_files_to_target()
 	printf "Copying Fusion Tutorial files... "
 
 	if [ -d "$TMPINSTALLDIR/tutorial" ]; then
-		cp -rf $TMPINSTALLDIR/tutorial $BASEINSTALLDIR_OPT
+		cp -rf $TMPINSTALLDIR/tutorial/opt/google/share $BASEINSTALLDIR_OPT
 		printf "Done\n"
 	else
 		printf "Not found - Skipping tutorial install\n"
