@@ -31,16 +31,6 @@ DEFAULTGROUPNAME="gegroup"
 GEFUSIONUSER_NAME=$DEFAULTGEFUSIONUSER_NAME
 GROUPNAME=$DEFAULTGROUPNAME
 
-# directory locations
-BININSTALLROOTDIR="/etc/init.d"
-BININSTALLPROFILEDIR="/etc/profile.d"
-BASEINSTALLDIR_OPT="/opt/google"
-BASEINSTALLDIR_ETC="/etc/opt/google"
-BASEINSTALLDIR_VAR="/var/opt/google"
-TMPINSTALLDIR="/tmp/fusion_os_install"
-INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
-CHKCONFIG="/sbin/chkconfig"
-
 # script arguments
 BACKUPFUSION=true
 BADHOSTNAMEOVERRIDE=false
@@ -48,35 +38,13 @@ MISMATCHHOSTNAMEOVERRIDE=false
 START_FUSION_DAEMON=true
 PURGE_TMP_DIR=true
 
-# derived directories
-BASEINSTALLGDALSHAREDIR="$BASEINSTALLDIR_OPT/share/gdal"
-GENERAL_LOG="$BASEINSTALLDIR_VAR/log"
-INSTALL_LOG_DIR="$BASEINSTALLDIR_OPT/install"
 INSTALL_LOG="$INSTALL_LOG_DIR/fusion_install_$(date +%Y_%m_%d.%H%M%S).log"
-SYSTEMRC="$BASEINSTALLDIR_ETC/systemrc"
 BACKUP_DIR="$BASEINSTALLDIR_VAR/fusion-backups/$(date +%Y_%m_%d.%H%sM%S)"
-FUSIONBININSTALL="$BININSTALLROOTDIR/gefusion"
-SOURCECODEDIR=$(dirname $(dirname $(readlink -f "$0")))
-TOPSOURCEDIR_EE=$(dirname $SOURCECODEDIR)
 
 # additional variables
-GEEF="Google Earth Enterprise Fusion"
-SOFTWARE_NAME="$GEEF"
-LONG_VERSION="5.1.3"
 IS_NEWINSTALL=false
 PUBLISH_ROOT_VOLUME=""
 IS_64BIT_OS=false
-ROOT_USERNAME="root"
-
-MACHINE_OS=""
-MACHINE_OS_VERSION=""
-MACHINE_OS_FRIENDLY=""
-
-HOSTNAME="$(hostname -f | tr [A-Z] [a-z] | $NEWLINECLEANER)"
-HOSTNAME_F="$(hostname -f | $NEWLINECLEANER)"
-HOSTNAME_S="$(hostname -s | $NEWLINECLEANER)"
-HOSTNAME_A="$(hostname -a | $NEWLINECLEANER)"
-NUM_CPUS="$(grep processor /proc/cpuinfo | wc -l | $NEWLINECLEANER)"
 
 ASSET_ROOT_VOLUME_SIZE=0
 SOURCE_VOLUME_PREEXISTING=false
@@ -114,8 +82,8 @@ main_preinstall()
 	fi
 
 	if ! determine_os; then
-        exit 1
-    fi
+            exit 1
+        fi
 
 	if ! check_prereq_software; then
 		exit 1
@@ -153,11 +121,11 @@ main_preinstall()
 
 	# 64 bit check
 	if [[ "$(uname -i)" == "x86_64" ]]; then 
-        IS_64BIT_OS=true 
+            IS_64BIT_OS=true 
 	else
 		echo -e "\n$GEEF $LONG_VERSION can only be installed on a 64 bit operating system."
 		exit 1
-    fi
+	fi
 
 	if ! prompt_install_confirmation; then
 		exit 1
@@ -277,41 +245,16 @@ load_systemrc_config()
 	fi
 }
 
-software_check()
-{
-	local software_check_retval=0
-	
-	# args: $1: ubuntu package
-	# args: $: rhel package
-
-    if [ "$MACHINE_OS" == "$UBUNTUKEY" ]; then
-        if [[ -z "$(dpkg --get-selections | sed s:install:: | sed -e 's:\s::g' | grep ^$1\$)" ]]; then
-            echo -e "Install $1 and restart the $GEEF $LONG_VERSION uninstaller."
-            software_check_retval=1
-        fi
-    elif [ "$MACHINE_OS" == "$REDHATKEY" ] || [ "$MACHINE_OS" == "$CENTOSKEY" ]; then
-        if [[ -z "$(rpm -qa | grep ^$2\$)" ]]; then
-            echo -e "Install $2 and restart the $GEEF $LONG_VERSION uninstaller."
-            software_check_retval=1
-        fi
-	else 
-		echo -e "\nThe installer could not determine your machine's operating system."
-            echo -e "Supported Operating Systems: ${SUPPORTED_OS_LIST[*]}\n"
-            software_check_retval=1
-    fi
-
-	return $software_check_retval
-}
-
 check_prereq_software()
 {
 	local check_prereq_software_retval=0
+  local script_name="$GEEF $LONG_VERSION installer"
 
-	if ! software_check "libxml2-utils" "libxml2.*x86_64"; then
+	if ! software_check "$script_name" "libxml2-utils" "libxml2.*x86_64"; then
 		check_prereq_software_retval=1
 	fi
 
-	if ! software_check "python2.7" "python-2.7.*"; then
+	if ! software_check "$script_name" "python2.7" "python-2.7.*"; then
 		check_prereq_software_retval=1
 	fi
 
@@ -712,69 +655,6 @@ setup_fusion_daemon()
 	test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE gefusion start 90 2 3 4 5 . stop 10 0 1 6 .
 	
 	printf "Fusion daemon setup ... Done\n"
-}
-
-get_array_index()
-{
-    # need to have a set test value -- technically, the return status is an unsigned 8 bit value, so negative numbers won't work
-    # need a value large enough that can be tested against
-    local get_array_index_retval=$INVALID_INDEX 
-
-    # args $1: array
-    # args $2: choice/selection
-
-    local array_list=("${!1}")
-    local selection=$2
-    
-    for i in "${!array_list[@]}"; 
-    do
-        if [[ "${array_list[$i]}" == "${selection}" ]]; then
-            get_array_index_retval=$i
-            break
-        fi
-    done
-
-    return $get_array_index_retval
-}
-
-prompt_to_action()
-{
-    # args- $1: array
-    # args- $2: repeatable prompt
-    
-    local prompt_to_action_choice=""
-    local prompt_to_action_validAnswers=("${!1}")
-
-    while [[ " ${prompt_to_action_validAnswers[*]} " != *"${prompt_to_action_choice^^} "* ]] || [ -z "$prompt_to_action_choice" ]
-    do
-        printf "$2 "
-        read -r prompt_to_action_choice
-    done
-
-    get_array_index prompt_to_action_validAnswers[@] ${prompt_to_action_choice^^}
-    prompt_to_action_retval=$?
-
-    return $prompt_to_action_retval
-}
-
-prompt_to_quit()
-{
-    # args- $1: repeatable prompt
-    local prompt_to_quit_retval=0
-    local prompt_to_quit_validAnswers=(X C)
-    local prompt_to_quit_index=1
-    
-    prompt_to_action prompt_to_quit_validAnswers[@] "$1"
-    prompt_to_quit_index=$?
-
-    if [ $prompt_to_quit_index -eq 1 ]; then
-        prompt_to_quit_retval=0
-    else		
-        echo -e "Exiting the Installer.\n"	
-        prompt_to_quit_retval=1
-    fi        
-
-    return $prompt_to_quit_retval
 }
 
 create_system_main_directories()

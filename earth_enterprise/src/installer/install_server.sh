@@ -30,53 +30,25 @@ GROUPNAME=$DEFAULTGROUPNAME
 DEFAULTGEFUSIONUSER_NAME="gefusionuser"
 GEFUSIONUSER_NAME=$DEFAULTGEFUSIONUSER_NAME
 
-# directory locations
-BININSTALLROOTDIR="/etc/init.d"
-BININSTALLPROFILEDIR="/etc/profile.d"
-BASEINSTALLLOGROTATEDIR="/etc/logrotate.d"
-BASEINSTALLDIR_OPT="/opt/google"
-BASEINSTALLDIR_ETC="/etc/opt/google"
-BASEINSTALLDIR_VAR="/var/opt/google"
-TMPINSTALLDIR="/tmp/fusion_os_install"
-KH_SYSTEMRC="/usr/keyhole/etc/systemrc"
-INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
-CHKCONFIG="/sbin/chkconfig"
-
 # script arguments
 BACKUPSERVER=true
 BADHOSTNAMEOVERRIDE=false
 MISMATCHHOSTNAMEOVERRIDE=false
 
-# derived directories
-BASEINSTALLGDALSHAREDIR="$BASEINSTALLDIR_OPT/share/gdal"
-PATH_TO_LOGS="$BASEINSTALLDIR_VAR/log"
-SYSTEMRC="$BASEINSTALLDIR_ETC/systemrc"
 BACKUP_DIR="$BASEINSTALLDIR_VAR/server-backups/$(date +%Y_%m_%d.%H%M%S)"
-OLD_SYSTEMRC=$SYSTEMRC
-SOURCECODEDIR=$(dirname $(dirname $(readlink -f "$0")))
-TOPSOURCEDIR_EE=$(dirname $SOURCECODEDIR)
-GESERVERBININSTALL="$BININSTALLROOTDIR/geserver"
-INSTALL_LOG_DIR="$BASEINSTALLDIR_OPT/install"
 INSTALL_LOG="$INSTALL_LOG_DIR/geserver_install_$(date +%Y_%m_%d.%H%M%S).log"
-GEHTTPD="$BASEINSTALLDIR_OPT/gehttpd"
-GEHTTPD_CONF="$GEHTTPD/conf.d"
 
-# versions and user names
-GEES="Google Earth Enterprise Server"
-SOFTWARE_NAME="$GEES"
-SHORT_VERSION="5.1"
-LONG_VERSION="5.1.3"
+# user names
 GRPNAME="gegroup"
 GEPGUSER_NAME="gepguser"
 GEAPACHEUSER_NAME="geapacheuser"
 
-#TODO this value could come from the server install script - merge as required (dattam)
-SERVER_UNINSTALL_OR_UPGRADE="uninstall"
+SERVER_INSTALL_OR_UPGRADE="install"
 GEE_CHECK_CONFIG_SCRIPT="/opt/google/gehttpd/cgi-bin/set_geecheck_config.py"
 PGSQL_DATA="/var/opt/google/pgsql/data"
 PGSQL_LOGS="/var/opt/google/pgsql/logs"
 PGSQL_PROGRAM="/opt/google/bin/pg_ctl"
-PRODUCT_NAME="Google Earth Enterprise"
+PRODUCT_NAME="$GEE"
 CHECK_POST_MASTER=""
 CHECK_GEHTTPD=""
 START_SERVER_DAEMON=1
@@ -165,15 +137,15 @@ main_preinstall()
 check_prereq_software()
 {
   local check_prereq_software_retval=0
+  local script_name="$GEES $LONG_VERSION installer"
 
-  if ! software_check "libxml2-utils" "libxml2.*x86_64"; then
+  if ! software_check "$script_name" "libxml2-utils" "libxml2.*x86_64"; then
     check_prereq_software_retval=1
   fi
 
-  if ! software_check "python2.7" "python-2.7.*"; then
+  if ! software_check "$script_name" "python2.7" "python-2.7.*"; then
     check_prereq_software_retval=1
   fi
-
 
   return $check_prereq_software_retval
 }
@@ -251,27 +223,6 @@ show_need_root()
   echo -e "The installer must exit."
 }
 
-backup_server()
-{
-  export BACKUP_DIR=$BACKUP_DIR
-
-  if [ ! -d $BACKUP_DIR ]; then
-    mkdir -p $BACKUP_DIR
-  fi
-
-  # Copy gehttpd directory.
-  # Do not back up folder /opt/google/gehttpd/htdocs/cutter/globes.
-  # Do not back up folders /opt/google/gehttpd/{bin, lib, manual, modules}
-  rsync -rltpu $BASEINSTALLDIR_OPT/gehttpd $BACKUP_DIR --exclude bin --exclude lib --exclude manual --exclude modules --exclude htdocs/cutter/globes
-
-  # Copy other files.
-  cp -f /etc/init.d/gevars.sh $BACKUP_DIR
-  cp -rf /etc/opt/google/openldap $BACKUP_DIR
-
-  # Change the ownership of the backup folder.
-  chown -R root:root $BACKUP_DIR
-}
-
 # TODO Add additional parameters for server
 parse_arguments()
 {
@@ -317,34 +268,6 @@ parse_arguments()
   done
 
   return $parse_arguments_retval;
-}
-
-check_server_processes_running()
-{
-  printf "\nChecking geserver services:\n"
-  local retval=1
-
-  # i) Check postgres is running .Store o/p in post_master_running
-  local post_master_running=$( ps -ef | grep postgres | grep -v grep )
-  local post_master_running_str="false"
-
-  # ii) Check gehttpd is running  .Store the o/p in gehttpd_running
-  local gehttpd_running=$( ps -ef | grep gehttpd | grep -v grep )
-  local gehttpd_running_str="false"
-
-  if [ -n "$post_master_running" ]; then
-    retval=0
-    post_master_running_str="true"
-  fi
-  echo "postgres service: $post_master_running_str"
-
-  if [ -n "$gehttpd_running" ]; then
-    retval=0
-    gehttpd_running_str="true"
-  fi
-  echo "gehttpd service: $gehttpd_running_str"
-
-  return $retval
 }
 
 show_server_running_message()
@@ -602,7 +525,7 @@ show_final_success_message(){
   INSTALLATION_OR_UPGRADE="installation"
   INSTALLED_OR_UPGRADED="installed"
   # TODO check for "UPGRADE" or case insensitive "upgrade"
-  if  [[ "$SERVER_UNINSTALL_OR_UPGRADE" = *upgrade* ]]; then
+  if  [[ "$SERVER_INSTALL_OR_UPGRADE" = *upgrade* ]]; then
     INSTALLATION_OR_UPGRADE="Upgrade"
     INSTALLED_OR_UPGRADED="upgraded"
   fi
