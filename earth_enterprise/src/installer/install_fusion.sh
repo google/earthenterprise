@@ -145,17 +145,17 @@ main_install()
 	# add group if it does not exist
 	if [ -z "$GROUP_EXISTS" ]; then
 		groupadd -r $GROUPNAME &> /dev/null 
-        NEW_GEGROUP=true 
+		NEW_GEGROUP=true 
 	fi
 
 	# add user if it does not exist
 	if [ -z "$USERNAME_EXISTS" ]; then
-        mkdir -p $BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER_NAME
-		useradd -d $BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER_NAME -g gegroup $GEFUSIONUSER_NAME
-        NEW_GEFUSIONUSER=true
-    else
-        # user already exists -- update primary group
-        usermod -g $GROUPNAME $GEFUSIONUSER_NAME
+		mkdir -p $BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER_NAME
+		useradd --home $BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER_NAME --system --gid $GROUPNAME $GEFUSIONUSER_NAME
+		NEW_GEFUSIONUSER=true
+	else
+		# user already exists -- update primary group
+		usermod -g $GROUPNAME $GEFUSIONUSER_NAME
 	fi
 
 	copy_files_to_target
