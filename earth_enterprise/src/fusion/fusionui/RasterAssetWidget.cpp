@@ -163,6 +163,7 @@ QFileDialog* RasterAssetWidget::FileDialog() {
     file_dialog_ = new QFileDialog(this);
     file_dialog_->setMode(QFileDialog::ExistingFiles);
     file_dialog_->setCaption(tr("Open Source"));
+    bool add_dem_file_filter = false;
 
     if (AssetType() == AssetDefs::Imagery) {
       if (khDirExists(Preferences::DefaultImageryPath().latin1())) {
@@ -184,8 +185,10 @@ QFileDialog* RasterAssetWidget::FileDialog() {
                    "Please update your preferences."),
                 tr("OK"), 0, 0, 0);
       }
-      file_dialog_->addFilter("USGS ASCII DEM ( *.dem *.DEM )");
+      add_dem_file_filter = true;
     }
+    // For JPEG2000 and MrSID, check if GDAL is built
+    // with specific format support.
     bool is_jpeg_found = false;
     bool is_mrsid_found = false;
     for (int iDr = 0; iDr < GDALGetDriverCount(); iDr++) {
@@ -216,8 +219,19 @@ QFileDialog* RasterAssetWidget::FileDialog() {
         }
       }
     }
-    // For JPEG2000 and MrSID, check if GDAL is built
-    // with specific format support.
+    // Add file filters:
+    QString supported_files_filter = "Supported images (";
+    if (add_dem_file_filter)
+      supported_files_filter += " *.dem *.DEM";
+    if (is_jpeg_found)
+      supported_files_filter += " *.jp2 *.JP2";
+    if (is_mrsid_found)
+      supported_files_filter += " *.sid *.SID";
+    supported_files_filter += " *.img *.IMG *.tif *.TIF )";
+    file_dialog_->addFilter(supported_files_filter);
+
+    if (add_dem_file_filter)
+      file_dialog_->addFilter("USGS ASCII DEM ( *.dem *.DEM )");
     if (is_jpeg_found)
       file_dialog_->addFilter("JPEG2000 ( *.jp2 *.JP2 )");
     if (is_mrsid_found)
@@ -226,7 +240,7 @@ QFileDialog* RasterAssetWidget::FileDialog() {
     file_dialog_->addFilter("Tiff/GeoTiff ( *.tif *.TIF )");
 
     // make the first filter current, which is the default "All Files (*)"
-    file_dialog_->setSelectedFilter(0);
+    file_dialog_->setSelectedFilter(1);
   }
   return file_dialog_;
 }
