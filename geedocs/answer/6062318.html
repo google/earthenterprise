@@ -60,12 +60,12 @@
   <p>This end-to-end example uses <code>gevirtualraster</code> to create a new Fusion resource from a set of 800+ contiguous imagery resources (jpeg2000) with consistent pixel size, projection, etc.</p>
   <ol class="spaced-list">
     <li>List the jpeg2000 files that are to be used for the virtual mosaic:
-      <p><code>$ ls -l *.jp2 | wc -l</code></p>
+      <p><code>$ ls -l *.tif | wc -l</code></p>
       <p>863</p>
     </li>
   </ol>
-<li>Create a virtual raster file, specifiying the fill value to be used for the mosaic (<code>0,0,0 = black</code>), the name of the file to be generated (<code>my_virtualmosaic_20140624_1.khvr</code>), and include all of the <code>.jp2</code> files in the current folder as input.
-  <p><code>$ gevirtualraster --fill 0,0,0 --tolerance 3 -o my_virtualmosaic_20140624_1.khvr *.jp2</code></p>
+<li>Create a virtual raster file, specifiying the fill value to be used for the mosaic (<code>0,0,0 = black</code>), the name of the file to be generated (<code>my_virtualmosaic_20140624_1.khvr</code>), and include all of the <code>.tif</code> files in the current folder as input.
+  <p><code>$ gevirtualraster --fill 0,0,0 --tolerance 3 -o my_virtualmosaic_20140624_1.khvr *.tif</code></p>
 </li>
 <li>Import the virtual raster imagery file into Fusion, specifying the resource type, the virtual raster file to import and the output resource file, <code>$ my_virtualmosaic_20140624.kip</code>.
   <p><code>gerasterimport --imagery my_virtualmosaic_20140624_1.khvr -o my_virtualmosaic_20140624.kip</code></p>

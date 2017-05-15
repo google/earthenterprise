@@ -69,11 +69,11 @@ L4 = ponds within islands in lakes</li>
 </li>
 <li>Create the blue background tiles:
 <ul>
-<li>Create the A1 tile for the ocean in the right size and in the Google Maps shade of blue. The NASA <code>.jp2</code> geospatial image file is already the right size, so you can just edit its color layers to create a tile with the Google Maps RGB value of 153,179,204:<br/>
+<li>Create the A1 tile for the ocean in the right size and in the Google Maps shade of blue. The NASA <code>.tif</code> geospatial image file is already the right size, so you can just edit its color layers to create a tile with the Google Maps RGB value of 153,179,204:<br/>
 <br/>
-<code>gdal_translate -b 1 -scale 0 255 153 153 world-topo-bathy-200407-3x21600x21600-A1.jp2 red.tif<br/>
-gdal_translate -b 1 -scale 0 255 179 179 world-topo-bathy-200407-3x21600x21600-A1.jp2 green.tif<br/>
-gdal_translate -b 1 -scale 0 255 204 204 world-topo-bathy-200407-3x21600x21600-A1.jp2 blue.tif</code><br/>
+<code>gdal_translate -b 1 -scale 0 255 153 153 world-topo-bathy-200407-3x21600x21600-A1.tif red.tif<br/>
+gdal_translate -b 1 -scale 0 255 179 179 world-topo-bathy-200407-3x21600x21600-A1.tif green.tif<br/>
+gdal_translate -b 1 -scale 0 255 204 204 world-topo-bathy-200407-3x21600x21600-A1.tif blue.tif</code><br/>
  </li>
 <li>Merge the layers to form a 3-band <code>.tif</code> file called <code>GoogleBlueA1.tif:</code><br/>
 <br/>
