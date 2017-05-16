@@ -192,6 +192,9 @@ QFileDialog* VectorAssetWidget::FileDialog() {
           tr("OK"), 0, 0, 0);
     }
 
+    file_dialog_->addFilter(
+      "Supported files ( *.rt1 *.RT1 *.gml *.GML *.txt *.csv *.TXT *.CSV *.dgn"
+        " *.DGN *.tab *.TAB *.shp *.SHP *.kml *.KML *.kmz *.KMZ )");
     file_dialog_->addFilter("US Census Tiger Line Files ( *.rt1 *.RT1 )");
     file_dialog_->addFilter("OpenGIS GML ( *.gml *.GML )");
     file_dialog_->addFilter("Generic Text ( *.txt *.csv *.TXT *.CSV )");
@@ -201,8 +204,9 @@ QFileDialog* VectorAssetWidget::FileDialog() {
     file_dialog_->addFilter(
         "Keyhole Markup Language ( *.kml *.KML *.kmz *.KMZ )");
 
-    // make the first filter current, which is the default "All Files (*)"
-    file_dialog_->setSelectedFilter(0);
+    // Make the second filter current, which is the 'Support files' one.
+    // The first filter is the default "All Files (*)".
+    file_dialog_->setSelectedFilter(1);
   }
 
   return file_dialog_;
