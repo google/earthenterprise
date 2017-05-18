@@ -265,7 +265,7 @@
   </li>
   <li><strong>Specify the output mask</strong>
     <ul class="spaced-list">
-      <li><strong><code>--output_mask</code></strong>: the folder path location and filename <code>gepolymaskgen</code> is to write the finished mask file. The completed mask file to import with GEE Fusion Pro must have the same filename as the source file with a <code>-mask.tif</code> extension. For example, if the source file is <code>brazil-squareimage-nofill.jp2</code> the mask file must be named <code>brazil-squareimage-nofill-mask.tif</code>. Only one <code>--output_mask</code> may be specified per <code>gepolymaskgen </code>operation.</li>
+      <li><strong><code>--output_mask</code></strong>: the folder path location and filename <code>gepolymaskgen</code> is to write the finished mask file. The completed mask file to import with GEE Fusion Pro must have the same filename as the source file with a <code>-mask.tif</code> extension. For example, if the source file is <code>brazil-squareimage-nofill.tif</code> the mask file must be named <code>brazil-squareimage-nofill-mask.tif</code>. Only one <code>--output_mask</code> may be specified per <code>gepolymaskgen </code>operation.</li>
     </ul>
     <p>As an example, this <code>gepolymaskgen</code> invocation will create a zero-feather mask file that edge-matches source data:</p>
     <p><code>gepolymaskgen --feather 0 --feather_border 0 --base_image brazil-squareimage-nofill.khvr --invert --output_mask brazil-squareimage-nofill-mask.tif</code></p>
@@ -814,10 +814,10 @@
 <hr/>
 <h3><a id="h.6wiupq-gddwoq" name="h.6wiupq-gddwoq"></a>Case 5: Building custom masks with both gemaskgen and gepolymaskgen</h3>
 <p>There are special cases where the capabilities of both <code>gemaskgen</code> and <code>gepolymaskgen</code> are needed to build a custom mask file for an image resource. The SFBayAreaLansat imagery from the Google Earth Enterprise Fusion Pro Tutorial is a good example (screenshot below).</p>
-<h4>Screenshot of the usgsLanSat.jp2 source file imported into Fusion Pro viewed with no mask. Note the areas of fill data surrounding the imagery: </h4>
-<p><img alt="usgsLanSat.jp2 in Fusion pro with no mask" src="../art/custom_masks/image19.jpg"/></p>
-<h4>Screenshot of the usgsLanSat.jp2 imagery after being imported into Fusion Pro with a mask automatically computed:</h4>
-<p><img alt="usgsLanSat.jp2 in Fusion pro with a mask" src="../art/custom_masks/image15.jpg"/></p>
+<h4>Screenshot of the usgsLanSat.tif source file imported into Fusion Pro viewed with no mask. Note the areas of fill data surrounding the imagery: </h4>
+<p><img alt="usgsLanSat.tif in Fusion pro with no mask" src="../art/custom_masks/image19.jpg"/></p>
+<h4>Screenshot of the usgsLanSat.tif imagery after being imported into Fusion Pro with a mask automatically computed:</h4>
+<p><img alt="usgsLanSat.tif in Fusion pro with a mask" src="../art/custom_masks/image15.jpg"/></p>
 <h4>Screenshot of the imported SFBayAreaLanSat image resource in Fusion after the custom mask is created:</h4>
 <p><img alt="SFBayAreaLanSat image in fusion with custom mask" src="../art/custom_masks/image12.jpg"/></p>
 <p>Here, the Fusion Pro automask function is needed to build a mask for the source imagery to mask all Fill Data; however, the imagery also includes imagery for the water which should be, ideally, masked to the coastline. Both <code>gemaskgen</code> and <code>gepolymaskgen</code> will be needed to accomplish this type of masking situation to build a mask hiding fill data within the image and then creating a coastline mask. This example is a special case since the source imagery must be imported into Fusion format first, then the custom mask will be generated from the output of the imagery resource build process. This example will also utilize information found in Appendixes <a href="#h.h6hjk6-u3u8xg">B</a>, <a href="#h.o23346-tgkrx4">C</a> and <a href="#h.p9e53m-jf2wqc">D</a> for locating masks built with <code>gemaskgen</code>. </p>
@@ -935,7 +935,7 @@
 <ol class="spaced-list">
   <li>Move the custom mask file to the same folder as the source file for the image.</li>
   <li>Rename the custom mask file to be the same filename as the source image file with a <code>-mask.tif</code> extension.<br/>
-    <p> For example: If the <code>/gevol/src/imagery/example.jp2</code> is the source file, then the custom mask must be </p>
+    <p> For example: If the <code>/gevol/src/imagery/example.tif</code> is the source file, then the custom mask must be </p>
     <p><code>/gevol/src/imagery/example-mask.tif</code></p>
   </li>
   <li>Load the Fusion GUI Asset Manager:
@@ -955,7 +955,7 @@
   <li>Move the custom mask file to the same folder as the source file for the image.</li>
   <li>Rename the custom mask file to be the same filename as the source image file with a <code>-mask.tif</code> extension.
     <p> For example if the:</p>
-    <p> <code>/gevol/src/imagery/example.jp2</code> is the source file, then the custom mask must be: </p>
+    <p> <code>/gevol/src/imagery/example.tif</code> is the source file, then the custom mask must be: </p>
     <p> <code>/gevol/src/imagery/example-mask.tif</code></p>
   </li>
   <li>On the command line, enter:
@@ -973,7 +973,7 @@
   <li>Move the custom mask file to the same folder as the source file for the image.</li>
   <li>Rename the custom mask file to be the same filename as the source image file with a <code>-mask.tif</code> extension.
     <p>For example if the: </p>
-    <p> <code>/gevol/src/imagery/example.jp2</code> is the source file, then the custom mask must be: </p>
+    <p> <code>/gevol/src/imagery/example.tif</code> is the source file, then the custom mask must be: </p>
     <p> <code>/gevol/src/imagery/example-mask.tif</code></p>
   </li>
   <li>Load the Fusion GUI Asset Manager:
@@ -993,7 +993,7 @@
   <li>Move the custom mask file to the same folder as the source file for the image.</li>
   <li>Rename the custom mask file to be the same filename as the source image file with a <code>-mask.tif</code> extension.
     <p>For example if the: </p>
-    <p> <code>/gevol/src/imagery/example.jp2</code> is the source file, then the custom mask must be: </p>
+    <p> <code>/gevol/src/imagery/example.tif</code> is the source file, then the custom mask must be: </p>
     <p> <code>/gevol/src/imagery/example-mask.tif</code></p>
   </li>
   <li>On the command line, enter:
@@ -1124,7 +1124,7 @@
   <li>Brush out the entire San Francisco Bay to remove the bay coastline mask
     <p><img alt="bay coastline mark removed" src="../art/custom_masks/image04.jpg"/></p>
   </li>
-  <li>Save the updated mask file to the same folder location as the <code>usgsLanSat.jp2</code> source image file for the SFBayAreaLanSat image resource<code> - /opt/google/share/tutorials/fusion/Imagery</code></li>
+  <li>Save the updated mask file to the same folder location as the <code>usgsLanSat.tif</code> source image file for the SFBayAreaLanSat image resource<code> - /opt/google/share/tutorials/fusion/Imagery</code></li>
   <br/>
   <li>Modify the SFBayAreaLanSat image resource to enable the <code>HaveMask</code> mask mode.
     <p>Please see <a href="#h.wwsxau-f5geku">Appendix A</a>, Examples <a href="#h.mzywb6-etqfmz">3</a> and <a href="#h.utxsvs-euyjjd">4</a> for further details.</p>
