@@ -164,6 +164,9 @@ extern const std::string kTimeMachineTOCSuffix;
 // Empty date string used for dated imagery dates.
 extern const std::string kUnknownDate;
 
+// Empty date-time string used for dated imagery dates.
+extern const std::string kUnknownDateTimeUTC;
+
 // An empty string that can be returned as a const string result by any method.
 extern const std::string kEmptyString;
 

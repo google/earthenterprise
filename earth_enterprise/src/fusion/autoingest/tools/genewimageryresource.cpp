@@ -229,7 +229,10 @@ main(int argc, char *argv[]) {
       // also accepts old time string such as "YYYY-MM-DD" in order not to
       // break customers' old scripts.
       struct tm ts;
-      if (ParseUTCTime(sourcedate, &ts)) {
+      if (sourcedate == kUnknownDate) {
+        // default input, set to standard metadata value.
+        req.meta.SetValue("sourcedate", kUnknownDateTimeUTC);
+      } else if (ParseUTCTime(sourcedate, &ts)) {
         // Reformat into standard UTC ISO 8601 time string.
         req.meta.SetValue("sourcedate", GetUTCTimeString(ts));
       } else {

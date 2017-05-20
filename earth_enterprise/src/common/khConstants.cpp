@@ -91,6 +91,7 @@ const std::string kEarthClientSearchAdapter = "ECV4Adapter";
 const std::string kMapsSearchAdapter = "MapsAdapter";
 
 const std::string kUnknownDate = "0000-00-00";
+const std::string kUnknownDateTimeUTC = "0000-00-00T00:00:00Z";
 const std::string kDatedImageryChannelsFileName = "dated_imagery_channels";
 
 // TimeMachine specific constants.
