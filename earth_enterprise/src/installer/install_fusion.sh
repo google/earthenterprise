@@ -902,6 +902,8 @@ show_final_success_message()
     echo -e "\n-------------------"
     echo -e "Congratulations! $GEEF $LONG_VERSION has been successfully $INSTALLED_OR_UPGRADED"
     echo -e "in [$USER_INSTALL_DIRECTORY]."
+    echo -e "You can remove the staged install files from $TMPINSTALLDIR if you do not"
+    echo -e "need to install $GEES."
 
     if [ $START_FUSION_DAEMON == true ]; then
         if [ -z "$SYSTEM_MGR_CHECK" ] && [ $IS_SLAVE == false ] || [ -z "$SYSTEM_RPROVIDER_CHECK" ]; then
