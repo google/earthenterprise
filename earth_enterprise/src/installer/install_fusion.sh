@@ -196,8 +196,6 @@ main_postinstall()
         exit 1
     fi
 
-    # install cleanup
-    cleanup_installfiles
     show_final_success_message
 }
 
@@ -213,7 +211,7 @@ show_intro()
 show_help()
 {
 	echo -e "\nUsage: \tsudo ./install_fusion.sh [-dir /tmp/fusion_os_install -ar /gevol/assets -sv /gevol/src -u fusionuser"
-	echo -e "\t\t-g gegroup -nobk -nop -hnf -nostart]\n"
+	echo -e "\t\t-g gegroup -nobk -hnf -nostart]\n"
 
 	echo -e "-h \t\tHelp - display this help screen"
 	echo -e "-dir \t\tTemp Install Directory - specify the temporary install directory. Default is [$TMPINSTALLDIR]."	
@@ -222,8 +220,6 @@ show_help()
 	echo -e "-ar \t\tAsset Root Mame - the name of the asset root volume.  Default is [$ASSET_ROOT]. \n\t\tNote: this is only used for new installations. Specify absolute paths only."
     echo -e "-sv \t\tSource Volume Name - the name of the source volume.  Default is [$SOURCE_VOLUME]. \n\t\tNote: this is only used for new installations. Specify absolute paths only."
 	echo -e "-nobk \t\tNo Backup - do not backup the current fusion setup. Default is to backup \n\t\tthe setup before installing."
-	echo -e "-nop \t\tNo Purge - do not delete the temporary install directory upon successful run of the installer."
-	echo -e "\t\tDefault is to delete the directory after successful installation."
     echo -e "-nostart \tDo Not Start Fusion - after install, do not start the Fusion daemon.  Default is to start the daemon."
 	echo -e "-hnf \t\tHostname Force - force the installer to continue installing with a bad \n\t\thostname. Bad hostname values are [${BADHOSTNAMELIST[*]}]."
 	echo -e "-hnmf \t\tHostname Mismatch Force - force the installer to continue installing with a \n\t\tmismatched hostname.\n" 	
@@ -363,9 +359,6 @@ parse_arguments()
             -nostart)
                 START_FUSION_DAEMON=false
                 ;;
-			-nop)
-				PURGE_TMP_DIR=false
-				;;
 			-dir)
 				shift
 					if [ -d "$1" ]; then
@@ -893,18 +886,6 @@ final_fusion_service_configuration()
     return $final_fusion_service_configuration_retval
 }
 
-cleanup_installfiles()
-{
-	if [ $PURGE_TMP_DIR == true ]; then
-		printf "\nPerforming cleanup..."
-	
-		# remove the temp files 
-		rm -rf $TMPINSTALLDIR
-
-		printf "Done\n"
-	fi
-}
-
 show_final_success_message()
 {
 	local INSTALLED_OR_UPGRADED=""
@@ -921,6 +902,8 @@ show_final_success_message()
     echo -e "\n-------------------"
     echo -e "Congratulations! $GEEF $LONG_VERSION has been successfully $INSTALLED_OR_UPGRADED"
     echo -e "in [$USER_INSTALL_DIRECTORY]."
+    echo -e "You can remove the staged install files from $TMPINSTALLDIR if you do not"
+    echo -e "need to install $GEES."
 
     if [ $START_FUSION_DAEMON == true ]; then
         if [ -z "$SYSTEM_MGR_CHECK" ] && [ $IS_SLAVE == false ] || [ -z "$SYSTEM_RPROVIDER_CHECK" ]; then
