@@ -154,6 +154,7 @@ stage_tutorial_cmds = {'stage_tutorial': [
 stage_tutorial = env.PhonyTargets(**stage_tutorial_cmds)
 env.Depends(stage_tutorial, stage_data)
 env.Alias('stage_install', 'stage_tutorial')
+env.Alias('install', 'stage_install')
 
 Export('env')
 Export('installdir')
