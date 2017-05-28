@@ -35,8 +35,6 @@
 </ul>
 <h2><a name="SetCPUs"></a>Set the number of CPUs assigned to Fusion processing</h2>
 <p>As some of the task rules described here rely on setting the number of CPUs assigned to Fusion processing, it’s useful for you to know how many CPUs are available on your machine and how many are assigned for Fusion processing. The <code>getop</code> output lists the available CPUs on your machine as the <code>maxjobs</code> entry and corresponds to how many concurrent jobs Fusion may spawn at any one time.</p>
-<div class="note"><p><strong>Note:</strong> The standard Fusion installation includes a license that allows you to run eight concurrent tasks/jobs. To use more than eight CPUs for Fusion processing, purchase an additional license by contacting your Google Account Manager.
-</p></div>
 <p>You can use the tool <code>geselectassetroot --assetroot path --numcpus</code> to assign more CPUs. For example:</p>
 <p><code>geselectassetroot --assetroot /gevol/assets --numcpus 7</code>
 <p>For information about assigning CPUs to Fusion processing, see <a href="../answer/6008655.html">Running Fusion on a Machine with Multiple CPUs</a>.</p>
