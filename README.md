@@ -10,6 +10,8 @@ The application suite consists of three core components:
 ![flow](https://lh3.googleusercontent.com/ZGQH04lc2mYmw1JEx0Jvwiardw5H6cwrmRhSj75pSKF6r1FRwwYUBUIBnTE6n5uY071XV7__mmVDKdV6B1tEpUQwFNYnt1HBfxiz3Hrqbw99HUFQKVFnht11EkPz70xCtuhFlCi3)
 
 ### Building
+
+[![Join the chat at https://gitter.im/earthenterprise/Lobby](https://badges.gitter.im/earthenterprise/Lobby.svg)](https://gitter.im/earthenterprise/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Earth Enterprise Fusion & Server currently run on 64-bit versions of the following operating systems:
 
 * CentOS 7
