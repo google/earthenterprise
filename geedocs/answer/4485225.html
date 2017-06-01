@@ -91,7 +91,7 @@
   <h3 id="globe_cutter">Globe cutter installation</h3>
   <p>The portable globe cutter tool is installed with Google Earth Enterprise Server 4.2 (and later). Globe cutting is disabled by default; to enable it you must set the <code>--enable_cutter</code> flag for <code>geserveradmin</code> from the command line:</p>
   <p> <code># geserveradmin --enable_cutter</code></p>
-  <p>By default, the cut globes will be stored in the <code>/opt/google/gehttpd/htdocs/cutter/globes</code> directory. The cut globes can be large, and many servers do not have sufficient storage allocated in this directory for multiple globes. If this is the case for your server, please contact tech support or visit the Earth Enterprise user forum for instructions on designating a different directory as the storage area for the cut globes.</p>
+  <p>By default, the cut globes will be stored in the <code>/opt/google/gehttpd/htdocs/cutter/globes</code> directory. The cut globes can be large, and many servers do not have sufficient storage allocated in this directory for multiple globes. If this is the case for your server, please visit the Earth Enterprise user forum for instructions on designating a different directory as the storage area for the cut globes.</p>
   <hr/>
   <h3 id="portable_globe_server">Portable globe server installation</h3>
   <p>The portable server is supported on:</p>
@@ -101,7 +101,7 @@
     <li>Mac OS X 10.4 and up.</li>
   </ul>
   <h4>Windows</h4>
-  <p>To download the portable server installer, please contact Google Enterprise Support. Once you've obtained the installer:</p>
+  <p>Refer to the <a href="https://github.com/google/earthenterprise/wiki">EarthEnterprise Wiki</a> for build instructions. Once you've obtained the installer:</p>
   <ol class="spaced-list">
     <li>Copy the installer to the Windows machine(s) on which you'd like to install the portable server.</li>
     <li>Double-click the executable file, and follow the prompts to install. Once installed, a shortcut labeled <strong>Google Earth Portable</strong> will be present on your desktop. Double-click that shortcut to launch the server.</li>
@@ -113,7 +113,7 @@
   <p>The default path may vary between Windows versions; different paths for the program and data can be specified at the time of installation.</p>
   <p>For Windows 7, user can choose Per-User or Per-Machine Installations by selecting "Anyone who uses this computer (all users)" or "Only for me (username)" button. Per-machine installation requires admin rights. Only Per-machine installation is available for Windows XP</p>
   <h4>Mac OS X</h4>
-  <p>To download the portable server installer, please contact Google Enterprise Support. Once you've obtained the installer:</p>
+  <p>Refer to the <a href="https://github.com/google/earthenterprise/wiki">EarthEnterprise Wiki</a> for build instructions. Once you've obtained the installer:</p>
   <ol class="spaced-list">
     <li>Copy the <code>Google_Earth_Portable.dmg</code> file to the OS X machine(s) on which you'd like to install the portable server.</li>
     <li>Mount the disk image by double-clicking the <code>.dmg</code> file, then open the image in Finder by double-clicking the mounted drive on your desktop.</li>
@@ -132,7 +132,6 @@
       <li>Creating pre-cut portable globes to host as downloadable files for portable users.</li>
       <li>Operating a separate GEE Server specifically to support on-demand globe cutting needs.</li>
     </ul>
-    <p>Please contact the Google Earth Enterprise Support team for further information or questions about these procedures.</p>
   </div>
   <hr/>
   <h3 id="before_you_begin">Before you begin</h3>
@@ -141,10 +140,8 @@
   <code># geserveradmin --enable_cutter </code>
   <p>For more information about <code>geserveradmin</code>, please refer to the <strong>Command Line Reference</strong> chapter of the <strong>Reference Guide</strong>.</p>
   <div class="alert">
-    <p><strong>Note about authentication and SSL:</strong> Cutting is not currently supported on globes that require end-user authentication e.g. LDAP. One workaround is to allow unauthenticated access from localhost on your Earth Enterprise Server. (Contact Google Enterprise Support if you need sample Apache directives to enable such a configuration.) Cutting of a globe over HTTPS is supported; however the SSL certificate of the target server will not be verified during cuting.</p>
+    <p><strong>Note about authentication and SSL:</strong> Cutting is not currently supported on globes that require end-user authentication e.g. LDAP. One workaround is to allow unauthenticated access from localhost on your Earth Enterprise Server. Refer to Apache documentation to enable such a configuration. Cutting of a globe over HTTPS is supported; however the SSL certificate of the target server will not be verified during cuting.</p>
   </div>
-  <h4 id="install_the_google_earth_plugin">Install the Google Earth Plugin</h4>
-  <p>The Google Earth Plugin is used to display the globe from which maps are cut. To install the plugin, visit <code><strong>http://developers.google.com/apis/earth</strong></code> and follow the prompts inside the Google Earth Plugin frame. If you require installers for offline installation, contact Google Enterprise Support.</p>
   <hr/>
   <h3 id="the_globe_cutter_interface">The globe cutter interface</h3>
   <p>To create a portable globe, point your browser to <code>http://yourserver/cutter</code>, where <code>yourserver</code> is the server on which Earth Enterprise Server is running. The <strong>Globe Creator</strong> page appears.</p>

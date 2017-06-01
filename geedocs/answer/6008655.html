@@ -29,10 +29,7 @@
 <h2>Running Fusion on a Machine with Multiple CPUs</h2>
 <p>Fusion can be configured to use a maximum number of CPUs on a machine with the following command:</p>
 <code>/opt/google/bin/geselectassetroot --assetroot /my/assetroot --numcpus X</code>
-<p>This number will show up as the maxjobs entry within getop output and corresponds to how many concurrent jobs Fusion may spawn at any one time. Note that the value for --numcpus should be equal to, or less than, the total number of CPUs permitted by your Fusion license; it should never exceed the number of physical CPU cores on the machine.</p>
-<div class="note">
-<p><strong>Note:</strong> The standard Fusion installation includes a license that allows you to run eight concurrent tasks/jobs. To use more than eight CPUs for Fusion processing, purchase an additional license by contacting your Google Account Manager.</p>
-</div>
+<p>This number will show up as the maxjobs entry within getop output and corresponds to how many concurrent jobs Fusion may spawn at any one time. Note that the value for --numcpus should be equal to, or less than, the number of physical CPU cores on the machine.</p>
 <p>Each task within Fusion is configured to use 1 CPU by default. Changing the maximum number of CPUs using the above command will not affect the number of CPUs assigned to each individual task. Some tasks in Fusion are capable of multithreaded support including:</p>
 <ul>
 <li>gepackgen (imagery and terrain projects)</li>
