@@ -71,7 +71,7 @@ gstStatus gstOGRFormat::OpenFile() {
   notify(NFY_DEBUG, "OGR Loader opening file %s", name());
 
   data_source_ = (GDALDataset *) GDALOpenEx(name(),
-                                            GDAL_OF_VECTOR || GDAL_OF_READONLY,
+                                            GDAL_OF_VECTOR | GDAL_OF_READONLY,
                                             NULL, NULL, NULL);
 
   if (data_source_ == NULL)
