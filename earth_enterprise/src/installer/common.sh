@@ -153,6 +153,13 @@ show_no_tmp_dir_message()
     echo -e "scons release=1 installdir=$1 install\n"
 }
 
+show_corrupt_tmp_dir_message()
+{
+    echo -e "\nThe temp install directory specified [$1] is corrupt (failed on copy)."
+    echo -e "Please specify the path of the extracted install files or first run"
+    echo -e "scons release=1 installdir=$1 install\n"
+}
+
 check_bad_hostname() {
     if [ -z "$HOSTNAME" ] || [[ " ${BADHOSTNAMELIST[*]} " == *"${HOSTNAME,,} "* ]]; then
         show_badhostname

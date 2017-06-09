@@ -302,51 +302,92 @@ copy_files_to_target()
   mkdir -p $BASEINSTALLDIR_ETC/openldap
   mkdir -p $BASEINSTALLDIR_VAR/pgsql
 
+  local error_on_copy=0
   cp -rf $TMPINSTALLDIR/common/opt/google/bin $BASEINSTALLDIR_OPT
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf $TMPINSTALLDIR/common/opt/google/share $BASEINSTALLDIR_OPT
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf $TMPINSTALLDIR/common/opt/google/qt $BASEINSTALLDIR_OPT
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf $TMPINSTALLDIR/common/opt/google/qt/lib $BASEINSTALLDIR_OPT
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf $TMPINSTALLDIR/common/opt/google/lib $BASEINSTALLDIR_OPT
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf $TMPINSTALLDIR/common/opt/google/gepython $BASEINSTALLDIR_OPT
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf $TMPINSTALLDIR/server/opt/google/share $BASEINSTALLDIR_OPT
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf $TMPINSTALLDIR/server/opt/google/bin $BASEINSTALLDIR_OPT
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf $TMPINSTALLDIR/server/opt/google/lib $BASEINSTALLDIR_OPT
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf $TMPINSTALLDIR/server/opt/google/gehttpd $BASEINSTALLDIR_OPT
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf $TMPINSTALLDIR/server/opt/google/search $BASEINSTALLDIR_OPT
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf $TMPINSTALLDIR/searchexample/opt/google/share $BASEINSTALLDIR_OPT
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf $TMPINSTALLDIR/geplaces/opt/google/share $BASEINSTALLDIR_OPT
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf $TMPINSTALLDIR/server/AppacheSupport/opt/google/gehttpd $BASEINSTALLDIR_OPT
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
 
   cp -rf $TMPINSTALLDIR/server/etc/init.d/geserver $BININSTALLROOTDIR
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf $TMPINSTALLDIR/server/etc/profile.d/ge-server.sh $BININSTALLPROFILEDIR
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf $TMPINSTALLDIR/server/etc/profile.d/ge-server.csh $BININSTALLPROFILEDIR
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
 
   cp -rf $TMPINSTALLDIR/server/user_magic/etc/logrotate.d/gehttpd $BASEINSTALLLOGROTATEDIR
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf $TMPINSTALLDIR/server/user_magic/var/opt/google/pgsql/logs/ $BASEINSTALLDIR_VAR/pgsql
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf $TMPINSTALLDIR/manual/opt/google/share/doc/manual $BASEINSTALLDIR_OPT/share/doc
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf $TMPINSTALLDIR/server/opt/google/gehttpd/conf/gehttpd.conf $BASEINSTALLDIR_OPT/gehttpd/conf
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf $TMPINSTALLDIR/server/opt/google/gehttpd/htdocs/shared_assets/images/location_pin.png $BASEINSTALLDIR_OPT/gehttpd/htdocs/shared_assets/images
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
 
   TMPOPENSSLPATH=$TMPINSTALLDIR/common/user_magic/var/opt/google/openssl
 
   cp -f $TMPOPENSSLPATH/openssl.cnf $BASEINSTALLDIR_VAR/openssl
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf $TMPOPENSSLPATH/private $BASEINSTALLDIR_VAR/openssl
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -f $TMPOPENSSLPATH/misc/CA.sh $BASEINSTALLDIR_VAR/openssl/misc
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -f $TMPOPENSSLPATH/misc/tsget $BASEINSTALLDIR_VAR/openssl/misc
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -f $TMPOPENSSLPATH/misc/c_name $BASEINSTALLDIR_VAR/openssl/misc
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -f $TMPOPENSSLPATH/misc/CA.pl $BASEINSTALLDIR_VAR/openssl/misc
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -f $TMPOPENSSLPATH/misc/c_issuer $BASEINSTALLDIR_VAR/openssl/misc
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -f $TMPOPENSSLPATH/misc/c_info $BASEINSTALLDIR_VAR/openssl/misc
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -f $TMPOPENSSLPATH/misc/c_hash $BASEINSTALLDIR_VAR/openssl/misc
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf $TMPOPENSSLPATH/certs $BASEINSTALLDIR_VAR/openssl
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
 
   TMPOPENLDAPPATH=$TMPINSTALLDIR/common/user_magic/etc/opt/google/openldap
 
   cp -f $TMPOPENLDAPPATH/ldap.conf $BASEINSTALLDIR_ETC/openldap
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -f $TMPOPENLDAPPATH/ldap.conf.default $BASEINSTALLDIR_ETC/openldap
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
 
   # TODO: final step: copy uninstall script
   # cp -f $TMPOPENLDAPPATH/<........> $INSTALL_LOG_DIR
+
+  if [ $error_on_copy -ne 0 ]
+  then
+    show_corrupt_tmp_dir_message $TMPINSTALLDIR
+    exit 1
+  fi
 
   printf "DONE\n"
 }

@@ -585,44 +585,76 @@ copy_files_to_target()
 	mkdir -p $BASEINSTALLDIR_VAR/run
 	mkdir -p $BASEINSTALLDIR_VAR/log
 
+	local error_on_copy=0
 	cp -rf $TMPINSTALLDIR/fusion/opt/google/bin $BASEINSTALLDIR_OPT
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -rf $TMPINSTALLDIR/fusion/opt/google/share $BASEINSTALLDIR_OPT
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -rf $TMPINSTALLDIR/common/opt/google/lib $BASEINSTALLDIR_OPT
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -rf $TMPINSTALLDIR/fusion/opt/google/lib $BASEINSTALLDIR_OPT
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -rf $TMPINSTALLDIR/common/opt/google/bin $BASEINSTALLDIR_OPT
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -rf $TMPINSTALLDIR/common/opt/google/share $BASEINSTALLDIR_OPT
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -rf $TMPINSTALLDIR/common/opt/google/qt $BASEINSTALLDIR_OPT
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	
-	cp -f $TMPINSTALLDIR/common/opt/google/qt/lib/* $BASEINSTALLDIR_OPT/lib
+	# copy "lib*" vs "*" because "cp *" will skip dir 'pkgconfig' and return error
+	cp -f $TMPINSTALLDIR/common/opt/google/qt/lib/lib* $BASEINSTALLDIR_OPT/lib
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -rf $TMPINSTALLDIR/common/opt/google/qt/lib/pkgconfig $BASEINSTALLDIR_OPT/lib
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -rf $TMPINSTALLDIR/common/opt/google/gepython $BASEINSTALLDIR_OPT
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -rf $TMPINSTALLDIR/manual/opt/google/share/doc/manual $BASEINSTALLDIR_OPT/share/doc
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	
 	cp -f $TMPINSTALLDIR/fusion/etc/profile.d/ge-fusion.csh $BININSTALLPROFILEDIR
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -f $TMPINSTALLDIR/fusion/etc/profile.d/ge-fusion.sh $BININSTALLPROFILEDIR
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -f $TMPINSTALLDIR/fusion/etc/init.d/gefusion $BININSTALLROOTDIR
 
 	TMPOPENSSLPATH=$TMPINSTALLDIR/common/user_magic/var/opt/google/openssl
 
 	cp -f $TMPOPENSSLPATH/openssl.cnf $BASEINSTALLDIR_VAR/openssl
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -rf $TMPOPENSSLPATH/private $BASEINSTALLDIR_VAR/openssl
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -f $TMPOPENSSLPATH/misc/CA.sh $BASEINSTALLDIR_VAR/openssl/misc
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -f $TMPOPENSSLPATH/misc/tsget $BASEINSTALLDIR_VAR/openssl/misc
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -f $TMPOPENSSLPATH/misc/c_name $BASEINSTALLDIR_VAR/openssl/misc
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -f $TMPOPENSSLPATH/misc/CA.pl $BASEINSTALLDIR_VAR/openssl/misc
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -f $TMPOPENSSLPATH/misc/c_issuer $BASEINSTALLDIR_VAR/openssl/misc
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -f $TMPOPENSSLPATH/misc/c_info $BASEINSTALLDIR_VAR/openssl/misc
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -f $TMPOPENSSLPATH/misc/c_hash $BASEINSTALLDIR_VAR/openssl/misc
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -rf $TMPOPENSSLPATH/certs $BASEINSTALLDIR_VAR/openssl
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 
 	TMPOPENLDAPPATH=$TMPINSTALLDIR/common/user_magic/etc/opt/google/openldap
 
 	cp -f $TMPOPENLDAPPATH/ldap.conf $BASEINSTALLDIR_ETC/openldap
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -f $TMPOPENLDAPPATH/ldap.conf.default $BASEINSTALLDIR_ETC/openldap
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 
 	# TODO: final step: copy uninstall script
 	# cp -f $TMPOPENLDAPPATH/<........> $INSTALL_LOG_DIR
 
+	if [ $error_on_copy -ne 0 ]
+	then
+		show_corrupt_tmp_dir_message $TMPINSTALLDIR
+		exit 1
+	fi
 	printf "Done\n"
 
 	printf "Copying Fusion Tutorial files... "
