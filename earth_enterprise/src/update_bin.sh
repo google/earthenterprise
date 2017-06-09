@@ -64,7 +64,7 @@ set -x
 /etc/init.d/geserver stop
 
 # Copy binary files from user's sand-box to the deployment dir.
-cd ./OPT-x86_64
+cd ./NATIVE-OPT-x86_64
 find ./bin -cmin $cmin_val -exec cp -v "{}" /opt/google/bin/ \;
 find ./lib -cmin $cmin_val -exec cp -v "{}" /opt/google/lib/ \;
 find ./lib/libgepublishmanagerhelper.so -cmin $cmin_val -exec cp -v "{}" /opt/google/gehttpd/wsgi-bin/serve/publish/_libgepublishmanagerhelper.so \;
