@@ -652,7 +652,7 @@ copy_files_to_target()
 
 	if [ $error_on_copy -ne 0 ]
 	then
-		show_corrupt_tmp_dir_message $TMPINSTALLDIR
+		show_corrupt_tmp_dir_message $TMPINSTALLDIR $INSTALL_LOG
 		exit 1
 	fi
 	printf "Done\n"
