@@ -398,7 +398,7 @@ parse_arguments()
 				else
 					shift
 
-					if is_valid_directory ${1// }; then
+					if is_valid_custom_directory ${1// }; then
 						SOURCE_VOLUME=${1// }
 					else
 						echo -e "\nThe source volume you specified does not appear to be a syntactically valid directory. Please"
