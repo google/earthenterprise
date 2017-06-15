@@ -504,8 +504,8 @@ fix_postinstall_filepermissions()
   # chmod 644 $PUBLISHER_ROOT/stream_space/.config
   chmod 644 $PUBLISHER_ROOT/.config
   chmod 755 $PUBLISHER_ROOT
-  chown $GEAPACHEUSER_NAME:$GRPNAME $PUBLISHER_ROOT/stream_space
-  chown $GEAPACHEUSER_NAME:$GRPNAME $PUBLISHER_ROOT/search_space
+  chown -R $GEAPACHEUSER_NAME:$GRPNAME $PUBLISHER_ROOT/stream_space
+  chown -R $GEAPACHEUSER_NAME:$GRPNAME $PUBLISHER_ROOT/search_space
 
   # Etc
   chmod 755 /etc/opt/google/
