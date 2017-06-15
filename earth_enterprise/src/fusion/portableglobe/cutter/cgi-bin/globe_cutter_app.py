@@ -305,7 +305,7 @@ class GlobeBuilder(object):
     """Create globe info file."""
     fp = open(self.info_file, "w")
     fp.write("Portable Globe\n")
-    fp.write("Copyright 2017 Google Inc.\nLicensed under the Apache License, Version 2.0.\n");
+    fp.write("Copyright 2017 Google Inc.\nLicensed under the Apache License, Version 2.0.\n")
     fp.write("portable %s:%s\n" % (self.portable_server, self.portable_port))
     fp.write("search %s\n" % (self.search_service))
     fp.write("kml %s:%s\n" % (self.kml_server, self.kml_port))
