@@ -1,0 +1,11 @@
+--- httpd-2.2.32.orig/docs/conf/httpd.conf.in	2016-08-16 16:32:35.000000000 -0700
++++ httpd-2.2.32/docs/conf/httpd.conf.in	2017-06-13 19:14:03.401763465 -0700
+@@ -415,7 +415,7 @@
+ #Include @rel_sysconfdir@/extra/httpd-default.conf
+ 
+ # Secure (SSL/TLS) connections
+-#Include @rel_sysconfdir@/extra/httpd-ssl.conf
++Include @rel_sysconfdir@/extra/httpd-ssl.conf
+ #
+ # Note: The following must must be present to support
+ #       starting without SSL on platforms with no /dev/random equivalent

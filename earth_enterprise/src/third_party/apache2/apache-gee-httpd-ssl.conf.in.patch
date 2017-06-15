@@ -1,0 +1,108 @@
+--- httpd-2.2.32.orig/docs/conf/extra/httpd-ssl.conf.in	2015-05-27 11:59:59.000000000 -0700
++++ httpd-2.2.32/docs/conf/extra/httpd-ssl.conf.in	2017-06-14 17:33:47.846665091 -0700
+@@ -56,7 +56,9 @@
+ #   ensure these follow appropriate best practices for this deployment.
+ #   httpd 2.2.30, 2.4.13 and later force-disable aNULL, eNULL and EXP ciphers,
+ #   while OpenSSL disabled these by default in 0.9.8zf/1.0.0r/1.0.1m/1.0.2a.
+-SSLCipherSuite HIGH:MEDIUM:!MD5:!RC4
++# Override SSL configuration to require more secure ciphers.
++#SSLCipherSuite HIGH:MEDIUM:!MD5:!RC4
++SSLCipherSuite ALL:!aNULL:!ADH:!eNULL:!LOW:!EXP:RC4+RSA:+HIGH:+MEDIUM
+ SSLProxyCipherSuite HIGH:MEDIUM:!MD5:!RC4
+ 
+ #  By the end of 2016, only TLSv1.2 ciphers should remain in use.
+@@ -83,7 +85,9 @@
+ #   Disable SSLv2 and SSLv3 by default (cf. RFC 7525 3.1.1).  TLSv1 (1.0)
+ #   should be disabled as quickly as practical.  By the end of 2016, only
+ #   the TLSv1.2 protocol or later should remain in use.
+-SSLProtocol all -SSLv2 -SSLv3
++# Limit SSL protocols.
++#SSLProtocol all -SSLv2 -SSLv3
++SSLProtocol -ALL +SSLv3 +TLSv1.2 +TLSv1
+ SSLProxyProtocol all -SSLv2 -SSLv3
+ 
+ #   Pass Phrase Dialog:
+@@ -108,18 +112,18 @@
+ ## SSL Virtual Host Context
+ ##
+ 
+-<VirtualHost _default_:@@SSLPort@@>
++#<VirtualHost _default_:@@SSLPort@@>
+ 
+ #   General setup for the virtual host
+-DocumentRoot "@exp_htdocsdir@"
+-ServerName www.example.com:@@SSLPort@@
+-ServerAdmin you@example.com
+-ErrorLog "@exp_logfiledir@/error_log"
+-TransferLog "@exp_logfiledir@/access_log"
++#DocumentRoot "@exp_htdocsdir@"
++#ServerName www.example.com:@@SSLPort@@
++#ServerAdmin you@example.com
++#ErrorLog "@exp_logfiledir@/error_log"
++#TransferLog "@exp_logfiledir@/access_log"
+ 
+ #   SSL Engine Switch:
+ #   Enable/Disable SSL for this virtual host.
+-SSLEngine on
++#SSLEngine on
+ 
+ #   Server Certificate:
+ #   Point SSLCertificateFile at a PEM encoded certificate.  If
+@@ -131,7 +135,7 @@
+ #   Some ECC cipher suites (http://www.ietf.org/rfc/rfc4492.txt)
+ #   require an ECC certificate which can also be configured in
+ #   parallel.
+-SSLCertificateFile "@exp_sysconfdir@/server.crt"
++#SSLCertificateFile "@exp_sysconfdir@/server.crt"
+ #SSLCertificateFile "@exp_sysconfdir@/server-dsa.crt"
+ #SSLCertificateFile "@exp_sysconfdir@/server-ecc.crt"
+ 
+@@ -141,7 +145,7 @@
+ #   you've both a RSA and a DSA private key you can configure
+ #   both in parallel (to also allow the use of DSA ciphers, etc.)
+ #   ECC keys, when in use, can also be configured in parallel
+-SSLCertificateKeyFile "@exp_sysconfdir@/server.key"
++#SSLCertificateKeyFile "@exp_sysconfdir@/server.key"
+ #SSLCertificateKeyFile "@exp_sysconfdir@/server-dsa.key"
+ #SSLCertificateKeyFile "@exp_sysconfdir@/server-ecc.key"
+ 
+@@ -225,12 +229,12 @@
+ #     This enables optimized SSL connection renegotiation handling when SSL
+ #     directives are used in per-directory context. 
+ #SSLOptions +FakeBasicAuth +ExportCertData +StrictRequire
+-<FilesMatch "\.(cgi|shtml|phtml|php)$">
+-    SSLOptions +StdEnvVars
+-</FilesMatch>
+-<Directory "@exp_cgidir@">
+-    SSLOptions +StdEnvVars
+-</Directory>
++#<FilesMatch "\.(cgi|shtml|phtml|php)$">
++#    SSLOptions +StdEnvVars
++#</FilesMatch>
++#<Directory "@exp_cgidir@">
++#    SSLOptions +StdEnvVars
++#</Directory>
+ 
+ #   SSL Protocol Adjustments:
+ #   The safe and default but still SSL/TLS standard compliant shutdown
+@@ -256,14 +260,14 @@
+ #   Similarly, one has to force some clients to use HTTP/1.0 to workaround
+ #   their broken HTTP/1.1 implementation. Use variables "downgrade-1.0" and
+ #   "force-response-1.0" for this.
+-BrowserMatch "MSIE [2-5]" \
+-         nokeepalive ssl-unclean-shutdown \
+-         downgrade-1.0 force-response-1.0
++#BrowserMatch "MSIE [2-5]" \
++#         nokeepalive ssl-unclean-shutdown \
++#         downgrade-1.0 force-response-1.0
+ 
+ #   Per-Server Logging:
+ #   The home of a custom SSL log file. Use this when you want a
+ #   compact non-error SSL logfile on a virtual host basis.
+-CustomLog "@exp_logfiledir@/ssl_request_log" \
+-          "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
++#CustomLog "@exp_logfiledir@/ssl_request_log" \
++#          "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+ 
+-</VirtualHost>                                  
++#</VirtualHost>                                  
