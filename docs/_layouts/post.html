@@ -1,0 +1,113 @@
+---
+layout: blog
+section_id: blog
+---
+
+{{page.categories}}
+
+
+<div class='post'>
+  <div class='timestamp left text-center'>
+    <span class='month'>{{ page.date | date: "%h" }}</span>
+    <span class='date'>{{ page.date | date: "%d" }}</span>
+  </div>
+  <div class='info'>
+    <h3>
+      <a href='{{page.url}}'>{{ page.title }}</a>
+    </h3>
+    <p>
+      By
+      <span class='author'>{{ page.author }}</span>
+      |
+      <a href='{{page.url}}#comments'>Comments 6</a>
+    </p>
+  </div>
+  <div class='content'>
+    {{ content }}
+  </div>
+</div>
+
+<a id='comments'></a>
+<div class='comments-wrapper'>
+  <h3 class='comments-count'>6 Comments</h3>
+  <ul class='comments'>
+    <li>
+      <div class='meta'>
+        <p class='avatar'>
+          <img alt='' height='39' src='{{site.url}}/images/avatar.png' width='39'>
+        </p>
+        <p class='info'>
+          <span class='name'>Amy</span>
+          <span class='datetime'>October 15, 2011 at 3:30 pm</span>
+          <a href='#comments-form'>Reply</a>
+        </p>
+      </div>
+      <p>
+        Laudantium et sint repellat eum necessitatibus aut est rem illo delectus saepe. dolor consectetur et dolorem distinctio beatae doloribus magni ducimus reprehenderit voluptatibus ex officia quia. cum facere est quas provident ea nam quibusdam deserunt quis. error quis nihil ad quia corrupti asperiores labore quis error ut debitis nobis iste. laborum sint qui aut asperiores numquam itaque ea illum
+      </p>
+    </li>
+    <li>
+      <div class='meta'>
+        <p class='avatar'>
+          <img alt='' height='39' src='{{site.url}}/images/avatar.png' width='39'>
+        </p>
+        <p class='info'>
+          <span class='name'>Amy</span>
+          <span class='datetime'>October 15, 2011 at 3:30 pm</span>
+          <a href='#comments-form'>Reply</a>
+        </p>
+      </div>
+      <p>Quam cumque magni voluptas. possimus neque in voluptates. quia consequatur voluptas eum aut mollitia ipsa commodi. sint vero earum illo sequi omnis officiis velit nihil dolor quo quisquam sint. impedit ut quisquam sed placeat et quia nam possimus veniam possimus at qui. ipsam architecto ducimus similique modi non autem consequatur soluta</p>
+      <ul class='children'>
+        <li>
+          <div class='meta'>
+            <p class='avatar'>
+              <img alt='' height='39' src='{{site.url}}/images/avatar.png' width='39'>
+            </p>
+            <p class='info'>
+              <span class='name'>Amy</span>
+              <span class='datetime'>October 15, 2011 at 3:30 pm</span>
+              <a href='#comments-form'>Reply</a>
+            </p>
+          </div>
+          <p>Quas ut vel nobis veniam explicabo consequatur. iusto nisi eius iure voluptas perferendis omnis quod excepturi et eum. sed porro tenetur ut unde suscipit optio ipsum molestiae</p>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <div class='meta'>
+        <p class='avatar'>
+          <img alt='' height='39' src='{{site.url}}/images/avatar.png' width='39'>
+        </p>
+        <p class='info'>
+          <span class='name'>Amy</span>
+          <span class='datetime'>October 15, 2011 at 3:30 pm</span>
+          <a href='#comments-form'>Reply</a>
+        </p>
+      </div>
+      <p>Deleniti omnis magnam officiis tempora et suscipit quam voluptates magni magnam aut recusandae fuga. et molestiae natus harum libero. et dignissimos qui id est natus architecto quisquam non quo voluptas dignissimos et quibusdam. id saepe laudantium ipsum labore dolorum officia et odio debitis et. consequatur non veniam deserunt rerum nihil sint est</p>
+    </li>
+  </ul>
+</div>
+
+<div id='comments-form'>
+  <h3>Your comment</h3>
+  <form accept-charset='UTF-8' action='' method='post'>
+    <p class='name'>
+      <label for='name'>Your Name</label>
+      <input class='input-text required' id='name' name='name' type='text'>
+    </p>
+    <p class='email'>
+      <label for='email'>Your Email</label>
+      <input class='input-text required' id='email' name='email' type='text'>
+    </p>
+    <p class='message'>
+      <label for='message'>Your Message</label>
+      <textarea class='required' cols='80' id='message' name='message' rows='5'></textarea>
+    </p>
+    <div class='spacing'></div>
+    <p>
+      <input class='button' type='submit' value='Send Message'>
+    </p>
+  </form>
+</div>

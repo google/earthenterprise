@@ -1,0 +1,16 @@
+- title: Loads of Features
+  icon: tools
+  desc:
+    An enterprise, production ready geospatial stack with over 12 years of development behind it.
+- title: Large Datasets
+  icon: layout
+  desc:
+    Store and process petabytes of imagery,terrain and vector data on your own server infrastructure.
+- title: Build Your Own Globe 
+  icon: globe
+  desc:
+    Fusion and Server, that work together to build and host your private Google Earth and Google Maps layers.
+- title: Community Supported
+  icon: users
+  desc:
+    Google Earth Enterprise partners are committed to supporting Open GEE.
