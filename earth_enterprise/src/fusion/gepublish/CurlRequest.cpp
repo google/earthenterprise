@@ -266,7 +266,7 @@ int GetRequest::Start(const std::string& args) {
   CURLcode code = curl_easy_perform(curl_easy_handle_);
 
   if (code != CURLE_OK) {
-    int result_code = 0;
+    long result_code = 0;
     curl_easy_getinfo(curl_easy_handle_, CURLINFO_RESPONSE_CODE, &result_code);
     // Authentication required.
     if (result_code == AUTH_REQD)
