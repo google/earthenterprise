@@ -250,7 +250,7 @@ create_links()
         ln -s $BASEINSTALLDIR_VAR/run $BASEINSTALLDIR_OPT/run
     fi
 
-    if [ ! -L "$BASEINSTALLDIR_OPT/share/doc" ]; then
+    if [ ! -L "$BASEINSTALLDIR_OPT/gehttpd/htdocs/shared_assets/docs" ]; then
         sudo ln -s $BASEINSTALLDIR_OPT/share/doc $BASEINSTALLDIR_OPT/gehttpd/htdocs/shared_assets/docs
     fi
 
