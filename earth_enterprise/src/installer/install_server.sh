@@ -491,9 +491,8 @@ fix_postinstall_filepermissions()
   mkdir -p $BASEINSTALLDIR_OPT/gehttpd/conf.d/virtual_servers/runtime
   chmod -R 755 $BASEINSTALLDIR_OPT/gehttpd
   chmod -R 775 $BASEINSTALLDIR_OPT/gehttpd/conf.d/virtual_servers/runtime/
-  chown -R $GEAPACHEUSER_NAME:$GRPNAME $BASEINSTALLDIR_OPT/gehttpd/conf.d/virtual_servers/runtime/
-  chown -R $GEAPACHEUSER_NAME:$GRPNAME $BASEINSTALLDIR_OPT/gehttpd/conf.d/virtual_servers/runtime/
-  chown -R $GEAPACHEUSER_NAME:$GRPNAME $BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/globes/
+  chown -R $GEAPACHEUSER_NAME:$GRPNAME $BASEINSTALLDIR_OPT/gehttpd/conf.d/virtual_servers/
+  chown -R $GEAPACHEUSER_NAME:$GRPNAME $BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/
   chmod -R 700 $BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/globes/
   chown $GEAPACHEUSER_NAME:$GRPNAME $BASEINSTALLDIR_OPT/gehttpd/htdocs/.htaccess
   chown -R $GEAPACHEUSER_NAME:$GRPNAME $BASEINSTALLDIR_OPT/gehttpd/logs
@@ -520,7 +519,7 @@ fix_postinstall_filepermissions()
   chown root:$GRPNAME $BASEINSTALLDIR_VAR/run/
 
   # Logs
-  chmod 775 /var/$BASEINSTALLDIR_OPT/log/
+  chmod 775 $BASEINSTALLDIR_VAR/log/
   chmod 775 $BASEINSTALLDIR_OPT/log/
   chown root:$GRPNAME $BASEINSTALLDIR_VAR/log
   chown root:$GRPNAME $BASEINSTALLDIR_OPT/log
