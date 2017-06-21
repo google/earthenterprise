@@ -1,6 +1,28 @@
---- httpd-2.2.27.orig/docs/conf/extra/httpd-ssl.conf.in	2014-06-09 18:11:27.016781632 -0700
-+++ httpd-2.2.27/docs/conf/extra/httpd-ssl.conf.in	2014-06-09 18:14:12.239279238 -0700
-@@ -75,8 +75,8 @@
+--- httpd-2.2.32.orig/docs/conf/extra/httpd-ssl.conf.in	2015-05-27 11:59:59.000000000 -0700
++++ httpd-2.2.32/docs/conf/extra/httpd-ssl.conf.in	2017-06-15 22:14:57.009538141 -0700
+@@ -56,7 +56,9 @@
+ #   ensure these follow appropriate best practices for this deployment.
+ #   httpd 2.2.30, 2.4.13 and later force-disable aNULL, eNULL and EXP ciphers,
+ #   while OpenSSL disabled these by default in 0.9.8zf/1.0.0r/1.0.1m/1.0.2a.
+-SSLCipherSuite HIGH:MEDIUM:!MD5:!RC4
++#SSLCipherSuite HIGH:MEDIUM:!MD5:!RC4
++# Override SSL configuration to require more secure ciphers.
++SSLCipherSuite ALL:!aNULL:!ADH:!eNULL:!LOW:!EXP:RC4+RSA:+HIGH:+MEDIUM
+ SSLProxyCipherSuite HIGH:MEDIUM:!MD5:!RC4
+ 
+ #  By the end of 2016, only TLSv1.2 ciphers should remain in use.
+@@ -83,7 +85,9 @@
+ #   Disable SSLv2 and SSLv3 by default (cf. RFC 7525 3.1.1).  TLSv1 (1.0)
+ #   should be disabled as quickly as practical.  By the end of 2016, only
+ #   the TLSv1.2 protocol or later should remain in use.
+-SSLProtocol all -SSLv2 -SSLv3
++#SSLProtocol all -SSLv2 -SSLv3
++# Limit SSL protocols.
++SSLProtocol -ALL +TLSv1.2 +SSLv3 +TLSv1
+ SSLProxyProtocol all -SSLv2 -SSLv3
+ 
+ #   Pass Phrase Dialog:
+@@ -112,8 +116,8 @@
  
  #   General setup for the virtual host
  DocumentRoot "@exp_htdocsdir@"
