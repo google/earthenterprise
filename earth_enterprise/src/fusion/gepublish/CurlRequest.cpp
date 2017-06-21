@@ -266,10 +266,11 @@ int GetRequest::Start(const std::string& args) {
   CURLcode code = curl_easy_perform(curl_easy_handle_);
 
   if (code != CURLE_OK) {
-    int result_code = 0;
-    curl_easy_getinfo(curl_easy_handle_, CURLINFO_RESPONSE_CODE, &result_code);
+    long result_code = 0;
+    CURLcode getinfoCode =
+        curl_easy_getinfo(curl_easy_handle_, CURLINFO_RESPONSE_CODE, &result_code);
     // Authentication required.
-    if (result_code == AUTH_REQD)
+    if (getinfoCode == CURLE_OK && result_code == AUTH_REQD)
       return result_code;
     // Ignore the GOT_NOTHING error code. This happens sometimes when
     // tomcat restarts apache and for some reason apache sends out an
