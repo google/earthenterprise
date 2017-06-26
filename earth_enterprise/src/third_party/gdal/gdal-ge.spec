@@ -2,6 +2,7 @@
 %define PACKAGE_VERSION 2.1.2
 %define KAKADU_SOURCEDIR v5_2_6-00418C
 %define KAKADU_ZIPFILE %KAKADU_SOURCEDIR.zip
+%define OPENJPEG_VERSION 20100
 
 %define MRSID_VERSION 8.5.0.3422
 %define MRSID_PLATFORM %(eval "%_topdir/SOURCES/GDALMrSIDConfig.pl platform")
@@ -55,7 +56,7 @@ AutoReqProv: no
 BuildRequires: gcc-ge >= 4.1.1
 Requires: gcc-ge-runtime >= 4.1.1
 
-# Stupid GDAL doesn't compile clean if another version is already installed
+# GDAL doesn't compile clean if another version is already installed
 BuildConflicts: gdal-ge
 BuildConflicts: gdal-ge-devel
 
