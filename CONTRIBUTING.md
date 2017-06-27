@@ -22,3 +22,7 @@ use GitHub pull requests for this purpose. Consult [GitHub Help] for more
 information on using pull requests.
 
 [GitHub Help]: https://help.github.com/articles/about-pull-requests/
+
+## First time contributors
+
+Several tickets are labelled "beginner".  These tickets are easier to complete than average and are suitable for first time contributors.  The list of beginner tickets is available [here](https://github.com/google/earthenterprise/issues?q=is%3Aopen+is%3Aissue+label%3Abeginner).
