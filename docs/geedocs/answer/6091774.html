@@ -43,7 +43,7 @@
   <p>The <code>ExampleSearch</code> search plug-in for GEE Server provides the interface to query a SQL database of San Francisco neighborhoods via a search tab in Google Earth EC or a browser. The following description captures the overall mechanism of the plug-in but we recommend that you take a look at the code directly.</p>
   <p>You can find the two Python files for the <code>ExampleSearch</code> plug-in in the following location:</p>
   <p><code>/opt/google/gehttpd/wsgi-bin/search/plug-in/example_search_app.py</code></p>
-  <p>/opt/google/gehttpd/wsgi-bin/search/plug-in/example_search_handler.py</p>
+  <p><code>/opt/google/gehttpd/wsgi-bin/search/plug-in/example_search_handler.py</code></p>
   <p>In Google Earth Enterprise, a search plug-in Python-based framework relies on the Python Web Server Gateway Interface (WSGI), a Python API that acts as an interface between web servers and web applications. The web application or framework, <code>example_search_app.py</code> search plug-in, is represented to the server as a Python callable method, <code>__call__</code> to start the application. The callable method must include two arguments:</p>
   <ul>
     <li><code>environ</code> object—a list that contains the WSGI environment information</li>

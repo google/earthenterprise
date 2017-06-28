@@ -51,7 +51,7 @@
 </li>
 <li>Obtain the data:
 <ul>
-<li>Download the A1 file that's in the Nasa Blue Marble July data set from http://earthobservatory.nasa.gov/Features/BlueMarble/BlueMarble_monthlies.php. This data set is available only through BitTorrent from the NASA site, not as a typical HTTP or FTP download. You can also download the BlueMarble A1 file from an HTTP mirror of the BlueMarble site at the Arctic Region Supercomputing Center at http://mirrors.arsc.edu/nasa/world_500m/.<br/>
+<li>Download the A1 file that's in the Nasa Blue Marble July data set from <a href="https://visibleearth.nasa.gov/view_cat.php?categoryID=1484">https://visibleearth.nasa.gov/view_cat.php?categoryID=1484</a>. You can also download the BlueMarble A1 file from an HTTP mirror of the BlueMarble site at the Arctic Region Supercomputing Center at <a href="http://mirrors.arsc.edu/nasa/world_500m/">http://mirrors.arsc.edu/nasa/world_500m/</a>.<br/>
 <br/>
 <strong>Note</strong>: There are eight files, named A1, A2, B1, B2, C1, C2, D1, and D2. Download the A1 file only. The A1 tile represents the top left corner of the globe, D2 is the bottom right, and so on.You'll generate the remaining seven tiles later.<br/>
  </li>
@@ -59,7 +59,7 @@
 <br/>
 <code>gdal_translate -a_srs WGS84 -a_ullr -180 90 -90 0 world.topo.bathy.200407 .3x21600x21600.A1.png world.topo.bathy.200407.3x21600x21600.A1.tif </code><br/>
  </li>
-<li>Download the shoreline dataset from: http://www.ngdc.noaa.gov/mgg/shorelines/gshhs.html. This dataset is in a single <code>.zip</code> file that expands into several directories named <code>c</code>, <code>l</code>, <code>i</code>, <code>h</code> and <code>f</code>. The lowest resolution is in the <code>c</code> directory and the highest is in the <code>f</code> directory. There are four shapefiles in each directory:<br/>
+<li>Download the shoreline dataset from: <a href="http://www.ngdc.noaa.gov/mgg/shorelines/gshhs.html">http://www.ngdc.noaa.gov/mgg/shorelines/gshhs.html</a>. This dataset is in a single <code>.zip</code> file that expands into several directories named <code>c</code>, <code>l</code>, <code>i</code>, <code>h</code> and <code>f</code>. The lowest resolution is in the <code>c</code> directory and the highest is in the <code>f</code> directory. There are four shapefiles in each directory:<br/>
 <br/>
 L1 = shorelines<br/>
 L2 = lakes and rivers<br/>

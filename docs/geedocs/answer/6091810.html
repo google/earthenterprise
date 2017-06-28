@@ -43,14 +43,14 @@
   <p>The <code>Custom POI Search</code> search plug-in sample code uses the GEE Python search module to query the <strong>Google Places database (www.google.com)</strong> via the <strong><a target="_blank" href="https://developers.google.com/places/">Google Places API</a></strong>. It demonstrates how to construct and query an external database based on a URL search string, extract geometries from the result, associate various styles with them and return the response back to the client.</p>
   <p>You can find the two Python files for the <code> POI Search</code> plug-in in the following location:</p>
   <p><code>/opt/google/gehttpd/wsgi-bin/search/plugin/custom_POI_search_app.py</code></p>
-  <p>/opt/google/gehttpd/wsgi-bin/search/plugin/custom_POI_search_handler.py</p>
+  <p><code>/opt/google/gehttpd/wsgi-bin/search/plugin/custom_POI_search_handler.py</code></p>
   <p>In this Python module, an implementation has been provided to access the <a target="_blank" href="https://developers.google.com/places/">Google Places database</a>, format the results, and send the response in XML or JSON as per the requirement. Valid Inputs are:</p>
   <ul>
     <li><code>location=lat,lng</code></li>
     <li><code>radius = 10(in miles)</code></li>
     <li><code>key = &lt;<em>server key required to access the Google Places database</em>&gt;</code></li>
   </ul>
-  <p>Further information about obtaining a server key is documented in <strong>Authentication</strong> at:</p>
+  <p>Further information about obtaining a server key is documented at:</p>
   <p><strong><a target="_blank" href="https://developers.google.com/places/documentation/">https://developers.google.com/places/documentation/</a> </strong></p>
   <div class="footer">
     <p class="BackToTop"><a href="#top_of_file">Back to top</a>

@@ -42,18 +42,15 @@
 <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
 <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Troubleshooting and error messages</h1><h2>Fusion diagnostics</h2>
 <p>The <code>geecheck</code> script provides information about Fusion server versioning, configuration, and current system state.</p>
-<p>To download and run <code>geecheck</code> on your Fusion server:</p>
+<p>To run <code>geecheck</code> on your Fusion server:</p>
 <ol>
 <li>
-<p>Copy the tarball from <a href="http://www.google.com/url?q=https%3A%2F%2Fc.na4.visual.force.com%2Fservlet%2Fservlet.FileDownload%3Ffile%3D01560000000Mixe&amp;sa=D&amp;sntz=1&amp;usg=AFQjCNGyelsJZXNFdX9TAsU-xWe5DIrIeg" target="_blank"> <code>geecheck</code></a> to <code>/tmp</code> on each Fusion development or production system.</p>
+<p>Go to /opt/google/share/support/geecheck on your Fusion system.</p>
 </li>
-<li>Whenever you open a technical support ticket to re-confirm proper system state and configuration, run this command on each system:<br/>
-<br/>
-<code>cd /tmp<br/>
-tar xvzf geecheck.tar.gz</code><br/>
+<li>Run the script <code>geecheck.pl</code>.<br/>
 <p><strong>Note</strong>: You might be prompted to enter a username and password. If you are not using authentication for the Fusion server, you can ignore the prompts.</p>
 </li>
-<li>Email each result file (at <code>/tmp/geecheck-CUSTOMERNAME-SERVER-YYYY-MM-DD.txt</code>) to <a href="http://www.google.com/url?q=http%3A%2F%2Fc.na4.visual.force.com&amp;sa=D&amp;sntz=1&amp;usg=AFQjCNGOe9is8ysSYuFA5cs-0inbVQHH7A" target="_blank">technical support</a>.</li>
+<li>Examine the output for potential errors and problems.</li>
 </ol>
 <div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
 </div></body> </html>
