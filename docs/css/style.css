@@ -607,8 +607,13 @@ ul.info i:hover {
 .post {
   margin: 0 0 60px;
 }
+
+.post .info{
+  margin-left: 100px;
+}
+
 .post .info, .post .content {
-  margin-left: 110px;
+  /*margin-left: 10px;*/
 }
 .post .info h3 {
   font-size: 24px;
