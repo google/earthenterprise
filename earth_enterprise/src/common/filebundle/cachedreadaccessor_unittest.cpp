@@ -71,8 +71,9 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
   uint32 file_bundle_size_;
   uint32 segment_size_;
   std::string path_base_;
-  char* test_buffer_;
   std::string bundle_name_;
+  std::string buffer_;
+  char* test_buffer_;
   std::vector<std::string> segment_names_;
   std::string header_path_;
   geFilePool file_pool_;
@@ -157,9 +158,9 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
                    uint32 max_blocks,
                    uint32 block_size,
                    std::string prefix) {
-    std::string buffer;
-    buffer.resize(request_count);
-    char* out_buffer = const_cast<char*>(buffer.data());
+    buffer_.resize(request_count);
+    char* out_buffer = const_cast<char*>(buffer_.data());
+
     // Test Read uncached of entire filebundle
     CachedReadAccessor accessor(max_blocks < 2 ? 2 : max_blocks, block_size);
     khTimer_t begin = khTimer::tick();
@@ -212,7 +213,6 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
     uint32 offset = 13;
     uint32 segment_id = 0;
     uint32 block_size = file_bundle_size_ / 4;
-
     CachedReadAccessor accessor(2, block_size);
 
     // Test Read
@@ -223,9 +223,9 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
                                     segment_names_[segment_id],
                                     segment_names_[segment_id],
                                     segment_id);
-    std::string buffer;
-    buffer.resize(request_count);
-    char* out_buffer = const_cast<char*>(buffer.data());
+
+    buffer_.resize(request_count);
+    char* out_buffer = const_cast<char*>(buffer_.data());
 
     // Test read within a single block
     // uncached block
@@ -395,9 +395,8 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
                                     segment_names_[segment_id],
                                     segment_names_[segment_id],
                                     segment_id);
-    std::string buffer;
-    buffer.resize(request_count);
-    char* out_buffer = const_cast<char*>(buffer.data());
+    buffer_.resize(request_count);
+    char* out_buffer = const_cast<char*>(buffer_.data());
 
     // Test read within non-cached (uninitialized) block
     uint64 stats_bytes_read = 0;
