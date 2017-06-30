@@ -145,7 +145,7 @@ openjpeg_extract = gdal_env.Command(
 #             kakadu_version, kakadu_version, kakadu_version, gdal_target))])
 
 
-# [7] Configure Gdal
+# [7] Configure gdal
 gdal_target = '%s/.configure_gdal' % current_dir
 
 if gdal_env['bundle_3rd_libs']:
@@ -202,7 +202,7 @@ gdal_configure = gdal_env.Command(
     gdal_target, [gdal_extract, openjpeg_extract],
     [gdal_env.MultiCommand(configure_cmd)])
 
-# [8] Build Gdal
+# [8] Build gdal
 if third_party_env['is_hardy'] and not third_party_env['native_cc']:
   ld = '%s -shared' % gdal_env['ENV']['CXX']
 else:
@@ -218,7 +218,7 @@ gdal_build = gdal_env.Command(
         'touch %s' % (build_root, gdal_env['ENV']['mod_env'], make_cmd,
                       gdal_target))])
 
-# [9] Create Gdal master installer
+# [9] Create gdal master installer
 make_cmd = 'make LD_SHARED="%s"' % (ld)
 install_root = '%s/install' % current_dir
 other_dir = '%s/share/doc/packages/%s' % (install_root, ge_version)
@@ -236,7 +236,7 @@ gdal_install = gdal_env.Command(
             other_dir, other_dir, install_root,
             gdal_target))])
 
-# [10] Copy Geoexpress libraries (Gdal master installer)
+# [10] Copy Geoexpress libraries (gdal master installer)
 # gdal_target = '%s/.geoxpress_install' % current_dir
 # geoexpress_install = gdal_env.Command(
 #    gdal_target, gdal_install,
@@ -247,15 +247,15 @@ gdal_install = gdal_env.Command(
 #        build_root, geoexpress_version, install_root, gdal_target))])
 
 
-# [10] Copy Openjpeg libraries (Gdal master installer)
+# [10] Copy Openjpeg libraries (gdal master installer)
 gdal_target = '%s/.openjpeg_install' % current_dir
 openjpeg_install = gdal_env.Command(
     gdal_target, gdal_install,
     [gdal_env.MultiCommand(
-         'cd %s\n'
-         'cp -d  %s/lib/*.so* %s/lib\n'
+        'cd %s\n'
+        'cp -d  %s/lib/*.so* %s/lib\n'
         'touch %s' % (
-        build_root, openjpeg_version, install_root, gdal_target))])
+            build_root, openjpeg_version, install_root, gdal_target))])
 
 
 # [11] Install these into various directories as required for build
@@ -276,7 +276,7 @@ gdal_install_build = gdal_env.Command(
 Default(gdal_install_build)
 
 if 'install' in COMMAND_LINE_TARGETS:
-  # Copies GDAL python bindings from ../install/lib/python2.7/site-packages
+  # Copies gdal python bindings from ../install/lib/python2.7/site-packages
   # to ../opt/google/gepython/../site-packages/ folder.
   gdal_env.InstallFileOrDir(
       '%s/lib/python%s/site-packages/' % (install_root,
@@ -286,8 +286,7 @@ if 'install' in COMMAND_LINE_TARGETS:
           gdal_env['python_major_version']),
       gdal_install_build, 'install')
 
-  # Copies GDAL py_tools to /opt/google/bin folder.
-
+  # Copies gdal py_tools to /opt/google/bin folder.
   gdal_env.InstallFileOrDir(
       '%s/bin/' % install_root,
       '%s/opt/google/bin' % gdal_env.installdirs['common_root'],
