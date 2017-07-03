@@ -879,6 +879,7 @@ fix_postinstall_filepermissions()
     find $BASEINSTALLDIR_OPT/share -type f -exec chmod 644 {} \;
     chown -R $ROOT_USERNAME:$ROOT_USERNAME $BASEINSTALLDIR_OPT/share
     chmod ugo+x $BASEINSTALLDIR_OPT/share/support/geecheck/geecheck.pl
+    chmod ugo+x $BASEINSTALLDIR_OPT/share/tutorials/fusion/download_tutorial.sh
 
     # Restrict permissions to uninstaller and installer logs
     chmod -R go-rwx $INSTALL_LOG_DIR
