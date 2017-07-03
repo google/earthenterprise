@@ -891,9 +891,8 @@ final_assetroot_configuration()
     else
         $BASEINSTALLDIR_OPT/bin/geselectassetroot --assetroot $ASSET_ROOT
 
-		if [ -d "$BASEINSTALLDIR_OPT/share/tutorials" ]; then
-			$BASEINSTALLDIR_OPT/bin/geconfigureassetroot --addvolume opt:$BASEINSTALLDIR_OPT/share/tutorials --noprompt --nochown
-		fi
+	mkdir -p $BASEINSTALLDIR_OPT/share/tutorials
+	$BASEINSTALLDIR_OPT/bin/geconfigureassetroot --addvolume opt:$BASEINSTALLDIR_OPT/share/tutorials --noprompt --nochown
     fi
 }
 
