@@ -64,6 +64,7 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
   ~CachedReadAccessorUnitTest() {
     if (!keep_temp_bundle_) {
       khPruneDir(path_base_);
+      delete test_buffer_;
     }
   }
 
@@ -72,7 +73,6 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
   uint32 segment_size_;
   std::string path_base_;
   std::string bundle_name_;
-  std::string buffer_;
   char* test_buffer_;
   std::vector<std::string> segment_names_;
   std::string header_path_;
@@ -158,8 +158,10 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
                    uint32 max_blocks,
                    uint32 block_size,
                    std::string prefix) {
-    buffer_.resize(request_count);
-    char* out_buffer = const_cast<char*>(buffer_.data());
+    std::string buffer;
+    buffer.reserve(block_size);
+    buffer.resize(request_count);
+    char* out_buffer = const_cast<char*>(buffer.data());
 
     // Test Read uncached of entire filebundle
     CachedReadAccessor accessor(max_blocks < 2 ? 2 : max_blocks, block_size);
@@ -223,9 +225,10 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
                                     segment_names_[segment_id],
                                     segment_names_[segment_id],
                                     segment_id);
-
-    buffer_.resize(request_count);
-    char* out_buffer = const_cast<char*>(buffer_.data());
+    std::string buffer;
+    buffer.reserve(block_size);
+    buffer.resize(request_count);
+    char* out_buffer = const_cast<char*>(buffer.data());
 
     // Test read within a single block
     // uncached block
@@ -238,6 +241,8 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
     // same block cached read
     offset *= 2;
     request_count -= offset;
+    buffer.resize(request_count);
+    
     accessor.Pread(segment, out_buffer, request_count, offset);
     expected = test_buffer_ + offset;
     if (!TestBuffer(out_buffer, expected, request_count,
@@ -248,6 +253,8 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
     // uncached 2nd block
     offset = block_size / 3;
     request_count = block_size;
+    buffer.resize(request_count);
+    
     accessor.Pread(segment, out_buffer, request_count, offset);
     expected = test_buffer_ + offset;
     if (!TestBuffer(out_buffer, expected, request_count,
@@ -257,6 +264,8 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
     // same 2 blocks cached read
     offset *= 2;
     request_count -= offset;
+    buffer.resize(request_count);
+    
     accessor.Pread(segment, out_buffer, request_count, offset);
     expected = test_buffer_ + offset;
     if (!TestBuffer(out_buffer, expected, request_count,
@@ -395,8 +404,10 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
                                     segment_names_[segment_id],
                                     segment_names_[segment_id],
                                     segment_id);
-    buffer_.resize(request_count);
-    char* out_buffer = const_cast<char*>(buffer_.data());
+    std::string buffer;
+    buffer.reserve(block_size);
+    buffer.resize(request_count);
+    char* out_buffer = const_cast<char*>(buffer.data());
 
     // Test read within non-cached (uninitialized) block
     uint64 stats_bytes_read = 0;
@@ -416,6 +427,7 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
     // Test read from the NOW cached block within the segment.
     offset = 23;
     request_count /= 3;
+    buffer.resize(request_count);
     read_count =
       block1.Read(segment, out_buffer, request_count, offset, access_tick++,
                   stats_bytes_read, stats_disk_accesses);
@@ -432,6 +444,8 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
     // create a new CacheBlock to start with an empty cache.
     block1 = CachedReadAccessor::CacheBlock(address1, block_size);
     request_count = 200;
+    buffer.resize(request_count);
+
     uint32 expected_read_count = 133;
     offset = block_size - expected_read_count;
     // Read from a non-cached block
