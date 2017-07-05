@@ -65,7 +65,7 @@ class CachedReadAccessorUnitTest : public UnitTest<CachedReadAccessorUnitTest> {
     if (!keep_temp_bundle_) {
       khPruneDir(path_base_);
     }
-    delete test_buffer_;
+    delete [] test_buffer_;
   }
 
   // Maintain Test bundle info for all the tests.
