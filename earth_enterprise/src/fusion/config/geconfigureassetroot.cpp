@@ -219,8 +219,9 @@ int main(int argc, char *argv[]) {
       }
       AddVolume(status, volume_name, volume_directory);
     }
-
-    printf("Configured %s.\n", status.assetroot_.c_str());
+    if (!listvolumes) {
+      printf("Configured %s.\n", status.assetroot_.c_str());
+    }
   } catch (const std::exception &e) {
     notify(NFY_FATAL, "\n%s", e.what());
   } catch (...) {
