@@ -894,6 +894,11 @@ final_assetroot_configuration()
 
 	mkdir -p $BASEINSTALLDIR_OPT/share/tutorials
 	$BASEINSTALLDIR_OPT/bin/geconfigureassetroot --addvolume opt:$BASEINSTALLDIR_OPT/share/tutorials --noprompt --nochown
+	if [ $? -eq 255 ]; then
+            echo -e "The geconfigureassetroot utility has failed on attempting"
+            echo -e "to add the volume 'opt:$BASEINSTALLDIR_OPT/share/tutorials'."
+            echo -e "This is probably due to a volume named 'opt' already exists."
+        fi
     fi
 }
 
