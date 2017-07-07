@@ -7,8 +7,7 @@
 <p class="sidebar-toc"><a href="../answer/3499934.html">Introduction</a></p>
 <p class="sidebar-toc"><a href="../answer/3499938.html" class="current-file">System Requirements for GEE Server</a></p>
 <p class="sidebar-toc"><a href="../answer/3499396.html">Before you install</a></p>
-<p class="sidebar-toc"><a href="../answer/3500042.html">GUI installer</a></p>
-<p class="sidebar-toc"><a href="../answer/3499960.html">Command line installer</a></p>
+<p class="sidebar-toc"><a href="../answer/3499960.html">Installing</a></p>
 <p class="sidebar-toc"><a href="../answer/3499964.html">Uninstalling</a></p>
 <p class="sidebar-toc"><a href="../answer/2987876.html">Legal notices</a></p>
   </div>
@@ -25,7 +24,6 @@
 <li>Minimum 2 dual-core Intel or AMD CPUs; 2.0 GHz or higher recommended.</li>
 <li>Minimum 4 GB RAM; 8 GB RAM (or more) per core recommended for Fusion.</li>
 <li>Minimum 500 GB of total hard disk storage.</li>
-<li>DVD drive, if installing from physical media.</li>
 <li>A graphics card with at least 64 MB video RAM (NVIDIA GeForce4 or higher preferred for Fusion GUI). You can install this graphics card in a separate workstation that accesses Fusion.</li>
 </ul>
 <p class="note"><strong>Note:</strong> If you plan on cutting globes, this processing can be CPU-intensive and you may also need to plan on providing more storage depending on the size of the globes.</p>
@@ -36,65 +34,20 @@
 <p>Software Requirements</p>
 </h5>
 <div>
-<p><strong>Operating Systems</strong>
-<p>Google Earth Enterprise is tested and supported only on the 64-bit versions of the operating systems listed below.</p>
-<p>Version 5.0.2:</p>
+<p><strong>Operating Systems</strong></p>
+<p>OpenGEE is supported only on the 64-bit versions of the operating systems listed below.</p>
 <ul>
-<li dir="ltr">Red Hat Enterprise Linux versions 6.0 to 6.4, including the most recent security patches.</li>
-<li>CentOS 6.4</li>
-<li dir="ltr">Ubuntu 10.04 LTS and 12.04 LTS</li>
-</ul>
-<p>Version 4.4:</p>
-<ul>
-<li>Red Hat Enterprise Linux versions 5.6 to 6.3, including the most recent security patches.</li>
-<li>Ubuntu 10.04 LTS and 12.04 LTS</li>
-</ul>
-<p>Version 4.3:</p>
-<ul>
-<li>Red Hat Enterprise Linux versions 5.6 to 6.2, including the most recent security patches.</li>
-<li>Ubuntu 10.04 LTS</li>
-</ul>
-<p>Versions 4.2 and earlier:</p>
-<ul>
-<li>OpenSUSE 11.1 or SUSE Linux Enterprise 11.1, including the most recent security patches</li>
-<li>CentOS 5.5 or Red Hat Enterprise Linux 5.5</li>
-<li>Ubuntu 10.04</li>
-<li>SUSE Linux Enterprise Server 10</li>
-<li>Red Hat Enterprise Linux AS 4</li>
-</ul>
-<p>If you have previous patch releases of these operating systems, you should update to the latest patches. Google will continue to test the GEE software with the latest patch releases as they become available.</p>
-<p><strong>Software Platforms</strong>
-<p>These supported software platforms and versions have been tested and certified by the Google Earth Enterprise team:</p>
-<p>Version 5.0:</p>
-<ul>
-<li dir="ltr">Java Runtime Environment (JRE) or Java Development Kit (JDK) from Sun Microsystems, version 1.6.0.13 or later.</li>
-</ul>
-<p>Version 4.4:</p>
-<ul>
-<li dir="ltr">Java Runtime Environment (JRE) or Java Development Kit (JDK) from Sun Microsystems, version 1.6.x.</li>
-</ul>
-<p>Version 4.4 and 5.0:</p>
-<ul>
-<li dir="ltr">Python (the latest version available for your platform)</li>
-<li dir="ltr">X11 libraries:
-<ul>
-<li>libXmu</li>
-<li>Mesa (for disconnected production servers only)</li>
-</ul>
-</li>
-<li dir="ltr">libGL library</li>
+<li dir="ltr">Red Hat Enterprise Linux 7.x, including the most recent security patches</li>
+<li>CentOS 7.x</li>
+<li dir="ltr">Ubuntu 14.04 LTS and 16.04 LTS</li>
 </ul>
 <p><strong>Browsers</strong></p>
 <p>Google Earth Enterprise is supported on the following browsers on all operating systems:</p>
 <ul>
-<li dir="ltr">Google Chrome version 10 and later</li>
-<li dir="ltr">Mozilla Firefox version 3.6 and later</li>
-<li dir="ltr">Microsoft Internet Explorer version 8 and later. Internet Explorer Compatibility View is not supported.
-<ul>
-<li><strong>NOTE:</strong> Earth Plugin is currently supported in Microsoft Internet Explorer version 10 and 11 in Compatibility View <em>only</em>.</li>
+<li dir="ltr">The latest version of Google Chrome</li>
+<li dir="ltr">The latest version of Mozilla Firefox</li>
 </ul>
-</li>
-</ul>
+<p>However, Google Earth Enterprise should work with any modern browser.</p>
 <p><strong>Google Earth Enterprise Client (EC)</strong></p>
 <p>The following versions of Google Earth Enterprise Client (EC) are recommended to be used with Google Earth Enterprise: </p>
 <ul>
@@ -103,14 +56,13 @@
 </ul>
 <div class="note"><p><strong>Note:</strong> Although older versions of Google Earth EC, that is 6.0 and earlier,  <em>may</em> still connect to Google Earth Enterprise or Portable 3D databases, not all features will be available. Also, as Google Earth Enterprise has not been tested or certified against older versions of Google Earth EC, there may be unknown operational problems.
 </p></div>
-<p>In order for Google Earth Enterprise Client (EC) to run on your computer or mobile device, you must have all minimum system requirements. Please click the links below to learn more about the system requirements for your specific operating system.</p>
 <p>Google Earth Enterprise Client (EC) is supported on the following platforms:</p>
 <ul>
 <li>Windows/Mac/Linux</li>
 </ul>
 <p><strong>Unsupported Versions and Environments</strong></p>
-<p>There are many variations of operating systems and related software; point ("x.x") releases can sometimes contain changes that can impact your GEE installation. Although an unsupported version of these software packages may appear to function correctly, their use in a production environment is not recommended. Unexpected results may occur that Google support can't resolve.</p>
-<p>GEE operations have been verified within the parameters of the hardware and software specifications of our test environment. You should adhere to the same specifications in your production environment. If a problem arises in an unsupported configuration that can't be resolved by reasonable support efforts, you may be asked to comply with these specifications before support efforts are continued.</p>
+<p>There are many variations of operating systems and related software; point ("x.x") releases can sometimes contain changes that can impact your GEE installation. Although an unsupported version of these software packages may appear to function correctly, their use in a production environment is not recommended. Unexpected results may occur.</p>
+<p>Where possible, you should adhere to the hardware and software specifications listed in this document. If a problem arises in an unsupported configuration, we may not be able to help you resolve it.</p>
 </p></p></div>
 </div>
 <div><h5>
@@ -138,11 +90,10 @@
 </div>
 </div>
 <div><h5>
-<p>Supported configurations</p>
+<p>Supported Configurations</p>
 </h5>
 <div>
-<p>Google Earth Enterprise products are tested and developed per the hardware and software requirements listed above. The products are intended to be installed according to the processes described in this documentation.</p>
-<p>When installing Google Earth Enterprise in an unsupported environment, there are risks that the products may not operate as intended. If Technical Support assistance is required, reasonable effort will be extended to troubleshoot the issue. If an unsupported environmental factor is determined to be the cause, you may be asked to install the products in a supported environment for further testing.</p>
+<p>Google Earth Enterprise products are developed per the hardware and software requirements listed above. The products are intended to be installed according to the processes described in this documentation. When installing Google Earth Enterprise in an unsupported environment, there are risks that the products may not operate as intended.</p>
 <p>Some factors that could affect your installation and deployment are:</p>
 <ul>
 <li>Installations on unsupported operating systems.</li>
@@ -150,15 +101,13 @@
 <li>3rd party or non-default permissions or security measures (no root access, sudo blockers, etc.).</li>
 <li>Complex proxy configurations that prevent the network communications from operating as intended.</li>
 </ul>
-<p>We encourage you to contact Support or a Google Partner if you have further questions regarding your operating environment.</p>
 </div>
 </div>
 <div><h5>
 <p>Important System Security Information</p>
 </h5>
 <div>
-<p>Google strongly recommends users who wish to host 3D and 2D globes online with Google Earth Enterprise should follow industry standard security practices and review for their systems and networks before enabling access. Although Google takes every precaution to secure the information, there is always the risk of unauthorized access outside of a closed or protected network.</p>
+<p>We strongly recommend users who wish to host 3D and 2D globes online with Google Earth Enterprise should follow industry standard security practices and review for their systems and networks before enabling access. Although we takes every precaution to secure the information, there is always the risk of unauthorized access outside of a closed or protected network.</p>
 </div>
-</div>
-<p> </p><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
 </div></body> </html>

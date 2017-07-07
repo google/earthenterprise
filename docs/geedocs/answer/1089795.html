@@ -97,7 +97,7 @@ map.enableScrollWheelZoom(); map.enableContinuousZoom();</code></p>
 </tr>
 </tbody>
 </table>
-<p>To accomplish this, replace the <code>GHierarchicalMapTypeControl</code> call with a <code>GMenuMapTypeControl</code>. You can download an example to use with your own map from: <a href="http://gmdemo.keyhole.com/geemaps-examples/gmaps_dropmenu.html" target="_blank">http://gmdemo.keyhole.com/geemaps-examples/gmaps_dropmenu.html</a>.</p>
+<p>To accomplish this, replace the <code>GHierarchicalMapTypeControl</code> call with a <code>GMenuMapTypeControl</code>.</p>
 <h2>Maintenance considerations</h2>
 <p>The layer ordering in <code>geeServerDefs</code> changes for each new version, so if you add more map layers or reorder the existing map layers in your 2D Map Database after you implement the HTML page, you must also update your <code>GFusionTileLayer</code> definitions so that the GEE Server requests the correct layer.</p>
 <h2>Make the HTML example the default display</h2>
@@ -128,7 +128,7 @@ SetHandler gedb-handler Include conf.d/virtual_servers/runtime/example_runtime<
 <p>You can obtain a complete copy of the 2D Map layer display rules from the <a href="https://groups.google.com/group/google-earth-enterprise" target="_blank">Google Earth Enterprise</a> Google Group Files section. The maps and hybrid (Show Labels) map layers were built from three different datasets:</p>
 <ul class="spaced-list">
 <li>Global borders (filled and outlined) in the maps and hybrid layers were created from the the Thematic Mapping World Borders dataset, available under a Creative Commons license at <a href="http://thematicmapping.org/downloads/world_borders.php" target="_blank">http://thematicmapping.org/downloads/world_borders.ph</a></li>
-<li>USA state boundaries in the maps and hybrid layers were created from the USA States borders vector data hosted by the <a href="http://www.nationalatlas.gov/" target="_blank">National Atlas of the USA</a>.You can obtain the file from the "Raw Data Download" section at <a href="http://www.nationalatlas.gov/mld/statesp.html" target="_blank">http://www.nationalatlas.gov/mld/statesp.html</a>.</li>
+<li>USA state boundaries in the maps and hybrid layers were created from the USA States borders vector data hosted by the National Atlas of the USA (now called the National Map).  You can download state boundaries from <a href="https://nationalmap.gov/small_scale/atlasftp.html">https://nationalmap.gov/small_scale/atlasftp.html</a>.
 <li>The background water that is visible in the maps layer was created with a global KML file. You can obtain the KML water file from the <a href="https://groups.google.com/group/google-earth-enterprise" target="_blank">Google Earth Enterprise</a> Google Group Files section.</li>
 </ul>
 <h3>Imagery data</h3>
