@@ -25,6 +25,7 @@
 #include <config/FixAssetRoot.h>
 #include <config/RecoverIds.h>
 #include <config/gePrompt.h>
+#include <config/geConfigUtil.h>
 #include <DottedVersion.h>
 #include <autoingest/geAssetRoot.h>
 #include <geUsers.h>
@@ -50,7 +51,7 @@ void usage(const char *prog, const char *msg = 0, ...) {
     (stderr,
      "\n"
      "usage:\n"
-     "  %s {--new|--repair|--editvolumes|--fixmasterhost|--addvolume [options]}\n"
+     "  %s {--new|--repair|--editvolumes|--fixmasterhost|--addvolume|--listvolumes [options]}\n"
      "Configure this machine to run Google Earth Fusion.\n"
      "  --help, -?                  Display this usage message\n"
      "\n"
@@ -77,6 +78,8 @@ void usage(const char *prog, const char *msg = 0, ...) {
      "    [--assetroot <dir>]       selected asset root or, modify the local\n"
      "                              path definition for an existing volume,\n"
      "                              or to add a volume definition.\n"
+     "  --listvolumes               List available volumes in the asset root.\n"
+     "    [--assetroot <dir>]\n"
      "  --fixmasterhost             Change the asset root host entry to match\n"
      "    [--assetroot <dir>]       the current host name.\n"
      "  --addvolume <volume_name>:<dir>\n"
@@ -99,6 +102,7 @@ void RepairExistingAssetRoot(const AssetRootStatus &status, bool noprompt);
 void AddVolume(const AssetRootStatus &status,
                const std::string &volume_name, const std::string &volume_dir);
 void EditVolumes(const AssetRootStatus &status);
+void ListVolumes(const AssetRootStatus &status);
 void FixMasterHost(const AssetRootStatus &status);
 
 }  // namespace
@@ -113,6 +117,7 @@ int main(int argc, char *argv[]) {
     bool create      = false;
     bool repair      = false;
     bool fixmasterhost = false;
+    bool listvolumes = false;
     std::string assetroot = CommandlineAssetRootDefault();
     std::string username = Systemrc::FusionUsername();
     std::string groupname = Systemrc::UserGroupname();
@@ -130,12 +135,14 @@ int main(int argc, char *argv[]) {
     options.opt("fixmasterhost", fixmasterhost);
     options.opt("srcvol", srcvol);
     options.opt("addvolume", addvolume);
+    options.opt("listvolumes", listvolumes);
     options.opt("noprompt", noprompt);
     options.opt("nochown", nochown);
     options.setExclusiveRequired(makeset(std::string("new"),
                                          std::string("repair"),
                                          std::string("editvolumes"),
                                          std::string("addvolume"),
+                                         std::string("listvolumes"),
                                          std::string("fixmasterhost")));
 
     if (!options.processAll(argc, argv, argn) || help) {
@@ -148,7 +155,13 @@ int main(int argc, char *argv[]) {
 
     // Make sure I'm root, everything is shut down,
     // and switch to fusion user
-    std::string thishost = ValidateHostReadyForConfig();
+    std::string thishost;
+    if (listvolumes) {
+      AssertRunningAsRoot();
+      thishost = GetAndValidateHostname();
+    } else {
+      thishost = ValidateHostReadyForConfig();
+    }
     printf("Switching to (%s, %s)\n", username.c_str(), groupname.c_str());
     SwitchToUser(username, groupname);
 
@@ -162,8 +175,8 @@ int main(int argc, char *argv[]) {
     // tell the other libraries what assetroot we're going to be using
     AssetDefs::OverrideAssetRoot(status.assetroot_);
 
-    printf("Making new assetroot ....\n");
     if (create) {
+      printf("Making new assetroot ....\n");
       MakeNewAssetRoot(status, srcvol, username, groupname, noprompt);
       if (!noprompt && !editvolumes &&
           geprompt::confirm(kh::tr(
@@ -181,6 +194,9 @@ int main(int argc, char *argv[]) {
     }
     if (fixmasterhost) {
       FixMasterHost(status);
+    }
+    if (listvolumes) {
+      ListVolumes(status);
     }
     if (!addvolume.empty()) {
       std::string::size_type index = addvolume.find(":", 0);
@@ -203,8 +219,9 @@ int main(int argc, char *argv[]) {
       }
       AddVolume(status, volume_name, volume_directory);
     }
-
-    printf("Configured %s.\n", status.assetroot_.c_str());
+    if (!listvolumes) {
+      printf("Configured %s.\n", status.assetroot_.c_str());
+    }
   } catch (const std::exception &e) {
     notify(NFY_FATAL, "\n%s", e.what());
   } catch (...) {
@@ -388,6 +405,42 @@ void RepairExistingAssetRoot(const AssetRootStatus &status, bool noprompt) {
 }
 
 // ****************************************************************************
+// ***  ListVolumes
+// ****************************************************************************
+void listCurrentVolumes(VolumeDefList *const voldefs, std::vector<std::string> volnames) {
+    printf("\nCurrent Volume Definitions:\n");
+    printf("--- name: netpath,localpath,isTmp ---\n");
+    uint i = 0;
+    for (std::vector<std::string>::const_iterator vn = volnames.begin();
+         vn != volnames.end(); ++vn, ++i) {
+      printf("%d)  %s: %s,%s,%s\n",
+             i+1,
+             vn->c_str(),
+             voldefs->volumedefs[*vn].netpath.c_str(),
+             voldefs->volumedefs[*vn].localpath.c_str(),
+             voldefs->volumedefs[*vn].isTmp ? "Y" : "N");
+    }
+    printf("-------------------------------------\n");
+}
+
+void ListHostVolumes(const std::string &host, VolumeDefList *const voldefs) {
+  std::vector<std::string> volnames;
+  for (VolumeDefList::VolumeDefMap::const_iterator v = voldefs->volumedefs.begin(); v != voldefs->volumedefs.end(); ++v) {
+    if (v->second.host == host) {
+      volnames.push_back(v->first);
+    }
+  }
+  listCurrentVolumes(voldefs, volnames);
+}
+
+void ListVolumes(const AssetRootStatus &status) {
+  VolumeDefList voldefs;
+  LoadVolumesOrThrow(status.assetroot_, voldefs);
+  ListHostVolumes(status.thishost_, &voldefs);
+}
+
+
+// ****************************************************************************
 // ***  EditVolumes
 // ****************************************************************************
 void EditHostVolumes(const std::string &host, VolumeDefList *const voldefs) {
@@ -406,19 +459,7 @@ void EditHostVolumes(const std::string &host, VolumeDefList *const voldefs) {
 
   std::string volume_prefix = khDirname(assetroot);
   while (1) {
-    printf("\nCurrent Volume Definitions:\n");
-    printf("--- name: netpath,localpath,isTmp ---\n");
-    uint i = 0;
-    for (std::vector<std::string>::const_iterator vn = volnames.begin();
-         vn != volnames.end(); ++vn, ++i) {
-      printf("%d)  %s: %s,%s,%s\n",
-             i+1,
-             vn->c_str(),
-             voldefs->volumedefs[*vn].netpath.c_str(),
-             voldefs->volumedefs[*vn].localpath.c_str(),
-             voldefs->volumedefs[*vn].isTmp ? "Y" : "N");
-    }
-    printf("-------------------------------------\n");
+    listCurrentVolumes(voldefs, volnames);
     char editchoice =
       geprompt::choose("{F}inished Editing. {A}dd Volume. {M}odify Volume.",
                       'F', 'A', 'M',
