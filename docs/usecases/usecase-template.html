@@ -1,0 +1,34 @@
+---
+layout: default
+title: Usecase with Image Slider
+section_id: portfolio
+images:
+  - "work-1-big.jpg"
+---
+
+<div class='three spacing'></div>
+<div class='spacing'></div>
+<div class='row'>
+  <div class='large-12 columns'>
+    <ul data-orbit=''>
+      {% for image in page.images %}
+        <li>
+          <img src='{{site.url}}/images/{{image}}'>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+<div class='two spacing'></div>
+
+
+<div class='row'>
+  <div class='large-12 columns'>
+    <h3>{{page.title}}</h3>
+    <p>
+      Dolores quibusdam eum itaque est et iusto perspiciatis saepe consequuntur quia occaecati consequatur. dignissimos dolores omnis voluptatum quia totam minus architecto qui assumenda ex aut aut. voluptatem et ex qui iure illum. est rerum eum est corrupti fugiat quas repellendus officia ratione tempore aliquid aspernatur itaque enim. officia dignissimos enim veniam corporis nemo ipsam sit omnis dolorum veniam rerum reprehenderit nihil mollitia. iure tenetur ut dolor et sit maxime culpa Illo minima ipsam nihil quibusdam at omnis magni quae id at magnam quia minus tempore. sit labore consequatur nihil cum minus occaecati. velit ratione quibusdam quisquam voluptas qui quos nesciunt excepturi maiores ut aut ut perferendis quos
+    </p>
+    <div class='spacing'></div>
+  </div>
+</div>
+<div class='three spacing'></div>

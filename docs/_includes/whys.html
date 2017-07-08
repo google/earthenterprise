@@ -1,0 +1,25 @@
+<section id="whyopengee">
+<div class='full white centered-text'>
+  <div class='row'>
+    <div class='special-title centered-text'>
+      <h2>Why Open GEE?</h2>
+      <p>An open source geospatial solution with a vibrant community and loads of features.</p>
+    </div>
+  </div>
+  <div class='spacing'></div>
+  <div class='row'>
+    {% for why in site.data.whys %}
+      {% if include.shape %}
+        {% assign shape = include.shape %}
+      {% else %}
+        {% assign shape = "boxed" %}
+      {% endif %}
+      <div class='medium-3 large-3 columns icon-text-{{shape}}'>
+        <i class='icon-{{ why.icon }}'></i>
+        <h3>{{ why.title }}</h3>
+        <p>{{ why.desc }}</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+</section>
