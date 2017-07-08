@@ -90,10 +90,10 @@
   <p><i>Default</i>. Uses normal imagery for the project.</p>
   <h2><a name="63542"></a>geconfigureassetroot</h2>
   <pre>
-<code><b>geconfigureassetroot</b> {<b>--new</b> <b>--assetroot </b><i>path </i> [<b>--srcvol </b><i>path</i>] | <b>--repair</b> | <b>--editvolumes</b> | <b>--addvolume</b> | <b>--fixmasterhost</b> | <strong>--noprompt</strong>}  [--nochown]</code></pre>
+<code><b>geconfigureassetroot</b> {<b>--new</b> <b>--assetroot </b><i>path </i> [<b>--srcvol </b><i>path</i>] | <b>--repair</b> | <b>--editvolumes</b> | <b>--listvolumes</b> | <b>--addvolume</b> | <b>--fixmasterhost</b> | <strong>--noprompt</strong>}  [--nochown]</code></pre>
   <h3>Purpose</h3>
   <p>To add volume definitions or edit existing volume definitions.</p>
-  <div class="tip"> You must stop the system manager before using this command and then start it again after you are done. You must also run this command as root.</div>
+  <div class="tip">You must run this command as root. Except for the <b>--listvolumes</b> command, you must stop the fusion service before using this command and then start it again after you are done.</div>
   <h3>Example</h3>
   <pre>
 <code>geconfigureassetroot --new --assetroot /gevol/assets
@@ -126,6 +126,9 @@ geconfigureassetroot --editvolumes</code></pre>
 <pre>
 <code><b>--editvolumes</b> [--assetroot <i>path</i>]</code></pre>
 <p><i>Optional</i>. Follow the prompts to add a volume to the selected asset root or, modify the <code>localpath</code> definition for an existing volume, or to add a volume definition.</p>
+<pre>
+<code><b>--listvolumes</b> [--assetroot <i>path</i>]</code></pre>
+<p><i>Optional</i>. List the available (configured) volumes for the selected asset root.</p>
 <pre>
 <code><b>--fixmasterhost</b> [--assetroot <i>path</i>]</code></pre>
 <p><i>Optional</i>. Change the <i>assetroot host</i> entry to match the current host name. (This command corrects cases where a host name is changed after installing and configuring Google Earth Enterprise Fusion.)</p>
