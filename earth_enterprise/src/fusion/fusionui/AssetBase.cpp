@@ -101,7 +101,7 @@ AssetBase::AssetBase(QWidget* parent)
   connect(file_menu_, SIGNAL(aboutToShow()), this, SLOT(AboutToShowFileMenu()));
   connect(file_menu_, SIGNAL(aboutToHide()), this, SLOT(AboutToHideFileMenu()));
   connect(hidden_action_, SIGNAL(toggled(bool)), this, SLOT(SetHidden(bool)));
-  save_error_  = false;
+  save_error_ = false;
 }
 
 AssetBase::~AssetBase() {
@@ -165,7 +165,7 @@ bool AssetBase::Save() {
                             tr("Unable to save: ") + Name() + "\n" +
                             error_msg,
                             tr("OK"), 0, 0, 0);
-      save_error_= true;
+      save_error_ = true;
       return false;
     } else {
       save_error_ = false;
@@ -188,7 +188,7 @@ bool AssetBase::Save() {
                           Name() + "\nUnknown error",
                           tr("OK"), 0, 0, 0);
   }
-  save_error_=true;
+  save_error_ = true;
   return false;
 }
 
