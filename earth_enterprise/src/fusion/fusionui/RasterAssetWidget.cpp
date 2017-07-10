@@ -655,7 +655,7 @@ void RasterAssetWidget::AssembleEditRequest(
                           + filename + "\n" +
                           khErrnoException::errorString(errno));
       case SourceConfig::NonVolume:
-        throw khException(filename + tr(" doesn't reside on a known volume."));
+        throw khException(filename + tr(" doesn't reside on a known volume. \n Make sure the volume is configured correctly using geconfigureassetroot and try again."));
     }
   }
 

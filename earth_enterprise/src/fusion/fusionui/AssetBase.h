@@ -101,6 +101,7 @@ class AssetBase : public QMainWindow {
   bool EnsureNameValid();
   khMetaData meta_;
   QString asset_path_;
+  bool save_error_;
 };
 
 #endif // !KHSRC_FUSION_FUSIONUI_ASSETBASE_H__
