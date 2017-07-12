@@ -158,20 +158,8 @@ Otherwise, enter <code>N</code>, and press <b>Enter</b>.
 <li>Stop the Google Earth Enterprise Server:
 <p><pre><code>/etc/init.d/geserver stop</code></pre></p>
 </li>
-<li>Run the GEE Fusion installer:
-<p>Command-line installer:</p>
-<p><pre><code><em>/path/install_directory/</em>InstallGEFusion.sh</code></pre></p>
-<p>GUI installer:</p>
-<p><pre><code><em>/path/install_directory/</em>InstallGEFusionGUI.sh</code></pre></p>
-<p>In the GUI installer, select <strong>Customize</strong> from the <strong>Choose Products</strong> window and then uncheck Google Earth Enterprise Tutorial, setting the installation process to install Google Earth Enterprise Fusion <em>only</em>.
-</p>
-<p>In the command line installer at the <strong>Choose Products</strong> prompt, Enter <b>3</b> to select the <strong>Customized</strong> installation. Both Google Earth Enterprise Fusion and Google Earth Enterprise Fusion Tutorial are selected for installation, indicated by the <b>X</b> next to each entry.</p>
-</li>
-<li>To remove the tutorial from the installation, enter <strong>2</strong> to deselect it.
-</li>
-<li>Follow  the rest of the prompts.
-<p>The installer removes the tutorial files but does not change any of your other installed products. When it completes the installation, it returns you to the prompt.
-</p>
+<li>Delete the tutorial files:</p>
+<code>rm -Rf /opt/google/share/tutorials/fusion/</code>
 </li>
 <li>Delete the user’s tutorial asset root by entering:<pre><code>rm -Rf /<i>username</i>/assets</code></pre>
 <p>where <i>username</i> is the name of the user you specified when you configured the tutorial work space.

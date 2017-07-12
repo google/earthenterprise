@@ -879,6 +879,7 @@ fix_postinstall_filepermissions()
     find $BASEINSTALLDIR_OPT/share -type f -exec chmod 644 {} \;
     chown -R $ROOT_USERNAME:$ROOT_USERNAME $BASEINSTALLDIR_OPT/share
     chmod ugo+x $BASEINSTALLDIR_OPT/share/support/geecheck/geecheck.pl
+    chmod ugo+x $BASEINSTALLDIR_OPT/share/tutorials/fusion/download_tutorial.sh
 
     # Restrict permissions to uninstaller and installer logs
     chmod -R go-rwx $INSTALL_LOG_DIR
@@ -891,9 +892,13 @@ final_assetroot_configuration()
     else
         $BASEINSTALLDIR_OPT/bin/geselectassetroot --assetroot $ASSET_ROOT
 
-		if [ -d "$BASEINSTALLDIR_OPT/share/tutorials" ]; then
-			$BASEINSTALLDIR_OPT/bin/geconfigureassetroot --addvolume opt:$BASEINSTALLDIR_OPT/share/tutorials --noprompt --nochown
-		fi
+	mkdir -p $BASEINSTALLDIR_OPT/share/tutorials
+	$BASEINSTALLDIR_OPT/bin/geconfigureassetroot --addvolume opt:$BASEINSTALLDIR_OPT/share/tutorials --noprompt --nochown
+	if [ $? -eq 255 ]; then
+            echo -e "The geconfigureassetroot utility has failed on attempting"
+            echo -e "to add the volume 'opt:$BASEINSTALLDIR_OPT/share/tutorials'."
+            echo -e "This is probably due to a volume named 'opt' already exists."
+        fi
     fi
 }
 

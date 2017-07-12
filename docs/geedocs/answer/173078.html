@@ -10,7 +10,6 @@
 <p class="sidebar-toc"><a href="../answer/179631.html">Unsupported 3D geometry files</a></p>
 <p class="sidebar-toc"><a href="../answer/173055.html">Maps display grey tiles</a></p>
 <p class="sidebar-toc"><a href="../answer/173202.html">Imagery or terrain gaps</a></p>
-<p class="sidebar-toc"><a href="../answer/2880343.html">GEE downloads to Mac</a></p>
 <p class="sidebar-toc"><a href="../answer/6363126.html">Troubleshoot connection to GEE Server</a></p>
 <p class="sidebar-toc"><a href="../answer/173081.html">Post-installation error message: Conflicts in plugins</a></p>
 <p class="sidebar-toc"><a href="../answer/173064.html">Post-installation error message: Permission denied</a></p>
@@ -55,12 +54,17 @@
 <h2>Resolution</h2>
 <ol>
 <li>Switch to root and enter:<br/>
-<code>/etc/init.d/gefusion stop /etc/init.d/geserver stop sleep 5 killall -9 gesystemmanager killall -9 geresourceprovider</code></li>
+<code>/etc/init.d/gefusion stop</code><br/>
+<code>/etc/init.d/geserver stop</code><br/>
+<code>sleep 5</code><br/>
+<code>killall -9 gesystemmanager</code><br/>
+<code>killall -9 geresourceprovider</code></li>
 <li>Enter:<br/>
 <code>ps aux | grep ge</code></li>
 <li>Look for and stop any Fusion processes in the output.</li>
 <li>Make sure that you have enough free disk space, and then enter:<br/>
-<code>/etc/init.d/gefusion start /etc/init.d/gesystem start</code></li>
+<code>/etc/init.d/gefusion start</code><br/>
+<code>/etc/init.d/geserver start</code></li>
 <li>Cancel the build, and then resume it using the <code>gecancel</code> and <code>geresume</code> commands.</li>
 </ol>
 <div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
