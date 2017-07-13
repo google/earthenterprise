@@ -644,6 +644,10 @@ void RasterAssetWidget::AssembleEditRequest(
   request->meta.SetValue("sourcedate", acquisition_date_wrapper_->GetDate());
 
   request->sources.clear();
+  if (source_list->numRows() == 0){
+    throw khException(tr("No source files specified \n") +
+                      khErrnoException::errorString(errno));
+  }
   for (int row = 0; row < source_list->numRows(); ++row) {
     std::string filename = source_list->text(row).latin1();
     SourceConfig::AddResult result = request->sources.AddFile(filename);

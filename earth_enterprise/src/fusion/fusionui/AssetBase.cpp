@@ -160,7 +160,7 @@ bool AssetBase::Save() {
     }
 
     QString error_msg;
-    if (!SubmitEditRequest(&error_msg)) {
+    if (!SubmitEditRequest(&error_msg, save_error_)) {
       QMessageBox::critical(this, tr("Save ") + AssetPrettyName(),
                             tr("Unable to save: ") + Name() + "\n" +
                             error_msg,
