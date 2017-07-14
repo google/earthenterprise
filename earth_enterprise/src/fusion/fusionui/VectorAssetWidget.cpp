@@ -451,8 +451,9 @@ void VectorAssetWidget::AssembleEditRequest(
                           + filename + "\n" +
                           khErrnoException::errorString(errno));
       case SourceConfig::NonVolume:
-        throw khException(filename
-                          + tr(" doesn't reside on a known volume. \n Make sure the volume is configured correctly using geconfigureassetroot and try again."));
+        throw khException(filename + tr(" doesn't reside on a known volume.\n") +
+                         " You can move your asset files to a known volume, or create a new volume that contains their current location." +
+                         " You can list known volumes and create new ones from the command line with geconfigureassetroot.");
     }
   }
   bool ok_north = false;
