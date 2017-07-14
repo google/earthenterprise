@@ -11,3 +11,6 @@
 - name: Documentation
   path: geedocs
   secion_id: geedocs
+- name: Blog
+  path: blog.html
+  section_id: blog
