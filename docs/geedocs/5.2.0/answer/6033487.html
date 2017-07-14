@@ -1,6 +1,6 @@
 <!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
 <title>Benchmarking outcomes for applying task rules</title>
-<link rel="stylesheet" href="../../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../../css/containers.css" type="text/css" media="all" /> </head> <body>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
 <!-- 6033487.html -->
 <div class="container">
   <div class="sidebar1">
@@ -24,7 +24,7 @@
   </div>
   <div class="content">
 <a name="top_of_file"></a>
-<p><img src="../../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
 <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion administration</h1>
 <h2>Benchmarking outcomes for applying task rules</h2>
 <p>This article describes the benchmarking outcomes for applying various task rules to a test set of data under a similar environment. The results are useful in providing guidance in how task rules can improve GEE performance of loading assets and build times.</p>
@@ -122,7 +122,7 @@ The following table lists the software  and hardware specifications that were us
 <p>In this set of tests, the server was permitted to use 7 CPU cores for Fusion processing; take Taskrule 2 for example, there can be up to 2 gepackgen tasks running concurrently with 3 CPUs assigned for each task.</p>
 <h2>Project build time under different taskrules</h2>
 <p>Total raster, terrain and vector project build times are illustrated in the following charts. The vector project build time doesn’t change  much at all because the task rule settings have no impact on the <code>gevectorfuse</code> command. For the imagery project, <em>taskrule 2</em> provides the best build performance. For the terrain project, <em>taskrule 3</em> provides the best build performance. </p>
-<p><img alt="Task rule benchmarking outcomes" src="../../art/fusion/benchmark_taskrules/benchmark_taskrules1.png"/></p>
+<p><img alt="Task rule benchmarking outcomes" src="../art/fusion/benchmark_taskrules/benchmark_taskrules1.png"/></p>
 <h3>Total database build time</h3>
 <p>The database build time with <em>task rule 3</em> was the fastest - reducing the time to 25.31 hours. Under the <em>default task rule</em> setting, the total database build time took the longest time to finish, 33.52 hours. </p>
 <h2>Recommendations</h2>

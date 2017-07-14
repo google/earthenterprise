@@ -1,6 +1,6 @@
 <!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
 <title>Create terrain overlays</title>
-<link rel="stylesheet" href="../../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../../css/containers.css" type="text/css" media="all" /> </head> <body>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
 <!-- 4492623.html -->
 <div class="container">
   <div class="sidebar1">
@@ -24,7 +24,7 @@
   </div>
   <div class="content">
 <a name="top_of_file"></a>
-<p><img src="../../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
 <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion resources and projects</h1>
 <h2>Create terrain overlays</h2>
 <ul>
@@ -39,12 +39,12 @@
 <p>A terrain overlay is a secondary terrain database that you can use to “overlay” on top of another database in Google Earth EC. For example, you may want to add a terrain overlay as an inset of terrain data at a higher resolution. Another great benefit is how easy it is to add new terrain resources for just a specific area of an existing database, requiring less storage space and less time; instead of having to rebuild the entire terrain project, you can now just build a new database for a terrain overlay, based on the new resource, then add it as an additional database (terrain layer) in Google Earth EC.</p>
 <p>A terrain database is defined by the resolution tiles that contain it, but the actual terrain can have an irregular shape. For example, a geo-spatially smaller database of terrain that contains the land mass for a country includes areas of the resolution tiles that are outside the country's borders. These areas are called fill, and Google Earth Enterprise Fusion lets you create an overlay that uses lower resolution data for the fill area, which can then “blend” as you add your secondary terrain database on top.</p>
 <h4>Base terrain database:</h4>
-<p><img alt="Base terrain database" src="../../art/fusion/projects/4492668_base.png"/></p>
+<p><img alt="Base terrain database" src="../art/fusion/projects/4492668_base.png"/></p>
 <h4>Secondary terrain overlay database with low resolution "fill":</h4>
-<p><img alt="Secondary terrain overlay" src="../../art/fusion/projects/4492692_secondary_overlay.png"/></p>
+<p><img alt="Secondary terrain overlay" src="../art/fusion/projects/4492692_secondary_overlay.png"/></p>
 <p>In Google Earth EC, you overlay the secondary database using Add Database, blending the two terrain databases together.</p>
 <h4>Base terrain database and secondary terrain database blend together with low resolution “fill” created by the terrain overlay:</h4>
-<p><img alt="Base and secondary database blend" src="../../art/fusion/projects/4492672_base_secondary_blend.png"/></p>
+<p><img alt="Base and secondary database blend" src="../art/fusion/projects/4492672_base_secondary_blend.png"/></p>
 <div class="tip">
 <p>Using the base terrain as the fill for the secondary terrain ensures smooth viewing transitions at the overlay borders.</p>
 </div>
@@ -53,10 +53,10 @@
 <p>You create the terrain overlay in the Terrain Project Editor:</p>
 <ol class="spaced-list">
 <li>Select <strong>Tools &gt; Asset Manager</strong>. The <strong>Asset Manager</strong> appears.</li>
-<li>Click <img alt="Terrain project icon" src="../../art/fusion/projects/4492673_project_icon.png"/>. The <strong>Terrain Project Editor</strong> opens.<br/>
+<li>Click <img alt="Terrain project icon" src="../art/fusion/projects/4492673_project_icon.png"/>. The <strong>Terrain Project Editor</strong> opens.<br/>
 <br/>
-<img alt="New Terrain project editor window" src="../../art/fusion/projects/4492696_new_project.png"/></li>
-<li>Click <img alt="Open file icon" src="../../art/fusion/projects/4492675_open_file_icon.png"/>. The <strong>Open</strong> dialog appears.
+<img alt="New Terrain project editor window" src="../art/fusion/projects/4492696_new_project.png"/></li>
+<li>Click <img alt="Open file icon" src="../art/fusion/projects/4492675_open_file_icon.png"/>. The <strong>Open</strong> dialog appears.
 <div class="note"><strong>Note:</strong> The selection in the Type drop-down list near the bottom of this dialog determines the type of resources that appear on the list. Terrain Resource is automatically selected when you open this dialog from the Terrain Project Editor, so only terrain resources appear on the list.</div>
 </li>
 <li>Navigate to the folder that contains your terrain resources.</li>
@@ -71,10 +71,10 @@
 <div class="note">
 <p><strong>Note:</strong> If every resource is at or above the <strong>Resources Min Level</strong>, then 0 (sea level) is used for the fill terrain. Equally, if you set the <strong>Start Level</strong> to a resolution beyond the extent of the base terrain resource resolution, then 0 (sea level) is used for fill terrain.</p>
 </div>
-<p><img alt="Terrain project editor window with resources" src="../../art/fusion/projects/4492676_project_resources.png"/></p>
+<p><img alt="Terrain project editor window with resources" src="../art/fusion/projects/4492676_project_resources.png"/></p>
 </li>
 <li>When you have finished setting the terrain overlay options, click <strong>File &gt; Save</strong>.</li>
-<li>Navigate to the folder where you want to save your project or click <img alt="New folder icon" src="../../art/fusion/projects/4492677_new_folder_icon.png"/> to create a folder in the desired location.</li>
+<li>Navigate to the folder where you want to save your project or click <img alt="New folder icon" src="../art/fusion/projects/4492677_new_folder_icon.png"/> to create a folder in the desired location.</li>
 <li>Enter the name of your project, and click <strong>Save</strong>. The new project name appears in the Asset Manager’s asset list.</li>
 <li>Right-click the project name and select <strong>Build</strong> from the context menu.
 <p>The status of the project immediately changes to <strong>Queued</strong> and then <strong>In Progress</strong>.</p>
@@ -86,8 +86,8 @@
 <p>This exercise walks you through the process of defining, building, and pushing a database using the projects you created in the previous exercise.</p>
 <h4>To define, build, and push a database:</h4>
 <ol class="spaced-list">
-<li>In the Asset Manager click <img alt="Database editor icon" src="../../art/fusion/projects/4492700_db_editor_icon.png"/>. The Database Editor appears with no projects selected.</li>
-<li>Click <img alt="Open file icon" src="../../art/fusion/projects/4492675_open_file_icon.png"/> next to Terrain Project. The Open dialog appears.</li>
+<li>In the Asset Manager click <img alt="Database editor icon" src="../art/fusion/projects/4492700_db_editor_icon.png"/>. The Database Editor appears with no projects selected.</li>
+<li>Click <img alt="Open file icon" src="../art/fusion/projects/4492675_open_file_icon.png"/> next to Terrain Project. The Open dialog appears.</li>
 <li>Navigate to the folder where you saved your terrain overlay project.</li>
 <li>Select the name of your terrain overlay project and click <strong>Open</strong>. The terrain overlay project appears next to Terrain Project in the Database Editor.</li>
 <li>Select <strong>File &gt; Save</strong>.</li>

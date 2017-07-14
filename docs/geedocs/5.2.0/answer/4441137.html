@@ -1,6 +1,6 @@
 <!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
 <title>Make Web Map Service (WMS) requests</title>
-<link rel="stylesheet" href="../../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../../css/containers.css" type="text/css" media="all" /> </head> <body>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
 <!-- 4441137.html -->
 <div class="container">
   <div class="sidebar1">
@@ -32,7 +32,7 @@
   </div>
   <div class="content">
 <a name="top_of_file"></a>
-<p><img src="../../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
 <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | GEE Server administration</h1>
 <h2>Make Web Map Service (WMS) requests</h2>
 <p>Google Earth Enterprise Server 5.x supports the <a href="http://www.opengeospatial.org/standards/wms" target="_blank">OpenGIS Web Map Service Interface Standard (WMS)</a>, which provides a standard HTTP interface to request map images from one or more published geospatial databases. Mapping images that are provided through a WMS over the Internet can show information such as weather formations and conditions, topographical maps, alternate high resolution satellite imagery and more.</p>
@@ -81,7 +81,7 @@
 </li>
 </ol>
 <p>Databases that have WMS enabled are identified as such with a WMS label in the description.</p>
-<p><img alt="WMS-enabled databases in GEE Server" src="../../art/server/wms/WMS_description.png"/></p>
+<p><img alt="WMS-enabled databases in GEE Server" src="../art/server/wms/WMS_description.png"/></p>
 <hr/>
 <h2><a name="MakingRequests"></a>Making WMS Requests to Google Earth Enterprise Server 5.x</h2>
 <p>The first step in creating maps via HTTP requests to Google Earth Enterprise Server 5.x is to create a connection.</p>
@@ -289,10 +289,10 @@ GetMap&amp;BBOX=&lt;bounding_box_limits_of_the_requested_map&gt;&amp;SRS=&lt;pro
 <ol class="spaced-list">
 <li>Start the QGIS client application. At the top of the QGIS window, click the <strong>Add WMS/WMTS Layer</strong> toolbar button or from the <strong>Layer</strong> menu choose <strong>Add &gt; Add WMS/WMTS Layer...</strong>.
 
-<p><img alt="Add WMS layer feature" src="../../art/server/wms/4441250_add_layer_tab.png"/></p>
+<p><img alt="Add WMS layer feature" src="../art/server/wms/4441250_add_layer_tab.png"/></p>
 </li>
 <li>Click <strong>New</strong> to establish a new WMS layer connection. A new connection window displays.
-<p><img alt="Create WMS connection dialog" src="../../art/server/wms/4441253_connection_dialog.png"/></p>
+<p><img alt="Create WMS connection dialog" src="../art/server/wms/4441253_connection_dialog.png"/></p>
 </li>
 <li>Enter the following details:
 <ul>
@@ -304,15 +304,15 @@ GetMap&amp;BBOX=&lt;bounding_box_limits_of_the_requested_map&gt;&amp;SRS=&lt;pro
 </li>
 <li>In the same window, click <strong>Connect</strong> to make a <strong>GetCapabilities</strong> request for a specific published target path database.
 <p>An example response for a <strong>GetCapabilities</strong> request is shown in the following window.</p>
-<p><img alt="GetCapabilities request response" src="../../art/server/wms/4441193_request_response.png"/></p>
+<p><img alt="GetCapabilities request response" src="../art/server/wms/4441193_request_response.png"/></p>
 <p>The <strong>GetCapabilities</strong> WMS request returns imagery and vector layers for 2D databases and only imagery for 3D databases.</p>
 </li>
 <li>
 <p>Determine which layer you want to display, then double-click the layer name to send a <strong>GetMap</strong> request to Google Earth Enterprise Server 5.x. The following example shows a map retrieved from a <strong>GetMap</strong> request.</p>
-<p><img alt="GetMap request map retrieval" src="../../art/server/wms/4441194_request_retrieval.png"/></p>
+<p><img alt="GetMap request map retrieval" src="../art/server/wms/4441194_request_retrieval.png"/></p>
 </li>
 <li>If you are adding layers from a 2D database to your QGIS project, be sure to first set the <strong>Coordinate Reference System (CRS)</strong> for the project to <strong>EPSG:3857 (WGS 84 / Pseudo Mercator)</strong> by clicking the icon in the lower-right corner of the display window.
-<p><img alt="Set CRS dialog" src="../../art/server/wms/4542523_crs_dialog.png"/></p>
+<p><img alt="Set CRS dialog" src="../art/server/wms/4542523_crs_dialog.png"/></p>
 </li>
 </ol><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
 </div></body> </html>

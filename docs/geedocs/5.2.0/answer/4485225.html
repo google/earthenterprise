@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <title>Portable Globe and Server 4.4</title>
-<link rel="stylesheet" href="../../css/styles.css" type="text/css" media="all" />
-<link rel="stylesheet" href="../../css/containers.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
 </head>
 <body>
 <!-- 4485225.html -->
@@ -23,7 +23,7 @@
   <p class="sidebar-toc"><a href="../answer/4485225.html" class="current-file">Portable Globe and Server 4.4</a></p>
 </div>
 <div class="content"> <a name="top_of_file"></a>
-  <p><img src="../../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+  <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
   <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Portable</h1>
   <h2>Portable Globe and Server 4.4</h2>
   <ul>
@@ -75,7 +75,7 @@
   <p>The Google Earth Enterprise Portable Server solution enables organizations to access portions of their custom globes in the field when no network access may be available or possible. Using a web interface, end-users may select an area of interest to download from a Google Earth Enterprise Server for offline use on their Mac or Windows laptop with the Portable Server application.</p>
   <p>All data available within a specified area of interest is downloaded and stored in a portable globe, including all high-resolution imagery, terrain, vector data, KML files, and searchable Point of Interest (POI) locations. Outside of the specified area of interest, only low resolution imagery and terrain will be stored in a portable globe. These levels of resolution can be specified when the globe is cut.</p>
   <p>Portable globes may be specified, generated, and downloaded in as quickly as a few minutes -- depending on the area of coverage -- to support rapid preparation for first responders, or larger globes may be built in advanced preparation for responders to have ready “on the shelf.”</p>
-  <p><img alt="GEE portable diagram" id="gee_portable_diagram" name="gee_portable_diagram" src="../../art/fusion/portable/gee_portable_diagram.gif"/></p>
+  <p><img alt="GEE portable diagram" id="gee_portable_diagram" name="gee_portable_diagram" src="../art/fusion/portable/gee_portable_diagram.gif"/></p>
   <p>The Portable Server solution is made up of two applications:</p>
   <ul class="spaced-list">
     <li>The <a href="#globe_cutter">globe cutter</a> tool, which is installed on a production Google Earth Enterprise Server system hosting a 3D database. This tool allows end-users and administrators to select, package, and download a portion of the 3D Earth as a portable globe file.</li>
@@ -145,7 +145,7 @@
   <hr/>
   <h3 id="the_globe_cutter_interface">The globe cutter interface</h3>
   <p>To create a portable globe, point your browser to <code>http://yourserver/cutter</code>, where <code>yourserver</code> is the server on which Earth Enterprise Server is running. The <strong>Globe Creator</strong> page appears.</p>
-  <img alt="Cutter" id="cutter_interface" interface="" name="cutter_interface" src="../../art/fusion/portable/cutter_interface.png"/>
+  <img alt="Cutter" id="cutter_interface" interface="" name="cutter_interface" src="../art/fusion/portable/cutter_interface.png"/>
   <p>Select the globe you'd like to cut your portable version from in the drop-down menu.</p>
   <div class="note">
     <p><strong>Note:</strong> An alternate cutter UI is available at <code>http://yourserver/cutter/globe_cutter_advanced.html</code>. This interface offers additional globe-cutting options, namely <em>Polygon Resolution</em>. This setting is useful when cutting with large polygons; e.g. use 12 for a country-sized polygon and 18 for a city-sized polygon. Additional advanced settings may be offered in future versions. Use caution when changing them as they may dramatically increase build times and globe sizes.</p>
@@ -162,7 +162,7 @@
   <p>Once the globe name has been specified, you can define the geographic region to be cut, by drawing a polygon on the globe. There are two ways to draw the polygon.</p>
   <h4>Hand drawing the polygon</h4>
   <p>First, using the navigation controls in the plugin, zoom in to the region of interest. To use your mouse to define the polygon, click the polygon icon in the globe window:<br/>
-    <img alt="Polygon icon" id="polygon_icon" name="polygon_icon" src="../../art/fusion/portable/polygon_icon.png"/></p>
+    <img alt="Polygon icon" id="polygon_icon" name="polygon_icon" src="../art/fusion/portable/polygon_icon.png"/></p>
   <p>Then, click on the globe to define each point. You can use the navigation controls on the right to move the globe or change zoom levels while drawing.</p>
   <p>Double-click the final point to complete the polygon selection, at which point the polygon should change from blue to purple.</p>
   <p>You can view the KML of the shape you've drawn by selecting the <strong>Enter polygon as KML</strong> checkbox.</p>
@@ -245,7 +245,7 @@
     <li>Enter a <strong>Key</strong> value and click <strong>Set Key</strong>. This key is simply an access key; it is not an encryption key.</li>
     <li>In the <strong>Remote servers</strong> section, click <strong>add</strong>.</li>
     <li>The <strong>Currently serving</strong> section now shows that you are <strong>Broadcasting</strong>. Click <strong>glr</strong> to create a connection file for this globe.
-      <p><img alt="Portable Globe" id="portable_glr" name="portable_glr" src="../../art/fusion/portable/portable_glr.png"/></p>
+      <p><img alt="Portable Globe" id="portable_glr" name="portable_glr" src="../art/fusion/portable/portable_glr.png"/></p>
     </li>
     <li>A <code>share.glr</code> file is created and saved to your browser's default download directory. This file can be sent to any user who requires a connection to your globe; the remote client must also be installed on their machine.</li>
   </ol>
@@ -287,7 +287,7 @@
         <strong>Server</strong>: The IP address or machine name on which the portable server is running.<br/>
         <strong>Port</strong>: The default port is <code>9335</code>. If you're serving on another port, enter that number here.<br/>
         <strong>Key</strong>: The access key for this server.</p>
-      <p><img alt="remote_new" id="remote_new" name="remote_new" src="../../art/fusion/portable/remote_new.png"/></p>
+      <p><img alt="remote_new" id="remote_new" name="remote_new" src="../art/fusion/portable/remote_new.png"/></p>
     </li>
     <li>Click <strong>Add Server</strong>. A .glr file is created and saved to your globes directory. It will also show up in the <strong>Remote servers</strong> section of the Portable Server interface.</li>
   </ol>

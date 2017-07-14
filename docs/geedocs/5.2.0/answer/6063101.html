@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <title>Search your POI vector data or map layer data</title>
-<link rel="stylesheet" href="../../css/styles.css" type="text/css" media="all" />
-<link rel="stylesheet" href="../../css/containers.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
 </head>
 <body>
 <!-- 6063101.html -->
@@ -37,7 +37,7 @@
     <p class="sidebar-toc"><a href="../answer/6051584.html">Provide Google Earth Plug-in for your users to install</a></p>
   </div>
   <div class="content"> <a name="top_of_file"></a>
-    <p><img src="../../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+    <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
     <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | GEE Server administration</h1>
     <h2>Search your POI vector data or map layer data</h2>
     <p>With GEE, you can perform simple text searches of your POI vector data or map layer data. If you have one or more text fields that you would like to query from vector or map layer data in a project, you can simply add those search fields to that vector data’s layer. You include the layer as part of the <a href="../answer/4412421.html#55155">vector project</a> that you want to include in your 2D or 3D database.</p>
@@ -49,10 +49,10 @@
       <li>In the Asset Manager, double-click the name of the project in which you want to modify layers. The Vector Project Editor displays the list of layers included in the project.</li>
       <li>View the layer properties for a resource in a project by right-clicking the layer name in the Vector Project Editor and selecting <strong>Layer Properties</strong> from the context menu.</li>
       <li>Click the <strong>Search</strong> tab in the Layer Properties dialog.
-        <p><img alt="Layer Properties Search Tab" src="../../art/server/search/layer_prop_search_tab.png"/></p>
+        <p><img alt="Layer Properties Search Tab" src="../art/server/search/layer_prop_search_tab.png"/></p>
       </li>
-      <li>Click <img alt="New Icon" src="../../art/fusion/tutorial/icon_new.gif"/>. The Add Search Field dialog appears.
-        <p><img alt="Layer Properties Add Search" src="../../art/server/search/layer_prop_add_search.png"/></p>
+      <li>Click <img alt="New Icon" src="../art/fusion/tutorial/icon_new.gif"/>. The Add Search Field dialog appears.
+        <p><img alt="Layer Properties Add Search" src="../art/server/search/layer_prop_add_search.png"/></p>
       </li>
       <li>Select the desired field from the <strong>Column Name</strong> drop-down list.
         Select an option from the <strong>Use</strong> drop-down list:
@@ -65,18 +65,18 @@
       </li>
       <li>Repeat the steps above for each additional field you want to add to the search.
         Your selections appear on the list of search fields on the Search tab in the order in which you added them:
-        <p><img alt="Layer Properties Add Search" src="../../art/server/search/layer_prop_add_search-full.png"/></p>
+        <p><img alt="Layer Properties Add Search" src="../art/server/search/layer_prop_add_search-full.png"/></p>
         <p>The order in which the fields appear on this list is the order in which they appear in the description balloon in the client. (The fields designated as <strong>Search Only</strong> do not affect the order in which the fields to be displayed appear.) </p>
       </li>
-      <li>To change the order in which the fields appear, use the <img alt="Layer Properties Add Search Up Arrow Icon" src="../../art/server/search/layer_prop_search_tab_up_arrow.png"/> and <img alt="Layer Properties Add Search Down Arrow Icon" src="../art/server/search/layer_prop_search_tab_down_arrow.png"/> arrows.</li>
-      <li>To remove a field, click <img alt="Layer Properties Add Search Delete Icon" src="../../art/server/search/layer_prop_search_tab_delete_icon.png"/>.</li>
+      <li>To change the order in which the fields appear, use the <img alt="Layer Properties Add Search Up Arrow Icon" src="../art/server/search/layer_prop_search_tab_up_arrow.png"/> and <img alt="Layer Properties Add Search Down Arrow Icon" src="../art/server/search/layer_prop_search_tab_down_arrow.png"/> arrows.</li>
+      <li>To remove a field, click <img alt="Layer Properties Add Search Delete Icon" src="../art/server/search/layer_prop_search_tab_delete_icon.png"/>.</li>
       <li>Click <strong>OK</strong> to save the Search field properties, then select <strong>File &gt; Save</strong> in the Vector Project Editor to save the changes to the layer.
         <div class="note">
           <p><strong>Note:</strong> This search performs an exact match, which means that the Google Earth EC user must enter the value exactly as it appears in the database. It can also perform a wildcard search, so users can enter part of the text they want to match. For example, if a user enters “dakota” in a state search, the search results match “North Dakota” and “South Dakota”. </p>
         </div>
       </li>
       <li>Once you’ve added your POI vector project to the database you want to publish, you push it to GEE Server, then turn on <strong>POI Search</strong> when you publish.
-        <p><img alt="Publish Dialog POI Search" src="../../art/server/search/publish_dialog_poi_search.png"/></p>
+        <p><img alt="Publish Dialog POI Search" src="../art/server/search/publish_dialog_poi_search.png"/></p>
       </li>
     </ol>
     <p>Setting the <strong>+Enhanced Search</strong> to <strong>On</strong> also will first perform a <strong>POI search</strong> against the vector data in your database, and if no results are found, an <strong>Enhanced Search</strong> using the <strong>GeocodingFederated</strong> search plug-in is performed, searching your database for queried places or coordinates.</p>
@@ -87,7 +87,7 @@
       </p>
     </div>
     <p>Once you have added the search fields, the main Search tab in Google Earth EC displays the POI search and includes the field(s) that you specified for your queries.</p>
-    <p><img alt="Database With Search Tab" src="../../art/server/search/ECSearchTab-POI.png"/></p>
+    <p><img alt="Database With Search Tab" src="../art/server/search/ECSearchTab-POI.png"/></p>
     <h2>Specify POI Search tab settings</h2>
     <p>You can also modify the appearance of the POI search tab in Google Earth EC by editing the system search tab, <strong>POI Search</strong>, which sets the query parameters for the search fields you added to your vector layer, as well as specifying the labels for the tab, query field and suggestion box.</p>
     <h3>To specify the settings of the POI Search tab:</h3>
@@ -95,7 +95,7 @@
       <li>In the <a href="../answer/3470759.html">GEE Server Admin console</a>, click <strong>Search tabs</strong>.</li>
       <li>Check the box next to <strong>POISearch</strong>, then click <strong>Edit</strong>.
         <p>The Edit Search Definition dialog appears.</p>
-        <p><img alt="POI Search Tab Definition" src="../../art/server/search/search_tab_def-POI.png"/></p>
+        <p><img alt="POI Search Tab Definition" src="../art/server/search/search_tab_def-POI.png"/></p>
       </li>
       <li>Edit the name of the system search tab to create your own POISearch tab definition. (You cannot modify system search tabs without changing the name.)</li>
       <li>Edit the label, specify any query parameters and modify the field label and suggestion box as required. </li>
@@ -105,13 +105,13 @@
         <p>Setting the <strong>+Enhanced Search</strong> to <strong>On</strong> also will first perform a <strong>POI search</strong> against the vector data in your database, and if no results are found, an <strong>Enhanced Search</strong> using the <strong>GeocodingFederated</strong> search plug-in is performed, searching your database for queried places or coordinates.</p>
       </li>
       <li>Click the <strong>Search tabs</strong> drop-down list to add your POI search tab.
-        <p><img alt="POI Search Tab in Publish Dialog" src="../../art/server/search/publish_poi_search_tab.png"/></p>
+        <p><img alt="POI Search Tab in Publish Dialog" src="../art/server/search/publish_poi_search_tab.png"/></p>
       </li>
     </ol>
   Click <strong>Publish</strong>. A message appears to confirm the successful publishing process.
   <ol>
     <p>When you view your POI Search tab in Google Earth EC, it reflects the settings you specified in the POI Search tab definition.</p>
-    <p><img alt="POI Search Tab Display in EC" src="../../art/server/search/search_tab_EC-POI.png"/></p>
+    <p><img alt="POI Search Tab Display in EC" src="../art/server/search/search_tab_EC-POI.png"/></p>
   </ol>
   <div class="footer">
     <p class="BackToTop"><a href="#top_of_file">Back to top</a>

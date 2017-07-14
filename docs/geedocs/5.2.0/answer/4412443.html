@@ -1,6 +1,6 @@
 <!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
 <title>Defining and Building Resources</title>
-<link rel="stylesheet" href="../../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../../css/containers.css" type="text/css" media="all" /> </head> <body>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
 <!-- 4412443.html -->
 <div class="container">
   <div class="sidebar1">
@@ -24,7 +24,7 @@
   </div>
   <div class="content">
 <a name="top_of_file"></a>
-<p><img src="../../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
 <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion tutorial</h1>
 <h2>Defining and Building Resources</h2>
 <p>The first step in preparing data is to define resources by importing the source data into Google Earth Enterprise Fusion. You import imagery, terrain, and vector data separately.</p>
@@ -80,19 +80,19 @@
 </ul>
 <h4>To explore imagery source files:</h4>
 <ol class="spaced-list">
-<li>Click the <strong>Open</strong> icon: <img alt="Open Icon" src="../../art/fusion/tutorial/iconOpenFile.png"/>.</li>
+<li>Click the <strong>Open</strong> icon: <img alt="Open Icon" src="../art/fusion/tutorial/iconOpenFile.png"/>.</li>
 <li>Select <code>/opt/google/share/tutorials/fusion/Imagery/usgsLanSat.tif</code> and click <strong>Open</strong>.
 <p>The image name appears in the Preview List pane. This is called a <em>layer</em> (an individual source file or resource).</p>
-<img alt="Layer in the Preview List" src="../../art/fusion/tutorial/previewList.png"/></li>
+<img alt="Layer in the Preview List" src="../art/fusion/tutorial/previewList.png"/></li>
 <li>Select the layer's checkbox.
 <p>A bounding box in the Preview pane indicates the extents of the imagery in the selected file.</p>
-<img alt="Bounding Box in the Preview pane" src="../../art/fusion/tutorial/previewListChecked.png"/></li>
+<img alt="Bounding Box in the Preview pane" src="../art/fusion/tutorial/previewListChecked.png"/></li>
 <li>Right-click the layer in the Preview List pane, and select <strong>Zoom to Layer</strong> from the context menu.
 <p>The Preview pane zooms to show only the region in the selected imagery file.</p>
-<img alt="Preview Pane Zoom" src="../../art/fusion/tutorial/previewZoom2Layer1.png"/></li>
+<img alt="Preview Pane Zoom" src="../art/fusion/tutorial/previewZoom2Layer1.png"/></li>
 <li>Repeat the steps above, this time opening the <strong>i3SF15-meter.tif</strong> file.
 <p>When you select the checkbox next to this second layer, a bounding box indicates the extents of the second layer within the first layer. You can see the relationship of each area to the other in the Preview pane.</p>
-<img alt="Second Bounding Box in the Preview pane" src="../../art/fusion/tutorial/previewZoom2Layer2.png"/></li>
+<img alt="Second Bounding Box in the Preview pane" src="../art/fusion/tutorial/previewZoom2Layer2.png"/></li>
 <li>When you finish viewing the imagery layers, right-click either layer in the Preview List pane, and select <strong>Remove All Layers</strong> from the context menu.
 <p>A message prompts you to confirm that you want to remove all layers from the Preview panes.</p>
 </li>
@@ -105,8 +105,8 @@
 <h4>To define an imagery resource:</h4>
 <ol class="spaced-list">
 <li>Select <strong>Tools &gt; Asset Manager</strong>.</li>
-<li>In the Asset Manager, click <img alt="Imagery Resource Icon" src="../../art/fusion/tutorial/iconResImagery.png"/> on the toolbar. The Imagery Resource window appears.
-<p><img alt="Imagery Resource Window" src="../../art/fusion/tutorial/imageryResEditor.png"/></p>
+<li>In the Asset Manager, click <img alt="Imagery Resource Icon" src="../art/fusion/tutorial/iconResImagery.png"/> on the toolbar. The Imagery Resource window appears.
+<p><img alt="Imagery Resource Window" src="../art/fusion/tutorial/imageryResEditor.png"/></p>
 </li>
 <li>Set the <strong>Acquisition Date</strong> to today’s date. This is required if you will be creating a historical imagery project later.
 <p>The date you set for the imagery <strong>Acquisition Date</strong> is visible in the Google Earth Client when hovering the cursor over a tile. If you add this information to the imagery at a later point, a rebuild of the imagery project is required (as the date needs to be encoded in the JPEG tiles).</p>
@@ -127,7 +127,7 @@
 </li>
 <li>Click <strong>Add</strong>.
 <p>The Open Source dialog opens to the <code>/opt/google/share/tutorials/fusion/Imagery</code> folder.</p>
-<img alt="Open Source Dialog " src="../../art/fusion/tutorial/imageryOpen-BM.png"/></li>
+<img alt="Open Source Dialog " src="../art/fusion/tutorial/imageryOpen-BM.png"/></li>
 <li>Select the <code>bluemarble_4km.tif</code> file, and click <strong>Open</strong>.</li>
 <li>Select <strong>File &gt; Save</strong> and navigate to the <code>/ASSET_ROOT/Resources/Imagery</code> folder you created in the previous chapter.</li>
 <li>Enter the name <strong>BlueMarble</strong> for the resource, and click <strong>Save</strong>.</li>
@@ -141,7 +141,7 @@ When you finish using any of the asset editors (such as the Imagery Resource Edi
 <p><strong>Caution:</strong> When you are defining assets for your live production system, it is important to remember that you cannot delete or edit asset names after you save them.</p>
 </div>
 <p>In the Asset Manager, the name of the resource appears on the right when you select the <code>/ASSET_ROOT/Resources/Imagery </code>folder in the asset navigation tree.</p>
-<img alt="Resource Name in the Asset Manager" src="../../art/fusion/tutorial/assetManagerResImagery.png"/>
+<img alt="Resource Name in the Asset Manager" src="../art/fusion/tutorial/assetManagerResImagery.png"/>
 <hr/>
 <h3>Build an Imagery Resource</h3>
 <p>Before you can view the imagery resource in the Preview pane or include it in a project, you must build it. You do not have to build each resource right away, however. You can define several resources and then build them all at the same time, if you prefer. There are advantages and disadvantages to both approaches. You can develop your own routine as you get more comfortable with Google Earth Enterprise Fusion.</p>
@@ -207,9 +207,9 @@ Default values.</td>
 </tbody>
 </table>
 <p>While the resources are building, the Asset Manager list looks something like this:</p>
-<img alt="Asset Manager While Resources are Building" src="../../art/fusion/tutorial/assetManagerBuildProgress.png"/>
+<img alt="Asset Manager While Resources are Building" src="../art/fusion/tutorial/assetManagerBuildProgress.png"/>
 <p>It could take several minutes to build all of the imagery resources. When the builds are all complete, it looks like this:</p>
-<img alt="Asset Manager When Builds are Complete" src="../../art/fusion/tutorial/assetManagerResImagery-full.png"/>
+<img alt="Asset Manager When Builds are Complete" src="../art/fusion/tutorial/assetManagerResImagery-full.png"/>
 <hr/>
 <h3><a name="PreImgRes"></a>Preview the Imagery Resources</h3>
 <p>After you successfully build the imagery resources, you can view some of them in the Preview pane of the Google Earth Enterprise Fusion GUI.</p>
@@ -226,13 +226,13 @@ Default values.</td>
 </li>
 <li>Right-click <strong>SFBayAreaLanSat</strong> in the Preview List pane, and select <strong>Zoom to Layer</strong> from the context menu.
 <p>The Preview pane zooms to the outermost edges of the selected layer. Notice the bounding box for the other resource.</p>
-<img alt="Zoom to Layer FLanSatLayer" src="../../art/fusion/tutorial/SFLanSatLayer.png"/></li>
+<img alt="Zoom to Layer FLanSatLayer" src="../art/fusion/tutorial/SFLanSatLayer.png"/></li>
 <li>Right-click <strong>SFHighResInset</strong> in the Preview List pane, and select <strong>Zoom to Layer</strong> from the context menu.
 <p>The Preview pane zooms to the outermost edges of the selected layer.</p>
-<img alt="Zoom to Layer SFHighResInset" src="../../art/fusion/tutorial/SFHighResInset.png"/></li>
-<li>To prepare for the next exercise, zoom out to a display level between 11 and 12 <img alt="Zoom Level 11.6" src="../../art/fusion/tutorial/zoomLevel11.6.png"/> to view more of the San Francisco bay area, as shown in the following graphic.
-<p>To zoom out, you can either select <img alt="Zoom Drag Mode Icon" src="../../art/fusion/tutorial/iconZoomDragMode.png"/> and then click in the Preview pane and push the mouse away from you, or roll the mouse wheel away from you.</p>
-<img alt="Zoom Out" src="../../art/fusion/tutorial/zoomOut.png"/></li>
+<img alt="Zoom to Layer SFHighResInset" src="../art/fusion/tutorial/SFHighResInset.png"/></li>
+<li>To prepare for the next exercise, zoom out to a display level between 11 and 12 <img alt="Zoom Level 11.6" src="../art/fusion/tutorial/zoomLevel11.6.png"/> to view more of the San Francisco bay area, as shown in the following graphic.
+<p>To zoom out, you can either select <img alt="Zoom Drag Mode Icon" src="../art/fusion/tutorial/iconZoomDragMode.png"/> and then click in the Preview pane and push the mouse away from you, or roll the mouse wheel away from you.</p>
+<img alt="Zoom Out" src="../art/fusion/tutorial/zoomOut.png"/></li>
 </ol>
 <hr/>
 <h2><a name="DefTerrRes"></a>Define Terrain Resources</h2>
@@ -242,14 +242,14 @@ Default values.</td>
 <p>As with imagery files, you can preview terrain source files to be sure they cover the correct area before you convert them to resources. Although you learned about previewing source files in a previous exercise, this exercise gives you an opportunity to learn about more about the preview tools.</p>
 <h4>To explore terrain source files:</h4>
 <ol class="spaced-list">
-<li>Click <img alt="Open File Icon" src="../../art/fusion/tutorial/iconOpenFile.png"/>.
+<li>Click <img alt="Open File Icon" src="../art/fusion/tutorial/iconOpenFile.png"/>.
 <p>The Open dialog appears.</p>
 </li>
 <li>Navigate to the <code>/opt/google/share/tutorials/fusion/Terrain</code> folder.</li>
 <li>Select <code>SF_terrain.tif</code>, and click <strong>Open</strong>.
-<p><img alt="Open Terrain Preview" src="../../art/fusion/tutorial/previewTerrainOpen.png"/></p>
+<p><img alt="Open Terrain Preview" src="../art/fusion/tutorial/previewTerrainOpen.png"/></p>
 <p>The new layer name appears in the Preview List pane unchecked.</p>
-<img alt="Unchecked Terrain Preview" src="../../art/fusion/tutorial/previewTerrainUnchecked.png"/></li>
+<img alt="Unchecked Terrain Preview" src="../art/fusion/tutorial/previewTerrainUnchecked.png"/></li>
 <li>Select <strong>Enable All Layers </strong>from the Edit menu to check the boxes for all layers.
 <p>A bounding box appears for the terrain layer.</p>
 </li>
@@ -257,10 +257,10 @@ Default values.</td>
 <div class="note">
 <p><strong>Note:</strong> The Preview pane displays a bounding box for terrain source data, not the actual terrain imagery. You must define and build terrain resources to be able to see a preview of the actual terrain.</p>
 </div>
-<img alt="Preview All Terrain" src="../../art/fusion/tutorial/previewTerrainAll.png"/></li>
+<img alt="Preview All Terrain" src="../art/fusion/tutorial/previewTerrainAll.png"/></li>
 <li>Right-click <strong>SF_terrain</strong>, and select <strong>Zoom to Layer</strong> from the context menu.
 <p>This fills the Preview pane with the city of San Francisco. The high-resolution imagery inset, SFHighResInset, is still part of this view, and the SFBayAreaLanSat provides the background imagery.</p>
-<img alt="Zoom In To Terrain " src="../../art/fusion/tutorial/previewTerrain_ZoomIn.png"/></li>
+<img alt="Zoom In To Terrain " src="../art/fusion/tutorial/previewTerrain_ZoomIn.png"/></li>
 <li>Use the toolbar buttons and/or your mouse wheel to zoom in and out to explore the terrain extents on the underlying imagery.</li>
 <li>Right-click any layer and select <strong>Remove All Layers</strong>.
 <p>A message prompts you to confirm that you want to remove all layers.</p>
@@ -274,7 +274,7 @@ Default values.</td>
 <p>In this exercise, you create terrain resources from the terrain data provided for this tutorial.</p>
 <h4>To define a terrain resource:</h4>
 <ol class="spaced-list">
-<li>Open the Asset Manager, and click <img alt="Terrain Resource Icon" src="../../art/fusion/tutorial/iconResTerrain.png"/> on the toolbar.
+<li>Open the Asset Manager, and click <img alt="Terrain Resource Icon" src="../art/fusion/tutorial/iconResTerrain.png"/> on the toolbar.
 <p>The Terrain Resource Editor appears.</p>
 </li>
 <li>Set the acquisition date to today’s date in year-month-day format by clicking each section of the date and enter the values.</li>
@@ -290,7 +290,7 @@ Default values.</td>
 <p>The Open Source dialog opens to the <code>/opt/google/share/tutorials/fusion/Terrain</code> folder.</p>
 </li>
 <li>Select <strong>gtopo30_4km.tif</strong>, and click <strong>Open</strong>.
-<p><img alt="Open Terrain Resource" src="../../art/fusion/tutorial/terrainResOpen1.png"/></p>
+<p><img alt="Open Terrain Resource" src="../art/fusion/tutorial/terrainResOpen1.png"/></p>
 <p>The selected file appears on the Source File(s) list.</p>
 </li>
 <li>Select <strong>Save</strong> from the File menu.
@@ -304,7 +304,7 @@ Default values.</td>
 </ol>
 <h4>To define another terrain resource:</h4>
 <ol class="spaced-list">
-<li>In the <strong>Asset Manager</strong>, click <img alt="Terrain Resource Icon" height="20" src="../../art/fusion/tutorial/iconResTerrain.png" width="22"/> on the toolbar.
+<li>In the <strong>Asset Manager</strong>, click <img alt="Terrain Resource Icon" height="20" src="../art/fusion/tutorial/iconResTerrain.png" width="22"/> on the toolbar.
 <p>The Terrain Resource Editor appears.</p>
 </li>
 <li>Set the acquisition date to today’s date in year-month-day format by clicking each section of the date and enter the values.</li>
@@ -357,7 +357,7 @@ Drag the <strong>SFTerrain</strong> resource into the Preview List pane, and che
 <div class="note">
 <p><strong>Note:</strong> Since the Preview pane in Google Earth Enterprise Fusion is meant for preview purposes only, it does not render terrain in 3D like Google Earth EC. Instead, it renders a grayscale interpretation of the terrain. The lighter pixels represent the higher elevations, and the darker pixels represent lower elevations. For this reason, the Preview pane is not useful for comparing elevation values from different resources.</p>
 </div>
-<img src="../../art/fusion/tutorial/previewTerrainRes.png"/>
+<img src="../art/fusion/tutorial/previewTerrainRes.png"/>
 <p>Because the background is a very low-resolution image, it is hard to determine what you are looking at. The solution to this problem is to add high-resolution imagery to the Preview pane to give you a frame of reference.</p>
 </li>
 <li>In the Asset Manager, navigate to <code>ASSET_ROOT/Resources/Imagery</code>, and drag <strong>SFBayAreaLanSat</strong> to the Preview List pane, and check the box next to it.
@@ -389,7 +389,7 @@ Drag the <strong>SFTerrain</strong> resource into the Preview List pane, and che
 <li>In the Asset Manager, navigate to <code>ASSET_ROOT/Resources/Terrain</code>, and drag and drop the new version of the <strong>SFTerrain</strong> resource onto the Preview List pane, and check the box next to it.</li>
 <li>Navigate to <code>ASSET_ROOT/Resources/Imagery</code>, and drag <strong>SFBayAreaLanSat</strong> to the Preview List pane, and check the box next to it.
 <p>Now you can see the preview of the terrain over the imagery. With a feather value of 5, the mask removes the fill data but removes much less of the real data, allowing the actual terrain data to be visible out to the edges of the coastline.</p>
-<img src="../../art/fusion/tutorial/previewTerrainAndImagery2.png"/></li>
+<img src="../art/fusion/tutorial/previewTerrainAndImagery2.png"/></li>
 <li>When you finish examining the preview, right-click either layer in the Preview List pane, and select <strong>Remove All Layers</strong> from the context menu.
 <p>A message prompts you to confirm that you want to remove all layers.</p>
 </li>
@@ -406,22 +406,22 @@ Drag the <strong>SFTerrain</strong> resource into the Preview List pane, and che
 <p>As with imagery and terrain files, you can preview vector source files to be sure they provide the data you want before you convert them to resources. This exercise provides an opportunity for you to use some additional preview tools.</p>
 <h4>To explore vector source files:</h4>
 <ol class="spaced-list">
-<li>Click <img alt="Open File Icon" src="../../art/fusion/tutorial/iconOpenFile.png"/>.
+<li>Click <img alt="Open File Icon" src="../art/fusion/tutorial/iconOpenFile.png"/>.
 <p>The Open dialog appears.</p>
 </li>
 <li>Navigate to the <code>/opt/google/share/tutorials/fusion/Vector</code> folder.
-<p><img alt="Open File Dialog" src="../../art/fusion/tutorial/vectorFileOpenDia.png"/></p>
+<p><img alt="Open File Dialog" src="../art/fusion/tutorial/vectorFileOpenDia.png"/></p>
 </li>
 <li>Select <code>california_roads_line.shp</code>, and click <strong>Open</strong>.
 <p>The layer name appears in the Preview List pane.</p>
 </li>
 <li>Check the box next to <code>california_roads_line</code>.
 <p>The highway and road lines appear on California. (It appears below in bright green; it might appear in a different color on your screen.)</p>
-<img alt="Preview california_roads_line" src="../../art/fusion/tutorial/previewRoads.png"/></li>
+<img alt="Preview california_roads_line" src="../art/fusion/tutorial/previewRoads.png"/></li>
 <li>Right-click <strong>california_roads_line</strong>, and select <strong>Zoom to Layer</strong> to zoom into the San Francisco Bay area to view the road features.
-<p><img alt="Zoom to Layer california_roads_line" src="../../art/fusion/tutorial/previewRoads2.png"/></p>
+<p><img alt="Zoom to Layer california_roads_line" src="../art/fusion/tutorial/previewRoads2.png"/></p>
 </li>
-<li>Make sure the layer is selected (highlighted) in the Preview List pane. Then, with <img alt="Select Mode Icon" src="../../art/fusion/tutorial/iconSelectMode.png"/> selected on the toolbar, drag a selector rectangle around the City of San Francisco.
+<li>Make sure the layer is selected (highlighted) in the Preview List pane. Then, with <img alt="Select Mode Icon" src="../art/fusion/tutorial/iconSelectMode.png"/> selected on the toolbar, drag a selector rectangle around the City of San Francisco.
 <p>The selected area is highlighted (yellow), and the data fields that correspond to the selected area appear in the Data List pane.</p>
 <p>You can scroll through this data and sort it by columns to explore the values of each field to determine the potential attributes to use in the filters you set up in <a href="../answer/4412421.html#59934"><em>Defining and Building Projects</em></a>.</p>
 </li>
@@ -442,17 +442,17 @@ Drag the <strong>SFTerrain</strong> resource into the Preview List pane, and che
 
 <p>The Asset Manager appears.</p>
 </li>
-<li>Click <img alt="Vector Resource Icon" src="../../art/fusion/tutorial/iconResVector.png"/> on the toolbar.
+<li>Click <img alt="Vector Resource Icon" src="../art/fusion/tutorial/iconResVector.png"/> on the toolbar.
 <p>The Vector Resource Editor appears.</p>
-<img alt="Vector Resource Editor" src="../../art/fusion/tutorial/vectorResEditor.png"/></li>
+<img alt="Vector Resource Editor" src="../art/fusion/tutorial/vectorResEditor.png"/></li>
 <li>Set the acquisition date to today’s date in year-month-day format by clicking each section of the date and enter the values.</li>
 <li>Select <strong>USGS Maps</strong> from the Provider drop-down list.</li>
 <li>Click <strong>Add</strong>.
 <p>The Open Source dialog opens to the <code>/opt/google/share/tutorials/fusion/Vector</code> folder.</p>
-<img alt="Open Source Dialog" src="../../art/fusion/tutorial/vectorFileOpenDia2.png"/></li>
+<img alt="Open Source Dialog" src="../art/fusion/tutorial/vectorFileOpenDia2.png"/></li>
 <li>Select the <code>california_roads_line.shp</code> file, and click <strong>Open</strong>.
 <p>The selected file appears on the Source File(s) list.</p>
-<img alt="Vector Resource Editor" src="../../art/fusion/tutorial/vectorResEditor-full.png"/></li>
+<img alt="Vector Resource Editor" src="../art/fusion/tutorial/vectorResEditor-full.png"/></li>
 <li>Select <strong>Save</strong> from the File menu.
 <p>The Save dialog appears.</p>
 </li>

@@ -1,6 +1,6 @@
 <!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
 <title>Display custom logos</title>
-<link rel="stylesheet" href="../../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../../css/containers.css" type="text/css" media="all" /> </head> <body>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
 <!-- 176770.html -->
 <div class="container">
   <div class="sidebar1">
@@ -32,7 +32,7 @@
   </div>
   <div class="content">
 <a name="top_of_file"></a>
-<p><img src="../../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
 <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | GEE Server administration</h1>
 <h2>Display custom logos</h2>
 <p>Google Earth Enterprise Client (EC) 5.0 and later can display multiple custom logos with your globes and maps when connected to a GEE Server.</p>
@@ -54,7 +54,7 @@
 <p>You define the <strong>cobrand_info</strong> snippet by specifying the URL from which the logo will be served, the screen width size, the tie point, which controls the reference point used when overlaying the logo, and x and y coordinates, expressed as either absolute values in pixels, or relative values of percentage of screen width or height.
 
 <p>The following <strong>cobrand_info</strong> example snippet places the <em>top_right.jpg</em> logo in the upper-right corner of the window (the top right of the image is 5 pixels from the right edge of the window edge, using an absolute x coordinate value, and 95% from the bottom using a relative y coordinate value), and sets it to dynamically scale to 5% of the screen width as the Google Earth EC window is resized.</p>
-<p><img alt="GEE Server cobrand_info snippet example" src="../../art/server/custom_logos/Snippet_cobrand-full.png"/></p>
+<p><img alt="GEE Server cobrand_info snippet example" src="../art/server/custom_logos/Snippet_cobrand-full.png"/></p>
 <h2>Cobrand_info parameters</h2>
 The following table describes the cobrand_info snippet parameters, all of which are required to be set.
 <table class="nice-table">
@@ -164,13 +164,13 @@ The location of the logo file. For example, "http://yourserver.org/top-left-logo
 </li>
 <li>Click <strong>Snippet profiles</strong> to display your snippet profiles.</li>
 <li>Click <strong>Create New</strong>. The <strong>Create new snippet profile</strong> dialog appears.
-<p><img alt="GEE Server Create Snippet Profile dialog" src="../../art/server/snippet_profiles/snippet_profilesCreateDialog.png"/></p></li>
+<p><img alt="GEE Server Create Snippet Profile dialog" src="../art/server/snippet_profiles/snippet_profilesCreateDialog.png"/></p></li>
 <li>Enter a name for the new snippet profile and click <b>Create</b>. The snippet profile name appears in red in the <strong>Existing snippet profile</strong> list and the <strong>Snippet editor</strong> opens.     </li>
 <li>Click the <strong>Add a new snippet set to the profile</strong> drop-down to display the list of available snippets.</li>
 <li>Select the <strong>cobrand_info</strong> snippet from the list.
-<p><img alt="GEE Server Select cobrand_info Snippet" src="../../art/server/custom_logos/Snippet_cobrandSelect.png"/></p></li>
+<p><img alt="GEE Server Select cobrand_info Snippet" src="../art/server/custom_logos/Snippet_cobrandSelect.png"/></p></li>
 <li>Enter a URL for the path of the custom logo. Select whether your x and y coordinate values are expressed as relative or absolute and enter the parameter values. All fields must be completed.
-<p><img alt="GEE Server cobrand_info Snippet definition" src="../../art/server/custom_logos/Snippet_cobrand.png"/></p>
+<p><img alt="GEE Server cobrand_info Snippet definition" src="../art/server/custom_logos/Snippet_cobrand.png"/></p>
 <p>Click <strong>Save changes</strong> to save the snippet profile.</p></li>
 </ol>
 <h4>To apply a custom logo to a globe or map:</h4>
@@ -178,7 +178,7 @@ The location of the logo file. For example, "http://yourserver.org/top-left-logo
 <li>In the GEE Server Admin console, click <strong>Databases</strong>. The list of databases on GEE server appears.</li>
 <li>Check the box next to the database to which you want to apply your custom logo. Click <strong>Publish</strong>. The Publish dialog appears.</li>
 <li>Select your snippet profile for your custom logo from the <strong>Snippet profiles</strong> drop-down list.
-<p><img alt="GEE Server Publish dialog snippet profile" src="../../art/server/custom_logos/Publish_snippet.png"/></p>
+<p><img alt="GEE Server Publish dialog snippet profile" src="../art/server/custom_logos/Publish_snippet.png"/></p>
 <div class="tip"> If you have already published your database, you need to <strong>Unpublish</strong> before publishing again, this time adding your snippet profile to apply your custom logo.
 </div>
 </li>
@@ -192,26 +192,26 @@ Google Earth EC recognizes only the snippet profile settings made by the first d
 <h5>Single logo at top left</h5>
 <div>
 <p>This example places one logo in the upper-left corner of the window (the top left of the image is 5% of the window width from the left side of the window, and 95% from the bottom), and sets it to dynamically scale to 10% of the window width as the window is resized.</p>
-<p><img alt="cobrand_info top-left example" src="../../art/server/custom_logos/cobrand_top_left.png"/></p>
+<p><img alt="cobrand_info top-left example" src="../art/server/custom_logos/cobrand_top_left.png"/></p>
 </div>
 <h5>Single logo at mid right</h5>
 <div>
 <p>This example places one logo at the vertical midpoint on the right side of the window using absolute and relative coordinate values. The center-right logo tiePoint is placed 5 pixels from the right window edge and at 50% of the relative window height. EC requests the file using HTTPS (as specified in <strong>logo_url</strong>) and doesn't scale the logo.</p>
-<p><img alt="cobrand_info right-center example" src="../../art/server/custom_logos/cobrand_center_right.png"/></p>
+<p><img alt="cobrand_info right-center example" src="../art/server/custom_logos/cobrand_center_right.png"/></p>
 </div>
 <h5>Single logo at top center</h5>
 <div>
 <p>This example places one logo at the top center of the window. The top-center tiePoint of the logo is placed, by relative coordinates, at the 50% window width and 98% window height, and the logo dynamically scales to 9% of the window width.</p>
-<p><img alt="cobrand_info top-center example" src="../../art/server/custom_logos/cobrand_top_center.png"/></p>
+<p><img alt="cobrand_info top-center example" src="../art/server/custom_logos/cobrand_top_center.png"/></p>
 </div>
 <h5>Single logo at lower right corner</h5>
 <div>
 <p>This example places one logo in the bottom right corner of the window by combining relative and absolute coordinate values. The bottom-right logo tiePoint is placed at 80% of the window width from the left window edge, leaving a 20% margin at the right window edge, and 30 pixels from the bottom window edge. The logo is dynamically scaled to occupy 20% of the window width.</p>
-<p><img alt="cobrand_info bottom-right example" src="../../art/server/custom_logos/cobrand_bottom_right.png"/></p></div>
+<p><img alt="cobrand_info bottom-right example" src="../art/server/custom_logos/cobrand_bottom_right.png"/></p></div>
 <h5>Single logo at upper left corner</h5>
 <div>
 <p>This example places one logo in the upper left corner of the window using absolute pixel values. The top-left logo tiePoint is placed 5 pixels from the left window edge and 5 pixels from the top window edge, and the logo is displayed without scaling.</p>
-<p><img alt="cobrand_info upper-left example" src="../../art/server/custom_logos/cobrand_upper_left.png"/></p>
+<p><img alt="cobrand_info upper-left example" src="../art/server/custom_logos/cobrand_upper_left.png"/></p>
 </div>
 <h3>Learn more</h3>
 <ul>

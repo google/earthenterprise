@@ -1,6 +1,6 @@
 <!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
 <title>Create portable globes and maps</title>
-<link rel="stylesheet" href="../../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../../css/containers.css" type="text/css" media="all" /> </head> <body>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
 <!-- 3230777.html -->
 <div class="container">
   <div class="sidebar1">
@@ -32,7 +32,7 @@
   </div>
   <div class="content">
 <a name="top_of_file"></a>
-<p><img src="../../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
 <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | GEE Server administration</h1>
 <h2>Create portable globes and maps</h2>
 <p>When you’re out in the field and you need a globe or map that can easily be stored and accessed from a desktop or laptop, you can create a portable globe or map by creating a <em>cut</em> of one of your databases. A portable globe or map is a single file (<code>.glb</code> or <code>.glc</code>) that stores all the geospatial data available within your specified area of interest—including all high-resolution imagery, terrain, vector data, KML files, and searchable point of interest (POI) locations. Outside the specified area of interest, the globe or map stores only low-resolution imagery and terrain. You specify the levels of resolution when you cut the globe or map.</p>
@@ -101,9 +101,9 @@ Executing: /opt/google/bin/geportableglcpacker --layer_info="/tmp/cutter/glc_205
 <div class="note"><strong>Note:</strong> If you do not know your username and password, contact your Google Earth Enterprise Server System Administrator.</div>
 </li>
 <li>Click <strong>Databases</strong> to display the list of databases and portables pushed to the Server. </li>
-<li>Click the <strong>Settings</strong> button in the top right of the window: <img alt="Settings button" src="../../art/fusion/portable/cutterSettingsButton.png"/> and choose <strong>Launch Cutter</strong> from the Tools menu.
+<li>Click the <strong>Settings</strong> button in the top right of the window: <img alt="Settings button" src="../art/fusion/portable/cutterSettingsButton.png"/> and choose <strong>Launch Cutter</strong> from the Tools menu.
 <p>A new browser tab opens with the GEE Server - Cutting Tool and the <strong>Create new offline map</strong> window appears.</p>
-<p><img alt="GEE Cutter create offline map window" src="../../art/fusion/portable/cutterTools.png"/></p>
+<p><img alt="GEE Cutter create offline map window" src="../art/fusion/portable/cutterTools.png"/></p>
 </li>
 </ol>
 <hr/>
@@ -125,11 +125,11 @@ Executing: /opt/google/bin/geportableglcpacker --layer_info="/tmp/cutter/glc_205
 <h4>Hand drawing the polygon</h4>
 <ol>
 <li>By default, you draw a polygon by hand so the <strong>Select Region</strong> drop-down list is set to <strong>Manual</strong>. </li>
-<li>Use the Hand tool <img alt="Pan tool" src="../../art/fusion/portable/cutterHandTool2.png"/> to pan, then using the navigation controls in the plug-in, zoom in to the region of interest. </li>
-<li>To use your mouse to define the polygon, click the polygon icon in the globe window: <img alt="Polygon icon" id="polygon_icon" name="polygon_icon" src="../../art/fusion/portable/cutterPolygonTool.png"/>. </li>
+<li>Use the Hand tool <img alt="Pan tool" src="../art/fusion/portable/cutterHandTool2.png"/> to pan, then using the navigation controls in the plug-in, zoom in to the region of interest. </li>
+<li>To use your mouse to define the polygon, click the polygon icon in the globe window: <img alt="Polygon icon" id="polygon_icon" name="polygon_icon" src="../art/fusion/portable/cutterPolygonTool.png"/>. </li>
 <li>Click on the map or globe to define each point. You can use the navigation controls on the right to move the globe or change zoom levels while drawing. </li>
 <p>Click the final point at the point of origin to complete the polygon selection.</p>
-<p><img alt="GEE Cutter create offline map window" src="../../art/fusion/portable/cutterPolygonExample.png"/></p>
+<p><img alt="GEE Cutter create offline map window" src="../art/fusion/portable/cutterPolygonExample.png"/></p>
 <p>If you need to draw the polygon again, click <strong>Clear</strong> to delete the polygon you just created.</p>
 </ol>
 <h4>Defining the polygon with KML</h4>

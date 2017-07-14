@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <title>Create composite globes and maps</title>
-<link rel="stylesheet" href="../../css/styles.css" type="text/css" media="all" />
-<link rel="stylesheet" href="../../css/containers.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
 </head>
 <body>
 <!-- 4643041.html -->
@@ -37,7 +37,7 @@
   <p class="sidebar-toc"><a href="../answer/6051584.html">Provide Google Earth Plug-in for your users to install</a></p>
 </div>
 <div class="content"> <a name="top_of_file"></a>
-  <p><img src="../../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+  <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
   <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | GEE Server administration</h1>
   <h2>Create composite globes and maps</h2>
   <a name="top">
@@ -51,7 +51,7 @@
     <p>A composite globe (<code>.glc</code>) is an assembly of layers from existing portable globes or maps. A portable globe or map stores all the geospatial data available within your specified area of interest—your cut—including all high-resolution imagery, terrain, vector data, KML files, and searchable point of interest (POI) locations. Outside the specified area of interest, the globe or map stores only low-resolution imagery and terrain. You specify the levels of resolution when you cut the globe or map.</p>
     <p>When you create a composite globe or map, you define your viewing area using a KML polygon, select layers, and in addition for globes, specify base globe options. One of the key benefits of using composite maps and globes is that you can apply layers that use different cuts or regions of interest, then assemble them to create one single portable map or globe.</p>
     <p>For example, you may want to create a composite map for a hiking trip. You might cut a road map using one region of interest and then cut imagery and also a park map of the hiking trail using additional regions of interest. Ordinarily, cuts from map databases would result in separate <code>.glm</code> files. By assembling the <code>.glm</code> files into a composite <code>.glc</code> file, the result is a single portable map.</p>
-    <p><img alt="GEE composite map example" src="../../art/server/composite_globes/composite_hiking_map.png"/></p>
+    <p><img alt="GEE composite map example" src="../art/server/composite_globes/composite_hiking_map.png"/></p>
     <h2><a name="Creating">Creating composite maps and globes</a></h2>
     <p>You can create composite files of portable globes and maps with the <strong>Assembly tool</strong> feature of the Google Earth Enterprise (GEE) Server.  You provide a KML polygon definition to identify the ‘area of interest.’ This polygon not only defines the viewing area, but is also used by Fusion to create a localized search database.</p>
     <p>You select 2D or 3D layers to add to the composite file from any of the cut maps or globes that you have available in your <code>/opt/google/gehttpd/htdocs/cutter/globes</code> directory.  In addition, for globes, you specify a base globe.
@@ -82,7 +82,7 @@
       <li>Click the <strong>Layers</strong> drop-down list to select a layer to add to your composite file. The selected layer appears as Layer 1. Check the <strong>Use Search?</strong> box to include a localized search database with this layer.</li>
       <li>To add more layers, click the <strong>Layers</strong> drop-down list and continue to select from your available maps or globes.
         <p>Select the layers in the order that you want them to appear in your portable globe or map. If you need to remove a layer, click <strong>delete</strong>.</p>
-        <p><img alt="GEE Assembly tool" src="../../art/server/composite_globes/AssemblyTool-full.png"/></p>
+        <p><img alt="GEE Assembly tool" src="../art/server/composite_globes/AssemblyTool-full.png"/></p>
         <p>When you have no more layers available, the <strong>Layers</strong> drop-down list indicates that all available layers are in use.</p>
       </li>
       <strong>For composite maps</strong>, once you have assembled the layers you want to include, click <strong>Assemble Glc</strong>.
@@ -92,7 +92,7 @@
     </p>
   </android-toc>
   <li>To select a base globe option, click the <strong>Base globe options</strong> drop-down list and choose a portable globe, then click Yes to use the imagery and terrain data for the selected base globe.
-    <p><img alt="GEE Assembly tool base globe options" src="../../art/server/composite_globes/Base_globe_options.png"/></p>
+    <p><img alt="GEE Assembly tool base globe options" src="../art/server/composite_globes/Base_globe_options.png"/></p>
   </li>
   <li>If your base globe is a portable file created using Portable Server 4.4 or earlier, click <strong>Yes</strong> next to <strong>Old (4.4) globe</strong>.
     <p>This option only affects the imagery layer within older <code>.glb</code> files.</p>
@@ -120,7 +120,7 @@
       <li>Enter a new output directory in the text box.</li>
       <li>Click <strong>Disassemble glc</strong>.
         <p>The layers in the composite file are extracted and are moved to the output directory that you specified. If you included a base globe, this portable file is also output to the same directory.</p>
-        <p><img alt="GEE Disassembly tool" src="../../art/server/composite_globes/disassemblyTool-full.png"/></p>
+        <p><img alt="GEE Disassembly tool" src="../art/server/composite_globes/disassemblyTool-full.png"/></p>
       </li>
     </ol>
   </li>

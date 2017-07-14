@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <title>Create custom masks</title>
-<link rel="stylesheet" href="../../css/styles.css" type="text/css" media="all" />
-<link rel="stylesheet" href="../../css/containers.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
 </head>
 <body>
 <!-- 4525555.html -->
@@ -29,7 +29,7 @@
   <p class="sidebar-toc"><a href="../answer/2760655.html">Monitor builds with Twitter</a></p>
 </div>
 <div class="content"> <a name="top_of_file"></a>
-  <p><img src="../../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+  <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
   <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion resources and projects</h1>
   <h2>Create custom masks</h2>
   <hr/>
@@ -115,7 +115,7 @@
   <h2><a id="h.q755la-khb6k2" name="h.q755la-khb6k2"></a>What is gemaskgen?</h2>
   <p><code>gemaskgen</code> is an existing low-level masking tool bundled with GEE Fusion Pro that is invoked by Fusion when building an imagery or terrain resource. The <code>gemaskgen</code> tool was designed to automatically build mask files for imported source imagery and terrain data to hide external, or internal, fill data from view on the globe. In order to build the mask, users must specify within the Resource Editing tool: which band (Red, Green, or Blue) should be used to create the mask; the amount of feathering that should be applied between the fill data (masked) and the usable imagery; a tolerance value (buffer) that may be applied by the tool when checking if a pixel is fill value or not; if the entire image should be checked for fill data (holes); and if both white and black fill data should be included in the mask (0 is assumed default, 255 to be included). </p>
   <p>The <code>gemaskgen</code> tool will be invoked by GEE Fusion Pro after the source imagery are converted into Fusion format (<code>kip</code>). <code>gemaskgen</code> collects the value for each corner pixel on band 1 of the image resource - which is assumed to be the fill data pixel value (0 is the typical value) - and then systematically moves through the <code>kip</code> adding all fill data into the mask until non-fill data is found. The edge between the fill data and usable imagery is feathered based on the user-specified feather value (in pixels). The new GEE Fusion Pro imagery, or terrain, resource is comprised of both the imported source data and the computed mask file as demonstrated in the graphic below. </p>
-  <p><img alt="Masked imagery diagram" src="../../art/custom_masks/image10.jpg"/></p>
+  <p><img alt="Masked imagery diagram" src="../art/custom_masks/image10.jpg"/></p>
   <hr/>
   <h2><a id="h.72rojo-cole53" name="h.72rojo-cole53"></a>Useful information about gepolymaskgen</h2>
   <ul class="spaced-list">
@@ -272,7 +272,7 @@
     <p>Let's step through the sequence of events that occur when <code>gepolymaskgen</code> is invoked as noted above. A new mask file will be created with the same raster dimensions, projection, and geographic coordinates as the <code>brazil-squareimage-nofill.khvr</code> mosaic file specified with <code>--base_image</code>. <code>gepolymaskgen</code> will not feather the edge of the new mask file (<code>--feather 0</code>) for which all pixel values in the mask will be 0.</p>
     <p> The <code>--invert</code> option directs <code>gepolymaskgen</code> to change the mask pixel values from 0 to 255 before writing out the finished mask file <code>brazil-squareimage-nofill-mask.tif</code>. The resulting mask file will look like the image below as viewed in the GIMP photo editing tool. The resulting image resource, when imported into GEE Fusion Pro will display all pixels since the mask file includes edge-to-edge 255 pixels, to display the imagery. Conversely, if all pixels were value 0 (black), the image would be fully hidden from view.</p>
     <h4>An edge-matched, zero-feather mask file built by gepolymaskgen as viewed in the GIMP photo editing tool: </h4>
-    <p><img alt="Hidden masked diagram" src="../../art/custom_masks/image24.jpg"/></p>
+    <p><img alt="Hidden masked diagram" src="../art/custom_masks/image24.jpg"/></p>
     <p>All custom mask files can be built with the different <code>gepolymaskgen</code> masking operators in various combinations to add or subtract shapes from a mask so only the desired imagery is visible. Some masking situations may be very complex and require building multiple mask files with <code>gepolymaskgen</code> to achieve the desired effect. The next section includes some common use cases for building custom masks as a quick reference guide so you may see the steps involved and copy and adapt the commands to suit your own masking needs. These example cases include creating an edge-matched imagery mask with no feathering; creating a mask that clips imagery to the coastline on one side and creates and edge feather on the other side; masking islands to only show land imagery; masking sections within an image. </p>
   </li>
 </ol>
@@ -289,9 +289,9 @@
 <h3><a id="h.qszedw-11begv" name="h.qszedw-11begv"></a>Case 1: Create custom masks for imagery which has no fill pixels (usable imagery goes to the edges)</h3>
 <p>Working with source imagery which fully includes usable imagery to the image edges can cause problems for the <code>gemaskgen</code> tool since usable imagery pixels (ex: 132, 56, 200), and not fill pixels (ex: 0,0,0), will occupy the image corners which <code>gemaskgen</code> references for fill pixel values. The <code>gepolymaskgen</code> tool is well suited to meet this masking challenge since a mask can be created the exact raster dimensions of the image resource, the exact feathering value (0) can be specified, and <code>gepolymaskgen</code> will not attempt to read pixel values. Consider the imagery mosaic below in the middle of Brazil which includes several source images which include all usable imagery and no fill. </p>
 <h4>Location of image mosaic as seen with virtual raster file:</h4>
-<p><img alt="Brazil Imagery mosaic diagram" src="../../art/custom_masks/image29.jpg"/></p>
+<p><img alt="Brazil Imagery mosaic diagram" src="../art/custom_masks/image29.jpg"/></p>
 <h4>Close up of imagery resource imported into Fusion:</h4>
-<p><img alt="Brazil Imagery Fusion import" src="../../art/custom_masks/image40.jpg"/></p>
+<p><img alt="Brazil Imagery Fusion import" src="../art/custom_masks/image40.jpg"/></p>
 <p>Since we know the source imagery does not contain fill data we can create a custom mask based on the <code>khvr</code> virtual mosaic description file, then include this for import into Fusion. For this process, <code>gepolymaskgen</code> will need to know:</p>
 <ol>
   <li>The base image to create the mask file from (including location and raster dimensions)</li>
@@ -325,9 +325,9 @@
 <p><code>sys 0m2.260s</code></p>
 <p>The resulting mask will be approximately 100MB in filesize and will display all usable imagery in the areas of white pixels. </p>
 <h4> View of the built mask file within the GIMP photo editing tool with edge-to-edge display of all imagery pixels for the source file:</h4>
-<p><img alt="hidden masked diagram" src="../../art/custom_masks/image24.jpg"/></p>
+<p><img alt="hidden masked diagram" src="../art/custom_masks/image24.jpg"/></p>
 <h4>View of the image resource after import into Fusion Pro with the custom mask:</h4>
-<p><img alt="Fusion Pro with custom mask" src="../../art/custom_masks/image00.jpg"/></p>
+<p><img alt="Fusion Pro with custom mask" src="../art/custom_masks/image00.jpg"/></p>
 <p>Once the mask file is built by <code>gepolymaskgen</code>, the source imagery may be imported into Fusion Pro by enabling the <code>havemask</code> masking mode in the Fusion GUI or specifying the <code>--havemask</code> option with the <code>genewimageryresource</code> or <code>gemodifyimageryresource</code> commands. </p>
 <p>Please see <a href="#h.wwsxau-f5geku">Appendix A</a> for further information about enabling the <code>havemask</code> mask mode for an image resource.</p>
 <h4><a id="h.iwshjk-8eno4v" name="h.iwshjk-8eno4v"></a>Example B: Creating an edge-matched mask with a fixed value feather </h4>
@@ -362,19 +362,19 @@
 <p><code>sys 0m2.200s</code></p>
 <p>The resulting mask file will be approximately 100MB in filesize with a feathered edge 100 pixels from the edge inwards into the image resource.</p>
 <h4> Resulting mask file from gepolymaskgen seen in the GIMP photo editing tool: </h4>
-<p><img alt="gepolymaskgen in gimp photo editor" src="../../art/custom_masks/image31.jpg"/></p>
+<p><img alt="gepolymaskgen in gimp photo editor" src="../art/custom_masks/image31.jpg"/></p>
 <h4>The image resource now has a 100-pixel feather after Fusion import:</h4>
-<p><img alt="image with 100-pixel feather in Fusion" src="../../art/custom_masks/image21.jpg"/></p>
+<p><img alt="image with 100-pixel feather in Fusion" src="../art/custom_masks/image21.jpg"/></p>
 <p>Once the mask file is built by <code>gepolymaskgen</code>, the source imagery may be imported into Fusion Pro by enabling the <code>havemask</code> masking mode in the Fusion GUI or specifying the <code>--havemask</code> option with the <code>genewimageryresource</code> or <code>gemodifyimageryresource</code> commands. </p>
 <p>Please see <a href="#h.wwsxau-f5geku">Appendix A</a> for further information about enabling the <code>havemask</code> mask mode for an image resource.</p>
 <hr/>
 <h3><a id="h.3n4rc-ctite1" name="h.3n4rc-ctite1"></a>Case 2: Create custom masks for islands</h3>
 <p>Masking imagery around islands is another good use case for <code>gepolymaskgen</code> since it is often desirable to only show usable imagery for the island above sea level and to mask imagery at the coastlines. In this example, we have imagery for the island of Oahu for Hawaii, USA, where all imagery for the island is to be seen in the imagery project but all imagery from the coastline away from the island to the edge of the imagery is to be masked from view. </p>
 <h4> Fusion Preview window:</h4>
-<p><img alt="Fusion preview window" src="../../art/custom_masks/image02.jpg"/></p>
+<p><img alt="Fusion preview window" src="../art/custom_masks/image02.jpg"/></p>
 <p>The Fusion Preview window above displays the overall dimensions and source file extents for four images creating an imagery mosaic for the island of Oahu, Hawaii, USA. A virtual raster description file (<code>KHVR</code>) was created for the four source files and loaded into the Fusion Preview window.</p>
 <h4> Importing the source imagery into Fusion Pro creates an image resource with imagery for the island and water (automask used):</h4>
-<p><img alt="Island and water automask in Fusion" src="../../art/custom_masks/image11.jpg"/></p>
+<p><img alt="Island and water automask in Fusion" src="../art/custom_masks/image11.jpg"/></p>
 <p>Four <code>JPEG2000</code> images were grouped into one virtual mosaic for the image resource and a <code>khvr</code> mosaic description file was built with <code>gevirtualraster</code>. To create the custom mask we need to:</p>
 <ol class="spaced-list">
   <li>Direct <code>gepolymaskgen</code> to use the source <code>khvr</code> file as the base image to set the custom mask the same raster size and fully masks all imagery from view;</li>
@@ -415,9 +415,9 @@
 <p><code>sys 0m3.020s</code></p>
 <p>The resulting mask file is approximately 400MB in filesize. Screenshots of the output mask and resulting Fusion image resource may be seen below.</p>
 <h4>View of the mask with a 100 pixel feather as seen in the GIMP photo editor:</h4>
-<p><img alt="Mask with 100 pixel feather in GIMP" src="../../art/custom_masks/image09.jpg"/></p>
+<p><img alt="Mask with 100 pixel feather in GIMP" src="../art/custom_masks/image09.jpg"/></p>
 <h4>View of the Oahu, Hawaii, USA imagery in Fusion Preview after importing the custom mask with the image resource:</h4>
-<p><img alt="Custom" fusion="fusion" hawiai="Hawiai" in="in" mask="mask" oahu="Oahu" of="of" src="../../art/custom_masks/image33.jpg"/></p>
+<p><img alt="Custom" fusion="fusion" hawiai="Hawiai" in="in" mask="mask" oahu="Oahu" of="of" src="../art/custom_masks/image33.jpg"/></p>
 <p>The custom mask file may now be imported into Fusion Pro with the source imagery by enabling the <code>havemask</code> masking mode in the Fusion Pro Resource Editor or by specifying the <code>gemodifyimageryresource --havemask</code> option on the command line. </p>
 <p>Please see <a href="#h.wwsxau-f5geku">Appendix A</a> for further information about enabling the <code>havemask</code> mask mode for an image resource.</p>
 <h4><a id="h.o53yvg-84blkd" name="h.o53yvg-84blkd"></a>Example B: Create a custom edge-matched mask for an island that masks into the water</h4>
@@ -453,16 +453,16 @@
 <p><code>sys 0m3.100s</code></p>
 <p>The resulting mask file is approximately 400MB in filesize. Screenshots of the output mask and resulting Fusion image resource may be seen below.</p>
 <h4>View of the mask file with a -100 pixel feather as seen in the GIMP photo editor:</h4>
-<p><img alt="Mask file of Oahu Hawaii in GIMP" src="../../art/custom_masks/image34.jpg"/></p>
+<p><img alt="Mask file of Oahu Hawaii in GIMP" src="../art/custom_masks/image34.jpg"/></p>
 <h4>View of the Oahu, Hawaii, USA imagery in Fusion Preview after importing the custom mask with the image resource:</h4>
-<p><img alt="Oahu Hawaii in Fusion Preview" src="../../art/custom_masks/image28.jpg"/></p>
+<p><img alt="Oahu Hawaii in Fusion Preview" src="../art/custom_masks/image28.jpg"/></p>
 <p>The custom mask file may now be imported into Fusion Pro with the source imagery by enabling the <code>havemask</code> masking mode in the Fusion Pro Resource Editor or by specifying the <code>gemodifyimageryresource --havemask</code> option on the command line.</p>
 <p>Please see <a href="#h.wwsxau-f5geku">Appendix A</a> for further information about enabling the <code>havemask</code> mask mode for an image resource.</p>
 <hr/>
 <h3><a id="#h.bx3u98-pvlwqy" name="#h.bx3u98-pvlwqy"></a>Case 3: Create custom masks with coastlines and shared edges with other imagery resources</h3>
 <p>Creating custom masks for imagery resources bordering coastlines is a little more challenging since a set of vector polygons are needed to mask the desired imagery to the coastline, and it is necessary to determine what feather values to apply to the coastline and the external edges of the mask. Let's first see the imagery we will be working with in this example.</p>
 <h4>View from the Fusion Preview GUI with imagery for California, USA along the coastline:</h4>
-<p><img alt="Fusiin Preview GUI in California" src="../../art/custom_masks/image41.jpg"/></p>
+<p><img alt="Fusiin Preview GUI in California" src="../art/custom_masks/image41.jpg"/></p>
 <p>Forty-two source files of 15-meter imagery have been grouped into one virtual raster to build a new imagery resource. The source images along the interior of California fully contain usable imagery and do not include fill data; however, imagery along the Pacific Ocean includes water. The goal will be to mask the water from view while displaying imagery for the land. The workflow will be as follows:</p>
 <ol>
   <li>Create the overall mask for the image</li>
@@ -509,9 +509,9 @@
 <p><code>sys 0m15.650s</code></p>
 <p>The resulting mask file is approximately 1GB in filesize. Screenshot of the mask from the GIMP photo editing tool and the resulting image resource after the mask is applied are available below.</p>
 <h4>View of the mask file built in Example A as seen in the GIMP photo editing tool:</h4>
-<p><img alt="Example A mask file in GIMP" src="../../art/custom_masks/image13.jpg"/></p>
+<p><img alt="Example A mask file in GIMP" src="../art/custom_masks/image13.jpg"/></p>
 <h4>View of the imagery resource within the Fusion Preview window after the custom mask is imported:</h4>
-<p><img alt="Finished image after custom mask import" src="../../art/custom_masks/image05.jpg"/></p>
+<p><img alt="Finished image after custom mask import" src="../art/custom_masks/image05.jpg"/></p>
 <p>The custom mask file may now be imported into Fusion Pro with the source imagery by enabling the <code>havemask</code> masking mode in the Fusion Pro Resource Editor or by specifying the <code>gemodifyimageryresource --havemask</code> option on the command line. </p>
 <p>Please see <a href="#h.wwsxau-f5geku">Appendix A</a> for further information about enabling the havemask mask mode for an image resource.</p>
 <h4><a id="h.liqys0-bdy6ft" name="h.liqys0-bdy6ft"></a>Example B: Create an edge-matched custom mask with feathered coastlines and feathered external edges</h4>
@@ -530,12 +530,12 @@
 </ol>
 <p>Screen shots of each mask file generated by the three steps are included below as a reference.</p>
 <h4>Picture frame border mask:</h4>
-<p><img alt="picture frame border mask" src="../../art/custom_masks/image30.jpg"/></p>
+<p><img alt="picture frame border mask" src="../art/custom_masks/image30.jpg"/></p>
 <h4>Coastline mask:</h4>
-<p><img alt="Example A mask file in GIMP" src="../../art/custom_masks/image13.jpg"/></p>
+<p><img alt="Example A mask file in GIMP" src="../art/custom_masks/image13.jpg"/></p>
 <br/>
 <h4>Finished, merged mask of coastline and border feather:</h4>
-<p><img alt="finished mask of coastline and border feather" src="../../art/custom_masks/image07.jpg"/></p>
+<p><img alt="finished mask of coastline and border feather" src="../art/custom_masks/image07.jpg"/></p>
 <p>Console output for building these masks are included below for reference along with the time to build and output filesizes for each of the three masks.</p>
 <ol class="spaced-list">
   <li><strong>Create a 'picture frame' mask for the overall image:</strong>
@@ -610,9 +610,9 @@
     <p><code>sys 0m7.300s</code></p>
     <p>The resulting mask file is approximately 1GB in filesize.</p>
     <h4>View of finished mask file feathering the coastlines and external edges of the image resource:</h4>
-    <p><img alt="finished mask of coastline and border feather" src="../../art/custom_masks/image07.jpg"/></p>
+    <p><img alt="finished mask of coastline and border feather" src="../art/custom_masks/image07.jpg"/></p>
     <h4>View of finished image resource after importing custom mask:</h4>
-    <p><img alt="Finished image after custom mask import" src="../../art/custom_masks/image42.jpg"/></p>
+    <p><img alt="Finished image after custom mask import" src="../art/custom_masks/image42.jpg"/></p>
     <p>The custom mask file may now be imported into Fusion Pro with the source imagery by enabling the <code>havemask</code> masking mode in the Fusion Pro Resource Editor or by specifying the <code>gemodifyimageryresource --havemask</code> option on the command line. </p>
     <p>Please see <a href="#h.wwsxau-f5geku">Appendix A</a> for further information about enabling the <code>havemask</code> mask mode for an image resource.</p>
   </li>
@@ -655,16 +655,16 @@
 <p><code>sys 0m14.540s</code></p>
 <p>The resulting mask will be approximately 1GB in filesize.</p>
 <h4>View of the finished mask within the GIMP photo editing tool:</h4>
-<p><img alt="finished mask in GIMP" src="../../art/custom_masks/image32.jpg"/></p>
+<p><img alt="finished mask in GIMP" src="../art/custom_masks/image32.jpg"/></p>
 <h4>View of the imagery resource within the Fusion Preview window after importing the custom mask:</h4>
-<p><img alt="Fusion preview window with custom mark import" src="../../art/custom_masks/image43.jpg"/></p>
+<p><img alt="Fusion preview window with custom mark import" src="../art/custom_masks/image43.jpg"/></p>
 <p>The custom mask file may now be imported into Fusion Pro with the source imagery by enabling the <code>havemask</code> masking mode in the Fusion Pro Resource Editor or by specifying the <code>gemodifyimageryresource --havemask</code> option on the command line. </p>
 <p>Please see <a href="#h.wwsxau-f5geku">Appendix A</a> for further information about enabling the <code>havemask</code> mask mode for an image resource.</p>
 <hr/>
 <h3><a id="h.d2mv1m-pa0xwq" name="h.d2mv1m-pa0xwq"></a>Case 4: Masking out sections within an image resource</h3>
 <p><code>gepolymaskgen</code> is capable of masking out sections within a source image in addition to masking external edges of the imagery. This is similar to the hole checking option with the <code>gemaskgen</code> tool which can automatically scan an image resource to seek fill data within the image resource. The main difference is <code>gepolymaskgen</code> will only mask out user-specified sections of the imagery. This example case will build on the principles discussed in <a href="#h.qszedw-11begv">Case 1</a> where a fixed feather value edge mask will be made for a mosaic with imagery to the edges, and additionally demonstrate removing (masking) internal portions of an image resource from view with a <code>KML</code> file created in Google Earth. Let's first see a screenshot of imagery used for this example.</p>
 <h4>View of image resource in Fusion Preview after import with the automask tool:</h4>
-<p><img alt="image in Fusion with automask" src="../../art/custom_masks/image16.jpg"/></p>
+<p><img alt="image in Fusion with automask" src="../art/custom_masks/image16.jpg"/></p>
 <p>Boundaries for the imported source files (<code>khvr</code>) are overlayed on the image for reference.</p>
 <p>The workflow for this example is different from the others since we need a <code>KML</code> file to specify which area in the image to remove from view. The general workflow will be:</p>
 <ol class="spaced-list">
@@ -677,9 +677,9 @@
 </ol>
 <p>Examples of what the imagery resource looks like as viewed in Google Earth EC are included below.</p>
 <h4>This image demonstrates how the image resource appears with the area of missing imagery: </h4>
-<p><img alt="Missing imagery in GEEC" src="../../art/custom_masks/image23.jpg"/></p>
+<p><img alt="Missing imagery in GEEC" src="../art/custom_masks/image23.jpg"/></p>
 <h4>This image is a screenshot after a polygon was drawn over the entire area of missing imagery:</h4>
-<p><img alt="Polygon on mising imagery" src="../../art/custom_masks/image03.jpg"/></p>
+<p><img alt="Polygon on mising imagery" src="../art/custom_masks/image03.jpg"/></p>
 <p>The polygon area was set to 50% opacity in order to show the polygon fully covers the area of missing imagery with a little overlap into the usable imagery. This polygon will be stored in the <strong>Places</strong> panel of Google Earth EC and must be saved out from Google Earth as an independent <code>KML</code> file that can then be utilized with <code>gepolymaskgen</code>.</p>
 <div class="note"> <strong>Note: </strong> Additional information about creating polygons within Google Earth is also freely available with the Google Earth Outreach tutorials, directly accessible at <a href="http://earth.google.com/outreach/tutorial_annotate.html#addpolygons">http://earth.google.com/outreach/tutorial_annotate.html#addpolygons</a>. </div>
 <div class="tip"> <strong>Tip: </strong>Each polygon correction should be saved out as a <code>KML</code> file directly (four polygons saved to four separate <code>KML</code> files) as these will be separate mask operations within <code>gepolymaskgen</code>. </div>
@@ -728,9 +728,9 @@
 <p><code>sys 0m11.990s</code></p>
 <p>The resulting mask file will be approximately 900 MB in file size. Screenshots of the finished mask and the resulting image resource are included below.</p>
 <h4>Custom mask which masks missing interior imagery with feathered edge as viewed in the GIMP photo editing tool:</h4>
-<p><img alt="Custom mask with missing imagery in GIMP" src="../../art/custom_masks/image08.jpg"/></p>
+<p><img alt="Custom mask with missing imagery in GIMP" src="../art/custom_masks/image08.jpg"/></p>
 <h4>Resulting image resource built by Fusion after the custom mask is imported. Lower resolution imagery from the resource under the 15-meter imagery will be visible from the internal area masked from view: </h4>
-<p><img alt="Image in Fusion after custom mask import" src="../../art/custom_masks/image22.jpg"/></p>
+<p><img alt="Image in Fusion after custom mask import" src="../art/custom_masks/image22.jpg"/></p>
 <p>The custom mask file may now be imported into Fusion Pro with the source imagery by enabling the <code>havemask</code> masking mode in the Fusion Pro Resource Editor or by specifying the <code>gemodifyimageryresource --havemask</code> option on the command line. </p>
 <p>Please see <a href="#h.wwsxau-f5geku">Appendix A</a> for further information about enabling the <code>havemask</code> mask mode for an image resource.</p>
 <div class="note"> <strong>Note: </strong> This mask file could also be created in two steps as well - the first step to create the base mask file (<strong>picture frame</strong>) that provides a feathered edge for the overall image, and the second step to apply the internal mask with the specified <code>KML</code> file. Multiple areas may be removed from the internal portion of the image mask as separate operations. </div>
@@ -774,7 +774,7 @@
     <p><code>sys 0m3.620s</code></p>
     <p>The resulting mask will be approximately 900MB in filesize.</p>
     <h4>Edge mask created with gepolymaskgen as viewed in the GIMP photo editing tool:</h4>
-    <p><img alt="gepolymaskgen Edge mask in GIMP " src="../../art/custom_masks/image06.jpg"/></p>
+    <p><img alt="gepolymaskgen Edge mask in GIMP " src="../art/custom_masks/image06.jpg"/></p>
   </li>
   <li><strong>Mask the area of missing imagery from the mask built in the previous step:</strong>
     <p><code>jcain@machine123:/gevol-local/src/gepolymaskgen-howto$ time gepolymaskgen --base_mask glandsat_15m_bhutan_missing_imagery-basemask.tif --feather 50 --and_neg_mask bhutan.kml --output_mask glandsat_15m_bhutan_missing_imagery-mask.tif</code></p>
@@ -806,7 +806,7 @@
     <p><code>sys 0m11.890s</code></p>
     <p>The resulting mask file will be approximately 900MB in filesize.</p>
     <h4>Merged mask built with gepolymaskgen with feathered edge and internal image masking for area of missing imagery as viewed in the GIMP photo editing tool:</h4>
-    <p><img alt="gepolymaskgen merged mask in GIMP" src="../../art/custom_masks/image08.jpg"/></p>
+    <p><img alt="gepolymaskgen merged mask in GIMP" src="../art/custom_masks/image08.jpg"/></p>
     <p>The custom mask file may now be imported into Fusion Pro with the source imagery by enabling the <code>havemask</code> masking mode in the Fusion Pro Resource Editor or by specifying the <code>gemodifyimageryresource --havemask</code> option on the command line. </p>
     <p>Please see <a href="#h.wwsxau-f5geku">Appendix A</a> for further information about enabling the <code>havemask</code> mask mode for an image resource.</p>
   </li>
@@ -815,11 +815,11 @@
 <h3><a id="h.6wiupq-gddwoq" name="h.6wiupq-gddwoq"></a>Case 5: Building custom masks with both gemaskgen and gepolymaskgen</h3>
 <p>There are special cases where the capabilities of both <code>gemaskgen</code> and <code>gepolymaskgen</code> are needed to build a custom mask file for an image resource. The SFBayAreaLansat imagery from the Google Earth Enterprise Fusion Pro Tutorial is a good example (screenshot below).</p>
 <h4>Screenshot of the usgsLanSat.tif source file imported into Fusion Pro viewed with no mask. Note the areas of fill data surrounding the imagery: </h4>
-<p><img alt="usgsLanSat.tif in Fusion pro with no mask" src="../../art/custom_masks/image19.jpg"/></p>
+<p><img alt="usgsLanSat.tif in Fusion pro with no mask" src="../art/custom_masks/image19.jpg"/></p>
 <h4>Screenshot of the usgsLanSat.tif imagery after being imported into Fusion Pro with a mask automatically computed:</h4>
-<p><img alt="usgsLanSat.tif in Fusion pro with a mask" src="../../art/custom_masks/image15.jpg"/></p>
+<p><img alt="usgsLanSat.tif in Fusion pro with a mask" src="../art/custom_masks/image15.jpg"/></p>
 <h4>Screenshot of the imported SFBayAreaLanSat image resource in Fusion after the custom mask is created:</h4>
-<p><img alt="SFBayAreaLanSat image in fusion with custom mask" src="../../art/custom_masks/image12.jpg"/></p>
+<p><img alt="SFBayAreaLanSat image in fusion with custom mask" src="../art/custom_masks/image12.jpg"/></p>
 <p>Here, the Fusion Pro automask function is needed to build a mask for the source imagery to mask all Fill Data; however, the imagery also includes imagery for the water which should be, ideally, masked to the coastline. Both <code>gemaskgen</code> and <code>gepolymaskgen</code> will be needed to accomplish this type of masking situation to build a mask hiding fill data within the image and then creating a coastline mask. This example is a special case since the source imagery must be imported into Fusion format first, then the custom mask will be generated from the output of the imagery resource build process. This example will also utilize information found in Appendixes <a href="#h.h6hjk6-u3u8xg">B</a>, <a href="#h.o23346-tgkrx4">C</a> and <a href="#h.p9e53m-jf2wqc">D</a> for locating masks built with <code>gemaskgen</code>. </p>
 <p>The workflow to accomplish this custom mask will be:</p>
 <ol>
@@ -912,17 +912,17 @@
 </li>
 <p>Screenshots of the mask files during the build process are included below for reference. Each mask file is approximately 50MB in file size.</p>
 <h4>Mask computed by gemaskgen during SFBayAreaLanSat image resource import:</h4>
-<p><img alt="mask by gemaskgen during SFBayAreaLanSat import" src="../../art/custom_masks/image18.jpg"/></p>
+<p><img alt="mask by gemaskgen during SFBayAreaLanSat import" src="../art/custom_masks/image18.jpg"/></p>
 <h4>Step A: Inverted base mask:</h4>
-<p><img alt="Inverted base mask" src="../../art/custom_masks/image25.jpg"/></p>
+<p><img alt="Inverted base mask" src="../art/custom_masks/image25.jpg"/></p>
 <h4>Step B: Inverted coastlines mask:</h4>
-<p><img alt="Inverted coastlines mask" src="../../art/custom_masks/image20.jpg"/></p>
+<p><img alt="Inverted coastlines mask" src="../art/custom_masks/image20.jpg"/></p>
 <h4>Step C: Merged, finished custom mask: </h4>
-<p><img alt="merged custom mask" src="../../art/custom_masks/image01.jpg"/></p>
+<p><img alt="merged custom mask" src="../art/custom_masks/image01.jpg"/></p>
 <p>The custom mask may now be imported into Google Earth Enterprise Fusion Pro with the image resource by enabling the <code>havemask</code> mask mode. </p>
 <p>Please see <a href="#h.wwsxau-f5geku">Appendix A</a> for further details about importing the new custom mask with an image resource. </p>
 <h4>A screenshot of the SFBayAreaLanSat image resource with the custom mask is viewable below:</h4>
-<p><img alt="SFBayAreaLanSat image with custom mask" src="../../art/custom_masks/image12.jpg"/></p>
+<p><img alt="SFBayAreaLanSat image with custom mask" src="../art/custom_masks/image12.jpg"/></p>
 <p>This example workflow utilized the mask file automatically computed by Fusion Pro during the image resource import. By default, the mask files created by <code>gemaskgen</code> will typically be low resolution with a maximum of 16,000 pixels on any one side. It is possible to create a higher resolution mask file by manually operating the gemaskgen command on the command line. </p>
 <p>Please see <a href="#h.p9e53m-jf2wqc"> Appendix D</a> for further details.</p>
 <hr/>
@@ -939,11 +939,11 @@
     <p><code>/gevol/src/imagery/example-mask.tif</code></p>
   </li>
   <li>Load the Fusion GUI Asset Manager:
-    <p><img alt="Fusion GUI Asset Manager" src="../../art/custom_masks/image14.jpg"/></p>
+    <p><img alt="Fusion GUI Asset Manager" src="../art/custom_masks/image14.jpg"/></p>
   </li>
   <li>Start a new image resource and specify the source file, provider, acquisition date</li>
   <li>Set the Mask Type to Have Mask from the Mask Options drop-down menu
-    <p><img alt="Mask Options drop down menu" src="../../art/custom_masks/image17.jpg"/></p>
+    <p><img alt="Mask Options drop down menu" src="../art/custom_masks/image17.jpg"/></p>
   </li>
   <li>Save the image resource, specifying the location and name for the new image resource.</li>
   <li>Build the image resource.</li>
@@ -977,11 +977,11 @@
     <p> <code>/gevol/src/imagery/example-mask.tif</code></p>
   </li>
   <li>Load the Fusion GUI Asset Manager:
-    <p><img alt="Fusion GUI Asset Manager" src="../../art/custom_masks/image14.jpg"/></p>
+    <p><img alt="Fusion GUI Asset Manager" src="../art/custom_masks/image14.jpg"/></p>
   </li>
   <li>Double-click on the name of the image resource for which the custom mask will be applied, or right-click on the image resource and select <strong>Modify </strong></li>
   <li>When the Resource Editor loads, change the Mask Type to Have Mask from the Mask Options drop-down menu
-    <p><img alt="Mask Options drop down menu" src="../../art/custom_masks/image17.jpg"/></p>
+    <p><img alt="Mask Options drop down menu" src="../art/custom_masks/image17.jpg"/></p>
   </li>
   <li>Save the image resource.</li>
   <li>Build the image resource.</li>
@@ -1099,9 +1099,9 @@
 <p>The <code>gemaskgen</code> automask utility has several options to automatically compute a mask file from an imported Fusion imagery resource (<code>.kip</code>); however, by default <code>gemaskgen</code> limits the computed mask to only be a maximum of 16,000 pixels on any one side which can result in low-resolution masks for high-resolution image resources. Higher resolution masks may be created by manually invoking the <code>gemaskgen</code> tool specifying a higher pixel value for the <code>--maxsize</code> option. </p>
 <p><code>gemaskgen</code> requires access to the Fusion format version of the imagery resource to compute the mask file, which may be located either in the Fusion Asset Root or in a separate folder, depending if the imagery was processed by another system and copied to the Fusion system for use, or if a <code>KRP.taskrule</code> taskrule file redirects output from Fusion resource imports to another volume. The location of both the <code>.kip</code> folder Fusion-format imagery and <code>mask.tif</code> file may be found with the <code>gequery --infiles</code> command as described in <a href="#h.h6hjk6-u3u8xg">Appendix B</a>, <a href="#h.36qmui-enjrcd">Example 3</a>. </p>
 <p>The exact settings used by <code>gemaskgen</code> when building a mask file for an image resource may be found from the <code>gemaskgen</code> log file, available in the Google Earth Enterprise Fusion Pro Asset Manager. To access the log file, load the Asset Manager and right-click on the desired image resource. Select the <strong>Current Version Properties</strong> entry then expand the <code>CHILD.KRMP</code> item until the <code>Maskgen.kia&amp;</code> entry is visible. </p>
-<p><img alt="maskgen version properties" src="../../art/custom_masks/image44.jpg"/></p>
+<p><img alt="maskgen version properties" src="../art/custom_masks/image44.jpg"/></p>
 <p>Left-click once on the logfile icon to the right of the <code>Maskgen.kia</code> entry to open the Logfile.</p>
-<p><img alt="Maskgen Logfile diagram" src="../../art/custom_masks/image26.jpg"/></p>
+<p><img alt="Maskgen Logfile diagram" src="../art/custom_masks/image26.jpg"/></p>
 <p>The <code>gemaskgen</code> command executed by Fusion Pro during the image resource build is visible at the top of the log file on the line starting with <code>COMMAND</code>. This command may be utilized as a template for building a higher resolution mask by also including the <code>--maxsize</code> option. </p>
 <p>An example <code>gemaskgen</code> use will be included below that will build a mask for the <code>example-imagery.kip</code> image resource with a maximum size of 55,000 pixels, feathered 100 pixels into the imagery, with fill data set to pixel value 0: </p>
 <p><code>jcain@machine123:/gevol-local/src/gepolymaskgen-howto$ time gemaskgen --mask --maxsize 55000 --feather 100 /path/to/example-imagery.kip /path/to/example-imagery-mask.tif</code></p>
@@ -1111,18 +1111,18 @@
 <h2><a id="h.nt1nwm-ygzycp" name="h.nt1nwm-ygzycp"></a>Appendix E: Using a Photo Editing application to augment a custom mask</h2>
 <p>This is a special section for manually modifying a custom mask for an imagery resource. Both the <code>gepolymaskgen</code> and <code>gemaskgen</code> tools are able to build high quality masks to accompany image resources; however, there are cases where neither tool may be able to provide the correct solution for a set of imagery. Consider the mask and imagery resource from the <a href="#h.6wiupq-gddwoq">Case 5 Example</a> based on the SFBayAreaLanSat image resource for California (below) where <code>gemaskgen</code> successfully masked Fill Data from view and <code>gepolymaskgen</code> successfully masked ocean imagery to the specified coastline. The resulting mask masks out the San Francisco Bay which makes the low-resolution BlueMarble imagery visible (green).</p>
 <h4>SFBayAreaLanSat image resource as completed in Example Case 5:</h4>
-<p><img alt="SFBayAreaLanSat image with custom mask" src="../../art/custom_masks/image12.jpg"/></p>
+<p><img alt="SFBayAreaLanSat image with custom mask" src="../art/custom_masks/image12.jpg"/></p>
 <h4>SFBayAreaLanSat image resource with automasking only:</h4>
-<p><img alt="SFBayAreaLanSat image with automask" src="../../art/custom_masks/image27.jpg"/></p>
+<p><img alt="SFBayAreaLanSat image with automask" src="../art/custom_masks/image27.jpg"/></p>
 <p>One solution for this case is to manually modify the finished custom mask with a photo editing tool such as GIMP or Adobe Photoshop to alter the mask to show more imagery, or less imagery based on the circumstance. In this example, the <code>usgsLanSat-mask.tif</code> custom mask will modified such that imagery for the San Francisco Bay will be visible in the final image resource while still masking imagery to the California Coastline. Here is the workflow for manually modifying the mask file for the SFBayAreaLanSat image resource: </p>
 <ol class="spaced-list">
   <li>Load the usgsLanSat-mask.tif mask file created from the <a href="#h.6wiupq-gddwoq">Case 5 Example</a> into the photo editing application
-    <p><img alt="merged custom mask" src="../../art/custom_masks/image01.jpg"/></p>
+    <p><img alt="merged custom mask" src="../art/custom_masks/image01.jpg"/></p>
   </li>
   <li>Select the paintbrush tool and set to paint with white fill(255). The pixel width, opacity, and feather value of the brush needed will vary for each mask.</li>
   <br/>
   <li>Brush out the entire San Francisco Bay to remove the bay coastline mask
-    <p><img alt="bay coastline mark removed" src="../../art/custom_masks/image04.jpg"/></p>
+    <p><img alt="bay coastline mark removed" src="../art/custom_masks/image04.jpg"/></p>
   </li>
   <li>Save the updated mask file to the same folder location as the <code>usgsLanSat.tif</code> source image file for the SFBayAreaLanSat image resource<code> - /opt/google/share/tutorials/fusion/Imagery</code></li>
   <br/>
@@ -1133,11 +1133,11 @@
   <br/>
   <li>Load the SFBayAreaLanSat image resource into the Fusion Pro Preview <br/>
     <h4>usgsLanSat mask after mask updates to show the imagery for the San Francisco Bay:</h4>
-    <img alt="san francisco bay with usgsLanSat mask" src="../../art/custom_masks/image12.jpg"/> </li>
+    <img alt="san francisco bay with usgsLanSat mask" src="../art/custom_masks/image12.jpg"/> </li>
 </ol>
 <br/>
 <h4>usgsLanSat mask before mask edits:</h4>
-<p><img alt="usgsLanSat before mask" src="../../art/custom_masks/image27.jpg"/></p>
+<p><img alt="usgsLanSat before mask" src="../art/custom_masks/image27.jpg"/></p>
 <hr/>
 <h2><a id="h.3wwhdu-olys6q" name="h.3wwhdu-olys6q"></a>Appendix F: Building custom masks for large source imagery</h2>
 <p>This is a special section intended for use when working with source imagery datasets - such as an image resource of 0.5-meter per pixel resolution 3-band, color imagery for an entire state - where a high-fidelity mask is desired could easily create a mask file larger than 2GB in filesize. The same tools described in this document and appendices can be used to construct a custom mask that provides high fidelity masking for the image resource while being less than 2GB in file size. The key difference in the workflow for building custom mask for large imagery resources - where the image resource will have more than 65,000 pixels on one side - is the source imagery are imported first, then <code>gemaskgen</code> is called manually to create a stand-in base mask file for use with <code>gepolymaskgen</code>. This workflow is similar to the <a href="#h.6wiupq-gddwoq">Case 5 Example</a> where the image resource was imported first into Fusion Pro and then a custom mask was generated and added after import. </p>

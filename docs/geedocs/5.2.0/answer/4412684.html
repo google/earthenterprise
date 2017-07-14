@@ -1,6 +1,6 @@
 <!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
 <title>Specifying Search Fields for Individual Layers</title>
-<link rel="stylesheet" href="../../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../../css/containers.css" type="text/css" media="all" /> </head> <body>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
 <!-- 4412684.html -->
 <div class="container">
   <div class="sidebar1">
@@ -24,7 +24,7 @@
   </div>
   <div class="content">
 <a name="top_of_file"></a>
-<p><img src="../../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
 <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion tutorial</h1>
 <h2>Specifying Search Fields for Individual Layers</h2>
 <p>You can specify one or more fields by configuring layer properties in your source data on which users of Google Earth EC can search. This lesson guides you through the process of specifying one field on one layer as searchable, using the vector project you created in  <a href="../answer/4412681.html"><em>Configuring Display Rules for Polygon Data</em></a>. If you have not yet completed that lesson, complete at least the first two sections, <a href="../answer/4412681.html#93472">Define and Build a Vector Resource Using Polygon Data</a> and <a href="../answer/4412681.html#78762">Define, Configure, and Build a Vector Project</a>, before continuing with this lesson.
@@ -53,28 +53,28 @@
 </p>
 </li>
 <li>Click the <b>Search</b> tab.
-<p><img alt="Layer Properties Search Tab" src="../../art/fusion/tutorial/layerProperties_SearchTab.png"/></p>
+<p><img alt="Layer Properties Search Tab" src="../art/fusion/tutorial/layerProperties_SearchTab.png"/></p>
 <p>When you specify one or more search fields on this tab, a search tab appears in Google Earth EC that allows users to search for data in the selected field(s).
 </p>
 </li>
 <li>Click
-<img alt="New Icon" src="../../art/fusion/tutorial/icon_new.gif"/>. The <strong>Add Search Field</strong> dialog appears.
-<p><img alt="Add Search Field" src="../../art/fusion/tutorial/layerSearchAdd.png"/></p>
+<img alt="New Icon" src="../art/fusion/tutorial/icon_new.gif"/>. The <strong>Add Search Field</strong> dialog appears.
+<p><img alt="Add Search Field" src="../art/fusion/tutorial/layerSearchAdd.png"/></p>
 </li>
 <li>Select <b>COUNTY</b> from the drop-down list next to Column Name, select <b>Search and Display</b> from the drop-down list next to Use, and then click <b>OK</b>.
-<p><img alt="Add Search Field" src="../../art/fusion/tutorial/searchField1.png"/></p>
+<p><img alt="Add Search Field" src="../art/fusion/tutorial/searchField1.png"/></p>
 <p>These selections allow users to search on the COUNTY field and display the county name in the description label.
 </p>
 </li>
 <li>Select <b>POP2000</b> from the drop-down list next to Column Name, select <b>Display Only </b>from the drop-down list next to Use, and then click <b>OK</b>.
-<p><img alt="Add Search Field" src="../../art/fusion/tutorial/searchField2.png"/></p>
+<p><img alt="Add Search Field" src="../art/fusion/tutorial/searchField2.png"/></p>
 <p>These selections result in the county population being displayed in the description label for each county that matches the user’s search criteria. The first field selected for display becomes the placemark name. The second field selected for display becomes the snippet. Any additional fields selected for display become the description.
 </p>
 <div class="note"><p><strong>Note:</strong> This search performs an exact match, which means that the Google Earth EC user must enter the value exactly as it appears in the database. It can also perform a wildcard search, so users can enter part of the text they want to match. For example, if a user enters “dakota” in a state search, the search results match “North Dakota” and “South Dakota”.
 </p></div>
 <p>Your selections appear on the list of search fields on the Search tab in the order in which you added them. Use the Up or Down arrows to reorder the list.
 </p>
-<p><img alt="Layer Properties Search Tab" src="../../art/fusion/tutorial/layerProperties_SearchTab-full.png"/></p>
+<p><img alt="Layer Properties Search Tab" src="../art/fusion/tutorial/layerProperties_SearchTab-full.png"/></p>
 <p>The order in which the fields appear on this list dictates the order in which they appear in the description label in Google Earth EC.
 </p>
 </li>
@@ -136,7 +136,7 @@ the most recent build was started.
 <li>Select the POI Search radio button labeled <b>On</b>. The <b>+ Enhanced Search</b> option appears. Leave its radio button setting as <b>On</b>. Doing so will first search against the <em>POI database</em>, and if no results are found, the <em>GeocodingFederated database</em> is automatically searched.
 </li>
 <li>Change the default Publish point from CACountyPopulation-v001 to <strong>CACountySearch</strong>.
-<p><img alt="GEE Server Database Publish POI Search dialog" src="../../art/fusion/tutorial/serverDatabasePublish-POI.png"/></p>
+<p><img alt="GEE Server Database Publish POI Search dialog" src="../art/fusion/tutorial/serverDatabasePublish-POI.png"/></p>
 <p>To learn more about the options available in the Publish dialog, see <a href="../answer/3497832.html"><em>Create Search Tabs</em></a>, <a href="../answer/6004748.html"><em>Snippet profiles</em></a>, and <a href="../answer/4441137.html"><em>WMS</em></a>.
 </p>
 </li>
@@ -156,6 +156,6 @@ Now you can view the POISearch search tab in Google Earth EC and use it to searc
 </p></div>
 <p>Google Earth EC displays your database with the search tab you specified. When you enter a search string, such as “San”, all of the counties containing that string appear in the search results, and POI icons indicate the location of each of the search results on the map.
 </p>
-<p><img alt="Database With Search Tab" src="../../art/fusion/tutorial/ECSearchTab-POI.png"/></p>
+<p><img alt="Database With Search Tab" src="../art/fusion/tutorial/ECSearchTab-POI.png"/></p>
 </hr></hr></hr></hr><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
 </div></body> </html>

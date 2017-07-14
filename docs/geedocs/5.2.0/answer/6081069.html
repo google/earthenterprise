@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <title>Add flat imagery to Mercator map databases in GEE 5.1.0</title>
-<link rel="stylesheet" href="../../css/styles.css" type="text/css" media="all" />
-<link rel="stylesheet" href="../../css/containers.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
 </head>
 <body>
 <!-- 6081069.html -->
@@ -29,7 +29,7 @@
   <p class="sidebar-toc"><a href="../answer/2760655.html">Monitor builds with Twitter</a></p>
 </div>
 <div class="content"> <a name="top_of_file"></a>
-  <p><img src="../../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+  <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
   <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion resources and projects</h1>
   <h2>Add flat imagery to Mercator map databases in GEE 5.1.0</h2>
   <p>When you build a Mercator-based map database, you must build imagery projects specifically for use with Mercator-based projection (EPSG: 3857). However, with GEE 5.1.0, if you already have database imagery projects in the Plate Carrée projection (EPSG: 4326), you can re-use them for your Mercator-based map database using <em>Mercator on the Fly</em>. When disk space is a key consideration, you only need imagery projects in Plate Carrée projection for 2D flat, 2D Mercator, and 3D databases, reducing the storage requirements for your assets.</p>
@@ -46,20 +46,20 @@
       <tr>
         <td>Flat imagery project</td>
         <td class="align-center red-text"><strong>X</strong></td>
-        <td class="align-center"><img src="../../art/fusion/tutorial/checkmark-g16.png"/></td>
-        <td><img src="../../art/fusion/tutorial/checkmark-g16.png"/> Disk space is most important. Flat imagery projects used for all database types, with <em>Mercator on the Fly</em> used to serve flat imagery for Mercator map databases.</td>
+        <td class="align-center"><img src="../art/fusion/tutorial/checkmark-g16.png"/></td>
+        <td><img src="../art/fusion/tutorial/checkmark-g16.png"/> Disk space is most important. Flat imagery projects used for all database types, with <em>Mercator on the Fly</em> used to serve flat imagery for Mercator map databases.</td>
       </tr>
       <tr>
         <td>Mercator imagery project</td>
-        <td class="align-center"><img src="../../art/fusion/tutorial/checkmark-g16.png"/></td>
+        <td class="align-center"><img src="../art/fusion/tutorial/checkmark-g16.png"/></td>
         <td class="align-center red-text"><strong>X</strong></td>
         <td></td>
       </tr>
       <tr>
         <td>Flat and Mercator imagery projects</td>
-        <td class="align-center"><img src="../../art/fusion/tutorial/checkmark-g16.png"/></td>
-        <td class="align-center"><img src="../../art/fusion/tutorial/checkmark-g16.png"/></td>
-        <td><img src="../../art/fusion/tutorial/checkmark-g16.png"/> Serving speed is most important. Flat imagery projects used for 3D and 2D flat databases; Mercator imagery projects for Mercator map databases.</td>
+        <td class="align-center"><img src="../art/fusion/tutorial/checkmark-g16.png"/></td>
+        <td class="align-center"><img src="../art/fusion/tutorial/checkmark-g16.png"/></td>
+        <td><img src="../art/fusion/tutorial/checkmark-g16.png"/> Serving speed is most important. Flat imagery projects used for 3D and 2D flat databases; Mercator imagery projects for Mercator map databases.</td>
       </tr>
     </tbody>
   </table>
@@ -68,15 +68,15 @@
   <ol class="spaced-list">
     <li>Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu. The Asset Manager dialog appears.</li>
     <li>Select <strong>Mercator Map Tools (2D)</strong> from the Asset Manager toolbar. The tools for Mercator maps appear in the toolbar.</li>
-    <li>Click <img height="20" src="../../art/fusion/tutorial/iconDatabaseMap.png" width="20"/>. The Map Database Editor appears with no projects selected.
-      <p><img alt="Mercator Maps Database Editor" height="175" name="mapsMercDatabaseEditor" src="../../art/fusion/tutorial/mapsMercDatabaseEditor.png" width="434"/> </p>
+    <li>Click <img height="20" src="../art/fusion/tutorial/iconDatabaseMap.png" width="20"/>. The Map Database Editor appears with no projects selected.
+      <p><img alt="Mercator Maps Database Editor" height="175" name="mapsMercDatabaseEditor" src="../art/fusion/tutorial/mapsMercDatabaseEditor.png" width="434"/> </p>
     </li>
     <li></li>
   </ol>
-  Click <img src="../../art/fusion/tutorial/icon_new.gif"/> next to <b>Map Project</b>. The Open Asset dialog appears.
+  Click <img src="../art/fusion/tutorial/icon_new.gif"/> next to <b>Map Project</b>. The Open Asset dialog appears.
   <li><a name="25862"></a>Navigate to the <code>ASSET_ROOT/Projects/Map </code>folder.</li>
   <li>Select the map project that you want to add to the map database and click <strong>Open</strong>. The map project appears in the Map Database Editor next to Map Project.</li>
-  <li>Click <img src="../../art/fusion/tutorial/icon_new.gif"/> next to <strong>Imagery Project</strong>. The Open Asset dialog appears.</li>
+  <li>Click <img src="../art/fusion/tutorial/icon_new.gif"/> next to <strong>Imagery Project</strong>. The Open Asset dialog appears.</li>
   <li>Navigate to the <code>ASSET_ROOT/Projects/Imagery</code> folder.</li>
   <li>Select <strong>Flat Imagery Project</strong> from the <strong>Type</strong> drop-down list, then select the imagery project to add and click <strong>Open</strong>. The imagery project appears in the Map Database Editor next to Imagery Project.</li>
   <li>Select <strong>File &gt; Save</strong>.</li>

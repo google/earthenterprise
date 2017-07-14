@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <title>Creating a Map Database</title>
-<link rel="stylesheet" href="../../css/styles.css" type="text/css" media="all" />
-<link rel="stylesheet" href="../../css/containers.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
 </head>
 <body>
 <!-- 4412455.html -->
@@ -29,7 +29,7 @@
     <p class="sidebar-toc"><a href="../answer/6028272.html">Configure tutorial workspace</a></p>
   </div>
   <div class="content"> <a name="top_of_file"></a>
-    <p><img src="../../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+    <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
     <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion tutorial</h1>
     <h2>Creating a Map Database</h2>
     <p>In addition to using Google Earth Enterprise Fusion to prepare and publish data in Google Earth, you can use it to prepare and publish map data in Google Maps. Map data can be published with Google Earth Enterprise Fusion using Plate Carrée (EPSG: 4326) and Mercator (EPSG: 3857) projections, and is referred to hereafter as a <em>map layer</em>, <em>map project</em>, and <em>map database</em>. </p>
@@ -56,8 +56,8 @@
       <li>Select <strong>Mercator
         Map Tools (2D)</strong> from the
         drop-down menu. </li>
-      <li>Click <img src="../../art/fusion/tutorial/iconLayerMaps.png"/>. The Map Layer Editor appears.
-        <p><img id="mapLayerDia" name="mapLayerDia" src="../../art/fusion/tutorial/mapLayerDialog.png"/></p>
+      <li>Click <img src="../art/fusion/tutorial/iconLayerMaps.png"/>. The Map Layer Editor appears.
+        <p><img id="mapLayerDia" name="mapLayerDia" src="../art/fusion/tutorial/mapLayerDialog.png"/></p>
         <p>The legend area displays the current value of each property you can set for the map layer. The top row lists the names of the locales you support. When you first open this dialog for a new map layer, only the default locale and its values appear, and the box next to <b>Hide unspecialized locales</b> is checked. Google Maps uses the default locale settings when you do not specify different settings for a user’s locale in this tab. </p>
       </li>
       <li>Set the property values for the default locale as follows:
@@ -83,7 +83,7 @@
       <li>For <strong>Line Width</strong>, accept the default,<b> 2</b>. </li>
       <li>Check the box next to <b>Label</b>. </li>
       <li>Under <strong>Label</strong>, accept the default setting on the drop-down list, <b>Text</b>. </li>
-      <li>Click <img alt="Label Format Open" height="18" src="../../art/fusion/tutorial/iconEllipsis.png" width="18"/>. The <strong>Label Format</strong> dialog appears.
+      <li>Click <img alt="Label Format Open" height="18" src="../art/fusion/tutorial/iconEllipsis.png" width="18"/>. The <strong>Label Format</strong> dialog appears.
         <p>The <b>Insert Field</b> drop-down list contains the names of all fields in your source data. </p>
       </li>
       <li>Select <b>NAME</b>, and click <b>OK</b>.<br/>
@@ -108,7 +108,7 @@
       </li>
       <li>Click <b>OK</b>. You return to the Map Layer Editor, and the Feature tab shows all of your
         selections.
-        <p><img src="../../art/fusion/tutorial/mapLayerEditor_Feature-full.png"/></p>
+        <p><img src="../art/fusion/tutorial/mapLayerEditor_Feature-full.png"/></p>
       </li>
       <li>Select <b>Save</b> from the File menu<b>.</b> </li>
       <li>Navigate to the <code>ASSET_ROOT/MapLayers</code> folder. </li>
@@ -125,14 +125,14 @@
     </ol>
     <h4>To create a map project: </h4>
     <ol class="spaced-list">
-      <li>In the Asset Manager, click <img src="../../art/fusion/tutorial/iconProjMaps.png"/>. The Map Project Editor appears. </li>
-      <li><a name="68889"></a>Click <img src="../../art/fusion/tutorial/icon_new.gif"/>. The Open dialog appears. </li>
+      <li>In the Asset Manager, click <img src="../art/fusion/tutorial/iconProjMaps.png"/>. The Map Project Editor appears. </li>
+      <li><a name="68889"></a>Click <img src="../art/fusion/tutorial/icon_new.gif"/>. The Open dialog appears. </li>
       <li>Navigate to the <code>ASSET_ROOT/MapLayers </code>folder. </li>
       <li><a name="47673"></a>Select <b>SFMapLayer</b>, the map layer you created in the previous exercise, and click <b>Open</b>. SF Map Layer appears in the Map Project Editor.
         <p>The default legend name of the map layer, <b>CAFreeways</b>, appears in the Legend Name column, followed by <b>&lt;DEFAULT&gt;</b>, which indicates that this is the name you specified for the legend when you created the layer. The name and path of the map layer appears in the Layer column. </p>
       </li>
       <li>Double-click <b>CAFreeways</b>. The Layer Legend dialog displays the current values for the map layer.
-        <p><img src="../../art/fusion/tutorial/mapProject_LayerLegendDialog.png"/></p>
+        <p><img src="../art/fusion/tutorial/mapProject_LayerLegendDialog.png"/></p>
       </li>
       <li>Click the name field, change the name to <b>California Freeways</b>, press <b>Enter</b> to save the change, and click <b>OK</b>.
         <p>The new legend name appears in the Map Project Editor. Notice that <b>&lt;DEFAULT&gt;</b> no longer appears after the legend name. (If you want to return to the default name, right-click <b>California Freeways</b> in the Legend Name field, and select <b>Use Layer Defaults</b> from the context menu.) </p>
@@ -150,13 +150,13 @@
     <ol class="spaced-list">
       <li>Select <b>Asset Manager</b> from the Tools menu. The Asset Manager appears.</li>
       <li>Select <b>Mercator Map Tools (2D)</b>. The tools for Mercator maps appear in the toolbar.</li>
-      <li>Click <img height="20" src="../../art/fusion/tutorial/iconDatabaseMap.png" width="20"/>. The Map Database Editor appears with no projects selected.
-        <p><img alt="Mercator Maps Database Editor" height="175" name="mapsMercDatabaseEditor" src="../../art/fusion/tutorial/mapsMercDatabaseEditor.png" width="434"/> </p>
+      <li>Click <img height="20" src="../art/fusion/tutorial/iconDatabaseMap.png" width="20"/>. The Map Database Editor appears with no projects selected.
+        <p><img alt="Mercator Maps Database Editor" height="175" name="mapsMercDatabaseEditor" src="../art/fusion/tutorial/mapsMercDatabaseEditor.png" width="434"/> </p>
       </li>
-      <li><a name="59253"></a>Click <img src="../../art/fusion/tutorial/icon_new.gif"/> next to <b>Map Project</b>. The Open Asset dialog appears. </li>
+      <li><a name="59253"></a>Click <img src="../art/fusion/tutorial/icon_new.gif"/> next to <b>Map Project</b>. The Open Asset dialog appears. </li>
       <li><a name="25862"></a>Navigate to the <code>ASSET_ROOT/Projects/Map </code>folder.</li>
       <li>Select <b>SFMapProject</b>, and click <b>Open</b>. The SF Map Project appears in the Map Database Editor next to Map Project. </li>
-      <li><a name="27648"></a>Click <img src="../../art/fusion/tutorial/icon_new.gif"/> next to <b>Imagery Project</b>. The Open Asset dialog appears. </li>
+      <li><a name="27648"></a>Click <img src="../art/fusion/tutorial/icon_new.gif"/> next to <b>Imagery Project</b>. The Open Asset dialog appears. </li>
       <li>Navigate to the <code>ASSET_ROOT/Projects/Imagery </code>folder.
         <p>Notice that <strong>Type</strong> is set to <strong>Mercator Imagery Project</strong> and only the Mercator imagery project(s) you have built are listed. </p>
       </li>
@@ -181,7 +181,7 @@
     <h4>To push a map database:</h4>
     <ol class="spaced-list">
       <li>Right-click the name of the map database you built in the previous exercise, and select <b>Push</b> from the context menu. The Push Database dialog appears.
-        <p><img src="../../art/fusion/tutorial/pushMapDatabase.png"/> </p>
+        <p><img src="../art/fusion/tutorial/pushMapDatabase.png"/> </p>
       </li>
       <li>Click <b>Push</b>.
         <p>Google Earth Enterprise Fusion pushes the database to the Google Earth Enterprise Server, and displays a success message when it is done. </p>
@@ -249,8 +249,8 @@
     <ol class="spaced-list">
       <li>Select <b>Asset Manager</b> from the Tools menu. The Asset Manager appears.</li>
       <li>Select Mercator Map Tools (2D). The tools for Mercator maps appear in the toolbar.</li>
-      <li>Click <img height="20" src="../../art/fusion/tutorial/iconDatabaseMap.png" width="20"/>. The Map Database Editor appears with no projects selected.
-        <p><img alt="Mercator Maps Database Editor" name="mapsMercDatabaseEditor" src="../../art/fusion/tutorial/mapsMercDatabaseEditor-geo.png"/> </p>
+      <li>Click <img height="20" src="../art/fusion/tutorial/iconDatabaseMap.png" width="20"/>. The Map Database Editor appears with no projects selected.
+        <p><img alt="Mercator Maps Database Editor" name="mapsMercDatabaseEditor" src="../art/fusion/tutorial/mapsMercDatabaseEditor-geo.png"/> </p>
       </li>
       <li>Select the <strong>Use Google Base Map (google.com)</strong> checkbox. </li>
       <li>Add your map project.

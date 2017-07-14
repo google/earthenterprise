@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <title>Defining and Building Projects</title>
-<link rel="stylesheet" href="../../css/styles.css" type="text/css" media="all" />
-<link rel="stylesheet" href="../../css/containers.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
 </head>
 <body>
 <!-- 4412421.html -->
@@ -29,7 +29,7 @@
     <p class="sidebar-toc"><a href="../answer/6028272.html">Configure tutorial workspace</a></p>
   </div>
   <div class="content"> <a name="top_of_file"></a>
-    <p><img src="../../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+    <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
     <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion tutorial</h1>
     <h2>Defining and Building Projects</h2>
     <p>The following exercises guide you through defining and building imagery, terrain, and vector projects, using the resources you created in the previous lesson. </p>
@@ -70,15 +70,15 @@
     <p>Although you can change the display order of imagery and terrain resources within a project, the order is ultimately determined by the resolution of the source files. That is, lower-resolution insets are automatically ordered below higher-resolution insets. So in reality, you can change the order of resources with the same resolution only. </p>
     <p>The following example shows a number of imagery resources in a project ordered by resolution. The resolution of each resource appears in parentheses after the resource name. </p>
     <p>The order in which the imagery or terrain resource data appears in the Imagery and Terrain Project Editors is the same as the stacking order of the insets in Google Earth EC. That is, higher-resolution insets appear above lower-resolution insets, so that viewing preference is given to the higher-quality imagery. The stacking order of same-resolution insets follows the order you define in the project. The following graphic illustrates this concept. </p>
-    <p><img alt="Imagery Resources Ordered by Resolution" src="../../art/fusion/tutorial/imageryLevels.png"/></p>
+    <p><img alt="Imagery Resources Ordered by Resolution" src="../art/fusion/tutorial/imageryLevels.png"/></p>
     <h4>To add resources to an imagery project: </h4>
     <br/>
     <ol class="spaced-list">
       <li>Select <b>Asset Manager</b> from the Tools menu. The Asset Manager appears. </li>
-      <li>Click <img alt="Imagery Project Icon" src="../../art/fusion/tutorial/iconProjImagery.png"/> on the toolbar. The Imagery Project Editor appears.
-        <p><img alt="Imagery Project Editor" src="../../art/fusion/tutorial/imageryProjEditor.png"/></p>
+      <li>Click <img alt="Imagery Project Icon" src="../art/fusion/tutorial/iconProjImagery.png"/> on the toolbar. The Imagery Project Editor appears.
+        <p><img alt="Imagery Project Editor" src="../art/fusion/tutorial/imageryProjEditor.png"/></p>
       </li>
-      <li><a name="68889"></a>Click <img alt="New Resource Icon" src="../../art/fusion/tutorial/icon_new.gif"/>. The Open dialog appears. </li>
+      <li><a name="68889"></a>Click <img alt="New Resource Icon" src="../art/fusion/tutorial/icon_new.gif"/>. The Open dialog appears. </li>
       <li>Navigate to the <code>ASSET_ROOT/Resources/Imagery</code> folder. </li>
       <li><a name="47673"></a>Select <b>BlueMarble</b>, and click <b>Open</b>. The BlueMarble resource appears in the Imagery Project Editor. </li>
       <li>Repeat steps 4 through 6 for each of the following resources:
@@ -88,7 +88,7 @@
           <li><b>SFHighResInset</b></li>
         </ul>
         <p>The resources appear in order by resolution, with the higher resolution imagery at the top of the list.</p>
-        <p><img alt="Imagery Project Editor: list of resources" src="../../art/fusion/tutorial/imageryProjEditor-full2.png"/></p>
+        <p><img alt="Imagery Project Editor: list of resources" src="../art/fusion/tutorial/imageryProjEditor-full2.png"/></p>
       </li>
     </ol>
     </hr>
@@ -124,7 +124,7 @@
         <div class="note">
           <p><strong>Note:</strong> The name of the project does not appear in the Preview List pane. When you close the Imagery Project Editor or uncheck the box next to <b>Preview</b>, the bounding boxes disappear. You can reset the view by pressing <b>Ctrl-R</b>. </p>
         </div>
-        <p><img alt="Project Preview" src="../../art/fusion/tutorial/previewProject.png"/></p>
+        <p><img alt="Project Preview" src="../art/fusion/tutorial/previewProject.png"/></p>
       </li>
     </ol>
     <hr>
@@ -134,10 +134,10 @@
     <ol class="spaced-list">
       <li>Select <b>Preferences</b> from the Edit menu. The Preferences dialog appears. </li>
       <li>Under Background Imagery, select <b>Imagery Project</b> from the drop-down list. </li>
-      <li>Click <img alt="Project Browser Icon" src="../../art/fusion/tutorial/iconProjBrowser.png"/> to the right of the drop-down list. The Open dialog appears. </li>
+      <li>Click <img alt="Project Browser Icon" src="../art/fusion/tutorial/iconProjBrowser.png"/> to the right of the drop-down list. The Open dialog appears. </li>
       <li>Navigate to <code>ASSET_ROOT/Projects/Imagery</code>, and select <b>SFBayArea</b>.
         <p>The full path within the tutorial asset root appears to the right of the drop-down list. </p>
-        <p><img alt="Imagery Project Preferences" src="../../art/fusion/tutorial/prefsImageryProject-full.png"/></p>
+        <p><img alt="Imagery Project Preferences" src="../art/fusion/tutorial/prefsImageryProject-full.png"/></p>
       </li>
       <li>Click <b>OK</b>. The Preview pane displays the specified imagery. The specified imagery will remain the background imagery until you change it to another image or return it to the default imagery in the Preferences dialog. </li>
     </ol>
@@ -150,14 +150,14 @@
     <h4>To add resources to a terrain project: </h4>
     <ol class="spaced-list">
       <li>Select <b>Asset Manager</b> from the Tools menu. The Asset Manager appears. </li>
-      <li>Click <img alt="Terrain  Project Icon" src="../../art/fusion/tutorial/iconProjTerrain.png"/> on the toolbar. The <strong>Terrain Project</strong> editor appears. </li>
-      <li><a name="49114"></a>Click <img alt="New Icon" src="../../art/fusion/tutorial/icon_new.gif"/>. The Open dialog appears. </li>
+      <li>Click <img alt="Terrain  Project Icon" src="../art/fusion/tutorial/iconProjTerrain.png"/> on the toolbar. The <strong>Terrain Project</strong> editor appears. </li>
+      <li><a name="49114"></a>Click <img alt="New Icon" src="../art/fusion/tutorial/icon_new.gif"/>. The Open dialog appears. </li>
       <li>Navigate to the <code>ASSET_ROOT/Resources/Terrain</code> folder. </li>
       <li><a name="53069"></a>Select <b>SFTerrain</b>, and click <b>Open</b>. The SFTerrain resource appears in the Terrain Project Editor. </li>
       <li>Check the box next to <b>Preview</b>. </li>
       <li>Right-click the name of the resource, and select <b>Zoom to Layer</b> from the context menu.
         <p>The Preview pane zooms in to the bounding box that indicates the extents of the terrain resource. </p>
-        <img alt="Terrain Project Preview" src="../../art/fusion/tutorial/terrainProjPreview.png"/> </li>
+        <img alt="Terrain Project Preview" src="../art/fusion/tutorial/terrainProjPreview.png"/> </li>
       <li>Uncheck the box next to <b>Preview</b>. </li>
       <li></li>
     </ol>
@@ -166,10 +166,10 @@
     </hr>
     </hr>
     </hr>
-    Click <img alt="New Icon" src="../../art/fusion/tutorial/icon_new.gif"/>. The Open dialog appears.
+    Click <img alt="New Icon" src="../art/fusion/tutorial/icon_new.gif"/>. The Open dialog appears.
     <li>Navigate to the <code>ASSET_ROOT/Resources/Terrain</code> folder. </li>
     <li><a name="53069"></a>Select <b>WorldTopography</b>, and click <b>Open</b>. The WorldTopography resource appears in the Terrain Project Editor.
-      <p><img alt="Terrain Project Editor" src="../../art/fusion/tutorial/terrainProjEditor-full.png"/></p>
+      <p><img alt="Terrain Project Editor" src="../art/fusion/tutorial/terrainProjEditor-full.png"/></p>
     </li>
     <li><a name="53069"></a>In the Terrain Project Editor, select <strong>File &gt; Save</strong>. </li>
     <li>Navigate to the <code>ASSET_ROOT/Projects/Terrain </code>folder. Enter <b>SFTerrain </b>as the name of your project, and click <b>Save</b>. </li>
@@ -191,32 +191,32 @@
     <h2><a name="55155"></a>Define a Vector Project </h2>
     <p>The following exercises cover how to define, configure, and build a vector project using the resources you created in the previous lesson. </p>
     <p>You spend the majority of your time in Google Earth Enterprise Fusion configuring display rules for vector projects, determining how they look in Google Earth EC. Using the data in your vector source files, you can designate specific data for a variety of display purposes, such as road labels, features lines, and icons at viewing altitudes that are most appropriate for each feature. For example: </p>
-    <img alt="Road Display Example" src="../../art/fusion/tutorial/tutRoadDisplay.png"/>
+    <img alt="Road Display Example" src="../art/fusion/tutorial/tutRoadDisplay.png"/>
     <hr>
     <h3><a name="34579"></a>Add Resources to a Vector Project</h3>
     <p>Before specifying the display rules for this vector project, you must add the resource you created in <a href="../answer/4412443.html"><em>Defining and Building Resources</em></a>. </p>
     <h4>To add resources to a vector project: </h4>
     <ol class="spaced-list">
       <li>Select <b>Asset Manager</b> from the Tools menu. The Asset Manager appears. </li>
-      <li>Click <img alt="Vector Project Icon" src="../../art/fusion/tutorial/iconProjVector.png"/> on the toolbar. The Vector Project Editor appears.
-        <p><img alt="Vector Project Editor" src="../../art/fusion/tutorial/vectorProjEditor.png"/></p>
+      <li>Click <img alt="Vector Project Icon" src="../art/fusion/tutorial/iconProjVector.png"/> on the toolbar. The Vector Project Editor appears.
+        <p><img alt="Vector Project Editor" src="../art/fusion/tutorial/vectorProjEditor.png"/></p>
       </li>
-      <li><a name="54569"></a>Click <img alt="New Icon" src="../../art/fusion/tutorial/icon_new.gif"/>. The Open dialog appears. </li>
+      <li><a name="54569"></a>Click <img alt="New Icon" src="../art/fusion/tutorial/icon_new.gif"/>. The Open dialog appears. </li>
       <li>Navigate to the <code>ASSET_ROOT/Resources/Vector</code> folder. </li>
       <li><a name="64273"></a>Select <b>CAHighways</b>, and click <b>Open</b>. The CAHighways resource appears in the Vector Project Editor. </li>
       <li>Repeat steps 3 through 5 to add <b>USPopulation</b> to the project. Notice that a check box appears next to each resource/layer in the project. </li>
       <li>Check the box next to <b>CAHighways</b>. </li>
       <li>Right-click <b>CAHighways</b>, and select <b>Zoom to Layer</b> from the context menu.
         <p>The roads in the CAHighways resource appear in the Preview pane. </p>
-        <img alt="Vector Project Preview" src="../../art/fusion/tutorial/previewVectorProject1.png"/> </li>
+        <img alt="Vector Project Preview" src="../art/fusion/tutorial/previewVectorProject1.png"/> </li>
       <li>Check the box next to <b>USPopulation</b>, switch to the Preview pane, and zoom out a bit.
         <p>Since this resource contains US census data by county, the outlines of counties across the US appear in the Preview pane as well as the roads in California. </p>
-        <img alt="Vector Project Preview" src="../../art/fusion/tutorial/previewVectorProject2.png"/>
+        <img alt="Vector Project Preview" src="../art/fusion/tutorial/previewVectorProject2.png"/>
         <div class="note">
           <p><strong>Note:</strong> The name of the project does not appear in the Preview List pane. When you close the Vector Project Editor or uncheck the boxes next to the resources, the vector data disappears. You can reset the view, if desired, by pressing <b>Ctrl-R</b>. </p>
         </div>
       </li>
-      <li>In the Vector Project Editor, select (highlight) <b>USPopulation</b>, and click <img alt="Delete Icon" src="../../art/fusion/tutorial/iconDelete.png"/> to remove the US Population resource from the project. A message prompts you to confirm the deletion. </li>
+      <li>In the Vector Project Editor, select (highlight) <b>USPopulation</b>, and click <img alt="Delete Icon" src="../art/fusion/tutorial/iconDelete.png"/> to remove the US Population resource from the project. A message prompts you to confirm the deletion. </li>
       <li>Click <b>OK</b>. The <b>USPopulation</b> disappears.
         <div class="note">
           <p><strong>Note:</strong> Removing the resource from the project does not delete the resource. The resource remains intact and available for use by other projects. It is just not part of this particular project. </p>
@@ -234,14 +234,14 @@
     <ol class="spaced-list">
       <li>In the Asset Manager, double-click <b>CARoads</b> in the <code>/ASSET_ROOT/Projects/Vector</code> folder. The Vector Project Editor appears and displays the resource you added in the previous lesson. </li>
       <li>Right-click <b>CAHighways</b>, and select <b>Layer Properties </b>from the context menu. The Layer Properties dialog appears.
-        <p><img alt="Vector Layer Properties dialog" src="../../art/fusion/tutorial/vectorLayerProp.png"/></p>
+        <p><img alt="Vector Layer Properties dialog" src="../art/fusion/tutorial/vectorLayerProp.png"/></p>
       </li>
       <li>Click <b>Off</b> next to Initial State to change it to <b>On</b>. Changing the initial state to <b>On</b> results in the CAHighways layer being automatically checked (turned on) in Google Earth EC. </li>
       <li>Click the blank field next to <b>LookAt</b>. The Open dialog appears. </li>
       <li>Navigate to <code>/opt/google/share/tutorials/fusion/KML</code>, select <code>San Francisco View Oblique.kmz</code>, and click <b>Open</b>.
         <p>When you specify a KML/KMZ file in this field, Google Earth EC users can fly directly to the specified camera view by double-clicking the layer. </p>
         <p>The latitude and longitude of the selected KMZ file appear in the LookAt field. (You can only see the beginning of the latitude unless you expand the default column width.) </p>
-        <p><img alt="Vector Layer Properties dialog with settings" src="../../art/fusion/tutorial/vectorLayerProp-full.png"/></p>
+        <p><img alt="Vector Layer Properties dialog with settings" src="../art/fusion/tutorial/vectorLayerProp-full.png"/></p>
       </li>
       <li>Click <b>OK</b>. You return to the Vector Project Editor. </li>
       <li>Select <strong>File &gt; Save</strong>. Google Earth Enterprise Fusion saves the vector project with the same name. </li>
@@ -294,7 +294,7 @@
           <li>Click the Insert Field drop-down list to display the names of all of the fields in your source data. </li>
           <li>Select <b>NAME</b> from the list. The string «<b>NAME</b>» appears in the text field. </li>
           <li>Click <b>OK</b>. The string «<b>NAME</b>» appears in the Text field. The Display Rule dialog shows all of your selections. These settings result in Google Earth EC displaying the value of the NAME column for each road in your source data.
-            <p><img alt="Display Rules" src="../../art/fusion/tutorial/displayRuleStart.png"/></p>
+            <p><img alt="Display Rules" src="../art/fusion/tutorial/displayRuleStart.png"/></p>
           </li>
           <li>Click <b>OK</b> to save your display rule. </li>
         </ol>
@@ -336,13 +336,13 @@
       <li>In the Vector Project Editor, right-click <b>CAHighways</b>,<b> </b>and select <b>Configure Display Rules</b> from the context menu.
         <p>The Display Rules dialog appears with the Feature tab in the foreground and the <b>default select all</b> rule highlighted. </p>
       </li>
-      <li>Click <img alt="New Icon" src="../../art/fusion/tutorial/icon_new.gif"/> at the bottom-left of the dialog. The New Rule dialog appears. </li>
+      <li>Click <img alt="New Icon" src="../art/fusion/tutorial/icon_new.gif"/> at the bottom-left of the dialog. The New Rule dialog appears. </li>
       <li>Enter <b>Major Freeways</b> in the New Rule Name field, and click <b>OK</b>. The new rule name appears on the Rules list below the <b>default select all</b> rule.
-        <p><img alt="New Display Rule" src="../../art/fusion/tutorial/displayRulesNew.png"/></p>
+        <p><img alt="New Display Rule" src="../art/fusion/tutorial/displayRulesNew.png"/></p>
       </li>
-      <li>Click <img alt="Up Arrow" src="../../art/fusion/tutorial/arrowUp.gif"/> to move the new rule up, so it appears before the <b>default select all</b> rule.
+      <li>Click <img alt="Up Arrow" src="../art/fusion/tutorial/arrowUp.gif"/> to move the new rule up, so it appears before the <b>default select all</b> rule.
         <p>Because Google Earth Enterprise Fusion applies display rules in the order in which they appear on this list, the MajorFreeways rule must appear before the <i>catch-all</i> rule (<b>default select all</b>), which covers all data not covered by other rules. </p>
-        <p><img alt="Display Rules" src="../../art/fusion/tutorial/displayRulesNew2.png"/></p>
+        <p><img alt="Display Rules" src="../art/fusion/tutorial/displayRulesNew2.png"/></p>
       </li>
       <li>On the Feature tab, specify the geometry characteristics for the Major Freeways rule:
         <ol type="a">
@@ -363,7 +363,7 @@
       </li>
       <li>In the Road Label section, accept the current settings. </li>
       <li>In the Road Shield section on the right, click the button next to <b>Icon</b>. The Icons dialog appears.
-        <p><img alt="Icons Dialog" src="../../art/fusion/tutorial/iconsDialogShield.png"/></p>
+        <p><img alt="Icons Dialog" src="../art/fusion/tutorial/iconsDialogShield.png"/></p>
       <li>Scroll down, and select <b>shield1</b>, and click <b>OK</b>.
         <p>The Display Rule dialog shows all of your selections. </p>
       </li>
@@ -377,7 +377,7 @@
           <li>Select <b>equals</b> from the other drop-down list.</li>
           <li>Enter <b>Limited Access Highway</b> in the text field.
             <p>The Filter tab shows your selections.</p>
-            <img alt="Display Rules Filter Tab" id="displayRuleFilter" name="displayRuleFilter" src="../../art/fusion/tutorial/displayRuleFilter.png"/></li>
+            <img alt="Display Rules Filter Tab" id="displayRuleFilter" name="displayRuleFilter" src="../art/fusion/tutorial/displayRuleFilter.png"/></li>
           <li>Click <b>OK</b> to save your changes to the display rule.
             <p>When this data is displayed in Google Earth EC, this filter causes the display settings on the Feature tab to be applied only to the road segments in your source data with the value <b>Limited Access Highway</b> in their FEATURE column.</p>
           </li>
@@ -388,7 +388,7 @@
           <li>In the Vector Project Editor, check the box next to <b>CAHighways</b>, if it is not already checked. </li>
           <li>Zoom in to a display level between <b>9</b> and <b>18</b>, if necessary.
             <p>Both thin red roads and thicker blue roads appear in the Preview pane. The thicker blue roads are the roads defined in the MajorFreeways filter, and the thinner red roads are the rest of the roads in the source data, which are defined by the <b>default select all</b> filter. </p>
-            <p><img alt="Filtered Data Preview" src="../../art/fusion/tutorial/previewFilteredData.png"/></p>
+            <p><img alt="Filtered Data Preview" src="../art/fusion/tutorial/previewFilteredData.png"/></p>
           </li>
         </ol>
       </li>

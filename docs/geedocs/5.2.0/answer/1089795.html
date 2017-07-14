@@ -1,6 +1,6 @@
 <!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
 <title>Map buttons</title>
-<link rel="stylesheet" href="../../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../../css/containers.css" type="text/css" media="all" /> </head> <body>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
 <!-- 1089795.html -->
 <div class="container">
   <div class="sidebar1">
@@ -24,15 +24,15 @@
   </div>
   <div class="content">
 <a name="top_of_file"></a>
-<p><img src="../../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
 <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion resources and projects</h1>
 <h2>Map buttons</h2>
 <p>If you're using version 2.x of the Maps JavaScript API, the procedure below explains how to create map buttons for GEE. However, this procedure isn't compatible with Maps API 3.x.</p>
 <p>GEE includes a default web interface for viewing the 2D maps that you build with Fusion and host on a GEE 2D virtual server. In the example below, the left panel shows map layers that are published with the database.</p>
-<p><img alt="Default HTML interface" src="../../art/fusion/projects/2972222_default_interface.jpg"/></p>
+<p><img alt="Default HTML interface" src="../art/fusion/projects/2972222_default_interface.jpg"/></p>
 <p>Data courtesy of Thematic Mapping.org, <a href="http://thematicmapping.org/" target="_blank">http://thematicmapping.org/</a></p>
 <p>The default interface doesn't include layer buttons like the “Maps, Satellite, Hybrid” buttons in Google Maps. However, you can do some HTML and JavaScript editing to display Maps, Imagery, and Hybrid layer buttons that are similar. The example map below displays a <strong>Maps</strong> button for its two map layers and an <strong>Imagery</strong> button for its imagery layer.</p>
-<p><img alt="HTML interface with buttons" src="../../art/fusion/projects/2972267_interface_buttons.jpg"/></p>
+<p><img alt="HTML interface with buttons" src="../art/fusion/projects/2972267_interface_buttons.jpg"/></p>
 <p>Data courtesy Thematic Mapping.org, <a href="http://thematicmapping.org/" target="_blank">http://thematicmapping.org/</a></p>
 <p>To create buttons like this, associate the <strong>Maps</strong>, <strong>Imagery</strong>, and <strong>Hybrid</strong> (<strong>Show Labels</strong>) buttons with map types that you define with <code>GMapType</code>. In Google Maps, map types are constants that can be called directly. However, in GEE you need to use <code>GMapType</code> to define map types in the interface itself because the map and imagery layers are different for each map.</p>
 <h3>To define map types in GEE:</h3>
@@ -55,7 +55,7 @@
 var painted_map_layer = new GFusionTileLayer(geeServerDefs.serverUrl, geeServerDefs.layers[1]);<br/>
 var labels_layer = new GFusionTileLayer(geeServerDefs.serverUrl, geeServerDefs.layers[2]);</code></p>
 <p>You can access the server definitions and other information about map and imagery layers directly from a web browser by using a URL in this format: <code>http://yourserver.org/virtual-server-name/query?request=Json&amp;vars=geeServerDefs</code>. Responses will look like the image below:</p>
-<p><img alt="GEE server definitions" src="../../art/fusion/projects/2972270_server_definitions.jpg"/></p>
+<p><img alt="GEE server definitions" src="../art/fusion/projects/2972270_server_definitions.jpg"/></p>
 </li>
 <li>Associate layers with buttons by using the <code>GMapType</code> class to define a map type for each of the <code>GTileLayer</code> objects. See the example below:
 <p><code>var painted_map_type = new GMapType([painted_map_layer],new LatLngProjection(MAX_ZOOM_LEVEL),"Maps");<br/>
@@ -92,8 +92,8 @@ map.enableScrollWheelZoom(); map.enableContinuousZoom();</code></p>
 </td>
 </tr>
 <tr>
-<td><img alt="Map buttons" src="../../art/fusion/projects/2972268_map_buttons.jpg"/></td>
-<td><img alt="Menu buttons" src="../../art/fusion/projects/2972269_menu_buttons.jpg"/></td>
+<td><img alt="Map buttons" src="../art/fusion/projects/2972268_map_buttons.jpg"/></td>
+<td><img alt="Menu buttons" src="../art/fusion/projects/2972269_menu_buttons.jpg"/></td>
 </tr>
 </tbody>
 </table>

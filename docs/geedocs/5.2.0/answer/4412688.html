@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <title>Creating Imagery Mosaics</title>
-<link rel="stylesheet" href="../../css/styles.css" type="text/css" media="all" />
-<link rel="stylesheet" href="../../css/containers.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
 </head>
 <body>
 <!-- 4412688.html -->
@@ -29,7 +29,7 @@
     <p class="sidebar-toc"><a href="../answer/6028272.html">Configure tutorial workspace</a></p>
   </div>
   <div class="content"> <a name="top_of_file"></a>
-    <p><img src="../../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+    <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
     <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion tutorial</h1>
     <h2>Creating Imagery Mosaics</h2>
     <p>The simplest way to import source data is to create one resource from each data file. In certain cases, though, you might obtain multiple source files that comprise a single image. In that case, you can combine the source files into a single resource, called a <em>mosaic</em>. This lesson guides you through the process of creating an imagery mosaic. </p>
@@ -53,8 +53,8 @@
     <h4>To define an imagery mosaic: </h4>
     <ol class="spaced-list">
       <li>Select <b>Asset Manager</b> from the Tools menu. The Asset Manager appears. </li>
-      <li>Click <img alt="Imagery Resource Editor Icon" src="../../art/fusion/tutorial/iconResImagery.png"/> on the toolbar. The Imagery Resource Editor appears.
-        <p><img alt="Imagery Resource Editor" name="imageryResEditor" src="../../art/fusion/tutorial/imageryResEditor.png"/></p>
+      <li>Click <img alt="Imagery Resource Editor Icon" src="../art/fusion/tutorial/iconResImagery.png"/> on the toolbar. The Imagery Resource Editor appears.
+        <p><img alt="Imagery Resource Editor" name="imageryResEditor" src="../art/fusion/tutorial/imageryResEditor.png"/></p>
       </li>
       <li>Set the acquisition date to today’s date in year-month-day format by clicking each section of the date and enter the values. </li>
       <li>Select <b>USGS Imagery</b> from the Provider drop-down list. </li>
@@ -62,7 +62,7 @@
       <li>Click <b>Add</b>. The Open Source dialog appears. </li>
       <li>Navigate to the <code>/opt/google/share/tutorials/fusion/Imagery/SF_grayscale/SFnorth</code> folder. </li>
       <li>Select all four TIFF files (only the four files with the <code>.tif</code> extension), and click <b>Open</b>.
-        <p><img alt="Open Source Dialog" src="../../art/fusion/tutorial/mosaicImageryAddDia.png"/></p>
+        <p><img alt="Open Source Dialog" src="../art/fusion/tutorial/mosaicImageryAddDia.png"/></p>
         <p>The selected files appear on the Source File(s) list. </p>
         <p>Notice that the Mosaic Options area is enabled when you import more than one imagery file. (Refer to the <strong> Reference Guide</strong> for detailed explanations of these settings.) </p>
       </li>
@@ -81,7 +81,7 @@
       <li>When the status of the resource changes to <b>Succeeded</b> in the Asset Manager, drag it to the Preview List pane. </li>
       <li>Check the box next to <b>ImageryMosaic</b> in the Preview List pane, and then right-click it and select <b>Zoom to Layer</b> from the context menu.
         <p>The grayscale image of San Francisco appears in the Preview pane, surrounded by a bounding box. This is the single mosaic resource created from four separate source files. </p>
-        <img alt="Grayscale Image of San Francisco" src="../../art/fusion/tutorial/mosaicPreview.png"/> </li>
+        <img alt="Grayscale Image of San Francisco" src="../art/fusion/tutorial/mosaicPreview.png"/> </li>
     </ol>
     <p>Notice the black border and uneven edges of the mosaic. These are called <em>fill pixels</em>. The fill pixels fill the frame around the imagery where its borders are uneven. </p>
     <p>If you want to add more imagery around this image and have all of the imagery blend together seamlessly, you need to <em>mask</em> the fill pixels. Masking blocks the pixels that you do not want users to see. The auto mask feature in Google Earth Enterprise Fusion does a very good job of creating masks for most situations. The <em>Google Earth Enterprise Fusion Reference Guide</em> provides instructions for doing so. </p>
@@ -119,7 +119,7 @@
       </li>
       <li>Preview the new virtual mosaic:
         <ol class="spaced-list" type="a">
-          <li>In the Google Earth Enterprise Fusion GUI, click <img alt="Open File Icon" src="../../art/fusion/tutorial/iconOpenFile.png"/>.
+          <li>In the Google Earth Enterprise Fusion GUI, click <img alt="Open File Icon" src="../art/fusion/tutorial/iconOpenFile.png"/>.
             <p>The Open dialog appears. </p>
           </li>
           <li>Navigate to the <code>path</code> folder. </li>
@@ -152,8 +152,8 @@
     <h4>To apply a custom mask to the virtual mosaic: </h4>
     <ol class="spaced-list">
       <li>Select <b>Asset Manager</b> from the Tools menu. The Asset Manager appears. </li>
-      <li>Click <img alt="Imagery Resource Editor Icon" src="../../art/fusion/tutorial/iconResImagery.png"/> on the toolbar. The Imagery Resource Editor appears.
-        <p><img alt="Imagery Resource Editor" src="../../art/fusion/tutorial/imageryResEditor.png"/></p>
+      <li>Click <img alt="Imagery Resource Editor Icon" src="../art/fusion/tutorial/iconResImagery.png"/> on the toolbar. The Imagery Resource Editor appears.
+        <p><img alt="Imagery Resource Editor" src="../art/fusion/tutorial/imageryResEditor.png"/></p>
       </li>
       <li>Set the acquisition date to today’s date in year-month-day format by clicking each section of the date and enter the values. </li>
       <li>Select <b>USGS Imagery</b> from the Provider drop-down list. </li>

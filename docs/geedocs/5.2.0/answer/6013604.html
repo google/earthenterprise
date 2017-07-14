@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <title>Manage virtual hosts</title>
-<link rel="stylesheet" href="../../css/styles.css" type="text/css" media="all" />
-<link rel="stylesheet" href="../../css/containers.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
 </head>
 <body>
 <!-- 6013604.html -->
@@ -37,7 +37,7 @@
   <p class="sidebar-toc"><a href="../answer/6051584.html">Provide Google Earth Plug-in for your users to install</a></p>
 </div>
 <div class="content"> <a name="top_of_file"></a>
-  <p><img src="../../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+  <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
   <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | GEE Server administration</h1>
   <h2>Manage virtual hosts</h2>
   <p>A <em>virtual host</em> combines Apache virtual host functionality with publisher mapping within GEE Server so that you can publish your databases securely. You create and register a virtual host in GEE Server, assign a security protocol to it, and then associate multiple databases, including portable globes and maps, with that single virtual host. Add another virtual host when you want to use a different authentication and to associate different databases.</p>
@@ -132,7 +132,7 @@
     </ol>
     <h2><a name="AssociateVH"></a>Associate a database with a virtual host</h2>
     <p>To associate a database or portable globe or map with a virtual host, you specify the virtual host when you publish in GEE Server.</p>
-    <p><img alt="Publish dialog virtual host example" src="../../art/server/virtual_hosts/Publishdialog-vh.png"/></p>
+    <p><img alt="Publish dialog virtual host example" src="../art/server/virtual_hosts/Publishdialog-vh.png"/></p>
     <p>See <a href="../answer/3497763.html">Publishing databases and portables</a>.</p>
     <h2><a name="NameVH"></a>Naming virtual hosts</h2>
     <p>Virtual hosts on GEE Server are “name-based,” meaning that you can have multiple “names” that serve assets running on a single IP address. With name-based virtual hosting, GEE Server relies on the client to report the host name as part of the HTTP headers. Using this method, many different hosts can share the same IP address.</p>
