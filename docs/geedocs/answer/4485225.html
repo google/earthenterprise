@@ -210,7 +210,7 @@
     <li>To start serving run the following command in the directory you unpacked Portable Server:
       <p><code>python portable_server.py</code></p>
     </li>
-    <li>Navigate to the Portable Server administrative page at <code>http://localhost:9335</code>, using whatever <code>port</code> you've used in <code>portable.cfg</code>.</li>
+    <li>Navigate to the Portable Server administrative page at <code>http://localhost:9335</code>.  If you have set a custom <code>port</code> number in <code>portable.cfg</code>, substitute that for "9335".</li>
   </ol>
   <p>You can select what globe is being served from the administrative page. Click on the folder icon (<img class="inline" alt="Portable folder icon" src="../art/fusion/portable/portable_folder_icon.png"/>), and you should a see a screen where you can select what globe, or map should be served by Portable Server.</p>
   <p>You can shut down Portable Server from the administrative page, as well. Click on the hamburger menu button (<img class="inline" alt="Portable menu icon" src="../art/fusion/portable/portable_menu_icon.png"/>), and then on 'Quit'.</p>
@@ -243,7 +243,7 @@
   <p>You can also reach the page listed above by clicking <strong>view in browser</strong> from the administration page at <code>http://localhost:9335</code>.</p>
   <hr/>
   <h3 id="portable_cfg">Defining options in portable.cfg</h3>
-  <p>The <strong>server</strong> directory under the directory the Portable Server archive is unpacked contains the main configuration file, <code>portable.cfg</code>. This file defines a number of options, but is primarily used to change the port on which the globe is served, if required.</p>
+  <p>The <strong>server</strong> directory under the Portable Server installation directory contains the main configuration file, <code>portable.cfg</code>. This file defines a number of options, but is primarily used to change the port on which the globe is served, if required.</p>
   <ul cass="spaced-list">
     <li><strong>port</strong>: defines the port on which to serve the globe. Default is 9335.</li>
     <li><strong>globes_directory</strong>: the directory in which to look for globe files.</li>
