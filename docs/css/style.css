@@ -16,6 +16,10 @@ h1, h2, h3, h4 {
   letter-spacing: 2px;
 }
 
+.regularText {
+  text-transform: none;
+}
+
 .full {
   padding: 60px 0;
   background-size: cover;
@@ -607,9 +611,11 @@ ul.info i:hover {
 .post {
   margin: 0 0 60px;
 }
-.post .info, .post .content {
-  margin-left: 110px;
+
+.post .info{
+  margin-left: 100px;
 }
+
 .post .info h3 {
   font-size: 24px;
   margin-bottom: 5px;

@@ -4251,6 +4251,14 @@ dialog[open] {
   border-top-color: white;
 }
 
+.side-nav-with-borders {
+  border-style: solid;
+  height: 0;
+  padding: 0;
+  list-style: none;
+  border-top-color: black;
+}
+
 .split.button {
   position: relative;
   padding-right: 5.0625rem;
@@ -5591,7 +5599,7 @@ td {
 
 /* Default Link Styles */
 a {
-  color: #fcbf31;
+  color: #0000ff;
   text-decoration: none;
   line-height: inherit;
 }

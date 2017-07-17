@@ -1,0 +1,43 @@
+---
+layout: blog
+section_id: blog
+---
+
+
+<!-- Remove the top padding but add in bottom padding -->
+<div class='full white' style="padding:0; padding-bottom:10px;">
+  <div class='row'>
+    <div class="special-title centered-text">
+      <h2>The Latest in Open GEE</h2>
+      <p class="shortline"/>
+    </div>
+    <div class='large-9 columns'>
+      {{ content }}
+
+      <!-- Experiment with Paginator when we have more pages
+      {% if paginator %}
+        <div class="pager">
+          {% if paginator.next_page %}
+            {% if paginator.next_page == 1 %}
+              <a href="/blog" class="older">Older Entries</a>
+            {% else %}
+              <a href="/blog/page{{ paginator.next_page }}" class="older">Older Entries</a>
+            {% endif %}
+          {% else %}
+            <span class="older">Older Entries</span>
+          {% endif %}
+          {% if paginator.previous_page %}
+            {% if paginator.previous_page == 1 %}
+              <a href="/blog" class="newer">Newer Entries</a>
+            {% else %}
+              <a href="/blog/page{{ paginator.previous_page }}" class="newer">Newer Entries</a>
+            {% endif %}
+          {% else %}
+            <span class="newer">Newer Entries</span>
+          {% endif %}
+        </div>
+      {% endif %} -->
+
+    </div>
+  </div>
+</div>
