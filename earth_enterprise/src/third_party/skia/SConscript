@@ -100,6 +100,8 @@ sgl_env.UpdateCppflagsForSkia()
 
 cxx_flags = sgl_env['CXXFLAGS']
 cxx_flags.remove('-Werror')
+cxx_flags.append('-fPIC')
+
 sgl_env['CXXFLAGS'] = cxx_flags
 sgl_env['CPPFLAGS'] += [
   '-DPNG_HANDLE_CHUNK_ALWAYS=3',

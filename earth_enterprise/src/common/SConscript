@@ -175,9 +175,9 @@ env.test('tile_resampler_unittest',
          'tile_resampler_unittest.cpp',
          LIBS=['gecommon', 'gtest', 'qt-mt'])
 
-env.test('verref_storage_unittest',
-         'verref_storage_unittest.cpp',
-         LIBS=['geutil', 'gecommon', 'gtest'])
+#env.test('verref_storage_unittest',
+#         'verref_storage_unittest.cpp',
+#         LIBS=['geutil', 'gecommon', 'gtest'])
 
 env.install('common_lib', [gecommon])
 env.install('common_lib', [geutil])
