@@ -660,8 +660,8 @@ void RasterAssetWidget::AssembleEditRequest(
                           khErrnoException::errorString(errno));
       case SourceConfig::NonVolume:
         throw khException(filename + tr(" doesn't reside on a known volume.\n") +
-                         " You can move your asset files to a known volume, or create a new volume that contains their current location." +
-                         " You can list known volumes and create new ones from the command line with geconfigureassetroot.");
+                         " You can move your asset files to a known volume, or create a new volume\n" +
+			 " that contains their current location using geconfigureassetroot command.");
     }
   }
 
