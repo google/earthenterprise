@@ -58,11 +58,12 @@ class AssetBase : public QMainWindow {
  protected:
   virtual QWidget* BuildMainWidget(QWidget* parent) = 0;
   virtual bool IsModified() = 0;
-  virtual bool SubmitEditRequest(QString* error_msg) = 0;
+  virtual bool SubmitEditRequest(QString* error_msg, bool save_error_) = 0;
 
   void InstallMainWidget();
   void SetName(const QString& text);
   void SetMeta(const khMetaData& meta);
+
   khMetaData Meta() const;
 
   QGridLayout* main_frame_layout_;
@@ -101,6 +102,7 @@ class AssetBase : public QMainWindow {
   bool EnsureNameValid();
   khMetaData meta_;
   QString asset_path_;
+  bool save_error_;
 };
 
 #endif // !KHSRC_FUSION_FUSIONUI_ASSETBASE_H__
