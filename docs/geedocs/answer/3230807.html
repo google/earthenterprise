@@ -13,6 +13,7 @@
   <p class="sidebar-toc"><a href="../answer/4580164.html">Welcome to Portable 5.0</a></p>
   <p class="sidebar-toc"><a href="../answer/4594620.html">Portable Release Notes 5.0</a></p>
   <p class="sidebar-toc"><a href="../answer/3230746.html">Portable User Guide</a></p>
+  <p class="sidebar-toc"><a href="../answer/4485225.html">Portable Globe and Server 5.2</a></p>
   <p class="sidebar-toc"><a href="../answer/3230807.html" class="current-file">Portable Developer Guide</a></p>
   <p class="sidebar-toc"><a href="../answer/3253752.html">Hello Earth! code sample</a></p>
   <p class="sidebar-toc"><a href="../answer/3253275.html">Hello Maps! code sample</a></p>
@@ -20,7 +21,6 @@
   <p class="sidebar-toc"><a href="../answer/1066449.html">Custom folders</a></p>
   <p class="sidebar-toc"><a href="../answer/3003324.html">Cutter tool system information</a></p>
   <p class="sidebar-toc"><a href="../answer/3003337.html">Manually halt the cutter process</a></p>
-  <p class="sidebar-toc"><a href="../answer/4485225.html">Portable Globe and Server 4.4</a></p>
 </div>
 <div class="content">
 <a name="top_of_file"></a>
@@ -42,19 +42,18 @@
 <p>You can customize or extend GEE Portable, or create applications that work with it.</p>
 <p>To help you get started, Google provides two <code>Hello World!</code> files that you can copy and use as templates. These files (<code>Hello_Maps.html</code> for 2D maps and <code>Hello_Earth.html</code> for 3D globes) call the required scripts, load the globe or map, define the <code>.css</code> file, and so on. The files include JSON and, if needed, KML polygons.</p>
 <p>See the resources linked to below to learn how to edit and extend the <code>Hello_Maps.html</code> and <code>Hello_Earth.html</code> files.</p>
-<p><strong>Note</strong>: Although it is possible to configure GEE Portable to display multiple globes or maps at the same time, this isn't recommended or supported. The additional configuration requires you to build the globe or map to reference a specific port number, so you can no longer re-use it for any other ports.</p>
 <h2><a id="Usefulresources" name="Usefulresources">Useful resources</a></h2>
 <p><strong>Note</strong>: Clicking any of these links connects you to a site outside your network. If you’re not sure if your organization allows outside connections, check with your administrator first.</p>
 <p><code>Hello_Maps.html</code> and <code>Hello_Earth.html</code> are based on the Google Maps API and Google Earth API. More information about these APIs is linked to below. Also included are links to some resources for learning how to parse your JSON data and KML coordinates.</p>
 <ul>
   <li><a href="https://developers.google.com/maps/" target="_blank">Google Maps API help</a> at <a href="https://developers.google.com/maps/" target="_blank">https://developers.google.com/maps/</a>. Examples that use the Maps API.</li>
-  <li><a href="https://developers.google.com/earth/" target="_blank">Google Earth API help</a> at <a href="https://developers.google.com/earth/" target="_blank">https://developers.google.com/earth/</a>. Ways to extend the Earth Plug-in.</li>
+  <li><a href="https://developers.google.com/earth/" target="_blank">Google Earth API help</a> at <a href="https://developers.google.com/earth/" target="_blank">https://developers.google.com/earth/</a>. <em>The Earth Plug-in and its API have been discontinued.</em></li>
   <li><a href="http://api.jquery.com/jQuery.parseJSON/" target="_blank">jQuery help</a> at <a href="http://api.jquery.com/jQuery.parseJSON/" target="_blank">http://api.jquery.com/jQuery.parseJSON/</a>. A method for parsing JSON.</li>
   <li><a href="https://code.google.com/p/geoxml3/" target="_blank">geoxml3</a> at <a href="https://code.google.com/p/geoxml3/" target="_blank">https://code.google.com/p/geoxml3/</a>. A KML processor for use with the Google Maps API.</li>
 </ul>
 <h2><a id="HelloMaps" name="HelloMaps">Hello Maps!</a></h2>
-<p>To write a script to display portable 2D maps, start with <code>Hello_Maps.html</code> and edit as needed. <code>Hello_Maps.html</code> is based on the Google Maps API.</p>
-<h3>To access the <code>Hello_Maps</code> file:</h3>
+<p>To write a script to display portable 2D maps, start with <code>hello_maps.html</code> and edit as needed. <code>hello_maps.html</code> is based on the Google Maps API.</p>
+<h3>To access the <code>hello_maps.html</code> file:</h3>
 <ol>
   <li>Launch GEE Portable on <code>localhost:9335</code>.</li>
   <li>Enter <code>http://localhost:9335/local/preview/developers/hello_maps.html</code> in your browser.</li>
@@ -63,7 +62,7 @@
 <p>Alternatively, click the link below:</p>
 <p><a href="../answer/3253275.html">Hello Maps! code sample</a></p>
 <h2><a id="HelloEarth" name="HelloEarth">Hello Earth!</a></h2>
-<p>To write a script to display portable 3D maps (globes), start with <code>Hello_Earth.html</code> and edit as needed. <code>Hello_Earth.html</code> is based on the Google Earth API.</p>
+<p>To write a script to display portable 3D maps (globes), start with <code>hello_earth.html</code> and edit as needed. <em>The <code>hello_earth.html</code> example is based on the discontinued Google Earth API.</em> Take that into consideration when developing new applications.</p>
 <h3>To access the <code>Hello_Earth</code> file:</h3>
 <ol>
   <li>Launch GME Portable on <code>localhost:9335</code>.</li>
@@ -94,7 +93,7 @@
    "is_being_served":false<br/>
   },<br/>
   {<br/>
-  some other globe<br/>
+   some other globe<br/>
   },...<br/>
   ]</code></div>
 <h5>
