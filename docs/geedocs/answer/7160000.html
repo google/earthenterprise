@@ -28,16 +28,6 @@
 Open GEE 5.2.0 includes a number of code and library changes to support the open source effort.</p>
 <!-- TODO: talk about changes between 5.1.3 and 5.2.0 -->
 <!--
-Issues fixed:
-Fix fusing a mosaic with GDAL 2.x: implements IReadBlock() API for khVRRasterBand.
-Shapefiles cannot be read unless they have write access
-Fusion UI and geserveradmin get segmentation fault if they cannot contact Publish module #26 - pass correct data type to cURL library
-cachedreadaccessor_unittest fails on free() call on Ubuntu 16.04 #239 (buffer was too small)
-Portable Globe Cutter fails with a Python error #351 - fix paths
-Once failed to save a new resource, the resource cannot be saved again #317 - partial fixes
-Fix broken line in cutter script. #243
-Update date parsing to handle default date string. #179
-
 Known issues:
 333 portable on MacOS
 Incorrect versions of libraries loaded #326
@@ -143,6 +133,41 @@ current asset root without stopping Fusion.</p>
           <th>Number</th>
           <th class="narrow">Description</th>
           <th>Resolution</th>
+        </tr>
+        <tr>
+          <td>(none)</td>
+          <td>Error when fusing a mosaic in GDAL 2.x</td>
+          <td>Implement IReadBlock() API for khVRRasterBand</td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td>gefusionuser must have write access to vector files</td>
+          <td>Removed the requirement for write access</td>
+        </tr>
+        <tr>
+          <td>26</td>
+          <td>Fusion segmentation faults when trying to push and the server is not available</td>
+          <td>Pass the correct data type to cURL function</td>
+        </tr>
+        <tr>
+          <td>167</td>
+          <td>If save fails because the Fusion server is not running, the user cannot save again even if the problem is fixed</td>
+          <td>Updated state management in resource creation form</td>
+        </tr>
+        <tr>
+          <td>179</td>
+          <td>Update date parsing to fix default date handling</td>
+          <td>Added code to handle default dates in Fusion tools</td>
+        </tr>
+        <tr>
+          <td>239</td>
+          <td>cachedreadaccessor_unittest fails on free() call on Ubuntu 16.04</td>
+          <td>Increased the size of a buffer that was overflowing</td>
+        </tr>
+        <tr>
+          <td>243</td>
+          <td>Fix broken line in cutter script</td>
+          <td>Fixed the relevant line</td>
         </tr>
       </tbody>
     </table>
