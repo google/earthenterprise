@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8"/>
-<title>Portable Globe and Server 4.4</title>
+<title>Portable Globe and Server 5.2</title>
 <link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
 <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
 </head>
@@ -13,6 +13,7 @@
   <p class="sidebar-toc"><a href="../answer/4580164.html">Welcome to Portable 5.0</a></p>
   <p class="sidebar-toc"><a href="../answer/4594620.html">Portable Release Notes 5.0</a></p>
   <p class="sidebar-toc"><a href="../answer/3230746.html">Portable User Guide</a></p>
+  <p class="sidebar-toc"><a href="../answer/4485225.html" class="current-file">Portable Globe and Server 5.2</a></p>
   <p class="sidebar-toc"><a href="../answer/3230807.html">Portable Developer Guide</a></p>
   <p class="sidebar-toc"><a href="../answer/3253752.html">Hello Earth! code sample</a></p>
   <p class="sidebar-toc"><a href="../answer/3253275.html">Hello Maps! code sample</a></p>
@@ -20,12 +21,11 @@
   <p class="sidebar-toc"><a href="../answer/1066449.html">Custom folders</a></p>
   <p class="sidebar-toc"><a href="../answer/3003324.html">Cutter tool system information</a></p>
   <p class="sidebar-toc"><a href="../answer/3003337.html">Manually halt the cutter process</a></p>
-  <p class="sidebar-toc"><a href="../answer/4485225.html" class="current-file">Portable Globe and Server 4.4</a></p>
 </div>
 <div class="content"> <a name="top_of_file"></a>
   <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
   <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Portable</h1>
-  <h2>Portable Globe and Server 4.4</h2>
+  <h2>Portable Globe and Server 5.2</h2>
   <ul>
     <li><a href="#overview">Overview</a></li>
     <li><a href="#installation">Installation</a>
@@ -72,14 +72,14 @@
   </ul>
   <hr/>
   <h2 id="overview">Overview</h2>
-  <p>The Google Earth Enterprise Portable Server solution enables organizations to access portions of their custom globes in the field when no network access may be available or possible. Using a web interface, end-users may select an area of interest to download from a Google Earth Enterprise Server for offline use on their Mac or Windows laptop with the Portable Server application.</p>
+  <p>The Google Earth Enterprise Portable Server solution enables organizations to access portions of their custom globes in the field when no network access may be available or possible. Using a web interface, end-users may select an area of interest to download from a Google Earth Enterprise Server for offline use on their Linux or Windows laptop with the Portable Server application.</p>
   <p>All data available within a specified area of interest is downloaded and stored in a portable globe, including all high-resolution imagery, terrain, vector data, KML files, and searchable Point of Interest (POI) locations. Outside of the specified area of interest, only low resolution imagery and terrain will be stored in a portable globe. These levels of resolution can be specified when the globe is cut.</p>
-  <p>Portable globes may be specified, generated, and downloaded in as quickly as a few minutes -- depending on the area of coverage -- to support rapid preparation for first responders, or larger globes may be built in advanced preparation for responders to have ready “on the shelf.”</p>
+  <p>Portable globes may be specified, generated, and downloaded in as quickly as a few minutes &mdash; depending on the area of coverage &mdash; to support rapid preparation for first responders, or larger globes may be built in advanced preparation for responders to have ready “on the shelf.”</p>
   <p><img alt="GEE portable diagram" id="gee_portable_diagram" name="gee_portable_diagram" src="../art/fusion/portable/gee_portable_diagram.gif"/></p>
   <p>The Portable Server solution is made up of two applications:</p>
   <ul class="spaced-list">
     <li>The <a href="#globe_cutter">globe cutter</a> tool, which is installed on a production Google Earth Enterprise Server system hosting a 3D database. This tool allows end-users and administrators to select, package, and download a portion of the 3D Earth as a portable globe file.</li>
-    <li>The <a href="#local_server">portable server</a> is installed on Windows or Mac OS X machines in the field. It can operate in a single-user mode for complete offline usage by one user, or can broadcast a portable globe so that multiple Portable Server users, and/or mobile users with compatible Android-based smart phones, can view the same globe.</li>
+    <li>The <a href="#local_server">portable server</a> is installed on Linux or Windows machines in the field. It can operate in a single-user mode for complete offline usage by one user, or can broadcast a portable globe so that multiple Portable Server users, and/or mobile users with compatible Android-based smart phones, can view the same globe.</li>
   </ul>
   <div class="note">
     <p><strong>Note:</strong> The Portable Server solution can also create portable globes from a 2D map source. This document uses the term <em>portable globe</em> only, but instructions apply to both globes and maps.</p>
@@ -89,37 +89,17 @@
   <p>This section describes installation of the two applications that make up the Portable Server solution.</p>
   <hr/>
   <h3 id="globe_cutter">Globe cutter installation</h3>
-  <p>The portable globe cutter tool is installed with Google Earth Enterprise Server 4.2 (and later). Globe cutting is disabled by default; to enable it you must set the <code>--enable_cutter</code> flag for <code>geserveradmin</code> from the command line:</p>
+  <p>The portable globe cutter tool is installed with Google Earth Enterprise Server Open Source. Globe cutting is disabled by default; to enable it you must set the <code>--enable_cutter</code> flag for <code>geserveradmin</code> from the command line:</p>
   <p> <code># geserveradmin --enable_cutter</code></p>
-  <p>By default, the cut globes will be stored in the <code>/opt/google/gehttpd/htdocs/cutter/globes</code> directory. The cut globes can be large, and many servers do not have sufficient storage allocated in this directory for multiple globes. If this is the case for your server, please visit the Earth Enterprise user forum for instructions on designating a different directory as the storage area for the cut globes.</p>
+  <p>By default, the cut globes will be stored in the <code>/opt/google/gehttpd/htdocs/cutter/globes</code> directory. The cut globes can be large, and many servers do not have sufficient storage allocated in this directory for multiple globes. If this is the case for your server, you may consider designating a different directory as the storage area for the cut globes.</p>
   <hr/>
   <h3 id="portable_globe_server">Portable globe server installation</h3>
   <p>The portable server is supported on:</p>
   <ul>
-    <li>Windows XP and 7</li>
-    <li>Windows 2008 Server</li>
-    <li>Mac OS X 10.4 and up.</li>
+    <li>Linux distributions Cent OS 7, RHEL 7, Ubuntu 14, Ubuntu 16</li>
+    <li>Windows 7 and 10</li>
   </ul>
-  <h4>Windows</h4>
-  <p>Refer to the <a href="https://github.com/google/earthenterprise/wiki">EarthEnterprise Wiki</a> for build instructions. Once you've obtained the installer:</p>
-  <ol class="spaced-list">
-    <li>Copy the installer to the Windows machine(s) on which you'd like to install the portable server.</li>
-    <li>Double-click the executable file, and follow the prompts to install. Once installed, a shortcut labeled <strong>Google Earth Portable</strong> will be present on your desktop. Double-click that shortcut to launch the server.</li>
-  </ol>
-  <p>The program files are installed into:</p>
-  <code>C:\Program Files\Google\Google Earth Portable Server\Portable\</code>
-  <p>The data files are installed into:</p>
-  <code>C:\Program Files\Google\Google Earth Portable Server\Portable\Data\</code>
-  <p>The default path may vary between Windows versions; different paths for the program and data can be specified at the time of installation.</p>
-  <p>For Windows 7, user can choose Per-User or Per-Machine Installations by selecting "Anyone who uses this computer (all users)" or "Only for me (username)" button. Per-machine installation requires admin rights. Only Per-machine installation is available for Windows XP</p>
-  <h4>Mac OS X</h4>
-  <p>Refer to the <a href="https://github.com/google/earthenterprise/wiki">EarthEnterprise Wiki</a> for build instructions. Once you've obtained the installer:</p>
-  <ol class="spaced-list">
-    <li>Copy the <code>Google_Earth_Portable.dmg</code> file to the OS X machine(s) on which you'd like to install the portable server.</li>
-    <li>Mount the disk image by double-clicking the <code>.dmg</code> file, then open the image in Finder by double-clicking the mounted drive on your desktop.</li>
-    <li>Drag the <strong>Google Earth Portable</strong> folder into your <strong>Applications</strong> folder.</li>
-    <li>To launch the server, select the <strong>Google Earth Portable</strong> shortcut inside that folder.</li>
-  </ol>
+  <p>Refer to the <a href="https://github.com/google/earthenterprise/wiki/Portable-Server">Portable Server Wiki page</a> for build and install instructions.</p>
   <hr/>
   <h2 id="creating_a_portable_globe">Creating a portable globe</h2>
   <p>Cutting a globe is accomplished with a simple web interface. You'll use your mouse, or import KML, to define a polygon, which defines your 'area of interest.' This polygon not only defines the area that will display high-resolution imagery, but is also used by Fusion to create a localized search database.</p>
@@ -138,7 +118,6 @@
   <h4 id="enable_the_cutter">Enable the cutter</h4>
   <p>Before cutting a globe, you must enable the cutter from the command line:</p>
   <code># geserveradmin --enable_cutter </code>
-  <p>For more information about <code>geserveradmin</code>, please refer to the <strong>Command Line Reference</strong> chapter of the <strong>Reference Guide</strong>.</p>
   <div class="alert">
     <p><strong>Note about authentication and SSL:</strong> Cutting is not currently supported on globes that require end-user authentication e.g. LDAP. One workaround is to allow unauthenticated access from localhost on your Earth Enterprise Server. Refer to Apache documentation to enable such a configuration. Cutting of a globe over HTTPS is supported; however the SSL certificate of the target server will not be verified during cuting.</p>
   </div>
@@ -148,7 +127,7 @@
   <img alt="Cutter" id="cutter_interface" interface="" name="cutter_interface" src="../art/fusion/portable/cutter_interface.png"/>
   <p>Select the globe you'd like to cut your portable version from in the drop-down menu.</p>
   <div class="note">
-    <p><strong>Note:</strong> An alternate cutter UI is available at <code>http://yourserver/cutter/globe_cutter_advanced.html</code>. This interface offers additional globe-cutting options, namely <em>Polygon Resolution</em>. This setting is useful when cutting with large polygons; e.g. use 12 for a country-sized polygon and 18 for a city-sized polygon. Additional advanced settings may be offered in future versions. Use caution when changing them as they may dramatically increase build times and globe sizes.</p>
+    <p><strong>Note:</strong> Additional options can be shown by clicking on the 'Advanced &hellip;' button after a cut region has been selected. These options are, namely, <em>Polygon level</em>. This setting is useful when cutting with large polygons; e.g. use 12 for a country-sized polygon and 18 for a city-sized polygon. Additional advanced settings may be offered in future versions. Use caution when changing them as they may dramatically increase build times and globe sizes.</p>
   </div>
   <hr/>
   <h3 id="globe_name">Globe name</h3>
@@ -159,22 +138,21 @@
   </div>
   <hr/>
   <h3 id="drawing_the_polygon">Drawing the polygon</h3>
-  <p>Once the globe name has been specified, you can define the geographic region to be cut, by drawing a polygon on the globe. There are two ways to draw the polygon.</p>
+  <p>Once the globe name has been specified, you can define the geographic region to be cut, by drawing a polygon on the globe. There are two ways to draw the polygon, one of which is deprecated.</p>
+  <h4>Defining the polygon with KML</h4>
+  <p>You can use KML to define the polygon(s). The KML should be complete, and may contain single or multiple <code>&lt;polygon&gt; &lt;/polygon&gt;</code> elements. To insert your KML:</p>
+  <ol>
+    <li>Select the <strong>Enter polygon as KML</strong> checkbox.</li>
+    <li>Paste your KML into the text field.</li>
+    <li>Click outside of the text field. Your polygon appears on the map, if you are running the deprecated Google Earth plug-in.</li>
+  </ol>
   <h4>Hand drawing the polygon</h4>
+  <p><em>This method is only available if you are have the deprecated Google Earth plug-in running in your browser.</em></p>
   <p>First, using the navigation controls in the plugin, zoom in to the region of interest. To use your mouse to define the polygon, click the polygon icon in the globe window:<br/>
     <img alt="Polygon icon" id="polygon_icon" name="polygon_icon" src="../art/fusion/portable/polygon_icon.png"/></p>
   <p>Then, click on the globe to define each point. You can use the navigation controls on the right to move the globe or change zoom levels while drawing.</p>
   <p>Double-click the final point to complete the polygon selection, at which point the polygon should change from blue to purple.</p>
   <p>You can view the KML of the shape you've drawn by selecting the <strong>Enter polygon as KML</strong> checkbox.</p>
-  <h4>Defining the polygon with KML</h4>
-  <p>You can also use KML to define the polygon(s). The KML should be complete, and may contain single or multiple <code>
-    <polygon> </polygon>
-    </code> elements. To insert your KML:</p>
-  <ol>
-    <li>Select the <strong>Enter polygon as KML</strong> checkbox.</li>
-    <li>Paste your KML into the text field.</li>
-    <li>Click outside of the text field. Your polygon appears on the map.</li>
-  </ol>
   <hr/>
   <h3 id="globe_resolution">Globe resolution</h3>
   <p>The polygon you specify in the previous step defines your 'area of interest.' This area will contain high-resolution imagery and data, and search tabs will be created for information that lies within this zone. The maximum and minimum resolutions are specified as integers between 1 and 24. These correspond to the zoom levels that are used in the Fusion server.</p>
@@ -194,8 +172,8 @@
   <hr/>
   <h3 id="building_the_globe">Building the globe</h3>
   <p>Click <strong>Build</strong> to start the build process. Depending on the size of your polygon, this can take from a few minutes to a few hours; likewise, file size will vary widely depending on the area selected and the desired resolution.</p>
-  <p>When the build is finished, a <code>.glb</code> file is created and a download link appears to the file's location on the Earth Server. Save the file into the <code>Portable\Data</code> directory with the other <code>.glb</code> files. Alternately, the globe file can be copied onto portable media like a DVD, thumb drive, or external hard drive to be delivered to users.</p>
-  <p>The <code>.glb</code> file contains all that you need to share your portable globe - imagery, terrain, and vector assets, plus the search database. For this reason, it's important to retain control of your globe if it contains sensitive or proprietary information.</p>
+  <p>When the build is finished, a <code>.glb</code> file is created and a download link appears to the file's location on the Earth Server. Save the file into the <code>&lt;portable-server-unpack-directory&gt;/data</code> directory with the other <code>.glb</code> files. Alternately, the globe file can be copied onto portable media like a DVD, thumb drive, or external hard drive to be delivered to users.</p>
+  <p>The <code>.glb</code> file contains all that you need to share your portable globe &mdash; imagery, terrain, and vector assets, plus the search database. For this reason, it's important to retain control of your globe if it contains sensitive or proprietary information.</p>
   <h4>Search tabs</h4>
   <p>When a globe is cut, the search tabs associated with the globe are also bundled with the globe. However, because search plugins in Google Earth Enterprise run within the Tomcat / Apache instance on the Earth server, most search tabs will not work in a portable globe.</p>
   <p>The Portable Server uses its own search framework that allows Python code stored on the portable machine to execute in place of the GEE plugin.</p>
@@ -224,40 +202,32 @@
   </blockquote>
   <hr/>
   <h2 id="portable_server">Portable server</h2>
-  <p>The portable server is a lightweight web server that runs on OS X or Windows computers. The web server starts within seconds and begins serving one of the globes that has been saved to the Data directory. Once the globe is served, a web browser is automatically launched.</p>
+  <p>The portable server is a lightweight web server that runs on Linux and Windows computers. The web server starts within seconds and begins serving one of the globes that has been saved to the <code>data</code> directory. Once the globe is served, it can be opened in a web browser.</p>
   <hr/>
   <h3 id="serving_a_globe">Serving a globe</h3>
-  <p>Copy the globe to be served into the <code>Data</code> subdirectory (or whichever directory is specified as the <code>globes_directory</code> in <code>portable.cfg</code>).</p>
+  <p>Copy the globe to be served into the <code>data</code> subdirectory (or whichever directory is specified as the <code>globes_directory</code> in <code>portable.cfg</code>).</p>
   <ol class="spaced-list">
-    <li><strong>Windows</strong>: Double-click the <strong>Google Earth Portable</strong> desktop shortcut created during installation.
-      <p><strong>Mac OS X</strong>: From the <strong>Applications</strong> folder, open the <strong>Google Earth Portable</strong> folder and double-click<strong> Google Earth Portable</strong>.</p>
-      <p>All of the globes present in the globe directory are listed and available for serving.</p>
+    <li>To start serving run the following command in the directory you unpacked Portable Server:
+      <p><code>python portable_server.py</code></p>
     </li>
-    <li>Click <strong>start serving</strong> next to the globe you wish to serve.</li>
+    <li>Navigate to the Portable Server administrative page at <code>http://localhost:9335</code>.  If you have set a custom <code>port</code> number in <code>portable.cfg</code>, substitute that for "9335".</li>
   </ol>
-  <p>To stop serving a globe, return to the administration page at <code>http://localhost:9335</code>. The currently-served globe is listed in the first section; click <strong>stop serving</strong> to stop serving that globe.</p>
+  <p>You can select what globe is being served from the administrative page. Click on the folder icon (<img class="inline" alt="Portable folder icon" src="../art/fusion/portable/portable_folder_icon.png"/>), and you should a see a screen where you can select what globe, or map should be served by Portable Server.</p>
+  <p>You can shut down Portable Server from the administrative page, as well. Click on the hamburger menu button (<img class="inline" alt="Portable menu icon" src="../art/fusion/portable/portable_menu_icon.png"/>), and then on 'Quit'.</p>
   <hr/>
   <h3 id="broadcasting_a_globe">Broadcasting a globe</h3>
   <p>To share a globe with others on your network:</p>
   <ol class="spaced-list">
-    <li>If you're not already serving a globe, double-click the globe file, or select the globe to serve from the Portable Server interface.</li>
-    <li>In the <strong>Currently serving</strong> section of the Portable Server interface, click <strong>broadcast</strong>.</li>
-    <li>Enter a <strong>Key</strong> value and click <strong>Set Key</strong>. This key is simply an access key; it is not an encryption key.</li>
-    <li>In the <strong>Remote servers</strong> section, click <strong>add</strong>.</li>
-    <li>The <strong>Currently serving</strong> section now shows that you are <strong>Broadcasting</strong>. Click <strong>glr</strong> to create a connection file for this globe.
-      <p><img alt="Portable Globe" id="portable_glr" name="portable_glr" src="../art/fusion/portable/portable_glr.png"/></p>
-    </li>
-    <li>A <code>share.glr</code> file is created and saved to your browser's default download directory. This file can be sent to any user who requires a connection to your globe; the remote client must also be installed on their machine.</li>
+    <li>Make sure <code>disable_broadcasting</code> is set to <code>False</code> in your <code>portable.cfg</code>.</li>
+    <li>If you're not already serving a globe, select the globe to serve from the Portable Server interface.</li>
+    <li>On the Portable Server administrative page, click the broadcast icon (<img class="inline line-sized" alt="Broadcast globe icon" src="../art/fusion/portable/broadcast_false.gif"/>).</li>
   </ol>
   <hr/>
   <h3 id="changing_the_globe_being_served">Changing the globe being served</h3>
   <p>To change the globe being served:</p>
   <ul>
-    <li>Point your browser to <code>http://localhost:9335</code> and click <strong>start serving</strong> for your new globe.<br/>
-      <br/>
-      Or,</li>
+    <li>Point your browser to <code>http://localhost:9335</code>, click the folder button (<img class="inline" alt="Portable folder icon" src="../art/fusion/portable/portable_folder_icon.png"/>), and select your new globe.</li>
     <br/>
-    <li>Double-click the globe file from your system.</li>
   </ul>
   <p>If you're accessing the globe with the Google Earth Enterprise Client, log out of the client and log back in to <code>http://localhost:9335</code>.</p>
   <hr/>
@@ -268,32 +238,12 @@
   <p>Launch the Google Earth EC client. When prompted for a server address, enter <code>http://localhost:9335</code>. If you've changed the default port in portable.cfg, use the new port value instead.</p>
   <hr/>
   <h3 id="google_earth_api">Google Earth API</h3>
-  <p>The Google Earth Enterprise Portable Server comes with a preconfigured HTML page that displays your globe using the Earth API. This page is at <code>http://localhost:9335/earth/earth_local.html</code>.</p>
+  <p>The Google Earth Enterprise Portable Server comes with a preconfigured HTML page that displays your globe using the Earth API. The page relies on the discontinued Google Earth browser plug-in to render globes, so it doesn't work in most recent browsers. This page is at <code>http://localhost:9335/earth/earth_local.html</code>.</p>
   <p>If you'd like to make your own custom Earth API application, make a copy of the included file from which to start.</p>
   <p>You can also reach the page listed above by clicking <strong>view in browser</strong> from the administration page at <code>http://localhost:9335</code>.</p>
   <hr/>
-  <h3 id="connecting_to_a_broadcasted_globe">Connecting to a broadcasted globe</h3>
-  <p>The Portable server uses connection files to simplify connections to broadcasted globes. The individual with access to the globe file serves that globe on their local machine, then creates the connection file containing the machine address and connection parameters.</p>
-  <p>To connect to a broadcasted globe, you can:</p>
-  <h4>Connect with a .glr file</h4>
-  <p>If you've been sent a <code>.glr</code> file, simply double-click the file to launch your portable server and connect to the broadcasted globe. You must have the portable server already installed.</p>
-  <h4>Create your own connection file</h4>
-  <p>If you don't have the <code>.glr</code> connection file for a globe, but know the machine address and broadcast key, you can create your own connection file:</p>
-  <ol>
-    <li>Start the portable server.</li>
-    <li>In the Remote servers section, click <strong>add</strong>.</li>
-    <li>Enter the following information:
-      <p><strong>Name</strong>: The filename for this server connection file. A .glr extension will be appended to this name when the file is created.<br/>
-        <strong>Server</strong>: The IP address or machine name on which the portable server is running.<br/>
-        <strong>Port</strong>: The default port is <code>9335</code>. If you're serving on another port, enter that number here.<br/>
-        <strong>Key</strong>: The access key for this server.</p>
-      <p><img alt="remote_new" id="remote_new" name="remote_new" src="../art/fusion/portable/remote_new.png"/></p>
-    </li>
-    <li>Click <strong>Add Server</strong>. A .glr file is created and saved to your globes directory. It will also show up in the <strong>Remote servers</strong> section of the Portable Server interface.</li>
-  </ol>
-  <hr/>
   <h3 id="portable_cfg">Defining options in portable.cfg</h3>
-  <p>The <strong>Tools</strong> directory (<code>.apps</code> on OS X) in the portable server folder hierarchy contains the main configuration file, <code>portable.cfg</code>. This file defines a number of options, but is primarily used to change the port on which the globe is served, if required.</p>
+  <p>The <strong>server</strong> directory under the Portable Server installation directory contains the main configuration file, <code>portable.cfg</code>. This file defines a number of options, but is primarily used to change the port on which the globe is served, if required.</p>
   <ul cass="spaced-list">
     <li><strong>port</strong>: defines the port on which to serve the globe. Default is 9335.</li>
     <li><strong>globes_directory</strong>: the directory in which to look for globe files.</li>
@@ -302,63 +252,6 @@
     <li><strong>max_missing_maps_tile_ancestor</strong>: Limit the pixelation to 2<sup>x</sup> by 2<sup>x</sup> sized pixels.</li>
     <li><strong>local_override</strong>: If set to 'True', Portable Server looks for all files on the server first before seeking them on the globe.</li>
   </ul>
-  <h4>Changing the port</h4>
-  <p>When changing the port from the default, you should re-cut your globe for the new port number as well. To do so, you must override the default port parameter in the cutter:</p>
-  <ol class="spaced-list">
-    <li>On your cutter server, open
-      <p><code>/opt/google/gehttpd/htdocs/cutter/js/globe_cutter.js</code></p>
-    </li>
-    <li>Find these lines:
-      <p><code>// Example:<br/>
-        // var FORCE_ARGUMENTS = '&amp;FORCE_PORTABLE_PORT=8778'; var FORCE_ARGUMENTS = ''; </code></p>
-    </li>
-    <li>Uncomment the second line, and update the port number. Then, comment out the third line. You will end up with:
-      <p><code>// Example: var FORCE_ARGUMENTS = '&amp;FORCE_PORTABLE_PORT=3209';<br/>
-        // var FORCE_ARGUMENTS = '';</code></p>
-    </li>
-  </ol>
-  <hr/>
-  <h2 id="glb">Usage of the Apache (glc) Module</h2>
-  <p>The Google Earth Enterprise Apache (glc) module supports a mechanism to serve .glb files from a Google Earth Enterprise Server 4.2.0 (or later). This functionality provides an on-premise alternative to serving a .glb and .glc file from the Portable Server.</p>
-  <h4>Setup</h4>
-  <ol class="spaced-list">
-    <li>Enable the cutter (even if it was done so previously):
-      <p><code>sudo /opt/google/bin/geserveradmin --enable_cutter</code></p>
-    </li>
-    <li>Verify <code>/opt/google/gehttpd/conf.d/gemodules.conf</code> contains:<br/>
-      <p><code>LoadModule glc_module /opt/google/gehttpd/modules/mod_glc.so</code></p>
-    </li>
-    <li>Verify <code>/opt/google/gehttpd/conf.d/virtual_servers/default_glc.location</code> exists and contains:
-      <p><code>&lt;Location /portable/ &gt; SetHandler glc-handler Include conf.d/virtual_servers/runtime/default_glc_runtime &lt;/Location&gt;</code></p>
-    </li>
-    <li>Verify <code>/opt/google/gehttpd/conf.d/virtual_servers/runtime/default_glc_runtime</code> contains:
-      <p><code>Glc "/opt/google/gehttpd/htdocs/cutter/globes"</code></p>
-    </li>
-  </ol>
-  <h4>Access</h4>
-  <p>To load the glb in Google Earth Enterprise Client (EC), connect to the server using the following URL syntax:</p>
-  <code>http://&lt;your_server&gt;/portable/&lt;your_globe.glb&gt;</code>
-  <p>To load the glb or glm in the default application using the Google Earth API Browser Plugin:</p>
-  <code> http://&lt;your_server&gt;/earth/glb.html?map=/portable/&lt;your_globe&gt;.glb<br/>
-  http://&lt;your_server&gt;/maps/glm.html?map=/portable/&lt;your_map&gt;.glm</code>
-  <p>To load the glb in a custom Javascript application using the Google Earth API Browser Plugin, reference the same path when <a href="http://developers.google.com/earth/documentation/reference/google_earth_namespace.html#a70288485024d8129dd1c290fb2e5553b">creating</a> the plugin instance, e.g.</p>
-  <code>google.earth.createInstance('earth', initCB, failureCB, {database:'http://&lt;your_server&gt;/portable/&lt;your_globe.glb&gt;'});</code>
-  <h4>Metadata</h4>
-  <p>To view more information about a particular .glb, including what other globes have been served since the last time the server was restarted, enter the following URL:</p>
-  <code>http://&lt;your_server&gt;/portable/&lt;your_globe.glb&gt;/statusz</code><br/>
-  <br/>
-  The output should look similar to:<br/>
-  <br/>
-  <code><strong>Glc Apache Module Status</strong><br/>
-  <strong>Globe my_globe.glb</strong></code><br/>
-  <code>Size: 13.35 MB (13353414 bytes)</code><br/>
-  <br/>
-  <code><strong>Unpacker Map Globes (3)</strong></code><br/>
-  <br/>
-  <code>   /usr/local/google/globes/Atlanta.glb<br/>
-     /usr/local/google/globes/SF.glb<br/>
-     /usr/local/google/globes/my_globe.glb </code>
-  <p>If the list of globes is too long or stale (i.e. many of the globes are no longer being accessed), restart the server to refresh the information or improve performance.</p>
   <hr/>
   <h2 id="command_line_reference">Command line reference</h2>
   <p>The following command line tools are available for the portable globe and server.</p>
@@ -490,8 +383,8 @@
   <h3><a id="gerewritedbroot" name="gerewritedbroot"></a>gerewritedbroot</h3>
   <h4>Usage</h4>
   <code><strong>gerewritedbroot</strong></code> <code>--source=<em>server_name</em> --icon_directory=<em>directory</em><br/>
-    --dbroot_file=<em>filename</em> [--search_server=<em>server_name</em>]<br/>
-    [--search_port=<em>num]</em> [--kml_map_file=<em>filename]</em> [--kml_server=<em>server_name]</em><br/>
+    --dbroot_file=<em>filename</em>  --kml_map_file=<em>filename</em><br/>
+    [--search_service=<em>search_service_url</em>] [--kml_server=<em>server_name]</em><br/>
     [--kml_port=<em>num]</em> [--kml_url_path=<em>prefix]</em> [--use_ssl_for_kml=<em>bool</em>]</code>
   <h4>Description</h4>
   <ul>
@@ -524,12 +417,8 @@
   <table class="nice-table">
     <tbody>
       <tr>
-        <td><code>--search_server=<em>server_name</em></code></td>
-        <td>Server to be used for search tabs in the dbRoot. Default is <code>localhost</code>.</td>
-      </tr>
-      <tr>
-        <td><code>--search_port=<em>num</em></code></td>
-        <td>Port to be used for search tabs in the dbRoot. Default is <code>8888</code>.</td>
+        <td><code>--search_service=<em>search_service_url</em></code></td>
+        <td>Url to search service. If none is provided then uses relative url for standard Portable search.</td>
       </tr>
       <tr>
         <td><code>--kml_server=<em>server_name</em></code></td>
@@ -656,7 +545,7 @@
   <hr/>
   <h3><a id="geportableglobepacker" name="geportableglobepacker"></a>geportableglobepacker</h3>
   <h4>Usage</h4>
-     <code>geportableglobepacker --globe_directory=<em>path</em> --output=<em>filename</em> --make_copy=<em>bool</em></code>
+     <code>geportableglobepacker --globe_directory=<em>path</em> --output=<em>filename</em> [--make_copy=<em>bool</em>] [--is_2d=<em>bool</em>]</code>
   <h4>Description</h4>
   <p>Packs up all globe files into a single file. If <code>--make_copy</code> is set to <code>true</code>, the globe directory is undisturbed. If not, then the globe directory is rendered unusable, but the command can run considerably faster.</p>
   <h4>Options</h4>
@@ -673,6 +562,10 @@
       <tr>
         <td><code>--make_copy=<em>bool</em></code></td>
         <td>Make a copy of all files so that the globe directory is not disturbed. Default is <code>false</code>.</td>
+      </tr>
+      <tr>
+        <td><code>--is_2d=<em>bool</em></code></td>
+        <td>Are we packaging a 2d map. Default is <code>false</code>.</td>
       </tr>
     </tbody>
   </table>

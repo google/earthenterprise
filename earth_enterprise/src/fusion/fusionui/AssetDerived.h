@@ -48,7 +48,7 @@ class AssetDerived : public AssetBase {
   virtual QString AssetPrettyName() const;
   virtual QWidget* BuildMainWidget(QWidget* parent);
   virtual bool IsModified();
-  virtual bool SubmitEditRequest(QString* error_msg);
+  virtual bool SubmitEditRequest(QString* error_msg, bool save_error_);
 
   typename Defs::Request saved_edit_request_;
   typename Defs::Widget* main_widget_;

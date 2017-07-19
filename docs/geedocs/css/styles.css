@@ -168,7 +168,7 @@ div.note {
 p.note, div.note {
 	border-bottom: 1px solid #eee;
 	border-top: 1px solid #eee;
-	min-height: 30px;*/
+	min-height: 30px;
 	padding: 8px 0 8p 54px;
 	min-height: 0;
 	padding-left: 0;
@@ -235,14 +235,13 @@ ol.spaced-list, ul.spaced-list .spaced-list>li+li {
 }
 th, td
 {
-border: 1px solid #eee;
-padding-bottom:4px;
-padding-top:4px;
-padding-left: 12px;
-padding-right: 12px;
-text-align:left;
-vertical-align:top;
-
+	border: 1px solid #eee;
+	padding-bottom:4px;
+	padding-top:4px;
+	padding-left: 12px;
+	padding-right: 12px;
+	text-align:left;
+	vertical-align:top;
 }
 th {
 	background-color:#f5f5f5;
@@ -254,10 +253,21 @@ table {
 }
 td.main
 {
-border: 0px solid #eee;
-padding-bottom:2px;
-padding-top:2px;
-padding-left: 2px;
-padding-right: 10px;
-text-align:left;
-vertical-align:top;
+	border: 0px solid #eee;
+	padding-bottom:2px;
+	padding-top:2px;
+	padding-left: 2px;
+	padding-right: 10px;
+	text-align:left;
+	vertical-align:top;
+}
+
+img.inline
+{
+	vertical-align: bottom;
+}
+
+img.line-sized
+{
+	max-height: 1.3em;
+}

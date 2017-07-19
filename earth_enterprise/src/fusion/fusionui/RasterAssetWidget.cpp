@@ -644,6 +644,10 @@ void RasterAssetWidget::AssembleEditRequest(
   request->meta.SetValue("sourcedate", acquisition_date_wrapper_->GetDate());
 
   request->sources.clear();
+  if (source_list->numRows() == 0){
+    throw khException(tr("No source files specified \n") +
+                      khErrnoException::errorString(errno));
+  }
   for (int row = 0; row < source_list->numRows(); ++row) {
     std::string filename = source_list->text(row).latin1();
     SourceConfig::AddResult result = request->sources.AddFile(filename);
@@ -655,7 +659,9 @@ void RasterAssetWidget::AssembleEditRequest(
                           + filename + "\n" +
                           khErrnoException::errorString(errno));
       case SourceConfig::NonVolume:
-        throw khException(filename + tr(" doesn't reside on a known volume."));
+        throw khException(filename + tr(" doesn't reside on a known volume.\n") +
+                         " You can move your asset files to a known volume, or create a new volume\n" +
+			 " that contains their current location using geconfigureassetroot command.");
     }
   }
 

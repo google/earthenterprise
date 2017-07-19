@@ -97,13 +97,14 @@ bool AssetDerived<Defs, FinalClass>::IsModified() {
 }
 
 template <class Defs, class FinalClass>
-bool AssetDerived<Defs, FinalClass>::SubmitEditRequest(QString* error_msg) {
+  bool AssetDerived<Defs, FinalClass>::SubmitEditRequest(QString* error_msg, bool save_error_) {
   typename Defs::Request request = AssembleEditRequest();
-  if (request == saved_edit_request_)
+  if (!save_error_ && request == saved_edit_request_ )
     return true;
 
-  if (request.assetname != saved_edit_request_.assetname) {
-    // It is a "SaveAs"'s edit request, so resetting IDs in fuse config to force
+  if (save_error_ || request.assetname != saved_edit_request_.assetname) {
+    // It is a "SaveAs"'s edit request, or earlier request was not
+    // successfully saved, so resetting IDs in fuse config to force
     // generating of new ones.
     ResetConfigIds(&request);
     // Update model-object: sync with locally modified request.
