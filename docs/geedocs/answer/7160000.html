@@ -28,22 +28,6 @@
 Open GEE 5.2.0 includes a number of code and library changes to support the open source effort.</p>
 <!-- TODO: talk about changes between 5.1.3 and 5.2.0 -->
 <!--
-Changes:
--tif versions of tutorial files
--separate tutorial files from main repo
--unbundle third party libraries: python, cython, PIL, setuptools, numpy, lots of others
--remove old installers, create new installers
--rewrite all copyrights in source files, remove Google EULA
--update documentation to take out Google links
--query GDAL for MrSID and JPEG2000 support
--open gee website
--lots of documentation updates
--remove obsolete and experimental code
--updates for building on supported platforms
--download tutorial files separately
--new portable build process
--Add "--listvolumes" flag to geconfigureassetroot utility 
-
 Issues fixed:
 Fix fusing a mosaic with GDAL 2.x: implements IReadBlock() API for khVRRasterBand.
 Shapefiles cannot be read unless they have write access
@@ -81,6 +65,13 @@ gefusion crash when opening non supported type of file #342
   </h5>
     <p><strong>Open Sourcing</strong>. Open GEE 5.2.0 includes a number of changes that were necessary for the open sourcing effort.  This includes a number of library replacements, library unbundling,
 removal of obsolete code and libraries, changes to support new compilers, updates to support git and Github, and several documentation changes.</p>
+    <p><strong>New Installers</strong>. Previous GEE installers used proprietary tools that are not appropriate for open source projects.  Open GEE 5.2.0 includes new installers that run as bash
+scripts.  There are also new build and install scripts for the Portable Server.</p>
+    <p><strong>New Tutorial Files</strong>. Images used in the Fusion tutorial are now provided in both tif and jp2 format.  In addition, the tutorial files are stored and downloaded separately
+from the rest of the Open GEE code.</p>
+    <p><strong>OpenGEE.org Web Site</strong>. The Open GEE repository now includes the source code for the Open GEE website, which can be viewed at <a href="http://www.opengee.org">http://www.opengee.org</a>.</p>
+    <p><strong>New --listvolumes Flag in geconfigureassetroot</strong>. The geconfigureassetroot utility now supports a --listvolumes flag that allows users to display the configured volumes for the
+current asset root without stopping Fusion.</p>
   <h5>
     <p id="supported_5.2.0">Supported Platforms</p>
   </h5>
