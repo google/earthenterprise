@@ -14,7 +14,7 @@ As for myself, I worked in the Defense Industry for six years and then transitio
 
 Normally, an open source group does not get to start with such a strong code foundation. We have inherited a very useful tool from Google and it is my belief that we can find new and interesting uses for it.
 
-If you have been following the project you might have already seen our [Slack Channel](http://slack.Open Gee.org) but if not then I invite you to join! It has been an active place for discussion and I will do what I can to keep it that way. We will strive to keep the development open and developer-friendly, and Slack provides us a good means to do so. If you are interested in using the product and not in development the Slack channel is still a great place to discuss your use case or what you can do to get the most of out of your geospatial data.
+If you have been following the project you might have already seen our [Slack Channel](http://slack.opengee.org) but if not then I invite you to join! It has been an active place for discussion and I will do what I can to keep it that way. We will strive to keep the development open and developer-friendly, and Slack provides us a good means to do so. If you are interested in using the product and not in development the Slack channel is still a great place to discuss your use case or what you can do to get the most of out of your geospatial data.
 
 In the future, I want to continue to use this blog as a place to talk about new features, contributors, product releases and representing Open GEE at conferences. If you have any question about Open GEE, myself or the future of the project please do not hesitate to email me: <ahernandez@t-sciences.com>.
 
