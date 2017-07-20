@@ -43,7 +43,7 @@ current asset root without stopping Fusion.</p>
   </h5>
   <p>The Open GEE 5.2.0 release is supported on 64-bit versions of the following operating systems:</p>
     <ul>
-      <li>Red Hat Enterprise Linux versions 7.x, including the most recent security patches</li>
+      <li>Red Hat Enterprise Linux version 7.x, including the most recent security patches</li>
       <li>CentOS 7.x</li>
       <li>Ubuntu 14.04 LTS and 16.04 LTS</li>
     </ul>
@@ -113,6 +113,16 @@ current asset root without stopping Fusion.</p>
           <td>Ensure that <code>/home</code> and <code>/tmp</code> are on the same file system or download the tutorial files to <code>/opt/google/share/tutorials/fusion/</code> after installing Fusion.</td>
         </tr>
         <tr>
+          <td>202</td>
+          <td>Icons are not displayed on vector layers in the Enterprise Client</td>
+          <td>No current work around.  It is not clear if this is an error in GEE or in the Enterprise Client.</td>
+        </tr>
+        <tr>
+          <td>203</td>
+          <td>Some vector layer options are not saved</td>
+          <td>No current work around</td>
+        </tr>
+        <tr>
           <td>254</td>
           <td>Automasking fails for images stored with UTM projection</td>
           <td>Use GDAL to convert the images to a different projection before ingesting them into Fusion.</td>
@@ -140,7 +150,7 @@ current asset root without stopping Fusion.</p>
         <tr>
           <td>342</td>
           <td>Fusion crashes when opening an unsupported file type</td>
-          <td>Do not open unsupported file types.</td>
+          <td>Re-open fusion and avoid opening unsupported file types.</td>
         </tr>
       </tbody>
     </table>
@@ -168,7 +178,7 @@ current asset root without stopping Fusion.</p>
         <tr>
           <td>26</td>
           <td>Fusion segmentation faults when trying to push and the server is not available</td>
-          <td>Pass the correct data type to cURL function</td>
+          <td>Passed the correct data type to cURL function</td>
         </tr>
         <tr>
           <td>167</td>
@@ -181,6 +191,11 @@ current asset root without stopping Fusion.</p>
           <td>Added code to handle default dates in Fusion tools</td>
         </tr>
         <tr>
+          <td>196</td>
+          <td>Simplify SSL settings and enable TLS 1.2 by default</td>
+          <td>Consolidated SSL settings and updated the defaults to include TLS 1.2</td>
+        </tr>
+        <tr>
           <td>239</td>
           <td><code>cachedreadaccessor_unittest</code> fails on <code>free()</code> call on Ubuntu 16.04</td>
           <td>Increased the size of a buffer that was overflowing</td>
@@ -190,6 +205,11 @@ current asset root without stopping Fusion.</p>
           <td>Fix broken line in cutter script</td>
           <td>Fixed the relevant line</td>
         </tr>
+        <tr>
+          <td>351</td>
+          <td>Portable Globe Cutter fails with a Python error</td>
+          <td>Fixed import errors in the cutter scripts</td>
+        </tr>
       </tbody>
     </table>
   <div class="footer">
@@ -197,7 +217,7 @@ current asset root without stopping Fusion.</p>
     
     <hr />
     </p>
-    <p class="copyright">&copy;2015 Google</p>
+    <p class="copyright">&copy;2017 Open GEE Contributors</p>
   </div>
 </div>
 </body>
