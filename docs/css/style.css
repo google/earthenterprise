@@ -616,10 +616,6 @@ ul.info i:hover {
   margin-left: 100px;
 }
 
-.post .info, .post .content {
-  /*margin-left: 10px;*/
-}
-
 .post .info h3 {
   font-size: 24px;
   margin-bottom: 5px;
