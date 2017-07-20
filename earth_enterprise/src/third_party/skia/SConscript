@@ -100,7 +100,8 @@ sgl_env.UpdateCppflagsForSkia()
 
 cxx_flags = sgl_env['CXXFLAGS']
 cxx_flags.remove('-Werror')
-cxx_flags.append('-fPIC')
+cxx_flags.append('-fPIC') # Required on some platforms for generating dynamically linked libraries
+# For more info: http://www.microhowto.info/howto/building_a_shared_library_using_gcc.html#idp25536
 
 sgl_env['CXXFLAGS'] = cxx_flags
 sgl_env['CPPFLAGS'] += [
