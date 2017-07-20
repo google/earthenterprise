@@ -22,7 +22,7 @@ Class for managing batch sql command processing.
 import logging
 import psycopg2  # No lint.
 
-from common import exceptions
+import exceptions
 
 ERR_BATCH_SQL_MANAGER_CLOSED = ("Server-side Internal Error"
                                 " - BatchSqlManager has already been closed.")
