@@ -66,8 +66,6 @@ if 'install' in COMMAND_LINE_TARGETS:
   # Collect python files from cgi-bin root directory.
   for file in fnmatch.filter(filenames, '*.py'):
     py_files.append(os.path.join(py_dir_abspath, file))
-    print "file=%s" % file
-    print "py_file=%s" % os.path.join(py_dir_abspath, file)
 
   cgi_env.install('httpdcgi', py_files)
 
