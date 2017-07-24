@@ -20,8 +20,8 @@ BADHOSTNAMELIST=(empty linux localhost dhcp bootp)
 GEE="Google Earth Enterprise"
 GEES="$GEE Server"
 GEEF="$GEE Fusion"
-LONG_VERSION="5.1.3"
-SHORT_VERSION="5.1"
+LONG_VERSION="5.2.0"
+SHORT_VERSION="5.2"
 
 ROOT_USERNAME="root"
 
