@@ -67,6 +67,7 @@ ValidOptions = set(
      'jobstats',  # Use to enable jobstats profile output.
      'internal',  # Use to enable internal use only debug classes
      'cross_cc',  # Use the cross compiler.
+     'cc_path',
      'coverage',
      'bundle_3rd_libs',  # Build with bundling 3rd party libs.
      ]);
@@ -91,6 +92,7 @@ internal = int(ARGUMENTS.get('internal', 0))
 native_cc = not int(ARGUMENTS.get('cross_cc', 0))
 coverage = ARGUMENTS.get('coverage', 0)
 bundle_3rd_libs = int(ARGUMENTS.get('bundle_3rd_libs', 0))
+cc_path = ARGUMENTS.get('cc_path', 0)
 
 # make some directory variables used by other parts of the build system
 top_dir = Dir('#').abspath
@@ -405,6 +407,7 @@ env = khEnvironment(
     jobstats=jobstats,
     internal=internal,
     native_cc=native_cc,
+    cc_path=cc_path,
     bundle_3rd_libs=bundle_3rd_libs,
     is_hardy=is_hardy,
     exportdirs=exportdirs,
@@ -436,6 +439,10 @@ env = khEnvironment(
     python_version=python_version,
     python_major_version=python_major_version
 )
+
+if cc_path:
+    env['CXX'] = cc_path + '/g++'
+    env['CC'] = cc_path + '/gcc'
 
 # The following is to make Scons 1.xx behave like it used to with scons .96
 env['SHCXXFLAGS'] = ['$CXXFLAGS', '-fPIC']
