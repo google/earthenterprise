@@ -66,7 +66,7 @@ To start the Fusion UI in the Open GEE Docker container, you need to have
 the GEE servers running in the container, e.g. by running
 `./bin/start-docker-image.sh`, and an X11 server outside the container that
 the Fusion UI can connect to.  If you started the container on a Linux 
-distribution running X11 listening to socket connections to `/tmp/.X11-unix`,
+distribution running X11 listening for socket connections to `/tmp/.X11-unix`,
 you should only need to run the following command to bring up the Fusion UI:
 
 ```BASH
@@ -91,7 +91,7 @@ you can use the commands that follow.
 Make sure you have, at least, about 10 GB of free space to create a new GEE 
 Docker image.  You need slightly more than 8.6 GB of free space to build
 the Docker build image stages, and another 1.03+ GB to produce a flattened
-image.  You can remove the larger build images which contains Docker layer
+image.  You can remove the larger build images which contain Docker layer
 history after creating the flattened one.
 
 To build the two stages of images with layer history, and flattened final
