@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#
+# -*- coding: utf-8 -*-
 # Copyright 2017 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,6 @@
 # limitations under the License.
 
 """Module for implementing the Coordinate Transformation."""
-# coding=utf-8
 
 import math
 import re
