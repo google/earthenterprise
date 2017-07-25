@@ -35,6 +35,26 @@ Publish root:
 
 Examples:
 
+To run the tutorial steps
+
+./run_tutorial.sh
+
+To check the status
+
+./status.sh
+
+To publish after the build is finished (status.sh should output "Succeeded" for both databases first)
+
+./publish_tutorial.sh
+
+To clean up after a successful run
+
+rm -rf /usr/local/google/gevol_test/assets/Tutorial
+
+To cancel the tutorial run, use the Fusion Asset Manager to cancel the current build for each of the assets under Tutorial, then run the above rm command
+
+Note: gee_test.py has not been updated to work with the latest installer, so the following instructions will not work without modifications to the script
+
 To do a basic install and test:
 
 ./gee_test.py <path-to-installer-tarball>
