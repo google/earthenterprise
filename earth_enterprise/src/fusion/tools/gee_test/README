@@ -25,6 +25,7 @@ sudo /opt/google/bin/geconfigureassetroot --new --assetroot  /usr/local/google/g
 
 sudo /opt/google/bin/geselectassetroot --assetroot  /usr/local/google/gevol_test/assets
 
+sudo /opt/google/bin/geselectpublishroot /usr/local/google/gevol_test/published_db
 
 Asset root:
   /usr/local/google/gevol_test/assets
