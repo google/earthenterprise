@@ -88,9 +88,9 @@ that Open GEE doesn't currently support clustering.
 If you want to build the Docker image yourself (perhaps, after customization),
 you can use the commands that follow.
 
-Make sure you have, at least, about 10 GB of free space to create a new GEE 
-Docker image.  You need slightly more than 8.6 GB of free space to build
-the Docker build image stages, and another 1.03+ GB to produce a flattened
+Make sure you have, at least, about 8.1 GB of free space to create a new GEE 
+Docker image.  You need slightly more than 6 GB of free space to build
+the Docker build image stages, and another 2+ GB to produce a flattened
 image.  You can remove the larger build images which contain Docker layer
 history after creating the flattened one.
 
