@@ -88,47 +88,30 @@ that Open GEE doesn't currently support clustering.
 If you want to build the Docker image yourself (perhaps, after customization),
 you can use the commands that follow.
 
-Make sure you have, at least, about 12 GB of free space to create a new GEE 
-Docker image.  You need slightly more than 8.565 GB of free space to build
-the initial Docker image, and another 3.06+ GB to produce a flattened image.  
-You can remove the larger initial image which contains Docker history after 
-creating the flattened one.
+Make sure you have, at least, about 10 GB of free space to create a new GEE 
+Docker image.  You need slightly more than 8.6 GB of free space to build
+the Docker build image stages, and another 1.03+ GB to produce a flattened
+image.  You can remove the larger build images which contains Docker layer
+history after creating the flattened one.
 
-
-### Build an Initial Image with Docker Layer History
-
-To build an image with layer history:
+To build the two stages of images with layer history, and flattened final
+image:
 
 ```BASH
 ./bin/build-docker-image.sh
 ```
 
-You can optionally set the `IMAGE_TAG` shell variable to override the default
-tag used for the Docker image.
+You can optionally set the `OUTPUT_IMAGE_NAME` shell variable to override the
+default name used for the final Docker image.
 
 
-### Create a Flattened Image without Docker Layer History
+### Delete the Temporary Build Docker Images
 
-To create flattened image from the intial image built by the command above:
-
-```BASH
-./bin/flatten-docker-image.sh
-```
-
-You can optionally set the `INPUT_IMAGE_TAG` and `OUTPUT_IMAGE_TAG` variables 
-when running the above command.
-
-
-### Delete the Initial Docker Image with Layer History
-
-To delete the initially built image with Docker history:
+To delete the intermediary Docker images used during the build:
 
 ```BASH
-docker rmi -f opengee-experimental-history
+./bin/clean-build-images.sh
 ```
-
-Replace `opengee-experimental-history` with the approprate image tag, if you 
-customized it during building.
 
 
 ### Publish the Image to Docker Store / Docker Cloud
