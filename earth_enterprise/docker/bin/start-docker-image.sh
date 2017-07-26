@@ -3,18 +3,19 @@
 # Set these variables before running this script to override the
 # default values below:
 : ${GEE_SERVER_PORT:=80}
-: ${HOST_GEVOL_PATH:="/host-gevol"}
+: ${HOST_GEVOL_PATH:=""}
 : ${IMAGE_TAG:="opengee-experimental"}
-: ${TEMPORARY_SERVERS:=""}
 
 # Set the following to any extra flags you want to pass to `docker run`, such
 # as sharing extra paths from the host system to the Docker container:
 : ${DOCKER_RUN_FLAGS:=""}
 
-if [ -n "$TEMPORARY_SERVERS" ]; then
+if [ -z "$HOST_GEVOL_PATH" ]; then
     MAP_GEVOL_PARAMETERS=""
+    TEMPORARY_SERVERS='true'
 else
-    MAP_GEVOL_PARAMETERS="-v /gevol:$(printf '%q' "$HOST_GEVOL_PATH")"
+    MAP_GEVOL_PARAMETERS="-v $(printf '%q' "$HOST_GEVOL_PATH"):/gevol"
+    TEMPORARY_SERVERS=''
 fi
 
 if [ -z "$DRI_PARAMETERS" -a -d '/dev/dri' ]; then

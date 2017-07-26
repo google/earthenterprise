@@ -37,26 +37,38 @@ instantiations of the Docker image, you need a persistent assets directory
 outside of the Docker container.
 
 To run the Docker container using a persistent globe assets directory outside 
-the container, use the script:
+the container, use the following script.  Set the `HOST_GEVOL_PATH`
+environment variable to the path outside the container where you want to store
+your persistent assets.
 
 ```BASH
-./bin/start-docker-image.sh
+HOST_GEVOL_PATH=/persistent/gevol/ ./bin/start-docker-image.sh
 ```
 
-You can optionally set the `HOST_GEVOL_PATH`, `GEE_SERVER_PORT` and even 
-`IMAGE_TAG` to  override the default values.  You likely want to override, at 
-least, `HOST_GEVOL_PATH` to contain the path to the directory outside of the 
-container where you store your persistent globe assets in.
+You can optionally set the `GEE_SERVER_PORT` and even  `IMAGE_TAG` to override
+the default values.
+
+
+##### Initializing a New Location for Persistsing Databases
+
+If you want to create the directory structure needed for storing globe and map
+databases in a new location, you can use the following commands (after
+substituting the desired path), and follow the prompts.
+
+```BASH
+sudo mkdir -p /persistent/gevol/assets
+docker run --cap-add=DAC_READ_SEARCH -v /persistent/gevol:/gevol -ti opengee-experimental /opt/google/bin/geconfigureassetroot --new --assetroot /gevol/assets
+```
 
 
 #### Running Open GEE Server with Temporary Globe and Map Databases
 
 To run the Docker container using temporary assets that disapper when the 
-container is stopped, set the `TEMPORARY_SERVERS` shell valiable to true when 
-executing the above command.
+container is stopped, leave the `HOST_GEVOL_PATH` environment valiable empty.
+This is the default behavior
 
 ```BASH
-TEMPORARY_SERVERS=true ./bin/start-docker-image.sh
+HOST_GEVOL_PATH='' ./bin/start-docker-image.sh
 ```
 
 
