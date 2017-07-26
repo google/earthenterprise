@@ -7,6 +7,10 @@
 : ${IMAGE_TAG:="opengee-experimental"}
 : ${TEMPORARY_SERVERS:=""}
 
+# Set the following to any extra flags you want to pass to `docker run`, such
+# as sharing extra paths from the host system to the Docker container:
+: ${DOCKER_RUN_FLAGS:=""}
+
 if [ -n "$TEMPORARY_SERVERS" ]; then
     MAP_GEVOL_PARAMETERS=""
 else
@@ -31,5 +35,6 @@ docker run \
     $DRI_PARAMETERS \
     --cap-add=DAC_READ_SEARCH \
     -e "TEMPORARY_SERVERS" \
+    $DOCKER_RUN_FLAGS \
     -it "${IMAGE_TAG}" \
     $@

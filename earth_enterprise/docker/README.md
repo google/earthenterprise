@@ -77,6 +77,34 @@ Running the Fusion UI on a non-Linux Docker host running X11 has not been
 tested, although it should be theoretially possible.
 
 
+#### Using GEE Tutorial Files in the Docker Container
+
+The Docker image is built without the GEE tutorial files, since people using
+the image for production may not want to carry the 600+ MB files they wouldn't
+use.
+
+##### Deriving an Image that Includes the Tutorial Files
+
+You can create an image based on the provided one that adds the tutorial
+files. All you need to do to construct the new image is to run:
+
+```Dockerfile
+CMD /bin/bash /opt/google/share/tutorials/fusion/download_tutorial.sh
+```
+
+
+##### Using Tutorial Files from Outside the Docker Image
+
+If you have already unpacked the tutorial files in host operating system, you
+can add them as a volume accessible inside the Docker container.  E.g., if you
+have the files stored at `/opt/google/share/tutorials/fusion/` outside the
+container:
+
+```BASH
+DOCKER_RUN_FLAGS="-v /opt/google/share/tutorials/fusion/:/opt/google/share/tutorials/fusion/" ./bin/start-docker-image.sh
+```
+
+
 #### Pointers for Running Open GEE in Custom Setup
 
 There's a sample `docker-compose.yml` you can have a look at.  Note, however,
