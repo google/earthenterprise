@@ -1,4 +1,4 @@
-#!/bin/bash -eu
+#!/bin/bash
 #
 # Copyright 2017 Google Inc.
 #
@@ -13,8 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
 
-# TODO: High-level file comment.
-#!/bin/bash
 # TODO: Consider renaming test_portable.py gold_test.py.
 cp ../../portableglobe/servers/test/test_portable.py tests/gold_tests/gold_test.py

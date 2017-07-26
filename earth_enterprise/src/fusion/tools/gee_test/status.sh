@@ -13,9 +13,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+# Checks status of tutorial assets built by run_tutorial.sh script
 
-# TODO: High-level file comment.
-#!/bin/bash
 set -x
 set -e
 
@@ -23,4 +23,5 @@ ASSET_ROOT="/usr/local/google/gevol_test/assets"
 echo "Using asset root: $ASSET_ROOT"
 
 /opt/google/bin/gequery Tutorial/Databases/SFDb_3d --status
+/opt/google/bin/gequery Tutorial/Databases/SFDb_3d_TM --status
 /opt/google/bin/gequery Tutorial/Databases/SF_2d_Merc --status

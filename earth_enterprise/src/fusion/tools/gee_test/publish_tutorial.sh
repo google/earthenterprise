@@ -13,9 +13,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-# TODO: High-level file comment.
-#!/bin/bash
+#
+# Pushes databases built by run_tutorial.sh script
 set -x
 set -e
 
@@ -24,6 +23,9 @@ echo "Using asset root: $ASSET_ROOT"
 
 /opt/google/bin/geserveradmin --adddb $ASSET_ROOT/Tutorial/Databases/SFDb_3d.kdatabase/gedb.kda/ver001/gedb
 /opt/google/bin/geserveradmin --pushdb $ASSET_ROOT/Tutorial/Databases/SFDb_3d.kdatabase/gedb.kda/ver001/gedb
+
+/opt/google/bin/geserveradmin --adddb $ASSET_ROOT/Tutorial/Databases/SFDb_3d_TM.kdatabase/gedb.kda/ver001/gedb
+/opt/google/bin/geserveradmin --pushdb $ASSET_ROOT/Tutorial/Databases/SFDb_3d_TM.kdatabase/gedb.kda/ver001/gedb
 
 /opt/google/bin/geserveradmin --adddb $ASSET_ROOT/Tutorial/Databases/SF_2d_Merc.kmmdatabase/mapdb.kda/ver001/mapdb
 /opt/google/bin/geserveradmin --pushdb $ASSET_ROOT/Tutorial/Databases/SF_2d_Merc.kmmdatabase/mapdb.kda/ver001/mapdb

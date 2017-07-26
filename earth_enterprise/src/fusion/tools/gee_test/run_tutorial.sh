@@ -13,9 +13,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+# Runs most commands referenced in the Fusion tutorial. Handy for doing
+# testing.
 
-# TODO: High-level file comment.
-#!/bin/bash
 set -x
 set -e
 
@@ -23,9 +24,35 @@ ASSET_ROOT="/usr/local/google/gevol_test/assets"
 echo "Using asset root: $ASSET_ROOT"
 
 # This is a simplified tutorial script.  It does not have all the dependencies as the Python QA tutorial script, nor does it do any kind of checking.
+: '
+TODO: check for current assetroot and manage to work with "gevol_test"- assetroot.
+ IF current assetroot is $ASSET_ROOT
+ THEN
+    - back up postgres databases and report backup folder;
+    - reset postgres databases;
+    - delete Tutorial/Databases/Tutorial/Resources/Projects folders from $ASSET_ROOT (need sudo)
+ELSE  # not gevol_test
+    - back up postgres databases and report back up folder;
+    - report/store current(source) assetroot path/published_dbs path;
+    - create gevol_test assetroot $ASSET_ROOT;
+    - create gevol_test/published_dbs
+    - switch to gevol_test assetroot/published_dbs;
 
-# - Copy needed files 
-mkdir -p $ASSET_ROOT/.userdata/
+...run tests
+
+Note: This might be optional since we may want to test serving of published gee_test Databases.
+Maybe better just report command lines to restore user assetroot and postgres databases.
+- Back up gevol_test postgres databases;
+IF source assetroot was not gevol_test;
+   - Switch to source assetroot/published_dbs
+   - restore postgres database;
+
+Also we may consider to create assetroot for test with timestamp ID to have it unique and to not accidentally delete user assetroot which may be gevol_test.
+
+'
+# - Copy needed files
+sudo mkdir -p $ASSET_ROOT/.userdata/
+sudo chmod 777 $ASSET_ROOT/.userdata/
 sudo cp tutorial_files/providers.xml $ASSET_ROOT/.userdata/
 sudo chmod 666 $ASSET_ROOT/.userdata/providers.xml
 mkdir -p /tmp/tutorial
@@ -106,7 +133,7 @@ sudo /etc/init.d/geserver restart
 
 /opt/google/bin/gebuild Tutorial/Databases/SFDb_3d_TM
 
-/opt/google/bin/genewmapdatabase -o Tutorial/Databases/SF_2d_Merc --imagery Tutorial/Projects/Imagery/SFBayArea_merc.kimproject --map Tutorial/Projects/Maps/CAProjects --mercator
+/opt/google/bin/genewmapdatabase --mercator -o Tutorial/Databases/SF_2d_Merc --imagery Tutorial/Projects/Imagery/SFBayArea_merc --map Tutorial/Projects/Maps/CAProjects
 
 /opt/google/bin/gebuild Tutorial/Databases/SF_2d_Merc
 
@@ -115,12 +142,17 @@ set +x
 echo "Check status with:"
 echo "  /opt/google/bin/gequery Tutorial/Databases/SFDb_3d --status"
 echo "Once 'Succeeded', run:"
+echo "  /opt/google/bin/geserveradmin --adddb $ASSET_ROOT/Tutorial/Databases/SFDb_3d.kdatabase/gedb.kda/ver001/gedb/"
 echo "  /opt/google/bin/geserveradmin --pushdb $ASSET_ROOT/Tutorial/Databases/SFDb_3d.kdatabase/gedb.kda/ver001/gedb/"
 echo ""
 echo "Check status with:"
 echo "  /opt/google/bin/gequery Tutorial/Databases/SF_2d_Merc --status"
 echo "Once 'Succeeded', run:"
+echo "  /opt/google/bin/geserveradmin --adddb $ASSET_ROOT/Tutorial/Databases/SF_2d_Merc.kmmdatabase/mapdb.kda/ver001/mapdb"
 echo "  /opt/google/bin/geserveradmin --pushdb $ASSET_ROOT/Tutorial/Databases/SF_2d_Merc.kmmdatabase/mapdb.kda/ver001/mapdb"
+echo ""
+echo " The same for all other databases..."
 
 /opt/google/bin/gequery Tutorial/Databases/SFDb_3d --status
+/opt/google/bin/gequery Tutorial/Databases/SFDb_3d_TM --status
 /opt/google/bin/gequery Tutorial/Databases/SF_2d_Merc --status
