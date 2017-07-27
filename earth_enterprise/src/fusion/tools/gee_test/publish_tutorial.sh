@@ -21,11 +21,11 @@ set -e
 ASSET_ROOT="/usr/local/google/gevol_test/assets"
 echo "Using asset root: $ASSET_ROOT"
 
-/opt/google/bin/geserveradmin --adddb $ASSET_ROOT/Tutorial/Databases/SFDb_3d.kdatabase/gedb.kda/ver001/gedb
-/opt/google/bin/geserveradmin --pushdb $ASSET_ROOT/Tutorial/Databases/SFDb_3d.kdatabase/gedb.kda/ver001/gedb
+/opt/google/bin/geserveradmin --adddb "$ASSET_ROOT/Tutorial/Databases/SFDb_3d.kdatabase/gedb.kda/ver001/gedb"
+/opt/google/bin/geserveradmin --pushdb "$ASSET_ROOT/Tutorial/Databases/SFDb_3d.kdatabase/gedb.kda/ver001/gedb"
 
-/opt/google/bin/geserveradmin --adddb $ASSET_ROOT/Tutorial/Databases/SFDb_3d_TM.kdatabase/gedb.kda/ver001/gedb
-/opt/google/bin/geserveradmin --pushdb $ASSET_ROOT/Tutorial/Databases/SFDb_3d_TM.kdatabase/gedb.kda/ver001/gedb
+/opt/google/bin/geserveradmin --adddb "$ASSET_ROOT/Tutorial/Databases/SFDb_3d_TM.kdatabase/gedb.kda/ver001/gedb"
+/opt/google/bin/geserveradmin --pushdb "$ASSET_ROOT/Tutorial/Databases/SFDb_3d_TM.kdatabase/gedb.kda/ver001/gedb"
 
-/opt/google/bin/geserveradmin --adddb $ASSET_ROOT/Tutorial/Databases/SF_2d_Merc.kmmdatabase/mapdb.kda/ver001/mapdb
-/opt/google/bin/geserveradmin --pushdb $ASSET_ROOT/Tutorial/Databases/SF_2d_Merc.kmmdatabase/mapdb.kda/ver001/mapdb
+/opt/google/bin/geserveradmin --adddb "$ASSET_ROOT/Tutorial/Databases/SF_2d_Merc.kmmdatabase/mapdb.kda/ver001/mapdb"
+/opt/google/bin/geserveradmin --pushdb "$ASSET_ROOT/Tutorial/Databases/SF_2d_Merc.kmmdatabase/mapdb.kda/ver001/mapdb"
