@@ -8,5 +8,5 @@ excerpt_separator: <!--more-->
 gems:
   - jekyll-paginate
 
-paginate: 3
+paginate: 1
 paginate_path: "blog/page:num"
