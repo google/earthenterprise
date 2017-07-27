@@ -19,7 +19,8 @@ The clean is harsh so you should not use it on machines where you want to save y
 
 The test program does not work unless the asset root /usr/local/google/gevol_test already exists. This seems to be an issue with the clean install. If it fails, you will have to run:
 sudo /opt/google/bin/geconfigureassetroot --new --assetroot  /usr/local/google/gevol_test/assets
-# You can add source volumes:
+
+You must also add source volumes with the names "src" and "tutorial", respectively:
 /usr/local/google/gevol_test/src
 /opt/google/share/tutorials/fusion
 
@@ -27,8 +28,18 @@ sudo /opt/google/bin/geselectassetroot --assetroot  /usr/local/google/gevol_test
 
 sudo /opt/google/bin/geselectpublishroot /usr/local/google/gevol_test/published_db
 
+You can check your asset root and source volumes using:
+sudo /opt/google/bin/geconfigureassetroot --listvolumes
+
+If anything is missing, you can edit the asset root and source volumes with:
+sudo /opt/google/bin/geconfigureassetroot --editvolumes
+
 Asset root:
   /usr/local/google/gevol_test/assets
+
+Source volumes:
+  /usr/local/google/gevol_test/src (src)
+  /opt/google/share/tutorials/fusion (tutorial)
 
 Publish root:
   /usr/local/google/gevol_test/published_db
