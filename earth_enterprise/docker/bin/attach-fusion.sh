@@ -6,9 +6,22 @@
 # Set these variables before running this script to override the
 # default values below:
 
+# Set this to the OS distribution you want to run inside the Docker container.
+# (Choose from the couple of available ones.)  You don't need to set this, if
+# you are going to override the IMAGE_TAG variable.
+: ${OS_DISTRIBUTION:="ubuntu-14"}
+
+: ${STAGE_1_NAME:="clean-clone"}
+
+if [ "$STAGE_1_NAME" == "clean-clone" ]; then
+    CLONE_SUFFIX=""
+else
+    CLONE_SUFFIX="-$STAGE_1_NAME"
+fi
+
 # Set this to the name of the Open GEE Docker image to seach for containers
 # running that image:
-: ${IMAGE_TAG:="opengee-experimental"}
+: ${IMAGE_TAG:="opengee-experimental-${OS_DISTRIBUTION}${CLONE_SUFFIX}"}
 
 # Set this to the ID of a running container to skip searching by image tag,
 # or, if you have more than one container running the Open GEE Docker image:

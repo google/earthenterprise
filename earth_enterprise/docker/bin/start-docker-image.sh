@@ -4,7 +4,16 @@
 # default values below:
 : ${GEE_SERVER_PORT:=80}
 : ${HOST_GEVOL_PATH:=""}
-: ${IMAGE_TAG:="opengee-experimental"}
+: ${OS_DISTRIBUTION:="ubuntu-14"}
+: ${STAGE_1_NAME:="clean-clone"}
+
+if [ "$STAGE_1_NAME" == "clean-clone" ]; then
+    CLONE_SUFFIX=""
+else
+    CLONE_SUFFIX="-$STAGE_1_NAME"
+fi
+
+: ${IMAGE_TAG:="opengee-experimental-${OS_DISTRIBUTION}${CLONE_SUFFIX}"}
 
 # Set the following to any extra flags you want to pass to `docker run`, such
 # as sharing extra paths from the host system to the Docker container:

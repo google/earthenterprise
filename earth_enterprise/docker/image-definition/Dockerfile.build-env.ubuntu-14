@@ -1,0 +1,27 @@
+FROM ubuntu:14.04
+
+# Install required packages:
+RUN apt-get -y update && \
+    apt-get -y install alien autoconf automake bison++ bisonc++ curl doxygen flex freeglut3-dev \
+        g++ gettext gcc libc6 libc6-dev libcap-dev libfreetype6 libfreetype6-dev libgdbm-dev \
+        libgeos-dev libgeos++-dev libgif-dev libgtest-dev libjpeg-dev libjpeg8-dev libmng-dev \
+        libogdi3.2-dev libperl4-corelibs-perl libpng12-0 libpng12-dev libpq-dev libproj-dev \
+        libstdc++6 libtool libx11-dev libxcursor-dev libxerces-c-dev libxft-dev libxinerama-dev \
+        libxml2-dev libxml2-utils libxrandr-dev openssl python-dev python2.7 python2.7-dev python-imaging \
+        python-setuptools rsync scons software-properties-common swig wget xorg-dev zlib1g-dev
+
+# Install Git:
+RUN add-apt-repository ppa:git-core/ppa && \
+    apt-get -y update && \
+    apt-get -y install git
+
+# Install Git-LFS:
+RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && \
+    apt-get -y install git-lfs
+
+# Copy shell scripts to /root/bin in the Docker container:
+RUN mkdir -p /root/opengee/bin
+ADD scripts /root/opengee/bin
+
+# Make a build directory:
+RUN mkdir -p /root/opengee/build

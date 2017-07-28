@@ -5,8 +5,18 @@
 
 # Set these variables before running this script to override the
 # default values below:
-: ${STAGE_1_IMAGE_NAME:="opengee-experimental-stage-1"}
-: ${STAGE_2_IMAGE_NAME:="opengee-experimental-stage-2"}
+: ${OS_DISTRIBUTION:="ubuntu-14"}
+
+: ${STAGE_1_NAME:="clean-clone"}
+
+if [ "$STAGE_1_NAME" == "clean-clone" ]; then
+    CLONE_SUFFIX=""
+else
+    CLONE_SUFFIX="-$STAGE_1_NAME"
+fi
+
+: ${STAGE_1_IMAGE_NAME:="opengee-experimental-${OS_DISTRIBUTION}${CLONE_SUFFIX}-stage-1"}
+: ${STAGE_2_IMAGE_NAME:="opengee-experimental-${OS_DISTRIBUTION}${CLONE_SUFFIX}-stage-2"}
 
 docker rmi -f "$STAGE_2_IMAGE_NAME"
 docker rmi -f "$STAGE_1_IMAGE_NAME"

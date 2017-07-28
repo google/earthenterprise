@@ -1,6 +1,6 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 
-#Install required packages
+# Install required packages:
 RUN apt-get -y update && \
     apt-get -y install alien autoconf automake bison++ bisonc++ curl doxygen flex freeglut3-dev \
         g++ gettext gcc libc6 libc6-dev libcap-dev libfreetype6 libfreetype6-dev libgdbm-dev \
@@ -10,14 +10,14 @@ RUN apt-get -y update && \
         libxml2-dev libxml2-utils libxrandr-dev openssl python-dev python2.7 python2.7-dev python-imaging \
         python-setuptools rsync scons software-properties-common swig wget xorg-dev zlib1g-dev
 
-#Install git
+# Install Git:
 RUN add-apt-repository ppa:git-core/ppa && \
     apt-get -y update && \
     apt-get -y install git
 
-#Install gitlfs
-RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
-RUN apt-get -y install git-lfs
+# Install Git-LFS:
+RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && \
+    apt-get -y install git-lfs
 
 # Copy shell scripts to /root/bin in the Docker container:
 RUN mkdir -p /root/opengee/bin
@@ -25,17 +25,3 @@ ADD scripts /root/opengee/bin
 
 # Make a build directory:
 RUN mkdir -p /root/opengee/build
-
-# Build Open GEE:
-RUN cd /root/opengee/build && \
-   /root/opengee/bin/pull-gee-repository.sh && \
-   /root/opengee/bin/build-gee.sh
-
-# We can't proceed further with installing GEE from the Dockerfile, because the
-# installer requires the 'DAC_READ_SEARCH' capability, and Docker currently has
-# no way of running Dockerfile commands with capabilities.
-#   Instead, we run the image built so far, and execute
-# `build-docker-stage-2.sh` to complete image creation, and export an image
-# from the running container.
-
-CMD /root/opengee/bin/build-docker-stage-2.sh
