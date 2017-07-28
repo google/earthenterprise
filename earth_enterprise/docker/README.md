@@ -34,7 +34,9 @@ docker pull thermopylae/opengee-experimental
 
 In order to be able to build and serve Earth databases that persist between 
 instantiations of the Docker image, you need a persistent assets directory 
-outside of the Docker container.
+outside of the Docker container.  Another alternative is to run a container
+with a temporary assets directory, and commit the running to container to a
+new image after you've build your assets.
 
 To run the Docker container using a persistent globe assets directory outside 
 the container, use the following script.  Set the `HOST_GEVOL_PATH`
