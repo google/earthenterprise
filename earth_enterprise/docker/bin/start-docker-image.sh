@@ -4,11 +4,20 @@
 # default values below:
 : ${GEE_SERVER_PORT:=80}
 : ${HOST_GEVOL_PATH:=""}
-: ${IMAGE_TAG:="opengee-experimental"}
 
 # Set the following to any extra flags you want to pass to `docker run`, such
 # as sharing extra paths from the host system to the Docker container:
 : ${DOCKER_RUN_FLAGS:=""}
+
+if [ -z "$IMAGE_TAG" ]; then
+    if [ -n "$(docker images -q "opengee-experimental")" ]; then
+        IMAGE_TAG="opengee-experimental"
+    else
+        IMAGE_TAG="thermopylae/opengee-experimental"
+    fi
+fi
+
+echo "IMAGE_TAG: $IMAGE_TAG"
 
 if [ -z "$HOST_GEVOL_PATH" ]; then
     MAP_GEVOL_PARAMETERS=""
