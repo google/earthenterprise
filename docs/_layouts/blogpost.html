@@ -60,7 +60,7 @@ section_id: blog
                   {% if post.title == page.title %}
                     {{post.title}}
                   {% else %}
-                    <a href="{{ post.url }}">{{ post.title }}</a>
+                    <a href="{{site.url}}{{site.baseurl}}{{ post.url }}">{{ post.title }}</a>
                   {% endif %}
                 </li>
               {% endfor %}
