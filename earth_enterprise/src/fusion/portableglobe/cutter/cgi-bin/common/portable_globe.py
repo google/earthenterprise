@@ -22,7 +22,7 @@ Adapted from module of same name used in Portable Server.
 import os
 import re
 
-from common import portable_exceptions
+import portable_exceptions
 import glc_unpacker
 
 NON_COMPOSITE_LAYER = 0
