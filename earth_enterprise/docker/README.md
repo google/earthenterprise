@@ -100,10 +100,23 @@ use.
 ##### Deriving an Image that Includes the Tutorial Files
 
 You can create an image based on the provided one that adds the tutorial
-files. All you need to do to construct the new image is to run:
+files.
 
-```Dockerfile
-CMD /bin/bash /opt/google/share/tutorials/fusion/download_tutorial.sh
+```BASH
+docker build -f derived-images/Dockerfile.opengee-tutorial-resources -t opengee-tutorial-resources .
+```
+
+You could then, re-use the `start-docker-image.sh` and `attach-fusion.sh`
+scripts by supplying the tag of the new image you built. E.g.:
+
+```BASH
+IMAGE_TAG=opengee-tutorial-resources ./bin/start-docker-image.sh
+```
+
+and
+
+```BASH
+IMAGE_TAG=opengee-tutorial-resources ./bin/attach-fusion.sh
 ```
 
 
