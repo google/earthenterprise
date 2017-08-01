@@ -16,6 +16,18 @@ Add users that you want to have access to Docker to the `docker` group:
 # adduser muser docker
 ```
 
+### Cent OS 7
+
+Install Docker as root:
+
+```BASH
+yum install docker
+# In case your Docker deamon isn't running:
+service docker start
+```
+
+Now you can use Docker as the root user.
+
 
 ## Pulling an Image from Docker Cloud
 
