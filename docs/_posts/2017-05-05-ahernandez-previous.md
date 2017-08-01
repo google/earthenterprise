@@ -1,6 +1,6 @@
 ---
 layout: blogpost
-title:  "Old gross post"
+title:  "An older post"
 section_id: blog
 date:   2017-05-05 16:00:00
 author: Alexander Hernandez
