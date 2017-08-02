@@ -31,7 +31,7 @@ echo "Using asset root: $ASSET_ROOT"
 
 # - Fusion Commands
 
-/opt/google/bin/genewimageryresource --nomask --provider USGS-I --sourcedate "2012-05-10T12:00:00Z" -o Tutorial/Resources/Imagery/SFBayAreaLanSat_x /opt/google/share/tutorials/fusion/Imagery/usgsLanSat.jp2
+/opt/google/bin/genewimageryresource --provider USGS-I --sourcedate "2012-05-10T12:00:00Z" --feather 100 --masktolerance 2 -o Tutorial/Resources/Imagery/SFBayAreaLanSat_x /opt/google/share/tutorials/fusion/Imagery/usgsLanSat.tif
 
 /opt/google/bin/genewimageryresource --provider USGS-I --sourcedate "2012-05-12T12:00:00Z" --feather 100 -o Tutorial/Resources/Imagery/SFHighResInset_1 /opt/google/share/tutorials/fusion/Imagery/usgsSFHiRes.tif
 /opt/google/bin/genewimageryresource --provider USGS-I --sourcedate "2012-05-10T14:00:00Z" --feather 100 -o Tutorial/Resources/Imagery/SFHighResInset_2 /opt/google/share/tutorials/fusion/Imagery/usgsSFHiRes.tif
@@ -62,4 +62,3 @@ echo "Using asset root: $ASSET_ROOT"
 /opt/google/bin/gebuild Tutorial/Databases/SFinset_3
 /opt/google/bin/gebuild Tutorial/Databases/SFinset_4
 /opt/google/bin/gebuild Tutorial/Databases/SFinset_5
-
