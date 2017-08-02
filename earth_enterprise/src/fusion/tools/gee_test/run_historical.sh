@@ -39,11 +39,11 @@ echo "Using asset root: $ASSET_ROOT"
 /opt/google/bin/genewimageryresource --provider USGS-I --sourcedate "2012-10-10T12:10:10Z" --feather 100 -o Tutorial/Resources/Imagery/SFHighResInset_4 /opt/google/share/tutorials/fusion/Imagery/usgsSFHiRes.tif
 /opt/google/bin/genewimageryresource --provider USGS-I --sourcedate "2017-05-10T12:10:10Z" --feather 100 -o Tutorial/Resources/Imagery/SFHighResInset_5 /opt/google/share/tutorials/fusion/Imagery/usgsSFHiRes.tif
 
-/opt/google/bin/genewimageryproject --historical_imagery -o Tutorial/Projects/Imagery/SFinset_1 Tutorial/Resources/Imagery/SFBayAreaLanSat_x Tutorial/Resources/Imagery/SFHighResInset_1 Tutorial/Resources/Imagery/BlueMarble
-/opt/google/bin/genewimageryproject --historical_imagery -o Tutorial/Projects/Imagery/SFinset_2 Tutorial/Resources/Imagery/SFBayAreaLanSat_x Tutorial/Resources/Imagery/SFHighResInset_2 Tutorial/Resources/Imagery/BlueMarble
-/opt/google/bin/genewimageryproject --historical_imagery -o Tutorial/Projects/Imagery/SFinset_3 Tutorial/Resources/Imagery/SFBayAreaLanSat_x Tutorial/Resources/Imagery/SFHighResInset_3 Tutorial/Resources/Imagery/BlueMarble
-/opt/google/bin/genewimageryproject --historical_imagery -o Tutorial/Projects/Imagery/SFinset_4 Tutorial/Resources/Imagery/SFBayAreaLanSat_x Tutorial/Resources/Imagery/SFHighResInset_4 Tutorial/Resources/Imagery/BlueMarble
-/opt/google/bin/genewimageryproject --historical_imagery -o Tutorial/Projects/Imagery/SFinset_5 Tutorial/Resources/Imagery/SFBayAreaLanSat_x Tutorial/Resources/Imagery/SFHighResInset_5 Tutorial/Resources/Imagery/BlueMarble
+/opt/google/bin/genewimageryproject --historical_imagery -o Tutorial/Projects/Imagery/SFinset_1 Tutorial/Resources/Imagery/SFBayAreaLanSat_x Tutorial/Resources/Imagery/SFHighResInset_1 Tutorial/Resources/Imagery/BlueMarble Tutorial/Resources/Imagery/i3_15Meter
+/opt/google/bin/genewimageryproject --historical_imagery -o Tutorial/Projects/Imagery/SFinset_2 Tutorial/Resources/Imagery/SFBayAreaLanSat_x Tutorial/Resources/Imagery/SFHighResInset_2 Tutorial/Resources/Imagery/BlueMarble Tutorial/Resources/Imagery/i3_15Meter
+/opt/google/bin/genewimageryproject --historical_imagery -o Tutorial/Projects/Imagery/SFinset_3 Tutorial/Resources/Imagery/SFBayAreaLanSat_x Tutorial/Resources/Imagery/SFHighResInset_3 Tutorial/Resources/Imagery/BlueMarble Tutorial/Resources/Imagery/i3_15Meter
+/opt/google/bin/genewimageryproject --historical_imagery -o Tutorial/Projects/Imagery/SFinset_4 Tutorial/Resources/Imagery/SFBayAreaLanSat_x Tutorial/Resources/Imagery/SFHighResInset_4 Tutorial/Resources/Imagery/BlueMarble Tutorial/Resources/Imagery/i3_15Meter
+/opt/google/bin/genewimageryproject --historical_imagery -o Tutorial/Projects/Imagery/SFinset_5 Tutorial/Resources/Imagery/SFBayAreaLanSat_x Tutorial/Resources/Imagery/SFHighResInset_5 Tutorial/Resources/Imagery/BlueMarble Tutorial/Resources/Imagery/i3_15Meter
 
 /opt/google/bin/gebuild Tutorial/Projects/Imagery/SFinset_1 
 /opt/google/bin/gebuild Tutorial/Projects/Imagery/SFinset_2 
