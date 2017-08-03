@@ -25,3 +25,9 @@ echo "Using asset root: $ASSET_ROOT"
 /opt/google/bin/gequery Tutorial/Databases/SFDb_3d --status
 /opt/google/bin/gequery Tutorial/Databases/SFDb_3d_TM --status
 /opt/google/bin/gequery Tutorial/Databases/SF_2d_Merc --status
+
+/opt/google/bin/gequery Tutorial/Databases/SFinset_1 --status
+/opt/google/bin/gequery Tutorial/Databases/SFinset_2 --status
+/opt/google/bin/gequery Tutorial/Databases/SFinset_3 --status
+/opt/google/bin/gequery Tutorial/Databases/SFinset_4 --status
+/opt/google/bin/gequery Tutorial/Databases/SFinset_5 --status
