@@ -29,18 +29,3 @@ echo "Using asset root: $ASSET_ROOT"
 
 /opt/google/bin/geserveradmin --adddb "$ASSET_ROOT/Tutorial/Databases/SF_2d_Merc.kmmdatabase/mapdb.kda/ver001/mapdb"
 /opt/google/bin/geserveradmin --pushdb "$ASSET_ROOT/Tutorial/Databases/SF_2d_Merc.kmmdatabase/mapdb.kda/ver001/mapdb"
-
-/opt/google/bin/geserveradmin --adddb "$ASSET_ROOT/Tutorial/Databases/SFinset_1.kdatabase/gedb.kda/ver001/gedb"
-/opt/google/bin/geserveradmin --pushdb "$ASSET_ROOT/Tutorial/Databases/SFinset_1.kdatabase/gedb.kda/ver001/gedb"
-
-/opt/google/bin/geserveradmin --adddb "$ASSET_ROOT/Tutorial/Databases/SFinset_2.kdatabase/gedb.kda/ver001/gedb"
-/opt/google/bin/geserveradmin --pushdb "$ASSET_ROOT/Tutorial/Databases/SFinset_2.kdatabase/gedb.kda/ver001/gedb"
-
-/opt/google/bin/geserveradmin --adddb "$ASSET_ROOT/Tutorial/Databases/SFinset_3.kdatabase/gedb.kda/ver001/gedb"
-/opt/google/bin/geserveradmin --pushdb "$ASSET_ROOT/Tutorial/Databases/SFinset_3.kdatabase/gedb.kda/ver001/gedb"
-
-/opt/google/bin/geserveradmin --adddb "$ASSET_ROOT/Tutorial/Databases/SFinset_4.kdatabase/gedb.kda/ver001/gedb"
-/opt/google/bin/geserveradmin --pushdb "$ASSET_ROOT/Tutorial/Databases/SFinset_4.kdatabase/gedb.kda/ver001/gedb"
-
-/opt/google/bin/geserveradmin --adddb "$ASSET_ROOT/Tutorial/Databases/SFinset_5.kdatabase/gedb.kda/ver001/gedb"
-/opt/google/bin/geserveradmin --pushdb "$ASSET_ROOT/Tutorial/Databases/SFinset_5.kdatabase/gedb.kda/ver001/gedb"
