@@ -1,6 +1,6 @@
-#!/usr/bin/python
+#!/bin/bash -eu
 #
-# Copyright 2017 Google Inc.
+# Copyright 2017 Open GEE Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,12 +14,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# Checks status of tutorial assets built by run_tutorial.sh script
 
-"""Example test."""
+set -x
+set -e
 
+ASSET_ROOT="/usr/local/google/gevol_test/assets"
+echo "Using asset root: $ASSET_ROOT"
 
-def main():
-  print "SUCCESS"
-
-if __name__ == "__main__":
-  main()
+/opt/google/bin/gequery Tutorial/Databases/SFDb_3d --status
+/opt/google/bin/gequery Tutorial/Databases/SFDb_3d_TM --status
+/opt/google/bin/gequery Tutorial/Databases/SF_2d_Merc --status
