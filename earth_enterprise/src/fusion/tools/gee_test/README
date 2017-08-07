@@ -67,7 +67,7 @@ To check the status
 
 ./status_historical.sh
 
-To publish after the historical build is finished (status_historical .sh should output "Succeeded" for all five databases first)
+To publish after the historical build is finished (status_historical.sh should output "Succeeded" for all five databases first)
 
 ./publish_historical.sh
 

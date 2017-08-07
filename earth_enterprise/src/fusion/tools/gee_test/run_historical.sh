@@ -45,12 +45,6 @@ echo "Using asset root: $ASSET_ROOT"
 /opt/google/bin/genewimageryproject --historical_imagery -o Tutorial/Projects/Imagery/SFinset_4 Tutorial/Resources/Imagery/SFBayAreaLanSat_x Tutorial/Resources/Imagery/SFHighResInset_4 Tutorial/Resources/Imagery/BlueMarble Tutorial/Resources/Imagery/i3_15Meter
 /opt/google/bin/genewimageryproject --historical_imagery -o Tutorial/Projects/Imagery/SFinset_5 Tutorial/Resources/Imagery/SFBayAreaLanSat_x Tutorial/Resources/Imagery/SFHighResInset_5 Tutorial/Resources/Imagery/BlueMarble Tutorial/Resources/Imagery/i3_15Meter
 
-/opt/google/bin/gebuild Tutorial/Projects/Imagery/SFinset_1 
-/opt/google/bin/gebuild Tutorial/Projects/Imagery/SFinset_2 
-/opt/google/bin/gebuild Tutorial/Projects/Imagery/SFinset_3 
-/opt/google/bin/gebuild Tutorial/Projects/Imagery/SFinset_4 
-/opt/google/bin/gebuild Tutorial/Projects/Imagery/SFinset_5 
-
 /opt/google/bin/genewdatabase -o Tutorial/Databases/SFinset_1 --imagery Tutorial/Projects/Imagery/SFinset_1
 /opt/google/bin/genewdatabase -o Tutorial/Databases/SFinset_2 --imagery Tutorial/Projects/Imagery/SFinset_2
 /opt/google/bin/genewdatabase -o Tutorial/Databases/SFinset_3 --imagery Tutorial/Projects/Imagery/SFinset_3
