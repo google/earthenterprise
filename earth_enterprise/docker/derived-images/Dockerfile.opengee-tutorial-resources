@@ -1,0 +1,6 @@
+FROM thermopylae/opengee-experimental
+
+# Download Fusion tutorial resources:
+RUN /bin/bash /opt/google/share/tutorials/fusion/download_tutorial.sh
+
+CMD /root/opengee/bin/start-servers.sh
