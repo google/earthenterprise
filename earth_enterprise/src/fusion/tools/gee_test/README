@@ -59,6 +59,18 @@ To publish after the build is finished (status.sh should output "Succeeded" for 
 
 ./publish_tutorial.sh
 
+To run the historical steps (Note: this must be run *after* run_tutorial.sh)
+
+./run_historical.sh
+
+To check the status
+
+./status_historical.sh
+
+To publish after the historical build is finished (status_historical.sh should output "Succeeded" for all five databases first)
+
+./publish_historical.sh
+
 To clean up after a successful run
 
 rm -rf /usr/local/google/gevol_test/assets/Tutorial
