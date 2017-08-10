@@ -1,4 +1,4 @@
-#!/usr/bin/python2.6
+#!/usr/bin/python
 #
 # Copyright 2017 Google Inc.
 #
@@ -19,7 +19,12 @@
 
 import os
 import pexpect
-import pexpect.fdpexpect
+
+try:
+   import pexpect.fdpexpect as fdpexpect
+except ImportError:
+   import fdpexpect
+	
 import subprocess
 import sys
 
@@ -43,8 +48,8 @@ def ExecuteCmd(os_cmd, use_shell=False):
   try:
     process = subprocess.Popen(os_cmd, stdin=None, stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE, bufsize=0, shell=use_shell)
-    stdout_stream = pexpect.fdpexpect.fdspawn(process.stdout)
-    stderr_stream = pexpect.fdpexpect.fdspawn(process.stderr)
+    stdout_stream = fdpexpect.fdspawn(process.stdout)
+    stderr_stream = fdpexpect.fdspawn(process.stderr)
     # process.returncode is None until the subprocess completes. Then, it gets
     # filled in with the subprocess exit code.
     while process.returncode is None:
