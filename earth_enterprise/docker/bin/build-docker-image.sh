@@ -12,8 +12,17 @@
 # template copies the current files in your development repository.
 : ${STAGE_1_NAME:="clean-clone"}
 
+# Set this to the name of a branch that you want to build during a
+# "clean-clone" stage 1.  This variable is not used for the "current-clone"
+# stage 1.
+: ${CLEAN_CLONE_BRANCH:=""}
+
 if [ "$STAGE_1_NAME" == "clean-clone" ]; then
-    CLONE_SUFFIX=""
+    if [ -z "$CLEAN_CLONE_BRANCH" ]; then
+        CLONE_SUFFIX=""
+    else
+        CLONE_SUFFIX="-branch-$CLEAN_CLONE_BRANCH"
+    fi
 else
     CLONE_SUFFIX="-$STAGE_1_NAME"
 fi
@@ -26,6 +35,7 @@ fi
 : ${FLATTEN_IMAGE:="true"}
 
 STAGE_COMPLETE_MESSAGE="Open GEE Docker Stage 2: Entering wait loop."
+DOCKERFILE_NO_CONTEXT_MARKER='# --\[ TST-Dockerfile: no-context \]--'
 
 SELF_NAME=$(basename "$0")
 SELF_DIR=$(dirname "$0")
@@ -45,12 +55,25 @@ function is_string_false()
 
 cd "$SELF_DIR/../../.." || exit 1
 DOCKER_DIR="earth_enterprise/docker"
-DOCKERFILE_PATH=""$DOCKER_DIR/Dockerfile.tmp.stage-1.$STAGE_1_NAME.$OS_DISTRIBUTION.$RANDOM""
+DOCKERFILE_PATH="$DOCKER_DIR/Dockerfile.tmp.stage-1.$STAGE_1_NAME.${OS_DISTRIBUTION}${CLONE_SUFFIX}.$RANDOM"
 
-cat "$DOCKER_DIR/image-definition/Dockerfile.stage-1.$STAGE_1_NAME.template" | \
-    sed "s/\${OS_DISTRIBUTION}/$OS_DISTRIBUTION/g" > "$DOCKERFILE_PATH"
-docker build -f "$DOCKERFILE_PATH" --no-cache=true --rm=true -t "${STAGE_1_IMAGE_NAME}" .
+export OS_DISTRIBUTION
+export CLEAN_CLONE_BRANCH_ESCAPED=$(printf "%q" "$CLEAN_CLONE_BRANCH")
+envsubst < "$DOCKER_DIR/image-definition/Dockerfile.stage-1.$STAGE_1_NAME.template" \
+    > "$DOCKERFILE_PATH"
+
+if grep -q -x "$DOCKERFILE_NO_CONTEXT_MARKER" "$DOCKERFILE_PATH"; then
+    DOCKER_CONTEXT_ARGUMENT="-"
+else
+    DOCKER_CONTEXT_ARGUMENT="."
+fi
+docker build --no-cache=true --rm=true \
+    -t "${STAGE_1_IMAGE_NAME}" \
+    $DOCKER_CONTEXT_ARGUMENT \
+    <"$DOCKERFILE_PATH"
+
 rm "$DOCKERFILE_PATH"
+
 docker run --cap-add=DAC_READ_SEARCH --name="$STAGE_1_CONTAINER_NAME" -ti "${STAGE_1_IMAGE_NAME}" |
 while read ln; do
     echo "$ln"

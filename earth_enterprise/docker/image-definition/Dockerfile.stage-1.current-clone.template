@@ -1,5 +1,7 @@
 # Run this Dockerfile from the top level of the GEE repository.
 
+# The Docker that comes with Ubuntu 14 is too old to support the ARG command,
+# so we use template variables. ):
 FROM thermopylae/opengee-experimental-build-env-${OS_DISTRIBUTION}
 
 COPY . /root/opengee/build/earthenterprise

@@ -1,10 +1,14 @@
-# Run this Dockerfile from the top level of the GEE repository.
+# Mark this Dockerfile as one that doesn't require a build context. (Save 
+# ourselves the time to migrate 1.7--3 GB of repository files we don't need.)
+# --[ TST-Dockerfile: no-context ]--
 
+# The Docker that comes with Ubuntu 14 is too old to support the ARG command,
+# so we use template variables. ):
 FROM thermopylae/opengee-experimental-build-env-${OS_DISTRIBUTION}
 
 # Build Open GEE:
 RUN cd /root/opengee/build && \
-   /root/opengee/bin/pull-gee-repository.sh && \
+   /root/opengee/bin/pull-gee-repository.sh --branch ${CLEAN_CLONE_BRANCH_ESCAPED} && \
    /root/opengee/bin/build-gee.sh
 
 # We can't proceed further with installing GEE from the Dockerfile, because the

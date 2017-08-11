@@ -169,7 +169,55 @@ image:
 ```
 
 You can optionally set the `OUTPUT_IMAGE_NAME` shell variable to override the
-default name used for the final Docker image.
+default name used for the final Docker image.  You can use the
+`OS_DISTRIBUTION` variable to set the platform you want to build on, the
+`STAGE_1_NAME` to set whether to build from a clean clone of the GEE
+repository, or from you current clone, and `CLEAN_CLONE_BRANCH` to build from
+the most recent commit on a given Git branch when building a clean clone.
+
+### Examples:
+
+Build from a clean repsitory clone on Cent OS 7:
+
+```BASH
+OS_DISTRIBUTION=centos-7 ./bin/build-docker-image.sh
+```
+
+
+Build from your current clone of the repository on Ubuntu 16:
+
+```BASH
+OS_DISTRIBUTION=ubuntu-16 STAGE_1_NAME=current-clone ./bin/build-docker-image.sh
+```
+
+
+Build a clean clone of branch `release_5.2.0` on Cent OS 7:
+
+```BASH
+OS_DISTRIBUTION=centos-7 CLEAN_CLONE_BRANCH=release_5.2.0 ./bin/build-docker-image.sh
+```
+
+
+### Building a Build-environment Image
+
+The Dockerfiles used by the `build-docker-image.sh` script require Docker
+images with build environments for each platform you are trying to build on.
+
+Normally, a build environment image for each supported platform should be
+published to Docker cloud, so one would be downloaded when you try to build,
+if you don't have it locally.  However, if you want to build a new image to
+publish to Docker cloud, or want to use a custom build environment, you can
+have a look at the `build-build-env-image.sh` script.  It's used as:
+
+```BASH
+OS_DISTRIBUTION=centos-7 ./bin/build-build-env-image.sh
+```
+
+With the value of `OS_DISTRIBUTION` that you need substituted above.  You can
+also override the `IMAGE_NAME` variable, but don't forget that the Dockerfiles
+used for the final platform images are looking for images with the default
+image name tags.
+
 
 
 ### Delete the Temporary Build Docker Images

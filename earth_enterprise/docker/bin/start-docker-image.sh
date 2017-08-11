@@ -6,9 +6,14 @@
 : ${HOST_GEVOL_PATH:=""}
 : ${OS_DISTRIBUTION:="ubuntu-14"}
 : ${STAGE_1_NAME:="clean-clone"}
+: ${CLEAN_CLONE_BRANCH:=""}
 
 if [ "$STAGE_1_NAME" == "clean-clone" ]; then
-    CLONE_SUFFIX=""
+    if [ -z "$CLEAN_CLONE_BRANCH" ]; then
+        CLONE_SUFFIX=""
+    else
+        CLONE_SUFFIX="-branch-$CLEAN_CLONE_BRANCH"
+    fi
 else
     CLONE_SUFFIX="-$STAGE_1_NAME"
 fi
