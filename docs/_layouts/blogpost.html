@@ -47,12 +47,12 @@ section_id: blog
         </div>
 
       </div>
-      <!-- Only display the Previous Posts section if there are >1 posts -->
+      <!-- Only display the all Posts section if there are >1 posts -->
       {% if num_posts > 1 %}
-        <!-- The previous posts navigator sits in the right 25% -->
+        <!-- The all posts navigator sits in the right 25% -->
         <div class='large-3 columns large-uncentered opposite darkBorder'>
           <div>
-            <h3 class='regularText'> Previous Posts </h3>
+            <h3 class='regularText'> All Posts </h3>
             <ul>
               {% for post in site.posts %}
                 <li>
@@ -60,7 +60,7 @@ section_id: blog
                   {% if post.title == page.title %}
                     {{post.title}}
                   {% else %}
-                    <a href="{{site.url}}{{site.baseurl}}{{ post.url }}">{{ post.title }}</a>
+                    <a href="{{ site.url }}{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
                   {% endif %}
                 </li>
               {% endfor %}
