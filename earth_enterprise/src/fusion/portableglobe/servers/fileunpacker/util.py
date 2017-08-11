@@ -20,9 +20,8 @@
 import os
 import pexpect
 
-""" Try loading fdpexpect for version 3.* and above.
-    if not successful, fallback to fdpexpect from older pexpect package.
-"""
+# Try loading fdpexpect for version 3.* and above.
+# if not successful, fallback to fdpexpect from older pexpect package.
 try:
    import pexpect.fdpexpect as fdpexpect
 except ImportError:
