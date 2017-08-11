@@ -27,13 +27,25 @@ fi
 # or, if you have more than one container running the Open GEE Docker image:
 : ${CONTAINER_ID:=""}
 
+# Set `IMAGE_TAG` to the name of the Open GEE Docker image to seach for
+# containers running that image.  You don't have to set this, if you set
+# `CONTAINER_ID`.
+if [ -z "$IMAGE_TAG" ]; then
+    if [ -n "$(docker images -q "opengee-experimental")" ]; then
+        IMAGE_TAG="opengee-experimental"
+    else
+        IMAGE_TAG="thermopylae/opengee-experimental"
+    fi
+fi
+
+
 
 SELF_NAME=$(basename "$0")
 
 function echo_container_id()
 {
     # `docker ps --filter "ancestor=. . ."` is currently broken, so we grep.
-    docker ps --no-trunc=true | grep -E "^[a-zA-Z0-9]+\\s+$(printf '%q' "$IMAGE_TAG")[\\s:]" |
+    docker ps --no-trunc=true | grep -E "^[a-zA-Z0-9]+\\s+$(printf '%q' "$IMAGE_TAG")[[:space:]:]" |
     while read -r id_field _; do
         if [ -n "$CONTAINER_ID" ]; then
             echo "$SELF_NAME: Multiple instances of the GEE image found. " >&2

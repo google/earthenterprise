@@ -16,6 +16,18 @@ Add users that you want to have access to Docker to the `docker` group:
 # adduser muser docker
 ```
 
+### Cent OS 7
+
+Install Docker as root:
+
+```BASH
+yum install docker
+# In case your Docker deamon isn't running:
+service docker start
+```
+
+Now you can use Docker as the root user.
+
 
 ## Pulling an Image from Docker Cloud
 
@@ -34,7 +46,9 @@ docker pull thermopylae/opengee-experimental
 
 In order to be able to build and serve Earth databases that persist between 
 instantiations of the Docker image, you need a persistent assets directory 
-outside of the Docker container.
+outside of the Docker container.  Another alternative is to run a container
+with a temporary assets directory, and commit the running to container to a
+new image after you've build your assets.
 
 To run the Docker container using a persistent globe assets directory outside 
 the container, use the following script.  Set the `HOST_GEVOL_PATH`
@@ -98,10 +112,23 @@ use.
 ##### Deriving an Image that Includes the Tutorial Files
 
 You can create an image based on the provided one that adds the tutorial
-files. All you need to do to construct the new image is to run:
+files.
 
-```Dockerfile
-CMD /bin/bash /opt/google/share/tutorials/fusion/download_tutorial.sh
+```BASH
+docker build -f derived-images/Dockerfile.opengee-tutorial-resources -t opengee-tutorial-resources .
+```
+
+You could then, re-use the `start-docker-image.sh` and `attach-fusion.sh`
+scripts by supplying the tag of the new image you built. E.g.:
+
+```BASH
+IMAGE_TAG=opengee-tutorial-resources ./bin/start-docker-image.sh
+```
+
+and
+
+```BASH
+IMAGE_TAG=opengee-tutorial-resources ./bin/attach-fusion.sh
 ```
 
 
