@@ -103,6 +103,18 @@ Running the Fusion UI on a non-Linux Docker host running X11 has not been
 tested, although it should be theoretially possible.
 
 
+#### Running Portable Server in the Docker Container
+
+Portable Server is installed under an `/opt/google` directory which has a name
+that looks like `/opt/google/portableserver-linux-5.2.0-20170812`.  You can
+start Portable Server by running the following command in a started Open GEE
+Docker container:
+
+```BASH
+/opt/google/bin/portableserver
+```
+
+
 #### Using GEE Tutorial Files in the Docker Container
 
 The Docker image is built without the GEE tutorial files, since people using
@@ -197,6 +209,13 @@ Build a clean clone of branch `release_5.2.0` on Cent OS 7:
 OS_DISTRIBUTION=centos-7 CLEAN_CLONE_BRANCH=release_5.2.0 ./bin/build-docker-image.sh
 ```
 
+
+Build a clean clone of branch `release_5.2.0` from user `unameit`'s GitHub
+repository on Cent OS 7:
+
+```BASH
+OS_DISTRIBUTION=centos-7 CLEAN_CLONE_URL=https://github.com/unameit/earthenterprise.git CLEAN_CLONE_BRANCH=release_5.2.0 ./bin/build-docker-image.sh
+```
 
 ### Building a Build-environment Image
 
