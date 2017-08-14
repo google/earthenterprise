@@ -31,7 +31,7 @@ sudo /opt/google/bin/geconfigurepublishroot --path=/usr/local/google/gevol_test/
 You will need to copy several TIFs to the Imagery and Terrain directories
 (it's simplest to unpack the entire tutorial tar):
   wget http://data.opengee.org/FusionTutorial-Full.tar.gz
-  sudo tar -zxf FusionTutorial-Full.tar.gz -O /opt/google/share/tutorials/fusion
+  sudo tar -zxf FusionTutorial-Full.tar.gz -C /opt/google/share/tutorials/fusion
 
 You can check your asset root and source volumes using:
 sudo /opt/google/bin/geconfigureassetroot --listvolumes
