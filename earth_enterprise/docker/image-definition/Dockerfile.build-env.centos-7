@@ -2,6 +2,8 @@ FROM centos:7
 
 # Install required packages.
 # The "X Window System" is not needed for building, but for running the Fusion UI.
+# The 'pexpect' and 'python-tornado' packages are not needed for Earth Server,
+# or Fusion, but it is for Portable Server.
 RUN yum update -y && \
     yum install -y git && \
     yum install -y epel-release && \
@@ -11,7 +13,8 @@ RUN yum update -y && \
         libXinerama-devel libXmu-devel libXrandr-devel libxml2-devel ogdi-devel openjpeg-devel \
         openjpeg2-devel openssl-devel perl-Alien-Packages perl-Perl4-CoreLibs proj-devel \
         python-devel scons xerces-c xerces-c-devel xorg-x11-server-devel zlib-devel && \
-    yum groupinstall -y "X Window System"
+    yum groupinstall -y "X Window System" && \
+    yum install -y pexpect python-tornado
 
 # Install Git-LFS:
 RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh.rpm | bash && \

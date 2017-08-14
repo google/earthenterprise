@@ -8,8 +8,9 @@ FROM thermopylae/opengee-experimental-build-env-${OS_DISTRIBUTION}
 
 # Build Open GEE:
 RUN cd /root/opengee/build && \
-   /root/opengee/bin/pull-gee-repository.sh --branch ${CLEAN_CLONE_BRANCH_ESCAPED} && \
-   /root/opengee/bin/build-gee.sh
+    /root/opengee/bin/pull-gee-repository.sh --branch ${CLEAN_CLONE_BRANCH_ESCAPED} ${CLEAN_CLONE_URL_ESCAPED} && \
+    /root/opengee/bin/build-gee.sh && \
+    /root/opengee/bin/build-portable-server.sh
 
 # We can't proceed further with installing GEE from the Dockerfile, because the
 # installer requires the 'DAC_READ_SEARCH' capability, and Docker currently has

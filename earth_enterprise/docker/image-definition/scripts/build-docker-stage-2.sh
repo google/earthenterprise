@@ -12,6 +12,9 @@ cd "$SELF_DIR/../build"
 # capabilities.
 /root/opengee/bin/install-gee.sh || exit 1
 
+# Install Portable Server:
+/root/opengee/bin/install-portable-server.sh || exit 1
+
 # Remove the GEE repository and build files to save space:
 /root/opengee/bin/rm-gee-build-files.sh || exit 1
 
