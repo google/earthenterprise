@@ -1,22 +1,20 @@
 #! /bin/bash
 
+SELF_DIR=$(dirname "$0")
+
+source "$SELF_DIR/lib/image-naming.sh"
+
+
 # Set these variables before running this script to override the
 # default values below:
 : ${GEE_SERVER_PORT:=80}
 : ${HOST_GEVOL_PATH:=""}
 : ${OS_DISTRIBUTION:="ubuntu-14"}
 : ${STAGE_1_NAME:="clean-clone"}
+: ${CLEAN_CLONE_URL:=""}
 : ${CLEAN_CLONE_BRANCH:=""}
 
-if [ "$STAGE_1_NAME" == "clean-clone" ]; then
-    if [ -z "$CLEAN_CLONE_BRANCH" ]; then
-        CLONE_SUFFIX=""
-    else
-        CLONE_SUFFIX="-branch-$CLEAN_CLONE_BRANCH"
-    fi
-else
-    CLONE_SUFFIX="-$STAGE_1_NAME"
-fi
+CLONE_SUFFIX=$(tst_docker_naming_echo_clone_suffix "$STAGE_1_NAME" "$CLEAN_CLONE_URL" "$CLEAN_CLONE_BRANCH")
 
 : ${IMAGE_TAG:="opengee-experimental-${OS_DISTRIBUTION}${CLONE_SUFFIX}"}
 

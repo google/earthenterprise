@@ -2,6 +2,11 @@
 
 # This script builds a Docker image containing Open GEE Server and Fusion.
 
+SELF_DIR=$(dirname "$0")
+
+source "$SELF_DIR/lib/image-naming.sh"
+
+
 # Set these variables before running this script to override the
 # default values below:
 : ${OS_DISTRIBUTION:="ubuntu-14"}
@@ -12,20 +17,18 @@
 # template copies the current files in your development repository.
 : ${STAGE_1_NAME:="clean-clone"}
 
+# Set this to the URL of the repository to clone during a "clean-clone"
+# stage 1.  This variable is not used for "current-clone" stage 1.  If left
+# blank, the default GEE Git URL will be used.
+: ${CLEAN_CLONE_URL:=""}
+
 # Set this to the name of a branch that you want to build during a
 # "clean-clone" stage 1.  This variable is not used for the "current-clone"
 # stage 1.
 : ${CLEAN_CLONE_BRANCH:=""}
 
-if [ "$STAGE_1_NAME" == "clean-clone" ]; then
-    if [ -z "$CLEAN_CLONE_BRANCH" ]; then
-        CLONE_SUFFIX=""
-    else
-        CLONE_SUFFIX="-branch-$CLEAN_CLONE_BRANCH"
-    fi
-else
-    CLONE_SUFFIX="-$STAGE_1_NAME"
-fi
+CLONE_SUFFIX=$(tst_docker_naming_echo_clone_suffix "$STAGE_1_NAME" "$CLEAN_CLONE_URL" "$CLEAN_CLONE_BRANCH")
+
 
 : ${STAGE_1_IMAGE_NAME:="opengee-experimental-${OS_DISTRIBUTION}${CLONE_SUFFIX}-stage-1"}
 : ${STAGE_2_IMAGE_NAME:="opengee-experimental-${OS_DISTRIBUTION}${CLONE_SUFFIX}-stage-2"}
@@ -58,6 +61,7 @@ DOCKER_DIR="earth_enterprise/docker"
 DOCKERFILE_PATH="$DOCKER_DIR/Dockerfile.tmp.stage-1.$STAGE_1_NAME.${OS_DISTRIBUTION}${CLONE_SUFFIX}.$RANDOM"
 
 export OS_DISTRIBUTION
+export CLEAN_CLONE_URL_ESCAPED=$(printf "%q" "$CLEAN_CLONE_URL")
 export CLEAN_CLONE_BRANCH_ESCAPED=$(printf "%q" "$CLEAN_CLONE_BRANCH")
 envsubst < "$DOCKER_DIR/image-definition/Dockerfile.stage-1.$STAGE_1_NAME.template" \
     > "$DOCKERFILE_PATH"
