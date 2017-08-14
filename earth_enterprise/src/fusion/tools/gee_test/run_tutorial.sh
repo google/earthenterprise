@@ -67,17 +67,17 @@ sudo /etc/init.d/geserver restart
 
 # - Fusion Commands
 
-/opt/google/bin/genewimageryresource --nomask --provider NASA --sourcedate 2000-05-10 -o Tutorial/Resources/Imagery/BlueMarble /opt/google/share/tutorials/fusion/Imagery/bluemarble_4km.jp2
+/opt/google/bin/genewimageryresource --nomask --provider NASA --sourcedate 2000-05-10 -o Tutorial/Resources/Imagery/BlueMarble /opt/google/share/tutorials/fusion/Imagery/bluemarble_4km.tif
 
-/opt/google/bin/genewimageryresource --provider USGS-I --sourcedate 2003-05-10 --feather 100 --masktolerance 2 -o Tutorial/Resources/Imagery/SFBayAreaLanSat /opt/google/share/tutorials/fusion/Imagery/usgsLanSat.jp2
+/opt/google/bin/genewimageryresource --provider USGS-I --sourcedate 2003-05-10 --feather 100 --masktolerance 2 -o Tutorial/Resources/Imagery/SFBayAreaLanSat /opt/google/share/tutorials/fusion/Imagery/usgsLanSat.tif
 
 /opt/google/bin/genewimageryresource --provider I3 --sourcedate 2006-05-10 --feather 100 -o Tutorial/Resources/Imagery/i3_15Meter /opt/google/share/tutorials/fusion/Imagery/i3SF15-meter.tif
 
 /opt/google/bin/genewimageryresource --provider USGS-I --sourcedate 2008-05-01 --feather 100 -o Tutorial/Resources/Imagery/SFHighResInset /opt/google/share/tutorials/fusion/Imagery/usgsSFHiRes.tif
 
-/opt/google/bin/genewimageryresource --nomask --provider NASA --sourcedate 2000-05-10 -o Tutorial/Resources/Imagery/BlueMarble_merc /opt/google/share/tutorials/fusion/Imagery/bluemarble_4km.jp2 --mercator
+/opt/google/bin/genewimageryresource --nomask --provider NASA --sourcedate 2000-05-10 -o Tutorial/Resources/Imagery/BlueMarble_merc /opt/google/share/tutorials/fusion/Imagery/bluemarble_4km.tif --mercator
 
-/opt/google/bin/genewimageryresource --provider USGS-I --sourcedate 2003-05-10 --feather 100 --masktolerance 2 -o Tutorial/Resources/Imagery/SFBayAreaLanSat_merc /opt/google/share/tutorials/fusion/Imagery/usgsLanSat.jp2 --mercator
+/opt/google/bin/genewimageryresource --provider USGS-I --sourcedate 2003-05-10 --feather 100 --masktolerance 2 -o Tutorial/Resources/Imagery/SFBayAreaLanSat_merc /opt/google/share/tutorials/fusion/Imagery/usgsLanSat.tif --mercator
 
 /opt/google/bin/genewimageryresource --provider I3 --sourcedate 2006-05-10 --feather 100 -o Tutorial/Resources/Imagery/i3_15Meter_merc /opt/google/share/tutorials/fusion/Imagery/i3SF15-meter.tif --mercator
 
@@ -85,7 +85,7 @@ sudo /etc/init.d/geserver restart
 
 /opt/google/bin/genewterrainresource --scale 1 --provider USGS-T --sourcedate 2003-05-10 --mosaictolerance 0 --feather 100 --holesize 0 -o Tutorial/Resources/Terrain/SFTerrain /opt/google/share/tutorials/fusion/Terrain/SF_terrain.tif
 
-/opt/google/bin/genewterrainresource --scale 1 --provider USGS-T --sourcedate 2003-05-10 --havemask -o Tutorial/Resources/Terrain/Topo30 /opt/google/share/tutorials/fusion/Terrain/gtopo30_4km.jp2
+/opt/google/bin/genewterrainresource --scale 1 --provider USGS-T --sourcedate 2003-05-10 --havemask -o Tutorial/Resources/Terrain/Topo30 /opt/google/share/tutorials/fusion/Terrain/gtopo30_4km.tif
 
 /opt/google/bin/genewvectorresource --sourcedate 2003-05-10 --encoding UTF-8 --layer 0 --provider USGS-M -o Tutorial/Resources/Vector/CAHighways /opt/google/share/tutorials/fusion/Vector/california_roads_line.shp
 
