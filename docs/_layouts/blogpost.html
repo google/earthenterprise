@@ -14,10 +14,10 @@ section_id: blog
       <!-- Add in a small seperator -->
       <p class="shortline"/>
     </div>
-    <!--  The large div contains the width of the entire page -->
-    <div class='large-12'>
+    <!--  The main div contains the width of the entire page -->
+    <div class='medium-12'>
       <!-- The post content resides in the left 75% of the page -->
-      <div class='large-9 columns'>
+      <div class='medium-9 columns'>
         <!-- Add in the Post Header content -->
         <div class='post'>
           <!-- Create a nice timestamp icon -->
@@ -45,12 +45,11 @@ section_id: blog
         <div class="content">
           {{ content }}
         </div>
-
       </div>
       <!-- Only display the all Posts section if there are >1 posts -->
       {% if num_posts > 1 %}
         <!-- The all posts navigator sits in the right 25% -->
-        <div class='large-3 columns large-uncentered opposite darkBorder'>
+        <div class='medium-3 columns medium-uncentered opposite darkBorder'>
           <div>
             <h3 class='regularText'> All Posts </h3>
             <ul>
