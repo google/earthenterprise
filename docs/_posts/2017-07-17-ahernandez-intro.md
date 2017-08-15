@@ -1,6 +1,7 @@
 ---
-layout: post
+layout: blogpost
 title:  "Community Manager Introduction"
+section_id: blog
 date:   2017-07-17 16:00:00
 author: Alexander Hernandez
 thumbnail: ahernandez.jpg

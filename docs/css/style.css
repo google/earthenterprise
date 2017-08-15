@@ -16,6 +16,13 @@ h1, h2, h3, h4 {
   letter-spacing: 2px;
 }
 
+.darkBorder {
+  border-style: solid;
+  border-color: black;
+  border-width: thin;
+  border-radius: 0.5em;
+}
+
 .regularText {
   text-transform: none;
 }
@@ -614,6 +621,10 @@ ul.info i:hover {
 
 .post .info{
   margin-left: 100px;
+}
+
+.post .info, .post .content {
+  /*margin-left: 10px;*/
 }
 
 .post .info h3 {
