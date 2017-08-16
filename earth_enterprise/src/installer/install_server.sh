@@ -545,6 +545,8 @@ fix_postinstall_filepermissions()
   chmod ugo+x /opt/google/share/support/geecheck/convert_to_kml.pl
   chmod ugo+x /opt/google/share/support/geecheck/find_terrain_pixel.pl
   chmod ugo+x /opt/google/share/support/geecheck/pg_check.pl
+  # Note: this is installed in install_fusion.sh, but needs setting here too.
+  chmod ugo+x $BASEINSTALLDIR_OPT/share/tutorials/fusion/download_tutorial.sh
   chown -R root:root /opt/google/share
 
   #TODO
