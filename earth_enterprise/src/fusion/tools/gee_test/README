@@ -1,17 +1,17 @@
-#
-# Copyright 2017 Google Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+// Copyright 2017 Google Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 
 Tool for installing Fusion and Earth Server, building tutorial databases (2d, 3d, and 3d Time Machine), and running tests against these databases.
 
@@ -19,15 +19,32 @@ The clean is harsh so you should not use it on machines where you want to save y
 
 The test program does not work unless the asset root /usr/local/google/gevol_test already exists. This seems to be an issue with the clean install. If it fails, you will have to run:
 sudo /opt/google/bin/geconfigureassetroot --new --assetroot  /usr/local/google/gevol_test/assets
-# You can add source volumes:
+
+You must also add source volumes with the names "src" and "tutorial", respectively:
 /usr/local/google/gevol_test/src
 /opt/google/share/tutorials/fusion
 
 sudo /opt/google/bin/geselectassetroot --assetroot  /usr/local/google/gevol_test/assets
 
+sudo /opt/google/bin/geconfigurepublishroot --path=/usr/local/google/gevol_test/published_db
+
+You will need to copy several TIFs to the Imagery and Terrain directories
+(it's simplest to unpack the entire tutorial tar):
+  wget http://data.opengee.org/FusionTutorial-Full.tar.gz
+  sudo tar -zxf FusionTutorial-Full.tar.gz -C /opt/google/share/tutorials/fusion
+
+You can check your asset root and source volumes using:
+sudo /opt/google/bin/geconfigureassetroot --listvolumes
+
+If anything is missing, you can edit the asset root and source volumes with:
+sudo /opt/google/bin/geconfigureassetroot --editvolumes
 
 Asset root:
   /usr/local/google/gevol_test/assets
+
+Source volumes:
+  /usr/local/google/gevol_test/src (src)
+  /opt/google/share/tutorials/fusion (tutorial)
 
 Publish root:
   /usr/local/google/gevol_test/published_db
@@ -35,24 +52,56 @@ Publish root:
 
 Examples:
 
+To run the tutorial steps
+
+./run_tutorial.sh
+
+To check the status
+
+./status.sh
+
+To publish after the build is finished (status.sh should output "Succeeded" for both databases first)
+
+./publish_tutorial.sh
+
+To run the historical steps (Note: this must be run *after* run_tutorial.sh)
+
+./run_historical.sh
+
+To check the status
+
+./status_historical.sh
+
+To publish after the historical build is finished (status_historical.sh should output "Succeeded" for all five databases first)
+
+./publish_historical.sh
+
+To clean up after a successful run
+
+rm -rf /usr/local/google/gevol_test/assets/Tutorial
+
+To cancel the tutorial run, use the Fusion Asset Manager to cancel the current build for each of the assets under Tutorial, then run the above rm command
+
+Note: gee_test.py has not been updated to work with the latest installer, so the following instructions will not work without modifications to the script
+
 To do a basic install and test:
 
-./gee_test.py <path-to-installer-tarball>
+sudo ./gee_test.py <path-to-installer-tarball>
 
 or
 
-./gee_test.py <path-to-installer-directory>
+sudo ./gee_test.py <path-to-installer-directory>
 
 
 To install without building tutorial dbs:
 
-./gee_test.py --notutorial --nopublish --notests <path-to-installer-tarball>
+sudo ./gee_test.py --notutorial --nopublish --notests <path-to-installer-tarball>
 
 
 To do a clean install with tests:
 
-./gee_test.py --clean --uninstall <path-to-installer-directory>
+sudo ./gee_test.py --clean --uninstall <path-to-installer-directory>
 
 To run only tests:
 
-./gee_test.py --noserver --nofusion --notutorial --nopublish <path-to-installer-directory>
+sudo ./gee_test.py --noserver --nofusion --notutorial --nopublish <path-to-installer-directory>
