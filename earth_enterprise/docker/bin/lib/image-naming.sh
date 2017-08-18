@@ -1,4 +1,4 @@
-# Source this file to get function defined.
+# Source this file to get functions defined below.
 
 function tst_docker_naming_echo_clone_suffix()
 {

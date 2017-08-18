@@ -5,30 +5,13 @@
 
 SELF_DIR=$(dirname "$0")
 
-source "$SELF_DIR/lib/image-naming.sh"
+source "$SELF_DIR/lib/input-variables.sh"
 
 
-# Set these variables before running this script to override the
-# default values below:
+# Look at `build_image_parse_input_variables` in <lib/input-variables.sh> for
+# input variables you can set before running this script.
 
-# Set this to the OS distribution you want to run inside the Docker container.
-# (Choose from the couple of available ones.)  You don't need to set this, if
-# you are going to override the IMAGE_TAG variable.
-: ${OS_DISTRIBUTION:="ubuntu-14"}
-
-: ${STAGE_1_NAME:="clean-clone"}
-
-# Set this to the URL of the repository to clone during a "clean-clone"
-# stage 1.  This variable is not used for "current-clone" stage 1.  If left
-# blank, the default GEE Git URL will be used.
-: ${CLEAN_CLONE_URL:=""}
-
-# Set this to the name of a branch that you want to build during a
-# "clean-clone" stage 1.  This variable is not used for the "current-clone"
-# stage 1.
-: ${CLEAN_CLONE_BRANCH:=""}
-
-CLONE_SUFFIX=$(tst_docker_naming_echo_clone_suffix "$STAGE_1_NAME" "$CLEAN_CLONE_URL" "$CLEAN_CLONE_BRANCH")
+build_image_parse_input_variables
 
 # Set this to the name of the Open GEE Docker image to seach for containers
 # running that image:
