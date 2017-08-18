@@ -3,8 +3,8 @@
 TMPFILE="/tmp/FusionTutorial-Full.tar.gz"
 SCRIPTDIR=`dirname "$0"`
 
-if [ "$EUID" != "0" ] ; then
-    echo `basename $0` "must be run as root"
+if [ $(id -u) != 0 ] ; then
+    echo "`basename $0`" "must be run as root"
     exit 1;
 fi
 
