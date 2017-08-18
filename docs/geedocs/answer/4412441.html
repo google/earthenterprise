@@ -39,6 +39,7 @@
 <li><a href="#LaunchFusion">Launch Google Earth Enterprise Fusion</a></li>
 <li><a href="#AssetNavTree">Build the Asset Navigation Tree</a></li>
 <li><a href="#DefineSrcProv">Define Source Providers</a></li>
+<li><a href="#DefineResPath">Define Resource Paths</a></li>
 </ul>
 <hr/>
 <h2><a name="SelectAssetRoot"></a>Select the Tutorial Asset Root</h2>
@@ -117,7 +118,9 @@ All four subfolders appear in alphabetical order in the asset navigation tree.</
 You do not need to create Vector, Imagery, and Terrain subfolders for the MapLayers or Databases folders.</li>
 <li>Close the Asset Manager by clicking the close box (<strong>X</strong>) in the top right corner.</li>
 </ol>
+
 <hr/>
+
 <h2><a name="DefineSrcProv"></a>Define Source Providers</h2>
 <p>The <strong>Provider Manager</strong> allows you to create a list of organizations that provide the source data you use in Google Earth. For each provider, you specify a unique lookup key (any unique abbreviation you choose) and copyright information. When you create a resource, a data provider is associated with it, so that when the resource is displayed in Google Earth EC, the appropriate copyright information is also displayed.</p>
 <h4>To create a source provider:</h4>
@@ -186,6 +189,35 @@ To enter the copyright symbol, open a text editor, press CTRL-SHIFT-U, then ente
 The new providers appear in the Provider Manager dialog in the order in which you added them:<br/>
 <br/>
 <img alt="Provider Manager" src="../art/fusion/tutorial/providerManager-full.png"/></li>
-<li>Click <strong>OK</strong> to close the Provider Manager, and go on to the <a href="../answer/4412443.html">next lesson</a>.</li>
-</ol></p><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+
+<li>Click <strong>OK</strong> to close the Provider Manager.</li>
+</ol></p>
+
+<h2><a name="DefineResPath"></a>Define Resource Paths</h2>
+<p>The <strong>Asset Manager Resource Editor Default Source Paths</strong> screen allows you to specify default paths for Vector, Imagery, and Terrain resource types.</p>
+<h4>To define resource paths:</h4>
+<ol class="spaced-list">
+<li>Open the Asset Manager Resource Editor Default Source Paths by selecting <strong>Edit &gt; Preferences &gt; Asset Manager</strong>.<br/>
+<br/>
+<img alt="Asset Manager Config" src="../art/fusion/tutorial/assetManagerConfig.png"/></li>
+
+<li>Click the first folder icon on the right-hand side for Vector.<br/>
+<br/>
+<img alt="Folder Icon" src="../art/fusion/tutorial/iconProjBrowser.png"/><br/>
+<br/>
+The <strong>Select Folder</strong> dialog appears.<br/>
+<br/>
+<img alt="Select Folder Dialog" src="../art/fusion/tutorial/assetFolderSelection.png"/>
+</li>
+
+<li>Navigate to <i>/opt/google/share/tutorials/fusion</i>.
+
+<li>
+Select <strong>Vector</strong>, then click <strong>OK</strong>.
+</li>
+<li>Repeat steps <strong>2</strong> through <strong>4</strong> for <strong>Imagery</strong> and <strong>Terrain</strong>.</li>
+<li>Click <strong>OK</strong> to close the Asset Manager Resource Editor Default Source Paths, and go on to the <a href="../answer/4412443.html">next lesson</a>.</li>
+</ol>
+
+<div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
 </div></body> </html>
