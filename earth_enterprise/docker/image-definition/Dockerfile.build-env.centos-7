@@ -17,7 +17,7 @@ RUN yum update -y && \
     yum install -y pexpect python-tornado
 
 # Install Git-LFS:
-RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh.rpm | bash && \
+RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh | bash && \
     yum install -y install git-lfs
 
 # Copy shell scripts to /root/bin in the Docker container:
