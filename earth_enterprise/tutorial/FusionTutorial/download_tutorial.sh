@@ -2,9 +2,10 @@
 
 TMPFILE="/tmp/FusionTutorial-Full.tar.gz"
 SCRIPTDIR=`dirname "$0"`
+SELFNAME=`basename "$0"`
 
 if [ $(id -u) != 0 ] ; then
-    echo "`basename $0`" "must be run as root"
+    echo "$SELFNAME must be run as root"
     exit 1;
 fi
 
