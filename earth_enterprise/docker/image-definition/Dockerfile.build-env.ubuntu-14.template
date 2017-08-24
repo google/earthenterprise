@@ -1,4 +1,7 @@
-FROM ubuntu:16.04
+# We only need a few context files, rather than the whole repository:
+# --[ TST-Dockerfile: context-dir=earth_enterprise/docker/image-definition ]--
+
+FROM ubuntu:14.04
 
 # Install required packages:
 # The 'pexpect' package is not needed for Earth Server, or Fusion, but it is for
@@ -24,7 +27,7 @@ RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.d
 
 # Copy shell scripts to /root/bin in the Docker container:
 RUN mkdir -p /root/opengee/bin
-ADD scripts /root/opengee/bin
+COPY scripts /root/opengee/bin
 
 # Make a build directory:
 RUN mkdir -p /root/opengee/build

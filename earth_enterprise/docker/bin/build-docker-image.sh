@@ -2,9 +2,8 @@
 
 # This script builds a Docker image containing Open GEE Server and Fusion.
 
-SELF_DIR=$(dirname "$0")
-
-source "$SELF_DIR/lib/input-variables.sh"
+source "$(dirname "$0")/lib/input-variables.sh"
+source "$(dirname "$0")/lib/image-building.sh"
 
 
 # Look at `build_image_parse_input_variables` in <lib/input-variables.sh> for
@@ -16,12 +15,13 @@ build_image_parse_input_variables
 : ${STAGE_1_CONTAINER_NAME:="$STAGE_1_IMAGE_NAME-build-$(date '+%s.%N')-$RANDOM"}
 : ${STAGE_2_CONTAINER_NAME:="$STAGE_2_IMAGE_NAME-build-$(date '+%s.%N')-$RANDOM"}
 : ${FLATTEN_IMAGE:="true"}
+# Set TST_DOCKER_QUIET to a non-empty string to avoid prompting the user for input.
 
 STAGE_COMPLETE_MESSAGE="Open GEE Docker Stage 2: Entering wait loop."
-DOCKERFILE_NO_CONTEXT_MARKER='# --\[ TST-Dockerfile: no-context \]--'
 
 SELF_NAME=$(basename "$0")
 SELF_DIR=$(dirname "$0")
+DOCKER_DIR="$SELF_DIR/.."
 
 function is_string_false()
 {
@@ -36,27 +36,9 @@ function is_string_false()
 }
 
 
-cd "$SELF_DIR/../../.." || exit 1
-DOCKER_DIR="earth_enterprise/docker"
-DOCKERFILE_PATH="$DOCKER_DIR/Dockerfile.tmp.stage-1.$STAGE_1_NAME.${OS_DISTRIBUTION}${CLONE_SUFFIX}.$RANDOM"
-
-export OS_DISTRIBUTION
-export CLEAN_CLONE_URL_ESCAPED=$(printf "%q" "$CLEAN_CLONE_URL")
-export CLEAN_CLONE_BRANCH_ESCAPED=$(printf "%q" "$CLEAN_CLONE_BRANCH")
-envsubst < "$DOCKER_DIR/image-definition/Dockerfile.stage-1.$STAGE_1_NAME.template" \
-    > "$DOCKERFILE_PATH"
-
-if grep -q -x "$DOCKERFILE_NO_CONTEXT_MARKER" "$DOCKERFILE_PATH"; then
-    DOCKER_CONTEXT_ARGUMENT="-"
-else
-    DOCKER_CONTEXT_ARGUMENT="."
-fi
-docker build --no-cache=true --rm=true \
-    -t "${STAGE_1_IMAGE_NAME}" \
-    $DOCKER_CONTEXT_ARGUMENT \
-    <"$DOCKERFILE_PATH"
-
-rm "$DOCKERFILE_PATH"
+tst_docker_build_dockerfile_template \
+    "$DOCKER_DIR/image-definition/Dockerfile.stage-1.$STAGE_1_NAME.template" \
+    "${STAGE_1_IMAGE_NAME}"
 
 docker run --cap-add=DAC_READ_SEARCH --name="$STAGE_1_CONTAINER_NAME" -ti "${STAGE_1_IMAGE_NAME}" |
 while read ln; do

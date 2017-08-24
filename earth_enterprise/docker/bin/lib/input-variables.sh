@@ -1,6 +1,6 @@
 # Source this file to get functions defined below.
 
-SELF_PATH="$_"
+SELF_PATH="${BASH_SOURCE}"
 SELF_DIR=$(dirname "$SELF_PATH")
 
 source "$SELF_DIR/image-naming.sh"
@@ -29,7 +29,7 @@ function build_image_parse_input_variables()
     # a username is enough to construct the repository URL.
     : ${CLEAN_CLONE_GIT_USER:=""}
 
-    if [ -z "$CLEAN_CLONE_URL" -a -n "CLEAN_CLONE_GIT_USER" ]; then
+    if [ -z "$CLEAN_CLONE_URL" -a -n "$CLEAN_CLONE_GIT_USER" ]; then
         CLEAN_CLONE_URL="https://github.com/${CLEAN_CLONE_GIT_USER}/earthenterprise.git"
     fi
 

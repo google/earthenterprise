@@ -1,9 +1,12 @@
+# We only need a few context files, rather than the whole repository:
+# --[ TST-Dockerfile: context-dir=earth_enterprise/docker/image-definition ]--
+
 FROM centos:7
 
 # Install required packages.
 # The "X Window System" is not needed for building, but for running the Fusion UI.
 # The 'pexpect' and 'python-tornado' packages are not needed for Earth Server,
-# or Fusion, but it is for Portable Server.
+# or Fusion, but they are for Portable Server.
 RUN yum update -y && \
     yum install -y git && \
     yum install -y epel-release && \
@@ -22,7 +25,7 @@ RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.r
 
 # Copy shell scripts to /root/bin in the Docker container:
 RUN mkdir -p /root/opengee/bin
-ADD scripts /root/opengee/bin
+COPY scripts /root/opengee/bin
 
 # Make a build directory:
 RUN mkdir -p /root/opengee/build
