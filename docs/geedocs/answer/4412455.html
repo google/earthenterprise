@@ -143,8 +143,73 @@
     </ol>
     <hr>
     <h2><a name="imagery_proj"></a>Define a Flat Imagery Project</h2>
-    <p>The maps layer includes Google Maps layers and uses the Google Maps API from google.com. Map databases use either Plate Carrée (EPSG: 4326) and Mercator (EPSG: 3857) projections and normally require corresponding imagery resource types. In this lesson you add a flat imagery project from a previous tutorial lesson to a Mercator map database, which can then be projected as <em>Mercator on the Fly</em>. For more information, see <a href="../answer/6081069.html">Add flat imagery to Mercator map databases</a>.</p>
+    <p>The maps layer includes Google Maps layers and uses the Google Maps API from google.com. Map databases use either Plate Carrée (EPSG: 4326) or Mercator (EPSG: 3857) projections and normally require corresponding imagery resource types. In this lesson you add a flat imagery project from a previous tutorial lesson to a Mercator map database, which can then be projected as <em>Mercator on the Fly</em>. For more information, see <a href="../answer/6081069.html">Add flat imagery to Mercator map databases</a>.</p>
     <div class="tip">If you did not complete the tutorial lesson to create an imagery project, see <a href="../answer/4412421.html#56899">Define an Imagery Project</a>. </div>
+    <ol class="spaced-list">
+      <li>Select <b>Asset Manager</b> from the Tools menu. The Asset Manager appears.</li>
+      <li>Select <b>Mercator Map Tools (2D)</b>. The tools for Mercator maps appear in the toolbar.</li>
+     <li>Click <img src="../art/fusion/tutorial/iconResImageryMerc.png"/>.  The Mercator Imagery Resource Editor appears with no resources selected.<br/>
+      <img src="../art/fusion/tutorial/imageryResEditorMerc.png"/></li>
+     <li>Click <strong>Add</strong><br/>
+      The Open Source dialog opens to the <code>/opt/google/share/tutorials/fusion/Imagery</code> folder.<br/>
+      <img src="../art/fusion/tutorial/imageryOpen-2.png"/></li>
+     <li>Select source file <strong>usgsLanSat.tif</strong>, and click <strong>Open</strong>.</li>
+     <li>Enter today's date for <strong>Acquisition Date</strong>
+     <li>Select <strong>USGS Imagery</strong> for <strong>Provider</strong>
+     <li>Enter <strong>2</strong> for <strong>Tolerance</strong>
+     <li>Select <strong>File &gt; Save</strong> and navigate to the <code>/ASSET_ROOT/Resources/Imagery</code> folder.</li>
+     <li>Enter the name <strong>SFBayAreaLanSat_Merc</strong>, and click <strong>Save</strong>.
+     <li>Select <strong>File &gt; Close</strong></li>
+     <li>Repeat steps <strong>3</strong> through <strong>11</strong> for the table that follows:
+        <table class="nice-table">
+        <tbody>
+        <tr>
+        <th>Name<br/>
+        (Resources/Imagery/...)</th>
+        <th>Acquisition Date</th>
+        <th>Provider</th>
+        <th>Mask</th>
+        <th>Source file</th>
+        </tr>
+        <tr>
+        <td><strong>BlueMarble_Merc</strong></td>
+        <td>Today's date</td>
+        <td>NASA Imagery</td>
+        <td><strong>No Mask</strong><br/>
+        <td><code>bluemarble_4km.tif</code></td>
+        </tr>
+        <tr>
+        <td><strong>i3_15Meter_Merc</strong></td>
+        <td>Today's date</td>
+        <td>i3</td>
+        <td>
+        <p><strong>Auto Mask</strong><br/>
+        Default values.</p>
+        </td>
+        <td><code>i3SF15-meter.tif</code></td>
+        </tr>
+        <tr>
+        <td><strong>SFHighResInset_Merc</strong></td>
+        <td>Today's date</td>
+        <td>USGS Imagery</td>
+        <td><strong>Auto Mask</strong><br/>
+        Default values.</td>
+        <td><code>usgsSFHiRes.tif</code></td>
+        </tr>
+        </tbody>
+        </table>
+      </li>
+     <li>Click <img src="../art/fusion/tutorial/iconProjImageryMerc.png"/>.  The Mercator Imagery Project Editor appears with no resources selected.<br/>
+      <img src="../art/fusion/tutorial/imageryProjEditorMerc.png"/></li>
+      <li>Click <img src="../art/fusion/tutorial/icon_new.gif"/>. The Open dialog appears. </li>
+     <li>Select <strong>SFBayAreaLanSat_Merc</strong>, and click <strong>Open</strong>.</li>
+     <li>Repeat steps <strong>14</strong> and <strong>15</strong> for Named entries in the above table.</li>
+
+
+
+     <li>Select <strong>File &gt; Save</strong> and navigate to the <code>/ASSET_ROOT/Projects/Imagery</code> folder.</li>
+     <li>Enter the name <strong>SFBayAreaMercator</strong>, and click <strong>Save</strong>.</li>
+    </ol>
     <hr>
     <h2><a name="43488"></a>Define, Push, and Publish a Map Database</h2>
     <ol class="spaced-list">
