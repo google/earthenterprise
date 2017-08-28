@@ -1,0 +1,64 @@
+# We only need a few context files, rather than the whole repository:
+# --[ TST-Dockerfile: context-dir=earth_enterprise/docker/image-definition ]--
+# Prompt the user to enter variables required to build this Dockerfile:
+# --[ TST-Dockerfile: required-vars=REDHAT_USERNAME ]--
+# Avoid displaying the values of some variables:
+# --[ TST-Dockerfile: required-password-vars=REDHAT_PASSWORD ]--
+
+FROM registry.access.redhat.com/rhel6
+
+# Install required packages.
+#   The "X Window System" is not needed for building, but for running the
+# Fusion UI.
+#   The 'pexpect' and 'python-tornado' packages are not needed for Earth
+# Server, or Fusion, but they are for Portable Server.
+#   The 'wget' package is needed for downloading the 'epel-release' package and
+# for downloading the googletest source.
+#   We register the Docker image with the Red Hat repository provider (you
+# need to have a username and password) so we can install Yum packages.  We
+# unregister when we finish, so we're not taking up a machine license.
+WORKDIR /root
+RUN subscription-manager register \
+        --username=${REDHAT_USERNAME_ESCAPED} --password=${REDHAT_PASSWORD_ESCAPED} \
+        --auto-attach && \
+    yum update -y && \
+    yum install -y git wget && \
+    wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm && \
+    yum install -y epel-release-latest-6.noarch.rpm && \
+    subscription-manager repos --enable=rhel-6-server-optional-rpms && \
+    subscription-manager repos --enable=rhel-6-server-optional-source-rpms && \
+    yum --setopt=group_package_types=mandatory,default,optional groupinstall -y "Development Tools" && \
+    yum install -y devtoolset-2-toolchain && \
+    yum install -y bison-devel freeglut-devel gdbm-devel geos-devel giflib-devel \
+        libcap-devel libmng-devel libpng-devel libX11-devel libXcursor-devel libXft-devel \
+        libXinerama-devel libXmu-devel libXrandr-devel libxml2-devel ogdi-devel openjpeg-devel \
+        openjpeg2-devel openssl-devel proj-devel \
+        python-devel scons xerces-c xerces-c-devel xorg-x11-server-devel zlib-devel && \
+    yum groupinstall -y "X Window System" && \
+    yum install -y pexpect python-tornado
+
+# Install Git-LFS:
+RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh | bash && \
+    yum install -y install git-lfs
+
+# We're done installing packages from Yum repositories.  Unregister our RHEL
+# subscription to free up the license:
+RUN subscription-manager unregister
+
+# We need to build our own gtest with the devtooset-2-toolchain so it works
+# with the GCC compiler from that toolchain.
+RUN mkdir -p /root/opengee/rpm-specs
+COPY rhel-6/rpm-specs /root/opengee/rpm-specs
+RUN cd /root/opengee/rpm-specs/gtest-1.8.0/SOURCES && \
+    wget https://github.com/google/googletest/archive/release-1.8.0.tar.gz && \
+    cd .. && \
+    source /opt/rh/devtoolset-2/enable && \
+    rpmbuild -v -bb --clean SPECS/gtest.spec && \
+    yum install -y RPMS/$(uname -i)/gtest-devtoolset2-1.8.0-1.$(uname -i).rpm
+
+# Copy shell scripts to /root/bin in the Docker container:
+RUN mkdir -p /root/opengee/bin
+COPY scripts /root/opengee/bin
+
+# Make a build directory:
+RUN mkdir -p /root/opengee/build
