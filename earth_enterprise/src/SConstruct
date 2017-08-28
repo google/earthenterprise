@@ -408,8 +408,9 @@ def get_cc_version(cc_path):
   return version
 
 def is_version_ge(version_components, comparand_components):
-  """Tests if a version number is greater than another version number.
-  Both version numbers are specified as lists of version components."""
+  """Tests if a version number is greater than, or equal to another version
+  number.  Both version numbers are specified as lists of version components.
+  """
 
   if version_components is None:
     return False
