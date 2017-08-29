@@ -27,7 +27,7 @@ You need to source /opt/rh/devtoolset-2/enable to add the shared library to
 %build
 mkdir build
 cd build
-cmake -DCMAKE_INSTALL_PREFIX=/usr ..
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_CXX_FLAGS=-fPIC ..
 make
 cd ..
 
