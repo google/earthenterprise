@@ -250,7 +250,7 @@ check_prereq_software()
 		check_prereq_software_retval=1
 	fi
 
-	if ! software_check "$script_name" "python2.7" "python-2.7.*"; then
+	if ! software_check "$script_name" "python2.7" "python-2.7.*" "python27-*"; then
 		check_prereq_software_retval=1
 	fi
 
