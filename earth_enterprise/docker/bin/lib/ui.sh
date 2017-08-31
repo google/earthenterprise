@@ -1,4 +1,4 @@
-# Source this file to get functions defined below.
+# Source this file to get the functions defined below.
 
 function tst_docker_warn()
 {
