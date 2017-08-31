@@ -435,20 +435,6 @@ if is_hardy:
 else:
   path_string = '%sbin:%s/bin:/bin:/usr/bin' % (exportdirs['root'], optdir)
 
-# Check for GCC 4.8 from an alternative toolchain installation on RHEL 6:
-if cc_dir is None and os.path.isfile('/opt/rh/devtoolset-2/root/usr/bin/g++'):
-    # Check if the version of the default compiler is, at least 4.8:
-    if not is_version_ge(get_cc_version(env['CXX']), [4, 8]):
-        cc_dir = '/opt/rh/devtoolset-2/root/usr/bin'
-        rpathlink_dirs += [
-          '/opt/rh/devtoolset-2/root/usr/lib64',
-          '/opt/rh/devtoolset-2/root/usr/lib']
-
-if cc_dir:
-    env['CXX'] = cc_dir + '/g++'
-    env['CC'] = cc_dir + '/gcc'
-
-
 env = khEnvironment(
     ENV={'PATH': path_string},
     release=release,
@@ -489,6 +475,15 @@ env = khEnvironment(
     python_version=python_version,
     python_major_version=python_major_version
 )
+
+# Check for GCC 4.8 from an alternative toolchain installation on RHEL 6:
+if cc_dir is None and os.path.isfile('/opt/rh/devtoolset-2/root/usr/bin/g++'):
+    # Check if the version of the default compiler is, at least 4.8:
+    if not is_version_ge(get_cc_version(env['CXX']), [4, 8]):
+        cc_dir = '/opt/rh/devtoolset-2/root/usr/bin'
+        rpathlink_dirs += [
+          '/opt/rh/devtoolset-2/root/usr/lib64',
+          '/opt/rh/devtoolset-2/root/usr/lib']
 
 if cc_dir:
     env['CXX'] = cc_dir + '/g++'
