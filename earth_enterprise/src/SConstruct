@@ -67,7 +67,7 @@ ValidOptions = set(
      'jobstats',  # Use to enable jobstats profile output.
      'internal',  # Use to enable internal use only debug classes
      'cross_cc',  # Use the cross compiler.
-     'cc_path',
+     'cc_dir',
      'coverage',
      'bundle_3rd_libs',  # Build with bundling 3rd party libs.
      ]);
@@ -92,7 +92,7 @@ internal = int(ARGUMENTS.get('internal', 0))
 native_cc = not int(ARGUMENTS.get('cross_cc', 0))
 coverage = ARGUMENTS.get('coverage', 0)
 bundle_3rd_libs = int(ARGUMENTS.get('bundle_3rd_libs', 0))
-cc_path = ARGUMENTS.get('cc_path', 0)
+cc_dir = ARGUMENTS.get('cc_dir', None)
 
 # make some directory variables used by other parts of the build system
 top_dir = Dir('#').abspath
@@ -392,12 +392,61 @@ def FusionVersionNumber(source):
     print 'Unable to find Fusion Version Number:', exp
 fusion_version_number = FusionVersionNumber('fusion_version.txt')
 
+def get_cc_version(cc_path):
+  """Extracts the version number of a C/C++ compiler (like GCC) as a list of
+  strings."""
+
+  process = subprocess.Popen(
+    [cc_path, '--version'], stdout=subprocess.PIPE)
+  (stdout, stderr) = process.communicate()
+  match = re.search('[0-9][0-9.]*', stdout)
+  # If match is None we don't know the version.
+  if match is None:
+    return None
+  version = match.group().split('.')
+
+  return version
+
+def is_version_ge(version_components, comparand_components):
+  """Tests if a version number is greater than another version number.
+  Both version numbers are specified as lists of version components."""
+
+  if version_components is None:
+    return False
+
+  for i in xrange(len(comparand_components)):
+    if i >= len(version_components):
+      version_component = 0
+    else:
+      version_component = int(version_components[i])
+    if int(comparand_components[i]) > version_component:
+      return False
+    if int(comparand_components[i]) < version_component:
+      return True
+
+  return True
+
+
 # create the environment that controls the builds
 
 if is_hardy:
   path_string = '%sbin:/bin:/usr/bin' % (exportdirs['root'])
 else:
   path_string = '%sbin:%s/bin:/bin:/usr/bin' % (exportdirs['root'], optdir)
+
+# Check for GCC 4.8 from an alternative toolchain installation on RHEL 6:
+if cc_dir is None and os.path.isfile('/opt/rh/devtoolset-2/root/usr/bin/g++'):
+    # Check if the version of the default compiler is, at least 4.8:
+    if not is_version_ge(get_cc_version(env['CXX']), [4, 8]):
+        cc_dir = '/opt/rh/devtoolset-2/root/usr/bin'
+        rpathlink_dirs += [
+          '/opt/rh/devtoolset-2/root/usr/lib64',
+          '/opt/rh/devtoolset-2/root/usr/lib']
+
+if cc_dir:
+    env['CXX'] = cc_dir + '/g++'
+    env['CC'] = cc_dir + '/gcc'
+
 
 env = khEnvironment(
     ENV={'PATH': path_string},
@@ -407,8 +456,8 @@ env = khEnvironment(
     jobstats=jobstats,
     internal=internal,
     native_cc=native_cc,
-    cc_path=cc_path,
     bundle_3rd_libs=bundle_3rd_libs,
+    cc_dir=cc_dir,
     is_hardy=is_hardy,
     exportdirs=exportdirs,
     installdirs=installdirs,
@@ -440,9 +489,9 @@ env = khEnvironment(
     python_major_version=python_major_version
 )
 
-if cc_path:
-    env['CXX'] = cc_path + '/g++'
-    env['CC'] = cc_path + '/gcc'
+if cc_dir:
+    env['CXX'] = cc_dir + '/g++'
+    env['CC'] = cc_dir + '/gcc'
 
 # The following is to make Scons 1.xx behave like it used to with scons .96
 env['SHCXXFLAGS'] = ['$CXXFLAGS', '-fPIC']
