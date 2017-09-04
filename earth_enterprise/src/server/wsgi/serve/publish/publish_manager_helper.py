@@ -101,8 +101,8 @@ class PublishManagerHelper(stream_manager.StreamManager):
   HTACCESS_GE_PUBLISH_BEGIN = "### GE_PUBLISH BEGIN\n"
   HTACCESS_GE_PUBLISH_END = "### GE_PUBLISH END\n"
 
-  PUBLISH_PATH_TEMPL = "{}{}"
-  TARGET_PATH_TEMPL = "{}/targets{}"
+  PUBLISH_PATH_TEMPL = "{0}{1}"
+  TARGET_PATH_TEMPL = "{0}/targets{1}"
 
   def __init__(self):
     """Inits publish manager helper."""
@@ -552,13 +552,13 @@ class PublishManagerHelper(stream_manager.StreamManager):
       if serve_utils.IsFusionDb(db_type):
         db_host = line[0]
         publish_db_path = self.BuildDbPublishPath(db_host, db_path)
-        publish_db_path = "{}/header.xml".format(publish_db_path)
+        publish_db_path = "{0}/header.xml".format(publish_db_path)
         db_name = serve_utils.GetFusionDbInfoName(line[2], db_type)
         do_clean_up = True
       else:
         assert serve_utils.IsPortable(db_type)
         if is_globes_mounted:
-          publish_db_path = "{}{}".format(
+          publish_db_path = "{0}{1}".format(
               constants.CUTTER_GLOBES_PATH, db_path)
           db_name = line[1]
           db_host = ""
@@ -572,8 +572,8 @@ class PublishManagerHelper(stream_manager.StreamManager):
         self.DoUnpublish(target_path)
         unpublished_dbs.append({"host": db_host, "path": db_path})
         logger.warning(
-            "The database/portable globe '{}' could not be found."
-            " The path '{}' serving it has been un-published.".format(
+            "The database/portable globe '{0}' could not be found."
+            " The path '{1}' serving it has been un-published.".format(
                 db_name, target_path))
 
     logger.info("Publish info cleanup is complete.")
@@ -1057,7 +1057,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
     except Exception as e:
       logger.error(e)
       http_io.ResponseWriter.AddJsonFailureBody(
-          response, "Server-side Internal Error: {}".format(e))
+          response, "Server-side Internal Error: {0}".format(e))
 
   def _GetAllAssets(self, response):
     """Gets list of available fusion databases and portables.
@@ -1417,9 +1417,9 @@ class PublishManagerHelper(stream_manager.StreamManager):
       (scheme://host[:port]) -  {vh_name: vh_base_url}
     """
     vh_list = self.QueryVhList()
-    vhname_to_baseurl_dct = {
-        vh_name: self.GetVhBaseUrl(vh_url, vh_ssl) for (
-            vh_name, vh_url, vh_ssl) in vh_list}
+    vhname_to_baseurl_dct = {}
+    for (vh_name, vh_url, vh_ssl) in vh_list:
+        vhname_to_baseurl_dct[vh_name] = self.GetVhBaseUrl(vh_url, vh_ssl) 
 
     return vhname_to_baseurl_dct
 
@@ -1441,7 +1441,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
     """
     url_parse_res = urlparse.urlparse(vh_url)
     if url_parse_res.scheme and url_parse_res.netloc:
-      return "{}://{}".format(url_parse_res.scheme, url_parse_res.netloc)
+      return "{0}://{1}".format(url_parse_res.scheme, url_parse_res.netloc)
     else:
       # VH URL is specified as absolute path, then build VH base URL based on
       # information in Apache config.
@@ -1458,7 +1458,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
         # override scheme in according with VH properties.
         scheme = "https" if vh_ssl else "http"
         host = "localhost" if vh_url == "/local_host" else host
-        vh_base_url = "{}://{}".format(scheme, host)
+        vh_base_url = "{0}://{1}".format(scheme, host)
 
         # Note: Do not pick up port from Apache config for SSL virtual host,
         # use default port if SSL virtual host specified with absolute path.
@@ -1466,7 +1466,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
         if (not vh_ssl) and port and port != "80":
           # Get port number for not SSL virtual host from Apache config and
           # put it into URL if it is not default.
-          vh_base_url += ":{}".format(port)
+          vh_base_url += ":{0}".format(port)
         return vh_base_url
 
   def _GetVhCompleteUrl(self, vh_url, vh_ssl):

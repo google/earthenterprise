@@ -43,11 +43,11 @@ class Error(Exception):
       HTML escaped error message.
     """
     if error_prefix:
-      return utils.HtmlEscape("{}: {}".format(
+      return utils.HtmlEscape("{0}: {1}".format(
           error_prefix,
           str(self.args[0] if len(self.args) <= 1 else self.args)))
     else:
-      return utils.HtmlEscape("Error: {}".format(
+      return utils.HtmlEscape("Error: {0}".format(
           str(self.args[0] if len(self.args) <= 1 else self.args)))
 
   def __str__(self):

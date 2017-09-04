@@ -93,7 +93,7 @@ def GetSchemeHostPort(environ):
   Returns:
     reconstructed part of URI: scheme://host:port.
   """
-  url = "{}://".format(environ["wsgi.url_scheme"])
+  url = "{0}://".format(environ["wsgi.url_scheme"])
 
   if environ.get("HTTP_HOST"):
     url += environ["HTTP_HOST"]
@@ -102,10 +102,10 @@ def GetSchemeHostPort(environ):
 
     if environ["wsgi.url_scheme"] == "https":
       if environ["SERVER_PORT"] != "443":
-        url += ":{}".format(environ["SERVER_PORT"])
+        url += ":{0}".format(environ["SERVER_PORT"])
     else:
       if environ["SERVER_PORT"] != "80":
-        url += ":{}".format(environ["SERVER_PORT"])
+        url += ":{0}".format(environ["SERVER_PORT"])
 
   return url
 
@@ -134,11 +134,11 @@ def GetApacheServerUrl():
   assert host
   assert port
 
-  server_url = "{}://{}".format(scheme, host)
+  server_url = "{0}://{1}".format(scheme, host)
   if (port and
       ((scheme == "http" and port != "80") or
        (scheme == "https" and port != "443"))):
-    server_url += ":{}".format(port)
+    server_url += ":{0}".format(port)
 
   return server_url
 
@@ -163,9 +163,9 @@ def BuildServerUrl(host_):
   assert scheme
   assert port
 
-  server_url = "{}://{}".format(scheme, host_)
+  server_url = "{0}://{1}".format(scheme, host_)
   if port and port != "80" and port != "443":
-    server_url += ":{}".format(port)
+    server_url += ":{0}".format(port)
 
   return server_url
 
@@ -239,7 +239,7 @@ def GetApacheServerHost():
       r"^ServerName\s+(?:(https?)://)?"
       r"((?:[\da-zA-Z-]+)(?:\.(?:[\da-zA-Z-]+)){1,5})(?::(\d+))?")
 
-  if match and (match[1] not in {"localhost", "127.0.0.1"}):
+  if match and (match[1] not in ["localhost", "127.0.0.1"]):
     host = match[1]
 
   if not host:
