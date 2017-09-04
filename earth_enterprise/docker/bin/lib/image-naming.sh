@@ -7,6 +7,7 @@ function tst_docker_naming_echo_clone_suffix()
     local CLEAN_CLONE_BRANCH="$3"
     local CLONE_SUFFIX=""
     local URL_SUFFIX
+    local SANITIZED_BRANCH_NAME
 
     if [ "$STAGE_1_NAME" == "clean-clone" ]; then
         CLONE_SUFFIX=""
@@ -31,7 +32,9 @@ function tst_docker_naming_echo_clone_suffix()
             fi
         fi
         if [ -n "$CLEAN_CLONE_BRANCH" ]; then
-            CLONE_SUFFIX="$CLONE_SUFFIX-branch-$CLEAN_CLONE_BRANCH"
+            SANITIZED_BRANCH_NAME="$(echo -n "$CLEAN_CLONE_BRANCH" | tr '[:upper:]' '[:lower:]' |\
+                tr --complement 'a-z0-9_.-' '_')"
+            CLONE_SUFFIX="$CLONE_SUFFIX-branch-$SANITIZED_BRANCH_NAME"
         fi
     else
         CLONE_SUFFIX="-$STAGE_1_NAME"
