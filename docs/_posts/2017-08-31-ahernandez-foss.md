@@ -1,6 +1,6 @@
 ---
 layout: blogpost
-title:  "2017 FOSS 4G"
+title:  "2017 FOSS4G"
 section_id: blog
 date:   2017-08-31 13:00:00
 author: Alexander Hernandez
