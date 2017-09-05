@@ -74,18 +74,12 @@ software_check()
     local software_check_retval=0
 
     # args: $1: name of script
-    # args: $2: ubuntu package
-    # args: $3: rhel package
-    # args: $4: centos6 package
+    # args: $2: Ubuntu package
+    # args: $3: RHEL package
 
     if [ "$MACHINE_OS" == "$UBUNTUKEY" ] && [ ! -z "$2" ]; then
         if [[ -z "$(dpkg --get-selections | sed s:install:: | sed -e 's:\s::g' | grep ^$2\$)" ]]; then
             echo -e "\nInstall $2 and restart the $1."
-            software_check_retval=1
-        fi
-    elif [ "$MACHINE_OS" == "$CENTOSKEY" ] && [ ! -z "$4" ]; then
-        if [[ -z "$(rpm -qa | grep ^$4)" ]]; then
-            echo -e "\nInstall $4 and restart the $1."
             software_check_retval=1
         fi
     elif { [ "$MACHINE_OS" == "$REDHATKEY" ] || [ "$MACHINE_OS" == "$CENTOSKEY" ]; } && [ ! -z "$3" ]; then
