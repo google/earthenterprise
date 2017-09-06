@@ -106,7 +106,6 @@ else:
     bin_path = '/usr/bin'
   else:
     bin_path = '%s/bin' % env['optdir']
-  print "bin_path=%s" % bin_path
 
   third_party_env['ENV']['CC'] = '%s/gcc %s %s' % (bin_path, cflags, lflags)
   third_party_env['ENV']['CXX'] = '%s/g++ %s %s' % (bin_path, cflags, lflags)
