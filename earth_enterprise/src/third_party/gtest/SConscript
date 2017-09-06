@@ -17,7 +17,6 @@
 # Scons build file for gtest library.
 
 Import('env')
-from pprint import pprint
 
 buildGtest = False
 
@@ -27,10 +26,6 @@ if not conf.CheckLib('gtest'):
     buildGtest = True
 
 env = conf.Finish()
-
-pprint(vars(env), indent=2)
-
-#buildGtest = False
 
 # Build libgtest as a shared library. If we make gtest static it forces all
 # executables linked against it to link statically and that messes up the
