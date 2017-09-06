@@ -23,8 +23,8 @@
 #include <Python.h>
 #include <cstddef>
 
-#include "string"
-#include "vector"
+#include <string>
+#include <vector>
 
 #include "common/ManifestEntry.h"
 
