@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/bash -eu
 #
-# Copyright 2017 Google Inc.
+# Copyright 2017 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,6 +14,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# Checks status of tutorial assets built by run_tutorial.sh script
 
-# TODO: Consider renaming test_portable.py gold_test.py.
-cp ../../portableglobe/servers/test/test_portable.py tests/gold_tests/gold_test.py
+set -x
+set -e
+
+ASSET_ROOT="/usr/local/google/gevol_test/assets"
+echo "Using asset root: $ASSET_ROOT"
+
+/opt/google/bin/gequery Tutorial/Databases/SFinset_1 --status
+/opt/google/bin/gequery Tutorial/Databases/SFinset_2 --status
+/opt/google/bin/gequery Tutorial/Databases/SFinset_3 --status
+/opt/google/bin/gequery Tutorial/Databases/SFinset_4 --status
+/opt/google/bin/gequery Tutorial/Databases/SFinset_5 --status
