@@ -381,7 +381,7 @@ def NormalizeTargetPath(target):
     return target
 
   if target[0] != "/":
-    target = "/{}".format(target)
+    target = "/{0}".format(target)
 
   return target
 
@@ -401,10 +401,10 @@ def GetServerAndPathFromUrl(url):
   path = ""
   url_obj = urlparse.urlparse(url)
   if url_obj.scheme and url_obj.netloc and url_obj.path:
-    server = "{}://{}".format(url_obj.scheme, url_obj.netloc)
+    server = "{0}://{1}".format(url_obj.scheme, url_obj.netloc)
     path = url_obj.path
   elif url_obj.scheme and url_obj.netloc:
-    server = "{}://{}".format(url_obj.scheme, url_obj.netloc)
+    server = "{0}://{1}".format(url_obj.scheme, url_obj.netloc)
   elif url_obj.path:
     path = url_obj.path
   else:
