@@ -21,7 +21,3 @@ Refer to the [wiki](https://github.com/google/earthenterprise/wiki/Build-Instruc
 
 ### Installation
 Refer to the [Install Instructions](https://github.com/google/earthenterprise/wiki/Install-Fusion-or-Earth-Server) for instructions on installing Fusion or Earth Server.  Please note that you must have a successful build of the source before proceeding with the install.
-
-### Known Issues
-Known issues can be tracked via [wiki page](https://github.com/google/earthenterprise/wiki/Known-Issues), which is updated weekly.
-
