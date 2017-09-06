@@ -26,7 +26,7 @@ third_party_env = env.Clone()
 # The order is important as n'th one has no dependency on anything after it
 if third_party_env['bundle_3rd_libs']:
   third_party_libs = [
-#      'gtest',
+      'gtest',
       'libjs',
       'libattr',
       'libcap',
@@ -60,7 +60,7 @@ if third_party_env['bundle_3rd_libs']:
       'skia']
 else:
   third_party_libs = [
-#      'gtest',
+      'gtest',
       'libjs',
       'openssl',
       'openldap',
