@@ -12,8 +12,9 @@ FROM registry.access.redhat.com/rhel6
 # Fusion UI.
 #   The 'pexpect' and 'python-tornado' packages are not needed for Earth
 # Server, or Fusion, but they are for Portable Server.
-#   The 'wget' package is needed for downloading the 'epel-release' package and
-# for downloading the googletest source.
+#   The 'wget' package is needed for downloading the 'epel-release' package.
+#   The 'cmake', gettext' and 'rpm-build' packages are needed for building the
+# Google Test RPM (for `cmake`, `envsubst` and `rpmbuild`).
 #   We register the Docker image with the Red Hat repository provider (you
 # need to have a username and password) so we can install Yum packages.  We
 # unregister when we finish, so we're not taking up a machine license.
@@ -22,7 +23,7 @@ RUN subscription-manager register \
         --username=${REDHAT_USERNAME_ESCAPED} --password=${REDHAT_PASSWORD_ESCAPED} \
         --auto-attach && \
     yum update -y && \
-    yum install -y git wget && \
+    yum install -y cmake gettext git rpm-build wget && \
     wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm && \
     yum install -y epel-release-latest-6.noarch.rpm && \
     subscription-manager repos --enable=rhel-6-server-optional-rpms && \
@@ -47,14 +48,11 @@ RUN subscription-manager unregister
 
 # We need to build our own gtest with the devtooset-2-toolchain so it works
 # with the GCC compiler from that toolchain.
-RUN mkdir -p /root/opengee/rpm-specs
-COPY rhel-6/rpm-specs /root/opengee/rpm-specs
-RUN cd /root/opengee/rpm-specs/gtest-1.8.0/SOURCES && \
-    wget https://github.com/google/googletest/archive/release-1.8.0.tar.gz && \
-    cd .. && \
-    source /opt/rh/devtoolset-2/enable && \
-    rpmbuild -v -bb --clean SPECS/gtest.spec && \
-    yum install -y RPMS/$(uname -i)/gtest-devtoolset2-1.8.0-1.$(uname -i).rpm
+RUN mkdir -p /root/opengee/rpm-build
+RUN cd /root/opengee/rpm-build && \
+    git clone https://github.com/tst-ppenev/gtest-rhel6-devtoolset.git && \
+    ./gtest-rhel6-devtoolset/bin/build.sh && \
+    yum install -y gtest-rhel6-devtoolset/build/RPMS/x86_64/gtest-devtoolset2-1.8.0-1.x86_64.rpm
 
 # Copy shell scripts to /root/bin in the Docker container:
 RUN mkdir -p /root/opengee/bin
