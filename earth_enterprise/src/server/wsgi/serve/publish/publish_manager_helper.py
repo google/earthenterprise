@@ -1417,7 +1417,6 @@ class PublishManagerHelper(stream_manager.StreamManager):
       (scheme://host[:port]) -  {vh_name: vh_base_url}
     """
     vh_list = self.QueryVhList()
-    vhname_to_baseurl_dct = dict()
     vhname_to_baseurl_dct = dict(
         (vh_name,"") for (vh_name, vh_url, vh_ssl) in vh_list)
   
