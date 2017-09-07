@@ -82,4 +82,4 @@ class SearchPublishHandler(object):
     except Exception as e:
       logger.error(e)
       http_io.ResponseWriter.AddJsonFailureBody(
-          response, "Server-side Internal Error: {}".format(e))
+          response, "Server-side Internal Error: {0}".format(e))

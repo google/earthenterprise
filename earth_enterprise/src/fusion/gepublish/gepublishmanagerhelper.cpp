@@ -12,10 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <stddef.h>
-
+#include <cstddef>
 #include "fusion/gepublish/gepublishmanagerhelper.h"
-
 #include "fusion/dbmanifest/dbmanifest.h"
 #include "common/khFileUtils.h"
 #include "common/khSpawn.h"

@@ -20,9 +20,8 @@
 #ifndef GEO_EARTH_ENTERPRISE_SRC_FUSION_GEPUBLISH_GEPUBLISHMANAGERHELPER_H_
 #define GEO_EARTH_ENTERPRISE_SRC_FUSION_GEPUBLISH_GEPUBLISHMANAGERHELPER_H_
 
-#include <stddef.h>
-
-#include <python2.7/Python.h>  // Note: should be first in include list.
+#include <Python.h>
+#include <cstddef>
 
 #include <string>
 #include <vector>
