@@ -49,7 +49,7 @@ def GetHostInfo():
   ipaddr = GetIP(hostname)
   host_check, _, _ = socket.gethostbyaddr(ipaddr)
   if hostname in BAD_HOSTNAMES:
-    AssertionError('Hostname cannot be one of %s' % ','.join(BAD_HOSTNAMES))
+    raise AssertionError('Hostname cannot be one of %s' % ','.join(BAD_HOSTNAMES))
   return hostname, ipaddr, host_check
 
 
@@ -73,7 +73,8 @@ def GetFusionVersion():
       version = f.readline().rstrip()
       return version
   except IOError:
-    AssertionError('Fusion version not available.')
+    raise AssertionError('Fusion version not available.')
+  return version
 
 
 def GetGeeServerVersion():
@@ -85,7 +86,7 @@ def GetGeeServerVersion():
       version = f.readline().rstrip()
       return version
   except IOError:
-    AssertionError('GEE Server version not available.')
+    raise AssertionError('GEE Server version not available.')
   return version
 
 

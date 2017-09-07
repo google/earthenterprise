@@ -79,8 +79,14 @@ current asset root without stopping Fusion.</p>
           <td>3.3.8b-free</td>
           <td>Updated</td>
         </tr>
+        <tr>
+          <td>GDAL</td>
+          <td>2.1.2</td>
+          <td>Updated</td>
+        </tr>
       </tbody>
     </table>
+  <p>If you're upgrading from GEE 5.1.3, you may have to reinstall the prerequisite libraries after uninstalling 5.1.3 but before installing 5.2.0.</p>
   <h5>
   <h5>
     <p id="known_issues_5.2.0">Known Issues</p>
@@ -148,9 +154,99 @@ current asset root without stopping Fusion.</p>
           <td>Close the resource form and open it again to make the save option available again.</td>
         </tr>
         <tr>
+          <td>340</td>
+          <td>GE Fusion Terrain is black</td>
+          <td>No current work around</td>
+        </tr>
+        <tr>
           <td>342</td>
           <td>Fusion crashes when opening an unsupported file type</td>
           <td>Re-open fusion and avoid opening unsupported file types.</td>
+        </tr>
+        <tr>
+          <td>375</td>
+          <td>Invalid version of psycopg2 on Ubuntu 16.04</td>
+          <td>On Ubuntu 16.04 switch to 'python-psycopg2' instead of 'python2.7-psycopg2'.</td>
+        </tr>
+        <tr>
+          <td>380</td>
+          <td>Provider field in resource-view is blank</td>
+          <td>Open the individual resource to see the provider</td>
+        </tr>
+        <tr>
+          <td>401</td>
+          <td>GEE commands are not in the path for sudo. </td>
+          <td>Specify the full path when running commands or add /opt/google/bin to the path for all users, including the super user</td>
+        </tr>
+        <tr>
+          <td>402</td>
+          <td>Provider manager window locked to main window.</td>
+          <td>No current work around</td>
+        </tr>
+        <tr>
+          <td>403</td>
+          <td>Missing close button on system manager window in RHEL 7</td>
+          <td>Right click the title bar and select close</td>
+        </tr>
+        <tr>
+          <td>404</td>
+          <td>Opaque polygons in preview.</td>
+          <td>No current work around</td>
+        </tr>
+        <tr>
+          <td>405</td>
+          <td>Vector layer preview not cleared in some situations</td>
+          <td>Reset the preview window to the correct state by either clicking on it or previewing another vector layer</td>
+        </tr>
+        <tr>
+          <td>407</td>
+          <td>Corrupt data warning when starting fusion</td>
+          <td>No current work around but Fusion loads and runs correctly.</td>
+        </tr>
+        <tr>
+          <td>423</td>
+          <td>Slower JPEG2000 performance than 5.1.3/td>
+          <td>Use Geotiff or other image formats.</td>
+        </tr>
+        <tr>
+          <td>437</td>
+          <td>Rebooting VM while it is building resources results in a corrupted XML</td>
+          <td>No current work around</td>
+        </tr>
+        <tr>
+          <td>440</td>
+          <td>Fuzzy imagery in historical imagery tests.</td>
+          <td>No current work around</td>
+        </tr>
+        <tr>
+          <td>444</td>
+          <td>Fusion installer does not upgrade the asset root on RHEL 7</td>
+          <td>Upgrade the asset root manually by running the command that is printed when you try to start the fusion service</td>
+        </tr>
+        <tr>
+          <td>453</td>
+          <td>Improve `check_server_processes_running` detection for uninstall</td>
+          <td>No current work around</td>
+        </tr>
+        <tr>
+          <td>456</td>
+          <td>Inconsistent behavior of vector layers after upgrade</td>
+          <td>No current work around</td>
+        </tr>
+        <tr>
+          <td>474</td>
+          <td>Running gee_check on some supported platforms reports that the platform is not supported</td>
+          <td>You can ignore the failed test if using a supported platform (Ubuntu 14.04, Ubuntu 16.04, RHEL 7, and CentOS 7).</td>
+        </tr>
+        <tr>
+          <td>476</td>
+          <td>Support building on CentOS6 with Python2.6</td>
+          <td>No current work around</td>
+        </tr>
+        <tr>
+          <td>477</td>
+          <td>'service geserver stop/start/restart' doesn't work on Ubuntu 16.04 without a reboot</td>
+          <td>Reboot and try again</td>
         </tr>
       </tbody>
     </table>
@@ -209,6 +305,26 @@ current asset root without stopping Fusion.</p>
           <td>351</td>
           <td>Portable Globe Cutter fails with a Python error</td>
           <td>Fixed import errors in the cutter scripts</td>
+        </tr>
+        <tr>
+          <td>381</td>
+          <td>Error running POI Search</td>
+          <td>Needed to declare the coding in headers of python script:# -- coding: utf-8 -</td>
+        </tr>
+        <tr>
+          <td>431</td>
+          <td>portable build failure - CentOS 7 - old version of pexpect. </td>
+          <td>Try loading fdpexpect for version 3.* and above. If not successful, fallback to fdpexpect from older pexpect package.</td>
+        </tr>
+        <tr>
+          <td>435</td>
+          <td>Specify C++ version for portable build</td>
+          <td>Updated the build_lib scripts to include the flag "-std=gnu++98"</td>
+        </tr>
+        <tr>
+          <td>436</td>
+          <td>Seg fault in fusion when opening vector resource created in old version</td>
+          <td>Eliminated NULL pointer error in date/time function</td>
         </tr>
       </tbody>
     </table>
