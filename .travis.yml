@@ -18,8 +18,8 @@ script:
 #  - g++ --version
 #  - gcc --version
   - scons -j3 release=1 build >build.log
-  - cd src/NATIVE-REL-x86_64/bin/tests
-  - ./RunAllTests.pl
+#  - cd src/NATIVE-REL-x86_64/bin/tests
+#  - ./RunAllTests.pl
 
 cache:
   directories:
