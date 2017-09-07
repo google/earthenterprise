@@ -75,10 +75,14 @@ class TmeshWorkItem {
   khDeletingVector<Piece> pieces;
   uint numPiecesUsed;
   TmeshGenerator generator;
+  float decimation_threshold_;
+  float decimate_;
 
   TmeshWorkItem(PacketFileWriter &_writer,
                 const AttributionByExtents &_attributions,
-                const khTilespaceFlat &_sampleTilespace, bool decimate);
+                const khTilespaceFlat &_sampleTilespace, 
+		bool decimate, 
+		float decimation_threshold);
 
   void DoWork(TmeshPrepItem *prep);
   void DoWrite(khMTProgressMeter *progress);
@@ -101,7 +105,9 @@ class TmeshPackgenTraverser : public PackgenTraverser<TmeshPackgenBaseConfig> {
  public:
   TmeshPackgenTraverser(const PacketLevelConfig &config,
                         geFilePool &file_pool_,
-                        const std::string &output);
+                        const std::string &output,
+                  	float decimation_threshold
+               		);
 
   virtual TmeshPrepItem* NewPrepItem(void);
   virtual TmeshWorkItem* NewWorkItem(void);
@@ -117,6 +123,8 @@ class TmeshPackgenTraverser : public PackgenTraverser<TmeshPackgenBaseConfig> {
   khTilespaceFlat         sample_tilespace_;
   PacketFileWriter        writer_;
   ExtraPixelCache         extra_cache_;
+  bool                    decimate_;
+  float                   decimation_threshold_;
 
   void PrepAddr(const khTileAddr &productAddr);
 

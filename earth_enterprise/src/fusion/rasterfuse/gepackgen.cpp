@@ -37,7 +37,7 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
 
   fprintf(stderr,
           "\n"
-          "usage: %s [options] {--imagery|--terrain} --config <configfile>"
+          "usage: %s [options] {--imagery|--terrain} --config <configfile> --decimation <decimation_threshhold>"
           " -o <output>\n"
           "   Supported options are:\n"
           "      --help | -?:     Display this usage message\n"
@@ -55,6 +55,7 @@ int main(int argc, char *argv[]) {
   bool help = false;
   std::string configFile;
   std::string output;
+  float decimation_threshold = 0.009;
   uint32 numcpus = kDefaultNumCPUs;
   bool imagery = false;
   bool terrain = false;
@@ -63,6 +64,7 @@ int main(int argc, char *argv[]) {
   options.flagOpt("?", help);
   options.opt("config", configFile,  khGetopt::FileExists);
   options.opt("output", output);
+  options.opt("decimation", decimation_threshold);
   options.opt("numcpus", numcpus,
               &khGetopt::RangeValidator<uint32, 1, kMaxNumJobsLimit_2>);
   options.flagOpt("imagery", imagery);
@@ -94,6 +96,13 @@ int main(int argc, char *argv[]) {
   if (numcpus < 1) {
     usage(progname, "Number of CPUs should not be less than 1");
   }
+  if (decimation_threshold < 0 || decimation_threshold > 100) {
+    usage(progname, "Decimation should be a valid percentage between 0-100");
+  }
+
+/////////////////////////// DEBUGGING .. FIXME
+  notify(NFY_NOTICE, "Set decimation_threshold to:  %f", decimation_threshold);
+  printf("Decimation threshold:   %f\n", decimation_threshold);
 
   try {
     // load the config
@@ -118,7 +127,7 @@ int main(int argc, char *argv[]) {
     geFilePool file_pool;
 
     if (terrain) {
-      fusion::rasterfuse::TmeshPackgenTraverser trav(config, file_pool, output);
+      fusion::rasterfuse::TmeshPackgenTraverser trav(config, file_pool, output, decimation_threshold);
       trav.Traverse(numcpus);
     } else {
       bool is_mercator = !config.insets.empty() &&

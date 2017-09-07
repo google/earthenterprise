@@ -56,7 +56,10 @@ TmeshGenerator::Generate(float *srcSamples,
                          const khOffset<uint32> &wantOffset,
                          const khTileAddr &tmeshAddr,
                          etArray<uchar> &compressed,
-                         const size_t reserve_size)
+                         const size_t reserve_size,
+			 bool decimate,
+			 float decimation_threshold
+			)
 {
   // reset my temporaries - they live in the class so I don't have to
   // constantly reallocate them.
@@ -79,9 +82,18 @@ TmeshGenerator::Generate(float *srcSamples,
   // jdjohnso - The allowable error on border tiles is 1/10 that of interior
   // tiles. This is because we really want the border tiles to match. If not
   // we get rips between mesh tiles in the client.
-  int error_level = tmeshAddr.level+1;
-  double error = 0.009 * pow(2, 11-error_level);
-  double borderError = error / 10.0;
+  //int error_level = tmeshAddr.level+1;
+  //double error = 0.009 * pow(2, 11-error_level);
+  // Disable decimation for spike evaluation:
+  //int error_level = tmeshAddr.level+1;
+
+//FIXME TODO for debugging
+decimation_threshold = 0.5;
+decimate = true;
+notify(NFY_NOTICE, "Have just reset decimation to %d and decimation_threshold is %f\n", decimate, decimation_threshold);
+
+  double error = (double) decimation_threshold * pow(2, 11 - (tmeshAddr.level + 1));
+  double borderError = decimate ? error / 10.0 : 0.0;
 
   // calculate position of this quadnode WRT the larger heightmap tile.
   // xoff and yoff are in units of samples, and represent the offset

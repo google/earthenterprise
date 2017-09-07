@@ -19,15 +19,17 @@
 set -x
 set -e
 
-ASSET_ROOT="/usr/local/google/gevol_test/assets"
+#ASSET_ROOT="/usr/local/google/gevol_test/assets"
+ASSET_ROOT="/gevol/assets"
 echo "Using asset root: $ASSET_ROOT"
 
 # This is a simplified tutorial script.  It does not have all the dependencies as the Python QA tutorial script, nor does it do any kind of checking.
 
 # - Copy needed files 
 mkdir -p $ASSET_ROOT/.userdata/
-sudo cp tutorial_files/providers.xml $ASSET_ROOT/.userdata/
+sudo cp ./tutorial_files/providers.xml $ASSET_ROOT/.userdata/
 sudo chmod 666 $ASSET_ROOT/.userdata/providers.xml
+sudo chown meryle:meryle $ASSET_ROOT/.userdata/providers.xml
 mkdir -p /tmp/tutorial
 cp tutorial_files/CA_Freeways_MapLayer.kmdsp /tmp/tutorial/
 cp tutorial_files/USA_Counties_MapLayer.kmdsp /tmp/tutorial/

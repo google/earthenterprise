@@ -52,12 +52,12 @@ ExtraPixelsImpl::ExtraPixelsImpl(
 TmeshWorkItem::TmeshWorkItem(PacketFileWriter &_writer,
                              const AttributionByExtents &_attributions,
                              const khTilespaceFlat& _sampleTilespace,
-                             bool decimate):
+                             bool decimate, float decimation_threshold):
     writer(_writer),
     attributions(_attributions),
     sampleTilespace(_sampleTilespace),
     numPiecesUsed(0),
-    generator(sampleTilespace, decimate) {
+    generator(sampleTilespace) {
   uint ratio = RasterProductTilespaceBase.tileSize / sampleTilespace.tileSize;
   uint totalPieces = ratio * ratio;
   pieces.reserve(totalPieces);
@@ -91,7 +91,10 @@ void TmeshWorkItem::DoWork(TmeshPrepItem *prep) {
                           subcol * sampleTilespace.tileSize),
          piece->targetAddr,
          piece->compressed,
-         kCRC32Size /* reserve size */);
+         kCRC32Size /* reserve size */,
+	 decimate_,
+	 decimation_threshold_
+	);
     }
   }
 }
@@ -135,7 +138,7 @@ static const khTilespace& BuildSampleTilespace(uint tileSize,
 
 TmeshPackgenTraverser::TmeshPackgenTraverser(
     const PacketLevelConfig &cfg, geFilePool &file_pool_,
-    const std::string &output)
+    const std::string &output, float decimation_threshold)
     : BaseClass(
         cfg, output,
         TranslateLevelCoverage(BuildSampleTilespace(cfg.sampleSize,
@@ -150,6 +153,18 @@ TmeshPackgenTraverser::TmeshPackgenTraverser(
       writer_(file_pool_, output, true /* overwrite */),
       extra_cache_(20000 /* apx 160M */),
       not_covered_tiles_exist_(false) {
+  if(decimation_threshold == 0.0)
+  {
+    //cfg.decimate = false;
+    decimate_ = false;
+  }
+  else
+  {
+    //cfg.decimation_threshold = decimation_threshold;
+    //cfg.decimate = true;
+    decimation_threshold_ = decimation_threshold;
+    decimate_ = true;
+  }
   notify(NFY_NOTICE, "Generating %u Tmeshes (4 @ %ux%u) for level %u",
          cfg.coverage.extents.width() * cfg.coverage.extents.height(),
          sample_tilespace_.tileSize / 2 + 1,
@@ -187,7 +202,8 @@ TmeshPrepItem* TmeshPackgenTraverser::NewPrepItem(void) {
 
 TmeshWorkItem* TmeshPackgenTraverser::NewWorkItem(void) {
   return new TmeshWorkItem(writer_, attributions, sample_tilespace_,
-                           config.decimate);
+			   decimate_, decimation_threshold_);
+                           //config.decimate, decimation_threshold);
 }
 
 

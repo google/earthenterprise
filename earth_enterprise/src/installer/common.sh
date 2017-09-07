@@ -116,6 +116,8 @@ determine_os()
 
         if [[ "${test_os,,}" == "ubuntu"* ]]; then
             MACHINE_OS=$UBUNTUKEY
+        elif [[ "${test_os,,}" == "linux mint"* ]]; then
+            MACHINE_OS=$UBUNTUKEY
         elif [[ "${test_os,,}" == "red hat"* ]]; then
             MACHINE_OS=$REDHATKEY
         elif [[ "${test_os,,}" == "centos"* ]]; then
