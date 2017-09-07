@@ -1,6 +1,6 @@
 ---
 layout: blogpost
-title:  "2017 FOSS 4G"
+title:  "2017 FOSS4G"
 section_id: blog
 date:   2017-08-31 13:00:00
 author: Alexander Hernandez
@@ -22,11 +22,11 @@ Developers want to join projects that are active and growing. I found it particu
 
 ![GEEBlock]({{ site.github.url }}/images/gee-schedule.jpg "The GEE Block")
 
-The OpenGEE block started with the history of GEE. Ed Parsons, a Google representative, gave an enlightening presentation on the acquisition of Keyhole that led to the GEE you know and love today. Cesium was next in the GEE block and discussed their integration with GEE. Cesium can support both imagery and terrain with Cesium WebGL, which is a cool feature. Cesium WebGL will help people transition off the old Google Earth Plugin as modern browsers remove NPAPI plugin support. Finally, Thermopylae Sciences and Technologies, the company I work for, presented the current state of the OpenGEE project and invited the attendees to join in development. After the presentation we had a number of discussions with current users of GEE. It was great to talk to these users and assure them that we’re still working to make the product better!
+The OpenGEE block started with the history of GEE. Ed Parsons, a Google representative, gave an enlightening presentation on the acquisition of Keyhole that led to the GEE you know and love today. Cesium was next in the GEE block and discussed their integration with GEE. Cesium can support both imagery and terrain with Cesium WebGL, which is a cool feature. Cesium WebGL will help people transition off the old Google Earth Plugin as modern browsers remove NPAPI plugin support. Finally, Thermopylae Sciences and Technologies, the company I work for, presented the current state of the OpenGEE project and invited the attendees to join in development. After the presentation we had a number of discussions with current users of GEE. It was great to talk to these users and assure them that we’re still working to make the product better! If you would like to see the presentation you can view the slides [here](https://www.slideshare.net/AndresTerrazas1/google-earth-enterprise-as-an-open-source-project-79495029).
 
 ![Our Presentation]({{ site.github.url }}/images/foss-opengee.png "OpenGEE Presentation")
 
-Lastly, I think it is clear that we need to keep spreading the good word about OpenGEE. I invited a number of people to join the slack channel and check out the GitHub page. As Ramsey said, we operate in an attention based economy, so the more attention we can get for OpenGEE the better. If you’re interested in contributing or using GEE then please visit [Github](https://github.com/google/earthenterprise) or the [Slack Channel](http://slack.opengee.org).
+Lastly, I think it is clear that we need to keep spreading the good word about OpenGEE. I invited a number of people to join the slack channel and check out the GitHub page. As Ramsey said, we operate in an attention based economy, so the more attention we can get for OpenGEE the better. If you’re interested in contributing or using OpenGEE then please visit [Github](https://github.com/google/earthenterprise) or the [Slack Channel](http://slack.opengee.org).
 
 -Alex
 
