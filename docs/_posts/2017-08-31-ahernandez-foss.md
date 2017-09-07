@@ -2,7 +2,7 @@
 layout: blogpost
 title:  "2017 FOSS4G"
 section_id: blog
-date:   2017-08-31 13:00:00
+date:   2017-09-07 13:00:00
 author: Alexander Hernandez
 thumbnail: ahernandez.jpg
 ---
