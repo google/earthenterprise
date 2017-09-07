@@ -90,7 +90,6 @@ TmeshGenerator::Generate(float *srcSamples,
 //FIXME TODO for debugging
 decimation_threshold = 0.5;
 decimate = true;
-notify(NFY_NOTICE, "Have just reset decimation to %d and decimation_threshold is %f\n", decimate, decimation_threshold);
 
   double error = (double) decimation_threshold * pow(2, 11 - (tmeshAddr.level + 1));
   double borderError = decimate ? error / 10.0 : 0.0;
