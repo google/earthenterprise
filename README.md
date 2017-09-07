@@ -17,7 +17,7 @@ Earth Enterprise Fusion & Server currently run on 64-bit versions of the followi
 * Ubuntu 14.04 LTS
 * Ubuntu 16.04 LTS
 
-Refer to the [wiki](https://github.com/google/earthenterprise/wiki/Build-Instructions) for instructions on building from source on one of these platforms.
+Refer to the [BUILD.md file](./earth_enterprise/BUILD.md) for instructions on building from source on one of these platforms.
 
 ### Installation
 Refer to the [Install Instructions](https://github.com/google/earthenterprise/wiki/Install-Fusion-or-Earth-Server) for instructions on installing Fusion or Earth Server.  Please note that you must have a successful build of the source before proceeding with the install.
