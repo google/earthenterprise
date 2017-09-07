@@ -23,7 +23,7 @@ script:
 
 cache:
   directories:
-    $HOME/Work/earthenterprise/earth_enterprise/src/NATIVE-REL-x86_64/third_party
+    $HOME/earthenterprise/earth_enterprise/src/NATIVE-REL-x86_64/third_party
 
 notifications:
   slack: opengee:YjzzzTnc7pgITPsrQPATIGwc
