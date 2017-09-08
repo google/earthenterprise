@@ -13,6 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
 
 """Install Fusion and Earth Server, build tutorial databases, and test."""
 
@@ -50,31 +51,36 @@ def Log(message):
     fp.close()
 
 
-def ExecuteCmd(os_cmd):
+def ExecuteCmd(os_cmd, do_log=False, err2out=False):
   """Execute and log os command.
 
   If the shell command fails, an exception is thrown.
 
   Args:
     os_cmd: (string) linux shell command to run.
-
+    do_log: whether to do logging.
+    err2out: whether to send stderr to the same file handle as for stdout.
   Returns:
     results of the linux shell command.
-
   Raises:
     OsCommandError: if error from shell command is not None.
   """
   print "Executing: %s" % os_cmd
-  Log(os_cmd)
+  if do_log:
+    Log(os_cmd)
+
   try:
-    p = subprocess.Popen(os_cmd,
-                         shell=True,
-                         stdout=subprocess.PIPE,
-                         stderr=subprocess.PIPE)
+    p = subprocess.Popen(
+        os_cmd,
+        shell=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT if err2out else subprocess.PIPE)
     result, error = p.communicate()
-    if error:
+
+    if (not err2out) and error:
       print "ERROR: %s" % error
       return "Unable to execute %s" % os_cmd
+
     return result
   except Exception, e:
     print "FAILED: %s" % e.__str__()

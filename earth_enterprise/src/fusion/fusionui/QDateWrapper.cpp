@@ -27,6 +27,10 @@ static const uint32 kDateStringBufferLength = kDateStringLength + 1;
 static const uint32 kDateTimeStringLength = 20;
 static const uint32 kDateTimeStringBufferLength = kDateTimeStringLength + 1;
 
+bool QDateWrapper::TimeIncluded() const {
+  return hours_edit_ && minutes_edit_ && seconds_edit_;
+}
+
 void QDateWrapper::SetDateValidators(QObject* parent) {
   QIntValidator* year_validator = new QIntValidator(0, 9999, parent);
   QIntValidator* month_validator = new QIntValidator(0, 12, parent);
@@ -35,7 +39,7 @@ void QDateWrapper::SetDateValidators(QObject* parent) {
   month_edit_->setValidator(month_validator);
   day_edit_->setValidator(day_validator);
 
-  if (hours_edit_) {  //  Case of raster widget.
+  if (TimeIncluded()) {  //  Case of raster widget.
     QIntValidator* hours_validator = new QIntValidator(0, 23, parent);
     QIntValidator* minutes_validator = new QIntValidator(0, 59, parent);
     QIntValidator* seconds_validator = new QIntValidator(0, 59, parent);
@@ -67,12 +71,14 @@ void QDateWrapper::SetDate(uint32 year, uint32 month, uint32 day,
   snprintf(datetimebuf, sizeof(datetimebuf), "%02d", day);
   day_edit_->setText(datetimebuf);
 
-  snprintf(datetimebuf, sizeof(datetimebuf), "%02d", hours);
-  hours_edit_->setText(datetimebuf);
-  snprintf(datetimebuf, sizeof(datetimebuf), "%02d", minutes);
-  minutes_edit_->setText(datetimebuf);
-  snprintf(datetimebuf, sizeof(datetimebuf) , "%02d", seconds);
-  seconds_edit_->setText(datetimebuf);
+  if (TimeIncluded()) {
+    snprintf(datetimebuf, sizeof(datetimebuf), "%02d", hours);
+    hours_edit_->setText(datetimebuf);
+    snprintf(datetimebuf, sizeof(datetimebuf), "%02d", minutes);
+    minutes_edit_->setText(datetimebuf);
+    snprintf(datetimebuf, sizeof(datetimebuf) , "%02d", seconds);
+    seconds_edit_->setText(datetimebuf);
+  }
 }
 
 void QDateWrapper::SetDate(uint32 year, uint32 month, uint32 day) {
@@ -133,7 +139,7 @@ std::string QDateWrapper::GetDate() const {
   uint32 month = atoi(month_string.c_str());
   uint32 day = atoi(day_string.c_str());
 
-  if (hours_edit_) {  //  Raster asset widget.
+  if (TimeIncluded()) {  //  Raster asset widget.
     std::string hours_string = hours_edit_->text().latin1();
     std::string minutes_string = minutes_edit_->text().latin1();
     std::string seconds_string = seconds_edit_->text().latin1();
