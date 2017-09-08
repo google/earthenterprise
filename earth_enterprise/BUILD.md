@@ -12,10 +12,10 @@ Building is currently supported on 64-bit versions of Ubuntu 14.04 LTS, Ubuntu 1
     * git lfs 
     * gcc 4.8.x
     * scons 2.0.x+
-    * python 2.6.x+
+    * python 2.6.x+ and Python 2.7.x+.  Python 3.0+ is not supported. 
     
     Different operating systems have different means to setup up these dependencies. For Linux build environments, see either the [Redhat and Centos Setup Instructions](./BUILD_RHEL_Centos.md)  
-or the [Ubuntu Setup Instructions](./BUILD_RHEL_Centos.md) for those specific platforms on how to setup the dependencies, tools and compilers. 
+or the [Ubuntu Setup Instructions](./BUILD_Ubuntu.md) for those specific platforms on how to setup the dependencies, tools and compilers. 
  
 1. Clone the EarthEnterprise repository in your build environment
     
@@ -51,8 +51,7 @@ of `release=1`).
     cd src/NATIVE-REL-x86_64/bin/tests
     ./RunAllTests.pl
     ```
-    Or run an individual test ___TODO___
-
+   
 ## Install Fusion and Earth Server
-For information on how to install Fusion and/or Earth Server, see [Install Fusion or Earth Server](Install-Fusion-or-Earth-Server)
+For information on how to install Fusion and/or Earth Server, see [Install Fusion or Earth Server](https://github.com/google/earthenterprise/wiki/Install-Fusion-or-Earth-Server)
 
