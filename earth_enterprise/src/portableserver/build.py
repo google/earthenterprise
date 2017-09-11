@@ -68,12 +68,12 @@ class Builder(object):
 
         self.package_dir = os.path.join(
             self.build_dir,
-            'portableserver-%s-%s' % (self.platform, self.version_string))
+            'portableserver-{0}-{1}'.format(self.platform, self.version_string))
         self.resources_dir = os.path.join(
             self.source_dir, 'portableserver', 'resources')
         self.server_dir = os.path.join(self.package_dir, 'server')
         self.tar_package_name = \
-            'portableserver-%s-%s' % (self.platform, self.version_string)
+            'portableserver-{0}-{1}'.format(self.platform, self.version_string)
         self.zip_package_name = self.tar_package_name
         if self.platform == 'windows':
             self.should_create_tar_package = False
@@ -152,7 +152,7 @@ class Builder(object):
             self.build_date = datetime.date.today()
 
         if self.version_string is None:
-            self.version_string = '%s-%s' % (
+            self.version_string = '{0}-{1}'.format(
                 self.base_version, self.build_date.strftime('%Y%m%d'))
 
     def build_fileunpacker(self):
@@ -247,9 +247,8 @@ def main(argv):
         platform = 'mac'
     else:
         raise ValueError(
-            ('Unrecognized platform: %s, please specify "linux", "windows", ' +
-             'or "mac" on the command line.') %
-            (platform))
+            ('Unrecognized platform: {0}, please specify "linux", "windows", '
+             'or "mac" on the command line.').format(platform))
 
     builder = Builder(build_dir, source_dir, platform)
     if parse_result.clean:

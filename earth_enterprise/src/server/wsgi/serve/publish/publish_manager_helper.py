@@ -1086,7 +1086,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
     except Exception as e:
       logger.error(e)
       http_io.ResponseWriter.AddJsonFailureBody(
-          response, "Server-side Internal Error: {}".format(e))
+          response, "Server-side Internal Error: {0}".format(e))
 
   # TODO: add database description in Fusion and handle it here.
   def _GetDatabaseList(self):
@@ -1419,7 +1419,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
     vh_list = self.QueryVhList()
     vhname_to_baseurl_dct = {}
     for (vh_name, vh_url, vh_ssl) in vh_list:
-        vhname_to_baseurl_dct[vh_name] = self.GetVhBaseUrl(vh_url, vh_ssl) 
+      vhname_to_baseurl_dct[vh_name] = self.GetVhBaseUrl(vh_url, vh_ssl)
 
     return vhname_to_baseurl_dct
 

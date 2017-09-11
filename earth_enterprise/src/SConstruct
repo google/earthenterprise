@@ -367,6 +367,38 @@ installdirs = {
     'htdocs': InstServerDir('gehttpd/htdocs'),
 }
 
+def get_cc_version(cc_path):
+  """Extracts the version number of a C/C++ compiler (like GCC) as a list of
+  strings."""
+  process = subprocess.Popen(
+    [cc_path, '--version'], stdout=subprocess.PIPE)
+  (stdout, stderr) = process.communicate()
+  match = re.search('[0-9][0-9.]*', stdout)
+  # If match is None we don't know the version.
+  if match is None:
+    return None
+  version = match.group().split('.')
+  return version
+
+def is_version_ge(version_components, comparand_components):
+  """Tests if a version number is greater than, or equal to another version
+  number.  Both version numbers are specified as lists of version components.
+  """
+
+  if version_components is None or comparand_components is None:
+    return False
+
+  for i in xrange(len(comparand_components)):
+    if i >= len(version_components):
+      version_component = 0
+    else:
+      version_component = int(version_components[i])
+    if int(comparand_components[i]) > version_component:
+      return False
+    if int(comparand_components[i]) < version_component:
+      return True
+
+  return True
 
 def FusionVersionNumber(source):
   """Read the Fusion Version number from source file.
