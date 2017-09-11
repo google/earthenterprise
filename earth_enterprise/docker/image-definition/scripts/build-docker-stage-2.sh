@@ -19,7 +19,7 @@ cd "$SELF_DIR/../build"
 /root/opengee/bin/rm-gee-build-files.sh || exit 1
 
 # Clean the package cache to save space:
-if type apt-get >/dev/null; then
+if type apt-get >/dev/null 2>&1; then
     apt-get clean
 else
     yum clean all

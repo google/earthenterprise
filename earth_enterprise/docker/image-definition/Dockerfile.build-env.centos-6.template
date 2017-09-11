@@ -3,44 +3,12 @@
 
 FROM centos:6
 
-# Install required packages.
-#   The "X Window System" is not needed for building, but for running the
-# Fusion UI.
-#   The 'pexpect' and 'python-tornado' packages are not needed for Earth
-# Server, or Fusion, but they are for Portable Server.
-#   The 'wget' package is needed for adding the devtoolset-2 Yum repository.
-#   The 'cmake', gettext' and 'rpm-build' packages are needed for building the
-# Google Test RPM (for `cmake`, `envsubst` and `rpmbuild`).
-WORKDIR /root
-RUN yum update -y && \
-    yum install -y git wget && \
-    ( cd /etc/yum.repos.d && wget http://people.centos.org/tru/devtools-2/devtools-2.repo ) && \
-    yum install -y epel-release && \
-    yum --setopt=group_package_types=mandatory,default,optional groupinstall -y "Development Tools" && \
-    yum install -y cmake devtoolset-2-toolchain gettext rpm-build && \
-    yum install -y bison-devel freeglut-devel gdbm-devel geos-devel giflib-devel \
-        libcap-devel libmng-devel libpng-devel libX11-devel libXcursor-devel libXft-devel \
-        libXinerama-devel libXmu-devel libXrandr-devel libxml2-devel ogdi-devel openjpeg-devel \
-        openjpeg2-devel openssl-devel proj-devel \
-        python-devel scons xerces-c xerces-c-devel xorg-x11-server-devel zlib-devel && \
-    yum groupinstall -y "X Window System" && \
-    yum install -y pexpect python-tornado
-
-# Install Git-LFS:
-RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh | bash && \
-    yum install -y install git-lfs
-
-# We need to build our own gtest with the devtooset-2-toolchain so it works
-# with the GCC compiler from that toolchain.
-RUN mkdir -p /root/opengee/rpm-build
-RUN cd /root/opengee/rpm-build && \
-    git clone https://github.com/tst-ppenev/gtest-rhel6-devtoolset.git && \
-    ./gtest-rhel6-devtoolset/bin/build.sh && \
-    yum install -y gtest-rhel6-devtoolset/build/RPMS/x86_64/gtest-devtoolset2-1.8.0-1.x86_64.rpm
-
 # Copy shell scripts to /root/bin in the Docker container:
 RUN mkdir -p /root/opengee/bin
 COPY scripts /root/opengee/bin
 
 # Make a build directory:
 RUN mkdir -p /root/opengee/build
+
+# Install the build environment:
+RUN /root/opengee/bin/get-gee-build-environment.sh -y --clone-repository=no
