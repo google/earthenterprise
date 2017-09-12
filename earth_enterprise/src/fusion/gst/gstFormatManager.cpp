@@ -67,8 +67,8 @@ gstFormatManager::gstFormatManager() {
   RegisterFormat<gstKVPFormat>("Keyhole Vector Product",
                                "Keyhole Vector Product", "*.kvp ");
   RegisterFormat<gstGDALFormat>("Supported Raster", "GDAL",
-                                "*.tif *.TIF *.img *.IMG *.jp2 *.JP2 *.rpf"
-                                "*.RPF *.fit *.FIT *.dem *.DEM *.sid *.SID");
+                                "*.tif *.TIF *.tiff *.TIFF *.jp2 *.JP2 *.rpf"
+                                "*.RPF *.fit *.FIT *.dem *.DEM");
   RegisterFormat<gstKVGeomFormat>("Keyhole Vector Geometry",
                                   "Keyhole Vector Geometry", "*.kvgeom");
   RegisterFormat<gstGDTFormat>("Geographic Data Technology", "GDT",
