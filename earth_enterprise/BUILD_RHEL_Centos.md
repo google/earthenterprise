@@ -1,7 +1,7 @@
 # GEE Build Setup for CentOS, RHEL 6 and RHEL 7     
 
 ## Enable additional repos
-Different yum repositoies need to be enabled for different distributions to install several required development tools.  
+Different yum repositories need to be enabled for different distributions to install several required development tools.  
 
 ### CentOS 7 
 ```
