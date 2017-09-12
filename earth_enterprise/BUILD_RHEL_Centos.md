@@ -28,7 +28,7 @@ sudo subscription-manager repos --enable=rhel-x86_64-workstation-dts-2
 sudo subscription-manager repos --enable=rhel-6-server-optional-rpms
 ```
 
-## Install git  
+## Install Git  
     
 Install the system default version:
     
@@ -45,7 +45,7 @@ sudo yum install -y ius-release.rpm
 sudo yum install -y git2u-all
 ```        
         
-## Install git lfs
+## Install Git LFS
    
 Execute the following commands
     
