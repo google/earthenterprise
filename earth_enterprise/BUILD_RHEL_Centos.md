@@ -16,6 +16,12 @@ sudo subscription-manager repos --enable=rhel-7-server-optional-rpms
 sudo yum install -y epel-release
 ```    
 
+### CentOS 6 
+```
+wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
+sudo yum install -y epel-release
+```
+
 ### RHEL 6
 ```
 sudo subscription-manager repos --enable=rhel-x86_64-workstation-dts-2
@@ -57,16 +63,47 @@ To obtain GCC 4.8 on RHEL, you must install the "Development Tools" from RHSM:
 sudo yum --setopt=group_package_types=mandatory,default,optional groupinstall "Development Tools"
 sudo yum install -y devtoolset-2-toolchain 
 ```
+
+
+### CentOS 6 
+```
+yum install -y devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-toolchain devtoolset-2-gcc-gfortran 
+```
+
 ### RHEL 6
 
 ```
-sudo yum install -y devtoolset-2-gcc devtoolset-2-binutils  devtoolset-2-toolchain devtoolset-2-gcc-c++ devtoolset-2-gcc-gfortran
+sudo yum install -y devtoolset-2-gcc devtoolset-2-binutils  devtoolset-2-toolchain devtoolset-2-gcc-c++ devtoolset-2-gcc-gfortran 
 ```
 
 The GCC 4.8 installation will be located in the `/opt/rh/devtoolset-2/root/usr/bin/` directory.  
 
 The GEE build scripts will detect this compiler automatically. However, if you wish switch the environment to use GCC 4.8 in a shell, run: 
 ```source /opt/rh/devtoolset-2/enable```
+
+
+## Install additional packages
+_Note: if you are upgrading from GEE 5.1.3 or earlier, you must run this step __after__ uninstalling older versions of GEE.  Otherwise, some of the prerequisites will be missing and your build will fail._
+
+### CentOS 7 and RHEL 7
+Execute: 
+```
+sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel python-devel perl-Alien-Packages  \
+    openssl-devel libxml2-devel libXinerama-devel libXft-devel libXrandr-devel libXcursor-devel gdbm-devel   \
+    libmng-devel libcap-devel libpng12-devel libXmu-devel freeglut-devel zlib-devel libX11-devel bison-devel  \
+    openjpeg-devel openjpeg2-devel geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel cmake rpm-build
+```
+### RHEL 6
+Execute: 
+```
+sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel python-devel perl-Alien-Packages  \
+    openssl-devel libxml2-devel libXinerama-devel libXft-devel libXrandr-devel libXcursor-devel gdbm-devel   \
+    libmng-devel libcap-devel libpng-devel libXmu-devel freeglut-devel zlib-devel libX11-devel bison-devel  \
+    openjpeg-devel openjpeg2-devel geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel cmake rpm-build
+```
+If you get an error about git dependency conflicts, consider experimenting with the `--skip-broken` parameter.
+
+
 
 ## GTest 1.8
 ### CentOS 7 and RHEL 7
@@ -80,11 +117,7 @@ You will need to compile, package and install an updated version of GTest as an 
 
 To clone this git repo and build the RPM on RHEL6, execute the following: 
 ```
-sudo mkdir -p /root/opengee/rpm-build && sudo chown -R `whoami` /root/opengee 
-cd /root/opengee/rpm-build 
-git clone https://github.com/thermopylae/gtest-devtoolset-rpm.git 
-cd ./gtest-devtoolset-rpm
-./bin/build.sh --user-docker=no 
+
 ```
 ___Note: the gtest RPM can be built on other linux systems using docker - simply execute "build.sh without the `--no-docker` parameter.  See the [README.md](https://github.com/thermopylae/gtest-devtoolset-rpm) file for more details.___  
   
@@ -93,24 +126,3 @@ ___Note: the gtest RPM can be built on other linux systems using docker - simply
 yum install -y gtest-rhel6-devtoolset/build/RPMS/x86_64/gtest-devtoolset2-1.8.0-1.x86_64.rpm
 
 ```  
-
-## Install additional packages
-_Note: if you are upgrading from GEE 5.1.3 or earlier, you must run this step __after__ uninstalling older versions of GEE.  Otherwise, some of the prerequisites will be missing and your build will fail._
-
-### CentOS 7 and RHEL 7
-Execute: 
-```
-sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel python-devel perl-Alien-Packages  \
-    openssl-devel libxml2-devel libXinerama-devel libXft-devel libXrandr-devel libXcursor-devel gdbm-devel   \
-    libmng-devel libcap-devel libpng12-devel libXmu-devel freeglut-devel zlib-devel libX11-devel bison-devel  \
-    openjpeg-devel openjpeg2-devel geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel
-```
-### RHEL 6
-Execute: 
-```
-sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel python-devel perl-Alien-Packages  \
-    openssl-devel libxml2-devel libXinerama-devel libXft-devel libXrandr-devel libXcursor-devel gdbm-devel   \
-    libmng-devel libcap-devel libpng-devel libXmu-devel freeglut-devel zlib-devel libX11-devel bison-devel  \
-    openjpeg-devel openjpeg2-devel geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel
-```
-If you get an error about git dependency conflicts, consider experimenting with the `--skip-broken` parameter.
