@@ -117,11 +117,11 @@ You will need to compile, package and install an updated version of GTest as an 
 
 To clone this git repo and build the RPM on RHEL6, execute the following: 
 ```
-sudo mkdir -p /root/opengee/rpm-build && sudo chown -R `whoami` /root/opengee 
-cd /root/opengee/rpm-build 
-git clone https://github.com/thermopylae/gtest-devtoolset-rpm.git 
-cd ./gtest-devtoolset-rpm
-./bin/build.sh --use-docker=no 
+mkdir -p ~/opengee/rpm-build/
+cd ~/opengee/rpm-build/
+git clone https://github.com/thermopylae/gtest-devtoolset-rpm.git
+cd gtest-devtoolset-rpm/
+./bin/build.sh --use-docker=no
 ```
 ___Note: the gtest RPM can be built on other linux systems using docker - simply execute "build.sh without the `--no-docker` parameter.  See the [README.md](https://github.com/thermopylae/gtest-devtoolset-rpm) file for more details.___  
   
