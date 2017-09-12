@@ -20,6 +20,14 @@ if [ "$#" -ne 1 ]; then
   exit 1
 fi
 
+# Verify that git lfs is installed
+GIT_LFS_ENV=`git lfs env`
+SMUDGE_HOOK=`expr match "${GIT_LFS_ENV}" '.*git config filter\.lfs\.clean = "\(.*\)".*'`
+if [ -z "${SMUDGE_HOOK}" ]; then
+  echo "You must install git lfs before running this script."
+  exit
+fi
+
 REPO_NAME="earthenterprise"
 CLONE_DIR="/tmp"
 
@@ -30,9 +38,9 @@ RUN_DIR=`pwd`
 # Download the repository
 cd ${CLONE_DIR}
 rm -Rf ${REPO_NAME}
-git clone git@github.com:google/${REPO_NAME}.git
-cd ${REPO_NAME}
-git checkout ${1}
+git clone git@github.com:google/${REPO_NAME}.git || exit
+cd ${REPO_NAME} || exit
+git checkout ${1} || exit
 
 # Remove the git-related files from the repo
 FILES=`find . -name ".git*"`
