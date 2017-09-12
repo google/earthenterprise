@@ -1,10 +1,13 @@
 #!/bin/bash
 
 # This script creates archive files that can be distributed as a release. The
-# files that github provides do not include files stored in git lfs, so this
-# process is required to create working archives that we can publish on github.
-# The resulting archives will be placed in the current directory.  Because this
-# script downloads and packages a large repo it may take a long time to run.
+# automatically generated files on the github releases page do not include the
+# files stored in git lfs, so this process is required to create working
+# archives that we can publish on the github releases page.
+
+# This script places the generated archives in the current directory.  Because
+# this script downloads and packages a large repo it may take a long time to
+# run.
 
 # This script works under /tmp and it assumes that previous artifacts under /tmp
 # (such as previously downloaded repos or previously created archives) can be
