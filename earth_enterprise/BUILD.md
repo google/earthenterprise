@@ -2,7 +2,7 @@ If you want to build, install, or run Portable server, see the [Portable Server 
 
 # Building Earth Enterprise Fusion and Server
 
-Building is currently supported on 64-bit versions of Ubuntu 14.04 LTS, Ubuntu 16.04 LTS, RHEL 6, RHEL 7, and CentOS 7.
+Building is currently supported on 64-bit versions of Ubuntu 14.04 LTS, Ubuntu 16.04 LTS, RHEL 6, RHEL 7, CentOS 6 and CentOS 7.
 
 
 ## GEE 5.2.1 Build Prerequisites (All platforms) 
