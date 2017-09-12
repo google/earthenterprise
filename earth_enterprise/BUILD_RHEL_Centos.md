@@ -93,7 +93,7 @@ sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel python-devel
     libmng-devel libcap-devel libpng12-devel libXmu-devel freeglut-devel zlib-devel libX11-devel bison-devel  \
     openjpeg-devel openjpeg2-devel geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel cmake rpm-build
 ```
-### RHEL 6
+### CentOS 6 and RHEL 6
 Execute: 
 ```
 sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel python-devel perl-Alien-Packages  \
@@ -112,17 +112,20 @@ gtest is included in EPEL and RHEL Extra Repositories.  Install the RPM:
 yum install -y gtest-devel
 ``` 
 
-### RHEL 6
+### CentOS 6 and RHEL 6
 You will need to compile, package and install an updated version of GTest as an RPM for RHEL6.   Note that this build process also depends on GCC 4.8, as does the rest of the GEE build process. 
 
 To clone this git repo and build the RPM on RHEL6, execute the following: 
 ```
-
+sudo mkdir -p /root/opengee/rpm-build && sudo chown -R `whoami` /root/opengee 
+cd /root/opengee/rpm-build 
+git clone https://github.com/thermopylae/gtest-devtoolset-rpm.git 
+cd ./gtest-devtoolset-rpm
+./bin/build.sh --use-docker=no 
 ```
 ___Note: the gtest RPM can be built on other linux systems using docker - simply execute "build.sh without the `--no-docker` parameter.  See the [README.md](https://github.com/thermopylae/gtest-devtoolset-rpm) file for more details.___  
   
   Install the RPM: 
 ``` 
-yum install -y gtest-rhel6-devtoolset/build/RPMS/x86_64/gtest-devtoolset2-1.8.0-1.x86_64.rpm
-
+sudo yum install -y ./build/RPMS/x86_64/gtest-devtoolset2-1.8.0-1.x86_64.rpm
 ```  
