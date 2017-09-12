@@ -24,7 +24,3 @@ if type apt-get >/dev/null 2>&1; then
 else
     yum clean all
 fi
-
-# Don't terminate, so the container can stay alive until it has been exported:
-echo "Open GEE Docker Stage 2: Entering wait loop."
-read
