@@ -164,8 +164,8 @@ polygontoqtnodes_test = env.test(
     ['polygontoqtnodes_unittest.cpp', polygontoqtnodes],
     LIBS=['gtest', 'geutil', 'gecommon', 'geqtpacket', 'qtutils'])
 
-#createmetadbroot_unittest = env.test(
-#    'createmetadbroot_unittest',
-#    ['createmetadbroot_unittest.cpp', 'createmetadbroot'],
-#    LIBS=['gtest', 'gecommon', 'gedbroot', 'geprotobuf'],
-#    CPPFLAGS='-Wno-error=narrowing')
+createmetadbroot_unittest = env.test(
+    'createmetadbroot_unittest',
+    ['createmetadbroot_unittest.cpp', 'createmetadbroot'],
+    LIBS=['gtest', 'gecommon', 'gedbroot', 'geprotobuf'],
+    CPPFLAGS='-Wno-error=narrowing')

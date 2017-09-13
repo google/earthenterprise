@@ -370,6 +370,7 @@ installdirs = {
 def get_cc_version(cc_path):
   """Extracts the version number of a C/C++ compiler (like GCC) as a list of
   strings."""
+
   process = subprocess.Popen(
     [cc_path, '--version'], stdout=subprocess.PIPE)
   (stdout, stderr) = process.communicate()
@@ -424,6 +425,7 @@ def FusionVersionNumber(source):
     print 'Unable to find Fusion Version Number:', exp
 fusion_version_number = FusionVersionNumber('fusion_version.txt')
 
+
 # create the environment that controls the builds
 
 if is_hardy:
@@ -439,8 +441,8 @@ env = khEnvironment(
     jobstats=jobstats,
     internal=internal,
     native_cc=native_cc,
-    cc_dir=cc_dir,
     bundle_3rd_libs=bundle_3rd_libs,
+    cc_dir=cc_dir,
     is_hardy=is_hardy,
     exportdirs=exportdirs,
     installdirs=installdirs,
@@ -473,7 +475,6 @@ env = khEnvironment(
 )
 
 # Check for GCC 4.8 from an alternative toolchain installation on RHEL 6:
-
 if cc_dir is None and os.path.isfile('/opt/rh/devtoolset-2/root/usr/bin/g++'):
     # Check if the version of the default compiler is, at least 4.8:
     if not is_version_ge(get_cc_version(env['CXX']), [4, 8]):

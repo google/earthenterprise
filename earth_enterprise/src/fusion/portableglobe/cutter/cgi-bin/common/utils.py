@@ -28,7 +28,7 @@ import xml.sax.saxutils as saxutils
 import distutils.dir_util
 import distutils.errors
 
-from common import errors
+import errors
 
 BYTES_PER_MEGABYTE = 1024.0 * 1024.0
 NAME_TEMPLATE = "%s_%s"

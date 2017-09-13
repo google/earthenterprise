@@ -15,7 +15,7 @@
 # limitations under the License.
 
 """Postgres database properties loader."""
-from common import utils
+import utils
 
 
 class PostgresProperties(object):

@@ -199,11 +199,19 @@ class Builder(object):
     def create_tar_package(self):
         """Archives and compresses the install directory."""
 
-        shutil.make_archive(
-            os.path.join(self.build_dir, self.zip_package_name),
-            'gztar',
-            os.path.dirname(self.package_dir),
-            os.path.basename(self.package_dir))
+        # Python 2.6 on RHEL 6 doesn't have `shutil.make_archive()`, and
+        # TarFile objects don't seem to support the `with` construct.
+        import tarfile
+
+        archive = tarfile.open(
+            os.path.join(self.build_dir, self.zip_package_name + '.tar.gz'),
+            "w:gz")
+        try:
+            archive.add(
+                os.path.dirname(self.package_dir),
+                os.path.basename(self.package_dir))
+        finally:
+            archive.close()
 
     def create_zip_package(self):
         """Archives and compresses the install directory."""
@@ -239,7 +247,8 @@ def main(argv):
         platform = 'mac'
     else:
         raise ValueError(
-            'Unrecognized platform: {0}, please specify "linux", "windows", or "mac" on the command line.'.format(platform))
+            ('Unrecognized platform: {0}, please specify "linux", "windows", '
+             'or "mac" on the command line.').format(platform))
 
     builder = Builder(build_dir, source_dir, platform)
     if parse_result.clean:

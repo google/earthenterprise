@@ -67,13 +67,13 @@ gelayerjsgen = env.executable('gelayerjsgen',
 env.install('fusion_lib', [geprotorootgen])
 env.install('fusion_bin', [gedbrootgen, gerasterdbrootgen, gelayerjsgen])
 
-#env.test('dbroot_generator_tests',
-#         ['dbroot_generator_tests.cc'],
-#         LIBS = ['geprotorootgen',
-#                 'gedbroot',
-#                 'geiconutil',
-#                 'geutil',
-#                 'gecommon',
-#                 'qt-mt',
-#                 'gtest',
-#                 ])
+env.test('dbroot_generator_tests',
+         ['dbroot_generator_tests.cc'],
+         LIBS = ['geprotorootgen',
+                 'gedbroot',
+                 'geiconutil',
+                 'geutil',
+                 'gecommon',
+                 'qt-mt',
+                 'gtest',
+                 ])

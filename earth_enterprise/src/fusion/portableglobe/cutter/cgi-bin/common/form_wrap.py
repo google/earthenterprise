@@ -22,8 +22,8 @@ import posixpath
 import re
 import urllib
 
-from common import errors
-from common import utils
+import errors
+import utils
 
 # It is used for debugging.
 # logging.getLogger().setLevel(level=logging.DEBUG)

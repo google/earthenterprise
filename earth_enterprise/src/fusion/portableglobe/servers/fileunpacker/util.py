@@ -1,4 +1,4 @@
-#!/usr/bin/python2.6
+#!/usr/bin/python
 #
 # Copyright 2017 Google Inc.
 #
@@ -17,13 +17,15 @@
 
 """Utility methods."""
 
-import os
 import pexpect
+
+# Try loading fdpexpect for version 3.* and above.
+# if not successful, fallback to fdpexpect from older pexpect package.
 try:
-   import pexpect.fdpexpect as fdpexpect
+  import pexpect.fdpexpect as fdpexpect
 except ImportError:
-   import fdpexpect
-   
+  import fdpexpect
+
 import subprocess
 import sys
 

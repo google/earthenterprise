@@ -18,8 +18,7 @@
 
 import cgitb
 
-from common import utils
-
+import utils
 
 def FormatException(exc_info):
   """Gets information from exception info tuple.
