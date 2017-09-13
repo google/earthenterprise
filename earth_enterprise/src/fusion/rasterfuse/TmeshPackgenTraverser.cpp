@@ -171,7 +171,7 @@ TmeshPackgenTraverser::TmeshPackgenTraverser(
   notify(NFY_NOTICE, "    from %u heightmap tile(s)",
          productCoverage.extents.width() * productCoverage.extents.height());
   notify(NFY_NOTICE, "    %s",
-         config.decimate ? "with decimation" : "no decimation");
+         decimate_ ? "with decimation" : "no decimation");
 }
 
 void TmeshPackgenTraverser::Traverse(uint numcpus) {
