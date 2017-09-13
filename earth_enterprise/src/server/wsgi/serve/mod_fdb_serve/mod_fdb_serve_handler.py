@@ -46,7 +46,7 @@ class ModFdbServeHandler(object):
     Raises:
       ModFdbServeException.
     """
-    url = "{}/fdb/reset".format(server_url)
+    url = "{0}/fdb/reset".format(server_url)
     try:
       response = self._url_opener.Open(url)
     except urllib2.URLError as e:
@@ -74,7 +74,7 @@ class ModFdbServeHandler(object):
     Raises:
       ModFdbServeException.
     """
-    url = "{}/fdb/publish?target_path={}&db_type={}&db_path={}".format(
+    url = "{0}/fdb/publish?target_path={1}&db_type={2}&db_path={3}".format(
         server_url, target_path, db_type, db_path)
 
     try:
@@ -101,7 +101,7 @@ class ModFdbServeHandler(object):
     Raises:
       ModFdbServeException.
     """
-    url = "{}/fdb/unpublish?target_path={}".format(server_url, target_path)
+    url = "{0}/fdb/unpublish?target_path={1}".format(server_url, target_path)
     try:
       response = self._url_opener.Open(url)
     except urllib2.URLError as e:

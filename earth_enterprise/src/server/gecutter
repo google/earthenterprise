@@ -31,13 +31,13 @@ import urllib2
 bin_path = os.path.dirname(__file__)
 opt_google_path = os.path.dirname(bin_path)
 ge_python_libs = os.path.realpath(
-    "{}/gehttpd/wsgi-bin".format(opt_google_path))
+    "{0}/gehttpd/wsgi-bin".format(opt_google_path))
 sys.path.append(ge_python_libs)
 
 from common import utils
 
 geportableglobebuilder_path = os.path.realpath(
-    "{}/geportableglobebuilder".format(bin_path))
+    "{0}/geportableglobebuilder".format(bin_path))
 
 def IsExecutable(file_path):
   """Returns whether file is executable."""
@@ -52,14 +52,14 @@ def DisableCutter(server_url):
     print "Cutter disabled."
     try:
       url_opener = utils.UrlOpener()
-      results = url_opener.Open("{}/fdb/disable_cut".format(server_url))
+      results = url_opener.Open("{0}/fdb/disable_cut".format(server_url))
     except urllib2.URLError as e:
       if hasattr(e, "code"):  # HTTPError
         print "Failed to block server from cutting."
-        print "Error: {}".format(httplib.responses[e.code])
+        print "Error: {0}".format(httplib.responses[e.code])
       elif hasattr(e, "reason"):  # URLError
         print "Failed to reach server blocking from cutting."
-        print "Reason: {}".format(e.reason)
+        print "Reason: {0}".format(e.reason)
     else:
       if "cutting disabled" in results:
         print "Server blocked from cutting."
@@ -78,14 +78,14 @@ def EnableCutter(server_url):
     print "Cutter enabled."
     try:
       url_opener = utils.UrlOpener()
-      results = url_opener.Open("{}/fdb/enable_cut".format(server_url))
+      results = url_opener.Open("{0}/fdb/enable_cut".format(server_url))
     except urllib2.URLError as e:
       if hasattr(e, "code"):  # HTTPError
         print "Failed to update server for cutting."
-        print "Error: {}".format(httplib.responses[e.code])
+        print "Error: {0}".format(httplib.responses[e.code])
       elif hasattr(e, "reason"):  # URLError
         print "Failed to reach server updating for cutting."
-        print "Reason: {}".format(e.reason)
+        print "Reason: {0}".format(e.reason)
     else:
       if "cutting enabled" in results:
         print "Server updated for cutting."

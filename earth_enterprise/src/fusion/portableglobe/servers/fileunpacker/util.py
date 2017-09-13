@@ -17,16 +17,15 @@
 
 """Utility methods."""
 
-import os
 import pexpect
 
 # Try loading fdpexpect for version 3.* and above.
 # if not successful, fallback to fdpexpect from older pexpect package.
 try:
-   import pexpect.fdpexpect as fdpexpect
+  import pexpect.fdpexpect as fdpexpect
 except ImportError:
-   import fdpexpect
-	
+  import fdpexpect
+
 import subprocess
 import sys
 
@@ -45,7 +44,7 @@ def PipePexpectStreamNonBlocking(source_stream, destination_stream):
 
 def ExecuteCmd(os_cmd, use_shell=False):
   """Execute os command and log results."""
-  print "Executing: {}".format(os_cmd if use_shell else ' '.join(os_cmd))
+  print "Executing: {0}".format(os_cmd if use_shell else ' '.join(os_cmd))
   process = None
   try:
     process = subprocess.Popen(os_cmd, stdin=None, stdout=subprocess.PIPE,
