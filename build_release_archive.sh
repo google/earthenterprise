@@ -37,7 +37,7 @@ CLONE_DIR=`mktemp -d`
 
 # Download the repository
 cd "${CLONE_DIR}"
-git clone -b "${1}" --depth 1 https://github.com/google/${REPO_NAME}.git || exit
+git clone -b "${1}" --depth 1 "https://github.com/google/${REPO_NAME}.git" || exit
 
 # Remove the git-related files from the repo
 find "${REPO_NAME}" -name ".git*" -exec rm -Rf {} +
