@@ -8,6 +8,8 @@
       path: index.html#usecases
     - name: Features
       path: index.html#opengeefeatures
+    - name: Release 5.2.0
+      path: https://github.com/google/earthenterprise/releases/tag/5.2.0-3.final
 - name: Documentation
   path: geedocs
   secion_id: geedocs
