@@ -9,6 +9,10 @@
 # this script downloads and packages a large repo it may take a long time to
 # run.
 
+# Example usage: to create archives for 5.2.0 (which is on the release_5.2.0)
+# branch, run
+# ./build_release_archive.sh release_5.2.0
+
 if [ "$#" -ne 1 ]; then
   echo "Usage: $0 <branch>"
   echo "where <branch> is a branch or tag that defines the release to be archived."
