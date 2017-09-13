@@ -12,4 +12,5 @@ COPY scripts /root/opengee/bin
 RUN mkdir -p /root/opengee/build
 
 # Install the build environment:
+WORKDIR /root/opengee/build
 RUN /root/opengee/bin/get-gee-build-environment.sh -y --clone-repository=no

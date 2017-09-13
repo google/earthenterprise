@@ -20,6 +20,7 @@ RUN mkdir -p /root/opengee/build
 #   We register the Docker image with the Red Hat repository provider (you
 # need to have a username and password) so we can install Yum packages.  We
 # unregister when we finish, so we're not taking up a machine license.
+WORKDIR /root/opengee/build
 RUN subscription-manager register \
         --username=${REDHAT_USERNAME_ESCAPED} --password=${REDHAT_PASSWORD_ESCAPED} \
         --auto-attach && \
