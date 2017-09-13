@@ -40,14 +40,9 @@ cd "${CLONE_DIR}"
 git clone -b "${1}" --depth 1 git@github.com:google/${REPO_NAME}.git || exit
 
 # Remove the git-related files from the repo
-cd "${REPO_NAME}"
-FILES=`find . -name ".git*"`
-for FILE in ${FILES}; do
-  rm -Rf "${FILE}"
-done
+find "${REPO_NAME}" -name ".git*" -exec rm -Rf {} +
 
 # Create the archives
-cd "${CLONE_DIR}"
 tar czf "${TAR_FILE}" "${REPO_NAME}"
 zip -rq "${ZIP_FILE}" "${REPO_NAME}"
 
