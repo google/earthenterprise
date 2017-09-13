@@ -96,13 +96,10 @@ int main(int argc, char *argv[]) {
   if (numcpus < 1) {
     usage(progname, "Number of CPUs should not be less than 1");
   }
-  if (decimation_threshold < 0 || decimation_threshold > 100) {
-    usage(progname, "Decimation should be a valid percentage between 0-100");
+  if (decimation_threshold < 0) { 
+    usage(progname, "Decimation should not be less than 0");
   }
-
-/////////////////////////// DEBUGGING .. FIXME
-  notify(NFY_NOTICE, "Set decimation_threshold to:  %f", decimation_threshold);
-  printf("Decimation threshold:   %f\n", decimation_threshold);
+  notify(NFY_DEBUG, "Set decimation_threshold to:  %f", decimation_threshold);
 
   try {
     // load the config

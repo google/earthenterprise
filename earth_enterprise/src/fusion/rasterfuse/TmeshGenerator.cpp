@@ -57,9 +57,9 @@ TmeshGenerator::Generate(float *srcSamples,
                          const khTileAddr &tmeshAddr,
                          etArray<uchar> &compressed,
                          const size_t reserve_size,
-			 bool decimate,
-			 float decimation_threshold
-			)
+                         bool decimate,
+                         float decimation_threshold
+                        )
 {
   // reset my temporaries - they live in the class so I don't have to
   // constantly reallocate them.
@@ -77,21 +77,16 @@ TmeshGenerator::Generate(float *srcSamples,
   elev.resize(SizeX * SizeY);
 
   // Error thresholds for decimation - set these to 0 to skip decimation
-  // jdjohnso - These numbers came from empirical testing?
-  // jdjohnso - The allowable error gets smaller as the resolution increases.
-  // jdjohnso - The allowable error on border tiles is 1/10 that of interior
+  // Question - Did these numbers come from empirical testing?
+  // The allowable error gets smaller as the resolution increases.
+  // The allowable error on border tiles is 1/10 that of interior
   // tiles. This is because we really want the border tiles to match. If not
   // we get rips between mesh tiles in the client.
   //int error_level = tmeshAddr.level+1;
-  //double error = 0.009 * pow(2, 11-error_level);
   // Disable decimation for spike evaluation:
-  //int error_level = tmeshAddr.level+1;
 
-//FIXME TODO for debugging
-decimation_threshold = 0.5;
-decimate = true;
-
-  double error = (double) decimation_threshold * pow(2, 11 - (tmeshAddr.level + 1));
+  double threshold_modifier = pow(2, 11 - (tmeshAddr.level + 1));
+  double error = decimation_threshold * threshold_modifier;
   double borderError = decimate ? error / 10.0 : 0.0;
 
   // calculate position of this quadnode WRT the larger heightmap tile.

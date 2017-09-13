@@ -46,9 +46,9 @@ class TmeshGenerator
                 const khTileAddr &tmeshAddr,
                 etArray<uchar> &compressed,
                 const size_t reserve_size,
-		bool  decimate,
-		float decimation_threshold
- 	      );
+                bool  decimate,
+                float decimation_threshold
+               );
 };
 
 

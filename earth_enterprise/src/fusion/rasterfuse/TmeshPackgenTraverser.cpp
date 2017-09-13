@@ -52,7 +52,8 @@ ExtraPixelsImpl::ExtraPixelsImpl(
 TmeshWorkItem::TmeshWorkItem(PacketFileWriter &_writer,
                              const AttributionByExtents &_attributions,
                              const khTilespaceFlat& _sampleTilespace,
-                             bool decimate, float decimation_threshold):
+                             bool decimate, 
+                             float decimation_threshold):
     writer(_writer),
     attributions(_attributions),
     sampleTilespace(_sampleTilespace),
@@ -92,9 +93,9 @@ void TmeshWorkItem::DoWork(TmeshPrepItem *prep) {
          piece->targetAddr,
          piece->compressed,
          kCRC32Size /* reserve size */,
-	 decimate_,
-	 decimation_threshold_
-	);
+         decimate_,
+         decimation_threshold_
+        );
     }
   }
 }
@@ -155,13 +156,10 @@ TmeshPackgenTraverser::TmeshPackgenTraverser(
       not_covered_tiles_exist_(false) {
   if(decimation_threshold == 0.0)
   {
-    //cfg.decimate = false;
     decimate_ = false;
   }
   else
   {
-    //cfg.decimation_threshold = decimation_threshold;
-    //cfg.decimate = true;
     decimation_threshold_ = decimation_threshold;
     decimate_ = true;
   }
@@ -202,8 +200,7 @@ TmeshPrepItem* TmeshPackgenTraverser::NewPrepItem(void) {
 
 TmeshWorkItem* TmeshPackgenTraverser::NewWorkItem(void) {
   return new TmeshWorkItem(writer_, attributions, sample_tilespace_,
-			   decimate_, decimation_threshold_);
-                           //config.decimate, decimation_threshold);
+                           decimate_, decimation_threshold_);
 }
 
 

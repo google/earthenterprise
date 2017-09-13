@@ -81,8 +81,8 @@ class TmeshWorkItem {
   TmeshWorkItem(PacketFileWriter &_writer,
                 const AttributionByExtents &_attributions,
                 const khTilespaceFlat &_sampleTilespace, 
-		bool decimate, 
-		float decimation_threshold);
+  bool decimate, 
+  float decimation_threshold);
 
   void DoWork(TmeshPrepItem *prep);
   void DoWrite(khMTProgressMeter *progress);
@@ -106,8 +106,8 @@ class TmeshPackgenTraverser : public PackgenTraverser<TmeshPackgenBaseConfig> {
   TmeshPackgenTraverser(const PacketLevelConfig &config,
                         geFilePool &file_pool_,
                         const std::string &output,
-                  	float decimation_threshold
-               		);
+                        float decimation_threshold
+                       );
 
   virtual TmeshPrepItem* NewPrepItem(void);
   virtual TmeshWorkItem* NewWorkItem(void);
