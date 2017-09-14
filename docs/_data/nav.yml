@@ -8,6 +8,10 @@
       path: index.html#usecases
     - name: Features
       path: index.html#opengeefeatures
+    - name: Releases      
+      _controller: FrameworkBundle:Redirect:urlRedirect
+      path: https://github.com/google/earthenterprise/releases/tag/5.2.0-3.final
+      permanent: true
 - name: Documentation
   path: geedocs
   secion_id: geedocs
