@@ -9,7 +9,7 @@
     - name: Features
       path: index.html#opengeefeatures
     - name: Release
-      path: "{{site.githubWikiUrl}}"
+      path: {{site.githubWikiUrl}}
 - name: Documentation
   path: geedocs
   secion_id: geedocs
