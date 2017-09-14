@@ -28,7 +28,7 @@ sudo yum install -y epel-release
 sudo subscription-manager repos --enable=rhel-x86_64-workstation-dts-2
 
 # For RHEL 6 Server:
-sudo subscription-manager repos --enable=rhel-server-dts2-rpms
+sudo subscription-manager repos --enable=rhel-server-dts2-6-rpms
 
 # For all RHEL 6 Editions:
 sudo subscription-manager repos --enable=rhel-6-server-optional-rpms
