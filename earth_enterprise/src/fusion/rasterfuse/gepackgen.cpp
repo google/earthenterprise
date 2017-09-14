@@ -25,6 +25,7 @@
 
 namespace {
 const uint32 kDefaultNumCPUs = 1;
+const float defaultDecimationThreshold = 0.009;
 
 void usage(const std::string &progn, const char *msg = 0, ...) {
   if (msg) {
@@ -37,12 +38,13 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
 
   fprintf(stderr,
           "\n"
-          "usage: %s [options] {--imagery|--terrain} --config <configfile> --decimation <decimation_threshhold>"
+          "usage: %s [options] {--imagery|--terrain} --config <configfile>"
           " -o <output>\n"
           "   Supported options are:\n"
           "      --help | -?:     Display this usage message\n"
-          "      --numcpus <num>: Num CPUs to use (default %u)\n",
-          progn.c_str(), kDefaultNumCPUs);
+          "      --numcpus <num>: Num CPUs to use (default %u)\n"
+          "      --decimation <num>: error threshold for terrain decimation (default %f)\n",
+          progn.c_str(), kDefaultNumCPUs, defaultDecimationThreshold);
   exit(1);
 }
 }  // namespace
@@ -55,7 +57,7 @@ int main(int argc, char *argv[]) {
   bool help = false;
   std::string configFile;
   std::string output;
-  float decimation_threshold = 0.009;
+  float decimation_threshold = defaultDecimationThreshold;
   uint32 numcpus = kDefaultNumCPUs;
   bool imagery = false;
   bool terrain = false;
