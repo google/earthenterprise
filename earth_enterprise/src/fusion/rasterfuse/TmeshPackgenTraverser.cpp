@@ -53,7 +53,7 @@ TmeshWorkItem::TmeshWorkItem(PacketFileWriter &_writer,
                              const AttributionByExtents &_attributions,
                              const khTilespaceFlat& _sampleTilespace,
                              bool decimate,
-                             float decimation_threshold):
+                             double decimation_threshold):
     writer(_writer),
     attributions(_attributions),
     sampleTilespace(_sampleTilespace),
@@ -95,9 +95,9 @@ void TmeshWorkItem::DoWork(TmeshPrepItem *prep) {
                           subcol * sampleTilespace.tileSize),
          piece->targetAddr,
          piece->compressed,
-         kCRC32Size /* reserve size */,
-         decimate_,
-         decimation_threshold_
+         kCRC32Size            /* reserve size */,
+         decimate_,            /* do we decimate? */
+         decimation_threshold_ /* decimation error threshold */ 
         );
     }
   }
@@ -142,7 +142,7 @@ static const khTilespace& BuildSampleTilespace(uint tileSize,
 
 TmeshPackgenTraverser::TmeshPackgenTraverser(
     const PacketLevelConfig &cfg, geFilePool &file_pool_,
-    const std::string &output, float decimation_threshold)
+    const std::string &output, double decimation_threshold)
     : BaseClass(
         cfg, output,
         TranslateLevelCoverage(BuildSampleTilespace(cfg.sampleSize,

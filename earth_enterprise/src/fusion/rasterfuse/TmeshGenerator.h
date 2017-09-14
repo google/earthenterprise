@@ -47,7 +47,7 @@ class TmeshGenerator
                 etArray<uchar> &compressed,
                 const size_t reserve_size,
                 bool  decimate,
-                float decimation_threshold
+                double decimation_threshold
                );
 };
 

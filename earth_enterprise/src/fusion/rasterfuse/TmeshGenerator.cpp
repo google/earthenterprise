@@ -58,7 +58,7 @@ TmeshGenerator::Generate(float *srcSamples,
                          etArray<uchar> &compressed,
                          const size_t reserve_size,
                          bool decimate,
-                         float decimation_threshold
+                         double decimation_threshold
                         )
 {
   // reset my temporaries - they live in the class so I don't have to

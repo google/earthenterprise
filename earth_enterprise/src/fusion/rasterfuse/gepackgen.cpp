@@ -25,7 +25,7 @@
 
 namespace {
 const uint32 kDefaultNumCPUs = 1;
-const float defaultDecimationThreshold = 0.009;
+const double defaultDecimationThreshold = 0.009;
 
 void usage(const std::string &progn, const char *msg = 0, ...) {
   if (msg) {
@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
   bool help = false;
   std::string configFile;
   std::string output;
-  float decimation_threshold = defaultDecimationThreshold;
+  double decimation_threshold = defaultDecimationThreshold;
   uint32 numcpus = kDefaultNumCPUs;
   bool imagery = false;
   bool terrain = false;
@@ -71,6 +71,9 @@ int main(int argc, char *argv[]) {
               &khGetopt::RangeValidator<uint32, 1, kMaxNumJobsLimit_2>);
   options.flagOpt("imagery", imagery);
   options.flagOpt("terrain", terrain);
+  options.setExclusive("imagery", "decimation");
+  options.setExclusive("imagery", "terrain");
+
   if (!options.processAll(argc, argv, argn)) {
     usage(progname);
   }
@@ -83,14 +86,8 @@ int main(int argc, char *argv[]) {
   numcpus = std::min(numcpus, CommandlineNumCPUsDefault());
 
   // Validate commandline options
-  if (imagery && terrain) {
-    usage(progname, "--imagery and --terrain are exclusive");
-  }
   if (!imagery && !terrain) {
     usage(progname, "--imagery or --terrain is required");
-  }
-  if (imagery && (decimation_threshold != 0.009)) {
-    usage(progname, "--decimation can only be used with --terrain");
   }
   if (output.empty()) {
     usage(progname, "You must specify an output file");
