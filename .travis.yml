@@ -18,10 +18,6 @@ script:
   - cd src/NATIVE-REL-x86_64/bin/tests
   - ./RunAllTests.pl
 
-cache:
-  directories:
-    - $HOME/earthenterprise/earth_enterprise/src/NATIVE-REL-x86_64/third_party
-
 notifications:
   slack: opengee:YjzzzTnc7pgITPsrQPATIGwc
   email:
