@@ -95,6 +95,31 @@ if grep -q -s 'Ubuntu' /etc/lsb-release ; then
       RETVAL=$?
     }
 
+elif grep -q -s 'LinuxMint' /etc/lsb-release ; then
+    # ---------- Ubuntu ----------
+    echo "Google Earth Enterprise Server for Ubuntu"
+
+    start() {
+      echo -n $"Starting $prog: "
+      $apachectl start $args
+      RETVAL=$?
+    }
+    stop() {
+      echo -n $"Stopping $prog: "
+      $apachectl stop
+      RETVAL=$?
+    }
+    reload() {
+      echo -n $"Reloading $prog: "
+      $apachectl restart
+      RETVAL=$?
+    }
+    getstatus() {
+      echo -n $"Checking for httpd: "
+      $apachectl status
+      RETVAL=$?
+    }
+
 elif [ -f /etc/redhat-release ] ; then
     # ---------- RedHat ----------
     # This will prevent initlog from swallowing up a pass-phrase prompt if
