@@ -12,7 +12,9 @@ The application suite consists of three core components:
 ### Building
 Earth Enterprise Fusion & Server currently run on 64-bit versions of the following operating systems:
 
+* CentOS 6
 * CentOS 7
+* Red Hat Enterprise Linux 6
 * Red Hat Enterprise Linux 7
 * Ubuntu 14.04 LTS
 * Ubuntu 16.04 LTS
