@@ -52,13 +52,16 @@ ExtraPixelsImpl::ExtraPixelsImpl(
 TmeshWorkItem::TmeshWorkItem(PacketFileWriter &_writer,
                              const AttributionByExtents &_attributions,
                              const khTilespaceFlat& _sampleTilespace,
-                             bool decimate, 
+                             bool decimate,
                              float decimation_threshold):
     writer(_writer),
     attributions(_attributions),
     sampleTilespace(_sampleTilespace),
     numPiecesUsed(0),
-    generator(sampleTilespace) {
+    generator(sampleTilespace),
+    decimate_(decimate),
+    decimation_threshold_(decimation_threshold) {
+
   uint ratio = RasterProductTilespaceBase.tileSize / sampleTilespace.tileSize;
   uint totalPieces = ratio * ratio;
   pieces.reserve(totalPieces);

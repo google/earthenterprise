@@ -75,17 +75,18 @@ class TmeshWorkItem {
   khDeletingVector<Piece> pieces;
   uint numPiecesUsed;
   TmeshGenerator generator;
-  float decimation_threshold_;
   bool decimate_;
+  float decimation_threshold_;
 
   TmeshWorkItem(PacketFileWriter &_writer,
                 const AttributionByExtents &_attributions,
-                const khTilespaceFlat &_sampleTilespace, 
-                bool decimate, 
+                const khTilespaceFlat &_sampleTilespace,
+                bool decimate,
                 float decimation_threshold);
 
   void DoWork(TmeshPrepItem *prep);
   void DoWrite(khMTProgressMeter *progress);
+
 };
 
 

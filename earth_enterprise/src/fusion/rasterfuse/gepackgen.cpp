@@ -87,6 +87,9 @@ int main(int argc, char *argv[]) {
   if (!imagery && !terrain) {
     usage(progname, "--imagery or --terrain is required");
   }
+  if (imagery && (decimation_threshold != 0.009)) {
+    usage(progname, "--decimation can only be used with --terrain");
+  }
   if (output.empty()) {
     usage(progname, "You must specify an output file");
   }
@@ -96,7 +99,7 @@ int main(int argc, char *argv[]) {
   if (numcpus < 1) {
     usage(progname, "Number of CPUs should not be less than 1");
   }
-  if (decimation_threshold < 0) { 
+  if (decimation_threshold < 0) {
     usage(progname, "Decimation should not be less than 0");
   }
   notify(NFY_DEBUG, "Set decimation_threshold to:  %f", decimation_threshold);
