@@ -157,12 +157,10 @@ TmeshPackgenTraverser::TmeshPackgenTraverser(
       writer_(file_pool_, output, true /* overwrite */),
       extra_cache_(20000 /* apx 160M */),
       not_covered_tiles_exist_(false) {
-  if(decimation_threshold == 0.0)
-  {
+
+  if((decimation_threshold == 0.0) || (config.decimate == false)) {
     decimate_ = false;
-  }
-  else
-  {
+  } else {
     decimation_threshold_ = decimation_threshold;
     decimate_ = true;
   }
