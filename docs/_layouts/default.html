@@ -44,11 +44,7 @@
                     <ul class='dropdown'>
                       {% for child in item.children %}
                         <li>
-                          {% if child.path contains "http" %}
-                            <a href="{{ child.path }}">{{ child.name }}</a>
-			  {% else %}
-                            <a href="{{ site.baseurl}}/{{ child.path }}">{{ child.name }}</a>
-                          {% else %}
+                          <a href="{{ site.baseurl}}/{{ child.path }}">{{ child.name }}</a>
                         </li>
                       {% endfor %}
                     </ul>
