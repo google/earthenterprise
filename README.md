@@ -9,6 +9,17 @@ The application suite consists of three core components:
 
 ![flow](https://lh3.googleusercontent.com/ZGQH04lc2mYmw1JEx0Jvwiardw5H6cwrmRhSj75pSKF6r1FRwwYUBUIBnTE6n5uY071XV7__mmVDKdV6B1tEpUQwFNYnt1HBfxiz3Hrqbw99HUFQKVFnht11EkPz70xCtuhFlCi3)
 
+### Releases
+
+[Release 5.2.0](https://github.com/google/earthenterprise/releases/tag/5.2.0-3.final)
+* [Release Notes](http://www.opengee.org/geedocs/answer/7160000.html)
+* [Release Documentation](http://www.opengee.org/geedocs/)
+
+### More information
+* [OpenGEE website](http://www.opengee.org)
+* [GEE User/Administrator Documentation](http://www.opengee.org/geedocs/)
+* [Forum](https://groups.google.com/forum/#!forum/google-earth-enterprise)
+
 ### Building
 Earth Enterprise Fusion & Server currently run on 64-bit versions of the following operating systems:
 
