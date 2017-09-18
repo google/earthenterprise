@@ -7,6 +7,7 @@ The application suite consists of three core components:
 
 ### Installation
 
+#### test line for commit check 
 Earth Enterprise Fusion & Server currently run on 64-bit versions of the following operating systems:
 * Red Hat Enterprise Linux versions 6.0 to 7.2, including the most recent security patches
 * CentOS 6.0 to 7.2
