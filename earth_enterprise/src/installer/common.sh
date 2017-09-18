@@ -20,7 +20,7 @@ BADHOSTNAMELIST=(empty linux localhost dhcp bootp)
 GEE="Google Earth Enterprise"
 GEES="$GEE Server"
 GEEF="$GEE Fusion"
-LONG_VERSION="5.2.0"
+LONG_VERSION="5.2.1"
 SHORT_VERSION="5.2"
 
 ROOT_USERNAME="root"
@@ -62,7 +62,7 @@ HOSTNAME_A="$(hostname -a | $NEWLINECLEANER)"
 
 NUM_CPUS="$(grep processor /proc/cpuinfo | wc -l | $NEWLINECLEANER)"
 
-SUPPORTED_OS_LIST=("Ubuntu", "Red Hat Enterprise Linux (RHEL)", "CentOS")
+SUPPORTED_OS_LIST=("Ubuntu", "Red Hat Enterprise Linux (RHEL)", "CentOS", "Linux Mint")
 UBUNTUKEY="ubuntu"
 REDHATKEY="rhel"
 CENTOSKEY="centos"
@@ -115,6 +115,8 @@ determine_os()
         MACHINE_OS_VERSION=$test_versionid
 
         if [[ "${test_os,,}" == "ubuntu"* ]]; then
+            MACHINE_OS=$UBUNTUKEY
+        elif [[ "${test_os,,}" == "linux mint"* ]]; then
             MACHINE_OS=$UBUNTUKEY
         elif [[ "${test_os,,}" == "red hat"* ]]; then
             MACHINE_OS=$REDHATKEY

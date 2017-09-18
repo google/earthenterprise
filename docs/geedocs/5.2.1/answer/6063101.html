@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Search your POI vector data or map layer data</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
+</head>
+<body>
+<!-- 6063101.html -->
+<div class="container">
+  <div class="sidebar1">
+    <p class="sidebar-toc"><a href="../answer/3468004.html">GEE Server Overview</a></p>
+    <p class="sidebar-toc"><a href="../answer/3470759.html">Sign in to GEE Server Admin console</a></p>
+    <p class="sidebar-toc"><a href="../answer/3479919.html">Snippet profiles page</a></p>
+    <p class="sidebar-toc"><a href="../answer/3480095.html">Search tabs page</a></p>
+    <p class="sidebar-toc"><a href="../answer/3479921.html">Settings page</a></p>
+    <p class="sidebar-toc"><a href="../answer/3480097.html">Dashboard page</a></p>
+    <p class="sidebar-toc"><a href="../answer/3479922.html">Databases page</a></p>
+    <p class="sidebar-toc"><a href="../answer/3497763.html">Publish databases and portables</a></p>
+    <p class="sidebar-toc"><a href="../answer/6004748.html">Manage snippet profiles</a></p>
+    <p class="sidebar-toc"><a href="../answer/176770.html">Display custom logos</a></p>
+    <p class="sidebar-toc"><a href="../answer/6013604.html">Manage virtual hosts</a></p>
+    <p class="sidebar-toc"><a href="../answer/4441137.html">Make Web Map Service (WMS) requests</a></p>
+    <p class="sidebar-toc"><a href="../answer/6062970.html">Publish databases with search</a></p>
+    <p class="sidebar-toc"><a href="../answer/6063101.html" class="current-file">Search your POI vector data or map layer data</a></p>
+    <p class="sidebar-toc"><a href="../answer/3497832.html">Create Search tabs</a></p>
+    <p class="sidebar-toc"><a href="../answer/6066597.html">Add custom search services</a></p>
+    <p class="sidebar-toc"><a href="../answer/6082250.html">Troubleshoot search services</a></p>
+    <p class="sidebar-toc"><a href="../answer/6091774.html">Example Search plug-in Python code sample</a></p>
+    <p class="sidebar-toc"><a href="../answer/6091810.html">Custom POI Search plug-in Python code sample</a></p>
+    <p class="sidebar-toc"><a href="../answer/3230777.html">Create portable globes and maps</a></p>
+    <p class="sidebar-toc"><a href="../answer/4643041.html">Create composite globes and maps</a></p>
+    <p class="sidebar-toc"><a href="../answer/6051534.html">View 3D databases</a></p>
+    <p class="sidebar-toc"><a href="../answer/6051659.html">View 2D databases</a></p>
+    <p class="sidebar-toc"><a href="../answer/6051568.html">Implement Google Earth Plugin</a></p>
+    <p class="sidebar-toc"><a href="../answer/6051584.html">(Deprecated) Provide Google Earth Plug-in for your users to install</a></p>
+  </div>
+  <div class="content"> <a name="top_of_file"></a>
+    <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+    <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | GEE Server administration</h1>
+    <h2>Search your POI vector data or map layer data</h2>
+    <p>With GEE, you can perform simple text searches of your POI vector data or map layer data. If you have one or more text fields that you would like to query from vector or map layer data in a project, you can simply add those search fields to that vector data’s layer. You include the layer as part of the <a href="../answer/4412421.html#55155">vector project</a> that you want to include in your 2D or 3D database.</p>
+    <p>For example, you may be interested in displaying the US Census Bureau population statistics on your map or globe, based on county name. Once you’ve added the census data as a layer in a vector project, you can easily add the search fields to the individual population data layer in your vector project. You can also choose how you want the labels for your search results to appear on your map, such as search and display a field, or simply display it.</p>
+    <h2>Add search fields to individual layers of your vector projects</h2>
+    <p>After you have added a layer to a vector project, you can configure it to add search functionality. You use the <strong>Search</strong> tab in the Layer Properties dialog to specify one or more search fields to query your source data.</p>
+    <h3>To add search fields to individual layers of a vector project:</h3>
+    <ol class="spaced-list">
+      <li>In the Asset Manager, double-click the name of the project in which you want to modify layers. The Vector Project Editor displays the list of layers included in the project.</li>
+      <li>View the layer properties for a resource in a project by right-clicking the layer name in the Vector Project Editor and selecting <strong>Layer Properties</strong> from the context menu.</li>
+      <li>Click the <strong>Search</strong> tab in the Layer Properties dialog.
+        <p><img alt="Layer Properties Search Tab" src="../art/server/search/layer_prop_search_tab.png"/></p>
+      </li>
+      <li>Click <img alt="New Icon" src="../art/fusion/tutorial/icon_new.gif"/>. The Add Search Field dialog appears.
+        <p><img alt="Layer Properties Add Search" src="../art/server/search/layer_prop_add_search.png"/></p>
+      </li>
+      <li>Select the desired field from the <strong>Column Name</strong> drop-down list.
+        Select an option from the <strong>Use</strong> drop-down list:
+        <ul>
+          <li><strong>Search Only</strong> - Google Earth EC searches against the selected field but does not display the results.</li>
+          <li><strong>Display Only</strong> - Google Earth EC displays the values of the selected field in the results but does not search against the selected field.</li>
+          <li><strong>Search and Display</strong> - Google Earth EC searches against the selected field and displays the results.</li>
+        </ul>
+        <p>An example of search fields added to a layer in a vector project describes the use of US Census Bureau data and setting up fields to query the County name and display the population per county in the results shown in the client.  See the tutorial lesson <a href="../answer/4412684.html">Specifying Search Fields for Individual Vector Layers</a>.</p>
+      </li>
+      <li>Repeat the steps above for each additional field you want to add to the search.
+        Your selections appear on the list of search fields on the Search tab in the order in which you added them:
+        <p><img alt="Layer Properties Add Search" src="../art/server/search/layer_prop_add_search-full.png"/></p>
+        <p>The order in which the fields appear on this list is the order in which they appear in the description balloon in the client. (The fields designated as <strong>Search Only</strong> do not affect the order in which the fields to be displayed appear.) </p>
+      </li>
+      <li>To change the order in which the fields appear, use the <img alt="Layer Properties Add Search Up Arrow Icon" src="../art/server/search/layer_prop_search_tab_up_arrow.png"/> and <img alt="Layer Properties Add Search Down Arrow Icon" src="../art/server/search/layer_prop_search_tab_down_arrow.png"/> arrows.</li>
+      <li>To remove a field, click <img alt="Layer Properties Add Search Delete Icon" src="../art/server/search/layer_prop_search_tab_delete_icon.png"/>.</li>
+      <li>Click <strong>OK</strong> to save the Search field properties, then select <strong>File &gt; Save</strong> in the Vector Project Editor to save the changes to the layer.
+        <div class="note">
+          <p><strong>Note:</strong> This search performs an exact match, which means that the Google Earth EC user must enter the value exactly as it appears in the database. It can also perform a wildcard search, so users can enter part of the text they want to match. For example, if a user enters “dakota” in a state search, the search results match “North Dakota” and “South Dakota”. </p>
+        </div>
+      </li>
+      <li>Once you’ve added your POI vector project to the database you want to publish, you push it to GEE Server, then turn on <strong>POI Search</strong> when you publish.
+        <p><img alt="Publish Dialog POI Search" src="../art/server/search/publish_dialog_poi_search.png"/></p>
+      </li>
+    </ol>
+    <p>Setting the <strong>+Enhanced Search</strong> to <strong>On</strong> also will first perform a <strong>POI search</strong> against the vector data in your database, and if no results are found, an <strong>Enhanced Search</strong> using the <strong>GeocodingFederated</strong> search plug-in is performed, searching your database for queried places or coordinates.</p>
+    <p>For example,  if your query in Google Earth EC for a city name returned no results via the POI search plug-in, the GeoFederated search plugin would automatically search for that city name.</p>
+    <div class="note">
+      <p><strong>Note:</strong> The POI Search option in the Publish dialog is only available if you build your database with POI data as a vector resource layer.  If you want to perform a POI search on a database external to your globe or map, for example, on a different server, you can use the POI Search tab or create your own custom search plugin.
+        <add links=""> </add>
+      </p>
+    </div>
+    <p>Once you have added the search fields, the main Search tab in Google Earth EC displays the POI search and includes the field(s) that you specified for your queries.</p>
+    <p><img alt="Database With Search Tab" src="../art/server/search/ECSearchTab-POI.png"/></p>
+    <h2>Specify POI Search tab settings</h2>
+    <p>You can also modify the appearance of the POI search tab in Google Earth EC by editing the system search tab, <strong>POI Search</strong>, which sets the query parameters for the search fields you added to your vector layer, as well as specifying the labels for the tab, query field and suggestion box.</p>
+    <h3>To specify the settings of the POI Search tab:</h3>
+    <ol class="spaced-list">
+      <li>In the <a href="../answer/3470759.html">GEE Server Admin console</a>, click <strong>Search tabs</strong>.</li>
+      <li>Check the box next to <strong>POISearch</strong>, then click <strong>Edit</strong>.
+        <p>The Edit Search Definition dialog appears.</p>
+        <p><img alt="POI Search Tab Definition" src="../art/server/search/search_tab_def-POI.png"/></p>
+      </li>
+      <li>Edit the name of the system search tab to create your own POISearch tab definition. (You cannot modify system search tabs without changing the name.)</li>
+      <li>Edit the label, specify any query parameters and modify the field label and suggestion box as required. </li>
+      <li>Click <strong>Save</strong>.</li>
+      <li>Click <strong>Databases</strong> to swtich to the list of available databases on GEE Server. Check the box next to the database you want to publish with search, then click <strong>Publish</strong>. The Publish dialog appears.</li>
+      <li>Change the <strong>POI Search</strong> option to <strong>On</strong>.
+        <p>Setting the <strong>+Enhanced Search</strong> to <strong>On</strong> also will first perform a <strong>POI search</strong> against the vector data in your database, and if no results are found, an <strong>Enhanced Search</strong> using the <strong>GeocodingFederated</strong> search plug-in is performed, searching your database for queried places or coordinates.</p>
+      </li>
+      <li>Click the <strong>Search tabs</strong> drop-down list to add your POI search tab.
+        <p><img alt="POI Search Tab in Publish Dialog" src="../art/server/search/publish_poi_search_tab.png"/></p>
+      </li>
+    </ol>
+  Click <strong>Publish</strong>. A message appears to confirm the successful publishing process.
+  <ol>
+    <p>When you view your POI Search tab in Google Earth EC, it reflects the settings you specified in the POI Search tab definition.</p>
+    <p><img alt="POI Search Tab Display in EC" src="../art/server/search/search_tab_EC-POI.png"/></p>
+  </ol>
+  <div class="footer">
+    <p class="BackToTop"><a href="#top_of_file">Back to top</a>
+    
+    <hr />
+    </p>
+    <p class="copyright">&copy;2015 Google</p>
+  </div>
+</div>
+</body>
+</html>
