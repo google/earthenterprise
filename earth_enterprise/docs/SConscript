@@ -19,8 +19,8 @@ import os
 Import('env')
 
 # Install manual to /opt/google/share/doc.
-env.install('manual_share', 'landing_page/manual/5.2.0', 'doc/')
-env.install('manual_share', 'landing_page/manual/5.2.1', 'doc/')
+env.install('manual_share', 'landing_page/manual', 'doc/')
+#env.install('manual_share', 'landing_page/manual/5.2.1', 'doc/')
 
 # Install previous Fusion versions documentation to /opt/google/share/doc.
 env.install('fusion_share',

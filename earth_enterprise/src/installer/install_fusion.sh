@@ -608,9 +608,8 @@ copy_files_to_target()
 	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -rf $TMPINSTALLDIR/common/opt/google/gepython $BASEINSTALLDIR_OPT
 	if [ $? -ne 0 ]; then error_on_copy=1; fi
-	cp -rf $TMPINSTALLDIR/manual/opt/google/share/doc/$LONG_VERSION/ $BASEINSTALLDIR_OPT/share/doc
+	cp -rf $TMPINSTALLDIR/manual/opt/google/share/doc/manual/ $BASEINSTALLDIR_OPT/share/doc
 	if [ $? -ne 0 ]; then error_on_copy=1; fi
-  ln -s $BASEINSTALLDIR_OPT/share/doc/$LONG_VERSION/answer $BASEINSTALLDIR_OPT/share/doc/answer
 	
 	cp -f $TMPINSTALLDIR/fusion/etc/profile.d/ge-fusion.csh $BININSTALLPROFILEDIR
 	if [ $? -ne 0 ]; then error_on_copy=1; fi
