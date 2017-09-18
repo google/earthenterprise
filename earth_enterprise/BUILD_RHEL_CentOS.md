@@ -24,9 +24,18 @@ sudo yum install -y epel-release
 
 ### RHEL 6
 ```
+# For RHEL 6 Workstation:
 sudo subscription-manager repos --enable=rhel-x86_64-workstation-dts-2
+
+# For RHEL 6 Server:
+sudo subscription-manager repos --enable=rhel-server-dts2-6-rpms
+
+# For all RHEL 6 Editions:
 sudo subscription-manager repos --enable=rhel-6-server-optional-rpms
+sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
 ```
+
+_Note: the EPEL URL above assumes that your RHEL 6 installation is running the latest updates_
 
 ## Install Git  
     

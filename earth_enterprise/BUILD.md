@@ -19,7 +19,7 @@ or the [Ubuntu Setup Instructions](./BUILD_Ubuntu.md) for those specific platfor
  
 1. Clone the EarthEnterprise repository in your build environment
     
-    ___Note: for development you should follow the instructions on the [Git Contributions](https://github.com/google/earthenterprise/wiki/Git-Contributions) page to clone the GEE repo to your personal fork, so that you can submit git pull-requests back to this repo.___
+    ___Note: for development you should follow the instructions on the [Git Contributions](https://github.com/google/earthenterprise/wiki/Development:-Git-Contributions) page to clone the GEE repo to your personal fork, so that you can submit git pull-requests back to this repo.___
            
     * Method 1: Clone and download LFS files in one step (may be slower and more error prone).
     
