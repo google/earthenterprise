@@ -23,5 +23,5 @@ notifications:
   email:
     recipients:
       - elamar@t-sciences.com
-    on_success: change
+    on_success: always
     on_failure: always
