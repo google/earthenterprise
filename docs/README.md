@@ -11,6 +11,5 @@ Earth Enterprise Fusion & Server currently run on 64-bit versions of the followi
 * Red Hat Enterprise Linux versions 6.0 to 7.2, including the most recent security patches
 * CentOS 6.0 to 7.2
 * Ubuntu 10.04, 12.04 and 14.04 LTS
-* Mint 18.2
 
 Refer to the wiki for instructions on building from source.
