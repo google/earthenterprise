@@ -72,7 +72,7 @@ class SnippetsHandler(object):
             request, response)
       else:
         raise exceptions.SnippetsServeException(
-            "Invalid Request Command: {}.".format(cmd))
+            "Invalid Request Command: {0}.".format(cmd))
     except exceptions.SnippetsServeException as e:
       logger.error(e)
       http_io.ResponseWriter.AddJsonFailureBody(response, str(e))
@@ -80,8 +80,8 @@ class SnippetsHandler(object):
       logger.error(e)
       http_io.ResponseWriter.AddJsonFailureBody(
           response,
-          "Database error: {}".format(e))
+          "Database error: {0}".format(e))
     except Exception as e:
       logger.error(e)
       http_io.ResponseWriter.AddJsonFailureBody(
-          response, "Server-side Internal Error: {}".format(e))
+          response, "Server-side Internal Error: {0}".format(e))

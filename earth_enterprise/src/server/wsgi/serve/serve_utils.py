@@ -63,7 +63,7 @@ def DatetimeNoTzToIsoFormatUtc(timestamp):
   """
   assert isinstance(timestamp, datetime.datetime)
   timestamp = timestamp.replace(tzinfo=None)
-  return "{}+00:00".format(timestamp.isoformat())
+  return "{0}+00:00".format(timestamp.isoformat())
 
 
 def GetIso8601StrFromDateTimeStr(timestamp_str):
@@ -104,7 +104,7 @@ def GlxDetails(db_info):
   unpacker_ = None
 
   # Build path for portable globe.
-  db_info.path = os.path.normpath("{}/{}".format(
+  db_info.path = os.path.normpath("{0}/{1}".format(
       constants.CUTTER_GLOBES_PATH, db_info.name))
 
   # Set projection of Portable Globe.
@@ -170,26 +170,26 @@ def GetUnpacker(db_info):
 
 def IsFusionDb(db_type):
   """Returns whether db_type is Fusion DB type."""
-  return db_type in {basic_types.DbType.TYPE_GE, basic_types.DbType.TYPE_MAP}
+  return db_type in [basic_types.DbType.TYPE_GE, basic_types.DbType.TYPE_MAP]
 
 
 def IsPortable(db_type):
   """Returns whether db_type is Portable type."""
-  return db_type in {basic_types.DbType.TYPE_GLB,
+  return db_type in [basic_types.DbType.TYPE_GLB,
                      basic_types.DbType.TYPE_GLM,
-                     basic_types.DbType.TYPE_GLC}
+                     basic_types.DbType.TYPE_GLC]
 
 
 def Is2d(db_type):
   """Returns whether database/portable of specific db_type is 2D."""
-  return db_type in {basic_types.DbType.TYPE_MAP,
-                     basic_types.DbType.TYPE_GLM}
+  return db_type in [basic_types.DbType.TYPE_MAP,
+                     basic_types.DbType.TYPE_GLM]
 
 
 def Is3d(db_type):
   """Returns whether database/portable of specific db_type is 3D."""
-  return db_type in {basic_types.DbType.TYPE_GE,
-                     basic_types.DbType.TYPE_GLB}
+  return db_type in [basic_types.DbType.TYPE_GE,
+                     basic_types.DbType.TYPE_GLB]
 
 
 def IsGlc(db_type):
@@ -283,7 +283,7 @@ def NormalizeTargetPath(target_path):
     norm_target_path = norm_target_path.strip("/ ")
     # TODO: do not add leading slash?
     if norm_target_path:
-      norm_target_path = "/{}".format(norm_target_path)
+      norm_target_path = "/{0}".format(norm_target_path)
 
   return norm_target_path
 

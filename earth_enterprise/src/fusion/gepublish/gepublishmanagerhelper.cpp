@@ -13,7 +13,6 @@
 // limitations under the License.
 
 #include "fusion/gepublish/gepublishmanagerhelper.h"
-
 #include "fusion/dbmanifest/dbmanifest.h"
 #include "common/khFileUtils.h"
 #include "common/khSpawn.h"
