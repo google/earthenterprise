@@ -20,8 +20,3 @@ script:
 
 notifications:
   slack: opengee:YjzzzTnc7pgITPsrQPATIGwc
-  email:
-    recipients:
-      - elamar@t-sciences.com
-    on_success: always
-    on_failure: always
