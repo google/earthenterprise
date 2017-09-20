@@ -31,6 +31,6 @@ MAP_DB_KEY = "mapdb.kda"
 
 # Patterns that are used to match against database path, e.g to check whether
 # 2D Fusion Database is Mercator or Flat Map based on database path.
-MAP_DATABASE_PATTERN = "{}/{}".format(MAP_DATABASE_SUFFIX, MAP_DB_KEY)
-MERCATOR_MAP_DATABASE_PATTERN = "{}/{}".format(
+MAP_DATABASE_PATTERN = "{0}/{1}".format(MAP_DATABASE_SUFFIX, MAP_DB_KEY)
+MERCATOR_MAP_DATABASE_PATTERN = "{0}/{1}".format(
     MERCATOR_MAP_DATABASE_SUFFIX, MAP_DB_KEY)

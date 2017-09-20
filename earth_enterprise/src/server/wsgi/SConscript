@@ -31,7 +31,7 @@ wsgi_env = env.Clone()
 
 root_dir = Dir(wsgi_env.exportdirs['root']).abspath
 python_bin = wsgi_env['python_bin']
-compiler_cmd = '%s -m compileall -f' % python_bin
+compiler_cmd = '%s -m py_compile' % python_bin
 wsgi_src_path = Dir('#/server/wsgi').abspath
 
 # List of directories to be compiled/installed.

@@ -23,6 +23,7 @@ read files and 3d and 2d packet data from globes and
 maps.
 """
 
+import distutils.sysconfig
 import os
 import shutil
 import sys
@@ -40,7 +41,9 @@ def BuildLibrary(os_dir, ignore_results):
   fp = open("../%s/build_lib" % os_dir)
   build_vars = {
     'prefix': sys.prefix,
-    'exec_prefix': sys.exec_prefix
+    'exec_prefix': sys.exec_prefix,
+    'python_inc_dir': distutils.sysconfig.get_python_inc(),
+    'python_lib_dir': distutils.sysconfig.get_python_lib()
   }
   for line in fp:
     result = util.ExecuteCmd(line.format(**build_vars), use_shell=True)

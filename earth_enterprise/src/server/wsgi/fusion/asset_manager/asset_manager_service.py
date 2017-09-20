@@ -64,14 +64,14 @@ class AssetManagerService(object):
         self._handler.HandleListAssetsRequest(request, response)
       else:
         raise exceptions.AssetManagerServeException(
-            "Invalid request command: {}.".format(cmd))
+            "Invalid request command: {0}.".format(cmd))
     except exceptions.AssetManagerServeException, e:
       logger.error(e)
       http_io.ResponseWriter.AddJsonFailureBody(response, str(e))
     except Exception, e:
       logger.error(e)
       http_io.ResponseWriter.AddJsonFailureBody(
-          response, "Server-side Internal Error: {}".format(e))
+          response, "Server-side Internal Error: {0}".format(e))
 
 
 def main():
