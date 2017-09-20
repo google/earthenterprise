@@ -1,0 +1,80 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Troubleshoot connection to GEE Server</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 6363126.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/6121524.html">Geecheck: test your GEE Server status</a></p>
+<p class="sidebar-toc"><a href="../answer/2760674.html">Fusion diagnostics</a></p>
+<p class="sidebar-toc"><a href="../answer/172780.html">Fusion issues</a></p>
+<p class="sidebar-toc"><a href="../answer/179631.html">Unsupported 3D geometry files</a></p>
+<p class="sidebar-toc"><a href="../answer/173055.html">Maps display grey tiles</a></p>
+<p class="sidebar-toc"><a href="../answer/173202.html">Imagery or terrain gaps</a></p>
+<p class="sidebar-toc"><a href="../answer/6363126.html" class="current-file">Troubleshoot connection to GEE Server</a></p>
+<p class="sidebar-toc"><a href="../answer/173081.html">Post-installation error message: Conflicts in plugins</a></p>
+<p class="sidebar-toc"><a href="../answer/173064.html">Post-installation error message: Permission denied</a></p>
+<p class="sidebar-toc"><a href="../answer/173076.html">Post-installation error message: Socket connect</a></p>
+<p class="sidebar-toc"><a href="../answer/173075.html">Post-installation error message: Segmentation fault</a></p>
+<p class="sidebar-toc"><a href="../answer/173079.html">Post-installation error message: ValidateProtocolVersion</a></p>
+<p class="sidebar-toc"><a href="../answer/173083.html">Resource build error message: coordinatetransformation</a></p>
+<p class="sidebar-toc"><a href="../answer/173060.html">Resource build error message: Headers do not match</a></p>
+<p class="sidebar-toc"><a href="../answer/173082.html">Resource build error message: No SRS</a></p>
+<p class="sidebar-toc"><a href="../answer/173058.html">Resource build error message: SourceFile</a></p>
+<p class="sidebar-toc"><a href="../answer/2981872.html">Resource build error message: Unable to find a suitable resource provider</a></p>
+<p class="sidebar-toc"><a href="../answer/2981878.html">Resource build error message: Unable to make reservation</a></p>
+<p class="sidebar-toc"><a href="../answer/3054957.html">Resource build error message: libjpeg.so.62</a></p>
+<p class="sidebar-toc"><a href="../answer/173063.html">Project build error message: Empty layer</a></p>
+<p class="sidebar-toc"><a href="../answer/173084.html">Project build error message: Pyramid data</a></p>
+<p class="sidebar-toc"><a href="../answer/173071.html">Project build error message: Signal 6</a></p>
+<p class="sidebar-toc"><a href="../answer/173072.html">Project build error message: Signal 11</a></p>
+<p class="sidebar-toc"><a href="../answer/173078.html">Project build error message: Write to index</a></p>
+<p class="sidebar-toc"><a href="../answer/173085.html">Database build error message: HandleAddDbRequest</a></p>
+<p class="sidebar-toc"><a href="../answer/172797.html">Publish error message: Authentication required</a></p>
+<p class="sidebar-toc"><a href="../answer/173061.html">Publish error message: Client/server mismatch</a></p>
+<p class="sidebar-toc"><a href="../answer/173062.html">Publish error message: Client too old</a></p>
+<p class="sidebar-toc"><a href="../answer/173074.html">Publish error message: Server push failed</a></p>
+<p class="sidebar-toc"><a href="../answer/173077.html">Publish error message: Unable to contact server</a></p>
+<p class="sidebar-toc"><a href="../answer/173080.html">Publish error message: Upload failed</a></p>
+<p class="sidebar-toc"><a href="../answer/3029085.html">Publish error message: Error adding files to publisher database</a></p>  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Troubleshooting and error messages</h1><h2>Troubleshoot connection to GEE Server</h2>
+<p>If the Earth EC is unable to connect to your GEE Server, you'll see the error, "Google Earth failed to connect to database":</p>
+<p><gkms:snippet contenteditable="false" id="6363160"></gkms:snippet></p>
+<p>To resolve this issue, try these troubleshooting steps:</p>
+<ol>
+<li>Make sure the <strong>Server URL</strong> (<code>http://hostname/path</code>) is correct in the "Google Earth - Select Server" dialog box, which appears when you start EC:
+
+<ul>
+<li>The hostname should match the fully qualified domain name of your GEE Server.</li>
+<li>The path in the URL should match the <strong>Publish Point</strong> shown in the GEE Server UI. This path indicates the location where the database was published.</li>
+</ul>
+</li>
+<li>Look for client EC requests in the GEE Server logs:
+<ol>
+<li>Open a terminal window on the GEE Server.</li>
+<li>Type the command <code>tail -f /opt/google/gehttpd/logs/access_log</code></li>
+<li>Start EC and try connecting to your GEE Server.<br/>
+<br/>
+In the terminal window, you should see time-stamped access requests in the logs from the client, starting with a GET request for the <code>dbRoot</code> file, followed by <code>flatfile</code> requests—for example:<br/>
+<br/>
+<code>192.168.1.199 - - [08/Feb/2016:09:10:25 -0800] "GET /3d/dbRoot.v5?hl=en&amp;gl=us&amp;output=proto&amp;cv=7.1.5.1557&amp;ct=ec HTTP/1.1" 200 4512 "-" "GoogleEarth/7.1.5.1557(Windows;Microsoft Windows (6.2.9200.0);en;kml:2.2;client:EC;type:default)" 192.168.1.199 - - [08/Feb/2016:09:10:27 -0800] "GET /3d/dbRoot.v5?db=tm&amp;hl=en&amp;gl=us&amp;output=proto&amp;cv=7.1.5.1557&amp;ct=ec HTTP/1.1" 200 1161 "-" "GoogleEarth/7.1.5.1557(Windows;Microsoft Windows (6.2.9200.0);en;kml:2.2;client:EC;type:default)"</code><br/>
+<br/>
+<code>192.168.1.199 - - [08/Feb/2016:09:10:27 -0800] "GET /3d/flatfile?lf-0-icons/help_l.png&amp;h=32 HTTP/1.1" 200 426 "-" "GoogleEarth/7.1.5.1557(Windows;Microsoft Windows (6.2.9200.0);en;kml:2.2;client:EC;type:default)"</code><br/>
+<br/>
+​If no new entries appear in the logs, then EC was unable to establish a connection to the GEE Server. This may be due to a network or firewall problem, as described in the next step.</li>
+</ol>
+</li>
+<li>Verify network connectivity from EC to the GEE Server:
+<ul>
+<li>The firewall on the host might be blocking outbound connections - Please check your firewall.
+Also, you can use tools such as Wireshark or <a href="http://www.telerik.com/fiddler" target="_blank">Fiddler</a> to capture HTTP traffic on your computer and confirm that EC is sending requests to the GEE Server.</li>
+<li>The firewall on the GEE Server might be blocking inbound connections from external hosts on port 80. Check whether firewalls like <code>iptables</code> are enabled on the server and are configured with packet-filtering rules.</li>
+<li>Network or web proxies might be causing connection issues. Consult your network administrator.</li>
+<li>Use tools such as <code>ping</code> or <code>traceroute</code> on the client machine to diagnose connectivity issues.</li>
+</ul>
+</li>
+</ol>
+<div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Set up HTTPS</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 172814.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/173056.html">Ports</a></p>
+<p class="sidebar-toc"><a href="../answer/172794.html">Server hostname</a></p>
+<p class="sidebar-toc"><a href="../answer/6080928.html">Configure GEE Server 5.1.0 for SSL/HTTPS</a></p>
+<p class="sidebar-toc"><a href="../answer/2848305.html">PostgreSQL authentication</a></p>
+<p class="sidebar-toc"><a href="../answer/2760544.html">Configure a GEE virtual host for LDAP authentication</a></p>
+<p class="sidebar-toc"><a href="../answer/172814.html" class="current-file">Set up HTTPS</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | GEE Server configuration and security</h1>
+<h2>Set up HTTPS</h2>
+<p>If you've set up SSL/HTTPS configurations on your GEE server, you can also set up a secure Fusion server for your browser-based maps.</p>
+<div class="alert">
+The following procedure is applicable only to release 4.x and previous versions of GEE. For <strong>GEE release 5.x</strong>, see <a href="../answer/6080928.html">Configure GEE Server for SSL/HTTPS</a>.
+</div>
+<h3>To set up an HTTPS virtual server for Fusion:</h3>
+<ol>
+<li>
+<p>Verify that you've already set up SSL/HTTPS configurations on your GEE server.</p>
+</li>
+<li>Create an HTTPS-compatible virtual server:
+<p><code>geserveradmin --stream_server_url http://myserver.org --server_type stream --addvs https_2d --vstype map --vscachelevel 1 --vsurl https://myserver.org/mymap</code></p>
+</li>
+<li>Copy and save the <code>Include</code> statement from <code>geserveradmin</code>. Later, you'll add that to the configuration file. It will look something like:
+<p><code>Include conf.d/virtual_servers/runtime/mymap_runtime</code></p>
+</li>
+<li>Copy a configuration file from the <code>examples</code> folder:<br/>
+<p><code>cp /opt/google/share/gehttpd/examples/  /opt/google/gehttpd/conf.d/virtual_servers/https_mymap.location</code></p>
+</li>
+<li>Edit the <code>https_mymap.location</code> file, insert the <code>Include</code> statement you copied and saved, and update the LOCATION tags to the real virtual server:<br/>
+<p><code>r...@fusion.localhost.org:/opt/google/gehttpd/conf.d/virtual_servers<br/>
+# cat https_2d.location # This is an example of a location-based map virtual server<br/>
+# Substitute appropriate values in the following variables<br/>
+# 1. &lt;LOCATION&gt; : The new location name.<br/>
+# 2. &lt;VS_NAME&gt; : The virtual server name used to create the virtual<br/>
+# server with geserveradmin<br/>
+<br/>
+RewriteRule ^/mymap$ /mymap/ [R] RewriteRule ^/mymap/$ /maps/fusionmaps_local.html [PT] RewriteRule ^/mymap/mapfiles/(.*)$ /maps/mapfiles/$1 [PT]<br/>
+<br/>
+&lt;Location "/mymap/*"&gt;<br/>
+SetHandler gedb-handler<br/>
+Include conf.d/virtual_servers/runtime/https_2d_runtime<br/>
+SSLRequireSSL<br/>
+SSLVerifyClient none<br/>
+&lt;/Location&gt;</code></p>
+</li>
+<li>Modify the <code>/opt/google/gehttpd/conf/extra/httpd-ssl.conf</code> file so that the <code>/opt/google/gehttpd/conf.d/virtual_server/https_2d.location</code> file and the virtual server are loaded by the HTTPS/443 virtual host and not the HTTP/80 virtual host:<br/>
+<p><code>(vi /opt/google/gehttpd/conf/extra/httpd-ssl.conf...)<br/>
+&lt;snip&gt;<br/>
+... &lt;VirtualHost _default_:443&gt;<br/>
+# General setup for the virtual host<br/>
+DocumentRoot "/opt/google/gehttpd/htdocs"<br/>
+ServerName myserver.org:443<br/>
+<br/>
+ServerAdmin administra...@myserver.org<br/>
+ErrorLog "/opt/google/gehttpd/logs/error_log"<br/>
+TransferLog "/opt/google/gehttpd/logs/access_log"<br/>
+Include conf.d/virtual_servers/https_2d.location<br/>
+...<br/>
+&lt;snip&gt;</code></p>
+</li>
+<li>Edit the HTTP/port 80 virtual host to load only the HTTP-available virtual servers:<br/>
+<p><code>(vi /opt/google/gehttpd/conf.d/gemodules.conf)</code></p>
+</li>
+<li>Comment out the <code>Include .. *.location</code> line and manually list the included location files so that the <code>https2d.location</code> file is excluded:<br/>
+<p><code>LoadModule gedb_module /opt/google/gehttpd/modules/mod_gedb.so<br/>
+<br/>
+NameVirtualHost *:80<br/>
+&lt;VirtualHost *:80&gt;<br/>
+# You should specify a ServerName in each VirtualHost declaration<br/>
+# to avoid unnecessary DNS lookups.<br/>
+# For example, ServerName www.mycompany.com<br/>
+<br/>
+# Redirect the home page to display the GE logo<br/>
+Include conf.d/index_rewrite<br/>
+Include conf.d/jkmount<br/>
+<br/>
+# Include all location-based virtual servers<br/>
+# Include conf.d/virtual_servers/*.location (Comment out this line.)<br/>
+Include conf.d/virtual_servers/default_ge.location (Add this line.)<br/>
+Include conf.d/virtual_servers/default_map.location (Add this line.)<br/>
+Include conf.d/virtual_servers/default_search.location (Add this line.)<br/>
+&lt;/VirtualHost&gt;</code></p>
+</li>
+<li>Save the file and restart the GEE Server software:<br/>
+<p><code>/etc/init.d/ geserver restart</code></p>
+<p>This separates the HTTP and HTTPS virtual servers from the Apache software so that unencrypted and encrypted data can be hosted from both.</p>
+<p><strong>Note</strong>: The firewall blocks external port 80 / HTTP connections, but the Publisher tool must use the HTTP port to upload information, even if this your system only allows this internally.</p>
+</li>
+<li>
+<p>Create a Fusion server association for the new <strong>https2d</strong> virtual server. Use <code>http://myserver.org</code> for the URL for both Stream and Search URLs, then press the <strong>Query</strong> button and select the correct https2d virtual server from the drop-down list.</p>
+</li>
+<li>
+<p>Save the new server association, then publish a 2D database to the virtual server.</p>
+</li>
+</ol>
+<h2>Listing registered virtual stream servers</h2>
+<p>To avoid confusion or conflict between http:// and https:// addresses, you can use <code>geserveradmin</code> parameters like the <code>-- stream_server_url http://myserver.org</code> option that lists registered virtual stream servers. For example, instead of using the <code>geserveradmin --listvss</code> command alone, you can use <code>geserveradmin --stream_server_url http://myserver.org --listvss</code>.</p>
+<h2>Binding Apache to port 80</h2>
+<p>You need HTTP to facilitate all <code>geserveradmin</code> work, including publishes, so make sure that your <code>gehttpd.conf</code> configuration file lets Apache bind to port 80. You can allow internal access to HTTP even if you block external access to HTTP ports. This lets the Publisher tool maintain the GEE Server software while you disallow external unencrypted data communications.</p><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>
