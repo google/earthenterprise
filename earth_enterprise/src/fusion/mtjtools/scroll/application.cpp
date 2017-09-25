@@ -105,7 +105,7 @@ void ApplicationWindow::loadInitImage(const std::string &image_file_path) {
 void ApplicationWindow::choose()
 {
   QFileDialog *fdlg = new QFileDialog(prevDir, QString::null, this);
-  fdlg->addFilter("Images (*.pre *.img *.tif *.jp2 *.sid *.jpg *.IMG *.TIF *.JP2 *.SID *.JPG)");
+  fdlg->addFilter("Images (*.pre *.img *.tif *.tiff *.jp2 *.sid *.jpg *.IMG *.TIF *.TIFF *.JP2 *.SID *.JPG)");
   if (fdlg->exec() == QDialog::Accepted) {
     prevDir = fdlg->dirPath();
     load(fdlg->selectedFile());
