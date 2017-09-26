@@ -15,8 +15,8 @@ earth_enterprise/tutorial/FusionTutorial/KML
 .settings
 
 # QT Creator project files
-earthenterprise.config
-earthenterprise.creator
-earthenterprise.creator.user
-earthenterprise.files
-earthenterprise.includes
+/*.config
+/*.creator
+/*.creator.user
+/*.files
+/*.includes
