@@ -16,7 +16,7 @@ before_script:
 script:
   - scons -j3 release=1 build > build.log
   - cd src/NATIVE-REL-x86_64/bin/tests
-  - ./RunAllTests.pl
+  - travis_wait 20 ./RunAllTests.pl
 
 notifications:
   slack: opengee:YjzzzTnc7pgITPsrQPATIGwc
