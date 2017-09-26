@@ -70,7 +70,6 @@ sudo yum install git-lfs
 To obtain GCC 4.8 on RHEL, you must install the "Development Tools" from RHSM: 
 ```
 sudo yum --setopt=group_package_types=mandatory,default,optional groupinstall "Development Tools"
-sudo yum install -y devtoolset-2-toolchain 
 ```
 
 
