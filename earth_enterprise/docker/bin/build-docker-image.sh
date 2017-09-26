@@ -44,14 +44,12 @@ docker run --cap-add=DAC_READ_SEARCH --name="$STAGE_1_CONTAINER_NAME" \
 if is_string_false "$FLATTEN_IMAGE"; then
     echo "$SELF_NAME: Committing Docker image."
     docker commit "$STAGE_1_CONTAINER_NAME" "$OUTPUT_IMAGE_NAME"
-    docker stop "$STAGE_1_CONTAINER_NAME"
 else
     echo "$SELF_NAME: Flattening Docker image."
     docker export "$STAGE_1_CONTAINER_NAME" | docker import - "$STAGE_2_IMAGE_NAME"
-    STAGE_2_CONTAINER_ID=$(docker run -d "$STAGE_2_IMAGE_NAME" /root/opengee/bin/spin.sh)
+    STAGE_2_CONTAINER_ID=$(docker run -d "$STAGE_2_IMAGE_NAME" /bin/bash)
     docker commit --change="CMD /root/opengee/bin/start-servers.sh" \
         "$STAGE_2_CONTAINER_ID" "$OUTPUT_IMAGE_NAME"
-    docker stop "$STAGE_2_CONTAINER_ID"
 fi
 
 echo "Open GEE Docker image built: $OUTPUT_IMAGE_NAME"
