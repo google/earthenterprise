@@ -11,9 +11,7 @@ sudo yum install epel-release
 ### RHEL 7  
 
 ```
-sudo subscription-manager repos --enable=rhel-7-server-extras-rpms
-sudo subscription-manager repos --enable=rhel-7-server-optional-rpms
-sudo yum install -y epel-release
+sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 ```    
 
 ### CentOS 6 
