@@ -9,16 +9,16 @@ before_install:
 - sudo apt-get update -qq
 - sudo apt-get install -qq libperl4-corelibs-perl libtool xorg-dev doxygen python-dev alien swig libgtest-dev libstdc++6 libxml2-dev gettext libxinerama-dev libxft-dev libxrandr-dev libxcursor-dev libgdbm-dev libc6 libc6-dev libmng-dev zlib1g-dev libcap-dev libpng12-0 libpng12-dev freeglut3-dev flex libx11-dev bison++ bisonc++ libjpeg-dev libjpeg8-dev python2.7 python2.7-dev python2.7-psycopg2 libogdi3.2-dev libgif-dev libxerces-c-dev libgeos-dev libgeos++-dev libfreetype6 libfreetype6-dev python-imaging libproj-dev python-setuptools libgif-dev libxerces-c-dev libcap-dev libpq-dev openssl libxml2-utils libxmu-dev
 
-script: skip
+script: echo "Running build..."
 
 jobs:
   include:
     - stage: gee build
-    - script: 
-      - cd earth_enterprise
-      - scons -j3 release=1 build > build.log
+      script: 
+        - cd earth_enterprise 
+        - scons -j3 release=1 build > build.log
     - stage: gee-test
-    - script:
+      script:
       - cd earth_enterprise/src/NATIVE-REL-x86_64/bin/tests
       - travis_wait 20 ./RunAllTests.pl
 
