@@ -15,9 +15,9 @@ before_script:
 
 jobs:
   include:
-    - stage: build
+    - stage: gee-build
     - script: scons -j3 release=1 build > build.log
-    - stage: test
+    - stage: gee-test
     - script:
       - cd src/NATIVE-REL-x86_64/bin/tests
       - travis_wait 20 ./RunAllTests.pl
