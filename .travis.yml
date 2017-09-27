@@ -13,10 +13,14 @@ before_install:
 before_script:
   - cd earth_enterprise
 
-script:
-  - scons -j3 release=1 build > build.log
-  - cd src/NATIVE-REL-x86_64/bin/tests
-  - travis_wait 20 ./RunAllTests.pl
+jobs:
+  include:
+    - stage: build
+    - script: scons -j3 release=1 build > build.log
+    - stage: test
+    - script:
+      - cd src/NATIVE-REL-x86_64/bin/tests
+      - travis_wait 20 ./RunAllTests.pl
 
 notifications:
   slack: opengee:YjzzzTnc7pgITPsrQPATIGwc
