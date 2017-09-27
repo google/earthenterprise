@@ -1,12 +1,15 @@
 name: google earth enterprise
 githuburl: https://github.com/google/earthenterprise/
 githubWikiUrl: https://github.com/google/earthenterprise/wiki/
+releasesUrl: https://github.com/google/earthenterprise/releases
+
 #markdown: redcarpet
+
 #highlighter: pygments
 excerpt_separator: <!--more-->
 
 gems:
   - jekyll-paginate
 
-paginate: 3
+paginate: 1
 paginate_path: "blog/page:num"

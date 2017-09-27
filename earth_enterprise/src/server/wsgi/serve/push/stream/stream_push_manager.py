@@ -112,14 +112,14 @@ class StreamPushManager(stream_manager.StreamManager):
       logger.warning("Cleanup has not been run.")
       registered_portables = [
           {"name": db_name,
-           "path": "{}{}".format(
+           "path": "{0}{1}".format(
                stream_manager.StreamManager.CUTTER_GLOBES_PATH,
                db_name)} for db_name in results]
       http_io.ResponseWriter.AddBodyElement(
           response, constants.HDR_DATA, json.dumps(registered_portables))
       http_io.ResponseWriter.AddBodyElement(
           response, constants.HDR_STATUS_MESSAGE,
-          "No portable files in directory {}."
+          "No portable files in directory {0}."
           " Volume may not be mounted.".format(
               stream_manager.StreamManager.CUTTER_GLOBES_PATH))
       http_io.ResponseWriter.AddBodyElement(
@@ -132,7 +132,7 @@ class StreamPushManager(stream_manager.StreamManager):
       (db_path, db_type) = serve_utils.IdentifyPublishedDb(db_name)
       assert serve_utils.IsPortable(db_type)
 
-      publish_db_path = "{}{}".format(
+      publish_db_path = "{0}{1}".format(
           stream_manager.StreamManager.CUTTER_GLOBES_PATH, db_path)
 
       if not os.path.exists(publish_db_path):
@@ -491,7 +491,7 @@ class StreamPushManager(stream_manager.StreamManager):
     if db_id == 0:
       raise exceptions.StreamPushServeException(
           "HandleDeleteDbRequest: Could not find database: "
-          "Fusion host: {} Database name: {}.".format(
+          "Fusion host: {0} Database name: {1}.".format(
               client_host_name, db_path))
 
     # Check if the database is currently published.

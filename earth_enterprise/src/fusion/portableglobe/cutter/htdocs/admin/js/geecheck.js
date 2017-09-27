@@ -110,6 +110,18 @@ var geecheck = {
 
     // Iterate over all the tests and create UI elements for each.
     for (var testType in testData) {
+      // Check for test suite directories that weren't run:
+      if (typeof testData[testType] !== 'object' || !testData[testType])
+      {
+        geecheck.renderResultSummary({
+            description: '<i>Test suite disabled, or not found!</i>',
+            status: 'SKIPPED',
+            test: testType + '/'
+          }, summaryDiv);
+        continue;
+      }
+
+      // Report results of performed tests:
       var results = testData[testType].test_results;
       if (results.length > 0) {
         for (var i = 0; i < results.length; i++) {

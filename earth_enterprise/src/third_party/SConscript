@@ -100,10 +100,13 @@ if third_party_env['is_hardy'] and not third_party_env['native_cc']:
       'rm -f $$tmp_nam\n'
       'exit $$status\n' % (our_lib, env.exportdirs['root']))
 else:
-  if third_party_env['is_hardy']:
+  if third_party_env['cc_dir']:
+    bin_path = third_party_env['cc_dir']
+  elif third_party_env['is_hardy']:
     bin_path = '/usr/bin'
   else:
     bin_path = '%s/bin' % env['optdir']
+
   third_party_env['ENV']['CC'] = '%s/gcc %s %s' % (bin_path, cflags, lflags)
   third_party_env['ENV']['CXX'] = '%s/g++ %s %s' % (bin_path, cflags, lflags)
   cc_template = (

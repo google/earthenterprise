@@ -32,9 +32,9 @@ class Error(Exception):
     """
     if error_prefix:
       return utils.HtmlEscape(
-          "{}: {}".format(error_prefix, str("\n".join(self.args))))
+          "{0}: {1}".format(error_prefix, str("\n".join(self.args))))
     else:
-      return utils.HtmlEscape("Error: {}".format(str("\n".join(self.args))))
+      return utils.HtmlEscape("Error: {0}".format(str("\n".join(self.args))))
 
   def __str__(self):
     return self.ToString("Error")

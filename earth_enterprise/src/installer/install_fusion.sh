@@ -250,7 +250,7 @@ check_prereq_software()
 		check_prereq_software_retval=1
 	fi
 
-	if ! software_check "$script_name" "python2.7" "python-2.7.*"; then
+	if ! software_check "$script_name" "python2.[67]" "python-2.[67].*"; then
 		check_prereq_software_retval=1
 	fi
 
@@ -608,7 +608,7 @@ copy_files_to_target()
 	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -rf $TMPINSTALLDIR/common/opt/google/gepython $BASEINSTALLDIR_OPT
 	if [ $? -ne 0 ]; then error_on_copy=1; fi
-	cp -rf $TMPINSTALLDIR/manual/opt/google/share/doc/manual $BASEINSTALLDIR_OPT/share/doc
+	cp -rf $TMPINSTALLDIR/manual/opt/google/share/doc/manual/ $BASEINSTALLDIR_OPT/share/doc
 	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	
 	cp -f $TMPINSTALLDIR/fusion/etc/profile.d/ge-fusion.csh $BININSTALLPROFILEDIR
@@ -702,9 +702,9 @@ compare_asset_root_publishvolume()
     local compare_assetroot_publishvolume_retval=0
 
     if [ -f "$BASEINSTALLDIR_OPT/gehttpd/conf.d/stream_space" ]; then
-		PUBLISH_ROOT_VOLUME="$(‘cut -d' ' -f3 /opt/google/gehttpd/conf.d/stream_space | cut -d'/' -f2 | $NEWLINECLEANER)"
+		PUBLISH_ROOT_VOLUME="$(cut -d' ' -f3 /opt/google/gehttpd/conf.d/stream_space | cut -d'/' -f2 | $NEWLINECLEANER)"
 
-        if [-d "$ASSET_ROOT" ] && [ -d "$PUBLISH_ROOT_VOLUME" ]; then
+        if [ -d "$ASSET_ROOT" ] && [ -d "$PUBLISH_ROOT_VOLUME" ]; then
             VOL_ASSETROOT=$(df $ASSET_ROOT | grep -v ^Filesystem | grep -Eo '^[^ ]+')
             VOL_PUBLISHED_ROOT_VOLUME=$(df $PUBLISH_ROOT_VOLUME | grep -v ^Filesystem | grep -Eo '^[^ ]+')
             

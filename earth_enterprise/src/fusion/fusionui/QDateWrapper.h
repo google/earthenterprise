@@ -97,6 +97,9 @@ private:
   // to associate them to the parent dialog.
   void SetDateValidators(QObject* parent);
 
+  // Indicates whether this date has a valid time component
+  bool TimeIncluded() const;
+
   QLineEdit* year_edit_;
   QLineEdit* month_edit_;
   QLineEdit* day_edit_;

@@ -52,12 +52,16 @@ ExtraPixelsImpl::ExtraPixelsImpl(
 TmeshWorkItem::TmeshWorkItem(PacketFileWriter &_writer,
                              const AttributionByExtents &_attributions,
                              const khTilespaceFlat& _sampleTilespace,
-                             bool decimate):
+                             bool decimate,
+                             double decimation_threshold):
     writer(_writer),
     attributions(_attributions),
     sampleTilespace(_sampleTilespace),
     numPiecesUsed(0),
-    generator(sampleTilespace, decimate) {
+    generator(sampleTilespace),
+    decimate_(decimate),
+    decimation_threshold_(decimation_threshold) {
+
   uint ratio = RasterProductTilespaceBase.tileSize / sampleTilespace.tileSize;
   uint totalPieces = ratio * ratio;
   pieces.reserve(totalPieces);
@@ -91,7 +95,10 @@ void TmeshWorkItem::DoWork(TmeshPrepItem *prep) {
                           subcol * sampleTilespace.tileSize),
          piece->targetAddr,
          piece->compressed,
-         kCRC32Size /* reserve size */);
+         kCRC32Size            /* reserve size */,
+         decimate_,            /* do we decimate? */
+         decimation_threshold_ /* decimation error threshold */ 
+        );
     }
   }
 }
@@ -135,7 +142,7 @@ static const khTilespace& BuildSampleTilespace(uint tileSize,
 
 TmeshPackgenTraverser::TmeshPackgenTraverser(
     const PacketLevelConfig &cfg, geFilePool &file_pool_,
-    const std::string &output)
+    const std::string &output, double decimation_threshold)
     : BaseClass(
         cfg, output,
         TranslateLevelCoverage(BuildSampleTilespace(cfg.sampleSize,
@@ -150,6 +157,13 @@ TmeshPackgenTraverser::TmeshPackgenTraverser(
       writer_(file_pool_, output, true /* overwrite */),
       extra_cache_(20000 /* apx 160M */),
       not_covered_tiles_exist_(false) {
+
+  if((decimation_threshold <= 0.0) || (config.decimate == false)) {
+    decimate_ = false;
+  } else {
+    decimation_threshold_ = decimation_threshold;
+    decimate_ = true;
+  }
   notify(NFY_NOTICE, "Generating %u Tmeshes (4 @ %ux%u) for level %u",
          cfg.coverage.extents.width() * cfg.coverage.extents.height(),
          sample_tilespace_.tileSize / 2 + 1,
@@ -158,7 +172,7 @@ TmeshPackgenTraverser::TmeshPackgenTraverser(
   notify(NFY_NOTICE, "    from %u heightmap tile(s)",
          productCoverage.extents.width() * productCoverage.extents.height());
   notify(NFY_NOTICE, "    %s",
-         config.decimate ? "with decimation" : "no decimation");
+         decimate_ ? "with decimation" : "no decimation");
 }
 
 void TmeshPackgenTraverser::Traverse(uint numcpus) {
@@ -187,7 +201,7 @@ TmeshPrepItem* TmeshPackgenTraverser::NewPrepItem(void) {
 
 TmeshWorkItem* TmeshPackgenTraverser::NewWorkItem(void) {
   return new TmeshWorkItem(writer_, attributions, sample_tilespace_,
-                           config.decimate);
+                           decimate_, decimation_threshold_);
 }
 
 

@@ -100,6 +100,12 @@ sgl_env.UpdateCppflagsForSkia()
 
 cxx_flags = sgl_env['CXXFLAGS']
 cxx_flags.remove('-Werror')
+
+# Position Independent Code is required on some platforms for generating
+# dynamically linked libraries.  For more info:
+# http://www.microhowto.info/howto/building_a_shared_library_using_gcc.html#idp25536
+cxx_flags.append('-fPIC')
+
 sgl_env['CXXFLAGS'] = cxx_flags
 sgl_env['CPPFLAGS'] += [
   '-DPNG_HANDLE_CHUNK_ALWAYS=3',

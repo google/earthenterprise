@@ -1,0 +1,72 @@
+---
+layout: default
+section_id: blog
+---
+{% assign num_posts = site.posts | size %}
+
+<!-- Remove the top padding but add in bottom padding -->
+<div class='full white' style="padding:0; padding-bottom:10px;">
+  <!-- Blog entries sit in a single row -->
+  <div class='row'>
+    <!-- Create the Title of the page -->
+    <div class="special-title centered-text">
+      <h2>The Latest in Open GEE</h2>
+      <!-- Add in a small seperator -->
+      <p class="shortline"/>
+    </div>
+    <!--  The main div contains the width of the entire page -->
+    <div class='medium-12'>
+      <!-- The post content resides in the left 75% of the page -->
+      <div class='medium-9 columns'>
+        <!-- Add in the Post Header content -->
+        <div class='post'>
+          <!-- Create a nice timestamp icon -->
+          <div class='timestamp left text-center'>
+            <span class='month'>{{ page.date | date: "%h" }}</span>
+            <span class='date'>{{ page.date | date: "%d" }}</span>
+            <!--  Reuse the month formatting to add the year to the post-->
+            <span class='month'>{{ page.date | date: "%Y" }}</span>
+          </div>
+          <!-- Adds the title of the page, thumbnail and author -->
+          <div class='info'>
+            <h3 class='regularText'>
+              {{ page.title }}
+            </h3>
+            {% if page.thumbnail %}
+              <img src="{{ site.baseurl}}/images/{{page.thumbnail}}" height="75" width="75">
+            {% endif %}
+            <p>
+              By
+              <span class='author'>{{ page.author }}</span>
+            </p>
+          </div>
+        </div>
+        <!-- This is the actual content of the post -->
+        <div class="content">
+          {{ content }}
+        </div>
+      </div>
+      <!-- Only display the all Posts section if there are >1 posts -->
+      {% if num_posts > 1 %}
+        <!-- The all posts navigator sits in the right 25% -->
+        <div class='medium-3 columns medium-uncentered opposite darkBorder'>
+          <div>
+            <h3 class='regularText'> All Posts </h3>
+            <ul>
+              {% for post in site.posts %}
+                <li>
+                  <!-- If the current post is being displayed, do not link it -->
+                  {% if post.title == page.title %}
+                    {{post.title}}
+                  {% else %}
+                    <a href="{{ site.url }}{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>

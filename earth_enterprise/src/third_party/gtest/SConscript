@@ -27,7 +27,6 @@ if not conf.CheckLib('gtest'):
 
 env = conf.Finish()
 
-
 # Build libgtest as a shared library. If we make gtest static it forces all
 # executables linked against it to link statically and that messes up the
 # transitive dynamic lib includes that we get for free when we link

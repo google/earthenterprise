@@ -143,7 +143,7 @@ check_prereq_software()
     check_prereq_software_retval=1
   fi
 
-  if ! software_check "$script_name" "python2.7" "python-2.7.*"; then
+  if ! software_check "$script_name" "python2.[67]" "python-2.[67].*"; then
     check_prereq_software_retval=1
   fi
 
@@ -474,9 +474,9 @@ modify_files()
   sed -i "s/IA_GEPGUSER/$GEPGUSER_NAME/" /opt/google/gehttpd/conf/gehttpd.conf
   sed -i "s/IA_GEGROUP/$GRPNAME/" /opt/google/gehttpd/conf/gehttpd.conf
 
-  # c) Create a new file ‘/etc/opt/google/fusion_Server_version’ and
+  # c) Create a new file ‘/etc/opt/google/fusion_server_version’ and
   # add the below text to it.
-  echo $LONG_VERSION > /etc/opt/google/fusion_Server_version
+  echo $LONG_VERSION > /etc/opt/google/fusion_server_version
 
   # d) Create a new file ‘/etc/init.d/gevars.sh’ and prepend the below lines.
   echo -e "GEAPACHEUSER=$GEAPACHEUSER_NAME\nGEPGUSER=$GEPGUSER_NAME\nGEFUSIONUSER=$GEFUSIONUSER_NAME\nGEGROUP=$GRPNAME" > $BININSTALLROOTDIR/gevars.sh
@@ -545,6 +545,8 @@ fix_postinstall_filepermissions()
   chmod ugo+x /opt/google/share/support/geecheck/convert_to_kml.pl
   chmod ugo+x /opt/google/share/support/geecheck/find_terrain_pixel.pl
   chmod ugo+x /opt/google/share/support/geecheck/pg_check.pl
+  # Note: this is installed in install_fusion.sh, but needs setting here too.
+  chmod ugo+x $BASEINSTALLDIR_OPT/share/tutorials/fusion/download_tutorial.sh
   chown -R root:root /opt/google/share
 
   #TODO

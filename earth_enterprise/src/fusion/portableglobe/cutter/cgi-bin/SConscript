@@ -30,7 +30,7 @@ cgi_env = env.Clone()
 
 root_dir = Dir(cgi_env.exportdirs['root']).abspath
 python_bin = cgi_env['python_bin']
-compiler_cmd = '%s -m compileall -f' % python_bin
+compiler_cmd = '%s -m py_compile' % python_bin
 cgi_src_path = Dir('#/fusion/portableglobe/cutter/cgi-bin').abspath
 
 # List of directories to be compiled for installer.
@@ -47,8 +47,6 @@ if 'build_py' in COMMAND_LINE_TARGETS:
         python_file = os.path.join(py_dir_abspath, file)
         # Create '*.pyc' for the python file.
         command_line = '%s %s' % (compiler_cmd, python_file)
-        print "hello there"
-        print command_line
         args = shlex.split(command_line)
         subprocess.Popen(args)
 

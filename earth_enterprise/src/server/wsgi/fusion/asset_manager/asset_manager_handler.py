@@ -33,7 +33,7 @@ class AssetManagerHandler(object):
   def HandleListAssetsRequest(self, request, response):
     cmd = request.GetParameter(constants.CMD)
     raise exceptions.AssetManagerServeException(
-        "Not supported command: {}.".format(cmd))
+        "Not supported command: {0}.".format(cmd))
 
 
 def main():

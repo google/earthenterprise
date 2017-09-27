@@ -227,7 +227,7 @@ QFileDialog* RasterAssetWidget::FileDialog() {
       supported_files_filter += " *.jp2 *.JP2";
     if (is_mrsid_found)
       supported_files_filter += " *.sid *.SID";
-    supported_files_filter += " *.img *.IMG *.tif *.TIF )";
+    supported_files_filter += " *.img *.IMG *.tif *.TIF *.tiff *.TIFF )";
     file_dialog_->addFilter(supported_files_filter);
 
     if (add_dem_file_filter)
@@ -237,7 +237,7 @@ QFileDialog* RasterAssetWidget::FileDialog() {
     if (is_mrsid_found)
       file_dialog_->addFilter("MrSID ( *.sid *.SID )");
     file_dialog_->addFilter("Erdas Imagine ( *.img *.IMG )");
-    file_dialog_->addFilter("TIFF/GeoTIFF ( *.tif *.TIF )");
+    file_dialog_->addFilter("TIFF/GeoTIFF ( *.tif *.TIF *.tiff *.TIFF )");
 
     // Make the second filter current, which is the "Supported images" one.
     // The first one is the default "All Files (*)".
