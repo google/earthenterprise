@@ -22,7 +22,7 @@ jobs:
         - cd earth_enterprise/src 
         - if [ -f $HOME/third_party.tgz ]; then tar xvf $HOME/third_party.tgz yes; fi
         - scons -j3 release=1 third_party > build.log
-        - tar cvfz $HOME/third_party.tgz NATIVE-REL-x86_64]
+        - tar cvfz $HOME/third_party.tgz NATIVE-REL-x86_64
     - stage: build fusion and test
       script:
         - cd earth_enterprise/src 
