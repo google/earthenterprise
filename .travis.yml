@@ -11,16 +11,26 @@ before_install:
 
 script: echo "Running build..."
 
+cache:
+  files:
+    $HOME/third_party.tgz
+
 jobs:
   include:
-    - stage: gee build
+    - stage: build third party
       script: 
-        - cd earth_enterprise 
-        - scons -j3 release=1 build > build.log
-    - stage: gee-test
+        - cd earth_enterprise/src 
+        - if [ -f $HOME/third_party.tgz ]; then tar xvf $HOME/third_party.tgz yes; fi
+        - scons -j3 release=1 third_party > build.log
+        - tar cvfz $HOME/third_party.tgz NATIVE-REL-x86_64]
+    - stage: build fusion and test
       script:
-      - cd earth_enterprise/src/NATIVE-REL-x86_64/bin/tests
-      - travis_wait 20 ./RunAllTests.pl
+        - cd earth_enterprise/src 
+        - if [ -f $HOME/third_party.tgz ]; then tar xvf $HOME/third_party.tgz yes; fi
+        - cd ..
+        - scons -j3 release=1 build > build.log
+        - cd src/NATIVE-REL-x86_64/bin/tests
+        - travis_wait 20 ./RunAllTests.pl
 
 notifications:
   slack: opengee:YjzzzTnc7pgITPsrQPATIGwc
