@@ -218,8 +218,8 @@ if [ "$PACKAGE_MANAGER" == "yum" ]; then
 
         # Install development / build tools:
         yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
-            bzip2 doxygen gcc-c++ patch python-argparse python-setuptools \
-            swig || return 1
+            ant bzip2 doxygen gcc-c++ patch python-argparse \
+            python-setuptools swig tar || return 1
 
         # We need to use an alternative toolchain on RHEL 6 and Cent OS 6 to
         # get GCC 4.8+.  We need to make sure libgtest works with the
