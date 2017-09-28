@@ -168,10 +168,15 @@ If you want to build the Docker image yourself (perhaps, after customization),
 you can use the commands that follow.
 
 Make sure you have, at least, about 8.1 GB of free space to create a new GEE 
-Docker image.  You need slightly more than 6 GB of free space to build
+Docker image.  (You need slightly more than 6 GB of free space to build
 the Docker build image stages, and another 2+ GB to produce a flattened
 image.  You can remove the larger build images which contain Docker layer
-history after creating the flattened one.
+history after creating the flattened one.)
+
+Building a Docker image with Open GEE requires a Docker image with the GEE
+build environment for the platform you're building on.  The next section
+covers build environment images.  You'll need to read it, if you don't have a
+build environment image you can pull from a Docker registry.
 
 To build the two stages of images with layer history, and flattened final
 image:
@@ -186,6 +191,9 @@ default name used for the final Docker image.  You can use the
 `STAGE_1_NAME` to set whether to build from a clean clone of the GEE
 repository, or from you current clone, and `CLEAN_CLONE_BRANCH` to build from
 the most recent commit on a given Git branch when building a clean clone.
+
+Have a look at the files under the `config` directory for a more convenient
+way of setting build variables.
 
 ### Examples:
 
@@ -221,6 +229,11 @@ OS_DISTRIBUTION=centos-7 CLEAN_CLONE_URL=https://github.com/unameit/earthenterpr
 
 The Dockerfiles used by the `build-docker-image.sh` script require Docker
 images with build environments for each platform you are trying to build on.
+
+The build environment image is reused every time you rebuild Open GEE.  This
+should save you time during normal development targetting another platform,
+since only the steps of transferring the modified source code, and running the
+Open GEE build would need to be repeated.
 
 Normally, a build environment image for each supported platform should be
 published to Docker cloud, so one would be downloaded when you try to build,
