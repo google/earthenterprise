@@ -5,7 +5,7 @@
 # Avoid displaying the values of some variables:
 # --[ TST-Dockerfile: required-password-vars=REDHAT_PASSWORD ]--
 
-FROM registry.access.redhat.com/rhel:7.3
+FROM registry.access.redhat.com/rhel:7.4
 
 # Copy shell scripts to /root/bin in the Docker container:
 RUN mkdir -p /root/opengee/bin
