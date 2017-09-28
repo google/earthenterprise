@@ -251,6 +251,19 @@ used for the final platform images are looking for images with the default
 image name tags.
 
 
+#### Recovering a RHEL Subscription for a Deleted Image
+
+If a build on RHEL fails during package building and installation, the build
+script may terminate while the RHEL installation in the Docker container is
+still registered with `subscription-manager`.  If you still have the layer of
+the terminated container, you can `commit` it to a new image, run a shell in
+it, and perform `subscription-manager unregister`.
+
+If you have already deleted the terminated container, you can log in the
+Red Hat portal online, and follow this answer to unsubscribe the deleted
+image: https://access.redhat.com/solutions/776723.
+
+
 
 ### Delete the Temporary Build Docker Images
 
@@ -272,3 +285,4 @@ docker login  # You should only need to do this once.
 docker tag opengee-experimental thermopylae/opengee-experimental
 docker push thermopylae/opengee-experimental
 ```
+
