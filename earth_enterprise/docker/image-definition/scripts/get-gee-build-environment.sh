@@ -123,7 +123,7 @@ clean_package_download_dir()
 
 install_wget()
 {
-    if ! type wget; then
+    if ! type wget >/dev/null 2>&1; then
         "$PACKAGE_MANAGER" install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER wget
     fi
 }
