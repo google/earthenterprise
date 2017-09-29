@@ -13,25 +13,25 @@ script: echo "Running build..."
 
 cache:
   timeout: 600
-  files:
-    - third_party.tgz
+  directories:
+    - cache
 
 jobs:
   include:
     - stage: build third party
       script: 
         - cd earth_enterprise/src 
-        - if [ -f $HOME/third_party.tgz ]; then tar xf $HOME/third_party.tgz; fi
-        - ls $HOME
+        - if [ -f $HOME/cache/third_party.tgz ]; then tar xf $HOME/third_party.tgz; fi
+        - ls $HOME/cache
         #- scons -j3 release=1 third_party > build.log
         - touch NATIVE-REL-x86_64
-        - tar cfz $HOME/third_party.tgz NATIVE-REL-x86_64
-        - ls $HOME
+        - tar cfz $HOME/cache/third_party.tgz NATIVE-REL-x86_64
+        - ls $HOME/cache
     - stage: build fusion and test
       script:
         - cd earth_enterprise/src 
-        - if [ -f $HOME/third_party.tgz ]; then tar xf $HOME/third_party.tgz; fi
-        - ls $HOME
+        - if [ -f $HOME/cache/third_party.tgz ]; then tar xf $HOME/cache/third_party.tgz; fi
+        - ls $HOME/cache
         - cd ..
         #- scons -j3 release=1 build > build.log
         - cd src/NATIVE-REL-x86_64/bin/tests
