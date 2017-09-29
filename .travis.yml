@@ -13,7 +13,7 @@ script: echo "Running build..."
 
 cache:
   files:
-    $HOME/third_party.tgz
+    third_party.tgz
 
 jobs:
   include:
