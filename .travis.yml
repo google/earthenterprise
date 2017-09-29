@@ -25,6 +25,7 @@ jobs:
         - ls $HOME/cache
         #- scons -j3 release=1 third_party > build.log
         - touch NATIVE-REL-x86_64
+        - mkdir -p $HOME/cache
         - tar cfz $HOME/cache/third_party.tgz NATIVE-REL-x86_64
         - ls $HOME/cache
     - stage: build fusion and test
