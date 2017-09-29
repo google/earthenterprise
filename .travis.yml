@@ -21,7 +21,7 @@ jobs:
     - stage: build third party
       script: 
         - cd earth_enterprise/src 
-        - if [ -f $HOME/cache/third_party.tgz ]; then tar xf $HOME/third_party.tgz; fi
+        - if [ -f $HOME/cache/third_party.tgz ]; then tar xf $HOME/cache/third_party.tgz; fi
         - scons -j3 release=1 third_party > build.log
         - mkdir -p $HOME/cache
         - tar cfz $HOME/cache/third_party.tgz NATIVE-REL-x86_64
