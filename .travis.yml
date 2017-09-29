@@ -22,14 +22,18 @@ jobs:
       script: 
         - cd earth_enterprise/src 
         - if [ -f $HOME/third_party.tgz ]; then tar xf $HOME/third_party.tgz; fi
-        - scons -j3 release=1 third_party > build.log
+        - ls $HOME
+        #- scons -j3 release=1 third_party > build.log
+        - touch NATIVE-REL-x86_64
         - tar cfz $HOME/third_party.tgz NATIVE-REL-x86_64
+        - ls $HOME
     - stage: build fusion and test
       script:
         - cd earth_enterprise/src 
         - if [ -f $HOME/third_party.tgz ]; then tar xf $HOME/third_party.tgz; fi
+        - ls $HOME
         - cd ..
-        - scons -j3 release=1 build > build.log
+        #- scons -j3 release=1 build > build.log
         - cd src/NATIVE-REL-x86_64/bin/tests
         - travis_wait 20 ./RunAllTests.pl
 
