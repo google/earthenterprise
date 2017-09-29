@@ -14,7 +14,7 @@ script: echo "Running build..."
 cache:
   timeout: 600
   directories:
-    - cache
+    - $HOME/cache
 
 jobs:
   include:
