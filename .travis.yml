@@ -12,21 +12,22 @@ before_install:
 script: echo "Running build..."
 
 cache:
+  timeout: 600
   files:
-    third_party.tgz
+    - third_party.tgz
 
 jobs:
   include:
     - stage: build third party
       script: 
         - cd earth_enterprise/src 
-        - if [ -f $HOME/third_party.tgz ]; then tar xf $HOME/third_party.tgz yes; fi
+        - if [ -f $HOME/third_party.tgz ]; then tar xf $HOME/third_party.tgz; fi
         - scons -j3 release=1 third_party > build.log
         - tar cfz $HOME/third_party.tgz NATIVE-REL-x86_64
     - stage: build fusion and test
       script:
         - cd earth_enterprise/src 
-        - if [ -f $HOME/third_party.tgz ]; then tar xf $HOME/third_party.tgz yes; fi
+        - if [ -f $HOME/third_party.tgz ]; then tar xf $HOME/third_party.tgz; fi
         - cd ..
         - scons -j3 release=1 build > build.log
         - cd src/NATIVE-REL-x86_64/bin/tests
