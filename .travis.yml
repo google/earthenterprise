@@ -22,6 +22,7 @@ jobs:
       script: 
         - cd earth_enterprise/src 
         - if [ -f $HOME/cache/third_party.tgz ]; then tar xf $HOME/cache/third_party.tgz; fi
+        - if [ -f $HOME/cache/third_party.tgz ]; then ls -a NATIVE-REL-x86_64; fi
         - scons -j3 release=1 third_party > build.log
         - mkdir -p $HOME/cache
         - tar cfz $HOME/cache/third_party.tgz NATIVE-REL-x86_64
@@ -29,6 +30,7 @@ jobs:
       script:
         - cd earth_enterprise/src 
         - if [ -f $HOME/cache/third_party.tgz ]; then tar xf $HOME/cache/third_party.tgz; fi
+        - if [ -f $HOME/cache/third_party.tgz ]; then ls -a NATIVE-REL-x86_64; fi
         - cd ..
         - scons -j3 release=1 build > build.log
         - cd src/NATIVE-REL-x86_64/bin/tests
