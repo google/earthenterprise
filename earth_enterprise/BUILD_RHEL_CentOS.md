@@ -11,9 +11,7 @@ sudo yum install epel-release
 ### RHEL 7  
 
 ```
-sudo subscription-manager repos --enable=rhel-7-server-extras-rpms
-sudo subscription-manager repos --enable=rhel-7-server-optional-rpms
-sudo yum install -y epel-release
+sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 ```    
 
 ### CentOS 6 
@@ -67,10 +65,8 @@ sudo yum install git-lfs
 
 ### CentOS 7 and RHEL 7
 
-To obtain GCC 4.8 on RHEL, you must install the "Development Tools" from RHSM: 
 ```
-sudo yum --setopt=group_package_types=mandatory,default,optional groupinstall "Development Tools"
-sudo yum install -y devtoolset-2-toolchain 
+yum install ant bzip2 doxygen gcc-c++ patch python-argparse python-setuptools swig tar
 ```
 
 
@@ -100,7 +96,7 @@ Execute:
 sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel python-devel perl-Alien-Packages  \
     openssl-devel libxml2-devel libXinerama-devel libXft-devel libXrandr-devel libXcursor-devel gdbm-devel   \
     libmng-devel libcap-devel libpng12-devel libXmu-devel freeglut-devel zlib-devel libX11-devel bison-devel  \
-    openjpeg-devel openjpeg2-devel geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel cmake rpm-build
+    openjpeg-devel openjpeg2-devel geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel cmake rpm-build rsync
 ```
 ### CentOS 6 and RHEL 6
 Execute: 
@@ -108,7 +104,7 @@ Execute:
 sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel python-devel perl-Alien-Packages  \
     openssl-devel libxml2-devel libXinerama-devel libXft-devel libXrandr-devel libXcursor-devel gdbm-devel   \
     libmng-devel libcap-devel libpng-devel libXmu-devel freeglut-devel zlib-devel libX11-devel bison-devel  \
-    openjpeg-devel openjpeg2-devel geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel cmake rpm-build
+    openjpeg-devel openjpeg2-devel geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel cmake rpm-build rsync
 ```
 If you get an error about git dependency conflicts, consider experimenting with the `--skip-broken` parameter.
 
