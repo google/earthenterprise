@@ -25,7 +25,7 @@ jobs:
         - if [ -f $HOME/cache/third_party.tgz ]; then ls -a NATIVE-REL-x86_64; fi
         - scons -j3 release=1 third_party > build.log
         - mkdir -p $HOME/cache
-        - tar cfz $HOME/cache/third_party.tgz NATIVE-REL-x86_64
+        - tar cfz $HOME/cache/third_party.tgz NATIVE-REL-x86_64 .sconsign.dblite .sconf_temp
     - stage: build fusion and test
       script:
         - cd earth_enterprise/src 
