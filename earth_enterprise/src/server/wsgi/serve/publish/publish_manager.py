@@ -468,7 +468,7 @@ class PublishManager(object):
     # Get snippets set name parameter.
     publish_def.snippets_set_name = request.GetParameter(
         constants.SNIPPET_SET_NAME)
-    logger.debug("Snippets set name: %s ", publish_def.snippet_set_name if
+    logger.debug("Snippets set name: %s ", publish_def.snippets_set_name if
                  publish_def.snippets_set_name else "not specified.")
 
     # Get search definition name parameter.
