@@ -25,43 +25,6 @@ class QListView;
 class QListViewItem;
 class ProjectLayerView;
 class LayerItemBase;
-/*
-class DecimationThresholdSetting : public QObject {
-    Q_OBJECT
- public:
-
-    DecimationThresholdSetting();
-
-    double GetDecimation() const {
-      return decimation_threshold;
-    }
-
- public slots:
-    void SetDecimation(double);
- signals:
-    void ValueChanged(double);
- private:
-    double decimation_threshold;
-};
-*/
-
-/*
-class DecimationThresholdSetting : public QObject {
-      Q_OBJECT
-
-  public:
-    DecimationThresholdSetting(){};
-    //~DecimationThresholdSetting();
-    //double GetDecimation() const;
-    double decimation() const { return decimation_threshold; } // for later
-  public slots:
-    void SetDecimation(double);
-  signals:
-    void ValueChanged(double);
-  private:
-    double decimation_threshold;
-};
-*/
 
 class ProjectWidget : public ProjectWidgetBase {
  public:

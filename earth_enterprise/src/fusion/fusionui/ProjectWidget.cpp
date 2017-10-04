@@ -246,72 +246,15 @@ void ProjectWidget::GenericCheckboxToggled(bool state) {
 void ProjectWidget::SetGenericCheckboxText(const QString& text) {
   generic_check->setText(text);
 }
-/*
-void ProjectWidget::AssembleEditRequest(
-    ProjectProductImportRequest* request) {
-
-  PacketLevelConfig config;
-
-  //decimation->setText(QString::number(request.config.decimation));
-  bool status = false;
-  request->config.decimation = decimation->text().toDouble(&status);
-  std::string decimation_error;
-  if(!status) {
-    decimation_error += "Bad value for decimation threshold '";
-    decimation_error += decimation->text().latin1();
-    decimation_error += "'\n";
-    throw khException(decimation_error);
-  }
-}
-*/
-
 
 #define MAX_DECIMATION 100
-/*
-DecimationThresholdSetting::DecimationThresholdSetting() { 
-  decimation_threshold = 0.009;
-} 
 
-DecimationThresholdSetting::~DecimationThresholdSetting(){
-  decimation_threshold = 0;
-}
-*/
-
-/*
-void DecimationThresholdSetting::SetDecimation(double decimation) {
-  PacketLevelConfig config;
-  bool status = false;
-
-  if(decimation >= 0 && decimation <= MAX_DECIMATION) {
-    status = true;
-    config.decimation = decimation;
-  }
-   if(!status) {
-    std::string decimation_error;
-    decimation_error += "Bad value for decimation threshold '";
-    // decimation_error += decimation.text().latin1();
-    decimation_error += (std::string)decimation_error;
-    decimation_error += "'\n";
-    //notify(NFY_WARN, decimation_error.c_str());
-    notify(NFY_DEBUG, "bad decimation value\n");
-    throw khException(decimation_error); 
-  }
-
-}
-
-void ProjectWidget::SetDecimation(double decimation) { 
-  DecimationThresholdSetting DecimationThreshold;
-  DecimationThreshold.SetDecimation(decimation);
-}
-*/
-
-//void ProjectWidget::SetDecimation(double decimation) {
 void ProjectWidget::SetDecimation(const QString& decimation) { 
 
   PacketLevelConfig config;
   bool status = false;
+  notify(NFY_DEBUG, "in SetDecimation line %d\n", __LINE__);
 
-  //decimation->setText(QString::number(request.config.decimation));
   double decimation_val = -1; 
   decimation_val = decimation.toDouble(); //decimation->text().toDouble(&status);
 
@@ -331,7 +274,9 @@ void ProjectWidget::SetDecimation(const QString& decimation) {
 
   else {
      config.decimation = decimation_val;
+     notify(NFY_DEBUG, "in SetDecimation line %d and decimation is %lf\n", __LINE__, decimation_val);
   }
+  notify(NFY_DEBUG, "in SetDecimation line %d\n", __LINE__);
 }
 
 
