@@ -45,6 +45,7 @@ class DecimationThresholdSetting : public QObject {
 };
 */
 
+/*
 class DecimationThresholdSetting : public QObject {
       Q_OBJECT
 
@@ -60,7 +61,7 @@ class DecimationThresholdSetting : public QObject {
   private:
     double decimation_threshold;
 };
-
+*/
 
 class ProjectWidget : public ProjectWidgetBase {
  public:
@@ -111,7 +112,9 @@ class ProjectWidget : public ProjectWidgetBase {
   int  GetOverlayTerrainResourcesMinLevelSpinbox() const;
   void SetOverlayTerrainResourcesMinLevelSpinbox(int val);
  
-  void SetDecimation(double val);
+  //void SetDecimation(double val);
+  void SetDecimation(const QString&);
+  double decimation_threshold;
 
  private:
   // inherited from ProjectWidgetBase

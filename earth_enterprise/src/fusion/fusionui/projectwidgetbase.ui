@@ -145,14 +145,6 @@
                     <property name="text">
                         <string>0.009</string>
                     </property>
-                    <property name="maxLength">
-                        <number>10</number>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>0</width>
-                        </size>
-                    </property>
                 </widget>
                 <widget class="QLabel">
                     <property name="name">
@@ -511,9 +503,9 @@
     </connection>
     <connection>
         <sender>decimation_threshold</sender>
-        <signal>valueChanged(double)</signal>
+        <signal>textChanged(const QString&amp;)</signal>
         <receiver>ProjectWidgetBase</receiver>
-        <slot>SetDecimation(double)</slot>
+        <slot>SetDecimation(const QString&amp;)</slot>
     </connection>
 </connections>
 <includes>
@@ -534,7 +526,7 @@
     <slot>ContextMenu( QListViewItem *, const QPoint &amp;, int )</slot>
     <slot>TimeMachineCheckboxToggled( bool )</slot>
     <slot>BuildOverlayTerrainCheckboxToggled( bool )</slot>
-    <slot>SetDecimation(double)</slot>
+    <slot>SetDecimation(const QString&amp;)</slot>
 </slots>
 <pixmapinproject/>
 <layoutdefaults spacing="6" margin="11"/>

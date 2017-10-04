@@ -277,6 +277,7 @@ DecimationThresholdSetting::~DecimationThresholdSetting(){
 }
 */
 
+/*
 void DecimationThresholdSetting::SetDecimation(double decimation) {
   PacketLevelConfig config;
   bool status = false;
@@ -302,19 +303,21 @@ void ProjectWidget::SetDecimation(double decimation) {
   DecimationThresholdSetting DecimationThreshold;
   DecimationThreshold.SetDecimation(decimation);
 }
+*/
 
-
-/*
-void ProjectWidget::SetDecimation(double decimation) {
+//void ProjectWidget::SetDecimation(double decimation) {
+void ProjectWidget::SetDecimation(const QString& decimation) { 
 
   PacketLevelConfig config;
   bool status = false;
 
-  if(decimation >= 0 &&
-     decimation <= MAX_DECIMATION) status = true;
-
   //decimation->setText(QString::number(request.config.decimation));
-//  config.decimation = decimation.text().toDouble(&status);
+  double decimation_val = -1; 
+  decimation_val = decimation.toDouble(); //decimation->text().toDouble(&status);
+
+  if(decimation_val >= 0 &&
+     decimation_val <= MAX_DECIMATION) status = true;
+
   if(!status) {
     std::string decimation_error;
     decimation_error += "Bad value for decimation threshold '";
@@ -327,10 +330,9 @@ void ProjectWidget::SetDecimation(double decimation) {
   }
 
   else {
-     config.decimation = decimation;
+     config.decimation = decimation_val;
   }
 }
-*/
 
 
 void ProjectWidget::ContextMenu(
