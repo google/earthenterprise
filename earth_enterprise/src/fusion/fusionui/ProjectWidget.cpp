@@ -14,6 +14,7 @@
 
 
 #include "fusion/fusionui/ProjectWidget.h"
+#include "fusion/autoingest/.idl/storage/PacketLevelConfig.h"
 
 #include <qpushbutton.h>
 #include <qlistview.h>
@@ -23,11 +24,14 @@
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qspinbox.h>
+#include <notify.h>
 
 #include "fusion/fusionui/LayerItemBase.h"
 #include "fusion/fusionui/ProjectLayerView.h"
 
 #include "common/khTileAddrConsts.h"
+//#include "common/khException.h"
+#include "khException.h"
 
 ProjectWidget::ProjectWidget(QWidget* parent)
     : ProjectWidgetBase(parent),
@@ -242,6 +246,92 @@ void ProjectWidget::GenericCheckboxToggled(bool state) {
 void ProjectWidget::SetGenericCheckboxText(const QString& text) {
   generic_check->setText(text);
 }
+/*
+void ProjectWidget::AssembleEditRequest(
+    ProjectProductImportRequest* request) {
+
+  PacketLevelConfig config;
+
+  //decimation->setText(QString::number(request.config.decimation));
+  bool status = false;
+  request->config.decimation = decimation->text().toDouble(&status);
+  std::string decimation_error;
+  if(!status) {
+    decimation_error += "Bad value for decimation threshold '";
+    decimation_error += decimation->text().latin1();
+    decimation_error += "'\n";
+    throw khException(decimation_error);
+  }
+}
+*/
+
+
+#define MAX_DECIMATION 100
+/*
+DecimationThresholdSetting::DecimationThresholdSetting() { 
+  decimation_threshold = 0.009;
+} 
+
+DecimationThresholdSetting::~DecimationThresholdSetting(){
+  decimation_threshold = 0;
+}
+*/
+
+void DecimationThresholdSetting::SetDecimation(double decimation) {
+  PacketLevelConfig config;
+  bool status = false;
+
+  if(decimation >= 0 && decimation <= MAX_DECIMATION) {
+    status = true;
+    config.decimation = decimation;
+  }
+   if(!status) {
+    std::string decimation_error;
+    decimation_error += "Bad value for decimation threshold '";
+    // decimation_error += decimation.text().latin1();
+    decimation_error += (std::string)decimation_error;
+    decimation_error += "'\n";
+    //notify(NFY_WARN, decimation_error.c_str());
+    notify(NFY_DEBUG, "bad decimation value\n");
+    throw khException(decimation_error); 
+  }
+
+}
+
+void ProjectWidget::SetDecimation(double decimation) { 
+  DecimationThresholdSetting DecimationThreshold;
+  DecimationThreshold.SetDecimation(decimation);
+}
+
+
+/*
+void ProjectWidget::SetDecimation(double decimation) {
+
+  PacketLevelConfig config;
+  bool status = false;
+
+  if(decimation >= 0 &&
+     decimation <= MAX_DECIMATION) status = true;
+
+  //decimation->setText(QString::number(request.config.decimation));
+//  config.decimation = decimation.text().toDouble(&status);
+  if(!status) {
+    std::string decimation_error;
+    decimation_error += "Bad value for decimation threshold '";
+    // decimation_error += decimation.text().latin1();
+    decimation_error += (std::string)decimation_error;
+    decimation_error += "'\n";
+    //notify(NFY_WARN, decimation_error.c_str());
+    notify(NFY_DEBUG, "bad decimation value\n");
+    throw khException(decimation_error); 
+  }
+
+  else {
+     config.decimation = decimation;
+  }
+}
+*/
+
 
 void ProjectWidget::ContextMenu(
     QListViewItem* item, const QPoint& pt, int col) {

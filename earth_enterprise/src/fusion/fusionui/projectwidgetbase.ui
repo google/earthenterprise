@@ -130,6 +130,30 @@
                         </size>
                     </property>
                 </spacer>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>mask_nodata_label_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Decimation Error Threshold:</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="2" column="1">
+                    <property name="name">
+                        <cstring>decimation_threshold</cstring>
+                    </property>
+                    <property name="text">
+                        <string>0.009</string>
+                    </property>
+                    <property name="maxLength">
+                        <number>10</number>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>0</width>
+                        </size>
+                    </property>
+                </widget>
                 <widget class="QLabel">
                     <property name="name">
                         <cstring>overlay_terrain_start_level_label</cstring>
@@ -485,6 +509,12 @@
         <receiver>ProjectWidgetBase</receiver>
         <slot>BuildOverlayTerrainCheckboxToggled(bool)</slot>
     </connection>
+    <connection>
+        <sender>decimation_threshold</sender>
+        <signal>valueChanged(double)</signal>
+        <receiver>ProjectWidgetBase</receiver>
+        <slot>SetDecimation(double)</slot>
+    </connection>
 </connections>
 <includes>
     <include location="local" impldecl="in implementation">projectwidgetbase.ui.h</include>
@@ -504,6 +534,7 @@
     <slot>ContextMenu( QListViewItem *, const QPoint &amp;, int )</slot>
     <slot>TimeMachineCheckboxToggled( bool )</slot>
     <slot>BuildOverlayTerrainCheckboxToggled( bool )</slot>
+    <slot>SetDecimation(double)</slot>
 </slots>
 <pixmapinproject/>
 <layoutdefaults spacing="6" margin="11"/>

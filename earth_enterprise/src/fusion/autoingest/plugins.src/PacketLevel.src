@@ -107,12 +107,14 @@ void PacketLevelAssetVersionImplD::DoSubmitTask(void) {
 
   task.AddOutput(outdir, sizeEstimate);
 
+  notify(NFY_DEBUG, "Calling gepackgen with decimation = %lf\n", taskConfig.decimation);
 
   task << "gepackgen"
        << ((type == AssetDefs::Imagery) ? "--imagery" : "--terrain")
        << "--config"  << configfile
        << "--output"  << "$OUTPUT"
-       << "--numcpus" << "$NUMCPU";
+       << "--numcpus" << "$NUMCPU"
+       << "--decimation" << taskConfig.decimation;
   theAssetManager.SubmitTask(GetRef(), task);
 }
 

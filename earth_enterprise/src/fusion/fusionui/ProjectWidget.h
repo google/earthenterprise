@@ -25,6 +25,42 @@ class QListView;
 class QListViewItem;
 class ProjectLayerView;
 class LayerItemBase;
+/*
+class DecimationThresholdSetting : public QObject {
+    Q_OBJECT
+ public:
+
+    DecimationThresholdSetting();
+
+    double GetDecimation() const {
+      return decimation_threshold;
+    }
+
+ public slots:
+    void SetDecimation(double);
+ signals:
+    void ValueChanged(double);
+ private:
+    double decimation_threshold;
+};
+*/
+
+class DecimationThresholdSetting : public QObject {
+      Q_OBJECT
+
+  public:
+    DecimationThresholdSetting(){};
+    //~DecimationThresholdSetting();
+    //double GetDecimation() const;
+    double decimation() const { return decimation_threshold; } // for later
+  public slots:
+    void SetDecimation(double);
+  signals:
+    void ValueChanged(double);
+  private:
+    double decimation_threshold;
+};
+
 
 class ProjectWidget : public ProjectWidgetBase {
  public:
@@ -32,6 +68,9 @@ class ProjectWidget : public ProjectWidgetBase {
 
   ProjectLayerView* ListView() { return layer_listview; }
   void HideGroupButton();
+
+  //void AssembleEditRequest(ProjectWidgetImportRequest* request);
+  //DecimationThresholdSetting DecimationThreshold;
 
  protected:
   // all derived classes must provide both methods of adding an asset
@@ -71,6 +110,8 @@ class ProjectWidget : public ProjectWidgetBase {
   void SetOverlayTerrainStartLevelSpinbox(int val);
   int  GetOverlayTerrainResourcesMinLevelSpinbox() const;
   void SetOverlayTerrainResourcesMinLevelSpinbox(int val);
+ 
+  void SetDecimation(double val);
 
  private:
   // inherited from ProjectWidgetBase
