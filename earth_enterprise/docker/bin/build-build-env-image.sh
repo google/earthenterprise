@@ -21,4 +21,4 @@ source "$SELF_DIR/lib/image-building.sh"
 
 tst_docker_build_dockerfile_template \
     "$DOCKERFILE_TEMPLATES_DIR/Dockerfile.build-env.$OS_DISTRIBUTION.template" \
-    "${IMAGE_NAME}"
+    "${IMAGE_NAME}" yes

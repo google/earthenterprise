@@ -12,17 +12,11 @@ FROM registry.access.redhat.com/rhel6
 RUN mkdir -p /root/opengee/bin
 COPY scripts /root/opengee/bin
 
-# Make a build directory:
-RUN mkdir -p /root/opengee/build
-
-
-# Install the build environment.
-#   We register the Docker image with the Red Hat repository provider (you
-# need to have a username and password) so we can install Yum packages.  We
-# unregister when we finish, so we're not taking up a machine license.
-WORKDIR /root/opengee/build
-RUN subscription-manager register \
-        --username=${REDHAT_USERNAME_ESCAPED} --password=${REDHAT_PASSWORD_ESCAPED} \
-        --auto-attach && \
-    /root/opengee/bin/get-gee-build-environment.sh -y --clone-repository=no && \
-    subscription-manager unregister
+# We need to read secrets on RHEL to register a Yum subscription.
+# We serve secrets over a named pipe.  Unfortunately, the regular `docker`
+# client doesn't support mounting volumes during a build.  So, we defer
+# building to a scirpt in the container.
+#
+# TST-RUN-STAGE \
+#   -v $SECRET_SERVER_DIR_ESCAPED:/var/opt/run/tst-docker/secrets \
+#   /root/opengee/bin/build-env-stage-2.sh

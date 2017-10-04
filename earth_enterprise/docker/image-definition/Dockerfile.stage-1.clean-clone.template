@@ -18,5 +18,9 @@ RUN cd /root/opengee/build && \
 #   Instead, we run the image built so far, and execute
 # `build-docker-stage-2.sh` to complete image creation, and export an image
 # from the running container.
+#
+# TST-RUN-STAGE \
+#   --cap-add=DAC_READ_SEARCH \
+#   /root/opengee/bin/build-docker-stage-2.sh
 
-CMD /root/opengee/bin/build-docker-stage-2.sh
+CMD /root/opengee/bin/start-servers.sh

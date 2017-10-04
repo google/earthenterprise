@@ -33,23 +33,14 @@ function is_string_false()
     esac
 }
 
+if is_string_false "$FLATTEN_IMAGE"; then
+    FLATTEN_IMAGE=""
+else
+    FLATTEN_IMAGE="yes"
+fi
 
 tst_docker_build_dockerfile_template \
     "$DOCKER_DIR/image-definition/Dockerfile.stage-1.$STAGE_1_NAME.template" \
-    "${STAGE_1_IMAGE_NAME}"
-
-docker run --cap-add=DAC_READ_SEARCH --name="$STAGE_1_CONTAINER_NAME" \
-    -ti "${STAGE_1_IMAGE_NAME}" || exit 1
-
-if is_string_false "$FLATTEN_IMAGE"; then
-    echo "$SELF_NAME: Committing Docker image."
-    docker commit "$STAGE_1_CONTAINER_NAME" "$OUTPUT_IMAGE_NAME"
-else
-    echo "$SELF_NAME: Flattening Docker image."
-    docker export "$STAGE_1_CONTAINER_NAME" | docker import - "$STAGE_2_IMAGE_NAME"
-    STAGE_2_CONTAINER_ID=$(docker run -d "$STAGE_2_IMAGE_NAME" /bin/bash)
-    docker commit --change="CMD /root/opengee/bin/start-servers.sh" \
-        "$STAGE_2_CONTAINER_ID" "$OUTPUT_IMAGE_NAME"
-fi
+    "${OUTPUT_IMAGE_NAME}" "$FLATTEN_IMAGE"
 
 echo "Open GEE Docker image built: $OUTPUT_IMAGE_NAME"
