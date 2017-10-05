@@ -6,7 +6,7 @@
 #
 # (
 # 	flock -e 9
-# 	echo "GET var/USER" > /var/run/env-server.socket
+# 	echo "GET /var/USER" > /var/run/env-server.socket
 # 	# Add a "." at the end to prevent final new-line stripping:
 # 	user=$(cat /var/run/env-server.socket && echo .)
 # 	# Remove the added "." suffix:
