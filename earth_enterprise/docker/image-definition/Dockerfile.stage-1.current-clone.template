@@ -26,3 +26,5 @@ RUN cd /root/opengee/build/earthenterprise && \
 #   /root/opengee/bin/build-docker-stage-2.sh
 
 CMD /root/opengee/bin/start-servers.sh
+
+EXPOSE 80

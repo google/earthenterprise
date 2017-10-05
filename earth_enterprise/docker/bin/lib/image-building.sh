@@ -7,7 +7,8 @@ TST_DOCKER_REPOSITORY_DIR=$(cd "$SELF_DIR/../../../.." && pwd)
 TST_DOCKER_BUILD_DIR="$TST_DOCKER_REPOSITORY_DIR/earth_enterprise/docker/image-definition/build"
 TST_DOCKER_LIB_DIR="$(cd "$SELF_DIR" && pwd)"
 
-source "$SELF_DIR/ui.sh"
+source "$TST_DOCKER_LIB_DIR/ui.sh"
+source "$TST_DOCKER_LIB_DIR/shell-script-parsing.sh"
 
 
 TST_DOCKERFILE_NO_CONTEXT_MARKER='# --\[ TST-Dockerfile: no-context \]--'
@@ -107,6 +108,61 @@ function tst_docker_template_filter()
     done
 }
 
+function tst_docker_run_arguments_insert_image_name()
+{
+    local TST_DOCKER_COMMAND_STRING="$1"
+    local IMAGE_NAME="$2"
+    local OUTPUT_VARIABLE_NAME="$3"
+
+    local TST_DOCKER_ARGUMENT
+    local HAS_IMAGE_NAME_BEEN_INSERTED=""
+    local ARGUMENTS_STRING=""
+
+    while [ -n "$TST_DOCKER_COMMAND_STRING" ]; do
+        cmd_parse_first_arg "$TST_DOCKER_COMMAND_STRING" yes \
+            TST_DOCKER_ARGUMENT TST_DOCKER_COMMAND_STRING || return 1
+        case "$TST_DOCKER_ARGUMENT" in
+            --[a-z]*)
+                printf -v ARGUMENTS_STRING "%s %q" "$ARGUMENTS_STRING" "$TST_DOCKER_ARGUMENT"
+                ;;
+            -[a-z]*)
+                printf -v ARGUMENTS_STRING "%s %q" \
+                    "$ARGUMENTS_STRING" "$TST_DOCKER_ARGUMENT"
+                cmd_parse_first_arg "$TST_DOCKER_COMMAND_STRING" yes \
+                    TST_DOCKER_ARGUMENT TST_DOCKER_COMMAND_STRING || return 1
+                printf -v ARGUMENTS_STRING "%s %q" \
+                    "$ARGUMENTS_STRING" "$TST_DOCKER_ARGUMENT"
+                ;;
+            *)
+                # We've reached the end of `docker run` options; time to 
+                # insert the image name:
+                printf -v ARGUMENTS_STRING "%s %q" \
+                    "$ARGUMENTS_STRING" "$IMAGE_NAME"
+                printf -v ARGUMENTS_STRING "%s %q" "$ARGUMENTS_STRING" \
+                    "$TST_DOCKER_ARGUMENT"
+                # And pass the command and arguments through:
+                while [ -n "$TST_DOCKER_COMMAND_STRING" ]; do
+                    cmd_parse_first_arg "$TST_DOCKER_COMMAND_STRING" yes \
+                        TST_DOCKER_ARGUMENT TST_DOCKER_COMMAND_STRING \
+                        || return 1
+                    printf -v ARGUMENTS_STRING "%s %q" "$ARGUMENTS_STRING" \
+                        "$TST_DOCKER_ARGUMENT"
+                done
+
+                HAS_IMAGE_NAME_BEEN_INSERTED=yes
+                ;;
+        esac
+    done
+
+    if [ -z "$HAS_IMAGE_NAME_BEEN_INSERTED" ]; then
+        # There was no command to `run` specified.  Append image name:
+        printf -v ARGUMENTS_STRING "%s %q" "$ARGUMENTS_STRING" "$IMAGE_NAME"
+    fi
+
+    # Set the output variable:
+    printf -v "$OUTPUT_VARIABLE_NAME" "%s" "$ARGUMENTS_STRING"
+}
+
 function tst_docker_template_process_tst_instructions()
 {
     local DOCKER_BUILD_DIR="$1"
@@ -128,6 +184,7 @@ function tst_docker_template_process_tst_instructions()
     local COUNTER
     local CONTAINER_ID
     local CONTAINER_CMD
+    local CONTAINER_EXPOSE
 
     while read -r; do
         LINE="$REPLY"
@@ -156,26 +213,18 @@ function tst_docker_template_process_tst_instructions()
                 read -r
                 LINE="${REPLY#*#}"
             done
-            printf -v COMMAND_ARGUMENTS '%s %s\n' "${COMMAND_ARGUMENTS}" "${LINE}"
+            printf -v COMMAND_ARGUMENTS '%s %s' "${COMMAND_ARGUMENTS}" "${LINE}"
         fi
 
         case "$COMMAND_NAME" in
             TST-RUN-STAGE)
                 # Construct an argument string for `docker run`:
-                EXEC_ARGUMENTS=""
-                LAST_ARGUMENT=""
-                for ARGUMENT in $COMMAND_ARGUMENTS; do
-                    if [ -z "$LAST_ARGUMENT" ]; then
-                        LAST_ARGUMENT="$ARGUMENT"
-                    else
-                        printf -v EXEC_ARGUMENTS "%s %q" "$EXEC_ARGUMENTS" "$LAST_ARGUMENT"
-                        LAST_ARGUMENT="$ARGUMENT"
-                    fi
-                done
-                # Insert the image name before the run command:
-                printf -v EXEC_ARGUMENTS "%s %q %q" \
-                    "$EXEC_ARGUMENTS" "${IMAGE_TAG}-stage-${STAGE_NUMBER}" \
-                    "$LAST_ARGUMENT"
+                tst_docker_run_arguments_insert_image_name \
+                    "$COMMAND_ARGUMENTS" \
+                    "${IMAGE_TAG}-stage-${STAGE_NUMBER}" EXEC_ARGUMENTS
+                echo "==================="
+                echo "TST-RUN-STAGE docker run -t $EXEC_ARGUMENTS"
+                echo "==================="
                 # Obtain an image for the previous stage:
                 if [ "$STAGE_NUMBER" -lt 2 ]; then
                     echo "Building initial stage: ${IMAGE_TAG}-stage-${STAGE_NUMBER}"
@@ -228,11 +277,19 @@ function tst_docker_template_process_tst_instructions()
     if [ -n "$FLATTEN_IMAGE" ]; then
         echo "$SELF_NAME: Flattening Docker image."
         docker export "$(cat "$DOCKER_BUILD_DIR/stage-${STAGE_NUMBER}.cid")" |
-            docker import - "${IMAGE_TAG}-stage-${STAGE_NUMBER}"
-        # Restore the CMD property:
+            docker import - "${IMAGE_TAG}-stage-${STAGE_NUMBER}" || return 1
+        # Restore the CMD and EXPOSE properties:
         CONTAINER_CMD=$(docker inspect --format="{{ json .Config.Cmd }}" "${IMAGE_TAG}-stage-1")
+        CONTAINER_EXPOSE=$(docker inspect --format="{{ json .Config.ExposedPorts }}" "${IMAGE_TAG}-stage-1")
         CONTAINER_ID=$(docker run -d "${IMAGE_TAG}-stage-${STAGE_NUMBER}" /bin/bash)
-        docker commit --change="CMD $CONTAINER_CMD" "$CONTAINER_ID" "${IMAGE_TAG}"
+        if [ "$CONTAINER_EXPOSE" != "null" ]; then
+            docker commit --change="CMD $CONTAINER_CMD" \
+                --change="EXPOSE $(echo "$CONTAINER_EXPOSE" | tr '{}:"' ' ')" "$CONTAINER_ID" \
+                "${IMAGE_TAG}" || return 1
+        else
+            docker commit --change="CMD $CONTAINER_CMD" \
+                "$CONTAINER_ID" "${IMAGE_TAG}" || return 1
+        fi
         (( STAGE_NUMBER++ ))
     fi
 
@@ -334,7 +391,10 @@ function tst_docker_build_dockerfile_template()
     tst_docker_template_process_tst_instructions \
         "$DOCKER_BUILD_DIR" "$DOCKER_WORKING_DIR" "$DOCKER_CONTEXT_ARGUMENT" \
         "$IMAGE_TAG" "$FLATTEN_IMAGE" \
-        < "$DOCKERFILE_PATH"
+        < "$DOCKERFILE_PATH" || return 1
+    
+    # Stop the secret variables server, if it's still running:
+    echo "PUT /shut-down" > "$SECRET_SERVER_SOCKET_PATH"
 
     rm -R "$DOCKER_BUILD_DIR"
 }
