@@ -1,0 +1,41 @@
+%define name    opengee-third-party-libs
+%define release 1
+%define version ${GEE_VERSION}
+%define build_root %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
+Name: %{name}
+Version: %{version}
+Release: %{release}
+Summary: Run-time third-party libraries for Open GEE Earth Server and Fusion
+
+Group: Application/Productivity
+License: GPL 2
+URL: https://github.com/google/earthenterprise/tree/master/earth_enterprise/third_party/postgis
+Source: release-%{version}.tar.gz
+BuildRoot: %{build_root}
+Prefix: /opt/google
+BuildRequires: tar
+
+%description
+Post GIS extension for Postgre SQL server used by Open GEE.
+
+%prep
+%setup -q -n googletest-release-%{version}
+
+%build
+mkdir build
+cd build
+source /opt/rh/devtoolset-%{devtoolset_version}/enable
+cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_CXX_FLAGS=-fPIC ..
+make
+cd ..
+
+%install
+cd build
+make install DESTDIR="$RPM_BUILD_ROOT"/opt/rh/devtoolset-%{devtoolset_version}/root
+cd ..
+
+%files
+%defattr(-,root,root)
+/opt/rh/devtoolset-%{devtoolset_version}/root/usr/lib
+/opt/rh/devtoolset-%{devtoolset_version}/root/usr/include
