@@ -11,9 +11,6 @@ source "$(dirname "$0")/lib/image-building.sh"
 
 build_image_parse_input_variables
 
-: ${OUTPUT_IMAGE_NAME:="opengee-experimental-${OS_DISTRIBUTION}${CLONE_SUFFIX}"}
-: ${STAGE_1_CONTAINER_NAME:="$STAGE_1_IMAGE_NAME-build-$(date '+%s.%N')-$RANDOM"}
-: ${STAGE_2_CONTAINER_NAME:="$STAGE_2_IMAGE_NAME-build-$(date '+%s.%N')-$RANDOM"}
 : ${FLATTEN_IMAGE:="true"}
 # Set TST_DOCKER_QUIET to a non-empty string to avoid prompting the user for input.
 
@@ -41,6 +38,6 @@ fi
 
 tst_docker_build_dockerfile_template \
     "$DOCKER_DIR/image-definition/Dockerfile.stage-1.$STAGE_1_NAME.template" \
-    "${OUTPUT_IMAGE_NAME}" "$FLATTEN_IMAGE"
+    "${GEE_IMAGE_NAME}" "$FLATTEN_IMAGE"
 
-echo "Open GEE Docker image built: $OUTPUT_IMAGE_NAME"
+echo "Open GEE Docker image built: $GEE_IMAGE_NAME"

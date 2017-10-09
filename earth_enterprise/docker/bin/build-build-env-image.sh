@@ -14,7 +14,7 @@ source "$SELF_DIR/lib/image-building.sh"
 # Set these variables before running this script to override the
 # default values below:
 : ${OS_DISTRIBUTION:="ubuntu-14"}
-: ${IMAGE_NAME:="thermopylae/opengee-experimental-build-env-$OS_DISTRIBUTION"}
+: ${IMAGE_NAME:="opengee-experimental-build-env-$OS_DISTRIBUTION"}
 
 # Set TST_DOCKER_QUIET to a non-empty string to avoid prompting the user for input.
 

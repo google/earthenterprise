@@ -40,6 +40,5 @@ function build_image_parse_input_variables()
 
     CLONE_SUFFIX=$(tst_docker_naming_echo_clone_suffix "$STAGE_1_NAME" "$CLEAN_CLONE_URL" "$CLEAN_CLONE_BRANCH")
 
-    : ${STAGE_1_IMAGE_NAME:="opengee-experimental-${OS_DISTRIBUTION}${CLONE_SUFFIX}-stage-1"}
-    : ${STAGE_2_IMAGE_NAME:="opengee-experimental-${OS_DISTRIBUTION}${CLONE_SUFFIX}-stage-2"}
+    : ${GEE_IMAGE_NAME:="opengee-experimental-${OS_DISTRIBUTION}${CLONE_SUFFIX}"}
 }

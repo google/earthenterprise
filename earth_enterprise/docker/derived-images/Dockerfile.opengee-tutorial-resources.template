@@ -1,0 +1,10 @@
+# Mark this Dockerfile as one that doesn't require a build context. (Save 
+# ourselves the time to migrate 1.7--3 GB of repository files we don't need.)
+# --[ TST-Dockerfile: no-context ]--
+
+FROM ${GEE_IMAGE_NAME}
+
+# Download Fusion tutorial resources:
+RUN /bin/bash /opt/google/share/tutorials/fusion/download_tutorial.sh
+
+CMD /root/opengee/bin/start-servers.sh

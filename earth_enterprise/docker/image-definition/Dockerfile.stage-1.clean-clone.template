@@ -4,7 +4,7 @@
 
 # The Docker that comes with Ubuntu 14 is too old to support the ARG command,
 # so we use template variables. ):
-FROM thermopylae/opengee-experimental-build-env-${OS_DISTRIBUTION}
+FROM opengee-experimental-build-env-${OS_DISTRIBUTION}
 
 # Build Open GEE:
 RUN cd /root/opengee/build && \

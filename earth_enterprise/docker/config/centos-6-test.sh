@@ -4,7 +4,7 @@
 # Use this file in a command like:
 #
 # ```BASH
-# ( . config/centos-6-test.sh && ./bin/build-docker-image.sh )
+# ( . config/centos-6-test.sh && ./bin/build-gee-image.sh )
 # ```
 
 export OS_DISTRIBUTION=centos-6
