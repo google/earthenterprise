@@ -16,11 +16,7 @@ buildscript {
 
 apply plugin: "nebula.ospackage"
 
-
-
-
 def env = System.getenv()
-
 def staged_install_path = '/tmp/fusion_os_install'
 def staged_install_common = staged_install_path + '/common'
 def staged_install_common_usermagic = staged_install_path + '/common/user_magic'
