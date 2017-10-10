@@ -1,3 +1,6 @@
+/*
+    See documentation on the osPackage plugin here: https://github.com/nebula-plugins/gradle-ospackage-plugin
+ */
 buildscript {
     repositories {
         maven {
@@ -21,19 +24,19 @@ def tmp_server_opt = tmp_install + '/server/opt'
 def tmp_server_etc = tmp_install + '/server/etc'
 def tmp_server_apachesupport = tmp_install + '/server/AppacheSupport/'
 def tmp_server_usermagic = tmp_install + '/server/user_magic/'
-
 def tmp_fusion = tmp_install + '/fusion'
+def base_install_dir = "/"
+def props = new Properties()
 
-// def tmp_searchexample = tmp_install + 'searchexample'
-//geplaces
+file("package.properties").withInputStream { props.load(it) }
 
-def base_install_dir = "/test"
+def packageVersion =  props.getProperty("package.version")
 
 apply plugin: 'nebula.ospackage'
 
 ospackage {
     packageName = 'ge-common'
-    version = '5.2.1'
+    version = packageVersion
     release = '1'
     arch = X86_64
     os = LINUX
@@ -66,16 +69,16 @@ task commonDeb (type: Deb) {
 }
 
 task serverRpm (type: Rpm) {
-    requires('ge-common', '5.2.1', GREATER | EQUAL)
+    requires('ge-common', packageVersion, GREATER | EQUAL)
     packageName = 'ge-server'
     
-    installUtils file('../src/installer/common.sh')
-    preInstall file('../src/installer/install_server.sh')
-    postInstall file('scripts/rpm/postInstall.sh')
-    preUninstall file('scripts/rpm/preUninstall.sh')
-    postUninstall file('scripts/rpm/postUninstall.sh')
-    preTrans file('scripts/rpm/preTrans.sh')
-    postTrans file('scripts/rpm/postTrans.sh')
+//    installUtils file('../src/installer/common.sh')
+//    preInstall file('../src/installer/install_server.sh')
+//    postInstall file('scripts/rpm/postInstall.sh')
+//    preUninstall file('scripts/rpm/preUninstall.sh')
+//    postUninstall file('scripts/rpm/postUninstall.sh')
+//    preTrans file('scripts/rpm/preTrans.sh')
+//    postTrans file('scripts/rpm/postTrans.sh')
 
     from(tmp_server_opt) {
         into base_install_dir + '/opt'
@@ -90,12 +93,10 @@ task serverRpm (type: Rpm) {
     from(tmp_server_apachesupport) {
         into base_install_dir
     }
-
 }
 
-
 task serverDeb (type: Deb) {
-    requires('ge-common', '5.2.1', GREATER | EQUAL)
+    requires('ge-common', packageVersion, GREATER | EQUAL)
     packageName = 'ge-server'
     from(tmp_server_etc) {
         into base_install_dir + '/etc'
@@ -115,7 +116,7 @@ task serverDeb (type: Deb) {
 }
 
 task fusionRpm (type: Rpm) {
-    requires('ge-common', '5.2.1', GREATER | EQUAL)
+    requires('ge-common', packageVersion, GREATER | EQUAL)
     packageName = 'ge-fusion'
     from(tmp_fusion) {
         into base_install_dir
@@ -123,7 +124,7 @@ task fusionRpm (type: Rpm) {
 }
 
 task fusionDeb (type: Deb) {
-    requires('ge-common', '5.2.1', GREATER | EQUAL)
+    requires('ge-common', packageVersion, GREATER | EQUAL)
     packageName = 'ge-fusion'
     from(tmp_fusion) {
         into base_install_dir
@@ -132,7 +133,7 @@ task fusionDeb (type: Deb) {
 
 task packageRpms(dependsOn: ['serverRpm','fusionRpm','commonRpm'])
 task packageDebs(dependsOn: ['serverDeb','fusionDeb','commonDeb'])
-task osPackage(dependsOn: ['buildRpms','buildDebs'])
+task osPackage(dependsOn: ['packageRpms','packageDebs'])
 
 
 
