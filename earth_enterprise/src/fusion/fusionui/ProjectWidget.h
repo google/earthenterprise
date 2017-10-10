@@ -26,13 +26,6 @@ class QListViewItem;
 class ProjectLayerView;
 class LayerItemBase;
 
-/*
-class DecimationThreshold : public ProjectWidgetBase { 
- public:
-  static bool decimate;
-  static double decimation_threshold;
-};
-*/
 
 class ProjectWidget : public ProjectWidgetBase {
  public:
@@ -83,11 +76,7 @@ class ProjectWidget : public ProjectWidgetBase {
   int  GetOverlayTerrainResourcesMinLevelSpinbox() const;
   void SetOverlayTerrainResourcesMinLevelSpinbox(int val);
  
-  //void SetDecimation(double val);
-  //DecimationThreshold decimationThreshold;
   void SetDecimation(const QString&);
-  //static double decimation_threshold;
-  //static bool decimate;
 
  private:
   // inherited from ProjectWidgetBase
