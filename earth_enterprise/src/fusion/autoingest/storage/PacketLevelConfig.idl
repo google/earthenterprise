@@ -62,7 +62,7 @@ class PacketLevelConfig {
 
   // used only when type==Terrain
   bool               decimate    = true;
-  double             decimation  = 0.09;
+  double             decimation  = 0.009;
   uint               sampleSize  = uint(TmeshQuadnodeResolution);
 
   // used during merges of project PackgetLevel's (not supersample) to
@@ -121,10 +121,4 @@ RasterPackUpgradeConfig::RasterPackUpgradeConfig(
 #/cppquote  
 
 };
-
-//class DecimationThreshold { 
-//#pragma LoadAndSave
-//  static double decimation_threshold;
-//  static bool decimate;
-//};
 
