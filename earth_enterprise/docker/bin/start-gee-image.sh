@@ -10,13 +10,22 @@ source "$SELF_DIR/lib/input-variables.sh"
 # in <lib/input-variables.sh> for additional input variables you can set before
 # running this script.
 : ${GEE_SERVER_PORT:=80}
-: ${HOST_GEVOL_PATH:=""}
-: ${HOST_GEHTTPD_PATH:=""}
-: ${HOST_GOOGLE_LOG_PATH:=""}
-: ${HOST_PGSQL_DATA_PATH:=""}
+: ${HOST_GEE_PERSISTENT_STORAGE_PATH:=""}
+if [ -n "$HOST_GEE_PERSISTENT_STORAGE_PATH" ]; then
+    : ${HOST_GEVOL_PATH:="$HOST_GEE_PERSISTENT_STORAGE_PATH/gevol"}
+    : ${HOST_GEHTTPD_PATH:="$HOST_GEE_PERSISTENT_STORAGE_PATH/opt/google/gehttpd"}
+    : ${HOST_GOOGLE_LOG_PATH:="$HOST_GEE_PERSISTENT_STORAGE_PATH/var/opt/google/log"}
+    : ${HOST_PGSQL_DATA_PATH:="$HOST_GEE_PERSISTENT_STORAGE_PATH/var/opt/google/pgsql/data"}
+else
+    : ${HOST_GEVOL_PATH:=""}
+    : ${HOST_GEHTTPD_PATH:=""}
+    : ${HOST_GOOGLE_LOG_PATH:=""}
+    : ${HOST_PGSQL_DATA_PATH:=""}
+fi
 
 build_image_parse_input_variables
 
+echo "Persistent storage path: $HOST_GEE_PERSISTENT_STORAGE_PATH"
 
 # Set the following to any extra flags you want to pass to `docker run`, such
 # as sharing extra paths from the host system to the Docker container:
@@ -30,15 +39,15 @@ if [ -z "$HOST_GEVOL_PATH" ]; then
     MAP_GEVOL_PARAMETERS=""
     TEMPORARY_SERVERS=yes
 else
-    printf -v MAP_GEVOL_PARAMETERS "-v %q:/gevol" "$HOST_GEVOL_PATH"
+    printf -v MAP_GEVOL_PARAMETERS -- '-v %q:/gevol' "$HOST_GEVOL_PATH"
 fi
 
 if [ -z "$HOST_GEHTTPD_PATH" ]; then
     MAP_GEHTTPD_PARAMETERS=""
     TEMPORARY_SERVERS=yes
 else
-    printf -v MAP_GEHTTPD_PARAMETERS \
-        "-v %q/htdocs/.htaccess:/opt/google/gehttpd/htdocs/.htaccess -v %q/htdocs/logs:/opt/google/gehttpd/logs" \
+    printf -v MAP_GEHTTPD_PARAMETERS -- \
+        "-v %q/htdocs/.htaccess:/opt/google/gehttpd/htdocs/.htaccess -v %q/logs:/opt/google/gehttpd/logs" \
         "$HOST_GEHTTPD_PATH" "$HOST_GEHTTPD_PATH"
 fi
 
@@ -46,7 +55,7 @@ if [ -z "$HOST_GOOGLE_LOG_PATH" ]; then
     MAP_GOOGLE_LOG_PARAMETERS=""
     TEMPORARY_SERVERS=yes
 else
-    printf -v MAP_GOOGLE_LOG_PARAMETERS "-v %q:/var/opt/google/log" \
+    printf -v MAP_GOOGLE_LOG_PARAMETERS -- "-v %q:/var/opt/google/log" \
         "$HOST_GOOGLE_LOG_PATH"
 fi
 
@@ -54,8 +63,8 @@ if [ -z "$HOST_PGSQL_DATA_PATH" ]; then
     MAP_PGSQL_DATA_PARAMETERS=""
     TEMPORARY_SERVERS=yes
 else
-    printf -v MAP_PGSQL_DATA_PARAMETERS "-v %q:/var/opt/google/pgsql/data" \
-        "$HOST_PGSQL_DATA_PATH"
+    printf -v MAP_PGSQL_DATA_PARAMETERS -- \
+        "-v %q:/var/opt/google/pgsql/data" "$HOST_PGSQL_DATA_PATH"
 fi
 
 
