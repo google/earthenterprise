@@ -1,0 +1,138 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.netflix.nebula:gradle-ospackage-plugin:4.4.2"
+    }
+}
+
+apply plugin: "nebula.ospackage"
+
+def env = System.getenv()
+def home = env['HOME']
+def tmp_install = '/tmp/fusion_os_install'
+def tmp_common = tmp_install + '/common'
+def tmp_common_usermagic = tmp_install + '/common/user_magic'
+def tmp_manual = tmp_install + '/manual'
+def tmp_server_opt = tmp_install + '/server/opt'
+def tmp_server_etc = tmp_install + '/server/etc'
+def tmp_server_apachesupport = tmp_install + '/server/AppacheSupport/'
+def tmp_server_usermagic = tmp_install + '/server/user_magic/'
+
+def tmp_fusion = tmp_install + '/fusion'
+
+// def tmp_searchexample = tmp_install + 'searchexample'
+//geplaces
+
+def base_install_dir = "/test"
+
+apply plugin: 'nebula.ospackage'
+
+ospackage {
+    packageName = 'ge-common'
+    version = '5.2.1'
+    release = '1'
+    arch = X86_64
+    os = LINUX
+    into '/opt/google'
+}
+
+task commonRpm (type: Rpm) {
+    packageName = 'ge-common'
+
+    from(tmp_common) {
+        into base_install_dir
+    }
+    from(tmp_common_usermagic) {
+        into base_install_dir
+    }
+    from(tmp_manual) {
+        into base_install_dir
+    }
+}
+
+task commonDeb (type: Deb) {
+    packageName = 'ge-common'
+
+    from(tmp_common) {
+        into base_install_dir
+    }
+    from(tmp_manual) {
+        into base_install_dir
+    }
+}
+
+task serverRpm (type: Rpm) {
+    requires('ge-common', '5.2.1', GREATER | EQUAL)
+    packageName = 'ge-server'
+    
+    installUtils file('../src/installer/common.sh')
+    preInstall file('../src/installer/install_server.sh')
+    postInstall file('scripts/rpm/postInstall.sh')
+    preUninstall file('scripts/rpm/preUninstall.sh')
+    postUninstall file('scripts/rpm/postUninstall.sh')
+    preTrans file('scripts/rpm/preTrans.sh')
+    postTrans file('scripts/rpm/postTrans.sh')
+
+    from(tmp_server_opt) {
+        into base_install_dir + '/opt'
+    }
+    from(tmp_server_etc) {
+        into base_install_dir + '/etc'
+    }
+
+    from(tmp_server_usermagic) {
+        into base_install_dir
+    }
+    from(tmp_server_apachesupport) {
+        into base_install_dir
+    }
+
+}
+
+
+task serverDeb (type: Deb) {
+    requires('ge-common', '5.2.1', GREATER | EQUAL)
+    packageName = 'ge-server'
+    from(tmp_server_etc) {
+        into base_install_dir + '/etc'
+    }
+
+    from(tmp_server_opt) {
+        into base_install_dir + '/opt'
+    }
+
+    from(tmp_server_apachesupport) {
+        into base_install_dir
+    }
+
+    from(tmp_server_usermagic) {
+        into base_install_dir
+    }
+}
+
+task fusionRpm (type: Rpm) {
+    requires('ge-common', '5.2.1', GREATER | EQUAL)
+    packageName = 'ge-fusion'
+    from(tmp_fusion) {
+        into base_install_dir
+    }
+}
+
+task fusionDeb (type: Deb) {
+    requires('ge-common', '5.2.1', GREATER | EQUAL)
+    packageName = 'ge-fusion'
+    from(tmp_fusion) {
+        into base_install_dir
+    }
+}
+
+task packageRpms(dependsOn: ['serverRpm','fusionRpm','commonRpm'])
+task packageDebs(dependsOn: ['serverDeb','fusionDeb','commonDeb'])
+task osPackage(dependsOn: ['buildRpms','buildDebs'])
+
+
+
