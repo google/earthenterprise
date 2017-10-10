@@ -1,11 +1,13 @@
 /*
     See documentation on the osPackage plugin here: https://github.com/nebula-plugins/gradle-ospackage-plugin
+
+    This packaging script depends on the output of the main scons "stage_install" target,
+    which copies build artifacts, binaries and documents in to the /tmp/fusion_os_install path.
  */
+
 buildscript {
     repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
+        jcenter()
     }
     dependencies {
         classpath "com.netflix.nebula:gradle-ospackage-plugin:4.4.2"
@@ -14,120 +16,114 @@ buildscript {
 
 apply plugin: "nebula.ospackage"
 
+
+
+
 def env = System.getenv()
-def home = env['HOME']
-def tmp_install = '/tmp/fusion_os_install'
-def tmp_common = tmp_install + '/common'
-def tmp_common_usermagic = tmp_install + '/common/user_magic'
-def tmp_manual = tmp_install + '/manual'
-def tmp_server_opt = tmp_install + '/server/opt'
-def tmp_server_etc = tmp_install + '/server/etc'
-def tmp_server_apachesupport = tmp_install + '/server/AppacheSupport/'
-def tmp_server_usermagic = tmp_install + '/server/user_magic/'
-def tmp_fusion = tmp_install + '/fusion'
-def base_install_dir = "/"
-def props = new Properties()
 
-file("package.properties").withInputStream { props.load(it) }
+def staged_install_path = '/tmp/fusion_os_install'
+def staged_install_common = staged_install_path + '/common'
+def staged_install_common_usermagic = staged_install_path + '/common/user_magic'
+def staged_install_manual = staged_install_path + '/manual'
+def staged_install_server_opt = staged_install_path + '/server/opt'
+def staged_install_server_etc = staged_install_path + '/server/etc'
+def staged_install_server_apachesupport = staged_install_path + '/server/AppacheSupport/'
+def staged_install_server_usermagic = staged_install_path + '/server/user_magic/'
+def staged_install_fusion = staged_install_path + '/fusion'
+def package_install_path = "/"
+def packageProps = new Properties()
 
-def packageVersion =  props.getProperty("package.version")
+file("package.properties").withInputStream { packageProps.load(it) }
+def packageVersion = packageProps.getProperty("package.version")
+def packageRelease = packageProps.getProperty("package.release")
 
 apply plugin: 'nebula.ospackage'
 
 ospackage {
-    packageName = 'ge-common'
     version = packageVersion
-    release = '1'
+    release = packageRelease
     arch = X86_64
     os = LINUX
     into '/opt/google'
 }
 
 task commonRpm (type: Rpm) {
-    packageName = 'ge-common'
+    packageName = 'opengee-common'
 
-    from(tmp_common) {
-        into base_install_dir
+    from(staged_install_common) {
+        into package_install_path
     }
-    from(tmp_common_usermagic) {
-        into base_install_dir
+    from(staged_install_common_usermagic) {
+        into package_install_path
     }
-    from(tmp_manual) {
-        into base_install_dir
+    from(staged_install_manual) {
+        into package_install_path
     }
 }
 
 task commonDeb (type: Deb) {
-    packageName = 'ge-common'
+    packageName = 'opengee-common'
 
-    from(tmp_common) {
-        into base_install_dir
+    from(staged_install_common) {
+        into package_install_path
     }
-    from(tmp_manual) {
-        into base_install_dir
+    from(staged_install_manual) {
+        into package_install_path
     }
 }
 
 task serverRpm (type: Rpm) {
-    requires('ge-common', packageVersion, GREATER | EQUAL)
-    packageName = 'ge-server'
+    requires('opengee-common', packageVersion, GREATER | EQUAL)
+    packageName = 'opengee-server'
     
-//    installUtils file('../src/installer/common.sh')
-//    preInstall file('../src/installer/install_server.sh')
-//    postInstall file('scripts/rpm/postInstall.sh')
-//    preUninstall file('scripts/rpm/preUninstall.sh')
-//    postUninstall file('scripts/rpm/postUninstall.sh')
-//    preTrans file('scripts/rpm/preTrans.sh')
-//    postTrans file('scripts/rpm/postTrans.sh')
-
-    from(tmp_server_opt) {
-        into base_install_dir + '/opt'
+    from(staged_install_server_opt) {
+        into package_install_path + '/opt'
     }
-    from(tmp_server_etc) {
-        into base_install_dir + '/etc'
+    from(staged_install_server_etc) {
+        into package_install_path + '/etc'
     }
 
-    from(tmp_server_usermagic) {
-        into base_install_dir
+    from(staged_install_server_usermagic) {
+        into package_install_path
     }
-    from(tmp_server_apachesupport) {
-        into base_install_dir
+    from(staged_install_server_apachesupport) {
+        into package_install_path
     }
 }
 
 task serverDeb (type: Deb) {
-    requires('ge-common', packageVersion, GREATER | EQUAL)
-    packageName = 'ge-server'
-    from(tmp_server_etc) {
-        into base_install_dir + '/etc'
+    requires('opengee-common', packageVersion, GREATER | EQUAL)
+    packageName = 'opengee-server'
+    from(staged_install_server_etc) {
+        into package_install_path + '/etc'
     }
 
-    from(tmp_server_opt) {
-        into base_install_dir + '/opt'
+    from(staged_install_server_opt) {
+        into package_install_path + '/opt'
     }
 
-    from(tmp_server_apachesupport) {
-        into base_install_dir
+    from(staged_install_server_apachesupport) {
+        into package_install_path
     }
 
-    from(tmp_server_usermagic) {
-        into base_install_dir
+    from(staged_install_server_usermagic) {
+        into package_install_path
     }
 }
 
 task fusionRpm (type: Rpm) {
-    requires('ge-common', packageVersion, GREATER | EQUAL)
-    packageName = 'ge-fusion'
-    from(tmp_fusion) {
-        into base_install_dir
+    requires('opengee-common', packageVersion, GREATER | EQUAL)
+    packageName = 'opengee-fusion'
+    from(staged_install_fusion) {
+        into package_install_path
     }
 }
 
 task fusionDeb (type: Deb) {
-    requires('ge-common', packageVersion, GREATER | EQUAL)
-    packageName = 'ge-fusion'
-    from(tmp_fusion) {
-        into base_install_dir
+    requires('opengee-common', packageVersion, GREATER | EQUAL)
+    packageName = 'opengee-fusion'
+    from(staged_install_fusion) {
+        into package_install_path
     }
 }
 
