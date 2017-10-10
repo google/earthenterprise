@@ -15,6 +15,8 @@
 
 #include "fusion/fusionui/ProjectWidget.h"
 #include "fusion/autoingest/.idl/storage/PacketLevelConfig.h"
+#include "fusion/autoingest/sysman/plugins/PacketLevelAssetD.h"
+#include "Preferences.h"
 
 #include <qpushbutton.h>
 #include <qlistview.h>
@@ -32,6 +34,12 @@
 #include "common/khTileAddrConsts.h"
 //#include "common/khException.h"
 #include "khException.h"
+
+//bool DecimationThreshold::decimate = true;
+//double DecimationThreshold::decimation_threshold = 0.09;
+
+//bool ProjectWidget::decimate = true;
+//double DecimationThreshold::decimation_threshold = 0.09;
 
 ProjectWidget::ProjectWidget(QWidget* parent)
     : ProjectWidgetBase(parent),
@@ -247,20 +255,40 @@ void ProjectWidget::SetGenericCheckboxText(const QString& text) {
   generic_check->setText(text);
 }
 
+
+///////////////////////////////////////////////////////////////////////////// temporary
 #define MAX_DECIMATION 100
+#include <stdio.h>
+// this is bananas, i shouldn't have to initialize these again here since i already do it somewhere else, 
+// but if i don't, this won't build, and if i don't also initialize them in PacketLevel.src it doesn't link. 
+// I can initialize them in Preferences.cpp or main.cpp instead of here, but PacketLevelAssetVersionImplD still doesn't
+// understand it unless i initialize therem there as well, even though they are members in its own class. 
+// There are static things in preferences (class PrefsConfig), but i wasn't able to get PacketLevel to link against it.
+// Tried fixing the includes (like ../../../fusion/fusionui/Preferences.h or whatever it was) but then that file had an include
+// path issue against another file that I couldn't figure out how to correct. All the library stuff is very strange. One file
+// might be included like <thing.h> in one place and "../../../something/thing.h" somewhere else and <something/thing.h> in a
+// third place. I can use relative paths from the autogen code to the fusion code, but not the other way around, without 
+// getting some information from the build scripts themselves (because otherwise won't know the name of the build directory,
+// like NATIVE-${etc}).   I even tried putting values in preferences.idl, which is autogen code in the fusionui directory
+// (and therefore conceptually somewhere in between the two parts), but that didn't work out either. Also tried in 
+// autoingest/storage/PacketLevelConfig.idl since that's where some other relevant things are. 
+//bool PacketLevelAssetVersionImplD::decimate = true;
+//double PacketLevelAssetVersionImplD::decimation = 0.09;
 
 void ProjectWidget::SetDecimation(const QString& decimation) { 
 
-  PacketLevelConfig config;
   bool status = false;
-  notify(NFY_DEBUG, "in SetDecimation line %d\n", __LINE__);
-
   double decimation_val = -1; 
   decimation_val = decimation.toDouble(); //decimation->text().toDouble(&status);
+  //if(decimation_val == PrefsConfig::decimation_threshold) return;
+  if(decimation_val == PacketLevelAssetVersionImplD::decimation) return;
 
   if(decimation_val >= 0 &&
-     decimation_val <= MAX_DECIMATION) status = true;
+     decimation_val <= MAX_DECIMATION) {
+    status = true;
+  }
 
+  //printf("In %s %d and prior to setting, config.decimation is %lf\n", __FUNCTION__, __LINE__, config.decimation);
   if(!status) {
     std::string decimation_error;
     decimation_error += "Bad value for decimation threshold '";
@@ -273,10 +301,17 @@ void ProjectWidget::SetDecimation(const QString& decimation) {
   }
 
   else {
-     config.decimation = decimation_val;
+     //config.decimation = decimation_val;
+     //PrefsConfig::decimate = true;
+     //PrefsConfig::decimation_threshold = decimation_val;
+     //decimate = true;
+     //decimation_threshold = decimation_val;
+    PacketLevelAssetVersionImplD::decimate = true;
+    PacketLevelAssetVersionImplD::decimation = decimation_val;
      notify(NFY_DEBUG, "in SetDecimation line %d and decimation is %lf\n", __LINE__, decimation_val);
+     //printf("In %s %d and after setting, decimation is %lf, input decimation was %lf\n", __FUNCTION__, __LINE__, PrefsConfig::decimation_threshold, decimation_val);
+     printf("In %s %d and after setting, decimation is %lf, input decimation was %lf\n", __FUNCTION__, __LINE__, PacketLevelAssetVersionImplD::decimation, decimation_val);
   }
-  notify(NFY_DEBUG, "in SetDecimation line %d\n", __LINE__);
 }
 
 

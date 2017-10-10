@@ -17,7 +17,8 @@
 #ifndef __AssetD_h
 #define __AssetD_h
 
-#include <Asset.h>
+//#include <Asset.h>
+#include "fusion/autoingest/Asset.h"
 #include "AssetVersionD.h"
 #include "AssetHandleD.h"
 

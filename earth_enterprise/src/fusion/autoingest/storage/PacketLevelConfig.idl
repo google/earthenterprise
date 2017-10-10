@@ -20,7 +20,6 @@
 #include "common/khTypes.h"
 #include "common/khTileAddr.h"
 
-
 class PacketLevelConfig {
 #pragma DontEmitDefaults
 #pragma LoadAndSave
@@ -122,3 +121,10 @@ RasterPackUpgradeConfig::RasterPackUpgradeConfig(
 #/cppquote  
 
 };
+
+//class DecimationThreshold { 
+//#pragma LoadAndSave
+//  static double decimation_threshold;
+//  static bool decimate;
+//};
+

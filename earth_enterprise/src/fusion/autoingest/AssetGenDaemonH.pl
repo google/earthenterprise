@@ -97,7 +97,7 @@ print $fh <<EOF;
 #define __$hprot
 
 #include <$header>
-#include <sysman/AssetD.h>
+#include <fusion/autoingest/sysman/AssetD.h>
 
 
 // ****************************************************************************

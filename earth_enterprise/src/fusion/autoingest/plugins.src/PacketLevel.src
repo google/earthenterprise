@@ -29,6 +29,8 @@ class PacketLevelAssetVersionImplD {
  public:
   bool AttemptConvertFromOldLastGood(void);
   void MakeConvertTask(const AssetVersion &old);
+  static bool decimate;
+  static double decimation;
  private:
   uint64 EstimateOutputSize(bool is_mercator) const;
 };
@@ -38,6 +40,13 @@ class PacketLevelAssetVersionImplD {
 #include "fusion/khraster/khRasterProduct.h"
 #include "common/khFileUtils.h"
 #include "common/khConstants.h"
+//#include "fusion/fusionui/.ui/projectwidgetbase.h"
+#include <stdio.h>
+//#include "fusion/fusionui/.idl/preferences.h"
+//#include "../../../fusion/fusionui/ProjectWidget.h"
+
+bool PacketLevelAssetVersionImplD::decimate = true;
+double PacketLevelAssetVersionImplD::decimation = 0.09;
 
 void PacketLevelAssetVersionImplD::DoSubmitTask(void) {
   if (AttemptConvertFromOldLastGood()) {
@@ -107,7 +116,27 @@ void PacketLevelAssetVersionImplD::DoSubmitTask(void) {
 
   task.AddOutput(outdir, sizeEstimate);
 
+  //if(PrefsConfig::decimate == true)
+  //  taskConfig.decimation = PrefsConfig::decimation_threshold;
+  //else
+  //  taskConfig.decimation = false;
+
+  if(decimate == true)
+  {
+    taskConfig.decimate = true;
+    taskConfig.decimation = decimation;
+    printf("decimation threshold is %lf\n", decimation);
+  }
+  else 
+  {
+    taskConfig.decimate = false;
+    taskConfig.decimation = 0;
+    printf("decimation threshold is %lf\n", decimation);
+  }
+
   notify(NFY_DEBUG, "Calling gepackgen with decimation = %lf\n", taskConfig.decimation);
+  printf("decimation threshold is %lf\n", taskConfig.decimation);
+
 
   task << "gepackgen"
        << ((type == AssetDefs::Imagery) ? "--imagery" : "--terrain")
