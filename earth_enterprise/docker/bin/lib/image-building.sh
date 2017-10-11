@@ -365,7 +365,6 @@ function tst_docker_build_dockerfile_template()
                 tst_docker_read_variable "$VAR" "$VAR" password
             fi
         fi
-        echo "$VAR: ${!VAR}"
         printf -v "${VAR}_ESCAPED" "%q" "${!VAR}"
         export "$VAR" "${VAR}_ESCAPED"
     done
