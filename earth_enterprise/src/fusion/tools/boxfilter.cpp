@@ -104,14 +104,26 @@ const uchar *BoxFilterTiledImage::GetImageTile(int tile_x, int tile_y,
   }
 }
 
+// Computes the left SAT element of a given row and advances the pointer
+inline void ComputeLeftSAT(int **elem,  // pointer to element in SAT table
+                           uchar value,  // corresponding image value
+                           int prev_row_offset) {  // offset to previous row elem
+  **elem =
+      + *(*elem + prev_row_offset)
+      + value;
+  ++(*elem);
+}
 
 // Computes a single SAT element given current values and an offset to
 // the previous row of values in the table.
 inline void ComputeSAT(int *elem,  // pointer to element in SAT table
                        uchar value,  // corresponding image value
                        int prev_row_offset) {  // offset to previous row elem
-  *elem = - *(elem + prev_row_offset - 1) + *(elem + prev_row_offset)
-          + *(elem - 1)                   + value;
+  *elem =
+      - *(elem + prev_row_offset - 1)
+      + *(elem + prev_row_offset)
+      + *(elem - 1)
+      + value;
 }
 
 // Computes a horizontal span of entries in the SAT with a single input
@@ -290,8 +302,10 @@ void BoxFilterTiledImage::BoxFilter(int box_width, int box_height,
           // (box_halfw+1 tile padding on left, box_halfw inside image
           // tile).
           if (tile_col == 0) {
-            if (tile_row == 0) {  // Compute top tile row.
-              ComputeSATSpanValue(&psat, box_halfw + 1, border,
+            if (tile_row == 0) {
+              // Compute top tile row.
+              ComputeLeftSAT(&psat, border, sat_prev_row_offset);
+              ComputeSATSpanValue(&psat, box_halfw, border,
                                    sat_prev_row_offset);
               ComputeSATSpanValues(&psat, box_halfw, &pimg,
                                    sat_prev_row_offset);
@@ -325,7 +339,8 @@ void BoxFilterTiledImage::BoxFilter(int box_width, int box_height,
           // Handle case where row >= box_height.
           // Take care of the first box_width elements of SAT row.
           if (tile_col == 0) {  // Leftmost tile column: compute.
-            ComputeSATSpanValue(&psat, box_halfw + 1, border,
+            ComputeLeftSAT(&psat, border, sat_prev_row_offset);
+            ComputeSATSpanValue(&psat, box_halfw, border,
                                 sat_prev_row_offset);
             ComputeSATSpanValues(&psat, box_halfw, &pimg, sat_prev_row_offset);
           } else {  // Copy box_width elements from vertical band.
