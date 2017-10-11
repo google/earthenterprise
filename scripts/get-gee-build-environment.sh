@@ -31,13 +31,13 @@ MIN_GCC_VERSION="4.8"
 : ${ASSUME_YES:=""}
 
 # Open GEE repository URL for cloning:
-: ${CLONE_URL:="https://github.com/google/earthenterprise.git"}
+#: ${CLONE_URL:="https://github.com/google/earthenterprise.git"}
 
 # Git branch to clone:
-: ${CLONE_BRANCH:=""}
+#: ${CLONE_BRANCH:=""}
 
 # Whether to clone the Open GEE repository:
-: ${CLONE_REPOSITORY:="yes"}
+#: ${CLONE_REPOSITORY:=""}
 
 # Check for a known package manager:
 if type apt-get >/dev/null 2>&1; then
@@ -74,6 +74,23 @@ is_string_value_false()
             return 1
             ;;
     esac
+}
+
+
+#===  FUNCTION  ================================================================
+#          NAME:  check_root
+#   DESCRIPTION:  checks to see if the user has root permissions
+#    PARAMETERS:  none
+#       RETURNS:  nothing
+#===============================================================================
+function check_root ()
+{
+# id -u gives the user ID number. if 0, then root
+    if ! [ $(id -u) = 0 ]; then
+        echo "$SELF_NAME Error: Must be root!"
+	echo
+	exit 0
+    fi
 }
 
 # Tests whether a version represented by a version string is greater than, or
@@ -135,12 +152,12 @@ install_epel()
         install_wget && \
         (   cd "$PACKAGE_DOWNLOAD_DIR" && \
             wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-${RED_HAT_VERSION_MAJOR}.noarch.rpm && \
-            sudo yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
+             yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
                 "epel-release-latest-${RED_HAT_VERSION_MAJOR}.noarch.rpm"
         )
     else
         # On Cent OS:
-        sudo yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER epel-release
+         yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER epel-release
     fi
 }
 
@@ -149,13 +166,13 @@ install_devtoolset_toolchain()
 {
     if [ -n "$ARE_WE_ON_RHEL" ]; then
         # We're on RHEL:
-        sudo yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER devtoolset-2-toolchain || return 1
+         yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER devtoolset-2-toolchain || return 1
     else
         # On Cent OS:
         install_wget || return 1
         ( cd /etc/yum.repos.d && wget http://people.centos.org/tru/devtools-2/devtools-2.repo ) \
             || return 1
-        sudo yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER devtoolset-2-toolchain || return 1
+         yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER devtoolset-2-toolchain || return 1
     fi
 }
 
@@ -175,7 +192,7 @@ install_gtest_devtoolset_rpm()
         git clone https://github.com/thermopylae/gtest-devtoolset-rpm.git && \
         cd gtest-devtoolset-rpm && \
         ./bin/build.sh && \
-        sudo yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
+         yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
             "build/RPMS/$(uname -m)/gtest-devtoolset2-1.8.0-1.$(uname -m).rpm"
     )
 }
@@ -184,15 +201,15 @@ if [ "$PACKAGE_MANAGER" == "yum" ]; then
     install_git_lfs()
     {
         curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh \
-            | sudo bash || return 1
-        sudo yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER install git-lfs
+            |  bash || return 1
+         yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER install git-lfs
     }
 elif [ "$PACKAGE_MANAGER" == "apt-get" ]; then
     install_git_lfs()
     {
         curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh \
-            | sudo bash || return 1
-        sudo apt-get $ASSUME_YES_PACKAGE_MANAGER_PARAMETER install git-lfs
+            |  bash || return 1
+         apt-get $ASSUME_YES_PACKAGE_MANAGER_PARAMETER install git-lfs
     }
 fi
 
@@ -201,22 +218,22 @@ if [ "$PACKAGE_MANAGER" == "yum" ]; then
     # RHEL or Cent OS:
     install_packages()
     {
-        sudo yum update $ASSUME_YES_PACKAGE_MANAGER_PARAMETER || return 1
+         yum update $ASSUME_YES_PACKAGE_MANAGER_PARAMETER || return 1
         install_epel || return 1
-        sudo yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER git || return 1
+         yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER git || return 1
 
         # Enable optional Yum repositories on RHEL 6 before installing compilers:
         if [ -n "$ARE_WE_ON_RHEL" ]; then
-            sudo subscription-manager repos \
+             subscription-manager repos \
                 "--enable=rhel-${RED_HAT_VERSION_MAJOR}-server-optional-rpms" \
                 || return 1
-            sudo subscription-manager repos \
+             subscription-manager repos \
                 "--enable=rhel-${RED_HAT_VERSION_MAJOR}-server-optional-source-rpms" \
                 || return 1
         fi
 
         # Install development / build tools:
-        sudo yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
+         yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
             ant bzip2 doxygen gcc-c++ patch python-argparse \
             python-setuptools rsync swig tar || return 1
 
@@ -234,7 +251,7 @@ if [ "$PACKAGE_MANAGER" == "yum" ]; then
         # the Fusion UI.
         #   The 'pexpect' and 'python-tornado' packages are not needed for 
         # Earth Server, or Fusion, but they are for Portable Server.
-        sudo yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
+         yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
             bison-devel freeglut-devel gdbm-devel geos-devel giflib-devel \
             libcap-devel libmng-devel libX11-devel libXcursor-devel \
             libXft-devel libXinerama-devel libXmu-devel libXrandr-devel \
@@ -243,28 +260,28 @@ if [ "$PACKAGE_MANAGER" == "yum" ]; then
             proj-devel python-devel scons \
             xerces-c xerces-c-devel xorg-x11-server-devel \
             zlib-devel || return 1
-        sudo yum groupinstall $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
+         yum groupinstall $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
             "X Window System" || return 1
-        sudo yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
+         yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
             pexpect python-tornado
         
         # libpng 1.2 has different names on RHEL / Cent OS 6 and 7:
         if yum list libpng12-devel; then
-            sudo yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER libpng12-devel \
+             yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER libpng12-devel \
                 || return 1
         else
-            sudo yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER libpng-devel \
+             yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER libpng-devel \
                 || return 1
         fi
 
         # RHEL / Cent OS 6 don't have some packages, but Open GEE builds without them:
         if yum list perl-Alien-Packages; then
-            sudo yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
+             yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
                 perl-Alien-Packages || return 1
         fi
 
         if yum list perl-Perl4-CoreLibs; then
-            sudo yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
+             yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
                 perl-Perl4-CoreLibs || return 1
         fi
 
@@ -275,8 +292,8 @@ elif [ "$PACKAGE_MANAGER" == "apt-get" ]; then
     {
         # The 'pexpect' package is not needed for Earth Server, or Fusion, 
         # but it is for Portable Server.
-        sudo apt-get $ASSUME_YES_PACKAGE_MANAGER_PARAMETER update || return 1
-        sudo apt-get $ASSUME_YES_PACKAGE_MANAGER_PARAMETER install \
+         apt-get $ASSUME_YES_PACKAGE_MANAGER_PARAMETER update || return 1
+         apt-get $ASSUME_YES_PACKAGE_MANAGER_PARAMETER install \
             alien autoconf automake bison++ bisonc++ curl \
             doxygen flex freeglut3-dev g++ gettext gcc \
             libc6 libc6-dev libcap-dev libfreetype6 libfreetype6-dev \
@@ -289,51 +306,23 @@ elif [ "$PACKAGE_MANAGER" == "apt-get" ]; then
             python-dev python2.7 python2.7-dev python-imaging \
             python-setuptools rsync scons software-properties-common swig \
             wget xorg-dev zlib1g-dev || return 1
-        sudo apt-get $ASSUME_YES_PACKAGE_MANAGER_PARAMETER install python-pexpect \
+         apt-get $ASSUME_YES_PACKAGE_MANAGER_PARAMETER install python-pexpect \
             || return 1
 
         # Install Git:
         # add-apt-repository ppa:git-core/ppa || return 1
         # apt-get $ASSUME_YES_PACKAGE_MANAGER_PARAMETER update || return 1
-        sudo apt-get $ASSUME_YES_PACKAGE_MANAGER_PARAMETER install git || return 1
+         apt-get $ASSUME_YES_PACKAGE_MANAGER_PARAMETER install git || return 1
 
         install_git_lfs
     }
 fi
-
-clone_repository()
-{
-    if [ -d earthenterprise -a -d earthenterprise/.git ]; then
-        echo "The GEE Open Source repository has already been cloned. Pulling latest updates"
-        cd earthenterprise
-        if [ -n "$CLONE_BRANCH" ]; then
-            git checkout "$CLONE_BRANCH"
-        fi
-        git pull
-        git lfs pull
-    else
-        if [ -z "$CLONE_BRANCH" ]; then
-            GIT_LFS_SKIP_SMUDGE=1 git clone --depth 1 "$CLONE_URL"
-        else
-            GIT_LFS_SKIP_SMUDGE=1 git clone -b "$CLONE_BRANCH" --depth 1 "$CLONE_URL"
-        fi
-        cd earthenterprise
-        git lfs pull
-    fi
-}
 
 print_command_line_help()
 {
     cat <<MSG
 
 ${SELF_NAME} [-r] [-b <branch_name>] [-p <dir>] [-d <dir>] [-c] [-l] [-y] [-h]
-
-    -r|--clone-repository
-        Specify '--clone-repository=no' to skip cloning the Open GEE source
-        code repository.
-
-    -b|--branch <branch_name>
-        Repository branch to clone.
 
     -p|--package-build-dir <dir>
         Directory under which to build packages (.rpm, .deb) that are not
@@ -365,23 +354,6 @@ MSG
 # Parse command-line arguments:
 while [[ "$#" -gt 0 ]]; do
     case "$1" in
-        -r|--clone-repository)
-            CLONE_REPOSITORY="yes"
-            ;;
-        -r=*|--clone-repository=*)
-            if is_string_value_false "${1#*=}"; then
-                CLONE_REPOSITORY=""
-            else
-                CLONE_REPOSITORY="yes"
-            fi
-            ;;
-        -b|--branch)
-            CLONE_BRANCH="$2"
-            shift
-            ;;
-        -b=*|--branch=*)
-            CLONE_BRANCH="${1#*=}"
-            ;;
         -p|--package-build-dir)
             PACKAGE_BUILD_DIR="$2"
             shift
@@ -440,6 +412,7 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 
+check_root
 
 if [ -n "$ASSUME_YES" ]; then
     ASSUME_YES_PACKAGE_MANAGER_PARAMETER="-y"
@@ -456,8 +429,4 @@ fi
 
 if [ -n "$CLEAN_PACKAGE_DOWNLOAD_DIR" ]; then
     clean_package_download_dir || exit 1
-fi
-
-if [ -n "$CLONE_REPOSITORY" ]; then
-    clone_repository || exit 1
 fi
