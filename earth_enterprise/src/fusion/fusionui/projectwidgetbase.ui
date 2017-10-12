@@ -130,6 +130,22 @@
                         </size>
                     </property>
                 </spacer>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>mask_nodata_label_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Decimation Error Threshold:</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="2" column="1">
+                    <property name="name">
+                        <cstring>decimation_threshold</cstring>
+                    </property>
+                    <property name="text">
+                        <string>0.09</string>
+                    </property>
+                </widget>
                 <widget class="QLabel">
                     <property name="name">
                         <cstring>overlay_terrain_start_level_label</cstring>
@@ -485,6 +501,12 @@
         <receiver>ProjectWidgetBase</receiver>
         <slot>BuildOverlayTerrainCheckboxToggled(bool)</slot>
     </connection>
+    <connection>
+        <sender>decimation_threshold</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ProjectWidgetBase</receiver>
+        <slot>SetDecimation(const QString&amp;)</slot>
+    </connection>
 </connections>
 <includes>
     <include location="local" impldecl="in implementation">projectwidgetbase.ui.h</include>
@@ -504,6 +526,7 @@
     <slot>ContextMenu( QListViewItem *, const QPoint &amp;, int )</slot>
     <slot>TimeMachineCheckboxToggled( bool )</slot>
     <slot>BuildOverlayTerrainCheckboxToggled( bool )</slot>
+    <slot>SetDecimation(const QString&amp;)</slot>
 </slots>
 <pixmapinproject/>
 <layoutdefaults spacing="6" margin="11"/>

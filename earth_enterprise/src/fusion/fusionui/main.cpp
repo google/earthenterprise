@@ -43,6 +43,11 @@
 #include "common/khFileUtils.h"
 #include "common/khGetopt.h"
 
+#include "autoingest/sysman/plugins/PacketLevelAssetD.h"
+
+bool PacketLevelAssetVersionImplD::decimate = true;
+double PacketLevelAssetVersionImplD::decimation = 0.09;
+
 // pre-qt3.1 workaround
 // #ifndef WStyle_Splash
 // #define WStyle_Splash WStyle_NoBorder | WStyle_StaysOnTop | WStyle_Tool | WWinOwnDC | WX11BypassWM

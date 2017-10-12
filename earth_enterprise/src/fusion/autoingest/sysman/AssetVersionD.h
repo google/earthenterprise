@@ -17,7 +17,8 @@
 #ifndef __AssetVersionD_h
 #define __AssetVersionD_h
 
-#include <AssetVersion.h>
+//#include <AssetVersion.h>
+#include "fusion/autoingest/AssetVersion.h"
 #include "AssetHandleD.h"
 #include <autoingest/sysman/.idl/TaskStorage.h>
 
