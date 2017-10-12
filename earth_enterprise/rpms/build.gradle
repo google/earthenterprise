@@ -1,0 +1,131 @@
+/*
+    See documentation on the osPackage plugin here: https://github.com/nebula-plugins/gradle-ospackage-plugin
+
+    This packaging script depends on the output of the main scons "stage_install" target,
+    which copies build artifacts, binaries and documents in to the /tmp/fusion_os_install path.
+ */
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "com.netflix.nebula:gradle-ospackage-plugin:4.4.2"
+    }
+}
+
+apply plugin: "nebula.ospackage"
+
+def env = System.getenv()
+def staged_install_path = '/tmp/fusion_os_install'
+def staged_install_common = staged_install_path + '/common'
+def staged_install_common_usermagic = staged_install_path + '/common/user_magic'
+def staged_install_manual = staged_install_path + '/manual'
+def staged_install_server_opt = staged_install_path + '/server/opt'
+def staged_install_server_etc = staged_install_path + '/server/etc'
+def staged_install_server_apachesupport = staged_install_path + '/server/AppacheSupport/'
+def staged_install_server_usermagic = staged_install_path + '/server/user_magic/'
+def staged_install_fusion = staged_install_path + '/fusion'
+def package_install_path = "/"
+def packageProps = new Properties()
+
+file("package.properties").withInputStream { packageProps.load(it) }
+def packageVersion = packageProps.getProperty("package.version")
+def packageRelease = packageProps.getProperty("package.release")
+
+apply plugin: 'nebula.ospackage'
+
+ospackage {
+    version = packageVersion
+    release = packageRelease
+    arch = X86_64
+    os = LINUX
+    into '/opt/google'
+}
+
+task commonRpm (type: Rpm) {
+    packageName = 'opengee-common'
+
+    from(staged_install_common) {
+        into package_install_path
+    }
+    from(staged_install_common_usermagic) {
+        into package_install_path
+    }
+    from(staged_install_manual) {
+        into package_install_path
+    }
+}
+
+task commonDeb (type: Deb) {
+    packageName = 'opengee-common'
+
+    from(staged_install_common) {
+        into package_install_path
+    }
+    from(staged_install_manual) {
+        into package_install_path
+    }
+}
+
+task serverRpm (type: Rpm) {
+    requires('opengee-common', packageVersion, GREATER | EQUAL)
+    packageName = 'opengee-server'
+    
+    from(staged_install_server_opt) {
+        into package_install_path + '/opt'
+    }
+    from(staged_install_server_etc) {
+        into package_install_path + '/etc'
+    }
+
+    from(staged_install_server_usermagic) {
+        into package_install_path
+    }
+    from(staged_install_server_apachesupport) {
+        into package_install_path
+    }
+}
+
+task serverDeb (type: Deb) {
+    requires('opengee-common', packageVersion, GREATER | EQUAL)
+    packageName = 'opengee-server'
+    from(staged_install_server_etc) {
+        into package_install_path + '/etc'
+    }
+
+    from(staged_install_server_opt) {
+        into package_install_path + '/opt'
+    }
+
+    from(staged_install_server_apachesupport) {
+        into package_install_path
+    }
+
+    from(staged_install_server_usermagic) {
+        into package_install_path
+    }
+}
+
+task fusionRpm (type: Rpm) {
+    requires('opengee-common', packageVersion, GREATER | EQUAL)
+    packageName = 'opengee-fusion'
+    from(staged_install_fusion) {
+        into package_install_path
+    }
+}
+
+task fusionDeb (type: Deb) {
+    requires('opengee-common', packageVersion, GREATER | EQUAL)
+    packageName = 'opengee-fusion'
+    from(staged_install_fusion) {
+        into package_install_path
+    }
+}
+
+task packageRpms(dependsOn: ['serverRpm','fusionRpm','commonRpm'])
+task packageDebs(dependsOn: ['serverDeb','fusionDeb','commonDeb'])
+task osPackage(dependsOn: ['packageRpms','packageDebs'])
+
+
+
