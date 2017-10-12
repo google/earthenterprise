@@ -308,7 +308,9 @@ function tst_docker_build_dockerfile_template()
     local IMAGE_TAG="$2"
     local FLATTEN_IMAGE="$3"
 
-    local DOCKER_BUILD_DIR=$(mktemp -p "$TST_DOCKER_BUILD_DIR" -d tmp.XXXXX)
+    mkdir -p "$TST_DOCKER_BUILD_DIR"
+
+    local DOCKER_BUILD_DIR=$(mktemp -p "$TST_DOCKER_BUILD_DIR" -d tmp.XXXXX) || return 1
     local DOCKERFILE_PATH="$DOCKER_BUILD_DIR/Dockerfile"
     export SECRET_SERVER_DIR="$DOCKER_BUILD_DIR/secrets"
     export SECRET_SERVER_DIR_ESCAPED
@@ -321,7 +323,6 @@ function tst_docker_build_dockerfile_template()
     local VAR
 
     printf -v SECRET_SERVER_DIR_ESCAPED "%q" "$SECRET_SERVER_DIR"
-    mkdir -p "$TST_DOCKER_BUILD_DIR"
     mkdir -p "$SECRET_SERVER_DIR"
 
     if grep -q -x -e "$TST_DOCKERFILE_NO_CONTEXT_MARKER" "$DOCKERFILE_TEMPLATE_PATH"; then
