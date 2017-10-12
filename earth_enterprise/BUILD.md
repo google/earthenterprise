@@ -7,6 +7,8 @@ Building is currently supported on 64-bit versions of Ubuntu 14.04 LTS, Ubuntu 1
 
 ## GEE 5.2.1 Build Prerequisites (All platforms) 
 
+Setup may be performed manually (steps listed below), or by executing the [build script](../scripts/get-gee-build-environment.sh).
+
 1. Setup required Tools and Dependencies
     * git 1.7.1+
     * git lfs 
