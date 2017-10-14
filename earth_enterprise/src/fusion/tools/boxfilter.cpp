@@ -108,10 +108,9 @@ const uchar *BoxFilterTiledImage::GetImageTile(int tile_x, int tile_y,
 // don't have a similar function for the top row of the SAT because the
 // calculation will just wrap around the horizontal band which is set to 0,
 // so the extra elements will have no effect.
-static inline
-void ComputeLeftSAT(int **elem,  // pointer to element in SAT table
-                    uchar value,  // corresponding image value
-                    int prev_row_offset) {  // offset to previous row elem
+inline void ComputeLeftSAT(int **elem,  // pointer to element in SAT table
+                           uchar value,  // corresponding image value
+                           int prev_row_offset) {  // offset to previous row elem
   **elem =
       + *(*elem + prev_row_offset)
       + value;
@@ -120,35 +119,29 @@ void ComputeLeftSAT(int **elem,  // pointer to element in SAT table
 
 // Computes a single SAT element given current values and an offset to
 // the previous row of values in the table.
-static inline
-void ComputeSAT(int *elem,  // pointer to element in SAT table
-                uchar value,  // corresponding image value
-                int prev_row_offset) {  // offset to previous row elem
-  *elem =
-      - *(elem + prev_row_offset - 1)
-      + *(elem + prev_row_offset)
-      + *(elem - 1)
-      + value;
+inline void ComputeSAT(int *elem,  // pointer to element in SAT table
+                       uchar value,  // corresponding image value
+                       int prev_row_offset) {  // offset to previous row elem
+  *elem = - *(elem + prev_row_offset - 1) + *(elem + prev_row_offset)
+          + *(elem - 1)                   + value;
 }
 
 // Computes a horizontal span of entries in the SAT with a single input
 // value, moving ptrs forward.
-static inline
-void ComputeSATSpanValue(int **psat,   // ptr to first SAT element
-                         int length,   // length of the span
-                         uchar value,  // constant image value (border)
-                         int prev_row_offset) {
+inline void ComputeSATSpanValue(int **psat,   // ptr to first SAT element
+                                int length,   // length of the span
+                                uchar value,  // constant image value (border)
+                                int prev_row_offset) {
   for (int *psat_end = (*psat) + length; (*psat) < psat_end; ++(*psat))
     ComputeSAT((*psat), value, prev_row_offset);
 }
 
 // Computes a horizontal span of entries in the SAT with a row of
 // input values, moving ptrs forward.
-static inline
-void ComputeSATSpanValues(int **psat,  // ptr to first SAT element
-                          int length,  // length of the span
-                          const uchar **values,  // ptr to image values
-                          int prev_row_offset) {
+inline void ComputeSATSpanValues(int **psat,  // ptr to first SAT element
+                                 int length,  // length of the span
+                                 const uchar **values,  // ptr to image values
+                                 int prev_row_offset) {
   for (int *psat_end = (*psat) + length; (*psat) < psat_end;
        ++(*psat), ++(*values))
     ComputeSAT((*psat), **values, prev_row_offset);
@@ -180,6 +173,7 @@ void ComputeSATSpanFromLeft(int **psat,  // ptr to the row in the SAT
 //
 // This function is heavily optimized.  It uses a Summed Area Table (SAT) to
 // speed up the calculation of the sum of the pixels within the box.
+// For more information about SATs, see https://en.wikipedia.org/wiki/Summed-area_table.
 // We don't keep the whole SAT in memory, only one sliding horizontal band
 // across the whole image width (it slides down as we process each image tile)
 // and a vertical band (sliding right) for the current row of tiles.
