@@ -152,12 +152,11 @@ inline void ComputeSATSpanValues(int **psat,  // ptr to first SAT element
 // forward. The first box_halfw+1 elements are outside the image and are
 // computed from the border value.  The remaining box_halfw elements are
 // computed from the image.
-static inline
-void ComputeSATSpanFromLeft(int **psat,  // ptr to the row in the SAT
-                             uchar border,  // border vlaue
-                             int prev_row_offset,  // offset to the previous row
-                             int box_halfw,  // (width of box -1) / 2
-                             const uchar **pimg) {  // ptr to image row
+inline void ComputeLeftSATSpan(int **psat,  // ptr to the row in the SAT
+                               uchar border,  // border vlaue
+                               int prev_row_offset,  // offset to the prev row
+                               int box_halfw,  // (width of box -1) / 2
+                               const uchar **pimg) {  // ptr to image row
   // Compute the far left value
   ComputeLeftSAT(psat, border, prev_row_offset);
   // Compute the padding outside the image
@@ -329,7 +328,7 @@ void BoxFilterTiledImage::BoxFilter(int box_width, int box_height,
           if (tile_col == 0) {
             if (tile_row == 0) {
               // Compute first part of top tile row.
-              ComputeSATSpanFromLeft(&psat, border, sat_prev_row_offset,
+              ComputeLeftSATSpan(&psat, border, sat_prev_row_offset,
                                      box_halfw, &pimg);
             } else {  // It is already computed from tile above us.
               psat += box_width;
@@ -361,7 +360,7 @@ void BoxFilterTiledImage::BoxFilter(int box_width, int box_height,
           // Handle case where row >= box_height.
           // Take care of the first box_width elements of SAT row.
           if (tile_col == 0) {  // Leftmost tile column: compute.
-            ComputeSATSpanFromLeft(&psat, border, sat_prev_row_offset,
+            ComputeLeftSATSpan(&psat, border, sat_prev_row_offset,
                                    box_halfw, &pimg);
           } else {  // Copy box_width elements from vertical band.
             memcpy(psat, &sat_vband[0] + row * box_width,
