@@ -12,12 +12,15 @@ cd "$SELF_DIR/../build"
 # capabilities.
 /root/opengee/bin/install-gee.sh || exit 1
 
+# Install Portable Server:
+/root/opengee/bin/install-portable-server.sh || exit 1
+
 # Remove the GEE repository and build files to save space:
 /root/opengee/bin/rm-gee-build-files.sh || exit 1
 
 # Clean the package cache to save space:
-apt-get clean || exit 1
-
-# Don't terminate, so the container can stay alive until it has been exported:
-echo "Open GEE Docker Stage 2: Entering wait loop."
-read
+if type apt-get >/dev/null 2>&1; then
+    apt-get clean
+else
+    yum clean all
+fi
