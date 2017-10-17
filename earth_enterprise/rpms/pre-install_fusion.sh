@@ -33,6 +33,7 @@ BASEINSTALLDIR_VAR="/var/opt/google"
 
 # derived directories
 SYSTEMRC="$BASEINSTALLDIR_ETC/systemrc"
+MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB=1048576
 
 # Get system info values
 NEWLINECLEANER="sed -e s:\\n::g"
@@ -43,15 +44,7 @@ check_bad_hostname() {
     if [ -z "$HOSTNAME" ] || [[ " ${BADHOSTNAMELIST[*]} " == *"${HOSTNAME,,} "* ]]; then
         show_badhostname
 
-        if [ $BADHOSTNAMEOVERRIDE == true ]; then
-            echo -e "Continuing the installation process...\n"
-            # 0 = true (in bash)
-            return 0
-        else
-            echo -e "Exiting the installer.  If you wish to continue, re-run this command with the -hnf 'Hostname Override' flag.\n"
-            # 1 = false
-            return 1
-        fi
+        return 0
     fi
 }
 
@@ -67,15 +60,7 @@ check_mismatched_hostname() {
     if [ $HOSTNAME != $HOSTNAME_F ]; then
         show_mismatchedhostname
 
-        if [ $MISMATCHHOSTNAMEOVERRIDE == true ]; then
-            echo -e "Continuing the installation process...\n"
-            # 0 = true (in bash)
-            return 0
-        else
-            echo -e "Exiting the installer.  If you wish to continue, re-run this command with the -hnmf 'Hostname Mismatch Override' flag.\n"
-            # 1 = false
-            return 1
-        fi
+        return 0
     fi
 }
 
@@ -89,16 +74,15 @@ show_mismatchedhostname()
 
 # config values
 ASSET_ROOT="/gevol/assets"
+ASSET_ROOT_VOLUME_SIZE=0
+
 
 #-----------------------------------------------------------------
 # Main Functions
 #-----------------------------------------------------------------
 main_preinstall()
 {
-	# check to see if GE Fusion processes are running
-	if ! check_fusion_processes_running; then
-		# STOP PROCESSES
-	fi
+        service gefusion stop
 
 	load_systemrc_config
 
@@ -112,11 +96,26 @@ main_preinstall()
 	check_bad_hostname
     
 	check_mismatched_hostname
+
+        check_asset_root_volume_size
 }
 
 #-----------------------------------------------------------------
 # Pre-install Functions
 #-----------------------------------------------------------------
+
+check_asset_root_volume_size()
+{
+    ASSET_ROOT_VOLUME_SIZE=$(df --output=avail $ASSET_ROOT | grep -v Avail)
+    
+    if [[ $ASSET_ROOT_VOLUME_SIZE -lt MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB ]]; then
+        MIN_ASSET_ROOT_VOLUME_SIZE_IN_GB=$(expr $MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB / 1024 / 1024)
+
+        echo -e "\nThe asset root volume [$ASSET_ROOT] has only $ASSET_ROOT_VOLUME_SIZE KB available."
+        echo -e "We recommend that an asset root directory have a minimum of $MIN_ASSET_ROOT_VOLUME_SIZE_IN_GB GB of free disk space."
+        echo ""
+    fi
+}
 
 load_systemrc_config()
 {
@@ -126,20 +125,6 @@ load_systemrc_config()
 		GEFUSIONUSER_NAME=$(xmllint --xpath '//Systemrc/fusionUsername/text()' $SYSTEMRC)
 		GROUPNAME=$(xmllint --xpath '//Systemrc/userGroupname/text()' $SYSTEMRC)		
 	fi
-}
-
-check_fusion_processes_running()
-{
-	check_fusion_processes_running_retval=0
-
-	local manager_running=$(ps -e | grep gesystemmanager | grep -v grep)
-	local res_provider_running=$(ps -ef | grep geresourceprovider | grep -v grep)
-
-	if [ ! -z "$manager_running" ] || [ ! -z "$res_provider_running" ]; then
-		check_fusion_processes_running_retval=1
-	fi
-
-	return $check_fusion_processes_running_retval
 }
 
 show_invalid_assetroot_name()
