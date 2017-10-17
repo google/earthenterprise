@@ -28,8 +28,6 @@ GROUPNAME=""
 BININSTALLROOTDIR="/etc/init.d"
 
 # script arguments
-DELETE_FUSION_GROUP=true
-
 HAS_EARTH_SERVER=false
 
 #-----------------------------------------------------------------
@@ -37,10 +35,7 @@ HAS_EARTH_SERVER=false
 #-----------------------------------------------------------------
 main_preuninstall()
 {
-    # check to see if GE Fusion processes are running
-    if ! check_fusion_processes_running; then
-        # STOP PROCESSES
-    fi
+    service gefusion stop
 
     load_systemrc_config
 
@@ -54,27 +49,11 @@ main_preuninstall()
     fi
 
     verify_systemrc_config_values
-
-    verify_group
 }
 
 #-----------------------------------------------------------------
 # Pre-uninstall Functions
 #-----------------------------------------------------------------
-check_fusion_processes_running()
-{
-	check_fusion_processes_running_retval=0
-
-	local manager_running=$(ps -e | grep gesystemmanager | grep -v grep)
-	local res_provider_running=$(ps -ef | grep geresourceprovider | grep -v grep)
-
-	if [ ! -z "$manager_running" ] || [ ! -z "$res_provider_running" ]; then
-		check_fusion_processes_running_retval=1
-	fi
-
-	return $check_fusion_processes_running_retval
-}
-
 load_systemrc_config()
 {
     if [ -f "$SYSTEMRC" ]; then
@@ -97,16 +76,6 @@ verify_systemrc_config_values()
         echo -e "Fusion User: \t$GEFUSIONUSER_NAME"
         echo -e "Fusion Group: \t\t$GROUPNAME"
         echo -e "\nThe uninstaller requires a system configuration file with valid data."
-    fi
-}
-
-verify_group()
-{
-    if [ $DELETE_FUSION_GROUP == true ] && [ $HAS_EARTH_SERVER == true ]; then
-        echo -e "\nNote: the GEE group [$GROUPNAME] will not be deleted because $GEES is installed on"
-        echo -e "this server. $GEES uses this account too."
-        echo -e "The group account will be deleted when $GEES is uninstalled."
-        DELETE_FUSION_GROUP=false
     fi
 }
 

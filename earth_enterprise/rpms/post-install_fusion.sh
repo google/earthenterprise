@@ -64,9 +64,6 @@ START_FUSION_DAEMON=true
 IS_NEWINSTALL=false
 PUBLISH_ROOT_VOLUME=""
 
-ASSET_ROOT_VOLUME_SIZE=0
-
-MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB=1048576
 EXISTING_HOST=""
 IS_SLAVE=false
 NEW_GEFUSIONUSER=false
@@ -81,8 +78,6 @@ main_postinstall()
 
     compare_asset_root_publishvolume
 
-    check_asset_root_volume_size
-
     setup_fusion_daemon
 	
     # store fusion version
@@ -96,7 +91,6 @@ main_postinstall()
 
     install_or_upgrade_asset_root
 
-    fix_postinstall_filepermissions
     final_assetroot_configuration
 
     final_fusion_service_configuration
@@ -133,19 +127,6 @@ compare_asset_root_publishvolume()
             VOL_PUBLISHED_ROOT_VOLUME=$(df $PUBLISH_ROOT_VOLUME | grep -v ^Filesystem | grep -Eo '^[^ ]+')
             
         fi
-    fi
-}
-
-check_asset_root_volume_size()
-{
-    ASSET_ROOT_VOLUME_SIZE=$(df --output=avail $ASSET_ROOT | grep -v Avail)
-    
-    if [[ $ASSET_ROOT_VOLUME_SIZE -lt MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB ]]; then
-        MIN_ASSET_ROOT_VOLUME_SIZE_IN_GB=$(expr $MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB / 1024 / 1024)
-
-        echo -e "\nThe asset root volume [$ASSET_ROOT] has only $ASSET_ROOT_VOLUME_SIZE KB available."
-        echo -e "We recommend that an asset root directory have a minimum of $MIN_ASSET_ROOT_VOLUME_SIZE_IN_GB GB of free disk space."
-        echo ""
     fi
 }
 
@@ -221,48 +202,6 @@ install_or_upgrade_asset_root()
     fi
 }
 
-fix_postinstall_filepermissions()
-{
-    # Run    
-    chmod 775 $BASEINSTALLDIR_OPT/run
-    chmod 775 $BASEINSTALLDIR_VAR/run
-    chown $ROOT_USERNAME:$GROUPNAME $BASEINSTALLDIR_OPT/run
-    chown $ROOT_USERNAME:$GROUPNAME $BASEINSTALLDIR_VAR/run
-
-    # Logs
-    chmod 775 $BASEINSTALLDIR_VAR/log
-    chmod 775 $BASEINSTALLDIR_OPT/log
-    chown $ROOT_USERNAME:$GROUPNAME $BASEINSTALLDIR_VAR/log
-    chown $ROOT_USERNAME:$GROUPNAME $BASEINSTALLDIR_OPT/log
-
-    # Etc
-    chmod 755 $BASEINSTALLDIR_ETC
-    chmod 755 $BASEINSTALLDIR_OPT/etc
-    chmod 644 $SYSTEMRC
-
-    # Other folders
-    chmod 755 $BASEINSTALLDIR_OPT
-    chmod 755 $BASEINSTALLDIR_VAR
-    chmod -R 755 $BASEINSTALLDIR_OPT/lib
-    chmod -R 555 $BASEINSTALLDIR_OPT/bin
-    chmod 755 $BASEINSTALLDIR_OPT
-    
-    # suid enabled
-    chmod +s $BASEINSTALLDIR_OPT/bin/geserveradmin
-    chmod -R 755 $BASEINSTALLDIR_OPT/qt
-    chmod 755 $BASEINSTALLDIR_ETC/openldap
-
-    # Share
-    find $BASEINSTALLDIR_OPT/share -type d -exec chmod 755 {} \;
-    find $BASEINSTALLDIR_OPT/share -type f -exec chmod 644 {} \;
-    chown -R $ROOT_USERNAME:$ROOT_USERNAME $BASEINSTALLDIR_OPT/share
-    chmod ugo+x $BASEINSTALLDIR_OPT/share/support/geecheck/geecheck.pl
-    chmod ugo+x $BASEINSTALLDIR_OPT/share/tutorials/fusion/download_tutorial.sh
-
-    # Restrict permissions to uninstaller and installer logs
-    chmod -R go-rwx $INSTALL_LOG_DIR
-}
-
 final_assetroot_configuration()
 {
     if [ $IS_SLAVE == true ]; then
@@ -284,16 +223,7 @@ final_fusion_service_configuration()
 {
     chcon -t texrel_shlib_t $BASEINSTALLDIR_OPT/lib/*so*
 
-    if [ $START_FUSION_DAEMON == true ]; then
-        if [ -f "$FUSIONBININSTALL" ]; then
-            $FUSIONBININSTALL start
-        else
-            echo -e "\nThe fusion service could not be found.  It appears that some components"
-            echo -e "have been installed, but others failed to install. This indicates that a previous"
-            echo -e "install process did not complete successfully.  Please uninstall fusion and"
-            echo -e "re-run this script."
-        fi
-    fi
+    service gefusionb start
 }
 
 #-----------------------------------------------------------------
