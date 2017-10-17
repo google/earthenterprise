@@ -82,20 +82,20 @@ ASSET_ROOT_VOLUME_SIZE=0
 #-----------------------------------------------------------------
 main_preinstall()
 {
-        service gefusion stop
+    service gefusion stop
 
-	load_systemrc_config
+    load_systemrc_config
 
-	# check for invalid asset names
-	INVALID_ASSETROOT_NAMES=$(find $ASSET_ROOT -type d -name "*[\\\&\%\'\"\*\=\+\~\`\?\<\>\:\; ]*" 2> /dev/null)
+    # check for invalid asset names
+    INVALID_ASSETROOT_NAMES=$(find $ASSET_ROOT -type d -name "*[\\\&\%\'\"\*\=\+\~\`\?\<\>\:\; ]*" 2> /dev/null)
 
-	if [ ! -z "$INVALID_ASSETROOT_NAMES" ]; then
-		show_invalid_assetroot_name $INVALID_ASSETROOT_NAMES
-	fi
+    if [ ! -z "$INVALID_ASSETROOT_NAMES" ]; then
+        show_invalid_assetroot_name $INVALID_ASSETROOT_NAMES
+    fi
 
-	check_bad_hostname
+    check_bad_hostname
     
-	check_mismatched_hostname
+    check_mismatched_hostname
 
         check_asset_root_volume_size
 }
@@ -119,29 +119,29 @@ check_asset_root_volume_size()
 
 load_systemrc_config()
 {
-	if [ -f "$SYSTEMRC" ]; then
-		# read existing config information
-		ASSET_ROOT=$(xmllint --xpath '//Systemrc/assetroot/text()' $SYSTEMRC)
-		GEFUSIONUSER_NAME=$(xmllint --xpath '//Systemrc/fusionUsername/text()' $SYSTEMRC)
-		GROUPNAME=$(xmllint --xpath '//Systemrc/userGroupname/text()' $SYSTEMRC)		
-	fi
+    if [ -f "$SYSTEMRC" ]; then
+        # read existing config information
+        ASSET_ROOT=$(xmllint --xpath '//Systemrc/assetroot/text()' $SYSTEMRC)
+        GEFUSIONUSER_NAME=$(xmllint --xpath '//Systemrc/fusionUsername/text()' $SYSTEMRC)
+        GROUPNAME=$(xmllint --xpath '//Systemrc/userGroupname/text()' $SYSTEMRC)		
+    fi
 }
 
 show_invalid_assetroot_name()
 (
-	echo -e "\nThe following characters are no longer allowed in GEE Fusion Assets:"
-	echo -e "& % \' \" * = + ~ \` ? < > : ; and the space character.\n"
-	
-	echo -e "Assets with these names will no longer be usable in GEE Fusion and will generate"
-	echo -e "an appropriate error message.\n"
+    echo -e "\nThe following characters are no longer allowed in GEE Fusion Assets:"
+    echo -e "& % \' \" * = + ~ \` ? < > : ; and the space character.\n"
+    
+    echo -e "Assets with these names will no longer be usable in GEE Fusion and will generate"
+    echo -e "an appropriate error message.\n"
 
-	echo -e "If you continue with installation, you will have to either recreate those assets using"
-	echo -e "valid names or  rename the assets to a valid name before attempting to process the assets.\n"
+    echo -e "If you continue with installation, you will have to either recreate those assets using"
+    echo -e "valid names or  rename the assets to a valid name before attempting to process the assets.\n"
 
-	echo -e "See the GEE Admin Guide for more details on renaming assets.\n"
+    echo -e "See the GEE Admin Guide for more details on renaming assets.\n"
 
-	echo -e "The following assets contain invalid characters:\n"
-	echo -e "$1"
+    echo -e "The following assets contain invalid characters:\n"
+    echo -e "$1"
 )
 
 

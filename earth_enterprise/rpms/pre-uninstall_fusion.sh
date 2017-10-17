@@ -27,9 +27,6 @@ GROUPNAME=""
 # directory locations
 BININSTALLROOTDIR="/etc/init.d"
 
-# script arguments
-HAS_EARTH_SERVER=false
-
 #-----------------------------------------------------------------
 # Main Functions
 #-----------------------------------------------------------------
@@ -38,15 +35,6 @@ main_preuninstall()
     service gefusion stop
 
     load_systemrc_config
-
-    GROUP_EXISTS=$(getent group $GROUPNAME)
-    USERNAME_EXISTS=$(getent passwd $GEFUSIONUSER_NAME)
-
-    if [ -f "$BININSTALLROOTDIR/geserver" ]; then
-        HAS_EARTH_SERVER=true
-    else
-        HAS_EARTH_SERVER=false
-    fi
 
     verify_systemrc_config_values
 }
@@ -58,14 +46,12 @@ load_systemrc_config()
 {
     if [ -f "$SYSTEMRC" ]; then
         ASSET_ROOT=$(xmllint --xpath '//Systemrc/assetroot/text()' $SYSTEMRC)
-	GEFUSIONUSER_NAME=$(xmllint --xpath '//Systemrc/fusionUsername/text()' $SYSTEMRC)
-	GROUPNAME=$(xmllint --xpath '//Systemrc/userGroupname/text()' $SYSTEMRC)	
+        GEFUSIONUSER_NAME=$(xmllint --xpath '//Systemrc/fusionUsername/text()' $SYSTEMRC)
     else
         echo -e "\nThe system configuration file [$SYSTEMRC] could not be found on your system."
         echo -e "This uninstaller cannot continue without a valid system configuration file.\n"
     fi
 }
-
 
 verify_systemrc_config_values()
 {
