@@ -40,36 +40,6 @@ NEWLINECLEANER="sed -e s:\\n::g"
 HOSTNAME="$(hostname -f | tr [A-Z] [a-z] | $NEWLINECLEANER)"
 HOSTNAME_F="$(hostname -f | $NEWLINECLEANER)"
 
-check_bad_hostname() {
-    if [ -z "$HOSTNAME" ] || [[ " ${BADHOSTNAMELIST[*]} " == *"${HOSTNAME,,} "* ]]; then
-        show_badhostname
-
-        return 0
-    fi
-}
-
-show_badhostname()
-{
-    echo -e "\nYour server [$HOSTNAME] contains an invalid hostname value which typically"
-    echo -e "indicates an automatically generated hostname that might change over time."
-    echo -e "A subsequent hostname change would cause configuration issues for the "
-    echo -e "$SOFTWARE_NAME software.  Invalid values: ${BADHOSTNAMELIST[*]}."
-}
-
-check_mismatched_hostname() {
-    if [ $HOSTNAME != $HOSTNAME_F ]; then
-        show_mismatchedhostname
-
-        return 0
-    fi
-}
-
-show_mismatchedhostname()
-{
-    echo -e "\nThe hostname of this machine does not match the fully-qualified hostname."
-    echo -e "$SOFTWARE_NAME requires that they match for local publishing to function properly."
-}
-
 #-----------------------------------------------------------------
 
 # config values
@@ -86,18 +56,14 @@ main_preinstall()
 
     load_systemrc_config
 
+    check_asset_root_volume_size
+
     # check for invalid asset names
     INVALID_ASSETROOT_NAMES=$(find $ASSET_ROOT -type d -name "*[\\\&\%\'\"\*\=\+\~\`\?\<\>\:\; ]*" 2> /dev/null)
 
     if [ ! -z "$INVALID_ASSETROOT_NAMES" ]; then
         show_invalid_assetroot_name $INVALID_ASSETROOT_NAMES
     fi
-
-    check_bad_hostname
-    
-    check_mismatched_hostname
-
-        check_asset_root_volume_size
 }
 
 #-----------------------------------------------------------------
