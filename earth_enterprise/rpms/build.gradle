@@ -9,123 +9,265 @@ buildscript {
     repositories {
         jcenter()
     }
+
     dependencies {
-        classpath "com.netflix.nebula:gradle-ospackage-plugin:4.4.2"
+        classpath 'com.netflix.nebula:gradle-ospackage-plugin:4.5.0'
     }
 }
 
 apply plugin: "nebula.ospackage"
 
-def env = System.getenv()
-def staged_install_path = '/tmp/fusion_os_install'
-def staged_install_common = staged_install_path + '/common'
-def staged_install_common_usermagic = staged_install_path + '/common/user_magic'
-def staged_install_manual = staged_install_path + '/manual'
-def staged_install_server_opt = staged_install_path + '/server/opt'
-def staged_install_server_etc = staged_install_path + '/server/etc'
-def staged_install_server_apachesupport = staged_install_path + '/server/AppacheSupport/'
-def staged_install_server_usermagic = staged_install_path + '/server/user_magic/'
-def staged_install_fusion = staged_install_path + '/fusion'
-def package_install_path = "/"
-def packageProps = new Properties()
+def openGeeVersion =
+    new File(project.projectDir, '../src/fusion_version.txt').readLines().
+    collect {
+        // Strip comments:
+        def commentIndex = it.indexOf('#')
 
-file("package.properties").withInputStream { packageProps.load(it) }
-def packageVersion = packageProps.getProperty("package.version")
-def packageRelease = packageProps.getProperty("package.release")
+        commentIndex < 0 ? it : it.substring(0, commentIndex)        
+    }.
+    collect { it.trim() }. // Trim whitespace.
+    findAll { !it.isEmpty() }. // Skip empty lines.
+    findResult {
+        it // The first string that remains is the version string.
+    }
 
-apply plugin: 'nebula.ospackage'
+
+def stagedInstallDir = new File('/tmp/fusion_os_install')
+def stagedInstallDir_common = new File(stagedInstallDir, 'common')
+def stagedInstallDir_common_opt = new File(stagedInstallDir, 'common/opt')
+def stagedInstallDir_common_user_magic =
+    new File(stagedInstallDir, 'common/user_magic')
+def stagedInstallDir_manual = new File(stagedInstallDir, 'manual')
+def stagedInstallDir_server_opt = new File(stagedInstallDir, 'server/opt')
+def stagedInstallDir_server_etc = new File(stagedInstallDir, 'server/etc')
+def stagedInstallDir_server_apachesupport =
+    new File(stagedInstallDir, 'server/AppacheSupport/')
+def stagedInstallDir_server_usermagic =
+    new File(stagedInstallDir, 'server/user_magic/')
+def stagedInstallDir_fusion = new File(stagedInstallDir, 'fusion')
+def packageInstallRootDir = new File('/')
+
+def postGisInstallDir = new File(
+        project.projectDir,
+        '../src/NATIVE-REL-x86_64/third_party/postgis/install'
+    ).getAbsolutePath()
+
+def postGisInstallDir_opt = new File(postGisInstallDir, 'opt')
+
 
 ospackage {
-    version = packageVersion
-    release = packageRelease
+    version = openGeeVersion
+    release = '1'
     arch = X86_64
     os = LINUX
-    into '/opt/google'
 }
 
-task commonRpm (type: Rpm) {
+task compileOpenGee(type: Exec) {
+    workingDir = '..'
+
+    commandLine('scons', '-j8', 'release=1', 'build')
+}
+
+task stageOpenGeeInstall(type: Exec, dependsOn: 'compileOpenGee') {
+    workingDir = '..'
+
+    // The scons `stage_install` task doesn't work correctly with
+    // "installdir=${build_install_dir.getAbsolutePath()}", so we
+    // overwrite whatever is in the default stage install directory:
+    commandLine(
+        'scons', '-j8', 'release=1', 'stage_install')
+}
+
+task openGeePostGisRpm(type: Rpm, dependsOn: 'stageOpenGeeInstall') {
+    packageName = 'opengee-postgis'
+    release = '1'
+    version = '1.5.8'
+    user = 'root'
+    permissionGroup = 'root'
+    packageGroup = 'Application/Productivity'
+    summary = 'Post GIS extension for Postgre SQL server used by Open GEE'
+    packageDescription = 'Post GIS extension for Postgre SQL server used by Open GEE.'
+    license = 'GPL 2'
+    packager = 'gee-oss@googlegroups.com'
+    url = 'https://github.com/google/earthenterprise/tree/master/earth_enterprise/third_party/postgis'
+    arch = 'X86_64'
+    os = 'LINUX'
+    type = 'BINARY'
+
+    from (postGisInstallDir_opt) {
+        into new File(packageInstallRootDir, 'opt')
+    }
+}
+
+task openGeeCommonRpm(type: Rpm, dependsOn: 'stageOpenGeeInstall') {
+    packageName = 'opengee-common'
+    release = '1'
+    version = openGeeVersion
+    user = 'root'
+    permissionGroup = 'root'
+    packageGroup = 'Application/Productivity'
+    summary = 'Third-party libraries bundled with Open GEE'
+    packageDescription =
+'''Currently this package includes:
+
+* MesaLib: LGPL 2.1
+* PIL (Python Imaging Library): Python Imaging Library 1.1.7
+* Apache: Apache 2.0
+* apr-util: Apache 2.0
+* apr: Apache 2.0
+* Firefox: MPL 1.1
+* GDAL: MIT
+* libcurl: MIT/X
+* libjs: MPL 1.1
+* mgrs: mgrs 1.1.0
+* mm: mm 1.4.2
+* mod_wsgi: Apache 2.0
+* Open JPEG: Open JPEG BSD 2.1.2
+* Open LDAP: OpenLDAP Public License 2.8
+* Open SSL: Open SSL 1.0.2h
+* PCRE: BSD
+* Postgre SQL: BSD
+* Psycopg2: Psycopg2 GPL 3+ v. 2.4.6
+* Python: PSF 2
+* Qt: GPL 2+, QPL 1
+* Setup Tools: PSF 2 or ZPL
+* Skia: Skia 5.1.2
+* Tornado: Apache 2.0
+'''
+    license =
+        'Apache 2.0 and ' +
+        'BSD 2.1.2 and ' +
+        'GPL 2+ and ' +
+        'Psycopg2 GPL 3+ and ' +
+        'LGPL 2.1 and ' +
+        'MIT and MIT/X and ' +
+        'MPL 1.1 and ' +
+        'PSF 2 and ' +
+        'Python Imaging Library 1.1.7 and ' +
+        'mgrs 1.1.0 and mm 1.4.2 and ' +
+        'OpenLDAP Public License 2.8 and ' +
+        'Open SSL 1.0.2h and ' +
+        'Skia 5.1.2'
+    packager = 'gee-oss@googlegroups.com'
+    arch = 'X86_64'
+    os = 'LINUX'
+    type = 'BINARY'
+
+    requires('opengee-postgis', '1.5.8', GREATER | EQUAL)
+    conflicts('opengee-postgis', '2.0', GREATER | EQUAL)
+
+    from (stagedInstallDir_common_opt) {
+        into new File(packageInstallRootDir, 'opt')
+
+        exclude {
+            !new File(
+                postGisInstallDir_opt
+                    .toURI()
+                    .relativize(stagedInstallDir_common_opt.toURI())
+                    .getPath()
+            ).exists()
+        }
+    }
+
+    from (stagedInstallDir_common_user_magic) {
+        into packageInstallRootDir
+
+        exclude {
+            !new File(
+                postGisInstallDir
+                    .toURI()
+                    .relativize(stagedInstallDir_common.toURI())
+                    .getPath()
+            ).exists()
+        }
+    }
+
+    from(stagedInstallDir_manual) {
+        into packageInstallRootDir
+    }
+}
+
+
+task openGeeCommonDeb (type: Deb) {
     packageName = 'opengee-common'
 
-    from(staged_install_common) {
-        into package_install_path
+    from(stagedInstallDir_common) {
+        into packageInstallRootDir
     }
-    from(staged_install_common_usermagic) {
-        into package_install_path
-    }
-    from(staged_install_manual) {
-        into package_install_path
+    from(stagedInstallDir_manual) {
+        into packageInstallRootDir
     }
 }
 
-task commonDeb (type: Deb) {
-    packageName = 'opengee-common'
-
-    from(staged_install_common) {
-        into package_install_path
-    }
-    from(staged_install_manual) {
-        into package_install_path
-    }
-}
-
-task serverRpm (type: Rpm) {
-    requires('opengee-common', packageVersion, GREATER | EQUAL)
+task openGeeServerRpm (type: Rpm) {
+    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     packageName = 'opengee-server'
     
-    from(staged_install_server_opt) {
-        into package_install_path + '/opt'
+    from(stagedInstallDir_server_opt) {
+        into new File(packageInstallRootDir, 'opt')
     }
-    from(staged_install_server_etc) {
-        into package_install_path + '/etc'
+    from(stagedInstallDir_server_etc) {
+        into new File(packageInstallRootDir, 'etc')
     }
 
-    from(staged_install_server_usermagic) {
-        into package_install_path
+    from(stagedInstallDir_server_usermagic) {
+        into packageInstallRootDir
     }
-    from(staged_install_server_apachesupport) {
-        into package_install_path
+    from(stagedInstallDir_server_apachesupport) {
+        into packageInstallRootDir
     }
 }
 
-task serverDeb (type: Deb) {
-    requires('opengee-common', packageVersion, GREATER | EQUAL)
+task openGeeServerDeb (type: Deb) {
+    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     packageName = 'opengee-server'
-    from(staged_install_server_etc) {
-        into package_install_path + '/etc'
+    from(stagedInstallDir_server_etc) {
+        into new File(packageInstallRootDir, 'etc')
     }
 
-    from(staged_install_server_opt) {
-        into package_install_path + '/opt'
+    from(stagedInstallDir_server_opt) {
+        into new File(packageInstallRootDir, 'opt')
     }
 
-    from(staged_install_server_apachesupport) {
-        into package_install_path
+    from(stagedInstallDir_server_apachesupport) {
+        into packageInstallRootDir
     }
 
-    from(staged_install_server_usermagic) {
-        into package_install_path
+    from(stagedInstallDir_server_usermagic) {
+        into packageInstallRootDir
     }
 }
 
-task fusionRpm (type: Rpm) {
-    requires('opengee-common', packageVersion, GREATER | EQUAL)
+task openGeeFusionRpm (type: Rpm) {
+    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     packageName = 'opengee-fusion'
-    from(staged_install_fusion) {
-        into package_install_path
+    from(stagedInstallDir_fusion) {
+        into packageInstallRootDir
     }
 }
 
-task fusionDeb (type: Deb) {
-    requires('opengee-common', packageVersion, GREATER | EQUAL)
+task openGeeFusionDeb (type: Deb) {
+    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     packageName = 'opengee-fusion'
-    from(staged_install_fusion) {
-        into package_install_path
+    from(stagedInstallDir_fusion) {
+        into packageInstallRootDir
     }
 }
 
-task packageRpms(dependsOn: ['serverRpm','fusionRpm','commonRpm'])
-task packageDebs(dependsOn: ['serverDeb','fusionDeb','commonDeb'])
-task osPackage(dependsOn: ['packageRpms','packageDebs'])
+task opengeeRpms(
+    dependsOn: [
+        'openGeeServerRpm', 'openGeeFusionRpm', 'openGeeCommonRpm',
+        'openGeePostGisRpm'
+    ])
+
+task opengeeDebs(
+    dependsOn: ['openGeeServerDeb', 'openGeeFusionDeb', 'openGeeCommonDeb'])
+
+task osPackage(dependsOn: ['opengeeRpms', 'opengeeDebs'])
 
 
-
+// Mostly for documentation purposes.  You need to comment out the rest of the
+// Gradle file to run this task:
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.2'
+}
