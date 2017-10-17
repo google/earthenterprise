@@ -1,0 +1,317 @@
+/*
+    See documentation on the osPackage plugin here: https://github.com/nebula-plugins/gradle-ospackage-plugin
+
+    This packaging script depends on the output of the main scons "stage_install" target,
+    which copies build artifacts, binaries and documents in to the /tmp/fusion_os_install path.
+ */
+
+import java.nio.file.FileSystems
+import java.nio.file.Files
+import java.nio.file.Path
+import com.netflix.gradle.plugins.utils.JavaNIOUtils
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.netflix.nebula:gradle-ospackage-plugin:3.6.0'
+    }
+}
+
+apply plugin: "nebula.ospackage"
+
+def openGeeVersion =
+    new File(project.projectDir, '../src/fusion_version.txt').readLines().
+    collect {
+        // Strip comments:
+        def commentIndex = it.indexOf('#')
+
+        commentIndex < 0 ? it : it.substring(0, commentIndex)        
+    }.
+    collect { it.trim() }. // Trim whitespace.
+    findAll { !it.isEmpty() }. // Skip empty lines.
+    findResult {
+        it // The first string that remains is the version string.
+    }
+
+
+def stagedInstallDir = new File('/tmp/fusion_os_install')
+def stagedInstallDir_common = new File(stagedInstallDir, 'common')
+def stagedInstallDir_common_opt = new File(stagedInstallDir, 'common/opt')
+def stagedInstallDir_common_user_magic =
+    new File(stagedInstallDir, 'common/user_magic')
+def stagedInstallDir_manual = new File(stagedInstallDir, 'manual')
+def stagedInstallDir_server_opt = new File(stagedInstallDir, 'server/opt')
+def stagedInstallDir_server_etc = new File(stagedInstallDir, 'server/etc')
+def stagedInstallDir_server_apachesupport =
+    new File(stagedInstallDir, 'server/AppacheSupport/')
+def stagedInstallDir_server_usermagic =
+    new File(stagedInstallDir, 'server/user_magic/')
+def stagedInstallDir_fusion = new File(stagedInstallDir, 'fusion')
+def packageInstallRootDir = new File('/')
+
+def postGisInstallDir = new File(
+        project.projectDir,
+        '../src/NATIVE-REL-x86_64/third_party/postgis/install'
+    ).getAbsolutePath()
+
+def postGisInstallDir_opt = new File(postGisInstallDir, 'opt')
+
+
+ospackage {
+    version = openGeeVersion
+    release = '1'
+    arch = X86_64
+    os = LINUX
+}
+
+task compileOpenGee(type: Exec) {
+    workingDir = '..'
+    commandLine('scons', '-j8', 'release=1', 'build')
+}
+
+task stageOpenGeeInstall(type: Exec, dependsOn: 'compileOpenGee') {
+    workingDir = '..'
+
+    // The scons `stage_install` task doesn't work correctly with
+    // "installdir=${build_install_dir.getAbsolutePath()}", so we
+    // overwrite whatever is in the default stage install directory:
+    commandLine(
+        'scons', '-j8', 'release=1', 'stage_install')
+}
+
+task openGeePostGisRpm(type: Rpm, dependsOn: 'stageOpenGeeInstall') {
+    packageName = 'opengee-postgis'
+    release = '1'
+    version = '1.5.8'
+    user = 'root'
+    permissionGroup = 'root'
+    packageGroup = 'Application/Productivity'
+    summary = 'Post GIS extension for Postgre SQL server used by Open GEE'
+    packageDescription = 'Post GIS extension for Postgre SQL server used by Open GEE.'
+    license = 'GPL 2'
+    packager = 'gee-oss@googlegroups.com'
+    url = 'https://github.com/google/earthenterprise/tree/master/earth_enterprise/third_party/postgis'
+    arch = 'X86_64'
+    os = 'LINUX'
+    type = 'BINARY'
+
+    from (postGisInstallDir_opt) {
+        into new File(packageInstallRootDir, 'opt')
+    }
+}
+
+task openGeeCommonRpm(type: Rpm ) { //  dependsOn: 'stageOpenGeeInstall') {
+    packageName = 'opengee-common'
+    release = '1'
+    version = openGeeVersion
+    user = 'root'
+    permissionGroup = 'root'
+    packageGroup = 'Application/Productivity'
+    summary = 'Third-party libraries bundled with Open GEE'
+    packageDescription =
+'''Currently this package includes:
+
+* MesaLib: LGPL 2.1
+* PIL (Python Imaging Library): Python Imaging Library 1.1.7
+* Apache: Apache 2.0
+* apr-util: Apache 2.0
+* apr: Apache 2.0
+* Firefox: MPL 1.1
+* GDAL: MIT
+* libcurl: MIT/X
+* libjs: MPL 1.1
+* mgrs: mgrs 1.1.0
+* mm: mm 1.4.2
+* mod_wsgi: Apache 2.0
+* Open JPEG: Open JPEG BSD 2.1.2
+* Open LDAP: OpenLDAP Public License 2.8
+* Open SSL: Open SSL 1.0.2h
+* PCRE: BSD
+* Postgre SQL: BSD
+* Psycopg2: Psycopg2 GPL 3+ v. 2.4.6
+* Python: PSF 2
+* Qt: GPL 2+, QPL 1
+* Setup Tools: PSF 2 or ZPL
+* Skia: Skia 5.1.2
+* Tornado: Apache 2.0
+'''
+    license =
+        'Apache 2.0 and ' +
+        'BSD 2.1.2 and ' +
+        'GPL 2+ and ' +
+        'Psycopg2 GPL 3+ and ' +
+        'LGPL 2.1 and ' +
+        'MIT and MIT/X and ' +
+        'MPL 1.1 and ' +
+        'PSF 2 and ' +
+        'Python Imaging Library 1.1.7 and ' +
+        'mgrs 1.1.0 and mm 1.4.2 and ' +
+        'OpenLDAP Public License 2.8 and ' +
+        'Open SSL 1.0.2h and ' +
+        'Skia 5.1.2'
+    packager = 'gee-oss@googlegroups.com'
+    arch = 'X86_64'
+    os = 'LINUX'
+    type = 'BINARY'
+
+    requires('opengee-postgis', '1.5.8', GREATER | EQUAL)
+    conflicts('opengee-postgis', '2.0', GREATER | EQUAL)
+    println "BUILDING COMMON"
+
+    from (stagedInstallDir_common_opt) {
+
+        into new File(packageInstallRootDir, 'opt') //into '/' +'opt'
+        /*
+                    The following code intercepts files that are symlinks and excludes them from the CPIO RPM archive,
+                    which can cause errors in some versions of RPM.  NOTE - this is duplicated and should be made a separate
+                    function.
+        */
+        eachFile { details ->
+        if(JavaNIOUtils.isSymbolicLink(details.file)) {
+             details.exclude()
+             println "EXCLUDING SYMLINKED FILE FROM CPIO ARCHIVE.  CREATING LINK FOR: " + details
+             String symLinkPath = "/${details.relativePath}"
+             String targetPath = JavaNIOUtils.readSymbolicLink(JavaNIOUtils.createPath(details.file.path))
+             link(symLinkPath, targetPath)
+           }
+        }
+
+
+        exclude {
+            !new File(
+                postGisInstallDir_opt
+                    .toURI()
+                    .relativize(stagedInstallDir_common_opt.toURI())
+                    .getPath()
+            ).exists()
+        }
+    }
+
+
+    from (stagedInstallDir_common_user_magic) {
+        into packageInstallRootDir        // into '/' + 'opt'
+        // TODO - remove duplicate symlink mapping code
+        filesMatching('**') { FileCopyDetails details ->
+               if (Files.isSymbolicLink(details.file.toPath())) {
+                   details.exclude()
+                   def toFile = File
+                   println "EXCLUDING SYMLINKED FILE FROM CPIO ARCHIVE.  CREATING LINK FOR: " + details
+                   s.readSymbolicLink(details.file.toPath()).toFile()
+                   print '.LINK'
+                   link(details.relativePath.toString(), toFile.toString())
+               }
+         }
+
+
+        exclude {
+            !new File(
+                postGisInstallDir
+                    .toURI()
+                    .relativize(stagedInstallDir_common.toURI())
+                    .getPath()
+            ).exists()
+        }
+    }
+
+    from(stagedInstallDir_manual) {
+        into packageInstallRootDir
+        // TODO - remove duplicate symlink mapping code
+        filesMatching('**') { FileCopyDetails details ->
+              if (Files.isSymbolicLink(details.file.toPath())) {
+                details.exclude()
+                def toFile = Files.readSymbolicLink(details.file.toPath()).toFile()
+                println "EXCLUDING SYMLINKED FILE FROM CPIO ARCHIVE.  CREATING LINK FOR: " + details
+                link(details.relativePath.toString(), toFile.toString())
+              }
+            }
+
+    }
+}
+
+
+task openGeeCommonDeb (type: Deb) {
+    packageName = 'opengee-common'
+
+    from(stagedInstallDir_common) {
+        into packageInstallRootDir
+    }
+    from(stagedInstallDir_manual) {
+        into packageInstallRootDir
+    }
+}
+
+task openGeeServerRpm (type: Rpm) {
+    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
+    packageName = 'opengee-server'
+    
+    from(stagedInstallDir_server_opt) {
+        into new File(packageInstallRootDir, 'opt')
+    }
+    from(stagedInstallDir_server_etc) {
+        into new File(packageInstallRootDir, 'etc')
+    }
+
+    from(stagedInstallDir_server_usermagic) {
+        into packageInstallRootDir
+    }
+    from(stagedInstallDir_server_apachesupport) {
+        into packageInstallRootDir
+    }
+}
+
+task openGeeServerDeb (type: Deb) {
+    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
+    packageName = 'opengee-server'
+    from(stagedInstallDir_server_etc) {
+        into new File(packageInstallRootDir, 'etc')
+    }
+
+    from(stagedInstallDir_server_opt) {
+        into new File(packageInstallRootDir, 'opt')
+    }
+
+    from(stagedInstallDir_server_apachesupport) {
+        into packageInstallRootDir
+    }
+
+    from(stagedInstallDir_server_usermagic) {
+        into packageInstallRootDir
+    }
+}
+
+task openGeeFusionRpm (type: Rpm) {
+    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
+    packageName = 'opengee-fusion'
+    from(stagedInstallDir_fusion) {
+        into packageInstallRootDir
+    }
+}
+
+task openGeeFusionDeb (type: Deb) {
+    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
+    packageName = 'opengee-fusion'
+    from(stagedInstallDir_fusion) {
+        into packageInstallRootDir
+    }
+}
+
+task opengeeRpms(
+    dependsOn: [
+        'openGeeServerRpm', 'openGeeFusionRpm', 'openGeeCommonRpm',
+        'openGeePostGisRpm'
+    ])
+
+task opengeeDebs(
+    dependsOn: ['openGeeServerDeb', 'openGeeFusionDeb', 'openGeeCommonDeb'])
+
+task osPackage(dependsOn: ['opengeeRpms', 'opengeeDebs'])
+
+
+// Mostly for documentation purposes.  You need to comment out the rest of the
+// Gradle file to run this task:
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.2'
+}
