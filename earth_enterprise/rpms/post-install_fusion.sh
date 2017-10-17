@@ -79,7 +79,7 @@ main_postinstall()
     compare_asset_root_publishvolume
 
     setup_fusion_daemon
-	
+
     # store fusion version
     echo $LONG_VERSION > $BASEINSTALLDIR_ETC/fusion_version
 
@@ -101,26 +101,26 @@ main_postinstall()
 #-----------------------------------------------------------------
 setup_fusion_daemon()
 {
-	# setup fusion daemon
-	printf "Setting up the Fusion daemon...\n"
+    # setup fusion daemon
+    printf "Setting up the Fusion daemon...\n"
 
-	test -f $CHKCONFIG && $CHKCONFIG --add gefusion
-	test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE -f gefusion remove
-	test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE gefusion start 90 2 3 4 5 . stop 10 0 1 6 .
-	
-	printf "Fusion daemon setup ... Done\n"
+    test -f $CHKCONFIG && $CHKCONFIG --add gefusion
+    test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE -f gefusion remove
+    test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE gefusion start 90 2 3 4 5 . stop 10 0 1 6 .
+    
+    printf "Fusion daemon setup ... Done\n"
 }
 
 create_system_main_directories()
 {
-        mkdir -p $ASSET_ROOT
-        mkdir -p $SOURCE_VOLUME
+    mkdir -p $ASSET_ROOT
+    mkdir -p $SOURCE_VOLUME
 }
 
 compare_asset_root_publishvolume()
 {    
     if [ -f "$BASEINSTALLDIR_OPT/gehttpd/conf.d/stream_space" ]; then
-		PUBLISH_ROOT_VOLUME="$(cut -d' ' -f3 /opt/google/gehttpd/conf.d/stream_space | cut -d'/' -f2 | $NEWLINECLEANER)"
+        PUBLISH_ROOT_VOLUME="$(cut -d' ' -f3 /opt/google/gehttpd/conf.d/stream_space | cut -d'/' -f2 | $NEWLINECLEANER)"
 
         if [ -d "$ASSET_ROOT" ] && [ -d "$PUBLISH_ROOT_VOLUME" ]; then
             VOL_ASSETROOT=$(df $ASSET_ROOT | grep -v ^Filesystem | grep -Eo '^[^ ]+')
@@ -136,7 +136,7 @@ check_fusion_master_or_slave()
         EXISTING_HOST=$(xmllint --xpath "//VolumeDefList/volumedefs/item[1]/host/text()" $ASSET_ROOT/.config/volumes.xml | $NEWLINECLEANER)
 
         case "$EXISTING_HOST" in
-			$HOSTNAME_F|$HOSTNAME_A|$HOSTNAME_S|$HOSTNAME)
+            $HOSTNAME_F|$HOSTNAME_A|$HOSTNAME_S|$HOSTNAME)
                 IS_SLAVE=false
                 ;;
             *)
@@ -151,7 +151,7 @@ check_fusion_master_or_slave()
 
 create_systemrc()
 {
-	echo "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>
+    echo "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>
 <Systemrc>
   <assetroot>$ASSET_ROOT</assetroot>
   <maxjobs>$NUM_CPUS</maxjobs>
@@ -190,14 +190,14 @@ install_or_upgrade_asset_root()
 
             echo -e "\nThe asset root must be upgraded to work with the current version of $GEEF $LONG_VERSION."
             echo -e "You cannot use an upgraded asset root with older versions of $GEEF. "
-	    echo -e "Consider backing up your asset root. $GEEF will warn you when"
+            echo -e "Consider backing up your asset root. $GEEF will warn you when"
             echo -e "attempting to run with a non-upgraded asset root."
             echo -e "$UPGRADE_MESSAGE"
                 
-		# Note: we don't want to do the recursive chown on the asset root unless absolutely necessary
+            # Note: we don't want to do the recursive chown on the asset root unless absolutely necessary
             $BASEINSTALLDIR_OPT/bin/geconfigureassetroot --fixmasterhost --noprompt  $NOCHOWN --assetroot $ASSET_ROOT
             $BASEINSTALLDIR_OPT/bin/geupgradeassetroot --noprompt $NOCHOWN --assetroot $ASSET_ROOT
-	    chown -R $GEFUSIONUSER_NAME:$GROUPNAME $ASSET_ROOT
+            chown -R $GEFUSIONUSER_NAME:$GROUPNAME $ASSET_ROOT
         fi  
     fi
 }
@@ -209,9 +209,9 @@ final_assetroot_configuration()
     else
         $BASEINSTALLDIR_OPT/bin/geselectassetroot --assetroot $ASSET_ROOT
 
-	mkdir -p $BASEINSTALLDIR_OPT/share/tutorials
-	$BASEINSTALLDIR_OPT/bin/geconfigureassetroot --addvolume opt:$BASEINSTALLDIR_OPT/share/tutorials --noprompt --nochown
-	if [ $? -eq 255 ]; then
+        mkdir -p $BASEINSTALLDIR_OPT/share/tutorials
+        $BASEINSTALLDIR_OPT/bin/geconfigureassetroot --addvolume opt:$BASEINSTALLDIR_OPT/share/tutorials --noprompt --nochown
+        if [ $? -eq 255 ]; then
             echo -e "The geconfigureassetroot utility has failed on attempting"
             echo -e "to add the volume 'opt:$BASEINSTALLDIR_OPT/share/tutorials'."
             echo -e "This is probably due to a volume named 'opt' already exists."
