@@ -57,9 +57,6 @@ main_preuninstall()
     # get the GE user names
     get_user_names
 
-    # check if the group can be safely deleted
-    check_group_delete
-
     # find the publish root
     get_publish_roots
 }
@@ -74,16 +71,6 @@ get_user_names()
     GEAPACHEUSER_EXISTS=$(getent passwd $GEAPACHEUSER_NAME)
     GEPGUSER_EXISTS=$(getent passwd $GEPGUSER_NAME)
     GEGROUP_EXISTS=$(getent group $GEGROUP_NAME)
-}
-
-check_group_delete()
-{
-    if [ $DELETE_GROUP == true ] && [ $HAS_FUSION == true ]; then
-        echo -e "\nNote: the GEE group [$GEGROUP_NAME] will not be deleted because $GEEF is installed on"
-        echo -e "this server. $GEEF uses this account too."
-        echo -e "The group account will be deleted when $GEEF is uninstalled."
-        DELETE_GROUP=false
-    fi
 }
 
 get_publish_roots()
