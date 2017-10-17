@@ -127,30 +127,30 @@ GEAPACHEUSER_NAME="geapacheuser"
 #-----------------------------------------------------------------
 main_preinstall()
 {
-  # 5a) Check previous installation
-  if [ -f "$SERVERBININSTALL" ]; then
-    IS_NEWINSTALL=false
-  else
-    IS_NEWINSTALL=true
-  fi
+    # 5a) Check previous installation
+    if [ -f "$SERVERBININSTALL" ]; then
+        IS_NEWINSTALL=false
+    else
+        IS_NEWINSTALL=true
+    fi
 
-  # 7) Check prerequisite software
+    # 7) Check prerequisite software
 
-  # check to see if GE Server processes are running
-  service geserver stop
+    # check to see if GE Server processes are running
+    service geserver stop
 
-  # 6) Check valid host properties
-  check_bad_hostname
-  check_mismatched_hostname
+    # 6) Check valid host properties
+    check_bad_hostname
+    check_mismatched_hostname
 
-  # 8) Check if group and users exist
-  check_group
+    # 8) Check if group and users exist
+    check_group
 
-  check_username $GEAPACHEUSER_NAME
-  check_username $GEPGUSER_NAME
+    check_username $GEAPACHEUSER_NAME
+    check_username $GEPGUSER_NAME
 
-  # 10) Configure Publish Root
-  configure_publish_root
+    # 10) Configure Publish Root
+    configure_publish_root
 }
 
 #-----------------------------------------------------------------
@@ -159,11 +159,11 @@ main_preinstall()
 
 configure_publish_root()
 {
-  # Update PUBLISHER_ROOT if geserver already installed
-  local STREAM_SPACE="$GEHTTPD_CONF/stream_space"
-  if [ -e $STREAM_SPACE ]; then
-    PUBLISHER_ROOT=`cat $STREAM_SPACE |cut -d" " -f3 |sed 's/.\{13\}$//'`
-  fi
+    # Update PUBLISHER_ROOT if geserver already installed
+    local STREAM_SPACE="$GEHTTPD_CONF/stream_space"
+    if [ -e $STREAM_SPACE ]; then
+        PUBLISHER_ROOT=`cat $STREAM_SPACE |cut -d" " -f3 |sed 's/.\{13\}$//'`
+    fi
 }
 
 #-----------------------------------------------------------------
