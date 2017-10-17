@@ -23,47 +23,6 @@ GEE="Google Earth Enterprise"
 
 # directory locations
 BININSTALLROOTDIR="/etc/init.d"
-BASEINSTALLDIR_OPT="/opt/google"
-BASEINSTALLDIR_ETC="/etc/opt/google"
-BASEINSTALLDIR_VAR="/var/opt/google"
-
-check_server_processes_running()
-{
-  printf "\nChecking geserver services:\n"
-  local retval=1
-
-  # i) Check if postgres is running
-  local post_master_running=$( ps -ef | grep postgres | grep -v grep )
-  local post_master_running_str="false"
-
-  # ii) Check if gehttpd is running
-  local gehttpd_running=$( ps -ef | grep gehttpd | grep -v grep )
-  local gehttpd_running_str="false"
-
-  # iii) Check if wsgi is running
-  local wsgi_running=$( ps -ef | grep wsgi:ge_ | grep -v grep )
-  local wsgi_running_str="false"
-
-  if [ -n "$post_master_running" ]; then
-    retval=0
-    post_master_running_str="true"
-  fi
-  echo "postgres service: $post_master_running_str"
-
-  if [ -n "$gehttpd_running" ]; then
-    retval=0
-    gehttpd_running_str="true"
-  fi
-  echo "gehttpd service: $gehttpd_running_str"
-
-  if [ -n "$wsgi_running" ]; then
-    retval=0
-    wsgi_running_str="true"
-  fi
-  echo "wsgi service: $gehttpd_running_str"
-
-  return $retval
-}
 
 #------------------------------------------------------------------------------
 # script arguments
@@ -87,9 +46,7 @@ STREAM_SPACE_PATH=""
 main_preuninstall()
 {
   # check to see if GE Server processes are running
-  if check_server_processes_running; then
-    #STOP PROCESSES
-  fi
+  service geserver stop
 
   # Determine if fusion is installed
   if [ -f "$BININSTALLROOTDIR/gefusion" ]; then

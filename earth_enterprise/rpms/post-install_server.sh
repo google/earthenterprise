@@ -54,11 +54,6 @@ GESERVERBININSTALL="$BININSTALLROOTDIR/geserver"
 GEHTTPD="$BASEINSTALLDIR_OPT/gehttpd"
 GEHTTPD_CONF="$GEHTTPD/conf.d"
 
-SUPPORTED_OS_LIST=("Ubuntu", "Red Hat Enterprise Linux (RHEL)", "CentOS", "Linux Mint")
-UBUNTUKEY="ubuntu"
-REDHATKEY="rhel"
-CENTOSKEY="centos"
-
 run_as_user() {
     local use_su=`su $1 -c 'echo -n 1' 2> /dev/null  || echo -n 0`
     if [ "$use_su" -eq 1 ] ; then
@@ -69,45 +64,6 @@ run_as_user() {
         ( cd / ;sudo -u $1 $2 )
     fi
 }
-
-check_server_processes_running()
-{
-  printf "\nChecking geserver services:\n"
-  local retval=1
-
-  # i) Check if postgres is running
-  local post_master_running=$( ps -ef | grep postgres | grep -v grep )
-  local post_master_running_str="false"
-
-  # ii) Check if gehttpd is running
-  local gehttpd_running=$( ps -ef | grep gehttpd | grep -v grep )
-  local gehttpd_running_str="false"
-
-  # iii) Check if wsgi is running
-  local wsgi_running=$( ps -ef | grep wsgi:ge_ | grep -v grep )
-  local wsgi_running_str="false"
-
-  if [ -n "$post_master_running" ]; then
-    retval=0
-    post_master_running_str="true"
-  fi
-  echo "postgres service: $post_master_running_str"
-
-  if [ -n "$gehttpd_running" ]; then
-    retval=0
-    gehttpd_running_str="true"
-  fi
-  echo "gehttpd service: $gehttpd_running_str"
-
-  if [ -n "$wsgi_running" ]; then
-    retval=0
-    wsgi_running_str="true"
-  fi
-  echo "wsgi service: $gehttpd_running_str"
-
-  return $retval
-}
-
 
 #-----------------------------------------------------------------
 
@@ -173,13 +129,6 @@ main_postinstall()
   show_final_success_message
 }
 
-#-----------------------------------------------------------------
-# Pre-install Functions
-#-----------------------------------------------------------------
-
-#-----------------------------------------------------------------
-# Install Functions
-#-----------------------------------------------------------------
 #-----------------------------------------------------------------
 # Post-install Functions
 #-----------------------------------------------------------------
@@ -360,26 +309,13 @@ show_final_success_message(){
     INSTALLED_OR_UPGRADED="upgraded"
   fi
 
-          $BININSTALLROOTDIR/geserver start
-          check_server_running;
+          service geserver start
 
   echo -e "Congratulations! $PRODUCT_NAME has been successfully $INSTALLED_OR_UPGRADED in the following directory:
           /opt/google \n
           Start Google Earth Enterprise Server with the following command:
           $BININSTALLROOTDIR/geserver start"
 
-}
-
-check_server_running()
-{
-  # Check that server is setup properly
-
-  if ! check_server_processes_running; then
-    echo -e "$GEES service is not running properly. Check the logs in
-             /opt/google/gehttpd/logs \n
-             /var/opt/google/pgsql/logs \n
-             for more details. "
-  fi
 }
 
 #-----------------------------------------------------------------
