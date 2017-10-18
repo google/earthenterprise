@@ -1,10 +1,15 @@
+// Command-line parameters:
+//
+//     ./gradlew -PbuildOpenGee:
+// Compile and install Open GEE in a temporary directory before packaging.
+// By default no compilation, or installation are run.  In that case, you must
+// ensuce the main scons "stage_install" target has been called before building
+// packages.  This target copies build artifacts, binaries and documents into
+// the /tmp/fusion_os_install path.
+//
 // See documentation on the osPackage plugin here:
 //
 // https://github.com/nebula-plugins/gradle-ospackage-plugin
-//
-// This packaging script depends on the output of the main scons
-// "stage_install" target, which copies build artifacts, binaries and
-// documents into the /tmp/fusion_os_install path.
 
 
 buildscript {
@@ -102,9 +107,11 @@ task openGeePostGisRpm(type: Rpm) {
     }
 }
 
-// openGeePostGisRpm.dependsOn stageOpenGeeInstall
+if (project.hasProperty('buildOpenGee')) {
+    openGeePostGisRpm.dependsOn stageOpenGeeInstall
+}
 
-task openGeeCommonRpm(type: Rpm) { //  dependsOn: 'stageOpenGeeInstall') {
+task openGeeCommonRpm(type: Rpm) {
     packageName = 'opengee-common'
     release = '1'
     version = openGeeVersion
@@ -161,6 +168,12 @@ task openGeeCommonRpm(type: Rpm) { //  dependsOn: 'stageOpenGeeInstall') {
     requires('opengee-postgis', '1.5.8', GREATER | EQUAL)
     conflicts('opengee-postgis', '2.0', GREATER | EQUAL)
 
+    // Prefix variable definitions to all install scripts:
+    installUtils = file('opengee-common/etc/init.d/gevars.sh')
+
+    postInstall = file('opengee-common/post-install.sh')
+    postUninstall = file('opengee-common/post-uninstall.sh')
+
     from (stagedInstallDir_common_opt) {
         into new File(packageInstallRootDir, 'opt')
 
@@ -191,6 +204,10 @@ task openGeeCommonRpm(type: Rpm) { //  dependsOn: 'stageOpenGeeInstall') {
     from(stagedInstallDir_manual) {
         into packageInstallRootDir
     }
+}
+
+if (project.hasProperty('buildOpenGee')) {
+    openGeeCommonRpm.dependsOn stageOpenGeeInstall
 }
 
 

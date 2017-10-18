@@ -17,55 +17,42 @@
 set +x
 
 #------------------------------------------------------------------------------
-# from common.sh:
-# directory locations
+# Directory locations:
 BININSTALLROOTDIR="/etc/init.d"
 
 #------------------------------------------------------------------------------
-# user names
-GEAPACHEUSER_NAME=""
-GEPGUSER_NAME=""
+# Group names:
 GEGROUP_NAME=""
-GEAPACHEUSER_EXISTS=""
-GEPGUSER_EXISTS=""
 GEGROUP_EXISTS=""
 
-main_preuninstall()
+main_postuninstall()
 {
-    get_user_names
+    get_user_group_names
     remove_users_groups
 }
 
-get_user_names()
+get_user_group_names()
 {
-  GEAPACHEUSER_NAME=`cat $BININSTALLROOTDIR/gevars.sh | grep GEAPACHEUSER | cut  -d'=' -f2`
-  GEPGUSER_NAME=`cat $BININSTALLROOTDIR/gevars.sh | grep GEPGUSER | cut  -d'=' -f2`
-  GEGROUP_NAME=`cat $BININSTALLROOTDIR/gevars.sh | grep GEGROUP | cut  -d'=' -f2`
+    GEGROUP_NAME=$(cat "$BININSTALLROOTDIR/gevars.sh" | grep GEGROUP | cut  -d'=' -f2)
 
-  # Make sure the users and group exist
-  GEAPACHEUSER_EXISTS=$(getent passwd $GEAPACHEUSER_NAME)
-  GEPGUSER_EXISTS=$(getent passwd $GEPGUSER_NAME)
-  GEGROUP_EXISTS=$(getent group $GEGROUP_NAME)
+    # Check if the group exists:
+    GEGROUP_EXISTS=$(getent group $GEGROUP_NAME)
 }
 
 remove_users_groups()
 {
-    remove_account $GEAPACHEUSER_NAME "user" "$GEAPACHEUSER_EXISTS"
-    remove_account $GEPGUSER_NAME "user" "$GEPGUSER_EXISTS"
-    remove_account $GEGROUP_NAME "group" "$GEGROUP_EXISTS"
+    [ -n "$GEGROUP_EXISTS" ] && remove_account "$GEGROUP_NAME" "group"
 }
 
 remove_account() {
     # arg $1: name of account to remove
     # arg $2: account type - "user" or "group"
-    # arg $3: non-empty string if the user exists
-    if [ ! -z "$3" ]; then
-        echo -e "Deleting $2 $1"
-        eval "$2del $1"
-    fi
+    echo "Deleting $2 $1"
+    "${2}del" "$1"
 }
 
 #-----------------------------------------------------------------
-# Pre-Uninstall Main
+# Main Function:
 #-----------------------------------------------------------------
-main_preuninstall "$@"
+main_postuninstall "$@"
+#-----------------------------------------------------------------
