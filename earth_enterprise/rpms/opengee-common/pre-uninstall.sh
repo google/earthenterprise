@@ -22,37 +22,16 @@ BININSTALLROOTDIR="/etc/init.d"
 
 #------------------------------------------------------------------------------
 # Group names:
-GEGROUP_NAME=""
-GEGROUP_EXISTS=""
+GEGROUP_NAME=$(cat "$BININSTALLROOTDIR/gevars.sh" | grep GEGROUP | cut  -d'=' -f2)
 
-main_postuninstall()
-{
-    get_user_group_names
-    remove_users_groups
-}
-
-get_user_group_names()
-{
-    GEGROUP_NAME=$(cat "$BININSTALLROOTDIR/gevars.sh" | grep GEGROUP | cut  -d'=' -f2)
-
-    # Check if the group exists:
-    GEGROUP_EXISTS=$(getent group "$GEGROUP_NAME")
-}
 
 remove_users_groups()
 {
-    [ -n "$GEGROUP_EXISTS" ] && remove_account "$GEGROUP_NAME" "group"
-}
-
-remove_account() {
-    # arg $1: name of account to remove
-    # arg $2: account type - "user" or "group"
-    echo "Deleting $2 $1"
-    "${2}del" "$1"
+    [ -n "$(getent group "$GEGROUP_NAME")" ] && groupdel "$GEGROUP_NAME"
 }
 
 #-----------------------------------------------------------------
 # Main Function:
 #-----------------------------------------------------------------
-main_postuninstall "$@"
+remove_users_groups
 #-----------------------------------------------------------------
