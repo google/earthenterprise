@@ -36,7 +36,7 @@ get_user_group_names()
     GEGROUP_NAME=$(cat "$BININSTALLROOTDIR/gevars.sh" | grep GEGROUP | cut  -d'=' -f2)
 
     # Check if the group exists:
-    GEGROUP_EXISTS=$(getent group $GEGROUP_NAME)
+    GEGROUP_EXISTS=$(getent group "$GEGROUP_NAME")
 }
 
 remove_users_groups()
