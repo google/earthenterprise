@@ -77,22 +77,6 @@ check_group()
     fi
 }
 
-check_username()
-{
-    USERNAME_EXISTS=$(getent passwd $1)
-
-    # add user if it does not exist
-    if [ -z "$USERNAME_EXISTS" ]; then
-        mkdir -p $BASEINSTALLDIR_OPT/.users/$1
-        useradd --home $BASEINSTALLDIR_OPT/.users/$1 --system --gid $GROUPNAME $1
-        NEW_GEFUSIONUSER=true
-    else
-        echo "User $1 exists"
-        # user already exists -- update primary group
-        usermod -g $GROUPNAME $1
-    fi
-}
-
 #------------------------------------------------------------------------------
 
 # config values
@@ -123,9 +107,6 @@ main_preinstall()
 
     # 8) Check if group and users exist
     check_group
-
-    check_username $GEAPACHEUSER_NAME
-    check_username $GEPGUSER_NAME
 }
 
 #-----------------------------------------------------------------
