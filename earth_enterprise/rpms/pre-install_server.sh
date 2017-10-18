@@ -78,16 +78,6 @@ show_mismatchedhostname()
     echo -e "$SOFTWARE_NAME requires that they match for local publishing to function properly."
 }
 
-check_group() {
-    GROUP_EXISTS=$(getent group $GROUPNAME)
-
-    # add group if it does not exist
-    if [ -z "$GROUP_EXISTS" ]; then
-        groupadd -r $GROUPNAME &> /dev/null 
-        NEW_GEGROUP=true 
-    fi
-}
-
 check_username() {
     USERNAME_EXISTS=$(getent passwd $1)
 
@@ -143,9 +133,7 @@ main_preinstall()
     check_bad_hostname
     check_mismatched_hostname
 
-    # 8) Check if group and users exist
-    check_group
-
+    # 8) Check if users exist
     check_username $GEAPACHEUSER_NAME
     check_username $GEPGUSER_NAME
 
