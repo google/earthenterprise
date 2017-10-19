@@ -1,9 +1,8 @@
 #! /bin/bash
 
-# This scripts installs packages, downloads and buils software used to
+# This scripts installs packages, downloads and builds software used to
 # download the Open GEE source code and build it.
-#   It runs on RHEL 6, RHEL 7, Cent OS 6, Cent OS 7,
-# Ubuntu 14.04, Ubuntu 16.04.
+#   It runs on all supported platforms.
 #   This script does not share code with other shell scripts so that it can be
 # distributed as a single file that can be used to obtain a build environment
 # and source code for Open GEE.
@@ -89,7 +88,7 @@ function check_root ()
     if ! [ $(id -u) = 0 ]; then
         echo "$SELF_NAME Error: Must be root!"
 	echo
-	exit 0
+	exit 1
     fi
 }
 
@@ -393,7 +392,6 @@ while [[ "$#" -gt 0 ]]; do
             ASSUME_YES="yes"
             ;;
         -y=*|--yes=*|--assume-yes=*)
-            check_root
             if is_string_value_false "${1#*=}"; then
                 ASSUME_YES=""
             else
