@@ -96,7 +96,7 @@ task openGeePostGisRpm(type: Rpm) {
     packageGroup = 'Application/Productivity'
     summary = 'Post GIS extension for Postgre SQL server used by Open GEE'
     packageDescription = 'Post GIS extension for Postgre SQL server used by Open GEE.'
-    license = 'GPL 2'
+    license = 'GPLv2'
     url = 'https://github.com/google/earthenterprise/tree/master/earth_enterprise/third_party/postgis'
     type = BINARY
 
@@ -165,18 +165,18 @@ task openGeeCommonRpm(type: Rpm, dependsOn: openGeeSharedGeVars) {
 * Tornado: Apache 2.0
 '''
     license =
-        'Apache 2.0 and ' +
-        'BSD 2.1.2 and ' +
-        'GPL 2+ and ' +
+        'ASL 2.0 and ' +
+        'BSD and ' +
+        'GPLv2+ and ' +
         'Psycopg2 GPL 3+ and ' +
-        'LGPL 2.1 and ' +
-        'MIT and MIT/X and ' +
-        'MPL 1.1 and ' +
+        'LGPLv2 and ' +
+        'MIT and ' +
+        'MPLv1.1 and ' +
         'PSF 2 and ' +
         'Python Imaging Library 1.1.7 and ' +
         'mgrs 1.1.0 and mm 1.4.2 and ' +
-        'OpenLDAP Public License 2.8 and ' +
-        'Open SSL 1.0.2h and ' +
+        'OpenLDAP and ' +
+        'OpenSSL and ' +
         'Skia 5.1.2'
     type = BINARY
 
