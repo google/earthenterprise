@@ -28,10 +28,6 @@ ASSET_ROOT=""
 GEFUSIONUSER_NAME=""
 GROUPNAME=""
 
-# directory locations
-INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
-CHKCONFIG="/sbin/chkconfig"
-
 # script arguments
 BACKUPFUSION=true
 DELETE_FUSION_USER=true
