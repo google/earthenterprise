@@ -67,6 +67,7 @@ def postGisInstallDir_opt = new File(postGisInstallDir, 'opt')
 ospackage {
     version = openGeeVersion
     release = '1'
+    packager = 'gee-oss@googlegroups.com'
     arch = X86_64
     os = LINUX
 }
@@ -96,11 +97,8 @@ task openGeePostGisRpm(type: Rpm) {
     summary = 'Post GIS extension for Postgre SQL server used by Open GEE'
     packageDescription = 'Post GIS extension for Postgre SQL server used by Open GEE.'
     license = 'GPL 2'
-    packager = 'gee-oss@googlegroups.com'
     url = 'https://github.com/google/earthenterprise/tree/master/earth_enterprise/third_party/postgis'
-    arch = 'X86_64'
-    os = 'LINUX'
-    type = 'BINARY'
+    type = BINARY
 
     from (postGisInstallDir_opt) {
         into new File(packageInstallRootDir, 'opt')
@@ -180,10 +178,7 @@ task openGeeCommonRpm(type: Rpm, dependsOn: openGeeSharedGeVars) {
         'OpenLDAP Public License 2.8 and ' +
         'Open SSL 1.0.2h and ' +
         'Skia 5.1.2'
-    packager = 'gee-oss@googlegroups.com'
-    arch = 'X86_64'
-    os = 'LINUX'
-    type = 'BINARY'
+    type = BINARY
 
     requires('opengee-postgis', '1.5.8', GREATER | EQUAL)
     conflicts('opengee-postgis', '2.0', GREATER | EQUAL)
@@ -290,16 +285,45 @@ task openGeeServerDeb (type: Deb) {
 }
 
 task openGeeFusionRpm (type: Rpm) {
-    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     packageName = 'opengee-fusion'
+    release = '1'
+    version = openGeeVersion
+    user = 'root'
+    permissionGroup = 'root'
+    packageGroup = 'Application/Productivity'
+    summary = 'Open GEE Fusion UI and Command-line Utilities'
+    packageDescription =
+'''Command line utitiles and Qt UI for building Open GEE globes.
+
+The utilities in this package allow Open GEE globe and map databases to be
+built from raster, vector and location properties data.
+'''
+    license = 'Apache 2.0'
+    type = BINARY
+
+    requires('bash')
+    requires('coreutils')
+    requires('findutils')
+    requires('grep')
+    requires('libxml2')
+    requires('net-tools')
+    requires('sed')
+
+    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
+
     from(stagedInstallDir_fusion) {
         into packageInstallRootDir
     }
+
+    // Prefix variable definitions to all install scripts:
+    installUtils = file('build/shared/gevars.sh')
+
 }
 
 task openGeeFusionDeb (type: Deb) {
-    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     packageName = 'opengee-fusion'
+    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
+
     from(stagedInstallDir_fusion) {
         into packageInstallRootDir
     }

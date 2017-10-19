@@ -179,7 +179,7 @@ install_or_upgrade_asset_root()
     else
         # upgrade asset root -- if this is a master
         if [ $IS_SLAVE == false ]; then
-            # TODO: Verify this logic -- this is what is defined in the installer documentation, but need confirmation            
+            # TODO: Verify this logic -- this is what is defined in the installer documentation, but need confirmation
             if [ $NEW_GEGROUP == true ] || [ $NEW_GEFUSIONUSER == true ]; then
                 NOCHOWN=""
                 UPGRADE_MESSAGE="\nThe upgrade will fix permissions for the asset root and source volume. This may take a while.\n"
@@ -223,11 +223,10 @@ final_fusion_service_configuration()
 {
     chcon -t texrel_shlib_t $BASEINSTALLDIR_OPT/lib/*so*
 
-    service gefusionb start
+    /etc/init.d/gefusion start
 }
 
 #-----------------------------------------------------------------
 # Post-Install Main
 #-----------------------------------------------------------------
 main_postinstall
-
