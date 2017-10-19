@@ -32,7 +32,7 @@ BININSTALLROOTDIR="/etc/init.d"
 #-----------------------------------------------------------------
 main_preuninstall()
 {
-    service gefusion stop
+    /etc/init.d/gefusion stop
 
     load_systemrc_config
 
