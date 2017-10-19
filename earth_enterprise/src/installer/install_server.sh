@@ -25,23 +25,19 @@ SCRIPTDIR=`dirname $0`
 
 # config values
 PUBLISHER_ROOT="/gevol/published_dbs"
-DEFAULTGROUPNAME="gegroup"
-GROUPNAME=$DEFAULTGROUPNAME
-DEFAULTGEFUSIONUSER_NAME="gefusionuser"
-GEFUSIONUSER_NAME=$DEFAULTGEFUSIONUSER_NAME
+INSTALL_LOG="$INSTALL_LOG_DIR/geserver_install_$(date +%Y_%m_%d.%H%M%S).log"
 
 # script arguments
 BACKUPSERVER=true
 BADHOSTNAMEOVERRIDE=false
 MISMATCHHOSTNAMEOVERRIDE=false
 
-BACKUP_DIR="$BASEINSTALLDIR_VAR/server-backups/$(date +%Y_%m_%d.%H%M%S)"
-INSTALL_LOG="$INSTALL_LOG_DIR/geserver_install_$(date +%Y_%m_%d.%H%M%S).log"
-
 # user names
 GRPNAME="gegroup"
 GEPGUSER_NAME="gepguser"
 GEAPACHEUSER_NAME="geapacheuser"
+DEFAULTGEFUSIONUSER_NAME="gefusionuser"
+GEFUSIONUSER_NAME=$DEFAULTGEFUSIONUSER_NAME
 
 SERVER_INSTALL_OR_UPGRADE="install"
 GEE_CHECK_CONFIG_SCRIPT="/opt/google/gehttpd/cgi-bin/set_geecheck_config.py"
@@ -49,8 +45,6 @@ PGSQL_DATA="/var/opt/google/pgsql/data"
 PGSQL_LOGS="/var/opt/google/pgsql/logs"
 PGSQL_PROGRAM="/opt/google/bin/pg_ctl"
 PRODUCT_NAME="$GEE"
-CHECK_POST_MASTER=""
-CHECK_GEHTTPD=""
 START_SERVER_DAEMON=1
 PROMPT_FOR_START="n"
 
@@ -66,13 +60,6 @@ main_preinstall()
   if [ "$EUID" != "0" ]; then
     show_need_root
     exit 1
-  fi
-
-  # 5a) Check previous installation
-  if [ -f "$SERVERBININSTALL" ]; then
-    IS_NEWINSTALL=false
-  else
-    IS_NEWINSTALL=true
   fi
 
   # Argument check
@@ -117,9 +104,7 @@ main_preinstall()
   fi
 
   # 64 bit check
-  if [[ "$(uname -i)" == "x86_64" ]]; then
-    IS_64BIT_OS=true
-  else
+  if [[ "$(uname -i)" != "x86_64" ]]; then
     echo -e "\n$GEEF $LONG_VERSION can only be installed on a 64 bit operating system."
     exit 1
   fi
@@ -227,7 +212,6 @@ show_need_root()
 parse_arguments()
 {
   local parse_arguments_retval=0
-  local show_user_group_recommendation=false
 
   while [ $# -gt 0 ]
   do
@@ -564,11 +548,9 @@ fix_postinstall_filepermissions()
 
 show_final_success_message(){
  # Install complete
-  INSTALLATION_OR_UPGRADE="installation"
   INSTALLED_OR_UPGRADED="installed"
   # TODO check for "UPGRADE" or case insensitive "upgrade"
   if  [[ "$SERVER_INSTALL_OR_UPGRADE" = *upgrade* ]]; then
-    INSTALLATION_OR_UPGRADE="Upgrade"
     INSTALLED_OR_UPGRADED="upgraded"
   fi
 

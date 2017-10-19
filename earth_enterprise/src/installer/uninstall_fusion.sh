@@ -30,7 +30,6 @@ GROUPNAME=""
 
 # directory locations
 BININSTALLROOTDIR="/etc/init.d"
-BININSTALLPROFILEDIR="/etc/profile.d"
 BASEINSTALLDIR_OPT="/opt/google"
 BASEINSTALLDIR_ETC="/etc/opt/google"
 BASEINSTALLDIR_VAR="/var/opt/google"
@@ -468,9 +467,6 @@ show_final_success_message()
 #-----------------------------------------------------------------
 # Pre-install Main
 #-----------------------------------------------------------------
-mkdir -p $UNUNINSTALL_LOG_DIR
-exec 2> $UNINSTALL_LOG
-
 main_preuninstall "$@"
 
 #-----------------------------------------------------------------
