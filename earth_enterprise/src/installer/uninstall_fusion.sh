@@ -29,10 +29,6 @@ GEFUSIONUSER_NAME=""
 GROUPNAME=""
 
 # directory locations
-BININSTALLROOTDIR="/etc/init.d"
-BASEINSTALLDIR_OPT="/opt/google"
-BASEINSTALLDIR_ETC="/etc/opt/google"
-BASEINSTALLDIR_VAR="/var/opt/google"
 INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
 CHKCONFIG="/sbin/chkconfig"
 
