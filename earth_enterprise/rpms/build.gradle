@@ -111,7 +111,27 @@ if (project.hasProperty('buildOpenGee')) {
     openGeePostGisRpm.dependsOn stageOpenGeeInstall
 }
 
-task openGeeCommonRpm(type: Rpm) {
+// Expands the `gevars.sh.template` so it can be used in the `common` package,
+// and prefixed to install scripts for all the various packages.
+task openGeeSharedGeVars(type: Copy) {
+    from file('shared')
+    into file('build/shared')
+
+    def templateSuffix = '.template'
+    def stringStripSuffix = { value, suffix ->
+        return value.substring(0, value.length() - suffix.length())
+    }
+
+    eachFile {
+        if (it.getSourceName().endsWith(templateSuffix)) {
+            it.setName(stringStripSuffix(
+                it.getSourceName(), templateSuffix))
+            it.expand(['openGeeVersion': openGeeVersion])
+        }
+    }
+}
+
+task openGeeCommonRpm(type: Rpm, dependsOn: openGeeSharedGeVars) {
     packageName = 'opengee-common'
     release = '1'
     version = openGeeVersion
@@ -169,10 +189,14 @@ task openGeeCommonRpm(type: Rpm) {
     conflicts('opengee-postgis', '2.0', GREATER | EQUAL)
 
     // Prefix variable definitions to all install scripts:
-    installUtils = file('opengee-common/etc/init.d/gevars.sh')
+    installUtils = file('build/shared/gevars.sh')
 
     postInstall = file('opengee-common/post-install.sh')
     preUninstall = file('opengee-common/pre-uninstall.sh')
+
+    from (file('build/shared/gevars.sh')) {
+        into new File(packageInstallRootDir, 'etc/init.d')
+    }
 
     from (stagedInstallDir_common_opt) {
         into new File(packageInstallRootDir, 'opt')
