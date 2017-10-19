@@ -29,15 +29,6 @@ MIN_GCC_VERSION="4.8"
 # packages).  Set to true to run without user interaction.
 : ${ASSUME_YES:=""}
 
-# Open GEE repository URL for cloning:
-#: ${CLONE_URL:="https://github.com/google/earthenterprise.git"}
-
-# Git branch to clone:
-#: ${CLONE_BRANCH:=""}
-
-# Whether to clone the Open GEE repository:
-#: ${CLONE_REPOSITORY:=""}
-
 # Check for a known package manager:
 if type apt-get >/dev/null 2>&1; then
     PACKAGE_MANAGER="apt-get"
@@ -378,7 +369,6 @@ while [[ "$#" -gt 0 ]]; do
             fi
             ;;
         -l|--clean-package-download-dir)
-
             CLEAN_PACKAGE_DOWNLOAD_DIR="yes"
             ;;
         -l=*|--clean-package-download-dir=*)
@@ -417,7 +407,6 @@ if [ -n "$ASSUME_YES" ]; then
 else
     ASSUME_YES_PACKAGE_MANAGER_PARAMETER=""
 fi
-
 
 install_packages || exit 1
 
