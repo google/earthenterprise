@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+# Copyright 2017 OpenGEE Contributors
+
 # This scripts installs packages, downloads and builds software used to
 # download the Open GEE source code and build it.
 #   It runs on all supported platforms.
