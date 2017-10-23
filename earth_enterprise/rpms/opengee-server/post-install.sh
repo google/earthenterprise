@@ -14,14 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# NOTE: requires xmllint from libxml2-utils
-
 set +x
-
-#-----------------------------------------------------------------
-# from common.sh:
-
-BADHOSTNAMELIST=(empty linux localhost dhcp bootp)
 
 # versions and user names
 GEE="Google Earth Enterprise"

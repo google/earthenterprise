@@ -291,6 +291,7 @@ task openGeeServerDeb (type: Deb) {
 
 task openGeeFusionRpm (type: Rpm) {
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
+    requires('libxml2')
     packageName = 'opengee-fusion'
     from(stagedInstallDir_fusion) {
         into packageInstallRootDir
@@ -299,6 +300,7 @@ task openGeeFusionRpm (type: Rpm) {
 
 task openGeeFusionDeb (type: Deb) {
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
+    requires('libxml2-utils')
     packageName = 'opengee-fusion'
     from(stagedInstallDir_fusion) {
         into packageInstallRootDir
