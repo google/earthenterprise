@@ -21,25 +21,11 @@ set +x
 
 BADHOSTNAMELIST=(empty linux localhost dhcp bootp)
 
-# versions and user names
-GEE="Google Earth Enterprise"
-GEES="$GEE Server"
-LONG_VERSION="5.2.1"
-
-ROOT_USERNAME="root"
-
-MACHINE_OS=""
-MACHINE_OS_VERSION=""
-MACHINE_OS_FRIENDLY=""
-
 # directory locations
 BASEINSTALLDIR_OPT="/opt/google"
 BASEINSTALLDIR_VAR="/var/opt/google"
 
 # derived directories
-BASEINSTALLGDALSHAREDIR="$BASEINSTALLDIR_OPT/share/gdal"
-GENERAL_LOG="$BASEINSTALLDIR_VAR/log"
-INSTALL_LOG_DIR="$BASEINSTALLDIR_OPT/install"
 GEHTTPD="$BASEINSTALLDIR_OPT/gehttpd"
 GEHTTPD_CONF="$GEHTTPD/conf.d"
 
@@ -99,11 +85,6 @@ DEFAULTGROUPNAME="gegroup"
 GROUPNAME=$DEFAULTGROUPNAME
 DEFAULTGEFUSIONUSER_NAME="gefusionuser"
 GEFUSIONUSER_NAME=$DEFAULTGEFUSIONUSER_NAME
-
-# script arguments
-BACKUPSERVER=true
-BADHOSTNAMEOVERRIDE=false
-MISMATCHHOSTNAMEOVERRIDE=false
 
 # user names
 GEPGUSER_NAME="gepguser"

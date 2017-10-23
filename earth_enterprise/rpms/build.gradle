@@ -242,6 +242,9 @@ if (project.hasProperty('buildOpenGee')) {
 task openGeeCommonDeb (type: Deb) {
     packageName = 'opengee-common'
 
+    postInstall file('opengee-common/post-install.sh')
+    preUninstall file('opengee-common/pre-uninstall.sh')
+
     from(stagedInstallDir_common) {
         into packageInstallRootDir
     }
@@ -253,6 +256,12 @@ task openGeeCommonDeb (type: Deb) {
 task openGeeServerRpm (type: Rpm) {
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     packageName = 'opengee-server'
+
+    // This WON'T work yet, because /var/opt/google not setup...
+    // Scripts may also differ for debs...
+    preInstall file('opengee-server/pre-install.sh')
+    postInstall file('opengee-server/post-install.sh')
+    preUninstall file('opengee-server/pre-uninstall.sh')
     
     from(stagedInstallDir_server_opt) {
         into new File(packageInstallRootDir, 'opt')
@@ -293,6 +302,14 @@ task openGeeFusionRpm (type: Rpm) {
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     requires('libxml2')
     packageName = 'opengee-fusion'
+
+    // This WON'T work yet, because /var/opt/google not setup...
+    // Scripts may also differ for debs...
+    preInstall file('opengee-fusion/pre-install.sh')
+    postInstall file('opengee-fusion/post-install.sh')
+    preUninstall file('opengee-fusion/pre-uninstall.sh')
+
+
     from(stagedInstallDir_fusion) {
         into packageInstallRootDir
     }

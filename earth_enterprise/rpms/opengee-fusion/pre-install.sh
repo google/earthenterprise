@@ -18,27 +18,12 @@
 
 set +x
 
-#-----------------------------------------------------------------
-BADHOSTNAMELIST=(empty linux localhost dhcp bootp)
-
-# versions and user names
-GEE="Google Earth Enterprise"
-GEES="$GEE Server"
-
-# directory locations
-BININSTALLROOTDIR="/etc/init.d"
-BASEINSTALLDIR_OPT="/opt/google"
+# directory locations used
 BASEINSTALLDIR_ETC="/etc/opt/google"
-BASEINSTALLDIR_VAR="/var/opt/google"
 
 # derived directories
 SYSTEMRC="$BASEINSTALLDIR_ETC/systemrc"
 MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB=1048576
-
-# Get system info values
-NEWLINECLEANER="sed -e s:\\n::g"
-HOSTNAME="$(hostname -f | tr [A-Z] [a-z] | $NEWLINECLEANER)"
-HOSTNAME_F="$(hostname -f | $NEWLINECLEANER)"
 
 #-----------------------------------------------------------------
 
