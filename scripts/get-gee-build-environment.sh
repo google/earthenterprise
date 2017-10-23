@@ -3,11 +3,7 @@
 #
 # Copyright 2017 Open GEE Contributors
 #
-<<<<<<< HEAD
 # Licensed under the Apache license, Version 2.0 (the "License");
-=======
-# Licensed under the Apache License, Version 2.0 (the "License");
->>>>>>> 6bf535c5867c8910d8f69e0e6d035db9022bd94f
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -17,11 +13,8 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
-<<<<<<< HEAD
 # limitations under the license.
-=======
-# limitations under the License.
->>>>>>> 6bf535c5867c8910d8f69e0e6d035db9022bd94f
+#
 
 # This scripts installs packages, downloads and builds software used to
 # download the Open GEE source code and build it.
