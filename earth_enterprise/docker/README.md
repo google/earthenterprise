@@ -29,12 +29,153 @@ service docker start
 Now you can use Docker as the root user.
 
 
-## Pulling an Image from Docker Cloud
+## Building the Images
 
-You can get a pre-built image from a Docker registry.
+Before building Open GEE Docker images, make sure you have, at least, about
+8 GB of free disk space.
+
+### Image Configuration
+
+There are a number of option of how you can build and run Open GEE Docker
+images: 
+
+    * Platform to build on,
+    * Source code origin: from the main repository, or a fork, from the
+      master, or another branch, or from the current repository clone on your
+      disk;
+    * Port to forward HTTP connections to;
+    * Custom image to run, e.g., containing extra data like tutorial
+      resources, or custom built globes.
+
+These options are controlled by environment variables that are passed to the
+build scripts.  Since, it may become inconvenient to pass more than a couple
+of values on the command line, you could put the variable definitions in a
+shell script file instead, and source it before each command you execute.
+
+Have a look at the files under
+`earthenterprise/earth_enterprise/docker/config` for examples.
+
+
+### Building a Build-environment Image
+
+Before being able to compile and build Open GEE in a Docker image, you need a
+prerequisite Docker image containing a build environment for the platform you
+want to build Open GEE on.
+
+The build environment image is reused every time you rebuild Open GEE.  This
+should save you time during normal development for targetting another
+platform, since only the steps of transferring the modified source code, and
+running the Open GEE build would need to be repeated.
+
+You can build a build-environment image with a command like this:
 
 ```BASH
-docker pull thermopylae/opengee-experimental
+( . config/rhel-7.sh && ./bin/build-build-env-image.sh )
+```
+
+
+#### Recovering a RHEL Subscription for a Deleted Image
+
+If a build on RHEL fails during package building and installation, the build
+script may terminate while the RHEL installation in the Docker container is
+still registered with `subscription-manager`.  If you still have the layer of
+the terminated container, you can `commit` it to a new image, run a shell in
+it, and perform `subscription-manager unregister`.
+
+If you have already deleted the terminated container, you can log in the
+Red Hat portal online, and follow this answer to unsubscribe the deleted
+image: https://access.redhat.com/solutions/776723.
+
+
+
+### Building the Open GEE Image
+
+To build the flattened final Open GEE image:
+
+```BASH
+( . config/rhel-7.sh && ./bin/build-gee-image.sh )
+```
+
+You can use the `OS_DISTRIBUTION` variable to set the platform you want to
+build on, the `STAGE_1_NAME` to set whether to build from a clean clone of the
+GEE repository, or from your current clone, and `CLEAN_CLONE_BRANCH` to build
+from the most recent commit on a given Git branch when building a clean clone.
+
+### Examples:
+
+Build from a clean repsitory clone on Cent OS 7:
+
+```BASH
+OS_DISTRIBUTION=centos-7 ./bin/build-gee-image.sh
+```
+
+
+Build from your current clone of the repository on Ubuntu 16:
+
+```BASH
+OS_DISTRIBUTION=ubuntu-16 STAGE_1_NAME=current-clone ./bin/build-gee-image.sh
+```
+
+
+Build a clean clone of branch `release_5.2.0` on Cent OS 7:
+
+```BASH
+OS_DISTRIBUTION=centos-7 CLEAN_CLONE_BRANCH=release_5.2.0 ./bin/build-gee-image.sh
+```
+
+
+Build a clean clone of branch `release_5.2.0` from user `unameit`'s GitHub
+repository on Cent OS 7:
+
+```BASH
+OS_DISTRIBUTION=centos-7 CLEAN_CLONE_URL=https://github.com/unameit/earthenterprise.git CLEAN_CLONE_BRANCH=release_5.2.0 ./bin/build-gee-image.sh
+```
+
+
+### Using GEE Tutorial Files in the Docker Container
+
+The Docker image is built without the GEE tutorial files, since people using
+the image for production may not want to carry the 600+ MB files they wouldn't
+use.
+
+#### Deriving an Image that Includes the Tutorial Files
+
+You can create an image based on the provided one that adds the tutorial
+files.
+
+```BASH
+( . config/rhel-7.sh && ./bin/build-tutorials-image.sh )
+```
+
+You could then, re-use the `start-gee-image.sh` and `attach-fusion.sh`
+scripts by supplying the tag of the new image you built. E.g.:
+
+```BASH
+(
+    . config/rhel-7.sh &&
+    GEE_IMAGE_NAME=opengee-experimental-rhel-7-tutorial-resources ./bin/start-gee-image.sh
+)
+```
+
+and
+
+```BASH
+(
+    . config/rhel-7.sh &&
+    GEE_IMAGE_NAME=opengee-experimental-rhel-7-tutorial-resources ./bin/attach-fusion.sh
+)
+```
+
+#### Using Tutorial Files from Outside the Docker Image
+
+If you have already unpacked the tutorial files in the host operating system,
+you can add them as a volume accessible inside the Docker container.  E.g., if
+you have the files stored at `/opt/google/share/tutorials/fusion/` outside the
+container:
+
+```BASH
+( . config/rhel-7.sh &&
+DOCKER_RUN_FLAGS="-v /opt/google/share/tutorials/fusion/:/opt/google/share/tutorials/fusion/" ./bin/start-gee-image.sh )
 ```
 
 
@@ -44,45 +185,34 @@ docker pull thermopylae/opengee-experimental
 
 #### Running Open GEE Server with Persistent Globe and Map Databases
 
+_Currently, running running Open GEE Server with persistent globe and map
+databases outside the Docker container is not supported by the Open GEE Docker
+convenince scripts.  You'll have to update the `run` commands on your own.
+There are plans to fix that in the future._
+
 In order to be able to build and serve Earth databases that persist between 
-instantiations of the Docker image, you need a persistent assets directory 
-outside of the Docker container.  Another alternative is to run a container
-with a temporary assets directory, and commit the running to container to a
-new image after you've build your assets.
-
-To run the Docker container using a persistent globe assets directory outside 
-the container, use the following script.  Set the `HOST_GEVOL_PATH`
-environment variable to the path outside the container where you want to store
-your persistent assets.
-
-```BASH
-HOST_GEVOL_PATH=/persistent/gevol/ ./bin/start-docker-image.sh
-```
-
-You can optionally set the `GEE_SERVER_PORT` and even  `IMAGE_TAG` to override
-the default values.
-
-
-##### Initializing a New Location for Persistsing Databases
-
-If you want to create the directory structure needed for storing globe and map
-databases in a new location, you can use the following commands (after
-substituting the desired path), and follow the prompts.
-
-```BASH
-sudo mkdir -p /persistent/gevol/assets
-docker run --cap-add=DAC_READ_SEARCH -v /persistent/gevol:/gevol -ti opengee-experimental /opt/google/bin/geconfigureassetroot --new --assetroot /gevol/assets
-```
+instantiations of the Docker image, you need persistent asset, and other
+directories outside of the Docker container.  Another alternative is to run a
+container with temporary data directories, and commit the running container to
+a new image after you've built your assets.
 
 
 #### Running Open GEE Server with Temporary Globe and Map Databases
 
 To run the Docker container using temporary assets that disapper when the 
-container is stopped, leave the `HOST_GEVOL_PATH` environment valiable empty.
-This is the default behavior
+container is stopped, leave the `HOST_GEVOL_PATH`, `HOST_GEHTTPD_PATH`,
+`HOST_GOOGLE_LOG_PATH`, and `HOST_PGSQL_DATA_PATH` environment valiables
+empty.  This is the default behavior:
 
 ```BASH
-HOST_GEVOL_PATH='' ./bin/start-docker-image.sh
+(
+    . config/rhel-7.sh
+    unset HOST_GEVOL_PATH
+    unset HOST_GEHTTPD_PATH
+    unset HOST_GOOGLE_LOG_PATH
+    unset HOST_PGSQL_DATA_PATH
+    ./bin/start-gee-image.sh
+)
 ```
 
 
@@ -90,105 +220,26 @@ HOST_GEVOL_PATH='' ./bin/start-docker-image.sh
 
 To start the Fusion UI in the Open GEE Docker container, you need to have
 the GEE servers running in the container, e.g. by running
-`./bin/start-docker-image.sh`, and an X11 server outside the container that
-the Fusion UI can connect to.  If you started the container on a Linux 
+`./bin/start-gee-image.sh`, and an X11 server outside the container that the
+Fusion UI can connect to.  If you started the container on a Linux
 distribution running X11 listening for socket connections to `/tmp/.X11-unix`,
 you should only need to run the following command to bring up the Fusion UI:
 
 ```BASH
-./bin/attach-fusion.sh
+( . config/rhel-7.sh && ./bin/attach-fusion.sh )
 ```
 
 Running the Fusion UI on a non-Linux Docker host running X11 has not been
 tested, although it should be theoretially possible.
 
 
-#### Using GEE Tutorial Files in the Docker Container
+#### Running Portable Server in the Docker Container
 
-The Docker image is built without the GEE tutorial files, since people using
-the image for production may not want to carry the 600+ MB files they wouldn't
-use.
-
-##### Deriving an Image that Includes the Tutorial Files
-
-You can create an image based on the provided one that adds the tutorial
-files.
+Portable Server is installed under an `/opt/google` directory which has a name
+that looks like `/opt/google/portableserver-linux-5.2.0-20170812`.  You can
+start Portable Server by running the following command in a started Open GEE
+Docker container:
 
 ```BASH
-docker build -f derived-images/Dockerfile.opengee-tutorial-resources -t opengee-tutorial-resources .
-```
-
-You could then, re-use the `start-docker-image.sh` and `attach-fusion.sh`
-scripts by supplying the tag of the new image you built. E.g.:
-
-```BASH
-IMAGE_TAG=opengee-tutorial-resources ./bin/start-docker-image.sh
-```
-
-and
-
-```BASH
-IMAGE_TAG=opengee-tutorial-resources ./bin/attach-fusion.sh
-```
-
-
-##### Using Tutorial Files from Outside the Docker Image
-
-If you have already unpacked the tutorial files in host operating system, you
-can add them as a volume accessible inside the Docker container.  E.g., if you
-have the files stored at `/opt/google/share/tutorials/fusion/` outside the
-container:
-
-```BASH
-DOCKER_RUN_FLAGS="-v /opt/google/share/tutorials/fusion/:/opt/google/share/tutorials/fusion/" ./bin/start-docker-image.sh
-```
-
-
-#### Pointers for Running Open GEE in Custom Setup
-
-There's a sample `docker-compose.yml` you can have a look at.  Note, however,
-that Open GEE doesn't currently support clustering.
-
-
-## Building the Image
-
-If you want to build the Docker image yourself (perhaps, after customization),
-you can use the commands that follow.
-
-Make sure you have, at least, about 8.1 GB of free space to create a new GEE 
-Docker image.  You need slightly more than 6 GB of free space to build
-the Docker build image stages, and another 2+ GB to produce a flattened
-image.  You can remove the larger build images which contain Docker layer
-history after creating the flattened one.
-
-To build the two stages of images with layer history, and flattened final
-image:
-
-```BASH
-./bin/build-docker-image.sh
-```
-
-You can optionally set the `OUTPUT_IMAGE_NAME` shell variable to override the
-default name used for the final Docker image.
-
-
-### Delete the Temporary Build Docker Images
-
-To delete the intermediary Docker images used during the build:
-
-```BASH
-./bin/clean-build-images.sh
-```
-
-
-### Publish the Image to Docker Store / Docker Cloud
-
-If you are GEE developer, and need to publish a new version of the Docker 
-image to the Docker Store, or Docker Cloud registry, you can use the commands 
-below.
-
-```BASH
-docker login  # You should only need to do this once.
-docker tag opengee-experimental thermopylae/opengee-experimental
-docker push thermopylae/opengee-experimental
+/opt/google/bin/portableserver
 ```
