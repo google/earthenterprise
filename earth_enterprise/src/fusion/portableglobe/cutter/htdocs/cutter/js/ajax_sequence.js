@@ -36,7 +36,7 @@ var GEE_is_2d = '';
 // Place holder for customized cleanup.
 var GEE_cleanUp = function() {};
 // Indicates if the current build has already been cancelled
-var GEE_cancelled = 0;
+var GEE_cancelled = '';
 
 /**
  * Cancel current build.
@@ -82,6 +82,7 @@ function GEE_runAjaxSequence(sequence, update_time, showGlobeSize, cleanup) {
 
   // Initialize sequence
   GEE_start_time = new Date();
+  GEE_cancelled = 0;
   var div = gees.dom.get('globe');
   gees.dom.setHtml(div, '<hr>Working ...');
   GEE_sequence = [];
