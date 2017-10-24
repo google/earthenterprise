@@ -1,0 +1,5 @@
+GEAPACHEUSER=geapacheuser
+GEPGUSER=gepguser
+GEFUSIONUSER=gefusionuser
+GEGROUP=gegroup
+GEE_VERSION=${openGeeVersion}

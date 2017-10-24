@@ -1,0 +1,30 @@
+# Run this Dockerfile from the top level of the GEE repository.
+
+# The Docker that comes with Ubuntu 14 is too old to support the ARG command,
+# so we use template variables. ):
+FROM opengee-experimental-build-env-${OS_DISTRIBUTION}
+
+COPY . /root/opengee/build/earthenterprise
+
+# Build Open GEE:
+RUN cd /root/opengee/build/earthenterprise && \
+    git clean -Xf && \
+    rm -Rf earth_enterprise/src/NATIVE-{REL,DBG,OPT}-x86_64 && \
+    cd .. && \
+    /root/opengee/bin/build-gee.sh && \
+    /root/opengee/bin/build-portable-server.sh
+
+# We can't proceed further with installing GEE from the Dockerfile, because the
+# installer requires the 'DAC_READ_SEARCH' capability, and Docker currently has
+# no way of running Dockerfile commands with capabilities.
+#   Instead, we run the image built so far, and execute
+# `build-docker-stage-2.sh` to complete image creation, and export an image
+# from the running container.
+#
+# TST-RUN-STAGE \
+#   --cap-add=DAC_READ_SEARCH \
+#   /root/opengee/bin/build-docker-stage-2.sh
+
+CMD /root/opengee/bin/start-servers.sh
+
+EXPOSE 80

@@ -150,7 +150,7 @@ class BoxFilterUnitTest : public UnitTest<BoxFilterUnitTest> {
     }
 
     return true;
-  };
+  }
 
   int RandomInt(int low, int high) {
     return low + static_cast<int>((high - low) * (rand() / (RAND_MAX + 1.0)));

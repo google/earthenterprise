@@ -104,6 +104,18 @@ const uchar *BoxFilterTiledImage::GetImageTile(int tile_x, int tile_y,
   }
 }
 
+// Computes the left SAT element of a given row and advances the pointer. We
+// don't have a similar function for the top row of the SAT because the
+// calculation will just wrap around the horizontal band which is set to 0,
+// so the extra elements will have no effect.
+inline void ComputeLeftSAT(int **elem,  // pointer to element in SAT table
+                           uchar value,  // corresponding image value
+                           int prev_row_offset) {  // offset to previous row elem
+  **elem =
+      + *(*elem + prev_row_offset)
+      + value;
+  ++(*elem);
+}
 
 // Computes a single SAT element given current values and an offset to
 // the previous row of values in the table.
@@ -135,8 +147,32 @@ inline void ComputeSATSpanValues(int **psat,  // ptr to first SAT element
     ComputeSAT((*psat), **values, prev_row_offset);
 }
 
+// Computes a horizonal span of entries in the SAT that starts from the left
+// edge of the image and covers the width of the box while moving pointers
+// forward. The first box_halfw+1 elements are outside the image and are
+// computed from the border value.  The remaining box_halfw elements are
+// computed from the image.
+inline void ComputeLeftSATSpan(int **psat,  // ptr to the row in the SAT
+                               uchar border,  // border vlaue
+                               int prev_row_offset,  // offset to the prev row
+                               int box_halfw,  // (width of box -1) / 2
+                               const uchar **pimg) {  // ptr to image row
+  // Compute the far left value
+  ComputeLeftSAT(psat, border, prev_row_offset);
+  // Compute the padding outside the image
+  ComputeSATSpanValue(psat, box_halfw, border, prev_row_offset);
+  // Compute the remaining half of the box using values from the image
+  ComputeSATSpanValues(psat, box_halfw, pimg, prev_row_offset);
+}
 
-// Main function to do the box filtering using a Summed Area Table.
+
+// Main function to do box filtering.  It is used, for example, when feathering
+// a mask - in that case, each output pixel is the average of all the input
+// pixels within a box centered on the pixel being calculated.
+//
+// This function is heavily optimized.  It uses a Summed Area Table (SAT) to
+// speed up the calculation of the sum of the pixels within the box.
+// For more information about SATs, see https://en.wikipedia.org/wiki/Summed-area_table.
 // We don't keep the whole SAT in memory, only one sliding horizontal band
 // across the whole image width (it slides down as we process each image tile)
 // and a vertical band (sliding right) for the current row of tiles.
@@ -290,11 +326,10 @@ void BoxFilterTiledImage::BoxFilter(int box_width, int box_height,
           // (box_halfw+1 tile padding on left, box_halfw inside image
           // tile).
           if (tile_col == 0) {
-            if (tile_row == 0) {  // Compute top tile row.
-              ComputeSATSpanValue(&psat, box_halfw + 1, border,
-                                   sat_prev_row_offset);
-              ComputeSATSpanValues(&psat, box_halfw, &pimg,
-                                   sat_prev_row_offset);
+            if (tile_row == 0) {
+              // Compute first part of top tile row.
+              ComputeLeftSATSpan(&psat, border, sat_prev_row_offset,
+                                     box_halfw, &pimg);
             } else {  // It is already computed from tile above us.
               psat += box_width;
             }
@@ -325,9 +360,8 @@ void BoxFilterTiledImage::BoxFilter(int box_width, int box_height,
           // Handle case where row >= box_height.
           // Take care of the first box_width elements of SAT row.
           if (tile_col == 0) {  // Leftmost tile column: compute.
-            ComputeSATSpanValue(&psat, box_halfw + 1, border,
-                                sat_prev_row_offset);
-            ComputeSATSpanValues(&psat, box_halfw, &pimg, sat_prev_row_offset);
+            ComputeLeftSATSpan(&psat, border, sat_prev_row_offset,
+                                   box_halfw, &pimg);
           } else {  // Copy box_width elements from vertical band.
             memcpy(psat, &sat_vband[0] + row * box_width,
                    box_width * sizeof(*psat));

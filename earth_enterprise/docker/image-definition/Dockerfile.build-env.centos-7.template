@@ -1,0 +1,18 @@
+# We only need a few context files, rather than the whole repository:
+# --[ TST-Dockerfile: context-dir=earth_enterprise/docker/image-definition ]--
+
+FROM centos:7
+
+
+# Copy shell scripts to /root/bin in the Docker container:
+RUN mkdir -p /root/opengee/bin
+COPY scripts /root/opengee/bin
+
+# We need to read secrets on RHEL to register a Yum subscription.
+# We serve secrets over a named pipe.  Unfortunately, the regular `docker`
+# client doesn't support mounting volumes during a build.  So, we defer
+# building to a scirpt in the container.
+#
+# TST-RUN-STAGE \
+#   -v $SECRET_SERVER_DIR_ESCAPED:/var/opt/run/tst-docker/secrets \
+#   /root/opengee/bin/build-env-stage-2.sh
