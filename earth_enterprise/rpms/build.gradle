@@ -23,7 +23,7 @@ def openGeeVersion =
         // Strip comments:
         def commentIndex = it.indexOf('#')
 
-        commentIndex < 0 ? it : it.substring(0, commentIndex)        
+        commentIndex < 0 ? it : it.substring(0, commentIndex)
     }.
     collect { it.trim() }. // Trim whitespace.
     findAll { !it.isEmpty() }. // Skip empty lines.
@@ -202,9 +202,48 @@ task openGeeCommonDeb (type: Deb) {
 task openGeeServerRpm (type: Rpm) {
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     packageName = 'opengee-server'
-    
+    user = 'root'
+    permissionGroup = 'root'
+    preInstall =  new File( packageName, '/pre-install.sh')
+
     from(stagedInstallDir_server_opt) {
         into new File(packageInstallRootDir, 'opt')
+
+        /* WIP  : the following code to exclude duplicate files is not
+        currently working properly.  We should be able to remove the
+        explicit list once we resolve this.
+
+        Also, "addParentDirs false" is not working properly in some version of
+        ospackage.  Detailed here: https://github.com/nebula-plugins/gradle-ospackage-plugin/issues/212
+        */
+        addParentDirs=false
+
+        exclude {
+            !new File(
+                postGisInstallDir_opt
+                    .toURI()
+                    .relativize(stagedInstallDir_server_opt.toURI())
+                    .getPath()
+            ).exists()
+        }
+        exclude{ [
+           '/etc/profile.d',
+           '/opt/google/',
+           '/opt/google/bin/pgsql2shp',
+           '/opt/google/bin/shp2pgsql',
+           '/opt/google/lib/postgresql/postgis-1.5.so',
+           '/opt/google/share/doc/packages/postgis-ge-1.5.8/COPYING',
+           '/opt/google/share/doc/packages/postgis-ge-1.5.8/CREDITS',
+           '/opt/google/share/doc/packages/postgis-ge-1.5.8/README.postgis',
+           '/opt/google/share/postgresql/contrib/postgis.sql',
+           '/opt/google/share/postgresql/contrib/postgis_upgrade_13_to_15.sql',
+           '/opt/google/share/postgresql/contrib/postgis_upgrade_14_to_15.sql',
+           '/opt/google/share/postgresql/contrib/postgis_upgrade_15_minor.sql',
+           '/opt/google/share/postgresql/contrib/spatial_ref_sys.sql',
+           '/opt/google/share/postgresql/contrib/uninstall_postgis.sql']
+        }
+
+
     }
     from(stagedInstallDir_server_etc) {
         into new File(packageInstallRootDir, 'etc')
