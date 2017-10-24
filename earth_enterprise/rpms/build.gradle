@@ -1,9 +1,16 @@
-/*
-    See documentation on the osPackage plugin here: https://github.com/nebula-plugins/gradle-ospackage-plugin
+// Command-line parameters:
+//
+//     ./gradlew -PbuildOpenGee:
+// Compile and install Open GEE in a temporary directory before packaging.
+// By default no compilation, or installation are run.  In that case, you must
+// ensuce the main scons "stage_install" target has been called before building
+// packages.  This target copies build artifacts, binaries and documents into
+// the /tmp/fusion_os_install path.
+//
+// See documentation on the osPackage plugin here:
+//
+// https://github.com/nebula-plugins/gradle-ospackage-plugin
 
-    This packaging script depends on the output of the main scons "stage_install" target,
-    which copies build artifacts, binaries and documents in to the /tmp/fusion_os_install path.
- */
 
 buildscript {
     repositories {
@@ -11,7 +18,9 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.netflix.nebula:gradle-ospackage-plugin:4.5.0'
+        // OSPackage 4.4.0, 4.4.1, 4.4.2, 4.5.0, 4.5.1 produce RPMs that fail
+        // to install on Cent OS 6, so we use the older version:
+        classpath 'com.netflix.nebula:gradle-ospackage-plugin:4.3.0'
     }
 }
 
@@ -64,7 +73,6 @@ ospackage {
 
 task compileOpenGee(type: Exec) {
     workingDir = '..'
-
     commandLine('scons', '-j8', 'release=1', 'build')
 }
 
@@ -78,7 +86,7 @@ task stageOpenGeeInstall(type: Exec, dependsOn: 'compileOpenGee') {
         'scons', '-j8', 'release=1', 'stage_install')
 }
 
-task openGeePostGisRpm(type: Rpm, dependsOn: 'stageOpenGeeInstall') {
+task openGeePostGisRpm(type: Rpm) {
     packageName = 'opengee-postgis'
     release = '1'
     version = '1.5.8'
@@ -99,7 +107,11 @@ task openGeePostGisRpm(type: Rpm, dependsOn: 'stageOpenGeeInstall') {
     }
 }
 
-task openGeeCommonRpm(type: Rpm, dependsOn: 'stageOpenGeeInstall') {
+if (project.hasProperty('buildOpenGee')) {
+    openGeePostGisRpm.dependsOn stageOpenGeeInstall
+}
+
+task openGeeCommonRpm(type: Rpm) {
     packageName = 'opengee-common'
     release = '1'
     version = openGeeVersion
@@ -156,6 +168,12 @@ task openGeeCommonRpm(type: Rpm, dependsOn: 'stageOpenGeeInstall') {
     requires('opengee-postgis', '1.5.8', GREATER | EQUAL)
     conflicts('opengee-postgis', '2.0', GREATER | EQUAL)
 
+    // Prefix variable definitions to all install scripts:
+    installUtils = file('opengee-common/etc/init.d/gevars.sh')
+
+    postInstall = file('opengee-common/post-install.sh')
+    preUninstall = file('opengee-common/pre-uninstall.sh')
+
     from (stagedInstallDir_common_opt) {
         into new File(packageInstallRootDir, 'opt')
 
@@ -168,6 +186,7 @@ task openGeeCommonRpm(type: Rpm, dependsOn: 'stageOpenGeeInstall') {
             ).exists()
         }
     }
+
 
     from (stagedInstallDir_common_user_magic) {
         into packageInstallRootDir
@@ -185,6 +204,14 @@ task openGeeCommonRpm(type: Rpm, dependsOn: 'stageOpenGeeInstall') {
     from(stagedInstallDir_manual) {
         into packageInstallRootDir
     }
+
+    from(file('opengee-common/etc')) {
+        into new File(packageInstallRootDir, 'etc')
+    }
+}
+
+if (project.hasProperty('buildOpenGee')) {
+    openGeeCommonRpm.dependsOn stageOpenGeeInstall
 }
 
 
@@ -292,17 +319,16 @@ task openGeeFusionDeb (type: Deb) {
     }
 }
 
-task opengeeRpms(
+task openGeeRpms(
     dependsOn: [
         'openGeeServerRpm', 'openGeeFusionRpm', 'openGeeCommonRpm',
         'openGeePostGisRpm'
     ])
 
-task opengeeDebs(
+task openGeeDebs(
     dependsOn: ['openGeeServerDeb', 'openGeeFusionDeb', 'openGeeCommonDeb'])
 
-task osPackage(dependsOn: ['opengeeRpms', 'opengeeDebs'])
-
+task osPackage(dependsOn: ['openGeeRpms', 'openGeeDebs'])
 
 // Mostly for documentation purposes.  You need to comment out the rest of the
 // Gradle file to run this task:
