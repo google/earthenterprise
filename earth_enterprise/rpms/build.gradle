@@ -215,29 +215,11 @@ task openGeeCommonRpm(type: Rpm, dependsOn: openGeeSharedFiles) {
 
     from (stagedInstallDir_common_opt) {
         into new File(packageInstallRootDir, 'opt')
-
-        exclude {
-            !new File(
-                postGisInstallDir_opt
-                    .toURI()
-                    .relativize(stagedInstallDir_common_opt.toURI())
-                    .getPath()
-            ).exists()
-        }
     }
 
 
     from (stagedInstallDir_common_user_magic) {
         into packageInstallRootDir
-
-        exclude {
-            !new File(
-                postGisInstallDir
-                    .toURI()
-                    .relativize(stagedInstallDir_common.toURI())
-                    .getPath()
-            ).exists()
-        }
     }
 
     from(stagedInstallDir_manual) {
