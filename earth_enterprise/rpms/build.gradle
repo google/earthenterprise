@@ -253,6 +253,13 @@ task openGeeServerRpm (type: Rpm) {
     
     from(stagedInstallDir_server_opt) {
         into new File(packageInstallRootDir, 'opt')
+
+        addParentDirs = false
+        exclude {
+            return !it.isDirectory() &&
+                it.relativePath.getFile(postGisInstallDir_opt).exists()
+        }
+
     }
     from(stagedInstallDir_server_etc) {
         into new File(packageInstallRootDir, 'etc')
