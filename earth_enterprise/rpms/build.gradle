@@ -1,11 +1,26 @@
+// Copyright 2017 the Open GEE Contributors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
 // Command-line parameters:
 //
 //     ./gradlew -PbuildOpenGee:
 // Compile and install Open GEE in a temporary directory before packaging.
-// By default no compilation, or installation are run.  In that case, you must
-// ensuce the main scons "stage_install" target has been called before building
-// packages.  This target copies build artifacts, binaries and documents into
-// the /tmp/fusion_os_install path.
+// If you don't specify `-PbuildOpenGee` on the Gradle command line, no
+// compilation, or installation are run.  In that case, you must ensure the
+// main scons "stage_install" target has been called before building packages.
+// This Scons target copies build artifacts, binaries and documents into the
+// /tmp/fusion_os_install path.
 //
 // See documentation on the osPackage plugin here:
 //
@@ -71,6 +86,10 @@ ospackage {
     arch = X86_64
     os = LINUX
 }
+
+
+// Build packages for all platforms by default:
+defaultTasks 'osPackage'
 
 task compileOpenGee(type: Exec) {
     workingDir = '..'
