@@ -20,7 +20,7 @@ scons -j8 release=1 stage_install || exit 1
 
 # Install Fusion:
 cd src/installer &&
-(echo C) | ./install_fusion.sh -hnmf || exit 1
+(echo C; echo C) | ./install_fusion.sh -hnmf || exit 1
 
 # Install Earth Server:
 (echo n) | ./install_server.sh -hnmf || exit 1
