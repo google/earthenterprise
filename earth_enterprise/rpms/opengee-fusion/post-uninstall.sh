@@ -14,26 +14,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set +x
-
-#------------------------------------------------------------------------------
-check_group()
+remove_users_and_groups()
 {
-    local GROUP_EXISTS=$(getent group "$GEGROUP")
-
-    # Add group if it does not exist:
-    if [ -z "$GROUP_EXISTS" ]; then
-        groupadd -r "$GEGROUP" &> /dev/null
-        keyvalue_file_set "$GEE_INSTALL_KV_PATH" gegroup_existed "false"
-    else
-        keyvalue_file_set "$GEE_INSTALL_KV_PATH" gegroup_existed "true"
-    fi
+    [ -n "$(getent passwd "$GEFUSIONUSER")" ] && userdel "$GEFUSIONUSER"
 }
 
 
 #-----------------------------------------------------------------
 # Main Function
 #-----------------------------------------------------------------
-# 8) Check if group and users exist
-check_group
-#-----------------------------------------------------------------
+
+remove_users_and_groups
