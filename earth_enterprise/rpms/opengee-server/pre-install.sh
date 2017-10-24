@@ -28,6 +28,7 @@ BASEINSTALLDIR_VAR="/var/opt/google"
 # derived directories
 GEHTTPD="$BASEINSTALLDIR_OPT/gehttpd"
 GEHTTPD_CONF="$GEHTTPD/conf.d"
+GEHTTPD_BIN="$GEHTTPD/bin/gehttpd"
 
 # Get system info values
 NEWLINECLEANER="sed -e s:\\n::g"
@@ -96,28 +97,21 @@ GEAPACHEUSER_NAME="geapacheuser"
 #-----------------------------------------------------------------
 main_preinstall()
 {
-    # 5a) Check previous installation
-    if [ -f "$SERVERBININSTALL" ]; then
-        IS_NEWINSTALL=false
-    else
-        IS_NEWINSTALL=true
-    fi
-
-    # 7) Check prerequisite software
-
-    # check to see if GE Server processes are running
-    service geserver stop
-
-    # 6) Check valid host properties
-    check_bad_hostname
-    check_mismatched_hostname
-
-    # 8) Check if users exist
+    # Always make sure account identities exist...
     check_username $GEAPACHEUSER_NAME
     check_username $GEPGUSER_NAME
 
-    # 10) Configure Publish Root
-    configure_publish_root
+    # Some of pre-install depends on previous installation
+    if [ -f "$GEHTTPD_BIN" ]; then
+
+        # check to see if GE Server processes are running
+        service geserver stop
+
+        # 6) Check valid host properties
+        check_bad_hostname
+        check_mismatched_hostname
+        configure_publish_root
+    fi
 }
 
 #-----------------------------------------------------------------

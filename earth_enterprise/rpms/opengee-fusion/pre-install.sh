@@ -37,17 +37,20 @@ ASSET_ROOT_VOLUME_SIZE=0
 #-----------------------------------------------------------------
 main_preinstall()
 {
-    service gefusion stop
+    # if first time clean install/no prior assets, this never is needed...
+    if [ -d ${ASSET_ROOT} ] ; then
+        service gefusion stop
 
-    load_systemrc_config
+        load_systemrc_config
 
-    check_asset_root_volume_size
+        check_asset_root_volume_size
 
-    # check for invalid asset names
-    INVALID_ASSETROOT_NAMES=$(find $ASSET_ROOT -type d -name "*[\\\&\%\'\"\*\=\+\~\`\?\<\>\:\; ]*" 2> /dev/null)
+        # check for invalid asset names
+        INVALID_ASSETROOT_NAMES=$(find $ASSET_ROOT -type d -name "*[\\\&\%\'\"\*\=\+\~\`\?\<\>\:\; ]*" 2> /dev/null)
 
-    if [ ! -z "$INVALID_ASSETROOT_NAMES" ]; then
-        show_invalid_assetroot_name $INVALID_ASSETROOT_NAMES
+        if [ ! -z "$INVALID_ASSETROOT_NAMES" ]; then
+            show_invalid_assetroot_name $INVALID_ASSETROOT_NAMES
+        fi
     fi
 }
 
