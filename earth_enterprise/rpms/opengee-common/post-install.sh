@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /bin/bash
 #
 # Copyright 2017 Open GEE Contributors
 #
@@ -24,6 +24,9 @@ check_group()
     # Add group if it does not exist:
     if [ -z "$GROUP_EXISTS" ]; then
         groupadd -r "$GEGROUP" &> /dev/null
+        keyvalue_file_set "$GEE_INSTALL_KV_PATH" gegroup_existed "false"
+    else
+        keyvalue_file_set "$GEE_INSTALL_KV_PATH" gegroup_existed "true"
     fi
 }
 

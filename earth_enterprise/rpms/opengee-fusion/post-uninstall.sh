@@ -1,6 +1,6 @@
 #! /bin/bash
 #
-# Copyright 2017 Open GEE Contributors
+# Copyright 2017 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,24 +14,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set +x
-
-#------------------------------------------------------------------------------
-# Directory locations:
-BININSTALLROOTDIR="/etc/init.d"
-
-#------------------------------------------------------------------------------
-# Group names:
-GEGROUP_NAME=$(cat "$BININSTALLROOTDIR/gevars.sh" | grep GEGROUP | cut  -d'=' -f2)
-
-
-remove_users_groups()
+remove_users_and_groups()
 {
-    [ -n "$(getent group "$GEGROUP_NAME")" ] && groupdel "$GEGROUP_NAME"
+    [ -n "$(getent passwd "$GEFUSIONUSER")" ] && userdel "$GEFUSIONUSER"
 }
 
+
 #-----------------------------------------------------------------
-# Main Function:
+# Main Function
 #-----------------------------------------------------------------
-remove_users_groups
-#-----------------------------------------------------------------
+
+remove_users_and_groups

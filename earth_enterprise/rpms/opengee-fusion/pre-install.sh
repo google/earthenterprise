@@ -1,6 +1,6 @@
-#!/bin/bash
+#! /bin/bash
 #
-# Copyright 2017 Google Inc.
+# Copyright 2017 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,31 +19,11 @@
 set +x
 
 #-----------------------------------------------------------------
-BADHOSTNAMELIST=(empty linux localhost dhcp bootp)
-
-# versions and user names
+# Versions and user names:
 GEE="Google Earth Enterprise"
-GEES="$GEE Server"
-
-# directory locations
-BININSTALLROOTDIR="/etc/init.d"
-BASEINSTALLDIR_OPT="/opt/google"
-BASEINSTALLDIR_ETC="/etc/opt/google"
-BASEINSTALLDIR_VAR="/var/opt/google"
-
-# derived directories
-SYSTEMRC="$BASEINSTALLDIR_ETC/systemrc"
-MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB=1048576
-
-# Get system info values
-NEWLINECLEANER="sed -e s:\\n::g"
-HOSTNAME="$(hostname -f | tr [A-Z] [a-z] | $NEWLINECLEANER)"
-HOSTNAME_F="$(hostname -f | $NEWLINECLEANER)"
-
 #-----------------------------------------------------------------
 
 # config values
-ASSET_ROOT="/gevol/assets"
 ASSET_ROOT_VOLUME_SIZE=0
 
 
@@ -52,18 +32,20 @@ ASSET_ROOT_VOLUME_SIZE=0
 #-----------------------------------------------------------------
 main_preinstall()
 {
-    service gefusion stop
+    /etc/init.d/gefusion stop
 
     load_systemrc_config
 
     check_asset_root_volume_size
 
     # check for invalid asset names
-    INVALID_ASSETROOT_NAMES=$(find $ASSET_ROOT -type d -name "*[\\\&\%\'\"\*\=\+\~\`\?\<\>\:\; ]*" 2> /dev/null)
+    INVALID_ASSETROOT_NAMES=$(find "$ASSET_ROOT" -type d -name "*[\\\&\%\'\"\*\=\+\~\`\?\<\>\:\; ]*" 2> /dev/null)
 
-    if [ ! -z "$INVALID_ASSETROOT_NAMES" ]; then
-        show_invalid_assetroot_name $INVALID_ASSETROOT_NAMES
+    if [ -n "$INVALID_ASSETROOT_NAMES" ]; then
+        show_invalid_assetroot_name "$INVALID_ASSETROOT_NAMES"
     fi
+
+    create_users_and_groups
 }
 
 #-----------------------------------------------------------------
@@ -72,42 +54,54 @@ main_preinstall()
 
 check_asset_root_volume_size()
 {
-    ASSET_ROOT_VOLUME_SIZE=$(df --output=avail $ASSET_ROOT | grep -v Avail)
+    ASSET_ROOT_VOLUME_SIZE=$(df --output=avail "$ASSET_ROOT" | grep -v Avail)
     
-    if [[ $ASSET_ROOT_VOLUME_SIZE -lt MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB ]]; then
-        MIN_ASSET_ROOT_VOLUME_SIZE_IN_GB=$(expr $MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB / 1024 / 1024)
+    if [[ "$ASSET_ROOT_VOLUME_SIZE" -lt MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB ]]; then
+        MIN_ASSET_ROOT_VOLUME_SIZE_IN_GB=$(expr "$MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB" / 1024 / 1024)
 
-        echo -e "\nThe asset root volume [$ASSET_ROOT] has only $ASSET_ROOT_VOLUME_SIZE KB available."
-        echo -e "We recommend that an asset root directory have a minimum of $MIN_ASSET_ROOT_VOLUME_SIZE_IN_GB GB of free disk space."
-        echo ""
+        cat <<END
+
+The asset root volume [$ASSET_ROOT] has only $ASSET_ROOT_VOLUME_SIZE KB available.
+We recommend that an asset root directory have a minimum of $MIN_ASSET_ROOT_VOLUME_SIZE_IN_GB GB of free disk space.
+
+END
     fi
 }
 
-load_systemrc_config()
+create_users_and_groups()
 {
-    if [ -f "$SYSTEMRC" ]; then
-        # read existing config information
-        ASSET_ROOT=$(xmllint --xpath '//Systemrc/assetroot/text()' $SYSTEMRC)
-        GEFUSIONUSER_NAME=$(xmllint --xpath '//Systemrc/fusionUsername/text()' $SYSTEMRC)
-        GROUPNAME=$(xmllint --xpath '//Systemrc/userGroupname/text()' $SYSTEMRC)		
+    # Add user if it does not exist:
+    if [ -z "$(getent passwd "$GEFUSIONUSER")" ]; then
+		mkdir -p "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER"
+		useradd --home "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER" \
+            --system --gid "$GEGROUP" "$GEFUSIONUSER"
+        keyvalue_file_set "$GEE_INSTALL_KV_PATH" gefusionuser_existed "false"
+	else
+		# The user already exists -- update primary group:
+		usermod -g "$GEGROUP" "$GEFUSIONUSER"
+        keyvalue_file_set "$GEE_INSTALL_KV_PATH" gefusionuser_existed "true"
     fi
 }
 
 show_invalid_assetroot_name()
 (
-    echo -e "\nThe following characters are no longer allowed in GEE Fusion Assets:"
-    echo -e "& % \' \" * = + ~ \` ? < > : ; and the space character.\n"
-    
-    echo -e "Assets with these names will no longer be usable in GEE Fusion and will generate"
-    echo -e "an appropriate error message.\n"
+    cat<<END
 
-    echo -e "If you continue with installation, you will have to either recreate those assets using"
-    echo -e "valid names or  rename the assets to a valid name before attempting to process the assets.\n"
+The following characters are no longer allowed in GEE Fusion Assets:
+& % \' \" * = + ~ \` ? < > : ; and the space character.
 
-    echo -e "See the GEE Admin Guide for more details on renaming assets.\n"
+Assets with these names will no longer be usable in GEE Fusion and will generate
+an appropriate error message.
 
-    echo -e "The following assets contain invalid characters:\n"
-    echo -e "$1"
+If you continue with installation, you will have to either recreate those assets using
+valid names or  rename the assets to a valid name before attempting to process the assets.
+
+See the GEE Admin Guide for more details on renaming assets.
+
+The following assets contain invalid characters:
+
+$1
+END
 )
 
 
