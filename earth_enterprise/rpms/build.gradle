@@ -86,6 +86,10 @@ ospackage {
     os = LINUX
 }
 
+
+// Build packages for all platforms by default:
+defaultTasks 'osPackage'
+
 task compileOpenGee(type: Exec) {
     workingDir = '..'
     commandLine('scons', '-j8', 'release=1', 'build')
