@@ -26,11 +26,28 @@
 # lines below.
 
 Import('third_party_env')
+import os
 
 gdal_version = 'gdal-2.1.2'
 openjpeg_version = 'openjpeg-v2.1.2-linux-x86_64'
 # kakadu_version = 'v5_2_6-00418C'
 # geoexpress_version = 'MrSID_DSDK-8.5.0.3422'
+
+# Check if MrSID decoding library is installed and get the decoding SDK path
+mrSIDLibName = 'libltidsdk.so'
+mrSIDDSDKPath = ""
+findLibraryCommand = "/sbin/ldconfig -p | grep %s | tr ' ' '\n' | grep /" %mrSIDLibName
+mrSIDlibraryFullPath=os.popen(findLibraryCommand).read()
+if not mrSIDlibraryFullPath:
+   print("mrSID library was not found ! GDAL will be built without mrSID raster format support.")
+else:
+   print "mrSID library was found (%s)! GDAL will be built with mrSID raster format support." %mrSIDlibraryFullPath
+   getFolderCommand = "dirname %s" %mrSIDlibraryFullPath
+   mrSIDLibraryPath=os.popen(getFolderCommand).read()
+   mrSIDDSDKPath = os.path.normpath(mrSIDLibraryPath + os.sep + os.pardir)
+   print "mrSID Decoding SDK path is: ", mrSIDDSDKPath
+
+
 make_cmd_cpu = 'make -j%d' % GetOption('num_jobs')
 
 ge_version = gdal_version.replace('gdal', 'gdal-ge')
@@ -145,6 +162,9 @@ openjpeg_extract = gdal_env.Command(
 #             kakadu_version, kakadu_version, kakadu_version, gdal_target))])
 
 
+# [8] 
+
+
 # [7] Configure gdal
 gdal_target = '%s/.configure_gdal' % current_dir
 
@@ -157,6 +177,7 @@ if gdal_env['bundle_3rd_libs']:
       '--with-geotiff=internal --with-xerces=%s --with-geos=%s/bin/geos-config '
 #      '--with-kakadu=%s/%s --with-mrsid=%s/%s-linux.x86-64.gcc44/Raster_DSDK '
       '--with-openjpeg=%s/%s '
+      '--with-mrsid=%s '
       '--with-python=%s '
       '--with-xml2=%s/bin '
       '--without-pg --without-jasper --with-odbc=no --without-mysql '
@@ -168,7 +189,7 @@ if gdal_env['bundle_3rd_libs']:
            root_dir, root_dir,
            root_dir, root_dir,
 #           build_root, kakadu_version, build_root, geoexpress_version,
-           build_root, openjpeg_version,
+           build_root, openjpeg_version, mrSIDDSDKPath,
            gdal_env['python_bin'],
            root_dir,
            root_dir,
@@ -183,6 +204,7 @@ else:
         '--with-geotiff=internal --with-xerces --with-geos '
 #        '--with-kakadu=%s/%s --with-mrsid=%s/%s-linux.x86-64.gcc44/Raster_DSDK '
         '--with-openjpeg=%s/%s '
+        '--with-mrsid=%s '
         '--with-python=%s '
         '--with-xml2 '
         '--without-pg --without-jasper --with-odbc=no --without-mysql '
@@ -192,7 +214,7 @@ else:
             build_root,
             gdal_env['ENV']['mod_env'], optdir,
 #            build_root, kakadu_version, build_root, geoexpress_version,
-            build_root, openjpeg_version,
+            build_root, openjpeg_version, mrSIDDSDKPath,
             gdal_env['python_bin'],
             gdal_target))
 
