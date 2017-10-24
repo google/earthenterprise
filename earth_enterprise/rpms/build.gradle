@@ -297,7 +297,7 @@ task openGeeFusionRpm (type: Rpm) {
 '''Command line utitiles and Qt UI for building Open GEE globes.
 
 The utilities in this package allow Open GEE globe and map databases to be
-built from raster, vector and location properties data.
+built from raster, vector, and location properties data.
 '''
     license = 'Apache 2.0'
     type = BINARY
