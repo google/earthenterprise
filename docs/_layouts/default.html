@@ -14,6 +14,10 @@
 
       <script src='{{ site.baseurl}}/js/modernizr.js'></script>
 
+      {% if site.google_analytics and jekyll.environment == 'production' %}
+      {% include analytics.html %}
+      {% endif %}
+
     </head>
     <body>
       <div class='contain-to-grid sticky'>
