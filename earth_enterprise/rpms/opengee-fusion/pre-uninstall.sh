@@ -16,24 +16,10 @@
 
 set +x
 
-#------------------------------------------------------------------------------
-check_group()
-{
-    local GROUP_EXISTS=$(getent group "$GEGROUP")
-
-    # Add group if it does not exist:
-    if [ -z "$GROUP_EXISTS" ]; then
-        groupadd -r "$GEGROUP" &> /dev/null
-        keyvalue_file_set "$GEE_INSTALL_KV_PATH" gegroup_existed "false"
-    else
-        keyvalue_file_set "$GEE_INSTALL_KV_PATH" gegroup_existed "true"
-    fi
-}
-
-
 #-----------------------------------------------------------------
 # Main Function
 #-----------------------------------------------------------------
-# 8) Check if group and users exist
-check_group
+
+/etc/init.d/gefusion stop
+
 #-----------------------------------------------------------------

@@ -1,6 +1,6 @@
-#!/bin/bash
+#! /bin/bash
 #
-# Copyright 2017 Open GEE Contributors
+# Copyright 2017 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,7 +27,9 @@ GEGROUP_NAME=$(cat "$BININSTALLROOTDIR/gevars.sh" | grep GEGROUP | cut  -d'=' -f
 
 remove_users_groups()
 {
-    [ -n "$(getent group "$GEGROUP_NAME")" ] && groupdel "$GEGROUP_NAME"
+    if [ -n "$(getent group "$GEGROUP_NAME")" ]; then
+        groupdel "$GEGROUP_NAME"
+    fi
 }
 
 #-----------------------------------------------------------------
