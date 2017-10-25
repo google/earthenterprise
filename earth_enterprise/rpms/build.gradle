@@ -202,6 +202,7 @@ task openGeeCommonRpm(type: Rpm, dependsOn: openGeeSharedFiles) {
 
     requires('opengee-postgis', '1.5.8', GREATER | EQUAL)
     conflicts('opengee-postgis', '2.0', GREATER | EQUAL)
+    requires('util-linux')
 
     // Prefix variable definitions to all install scripts:
     installUtils = file('build/shared/install-utils.sh')
@@ -310,6 +311,7 @@ built from raster, vector, and location properties data.
     requires('libxml2')
     requires('net-tools')
     requires('sed')
+    requires('util-linux')
 
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
 
@@ -318,8 +320,10 @@ built from raster, vector, and location properties data.
     }
 
     // Prefix variable definitions to all install scripts:
-    installUtils = file('build/shared/gevars.sh')
+    installUtils = file('build/shared/install-utils.sh')
 
+    postInstall = file('opengee-fusion/post-install.sh')
+    preUninstall = file('opengee-fusion/pre-uninstall.sh')
 }
 
 task openGeeFusionDeb (type: Deb) {
