@@ -27,7 +27,9 @@ GEGROUP_NAME=$(cat "$BININSTALLROOTDIR/gevars.sh" | grep GEGROUP | cut  -d'=' -f
 
 remove_users_groups()
 {
-    [ -n "$(getent group "$GEGROUP_NAME")" ] && groupdel "$GEGROUP_NAME"
+    if [ -n "$(getent group "$GEGROUP_NAME")" ]; then
+        groupdel "$GEGROUP_NAME"
+    fi
 }
 
 #-----------------------------------------------------------------
