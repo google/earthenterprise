@@ -211,7 +211,7 @@ final_fusion_service_configuration()
 {
     chcon -t texrel_shlib_t "$BASEINSTALLDIR_OPT"/lib/*so*
 
-    /etc/init.d/gefusion start
+    service gefusion start
 }
 
 #-----------------------------------------------------------------

@@ -32,7 +32,7 @@ ASSET_ROOT_VOLUME_SIZE=0
 #-----------------------------------------------------------------
 main_preinstall()
 {
-    /etc/init.d/gefusion stop
+    service gefusion stop
 
     load_systemrc_config
 
