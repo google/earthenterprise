@@ -419,9 +419,9 @@ done
 check_root
 
 if [ -n "$ASSUME_YES" ]; then
-    ASSUME_YES_PACKAGE_MANAGER_PARAMETER="-y"
-else
     ASSUME_YES_PACKAGE_MANAGER_PARAMETER=""
+else
+    ASSUME_YES_PACKAGE_MANAGER_PARAMETER="-y"
 fi
 
 install_packages || exit 1
