@@ -15,5 +15,5 @@ paginate: 1
 paginate_path: "blog/page:num"
 
 #google analytics
-google_analytics: UA—108632131-1
+google_analytics: UA—108632131-2
 
