@@ -75,6 +75,7 @@ set -e
 VARPGDIR=/var/opt/google/pgsql
 SHAREDIR=/opt/google/share/postgresql/contrib
 BINDIR=/opt/google/bin
+SQLDIR=/opt/google/share/opengee-server/sql
 
 if [ ! -n "$1" ]; then
   type="soft";
@@ -147,7 +148,6 @@ elif [ $type == "restore" ]; then
   fi
 fi
 
-
 # Dumps geserve-databases.
 function do_dump {
   # Start postmaster.
@@ -181,15 +181,21 @@ function do_dump {
 
 # Deletes old data and recreates db instance.
 function do_reset {
-  if [ -f $VARPGDIR/data/postmaster.pid ]; then
-    $BINDIR/pg_ctl -D $VARPGDIR/data -l $VARPGDIR/logs/pg.log stop
+
+  # Drop gee databases
+  if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w gestream | wc -l` == 1 ]; then
+    $BINDIR/dropdb -U geuser gestream
+  fi
+  if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w geendsnippet | wc -l` == 1 ]; then
+    $BINDIR/dropdb -U geuser geendsnippet
+  fi
+  if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w gesearch | wc -l` == 1 ]; then
+    $BINDIR/dropdb -U geuser gesearch
+  fi
+  if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w gepoi | wc -l` == 1 ]; then
+    $BINDIR/dropdb -U geuser gepoi
   fi
 
-  # delete all the db files. not sure if we should do this.
-  rm -Rf $VARPGDIR/data
-
-  # create a new db instance from scratch
-  $BINDIR/initdb --auth=trust -D $VARPGDIR/data >/dev/null
 }
 
 # Check if postmaster is running. If it is then prompt the user to stop the
@@ -201,27 +207,49 @@ if [ -e $VARPGDIR/data/postmaster.pid ]; then
 fi
 
 if [ $type == "backup" ]; then
-  if [ ! -e $VARPGDIR/data ]; then
-    echo "WARNING: There is no data to back up."
-  else
-    do_dump
-  fi
-  exit
+  do_dump
 fi
 
 # if the data dir does not exist then this has to be a hard reset.
+# TODO: This will need to be removed when we unbundle
 if [ ! -e $VARPGDIR/data ]; then
   type="hard";
 fi
 
 if [ $type == "hard" ]; then
-  # Do reset and recreate database instance.
-  do_reset
+  if [ ! -e $VARPGDIR/data ]; then
+    # create a new db instance from scratch
+    # TODO: This will need to be removed when we unbundle
+    $BINDIR/initdb --auth=trust -D $VARPGDIR/data >/dev/null
+  else
+    # Start postmaster.
+    if [ ! -f $VARPGDIR/data/postmaster.pid ]; then
+      $BINDIR/pg_ctl -D $VARPGDIR/data -l $VARPGDIR/logs/pg.log start -w
+    fi
+
+    # Do reset and recreate database instance.
+    echo Removing geserve-databases...
+    do_reset
+
+    # Also drop example databases
+    if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w geplaces | wc -l` == 1 ]; then
+      $BINDIR/dropdb -U geuser geplaces
+    fi
+    if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w searchexample | wc -l` == 1 ]; then
+      $BINDIR/dropdb -U geuser searchexample
+    fi
+
+    # Remove geuser
+    echo Removing geuser...
+    $BINDIR/psql postgres -q -c "DROP USER IF EXISTS geuser"
+  fi
 else
   # Do backup for any reset except 'hard'.
   do_dump
 
   # Check if PostgreSQL version have been changed.
+  # TODO: this will need to be updated to work with unbundled versions of PostgreSQL and to detect and migrate data
+  # from bundled versions to unbundled versions
   old_version=`cat $VARPGDIR/data/PG_VERSION | cut -c1-3`
   new_version=`$BINDIR/psql --version | cut -f3 -d' ' | cut -c1-3`
   if [ "$old_version" != "$new_version" ]; then
@@ -245,18 +273,7 @@ fi
 
 # Soft reset
 if [ $type == "soft" -o $type == "restore" ]; then
-  if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w gestream | wc -l` == 1 ]; then
-    $BINDIR/dropdb -U geuser gestream
-  fi
-  if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w geendsnippet | wc -l` == 1 ]; then
-    $BINDIR/dropdb -U geuser geendsnippet
-  fi
-  if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w gesearch | wc -l` == 1 ]; then
-    $BINDIR/dropdb -U geuser gesearch
-  fi
-  if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w gepoi | wc -l` == 1 ]; then
-    $BINDIR/dropdb -U geuser gepoi
-  fi
+  do_reset
 else
   $BINDIR/createuser --superuser geuser
 fi
@@ -271,27 +288,23 @@ if [ $type == "upgrade" -o $type == "restore" ]; then
 else
   echo "Creating geserve-databases..."
   $BINDIR/createdb --owner=geuser -U geuser gestream
-  $BINDIR/psql -q -d gestream geuser -f $BINDIR/gestream_tables.sql
+  $BINDIR/psql -q -d gestream geuser -f $SQLDIR/gestream_tables.sql
 
   $BINDIR/createdb --owner=geuser -U geuser geendsnippet
-  $BINDIR/psql -q -d geendsnippet geuser -f $BINDIR/geendsnippet_tables.sql
+  $BINDIR/psql -q -d geendsnippet geuser -f $SQLDIR/geendsnippet_tables.sql
 
   $BINDIR/createdb --owner=geuser -U geuser gesearch
-  $BINDIR/psql -q -d gesearch geuser -f $BINDIR/gesearch_tables.sql
+  $BINDIR/psql -q -d gesearch geuser -f $SQLDIR/gesearch_tables.sql
 
   $BINDIR/createdb -U geuser --owner=geuser gepoi
   $BINDIR/createlang -U geuser plpgsql gepoi
-  # read -p "wating for you..."
+
   $BINDIR/psql -q -U geuser -d gepoi -f $SHAREDIR/postgis.sql 2>/dev/null >/dev/null
-  #$BINDIR/psql -q -U geuser -d gepoi -f $SHAREDIR/postgis_upgrade.sql 2>/dev/null >/dev/null
   $BINDIR/psql -q -U geuser -d gepoi -f $SHAREDIR/spatial_ref_sys.sql 2>/dev/null >/dev/null
   echo "Done."
 fi
 
 if [ $type == "upgrade" -o $type == "restore" ]; then
-#  cd "$VARPGDIR"/data.backup.$$
-#  test -f geplaces.dump && /opt/google/share/geplaces/geplaces create
-#  test -f searchexample.dump && /opt/google/share/searchexample/searchexample create
   shopt -s nullglob  # set nullglob so that bash allows patterns which match no files
                      # to expand to a null  string,  rather than themselves.
   if [ $type == "upgrade" ]; then
@@ -309,10 +322,10 @@ if [ $type == "upgrade" -o $type == "restore" ]; then
   done
 
   # Update tables/records of gesearch databases.
-  $BINDIR/psql -q -d gesearch geuser -f $BINDIR/gesearch_tables.sql
+  $BINDIR/psql -q -d gesearch geuser -f $SQLDIR/gesearch_tables.sql
 
   # Update tables/records of gestream databases.
-  $BINDIR/psql -q -d gestream geuser -f $BINDIR/gestream_tables.sql
+  $BINDIR/psql -q -d gestream geuser -f $SQLDIR/gestream_tables.sql
 
   echo "Done."
 fi
