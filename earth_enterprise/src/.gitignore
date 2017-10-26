@@ -9,3 +9,11 @@ NATIVE-REL-x86_64/
 .sconf_temp
 config.log
 portableserver/build
+
+# QT Creator project files
+/*.config
+/*.creator
+/*.creator.user
+/*.files
+/*.includes
+
