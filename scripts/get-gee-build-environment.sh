@@ -43,7 +43,7 @@ MIN_GCC_VERSION="4.8"
 
 # Whether to assume answer of yes to all questions (used when installing
 # packages).  Set to true to run without user interaction.
-: ${ASSUME_YES:=""}
+: ${ASSUME_YES:="yes"}
 
 # Check for a known package manager:
 if type apt-get >/dev/null 2>&1; then
@@ -419,9 +419,9 @@ done
 check_root
 
 if [ -n "$ASSUME_YES" ]; then
-    ASSUME_YES_PACKAGE_MANAGER_PARAMETER=""
-else
     ASSUME_YES_PACKAGE_MANAGER_PARAMETER="-y"
+else
+    ASSUME_YES_PACKAGE_MANAGER_PARAMETER=""
 fi
 
 install_packages || exit 1
