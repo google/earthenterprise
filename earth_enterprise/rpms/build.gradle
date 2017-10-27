@@ -250,6 +250,8 @@ task openGeeCommonDeb (type: Deb) {
 task openGeeServerRpm (type: Rpm) {
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     packageName = 'opengee-server'
+
+    directory('/var/opt/google/pgsql/logs')
     
     from(stagedInstallDir_server_opt) {
         into new File(packageInstallRootDir, 'opt')
@@ -261,7 +263,6 @@ task openGeeServerRpm (type: Rpm) {
 
     from(stagedInstallDir_server_user_magic) {
         into packageInstallRootDir
-	includeEmptyDirs = true
     }
 
     from(stagedInstallDir_server_apachesupport) {
