@@ -191,18 +191,18 @@ function ssh_or_https ()
 function get_password ()
 {
     printf "What is your password? "
-    read -s USER_NAME 
+    read -s PASSWORD 
 }
 
 #===  FUNCTION  ================================================================
-#          NAME:  get_USER_NAME
-#   DESCRIPTION:  prompts user to enter USER_NAME and sets global
+#          NAME:  get_username
+#   DESCRIPTION:  prompts user to enter username and sets global
 #    PARAMETERS:  n/a
 #       RETURNS:  n/a
 #===============================================================================
-function get_USER_NAME ()
+function get_username ()
 {
-    printf "What is your USER_NAME? "
+    printf "What is your username? "
     read USER_NAME 
 }
 
@@ -283,7 +283,7 @@ function interactive_mode ()
     #cloning fork
 
     #get USER_NAME and whether ssh or https
-    get_USER_NAME
+    get_username
     ssh_or_https
     clonetype=$?
     if [ $clonetype = $IS_SSH ]
