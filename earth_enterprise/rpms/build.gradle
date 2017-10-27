@@ -250,6 +250,11 @@ task openGeeCommonDeb (type: Deb) {
 task openGeeServerRpm (type: Rpm) {
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     packageName = 'opengee-server'
+    release = '1'
+    version = openGeeVersion
+    user = 'root'
+    permissionGroup = 'root'
+    packageGroup = 'Application/Productivity'
 
     directory('/var/opt/google/pgsql/logs')
     
@@ -268,6 +273,12 @@ task openGeeServerRpm (type: Rpm) {
     from(stagedInstallDir_server_apachesupport) {
         into packageInstallRootDir
     }
+
+    // Prefix variable definitions to all install scripts:
+    installUtils = file('build/shared/install-utils.sh')
+
+    preInstall = file('opengee-server/pre-install.sh')
+    postUninstall = file('opengee-server/post-uninstall.sh')
 }
 
 task openGeeServerDeb (type: Deb) {
