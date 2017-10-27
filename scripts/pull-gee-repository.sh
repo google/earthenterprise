@@ -32,7 +32,9 @@
 #===============================================================================
 #       Constants  
 #===============================================================================
+THIS=$(basename "$0")
 USER_NAME=""
+PASSWORD=""
 DIR_NAME="earthenterprise"
 IS_SSH=1
 IS_HTTPS=2
@@ -41,6 +43,8 @@ IS_FORK=4
 SSH_DIR=".ssh"
 SSH_KEY_PRIV="id_rsa"
 SSH_KEY_PUB="$SSH_KEY_PRIV.pub"
+CLONE_REPO=$IS_MAIN
+CLONE_TYPE=""
 
 #===  FUNCTION  ================================================================
 #          NAME:  is_cloned
@@ -63,8 +67,8 @@ function is_cloned ()
 function get_type ()
 {
     printf "Do you want to clone the (m)ain repo or a (f)ork (default is main)? "
-    read clone_type
-    if ! [ "$clone_type" = "m" ]
+    read CLONE_REPO
+    if ! [ "$CLONE_REPO" = "m" ]
     then
         return $IS_FORK  
     fi
@@ -80,6 +84,11 @@ function get_type ()
 #===============================================================================
 function clone_ssh ()
 {
+    if ! [ -n "$USER_NAME" ]
+    then
+        echo "Error: no USER_NAME given!"
+        exit 1
+    fi
     WD="$(pwd)"
     cd
     if [ ! -f "$SSH_DIR/$SSH_KEY_PRIV" ] || [ ! -f "$SSH_DIR/$SSH_KEY_PUB" ]
@@ -89,8 +98,8 @@ function clone_ssh ()
     fi
     cd $WD
     echo "Attempting to clone fork $USER_NAME..."
-    echo "git clone git@github.com:$USER_NAME/earthenterprise.git"
-    git clone git@github.com:$USER_NAME/earthenterprise.git
+    echo "git clone git@github.com:$USER_NAME/earthenterprise.git $DIR_NAME"
+    git clone git@github.com:$USER_NAME/earthenterprise.git $DIR_NAME
 }
 
 #===  FUNCTION  ================================================================
@@ -104,18 +113,21 @@ function clone_https ()
     if [ "$1" -eq "$IS_MAIN" ]
     then
         echo "Attempting to clone main..." 
-        echo "git clone https://github.com/google/earthenterprise.git"
-        git clone https://github.com/google/earthenterprise.git
+        echo "git clone https://github.com/google/earthenterprise.git $DIR_NAME"
+        git clone https://github.com/google/earthenterprise.git $DIR_NAME
     else
-        printf "what is your password? "
-        # -s suppresses output but still reads data
-        read -s password
-
-        len=${#password}
-        if ! [ -z "$password" ]
+        if ! [ -n "$USER_NAME" ]
         then
-            password=":$password"
+            echo "Error: no USER_NAME given!"
+            exit 1
         fi
+	if ! [ -n "$PASSWORD" ]
+        then
+            echo "Error: no password given!"
+            exit 1
+        fi
+        password=":$PASSWORD"
+        len=${#PASSWORD}
         echo
         echo "Attempting to clone fork $USER_NAME/earthenterprise.git..."
 
@@ -130,8 +142,8 @@ function clone_https ()
             hidden="$hidden*"
         done
 
-        echo "git clone https://$USER_NAME$hidden@github.com/$USER_NAME/$DIR_NAME.git" 
-        git clone https://$USER_NAME$password@github.com/$USER_NAME/$DIR_NAME.git 
+        echo "git clone https://$USER_NAME$hidden@github.com/$USER_NAME/earthenterprise.git $DIR_NAME" 
+        git clone https://$USER_NAME$password@github.com/$USER_NAME/earthenterprise.git $DIR_NAME 
     fi
 }   
 
@@ -163,56 +175,196 @@ function ssh_or_https ()
 {
     printf "Do you want to clone via (h)ttps or (s)sh (default is https)? " 
     read clonetype
-    if ! [ "$clonetype" = "h" ]
+    if [ "$clonetype" = "s" ]
     then
         return $IS_SSH
     fi   
     return $IS_HTTPS
 }
 
-
 #===  FUNCTION  ================================================================
-#          NAME:  get_username
-#   DESCRIPTION:  prompts user to enter username and sets global
+#          NAME:  get_password
+#   DESCRIPTION:  prompts user to enter password and sets global
 #    PARAMETERS:  n/a
 #       RETURNS:  n/a
 #===============================================================================
-function get_username ()
+function get_password ()
 {
-    printf "What is your username? "
+    printf "What is your password? "
+    read -s USER_NAME 
+}
+
+#===  FUNCTION  ================================================================
+#          NAME:  get_USER_NAME
+#   DESCRIPTION:  prompts user to enter USER_NAME and sets global
+#    PARAMETERS:  n/a
+#       RETURNS:  n/a
+#===============================================================================
+function get_USER_NAME ()
+{
+    printf "What is your USER_NAME? "
     read USER_NAME 
 }
 
+#===  FUNCTION  ================================================================
+#          NAME:  get_dir
+#   DESCRIPTION:  allows the user to set the directory name to clone into
+#    PARAMETERS:  n/a
+#       RETURNS:  n/a
+#===============================================================================
+
+function get_dir ()
+{
+    printf "Which directory do you wish to clone into (default is ./earthenterprise) ? "
+    read DIR
+    if [ -n "$DIR" ]
+    then
+        DIR_NAME=$DIR
+    fi
+}
+
+#===  FUNCTION  ================================================================
+#          NAME:  print_help
+#   DESCRIPTION:  prints help info
+#    PARAMETERS:  n/a
+#       RETURNS:  n/a
+#===============================================================================
+function print_help ()
+{
+    cat <<MSG
+
+${THIS} [-d <dir>] [-f <fork>] [-h] [-i] [-p <password>]
+
+    
+    -d|--dir <dir>
+        Directory under which to clone into (default is "earthenterprise")
+    
+    -f|--fork <fork>
+        Clone from forked repository. Default is SSH
+
+    -h|--help
+        Show this help message and exit.
+
+    -i|--interactive
+        Allows for user interaction
+
+    -p|--password <password>
+        User password. Only forked repositories cloned in HTTPS use this
+
+MSG
+}
+
+#===  FUNCTION  ================================================================
+#          NAME:  interactive_mode
+#   DESCRIPTION:  allows for user interaction
+#    PARAMETERS:  n/a
+#       RETURNS:  n/a
+#===============================================================================
+
+function interactive_mode ()
+{
+    get_dir
+    get_type
+    CLONE_REPO=$?
+
+    if is_cloned
+    then
+        echo "$DIR_NAME is already cloned!"
+        exit 1 
+    fi
+    
+    # if cloning main, just use standard https
+    if [ $CLONE_REPO -eq $IS_MAIN ]
+    then
+        clone_https $IS_MAIN
+        exit 0
+    fi
+
+    #cloning fork
+
+    #get USER_NAME and whether ssh or https
+    get_USER_NAME
+    ssh_or_https
+    clonetype=$?
+    if [ $clonetype = $IS_SSH ]
+    then
+        clone_ssh
+    else
+        get_password
+        clone_https $IS_FORK
+    fi
+}
+
+#===  FUNCTION  ================================================================
+#          NAME:  parse_cmd_line_args
+#   DESCRIPTION:  parses any command line arguments
+#    PARAMETERS:  n/a
+#       RETURNS:  n/a
+#===============================================================================
+function parse_cmd_line_args ()
+{
+    while [[ "$#" -gt 0 ]]
+    do
+        case "$1" in
+            -d|--dir)
+                DIR_NAME="$2"
+                if ! [ -n "$DIR_NAME" ]
+                then
+                    echo "Error: no directory specified!"
+                    exit 1
+                fi
+                shift
+                ;;
+            -f|--fork)
+                CLONE_REPO=$IS_FORK
+                USER_NAME="$2"
+                if ! [ -n "$CLONE_TYPE" ]
+                then
+                    CLONE_TYPE=$IS_SSH
+                fi
+                shift
+                ;;
+            -h|--help)
+                print_help
+                exit 0     
+                ;;
+            -i|--interactive)
+                interactive_mode
+                exit 0
+                ;;
+            -p|--password)
+                CLONE_REPO=$IS_FORK
+                CLONE_TYPE=$IS_HTTPS
+                PASSWORD="$2"
+                shift
+                ;;
+            *)
+                echo "Unrecognized command-line argument: $1" >&2
+                exit 1
+                ;;
+        esac
+        shift
+    done
+}
 
 #================================================================================
 #	MAIN 
 #================================================================================
 check_root
-if is_cloned
-then
-    echo "$DIR_NAME is already cloned!"
-    exit 1 
-fi
-get_type
-CLONE_TYPE=$?
+parse_cmd_line_args "$@"
 
-# if cloning main, just use standard https
-if [ $CLONE_TYPE -eq $IS_MAIN ]
+if [ $CLONE_REPO -eq $IS_MAIN ]
 then
     clone_https $IS_MAIN
     exit 0
 fi
 
 #cloning fork
-
-#get username and whether ssh or https
-get_username
-ssh_or_https
-clonetype=$?
-
-if [ $clonetype = $IS_SSH ]
+if [ $CLONE_TYPE = $IS_SSH ]
 then
     clone_ssh
 else
     clone_https $IS_FORK
 fi
+
+exit 0
