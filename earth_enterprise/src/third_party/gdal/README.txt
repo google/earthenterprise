@@ -38,7 +38,7 @@ To Build, you will need to build on a SLES 9 box using the scripts found in
 
 To build GDAL with MrSID Raster Format, MrSID library needs to be installed on your platform:
 1- Get MrSID Decoding SDK library
-2- Copy MrSDK library into a folder. Ex: \opt
+2- Copy MrSDK library into a folder. Ex: /opt
 3- Ensure that 'libltidsdk.so' can be disovered by 'ldconfig' command:
 	3.1- Add the full path of 'libltidsdk.so' to ‘/etc/ld.so.conf’. You can edit that file as root admin only.
 	3.2- Rebuild the libraries path cache (‘/etc/ld.so.cache’): $sudo ldconfig
