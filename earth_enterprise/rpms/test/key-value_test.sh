@@ -75,7 +75,11 @@ def' 'abc\ndef'
   value_escape_test "Carriage return value escape failed" $'abc\rdef' 'abc\rdef'
   value_escape_test "Backslash value escape failed" 'back\slash' 'back\\slash'
   value_escape_test "Backspace value escape failed" $'abc\bdef' 'abc\bdef'
-  value_escape_test "Null value escape failed" $'abc\x00def' 'abc\x00def'
+
+  # This test fails because bash assumes the string ends at the null value.
+  # We can clean it up, but it's not a high priority.
+  #value_escape_test "Null value escape failed" $'abc\x00def' 'abc\x00def'
+
   value_escape_test "Form feed value escape failed" $'abc\fdef' 'abc\fdef'
   value_escape_test "Vertical tab value escape failed" $'abc\vdef' 'abc\vdef'
   value_escape_test "Multiple value escape failed" $'\r\n\\\b\f\v' '\r\n\\\b\f\v'
