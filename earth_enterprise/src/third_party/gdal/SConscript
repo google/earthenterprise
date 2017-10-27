@@ -28,7 +28,7 @@
 Import('third_party_env')
 
 gdal_version = 'gdal-2.1.2'
-openjpeg_version = 'openjpeg-v2.1.2-linux-x86_64'
+openjpeg_version = 'openjpeg-v2.3.0-linux-x86_64'
 # kakadu_version = 'v5_2_6-00418C'
 # geoexpress_version = 'MrSID_DSDK-8.5.0.3422'
 make_cmd_cpu = 'make -j%d' % GetOption('num_jobs')
