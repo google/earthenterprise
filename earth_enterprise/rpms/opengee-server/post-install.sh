@@ -32,6 +32,9 @@ main_postinstall()
 
     # 1) Modify files, maybe should be templated
     modify_files
+
+    # 2) Set Permissions Before Server Start/Stop
+    fix_postinstall_filepermissions
 }
 
 #-----------------------------------------------------------------
@@ -69,6 +72,69 @@ modify_files()
 
     # d) Create a new file ‘/etc/init.d/gevars.sh’ and prepend the below lines.
     echo -e "GEAPACHEUSER=$GEAPACHEUSER\nGEPGUSER=$GEPGUSER\nGEFUSIONUSER=$GEFUSIONUSER\nGEGROUP=$GEGROUP" >$BININSTALLROOTDIR/gevars.sh
+}
+
+# this too probably should be done inside the rpm...
+fix_postinstall_filepermissions()
+{
+    # PostGres
+    chown -R $GEPGUSER:$GEGROUP $BASEINSTALLDIR_VAR/pgsql/
+
+    # Apache
+    mkdir -p $BASEINSTALLDIR_OPT/gehttpd/conf.d/virtual_servers/runtime
+    chmod -R 755 $BASEINSTALLDIR_OPT/gehttpd
+    chmod -R 775 $BASEINSTALLDIR_OPT/gehttpd/conf.d/virtual_servers/runtime/
+    chown -R $GEAPACHEUSER:$GEGROUP $BASEINSTALLDIR_OPT/gehttpd/conf.d/virtual_servers/
+    chown -R $GEAPACHEUSER:$GEGROUP $BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/
+    chmod -R 700 $BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/globes/
+    chown $GEAPACHEUSER:$GEGROUP $BASEINSTALLDIR_OPT/gehttpd/htdocs/.htaccess
+    chown -R $GEAPACHEUSER:$GEGROUP $BASEINSTALLDIR_OPT/gehttpd/logs
+
+    # Publish Root
+    chmod 775 $PUBLISHER_ROOT/stream_space
+    # TODO - Not Found
+    # chmod 644 $PUBLISHER_ROOT/stream_space/.config
+    chmod 644 $PUBLISHER_ROOT/.config
+    chmod 755 $PUBLISHER_ROOT
+    chown -R $GEAPACHEUSER:$GEGROUP $PUBLISHER_ROOT/stream_space
+    chown -R $GEAPACHEUSER:$GEGROUP $PUBLISHER_ROOT/search_space
+
+    # Run and logs ownership
+    chown root:$GEGROUP $BASEINSTALLDIR_OPT/run
+    chown root:$GEGROUP $BASEINSTALLDIR_VAR/run
+    chown root:$GEGROUP $BASEINSTALLDIR_VAR/log
+    chown root:$GEGROUP $BASEINSTALLDIR_OPT/log
+
+    # setuid requirements...hmmm
+    chmod +s /opt/google/bin/gerestartapache /opt/google/bin/geresetpgdb /opt/google/bin/geserveradmin
+
+    # Tutorial and Share
+    find /opt/google/share -type d -exec chmod 755 {} \;
+    find /opt/google/share -type f -exec chmod 644 {} \;
+#TODO
+#    chmod ugo+x /opt/google/share/searchexample/searchexample
+#    chmod ugo+x /opt/google/share/geplaces/geplaces
+    chmod ugo+x /opt/google/share/support/geecheck/geecheck.pl
+    chmod ugo+x /opt/google/share/support/geecheck/convert_to_kml.pl
+    chmod ugo+x /opt/google/share/support/geecheck/find_terrain_pixel.pl
+    chmod ugo+x /opt/google/share/support/geecheck/pg_check.pl
+    # Note: this is installed in install_fusion.sh, but needs setting here too.
+#TODO
+#    chmod ugo+x $BASEINSTALLDIR_OPT/share/tutorials/fusion/download_tutorial.sh
+    # this should already be true...
+    chown -R root:root /opt/google/share
+
+    #TODO
+    # Set context (needed for SELINUX support) for shared libs
+    # chcon -t texrel_shlib_t /opt/google/lib/*so*
+    # Restrict permissions to uninstaller and installer logs
+    #chmod -R go-rwx /opt/google/install
+
+    # Disable cutter (default) during installation.
+    /opt/google/bin/geserveradmin --disable_cutter
+
+    # Restrict permissions to uninstaller and installer logs
+    chmod -R go-rwx $BASEINSTALLDIR_OPT/install
 }
 
 #-----------------------------------------------------------------
