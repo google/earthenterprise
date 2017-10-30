@@ -37,23 +37,25 @@ test_banner() {
   banner "Running $1"
 }
 
+SCRIPT_DIR=`dirname $0`
+BASE_DIR_DOTS="${SCRIPT_DIR}/../earth_enterprise"
+BASE_DIR=$(cd "${BASE_DIR_DOTS}"; pwd)
+
 # RPM tests
 test_banner "RPM Unit Tests"
-cd rpms/test
+cd "${BASE_DIR}/rpms/test"
 for TEST in `ls *_test.sh`; do
-  ./"$TEST" || ((FAILURES++))
+  ./"${TEST}" || ((FAILURES++))
 done
-cd ../..
 
 # Fusion unit tests
-cd src
+SRC_DIR="${BASE_DIR}/src"
+cd "${SRC_DIR}"
 for BUILD_DIR in `ls -d NATIVE-*`; do
-  test_banner "Fusion Unit Tests in $BUILD_DIR"
-  cd "$BUILD_DIR/bin/tests"
+  test_banner "Fusion Unit Tests in ${BUILD_DIR}"
+  cd "${SRC_DIR}/${BUILD_DIR}/bin/tests"
   ./RunAllTests.pl || ((FAILURES++))
-  cd ../../..
 done
-cd ..
 
 # Report results
 if [ $FAILURES -eq 0 ]; then

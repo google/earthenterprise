@@ -28,18 +28,28 @@
 VERSION="release"
 CORES=8
 
-if [ -z ${VERSION} ]; then
+SCRIPT_DIR=`dirname $0`
+BASE_DIR_DOTS="${SCRIPT_DIR}/../earth_enterprise"
+BASE_DIR=$(cd "${BASE_DIR_DOTS}"; pwd)
+
+if [ -z "${VERSION}" ]; then
   VER_STR=""
 else
   VER_STR="${VERSION}=1"
 fi
 
+# Clean up previous builds
 rm -rf /tmp/fusion_os_install
+
+# Build
+cd "${BASE_DIR}"
 scons -j${CORES} ${VER_STR} build || exit
 scons -j${CORES} ${VER_STR} stage_install || exit
-cd src/installer
+
+# Install
+cd "${BASE_DIR}/src/installer"
 sudo /etc/init.d/gefusion stop
 sudo /etc/init.d/geserver stop
 sudo ./install_fusion.sh || exit
 sudo ./install_server.sh || exit
-cd ..
+
