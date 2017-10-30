@@ -22,6 +22,9 @@ GEE="Google Earth Enterprise"
 PUBLISHER_ROOT="/gevol/published_dbs"
 INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
 CHKCONFIG="/sbin/chkconfig"
+PGSQL_DATA="/var/opt/google/pgsql/data"
+PGSQL_LOGS="/var/opt/google/pgsql/logs"
+PGSQL_PROGRAM="/opt/google/bin/pg_ctl"
 #-----------------------------------------------------------------
 
 #-----------------------------------------------------------------
@@ -46,6 +49,9 @@ main_postinstall()
 
     # 5) Register publish root
     $BASEINSTALLDIR_OPT/bin/geconfigurepublishroot --noprompt --path=$PUBLISHER_ROOT
+
+    # 6) Install the GEPlaces and SearchExample Databases
+    install_search_databases
 }
 
 #-----------------------------------------------------------------
@@ -133,8 +139,7 @@ fix_postinstall_filepermissions()
     # Tutorial and Share
     find /opt/google/share -type d -exec chmod 755 {} \;
     find /opt/google/share -type f -exec chmod 644 {} \;
-#TODO
-#    chmod ugo+x /opt/google/share/searchexample/searchexample
+    chmod ugo+x /opt/google/share/searchexample/searchexample
     chmod ugo+x /opt/google/share/geplaces/geplaces
     chmod ugo+x /opt/google/share/support/geecheck/geecheck.pl
     chmod ugo+x /opt/google/share/support/geecheck/convert_to_kml.pl
@@ -170,8 +175,8 @@ reset_pgdb()
     #  If file ‘/var/opt/google/pgsql/data’ doesn’t exist:
 
     echo "pgsql_data"
-    echo $BASEINSTALLDIR_VAR/pgsql/data
-    if [ -d "$BASEINSTALLDIR_VAR/pgsql/data" ]; then
+    echo $PGSQL_DATA
+    if [ -d "$PGSQL_DATA" ]; then
         # PostgreSQL install Success.
         echo -e "The PostgreSQL component is successfully installed."
     else
@@ -191,6 +196,25 @@ setup_geserver_daemon()
     test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE geserver start 90 2 3 4 5 . stop 10 0 1 6 .
     test -f $CHKCONFIG && $CHKCONFIG --add geserver # for redhat...moved here
     printf "GEE Server daemon setup ... DONE\n"
+}
+
+install_search_databases()
+{   
+  # a) Start the PSQL Server
+    echo "# a) Start the PSQL Server "
+    run_as_user $GEPGUSER "$PGSQL_PROGRAM -D $PGSQL_DATA -l $PGSQL_LOGS/pg.log start -w"
+
+    echo "# b) Install GEPlaces Database"
+    # b) Install GEPlaces Database
+    run_as_user $GEPGUSER "/opt/google/share/geplaces/geplaces create"
+    
+    echo "# c) Install SearchExample Database "
+    # c) Install SearchExample Database
+    run_as_user $GEPGUSER "/opt/google/share/searchexample/searchexample create"
+
+    # d) Stop the PSQL Server
+    echo "# d) Stop the PSQL Server"
+    run_as_user $GEPGUSER "$PGSQL_PROGRAM -D $PGSQL_DATA stop"
 }
 
 #-----------------------------------------------------------------

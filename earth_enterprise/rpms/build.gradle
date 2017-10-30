@@ -66,6 +66,8 @@ def stagedInstallDir_server_opt = new File(stagedInstallDir, 'server/opt')
 def stagedInstallDir_server_etc = new File(stagedInstallDir, 'server/etc')
 def stagedInstallDir_server_apachesupport =
     new File(stagedInstallDir, 'server/AppacheSupport/')
+def stagedInstallDir_server_searchexample =
+    new File(stagedInstallDir, 'searchexample/opt/google/share/searchexample')
 def stagedInstallDir_server_geplaces =
     new File(stagedInstallDir, 'geplaces/opt/google/share/geplaces')
 def stagedInstallDir_server_user_magic =
@@ -283,6 +285,10 @@ task openGeeServerRpm (type: Rpm) {
 
     from(stagedInstallDir_server_geplaces) {
 	into new File(packageInstallRootDir, 'opt/google/share/geplaces')
+    }
+
+    from(stagedInstallDir_server_searchexample) {
+        into new File(packageInstallRootDir, 'opt/google/share/searchexample')
     }
 
     from(stagedInstallDir_server_apachesupport) {
