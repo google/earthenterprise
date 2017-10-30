@@ -265,7 +265,7 @@ if [ "$PACKAGE_MANAGER" == "yum" ]; then
             ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel \
             proj-devel python-devel scons \
             xerces-c xerces-c-devel xorg-x11-server-devel \
-            zlib-devel || return 1
+            zlib-devel python-psycopg2 || return 1
          yum groupinstall $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
             "X Window System" || return 1
          yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
