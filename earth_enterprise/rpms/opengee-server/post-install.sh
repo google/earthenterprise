@@ -35,11 +35,25 @@ main_postinstall()
 
     # 2) Set Permissions Before Server Start/Stop
     fix_postinstall_filepermissions
+
+    # 3) Upgrade Postgres config
+    reset_pgdb    
 }
 
 #-----------------------------------------------------------------
 # Post-install Functions
 #-----------------------------------------------------------------
+
+run_as_user() {
+    local use_su=`su $1 -c 'echo -n 1' 2> /dev/null  || echo -n 0`
+    if [ "$use_su" -eq 1 ] ; then
+        >&2 echo "cd / ;su $1 -c \"$2\""
+        ( cd / ;su $1 -c "$2" )
+    else
+        >&2 echo "cd / ;sudo -u $1 $2"
+        ( cd / ;sudo -u $1 $2 )
+    fi
+} 
 
 configure_publish_root()
 {
@@ -135,6 +149,29 @@ fix_postinstall_filepermissions()
 
     # Restrict permissions to uninstaller and installer logs
     chmod -R go-rwx $BASEINSTALLDIR_OPT/install
+}
+
+reset_pgdb()
+{
+    # TODO check if correct
+    # a) Always do an upgrade of the psql db
+    echo 2 | run_as_user $GEPGUSER "/opt/google/bin/geresetpgdb upgrade"
+    echo -e "upgrade done"
+
+    # b) Check for Success of PostGresDb
+    #  If file ‘/var/opt/google/pgsql/data’ doesn’t exist:
+
+    echo "pgsql_data"
+    echo $BASEINSTALLDIR_VAR/pgsql/data
+    if [ -d "$BASEINSTALLDIR_VAR/pgsql/data" ]; then
+        # PostgreSQL install Success.
+        echo -e "The PostgreSQL component is successfully installed."
+    else
+        # postgress reset/install failed.
+        echo -e "Failed to create PostGresDb."
+        echo -e "The PostgreSQL component of the installation failed
+             to install."
+    fi
 }
 
 #-----------------------------------------------------------------

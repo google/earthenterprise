@@ -264,6 +264,7 @@ task openGeeServerRpm (type: Rpm) {
     directory('/opt/google/log', 0775)
     directory('/var/opt/google/run', 0775)
     directory('/var/opt/google/log', 0775)
+    directory('/var/opt/google/pgsql', 0700)
     directory('/var/opt/google/pgsql/logs')
     
     from(stagedInstallDir_server_opt) {
