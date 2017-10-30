@@ -96,7 +96,8 @@ Execute:
 sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel python-devel perl-Alien-Packages  \
     openssl-devel libxml2-devel libXinerama-devel libXft-devel libXrandr-devel libXcursor-devel gdbm-devel   \
     libmng-devel libcap-devel libpng12-devel libXmu-devel freeglut-devel zlib-devel libX11-devel bison-devel  \
-    openjpeg-devel openjpeg2-devel geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel cmake rpm-build rsync
+    openjpeg-devel openjpeg2-devel geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel cmake \
+    rpm-build rsync shunit2
 ```
 ### CentOS 6 and RHEL 6
 Execute: 
@@ -104,7 +105,8 @@ Execute:
 sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel python-devel perl-Alien-Packages  \
     openssl-devel libxml2-devel libXinerama-devel libXft-devel libXrandr-devel libXcursor-devel gdbm-devel   \
     libmng-devel libcap-devel libpng-devel libXmu-devel freeglut-devel zlib-devel libX11-devel bison-devel  \
-    openjpeg-devel openjpeg2-devel geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel cmake rpm-build rsync
+    openjpeg-devel openjpeg2-devel geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel cmake
+    rpm-build rsync shunit2
 ```
 If you get an error about git dependency conflicts, consider experimenting with the `--skip-broken` parameter.
 

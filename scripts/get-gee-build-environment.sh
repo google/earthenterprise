@@ -263,7 +263,7 @@ if [ "$PACKAGE_MANAGER" == "yum" ]; then
             libXft-devel libXinerama-devel libXmu-devel libXrandr-devel \
             libxml2-devel \
             ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel \
-            proj-devel python-devel scons \
+            proj-devel python-devel scons shunit2 \
             xerces-c xerces-c-devel xorg-x11-server-devel \
             zlib-devel || return 1
          yum groupinstall $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
@@ -310,8 +310,8 @@ elif [ "$PACKAGE_MANAGER" == "apt-get" ]; then
             libxerces-c-dev libxft-dev libxinerama-dev libxml2-dev \
             libxml2-utils libxrandr-dev openssl \
             python-dev python2.7 python2.7-dev python-imaging \
-            python-setuptools rsync scons software-properties-common swig \
-            wget xorg-dev zlib1g-dev || return 1
+            python-setuptools rsync scons shunit2 software-properties-common \
+            swig wget xorg-dev zlib1g-dev || return 1
          apt-get $ASSUME_YES_PACKAGE_MANAGER_PARAMETER install python-pexpect \
             || return 1
 

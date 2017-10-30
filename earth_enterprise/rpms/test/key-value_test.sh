@@ -205,5 +205,5 @@ test_keyvalue_file_set() {
 }
 
 # Load the unit testing library (this also runs the tests)
-source ../../tools/shunit2-2.1.6/src/shunit2
+source /usr/share/shunit2/shunit2
 
