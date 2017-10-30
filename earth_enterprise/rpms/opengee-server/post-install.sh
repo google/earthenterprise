@@ -52,6 +52,20 @@ main_postinstall()
 
     # 6) Install the GEPlaces and SearchExample Databases
     install_search_databases
+
+    # 7) Repeated step; Set permissions after geserver Start/Stop.
+    fix_postinstall_filepermissions
+
+    # TODO - verify
+    # 8) Run geecheck config script
+    # If file ‘/opt/google/gehttpd/cgi-bin/set_geecheck_config.py’ exists:
+    if [ -f "$GEE_CHECK_CONFIG_SCRIPT" ]; then
+        cd $BASEINSTALLDIR_OPT/gehttpd/cgi-bin
+        python ./set_geecheck_config.py
+    fi
+
+    #9) done!
+    service geserver start
 }
 
 #-----------------------------------------------------------------
