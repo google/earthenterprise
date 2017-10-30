@@ -311,7 +311,7 @@ elif [ "$PACKAGE_MANAGER" == "apt-get" ]; then
             libxml2-utils libxrandr-dev openssl \
             python-dev python2.7 python2.7-dev python-imaging \
             python-setuptools rsync scons software-properties-common swig \
-            wget xorg-dev zlib1g-dev || return 1
+            wget xorg-dev zlib1g-dev  libxmu-dev python-psycopg2 || return 1
          apt-get $ASSUME_YES_PACKAGE_MANAGER_PARAMETER install python-pexpect \
             || return 1
 
