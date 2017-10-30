@@ -19,7 +19,7 @@
 #   1. Add any code necessary to call the test script from this directory.
 #   2. Call test_banner with the name of the test right before the test script
 #      is called (it makes the output nicer).
-#   3. Ensoure that FAILURES is incremented if the test script fails.
+#   3. Ensure that FAILURES is incremented if the test script fails.
 
 FAILURES=0
 
@@ -37,12 +37,12 @@ test_banner() {
   banner "Running $1"
 }
 
-SCRIPT_DIR=`dirname $0`
+SCRIPT_DIR=`dirname "$0"`
 BASE_DIR_DOTS="${SCRIPT_DIR}/../earth_enterprise"
 BASE_DIR=$(cd "${BASE_DIR_DOTS}"; pwd)
 
-# RPM tests
-test_banner "RPM Unit Tests"
+# Packaging (RPM and DEB) tests
+test_banner "Packaging Unit Tests"
 cd "${BASE_DIR}/rpms/test"
 for TEST in `ls *_test.sh`; do
   ./"${TEST}" || ((FAILURES++))
