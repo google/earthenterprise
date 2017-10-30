@@ -14,10 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Unit tests for the key value store used by the RPMs.  The functions that
-# start with "test_" are the unit tests.  Other functions are utility
-# functions.
-
 # This is a simple script that builds and installs Open GEE Fusion and Server.
 # It's useful for development.
 
