@@ -40,9 +40,7 @@ IS_SSH=1
 IS_HTTPS=2
 IS_MAIN=3
 IS_FORK=4
-SSH_DIR=".ssh"
-SSH_KEY_PRIV="id_rsa"
-SSH_KEY_PUB="$SSH_KEY_PRIV.pub"
+
 CLONE_REPO=$IS_MAIN
 CLONE_TYPE=""
 
@@ -75,7 +73,6 @@ function get_type ()
     return $IS_MAIN
 }
 
-
 #===  FUNCTION  ================================================================
 #          NAME:  clone_ssh
 #   DESCRIPTION:  will cone the repo over ssh
@@ -89,17 +86,11 @@ function clone_ssh ()
         echo "Error: no USER_NAME given!"
         exit 1
     fi
-    WD="$(pwd)"
-    cd
-    if [ ! -f "$SSH_DIR/$SSH_KEY_PRIV" ] || [ ! -f "$SSH_DIR/$SSH_KEY_PUB" ]
-    then
-        echo "SSH Key(s) missing!"
-        exit 1
-    fi
-    cd $WD
+
     echo "Attempting to clone fork $USER_NAME..."
     echo "git clone git@github.com:$USER_NAME/earthenterprise.git $DIR_NAME"
     git clone git@github.com:$USER_NAME/earthenterprise.git $DIR_NAME
+    echo $?
 }
 
 #===  FUNCTION  ================================================================
