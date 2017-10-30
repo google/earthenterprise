@@ -43,6 +43,9 @@ main_postinstall()
 
     # 4) Creating Daemon thread for geserver
     setup_geserver_daemon
+
+    # 5) Register publish root
+    $BASEINSTALLDIR_OPT/bin/geconfigurepublishroot --noprompt --path=$PUBLISHER_ROOT
 }
 
 #-----------------------------------------------------------------
