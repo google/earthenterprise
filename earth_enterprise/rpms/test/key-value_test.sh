@@ -59,6 +59,9 @@ test_keyvalue_file_escape_key() {
   key_escape_test "Dollar key escape failed" 'Owed $20' 'Owed\ \$20'
   key_escape_test "Backslash key escape failed" 'back\slash' 'back\\slash'
   key_escape_test "Multiple key escape failed" ' \$' '\ \\\$'
+  key_escape_test "test" 'abc
+
+' "$'abc\n\n'"
 }
 
 value_escape_test() {
