@@ -84,8 +84,8 @@ else
 fi
 
 if [ $type == "hard" ]; then
-  echo "   WARNING: 'geresetpgdb $type' will completely delete postgresql data"
-  echo "directory, and then recreate the gestream, gesearch, gepoi, gesnippets"
+  echo "   WARNING: 'geresetpgdb $type' will completely delete all GEE postgresql"
+  echo "databases, and then recreate the gestream, gesearch, gepoi, gesnippets"
   echo "databases in their initial state."
   echo "It does not perform backup."
   echo "All the information about pushed/published databases, snippets profiles"

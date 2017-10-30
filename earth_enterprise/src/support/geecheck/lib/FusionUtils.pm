@@ -454,7 +454,7 @@ sub check_httpd_services() {
 
 # Check the postgres installation.
 sub check_postgres() {
-  my @max_stack_depth_list = readpipe "sudo -u gepguser /opt/google/bin/psql  postgres -c \"show max_stack_depth\"";
+  my @max_stack_depth_list = readpipe "sudo -u gepguser /opt/google/bin/psql postgres -c \"show max_stack_depth\"";
   my $max_stack_depth = $max_stack_depth_list[2];
 
   chomp $max_stack_depth;
