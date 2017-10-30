@@ -46,6 +46,8 @@ keyvalue_file_escape_key()
 }
 
 # Escapes a value to a string that can be stored in the key-value store.
+# Note: this function does not escape null characters because they are not
+# supported by current versions of bash.
 keyvalue_file_escape_value()
 {
     local _KFEV_VALUE="$1"
@@ -72,9 +74,6 @@ keyvalue_file_escape_value()
                 ;;
             $(printf "%b" '\b'))
                 _KFEV_RESULT="${_KFEV_RESULT}\\b"
-                ;;
-            $(printf "%b" '\x00'))
-                _KFEV_RESULT="${_KFEV_RESULT}\\x00"
                 ;;
             $(printf "%b" '\f'))
                 _KFEV_RESULT="${_KFEV_RESULT}\\f"
