@@ -149,7 +149,31 @@ task openGeeSharedFiles(type: Copy) {
         if (it.getSourceName().endsWith(templateSuffix)) {
             it.setName(stringStripSuffix(
                 it.getSourceName(), templateSuffix))
-            it.expand(['openGeeVersion': openGeeVersion])
+
+            def templateDir = it.file.parent
+
+            def templateVariables = [
+                'templateFile': it.file,
+                'templateSourcePath': it.sourcePath,
+                'templateTargetPath': it.path,
+                'openGeeVersion': openGeeVersion
+            ]
+
+            def expandTemplate = { text_or_file ->
+                def engine = new groovy.text.SimpleTemplateEngine()
+                def template = engine.createTemplate(text_or_file).make(templateVariables)
+
+                return template.toString()
+            }
+
+            templateVariables.put(
+                'expandTemplateFile',
+                { relative_path ->
+                    expandTemplate(new File(new File(templateDir), relative_path))
+                },
+            )
+
+            it.expand(templateVariables)
         }
     }
 }
