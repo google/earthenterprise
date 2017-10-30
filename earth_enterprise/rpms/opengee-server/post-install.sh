@@ -20,6 +20,8 @@ set +x
 # Versions and user names:
 GEE="Google Earth Enterprise"
 PUBLISHER_ROOT="/gevol/published_dbs"
+INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
+CHKCONFIG="/sbin/chkconfig"
 #-----------------------------------------------------------------
 
 #-----------------------------------------------------------------
@@ -38,6 +40,9 @@ main_postinstall()
 
     # 3) Upgrade Postgres config
     reset_pgdb    
+
+    # 4) Creating Daemon thread for geserver
+    setup_geserver_daemon
 }
 
 #-----------------------------------------------------------------
@@ -172,6 +177,17 @@ reset_pgdb()
         echo -e "The PostgreSQL component of the installation failed
              to install."
     fi
+}
+
+setup_geserver_daemon()
+{   
+    # setup geserver daemon
+    printf "Setting up the geserver daemon...\n"
+    test -f $CHKCONFIG && $CHKCONFIG --add geserver
+    test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE -f geserver remove
+    test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE geserver start 90 2 3 4 5 . stop 10 0 1 6 .
+    test -f $CHKCONFIG && $CHKCONFIG --add geserver # for redhat...moved here
+    printf "GEE Server daemon setup ... DONE\n"
 }
 
 #-----------------------------------------------------------------

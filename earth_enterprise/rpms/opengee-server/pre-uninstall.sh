@@ -19,6 +19,7 @@ set +x
 #-----------------------------------------------------------------
 # Versions and user names:
 GEE="Google Earth Enterprise"
+CHKCONFIG="/sbin/chkconfig"
 #-----------------------------------------------------------------
 
 #-----------------------------------------------------------------
@@ -27,6 +28,7 @@ GEE="Google Earth Enterprise"
 main_preuninstall()
 {
     service geserver stop
+    test -f $CHKCONFIG && $CHKCONFIG --del geserver
 }
 
 #-----------------------------------------------------------------
