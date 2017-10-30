@@ -135,7 +135,7 @@ fix_postinstall_filepermissions()
     find /opt/google/share -type f -exec chmod 644 {} \;
 #TODO
 #    chmod ugo+x /opt/google/share/searchexample/searchexample
-#    chmod ugo+x /opt/google/share/geplaces/geplaces
+    chmod ugo+x /opt/google/share/geplaces/geplaces
     chmod ugo+x /opt/google/share/support/geecheck/geecheck.pl
     chmod ugo+x /opt/google/share/support/geecheck/convert_to_kml.pl
     chmod ugo+x /opt/google/share/support/geecheck/find_terrain_pixel.pl
