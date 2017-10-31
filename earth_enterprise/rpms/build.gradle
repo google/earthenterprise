@@ -199,6 +199,12 @@ task openGeeCommonRpm(type: Rpm) {
     postInstall = file('opengee-common/post-install.sh')
     preUninstall = file('opengee-common/pre-uninstall.sh')
 
+    // Prefix variable definitions to all install scripts:
+    installUtils = file('opengee-common/etc/init.d/gevars.sh')
+
+    postInstall = file('opengee-common/post-install.sh')
+    postUninstall = file('opengee-common/post-uninstall.sh')
+
     from (stagedInstallDir_common_opt) {
 
         into new File(packageInstallRootDir, 'opt') //into '/' +'opt'
