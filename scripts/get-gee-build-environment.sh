@@ -263,7 +263,7 @@ if [ "$PACKAGE_MANAGER" == "yum" ]; then
             libXft-devel libXinerama-devel libXmu-devel libXrandr-devel \
             libxml2-devel \
             ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel \
-            proj-devel python-devel scons shunit2 \
+            proj-devel python-devel scons \
             xerces-c xerces-c-devel xorg-x11-server-devel \
             zlib-devel || return 1
          yum groupinstall $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
@@ -289,6 +289,17 @@ if [ "$PACKAGE_MANAGER" == "yum" ]; then
         if yum list perl-Perl4-CoreLibs; then
              yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
                 perl-Perl4-CoreLibs || return 1
+        fi
+
+        # RHEL / Cent OS 7 repos don't include shunit2, so we download it
+        # directly from the RHEL / CentOS 6 EPEL repo
+        if yum list shunit2; then
+             yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
+                shunit2 || return 1
+        else
+             yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
+                http://download-ib01.fedoraproject.org/pub/epel/6/x86_64/Packages/s/shunit2-2.1.6-3.el6.noarch.rpm \
+                || return 1
         fi
 
         install_git_lfs
