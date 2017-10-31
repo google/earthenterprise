@@ -17,7 +17,7 @@
 set +x
 
 #-----------------------------------------------------------------
-# Versions and user names:
+# Definitions
 GEE="Google Earth Enterprise"
 PUBLISHER_ROOT="/gevol/published_dbs"
 INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
@@ -160,8 +160,8 @@ fix_postinstall_filepermissions()
     chmod ugo+x /opt/google/share/support/geecheck/find_terrain_pixel.pl
     chmod ugo+x /opt/google/share/support/geecheck/pg_check.pl
     # Note: this is installed in install_fusion.sh, but needs setting here too.
-#TODO
-#    chmod ugo+x $BASEINSTALLDIR_OPT/share/tutorials/fusion/download_tutorial.sh
+    #TODO
+    # chmod ugo+x $BASEINSTALLDIR_OPT/share/tutorials/fusion/download_tutorial.sh
     # this should already be true...
     chown -R root:root /opt/google/share
 
@@ -186,30 +186,23 @@ reset_pgdb()
     echo -e "upgrade done"
 
     # b) Check for Success of PostGresDb
-    #  If file ‘/var/opt/google/pgsql/data’ doesn’t exist:
-
-    echo "pgsql_data"
-    echo $PGSQL_DATA
     if [ -d "$PGSQL_DATA" ]; then
         # PostgreSQL install Success.
         echo -e "The PostgreSQL component is successfully installed."
     else
         # postgress reset/install failed.
         echo -e "Failed to create PostGresDb."
-        echo -e "The PostgreSQL component of the installation failed
-             to install."
+        echo -e "The PostgreSQL component failed to install."
     fi
 }
 
 setup_geserver_daemon()
 {   
     # setup geserver daemon
-    printf "Setting up the geserver daemon...\n"
     test -f $CHKCONFIG && $CHKCONFIG --add geserver
     test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE -f geserver remove
     test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE geserver start 90 2 3 4 5 . stop 10 0 1 6 .
     test -f $CHKCONFIG && $CHKCONFIG --add geserver # for redhat...moved here
-    printf "GEE Server daemon setup ... DONE\n"
 }
 
 install_search_databases()

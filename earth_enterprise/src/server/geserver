@@ -84,7 +84,7 @@ stop() {
   echo
   echo $dashes
   # only stop if already running...
-  if test -f /var/opt/google/pgsql/data/postmaster.pid ; then
+  if [ -f /var/opt/google/pgsql/data/postmaster.pid ] ; then
     run_as_user $GEPGUSER "$gebin_root/pg_ctl -D /var/opt/google/pgsql/data -l /var/opt/google/pgsql/logs/pg.log stop";
     rm -f /var/opt/google/pgsql/data/postmaster.pid
   fi
