@@ -14,12 +14,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+CHKCONFIG="/sbin/chkconfig"
+
 set +x
 
 #-----------------------------------------------------------------
 # Main Function
 #-----------------------------------------------------------------
 
-/etc/init.d/gefusion stop
+service gefusion stop
+test -f $CHKCONFIG && $CHKCONFIG --del gefusion
 
 #-----------------------------------------------------------------

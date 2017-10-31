@@ -371,6 +371,9 @@ built from raster, vector, and location properties data.
 
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
 
+    directory('/var/opt/google/run', 0775)
+    directory('/var/opt/google/log', 0775)
+
     from(stagedInstallDir_fusion) {
         into packageInstallRootDir
     }
@@ -378,8 +381,10 @@ built from raster, vector, and location properties data.
     // Prefix variable definitions to all install scripts:
     installUtils = file('build/shared/install-utils.sh')
 
+    preInstall = file('opengee-fusion/pre-install.sh')
     postInstall = file('opengee-fusion/post-install.sh')
     preUninstall = file('opengee-fusion/pre-uninstall.sh')
+    postUninstall = file('opengee-fusion/post-uninstall.sh')
 }
 
 task openGeeFusionDeb (type: Deb) {

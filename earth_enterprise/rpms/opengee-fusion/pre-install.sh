@@ -32,11 +32,16 @@ ASSET_ROOT_VOLUME_SIZE=0
 #-----------------------------------------------------------------
 main_preinstall()
 {
-    service gefusion stop
+    if test -f /etc/init.d/gefusion ; then
+        service gefusion stop ; fi
 
-    load_systemrc_config
+    check_username $GEFUSIONUSER
 
-    check_asset_root_volume_size
+# TODO: This seems broken...
+#    load_systemrc_config
+
+# TODO: depends on df option not found in rhel6/centos6
+#    check_asset_root_volume_size
 
     # check for invalid asset names
     INVALID_ASSETROOT_NAMES=$(find "$ASSET_ROOT" -type d -name "*[\\\&\%\'\"\*\=\+\~\`\?\<\>\:\; ]*" 2> /dev/null)
@@ -44,8 +49,6 @@ main_preinstall()
     if [ -n "$INVALID_ASSETROOT_NAMES" ]; then
         show_invalid_assetroot_name "$INVALID_ASSETROOT_NAMES"
     fi
-
-    create_users_and_groups
 }
 
 #-----------------------------------------------------------------
@@ -68,18 +71,16 @@ END
     fi
 }
 
-create_users_and_groups()
-{
-    # Add user if it does not exist:
-    if [ -z "$(getent passwd "$GEFUSIONUSER")" ]; then
-		mkdir -p "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER"
-		useradd --home "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER" \
-            --system --gid "$GEGROUP" "$GEFUSIONUSER"
-        keyvalue_file_set "$GEE_INSTALL_KV_PATH" gefusionuser_existed "false"
-	else
-		# The user already exists -- update primary group:
-		usermod -g "$GEGROUP" "$GEFUSIONUSER"
-        keyvalue_file_set "$GEE_INSTALL_KV_PATH" gefusionuser_existed "true"
+check_username() {
+    USERNAME_EXISTS=$(getent passwd $1)
+
+    # add user if it does not exist
+    if [ -z "$USERNAME_EXISTS" ]; then
+        mkdir -p $BASEINSTALLDIR_OPT/.users/$1
+        useradd --home $BASEINSTALLDIR_OPT/.users/$1 --system --gid $GEGROUP $1
+    else
+        # user already exists -- update primary group
+        usermod -g $GEGROUP $1
     fi
 }
 

@@ -23,6 +23,9 @@ set +x
 # Versions and user names:
 GEE="Google Earth Enterprise"
 GEEF="$GEE Fusion"
+CHKCONFIG="/sbin/chkconfig"
+INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
+BININSTALLPROFILEDIR="/etc/profile.d"
 
 #------------------------------------------------------------------------------
 # Get system info values:
@@ -61,6 +64,8 @@ main_postinstall()
     chmod 755 "$BININSTALLROOTDIR/gefusion"
     chmod 755 "$BININSTALLPROFILEDIR/ge-fusion.csh"
     chmod 755 "$BININSTALLPROFILEDIR/ge-fusion.sh"
+    chown root:$GEGROUP $BASEINSTALLDIR_VAR/run
+    chown root:$GEGROUP $BASEINSTALLDIR_VAR/log
 
     check_fusion_master_or_slave
 
@@ -79,9 +84,9 @@ setup_fusion_daemon()
     # setup fusion daemon
     printf "Setting up the Fusion daemon...\n"
 
-    test -f "$CHKCONFIG" && "$CHKCONFIG" --add gefusion
     test -f "$INITSCRIPTUPDATE" && "$INITSCRIPTUPDATE" -f gefusion remove
     test -f "$INITSCRIPTUPDATE" && "$INITSCRIPTUPDATE" gefusion start 90 2 3 4 5 . stop 10 0 1 6 .
+    test -f "$CHKCONFIG" && "$CHKCONFIG" --add gefusion
     
     printf "Fusion daemon setup ... Done\n"
 }
@@ -108,19 +113,21 @@ compare_asset_root_publishvolume()
 check_fusion_master_or_slave()
 {
     if [ -f "$ASSET_ROOT/.config/volumes.xml" ]; then
-        EXISTING_HOST=$(xmllint --xpath "//VolumeDefList/volumedefs/item[1]/host/text()" "$ASSET_ROOT/.config/volumes.xml" | $NEWLINECLEANER)
-
-        case "$EXISTING_HOST" in
-            $HOSTNAME_F|$HOSTNAME_A|$HOSTNAME_S|$HOSTNAME)
-                IS_SLAVE=false
-                ;;
-            *)
-                IS_SLAVE=true
-
-                echo -e "\nThe asset root [$ASSET_ROOT] is owned by another Fusion host:  $EXISTING_HOST"
-                echo -e "Installing $GEEF $GEE_VERSION in Grid Slave mode.\n"
-                ;;
-        esac
+        #TODO: xmllint does not have --xpath option
+#        EXISTING_HOST=$(xmllint --xpath "//VolumeDefList/volumedefs/item[1]/host/text()" "$ASSET_ROOT/.config/volumes.xml" | $NEWLINECLEANER)
+#
+#        case "$EXISTING_HOST" in
+#            $HOSTNAME_F|$HOSTNAME_A|$HOSTNAME_S|$HOSTNAME)
+#                IS_SLAVE=false
+#                ;;
+#            *)
+#                IS_SLAVE=true
+#
+#                echo -e "\nThe asset root [$ASSET_ROOT] is owned by another Fusion host:  $EXISTING_HOST"
+#                echo -e "Installing $GEEF $GEE_VERSION in Grid Slave mode.\n"
+#                ;;
+#        esac
+        IS_SLAVE=false
     fi
 }
 
@@ -150,7 +157,7 @@ install_or_upgrade_asset_root()
     chmod 644 "$SYSTEMRC"
     chown "$GEFUSIONUSER:$GEGROUP" "$SYSTEMRC"
 
-    if [ "$IS_NEWINSTALL" == true ]; then
+    if test ! -d $ASSET_ROOT/.config ; then
         "$BASEINSTALLDIR_OPT/bin/geconfigureassetroot" --new --noprompt \
             --assetroot "$ASSET_ROOT" --srcvol "$SOURCE_VOLUME"
         chown -R "$GEFUSIONUSER:$GEGROUP" "$ASSET_ROOT"
