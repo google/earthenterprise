@@ -14,8 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# This is an overall runner for all of the Open GEE unit tests.  New tests
-# should be added here as they are created.  To add a new test:
+# This is an overall runner for all of the Open GEE unit tests.  This will only
+# run fusion unit tests if fusion has already been built.
+
+# New tests should be added here as they are created.  To add a new test:
 #   1. Add any code necessary to call the test script from this directory.
 #   2. Call test_banner with the name of the test right before the test script
 #      is called (it makes the output nicer).
@@ -50,7 +52,7 @@ done
 # Fusion unit tests
 SRC_DIR="${BASE_DIR}/src"
 cd "${SRC_DIR}"
-for BUILD_DIR in `ls -d NATIVE-*`; do
+for BUILD_DIR in `ls -d NATIVE-* 2> /dev/null`; do
   test_banner "Fusion Unit Tests in ${BUILD_DIR}"
   cd "${SRC_DIR}/${BUILD_DIR}/bin/tests"
   ./RunAllTests.pl || ((FAILURES++))
