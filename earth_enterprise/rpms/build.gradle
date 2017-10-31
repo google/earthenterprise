@@ -203,7 +203,7 @@ task openGeeCommonRpm(type: Rpm) {
     installUtils = file('opengee-common/etc/init.d/gevars.sh')
 
     postInstall = file('opengee-common/post-install.sh')
-    postUninstall = file('opengee-common/post-uninstall.sh')
+    preUninstall = file('opengee-common/pre-uninstall.sh')
 
     from (stagedInstallDir_common_opt) {
 
@@ -272,6 +272,10 @@ task openGeeCommonRpm(type: Rpm) {
               }
             }
 
+    }
+
+    from(file('opengee-common/etc')) {
+        into new File(packageInstallRootDir, 'etc')
     }
 
     from(file('opengee-common/etc')) {
