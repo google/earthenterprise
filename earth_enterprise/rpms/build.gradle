@@ -262,7 +262,6 @@ task openGeeServerRpm (type: Rpm) {
 
     directory('/opt/google/install', 0700)
     directory('/opt/google/gehttpd/logs', 0755)
-    directory('/opt/google/share/geplaces', 0755)
     directory('/opt/google/etc', 0775)
     directory('/opt/google/run', 0775)
     directory('/opt/google/log', 0775)
