@@ -149,9 +149,12 @@ keyvalue_file_get()
     local _KFG_OUTPUT_VARIABLE_NAME="$3"
 
     if [ -f "$_KFG_STORE_PATH" ]; then
-        keyvalue_file_get_from_stdin \
-            "$_KFG_KEY" "$_KFG_OUTPUT_VARIABLE_NAME" \
-            < "$_KFG_STORE_PATH"
+        (
+            flock --shared -n 9 || exit 1
+            keyvalue_file_get_from_stdin \
+                "$_KFG_KEY" "$_KFG_OUTPUT_VARIABLE_NAME" \
+                < "$_KFG_STORE_PATH"
+        ) 9> "$STORE_PATH.lock"
     else
         # Store file not found, so key not found:
         unset "$_KFG_OUTPUT_VARIABLE_NAME"
