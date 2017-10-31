@@ -308,10 +308,10 @@ elif [ "$PACKAGE_MANAGER" == "apt-get" ]; then
             libperl4-corelibs-perl libpng12-0 libpng12-dev libpq-dev \
             libproj-dev libstdc++6 libtool libx11-dev libxcursor-dev \
             libxerces-c-dev libxft-dev libxinerama-dev libxml2-dev \
-            libxml2-utils libxrandr-dev openssl \
+            libxml2-utils libxrandr-dev openssl libxmu-dev python-psycopg2 \
             python-dev python2.7 python2.7-dev python-imaging \
             python-setuptools rsync scons software-properties-common swig \
-            wget xorg-dev zlib1g-dev  libxmu-dev python-psycopg2 || return 1
+            wget xorg-dev zlib1g-dev || return 1
          apt-get $ASSUME_YES_PACKAGE_MANAGER_PARAMETER install python-pexpect \
             || return 1
 
@@ -327,9 +327,7 @@ fi
 print_command_line_help()
 {
     cat <<MSG
-
 ${SELF_NAME} [-r] [-b <branch_name>] [-p <dir>] [-d <dir>] [-c] [-l] [-y] [-h]
-
     -p|--package-build-dir <dir>
         Directory under which to build packages (.rpm, .deb) that are not
         provided by the distribution we're running on.
@@ -353,7 +351,6 @@ ${SELF_NAME} [-r] [-b <branch_name>] [-p <dir>] [-d <dir>] [-c] [-l] [-y] [-h]
     
     -h|--help
         Show this help message and exit.
-
 MSG
 }
 
