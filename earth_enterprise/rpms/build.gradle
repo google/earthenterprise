@@ -27,11 +27,6 @@
 // https://github.com/nebula-plugins/gradle-ospackage-plugin
 
 
-import java.nio.file.FileSystems
-import java.nio.file.Files
-import java.nio.file.Path
-import com.netflix.gradle.plugins.utils.JavaNIOUtils
-
 buildscript {
     repositories {
         jcenter()
