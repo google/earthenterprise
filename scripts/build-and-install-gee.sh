@@ -15,36 +15,24 @@
 # limitations under the License.
 
 # This is a simple script that builds and installs Open GEE Fusion and Server.
-# It's useful for development.
+# It's useful for development.  It  accepts two paramters: the build type
+# (release, optimize, or debug - defaults to optimize) and the number of
+# processes to run (defaults to twice the number of cores).
 
-# You can customize this script by changing VERSION to "release", "optimize",
-# or (empty) and by changing CORES to the number of concurrent processes you
-# want to run.
+# This sets a different default than build-gee.sh and install-gee.sh
+BUILD_TYPE=${1:-"optimize"}
 
-VERSION="release"
-CORES=8
-
-SCRIPT_DIR=`dirname $0`
-BASE_DIR=$(cd "${SCRIPT_DIR}/../earth_enterprise"; pwd)
-
-if [ -z "${VERSION}" ]; then
-  VER_STR=""
-else
-  VER_STR="${VERSION}=1"
-fi
+PROCS=$2
+SCRIPT_DIR=`dirname "$0"`
 
 # Clean up previous builds
 rm -rf /tmp/fusion_os_install
 
 # Build
-cd "${BASE_DIR}"
-scons -j${CORES} ${VER_STR} build || exit
-scons -j${CORES} ${VER_STR} stage_install || exit
+"${SCRIPT_DIR}/build-gee.sh" "${BUILD_TYPE}" "${PROCS}" || exit
 
 # Install
-cd "${BASE_DIR}/src/installer"
 sudo /etc/init.d/gefusion stop
 sudo /etc/init.d/geserver stop
-sudo ./install_fusion.sh || exit
-sudo ./install_server.sh || exit
+"${SCRIPT_DIR}/install-gee.sh" "${BUILD_TYPE}" "${PROCS}" || exit
 

@@ -1,0 +1,1 @@
+../../../../scripts/common-build-install.sh
