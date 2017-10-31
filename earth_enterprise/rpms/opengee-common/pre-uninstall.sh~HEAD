@@ -1,6 +1,6 @@
-#! /bin/bash
+#!/bin/bash
 #
-# Copyright 2017 the Open GEE Contributors
+# Copyright 2017 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,23 +17,21 @@
 set +x
 
 #------------------------------------------------------------------------------
-check_group()
-{
-    local GROUP_EXISTS=$(getent group "$GEGROUP")
+# Directory locations:
+BININSTALLROOTDIR="/etc/init.d"
 
-    # Add group if it does not exist:
-    if [ -z "$GROUP_EXISTS" ]; then
-        groupadd -r "$GEGROUP" &> /dev/null
-        keyvalue_file_set "$GEE_INSTALL_KV_PATH" gegroup_existed "false"
-    else
-        keyvalue_file_set "$GEE_INSTALL_KV_PATH" gegroup_existed "true"
-    fi
+#------------------------------------------------------------------------------
+# Group names:
+GEGROUP_NAME=$(cat "$BININSTALLROOTDIR/gevars.sh" | grep GEGROUP | cut  -d'=' -f2)
+
+
+remove_users_groups()
+{
+    [ -n "$(getent group "$GEGROUP_NAME")" ] && groupdel "$GEGROUP_NAME"
 }
 
-
 #-----------------------------------------------------------------
-# Main Function
+# Main Function:
 #-----------------------------------------------------------------
-# 8) Check if group and users exist
-check_group
+remove_users_groups
 #-----------------------------------------------------------------

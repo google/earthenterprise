@@ -1,6 +1,6 @@
-#!/bin/bash
+#! /bin/bash
 #
-# Copyright 2017 Google Inc.
+# Copyright 2017 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,58 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# NOTE: requires xmllint from libxml2-utils
-
 set +x
 
-# get script directory
-# config values
-ASSET_ROOT=""
-GEFUSIONUSER_NAME=""
-GROUPNAME=""
+#-----------------------------------------------------------------
+# Main Function
+#-----------------------------------------------------------------
 
-# directory locations
-BININSTALLROOTDIR="/etc/init.d"
+/etc/init.d/gefusion stop
 
 #-----------------------------------------------------------------
-# Main Functions
-#-----------------------------------------------------------------
-main_preuninstall()
-{
-    /etc/init.d/gefusion stop
-
-    load_systemrc_config
-
-    verify_systemrc_config_values
-}
-
-#-----------------------------------------------------------------
-# Pre-uninstall Functions
-#-----------------------------------------------------------------
-load_systemrc_config()
-{
-    if [ -f "$SYSTEMRC" ]; then
-        ASSET_ROOT=$(xmllint --xpath '//Systemrc/assetroot/text()' $SYSTEMRC)
-        GEFUSIONUSER_NAME=$(xmllint --xpath '//Systemrc/fusionUsername/text()' $SYSTEMRC)
-    else
-        echo -e "\nThe system configuration file [$SYSTEMRC] could not be found on your system."
-        echo -e "This uninstaller cannot continue without a valid system configuration file.\n"
-    fi
-}
-
-verify_systemrc_config_values()
-{
-    # now let's make sure that the config values read from systemrc each contain data
-    if [ -z "$ASSET_ROOT" ] || [ -z "$GEFUSIONUSER_NAME" ] || [ -z "$GROUPNAME" ]; then
-        echo -e "\nThe [$SYSTEMRC] configuration file contains invalid data."
-        echo -e "\nAsset Root: \t\t$ASSET_ROOT"
-        echo -e "Fusion User: \t$GEFUSIONUSER_NAME"
-        echo -e "Fusion Group: \t\t$GROUPNAME"
-        echo -e "\nThe uninstaller requires a system configuration file with valid data."
-    fi
-}
-
-#-----------------------------------------------------------------
-# Pre-install Main
-#-----------------------------------------------------------------
-main_preuninstall "$@"

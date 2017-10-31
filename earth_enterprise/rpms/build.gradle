@@ -133,9 +133,10 @@ if (project.hasProperty('buildOpenGee')) {
     openGeePostGisRpm.dependsOn stageOpenGeeInstall
 }
 
-// Expands the `gevars.sh.template` so it can be used in the `common` package,
-// and prefixed to install scripts for all the various packages.
-task openGeeSharedGeVars(type: Copy) {
+// Expands the `gevars.sh.template` and any other templates so they can be
+// used in the `common` package, and prefixed to install scripts for all the
+// various packages.
+task openGeeSharedFiles(type: Copy) {
     from file('shared')
     into file('build/shared')
 
@@ -153,7 +154,7 @@ task openGeeSharedGeVars(type: Copy) {
     }
 }
 
-task openGeeCommonRpm(type: Rpm, dependsOn: openGeeSharedGeVars) {
+task openGeeCommonRpm(type: Rpm, dependsOn: openGeeSharedFiles) {
     packageName = 'opengee-common'
     release = '1'
     version = openGeeVersion
@@ -215,7 +216,7 @@ task openGeeCommonRpm(type: Rpm, dependsOn: openGeeSharedGeVars) {
     preUninstall = file('opengee-common/pre-uninstall.sh')
 
     // Prefix variable definitions to all install scripts:
-    installUtils = file('build/shared/gevars.sh')
+    installUtils = file('build/shared/install-utils.sh')
 
     postInstall = file('opengee-common/post-install.sh')
     preUninstall = file('opengee-common/pre-uninstall.sh')
@@ -297,8 +298,8 @@ task openGeeCommonRpm(type: Rpm, dependsOn: openGeeSharedGeVars) {
         into new File(packageInstallRootDir, 'etc')
     }
 
-    from(file('opengee-common/etc')) {
-        into new File(packageInstallRootDir, 'etc')
+    from(file('opengee-common/install')) {
+        into packageInstallRootDir
     }
 }
 
