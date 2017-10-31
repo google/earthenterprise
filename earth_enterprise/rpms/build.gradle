@@ -249,20 +249,6 @@ task openGeeCommonRpm(type: Rpm, dependsOn: openGeeSharedFiles) {
 
     from(stagedInstallDir_manual) {
         into packageInstallRootDir
-        // TODO - remove duplicate symlink mapping code
-        filesMatching('**') { FileCopyDetails details ->
-              if (Files.isSymbolicLink(details.file.toPath())) {
-                details.exclude()
-                def toFile = Files.readSymbolicLink(details.file.toPath()).toFile()
-                println "EXCLUDING SYMLINKED FILE FROM CPIO ARCHIVE.  CREATING LINK FOR: " + details
-                link(details.relativePath.toString(), toFile.toString())
-              }
-            }
-
-    }
-
-    from(file('opengee-common/etc')) {
-        into new File(packageInstallRootDir, 'etc')
     }
 
     from(file('opengee-common/install')) {
