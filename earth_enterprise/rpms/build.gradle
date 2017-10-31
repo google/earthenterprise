@@ -226,58 +226,12 @@ task openGeeCommonRpm(type: Rpm, dependsOn: openGeeSharedFiles) {
     }
 
     from (stagedInstallDir_common_opt) {
-
-        into new File(packageInstallRootDir, 'opt') //into '/' +'opt'
-        /*
-                    The following code intercepts files that are symlinks and excludes them from the CPIO RPM archive,
-                    which can cause errors in some versions of RPM.  NOTE - this is duplicated and should be made a separate
-                    function.
-        */
-        eachFile { details ->
-        if(JavaNIOUtils.isSymbolicLink(details.file)) {
-             details.exclude()
-             println "EXCLUDING SYMLINKED FILE FROM CPIO ARCHIVE.  CREATING LINK FOR: " + details
-             String symLinkPath = "/${details.relativePath}"
-             String targetPath = JavaNIOUtils.readSymbolicLink(JavaNIOUtils.createPath(details.file.path))
-             link(symLinkPath, targetPath)
-           }
-        }
-
-
-        exclude {
-            !new File(
-                postGisInstallDir_opt
-                    .toURI()
-                    .relativize(stagedInstallDir_common_opt.toURI())
-                    .getPath()
-            ).exists()
-        }
+        into new File(packageInstallRootDir, 'opt')
     }
 
 
     from (stagedInstallDir_common_user_magic) {
-        into packageInstallRootDir        // into '/' + 'opt'
-        // TODO - remove duplicate symlink mapping code
-        filesMatching('**') { FileCopyDetails details ->
-               if (Files.isSymbolicLink(details.file.toPath())) {
-                   details.exclude()
-                   def toFile = File
-                   println "EXCLUDING SYMLINKED FILE FROM CPIO ARCHIVE.  CREATING LINK FOR: " + details
-                   s.readSymbolicLink(details.file.toPath()).toFile()
-                   print '.LINK'
-                   link(details.relativePath.toString(), toFile.toString())
-               }
-         }
-
-
-        exclude {
-            !new File(
-                postGisInstallDir
-                    .toURI()
-                    .relativize(stagedInstallDir_common.toURI())
-                    .getPath()
-            ).exists()
-        }
+        into packageInstallRootDir
     }
 
     from(stagedInstallDir_manual) {
