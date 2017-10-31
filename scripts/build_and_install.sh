@@ -25,8 +25,7 @@ VERSION="release"
 CORES=8
 
 SCRIPT_DIR=`dirname $0`
-BASE_DIR_DOTS="${SCRIPT_DIR}/../earth_enterprise"
-BASE_DIR=$(cd "${BASE_DIR_DOTS}"; pwd)
+BASE_DIR=$(cd "${SCRIPT_DIR}/../earth_enterprise"; pwd)
 
 if [ -z "${VERSION}" ]; then
   VER_STR=""

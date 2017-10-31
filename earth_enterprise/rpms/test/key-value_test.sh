@@ -18,8 +18,11 @@
 # start with "test_" are the unit tests.  Other functions are utility
 # functions.
 
+SCRIPT_DIR=`dirname "$0"`
+RPM_DIR=$(cd "${SCRIPT_DIR}/.."; pwd)
+
 # Load the functions to test
-source ../shared/lib/key-value.sh
+source "${RPM_DIR}/shared/lib/key-value.sh"
 
 test_keyvalue_file_string_starts_with() {
   assertTrue "Positive key value starts with failed" "keyvalue_file_string_starts_with abcde abc"
