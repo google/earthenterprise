@@ -27,6 +27,11 @@
 // https://github.com/nebula-plugins/gradle-ospackage-plugin
 
 
+import java.nio.file.FileSystems
+import java.nio.file.Files
+import java.nio.file.Path
+import com.netflix.gradle.plugins.utils.JavaNIOUtils
+
 buildscript {
     repositories {
         jcenter()
@@ -186,6 +191,7 @@ task openGeeCommonRpm(type: Rpm) {
 
     requires('opengee-postgis', '1.5.8', GREATER | EQUAL)
     conflicts('opengee-postgis', '2.0', GREATER | EQUAL)
+    println "BUILDING COMMON"
 
     // Prefix variable definitions to all install scripts:
     installUtils = file('opengee-common/etc/init.d/gevars.sh')
@@ -194,7 +200,23 @@ task openGeeCommonRpm(type: Rpm) {
     preUninstall = file('opengee-common/pre-uninstall.sh')
 
     from (stagedInstallDir_common_opt) {
-        into new File(packageInstallRootDir, 'opt')
+
+        into new File(packageInstallRootDir, 'opt') //into '/' +'opt'
+        /*
+                    The following code intercepts files that are symlinks and excludes them from the CPIO RPM archive,
+                    which can cause errors in some versions of RPM.  NOTE - this is duplicated and should be made a separate
+                    function.
+        */
+        eachFile { details ->
+        if(JavaNIOUtils.isSymbolicLink(details.file)) {
+             details.exclude()
+             println "EXCLUDING SYMLINKED FILE FROM CPIO ARCHIVE.  CREATING LINK FOR: " + details
+             String symLinkPath = "/${details.relativePath}"
+             String targetPath = JavaNIOUtils.readSymbolicLink(JavaNIOUtils.createPath(details.file.path))
+             link(symLinkPath, targetPath)
+           }
+        }
+
 
         exclude {
             !new File(
@@ -208,7 +230,19 @@ task openGeeCommonRpm(type: Rpm) {
 
 
     from (stagedInstallDir_common_user_magic) {
-        into packageInstallRootDir
+        into packageInstallRootDir        // into '/' + 'opt'
+        // TODO - remove duplicate symlink mapping code
+        filesMatching('**') { FileCopyDetails details ->
+               if (Files.isSymbolicLink(details.file.toPath())) {
+                   details.exclude()
+                   def toFile = File
+                   println "EXCLUDING SYMLINKED FILE FROM CPIO ARCHIVE.  CREATING LINK FOR: " + details
+                   s.readSymbolicLink(details.file.toPath()).toFile()
+                   print '.LINK'
+                   link(details.relativePath.toString(), toFile.toString())
+               }
+         }
+
 
         exclude {
             !new File(
@@ -222,6 +256,16 @@ task openGeeCommonRpm(type: Rpm) {
 
     from(stagedInstallDir_manual) {
         into packageInstallRootDir
+        // TODO - remove duplicate symlink mapping code
+        filesMatching('**') { FileCopyDetails details ->
+              if (Files.isSymbolicLink(details.file.toPath())) {
+                details.exclude()
+                def toFile = Files.readSymbolicLink(details.file.toPath()).toFile()
+                println "EXCLUDING SYMLINKED FILE FROM CPIO ARCHIVE.  CREATING LINK FOR: " + details
+                link(details.relativePath.toString(), toFile.toString())
+              }
+            }
+
     }
 
     from(file('opengee-common/etc')) {
