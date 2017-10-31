@@ -40,14 +40,14 @@ There are a number of options for building and running Open GEE Docker
 images:
 
 * Build platform
-* Source code origin: from the main repository, a fork, another branch,
-    or from the current repository clone on your disk
+* Source code origin: from the main repository, a fork, master or another
+    branch, or from the current repository clone on your disk
 * Port to forward HTTP connections
 * Custom image to run, e.g. one that contains extra data such as tutorial
     resources or custom built globes
 
 These options are controlled by environment variables that are passed to the
-build scripts. Since it may become inconvenient to pass more than a couple
+build scripts. Since it may become inconvenient to pass more than a couple of
 values on the command line, you may put the variable definitions in a
 shell script file instead, and source it before executing each command.
 
