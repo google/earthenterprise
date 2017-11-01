@@ -83,8 +83,11 @@ stop() {
   $gehttpd_root/gehttpd_init stop
   echo
   echo $dashes
-  run_as_user $GEPGUSER "$gebin_root/pg_ctl -D /var/opt/google/pgsql/data -l /var/opt/google/pgsql/logs/pg.log stop";
-
+  # only stop if already running...
+  if [ -f /var/opt/google/pgsql/data/postmaster.pid ] ; then
+    run_as_user $GEPGUSER "$gebin_root/pg_ctl -D /var/opt/google/pgsql/data -l /var/opt/google/pgsql/logs/pg.log stop";
+    rm -f /var/opt/google/pgsql/data/postmaster.pid
+  fi
   echo $dashes
   echo 'Done Stopping Google Earth Enterprise Server'
   echo
