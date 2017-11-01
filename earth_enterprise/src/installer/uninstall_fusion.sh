@@ -28,15 +28,6 @@ ASSET_ROOT=""
 GEFUSIONUSER_NAME=""
 GROUPNAME=""
 
-# directory locations
-BININSTALLROOTDIR="/etc/init.d"
-BININSTALLPROFILEDIR="/etc/profile.d"
-BASEINSTALLDIR_OPT="/opt/google"
-BASEINSTALLDIR_ETC="/etc/opt/google"
-BASEINSTALLDIR_VAR="/var/opt/google"
-INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
-CHKCONFIG="/sbin/chkconfig"
-
 # script arguments
 BACKUPFUSION=true
 DELETE_FUSION_USER=true
@@ -468,9 +459,6 @@ show_final_success_message()
 #-----------------------------------------------------------------
 # Pre-install Main
 #-----------------------------------------------------------------
-mkdir -p $UNUNINSTALL_LOG_DIR
-exec 2> $UNINSTALL_LOG
-
 main_preuninstall "$@"
 
 #-----------------------------------------------------------------
