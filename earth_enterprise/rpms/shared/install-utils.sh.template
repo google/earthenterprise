@@ -41,9 +41,9 @@ load_systemrc_config()
 {
     if [ -f "$SYSTEMRC" ]; then
         # Read configuration:
-        ASSET_ROOT=$(xmllint --xpath '//Systemrc/assetroot/text()' "$SYSTEMRC")
-        GEFUSIONUSER=$(xmllint --xpath '//Systemrc/fusionUsername/text()' "$SYSTEMRC")
-        GEGROUP=$(xmllint --xpath '//Systemrc/userGroupname/text()' "$SYSTEMRC")
+        ASSET_ROOT=$(xml_file_get_node_text "$SYSTEMRC" '//Systemrc/assetroot' 1_result | recode html..utf-8)
+        GEFUSIONUSER=$(xml_file_get_node_text "$SYSTEMRC" '//Systemrc/fusionUsername' 1_result | recode html..utf-8)
+        GEGROUP=$(xml_file_get_node_text "$SYSTEMRC" '//Systemrc/userGroupname' 1_result | recode html..utf-8)
     fi
 }
 '''
@@ -51,3 +51,7 @@ load_systemrc_config()
 
 # Key-value library:
 <% out << (new File('shared/lib/key-value.sh').text) %>
+
+
+# Read XML library:
+<% out << (new File('shared/lib/read-xml.sh').text) %>

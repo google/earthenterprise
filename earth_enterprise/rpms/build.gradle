@@ -334,6 +334,7 @@ built from raster, vector, and location properties data.
     requires('grep')
     requires('libxml2')
     requires('net-tools')
+    requires('recode')
     requires('sed')
     requires('util-linux')
 
