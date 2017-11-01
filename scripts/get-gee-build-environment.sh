@@ -291,6 +291,17 @@ if [ "$PACKAGE_MANAGER" == "yum" ]; then
                 perl-Perl4-CoreLibs || return 1
         fi
 
+        # RHEL / Cent OS 7 repos don't include shunit2, so we download it
+        # directly from the RHEL / CentOS 6 EPEL repo
+        if yum list shunit2; then
+             yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
+                shunit2 || return 1
+        else
+             yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
+                http://download-ib01.fedoraproject.org/pub/epel/6/x86_64/Packages/s/shunit2-2.1.6-3.el6.noarch.rpm \
+                || return 1
+        fi
+
         install_git_lfs
     }
 elif [ "$PACKAGE_MANAGER" == "apt-get" ]; then
@@ -310,8 +321,8 @@ elif [ "$PACKAGE_MANAGER" == "apt-get" ]; then
             libxerces-c-dev libxft-dev libxinerama-dev libxml2-dev \
             libxml2-utils libxrandr-dev openssl \
             python-dev python2.7 python2.7-dev python-imaging \
-            python-setuptools rsync scons software-properties-common swig \
-            wget xorg-dev zlib1g-dev || return 1
+            python-setuptools rsync scons shunit2 software-properties-common \
+            swig wget xorg-dev zlib1g-dev || return 1
          apt-get $ASSUME_YES_PACKAGE_MANAGER_PARAMETER install python-pexpect \
             || return 1
 
