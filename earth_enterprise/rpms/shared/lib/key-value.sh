@@ -104,17 +104,13 @@ keyvalue_file_unescape_value()
 # Gets a value with a given key from a key-value store being read from the
 # standard input.
 #
-# If the key is found, the value is stored in the variable whose name is in
-# the _KFGFS_OUTPUT_VARIABLE_NAME variable.  If the key is not found, the
-# variable whose name is in _KFGFS_OUTPUT_VARIABLE_NAME is unset, and the
-# function returns with return code of 1.
-#
-# Warning: Some values don't work as _KFGFS_OUTPUT_VARIABLE_NAME (e.g.,
-# "REPLY").
-keyvalue_file_get_from_stdin()
+# If the key is found, the value is output to standard output, followed by a 
+# '.' character (to allow for values that end in new lines).  If the key is
+# not found, nothing is written to the standard output, and the function
+# returns  with return code of 1.
+keyvalue_file_on_stdin_output_value_for_key()
 {
     local _KFGFS_KEY="${1}="
-    local _KFGFS_OUTPUT_VARIABLE_NAME="$2"
     local _KFGFS_VALUE
     local REPLY
 
@@ -124,13 +120,13 @@ keyvalue_file_get_from_stdin()
             _KFGFS_VALUE="${REPLY:${#_KFGFS_KEY}}"
             keyvalue_file_unescape_value \
                 "$_KFGFS_VALUE" \
-                "$_KFGFS_OUTPUT_VARIABLE_NAME"
+                "REPLY"
+            echo "${REPLY}."
             return 0
         fi
     done
 
     # Key not found:
-    unset "$_KFGFS_OUTPUT_VARIABLE_NAME"
     return 1
 }
 
@@ -147,11 +143,25 @@ keyvalue_file_get()
     local _KFG_STORE_PATH="$1"
     local _KFG_KEY="$2"
     local _KFG_OUTPUT_VARIABLE_NAME="$3"
+    local _KFG_VALUE
 
     if [ -f "$_KFG_STORE_PATH" ]; then
-        keyvalue_file_get_from_stdin \
-            "$_KFG_KEY" "$_KFG_OUTPUT_VARIABLE_NAME" \
-            < "$_KFG_STORE_PATH"
+        _KFG_VALUE=$(
+            exec 9> "${_KFG_STORE_PATH}.lock"
+            flock --shared 9 || exit 1
+            keyvalue_file_on_stdin_output_value_for_key \
+                "$_KFG_KEY" "$_KFG_OUTPUT_VARIABLE_NAME" \
+                < "$_KFG_STORE_PATH"
+        )
+        if [ -z "$_KFG_VALUE" ]; then
+            # Key not found:
+            unset "$_KFG_OUTPUT_VARIABLE_NAME"
+            return 1
+        else
+            # Strip the final '.':
+            _KFG_VALUE="${_KFG_VALUE%.}"
+            printf -v "$_KFG_OUTPUT_VARIABLE_NAME" "%s" "$_KFG_VALUE"
+        fi
     else
         # Store file not found, so key not found:
         unset "$_KFG_OUTPUT_VARIABLE_NAME"
@@ -208,7 +218,7 @@ keyvalue_file_set()
     local VALUE="$3"
 
     (
-        flock --exclusive -n 9 || exit 1
+        flock --exclusive 9 || exit 1
         if [ -f "$STORE_PATH" ]; then
             local UPDATED_STORE=$(keyvalue_file_set_filter "$KEY" "$VALUE" < "$STORE_PATH")
         else
