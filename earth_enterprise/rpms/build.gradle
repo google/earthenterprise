@@ -66,8 +66,12 @@ def stagedInstallDir_server_opt = new File(stagedInstallDir, 'server/opt')
 def stagedInstallDir_server_etc = new File(stagedInstallDir, 'server/etc')
 def stagedInstallDir_server_apachesupport =
     new File(stagedInstallDir, 'server/AppacheSupport/')
-def stagedInstallDir_server_usermagic =
-    new File(stagedInstallDir, 'server/user_magic/')
+def stagedInstallDir_server_searchexample =
+    new File(stagedInstallDir, 'searchexample/opt/google/share/searchexample')
+def stagedInstallDir_server_geplaces =
+    new File(stagedInstallDir, 'geplaces/opt/google/share/geplaces')
+def stagedInstallDir_server_user_magic =
+    new File(stagedInstallDir, 'server/user_magic')
 def stagedInstallDir_fusion = new File(stagedInstallDir, 'fusion')
 def packageInstallRootDir = new File('/')
 
@@ -242,7 +246,6 @@ task openGeeCommonRpm(type: Rpm, dependsOn: openGeeSharedFiles) {
         into new File(packageInstallRootDir, 'opt')
     }
 
-
     from (stagedInstallDir_common_user_magic) {
         into packageInstallRootDir
     }
@@ -275,20 +278,53 @@ task openGeeCommonDeb (type: Deb) {
 task openGeeServerRpm (type: Rpm) {
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     packageName = 'opengee-server'
+    release = '1'
+    version = openGeeVersion
+    user = 'root'
+    permissionGroup = 'root'
+    packageGroup = 'Application/Productivity'
+
+    directory('/opt/google/install', 0700)
+    directory('/opt/google/gehttpd/logs', 0755)
+    directory('/opt/google/etc', 0775)
+    directory('/opt/google/run', 0775)
+    directory('/opt/google/log', 0775)
+    directory('/var/opt/google/run', 0775)
+    directory('/var/opt/google/log', 0775)
+    directory('/var/opt/google/pgsql', 0700)
+    directory('/var/opt/google/pgsql/logs')
     
     from(stagedInstallDir_server_opt) {
         into new File(packageInstallRootDir, 'opt')
     }
+
     from(stagedInstallDir_server_etc) {
         into new File(packageInstallRootDir, 'etc')
     }
 
-    from(stagedInstallDir_server_usermagic) {
+    from(stagedInstallDir_server_user_magic) {
         into packageInstallRootDir
     }
+
+    from(stagedInstallDir_server_geplaces) {
+	into new File(packageInstallRootDir, 'opt/google/share/geplaces')
+    }
+
+    from(stagedInstallDir_server_searchexample) {
+        into new File(packageInstallRootDir, 'opt/google/share/searchexample')
+    }
+
     from(stagedInstallDir_server_apachesupport) {
         into packageInstallRootDir
     }
+
+    // Prefix variable definitions to all install scripts:
+    installUtils = file('build/shared/install-utils.sh')
+
+    preInstall = file('opengee-server/pre-install.sh')
+    postInstall = file('opengee-server/post-install.sh')
+    preUninstall = file('opengee-server/pre-uninstall.sh')
+    postUninstall = file('opengee-server/post-uninstall.sh')
 }
 
 task openGeeServerDeb (type: Deb) {
@@ -303,10 +339,6 @@ task openGeeServerDeb (type: Deb) {
     }
 
     from(stagedInstallDir_server_apachesupport) {
-        into packageInstallRootDir
-    }
-
-    from(stagedInstallDir_server_usermagic) {
         into packageInstallRootDir
     }
 }
