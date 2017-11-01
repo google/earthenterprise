@@ -121,11 +121,16 @@ stdin_test() {
   # $2 - variable
   # $3 - expected value
   # $4 - input
-  keyvalue_file_get_from_stdin "$2" "OUTPUT" <<< "$4"
-  assertEquals "$1" "$3" "$OUTPUT"
+  if [ -n "$3" ]; then
+    EXPECTED="$3."
+  else
+    EXPECTED=""
+  fi
+  OUTPUT=`keyvalue_file_on_stdin_output_value_for_key "$2" <<< "$4"`
+  assertEquals "$1" "$EXPECTED" "$OUTPUT"
 }
 
-test_keyvalue_file_get_from_stdin() {
+test_keyvalue_file_on_stdin_output_value_for_key() {
   stdin_test "Basic stdin test failed" "abcd" "efgh" $'abcd=efgh\n.'
   stdin_test "Escaped char in key stdin test failed" 'ab$cd' "efgh" 'ab$cd=efgh
 .'
