@@ -75,7 +75,7 @@ value_escape_test() {
 }
 
 test_keyvalue_file_escape_value() {
-  value_escape_test "Basic value escape failed" "abcde" "abcde"
+  value_escape_test "Basic value escape failed" "aBCde" "aBCde"
   value_escape_test "New line value escape failed" 'abc
 def' 'abc\ndef'
   value_escape_test "Carriage return value escape failed" $'abc\rdef' 'abc\rdef'
@@ -86,7 +86,7 @@ def' 'abc\ndef'
   value_escape_test "Backspace value escape failed" $'abc\bdef' 'abc\bdef'
   value_escape_test "Form feed value escape failed" $'abc\fdef' 'abc\fdef'
   value_escape_test "Vertical tab value escape failed" $'abc\vdef' 'abc\vdef'
-  value_escape_test "Multiple value escape failed" $'\r\n\\\b\f\v' '\r\n\\\b\f\v'
+  value_escape_test "Multiple value escape failed" $'Yz\r\n\\\b\f\v' 'Yz\r\n\\\b\f\v'
 }
 
 value_unescape_test() {
@@ -97,7 +97,7 @@ value_unescape_test() {
 }
 
 test_keyvalue_file_unescape_value() {
-  value_unescape_test "Basic value escape failed" "abcde" "abcde"
+  value_unescape_test "Basic value escape failed" "aBCde" "aBCde"
   value_unescape_test "New line value escape failed" 'abc\ndef' 'abc
 def'
   value_unescape_test "Carriage return value escape failed" 'abc\rdef' $'abc\rdef'
@@ -106,11 +106,11 @@ def'
   value_unescape_test "Null value escape failed" 'abc\x00def' $'abc\x00def'
   value_unescape_test "Form feed value escape failed" 'abc\fdef' $'abc\fdef'
   value_unescape_test "Vertical tab value escape failed" 'abc\vdef' $'abc\vdef'
-  value_unescape_test "Multiple value escape failed" '\r\n\\\b\f\v' $'\r\n\\\b\f\v'
+  value_unescape_test "Multiple value escape failed" 'Yz\r\n\\\b\f\v' $'Yz\r\n\\\b\f\v'
 }
 
 test_keyvalue_file_escape_unescape() {
-  local VALUE=$'\r\n\\\b\f\v\$'
+  local VALUE=$'aB\r\n\\\b\f\v\$'
   keyvalue_file_escape_value "$VALUE" "ESCAPED"
   keyvalue_file_unescape_value "$ESCAPED" "UNESCAPED"
   assertEquals "Escape and unescape value failed" "$VALUE" "$UNESCAPED"
