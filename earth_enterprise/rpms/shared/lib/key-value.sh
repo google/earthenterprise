@@ -46,8 +46,8 @@ keyvalue_file_escape_key()
 }
 
 # Escapes a value to a string that can be stored in the key-value store.
-# Note: this function does not escape null characters current versions of bash
-# do not support null characters in variable values.
+# Note: this function does not escape null characters because current versions
+# of bash do not support null characters in variable values.
 keyvalue_file_escape_value()
 {
     local _KFEV_VALUE="$1"
