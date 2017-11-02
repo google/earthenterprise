@@ -83,6 +83,7 @@ installdirs = {
    'server_lib':        inst_server_dir('lib'),
    'server_root':       Dir('server/', installdir),
    'server_share':      inst_server_dir('share'),
+   'server_sql':        inst_server_dir('share/opengee-server/sql'),
 
    'httpd':             inst_server_dir('gehttpd'),
    'httpdmodules':      inst_server_dir('gehttpd/modules'),
@@ -96,9 +97,6 @@ installdirs = {
    'maps':              inst_server_dir('gehttpd/htdocs/maps'),
    'httpddocs':         inst_server_dir('gehttpd/htdocs/shared_assets/docs'),
 
-
-   'getomcat_webapps':           inst_server_dir('getomcat/webapps'),
-   'getomcat_lib':           inst_server_dir('getomcat/lib'),
    'search_plugins':    inst_server_dir('search/plugins'),
    'search_tabs':       inst_server_dir('search/tabs'),
    'search_api':        inst_server_dir('search/api'),
