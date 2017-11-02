@@ -1,6 +1,6 @@
 #! /bin/bash
 #
-# Copyright 2017 the Open GEE Contributors
+# Copyright 2017 The Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,13 +19,12 @@
 set +x
 
 #------------------------------------------------------------------------------
-
-# Versions and user names:
+# Definitions
 GEE="Google Earth Enterprise"
 GEEF="$GEE Fusion"
-CHKCONFIG="/sbin/chkconfig"
-INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
-BININSTALLPROFILEDIR="/etc/profile.d"
+CHK_CONFIG="/sbin/chkconfig"
+INITSCRIPT_UPDATE="/usr/sbin/update-rc.d"
+PROFILE_DIR="/etc/profile.d"
 
 #------------------------------------------------------------------------------
 # Get system info values:
@@ -62,8 +61,8 @@ main_postinstall()
     echo "$GEE_VERSION" > "$BASEINSTALLDIR_ETC/fusion_version"
 
     chmod 755 "$BININSTALLROOTDIR/gefusion"
-    chmod 755 "$BININSTALLPROFILEDIR/ge-fusion.csh"
-    chmod 755 "$BININSTALLPROFILEDIR/ge-fusion.sh"
+    chmod 755 "$PROFILE_DIR/ge-fusion.csh"
+    chmod 755 "$PROFILE_DIR/ge-fusion.sh"
     chown root:$GEGROUP $BASEINSTALLDIR_VAR/run
     chown root:$GEGROUP $BASEINSTALLDIR_VAR/log
 
@@ -79,14 +78,24 @@ main_postinstall()
 #-----------------------------------------------------------------
 # Post-install Functions
 #-----------------------------------------------------------------
+
+get_xpath()
+{
+  local FILE="$2"
+  local XPATH="$1"
+  
+  local OUTPUT=$(echo "cat $XPATH" | xmllint --shell "$FILE" | sed '/^\/ >/d' | sed 's/<[^>]*.//g')
+  echo $OUTPUT 
+}
+
 setup_fusion_daemon()
 {
     # setup fusion daemon
     printf "Setting up the Fusion daemon...\n"
 
-    test -f "$INITSCRIPTUPDATE" && "$INITSCRIPTUPDATE" -f gefusion remove
-    test -f "$INITSCRIPTUPDATE" && "$INITSCRIPTUPDATE" gefusion start 90 2 3 4 5 . stop 10 0 1 6 .
-    test -f "$CHKCONFIG" && "$CHKCONFIG" --add gefusion
+    test -f "$INITSCRIPT_UPDATE" && "$INITSCRIPT_UPDATE" -f gefusion remove
+    test -f "$INITSCRIPT_UPDATE" && "$INITSCRIPT_UPDATE" gefusion start 90 2 3 4 5 . stop 10 0 1 6 .
+    test -f "$CHK_CONFIG" && "$CHK_CONFIG" --add gefusion
     
     printf "Fusion daemon setup ... Done\n"
 }
@@ -113,20 +122,19 @@ compare_asset_root_publishvolume()
 check_fusion_master_or_slave()
 {
     if [ -f "$ASSET_ROOT/.config/volumes.xml" ]; then
-        #TODO: xmllint does not have --xpath option
-#        EXISTING_HOST=$(xmllint --xpath "//VolumeDefList/volumedefs/item[1]/host/text()" "$ASSET_ROOT/.config/volumes.xml" | $NEWLINECLEANER)
-#
-#        case "$EXISTING_HOST" in
-#            $HOSTNAME_F|$HOSTNAME_A|$HOSTNAME_S|$HOSTNAME)
-#                IS_SLAVE=false
-#                ;;
-#            *)
-#                IS_SLAVE=true
-#
-#                echo -e "\nThe asset root [$ASSET_ROOT] is owned by another Fusion host:  $EXISTING_HOST"
-#                echo -e "Installing $GEEF $GEE_VERSION in Grid Slave mode.\n"
-#                ;;
-#        esac
+        EXISTING_HOST=$(get_xpath "//VolumeDefList/volumedefs/item[1]/host/text()" "$ASSET_ROOT/.config/volumes.xml" | $NEWLINECLEANER)
+
+        case "$EXISTING_HOST" in
+            $HOSTNAME_F|$HOSTNAME_A|$HOSTNAME_S|$HOSTNAME)
+                IS_SLAVE=false
+                ;;
+            *)
+                IS_SLAVE=true
+
+                echo -e "\nThe asset root [$ASSET_ROOT] is owned by another Fusion host:  $EXISTING_HOST"
+                echo -e "Installing $GEEF $GEE_VERSION in Grid Slave mode.\n"
+                ;;
+        esac
         IS_SLAVE=false
     fi
 }
