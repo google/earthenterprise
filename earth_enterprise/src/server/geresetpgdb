@@ -211,7 +211,7 @@ if [ $type == "backup" ]; then
 fi
 
 # if the data dir does not exist then this has to be a hard reset.
-# TODO: This will need to be removed when we unbundle
+# TODO: This will need to be removed when we unbundle PostgreSQL
 if [ ! -e $VARPGDIR/data ]; then
   type="hard";
 fi
@@ -219,7 +219,7 @@ fi
 if [ $type == "hard" ]; then
   if [ ! -e $VARPGDIR/data ]; then
     # create a new db instance from scratch
-    # TODO: This will need to be removed when we unbundle
+    # TODO: This will need to be removed when we unbundle PostgreSQL
     $BINDIR/initdb --auth=trust -D $VARPGDIR/data >/dev/null
   else
     # Start postmaster.
