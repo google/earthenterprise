@@ -34,20 +34,5 @@ SOURCE_VOLUME="/gevol/src"
 # Commands:
 NEWLINECLEANER="sed -e s:\\n::g"
 
-
-<%
-out << '''
-load_systemrc_config()
-{
-    if [ -f "$SYSTEMRC" ]; then
-        # Read configuration:
-        ASSET_ROOT=$(xmllint --xpath '//Systemrc/assetroot/text()' "$SYSTEMRC")
-        GEFUSIONUSER=$(xmllint --xpath '//Systemrc/fusionUsername/text()' "$SYSTEMRC")
-        GEGROUP=$(xmllint --xpath '//Systemrc/userGroupname/text()' "$SYSTEMRC")
-    fi
-}
-'''
-%>
-
 # Key-value library:
-<% out << (new File('shared/lib/key-value.sh').text) %>
+<%= new File('shared/lib/key-value.sh').text %>
