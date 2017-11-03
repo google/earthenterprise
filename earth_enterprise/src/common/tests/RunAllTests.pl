@@ -67,7 +67,8 @@ foreach my $test (@tests) {
     my $stdout_data = "\t\t\t<system-out>\n";
     my $stderr_data = "\t\t\t<system-err>\n";
     my $test_count = 0;
-    my $failed = 0;
+    my $failures = 0;
+    my $errors = 0;
     my $test_output = "";
     my @testcases;
 
@@ -75,11 +76,18 @@ foreach my $test (@tests) {
         my @output;
         while (<OUTPUT>) {
             my $line = $_;
+
+            #save test output for jenkins's benefit
             $test_output .= $line;
 
             #there are a lot of these from some of the test files and we don't care about them
             if ($line =~ /^Fusion Notice:/) {
               next;
+            }
+
+            #Are these important or are these warnings normal for the types of tests being run? TODO
+            if ($line =~ /^Fusion Warning:/) {
+              $errors++;
             }
 
             #is this a test case with an individual result?
@@ -89,7 +97,7 @@ foreach my $test (@tests) {
 
               #count failures
               if($line =~ /FAILED/) {
-                $failed++;
+                $failures++;
               }
 
               #capture the test name from successes, which come in 2 different formats
@@ -109,17 +117,20 @@ foreach my $test (@tests) {
                 $classname = $1;
                 $testname = $2;
               }
+
+              #convert milliseconds to seconds for junit
               $ms *= 0.001;
+
+              #add the xml to the list of testcases for this file
               push(@testcases, "\t\t<testcase classname=\"$classname\" name=\"$testname\" time=\"$ms\">\n");
             }
 
-            #save test output in case we are logging a failure
         }
         if (close(OUTPUT)) {
-            $testsuite .= "errors=\"0\" failures=\"$failed\" "; #FIXME  count errors 
+            $testsuite .= "errors=\"$errors\" failures=\"$failures\" ";
             print "SUCCEEDED\n";
         } else {
-            $testsuite .= "errors=\"$failed\" failures=\"$failed\" "; #FIXME count errors 
+            $testsuite .= "errors=\"$errors\" failures=\"$failures\" ";
             $stderr_data .= "\n________________\nFAILED\n________________\n";
             $result = 1;
             print "FAILED\n";
@@ -130,7 +141,7 @@ foreach my $test (@tests) {
     } else {
         $stderr_data .= "FAILED to launch\n";
         $testsuite .= "errors=\"1\" failures=\"1\"";
-        $failed = 1;
+        $failures = 1;
         print "FAILED to launch\n";
     }
 
@@ -145,7 +156,7 @@ foreach my $test (@tests) {
     $stdout_data .= "\n\t\t\t</system-out>\n";
 
     #if there was a failure, save the output in the stderr-data xml block
-    if($failed > 0) {
+    if($failures > 0) {
       $stderr_data .= $test_output;
     }
     $stderr_data .= "\n\t\t\t</system-err>\n";
