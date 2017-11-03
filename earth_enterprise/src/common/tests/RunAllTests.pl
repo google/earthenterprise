@@ -18,6 +18,8 @@
 use FindBin qw($Bin $Script);
 use File::Basename;
 use Cwd 'abs_path';
+use strict;
+use warnings;
 
 # This script should be run from NATIVE-*-x86_64/bin/tests
 my $scriptDir = dirname(abs_path($0));
@@ -27,6 +29,10 @@ if ($scriptDir !~ /NATIVE-[a-zA-Z0-9_-]*\/bin\/tests$/) {
     exit;
 }
 chdir($scriptDir);
+
+# open an output file, cannot have "test" (lowercase) in its name
+my $logfile = "$scriptDir/Output.xml";
+open(my $fh, '>', $logfile) or die $!;
 
 # Add path to build binary directory for searching executables (ogr2ogr,
 # gdal_rasterize,...) used in tests.
@@ -43,28 +49,118 @@ foreach my $test (@tests) {
     }
 }
 
+#xml headers
+print $fh "<?xml version=\"1.0\" ?>\n";
+print $fh "<testsuites>\n";
+
 $| = 1;
 my $result = 0;
+
+#for each file with the word "test" in its name in the current directory
 foreach my $test (@tests) {
     my $basename = basename($test);
     next if $basename eq $Script;
     print "Running $basename ... ", ' 'x($longest-length($basename));
+
+    #set up xml tags for this file
+    my $testsuite = "\t<testsuite ";
+    my $stdout_data = "\t\t\t<system-out>\n";
+    my $stderr_data = "\t\t\t<system-err>\n";
+    my $test_count = 0;
+    my $failed = 0;
+    my $test_output = "";
+    my @testcases;
+
     if (open(OUTPUT, "$test 2>&1 |")) {
         my @output;
         while (<OUTPUT>) {
-            push @output, $_;
+            my $line = $_;
+
+            #there are a lot of these from some of the test files and we don't care about them
+            if ($line =~ /^Fusion Notice:/) {
+              next;
+            }
+
+            #is this a test case with an individual result?
+            if ($line =~ /OK|succeeded|FAILED/i && $line !~ /[0-9]+ of [0-9]+/) {
+              $test_count++;
+              my $ms = 0;
+
+              #count failures
+              if($line =~ /FAILED/) {
+                $failed++;
+              }
+
+              #capture the test name from successes, which come in 2 different formats
+              $line =~ s/^\[.+\]\s+//; 
+              if ($line =~ /^(\[.+\]\w+)?(\w+)(\s+succeeded)$/) { 
+                $line = $2;
+              }
+              elsif ($line =~ /(.+)\s+\((\d+)\s+ms\).*$/) {
+                $line = $1;
+                $ms = $2;
+              }
+
+              #find class name if possible 
+              my $classname = $line;
+              my $testname = $line;
+              if($line =~ /(\w+)\.(\w+)/) {
+                $classname = $1;
+                $testname = $2;
+              }
+              push(@testcases, "\t\t<testcase classname=\"$classname\" name=\"$testname\" time=\"$ms ms\">\n");
+            }
+
+            #save test output in case we are logging a failure
+            $test_output .= $_;
         }
         if (close(OUTPUT)) {
+            $testsuite .= "errors=\"0\" failures=\"$failed\" "; #FIXME  count errors 
             print "SUCCEEDED\n";
         } else {
+            $testsuite .= "errors=\"$failed\" failures=\"$failed\" "; #FIXME count errors 
+            $stderr_data .= "\n________________\nFAILED\n________________\n";
+            $result = 1;
             print "FAILED\n";
             print "----------\n";
             print @output;
             print "----------\n";
-            $result = 1;
         }
     } else {
+        $stderr_data .= "FAILED to launch\n";
+        $testsuite .= "errors=\"1\" failures=\"1\"";
+        $failed = 1;
         print "FAILED to launch\n";
     }
+
+    #if we didn't count any subtests, this should not be 0
+    if($test_count == 0) {
+      $test_count = 1;
+    }
+
+    ### print xml for the test file we just ran 
+    $testsuite .= " name=\"$basename\" tests=\"$test_count\">\n";
+    $stdout_data .= "\t\t\t</system-out>\n";
+
+    #if there was a failure, save the output in the stderr-data xml block
+    if($failed > 0) {
+      $stderr_data .= $test_output;
+    }
+    $stderr_data .= "\t\t\t</system-err>\n";
+
+    print $fh $testsuite;
+
+    #print xml for each testcase inside this testsuite 
+    foreach my $testcase (@testcases) { 
+      print $fh $testcase;
+      print $fh $stdout_data;
+      print $fh $stderr_data;
+      print $fh "\t\t</testcase>\n";
+    }
+    print $fh "\t</testsuite>\n";
 }
+
+#close the top level xml tag
+print $fh "</testsuites>\n";
+
 exit $result;
