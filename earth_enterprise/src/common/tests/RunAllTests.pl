@@ -84,7 +84,7 @@ foreach my $test (@tests) {
             #is this a test case with an individual result?
             if ($line =~ /OK|succeeded|FAILED/i && $line !~ /[0-9]+ of [0-9]+/) {
               $test_count++;
-              my $ms = 0;
+              my $ms = 0.0;
 
               #count failures
               if($line =~ /FAILED/) {
@@ -108,7 +108,7 @@ foreach my $test (@tests) {
                 $classname = $1;
                 $testname = $2;
               }
-              push(@testcases, "\t\t<testcase classname=\"$classname\" name=\"$testname\" time=\"$ms ms\">\n");
+              push(@testcases, "\t\t<testcase classname=\"$classname\" name=\"$testname\" time=\"$ms\">\n");
             }
 
             #save test output in case we are logging a failure
@@ -140,13 +140,14 @@ foreach my $test (@tests) {
 
     ### print xml for the test file we just ran 
     $testsuite .= " name=\"$basename\" tests=\"$test_count\">\n";
-    $stdout_data .= "\t\t\t</system-out>\n";
+    $stdout_data .= $test_output;
+    $stdout_data .= "\n\t\t\t</system-out>\n";
 
     #if there was a failure, save the output in the stderr-data xml block
     if($failed > 0) {
       $stderr_data .= $test_output;
     }
-    $stderr_data .= "\t\t\t</system-err>\n";
+    $stderr_data .= "\n\t\t\t</system-err>\n";
 
     print $fh $testsuite;
 
