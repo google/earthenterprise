@@ -160,7 +160,7 @@ bool AssetBase::Save() {
     }
 
     QString error_msg;
-    if (!SubmitEditRequest(&error_msg, true)) {
+    if (!SubmitEditRequest(&error_msg, last_save_error_)) {
       QMessageBox::critical(this, tr("Save ") + AssetPrettyName(),
                             tr("Unable to save: ") + Name() + "\n" +
                             error_msg,
@@ -329,8 +329,7 @@ void AssetBase::Build(void) {
 
 void AssetBase::AboutToShowFileMenu() {
   bool dirty = IsModified();
-  //save_action_->setEnabled(dirty && !save_error_);
-  save_action_->setEnabled(!save_error_);
+  save_action_->setEnabled(dirty && !save_error_);
   saveas_action_->setEnabled(!save_error_);
   build_action_->setEnabled(!dirty);
 }

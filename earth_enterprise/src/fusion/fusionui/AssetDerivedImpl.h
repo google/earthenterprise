@@ -112,8 +112,6 @@ template <class Defs, class FinalClass>
     // Re-assemble request after updating model-object.
     request = AssembleEditRequest();
   }
-  std::string buf, ref;
-  request.SaveToString(buf, ref);
 
 
   if (Defs::kSubmitFunc(request, *error_msg, 0 /* timeout */)) {
