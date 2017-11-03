@@ -102,6 +102,7 @@ AssetBase::AssetBase(QWidget* parent)
   connect(file_menu_, SIGNAL(aboutToHide()), this, SLOT(AboutToHideFileMenu()));
   connect(hidden_action_, SIGNAL(toggled(bool)), this, SLOT(SetHidden(bool)));
   save_error_ = false;
+  last_save_error_ = false;
 }
 
 AssetBase::~AssetBase() {
@@ -155,20 +156,18 @@ void AssetBase::languageChange() {
 bool AssetBase::Save() {
   try {
     if (!EnsureNameValid()) {
-      save_error_ = true;
       return false;
     }
 
     QString error_msg;
-    if (!SubmitEditRequest(&error_msg, save_error_)) {
+    if (!SubmitEditRequest(&error_msg, true)) {
       QMessageBox::critical(this, tr("Save ") + AssetPrettyName(),
                             tr("Unable to save: ") + Name() + "\n" +
                             error_msg,
                             tr("OK"), 0, 0, 0);
-      save_error_ = true;
-      return false;
     } else {
-      save_error_ = false;
+      SetSaveError(false);
+      SetLastSaveError(false);
       return true;
     }
   } catch (const khException &e) {
@@ -188,7 +187,8 @@ bool AssetBase::Save() {
                           Name() + "\nUnknown error",
                           tr("OK"), 0, 0, 0);
   }
-  save_error_ = true;
+  SetSaveError(true);
+  SetLastSaveError(true);
   return false;
 }
 
@@ -329,7 +329,9 @@ void AssetBase::Build(void) {
 
 void AssetBase::AboutToShowFileMenu() {
   bool dirty = IsModified();
-  save_action_->setEnabled(dirty || save_error_);
+  //save_action_->setEnabled(dirty && !save_error_);
+  save_action_->setEnabled(!save_error_);
+  saveas_action_->setEnabled(!save_error_);
   build_action_->setEnabled(!dirty);
 }
 
@@ -338,7 +340,8 @@ void AssetBase::AboutToHideFileMenu() {
   // make sure it's always enabled when the menu is dismissed. Otherwise
   // they might not be able to use the save accelerator key to save a dirty
   // asset.
-  save_action_->setEnabled(true);
+  save_action_->setEnabled(!save_error_);
+  saveas_action_->setEnabled(!save_error_);
   build_action_->setEnabled(true);
 }
 
@@ -353,4 +356,14 @@ void AssetBase::SetErrorMsg(const QString& text, bool red) {
     }
     error_msg_label_->show();
   }
+}
+
+void AssetBase::SetSaveError(bool state) {
+  save_error_ = state;
+  save_action_->setEnabled(!save_error_);
+  saveas_action_->setEnabled(!save_error_);
+}
+
+void AssetBase::SetLastSaveError(bool state) {
+  last_save_error_ = state;
 }
