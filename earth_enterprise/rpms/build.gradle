@@ -152,9 +152,6 @@ task openGeeSharedFiles(type: Copy) {
             def templateDir = it.file.parent
 
             def templateVariables = [
-                'templateFile': it.file,
-                'templateSourcePath': it.sourcePath,
-                'templateTargetPath': it.path,
                 'openGeeVersion': openGeeVersion
             ]
 
@@ -172,7 +169,7 @@ task openGeeSharedFiles(type: Copy) {
                 },
             )
 
-            it.expand(templateVariables)
+            it.expand(templateVariables.clone())
         }
     }
 }
