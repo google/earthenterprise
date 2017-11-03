@@ -111,7 +111,7 @@ foreach my $test (@tests) {
               }
 
               #find class name if possible 
-              my $classname = $line;
+              my $classname = $basename;
               my $testname = $line;
               if($line =~ /(\w+)\.(\w+)/) {
                 $classname = $1;
