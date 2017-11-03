@@ -75,6 +75,7 @@ foreach my $test (@tests) {
         my @output;
         while (<OUTPUT>) {
             my $line = $_;
+            $test_output .= $line;
 
             #there are a lot of these from some of the test files and we don't care about them
             if ($line =~ /^Fusion Notice:/) {
@@ -108,11 +109,11 @@ foreach my $test (@tests) {
                 $classname = $1;
                 $testname = $2;
               }
+              $ms *= 0.001;
               push(@testcases, "\t\t<testcase classname=\"$classname\" name=\"$testname\" time=\"$ms\">\n");
             }
 
             #save test output in case we are logging a failure
-            $test_output .= $_;
         }
         if (close(OUTPUT)) {
             $testsuite .= "errors=\"0\" failures=\"$failed\" "; #FIXME  count errors 
@@ -163,5 +164,6 @@ foreach my $test (@tests) {
 
 #close the top level xml tag
 print $fh "</testsuites>\n";
+close($fh);
 
 exit $result;
