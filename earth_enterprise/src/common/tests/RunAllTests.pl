@@ -21,6 +21,14 @@ use Cwd 'abs_path';
 use strict;
 use warnings;
 
+my $OSLABEL = "";
+my $argc = scalar(@ARGV);
+if($argc > 1) {
+  if($ARGV[0] eq "-o") {
+    $OSLABEL = $ARGV[1].".";
+  }
+}
+
 # This script should be run from NATIVE-*-x86_64/bin/tests
 my $scriptDir = dirname(abs_path($0));
 if ($scriptDir !~ /NATIVE-[a-zA-Z0-9_-]*\/bin\/tests$/) {
@@ -125,7 +133,7 @@ foreach my $test (@tests) {
               $ms *= 0.001;
 
               #add the xml to the list of testcases for this file
-              push(@testcases, "\t\t<testcase classname=\"$classname\" name=\"$testname\" time=\"$ms\">\n");
+              push(@testcases, "\t\t<testcase classname=\"$OSLABEL$classname\" name=\"$testname\" time=\"$ms\">\n");
             }
 
         }
