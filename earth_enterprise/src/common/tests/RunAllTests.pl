@@ -58,7 +58,7 @@ foreach my $test (@tests) {
 }
 
 #xml headers
-print $fh "<? xml version=\"1.0\" ?>\n";
+print $fh "<?xml version=\"1.0\" ?>\n";
 print $fh "<testsuites>\n";
 
 $| = 1;
