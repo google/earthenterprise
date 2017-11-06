@@ -17,14 +17,13 @@
 set +x
 
 #-----------------------------------------------------------------
-# Definitions
-CHK_CONFIG="/sbin/chkconfig"
-
-#-----------------------------------------------------------------
 # Main Function
 #-----------------------------------------------------------------
 
 service gefusion stop
-test -f "$CHK_CONFIG" && "$CHK_CONFIG" --del gefusion
+
+if [ -f "$CHKCONFIG" ]; then
+    "$CHKCONFIG" --del gefusion
+fi
 
 #-----------------------------------------------------------------

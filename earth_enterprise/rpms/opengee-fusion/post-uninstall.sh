@@ -16,7 +16,9 @@
 
 remove_users_and_groups()
 {
-    [ -n "$(getent passwd "$GEFUSIONUSER")" ] && userdel "$GEFUSIONUSER"
+    if [ -n "$(getent passwd "$GEFUSIONUSER")" ]; then
+        userdel "$GEFUSIONUSER"
+    fi
 }
 
 

@@ -19,7 +19,6 @@ set +x
 #-----------------------------------------------------------------
 # Definitions
 GEE="Google Earth Enterprise"
-CHKCONFIG="/sbin/chkconfig"
 #-----------------------------------------------------------------
 
 #-----------------------------------------------------------------
@@ -28,11 +27,13 @@ CHKCONFIG="/sbin/chkconfig"
 main_preuninstall()
 {
     service geserver stop
-    test -f $CHKCONFIG && $CHKCONFIG --del geserver
+    if [ -f "$CHKCONFIG" ]; then
+        "$CHKCONFIG" --del geserver
+    fi
 }
 
 #-----------------------------------------------------------------
 # Pre-install Main
 #-----------------------------------------------------------------
 
-main_preuninstall "$@"
+main_preuninstall $@

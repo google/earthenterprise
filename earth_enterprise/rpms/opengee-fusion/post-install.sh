@@ -22,8 +22,6 @@ set +x
 # Definitions
 GEE="Google Earth Enterprise"
 GEEF="$GEE Fusion"
-CHK_CONFIG="/sbin/chkconfig"
-INITSCRIPT_UPDATE="/usr/sbin/update-rc.d"
 PROFILE_DIR="/etc/profile.d"
 
 #------------------------------------------------------------------------------
@@ -33,12 +31,11 @@ HOSTNAME_F="$(hostname -f | $NEWLINECLEANER)"
 HOSTNAME_S="$(hostname -s | $NEWLINECLEANER)"
 HOSTNAME_A="$(hostname -a | $NEWLINECLEANER)"
 
-NUM_CPUS="$(grep processor /proc/cpuinfo | wc -l | $NEWLINECLEANER)"
+NUM_CPUS="$(nproc)"
 
 # config values
 
 # additional variables
-IS_NEWINSTALL=false
 PUBLISH_ROOT_VOLUME=""
 
 EXISTING_HOST=""
@@ -63,8 +60,8 @@ main_postinstall()
     chmod 755 "$BININSTALLROOTDIR/gefusion"
     chmod 755 "$PROFILE_DIR/ge-fusion.csh"
     chmod 755 "$PROFILE_DIR/ge-fusion.sh"
-    chown root:$GEGROUP $BASEINSTALLDIR_VAR/run
-    chown root:$GEGROUP $BASEINSTALLDIR_VAR/log
+    chown "root:$GEGROUP" "$BASEINSTALLDIR_VAR/run"
+    chown "root:$GEGROUP" "$BASEINSTALLDIR_VAR/log"
 
     check_fusion_master_or_slave
 
@@ -79,25 +76,16 @@ main_postinstall()
 # Post-install Functions
 #-----------------------------------------------------------------
 
-get_xpath()
-{
-  local FILE="$2"
-  local XPATH="$1"
-  
-  local OUTPUT=$(echo "cat $XPATH" | xmllint --shell "$FILE" | sed '/^\/ >/d' | sed 's/<[^>]*.//g')
-  echo $OUTPUT 
-}
-
 setup_fusion_daemon()
 {
     # setup fusion daemon
-    printf "Setting up the Fusion daemon...\n"
+    echo "Setting up the Fusion daemon..."
 
-    test -f "$INITSCRIPT_UPDATE" && "$INITSCRIPT_UPDATE" -f gefusion remove
-    test -f "$INITSCRIPT_UPDATE" && "$INITSCRIPT_UPDATE" gefusion start 90 2 3 4 5 . stop 10 0 1 6 .
-    test -f "$CHK_CONFIG" && "$CHK_CONFIG" --add gefusion
-    
-    printf "Fusion daemon setup ... Done\n"
+    [ -f "$INITSCRIPT_UPDATE" ] && "$INITSCRIPT_UPDATE" -f gefusion remove
+    [ -f "$INITSCRIPT_UPDATE" ] && "$INITSCRIPT_UPDATE" gefusion start 90 2 3 4 5 . stop 10 0 1 6 .
+    [ -f "$CHKCONFIG" ] && "$CHKCONFIG" --add gefusion
+
+    echo "Fusion daemon setup ... Done"
 }
 
 create_system_main_directories()
@@ -122,7 +110,7 @@ compare_asset_root_publishvolume()
 check_fusion_master_or_slave()
 {
     if [ -f "$ASSET_ROOT/.config/volumes.xml" ]; then
-        EXISTING_HOST=$(get_xpath "//VolumeDefList/volumedefs/item[1]/host/text()" "$ASSET_ROOT/.config/volumes.xml" | $NEWLINECLEANER)
+        EXISTING_HOST=$(xml_file_get_xpath "$ASSET_ROOT/.config/volumes.xml" "//VolumeDefList/volumedefs/item[1]/host/text()" | $NEWLINECLEANER)
 
         case "$EXISTING_HOST" in
             $HOSTNAME_F|$HOSTNAME_A|$HOSTNAME_S|$HOSTNAME)
@@ -135,7 +123,6 @@ check_fusion_master_or_slave()
                 echo -e "Installing $GEEF $GEE_VERSION in Grid Slave mode.\n"
                 ;;
         esac
-        IS_SLAVE=false
     fi
 }
 
@@ -165,7 +152,7 @@ install_or_upgrade_asset_root()
     chmod 644 "$SYSTEMRC"
     chown "$GEFUSIONUSER:$GEGROUP" "$SYSTEMRC"
 
-    if test ! -d $ASSET_ROOT/.config ; then
+    if [ ! -d $ASSET_ROOT/.config ]; then
         "$BASEINSTALLDIR_OPT/bin/geconfigureassetroot" --new --noprompt \
             --assetroot "$ASSET_ROOT" --srcvol "$SOURCE_VOLUME"
         chown -R "$GEFUSIONUSER:$GEGROUP" "$ASSET_ROOT"
@@ -173,12 +160,12 @@ install_or_upgrade_asset_root()
         # upgrade asset root -- if this is a master
         if [ "$IS_SLAVE" == false ]; then
             # TODO: Verify this logic -- this is what is defined in the
-            # installer documentation, but need confirmation
+            # installer documentation, but needs confirmation
             keyvalue_file_get "$GEE_INSTALL_KV_PATH" gegroup_existed NEW_GEFUSIONUSER
             keyvalue_file_get "$GEE_INSTALL_KV_PATH" gefusionuser_existed NEW_GEFUSIONUSER
             if [ "$NEW_GEGROUP" == true ] || [ "$NEW_GEFUSIONUSER" == true ]; then
                 NOCHOWN=""
-                UPGRADE_MESSAGE="\nThe upgrade will fix permissions for the asset root and source volume. This may take a while.\n"
+                UPGRADE_MESSAGE="The upgrade will fix permissions for the asset root and source volume. This may take a while."
             else
                 NOCHOWN="--nochown"
                 UPGRADE_MESSAGE=""
@@ -190,6 +177,7 @@ The asset root must be upgraded to work with the current version of $GEEF $GEE_V
 You cannot use an upgraded asset root with older versions of $GEEF. 
 Consider backing up your asset root. $GEEF will warn you when
 attempting to run with a non-upgraded asset root.
+
 $UPGRADE_MESSAGE
 END
             
