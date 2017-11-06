@@ -50,7 +50,7 @@ foreach my $test (@tests) {
 }
 
 #xml headers
-print $fh "<?xml version=\"1.0\" ?>\n";
+print $fh "<? xml version=\"1.0\" ?>\n";
 print $fh "<testsuites>\n";
 
 $| = 1;
@@ -155,14 +155,18 @@ foreach my $test (@tests) {
 
     ### print xml for the test file we just ran 
     $testsuite .= " name=\"$basename\" tests=\"$test_count\">\n";
-    $stdout_data .= $test_output;
-    $stdout_data .= "\n\t\t\t</system-out>\n";
+    #$stdout_data .= $test_output;
 
     #if there was a failure, save the output in the stderr-data xml block
     if($failures > 0) {
       $stderr_data .= $test_output;
+      $stdout_data .= "\n\t\t\t</system-out>\n";
+      $stderr_data .= "\n\t\t\t</system-err>\n";
     }
-    $stderr_data .= "\n\t\t\t</system-err>\n";
+    else { #experiment to see if this is why jenkins is getting slap-happy with test cases
+      $stderr_data = "";
+      $stdout_data = "";
+    }
 
     print $fh $testsuite;
 
