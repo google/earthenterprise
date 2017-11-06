@@ -71,6 +71,7 @@ foreach my $test (@tests) {
     my $errors = 0;
     my $test_output = "";
     my @testcases;
+    my $prev = "";
 
     if (open(OUTPUT, "$test 2>&1 |")) {
         my @output;
@@ -110,13 +111,15 @@ foreach my $test (@tests) {
                 $ms = $2;
               }
 
-              #find class name if possible 
+              #find class name if possible.. If not, use the filename
               my $classname = $basename;
               my $testname = $line;
               if($line =~ /(\w+)\.(\w+)/) {
                 $classname = $1;
                 $testname = $2;
               }
+              next if($prev && "$classname.$testname" eq $prev);
+              $prev = "$classname.$testname";
 
               #convert milliseconds to seconds for junit
               $ms *= 0.001;
