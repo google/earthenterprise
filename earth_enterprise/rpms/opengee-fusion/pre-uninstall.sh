@@ -1,6 +1,6 @@
 #! /bin/bash
 #
-# Copyright 2017 the Open GEE Contributors
+# Copyright 2017 The Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,9 +17,14 @@
 set +x
 
 #-----------------------------------------------------------------
+# Definitions
+CHK_CONFIG="/sbin/chkconfig"
+
+#-----------------------------------------------------------------
 # Main Function
 #-----------------------------------------------------------------
 
-/etc/init.d/gefusion stop
+service gefusion stop
+test -f "$CHK_CONFIG" && "$CHK_CONFIG" --del gefusion
 
 #-----------------------------------------------------------------
