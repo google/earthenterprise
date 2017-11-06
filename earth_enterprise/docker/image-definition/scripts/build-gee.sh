@@ -59,25 +59,30 @@ if [ -n "$BUILD_PACKAGES" ]; then
 fi
 
 
-cd earthenterprise/earth_enterprise && \
-scons -j8 release=1 build
+cd earthenterprise/earth_enterprise || exit 1
+scons "-j$[ 2 * $(nproc) ]" release=1 build || exit 1
+
+# Copy binaries to install package location (required for packaging):
+scons "-j$[ 2 * $(nproc) ]" release=1 stage_install || exit 1
+
 
 if [ "$BUILD_RPMS" ]; then
     (
-        cd rpms && ./gradlew openGeeRpms
+        cd rpms && ./gradlew openGeeRpms || exit 1
         if [ -n "$COPY_PACKAGES" ]; then
             mkdir -p /root/opengee/packages
-            cp *.rpm /root/opengee/packages
+            cp build/distributions/*.rpm /root/opengee/packages
         fi
-    )
+    ) || exit 1
 fi
 
 if [ "$BUILD_DEBS" ]; then
     (
-        cd rpms && ./gradlew openGeeDebs
+        cd rpms && ./gradlew openGeeDebs || exit 1
         if [ -n "$COPY_PACKAGES" ]; then
             mkdir -p /root/opengee/packages
-            cp *.deb *.changes /root/opengee/packages
+            cp build/distributions/*.deb build/distributions/*.changes \
+                /root/opengee/packages
         fi
-    )
+    ) || exit 1
 fi

@@ -7,23 +7,30 @@
 
 # Prepare the install package:
 
-# Download tutorial data:
-# cd earthenterprise/earth_enterprise/tutorial && \
-# mkdir -p FusionTutorial && \
-# wget http://data.opengee.org/FusionTutorial-Full.tar.gz && \
-# tar -xvzf FusionTutorial-Full.tar.gz -C FusionTutorial || exit 1
-
 # Copy binaries to install package location:
-# cd .. && \
-cd earthenterprise/earth_enterprise && \
-scons -j8 release=1 stage_install || exit 1
+# cd earthenterprise/earth_enterprise || exit 1
+# scons -j8 release=1 stage_install || exit 1
 
-# Install Fusion:
-cd src/installer &&
-(echo C; echo C) | ./install_fusion.sh -hnmf || exit 1
 
-# Install Earth Server:
-(echo n) | ./install_server.sh -hnmf || exit 1
+
+if type apt-get >/dev/null 2>&1; then
+    # Use RPM packages:
+    cd earthenterprise/earth_enterprise/rpms/build/distributions
+    dpkg -GEi *.deb
+elif type yum >/dev/null 2>&1; then
+    # Use Deb packages:
+    cd earthenterprise/earth_enterprise/rpms/build/distributions
+    yum install -y *.rpm
+else
+    # Use the old installers:
+    
+    # Install Fusion:
+    cd earthenterprise/earth_enterprise/src/installer || exit 1
+    (echo C; echo C) | ./install_fusion.sh -hnmf || exit 1
+
+    # Install Earth Server:
+    (echo n) | ./install_server.sh -hnmf || exit 1
+fi
 
 # Reload PATH:
 source /etc/profile || exit 1
