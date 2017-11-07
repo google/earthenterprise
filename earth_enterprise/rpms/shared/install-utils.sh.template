@@ -59,11 +59,8 @@ xml_file_get_xpath()
     # Warning: `xmllint --noent` doesn't recognize named entities like
     # "&lt;" and "&gt;":
     echo "cat $XPATH" | xmllint --noent --nocdata --shell "$FILE" |
-    while read -r; do
-        if [ "${REPLY:0:3}" != "/ >" ]; then
-            echo "$REPLY"
-        fi
-    done
+    # Skip the first and the last line:
+        tail -n -1 | head -n -1
 }
 '''
 %>

@@ -22,7 +22,6 @@ set +x
 # Definitions
 GEE="Google Earth Enterprise"
 GEEF="$GEE Fusion"
-PROFILE_DIR="/etc/profile.d"
 
 #------------------------------------------------------------------------------
 # Get system info values:
@@ -54,12 +53,6 @@ main_postinstall()
 
     setup_fusion_daemon
 
-    # store fusion version
-    echo "$GEE_VERSION" > "$BASEINSTALLDIR_ETC/fusion_version"
-
-    chmod 755 "$BININSTALLROOTDIR/gefusion"
-    chmod 755 "$PROFILE_DIR/ge-fusion.csh"
-    chmod 755 "$PROFILE_DIR/ge-fusion.sh"
     chown "root:$GEGROUP" "$BASEINSTALLDIR_VAR/run"
     chown "root:$GEGROUP" "$BASEINSTALLDIR_VAR/log"
 
@@ -152,7 +145,7 @@ install_or_upgrade_asset_root()
     chmod 644 "$SYSTEMRC"
     chown "$GEFUSIONUSER:$GEGROUP" "$SYSTEMRC"
 
-    if [ ! -d $ASSET_ROOT/.config ]; then
+    if [ ! -d "$ASSET_ROOT/.config" ]; then
         "$BASEINSTALLDIR_OPT/bin/geconfigureassetroot" --new --noprompt \
             --assetroot "$ASSET_ROOT" --srcvol "$SOURCE_VOLUME"
         chown -R "$GEFUSIONUSER:$GEGROUP" "$ASSET_ROOT"
@@ -203,9 +196,11 @@ final_assetroot_configuration()
         "$BASEINSTALLDIR_OPT/bin/geconfigureassetroot" --addvolume \
             "opt:$BASEINSTALLDIR_OPT/share/tutorials" --noprompt --nochown
         if [ $? -eq 255 ]; then
-            echo -e "The geconfigureassetroot utility has failed on attempting"
-            echo -e "to add the volume 'opt:$BASEINSTALLDIR_OPT/share/tutorials'."
-            echo -e "This is probably due to a volume named 'opt' already exists."
+            cat <<END
+The geconfigureassetroot utility has failed on attempting
+to add the volume 'opt:$BASEINSTALLDIR_OPT/share/tutorials'.
+This is probably due to a volume named "opt"'s already existing.
+END
         fi
     fi
 }

@@ -281,6 +281,14 @@ task openGeeServerRpm (type: Rpm) {
     permissionGroup = 'root'
     packageGroup = 'Application/Productivity'
 
+    // Prefix variable definitions to all install scripts:
+    installUtils = file('build/shared/install-utils.sh')
+
+    preInstall = file('opengee-server/pre-install.sh')
+    postInstall = file('opengee-server/post-install.sh')
+    preUninstall = file('opengee-server/pre-uninstall.sh')
+    postUninstall = file('opengee-server/post-uninstall.sh')
+
     directory('/opt/google/install', 0700)
     directory('/opt/google/gehttpd/logs', 0755)
     directory('/opt/google/etc', 0775)
@@ -314,19 +322,13 @@ task openGeeServerRpm (type: Rpm) {
     from(stagedInstallDir_server_apachesupport) {
         into packageInstallRootDir
     }
-
-    // Prefix variable definitions to all install scripts:
-    installUtils = file('build/shared/install-utils.sh')
-
-    preInstall = file('opengee-server/pre-install.sh')
-    postInstall = file('opengee-server/post-install.sh')
-    preUninstall = file('opengee-server/pre-uninstall.sh')
-    postUninstall = file('opengee-server/post-uninstall.sh')
 }
 
 task openGeeServerDeb (type: Deb) {
-    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     packageName = 'opengee-server'
+
+    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
+
     from(stagedInstallDir_server_etc) {
         into new File(packageInstallRootDir, 'etc')
     }
@@ -363,18 +365,10 @@ built from raster, vector, and location properties data.
     requires('grep')
     requires('libxml2')
     requires('net-tools')
-    requires('recode')
     requires('sed')
     requires('util-linux')
 
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
-
-    directory('/var/opt/google/run', 0775)
-    directory('/var/opt/google/log', 0775)
-
-    from(stagedInstallDir_fusion) {
-        into packageInstallRootDir
-    }
 
     // Prefix variable definitions to all install scripts:
     installUtils = file('build/shared/install-utils.sh')
@@ -383,6 +377,54 @@ built from raster, vector, and location properties data.
     postInstall = file('opengee-fusion/post-install.sh')
     preUninstall = file('opengee-fusion/pre-uninstall.sh')
     postUninstall = file('opengee-fusion/post-uninstall.sh')
+
+    directory('/etc/init.d/gefusion', 0755)
+    directory('/etc/profile.d/ge-fusion.csh', 0755)
+    directory('/etc/profile.d/ge-fusion.sh', 0755)
+    directory('/var/opt/google/run', 0775)
+    directory('/var/opt/google/log', 0775)
+
+    from(stagedInstallDir_fusion) {
+        into packageInstallRootDir
+    }
+
+    from(file('opengee-common/install')) {
+        into packageInstallRootDir
+
+        def templateSuffix = '.template'
+        def stringStripSuffix = { value, suffix ->
+            return value.substring(0, value.length() - suffix.length())
+        }
+
+        eachFile {
+            if (it.getSourceName().endsWith(templateSuffix)) {
+                it.setName(stringStripSuffix(
+                    it.getSourceName(), templateSuffix))
+
+                def templateDir = it.file.parent
+
+                def templateVariables = [
+                    'openGeeVersion': openGeeVersion
+                ]
+
+                def expandTemplate = { text_or_file ->
+                    def engine = new groovy.text.SimpleTemplateEngine()
+                    def template = engine.createTemplate(text_or_file).make(templateVariables)
+
+                    return template.toString()
+                }
+
+                templateVariables.put(
+                    'expandTemplateFile',
+                    { relative_path ->
+                        expandTemplate(new File(new File(templateDir), relative_path))
+                    },
+                )
+
+                it.expand(templateVariables.clone())
+            }
+        }
+    }
 }
 
 task openGeeFusionDeb (type: Deb) {
