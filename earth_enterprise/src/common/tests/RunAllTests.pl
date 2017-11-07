@@ -21,11 +21,36 @@ use Cwd 'abs_path';
 use strict;
 use warnings;
 
+#if we get a -o argument, the subsequent argument will be used as an OS label for the xml
+#if there is no subsequent argument, $OSLABEL will remain blank. Note this doesn't
+#validate the content of the label itself.  This enables jenkins to classify tests by OS
+#platform in the test output, which looks much nicer and is easier to navigate.
 my $OSLABEL = "";
+
+#set to 1 to include stdout output for non-error tests
+my $VERBOSE = 0;
+
+sub usage() {
+  print "USAGE:  RunAllTests.pl [OPTIONAL ARGUMENTS]\n";
+  print "\tOPTIONAL ARGUMENTS: \n";
+  print "\t\t-o OSLABEL\n";
+  print "\t\t-v verbose test output for non-failure cases\n";
+  print "\t\t-h display this message\n";
+  exit(0);
+}
+
 my $argc = scalar(@ARGV);
-if($argc > 1) {
-  if($ARGV[0] eq "-o") {
-    $OSLABEL = $ARGV[1].".";
+if($argc > 0) {
+  foreach my $i (0 .. ($argc - 1)) {
+    if($ARGV[$i] eq "-o") {
+      $OSLABEL = $ARGV[$i + 1].".";
+    }
+    elsif($ARGV[$i] eq "-v") {
+      $VERBOSE = 1;
+    }
+    elsif($ARGV[$i] eq "-h") {
+      usage();
+    }
   }
 }
 
@@ -133,6 +158,7 @@ foreach my $test (@tests) {
               $ms *= 0.001;
 
               #add the xml to the list of testcases for this file
+              chomp($testname);
               push(@testcases, "\t\t<testcase classname=\"$OSLABEL$classname\" name=\"$testname\" time=\"$ms\">\n");
             }
 
@@ -142,11 +168,10 @@ foreach my $test (@tests) {
             print "SUCCEEDED\n";
         } else {
             $testsuite .= "errors=\"$errors\" failures=\"$failures\" ";
-            $stderr_data .= "\n________________\nFAILED\n________________\n";
             $result = 1;
             print "FAILED\n";
             print "----------\n";
-            print @output;
+            print $test_output;
             print "----------\n";
         }
     } else {
@@ -163,7 +188,6 @@ foreach my $test (@tests) {
 
     ### print xml for the test file we just ran 
     $testsuite .= " name=\"$basename\" tests=\"$test_count\">\n";
-    #$stdout_data .= $test_output;
 
     #if there was a failure, save the output in the stderr-data xml block
     if($failures > 0) {
@@ -171,9 +195,15 @@ foreach my $test (@tests) {
       $stdout_data .= "\n\t\t\t</system-out>\n";
       $stderr_data .= "\n\t\t\t</system-err>\n";
     }
-    else { #experiment to see if this is why jenkins is getting slap-happy with test cases
+    else {
+      if($VERBOSE == 1) {
+        $stdout_data .= $test_output;
+        $stdout_data .= "\n\t\t\t</system-out>\n";
+      }
+      else {
+        $stdout_data = "";
+      }
       $stderr_data = "";
-      $stdout_data = "";
     }
 
     print $fh $testsuite;
