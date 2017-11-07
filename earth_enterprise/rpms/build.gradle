@@ -378,11 +378,16 @@ built from raster, vector, and location properties data.
     preUninstall = file('opengee-fusion/pre-uninstall.sh')
     postUninstall = file('opengee-fusion/post-uninstall.sh')
 
-    directory('/etc/init.d/gefusion', 0755)
-    directory('/etc/profile.d/ge-fusion.csh', 0755)
-    directory('/etc/profile.d/ge-fusion.sh', 0755)
     directory('/var/opt/google/run', 0775)
     directory('/var/opt/google/log', 0775)
+
+    filesMatching(
+        ['/etc/init.d/gefusion',
+         '/etc/profile.d/ge-fusion.csh',
+         '/etc/profile.d/ge-fusion.sh']
+    ) {
+        it.mode = 0755
+    }
 
     from(stagedInstallDir_fusion) {
         into packageInstallRootDir
