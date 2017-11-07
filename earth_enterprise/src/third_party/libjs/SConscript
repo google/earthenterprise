@@ -99,7 +99,7 @@ firefox_build = libjs_env.Command(
                       make_options, libjs_target))])
 
 # [5] Build libjs
-if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+if third_party_env['is_min_ubuntu'] and not third_party_env['native_cc']:
   make_options += ' LD="%s"' % libjs_env['ENV']['CC']
 libjs_target = '%s/.build_libjs' % current_dir
 # Note for this target: Don't use -jx as this is not parallel safe
