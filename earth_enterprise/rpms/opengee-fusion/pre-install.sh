@@ -49,7 +49,14 @@ main_preinstall()
 
 check_asset_root_volume_size()
 {
-    ASSET_ROOT_VOLUME_SIZE=$(df -k "$ASSET_ROOT" | grep -v Avail | tr -s ' ' | cut -d ' ' -f 4)
+    local VOLUME_PATH="$ASSET_ROOT"
+
+    # Find the deepest existing directory in the path to $ASSET_ROOT:
+    while [ ! -d "$VOLUME_PATH" ]; do
+        VOLUME_PATH=$(dirname "$VOLUME_PATH")
+    done
+
+    ASSET_ROOT_VOLUME_SIZE=$(df -k "$VOLUME_PATH" | grep -v Avail | tr -s ' ' | cut -d ' ' -f 4)
 
     if [[ "$ASSET_ROOT_VOLUME_SIZE" -lt MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB ]]; then
         MIN_ASSET_ROOT_VOLUME_SIZE_IN_GB=$(expr "$MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB" / 1024 / 1024)
