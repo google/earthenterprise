@@ -4,7 +4,7 @@
 # Use this file in a command like:
 #
 # ```BASH
-# ( . config/rhel7.sh && ./bin/build-gee-image.sh )
+# ( . config/rhel-7.sh && ./bin/build-gee-image.sh )
 # ```
 
 export OS_DISTRIBUTION=rhel-7
