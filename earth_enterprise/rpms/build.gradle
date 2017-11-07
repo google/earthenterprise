@@ -272,7 +272,7 @@ task openGeeCommonDeb (type: Deb) {
     }
 }
 
-task openGeeServerRpm (type: Rpm) {
+task openGeeServerRpm (type: Rpm, dependsOn: openGeeSharedFiles) {
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     packageName = 'opengee-server'
     release = '1'
@@ -342,7 +342,7 @@ task openGeeServerDeb (type: Deb) {
     }
 }
 
-task openGeeFusionRpm (type: Rpm) {
+task openGeeFusionRpm (type: Rpm, dependsOn: openGeeSharedFiles) {
     packageName = 'opengee-fusion'
     release = '1'
     version = openGeeVersion
@@ -388,7 +388,7 @@ built from raster, vector, and location properties data.
         into packageInstallRootDir
     }
 
-    from(file('opengee-common/install')) {
+    from(file('opengee-fusion/install')) {
         into packageInstallRootDir
 
         def templateSuffix = '.template'
