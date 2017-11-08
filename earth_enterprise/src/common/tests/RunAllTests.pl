@@ -107,7 +107,6 @@ foreach my $test (@tests) {
     my $prev = "";
 
     if (open(OUTPUT, "$test 2>&1 |")) {
-        my @output;
         while (<OUTPUT>) {
             my $line = $_;
 
