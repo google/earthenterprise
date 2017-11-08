@@ -195,9 +195,9 @@ final_assetroot_configuration()
             "opt:$BASEINSTALLDIR_OPT/share/tutorials" --noprompt --nochown
         if [ $? -eq 255 ]; then
             cat <<END
-The geconfigureassetroot utility has failed on attempting
+The geconfigureassetroot utility has failed while attempting
 to add the volume 'opt:$BASEINSTALLDIR_OPT/share/tutorials'.
-This is probably due to a volume named "opt"'s already existing.
+This is probably because a volume named 'opt' already exists.
 END
         fi
     fi

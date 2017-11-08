@@ -47,6 +47,9 @@ while [ "$#" -ge 1 ]; do
     shift
 done
 
+# How many jobs to run in parallel when building:
+: ${JOB_COUNT:=$[ 2 * $(nproc) ]}
+
 
 if [ -n "$BUILD_PACKAGES" ]; then
     if [ -z "$BUILD_RPMS" ] && type yum >/dev/null 2>&1; then
@@ -60,10 +63,10 @@ fi
 
 
 cd earthenterprise/earth_enterprise || exit 1
-scons "-j$[ 2 * $(nproc) ]" release=1 build || exit 1
+scons "-j${JOB_COUNT}" release=1 build || exit 1
 
 # Copy binaries to install package location (required for packaging):
-scons "-j$[ 2 * $(nproc) ]" release=1 stage_install || exit 1
+scons "-j${JOB_COUNT}" release=1 stage_install || exit 1
 
 
 if [ "$BUILD_RPMS" ]; then
