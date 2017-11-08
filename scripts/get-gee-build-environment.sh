@@ -43,7 +43,7 @@ MIN_GCC_VERSION="4.8"
 
 # Whether to assume answer of yes to all questions (used when installing
 # packages).  Set to true to run without user interaction.
-: ${ASSUME_YES:="yes"}
+: ${ASSUME_YES:=""}
 
 # Check for a known package manager:
 if type apt-get >/dev/null 2>&1; then
@@ -308,7 +308,7 @@ elif [ "$PACKAGE_MANAGER" == "apt-get" ]; then
             libperl4-corelibs-perl libpng12-0 libpng12-dev libpq-dev \
             libproj-dev libstdc++6 libtool libx11-dev libxcursor-dev \
             libxerces-c-dev libxft-dev libxinerama-dev libxml2-dev \
-            libxml2-utils libxrandr-dev openssl libxmu-dev python-psycopg2 \
+            libxml2-utils libxrandr-dev openssl \
             python-dev python2.7 python2.7-dev python-imaging \
             python-setuptools rsync scons software-properties-common swig \
             wget xorg-dev zlib1g-dev || return 1
