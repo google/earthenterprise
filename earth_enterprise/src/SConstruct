@@ -151,11 +151,6 @@ else:
 
 # setup platform specific operations
 is_min_ubuntu = True
-# if non-zero return status it is not hardy
-# Warning: assume your Ubuntu version is 10.04.2, otherwise need change 
-#the version number in order to compile
-
-
 # /etc/issue was the previous method of checking Ubuntu release version
 # however, some flavors of Ubuntu e.g. MATE, have used varying formats
 # using ilsb_release, subprocess and re is more readable than awk parsing also
