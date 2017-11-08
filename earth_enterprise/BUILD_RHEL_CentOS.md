@@ -96,7 +96,8 @@ Execute:
 sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel python-devel perl-Alien-Packages  \
     openssl-devel libxml2-devel libXinerama-devel libXft-devel libXrandr-devel libXcursor-devel gdbm-devel   \
     libmng-devel libcap-devel libpng12-devel libXmu-devel freeglut-devel zlib-devel libX11-devel bison-devel  \
-    openjpeg-devel openjpeg2-devel geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel cmake rpm-build rsync
+    openjpeg-devel openjpeg2-devel geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel cmake \
+    rpm-build rsync
 ```
 ### CentOS 6 and RHEL 6
 Execute: 
@@ -104,7 +105,8 @@ Execute:
 sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel python-devel perl-Alien-Packages  \
     openssl-devel libxml2-devel libXinerama-devel libXft-devel libXrandr-devel libXcursor-devel gdbm-devel   \
     libmng-devel libcap-devel libpng-devel libXmu-devel freeglut-devel zlib-devel libX11-devel bison-devel  \
-    openjpeg-devel openjpeg2-devel geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel cmake rpm-build rsync
+    openjpeg-devel openjpeg2-devel geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel cmake
+    rpm-build rsync shunit2
 ```
 If you get an error about git dependency conflicts, consider experimenting with the `--skip-broken` parameter.
 
@@ -133,4 +135,21 @@ ___Note: the gtest RPM can be built on other linux systems using docker - simply
   Install the RPM: 
 ``` 
 sudo yum install -y ./build/RPMS/x86_64/gtest-devtoolset2-1.8.0-1.x86_64.rpm
-```  
+```
+
+## shunit2
+
+shunit2 is used for unit testing shell scripts in the GEE repo.
+It is currently used only for testing package building scripts.
+
+### CentOS 7 and RHEL 7
+The EPEL repositories for RHEL and CentOS 7 do not include shunit2.
+If you want to run these tests on one of these platforms, you must install
+shunit2 from the EPEL repositories for RHEL and CentOS 6.
+Run the following:
+```
+sudo yum install -y http://download-ib01.fedoraproject.org/pub/epel/6/x86_64/Packages/s/shunit2-2.1.6-3.el6.noarch.rpm
+```
+
+### CentOS 6 and RHEL 6
+shunit2 was installed in a previous step.

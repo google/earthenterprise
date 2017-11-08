@@ -32,6 +32,8 @@ ASSET_ROOT="/gevol/assets"
 SOURCE_VOLUME="/gevol/src"
 
 # Commands:
+CHKCONFIG="/sbin/chkconfig"
+INITSCRIPT_UPDATE="/usr/sbin/update-rc.d"
 NEWLINECLEANER="sed -e s:\\n::g"
 
 
@@ -41,13 +43,27 @@ load_systemrc_config()
 {
     if [ -f "$SYSTEMRC" ]; then
         # Read configuration:
-        ASSET_ROOT=$(xmllint --xpath '//Systemrc/assetroot/text()' "$SYSTEMRC")
-        GEFUSIONUSER=$(xmllint --xpath '//Systemrc/fusionUsername/text()' "$SYSTEMRC")
-        GEGROUP=$(xmllint --xpath '//Systemrc/userGroupname/text()' "$SYSTEMRC")
+        ASSET_ROOT=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/assetroot/text()")
+        GEFUSIONUSER=$(xml_file_get_node_text "$SYSTEMRC" "//Systemrc/fusionUsername/text()")
+        GEGROUP=$(xml_file_get_node_text "$SYSTEMRC" "//Systemrc/userGroupname/text()")
     fi
+}
+
+xml_file_get_xpath()
+{
+    local FILE="$1"
+    local XPATH="$2"
+
+    local REPLY
+
+    # Warning: `xmllint --noent` doesn't recognize named entities like
+    # "&lt;" and "&gt;":
+    echo "cat $XPATH" | xmllint --noent --nocdata --shell "$FILE" |
+    # Skip the first and the last line:
+        tail -n -1 | head -n -1
 }
 '''
 %>
 
 # Key-value library:
-<% out << (new File('shared/lib/key-value.sh').text) %>
+<%= (new File('shared/lib/key-value.sh').text) %>

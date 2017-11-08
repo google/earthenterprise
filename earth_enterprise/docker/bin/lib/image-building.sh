@@ -258,14 +258,16 @@ function tst_docker_template_process_tst_instructions()
                 "$DOCKER_CONTEXT_ARGUMENT" \
                 "${IMAGE_TAG}" || return 1
         else
-            echo "Building image with no stages for flattening: ${IMAGE_TAG}-stage-$[ $STAGE_NUMBER + 1 ]"
+            echo "Building image with no stages for flattening: ${IMAGE_TAG}-stage-${STAGE_NUMBER}"
             tst_docker_template_run_build_stage \
                 "$DOCKERFILE_PATH" "$DOCKER_WORKING_DIR" \
                 "$DOCKER_CONTEXT_ARGUMENT" \
-                "${IMAGE_TAG}-stage-$[ $STAGE_NUMBER + 1 ]" || return 1
+                "${IMAGE_TAG}-stage-${STAGE_NUMBER}" || return 1
+            echo "Creating a container from the built image. ID file: ${DOCKER_BUILD_DIR}/stage-$[ $STAGE_NUMBER + 1 ].cid"
+            docker run \
+                --cidfile="${DOCKER_BUILD_DIR}/stage-$[ $STAGE_NUMBER + 1 ].cid" \
+                "${IMAGE_TAG}-stage-${STAGE_NUMBER}" /bin/bash
             (( STAGE_NUMBER++ ))
-            echo "Creating a container from the built image. ID file: ${DOCKER_BUILD_DIR}/stage-${STAGE_NUMBER}.cid"
-            docker run --cidfile="${DOCKER_BUILD_DIR}/stage-${STAGE_NUMBER}.cid" /bin/bash
         fi
     else
         if [ -z "$FLATTEN_IMAGE" ]; then
@@ -332,12 +334,12 @@ function tst_docker_build_dockerfile_template()
     fi
 
     DOCKER_WORKING_DIR=$(grep -Po -e "$TST_DOCKERFILE_CONTEXT_DIR_MARKER" "$DOCKERFILE_TEMPLATE_PATH")
-    if [ -n "$DOCKER_WORKING_DIR" -a "$DOCKER_CONTEXT_ARGUMENT" == "-" ]; then
+    if [ -n "$DOCKER_WORKING_DIR" -a "$DOCKER_CONTEXT_ARGUMENT" = "-" ]; then
         tst_docker_warn "Dockerfile species both no context, and context directory: $DOCKERFILE_TEMPLATE_PATH"
     fi
     if [ -z "$DOCKER_WORKING_DIR" ];then
         DOCKER_WORKING_DIR="$TST_DOCKER_REPOSITORY_DIR"
-    elif [ "${DOCKER_WORKING_DIR#/}" == "$DOCKER_WORKING_DIR" ]; then
+    elif [ "${DOCKER_WORKING_DIR#/}" = "$DOCKER_WORKING_DIR" ]; then
         # Context directories are relative to the repository directory:
         DOCKER_WORKING_DIR="$TST_DOCKER_REPOSITORY_DIR/$DOCKER_WORKING_DIR"
     fi

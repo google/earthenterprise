@@ -24,16 +24,16 @@ GEE="Google Earth Enterprise"
 #-----------------------------------------------------------------
 # Main Functions
 #-----------------------------------------------------------------
-main_preuninstall()
+main_postuninstall()
 {
-    service geserver stop
-    if [ -f "$CHKCONFIG" ]; then
-        "$CHKCONFIG" --del geserver
-    fi
+    # if we really get error, something really broken elsewhere
+    userdel "$GEAPACHEUSER"
+    userdel "$GEPGUSER"
 }
 
+
 #-----------------------------------------------------------------
-# Pre-install Main
+# Post-Uninstall Main
 #-----------------------------------------------------------------
 
-main_preuninstall $@
+main_postuninstall $@
