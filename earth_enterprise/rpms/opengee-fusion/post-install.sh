@@ -95,7 +95,6 @@ compare_asset_root_publishvolume()
         if [ -d "$ASSET_ROOT" ] && [ -d "$PUBLISH_ROOT_VOLUME" ]; then
             VOL_ASSETROOT=$(df "$ASSET_ROOT" | grep -v ^Filesystem | grep -Eo '^[^ ]+')
             VOL_PUBLISHED_ROOT_VOLUME=$(df "$PUBLISH_ROOT_VOLUME" | grep -v ^Filesystem | grep -Eo '^[^ ]+')
-            
         fi
     fi
 }
@@ -192,7 +191,6 @@ final_assetroot_configuration()
     else
         "$BASEINSTALLDIR_OPT/bin/geselectassetroot" --assetroot "$ASSET_ROOT"
 
-        mkdir -p "$BASEINSTALLDIR_OPT/share/tutorials"
         "$BASEINSTALLDIR_OPT/bin/geconfigureassetroot" --addvolume \
             "opt:$BASEINSTALLDIR_OPT/share/tutorials" --noprompt --nochown
         if [ $? -eq 255 ]; then

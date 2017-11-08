@@ -378,6 +378,7 @@ built from raster, vector, and location properties data.
     preUninstall = file('opengee-fusion/pre-uninstall.sh')
     postUninstall = file('opengee-fusion/post-uninstall.sh')
 
+    directory('/opt/google/share/tutorials', 0755)
     directory('/var/opt/google/run', 0775)
     directory('/var/opt/google/log', 0775)
 
