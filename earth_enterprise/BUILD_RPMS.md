@@ -29,22 +29,22 @@ creating RPMs.
 A new SCons target was added to make RPMs, **package_install**, that can be run
 from the *earth_enterprise* subdirectory.  This can be used after
 **stage_install** to verify the build, as it uses the stage install directory.
-This will setup the stage install directory, install Gradle if needed, and then
-uses Gradle to generate RPMs.  The RPMs are created in the
+This will setup the stage install directory, install Gradle if needed, and
+then uses Gradle to generate RPMs.  The RPMs are created in the
 *rpms/build/distributions* subdirectory.  A typical invocation for building
 release RPMs might be ```scons -j8 release=1 package_install```.  All other
-files related to RPM generation are found in the *rpms* sub-directory as well.
-Scripts for pre/post install operations are found under the related rpm
-directory in *rpms* and common templates for package script generation in
-*rpms/shared*.
+files related to RPM generation are found in the *rpms* sub-directory as
+well. Scripts for pre/post install operations are found under the related
+package directory in *rpms*, and common templates for package script generation
+is found in *rpms/shared*.
 
 Currently a separate RPM is created for **opengee-postgis**, and a common RPM
 for all other third party dependencies called **opengee-common**.  These are
 required installs.  A separate RPM is also produced for **opengee-server** and
 **opengee-fusion**, which can then each be installed and used independently,
 much like the ```install_server.sh``` and ```install_fusion.sh``` scripts
-allowed fusion and server to be separately installed when building out of the
-Git repo checkout directly.
+allowed Open GEE Fusion and Server to be separately installed when building out
+of the Git repo checkout directly.
 
 ## Installing RPMs
 After the SCons **package_install** target completes you can install and
@@ -53,15 +53,15 @@ test the RPMs you have created on CentOS or RHEL.  To do this, change to the
 opengee-postgis-*.rpm``` and ```rpm -Uhv opengee-common-*.rpm``` to get the
 base dependencies installed, in that order.  You can then install ```rpm -Uhv
 opengee-fusion-*.rpm``` and/or ```rpm -Uhv opengee-server-*.rpm``` as desired,
-and then you can test the RPM packaged Open GEE fusion and server.
+and then you can test the RPM packaged Open GEE Fusion and Server.
 
 The RPMs install Open GEE to the same */opt/google* path that the non-package
-based install scripts did.  If you have already installed fusion or server from
-the Git sources manually, it probably makes sense to use the 
-```uninstall_fusion.sh``` and ```src/installers/uninstall_server.sh``` first 
-before installing the RPM packages.  The RPMs should be able to migrate an
-existing manual install of Open GEE with the packaged version, but at the very
-least you should back up data if you are going to try such a migration.
+based install scripts did.  If you have already installed Open GEE from the Git
+sources manually, it probably makes sense to use the ```uninstall_fusion.sh```
+and ```uninstall_server.sh``` scripts first before installing the RPM packages.
+The RPMs should be able to migrate an existing manual install of Open GEE with
+the packaged version, but at the very least you should back up data if you are
+going to try such a migration.
 
 While it is possible to migrate from a manual install of Open GEE to a RPM one,
 converting an RPM install back to a manual install is not safe.  This is
