@@ -235,7 +235,7 @@ gdal_configure = gdal_env.Command(
     [gdal_env.MultiCommand(configure_cmd)])
 
 # [8] Build gdal
-if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+if third_party_env['is_min_ubuntu'] and not third_party_env['native_cc']:
   ld = '%s -shared' % gdal_env['ENV']['CXX']
 else:
   ld = '%s -shared' % gdal_env['ENV']['CXX']
