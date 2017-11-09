@@ -23,6 +23,7 @@ import subprocess
 import sys
 sys.path += ['scons']
 from khEnvironment import khEnvironment
+from khEnvironment import getVersion
 
 
 # Path to crosstool root directory.
@@ -401,29 +402,7 @@ def is_version_ge(version_components, comparand_components):
 
   return True
 
-def FusionVersionNumber(source):
-  """Read the Fusion Version number from source file.
-
-  Args:
-    source: The file storing version number.
-  Returns:
-    The Fusion Version string, without '\n'.
-  """
-
-  try:
-    spec = open(source, 'r')
-    line = spec.readline()
-    while line:
-      if line[0] != '#':
-        version = line.strip()
-        if version:
-          return version
-      line = spec.readline()
-    print 'Unable to find Fusion Version Number'
-    Exit(1)
-  except Exception, exp:
-    print 'Unable to find Fusion Version Number:', exp
-fusion_version_number = FusionVersionNumber('fusion_version.txt')
+gee_version_number = getVersion()
 
 
 # create the environment that controls the builds
@@ -498,7 +477,7 @@ env.SourceCode('.', None)
 env.Alias('install', installdirs['root'])
 
 Export('env')
-Export('fusion_version_number')
+Export('gee_version_number')
 
 # needed by colorgcc
 home = os.environ.get('HOME', 0)

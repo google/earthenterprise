@@ -19,24 +19,7 @@ import time
 import os
 
 Import('env')
-
-# Get Fusion Version (use same version for server).
-# Based on Andrei's code in fusion/portableglobe/SConscript.
-def VersionNumber(source):
-  """Reads the Fusion Version number."""
-  try:
-    fp = open(source, 'r')
-    line = fp.readline()
-    while len(line) != 0:
-      if line[0] != '#':
-        version = line.strip()
-        if len(version):
-          return version
-      line = fp.readline()
-    print 'Unable to find Fusion Version Number.'
-    Exit(1)
-  except Exception, exp:
-    print 'Unable to find Fusion Version Number: ', exp
+Import('gee_version_number')
 
 def WriteBuildInfoFile(build_info, version_file_path):
   try:
@@ -54,8 +37,7 @@ if not os.path.exists(server_version_file_dir):
   os.mkdir(server_version_file_dir)
 
 server_version_file_path = File('%s/%s' %(server_version_file_dir, 'version.txt')).abspath
-version_basic = VersionNumber(fusion_version_basic_file_path)
-build_info = ('%s-%s' % (version_basic, time.strftime('%Y%m%d')))
+build_info = ('%s-%s' % (gee_version_number, time.strftime('%Y%m%d')))
 WriteBuildInfoFile(build_info, server_version_file_path)
 
 # Copy files from '../earth_enterprise/src/earthplugin/..' directory.

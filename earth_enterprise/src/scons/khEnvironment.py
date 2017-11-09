@@ -22,6 +22,7 @@ central place and reuse it in all SConscripts as much as possible.
 
 import os
 import os.path
+import subprocess
 import sys
 import time
 import SCons
@@ -159,6 +160,81 @@ def EmitBuildDateStrfunc(target, build_date):
   return 'EmitBuildDate(%s, %s)' % (target, build_date)
 
 
+def EmitVersionHeaderFunc(target):
+  """Emit version information to the target file."""
+
+  versionStr = getVersion()
+
+  fp = open(target, 'w')
+  fp.writelines(['// DO NOT MODIFY - auto-generated file\n',
+                 'extern const char *const GEE_VERSION = "' +
+                 versionStr + '";'
+                ])
+  fp.close()
+
+
+def EmitVersionHeaderStrfunc(target):
+  return 'EmitVersionHeader(%s)' % (target)
+  
+  
+def EmitVersionFunc(target):
+  """Emit version information to the target file."""
+
+  versionStr = getVersion()
+
+  fp = open(target, 'w')
+  fp.write(versionStr)
+  fp.close()
+
+
+def EmitVersionStrfunc(target):
+  return 'EmitVersion(%s)' % (target)
+  
+  
+def getVersion():
+  """Take the raw information parsed by git, and use it to
+     generate an appropriate version string for GEE."""
+  try:
+    raw = subprocess.check_output(['git', 'describe', '--tags',
+                                        '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*'])
+    raw = raw.rstrip()
+  except Exception:
+    return "Version Error"
+
+  if (len(raw.split("-")) < 4):
+    return raw
+
+  # Tear apart the information in the version string.
+  rawComponents = raw.split("-")
+  base = rawComponents[0]
+  patchRaw = rawComponents[1]
+  commits = rawComponents[2]
+  hash = rawComponents[3]
+  isFinal = (patchRaw[-5:] == "final")
+  
+  baseComponents = base.split(".")
+  major = int(baseComponents[0])
+  minor = int(baseComponents[1])
+  revision = int(baseComponents[2])
+  
+  patchComponents = patchRaw.split(".")
+  patch = int(patchComponents[0])
+  
+  # Determine how to update. Note that 'commits > 0' already,
+  # or else we would have returned earlier.
+  if isFinal:
+    patch = 1
+    revision = revision + 1
+  else:
+    patch = patch + 1
+    
+  # Rebuild.
+  base = '.'.join([str(x) for x in (major, minor, revision)])
+  patchRaw = str(patch) + ".beta"
+  
+  return '-'.join([base, patchRaw, commits, hash])
+  
+
 # our derived class
 class khEnvironment(Environment):
   """The derived environment class used in all of Fusion SConscripts."""
@@ -167,6 +243,11 @@ class khEnvironment(Environment):
                                            WriteToFileStrfunc)
   EmitBuildDate = SCons.Action.ActionFactory(EmitBuildDateFunc,
                                              EmitBuildDateStrfunc)
+  EmitVersion = SCons.Action.ActionFactory(EmitVersionFunc,
+                                           EmitVersionStrfunc)
+  EmitVersionHeader = SCons.Action.ActionFactory(EmitVersionHeaderFunc,
+                                           EmitVersionHeaderStrfunc)
+  
   rsync_cmd = 'rsync -rltpvu %s %s'
   rsync_excl_cmd = 'rsync -rltpvu --exclude %s %s %s'
 

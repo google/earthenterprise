@@ -73,7 +73,7 @@ SplashScreen::SplashScreen(const QPixmap& pix)
 
   QString versionText = QString("%1 v%2")
                         .arg(GetFusionProductShortName())
-                        .arg(FUSION_VERSION);
+                        .arg(GEE_VERSION);
 
   setFont(QFont("arial", 13));
   QPainter painter(&pix_, this);

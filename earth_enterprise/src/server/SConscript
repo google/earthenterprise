@@ -17,7 +17,7 @@
 
 
 Import('env')
-Import('fusion_version_number')
+Import('gee_version_number')
 
 def emitVersion(env, target, source):
    import time
@@ -25,13 +25,14 @@ def emitVersion(env, target, source):
        file = open(str(target[0]), 'w')
        file.writelines(['// DO NOT MODIFY - auto-generated file\n',
                         'const char *const KEYHOLE_SERVER_VERSION = "' +
-                        fusion_version_number + '";\n',
+                        gee_version_number + '";\n',
                         ])
    except Exception, exp:
        print "Exception in emitVersion:", exp
 
-env.Command('serverversion.c', ['#fusion_version.txt'],
-            [emitVersion])
+server_version_file = env.Command('serverversion.c', [ ],
+                                  [emitVersion])
+env.AlwaysBuild(server_version_file)
 serverVerObj = env.SharedObject('serverversion.c')
 env['SERVERVER'] = serverVerObj
 
