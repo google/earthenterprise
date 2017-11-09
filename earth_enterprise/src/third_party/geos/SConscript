@@ -60,7 +60,7 @@ geos_patch = geos_env.Command(
         '%s'
         'touch %s' % (build_root, patch_cmds, geos_target))])
 
-if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+if third_party_env['is_min_ubuntu'] and not third_party_env['native_cc']:
   env_opt = ''
 else:
   env_opt = ''

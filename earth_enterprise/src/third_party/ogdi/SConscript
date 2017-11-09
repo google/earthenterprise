@@ -59,7 +59,7 @@ ogdi_patch = ogdi_env.Command(
                               ogdi_env.GetBuildPath(i)), ogdi_patches)),
                       ogdi_target))])
 
-if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+if third_party_env['is_min_ubuntu'] and not third_party_env['native_cc']:
   env_opt = ''
 else:
   env_opt = ''

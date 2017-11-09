@@ -65,7 +65,7 @@ env['BUILDDATE'] = build_date_obj
 # For cross compiler set the binaries
 link_gcc = []
 
-if env['is_hardy'] and not env['native_cc']:
+if env['is_min_ubuntu'] and not env['native_cc']:
   env.AlwaysBuild(
       env.exportdirs['bin'], [], ['mkdir -p %s' % '$TARGET'])
   crosstool_version = env['crosstool_version']

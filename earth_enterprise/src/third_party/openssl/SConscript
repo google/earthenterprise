@@ -43,7 +43,7 @@ openssl_extract = openssl_env.Command(
             current_dir, current_dir, openssl_source, openssl_target))])
 
 # [2] Find out whether optimize or debug and set variables accordingly
-if third_party_env['is_hardy'] and third_party_env['native_cc']:
+if third_party_env['is_min_ubuntu'] and third_party_env['native_cc']:
   env_opt = 'CFLAGS="-L%s" CXXFLAGS="-L%s" LDCMD=g++ CC=%s CXX=%s' % (build_root, build_root, third_party_env['ENV']['CC'], third_party_env['ENV']['CXX'])
 else:
   env_opt = 'LDFLAGS=-shared-libgcc CFLAGS="-L%s" CXXFLAGS="-L%s" LDCMD=g++ CC=%s CXX=%s' % (
