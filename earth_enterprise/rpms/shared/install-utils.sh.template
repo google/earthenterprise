@@ -41,11 +41,18 @@ NEWLINECLEANER="sed -e s:\\n::g"
 out << '''
 load_systemrc_config()
 {
+    local VALUE
+
     if [ -f "$SYSTEMRC" ]; then
         # Read configuration:
-        ASSET_ROOT=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/assetroot/text()")
-        GEFUSIONUSER=$(xml_file_get_node_text "$SYSTEMRC" "//Systemrc/fusionUsername/text()")
-        GEGROUP=$(xml_file_get_node_text "$SYSTEMRC" "//Systemrc/userGroupname/text()")
+        VALUE=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/assetroot/text()")
+        [ -z "$VALUE" ] || ASSET_ROOT="$VALUE"
+
+        VALUE=$(xml_file_get_node_text "$SYSTEMRC" "//Systemrc/fusionUsername/text()")
+        [ -z "$VALUE" ] || GEFUSIONUSER="$VALUE"
+
+        VALUE=$(xml_file_get_node_text "$SYSTEMRC" "//Systemrc/userGroupname/text()")
+        [ -z "$VALUE" ] || GEGROUP="$VALUE"
     fi
 }
 
@@ -54,13 +61,11 @@ xml_file_get_xpath()
     local FILE="$1"
     local XPATH="$2"
 
-    local REPLY
-
     # Warning: `xmllint --noent` doesn't recognize named entities like
     # "&lt;" and "&gt;":
     echo "cat $XPATH" | xmllint --noent --nocdata --shell "$FILE" |
     # Skip the first and the last line:
-        tail -n -1 | head -n -1
+        tail -n +2 | head -n -1
 }
 '''
 %>
