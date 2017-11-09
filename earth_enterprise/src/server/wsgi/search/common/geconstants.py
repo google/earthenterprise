@@ -124,8 +124,8 @@ class Constants(object):
         "lower(city) = %s AND lower(subnational_code) = %s")
 
     self.example_query = (
-        "SELECT ${FUNC}(ST_Force3DZ(the_geom)) AS the_geom,Area(the_geom),"
-        "Perimeter(the_geom),sfar_distr,nbrhood, "
+        "SELECT ${FUNC}(ST_Force3DZ(the_geom)) AS the_geom,ST_Area(the_geom),"
+        "ST_Perimeter(the_geom),sfar_distr,nbrhood, "
         "GeometryType(the_geom) AS geom_type "
         "FROM san_francisco_neighborhoods "
         "WHERE "

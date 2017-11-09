@@ -268,7 +268,7 @@ class SearchSchemaParser(object):
       self._db_updater.Execute(self._sql_insert)
       # And create our geometry columns.
       self._sql_insert = (
-          "SELECT AddGeometryColumn('%s', 'the_geom', 4326, 'POINT', 2, false);\n" %
+          "SELECT AddGeometryColumn('%s', 'the_geom', 4326, 'POINT', 2);\n" %
           self._table_name)
       self._db_updater.Execute(self._sql_insert)
       self._sql_insert = ""

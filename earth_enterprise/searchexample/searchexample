@@ -32,10 +32,7 @@ then
     exit 0
   fi
   $BINDIR/createdb -U geuser --owner=geuser searchexample
-  $BINDIR/createlang -U geuser plpgsql searchexample
-  $BINDIR/psql -q -U geuser -d searchexample -f $SQLDIR/postgis.sql 2>/dev/null >/dev/null
-#  $BINDIR/psql -q -U geuser -d searchexample -f $SQLDIR/postgis_upgrade.sql 2>/dev/null >/dev/null
-  $BINDIR/psql -q -U geuser -d searchexample -f $SQLDIR/spatial_ref_sys.sql 2>/dev/null >/dev/null
+  $BINDIR/psql -U geuser -d searchexample -c "CREATE EXTENSION postgis"
   zcat $SHAREDIR/searchexample/searchexample_db.gz | $BINDIR/psql -q -U geuser -d searchexample 2>/dev/null >/dev/null
 else
   if [ $1 == "delete" ]
