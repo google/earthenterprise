@@ -75,7 +75,7 @@ for link, target in toolsSymlinks.items():
 
 
 # Version information that was here has been moved to a central
-# buildversion.h file.
+# gee_version.h file.
 fusionVerObj = env.SharedObject('fusionver.cpp')
 env['FUSIONVER'] = fusionVerObj
 

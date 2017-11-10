@@ -15,7 +15,7 @@
 //
 
 #include "fusionversion.h"
-#include <buildversion.h>
+#include <gee_version.h>
 #include <khFileUtils.h>
 #include <geInstallPaths.h>
 #include <khGetopt.h>

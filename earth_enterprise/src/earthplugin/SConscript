@@ -19,30 +19,18 @@ import time
 import os
 
 Import('env')
-Import('gee_version_number')
 
-def WriteBuildInfoFile(build_info, version_file_path):
-  try:
-    fp = open(version_file_path, 'w')
-    fp.write(build_info)
-    fp.close()
-  except Exception, exp:
-    print 'Unable to write Build Info File: ', exp
-
-fusion_version_basic_file_path = File('#fusion_version.txt').abspath
 server_version_file_dir = Dir('.').abspath
 
 # Create 'earthplugin' directory if it doesn't exist.
 if not os.path.exists(server_version_file_dir):
   os.mkdir(server_version_file_dir)
 
-server_version_file_path = File('%s/%s' %(server_version_file_dir, 'version.txt')).abspath
-build_info = ('%s-%s' % (gee_version_number, time.strftime('%Y%m%d')))
-WriteBuildInfoFile(build_info, server_version_file_path)
-
 # Copy files from '../earth_enterprise/src/earthplugin/..' directory.
 env.installDirExcluding('earth', Dir('#earthplugin').abspath, ['SConscript'])
 
 # Copy files from '../earth_enterprise/src/{REL_XXX|OPT_XXX}/earthplugin/..'
 # directory. There is only one file 'version.txt' in this folder.
-env.installDirExcluding('earth', '.', [])
+env.install('earth', File('../gee_version.txt').abspath)
+env.install('earth', File('../builddate.txt').abspath)
+
