@@ -1,6 +1,6 @@
 #! /bin/bash
 #
-# Copyright 2017 the Open GEE Contributors
+# Copyright 2017 The Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,8 +19,7 @@
 set +x
 
 #------------------------------------------------------------------------------
-
-# Versions and user names:
+# Definitions
 GEE="Google Earth Enterprise"
 GEEF="$GEE Fusion"
 
@@ -31,12 +30,11 @@ HOSTNAME_F="$(hostname -f | $NEWLINECLEANER)"
 HOSTNAME_S="$(hostname -s | $NEWLINECLEANER)"
 HOSTNAME_A="$(hostname -a | $NEWLINECLEANER)"
 
-NUM_CPUS="$(grep processor /proc/cpuinfo | wc -l | $NEWLINECLEANER)"
+NUM_CPUS="$(nproc)"
 
 # config values
 
 # additional variables
-IS_NEWINSTALL=false
 PUBLISH_ROOT_VOLUME=""
 
 EXISTING_HOST=""
@@ -55,12 +53,8 @@ main_postinstall()
 
     setup_fusion_daemon
 
-    # store fusion version
-    echo "$GEE_VERSION" > "$BASEINSTALLDIR_ETC/fusion_version"
-
-    chmod 755 "$BININSTALLROOTDIR/gefusion"
-    chmod 755 "$BININSTALLPROFILEDIR/ge-fusion.csh"
-    chmod 755 "$BININSTALLPROFILEDIR/ge-fusion.sh"
+    chown "root:$GEGROUP" "$BASEINSTALLDIR_VAR/run"
+    chown "root:$GEGROUP" "$BASEINSTALLDIR_VAR/log"
 
     check_fusion_master_or_slave
 
@@ -74,16 +68,17 @@ main_postinstall()
 #-----------------------------------------------------------------
 # Post-install Functions
 #-----------------------------------------------------------------
+
 setup_fusion_daemon()
 {
     # setup fusion daemon
-    printf "Setting up the Fusion daemon...\n"
+    echo "Setting up the Fusion daemon..."
 
-    test -f "$CHKCONFIG" && "$CHKCONFIG" --add gefusion
-    test -f "$INITSCRIPTUPDATE" && "$INITSCRIPTUPDATE" -f gefusion remove
-    test -f "$INITSCRIPTUPDATE" && "$INITSCRIPTUPDATE" gefusion start 90 2 3 4 5 . stop 10 0 1 6 .
-    
-    printf "Fusion daemon setup ... Done\n"
+    [ -f "$INITSCRIPT_UPDATE" ] && "$INITSCRIPT_UPDATE" -f gefusion remove
+    [ -f "$INITSCRIPT_UPDATE" ] && "$INITSCRIPT_UPDATE" gefusion start 90 2 3 4 5 . stop 10 0 1 6 .
+    [ -f "$CHKCONFIG" ] && "$CHKCONFIG" --add gefusion
+
+    echo "Fusion daemon setup ... Done"
 }
 
 create_system_main_directories()
@@ -100,7 +95,6 @@ compare_asset_root_publishvolume()
         if [ -d "$ASSET_ROOT" ] && [ -d "$PUBLISH_ROOT_VOLUME" ]; then
             VOL_ASSETROOT=$(df "$ASSET_ROOT" | grep -v ^Filesystem | grep -Eo '^[^ ]+')
             VOL_PUBLISHED_ROOT_VOLUME=$(df "$PUBLISH_ROOT_VOLUME" | grep -v ^Filesystem | grep -Eo '^[^ ]+')
-            
         fi
     fi
 }
@@ -108,7 +102,7 @@ compare_asset_root_publishvolume()
 check_fusion_master_or_slave()
 {
     if [ -f "$ASSET_ROOT/.config/volumes.xml" ]; then
-        EXISTING_HOST=$(xmllint --xpath "//VolumeDefList/volumedefs/item[1]/host/text()" "$ASSET_ROOT/.config/volumes.xml" | $NEWLINECLEANER)
+        EXISTING_HOST=$(xml_file_get_xpath "$ASSET_ROOT/.config/volumes.xml" "//VolumeDefList/volumedefs/item[1]/host/text()" | $NEWLINECLEANER)
 
         case "$EXISTING_HOST" in
             $HOSTNAME_F|$HOSTNAME_A|$HOSTNAME_S|$HOSTNAME)
@@ -150,7 +144,7 @@ install_or_upgrade_asset_root()
     chmod 644 "$SYSTEMRC"
     chown "$GEFUSIONUSER:$GEGROUP" "$SYSTEMRC"
 
-    if [ "$IS_NEWINSTALL" == true ]; then
+    if [ ! -d "$ASSET_ROOT/.config" ]; then
         "$BASEINSTALLDIR_OPT/bin/geconfigureassetroot" --new --noprompt \
             --assetroot "$ASSET_ROOT" --srcvol "$SOURCE_VOLUME"
         chown -R "$GEFUSIONUSER:$GEGROUP" "$ASSET_ROOT"
@@ -158,12 +152,12 @@ install_or_upgrade_asset_root()
         # upgrade asset root -- if this is a master
         if [ "$IS_SLAVE" == false ]; then
             # TODO: Verify this logic -- this is what is defined in the
-            # installer documentation, but need confirmation
+            # installer documentation, but needs confirmation
             keyvalue_file_get "$GEE_INSTALL_KV_PATH" gegroup_existed NEW_GEFUSIONUSER
             keyvalue_file_get "$GEE_INSTALL_KV_PATH" gefusionuser_existed NEW_GEFUSIONUSER
             if [ "$NEW_GEGROUP" == true ] || [ "$NEW_GEFUSIONUSER" == true ]; then
                 NOCHOWN=""
-                UPGRADE_MESSAGE="\nThe upgrade will fix permissions for the asset root and source volume. This may take a while.\n"
+                UPGRADE_MESSAGE="The upgrade will fix permissions for the asset root and source volume. This may take a while."
             else
                 NOCHOWN="--nochown"
                 UPGRADE_MESSAGE=""
@@ -175,6 +169,7 @@ The asset root must be upgraded to work with the current version of $GEEF $GEE_V
 You cannot use an upgraded asset root with older versions of $GEEF. 
 Consider backing up your asset root. $GEEF will warn you when
 attempting to run with a non-upgraded asset root.
+
 $UPGRADE_MESSAGE
 END
             
@@ -196,13 +191,14 @@ final_assetroot_configuration()
     else
         "$BASEINSTALLDIR_OPT/bin/geselectassetroot" --assetroot "$ASSET_ROOT"
 
-        mkdir -p "$BASEINSTALLDIR_OPT/share/tutorials"
         "$BASEINSTALLDIR_OPT/bin/geconfigureassetroot" --addvolume \
             "opt:$BASEINSTALLDIR_OPT/share/tutorials" --noprompt --nochown
         if [ $? -eq 255 ]; then
-            echo -e "The geconfigureassetroot utility has failed on attempting"
-            echo -e "to add the volume 'opt:$BASEINSTALLDIR_OPT/share/tutorials'."
-            echo -e "This is probably due to a volume named 'opt' already exists."
+            cat <<END
+The geconfigureassetroot utility has failed on attempting
+to add the volume 'opt:$BASEINSTALLDIR_OPT/share/tutorials'.
+This is probably due to a volume named "opt"'s already existing.
+END
         fi
     fi
 }
