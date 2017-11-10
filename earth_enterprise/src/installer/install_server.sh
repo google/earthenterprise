@@ -26,6 +26,7 @@ SCRIPTDIR=`dirname $0`
 # config values
 PUBLISHER_ROOT="/gevol/published_dbs"
 INSTALL_LOG="$INSTALL_LOG_DIR/geserver_install_$(date +%Y_%m_%d.%H%M%S).log"
+BACKUP_DIR="$BASEINSTALLDIR_VAR/server-backups/$(date +%Y_%m_%d.%H%M%S)"
 
 # script arguments
 BACKUPSERVER=true
