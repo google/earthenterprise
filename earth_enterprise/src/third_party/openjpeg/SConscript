@@ -49,6 +49,7 @@ openjpeg_extract = openjpeg_env.Command(
 #  env_opt = ''
 #else:
 #  env_opt = ''
+env_opt = ''
 
 if openjpeg_env['release'] or openjpeg_env['optimize']:
   config_opt = '-DCMAKE_BUILD_TYPE:enum=Release '
