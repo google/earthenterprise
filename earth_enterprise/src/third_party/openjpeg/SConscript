@@ -116,10 +116,10 @@ if 'install' in COMMAND_LINE_TARGETS:
       '%s/lib/' % install_root_opt,
       '%s/' % openjpeg_env.installdirs['common_lib'],
       openjpeg_install_build, 'install')
-  openjpeg_env.InstallFileOrDir(
-      '%s/share/doc/packages/' % install_root_opt,
-      '%s/doc/packages/' % (
-          openjpeg_env.installdirs['common_share']),
-      openjpeg_install_build, 'install')
+#  openjpeg_env.InstallFileOrDir(
+#      '%s/share/doc/packages/' % install_root_opt,
+#      '%s/doc/packages/' % (
+#          openjpeg_env.installdirs['common_share']),
+#      openjpeg_install_build, 'install')
 
 Return('openjpeg_extract openjpeg_install_build')
