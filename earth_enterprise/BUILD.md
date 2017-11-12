@@ -1,20 +1,20 @@
 # Building Earth Enterprise Fusion and Server
 
-__NOTE: If you want to build, install, or run Portable server, see the
-[Portable Server page](https://github.com/google/earthenterprise/wiki/Portable-Server).__
+__NOTE:__ If you want to build, install, or run Portable server, see the
+[Portable Server page](https://github.com/google/earthenterprise/wiki/Portable-Server).
 
 Building is currently supported for 64-bit versions of Ubuntu 14.04 LTS,
 Ubuntu 16.04 LTS, RHEL 6, RHEL 7, CentOS 6, and CentOS 7.
 
-## GEE 5.2.1 Build Prerequisites (All platforms)
+## GEE 5.2.1 Build Prerequisites (all platforms)
 
 1. Setup required Tools and Dependencies:
 
     * git 1.7.1+
     * git lfs
     * gcc 4.8.x
-    * scons 2.0.x+
-    * python 2.6.x+ or python 2.7.x+. __Python 3.0+ is not supported.__
+    * scons 2.0.x
+    * python 2.6.x or python 2.7.x. __Python 3.0+ is not supported.__
 
 Different operating systems have different means to setup up these dependencies.
 For Linux build environments, see either the [Redhat and Centos Setup Instructions](./BUILD_RHEL_CentOS.md)
@@ -24,9 +24,9 @@ setup may be performed by executing the [build script](../scripts/get-gee-build-
 
 1. Clone the _earthenterprise_ repository in your build environment:
 
-    __NOTE: For development you should follow the instructions on the [Git Contributions](https://github.com/google/earthenterprise/wiki/Development:-Git-Contributions)
+    __NOTE:__ For development you should follow the instructions on the [Git Contributions](https://github.com/google/earthenterprise/wiki/Development:-Git-Contributions)
     page to clone the GEE repo to your personal fork, so that you can submit
-    git pull-requests back to this repo.__
+    git pull-requests back to this repo.
 
     * Method 1: Clone and download LFS files in one step (may be slower and
         more error prone):
