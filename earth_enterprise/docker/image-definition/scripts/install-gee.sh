@@ -3,13 +3,8 @@
 # This script installs Open Google Earth Enterprise Server and Fusion.
 #
 # It has to be run in the directory where the Open GEE repository has been
-# cloned.
-
-# Prepare the install package:
-
-# Copy binaries to install package location:
-# cd earthenterprise/earth_enterprise || exit 1
-# scons -j8 release=1 stage_install || exit 1
+# cloned, and after Open GEE and Fusion have been built and staged for
+# install.
 
 # Tests whether a glob matches any files.
 #
