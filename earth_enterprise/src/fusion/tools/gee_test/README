@@ -15,7 +15,11 @@
 
 Tools for building tutorial databases (2d, 3d, and 3d Time Machine), and running tests against these databases.
 
-You must add a source volume with the names "tutorial":
+You will need to set up the asset root:
+sudo /opt/google/bin/geconfigureassetroot --new --assetroot  /usr/local/google/gevol_test/assets
+
+You must also add source volumes with the names "src" and "tutorial", respectively:
+/usr/local/google/gevol_test/src
 /opt/google/share/tutorials/fusion
 
 sudo /opt/google/bin/geselectassetroot --assetroot  /usr/local/google/gevol_test/assets
