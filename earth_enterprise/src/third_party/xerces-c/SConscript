@@ -43,7 +43,7 @@ xerces_c_extract = xerces_c_env.Command(
         'touch %s' % (
             current_dir, current_dir, xerces_c_source, xerces_c_target))])
 
-if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+if third_party_env['is_min_ubuntu'] and not third_party_env['native_cc']:
   env_opt = ''
 else:
   env_opt = ''

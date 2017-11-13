@@ -46,7 +46,7 @@ libxml2_extract = libxml2_env.Command(
         'touch %s' % (
             current_dir, current_dir, libxml2_source, libxml2_target))])
 
-if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+if third_party_env['is_min_ubuntu'] and not third_party_env['native_cc']:
   env_opt = 'ac_cv_prog_cc_c99=no'
 else:
   env_opt = ''

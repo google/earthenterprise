@@ -64,7 +64,7 @@ env_opt = ('QTDIR=%s '
            'QMAKE_LIBS_OPENGL="-lGL -lXmu" LD_LIBRARY_PATH=%s/lib' % (
                build_root, build_root))
 
-if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+if third_party_env['is_min_ubuntu'] and not third_party_env['native_cc']:
   env_opt += ''
 else:
   env_opt += ''

@@ -366,7 +366,7 @@ function gee_showGlobeSize() {
  * Check if task is done.
  */
 function gee_checkTaskDone() {
-  if (GEE_interval == '') {
+  if (GEE_interval == '' && GEE_cancelled == 0) {
     alert('Got called but GEE interval is empty.');
   }
 
