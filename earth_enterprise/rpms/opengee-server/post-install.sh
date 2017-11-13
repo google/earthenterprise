@@ -21,7 +21,6 @@ set +x
 GEE="Google Earth Enterprise"
 PUBLISHER_ROOT="/gevol/published_dbs"
 INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
-CHKCONFIG="/sbin/chkconfig"
 PGSQL_DATA="/var/opt/google/pgsql/data"
 PGSQL_LOGS="/var/opt/google/pgsql/logs"
 PGSQL_PROGRAM="/opt/google/bin/pg_ctl"
@@ -48,7 +47,7 @@ main_postinstall()
     setup_geserver_daemon
 
     # 5) Register publish root
-    $BASEINSTALLDIR_OPT/bin/geconfigurepublishroot --noprompt --path=$PUBLISHER_ROOT
+    "$BASEINSTALLDIR_OPT/bin/geconfigurepublishroot" --noprompt "--path=$PUBLISHER_ROOT"
 
     # 6) Install the GEPlaces and SearchExample Databases
     install_search_databases
@@ -60,7 +59,7 @@ main_postinstall()
     # 8) Run geecheck config script
     # If file ‘/opt/google/gehttpd/cgi-bin/set_geecheck_config.py’ exists:
     if [ -f "$GEE_CHECK_CONFIG_SCRIPT" ]; then
-        cd $BASEINSTALLDIR_OPT/gehttpd/cgi-bin
+        cd "$BASEINSTALLDIR_OPT/gehttpd/cgi-bin"
         python ./set_geecheck_config.py
     fi
 
@@ -72,7 +71,8 @@ main_postinstall()
 # Post-install Functions
 #-----------------------------------------------------------------
 
-run_as_user() {
+run_as_user()
+{
     local use_su=`su $1 -c 'echo -n 1' 2> /dev/null  || echo -n 0`
     if [ "$use_su" -eq 1 ] ; then
         >&2 echo "cd / ;su $1 -c \"$2\""
@@ -88,7 +88,7 @@ configure_publish_root()
     # Update PUBLISHER_ROOT if geserver already installed
     local STREAM_SPACE="$GEHTTPD_CONF/stream_space"
     if [ -e $STREAM_SPACE ]; then
-        PUBLISHER_ROOT=`cat $STREAM_SPACE |cut -d" " -f3 |sed 's/.\{13\}$//'`
+        PUBLISHER_ROOT=`cat "$STREAM_SPACE" |cut -d" " -f3 |sed 's/.\{13\}$//'`
     fi
 }
 
@@ -110,7 +110,7 @@ modify_files()
 
     # c) Create a new file ‘/etc/opt/google/fusion_server_version’ and
     # add the below text to it.
-    echo $RPM_PACKAGE_VERSION >/etc/opt/google/fusion_server_version
+    echo "$RPM_PACKAGE_VERSION" >/etc/opt/google/fusion_server_version
 
     # d) Create a new file ‘/etc/init.d/gevars.sh’ and prepend the below lines.
     echo -e "GEAPACHEUSER=$GEAPACHEUSER\nGEPGUSER=$GEPGUSER\nGEFUSIONUSER=$GEFUSIONUSER\nGEGROUP=$GEGROUP" >$BININSTALLROOTDIR/gevars.sh
@@ -175,14 +175,14 @@ fix_postinstall_filepermissions()
     /opt/google/bin/geserveradmin --disable_cutter
 
     # Restrict permissions to uninstaller and installer logs
-    chmod -R go-rwx $BASEINSTALLDIR_OPT/install
+    chmod -R go-rwx "$BASEINSTALLDIR_OPT/install"
 }
 
 reset_pgdb()
 {
     # TODO check if correct
     # a) Always do an upgrade of the psql db
-    echo 2 | run_as_user $GEPGUSER "/opt/google/bin/geresetpgdb upgrade"
+    echo 2 | run_as_user "$GEPGUSER" "/opt/google/bin/geresetpgdb upgrade"
     echo -e "upgrade done"
 
     # b) Check for Success of PostGresDb
@@ -199,33 +199,33 @@ reset_pgdb()
 setup_geserver_daemon()
 {   
     # setup geserver daemon
-    test -f $CHKCONFIG && $CHKCONFIG --add geserver
-    test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE -f geserver remove
-    test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE geserver start 90 2 3 4 5 . stop 10 0 1 6 .
-    test -f $CHKCONFIG && $CHKCONFIG --add geserver # for redhat...moved here
+    [ -f $CHKCONFIG ] && $CHKCONFIG --add geserver
+    [ -f $INITSCRIPTUPDATE ] && $INITSCRIPTUPDATE -f geserver remove
+    [ -f $INITSCRIPTUPDATE ] && $INITSCRIPTUPDATE geserver start 90 2 3 4 5 . stop 10 0 1 6 .
+    [ -f $CHKCONFIG ] && $CHKCONFIG --add geserver # for redhat...moved here
 }
 
 install_search_databases()
 {   
   # a) Start the PSQL Server
     echo "# a) Start the PSQL Server "
-    run_as_user $GEPGUSER "$PGSQL_PROGRAM -D $PGSQL_DATA -l $PGSQL_LOGS/pg.log start -w"
+    run_as_user "$GEPGUSER" "$PGSQL_PROGRAM -D $PGSQL_DATA -l $PGSQL_LOGS/pg.log start -w"
 
     echo "# b) Install GEPlaces Database"
     # b) Install GEPlaces Database
-    run_as_user $GEPGUSER "/opt/google/share/geplaces/geplaces create"
+    run_as_user "$GEPGUSER" "/opt/google/share/geplaces/geplaces create"
     
     echo "# c) Install SearchExample Database "
     # c) Install SearchExample Database
-    run_as_user $GEPGUSER "/opt/google/share/searchexample/searchexample create"
+    run_as_user "$GEPGUSER" "/opt/google/share/searchexample/searchexample create"
 
     # d) Stop the PSQL Server
     echo "# d) Stop the PSQL Server"
-    run_as_user $GEPGUSER "$PGSQL_PROGRAM -D $PGSQL_DATA stop"
+    run_as_user "$GEPGUSER" "$PGSQL_PROGRAM -D $PGSQL_DATA stop"
 }
 
 #-----------------------------------------------------------------
 # Post-install Main
 #-----------------------------------------------------------------
 
-main_postinstall "$@"
+main_postinstall $@

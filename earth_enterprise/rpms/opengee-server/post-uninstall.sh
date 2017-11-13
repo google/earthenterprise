@@ -27,8 +27,8 @@ GEE="Google Earth Enterprise"
 main_postuninstall()
 {
     # if we really get error, something really broken elsewhere
-    userdel $GEAPACHEUSER
-    userdel $GEPGUSER
+    userdel "$GEAPACHEUSER"
+    userdel "$GEPGUSER"
 }
 
 
@@ -36,4 +36,4 @@ main_postuninstall()
 # Post-Uninstall Main
 #-----------------------------------------------------------------
 
-main_postuninstall "$@"
+main_postuninstall $@

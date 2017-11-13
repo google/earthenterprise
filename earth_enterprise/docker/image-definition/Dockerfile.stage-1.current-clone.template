@@ -10,8 +10,10 @@ COPY . /root/opengee/build/earthenterprise
 RUN cd /root/opengee/build/earthenterprise && \
     git clean -Xf && \
     rm -Rf earth_enterprise/src/NATIVE-{REL,DBG,OPT}-x86_64 && \
-    cd .. && \
-    /root/opengee/bin/build-gee.sh && \
+    cd earth_enterprise/rpms/ && \
+    ./gradlew clean && \
+    cd ../../.. && \
+    /root/opengee/bin/build-gee.sh --packages --copy-packages && \
     /root/opengee/bin/build-portable-server.sh
 
 # We can't proceed further with installing GEE from the Dockerfile, because the

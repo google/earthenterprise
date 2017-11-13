@@ -1,6 +1,6 @@
 #! /bin/bash
 #
-# Copyright 2017 the Open GEE Contributors
+# Copyright 2017 The Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +16,9 @@
 
 remove_users_and_groups()
 {
-    [ -n "$(getent passwd "$GEFUSIONUSER")" ] && userdel "$GEFUSIONUSER"
+    if [ -n "$(getent passwd "$GEFUSIONUSER")" ]; then
+        userdel "$GEFUSIONUSER"
+    fi
 }
 
 

@@ -152,9 +152,6 @@ task openGeeSharedFiles(type: Copy) {
             def templateDir = it.file.parent
 
             def templateVariables = [
-                'templateFile': it.file,
-                'templateSourcePath': it.sourcePath,
-                'templateTargetPath': it.path,
                 'openGeeVersion': openGeeVersion
             ]
 
@@ -172,7 +169,7 @@ task openGeeSharedFiles(type: Copy) {
                 },
             )
 
-            it.expand(templateVariables)
+            it.expand(templateVariables.clone())
         }
     }
 }
@@ -275,7 +272,7 @@ task openGeeCommonDeb (type: Deb) {
     }
 }
 
-task openGeeServerRpm (type: Rpm) {
+task openGeeServerRpm (type: Rpm, dependsOn: openGeeSharedFiles) {
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     packageName = 'opengee-server'
     release = '1'
@@ -283,6 +280,14 @@ task openGeeServerRpm (type: Rpm) {
     user = 'root'
     permissionGroup = 'root'
     packageGroup = 'Application/Productivity'
+
+    // Prefix variable definitions to all install scripts:
+    installUtils = file('build/shared/install-utils.sh')
+
+    preInstall = file('opengee-server/pre-install.sh')
+    postInstall = file('opengee-server/post-install.sh')
+    preUninstall = file('opengee-server/pre-uninstall.sh')
+    postUninstall = file('opengee-server/post-uninstall.sh')
 
     directory('/opt/google/install', 0700)
     directory('/opt/google/gehttpd/logs', 0755)
@@ -317,19 +322,13 @@ task openGeeServerRpm (type: Rpm) {
     from(stagedInstallDir_server_apachesupport) {
         into packageInstallRootDir
     }
-
-    // Prefix variable definitions to all install scripts:
-    installUtils = file('build/shared/install-utils.sh')
-
-    preInstall = file('opengee-server/pre-install.sh')
-    postInstall = file('opengee-server/post-install.sh')
-    preUninstall = file('opengee-server/pre-uninstall.sh')
-    postUninstall = file('opengee-server/post-uninstall.sh')
 }
 
 task openGeeServerDeb (type: Deb) {
-    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     packageName = 'opengee-server'
+
+    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
+
     from(stagedInstallDir_server_etc) {
         into new File(packageInstallRootDir, 'etc')
     }
@@ -343,7 +342,7 @@ task openGeeServerDeb (type: Deb) {
     }
 }
 
-task openGeeFusionRpm (type: Rpm) {
+task openGeeFusionRpm (type: Rpm, dependsOn: openGeeSharedFiles) {
     packageName = 'opengee-fusion'
     release = '1'
     version = openGeeVersion
@@ -371,15 +370,67 @@ built from raster, vector, and location properties data.
 
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
 
+    // Prefix variable definitions to all install scripts:
+    installUtils = file('build/shared/install-utils.sh')
+
+    preInstall = file('opengee-fusion/pre-install.sh')
+    postInstall = file('opengee-fusion/post-install.sh')
+    preUninstall = file('opengee-fusion/pre-uninstall.sh')
+    postUninstall = file('opengee-fusion/post-uninstall.sh')
+
+    directory('/opt/google/share/tutorials', 0755)
+    directory('/var/opt/google/run', 0775)
+    directory('/var/opt/google/log', 0775)
+
+    filesMatching(
+        ['/etc/init.d/gefusion',
+         '/etc/profile.d/ge-fusion.csh',
+         '/etc/profile.d/ge-fusion.sh']
+    ) {
+        it.mode = 0755
+    }
+
     from(stagedInstallDir_fusion) {
         into packageInstallRootDir
     }
 
-    // Prefix variable definitions to all install scripts:
-    installUtils = file('build/shared/install-utils.sh')
+    from(file('opengee-fusion/install')) {
+        into packageInstallRootDir
 
-    postInstall = file('opengee-fusion/post-install.sh')
-    preUninstall = file('opengee-fusion/pre-uninstall.sh')
+        def templateSuffix = '.template'
+        def stringStripSuffix = { value, suffix ->
+            return value.substring(0, value.length() - suffix.length())
+        }
+
+        eachFile {
+            if (it.getSourceName().endsWith(templateSuffix)) {
+                it.setName(stringStripSuffix(
+                    it.getSourceName(), templateSuffix))
+
+                def templateDir = it.file.parent
+
+                def templateVariables = [
+                    'openGeeVersion': openGeeVersion
+                ]
+
+                def expandTemplate = { text_or_file ->
+                    def engine = new groovy.text.SimpleTemplateEngine()
+                    def template = engine.createTemplate(text_or_file).make(templateVariables)
+
+                    return template.toString()
+                }
+
+                templateVariables.put(
+                    'expandTemplateFile',
+                    { relative_path ->
+                        expandTemplate(new File(new File(templateDir), relative_path))
+                    },
+                )
+
+                it.expand(templateVariables.clone())
+            }
+        }
+    }
 }
 
 task openGeeFusionDeb (type: Deb) {
