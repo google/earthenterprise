@@ -35,6 +35,8 @@ var GEE_force_arguments = '';
 var GEE_is_2d = '';
 // Place holder for customized cleanup.
 var GEE_cleanUp = function() {};
+// Indicates if the current build has already been cancelled
+var GEE_cancelled = '';
 
 /**
  * Cancel current build.
@@ -42,6 +44,7 @@ var GEE_cleanUp = function() {};
 function GEE_cancelBuild() {
   var div = gees.dom.get('globe');
   gees.dom.setHtml(div, 'Cancelling ...');
+  GEE_cancelled = 1;
   uid = GEE_uid;
   GEE_cleanUp();
   url = '/cgi-bin/globe_cutter_app.py?cmd=CANCEL&uid=' + uid +
@@ -79,6 +82,7 @@ function GEE_runAjaxSequence(sequence, update_time, showGlobeSize, cleanup) {
 
   // Initialize sequence
   GEE_start_time = new Date();
+  GEE_cancelled = 0;
   var div = gees.dom.get('globe');
   gees.dom.setHtml(div, '<hr>Working ...');
   GEE_sequence = [];

@@ -87,7 +87,7 @@ python_configure = python_env.Command(
             python_target))])
 
 # [4] Build python
-if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+if third_party_env['is_min_ubuntu'] and not third_party_env['native_cc']:
   ld = '%s -shared' % python_env['ENV']['CXX']
 else:
   ld = '%s -shared' % python_env['ENV']['CXX']
