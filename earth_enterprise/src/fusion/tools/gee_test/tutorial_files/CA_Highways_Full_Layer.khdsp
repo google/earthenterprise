@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<LayerConfig>
+
+  <channelId>5</channelId>
+
+  <assetRef>Resources/Vector/CAHighways.kvasset</assetRef>
+
+  <legend></legend>
+
+  <lodForce/>
+
+  <displayRules>
+    <displayRule>
+      <name>Major Freeways</name>
+      <feature>
+        <style>
+          <id>1</id>
+          <polyColor>
+            <polyColor_element>255</polyColor_element>
+            <polyColor_element>255</polyColor_element>
+            <polyColor_element>255</polyColor_element>
+            <polyColor_element>255</polyColor_element>
+          </polyColor>
+          <lineColor>
+            <lineColor_element>0</lineColor_element>
+            <lineColor_element>0</lineColor_element>
+            <lineColor_element>255</lineColor_element>
+            <lineColor_element>255</lineColor_element>
+          </lineColor>
+          <lineWidth>3</lineWidth>
+          <altitudeMode>ClampToGround</altitudeMode>
+          <extrude>0</extrude>
+          <enableCustomHeight>0</enableCustomHeight>
+          <customHeightVariableName></customHeightVariableName>
+          <customHeightOffset>0</customHeightOffset>
+          <customHeightScale>1</customHeightScale>
+          <icon>
+            <type>Internal</type>
+            <href>shield1</href>
+            <normalColor>
+              <normalColor_element>255</normalColor_element>
+              <normalColor_element>255</normalColor_element>
+              <normalColor_element>255</normalColor_element>
+              <normalColor_element>255</normalColor_element>
+            </normalColor>
+            <highlightColor>
+              <highlightColor_element>255</highlightColor_element>
+              <highlightColor_element>255</highlightColor_element>
+              <highlightColor_element>255</highlightColor_element>
+              <highlightColor_element>255</highlightColor_element>
+            </highlightColor>
+            <normalScale>1</normalScale>
+            <highlightScale>1</highlightScale>
+          </icon>
+          <label>
+            <label>«NAME»</label>
+            <reformat>0</reformat>
+            <normalColor>
+              <normalColor_element>255</normalColor_element>
+              <normalColor_element>255</normalColor_element>
+              <normalColor_element>255</normalColor_element>
+              <normalColor_element>255</normalColor_element>
+            </normalColor>
+            <highlightColor>
+              <highlightColor_element>255</highlightColor_element>
+              <highlightColor_element>255</highlightColor_element>
+              <highlightColor_element>255</highlightColor_element>
+              <highlightColor_element>255</highlightColor_element>
+            </highlightColor>
+            <normalScale>1</normalScale>
+            <highlightScale>1</highlightScale>
+            <labelMode>Original</labelMode>
+          </label>
+        </style>
+        <maxLevel>18</maxLevel>
+        <featureType>LineZ</featureType>
+        <minLevel>9</minLevel>
+        <drawAsRoads>1</drawAsRoads>
+        <roadLabelType>Shield</roadLabelType>
+        <polygonDrawMode>FillAndOutline</polygonDrawMode>
+        <maxError>0.5</maxError>
+      </feature>
+      <filter>
+        <match>MatchAll</match>
+        <selectRules>
+          <selectRule>
+            <op>Equal</op>
+            <fieldNum>6</fieldNum>
+            <rvalue>Limited Access Highway</rvalue>
+          </selectRule>
+        </selectRules>
+        <matchScript></matchScript>
+      </filter>
+    </displayRule>
+    <displayRule>
+      <name>default select all</name>
+      <feature>
+        <style>
+          <id>2</id>
+          <polyColor>
+            <polyColor_element>255</polyColor_element>
+            <polyColor_element>255</polyColor_element>
+            <polyColor_element>255</polyColor_element>
+            <polyColor_element>255</polyColor_element>
+          </polyColor>
+          <lineColor>
+            <lineColor_element>255</lineColor_element>
+            <lineColor_element>0</lineColor_element>
+            <lineColor_element>0</lineColor_element>
+            <lineColor_element>255</lineColor_element>
+          </lineColor>
+          <lineWidth>2</lineWidth>
+          <altitudeMode>ClampToGround</altitudeMode>
+          <extrude>0</extrude>
+          <enableCustomHeight>0</enableCustomHeight>
+          <customHeightVariableName></customHeightVariableName>
+          <customHeightOffset>0</customHeightOffset>
+          <customHeightScale>1</customHeightScale>
+          <icon>
+            <type>Internal</type>
+            <href>771</href>
+            <normalColor>
+              <normalColor_element>255</normalColor_element>
+              <normalColor_element>255</normalColor_element>
+              <normalColor_element>255</normalColor_element>
+              <normalColor_element>255</normalColor_element>
+            </normalColor>
+            <highlightColor>
+              <highlightColor_element>255</highlightColor_element>
+              <highlightColor_element>255</highlightColor_element>
+              <highlightColor_element>255</highlightColor_element>
+              <highlightColor_element>255</highlightColor_element>
+            </highlightColor>
+            <normalScale>1</normalScale>
+            <highlightScale>1</highlightScale>
+          </icon>
+          <label>
+            <label>«NAME»</label>
+            <reformat>0</reformat>
+            <normalColor>
+              <normalColor_element>255</normalColor_element>
+              <normalColor_element>255</normalColor_element>
+              <normalColor_element>255</normalColor_element>
+              <normalColor_element>255</normalColor_element>
+            </normalColor>
+            <highlightColor>
+              <highlightColor_element>255</highlightColor_element>
+              <highlightColor_element>255</highlightColor_element>
+              <highlightColor_element>255</highlightColor_element>
+              <highlightColor_element>255</highlightColor_element>
+            </highlightColor>
+            <normalScale>1</normalScale>
+            <highlightScale>1</highlightScale>
+            <labelMode>Original</labelMode>
+          </label>
+        </style>
+        <maxLevel>18</maxLevel>
+        <featureType>LineZ</featureType>
+        <minLevel>9</minLevel>
+        <drawAsRoads>1</drawAsRoads>
+        <roadLabelType>Label</roadLabelType>
+        <polygonDrawMode>FillAndOutline</polygonDrawMode>
+        <maxError>0.5</maxError>
+      </feature>
+      <filter>
+        <match>MatchAll</match>
+        <selectRules/>
+        <matchScript></matchScript>
+      </filter>
+    </displayRule>
+  </displayRules>
+
+  <preserveTextLevel>24</preserveTextLevel>
+
+  <allowFeatureDuplication>0</allowFeatureDuplication>
+
+  <isVisible>1</isVisible>
+
+  <isEnabled>1</isEnabled>
+
+  <isExpandable>1</isExpandable>
+
+  <asset_uuid>7672ed44-c091-11dc-86ae-7da33409e950</asset_uuid>
+
+  <defaultLocale config_version="1">
+    <name useDefault="0">California Highways</name>
+    <icon useDefault="0">
+      <type>Internal</type>
+      <href>shield1</href>
+    </icon>
+    <labels useDefault="0">
+      <label>0</label>
+    </labels>
+    <is_checked useDefault="0">1</is_checked>
+    <desc useDefault="0"></desc>
+    <look_at useDefault="0">-122.4327494982399|37.76678117597882|69501.85994216389|-0.001029611528592035|27.43950722337482</look_at>
+    <kml_layer_url useDefault="0"></kml_layer_url>
+    <required_client_version useDefault="0"></required_client_version>
+    <required_client_vram useDefault="0"></required_client_vram>
+    <probability useDefault="0"></probability>
+    <save_locked useDefault="0">1</save_locked>
+    <required_user_agent useDefault="0"></required_user_agent>
+    <required_client_capabilities useDefault="0"></required_client_capabilities>
+  </defaultLocale>
+
+  <locales/>
+
+  <layerContextScript></layerContextScript>
+
+  <allowEmptyLayer>0</allowEmptyLayer>
+
+  <skipLayer>0</skipLayer>
+
+  <searchFields/>
+
+  <meta/>
+
+  <searchStyle></searchStyle>
+
+</LayerConfig>
+
