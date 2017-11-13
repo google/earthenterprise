@@ -116,6 +116,79 @@ def postGisInstallDir = new File(
 
 def postGisInstallDir_opt = new File(postGisInstallDir, 'opt')
 
+// Returns the path to a given command found in a standard system PATH:
+def resolveCommandPath(command_name) {
+    def process = ["bash", "-c", "type -P -p ${command_name}"].execute()
+    def stdoutBuffer = new StringBuffer()
+    def stderrBuffer = new StringBuffer()
+
+    process.waitForProcessOutput(stdoutBuffer, stderrBuffer)
+    if (process.waitFor() != 0) {
+        throw new IllegalArgumentException("""\
+            Failed to find command ${command_name} in current PATH!  Error output:
+            ${stderrBuffer}""".stripIndent())
+    }
+
+    // Strip a trailing new-line character:
+    if (stdoutBuffer.charAt(stdoutBuffer.length() - 1) == "\n") {
+        stdoutBuffer.setLength(stdoutBuffer.length() - 1)
+    }
+
+    return stdoutBuffer.toString()
+}
+
+// Get the name of the RPM package that provides a given capability:
+def rpmWhatProvides(capability_path) {
+    def process = [
+        "rpm", "-q", '--queryformat="%{NAME}\\n"', "--whatprovides",
+        "${capability_path}"
+    ].execute()
+    def stdoutBuffer = new StringBuilder()
+    def stderrBuffer = new StringBuilder()
+
+    process.waitForProcessOutput(stdoutBuffer, stderrBuffer)
+    if (process.waitFor() != 0) {
+        throw new IllegalArgumentException("""\
+            Failed to find an RPM that provides ${capability_path}!  Error output:
+            ${stderrBuffer}""".stripIndent())
+    }
+
+    return stdoutBuffer.toString()
+}
+
+// Get the name of the RPM package that provides a given shell command:
+def rpmWhatProvidesCommand(String command_name) {
+    return rpmWhatProvides(resolveCommandPath(command_name))
+}
+
+def rpmWhatProvidesCommand(Iterable<String> command_names) {
+    return command_names.collect { rpmWhatProvides(it) }
+}
+
+// Get the name of the Deb package that provides a given file path:
+def debWhatProvidesFile(String file_path) {
+    def process = ["dpkg", "-S", "${file_path}"].execute()
+    def stdoutBuffer = new StringBuilder()
+    def stderrBuffer = new StringBuilder()
+
+    process.waitForProcessOutput(stdoutBuffer, stderrBuffer)
+    if (process.waitFor() != 0) {
+        throw new IllegalArgumentException("""\
+            Failed to find a Deb that provides ${file_path}!  Error output:
+            ${stderrBuffer}""".stripIndent())
+    }
+
+    return stdoutBuffer.substring(0, stdoutBuffer.indexOf(':'))
+}
+
+def debWhatProvidesCommand(String command_name) {
+    return debWhatProvidesFile(resolveCommandPath(command_name))
+}
+
+def debWhatProvidesCommand(Iterable<String> command_name) {
+    return command_name.collect { debWhatProvidesCommand(it) }
+}
+
 
 ospackage {
     version = openGeeVersion
@@ -393,14 +466,18 @@ built from raster, vector, and location properties data.
     license = 'Apache 2.0'
     type = BINARY
 
-    requires('bash')
-    requires('coreutils')
-    requires('findutils')
-    requires('grep')
-    requires('libxml2')
-    requires('net-tools')
-    requires('sed')
-    requires('util-linux')
+    def requiredPackages = rpmWhatProvidesCommand([
+            // install-utils.sh commands:
+            'bash', 'chkconfig', 'flock', 'sed', 'update-rc.d', 'xmllint',
+            // install script commands:
+            'cat', 'chcon', 'chmod', 'chown', 'cut', 'df', 'dirname', 'expr',
+            'find', 'getent', 'grep', 'hostname', 'mkdir', 'nproc', 'service',
+            'tr', 'useradd', 'userdel', 'usermod'
+        ]) as Set
+
+    requiredPackages.each {
+        requires(it)
+    }
 
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
 
