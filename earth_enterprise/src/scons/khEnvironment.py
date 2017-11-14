@@ -164,11 +164,14 @@ def EmitVersionHeaderFunc(target):
   """Emit version information to the target file."""
 
   versionStr = getVersion()
+  longVersionStr = getLongVersion()
 
   fp = open(target, 'w')
   fp.writelines(['// DO NOT MODIFY - auto-generated file\n',
                  'extern const char *const GEE_VERSION = "' +
-                 versionStr + '";'
+                 versionStr + '";\n',
+                 'extern const char *const GEE_LONG_VERSION = "' +
+                 longVersionStr + '";\n'
                 ])
   fp.close()
 
@@ -191,7 +194,21 @@ def EmitVersionStrfunc(target):
   return 'EmitVersion(%s)' % (target)
   
   
-def getVersion():
+def EmitLongVersionFunc(target):
+  """Emit version information to the target file."""
+
+  versionStr = getLongVersion()
+
+  fp = open(target, 'w')
+  fp.write(versionStr)
+  fp.close()
+
+
+def EmitLongVersionStrfunc(target):
+  return 'EmitLongVersion(%s)' % (target)
+  
+  
+def getLongVersion():
   """Take the raw information parsed by git, and use it to
      generate an appropriate version string for GEE."""
   try:
@@ -235,6 +252,38 @@ def getVersion():
   return '-'.join([base, patchRaw, commits, hash])
   
 
+def getVersion():
+  """As getLongVersion(), but only return the leading *.*.* value."""
+  try:
+    raw = subprocess.check_output(['git', 'describe', '--tags',
+                                        '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*'])
+    raw = raw.rstrip()
+  except Exception:
+    return "Version Error"
+
+  hasCommits = False
+  if (len(raw.split("-")) > 2):
+    hasCommits = True
+
+  # Tear apart the information in the version string.
+  rawComponents = raw.split("-")
+  base = rawComponents[0]
+  patchRaw = rawComponents[1]
+  isFinal = (patchRaw[-5:] == "final")
+  
+  baseComponents = base.split(".")
+  major = int(baseComponents[0])
+  minor = int(baseComponents[1])
+  revision = int(baseComponents[2])
+  
+  # Determine how to update.
+  if hasCommits and isFinal:
+    revision = revision + 1
+    
+  # Rebuild.
+  return '.'.join([str(x) for x in (major, minor, revision)])
+  
+
 # our derived class
 class khEnvironment(Environment):
   """The derived environment class used in all of Fusion SConscripts."""
@@ -245,6 +294,8 @@ class khEnvironment(Environment):
                                              EmitBuildDateStrfunc)
   EmitVersion = SCons.Action.ActionFactory(EmitVersionFunc,
                                            EmitVersionStrfunc)
+  EmitLongVersion = SCons.Action.ActionFactory(EmitLongVersionFunc,
+                                           EmitLongVersionStrfunc)
   EmitVersionHeader = SCons.Action.ActionFactory(EmitVersionHeaderFunc,
                                            EmitVersionHeaderStrfunc)
   

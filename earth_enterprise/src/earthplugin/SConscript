@@ -30,7 +30,8 @@ if not os.path.exists(server_version_file_dir):
 env.installDirExcluding('earth', Dir('#earthplugin').abspath, ['SConscript'])
 
 # Copy files from '../earth_enterprise/src/{REL_XXX|OPT_XXX}/earthplugin/..'
-# directory. There is only one file 'version.txt' in this folder.
-env.install('earth', File('../gee_version.txt').abspath)
+# directory.
 env.install('earth', File('../builddate.txt').abspath)
+env.install('earth', File('../gee_long_version.txt').abspath)
+env.install('earth', File('../gee_version.txt').abspath)
 

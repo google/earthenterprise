@@ -305,8 +305,13 @@ setTimeout(function () {
 jQuery.get('/earth/gee_version.txt',
            function(response) {
              var buildDateDiv = document.getElementById('build_date');
-             buildDateDiv.innerHTML = '<br/>Version: ' + response;
              document.title = 'GEE Server ' + response;
+           });
+
+jQuery.get('/earth/gee_long_version.txt',
+           function(response) {
+             var buildDateDiv = document.getElementById('build_date');
+             buildDateDiv.innerHTML = '<br/>Version: ' + response;
            });
 
 jQuery.get('/earth/builddate.txt',
