@@ -29,7 +29,7 @@ cython_env = third_party_env.DeepCopy()
 
 root_dir = Dir(cython_env.exportdirs['root']).abspath
 
-if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+if third_party_env['is_min_ubuntu'] and not third_party_env['native_cc']:
   env_opt = 'ac_cv_prog_cc_c99=no'
 else:
   env_opt = ''

@@ -1,0 +1,45 @@
+diff -Naur gdal-2.1.2/configure gdal-2.1.2_OJ2-v2.3.0/configure
+--- gdal-2.1.2/configure	2016-10-24 04:00:31.000000000 -0700
++++ gdal-2.1.2_OJ2-v2.3.0/configure	2017-10-26 20:20:31.000000000 -0700
+@@ -23677,12 +23677,12 @@
+         LIBS="-lopenjp2 $LIBS"
+     fi
+   else
+-    for ac_header in openjpeg-2.1/openjpeg.h
++    for ac_header in openjpeg-2.3/openjpeg.h
+ do :
+-  ac_fn_c_check_header_mongrel "$LINENO" "openjpeg-2.1/openjpeg.h" "ac_cv_header_openjpeg_2_1_openjpeg_h" "$ac_includes_default"
++  ac_fn_c_check_header_mongrel "$LINENO" "openjpeg-2.3/openjpeg.h" "ac_cv_header_openjpeg_2_1_openjpeg_h" "$ac_includes_default"
+ if test "x$ac_cv_header_openjpeg_2_1_openjpeg_h" = xyes; then :
+   cat >>confdefs.h <<_ACEOF
+-#define HAVE_OPENJPEG_2_1_OPENJPEG_H 1
++#define HAVE_OPENJPEG_2_3_OPENJPEG_H 1
+ _ACEOF
+ 
+ fi
+@@ -23743,11 +23743,11 @@
+   HAVE_OPENJPEG=yes
+   if test -r $with_openjpeg/include/openjpeg-2.0/openjpeg.h ; then
+     EXTRA_INCLUDES="-I$with_openjpeg/include $EXTRA_INCLUDES"
+-  elif test -r $with_openjpeg/include/openjpeg-2.1/openjpeg.h ; then
++  elif test -r $with_openjpeg/include/openjpeg-2.3/openjpeg.h ; then
+     OPENJPEG_VERSION=20100
+     EXTRA_INCLUDES="-I$with_openjpeg/include $EXTRA_INCLUDES"
+   else
+-    as_fn_error $? "openjpeg.h not found in $with_openjpeg/include/openjpeg-2.0 or $with_openjpeg/include/openjpeg-2.1" "$LINENO" 5
++    as_fn_error $? "openjpeg.h not found in $with_openjpeg/include/openjpeg-2.0 or $with_openjpeg/include/openjpeg-2.3" "$LINENO" 5
+   fi
+ 
+   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for opj_stream_set_user_data_length in -lopenjp2" >&5
+diff -Naur gdal-2.1.2/frmts/openjpeg/openjpegdataset.cpp gdal-2.1.2_OJ2-v2.3.0/frmts/openjpeg/openjpegdataset.cpp
+--- gdal-2.1.2/frmts/openjpeg/openjpegdataset.cpp	2016-10-24 04:00:35.000000000 -0700
++++ gdal-2.1.2_OJ2-v2.3.0/frmts/openjpeg/openjpegdataset.cpp	2017-10-27 16:32:51.000000000 -0700
+@@ -31,7 +31,7 @@
+ /* This file is to be used with openjpeg 2.0 */
+ 
+ #if defined(OPENJPEG_VERSION) && OPENJPEG_VERSION >= 20100
+-#include <openjpeg-2.1/openjpeg.h>
++#include <openjpeg-2.3/openjpeg.h>
+ #else
+ #include <stdio.h> /* openjpeg.h needs FILE* */
+ #include <openjpeg-2.0/openjpeg.h>

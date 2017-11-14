@@ -29,7 +29,7 @@ Import('third_party_env')
 import os
 
 gdal_version = 'gdal-2.1.2'
-openjpeg_version = 'openjpeg-v2.1.2-linux-x86_64'
+openjpeg_version = 'openjpeg-v2.3.0-linux-x86_64'
 # kakadu_version = 'v5_2_6-00418C'
 # geoexpress_version = 'MrSID_DSDK-8.5.0.3422'
 
@@ -81,6 +81,7 @@ gdal_env = third_party_env.DeepCopy()
 
 optdir = gdal_env['optdir']
 root_dir = Dir(gdal_env.exportdirs['root']).abspath
+gdal_patches = ['gdal-jp2-V2.3.0.patch']
 
 if GetOption('clean'):
   gdal_env.Execute('rm -rf %s' % current_dir)
@@ -104,6 +105,20 @@ openjpeg_extract = gdal_env.Command(
         'cd %s\n'
         'tar xzf %s\n'
         'touch %s' % (build_root, openjpeg_source, gdal_target))])
+
+
+# [2] Patch gdal
+gdal_target = '%s/.patch_gdal' % current_dir
+gdal_patch = gdal_env.Command(
+    gdal_target,
+    gdal_extract + map(gdal_env.GetBuildPath, gdal_patches),
+    [gdal_env.MultiCommand(
+        'cd %s\n'
+        '%s\n'
+        'touch %s' % (build_root,
+                      '\n'.join(map(lambda i: 'patch -g0 -p1 -s < %s' % (
+                          gdal_env.GetBuildPath(i)), gdal_patches)),
+                      gdal_target))])
 
 
 # [3] Extract Kakadu
@@ -216,11 +231,11 @@ else:
 
 gdal_configure = gdal_env.Command(
 #    gdal_target, [geoexpress_extract, gdal_kakadu_build],
-    gdal_target, [gdal_extract, openjpeg_extract],
+    gdal_target, [gdal_extract, gdal_patch, openjpeg_extract ],
     [gdal_env.MultiCommand(configure_cmd)])
 
 # [8] Build gdal
-if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+if third_party_env['is_min_ubuntu'] and not third_party_env['native_cc']:
   ld = '%s -shared' % gdal_env['ENV']['CXX']
 else:
   ld = '%s -shared' % gdal_env['ENV']['CXX']

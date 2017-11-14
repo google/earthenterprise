@@ -64,6 +64,7 @@ class RasterAssetWidget : public RasterAssetWidgetBase {
   std::string GetMosaicFill() const;
   void RestoreAllMaskOptions();
   AssetDefs::Type AssetType() const { return asset_type_; }
+  virtual AssetBase* GetAssetBase() const = 0;
 
   AssetDefs::Type asset_type_;
   QFileDialog* file_dialog_;
@@ -78,6 +79,7 @@ class ImageryAssetWidget : public RasterAssetWidget,
  public:
   inline ImageryAssetWidget(QWidget* parent, AssetBase* base) :
       RasterAssetWidget(parent, AssetDefs::Imagery), AssetWidgetBase(base) { }
+  AssetBase* GetAssetBase() const { return AssetWidgetBase::GetAssetBase(); }
 };
 
 class TerrainAssetWidget : public RasterAssetWidget,
@@ -85,6 +87,7 @@ class TerrainAssetWidget : public RasterAssetWidget,
  public:
   inline TerrainAssetWidget(QWidget* parent, AssetBase* base) :
       RasterAssetWidget(parent, AssetDefs::Terrain), AssetWidgetBase(base) { }
+  AssetBase* GetAssetBase() const { return AssetWidgetBase::GetAssetBase(); }
 };
 
 

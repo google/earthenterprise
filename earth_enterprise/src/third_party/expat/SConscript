@@ -43,7 +43,7 @@ expat_extract = expat_env.Command(
             current_dir, current_dir, expat_source, expat_target))])
 
 # [2] Find out whether optimize or debug and set variables accordingly
-if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+if third_party_env['is_min_ubuntu'] and not third_party_env['native_cc']:
   env_opt = ''
 else:
   env_opt = ''

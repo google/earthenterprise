@@ -54,7 +54,7 @@ class AssetDerived : public AssetBase {
   typename Defs::Widget* main_widget_;
 
  private:
-  void Init(void);
+  void Init(bool re_init = false);
   typename Defs::Request AssembleEditRequest(void);
 
   // Reset IDs(asset_uuid, fuid_resource, fuid_channel, indexVersion) in fuse
