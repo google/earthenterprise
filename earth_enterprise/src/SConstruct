@@ -355,6 +355,7 @@ installdirs = {
     'server_root': Dir('server/', installdir),
     'server_share': InstServerDir('share'),
     'server_search': InstServerDir('search'),
+    'server_sql': InstServerDir('share/opengee-server/sql'),
 
     'httpd': InstServerDir('gehttpd'),
     'httpdmodules': InstServerDir('gehttpd/modules'),
