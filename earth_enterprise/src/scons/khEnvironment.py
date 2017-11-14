@@ -255,33 +255,12 @@ def getLongVersion():
 def getVersion():
   """As getLongVersion(), but only return the leading *.*.* value."""
   try:
-    raw = subprocess.check_output(['git', 'describe', '--tags',
-                                        '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*'])
-    raw = raw.rstrip()
+    raw = getLongVersion()
+    final = raw.split("-")[0]
   except Exception:
     return "Version Error"
 
-  hasCommits = False
-  if (len(raw.split("-")) > 2):
-    hasCommits = True
-
-  # Tear apart the information in the version string.
-  rawComponents = raw.split("-")
-  base = rawComponents[0]
-  patchRaw = rawComponents[1]
-  isFinal = (patchRaw[-5:] == "final")
-  
-  baseComponents = base.split(".")
-  major = int(baseComponents[0])
-  minor = int(baseComponents[1])
-  revision = int(baseComponents[2])
-  
-  # Determine how to update.
-  if hasCommits and isFinal:
-    revision = revision + 1
-    
-  # Rebuild.
-  return '.'.join([str(x) for x in (major, minor, revision)])
+  return final
   
 
 # our derived class
