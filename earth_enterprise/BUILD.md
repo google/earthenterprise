@@ -15,7 +15,7 @@ Building is currently supported on 64-bit versions of Ubuntu 14.04 LTS, Ubuntu 1
     * python 2.6.x+ or Python 2.7.x+.  Python 3.0+ is not supported. 
     
 Different operating systems have different means to setup up these dependencies. For Linux build environments, see either the [Redhat and Centos Setup Instructions](./BUILD_RHEL_CentOS.md)  
-or the [Ubuntu Setup Instructions](./BUILD_Ubuntu.md) for those specific platforms on how to setup the dependencies, tools and compilers. Alternatively, setup may be performed by executing the [build script](../scripts/get-gee-build-environment.sh).
+or the [Ubuntu Setup Instructions](./BUILD_Ubuntu.md) for those specific platforms on how to setup the dependencies, tools and compilers.
  
 1. Clone the EarthEnterprise repository in your build environment
     
