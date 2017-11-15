@@ -1,0 +1,126 @@
+#-*- Python -*-
+#
+# Copyright 2017 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+
+Import('third_party_env')
+openjpeg_version = 'openjpeg-2.3.0'
+#ge_version = openjpeg_version.replace('curl', 'curl-ge')
+
+num_cpu = GetOption('num_jobs')
+
+openjpeg_source = File('#/../../earth_enterprise/third_party/openjpeg/%s'
+                      '.tar.gz' % openjpeg_version).abspath
+
+openjpeg_env = third_party_env.DeepCopy()
+root_dir = Dir(openjpeg_env.exportdirs['root']).abspath
+opt_dir = Dir(openjpeg_env['optdir']).abspath
+
+current_dir = Dir('.').abspath
+build_root = '%s/%s' % (current_dir, openjpeg_version)
+install_root = '%s/install' % current_dir
+install_root_opt = '%s%s' % (install_root, opt_dir)
+
+# [1] Extract openjpeg
+openjpeg_target = '%s/.extract' % current_dir
+openjpeg_extract = openjpeg_env.Command(
+    openjpeg_target, openjpeg_source,
+    [openjpeg_env.MultiCommand(
+        'mkdir -p %s\n'
+        'cd %s\n'
+        'tar xzf %s\n'
+        'touch %s' % (
+            current_dir, current_dir, openjpeg_source, openjpeg_target))])
+
+#if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+#  env_opt = ''
+#else:
+#  env_opt = ''
+env_opt = ''
+
+if openjpeg_env['release'] or openjpeg_env['optimize']:
+  config_opt = '-DCMAKE_BUILD_TYPE:enum=Release '
+else:
+  config_opt = '-DCMAKE_BUILD_TYPE:enum=Debug '
+
+#openjpeg_env['ENV']['mod_env'] = openjpeg_env['ENV']['mod_env'] + 'LDFLAGS=-lrt '
+
+# [3] Configure openjpeg
+openjpeg_target = '%s/.configure' % current_dir
+openjpeg_configure = openjpeg_env.Command(
+    openjpeg_target, openjpeg_extract,
+    [openjpeg_env.MultiCommand(
+        'cd %s\n'
+        '%s%s cmake . -DBUILD_STATIC_LIBS:bool=off '
+               ' -DCMAKE_INSTALL_PREFIX=%s '
+        '%s\n'
+        'touch %s' % (build_root,
+                      openjpeg_env['ENV']['mod_env'], env_opt,
+                        install_root_opt,
+                      config_opt,
+                      openjpeg_target))])
+
+# [4] Build
+openjpeg_target = '%s/.build' % current_dir
+openjpeg_build = openjpeg_env.Command(
+    openjpeg_target, openjpeg_configure,
+    [openjpeg_env.MultiCommand(
+        'cd %s\n'
+        '%smake -j%d\n'
+        'touch %s' % (build_root, openjpeg_env['ENV']['mod_env'],
+                      num_cpu,
+                      openjpeg_target))])
+
+# [5] Create openjpeg master installer
+openjpeg_target = '%s/.install' % current_dir
+openjpeg_install = openjpeg_env.Command(
+    openjpeg_target, openjpeg_build,
+    [openjpeg_env.MultiCommand(
+        'cd %s\n'
+        'make install\n'
+        'touch %s' % (build_root,
+                      openjpeg_target))])
+
+# [6] Install these into various directories as required for build
+openjpeg_target = '%s/.install_for_build' % current_dir
+openjpeg_install_build = openjpeg_env.Command(
+    openjpeg_target, openjpeg_install,
+    [openjpeg_env.rsync_cmd % (
+        '%s/include/' % install_root_opt,
+        '%s/include/' % root_dir),
+     openjpeg_env.rsync_cmd % (
+         '%s/lib/' % install_root_opt,
+         '%s/lib/' % root_dir),
+     openjpeg_env.rsync_cmd % (
+         '%s/bin/' % install_root_opt,
+         '%s/bin/' % root_dir),
+     Touch('$TARGET')])
+
+Default(openjpeg_install_build)
+openjpeg_env.ExecuteOnClean('rm -rf %s' % current_dir)
+
+if 'install' in COMMAND_LINE_TARGETS:
+  openjpeg_env.InstallFileOrDir(
+      '%s/lib/' % install_root_opt,
+      '%s/' % openjpeg_env.installdirs['common_lib'],
+      openjpeg_install_build, 'install')
+#  openjpeg_env.InstallFileOrDir(
+#      '%s/share/doc/packages/' % install_root_opt,
+#      '%s/doc/packages/' % (
+#          openjpeg_env.installdirs['common_share']),
+#      openjpeg_install_build, 'install')
+
+Return('openjpeg_extract openjpeg_install_build')

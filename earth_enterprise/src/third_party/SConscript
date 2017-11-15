@@ -67,6 +67,7 @@ else:
       'libcurl',
       'qt',
       'glu',
+      'openjpeg',
       'gdal',
       'postgresql',
       'postgis',  # requires postgresql config, geos, proj libs.
