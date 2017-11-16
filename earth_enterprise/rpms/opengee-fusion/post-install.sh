@@ -20,8 +20,7 @@ set +x
 
 #------------------------------------------------------------------------------
 # Definitions
-GEE="Google Earth Enterprise"
-GEEF="$GEE Fusion"
+GEEF="$GEE_NAME Fusion"
 
 #------------------------------------------------------------------------------
 # Get system info values:
@@ -74,9 +73,7 @@ setup_fusion_daemon()
     # setup fusion daemon
     echo "Setting up the Fusion daemon..."
 
-    [ -f "$INITSCRIPT_UPDATE" ] && "$INITSCRIPT_UPDATE" -f gefusion remove
-    [ -f "$INITSCRIPT_UPDATE" ] && "$INITSCRIPT_UPDATE" gefusion start 90 2 3 4 5 . stop 10 0 1 6 .
-    [ -f "$CHKCONFIG" ] && "$CHKCONFIG" --add gefusion
+    add_service gefusion
 
     echo "Fusion daemon setup ... Done"
 }

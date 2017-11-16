@@ -18,7 +18,6 @@ set +x
 
 #-----------------------------------------------------------------
 # Definitions
-GEE="Google Earth Enterprise"
 PUBLISHER_ROOT="/gevol/published_dbs"
 INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
 PGSQL_DATA="/var/opt/google/pgsql/data"
@@ -199,10 +198,7 @@ reset_pgdb()
 setup_geserver_daemon()
 {   
     # setup geserver daemon
-    [ -f $CHKCONFIG ] && $CHKCONFIG --add geserver
-    [ -f $INITSCRIPTUPDATE ] && $INITSCRIPTUPDATE -f geserver remove
-    [ -f $INITSCRIPTUPDATE ] && $INITSCRIPTUPDATE geserver start 90 2 3 4 5 . stop 10 0 1 6 .
-    [ -f $CHKCONFIG ] && $CHKCONFIG --add geserver # for redhat...moved here
+    add_service geserver
 }
 
 install_search_databases()
