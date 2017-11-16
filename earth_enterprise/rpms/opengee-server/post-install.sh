@@ -54,7 +54,6 @@ main_postinstall()
     # 7) Repeated step; Set permissions after geserver Start/Stop.
     fix_postinstall_filepermissions
 
-    # TODO - verify
     # 8) Run geecheck config script
     # If file ‘/opt/google/gehttpd/cgi-bin/set_geecheck_config.py’ exists:
     if [ -f "$GEE_CHECK_CONFIG_SCRIPT" ]; then
@@ -158,17 +157,7 @@ fix_postinstall_filepermissions()
     chmod ugo+x /opt/google/share/support/geecheck/convert_to_kml.pl
     chmod ugo+x /opt/google/share/support/geecheck/find_terrain_pixel.pl
     chmod ugo+x /opt/google/share/support/geecheck/pg_check.pl
-    # Note: this is installed in install_fusion.sh, but needs setting here too.
-    #TODO
-    # chmod ugo+x $BASEINSTALLDIR_OPT/share/tutorials/fusion/download_tutorial.sh
-    # this should already be true...
     chown -R root:root /opt/google/share
-
-    #TODO
-    # Set context (needed for SELINUX support) for shared libs
-    # chcon -t texrel_shlib_t /opt/google/lib/*so*
-    # Restrict permissions to uninstaller and installer logs
-    #chmod -R go-rwx /opt/google/install
 
     # Disable cutter (default) during installation.
     /opt/google/bin/geserveradmin --disable_cutter
@@ -179,7 +168,6 @@ fix_postinstall_filepermissions()
 
 reset_pgdb()
 {
-    # TODO check if correct
     # a) Always do an upgrade of the psql db
     echo 2 | run_as_user "$GEPGUSER" "/opt/google/bin/geresetpgdb upgrade"
     echo -e "upgrade done"
