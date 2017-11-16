@@ -150,12 +150,12 @@ install_or_upgrade_asset_root()
         chown -R "$GEFUSIONUSER:$GEGROUP" "$ASSET_ROOT"
     else
         # upgrade asset root -- if this is a master
-        if [ "$IS_SLAVE" == false ]; then
+        if [ "$IS_SLAVE" = false ]; then
             # TODO: Verify this logic -- this is what is defined in the
             # installer documentation, but needs confirmation
             keyvalue_file_get "$GEE_INSTALL_KV_PATH" gegroup_existed NEW_GEFUSIONUSER
             keyvalue_file_get "$GEE_INSTALL_KV_PATH" gefusionuser_existed NEW_GEFUSIONUSER
-            if [ "$NEW_GEGROUP" == true ] || [ "$NEW_GEFUSIONUSER" == true ]; then
+            if [ "$NEW_GEGROUP" = true ] || [ "$NEW_GEFUSIONUSER" = true ]; then
                 NOCHOWN=""
                 UPGRADE_MESSAGE="The upgrade will fix permissions for the asset root and source volume. This may take a while."
             else
@@ -186,7 +186,7 @@ END
 
 final_assetroot_configuration()
 {
-    if [ "$IS_SLAVE" == true ]; then
+    if [ "$IS_SLAVE" = true ]; then
         "$BASEINSTALLDIR_OPT/bin/geselectassetroot" --role slave --assetroot "$ASSET_ROOT"
     else
         "$BASEINSTALLDIR_OPT/bin/geselectassetroot" --assetroot "$ASSET_ROOT"
