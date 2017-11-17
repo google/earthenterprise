@@ -47,13 +47,20 @@ allowed Open GEE Fusion and Server to be separately installed when building out
 of the Git repo checkout directly.
 
 ## Installing RPMs
-After the SCons **package_install** target completes you can install and
-test the RPMs you have created on CentOS or RHEL.  To do this, change to the
-*rpms/build/distributions* directory.  You can then use ```rpm -Uhv
-opengee-postgis-*.rpm``` and ```rpm -Uhv opengee-common-*.rpm``` to get the
-base dependencies installed, in that order.  You can then install ```rpm -Uhv
-opengee-fusion-*.rpm``` and/or ```rpm -Uhv opengee-server-*.rpm``` as desired,
-and then you can test the RPM packaged Open GEE Fusion and Server.
+After the SCons **package_install** target completes you can install and test
+the RPMs you have created on CentOS or RHEL.  To do this, change to the
+*rpms/build/distributions* directory.  You can then use ```sudo rpm -Uhv
+opengee-postgis-*.rpm``` and ```sudo rpm -Uhv opengee-common-*.rpm``` to get
+the base dependencies installed, in that order.  You can then install ```sudo
+rpm -Uhv opengee-fusion-*.rpm```, and then ```sudo rpm -Uhv
+opengee-server-*.rpm```, to test the RPM packaged Open GEE Fusion and Server.
+
+You can also use yum to install your RPM files, which will also automatically
+install standard dependencies for you.  However, since the opengee packages are
+not in a repository, using ```sudo yum install opengee-server-*.rpm``` or
+```sudo yum install opengee-fusion-*.rpm``` will not automatically install
+**opengee-common** or **opengee-postgis** for you, but will refuse to install
+if these are not already installed.
 
 The RPMs install Open GEE to the same */opt/google* path that the non-package
 based install scripts did.  If you have already installed Open GEE from the Git
@@ -63,8 +70,18 @@ The RPMs should be able to migrate an existing manual install of Open GEE with
 the packaged version, but at the very least you should back up data if you are
 going to try such a migration.
 
+## Removing RPMs
+Removing RPMs can be performed using ```yum remove```.  To remove all all
+opengee packages, you can use ```sudo yum remove opengee-postgis``` as all
+other opengee packages depend on it, and this will automatically remove
+**opengee-common**, **opengee-server**, and **opengee-fusion** for you if they
+are also installed. You can also selectively use ```sudo yum remove
+opengee-server``` or ```sudo yum remove opengee-fusion``` by itself to remove
+server or fusion.  The ```uninstall_server.sh``` and ```uninstall_fusion.sh```
+scripts should **NOT** be used while you have a RPM installed Open GEE.
+
 While it is possible to migrate from a manual install of Open GEE to a RPM one,
-converting an RPM install back to a manual install is not safe.  This is
-because the RPM packaging system may remove key directories and files when the
-associated Open GEE packages are removed.  Again, make sure you have made
+converting an RPM install of Open GEE back to a manual install is not safe.
+This is because the RPM packaging system may remove key directories and files
+when the associated Open GEE packages are removed.  Make sure you have made
 backups of any critical data you may need before attempting this.
