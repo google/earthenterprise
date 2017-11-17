@@ -13,11 +13,9 @@
 // limitations under the License.
 
 
-Tool for installing Fusion and Earth Server, building tutorial databases (2d, 3d, and 3d Time Machine), and running tests against these databases.
+Tools for building tutorial databases (2d, 3d, and 3d Time Machine), and running tests against these databases.
 
-The clean is harsh so you should not use it on machines where you want to save your work.
-
-The test program does not work unless the asset root /usr/local/google/gevol_test already exists. This seems to be an issue with the clean install. If it fails, you will have to run:
+You will need to set up the asset root:
 sudo /opt/google/bin/geconfigureassetroot --new --assetroot  /usr/local/google/gevol_test/assets
 
 You must also add source volumes with the names "src" and "tutorial", respectively:
@@ -81,27 +79,3 @@ To clean up after a successful run
 rm -rf /usr/local/google/gevol_test/assets/Tutorial
 
 To cancel the tutorial run, use the Fusion Asset Manager to cancel the current build for each of the assets under Tutorial, then run the above rm command
-
-Note: gee_test.py has not been updated to work with the latest installer, so the following instructions will not work without modifications to the script
-
-To do a basic install and test:
-
-sudo ./gee_test.py <path-to-installer-tarball>
-
-or
-
-sudo ./gee_test.py <path-to-installer-directory>
-
-
-To install without building tutorial dbs:
-
-sudo ./gee_test.py --notutorial --nopublish --notests <path-to-installer-tarball>
-
-
-To do a clean install with tests:
-
-sudo ./gee_test.py --clean --uninstall <path-to-installer-directory>
-
-To run only tests:
-
-sudo ./gee_test.py --noserver --nofusion --notutorial --nopublish <path-to-installer-directory>
