@@ -23,7 +23,7 @@ import subprocess
 import sys
 sys.path += ['scons']
 from khEnvironment import khEnvironment
-from khEnvironment import getVersion
+from khEnvironment import GetVersion
 
 
 # Path to crosstool root directory.
@@ -402,7 +402,7 @@ def is_version_ge(version_components, comparand_components):
 
   return True
 
-gee_version_number = getVersion()
+gee_version_number = GetVersion("version.txt")
 
 
 # create the environment that controls the builds

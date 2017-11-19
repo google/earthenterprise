@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+from pkg_resources._vendor.pyparsing import line
 
 """The build environment, builders, actions and helper methods.
 
@@ -25,6 +26,7 @@ import os.path
 import subprocess
 import sys
 import time
+from datetime import datetime
 import SCons
 from SCons.Environment import Environment
 
@@ -160,11 +162,11 @@ def EmitBuildDateStrfunc(target, build_date):
   return 'EmitBuildDate(%s, %s)' % (target, build_date)
 
 
-def EmitVersionHeaderFunc(target):
+def EmitVersionHeaderFunc(target, backupFile):
   """Emit version information to the target file."""
 
-  versionStr = getVersion()
-  longVersionStr = getLongVersion()
+  versionStr = GetVersion(backupFile)
+  longVersionStr = GetLongVersion(backupFile)
 
   fp = open(target, 'w')
   fp.writelines(['// DO NOT MODIFY - auto-generated file\n',
@@ -176,91 +178,133 @@ def EmitVersionHeaderFunc(target):
   fp.close()
 
 
-def EmitVersionHeaderStrfunc(target):
-  return 'EmitVersionHeader(%s)' % (target)
+def EmitVersionHeaderStrfunc(target, backupFile):
+  return 'EmitVersionHeader(%s, %s)' % (target, backupFile)
   
   
-def EmitVersionFunc(target):
+def EmitVersionFunc(target, backupFile):
   """Emit version information to the target file."""
 
-  versionStr = getVersion()
+  versionStr = GetVersion(backupFile)
 
   fp = open(target, 'w')
   fp.write(versionStr)
   fp.close()
 
 
-def EmitVersionStrfunc(target):
-  return 'EmitVersion(%s)' % (target)
+def EmitVersionStrfunc(target, backupFile):
+  return 'EmitVersion(%s, %s)' % (target, backupFile)
   
   
-def EmitLongVersionFunc(target):
+def EmitLongVersionFunc(target, backupFile):
   """Emit version information to the target file."""
 
-  versionStr = getLongVersion()
+  versionStr = GetLongVersion(backupFile)
 
   fp = open(target, 'w')
   fp.write(versionStr)
   fp.close()
 
 
-def EmitLongVersionStrfunc(target):
-  return 'EmitLongVersion(%s)' % (target)
+def EmitLongVersionStrfunc(target, backupFile):
+  return 'EmitLongVersion(%s, %s)' % (target, backupFile)
   
-  
-def getLongVersion():
-  """Take the raw information parsed by git, and use it to
-     generate an appropriate version string for GEE."""
-  try:
-    raw = subprocess.check_output(['git', 'describe', '--tags',
-                                        '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*'])
-    raw = raw.rstrip()
-  except Exception:
-    return "Version Error"
 
-  if (len(raw.split("-")) < 4):
-    return raw
-
-  # Tear apart the information in the version string.
-  rawComponents = raw.split("-")
-  base = rawComponents[0]
-  patchRaw = rawComponents[1]
-  commits = rawComponents[2]
-  hash = rawComponents[3]
-  isFinal = (patchRaw[-5:] == "final")
-  
-  baseComponents = base.split(".")
-  major = int(baseComponents[0])
-  minor = int(baseComponents[1])
-  revision = int(baseComponents[2])
-  
-  patchComponents = patchRaw.split(".")
-  patch = int(patchComponents[0])
-  
-  # Determine how to update. Note that 'commits > 0' already,
-  # or else we would have returned earlier.
-  if isFinal:
-    patch = 1
-    revision = revision + 1
-  else:
-    patch = patch + 1
+def GetLongVersion(backupFile):
+    """Create a detailed version string based on the state of
+       the software, as it exists in the repository."""
     
-  # Rebuild.
-  base = '.'.join([str(x) for x in (major, minor, revision)])
-  patchRaw = str(patch) + ".beta"
-  
-  return '-'.join([base, patchRaw, commits, hash])
+    #if CheckGitAvailable():
+    #    return GitGeneratedLongVersion()
+
+    # Without git, must use the backup file to create a string.
+    base = ReadBackupVersionFile(backupFile)
+    date = datetime.utcnow().strftime("%Y%m%d%H%M")
+    
+    return '-'.join([base, date])
+
+
+def GetVersion(backupFile):
+    """As getLongVersion(), but only return the leading *.*.* value."""
+    try:
+        raw = GetLongVersion(backupFile)
+        final = raw.split("-")[0]
+    except Exception:
+        return "Version Error"
+
+    return final
   
 
-def getVersion():
-  """As getLongVersion(), but only return the leading *.*.* value."""
-  try:
-    raw = getLongVersion()
-    final = raw.split("-")[0]
-  except Exception:
-    return "Version Error"
+def CheckGitAvailable():
+    """Try the most basic of git commands, to see if there is
+       currently any access to a repository."""
+    
+    try:
+        subprocess.check_output(['git', 'status'])
+    except Exception:
+        return False
+    
+    return True
 
-  return final
+
+def ReadBackupVersionFile(target):
+    """There should be a file checked in with the latest version
+       information available; if git isn't available to provide
+       information, then use this file instead."""
+    
+    try:
+        fp = open(target, 'r')
+        line = fp.readline()
+        fp.close()
+        
+        return line
+    
+    except Exception:
+        return "Version Error"
+
+
+def GitGeneratedLongVersion():
+    """Take the raw information parsed by git, and use it to
+       generate an appropriate version string for GEE."""
+    try:
+        raw = subprocess.check_output(['git', 'describe', '--tags',
+                                        '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*'])
+        raw = raw.rstrip()
+    except Exception:
+        return "Version Error"
+
+    if (len(raw.split("-")) < 4):
+        return raw
+
+    # Tear apart the information in the version string.
+    rawComponents = raw.split("-")
+    base = rawComponents[0]
+    patchRaw = rawComponents[1]
+    numCommits = rawComponents[2]
+    hash = rawComponents[3]
+    isFinal = (patchRaw[-5:] == "final")
+  
+    baseComponents = base.split(".")
+    major = int(baseComponents[0])
+    minor = int(baseComponents[1])
+    revision = int(baseComponents[2])
+  
+    patchComponents = patchRaw.split(".")
+    patch = int(patchComponents[0])
+  
+    # Determine how to update. Note that 'commits > 0' already,
+    # or else we would have returned earlier.
+    if isFinal:
+        patch = 1
+        revision = revision + 1
+    else:
+        patch = patch + 1
+    
+    # Rebuild.
+    base = '.'.join([str(x) for x in (major, minor, revision)])
+    patchRaw = str(patch) + ".beta"
+  
+    return '-'.join([base, patchRaw, commits, hash])
   
 
 # our derived class
