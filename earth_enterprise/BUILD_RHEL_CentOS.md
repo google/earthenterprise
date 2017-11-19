@@ -95,10 +95,10 @@ sudo yum install -y devtoolset-2-gcc devtoolset-2-binutils \
   devtoolset-2-toolchain devtoolset-2-gcc-c++ devtoolset-2-gcc-gfortran
 ```
 
-The GCC 4.8 installation will be located in the _/opt/rh/devtoolset-2/root/usr/bin/_.
+The GCC 4.8 installation will be located in the `/opt/rh/devtoolset-2/root/usr/bin/` directory.
 
 The GEE build scripts will detect this compiler automatically. However, if you
-wish switch the environment to use GCC 4.8 in a shell, execute:
+wish to switch the environment to use GCC 4.8 in a shell, execute:
 
 ```bash
 source /opt/rh/devtoolset-2/enable
