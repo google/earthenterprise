@@ -1,21 +1,26 @@
-# GEE Build Setup for Ubuntu    
+# GEE Build Setup for Ubuntu
 
-## Install Git  
+## Install Git
+
 Install the system default version:
 
-```
+```bash
 sudo apt-get install git
 ```
-_Or_ install the latest version:
-```
+
+Alternatively, install the latest version:
+
+```bash
 sudo add-apt-repository ppa:git-core/ppa
 sudo apt-get update
 sudo apt-get install git
 ```
 
 ## Install Git LFS
-Run the following commands: 
-```
+
+Execute the following:
+
+```bash
 curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
 sudo apt install git-lfs
 ```
