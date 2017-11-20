@@ -214,8 +214,8 @@ def GetLongVersion(backupFile):
     """Create a detailed version string based on the state of
        the software, as it exists in the repository."""
     
-    #if CheckGitAvailable():
-    #    return GitGeneratedLongVersion()
+    if CheckGitAvailable():
+        return GitGeneratedLongVersion()
 
     # Without git, must use the backup file to create a string.
     base = ReadBackupVersionFile(backupFile)
@@ -247,6 +247,13 @@ def CheckGitAvailable():
     return True
 
 
+def CheckDirtyRepository():
+    """Check to see if the repository is not in a cleanly committed state."""
+    
+    str = subprocess.check_output(['git', 'status', '--porcelain'])
+    return (len(str) > 0)
+    
+
 def ReadBackupVersionFile(target):
     """There should be a file checked in with the latest version
        information available; if git isn't available to provide
@@ -273,7 +280,13 @@ def GitGeneratedLongVersion():
     except Exception:
         return "Version Error"
 
+    # Grab the datestamp.
+    date = datetime.utcnow().strftime("%Y%m%d%H%M")
+    
+    # If this condition hits, then we are currently on a tagged commit.
     if (len(raw.split("-")) < 4):
+        if CheckDirtyRepository():
+            return '.'.join([raw, date])
         return raw
 
     # Tear apart the information in the version string.
@@ -304,7 +317,7 @@ def GitGeneratedLongVersion():
     base = '.'.join([str(x) for x in (major, minor, revision)])
     patchRaw = str(patch) + ".beta"
   
-    return '-'.join([base, patchRaw, commits, hash])
+    return '-'.join([base, patchRaw, hash])
   
 
 # our derived class
