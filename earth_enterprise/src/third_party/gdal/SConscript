@@ -29,9 +29,6 @@ Import('third_party_env')
 import os
 
 gdal_version = 'gdal-2.1.2'
-openjpeg_version = 'openjpeg-v2.3.0-linux-x86_64'
-# kakadu_version = 'v5_2_6-00418C'
-# geoexpress_version = 'MrSID_DSDK-8.5.0.3422'
 
 # Check if MrSID decoding library is installed and get the decoding SDK path
 mrSIDLibName = 'libltidsdk.so'
@@ -51,33 +48,13 @@ make_cmd_cpu = 'make -j%d' % GetOption('num_jobs')
 ge_version = gdal_version.replace('gdal', 'gdal-ge')
 
 current_dir = Dir('.').abspath
+openjpeg_dir = Dir('../openjpeg/install/opt/google/').abspath 
 build_root = '%s/%s' % (current_dir, gdal_version)
 gdal_source = File('#/../../earth_enterprise/third_party/gdal/%s.tar.gz'
                    % gdal_version).abspath
 
 
-## Specify path to openjpeg library here:
-openjpeg_source = File('#/../../earth_enterprise/third_party/openjpeg/%s.tar.gz'
-                      % openjpeg_version).abspath
-
-# Specify path to kakadu library here:
-# kakadu_source = File('#/../../earth_enterprise/third_party/kakadu/%s.zip'
-#                      % kakadu_version).abspath
-
-# kakadu patch files:
-# kakadu_patches = {'kakadu-fPIC.patch': 2, 'kakadu-static-kdu.patch': 1}
-
-# Specify path to MrSID libary here:
-# geoexpress_source = File('#/../../earth_enterprise/third_party/geoexpres'
-#                          's/%s-linux.x86-64.gcc44.tar.gz' % geoexpress_version
-#                         ).abspath
-
-
 gdal_env = third_party_env.DeepCopy()
-
-# kakadu_lib_defs = "-DKDU_MAJOR_VERSION=5 -DKDU_MINOR_VERSION=2 -DKDU_PATCH_VERSION=6"
-# gdal_env['ENV']['mod_env'] = 'env CFLAGS="%s" CXXFLAGS="%s" ' % (
-#     kakadu_lib_defs, kakadu_lib_defs)
 
 optdir = gdal_env['optdir']
 root_dir = Dir(gdal_env.exportdirs['root']).abspath
@@ -97,16 +74,6 @@ gdal_extract = gdal_env.Command(
         'touch %s'% (current_dir, current_dir, gdal_source, gdal_target))])
 
 
-# [2] Extract openjpeg
-gdal_target = '%s/.extract_openjpeg' % current_dir
-openjpeg_extract = gdal_env.Command(
-    gdal_target, [openjpeg_source, gdal_extract],
-    [gdal_env.MultiCommand(
-        'cd %s\n'
-        'tar xzf %s\n'
-        'touch %s' % (build_root, openjpeg_source, gdal_target))])
-
-
 # [2] Patch gdal
 gdal_target = '%s/.patch_gdal' % current_dir
 gdal_patch = gdal_env.Command(
@@ -121,60 +88,6 @@ gdal_patch = gdal_env.Command(
                       gdal_target))])
 
 
-# [3] Extract Kakadu
-# gdal_target = '%s/.extract_kakadu' % current_dir
-# kakadu_extract = gdal_env.Command(
-#     gdal_target, [kakadu_source, gdal_extract],
-#     [gdal_env.MultiCommand(
-#         'cd %s\n'
-#         'unzip -q -o %s\n'
-#         'touch %s' % (build_root, kakadu_source, gdal_target))])
-
-# kakadu 5.2
-# [4] Patch Kakadu
-# gdal_target = '%s/.patch_kakadu' % current_dir
-# kakadu_patch = gdal_env.Command(
-#     gdal_target, kakadu_extract +
-#     map(gdal_env.GetBuildPath, kakadu_patches.keys()),
-#     [gdal_env.MultiCommand(
-#         'cd %s/%s\n'
-#         '%s\n'
-#         'touch %s' % (
-#             build_root, kakadu_version, '\n'.join(map(
-#                 lambda i: 'patch -g0 -p%d -s < %s' % (
-#                     kakadu_patches[i], gdal_env.GetBuildPath(i)),
-#                 kakadu_patches.keys())), gdal_target))])
-
-# [5] Extract Geoexpress (Mrsid)
-# gdal_target = '%s/.extract_geoexpress' % current_dir
-# geoexpress_extract = gdal_env.Command(
-#    gdal_target, [geoexpress_source, gdal_extract],
-#    [gdal_env.MultiCommand(
-#         'cd %s\n'
-#         'tar xzf %s\n'
-#         'touch %s' % (build_root, geoexpress_source, gdal_target))])
-
-# [6] Build kakadu
-# Note: kakadu build uses -DKDU_PENTIUM_GCC which don't work well with anything
-# later than gcc 4.1.1 ; Removing this flag and using gcc 4.4.0 gives good
-# image but with image regressions. So to keep things unchanged use gcc 4.1.1
-# for Kakadu. i.e /opt/google/bin/g++
-# make_cmd = '%s CC="%s"' % (make_cmd_cpu, gdal_env['ENV']['CXX'])
-# gdal_target = '%s/.build_kakadu' % current_dir
-# gdal_kakadu_build = gdal_env.Command(
-#     gdal_target, kakadu_patch,
-#     [gdal_env.MultiCommand(
-#         'cd %s\n'
-#         '%s CC=%s/g++ -C %s/coresys/make -f Makefile-Linux-x86-gcc libkdu.a\n'
-#         'mkdir -p %s/%s/java/kdu_jni\n'
-#         '%s%s -C %s/apps/make -f Makefile-Linux-x86-gcc\n'
-#         'ln -f %s/lib/Linux-x86-gcc/libkdu.a %s/lib\n'
-#         'touch %s' % (
-#             build_root, make_cmd, '%s/bin' % optdir, kakadu_version,
-#             build_root, kakadu_version, gdal_env['ENV']['mod_env'], make_cmd,
-#             kakadu_version, kakadu_version, kakadu_version, gdal_target))])
-
-
 # [7] Configure gdal
 gdal_target = '%s/.configure_gdal' % current_dir
 
@@ -185,8 +98,7 @@ if gdal_env['bundle_3rd_libs']:
       '--disable-static --with-threads --with-expat=%s --with-ogdi=%s '
       '--with-libtiff=internal --without-netcdf --with-png=internal --with-jpeg '
       '--with-geotiff=internal --with-xerces=%s --with-geos=%s/bin/geos-config '
-#      '--with-kakadu=%s/%s --with-mrsid=%s/%s-linux.x86-64.gcc44/Raster_DSDK '
-      '--with-openjpeg=%s/%s '
+      '--with-openjpeg=%s '
       '--with-mrsid=%s '
       '--with-python=%s '
       '--with-xml2=%s/bin '
@@ -198,8 +110,8 @@ if gdal_env['bundle_3rd_libs']:
            gdal_env['ENV']['mod_env'], optdir,
            root_dir, root_dir,
            root_dir, root_dir,
-#           build_root, kakadu_version, build_root, geoexpress_version,
-           build_root, openjpeg_version, mrSIDDSDKPath,
+           openjpeg_dir,
+           mrSIDDSDKPath,
            gdal_env['python_bin'],
            root_dir,
            root_dir,
@@ -212,8 +124,7 @@ else:
         '--disable-static --with-threads --with-expat --with-ogdi '
         '--with-libtiff=internal --without-netcdf --with-png=internal --with-jpeg '
         '--with-geotiff=internal --with-xerces --with-geos '
-#        '--with-kakadu=%s/%s --with-mrsid=%s/%s-linux.x86-64.gcc44/Raster_DSDK '
-        '--with-openjpeg=%s/%s '
+        '--with-openjpeg=%s '
         '--with-mrsid=%s '
         '--with-python=%s '
         '--with-xml2 '
@@ -223,15 +134,15 @@ else:
         'touch %s' % (
             build_root,
             gdal_env['ENV']['mod_env'], optdir,
-#            build_root, kakadu_version, build_root, geoexpress_version,
-            build_root, openjpeg_version, mrSIDDSDKPath,
+            openjpeg_dir,
+            mrSIDDSDKPath,
             gdal_env['python_bin'],
             gdal_target))
 
 
 gdal_configure = gdal_env.Command(
 #    gdal_target, [geoexpress_extract, gdal_kakadu_build],
-    gdal_target, [gdal_extract, gdal_patch, openjpeg_extract ],
+    gdal_target, [gdal_extract, gdal_patch ],
     [gdal_env.MultiCommand(configure_cmd)])
 
 # [8] Build gdal
@@ -268,33 +179,11 @@ gdal_install = gdal_env.Command(
             other_dir, other_dir, install_root,
             gdal_target))])
 
-# [10] Copy Geoexpress libraries (gdal master installer)
-# gdal_target = '%s/.geoxpress_install' % current_dir
-# geoexpress_install = gdal_env.Command(
-#    gdal_target, gdal_install,
-#    [gdal_env.MultiCommand(
-#         'cd %s\n'
-#         'cp -d  %s-linux.x86-64.gcc44/Raster_DSDK/lib/libltidsdk.so* %s/lib\n'
-#        'touch %s' % (
-#        build_root, geoexpress_version, install_root, gdal_target))])
-
-
-# [10] Copy Openjpeg libraries (gdal master installer)
-gdal_target = '%s/.openjpeg_install' % current_dir
-openjpeg_install = gdal_env.Command(
-    gdal_target, gdal_install,
-    [gdal_env.MultiCommand(
-        'cd %s\n'
-        'cp -d  %s/lib/*.so* %s/lib\n'
-        'touch %s' % (
-            build_root, openjpeg_version, install_root, gdal_target))])
-
-
 # [11] Install these into various directories as required for build
 gdal_target = '%s/.install_for_build' % current_dir
 gdal_install_build = gdal_env.Command(
 #    gdal_target, [gdal_install, geoexpress_install],
-    gdal_target, [gdal_install, openjpeg_install],
+    gdal_target, [gdal_install ],
     [gdal_env.rsync_cmd % (
         '%s/bin/' % install_root,
         '%s/' % Dir(gdal_env.exportdirs['bin']).abspath),
