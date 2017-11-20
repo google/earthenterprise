@@ -32,8 +32,6 @@ ASSET_ROOT="/gevol/assets"
 SOURCE_VOLUME="/gevol/src"
 
 # Commands:
-CHKCONFIG="/sbin/chkconfig"
-INITSCRIPT_UPDATE="/usr/sbin/update-rc.d"
 NEWLINECLEANER="sed -e s:\\n::g"
 
 if [ -f /sbin/chkconfig ]; then
