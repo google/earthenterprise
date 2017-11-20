@@ -1,27 +1,35 @@
-# GEE Build Setup for CentOS, RHEL 6 and RHEL 7     
+# GEE Build Setup for CentOS 6, CentOS 7, RHEL 6, and RHEL 7
 
-## Enable additional repos
-Different yum repositories need to be enabled for different distributions to install several required development tools.  
+## Enable Additional Repositories
 
-### CentOS 7 
-```
+Specific Yum repositories need to be enabled for different distributions to
+install the required development tools.
+
+### CentOS 7
+
+```bash
 sudo yum install epel-release
 ```
 
-### RHEL 7  
+### RHEL 7
 
-```
+```bash
 sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-```    
-
-### CentOS 6 
 ```
+
+### CentOS 6
+
+```bash
 wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
 sudo yum install -y epel-release
 ```
 
 ### RHEL 6
-```
+
+__NOTE:__ The EPEL URL below assumes that your RHEL 6 installation has
+the latest updates.
+
+```bash
 # For RHEL 6 Workstation:
 sudo subscription-manager repos --enable=rhel-x86_64-workstation-dts-2
 
@@ -33,123 +41,155 @@ sudo subscription-manager repos --enable=rhel-6-server-optional-rpms
 sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
 ```
 
-_Note: the EPEL URL above assumes that your RHEL 6 installation is running the latest updates_
+## Install Git
 
-## Install Git  
-    
 Install the system default version:
-    
-```
+
+```bash
 sudo yum install -y git
 ```
-    
-Or install the latest version from the IUS repo (recommended) [ [More Info] ](https://ius.io/GettingStarted/):
-```
+
+Alternatively, install the latest version from the IUS repository (recommended).
+See the [Getting Started](https://ius.io/GettingStarted/) page to find the RPM
+URL for your system. Use this URL below:
+
+```bash
 sudo yum install -y wget
 cd /tmp
-wget https://rhel7.iuscommunity.org/ius-release.rpm
+
+# CentOS 7
+wget https://centos7.iuscommunity.org/ius-release.rpm
 sudo yum install -y ius-release.rpm
 sudo yum install -y git2u-all
-```        
-        
-## Install Git LFS
-   
-Execute the following commands
-    
 ```
-curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh | sudo bash
+
+## Install Git LFS
+
+Execute the following commands:
+
+```bash
+curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh \
+  | sudo bash
 sudo yum install git-lfs
 ```
-    
+
 ## GCC 4.8
 
 ### CentOS 7 and RHEL 7
 
-```
-yum install ant bzip2 doxygen gcc-c++ patch python-argparse python-setuptools swig tar
+```bash
+yum install ant bzip2 doxygen gcc-c++ patch python-argparse python-setuptools \
+  swig tar
 ```
 
+### CentOS 6
 
-### CentOS 6 
-```
-yum install -y devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-toolchain devtoolset-2-gcc-gfortran 
+```bash
+yum install -y devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-toolchain devtoolset-2-gcc-gfortran
 ```
 
 ### RHEL 6
 
+```bash
+sudo yum install -y devtoolset-2-gcc devtoolset-2-binutils \
+  devtoolset-2-toolchain devtoolset-2-gcc-c++ devtoolset-2-gcc-gfortran
 ```
-sudo yum install -y devtoolset-2-gcc devtoolset-2-binutils  devtoolset-2-toolchain devtoolset-2-gcc-c++ devtoolset-2-gcc-gfortran 
+
+The GCC 4.8 installation will be located in the `/opt/rh/devtoolset-2/root/usr/bin/` directory.
+
+The GEE build scripts will detect this compiler automatically. However, if you
+wish to switch the environment to use GCC 4.8 in a shell, execute:
+
+```bash
+source /opt/rh/devtoolset-2/enable
 ```
-
-The GCC 4.8 installation will be located in the `/opt/rh/devtoolset-2/root/usr/bin/` directory.  
-
-The GEE build scripts will detect this compiler automatically. However, if you wish switch the environment to use GCC 4.8 in a shell, run: 
-```source /opt/rh/devtoolset-2/enable```
-
 
 ## Install additional packages
-_Note: if you are upgrading from GEE 5.1.3 or earlier, you must run this step __after__ uninstalling older versions of GEE.  Otherwise, some of the prerequisites will be missing and your build will fail._
+
+__NOTE:__ If you are upgrading from GEE 5.1.3 or earlier, you must run this step
+_after_ uninstalling older versions of GEE. Otherwise, some of the
+prerequisites will be missing and the build will fail.
 
 ### CentOS 7 and RHEL 7
-Execute: 
+
+Execute:
+
+```bash
+sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel \
+  python-devel perl-Alien-Packages openssl-devel libxml2-devel \
+  libXinerama-devel libXft-devel libXrandr-devel libXcursor-devel gdbm-devel \
+  libmng-devel libcap-devel libpng12-devel libXmu-devel freeglut-devel \
+  zlib-devel libX11-devel bison-devel openjpeg-devel openjpeg2-devel \
+  geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel \
+  cmake rpm-build rsync
 ```
-sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel python-devel perl-Alien-Packages  \
-    openssl-devel libxml2-devel libXinerama-devel libXft-devel libXrandr-devel libXcursor-devel gdbm-devel   \
-    libmng-devel libcap-devel libpng12-devel libXmu-devel freeglut-devel zlib-devel libX11-devel bison-devel  \
-    openjpeg-devel openjpeg2-devel geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel cmake \
-    rpm-build rsync
-```
+
 ### CentOS 6 and RHEL 6
-Execute: 
-```
-sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel python-devel perl-Alien-Packages  \
-    openssl-devel libxml2-devel libXinerama-devel libXft-devel libXrandr-devel libXcursor-devel gdbm-devel   \
-    libmng-devel libcap-devel libpng-devel libXmu-devel freeglut-devel zlib-devel libX11-devel bison-devel  \
-    openjpeg-devel openjpeg2-devel geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel cmake
-    rpm-build rsync shunit2
-```
-If you get an error about git dependency conflicts, consider experimenting with the `--skip-broken` parameter.
 
+Execute:
 
+```bash
+sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel \
+  python-devel perl-Alien-Packages openssl-devel libxml2-devel \
+  libXinerama-devel libXft-devel libXrandr-devel libXcursor-devel gdbm-devel \
+  libmng-devel libcap-devel libpng-devel libXmu-devel freeglut-devel \
+  zlib-devel libX11-devel bison-devel openjpeg-devel openjpeg2-devel \
+  geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel \
+  cmake rpm-build rsync shunit2
+```
 
 ## GTest 1.8
+
 ### CentOS 7 and RHEL 7
-gtest is included in EPEL and RHEL Extra Repositories.  Install the RPM: 
-```
+
+GTest is included in the EPEL and RHEL Extra Repositories. Install the RPM with:
+
+```bash
 yum install -y gtest-devel
-``` 
+```
 
 ### CentOS 6 and RHEL 6
-You will need to compile, package and install an updated version of GTest as an RPM for RHEL6.   Note that this build process also depends on GCC 4.8, as does the rest of the GEE build process. 
 
-To clone this git repo and build the RPM on RHEL6, execute the following: 
-```
+You will need to compile, package, and install an updated version of GTest as an
+RPM for RHEL6. This build process also depends on GCC 4.8, as does
+the rest of the GEE build process.
+
+To clone this Git repository and build the RPM on RHEL6, execute the following:
+
+```bash
 mkdir -p ~/opengee/rpm-build/
 cd ~/opengee/rpm-build/
+
 git clone https://github.com/thermopylae/gtest-devtoolset-rpm.git
+
 cd gtest-devtoolset-rpm/
 ./bin/build.sh --use-docker=no
 ```
-___Note: the gtest RPM can be built on other linux systems using docker - simply execute "build.sh without the `--no-docker` parameter.  See the [README.md](https://github.com/thermopylae/gtest-devtoolset-rpm) file for more details.___  
-  
-  Install the RPM: 
-``` 
+
+__NOTE:__ The GTest RPM can be built on other Linux systems using Docker. Simply
+execute `build.sh` without the `--use-docker=no` argument. See the [README.md](https://github.com/thermopylae/gtest-devtoolset-rpm) for more details.
+
+Install the RPM:
+
+```bash
 sudo yum install -y ./build/RPMS/x86_64/gtest-devtoolset2-1.8.0-1.x86_64.rpm
 ```
-
 ## shunit2
 
-shunit2 is used for unit testing shell scripts in the GEE repo.
-It is currently used only for testing package building scripts.
+shunit2 is used for unit testing shell scripts in the GEE repository.
+It is currently used only for testing package-building scripts.
 
 ### CentOS 7 and RHEL 7
+
 The EPEL repositories for RHEL and CentOS 7 do not include shunit2.
 If you want to run these tests on one of these platforms, you must install
 shunit2 from the EPEL repositories for RHEL and CentOS 6.
-Run the following:
-```
+To do so run the following:
+
+```bash
 sudo yum install -y http://download-ib01.fedoraproject.org/pub/epel/6/x86_64/Packages/s/shunit2-2.1.6-3.el6.noarch.rpm
 ```
 
 ### CentOS 6 and RHEL 6
+
 shunit2 was installed in a previous step.

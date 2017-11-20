@@ -150,16 +150,22 @@ else:
   python_include = '/usr/include/python%s' % python_major_version
 
 # setup platform specific operations
-is_hardy = True
-# if non-zero return status it is not hardy
-# Warning: assume your Ubuntu version is 10.04.2, otherwise need change 
-#the version number in order to compile
-if os.WEXITSTATUS(os.system('awk \'/Ubuntu/ { split($2, array,"."); \
-      if(!(array[1]>=10 && array[2]>=04)) exit(1) }\'  /etc/issue')):
-  print 'Unknown Unbuntu version, require 10.04.x or higher.\
-  Please check /etc/issue for version number'
-  Exit(1)
-  is_hardy = False
+is_min_ubuntu = True
+# /etc/issue was the previous method of checking Ubuntu release version
+# however, some flavors of Ubuntu e.g. MATE, have used varying formats
+# using ilsb_release, subprocess and re is more readable than awk parsing also
+try:
+  vstring=subprocess.check_output('lsb_release -r',shell=True)
+  arr=re.split('[\t\.\n]',vstring)
+  major=int(arr[1])
+  minor=int(arr[2])
+  if arr[1] < 12:
+    print 'Unknown Ubuntu version, minimum required version is 12.04.'
+    Exit(1)
+    is_min_ubuntu = False
+# lsb_release is not present, must be RHEL or CentOS, move on
+except:
+  print "OS is not Ubuntu"
 
 extragccflags = []
 if sys.platform[0:5] == 'linux':
@@ -179,7 +185,7 @@ if sys.platform[0:5] == 'linux':
   # confusion. But it is not dangerous and so for the time being we ignore
   # those.
   # TODO: Remove this and correct all places where we see this warning.
-  if is_hardy:
+  if is_min_ubuntu:
     warnflags += ['-Wno-parentheses']
   cppflags = ['-D_LARGEFILE64_SOURCE', '-DQT_THREAD_SUPPORT',
               '-DQT_NO_ASCII_CAST', '-DQT_CLEAN_NAMESPACE', '-D_REENTRANT',
@@ -247,9 +253,8 @@ else:
   cross_cc_target = None
   cross_cc_base = None
 
-# TODO: clean up using of the is_hardy-flag.
 if not native_cc:
-  if is_hardy:
+  if is_min_ubuntu:
     optflags += ['-D_GNU_SOURCE', '-mno-red-zone', '-fno-strict-aliasing', '-mcld',
                  '-idirafter', '/usr/include', '-isystem', '/usr/include']
     linkflags += ['-Wl,-dynamic-linker,/lib64/ld-linux-x86-64.so.2']
@@ -428,7 +433,7 @@ fusion_version_number = FusionVersionNumber('fusion_version.txt')
 
 # create the environment that controls the builds
 
-if is_hardy:
+if is_min_ubuntu:
   path_string = '%sbin:/bin:/usr/bin' % (exportdirs['root'])
 else:
   path_string = '%sbin:%s/bin:/bin:/usr/bin' % (exportdirs['root'], optdir)
@@ -443,7 +448,7 @@ env = khEnvironment(
     native_cc=native_cc,
     bundle_3rd_libs=bundle_3rd_libs,
     cc_dir=cc_dir,
-    is_hardy=is_hardy,
+    is_min_ubuntu=is_min_ubuntu,
     exportdirs=exportdirs,
     installdirs=installdirs,
     skia_rel_dir=skia_rel_dir,
