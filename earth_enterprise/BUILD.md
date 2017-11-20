@@ -19,8 +19,7 @@ Ubuntu 16.04 LTS, RHEL 6, RHEL 7, CentOS 6, and CentOS 7.
 Different operating systems have different means to setup up these dependencies.
 For Linux build environments, see either the [Redhat and Centos Setup Instructions](./BUILD_RHEL_CentOS.md)
 or the [Ubuntu Setup Instructions](./BUILD_Ubuntu.md) for those specific
-platforms on how to setup the dependencies, tools, and compilers. Alternatively,
-setup may be performed by executing the [build script](../scripts/get-gee-build-environment.sh).
+platforms on how to setup the dependencies, tools, and compilers.
 
 1. Clone the _earthenterprise_ repository in your build environment:
 
