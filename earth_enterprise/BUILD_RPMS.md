@@ -1,4 +1,5 @@
 # Installing via Package Managers
+
 This document describes how to build and install Open GEE packages (i.e. RPMs,
 and later, DEBs).  Packages should be built on the same platform that they are
 installed on to avoid library errors.  This document assumes the development
@@ -13,19 +14,20 @@ tested by building **stage_install** before attempting to create RPMs.  The
 used.
 
 ## Prerequisites
-The RPMs are built using Gradle, and Gradle requires Java.  On Ubuntu (16.04)
-the jdk can be installed with ```apt-get install default-jdk rpm```.  The
-minimum requirement is Java 7 JDK.  It is possible to build RPMs on Ubuntu, and
-therefore test the build process itself there, but the resulting RPMs cannot be
-installed anywhere.  To create RPM's that will install on CentOS or RHEL 6
-requires building the RPM's on those same platforms.
 
-To build RPMS on CentOS or RHEL requires installing the jdk with ```yum install
+The RPMs are built using Gradle, and Gradle requires Java.  On Ubuntu (16.04)
+the JDK can be installed with ```apt-get install default-jdk rpm```.  The
+minimum requirement is Java 7 JDK.  Building RPMs on Ubuntu is not supported.
+To create RPM's that will install on CentOS or RHEL 6 requires building the
+RPM's on the target platform.
+
+To build RPMS on CentOS or RHEL requires installing the JDK with ```yum install
 java-1.7.0-openjdk-devel```.  There are no other special prerequisites, as the
 SCons build target pulls down osPackage and dependencies as needed before
 creating RPMs.
 
 ## Creating RPMs
+
 A new SCons target was added to make RPMs, **package_install**, that can be run
 from the *earth_enterprise* subdirectory.  This can be used after
 **stage_install** to verify the build, as it uses the stage install directory.
@@ -73,6 +75,7 @@ should be able to migrate an existing manual install of Open GEE with the
 packaged version, backup any data before attempting such a migration.
 
 ## Removing RPMs
+
 Removing RPMs can be performed using ```yum remove```.  To remove all all
 opengee packages, use ```sudo yum remove opengee-postgis``` as all other
 opengee packages depend on it, and this will automatically remove

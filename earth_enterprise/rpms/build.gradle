@@ -147,10 +147,14 @@ def rpmWhatProvides(capability_path) {
     def stderrBuffer = new StringBuilder()
 
     process.waitForProcessOutput(stdoutBuffer, stderrBuffer)
-    if (process.waitFor() != 0) {
+    def exitCode = process.waitFor()
+    if (exitCode != 0) {
         throw new IllegalArgumentException("""\
-            Failed to find an RPM that provides ${capability_path}!  Error output:
-            ${stderrBuffer}""".stripIndent())
+            Failed to find an RPM that provides ${capability_path}!  Exit code: ${exitCode}.
+            Error output:
+            ${stderrBuffer}
+            Standard output:
+            ${stdoutBuffer}""".stripIndent())
     }
 
     return stdoutBuffer.toString()
@@ -162,7 +166,39 @@ def rpmWhatProvidesCommand(String command_name) {
 }
 
 def rpmWhatProvidesCommand(Iterable<String> command_names) {
-    return command_names.collect { rpmWhatProvides(it) }
+    return command_names.collect { rpmWhatProvidesCommand(it) }
+}
+
+def rpmFindProvides(File[] inputFileList) {
+    def process = ["/usr/lib/rpm/find-provides"].execute()
+    def stdoutBuffer = new StringBuilder()
+    def stderrBuffer = new StringBuilder()
+
+    process.withWriter { stdin -> inputFileList.each { stdin << "${it}\n" } }
+    process.waitForProcessOutput(stdoutBuffer, stderrBuffer)
+    if (process.waitFor() != 0) {
+        throw new IllegalArgumentException("""\
+            Runing RPM find-provides failed!  Error output:
+            ${stderrBuffer}""".stripIndent())
+    }
+
+    return stdoutBuffer.readLines()
+}
+
+def rpmFindRequires(File[] inputFileList) {
+    def process = ["/usr/lib/rpm/find-requires"].execute()
+    def stdoutBuffer = new StringBuilder()
+    def stderrBuffer = new StringBuilder()
+
+    process.withWriter { stdin -> inputFileList.each { stdin << "${it}\n" } }
+    process.waitForProcessOutput(stdoutBuffer, stderrBuffer)
+    if (process.waitFor() != 0) {
+        throw new IllegalArgumentException("""\
+            Runing RPM find-provides failed!  Error output:
+            ${stderrBuffer}""".stripIndent())
+    }
+
+    return stdoutBuffer.readLines()
 }
 
 // Get the name of the Deb package that provides a given file path:
@@ -233,6 +269,18 @@ task openGeePostGisRpm(type: Rpm) {
     from (postGisInstallDir_opt) {
         into new File(packageInstallRootDir, 'opt')
     }
+
+
+    // Get a list of files going into the RPM as a '\n'-separated string:
+    def packageInputFiles = [] as File[]
+
+    eachFile { packageInputFiles << it.file }
+
+    // Run find-provides, and add provided artifacts to the package:
+    rpmFindProvides(packageInputFiles).each { provides(it) }
+
+    // Run find-requires, and add required packages:
+    rpmFindRequires(packageInputFiles).each { requires(it) }
 }
 
 if (project.hasProperty('buildOpenGee')) {
@@ -468,7 +516,7 @@ built from raster, vector, and location properties data.
 
     def requiredPackages = rpmWhatProvidesCommand([
             // install-utils.sh commands:
-            'bash', 'chkconfig', 'flock', 'sed', 'update-rc.d', 'xmllint',
+            'bash', 'chkconfig', 'flock', 'sed', 'xmllint',
             // install script commands:
             'cat', 'chcon', 'chmod', 'chown', 'cut', 'df', 'dirname', 'expr',
             'find', 'getent', 'grep', 'hostname', 'mkdir', 'nproc', 'service',
