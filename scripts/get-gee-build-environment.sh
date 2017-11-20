@@ -32,14 +32,14 @@ MIN_GCC_VERSION="4.8"
 : ${PACKAGE_BUILD_DIR:=""}
 
 # Whether to delete the package build directory before exiting:
-: ${CLEAN_PACKAGE_BUILD_DIR:="yes"}
+: ${CLEAN_PACKAGE_BUILD_DIR:="no"}
 
 # Where we download packages (RPMs) that are not provided in repositories
 # (Yum):
 : ${PACKAGE_DOWNLOAD_DIR:=""}
 
 # Whether to delete the package download directory before exiting:
-: ${CLEAN_PACKAGE_DOWNLOAD_DIR:="yes"}
+: ${CLEAN_PACKAGE_DOWNLOAD_DIR:="no"}
 
 # Whether to assume answer of yes to all questions (used when installing
 # packages).  Set to true to run without user interaction.
@@ -240,6 +240,7 @@ if [ "$PACKAGE_MANAGER" == "yum" ]; then
 
         # Install development / build tools:
          yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
+            cmake \
             ant bzip2 doxygen gcc-c++ patch python-argparse \
             python-setuptools rsync swig tar || return 1
 
@@ -300,6 +301,7 @@ elif [ "$PACKAGE_MANAGER" == "apt-get" ]; then
         # but it is for Portable Server.
          apt-get $ASSUME_YES_PACKAGE_MANAGER_PARAMETER update || return 1
          apt-get $ASSUME_YES_PACKAGE_MANAGER_PARAMETER install \
+            cmake \
             alien autoconf automake bison++ bisonc++ curl \
             doxygen flex freeglut3-dev g++ gettext gcc \
             libc6 libc6-dev libcap-dev libfreetype6 libfreetype6-dev \
