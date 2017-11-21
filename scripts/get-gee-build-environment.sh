@@ -240,7 +240,7 @@ if [ "$PACKAGE_MANAGER" == "yum" ]; then
 
         # Install development / build tools:
          yum install $ASSUME_YES_PACKAGE_MANAGER_PARAMETER \
-            cmake \
+            cmake wget \
             ant bzip2 doxygen gcc-c++ patch python-argparse \
             python-setuptools rsync swig tar || return 1
 
