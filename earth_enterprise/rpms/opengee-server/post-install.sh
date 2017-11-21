@@ -19,7 +19,6 @@ set +x
 #-----------------------------------------------------------------
 # Definitions
 PUBLISHER_ROOT="/gevol/published_dbs"
-INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
 PGSQL_DATA="/var/opt/google/pgsql/data"
 PGSQL_LOGS="/var/opt/google/pgsql/logs"
 PGSQL_PROGRAM="/opt/google/bin/pg_ctl"

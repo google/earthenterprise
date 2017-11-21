@@ -116,105 +116,19 @@ def postGisInstallDir = new File(
 
 def postGisInstallDir_opt = new File(postGisInstallDir, 'opt')
 
-// Returns the path to a given command found in a standard system PATH:
-def resolveCommandPath(command_name) {
-    def process = ["bash", "-c", "type -P -p ${command_name}"].execute()
-    def stdoutBuffer = new StringBuffer()
-    def stderrBuffer = new StringBuffer()
+// Commands used in install-utils.sh:
+def packageSharedCommands = ['bash', 'chkconfig', 'flock', 'sed', 'xmllint']
 
-    process.waitForProcessOutput(stdoutBuffer, stderrBuffer)
-    if (process.waitFor() != 0) {
-        throw new IllegalArgumentException("""\
-            Failed to find command ${command_name} in current PATH!  Error output:
-            ${stderrBuffer}""".stripIndent())
-    }
 
-    // Strip a trailing new-line character:
-    if (stdoutBuffer.charAt(stdoutBuffer.length() - 1) == "\n") {
-        stdoutBuffer.setLength(stdoutBuffer.length() - 1)
-    }
-
-    return stdoutBuffer.toString()
-}
-
-// Get the name of the RPM package that provides a given capability:
-def rpmWhatProvides(capability_path) {
-    def process = [
-        "rpm", "-q", '--queryformat="%{NAME}\\n"', "--whatprovides",
-        "${capability_path}"
-    ].execute()
-    def stdoutBuffer = new StringBuilder()
-    def stderrBuffer = new StringBuilder()
-
-    process.waitForProcessOutput(stdoutBuffer, stderrBuffer)
-    def exitCode = process.waitFor()
-    if (exitCode != 0) {
-        throw new IllegalArgumentException("""\
-            Failed to find an RPM that provides ${capability_path}!  Exit code: ${exitCode}.
-            Error output:
-            ${stderrBuffer}
-            Standard output:
-            ${stdoutBuffer}""".stripIndent())
-    }
-
-    return stdoutBuffer.toString()
-}
-
-// Get the name of the RPM package that provides a given shell command:
-def rpmWhatProvidesCommand(String command_name) {
-    return rpmWhatProvides(resolveCommandPath(command_name))
-}
-
-def rpmWhatProvidesCommand(Iterable<String> command_names) {
-    return command_names.collect { rpmWhatProvidesCommand(it) }
-}
-
-def rpmFindProvides(File[] inputFileList) {
-    def process = ["/usr/lib/rpm/find-provides"].execute()
-    def stdoutBuffer = new StringBuilder()
-    def stderrBuffer = new StringBuilder()
-
-    process.withWriter { stdin -> inputFileList.each { stdin << "${it}\n" } }
-    process.waitForProcessOutput(stdoutBuffer, stderrBuffer)
-    if (process.waitFor() != 0) {
-        throw new IllegalArgumentException("""\
-            Runing RPM find-provides failed!  Error output:
-            ${stderrBuffer}""".stripIndent())
-    }
-
-    return stdoutBuffer.readLines()
-}
-
-def rpmFindRequires(File[] inputFileList) {
-    def process = ["/usr/lib/rpm/find-requires"].execute()
-    def stdoutBuffer = new StringBuilder()
-    def stderrBuffer = new StringBuilder()
-
-    process.withWriter { stdin -> inputFileList.each { stdin << "${it}\n" } }
-    process.waitForProcessOutput(stdoutBuffer, stderrBuffer)
-    if (process.waitFor() != 0) {
-        throw new IllegalArgumentException("""\
-            Runing RPM find-provides failed!  Error output:
-            ${stderrBuffer}""".stripIndent())
-    }
-
-    return stdoutBuffer.readLines()
-}
 
 // Get the name of the Deb package that provides a given file path:
 def debWhatProvidesFile(String file_path) {
-    def process = ["dpkg", "-S", "${file_path}"].execute()
-    def stdoutBuffer = new StringBuilder()
-    def stderrBuffer = new StringBuilder()
+    def commandOutput = expandCommand(
+            ["dpkg", "-S", file_path],
+            "Failed to find a Deb that provides ${file_path}!"
+        )
 
-    process.waitForProcessOutput(stdoutBuffer, stderrBuffer)
-    if (process.waitFor() != 0) {
-        throw new IllegalArgumentException("""\
-            Failed to find a Deb that provides ${file_path}!  Error output:
-            ${stderrBuffer}""".stripIndent())
-    }
-
-    return stdoutBuffer.substring(0, stdoutBuffer.indexOf(':'))
+    return commandOutput.substring(0, commandOutput.indexOf(':'))
 }
 
 def debWhatProvidesCommand(String command_name) {
@@ -224,6 +138,7 @@ def debWhatProvidesCommand(String command_name) {
 def debWhatProvidesCommand(Iterable<String> command_name) {
     return command_name.collect { debWhatProvidesCommand(it) }
 }
+
 
 
 ospackage {
@@ -253,7 +168,7 @@ task stageOpenGeeInstall(type: Exec, dependsOn: 'compileOpenGee') {
         'scons', '-j8', 'release=1', 'stage_install')
 }
 
-task openGeePostGisRpm(type: Rpm) {
+task openGeePostGisRpm(type: TstRpm) {
     packageName = 'opengee-postgis'
     release = "1.${packagePlatformString}"
     version = '1.5.8'
@@ -270,17 +185,8 @@ task openGeePostGisRpm(type: Rpm) {
         into new File(packageInstallRootDir, 'opt')
     }
 
-
-    // Get a list of files going into the RPM as a '\n'-separated string:
-    def packageInputFiles = [] as File[]
-
-    eachFile { packageInputFiles << it.file }
-
-    // Run find-provides, and add provided artifacts to the package:
-    rpmFindProvides(packageInputFiles).each { provides(it) }
-
-    // Run find-requires, and add required packages:
-    rpmFindRequires(packageInputFiles).each { requires(it) }
+    findAndAddProvides()
+    findAndAddRequires()
 }
 
 if (project.hasProperty('buildOpenGee')) {
@@ -329,7 +235,7 @@ task openGeeSharedFiles(type: Copy) {
     }
 }
 
-task openGeeCommonRpm(type: Rpm, dependsOn: openGeeSharedFiles) {
+task openGeeCommonRpm(type: TstRpm, dependsOn: openGeeSharedFiles) {
     packageName = 'opengee-common'
     release = "1.${packagePlatformString}"
     version = openGeeVersion
@@ -382,7 +288,9 @@ task openGeeCommonRpm(type: Rpm, dependsOn: openGeeSharedFiles) {
 
     requires('opengee-postgis', '1.5.8', GREATER | EQUAL)
     conflicts('opengee-postgis', '2.0', GREATER | EQUAL)
-    requires('util-linux')
+
+    requireCommands(packageSharedCommands +
+        ['cat', 'cut', 'getent', 'grep', 'groupadd', 'groupdel'])
 
     // Prefix variable definitions to all install scripts:
     installUtils = file('build/shared/install-utils.sh')
@@ -409,6 +317,9 @@ task openGeeCommonRpm(type: Rpm, dependsOn: openGeeSharedFiles) {
     from(file('opengee-common/install')) {
         into packageInstallRootDir
     }
+
+    findAndAddProvides()
+    findAndAddRequires()
 }
 
 if (project.hasProperty('buildOpenGee')) {
@@ -427,7 +338,7 @@ task openGeeCommonDeb (type: Deb) {
     }
 }
 
-task openGeeServerRpm (type: Rpm, dependsOn: openGeeSharedFiles) {
+task openGeeServerRpm (type: TstRpm, dependsOn: openGeeSharedFiles) {
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     packageName = 'opengee-server'
     release = "1.${packagePlatformString}"
@@ -435,6 +346,17 @@ task openGeeServerRpm (type: Rpm, dependsOn: openGeeSharedFiles) {
     user = 'root'
     permissionGroup = 'root'
     packageGroup = 'Application/Productivity'
+
+    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
+
+    requireCommands(
+        packageSharedCommands +
+        [
+            // install script commands:
+            'cat', 'chmod', 'chown', 'cut', 'find', 'getent', 'mkdir', 'python',
+            'sed', 'service', 'su', 'sudo', 'useradd', 'userdel', 'usermod'
+        ]
+    )
 
     // Prefix variable definitions to all install scripts:
     installUtils = file('build/shared/install-utils.sh')
@@ -477,6 +399,9 @@ task openGeeServerRpm (type: Rpm, dependsOn: openGeeSharedFiles) {
     from(stagedInstallDir_server_apachesupport) {
         into packageInstallRootDir
     }
+
+    findAndAddProvides()
+    findAndAddRequires()
 }
 
 task openGeeServerDeb (type: Deb) {
@@ -497,7 +422,7 @@ task openGeeServerDeb (type: Deb) {
     }
 }
 
-task openGeeFusionRpm (type: Rpm, dependsOn: openGeeSharedFiles) {
+task openGeeFusionRpm (type: TstRpm, dependsOn: openGeeSharedFiles) {
     packageName = 'opengee-fusion'
     release = "1.${packagePlatformString}"
     version = openGeeVersion
@@ -514,20 +439,17 @@ built from raster, vector, and location properties data.
     license = 'Apache 2.0'
     type = BINARY
 
-    def requiredPackages = rpmWhatProvidesCommand([
-            // install-utils.sh commands:
-            'bash', 'chkconfig', 'flock', 'sed', 'xmllint',
+    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
+
+    requireCommands(
+        packageSharedCommands +
+        [
             // install script commands:
             'cat', 'chcon', 'chmod', 'chown', 'cut', 'df', 'dirname', 'expr',
             'find', 'getent', 'grep', 'hostname', 'mkdir', 'nproc', 'service',
             'tr', 'useradd', 'userdel', 'usermod'
-        ]) as Set
-
-    requiredPackages.each {
-        requires(it)
-    }
-
-    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
+        ]
+    )
 
     // Prefix variable definitions to all install scripts:
     installUtils = file('build/shared/install-utils.sh')
@@ -590,6 +512,9 @@ built from raster, vector, and location properties data.
             }
         }
     }
+
+    findAndAddProvides()
+    findAndAddRequires()
 }
 
 task openGeeFusionDeb (type: Deb) {
