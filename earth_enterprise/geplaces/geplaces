@@ -32,10 +32,8 @@ then
     exit 0
   fi
   $BINDIR/createdb -U geuser --owner=geuser geplaces
-  $BINDIR/createlang -U geuser plpgsql geplaces
-  $BINDIR/psql -q -U geuser -d geplaces -f $SQLDIR/postgis.sql 2>/dev/null >/dev/null
-#  $BINDIR/psql -q -U geuser -d geplaces -f $SQLDIR/postgis_upgrade.sql 2>/dev/null >/dev/null
-  $BINDIR/psql -q -U geuser -d geplaces -f $SQLDIR/spatial_ref_sys.sql 2>/dev/null >/dev/null
+  $BINDIR/psql -U geuser -d geplaces -c "CREATE EXTENSION postgis"
+
   zcat $SHAREDIR/geplaces/geplaces_db.gz | $BINDIR/psql -q -U geuser -d geplaces 2>/dev/null >/dev/null
 
   # Create new cities view

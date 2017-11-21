@@ -295,12 +295,10 @@ else
 
   $BINDIR/createdb --owner=geuser -U geuser gesearch
   $BINDIR/psql -q -d gesearch geuser -f $SQLDIR/gesearch_tables.sql
-
+  
   $BINDIR/createdb -U geuser --owner=geuser gepoi
-  $BINDIR/createlang -U geuser plpgsql gepoi
+  $BINDIR/psql -U geuser -d gepoi -c "CREATE EXTENSION postgis"
 
-  $BINDIR/psql -q -U geuser -d gepoi -f $SHAREDIR/postgis.sql 2>/dev/null >/dev/null
-  $BINDIR/psql -q -U geuser -d gepoi -f $SHAREDIR/spatial_ref_sys.sql 2>/dev/null >/dev/null
   echo "Done."
 fi
 
