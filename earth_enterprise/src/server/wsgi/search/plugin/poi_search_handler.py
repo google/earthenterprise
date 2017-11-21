@@ -824,7 +824,7 @@ class POISearch(object):
     """
     (xmin, xmax, ymin, ymax) = self.__GetBBoxBounds(
         latcenter, loncenter, latspan, lonspan)
-    bbox = "SetSRID('BOX3D(%s %s,%s %s)'::box3d,%s)" %(
+    bbox = "ST_SetSRID('BOX3D(%s %s,%s %s)'::box3d,%s)" %(
         xmin, ymin, xmax, ymax, self.srid)
 
     return bbox
@@ -879,7 +879,7 @@ class POISearch(object):
 
 def main():
   poiobj = POISearch()
-  bbox = "SetSRID('BOX3D(-180.0 -90.0,180.0 90.0)'::box3d,4326)"
+  bbox = "ST_SetSRID('BOX3D(-180.0 -90.0,180.0 90.0)'::box3d,4326)"
   poiobj.DoSearch("US Route 101", 7, "KML", bbox)
 
 if __name__ == "__main__":
