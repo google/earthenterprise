@@ -295,7 +295,7 @@ def GitGeneratedLongVersion():
     patchRaw = rawComponents[1]
     numCommits = rawComponents[2]   # Unused.
     hash = rawComponents[3]
-    isFinal = ((patchRaw[-5:] ==  "final") or
+    isFinal = ((patchRaw[-5:] == "final") or
                (patchRaw[-7:] == "release"))
   
     baseComponents = base.split(".")
@@ -310,7 +310,7 @@ def GitGeneratedLongVersion():
     # Determine how to update. Note that 'commits > 0' already,
     # or else we would have returned earlier.
     if isFinal:
-        patch = 1
+        patch = 0
         revision = revision + 1
     else:
         patch = patch + 1
