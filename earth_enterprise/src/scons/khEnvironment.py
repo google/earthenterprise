@@ -282,7 +282,7 @@ def GitGeneratedLongVersion():
 
     # Grab the datestamp.
     date = datetime.utcnow().strftime("%Y%m%d%H%M")
-    
+
     # If this condition hits, then we are currently on a tagged commit.
     if (len(raw.split("-")) < 4):
         if CheckDirtyRepository():
@@ -293,9 +293,10 @@ def GitGeneratedLongVersion():
     rawComponents = raw.split("-")
     base = rawComponents[0]
     patchRaw = rawComponents[1]
-    numCommits = rawComponents[2]
+    numCommits = rawComponents[2]   # Unused.
     hash = rawComponents[3]
-    isFinal = (patchRaw[-5:] == "final")
+    isFinal = ((patchRaw[-5:] == "final") or
+               (patchRaw[-7:] == "release"))
   
     baseComponents = base.split(".")
     major = int(baseComponents[0])
@@ -304,6 +305,7 @@ def GitGeneratedLongVersion():
   
     patchComponents = patchRaw.split(".")
     patch = int(patchComponents[0])
+    
   
     # Determine how to update. Note that 'commits > 0' already,
     # or else we would have returned earlier.
@@ -315,9 +317,13 @@ def GitGeneratedLongVersion():
     
     # Rebuild.
     base = '.'.join([str(x) for x in (major, minor, revision)])
-    patchRaw = str(patch) + ".beta"
-  
-    return '-'.join([base, patchRaw, hash])
+    # A dirty repository trumps most other tag concerns.
+    if CheckDirtyRepository():
+        patchRaw = '.'.join([patchRaw, date])
+    else:
+        patchRaw = '.'.join([str(patch), "alpha", date, hash])
+    
+    return '-'.join([base, patchRaw])
   
 
 # our derived class
