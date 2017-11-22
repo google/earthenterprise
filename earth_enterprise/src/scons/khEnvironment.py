@@ -190,6 +190,10 @@ def EmitVersionFunc(target, backupFile):
   fp = open(target, 'w')
   fp.write(versionStr)
   fp.close()
+  
+  fp = open(backupFile, 'w')
+  fp.write(versionStr)
+  fp.close()
 
 
 def EmitVersionStrfunc(target, backupFile):
