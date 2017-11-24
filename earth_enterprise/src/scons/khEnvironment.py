@@ -255,6 +255,12 @@ def CheckDirtyRepository():
     """Check to see if the repository is not in a cleanly committed state."""
     
     str = subprocess.check_output(['git', 'status', '--porcelain'])
+    
+    # Ignore version.txt for this purpose, as a build may modify the file
+    # and lead to an erroneous interpretation.
+    if (str == " M earth_enterprise/src/version.txt\n"):
+        return False
+    
     return (len(str) > 0)
     
 
