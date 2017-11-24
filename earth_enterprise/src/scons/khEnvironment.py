@@ -294,40 +294,52 @@ def GitGeneratedLongVersion():
         return raw
 
     # Tear apart the information in the version string.
-    rawComponents = raw.split("-")
-    base = rawComponents[0]
-    patchRaw = rawComponents[1]
-    numCommits = rawComponents[2]   # Unused.
-    hash = rawComponents[3]
-    isFinal = ((patchRaw[-5:] == "final") or
-               (patchRaw[-7:] == "release"))
+    components = ParseRawVersionString(raw)
   
-    baseComponents = base.split(".")
-    major = int(baseComponents[0])
-    minor = int(baseComponents[1])
-    revision = int(baseComponents[2])
-  
-    patchComponents = patchRaw.split(".")
-    patch = int(patchComponents[0])
-    
-  
-    # Determine how to update. Note that 'commits > 0' already,
-    # or else we would have returned earlier.
-    if isFinal:
-        patch = 0
-        revision = revision + 1
+    # Determine how to update, since we are *not* on tagged commit.
+    if components['isFinal']:
+        components['patch'] = 0
+        components['patchType]'] = "alpha"
+        components['revision'] = components['revision'] + 1
     else:
-        patch = patch + 1
+        components['patch'] = components['patch'] + 1
     
     # Rebuild.
-    base = '.'.join([str(x) for x in (major, minor, revision)])
-    # A dirty repository trumps most other tag concerns.
-    if CheckDirtyRepository():
-        patchRaw = '.'.join([patchRaw, date])
-    else:
-        patchRaw = '.'.join([str(patch), "alpha", date, hash])
+    base = '.'.join([str(components[x]) for x in ("major", "minor", "revision")])
+    patch = '.'.join([str(components["patch"]), components["patchType"], date])
+    if not CheckDirtyRepository():
+        patch = '.'.join(patch, components['hash'])
     
-    return '-'.join([base, patchRaw])
+    return '-'.join([base, patch])
+
+
+def ParseRawVersionString(raw):
+    """Break apart a raw version string into its various components,
+    and return those entries via a dictionary."""
+
+    components = { }    
+    rawComponents = raw.split("-")
+    
+    base = rawComponents[0]
+    patchRaw = rawComponents[1]
+    components['numCommits'] = rawComponents[2]
+    components['hash'] = rawComponents[3]
+    components['isFinal'] = ((patchRaw[-5:] == "final") or
+                             (patchRaw[-7:] == "release"))
+  
+    baseComponents = base.split(".")
+    components['major'] = int(baseComponents[0])
+    components['minor'] = int(baseComponents[1])
+    components['revision'] = int(baseComponents[2])
+  
+    patchComponents = patchRaw.split(".")
+    components['patch'] = int(patchComponents[0])
+    if (len(patchComponents) < 2):
+        components['patchType'] = "alpha"
+    else:
+        components['patchType'] = patchComponents[1]
+        
+    return components
   
 
 # our derived class
