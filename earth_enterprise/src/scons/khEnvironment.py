@@ -257,7 +257,7 @@ def CheckDirtyRepository():
     str = subprocess.check_output(['git', 'status', '--porcelain'])
     
     # Ignore version.txt for this purpose, as a build may modify the file
-    # and lead to an erroneous interpretation.
+    # and lead to an erroneous interpretation on repeated consecutive builds.
     if (str == " M earth_enterprise/src/version.txt\n"):
         return False
     
