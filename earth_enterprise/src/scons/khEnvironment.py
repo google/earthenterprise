@@ -299,7 +299,7 @@ def GitGeneratedLongVersion():
     # Determine how to update, since we are *not* on tagged commit.
     if components['isFinal']:
         components['patch'] = 0
-        components['patchType]'] = "alpha"
+        components['patchType'] = "alpha"
         components['revision'] = components['revision'] + 1
     else:
         components['patch'] = components['patch'] + 1
