@@ -308,7 +308,7 @@ def GitGeneratedLongVersion():
     base = '.'.join([str(components[x]) for x in ("major", "minor", "revision")])
     patch = '.'.join([str(components["patch"]), components["patchType"], date])
     if not CheckDirtyRepository():
-        patch = '.'.join(patch, components['hash'])
+        patch = '.'.join([patch, components['hash']])
     
     return '-'.join([base, patch])
 
