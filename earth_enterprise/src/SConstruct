@@ -533,5 +533,3 @@ env.Clean("distclean", [
 
 env.Clean("clean", None)
 env.Clean("buildclean", [[exportdir+"/"+x for x in os.listdir(exportdir) if x != "third_party"]])
-
-cleanup = env.Command(None, None, ".")
