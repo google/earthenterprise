@@ -153,8 +153,17 @@ stage_tutorial_cmds = {'stage_tutorial': [
 ]}
 stage_tutorial = env.PhonyTargets(**stage_tutorial_cmds)
 env.Depends(stage_tutorial, stage_data)
+
+package_staged_cmds = {'package_install': [    
+    'cd rpms; ./gradlew osPackage'    
+]}    
+    
+package_install = env.PhonyTargets(**package_staged_cmds)   
+env.Depends(package_install, stage_data)
+
 env.Alias('stage_install', 'stage_tutorial')
 env.Alias('install', 'stage_install')
+env.Alias('package', 'package_install')
 
 Export('env')
 Export('installdir')
