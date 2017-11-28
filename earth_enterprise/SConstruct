@@ -184,7 +184,12 @@ env.Clean("distclean", [
 
 if 'buildclean' in COMMAND_LINE_TARGETS:
     #clean the search and getomcat install folders.
-    #file = installdir.get_path()
-    #commands.getstatusoutput("rm -rf " + file)
+    file = installdir.get_path()
+    commands.getstatusoutput("rm -rf " + file)
+
+    #clean /tmp/fusion_os_install
+    Clean(env, installdir)
+
+    #clean build data in ./src
     clean_cmd = 'cd src; scons %s -c buildclean' % (arg_vars)
     env.Execute(clean_cmd)
