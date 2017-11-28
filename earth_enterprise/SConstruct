@@ -153,17 +153,9 @@ stage_tutorial_cmds = {'stage_tutorial': [
 ]}
 stage_tutorial = env.PhonyTargets(**stage_tutorial_cmds)
 env.Depends(stage_tutorial, stage_data)
-
-package_staged_cmds = {'package_install': [
-    'cd rpms; ./gradlew osPackage'
-]}
-
-package_install = env.PhonyTargets(**package_staged_cmds)
-env.Depends(package_install, stage_data)
-
 env.Alias('stage_install', 'stage_tutorial')
 env.Alias('install', 'stage_install')
-env.Alias('package', 'package_install')
+
 Export('env')
 Export('installdir')
 
@@ -180,7 +172,21 @@ env.PhonyTargets(**this_dict)
 
 # Clean install dir (note: the current sconscripts leave stuff behind, like
 # directories).
-if env.GetOption('clean'):
-    # clean the search and getomcat install folders.
-    file = installdir.get_path()
-    commands.getstatusoutput("rm -rf " + file)
+
+env.Clean("distclean", [
+  ".sconsign.dblite",
+  ".sconf_temp",
+  "config.log",
+  "src/.sconsign.dblite",
+  "src/.sconf_temp",
+  "src/config.log"
+  ])
+
+if 'buildclean' in COMMAND_LINE_TARGETS:
+    print "we are doing clean stuff"
+    #clean the search and getomcat install folders.
+    #file = installdir.get_path()
+    #commands.getstatusoutput("rm -rf " + file)
+    print arg_vars
+    clean_cmd = 'cd src; scons %s -c buildclean' % (arg_vars)
+    env.Execute(clean_cmd)
