@@ -183,10 +183,8 @@ env.Clean("distclean", [
   ])
 
 if 'buildclean' in COMMAND_LINE_TARGETS:
-    print "we are doing clean stuff"
     #clean the search and getomcat install folders.
     #file = installdir.get_path()
     #commands.getstatusoutput("rm -rf " + file)
-    print arg_vars
     clean_cmd = 'cd src; scons %s -c buildclean' % (arg_vars)
     env.Execute(clean_cmd)
