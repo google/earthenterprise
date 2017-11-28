@@ -525,11 +525,4 @@ env['KHIDL'] = File('#common/khxml/khidl.pl')
 
 SConscript('SConscript', build_dir=builddir, duplicate=0)
 
-env.Clean("distclean", [
-  ".sconsign.dblite",
-  "sconf_temp",
-  "config.log"
-  ])
-
-env.Clean("clean", None)
 env.Clean("buildclean", [[exportdir+"/"+x for x in os.listdir(exportdir) if x != "third_party"]])
