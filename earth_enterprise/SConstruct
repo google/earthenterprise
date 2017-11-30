@@ -181,16 +181,7 @@ env.PhonyTargets(**this_dict)
 # Clean install dir (note: the current sconscripts leave stuff behind, like
 # directories).
 
-env.Clean("distclean", [
-  ".sconsign.dblite",
-  ".sconf_temp",
-  "config.log",
-  "src/.sconsign.dblite",
-  "src/.sconf_temp",
-  "src/config.log"
-  ])
-
-if 'buildclean' in COMMAND_LINE_TARGETS:
+if 'cleanall' in COMMAND_LINE_TARGETS:
     #clean the search and getomcat install folders.
     file = installdir.get_path()
     commands.getstatusoutput("rm -rf " + file)
@@ -198,6 +189,16 @@ if 'buildclean' in COMMAND_LINE_TARGETS:
     #clean /tmp/fusion_os_install
     Clean(env, installdir)
 
+    #clean scons metadata
+    for sconsfile in [
+          ".sconsign.dblite",
+          ".sconf_temp",
+          "config.log",
+          "src/.sconsign.dblite",
+          "src/.sconf_temp",
+          "src/config.log"]:
+      Clean(env, sconsfile)
+
     #clean build data in ./src
-    clean_cmd = 'cd src; scons %s -c buildclean' % (arg_vars)
+    clean_cmd = 'cd src; scons %s -c cleanall' % (arg_vars)
     env.Execute(clean_cmd)
