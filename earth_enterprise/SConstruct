@@ -197,7 +197,7 @@ if 'cleanall' in COMMAND_LINE_TARGETS:
           "src/.sconsign.dblite",
           "src/.sconf_temp",
           "src/config.log"]:
-      Clean(env, sconsfile)
+      commands.getstatusoutput("rm -rf " + sconsfile)
 
     #clean build data in ./src
     clean_cmd = 'cd src; scons %s -c cleanall' % (arg_vars)
