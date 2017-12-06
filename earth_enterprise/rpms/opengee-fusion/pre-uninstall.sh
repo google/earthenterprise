@@ -21,9 +21,6 @@ set +x
 #-----------------------------------------------------------------
 
 service gefusion stop
-
-if [ -f "$CHKCONFIG" ]; then
-    "$CHKCONFIG" --del gefusion
-fi
+remove_service gefusion
 
 #-----------------------------------------------------------------

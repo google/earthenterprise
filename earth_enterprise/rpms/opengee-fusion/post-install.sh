@@ -20,8 +20,7 @@ set +x
 
 #------------------------------------------------------------------------------
 # Definitions
-GEE="Google Earth Enterprise"
-GEEF="$GEE Fusion"
+GEEF="$GEE_NAME Fusion"
 
 #------------------------------------------------------------------------------
 # Get system info values:
@@ -74,9 +73,7 @@ setup_fusion_daemon()
     # setup fusion daemon
     echo "Setting up the Fusion daemon..."
 
-    [ -f "$INITSCRIPT_UPDATE" ] && "$INITSCRIPT_UPDATE" -f gefusion remove
-    [ -f "$INITSCRIPT_UPDATE" ] && "$INITSCRIPT_UPDATE" gefusion start 90 2 3 4 5 . stop 10 0 1 6 .
-    [ -f "$CHKCONFIG" ] && "$CHKCONFIG" --add gefusion
+    add_service gefusion
 
     echo "Fusion daemon setup ... Done"
 }
@@ -150,12 +147,12 @@ install_or_upgrade_asset_root()
         chown -R "$GEFUSIONUSER:$GEGROUP" "$ASSET_ROOT"
     else
         # upgrade asset root -- if this is a master
-        if [ "$IS_SLAVE" == false ]; then
+        if [ "$IS_SLAVE" = false ]; then
             # TODO: Verify this logic -- this is what is defined in the
             # installer documentation, but needs confirmation
             keyvalue_file_get "$GEE_INSTALL_KV_PATH" gegroup_existed NEW_GEFUSIONUSER
             keyvalue_file_get "$GEE_INSTALL_KV_PATH" gefusionuser_existed NEW_GEFUSIONUSER
-            if [ "$NEW_GEGROUP" == true ] || [ "$NEW_GEFUSIONUSER" == true ]; then
+            if [ "$NEW_GEGROUP" = true ] || [ "$NEW_GEFUSIONUSER" = true ]; then
                 NOCHOWN=""
                 UPGRADE_MESSAGE="The upgrade will fix permissions for the asset root and source volume. This may take a while."
             else
@@ -186,7 +183,7 @@ END
 
 final_assetroot_configuration()
 {
-    if [ "$IS_SLAVE" == true ]; then
+    if [ "$IS_SLAVE" = true ]; then
         "$BASEINSTALLDIR_OPT/bin/geselectassetroot" --role slave --assetroot "$ASSET_ROOT"
     else
         "$BASEINSTALLDIR_OPT/bin/geselectassetroot" --assetroot "$ASSET_ROOT"
@@ -195,9 +192,9 @@ final_assetroot_configuration()
             "opt:$BASEINSTALLDIR_OPT/share/tutorials" --noprompt --nochown
         if [ $? -eq 255 ]; then
             cat <<END
-The geconfigureassetroot utility has failed on attempting
+The geconfigureassetroot utility has failed while attempting
 to add the volume 'opt:$BASEINSTALLDIR_OPT/share/tutorials'.
-This is probably due to a volume named "opt"'s already existing.
+This is probably because a volume named 'opt' already exists.
 END
         fi
     fi
