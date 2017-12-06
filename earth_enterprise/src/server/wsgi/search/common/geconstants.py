@@ -22,7 +22,7 @@ SEARCH_CONFIGS_DIR = "/opt/google/search/conf"
 
 
 class Constants(object):
-  """Class contains Contants used in search implementations."""
+  """Class contains Constants used in search implementations."""
 
   def __init__(self):
     """Inits constants used in search implementation."""
@@ -75,7 +75,7 @@ class Constants(object):
     # city = result[city_query_indexes["city"]]
 
     self.city_query = (
-        "SELECT ${FUNC}(ST_Force_3DZ(the_geom)) AS the_geom,city,country_name,"
+        "SELECT ${FUNC}(ST_Force3DZ(the_geom)) AS the_geom,city,country_name,"
         "population, subnational_name, GeometryType(the_geom) AS geom_type "
         "FROM ${CITY_VIEW} "
         "WHERE "
@@ -84,7 +84,7 @@ class Constants(object):
 
     self.country_query = (
         "SELECT country_name, country_code, "
-        "${FUNC}(ST_Force_3DZ(the_geom)) AS the_geom, capital, areainsqkm, "
+        "${FUNC}(ST_Force3DZ(the_geom)) AS the_geom, capital, areainsqkm, "
         "population, continent_name, languages, "
         "GeometryType(the_geom) AS geom_type "
         "FROM countries "
@@ -93,7 +93,7 @@ class Constants(object):
         "ORDER BY population DESC")
 
     self.city_and_country_name_query = (
-        "SELECT ${FUNC}(ST_Force_3DZ(the_geom)) AS the_geom, population, city,"
+        "SELECT ${FUNC}(ST_Force3DZ(the_geom)) AS the_geom, population, city,"
         "country_name, subnational_name, GeometryType(the_geom) AS geom_type "
         "FROM ${CITY_VIEW} "
         "WHERE "
@@ -101,14 +101,14 @@ class Constants(object):
         "lower(country_name) = %s")
 
     self.city_and_country_code_query = (
-        "SELECT ${FUNC}(ST_Force_3DZ(the_geom)) AS the_geom, population, city,"
+        "SELECT ${FUNC}(ST_Force3DZ(the_geom)) AS the_geom, population, city,"
         "country_name, subnational_name, GeometryType(the_geom) AS geom_type "
         "FROM ${CITY_VIEW} "
         "WHERE "
         "lower(city) = %s AND lower(country_code) = %s")
 
     self.city_and_subnational_name_query = (
-        "SELECT ${FUNC}(ST_Force_3DZ(the_geom)) AS the_geom,"
+        "SELECT ${FUNC}(ST_Force3DZ(the_geom)) AS the_geom,"
         "population, city, country_name, subnational_name, "
         "GeometryType(the_geom) AS geom_type "
         "FROM ${CITY_VIEW} "
@@ -116,7 +116,7 @@ class Constants(object):
         "lower(city) = %s AND lower(subnational_name) = %s")
 
     self.city_and_subnational_code_query = (
-        "SELECT ${FUNC}(ST_Force_3DZ(the_geom)) AS the_geom, "
+        "SELECT ${FUNC}(ST_Force3DZ(the_geom)) AS the_geom, "
         "population, city, country_name, subnational_name, "
         "GeometryType(the_geom) AS geom_type "
         "FROM ${CITY_VIEW} "
@@ -124,8 +124,8 @@ class Constants(object):
         "lower(city) = %s AND lower(subnational_code) = %s")
 
     self.example_query = (
-        "SELECT ${FUNC}(ST_Force_3DZ(the_geom)) AS the_geom,Area(the_geom),"
-        "Perimeter(the_geom),sfar_distr,nbrhood, "
+        "SELECT ${FUNC}(ST_Force3DZ(the_geom)) AS the_geom,ST_Area(the_geom),"
+        "ST_Perimeter(the_geom),sfar_distr,nbrhood, "
         "GeometryType(the_geom) AS geom_type "
         "FROM san_francisco_neighborhoods "
         "WHERE "
