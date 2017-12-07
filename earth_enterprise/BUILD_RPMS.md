@@ -7,7 +7,8 @@ system of the target platform is already set up and ready to build Open GEE.
 
 Currently only building RPM packages are supported.  To begin creating Open Gee
 RPMs requires a normal Open GEE build environment which can be setup by
-following the existing [build instructions](https://github.com/google/earthenterprise/wiki/Build-Instructions),
+following the existing
+[build instructions](https://github.com/google/earthenterprise/wiki/Build-Instructions),
 such as those already found in **BUILD.md**.  The build environment can be
 tested by building **stage_install** before attempting to create RPMs.  The
 ```install_server.sh``` or ```install_fusion.sh``` scripts should **NOT** be
@@ -75,7 +76,6 @@ should be able to migrate an existing manual install of Open GEE with the
 packaged version, backup any data before attempting such a migration.
 
 ## Removing RPMs
-
 Removing RPMs can be performed using ```yum remove```.  To remove all all
 opengee packages, use ```sudo yum remove opengee-postgis``` as all other
 opengee packages depend on it, and this will automatically remove
