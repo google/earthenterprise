@@ -15,6 +15,7 @@
 # limitations under the License.
 
 set +x
+umask 002 
 
 #-----------------------------------------------------------------
 # Definitions
