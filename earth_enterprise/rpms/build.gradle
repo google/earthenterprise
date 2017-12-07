@@ -55,8 +55,19 @@ def openGeeVersion =
         it // The first string that remains is the version string.
     }
 
+def stagedInstall_path = '/tmp/fusion_os_install'
+if (new File('../.buildinfo').exists()) {
+    new File('../.buildinfo').readLines().each {
+        if(it.startsWith('PREFIX=')) {
+            stagedInstall_path = it.substring('PREFIX='.length())
+            if(stagedInstall_path.startsWith('"')) {
+                stagedInstall_path = stagedInstall_path.substring(1, stagedInstall_path.length() - 1)
+            }
+        }
+    }
+}
 
-def stagedInstallDir = new File('/tmp/fusion_os_install')
+def stagedInstallDir = new File(stagedInstall_path)
 def stagedInstallDir_common = new File(stagedInstallDir, 'common')
 def stagedInstallDir_common_opt = new File(stagedInstallDir, 'common/opt')
 def stagedInstallDir_common_user_magic =
