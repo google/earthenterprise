@@ -189,7 +189,13 @@ if 'cleanall' in COMMAND_LINE_TARGETS:
     #clean /tmp/fusion_os_install
     Clean(env, installdir)
 
-    #clean scons metadata
+    #clean build data in ./src
+    clean_cmd = 'cd src; scons %s -c cleanall' % (arg_vars)
+    env.Execute(clean_cmd)
+
+    #clean scons metadata.. can't use Clean() or Delete()
+    #because they are scons functions and recreate
+    #the files/directories they delete
     for sconsfile in [
           ".sconsign.dblite",
           ".sconf_temp",
@@ -197,8 +203,5 @@ if 'cleanall' in COMMAND_LINE_TARGETS:
           "src/.sconsign.dblite",
           "src/.sconf_temp",
           "src/config.log"]:
-      commands.getstatusoutput("rm -rf " + sconsfile)
+      os.system("rm -rf " + sconsfile)
 
-    #clean build data in ./src
-    clean_cmd = 'cd src; scons %s -c cleanall' % (arg_vars)
-    env.Execute(clean_cmd)
