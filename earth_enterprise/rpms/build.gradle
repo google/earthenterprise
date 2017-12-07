@@ -121,26 +121,6 @@ def packageSharedCommands = ['bash', 'chkconfig', 'flock', 'sed', 'xmllint']
 
 
 
-// Get the name of the Deb package that provides a given file path:
-def debWhatProvidesFile(String file_path) {
-    def commandOutput = expandCommand(
-            ["dpkg", "-S", file_path],
-            "Failed to find a Deb that provides ${file_path}!"
-        )
-
-    return commandOutput.substring(0, commandOutput.indexOf(':'))
-}
-
-def debWhatProvidesCommand(String command_name) {
-    return debWhatProvidesFile(resolveCommandPath(command_name))
-}
-
-def debWhatProvidesCommand(Iterable<String> command_name) {
-    return command_name.collect { debWhatProvidesCommand(it) }
-}
-
-
-
 ospackage {
     version = openGeeVersion
     release = '1'

@@ -1,44 +1,53 @@
 import com.netflix.gradle.plugins.rpm.Rpm
 import com.tsciences.shell.TstCommandLine
 
-class TstRpm extends com.netflix.gradle.plugins.rpm.Rpm {
-    // Get the name of the RPM package that provides a given capability:
-    static def whatProvides(capability_path) {
-        return TstCommandLine.expand(
-                ["rpm", "-q", "--queryformat=%{NAME}\\n", "--whatprovides",
-                    capability_path],
-                "Failed to find an RPM that provides ${capability_path}!"
-            ).readLines()[0]
+class TstDeb extends com.netflix.gradle.plugins.rpm.Deb {
+    // Get the name of the Deb package that provides a given file path:
+    static def whatProvidesFile(String file_path) {
+        def commandOutput = TstCommandLine.expand(
+                ["dpkg", "-S", file_path],
+                "Failed to find a Deb that provides ${file_path}!"
+            )
+
+        return commandOutput.substring(0, commandOutput.indexOf(':'))
     }
 
-    // Get the name of the RPM package that provides a given shell command:
     static def whatProvidesCommand(String command_name) {
-        return whatProvides(TstCommandLine.resolveCommandPath(command_name))
+        return whatProvidesFile(TstCommandLine.resolveCommandPath(
+            command_name))
     }
 
-    static def whatProvidesCommand(Iterable<String> command_names) {
-        return command_names.collect { whatProvidesCommand(it) }
+    static def whatProvidesCommand(Iterable<String> command_name) {
+        return command_name.collect { whatProvidesCommand(it) }
     }
 
     static def findProvides(File[] inputFileList) {
-        return TstCommandLine.expand(
-                ["/usr/lib/rpm/find-provides"],
-                "Runing /usr/lib/rpm/find-provides failed!",
-                { stdin -> inputFileList.each { stdin << it << "\n" } }
-            ).readLines()
+        return []
     }
 
     static def findRequires(File[] inputFileList) {
-        return TstCommandLine.expand(
-                ["/usr/lib/rpm/find-requires"],
-                "Runing /usr/lib/rpm/find-provides failed!",
-                { stdin -> inputFileList.each { stdin << it << "\n" } }
-            ).readLines()
+        def libs = new Set()
+
+        inputFileList.collect { inputFile ->
+            return TstCommandLine.expand(
+                ["ldd", inputFile.toString()],
+                "Failed to list shared library dependencies of ${inputFile}!",
+                null,
+                // Ignore non-binary files:
+                [new TstCommandLine.ExpectedResult(1, "\tnot a dynamic executable\n", "")])
+        }.
+        findAll { it != null }.
+        each { stdOutput ->
+            stdOutput.readLines().
+            findAll { it.startsWith("  NEEDED ") }.
+            collect { it.substring("  NEEDED ".length()).trim() }
+        }
     }
+
 
     protected File[] packageInputFiles = null
 
-    TstRpm() {
+    TstDeb() {
         super()
     }
 
