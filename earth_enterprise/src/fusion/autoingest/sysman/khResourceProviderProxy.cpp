@@ -37,9 +37,9 @@ khResourceProviderProxy::khResourceProviderProxy
     wantAbandon(false), cleaned(false)
 {
   // Verify fusion version - bail out if mismatch
-  if (strcmp(conn.fusionVer.c_str(), FUSION_VERSION) != 0) {
+  if (strcmp(conn.fusionVer.c_str(), GEE_VERSION) != 0) {
     throw khException(kh::tr("Incorrect version: %1 instead of %2")
-                      .arg(ToQString(conn.fusionVer)).arg(ToQString(FUSION_VERSION)));
+                      .arg(ToQString(conn.fusionVer)).arg(ToQString(GEE_VERSION)));
   }
   // add myself to the resource manager
   // this will send a message to the provider for

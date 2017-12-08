@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     NotifyPrefix = "[time]";
 
     notify(NFY_NOTICE, "--------------- Started ---------------");
-    notify(NFY_NOTICE, "Fusion Version: %s", FUSION_VERSION);
+    notify(NFY_NOTICE, "Fusion Version: %s", GEE_VERSION);
 
     theSystemManager.Run();
 
