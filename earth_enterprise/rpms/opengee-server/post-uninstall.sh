@@ -17,18 +17,19 @@
 set +x
 
 #-----------------------------------------------------------------
-# Definitions
-GEE="Google Earth Enterprise"
-#-----------------------------------------------------------------
-
-#-----------------------------------------------------------------
 # Main Functions
 #-----------------------------------------------------------------
 main_postuninstall()
 {
-    # if we really get error, something really broken elsewhere
-    userdel "$GEAPACHEUSER"
-    userdel "$GEPGUSER"
+    # Fedora recommends to never delete users that a package has created:
+    #   https://fedoraproject.org/wiki/Packaging:UsersAndGroups
+    # TODO: Consider whether we want to remove this:
+    if getent passwd "$GEAPACHEUSER" >/dev/null; then
+        userdel "$GEAPACHEUSER"
+    fi
+    if getent passwd "$GEPGUSER" >/dev/null; then
+        userdel "$GEPGUSER"
+    fi
 }
 
 

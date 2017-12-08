@@ -18,7 +18,6 @@ set +x
 
 #-----------------------------------------------------------------
 # Definitions
-GEE="Google Earth Enterprise"
 PUBLISHER_ROOT="/gevol/published_dbs"
 INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
 PGSQL_DATA="/var/opt/google/pgsql/data"
@@ -55,7 +54,6 @@ main_postinstall()
     # 7) Repeated step; Set permissions after geserver Start/Stop.
     fix_postinstall_filepermissions
 
-    # TODO - verify
     # 8) Run geecheck config script
     # If file ‘/opt/google/gehttpd/cgi-bin/set_geecheck_config.py’ exists:
     if [ -f "$GEE_CHECK_CONFIG_SCRIPT" ]; then
@@ -159,17 +157,7 @@ fix_postinstall_filepermissions()
     chmod ugo+x /opt/google/share/support/geecheck/convert_to_kml.pl
     chmod ugo+x /opt/google/share/support/geecheck/find_terrain_pixel.pl
     chmod ugo+x /opt/google/share/support/geecheck/pg_check.pl
-    # Note: this is installed in install_fusion.sh, but needs setting here too.
-    #TODO
-    # chmod ugo+x $BASEINSTALLDIR_OPT/share/tutorials/fusion/download_tutorial.sh
-    # this should already be true...
     chown -R root:root /opt/google/share
-
-    #TODO
-    # Set context (needed for SELINUX support) for shared libs
-    # chcon -t texrel_shlib_t /opt/google/lib/*so*
-    # Restrict permissions to uninstaller and installer logs
-    #chmod -R go-rwx /opt/google/install
 
     # Disable cutter (default) during installation.
     /opt/google/bin/geserveradmin --disable_cutter
@@ -180,7 +168,6 @@ fix_postinstall_filepermissions()
 
 reset_pgdb()
 {
-    # TODO check if correct
     # a) Always do an upgrade of the psql db
     echo 2 | run_as_user "$GEPGUSER" "/opt/google/bin/geresetpgdb upgrade"
     echo -e "upgrade done"
@@ -199,10 +186,7 @@ reset_pgdb()
 setup_geserver_daemon()
 {   
     # setup geserver daemon
-    [ -f $CHKCONFIG ] && $CHKCONFIG --add geserver
-    [ -f $INITSCRIPTUPDATE ] && $INITSCRIPTUPDATE -f geserver remove
-    [ -f $INITSCRIPTUPDATE ] && $INITSCRIPTUPDATE geserver start 90 2 3 4 5 . stop 10 0 1 6 .
-    [ -f $CHKCONFIG ] && $CHKCONFIG --add geserver # for redhat...moved here
+    add_service geserver
 }
 
 install_search_databases()

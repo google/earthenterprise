@@ -17,11 +17,6 @@
 set +x
 
 #-----------------------------------------------------------------
-# Definitions
-GEE="Google Earth Enterprise"
-#-----------------------------------------------------------------
-
-#-----------------------------------------------------------------
 # Main Functions
 #-----------------------------------------------------------------
 main_preinstall()
@@ -58,7 +53,7 @@ check_asset_root_volume_size()
 
     ASSET_ROOT_VOLUME_SIZE=$(df -k "$VOLUME_PATH" | grep -v Avail | tr -s ' ' | cut -d ' ' -f 4)
 
-    if [[ "$ASSET_ROOT_VOLUME_SIZE" -lt MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB ]]; then
+    if [[ "$ASSET_ROOT_VOLUME_SIZE" -lt "$MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB" ]]; then
         MIN_ASSET_ROOT_VOLUME_SIZE_IN_GB=$(expr "$MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB" / 1024 / 1024)
 
         cat <<END
