@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-from pkg_resources._vendor.pyparsing import line
 
 """The build environment, builders, actions and helper methods.
 
