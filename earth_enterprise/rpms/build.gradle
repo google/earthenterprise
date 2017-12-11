@@ -61,7 +61,9 @@ if (new File('build.properties').exists()) {
     new File('build.properties').withInputStream {
         props.load(it)
     }
-    stagedInstall_path = props["prefix"]
+    if(props["staged"]) {
+        stagedInstall_path = props["staged"]
+    }
 }
 
 def stagedInstallDir = new File(stagedInstall_path)
