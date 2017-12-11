@@ -1,7 +1,7 @@
-import com.netflix.gradle.plugins.rpm.Rpm
+import com.netflix.gradle.plugins.deb.Deb
 import com.tsciences.shell.TstCommandLine
 
-class TstDeb extends com.netflix.gradle.plugins.rpm.Deb {
+class TstDeb extends com.netflix.gradle.plugins.deb.Deb {
     // Get the name of the Deb package that provides a given file path:
     static def whatProvidesFile(String file_path) {
         def commandOutput = TstCommandLine.expand(
@@ -26,7 +26,7 @@ class TstDeb extends com.netflix.gradle.plugins.rpm.Deb {
     }
 
     static def findRequires(File[] inputFileList) {
-        def libs = new Set()
+        def libs = new HashSet()
 
         inputFileList.collect { inputFile ->
             return TstCommandLine.expand(

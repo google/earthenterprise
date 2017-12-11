@@ -27,7 +27,7 @@ class TstCommandLine {
         def stderrBuffer = new StringBuilder()
 
         if (stdInAction != null) {
-            process.withWriter action
+            process.withWriter stdInAction
         }
         process.waitForProcessOutput(stdoutBuffer, stderrBuffer)
         def exitCode = process.waitFor()
