@@ -26,8 +26,8 @@ EnsureSConsVersion(0, 96, 92)
 
 # process commandline arguments
 installdir = ARGUMENTS.get('installdir', '/tmp/fusion_os_install')
-with open('.buildinfo', 'w') as f:
-    print >> f, str('PREFIX="')+installdir.strip()+str('"')
+with open('rpms/build.properties', 'w') as f:
+    print >> f, str('prefix=') + installdir.strip()
 
 installdir = Dir(installdir)
 def dir_cat(installdir, subdir1, subdir2):
