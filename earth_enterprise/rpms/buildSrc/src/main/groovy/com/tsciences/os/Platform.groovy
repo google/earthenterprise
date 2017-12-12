@@ -4,7 +4,7 @@ class Platform {
     static private String osId = null;
     static private String osVersionId = null;
 
-    static def obtanOsAndVersionIds() {
+    static def obtainOsAndVersionIds() {
         osId = null
         osVersionId = null
 
@@ -34,7 +34,7 @@ class Platform {
 
     static def getOsVersionId() {
         if (osVersionId == null) {
-            obtanOsAndVersionIds()
+            obtainOsAndVersionIds()
         }
 
         return osVersionId
@@ -42,7 +42,7 @@ class Platform {
 
     static def getOsId() {
         if (osId == null) {
-            obtanOsAndVersionIds()
+            obtainOsAndVersionIds()
         }
 
         return osId
@@ -50,7 +50,7 @@ class Platform {
 
     static def getRpmPlatformId() {
         if (osId == null) {
-            obtanOsAndVersionIds()
+            obtainOsAndVersionIds()
         }
 
         return osId in ['centos', 'redhat', 'rhel'] ? 'el' : osId
