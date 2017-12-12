@@ -89,8 +89,18 @@ def openGeeVersion =
         it // The first string that remains is the version string.
     }
 
+def stagedInstall_path = '/tmp/fusion_os_install'
+if (new File('build.properties').exists()) {
+    def props = new Properties()
+    new File('build.properties').withInputStream {
+        props.load(it)
+    }
+    if(props["staged"]) {
+        stagedInstall_path = props["staged"]
+    }
+}
 
-def stagedInstallDir = new File('/tmp/fusion_os_install')
+def stagedInstallDir = new File(stagedInstall_path)
 def stagedInstallDir_common = new File(stagedInstallDir, 'common')
 def stagedInstallDir_common_opt = new File(stagedInstallDir, 'common/opt')
 def stagedInstallDir_common_user_magic =
