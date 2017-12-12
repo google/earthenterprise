@@ -33,7 +33,8 @@ class TstRpm extends com.netflix.gradle.plugins.rpm.Rpm {
                 ["/usr/lib/rpm/find-requires"],
                 "Runing /usr/lib/rpm/find-provides failed!",
                 { stdin -> inputFileList.each { stdin << it << "\n" } }
-            ).readLines()
+            ).readLines().
+            findAll { !(it.trim() in ['', '#', 'from']) }
     }
 
     TstRpm() {
