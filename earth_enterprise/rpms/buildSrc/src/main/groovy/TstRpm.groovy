@@ -20,7 +20,7 @@ class TstRpm extends com.netflix.gradle.plugins.rpm.Rpm {
         return command_names.collect { whatProvidesCommand(it) }
     }
 
-    static def findProvides(File[] inputFileList) {
+    static def findProvides(Iterable<File> inputFileList) {
         return TstCommandLine.expand(
                 ["/usr/lib/rpm/find-provides"],
                 "Runing /usr/lib/rpm/find-provides failed!",
@@ -28,7 +28,7 @@ class TstRpm extends com.netflix.gradle.plugins.rpm.Rpm {
             ).readLines()
     }
 
-    static def findRequires(File[] inputFileList) {
+    static def findRequires(Iterable<File> inputFileList) {
         return TstCommandLine.expand(
                 ["/usr/lib/rpm/find-requires"],
                 "Runing /usr/lib/rpm/find-provides failed!",
@@ -36,43 +36,25 @@ class TstRpm extends com.netflix.gradle.plugins.rpm.Rpm {
             ).readLines()
     }
 
-    protected File[] packageInputFiles = null
-
     TstRpm() {
         super()
-    }
-
-    protected void collectPackageInputFilesList() {
-        if (packageInputFiles == null) {
-            // Get a list of files going into the RPM:
-            def filesList = []
-
-            eachFile { filesList << it.file }
-
-            packageInputFiles = filesList as File[]
-            println "packageInputFiles: ${packageInputFiles}"
-        }
     }
 
     // Adds the packages that provide all of the given commands to the package
     // dependency list.
     def requireCommands(Iterable<String> commands) {
-        (whatProvidesCommand(commands) as Set).each {
-            requires(it)
+        (commands as Set).each {
+            requires(TstCommandLine.resolveCommandPath(it))
         }
     }
 
     // Runs find-provides, and add provided artifacts to the package.
     def findAndAddProvides() {
-        collectPackageInputFilesList()
-
-        findProvides(packageInputFiles).each { provides(it) }
+        findProvides(source.files).each { provides(it) }
     }
 
     // Runs find-requires, and add required packages.
     def findAndAddRequires() {
-        collectPackageInputFilesList()
-
-        findRequires(packageInputFiles).each { requires(it) }
+        findRequires(source.files).each { requires(it) }
     }
 }
