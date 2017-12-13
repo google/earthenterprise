@@ -105,7 +105,7 @@ MapDBAssetVersionImplD::DoSubmitTask(void)
       layerJSVersion->GetOutputFilename(0);
   }
   mapdbgen_config.database_version_ = config.database_version_;
-  mapdbgen_config.fusion_version_ = FUSION_VERSION;
+  mapdbgen_config.fusion_version_ = GEE_VERSION;
 
   std::string configfile = WorkingFilename("config.xml"); // fully bound name
   if (!mapdbgen_config.Save(configfile)) {
