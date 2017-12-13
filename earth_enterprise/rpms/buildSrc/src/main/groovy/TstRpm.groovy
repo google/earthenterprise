@@ -50,14 +50,20 @@ class TstRpm extends com.netflix.gradle.plugins.rpm.Rpm {
         }
     }
 
-    // Runs find-provides, and add provided artifacts to the package.
-    def findAndAddProvides() {
-        findProvides(source.files).each { provides(it) }
-    }
+    // Runs find-provides and find-requires, and adds provided artifacts to
+    // the package.
+    def findAndAddProvidesAndRequires() {
+        def providedCapabilities = new HashSet<String>()
 
-    // Runs find-requires, and add required packages.
-    def findAndAddRequires() {
-        findRequires(source.files).each { requires(it) }
+        findProvides(source.files).each {
+            provides(it)
+            providedCapabilities.add(it.find(/[^<=>]+/).trim())
+        }
+        findRequires(source.files).each {
+            if (!providedCapabilities.contains(it.find(/[^<=>]+/).trim())) {
+                requires(it)
+            }
+        }
     }
 
 
