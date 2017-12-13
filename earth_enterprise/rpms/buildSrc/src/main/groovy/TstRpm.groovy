@@ -25,7 +25,8 @@ class TstRpm extends com.netflix.gradle.plugins.rpm.Rpm {
                 ["/usr/lib/rpm/find-provides"],
                 "Runing /usr/lib/rpm/find-provides failed!",
                 { stdin -> inputFileList.each { stdin << it << "\n" } }
-            ).readLines()
+            ).readLines().
+            findAll { !(it.trim() in ['', '#', 'from']) }
     }
 
     static def findRequires(Iterable<File> inputFileList) {
@@ -57,5 +58,30 @@ class TstRpm extends com.netflix.gradle.plugins.rpm.Rpm {
     // Runs find-requires, and add required packages.
     def findAndAddRequires() {
         findRequires(source.files).each { requires(it) }
+    }
+
+
+    def autoPackageDependencyInjection() {
+        println findRequires(source.files).dump()   
+        println findProvides(source.files).dump()
+        def reqs = findRequires(source.files)
+        def provs = findProvides(source.files)
+        reqs.removeAll( provs )
+
+        println "XXXXXXXXXXXXXXXXXXX"
+        println 'Source: ' + source
+        println '    provides : ' + provs
+        println '    reqs     : ' + reqs
+      
+        println "XXXXXXXXXXXXXXXXXXX"
+        reqs.each{ r-> 
+            println "Adding req: " + r
+            requires( r ) 
+        }
+        provs.each{ p->
+            println "Adding prov: " + p
+             provides( p ) 
+        }
+        
     }
 }

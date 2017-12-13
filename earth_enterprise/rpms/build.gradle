@@ -175,8 +175,11 @@ task openGeePostGisRpm(type: TstRpm) {
         into new File(packageInstallRootDir, 'opt')
     }
 
-    findAndAddProvides()
-    findAndAddRequires()
+    //findAndAddProvides()
+    //findAndAddRequires()
+    doLast{ 
+        autoPackageDependencyInjection()
+    }
 }
 
 if (project.hasProperty('buildOpenGee')) {
@@ -308,8 +311,11 @@ task openGeeCommonRpm(type: TstRpm, dependsOn: openGeeSharedFiles) {
         into packageInstallRootDir
     }
 
-    findAndAddProvides()
-    findAndAddRequires()
+    //findAndAddProvides()
+    //findAndAddRequires()
+    doLast { 
+        autoPackageDependencyInjection()
+    }
 }
 
 if (project.hasProperty('buildOpenGee')) {
@@ -390,8 +396,11 @@ task openGeeServerRpm (type: TstRpm, dependsOn: openGeeSharedFiles) {
         into packageInstallRootDir
     }
 
-    findAndAddProvides()
-    findAndAddRequires()
+        //findAndAddProvides()
+        //findAndAddRequires()
+        doLast{
+            autoPackageDependencyInjection()
+        }
 }
 
 task openGeeServerDeb (type: Deb) {
@@ -503,8 +512,11 @@ built from raster, vector, and location properties data.
         }
     }
 
-    findAndAddProvides()
-    findAndAddRequires()
+    //findAndAddProvides()
+    //findAndAddRequires()
+    doLast { 
+        autoPackageDependencyInjection()
+    }
 }
 
 task openGeeFusionDeb (type: Deb) {
