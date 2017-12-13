@@ -52,7 +52,7 @@ class TstRpm extends com.netflix.gradle.plugins.rpm.Rpm {
 
     // Runs find-provides and find-requires, and adds provided artifacts to
     // the package.
-    def findAndAddProvidesAndRequires() {
+    def findAndAddProvidesAndRequires(Iterable<String> excludeLibs=[]) {
         def providedCapabilities = new HashSet<String>()
 
         findProvides(source.files).each {
@@ -60,34 +60,14 @@ class TstRpm extends com.netflix.gradle.plugins.rpm.Rpm {
             providedCapabilities.add(it.find(/[^<=>]+/).trim())
         }
         findRequires(source.files).each {
-            if (!providedCapabilities.contains(it.find(/[^<=>]+/).trim())) {
+            def capability = it.find(/[^<=>]+/).trim()
+            if (!providedCapabilities.contains(capability)
+                && !excludeLibs.contains( capability ) ){
                 requires(it)
             }
+            else {
+                println 'Excluded ' + capability + '  from RPM Dependencies.'
+            }
         }
-    }
-
-
-    def autoPackageDependencyInjection() {
-        println findRequires(source.files).dump()   
-        println findProvides(source.files).dump()
-        def reqs = findRequires(source.files)
-        def provs = findProvides(source.files)
-        reqs.removeAll( provs )
-
-        println "XXXXXXXXXXXXXXXXXXX"
-        println 'Source: ' + source
-        println '    provides : ' + provs
-        println '    reqs     : ' + reqs
-      
-        println "XXXXXXXXXXXXXXXXXXX"
-        reqs.each{ r-> 
-            println "Adding req: " + r
-            requires( r ) 
-        }
-        provs.each{ p->
-            println "Adding prov: " + p
-             provides( p ) 
-        }
-        
     }
 }

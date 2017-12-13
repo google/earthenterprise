@@ -248,6 +248,7 @@ task openGeeCommonRpm(type: TstRpm, dependsOn: openGeeSharedFiles) {
 
     requireCommands(packageSharedCommands +
         ['cat', 'cut', 'getent', 'grep', 'groupadd', 'groupdel'])
+    def filterCapabilities = ['libltidsdk.so()(64bit)']
 
     // Prefix variable definitions to all install scripts:
     installUtils = file('build/shared/install-utils.sh')
@@ -275,7 +276,7 @@ task openGeeCommonRpm(type: TstRpm, dependsOn: openGeeSharedFiles) {
         into packageInstallRootDir
     }
 
-    findAndAddProvidesAndRequires()
+    findAndAddProvidesAndRequires(filterCapabilities)
 }
 
 if (project.hasProperty('buildOpenGee')) {
