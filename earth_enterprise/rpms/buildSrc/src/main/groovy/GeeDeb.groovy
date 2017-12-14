@@ -1,10 +1,10 @@
 import com.netflix.gradle.plugins.deb.Deb
-import com.tsciences.shell.TstCommandLine
+import org.opengee.shell.GeeCommandLine
 
-class TstDeb extends com.netflix.gradle.plugins.deb.Deb {
+class GeeDeb extends com.netflix.gradle.plugins.deb.Deb {
     // Get the name of the Deb package that provides a given file path:
     static def whatProvidesFile(String file_path) {
-        def commandOutput = TstCommandLine.expand(
+        def commandOutput = GeeCommandLine.expand(
                 ["dpkg", "-S", file_path],
                 "Failed to find a Deb that provides ${file_path}!"
             )
@@ -13,7 +13,7 @@ class TstDeb extends com.netflix.gradle.plugins.deb.Deb {
     }
 
     static def whatProvidesCommand(String command_name) {
-        return whatProvidesFile(TstCommandLine.resolveCommandPath(
+        return whatProvidesFile(GeeCommandLine.resolveCommandPath(
             command_name))
     }
 
@@ -29,12 +29,12 @@ class TstDeb extends com.netflix.gradle.plugins.deb.Deb {
         def libs = new HashSet()
 
         inputFileList.collect { inputFile ->
-            return TstCommandLine.expand(
+            return GeeCommandLine.expand(
                 ["ldd", inputFile.toString()],
                 "Failed to list shared library dependencies of ${inputFile}!",
                 null,
                 // Ignore non-binary files:
-                [new TstCommandLine.ExpectedResult(1, "\tnot a dynamic executable\n", "")])
+                [new GeeCommandLine.ExpectedResult(1, "\tnot a dynamic executable\n", "")])
         }.
         findAll { it != null }.
         each { stdOutput ->
@@ -47,7 +47,7 @@ class TstDeb extends com.netflix.gradle.plugins.deb.Deb {
 
     protected File[] packageInputFiles = null
 
-    TstDeb() {
+    GeeDeb() {
         super()
     }
 

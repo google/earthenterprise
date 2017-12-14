@@ -2,9 +2,9 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 import org.gradle.api.tasks.TaskAction
 import com.netflix.gradle.plugins.rpm.Rpm
-import com.tsciences.shell.TstCommandLine
+import org.opengee.shell.GeeCommandLine
 
-class TstRpm extends com.netflix.gradle.plugins.rpm.Rpm {
+class GeeRpm extends com.netflix.gradle.plugins.rpm.Rpm {
     // A class that stores information about a dependency.
     // (E.g., 'perl >= 1:5')
     @groovy.transform.InheritConstructors
@@ -47,7 +47,7 @@ class TstRpm extends com.netflix.gradle.plugins.rpm.Rpm {
 
     // Gets the name of the RPM package that provides a given capability:
     static def whatProvides(capability_path) {
-        return TstCommandLine.expand(
+        return GeeCommandLine.expand(
                 ["rpm", "-q", "--queryformat=%{NAME}\\n", "--whatprovides",
                     capability_path],
                 "Failed to find an RPM that provides ${capability_path}!"
@@ -56,7 +56,7 @@ class TstRpm extends com.netflix.gradle.plugins.rpm.Rpm {
 
     // Gets the name of the RPM package that provides a given shell command:
     static def whatProvidesCommand(String command_name) {
-        return whatProvides(TstCommandLine.resolveCommandPath(command_name))
+        return whatProvides(GeeCommandLine.resolveCommandPath(command_name))
     }
 
     // Returns the name of a Yum package that provides a given command.
@@ -68,7 +68,7 @@ class TstRpm extends com.netflix.gradle.plugins.rpm.Rpm {
     // Runs `find-provides` from `rpm-build` to find a list of capabilities
     // provided by an RPM that contains a given list of files.
     static def findProvides(Iterable<File> inputFileList) {
-        return TstCommandLine.expand(
+        return GeeCommandLine.expand(
                 ["/usr/lib/rpm/find-provides"],
                 "Runing /usr/lib/rpm/find-provides failed!",
                 { stdin -> inputFileList.each { stdin << it << "\n" } }
@@ -78,7 +78,7 @@ class TstRpm extends com.netflix.gradle.plugins.rpm.Rpm {
     // Runs `find-requires` from `rpm-build` to find a list of capabilities
     // required by an RPM that contains a given list of files.
     static def findRequires(Iterable<File> inputFileList) {
-        return TstCommandLine.expand(
+        return GeeCommandLine.expand(
                 ["/usr/lib/rpm/find-requires"],
                 "Runing /usr/lib/rpm/find-provides failed!",
                 { stdin -> inputFileList.each { stdin << it << "\n" } }
@@ -113,7 +113,7 @@ class TstRpm extends com.netflix.gradle.plugins.rpm.Rpm {
     Closure autoFindRequiresFilter = { it }
 
 
-    TstRpm() {
+    GeeRpm() {
         super()
     }
 
@@ -136,7 +136,7 @@ class TstRpm extends com.netflix.gradle.plugins.rpm.Rpm {
     // dependency list.
     def requireCommands(Iterable<String> commands) {
         (commands as Set).each {
-            requires(TstCommandLine.resolveCommandPath(it))
+            requires(GeeCommandLine.resolveCommandPath(it))
         }
     }
 

@@ -1,6 +1,6 @@
-package com.tsciences.shell
+package org.opengee.shell
 
-class TstCommandLine {
+class GeeCommandLine {
     class ExpectedResult {
         Integer exitCode = null
         String stdOut = null
