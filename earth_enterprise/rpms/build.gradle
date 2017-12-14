@@ -126,7 +126,7 @@ task stageOpenGeeInstall(type: Exec, dependsOn: 'compileOpenGee') {
         'scons', '-j8', 'release=1', 'stage_install')
 }
 
-task openGeePostGisRpm(type: TstRpm) {
+task openGeePostGisRpm(type: GeeRpm) {
     packageName = 'opengee-postgis'
     release = "1.${rpmPlatformString}"
     version = '1.5.8'
@@ -192,7 +192,7 @@ task openGeeSharedFiles(type: Copy) {
     }
 }
 
-task openGeeCommonRpm(type: TstRpm, dependsOn: openGeeSharedFiles) {
+task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeSharedFiles) {
     packageName = 'opengee-common'
     release = "1.${rpmPlatformString}"
     version = openGeeVersion
@@ -301,7 +301,7 @@ task openGeeCommonDeb (type: Deb) {
     }
 }
 
-task openGeeServerRpm (type: TstRpm, dependsOn: openGeeSharedFiles) {
+task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     packageName = 'opengee-server'
     release = "1.${rpmPlatformString}"
@@ -389,7 +389,7 @@ task openGeeServerDeb (type: Deb) {
     }
 }
 
-task openGeeFusionRpm (type: TstRpm, dependsOn: openGeeSharedFiles) {
+task openGeeFusionRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     packageName = 'opengee-fusion'
     release = "1.${rpmPlatformString}"
     version = openGeeVersion
