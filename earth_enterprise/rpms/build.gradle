@@ -41,7 +41,7 @@ buildscript {
 
 apply plugin: "nebula.ospackage"
 
-def rpmPlatformString = com.tsciences.os.Platform.rpmPlatformString
+def rpmPlatformString = org.opengee.os.Platform.rpmPlatformString
 
 def openGeeVersion =
     new File(project.projectDir, '../src/fusion_version.txt').readLines().
@@ -342,6 +342,11 @@ task openGeeServerRpm (type: TstRpm, dependsOn: openGeeSharedFiles) {
     directory('/var/opt/google/pgsql/logs')
     
     from(stagedInstallDir_server_opt) {
+        println 'excluding: ' + new File( stagedInstallDir_server_opt, 'google/bin/pgsql2shp').absolutePath
+        exclude  new File( stagedInstallDir_server_opt, 'google/bin/pgsql2shp').absolutePath
+        exclude  new File( stagedInstallDir_server_opt, 'google/bin/shp2pgsql').absolutePath
+        println 'excluding: ' + new File( stagedInstallDir_server_opt,  'google/share/postgresql').absolutePath
+        exclude  new File( stagedInstallDir_server_opt, 'google/share/postgresql').absolutePath
         into new File(packageInstallRootDir, 'opt')
     }
 
