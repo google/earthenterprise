@@ -63,7 +63,7 @@ if (new File('build.properties').exists()) {
     new File('build.properties').withInputStream {
         props.load(it)
     }
-    if(props["staged"]) {
+    if (props["staged"]) {
         stagedInstall_path = props["staged"]
     }
 }
@@ -138,12 +138,12 @@ task openGeePostGisRpm(type: TstRpm) {
     license = 'GPLv2'
     url = 'https://github.com/google/earthenterprise/tree/master/earth_enterprise/third_party/postgis'
     type = BINARY
+    autoFindProvides = true
+    autoFindRequires = true
 
     from (postGisInstallDir_opt) {
         into new File(packageInstallRootDir, 'opt')
     }
-
-    findAndAddProvidesAndRequires()
 }
 
 if (project.hasProperty('buildOpenGee')) {
@@ -242,13 +242,21 @@ task openGeeCommonRpm(type: TstRpm, dependsOn: openGeeSharedFiles) {
         'OpenSSL and ' +
         'Skia 5.1.2'
     type = BINARY
+    autoFindProvides = true
+    autoFindRequires = true
 
     requires('opengee-postgis', '1.5.8', GREATER | EQUAL)
     conflicts('opengee-postgis', '2.0', GREATER | EQUAL)
 
     requireCommands(packageSharedCommands +
         ['cat', 'cut', 'getent', 'grep', 'groupadd', 'groupdel'])
+    
+    /* Since some libraries (i.e., MrSid)  cannot be redistributed without a 
+       license and are not packaged as an RPM, we need to filter these out from the
+       automatic 'requires' dependency generation. */
+    
     def filterCapabilities = ['libltidsdk.so()(64bit)']
+    autoFindRequiresFilter = { filterCapabilities.contains( 'libltidsdk.so()(64bit)') ? null : it }
 
     // Prefix variable definitions to all install scripts:
     installUtils = file('build/shared/install-utils.sh')
@@ -275,8 +283,6 @@ task openGeeCommonRpm(type: TstRpm, dependsOn: openGeeSharedFiles) {
     from(file('opengee-common/install')) {
         into packageInstallRootDir
     }
-
-    findAndAddProvidesAndRequires(filterCapabilities)
 }
 
 if (project.hasProperty('buildOpenGee')) {
@@ -303,6 +309,8 @@ task openGeeServerRpm (type: TstRpm, dependsOn: openGeeSharedFiles) {
     user = 'root'
     permissionGroup = 'root'
     packageGroup = 'Application/Productivity'
+    autoFindProvides = true
+    autoFindRequires = true
 
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
 
@@ -356,8 +364,6 @@ task openGeeServerRpm (type: TstRpm, dependsOn: openGeeSharedFiles) {
     from(stagedInstallDir_server_apachesupport) {
         into packageInstallRootDir
     }
-
-    findAndAddProvidesAndRequires()
 }
 
 task openGeeServerDeb (type: Deb) {
@@ -394,6 +400,8 @@ built from raster, vector, and location properties data.
 '''
     license = 'Apache 2.0'
     type = BINARY
+    autoFindProvides = true
+    autoFindRequires = true
 
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
 
@@ -468,8 +476,6 @@ built from raster, vector, and location properties data.
             }
         }
     }
-
-    findAndAddProvidesAndRequires()
 }
 
 task openGeeFusionDeb (type: Deb) {
