@@ -256,7 +256,7 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeSharedFiles) {
        automatic 'requires' dependency generation. */
     
     def filterCapabilities = ['libltidsdk.so()(64bit)']
-    autoFindRequiresFilter = { filterCapabilities.contains( 'libltidsdk.so()(64bit)') ? null : it }
+    autoFindRequiresFilter = { filterCapabilities.contains( it ) ? null : it }
 
     // Prefix variable definitions to all install scripts:
     installUtils = file('build/shared/install-utils.sh')
@@ -342,11 +342,9 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     directory('/var/opt/google/pgsql/logs')
     
     from(stagedInstallDir_server_opt) {
-        println 'excluding: ' + new File( stagedInstallDir_server_opt, 'google/bin/pgsql2shp').absolutePath
-        exclude  new File( stagedInstallDir_server_opt, 'google/bin/pgsql2shp').absolutePath
-        exclude  new File( stagedInstallDir_server_opt, 'google/bin/shp2pgsql').absolutePath
-        println 'excluding: ' + new File( stagedInstallDir_server_opt,  'google/share/postgresql').absolutePath
-        exclude  new File( stagedInstallDir_server_opt, 'google/share/postgresql').absolutePath
+        exclude 'google/bin/pgsql2shp'
+        exclude 'google/bin/shp2pgsql'
+        exclude  'google/share/postgresql'
         into new File(packageInstallRootDir, 'opt')
     }
 
