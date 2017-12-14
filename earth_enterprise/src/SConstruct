@@ -23,6 +23,7 @@ import subprocess
 import sys
 sys.path += ['scons']
 from khEnvironment import khEnvironment
+from khEnvironment import GetVersion
 
 
 # Path to crosstool root directory.
@@ -165,7 +166,7 @@ try:
     is_min_ubuntu = False
 # lsb_release is not present, must be RHEL or CentOS, move on
 except:
-  print "OS is not Ubuntu"
+    print "OS is not Ubuntu"
 
 extragccflags = []
 if sys.platform[0:5] == 'linux':
@@ -252,6 +253,7 @@ else:
   cross_cc_dir = None
   cross_cc_target = None
   cross_cc_base = None
+
 
 if not native_cc:
   if is_min_ubuntu:
@@ -406,29 +408,7 @@ def is_version_ge(version_components, comparand_components):
 
   return True
 
-def FusionVersionNumber(source):
-  """Read the Fusion Version number from source file.
-
-  Args:
-    source: The file storing version number.
-  Returns:
-    The Fusion Version string, without '\n'.
-  """
-
-  try:
-    spec = open(source, 'r')
-    line = spec.readline()
-    while line:
-      if line[0] != '#':
-        version = line.strip()
-        if version:
-          return version
-      line = spec.readline()
-    print 'Unable to find Fusion Version Number'
-    Exit(1)
-  except Exception, exp:
-    print 'Unable to find Fusion Version Number:', exp
-fusion_version_number = FusionVersionNumber('fusion_version.txt')
+gee_version_number = GetVersion("version.txt")
 
 
 # create the environment that controls the builds
@@ -503,7 +483,7 @@ env.SourceCode('.', None)
 env.Alias('install', installdirs['root'])
 
 Export('env')
-Export('fusion_version_number')
+Export('gee_version_number')
 
 # needed by colorgcc
 home = os.environ.get('HOME', 0)

@@ -140,7 +140,7 @@ class Builder(object):
         """Parses version information, and sets member variables."""
 
         if self.base_version is None:
-            path = os.path.join(self.source_dir, 'fusion_version.txt')
+            path = os.path.join(self.source_dir, 'version.txt')
             with open(path, 'r') as input_file:
                 while True:
                     base_version = input_file.readline().strip()

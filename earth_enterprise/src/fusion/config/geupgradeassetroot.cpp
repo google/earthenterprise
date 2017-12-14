@@ -208,7 +208,7 @@ void UpgradeAssetRoot(const DottedVersion &version) {
   geAssetRoot::WriteVersion(AssetDefs::AssetRoot());
 
   printf("Upgraded %s to version %s.\n",
-         AssetDefs::AssetRoot().c_str(), FUSION_VERSION);
+         AssetDefs::AssetRoot().c_str(), GEE_VERSION);
 }
 
 

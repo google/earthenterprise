@@ -304,7 +304,7 @@ MapDatabaseAssetVersionImplD::DelayedBuildChildren(void)
                                   config.indexVersion,
                                   config.useGoogleImagery,
                                   false,  // This is flat projection Map DB.
-                                  FUSION_VERSION);
+                                  GEE_VERSION);
     // update the mapdb asset
     mapdb =
       MapDBFactory::FindMakeAndUpdate(
