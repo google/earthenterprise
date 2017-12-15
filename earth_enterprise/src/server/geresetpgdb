@@ -27,8 +27,12 @@
 #    - recreate geserve-databases in their initial state of GEE system;
 #
 # Dumps geserve-databases
-# 'geresetpgdb backup'
+# 'geresetpgdb backup [path_to_dump_directory]'
 #    - back up (dump) current geserve-databases;
+#    - if path_to_dump_directory is specified, the files will be dumped to
+#      that directory. The user running the script (usually gepguser) must
+#      have write permissions to that directory already or to the parent
+#      directory;
 #
 # Restores geserve-databases from specified dump directory.
 # 'geresetpgdb restore path_to_dump_directory'
@@ -41,8 +45,9 @@
 # Implements 'upgrade'-reset with restoring database state we have before
 # running reset.
 # Used by installer in upgrade procedure for GEE 5.0 and later versions.
-# 'geresetpgdb upgrade'
-#    - back up(dump) current geserve-databases;
+# 'geresetpgdb upgrade [path_to_dump_directory]'
+#    - back up(dump) current geserve-databases (unless path_to_dump_directory
+#      is specified);
 #    - delete data directory;
 #    - recreate postgres db instance;
 #    - recreate superuser;
@@ -70,12 +75,31 @@
 # /opt/google/share/geplaces/geplaces create
 # /opt/google/share/searchexample/searchexample create
 
-set -e
-
 VARPGDIR=/var/opt/google/pgsql
 SHAREDIR=/opt/google/share/postgresql/contrib
 BINDIR=/opt/google/bin
 SQLDIR=/opt/google/share/opengee-server/sql
+
+# Handles errors - prints out error code, command, and line number; shuts down
+#                  PostgreSQL if running
+on_error () {
+    errcode=$? # save the exit code as the first thing done in the trap function
+    echo "error $errorcode"
+    echo "the command executing at the time of the error was"
+    echo "$BASH_COMMAND"
+    echo "on line ${BASH_LINENO[0]}"
+    # $BASH_COMMAND contains the command that was being executed at the time of the trap
+    # ${BASH_LINENO[0]} contains the line number in the script of that command
+
+    # Shut down database if running
+    if [ -f $VARPGDIR/data/postmaster.pid ]; then
+      $BINDIR/pg_ctl -D $VARPGDIR/data -l $VARPGDIR/logs/pg.log stop -w
+    fi
+
+    exit $errcode
+}
+
+trap on_error ERR
 
 if [ ! -n "$1" ]; then
   type="soft";
@@ -138,39 +162,54 @@ elif [ $type == "soft" ]; then
       exit
       ;;
   esac
-elif [ $type == "restore" ]; then
-  if [ ! -n "$2" ]; then
+elif [ $type == "restore" ] || [ $type == "upgrade" ] || [ $type == "backup" ]; then
+  if [ $type == "restore" ] && [ ! -n "$2" ]; then
     echo "WARNING: Path to dump directory is not specified."
     echo "Usage: $0 restore path_to_dump_dir"
     exit
   else
-    dump_path="$2"
+    if [ -n "$2" ]; then
+      dump_path="$2"
+    fi
   fi
 fi
 
 # Dumps geserve-databases.
 function do_dump {
   # Start postmaster.
+  echo Do data dump!
   if [ ! -f $VARPGDIR/data/postmaster.pid ]; then
     $BINDIR/pg_ctl -D $VARPGDIR/data -l $VARPGDIR/logs/pg.log start -w
   fi
 
   # Dump databases.
-  echo "Keeping a backup of old geserve-databases at $VARPGDIR/data.backup_dump.$$ ..."
+  BACKUP_DIR=$VARPGDIR/data.backup_dump.$$
+  if [ $dump_path != "" ]; then
+    BACKUP_DIR=$dump_path
+  fi
+
+  echo "Keeping a backup of old geserve-databases at $BACKUP_DIR ..."
   echo "After verifying that the database is good, you may delete it to recover disk space."
-  mkdir $VARPGDIR/data.backup_dump.$$
+
+  mkdir $BACKUP_DIR
 
   if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w gestream | wc -l` == 1 ]; then
-    $BINDIR/pg_dump gestream > $VARPGDIR/data.backup_dump.$$/gestream.dump
+    $BINDIR/pg_dump gestream > $BACKUP_DIR/gestream.dump
   fi
   if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w geendsnippet | wc -l` == 1 ]; then
-    $BINDIR/pg_dump geendsnippet > $VARPGDIR/data.backup_dump.$$/geendsnippet.dump
+    $BINDIR/pg_dump geendsnippet > $BACKUP_DIR/geendsnippet.dump
   fi
   if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w gesearch | wc -l` == 1 ]; then
-    $BINDIR/pg_dump gesearch > $VARPGDIR/data.backup_dump.$$/gesearch.dump
+    $BINDIR/pg_dump gesearch > $BACKUP_DIR/gesearch.dump
   fi
   if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w gepoi | wc -l` == 1 ]; then
-    $BINDIR/pg_dump gepoi > $VARPGDIR/data.backup_dump.$$/gepoi.dump
+    $BINDIR/pg_dump gepoi > $BACKUP_DIR/gepoi.dump
+
+    # Now backup just the gepoi tables, not the schema and postgis tables
+    for table in `get_gepoi_tables`
+    do
+      $BINDIR/pg_dump gepoi -t $table > $BACKUP_DIR/gepoi.$table.dump
+    done
   fi
 
   echo "Done."
@@ -179,7 +218,12 @@ function do_dump {
   $BINDIR/pg_ctl -D $VARPGDIR/data -l $VARPGDIR/logs/pg.log stop
 }
 
-# Deletes old data and recreates db instance.
+# Retrieves the gepoi table names from the gepoi database
+function get_gepoi_tables {
+  echo ` $BINDIR/psql gepoi -c "\dt gepoi*" | grep table | awk -F\| '{ print $2 }'`
+}
+
+# Deletes old database instances
 function do_reset {
 
   # Drop gee databases
@@ -198,6 +242,22 @@ function do_reset {
 
 }
 
+# Deletes old data and recreates db instance.
+function do_hard_reset {
+  # Do hard reset and init DB
+  # Deletes old data and recreates db instance.
+
+  if [ -f $VARPGDIR/data/postmaster.pid ]; then
+    $BINDIR/pg_ctl -D $VARPGDIR/data -l $VARPGDIR/logs/pg.log stop
+  fi
+
+  # delete all the db files. not sure if we should do this.
+  rm -Rf $VARPGDIR/data
+
+  # create a new db instance from scratch
+  $BINDIR/initdb --auth=trust -D $VARPGDIR/data >/dev/null
+}
+
 # Check if postmaster is running. If it is then prompt the user to stop the
 # server
 if [ -e $VARPGDIR/data/postmaster.pid ]; then
@@ -206,17 +266,16 @@ if [ -e $VARPGDIR/data/postmaster.pid ]; then
   exit 1;
 fi
 
-if [ $type == "backup" ]; then
-  do_dump
-fi
-
 # if the data dir does not exist then this has to be a hard reset.
 # TODO: This will need to be removed when we unbundle PostgreSQL
 if [ ! -e $VARPGDIR/data ]; then
   type="hard";
 fi
 
-if [ $type == "hard" ]; then
+
+if [ $type == "backup" ]; then
+  do_dump
+elif [ $type == "hard" ]; then
   if [ ! -e $VARPGDIR/data ]; then
     # create a new db instance from scratch
     # TODO: This will need to be removed when we unbundle PostgreSQL
@@ -244,8 +303,6 @@ if [ $type == "hard" ]; then
     $BINDIR/psql postgres -q -c "DROP USER IF EXISTS geuser"
   fi
 else
-  # Do backup for any reset except 'hard'.
-  do_dump
 
   # Check if PostgreSQL version have been changed.
   # TODO: this will need to be updated to work with unbundled versions of PostgreSQL and to detect and migrate data
@@ -255,26 +312,34 @@ else
   if [ "$old_version" != "$new_version" ]; then
     # PostgreSQL version have been changed - the case of upgrade.
     if [ $type != "upgrade" ]; then
-      echo "WARNING: PostgresSQL have been updated, please, run 'upgrade' reset first."
-      exit
+      echo "WARNING: PostgresSQL have been updated. Please, run 'upgrade' reset first."
+      exit 1
     fi
+    if [ "$dump_path" == "" ]; then
+      echo "WARNING: PostgresSQL have been updated. You must indicate the path to the backup data."
+      exit 1
+    fi
+  else
+    # Do backup for any reset except 'hard' or if we are upgrading to a new database version. In that case,
+    # it must have been done with the previous version of the PostgreSQL binaries
+    do_dump
   fi
 
   if [ $type == "upgrade" ]; then
-    # Do reset and recreate database instance.
-    do_reset
+    do_hard_reset
   fi
 fi
 
-# Start postmaster.
+# Start postmaster
 if [ ! -f $VARPGDIR/data/postmaster.pid ]; then
+  echo Starting server
   $BINDIR/pg_ctl -D $VARPGDIR/data -l $VARPGDIR/logs/pg.log start -w
 fi
 
 # Soft reset
 if [ $type == "soft" -o $type == "restore" ]; then
   do_reset
-else
+elif [ $type != "backup" ]; then
   $BINDIR/createuser --superuser geuser
 fi
 
@@ -285,7 +350,7 @@ if [ $type == "upgrade" -o $type == "restore" ]; then
   $BINDIR/createdb -T template0 gesearch
   $BINDIR/createdb -T template0 gepoi
   echo "Done."
-else
+elif [ $type != "backup" ]; then
   echo "Creating geserve-databases..."
   $BINDIR/createdb --owner=geuser -U geuser gestream
   $BINDIR/psql -q -d gestream geuser -f $SQLDIR/gestream_tables.sql
@@ -305,17 +370,34 @@ fi
 if [ $type == "upgrade" -o $type == "restore" ]; then
   shopt -s nullglob  # set nullglob so that bash allows patterns which match no files
                      # to expand to a null  string,  rather than themselves.
-  if [ $type == "upgrade" ]; then
-    echo "Restoring geserve-databases from dump $VARPGDIR/data.backup_dump.$$ ..."
-    cd $VARPGDIR/data.backup_dump.$$
-  else
+  if [ "$dump_path" != "" ]; then
     echo "Restoring geserve-databases from dump $dump_path ..."
     cd $dump_path
+  elif [ $type == "upgrade" ]; then
+    echo "Restoring geserve-databases from dump $VARPGDIR/data.backup_dump.$$ ..."
+    cd $VARPGDIR/data.backup_dump.$$
+  fi
+
+  # Check to see if the individual tables from gepoi were dumped
+  gepoi_dump_files=`ls gepoi* | wc | awk '{ print $1 }'`
+
+  # If gepoi tables have been dumped individually, create gepoi database and install postgis extension
+  if [ $gepoi_dump_files -gt 1 ]; then
+    echo Adding PostGIS extension
+    $BINDIR/psql -U geuser -d gepoi -c "CREATE EXTENSION postgis"
   fi
 
   for DB in *.dump; do
     if [ -s $DB  ]; then
-      $BINDIR/psql -q -d ${DB%?????} -f $DB
+      if [ $gepoi_dump_files == 1 ] || [ "$DB" != "gepoi.dump" ]; then
+        echo "Restoring $DB..."
+        if [ ${DB:0:6} == "gepoi." ]; then
+          # The dump is a single table for the gepoi database, not the full database, restore to the correct db
+          $BINDIR/psql -q -d gepoi -f $DB
+        else
+          $BINDIR/psql -q -d ${DB%?????} -f $DB
+        fi
+      fi
     fi
   done
 
