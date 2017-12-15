@@ -27,6 +27,7 @@ SCRIPTDIR=`dirname $0`
 PUBLISHER_ROOT="/gevol/published_dbs"
 INSTALL_LOG="$INSTALL_LOG_DIR/geserver_install_$(date +%Y_%m_%d.%H%M%S).log"
 BACKUP_DIR="$BASEINSTALLDIR_VAR/server-backups/$(date +%Y_%m_%d.%H%M%S)"
+BACKUP_DATA_DIR=$BACKUP_DIR/data.backup
 
 # script arguments
 BACKUPSERVER=true
@@ -97,6 +98,11 @@ main_preinstall()
     backup_server
   fi
 
+  # Backup PGSQL data
+  if [ -d $PGSQL_DATA ]; then
+    backup_pgsql_data
+  fi
+
   # 6) Check valid host properties
   if ! check_bad_hostname; then
     exit 1
@@ -108,7 +114,7 @@ main_preinstall()
 
   # 64 bit check
   if [[ "$(uname -i)" != "x86_64" ]]; then
-    echo -e "\n$GEEF $LONG_VERSION can only be installed on a 64 bit operating system."
+    echo -e "\n$GEES $LONG_VERSION can only be installed on a 64 bit operating system."
     exit 1
   fi
 
@@ -272,6 +278,18 @@ configure_publish_root()
   fi
 }
 
+backup_pgsql_data()
+{
+  # Make the temporary data backup directory
+  mkdir -p $BACKUP_DATA_DIR
+  chown $GEPGUSER_NAME $BACKUP_DATA_DIR
+
+  # Dump PGSQL data
+  RESET_DB_SCRIPT=$TMPINSTALLDIR/server/opt/google/bin/geresetpgdb
+
+  echo 2 | run_as_user $GEPGUSER_NAME "$RESET_DB_SCRIPT backup $BACKUP_DATA_DIR"
+}
+
 #-----------------------------------------------------------------
 # Install Functions
 #-----------------------------------------------------------------
@@ -395,7 +413,7 @@ reset_pgdb()
 {
   # TODO check if correct
   # a) Always do an upgrade of the psql db
-  echo 2 | run_as_user $GEPGUSER_NAME "/opt/google/bin/geresetpgdb upgrade"
+  echo 2 | run_as_user $GEPGUSER_NAME "/opt/google/bin/geresetpgdb upgrade $BACKUP_DATA_DIR"
   echo -e "upgrade done"
 
   # b) Check for Success of PostGresDb
