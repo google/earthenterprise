@@ -265,7 +265,7 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeSharedFiles) {
     // Prefix variable definitions to all install scripts:
     installUtils = file('build/shared/install-utils.sh')
 
-    postInstall = file('opengee-common/post-install.sh')
+    preInstall = file('opengee-common/pre-install.sh')
     preUninstall = file('opengee-common/pre-uninstall.sh')
 
     from (file('build/shared/gevars.sh')) {
