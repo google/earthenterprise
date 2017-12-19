@@ -95,7 +95,7 @@ def postGisInstallDir = new File(
 def postGisInstallDir_opt = new File(postGisInstallDir, 'opt')
 
 // Commands used in install-utils.sh:
-def packageSharedCommands = ['bash', 'chkconfig', 'flock', 'sed', 'xmllint']
+def packageSharedCommands = ['bash', 'flock', 'sed', 'xmllint']
 
 
 
@@ -246,17 +246,21 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeSharedFiles) {
     autoFindRequires = true
 
     requires('opengee-postgis', '1.5.8', GREATER | EQUAL)
+    requires('chkconfig')
+    requires('shadow-utils')
     conflicts('opengee-postgis', '2.0', GREATER | EQUAL)
 
     requireCommands(packageSharedCommands +
-        ['cat', 'cut', 'getent', 'grep', 'groupadd', 'groupdel'])
+        ['cat', 'cut', 'getent', 'grep' ])
     
     /* Since some libraries (i.e., MrSid)  cannot be redistributed without a 
        license and are not packaged as an RPM, we need to filter these out from the
        automatic 'requires' dependency generation. */
     
     def filterCapabilities = ['libltidsdk.so()(64bit)']
-    autoFindRequiresFilter = { filterCapabilities.contains( it ) ? null : it }
+    autoFindRequiresFilter = { 
+        return filterCapabilities.contains( it.capabilityName ) ? null : it 
+    }
 
     // Prefix variable definitions to all install scripts:
     installUtils = file('build/shared/install-utils.sh')
@@ -319,7 +323,7 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
         [
             // install script commands:
             'cat', 'chmod', 'chown', 'cut', 'find', 'getent', 'mkdir', 'python',
-            'sed', 'service', 'su', 'sudo', 'useradd', 'userdel', 'usermod'
+            'sed', 'su', 'sudo'
         ]
     )
 
@@ -344,7 +348,8 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     from(stagedInstallDir_server_opt) {
         exclude 'google/bin/pgsql2shp'
         exclude 'google/bin/shp2pgsql'
-        exclude  'google/share/postgresql'
+        exclude 'google/share/postgresql'
+        exclude 'google/lib/postgresql'
         into new File(packageInstallRootDir, 'opt')
     }
 
@@ -413,8 +418,8 @@ built from raster, vector, and location properties data.
         [
             // install script commands:
             'cat', 'chcon', 'chmod', 'chown', 'cut', 'df', 'dirname', 'expr',
-            'find', 'getent', 'grep', 'hostname', 'mkdir', 'nproc', 'service',
-            'tr', 'useradd', 'userdel', 'usermod'
+            'find', 'getent', 'grep', 'hostname', 'mkdir', 'nproc',
+            'tr'
         ]
     )
 
