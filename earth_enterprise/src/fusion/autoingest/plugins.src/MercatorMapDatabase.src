@@ -343,7 +343,7 @@ MercatorMapDatabaseAssetVersionImplD::DelayedBuildChildren(void)
                                   config.indexVersion,
                                   config.useGoogleImagery,
                                   true,  // This is mercator projection Map DB.
-                                  FUSION_VERSION);
+                                  GEE_VERSION);
     // update the mapdb asset
     mapdb =
       MapDBFactory::FindMakeAndUpdate(
