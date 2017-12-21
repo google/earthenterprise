@@ -80,7 +80,7 @@ check_username()
     # and common will remove it if necessary. 
     if [ -z "$GROUP_EXISTS" ]; then
         groupadd -r "$GEGROUP" &> /dev/null
-        echo "Added group $GEGROUP"
+        echo "$GEGROUP didn't exist.  Server install added group $GEGROUP"
     fi
     
     USERNAME_EXISTS=$(getent passwd "$1")
