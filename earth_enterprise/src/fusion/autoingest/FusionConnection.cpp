@@ -188,7 +188,7 @@ FusionConnection::ConnectTokhAssetManager(void)
                                   (khAssetManagerAddr())));
 
   handle->NoRetRequest("ValidateProtocolVersion",
-                       std::string(FUSION_VERSION));
+                       std::string(GEE_VERSION));
 
   return handle;
 }

@@ -41,6 +41,8 @@ buildscript {
 
 apply plugin: "nebula.ospackage"
 
+def rpmPlatformString = com.tsciences.os.Platform.rpmPlatformString
+
 def openGeeVersion =
     new File(project.projectDir, '../src/fusion_version.txt').readLines().
     collect {
@@ -55,8 +57,18 @@ def openGeeVersion =
         it // The first string that remains is the version string.
     }
 
+def stagedInstall_path = '/tmp/fusion_os_install'
+if (new File('build.properties').exists()) {
+    def props = new Properties()
+    new File('build.properties').withInputStream {
+        props.load(it)
+    }
+    if(props["staged"]) {
+        stagedInstall_path = props["staged"]
+    }
+}
 
-def stagedInstallDir = new File('/tmp/fusion_os_install')
+def stagedInstallDir = new File(stagedInstall_path)
 def stagedInstallDir_common = new File(stagedInstallDir, 'common')
 def stagedInstallDir_common_opt = new File(stagedInstallDir, 'common/opt')
 def stagedInstallDir_common_user_magic =
@@ -85,7 +97,7 @@ def postGisInstallDir_opt = new File(postGisInstallDir, 'opt')
 
 ospackage {
     version = openGeeVersion
-    release = '1'
+    release = "1.${rpmPlatformString}"
     packager = 'gee-oss@googlegroups.com'
     arch = X86_64
     os = LINUX
@@ -112,7 +124,7 @@ task stageOpenGeeInstall(type: Exec, dependsOn: 'compileOpenGee') {
 
 task openGeePostGisRpm(type: Rpm) {
     packageName = 'opengee-postgis'
-    release = '1'
+    release = "1.${rpmPlatformString}"
     version = '1.5.8'
     user = 'root'
     permissionGroup = 'root'
@@ -176,7 +188,7 @@ task openGeeSharedFiles(type: Copy) {
 
 task openGeeCommonRpm(type: Rpm, dependsOn: openGeeSharedFiles) {
     packageName = 'opengee-common'
-    release = '1'
+    release = "1.${rpmPlatformString}"
     version = openGeeVersion
     user = 'root'
     permissionGroup = 'root'
@@ -275,7 +287,7 @@ task openGeeCommonDeb (type: Deb) {
 task openGeeServerRpm (type: Rpm, dependsOn: openGeeSharedFiles) {
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     packageName = 'opengee-server'
-    release = '1'
+    release = "1.${rpmPlatformString}"
     version = openGeeVersion
     user = 'root'
     permissionGroup = 'root'
@@ -344,7 +356,7 @@ task openGeeServerDeb (type: Deb) {
 
 task openGeeFusionRpm (type: Rpm, dependsOn: openGeeSharedFiles) {
     packageName = 'opengee-fusion'
-    release = '1'
+    release = "1.${rpmPlatformString}"
     version = openGeeVersion
     user = 'root'
     permissionGroup = 'root'

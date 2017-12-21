@@ -186,7 +186,7 @@ khResourceProvider::Run(void)
 
     // send ProviderConnRequest
 
-    ProviderConnectMsg connreq(khHostname(), numCPUs, FUSION_VERSION);
+    ProviderConnectMsg connreq(khHostname(), numCPUs, GEE_VERSION);
     if (!manager->TryNotify("ProviderConnectMsg", connreq, error)) {
       notify(NFY_WARN, "Unable to talk to resource manager: %s",
              error.latin1());
@@ -646,7 +646,7 @@ khResourceProvider::JobLoop(StartJobMsg start)
       fprintf(job->logfile, "BUILD HOST: %s\n",
               khHostname().c_str());
       fprintf(job->logfile, "FUSION VERSION %s, BUILD %s\n",
-              FUSION_VERSION, BUILD_DATE);
+              GEE_VERSION, BUILD_DATE);
       {
         QString runtimeDesc = RuntimeOptions::DescString();
         if (!runtimeDesc.isEmpty()) {

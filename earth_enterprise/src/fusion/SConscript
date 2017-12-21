@@ -16,7 +16,6 @@
 
 # -*- Python -*-
 Import('env')
-Import('fusion_version_number')
 
 # ****************************************************************************
 # ***  fusionSymlinks for backwards compatibility wit 2.4 scripts
@@ -74,20 +73,9 @@ for link, target in fusionSymLinks.items():
 for link, target in toolsSymlinks.items():
     env.installedExecutableSymlink('tools_bin', link, target)
 
-def emitVersion(env, target, source):
-   import time
-   try:
-       file = open(str(target[0]), 'w')
-       file.writelines(['// DO NOT MODIFY - auto-generated file\n',
-                        'extern const char *const FUSION_VERSION = "' +
-                        fusion_version_number + '";\n',
-                        ])
-   except Exception, exp:
-       print "Exception in emitVersion:", exp
 
-versionimpl = env.Command('fusionversion_impl.h',
-                          ['#fusion_version.txt'],
-                          [emitVersion])
+# Version information that was here has been moved to a central
+# gee_version.h file.
 fusionVerObj = env.SharedObject('fusionver.cpp')
 env['FUSIONVER'] = fusionVerObj
 
