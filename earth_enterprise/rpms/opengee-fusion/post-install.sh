@@ -70,6 +70,15 @@ main_postinstall()
 
 create_users_and_groups()
 {
+    local GROUP_EXISTS=$(getent group "$GEGROUP")
+
+    # Add group if it does not exist.  Note that it is also created by the common installer, 
+    # and common will remove it if necessary. 
+    if [ -z "$GROUP_EXISTS" ]; then
+        groupadd -r "$GEGROUP" &> /dev/null
+        echo "Fusion install added group $GEGROUP"
+    fi
+
     # Add user if it does not exist:
     if [ -z "$(getent passwd "$GEFUSIONUSER")" ]; then
 		mkdir -p "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER"
