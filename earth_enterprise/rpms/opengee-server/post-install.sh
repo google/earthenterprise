@@ -15,11 +15,11 @@
 # limitations under the License.
 
 set +x
-umask 002
 
 #-----------------------------------------------------------------
 # Definitions
 PUBLISHER_ROOT="/gevol/published_dbs"
+INITSCRIPTUPDATE="/usr/sbin/update-rc.d"
 PGSQL_DATA="/var/opt/google/pgsql/data"
 PGSQL_LOGS="/var/opt/google/pgsql/logs"
 PGSQL_PROGRAM="/opt/google/bin/pg_ctl"
@@ -30,6 +30,10 @@ PGSQL_PROGRAM="/opt/google/bin/pg_ctl"
 #-----------------------------------------------------------------
 main_postinstall()
 {
+
+    check_username "$GEAPACHEUSER"
+    check_username "$GEPGUSER"    
+    
     # 0) Configure publishing db, we do it post install...
     configure_publish_root
 
@@ -68,6 +72,28 @@ main_postinstall()
 #-----------------------------------------------------------------
 # Post-install Functions
 #-----------------------------------------------------------------
+
+
+check_username()
+{
+    # Add group if it does not exist.  Note that it is also created by the common installer, 
+    # and common will remove it if necessary. 
+    if [ -z "$GROUP_EXISTS" ]; then
+        groupadd -r "$GEGROUP" &> /dev/null
+        echo "Added group $GEGROUP"
+    fi
+    
+    USERNAME_EXISTS=$(getent passwd "$1")
+    # add user if it does not exist
+    if [ -z "$USERNAME_EXISTS" ]; then
+        mkdir -p "$BASEINSTALLDIR_OPT/.users/$1"
+        useradd --home "$BASEINSTALLDIR_OPT/.users/$1" --system --gid "$GEGROUP" "$1"
+    else
+        # user already exists -- update primary group
+        usermod -g "$GEGROUP" "$1"
+    fi
+}
+
 
 run_as_user()
 {

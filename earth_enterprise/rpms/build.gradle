@@ -267,6 +267,7 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeSharedFiles) {
 
     preInstall = file('opengee-common/pre-install.sh')
     preUninstall = file('opengee-common/pre-uninstall.sh')
+    postUninstall = file('opengee-common/post-uninstall.sh')
 
     from (file('build/shared/gevars.sh')) {
         into new File(packageInstallRootDir, 'etc/init.d')

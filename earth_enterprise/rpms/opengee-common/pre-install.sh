@@ -24,11 +24,14 @@ check_group()
     # Add group if it does not exist:
     if [ -z "$GROUP_EXISTS" ]; then
         groupadd -r "$GEGROUP" &> /dev/null
-        keyvalue_file_set "$GEE_INSTALL_KV_PATH" gegroup_existed "false"
+        echo "Added group $GEGROUP"
+        keyvalue_file_set "$GEE_INSTALL_KV_FILE" gegroup_existed "false"
     else
-        keyvalue_file_set "$GEE_INSTALL_KV_PATH" gegroup_existed "true"
+        keyvalue_file_set "$GEE_INSTALL_KV_FILE" gegroup_existed "true"
     fi
 }
+
+mkdir -p $GEE_INSTALL_KV_PATH
 
 
 #-----------------------------------------------------------------
