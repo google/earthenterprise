@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /bin/bash
 #
 # Copyright 2017 Google Inc.
 #
@@ -79,6 +79,10 @@ VARPGDIR=/var/opt/google/pgsql
 SHAREDIR=/opt/google/share/postgresql/contrib
 BINDIR=/opt/google/bin
 SQLDIR=/opt/google/share/opengee-server/sql
+SCRIPTDIR=`dirname $0`
+
+# Import utility functions
+. $SCRIPTDIR/gepgcommon
 
 # Handles errors - prints out error code, command, and line number; shuts down
 #                  PostgreSQL if running
@@ -173,55 +177,6 @@ elif [ $type == "restore" ] || [ $type == "upgrade" ] || [ $type == "backup" ]; 
     fi
   fi
 fi
-
-# Dumps geserve-databases.
-function do_dump {
-  # Start postmaster.
-  echo Do data dump!
-  if [ ! -f $VARPGDIR/data/postmaster.pid ]; then
-    $BINDIR/pg_ctl -D $VARPGDIR/data -l $VARPGDIR/logs/pg.log start -w
-  fi
-
-  # Dump databases.
-  BACKUP_DIR=$VARPGDIR/data.backup_dump.$$
-  if [ $dump_path != "" ]; then
-    BACKUP_DIR=$dump_path
-  fi
-
-  echo "Keeping a backup of old geserve-databases at $BACKUP_DIR ..."
-  echo "After verifying that the database is good, you may delete it to recover disk space."
-
-  mkdir $BACKUP_DIR
-
-  if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w gestream | wc -l` == 1 ]; then
-    $BINDIR/pg_dump gestream > $BACKUP_DIR/gestream.dump
-  fi
-  if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w geendsnippet | wc -l` == 1 ]; then
-    $BINDIR/pg_dump geendsnippet > $BACKUP_DIR/geendsnippet.dump
-  fi
-  if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w gesearch | wc -l` == 1 ]; then
-    $BINDIR/pg_dump gesearch > $BACKUP_DIR/gesearch.dump
-  fi
-  if [ `$BINDIR/psql -lqt | cut -d \| -f 1 | grep -w gepoi | wc -l` == 1 ]; then
-    $BINDIR/pg_dump gepoi > $BACKUP_DIR/gepoi.dump
-
-    # Now backup just the gepoi tables, not the schema and postgis tables
-    for table in `get_gepoi_tables`
-    do
-      $BINDIR/pg_dump gepoi -t $table > $BACKUP_DIR/gepoi.$table.dump
-    done
-  fi
-
-  echo "Done."
-
-  # Stop postmaster.
-  $BINDIR/pg_ctl -D $VARPGDIR/data -l $VARPGDIR/logs/pg.log stop
-}
-
-# Retrieves the gepoi table names from the gepoi database
-function get_gepoi_tables {
-  echo ` $BINDIR/psql gepoi -c "\dt gepoi*" | grep table | awk -F\| '{ print $2 }'`
-}
 
 # Deletes old database instances
 function do_reset {

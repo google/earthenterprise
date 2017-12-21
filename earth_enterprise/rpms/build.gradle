@@ -296,6 +296,9 @@ task openGeeServerRpm (type: Rpm, dependsOn: openGeeSharedFiles) {
     // Prefix variable definitions to all install scripts:
     installUtils = file('build/shared/install-utils.sh')
 
+    // Add geresetpgdb script:
+    installUtils = file(new File(stagedInstallDir_server_opt, 'google/bin/gepgcommon'))
+
     preInstall = file('opengee-server/pre-install.sh')
     postInstall = file('opengee-server/post-install.sh')
     preUninstall = file('opengee-server/pre-uninstall.sh')
