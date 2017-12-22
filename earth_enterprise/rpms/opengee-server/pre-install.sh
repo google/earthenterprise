@@ -53,7 +53,8 @@ check_username()
 
 database_backup()
 {
-    if [ -d "$BASEINSTALLDIR_VAR/pgsql/data" ]; then
+    # If the GEE data directory exists and PostgreSQL is installed
+    if [ -d "$BASEINSTALLDIR_VAR/pgsql/data" ] && [ -f "$BASEINSTALLDIR_OPT/bin/psql" ]; then
         do_dump
     fi
 }
