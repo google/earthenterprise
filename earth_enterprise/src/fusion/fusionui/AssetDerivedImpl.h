@@ -134,11 +134,12 @@ void AssetDerived<Defs, FinalClass>::Init(bool re_init) {
 
   if (re_init == false) {
     InstallMainWidget();
-  }
-  SetName(saved_edit_request_.assetname);
-  SetMeta(saved_edit_request_.meta);
 
-  main_widget_->Prefill(saved_edit_request_);
+    SetName(saved_edit_request_.assetname);
+    SetMeta(saved_edit_request_.meta);
+
+    main_widget_->Prefill(saved_edit_request_);
+  }
 
   // defer to final class
   final()->FinalExtraInit();
