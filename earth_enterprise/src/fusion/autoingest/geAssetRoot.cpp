@@ -83,7 +83,7 @@ std::string ReadVersion(const std::string &assetroot) {
 
 void WriteVersion(const std::string &assetroot) {
   const std::string filename = Filename(assetroot, VersionFile);
-  if (!khWriteStringToFile(filename, FUSION_VERSION)) {
+  if (!khWriteStringToFile(filename, GEE_VERSION)) {
     throw khException(kh::tr("Unable to write %1").arg(filename));
   }
   khChmod(filename, FilePerms(VersionFile));
@@ -91,7 +91,7 @@ void WriteVersion(const std::string &assetroot) {
 
 void AssertVersion(const std::string &assetroot) {
   const std::string version = ReadVersion(assetroot);
-  const std::string fusionVer = FUSION_VERSION;
+  const std::string fusionVer = GEE_VERSION;
 
   // NOTE: the exception below should never trigger since we call
   // gefdaemoncheck before launching the daemons.

@@ -1,0 +1,7 @@
+GEAPACHEUSER=geapacheuser
+GEPGUSER=gepguser
+GEFUSIONUSER=gefusionuser
+GEGROUP=gegroup
+GEE_NAME="Open Google Earth Enterprise"
+GEE_VERSION=${openGeeVersion}
+GEE_INSTALL_KV_PATH=/var/opt/opengee/opengee-common/install.kv

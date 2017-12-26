@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<!--
+This file is packaged empty in order to be registred as part of the OS
+distribution package.  Its contents are generated based on the OS and machine
+parameters during the package post-install phase.
+ -->
+
+<Systemrc>
+</Systemrc>

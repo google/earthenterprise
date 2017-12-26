@@ -95,10 +95,10 @@ sudo yum install -y devtoolset-2-gcc devtoolset-2-binutils \
   devtoolset-2-toolchain devtoolset-2-gcc-c++ devtoolset-2-gcc-gfortran
 ```
 
-The GCC 4.8 installation will be located in the _/opt/rh/devtoolset-2/root/usr/bin/_.
+The GCC 4.8 installation will be located in the `/opt/rh/devtoolset-2/root/usr/bin/` directory.
 
 The GEE build scripts will detect this compiler automatically. However, if you
-wish switch the environment to use GCC 4.8 in a shell, execute:
+wish to switch the environment to use GCC 4.8 in a shell, execute:
 
 ```bash
 source /opt/rh/devtoolset-2/enable
@@ -111,12 +111,10 @@ _after_ uninstalling older versions of GEE. Otherwise, some of the
 prerequisites will be missing and the build will fail.
 
 ### CentOS 7 and RHEL 7
-
-Execute:
-
-```bash
+Execute: 
+```
 sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel \
-  python-devel perl-Alien-Packages openssl-devel libxml2-devel  \
+  python-devel perl-Alien-Packages openssl-devel libxml2-devel \
   libXinerama-devel libXft-devel libXrandr-devel libXcursor-devel gdbm-devel \
   libmng-devel libcap-devel libpng12-devel libXmu-devel freeglut-devel \
   zlib-devel libX11-devel bison-devel openjpeg-devel openjpeg2-devel \
@@ -125,7 +123,6 @@ sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel \
 ```
 
 ### CentOS 6 and RHEL 6
-
 Execute:
 
 ```bash
@@ -135,11 +132,11 @@ sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel \
   libmng-devel libcap-devel libpng-devel libXmu-devel freeglut-devel \
   zlib-devel libX11-devel bison-devel openjpeg-devel openjpeg2-devel \
   geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel \
-  cmake rpm-build rsync
+  cmake rpm-build rsync shunit2
 ```
 
-If you encouter an error about git dependency conflicts, consider experimenting with
-the `--skip-broken` parameter.
+If you encounter an error about git dependency conflicts, consider 
+experimenting with the `--skip-broken` parameter.
 
 ## GTest 1.8
 
@@ -177,3 +174,19 @@ Install the RPM:
 ```bash
 sudo yum install -y ./build/RPMS/x86_64/gtest-devtoolset2-1.8.0-1.x86_64.rpm
 ```
+## shunit2
+
+shunit2 is used for unit testing shell scripts in the GEE repo.
+It is currently used only for testing package building scripts.
+
+### CentOS 7 and RHEL 7
+The EPEL repositories for RHEL and CentOS 7 do not include shunit2.
+If you want to run these tests on one of these platforms, you must install
+shunit2 from the EPEL repositories for RHEL and CentOS 6.
+Run the following:
+```
+sudo yum install -y http://download-ib01.fedoraproject.org/pub/epel/6/x86_64/Packages/s/shunit2-2.1.6-3.el6.noarch.rpm
+```
+
+### CentOS 6 and RHEL 6
+shunit2 was installed in a previous step.
