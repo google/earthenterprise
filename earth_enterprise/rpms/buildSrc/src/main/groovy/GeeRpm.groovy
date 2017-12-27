@@ -3,48 +3,10 @@ import java.util.regex.Pattern
 import org.gradle.api.tasks.TaskAction
 import com.netflix.gradle.plugins.rpm.Rpm
 import org.opengee.shell.GeeCommandLine
+import org.opengee.os.package.Dependency
+
 
 class GeeRpm extends com.netflix.gradle.plugins.rpm.Rpm {
-    // A class that stores information about a dependency.
-    // (E.g., 'perl >= 1:5')
-    @groovy.transform.InheritConstructors
-    class Dependency {
-        String capabilityName
-        String version = null
-
-        // Values from org.freecompany.redline.header.Flags (like 'EQUAL' and
-        // 'GREATER') bit-wise OR'd:
-        int versionComparisonFlag = 0
-
-        Dependency(String dependencySpecifier) {
-            Matcher m = Pattern.compile('[<=>]+').matcher(dependencySpecifier)
-
-            // Parse strings like 'name(arch) <=> 1.0+3':
-            if (m.find()) {
-                capabilityName = dependencySpecifier.substring(0, m.start()).trim()
-                m.group().each {
-                    switch (it) {
-                        case '<':
-                            versionComparisonFlag |=
-                                org.freecompany.redline.header.Flags.LESS
-                            break
-                        case '=':
-                            versionComparisonFlag |=
-                                org.freecompany.redline.header.Flags.EQUAL
-                            break
-                        case '>':
-                            versionComparisonFlag |=
-                                org.freecompany.redline.header.Flags.GREATER
-                            break
-                    }
-                }
-                version = dependencySpecifier.substring(m.end()).trim()
-            } else {
-                capabilityName = dependencySpecifier
-            }
-        }
-    }
-
     // Gets the name of the RPM package that provides a given capability:
     static def whatProvides(capability_path) {
         return GeeCommandLine.expand(
@@ -112,9 +74,53 @@ class GeeRpm extends com.netflix.gradle.plugins.rpm.Rpm {
     // package.
     Closure autoFindRequiresFilter = { it }
 
+    // A set of `Requires(Pre)` (pre-install) dependencies for the RPM:
+    Set<Dependency> requiresPre_set = new HashSet<Dependency>();
+
 
     GeeRpm() {
         super()
+    }
+
+    def rebuildWithRequiresPre(
+        File rpmFile, Iterable<Dependency> requiresPre,
+        File buildDir, File outputFile=null
+    ) {
+        // Write requires filter:
+        def requiresFilterFile = new File(buildDir, "requires-filter.sh")
+
+        requiresFilterFile.parentFile.mkdirs()
+        requiresFilterFile.write(
+"""#! /bin/bash
+
+# Pass through existing requires:
+cat
+
+# Add Requires(Pre) statements:
+cat <<RequiresEND
+${
+    requiresPre.collect { "Requires(pre): ${it}" }.join("\n")
+ }
+RequiresEND
+""")
+
+        GeeCommandLine.expand(
+            [
+                "/usr/bin/rpmrebuild", "--package",
+                "--change-spec-requires=/bin/bash ${requiresFilterFile}",
+                "--define", "_rpmdir ${buildDir}",
+                "${rpmFile}"
+            ],
+            "Rebuilding RPM to add Requires(pre) failed!"
+        )
+
+        if (outputFile != null) {
+            java.nio.file.Files.copy(
+                new File(buildDir, "${archString}/${rpmFile.name}").toPath(),
+                outputFile.toPath(),
+                java.nio.file.StandardCopyOption.REPLACE_EXISTING,
+                java.nio.file.StandardCopyOption.COPY_ATTRIBUTES );
+        }
     }
 
     // Override the @TaskAction from the base class, so we can run automatic
@@ -129,15 +135,33 @@ class GeeRpm extends com.netflix.gradle.plugins.rpm.Rpm {
         if (autoFindRequires) {
             findAndAddRequires()
         }
+
         super.copy()
+
+        if (requiresPre_set) {
+            def rpmFile =
+                new File("${project.buildDir}/distributions/${assembleArchiveName()}")
+
+            rebuildWithRequiresPre(
+                rpmFile, requiresPre_set,
+                new File("${project.buildDir}/rpmRebuild"), rpmFile)
+        }
     }
 
     // Adds the packages that provide all of the given commands to the package
     // dependency list.
-    def requireCommands(Iterable<String> commands) {
+    def requiresCommands(Iterable<String> commands) {
         (commands as Set).each {
             requires(GeeCommandLine.resolveCommandPath(it))
         }
+    }
+
+    def requiresPre(Dependency requirement) {
+        requiresPre_set.add(requirement)
+    }
+
+    def requiresPre(String name, String version, int flags) {
+        requiresPre(new Dependency(name, version, flags))
     }
 
     // Returns a list of capability specifications that the files going into
@@ -159,17 +183,16 @@ class GeeRpm extends com.netflix.gradle.plugins.rpm.Rpm {
         autoFoundProvidedCapabilities = new HashSet<String>()
 
         findProvides().
-            collect { new Dependency(it) }.
+            collect { Dependency.fromSpecifier(it) }.
             collect(autoFindProvidesFilter).
             findAll { it != null }.
             each {
-                if (it.versionComparisonFlag != 0) {
-                    provides(it.capabilityName, it.version,
-                        it.versionComparisonFlag)
+                if (it.flags != 0) {
+                    provides(it.name, it.version, it.flags)
                 } else {
-                    provides(it.capabilityName)
+                    provides(it.name)
                 }
-                autoFoundProvidedCapabilities.add(it.capabilityName)
+                autoFoundProvidedCapabilities.add(it.name)
             }
     }
 
@@ -178,18 +201,17 @@ class GeeRpm extends com.netflix.gradle.plugins.rpm.Rpm {
     // to set `autoFindRequires = true`.
     def findAndAddRequires() {
         findRequires().
-            collect { new Dependency(it) }.
+            collect { Dependency.fromSpecifier(it) }.
             findAll {
-                !autoFoundProvidedCapabilities.contains(it.capabilityName)
+                !autoFoundProvidedCapabilities.contains(it.name)
             }.
             collect(autoFindRequiresFilter).
             findAll { it != null }.
             each {
-                if (it.versionComparisonFlag != 0) {
-                    requires(it.capabilityName, it.version,
-                        it.versionComparisonFlag)
+                if (it.flags != 0) {
+                    requires(it.name, it.version, it.flags)
                 } else {
-                    requires(it.capabilityName)
+                    requires(it.name)
                 }
             }
     }
