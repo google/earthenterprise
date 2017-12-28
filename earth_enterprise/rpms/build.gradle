@@ -151,6 +151,13 @@ task openGeePostGisRpm(type: GeeRpm) {
     from (postGisInstallDir_opt) {
         into new File(packageInstallRootDir, 'opt')
     }
+
+    from (new File(stagedInstallDir_server_opt, 'google/lib')) {
+        // Include libpq, since it's used by postgis command-line utilities:
+        include 'libpq.*'
+
+        into new File(packageInstallRootDir, 'opt/google/lib')
+    }
 }
 
 if (project.hasProperty('buildOpenGee')) {
@@ -359,6 +366,9 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     directory('/var/opt/google/pgsql/logs')
     
     from(stagedInstallDir_server_opt) {
+        // libpq is in the opengee-postgis package:
+        exclude 'google/lib/libpq.*'
+
         into new File(packageInstallRootDir, 'opt')
     }
 
