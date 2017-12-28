@@ -25,13 +25,27 @@ main_preinstall()
         service geserver stop
     fi
 
-  
+    check_username "$GEAPACHEUSER"
+    check_username "$GEPGUSER"
 }
 
 #-----------------------------------------------------------------
 # Pre-install Functions
 #-----------------------------------------------------------------
 
+check_username()
+{
+    USERNAME_EXISTS=$(getent passwd "$1")
+
+    # add user if it does not exist
+    if [ -z "$USERNAME_EXISTS" ]; then
+        mkdir -p "$BASEINSTALLDIR_OPT/.users/$1"
+        useradd --home "$BASEINSTALLDIR_OPT/.users/$1" --system --gid "$GEGROUP" "$1"
+    else
+        # user already exists -- update primary group
+        usermod -g "$GEGROUP" "$1"
+    fi
+}
 
 #-----------------------------------------------------------------
 # Pre-install Main

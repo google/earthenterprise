@@ -46,8 +46,6 @@ NEW_GEGROUP=false
 #-----------------------------------------------------------------
 main_postinstall()
 {
-    create_users_and_groups
-    
     create_system_main_directories
 
     compare_asset_root_publishvolume
@@ -66,31 +64,6 @@ main_postinstall()
     final_fusion_service_configuration
 }
 
-
-
-create_users_and_groups()
-{
-    local GROUP_EXISTS=$(getent group "$GEGROUP")
-
-    # Add group if it does not exist.  Note that it is also created by the common installer, 
-    # and common will remove it if necessary. 
-    if [ -z "$GROUP_EXISTS" ]; then
-        groupadd -r "$GEGROUP" &> /dev/null
-        echo "Fusion install added group $GEGROUP"
-    fi
-
-    # Add user if it does not exist:
-    if [ -z "$(getent passwd "$GEFUSIONUSER")" ]; then
-		mkdir -p "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER"
-		useradd --home "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER" \
-            --system --gid "$GEGROUP" "$GEFUSIONUSER"
-        keyvalue_file_set "$GEE_INSTALL_KV_FILE" gefusionuser_existed "false"
-	else
-		# The user already exists -- update primary group:
-		usermod -g "$GEGROUP" "$GEFUSIONUSER"
-        keyvalue_file_set "$GEE_INSTALL_KV_FILE" gefusionuser_existed "true"
-    fi
-}
 
 #-----------------------------------------------------------------
 # Post-install Functions
@@ -178,8 +151,8 @@ install_or_upgrade_asset_root()
         if [ "$IS_SLAVE" = false ]; then
             # TODO: Verify this logic -- this is what is defined in the
             # installer documentation, but needs confirmation
-            keyvalue_file_get "$GEE_INSTALL_KV_FILE" gegroup_existed NEW_GEFUSIONUSER
-            keyvalue_file_get "$GEE_INSTALL_KV_FILE" gefusionuser_existed NEW_GEFUSIONUSER
+            keyvalue_file_get "$GEE_INSTALL_KV_PATH" gegroup_existed NEW_GEFUSIONUSER
+            keyvalue_file_get "$GEE_INSTALL_KV_PATH" gefusionuser_existed NEW_GEFUSIONUSER
             if [ "$NEW_GEGROUP" = true ] || [ "$NEW_GEFUSIONUSER" = true ]; then
                 NOCHOWN=""
                 UPGRADE_MESSAGE="The upgrade will fix permissions for the asset root and source volume. This may take a while."

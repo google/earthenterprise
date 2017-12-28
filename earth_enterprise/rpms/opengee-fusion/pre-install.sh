@@ -35,7 +35,7 @@ main_preinstall()
         show_invalid_assetroot_name "$INVALID_ASSETROOT_NAMES"
     fi
 
-
+    create_users_and_groups
 }
 
 #-----------------------------------------------------------------
@@ -60,6 +60,21 @@ check_asset_root_volume_size()
 The asset root volume [$ASSET_ROOT] has only $ASSET_ROOT_VOLUME_SIZE KB available.
 We recommend that an asset root directory have a minimum of $MIN_ASSET_ROOT_VOLUME_SIZE_IN_GB GB of free disk space.
 END
+    fi
+}
+
+create_users_and_groups()
+{
+    # Add user, if it does not exist:
+    if [ -z "$(getent passwd "$GEFUSIONUSER")" ]; then
+		mkdir -p "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER"
+		useradd --home "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER" \
+            --system --gid "$GEGROUP" "$GEFUSIONUSER"
+        keyvalue_file_set "$GEE_INSTALL_KV_PATH" gefusionuser_existed "false"
+	else
+		# The user already exists -- update primary group:
+		usermod -g "$GEGROUP" "$GEFUSIONUSER"
+        keyvalue_file_set "$GEE_INSTALL_KV_PATH" gefusionuser_existed "true"
     fi
 }
 
