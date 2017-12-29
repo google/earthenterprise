@@ -42,13 +42,14 @@ NEW_INSTALL=false
 
 # we can now infer install/upgrade directly from package install/upgrade state
 if [ "$1" = "1" ] ; then
-    # special check for upgrading non-rpm install
-    if [ ! -f "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER/upgrade" ] ; then
+    # special check for migration upgrading non-rpm install
+    if [ ! -f "$BASEINSTALLDIR_OPT/.upgrade-migration" ] ; then
         NEW_INSTALL=true
-    else
-        rm "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER/upgrade"
     fi
 fi
+
+# more certain we do not carry this...
+rm -f "$BASEINSTALLDIR_OPT/.upgrade-migration"
 
 #-----------------------------------------------------------------
 # Main Functions
@@ -156,8 +157,8 @@ install_or_upgrade_asset_root()
         chown -R "$GEFUSIONUSER:$GEGROUP" "$ASSET_ROOT"
     else
         # upgrade asset root -- if this is a master
-        if [ "$IS_SLAVE" = false ]; then
-            if [ "$NEW_INSTALL" = false ] ; then
+        if [ "$IS_SLAVE" == "false" ]; then
+            if [ "$NEW_INSTALL" == "false" ] ; then
                 NOCHOWN=""
                 UPGRADE_MESSAGE="The upgrade will fix permissions for the asset root and source volume. This may take a while."
             else
@@ -188,7 +189,7 @@ END
 
 final_assetroot_configuration()
 {
-    if [ "$IS_SLAVE" = true ]; then
+    if [ "$IS_SLAVE" == "true" ]; then
         "$BASEINSTALLDIR_OPT/bin/geselectassetroot" --role slave --assetroot "$ASSET_ROOT"
     else
         "$BASEINSTALLDIR_OPT/bin/geselectassetroot" --assetroot "$ASSET_ROOT"

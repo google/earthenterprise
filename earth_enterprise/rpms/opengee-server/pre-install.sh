@@ -32,7 +32,7 @@ main_preinstall()
     fi
 
     # only if a new install, has failsafe to protect non-rpm upgrades
-    if [ "$NEW_INSTALL" = true ] ; then
+    if [ "$NEW_INSTALL" == "true" ] ; then
         check_username "$GEAPACHEUSER"
         check_username "$GEPGUSER"
     fi
