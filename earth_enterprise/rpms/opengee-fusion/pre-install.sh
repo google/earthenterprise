@@ -25,6 +25,9 @@ fi
 #-----------------------------------------------------------------
 main_preinstall()
 {
+    # cleanup of special non-rpm case flag...
+    rm -f "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER/upgrade"
+
     # Whether rpm or non-rpm upgrade...
     if [ -f /etc/init.d/gefusion ]; then
         service gefusion stop

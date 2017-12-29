@@ -45,6 +45,8 @@ if [ "$1" = "1" ] ; then
     # special check for upgrading non-rpm install
     if [ ! -f "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER/upgrade" ] ; then
         NEW_INSTALL=true
+    else
+        rm "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER/upgrade"
     fi
 fi
 
