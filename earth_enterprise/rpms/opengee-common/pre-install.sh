@@ -24,9 +24,6 @@ check_group()
     # Add group if it does not exist:
     if [ -z "$GROUP_EXISTS" ]; then
         groupadd -r "$GEGROUP" &> /dev/null
-        keyvalue_file_set "$GEE_INSTALL_KV_PATH" gegroup_existed "false"
-    else
-        keyvalue_file_set "$GEE_INSTALL_KV_PATH" gegroup_existed "true"
     fi
 }
 
@@ -35,5 +32,10 @@ check_group()
 # Main Function
 #-----------------------------------------------------------------
 # 8) Check if group and users exist
-check_group
+
+# only if we are going to install, added as pre so cpio can carry
+# group name if needed.  skip if upgrade.
+if [ "$1" = "1" ]; then
+    check_group
+fi
 #-----------------------------------------------------------------

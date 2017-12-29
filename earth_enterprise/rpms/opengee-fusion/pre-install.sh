@@ -70,11 +70,9 @@ create_users_and_groups()
 		mkdir -p "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER"
 		useradd --home "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER" \
             --system --gid "$GEGROUP" "$GEFUSIONUSER"
-        keyvalue_file_set "$GEE_INSTALL_KV_PATH" gefusionuser_existed "false"
 	else
 		# The user already exists -- update primary group:
 		usermod -g "$GEGROUP" "$GEFUSIONUSER"
-        keyvalue_file_set "$GEE_INSTALL_KV_PATH" gefusionuser_existed "true"
     fi
 }
 

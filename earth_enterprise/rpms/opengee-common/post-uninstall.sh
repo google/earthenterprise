@@ -27,7 +27,10 @@ GEGROUP_NAME=$(cat "$BININSTALLROOTDIR/gevars.sh" | grep GEGROUP | cut  -d'=' -f
 
 remove_users_groups()
 {
-    if [ -n "$(getent group "$GEGROUP_NAME")" ]; then
+    local GROUP_EXISTS=$(getent group "$GEGROUP")
+
+    # Add group if it does not exist:
+    if [ ! -z "$GROUP_EXISTS" ]; then
         groupdel "$GEGROUP_NAME"
     fi
 }
@@ -35,5 +38,9 @@ remove_users_groups()
 #-----------------------------------------------------------------
 # Main Function:
 #-----------------------------------------------------------------
-remove_users_groups
+
+# at end of actual un-install, not an upgrade...
+if [ "$1" = "0" ]; then
+    remove_users_groups
+fi
 #-----------------------------------------------------------------

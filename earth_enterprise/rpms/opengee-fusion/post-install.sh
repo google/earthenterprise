@@ -38,8 +38,12 @@ PUBLISH_ROOT_VOLUME=""
 
 EXISTING_HOST=""
 IS_SLAVE=false
-NEW_GEFUSIONUSER=false
-NEW_GEGROUP=false
+NEW_INSTALL=false
+
+# we can now infer this directly from package install/upgrade state
+if [ "$1" = "1" ] ; then
+  NEW_INSTALL=true
+fi
 
 #-----------------------------------------------------------------
 # Main Functions
@@ -148,11 +152,7 @@ install_or_upgrade_asset_root()
     else
         # upgrade asset root -- if this is a master
         if [ "$IS_SLAVE" = false ]; then
-            # TODO: Verify this logic -- this is what is defined in the
-            # installer documentation, but needs confirmation
-            keyvalue_file_get "$GEE_INSTALL_KV_PATH" gegroup_existed NEW_GEFUSIONUSER
-            keyvalue_file_get "$GEE_INSTALL_KV_PATH" gefusionuser_existed NEW_GEFUSIONUSER
-            if [ "$NEW_GEGROUP" = true ] || [ "$NEW_GEFUSIONUSER" = true ]; then
+            if [ "$NEW_INSTALL" = false ] ; then
                 NOCHOWN=""
                 UPGRADE_MESSAGE="The upgrade will fix permissions for the asset root and source volume. This may take a while."
             else
