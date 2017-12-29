@@ -21,7 +21,7 @@ set +x
 #-----------------------------------------------------------------
 
 if [ "$1" = "0" ]; then
-	service gefusion stop
+    service gefusion stop
     remove_service gefusion
 fi
 

@@ -84,10 +84,10 @@ def openGeeVersion =
         commentIndex < 0 ? it : it.substring(0, commentIndex)        
     }.
     collect { it.trim() }. // Trim whitespace.
-    collect { it.replaceAll('-', '.') }. // Replace incompatible characters
     findAll { !it.isEmpty() }. // Skip empty lines.
     findResult {
-        it // The first string that remains is the version string.
+        // The first string that remains is the version string.
+        it.replaceAll('-', '.') // Replace incompatible characters
     }
 
 def postGisInstallDir = new File(

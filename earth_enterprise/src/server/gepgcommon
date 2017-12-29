@@ -23,17 +23,16 @@ GEPGUSER=gepguser
 # If it's the same user, then just execute directly, otherwise use su or sudo
 function run_as_user
 {
-  if [ "$( whoami )" == "$1" ]; then
+  if [ "$( whoami )" = "$1" ]; then
     >&2 echo "sh -c \"$2\""
     sh -c "$2"
   else
-    local use_su=`su $1 -c 'echo -n 1' 2> /dev/null  || echo -n 0`
-    if [ "$use_su" -eq 1 ] ; then
-        >&2 echo "cd / ;su $1 -c \"$2\""
-        ( cd / ;su $1 -c "$2" )
+    if su "$1" -c 'echo 1' >/dev/null 2>&1; then
+        >&2 echo "cd / ;su \"$1\" -c \"$2\""
+        ( cd / ;su "$1" -c "$2" )
     else
-        >&2 echo "cd / ;sudo -u $1 $2"
-        ( cd / ;sudo -u $1 $2 )
+        >&2 echo "cd / ;sudo -u \"$1\" -- \"$2\""
+        ( cd / ;sudo -u "$1" -- "$2" )
     fi
   fi
 }
@@ -69,7 +68,7 @@ function get_gepoi_tables {
 # Dumps geserve-databases.
 function do_dump {
   # Start postmaster.
-  if [ ! -f $VARPGDIR/data/postmaster.pid ]; then
+  if [ ! -f "$VARPGDIR/data/postmaster.pid" ]; then
     echo $( run_as_user $GEPGUSER "$BINDIR/pg_ctl -D $VARPGDIR/data -l $VARPGDIR/logs/pg.log start -w" )
   fi
 

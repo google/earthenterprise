@@ -336,8 +336,6 @@ installdirs = {
     'common_fonts': InstCommonDir('share/fonts'),
     'common_geecheck': InstCommonDir('share/support/geecheck'),
     'common_geecheck_lib': InstCommonDir('share/support/geecheck/lib'),
-    'common_version_file' : InstCommonDir('gee_version.txt'),
-    'common_long_version_file' : InstCommonDir('gee_long_version.txt'),
 
     'fusion_bin': InstFusionDir('bin'),
     'fusion_etc': Dir('fusion/etc%s' % optdir, installdir),

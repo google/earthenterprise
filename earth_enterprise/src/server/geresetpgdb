@@ -79,10 +79,10 @@ VARPGDIR=/var/opt/google/pgsql
 SHAREDIR=/opt/google/share/postgresql/contrib
 BINDIR=/opt/google/bin
 SQLDIR=/opt/google/share/opengee-server/sql
-SCRIPTDIR=`dirname $0`
+SCRIPTDIR=`dirname "$0"`
 
 # Import utility functions
-. $SCRIPTDIR/gepgcommon
+. "$SCRIPTDIR/gepgcommon"
 
 # Handles errors - prints out error code, command, and line number; shuts down
 #                  PostgreSQL if running
