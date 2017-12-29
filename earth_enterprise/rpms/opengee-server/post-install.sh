@@ -17,6 +17,12 @@
 set +x
 umask 002
 
+# we are not using this yet, but is probably good to have if we need to
+NEW_INSTALL=false
+if [ "$1" = "1" ] ; then
+    NEW_INSTALL=true
+fi
+
 #-----------------------------------------------------------------
 # Definitions
 PUBLISHER_ROOT="/gevol/published_dbs"

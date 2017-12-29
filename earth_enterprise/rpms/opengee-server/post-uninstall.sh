@@ -37,4 +37,6 @@ main_postuninstall()
 # Post-Uninstall Main
 #-----------------------------------------------------------------
 
-main_postuninstall $@
+if [ "$1" = "0" ] ; then
+    main_postuninstall $@
+fi

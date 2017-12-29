@@ -17,16 +17,12 @@
 set +x
 
 #-----------------------------------------------------------------
-# Main Functions
-#-----------------------------------------------------------------
-main_preuninstall()
-{
-    service geserver stop
-    remove_service geserver
-}
-
-#-----------------------------------------------------------------
-# Pre-install Main
+# Main Function
 #-----------------------------------------------------------------
 
-main_preuninstall $@
+service geserver stop
+
+# remove if actually uninstalling
+if [ "$1" = "0" ] ; then
+	remove_service geserver
+fi
