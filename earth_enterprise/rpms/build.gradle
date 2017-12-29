@@ -245,9 +245,7 @@ task openGeeCommonRpm(type: Rpm, dependsOn: openGeeSharedFiles) {
     installUtils = file('build/shared/install-utils.sh')
 
     preInstall = file('opengee-common/pre-install.sh')
-    
-    // we no longer remove group on uninstall
-    // postUninstall = file('opengee-common/post-uninstall.sh')
+    postUninstall = file('opengee-common/post-uninstall.sh')
 
     from (file('build/shared/gevars.sh')) {
         into new File(packageInstallRootDir, 'etc/init.d')
@@ -301,9 +299,7 @@ task openGeeServerRpm (type: Rpm, dependsOn: openGeeSharedFiles) {
     preInstall = file('opengee-server/pre-install.sh')
     postInstall = file('opengee-server/post-install.sh')
     preUninstall = file('opengee-server/pre-uninstall.sh')
-
-    // we no longer remove user on uninstall
-    // postUninstall = file('opengee-server/post-uninstall.sh')
+    postUninstall = file('opengee-server/post-uninstall.sh')
 
     directory('/opt/google/install', 0700)
     directory('/opt/google/gehttpd/logs', 0755)
@@ -392,9 +388,7 @@ built from raster, vector, and location properties data.
     preInstall = file('opengee-fusion/pre-install.sh')
     postInstall = file('opengee-fusion/post-install.sh')
     preUninstall = file('opengee-fusion/pre-uninstall.sh')
-    
-    // we no longer remove users on uninstall
-    // postUninstall = file('opengee-fusion/post-uninstall.sh')
+    postUninstall = file('opengee-fusion/post-uninstall.sh')
 
     directory('/opt/google/share/tutorials', 0755)
     directory('/var/opt/google/run', 0775)

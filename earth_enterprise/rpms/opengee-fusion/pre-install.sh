@@ -32,7 +32,7 @@ main_preinstall()
     if [ -f /etc/init.d/gefusion ]; then
         # moved special non-rpm upgrade check, not tied to user...
         # this is because users are now left alone after uninstall.
-        if [ "$NEW_INSTALL" == "true" ] ; then
+        if [ "$NEW_INSTALL" = "true" ] ; then
             echo "### non-rpm migration required"
             touch "$BASEINSTALLDIR_OPT/.upgrade-migration" 2>/dev/null
         fi
@@ -50,7 +50,7 @@ main_preinstall()
     fi
 
     # only on new install do we need to create user...
-    if [ "$NEW_INSTALL" == "true" ] ; then
+    if [ "$NEW_INSTALL" = "true" ] ; then
         create_users_and_groups
     fi
 }
@@ -84,12 +84,12 @@ create_users_and_groups()
 {
     # Add user if it does not exist:
     if [ -z "$(getent passwd "$GEFUSIONUSER")" ]; then
-		mkdir -p "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER"
-		useradd --home "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER" \
+        mkdir -p "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER"
+        useradd --home "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER" \
             --system --gid "$GEGROUP" "$GEFUSIONUSER"
-	else
-		# The user already exists -- update primary group:
-		usermod -g "$GEGROUP" "$GEFUSIONUSER"
+    else
+        # The user already exists -- update primary group:
+        usermod -g "$GEGROUP" "$GEFUSIONUSER"
         # Special case, upgrading from a non-rpm install
     fi
 }

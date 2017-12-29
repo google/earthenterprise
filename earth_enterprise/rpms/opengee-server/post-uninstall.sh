@@ -21,15 +21,7 @@ set +x
 #-----------------------------------------------------------------
 main_postuninstall()
 {
-    # Fedora recommends to never delete users that a package has created:
-    #   https://fedoraproject.org/wiki/Packaging:UsersAndGroups
-    # TODO: Consider whether we want to remove this:
-    if getent passwd "$GEAPACHEUSER" >/dev/null; then
-        userdel "$GEAPACHEUSER"
-    fi
-    if getent passwd "$GEPGUSER" >/dev/null; then
-        userdel "$GEPGUSER"
-    fi
+    echo "opengee users $GEAPACHEUSER and $GEPGUSER may now safely be removed."
 }
 
 

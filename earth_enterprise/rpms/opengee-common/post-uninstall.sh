@@ -25,12 +25,7 @@ BININSTALLROOTDIR="/etc/init.d"
 
 remove_users_groups()
 {
-    local GROUP_EXISTS=$(getent group "$GEGROUP")
-
-    # Add group if it does not exist:
-    if [ ! -z "$GROUP_EXISTS" ]; then
-        groupdel "$GEGROUP"
-    fi
+    echo "opengee group $GEGROUP may now be safely removed."
 }
 
 #-----------------------------------------------------------------

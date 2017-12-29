@@ -16,9 +16,7 @@
 
 remove_users_and_groups()
 {
-    if getent passwd "$GEFUSIONUSER" > /dev/null; then
-        userdel "$GEFUSIONUSER"
-    fi
+    echo "opengee user $GEFUSIONUSER may now be safely removed."
 }
 
 
