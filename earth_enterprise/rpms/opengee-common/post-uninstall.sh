@@ -22,8 +22,6 @@ BININSTALLROOTDIR="/etc/init.d"
 
 #------------------------------------------------------------------------------
 # Group names:
-GEGROUP_NAME=$(cat "$BININSTALLROOTDIR/gevars.sh" | grep GEGROUP | cut  -d'=' -f2)
-
 
 remove_users_groups()
 {
@@ -31,7 +29,7 @@ remove_users_groups()
 
     # Add group if it does not exist:
     if [ ! -z "$GROUP_EXISTS" ]; then
-        groupdel "$GEGROUP_NAME"
+        groupdel "$GEGROUP"
     fi
 }
 
