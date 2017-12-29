@@ -15,12 +15,17 @@
 # limitations under the License.
 
 set +x
+NEW_INSTALL=false
+if [ "$1" = "1" ] ; then
+    NEW_INSTALL=true
+fi
 
 #-----------------------------------------------------------------
 # Main Functions
 #-----------------------------------------------------------------
 main_preinstall()
 {
+    # Whether rpm or non-rpm upgrade...
     if [ -f /etc/init.d/gefusion ]; then
         service gefusion stop
     fi
@@ -35,7 +40,10 @@ main_preinstall()
         show_invalid_assetroot_name "$INVALID_ASSETROOT_NAMES"
     fi
 
-    create_users_and_groups
+    # only on new install do we need to create user...
+    if [ "$NEW_INSTALL" = true ] ; then
+        create_users_and_groups
+    fi
 }
 
 #-----------------------------------------------------------------
@@ -73,6 +81,8 @@ create_users_and_groups()
 	else
 		# The user already exists -- update primary group:
 		usermod -g "$GEGROUP" "$GEFUSIONUSER"
+        # Special case, upgrading from a non-rpm install
+        touch "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER/upgrade"
     fi
 }
 

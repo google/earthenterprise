@@ -40,9 +40,12 @@ EXISTING_HOST=""
 IS_SLAVE=false
 NEW_INSTALL=false
 
-# we can now infer this directly from package install/upgrade state
+# we can now infer install/upgrade directly from package install/upgrade state
 if [ "$1" = "1" ] ; then
-  NEW_INSTALL=true
+    # special check for upgrading non-rpm install
+    if [ ! -f "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER/upgrade" ] ; then
+        NEW_INSTALL=true
+    fi
 fi
 
 #-----------------------------------------------------------------

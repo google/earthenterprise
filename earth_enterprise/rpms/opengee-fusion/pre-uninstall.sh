@@ -21,6 +21,10 @@ set +x
 #-----------------------------------------------------------------
 
 service gefusion stop
-remove_service gefusion
+
+# remove if actually uninstalling
+if [ "$1" = "0" ] ; then
+	remove_service gefusion
+fi
 
 #-----------------------------------------------------------------

@@ -26,4 +26,7 @@ remove_users_and_groups()
 # Main Function
 #-----------------------------------------------------------------
 
-remove_users_and_groups
+# remove users only if actually uninstalling
+if [ "$1" = "0" ] ; then
+    remove_users_and_groups
+fi
