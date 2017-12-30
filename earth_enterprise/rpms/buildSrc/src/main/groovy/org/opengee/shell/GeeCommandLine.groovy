@@ -42,7 +42,7 @@ class GeeCommandLine {
             }
         }
         if (exitCode != 0) {
-            throw new IllegalArgumentException("""\
+            throw new Exception("""\
                 ${error_message_header}
                 Command: ${command}
                 Exit code: ${exitCode}.

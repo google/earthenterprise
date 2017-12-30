@@ -68,10 +68,10 @@ class GeeRpm extends com.netflix.gradle.plugins.rpm.Rpm {
     boolean autoFindRequires = false
 
     // A lambda executed on each automatically found required capability.
-    //   The lambda should map:
-    //       Dependency -> Dependency
-    //   If the result is `null`, that depedency is not included in the output
-    // package.
+    //     The lambda should map:
+    //         Dependency -> Dependency
+    //     If the result is `null`, that depedency is not included in the
+    // output package.
     Closure autoFindRequiresFilter = { it }
 
     // A set of `Requires(Pre)` (pre-install) dependencies for the RPM:

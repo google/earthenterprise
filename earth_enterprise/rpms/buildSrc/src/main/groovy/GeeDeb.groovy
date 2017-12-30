@@ -21,10 +21,6 @@ class GeeDeb extends com.netflix.gradle.plugins.deb.Deb {
         return command_name.collect { whatProvidesCommand(it) }
     }
 
-    static def findProvides(File[] inputFileList) {
-        return []
-    }
-
     static def findRequires(File[] inputFileList) {
         def libs = new HashSet()
 
