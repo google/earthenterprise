@@ -20,6 +20,7 @@ Define build environments, builders, actions and helper methods in this
 central place and reuse it in all SConscripts as much as possible.
 """
 
+import git
 import os
 import os.path
 import sys
@@ -27,7 +28,6 @@ import time
 from datetime import datetime
 import SCons
 from SCons.Environment import Environment
-import git
 
 
 def AppendToFlags(target, env, key, to_add):
