@@ -236,14 +236,21 @@ def GetVersion(backupFile):
         return "Version Error"
 
     return final
-  
+
+
+def GetRepository():
+    """Get a reference to the Git Repository.
+    Is there a cleaner option than searching from the current location?"""
+
+    return git.Repo('.', search_parent_directories=True)
+ 
 
 def CheckGitAvailable():
     """Try the most basic of git commands, to see if there is
        currently any access to a repository."""
     
     try:
-        repo = git.Repo(".")
+        repo = GetRepository()
     except git.exc.InvalidGitRepositoryError:
         return False
     
@@ -253,7 +260,7 @@ def CheckGitAvailable():
 def CheckDirtyRepository():
     """Check to see if the repository is not in a cleanly committed state."""
 
-    repo = git.Repo(".")    
+    repo = GetRepository()
     str = repo.git.status("--porcelain")
     
     # Ignore version.txt for this purpose, as a build may modify the file
@@ -284,7 +291,7 @@ def GitGeneratedLongVersion():
     """Take the raw information parsed by git, and use it to
        generate an appropriate version string for GEE."""
     try:
-        repo = git.Repo(".")
+        repo = GetRepository()
         raw = repo.git.describe('--tags', '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*')
         raw = raw.rstrip()
     except Exception:
