@@ -22,12 +22,12 @@ central place and reuse it in all SConscripts as much as possible.
 
 import os
 import os.path
-import subprocess
 import sys
 import time
 from datetime import datetime
 import SCons
 from SCons.Environment import Environment
+import git
 
 
 def AppendToFlags(target, env, key, to_add):
@@ -243,8 +243,8 @@ def CheckGitAvailable():
        currently any access to a repository."""
     
     try:
-        subprocess.check_output(['git', 'status'])
-    except Exception:
+        repo = git.Repo(".")
+    except git.exc.InvalidGitRepositoryError:
         return False
     
     return True
@@ -252,8 +252,9 @@ def CheckGitAvailable():
 
 def CheckDirtyRepository():
     """Check to see if the repository is not in a cleanly committed state."""
-    
-    str = subprocess.check_output(['git', 'status', '--porcelain'])
+
+    repo = git.Repo(".")    
+    str = repo.git.status("--porcelain")
     
     # Ignore version.txt for this purpose, as a build may modify the file
     # and lead to an erroneous interpretation on repeated consecutive builds.
@@ -283,8 +284,8 @@ def GitGeneratedLongVersion():
     """Take the raw information parsed by git, and use it to
        generate an appropriate version string for GEE."""
     try:
-        raw = subprocess.check_output(['git', 'describe', '--tags',
-                                        '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*'])
+        repo = git.Repo(".")
+        raw = repo.git.describe('--tags', '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*')
         raw = raw.rstrip()
     except Exception:
         return "Version Error"
