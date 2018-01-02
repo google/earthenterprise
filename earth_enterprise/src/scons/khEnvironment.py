@@ -242,7 +242,12 @@ def GetRepository():
     """Get a reference to the Git Repository.
     Is there a cleaner option than searching from the current location?"""
 
-    return git.Repo('.', search_parent_directories=True)
+    # The syntax is different between library versions (particularly,
+    # those used by Centos 6 vs Centos 7).
+    try:
+        return git.Repo('.', search_parent_directories=True)
+    except TypeError:
+        return git.Repo('.')
  
 
 def CheckGitAvailable():
