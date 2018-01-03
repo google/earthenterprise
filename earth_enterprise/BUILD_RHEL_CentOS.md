@@ -111,8 +111,10 @@ _after_ uninstalling older versions of GEE. Otherwise, some of the
 prerequisites will be missing and the build will fail.
 
 ### CentOS 7 and RHEL 7
-Execute: 
-```
+
+Execute:
+
+```bash
 sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel \
   python-devel perl-Alien-Packages openssl-devel libxml2-devel \
   libXinerama-devel libXft-devel libXrandr-devel libXcursor-devel gdbm-devel \

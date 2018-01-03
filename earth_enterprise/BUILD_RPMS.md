@@ -5,7 +5,7 @@ and later, DEBs).  Packages should be built on the same platform that they are
 installed on to avoid library errors.  This document assumes the development
 system of the target platform is already set up and ready to build Open GEE.
 
-Currently only building RPM packages are supported.  To begin creating Open Gee
+Currently only building RPM packages are supported.  To begin creating Open GEE
 RPMs requires a normal Open GEE build environment which can be setup by
 following the existing
 [build instructions](https://github.com/google/earthenterprise/wiki/Build-Instructions),
