@@ -57,6 +57,7 @@ def openGeeVersion =
     findResult {
         it // The first string that remains is the version string.
     }.
+    replaceAll(/-.*release/, '').
     replaceAll('-', '.')
 
 def stagedInstall_path = '/tmp/fusion_os_install'
