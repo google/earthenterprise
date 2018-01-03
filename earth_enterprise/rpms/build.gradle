@@ -44,7 +44,6 @@ apply plugin: "nebula.ospackage"
 def rpmPlatformString = com.tsciences.os.Platform.rpmPlatformString
 
 def openGeeVersion =
-    // new File(project.projectDir, '../src/fusion_version.txt').readLines().
     new File('/tmp/fusion_os_install/gee_long_version.txt').readLines().
     collect {
         // Strip comments:
