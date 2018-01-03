@@ -43,8 +43,19 @@ apply plugin: "nebula.ospackage"
 
 def rpmPlatformString = com.tsciences.os.Platform.rpmPlatformString
 
+def stagedInstall_path = '/tmp/fusion_os_install'
+if (new File('build.properties').exists()) {
+    def props = new Properties()
+    new File('build.properties').withInputStream {
+        props.load(it)
+    }
+    if(props["staged"]) {
+        stagedInstall_path = props["staged"]
+    }
+}
+
 def openGeeVersion =
-    new File('/tmp/fusion_os_install/gee_long_version.txt').readLines().
+    new File(stagedInstall_path, 'gee_long_version.txt').readLines().
     collect {
         // Strip comments:
         def commentIndex = it.indexOf('#')
@@ -58,17 +69,6 @@ def openGeeVersion =
     }.
     replaceAll(/-.*release/, '').
     replaceAll('-', '.')
-
-def stagedInstall_path = '/tmp/fusion_os_install'
-if (new File('build.properties').exists()) {
-    def props = new Properties()
-    new File('build.properties').withInputStream {
-        props.load(it)
-    }
-    if(props["staged"]) {
-        stagedInstall_path = props["staged"]
-    }
-}
 
 def stagedInstallDir = new File(stagedInstall_path)
 def stagedInstallDir_common = new File(stagedInstallDir, 'common')
