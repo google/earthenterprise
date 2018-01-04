@@ -1,4 +1,4 @@
-package com.tsciences.os
+package org.opengee.os
 
 class Platform {
     static private String osId = null;
