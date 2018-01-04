@@ -28,5 +28,18 @@ sudo apt install git-lfs
 ## Install Required Packages
 Run the following command:
 ```
-sudo apt-get install gcc g++ scons automake autoconf libperl4-corelibs-perl libtool xorg-dev doxygen python-dev alien swig libgtest-dev libstdc++6 libxml2-dev gettext libxinerama-dev libxft-dev libxrandr-dev libxcursor-dev libgdbm-dev libc6 libc6-dev libmng-dev zlib1g-dev libcap-dev libpng12-0 libpng12-dev freeglut3-dev flex libx11-dev bison++ bisonc++ libjpeg-dev libjpeg8-dev python2.7 python2.7-dev python-psycopg2 libogdi3.2-dev libgif-dev libxerces-c-dev libgeos-dev libgeos++-dev libfreetype6 libfreetype6-dev python-imaging libproj-dev python-setuptools libgif-dev libxerces-c-dev libcap-dev libpq-dev openssl libxml2-utils libxmu-dev shunit2 cmake
+sudo apt-get install \
+    alien autoconf automake bison++ bisonc++ cmake doxygen \
+    flex freeglut3-dev g++ gcc gettext \
+    libc6 libc6-dev libcap-dev libfreetype6 libfreetype6-dev \
+    libgdbm-dev libgeos-dev libgeos++-dev libgif-dev libgtest-dev \
+    libjpeg-dev libjpeg8-dev libmng-dev libogdi3.2-dev \
+    libperl4-corelibs-perl libpng12-0 libpng12-dev libpq-dev libproj-dev \
+    libstdc++6 libtool \
+    libx11-dev libxcursor-dev libxerces-c-dev libxft-dev libxinerama-dev \
+    libxml2-dev libxml2-utils libxmu-dev libxrandr-dev \
+    openssl \
+    python-dev python-imaging python-psycopg2 python-setuptools python2.7 \
+    python2.7-dev \
+    scons shunit2 swig xorg-dev zlib1g-dev
 ```
