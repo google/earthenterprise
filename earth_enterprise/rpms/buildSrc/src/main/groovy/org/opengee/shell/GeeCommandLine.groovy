@@ -19,10 +19,11 @@ class GeeCommandLine {
     //     To suppress known command results (return `null`), use the
     // `suppressedResults` parameter.
     static def expand(
-        command, error_message_header, stdInAction = null,
+        command, String error_message_header,
+        Iterable<String> envp = null, File work_dir = null, stdInAction = null,
         Iterable<ExpectedResult> suppressedResults = []
     ) {
-        def process = command.execute()
+        def process = command.execute(envp, work_dir)
         def stdoutBuffer = new StringBuilder()
         def stderrBuffer = new StringBuilder()
 
@@ -55,6 +56,13 @@ class GeeCommandLine {
         return stdoutBuffer.toString()
     }
 
+    static def expand(
+        command, String error_message_header, stdInAction,
+        Iterable<ExpectedResult> suppressedResults = []
+    ) {
+        return expand(command, error_message_header, null, null, stdInAction,
+            suppressedResults)
+    }
 
     // Returns the path to a given command found in a standard system PATH:
     static def resolveCommandPath(command_name) {

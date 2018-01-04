@@ -108,10 +108,16 @@ RequiresEND
             [
                 "/usr/bin/rpmrebuild", "--package",
                 "--change-spec-requires=/bin/bash ${requiresFilterFile}",
-                "--define", "_rpmdir ${buildDir}",
+                "--directory=${buildDir}",
                 "${rpmFile}"
             ],
-            "Rebuilding RPM to add Requires(pre) failed!"
+            "Rebuilding RPM to add Requires(pre) failed!",
+            // Control environment variables. (Needed in case we're running
+            // in a minimalistic enviroment like a `scons` target.)
+            [
+                "PATH=/bin:/usr/bin:/sbin:/usr/sbin",
+                "HOME=${buildDir}"
+            ]
         )
 
         if (outputFile != null) {

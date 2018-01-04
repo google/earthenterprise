@@ -30,7 +30,9 @@ class GeeDeb extends com.netflix.gradle.plugins.deb.Deb {
                 "Failed to list shared library dependencies of ${inputFile}!",
                 null,
                 // Ignore non-binary files:
-                [new GeeCommandLine.ExpectedResult(1, "\tnot a dynamic executable\n", "")])
+                [new GeeCommandLine.ExpectedResult(
+                    1, "\tnot a dynamic executable\n", "")]
+            )
         }.
         findAll { it != null }.
         each { stdOutput ->
