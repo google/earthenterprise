@@ -428,7 +428,7 @@ khAssetManager::HandleClientLoop(FusionConnection::Handle client) throw()
           (msg, "Invalid protocol version (client too old)");
         return;
       }
-      if (msg.payload != std::string(FUSION_VERSION)) {
+      if (msg.payload != std::string(GEE_VERSION)) {
         client->SendException
           (msg, "Invalid protocol version (client/server mismatch)");
         return;

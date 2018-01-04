@@ -153,7 +153,7 @@ main(int argc, char *argv[])
         (void)clearscreen.System();
 
         // emit khtop header
-        outline("FUSION VERSION: %s", FUSION_VERSION);
+        outline("FUSION VERSION: %s", GEE_VERSION);
         outline("MASTER: %s    ASSET ROOT: %s",
                 master.c_str(), assetroot.c_str());
         outline("");

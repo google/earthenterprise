@@ -138,11 +138,11 @@ bool AssetRootStatus::IsMaster(const std::string &host) const {
 }
 
 bool AssetRootStatus::AssetRootNeedsUpgrade(void) const {
-  return DottedVersion(version_) < DottedVersion(FUSION_VERSION);
+  return DottedVersion(version_) < DottedVersion(GEE_VERSION);
 }
 
 bool AssetRootStatus::SoftwareNeedsUpgrade(void) const {
-  return DottedVersion(version_) > DottedVersion(FUSION_VERSION);
+  return DottedVersion(version_) > DottedVersion(GEE_VERSION);
 }
 
 bool AssetRootStatus::AssetRootNeedsRepair(void) const {
@@ -178,7 +178,7 @@ void AssetRootStatus::ThrowAssetRootNeedsUpgrade(void) const {
 "Run the following command%5:\n"
 "  geupgradeassetroot --assetroot %6\n");
   throw khException(root_upgrade_msg
-                    .arg(FUSION_VERSION)
+                    .arg(GEE_VERSION)
                     .arg(assetroot_)
                     .arg(version_)
                     .arg(assetroot_)
@@ -195,7 +195,7 @@ void AssetRootStatus::ThrowSoftwareNeedsUpgrade(void) const {
 "In order to use %4 from this machine, you must upgrade\n"
 "the fusion software on this machine to version %5.\n");
   throw khException(software_upgrade_msg
-                    .arg(FUSION_VERSION)
+                    .arg(GEE_VERSION)
                     .arg(assetroot_)
                     .arg(version_)
                     .arg(assetroot_)
