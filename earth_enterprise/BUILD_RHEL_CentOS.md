@@ -2,7 +2,7 @@
 
 ## Enable Additional Repositories
 
-Specific yum repositories need to be enabled for different distributions to
+Specific Yum repositories need to be enabled for different distributions to
 install the required development tools.
 
 ### CentOS 7
@@ -49,7 +49,7 @@ Install the system default version:
 sudo yum install -y git
 ```
 
-Alternatively, install the latest version from the IUS repo (recommended).
+Alternatively, install the latest version from the IUS repository (recommended).
 See the [Getting Started](https://ius.io/GettingStarted/) page to find the RPM
 URL for your system. Use this URL below:
 
@@ -111,15 +111,17 @@ _after_ uninstalling older versions of GEE. Otherwise, some of the
 prerequisites will be missing and the build will fail.
 
 ### CentOS 7 and RHEL 7
-Execute: 
-```
+
+Execute:
+
+```bash
 sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel \
   python-devel perl-Alien-Packages openssl-devel libxml2-devel \
   libXinerama-devel libXft-devel libXrandr-devel libXcursor-devel gdbm-devel \
   libmng-devel libcap-devel libpng12-devel libXmu-devel freeglut-devel \
   zlib-devel libX11-devel bison-devel openjpeg-devel openjpeg2-devel \
   geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel \
-  cmake rpm-build rsync GitPython
+  cmake GitPython rpm-build rpmrebuild rsync
 ```
 
 ### CentOS 6 and RHEL 6
@@ -132,7 +134,7 @@ sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel \
   libmng-devel libcap-devel libpng-devel libXmu-devel freeglut-devel \
   zlib-devel libX11-devel bison-devel openjpeg-devel openjpeg2-devel \
   geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel \
-  cmake rpm-build rsync shunit2 GitPython
+  cmake GitPython rpm-build rpmrebuild rsync shunit2
 ```
 
 If you encounter an error about git dependency conflicts, consider 
@@ -142,7 +144,7 @@ experimenting with the `--skip-broken` parameter.
 
 ### CentOS 7 and RHEL 7
 
-gtest is included in EPEL and RHEL Extra Repositories. Install the RPM:
+GTest is included in the EPEL and RHEL Extra Repositories. Install the RPM with:
 
 ```bash
 yum install -y gtest-devel
@@ -154,7 +156,7 @@ You will need to compile, package, and install an updated version of GTest as an
 RPM for RHEL6. This build process also depends on GCC 4.8, as does
 the rest of the GEE build process.
 
-To clone this git repo and build the RPM on RHEL6, execute the following:
+To clone this Git repository and build the RPM on RHEL6, execute the following:
 
 ```bash
 mkdir -p ~/opengee/rpm-build/
@@ -166,8 +168,8 @@ cd gtest-devtoolset-rpm/
 ./bin/build.sh --use-docker=no
 ```
 
-__NOTE:__ The gtest RPM can be built on other linux systems using docker. Simply
-execute `build.sh` without the `--no-docker` argument. See the [README.md](https://github.com/thermopylae/gtest-devtoolset-rpm) for more details.
+__NOTE:__ The GTest RPM can be built on other Linux systems using Docker. Simply
+execute `build.sh` without the `--use-docker=no` argument. See the [README.md](https://github.com/thermopylae/gtest-devtoolset-rpm) for more details.
 
 Install the RPM:
 
@@ -176,17 +178,20 @@ sudo yum install -y ./build/RPMS/x86_64/gtest-devtoolset2-1.8.0-1.x86_64.rpm
 ```
 ## shunit2
 
-shunit2 is used for unit testing shell scripts in the GEE repo.
-It is currently used only for testing package building scripts.
+shunit2 is used for unit testing shell scripts in the GEE repository.
+It is currently used only for testing package-building scripts.
 
 ### CentOS 7 and RHEL 7
+
 The EPEL repositories for RHEL and CentOS 7 do not include shunit2.
 If you want to run these tests on one of these platforms, you must install
 shunit2 from the EPEL repositories for RHEL and CentOS 6.
-Run the following:
-```
+To do so run the following:
+
+```bash
 sudo yum install -y http://download-ib01.fedoraproject.org/pub/epel/6/x86_64/Packages/s/shunit2-2.1.6-3.el6.noarch.rpm
 ```
 
 ### CentOS 6 and RHEL 6
+
 shunit2 was installed in a previous step.
