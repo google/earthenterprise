@@ -119,7 +119,7 @@ sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel \
   libmng-devel libcap-devel libpng12-devel libXmu-devel freeglut-devel \
   zlib-devel libX11-devel bison-devel openjpeg-devel openjpeg2-devel \
   geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel \
-  cmake rpm-build rsync
+  cmake rpm-build rsync GitPython
 ```
 
 ### CentOS 6 and RHEL 6
@@ -132,7 +132,7 @@ sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel \
   libmng-devel libcap-devel libpng-devel libXmu-devel freeglut-devel \
   zlib-devel libX11-devel bison-devel openjpeg-devel openjpeg2-devel \
   geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel \
-  cmake rpm-build rsync shunit2
+  cmake rpm-build rsync shunit2 GitPython
 ```
 
 If you encounter an error about git dependency conflicts, consider 
