@@ -42,14 +42,8 @@ NEW_INSTALL=false
 
 # we can now infer install/upgrade directly from package install/upgrade state
 if [ "$1" = "1" ] ; then
-    # special check for migration upgrading non-rpm install
-    if [ ! -f "$BASEINSTALLDIR_OPT/.upgrade-migration" ] ; then
-        NEW_INSTALL=true
-    fi
+    NEW_INSTALL=true
 fi
-
-# more certain we do not carry this...
-rm -f "$BASEINSTALLDIR_OPT/.upgrade-migration"
 
 #-----------------------------------------------------------------
 # Main Functions
@@ -159,7 +153,7 @@ install_or_upgrade_asset_root()
     else
         # upgrade asset root -- if this is a master
         if [ "$IS_SLAVE" = "false" ]; then
-            if [ "$NEW_INSTALL" = "false" ] ; then
+            if [ "$NEW_INSTALL" = "true" ] ; then
                 NOCHOWN=""
                 UPGRADE_MESSAGE="The upgrade will fix permissions for the asset root and source volume. This may take a while."
             else

@@ -25,17 +25,7 @@ fi
 #-----------------------------------------------------------------
 main_preinstall()
 {
-    # cleanup of special non-rpm upgrade case flag...
-    rm -f "$BASEINSTALLDIR_OPT/.upgrade-migration"
-
-    # Whether rpm or non-rpm upgrade...
     if [ -f /etc/init.d/gefusion ]; then
-        # moved special non-rpm upgrade check, not tied to user...
-        # this is because users are now left alone after uninstall.
-        if [ "$NEW_INSTALL" = "true" ] ; then
-            echo "### non-rpm migration required"
-            touch "$BASEINSTALLDIR_OPT/.upgrade-migration" 2>/dev/null
-        fi
         service gefusion stop
     fi
 
