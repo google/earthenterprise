@@ -153,7 +153,8 @@ install_or_upgrade_asset_root()
     else
         # upgrade asset root -- if this is a master
         if [ "$IS_SLAVE" = "false" ]; then
-            if [ "$NEW_INSTALL" = "true" ] ; then
+            OWNERSHIP=`find /gevol/assets -maxdepth 0 -printf "%g:%u"`
+            if [ "$OWNERSHIP" != "$GEGROUP:$GEFUSIONUSER" ] ; then
                 NOCHOWN=""
                 UPGRADE_MESSAGE="The upgrade will fix permissions for the asset root and source volume. This may take a while."
             else
