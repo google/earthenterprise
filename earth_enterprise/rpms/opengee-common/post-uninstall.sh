@@ -25,7 +25,7 @@ BININSTALLROOTDIR="/etc/init.d"
 
 remove_users_groups()
 {
-    echo "opengee group $GEGROUP may be removed once associated data files are purged."
+    echo "OpenGEE group $GEGROUP may be removed once associated data files are purged."
 }
 
 #-----------------------------------------------------------------

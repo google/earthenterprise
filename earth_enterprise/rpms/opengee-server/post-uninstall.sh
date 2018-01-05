@@ -21,7 +21,7 @@ set +x
 #-----------------------------------------------------------------
 main_postuninstall()
 {
-    echo "opengee users $GEAPACHEUSER and $GEPGUSER may be removed once associated data files are purged."
+    echo "OpenGEE users $GEAPACHEUSER and $GEPGUSER may be removed once associated data files are purged."
 }
 
 
