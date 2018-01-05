@@ -17,23 +17,23 @@
 set +x
 
 #------------------------------------------------------------------------------
-check_group()
-{
-    local GROUP_EXISTS=$(getent group "$GEGROUP")
+# Directory locations:
+BININSTALLROOTDIR="/etc/init.d"
 
-    # Add group if it does not exist:
-    if [ -z "$GROUP_EXISTS" ]; then
-        groupadd -r "$GEGROUP" &> /dev/null
-        keyvalue_file_set "$GEE_INSTALL_KV_PATH" gegroup_existed "false"
-    else
-        keyvalue_file_set "$GEE_INSTALL_KV_PATH" gegroup_existed "true"
-    fi
+#------------------------------------------------------------------------------
+# Group names:
+
+remove_users_groups()
+{
+    echo "OpenGEE group $GEGROUP may be removed once associated data files are purged."
 }
 
+#-----------------------------------------------------------------
+# Main Function:
+#-----------------------------------------------------------------
 
-#-----------------------------------------------------------------
-# Main Function
-#-----------------------------------------------------------------
-# 8) Check if group and users exist
-check_group
+# at end of actual un-install, not an upgrade...
+if [ "$1" = "0" ]; then
+    remove_users_groups
+fi
 #-----------------------------------------------------------------

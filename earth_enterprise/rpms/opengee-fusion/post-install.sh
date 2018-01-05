@@ -38,8 +38,12 @@ PUBLISH_ROOT_VOLUME=""
 
 EXISTING_HOST=""
 IS_SLAVE=false
-NEW_GEFUSIONUSER=false
-NEW_GEGROUP=false
+NEW_INSTALL=false
+
+# we can now infer install/upgrade directly from package install/upgrade state
+if [ "$1" = "1" ] ; then
+    NEW_INSTALL=true
+fi
 
 #-----------------------------------------------------------------
 # Main Functions
@@ -63,6 +67,7 @@ main_postinstall()
 
     final_fusion_service_configuration
 }
+
 
 #-----------------------------------------------------------------
 # Post-install Functions
@@ -147,12 +152,9 @@ install_or_upgrade_asset_root()
         chown -R "$GEFUSIONUSER:$GEGROUP" "$ASSET_ROOT"
     else
         # upgrade asset root -- if this is a master
-        if [ "$IS_SLAVE" = false ]; then
-            # TODO: Verify this logic -- this is what is defined in the
-            # installer documentation, but needs confirmation
-            keyvalue_file_get "$GEE_INSTALL_KV_PATH" gegroup_existed NEW_GEFUSIONUSER
-            keyvalue_file_get "$GEE_INSTALL_KV_PATH" gefusionuser_existed NEW_GEFUSIONUSER
-            if [ "$NEW_GEGROUP" = true ] || [ "$NEW_GEFUSIONUSER" = true ]; then
+        if [ "$IS_SLAVE" = "false" ]; then
+            OWNERSHIP=`find "$ASSET_ROOT" -maxdepth 0 -printf "%g:%u"`
+            if [ "$OWNERSHIP" != "$GEGROUP:$GEFUSIONUSER" ] ; then
                 NOCHOWN=""
                 UPGRADE_MESSAGE="The upgrade will fix permissions for the asset root and source volume. This may take a while."
             else
@@ -183,7 +185,7 @@ END
 
 final_assetroot_configuration()
 {
-    if [ "$IS_SLAVE" = true ]; then
+    if [ "$IS_SLAVE" = "true" ]; then
         "$BASEINSTALLDIR_OPT/bin/geselectassetroot" --role slave --assetroot "$ASSET_ROOT"
     else
         "$BASEINSTALLDIR_OPT/bin/geselectassetroot" --assetroot "$ASSET_ROOT"
@@ -210,4 +212,5 @@ final_fusion_service_configuration()
 #-----------------------------------------------------------------
 # Post-Install Main
 #-----------------------------------------------------------------
+
 main_postinstall

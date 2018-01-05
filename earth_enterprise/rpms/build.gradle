@@ -41,18 +41,39 @@ buildscript {
 
 apply plugin: "nebula.ospackage"
 
-def rpmPlatformString = com.tsciences.os.Platform.rpmPlatformString
+def rpmPlatformString = org.opengee.os.Platform.rpmPlatformString
 
-def stagedInstall_path = '/tmp/fusion_os_install'
+def stagedInstall_path =
+    project.hasProperty('stageInstallPath') ?
+        project.stageInstallPath :
+        (project.hasProperty('buildOpenGee') ?
+            "${buildDir.getAbsolutePath()}/install" :
+            '/tmp/fusion_os_install')
 if (new File('build.properties').exists()) {
     def props = new Properties()
     new File('build.properties').withInputStream {
         props.load(it)
     }
-    if(props["staged"]) {
+    if (props["staged"]) {
         stagedInstall_path = props["staged"]
     }
 }
+
+def openGeeVersion =
+    new File(stagedInstall_path, 'gee_long_version.txt').readLines().
+    collect {
+        // Strip comments:
+        def commentIndex = it.indexOf('#')
+
+        commentIndex < 0 ? it : it.substring(0, commentIndex)        
+    }.
+    collect { it.trim() }. // Trim whitespace.
+    findAll { !it.isEmpty() }. // Skip empty lines.
+    findResult {
+        it // The first string that remains is the version string.
+    }.
+    replaceAll(/-.*release/, '').
+    replaceAll('-', '.')
 
 def stagedInstallDir = new File(stagedInstall_path)
 def stagedInstallDir_common = new File(stagedInstallDir, 'common')
@@ -75,21 +96,6 @@ def stagedInstallDir_server_version =
 def stagedInstallDir_fusion = new File(stagedInstallDir, 'fusion')
 def packageInstallRootDir = new File('/')
 
-def openGeeVersion =
-    stagedInstallDir_server_version.readLines().
-    collect {
-        // Strip comments:
-        def commentIndex = it.indexOf('#')
-
-        commentIndex < 0 ? it : it.substring(0, commentIndex)        
-    }.
-    collect { it.trim() }. // Trim whitespace.
-    findAll { !it.isEmpty() }. // Skip empty lines.
-    findResult {
-        // The first string that remains is the version string.
-        it.replaceAll('-', '.') // Replace incompatible characters
-    }
-
 def postGisInstallDir = new File(
         project.projectDir,
         '../src/NATIVE-REL-x86_64/third_party/postgis/install'
@@ -97,11 +103,17 @@ def postGisInstallDir = new File(
 
 def postGisInstallDir_opt = new File(postGisInstallDir, 'opt')
 
+// Commands used in install-utils.sh:
+def packageSharedCommands = ['bash', 'flock', 'sed', 'xmllint']
+
+
 
 ospackage {
     version = openGeeVersion
     release = "1.${rpmPlatformString}"
+    distribution = rpmPlatformString
     packager = 'gee-oss@googlegroups.com'
+    vendor = 'The OpenGEE Contributors'
     arch = X86_64
     os = LINUX
 }
@@ -122,10 +134,11 @@ task stageOpenGeeInstall(type: Exec, dependsOn: 'compileOpenGee') {
     // "installdir=${build_install_dir.getAbsolutePath()}", so we
     // overwrite whatever is in the default stage install directory:
     commandLine(
-        'scons', '-j8', 'release=1', 'stage_install')
+        'scons', '-j8', 'release=1', 'stage_install',
+        "installdir=${stagedInstallDir}")
 }
 
-task openGeePostGisRpm(type: Rpm) {
+task openGeePostGisRpm(type: GeeRpm) {
     packageName = 'opengee-postgis'
     release = "1.${rpmPlatformString}"
     version = '1.5.8'
@@ -137,9 +150,18 @@ task openGeePostGisRpm(type: Rpm) {
     license = 'GPLv2'
     url = 'https://github.com/google/earthenterprise/tree/master/earth_enterprise/third_party/postgis'
     type = BINARY
+    autoFindProvides = true
+    autoFindRequires = true
 
     from (postGisInstallDir_opt) {
         into new File(packageInstallRootDir, 'opt')
+    }
+
+    from (new File(stagedInstallDir_server_opt, 'google/lib')) {
+        // Include libpq, since it's used by postgis command-line utilities:
+        include 'libpq.*'
+
+        into new File(packageInstallRootDir, 'opt/google/lib')
     }
 }
 
@@ -189,7 +211,7 @@ task openGeeSharedFiles(type: Copy) {
     }
 }
 
-task openGeeCommonRpm(type: Rpm, dependsOn: openGeeSharedFiles) {
+task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeSharedFiles) {
     packageName = 'opengee-common'
     release = "1.${rpmPlatformString}"
     version = openGeeVersion
@@ -239,15 +261,33 @@ task openGeeCommonRpm(type: Rpm, dependsOn: openGeeSharedFiles) {
         'OpenSSL and ' +
         'Skia 5.1.2'
     type = BINARY
+    autoFindProvides = true
+    autoFindRequires = true
 
     requires('opengee-postgis', '1.5.8', GREATER | EQUAL)
+    requires('chkconfig')
+    requires('shadow-utils')
+    requires('perl')
+    requires('sudo')
     conflicts('opengee-postgis', '2.0', GREATER | EQUAL)
-    requires('util-linux')
+
+    requiresCommands(packageSharedCommands +
+        ['cat', 'cut', 'getent', 'grep' ])
+    
+    /* Since some libraries (i.e., MrSid)  cannot be redistributed without a 
+       license and are not packaged as an RPM, we need to filter these out from the
+       automatic 'requires' dependency generation. */
+    
+    def filterCapabilities = ['libltidsdk.so()(64bit)']
+    autoFindRequiresFilter = { 
+        return filterCapabilities.contains(it.name) ? null : it 
+    }
 
     // Prefix variable definitions to all install scripts:
     installUtils = file('build/shared/install-utils.sh')
 
-    postInstall = file('opengee-common/post-install.sh')
+    preInstall = file('opengee-common/pre-install.sh')
+    postUninstall = file('opengee-common/post-uninstall.sh')
 
     from (file('build/shared/gevars.sh')) {
         into new File(packageInstallRootDir, 'etc/init.d')
@@ -286,7 +326,7 @@ task openGeeCommonDeb (type: Deb) {
     }
 }
 
-task openGeeServerRpm (type: Rpm, dependsOn: openGeeSharedFiles) {
+task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     packageName = 'opengee-server'
     release = "1.${rpmPlatformString}"
@@ -294,6 +334,25 @@ task openGeeServerRpm (type: Rpm, dependsOn: openGeeSharedFiles) {
     user = 'root'
     permissionGroup = 'root'
     packageGroup = 'Application/Productivity'
+    summary = 'Open Google Earth Enterprise 3D globe and 2D map tile server'
+    packageDescription =
+        'OpenGEE Server Daemons (Apache, PostGRE SQL) and command-line tools.'
+    license = 'ASL 2.0'
+    url = 'https://github.com/google/earthenterprise'
+    autoFindProvides = true
+    autoFindRequires = true
+
+    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
+    requiresPre('opengee-common', openGeeVersion, GREATER | EQUAL)
+
+    requiresCommands(
+        packageSharedCommands +
+        [
+            // Install script commands:
+            'cat', 'chmod', 'chown', 'cut', 'find', 'getent', 'mkdir', 'python',
+            'sed', 'su', 'sudo'
+        ]
+    )
 
     // Prefix variable definitions to all install scripts:
     installUtils = file('build/shared/install-utils.sh')
@@ -316,6 +375,9 @@ task openGeeServerRpm (type: Rpm, dependsOn: openGeeSharedFiles) {
     directory('/var/opt/google/pgsql/logs')
     
     from(stagedInstallDir_server_opt) {
+        // libpq is in the opengee-postgis package:
+        exclude 'google/lib/libpq.*'
+
         into new File(packageInstallRootDir, 'opt')
     }
 
@@ -338,6 +400,13 @@ task openGeeServerRpm (type: Rpm, dependsOn: openGeeSharedFiles) {
     from(stagedInstallDir_server_apachesupport) {
         into packageInstallRootDir
     }
+
+    // Exclude files that go into the PostGIS RPM from this package:
+    eachFile {
+        if (new File(postGisInstallDir_opt, "../${it.path}").exists()) {
+            it.exclude()
+        }
+    }
 }
 
 task openGeeServerDeb (type: Deb) {
@@ -358,7 +427,7 @@ task openGeeServerDeb (type: Deb) {
     }
 }
 
-task openGeeFusionRpm (type: Rpm, dependsOn: openGeeSharedFiles) {
+task openGeeFusionRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     packageName = 'opengee-fusion'
     release = "1.${rpmPlatformString}"
     version = openGeeVersion
@@ -372,19 +441,23 @@ task openGeeFusionRpm (type: Rpm, dependsOn: openGeeSharedFiles) {
 The utilities in this package allow Open GEE globe and map databases to be
 built from raster, vector, and location properties data.
 '''
-    license = 'Apache 2.0'
+    license = 'ASL 2.0'
+    url = 'https://github.com/google/earthenterprise'
     type = BINARY
-
-    requires('bash')
-    requires('coreutils')
-    requires('findutils')
-    requires('grep')
-    requires('libxml2')
-    requires('net-tools')
-    requires('sed')
-    requires('util-linux')
+    autoFindProvides = true
+    autoFindRequires = true
 
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
+
+    requiresCommands(
+        packageSharedCommands +
+        [
+            // Install script commands:
+            'cat', 'chcon', 'chmod', 'chown', 'cut', 'df', 'dirname', 'expr',
+            'find', 'getent', 'grep', 'hostname', 'mkdir', 'nproc',
+            'tr'
+        ]
+    )
 
     // Prefix variable definitions to all install scripts:
     installUtils = file('build/shared/install-utils.sh')

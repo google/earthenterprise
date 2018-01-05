@@ -14,14 +14,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set +x
+remove_users_and_groups()
+{
+    echo "OpenGEE user $GEFUSIONUSER may be removed once associated data files are purged."
+}
+
 
 #-----------------------------------------------------------------
 # Main Function
 #-----------------------------------------------------------------
 
-# remove if actually uninstalling
+# remove users only if actually uninstalling
 if [ "$1" = "0" ] ; then
-	service geserver stop
-	remove_service geserver
+    remove_users_and_groups
 fi
