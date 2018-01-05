@@ -17,11 +17,18 @@
 set +x
 
 #-----------------------------------------------------------------
-# Main Function
+# Main Functions
+#-----------------------------------------------------------------
+main_postuninstall()
+{
+    echo "OpenGEE users $GEAPACHEUSER and $GEPGUSER may be removed once associated data files are purged."
+}
+
+
+#-----------------------------------------------------------------
+# Post-Uninstall Main
 #-----------------------------------------------------------------
 
-# remove if actually uninstalling
 if [ "$1" = "0" ] ; then
-	service geserver stop
-	remove_service geserver
+    main_postuninstall $@
 fi

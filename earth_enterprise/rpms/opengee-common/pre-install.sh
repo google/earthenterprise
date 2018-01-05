@@ -1,6 +1,6 @@
 #! /bin/bash
 #
-# Copyright 2017 The Open GEE Contributors
+# Copyright 2017 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,12 +16,26 @@
 
 set +x
 
+#------------------------------------------------------------------------------
+check_group()
+{
+    local GROUP_EXISTS=$(getent group "$GEGROUP")
+
+    # Add group if it does not exist:
+    if [ -z "$GROUP_EXISTS" ]; then
+        groupadd -r "$GEGROUP" &> /dev/null
+    fi
+}
+
+
 #-----------------------------------------------------------------
 # Main Function
 #-----------------------------------------------------------------
+# 8) Check if group and users exist
 
-# remove if actually uninstalling
-if [ "$1" = "0" ] ; then
-	service geserver stop
-	remove_service geserver
+# only if we are going to install, added as pre so cpio can carry
+# group name if needed.  skip if upgrade.
+if [ "$1" = "1" ]; then
+    check_group
 fi
+#-----------------------------------------------------------------
