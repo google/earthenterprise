@@ -82,7 +82,7 @@ END
 
 create_users_and_groups()
 {
-    # Add user if it does not exist:
+    # Add user, if it does not exist:
     if [ -z "$(getent passwd "$GEFUSIONUSER")" ]; then
         mkdir -p "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER"
         useradd --home "$BASEINSTALLDIR_OPT/.users/$GEFUSIONUSER" \

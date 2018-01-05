@@ -20,9 +20,9 @@ Define build environments, builders, actions and helper methods in this
 central place and reuse it in all SConscripts as much as possible.
 """
 
+import git
 import os
 import os.path
-import subprocess
 import sys
 import time
 from datetime import datetime
@@ -236,15 +236,27 @@ def GetVersion(backupFile):
         return "Version Error"
 
     return final
-  
+
+
+def GetRepository():
+    """Get a reference to the Git Repository.
+    Is there a cleaner option than searching from the current location?"""
+
+    # The syntax is different between library versions (particularly,
+    # those used by Centos 6 vs Centos 7).
+    try:
+        return git.Repo('.', search_parent_directories=True)
+    except TypeError:
+        return git.Repo('.')
+ 
 
 def CheckGitAvailable():
     """Try the most basic of git commands, to see if there is
        currently any access to a repository."""
     
     try:
-        subprocess.check_output(['git', 'status'])
-    except Exception:
+        repo = GetRepository()
+    except git.exc.InvalidGitRepositoryError:
         return False
     
     return True
@@ -252,8 +264,9 @@ def CheckGitAvailable():
 
 def CheckDirtyRepository():
     """Check to see if the repository is not in a cleanly committed state."""
-    
-    str = subprocess.check_output(['git', 'status', '--porcelain'])
+
+    repo = GetRepository()
+    str = repo.git.status("--porcelain")
     
     # Ignore version.txt for this purpose, as a build may modify the file
     # and lead to an erroneous interpretation on repeated consecutive builds.
@@ -283,8 +296,8 @@ def GitGeneratedLongVersion():
     """Take the raw information parsed by git, and use it to
        generate an appropriate version string for GEE."""
     try:
-        raw = subprocess.check_output(['git', 'describe', '--tags',
-                                        '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*'])
+        repo = GetRepository()
+        raw = repo.git.describe('--tags', '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*')
         raw = raw.rstrip()
     except Exception:
         return "Version Error"
