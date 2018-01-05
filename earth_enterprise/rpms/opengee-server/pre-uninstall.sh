@@ -20,9 +20,8 @@ set +x
 # Main Function
 #-----------------------------------------------------------------
 
-service geserver stop
-
 # remove if actually uninstalling
 if [ "$1" = "0" ] ; then
+	service geserver stop
 	remove_service geserver
 fi

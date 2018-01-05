@@ -212,4 +212,10 @@ final_fusion_service_configuration()
 #-----------------------------------------------------------------
 # Post-Install Main
 #-----------------------------------------------------------------
+
+# stop if an upgrade, so start will begin a clean new instance
+if [ "$1" > 1 ] ; then
+  service gefusion stop
+fi
+
 main_postinstall

@@ -213,4 +213,9 @@ install_search_databases()
 # Post-install Main
 #-----------------------------------------------------------------
 
+# stop if an upgrade, so start will begin a clean new instance
+if [ "$1" > 1 ] ; then
+  service geserver stop
+fi
+
 main_postinstall $@

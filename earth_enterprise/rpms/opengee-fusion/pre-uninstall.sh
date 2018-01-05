@@ -20,10 +20,9 @@ set +x
 # Main Function
 #-----------------------------------------------------------------
 
-service gefusion stop
-
 # remove if actually uninstalling
 if [ "$1" = "0" ] ; then
+	service gefusion stop
 	remove_service gefusion
 fi
 
