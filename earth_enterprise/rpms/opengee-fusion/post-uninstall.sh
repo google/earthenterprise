@@ -16,7 +16,7 @@
 
 remove_users_and_groups()
 {
-    echo "opengee user $GEFUSIONUSER may now be safely removed."
+    echo "opengee user $GEFUSIONUSER may be removed once associated data files are purged."
 }
 
 
