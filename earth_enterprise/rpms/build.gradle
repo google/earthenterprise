@@ -440,8 +440,21 @@ built from raster, vector, and location properties data.
     license = 'ASL 2.0'
     url = 'https://github.com/google/earthenterprise'
     type = BINARY
+<<<<<<< HEAD
     autoFindProvides = true
     autoFindRequires = true
+=======
+
+    requires('bash')
+    requires('coreutils')
+    requires('findutils')
+    requires('grep')
+    requires('libxml2')
+    requires('net-tools')
+    requires('sed')
+    requires('util-linux')
+    requires('proj')
+>>>>>>> Added proj rpm dependency to opengee-fusion rpm
 
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
 
