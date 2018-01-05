@@ -1,5 +1,5 @@
 --
--- Copyright 2017 Google Inc.
+-- Copyright 2018 Google Inc.
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -15,10 +15,6 @@
 --
 
 SET CLIENT_MIN_MESSAGES TO WARNING;
-
---Add "plpgsql" to the list of existing languages.
-CREATE LANGUAGE plpgsql;
-
 
 --Check if the table already exists.
 --Return TRUE/FALSE based on whether tables exists or not.
@@ -163,5 +159,3 @@ SELECT create_tables();
 
 --insert/update system search services.
 SELECT run_searchdef_upsert();
-
-DROP LANGUAGE IF EXISTS plpgsql CASCADE;
