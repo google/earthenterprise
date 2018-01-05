@@ -20,7 +20,9 @@ set +x
 # Main Function
 #-----------------------------------------------------------------
 
-service gefusion stop
-remove_service gefusion
+if [ "$1" = "0" ]; then
+    service gefusion stop
+    remove_service gefusion
+fi
 
 #-----------------------------------------------------------------

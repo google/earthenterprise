@@ -21,8 +21,10 @@ set +x
 #-----------------------------------------------------------------
 main_preuninstall()
 {
-    service geserver stop
-    remove_service geserver
+    if [ "$1" = "0" ]; then
+        service geserver stop
+        remove_service geserver
+    fi
 }
 
 #-----------------------------------------------------------------
