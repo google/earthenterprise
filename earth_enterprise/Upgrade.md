@@ -17,4 +17,4 @@ Alternatively, instead of using scripts, on Redhat and Centos, you can upgrade G
     * Create a backup folder: `mkdir -p /tmp/MyBackupFolder`
     * Make gepguser owner of the created folder: `chown gepguser /tmp/MyBackupFolder`
     * Dump PostGreSQL databases using '/opt/google/bin/geresetpgdb' script. This script needs to be run under user 'gepguser'. 
-    This can be achieved by switching to user 'gepguser' then executing: `"/opt/google/bin/geresetpgdb backup /tmp/MyBackupFolder`
+    This can be achieved by switching to user 'gepguser' then executing: `/opt/google/bin/geresetpgdb backup /tmp/MyBackupFolder`
