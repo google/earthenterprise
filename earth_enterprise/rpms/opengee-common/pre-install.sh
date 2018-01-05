@@ -17,23 +17,25 @@
 set +x
 
 #------------------------------------------------------------------------------
-# Directory locations:
-BININSTALLROOTDIR="/etc/init.d"
-
-#------------------------------------------------------------------------------
-# Group names:
-GEGROUP_NAME=$(cat "$BININSTALLROOTDIR/gevars.sh" | grep GEGROUP | cut  -d'=' -f2)
-
-
-remove_users_groups()
+check_group()
 {
-    if [ -n "$(getent group "$GEGROUP_NAME")" ]; then
-        groupdel "$GEGROUP_NAME"
+    local GROUP_EXISTS=$(getent group "$GEGROUP")
+
+    # Add group if it does not exist:
+    if [ -z "$GROUP_EXISTS" ]; then
+        groupadd -r "$GEGROUP" &> /dev/null
     fi
 }
 
+
 #-----------------------------------------------------------------
-# Main Function:
+# Main Function
 #-----------------------------------------------------------------
-remove_users_groups
+# 8) Check if group and users exist
+
+# only if we are going to install, added as pre so cpio can carry
+# group name if needed.  skip if upgrade.
+if [ "$1" = "1" ]; then
+    check_group
+fi
 #-----------------------------------------------------------------
