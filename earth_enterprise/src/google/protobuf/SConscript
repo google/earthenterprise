@@ -70,6 +70,15 @@ stub_files = [
   'substitute.cc'
 ]
 
+# Remove gtest from the list of required libraries. For some reason the LIBS
+# variable includes "gtest" here, which makes libgeprotobuf unnecessarily
+# depend on gtest-devel. This is a hack to fix that problem, but it's a fairly
+# safe hack.
+if 'LIBS' in local_env:
+  local_libs = local_env['LIBS']
+  local_libs = [lib for lib in local_libs if lib is not "gtest"]
+  local_env['LIBS'] = local_libs
+
 # Compile the cc files and add them to the "proto.a" lib.
 geprotobuf = local_env.sharedLib('geprotobuf', cpp_files
                     + map(lambda f: 'io/' + f, io_files)
