@@ -10,11 +10,11 @@ sudo ./install_fusion.sh
 sudo ./install_server.sh
 ```
 
-Alternatively, instead of using scripts, on Redhat and Centos, you can upgrade GEE 5.2.0 to GEE 5.2.1 using [RPM packages] (https://github.com/google/earthenterprise/blob/master/earth_enterprise/BUILD_RPMS.md)
+Alternatively, instead of using scripts, on Redhat and Centos, you can upgrade GEE 5.2.0 to GEE 5.2.1 using [RPM packages](https://github.com/google/earthenterprise/blob/master/earth_enterprise/BUILD_RPMS.md)
 
 1. If you decide that you want to uninstall GEE 5.2.0 before installing GEE 5.2.1, first make sure to backup your PostgreSQL databases. Please keep in mind that the database backup, made by 5.2.0, would not be compatible with GEE 5.2.1 PostgreSQL databases.
 
     * Create a backup folder: `mkdir -p /tmp/MyBackupFolder`
     * Make gepguser owner of the created folder: `chown gepguser /tmp/MyBackupFolder`
     * Dump PostGreSQL databases using '/opt/google/bin/geresetpgdb' script. This script needs to be run under user 'gepguser'. 
-    This can be achieved by switching to user 'gepguser' then executing: `"/opt/google/bin/geresetpgdb backup /tmp/MyBackupFolder`
+    This can be achieved by switching to user 'gepguser' then executing: `/opt/google/bin/geresetpgdb backup /tmp/MyBackupFolder`
