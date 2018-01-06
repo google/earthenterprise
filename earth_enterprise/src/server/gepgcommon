@@ -43,18 +43,18 @@ function dump_db
   echo "dumping $1"
 
   # Check to make sure the database is valid
-  myres=$( run_as_user $GEPGUSER "$BINDIR/psql -lqt" )
-  myres=$( echo "$myres" | cut -d \| -f 1 | grep -w $1 | wc -l )
-  if [ $myres == 1 ]; then
+  myres=$( run_as_user "$GEPGUSER" "$(printf '%q' "$BINDIR/psql") -lqt" )
+  myres=$( echo "$myres" | cut -d \| -f 1 | grep -w "$1" | wc -l )
+  if [ "$myres" == 1 ]; then
     # Do dump operation
-    run_as_user $GEPGUSER "$BINDIR/pg_dump $1 > $BACKUP_DIR/$1.dump"
+    run_as_user "$GEPGUSER" "$(printf '%q' "$BINDIR/pg_dump") $(printf '%q' "$1") > $(printf '%q' "$BACKUP_DIR/$1.dump")"
 
     # Special case for gepoi database
     if [ "$1" == "gepoi" ]; then
       # Now backup just the gepoi tables, not the schema and postgis tables
       for table in $( get_gepoi_tables )
       do
-        run_as_user $GEPGUSER "$BINDIR/pg_dump gepoi -t $table > $BACKUP_DIR/gepoi.$table.dump"
+        run_as_user "$GEPGUSER" "$(printf '%q' "$BINDIR/pg_dump") gepoi -t $(printf '%q' "$table") > $(printf '%q' "$BACKUP_DIR/gepoi.$table.dump")"
       done
     fi
   fi
@@ -62,14 +62,14 @@ function dump_db
 
 # Retrieves the gepoi table names from the gepoi database
 function get_gepoi_tables {
-  echo $( run_as_user $GEPGUSER "$BINDIR/psql gepoi -c \"\dt gepoi*\" | grep table | awk -F\| '{ print \$2 }'" )
+  echo $( run_as_user "$GEPGUSER" "$(printf '%q' "$BINDIR/psql") gepoi -c \"\dt gepoi*\" | grep table | awk -F\| '{ print \$2 }'" )
 }
 
 # Dumps geserve-databases.
 function do_dump {
   # Start postmaster.
   if [ ! -f "$VARPGDIR/data/postmaster.pid" ]; then
-    echo $( run_as_user $GEPGUSER "$BINDIR/pg_ctl -D $VARPGDIR/data -l $VARPGDIR/logs/pg.log start -w" )
+    echo $( run_as_user "$GEPGUSER" "$(printf '%q' "$BINDIR/pg_ctl") -D $(printf '%q' "$VARPGDIR/data") -l $(printf '%q' "$VARPGDIR/logs/pg.log") start -w" )
   fi
 
   # Dump databases.
@@ -81,7 +81,7 @@ function do_dump {
   echo "Keeping a backup of old geserve-databases at $BACKUP_DIR ..."
   echo "After verifying that the database is good, you may delete it to recover disk space."
 
-  run_as_user $GEPGUSER "mkdir $BACKUP_DIR"
+  run_as_user "$GEPGUSER" "mkdir $(printf '%q' "$BACKUP_DIR")"
 
   dump_db gestream
   dump_db geendsnippet
@@ -89,8 +89,8 @@ function do_dump {
   dump_db gepoi
 
   # Stop postmaster.
-  if [ -f $VARPGDIR/data/postmaster.pid ]; then
-    echo $( run_as_user $GEPGUSER "$BINDIR/pg_ctl -D $VARPGDIR/data -l $VARPGDIR/logs/pg.log stop -w" )
+  if [ -f "$VARPGDIR/data/postmaster.pid" ]; then
+    echo $( run_as_user "$GEPGUSER" "$(printf '%q' "$BINDIR/pg_ctl") -D $(printf '%q' "$VARPGDIR/data") -l $(printf '%q' "$VARPGDIR/logs/pg.log") stop -w" )
   fi
 
 }
