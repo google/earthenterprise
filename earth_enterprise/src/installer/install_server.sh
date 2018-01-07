@@ -283,7 +283,7 @@ backup_pgsql_data()
 {
   # Make the temporary data backup directory
   mkdir -p "$BACKUP_DATA_DIR"
-  chown "$GEPGUSER_NAME $BACKUP_DATA_DIR"
+  chown "$GEPGUSER_NAME" "$BACKUP_DATA_DIR"
 
   # Dump PGSQL data
   RESET_DB_SCRIPT=$TMPINSTALLDIR/server/opt/google/bin/geresetpgdb
