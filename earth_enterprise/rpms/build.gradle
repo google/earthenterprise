@@ -263,6 +263,9 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeSharedFiles) {
     autoFindProvides = true
     autoFindRequires = true
 
+    /* When the scons release=1 package target is run as a non-root user, scons does 
+    not include /sbin in the path, so auto-detection of chkconfig fails, so this 
+    dependency is explicit */
     requires('chkconfig')
     requires('shadow-utils')
     requires('sudo')
@@ -339,8 +342,7 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     autoFindRequires = true
 
     requires('opengee-postgis', '1.5.8', GREATER | EQUAL)
-    conflicts('opengee-postgis', '2.0', GREATER | EQUAL)
-
+    
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     requiresPre('opengee-common', openGeeVersion, GREATER | EQUAL)
 
