@@ -265,11 +265,7 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeSharedFiles) {
 
     requires('chkconfig')
     requires('shadow-utils')
-    requires('perl')
     requires('sudo')
-    requires('xerces-c')
-    requires('ogdi')
-    requires('geos')
     
     requiresCommands(packageSharedCommands +
         ['cat', 'cut', 'getent', 'grep' ])
