@@ -342,7 +342,7 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     autoFindRequires = true
 
     requires('opengee-postgis', '1.5.8', GREATER | EQUAL)
-    
+    conflicts('opengee-postgis', '2.0', GREATER | EQUAL)
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     requiresPre('opengee-common', openGeeVersion, GREATER | EQUAL)
 
