@@ -269,6 +269,7 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeSharedFiles) {
     requires('shadow-utils')
     requires('perl')
     requires('sudo')
+    conflicts('opengee-postgis', '2.0', LESS )
     conflicts('opengee-postgis', '2.4', GREATER | EQUAL)
 
     requiresCommands(packageSharedCommands +
