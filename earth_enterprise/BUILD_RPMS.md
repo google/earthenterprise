@@ -27,6 +27,12 @@ java-1.7.0-openjdk-devel```.  There are no other special prerequisites, as the
 SCons build target pulls down osPackage and dependencies as needed before
 creating RPMs.
 
+Ensure that all required Debian or Yum repositories are enabled on your 
+platform.  For EL6 and EL7 systems, the EPEL repository must be installed 
+and enabled. 
+RHEL satellite based systems also require the *optional* repository ( i.e., rhui-DISTRO-rhel-server-releases-optional) repository to provide some libraries 
+including xerces-c and some perl libraries.
+
 ## Creating RPMs
 
 A new SCons target was added to make RPMs, **package_install**, that can be run
@@ -54,19 +60,19 @@ of the Git repo checkout directly.
 After the SCons **package_install** target completes the rpm command can
 install and test the RPMs created on CentOS or RHEL.  To do this, change to the
 *rpms/build/distributions* directory.  Use ```sudo rpm -Uhv
-opengee-postgis-*.rpm``` and ```sudo rpm -Uhv opengee-common-*.rpm``` to get
+opengee-common-*.rpm``` and ```sudo rpm -Uhv opengee-postgis-*.rpm``` to get
 the base dependencies installed, in that order.  Afterward use ```sudo rpm -Uhv
 opengee-fusion-*.rpm```, and then ```sudo rpm -Uhv opengee-server-*.rpm``` to
 install and test the RPM packaged Open GEE Fusion and Server.
 
-Yum can also be used to install opengee RPM files, and will also automatically
-install required system dependencies.  However, since the opengee packages are
-not in a repository, using ```sudo yum install opengee-server-*.rpm``` or
+Use `yum` to install opengee RPM files so that it will also automatically
+install required system dependencies if they are in enabled repositories.  However, 
+if the opengee packages installed from local files, use ```sudo yum install *.rpm``` 
+in the `rpms/build/distributions` directory to install all rpms and dependencies
+in one step.  Note that using ```sudo yum install opengee-server-*.rpm``` or
 ```sudo yum install opengee-fusion-*.rpm``` will not automatically install
-**opengee-common** or **opengee-postgis**, and yum will refuse to install if
-they are not already installed.  All the rpm packages could be also installed
-together using ```sudo yum install *.rpm``` in the `rpms/build/distributions`
-directory.
+**opengee-common** or **opengee-postgis** if they are not also specified and yum 
+will refuse to install if they were not previously installed.  
 
 The RPMs install Open GEE to the same */opt/google* path that the non-package
 based install scripts did.  If Open GEE is already installed from the Git
