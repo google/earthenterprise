@@ -141,7 +141,7 @@ task stageOpenGeeInstall(type: Exec, dependsOn: 'compileOpenGee') {
 task openGeePostGisRpm(type: GeeRpm) {
     packageName = 'opengee-postgis'
     release = "1.${rpmPlatformString}"
-    version = '1.5.8'
+    version = '2.3.4'
     user = 'root'
     permissionGroup = 'root'
     packageGroup = 'Application/Productivity'
@@ -264,12 +264,13 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeSharedFiles) {
     autoFindProvides = true
     autoFindRequires = true
 
-    requires('opengee-postgis', '1.5.8', GREATER | EQUAL)
+    requires('opengee-postgis', '2.3.4', GREATER | EQUAL)
     requires('chkconfig')
     requires('shadow-utils')
     requires('perl')
     requires('sudo')
-    conflicts('opengee-postgis', '2.0', GREATER | EQUAL)
+    conflicts('opengee-postgis', '2.0', LESS )
+    conflicts('opengee-postgis', '2.4', GREATER | EQUAL)
 
     requiresCommands(packageSharedCommands +
         ['cat', 'cut', 'getent', 'grep' ])
