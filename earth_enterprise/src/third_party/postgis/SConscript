@@ -18,8 +18,8 @@
 
 Import('third_party_env')
 
-postgis_major_version = 'postgis-1.5'
-postgis_version = 'postgis-1.5.8'
+postgis_major_version = 'postgis-2.3'
+postgis_version = 'postgis-2.3.4'
 postgis_source = File('#/../../earth_enterprise/third_party/postgis/'
                       '%s.tar.gz' % postgis_version).abspath
 
@@ -108,6 +108,8 @@ postgis_install = postgis_env.Command(
         'rm -rf %s/lib\n'
         'mkdir -p %s/share/doc/packages/%s\n'
         'cp -pr COPYING CREDITS README.postgis %s/share/doc/packages/%s\n'
+        'mkdir -p %s/share/postgresql/extension\n'
+        'cp -pr %s/liblwgeom/.libs/*.so* %s/share/postgresql/extension\n'
         'cd %s%s\n'
         'tar cf - * | (cd %s; tar xf -)\n'
         'cd %s/share/postgresql/contrib\n'
@@ -119,6 +121,8 @@ postgis_install = postgis_env.Command(
                       install_root_opt,
                       install_root_opt, ge_version,
                       install_root_opt, ge_version,
+                      install_root_opt, 
+                      build_root, install_root_opt, 
                       install_root, root_dir,
                       install_root_opt,
                       install_root_opt,
