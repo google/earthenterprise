@@ -203,7 +203,7 @@ class SearchSchemaParser(object):
       # TODO: seems we do not retrieve geometry as binary, can be
       # refactored.
       self._sql_search += (
-          "SELECT Encode(AsBinary(the_geom, 'XDR'), 'base64') AS the_geom, ")
+          "SELECT Encode(ST_AsBinary(the_geom, 'XDR'), 'base64') AS the_geom, ")
     elif self._current_tag == SearchSchemaParser.SEARCH_TABLE_VALUES_TAG:
       self._element_start = self.__StartElementData
       self._element_end = self.__EndElementData
