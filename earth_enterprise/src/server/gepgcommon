@@ -1,0 +1,96 @@
+#! /bin/bash
+#
+# Copyright 2017 Open GEE Developers.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+BINDIR=/opt/google/bin
+VARPGDIR=/var/opt/google/pgsql
+GEPGUSER=gepguser
+
+# Runs a command a specific user
+# If it's the same user, then just execute directly, otherwise use su or sudo
+function run_as_user
+{
+  if [ "$( whoami )" = "$1" ]; then
+    >&2 echo "sh -c \"$2\""
+    sh -c "$2"
+  else
+    if su "$1" -c 'echo 1' >/dev/null 2>&1; then
+        >&2 echo "cd / ;su \"$1\" -c \"$2\""
+        ( cd / ;su "$1" -c "$2" )
+    else
+        >&2 echo "cd / ;sudo -u \"$1\" -- \"$2\""
+        ( cd / ;sudo -u "$1" -- "$2" )
+    fi
+  fi
+}
+
+# Dumps a single database
+function dump_db
+{
+  echo "dumping $1"
+
+  # Check to make sure the database is valid
+  myres=$( run_as_user "$GEPGUSER" "$(printf '%q' "$BINDIR/psql") -lqt" )
+  myres=$( echo "$myres" | cut -d \| -f 1 | grep -w "$1" | wc -l )
+  if [ "$myres" == 1 ]; then
+    # Do dump operation
+    run_as_user "$GEPGUSER" "$(printf '%q' "$BINDIR/pg_dump") $(printf '%q' "$1") > $(printf '%q' "$BACKUP_DIR/$1.dump")"
+
+    # Special case for gepoi database
+    if [ "$1" == "gepoi" ]; then
+      # Now backup just the gepoi tables, not the schema and postgis tables
+      for table in $( get_gepoi_tables )
+      do
+        run_as_user "$GEPGUSER" "$(printf '%q' "$BINDIR/pg_dump") gepoi -t $(printf '%q' "$table") > $(printf '%q' "$BACKUP_DIR/gepoi.$table.dump")"
+      done
+    fi
+  fi
+}
+
+# Retrieves the gepoi table names from the gepoi database
+function get_gepoi_tables {
+  echo $( run_as_user "$GEPGUSER" "$(printf '%q' "$BINDIR/psql") gepoi -c \"\dt gepoi*\" | grep table | awk -F\| '{ print \$2 }'" )
+}
+
+# Dumps geserve-databases.
+function do_dump {
+  # Start postmaster.
+  if [ ! -f "$VARPGDIR/data/postmaster.pid" ]; then
+    echo $( run_as_user "$GEPGUSER" "$(printf '%q' "$BINDIR/pg_ctl") -D $(printf '%q' "$VARPGDIR/data") -l $(printf '%q' "$VARPGDIR/logs/pg.log") start -w" )
+  fi
+
+  # Dump databases.
+  BACKUP_DIR=$VARPGDIR/data.backup_dump.$$
+  if [ "$dump_path" != "" ]; then
+    BACKUP_DIR=$dump_path
+  fi
+
+  echo "Keeping a backup of old geserve-databases at $BACKUP_DIR ..."
+  echo "After verifying that the database is good, you may delete it to recover disk space."
+
+  run_as_user "$GEPGUSER" "mkdir $(printf '%q' "$BACKUP_DIR")"
+
+  dump_db gestream
+  dump_db geendsnippet
+  dump_db gesearch
+  dump_db gepoi
+
+  # Stop postmaster.
+  if [ -f "$VARPGDIR/data/postmaster.pid" ]; then
+    echo $( run_as_user "$GEPGUSER" "$(printf '%q' "$BINDIR/pg_ctl") -D $(printf '%q' "$VARPGDIR/data") -l $(printf '%q' "$VARPGDIR/logs/pg.log") stop -w" )
+  fi
+
+}
