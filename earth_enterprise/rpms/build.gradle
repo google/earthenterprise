@@ -41,6 +41,9 @@ buildscript {
 
 apply plugin: "nebula.ospackage"
 
+import org.opengee.shell.GeeCommandLine
+
+
 def rpmPlatformString = org.opengee.os.Platform.rpmPlatformString
 
 def stagedInstall_path =
@@ -59,8 +62,19 @@ if (new File('build.properties').exists()) {
     }
 }
 
+def openGeeVersionFile = new File("../src/NATIVE-REL-x86_64/gee_long_version.txt")
+
+if (!openGeeVersionFile.exists()) {
+    GeeCommandLine.expand(
+            ["/usr/bin/scons", "release=1", "NATIVE-REL-x86_64/gee_long_version.txt"],
+            "Runing `scons` to produce <gee_long_version.txt> failed!",
+            null, // Use default environment variables.
+            new File("../src") // Working directory.
+        )
+}
+
 def openGeeVersion =
-    new File(stagedInstall_path, 'gee_long_version.txt').readLines().
+    openGeeVersionFile.readLines().
     collect {
         // Strip comments:
         def commentIndex = it.indexOf('#')
