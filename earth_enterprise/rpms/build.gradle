@@ -139,16 +139,26 @@ def rpmCapabilityMap = [
     '/bin/sudo': '/usr/bin/sudo'
 ]
 
-// A lambda that can be set as `autoFindRequiresFilter` in `GeeRpm` tasks.
-// It will use `rpmCapabilityMap` to rewrite RPM capabilities output by
+// A lambda that can be set as an `autoFindRequiresFilter` in `GeeRpm` tasks.
+//  It will use `rpmCapabilityMap` to rewrite RPM capabilities output by
 // `find-requires`.
-def autoFindCapabilityFilter = {
-    // For some reason using `get()` with a default value ends up adding
-    // elements to the map.
-    return rpmCapabilityMap.containsKey(it.toString()) ?
-        new org.opengee.os.package.Dependency(
-            rpmCapabilityMap[it.toString()], it.version, it.flags) :
-        it
+def rpmCapabilityFilter = {
+    if (rpmCapabilityMap.containsKey(it.name)) {
+        def newName = rpmCapabilityMap[it.name]
+
+        return newName == null ?
+            null :
+            new org.opengee.os.package.Dependency(
+                newName, it.version, it.flags)
+    }
+
+    return it
+}
+
+// A lambda that can be set as a `requiresCommandFilter` in `GeeRpm` tasks.
+// It will use `rpmCapabilityMap` to rewrite command paths returned by `type`.
+def rpmCommandFilter = {
+    return rpmCapabilityMap.containsKey(it) ? rpmCapabilityMap[it] : it
 }
 
 
@@ -319,7 +329,7 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeSharedFiles) {
     requiresCommands(packageSharedCommands +
         ['cat', 'cut', 'getent', 'grep'])
 
-    autoFindRequiresFilter = autoFindCapabilityFilter
+    autoFindRequiresFilter = rpmCapabilityFilter
 
     // Prefix variable definitions to all install scripts:
     installUtils = file('build/shared/install-utils.sh')
@@ -395,7 +405,8 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
         ]
     )
 
-    autoFindRequiresFilter = autoFindCapabilityFilter
+    autoFindRequiresFilter = rpmCapabilityFilter
+    requiresCommandFilter = rpmCommandFilter
 
     // Prefix variable definitions to all install scripts:
     installUtils = file('build/shared/install-utils.sh')
