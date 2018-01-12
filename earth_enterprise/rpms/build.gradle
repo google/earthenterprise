@@ -395,6 +395,9 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     conflicts('opengee-postgis', '2.4', GREATER | EQUAL)
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     requiresPre('opengee-common', openGeeVersion, GREATER | EQUAL)
+    // `opengee-server` bundles Apache, and Apache requires utilities from the
+    // `initscripts` package:
+    requires('initscripts')
 
     requiresCommands(
         packageSharedCommands +
