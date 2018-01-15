@@ -27,7 +27,6 @@
 class TmeshGenerator
 {
   const khTilespaceFlat &sampleTilespace;
-  bool decimate;
 
   // temporaries used by generate. Hold them in the class so they don't
   // need to be constantly reallocated.
@@ -37,10 +36,8 @@ class TmeshGenerator
   std::vector<etVec3f>      elev;
 
  public:
-  TmeshGenerator(const khTilespaceFlat &sampleTilespace_,
-                 bool decimate_) :
-      sampleTilespace(sampleTilespace_),
-      decimate(decimate_)
+  TmeshGenerator(const khTilespaceFlat &sampleTilespace_) :
+      sampleTilespace(sampleTilespace_)
   { }
 
   void Generate(float *srcSamples,
@@ -48,7 +45,10 @@ class TmeshGenerator
                 const khOffset<uint32> &wantOffset,
                 const khTileAddr &tmeshAddr,
                 etArray<uchar> &compressed,
-                const size_t reserve_size);
+                const size_t reserve_size,
+                bool  decimate,
+                double decimation_threshold
+               );
 };
 
 

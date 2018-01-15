@@ -17,6 +17,7 @@
 # NOTE: requires xmllint from libxml2-utils
 
 set +x
+umask 002
 
 # get script directory
 SCRIPTDIR=`dirname $0`
@@ -36,7 +37,6 @@ BACKUPFUSION=true
 BADHOSTNAMEOVERRIDE=false
 MISMATCHHOSTNAMEOVERRIDE=false
 START_FUSION_DAEMON=true
-PURGE_TMP_DIR=true
 
 INSTALL_LOG="$INSTALL_LOG_DIR/fusion_install_$(date +%Y_%m_%d.%H%M%S).log"
 BACKUP_DIR="$BASEINSTALLDIR_VAR/fusion-backups/$(date +%Y_%m_%d.%H%sM%S)"
@@ -44,12 +44,8 @@ BACKUP_DIR="$BASEINSTALLDIR_VAR/fusion-backups/$(date +%Y_%m_%d.%H%sM%S)"
 # additional variables
 IS_NEWINSTALL=false
 PUBLISH_ROOT_VOLUME=""
-IS_64BIT_OS=false
 
 ASSET_ROOT_VOLUME_SIZE=0
-SOURCE_VOLUME_PREEXISTING=false
-ASSET_ROOT_PREEXISTING=false
-
 MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB=1048576
 EXISTING_HOST=""
 IS_SLAVE=false
@@ -120,9 +116,7 @@ main_preinstall()
 	fi
 
 	# 64 bit check
-	if [[ "$(uname -i)" == "x86_64" ]]; then 
-            IS_64BIT_OS=true 
-	else
+	if [[ "$(uname -i)" != "x86_64" ]]; then
 		echo -e "\n$GEEF $LONG_VERSION can only be installed on a 64 bit operating system."
 		exit 1
 	fi
@@ -250,7 +244,7 @@ check_prereq_software()
 		check_prereq_software_retval=1
 	fi
 
-	if ! software_check "$script_name" "python2.7" "python-2.7.*"; then
+	if ! software_check "$script_name" "python2.[67]" "python-2.[67].*"; then
 		check_prereq_software_retval=1
 	fi
 
@@ -608,7 +602,7 @@ copy_files_to_target()
 	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -rf $TMPINSTALLDIR/common/opt/google/gepython $BASEINSTALLDIR_OPT
 	if [ $? -ne 0 ]; then error_on_copy=1; fi
-	cp -rf $TMPINSTALLDIR/manual/opt/google/share/doc/manual $BASEINSTALLDIR_OPT/share/doc
+	cp -rf $TMPINSTALLDIR/manual/opt/google/share/doc/manual/ $BASEINSTALLDIR_OPT/share/doc
 	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	
 	cp -f $TMPINSTALLDIR/fusion/etc/profile.d/ge-fusion.csh $BININSTALLPROFILEDIR
@@ -684,15 +678,11 @@ setup_fusion_daemon()
 
 create_system_main_directories()
 {
-    if [ -d "$ASSET_ROOT" ]; then        
-        ASSET_ROOT_PREEXISTING=true
-    else
+    if [ ! -d "$ASSET_ROOT" ]; then
         mkdir -p $ASSET_ROOT
     fi
 
-    if [ -d "$SOURCE_VOLUME" ]; then
-        SOURCE_VOLUME_PREEXISTING=true
-    else
+    if [ ! -d "$SOURCE_VOLUME" ]; then
         mkdir -p $SOURCE_VOLUME
     fi
 }

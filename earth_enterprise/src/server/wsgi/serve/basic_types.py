@@ -22,7 +22,7 @@ import json
 from common import string_utils
 
 # Portable files extensions set.
-PORTABLE_EXTS_SET = {".glm", ".glb", ".glc"}
+PORTABLE_EXTS_SET = [".glm", ".glb", ".glc"]
 
 
 class DbFlags(object):

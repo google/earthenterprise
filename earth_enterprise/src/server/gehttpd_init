@@ -70,7 +70,7 @@ args=''
 RETVAL=0
 
 
-if grep -q -s 'Ubuntu' /etc/lsb-release ; then
+if grep -q -s 'Ubuntu\|LinuxMint' /etc/lsb-release ; then
     # ---------- Ubuntu ----------
     echo "Google Earth Enterprise Server for Ubuntu"
 

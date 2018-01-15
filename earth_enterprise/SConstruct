@@ -26,6 +26,10 @@ EnsureSConsVersion(0, 96, 92)
 
 # process commandline arguments
 installdir = ARGUMENTS.get('installdir', '/tmp/fusion_os_install')
+with open('rpms/build.properties', 'w') as f:
+    print >> f, "## Auto-generated file from scons."
+    print >> f, "## Manual changes will be overwritten."
+    print >> f, str('staged=') + installdir.strip()
 
 installdir = Dir(installdir)
 def dir_cat(installdir, subdir1, subdir2):
@@ -83,6 +87,7 @@ installdirs = {
    'server_lib':        inst_server_dir('lib'),
    'server_root':       Dir('server/', installdir),
    'server_share':      inst_server_dir('share'),
+   'server_sql':        inst_server_dir('share/opengee-server/sql'),
 
    'httpd':             inst_server_dir('gehttpd'),
    'httpdmodules':      inst_server_dir('gehttpd/modules'),
@@ -96,9 +101,6 @@ installdirs = {
    'maps':              inst_server_dir('gehttpd/htdocs/maps'),
    'httpddocs':         inst_server_dir('gehttpd/htdocs/shared_assets/docs'),
 
-
-   'getomcat_webapps':           inst_server_dir('getomcat/webapps'),
-   'getomcat_lib':           inst_server_dir('getomcat/lib'),
    'search_plugins':    inst_server_dir('search/plugins'),
    'search_tabs':       inst_server_dir('search/tabs'),
    'search_api':        inst_server_dir('search/api'),
@@ -153,9 +155,17 @@ stage_tutorial_cmds = {'stage_tutorial': [
 ]}
 stage_tutorial = env.PhonyTargets(**stage_tutorial_cmds)
 env.Depends(stage_tutorial, stage_data)
+
+package_staged_cmds = {'package_install': [
+    'cd rpms; ./gradlew osPackage'
+]}
+
+package_install = env.PhonyTargets(**package_staged_cmds)
+env.Depends(package_install, stage_data)
+
 env.Alias('stage_install', 'stage_tutorial')
 env.Alias('install', 'stage_install')
-
+env.Alias('package', 'package_install')
 Export('env')
 Export('installdir')
 
@@ -172,7 +182,28 @@ env.PhonyTargets(**this_dict)
 
 # Clean install dir (note: the current sconscripts leave stuff behind, like
 # directories).
-if env.GetOption('clean'):
-    # clean the search and getomcat install folders.
+
+if 'cleanall' in COMMAND_LINE_TARGETS:
+    #clean the search and getomcat install folders.
     file = installdir.get_path()
     commands.getstatusoutput("rm -rf " + file)
+
+    #clean /tmp/fusion_os_install
+    Clean(env, installdir)
+
+    #clean build data in ./src
+    clean_cmd = 'cd src; scons %s -c cleanall' % (arg_vars)
+    env.Execute(clean_cmd)
+
+    #clean scons metadata.. can't use Clean() or Delete()
+    #because they are scons functions and recreate
+    #the files/directories they delete
+    for sconsfile in [
+          ".sconsign.dblite",
+          ".sconf_temp",
+          "config.log",
+          "src/.sconsign.dblite",
+          "src/.sconf_temp",
+          "src/config.log"]:
+      os.system("rm -rf " + sconsfile)
+

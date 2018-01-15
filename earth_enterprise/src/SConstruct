@@ -23,6 +23,7 @@ import subprocess
 import sys
 sys.path += ['scons']
 from khEnvironment import khEnvironment
+from khEnvironment import GetVersion
 
 
 # Path to crosstool root directory.
@@ -67,6 +68,7 @@ ValidOptions = set(
      'jobstats',  # Use to enable jobstats profile output.
      'internal',  # Use to enable internal use only debug classes
      'cross_cc',  # Use the cross compiler.
+     'cc_dir',
      'coverage',
      'bundle_3rd_libs',  # Build with bundling 3rd party libs.
      ]);
@@ -91,6 +93,7 @@ internal = int(ARGUMENTS.get('internal', 0))
 native_cc = not int(ARGUMENTS.get('cross_cc', 0))
 coverage = ARGUMENTS.get('coverage', 0)
 bundle_3rd_libs = int(ARGUMENTS.get('bundle_3rd_libs', 0))
+cc_dir = ARGUMENTS.get('cc_dir', None)
 
 # make some directory variables used by other parts of the build system
 top_dir = Dir('#').abspath
@@ -148,16 +151,22 @@ else:
   python_include = '/usr/include/python%s' % python_major_version
 
 # setup platform specific operations
-is_hardy = True
-# if non-zero return status it is not hardy
-# Warning: assume your Ubuntu version is 10.04.2, otherwise need change 
-#the version number in order to compile
-if os.WEXITSTATUS(os.system('awk \'/Ubuntu/ { split($2, array,"."); \
-      if(!(array[1]>=10 && array[2]>=04)) exit(1) }\'  /etc/issue')):
-  print 'Unknown Unbuntu version, require 10.04.x or higher.\
-  Please check /etc/issue for version number'
-  Exit(1)
-  is_hardy = False
+is_min_ubuntu = True
+# /etc/issue was the previous method of checking Ubuntu release version
+# however, some flavors of Ubuntu e.g. MATE, have used varying formats
+# using ilsb_release, subprocess and re is more readable than awk parsing also
+try:
+  vstring=subprocess.check_output('lsb_release -r',shell=True)
+  arr=re.split('[\t\.\n]',vstring)
+  major=int(arr[1])
+  minor=int(arr[2])
+  if arr[1] < 12:
+    print 'Unknown Ubuntu version, minimum required version is 12.04.'
+    Exit(1)
+    is_min_ubuntu = False
+# lsb_release is not present, must be RHEL or CentOS, move on
+except:
+    print "OS is not Ubuntu"
 
 extragccflags = []
 if sys.platform[0:5] == 'linux':
@@ -177,7 +186,7 @@ if sys.platform[0:5] == 'linux':
   # confusion. But it is not dangerous and so for the time being we ignore
   # those.
   # TODO: Remove this and correct all places where we see this warning.
-  if is_hardy:
+  if is_min_ubuntu:
     warnflags += ['-Wno-parentheses']
   cppflags = ['-D_LARGEFILE64_SOURCE', '-DQT_THREAD_SUPPORT',
               '-DQT_NO_ASCII_CAST', '-DQT_CLEAN_NAMESPACE', '-D_REENTRANT',
@@ -245,9 +254,9 @@ else:
   cross_cc_target = None
   cross_cc_base = None
 
-# TODO: clean up using of the is_hardy-flag.
+
 if not native_cc:
-  if is_hardy:
+  if is_min_ubuntu:
     optflags += ['-D_GNU_SOURCE', '-mno-red-zone', '-fno-strict-aliasing', '-mcld',
                  '-idirafter', '/usr/include', '-isystem', '/usr/include']
     linkflags += ['-Wl,-dynamic-linker,/lib64/ld-linux-x86-64.so.2']
@@ -348,6 +357,7 @@ installdirs = {
     'server_root': Dir('server/', installdir),
     'server_share': InstServerDir('share'),
     'server_search': InstServerDir('search'),
+    'server_sql': InstServerDir('share/opengee-server/sql'),
 
     'httpd': InstServerDir('gehttpd'),
     'httpdmodules': InstServerDir('gehttpd/modules'),
@@ -365,34 +375,46 @@ installdirs = {
     'htdocs': InstServerDir('gehttpd/htdocs'),
 }
 
+def get_cc_version(cc_path):
+  """Extracts the version number of a C/C++ compiler (like GCC) as a list of
+  strings."""
 
-def FusionVersionNumber(source):
-  """Read the Fusion Version number from source file.
+  process = subprocess.Popen(
+    [cc_path, '--version'], stdout=subprocess.PIPE)
+  (stdout, stderr) = process.communicate()
+  match = re.search('[0-9][0-9.]*', stdout)
+  # If match is None we don't know the version.
+  if match is None:
+    return None
+  version = match.group().split('.')
+  return version
 
-  Args:
-    source: The file storing version number.
-  Returns:
-    The Fusion Version string, without '\n'.
+def is_version_ge(version_components, comparand_components):
+  """Tests if a version number is greater than, or equal to another version
+  number.  Both version numbers are specified as lists of version components.
   """
 
-  try:
-    spec = open(source, 'r')
-    line = spec.readline()
-    while line:
-      if line[0] != '#':
-        version = line.strip()
-        if version:
-          return version
-      line = spec.readline()
-    print 'Unable to find Fusion Version Number'
-    Exit(1)
-  except Exception, exp:
-    print 'Unable to find Fusion Version Number:', exp
-fusion_version_number = FusionVersionNumber('fusion_version.txt')
+  if version_components is None or comparand_components is None:
+    return False
+
+  for i in xrange(len(comparand_components)):
+    if i >= len(version_components):
+      version_component = 0
+    else:
+      version_component = int(version_components[i])
+    if int(comparand_components[i]) > version_component:
+      return False
+    if int(comparand_components[i]) < version_component:
+      return True
+
+  return True
+
+gee_version_number = GetVersion("version.txt")
+
 
 # create the environment that controls the builds
 
-if is_hardy:
+if is_min_ubuntu:
   path_string = '%sbin:/bin:/usr/bin' % (exportdirs['root'])
 else:
   path_string = '%sbin:%s/bin:/bin:/usr/bin' % (exportdirs['root'], optdir)
@@ -406,7 +428,8 @@ env = khEnvironment(
     internal=internal,
     native_cc=native_cc,
     bundle_3rd_libs=bundle_3rd_libs,
-    is_hardy=is_hardy,
+    cc_dir=cc_dir,
+    is_min_ubuntu=is_min_ubuntu,
     exportdirs=exportdirs,
     installdirs=installdirs,
     skia_rel_dir=skia_rel_dir,
@@ -437,6 +460,19 @@ env = khEnvironment(
     python_major_version=python_major_version
 )
 
+# Check for GCC 4.8 from an alternative toolchain installation on RHEL 6:
+if cc_dir is None and os.path.isfile('/opt/rh/devtoolset-2/root/usr/bin/g++'):
+    # Check if the version of the default compiler is, at least 4.8:
+    if not is_version_ge(get_cc_version(env['CXX']), [4, 8]):
+        cc_dir = '/opt/rh/devtoolset-2/root/usr/bin'
+        rpathlink_dirs += [
+          '/opt/rh/devtoolset-2/root/usr/lib64',
+          '/opt/rh/devtoolset-2/root/usr/lib']
+
+if cc_dir:
+    env['CXX'] = cc_dir + '/g++'
+    env['CC'] = cc_dir + '/gcc'
+
 # The following is to make Scons 1.xx behave like it used to with scons .96
 env['SHCXXFLAGS'] = ['$CXXFLAGS', '-fPIC']
 env['CXXCOM'] = '$CXX -o $TARGET -c $CXXFLAGS $_CCCOMCOM $SOURCES'
@@ -448,7 +484,7 @@ env.SourceCode('.', None)
 env.Alias('install', installdirs['root'])
 
 Export('env')
-Export('fusion_version_number')
+Export('gee_version_number')
 
 # needed by colorgcc
 home = os.environ.get('HOME', 0)
@@ -469,3 +505,5 @@ env['LRELEASE'] = qtdir+'/bin/lrelease'
 env['KHIDL'] = File('#common/khxml/khidl.pl')
 
 SConscript('SConscript', build_dir=builddir, duplicate=0)
+
+env.Clean('cleanall', [[exportdir+"/"+x for x in os.listdir(exportdir) if x != "third_party"]])

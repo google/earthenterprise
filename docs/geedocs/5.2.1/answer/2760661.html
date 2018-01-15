@@ -1,0 +1,243 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Back up Fusion servers</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 2760661.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/3481464.html">Before you configure Google Earth Enterprise Fusion</a></p>
+<p class="sidebar-toc"><a href="../answer/6008655.html">Running Fusion on a Machine with Multiple CPUs</a></p>
+<p class="sidebar-toc"><a href="../answer/176738.html">Configure task rules</a></p>
+<p class="sidebar-toc"><a href="../answer/6033487.html">Benchmarking outcomes for applying task rules</a></p>
+<p class="sidebar-toc"><a href="../answer/3481501.html">Configure font size in the GUI</a></p>
+<p class="sidebar-toc"><a href="../answer/3481506.html">Configure fonts for the Text Style dialog</a></p>
+<p class="sidebar-toc"><a href="../answer/3481478.html">Customize your Google Maps landing page</a></p>
+<p class="sidebar-toc"><a href="../answer/3481512.html">Monitor system processes</a></p>
+<p class="sidebar-toc"><a href="../answer/3481546.html">Backing up your data</a></p>
+<p class="sidebar-toc"><a href="../answer/2760661.html" class="current-file">Back up Fusion servers</a></p>
+<p class="sidebar-toc"><a href="../answer/176676.html">Manage Fusion disk space</a></p>
+<p class="sidebar-toc"><a href="../answer/6035839.html">Relocate your asset root</a></p>
+<p class="sidebar-toc"><a href="../answer/3481499.html">Configure your data locations</a></p>
+<p class="sidebar-toc"><a href="../answer/6034724.html">Push and publish databases</a></p>
+<p class="sidebar-toc"><a href="../answer/6051700.html">Publish databases using disconnected publishing</a></p>
+<p class="sidebar-toc"><a href="../answer/6086672.html">Troubleshoot push/publishing issues 5.x</a></p>
+<p class="sidebar-toc"><a href="../answer/3481558.html">Command reference</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion administration</h1>
+<h2>Back up Fusion servers</h2>
+<p>The Fusion server typically stores multiple terabytes of source data and intermediate assets. If you have a tape backup system or enough disk space, you should perform a full back up of the server anytime a new database is built or a significant amount of new data is processed. If you don't have enough resources to do this, you can back up just your critical files and display rules instead.</p>
+<h2>Display rules</h2>
+<p>Typically, you’ll spend quite a bit of time making your display rules exactly the way you want them, so you should back up the display rules each time you modify a vector layer.</p>
+<p>To back up display rules:</p>
+<ol>
+<li>In the Vector Layer dialog box, select <strong>Export as a Template</strong>.</li>
+<li>Save the display rules on a volume different from the source volume and the asset root.</li>
+</ol>
+<h2>Critical Fusion files</h2>
+<p>If you have backups of the files listed below, you can rebuild your database with some patience and scripting. The rebuild will take a lot of CPU time, but should go smoothly with a minimum of administrator time.</p>
+<p>The files that are critical to restoring your Fusion server are:</p>
+<ul>
+<li><strong>Your original source files</strong>. These are typically stored on a network shared drive or on portable USB disks, depending on the environment. Make sure that you can find and re-load your original source files.</li>
+<li><strong>The XML files that Fusion generates during its processing</strong>. These are critical because they contain the display rules for the vector data, the rules for building resources and projects, and other critical settings.</li>
+<li><strong>All the files under /opt/google/gehttpd in the cgi-bin, conf conf.d, and htdocs directory</strong>. These files contain any user-customized scripts or web pages, and the definitions of any virtual servers you created on the Fusion server.</li>
+<li><strong>The files in the .config and .userdata directories under the asset root</strong>. These contain custom icons and provider information as well as some basic Fusion configuration settings.</li>
+</ul>
+<h2>Backing up</h2>
+<p>The steps below show you how to back up your critical files. When you run these commands, replace the asset root and backup locations with the locations of your own asset root and backups.</p>
+<ol>
+<li>Make sure that you can locate and re-load all the source data files if needed.</li>
+<li>Create a directory to hold the backup files:
+<p><code>mkdir -p <em>/data/backup/assets</em><br/>
+mkdir -p <em>/data/backup/gehttpd</em></code></p>
+</li>
+<li>Back up the gehttpd files:
+<p><code>cd /opt/google/gehttpd<br/>
+rsync -r htdocs cgi-bin conf conf.d <em>/data/backup</em>/gehttpd</code></p>
+</li>
+<li>Back up the XML files and config files to a safe place on a disk that is not part of the asset root or source directories:
+<p><code>cd <em>/gevol/assets</em><br/>
+rsync -r .config .userdata <em>/data/backup/assets/</em><br/>
+find . -name "*.xml" &gt; FileList.txt<br/>
+rsync --files-from=FileList.txt <em>/gevol/assets /data/backup/assets/</em></code></p>
+</li>
+<li>(Optional.) Store a compressed backup of the files somewhere else:
+<p><code>tar czf <em>/home/backups/GevolXmlBackup</em>.tgz <em>/data/backups</em></code></p>
+</li>
+</ol>
+<h2>Restoring imagery and terrain</h2>
+<ol>
+<li>Make sure that the Fusion software is installed correctly and is running.</li>
+<li>Configure your asset root to be consistent with your old asset root. If you are not sure about this, manually run commands like:<br/>
+<code>geconfigureassetroot --new --assetroot <em>/gevol/assets</em><br/>
+geselectassetroot --assetroot <em>/gevol/assets</em></code></li>
+<li>Restore the backed-up XML and configuration files to their original location in the asset root.</li>
+<li>Restore the source files to their original location on the Fusion server. If you can't remember the directory they were in, just place them on the Fusion server in the source directory you specified in the Fusion volume definitions (<code>/gevol/src</code> by default).</li>
+<li>Use the <code>gequery</code> command and shell scripting to make sure your source files are in the right place. If the files are not found, find them and copy them to the right place. Below is an example of a script for reporting where all your imagery source files should be located. You can use the same script for terrain resources if you change <code>kiasset</code> to <code>ktasset</code>. Example script:
+<p><code>cd <em>/gevol/assets</em><br/>
+for resource in `find . -type d -name "*.kiasset"`<br/>
+do<br/>
+    for file in `gequery --infiles $resource`<br/>
+    do<br/>
+        if [ ! -f $file ] &amp;&amp; [ ! -d $file ]<br/>
+        then<br/>
+            echo "Can not find $file"<br/>
+        else<br/>
+            echo "Found $file"<br/>
+        fi<br/>
+    done<br/>
+done</code></p>
+</li>
+<li>After all the files are in place, generate a series of commands to rebuild the resources. For example:
+<p><code>cd <em>/gevol/assets</em><br/>
+for resource in `find . -type d -name "*.kiasset" | sed 's/.kiasset//'`<br/>
+do<br/>
+    gequery --infiles $resource &gt; filelist<br/>
+    genewimageryresource -o $resource --filelist filelist<br/>
+    sleep 1<br/>
+    gebuild $resource<br/>
+done</code></p>
+</li>
+<li>There is a <code>khasset.xml</code> file under each <code>.kiasset</code> directory that contains information about the mask tolerance, feathering, white fill, and provider for each imagery and terrain resource. You can use scripting to extract this information from each resource and add it to the <code>genewimageryresource</code> command to apply the correct settings for each resource.</li>
+</ol>
+<h2>Restoring vectors</h2>
+<p>The vector restore process is different from the imagery and terrain process because of the display rules that each vector layer has. These display rules take a very long time to configure, and typically the Fusion administrator hasn't saved the display rules as a template. Without the XML files, the vector project can take many hours to re-create. Fortunately, all the display rules for each vector layer are contained in a single file called <code>khasset.xml</code>. This file is under the vector project's main directory, and is included in the backup script listed above. The <code>restore_vector_project.pl</code> file below reads the khasset.xml file, and creates the commands and display templates necessary to rebuild the entire vector project.</p>
+<h5>restore_vector_project.pl</h5>
+<div><code>#!/usr/bin/perl<br/>
+#<br/>
+# Do you want to back up your vector project or duplicate it as a new project?<br/>
+#<br/>
+#<br/>
+# This script generates the instructions and files necessary to completely rebuild your<br/>
+# vector project. It reads your current vector project and extracts the display rules<br/>
+# and determines which raw data files were used to create your resources. The results<br/>
+# of running this script is a series of four new scripts called <strong>Step_One thru Step_Four</strong><br/>
+# Running the resulting four scripts in order rebuilds your vector project as it was before.<br/>
+<br/>
+use File::Path;<br/>
+use File::Copy;<br/>
+<br/>
+# Read in the vector project to be backed up and the directory to<br/>
+# write the scripts and files to.<br/>
+if ($#ARGV != 1){ usage(); exit; }<br/>
+$vector_project = $ARGV[0];<br/>
+$output_dir = $ARGV[1]; chomp( $output_dir );<br/>
+<br/>
+$assetroot = &amp;get_assetroot();<br/>
+chomp( $assetroot );<br/>
+print "Using Asset Root $assetroot \n";<br/>
+<br/>
+open(StepOne,  "&gt;$output_dir/Step_One_Create_Resources.sh");<br/>
+open(StepTwo,  "&gt;$output_dir/Step_Two_Build_Resources.sh");<br/>
+open(StepThree,"&gt;$output_dir/Step_Three_Create_Project.sh");<br/>
+print StepThree "genewvectorproject -o $vector_project\n";<br/>
+close(StepThree);<br/>
+open(StepFour, "&gt;$output_dir/Step_Four_Add_Resources.sh");<br/>
+<br/>
+# Locate the khasset.xml file for this project.<br/>
+$khasset = "$assetroot/$vector_project.kvproject/khasset.xml";<br/>
+<br/>
+open(IN, "$khasset") || die "Can't open $khasset";<br/>
+<br/>
+# Read in all of the header info on the khasset file and ignore it<br/>
+while(&lt;IN&gt;){ last if $_ !~ /&lt;layers&gt;/; }<br/>
+<br/>
+<br/>
+# Keep reading the khasset file and parse out the information for each individual<br/>
+# layer.<br/>
+<br/>
+while(&lt;IN&gt;){<br/>
+    my(@current_layer);<br/>
+<br/>
+    if ($_ =~ /&lt;layer&gt;/){ # Found a new layer<br/>
+        $_ = &lt;IN&gt;;<br/>
+        while ($_ !~ /&lt;\/layer&gt;/){ # Read all of the data on this layer<br/>
+            push(@current_layer, $_);<br/>
+            $_ = &lt;IN&gt;;<br/>
+        }<br/>
+        # Extract the important naming information from this layer including<br/>
+        # the name of the layer, and the resource that was used for this layer.<br/>
+        # The legend corresponds to the folder that contains the layer<br/>
+<br/>
+        $assetref = get_value( grep(/assetRef/, @current_layer));<br/>
+        $assetname = get_value(grep(/name useDefault/, @current_layer));<br/>
+        $assetname =~ s/ /_/g;<br/>
+        $assetname =~ s/\W/_/g;<br/>
+        $legend   = get_value( grep(/&lt;legend&gt;/, @current_layer));<br/>
+        $legend =~ s/\|/\//g;<br/>
+        $legend =~ s/ /_/g;<br/>
+<br/>
+        # Store all of the display rules in subdirectories that correspond to the<br/>
+        # structure of the folders that the layers are grouped in. This way, duplicate<br/>
+        # layer names will not overwrite eachother<br/>
+<br/>
+        if (! -d "$output_dir/$legend"){mkpath("$output_dir/$legend")};<br/>
+<br/>
+        # Begin writing each display rule to its own ".khdsp" file and simultaneously create<br/>
+        # the instructions for building the resource and adding the resource to the project<br/>
+        # using the correct ".khdsp" template.<br/>
+<br/>
+        if (length($assetref) &gt;= 1){ # Not just a folder<br/>
+<br/>
+            open(OUT, "&gt;$output_dir/$legend/$assetname.khdsp") ||<br/>
+                die "Cant open $output_dir/$legend/$assetname.khdsp";<br/>
+            print OUT '&lt;?xml version="1.0" encoding="UTF-8" standalone="no" ?&gt;' . "\n";<br/>
+            print OUT "&lt;LayerConfig&gt;\n";<br/>
+            print OUT @current_layer;<br/>
+            print OUT "&lt;/LayerConfig&gt;\n";<br/>
+            close( OUT );<br/>
+<br/>
+            $raw_files = `gequery --infiles "$assetref"`;<br/>
+            $raw_files =~ s/\n/ /g;<br/>
+            print StepOne "genewvectorresource -o $assetref $raw_files\n";<br/>
+            print StepTwo "gebuild $assetref\n";<br/>
+            print StepFour "geaddtovectorproject -o $vector_project --template $output_dir/$legend/$assetname.khdsp $assetref\n";<br/>
+<br/>
+        }<br/>
+        undef @current_layer;<br/>
+    }<br/>
+    last if $_ =~ /&lt;\/layers&gt;/;<br/>
+}<br/>
+<br/>
+copy( $khasset, $output_dir);<br/>
+<br/>
+close(IN); close(OUT);<br/>
+close(StepOne);<br/>
+close(StepTwo);<br/>
+close(StepThree);<br/>
+close(StepFour);<br/>
+<br/>
+sub get_assetroot(){<br/>
+    open(IN, "/opt/google/etc/systemrc") ||<br/>
+    open(IN, "/usr/keyhole/etc/systemrc") ||<br/>
+    die "Can not open /opt/google/etc/systemrc or /usr/keyhole/etc/systemrc\n";<br/>
+    @sysrc = &lt;IN&gt;;<br/>
+    $assetroot=&amp;get_value(grep(/assetroot/, @sysrc));<br/>
+    return $assetroot;<br/>
+}<br/>
+<br/>
+sub get_value(){<br/>
+    $string=shift(@_);<br/>
+    $string =~ s/\s*&lt;[^&lt;&gt;]*&gt;//;<br/>
+    $string =~ s/&lt;.*//;<br/>
+    chomp($string);<br/>
+    return $string;<br/>
+}<br/>
+<br/>
+sub usage(){<br/>
+print&lt;&lt;EndOfUsage<br/>
+<br/>
+rebuild_vector_layer.pl vector_project output_dir<br/>
+<br/>
+where:<br/>
+    vector_project is the name of your vector project relative to the asset<br/>
+    root - for example, MyProjects/MyVectors<br/>
+<br/>
+    output_dir is the directory for putting all of the output from this script.<br/>
+    This needs to be an absolute directory path like /home/mydir/vectors<br/>
+<br/>
+EndOfUsage<br/>
+}</code></div>
+<div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>

@@ -38,7 +38,7 @@ Formats {
   7 {
     Description : "Supported Raster"
     ShortDesc : "GDAL"
-    Filter : "*.tif *.fit *.img *.rpf"
+    Filter : "*.tif *.tiff *.fit *.img *.rpf"
     Loader : "GDAL"
   }
   8 {

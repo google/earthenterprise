@@ -17,23 +17,6 @@
 
 
 Import('env')
-Import('fusion_version_number')
-
-def emitVersion(env, target, source):
-   import time
-   try:
-       file = open(str(target[0]), 'w')
-       file.writelines(['// DO NOT MODIFY - auto-generated file\n',
-                        'const char *const KEYHOLE_SERVER_VERSION = "' +
-                        fusion_version_number + '";\n',
-                        ])
-   except Exception, exp:
-       print "Exception in emitVersion:", exp
-
-env.Command('serverversion.c', ['#fusion_version.txt'],
-            [emitVersion])
-serverVerObj = env.SharedObject('serverversion.c')
-env['SERVERVER'] = serverVerObj
 
 
 # pick up the regular subdirs
@@ -44,7 +27,8 @@ env.Append(CPPPATH = ['#server'])
 env.install('httpdconf', ['.htpasswd'])
 
 # Install the postgres init script along with the sql files.
-env.install('server_bin', ['geresetpgdb', 'gestream_tables.sql',
+env.install('server_bin', ['geresetpgdb', 'gepgcommon'])
+env.install('server_sql', ['gestream_tables.sql',
   'gestream_tables_upgrade_to_3_1.sql', 'gesearch_tables.sql',
   'geendsnippet_tables.sql'])
 env.install('httpd', ['gehttpd_init'], 'bin')

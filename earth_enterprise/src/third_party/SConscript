@@ -67,6 +67,7 @@ else:
       'libcurl',
       'qt',
       'glu',
+      'openjpeg',
       'gdal',
       'postgresql',
       'postgis',  # requires postgresql config, geos, proj libs.
@@ -85,7 +86,7 @@ lflags = ' '.join(third_party_env['LINKFLAGS'])
 our_lib = '-L%s' % Dir(env.exportdirs['lib']).abspath
 lpaths = lpaths.replace(our_lib, '')
 lpaths = lpaths.replace('-L/opt/google/lib64/compatibility', '')
-if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+if third_party_env['is_min_ubuntu'] and not third_party_env['native_cc']:
   third_party_env['ENV']['CC'] = '%sgcc %s %s' % (
       env.exportdirs['bin'], cflags, lflags)
   third_party_env['ENV']['CXX'] = '%sg++ %s %s' % (
@@ -100,10 +101,13 @@ if third_party_env['is_hardy'] and not third_party_env['native_cc']:
       'rm -f $$tmp_nam\n'
       'exit $$status\n' % (our_lib, env.exportdirs['root']))
 else:
-  if third_party_env['is_hardy']:
+  if third_party_env['cc_dir']:
+    bin_path = third_party_env['cc_dir']
+  elif third_party_env['is_min_ubuntu']:
     bin_path = '/usr/bin'
   else:
     bin_path = '%s/bin' % env['optdir']
+
   third_party_env['ENV']['CC'] = '%s/gcc %s %s' % (bin_path, cflags, lflags)
   third_party_env['ENV']['CXX'] = '%s/g++ %s %s' % (bin_path, cflags, lflags)
   cc_template = (
@@ -143,7 +147,7 @@ Export('third_party_env')
 prev = [cc_target, cxx_target]
 
 if not third_party_env['native_cc']:
-  if third_party_env['is_hardy']:
+  if third_party_env['is_min_ubuntu']:
     cpp_lib_root = third_party_env.Dir(
         '%s/%s/lib64' % (env['cross_cc_base'], env['cross_cc_target'])).abspath
     gcc_s_dir = cpp_lib_root

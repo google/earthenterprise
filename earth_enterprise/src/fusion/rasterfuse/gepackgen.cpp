@@ -25,6 +25,7 @@
 
 namespace {
 const uint32 kDefaultNumCPUs = 1;
+const double defaultDecimationThreshold = 0.009;
 
 void usage(const std::string &progn, const char *msg = 0, ...) {
   if (msg) {
@@ -41,8 +42,9 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
           " -o <output>\n"
           "   Supported options are:\n"
           "      --help | -?:     Display this usage message\n"
-          "      --numcpus <num>: Num CPUs to use (default %u)\n",
-          progn.c_str(), kDefaultNumCPUs);
+          "      --numcpus <num>: Num CPUs to use (default %u)\n"
+          "      --decimation <num>: error threshold for terrain decimation (default %f)\n",
+          progn.c_str(), kDefaultNumCPUs, defaultDecimationThreshold);
   exit(1);
 }
 }  // namespace
@@ -55,6 +57,7 @@ int main(int argc, char *argv[]) {
   bool help = false;
   std::string configFile;
   std::string output;
+  double decimation_threshold = defaultDecimationThreshold;
   uint32 numcpus = kDefaultNumCPUs;
   bool imagery = false;
   bool terrain = false;
@@ -63,10 +66,14 @@ int main(int argc, char *argv[]) {
   options.flagOpt("?", help);
   options.opt("config", configFile,  khGetopt::FileExists);
   options.opt("output", output);
+  options.opt("decimation", decimation_threshold);
   options.opt("numcpus", numcpus,
               &khGetopt::RangeValidator<uint32, 1, kMaxNumJobsLimit_2>);
   options.flagOpt("imagery", imagery);
   options.flagOpt("terrain", terrain);
+  options.setExclusive("imagery", "decimation");
+  options.setExclusive("imagery", "terrain");
+
   if (!options.processAll(argc, argv, argn)) {
     usage(progname);
   }
@@ -79,9 +86,6 @@ int main(int argc, char *argv[]) {
   numcpus = std::min(numcpus, CommandlineNumCPUsDefault());
 
   // Validate commandline options
-  if (imagery && terrain) {
-    usage(progname, "--imagery and --terrain are exclusive");
-  }
   if (!imagery && !terrain) {
     usage(progname, "--imagery or --terrain is required");
   }
@@ -94,6 +98,10 @@ int main(int argc, char *argv[]) {
   if (numcpus < 1) {
     usage(progname, "Number of CPUs should not be less than 1");
   }
+  if (decimation_threshold < 0) {
+    usage(progname, "Decimation should not be less than 0");
+  }
+  notify(NFY_DEBUG, "Set decimation_threshold to:  %f", decimation_threshold);
 
   try {
     // load the config
@@ -118,7 +126,7 @@ int main(int argc, char *argv[]) {
     geFilePool file_pool;
 
     if (terrain) {
-      fusion::rasterfuse::TmeshPackgenTraverser trav(config, file_pool, output);
+      fusion::rasterfuse::TmeshPackgenTraverser trav(config, file_pool, output, decimation_threshold);
       trav.Traverse(numcpus);
     } else {
       bool is_mercator = !config.insets.empty() &&

@@ -20,7 +20,7 @@ BADHOSTNAMELIST=(empty linux localhost dhcp bootp)
 GEE="Google Earth Enterprise"
 GEES="$GEE Server"
 GEEF="$GEE Fusion"
-LONG_VERSION="5.2.0"
+LONG_VERSION="5.2.1"
 SHORT_VERSION="5.2"
 
 ROOT_USERNAME="root"
@@ -62,7 +62,7 @@ HOSTNAME_A="$(hostname -a | $NEWLINECLEANER)"
 
 NUM_CPUS="$(grep processor /proc/cpuinfo | wc -l | $NEWLINECLEANER)"
 
-SUPPORTED_OS_LIST=("Ubuntu", "Red Hat Enterprise Linux (RHEL)", "CentOS")
+SUPPORTED_OS_LIST=("Ubuntu", "Red Hat Enterprise Linux (RHEL)", "CentOS", "Linux Mint")
 UBUNTUKEY="ubuntu"
 REDHATKEY="rhel"
 CENTOSKEY="centos"
@@ -74,8 +74,8 @@ software_check()
     local software_check_retval=0
 
     # args: $1: name of script
-    # args: $2: ubuntu package
-    # args: $3: rhel package
+    # args: $2: Ubuntu package
+    # args: $3: RHEL package
 
     if [ "$MACHINE_OS" == "$UBUNTUKEY" ] && [ ! -z "$2" ]; then
         if [[ -z "$(dpkg --get-selections | sed s:install:: | sed -e 's:\s::g' | grep ^$2\$)" ]]; then
@@ -115,6 +115,8 @@ determine_os()
         MACHINE_OS_VERSION=$test_versionid
 
         if [[ "${test_os,,}" == "ubuntu"* ]]; then
+            MACHINE_OS=$UBUNTUKEY
+        elif [[ "${test_os,,}" == "linux mint"* ]]; then
             MACHINE_OS=$UBUNTUKEY
         elif [[ "${test_os,,}" == "red hat"* ]]; then
             MACHINE_OS=$REDHATKEY

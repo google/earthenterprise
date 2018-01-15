@@ -34,6 +34,7 @@
 #include "autoingest/.idl/gstProvider.h"
 #include "autoingest/.idl/storage/RasterProductConfig.h"
 #include "fusion/autoingest/khFusionURI.h"
+#include "fusion/fusionui/AssetBase.h"
 #include "fusion/fusionui/QDateWrapper.h"
 #include "fusion/fusionui/Preferences.h"
 #include "common/khStringUtils.h"
@@ -227,7 +228,7 @@ QFileDialog* RasterAssetWidget::FileDialog() {
       supported_files_filter += " *.jp2 *.JP2";
     if (is_mrsid_found)
       supported_files_filter += " *.sid *.SID";
-    supported_files_filter += " *.img *.IMG *.tif *.TIF )";
+    supported_files_filter += " *.img *.IMG *.tif *.TIF *.tiff *.TIFF )";
     file_dialog_->addFilter(supported_files_filter);
 
     if (add_dem_file_filter)
@@ -237,7 +238,7 @@ QFileDialog* RasterAssetWidget::FileDialog() {
     if (is_mrsid_found)
       file_dialog_->addFilter("MrSID ( *.sid *.SID )");
     file_dialog_->addFilter("Erdas Imagine ( *.img *.IMG )");
-    file_dialog_->addFilter("TIFF/GeoTIFF ( *.tif *.TIF )");
+    file_dialog_->addFilter("TIFF/GeoTIFF ( *.tif *.TIF *.tiff *.TIFF )");
 
     // Make the second filter current, which is the "Supported images" one.
     // The first one is the default "All Files (*)".
@@ -255,6 +256,7 @@ void RasterAssetWidget::AddSource() {
   if (FileDialog()->exec() != QDialog::Accepted)
     return;
 
+  bool modified = false;
   QStringList files = FileDialog()->selectedFiles();
   for (QStringList::Iterator it = files.begin(); it != files.end(); ++it) {
     if (source_list->findItem(*it, Qt::ExactMatch)) {
@@ -266,7 +268,12 @@ void RasterAssetWidget::AddSource() {
       continue;
     } else {
       source_list->insertItem(*it);
+      modified = true;
     }
+  }
+
+  if (modified) {
+	this->GetAssetBase()->SetSaveError(false);
   }
 
   // adding a source may enable mosaic config
@@ -283,6 +290,7 @@ void RasterAssetWidget::DeleteSource() {
     return;
 
   source_list->removeItem(row);
+  this->GetAssetBase()->SetSaveError(false);
 
   // deleting a source may disable mosaic config
   AdjustMosaicEnabled();

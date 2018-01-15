@@ -43,7 +43,7 @@ openldap_extract = openldap_env.Command(
             current_dir, current_dir, openldap_source, openldap_target))])
 
 # [2] Find out whether optimize or debug and set variables accordingly
-if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+if third_party_env['is_min_ubuntu'] and not third_party_env['native_cc']:
   env_opt = 'ol_cv_linux_threads=yes'
 else:
   env_opt = ''

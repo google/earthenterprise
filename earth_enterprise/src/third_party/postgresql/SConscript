@@ -18,7 +18,7 @@
 
 Import('third_party_env')
 
-postgresql_version = 'postgresql-8.4.22'
+postgresql_version = 'postgresql-9.6.5'
 postgresql_source = File('#/../../earth_enterprise/third_party/postgresql/%s.tar.bz2'
                          % postgresql_version).abspath
 
@@ -67,7 +67,7 @@ postgresql_configure = postgresql_env.Command(
 
 # [3] Build
 make_options = '-j%d' % num_cpu
-if third_party_env['is_hardy'] and not third_party_env['native_cc']:
+if third_party_env['is_min_ubuntu'] and not third_party_env['native_cc']:
   make_options = '%s python_additional_libs=""' % make_options
 postgresql_target = '%s/.build' % current_dir
 postgresql_build = postgresql_env.Command(
