@@ -81,6 +81,33 @@ MAP_LINE2_REWRITECOND = "RewriteCond %{QUERY_STRING}  ^(.*)$\n"
 MAP_LINE3_REWRITERULE = (
     "RewriteRule '^%s/(.*)'  '%s%s/db/$1?%%1&db_type=%s' [NC]\n")
 
+
+# Redirect Earth Client requests with no Globe specified on the URL
+# to the ec_default URIs
+# RewriteCond %{HTTP_USER_AGENT}  ^EarthClient/(.*)$
+# Redirect '/dbRoot.v5'  '/ec_default/dbRoot.v5'
+# Redirect '/flatfile'  '/ec_default/flatfile'RewriteRule '^ec_default$'  'bmDb2/'  [NC,R]
+# RewriteRule '^ec_default/POISearch(.*)'  POISearch$1 [NC,PT]
+# RewriteRule '^ec_default/wms' - [NC,R=404]
+# RewriteRule '^ec_default/+$'  earth/earth_local.html [NC,PT]
+# RewriteCond %{QUERY_STRING}  ^(.*)$
+# RewriteRule '^ec_default/(.*)'  '/public_host/bmDb2/db/$1?%1&db_type=ge' [NC]
+
+
+# Redirect Earth Client requests with no Globe specified on the URL
+# to the default_ge based URIs to provide Earth Client access to a default map 
+# if none is specified in the server connection URLs. 
+EC_DEFAULT_MAP_LINE0_LOCAL_REWRITECOND = (
+    "RewriteCond %{HTTP_USER_AGENT}  ^EarthClient/(.*)$\n")
+    
+EC_DEFAULT_MAP_LINE1_GOOGLE_REDIRECTRULE = (
+    "RewriteRule '/dbRoot.v5'  '/%s/dbRoot.v5'\n")
+EC_DEFAULT_MAP_LINE2_GOOGLE_REDIRECTRULE = (
+    "RewriteRule '/flatfile'  '/%s/flatfile'\n" )
+    
+
+    
+
 # Rewrite rules templates for portable globes requests serving.
 # GLB or 3d GLC
 GLX_LINE0_REWRITERULE = (
