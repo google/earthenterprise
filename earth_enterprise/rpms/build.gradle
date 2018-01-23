@@ -448,7 +448,7 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     }
 
     from(stagedInstallDir_server_geplaces) {
-	into new File(packageInstallRootDir, 'opt/google/share/geplaces')
+        into new File(packageInstallRootDir, 'opt/google/share/geplaces')
     }
 
     from(stagedInstallDir_server_searchexample) {
@@ -465,6 +465,12 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
             it.exclude()
         }
     }
+
+    // Create links
+    link('/opt/google/etc', '/etc/opt/google')
+    link('/opt/google/log', '/var/opt/google/log')
+    link('/opt/google/run', '/var/opt/google/run')
+    link('/opt/google/gehttpd/htdocs/shared_assets/docs', '/opt/google/share/doc')
 }
 
 task openGeeServerDeb (type: Deb) {
@@ -580,6 +586,12 @@ built from raster, vector, and location properties data.
             }
         }
     }
+
+    // Create links
+    link('/opt/google/etc', '/etc/opt/google')
+    link('/opt/google/log', '/var/opt/google/log')
+    link('/opt/google/run', '/var/opt/google/run')
+    link('/opt/google/gehttpd/htdocs/shared_assets/docs', '/opt/google/share/doc')
 }
 
 task openGeeFusionDeb (type: Deb) {
