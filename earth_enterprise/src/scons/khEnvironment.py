@@ -20,6 +20,7 @@ Define build environments, builders, actions and helper methods in this
 central place and reuse it in all SConscripts as much as possible.
 """
 
+import errno
 import git
 import os
 import os.path
@@ -141,6 +142,31 @@ def WriteToFileStrfunc(file_name, strn):
   return 'WriteToFile(%s, %s)' % (file_name, strn)
 
 
+def StringExpandFileFunc(target, source, env):
+  """Expand "{var}" strings in a file, using values from `env`."""
+
+  if SCons.Util.is_List(target):
+    target = target[0].get_abspath()
+  if SCons.Util.is_List(source):
+    source = source[0].get_abspath()
+
+  # Read the input template into a string:
+  with open(source, 'r') as f:
+    template = f.read()
+
+  # Create output file parent directories:
+  target_dir = os.path.dirname(os.path.abspath(target))
+  try:
+    os.makedirs(target_dir)
+  except OSError, e:
+    if e.errno != errno.EEXIST:
+      raise
+
+  # Expand template into output file:
+  with open(target, 'w') as f:
+    f.write(template.format(**env.gvars()))
+
+
 def EmitBuildDateFunc(target, build_date):
   """Emits build date information to target file."""
   fp = open(target, 'w')
@@ -180,7 +206,7 @@ def EmitVersionHeaderFunc(target, backupFile):
 def EmitVersionHeaderStrfunc(target, backupFile):
   return 'EmitVersionHeader(%s, %s)' % (target, backupFile)
   
-  
+
 def EmitVersionFunc(target, backupFile):
   """Emit version information to the target file."""
 
@@ -400,6 +426,7 @@ class khEnvironment(Environment):
     self['BUILDERS']['IDLCPP'] = idl_cpp_builder
     self['_oldstripixes'] = self['_stripixes']
     self['_stripixes'] = CleanupLibFlags
+    self.StringExpandFileFunc = StringExpandFileFunc
 
     DefineProtocolBufferBuilder(self)
 
