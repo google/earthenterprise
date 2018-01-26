@@ -29,6 +29,7 @@ import sys
 from tempfile import SpooledTemporaryFile as TempFile
 import time
 import xml.etree.cElementTree
+import os
 
 from common import exceptions
 
@@ -94,7 +95,7 @@ class SearchSchemaParser(object):
     self._within_record = False
     self._within_style = False
 
-  def Parse(self, search_file, table_name):
+  def Parse(self, search_file, table_name, file_prefix=None):
     """Parser entry point.
 
     Parses the given POI file to POI elements, based on POI elements builds
@@ -114,7 +115,12 @@ class SearchSchemaParser(object):
       psycopg2.Warning/Error exceptions.
     """
     self._table_name = table_name
+    self._file_prefix = file_prefix
     logger.info("Ingesting POI file %s into parser...", search_file)
+    if file_prefix is None:
+      logger.info("File prefix is None")
+    else:
+      logger.info("File prefix is '%s'", file_prefix)
     self.__StartDocument()
     try:
       context = xml.etree.cElementTree.iterparse(search_file,
@@ -219,6 +225,11 @@ class SearchSchemaParser(object):
       self._within_record = True
     elif self._current_tag == SearchSchemaParser.SEARCH_FILE_NAME:
       data_file_name = elem.text
+      if self._file_prefix is not None:
+        logger.info("Adding prefix to poi data file: '%s'", self._file_prefix)
+        data_file_name = os.path.normpath(self._file_prefix + data_file_name)
+      else:
+        logger.info("Missing file prefix!")
       data_file = open(data_file_name, "r")
       logger.info("Importing records from:'%s'", data_file_name)
       self._db_updater.CopyFrom(data_file)
@@ -394,7 +405,8 @@ def main(argv):
   parser = SearchSchemaParser(db_updater)
 
   start = time.time()
-  (num_fields, sql_search, balloon_style) = parser.Parse(poifile, "test_poi")
+  # TODO(RAW): add prefix path to test this
+  (num_fields, sql_search, balloon_style) = parser.Parse(poifile, "test_poi", None)
   elapsed = time.time() - start
   print "Elapsed time: ", elapsed
   logger.info("Num fields: %s", num_fields)

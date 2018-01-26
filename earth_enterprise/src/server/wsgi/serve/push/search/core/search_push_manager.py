@@ -449,7 +449,7 @@ class SearchPushManager(search_manager.SearchManager):
     if not self.server_prefix:
       raise exceptions.SearchPushServeException(
           "Unable to read WebDAV Config.")
-    logger.info("Server Prefix: " + self.server_prefix)
+    logger.info("Server Prefix xxxxxxxxx: " + self.server_prefix)
 
   def __ReadPublishRootConfig(self):
     self.allow_symlinks = "N"
@@ -514,6 +514,10 @@ class SearchPushManager(search_manager.SearchManager):
     """
     logger.debug("__UpdatePoiStatus...")
     file_prefix = self.__ServerFilePrefix(client_host_name)
+    if file_prefix is None:
+      logger.info("File prefix is None")
+    else:
+      logger.info("File prefix is '%s'", file_prefix)
     existing_files = []
     i = 0
     while i in range(len(file_paths)):
@@ -535,7 +539,7 @@ class SearchPushManager(search_manager.SearchManager):
       poi_id = self._QueryPoiId(client_host_name, existing_file)
       server_file_path = os.path.normpath(file_prefix + existing_file)
       (num_fields, query_str, balloon_style) = self.__CreatePoiTable(
-          server_file_path, self.__PoiTableName(poi_id))
+          server_file_path, self.__PoiTableName(poi_id), file_prefix)
 
       # Update the poi_table. Change the status to 1 and update query_strs.
       self._DbModify(update_string,
@@ -565,7 +569,7 @@ class SearchPushManager(search_manager.SearchManager):
     """
     return "%s%d" % (SearchPushManager.POI_TABLE_PREFIX, poi_id)
 
-  def __CreatePoiTable(self, poi_file_path, table_name):
+  def __CreatePoiTable(self, poi_file_path, table_name, file_prefix=None):
     """Creates and populates POI table.
 
     Args:
@@ -581,7 +585,11 @@ class SearchPushManager(search_manager.SearchManager):
     Raises:
       SearchSchemaTableUtilException, psycopg2.Warning/Error.
     """
-    return self.table_utility.CreatePoiTable(poi_file_path, table_name.lower())
+    if file_prefix is None:
+      logger.info("File prefix is None")
+    else:
+      logger.info("File prefix is '%s'", file_prefix)
+    return self.table_utility.CreatePoiTable(poi_file_path, table_name.lower(), file_prefix)
 
 
 def main():

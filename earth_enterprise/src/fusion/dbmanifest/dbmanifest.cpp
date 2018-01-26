@@ -263,6 +263,7 @@ void DbManifest::GetManifest(geFilePool &file_pool,
     // assetroot).
     geindex::IndexManifest::GetManifest(file_pool, fusion_config_.index_path_,
                                         *stream_manifest, tmp_dir, "", "");
+    notify(NFY_DEBUG, "Processing %ld POI files 1", fusion_config_.poi_file_paths_.size());
     for (uint i = 0; i < fusion_config_.poi_file_paths_.size(); ++i) {
       const std::string poi_file = fusion_config_.poi_file_paths_[i];
       if (!khExists(poi_file)) {
@@ -272,7 +273,7 @@ void DbManifest::GetManifest(geFilePool &file_pool,
           stream_manifest->push_back(ManifestEntry(poi_file));
         }
         search_manifest->push_back(ManifestEntry(poi_file));
-        GetPoiDataFiles(poi_file, search_manifest);
+        GetPoiDataFiles(poi_file, stream_manifest, search_manifest);
       }
     }
     // These file paths are listed directly in the GedbFusionConfig.
@@ -302,6 +303,7 @@ void DbManifest::GetManifest(geFilePool &file_pool,
       }
     }
 
+    notify(NFY_DEBUG, "Processing %ld POI files 2", fusion_config_.poi_file_paths_.size());
     // The *.poi file paths are in the GedbFusionConfig.
     for (uint i = 0; i < fusion_config_.poi_file_paths_.size(); ++i) {
       const std::string& orig = fusion_config_.poi_file_paths_[i];
@@ -316,7 +318,7 @@ void DbManifest::GetManifest(geFilePool &file_pool,
           stream_manifest->push_back(ManifestEntry(orig, curr));
         }
         search_manifest->push_back(ManifestEntry(orig, curr));
-        GetPoiDataFiles(curr, search_manifest);
+        GetPoiDataFiles(curr, stream_manifest, search_manifest);
       }
     }
 
@@ -333,6 +335,7 @@ void DbManifest::GetManifest(geFilePool &file_pool,
 // Read POI file and extract the data file names from within it and then add
 // them to the manifest too
 void DbManifest::GetPoiDataFiles(const std::string& poi_file,
+                     std::vector<ManifestEntry>* stream_manifest,
                      std::vector<ManifestEntry>* search_manifest)
 {
   notify(NFY_DEBUG,
@@ -352,7 +355,12 @@ void DbManifest::GetPoiDataFiles(const std::string& poi_file,
             }
             for (uint i = 0; i < data_files.size(); ++i) {
               const std::string& data_file = data_files[i];
+              if (stream_manifest != search_manifest)
+              {
+                stream_manifest->push_back(ManifestEntry(data_file));
+              }
               search_manifest->push_back(ManifestEntry(data_file));
+              notify(NFY_DEBUG, "Adding POI datafile: %s", data_file.c_str());
             }
           } else {
             notify(NFY_WARN,
