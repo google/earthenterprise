@@ -339,7 +339,9 @@ void DbManifest::GetPoiDataFiles(const std::string& poi_file,
                      std::vector<ManifestEntry>* search_manifest)
 {
   notify(NFY_DEBUG,
-        "Parsing poi file %s looking for data files", poi_file.c_str());
+        "Parsing POI file %s looking for data files", poi_file.c_str());
+  size_t stream_poi_file_idx = stream_manifest->size() - 1;
+  size_t search_poi_file_idx = search_manifest->size() - 1;
   khxml::DOMLSParser *parser = CreateDOMParser();
   if (parser) {
     khxml::DOMDocument *doc = ReadDocument(parser, poi_file);
@@ -351,36 +353,37 @@ void DbManifest::GetPoiDataFiles(const std::string& poi_file,
             FromElementWithChildName(el_search_table, "SearchDataFile", data_files);
             if (data_files.empty()) {
               notify(NFY_WARN,
-                    "No data files defined for poi file %s", poi_file.c_str());
+                    "No data files defined for POI file %s", poi_file.c_str());
             }
             for (uint i = 0; i < data_files.size(); ++i) {
               const std::string& data_file = data_files[i];
-              if (stream_manifest != search_manifest)
-              {
+              if (stream_manifest != search_manifest) {
                 stream_manifest->push_back(ManifestEntry(data_file));
+                stream_manifest->at(stream_poi_file_idx).dependents.push_back(data_file);
               }
               search_manifest->push_back(ManifestEntry(data_file));
+              search_manifest->at(search_poi_file_idx).dependents.push_back(data_file);
               notify(NFY_DEBUG, "Adding POI datafile: %s", data_file.c_str());
             }
           } else {
             notify(NFY_WARN,
-                  "No search table element found in poi file %s", poi_file.c_str());
+                  "No search table element found in POI file %s", poi_file.c_str());
           }
         } else {
           notify(NFY_WARN,
-                 "No document element loading poi file %s", poi_file.c_str());
+                 "No document element loading POI file %s", poi_file.c_str());
         }
       } catch(const std::exception &e) {
-        notify(NFY_WARN, "%s while loading poi file %s", e.what(), poi_file.c_str());
+        notify(NFY_WARN, "%s while loading POI file %s", e.what(), poi_file.c_str());
       } catch(...) {
-        notify(NFY_WARN, "Unable to load poi file %s", poi_file.c_str());
+        notify(NFY_WARN, "Unable to load POI file %s", poi_file.c_str());
       }
     } else {
-      notify(NFY_WARN, "Unable to read poi file %s", poi_file.c_str());
+      notify(NFY_WARN, "Unable to read POI file %s", poi_file.c_str());
     }
     DestroyParser(parser);
   } else {
-    notify(NFY_WARN, "Unable to get parser for poi file %s", poi_file.c_str());
+    notify(NFY_WARN, "Unable to get parser for POI file %s", poi_file.c_str());
   }
 }
 

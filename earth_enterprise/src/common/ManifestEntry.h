@@ -21,6 +21,7 @@
 #define COMMON_MANIFESTENTRY_H__
 
 #include <string>
+#include <vector>
 #include "common/khTypes.h"
 #include "common/khFileUtils.h"
 
@@ -29,8 +30,9 @@ struct ManifestEntry {
   std::string orig_path;
   std::string current_path;
   uint64 data_size;
+  std::vector<std::string> dependents;
 
-  ManifestEntry() {}
+  ManifestEntry() : data_size(0) {}
 
   explicit ManifestEntry(const std::string& orig_path_) :
       orig_path(orig_path_),

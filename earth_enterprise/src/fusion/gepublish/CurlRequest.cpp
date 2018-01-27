@@ -123,6 +123,7 @@ void UploadRequest::Close() {
 
 
 bool UploadRequest::CreateDir(const std::string& dir) {
+  notify(NFY_VERBOSE, "Creating directory: %s", dir.c_str());
   std::string dest_root = url_;
   std::string complete_dir = url_ + "/" + dir;
   curl_easy_setopt(curl_easy_handle_, CURLOPT_URL, complete_dir.c_str());
@@ -166,20 +167,25 @@ bool UploadRequest::Start(bool report_progress, geProgress* progress) {
   size_t num_entries = entries_->size();
   for (size_t i = 0; i < num_entries; ++i) {
     const ManifestEntry& entry = (*entries_)[i];
-    notify(NFY_DEBUG, "%s", entry.orig_path.c_str());
+    notify(NFY_DEBUG, "uploading: %s", entry.orig_path.c_str());
     if (!Init(entry.current_path)) {
+      notify(NFY_VERBOSE, "Upload request Init() failed");
       return false;
     }
 
-    if (!CreateDir(root_dir_))
+    if (!CreateDir(root_dir_)) {
+      notify(NFY_VERBOSE, "Upload request CreateDir() failed");
       return false;
+    }
 
     // We cannot escape the entire URL because that results in an invalid
     // PUT request (all the '/' and '.' chars are also replaced)
     std::string escaped_orig_path = ReplaceString(entry.orig_path, " ", "%20");
 
-    if (!EnsureDestPath(escaped_orig_path))
+    if (!EnsureDestPath(escaped_orig_path)) {
+      notify(NFY_VERBOSE, "Upload request EnsureDestPath() failed");
       return false;
+    }
 
     std::string dest_url = url_ + "/" + root_dir_ + escaped_orig_path;
     curl_easy_setopt(curl_easy_handle_, CURLOPT_URL, dest_url.c_str());
@@ -193,13 +199,16 @@ bool UploadRequest::Start(bool report_progress, geProgress* progress) {
       return false;
     }
     Close();
+    processed_size += entry.data_size;
     if (report_progress && progress != NULL) {
       if (!progress->incrementDone(entry.data_size)) {
         notify(NFY_WARN, "Push interrupted");
         return false;
       }
-      processed_size += entry.data_size;
       notify(NFY_DEBUG, "Done files: %zd/%zd, bytes: %zd",
+             i + 1, num_entries, processed_size);
+    } else {
+      notify(NFY_VERBOSE, "Done files: %zd/%zd, bytes: %zd",
              i + 1, num_entries, processed_size);
     }
   }

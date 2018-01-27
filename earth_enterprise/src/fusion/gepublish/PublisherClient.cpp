@@ -463,7 +463,7 @@ bool PublisherClient::AddDatabase(const std::string& input_db_name,
     std::string publish_prefix;
     { // Since index manifest uses publish_prefix, we can safely use
       // STREAM_SERVER for determining publish_prefix.
-      bool failed_to_find;
+      bool failed_to_find = true;
       const bool is_server_host_same_as_publishing =
           IsServerHostSameAsPublishingHost(STREAM_SERVER, &failed_to_find);
       if (failed_to_find) {
@@ -482,7 +482,7 @@ bool PublisherClient::AddDatabase(const std::string& input_db_name,
     std::vector<ManifestEntry> stream_manifest, search_manifest;
     db_manifest.GetPushManifest(
         file_pool, &stream_manifest, &search_manifest, "", publish_prefix);
-    notify(NFY_DEBUG, "GetPushManifest");
+    notify(NFY_DEBUG, "GetPushManifest %ld/%ld", stream_manifest.size(), search_manifest.size());
 
     std::string args = "Cmd=AddDb&DbName=" + db_name + "&DbPrettyName=" +
         db_pretty_name;
@@ -1221,6 +1221,7 @@ bool PublisherClient::UploadFiles(ServerType server_type,
 
   int64 processed_size = 0;
   if (is_server_host_same_as_publishing)  {
+    notify(NFY_DEBUG, "Transfering files locally");
     size_t num_entries = entries.size();
     for (size_t i = 0; i < num_entries; ++i) {
       const ManifestEntry& entry = entries[i];
@@ -1246,6 +1247,11 @@ bool PublisherClient::UploadFiles(ServerType server_type,
       // attempts.
       int tries = 4;
       int sleep_secs = 15;
+      notify(NFY_VERBOSE, "Transfering '%s' to '%s'.\n\tServer type: %s\n\tPrefer copy: %s",
+        src_path.c_str(),
+        dest_path.c_str(),
+        (server_type == STREAM_SERVER) ? kStreamSpace.c_str() : kSearchSpace.c_str(),
+        prefer_copy?"true":"false");
       while (!LocalTransfer(
                  server_type, src_path, dest_path, prefer_copy)) {
         if (--tries == 0) {
@@ -1268,6 +1274,7 @@ bool PublisherClient::UploadFiles(ServerType server_type,
     }
     return true;
   } else {
+    notify(NFY_DEBUG, "Transfering files remotely");
     std::string dav_root = (server_type == STREAM_SERVER) ?
         kStreamSpace : kSearchSpace;
     std::string url = ServerUrl(server_type) + "/" + dav_root;
@@ -1312,6 +1319,7 @@ bool PublisherClient::SyncFiles(
     if (file_paths.size() > 0) {
       std::vector<ManifestEntry> subset_entries;
       std::string remove_chars = "\r\n";
+      // Need to check for poi files
       for (size_t i = 0; i < file_paths.size(); ++i) {
         // Clean the path name. Remove spaces, newlines.
         CleanString(&file_paths[i], remove_chars);
@@ -1322,6 +1330,9 @@ bool PublisherClient::SyncFiles(
           return false;
         }
 
+        file_paths.insert(file_paths.end(),
+          manifest_entries[index].dependents.begin(),
+          manifest_entries[index].dependents.end());
         subset_entries.push_back(manifest_entries[index]);
       }
 
@@ -1334,6 +1345,9 @@ bool PublisherClient::SyncFiles(
         notify(NFY_DEBUG, "Total files to push: %zu, size (bytes): %zu",
                subset_entries.size(), total_size);
         progress_->incrementTotal(static_cast<int64>(total_size));
+      } else {
+        notify(NFY_DEBUG, "Total files to push: %zu",
+               subset_entries.size());
       }
 
       bool REPORT_PROGRESS = true;
@@ -1343,6 +1357,7 @@ bool PublisherClient::SyncFiles(
       }
     } else {
       successful = true;
+      notify(NFY_DEBUG, "No files to push");
     }
     ++cur_retry;
   }
