@@ -186,6 +186,9 @@ class SearchPushManager(search_manager.SearchManager):
           " poi file_paths/file_sizes mismatch: %d/%d" %
           (len(poi_file_paths), len(poi_file_sizes)))
 
+    logger.debug("poi_file_paths: %s", str(poi_file_paths))
+    logger.debug("poi_file_sizes: %s", str(poi_file_sizes))
+
     # Check if database already exists.
     # The assumption is if it already exists, all the files and db-to-files
     # links have already been pushed to the database.
