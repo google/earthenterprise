@@ -332,10 +332,9 @@ def RunCmd(os_cmd):
                          stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE)
     results = p.communicate()[1]
-    return_code = p.returncode
-    if return_code != 0:
-      errorMessage = "%s (return code %d)" % (results, return_code)
-      results = errorMessage
+    if p.returncode != 0:
+      results = "{0} (return code {1})".format(results, p.returncode)
+      return ["", results]
 
     return results.split("\n")
   except Exception, e:
