@@ -298,7 +298,7 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
 
 int main(int argc, char *argv[]) {
   std::string progname = argv[0];
-  bool help;
+  bool help = false;
   bool use_ssl_for_kml = false;
   std::string source;
   std::string icon_directory;

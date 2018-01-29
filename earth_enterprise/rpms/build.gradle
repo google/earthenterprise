@@ -41,6 +41,9 @@ buildscript {
 
 apply plugin: "nebula.ospackage"
 
+import org.opengee.shell.GeeCommandLine
+
+
 def rpmPlatformString = org.opengee.os.Platform.rpmPlatformString
 
 def stagedInstall_path =
@@ -59,8 +62,19 @@ if (new File('build.properties').exists()) {
     }
 }
 
+def openGeeVersionFile = new File("../src/NATIVE-REL-x86_64/gee_long_version.txt")
+
+if (!openGeeVersionFile.exists()) {
+    GeeCommandLine.expand(
+            ["/usr/bin/scons", "release=1", "NATIVE-REL-x86_64/gee_long_version.txt"],
+            "Runing `scons` to produce <gee_long_version.txt> failed!",
+            null, // Use default environment variables.
+            new File("../src") // Working directory.
+        )
+}
+
 def openGeeVersion =
-    new File(stagedInstall_path, 'gee_long_version.txt').readLines().
+    openGeeVersionFile.readLines().
     collect {
         // Strip comments:
         def commentIndex = it.indexOf('#')
@@ -105,6 +119,47 @@ def postGisInstallDir_opt = new File(postGisInstallDir, 'opt')
 
 // Commands used in install-utils.sh:
 def packageSharedCommands = ['bash', 'flock', 'sed', 'xmllint']
+
+// Since some libraries (i.e., MrSid)  cannot be redistributed without
+// a license and are not packaged as an RPM, we need to filter these
+// out from the automatic 'requires' dependency generation.
+//     Since </bin> is symlinked to </usr/bin> on Cent OS 7, some
+// build scripts misdetect the location of interpreters and utilities,
+// such as `perl` and `sudo`.  The RPM packages for those utilities
+// only provide RPM capabilities at the canonical paths
+// (`/usr/bin/perl` and `/usr/bin/sudo`), so dependency resolution
+// breaks, if non-canonical paths are used in `requires` headers.
+//
+// Capabilities mapped to `null` are removed from the dependency list.
+// The ones mapped to strings are rewritten.
+def rpmCapabilityMap = [
+    'libltidsdk.so()(64bit)': null,
+    '/bin/perl': '/usr/bin/perl',
+    '/bin/python': '/usr/bin/python',
+    '/bin/sudo': '/usr/bin/sudo'
+]
+
+// A lambda that can be set as an `autoFindRequiresFilter` in `GeeRpm` tasks.
+//  It will use `rpmCapabilityMap` to rewrite RPM capabilities output by
+// `find-requires`.
+def rpmCapabilityFilter = {
+    if (rpmCapabilityMap.containsKey(it.name)) {
+        def newName = rpmCapabilityMap[it.name]
+
+        return newName == null ?
+            null :
+            new org.opengee.os.package.Dependency(
+                newName, it.version, it.flags)
+    }
+
+    return it
+}
+
+// A lambda that can be set as a `requiresCommandFilter` in `GeeRpm` tasks.
+// It will use `rpmCapabilityMap` to rewrite command paths returned by `type`.
+def rpmCommandFilter = {
+    return rpmCapabilityMap.containsKey(it) ? rpmCapabilityMap[it] : it
+}
 
 
 
@@ -265,26 +320,16 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeSharedFiles) {
     autoFindProvides = true
     autoFindRequires = true
 
-    /* When the scons release=1 package target is run as a non-root user, scons does 
-    not include /sbin in the path, so auto-detection of chkconfig fails, so this 
-    dependency is explicit */
+    // When the scons release=1 package target is run as a non-root user,
+    // scons does not include /sbin in the path, so auto-detection of 
+    // chkconfig fails, so this dependency is explicit.
     requires('chkconfig')
     requires('shadow-utils')
-    requires('sudo')
-    conflicts('opengee-postgis', '2.0', LESS )
-    conflicts('opengee-postgis', '2.4', GREATER | EQUAL)
-    
+
     requiresCommands(packageSharedCommands +
-        ['cat', 'cut', 'getent', 'grep' ])
-    
-    /* Since some libraries (i.e., MrSid)  cannot be redistributed without a 
-       license and are not packaged as an RPM, we need to filter these out from the
-       automatic 'requires' dependency generation. */
-    
-    def filterCapabilities = ['libltidsdk.so()(64bit)']
-    autoFindRequiresFilter = { 
-        return filterCapabilities.contains(it.name) ? null : it 
-    }
+        ['cat', 'cut', 'getent', 'grep'])
+
+    autoFindRequiresFilter = rpmCapabilityFilter
 
     // Prefix variable definitions to all install scripts:
     installUtils = file('build/shared/install-utils.sh')
@@ -350,6 +395,9 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     conflicts('opengee-postgis', '2.4', GREATER | EQUAL)
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     requiresPre('opengee-common', openGeeVersion, GREATER | EQUAL)
+    // `opengee-server` bundles Apache, and Apache requires utilities from the
+    // `initscripts` package:
+    requires('initscripts')
 
     requiresCommands(
         packageSharedCommands +
@@ -359,6 +407,9 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
             'sed', 'su', 'sudo'
         ]
     )
+
+    autoFindRequiresFilter = rpmCapabilityFilter
+    requiresCommandFilter = rpmCommandFilter
 
     // Prefix variable definitions to all install scripts:
     installUtils = file('build/shared/install-utils.sh')
@@ -397,7 +448,7 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     }
 
     from(stagedInstallDir_server_geplaces) {
-	into new File(packageInstallRootDir, 'opt/google/share/geplaces')
+        into new File(packageInstallRootDir, 'opt/google/share/geplaces')
     }
 
     from(stagedInstallDir_server_searchexample) {
@@ -414,6 +465,12 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
             it.exclude()
         }
     }
+
+    // Create links
+    link('/opt/google/etc', '/etc/opt/google')
+    link('/opt/google/log', '/var/opt/google/log')
+    link('/opt/google/run', '/var/opt/google/run')
+    link('/opt/google/gehttpd/htdocs/shared_assets/docs', '/opt/google/share/doc')
 }
 
 task openGeeServerDeb (type: Deb) {
@@ -529,6 +586,12 @@ built from raster, vector, and location properties data.
             }
         }
     }
+
+    // Create links
+    link('/opt/google/etc', '/etc/opt/google')
+    link('/opt/google/log', '/var/opt/google/log')
+    link('/opt/google/run', '/var/opt/google/run')
+    link('/opt/google/gehttpd/htdocs/shared_assets/docs', '/opt/google/share/doc')
 }
 
 task openGeeFusionDeb (type: Deb) {
