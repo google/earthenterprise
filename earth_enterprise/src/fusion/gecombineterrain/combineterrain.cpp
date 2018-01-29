@@ -26,6 +26,7 @@
 #include <khAssert.h>
 #include <qtpacket/quadtree_utils.h>
 #include "combineterrain.h"
+#include "combineterrainprofiler.h"
 
 COMPILE_TIME_CHECK(qtpacket::QuadtreeNumbering::kDefaultDepth == 5,
                    Quadset_packet_depth_is_not_5);
@@ -231,6 +232,8 @@ void TerrainCombiner::WriteCombinedTerrain(
 }
 
 void TerrainCombiner::CompressPacket(PacketInfo* packet) {
+  terrainProf->BeginCompress(packet->EvenPath());
+
   std::string& buffer = packet->RawBuffer();
   std::string& compressed_buffer = packet->CompressedBuffer();
 
@@ -249,6 +252,8 @@ void TerrainCombiner::CompressPacket(PacketInfo* packet) {
   // Make room for the CRC checksum, and adjust final size of the
   // compressed buffer to match the actual size.
   compressed_buffer.resize(compress_buffer_size + kCRC32Size);
+
+  terrainProf->EndCompress(packet->EvenPath());
 }
 
 void TerrainCombiner::WritePacket(PacketInfo* packet) {
