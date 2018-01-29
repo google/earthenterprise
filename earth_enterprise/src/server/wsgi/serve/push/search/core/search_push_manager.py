@@ -241,6 +241,7 @@ class SearchPushManager(search_manager.SearchManager):
             insert_into_poi_table,
             (client_host_name, poi_file_paths[i], poi_file_sizes[i]))
         poi_id = self._QueryPoiId(client_host_name, poi_file_paths[i])
+        logger.debug("inserted %s into poi_table with id of %d", poi_file_paths[i], poi_id)
 
       assert poi_id != 0
       # Add db_poi mapping table entry.
@@ -452,7 +453,7 @@ class SearchPushManager(search_manager.SearchManager):
     if not self.server_prefix:
       raise exceptions.SearchPushServeException(
           "Unable to read WebDAV Config.")
-    logger.info("Server Prefix xxxxxxxxx: " + self.server_prefix)
+    logger.info("Server Prefix: " + self.server_prefix)
 
   def __ReadPublishRootConfig(self):
     self.allow_symlinks = "N"
@@ -529,11 +530,13 @@ class SearchPushManager(search_manager.SearchManager):
           serve_utils.FileSizeMatched(server_file_path, file_sizes[i])):
 
         existing_files.append(file_paths[i])
+        logger.debug("%s already exists", server_file_path)
 
         file_paths.pop(i)
         file_sizes.pop(i)
       else:
         i += 1
+        logger.debug("%s does not exists", server_file_path)
 
     # Create POI tables for the files that are already uploaded.
     update_string = ("UPDATE poi_table SET status = 1, num_fields = %s,"

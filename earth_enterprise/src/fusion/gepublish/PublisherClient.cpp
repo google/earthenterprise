@@ -446,12 +446,12 @@ bool PublisherClient::AddDatabase(const std::string& input_db_name,
       AppendErrMsg(kErrPingStream);
       return false;
     }
-    notify(NFY_DEBUG, "Contacted STREAM_SERVER");
+    notify(NFY_DEBUG, "Add Database Contacted STREAM_SERVER");
     if (!PingServer(SEARCH_SERVER)) {
       AppendErrMsg(kErrPingSearch);
       return false;
     }
-    notify(NFY_DEBUG, "Contacted SEARCH_SERVER");
+    notify(NFY_DEBUG, "Add Database Contacted SEARCH_SERVER");
 
     // Will throw an exception.
     std::string db_name = norm_input_db_name;
@@ -520,11 +520,12 @@ bool PublisherClient::AddDatabase(const std::string& input_db_name,
     }
 
     std::vector<std::string> empty_vec;
+    notify(NFY_DEBUG, "ProcessGetRequest STREAM_SERVER started");
     if (!ProcessGetRequest(STREAM_SERVER, &stream_args, "", &empty_vec)) {
       notify(NFY_DEBUG, "ProcessGetRequest(STREAM_SERVER) failed.");
       return false;
     }
-    notify(NFY_DEBUG, "ProcessGetRequest(STREAM_SERVER).");
+    notify(NFY_DEBUG, "ProcessGetRequest STREAM_SERVER finished.");
 
     std::string search_args(args);
 
@@ -533,12 +534,12 @@ bool PublisherClient::AddDatabase(const std::string& input_db_name,
     // Do not register the database with the search server if we dont have any
     // POI files.
     if (search_manifest.size() > 0) {
-      notify(NFY_DEBUG, "ProcessGetRequest started");
+      notify(NFY_DEBUG, "ProcessGetRequest SEARCH_SERVER started");
       if (!ProcessGetRequest(SEARCH_SERVER, &search_args, "", &empty_vec)) {
         notify(NFY_DEBUG, "ProcessGetRequest(SEARCH_SERVER) failed.");
         return false;
       }
-      notify(NFY_DEBUG, "ProcessGetRequest finished.");
+      notify(NFY_DEBUG, "ProcessGetRequest SEARCH_SERVER finished.");
     }
 
     notify(NFY_DEBUG, "-----------------AddDatabase successful\n");
@@ -562,12 +563,12 @@ bool PublisherClient::DeleteDatabase(const std::string& input_db_name) {
     AppendErrMsg(kErrPingStream);
     return false;
   }
-  notify(NFY_DEBUG, "Contacted STREAM_SERVER");
+  notify(NFY_DEBUG, "Delete Database Contacted STREAM_SERVER");
   if (!PingServer(SEARCH_SERVER)) {
     AppendErrMsg(kErrPingSearch);
     return false;
   }
-  notify(NFY_DEBUG, "Contacted SEARCH_SERVER");
+  notify(NFY_DEBUG, "Delete Database Contacted SEARCH_SERVER");
 
   std::string args = "Cmd=DeleteDb&DbName=" + db_name;
   std::string search_args(args);
@@ -616,12 +617,12 @@ bool PublisherClient::PushDatabase(const std::string& db_name) {
     AppendErrMsg(kErrPingStream);
     return false;
   }
-  notify(NFY_DEBUG, "Contacted STREAM_SERVER");
+  notify(NFY_DEBUG, "Push Database Contacted STREAM_SERVER");
   if (!PingServer(SEARCH_SERVER)) {
     AppendErrMsg(kErrPingSearch);
     return false;
   }
-  notify(NFY_DEBUG, "Contacted SEARCH_SERVER");
+  notify(NFY_DEBUG, "Push Database Contacted SEARCH_SERVER");
 
   std::string norm_db_name = NormalizeDbName(db_name);
 
@@ -1298,6 +1299,9 @@ bool PublisherClient::SyncFiles(
     if (cur_retry > 0 && server_type == SEARCH_SERVER) {
       notify(NFY_DEBUG,
              "Parsing POI files and filling POI database when syncing...");
+    } else if (cur_retry > 0) {
+      notify(NFY_DEBUG,
+             "Processing stream files when syncing...");
     }
 
     // Get the delta list of files to complete this DB.
@@ -1317,9 +1321,8 @@ bool PublisherClient::SyncFiles(
     }
 
     if (file_paths.size() > 0) {
-      std::vector<ManifestEntry> subset_entries;
+      std::vector<ManifestEntry> upload_entries;
       std::string remove_chars = "\r\n";
-      // Need to check for poi files
       for (size_t i = 0; i < file_paths.size(); ++i) {
         // Clean the path name. Remove spaces, newlines.
         CleanString(&file_paths[i], remove_chars);
@@ -1330,28 +1333,34 @@ bool PublisherClient::SyncFiles(
           return false;
         }
 
-        file_paths.insert(file_paths.end(),
-          manifest_entries[index].dependents.begin(),
-          manifest_entries[index].dependents.end());
-        subset_entries.push_back(manifest_entries[index]);
+        upload_entries.push_back(manifest_entries[index]);
+
+        // some files are 'dependent files' that are not part of the original manifest reported to
+        // server but we still need to upload those files as they complete the specified file in the 
+        // original manifest.  We can't include the file in the original manifest because in cases
+        // like search manifests server does special processing on files in that manifest that
+        // can't be done on the dependent files.
+        for(size_t dep_idx = 0; dep_idx < manifest_entries[index].dependents.size(); ++dep_idx) {
+          upload_entries.push_back(ManifestEntry(manifest_entries[index].dependents[dep_idx]));
+        }
       }
 
       // Compute total files size for progress reporting on first try only.
       if (progress_ != NULL && cur_retry == 0) {
         uint64 total_size = 0;
-        for (size_t i = 0; i < subset_entries.size(); ++i) {
-          total_size += subset_entries[i].data_size;
+        for (size_t i = 0; i < upload_entries.size(); ++i) {
+          total_size += upload_entries[i].data_size;
         }
         notify(NFY_DEBUG, "Total files to push: %zu, size (bytes): %zu",
-               subset_entries.size(), total_size);
+               upload_entries.size(), total_size);
         progress_->incrementTotal(static_cast<int64>(total_size));
       } else {
         notify(NFY_DEBUG, "Total files to push: %zu",
-               subset_entries.size());
+               upload_entries.size());
       }
 
       bool REPORT_PROGRESS = true;
-      if (!UploadFiles(server_type, subset_entries, tmpdir, REPORT_PROGRESS)) {
+      if (!UploadFiles(server_type, upload_entries, tmpdir, REPORT_PROGRESS)) {
         AppendErrMsg(kErrUploadFailed);
         return false;
       }

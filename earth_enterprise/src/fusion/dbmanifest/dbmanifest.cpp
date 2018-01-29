@@ -263,7 +263,7 @@ void DbManifest::GetManifest(geFilePool &file_pool,
     // assetroot).
     geindex::IndexManifest::GetManifest(file_pool, fusion_config_.index_path_,
                                         *stream_manifest, tmp_dir, "", "");
-    notify(NFY_DEBUG, "Processing %ld POI files 1", fusion_config_.poi_file_paths_.size());
+    notify(NFY_DEBUG, "Processing %ld POI files with empty prefix", fusion_config_.poi_file_paths_.size());
     for (uint i = 0; i < fusion_config_.poi_file_paths_.size(); ++i) {
       const std::string poi_file = fusion_config_.poi_file_paths_[i];
       if (!khExists(poi_file)) {
@@ -303,7 +303,7 @@ void DbManifest::GetManifest(geFilePool &file_pool,
       }
     }
 
-    notify(NFY_DEBUG, "Processing %ld POI files 2", fusion_config_.poi_file_paths_.size());
+    notify(NFY_DEBUG, "Processing %ld POI files with prefix", fusion_config_.poi_file_paths_.size());
     // The *.poi file paths are in the GedbFusionConfig.
     for (uint i = 0; i < fusion_config_.poi_file_paths_.size(); ++i) {
       const std::string& orig = fusion_config_.poi_file_paths_[i];
@@ -356,14 +356,18 @@ void DbManifest::GetPoiDataFiles(const std::string& poi_file,
                     "No data files defined for POI file %s", poi_file.c_str());
             }
             for (uint i = 0; i < data_files.size(); ++i) {
+
               const std::string& data_file = data_files[i];
+              
+              // poi data files have to be set aside until after AddDB processing is done
+              // so we hide them in a special location now within the manifest and will
+              // use them when we crate an 'upload' manifest during DBsync processing
               if (stream_manifest != search_manifest) {
-                stream_manifest->push_back(ManifestEntry(data_file));
+                notify(NFY_DEBUG, "Adding POI datafile as a dependent file to stream manifest: %s", data_file.c_str());
                 stream_manifest->at(stream_poi_file_idx).dependents.push_back(data_file);
               }
-              search_manifest->push_back(ManifestEntry(data_file));
               search_manifest->at(search_poi_file_idx).dependents.push_back(data_file);
-              notify(NFY_DEBUG, "Adding POI datafile: %s", data_file.c_str());
+              notify(NFY_DEBUG, "Adding POI datafile as a dependent file to search manifest: %s", data_file.c_str());
             }
           } else {
             notify(NFY_WARN,

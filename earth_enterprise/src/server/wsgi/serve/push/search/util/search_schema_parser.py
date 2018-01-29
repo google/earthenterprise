@@ -227,7 +227,14 @@ class SearchSchemaParser(object):
       data_file_name = elem.text
       if self._file_prefix is not None:
         logger.info("Adding prefix to poi data file: '%s'", self._file_prefix)
-        data_file_name = os.path.normpath(self._file_prefix + data_file_name)
+        data_file_name_with_prefix = os.path.normpath(self._file_prefix + data_file_name)
+        if not os.path.exists(data_file_name_with_prefix) and os.path.exists(data_file_name):
+          # might be talking to an old fusion client so preserve
+          # old behavior if the prefixed file does not exist
+          # but the non-prefixed file does
+          pass
+        else:
+          data_file_name = data_file_name_with_prefix
       else:
         logger.info("Missing file prefix!")
       data_file = open(data_file_name, "r")
