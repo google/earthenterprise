@@ -89,6 +89,8 @@ void TerrainCombiner::CombineTerrainPackets(
 
 void TerrainCombiner::CombineChildren(const TerrainQuadsetGroup &quadset_group,
                                       const QuadtreePath even_path) {
+  terrainProf->BeginCombine(even_path);
+  
   uint64 quadset_num;
   int even_subindex;
   qtpacket::QuadtreeNumbering::TraversalPathToQuadsetAndSubindex(
@@ -131,6 +133,8 @@ void TerrainCombiner::CombineChildren(const TerrainQuadsetGroup &quadset_group,
   } else {
     progress_meter_.incrementDone(progress_increment);
   }
+
+  terrainProf->EndCombine(even_path);
 }
 
 // Given a vector of TerrainQuadsetItem objects,
@@ -205,7 +209,9 @@ void TerrainCombiner::WriteCombinedTerrain(
     }
   }
 
-  // Create the new PacketInfo and initialize it's raw buffer.
+  terrainProf->BeginRead(even_path);
+  
+  // Create the new PacketInfo and initialize its raw buffer.
   PacketInfo* packet = new PacketInfo(even_path, providerid, progress_increment);
   std::string& read_buffer = packet->RawBuffer();
   read_buffer.resize(read_buffer_size);
@@ -226,6 +232,8 @@ void TerrainCombiner::WriteCombinedTerrain(
   // The buffer in general shrinks because of removal of CRC bytes.
   read_buffer.resize(read_buffer_next);
 
+  terrainProf->EndRead(even_path);
+  
   // We add the packet to both the compress queue and the write queue for
   // processing by other threads that do compression and writing.
   AddPacketToQueues(packet);
@@ -257,10 +265,12 @@ void TerrainCombiner::CompressPacket(PacketInfo* packet) {
 }
 
 void TerrainCombiner::WritePacket(PacketInfo* packet) {
+  terrainProf->BeginWrite(packet->EvenPath());
   std::string& compressed_buffer = packet->CompressedBuffer();
   writer_.WriteAppendCRC(packet->EvenPath(), &compressed_buffer[0],
                          compressed_buffer.size(), packet->ProviderId());
   progress_meter_.incrementDone(packet->ProgressIncrement());
+  terrainProf->EndWrite(packet->EvenPath());
 }
 
 
