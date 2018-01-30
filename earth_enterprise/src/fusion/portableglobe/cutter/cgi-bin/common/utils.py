@@ -331,12 +331,14 @@ def RunCmd(os_cmd):
     p = subprocess.Popen(os_cmd, shell=False,
                          stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE)
-    results = p.communicate()[1]
-    if p.returncode != 0:
-      results = "{0} (return code {1})".format(results, p.returncode)
+    results = p.communicate()[0]
+    err_data = p.communicate()[1]
+    return_code = p.returncode
+    if return_code != 0:
+      results = "{0} (return code {1})".format(err_data, return_code)
       return ["", results]
-
-    return results.split("\n")
+    else:
+      return results.split("\n")
   except Exception, e:
     # print "FAILURE: %s" % e.__str__()
     return ["", e.__str__()]
