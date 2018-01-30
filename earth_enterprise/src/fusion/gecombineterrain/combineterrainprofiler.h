@@ -25,13 +25,12 @@
  * events will be written out to a log file. This class is intended for
  * performance debugging.
  */
-class CombineTerrainProfiler
-{
+class CombineTerrainProfiler {
   public:
     static CombineTerrainProfiler * instance() { return _instance; }
     
-    inline void Begin(const std::string operation, const QuadtreePath & path) {
-      log(BEGIN, operation, path.AsString());
+    inline void Begin(const std::string operation, const QuadtreePath & path, const size_t size) {
+      log(BEGIN, operation, path.AsString(), size);
     }
 
     inline void End(const std::string operation, const QuadtreePath & path) {
@@ -45,7 +44,7 @@ class CombineTerrainProfiler
     static CombineTerrainProfiler * const _instance;
     
     CombineTerrainProfiler() {}
-    void log(TerrainEvent event, const std::string operation, const std::string object);
+    void log(TerrainEvent event, const std::string operation, const std::string object, const size_t size = 0);
     double getTime() const;
 };
 
@@ -54,13 +53,12 @@ class CombineTerrainProfiler
  * instance of this class is created and ends when the instance goes out of
  * scope.
  */
-class BlockProfiler
-{
+class BlockProfiler {
   public:
-    BlockProfiler(const std::string operation, const QuadtreePath & path) :
+    BlockProfiler(const std::string operation, const QuadtreePath & path, const size_t size) :
         operation(operation), path(path)
     {
-      terrainProf->Begin(operation, path);
+      terrainProf->Begin(operation, path, size);
     }
     ~BlockProfiler() {
       terrainProf->End(operation, path);
@@ -74,7 +72,7 @@ class BlockProfiler
 // Programmers should use these functions to profile code rather than the
 // functions above. This makes it easy to use compile time flags to exclude
 // the profiling code.
-#define BEGIN_TERRAIN_PROF(op, path) { BlockProfiler prof(op, path)
+#define BEGIN_TERRAIN_PROF(op, path, size) { BlockProfiler prof(op, path, size)
 #define END_TERRAIN_PROF() }
 
 #endif // COMBINETERRAINPROFILER_H

@@ -34,7 +34,7 @@ CombineTerrainProfiler * const BlockProfiler::terrainProf =
 
 // Log a profiling message
 void CombineTerrainProfiler::log
-    (TerrainEvent event, const string operation, const string object) {
+    (TerrainEvent event, const string operation, const string object, const size_t size) {
   stringstream message;
   
   message.setf(ios_base::fixed, ios_base::floatfield);
@@ -52,6 +52,10 @@ void CombineTerrainProfiler::log
   }
   
   message << " " << operation << " " << object;
+  
+  if (size > 0) {
+      message << ", size " << size;
+  }
   
   notify(NFY_NOTICE, "%s\n", message.str().c_str());
 }

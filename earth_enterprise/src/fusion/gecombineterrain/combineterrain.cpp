@@ -89,8 +89,6 @@ void TerrainCombiner::CombineTerrainPackets(
 
 void TerrainCombiner::CombineChildren(const TerrainQuadsetGroup &quadset_group,
                                       const QuadtreePath even_path) {
-  BEGIN_TERRAIN_PROF("combine", even_path);
-  
   uint64 quadset_num;
   int even_subindex;
   qtpacket::QuadtreeNumbering::TraversalPathToQuadsetAndSubindex(
@@ -133,8 +131,6 @@ void TerrainCombiner::CombineChildren(const TerrainQuadsetGroup &quadset_group,
   } else {
     progress_meter_.incrementDone(progress_increment);
   }
-
-  END_TERRAIN_PROF();
 }
 
 // Given a vector of TerrainQuadsetItem objects,
@@ -213,7 +209,7 @@ void TerrainCombiner::WriteCombinedTerrain(
   PacketInfo* packet = new PacketInfo(even_path, providerid, progress_increment);
   // Start profiling here because the variable "packet" needs to be defined
   // outside the profiling block.
-  BEGIN_TERRAIN_PROF("read", even_path);
+  BEGIN_TERRAIN_PROF("read", even_path, read_buffer_size);
   std::string& read_buffer = packet->RawBuffer();
   read_buffer.resize(read_buffer_size);
 
@@ -241,12 +237,12 @@ void TerrainCombiner::WriteCombinedTerrain(
 }
 
 void TerrainCombiner::CompressPacket(PacketInfo* packet) {
-  BEGIN_TERRAIN_PROF("compress", packet->EvenPath());
-
   std::string& buffer = packet->RawBuffer();
   std::string& compressed_buffer = packet->CompressedBuffer();
 
-    // Compress data
+  BEGIN_TERRAIN_PROF("compress", packet->EvenPath(), buffer.size());
+
+  // Compress data
   size_t compress_buffer_size = KhPktGetCompressBufferSize(buffer.size())
                                 + kCRC32Size;
   compressed_buffer.resize(compress_buffer_size);
@@ -266,8 +262,8 @@ void TerrainCombiner::CompressPacket(PacketInfo* packet) {
 }
 
 void TerrainCombiner::WritePacket(PacketInfo* packet) {
-  BEGIN_TERRAIN_PROF("write", packet->EvenPath());
   std::string& compressed_buffer = packet->CompressedBuffer();
+  BEGIN_TERRAIN_PROF("write", packet->EvenPath(), compressed_buffer.size());
   writer_.WriteAppendCRC(packet->EvenPath(), &compressed_buffer[0],
                          compressed_buffer.size(), packet->ProviderId());
   progress_meter_.incrementDone(packet->ProgressIncrement());
