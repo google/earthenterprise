@@ -1163,6 +1163,53 @@ bool PublisherClient::LocalTransfer(ServerType server_type,
   return ProcessGetRequest(server_type, &args, "", &empty_vec);
 }
 
+bool PublisherClient::LocalTransferWithRetry(const std::string& server_prefix,
+                                          const std::string& host_root,
+                                          ServerType server_type,
+                                          const std::string& tmpdir,
+                                          const std::string& current_path,
+                                          const std::string& orig_path) {
+
+  // Note: all files coming to upload should exist.
+  assert(khExists(current_path));
+  std::string dest_path(server_prefix + "/" +
+                        host_root + orig_path);
+  assert(current_path != dest_path);  // We send only delta always
+  // The logic for prefer_copy was fixed in 3.0.3.
+  // It used to set prefer_copy = !tmp_dir.empty(), when
+  // in fact the desired effect is only to prefer copies for
+  // source files that are in the tmp_dir, and to defer to the
+  // server setting for AllowSymLinks: Y in PUBLISH_ROOT/.config.
+
+  // If the source file is in the temp directory, we want to copy (hard
+  // link is OK whenever possible).
+  // Otherwise, a symbolic link is OK whenever possible.
+  bool prefer_copy = !tmpdir.empty() && current_path.find(tmpdir) == 0;
+
+  notify(NFY_VERBOSE, "Transfering '%s' to '%s'.\n\tServer type: %s\n\tPrefer copy: %s",
+    current_path.c_str(),
+    dest_path.c_str(),
+    (server_type == STREAM_SERVER) ? kStreamSpace.c_str() : kSearchSpace.c_str(),
+    prefer_copy?"true":"false");
+
+  // Many LocalTransfers in succession may sometimes overwhelm a server.
+  // To be safe we do a handful of retries with increasing delays between
+  // attempts.
+  int tries = 4;
+  int sleep_secs = 15;
+  while (!LocalTransfer(
+              server_type, current_path, dest_path, prefer_copy)) {
+    if (--tries == 0) {
+      return false;
+    }
+    notify(NFY_DEBUG, "Retrying Local Transfer.");
+    sleep(sleep_secs);  // Sleep before the next retry.
+    sleep_secs *= 2;  // Double the sleep time after each retry.
+  }
+
+  return true;
+}
+
 
 bool PublisherClient::IsServerHostSameAsPublishingHost(
     const ServerType server_type, bool* failed_to_find) {
@@ -1224,43 +1271,18 @@ bool PublisherClient::UploadFiles(ServerType server_type,
   if (is_server_host_same_as_publishing)  {
     notify(NFY_DEBUG, "Transfering files locally");
     size_t num_entries = entries.size();
-    for (size_t i = 0; i < num_entries; ++i) {
+    std::vector<ManifestEntry> dependent_entries;
+    size_t i = 0;
+    for (; i < num_entries; ++i) {
       const ManifestEntry& entry = entries[i];
-      std::string src_path(entry.current_path);
-      // Note: all files coming to upload should exist.
-      assert(khExists(src_path));
-      std::string dest_path(server_prefix + "/" +
-                            host_root + entry.orig_path);
-      assert(src_path != dest_path);  // We send only delta always
-      // The logic for prefer_copy was fixed in 3.0.3.
-      // It used to set prefer_copy = !tmp_dir.empty(), when
-      // in fact the desired effect is only to prefer copies for
-      // source files that are in the tmp_dir, and to defer to the
-      // server setting for AllowSymLinks: Y in PUBLISH_ROOT/.config.
 
-      // If the source file is in the temp directory, we want to copy (hard
-      // link is OK whenever possible).
-      // Otherwise, a symbolic link is OK whenever possible.
-      bool prefer_copy = !tmpdir.empty() && src_path.find(tmpdir) == 0;
+      if (!LocalTransferWithRetry(server_prefix, host_root, server_type,
+                                  tmpdir, entry.current_path, entry.orig_path))
+        return false;
 
-      // Many LocalTransfers in succession may sometimes overwhelm a server.
-      // To be safe we do a handful of retries with increasing delays between
-      // attempts.
-      int tries = 4;
-      int sleep_secs = 15;
-      notify(NFY_VERBOSE, "Transfering '%s' to '%s'.\n\tServer type: %s\n\tPrefer copy: %s",
-        src_path.c_str(),
-        dest_path.c_str(),
-        (server_type == STREAM_SERVER) ? kStreamSpace.c_str() : kSearchSpace.c_str(),
-        prefer_copy?"true":"false");
-      while (!LocalTransfer(
-                 server_type, src_path, dest_path, prefer_copy)) {
-        if (--tries == 0) {
-          return false;
-        }
-        notify(NFY_DEBUG, "Retrying Local Transfer.");
-        sleep(sleep_secs);  // Sleep before the next retry.
-        sleep_secs *= 2;  // Double the sleep time after each retry.
+      for(size_t iDep = 0; iDep < entry.dependents.size(); ++iDep) {
+        notify(NFY_DEBUG, "Adding dependent file: %s", entry.dependents[iDep].c_str());
+        dependent_entries.push_back(ManifestEntry(entry.dependents[iDep]));
       }
 
       if (report_progress && progress_ != NULL) {
@@ -1270,7 +1292,24 @@ bool PublisherClient::UploadFiles(ServerType server_type,
         }
         processed_size += entry.data_size;
         notify(NFY_DEBUG, "Done files: %zd/%zd, bytes: %zd",
-               i + 1, num_entries, processed_size);
+               i + 1, num_entries + dependent_entries.size(), processed_size);
+      }
+    }
+    for(; i < num_entries + dependent_entries.size(); ++i) {
+      const ManifestEntry& entry = dependent_entries[i - num_entries];
+
+      if (!LocalTransferWithRetry(server_prefix, host_root, server_type,
+                                  tmpdir, entry.current_path, entry.orig_path))
+        return false;
+
+      if (report_progress && progress_ != NULL) {
+        if (!progress_->incrementDone(entry.data_size)) {
+          notify(NFY_WARN, "Push interrupted");
+          return false;
+        }
+        processed_size += entry.data_size;
+        notify(NFY_DEBUG, "Done files: %zd/%zd, bytes: %zd",
+               i + 1, num_entries + dependent_entries.size(), processed_size);
       }
     }
     return true;
