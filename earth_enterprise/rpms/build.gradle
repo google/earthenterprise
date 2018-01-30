@@ -109,6 +109,7 @@ def stagedInstallDir_server_version =
     new File(stagedInstallDir, 'server/opt/google/gehttpd/htdocs/earth/gee_long_version.txt')
 def stagedInstallDir_fusion = new File(stagedInstallDir, 'fusion')
 def packageInstallRootDir = new File('/')
+def packageInstallLibDir = new File(packageInstallRootDir, 'opt/google/lib')
 
 def postGisInstallDir = new File(
         project.projectDir,
@@ -217,7 +218,7 @@ task openGeePostGisRpm(type: GeeRpm) {
         // Include libpq, since it's used by postgis command-line utilities:
         include 'libpq.*'
 
-        into new File(packageInstallRootDir, 'opt/google/lib')
+        into packageInstallLibDir
     }
 }
 

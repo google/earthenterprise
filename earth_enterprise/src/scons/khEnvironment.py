@@ -20,6 +20,7 @@ Define build environments, builders, actions and helper methods in this
 central place and reuse it in all SConscripts as much as possible.
 """
 
+import errno
 import git
 import os
 import os.path
@@ -141,6 +142,31 @@ def WriteToFileStrfunc(file_name, strn):
   return 'WriteToFile(%s, %s)' % (file_name, strn)
 
 
+def StringExpandFileFunc(target, source, env):
+  """Expand "{var}" strings in a file, using values from `env`."""
+
+  if SCons.Util.is_List(target):
+    target = target[0].get_abspath()
+  if SCons.Util.is_List(source):
+    source = source[0].get_abspath()
+
+  # Read the input template into a string:
+  with open(source, 'r') as f:
+    template = f.read()
+
+  # Create output file parent directories:
+  target_dir = os.path.dirname(os.path.abspath(target))
+  try:
+    os.makedirs(target_dir)
+  except OSError, e:
+    if e.errno != errno.EEXIST:
+      raise
+
+  # Expand template into output file:
+  with open(target, 'w') as f:
+    f.write(template.format(**env.gvars()))
+
+
 def EmitBuildDateFunc(target, build_date):
   """Emits build date information to target file."""
   fp = open(target, 'w')
@@ -180,19 +206,17 @@ def EmitVersionHeaderFunc(target, backupFile):
 def EmitVersionHeaderStrfunc(target, backupFile):
   return 'EmitVersionHeader(%s, %s)' % (target, backupFile)
   
-  
+
 def EmitVersionFunc(target, backupFile):
   """Emit version information to the target file."""
 
   versionStr = GetVersion(backupFile)
 
-  fp = open(target, 'w')
-  fp.write(versionStr)
-  fp.close()
+  with open(target, 'w') as fp:
+    fp.write(versionStr)
   
-  fp = open(backupFile, 'w')
-  fp.write(versionStr)
-  fp.close()
+  with open(backupFile, 'w') as fp:
+    fp.write(versionStr)
 
 
 def EmitVersionStrfunc(target, backupFile):
@@ -204,9 +228,8 @@ def EmitLongVersionFunc(target, backupFile):
 
   versionStr = GetLongVersion(backupFile)
 
-  fp = open(target, 'w')
-  fp.write(versionStr)
-  fp.close()
+  with open(target, 'w') as fp:
+    fp.write(versionStr)
 
 
 def EmitLongVersionStrfunc(target, backupFile):
@@ -214,28 +237,26 @@ def EmitLongVersionStrfunc(target, backupFile):
   
 
 def GetLongVersion(backupFile):
-    """Create a detailed version string based on the state of
-       the software, as it exists in the repository."""
-    
-    if CheckGitAvailable():
-        return GitGeneratedLongVersion()
+  """Create a detailed version string based on the state of
+     the software, as it exists in the repository."""
+  
+  if CheckGitAvailable():
+    return GitGeneratedLongVersion()
 
-    # Without git, must use the backup file to create a string.
-    base = ReadBackupVersionFile(backupFile)
-    date = datetime.utcnow().strftime("%Y%m%d%H%M")
-    
-    return '-'.join([base, date])
+  # Without git, must use the backup file to create a string.
+  base = ReadBackupVersionFile(backupFile)
+  date = datetime.utcnow().strftime("%Y%m%d%H%M")
+  
+  return '-'.join([base, date])
 
 
 def GetVersion(backupFile):
-    """As getLongVersion(), but only return the leading *.*.* value."""
-    try:
-        raw = GetLongVersion(backupFile)
-        final = raw.split("-")[0]
-    except Exception:
-        return "Version Error"
+  """As getLongVersion(), but only return the leading *.*.* value."""
 
-    return final
+  raw = GetLongVersion(backupFile)
+  final = raw.split("-")[0]
+
+  return final
 
 
 def GetRepository():
@@ -277,30 +298,22 @@ def CheckDirtyRepository():
     
 
 def ReadBackupVersionFile(target):
-    """There should be a file checked in with the latest version
-       information available; if git isn't available to provide
-       information, then use this file instead."""
-    
-    try:
-        fp = open(target, 'r')
-        line = fp.readline()
-        fp.close()
-        
-        return line
-    
-    except Exception:
-        return "Version Error"
+  """There should be a file checked in with the latest version
+     information available; if git isn't available to provide
+     information, then use this file instead."""
 
+  with open(target, 'r') as fp:
+    line = fp.readline()
+
+  return line
 
 def GitGeneratedLongVersion():
     """Take the raw information parsed by git, and use it to
        generate an appropriate version string for GEE."""
-    try:
-        repo = GetRepository()
-        raw = repo.git.describe('--tags', '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*')
-        raw = raw.rstrip()
-    except Exception:
-        return "Version Error"
+
+    repo = GetRepository()
+    raw = repo.git.describe('--tags', '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*')
+    raw = raw.rstrip()
 
     # Grab the datestamp.
     date = datetime.utcnow().strftime("%Y%m%d%H%M")
@@ -400,6 +413,7 @@ class khEnvironment(Environment):
     self['BUILDERS']['IDLCPP'] = idl_cpp_builder
     self['_oldstripixes'] = self['_stripixes']
     self['_stripixes'] = CleanupLibFlags
+    self.StringExpandFileFunc = StringExpandFileFunc
 
     DefineProtocolBufferBuilder(self)
 
