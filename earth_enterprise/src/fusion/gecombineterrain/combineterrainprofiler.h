@@ -9,52 +9,46 @@ class CombineTerrainProfiler
 {
   public:
     static CombineTerrainProfiler * instance();
-
-    inline void BeginCompress(const QuadtreePath & path) {
-      log(BEGIN, COMPRESS_OP, path.AsString());
-    }
-    inline void EndCompress(const QuadtreePath & path) {
-      log(END, COMPRESS_OP, path.AsString());
+    
+    inline void Begin(const std::string operation, const QuadtreePath & path) {
+      log(BEGIN, operation, path.AsString());
     }
 
-    inline void BeginCombine(const QuadtreePath & path) {
-      log(BEGIN, COMBINE_OP, path.AsString());
-    }
-    inline void EndCombine(const QuadtreePath & path) {
-      log(END, COMBINE_OP, path.AsString());
-    }
-
-    inline void BeginRead(const QuadtreePath & path) {
-      log(BEGIN, READ_OP, path.AsString());
-    }
-    inline void EndRead(const QuadtreePath & path) {
-      log(END, READ_OP, path.AsString());
-    }
-
-    inline void BeginWrite(const QuadtreePath & path) {
-      log(BEGIN, WRITE_OP, path.AsString());
-    }
-    inline void EndWrite(const QuadtreePath & path) {
-      log(END, WRITE_OP, path.AsString());
+    inline void End(const std::string operation, const QuadtreePath & path) {
+      log(END, operation, path.AsString());
     }
 
   private:
-    static const std::string COMPRESS_OP;
-    static const std::string COMBINE_OP;
-    static const std::string READ_OP;
-    static const std::string WRITE_OP;
-    
     enum TerrainEvent { BEGIN, END };
     
     static const double NSEC_TO_SEC = 1e-9;
     
     static CombineTerrainProfiler * _instance;
     CombineTerrainProfiler() {}
-    void log(TerrainEvent event, std::string operation, std::string object);
-    double getTime();
+    void log(TerrainEvent event, const std::string operation, const std::string object);
+    double getTime() const;
 };
 
 // Pointer to the singleton instance for speed and convenience
 extern CombineTerrainProfiler * terrainProf;
+
+class BlockProfiler
+{
+  public:
+    BlockProfiler(const std::string operation, const QuadtreePath & path) :
+        operation(operation), path(path)
+    {
+      terrainProf->Begin(operation, path);
+    }
+    ~BlockProfiler() {
+      terrainProf->End(operation, path);
+    }
+  private:
+    const std::string operation;
+    const QuadtreePath path;
+};
+
+#define BEGIN_TERRAIN_PROF(op, path) { BlockProfiler prof(op, path)
+#define END_TERRAIN_PROF() }
 
 #endif // COMBINETERRAINPROFILER_H

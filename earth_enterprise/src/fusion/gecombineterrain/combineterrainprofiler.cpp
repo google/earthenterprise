@@ -16,10 +16,6 @@ using namespace std;
 CombineTerrainProfiler * terrainProf = CombineTerrainProfiler::instance();
 
 // Initialize static members
-const string CombineTerrainProfiler::COMPRESS_OP = "compress";
-const string CombineTerrainProfiler::COMBINE_OP = "combine";
-const string CombineTerrainProfiler::READ_OP = "read";
-const string CombineTerrainProfiler::WRITE_OP = "write";
 CombineTerrainProfiler * CombineTerrainProfiler::_instance = NULL;
 
 CombineTerrainProfiler * CombineTerrainProfiler::instance() {
@@ -30,7 +26,7 @@ CombineTerrainProfiler * CombineTerrainProfiler::instance() {
 }
 
 void CombineTerrainProfiler::log
-    (TerrainEvent event, string operation, string object) {
+    (TerrainEvent event, const string operation, const string object) {
   stringstream message;
   
   message.setf(ios_base::fixed, ios_base::floatfield);
@@ -52,7 +48,7 @@ void CombineTerrainProfiler::log
   notify(NFY_NOTICE, "%s\n", message.str().c_str());
 }
 
-double CombineTerrainProfiler::getTime() {
+double CombineTerrainProfiler::getTime() const {
   struct timespec currTime;
   clock_gettime(CLOCK_MONOTONIC, &currTime);
   return static_cast<double>(currTime.tv_sec) + (currTime.tv_nsec * NSEC_TO_SEC);

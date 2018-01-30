@@ -89,7 +89,7 @@ void TerrainCombiner::CombineTerrainPackets(
 
 void TerrainCombiner::CombineChildren(const TerrainQuadsetGroup &quadset_group,
                                       const QuadtreePath even_path) {
-  terrainProf->BeginCombine(even_path);
+  BEGIN_TERRAIN_PROF("combine", even_path);
   
   uint64 quadset_num;
   int even_subindex;
@@ -134,7 +134,7 @@ void TerrainCombiner::CombineChildren(const TerrainQuadsetGroup &quadset_group,
     progress_meter_.incrementDone(progress_increment);
   }
 
-  terrainProf->EndCombine(even_path);
+  END_TERRAIN_PROF();
 }
 
 // Given a vector of TerrainQuadsetItem objects,
@@ -209,10 +209,11 @@ void TerrainCombiner::WriteCombinedTerrain(
     }
   }
 
-  terrainProf->BeginRead(even_path);
-  
   // Create the new PacketInfo and initialize its raw buffer.
   PacketInfo* packet = new PacketInfo(even_path, providerid, progress_increment);
+  // Start profiling here because the variable "packet" needs to be defined
+  // outside the profiling block.
+  BEGIN_TERRAIN_PROF("read", even_path);
   std::string& read_buffer = packet->RawBuffer();
   read_buffer.resize(read_buffer_size);
 
@@ -232,7 +233,7 @@ void TerrainCombiner::WriteCombinedTerrain(
   // The buffer in general shrinks because of removal of CRC bytes.
   read_buffer.resize(read_buffer_next);
 
-  terrainProf->EndRead(even_path);
+  END_TERRAIN_PROF();
   
   // We add the packet to both the compress queue and the write queue for
   // processing by other threads that do compression and writing.
@@ -240,7 +241,7 @@ void TerrainCombiner::WriteCombinedTerrain(
 }
 
 void TerrainCombiner::CompressPacket(PacketInfo* packet) {
-  terrainProf->BeginCompress(packet->EvenPath());
+  BEGIN_TERRAIN_PROF("compress", packet->EvenPath());
 
   std::string& buffer = packet->RawBuffer();
   std::string& compressed_buffer = packet->CompressedBuffer();
@@ -261,16 +262,16 @@ void TerrainCombiner::CompressPacket(PacketInfo* packet) {
   // compressed buffer to match the actual size.
   compressed_buffer.resize(compress_buffer_size + kCRC32Size);
 
-  terrainProf->EndCompress(packet->EvenPath());
+  END_TERRAIN_PROF();
 }
 
 void TerrainCombiner::WritePacket(PacketInfo* packet) {
-  terrainProf->BeginWrite(packet->EvenPath());
+  BEGIN_TERRAIN_PROF("write", packet->EvenPath());
   std::string& compressed_buffer = packet->CompressedBuffer();
   writer_.WriteAppendCRC(packet->EvenPath(), &compressed_buffer[0],
                          compressed_buffer.size(), packet->ProviderId());
   progress_meter_.incrementDone(packet->ProgressIncrement());
-  terrainProf->EndWrite(packet->EvenPath());
+  END_TERRAIN_PROF();
 }
 
 
