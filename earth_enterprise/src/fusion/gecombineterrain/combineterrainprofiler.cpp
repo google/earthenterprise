@@ -12,18 +12,11 @@
 
 using namespace std;
 
-// Pointer to the singleton instance for speed and convenience
-CombineTerrainProfiler * terrainProf = CombineTerrainProfiler::instance();
-
 // Initialize static members
-CombineTerrainProfiler * CombineTerrainProfiler::_instance = NULL;
-
-CombineTerrainProfiler * CombineTerrainProfiler::instance() {
-  if (!_instance) {
-    _instance = new CombineTerrainProfiler();
-  }
-  return _instance;
-}
+CombineTerrainProfiler * const CombineTerrainProfiler::_instance =
+    new CombineTerrainProfiler();
+CombineTerrainProfiler * const BlockProfiler::terrainProf =
+    CombineTerrainProfiler::instance();
 
 void CombineTerrainProfiler::log
     (TerrainEvent event, const string operation, const string object) {
