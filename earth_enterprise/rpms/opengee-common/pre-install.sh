@@ -35,7 +35,12 @@ is_directory_not_link()
 remove_nonlink_directory()
 {
     if is_directory_not_link "$1"; then
-        rm -rf "$1"
+        # A little extra protection so it will only do rm -rf in certain cases
+        if [ "1" = "$2" ]; then
+            rm -rf "$1"
+        else
+            rmdir "$1"
+        fi
     fi
 }
 
@@ -44,7 +49,7 @@ remove_nonlink_directories()
     remove_nonlink_directory "$BASEINSTALLDIR_OPT/etc"
     remove_nonlink_directory "$BASEINSTALLDIR_OPT/log"
     remove_nonlink_directory "$BASEINSTALLDIR_OPT/run"
-    remove_nonlink_directory "$BASEINSTALLDIR_OPT/gehttpd/htdocs/shared_assets/docs"
+    remove_nonlink_directory "$BASEINSTALLDIR_OPT/gehttpd/htdocs/shared_assets/docs" 1
 }
 
 #-----------------------------------------------------------------
