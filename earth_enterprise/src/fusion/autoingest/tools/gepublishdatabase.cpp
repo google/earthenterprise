@@ -143,6 +143,7 @@ main(int argc, char *argv[]) {
     bool listdbs = false;
     bool publisheddbs = false;
     bool report_size_only = false;
+    bool setdefaultge = false;
     std::string publishdbname, deletedbname, server;
     std::string serverurl = "http://" + FusionHostName();
     khGetopt options;
@@ -154,6 +155,7 @@ main(int argc, char *argv[]) {
     options.opt("delete", deletedbname);
     options.opt("server", server);
     options.opt("serverurl", serverurl);
+    options.flagOpt("set-default", setdefaultge);
 
     if (!options.processAll(argc, argv, argn)) {
       usage(progname);

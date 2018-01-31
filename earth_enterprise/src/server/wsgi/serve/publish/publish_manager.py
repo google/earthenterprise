@@ -81,6 +81,9 @@ class PublishDef(object):
     self.serve_wms = False
     # Whether to force copy publish-manifest files.
     self.force_copy = False
+    # Whether to make this databased the default for Earth Clients when
+    # none is specified in stream endpoint requests. 
+    self.ec_default_ge = False
 
 
 # TODO: rename to PublishHandler.
@@ -503,6 +506,9 @@ class PublishManager(object):
     publish_def.serve_wms = request.GetBoolParameter(constants.SERVE_WMS)
 
     publish_def.force_copy = request.IsForceCopy()
+
+    publish_def.ec_default_ge = request.GetBoolParameter(constants.EC_DEFAULT_GE)
+    
     return publish_def
 
   def __GetPublishManifest(self, publish_def):

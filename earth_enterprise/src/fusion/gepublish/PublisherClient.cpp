@@ -706,7 +706,8 @@ bool PublisherClient::SyncDatabase(const std::string& db_name) {
 
 bool PublisherClient::PublishDatabase(const std::string& in_db_name,
                                       const std::string& in_target_path,
-                                      const std::string& vh_name) {
+                                      const std::string& vh_name,
+                                      const bool ec_default_ge) {
   try {
     std::string target_path = NormalizeTargetPath(in_target_path);
     if (target_path.empty()) {
@@ -748,6 +749,7 @@ bool PublisherClient::PublishDatabase(const std::string& in_db_name,
     stream_args += "&VirtualHostName=" + stream_vs_name;
     stream_args += "&TargetPath=" + target_path;
     stream_args += "&DbType=" + Itoa(db_manifest.GetDbType());
+    stream_args += "&EcDefaultGe=" + ec_default_ge;
 
     std::vector<std::string> empty_vector;
     if (!ProcessPublishGetRequest(

@@ -149,7 +149,8 @@ class PublisherClient : public PublishHelper {
   // serverdb.config) to the server and publishes stream data.
   bool PublishDatabase(const std::string& in_db_name,
                        const std::string& in_target_path,
-                       const std::string& vh_name = "");
+                       const std::string& vh_name = "", 
+                       bool default_ge = false);
 
   // Re-publish database to be served with the existing target path.
   bool RepublishDatabase(const std::string& in_db_name,
