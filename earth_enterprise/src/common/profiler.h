@@ -38,12 +38,10 @@ class Profiler {
   private:
     enum ProfileEvent { BEGIN, END };
 
-    static const double NSEC_TO_SEC = 1e-9;
     static Profiler * const _instance;
 
     Profiler() {}
     void log(ProfileEvent event, const std::string & operation, const std::string & object, const size_t size = 0);
-    double getTime() const;
 };
 
 /*

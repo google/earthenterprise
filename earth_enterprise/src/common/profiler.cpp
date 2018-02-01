@@ -15,13 +15,12 @@
 #include <iomanip>
 #include <sstream>
 #include <string>
-#include <sys/types.h>
 #include <unistd.h>
 #include <sys/syscall.h>
-#include <time.h>
 
-#include "common/notify.h"
 #include "common/profiler.h"
+#include "common/notify.h"
+#include "common/timeutils.h"
 
 using namespace std;
 
@@ -57,10 +56,4 @@ void Profiler::log
   }
   
   notify(NFY_NOTICE, "%s\n", message.str().c_str());
-}
-
-double Profiler::getTime() const {
-  struct timespec currTime;
-  clock_gettime(CLOCK_MONOTONIC, &currTime);
-  return static_cast<double>(currTime.tv_sec) + (currTime.tv_nsec * NSEC_TO_SEC);
 }

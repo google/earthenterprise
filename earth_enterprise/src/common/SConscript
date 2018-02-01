@@ -76,6 +76,7 @@ commonsources = [ '../third_party/rsa_md5/md5c.c',
                   'LoggingManager.cpp',
                   'proto_streaming_imagery.cpp',
                   'profiler.cpp',
+                  'timeutils.cpp',
                   streaming_imagery[0]  # generated .cc file
                  ]
 # Check environment for png.h file
