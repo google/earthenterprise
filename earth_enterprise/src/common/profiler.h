@@ -46,7 +46,7 @@ class BlockProfiler {
     BlockProfiler(
         const std::string & operation,
         const std::string & object,
-        const size_t size);
+        const size_t size = 0);
     ~BlockProfiler();
   private:
     static Profiler * const profiler;
@@ -56,12 +56,23 @@ class BlockProfiler {
     const double startTime;
 };
 
-// Programmers should use these macros to profile code instead of using the
+// Programmers should use the macros below to profile code instead of using the
 // classes above directly. This makes it easy to use compile time flags to
 // exclude the profiling code.
-// The call to this macro should be the first statement in the block you want
-// to profile - it will not profile anything that comes before it.
-#define PROFILE_BLOCK(op, obj) BlockProfiler _prof_instance(op, obj)
-#define PROFILE_BLOCK_SIZE(op, obj, size) BlockProfiler _prof_instance(op, obj, size)
+
+// For all of the macros, the variadic arguments include the object name
+// (required) and the size (optional).
+
+// This macro will profile a block of code. The call to this macro should be
+// the first statement in the block you want to profile - it will not profile
+// anything that comes before it. It will continue profiling until it goes out
+// of scope.
+#define PROFILE_BLOCK(op, ...) BlockProfiler _block_prof_inst(op, __VA_ARGS__)
+
+// You can use these macros if you want to profile a part of a block of code.
+// If you use multiple profiling statements in the same block you must give
+// each one a unique name.
+#define BEGIN_PROFILING(name, op, ...) BlockProfiler * name = new BlockProfiler(op, __VA_ARGS__)
+#define END_PROFILING(name) delete name
 
 #endif // PROFILER_H

@@ -38,6 +38,7 @@
 #include "common/khAbortedException.h"
 #include "common/khSimpleException.h"
 #include "common/khFileUtils.h"
+#include "common/profiler.h"
 
 #ifdef JOBSTATS_ENABLED
 enum {MERGER_CREATED, GATHERER_CREATED, COMBINE};
@@ -202,6 +203,7 @@ int main(int argc, char **argv) {
   // On successful completion, print out the output file sizes.
   std::vector<std::string> output_files;
   try {
+    BEGIN_PROFILING(parse_args, "parse", "arguments");
     std::string progname = argv[0];
 
     // Process commandline options
@@ -252,8 +254,10 @@ int main(int argc, char **argv) {
     if (sortbuf <= 0) {
       notify(NFY_FATAL, "--sortbuf must be > 0, is %d", sortbuf);
     }
+    END_PROFILING(parse_args);
 
     // Create a merge of the terrain indices
+    BEGIN_PROFILING(create_merger, "create", "merger");
     JOBSTATS_BEGIN(job_stats, MERGER_CREATED);    // validate
 
     // We'll need to limit the number of filebundles opened by the filepool
@@ -339,8 +343,10 @@ int main(int argc, char **argv) {
 
     merger->Start();
     JOBSTATS_END(job_stats, MERGER_CREATED);
+    END_PROFILING(create_merger);
 
     // Feed this merge into a QuadsetGather operation
+    BEGIN_PROFILING(create_gatherer, "create", "gatherer");
     JOBSTATS_BEGIN(job_stats, GATHERER_CREATED);    // validate
 
     qtpacket::QuadsetGather<geterrain::TerrainPacketItem>
@@ -373,12 +379,15 @@ int main(int argc, char **argv) {
     notify(NFY_DEBUG, "closing the gatherer");
     gather.Close();
     JOBSTATS_END(job_stats, GATHERER_CREATED);
+    END_PROFILING(create_gatherer);
 
     // Finish the packet file
+    BEGIN_PROFILING(start_combiner, "start", "combiner");
     JOBSTATS_BEGIN(job_stats, COMBINE);    // validate
     notify(NFY_DEBUG, "writing the packet index");
     combiner.Close(static_cast<size_t>(sortbuf) * 1024 * 1024);
     JOBSTATS_END(job_stats, COMBINE);
+    END_PROFILING(start_combiner);
     // On successful completion, print the output file sizes.
     output_files.push_back(outdir);
   } catch (const khAbortedException &e) {
