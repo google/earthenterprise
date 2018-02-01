@@ -31,29 +31,50 @@ Profiler * const Profiler::_instance = new Profiler();
 Profiler * const BlockProfiler::profiler = Profiler::instance();
 
 // Log a profiling message
-void Profiler::log
-    (ProfileEvent event, const string & operation, const string & object, const size_t size) {
+void Profiler::log(
+    const string & operation,
+    const string & object,
+    const double startTime,
+    const double endTime,
+    const size_t size) {
+
+  const double duration = endTime - startTime;
+  const pid_t tid = syscall(SYS_gettid);
   stringstream message;
-  
+
   message.setf(ios_base::fixed, ios_base::floatfield);
-  
-  message << "Thread " << syscall(SYS_gettid) << ", Time "
-          << setprecision(6) << getTime() << ": ";
-  
-  switch(event) {
-    case BEGIN:
-      message << "Begin";
-      break;
-    case END:
-      message << "End";
-      break;
-  }
-  
-  message << " " << operation << " " << object;
-  
+  message << setprecision(9)
+          << operation << " " << object << ": "
+          << "start time: " << startTime
+          << ", "
+          << "end time: " << endTime
+          << ", "
+          << "duration: " << duration
+          << ", "
+          << "thread: " << tid;
   if (size > 0) {
-      message << ", size " << size;
+    message << ", size: " << size;
   }
-  
+
   notify(NFY_NOTICE, "%s\n", message.str().c_str());
+}
+
+// Begin profiling
+BlockProfiler::BlockProfiler(
+    const string & operation,
+    const string & object,
+    const size_t size
+  ) :
+    operation(operation),
+    object(object),
+    size(size),
+    startTime(getTime())
+{
+  // Nothing to do - just initialize class members above
+}
+
+// Stop profiling and log results
+BlockProfiler::~BlockProfiler() {
+  const double endTime = getTime();
+  profiler->log(operation, object, startTime, endTime, size);
 }

@@ -209,7 +209,7 @@ void TerrainCombiner::WriteCombinedTerrain(
   PacketInfo* packet = new PacketInfo(even_path, providerid, progress_increment);
   // Start profiling here because the variable "packet" needs to be defined
   // outside the profiling block.
-  BEGIN_PROFILING("read", even_path.AsString(), read_buffer_size);
+  PROFILE_BLOCK_SIZE("read", even_path.AsString(), read_buffer_size);
   std::string& read_buffer = packet->RawBuffer();
   read_buffer.resize(read_buffer_size);
 
@@ -229,8 +229,6 @@ void TerrainCombiner::WriteCombinedTerrain(
   // The buffer in general shrinks because of removal of CRC bytes.
   read_buffer.resize(read_buffer_next);
 
-  END_PROFILING();
-  
   // We add the packet to both the compress queue and the write queue for
   // processing by other threads that do compression and writing.
   AddPacketToQueues(packet);
@@ -240,7 +238,7 @@ void TerrainCombiner::CompressPacket(PacketInfo* packet) {
   std::string& buffer = packet->RawBuffer();
   std::string& compressed_buffer = packet->CompressedBuffer();
 
-  BEGIN_PROFILING("compress", packet->EvenPath().AsString(), buffer.size());
+  PROFILE_BLOCK_SIZE("compress", packet->EvenPath().AsString(), buffer.size());
 
   // Compress data
   size_t compress_buffer_size = KhPktGetCompressBufferSize(buffer.size())
@@ -257,17 +255,14 @@ void TerrainCombiner::CompressPacket(PacketInfo* packet) {
   // Make room for the CRC checksum, and adjust final size of the
   // compressed buffer to match the actual size.
   compressed_buffer.resize(compress_buffer_size + kCRC32Size);
-
-  END_PROFILING();
 }
 
 void TerrainCombiner::WritePacket(PacketInfo* packet) {
   std::string& compressed_buffer = packet->CompressedBuffer();
-  BEGIN_PROFILING("write", packet->EvenPath().AsString(), compressed_buffer.size());
+  PROFILE_BLOCK_SIZE("write", packet->EvenPath().AsString(), compressed_buffer.size());
   writer_.WriteAppendCRC(packet->EvenPath(), &compressed_buffer[0],
                          compressed_buffer.size(), packet->ProviderId());
   progress_meter_.incrementDone(packet->ProgressIncrement());
-  END_PROFILING();
 }
 
 

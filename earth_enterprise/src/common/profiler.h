@@ -18,30 +18,22 @@
 #include <string>
 
 /*
- * Singleton class for profiling events. The programmer can use
- * this class to mark the beginning and end of events, and the timing of those
- * events will be written out to a log file. This class is intended for
- * performance debugging.
+ * Singleton class for profiling events. The programmer can use this class
+ * to log the timing of operations. This class is intended for performance
+ * debugging.
  */
 class Profiler {
   public:
     static Profiler * instance() { return _instance; }
-
-    inline void Begin(const std::string & operation, const std::string & object, const size_t size) {
-      log(BEGIN, operation, object, size);
-    }
-
-    inline void End(const std::string & operation, const std::string & object) {
-      log(END, operation, object);
-    }
-
+    void log(
+        const std::string & operation, // The operation being timed
+        const std::string & object,    // The object that the operation is performed on
+        const double startTime,        // The start time of the operation
+        const double endTime,          // The end time of the operation
+        const size_t size = 0);        // The size of the object, if applicable
   private:
-    enum ProfileEvent { BEGIN, END };
-
     static Profiler * const _instance;
-
     Profiler() {}
-    void log(ProfileEvent event, const std::string & operation, const std::string & object, const size_t size = 0);
 };
 
 /*
@@ -51,24 +43,25 @@ class Profiler {
  */
 class BlockProfiler {
   public:
-    BlockProfiler(const std::string & operation, const std::string & object, const size_t size) :
-        operation(operation), object(object)
-    {
-      profiler->Begin(operation, object, size);
-    }
-    ~BlockProfiler() {
-      profiler->End(operation, object);
-    }
+    BlockProfiler(
+        const std::string & operation,
+        const std::string & object,
+        const size_t size);
+    ~BlockProfiler();
   private:
     static Profiler * const profiler;
     const std::string operation;
     const std::string object;
+    const size_t size;
+    const double startTime;
 };
 
-// Programmers should use these functions to profile code rather than the
-// functions above. This makes it easy to use compile time flags to exclude
-// the profiling code.
-#define BEGIN_PROFILING(op, obj, size) { BlockProfiler prof(op, obj, size)
-#define END_PROFILING() }
+// Programmers should use these macros to profile code instead of using the
+// classes above directly. This makes it easy to use compile time flags to
+// exclude the profiling code.
+// The call to this macro should be the first statement in the block you want
+// to profile - it will not profile anything that comes before it.
+#define PROFILE_BLOCK(op, obj) BlockProfiler _prof_instance(op, obj)
+#define PROFILE_BLOCK_SIZE(op, obj, size) BlockProfiler _prof_instance(op, obj, size)
 
 #endif // PROFILER_H
