@@ -93,7 +93,7 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
     "   [--vhname <vh_name>]     If virtual host is omitted,\n"
     "                            <db_name> is published to the default\n"
     "                            virtual host: \"%s\".\n"
-    "   [--set-default]          Publish this database as the default one for\n"
+    "   [--setdefault]          Publish this database as the default one for\n"
     "                            the Earth Client to connect to if no database\n"
     "                            or virtual host is specified upon initia\n"
     "                            connection." 
@@ -343,7 +343,7 @@ int main(int argc, char* argv[]) {
     options.flagOpt("force_copy", force_copy);
     options.vecOpt("pushdb", pushdbs);
     options.opt("publishdb", publishdb);
-    options.flagOpt("set-default", ec_default_ge);
+    options.flagOpt("setdefault", ec_default_ge);
     options.opt("unpublish", unpublish);
     options.opt("republishdb", republishdb);
     options.flagOpt("swaptargets", swaptargets);
@@ -635,7 +635,7 @@ int main(int argc, char* argv[]) {
         SetFusionHost(&publisher_client, gedb_path, curr_host);
       }
       if (publisher_client.PublishDatabase(gedb_path, target_path, vhname, ec_default_ge)) {
-        fprintf(stdout, "Database successfully published.\n");
+        fprintf(stdout, "Database successfully published.  EC Default GE: %s\n", ec_default_ge ? "true" : "false");
       } else {
         throw khException(publisher_client.ErrMsg() +
                           "\nDatabase publish request failed.\n");

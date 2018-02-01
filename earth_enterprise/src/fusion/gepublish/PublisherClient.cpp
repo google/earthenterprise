@@ -749,8 +749,9 @@ bool PublisherClient::PublishDatabase(const std::string& in_db_name,
     stream_args += "&VirtualHostName=" + stream_vs_name;
     stream_args += "&TargetPath=" + target_path;
     stream_args += "&DbType=" + Itoa(db_manifest.GetDbType());
-    stream_args += "&EcDefaultGe=" + ec_default_ge;
-
+    if (ec_default_ge) {
+      stream_args += "&EcDefaultGe=1" ;
+    }
     std::vector<std::string> empty_vector;
     if (!ProcessPublishGetRequest(
         STREAM_SERVER, &stream_args, "", &empty_vector)) {

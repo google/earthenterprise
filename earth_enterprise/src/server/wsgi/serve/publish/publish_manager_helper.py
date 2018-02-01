@@ -31,6 +31,8 @@ import shutil
 import subprocess
 import tempfile
 import urlparse
+from inspect import getmembers
+from pprint import pprint
 
 from common import exceptions
 from common import utils
@@ -84,8 +86,7 @@ MAP_LINE3_REWRITERULE = (
 # Redirect Earth Client requests with no Globe specified on the URL
 # to the default_ge based URIs to provide Earth Client access to a default map 
 # if none is specified in the server connection URLs. 
-EC_DEFAULT_MAP_LINE0_LOCAL_REWRITECOND = (
-    "RewriteCond %{HTTP_USER_AGENT}  ^EarthClient/(.*)$\n")
+EC_DEFAULT_MAP_LINE0_LOCAL_REWRITECOND =  "RewriteCond %{HTTP_USER_AGENT}  ^EarthClient/(.*)$\n"
 EC_DEFAULT_MAP_LINE1_GOOGLE_REWRITERULE = (
     "RewriteRule '/dbRoot.v5'  '/%s/dbRoot.v5'\n")
 EC_DEFAULT_MAP_LINE2_GOOGLE_REWRITERULE = (
@@ -353,8 +354,11 @@ class PublishManagerHelper(stream_manager.StreamManager):
     ec_default_ge = publish_def.ec_default_ge
     poifederated = publish_def.poi_federated
     
-    logger.info("Handling Publish Request. publish_def request: %s"  % str( publish_def) )
-
+    logger.info("Handling Publish Request. publish_def.target_path : %s"  %  publish_def.target_path )
+    logger.info("Handling Publish Request. publish_def.ec_default_ge : %s"  %  publish_def.ec_default_ge )
+    logger.info("Handling Publish Request. publish_def.poi_federated : %s"  %  publish_def.poi_federated )
+    logger.info("Handling Publish Request. publish_def request: %s"  %  pprint( getmembers( publish_def ) ) )
+    
     assert target_path and target_path[0] == "/" and target_path[-1] != "/"
 
     # Check if the VS template exists.
@@ -371,6 +375,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
       # clear the default DB flag if this publish has one set, so that 
       # the older database is not considered the default.  
       if ec_default_ge:
+        logger.warn( "Database %s will be set as the default when Earth Client connections when no database is specified." % target_path )
         query_string = ("UPDATE publish_context_table"
                         " SET ec_default_ge = FALSE ")
         result = self.DbModify(query_string)
@@ -384,7 +389,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
       
       result = self.DbModify(
           query_string,
-          (snippets_set_name, search_defs, sup_search_defs, poifederated),
+          (snippets_set_name, search_defs, sup_search_defs, poifederated, ec_default_ge),
           returning=True)
 
       publish_context_id = 0
@@ -1321,18 +1326,19 @@ class PublishManagerHelper(stream_manager.StreamManager):
     Returns:
       list of tuples (target_path, target_id, serve_wms).
     """
+    target_path_result = None
     query_string = (
-        """SELECT target_table.target_path, publish_context_table.ec_default_ge,
-           FROM publish_context_table, target_table 
+        """SELECT target_table.target_path, publish_context_table.ec_default_ge
+           FROM publish_context_table, target_table, target_db_table
            WHERE ec_default_ge = TRUE AND
                  target_table.target_id = target_db_table.target_id AND
                  target_db_table.publish_context_id =
-                 publish_context_table.publish_context_id""")
-    results = self.DbQuery(query_string): 
+                 publish_context_table.publish_context_id;""")
+    results = self.DbQuery(query_string)
     if results:
-        assert isinstance(results, list) and len(results) == 1
-        ( target_path, ec_default_ge ) = results[0]
-    return target_path
+      if isinstance(results, list) and len(results) >0:
+        ( target_path_result, ec_default_ge ) = results[0]
+    return target_path_result
 
   def _WritePublishContentToHtaccessFile(self, htaccess_file,
                                          target_paths_list):
@@ -1345,6 +1351,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
       psycopg2.Error/Warning, PublishServeException.
     """
     default_target_path = self._GetEcDefaultGeTargetPath() 
+    logger.info( "Default target path is currently set to: %s " % default_target_path)
     # Write publish header to file.
     htaccess_file.write("%s" % PublishManagerHelper.HTACCESS_GE_PUBLISH_BEGIN)
     # Write RewriteBase to file.
@@ -1399,7 +1406,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
         # Database is set to default for Earth Client:
         # TODO - execute some kind of query to determine flag. if serve_Utils.isECdefault( dbname )
         if default_target_path == target_path: 
-          htaccess_file.write( EC_DEFAULT_MAP_LINE0_LOCAL_REWRITECOND % relative_target_path )
+          htaccess_file.write( EC_DEFAULT_MAP_LINE0_LOCAL_REWRITECOND )
           htaccess_file.write( EC_DEFAULT_MAP_LINE1_GOOGLE_REWRITERULE % relative_target_path )
           htaccess_file.write( EC_DEFAULT_MAP_LINE2_GOOGLE_REWRITERULE % relative_target_path )
         htaccess_file.write(GE_LINE0_REWRITERULE % relative_target_path)
