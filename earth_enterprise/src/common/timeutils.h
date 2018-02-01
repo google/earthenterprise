@@ -19,6 +19,6 @@
 
 const double NSEC_TO_SEC = 1e-9;
 
-double getTime();
+double getMonotonicTime();
 
 #endif // TIMEUTILS_H

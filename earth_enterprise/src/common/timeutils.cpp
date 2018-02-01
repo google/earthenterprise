@@ -16,7 +16,7 @@
 
 #include "timeutils.h"
 
-double getTime() {
+double getMonotonicTime() {
   struct timespec currTime;
   clock_gettime(CLOCK_MONOTONIC, &currTime);
   return static_cast<double>(currTime.tv_sec) + (currTime.tv_nsec * NSEC_TO_SEC);

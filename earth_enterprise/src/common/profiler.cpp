@@ -68,13 +68,13 @@ BlockProfiler::BlockProfiler(
     operation(operation),
     object(object),
     size(size),
-    startTime(getTime())
+    startTime(getMonotonicTime())
 {
   // Nothing to do - just initialize class members above
 }
 
 // Stop profiling and log results
 BlockProfiler::~BlockProfiler() {
-  const double endTime = getTime();
+  const double endTime = getMonotonicTime();
   profiler->log(operation, object, startTime, endTime, size);
 }
