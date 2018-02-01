@@ -273,7 +273,7 @@ void DbManifest::GetManifest(geFilePool &file_pool,
           stream_manifest->push_back(ManifestEntry(poi_file));
         }
         search_manifest->push_back(ManifestEntry(poi_file));
-        GetPoiDataFiles(poi_file, stream_manifest, search_manifest);
+        GetPoiDataFiles(&(stream_manifest->back()), &(search_manifest->back()));
       }
     }
     // These file paths are listed directly in the GedbFusionConfig.
@@ -318,7 +318,7 @@ void DbManifest::GetManifest(geFilePool &file_pool,
           stream_manifest->push_back(ManifestEntry(orig, curr));
         }
         search_manifest->push_back(ManifestEntry(orig, curr));
-        GetPoiDataFiles(curr, stream_manifest, search_manifest);
+        GetPoiDataFiles(&(stream_manifest->back()), &(search_manifest->back()));
       }
     }
 
@@ -333,15 +333,14 @@ void DbManifest::GetManifest(geFilePool &file_pool,
 }
 
 // Read POI file and extract the data file names from within it and then add
-// them to the manifest too
-void DbManifest::GetPoiDataFiles(const std::string& poi_file,
-                     std::vector<ManifestEntry>* stream_manifest,
-                     std::vector<ManifestEntry>* search_manifest)
+// them to the manifest entries as dependant files
+void DbManifest::GetPoiDataFiles(ManifestEntry* stream_manifest_entry,
+                                 ManifestEntry* search_manifest_entry)
 {
+  const std::string& poi_file = search_manifest_entry->current_path;
+  assert(stream_manifest_entry->current_path == search_manifest_entry->current_path);
   notify(NFY_DEBUG,
         "Parsing POI file %s looking for data files", poi_file.c_str());
-  size_t stream_poi_file_idx = stream_manifest->size() - 1;
-  size_t search_poi_file_idx = search_manifest->size() - 1;
   khxml::DOMLSParser *parser = CreateDOMParser();
   if (parser) {
     khxml::DOMDocument *doc = ReadDocument(parser, poi_file);
@@ -362,12 +361,12 @@ void DbManifest::GetPoiDataFiles(const std::string& poi_file,
               // poi data files have to be set aside until after AddDB processing is done
               // so we hide them in a special location now within the manifest and will
               // use them when we crate an 'upload' manifest during DBsync processing
-              if (stream_manifest != search_manifest) {
+              if (stream_manifest_entry != search_manifest_entry) {
                 notify(NFY_DEBUG, "Adding POI datafile as a dependent file to stream manifest: %s", data_file.c_str());
-                stream_manifest->at(stream_poi_file_idx).dependents.push_back(data_file);
+                stream_manifest_entry->dependents.push_back(data_file);
               }
-              search_manifest->at(search_poi_file_idx).dependents.push_back(data_file);
               notify(NFY_DEBUG, "Adding POI datafile as a dependent file to search manifest: %s", data_file.c_str());
+              search_manifest_entry->dependents.push_back(data_file);
             }
           } else {
             notify(NFY_WARN,

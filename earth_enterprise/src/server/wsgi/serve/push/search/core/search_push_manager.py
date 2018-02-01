@@ -530,7 +530,7 @@ class SearchPushManager(search_manager.SearchManager):
           serve_utils.FileSizeMatched(server_file_path, file_sizes[i])):
 
         existing_files.append(file_paths[i])
-        logger.debug("%s already exists", server_file_path)
+        logger.debug("%s already exist", server_file_path)
 
         file_paths.pop(i)
         file_sizes.pop(i)

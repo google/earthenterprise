@@ -1271,18 +1271,12 @@ bool PublisherClient::UploadFiles(ServerType server_type,
   if (is_server_host_same_as_publishing)  {
     notify(NFY_DEBUG, "Transfering files locally");
     size_t num_entries = entries.size();
-    std::vector<ManifestEntry> dependent_entries;
-    size_t i = 0;
-    for (; i < num_entries; ++i) {
+    for (size_t i = 0; i < num_entries; ++i) {
       const ManifestEntry& entry = entries[i];
 
       if (!LocalTransferWithRetry(server_prefix, host_root, server_type,
-                                  tmpdir, entry.current_path, entry.orig_path))
+                                  tmpdir, entry.current_path, entry.orig_path)) {
         return false;
-
-      for(size_t iDep = 0; iDep < entry.dependents.size(); ++iDep) {
-        notify(NFY_DEBUG, "Adding dependent file: %s", entry.dependents[iDep].c_str());
-        dependent_entries.push_back(ManifestEntry(entry.dependents[iDep]));
       }
 
       if (report_progress && progress_ != NULL) {
@@ -1292,24 +1286,7 @@ bool PublisherClient::UploadFiles(ServerType server_type,
         }
         processed_size += entry.data_size;
         notify(NFY_DEBUG, "Done files: %zd/%zd, bytes: %zd",
-               i + 1, num_entries + dependent_entries.size(), processed_size);
-      }
-    }
-    for(; i < num_entries + dependent_entries.size(); ++i) {
-      const ManifestEntry& entry = dependent_entries[i - num_entries];
-
-      if (!LocalTransferWithRetry(server_prefix, host_root, server_type,
-                                  tmpdir, entry.current_path, entry.orig_path))
-        return false;
-
-      if (report_progress && progress_ != NULL) {
-        if (!progress_->incrementDone(entry.data_size)) {
-          notify(NFY_WARN, "Push interrupted");
-          return false;
-        }
-        processed_size += entry.data_size;
-        notify(NFY_DEBUG, "Done files: %zd/%zd, bytes: %zd",
-               i + 1, num_entries + dependent_entries.size(), processed_size);
+               i + 1, num_entries, processed_size);
       }
     }
     return true;

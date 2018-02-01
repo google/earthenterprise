@@ -156,7 +156,8 @@ bool PublishHelper::ProcessGetRequest(const std::string& url,
   else
     *args += host_name;
 
-  notify(NFY_DEBUG, "ProcessGetRequest %s Starting", url.c_str());
+  notify(NFY_DEBUG, "Request %s args: %s", url.c_str(),
+         (username_.empty() ? "nouser" : "user"));
 
   int status = request.Start(*args);
   int max_retries = 3;

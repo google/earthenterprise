@@ -137,10 +137,9 @@ class DbManifest {
                    const std::string& publish_prefix);
 
 // Read POI file and extract the data file names from within it and then add
-// them to the manifest too
-void GetPoiDataFiles(const std::string& poi_file,
-                     std::vector<ManifestEntry>* stream_manifest,
-                     std::vector<ManifestEntry>* search_manifest);
+// them to the manifest entries as dependant files
+void GetPoiDataFiles(ManifestEntry* stream_manifest_entry,
+                     ManifestEntry* search_manifest_entry);
 
   // For mapdb and creates the following files in db_path_:
   // [1] json/maps.json.DEFAULT
