@@ -354,11 +354,6 @@ class PublishManagerHelper(stream_manager.StreamManager):
     ec_default_ge = publish_def.ec_default_ge
     poifederated = publish_def.poi_federated
     
-    logger.info("Handling Publish Request. publish_def.target_path : %s"  %  publish_def.target_path )
-    logger.info("Handling Publish Request. publish_def.ec_default_ge : %s"  %  publish_def.ec_default_ge )
-    logger.info("Handling Publish Request. publish_def.poi_federated : %s"  %  publish_def.poi_federated )
-    logger.info("Handling Publish Request. publish_def request: %s"  %  pprint( getmembers( publish_def ) ) )
-    
     assert target_path and target_path[0] == "/" and target_path[-1] != "/"
 
     # Check if the VS template exists.
@@ -1351,11 +1346,19 @@ class PublishManagerHelper(stream_manager.StreamManager):
       psycopg2.Error/Warning, PublishServeException.
     """
     default_target_path = self._GetEcDefaultGeTargetPath() 
-    logger.info( "Default target path is currently set to: %s " % default_target_path)
+
     # Write publish header to file.
     htaccess_file.write("%s" % PublishManagerHelper.HTACCESS_GE_PUBLISH_BEGIN)
     # Write RewriteBase to file.
     htaccess_file.write("%s" % HTACCESS_REWRITE_BASE)
+
+    logger.info( "Default target path is currently set to: %s " % default_target_path)
+    if default_target_path: 
+      # Database is set to default for Earth Client:
+      relative_target_path = default_target_path[1:]
+      htaccess_file.write( EC_DEFAULT_MAP_LINE0_LOCAL_REWRITECOND )
+      htaccess_file.write( EC_DEFAULT_MAP_LINE1_GOOGLE_REWRITERULE % relative_target_path )
+      htaccess_file.write( EC_DEFAULT_MAP_LINE2_GOOGLE_REWRITERULE % relative_target_path )
 
     # Collects all the needed information for all the target paths based on
     # target ID and adds corresponding rewrite rules into htacces-file.
@@ -1403,12 +1406,6 @@ class PublishManagerHelper(stream_manager.StreamManager):
 
       # Content for Fusion earth (GE database).
       if db_type == basic_types.DbType.TYPE_GE:
-        # Database is set to default for Earth Client:
-        # TODO - execute some kind of query to determine flag. if serve_Utils.isECdefault( dbname )
-        if default_target_path == target_path: 
-          htaccess_file.write( EC_DEFAULT_MAP_LINE0_LOCAL_REWRITECOND )
-          htaccess_file.write( EC_DEFAULT_MAP_LINE1_GOOGLE_REWRITERULE % relative_target_path )
-          htaccess_file.write( EC_DEFAULT_MAP_LINE2_GOOGLE_REWRITERULE % relative_target_path )
         htaccess_file.write(GE_LINE0_REWRITERULE % relative_target_path)
         htaccess_file.write(GE_LINE1_REWRITECOND)
         htaccess_file.write(GE_LINE2_REWRITERULE % (
