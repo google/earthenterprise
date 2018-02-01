@@ -20,7 +20,6 @@ Import('env')
 gecombineterrain = env.executable('gecombineterrain',
                                   ['gecombineterrain.cpp',
                                    'combineterrain.cpp',
-                                   'combineterrainprofiler.cpp'
                                    ],
                                   LIBS=['geindex_rw', 'gefconfigutil', 'gecommon', 'geutil',
                                   'geconfigutil', 'gexml', 'geqtpacket',

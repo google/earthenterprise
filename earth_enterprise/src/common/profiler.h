@@ -12,39 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef COMBINETERRAINPROFILER_H
-#define COMBINETERRAINPROFILER_H
+#ifndef PROFILER_H
+#define PROFILER_H
 
 #include <string>
 
-#include "quadtreepath.h"
-
 /*
- * Singleton class for profiling terrain combine events. The programmer can use
+ * Singleton class for profiling events. The programmer can use
  * this class to mark the beginning and end of events, and the timing of those
  * events will be written out to a log file. This class is intended for
  * performance debugging.
  */
-class CombineTerrainProfiler {
+class Profiler {
   public:
-    static CombineTerrainProfiler * instance() { return _instance; }
-    
-    inline void Begin(const std::string operation, const QuadtreePath & path, const size_t size) {
-      log(BEGIN, operation, path.AsString(), size);
+    static Profiler * instance() { return _instance; }
+
+    inline void Begin(const std::string & operation, const std::string & object, const size_t size) {
+      log(BEGIN, operation, object, size);
     }
 
-    inline void End(const std::string operation, const QuadtreePath & path) {
-      log(END, operation, path.AsString());
+    inline void End(const std::string & operation, const std::string & object) {
+      log(END, operation, object);
     }
 
   private:
-    enum TerrainEvent { BEGIN, END };
-    
+    enum ProfileEvent { BEGIN, END };
+
     static const double NSEC_TO_SEC = 1e-9;
-    static CombineTerrainProfiler * const _instance;
-    
-    CombineTerrainProfiler() {}
-    void log(TerrainEvent event, const std::string operation, const std::string object, const size_t size = 0);
+    static Profiler * const _instance;
+
+    Profiler() {}
+    void log(ProfileEvent event, const std::string & operation, const std::string & object, const size_t size = 0);
     double getTime() const;
 };
 
@@ -55,24 +53,24 @@ class CombineTerrainProfiler {
  */
 class BlockProfiler {
   public:
-    BlockProfiler(const std::string operation, const QuadtreePath & path, const size_t size) :
-        operation(operation), path(path)
+    BlockProfiler(const std::string & operation, const std::string & object, const size_t size) :
+        operation(operation), object(object)
     {
-      terrainProf->Begin(operation, path, size);
+      profiler->Begin(operation, object, size);
     }
     ~BlockProfiler() {
-      terrainProf->End(operation, path);
+      profiler->End(operation, object);
     }
   private:
-    static CombineTerrainProfiler * const terrainProf;
+    static Profiler * const profiler;
     const std::string operation;
-    const QuadtreePath path;
+    const std::string object;
 };
 
 // Programmers should use these functions to profile code rather than the
 // functions above. This makes it easy to use compile time flags to exclude
 // the profiling code.
-#define BEGIN_TERRAIN_PROF(op, path, size) { BlockProfiler prof(op, path, size)
-#define END_TERRAIN_PROF() }
+#define BEGIN_PROFILING(op, obj, size) { BlockProfiler prof(op, obj, size)
+#define END_PROFILING() }
 
-#endif // COMBINETERRAINPROFILER_H
+#endif // PROFILER_H

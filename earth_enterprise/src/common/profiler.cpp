@@ -21,20 +21,19 @@
 #include <time.h>
 
 #include "common/notify.h"
-#include "combineterrain.h"
-#include "combineterrainprofiler.h"
+#include "common/profiler.h"
 
 using namespace std;
 
-// Initialize static members
-CombineTerrainProfiler * const CombineTerrainProfiler::_instance =
-    new CombineTerrainProfiler();
-CombineTerrainProfiler * const BlockProfiler::terrainProf =
-    CombineTerrainProfiler::instance();
+// Initialize static members of Profiler class
+Profiler * const Profiler::_instance = new Profiler();
+
+// Initialize static members of BlockProfiler class
+Profiler * const BlockProfiler::profiler = Profiler::instance();
 
 // Log a profiling message
-void CombineTerrainProfiler::log
-    (TerrainEvent event, const string operation, const string object, const size_t size) {
+void Profiler::log
+    (ProfileEvent event, const string & operation, const string & object, const size_t size) {
   stringstream message;
   
   message.setf(ios_base::fixed, ios_base::floatfield);
@@ -60,7 +59,7 @@ void CombineTerrainProfiler::log
   notify(NFY_NOTICE, "%s\n", message.str().c_str());
 }
 
-double CombineTerrainProfiler::getTime() const {
+double Profiler::getTime() const {
   struct timespec currTime;
   clock_gettime(CLOCK_MONOTONIC, &currTime);
   return static_cast<double>(currTime.tv_sec) + (currTime.tv_nsec * NSEC_TO_SEC);
