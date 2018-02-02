@@ -58,7 +58,8 @@ struct ManifestEntry {
   bool operator==(const ManifestEntry &other) const {
     return orig_path == other.orig_path
     && current_path == other.current_path
-        && data_size == other.data_size;
+        && data_size == other.data_size
+        && dependents == other.dependents;
   }
 };
 
