@@ -36,7 +36,6 @@ BEGIN
     IF NOT EXISTS(select column_name from information_schema.columns where table_name = 'db_table' and column_name = 'db_flags') THEN
       alter table db_table add column db_flags integer not null default 0;
     END IF;
-
   ELSE
     create table db_table (
       db_id serial,
