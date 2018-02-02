@@ -425,9 +425,6 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
 
     directory('/opt/google/install', 0700)
     directory('/opt/google/gehttpd/logs', 0755)
-    directory('/opt/google/etc', 0775)
-    directory('/opt/google/run', 0775)
-    directory('/opt/google/log', 0775)
     directory('/var/opt/google/run', 0775)
     directory('/var/opt/google/log', 0775)
     directory('/var/opt/google/pgsql', 0700)
