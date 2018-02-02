@@ -144,6 +144,15 @@ void PopulateFileMap(geFilePool &file_pool,
         if (filelists) {
           (*filelists)[i].push_back(entry->orig_path);
         }
+        for(size_t idx = 0; idx < entry->dependents.size(); ++idx)
+        {
+          const std::string& dep_file = entry->dependents[idx];
+          NameSizePair* name_size = &files[dep_file];
+          *name_size = std::make_pair(dep_file, khDiskUsage(dep_file));
+          if (filelists) {
+            (*filelists)[i].push_back(dep_file);
+          }
+        }
       }
     }
   } catch (const std::exception &e) {
