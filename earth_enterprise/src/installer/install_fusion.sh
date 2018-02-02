@@ -246,9 +246,9 @@ load_systemrc_config()
 {
 	if [ -f "$SYSTEMRC" ]; then
 		# read existing config information
-		ASSET_ROOT=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/assetroot/text()" )
-    	GEFUSIONUSER_NAME=$(xml_file_get_xpath "$SYSTEMRC" '//Systemrc/fusionUsername/text()' )
-		ASSET_ROOT=$(xml_file_get_xpath "$SYSTEMRC" '//Systemrc/userGroupname/text()' )
+        ASSET_ROOT=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/assetroot/text()" )
+        GEFUSIONUSER_NAME=$(xml_file_get_xpath "$SYSTEMRC" '//Systemrc/fusionUsername/text()' )
+        ASSET_ROOT=$(xml_file_get_xpath "$SYSTEMRC" '//Systemrc/userGroupname/text()' )
 	fi
 }
 
