@@ -54,6 +54,15 @@ HTACCESS_REWRITE_BASE = "\nRewriteBase /\n"
 # Minimum portable globe size in MB.
 GLOBE_SIZE_THRESHOLD = 1.0
 
+# Redirect Earth Client requests with no Globe specified on the URL
+# to the default_ge based URIs to provide Earth Client access to a default map 
+# if none is specified in the server connection URLs. 
+EC_DEFAULT_MAP_LINE0_LOCAL_REWRITECOND =  "RewriteCond %{HTTP_USER_AGENT}  ^EarthClient/(.*)$\n"
+EC_DEFAULT_MAP_LINE1_GOOGLE_REDIRECT = (
+    "Redirect '/dbRoot.v5' '/%s/dbRoot.v5'\n")
+EC_DEFAULT_MAP_LINE2_GOOGLE_REDIRECT = (
+    "Redirect '/flatfile'  '/%s/flatfile'\n" )
+
 LINE0_TARGETDESCR = "\n# target: %s\n"
 # Rewrite rule template for adding trailing slash.
 LINE1_TRAILING_SLASH_REWRITERULE = "RewriteRule '^%s$'  '%s/'  [NC,R]\n"
@@ -83,17 +92,6 @@ MAP_LINE2_REWRITECOND = "RewriteCond %{QUERY_STRING}  ^(.*)$\n"
 MAP_LINE3_REWRITERULE = (
     "RewriteRule '^%s/(.*)'  '%s%s/db/$1?%%1&db_type=%s' [NC]\n")
 
-# Redirect Earth Client requests with no Globe specified on the URL
-# to the default_ge based URIs to provide Earth Client access to a default map 
-# if none is specified in the server connection URLs. 
-EC_DEFAULT_MAP_LINE0_LOCAL_REWRITECOND =  "RewriteCond %{HTTP_USER_AGENT}  ^EarthClient/(.*)$\n"
-EC_DEFAULT_MAP_LINE1_GOOGLE_REWRITERULE = (
-    "RewriteRule '/dbRoot.v5'  '/%s/dbRoot.v5'\n")
-EC_DEFAULT_MAP_LINE2_GOOGLE_REWRITERULE = (
-    "RewriteRule '/flatfile'  '/%s/flatfile'\n" )
-    
-
-    
 
 # Rewrite rules templates for portable globes requests serving.
 # GLB or 3d GLC
@@ -317,6 +315,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
     elif query_cmd == constants.QUERY_CMD_TARGET_DETAILS:
       target_path_in = request.GetParameter(constants.TARGET_PATH)
       if not target_path_in:
+
         raise exceptions.PublishServeException(
             "Missing target path in the request.")
 
@@ -1357,8 +1356,8 @@ class PublishManagerHelper(stream_manager.StreamManager):
       # Database is set to default for Earth Client:
       relative_target_path = default_target_path[1:]
       htaccess_file.write( EC_DEFAULT_MAP_LINE0_LOCAL_REWRITECOND )
-      htaccess_file.write( EC_DEFAULT_MAP_LINE1_GOOGLE_REWRITERULE % relative_target_path )
-      htaccess_file.write( EC_DEFAULT_MAP_LINE2_GOOGLE_REWRITERULE % relative_target_path )
+      htaccess_file.write( EC_DEFAULT_MAP_LINE1_GOOGLE_REDIRECT % relative_target_path )
+      htaccess_file.write( EC_DEFAULT_MAP_LINE2_GOOGLE_REDIRECT % relative_target_path )
 
     # Collects all the needed information for all the target paths based on
     # target ID and adds corresponding rewrite rules into htacces-file.
