@@ -227,7 +227,8 @@ show_fusion_running_message()
 }
 
 
-
+# This function supports using xmllint in EL6 and EL7 becaue EL6 
+# is missing the --xpath option.
 xml_file_get_xpath()
 {
     local FILE="$1"
@@ -245,16 +246,8 @@ load_systemrc_config()
 {
 	if [ -f "$SYSTEMRC" ]; then
 		# read existing config information
-		#ASSET_ROOT=$(xmllint --xpath '//Systemrc/assetroot/text()' $SYSTEMRC)
-		echo POOP 1
 		ASSET_ROOT=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/assetroot/text()" )
-
-		echo POOP 2
-		#GEFUSIONUSER_NAME=$(xmllint --xpath '//Systemrc/fusionUsername/text()' $SYSTEMRC)
-		GEFUSIONUSER_NAME=$(xml_file_get_xpath "$SYSTEMRC" '//Systemrc/fusionUsername/text()' )
-
-		echo POOP 
-		#GROUPNAME=$(xmllint --xpath '//Systemrc/userGroupname/text()' $SYSTEMRC)
+    	GEFUSIONUSER_NAME=$(xml_file_get_xpath "$SYSTEMRC" '//Systemrc/fusionUsername/text()' )
 		ASSET_ROOT=$(xml_file_get_xpath "$SYSTEMRC" '//Systemrc/userGroupname/text()' )
 	fi
 }
