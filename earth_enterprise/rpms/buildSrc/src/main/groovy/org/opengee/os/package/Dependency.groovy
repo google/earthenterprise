@@ -66,7 +66,9 @@ class Dependency extends org.redline_rpm.Dependency {
     public int hashCode() {
         int result = this.name.hashCode()
 
-        result = result * 23 + this.version.hashCode()
+        if (this.version != null) {
+            result = result * 23 + this.version.hashCode()
+        }
         result = result * 31 + this.flags.hashCode()
 
         return result;

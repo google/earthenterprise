@@ -16,17 +16,31 @@
 
 set +x
 
+NEW_INSTALL=false
+if [ "$1" = "1" ] ; then
+    NEW_INSTALL=true
+fi
+
 #-----------------------------------------------------------------
 # Main Functions
 #-----------------------------------------------------------------
 main_preinstall()
 {
+    # needed both for rpm state change and upgrading non-rpm install
     if [ -f /etc/init.d/geserver ]; then
         service geserver stop
     fi
 
-    check_username "$GEAPACHEUSER"
-    check_username "$GEPGUSER"
+    # only if a new install, has failsafe to protect non-rpm upgrades
+    if [ "$NEW_INSTALL" = "true" ] ; then
+        check_username "$GEAPACHEUSER"
+        check_username "$GEPGUSER"
+
+    fi
+
+    # Dump database if it exists
+    database_backup
+
 }
 
 #-----------------------------------------------------------------
@@ -44,6 +58,15 @@ check_username()
     else
         # user already exists -- update primary group
         usermod -g "$GEGROUP" "$1"
+    fi
+
+}
+
+database_backup()
+{
+    # If the GEE data directory exists and PostgreSQL is installed
+    if [ -d "$BASEINSTALLDIR_VAR/pgsql/data" ] && [ -f "$BASEINSTALLDIR_OPT/bin/psql" ]; then
+        do_dump
     fi
 }
 

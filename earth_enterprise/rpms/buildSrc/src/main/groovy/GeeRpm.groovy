@@ -74,6 +74,19 @@ class GeeRpm extends com.netflix.gradle.plugins.rpm.Rpm {
     // output package.
     Closure autoFindRequiresFilter = { it }
 
+    // A set of the commands set as dependencies for this package by calling
+    // the `requiresCommands` method:
+    protected Set<String> requiredCommands = new HashSet<String>()
+
+    // A lambda executed for each command path found for a `requiresCommand`
+    // statement.
+    //     The lambda should map:
+    //         String -> String
+    //     If the result is `null`, that dependency is dropped.  If the result
+    // is a string, it's used a capability name to be added as dependency of
+    // the output package.
+    Closure requiresCommandFilter = { it }
+
     // A set of `Requires(Pre)` (pre-install) dependencies for the RPM:
     Set<Dependency> requiresPre_set = new HashSet<Dependency>();
 
@@ -142,6 +155,14 @@ RequiresEND
             findAndAddRequires()
         }
 
+        requiredCommands.
+            collect { GeeCommandLine.resolveCommandPath(it) }.
+            collect(requiresCommandFilter).
+            findAll { it != null }.
+            each {
+                requires(it)
+            }
+
         super.copy()
 
         if (requiresPre_set) {
@@ -154,12 +175,9 @@ RequiresEND
         }
     }
 
-    // Adds the packages that provide all of the given commands to the package
-    // dependency list.
+    // Adds all of the given shell commands to the package dependency list.
     def requiresCommands(Iterable<String> commands) {
-        (commands as Set).each {
-            requires(GeeCommandLine.resolveCommandPath(it))
-        }
+        requiredCommands.addAll(commands)
     }
 
     def requiresPre(Dependency requirement) {

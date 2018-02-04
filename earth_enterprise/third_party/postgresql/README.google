@@ -1,5 +1,5 @@
 URL: http://www.postgresql.org/developer/
-Version: 8.4.22
+Version: 9.6.5
 License: BSD
 License File: COPYRIGHT
 
@@ -9,7 +9,7 @@ traditional commercial database systems with enhancements to be found in
 next-generation DBMS  systems. PostgreSQL is free and the complete source
 code is available.
 
-The PostgreSQL source, postgresql-8.4.22.tar.bz2,
+The PostgreSQL source, postgresql-9.6.5.tar.bz2,
 is downloadable from http://www.postgresql.org/ftp/source/
 
 Local Modifications:
