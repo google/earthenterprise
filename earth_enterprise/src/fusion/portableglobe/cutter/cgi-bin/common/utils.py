@@ -328,9 +328,18 @@ def RunCmd(os_cmd):
   try:
     if isinstance(os_cmd, str):
       os_cmd = shlex.split(os_cmd)
-    results = subprocess.check_output(os_cmd)
-    return results.split("\n")
-  except subprocess.CalledProcessError as e:
+    p = subprocess.Popen(os_cmd, shell=False,
+                         stdout=subprocess.PIPE,
+                         stderr=subprocess.PIPE)
+    results = p.communicate()[0]
+    err_data = p.communicate()[1]
+    return_code = p.returncode
+    if return_code != 0:
+      results = "{0} (return code {1})".format(err_data, return_code)
+      return ["", results]
+    else:
+      return results.split("\n")
+  except Exception, e:
     # print "FAILURE: %s" % e.__str__()
     return ["", e.__str__()]
 

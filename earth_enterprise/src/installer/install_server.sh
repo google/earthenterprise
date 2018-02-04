@@ -28,6 +28,7 @@ SCRIPTDIR=`dirname $0`
 PUBLISHER_ROOT="/gevol/published_dbs"
 INSTALL_LOG="$INSTALL_LOG_DIR/geserver_install_$(date +%Y_%m_%d.%H%M%S).log"
 BACKUP_DIR="$BASEINSTALLDIR_VAR/server-backups/$(date +%Y_%m_%d.%H%M%S)"
+BACKUP_DATA_DIR=$BACKUP_DIR/data.backup
 
 # script arguments
 BACKUPSERVER=true
@@ -93,9 +94,14 @@ main_preinstall()
   fi
 
   # 5b) Perform backup
-  if [ $BACKUPSERVER == true ]; then
+  if [ "$BACKUPSERVER" = true ]; then
     # Backing up current Server Install...
     backup_server
+  fi
+
+  # Backup PGSQL data
+  if [ -d "$PGSQL_DATA" ]; then
+    backup_pgsql_data
   fi
 
   # 6) Check valid host properties
@@ -109,15 +115,15 @@ main_preinstall()
 
   # 64 bit check
   if [[ "$(uname -i)" != "x86_64" ]]; then
-    echo -e "\n$GEEF $LONG_VERSION can only be installed on a 64 bit operating system."
+    echo -e "\n$GEES $LONG_VERSION can only be installed on a 64 bit operating system."
     exit 1
   fi
 
   # 8) Check if group and users exist
   check_group
 
-  check_username $GEAPACHEUSER_NAME
-  check_username $GEPGUSER_NAME
+  check_username "$GEAPACHEUSER_NAME"
+  check_username "$GEPGUSER_NAME"
 
   # 10) Configure Publish Root
   configure_publish_root
@@ -161,10 +167,10 @@ main_postinstall()
 
   # 5) Add the server to services
   # For RedHat and SuSE
-  test -f $CHKCONFIG && $CHKCONFIG --add geserver
+  test -f "$CHKCONFIG" && "$CHKCONFIG" --add geserver
 
   # 6) Register publish root
-  $BASEINSTALLDIR_OPT/bin/geconfigurepublishroot --noprompt --path=$PUBLISHER_ROOT
+  "$BASEINSTALLDIR_OPT/bin/geconfigurepublishroot" --noprompt --path="$PUBLISHER_ROOT"
 
   # 7) Install the GEPlaces and SearchExample Databases
   install_search_databases
@@ -176,7 +182,7 @@ main_postinstall()
   # 9) Run geecheck config script
   # If file ‘/opt/google/gehttpd/cgi-bin/set_geecheck_config.py’ exists:
   if [ -f "$GEE_CHECK_CONFIG_SCRIPT" ]; then
-    cd $BASEINSTALLDIR_OPT/gehttpd/cgi-bin
+    cd "$BASEINSTALLDIR_OPT/gehttpd/cgi-bin"
     python ./set_geecheck_config.py
   fi
 
@@ -236,7 +242,7 @@ parse_arguments()
         if [ -d "$1" ]; then
           TMPINSTALLDIR="$1"
         else
-          show_no_tmp_dir_message $1
+          show_no_tmp_dir_message "$1"
           parse_arguments_retval=-1
           break
         fi
@@ -268,9 +274,22 @@ configure_publish_root()
 {
   # Update PUBLISHER_ROOT if geserver already installed
   local STREAM_SPACE="$GEHTTPD_CONF/stream_space"
-  if [ -e $STREAM_SPACE ]; then
-    PUBLISHER_ROOT=`cat $STREAM_SPACE |cut -d" " -f3 |sed 's/.\{13\}$//'`
+  if [ -e "$STREAM_SPACE" ]; then
+    PUBLISHER_ROOT=`cat $STREAM_SPACE | cut -d" " -f3 | sed 's/.\{13\}$//'`
   fi
+}
+
+backup_pgsql_data()
+{
+  # Make the temporary data backup directory
+  mkdir -p "$BACKUP_DATA_DIR"
+  chown "$GEPGUSER_NAME" "$BACKUP_DATA_DIR"
+
+  # Dump PGSQL data
+  RESET_DB_SCRIPT=$TMPINSTALLDIR/server/opt/google/bin/geresetpgdb
+
+  echo 2 | run_as_user "$GEPGUSER_NAME" \
+    "$(printf '%q' "$RESET_DB_SCRIPT") backup $(printf '%q' "$BACKUP_DATA_DIR")"
 }
 
 #-----------------------------------------------------------------
@@ -280,100 +299,100 @@ copy_files_to_target()
 {
   printf "\nCopying files from source to target directories..."
 
-  mkdir -p $BASEINSTALLDIR_OPT/share/doc
-  mkdir -p $BASEINSTALLDIR_OPT/gehttpd/conf
-  mkdir -p $BASEINSTALLDIR_OPT/gehttpd/htdocs/shared_assets/images
-  mkdir -p $BASEINSTALLDIR_OPT/search
-  mkdir -p $BASEINSTALLDIR_VAR/openssl/private
-  mkdir -p $BASEINSTALLDIR_VAR/openssl/misc
-  mkdir -p $BASEINSTALLDIR_VAR/openssl/certs
-  mkdir -p $BASEINSTALLDIR_ETC/openldap
-  mkdir -p $BASEINSTALLDIR_VAR/pgsql
+  mkdir -p "$BASEINSTALLDIR_OPT/share/doc"
+  mkdir -p "$BASEINSTALLDIR_OPT/gehttpd/conf"
+  mkdir -p "$BASEINSTALLDIR_OPT/gehttpd/htdocs/shared_assets/images"
+  mkdir -p "$BASEINSTALLDIR_OPT/search"
+  mkdir -p "$BASEINSTALLDIR_VAR/openssl/private"
+  mkdir -p "$BASEINSTALLDIR_VAR/openssl/misc"
+  mkdir -p "$BASEINSTALLDIR_VAR/openssl/certs"
+  mkdir -p "$BASEINSTALLDIR_ETC/openldap"
+  mkdir -p "$BASEINSTALLDIR_VAR/pgsql"
 
   local error_on_copy=0
-  cp -rf $TMPINSTALLDIR/common/opt/google/bin $BASEINSTALLDIR_OPT
+  cp -rf "$TMPINSTALLDIR/common/opt/google/bin" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf $TMPINSTALLDIR/common/opt/google/share $BASEINSTALLDIR_OPT
+  cp -rf "$TMPINSTALLDIR/common/opt/google/share" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf $TMPINSTALLDIR/common/opt/google/qt $BASEINSTALLDIR_OPT
+  cp -rf "$TMPINSTALLDIR/common/opt/google/qt" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf $TMPINSTALLDIR/common/opt/google/qt/lib $BASEINSTALLDIR_OPT
+  cp -rf "$TMPINSTALLDIR/common/opt/google/qt/lib" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf $TMPINSTALLDIR/common/opt/google/lib $BASEINSTALLDIR_OPT
+  cp -rf "$TMPINSTALLDIR/common/opt/google/lib" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf $TMPINSTALLDIR/common/opt/google/gepython $BASEINSTALLDIR_OPT
+  cp -rf "$TMPINSTALLDIR/common/opt/google/gepython" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf $TMPINSTALLDIR/server/opt/google/share $BASEINSTALLDIR_OPT
+  cp -rf "$TMPINSTALLDIR/server/opt/google/share" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf $TMPINSTALLDIR/server/opt/google/bin $BASEINSTALLDIR_OPT
+  cp -rf "$TMPINSTALLDIR/server/opt/google/bin" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf $TMPINSTALLDIR/server/opt/google/lib $BASEINSTALLDIR_OPT
+  cp -rf "$TMPINSTALLDIR/server/opt/google/lib" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf $TMPINSTALLDIR/server/opt/google/gehttpd $BASEINSTALLDIR_OPT
+  cp -rf "$TMPINSTALLDIR/server/opt/google/gehttpd" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf $TMPINSTALLDIR/server/opt/google/search $BASEINSTALLDIR_OPT
+  cp -rf "$TMPINSTALLDIR/server/opt/google/search" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf $TMPINSTALLDIR/searchexample/opt/google/share $BASEINSTALLDIR_OPT
+  cp -rf "$TMPINSTALLDIR/searchexample/opt/google/share" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf $TMPINSTALLDIR/geplaces/opt/google/share $BASEINSTALLDIR_OPT
+  cp -rf "$TMPINSTALLDIR/geplaces/opt/google/share" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf $TMPINSTALLDIR/server/AppacheSupport/opt/google/gehttpd $BASEINSTALLDIR_OPT
-  if [ $? -ne 0 ]; then error_on_copy=1; fi
-
-  cp -rf $TMPINSTALLDIR/server/etc/init.d/geserver $BININSTALLROOTDIR
-  if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf $TMPINSTALLDIR/server/etc/profile.d/ge-server.sh $BININSTALLPROFILEDIR
-  if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf $TMPINSTALLDIR/server/etc/profile.d/ge-server.csh $BININSTALLPROFILEDIR
+  cp -rf "$TMPINSTALLDIR/server/AppacheSupport/opt/google/gehttpd" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
 
-  cp -rf $TMPINSTALLDIR/server/user_magic/etc/logrotate.d/gehttpd $BASEINSTALLLOGROTATEDIR
+  cp -rf "$TMPINSTALLDIR/server/etc/init.d/geserver" "$BININSTALLROOTDIR"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf $TMPINSTALLDIR/server/user_magic/var/opt/google/pgsql/logs/ $BASEINSTALLDIR_VAR/pgsql
+  cp -rf "$TMPINSTALLDIR/server/etc/profile.d/ge-server.sh" "$BININSTALLPROFILEDIR"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf $TMPINSTALLDIR/manual/opt/google/share/doc/manual $BASEINSTALLDIR_OPT/share/doc
+  cp -rf "$TMPINSTALLDIR/server/etc/profile.d/ge-server.csh" "$BININSTALLPROFILEDIR"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf $TMPINSTALLDIR/server/opt/google/gehttpd/conf/gehttpd.conf $BASEINSTALLDIR_OPT/gehttpd/conf
+
+  cp -rf "$TMPINSTALLDIR/server/user_magic/etc/logrotate.d/gehttpd" "$BASEINSTALLLOGROTATEDIR"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf $TMPINSTALLDIR/server/opt/google/gehttpd/htdocs/shared_assets/images/location_pin.png $BASEINSTALLDIR_OPT/gehttpd/htdocs/shared_assets/images
+  cp -rf "$TMPINSTALLDIR/server/user_magic/var/opt/google/pgsql/logs/" "$BASEINSTALLDIR_VAR/pgsql"
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
+  cp -rf "$TMPINSTALLDIR/manual/opt/google/share/doc/manual" "$BASEINSTALLDIR_OPT/share/doc"
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
+  cp -rf "$TMPINSTALLDIR/server/opt/google/gehttpd/conf/gehttpd.conf" "$BASEINSTALLDIR_OPT/gehttpd/conf"
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
+  cp -rf "$TMPINSTALLDIR/server/opt/google/gehttpd/htdocs/shared_assets/images/location_pin.png" "$BASEINSTALLDIR_OPT/gehttpd/htdocs/shared_assets/images"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
 
   TMPOPENSSLPATH=$TMPINSTALLDIR/common/user_magic/var/opt/google/openssl
 
-  cp -f $TMPOPENSSLPATH/openssl.cnf $BASEINSTALLDIR_VAR/openssl
+  cp -f "$TMPOPENSSLPATH/openssl.cnf" "$BASEINSTALLDIR_VAR/openssl"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf $TMPOPENSSLPATH/private $BASEINSTALLDIR_VAR/openssl
+  cp -rf "$TMPOPENSSLPATH/private" "$BASEINSTALLDIR_VAR/openssl"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -f $TMPOPENSSLPATH/misc/CA.sh $BASEINSTALLDIR_VAR/openssl/misc
+  cp -f "$TMPOPENSSLPATH/misc/CA.sh" "$BASEINSTALLDIR_VAR/openssl/misc"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -f $TMPOPENSSLPATH/misc/tsget $BASEINSTALLDIR_VAR/openssl/misc
+  cp -f "$TMPOPENSSLPATH/misc/tsget" "$BASEINSTALLDIR_VAR/openssl/misc"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -f $TMPOPENSSLPATH/misc/c_name $BASEINSTALLDIR_VAR/openssl/misc
+  cp -f "$TMPOPENSSLPATH/misc/c_name" "$BASEINSTALLDIR_VAR/openssl/misc"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -f $TMPOPENSSLPATH/misc/CA.pl $BASEINSTALLDIR_VAR/openssl/misc
+  cp -f "$TMPOPENSSLPATH/misc/CA.pl" "$BASEINSTALLDIR_VAR/openssl/misc"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -f $TMPOPENSSLPATH/misc/c_issuer $BASEINSTALLDIR_VAR/openssl/misc
+  cp -f "$TMPOPENSSLPATH/misc/c_issuer" "$BASEINSTALLDIR_VAR/openssl/misc"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -f $TMPOPENSSLPATH/misc/c_info $BASEINSTALLDIR_VAR/openssl/misc
+  cp -f "$TMPOPENSSLPATH/misc/c_info" "$BASEINSTALLDIR_VAR/openssl/misc"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -f $TMPOPENSSLPATH/misc/c_hash $BASEINSTALLDIR_VAR/openssl/misc
+  cp -f "$TMPOPENSSLPATH/misc/c_hash" "$BASEINSTALLDIR_VAR/openssl/misc"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf $TMPOPENSSLPATH/certs $BASEINSTALLDIR_VAR/openssl
+  cp -rf "$TMPOPENSSLPATH/certs" "$BASEINSTALLDIR_VAR/openssl"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
 
   TMPOPENLDAPPATH=$TMPINSTALLDIR/common/user_magic/etc/opt/google/openldap
 
-  cp -f $TMPOPENLDAPPATH/ldap.conf $BASEINSTALLDIR_ETC/openldap
+  cp -f "$TMPOPENLDAPPATH/ldap.conf" "$BASEINSTALLDIR_ETC/openldap"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -f $TMPOPENLDAPPATH/ldap.conf.default $BASEINSTALLDIR_ETC/openldap
+  cp -f "$TMPOPENLDAPPATH/ldap.conf.default" "$BASEINSTALLDIR_ETC/openldap"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
 
   # TODO: final step: copy uninstall script
   # cp -f $TMPOPENLDAPPATH/<........> $INSTALL_LOG_DIR
 
-  if [ $error_on_copy -ne 0 ]
+  if [ "$error_on_copy" -ne 0 ]
   then
-    show_corrupt_tmp_dir_message $TMPINSTALLDIR $INSTALL_LOG
+    show_corrupt_tmp_dir_message "$TMPINSTALLDIR" "$INSTALL_LOG"
     exit 1
   fi
 
@@ -388,7 +407,7 @@ postgres_db_config()
 {
   # a) PostGres folders and configuration
   chmod -R 700 /var/opt/google/pgsql/
-  chown -R $GEPGUSER_NAME:$GRPNAME /var/opt/google/pgsql/
+  chown -R "$GEPGUSER_NAME:$GRPNAME" /var/opt/google/pgsql/
   reset_pgdb
 }
 
@@ -396,14 +415,14 @@ reset_pgdb()
 {
   # TODO check if correct
   # a) Always do an upgrade of the psql db
-  echo 2 | run_as_user $GEPGUSER_NAME "/opt/google/bin/geresetpgdb upgrade"
+  echo 2 | run_as_user "$GEPGUSER_NAME" "/opt/google/bin/geresetpgdb upgrade $(printf '%q' "$BACKUP_DATA_DIR")"
   echo -e "upgrade done"
 
   # b) Check for Success of PostGresDb
   #  If file ‘/var/opt/google/pgsql/data’ doesn’t exist:
 
-  echo  "pgsql_data"
-  echo $PGSQL_DATA
+  echo "pgsql_data"
+  echo "$PGSQL_DATA"
   if [ -d "$PGSQL_DATA" ]; then
     # PostgreSQL install Success.
     echo -e "The PostgreSQL component is successfully installed."
@@ -421,9 +440,9 @@ setup_geserver_daemon()
   # setup geserver daemon
   # For Ubuntu
   printf "Setting up the geserver daemon...\n"
-  test -f $CHKCONFIG && $CHKCONFIG --add geserver
-  test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE -f geserver remove
-  test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE geserver start 90 2 3 4 5 . stop 10 0 1 6 .
+  test -f "$CHKCONFIG" && "$CHKCONFIG" --add geserver
+  test -f "$INITSCRIPTUPDATE" && "$INITSCRIPTUPDATE" -f geserver remove
+  test -f "$INITSCRIPTUPDATE" && "$INITSCRIPTUPDATE" geserver start 90 2 3 4 5 . stop 10 0 1 6 .
   printf "GEE Server daemon setup ... DONE\n"
 }
 
@@ -432,19 +451,19 @@ install_search_databases()
 {
   # a) Start the PSQL Server
   echo "# a) Start the PSQL Server "
-  run_as_user $GEPGUSER_NAME "$PGSQL_PROGRAM -D $PGSQL_DATA -l $PGSQL_LOGS/pg.log start -w"
+  run_as_user "$GEPGUSER_NAME" "$(printf '%q' "$PGSQL_PROGRAM") -D $(printf '%q' "$PGSQL_DATA") -l $(printf '%q' "$PGSQL_LOGS/pg.log") start -w"
 
   echo "# b) Install GEPlaces Database"
   # b) Install GEPlaces Database
-  run_as_user $GEPGUSER_NAME "/opt/google/share/geplaces/geplaces create"
+  run_as_user "$GEPGUSER_NAME" "/opt/google/share/geplaces/geplaces create"
 
   echo "# c) Install SearchExample Database "
   # c) Install SearchExample Database
-  run_as_user $GEPGUSER_NAME "/opt/google/share/searchexample/searchexample create"
+  run_as_user "$GEPGUSER_NAME" "/opt/google/share/searchexample/searchexample create"
 
   # d) Stop the PSQL Server
   echo "# d) Stop the PSQL Server"
-  run_as_user $GEPGUSER_NAME "$PGSQL_PROGRAM -D $PGSQL_DATA stop"
+  run_as_user "$GEPGUSER_NAME" "$PGSQL_PROGRAM -D $PGSQL_DATA stop"
 }
 
 modify_files()
@@ -454,8 +473,8 @@ modify_files()
   # if there are non-OSS installs in the system, it might help cleanup those.
 
   # a) Search and replace the below variables in /etc/init.d/geserver.
-  sed -i "s/IA_GEAPACHE_USER/$GEAPACHEUSER_NAME/" $BININSTALLROOTDIR/geserver
-  sed -i "s/IA_GEPGUSER/$GEPGUSER_NAME/" $BININSTALLROOTDIR/geserver
+  sed -i "s/IA_GEAPACHE_USER/$GEAPACHEUSER_NAME/" "$BININSTALLROOTDIR/geserver"
+  sed -i "s/IA_GEPGUSER/$GEPGUSER_NAME/" "$BININSTALLROOTDIR/geserver"
 
   # b) Search and replace the file ‘/opt/google/gehttpd/conf/gehttpd.conf’
   sed -i "s/IA_GEAPACHE_USER/$GEAPACHEUSER_NAME/" /opt/google/gehttpd/conf/gehttpd.conf
@@ -464,7 +483,7 @@ modify_files()
 
   # c) Create a new file ‘/etc/opt/google/fusion_server_version’ and
   # add the below text to it.
-  echo $LONG_VERSION > /etc/opt/google/fusion_server_version
+  echo "$LONG_VERSION" > /etc/opt/google/fusion_server_version
 
   # d) Create a new file ‘/etc/init.d/gevars.sh’ and prepend the below lines.
   echo -e "GEAPACHEUSER=$GEAPACHEUSER_NAME\nGEPGUSER=$GEPGUSER_NAME\nGEFUSIONUSER=$GEFUSIONUSER_NAME\nGEGROUP=$GRPNAME" > $BININSTALLROOTDIR/gevars.sh
@@ -473,48 +492,48 @@ modify_files()
 fix_postinstall_filepermissions()
 {
   # PostGres
-  chown -R $GEPGUSER_NAME:$GRPNAME $BASEINSTALLDIR_VAR/pgsql/
+  chown -R "$GEPGUSER_NAME:$GRPNAME" "$BASEINSTALLDIR_VAR/pgsql/"
 
   # Apache
-  mkdir -p $BASEINSTALLDIR_OPT/gehttpd/conf.d/virtual_servers/runtime
-  chmod -R 755 $BASEINSTALLDIR_OPT/gehttpd
-  chmod -R 775 $BASEINSTALLDIR_OPT/gehttpd/conf.d/virtual_servers/runtime/
-  chown -R $GEAPACHEUSER_NAME:$GRPNAME $BASEINSTALLDIR_OPT/gehttpd/conf.d/virtual_servers/
-  chown -R $GEAPACHEUSER_NAME:$GRPNAME $BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/
-  chmod -R 700 $BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/globes/
-  chown $GEAPACHEUSER_NAME:$GRPNAME $BASEINSTALLDIR_OPT/gehttpd/htdocs/.htaccess
-  chown -R $GEAPACHEUSER_NAME:$GRPNAME $BASEINSTALLDIR_OPT/gehttpd/logs
+  mkdir -p "$BASEINSTALLDIR_OPT/gehttpd/conf.d/virtual_servers/runtime"
+  chmod -R 755 "$BASEINSTALLDIR_OPT/gehttpd"
+  chmod -R 775 "$BASEINSTALLDIR_OPT/gehttpd/conf.d/virtual_servers/runtime/"
+  chown -R "$GEAPACHEUSER_NAME:$GRPNAME" "$BASEINSTALLDIR_OPT/gehttpd/conf.d/virtual_servers/"
+  chown -R "$GEAPACHEUSER_NAME:$GRPNAME" "$BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/"
+  chmod -R 700 "$BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/globes/"
+  chown "$GEAPACHEUSER_NAME:$GRPNAME" "$BASEINSTALLDIR_OPT/gehttpd/htdocs/.htaccess"
+  chown -R "$GEAPACHEUSER_NAME:$GRPNAME" "$BASEINSTALLDIR_OPT/gehttpd/logs"
 
   # Publish Root
-  chmod 775 $PUBLISHER_ROOT/stream_space
+  chmod 775 "$PUBLISHER_ROOT/stream_space"
   # TODO - Not Found
   # chmod 644 $PUBLISHER_ROOT/stream_space/.config
-  chmod 644 $PUBLISHER_ROOT/.config
-  chmod 755 $PUBLISHER_ROOT
-  chown -R $GEAPACHEUSER_NAME:$GRPNAME $PUBLISHER_ROOT/stream_space
-  chown -R $GEAPACHEUSER_NAME:$GRPNAME $PUBLISHER_ROOT/search_space
+  chmod 644 "$PUBLISHER_ROOT/.config"
+  chmod 755 "$PUBLISHER_ROOT"
+  chown -R "$GEAPACHEUSER_NAME:$GRPNAME" "$PUBLISHER_ROOT/stream_space"
+  chown -R "$GEAPACHEUSER_NAME:$GRPNAME" "$PUBLISHER_ROOT/search_space"
 
   # Etc
   chmod 755 /etc/opt/google/
-  chmod 755 $BASEINSTALLDIR_OPT/etc/
-  chmod 755 $BININSTALLROOTDIR/gevars.sh
-  chmod 755 $BININSTALLROOTDIR/geserver
+  chmod 755 "$BASEINSTALLDIR_OPT/etc/"
+  chmod 755 "$BININSTALLROOTDIR/gevars.sh"
+  chmod 755 "$BININSTALLROOTDIR/geserver"
 
   # Run
-  chmod 775 $BASEINSTALLDIR_OPT/run/
-  chmod 775 $BASEINSTALLDIR_VAR/run/
-  chown root:$GRPNAME $BASEINSTALLDIR_OPT/run/
-  chown root:$GRPNAME $BASEINSTALLDIR_VAR/run/
+  chmod 775 "$BASEINSTALLDIR_OPT/run/"
+  chmod 775 "$BASEINSTALLDIR_VAR/run/"
+  chown "root:$GRPNAME" "$BASEINSTALLDIR_OPT/run/"
+  chown "root:$GRPNAME" "$BASEINSTALLDIR_VAR/run/"
 
   # Logs
-  chmod 775 $BASEINSTALLDIR_VAR/log/
-  chmod 775 $BASEINSTALLDIR_OPT/log/
-  chown root:$GRPNAME $BASEINSTALLDIR_VAR/log
-  chown root:$GRPNAME $BASEINSTALLDIR_OPT/log
+  chmod 775 "$BASEINSTALLDIR_VAR/log/"
+  chmod 775 "$BASEINSTALLDIR_OPT/log/"
+  chown "root:$GRPNAME" "$BASEINSTALLDIR_VAR/log"
+  chown "root:$GRPNAME" "$BASEINSTALLDIR_OPT/log"
 
   # Other folders
-  chmod 755 $BASEINSTALLDIR_OPT
-  chmod 755 $BASEINSTALLDIR_VAR
+  chmod 755 "$BASEINSTALLDIR_OPT"
+  chmod 755 "$BASEINSTALLDIR_VAR"
   chmod -R 755 /opt/google/lib/
   chmod -R 555 /opt/google/bin/
   chmod 755 /opt/google/bin
@@ -534,7 +553,7 @@ fix_postinstall_filepermissions()
   chmod ugo+x /opt/google/share/support/geecheck/find_terrain_pixel.pl
   chmod ugo+x /opt/google/share/support/geecheck/pg_check.pl
   # Note: this is installed in install_fusion.sh, but needs setting here too.
-  chmod ugo+x $BASEINSTALLDIR_OPT/share/tutorials/fusion/download_tutorial.sh
+  chmod ugo+x "$BASEINSTALLDIR_OPT/share/tutorials/fusion/download_tutorial.sh"
   chown -R root:root /opt/google/share
 
   #TODO
@@ -547,7 +566,7 @@ fix_postinstall_filepermissions()
   /opt/google/bin/geserveradmin --disable_cutter
 
   # Restrict permissions to uninstaller and installer logs
-  chmod -R go-rwx $INSTALL_LOG_DIR
+  chmod -R go-rwx "$INSTALL_LOG_DIR"
 }
 
 show_final_success_message(){
@@ -563,9 +582,9 @@ show_final_success_message(){
     while true; do
       echo -e "Do you want to start the $GEES Service(y/n)?"
       read PROMPT_FOR_START
-      case $PROMPT_FOR_START in
+      case "$PROMPT_FOR_START" in
         [Yy]* )
-          $BININSTALLROOTDIR/geserver start
+          "$BININSTALLROOTDIR/geserver" start
           check_server_running; break;;
         [Nn]* )
           echo -e "Congratulations! $PRODUCT_NAME has been successfully $INSTALLED_OR_UPGRADED in the following directory:
@@ -602,8 +621,8 @@ check_server_running()
 #-----------------------------------------------------------------
 # Pre-Install Main
 #-----------------------------------------------------------------
-mkdir -p $INSTALL_LOG_DIR
-exec 2> $INSTALL_LOG
+mkdir -p "$INSTALL_LOG_DIR"
+exec 2> "$INSTALL_LOG"
 
 main_preinstall "$@"
 
