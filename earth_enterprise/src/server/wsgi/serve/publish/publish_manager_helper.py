@@ -31,6 +31,8 @@ import shutil
 import subprocess
 import tempfile
 import urlparse
+from inspect import getmembers
+from pprint import pprint
 
 from common import exceptions
 from common import utils
@@ -51,6 +53,15 @@ HTACCESS_REWRITE_BASE = "\nRewriteBase /\n"
 
 # Minimum portable globe size in MB.
 GLOBE_SIZE_THRESHOLD = 1.0
+
+# Redirect Earth Client requests with no Globe specified on the URL
+# to the default_ge based URIs to provide Earth Client access to a default map 
+# if none is specified in the server connection URLs. 
+EC_DEFAULT_MAP_LINE0_LOCAL_REWRITECOND =  "RewriteCond %{HTTP_USER_AGENT}  ^EarthClient/(.*)$\n"
+EC_DEFAULT_MAP_LINE1_GOOGLE_REDIRECT = (
+    "Redirect '/dbRoot.v5' '/%s/dbRoot.v5'\n")
+EC_DEFAULT_MAP_LINE2_GOOGLE_REDIRECT = (
+    "Redirect '/flatfile'  '/%s/flatfile'\n" )
 
 LINE0_TARGETDESCR = "\n# target: %s\n"
 # Rewrite rule template for adding trailing slash.
@@ -80,6 +91,7 @@ MAP_LINE1_REWRITERULE = (
 MAP_LINE2_REWRITECOND = "RewriteCond %{QUERY_STRING}  ^(.*)$\n"
 MAP_LINE3_REWRITERULE = (
     "RewriteRule '^%s/(.*)'  '%s%s/db/$1?%%1&db_type=%s' [NC]\n")
+
 
 # Rewrite rules templates for portable globes requests serving.
 # GLB or 3d GLC
@@ -209,7 +221,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
 
       query_string = ("""
           SELECT db_table.host_name, db_table.db_name, db_table.db_pretty_name,
-            db_table.db_timestamp AT TIME ZONE 'UTC', db_table.db_size,
+            db_table.db_timestamp AT TIME ZONE 'UTC', db_table.db_size, 
             virtual_host_table.virtual_host_name,
             virtual_host_table.virtual_host_url,
             virtual_host_table.virtual_host_ssl,
@@ -303,6 +315,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
     elif query_cmd == constants.QUERY_CMD_TARGET_DETAILS:
       target_path_in = request.GetParameter(constants.TARGET_PATH)
       if not target_path_in:
+
         raise exceptions.PublishServeException(
             "Missing target path in the request.")
 
@@ -328,6 +341,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
     Raises:
       psycopg2.Error/Warning, PublishServeException.
     """
+    
     target_path = publish_def.target_path
     virtual_host_name = publish_def.virtual_host_name
     db_type = publish_def.db_type
@@ -336,9 +350,9 @@ class PublishManagerHelper(stream_manager.StreamManager):
     snippets_set_name = publish_def.snippets_set_name
     search_defs = publish_def.search_tabs
     sup_search_defs = publish_def.sup_search_tabs
-
+    ec_default_ge = publish_def.ec_default_ge
     poifederated = publish_def.poi_federated
-
+    
     assert target_path and target_path[0] == "/" and target_path[-1] != "/"
 
     # Check if the VS template exists.
@@ -352,16 +366,24 @@ class PublishManagerHelper(stream_manager.StreamManager):
       # Add target point into target_table.
       target_id = self._AddTarget(target_path, serve_wms)
 
+      # clear the default DB flag if this publish has one set, so that 
+      # the older database is not considered the default.  
+      if ec_default_ge:
+        logger.warn( "Database %s will be set as the default when Earth Client connections when no database is specified." % target_path )
+        query_string = ("UPDATE publish_context_table"
+                        " SET ec_default_ge = FALSE ")
+        result = self.DbModify(query_string)
+
       # Insert publish context into 'publish_context_table' table.
       query_string = ("INSERT INTO publish_context_table"
                       " (snippets_set_name, search_def_names,"
-                      " supplemental_search_def_names, poifederated)"
-                      " VALUES(%s, %s, %s, %s) RETURNING"
+                      " supplemental_search_def_names, poifederated, ec_default_ge)"
+                      " VALUES(%s, %s, %s, %s, %s) RETURNING"
                       " publish_context_id")
-
+      
       result = self.DbModify(
           query_string,
-          (snippets_set_name, search_defs, sup_search_defs, poifederated),
+          (snippets_set_name, search_defs, sup_search_defs, poifederated, ec_default_ge),
           returning=True)
 
       publish_context_id = 0
@@ -373,10 +395,9 @@ class PublishManagerHelper(stream_manager.StreamManager):
       # Link target point with VS template, database and publish context.
       query_string = ("INSERT INTO target_db_table"
                       " (target_id, virtual_host_id, db_id, publish_context_id)"
-                      " VALUES(%s, %s, %s, %s)")
+                      " VALUES(%s, %s, %s, %s )")
       self.DbModify(query_string,
                     (target_id, virtual_host_id, db_id, publish_context_id))
-
     else:
       raise exceptions.PublishServeException("Database is not pushed.")
 
@@ -633,7 +654,8 @@ class PublishManagerHelper(stream_manager.StreamManager):
     query_string = ("""SELECT publish_context_table.snippets_set_name,
            publish_context_table.search_def_names,
            publish_context_table.supplemental_search_def_names,
-           publish_context_table.poifederated
+           publish_context_table.poifederated, 
+           publish_context_table.ec_default_ge
            FROM target_table, target_db_table, publish_context_table
            WHERE target_table.target_path = %s AND
                  target_table.target_id = target_db_table.target_id AND
@@ -1289,6 +1311,29 @@ class PublishManagerHelper(stream_manager.StreamManager):
         " WHERE target_id IN (SELECT target_id FROM target_db_table)")
     return self.DbQuery(query_string)
 
+  # Finds the database that is the default stream for Earth Clients.
+  def _GetEcDefaultGeTargetPath(self):
+    """Gets target paths serving published databases.
+
+    Raises:
+      psycopg2.Error/Warning.
+    Returns:
+      list of tuples (target_path, target_id, serve_wms).
+    """
+    target_path_result = None
+    query_string = (
+        """SELECT target_table.target_path, publish_context_table.ec_default_ge
+           FROM publish_context_table, target_table, target_db_table
+           WHERE ec_default_ge = TRUE AND
+                 target_table.target_id = target_db_table.target_id AND
+                 target_db_table.publish_context_id =
+                 publish_context_table.publish_context_id;""")
+    results = self.DbQuery(query_string)
+    if results:
+      if isinstance(results, list) and len(results) >0:
+        ( target_path_result, ec_default_ge ) = results[0]
+    return target_path_result
+
   def _WritePublishContentToHtaccessFile(self, htaccess_file,
                                          target_paths_list):
     """Writes publish content into htaccess-file.
@@ -1299,10 +1344,20 @@ class PublishManagerHelper(stream_manager.StreamManager):
     Raises:
       psycopg2.Error/Warning, PublishServeException.
     """
+    default_target_path = self._GetEcDefaultGeTargetPath() 
+
     # Write publish header to file.
     htaccess_file.write("%s" % PublishManagerHelper.HTACCESS_GE_PUBLISH_BEGIN)
     # Write RewriteBase to file.
     htaccess_file.write("%s" % HTACCESS_REWRITE_BASE)
+
+    logger.info( "Default target path is currently set to: %s " % default_target_path)
+    if default_target_path: 
+      # Database is set to default for Earth Client:
+      relative_target_path = default_target_path[1:]
+      htaccess_file.write( EC_DEFAULT_MAP_LINE0_LOCAL_REWRITECOND )
+      htaccess_file.write( EC_DEFAULT_MAP_LINE1_GOOGLE_REDIRECT % relative_target_path )
+      htaccess_file.write( EC_DEFAULT_MAP_LINE2_GOOGLE_REDIRECT % relative_target_path )
 
     # Collects all the needed information for all the target paths based on
     # target ID and adds corresponding rewrite rules into htacces-file.
@@ -1354,6 +1409,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
         htaccess_file.write(GE_LINE1_REWRITECOND)
         htaccess_file.write(GE_LINE2_REWRITERULE % (
             relative_target_path, virtual_host_path, target_path, db_type))
+    
       # Content for Fusion map (map database).
       elif db_type == basic_types.DbType.TYPE_MAP:
         assert isinstance(db_flags, int)

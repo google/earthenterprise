@@ -101,8 +101,9 @@ main_preinstall()
 
 	# check for invalid asset names
 	INVALID_ASSETROOT_NAMES=$(find $ASSET_ROOT -type d -name "*[\\\&\%\'\"\*\=\+\~\`\?\<\>\:\; ]*" 2> /dev/null)
-
-	if [ ! -z "$INVALID_ASSETROOT_NAMES" ]; then
+	
+	
+   if [ ! -z "$INVALID_ASSETROOT_NAMES" ]; then
 		show_invalid_assetroot_name $INVALID_ASSETROOT_NAMES
 		exit 1
 	fi
@@ -225,13 +226,29 @@ show_fusion_running_message()
 	echo -e "To use this installer to upgrade, you must stop all fusion services.\n"	
 }
 
+
+# This function supports using xmllint in EL6 and EL7 becaue EL6 
+# is missing the --xpath option.
+xml_file_get_xpath()
+{
+    local FILE="$1"
+    local XPATH="$2"
+
+    # Warning: `xmllint --noent` doesn't recognize named entities like
+    # "&lt;" and "&gt;":
+    echo "cat $XPATH" | xmllint --noent --nocdata --shell "$FILE" |
+    # Skip the first and the last line:
+        tail -n +2 | head -n -1
+}
+
+
 load_systemrc_config()
 {
 	if [ -f "$SYSTEMRC" ]; then
 		# read existing config information
-		ASSET_ROOT=$(xmllint --xpath '//Systemrc/assetroot/text()' $SYSTEMRC)
-		GEFUSIONUSER_NAME=$(xmllint --xpath '//Systemrc/fusionUsername/text()' $SYSTEMRC)
-		GROUPNAME=$(xmllint --xpath '//Systemrc/userGroupname/text()' $SYSTEMRC)		
+        ASSET_ROOT=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/assetroot/text()" )
+        GEFUSIONUSER_NAME=$(xml_file_get_xpath "$SYSTEMRC" '//Systemrc/fusionUsername/text()' )
+        ASSET_ROOT=$(xml_file_get_xpath "$SYSTEMRC" '//Systemrc/userGroupname/text()' )
 	fi
 }
 
@@ -742,8 +759,7 @@ check_asset_root_volume_size()
 check_fusion_master_or_slave()
 {
     if [ -f "$ASSET_ROOT/.config/volumes.xml" ]; then
-        EXISTING_HOST=$(xmllint --xpath "//VolumeDefList/volumedefs/item[1]/host/text()" $ASSET_ROOT/.config/volumes.xml | $NEWLINECLEANER)
-
+        EXISTING_HOST=$(xml_file_get_xpath "$ASSET_ROOT/.config/volumes.xml" '//VolumeDefList/volumedefs/item[1]/host/text()' )
         case "$EXISTING_HOST" in
 			$HOSTNAME_F|$HOSTNAME_A|$HOSTNAME_S|$HOSTNAME)
                 IS_SLAVE=false
