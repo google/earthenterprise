@@ -1,4 +1,4 @@
-// Copyright 2018 the Open GEE Contributors
+// Copyright 2018 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,12 +17,14 @@
 #include <string>
 #include <unistd.h>
 #include <sys/syscall.h>
+#include <time.h>
 
 #include "common/profiler.h"
 #include "common/notify.h"
 #include "common/timeutils.h"
 
 using namespace std;
+using namespace getime;
 
 // Initialize static members of Profiler class
 Profiler * const Profiler::_instance = new Profiler();
@@ -34,11 +36,11 @@ Profiler * const BlockProfiler::profiler = Profiler::instance();
 void Profiler::log(
     const string & operation,
     const string & object,
-    const double startTime,
-    const double endTime,
+    const timespec startTime,
+    const timespec endTime,
     const size_t size) {
 
-  const double duration = endTime - startTime;
+  const timespec duration = timespecDiff(endTime, startTime);
   const pid_t tid = syscall(SYS_gettid);
   stringstream message;
 
@@ -75,6 +77,6 @@ BlockProfiler::BlockProfiler(
 
 // Stop profiling and log results
 BlockProfiler::~BlockProfiler() {
-  const double endTime = getMonotonicTime();
+  const timespec endTime = getMonotonicTime();
   profiler->log(operation, object, startTime, endTime, size);
 }

@@ -1,4 +1,4 @@
-// Copyright 2018 the Open GEE Contributors
+// Copyright 2018 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,8 +17,18 @@
 #ifndef TIMEUTILS_H
 #define TIMEUTILS_H
 
-const double NSEC_TO_SEC = 1e-9;
+#include <time.h>
+#include <ostream>
 
-double getMonotonicTime();
+namespace getime {
+
+timespec getMonotonicTime();
+double timespecToDouble(const timespec tm);
+timespec timespecDiff(const timespec x, const timespec y);
+bool operator<(const timespec & x, const timespec & y);
+bool operator>=(const timespec & x, const timespec & y);
+std::ostream & operator<<(std::ostream & stream, const timespec & tm);
+
+}
 
 #endif // TIMEUTILS_H

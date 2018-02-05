@@ -1,4 +1,4 @@
-// Copyright 2018 the Open GEE Contributors
+// Copyright 2018 The Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 #define PROFILER_H
 
 #include <string>
+#include <time.h>
 
 /*
  * Singleton class for profiling events. The programmer can use this class
@@ -28,8 +29,8 @@ class Profiler {
     void log(
         const std::string & operation, // The operation being timed
         const std::string & object,    // The object that the operation is performed on
-        const double startTime,        // The start time of the operation
-        const double endTime,          // The end time of the operation
+        const timespec startTime,      // The start time of the operation
+        const timespec endTime,        // The end time of the operation
         const size_t size = 0);        // The size of the object, if applicable
   private:
     static Profiler * const _instance;
@@ -53,7 +54,7 @@ class BlockProfiler {
     const std::string operation;
     const std::string object;
     const size_t size;
-    const double startTime;
+    const timespec startTime;
 };
 
 // Programmers should use the macros below to profile code instead of using the

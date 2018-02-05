@@ -257,8 +257,8 @@ int main(int argc, char **argv) {
     END_PROFILING(parse_args);
 
     // Create a merge of the terrain indices
-    BEGIN_PROFILING(create_merger, "create", "merger");
     JOBSTATS_BEGIN(job_stats, MERGER_CREATED);    // validate
+    BEGIN_PROFILING(create_merger, "create", "merger");
 
     // We'll need to limit the number of filebundles opened by the filepool
     // at a single time, to keep from overflowing memory.
@@ -342,12 +342,12 @@ int main(int argc, char **argv) {
     khPrintFileSizes("Input File Sizes", input_files);
 
     merger->Start();
-    JOBSTATS_END(job_stats, MERGER_CREATED);
     END_PROFILING(create_merger);
+    JOBSTATS_END(job_stats, MERGER_CREATED);
 
     // Feed this merge into a QuadsetGather operation
-    BEGIN_PROFILING(create_gatherer, "create", "gatherer");
     JOBSTATS_BEGIN(job_stats, GATHERER_CREATED);    // validate
+    BEGIN_PROFILING(create_gatherer, "create", "gatherer");
 
     qtpacket::QuadsetGather<geterrain::TerrainPacketItem>
       gather("TerrainQuadsetGather", TransferOwnership(merger));
@@ -378,16 +378,16 @@ int main(int argc, char **argv) {
     combiner.WaitForThreadsToFinish();
     notify(NFY_DEBUG, "closing the gatherer");
     gather.Close();
-    JOBSTATS_END(job_stats, GATHERER_CREATED);
     END_PROFILING(create_gatherer);
+    JOBSTATS_END(job_stats, GATHERER_CREATED);
 
     // Finish the packet file
-    BEGIN_PROFILING(start_combiner, "start", "combiner");
     JOBSTATS_BEGIN(job_stats, COMBINE);    // validate
+    BEGIN_PROFILING(start_combiner, "start", "combiner");
     notify(NFY_DEBUG, "writing the packet index");
     combiner.Close(static_cast<size_t>(sortbuf) * 1024 * 1024);
-    JOBSTATS_END(job_stats, COMBINE);
     END_PROFILING(start_combiner);
+    JOBSTATS_END(job_stats, COMBINE);
     // On successful completion, print the output file sizes.
     output_files.push_back(outdir);
   } catch (const khAbortedException &e) {
