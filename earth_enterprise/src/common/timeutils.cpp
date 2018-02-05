@@ -12,17 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <assert.h>
 #include <time.h>
 #include <ostream>
+#include <stdint.h>
 
-#include "khTypes.h"
 #include "timeutils.h"
 
 using namespace std;
 
 namespace getime {
 
-const u_int32_t SEC_TO_NSEC = 1e9;
+const uint32_t SEC_TO_NSEC = 1e9;
 const double NSEC_TO_SEC = 1e-9;
 
 timespec getMonotonicTime() {
@@ -40,10 +41,10 @@ timespec timespecDiff(const timespec x, const timespec y) {
   assert(x >= y);
 
   // Cast to larger integers in case of overflow
-  u_int32_t x_sec = x.tv_sec;
-  u_int32_t x_nsec = x.tv_nsec;
-  u_int32_t y_sec = y.tv_sec;
-  u_int32_t y_nsec = y.tv_nsec;
+  uint32_t x_sec = x.tv_sec;
+  uint32_t x_nsec = x.tv_nsec;
+  uint32_t y_sec = y.tv_sec;
+  uint32_t y_nsec = y.tv_nsec;
 
   // See if we need to borrow
   if (x_nsec < y_nsec) {
