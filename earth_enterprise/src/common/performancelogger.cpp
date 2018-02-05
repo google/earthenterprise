@@ -19,7 +19,7 @@
 #include <sys/syscall.h>
 #include <time.h>
 
-#include "common/profiler.h"
+#include "common/performancelogger.h"
 #include "common/notify.h"
 #include "common/timeutils.h"
 
@@ -27,13 +27,13 @@ using namespace std;
 using namespace getime;
 
 // Initialize static members of Profiler class
-Profiler * const Profiler::_instance = new Profiler();
+PerformanceLogger * const PerformanceLogger::_instance = new PerformanceLogger();
 
 // Initialize static members of BlockProfiler class
-Profiler * const BlockProfiler::profiler = Profiler::instance();
+PerformanceLogger * const BlockPerformanceLogger::perfLogger = PerformanceLogger::instance();
 
 // Log a profiling message
-void Profiler::log(
+void PerformanceLogger::log(
     const string & operation,
     const string & object,
     const timespec startTime,
@@ -62,7 +62,7 @@ void Profiler::log(
 }
 
 // Begin profiling
-BlockProfiler::BlockProfiler(
+BlockPerformanceLogger::BlockPerformanceLogger(
     const string & operation,
     const string & object,
     const size_t size
@@ -76,7 +76,7 @@ BlockProfiler::BlockProfiler(
 }
 
 // Stop profiling and log results
-BlockProfiler::~BlockProfiler() {
+BlockPerformanceLogger::~BlockPerformanceLogger() {
   const timespec endTime = getMonotonicTime();
-  profiler->log(operation, object, startTime, endTime, size);
+  perfLogger->log(operation, object, startTime, endTime, size);
 }

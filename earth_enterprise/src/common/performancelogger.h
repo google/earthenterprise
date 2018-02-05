@@ -12,20 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef PROFILER_H
-#define PROFILER_H
+#ifndef PERFORMANCELOGGER_H
+#define PERFORMANCELOGGER_H
 
 #include <string>
 #include <time.h>
 
 /*
- * Singleton class for profiling events. The programmer can use this class
- * to log the timing of operations. This class is intended for performance
- * debugging.
+ * Singleton class for logging event performance. This class is intended for
+ * performance debugging.
  */
-class Profiler {
+class PerformanceLogger {
   public:
-    static Profiler * instance() { return _instance; }
+    static PerformanceLogger * instance() { return _instance; }
     void log(
         const std::string & operation, // The operation being timed
         const std::string & object,    // The object that the operation is performed on
@@ -33,47 +32,46 @@ class Profiler {
         const timespec endTime,        // The end time of the operation
         const size_t size = 0);        // The size of the object, if applicable
   private:
-    static Profiler * const _instance;
-    Profiler() {}
+    static PerformanceLogger * const _instance;
+    PerformanceLogger() {}
 };
 
 /*
- * A convenience class for profiling a block of code. Profiling begins when an
+ * A convenience class for timing a block of code. Timing begins when an
  * instance of this class is created and ends when the instance goes out of
  * scope.
  */
-class BlockProfiler {
+class BlockPerformanceLogger {
   public:
-    BlockProfiler(
+    BlockPerformanceLogger(
         const std::string & operation,
         const std::string & object,
         const size_t size = 0);
-    ~BlockProfiler();
+    ~BlockPerformanceLogger();
   private:
-    static Profiler * const profiler;
+    static PerformanceLogger * const perfLogger;
     const std::string operation;
     const std::string object;
     const size_t size;
     const timespec startTime;
 };
 
-// Programmers should use the macros below to profile code instead of using the
+// Programmers should use the macros below to time code instead of using the
 // classes above directly. This makes it easy to use compile time flags to
-// exclude the profiling code.
+// exclude the time code.
 
 // For all of the macros, the variadic arguments include the object name
 // (required) and the size (optional).
 
-// This macro will profile a block of code. The call to this macro should be
-// the first statement in the block you want to profile - it will not profile
-// anything that comes before it. It will continue profiling until it goes out
-// of scope.
-#define PROFILE_BLOCK(op, ...) BlockProfiler _block_prof_inst(op, __VA_ARGS__)
+// This macro will time a block of code. The call to this macro should be the
+// first statement in the block you want to time - it will not time anything
+// that comes before it. It will continue timinguntil it goes out of scope.
+#define PERF_LOG_BLOCK(op, ...) BlockPerformanceLogger _block_prof_inst(op, __VA_ARGS__)
 
-// You can use these macros if you want to profile a part of a block of code.
-// If you use multiple profiling statements in the same block you must give
-// each one a unique name.
-#define BEGIN_PROFILING(name, op, ...) BlockProfiler * name = new BlockProfiler(op, __VA_ARGS__)
-#define END_PROFILING(name) delete name
+// You can use these macros if you want to time a part of a block of code. If
+// you use multiple perf loggin statements in the same block you must give each
+// one a unique name.
+#define BEGIN_PERF_LOGGING(name, op, ...) BlockPerformanceLogger * name = new BlockPerformanceLogger(op, __VA_ARGS__)
+#define END_PERF_LOGGING(name) delete name
 
-#endif // PROFILER_H
+#endif // PERFORMANCELOGGER_H
