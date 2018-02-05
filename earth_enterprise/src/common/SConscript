@@ -181,5 +181,9 @@ env.test('verref_storage_unittest',
          'verref_storage_unittest.cpp',
          LIBS=['geutil', 'gecommon', 'gtest'])
 
+env.test('timeutils_unittest',
+         'timeutils_unittest.cpp',
+         LIBS=['gecommon', 'gtest'])
+
 env.install('common_lib', [gecommon])
 env.install('common_lib', [geutil])

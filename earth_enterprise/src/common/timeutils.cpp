@@ -63,7 +63,7 @@ bool operator<(const timespec & x, const timespec & y) {
   else return false;
 }
 
-bool operator >=(const timespec & x, const timespec & y) {
+bool operator>=(const timespec & x, const timespec & y) {
   return !(x < y);
 }
 
