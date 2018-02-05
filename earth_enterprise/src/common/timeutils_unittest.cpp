@@ -57,9 +57,13 @@ TEST(TimeUtilsTest, TimespecDiff_Borrow2){
 TEST(TimeUtilsTest, TimespecDiff_Large) {
   testTimespecDiff(987654321, 999999999, 987654320, 999999998, 1, 1);
 }
+
+// This test will pass (i.e., the function will die) if asserts are enabled.
+#if !defined NDEBUG
 TEST(TimeUtilsTest, TimespecDiff_SmallMinusLarge) {
   EXPECT_DEATH_IF_SUPPORTED(timespecDiff(makeTimespec(10, 0), makeTimespec(11, 0)), ".*");
 }
+#endif
 
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
