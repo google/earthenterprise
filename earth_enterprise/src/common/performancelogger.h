@@ -40,8 +40,8 @@ class PerformanceLogger {
 
 /*
  * A convenience class for timing a block of code. Timing begins when an
- * instance of this class is created and ends when the instance goes out of
- * scope.
+ * instance of this class is created and ends when the user calls "end" or the
+ * instance goes out of scope.
  */
 template <class PerfLoggerCls>
 class BlockPerformanceLogger {
@@ -54,13 +54,19 @@ class BlockPerformanceLogger {
       operation(operation),
       object(object),
       size(size),
-      startTime(getime::getMonotonicTime())
-    {
+      startTime(getime::getMonotonicTime()),
+      ended(false) {
       // Nothing to do - just initialize class members above
     }
+    void end() {
+      if (!ended) {
+        ended = true;
+        const timespec endTime = getime::getMonotonicTime();
+        perfLogger->log(operation, object, startTime, endTime, size);
+      }
+    }
     ~BlockPerformanceLogger() {
-      const timespec endTime = getime::getMonotonicTime();
-      perfLogger->log(operation, object, startTime, endTime, size);
+      end();
     }
   private:
     PerfLoggerCls * const perfLogger;
@@ -68,27 +74,20 @@ class BlockPerformanceLogger {
     const std::string object;
     const size_t size;
     const timespec startTime;
+    bool ended;
 };
 
 // Programmers should use the macros below to time code instead of using the
 // classes above directly. This makes it easy to use compile time flags to
 // exclude the time code.
-
-// For all of the macros, the variadic arguments include the object name
+//
+// For the macros below, the variadic arguments include the object name
 // (required) and the size (optional).
-
-// This macro will time a block of code. The call to this macro should be the
-// first statement in the block you want to time - it will not time anything
-// that comes before it. It will continue timinguntil it goes out of scope.
-#define PERF_LOG_BLOCK(op, ...) \
-  BlockPerformanceLogger<PerformanceLogger> _block_prof_inst(op, __VA_ARGS__)
-
-// You can use these macros if you want to time a part of a block of code. If
-// you use multiple perf loggin statements in the same block you must give each
-// one a unique name.
+//
+// If you use multiple performance logging statements in the same scope you
+// must give each one a unique name.
 #define BEGIN_PERF_LOGGING(name, op, ...) \
-  BlockPerformanceLogger<PerformanceLogger> * name = \
-      new BlockPerformanceLogger<PerformanceLogger>(op, __VA_ARGS__)
-#define END_PERF_LOGGING(name) delete name
+  BlockPerformanceLogger<PerformanceLogger> name(op, __VA_ARGS__)
+#define END_PERF_LOGGING(name) name.end()
 
 #endif // PERFORMANCELOGGER_H
