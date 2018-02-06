@@ -133,6 +133,7 @@ void PopulateFileMap(geFilePool &file_pool,
       DbManifest dbmanifest(&(*dbpaths)[i]);
 
       std::vector<ManifestEntry> manifest;
+      notify(NFY_DEBUG, "Building manifest for: %s", (*dbpaths)[i].c_str());
       dbmanifest.GetDisconnectedManifest(file_pool, manifest, tmp_dir);
       if (filelists) {
         (*filelists)[i].reserve(manifest.size());
@@ -146,14 +147,15 @@ void PopulateFileMap(geFilePool &file_pool,
         }
         for(size_t idx = 0; idx < entry->dependents.size(); ++idx)
         {
-          const std::string& dep_file = entry->dependents[idx];
-          NameSizePair* name_size = &files[dep_file];
-          *name_size = std::make_pair(dep_file, khDiskUsage(dep_file));
+          const ManifestEntry& dep_entry = entry->dependents[idx];
+          NameSizePair* dep_name_size = &files[dep_entry.current_path];
+          *dep_name_size = std::make_pair(dep_entry.orig_path, dep_entry.data_size);
           if (filelists) {
-            (*filelists)[i].push_back(dep_file);
+            (*filelists)[i].push_back(dep_entry.orig_path);
           }
         }
       }
+      notify(NFY_DEBUG, "Done building file map for: %s", (*dbpaths)[i].c_str());
     }
   } catch (const std::exception &e) {
     notify(NFY_FATAL, "%s", e.what());

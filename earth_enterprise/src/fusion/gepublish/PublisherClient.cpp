@@ -1357,7 +1357,7 @@ bool PublisherClient::SyncFiles(
         // like search manifests server does special processing on files in that manifest that
         // can't be done on the dependent files.
         for(size_t dep_idx = 0; dep_idx < manifest_entries[index].dependents.size(); ++dep_idx) {
-          upload_entries.push_back(ManifestEntry(manifest_entries[index].dependents[dep_idx]));
+          upload_entries.push_back(manifest_entries[index].dependents[dep_idx]);
         }
       }
 

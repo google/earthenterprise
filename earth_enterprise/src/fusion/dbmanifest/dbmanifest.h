@@ -23,6 +23,7 @@
 
 #include "fusion/dbgen/.idl/DBConfig.h"
 #include "common/ManifestEntry.h"
+#include "common/khGuard.h"
 #include "common/khstl.h"
 
 
@@ -35,9 +36,25 @@ class geProtoDbroot;
 
 class DbManifest {
  public:
+
+  struct IndextManifest {
+    virtual void operator()(geFilePool &filePool,
+                          const std::string &index_path,
+                          std::vector<ManifestEntry> &manifest,
+                          const std::string &tmpdir,
+                          const std::string& disconnect_prefix,
+                          const std::string& publish_prefix) = 0;
+    virtual ~IndextManifest(){}
+  };
+
   // May throw an exception.
   // Returns the prefix removed db_path (assetroot db path).
   explicit DbManifest(std::string* db_path);
+  // used for testing
+  DbManifest(std::string* db_path,
+             // alternate indext manifest getter. Ownership will
+             // be transfered
+             khDeleteGuard<IndextManifest>& GetIndexManifest);
 
   // Gets push- manifest files (index-, packet- files, time machine files,
   // POI files, icon files).
@@ -225,6 +242,11 @@ void GetPoiDataFiles(ManifestEntry* stream_manifest_entry,
     const std::string& curr, std::vector<ManifestEntry>* manifest) const;
 
   void GetXmlManifest(std::vector<ManifestEntry>* manifest) const;
+
+  // shared initialization code ( no shared constructors until C++11 :( )
+  void Init(std::string* db_path);
+
+  const khDeleteGuard<IndextManifest> GetIndextManifest_;
 
   const std::string db_path_;
   const std::string search_prefix_;

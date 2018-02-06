@@ -25,12 +25,13 @@
 #include "common/khTypes.h"
 #include "common/khFileUtils.h"
 
+struct ManifestEntry;
 
 struct ManifestEntry {
   std::string orig_path;
   std::string current_path;
   uint64 data_size;
-  std::vector<std::string> dependents;
+  std::vector<ManifestEntry> dependents;
 
   ManifestEntry() : data_size(0) {}
 

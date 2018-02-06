@@ -65,10 +65,50 @@
 #include "common/notify.h"
 #include "common/khxml/khdom.h"
 
-DbManifest::DbManifest(std::string* db_path)
-  : db_path_(*db_path),
+struct DefaultGetIndextManifest : public DbManifest::IndextManifest {
+  void operator()(geFilePool &filePool,
+                  const std::string &index_path,
+                  std::vector<ManifestEntry> &manifest,
+                  const std::string &tmpdir,
+                  const std::string& disconnect_prefix,
+                  const std::string& publish_prefix) {
+                    geindex::IndexManifest::GetManifest(filePool,
+                                                        index_path,
+                                                        manifest,
+                                                        tmpdir,
+                                                        disconnect_prefix,
+                                                        publish_prefix);
+                  }
+};
+
+khDeleteGuard<DbManifest::IndextManifest>&
+  GetIndexManifestFunc(khDeleteGuard<DbManifest::IndextManifest>& GetIndexManifest)
+{
+  if (!GetIndexManifest) {
+    GetIndexManifest = TransferOwnership(new DefaultGetIndextManifest());
+  }
+
+  return GetIndexManifest;
+}
+
+DbManifest::DbManifest(std::string* db_path,
+                       khDeleteGuard<IndextManifest>& GetIndexManifest)
+  : GetIndextManifest_(TransferOwnership(GetIndexManifestFunc(GetIndexManifest))),
+    db_path_(*db_path),
     search_prefix_(khGetSearchPrefix(db_path_)),
     is_time_machine_enabled_(false) {
+  Init(db_path);
+}
+
+DbManifest::DbManifest(std::string* db_path)
+  : GetIndextManifest_(TransferOwnership(new DefaultGetIndextManifest())),
+    db_path_(*db_path),
+    search_prefix_(khGetSearchPrefix(db_path_)),
+    is_time_machine_enabled_(false) {
+  Init(db_path);
+}
+    
+void DbManifest::Init(std::string* db_path) {
   if (!khIsAbspath(db_path_)) {
     throw khSimpleException("'")
       << db_path_ << "' is not an absolute path.";
@@ -261,7 +301,7 @@ void DbManifest::GetManifest(geFilePool &file_pool,
   if (prefix_.empty()) {
     // The case we get manifest files for a database asset (a database in the
     // assetroot).
-    geindex::IndexManifest::GetManifest(file_pool, fusion_config_.index_path_,
+    (*GetIndextManifest_)(file_pool, fusion_config_.index_path_,
                                         *stream_manifest, tmp_dir, "", "");
     notify(NFY_DEBUG, "Processing %ld POI files with empty prefix", fusion_config_.poi_file_paths_.size());
     for (uint i = 0; i < fusion_config_.poi_file_paths_.size(); ++i) {
@@ -288,7 +328,7 @@ void DbManifest::GetManifest(geFilePool &file_pool,
     // Note: when getting index manifest for delta-disconnected db we look
     // for index and packet files in both locations: disconnected db path and
     // publishroot.
-    geindex::IndexManifest::GetManifest(
+    (*GetIndextManifest_)(
         file_pool, Prefixed(fusion_config_.index_path_),
         *stream_manifest, tmp_dir, prefix_, publish_prefix);
 
@@ -307,12 +347,13 @@ void DbManifest::GetManifest(geFilePool &file_pool,
     // The *.poi file paths are in the GedbFusionConfig.
     for (uint i = 0; i < fusion_config_.poi_file_paths_.size(); ++i) {
       const std::string& orig = fusion_config_.poi_file_paths_[i];
-      std::string curr = Prefixed(orig);
+      const std::string prefixed = Prefixed(orig);
+      std::string curr = prefixed;
       if (!khExists(curr) && !search_prefix_.empty()) {  // a published DB
         curr = search_prefix_ + orig;
       }
       if (!khExists(curr)) {
-        notify(NFY_WARN, "Missing POI file '%s'.", orig.c_str());
+        notify(NFY_WARN, "Missing POI file [%s:%s:%s].", orig.c_str(), prefixed.c_str(), curr.c_str());
       } else {
         if (stream_manifest != search_manifest) {
           stream_manifest->push_back(ManifestEntry(orig, curr));
@@ -341,9 +382,9 @@ void DbManifest::GetPoiDataFiles(ManifestEntry* stream_manifest_entry,
   assert(stream_manifest_entry->current_path == search_manifest_entry->current_path);
   notify(NFY_DEBUG,
         "Parsing POI file %s looking for data files", poi_file.c_str());
-  khxml::DOMLSParser *parser = CreateDOMParser();
+  khParserDeleteGuard parser(TransferOwnership(CreateDOMParser()));
   if (parser) {
-    khxml::DOMDocument *doc = ReadDocument(parser, poi_file);
+    khxml::DOMDocument* doc(ReadDocument(parser, poi_file));
     if (doc) {
       try {
         if (khxml::DOMElement *root = doc->getDocumentElement()) {
@@ -356,17 +397,33 @@ void DbManifest::GetPoiDataFiles(ManifestEntry* stream_manifest_entry,
             }
             for (uint i = 0; i < data_files.size(); ++i) {
 
-              const std::string& data_file = data_files[i];
+              const std::string& org_data_file = data_files[i];
+              const std::string prefixed_data_file = Prefixed(org_data_file);
+              std::string cur_data_file = prefixed_data_file;
               
-              // poi data files have to be set aside until after AddDB processing is done
-              // so we hide them in a special location now within the manifest and will
-              // use them when we crate an 'upload' manifest during DBsync processing
-              if (stream_manifest_entry != search_manifest_entry) {
-                notify(NFY_DEBUG, "Adding POI datafile as a dependent file to stream manifest: %s", data_file.c_str());
-                stream_manifest_entry->dependents.push_back(data_file);
+              if (!khExists(cur_data_file) && !search_prefix_.empty()) {  // a published DB
+                cur_data_file = search_prefix_ + org_data_file;
               }
-              notify(NFY_DEBUG, "Adding POI datafile as a dependent file to search manifest: %s", data_file.c_str());
-              search_manifest_entry->dependents.push_back(data_file);
+              if (!khExists(cur_data_file)) {
+                notify(NFY_WARN, "Missing POI data file [%s:%s:%s].",
+                  org_data_file.c_str(),
+                  prefixed_data_file.c_str(),
+                  cur_data_file.c_str());
+              } else {
+                // poi data files have to be set aside until after AddDB processing is done
+                // so we hide them in a special location now within the manifest and will
+                // use them when we crate an 'upload' manifest during DBsync processing
+                if (stream_manifest_entry != search_manifest_entry) {
+                  notify(NFY_DEBUG, "Adding POI datafile as a dependent file to stream manifest: [%s:%s]",
+                    org_data_file.c_str(),
+                    cur_data_file.c_str());
+                  stream_manifest_entry->dependents.push_back(ManifestEntry(org_data_file, cur_data_file));
+                }
+                notify(NFY_DEBUG, "Adding POI datafile as a dependent file to search manifest: [%s:%s]",
+                  org_data_file.c_str(),
+                  cur_data_file.c_str());
+                search_manifest_entry->dependents.push_back(ManifestEntry(org_data_file, cur_data_file));
+              }
             }
           } else {
             notify(NFY_WARN,
@@ -384,7 +441,6 @@ void DbManifest::GetPoiDataFiles(ManifestEntry* stream_manifest_entry,
     } else {
       notify(NFY_WARN, "Unable to read POI file %s", poi_file.c_str());
     }
-    DestroyParser(parser);
   } else {
     notify(NFY_WARN, "Unable to get parser for POI file %s", poi_file.c_str());
   }
