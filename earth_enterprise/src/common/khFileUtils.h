@@ -102,7 +102,7 @@ std::string khTmpFilename(const std::string &basename, mode_t mode = 0666);
 
 // Creates a temporary directory under /tmp (or as defined in the env).
 // The directory is created with permissions 0700.
-std::string khCreateTmpDir(const std::string prefix);
+std::string khCreateTmpDir(const std::string &prefix);
 
 void khGetNumericFilenames(const std::string &pattern,
                            std::vector<std::string>& out);

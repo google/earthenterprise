@@ -42,7 +42,7 @@ class SearchSchemaTableUtil(object):
     """
     self._poi_db_connection = poi_db_connection
 
-  def CreatePoiTable(self, poi_file, table_name):
+  def CreatePoiTable(self, poi_file, table_name, file_prefix=None):
     """Creates and populates POI table in gepoi database.
 
     Creates POI table with specified table name and populates with data from
@@ -71,8 +71,12 @@ class SearchSchemaTableUtil(object):
 
     # Parse POI search file.
     try:
+      if file_prefix is None:
+        logger.info("file prefix is None")
+      else:
+        logger.info("file prefix is: '%s'", file_prefix)
       (num_fields, query_string, balloon_style) = parser.Parse(
-          poi_file, table_name)
+          poi_file, table_name, file_prefix)
     except (psycopg2.Error, psycopg2.Warning) as e:
       logger.error("Error when parsing/ingesting poifile %s: %s", poi_file, e)
       db_updater.Rollback()
