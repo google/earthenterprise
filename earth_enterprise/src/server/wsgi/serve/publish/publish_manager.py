@@ -83,7 +83,7 @@ class PublishDef(object):
     self.force_copy = False
     # Whether to make this databased the default for Earth Clients when
     # none is specified in stream endpoint requests. 
-    self.ec_default_ge = False
+    self.ec_default_db = False
 
 
 # TODO: rename to PublishHandler.
@@ -507,7 +507,7 @@ class PublishManager(object):
 
     publish_def.force_copy = request.IsForceCopy()
 
-    publish_def.ec_default_ge = request.GetBoolParameter(constants.EC_DEFAULT_GE)
+    publish_def.ec_default_db = request.GetBoolParameter(constants.EC_DEFAULT_DB)
     
     return publish_def
 

@@ -297,7 +297,7 @@ int main(int argc, char* argv[]) {
     bool disable_cutter = false;
     bool listdbs = false;
     bool publisheddbs = false;
-    bool ec_default_ge = false;
+    bool ec_default_db = false;
     bool listtgs = false;
     bool only_portables = false;
     bool listvhs = false;
@@ -343,7 +343,7 @@ int main(int argc, char* argv[]) {
     options.flagOpt("force_copy", force_copy);
     options.vecOpt("pushdb", pushdbs);
     options.opt("publishdb", publishdb);
-    options.flagOpt("setdefault", ec_default_ge);
+    options.flagOpt("setecdefault", ec_default_db);
     options.opt("unpublish", unpublish);
     options.opt("republishdb", republishdb);
     options.flagOpt("swaptargets", swaptargets);
@@ -634,8 +634,8 @@ int main(int argc, char* argv[]) {
       if (fusion_host.empty()) {
         SetFusionHost(&publisher_client, gedb_path, curr_host);
       }
-      if (publisher_client.PublishDatabase(gedb_path, target_path, vhname, ec_default_ge)) {
-        fprintf(stdout, "Database successfully published.  EC Default GE: %s\n", ec_default_ge ? "true" : "false");
+      if (publisher_client.PublishDatabase(gedb_path, target_path, vhname, ec_default_db)) {
+        fprintf(stdout, "Database successfully published.  EC Default Database: %s\n", ec_default_db ? "true" : "false");
       } else {
         throw khException(publisher_client.ErrMsg() +
                           "\nDatabase publish request failed.\n");
