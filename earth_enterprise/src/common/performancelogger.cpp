@@ -29,9 +29,6 @@ using namespace getime;
 // Initialize static members of Profiler class
 PerformanceLogger * const PerformanceLogger::_instance = new PerformanceLogger();
 
-// Initialize static members of BlockProfiler class
-PerformanceLogger * const BlockPerformanceLogger::perfLogger = PerformanceLogger::instance();
-
 // Log a profiling message
 void PerformanceLogger::log(
     const string & operation,
@@ -59,24 +56,4 @@ void PerformanceLogger::log(
   }
 
   notify(NFY_NOTICE, "%s\n", message.str().c_str());
-}
-
-// Begin profiling
-BlockPerformanceLogger::BlockPerformanceLogger(
-    const string & operation,
-    const string & object,
-    const size_t size
-  ) :
-    operation(operation),
-    object(object),
-    size(size),
-    startTime(getMonotonicTime())
-{
-  // Nothing to do - just initialize class members above
-}
-
-// Stop profiling and log results
-BlockPerformanceLogger::~BlockPerformanceLogger() {
-  const timespec endTime = getMonotonicTime();
-  perfLogger->log(operation, object, startTime, endTime, size);
 }
