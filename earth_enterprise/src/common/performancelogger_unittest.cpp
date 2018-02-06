@@ -20,6 +20,7 @@
 
 using namespace std;
 using namespace testing;
+using namespace getime;
 
 // Mock of the PerformanceLogger class
 class MockPerformanceLogger {
@@ -75,10 +76,9 @@ class BlockPerformanceLoggerTest : public testing::Test {
 };
 
 TEST_F(BlockPerformanceLoggerTest, Standard) {
-  BlockPerformanceLogger<MockPerformanceLogger> * logger =
-      new BlockPerformanceLogger<MockPerformanceLogger>("operation", "object", 123);
+  BlockPerformanceLogger<MockPerformanceLogger> logger("operation", "object", 123);
   EXPECT_EQ(perfLogger->calls, 0);
-  delete logger;
+  logger.end();
 
   EXPECT_EQ(perfLogger->calls, 1);
   EXPECT_EQ(perfLogger->operation, "operation");
@@ -89,10 +89,9 @@ TEST_F(BlockPerformanceLoggerTest, Standard) {
 }
 
 TEST_F(BlockPerformanceLoggerTest, NoSize) {
-  BlockPerformanceLogger<MockPerformanceLogger> * logger =
-      new BlockPerformanceLogger<MockPerformanceLogger>("operation", "object");
+  BlockPerformanceLogger<MockPerformanceLogger> logger("operation", "object");
   EXPECT_EQ(perfLogger->calls, 0);
-  delete logger;
+  logger.end();
 
   EXPECT_EQ(perfLogger->calls, 1);
   EXPECT_EQ(perfLogger->operation, "operation");
@@ -100,6 +99,51 @@ TEST_F(BlockPerformanceLoggerTest, NoSize) {
   EXPECT_TRUE(perfLogger->startTime.tv_sec > 0 || perfLogger->startTime.tv_nsec > 0);
   EXPECT_TRUE(perfLogger->endTime.tv_sec > 0 || perfLogger->endTime.tv_nsec > 0);
   EXPECT_EQ(perfLogger->size, 0);
+}
+
+TEST_F(BlockPerformanceLoggerTest, OperationTiming) {
+  BlockPerformanceLogger<MockPerformanceLogger> logger("op", "obj");
+  sleep(3);
+  logger.end();
+
+  double duration = timespecToDouble(timespecDiff(perfLogger->endTime, perfLogger->startTime));
+  EXPECT_GE(duration, 3.0);
+  EXPECT_LT(duration, 4.0);
+}
+
+TEST_F(BlockPerformanceLoggerTest, MultiEnd) {
+  BlockPerformanceLogger<MockPerformanceLogger> logger("operation", "object");
+  EXPECT_EQ(perfLogger->calls, 0);
+  logger.end();
+  EXPECT_EQ(perfLogger->calls, 1);
+  logger.end();
+  EXPECT_EQ(perfLogger->calls, 1);
+}
+
+TEST_F(BlockPerformanceLoggerTest, LogOnDelete) {
+  BlockPerformanceLogger<MockPerformanceLogger> * logger = 
+      new BlockPerformanceLogger<MockPerformanceLogger>("abc", "def", 987);
+  EXPECT_EQ(perfLogger->calls, 0);
+  delete logger;
+
+  EXPECT_EQ(perfLogger->calls, 1);
+  EXPECT_EQ(perfLogger->operation, "abc");
+  EXPECT_EQ(perfLogger->object, "def");
+  EXPECT_TRUE(perfLogger->startTime.tv_sec > 0 || perfLogger->startTime.tv_nsec > 0);
+  EXPECT_TRUE(perfLogger->endTime.tv_sec > 0 || perfLogger->endTime.tv_nsec > 0);
+  EXPECT_EQ(perfLogger->size, 987);
+}
+
+TEST_F(BlockPerformanceLoggerTest, DeleteAfterEnd) {
+  BlockPerformanceLogger<MockPerformanceLogger> * logger = 
+      new BlockPerformanceLogger<MockPerformanceLogger>("abc", "def", 987);
+  EXPECT_EQ(perfLogger->calls, 0);
+  logger->end();
+  EXPECT_EQ(perfLogger->calls, 1);
+  logger->end();
+  EXPECT_EQ(perfLogger->calls, 1);
+  delete logger;
+  EXPECT_EQ(perfLogger->calls, 1);
 }
 
 int main(int argc, char **argv) {

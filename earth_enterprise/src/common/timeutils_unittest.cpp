@@ -34,6 +34,7 @@ TEST(TimeUtilsTest, GetMonotonicTimeTest) {
   sleep(2);
   timespec end = getMonotonicTime();
   EXPECT_GE(end.tv_sec, start.tv_sec + 2);
+  EXPECT_LT(end.tv_sec, start.tv_sec + 3);
 }
 
 TEST(TimeUtilsTest, TimespecToDoubleTest) {
