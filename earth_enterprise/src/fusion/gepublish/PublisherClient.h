@@ -218,6 +218,12 @@ class PublisherClient : public PublishHelper {
                      const std::string& src_path,
                      const std::string& dest_path,
                      bool prefer_copy);
+  bool LocalTransferWithRetry(const std::string& server_prefix,
+                     const std::string& host_root,
+                     ServerType server_type,
+                     const std::string& tmpdir,
+                     const std::string& current_path,
+                     const std::string& orig_path);
   bool UploadFiles(ServerType server_type,
                    const std::vector<ManifestEntry>& entries,
                    const std::string& tmpdir,

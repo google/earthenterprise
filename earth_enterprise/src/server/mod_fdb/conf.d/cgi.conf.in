@@ -1,0 +1,3 @@
+# Allow Python to load modules bundled with OpenGEE.
+# Necessary when interpreting CGI scripts.
+SetEnv PYTHONPATH /opt/google/gepython/Python-{python_version}/lib/python{python_major_version}/site-packages

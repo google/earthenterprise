@@ -805,7 +805,7 @@ khTmpFilename(const std::string &basename, mode_t mode)
 
 
 std::string
-khCreateTmpDir(const std::string prefix)
+khCreateTmpDir(const std::string &prefix)
 {
   std::string dirname = khTmpDirPath() + "/" + prefix;
 

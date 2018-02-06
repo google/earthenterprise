@@ -27,6 +27,30 @@ check_group()
     fi
 }
 
+is_directory_not_link()
+{
+    [ -d "$1" ] && [ ! -L "$1" ]
+}
+
+remove_nonlink_directory()
+{
+    if is_directory_not_link "$1"; then
+        # A little extra protection so it will only do rm -rf in certain cases
+        if [ "1" = "$2" ]; then
+            rm -rf "$1"
+        else
+            rmdir "$1"
+        fi
+    fi
+}
+
+remove_nonlink_directories()
+{
+    remove_nonlink_directory "$BASEINSTALLDIR_OPT/etc"
+    remove_nonlink_directory "$BASEINSTALLDIR_OPT/log"
+    remove_nonlink_directory "$BASEINSTALLDIR_OPT/run"
+    remove_nonlink_directory "$BASEINSTALLDIR_OPT/gehttpd/htdocs/shared_assets/docs" 1
+}
 
 #-----------------------------------------------------------------
 # Main Function
@@ -37,5 +61,7 @@ check_group()
 # group name if needed.  skip if upgrade.
 if [ "$1" = "1" ]; then
     check_group
+else
+    remove_nonlink_directories
 fi
 #-----------------------------------------------------------------

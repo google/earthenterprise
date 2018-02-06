@@ -43,6 +43,12 @@ env.install('httpdconf', ['conf.d/gemodules.conf',
                           'conf.d/portable.conf',
                           'conf.d/worker_mpm.conf'])
 
+env.Command(
+    env.installdirs['httpdconf'].entry_abspath('cgi.conf'),
+    'conf.d/cgi.conf.in',
+    env.StringExpandFileFunc
+)
+
 # TODO: update examples.
 env.install('httpdconfex', ['conf.d/examples/location_based_ge_vs_example.location',
                             'conf.d/examples/location_based_map_vs_example.location',
