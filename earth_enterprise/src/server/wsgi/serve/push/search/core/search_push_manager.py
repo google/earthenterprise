@@ -186,6 +186,9 @@ class SearchPushManager(search_manager.SearchManager):
           " poi file_paths/file_sizes mismatch: %d/%d" %
           (len(poi_file_paths), len(poi_file_sizes)))
 
+    logger.debug("poi_file_paths: %s", str(poi_file_paths))
+    logger.debug("poi_file_sizes: %s", str(poi_file_sizes))
+
     # Check if database already exists.
     # The assumption is if it already exists, all the files and db-to-files
     # links have already been pushed to the database.
@@ -238,6 +241,7 @@ class SearchPushManager(search_manager.SearchManager):
             insert_into_poi_table,
             (client_host_name, poi_file_paths[i], poi_file_sizes[i]))
         poi_id = self._QueryPoiId(client_host_name, poi_file_paths[i])
+        logger.debug("inserted %s into poi_table with id of %d", poi_file_paths[i], poi_id)
 
       assert poi_id != 0
       # Add db_poi mapping table entry.
@@ -514,6 +518,10 @@ class SearchPushManager(search_manager.SearchManager):
     """
     logger.debug("__UpdatePoiStatus...")
     file_prefix = self.__ServerFilePrefix(client_host_name)
+    if file_prefix is None:
+      logger.info("File prefix is None")
+    else:
+      logger.info("File prefix is '%s'", file_prefix)
     existing_files = []
     i = 0
     while i in range(len(file_paths)):
@@ -522,11 +530,13 @@ class SearchPushManager(search_manager.SearchManager):
           serve_utils.FileSizeMatched(server_file_path, file_sizes[i])):
 
         existing_files.append(file_paths[i])
+        logger.debug("%s already exist", server_file_path)
 
         file_paths.pop(i)
         file_sizes.pop(i)
       else:
         i += 1
+        logger.debug("%s does not exists", server_file_path)
 
     # Create POI tables for the files that are already uploaded.
     update_string = ("UPDATE poi_table SET status = 1, num_fields = %s,"
@@ -535,7 +545,7 @@ class SearchPushManager(search_manager.SearchManager):
       poi_id = self._QueryPoiId(client_host_name, existing_file)
       server_file_path = os.path.normpath(file_prefix + existing_file)
       (num_fields, query_str, balloon_style) = self.__CreatePoiTable(
-          server_file_path, self.__PoiTableName(poi_id))
+          server_file_path, self.__PoiTableName(poi_id), file_prefix)
 
       # Update the poi_table. Change the status to 1 and update query_strs.
       self._DbModify(update_string,
@@ -565,7 +575,7 @@ class SearchPushManager(search_manager.SearchManager):
     """
     return "%s%d" % (SearchPushManager.POI_TABLE_PREFIX, poi_id)
 
-  def __CreatePoiTable(self, poi_file_path, table_name):
+  def __CreatePoiTable(self, poi_file_path, table_name, file_prefix=None):
     """Creates and populates POI table.
 
     Args:
@@ -581,7 +591,11 @@ class SearchPushManager(search_manager.SearchManager):
     Raises:
       SearchSchemaTableUtilException, psycopg2.Warning/Error.
     """
-    return self.table_utility.CreatePoiTable(poi_file_path, table_name.lower())
+    if file_prefix is None:
+      logger.info("File prefix is None")
+    else:
+      logger.info("File prefix is '%s'", file_prefix)
+    return self.table_utility.CreatePoiTable(poi_file_path, table_name.lower(), file_prefix)
 
 
 def main():

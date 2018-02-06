@@ -29,4 +29,15 @@ dbmanifest = env.sharedLib(
           'gedbroot',
           'geautoingest'])
 
+dbmanifest_test = env.test('dbmanifest_unittest',
+                         ['dbmanifest_unittest.cpp'],
+                         LIBS=['gtest',
+                               'dbmanifest',
+                               'geutil',
+                               'gecommon',
+                               'xerces-c',
+                               'gexml',
+                               'qt-mt'])
+
 env.install('common_lib', [dbmanifest])
+# , 'geutil', 'gecommon', 'gexml', 'xerces-c'
