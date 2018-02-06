@@ -65,10 +65,6 @@ usage(const std::string &progn, const char *msg = 0, ...)
     "                          the default server association will be used\n"
     "                           \"%s\" for Earth databases and\n"
     "                           \"%s\" for Map databases.\n"
-    "    [--set-default]       Publish this database as the default one for\n"
-    "                          the Earth Client to connect to if no database\n"
-    "                          is specified upon initial connection." 
-    "\n"
     "  --delete <db_name>      Delete a registered DB from the server.\n"
     "    [--serverurl] <url>   Use specific server URL.\n"
     "                          Default: http://%s\n"
@@ -143,7 +139,6 @@ main(int argc, char *argv[]) {
     bool listdbs = false;
     bool publisheddbs = false;
     bool report_size_only = false;
-    bool setdefaultge = false;
     std::string publishdbname, deletedbname, server;
     std::string serverurl = "http://" + FusionHostName();
     khGetopt options;
@@ -155,7 +150,6 @@ main(int argc, char *argv[]) {
     options.opt("delete", deletedbname);
     options.opt("server", server);
     options.opt("serverurl", serverurl);
-    options.flagOpt("set-default", setdefaultge);
 
     if (!options.processAll(argc, argv, argn)) {
       usage(progname);
