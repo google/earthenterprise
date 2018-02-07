@@ -93,7 +93,7 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
     "   [--vhname <vh_name>]     If virtual host is omitted,\n"
     "                            <db_name> is published to the default\n"
     "                            virtual host: \"%s\".\n"
-    "   [--setdefault]          Publish this database as the default one for\n"
+    "   [--setecdefault]          Publish this database as the default one for\n"
     "                            the Earth Client to connect to if no database\n"
     "                            or virtual host is specified upon initia\n"
     "                            connection." 

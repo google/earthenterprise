@@ -103,7 +103,7 @@ main_preinstall()
 	INVALID_ASSETROOT_NAMES=$(find $ASSET_ROOT -type d -name "*[\\\&\%\'\"\*\=\+\~\`\?\<\>\:\; ]*" 2> /dev/null)
 	
 	
-   if [ ! -z "$INVALID_ASSETROOT_NAMES" ]; then
+    if [ ! -z "$INVALID_ASSETROOT_NAMES" ]; then
 		show_invalid_assetroot_name $INVALID_ASSETROOT_NAMES
 		exit 1
 	fi
