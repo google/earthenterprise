@@ -38,6 +38,7 @@
 #include "common/khAbortedException.h"
 #include "common/khSimpleException.h"
 #include "common/khFileUtils.h"
+#include "common/performancelogger.h"
 
 #ifdef JOBSTATS_ENABLED
 enum {MERGER_CREATED, GATHERER_CREATED, COMBINE};
@@ -202,6 +203,7 @@ int main(int argc, char **argv) {
   // On successful completion, print out the output file sizes.
   std::vector<std::string> output_files;
   try {
+    BEGIN_PERF_LOGGING(parse_args, "parse", "arguments");
     std::string progname = argv[0];
 
     // Process commandline options
@@ -252,9 +254,11 @@ int main(int argc, char **argv) {
     if (sortbuf <= 0) {
       notify(NFY_FATAL, "--sortbuf must be > 0, is %d", sortbuf);
     }
+    END_PERF_LOGGING(parse_args);
 
     // Create a merge of the terrain indices
     JOBSTATS_BEGIN(job_stats, MERGER_CREATED);    // validate
+    BEGIN_PERF_LOGGING(create_merger, "create", "merger");
 
     // We'll need to limit the number of filebundles opened by the filepool
     // at a single time, to keep from overflowing memory.
@@ -338,10 +342,12 @@ int main(int argc, char **argv) {
     khPrintFileSizes("Input File Sizes", input_files);
 
     merger->Start();
+    END_PERF_LOGGING(create_merger);
     JOBSTATS_END(job_stats, MERGER_CREATED);
 
     // Feed this merge into a QuadsetGather operation
     JOBSTATS_BEGIN(job_stats, GATHERER_CREATED);    // validate
+    BEGIN_PERF_LOGGING(create_gatherer, "create", "gatherer");
 
     qtpacket::QuadsetGather<geterrain::TerrainPacketItem>
       gather("TerrainQuadsetGather", TransferOwnership(merger));
@@ -372,12 +378,15 @@ int main(int argc, char **argv) {
     combiner.WaitForThreadsToFinish();
     notify(NFY_DEBUG, "closing the gatherer");
     gather.Close();
+    END_PERF_LOGGING(create_gatherer);
     JOBSTATS_END(job_stats, GATHERER_CREATED);
 
     // Finish the packet file
     JOBSTATS_BEGIN(job_stats, COMBINE);    // validate
+    BEGIN_PERF_LOGGING(start_combiner, "start", "combiner");
     notify(NFY_DEBUG, "writing the packet index");
     combiner.Close(static_cast<size_t>(sortbuf) * 1024 * 1024);
+    END_PERF_LOGGING(start_combiner);
     JOBSTATS_END(job_stats, COMBINE);
     // On successful completion, print the output file sizes.
     output_files.push_back(outdir);
