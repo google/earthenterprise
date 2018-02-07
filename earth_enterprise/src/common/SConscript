@@ -75,6 +75,8 @@ commonsources = [ '../third_party/rsa_md5/md5c.c',
                   'etencoder.cc',
                   'LoggingManager.cpp',
                   'proto_streaming_imagery.cpp',
+                  'performancelogger.cpp',
+                  'timeutils.cpp',
                   streaming_imagery[0]  # generated .cc file
                  ]
 # Check environment for png.h file
@@ -178,6 +180,10 @@ env.test('tile_resampler_unittest',
 env.test('verref_storage_unittest',
          'verref_storage_unittest.cpp',
          LIBS=['geutil', 'gecommon', 'gtest'])
+
+env.test('timeutils_unittest',
+         'timeutils_unittest.cpp',
+         LIBS=['gecommon', 'gtest'])
 
 env.install('common_lib', [gecommon])
 env.install('common_lib', [geutil])
