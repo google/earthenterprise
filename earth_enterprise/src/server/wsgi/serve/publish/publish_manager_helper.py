@@ -395,7 +395,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
       # Link target point with VS template, database and publish context.
       query_string = ("INSERT INTO target_db_table"
                       " (target_id, virtual_host_id, db_id, publish_context_id)"
-                      " VALUES(%s, %s, %s, %s )")
+                      " VALUES(%s, %s, %s, %s)")
       self.DbModify(query_string,
                     (target_id, virtual_host_id, db_id, publish_context_id))
     else:
@@ -1330,7 +1330,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
                  publish_context_table.publish_context_id;""")
     results = self.DbQuery(query_string)
     if results:
-      if isinstance(results, list) and len(results) >0:
+      if isinstance(results, list) and len(results) > 0:
         ( target_path_result ) = results[0]
     return target_path_result
 

@@ -70,7 +70,6 @@ class PublishServlet(object):
       return
 
     try:
-      logger.info( "Incoming request to publish_servlet: ")
       logger.info(request)
       cmd = request.GetParameter(constants.CMD)
 
