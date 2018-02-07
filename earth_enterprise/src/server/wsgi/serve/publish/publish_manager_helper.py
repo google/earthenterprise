@@ -350,7 +350,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
     snippets_set_name = publish_def.snippets_set_name
     search_defs = publish_def.search_tabs
     sup_search_defs = publish_def.sup_search_tabs
-    ec_default_ge = publish_def.ec_default_ge
+    ec_default_db = publish_def.ec_default_db
     poifederated = publish_def.poi_federated
     
     assert target_path and target_path[0] == "/" and target_path[-1] != "/"
@@ -368,22 +368,22 @@ class PublishManagerHelper(stream_manager.StreamManager):
 
       # clear the default DB flag if this publish has one set, so that 
       # the older database is not considered the default.  
-      if ec_default_ge:
+      if ec_default_db:
         logger.warn( "Database %s will be set as the default when Earth Client connections when no database is specified." % target_path )
         query_string = ("UPDATE publish_context_table"
-                        " SET ec_default_ge = FALSE ")
+                        " SET ec_default_db = FALSE ")
         result = self.DbModify(query_string)
 
       # Insert publish context into 'publish_context_table' table.
       query_string = ("INSERT INTO publish_context_table"
                       " (snippets_set_name, search_def_names,"
-                      " supplemental_search_def_names, poifederated, ec_default_ge)"
+                      " supplemental_search_def_names, poifederated, ec_default_db)"
                       " VALUES(%s, %s, %s, %s, %s) RETURNING"
                       " publish_context_id")
       
       result = self.DbModify(
           query_string,
-          (snippets_set_name, search_defs, sup_search_defs, poifederated, ec_default_ge),
+          (snippets_set_name, search_defs, sup_search_defs, poifederated, ec_default_db),
           returning=True)
 
       publish_context_id = 0
@@ -655,7 +655,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
            publish_context_table.search_def_names,
            publish_context_table.supplemental_search_def_names,
            publish_context_table.poifederated, 
-           publish_context_table.ec_default_ge
+           publish_context_table.ec_default_db
            FROM target_table, target_db_table, publish_context_table
            WHERE target_table.target_path = %s AND
                  target_table.target_id = target_db_table.target_id AND
@@ -1312,7 +1312,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
     return self.DbQuery(query_string)
 
   # Finds the database that is the default stream for Earth Clients.
-  def _GetEcDefaultGeTargetPath(self):
+  def _GetEcDefaultDbTargetPath(self):
     """Gets target paths serving published databases.
 
     Raises:
@@ -1322,16 +1322,16 @@ class PublishManagerHelper(stream_manager.StreamManager):
     """
     target_path_result = None
     query_string = (
-        """SELECT target_table.target_path, publish_context_table.ec_default_ge
+        """SELECT target_table.target_path
            FROM publish_context_table, target_table, target_db_table
-           WHERE ec_default_ge = TRUE AND
+           WHERE publish_context_table.ec_default_db = TRUE AND
                  target_table.target_id = target_db_table.target_id AND
                  target_db_table.publish_context_id =
                  publish_context_table.publish_context_id;""")
     results = self.DbQuery(query_string)
     if results:
       if isinstance(results, list) and len(results) >0:
-        ( target_path_result, ec_default_ge ) = results[0]
+        ( target_path_result ) = results[0]
     return target_path_result
 
   def _WritePublishContentToHtaccessFile(self, htaccess_file,
@@ -1344,7 +1344,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
     Raises:
       psycopg2.Error/Warning, PublishServeException.
     """
-    default_target_path = self._GetEcDefaultGeTargetPath() 
+    default_target_path = self._GetEcDefaultDbTargetPath() 
 
     # Write publish header to file.
     htaccess_file.write("%s" % PublishManagerHelper.HTACCESS_GE_PUBLISH_BEGIN)
