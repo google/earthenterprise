@@ -50,26 +50,23 @@ class BlockPerformanceLogger {
         const std::string & operation,
         const std::string & object,
         const size_t size = 0) :
-      perfLogger(PerfLoggerCls::instance()),
       operation(operation),
       object(object),
       size(size),
       startTime(getime::getMonotonicTime()),
-      ended(false) {
-      // Nothing to do - just initialize class members above
-    }
+      ended(false) {}
     void end() {
       if (!ended) {
         ended = true;
         const timespec endTime = getime::getMonotonicTime();
-        perfLogger->log(operation, object, startTime, endTime, size);
+        PerfLoggerCls::instance()
+            ->log(operation, object, startTime, endTime, size);
       }
     }
     ~BlockPerformanceLogger() {
       end();
     }
   private:
-    PerfLoggerCls * const perfLogger;
     const std::string operation;
     const std::string object;
     const size_t size;
