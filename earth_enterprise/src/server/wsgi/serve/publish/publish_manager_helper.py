@@ -341,7 +341,6 @@ class PublishManagerHelper(stream_manager.StreamManager):
     Raises:
       psycopg2.Error/Warning, PublishServeException.
     """
-    
     target_path = publish_def.target_path
     virtual_host_name = publish_def.virtual_host_name
     db_type = publish_def.db_type
@@ -352,7 +351,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
     sup_search_defs = publish_def.sup_search_tabs
     ec_default_db = publish_def.ec_default_db
     poifederated = publish_def.poi_federated
-    
+
     assert target_path and target_path[0] == "/" and target_path[-1] != "/"
 
     # Check if the VS template exists.
@@ -380,7 +379,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
                       " supplemental_search_def_names, poifederated, ec_default_db)"
                       " VALUES(%s, %s, %s, %s, %s) RETURNING"
                       " publish_context_id")
-      
+ 
       result = self.DbModify(
           query_string,
           (snippets_set_name, search_defs, sup_search_defs, poifederated, ec_default_db),
