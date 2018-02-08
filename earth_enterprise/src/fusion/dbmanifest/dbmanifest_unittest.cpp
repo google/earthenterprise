@@ -26,7 +26,7 @@
 #include "common/khxml/khdom.h"
 #include "fusion/dbmanifest/dbmanifest.h"
 
-struct FakeGetIndextManifest : public DbManifest::IndextManifest {
+struct MockGetIndextManifest : public DbManifest::IndextManifest {
   std::vector<ManifestEntry> manifest_;
   void operator()(geFilePool& /*filePool*/,
                   const std::string& /*index_path*/,
@@ -59,8 +59,8 @@ class DbManifestTest : public testing::Test {
   const std::string vol_root_;
   const std::string assets_root_;
   const std::string dbs_root_;
-  const std::string fake_db_name_;
-  const std::string fake_db_root_;
+  const std::string mock_db_name_;
+  const std::string mock_db_root_;
   const std::string ge_db_key_root_;
   const std::string ge_unified_index_root_;
   const std::string db_path_v1_;
@@ -73,10 +73,10 @@ class DbManifestTest : public testing::Test {
     ,vol_root_(khComposePath(test_folder_, "gevol_test"))
     ,assets_root_(khComposePath(vol_root_, "assets"))
     ,dbs_root_(khComposePath(assets_root_, "Databases"))
-    ,fake_db_name_("fakeDB")
-    ,fake_db_root_(khComposePath(dbs_root_, fake_db_name_ + kDatabaseSuffix))
-    ,ge_db_key_root_(khComposePath(fake_db_root_, kGedbKey))
-    ,ge_unified_index_root_(khComposePath(fake_db_root_, kUnifiedIndexKey, "ver001/unified.geindex"))
+    ,mock_db_name_("mockDB")
+    ,mock_db_root_(khComposePath(dbs_root_, mock_db_name_ + kDatabaseSuffix))
+    ,ge_db_key_root_(khComposePath(mock_db_root_, kGedbKey))
+    ,ge_unified_index_root_(khComposePath(mock_db_root_, kUnifiedIndexKey, "ver001/unified.geindex"))
     ,db_path_v1_(khComposePath(ge_db_key_root_, "ver001", kGedbBase))
     ,toc_file_spec1_(kPostamblePrefix + "." + kDefaultLocaleSuffix)
     ,toc_path_(khComposePath(db_path_v1_, kDbrootsDir, toc_file_spec1_))
@@ -92,7 +92,7 @@ class DbManifestTest : public testing::Test {
     std::vector<std::string> poi_data_files;
   };
 
-  struct FakeDbCreationParameters {
+  struct MockDbCreationParameters {
     std::string prefix_loc;
     std::vector<PoiEntry> poi_entries;
     std::vector<std::string> icon_files;
@@ -114,7 +114,7 @@ class DbManifestTest : public testing::Test {
     }
   }
 
-  void CreateFakeDbFolderWithPoiData(const FakeDbCreationParameters& params = FakeDbCreationParameters()) {
+  void CreateMockDbFolderWithPoiData(const MockDbCreationParameters& params = MockDbCreationParameters()) {
     std::string actual_db_header_path;
     std::string actual_toc_path;
 
@@ -180,7 +180,7 @@ class DbManifestTest : public testing::Test {
       // add element to header xml
       AddElement(poi_file_paths_elm, "poi_file_path", poi_entry.poi_file);
 
-      // Create the fake poi file
+      // Create the mock poi file
       khDomDeleteGuard poi_file_dom(TransferOwnership(CreateEmptyDocument("POISearchFile")));
       khxml::DOMElement* poi_file_root_elm = poi_file_dom->getDocumentElement();
       khxml::DOMElement* search_table_values_elm = poi_file_dom->createElement(ToXMLStr("SearchTableValues"));
@@ -252,31 +252,31 @@ TEST_F(DbManifestTest, EnforcesAbsolutePath) {
 
 // asset root tests
 TEST_F(DbManifestTest, AssetRootGetPushManifestNoPoiNoIconsSingleManifest) {
-  khDeleteGuard<FakeGetIndextManifest>
-    fake_get_index_manifest(TransferOwnership(new FakeGetIndextManifest()));
+  khDeleteGuard<MockGetIndextManifest>
+    mock_get_index_manifest(TransferOwnership(new MockGetIndextManifest()));
    khDeleteGuard<DbManifest::IndextManifest> get_index_manifest;
   khDeleteGuard<DbManifest> db_manifest;
   std::string db_path(db_path_v1_);
   std::vector<ManifestEntry> single_manifest;
   std::vector<ManifestEntry> expected_manifest;
 
-  CreateFakeDbFolderWithPoiData();
+  CreateMockDbFolderWithPoiData();
 
-  // initialize fake get index manifest call
+  // initialize mock get index manifest call
   // create unitialized entries to avoid OS calls for file sizes that don't exist
-  fake_get_index_manifest->manifest_.resize(3);
+  mock_get_index_manifest->manifest_.resize(3);
   // for testing purposes keep it simple and stupid.  No i/o is done to these files
-  fake_get_index_manifest->manifest_[0].orig_path = khComposePath(assets_root_, "SomeDataDir/somedatafile1");
-  fake_get_index_manifest->manifest_[0].current_path = fake_get_index_manifest->manifest_[0].orig_path;
-  fake_get_index_manifest->manifest_[0].data_size = 1024;
-  fake_get_index_manifest->manifest_[1].orig_path = khComposePath(assets_root_, "SomeDataDir/somedatafile2");
-  fake_get_index_manifest->manifest_[1].current_path = fake_get_index_manifest->manifest_[0].orig_path;
-  fake_get_index_manifest->manifest_[1].data_size = 1024;
-  fake_get_index_manifest->manifest_[2].orig_path = khComposePath(assets_root_, "SomeDataDir/somedatafile3");
-  fake_get_index_manifest->manifest_[2].current_path = fake_get_index_manifest->manifest_[0].orig_path;
-  fake_get_index_manifest->manifest_[2].data_size = 1024;
+  mock_get_index_manifest->manifest_[0].orig_path = khComposePath(assets_root_, "SomeDataDir/somedatafile1");
+  mock_get_index_manifest->manifest_[0].current_path = mock_get_index_manifest->manifest_[0].orig_path;
+  mock_get_index_manifest->manifest_[0].data_size = 1024;
+  mock_get_index_manifest->manifest_[1].orig_path = khComposePath(assets_root_, "SomeDataDir/somedatafile2");
+  mock_get_index_manifest->manifest_[1].current_path = mock_get_index_manifest->manifest_[0].orig_path;
+  mock_get_index_manifest->manifest_[1].data_size = 1024;
+  mock_get_index_manifest->manifest_[2].orig_path = khComposePath(assets_root_, "SomeDataDir/somedatafile3");
+  mock_get_index_manifest->manifest_[2].current_path = mock_get_index_manifest->manifest_[0].orig_path;
+  mock_get_index_manifest->manifest_[2].data_size = 1024;
 
-  expected_manifest = fake_get_index_manifest->manifest_;
+  expected_manifest = mock_get_index_manifest->manifest_;
   expected_manifest.resize(expected_manifest.size() + 1);
   expected_manifest.back().orig_path = toc_path_;
   expected_manifest.back().current_path = toc_path_;
@@ -284,7 +284,7 @@ TEST_F(DbManifestTest, AssetRootGetPushManifestNoPoiNoIconsSingleManifest) {
   expected_manifest.push_back(ManifestEntry(db_header_path_));
 
   // change pointer to base type
-  get_index_manifest = TransferOwnership(fake_get_index_manifest);
+  get_index_manifest = TransferOwnership(mock_get_index_manifest);
 
   EXPECT_NO_THROW(db_manifest = TransferOwnership(new DbManifest(&db_path, get_index_manifest)));
   EXPECT_EQ(db_path_v1_, db_path); // should be unchanged
@@ -304,9 +304,9 @@ TEST_F(DbManifestTest, AssetRootGetPushManifestNoPoiNoIconsSingleManifest) {
 }
 
 TEST_F(DbManifestTest, AssetRootGetPushManifestSingleManifest) {
-  FakeDbCreationParameters db_create_params;
-  khDeleteGuard<FakeGetIndextManifest>
-    fake_get_index_manifest(TransferOwnership(new FakeGetIndextManifest()));
+  MockDbCreationParameters db_create_params;
+  khDeleteGuard<MockGetIndextManifest>
+    mock_get_index_manifest(TransferOwnership(new MockGetIndextManifest()));
    khDeleteGuard<DbManifest::IndextManifest> get_index_manifest;
   khDeleteGuard<DbManifest> db_manifest;
   std::string db_path(db_path_v1_);
@@ -322,23 +322,23 @@ TEST_F(DbManifestTest, AssetRootGetPushManifestSingleManifest) {
   db_create_params.icon_files.push_back(khComposePath(assets_root_, "SomeDataDir/inconpath2/icon4.png"));
   db_create_params.icon_files.push_back(khComposePath(assets_root_, "SomeDataDir/inconpath2/icon5.gnp"));  // negitive test
 
-  CreateFakeDbFolderWithPoiData(db_create_params);
+  CreateMockDbFolderWithPoiData(db_create_params);
 
-  // initialize fake get index manifest call
+  // initialize mock get index manifest call
   // create unitialized entries to avoid OS calls for file sizes that don't exist
-  fake_get_index_manifest->manifest_.resize(3);
+  mock_get_index_manifest->manifest_.resize(3);
   // for testing purposes keep it simple and stupid.  No i/o is done to these files
-  fake_get_index_manifest->manifest_[0].orig_path = khComposePath(assets_root_, "SomeDataDir/somedatafile1");
-  fake_get_index_manifest->manifest_[0].current_path = fake_get_index_manifest->manifest_[0].orig_path;
-  fake_get_index_manifest->manifest_[0].data_size = 1024;
-  fake_get_index_manifest->manifest_[1].orig_path = khComposePath(assets_root_, "SomeDataDir/somedatafile2");
-  fake_get_index_manifest->manifest_[1].current_path = fake_get_index_manifest->manifest_[0].orig_path;
-  fake_get_index_manifest->manifest_[1].data_size = 1024;
-  fake_get_index_manifest->manifest_[2].orig_path = khComposePath(assets_root_, "SomeDataDir/somedatafile3");
-  fake_get_index_manifest->manifest_[2].current_path = fake_get_index_manifest->manifest_[0].orig_path;
-  fake_get_index_manifest->manifest_[2].data_size = 1024;
+  mock_get_index_manifest->manifest_[0].orig_path = khComposePath(assets_root_, "SomeDataDir/somedatafile1");
+  mock_get_index_manifest->manifest_[0].current_path = mock_get_index_manifest->manifest_[0].orig_path;
+  mock_get_index_manifest->manifest_[0].data_size = 1024;
+  mock_get_index_manifest->manifest_[1].orig_path = khComposePath(assets_root_, "SomeDataDir/somedatafile2");
+  mock_get_index_manifest->manifest_[1].current_path = mock_get_index_manifest->manifest_[0].orig_path;
+  mock_get_index_manifest->manifest_[1].data_size = 1024;
+  mock_get_index_manifest->manifest_[2].orig_path = khComposePath(assets_root_, "SomeDataDir/somedatafile3");
+  mock_get_index_manifest->manifest_[2].current_path = mock_get_index_manifest->manifest_[0].orig_path;
+  mock_get_index_manifest->manifest_[2].data_size = 1024;
 
-  expected_manifest = fake_get_index_manifest->manifest_;
+  expected_manifest = mock_get_index_manifest->manifest_;
   expected_manifest.push_back(ManifestEntry(db_create_params.poi_entries[0].poi_file));
   expected_manifest.back().dependents.push_back(ManifestEntry(db_create_params.poi_entries[0].poi_data_files[0]));
   expected_manifest.push_back(ManifestEntry(toc_path_));
@@ -349,7 +349,7 @@ TEST_F(DbManifestTest, AssetRootGetPushManifestSingleManifest) {
   expected_manifest.push_back(ManifestEntry(db_create_params.icon_files[3]));
 
   // change pointer to base type
-  get_index_manifest = TransferOwnership(fake_get_index_manifest);
+  get_index_manifest = TransferOwnership(mock_get_index_manifest);
 
   EXPECT_NO_THROW(db_manifest = TransferOwnership(new DbManifest(&db_path, get_index_manifest)));
   EXPECT_EQ(db_path_v1_, db_path); // should be unchanged
@@ -369,9 +369,9 @@ TEST_F(DbManifestTest, AssetRootGetPushManifestSingleManifest) {
 }
 
 TEST_F(DbManifestTest, AssetRootGetPushManifest) {
-  FakeDbCreationParameters db_create_params;
-  khDeleteGuard<FakeGetIndextManifest>
-    fake_get_index_manifest(TransferOwnership(new FakeGetIndextManifest()));
+  MockDbCreationParameters db_create_params;
+  khDeleteGuard<MockGetIndextManifest>
+    mock_get_index_manifest(TransferOwnership(new MockGetIndextManifest()));
    khDeleteGuard<DbManifest::IndextManifest> get_index_manifest;
   khDeleteGuard<DbManifest> db_manifest;
   std::string db_path(db_path_v1_);
@@ -389,23 +389,23 @@ TEST_F(DbManifestTest, AssetRootGetPushManifest) {
   db_create_params.icon_files.push_back(khComposePath(assets_root_, "SomeDataDir/inconpath2/icon4.png"));
   db_create_params.icon_files.push_back(khComposePath(assets_root_, "SomeDataDir/inconpath2/icon5.gnp"));  // negitive test
 
-  CreateFakeDbFolderWithPoiData(db_create_params);
+  CreateMockDbFolderWithPoiData(db_create_params);
 
-  // initialize fake get index manifest call
+  // initialize mock get index manifest call
   // create unitialized entries to avoid OS calls for file sizes that don't exist
-  fake_get_index_manifest->manifest_.resize(3);
+  mock_get_index_manifest->manifest_.resize(3);
   // for testing purposes keep it simple and stupid.  No i/o is done to these files
-  fake_get_index_manifest->manifest_[0].orig_path = khComposePath(assets_root_, "SomeDataDir/somedatafile1");
-  fake_get_index_manifest->manifest_[0].current_path = fake_get_index_manifest->manifest_[0].orig_path;
-  fake_get_index_manifest->manifest_[0].data_size = 1024;
-  fake_get_index_manifest->manifest_[1].orig_path = khComposePath(assets_root_, "SomeDataDir/somedatafile2");
-  fake_get_index_manifest->manifest_[1].current_path = fake_get_index_manifest->manifest_[0].orig_path;
-  fake_get_index_manifest->manifest_[1].data_size = 1024;
-  fake_get_index_manifest->manifest_[2].orig_path = khComposePath(assets_root_, "SomeDataDir/somedatafile3");
-  fake_get_index_manifest->manifest_[2].current_path = fake_get_index_manifest->manifest_[0].orig_path;
-  fake_get_index_manifest->manifest_[2].data_size = 1024;
+  mock_get_index_manifest->manifest_[0].orig_path = khComposePath(assets_root_, "SomeDataDir/somedatafile1");
+  mock_get_index_manifest->manifest_[0].current_path = mock_get_index_manifest->manifest_[0].orig_path;
+  mock_get_index_manifest->manifest_[0].data_size = 1024;
+  mock_get_index_manifest->manifest_[1].orig_path = khComposePath(assets_root_, "SomeDataDir/somedatafile2");
+  mock_get_index_manifest->manifest_[1].current_path = mock_get_index_manifest->manifest_[0].orig_path;
+  mock_get_index_manifest->manifest_[1].data_size = 1024;
+  mock_get_index_manifest->manifest_[2].orig_path = khComposePath(assets_root_, "SomeDataDir/somedatafile3");
+  mock_get_index_manifest->manifest_[2].current_path = mock_get_index_manifest->manifest_[0].orig_path;
+  mock_get_index_manifest->manifest_[2].data_size = 1024;
 
-  expected_stream_manifest = fake_get_index_manifest->manifest_;
+  expected_stream_manifest = mock_get_index_manifest->manifest_;
   expected_stream_manifest.push_back(ManifestEntry(db_create_params.poi_entries[0].poi_file));
   expected_search_manifest.push_back(ManifestEntry(db_create_params.poi_entries[0].poi_file));
   expected_stream_manifest.back().dependents.push_back(ManifestEntry(db_create_params.poi_entries[0].poi_data_files[0]));
@@ -418,7 +418,7 @@ TEST_F(DbManifestTest, AssetRootGetPushManifest) {
   expected_stream_manifest.push_back(ManifestEntry(db_create_params.icon_files[3]));
 
   // change pointer to base type
-  get_index_manifest = TransferOwnership(fake_get_index_manifest);
+  get_index_manifest = TransferOwnership(mock_get_index_manifest);
 
   EXPECT_NO_THROW(db_manifest = TransferOwnership(new DbManifest(&db_path, get_index_manifest)));
   EXPECT_EQ(db_path_v1_, db_path); // should be unchanged
@@ -449,9 +449,9 @@ TEST_F(DbManifestTest, AssetRootGetPushManifest) {
 
 // disconnected testing
 TEST_F(DbManifestTest, DisconnectedRootGetPushManifest) {
-  FakeDbCreationParameters db_create_params;
-  khDeleteGuard<FakeGetIndextManifest>
-    fake_get_index_manifest(TransferOwnership(new FakeGetIndextManifest()));
+  MockDbCreationParameters db_create_params;
+  khDeleteGuard<MockGetIndextManifest>
+    mock_get_index_manifest(TransferOwnership(new MockGetIndextManifest()));
    khDeleteGuard<DbManifest::IndextManifest> get_index_manifest;
   khDeleteGuard<DbManifest> db_manifest;
   const std::string disconnect_path(khComposePath(test_folder_, "disconnected"));
@@ -471,23 +471,23 @@ TEST_F(DbManifestTest, DisconnectedRootGetPushManifest) {
   db_create_params.icon_files.push_back(khComposePath(assets_root_, "SomeDataDir/inconpath2/icon4.png"));
   db_create_params.icon_files.push_back(khComposePath(assets_root_, "SomeDataDir/inconpath2/icon5.gnp"));  // negitive test
 
-  CreateFakeDbFolderWithPoiData(db_create_params);
+  CreateMockDbFolderWithPoiData(db_create_params);
 
-  // initialize fake get index manifest call
+  // initialize mock get index manifest call
   // create unitialized entries to avoid OS calls for file sizes that don't exist
-  fake_get_index_manifest->manifest_.resize(3);
+  mock_get_index_manifest->manifest_.resize(3);
   // for testing purposes keep it simple and stupid.  No i/o is done to these files
-  fake_get_index_manifest->manifest_[0].orig_path = khComposePath(disconnect_path, assets_root_, "SomeDataDir/somedatafile1");
-  fake_get_index_manifest->manifest_[0].current_path = fake_get_index_manifest->manifest_[0].orig_path;
-  fake_get_index_manifest->manifest_[0].data_size = 1024;
-  fake_get_index_manifest->manifest_[1].orig_path = khComposePath(disconnect_path, assets_root_, "SomeDataDir/somedatafile2");
-  fake_get_index_manifest->manifest_[1].current_path = fake_get_index_manifest->manifest_[0].orig_path;
-  fake_get_index_manifest->manifest_[1].data_size = 1024;
-  fake_get_index_manifest->manifest_[2].orig_path = khComposePath(disconnect_path, assets_root_, "SomeDataDir/somedatafile3");
-  fake_get_index_manifest->manifest_[2].current_path = fake_get_index_manifest->manifest_[0].orig_path;
-  fake_get_index_manifest->manifest_[2].data_size = 1024;
+  mock_get_index_manifest->manifest_[0].orig_path = khComposePath(disconnect_path, assets_root_, "SomeDataDir/somedatafile1");
+  mock_get_index_manifest->manifest_[0].current_path = mock_get_index_manifest->manifest_[0].orig_path;
+  mock_get_index_manifest->manifest_[0].data_size = 1024;
+  mock_get_index_manifest->manifest_[1].orig_path = khComposePath(disconnect_path, assets_root_, "SomeDataDir/somedatafile2");
+  mock_get_index_manifest->manifest_[1].current_path = mock_get_index_manifest->manifest_[0].orig_path;
+  mock_get_index_manifest->manifest_[1].data_size = 1024;
+  mock_get_index_manifest->manifest_[2].orig_path = khComposePath(disconnect_path, assets_root_, "SomeDataDir/somedatafile3");
+  mock_get_index_manifest->manifest_[2].current_path = mock_get_index_manifest->manifest_[0].orig_path;
+  mock_get_index_manifest->manifest_[2].data_size = 1024;
 
-  expected_stream_manifest = fake_get_index_manifest->manifest_;
+  expected_stream_manifest = mock_get_index_manifest->manifest_;
   expected_stream_manifest[0].orig_path = expected_stream_manifest[0].orig_path.substr(disconnect_path.length());
   expected_stream_manifest[1].orig_path = expected_stream_manifest[1].orig_path.substr(disconnect_path.length());
   expected_stream_manifest[2].orig_path = expected_stream_manifest[2].orig_path.substr(disconnect_path.length());
@@ -519,7 +519,7 @@ TEST_F(DbManifestTest, DisconnectedRootGetPushManifest) {
     khComposePath(disconnect_path, db_create_params.icon_files[3])));
 
   // change pointer to base type
-  get_index_manifest = TransferOwnership(fake_get_index_manifest);
+  get_index_manifest = TransferOwnership(mock_get_index_manifest);
 
   EXPECT_NO_THROW(db_manifest = TransferOwnership(new DbManifest(&db_path, get_index_manifest)));
   EXPECT_EQ(db_path_v1_, db_path); // should be changed now
