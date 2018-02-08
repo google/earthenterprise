@@ -38,6 +38,10 @@ struct FakeGetIndextManifest : public DbManifest::IndextManifest {
                   }
 };
 
+bool LessThan(const ManifestEntry& lhs_entry, const ManifestEntry& rhs_entry) {
+  return (lhs_entry.orig_path < rhs_entry.orig_path);
+}
+
 class DbManifestTest : public testing::Test {
 
   protected:
@@ -88,8 +92,7 @@ class DbManifestTest : public testing::Test {
     std::vector<std::string> poi_data_files;
   };
 
-  struct FakeDbCreationParameters
-  {
+  struct FakeDbCreationParameters {
     std::string prefix_loc;
     std::vector<PoiEntry> poi_entries;
     std::vector<std::string> icon_files;
@@ -98,8 +101,7 @@ class DbManifestTest : public testing::Test {
   // nice for debugging when things go wrong
   // NOTE: none of this shows up unless you do `export KH_NFY_LEVEL=6`
   // before running unit test
-  void DumpManifest(const std::vector<ManifestEntry>& manifest)
-  {
+  void DumpManifest(const std::vector<ManifestEntry>& manifest) {
     for(size_t idx=0; idx < manifest.size(); ++idx) {
       const ManifestEntry& entry = manifest[idx];
       notify(NFY_WARN, "org=%s:cur=%s;data_size=%ld",
@@ -214,6 +216,32 @@ class DbManifestTest : public testing::Test {
     khEnsureParentDir(actual_toc_path);
     khMakeEmptyFile(actual_toc_path);
   }
+
+  bool IsEquivalent(std::vector<ManifestEntry>* manifest1,
+                    std::vector<ManifestEntry>* manifest2) {
+
+    // sort no matter what.  Makes things easier to figure out
+    // what is missing when we dump the manifests
+    std::sort(manifest1->begin(), manifest1->end(), LessThan);
+    std::sort(manifest2->begin(), manifest2->end(), LessThan);
+    if (manifest1->size() != manifest2->size()) {
+      return false;
+    }
+
+    for (size_t idx=0; idx < manifest1->size(); ++idx) {
+      ManifestEntry& entry1 = manifest1->at(idx);
+      ManifestEntry& entry2 = manifest2->at(idx);
+      if (IsEquivalent(&(entry1.dependents), &(entry2.dependents)) == false ||
+          entry1.orig_path != entry2.orig_path ||
+          entry1.current_path != entry2.current_path ||
+          entry1.data_size != entry2.data_size) {
+            return false;
+      }
+    }
+
+    return true;
+  }
+  
 };
 
 // Basic constructor tests
@@ -264,14 +292,15 @@ TEST_F(DbManifestTest, AssetRootGetPushManifestNoPoiNoIconsSingleManifest) {
 
   db_manifest->GetPushManifest(file_pool_, &single_manifest, &single_manifest, "", "");
 
-  if (expected_manifest != single_manifest) {
+  bool is_equivalent = IsEquivalent(&expected_manifest, &single_manifest);
+  if (!is_equivalent) {
     notify(NFY_WARN, "Dumping expected manifest:");
     DumpManifest(expected_manifest);
     notify(NFY_WARN, "Dumping actual manifest:");
     DumpManifest(single_manifest);
   }
 
-  EXPECT_TRUE(expected_manifest == single_manifest);
+  EXPECT_TRUE(is_equivalent);
 }
 
 TEST_F(DbManifestTest, AssetRootGetPushManifestSingleManifest) {
@@ -328,14 +357,15 @@ TEST_F(DbManifestTest, AssetRootGetPushManifestSingleManifest) {
 
   db_manifest->GetPushManifest(file_pool_, &single_manifest, &single_manifest, "", "");
 
-  if (expected_manifest != single_manifest) {
+  bool is_equivalent = IsEquivalent(&expected_manifest, &single_manifest);
+  if (!is_equivalent) {
     notify(NFY_WARN, "Dumping expected manifest:");
     DumpManifest(expected_manifest);
     notify(NFY_WARN, "Dumping actual manifest:");
     DumpManifest(single_manifest);
   }
 
-  EXPECT_TRUE(expected_manifest == single_manifest);
+  EXPECT_TRUE(is_equivalent);
 }
 
 TEST_F(DbManifestTest, AssetRootGetPushManifest) {
@@ -396,23 +426,25 @@ TEST_F(DbManifestTest, AssetRootGetPushManifest) {
 
   db_manifest->GetPushManifest(file_pool_, &stream_manifest, &search_manifest, "", "");
 
-  if (expected_stream_manifest != stream_manifest) {
+  bool is_equivalent = IsEquivalent(&expected_stream_manifest, &stream_manifest);
+  if (!is_equivalent) {
     notify(NFY_WARN, "Dumping expected stream manifest:");
     DumpManifest(expected_stream_manifest);
     notify(NFY_WARN, "Dumping actual stream manifest:");
     DumpManifest(stream_manifest);
   }
 
-  EXPECT_TRUE(expected_stream_manifest == stream_manifest);
+  EXPECT_TRUE(is_equivalent);
 
-  if (expected_search_manifest != search_manifest) {
+  is_equivalent = IsEquivalent(&expected_search_manifest, &search_manifest);
+  if (!is_equivalent) {
     notify(NFY_WARN, "Dumping expected search manifest:");
     DumpManifest(expected_search_manifest);
     notify(NFY_WARN, "Dumping actual search manifest:");
     DumpManifest(search_manifest);
   }
 
-  EXPECT_TRUE(expected_search_manifest == search_manifest);
+  EXPECT_TRUE(is_equivalent);
 }
 
 // disconnected testing
@@ -495,23 +527,25 @@ TEST_F(DbManifestTest, DisconnectedRootGetPushManifest) {
 
   db_manifest->GetPushManifest(file_pool_, &stream_manifest, &search_manifest, "", "");
 
-  if (expected_stream_manifest != stream_manifest) {
+  bool is_equivalent = IsEquivalent(&expected_stream_manifest, &stream_manifest);
+  if (!is_equivalent) {
     notify(NFY_WARN, "Dumping expected stream manifest:");
     DumpManifest(expected_stream_manifest);
     notify(NFY_WARN, "Dumping actual stream manifest:");
     DumpManifest(stream_manifest);
   }
 
-  EXPECT_TRUE(expected_stream_manifest == stream_manifest);
+  EXPECT_TRUE(is_equivalent);
 
-  if (expected_search_manifest != search_manifest) {
+  is_equivalent = IsEquivalent(&expected_search_manifest, &search_manifest);
+  if (!is_equivalent) {
     notify(NFY_WARN, "Dumping expected search manifest:");
     DumpManifest(expected_search_manifest);
     notify(NFY_WARN, "Dumping actual search manifest:");
     DumpManifest(search_manifest);
   }
 
-  EXPECT_TRUE(expected_search_manifest == search_manifest);
+  EXPECT_TRUE(is_equivalent);
 }
 
 // TODO(RAW): cover all use cases: see comments in dbmanifest.cpp
