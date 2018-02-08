@@ -396,13 +396,8 @@ change_volume_ownership()
 
             local volume_name="test"
             local index=1
-###
-	    echo "$CONFIG_VOLUME"
-	    exit 0
-###
-            #local max_index=$(expr "$(xmllint --xpath 'count(//VolumeDefList/volumedefs/item/localpath)' $CONFIG_VOLUME)")
-            local temp=$(xml_file_get_xpath "$CONFIG_VOLUME" "//VolumeDefList/volumedefs/item/localpath")
-	    local max_index=`echo "$temp" | grep localpath | grep -v / | wc -l`
+            local xpath_output=$(xml_file_get_xpath "$CONFIG_VOLUME" "//VolumeDefList/volumedefs/item/localpath")
+	    local max_index=`echo "$xpath_output" | grep localpath | wc -l`
             while [ $index -le $max_index ]; 
             do                
                 volume_name=$(xml_file_get_xpath "$CONFIG_VOLUME" "//VolumeDefList/volumedefs/item[$index]/localpath/text()")
