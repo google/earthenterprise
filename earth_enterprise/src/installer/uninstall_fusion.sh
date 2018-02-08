@@ -202,14 +202,26 @@ show_fusion_running_message()
 	echo -e "To use this uninstaller, you must stop all fusion services.\n"	
 }
 
+xml_file_get_xpath()
+{
+    local FILE="$1"
+    local XPATH="$2"
+
+    # Warning: `xmllint --noent` doesn't recognize named entities like
+    # "&lt;" and "&gt;":
+    echo "cat $XPATH" | xmllint --noent --nocdata --shell "$FILE" |
+    # Skip the first and the last line:
+        tail -n +2 | head -n -1
+}
+
 load_systemrc_config()
 {
     local load_systemrc_config_retval=0
 
     if [ -f "$SYSTEMRC" ]; then
-        ASSET_ROOT=$(xmllint --xpath '//Systemrc/assetroot/text()' $SYSTEMRC)
-		GEFUSIONUSER_NAME=$(xmllint --xpath '//Systemrc/fusionUsername/text()' $SYSTEMRC)
-		GROUPNAME=$(xmllint --xpath '//Systemrc/userGroupname/text()' $SYSTEMRC)	
+        ASSET_ROOT=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/assetroot/text()")
+	GEFUSIONUSER_NAME=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/fusionUsername/text()")
+	GROUPNAME=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/userGroupname/text()")
     else
         load_systemrc_config_retval=1
         echo -e "\nThe system configuration file [$SYSTEMRC] could not be found on your system."
@@ -384,11 +396,16 @@ change_volume_ownership()
 
             local volume_name="test"
             local index=1
-            local max_index=$(expr "$(xmllint --xpath 'count(//VolumeDefList/volumedefs/item/localpath)' $CONFIG_VOLUME)")
-
+###
+	    echo "$CONFIG_VOLUME"
+	    exit 0
+###
+            #local max_index=$(expr "$(xmllint --xpath 'count(//VolumeDefList/volumedefs/item/localpath)' $CONFIG_VOLUME)")
+            local temp=$(xml_file_get_xpath "$CONFIG_VOLUME" "//VolumeDefList/volumedefs/item/localpath")
+	    local max_index=`echo "$temp" | grep localpath | grep -v / | wc -l`
             while [ $index -le $max_index ]; 
             do                
-                volume_name=$(xmllint --xpath "//VolumeDefList/volumedefs/item[$index]/localpath/text()" $CONFIG_VOLUME)
+                volume_name=$(xml_file_get_xpath "$CONFIG_VOLUME" "//VolumeDefList/volumedefs/item[$index]/localpath/text()")
 
                 if [ -d "$volume_name" ]; then
                     echo -e "Changing ownership for $volume_name"
