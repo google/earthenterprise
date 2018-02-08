@@ -102,11 +102,11 @@ class DbManifestTest : public testing::Test {
   {
     for(size_t idx=0; idx < manifest.size(); ++idx) {
       const ManifestEntry& entry = manifest[idx];
-      notify(NFY_DEBUG, "org=%s:cur=%s;data_size=%ld",
+      notify(NFY_WARN, "org=%s:cur=%s;data_size=%ld",
         entry.orig_path.c_str(), entry.current_path.c_str(), entry.data_size);
       for(size_t jdx=0; jdx < entry.dependents.size(); ++jdx) {
         const ManifestEntry& dep_entry = entry.dependents[jdx];
-        notify(NFY_DEBUG, "  dep_org=%s:dep_cur=%s;dep_data_size=%ld",
+        notify(NFY_WARN, "  dep_org=%s:dep_cur=%s;dep_data_size=%ld",
           dep_entry.orig_path.c_str(), dep_entry.current_path.c_str(), dep_entry.data_size);
       }
     }
@@ -265,9 +265,9 @@ TEST_F(DbManifestTest, AssetRootGetPushManifestNoPoiNoIconsSingleManifest) {
   db_manifest->GetPushManifest(file_pool_, &single_manifest, &single_manifest, "", "");
 
   if (expected_manifest != single_manifest) {
-    notify(NFY_DEBUG, "Dumping expected manifest:");
+    notify(NFY_WARN, "Dumping expected manifest:");
     DumpManifest(expected_manifest);
-    notify(NFY_DEBUG, "Dumping actual manifest:");
+    notify(NFY_WARN, "Dumping actual manifest:");
     DumpManifest(single_manifest);
   }
 
@@ -329,9 +329,9 @@ TEST_F(DbManifestTest, AssetRootGetPushManifestSingleManifest) {
   db_manifest->GetPushManifest(file_pool_, &single_manifest, &single_manifest, "", "");
 
   if (expected_manifest != single_manifest) {
-    notify(NFY_DEBUG, "Dumping expected manifest:");
+    notify(NFY_WARN, "Dumping expected manifest:");
     DumpManifest(expected_manifest);
-    notify(NFY_DEBUG, "Dumping actual manifest:");
+    notify(NFY_WARN, "Dumping actual manifest:");
     DumpManifest(single_manifest);
   }
 
@@ -397,18 +397,18 @@ TEST_F(DbManifestTest, AssetRootGetPushManifest) {
   db_manifest->GetPushManifest(file_pool_, &stream_manifest, &search_manifest, "", "");
 
   if (expected_stream_manifest != stream_manifest) {
-    notify(NFY_DEBUG, "Dumping expected stream manifest:");
+    notify(NFY_WARN, "Dumping expected stream manifest:");
     DumpManifest(expected_stream_manifest);
-    notify(NFY_DEBUG, "Dumping actual stream manifest:");
+    notify(NFY_WARN, "Dumping actual stream manifest:");
     DumpManifest(stream_manifest);
   }
 
   EXPECT_TRUE(expected_stream_manifest == stream_manifest);
 
   if (expected_search_manifest != search_manifest) {
-    notify(NFY_DEBUG, "Dumping expected search manifest:");
+    notify(NFY_WARN, "Dumping expected search manifest:");
     DumpManifest(expected_search_manifest);
-    notify(NFY_DEBUG, "Dumping actual search manifest:");
+    notify(NFY_WARN, "Dumping actual search manifest:");
     DumpManifest(search_manifest);
   }
 
@@ -496,18 +496,18 @@ TEST_F(DbManifestTest, DisconnectedRootGetPushManifest) {
   db_manifest->GetPushManifest(file_pool_, &stream_manifest, &search_manifest, "", "");
 
   if (expected_stream_manifest != stream_manifest) {
-    notify(NFY_DEBUG, "Dumping expected stream manifest:");
+    notify(NFY_WARN, "Dumping expected stream manifest:");
     DumpManifest(expected_stream_manifest);
-    notify(NFY_DEBUG, "Dumping actual stream manifest:");
+    notify(NFY_WARN, "Dumping actual stream manifest:");
     DumpManifest(stream_manifest);
   }
 
   EXPECT_TRUE(expected_stream_manifest == stream_manifest);
 
   if (expected_search_manifest != search_manifest) {
-    notify(NFY_DEBUG, "Dumping expected search manifest:");
+    notify(NFY_WARN, "Dumping expected search manifest:");
     DumpManifest(expected_search_manifest);
-    notify(NFY_DEBUG, "Dumping actual search manifest:");
+    notify(NFY_WARN, "Dumping actual search manifest:");
     DumpManifest(search_manifest);
   }
 
@@ -517,6 +517,9 @@ TEST_F(DbManifestTest, DisconnectedRootGetPushManifest) {
 // TODO(RAW): cover all use cases: see comments in dbmanifest.cpp
 
 int main(int argc, char **argv) {
+  if (getNotifyLevel() < NFY_WARN) {
+    setNotifyLevel(NFY_WARN); // force notify level to warning
+  }
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
