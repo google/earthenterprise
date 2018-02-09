@@ -279,6 +279,10 @@ if [ "$type" == "upgrade" -o "$type" == "restore" ]; then
   "$BINDIR/createdb" -T template0 geendsnippet
   "$BINDIR/createdb" -T template0 gesearch
   "$BINDIR/createdb" -T template0 gepoi
+
+  echo Adding PostGIS extension
+  "$BINDIR/psql" -U geuser -d gepoi -c "CREATE EXTENSION postgis"
+
   echo "Done."
 elif [ "$type" != "backup" ]; then
   echo "Creating geserve-databases..."
@@ -311,15 +315,9 @@ if [ "$type" == "upgrade" -o "$type" == "restore" ]; then
   # Check to see if the individual tables from gepoi were dumped
   gepoi_dump_files=`ls gepoi* | wc | awk '{ print $1 }'`
 
-  # If gepoi tables have been dumped individually, create gepoi database and install postgis extension
-  if [ "$gepoi_dump_files" -gt 1 ]; then
-    echo Adding PostGIS extension
-    "$BINDIR/psql" -U geuser -d gepoi -c "CREATE EXTENSION postgis"
-  fi
-
   for DB in *.dump; do
     if [ -s "$DB"  ]; then
-      if [ "$gepoi_dump_files" == 1 ] || [ "$DB" != "gepoi.dump" ]; then
+      if [ "$DB" != "gepoi.dump" ]; then
         echo "Restoring $DB..."
         if [ "${DB:0:6}" == "gepoi." ]; then
           # The dump is a single table for the gepoi database, not the full database, restore to the correct db
