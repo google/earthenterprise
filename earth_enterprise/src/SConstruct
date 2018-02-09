@@ -232,12 +232,14 @@ if gprof:
 
 # setup -rpath-link and -rpath options
 rpathlink_dirs = [Dir(exportdirs['lib']).abspath]
-rpath_dirs = [Dir(exportdirs['lib']).abspath,
-              "'$$ORIGIN/../qt/lib'",
+# SetUID binaries don't use RPATH's containing '$ORIGIN' (since that would be
+# exploitable).  Use absolute paths to library install locations instead:
+rpath_dirs = ["'$$ORIGIN/../qt/lib'",
               "'$$ORIGIN/../lib64'",
               "'$$ORIGIN/../lib'",
               '%s/lib64' % optdir,
-              '%s/lib' % optdir]
+              '%s/lib' % optdir,
+              '%s/qt/lib' % optdir]
 
 # setup crosstool directories.
 if not native_cc:
