@@ -36,6 +36,7 @@ khResourceProviderProxy::khResourceProviderProxy
     providerProxy(providerHandle),
     wantAbandon(false), cleaned(false)
 {
+  RESOURCE_ALLOC_LOGGER( connect_resource_vcpus, host, numCPUs  );
   // Verify fusion version - bail out if mismatch
   if (strcmp(conn.fusionVer.c_str(), GEE_VERSION) != 0) {
     throw khException(kh::tr("Incorrect version: %1 instead of %2")

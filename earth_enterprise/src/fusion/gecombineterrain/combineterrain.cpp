@@ -284,15 +284,18 @@ void TerrainCombiner::StartThreads() {
     khFunctor<void>(std::mem_fun(&TerrainCombiner::PacketWriteThread), this));
   writer_thread_->run();
 
-  notify(NTY_WARN, "combineterrain num_cpus_: %llu ",
+  notify(NFY_WARN, "combineterrain num_cpus_: %llu ",
                static_cast<long long unsigned int>(num_cpus_));
     
   // Use one less cpu than num cpus for doing the compression work.
   uint compress_cpus = num_cpus_;
+  RESOURCE_ALLOC_LOGGER( proc_exec_config_internal_numcpus, taskName+'_compress', numcpus );
+    
   if (num_cpus_ >= 4) {
     compress_cpus--; // If we have more than 4 cpus save one for reads/writes.
   }
-  notify(NTY_WARN, "gecombineterrain compress_cpus: %llu ",
+  RESOURCE_ALLOC_LOGGER( proc_exec_config_internal_numcpus, taskName+'_compress', compress_cpus );
+  notify(NFY_WARN, "gecombineterrain compress_cpus: %llu ",
                static_cast<long long unsigned int>(compress_cpus));
     
   for(uint i = 0; i < compress_cpus; ++i) {

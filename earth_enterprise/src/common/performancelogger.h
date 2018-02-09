@@ -49,27 +49,74 @@ class BlockPerformanceLogger {
     BlockPerformanceLogger(
         const std::string & operation,
         const std::string & object,
-        const size_t size = 0) :
+        const timespec time,  
+        const size_t requested = 0,
+        const size_t result) :
       operation(operation),
       object(object),
-      size(size),
-      startTime(getime::getMonotonicTime()),
-      ended(false) {}
+      requested(requested),
+      result(result),
+      time(getime::getMonotonicTime()),
+      ended(true) {}
     void end() {
       if (!ended) {
         ended = true;
-        const timespec endTime = getime::getMonotonicTime();
         PerfLoggerCls::instance()
-            ->log(operation, object, startTime, endTime, size);
+            ->log(operation, object, time, endTime, size);
       }
     }
     ~BlockPerformanceLogger() {
       end();
     }
   private:
+    const std::string & operation;
+    const std::string & object;
+    const timespec time;
+    const size_t requested = 0;
+    const size_t result = 0;
+};
+
+
+
+
+
+/*
+ * A convenience class for timing a block of code. Timing begins when an
+ * instance of this class is created and ends when the user calls "end" or the
+ * instance goes out of scope.
+ */
+template <class PerfLoggerCls>
+class TaskAllocationLogger {
+  public:
+    TaskAllocationLogger(
+        const std::string & operation,
+        const std::string & object,
+        const size_t result = 0,
+        const size_t value1 = 0,
+        const size_t value2 = 0,
+        
+        ) :
+      operation(operation),
+      object(object),
+      result(result),
+      value1(value1),
+      value2(value2),
+      dateTime(getime::getMonotonicTime()),
+      ended(false) {}
+    void end() {
+        PerfLoggerCls::instance()
+            ->log(operation, object, dateTime, result, value1, value2);
+      }
+    }
+    ~TaskAllocationLogger() {
+      end();
+    }
+  private:
     const std::string operation;
     const std::string object;
-    const size_t size;
+    const uint16 result;
+    const uint16 value1;
+    const uint16 value2;
     const timespec startTime;
     bool ended;
 };
@@ -86,5 +133,14 @@ class BlockPerformanceLogger {
 #define BEGIN_PERF_LOGGING(name, op, ...) \
   BlockPerformanceLogger<PerformanceLogger> name(op, __VA_ARGS__)
 #define END_PERF_LOGGING(name) name.end()
+
+
+// Resource Logging records the various number of job allocation parameters, 
+// how many thread/vcpu resources were requested to process a given task, and 
+// how many were actually allocated and on which machine. 
+#define RESOURCE_ALLOC_LOGGING(name, op, ...) \
+  TaskAllocationLogger<TaskAllocationLogger> name(op, __VA_ARGS__)
+
+
 
 #endif // PERFORMANCELOGGER_H
