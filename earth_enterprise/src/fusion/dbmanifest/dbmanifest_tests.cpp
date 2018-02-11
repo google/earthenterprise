@@ -250,7 +250,9 @@ TEST_F(DbManifestTest, EnforcesAbsolutePath) {
   EXPECT_THROW(TransferOwnership(new DbManifest(&not_an_absolute_path)), khSimpleException);
 }
 
-// asset root tests
+// Calling GetPushManifest for asset root test.  This test only gets file entries from 
+// the mocked out get_index_manifest() call and has no Poi files or icons in the mocked 
+// out DB folder.  Also uses the same manifest vector for both steam and search manifest.
 TEST_F(DbManifestTest, AssetRootGetPushManifestNoPoiNoIconsSingleManifest) {
   khDeleteGuard<MockGetIndextManifest>
     mock_get_index_manifest(TransferOwnership(new MockGetIndextManifest()));
@@ -290,6 +292,7 @@ TEST_F(DbManifestTest, AssetRootGetPushManifestNoPoiNoIconsSingleManifest) {
   EXPECT_EQ(db_path_v1_, db_path); // should be unchanged
   EXPECT_TRUE(db_manifest->Prefix().empty());
 
+  // calling method under test
   db_manifest->GetPushManifest(file_pool_, &single_manifest, &single_manifest, "", "");
 
   bool is_equivalent = IsEquivalent(&expected_manifest, &single_manifest);
@@ -303,6 +306,9 @@ TEST_F(DbManifestTest, AssetRootGetPushManifestNoPoiNoIconsSingleManifest) {
   EXPECT_TRUE(is_equivalent);
 }
 
+// Calling GetPushManifest for asset root test.  This test gets file entries from the mocked out 
+// get_index_manifest() call and also creates fake Poi files and icon files in the mocked out 
+// DB folder.  Also uses the same manifest vector for both steam and search manifest.
 TEST_F(DbManifestTest, AssetRootGetPushManifestSingleManifest) {
   MockDbCreationParameters db_create_params;
   khDeleteGuard<MockGetIndextManifest>
@@ -355,6 +361,7 @@ TEST_F(DbManifestTest, AssetRootGetPushManifestSingleManifest) {
   EXPECT_EQ(db_path_v1_, db_path); // should be unchanged
   EXPECT_TRUE(db_manifest->Prefix().empty());
 
+  // calling method under test
   db_manifest->GetPushManifest(file_pool_, &single_manifest, &single_manifest, "", "");
 
   bool is_equivalent = IsEquivalent(&expected_manifest, &single_manifest);
@@ -368,6 +375,9 @@ TEST_F(DbManifestTest, AssetRootGetPushManifestSingleManifest) {
   EXPECT_TRUE(is_equivalent);
 }
 
+// Calling GetPushManifest for asset root test.  This test gets file entries from the mocked
+// out get_index_manifest() call and also creates fake Poi files and icon files in the mocked
+// out DB folder.  Also uses the seperate manifest vectors for steam and search manifest.
 TEST_F(DbManifestTest, AssetRootGetPushManifest) {
   MockDbCreationParameters db_create_params;
   khDeleteGuard<MockGetIndextManifest>
@@ -424,6 +434,7 @@ TEST_F(DbManifestTest, AssetRootGetPushManifest) {
   EXPECT_EQ(db_path_v1_, db_path); // should be unchanged
   EXPECT_TRUE(db_manifest->Prefix().empty());
 
+  // calling method under test
   db_manifest->GetPushManifest(file_pool_, &stream_manifest, &search_manifest, "", "");
 
   bool is_equivalent = IsEquivalent(&expected_stream_manifest, &stream_manifest);
@@ -447,7 +458,9 @@ TEST_F(DbManifestTest, AssetRootGetPushManifest) {
   EXPECT_TRUE(is_equivalent);
 }
 
-// disconnected testing
+// Calling GetPushManifest for disconnected push test.  This test gets file entries from the 
+// mocked out get_index_manifest() call and also creates fake Poi files and icon files in the 
+// mocked out DB folder.  Also uses the seperate manifest vectors for steam and search manifest.
 TEST_F(DbManifestTest, DisconnectedRootGetPushManifest) {
   MockDbCreationParameters db_create_params;
   khDeleteGuard<MockGetIndextManifest>
@@ -525,6 +538,7 @@ TEST_F(DbManifestTest, DisconnectedRootGetPushManifest) {
   EXPECT_EQ(db_path_v1_, db_path); // should be changed now
   EXPECT_EQ(db_manifest->Prefix(), disconnect_path);
 
+  // calling method under test
   db_manifest->GetPushManifest(file_pool_, &stream_manifest, &search_manifest, "", "");
 
   bool is_equivalent = IsEquivalent(&expected_stream_manifest, &stream_manifest);
