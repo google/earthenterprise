@@ -1192,7 +1192,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
     root = constants.CUTTER_GLOBES_PATH
     for name in os.listdir(root):
       # Ignore globes that are registered.
-      if name not in registered_portable_set:
+      if (name not in registered_portable_set) and (os.path.isfile(name)):
         db_info = basic_types.DbInfo()
         db_info.name = name
         db_info.type = db_info.name[-3:]
