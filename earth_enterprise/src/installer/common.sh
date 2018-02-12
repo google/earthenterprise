@@ -69,6 +69,18 @@ CENTOSKEY="centos"
 OS_RELEASE1="/etc/os-release"
 OS_RELEASE2="/etc/system-release"
 
+xml_file_get_xpath()
+{
+    local FILE="$1"
+    local XPATH="$2"
+
+    # Warning: `xmllint --noent` doesn't recognize named entities like
+    # "&lt;" and "&gt;":
+    echo "cat $XPATH" | xmllint --noent --nocdata --shell "$FILE" |
+    # Skip the first and the last line:
+        tail -n +2 | head -n -1
+}
+
 software_check()
 {
     local software_check_retval=0

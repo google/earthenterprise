@@ -225,18 +225,6 @@ show_fusion_running_message()
 	echo -e "To use this installer to upgrade, you must stop all fusion services.\n"	
 }
 
-xml_file_get_xpath()
-{
-    local FILE="$1"
-    local XPATH="$2"
-
-    # Warning: `xmllint --noent` doesn't recognize named entities like
-    # "&lt;" and "&gt;":
-    echo "cat $XPATH" | xmllint --noent --nocdata --shell "$FILE" |
-    # Skip the first and the last line:
-        tail -n +2 | head -n -1
-}
-
 load_systemrc_config()
 {
 	if [ -f "$SYSTEMRC" ]; then
