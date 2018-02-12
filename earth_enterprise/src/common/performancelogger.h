@@ -18,13 +18,15 @@
 #include <string>
 #include <time.h>
 
+#include "common/timeutils.h"
+
 /*
  * Singleton class for logging event performance. This class is intended for
  * performance debugging.
  */
 class PerformanceLogger {
   public:
-    static PerformanceLogger * instance() { return _instance; }
+    static PerformanceLogger * const instance() { return _instance; }
     void log(
         const std::string & operation, // The operation being timed
         const std::string & object,    // The object that the operation is performed on
@@ -38,40 +40,51 @@ class PerformanceLogger {
 
 /*
  * A convenience class for timing a block of code. Timing begins when an
- * instance of this class is created and ends when the instance goes out of
- * scope.
+ * instance of this class is created and ends when the user calls "end" or the
+ * instance goes out of scope.
  */
+template <class PerfLoggerCls>
 class BlockPerformanceLogger {
   public:
     BlockPerformanceLogger(
         const std::string & operation,
         const std::string & object,
-        const size_t size = 0);
-    ~BlockPerformanceLogger();
+        const size_t size = 0) :
+      operation(operation),
+      object(object),
+      size(size),
+      startTime(getime::getMonotonicTime()),
+      ended(false) {}
+    void end() {
+      if (!ended) {
+        ended = true;
+        const timespec endTime = getime::getMonotonicTime();
+        PerfLoggerCls::instance()
+            ->log(operation, object, startTime, endTime, size);
+      }
+    }
+    ~BlockPerformanceLogger() {
+      end();
+    }
   private:
-    static PerformanceLogger * const perfLogger;
     const std::string operation;
     const std::string object;
     const size_t size;
     const timespec startTime;
+    bool ended;
 };
 
 // Programmers should use the macros below to time code instead of using the
 // classes above directly. This makes it easy to use compile time flags to
 // exclude the time code.
-
-// For all of the macros, the variadic arguments include the object name
+//
+// For the macros below, the variadic arguments include the object name
 // (required) and the size (optional).
-
-// This macro will time a block of code. The call to this macro should be the
-// first statement in the block you want to time - it will not time anything
-// that comes before it. It will continue timinguntil it goes out of scope.
-#define PERF_LOG_BLOCK(op, ...) BlockPerformanceLogger _block_prof_inst(op, __VA_ARGS__)
-
-// You can use these macros if you want to time a part of a block of code. If
-// you use multiple perf loggin statements in the same block you must give each
-// one a unique name.
-#define BEGIN_PERF_LOGGING(name, op, ...) BlockPerformanceLogger * name = new BlockPerformanceLogger(op, __VA_ARGS__)
-#define END_PERF_LOGGING(name) delete name
+//
+// If you use multiple performance logging statements in the same scope you
+// must give each one a unique name.
+#define BEGIN_PERF_LOGGING(name, op, ...) \
+  BlockPerformanceLogger<PerformanceLogger> name(op, __VA_ARGS__)
+#define END_PERF_LOGGING(name) name.end()
 
 #endif // PERFORMANCELOGGER_H
