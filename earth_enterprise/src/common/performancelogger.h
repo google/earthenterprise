@@ -51,6 +51,7 @@ class PerformanceLogger {
   private:
     static PerformanceLogger * const _instance;
     PerformanceLogger() {}
+    void doNotify(std::string message);
 };
 
 

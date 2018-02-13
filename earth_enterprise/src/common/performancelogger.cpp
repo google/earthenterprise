@@ -56,8 +56,12 @@ void PerformanceLogger::log(
   if (size > 0) {
     message << ", size: " << size;
   }
+  this->doNotify(message.str());
+}
 
-  notify(NFY_NOTICE, "%s\n", message.str().c_str());
+void PerformanceLogger::doNotify(string message)
+{
+    notify(NFY_NOTICE,"%s\n",message.c_str());
 }
 
 string perfEnvelope::toString() {
