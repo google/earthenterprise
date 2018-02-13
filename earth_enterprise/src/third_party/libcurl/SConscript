@@ -34,6 +34,7 @@ build_root = '%s/%s' % (current_dir, libcurl_version)
 install_root = '%s/install' % current_dir
 install_root_opt = '%s%s' % (install_root, opt_dir)
 
+
 # [1] Extract libcurl
 libcurl_target = '%s/.extract' % current_dir
 libcurl_extract = libcurl_env.Command(
@@ -62,15 +63,24 @@ libcurl_target = '%s/.configure' % current_dir
 libcurl_configure = libcurl_env.Command(
     libcurl_target, libcurl_extract,
     [libcurl_env.MultiCommand(
-        'cd %s\n'
-        '%s%s ./configure --prefix=%s '
-        '--with-ssl --without-ca-bundle '
-        '--without-zlib --without-libidn --without-krb4 --without-gnutls '
-        '--enable-shared --disable-static %s\n'
-        'touch %s' % (build_root,
-                      libcurl_env['ENV']['mod_env'], env_opt, opt_dir,
-                      config_opt,
-                      libcurl_target))])
+        ('cd {build_root_escaped}\n'
+         'export LD_LIBRARY_PATH={build_lib_dir_escaped}\n'
+         '{mod_env}{env_opt} ./configure --prefix={opt_dir_escaped} '
+            '--with-ssl --without-ca-bundle '
+            '--without-zlib --without-libidn --without-krb4 --without-gnutls '
+            '--enable-shared --disable-static {config_opt}\n'
+         'touch {libcurl_target_escaped}'
+        ).format(
+            build_root_escaped = libcurl_env.bash_escape(build_root),
+            build_lib_dir_escaped =
+                libcurl_env.bash_escape(libcurl_env.exportdirs['lib']),
+            mod_env = libcurl_env['ENV']['mod_env'],
+            env_opt = env_opt,
+            opt_dir_escaped = libcurl_env.bash_escape(opt_dir),
+            config_opt = config_opt,
+            libcurl_target_escaped = libcurl_env.bash_escape(libcurl_target)
+        )
+    )])
 
 # [4] Build
 libcurl_target = '%s/.build' % current_dir
