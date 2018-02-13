@@ -207,9 +207,9 @@ load_systemrc_config()
     local load_systemrc_config_retval=0
 
     if [ -f "$SYSTEMRC" ]; then
-        ASSET_ROOT=$(xmllint --xpath '//Systemrc/assetroot/text()' $SYSTEMRC)
-		GEFUSIONUSER_NAME=$(xmllint --xpath '//Systemrc/fusionUsername/text()' $SYSTEMRC)
-		GROUPNAME=$(xmllint --xpath '//Systemrc/userGroupname/text()' $SYSTEMRC)	
+        ASSET_ROOT=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/assetroot/text()")
+	GEFUSIONUSER_NAME=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/fusionUsername/text()")
+	GROUPNAME=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/userGroupname/text()")
     else
         load_systemrc_config_retval=1
         echo -e "\nThe system configuration file [$SYSTEMRC] could not be found on your system."
@@ -384,11 +384,11 @@ change_volume_ownership()
 
             local volume_name="test"
             local index=1
-            local max_index=$(expr "$(xmllint --xpath 'count(//VolumeDefList/volumedefs/item/localpath)' $CONFIG_VOLUME)")
-
+            local xpath_output=$(xml_file_get_xpath "$CONFIG_VOLUME" "//VolumeDefList/volumedefs/item/localpath")
+	    local max_index=`echo "$xpath_output" | grep localpath | wc -l`
             while [ $index -le $max_index ]; 
             do                
-                volume_name=$(xmllint --xpath "//VolumeDefList/volumedefs/item[$index]/localpath/text()" $CONFIG_VOLUME)
+                volume_name=$(xml_file_get_xpath "$CONFIG_VOLUME" "//VolumeDefList/volumedefs/item[$index]/localpath/text()")
 
                 if [ -d "$volume_name" ]; then
                     echo -e "Changing ownership for $volume_name"
