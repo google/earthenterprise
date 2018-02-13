@@ -82,8 +82,6 @@ string perfEnvelope::toString() {
 }
 
 string ioEnvelope::toString() {
-    const timespec duration = timespecDiff(endTime, startTime);
-    const pid_t tid = syscall(SYS_gettid);
     stringstream message;
     message << perfEnvelope::toString();
     if (requests >0)
