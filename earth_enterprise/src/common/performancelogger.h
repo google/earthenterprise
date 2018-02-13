@@ -20,6 +20,14 @@
 
 #include "common/timeutils.h"
 
+/*
+    Data envelope: used as a struct since there is essentially no
+    logic included for the adt, outside of toString(), which is a
+    proto-strategy pattern. All sub envelopes should base themselves on
+    perfEnvelope and encapsulate their own log string logic on top.
+    Takes the place of the parameter list for PerformanceLogger::log()
+*/
+
 struct perfEnvelope {
     std::string operation;
     std::string object;
