@@ -417,6 +417,11 @@ class khEnvironment(Environment):
 
     DefineProtocolBufferBuilder(self)
 
+  def bash_escape(self, value):
+    """Escapes a given value as a BASH string."""
+
+    return "'{0}'".format(value.replace("'", "'\\''"))
+
   def DeepCopy(self):
     other = self.Clone()
     other.MultiCommand = SCons.Action.ActionFactory(other.MultiCommandFunc,
