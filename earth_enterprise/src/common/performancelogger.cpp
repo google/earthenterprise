@@ -85,20 +85,7 @@ string ioEnvelope::toString() {
     const timespec duration = timespecDiff(endTime, startTime);
     const pid_t tid = syscall(SYS_gettid);
     stringstream message;
-
-    message.setf(ios_base::fixed, ios_base::floatfield);
-    message << setprecision(9)
-            << operation << " " << object << ": "
-            << "start time: " << startTime
-            << ", "
-            << "end time: " << endTime
-            << ", "
-            << "duration: " << duration
-            << ", "
-            << "thread: " << tid;
-    if (size > 0) {
-      message << ", buffer size: " << size;
-    }
+    message << perfEnvelope::toString();
     if (requests >0)
         message << ", requests: " << requests;
     if (throughput >0)
