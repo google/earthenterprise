@@ -17,8 +17,10 @@
 
 #include <string>
 #include <time.h>
-
+#include <cassert>
 #include "common/timeutils.h"
+
+enum EnvelopeType { PERFORMANCE, IO, NUM_ENVELOPE_TYPE_ENUMS };
 
 /*
     Data envelope: used as a struct since there is essentially no
@@ -35,6 +37,7 @@ struct perfEnvelope {
     timespec endTime;
     size_t size;
     virtual std::string toString();
+    virtual ~perfEnvelope() {};
 };
 
 struct ioEnvelope : perfEnvelope {
@@ -51,18 +54,15 @@ class PerformanceLogger {
   public:
     static PerformanceLogger * const instance() { return _instance; }
     void log(
-        const std::string & operation, // The operation being timed
-        const std::string & object,    // The object that the operation is performed on
-        const timespec startTime,      // The start time of the operation
-        const timespec endTime,        // The end time of the operation
-        const size_t size = 0);    // The size of the object, if applicable
+        perfEnvelope * envelope); // the envelope
   private:
     static PerformanceLogger * const _instance;
-    PerformanceLogger() {}
+    perfEnvelope * envelope;
+    PerformanceLogger() { envelope = NULL; }
     void doNotify(std::string message);
 };
 
-
+const int max_types = 2; //TODO: enumeration
 /*
  * A convenience class for timing a block of code. Timing begins when an
  * instance of this class is created and ends when the user calls "end" or the
@@ -74,26 +74,44 @@ class BlockPerformanceLogger {
     BlockPerformanceLogger(
         const std::string & operation,
         const std::string & object,
+        const EnvelopeType & eType,
         const size_t size = 0) :
       operation(operation),
       object(object),
+      eType(eType),
       size(size),
       startTime(getime::getMonotonicTime()),
       ended(false) {}
-    void end() {
+    void end(EnvelopeType type) { //TODO: turn into enum
       if (!ended) {
+        assert(type > 0 && type < NUM_ENVELOPE_TYPE_ENUMS);
         ended = true;
+        perfEnvelope * envelope;
         const timespec endTime = getime::getMonotonicTime();
+        if (type == PERFORMANCE) {
+            envelope = new perfEnvelope;
+            envelope->operation = operation;
+            envelope->object = object;
+            envelope->startTime = startTime;
+            envelope->endTime = endTime;
+            envelope->size = size;
+        } else if (type == IO) {
+            ioEnvelope* temp = new ioEnvelope;
+            envelope = temp;
+        }
         PerfLoggerCls::instance()
-            ->log(operation, object, startTime, endTime, size);
+            ->log(envelope);//operation, object, startTime, endTime, size);
+          delete envelope;
       }
     }
+    void setType (EnvelopeType type) { eType = type; }
     ~BlockPerformanceLogger() {
-      end();
+      end(eType);
     }
   private:
     const std::string operation;
     const std::string object;
+    const EnvelopeType eType;
     const size_t size;
     const timespec startTime;
     bool ended;
@@ -109,8 +127,9 @@ class BlockPerformanceLogger {
 // If you use multiple performance logging statements in the same scope you
 // must give each one a unique name.
 #define BEGIN_PERF_LOGGING(name, op, ...) \
-  BlockPerformanceLogger<PerformanceLogger> name(op, __VA_ARGS__)
-#define END_PERF_LOGGING(name) name.end()
+  BlockPerformanceLogger<PerformanceLogger> name(op, __VA_ARGS__);
+#define CREATE_PERF_ENVELOPE
+#define END_PERF_LOGGING(name) name.end(PERF)
 
 
 #endif // PERFORMANCELOGGER_H

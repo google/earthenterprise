@@ -32,31 +32,10 @@ using namespace getime;
 PerformanceLogger * const PerformanceLogger::_instance = new PerformanceLogger();
 
 // Log a profiling message
-void PerformanceLogger::log(
-    const string & operation,
-    const string & object,
-    const timespec startTime,
-    const timespec endTime,
-    const size_t size) {
+void PerformanceLogger::log(perfEnvelope* const envelope) {
 
-  const timespec duration = timespecDiff(endTime, startTime);
-  const pid_t tid = syscall(SYS_gettid);
-  stringstream message;
-
-  message.setf(ios_base::fixed, ios_base::floatfield);
-  message << setprecision(9)
-          << operation << " " << object << ": "
-          << "start time: " << startTime
-          << ", "
-          << "end time: " << endTime
-          << ", "
-          << "duration: " << duration
-          << ", "
-          << "thread: " << tid;
-  if (size > 0) {
-    message << ", size: " << size;
-  }
-  this->doNotify(message.str());
+  string message = envelope->toString();
+  this->doNotify(message);
 }
 
 void PerformanceLogger::doNotify(string message)
