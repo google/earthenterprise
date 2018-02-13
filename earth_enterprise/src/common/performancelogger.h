@@ -20,6 +20,21 @@
 
 #include "common/timeutils.h"
 
+struct perfEnvelope {
+    std::string operation;
+    std::string object;
+    timespec startTime;
+    timespec endTime;
+    size_t size;
+    virtual std::string toString();
+};
+
+struct ioEnvelope : perfEnvelope {
+    size_t requests;
+    size_t throughput;
+    std::string toString();
+};
+
 /*
  * Singleton class for logging event performance. This class is intended for
  * performance debugging.
@@ -32,11 +47,12 @@ class PerformanceLogger {
         const std::string & object,    // The object that the operation is performed on
         const timespec startTime,      // The start time of the operation
         const timespec endTime,        // The end time of the operation
-        const size_t size = 0);        // The size of the object, if applicable
+        const size_t size = 0);    // The size of the object, if applicable
   private:
     static PerformanceLogger * const _instance;
     PerformanceLogger() {}
 };
+
 
 /*
  * A convenience class for timing a block of code. Timing begins when an
@@ -86,5 +102,6 @@ class BlockPerformanceLogger {
 #define BEGIN_PERF_LOGGING(name, op, ...) \
   BlockPerformanceLogger<PerformanceLogger> name(op, __VA_ARGS__)
 #define END_PERF_LOGGING(name) name.end()
+
 
 #endif // PERFORMANCELOGGER_H
