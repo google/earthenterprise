@@ -40,6 +40,6 @@ sudo apt-get install \
     libxml2-dev libxml2-utils libxmu-dev libxrandr-dev \
     openssl \
     python-dev python-imaging python-psycopg2 python-setuptools python2.7 \
-    python2.7-dev \
+    python2.7-dev python-git \
     scons shunit2 swig xorg-dev zlib1g-dev
 ```
