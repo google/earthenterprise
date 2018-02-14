@@ -38,7 +38,7 @@ void PerformanceLogger::log(perfEnvelope* const envelope) {
   this->doNotify(message);
 }
 
-void PerformanceLogger::doNotify(string message)
+void PerformanceLogger::doNotify(const string & message)
 {
     notify(NFY_NOTICE,"%s\n",message.c_str());
 }

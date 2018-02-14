@@ -58,7 +58,7 @@ class PerformanceLogger {
   private:
     static PerformanceLogger * const _instance;
     PerformanceLogger() {  }
-    void doNotify(std::string message);
+    void doNotify(const std::string & message);
 };
 
 const int max_types = 2; //TODO: enumeration
