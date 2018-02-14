@@ -17,7 +17,6 @@
 
 #include <string>
 #include <time.h>
-#include <cassert>
 #include "common/timeutils.h"
 
 enum EnvelopeType { PERFORMANCE, IO, NUM_ENVELOPE_TYPE_ENUMS };
@@ -83,7 +82,12 @@ class BlockPerformanceLogger {
       ended(false) {}
     void end(EnvelopeType type) { //TODO: turn into enum
       if (!ended) {
-        assert(type > 0 && type < NUM_ENVELOPE_TYPE_ENUMS);
+        //TODO: refactor into try/catch block
+        if (type < 0 || type >= NUM_ENVELOPE_TYPE_ENUMS)
+        {
+            //print a message to stderr
+            return;
+        }
         ended = true;
         perfEnvelope * envelope;
         const timespec endTime = getime::getMonotonicTime();
@@ -128,7 +132,7 @@ class BlockPerformanceLogger {
 #define BEGIN_PERF_LOGGING(name, op, ...) \
   BlockPerformanceLogger<PerformanceLogger> name(op, __VA_ARGS__);
 #define CREATE_PERF_ENVELOPE
-#define END_PERF_LOGGING(name) name.end(PERF)
+#define END_PERF_LOGGING(name) name.end(PERFORMANCE)
 
 
 #endif // PERFORMANCELOGGER_H
