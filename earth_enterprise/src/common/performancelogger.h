@@ -101,4 +101,10 @@ class BlockPerformanceLogger {
   BlockPerformanceLogger<PerformanceLogger> name(op, __VA_ARGS__)
 #define END_PERF_LOGGING(name) name.end()
 
+#define BEGIN_IO_LOGGING() // fill in as needed
+#define BEGIN_IO_LOGGING() // fill in as needed
+#define BEGIN_THREAD_LOGGING() // fill in as needed
+#define BEGIN_THREAD_LOGGING() // fill in as needed
+
+
 #endif // PERFORMANCELOGGER_H
