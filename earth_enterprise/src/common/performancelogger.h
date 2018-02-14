@@ -57,8 +57,7 @@ class PerformanceLogger {
         perfEnvelope * envelope); // the envelope
   private:
     static PerformanceLogger * const _instance;
-    perfEnvelope * envelope;
-    PerformanceLogger() { envelope = NULL; }
+    PerformanceLogger() {  }
     void doNotify(std::string message);
 };
 
