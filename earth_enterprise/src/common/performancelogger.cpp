@@ -57,3 +57,12 @@ void PerformanceLogger::log(
 
   notify(NFY_NOTICE, "%s\n", message.str().c_str());
 }
+
+// Thread safety wrapper for log output
+PerformanceLogger::do_notify( const string& message, ostream& out, khMutex& mutex ) {
+
+  mutex.lock();  // wait for and then lock the mutex
+  out << message << endl;
+  mutex.unlock();  // clear the lock
+
+};  // end do_notify

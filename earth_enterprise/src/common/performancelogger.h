@@ -19,6 +19,7 @@
 #include <time.h>
 
 #include "common/timeutils.h"
+#include "common/khThread.h"  // defines khMutex
 
 /*
  * Singleton class for logging event performance. This class is intended for
@@ -33,6 +34,7 @@ class PerformanceLogger {
         const timespec startTime,      // The start time of the operation
         const timespec endTime,        // The end time of the operation
         const size_t size = 0);        // The size of the object, if applicable
+    void do_notify( const string&, std::ostream&, khMutex& );  // func decloration
   private:
     static PerformanceLogger * const _instance;
     PerformanceLogger() {}
