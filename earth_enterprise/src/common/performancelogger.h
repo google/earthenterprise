@@ -27,15 +27,29 @@
 class PerformanceLogger {
   public:
     static PerformanceLogger * const instance() { return _instance; }
-    void log(
+    void logTiming(
         const std::string & operation, // The operation being timed
         const std::string & object,    // The object that the operation is performed on
         const timespec startTime,      // The start time of the operation
         const timespec endTime,        // The end time of the operation
         const size_t size = 0);        // The size of the object, if applicable
+    void logIo(/* Add params as needed*/) {
+      // Format IO data
+      doNotify("", /* the formatted data */, "iofile.csv");
+    }
+    void logThread(/* Add params as needed*/) {
+      // Format thread data
+      doNotify("", /* the formatted data */, "threadfile.csv");
+    }
   private:
     static PerformanceLogger * const _instance;
     PerformanceLogger() {}
+    void doNotify(std::string data, std::string fileName) {
+      // Add thread ID to data
+      // Lock the mutex
+      // Write data to file
+      // unlock mutex
+    }
 };
 
 /*
@@ -60,7 +74,7 @@ class BlockPerformanceLogger {
         ended = true;
         const timespec endTime = getime::getMonotonicTime();
         PerfLoggerCls::instance()
-            ->log(operation, object, startTime, endTime, size);
+            ->logTiming(operation, object, startTime, endTime, size);
       }
     }
     ~BlockPerformanceLogger() {
