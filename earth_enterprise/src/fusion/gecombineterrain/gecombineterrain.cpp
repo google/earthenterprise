@@ -239,7 +239,16 @@ int main(int argc, char **argv) {
       usage(progname, "No input indexes specified");
     }
 
+    notify(NTY_WARN, "gecombineterrain numcpus: %llu ",
+               static_cast<long long unsigned int>(numcpus));
+    notify(NTY_WARN, "gecombineterrain CommandlineNumCPUsDefault(): %llu ",
+               static_cast<long long unsigned int>(CommandlineNumCPUsDefault()));
+    
     numcpus = std::min(numcpus, CommandlineNumCPUsDefault());
+
+    notify(NTY_WARN, "gecombineterrain actually using min numcpu: %llu ",
+               static_cast<long long unsigned int>(numcpus));
+    
 
     // Validate commandline options
     if (!outdir.size()) {
