@@ -26,9 +26,9 @@ SUPPORTED_OS_LIST = {
     'redhat': {'min_release': '6.0',
                'max_release': '6.5'},
     'Ubuntu': {'min_release': '10.04',
-               'max_release': '14.04'},
-    'CentOS Linux': {'min_release': '6.5',
-                     'max_release': '6.5'}
+               'max_release': '16.04'},
+    'CentOS': {'min_release': '6.5',
+               'max_release': '7.4'}
 }
 
 BAD_HOSTNAMES = ['', 'linux', 'localhost', 'dhcp', 'bootp']

@@ -30,7 +30,9 @@ class TestVersion(unittest.TestCase):
     """Check if Fusion release is the latest available."""
 
     latest_version = common.GetLatestVersion()
+    # Extract the main version information.
     fusion_version = common.GetFusionVersion()
+    fusion_version = ".".join(fusion_version.split('.')[0:3])
 
     error_msg = ('Running Fusion version %s. Upgrade to version %s.' %
                  (fusion_version, latest_version))
@@ -45,7 +47,9 @@ class TestVersion(unittest.TestCase):
     """Check if GEE Server release is the latest available."""
 
     latest_version = common.GetLatestVersion()
+    # Extract the main version information.
     gee_server_version = common.GetGeeServerVersion()
+    gee_server_version = ".".join(gee_server_version.split('.')[0:3])
 
     error_msg = ('Running GEE Server version %s. Upgrade to (%s).' %
                  (gee_server_version, latest_version))
