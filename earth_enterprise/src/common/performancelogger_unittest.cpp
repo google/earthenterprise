@@ -21,6 +21,7 @@
 using namespace std;
 using namespace testing;
 using namespace getime;
+using namespace performance_logger;
 
 // Mock of the PerformanceLogger class
 class MockPerformanceLogger {
@@ -33,7 +34,7 @@ class MockPerformanceLogger {
     size_t size;
 
     static MockPerformanceLogger * const instance() { return _instance; }
-    void log(
+    void logTiming(
         const string & operation,
         const string & object,
         const timespec startTime,

@@ -15,10 +15,53 @@
 #ifndef PERFORMANCELOGGER_H
 #define PERFORMANCELOGGER_H
 
+#include <iostream>
+
+#include <assert.h>
+#include <pthread.h>
 #include <string>
 #include <time.h>
 
 #include "common/timeutils.h"
+
+
+namespace performance_logger {
+
+// We need a mutex for performance logging, but we've intstrumented the
+// khMutex class hierarchy, and we don't want to see log entries for logging
+// operations, so we have a non-instrumented implementation of the mutex
+// classes here. :P
+class khMutexBase {
+ public:
+  pthread_mutex_t mutex;
+
+  void lock(void) { Lock(); }
+  void Lock(void);
+  void unlock(void) { Unlock(); }
+  void Unlock(void);
+  bool trylock(void) { return TryLock(); }
+  bool TryLock(void);
+};
+
+// Simple non-recursive, non-checking mutex
+class khMutex : public khMutexBase
+{
+ public:
+  khMutex(void);
+  ~khMutex(void);
+};
+
+class khLockGuard {
+  khMutexBase &mutex;
+ public:
+  khLockGuard(khMutexBase &mutex_) : mutex(mutex_) {
+    mutex.Lock();
+  }
+  ~khLockGuard(void) {
+    mutex.Unlock();
+  }
+};
+
 
 /*
  * Singleton class for logging event performance. This class is intended for
@@ -33,23 +76,15 @@ class PerformanceLogger {
         const timespec startTime,      // The start time of the operation
         const timespec endTime,        // The end time of the operation
         const size_t size = 0);        // The size of the object, if applicable
-    void logIo(/* Add params as needed*/) {
-      // Format IO data
-      doNotify("", /* the formatted data */, "iofile.csv");
-    }
-    void logThread(/* Add params as needed*/) {
-      // Format thread data
-      doNotify("", /* the formatted data */, "threadfile.csv");
-    }
+    // void logThread(/* Add params as needed*/) {
+    //   // Format thread data
+    //   doNotify("", /* the formatted data */, "threadfile.csv");
+    // }
   private:
     static PerformanceLogger * const _instance;
+    khMutex write_mutex;
     PerformanceLogger() {}
-    void doNotify(std::string data, std::string fileName) {
-      // Add thread ID to data
-      // Lock the mutex
-      // Write data to file
-      // unlock mutex
-    }
+    void doNotify(std::string data, std::string fileName);
 };
 
 /*
@@ -88,6 +123,8 @@ class BlockPerformanceLogger {
     bool ended;
 };
 
+}
+
 // Programmers should use the macros below to time code instead of using the
 // classes above directly. This makes it easy to use compile time flags to
 // exclude the time code.
@@ -98,7 +135,7 @@ class BlockPerformanceLogger {
 // If you use multiple performance logging statements in the same scope you
 // must give each one a unique name.
 #define BEGIN_PERF_LOGGING(name, op, ...) \
-  BlockPerformanceLogger<PerformanceLogger> name(op, __VA_ARGS__)
+  performance_logger::BlockPerformanceLogger<performance_logger::PerformanceLogger> name(op, __VA_ARGS__)
 #define END_PERF_LOGGING(name) name.end()
 
 #define BEGIN_IO_LOGGING() // fill in as needed
