@@ -114,8 +114,15 @@ def GetLinuxDetails():
     # platform.linux_distribution() and platform.dist() were deprecated, they
     # return 'debian' as the os, didn't find an elegant alternative and the
     # functions use the files in /etc/ to do their magic.
+    #
+    # This has become further complicated by changes in how CentOS 7 uses the
+    # /etc files.
     with open("/etc/issue") as f:
-      return f.read().split()
+      ret = f.read().split()
+    if ret[0] == '\S':
+      with open("/etc/redhat-release") as f:
+        ret = f.read().split()
+    return ret
   except IOError:
     raise AssertionError('Linux distribution details not available.')
 
