@@ -26,6 +26,8 @@
 using namespace std;
 using namespace getime;
 
+#ifdef LOG_PERFORMANCE
+
 // Initialize static members of Profiler class
 PerformanceLogger * const PerformanceLogger::_instance = new PerformanceLogger();
 
@@ -38,22 +40,17 @@ void PerformanceLogger::log(
     const size_t size) {
 
   const timespec duration = timespecDiff(endTime, startTime);
-  const pid_t tid = syscall(SYS_gettid);
   stringstream message;
+  pthread_t tid = pthread_self();
 
   message.setf(ios_base::fixed, ios_base::floatfield);
-  message << setprecision(9)
-          << operation << " " << object << ": "
-          << "start time: " << startTime
-          << ", "
-          << "end time: " << endTime
-          << ", "
-          << "duration: " << duration
-          << ", "
-          << "thread: " << tid;
-  if (size > 0) {
-    message << ", size: " << size;
-  }
+  message << tid << ", "
+          << startTime << ", "
+          << endTime << ", "
+          << duration << ", "
+          << size << ", "
+          << operation << ", "
+          << object;
 
   notify(NFY_NOTICE, "%s\n", message.str().c_str());
 }
@@ -61,8 +58,14 @@ void PerformanceLogger::log(
 // Thread safety wrapper for log output
 PerformanceLogger::do_notify( const string& message, ostream& out, khMutex& mutex ) {
 
+  // Get the thread ID
+  pthread_t tid = pthread_self();
+
   mutex.lock();  // wait for and then lock the mutex
-  out << message << endl;
+  out << tid << ", " << message << endl;
   mutex.unlock();  // clear the lock
 
 };  // end do_notify
+
+
+#endif  // LOG_PERFORMANCE
