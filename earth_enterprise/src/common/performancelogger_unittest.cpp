@@ -22,6 +22,8 @@ using namespace std;
 using namespace testing;
 using namespace getime;
 
+#ifdef LOG_PERFORMANCE
+
 // Mock of the PerformanceLogger class
 class MockPerformanceLogger {
   public:
@@ -121,7 +123,7 @@ TEST_F(BlockPerformanceLoggerTest, MultiEnd) {
 }
 
 TEST_F(BlockPerformanceLoggerTest, LogOnDelete) {
-  BlockPerformanceLogger<MockPerformanceLogger> * logger = 
+  BlockPerformanceLogger<MockPerformanceLogger> * logger =
       new BlockPerformanceLogger<MockPerformanceLogger>("abc", "def", 987);
   EXPECT_EQ(perfLogger->calls, 0);
   delete logger;
@@ -135,7 +137,7 @@ TEST_F(BlockPerformanceLoggerTest, LogOnDelete) {
 }
 
 TEST_F(BlockPerformanceLoggerTest, DeleteAfterEnd) {
-  BlockPerformanceLogger<MockPerformanceLogger> * logger = 
+  BlockPerformanceLogger<MockPerformanceLogger> * logger =
       new BlockPerformanceLogger<MockPerformanceLogger>("abc", "def", 987);
   EXPECT_EQ(perfLogger->calls, 0);
   logger->end();
@@ -150,3 +152,5 @@ int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
+
+#endif  // LOG_PERFORMANCE
