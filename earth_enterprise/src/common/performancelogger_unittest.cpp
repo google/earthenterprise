@@ -148,9 +148,9 @@ TEST_F(BlockPerformanceLoggerTest, DeleteAfterEnd) {
   EXPECT_EQ(perfLogger->calls, 1);
 }
 
+#endif  // LOG_PERFORMANCE
+
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
-
-#endif  // LOG_PERFORMANCE
