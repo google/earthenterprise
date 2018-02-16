@@ -56,7 +56,7 @@ void PerformanceLogger::log(
 }
 
 // Thread safety wrapper for log output
-PerformanceLogger::do_notify( const string& message, ostream& out, khMutex& mutex ) {
+void PerformanceLogger::do_notify( const string& message, ostream& out, khMutex& mutex ) {
 
   // Get the thread ID
   pthread_t tid = pthread_self();
