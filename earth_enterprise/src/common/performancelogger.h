@@ -21,7 +21,6 @@
 #include "common/timeutils.h"
 #include "common/khThread.h"  // defines khMutex
 
-#define LOG_PERFORMANCE
 
 // Ignore this code unless LOG_PERFORMANCE is set to 1
 #ifdef  LOG_PERFORMANCE
