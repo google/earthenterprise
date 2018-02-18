@@ -31,6 +31,7 @@
 #include <khTypes.h>
 #include <khGuard.h>
 #include <packetfile/packetfilereader.h>
+#include "common/performancelogger.h"
 
 // PacketFileReaderToken
 //
@@ -65,8 +66,7 @@ class PacketFileReaderToken {
  private:
   PacketFileReaderToken(uint32 pool_hash, uint32 packet_file_index)
       : pool_hash_(pool_hash),
-        packet_file_index_(packet_file_index) {
-  }
+        packet_file_index_(packet_file_index) {}
   friend class PacketFileReaderPool;
 
   uint32 pool_hash_;

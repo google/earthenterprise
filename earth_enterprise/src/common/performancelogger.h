@@ -20,6 +20,11 @@
 
 #include "common/timeutils.h"
 
+const std::string io_FnBase("ioPref");
+const std::string time_FnBase("timingPref");
+const std::string ext(".csv");
+enum LogType { PERF, IO, THREAD, NUM_TYPES };
+
 /*
  * Singleton class for logging event performance. This class is intended for
  * performance debugging.
@@ -27,15 +32,18 @@
 class PerformanceLogger {
   public:
     static PerformanceLogger * const instance() { return _instance; }
-    void log(
+    void logTiming(
         const std::string & operation, // The operation being timed
         const std::string & object,    // The object that the operation is performed on
         const timespec startTime,      // The start time of the operation
         const timespec endTime,        // The end time of the operation
         const size_t size = 0);        // The size of the object, if applicable
+    void logIO(/**/);
+    void logThread(/**/);
   private:
     static PerformanceLogger * const _instance;
     PerformanceLogger() {}
+    void doNotify(std::string message, std::string fileName);
 };
 
 /*
@@ -55,12 +63,24 @@ class BlockPerformanceLogger {
       size(size),
       startTime(getime::getMonotonicTime()),
       ended(false) {}
-    void end() {
+    void end(LogType _type = PERF, int reqCount = 1) {
       if (!ended) {
         ended = true;
         const timespec endTime = getime::getMonotonicTime();
-        PerfLoggerCls::instance()
-            ->log(operation, object, startTime, endTime, size);
+        switch (_type){
+        case PERF:
+            PerfLoggerCls::instance()
+              ->logTiming(operation, object, startTime, endTime, size);
+            break;
+        case IO:
+            PerfLoggerCls::instance()
+              ->logIO(/**/);
+            break;
+        case THREAD:
+            /* implemented by pavel */
+            break;
+        default:; //error
+        };
       }
     }
     ~BlockPerformanceLogger() {
@@ -83,8 +103,13 @@ class BlockPerformanceLogger {
 //
 // If you use multiple performance logging statements in the same scope you
 // must give each one a unique name.
-#define BEGIN_PERF_LOGGING(name, op, ...) \
-  BlockPerformanceLogger<PerformanceLogger> name(op, __VA_ARGS__)
-#define END_PERF_LOGGING(name) name.end()
+#define BEGIN_PERF_LOGGING(pname, op, ...) \
+  BlockPerformanceLogger<PerformanceLogger> pname(op, __VA_ARGS__)
+#define END_PERF_LOGGING(pname) pname.end(PERF)
 
-#endif // PERFORMANCELOGGER_H
+#define BEGIN_IO_LOGGING(ioname, op, ...) \
+  BlockPerformanceLogger<PerformanceLogger> ioname(op, __VA_ARGS__)
+//#define START_IO_REQUEST_COUNT(ioReq) int ioReq=1
+//#define IO_REQUEST(ioReq) ++ioReq
+#define END_IO_LOGGING(ioname,...) ioname.end(IO)
+#endif

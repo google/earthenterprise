@@ -29,8 +29,23 @@ using namespace getime;
 // Initialize static members of Profiler class
 PerformanceLogger * const PerformanceLogger::_instance = new PerformanceLogger();
 
+void PerformanceLogger::doNotify(string message, string fileName)
+{
+    //implemented by Daniel
+}
+
+void PerformanceLogger::logIO(/**/) {
+    //output info
+    stringstream message;
+    this->doNotify(message.str(),io_FnBase+ext);
+}
+
+void PerformanceLogger::logThread(/**/) {
+//implemented by pavel
+}
+
 // Log a profiling message
-void PerformanceLogger::log(
+void PerformanceLogger::logTiming(
     const string & operation,
     const string & object,
     const timespec startTime,
