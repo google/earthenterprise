@@ -115,13 +115,19 @@ BEGIN
     alter table target_db_table add primary key (target_id, db_id);
   END IF;
 
-  IF NOT check_table_exists('publish_context_table') THEN
+
+  IF check_table_exists('publish_context_table') THEN
+    IF NOT EXISTS(select column_name from information_schema.columns where table_name = 'publish_context_table' and column_name = 'ec_default_db') THEN
+      alter table publish_context_table add column ec_default_db boolean not null default false;
+    END IF;
+  ELSE 
     create table publish_context_table (
       publish_context_id serial,
       snippets_set_name varchar(150),
       search_def_names varchar(150)[] default '{}',
       supplemental_search_def_names varchar(150)[] default '{}',
-      poifederated boolean not null default false
+      poifederated boolean not null default false,
+      ec_default_db boolean not null default false
     );
   END IF;
 

@@ -446,12 +446,12 @@ bool PublisherClient::AddDatabase(const std::string& input_db_name,
       AppendErrMsg(kErrPingStream);
       return false;
     }
-    notify(NFY_DEBUG, "Contacted STREAM_SERVER");
+    notify(NFY_DEBUG, "Add Database Contacted STREAM_SERVER");
     if (!PingServer(SEARCH_SERVER)) {
       AppendErrMsg(kErrPingSearch);
       return false;
     }
-    notify(NFY_DEBUG, "Contacted SEARCH_SERVER");
+    notify(NFY_DEBUG, "Add Database Contacted SEARCH_SERVER");
 
     // Will throw an exception.
     std::string db_name = norm_input_db_name;
@@ -463,7 +463,7 @@ bool PublisherClient::AddDatabase(const std::string& input_db_name,
     std::string publish_prefix;
     { // Since index manifest uses publish_prefix, we can safely use
       // STREAM_SERVER for determining publish_prefix.
-      bool failed_to_find;
+      bool failed_to_find = true;
       const bool is_server_host_same_as_publishing =
           IsServerHostSameAsPublishingHost(STREAM_SERVER, &failed_to_find);
       if (failed_to_find) {
@@ -482,7 +482,7 @@ bool PublisherClient::AddDatabase(const std::string& input_db_name,
     std::vector<ManifestEntry> stream_manifest, search_manifest;
     db_manifest.GetPushManifest(
         file_pool, &stream_manifest, &search_manifest, "", publish_prefix);
-    notify(NFY_DEBUG, "GetPushManifest");
+    notify(NFY_DEBUG, "GetPushManifest %ld/%ld", stream_manifest.size(), search_manifest.size());
 
     std::string args = "Cmd=AddDb&DbName=" + db_name + "&DbPrettyName=" +
         db_pretty_name;
@@ -520,11 +520,12 @@ bool PublisherClient::AddDatabase(const std::string& input_db_name,
     }
 
     std::vector<std::string> empty_vec;
+    notify(NFY_DEBUG, "ProcessGetRequest STREAM_SERVER started");
     if (!ProcessGetRequest(STREAM_SERVER, &stream_args, "", &empty_vec)) {
       notify(NFY_DEBUG, "ProcessGetRequest(STREAM_SERVER) failed.");
       return false;
     }
-    notify(NFY_DEBUG, "ProcessGetRequest(STREAM_SERVER).");
+    notify(NFY_DEBUG, "ProcessGetRequest STREAM_SERVER finished.");
 
     std::string search_args(args);
 
@@ -533,12 +534,12 @@ bool PublisherClient::AddDatabase(const std::string& input_db_name,
     // Do not register the database with the search server if we dont have any
     // POI files.
     if (search_manifest.size() > 0) {
-      notify(NFY_DEBUG, "ProcessGetRequest started");
+      notify(NFY_DEBUG, "ProcessGetRequest SEARCH_SERVER started");
       if (!ProcessGetRequest(SEARCH_SERVER, &search_args, "", &empty_vec)) {
         notify(NFY_DEBUG, "ProcessGetRequest(SEARCH_SERVER) failed.");
         return false;
       }
-      notify(NFY_DEBUG, "ProcessGetRequest finished.");
+      notify(NFY_DEBUG, "ProcessGetRequest SEARCH_SERVER finished.");
     }
 
     notify(NFY_DEBUG, "-----------------AddDatabase successful\n");
@@ -562,12 +563,12 @@ bool PublisherClient::DeleteDatabase(const std::string& input_db_name) {
     AppendErrMsg(kErrPingStream);
     return false;
   }
-  notify(NFY_DEBUG, "Contacted STREAM_SERVER");
+  notify(NFY_DEBUG, "Delete Database Contacted STREAM_SERVER");
   if (!PingServer(SEARCH_SERVER)) {
     AppendErrMsg(kErrPingSearch);
     return false;
   }
-  notify(NFY_DEBUG, "Contacted SEARCH_SERVER");
+  notify(NFY_DEBUG, "Delete Database Contacted SEARCH_SERVER");
 
   std::string args = "Cmd=DeleteDb&DbName=" + db_name;
   std::string search_args(args);
@@ -616,12 +617,12 @@ bool PublisherClient::PushDatabase(const std::string& db_name) {
     AppendErrMsg(kErrPingStream);
     return false;
   }
-  notify(NFY_DEBUG, "Contacted STREAM_SERVER");
+  notify(NFY_DEBUG, "Push Database Contacted STREAM_SERVER");
   if (!PingServer(SEARCH_SERVER)) {
     AppendErrMsg(kErrPingSearch);
     return false;
   }
-  notify(NFY_DEBUG, "Contacted SEARCH_SERVER");
+  notify(NFY_DEBUG, "Push Database Contacted SEARCH_SERVER");
 
   std::string norm_db_name = NormalizeDbName(db_name);
 
@@ -706,7 +707,8 @@ bool PublisherClient::SyncDatabase(const std::string& db_name) {
 
 bool PublisherClient::PublishDatabase(const std::string& in_db_name,
                                       const std::string& in_target_path,
-                                      const std::string& vh_name) {
+                                      const std::string& vh_name,
+                                      const bool ec_default_db) {
   try {
     std::string target_path = NormalizeTargetPath(in_target_path);
     if (target_path.empty()) {
@@ -748,7 +750,9 @@ bool PublisherClient::PublishDatabase(const std::string& in_db_name,
     stream_args += "&VirtualHostName=" + stream_vs_name;
     stream_args += "&TargetPath=" + target_path;
     stream_args += "&DbType=" + Itoa(db_manifest.GetDbType());
-
+    if (ec_default_db) { 
+      stream_args += "&EcDefaultDb=1" ;
+    }
     std::vector<std::string> empty_vector;
     if (!ProcessPublishGetRequest(
         STREAM_SERVER, &stream_args, "", &empty_vector)) {
@@ -1162,6 +1166,53 @@ bool PublisherClient::LocalTransfer(ServerType server_type,
   return ProcessGetRequest(server_type, &args, "", &empty_vec);
 }
 
+bool PublisherClient::LocalTransferWithRetry(const std::string& server_prefix,
+                                          const std::string& host_root,
+                                          ServerType server_type,
+                                          const std::string& tmpdir,
+                                          const std::string& current_path,
+                                          const std::string& orig_path) {
+
+  // Note: all files coming to upload should exist.
+  assert(khExists(current_path));
+  std::string dest_path(server_prefix + "/" +
+                        host_root + orig_path);
+  assert(current_path != dest_path);  // We send only delta always
+  // The logic for prefer_copy was fixed in 3.0.3.
+  // It used to set prefer_copy = !tmp_dir.empty(), when
+  // in fact the desired effect is only to prefer copies for
+  // source files that are in the tmp_dir, and to defer to the
+  // server setting for AllowSymLinks: Y in PUBLISH_ROOT/.config.
+
+  // If the source file is in the temp directory, we want to copy (hard
+  // link is OK whenever possible).
+  // Otherwise, a symbolic link is OK whenever possible.
+  bool prefer_copy = !tmpdir.empty() && current_path.find(tmpdir) == 0;
+
+  notify(NFY_VERBOSE, "Transfering '%s' to '%s'.\n\tServer type: %s\n\tPrefer copy: %s",
+    current_path.c_str(),
+    dest_path.c_str(),
+    (server_type == STREAM_SERVER) ? kStreamSpace.c_str() : kSearchSpace.c_str(),
+    prefer_copy?"true":"false");
+
+  // Many LocalTransfers in succession may sometimes overwhelm a server.
+  // To be safe we do a handful of retries with increasing delays between
+  // attempts.
+  int tries = 4;
+  int sleep_secs = 15;
+  while (!LocalTransfer(
+              server_type, current_path, dest_path, prefer_copy)) {
+    if (--tries == 0) {
+      return false;
+    }
+    notify(NFY_DEBUG, "Retrying Local Transfer.");
+    sleep(sleep_secs);  // Sleep before the next retry.
+    sleep_secs *= 2;  // Double the sleep time after each retry.
+  }
+
+  return true;
+}
+
 
 bool PublisherClient::IsServerHostSameAsPublishingHost(
     const ServerType server_type, bool* failed_to_find) {
@@ -1221,39 +1272,14 @@ bool PublisherClient::UploadFiles(ServerType server_type,
 
   int64 processed_size = 0;
   if (is_server_host_same_as_publishing)  {
+    notify(NFY_DEBUG, "Transfering files locally");
     size_t num_entries = entries.size();
     for (size_t i = 0; i < num_entries; ++i) {
       const ManifestEntry& entry = entries[i];
-      std::string src_path(entry.current_path);
-      // Note: all files coming to upload should exist.
-      assert(khExists(src_path));
-      std::string dest_path(server_prefix + "/" +
-                            host_root + entry.orig_path);
-      assert(src_path != dest_path);  // We send only delta always
-      // The logic for prefer_copy was fixed in 3.0.3.
-      // It used to set prefer_copy = !tmp_dir.empty(), when
-      // in fact the desired effect is only to prefer copies for
-      // source files that are in the tmp_dir, and to defer to the
-      // server setting for AllowSymLinks: Y in PUBLISH_ROOT/.config.
 
-      // If the source file is in the temp directory, we want to copy (hard
-      // link is OK whenever possible).
-      // Otherwise, a symbolic link is OK whenever possible.
-      bool prefer_copy = !tmpdir.empty() && src_path.find(tmpdir) == 0;
-
-      // Many LocalTransfers in succession may sometimes overwhelm a server.
-      // To be safe we do a handful of retries with increasing delays between
-      // attempts.
-      int tries = 4;
-      int sleep_secs = 15;
-      while (!LocalTransfer(
-                 server_type, src_path, dest_path, prefer_copy)) {
-        if (--tries == 0) {
-          return false;
-        }
-        notify(NFY_DEBUG, "Retrying Local Transfer.");
-        sleep(sleep_secs);  // Sleep before the next retry.
-        sleep_secs *= 2;  // Double the sleep time after each retry.
+      if (!LocalTransferWithRetry(server_prefix, host_root, server_type,
+                                  tmpdir, entry.current_path, entry.orig_path)) {
+        return false;
       }
 
       if (report_progress && progress_ != NULL) {
@@ -1268,6 +1294,7 @@ bool PublisherClient::UploadFiles(ServerType server_type,
     }
     return true;
   } else {
+    notify(NFY_DEBUG, "Transfering files remotely");
     std::string dav_root = (server_type == STREAM_SERVER) ?
         kStreamSpace : kSearchSpace;
     std::string url = ServerUrl(server_type) + "/" + dav_root;
@@ -1291,6 +1318,9 @@ bool PublisherClient::SyncFiles(
     if (cur_retry > 0 && server_type == SEARCH_SERVER) {
       notify(NFY_DEBUG,
              "Parsing POI files and filling POI database when syncing...");
+    } else if (cur_retry > 0) {
+      notify(NFY_DEBUG,
+             "Processing stream files when syncing...");
     }
 
     // Get the delta list of files to complete this DB.
@@ -1310,7 +1340,7 @@ bool PublisherClient::SyncFiles(
     }
 
     if (file_paths.size() > 0) {
-      std::vector<ManifestEntry> subset_entries;
+      std::vector<ManifestEntry> upload_entries;
       std::string remove_chars = "\r\n";
       for (size_t i = 0; i < file_paths.size(); ++i) {
         // Clean the path name. Remove spaces, newlines.
@@ -1322,27 +1352,40 @@ bool PublisherClient::SyncFiles(
           return false;
         }
 
-        subset_entries.push_back(manifest_entries[index]);
+        upload_entries.push_back(manifest_entries[index]);
+
+        // some files are 'dependent files' that are not part of the original manifest reported to
+        // server but we still need to upload those files as they complete the specified file in the 
+        // original manifest.  We can't include the file in the original manifest because in cases
+        // like search manifests server does special processing on files in that manifest that
+        // can't be done on the dependent files.
+        for(size_t dep_idx = 0; dep_idx < manifest_entries[index].dependents.size(); ++dep_idx) {
+          upload_entries.push_back(manifest_entries[index].dependents[dep_idx]);
+        }
       }
 
       // Compute total files size for progress reporting on first try only.
       if (progress_ != NULL && cur_retry == 0) {
         uint64 total_size = 0;
-        for (size_t i = 0; i < subset_entries.size(); ++i) {
-          total_size += subset_entries[i].data_size;
+        for (size_t i = 0; i < upload_entries.size(); ++i) {
+          total_size += upload_entries[i].data_size;
         }
         notify(NFY_DEBUG, "Total files to push: %zu, size (bytes): %zu",
-               subset_entries.size(), total_size);
+               upload_entries.size(), total_size);
         progress_->incrementTotal(static_cast<int64>(total_size));
+      } else {
+        notify(NFY_DEBUG, "Total files to push: %zu",
+               upload_entries.size());
       }
 
       bool REPORT_PROGRESS = true;
-      if (!UploadFiles(server_type, subset_entries, tmpdir, REPORT_PROGRESS)) {
+      if (!UploadFiles(server_type, upload_entries, tmpdir, REPORT_PROGRESS)) {
         AppendErrMsg(kErrUploadFailed);
         return false;
       }
     } else {
       successful = true;
+      notify(NFY_DEBUG, "No files to push");
     }
     ++cur_retry;
   }

@@ -42,19 +42,19 @@ class PublishServlet(object):
       self._publish_manager = publish_manager.PublishManager()
     except exceptions.PublishServeException as e:
       self._publish_manager = None
-      logger.error(e)
+      logger.error(e, exc_info=True)
 
     except psycopg2.Warning as w:
       self._publish_manager = None
-      logger.error(w)
+      logger.error(w, exc_info=True)
 
     except psycopg2.Error as e:
       self._publish_manager = None
-      logger.error(e)
+      logger.error(e, exc_info=True)
 
     except Exception as e:
       self._publish_manager = None
-      logger.error(e)
+      logger.error(e, exc_info=True)
 
   def DoGet(self, request, response):
     """Handles request by delegating it to publish manager."""
@@ -70,6 +70,7 @@ class PublishServlet(object):
       return
 
     try:
+      logger.info(request)
       cmd = request.GetParameter(constants.CMD)
 
       if not cmd:
@@ -102,22 +103,22 @@ class PublishServlet(object):
       return
 
     except exceptions.PublishServeException as e:
-      logger.error(e)
+      logger.error(e, exc_info=True)
       http_io.ResponseWriter.AddBodyElement(response,
                                             constants.HDR_STATUS_MESSAGE,
                                             e)
     except psycopg2.Warning as w:
-      logger.error(w)
+      logger.error(w, exc_info=True)
       http_io.ResponseWriter.AddBodyElement(response,
                                             constants.HDR_STATUS_MESSAGE,
                                             w)
     except psycopg2.Error as e:
-      logger.error(e)
+      logger.error(e, exc_info=True)
       http_io.ResponseWriter.AddBodyElement(response,
                                             constants.HDR_STATUS_MESSAGE,
                                             e)
     except Exception as e:
-      logger.error(e)
+      logger.error(e, exc_info=True)
       http_io.ResponseWriter.AddBodyElement(response,
                                             constants.HDR_STATUS_MESSAGE,
                                             "Server-side Internal Error")
