@@ -24,10 +24,10 @@ LATEST_VERSION = '5.2.1'
 
 SUPPORTED_OS_LIST = {
     'redhat': {'min_release': '6.0',
-               'max_release': '6.5'},
+               'max_release': '7.4'},
     'Ubuntu': {'min_release': '10.04',
                'max_release': '16.04'},
-    'CentOS': {'min_release': '6.5',
+    'CentOS': {'min_release': '6.0',
                'max_release': '7.4'}
 }
 
