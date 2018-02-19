@@ -34,9 +34,27 @@ void PerformanceLogger::doNotify(string message, string fileName)
     //implemented by Daniel
 }
 
-void PerformanceLogger::logIO(/**/) {
+void PerformanceLogger::logIO(
+        const string & operation,
+        const string & object,
+        const timespec startTime,
+        const timespec endTime,
+        const size_t size,
+        const size_t requests) {
     //output info
     stringstream message;
+    const timespec duration = timespecDiff(endTime,startTime);
+    double throughput = (timespecToDouble(duration)*size) / 1024;
+    message.setf(ios_base::fixed, ios_base::floatfield);
+    this->doNotify(message.str(),io_FnBase+ext);
+    message << setprecision(9)
+            << operation << ' ' << object << ": "
+            << ", start time: " << startTime
+            << ", end time: " << endTime
+            << ", duration: " << duration
+            << ", buffer size: " << size
+            << ", throughput: " << throughput
+            << ", io requests: " << requests;
     this->doNotify(message.str(),io_FnBase+ext);
 }
 
@@ -70,5 +88,5 @@ void PerformanceLogger::logTiming(
     message << ", size: " << size;
   }
 
-  notify(NFY_NOTICE, "%s\n", message.str().c_str());
+  this->doNotify(message.str(),time_FnBase+ext);
 }

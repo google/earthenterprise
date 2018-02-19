@@ -21,6 +21,7 @@
 #include <notify.h>
 #include <packetfile/packetindex.h>
 #include <packetfile/packetfilewriter.h>
+#include "common/performancelogger.h"
 
 // PacketFileWriter - create packet file with index.
 

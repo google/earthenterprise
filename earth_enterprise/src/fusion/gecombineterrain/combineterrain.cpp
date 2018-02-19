@@ -273,8 +273,12 @@ void TerrainCombiner::CompressPacket(PacketInfo* packet) {
 }
 
 void TerrainCombiner::WritePacket(PacketInfo* packet) {
+  /* PERF NOTE: should IO Logging take precedence over PERF Logging,
+     or in PacketFileWriter::WriteAppendCRC ?
+  */
   std::string& compressed_buffer = packet->CompressedBuffer();
-  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_WritePacket", packet->EvenPath().AsString(), compressed_buffer.size());
+  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_WritePacket", packet->EvenPath().AsString(),
+                     compressed_buffer.size());
   writer_.WriteAppendCRC(packet->EvenPath(), &compressed_buffer[0],
                          compressed_buffer.size(), packet->ProviderId());
   progress_meter_.incrementDone(packet->ProgressIncrement());

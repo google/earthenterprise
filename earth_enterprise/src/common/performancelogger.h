@@ -38,10 +38,17 @@ class PerformanceLogger {
         const timespec startTime,      // The start time of the operation
         const timespec endTime,        // The end time of the operation
         const size_t size = 0);        // The size of the object, if applicable
-    void logIO(/**/);
+    void logIO(
+        const std::string & operation, // The operation being timed
+        const std::string & object,    // The object that the operation is performed on
+        const timespec startTime,      // The start time of the operation
+        const timespec endTime,        // The end time of the operation
+        const size_t size = 0,         // The buffer size
+        const size_t requests = 1);    // The number of requests
     void logThread(/**/);
   private:
     static PerformanceLogger * const _instance;
+    std::string generateFileName();
     PerformanceLogger() {}
     void doNotify(std::string message, std::string fileName);
 };
@@ -57,10 +64,12 @@ class BlockPerformanceLogger {
     BlockPerformanceLogger(
         const std::string & operation,
         const std::string & object,
-        const size_t size = 0) :
+        const size_t size = 0,
+        const size_t requests = 1) :
       operation(operation),
       object(object),
       size(size),
+      requests(requests),
       startTime(getime::getMonotonicTime()),
       ended(false) {}
     void end(LogType _type = PERF, int reqCount = 1) {
@@ -74,7 +83,7 @@ class BlockPerformanceLogger {
             break;
         case IO:
             PerfLoggerCls::instance()
-              ->logIO(/**/);
+              ->logIO(operation,object,startTime,endTime,size,requests);
             break;
         case THREAD:
             /* implemented by pavel */
@@ -90,6 +99,7 @@ class BlockPerformanceLogger {
     const std::string operation;
     const std::string object;
     const size_t size;
+    const size_t requests;
     const timespec startTime;
     bool ended;
 };
@@ -109,6 +119,8 @@ class BlockPerformanceLogger {
 
 #define BEGIN_IO_LOGGING(ioname, op, ...) \
   BlockPerformanceLogger<PerformanceLogger> ioname(op, __VA_ARGS__)
+/* Unsure of how to get request count. Write queue position when entering?
+   If so, how to track this? */
 //#define START_IO_REQUEST_COUNT(ioReq) int ioReq=1
 //#define IO_REQUEST(ioReq) ++ioReq
 #define END_IO_LOGGING(ioname,...) ioname.end(IO)
