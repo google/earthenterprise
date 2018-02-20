@@ -66,9 +66,33 @@ function stop_daemon {
 	else
 	    echo "Failed"
 	fi
+  else
+  echo "Not running"
+  fi
+}
+
+function check_daemon {
+  # more DRY to use "gefdaemoncheck --checkrunning"
+  #   but it seems to assume --checksysman is true
+  #   thus wont work on non-master hosts.
+  pidfile="/var/opt/google/run/$1.pid"
+  if [ -s $pidfile ] ; then
+    pid=`cat $pidfile`
+    ps -ef | grep $pid | grep -q $1
+    foundPid=$?
+    if [ $foundPid -eq 0 ] ; then
+      message="OK"
+      returncode=0
     else
-	echo "Not running"
+      message="not running"
+      returncode=1
     fi
+  else
+    message="not running"
+    returncode=1
+  fi
+  echo "$1  $message"
+  return $returncode
 }
 
 start() {
@@ -105,6 +129,22 @@ stop() {
   fi
 }
 
+status() {
+  if check_if_master ; then
+	check_daemon gesystemmanager
+    gesystemmanager_returncode=$?
+  else
+    gesystemmanager_returncode=0
+  fi
+  check_daemon geresourceprovider
+  geresourceprovider_returncode=$?
+  if [ $gesystemmanager_returncode -eq 0 ] && [ $geresourceprovider_returncode -eq 0 ] ; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 case "$1" in
     restart)
     stop
@@ -117,8 +157,12 @@ case "$1" in
     stop)
     stop
     ;;
+    status)
+	status
+	exit $?
+    ;;
     *)
-    echo "usage: $0 {start|stop|restart}"
+    echo "usage: $0 {start|stop|restart|status}"
     exit 1
     ;;
 

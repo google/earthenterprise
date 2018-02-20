@@ -48,6 +48,8 @@ GEPGUSER="IA_GEPGUSER"
 prog=geserver
 gehttpd_root=/opt/google/gehttpd/bin
 gebin_root=/opt/google/bin
+pidfile_gehttpd='/opt/google/gehttpd/logs/httpd.pid'
+pidfile_postmaster='/var/opt/google/pgsql/data/postmaster.pid'
 dashes='--------------------------------------------------------------------'
 
 # Variable where result of start/stop are stored for later return by
@@ -84,13 +86,60 @@ stop() {
   echo
   echo $dashes
   # only stop if already running...
-  if [ -f /var/opt/google/pgsql/data/postmaster.pid ] ; then
+  if [ -f $pidfile_postmaster ] ; then
     run_as_user $GEPGUSER "$gebin_root/pg_ctl -D /var/opt/google/pgsql/data -l /var/opt/google/pgsql/logs/pg.log stop";
-    rm -f /var/opt/google/pgsql/data/postmaster.pid
+    rm -f $pidfile_postmaster
   fi
   echo $dashes
   echo 'Done Stopping Google Earth Enterprise Server'
   echo
+}
+
+status_postmaster() {
+  if [ -s $pidfile_postmaster ] ; then
+    pid_postmaster=`head -1 $pidfile_postmaster`
+    # redirect to /dev/null because pg_ctl --silent option doesnt work for status subcommand
+    run_as_user $GEPGUSER "$gebin_root/pg_ctl -D /var/opt/google/pgsql/data status" >& /dev/null
+    returncode=$?
+  else
+    returncode=1
+  fi
+  if [ $returncode -eq 0 ]; then
+    echo "postmaster: OK"
+  else
+    echo "postmaster: not running"
+  fi
+  return $returncode
+}
+
+status_gehttpd() {
+  if [ -s $pidfile_gehttpd ] ; then
+    pid_gehttpd=`cat $pidfile_gehttpd`
+    # not using 'gehttpd_init status' because it requires lynx install
+    ps -ef | grep $pid_gehttpd | grep -q gehttpd
+    returncode=$?
+  else
+    returncode=1
+  fi
+  if [ $returncode -eq 0 ]; then
+    echo "gehttpd: OK"
+  else
+    echo "gehttpd: not running"
+  fi
+  return $returncode
+}
+
+status()
+{
+  status_postmaster
+  returncode_postmaster=$?
+  status_gehttpd
+  returncode_gehttpd=$?
+  if [ $returncode_postmaster -eq 0 ] && [ $returncode_gehttpd -eq 0 ] ; then
+    RETVAL=0
+  else
+    RETVAL=1
+  fi
 }
 
 # See how we were called.
@@ -106,8 +155,11 @@ case "$1" in
   sleep 1
   start
   ;;
+  status)
+  status
+  ;;
   *)
-  echo $"Usage: $prog {start|stop|restart}"
+  echo $"Usage: $prog {start|stop|restart|status}"
   exit 1
 esac
 
