@@ -69,7 +69,17 @@ class khLockGuard {
  */
 class PerformanceLogger {
   public:
-    static PerformanceLogger * const instance() { return _instance; }
+    static PerformanceLogger& instance() {
+      static PerformanceLogger _instance;
+
+      return _instance;
+    }
+
+    // Initialize member variables in constructor:
+    PerformanceLogger()
+    : write_mutex()
+    {}
+
     void logTiming(
         const std::string & operation, // The operation being timed
         const std::string & object,    // The object that the operation is performed on
@@ -81,9 +91,7 @@ class PerformanceLogger {
     //   doNotify("", /* the formatted data */, "threadfile.csv");
     // }
   private:
-    static PerformanceLogger * const _instance;
     khMutex write_mutex;
-    PerformanceLogger() {}
     void doNotify(std::string data, std::string fileName);
 };
 
@@ -108,8 +116,7 @@ class BlockPerformanceLogger {
       if (!ended) {
         ended = true;
         const timespec endTime = getime::getMonotonicTime();
-        PerfLoggerCls::instance()
-            ->logTiming(operation, object, startTime, endTime, size);
+        PerfLoggerCls::instance().logTiming(operation, object, startTime, endTime, size);
       }
     }
     ~BlockPerformanceLogger() {

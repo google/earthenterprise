@@ -16,6 +16,8 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+
+#include <errno.h>
 #include <unistd.h>
 #include <sys/syscall.h>
 #include <time.h>
@@ -61,9 +63,6 @@ khMutex::~khMutex(void) {
   (void) err; // Suppress unused variable 'err' warning.
 }
 
-// Initialize static members of Profiler class
-PerformanceLogger * const PerformanceLogger::_instance = new PerformanceLogger();
-
 // Log a profiling message
 void PerformanceLogger::logTiming(
     const string & operation,
@@ -89,6 +88,7 @@ void PerformanceLogger::logTiming(
   if (size > 0) {
     message << ", size: " << size;
   }
+  message << std::endl;
 
   doNotify(message.str().c_str(), "timingfile.csv");
 }
