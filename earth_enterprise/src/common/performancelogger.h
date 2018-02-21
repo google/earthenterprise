@@ -16,14 +16,23 @@
 #define PERFORMANCELOGGER_H
 
 #include <string>
+#include <sstream>
 #include <time.h>
 
 #include "common/timeutils.h"
 
-const std::string io_FnBase("ioPref");
-const std::string time_FnBase("timingPref");
-const std::string ext(".csv");
-enum LogType { PERF, IO, THREAD, NUM_TYPES };
+void checkForLeadingZero(
+        std::stringstream& io,
+        std::stringstream& thread,
+        std::stringstream& time,
+        const int& val);
+void printToSStream(
+        std::stringstream& io,
+        std::stringstream& thread,
+        std::stringstream& time,
+        const char& delimiter,
+        const int& val);
+void createFileNames();
 
 /*
  * Singleton class for logging event performance. This class is intended for
@@ -31,24 +40,19 @@ enum LogType { PERF, IO, THREAD, NUM_TYPES };
  */
 class PerformanceLogger {
   public:
-    static PerformanceLogger * const instance() { return _instance; }
+    //static PerformanceLogger * const instance() { return _instance; }
+    static PerformanceLogger& instance() {
+        static PerformanceLogger _instance;
+        return _instance;
+    }
     void logTiming(
         const std::string & operation, // The operation being timed
         const std::string & object,    // The object that the operation is performed on
         const timespec startTime,      // The start time of the operation
         const timespec endTime,        // The end time of the operation
         const size_t size = 0);        // The size of the object, if applicable
-    void logIO(
-        const std::string & operation, // The operation being timed
-        const std::string & object,    // The object that the operation is performed on
-        const timespec startTime,      // The start time of the operation
-        const timespec endTime,        // The end time of the operation
-        const size_t size = 0,         // The buffer size
-        const size_t requests = 1);    // The number of requests
-    void logThread(/**/);
+
   private:
-    static PerformanceLogger * const _instance;
-    std::string generateFileName();
     PerformanceLogger() {}
     void doNotify(std::string message, std::string fileName);
 };
@@ -64,34 +68,22 @@ class BlockPerformanceLogger {
     BlockPerformanceLogger(
         const std::string & operation,
         const std::string & object,
-        const size_t size = 0,
-        const size_t requests = 1) :
+        const size_t size = 0) :
       operation(operation),
       object(object),
       size(size),
-      requests(requests),
       startTime(getime::getMonotonicTime()),
       ended(false) {}
-    void end(LogType _type = PERF, int reqCount = 1) {
+    void end() {
       if (!ended) {
         ended = true;
         const timespec endTime = getime::getMonotonicTime();
-        switch (_type){
-        case PERF:
             PerfLoggerCls::instance()
-              ->logTiming(operation, object, startTime, endTime, size);
-            break;
-        case IO:
-            PerfLoggerCls::instance()
-              ->logIO(operation,object,startTime,endTime,size,requests);
-            break;
-        case THREAD:
-            /* implemented by pavel */
-            break;
-        default:; //error
-        };
+              .logTiming(operation, object, startTime, endTime, size);
+
       }
     }
+    void tallyIOStats();
     ~BlockPerformanceLogger() {
       end();
     }
@@ -99,10 +91,12 @@ class BlockPerformanceLogger {
     const std::string operation;
     const std::string object;
     const size_t size;
-    const size_t requests;
     const timespec startTime;
     bool ended;
 };
+
+// Should be called at the beginning of gecombineterrain to create files
+#define CREATE_PERF_LOG_FILES() createFileNames()
 
 // Programmers should use the macros below to time code instead of using the
 // classes above directly. This makes it easy to use compile time flags to
@@ -115,7 +109,7 @@ class BlockPerformanceLogger {
 // must give each one a unique name.
 #define BEGIN_PERF_LOGGING(pname, op, ...) \
   BlockPerformanceLogger<PerformanceLogger> pname(op, __VA_ARGS__)
-#define END_PERF_LOGGING(pname) pname.end(PERF)
+#define END_PERF_LOGGING(pname) pname.end()
 
 #define BEGIN_IO_LOGGING(ioname, op, ...) \
   BlockPerformanceLogger<PerformanceLogger> ioname(op, __VA_ARGS__)
@@ -123,5 +117,5 @@ class BlockPerformanceLogger {
    If so, how to track this? */
 //#define START_IO_REQUEST_COUNT(ioReq) int ioReq=1
 //#define IO_REQUEST(ioReq) ++ioReq
-#define END_IO_LOGGING(ioname,...) ioname.end(IO)
+#define END_IO_LOGGING(ioname,...) ioname.end()
 #endif

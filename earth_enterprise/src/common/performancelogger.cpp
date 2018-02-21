@@ -26,21 +26,71 @@
 using namespace std;
 using namespace getime;
 
-// Initialize static members of Profiler class
-PerformanceLogger * const PerformanceLogger::_instance = new PerformanceLogger();
+std::string ioPrefFile;
+std::string timePrefFile;
+std::string threadPrefFile;
+
+void checkForLeadingZero(
+        std::stringstream& io,
+        std::stringstream& thread,
+        std::stringstream& time,
+        const int& val) {
+    if (val > 9) return;
+    std::string temp("0");
+    io << temp;
+    thread << temp;
+    time << temp;
+}
+
+void printToSStream(
+        std::stringstream& io,
+        std::stringstream& thread,
+        std::stringstream& time,
+        const char& delimiter,
+        const int& val) {
+    io << val << delimiter;
+    thread << val << delimiter;
+    time << val << delimiter;
+}
+
+void createFileNames() {
+    time_t t = time(0);
+    tm date = *localtime(&t);
+    std::stringstream io,time,thread;
+    io << "io.";
+    time << "time.";
+    thread << "thread.";
+    checkForLeadingZero(io,thread,time,date.tm_mon);
+    printToSStream(io,thread,time,'-',date.tm_mon);
+    checkForLeadingZero(io,thread,time,date.tm_mday);
+    printToSStream(io,thread,time,'-',date.tm_mday);
+    printToSStream(io,thread,time,'-',date.tm_year+1900);
+    checkForLeadingZero(io,thread,time,date.tm_hour);
+    printToSStream(io,thread,time,':',date.tm_hour);
+    checkForLeadingZero(io,thread,time,date.tm_min);
+    printToSStream(io,thread,time,':',date.tm_min);
+    checkForLeadingZero(io,thread,time,date.tm_sec);
+    printToSStream(io,thread,time,'.',date.tm_sec);
+    io << "csv";
+    thread << "csv";
+    time << "csv";
+    ioPrefFile = io.str();
+    timePrefFile = time.str();
+    threadPrefFile = thread.str();
+}
 
 void PerformanceLogger::doNotify(string message, string fileName)
 {
     //implemented by Daniel
 }
 
-void PerformanceLogger::logIO(
+/*void PerformanceLogger::logIO(
         const string & operation,
         const string & object,
         const timespec startTime,
         const timespec endTime,
-        const size_t size,
-        const size_t requests) {
+        const size_t size ) {
+        //const size_t requests) {
     //output info
     stringstream message;
     const timespec duration = timespecDiff(endTime,startTime);
@@ -48,19 +98,17 @@ void PerformanceLogger::logIO(
     message.setf(ios_base::fixed, ios_base::floatfield);
     this->doNotify(message.str(),io_FnBase+ext);
     message << setprecision(9)
-            << operation << ' ' << object << ": "
+            << operation << ',' << object << ": "
             << ", start time: " << startTime
             << ", end time: " << endTime
             << ", duration: " << duration
-            << ", buffer size: " << size
-            << ", throughput: " << throughput
-            << ", io requests: " << requests;
+            << ", buffer size: " << size;
     this->doNotify(message.str(),io_FnBase+ext);
 }
 
-void PerformanceLogger::logThread(/**/) {
+void PerformanceLogger::logThread() {
 //implemented by pavel
-}
+}*/
 
 // Log a profiling message
 void PerformanceLogger::logTiming(
@@ -88,5 +136,5 @@ void PerformanceLogger::logTiming(
     message << ", size: " << size;
   }
 
-  this->doNotify(message.str(),time_FnBase+ext);
+  this->doNotify(message.str(),timePrefFile);
 }
