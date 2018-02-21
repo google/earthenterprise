@@ -33,7 +33,8 @@ void printToSStream(
         std::stringstream& time,
         const char& delimiter,
         const int& val);
-void createFileNames();
+void openFiles();
+void closeFiles();
 
 /*
  * Singleton class for logging event performance. This class is intended for
