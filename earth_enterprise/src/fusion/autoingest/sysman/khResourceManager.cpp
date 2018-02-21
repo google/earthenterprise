@@ -322,6 +322,9 @@ khResourceManager::MakeCPUReservation(khResourceProviderProxy *provider,
     RESOURCE_ALLOC_LOGGER( rmanager_reservation_numcpus, provider->host, numCPUs  );
     return CPUReservationImpl::Make(provider->Host(), num);
   }
+  else {
+    RESOURCE_ALLOC_LOGGER( rmanager_fail_reservation__insufficient_numcpus, provider->host, req.minNumCPU );
+  }
   return Reservation();
 }
 

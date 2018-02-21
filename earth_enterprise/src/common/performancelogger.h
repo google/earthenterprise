@@ -135,12 +135,20 @@ class TaskAllocationLogger {
 #define END_PERF_LOGGING(name) name.end()
 
 
+<<<<<<< HEAD
 // Resource Logging records the various number of job allocation parameters, 
 // how many thread/vcpu resources were requested to process a given task, and 
 // how many were actually allocated and on which machine. 
 #define RESOURCE_ALLOC_LOGGING(name, op, ...) \
   TaskAllocationLogger<TaskAllocationLogger> name(op, __VA_ARGS__)
+=======
+// Task Logging records the various number of job allocation parameters, 
+// how many resources were requested process a given task, and how
+// Many were actually allocated and on which machine. 
+#define TASK_ALLOC_LOGGING(name, op, ...) \
+  TaskAllocationLogger<TaskAllocationLogger> name(op, __VA_ARGS__)
+// TODO - determine if we need this #define END_TASK_LOGGING(name) name.end()
 
-
+>>>>>>> c404664... WIP - very very messy at the moment...
 
 #endif // PERFORMANCELOGGER_H
