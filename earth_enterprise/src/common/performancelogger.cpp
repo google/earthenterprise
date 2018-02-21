@@ -26,9 +26,9 @@
 using namespace std;
 using namespace getime;
 
-std::string ioPrefFile;
-std::string timePrefFile;
-std::string threadPrefFile;
+std::ofstream ioPrefFile;
+std::ofstream timePrefFile;
+std::ofstream threadPrefFile;
 
 void checkForLeadingZero(
         std::stringstream& io,
@@ -53,7 +53,7 @@ void printToSStream(
     time << val << delimiter;
 }
 
-void createFileNames() {
+void openFiles() {
     time_t t = time(0);
     tm date = *localtime(&t);
     std::stringstream io,time,thread;
@@ -74,9 +74,20 @@ void createFileNames() {
     io << "csv";
     thread << "csv";
     time << "csv";
-    ioPrefFile = io.str();
-    timePrefFile = time.str();
-    threadPrefFile = thread.str();
+    if (!ioPrefFile.is_open()) ioPrefFile.open(io.str().c_str());
+    if (!timePrefFile.is_open()) timePrefFile.open(time.str().c_str());
+    if (!threadPrefFile.is_open()) threadPrefFile.open(thread.str().c_str());
+}
+
+void closeFiles() {
+    if (ioPrefFile.is_open()) ioPrefFile.close();
+    if (threadPrefFile.is_open()) threadPrefFile.close();
+    if (timePrefFile.is_open()) timePrefFile.close();
+}
+
+PerformanceLogger& PerformanceLogger::instance() {
+    static PerformanceLogger _instance;
+    return _instance;
 }
 
 void PerformanceLogger::doNotify(string message, string fileName)
@@ -136,5 +147,5 @@ void PerformanceLogger::logTiming(
     message << ", size: " << size;
   }
 
-  this->doNotify(message.str(),timePrefFile);
+  //this->doNotify(message.str(),timePrefFile);
 }

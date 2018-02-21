@@ -402,7 +402,7 @@ int main(int argc, char **argv) {
   }
   // at the end, call dump all
   JOBSTATS_DUMPALL();
-
+  CLOSE_PERF_LOG_FILES();
   // PERF NOTE: prints to stdout not file
   // On successful completion, print the output file sizes.
   // The print occurs here to allow progress to go out of scope.

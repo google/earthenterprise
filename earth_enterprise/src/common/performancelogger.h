@@ -17,6 +17,7 @@
 
 #include <string>
 #include <sstream>
+#include <fstream>
 #include <time.h>
 
 #include "common/timeutils.h"
@@ -41,20 +42,18 @@ void createFileNames();
 class PerformanceLogger {
   public:
     //static PerformanceLogger * const instance() { return _instance; }
-    static PerformanceLogger& instance() {
-        static PerformanceLogger _instance;
-        return _instance;
-    }
+    static PerformanceLogger& instance();
     void logTiming(
         const std::string & operation, // The operation being timed
         const std::string & object,    // The object that the operation is performed on
         const timespec startTime,      // The start time of the operation
         const timespec endTime,        // The end time of the operation
         const size_t size = 0);        // The size of the object, if applicable
-
+    static void openFiles();
   private:
     PerformanceLogger() {}
     void doNotify(std::string message, std::string fileName);
+    //static std::ofstream io,thread,time;
 };
 
 /*
@@ -96,7 +95,9 @@ class BlockPerformanceLogger {
 };
 
 // Should be called at the beginning of gecombineterrain to create files
-#define CREATE_PERF_LOG_FILES() createFileNames()
+#define OPEN_PERF_LOG_FILES() openFiles()
+// Should be called at the end of gecombineterrain to close files
+#define CLOSE_PERF_LOG_FILES() closeFiles()
 
 // Programmers should use the macros below to time code instead of using the
 // classes above directly. This makes it easy to use compile time flags to
