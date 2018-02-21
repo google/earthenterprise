@@ -109,22 +109,38 @@ def GetIP(hostname):
 
 def GetLinuxDetails():
   """Get Linux distribution details."""
+
+  # eg. ('Ubuntu', '14.04', 'trusty')
+  # platform.linux_distribution() and platform.dist() were deprecated, they
+  # return 'debian' as the os, didn't find an elegant alternative and the
+  # functions use the files in /etc/ to do their magic.
+  #
+  # This has become further complicated by changes in how CentOS 7 uses the
+  # /etc files.
+
+  # This block works well for RHEL and CentOS.
   try:
-    # eg. ('Ubuntu', '14.04', 'trusty')
-    # platform.linux_distribution() and platform.dist() were deprecated, they
-    # return 'debian' as the os, didn't find an elegant alternative and the
-    # functions use the files in /etc/ to do their magic.
-    #
-    # This has become further complicated by changes in how CentOS 7 uses the
-    # /etc files.
-    with open("/etc/issue") as f:
-      ret = f.read().split()
-    if ret[0] == '\S':
-      with open("/etc/redhat-release") as f:
-        ret = f.read().split()
-    return ret
+    with open("/etc/redhat-release") as f:
+      line = f.read()
+    os = line.split()[0]
+    if os == "Red":
+      os = "redhat"
+    version = line.split(" release ")[1].split()[0]
+    return [os, version]
+
+  # Now try for Ubuntu.
   except IOError:
-    raise AssertionError('Linux distribution details not available.')
+    try:
+      with open("/etc/lsb-release") as f:
+        line = f.read()
+      # Parse lines like "DISTRIB_ID=Ubuntu\n".
+      os = line.split()[0].split("=")[1]
+      version = line.split()[1].split("=")[1]
+      return [os, version]
+
+    # Final fail case.
+    except IOError:
+      raise AssertionError('Linux distribution details not available.')
 
 
 def GetLinuxArchitecture():
