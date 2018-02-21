@@ -107,7 +107,7 @@ status_postmaster() {
   if [ $returncode -eq 0 ]; then
     echo "postmaster: OK"
   else
-    echo "postmaster: not running"
+    echo "postmaster: Not running"
   fi
   return $returncode
 }
@@ -124,13 +124,12 @@ status_gehttpd() {
   if [ $returncode -eq 0 ]; then
     echo "gehttpd: OK"
   else
-    echo "gehttpd: not running"
+    echo "gehttpd: Not running"
   fi
   return $returncode
 }
 
-status()
-{
+status() {
   status_postmaster
   returncode_postmaster=$?
   status_gehttpd

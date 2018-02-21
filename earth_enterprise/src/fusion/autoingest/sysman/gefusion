@@ -84,11 +84,11 @@ function check_daemon {
       message="OK"
       returncode=0
     else
-      message="not running"
+      message="Not running"
       returncode=1
     fi
   else
-    message="not running"
+    message="Not running"
     returncode=1
   fi
   echo "$1  $message"
