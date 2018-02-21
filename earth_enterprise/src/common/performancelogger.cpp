@@ -41,11 +41,9 @@ void PerformanceLogger::log(
 
   const timespec duration = timespecDiff(endTime, startTime);
   stringstream message;
-  pthread_t tid = pthread_self();
 
   message.setf(ios_base::fixed, ios_base::floatfield);
-  message << tid << ", "
-          << startTime << ", "
+  message << startTime << ", "
           << endTime << ", "
           << duration << ", "
           << size << ", "
@@ -61,9 +59,10 @@ void PerformanceLogger::do_notify( const string& message, ostream& out, khMutex&
   // Get the thread ID
   pthread_t tid = pthread_self();
 
-  mutex.lock();  // wait for and then lock the mutex
-  out << tid << ", " << message << endl;
-  mutex.unlock();  // clear the lock
+  {  // atomic inner block
+    khLockGuard lock( mutex );
+    mutex.unlock();  // clear the lock
+  };  // end inner block
 
 };  // end do_notify
 
