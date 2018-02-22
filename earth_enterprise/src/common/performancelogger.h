@@ -86,9 +86,9 @@ class BlockPerformanceLogger {
  * instance goes out of scope.
  */
 template <class PerfLoggerCls>
-class TaskAllocationLogger {
+class ResourceAllocLogger {
   public:
-    TaskAllocationLogger(
+    ResourceAllocLogger(
         const std::string & operation,
         const std::string & object,
         const size_t result = 0,
@@ -103,12 +103,15 @@ class TaskAllocationLogger {
       value2(value2),
       dateTime(getime::getMonotonicTime()),
       ended(false) {}
+    std::vector<std::string> getHeaders() {
+        std::vector<std::string> &headers;
+    }
     void end() {
         PerfLoggerCls::instance()
             ->log(operation, object, dateTime, result, value1, value2);
       }
     }
-    ~TaskAllocationLogger() {
+    ~ResourceAllocLogger() {
       end();
     }
   private:
@@ -138,6 +141,6 @@ class TaskAllocationLogger {
 // how many thread/vcpu resources were requested to process a given task, and 
 // how many were actually allocated and on which machine. 
 #define RESOURCE_ALLOC_LOGGING(name, op, ...) \
-  TaskAllocationLogger<TaskAllocationLogger> name(op, __VA_ARGS__)
+  ResourceAllocLogger<ResourceAllocLogger> name(op, __VA_ARGS__)
 
 #endif // PERFORMANCELOGGER_H
