@@ -255,11 +255,6 @@ int main(int argc, char **argv) {
     notify(NFY_WARN, "gecombineterrain actually using min numcpu: %llu ",
                static_cast<long long unsigned int>(numcpus));
     
-
-    notify(NFY_WARN, "gecombineterrain actually using min numcpu: %llu ",
-               static_cast<long long unsigned int>(numcpus));
-    
-
     // Validate commandline options
     if (!outdir.size()) {
       usage(progname, "No output specified");
