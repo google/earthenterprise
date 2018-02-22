@@ -50,10 +50,15 @@ class PerformanceLogger {
         const timespec startTime,      // The start time of the operation
         const timespec endTime,        // The end time of the operation
         const size_t size = 0);        // The size of the object, if applicable
-    static void openFiles();
+    void logIO(
+        const std::string & operation, // The operation being timed
+        const std::string & object,    // The object that the operation is performed on
+        const timespec startTime,      // The start time of the operation
+        const timespec endTime,        // The end time of the operation
+        const size_t size = 0);        // The size of the buffer
   private:
     PerformanceLogger() {}
-    void doNotify(std::string message, std::string fileName);
+    void doNotify(std::string message, std::ostream& fileName);
     //static std::ofstream io,thread,time;
 };
 
@@ -83,9 +88,34 @@ class BlockPerformanceLogger {
 
       }
     }
-    void tallyIOStats();
-    ~BlockPerformanceLogger() {
-      end();
+  private:
+    const std::string operation;
+    const std::string object;
+    const size_t size;
+    const timespec startTime;
+    bool ended;
+};
+
+template <class PerfLoggerCls>
+class BlockIOLogger {
+  public:
+    BlockIOLogger(
+        const std::string & operation,
+        const std::string & object,
+        const size_t size=1024) :
+      operation(operation),
+      object(object),
+      size(size),
+      startTime(getime::getMonotonicTime()),
+      ended(false) {}
+    void end() {
+      if (!ended) {
+        ended = true;
+        const timespec endTime = getime::getMonotonicTime();
+            PerfLoggerCls::instance()
+              .logIO(operation, object, startTime, endTime, size);
+
+      }
     }
   private:
     const std::string operation;
@@ -114,10 +144,7 @@ class BlockPerformanceLogger {
 #define END_PERF_LOGGING(pname) pname.end()
 
 #define BEGIN_IO_LOGGING(ioname, op, ...) \
-  BlockPerformanceLogger<PerformanceLogger> ioname(op, __VA_ARGS__)
-/* Unsure of how to get request count. Write queue position when entering?
-   If so, how to track this? */
-//#define START_IO_REQUEST_COUNT(ioReq) int ioReq=1
-//#define IO_REQUEST(ioReq) ++ioReq
+  BlockIOLogger<PerformanceLogger> ioname(op, __VA_ARGS__)
+
 #define END_IO_LOGGING(ioname,...) ioname.end()
 #endif

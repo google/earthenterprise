@@ -18,7 +18,7 @@
 #include <unistd.h>
 #include <sys/syscall.h>
 #include <time.h>
-
+#include <vector>
 #include "common/performancelogger.h"
 #include "common/notify.h"
 #include "common/timeutils.h"
@@ -27,6 +27,7 @@ using namespace std;
 using namespace getime;
 
 std::ofstream ioPrefFile;
+std::string ioFileName;
 std::ofstream timePrefFile;
 std::ofstream threadPrefFile;
 
@@ -74,9 +75,34 @@ void openFiles() {
     io << "csv";
     thread << "csv";
     time << "csv";
-    if (!ioPrefFile.is_open()) ioPrefFile.open(io.str().c_str());
-    if (!timePrefFile.is_open()) timePrefFile.open(time.str().c_str());
-    if (!threadPrefFile.is_open()) threadPrefFile.open(thread.str().c_str());
+    // if not open, open and add header
+    if (!ioPrefFile.is_open()) { 
+      ioPrefFile.open(io.str().c_str());
+      ioFileName = io.str();
+      ioPrefFile << "operation,object,startTime,endTime,bufferSize" << endl;
+    }
+    if (!timePrefFile.is_open()) {
+      timePrefFile.open(time.str().c_str());
+      timePrefFile << "operation,object,startTime,endTime,duration,threadID,objectSize" << endl;
+    }
+    if (!threadPrefFile.is_open()) {
+      threadPrefFile.open(thread.str().c_str());
+      //TODO: pavel fill in header line
+    }
+}
+
+void ioPostProcess()
+{
+    /*
+        Do IO post processing and output:
+            - total number of write requests (number of lines in file)
+            - throughput: (size/duration) * 1024 = MbPS
+
+        Also look into a simple CVS parser. I have used https://github.com/ben-strasser/fast-cpp-csv-parser
+        but not sure about licensing, as this is BSD license. I can write my own, but I'd prefer to
+        not re-invent the wheel.
+    */
+
 }
 
 void closeFiles() {
@@ -90,12 +116,12 @@ PerformanceLogger& PerformanceLogger::instance() {
     return _instance;
 }
 
-void PerformanceLogger::doNotify(string message, string fileName)
+void PerformanceLogger::doNotify(string message, ostream& fileName)
 {
     //implemented by Daniel
 }
 
-/*void PerformanceLogger::logIO(
+void PerformanceLogger::logIO(
         const string & operation,
         const string & object,
         const timespec startTime,
@@ -105,19 +131,21 @@ void PerformanceLogger::doNotify(string message, string fileName)
     //output info
     stringstream message;
     const timespec duration = timespecDiff(endTime,startTime);
-    double throughput = (timespecToDouble(duration)*size) / 1024;
+    const pid_t tid = syscall(SYS_gettid);
+    //double throughput = (timespecToDouble(duration)*size) / 1024;
     message.setf(ios_base::fixed, ios_base::floatfield);
-    this->doNotify(message.str(),io_FnBase+ext);
-    message << setprecision(9)
-            << operation << ',' << object << ": "
-            << ", start time: " << startTime
-            << ", end time: " << endTime
-            << ", duration: " << duration
-            << ", buffer size: " << size;
-    this->doNotify(message.str(),io_FnBase+ext);
+    message << operation << ','
+            << object    << ','
+            << startTime << ','
+            << endTime   << ','
+            << duration  << ','
+            << tid       << ','
+            << size;
+
+    this->doNotify(message.str(),ioPrefFile);
 }
 
-void PerformanceLogger::logThread() {
+/*void PerformanceLogger::logThread() {
 //implemented by pavel
 }*/
 
@@ -134,7 +162,7 @@ void PerformanceLogger::logTiming(
   stringstream message;
 
   message.setf(ios_base::fixed, ios_base::floatfield);
-  message << setprecision(9)
+  message << setprecision(9)/*
           << operation << " " << object << ": "
           << "start time: " << startTime
           << ", "
@@ -142,10 +170,17 @@ void PerformanceLogger::logTiming(
           << ", "
           << "duration: " << duration
           << ", "
-          << "thread: " << tid;
+          << "thread: " << tid*/;
+  message << operation << ','
+          << object    << ','
+          << startTime << ','
+          << endTime   << ','
+          << duration  << ','
+          << tid       << ',';
+
   if (size > 0) {
-    message << ", size: " << size;
+    message << size;
   }
 
-  //this->doNotify(message.str(),timePrefFile);
+  this->doNotify(message.str(),timePrefFile);
 }
