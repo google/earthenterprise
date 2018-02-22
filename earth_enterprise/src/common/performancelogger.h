@@ -79,6 +79,7 @@ class BlockPerformanceLogger {
       size(size),
       startTime(getime::getMonotonicTime()),
       ended(false) {}
+    ~BlockPerformanceLogger() { this->end(); }
     void end() {
       if (!ended) {
         ended = true;
@@ -108,6 +109,7 @@ class BlockIOLogger {
       size(size),
       startTime(getime::getMonotonicTime()),
       ended(false) {}
+    ~BlockIOLogger() { this->end(); }
     void end() {
       if (!ended) {
         ended = true;
