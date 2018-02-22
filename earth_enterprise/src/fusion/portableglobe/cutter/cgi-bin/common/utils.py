@@ -331,7 +331,7 @@ def RunCmd(os_cmd):
     p = subprocess.Popen(os_cmd, shell=False,
                          stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE)
-    # capture stdout/stderr into memory veriables
+    # capture stdout/stderr into memory variables
     # NOTE: communicate() can only be called one time
     # per call of Popen as after the first call
     # stdout/stderr pipe handles are closed
