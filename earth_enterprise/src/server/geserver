@@ -86,9 +86,9 @@ stop() {
   echo
   echo $dashes
   # only stop if already running...
-  if [ -f $pidfile_postmaster ] ; then
+  if [ -f "$pidfile_postmaster" ] ; then
     run_as_user $GEPGUSER "$gebin_root/pg_ctl -D /var/opt/google/pgsql/data -l /var/opt/google/pgsql/logs/pg.log stop";
-    rm -f $pidfile_postmaster
+    rm -f "$pidfile_postmaster"
   fi
   echo $dashes
   echo 'Done Stopping Google Earth Enterprise Server'
@@ -96,70 +96,64 @@ stop() {
 }
 
 status_postmaster() {
-  if [ -s $pidfile_postmaster ] ; then
-    pid_postmaster=`head -1 $pidfile_postmaster`
+  if [ -s "$pidfile_postmaster" ] ; then
+    pid_postmaster=`head -1 "$pidfile_postmaster"`
     # redirect to /dev/null because pg_ctl --silent option doesnt work for status subcommand
     run_as_user $GEPGUSER "$gebin_root/pg_ctl -D /var/opt/google/pgsql/data status" >& /dev/null
     returncode=$?
   else
     returncode=1
   fi
-  if [ $returncode -eq 0 ]; then
-    echo "postmaster: OK"
+  if [ "$returncode" -eq 0 ]; then
+    echo "postmaster: Running (PID $pid_postmaster)."
   else
     echo "postmaster: Not running"
   fi
-  return $returncode
+  return "$returncode"
 }
 
 status_gehttpd() {
-  if [ -s $pidfile_gehttpd ] ; then
-    pid_gehttpd=`cat $pidfile_gehttpd`
+  if [ -s "$pidfile_gehttpd" ] ; then
+    pid_gehttpd=`cat "$pidfile_gehttpd"`
     # not using 'gehttpd_init status' because it requires lynx install
-    ps -ef | grep $pid_gehttpd | grep -q gehttpd
+    ps -ef | grep "$pid_gehttpd" | grep -q gehttpd
     returncode=$?
   else
     returncode=1
   fi
-  if [ $returncode -eq 0 ]; then
-    echo "gehttpd: OK"
+  if [ "$returncode" -eq 0 ]; then
+    echo "gehttpd: Running (PID $pid_gehttpd)."
   else
     echo "gehttpd: Not running"
   fi
-  return $returncode
+  return "$returncode"
 }
 
 status() {
-  status_postmaster
-  returncode_postmaster=$?
-  status_gehttpd
-  returncode_gehttpd=$?
-  if [ $returncode_postmaster -eq 0 ] && [ $returncode_gehttpd -eq 0 ] ; then
-    RETVAL=0
-  else
-    RETVAL=1
-  fi
+  RETVAL=0
+  status_postmaster || RETVAL=1
+  status_gehttpd || RETVAL=1
 }
 
 # See how we were called.
 case "$1" in
   start)
-  start
-  ;;
+    start
+    ;;
   stop)
-  stop
-  ;;
+    stop
+    ;;
   restart)
-  stop
-  sleep 1
-  start
-  ;;
+    stop
+    sleep 1
+    start
+    ;;
   status)
-  status
-  ;;
+    status
+    ;;
   *)
-  echo $"Usage: $prog {start|stop|restart|status}"
-  exit 1
+    echo $"Usage: $prog {start|stop|restart|status}"
+    exit 1
 esac
 
 exit $RETVAL

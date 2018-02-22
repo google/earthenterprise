@@ -58,16 +58,16 @@ function check_if_master {
 }
 
 function stop_daemon {
-    echo -n "Shutting down $2... "
-    pidfile="/var/opt/google/run/$1.pid"
-    if [ -e $pidfile ] ; then
-	if gestopdaemon $1 ; then
-	    echo "Done"
-	else
-	    echo "Failed"
-	fi
+  echo -n "Shutting down $2... "
+  pidfile="/var/opt/google/run/$1.pid"
+  if [ -e $pidfile ] ; then
+    if gestopdaemon $1 ; then
+      echo "Done"
+    else
+      echo "Failed"
+    fi
   else
-  echo "Not running"
+    echo "Not running"
   fi
 }
 
@@ -81,18 +81,12 @@ function check_daemon {
     ps -ef | grep $pid | grep -q $1
     foundPid=$?
     if [ $foundPid -eq 0 ] ; then
-      message="OK"
-      returncode=0
-    else
-      message="Not running"
-      returncode=1
+      echo "$1:  Running (PID $pid)."
+      return 0
     fi
-  else
-    message="Not running"
-    returncode=1
   fi
-  echo "$1  $message"
-  return $returncode
+  echo "$1:  Not running."
+  return 1
 }
 
 start() {
@@ -130,42 +124,34 @@ stop() {
 }
 
 status() {
+  return_code=0
   if check_if_master ; then
-	check_daemon gesystemmanager
-    gesystemmanager_returncode=$?
-  else
-    gesystemmanager_returncode=0
+    check_daemon gesystemmanager || return_code=1
   fi
-  check_daemon geresourceprovider
-  geresourceprovider_returncode=$?
-  if [ $gesystemmanager_returncode -eq 0 ] && [ $geresourceprovider_returncode -eq 0 ] ; then
-    return 0
-  else
-    return 1
-  fi
+  check_daemon geresourceprovider || return_code=1
+  return "$return_code"
 }
 
 case "$1" in
     restart)
-    stop
-    sleep 1
-    start
-    ;;
+      stop
+      sleep 1
+      start
+      ;;
     start)
-    start
-    ;;
+      start
+      ;;
     stop)
-    stop
-    ;;
+      stop
+      ;;
     status)
-	status
-	exit $?
-    ;;
+      status
+      exit $?
+      ;;
     *)
-    echo "usage: $0 {start|stop|restart|status}"
-    exit 1
-    ;;
-
+      echo "usage: $0 {start|stop|restart|status}"
+      exit 1
+      ;;
 esac
 
 exit 0
