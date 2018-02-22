@@ -75,12 +75,11 @@ function check_daemon {
   # more DRY to use "gefdaemoncheck --checkrunning"
   #   but it seems to assume --checksysman is true
   #   thus wont work on non-master hosts.
+  daemon_path=$(which "$1")
   pidfile="/var/opt/google/run/$1.pid"
   if [ -s $pidfile ] ; then
     pid=`cat $pidfile`
-    ps -ef | grep $pid | grep -q $1
-    foundPid=$?
-    if [ $foundPid -eq 0 ] ; then
+    if [ -d "/proc/$pid" ] && [ "$(readlink "/proc/$pid/exe")" = "$daemon_path" ]; then
       echo "$1:  Running (PID $pid)."
       return 0
     fi

@@ -97,36 +97,31 @@ stop() {
 
 status_postmaster() {
   if [ -s "$pidfile_postmaster" ] ; then
-    pid_postmaster=`head -1 "$pidfile_postmaster"`
+    pid=`head -1 "$pidfile_postmaster"`
     # redirect to /dev/null because pg_ctl --silent option doesnt work for status subcommand
     run_as_user $GEPGUSER "$gebin_root/pg_ctl -D /var/opt/google/pgsql/data status" >& /dev/null
-    returncode=$?
-  else
-    returncode=1
+    if [ "$?" -eq 0 ]; then
+      echo "postmaster: Running (PID $pid)."
+      return 0
+    fi
   fi
-  if [ "$returncode" -eq 0 ]; then
-    echo "postmaster: Running (PID $pid_postmaster)."
-  else
-    echo "postmaster: Not running"
-  fi
-  return "$returncode"
+  echo "postmaster: Not running"
+  return 1
 }
 
 status_gehttpd() {
+  daemon_name='gehttpd'
+  daemon_path="$gehttpd_root/gehttpd"
   if [ -s "$pidfile_gehttpd" ] ; then
-    pid_gehttpd=`cat "$pidfile_gehttpd"`
+    pid=`cat "$pidfile_gehttpd"`
     # not using 'gehttpd_init status' because it requires lynx install
-    ps -ef | grep "$pid_gehttpd" | grep -q gehttpd
-    returncode=$?
-  else
-    returncode=1
+    if [ -d "/proc/$pid" ] && [ "$(readlink "/proc/$pid/exe")" = "$daemon_path" ]; then
+      echo "$daemon_name: Running (PID $pid)."
+      return 0
+    fi
   fi
-  if [ "$returncode" -eq 0 ]; then
-    echo "gehttpd: Running (PID $pid_gehttpd)."
-  else
-    echo "gehttpd: Not running"
-  fi
-  return "$returncode"
+  echo "$daemon_name: Not running"
+  return 1
 }
 
 status() {
