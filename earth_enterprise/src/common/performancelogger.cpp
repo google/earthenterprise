@@ -58,10 +58,11 @@ void PerformanceLogger::do_notify( const string& message, ostream& out, khMutex&
 
   // Get the thread ID
   pthread_t tid = pthread_self();
+  pid_t pid = getppid();  // get the ID of the parent process
 
   {  // atomic inner block
     khLockGuard lock( mutex );
-    mutex.unlock();  // clear the lock
+    out << pid << ", " << tid << ", " << message;
   };  // end inner block
 
 };  // end do_notify
