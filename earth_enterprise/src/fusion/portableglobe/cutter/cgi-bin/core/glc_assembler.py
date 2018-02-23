@@ -183,9 +183,8 @@ class GlcAssembler(object):
 
     if not self.info_file:
       # if called before setting self.info_file
-      # return a logger that does nothing
-      logger = utils.Log("/nulllogger", False)
-      return logger
+      # return None
+      return None
 
     if not os.path.exists(os.path.dirname(self.info_file)):
       os.makedirs(os.path.dirname(self.info_file))
