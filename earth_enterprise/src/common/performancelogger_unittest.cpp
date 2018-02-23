@@ -32,8 +32,12 @@ class MockPerformanceLogger {
     timespec endTime;
     size_t size;
 
-    static MockPerformanceLogger * const instance() { return _instance; }
-    void log(
+    //static MockPerformanceLogger * const instance() { return _instance; }
+    static MockPerformanceLogger& instance() {
+        static MockPerformanceLogger _instance;
+        return _instance;
+    }
+    void logTiming(
         const string & operation,
         const string & object,
         const timespec startTime,
@@ -55,50 +59,51 @@ class MockPerformanceLogger {
       size = 0;
     }
   private:
-    static MockPerformanceLogger * const _instance;
+    //static MockPerformanceLogger * const _instance;
     MockPerformanceLogger() {
       reset();
     }
 };
 
-MockPerformanceLogger * const MockPerformanceLogger::_instance =
-    new MockPerformanceLogger();
+//MockPerformanceLogger * const MockPerformanceLogger::_instance =
+//    new MockPerformanceLogger();
+MockPerformanceLogger& perfLogger = MockPerformanceLogger::instance();
 
 // For convenience
-MockPerformanceLogger * const perfLogger = MockPerformanceLogger::instance();
+//MockPerformanceLogger * const perfLogger = MockPerformanceLogger::instance();
 
 class BlockPerformanceLoggerTest : public testing::Test {
   protected:
     virtual void SetUp() {
       // Reset the performance logger between each test
-      perfLogger->reset();
+      perfLogger.reset();
     }
 };
 
 TEST_F(BlockPerformanceLoggerTest, Standard) {
   BlockPerformanceLogger<MockPerformanceLogger> logger("operation", "object", 123);
-  EXPECT_EQ(perfLogger->calls, 0);
+  EXPECT_EQ(perfLogger.calls, 0);
   logger.end();
 
-  EXPECT_EQ(perfLogger->calls, 1);
-  EXPECT_EQ(perfLogger->operation, "operation");
-  EXPECT_EQ(perfLogger->object, "object");
-  EXPECT_TRUE(perfLogger->startTime.tv_sec > 0 || perfLogger->startTime.tv_nsec > 0);
-  EXPECT_TRUE(perfLogger->endTime.tv_sec > 0 || perfLogger->endTime.tv_nsec > 0);
-  EXPECT_EQ(perfLogger->size, 123);
+  EXPECT_EQ(perfLogger.calls, 1);
+  EXPECT_EQ(perfLogger.operation, "operation");
+  EXPECT_EQ(perfLogger.object, "object");
+  EXPECT_TRUE(perfLogger.startTime.tv_sec > 0 || perfLogger.startTime.tv_nsec > 0);
+  EXPECT_TRUE(perfLogger.endTime.tv_sec > 0 || perfLogger.endTime.tv_nsec > 0);
+  EXPECT_EQ(perfLogger.size, 123);
 }
 
 TEST_F(BlockPerformanceLoggerTest, NoSize) {
   BlockPerformanceLogger<MockPerformanceLogger> logger("operation", "object");
-  EXPECT_EQ(perfLogger->calls, 0);
+  EXPECT_EQ(perfLogger.calls, 0);
   logger.end();
 
-  EXPECT_EQ(perfLogger->calls, 1);
-  EXPECT_EQ(perfLogger->operation, "operation");
-  EXPECT_EQ(perfLogger->object, "object");
-  EXPECT_TRUE(perfLogger->startTime.tv_sec > 0 || perfLogger->startTime.tv_nsec > 0);
-  EXPECT_TRUE(perfLogger->endTime.tv_sec > 0 || perfLogger->endTime.tv_nsec > 0);
-  EXPECT_EQ(perfLogger->size, 0);
+  EXPECT_EQ(perfLogger.calls, 1);
+  EXPECT_EQ(perfLogger.operation, "operation");
+  EXPECT_EQ(perfLogger.object, "object");
+  EXPECT_TRUE(perfLogger.startTime.tv_sec > 0 || perfLogger.startTime.tv_nsec > 0);
+  EXPECT_TRUE(perfLogger.endTime.tv_sec > 0 || perfLogger.endTime.tv_nsec > 0);
+  EXPECT_EQ(perfLogger.size, 0);
 }
 
 TEST_F(BlockPerformanceLoggerTest, OperationTiming) {
@@ -106,47 +111,49 @@ TEST_F(BlockPerformanceLoggerTest, OperationTiming) {
   sleep(3);
   logger.end();
 
-  double duration = timespecToDouble(timespecDiff(perfLogger->endTime, perfLogger->startTime));
+  double duration = timespecToDouble(timespecDiff(perfLogger.endTime, perfLogger.startTime));
   EXPECT_GE(duration, 3.0);
   EXPECT_LT(duration, 4.0);
 }
 
 TEST_F(BlockPerformanceLoggerTest, MultiEnd) {
   BlockPerformanceLogger<MockPerformanceLogger> logger("operation", "object");
-  EXPECT_EQ(perfLogger->calls, 0);
+  EXPECT_EQ(perfLogger.calls, 0);
   logger.end();
-  EXPECT_EQ(perfLogger->calls, 1);
+  EXPECT_EQ(perfLogger.calls, 1);
   logger.end();
-  EXPECT_EQ(perfLogger->calls, 1);
+  EXPECT_EQ(perfLogger.calls, 1);
 }
 
 TEST_F(BlockPerformanceLoggerTest, LogOnDelete) {
   BlockPerformanceLogger<MockPerformanceLogger> * logger = 
       new BlockPerformanceLogger<MockPerformanceLogger>("abc", "def", 987);
-  EXPECT_EQ(perfLogger->calls, 0);
+  EXPECT_EQ(perfLogger.calls, 0);
   delete logger;
 
-  EXPECT_EQ(perfLogger->calls, 1);
-  EXPECT_EQ(perfLogger->operation, "abc");
-  EXPECT_EQ(perfLogger->object, "def");
-  EXPECT_TRUE(perfLogger->startTime.tv_sec > 0 || perfLogger->startTime.tv_nsec > 0);
-  EXPECT_TRUE(perfLogger->endTime.tv_sec > 0 || perfLogger->endTime.tv_nsec > 0);
-  EXPECT_EQ(perfLogger->size, 987);
+  EXPECT_EQ(perfLogger.calls, 1);
+  EXPECT_EQ(perfLogger.operation, "abc");
+  EXPECT_EQ(perfLogger.object, "def");
+  EXPECT_TRUE(perfLogger.startTime.tv_sec > 0 || perfLogger.startTime.tv_nsec > 0);
+  EXPECT_TRUE(perfLogger.endTime.tv_sec > 0 || perfLogger.endTime.tv_nsec > 0);
+  EXPECT_EQ(perfLogger.size, 987);
 }
 
 TEST_F(BlockPerformanceLoggerTest, DeleteAfterEnd) {
   BlockPerformanceLogger<MockPerformanceLogger> * logger = 
       new BlockPerformanceLogger<MockPerformanceLogger>("abc", "def", 987);
-  EXPECT_EQ(perfLogger->calls, 0);
+  EXPECT_EQ(perfLogger.calls, 0);
   logger->end();
-  EXPECT_EQ(perfLogger->calls, 1);
+  EXPECT_EQ(perfLogger.calls, 1);
   logger->end();
-  EXPECT_EQ(perfLogger->calls, 1);
+  EXPECT_EQ(perfLogger.calls, 1);
   delete logger;
-  EXPECT_EQ(perfLogger->calls, 1);
+  EXPECT_EQ(perfLogger.calls, 1);
 }
 
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
+  return 0;
 }
+

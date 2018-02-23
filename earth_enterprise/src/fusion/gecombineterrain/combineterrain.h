@@ -37,8 +37,7 @@ class CountedPacketFileReaderPool : public PacketFileReaderPool {
   CountedPacketFileReaderPool(const std::string &pool_name,
                               geFilePool &file_pool)
       : PacketFileReaderPool(pool_name, file_pool),
-        pool_packet_count_(0) {
-  }
+        pool_packet_count_(0) {}
   ~CountedPacketFileReaderPool() {}
   virtual PacketFileReaderToken Add(const std::string &packet_file_name);
   inline const uint64 &pool_packet_count() const { return pool_packet_count_; }
