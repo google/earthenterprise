@@ -47,7 +47,6 @@ class PerformanceLogger {
   private:
     PerformanceLogger() {}
     void doNotify(std::string message, std::ostream& fileName);
-    //static std::ofstream io,thread,time;
 };
 
 /*

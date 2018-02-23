@@ -19,9 +19,9 @@
 #include <sys/syscall.h>
 #include <time.h>
 #include <cstdlib>
-#include "common/performancelogger.h"
 #include "common/notify.h"
 #include "common/timeutils.h"
+#include "common/performancelogger.h"
 #include <cassert>
 
 using namespace std;
@@ -66,7 +66,7 @@ void generateFileNames() {
 
 void ioPostProcess()
 {
-    fstream file(ioFileName.c_str(),fstream::in);
+    /*fstream file(ioFileName.c_str(),fstream::in);
     string line;
     getline(file,line); //ignore header
 
@@ -95,7 +95,7 @@ void ioPostProcess()
     file.open(ioFileName.c_str(), fstream::out | fstream::app);
     file << "requests,throughput" << endl
          << requests << ',' << throughput << endl;
-    file.close();
+    file.close();*/
 }
 
 
