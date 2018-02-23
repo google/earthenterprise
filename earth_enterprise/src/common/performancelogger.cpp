@@ -27,6 +27,10 @@
 using namespace std;
 using namespace getime;
 
+string ioFileName;
+string threadFileName;
+string timeFileName;
+
 /*void checkForLeadingZero(
         std::stringstream& io,
         std::stringstream& thread,
@@ -49,10 +53,6 @@ void printToSStream(
     thread << val << delimiter;
     time << val << delimiter;
 }*/
-
-string ioFileName;
-string timeFileName;
-string threadFileName;
 
 void generateFileNames() {
     // needs mutex lock
@@ -85,7 +85,7 @@ void ioPostProcess()
 
         WILL THIS BE DONE IN C++ OR WILL IT BE ANALYZED AFTER VIA ANOTHER
         METHOD?
-    */
+
     fstream file(ioFileName.c_str(),fstream::in);
     string line;
     getline(file,line); //ignore header
@@ -115,7 +115,7 @@ void ioPostProcess()
     file.open(ioFileName.c_str(), fstream::out | fstream::app);
     file << "requests,throughput" << endl
          << requests << ',' << throughput << endl;
-    file.close();
+    file.close();*/
 }
 
 
@@ -149,8 +149,10 @@ void PerformanceLogger::logIO(
             << tid       << ','
             << size       << ','
             << duration;
+
+    assert(ioFileName.size());
     //Daniel: perhaps move open/close to doNotify?
-    ioPrefFile.open(ioFileName.c_str(), fstream::out | fstream::app);
+    fstream ioPrefFile(ioFileName.c_str(), fstream::out | fstream::app);
     doNotify(message.str(),ioPrefFile);
     ioPrefFile.close();
 }
@@ -180,9 +182,9 @@ void PerformanceLogger::logTiming(
           << duration  << ','
           << tid       << ','
           << size;
-
+  assert(timeFileName.size());
   //Daniel: perhaps move open/close to doNotify?
-  timePrefFile.open(timeFileName.c_str(), fstream::open | fstream::app);
+  fstream timePrefFile(timeFileName.c_str(), fstream::out | fstream::app);
   doNotify(message.str(),timePrefFile);
   timePrefFile.close();
 }

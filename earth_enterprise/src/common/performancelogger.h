@@ -66,14 +66,14 @@ class BlockPerformanceLogger {
       object(object),
       size(size),
       startTime(getime::getMonotonicTime()),
-      ended(false) { generateFileNames(); }
+      ended(false) { }
     ~BlockPerformanceLogger() { end(); }
     void end() {
       if (!ended) {
         ended = true;
         const timespec endTime = getime::getMonotonicTime();
             PerfLoggerCls::instance()
-              .logTiming(timeFileoperation, object, startTime, endTime, size);
+              .logTiming(operation, object, startTime, endTime, size);
 
       }
     }
@@ -82,7 +82,7 @@ class BlockPerformanceLogger {
     const std::string object;
     const size_t size;
     const timespec startTime;
-    //static std::fstream timePrefFile;
+    static std::fstream timePrefFile;
     bool ended;
 };
 
