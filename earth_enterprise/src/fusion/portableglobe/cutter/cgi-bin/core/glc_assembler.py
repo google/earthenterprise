@@ -182,8 +182,7 @@ class GlcAssembler(object):
     """Get logger built from info.txt."""
 
     if not self.info_file:
-      # if called before setting self.info_file
-      # return None
+      # self.info_file is expected to be set before calling this method
       return None
 
     if not os.path.exists(os.path.dirname(self.info_file)):
@@ -214,7 +213,7 @@ class GlcAssembler(object):
               % (COMMAND_DIR, glc_path))
     glx_info = utils.RunCmd(os_cmd)
 
-    # the odd way errors are returned....
+    # Checking for errors and logging them if there where any
     if not glx_info[0] and len(glx_info) == 2:
       utils.PrintAndLog("ERROR: '%s' running command: '%s'" % (glx_info[1], os_cmd), logger)
       return []
