@@ -213,7 +213,7 @@ class GlcAssembler(object):
               "--list_files"
               % (COMMAND_DIR, glc_path))
     glx_info = utils.RunCmd(os_cmd)
-    if not isinstance(glx_info, list) or len(glx_info) == 0:
+    if len(glx_info) == 0:
       utils.PrintAndLog("Unexpected empty results running command: '%s'" % os_cmd, logger)
       return []
 
