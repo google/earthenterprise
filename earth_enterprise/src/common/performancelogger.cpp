@@ -31,29 +31,6 @@ string ioFileName;
 string threadFileName;
 string timeFileName;
 
-/*void checkForLeadingZero(
-        std::stringstream& io,
-        std::stringstream& thread,
-        std::stringstream& time,
-        const int& val) {
-    if (val > 9) return;
-    std::string temp("0");
-    io << temp;
-    thread << temp;
-    time << temp;
-}
-
-void printToSStream(
-        std::stringstream& io,
-        std::stringstream& thread,
-        std::stringstream& time,
-        const char& delimiter,
-        const int& val) {
-    io << val << delimiter;
-    thread << val << delimiter;
-    time << val << delimiter;
-}*/
-
 void generateFileNames() {
     // needs mutex lock
     time_t t = time(0);
@@ -76,16 +53,19 @@ void generateFileNames() {
     }
 }
 
+/*
+    Do IO post processing and output:
+        - total number of write requests (number of lines in file)
+        - throughput: (size/1024) / duration = MbPS
+
+    WILL THIS BE DONE IN C++ OR WILL IT BE ANALYZED AFTER VIA ANOTHER
+    METHOD?
+
+    As for right now, this is not being called
+*/
+
 void ioPostProcess()
 {
-    /*
-        Do IO post processing and output:
-            - total number of write requests (number of lines in file)
-            - throughput: (size/1024) / duration = MbPS
-
-        WILL THIS BE DONE IN C++ OR WILL IT BE ANALYZED AFTER VIA ANOTHER
-        METHOD?
-
     fstream file(ioFileName.c_str(),fstream::in);
     string line;
     getline(file,line); //ignore header
@@ -115,7 +95,7 @@ void ioPostProcess()
     file.open(ioFileName.c_str(), fstream::out | fstream::app);
     file << "requests,throughput" << endl
          << requests << ',' << throughput << endl;
-    file.close();*/
+    file.close();
 }
 
 
