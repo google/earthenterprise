@@ -18,10 +18,11 @@
 #include <unistd.h>
 #include <sys/syscall.h>
 #include <time.h>
-#include <vector>
+#include <cstdlib>
 #include "common/performancelogger.h"
 #include "common/notify.h"
 #include "common/timeutils.h"
+#include <cassert>
 
 using namespace std;
 using namespace getime;
@@ -79,7 +80,7 @@ void openFiles() {
     if (!ioPrefFile.is_open()) { 
       ioPrefFile.open(io.str().c_str());
       ioFileName = io.str();
-      ioPrefFile << "operation,object,startTime,endTime,bufferSize" << endl;
+      ioPrefFile << "operation,object,startTime,endTime,threadID,bufferSize,duration" << endl;
     }
     if (!timePrefFile.is_open()) {
       timePrefFile.open(time.str().c_str());
@@ -96,17 +97,43 @@ void ioPostProcess()
     /*
         Do IO post processing and output:
             - total number of write requests (number of lines in file)
-            - throughput: (size/duration) * 1024 = MbPS
-
-        Also look into a simple CVS parser. I have used https://github.com/ben-strasser/fast-cpp-csv-parser
-        but not sure about licensing, as this is BSD license. I can write my own, but I'd prefer to
-        not re-invent the wheel.
+            - throughput: (size/1024) / duration = MbPS
     */
+    ioPrefFile.close();
+    fstream file(ioFileName.c_str(),fstream::in);
+    string line;
+    getline(file,line); //ignore header
 
+    int requests=0;
+    double durationTot=0, sizeTot=0;
+
+    // loop through file, extract buffer size and duration
+    while(getline(file,line)) {
+      ++requests;
+      size_t pos = line.rfind(',');
+      size_t len = line.length();
+      durationTot += strtod(line.substr(pos+1,len-1).c_str(),0);
+      len = pos-1;
+      pos = line.rfind(',',len);
+      sizeTot += strtod(line.substr(pos+1,len-pos).c_str(),0);
+    }
+
+    // dont divide by 0
+    assert(durationTot > 0);
+
+    // calculate throughput
+    double throughput = ((sizeTot/1024)/durationTot);
+
+    // close and reopen for writing
+    file.close();
+    file.open(ioFileName.c_str(), fstream::out | fstream::app);
+    file << "requests,throughput" << endl
+         << requests << ',' << throughput << endl;
+    file.close();
 }
 
 void closeFiles() {
-    if (ioPrefFile.is_open()) ioPrefFile.close();
+    if (ioPrefFile.is_open()) ioPostProcess();
     if (threadPrefFile.is_open()) threadPrefFile.close();
     if (timePrefFile.is_open()) timePrefFile.close();
 }
@@ -138,9 +165,9 @@ void PerformanceLogger::logIO(
             << object    << ','
             << startTime << ','
             << endTime   << ','
-            << duration  << ','
             << tid       << ','
-            << size;
+            << size       << ','
+            << duration;
 
     this->doNotify(message.str(),ioPrefFile);
 }
@@ -162,16 +189,8 @@ void PerformanceLogger::logTiming(
   stringstream message;
 
   message.setf(ios_base::fixed, ios_base::floatfield);
-  message << setprecision(9)/*
-          << operation << " " << object << ": "
-          << "start time: " << startTime
-          << ", "
-          << "end time: " << endTime
-          << ", "
-          << "duration: " << duration
-          << ", "
-          << "thread: " << tid*/;
-  message << operation << ','
+  message << setprecision(9)
+          << operation << ','
           << object    << ','
           << startTime << ','
           << endTime   << ','
