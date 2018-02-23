@@ -32,7 +32,7 @@ std::string ioFileName;
 std::ofstream timePrefFile;
 std::ofstream threadPrefFile;
 
-void checkForLeadingZero(
+/*void checkForLeadingZero(
         std::stringstream& io,
         std::stringstream& thread,
         std::stringstream& time,
@@ -53,42 +53,30 @@ void printToSStream(
     io << val << delimiter;
     thread << val << delimiter;
     time << val << delimiter;
-}
+}*/
 
-void openFiles() {
+string ioFileName;
+string timeFileName;
+string threadFileName;
+
+void generateFileNames() {
     time_t t = time(0);
     tm date = *localtime(&t);
-    std::stringstream io,time,thread;
-    io << "io.";
-    time << "time.";
-    thread << "thread.";
-    checkForLeadingZero(io,thread,time,date.tm_mon);
-    printToSStream(io,thread,time,'-',date.tm_mon);
-    checkForLeadingZero(io,thread,time,date.tm_mday);
-    printToSStream(io,thread,time,'-',date.tm_mday);
-    printToSStream(io,thread,time,'-',date.tm_year+1900);
-    checkForLeadingZero(io,thread,time,date.tm_hour);
-    printToSStream(io,thread,time,':',date.tm_hour);
-    checkForLeadingZero(io,thread,time,date.tm_min);
-    printToSStream(io,thread,time,':',date.tm_min);
-    checkForLeadingZero(io,thread,time,date.tm_sec);
-    printToSStream(io,thread,time,'.',date.tm_sec);
-    io << "csv";
-    thread << "csv";
-    time << "csv";
-    // if not open, open and add header
-    if (!ioPrefFile.is_open()) { 
-      ioPrefFile.open(io.str().c_str());
-      ioFileName = io.str();
-      ioPrefFile << "operation,object,startTime,endTime,threadID,bufferSize,duration" << endl;
+    char buf[256];
+    std::fill(buf,buf+256,0);
+    if (!ioFileName.size()) {
+        strftime(buf, sizeof(buf), "io_stats.%m-%d-%Y-%H:%M:%S.csv", &date);
+        ioFileName = buf;
+        std::fill(buf,buf+256,0);
     }
-    if (!timePrefFile.is_open()) {
-      timePrefFile.open(time.str().c_str());
-      timePrefFile << "operation,object,startTime,endTime,duration,threadID,objectSize" << endl;
+    if (!timeFileName.size()) {
+        strftime(buf, sizeof(buf), "time_stats.%m-%d-%Y-%H:%M:%S.csv", &date);
+        timeFileName = buf;
+        std::fill(buf,buf+256,0);
     }
-    if (!threadPrefFile.is_open()) {
-      threadPrefFile.open(thread.str().c_str());
-      //TODO: pavel fill in header line
+    if (!threadFileName.size()) {
+        strftime(buf, sizeof(buf), "thread_stats.%m-%d-%Y-%H:%M:%S.csv", &date);
+        threadFileName = buf;
     }
 }
 
@@ -132,11 +120,6 @@ void ioPostProcess()
     file.close();
 }
 
-void closeFiles() {
-    if (ioPrefFile.is_open()) ioPostProcess();
-    if (threadPrefFile.is_open()) threadPrefFile.close();
-    if (timePrefFile.is_open()) timePrefFile.close();
-}
 
 PerformanceLogger& PerformanceLogger::instance() {
     static PerformanceLogger _instance;
@@ -168,8 +151,10 @@ void PerformanceLogger::logIO(
             << tid       << ','
             << size       << ','
             << duration;
-
+    //Daniel: perhaps move open/close to doNotify?
+    ioPrefFile.open(ioFileName.c_str(), fstream::out | fstream::app);
     this->doNotify(message.str(),ioPrefFile);
+    ioPrefFile.close();
 }
 
 /*void PerformanceLogger::logThread() {
@@ -195,11 +180,10 @@ void PerformanceLogger::logTiming(
           << startTime << ','
           << endTime   << ','
           << duration  << ','
-          << tid       << ',';
-
-  if (size > 0) {
-    message << size;
+          << tid       << ','
+          << size;
   }
-
+  timePrefFile.open(timeFileName.c_str(), fstream::open | fstream::app);
   this->doNotify(message.str(),timePrefFile);
+  timePrefFile.close();;
 }

@@ -22,19 +22,7 @@
 
 #include "common/timeutils.h"
 
-void checkForLeadingZero(
-        std::stringstream& io,
-        std::stringstream& thread,
-        std::stringstream& time,
-        const int& val);
-void printToSStream(
-        std::stringstream& io,
-        std::stringstream& thread,
-        std::stringstream& time,
-        const char& delimiter,
-        const int& val);
-void openFiles();
-void closeFiles();
+void generateFileNames();
 
 /*
  * Singleton class for logging event performance. This class is intended for
@@ -78,8 +66,8 @@ class BlockPerformanceLogger {
       object(object),
       size(size),
       startTime(getime::getMonotonicTime()),
-      ended(false) {}
-    ~BlockPerformanceLogger() { this->end(); }
+      ended(false) { generateFileNames(); }
+    ~BlockPerformanceLogger() { end(); }
     void end() {
       if (!ended) {
         ended = true;
@@ -94,6 +82,7 @@ class BlockPerformanceLogger {
     const std::string object;
     const size_t size;
     const timespec startTime;
+    std::fstream timePrefFile;
     bool ended;
 };
 
@@ -109,7 +98,7 @@ class BlockIOLogger {
       size(size),
       startTime(getime::getMonotonicTime()),
       ended(false) {}
-    ~BlockIOLogger() { this->end(); }
+    ~BlockIOLogger() { end(); }
     void end() {
       if (!ended) {
         ended = true;
@@ -124,6 +113,7 @@ class BlockIOLogger {
     const std::string object;
     const size_t size;
     const timespec startTime;
+    std::fstream ioPrefFile;
     bool ended;
 };
 

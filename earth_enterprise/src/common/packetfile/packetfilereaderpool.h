@@ -31,7 +31,6 @@
 #include <khTypes.h>
 #include <khGuard.h>
 #include <packetfile/packetfilereader.h>
-#include "common/performancelogger.h"
 
 // PacketFileReaderToken
 //
