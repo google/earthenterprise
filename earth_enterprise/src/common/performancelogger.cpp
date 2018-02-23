@@ -27,25 +27,24 @@
 using namespace std;
 using namespace getime;
 
-string ioFileName;
-string threadFileName;
-string timeFileName;
+// make sure static members get initialized
+string PerformanceLogger::ioFileName = "";
+string PerformanceLogger::threadFileName = "";
+string PerformanceLogger::timeFileName = "";
 
-void generateFileNames() {
+void PerformanceLogger::generateFileNames() {
+
     // needs mutex lock
     time_t t = time(0);
     tm date = *localtime(&t);
     char buf[256];
-    std::fill(buf,buf+256,0);
     if (!ioFileName.size()) {
         strftime(buf, sizeof(buf), "io_stats.%m-%d-%Y-%H:%M:%S.csv", &date);
         ioFileName = buf;
-        std::fill(buf,buf+256,0);
     }
     if (!timeFileName.size()) {
         strftime(buf, sizeof(buf), "time_stats.%m-%d-%Y-%H:%M:%S.csv", &date);
         timeFileName = buf;
-        std::fill(buf,buf+256,0);
     }
     if (!threadFileName.size()) {
         strftime(buf, sizeof(buf), "thread_stats.%m-%d-%Y-%H:%M:%S.csv", &date);

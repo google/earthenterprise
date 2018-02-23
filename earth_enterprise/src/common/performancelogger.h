@@ -22,8 +22,6 @@
 
 #include "common/timeutils.h"
 
-void generateFileNames();
-
 /*
  * Singleton class for logging event performance. This class is intended for
  * performance debugging.
@@ -45,8 +43,12 @@ class PerformanceLogger {
         const timespec endTime,        // The end time of the operation
         const size_t size = 0);        // The size of the buffer
   private:
-    PerformanceLogger() {}
+    PerformanceLogger() { generateFileNames(); }
     void doNotify(std::string message, std::ostream& fileName);
+    static std::string ioFileName;
+    static std::string threadFileName;
+    static std::string timeFileName;
+    static void generateFileNames();
 };
 
 /*
@@ -96,7 +98,7 @@ class BlockIOLogger {
       object(object),
       size(size),
       startTime(getime::getMonotonicTime()),
-      ended(false) { generateFileNames(); }
+      ended(false) {  }
     ~BlockIOLogger() { end(); }
     void end() {
       if (!ended) {
@@ -115,11 +117,6 @@ class BlockIOLogger {
     static std::fstream ioPrefFile;
     bool ended;
 };
-
-
-// This should be run first, to make sure files names have the same timestamp
-#define BEGIN_LOGGING() \
-    generateFileNames()
 
 // Programmers should use the macros below to time code instead of using the
 // classes above directly. This makes it easy to use compile time flags to
