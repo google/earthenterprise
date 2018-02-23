@@ -203,7 +203,7 @@ int main(int argc, char **argv) {
   // On successful completion, print out the output file sizes.
   std::vector<std::string> output_files;
   try {
-    BEGIN_PERF_LOGGING(parse_args, "parse", "arguments");
+    BEGIN_PERF_LOGGING(parse_args, "parse", "arguments", PERFORMANCE);
     std::string progname = argv[0];
 
     // Process commandline options
@@ -258,7 +258,7 @@ int main(int argc, char **argv) {
 
     // Create a merge of the terrain indices
     JOBSTATS_BEGIN(job_stats, MERGER_CREATED);    // validate
-    BEGIN_PERF_LOGGING(create_merger, "create", "merger");
+    BEGIN_PERF_LOGGING(create_merger, "create", "merger", PERFORMANCE);
 
     // We'll need to limit the number of filebundles opened by the filepool
     // at a single time, to keep from overflowing memory.
@@ -347,7 +347,7 @@ int main(int argc, char **argv) {
 
     // Feed this merge into a QuadsetGather operation
     JOBSTATS_BEGIN(job_stats, GATHERER_CREATED);    // validate
-    BEGIN_PERF_LOGGING(create_gatherer, "create", "gatherer");
+    BEGIN_PERF_LOGGING(create_gatherer, "create", "gatherer", PERFORMANCE);
 
     qtpacket::QuadsetGather<geterrain::TerrainPacketItem>
       gather("TerrainQuadsetGather", TransferOwnership(merger));
@@ -383,7 +383,7 @@ int main(int argc, char **argv) {
 
     // Finish the packet file
     JOBSTATS_BEGIN(job_stats, COMBINE);    // validate
-    BEGIN_PERF_LOGGING(start_combiner, "start", "combiner");
+    BEGIN_PERF_LOGGING(start_combiner, "start", "combiner", PERFORMANCE);
     notify(NFY_DEBUG, "writing the packet index");
     combiner.Close(static_cast<size_t>(sortbuf) * 1024 * 1024);
     END_PERF_LOGGING(start_combiner);

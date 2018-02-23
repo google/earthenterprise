@@ -55,7 +55,7 @@ void TerrainCombiner::CombineTerrainPackets(
   // children of the quadset root, and the grand-children of those
   // nodes.
   QuadtreePath quadset_root = quadset_group.qt_root();
-  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_CombinePackets", quadset_root.AsString());
+  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_CombinePackets", quadset_root.AsString(), PERFORMANCE);
   if (quadset_root == QuadtreePath()) {
     // Should be no terrain at root
     for (size_t i = 0; i < quadset_group.size(); ++i) {
@@ -91,7 +91,7 @@ void TerrainCombiner::CombineTerrainPackets(
 
 void TerrainCombiner::CombineChildren(const TerrainQuadsetGroup &quadset_group,
                                       const QuadtreePath even_path) {
-  BEGIN_PERF_LOGGING(combineChildrenProf, "CombineTerrain_CombineChildren", even_path.AsString());
+  BEGIN_PERF_LOGGING(combineChildrenProf, "CombineTerrain_CombineChildren", even_path.AsString(), PERFORMANCE);
   uint64 quadset_num;
   int even_subindex;
   qtpacket::QuadtreeNumbering::TraversalPathToQuadsetAndSubindex(
@@ -192,7 +192,7 @@ void TerrainCombiner::WriteCombinedTerrain(
     const QuadtreePath even_path,
     const std::vector<const TerrainPacketItem *> &items,
     uint progress_increment) {
-  BEGIN_PERF_LOGGING(calcReadSize, "CombineTerrain_CalcPacketReadSize", even_path.AsString());
+  BEGIN_PERF_LOGGING(calcReadSize, "CombineTerrain_CalcPacketReadSize", even_path.AsString(), PERFORMANCE);
   // Determine size of read buffer and allocate space if necessary.
   // Sizes include CRC, where applicable.
   // figure out our provider id while we're at it
@@ -211,7 +211,7 @@ void TerrainCombiner::WriteCombinedTerrain(
   }
 
   END_PERF_LOGGING(calcReadSize);
-  BEGIN_PERF_LOGGING(readPackets, "CombineTerrain_ReadPacket", even_path.AsString(), read_buffer_size);
+  BEGIN_PERF_LOGGING(readPackets, "CombineTerrain_ReadPacket", even_path.AsString(), PERFORMANCE, read_buffer_size);
   
   // Create the new PacketInfo and initialize its raw buffer.
   PacketInfo* packet = new PacketInfo(even_path, providerid, progress_increment);
@@ -247,7 +247,7 @@ void TerrainCombiner::CompressPacket(PacketInfo* packet) {
   std::string& buffer = packet->RawBuffer();
   std::string& compressed_buffer = packet->CompressedBuffer();
 
-  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_CompressPacket", packet->EvenPath().AsString(), buffer.size());
+  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_CompressPacket", packet->EvenPath().AsString(), PERFORMANCE, buffer.size());
 
   // Compress data
   size_t compress_buffer_size = KhPktGetCompressBufferSize(buffer.size())
@@ -269,7 +269,7 @@ void TerrainCombiner::CompressPacket(PacketInfo* packet) {
 
 void TerrainCombiner::WritePacket(PacketInfo* packet) {
   std::string& compressed_buffer = packet->CompressedBuffer();
-  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_WritePacket", packet->EvenPath().AsString(), compressed_buffer.size());
+  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_WritePacket", packet->EvenPath().AsString(), PERFORMANCE, compressed_buffer.size());
   writer_.WriteAppendCRC(packet->EvenPath(), &compressed_buffer[0],
                          compressed_buffer.size(), packet->ProviderId());
   progress_meter_.incrementDone(packet->ProgressIncrement());
@@ -299,7 +299,7 @@ void TerrainCombiner::StartThreads() {
 }
 
 void TerrainCombiner::WaitForThreadsToFinish() {
-  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_WaitForFinish", "AllThreads");
+  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_WaitForFinish", "AllThreads", PERFORMANCE);
   if (writer_thread_) {
     // We're done creating PacketInfo's for the threads.
     MarkQueuesComplete();
@@ -333,7 +333,7 @@ void TerrainCombiner::CancelThreads() {
 }
 
 void TerrainCombiner::SetProcessState(bool canceled, bool queues_finished) {
-  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_Set", "ProcessState");
+  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_Set", "ProcessState", PERFORMANCE);
   {
     khLockGuard lock(mutex_);
     canceled_ = canceled;
@@ -366,7 +366,7 @@ void TerrainCombiner::AddPacketToQueues(PacketInfo* packet) {
   {
     // We add to the write queue at the same time to guarantee that
     // the writes are executed in order.
-    BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_WaitFor", "QueueMutex");
+    BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_WaitFor", "QueueMutex", PERFORMANCE);
     khLockGuard lock(mutex_);
     wake_compressors = compress_queue_.empty();
     compress_queue_.push(packet);
@@ -374,7 +374,7 @@ void TerrainCombiner::AddPacketToQueues(PacketInfo* packet) {
     sleep_until_woken = write_queue_.size() == max_queue_size_;
     END_PERF_LOGGING(perfLog);
   }
-  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_Sleep", "ReadThread");
+  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_Sleep", "ReadThread", PERFORMANCE);
   if (wake_compressors) {
     WakeCompressorThreads();
     // The compressor threads will wake the writer thread when there are
@@ -393,7 +393,7 @@ void TerrainCombiner::AddPacketToQueues(PacketInfo* packet) {
 }
 
 void TerrainCombiner::MarkPacketReadyForWrite(PacketInfo* packet) {
-  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_MarkForWrite", packet->EvenPath().AsString());
+  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_MarkForWrite", packet->EvenPath().AsString(), PERFORMANCE);
   bool wake_write_thread = false;
   {
     khLockGuard lock(mutex_);
@@ -412,7 +412,7 @@ void TerrainCombiner::MarkPacketReadyForWrite(PacketInfo* packet) {
 }
 
 bool TerrainCombiner::PopCompressQueue(PacketInfo** packet_out) {
-  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_Pop", "CompressQueue");
+  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_Pop", "CompressQueue", PERFORMANCE);
   *packet_out = NULL;
   bool wake_reader = false;
   {
@@ -486,7 +486,7 @@ void TerrainCombiner::PacketCompressThread() {
 }
 
 bool TerrainCombiner::PopWriteQueue(PacketInfo** packet_out) {
-  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_Pop", "WriteQueue");
+  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_Pop", "WriteQueue", PERFORMANCE);
   *packet_out = NULL;
   bool wake_reader = false;
   {

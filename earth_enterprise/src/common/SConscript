@@ -185,9 +185,9 @@ env.test('timeutils_unittest',
          'timeutils_unittest.cpp',
          LIBS=['gecommon', 'gtest'])
 
-env.test('performancelogger_unittest',
-         'performancelogger_unittest.cpp',
-         LIBS=['gecommon', 'gtest'])
+#env.test('performancelogger_unittest',
+#         'performancelogger_unittest.cpp',
+#         LIBS=['gecommon', 'gtest'])
 
 env.install('common_lib', [gecommon])
 env.install('common_lib', [geutil])
