@@ -27,11 +27,6 @@
 using namespace std;
 using namespace getime;
 
-std::ofstream ioPrefFile;
-std::string ioFileName;
-std::ofstream timePrefFile;
-std::ofstream threadPrefFile;
-
 /*void checkForLeadingZero(
         std::stringstream& io,
         std::stringstream& thread,
@@ -60,6 +55,7 @@ string timeFileName;
 string threadFileName;
 
 void generateFileNames() {
+    // needs mutex lock
     time_t t = time(0);
     tm date = *localtime(&t);
     char buf[256];
@@ -86,8 +82,10 @@ void ioPostProcess()
         Do IO post processing and output:
             - total number of write requests (number of lines in file)
             - throughput: (size/1024) / duration = MbPS
+
+        WILL THIS BE DONE IN C++ OR WILL IT BE ANALYZED AFTER VIA ANOTHER
+        METHOD?
     */
-    ioPrefFile.close();
     fstream file(ioFileName.c_str(),fstream::in);
     string line;
     getline(file,line); //ignore header
@@ -153,7 +151,7 @@ void PerformanceLogger::logIO(
             << duration;
     //Daniel: perhaps move open/close to doNotify?
     ioPrefFile.open(ioFileName.c_str(), fstream::out | fstream::app);
-    this->doNotify(message.str(),ioPrefFile);
+    doNotify(message.str(),ioPrefFile);
     ioPrefFile.close();
 }
 
@@ -182,8 +180,9 @@ void PerformanceLogger::logTiming(
           << duration  << ','
           << tid       << ','
           << size;
-  }
+
+  //Daniel: perhaps move open/close to doNotify?
   timePrefFile.open(timeFileName.c_str(), fstream::open | fstream::app);
-  this->doNotify(message.str(),timePrefFile);
-  timePrefFile.close();;
+  doNotify(message.str(),timePrefFile);
+  timePrefFile.close();
 }

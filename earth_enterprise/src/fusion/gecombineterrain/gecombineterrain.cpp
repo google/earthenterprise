@@ -203,7 +203,7 @@ int main(int argc, char **argv) {
   // On successful completion, print out the output file sizes.
   std::vector<std::string> output_files;
   try {
-    OPEN_PERF_LOG_FILES();
+    BEGIN_LOGGING(); // generates file names, a pre-req to logging
     BEGIN_PERF_LOGGING(parse_args, "parse", "arguments");
     std::string progname = argv[0];
 

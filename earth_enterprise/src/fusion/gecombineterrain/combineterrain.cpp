@@ -40,7 +40,7 @@ namespace geterrain {
 // and a token is returned.  The number of packets is added to the total.
 PacketFileReaderToken CountedPacketFileReaderPool::Add(
     const std::string &packet_file_name) {
-  BEGIN_IO_LOGGING(openPacketFile,"CombintTerrain_OpenPacket","Open/add packet file to reader pool");
+  BEGIN_IO_LOGGING(openPacketFile,"CombineTerrain_OpenPacket","Open/add packet file to reader pool");
   pool_packet_count_ += PacketIndexReader::NumPackets(
       PacketFile::IndexFilename(packet_file_name));
   PacketFileReaderToken retval = PacketFileReaderPool::Add(packet_file_name);
@@ -216,7 +216,7 @@ void TerrainCombiner::WriteCombinedTerrain(
   }
 
   END_PERF_LOGGING(calcReadSize);
-  BEGIN_PERF_LOGGING(readPackets, "CombineTerrain_ReadPacket", even_path.AsString(), read_buffer_size);
+  BEGIN_IO_LOGGING(readPackets, "CombineTerrain_ReadPacket", even_path.AsString(), read_buffer_size);
   
   // Create the new PacketInfo and initialize its raw buffer.
   PacketInfo* packet = new PacketInfo(even_path, providerid, progress_increment);
@@ -241,7 +241,7 @@ void TerrainCombiner::WriteCombinedTerrain(
   // The buffer in general shrinks because of removal of CRC bytes.
   read_buffer.resize(read_buffer_next);
 
-  END_PERF_LOGGING(readPackets);
+  END_IO_LOGGING(readPackets);
 
   // We add the packet to both the compress queue and the write queue for
   // processing by other threads that do compression and writing.
@@ -277,12 +277,12 @@ void TerrainCombiner::WritePacket(PacketInfo* packet) {
      or in PacketFileWriter::WriteAppendCRC ?
   */
   std::string& compressed_buffer = packet->CompressedBuffer();
-  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_WritePacket", packet->EvenPath().AsString(),
+  BEGIN_IO_LOGGING(perfLog, "CombineTerrain_WritePacket", packet->EvenPath().AsString(),
                      compressed_buffer.size());
   writer_.WriteAppendCRC(packet->EvenPath(), &compressed_buffer[0],
                          compressed_buffer.size(), packet->ProviderId());
   progress_meter_.incrementDone(packet->ProgressIncrement());
-  END_PERF_LOGGING(perfLog);
+  END_IO_LOGGING(perfLog);
 }
 
 

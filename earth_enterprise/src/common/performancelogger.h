@@ -73,7 +73,7 @@ class BlockPerformanceLogger {
         ended = true;
         const timespec endTime = getime::getMonotonicTime();
             PerfLoggerCls::instance()
-              .logTiming(operation, object, startTime, endTime, size);
+              .logTiming(timeFileoperation, object, startTime, endTime, size);
 
       }
     }
@@ -82,7 +82,7 @@ class BlockPerformanceLogger {
     const std::string object;
     const size_t size;
     const timespec startTime;
-    std::fstream timePrefFile;
+    //static std::fstream timePrefFile;
     bool ended;
 };
 
@@ -97,7 +97,7 @@ class BlockIOLogger {
       object(object),
       size(size),
       startTime(getime::getMonotonicTime()),
-      ended(false) {}
+      ended(false) { generateFileNames(); }
     ~BlockIOLogger() { end(); }
     void end() {
       if (!ended) {
@@ -113,14 +113,14 @@ class BlockIOLogger {
     const std::string object;
     const size_t size;
     const timespec startTime;
-    std::fstream ioPrefFile;
+    static std::fstream ioPrefFile;
     bool ended;
 };
 
-// Should be called at the beginning of gecombineterrain to create files
-#define OPEN_PERF_LOG_FILES() openFiles()
-// Should be called at the end of gecombineterrain to close files
-#define CLOSE_PERF_LOG_FILES() closeFiles()
+
+// This should be run first, to make sure files names have the same timestamp
+#define BEGIN_LOGGING() \
+    generateFileNames()
 
 // Programmers should use the macros below to time code instead of using the
 // classes above directly. This makes it easy to use compile time flags to
