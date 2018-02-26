@@ -40,11 +40,11 @@ namespace geterrain {
 // and a token is returned.  The number of packets is added to the total.
 PacketFileReaderToken CountedPacketFileReaderPool::Add(
     const std::string &packet_file_name) {
-  BEGIN_IO_LOGGING(openPacketFile,"CombineTerrain_OpenPacket","Open/add packet file to reader pool");
+  BEGIN_PERF_LOGGING(openPacketFile,"CombineTerrain_OpenPacket","Open/add packet file to reader pool");
   pool_packet_count_ += PacketIndexReader::NumPackets(
       PacketFile::IndexFilename(packet_file_name));
   PacketFileReaderToken retval = PacketFileReaderPool::Add(packet_file_name);
-  END_IO_LOGGING(openPacketFile);
+  END_PERF_LOGGING(openPacketFile);
   return retval;
 }
 
@@ -176,9 +176,9 @@ TerrainCombiner::~TerrainCombiner() {
 
 void TerrainCombiner::Close(size_t max_sort_buffer) {
   notify(NFY_DEBUG, "Closing TerrainCombiner");
-  BEGIN_IO_LOGGING(closeTC,"CombineTerrain_Close","Flush and Close TerrainCombiner file bundle");
+  BEGIN_PERF_LOGGING(closeTC,"CombineTerrain_Close","Flush and Close TerrainCombiner file bundle");
   writer_.Close(max_sort_buffer);
-  END_IO_LOGGING(closeTC);
+  END_PERF_LOGGING(closeTC);
 }
 
 // WriteCombinedTerrain - write a combined terrain packet for the
@@ -216,7 +216,7 @@ void TerrainCombiner::WriteCombinedTerrain(
   }
 
   END_PERF_LOGGING(calcReadSize);
-  BEGIN_IO_LOGGING(readPackets, "CombineTerrain_ReadPacket", even_path.AsString(), read_buffer_size);
+  BEGIN_PERF_LOGGING(readPackets, "CombineTerrain_ReadPacket", even_path.AsString(), read_buffer_size);
   
   // Create the new PacketInfo and initialize its raw buffer.
   PacketInfo* packet = new PacketInfo(even_path, providerid, progress_increment);
@@ -241,7 +241,7 @@ void TerrainCombiner::WriteCombinedTerrain(
   // The buffer in general shrinks because of removal of CRC bytes.
   read_buffer.resize(read_buffer_next);
 
-  END_IO_LOGGING(readPackets);
+  END_PERF_LOGGING(readPackets);
 
   // We add the packet to both the compress queue and the write queue for
   // processing by other threads that do compression and writing.
@@ -277,12 +277,12 @@ void TerrainCombiner::WritePacket(PacketInfo* packet) {
      or in PacketFileWriter::WriteAppendCRC ?
   */
   std::string& compressed_buffer = packet->CompressedBuffer();
-  BEGIN_IO_LOGGING(perfLog, "CombineTerrain_WritePacket", packet->EvenPath().AsString(),
+  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_WritePacket", packet->EvenPath().AsString(),
                      compressed_buffer.size());
   writer_.WriteAppendCRC(packet->EvenPath(), &compressed_buffer[0],
                          compressed_buffer.size(), packet->ProviderId());
   progress_meter_.incrementDone(packet->ProgressIncrement());
-  END_IO_LOGGING(perfLog);
+  END_PERF_LOGGING(perfLog);
 }
 
 
@@ -542,11 +542,11 @@ void TerrainCombiner::PacketWriteThread() {
     PacketInfo* packet = NULL;
     while(PopWriteQueue(&packet)) {
       if (packet != NULL) {
-        BEGIN_IO_LOGGING(pwThread,"CombineTerrain_PacketWrite","Packet write thread");
+        BEGIN_PERF_LOGGING(pwThread,"CombineTerrain_PacketWrite","Packet write thread");
         WritePacket(packet);
         delete packet;
         packets_processed++;
-        END_IO_LOGGING(pwThread);
+        END_PERF_LOGGING(pwThread);
         // how to handle exceptions?
       }
     }

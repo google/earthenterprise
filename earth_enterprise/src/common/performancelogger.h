@@ -67,20 +67,13 @@ class PerformanceLogger {
         const timespec startTime,      // The start time of the operation
         const timespec endTime,        // The end time of the operation
         const size_t size = 0);        // The size of the object, if applicable
-    void logIO(
-        const std::string & operation, // The operation being timed
-        const std::string & object,    // The object that the operation is performed on
-        const timespec startTime,      // The start time of the operation
-        const timespec endTime,        // The end time of the operation
-        const size_t size = 0);        // The size of the buffer
   private:
     plMutex write_mutex;
-    static std::string ioFileName;
     static std::string timeFileName;
 
-    PerformanceLogger() : write_mutex() { generateFileNames(); }
+    PerformanceLogger() : write_mutex() { generateFileName(); }
     void do_notify(const std::string & message, const std::string & fileName);
-    static void generateFileNames();
+    static void generateFileName();
 };
 
 /*
@@ -118,36 +111,6 @@ class BlockPerformanceLogger {
     bool ended;
 };
 
-template <class PerfLoggerCls>
-class BlockIOLogger {
-  public:
-    BlockIOLogger(
-        const std::string & operation,
-        const std::string & object,
-        const size_t size=1024) :
-      operation(operation),
-      object(object),
-      size(size),
-      startTime(getime::getMonotonicTime()),
-      ended(false) {  }
-    ~BlockIOLogger() { end(); }
-    void end() {
-      if (!ended) {
-        ended = true;
-        const timespec endTime = getime::getMonotonicTime();
-            PerfLoggerCls::instance()
-              .logIO(operation, object, startTime, endTime, size);
-      }
-    }
-  private:
-    const std::string operation;
-    const std::string object;
-    const size_t size;
-    const timespec startTime;
-    static std::fstream ioPrefFile;
-    bool ended;
-};
-
 } // namespace performance_logger
 
 // Programmers should use the macros below to time code instead of using the
@@ -163,16 +126,10 @@ class BlockIOLogger {
   performance_logger::BlockPerformanceLogger<performance_logger::PerformanceLogger> name(op, __VA_ARGS__)
 #define END_PERF_LOGGING(name) name.end()
 
-#define BEGIN_IO_LOGGING(ioname, op, ...) \
-  performance_logger::BlockIOLogger<performance_logger::PerformanceLogger> ioname(op, __VA_ARGS__)
-#define END_IO_LOGGING(ioname,...) ioname.end()
-
 #else
 
 #define BEGIN_PERF_LOGGING( ... )
 #define END_PERF_LOGGING( ... )
-#define BEGIN_IO_LOGGING( ... )
-#define END_IO_LOGGING( ... )
 
 #endif  // LOG_PERFORMANCE
 

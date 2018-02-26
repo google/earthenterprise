@@ -34,7 +34,6 @@ using namespace getime;
 namespace performance_logger {
 
 // make sure static members get initialized
-string PerformanceLogger::ioFileName = "";
 string PerformanceLogger::timeFileName = "";
 
 void plMutexBase::Lock(void) {
@@ -74,40 +73,15 @@ class plLockGuard {
     }
 };
 
-void PerformanceLogger::generateFileNames() {
+void PerformanceLogger::generateFileName() {
     // needs mutex lock
     time_t t = time(0);
     tm date = *localtime(&t);
     char buf[256];
-    if (!ioFileName.size()) {
-        strftime(buf, sizeof(buf), "io_stats.%m-%d-%Y-%H:%M:%S.csv", &date);
-        ioFileName = buf;
-    }
     if (!timeFileName.size()) {
         strftime(buf, sizeof(buf), "time_stats.%m-%d-%Y-%H:%M:%S.csv", &date);
         timeFileName = buf;
     }
-}
-
-void PerformanceLogger::logIO(
-        const string & operation,
-        const string & object,
-        const timespec startTime,
-        const timespec endTime,
-        const size_t size ) {
-        //const size_t requests) {
-    //output info
-    stringstream message;
-    const timespec duration = timespecDiff(endTime,startTime);
-    message.setf(ios_base::fixed, ios_base::floatfield);
-    message << operation << ','
-            << object    << ','
-            << startTime << ','
-            << endTime   << ','
-            << duration  << ','
-            << size;
-
-    do_notify(message.str(), ioFileName);
 }
 
 // Log a profiling message
@@ -138,7 +112,8 @@ void PerformanceLogger::do_notify(const string & message, const string & fileNam
 
   // Get the thread ID
   pthread_t tid = pthread_self();
-  pid_t pid = getpid();  // get the ID of the process
+  // get the ID of the process
+  pid_t pid = getpid();
 
   {  // atomic inner block
     plLockGuard lock( write_mutex );
