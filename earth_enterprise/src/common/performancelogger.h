@@ -74,9 +74,9 @@ class PerformanceLogger {
     plMutex write_mutex;
     std::string timeFileName;
 
-    PerformanceLogger() : write_mutex() { generateFileName(); }
+    PerformanceLogger() : write_mutex() { generateFileNameAndWriteHeader(); }
     void do_notify(const std::string & message, const std::string & fileName);
-    void generateFileName();
+    void generateFileNameAndWriteHeader();
     
     // Disable copy (these functions should not be implemented)
     PerformanceLogger(const PerformanceLogger&);

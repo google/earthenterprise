@@ -60,14 +60,20 @@ plMutex::~plMutex(void) {
   (void) err; // Suppress unused variable 'err' warning.
 }
 
-void PerformanceLogger::generateFileName() {
-    time_t t = time(0);
-    tm date = *localtime(&t);
-    char buf[256];
-    if (timeFileName.size() == 0) {
-        strftime(buf, sizeof(buf), "time_stats.%m-%d-%Y-%H:%M:%S.csv", &date);
-        timeFileName = buf;
-    }
+// This function is only called while a lock is held
+void PerformanceLogger::generateFileNameAndWriteHeader() {
+  // Create a unique file name
+  time_t t = time(0);
+  tm date = *localtime(&t);
+  char buf[256];
+  if (timeFileName.size() == 0) {
+    strftime(buf, sizeof(buf), "time_stats.%m-%d-%Y-%H:%M:%S.csv", &date);
+    timeFileName = buf;
+  }
+
+  // Write the header for the CSV file
+  ofstream output_stream(timeFileName.c_str(), ios::app);
+  output_stream << "pid,tid,operation,object,startTime,endTime,duration,size" << endl;
 }
 
 // Log a profiling message
