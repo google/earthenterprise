@@ -13,8 +13,11 @@
 // limitations under the License.
 
 #include <iomanip>
+#include <fstream>
 #include <sstream>
 #include <string>
+
+#include <errno.h>
 #include <unistd.h>
 #include <sys/syscall.h>
 #include <time.h>
@@ -28,8 +31,39 @@ using namespace getime;
 
 #ifdef LOG_PERFORMANCE
 
-// Initialize static members of Profiler class
-PerformanceLogger * const PerformanceLogger::_instance = new PerformanceLogger();
+namespace performance_logger {
+
+void khMutexBase::Lock(void) {
+  // if this wasn't properly initialized, we'll get an error
+  int err = pthread_mutex_lock(&mutex);
+  assert(!err);
+  (void) err; // Suppress unused variable 'err' warning.
+}
+
+void khMutexBase::Unlock(void) {
+  // if this wasn't properly initialized, we'll get an error
+  int err = pthread_mutex_unlock(&mutex);
+  assert(!err);
+  (void) err; // Suppress unused variable 'err' warning.
+}
+
+bool khMutexBase::TryLock(void) {
+  // if this wasn't properly initialized, we'll get an error
+  int err = pthread_mutex_trylock(&mutex);
+  assert(err != EINVAL);
+  return (err == 0);
+}
+
+khMutex::khMutex(void) {
+  // always returns 0
+  (void)pthread_mutex_init(&mutex, NULL /* simple, fast mutex */);
+}
+
+khMutex::~khMutex(void) {
+  int err = pthread_mutex_destroy(&mutex);
+  assert(!err);
+  (void) err; // Suppress unused variable 'err' warning.
+}
 
 // Log a profiling message
 void PerformanceLogger::logTiming(
@@ -50,22 +84,39 @@ void PerformanceLogger::logTiming(
           << operation << ", "
           << object;
 
-  notify(NFY_NOTICE, "%s\n", message.str().c_str());
+  do_notify(message.str().c_str(), "timingfile.csv");
+}
+
+void PerformanceLogger::doNotify(std::string data, std::string fileName)
+{
+  {
+    khLockGuard lock(write_mutex);
+
+    { // Make sure we flush and close the output file before unlocking the mutex:
+      std::ofstream output_stream(fileName.c_str(), std::ios_base::app);
+
+      output_stream << data;
+    }
+  }
+}
+
 }
 
 // Thread safety wrapper for log output
-void PerformanceLogger::do_notify( const string& message, ostream& out, khMutex& mutex ) {
+void PerformanceLogger::do_notify( const string& message, ostream& out ) {
 
   // Get the thread ID
   pthread_t tid = pthread_self();
   pid_t pid = getpid();  // get the ID of the process
 
   {  // atomic inner block
-    khLockGuard lock( mutex );
-    out << pid << ", " << tid << ", " << message;
-  }  // end inner block
+    khLockGuard lock( write_mutex );
+    { // Make sure we flush and close the output file before unlocking the mutex:
+      std::ofstream output_stream(fileName.c_str(), std::ios_base::app);
+      output_stream << pid << ", " << tid << ", " << message;
+    }
+  }
 
-};  // end do_notify
-
+}
 
 #endif  // LOG_PERFORMANCE
