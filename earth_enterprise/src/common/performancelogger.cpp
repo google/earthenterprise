@@ -26,6 +26,8 @@
 using namespace std;
 using namespace getime;
 
+#ifdef LOG_PERFORMANCE
+
 // Initialize static members of Profiler class
 PerformanceLogger * const PerformanceLogger::_instance = new PerformanceLogger();
 
@@ -38,22 +40,32 @@ void PerformanceLogger::logTiming(
     const size_t size) {
 
   const timespec duration = timespecDiff(endTime, startTime);
-  const pid_t tid = syscall(SYS_gettid);
   stringstream message;
 
   message.setf(ios_base::fixed, ios_base::floatfield);
-  message << setprecision(9)
-          << operation << " " << object << ": "
-          << "start time: " << startTime
-          << ", "
-          << "end time: " << endTime
-          << ", "
-          << "duration: " << duration
-          << ", "
-          << "thread: " << tid;
-  if (size > 0) {
-    message << ", size: " << size;
-  }
+  message << startTime << ", "
+          << endTime << ", "
+          << duration << ", "
+          << size << ", "
+          << operation << ", "
+          << object;
 
   doNotify(message.str().c_str(), "timingfile.csv");
 }
+
+// Thread safety wrapper for log output
+void PerformanceLogger::do_notify( const string& message, ostream& out, khMutex& mutex ) {
+
+  // Get the thread ID
+  pthread_t tid = pthread_self();
+  pid_t pid = getppid();  // get the ID of the parent process
+
+  {  // atomic inner block
+    khLockGuard lock( mutex );
+    out << pid << ", " << tid << ", " << message;
+  };  // end inner block
+
+};  // end do_notify
+
+
+#endif  // LOG_PERFORMANCE
