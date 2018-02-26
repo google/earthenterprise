@@ -17,11 +17,13 @@
 #include <string>
 #include <unistd.h>
 #include <sys/syscall.h>
+#include <pthread.h>  // required for 'pthread_getunique_np'
 #include <time.h>
 
 #include "common/performancelogger.h"
 #include "common/notify.h"
 #include "common/timeutils.h"
+#include "common/mutex.h"  // defines thrd::mutex
 
 using namespace std;
 using namespace getime;
@@ -37,23 +39,30 @@ void PerformanceLogger::log(
     const timespec endTime,
     const size_t size) {
 
-  const timespec duration = timespecDiff(endTime, startTime);
-  const pid_t tid = syscall(SYS_gettid);
+  timespec duration;
   stringstream message;
+  pthread_t tid = pthread_self();
 
+  duration = timespecDiff( endTime, startTime );  // thread safe call
   message.setf(ios_base::fixed, ios_base::floatfield);
-  message << setprecision(9)
-          << operation << " " << object << ": "
-          << "start time: " << startTime
-          << ", "
-          << "end time: " << endTime
-          << ", "
-          << "duration: " << duration
-          << ", "
-          << "thread: " << tid;
-  if (size > 0) {
-    message << ", size: " << size;
-  }
+  message << startTime << ", "
+          << endTime << ", "
+          << duration << ", "
+          << tid << ", "
+          << size << ", "
+          << operation << ", "
+          << object;
 
-  notify(NFY_NOTICE, "%s\n", message.str().c_str());
+  try {  // attempt to lock the system wide mutex and log the message
+
+    thrd::mutex lock;  // create the mutex object - attempt to lock it
+
+    notify(NFY_NOTICE, "%s\n", message.str().c_str());
+
+  } catch( exception& except ) {
+
+   notify( NFY_FATAL, "%s\n", except.what() );
+
+  };  // end try/catch block
+
 }
