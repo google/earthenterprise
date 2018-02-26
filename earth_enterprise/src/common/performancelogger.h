@@ -34,37 +34,21 @@ namespace performance_logger {
 // khMutex class hierarchy, and we don't want to see log entries for logging
 // operations, so we have a non-instrumented implementation of the mutex
 // classes here. :P
-class khMutexBase {
- public:
-  pthread_mutex_t mutex;
+class plMutexBase {
+  public:
+    pthread_mutex_t mutex;
 
-  void lock(void) { Lock(); }
-  void Lock(void);
-  void unlock(void) { Unlock(); }
-  void Unlock(void);
-  bool trylock(void) { return TryLock(); }
-  bool TryLock(void);
+    void Lock(void);
+    void Unlock(void);
 };
 
 // Simple non-recursive, non-checking mutex
-class khMutex : public khMutexBase
+class plMutex : public plMutexBase
 {
- public:
-  khMutex(void);
-  ~khMutex(void);
+  public:
+    plMutex(void);
+    ~plMutex(void);
 };
-
-class khLockGuard {
-  khMutexBase &mutex;
- public:
-  khLockGuard(khMutexBase &mutex_) : mutex(mutex_) {
-    mutex.Lock();
-  }
-  ~khLockGuard(void) {
-    mutex.Unlock();
-  }
-};
-
 
 /*
  * Singleton class for logging event performance. This class is intended for
@@ -85,7 +69,7 @@ class PerformanceLogger {
         const timespec endTime,        // The end time of the operation
         const size_t size = 0);        // The size of the object, if applicable
   private:
-    khMutex write_mutex;
+    plMutex write_mutex;
 
     // Initialize member variables in constructor:
     PerformanceLogger()

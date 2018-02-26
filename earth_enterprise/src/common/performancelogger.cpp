@@ -33,37 +33,42 @@ using namespace getime;
 
 namespace performance_logger {
 
-void khMutexBase::Lock(void) {
+void plMutexBase::Lock(void) {
   // if this wasn't properly initialized, we'll get an error
   int err = pthread_mutex_lock(&mutex);
   assert(!err);
   (void) err; // Suppress unused variable 'err' warning.
 }
 
-void khMutexBase::Unlock(void) {
+void plMutexBase::Unlock(void) {
   // if this wasn't properly initialized, we'll get an error
   int err = pthread_mutex_unlock(&mutex);
   assert(!err);
   (void) err; // Suppress unused variable 'err' warning.
 }
 
-bool khMutexBase::TryLock(void) {
-  // if this wasn't properly initialized, we'll get an error
-  int err = pthread_mutex_trylock(&mutex);
-  assert(err != EINVAL);
-  return (err == 0);
-}
-
-khMutex::khMutex(void) {
+plMutex::plMutex(void) {
   // always returns 0
   (void)pthread_mutex_init(&mutex, NULL /* simple, fast mutex */);
 }
 
-khMutex::~khMutex(void) {
+plMutex::~plMutex(void) {
   int err = pthread_mutex_destroy(&mutex);
   assert(!err);
   (void) err; // Suppress unused variable 'err' warning.
 }
+
+class plLockGuard {
+  private:
+    plMutexBase &mutex;
+  public:
+    plLockGuard(plMutexBase &mutex_) : mutex(mutex_) {
+      mutex.Lock();
+    }
+    ~plLockGuard(void) {
+      mutex.Unlock();
+    }
+};
 
 // Log a profiling message
 void PerformanceLogger::logTiming(
@@ -95,7 +100,7 @@ void PerformanceLogger::do_notify(const string & message, const string & fileNam
   pid_t pid = getpid();  // get the ID of the process
 
   {  // atomic inner block
-    khLockGuard lock( write_mutex );
+    plLockGuard lock( write_mutex );
     { // Make sure we flush and close the output file before unlocking the mutex:
       std::ofstream output_stream(fileName.c_str(), std::ios_base::app);
       output_stream << pid << ", " << tid << ", " << message << endl;
