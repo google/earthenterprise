@@ -16,15 +16,15 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-
 #include <errno.h>
 #include <unistd.h>
 #include <sys/syscall.h>
 #include <time.h>
-
-#include "common/performancelogger.h"
+#include <cstdlib>
 #include "common/notify.h"
 #include "common/timeutils.h"
+#include "common/performancelogger.h"
+#include <cassert>
 
 using namespace std;
 using namespace getime;
@@ -32,6 +32,10 @@ using namespace getime;
 #ifdef LOG_PERFORMANCE
 
 namespace performance_logger {
+
+// make sure static members get initialized
+string PerformanceLogger::ioFileName = "";
+string PerformanceLogger::timeFileName = "";
 
 void plMutexBase::Lock(void) {
   // if this wasn't properly initialized, we'll get an error
@@ -70,6 +74,48 @@ class plLockGuard {
     }
 };
 
+void PerformanceLogger::generateFileNames() {
+
+    // needs mutex lock
+    time_t t = time(0);
+    tm date = *localtime(&t);
+    char buf[256];
+    if (!ioFileName.size()) {
+        strftime(buf, sizeof(buf), "io_stats.%m-%d-%Y-%H:%M:%S.csv", &date);
+        ioFileName = buf;
+    }
+    if (!timeFileName.size()) {
+        strftime(buf, sizeof(buf), "time_stats.%m-%d-%Y-%H:%M:%S.csv", &date);
+        timeFileName = buf;
+    }
+}
+
+void PerformanceLogger::logIO(
+        const string & operation,
+        const string & object,
+        const timespec startTime,
+        const timespec endTime,
+        const size_t size ) {
+        //const size_t requests) {
+    //output info
+    stringstream message;
+    const timespec duration = timespecDiff(endTime,startTime);
+    const pid_t tid = syscall(SYS_gettid);
+    //double throughput = (timespecToDouble(duration)*size) / 1024;
+    message.setf(ios_base::fixed, ios_base::floatfield);
+    message << operation << ','
+            << object    << ','
+            << startTime << ','
+            << endTime   << ','
+            << tid       << ','
+            << size       << ','
+            << duration;
+
+    assert(ioFileName.size());
+
+    do_notify(message.str(), ioFileName);
+}
+
 // Log a profiling message
 void PerformanceLogger::logTiming(
     const string & operation,
@@ -82,14 +128,15 @@ void PerformanceLogger::logTiming(
   stringstream message;
 
   message.setf(ios_base::fixed, ios_base::floatfield);
-  message << startTime << ", "
-          << endTime << ", "
-          << duration << ", "
-          << size << ", "
-          << operation << ", "
-          << object;
+  message << setprecision(9)
+          << operation << ','
+          << object    << ','
+          << startTime << ','
+          << endTime   << ','
+          << duration  << ','
+          << size;
 
-  do_notify(message.str(), "timingfile.csv");
+  do_notify(message.str(), timeFileName);
 }
 
 // Thread safety wrapper for log output
@@ -106,7 +153,6 @@ void PerformanceLogger::do_notify(const string & message, const string & fileNam
       output_stream << pid << ", " << tid << ", " << message << endl;
     }
   }
-
 }
 
 } // namespace performance_logger

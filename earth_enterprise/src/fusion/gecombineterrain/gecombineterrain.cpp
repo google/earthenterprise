@@ -284,6 +284,7 @@ int main(int argc, char **argv) {
                static_cast<long long unsigned int>(physical_memory_size));
       }
 
+
       // Convert this read cache block size from kilobytes to bytes.
       read_cache_block_size *= 1024U;
 
@@ -326,9 +327,9 @@ int main(int argc, char **argv) {
     khDeleteGuard<TerrainMergeType> merger(
         TransferOwnership(new TerrainMergeType("Terrain Merger")));
 
+    // PERF NOTE: io to stderr, not file
     // Print the input file sizes for diagnostic log file info.
     std::vector<std::string> input_files;
-
     fprintf(stderr, "index version: %d\n", index_version);
     for (int i = argn; i < argc; ++i) {
       notify(NFY_INFO, "Opening terrain index: %s", argv[i]);
@@ -339,6 +340,7 @@ int main(int argc, char **argv) {
                                               argv[i])));
       input_files.push_back(argv[i]);
     }
+    // PERF NOTE: prints to stdout, not file
     khPrintFileSizes("Input File Sizes", input_files);
 
     merger->Start();
@@ -400,6 +402,7 @@ int main(int argc, char **argv) {
   // at the end, call dump all
   JOBSTATS_DUMPALL();
 
+  // PERF NOTE: prints to stdout not file
   // On successful completion, print the output file sizes.
   // The print occurs here to allow progress to go out of scope.
   khPrintFileSizes("Output File Sizes", output_files);

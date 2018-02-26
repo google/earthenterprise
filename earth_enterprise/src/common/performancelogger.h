@@ -16,14 +16,14 @@
 #define PERFORMANCELOGGER_H
 
 #include <iostream>
-
 #include <assert.h>
 #include <pthread.h>
 #include <string>
+#include <sstream>
+#include <fstream>
 #include <time.h>
 
 #include "common/timeutils.h"
-
 
 #ifdef LOG_PERFORMANCE
 
@@ -61,22 +61,26 @@ class PerformanceLogger {
 
       return _instance;
     }
-
     void logTiming(
         const std::string & operation, // The operation being timed
         const std::string & object,    // The object that the operation is performed on
         const timespec startTime,      // The start time of the operation
         const timespec endTime,        // The end time of the operation
         const size_t size = 0);        // The size of the object, if applicable
+    void logIO(
+        const std::string & operation, // The operation being timed
+        const std::string & object,    // The object that the operation is performed on
+        const timespec startTime,      // The start time of the operation
+        const timespec endTime,        // The end time of the operation
+        const size_t size = 0);        // The size of the buffer
   private:
     plMutex write_mutex;
+    static std::string ioFileName;
+    static std::string timeFileName;
 
-    // Initialize member variables in constructor:
-    PerformanceLogger()
-    : write_mutex()
-    {}
-
+    PerformanceLogger() : write_mutex() { generateFileNames(); }
     void do_notify(const std::string & message, const std::string & fileName);
+    static void generateFileNames();
 };
 
 /*
@@ -95,22 +99,52 @@ class BlockPerformanceLogger {
       object(object),
       size(size),
       startTime(getime::getMonotonicTime()),
-      ended(false) {}
+      ended(false) { }
+    ~BlockPerformanceLogger() { end(); }
     void end() {
       if (!ended) {
         ended = true;
         const timespec endTime = getime::getMonotonicTime();
-        PerfLoggerCls::instance().logTiming(operation, object, startTime, endTime, size);
+        PerfLoggerCls::instance()
+          .logTiming(operation, object, startTime, endTime, size);
       }
-    }
-    ~BlockPerformanceLogger() {
-      end();
     }
   private:
     const std::string operation;
     const std::string object;
     const size_t size;
     const timespec startTime;
+    static std::fstream timePrefFile;
+    bool ended;
+};
+
+template <class PerfLoggerCls>
+class BlockIOLogger {
+  public:
+    BlockIOLogger(
+        const std::string & operation,
+        const std::string & object,
+        const size_t size=1024) :
+      operation(operation),
+      object(object),
+      size(size),
+      startTime(getime::getMonotonicTime()),
+      ended(false) {  }
+    ~BlockIOLogger() { end(); }
+    void end() {
+      if (!ended) {
+        ended = true;
+        const timespec endTime = getime::getMonotonicTime();
+            PerfLoggerCls::instance()
+              .logIO(operation, object, startTime, endTime, size);
+      }
+    }
+  private:
+    const std::string operation;
+    const std::string object;
+    const size_t size;
+    const timespec startTime;
+    static std::fstream ioPrefFile;
     bool ended;
 };
 
@@ -129,10 +163,16 @@ class BlockPerformanceLogger {
   performance_logger::BlockPerformanceLogger<performance_logger::PerformanceLogger> name(op, __VA_ARGS__)
 #define END_PERF_LOGGING(name) name.end()
 
+#define BEGIN_IO_LOGGING(ioname, op, ...) \
+  performance_logger::BlockIOLogger<performance_logger::PerformanceLogger> ioname(op, __VA_ARGS__)
+#define END_IO_LOGGING(ioname,...) ioname.end()
+
 #else
 
 #define BEGIN_PERF_LOGGING( ... )
 #define END_PERF_LOGGING( ... )
+#define BEGIN_IO_LOGGING( ... )
+#define END_IO_LOGGING( ... )
 
 #endif  // LOG_PERFORMANCE
 
