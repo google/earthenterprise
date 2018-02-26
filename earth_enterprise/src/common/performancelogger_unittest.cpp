@@ -35,7 +35,7 @@ class MockPerformanceLogger {
     size_t size;
 
     static MockPerformanceLogger * const instance() { return _instance; }
-    void log(
+    void logTiming(
         const string & operation,
         const string & object,
         const timespec startTime,

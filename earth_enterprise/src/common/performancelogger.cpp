@@ -50,7 +50,7 @@ void PerformanceLogger::logTiming(
           << operation << ", "
           << object;
 
-  doNotify(message.str().c_str(), "timingfile.csv");
+  notify(NFY_NOTICE, "%s\n", message.str().c_str());
 }
 
 // Thread safety wrapper for log output
@@ -58,12 +58,12 @@ void PerformanceLogger::do_notify( const string& message, ostream& out, khMutex&
 
   // Get the thread ID
   pthread_t tid = pthread_self();
-  pid_t pid = getppid();  // get the ID of the parent process
+  pid_t pid = getpid();  // get the ID of the process
 
   {  // atomic inner block
     khLockGuard lock( mutex );
     out << pid << ", " << tid << ", " << message;
-  };  // end inner block
+  }  // end inner block
 
 };  // end do_notify
 
