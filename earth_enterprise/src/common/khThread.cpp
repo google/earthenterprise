@@ -59,14 +59,12 @@ khMutex::khMutex(void) {
 }
 
 khMutex::~khMutex(void) {
-  BEGIN_PERF_LOGGING(timingLogger, "khMutex::~khMutex", "mutex");
 #ifndef NDEBUG
   int err = pthread_mutex_destroy(&mutex);
   assert(!err);
 #else
   pthread_mutex_destroy(&mutex);
 #endif
-  END_PERF_LOGGING(timingLogger);
 }
 
 khNoDestroyMutex::khNoDestroyMutex(void) {

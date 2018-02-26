@@ -98,7 +98,7 @@ void PerformanceLogger::do_notify(const string & message, const string & fileNam
     khLockGuard lock( write_mutex );
     { // Make sure we flush and close the output file before unlocking the mutex:
       std::ofstream output_stream(fileName.c_str(), std::ios_base::app);
-      output_stream << pid << ", " << tid << ", " << message;
+      output_stream << pid << ", " << tid << ", " << message << endl;
     }
   }
 
