@@ -12,19 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <cassert>
 #include <iomanip>
 #include <fstream>
 #include <sstream>
 #include <string>
-#include <errno.h>
 #include <unistd.h>
 #include <sys/syscall.h>
 #include <time.h>
-#include <cstdlib>
+
+#include "common/performancelogger.h"
 #include "common/notify.h"
 #include "common/timeutils.h"
-#include "common/performancelogger.h"
-#include <cassert>
 
 using namespace std;
 using namespace getime;
@@ -36,14 +35,14 @@ namespace performance_logger {
 // make sure static members get initialized
 string PerformanceLogger::timeFileName = "";
 
-void plMutexBase::Lock(void) {
+void plMutex::Lock(void) {
   // if this wasn't properly initialized, we'll get an error
   int err = pthread_mutex_lock(&mutex);
   assert(!err);
   (void) err; // Suppress unused variable 'err' warning.
 }
 
-void plMutexBase::Unlock(void) {
+void plMutex::Unlock(void) {
   // if this wasn't properly initialized, we'll get an error
   int err = pthread_mutex_unlock(&mutex);
   assert(!err);
@@ -63,9 +62,9 @@ plMutex::~plMutex(void) {
 
 class plLockGuard {
   private:
-    plMutexBase &mutex;
+    plMutex &mutex;
   public:
-    plLockGuard(plMutexBase &mutex_) : mutex(mutex_) {
+    plLockGuard(plMutex &mutex_) : mutex(mutex_) {
       mutex.Lock();
     }
     ~plLockGuard(void) {
@@ -74,7 +73,6 @@ class plLockGuard {
 };
 
 void PerformanceLogger::generateFileName() {
-    // needs mutex lock
     time_t t = time(0);
     tm date = *localtime(&t);
     char buf[256];
@@ -110,9 +108,8 @@ void PerformanceLogger::logTiming(
 // Thread safety wrapper for log output
 void PerformanceLogger::do_notify(const string & message, const string & fileName) {
 
-  // Get the thread ID
+  // Get the thread and process IDs
   pthread_t tid = pthread_self();
-  // get the ID of the process
   pid_t pid = getpid();
 
   {  // atomic inner block

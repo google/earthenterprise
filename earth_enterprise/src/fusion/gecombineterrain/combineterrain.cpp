@@ -273,9 +273,6 @@ void TerrainCombiner::CompressPacket(PacketInfo* packet) {
 }
 
 void TerrainCombiner::WritePacket(PacketInfo* packet) {
-  /* PERF NOTE: should IO Logging take precedence over PERF Logging,
-     or in PacketFileWriter::WriteAppendCRC ?
-  */
   std::string& compressed_buffer = packet->CompressedBuffer();
   BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_WritePacket", packet->EvenPath().AsString(),
                      compressed_buffer.size());
@@ -547,7 +544,6 @@ void TerrainCombiner::PacketWriteThread() {
         delete packet;
         packets_processed++;
         END_PERF_LOGGING(pwThread);
-        // how to handle exceptions?
       }
     }
   } catch(const khSimpleException &e) {

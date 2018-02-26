@@ -63,7 +63,6 @@ class MockPerformanceLogger {
       size = 0;
     }
   private:
-    //static MockPerformanceLogger * const _instance;
     MockPerformanceLogger() {
       reset();
     }
@@ -156,5 +155,4 @@ TEST_F(BlockPerformanceLoggerTest, DeleteAfterEnd) {
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
-  return 0;
 }

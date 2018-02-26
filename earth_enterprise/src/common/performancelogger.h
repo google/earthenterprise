@@ -15,12 +15,8 @@
 #ifndef PERFORMANCELOGGER_H
 #define PERFORMANCELOGGER_H
 
-#include <iostream>
-#include <assert.h>
 #include <pthread.h>
 #include <string>
-#include <sstream>
-#include <fstream>
 #include <time.h>
 
 #include "common/timeutils.h"
@@ -34,20 +30,14 @@ namespace performance_logger {
 // khMutex class hierarchy, and we don't want to see log entries for logging
 // operations, so we have a non-instrumented implementation of the mutex
 // classes here. :P
-class plMutexBase {
-  public:
-    pthread_mutex_t mutex;
-
-    void Lock(void);
-    void Unlock(void);
-};
-
-// Simple non-recursive, non-checking mutex
-class plMutex : public plMutexBase
-{
+class plMutex {
   public:
     plMutex(void);
     ~plMutex(void);
+    void Lock(void);
+    void Unlock(void);
+  private:
+    pthread_mutex_t mutex;
 };
 
 /*
@@ -92,8 +82,7 @@ class BlockPerformanceLogger {
       object(object),
       size(size),
       startTime(getime::getMonotonicTime()),
-      ended(false) { }
-    ~BlockPerformanceLogger() { end(); }
+      ended(false) {}
     void end() {
       if (!ended) {
         ended = true;
@@ -102,12 +91,14 @@ class BlockPerformanceLogger {
           .logTiming(operation, object, startTime, endTime, size);
       }
     }
+    ~BlockPerformanceLogger() {
+      end();
+    }
   private:
     const std::string operation;
     const std::string object;
     const size_t size;
     const timespec startTime;
-    static std::fstream timePrefFile;
     bool ended;
 };
 
