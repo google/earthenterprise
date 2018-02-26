@@ -33,7 +33,7 @@ using namespace getime;
 namespace performance_logger {
 
 // make sure static members get initialized
-string PerformanceLogger::timeFileName = "";
+plMutex PerformanceLogger::instance_mutex;
 
 void plMutex::Lock(void) {
   // if this wasn't properly initialized, we'll get an error
@@ -60,23 +60,11 @@ plMutex::~plMutex(void) {
   (void) err; // Suppress unused variable 'err' warning.
 }
 
-class plLockGuard {
-  private:
-    plMutex &mutex;
-  public:
-    plLockGuard(plMutex &mutex_) : mutex(mutex_) {
-      mutex.Lock();
-    }
-    ~plLockGuard(void) {
-      mutex.Unlock();
-    }
-};
-
 void PerformanceLogger::generateFileName() {
     time_t t = time(0);
     tm date = *localtime(&t);
     char buf[256];
-    if (!timeFileName.size()) {
+    if (timeFileName.size() == 0) {
         strftime(buf, sizeof(buf), "time_stats.%m-%d-%Y-%H:%M:%S.csv", &date);
         timeFileName = buf;
     }
@@ -102,6 +90,7 @@ void PerformanceLogger::logTiming(
           << duration  << ','
           << size;
 
+  assert(timeFileName.size() > 0);
   do_notify(message.str(), timeFileName);
 }
 
@@ -115,8 +104,8 @@ void PerformanceLogger::do_notify(const string & message, const string & fileNam
   {  // atomic inner block
     plLockGuard lock( write_mutex );
     { // Make sure we flush and close the output file before unlocking the mutex:
-      std::ofstream output_stream(fileName.c_str(), std::ios_base::app);
-      output_stream << pid << ", " << tid << ", " << message << endl;
+      ofstream output_stream(fileName.c_str(), ios::app);
+      output_stream << pid << ',' << tid << ',' << message << endl;
     }
   }
 }

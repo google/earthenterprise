@@ -40,6 +40,18 @@ class plMutex {
     pthread_mutex_t mutex;
 };
 
+class plLockGuard {
+  private:
+    plMutex &mutex;
+  public:
+    plLockGuard(plMutex &mutex_) : mutex(mutex_) {
+      mutex.Lock();
+    }
+    ~plLockGuard(void) {
+      mutex.Unlock();
+    }
+};
+
 /*
  * Singleton class for logging event performance. This class is intended for
  * performance debugging.
@@ -47,8 +59,8 @@ class plMutex {
 class PerformanceLogger {
   public:
     static PerformanceLogger& instance() {
+      plLockGuard lock(instance_mutex);
       static PerformanceLogger _instance;
-
       return _instance;
     }
     void logTiming(
@@ -58,12 +70,17 @@ class PerformanceLogger {
         const timespec endTime,        // The end time of the operation
         const size_t size = 0);        // The size of the object, if applicable
   private:
+    static plMutex instance_mutex;
     plMutex write_mutex;
-    static std::string timeFileName;
+    std::string timeFileName;
 
     PerformanceLogger() : write_mutex() { generateFileName(); }
     void do_notify(const std::string & message, const std::string & fileName);
-    static void generateFileName();
+    void generateFileName();
+    
+    // Disable copy (these functions should not be implemented)
+    PerformanceLogger(const PerformanceLogger&);
+    void operator=(const PerformanceLogger&);
 };
 
 /*
