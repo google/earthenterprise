@@ -21,9 +21,10 @@
 using namespace std;
 using namespace testing;
 using namespace getime;
-using namespace performance_logger;
 
 #ifdef LOG_PERFORMANCE
+
+using namespace performance_logger;
 
 // Mock of the PerformanceLogger class
 class MockPerformanceLogger {

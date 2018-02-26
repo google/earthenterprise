@@ -23,7 +23,6 @@
 #include <time.h>
 
 #include "common/timeutils.h"
-#include "common/khThread.h"  // defines khMutex
 
 
 #ifdef LOG_PERFORMANCE
@@ -79,25 +78,21 @@ class PerformanceLogger {
       return _instance;
     }
 
-    // Initialize member variables in constructor:
-    PerformanceLogger()
-    : write_mutex()
-    {}
-
     void logTiming(
         const std::string & operation, // The operation being timed
         const std::string & object,    // The object that the operation is performed on
         const timespec startTime,      // The start time of the operation
         const timespec endTime,        // The end time of the operation
         const size_t size = 0);        // The size of the object, if applicable
-    // void logThread(/* Add params as needed*/) {
-    //   // Format thread data
-    //   doNotify("", /* the formatted data */, "threadfile.csv");
-    // }
   private:
     khMutex write_mutex;
-    PerformanceLogger() {}
-    void doNotify(std::string data, std::string fileName);
+
+    // Initialize member variables in constructor:
+    PerformanceLogger()
+    : write_mutex()
+    {}
+
+    void do_notify(const std::string & message, const std::string & fileName);
 };
 
 /*
@@ -135,7 +130,7 @@ class BlockPerformanceLogger {
     bool ended;
 };
 
-}
+} // namespace performance_logger
 
 // Programmers should use the macros below to time code instead of using the
 // classes above directly. This makes it easy to use compile time flags to

@@ -84,26 +84,11 @@ void PerformanceLogger::logTiming(
           << operation << ", "
           << object;
 
-  do_notify(message.str().c_str(), "timingfile.csv");
-}
-
-void PerformanceLogger::doNotify(std::string data, std::string fileName)
-{
-  {
-    khLockGuard lock(write_mutex);
-
-    { // Make sure we flush and close the output file before unlocking the mutex:
-      std::ofstream output_stream(fileName.c_str(), std::ios_base::app);
-
-      output_stream << data;
-    }
-  }
-}
-
+  do_notify(message.str(), "timingfile.csv");
 }
 
 // Thread safety wrapper for log output
-void PerformanceLogger::do_notify( const string& message, ostream& out ) {
+void PerformanceLogger::do_notify(const string & message, const string & fileName) {
 
   // Get the thread ID
   pthread_t tid = pthread_self();
@@ -118,5 +103,7 @@ void PerformanceLogger::do_notify( const string& message, ostream& out ) {
   }
 
 }
+
+} // namespace performance_logger
 
 #endif  // LOG_PERFORMANCE
