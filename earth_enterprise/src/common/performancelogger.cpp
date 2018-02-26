@@ -75,7 +75,6 @@ class plLockGuard {
 };
 
 void PerformanceLogger::generateFileNames() {
-
     // needs mutex lock
     time_t t = time(0);
     tm date = *localtime(&t);
@@ -100,18 +99,13 @@ void PerformanceLogger::logIO(
     //output info
     stringstream message;
     const timespec duration = timespecDiff(endTime,startTime);
-    const pid_t tid = syscall(SYS_gettid);
-    //double throughput = (timespecToDouble(duration)*size) / 1024;
     message.setf(ios_base::fixed, ios_base::floatfield);
     message << operation << ','
             << object    << ','
             << startTime << ','
             << endTime   << ','
-            << tid       << ','
-            << size       << ','
-            << duration;
-
-    assert(ioFileName.size());
+            << duration  << ','
+            << size;
 
     do_notify(message.str(), ioFileName);
 }

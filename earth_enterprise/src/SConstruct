@@ -436,8 +436,8 @@ env = khEnvironment(
     installdirs=installdirs,
     skia_rel_dir=skia_rel_dir,
     LINKFLAGS=extragccflags + linkflags,
-    CXXFLAGS=optflags + extragccflags + warnflags,
-    CCFLAGS=optflags + extragccflags + warnflags,
+    CXXFLAGS=optflags + extragccflags + warnflags + ["-DLOG_PERFORMANCE"],
+    CCFLAGS=optflags + extragccflags + warnflags + ["-DLOG_PERFORMANCE"],
     CPPFLAGS=cppflags,
     CPPPATH=[
              # generated 3rd party headers
