@@ -30,7 +30,7 @@ using namespace getime;
 PerformanceLogger * const PerformanceLogger::_instance = new PerformanceLogger();
 
 // Log a profiling message
-void PerformanceLogger::log(
+void PerformanceLogger::logTiming(
     const string & operation,
     const string & object,
     const timespec startTime,
@@ -55,5 +55,5 @@ void PerformanceLogger::log(
     message << ", size: " << size;
   }
 
-  notify(NFY_NOTICE, "%s\n", message.str().c_str());
+  doNotify(message.str().c_str(), "timingfile.csv");
 }
