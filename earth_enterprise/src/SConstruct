@@ -71,7 +71,9 @@ ValidOptions = set(
      'cc_dir',
      'coverage',
      'bundle_3rd_libs',  # Build with bundling 3rd party libs.
+     'log_performance',  # Add code to perform performancing loggging
      ]);
+
 for argkey in ARGUMENTS:
   if argkey not in ValidOptions:
     print "Unrecognized option: '" + argkey + "'"
@@ -94,6 +96,7 @@ native_cc = not int(ARGUMENTS.get('cross_cc', 0))
 coverage = ARGUMENTS.get('coverage', 0)
 bundle_3rd_libs = int(ARGUMENTS.get('bundle_3rd_libs', 0))
 cc_dir = ARGUMENTS.get('cc_dir', None)
+log_performance = int( ARGUMENTS.get( 'log_performance', 0 ) )
 
 # make some directory variables used by other parts of the build system
 top_dir = Dir('#').abspath
@@ -420,6 +423,10 @@ if is_min_ubuntu:
   path_string = '%sbin:/bin:/usr/bin' % (exportdirs['root'])
 else:
   path_string = '%sbin:%s/bin:/bin:/usr/bin' % (exportdirs['root'], optdir)
+
+# Add performance logging flag if flag has been added
+if log_performance != 0 :
+    extragccflags += [ '-DLOG_PERFORMANCE' ]
 
 env = khEnvironment(
     ENV={'PATH': path_string},
