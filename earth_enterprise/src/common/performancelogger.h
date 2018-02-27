@@ -69,11 +69,6 @@ class PerformanceLogger {
         const timespec startTime,      // The start time of the operation
         const timespec endTime,        // The end time of the operation
         const size_t size = 0);        // The size of the object, if applicable
-    void logConfig(
-        const std::string & operation, // The operation being timed
-        const std::string & object,    // The object that the operation is performed on
-        const timespec startTime,      // The start time of the operation
-        const uint16 value);        // The size of the object, if applicable
   private:
     static plMutex instance_mutex;
     plMutex write_mutex;
@@ -94,35 +89,36 @@ class PerformanceLogger {
  * instance goes out of scope.
  */
 template <class PerfLoggerCls>
- class BlockPerformanceLogger {
-   public:
-     BlockPerformanceLogger(
-         const std::string & operation,
-         const std::string & object,
-         const size_t size = 0) :
-       operation(operation),
-       object(object),
-       size(size),
-       startTime(getime::getMonotonicTime()),
-       ended(false) {}
-     void end() {
-       if (!ended) {
-         ended = true;
-         const timespec endTime = getime::getMonotonicTime();
-         PerfLoggerCls::instance()
+class BlockPerformanceLogger {
+  public:
+    BlockPerformanceLogger(
+        const std::string & operation,
+        const std::string & object,
+        const size_t size = 0) :
+      operation(operation),
+      object(object),
+      size(size),
+      startTime(getime::getMonotonicTime()),
+      ended(false) {}
+    void end() {
+      if (!ended) {
+        ended = true;
+        const timespec endTime = getime::getMonotonicTime();
+        PerfLoggerCls::instance()
           .logTiming(operation, object, startTime, endTime, size);
-       }
-     }
+      }
+    }
     ~BlockPerformanceLogger() {
       end();
     }
   private:
-    const std::string & operation;
-    const std::string & object;
-    const timespec time;
-    const size_t requested = 0;
-    const size_t result = 0;
+    const std::string operation;
+    const std::string object;
+    const size_t size;
+    const timespec startTime;
+    bool ended;
 };
+
 } // namespace performance_logger
 
 // Programmers should use the macros below to time code instead of using the
@@ -138,16 +134,11 @@ template <class PerfLoggerCls>
   performance_logger::BlockPerformanceLogger<performance_logger::PerformanceLogger> name(op, __VA_ARGS__)
 #define END_PERF_LOGGING(name) name.end()
 
-// Resource Logging records the various number of job allocation parameters, 
-// how many thread/vcpu resources were requested to process a given task, and 
-// how many were actually allocated and on which machine. 
-#define PERF_CONF_LOGGING(name, op, value) \
-  performance_logger::PerformanceLogger.instance().logConfig( name, op, value);
-
 #else
 
 #define BEGIN_PERF_LOGGING( ... )
 #define END_PERF_LOGGING( ... )
-#define PERF_CONF_LOGGING( ...) 
+
 #endif  // LOG_PERFORMANCE
+
 #endif // PERFORMANCELOGGER_H
