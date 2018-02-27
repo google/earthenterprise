@@ -319,11 +319,11 @@ khResourceManager::MakeCPUReservation(khResourceProviderProxy *provider,
   if (num >= req.minNumCPU) {
 
     provider->usedCPUs += num;
-    RESOURCE_ALLOC_LOGGER( rmanager_reservation_numcpus, provider->host, numCPUs  );
+    PERF_CONF_LOGGING( "rmanager_reservation_numcpus", provider->host, numCPUs  );
     return CPUReservationImpl::Make(provider->Host(), num);
   }
   else {
-    RESOURCE_ALLOC_LOGGER( rmanager_fail_reservation__insufficient_numcpus, provider->host, req.minNumCPU );
+    PERF_CONF_LOGGING( "rmanager_fail_reservation__insufficient_numcpus", provider->host, req.minNumCPU );
   }
   return Reservation();
 }
@@ -335,7 +335,7 @@ khResourceManager::ReleaseCPUReservation(const std::string &host, uint num)
   Providers::iterator found = providers.find(host);
   if (found != providers.end()) {
     found->second->usedCPUs -= num;
-    RESOURCE_ALLOC_LOGGER( rmanager_release_numcpus_reservation, provider->host, numCPUs  );
+    PERF_CONF_LOGGING( "rmanager_release_numcpus_reservation", provider->host, numCPUs  );
     // wake up the activate thread
     activateCondVar.signal_one();
   }

@@ -137,8 +137,8 @@ khResourceProvider::Run(void)
   Systemrc systemrc;
   LoadSystemrc(systemrc);
   uint32 numCPUs = systemrc.maxjobs;
-  RESOURCE_ALLOC_LOGGER( rprovider_config_numcpus, "numcpus", numCPUs  );
-  notify(NFY_WARN, "khResourceProvider: host %s has systemrc.maxjobs =  %d", khHostName(), numCPUs  );
+  PERF_CONF_LOGGING( "rprovider_config_numcpus", "numcpus", numCPUs  );
+  notify(NFY_WARN, "khResourceProvider: systemrc.maxjobs =  %d",  numCPUs  );
   // start the SignalLoop thread - listens for SIGINT & SIGTERM
   RunInDetachedThread
     (khFunctor<void>(std::mem_fun(&khResourceProvider::SignalLoop), this));
@@ -188,7 +188,7 @@ khResourceProvider::Run(void)
 
     // send ProviderConnRequest
 
-    RESOURCE_ALLOC_LOGGER( rprovider_register_resource_numcpu, khHostname(), numCPUs  );
+    PERF_CONF_LOGGING( "rprovider_register_resource_numcpu", khHostname(), numCPUs  );
     ProviderConnectMsg connreq(khHostname(), numCPUs, GEE_VERSION);
     if (!manager->TryNotify("ProviderConnectMsg", connreq, error)) {
       notify(NFY_WARN, "Unable to talk to resource manager: %s",

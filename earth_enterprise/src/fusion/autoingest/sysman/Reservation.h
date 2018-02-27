@@ -20,6 +20,7 @@
 
 #include <khRefCounter.h>
 #include <autoingest/khFusionURI.h>
+#include <common/performancelogger.h>
 
 
 class ReservationImpl : public khRefCounter
@@ -48,17 +49,16 @@ class CPUReservationImpl : public ReservationImpl
  protected:
   virtual ~CPUReservationImpl(void) {
     if (!released) {
-      TASK_ALLOC_LOGGING( "CPU_Reservation_Release",host,num_);
+      PERF_CONF_LOGGING( "CPU_Reservation_Release",host,num_);
       Release();
     }
   }
  public:
   uint num(void) const { return num_; }
-  std::string host(void) const { return host_; }
   virtual void Release(void);
   static Reservation Make(const std::string &host, uint num) {
+    PERF_CONF_LOGGING( "CPU_Reservation_Request",host,num);
     return Reservation(khRefGuardFromNew(new CPUReservationImpl(host, num)));
-    TASK_ALLOC_LOGGING( "CPU_Reservation_Request",host,num_);
   }
 };
 

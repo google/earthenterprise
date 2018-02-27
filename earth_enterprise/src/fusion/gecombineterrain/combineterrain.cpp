@@ -295,12 +295,12 @@ void TerrainCombiner::StartThreads() {
     
   // Use one less cpu than num cpus for doing the compression work.
   uint compress_cpus = num_cpus_;
-  RESOURCE_ALLOC_LOGGER( proc_exec_config_internal_numcpus, taskName+'_compress', numcpus );
+  PERF_CONF_LOGGING( "proc_exec_config_internal_numcpus", taskName+'_compress', numcpus );
     
   if (num_cpus_ >= 4) {
     compress_cpus--; // If we have more than 4 cpus save one for reads/writes.
   }
-  RESOURCE_ALLOC_LOGGER( proc_exec_config_internal_numcpus, taskName+'_compress', compress_cpus );
+  PERF_CONF_LOGGING( "proc_exec_config_internal_numcpus", taskName+'_compress', compress_cpus );
   notify(NFY_WARN, "gecombineterrain compress_cpus: %llu ",
                static_cast<long long unsigned int>(compress_cpus));
     
