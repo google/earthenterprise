@@ -416,7 +416,7 @@ geserveradmin --garbagecollect
 </table>
 <h4><a name="geserveradmin_pdb"></a>Publish database</h4>
 <pre>
-<code><b>--publishdb</b> <i>db_name</i> <b>--targetpath</b> <i>target_path</i> [<b>--vhname</b> <i>vh_name</i>]</code></pre>
+<code><b>--publishdb</b> <i>db_name</i> <b>--targetpath</b> <i>target_path</i> [<b>--vhname</b> <i>vh_name</i>] [<b>--setecdefault</b>]</code></pre>
 <p>Publish the specified database on the specified target path. If the virtual host name is omitted, it publishes to the default virtual host: "public".</p>
 <table class="nice-table">
   <tbody>
@@ -436,6 +436,11 @@ geserveradmin --garbagecollect
 <code><b>--vhname</b> <i>vh_name</i></code></pre></td>
       <td>Optional</td>
       <td>Specify the name of the virtual host. If the virtual host name is omitted, it publishes to the default virtual host: "public".</td>
+    </tr>
+    <tr>
+      <td><pre><code><b>--setecdefault</b> </code></pre></td>
+      <td>Optional</td>
+      <td>Publish this database as the default one for the Earth Client to connect to if no database or virtual host is specified upon initial connection.</td>
     </tr>
   </tbody>
 </table>
