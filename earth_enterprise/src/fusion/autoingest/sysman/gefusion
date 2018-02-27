@@ -60,7 +60,7 @@ function check_if_master {
 function stop_daemon {
   echo -n "Shutting down $2... "
   pidfile="/var/opt/google/run/$1.pid"
-  if [ -e $pidfile ] ; then
+  if [ -e "$pidfile" ] ; then
     if gestopdaemon $1 ; then
       echo "Done"
     else
@@ -77,8 +77,8 @@ function check_daemon {
   #   thus wont work on non-master hosts.
   daemon_path=$(which "$1")
   pidfile="/var/opt/google/run/$1.pid"
-  if [ -s $pidfile ] ; then
-    pid=`cat $pidfile`
+  if [ -s "$pidfile" ] ; then
+    pid=`cat "$pidfile"`
     if [ -d "/proc/$pid" ] && [ "$(readlink "/proc/$pid/exe")" = "$daemon_path" ]; then
       echo "$1:  Running (PID $pid)."
       return 0
