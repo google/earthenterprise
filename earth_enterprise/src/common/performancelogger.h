@@ -19,6 +19,11 @@
 #include <time.h>
 
 #include "common/timeutils.h"
+#include "common/khThread.h"  // defines khMutex
+
+
+// Ignore this code unless LOG_PERFORMANCE is set to 1
+#ifdef  LOG_PERFORMANCE
 
 /*
  * Singleton class for logging event performance. This class is intended for
@@ -33,9 +38,11 @@ class PerformanceLogger {
         const timespec startTime,      // The start time of the operation
         const timespec endTime,        // The end time of the operation
         const size_t size = 0);        // The size of the object, if applicable
+
   private:
     static PerformanceLogger * const _instance;
     PerformanceLogger() {}
+    void do_notify( const std::string&, std::ostream&, khMutex& );  // func decloration
 };
 
 /*
@@ -56,7 +63,7 @@ class BlockPerformanceLogger {
       startTime(getime::getMonotonicTime()),
       ended(false) {}
     void end() {
-      if (!ended) {
+     if (!ended) {
         ended = true;
         const timespec endTime = getime::getMonotonicTime();
         PerfLoggerCls::instance()
@@ -74,6 +81,8 @@ class BlockPerformanceLogger {
     bool ended;
 };
 
+#endif  // LOG_PERFORMANCE
+
 // Programmers should use the macros below to time code instead of using the
 // classes above directly. This makes it easy to use compile time flags to
 // exclude the time code.
@@ -83,8 +92,19 @@ class BlockPerformanceLogger {
 //
 // If you use multiple performance logging statements in the same scope you
 // must give each one a unique name.
+#ifdef LOG_PERFORMANCE
+
 #define BEGIN_PERF_LOGGING(name, op, ...) \
   BlockPerformanceLogger<PerformanceLogger> name(op, __VA_ARGS__)
 #define END_PERF_LOGGING(name) name.end()
+
+#else
+
+#define BEGIN_PERF_LOGGING( ... )
+#define END_PERF_LOGGING( ... )
+
+#endif  // LOG_PERFORMANCE = 1
+
+
 
 #endif // PERFORMANCELOGGER_H
