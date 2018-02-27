@@ -215,7 +215,7 @@ int main(int argc, char **argv) {
     int index_version = 0;
     int sortbuf = kDefaultSortBufferMegabytes;
     uint32 numcpus = kDefaultNumCPUs;
-    RESOURCE_ALLOC_LOGGER( proc_exec_config_default_numcpus, taskName, numcpus );
+    RESOURCE_ALLOC_LOGGING( "proc_exec_config_default_numcpus", taskName, numcpus );
     uint32 read_cache_max_blocks = kDefaultReadCacheBlocks;
     uint32 read_cache_block_size = kDefaultReadCacheBlockKilobyteSize;
 
@@ -227,7 +227,7 @@ int main(int argc, char **argv) {
     options.opt("sortbuf", sortbuf);
     options.opt("numcpus", numcpus,
                 &khGetopt::RangeValidator<uint32, 1, kMaxNumJobsLimit_2>);
-    RESOURCE_ALLOC_LOGGER( proc_exec_config_cli_numcpus, taskName, numcpus );
+    RESOURCE_ALLOC_LOGGING( "proc_exec_config_cli_numcpus", taskName, numcpus );
     options.opt("read_cache_max_blocks", read_cache_max_blocks,
                 &khGetopt::RangeValidator<uint32, 0, 1024>);
     options.opt("read_cache_block_size", read_cache_block_size,
@@ -250,7 +250,7 @@ int main(int argc, char **argv) {
     
     numcpus = std::min(numcpus, CommandlineNumCPUsDefault());
     
-    RESOURCE_ALLOC_LOGGER( proc_exec_vcpu_count, taskName, numcpus );
+    RESOURCE_ALLOC_LOGGING( "proc_exec_vcpu_count", taskName, numcpus );
 
     notify(NFY_WARN, "gecombineterrain actually using min numcpu: %llu ",
                static_cast<long long unsigned int>(numcpus));
@@ -278,7 +278,7 @@ int main(int argc, char **argv) {
     // at a single time, to keep from overflowing memory.
     // Allow 50 files for other operations outside the filepool.
     int max_open_fds = GetMaxFds(-50);
-    RESOURCE_ALLOC_LOGGER( proc_exec_config_max_open_fds, taskName, max_open_fds );
+    RESOURCE_ALLOC_LOGGING( "proc_exec_config_max_open_fds", taskName, max_open_fds );
     // Read Cache is enabled only if read_cache_max_blocks is > 2.
     if (read_cache_max_blocks < 2) {
       notify(NFY_WARN, "Read caching is disabled. This will cause %s"
@@ -288,10 +288,10 @@ int main(int argc, char **argv) {
     } else {
       // Get the physical memory size to help choose the read_cache_max_blocks.
       uint64 physical_memory_size = GetPhysicalMemorySize();
-      RESOURCE_ALLOC_LOGGER( proc_exec_config_memsize, taskName, physical_memory_size );
+      RESOURCE_ALLOC_LOGGING( "proc_exec_config_memsize", taskName, physical_memory_size );
       if (physical_memory_size == 0) {
         physical_memory_size = kDefaultMinMemoryAssumed;
-        RESOURCE_ALLOC_LOGGER( proc_exec_config_memsize, taskName, physical_memory_size );
+        RESOURCE_ALLOC_LOGGING( "proc_exec_config_memsize", taskName, physical_memory_size );
         notify(NFY_WARN, "Physical Memory available not found. "
                "Assuming min recommended system size: %llu bytes",
                static_cast<long long unsigned int>(physical_memory_size));
