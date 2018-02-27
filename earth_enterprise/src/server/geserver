@@ -56,7 +56,7 @@ dashes='--------------------------------------------------------------------'
 # this script
 RETVAL=0
 
-use_su=`su $GEPGUSER -c "echo -n 1" 2>/dev/null || echo -n 0`
+use_su=`su "$GEPGUSER" -c "echo -n 1" 2>/dev/null || echo -n 0`
 
 run_as_user() {
   if [ $use_su -eq 1 ] ; then
@@ -68,7 +68,7 @@ run_as_user() {
 
 start() {
   echo $dashes
-  run_as_user $GEPGUSER "$gebin_root/pg_ctl -D /var/opt/google/pgsql/data -l /var/opt/google/pgsql/logs/pg.log start -w";
+  run_as_user "$GEPGUSER" "$gebin_root/pg_ctl -D /var/opt/google/pgsql/data -l /var/opt/google/pgsql/logs/pg.log start -w";
   echo
   echo $dashes
   $gehttpd_root/gehttpd_init start
@@ -87,7 +87,7 @@ stop() {
   echo $dashes
   # only stop if already running...
   if [ -f "$pidfile_postmaster" ] ; then
-    run_as_user $GEPGUSER "$gebin_root/pg_ctl -D /var/opt/google/pgsql/data -l /var/opt/google/pgsql/logs/pg.log stop";
+    run_as_user "$GEPGUSER" "$gebin_root/pg_ctl -D /var/opt/google/pgsql/data -l /var/opt/google/pgsql/logs/pg.log stop";
     rm -f "$pidfile_postmaster"
   fi
   echo $dashes
@@ -99,7 +99,7 @@ status_postmaster() {
   if [ -s "$pidfile_postmaster" ] ; then
     pid=`head -1 "$pidfile_postmaster"`
     # redirect to /dev/null because pg_ctl --silent option doesnt work for status subcommand
-    run_as_user $GEPGUSER "$gebin_root/pg_ctl -D /var/opt/google/pgsql/data status" >& /dev/null
+    run_as_user "$GEPGUSER" "$gebin_root/pg_ctl -D /var/opt/google/pgsql/data status" >& /dev/null
     if [ "$?" -eq 0 ]; then
       echo "postmaster: Running (PID $pid)."
       return 0
