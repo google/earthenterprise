@@ -103,16 +103,19 @@ void PerformanceLogger::logTiming(
 void PerformanceLogger::logConfig(
     const string & operation,
     const string & object,
-    const timespec startTime,
     const size_t uint16) {
 
+  const timespec now = getime::getMonotonicTime();
   stringstream message;
 
+  
   message.setf(ios_base::fixed, ios_base::floatfield);
   message << setprecision(9)
           << operation << ','
           << object    << ','
-          << startTime << ','
+          << now << ','
+          << now << ','
+          << 0 << ','
           << value;
 
   assert(timeFileName.size() > 0);

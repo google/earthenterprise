@@ -141,8 +141,8 @@ template <class PerfLoggerCls>
 // Resource Logging records the various number of job allocation parameters, 
 // how many thread/vcpu resources were requested to process a given task, and 
 // how many were actually allocated and on which machine. 
-#define PERF_CONF_LOGGING(name, op, ...) \
-  performance_logger::PerformanceLogger.instance<performance_logger::PerformanceLogger> name(op, __VA_ARGS__)
+#define PERF_CONF_LOGGING(name, op, value) \
+  performance_logger::PerformanceLogger.instance().logConfig( name, op, value);
 
 #else
 
