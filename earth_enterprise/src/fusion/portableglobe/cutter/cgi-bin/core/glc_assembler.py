@@ -22,6 +22,7 @@ import os
 import re
 import shutil
 import sys
+import traceback
 import time
 import urllib
 from common import utils
@@ -56,6 +57,7 @@ MAPS_DATA_DIR = "%s/maps"
 REL_EARTH_DATA_DIR = "earth"
 REL_MAPS_DATA_DIR = "maps"
 REL_INFO_FILE = "earth/info.txt"
+REL_INFO_FILE_LOG = "log/info.txt"
 REL_POLYGON_FILE = "earth/polygon.kml"
 REL_META_DBROOT_FILE = "metadbroot"
 REL_MAP_JSON_FILE = "map.json"
@@ -63,6 +65,7 @@ REL_LAYERS_INFO_FILE = "earth/layer_info.txt"
 REL_DBROOT_LAYERS_INFO_FILE = "earth/dbroot_layer_info.txt"
 REL_DELTA_LAYERS_INFO_FILE = "earth/delta_layer_info.txt"
 INFO_FILE = "%%s/%s" % REL_INFO_FILE
+INFO_FILE_LOG = "%%s/%s" % REL_INFO_FILE_LOG
 META_DBROOT_FILE = "%%s/%s" % REL_META_DBROOT_FILE
 LAYERS_INFO_FILE = "%%s/%s" % REL_LAYERS_INFO_FILE
 DBROOT_LAYERS_INFO_FILE = "%%s/%s" % REL_DBROOT_LAYERS_INFO_FILE
@@ -117,6 +120,9 @@ class DiskFullError(Exception):
 class GlcAssembler(object):
   """Class that implements all commands for cutting a globe."""
 
+  def __init__(self):
+      self.info_file = ""
+
   @staticmethod
   def Status(message):
     """Outputs a status message."""
@@ -161,7 +167,7 @@ class GlcAssembler(object):
     self.info_file = INFO_FILE % self.base_path
     self.temp_glc = TEMP_GLC_FILE % self.base_path
 
-    logger = self.GetLogger(self.base_path)
+    logger = self.GetLogger()
     utils.PrintAndLog("Prepare assembler...", logger)
     utils.PrintAndLog("Base dir: %s" % self.base_path, logger)
     utils.CreateDirectory(self.base_path)
@@ -172,12 +178,16 @@ class GlcAssembler(object):
     utils.PrintAndLog("Prepare assembler done.", logger)
     return logger
 
-  def GetLogger(self, base_path):
+  def GetLogger(self):
     """Get logger built from info.txt."""
-    info_file = INFO_FILE % base_path
-    if not os.path.exists(os.path.dirname(info_file)):
-      os.makedirs(os.path.dirname(info_file))
-    logger = utils.Log(info_file)
+
+    if not self.info_file:
+      # self.info_file is expected to be set before calling this method
+      return None
+
+    if not os.path.exists(os.path.dirname(self.info_file)):
+      os.makedirs(os.path.dirname(self.info_file))
+    logger = utils.Log(self.info_file)
     return logger
 
   def ExtractFileFromGlx(self, glc_path, file_in_glc, output_file):
@@ -196,11 +206,18 @@ class GlcAssembler(object):
 
   def ExtractFilelistFromGlx(self, glc_path, regex):
     """Extract given file from glc file and save it to the given path."""
+    logger = self.GetLogger()
     os_cmd = ("%s/geglxinfo "
               "--glx=\"%s\" "
               "--list_files"
               % (COMMAND_DIR, glc_path))
     glx_info = utils.RunCmd(os_cmd)
+
+    # Checking for errors and logging them if there where any
+    if not glx_info[0] and len(glx_info) == 2:
+      utils.PrintAndLog("ERROR: '%s' running command: '%s'" % (glx_info[1], os_cmd), logger)
+      return []
+
     glx_files = []
     for line in glx_info:
       match = regex.match(line)
@@ -630,19 +647,20 @@ class GlcAssembler(object):
 
   def CleanUp(self, form_):
     """Move temp glc to final location and remove temp folder if needed."""
-    base = form_.getvalue_path("base")
-    temp_glc = TEMP_GLC_FILE % base
+    self.base_path = form_.getvalue_path("base")
+    self.info_file = INFO_FILE % self.base_path
+    temp_glc = TEMP_GLC_FILE % self.base_path
     final_glc = form_.getvalue_path("globe")
     cleanup = form_.getvalue("cleanup") is not None
-    logger = self.GetLogger(base)
+    logger = self.GetLogger()
     utils.PrintAndLog("Moving temp glc %s -> %s ..." % (temp_glc, final_glc),
                       logger)
     shutil.move(temp_glc, final_glc)
     utils.PrintAndLog("SUCCESS", logger, None)
 
     if cleanup:
-      utils.PrintAndLog("Deleting %s" % base, logger)
-      shutil.rmtree(base)
+      utils.PrintAndLog("Deleting %s" % self.base_path, logger)
+      shutil.rmtree(self.base_path)
       utils.PrintAndLog("SUCCESS", logger, None)
 
     return ""
@@ -665,35 +683,59 @@ class GlcAssembler(object):
         return True
     return False
 
+  def PrepareDisassembler(self, base_path, glc_path):
+    """Set up build directory and paths to be used by disassembler."""
+    self.base_path = base_path
+    self.output_dir = base_path
+    self.glc_path = glc_path
+    self.info_file = INFO_FILE_LOG % self.base_path
+   
+    logger = self.GetLogger()
+    utils.PrintAndLog("Prepare disassembler...", logger)
+    utils.PrintAndLog("Output dir: %s" % self.base_path, logger)
+    utils.PrintAndLog("Glc path: %s" % self.glc_path, logger)
+
+    utils.PrintAndLog("Prepare disassembler done.", logger)
+    return logger
+
   def DisassembleGlc(self, form_):
     """Extract glms or glbs from a glc."""
+
+    logger = None
+   
     try:
-      glc_path = form_.getvalue_path("path")
       output_dir = form_.getvalue_path("dir")
-      try:
-        utils.CreateDirectory(output_dir)
-      except OSError:
-        pass  # Allow use of existing directory.
+      glc_path = form_.getvalue_path("path")
+      logger = self.PrepareDisassembler(output_dir, glc_path)
 
       # Extra check to prevent XSS attack.
-      if self.IsPathInvalid({"glc_path": glc_path,
-                             "output_dir": output_dir,
+      if self.IsPathInvalid({"glc_path": self.glc_path,
+                             "output_dir": self.output_dir,
                             }):
-        return ""
+        return "FAILED: Output dir or Glc path is invalid"
 
-      glx_entries = self.ExtractFilelistFromGlx(glc_path, GLX_ENTRY_REGEX)
+      glx_entries = self.ExtractFilelistFromGlx(self.glc_path, GLX_ENTRY_REGEX)
       msg = ""
+      if len(glx_entries) == 0:
+        return "FAILED: no file entries found in '%s' that match pattern '%s'" % (self.glc_path, GLX_ENTRY_REGEX.pattern)
       for glx_entry in glx_entries:
         glx_name = glx_entry.split("/")[-1]
-        extracted_glx = "%s/%s" % (output_dir, glx_name)
+        extracted_glx = "%s/%s" % (self.output_dir, glx_name)
         if os.path.isfile(extracted_glx):
           return msg + "FAILED: %s already exists." % extracted_glx
 
         print "Extracting %s to %s ..." % (glx_entry, extracted_glx)
-        msg += self.ExtractFileFromGlx(glc_path, glx_entry, extracted_glx)
+        msg += self.ExtractFileFromGlx(self.glc_path, glx_entry, extracted_glx)
       return "SUCCESS"
     except Exception as e:
-      return "FAILED %s" % e.__str__()
+      exc_type, exc_value, exc_traceback = sys.exc_info()
+      err_msg = e.__str__()
+      stack_trace = repr(traceback.format_exception(exc_type, exc_value, exc_traceback))
+      if logger is not None:
+        logger.Log("ERROR: %s\n%s\n" % (err_msg, stack_trace))
+      else:
+        print "ERROR: %s\n%s\n" % (err_msg, stack_trace)
+      return "FAILED %s" % err_msg
 
 
 def main():

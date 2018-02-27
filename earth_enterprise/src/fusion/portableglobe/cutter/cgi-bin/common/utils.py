@@ -331,8 +331,11 @@ def RunCmd(os_cmd):
     p = subprocess.Popen(os_cmd, shell=False,
                          stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE)
-    results = p.communicate()[0]
-    err_data = p.communicate()[1]
+    # capture stdout/stderr into memory variables
+    # NOTE: communicate() can only be called one time
+    # per call of Popen as after the first call
+    # stdout/stderr pipe handles are closed
+    results, err_data = p.communicate()
     return_code = p.returncode
     if return_code != 0:
       results = "{0} (return code {1})".format(err_data, return_code)

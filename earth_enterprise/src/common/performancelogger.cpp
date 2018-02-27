@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <cassert>
 #include <iomanip>
+#include <fstream>
 #include <sstream>
 #include <string>
 #include <unistd.h>
@@ -26,11 +28,56 @@
 using namespace std;
 using namespace getime;
 
-// Initialize static members of Profiler class
-PerformanceLogger * const PerformanceLogger::_instance = new PerformanceLogger();
+#ifdef LOG_PERFORMANCE
+
+namespace performance_logger {
+
+// make sure static members get initialized
+plMutex PerformanceLogger::instance_mutex;
+
+void plMutex::Lock(void) {
+  // if this wasn't properly initialized, we'll get an error
+  int err = pthread_mutex_lock(&mutex);
+  assert(!err);
+  (void) err; // Suppress unused variable 'err' warning.
+}
+
+void plMutex::Unlock(void) {
+  // if this wasn't properly initialized, we'll get an error
+  int err = pthread_mutex_unlock(&mutex);
+  assert(!err);
+  (void) err; // Suppress unused variable 'err' warning.
+}
+
+plMutex::plMutex(void) {
+  // always returns 0
+  (void)pthread_mutex_init(&mutex, NULL /* simple, fast mutex */);
+}
+
+plMutex::~plMutex(void) {
+  int err = pthread_mutex_destroy(&mutex);
+  assert(!err);
+  (void) err; // Suppress unused variable 'err' warning.
+}
+
+// This function is only called while a lock is held
+void PerformanceLogger::generateFileNameAndWriteHeader() {
+  // Create a unique file name
+  time_t t = time(0);
+  tm date = *localtime(&t);
+  char buf[256];
+  if (timeFileName.size() == 0) {
+    strftime(buf, sizeof(buf), "time_stats.%m-%d-%Y-%H:%M:%S.csv", &date);
+    timeFileName = buf;
+  }
+
+  // Write the header for the CSV file
+  ofstream output_stream(timeFileName.c_str(), ios::app);
+  output_stream << "pid,tid,operation,object,startTime,endTime,duration,size" << endl;
+}
 
 // Log a profiling message
-void PerformanceLogger::log(
+void PerformanceLogger::logTiming(
     const string & operation,
     const string & object,
     const timespec startTime,
@@ -38,22 +85,37 @@ void PerformanceLogger::log(
     const size_t size) {
 
   const timespec duration = timespecDiff(endTime, startTime);
-  const pid_t tid = syscall(SYS_gettid);
   stringstream message;
 
   message.setf(ios_base::fixed, ios_base::floatfield);
   message << setprecision(9)
-          << operation << " " << object << ": "
-          << "start time: " << startTime
-          << ", "
-          << "end time: " << endTime
-          << ", "
-          << "duration: " << duration
-          << ", "
-          << "thread: " << tid;
-  if (size > 0) {
-    message << ", size: " << size;
-  }
+          << operation << ','
+          << object    << ','
+          << startTime << ','
+          << endTime   << ','
+          << duration  << ','
+          << size;
 
-  notify(NFY_NOTICE, "%s\n", message.str().c_str());
+  assert(timeFileName.size() > 0);
+  do_notify(message.str(), timeFileName);
 }
+
+// Thread safety wrapper for log output
+void PerformanceLogger::do_notify(const string & message, const string & fileName) {
+
+  // Get the thread and process IDs
+  pthread_t tid = pthread_self();
+  pid_t pid = getpid();
+
+  {  // atomic inner block
+    plLockGuard lock( write_mutex );
+    { // Make sure we flush and close the output file before unlocking the mutex:
+      ofstream output_stream(fileName.c_str(), ios::app);
+      output_stream << pid << ',' << tid << ',' << message << endl;
+    }
+  }
+}
+
+} // namespace performance_logger
+
+#endif  // LOG_PERFORMANCE
