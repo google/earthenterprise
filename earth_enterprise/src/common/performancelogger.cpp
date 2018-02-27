@@ -73,7 +73,7 @@ void PerformanceLogger::generateFileNameAndWriteHeader() {
 
   // Write the header for the CSV file
   ofstream output_stream(timeFileName.c_str(), ios::app);
-  output_stream << "pid,tid,operation,object,startTime,endTime,duration,size" << endl;
+  output_stream << "pid,tid,operation,object,startTime_sec,endTime_sec,duration_sec,size" << endl;
 }
 
 // Log a profiling message

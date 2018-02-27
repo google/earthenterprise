@@ -71,7 +71,7 @@ ValidOptions = set(
      'cc_dir',
      'coverage',
      'bundle_3rd_libs',  # Build with bundling 3rd party libs.
-     'log_performance',  # Add code to perform performancing loggging
+     'log_performance',  # Include code for performance logging
      ]);
 
 for argkey in ARGUMENTS:
