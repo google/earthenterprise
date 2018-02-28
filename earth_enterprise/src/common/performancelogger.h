@@ -69,6 +69,10 @@ class PerformanceLogger {
         const timespec startTime,      // The start time of the operation
         const timespec endTime,        // The end time of the operation
         const size_t size = 0);        // The size of the object, if applicable
+    void logConfig(
+        const std::string & operation, // The operation being configured
+        const std::string & object,    // The object that the operation is performed on
+        const unsigned int value);        // The value being configured, if applicable
   private:
     static plMutex instance_mutex;
     plMutex write_mutex;
@@ -134,11 +138,16 @@ class BlockPerformanceLogger {
   performance_logger::BlockPerformanceLogger<performance_logger::PerformanceLogger> name(op, __VA_ARGS__)
 #define END_PERF_LOGGING(name) name.end()
 
+// Resource Logging records the various number of job allocation parameters, 
+// how many thread/vcpu resources were requested to process a given task, and 
+// how many were actually allocated and on which machine. 
+#define PERF_CONF_LOGGING(name, op, value) \
+  performance_logger::PerformanceLogger::instance().logConfig( name, op, value);
+
 #else
 
 #define BEGIN_PERF_LOGGING( ... )
 #define END_PERF_LOGGING( ... )
-
+#define PERF_CONF_LOGGING( ...) 
 #endif  // LOG_PERFORMANCE
-
 #endif // PERFORMANCELOGGER_H

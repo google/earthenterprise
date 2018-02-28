@@ -20,7 +20,7 @@
 
 #include <khRefCounter.h>
 #include <autoingest/khFusionURI.h>
-#include <common/performancelogger.h>
+#include "common/performancelogger.h"
 
 
 class ReservationImpl : public khRefCounter

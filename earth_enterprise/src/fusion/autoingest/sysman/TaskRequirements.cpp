@@ -481,7 +481,7 @@ TaskRequirements::LoadFromFiles(void)
         notify(NFY_FATAL, "Error loading %s: taskname != %s",
                path.c_str(), rule.c_str());
       }
-      PERF_CONF_LOGGING( "task_config_loadfromfile", taskrule.taskname, path );
+      PERF_CONF_LOGGING( "task_config_loadfromfile", path, 0 );
       taskRules.insert(std::make_pair(rule, taskrule));
     } else {
       notify(NFY_FATAL, "Unable to load %s", path.c_str());
