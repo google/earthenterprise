@@ -40,9 +40,12 @@ namespace geterrain {
 // and a token is returned.  The number of packets is added to the total.
 PacketFileReaderToken CountedPacketFileReaderPool::Add(
     const std::string &packet_file_name) {
+  BEGIN_PERF_LOGGING(openPacketFile,"CombineTerrain_OpenPacket","Open/add packet file to reader pool");
   pool_packet_count_ += PacketIndexReader::NumPackets(
       PacketFile::IndexFilename(packet_file_name));
-  return PacketFileReaderPool::Add(packet_file_name);
+  PacketFileReaderToken retval = PacketFileReaderPool::Add(packet_file_name);
+  END_PERF_LOGGING(openPacketFile);
+  return retval;
 }
 
 // CombineTerrainPackets
@@ -173,7 +176,9 @@ TerrainCombiner::~TerrainCombiner() {
 
 void TerrainCombiner::Close(size_t max_sort_buffer) {
   notify(NFY_DEBUG, "Closing TerrainCombiner");
+  BEGIN_PERF_LOGGING(closeTC,"CombineTerrain_Close","Flush and Close TerrainCombiner file bundle");
   writer_.Close(max_sort_buffer);
+  END_PERF_LOGGING(closeTC);
 }
 
 // WriteCombinedTerrain - write a combined terrain packet for the
@@ -269,7 +274,8 @@ void TerrainCombiner::CompressPacket(PacketInfo* packet) {
 
 void TerrainCombiner::WritePacket(PacketInfo* packet) {
   std::string& compressed_buffer = packet->CompressedBuffer();
-  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_WritePacket", packet->EvenPath().AsString(), compressed_buffer.size());
+  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_WritePacket", packet->EvenPath().AsString(),
+                     compressed_buffer.size());
   writer_.WriteAppendCRC(packet->EvenPath(), &compressed_buffer[0],
                          compressed_buffer.size(), packet->ProviderId());
   progress_meter_.incrementDone(packet->ProgressIncrement());
@@ -533,9 +539,11 @@ void TerrainCombiner::PacketWriteThread() {
     PacketInfo* packet = NULL;
     while(PopWriteQueue(&packet)) {
       if (packet != NULL) {
+        BEGIN_PERF_LOGGING(pwThread,"CombineTerrain_PacketWrite","Packet write thread");
         WritePacket(packet);
         delete packet;
         packets_processed++;
+        END_PERF_LOGGING(pwThread);
       }
     }
   } catch(const khSimpleException &e) {

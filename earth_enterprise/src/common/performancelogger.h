@@ -15,10 +15,42 @@
 #ifndef PERFORMANCELOGGER_H
 #define PERFORMANCELOGGER_H
 
+#include <pthread.h>
 #include <string>
 #include <time.h>
 
 #include "common/timeutils.h"
+
+#ifdef LOG_PERFORMANCE
+
+
+namespace performance_logger {
+
+// We need a mutex for performance logging, but we've intstrumented the
+// khMutex class hierarchy, and we don't want to see log entries for logging
+// operations, so we have a non-instrumented implementation of the mutex
+// classes here. :P
+class plMutex {
+  public:
+    plMutex(void);
+    ~plMutex(void);
+    void Lock(void);
+    void Unlock(void);
+  private:
+    pthread_mutex_t mutex;
+};
+
+class plLockGuard {
+  private:
+    plMutex &mutex;
+  public:
+    plLockGuard(plMutex &mutex_) : mutex(mutex_) {
+      mutex.Lock();
+    }
+    ~plLockGuard(void) {
+      mutex.Unlock();
+    }
+};
 
 /*
  * Singleton class for logging event performance. This class is intended for
@@ -26,16 +58,29 @@
  */
 class PerformanceLogger {
   public:
-    static PerformanceLogger * const instance() { return _instance; }
-    void log(
+    static PerformanceLogger& instance() {
+      plLockGuard lock(instance_mutex);
+      static PerformanceLogger _instance;
+      return _instance;
+    }
+    void logTiming(
         const std::string & operation, // The operation being timed
         const std::string & object,    // The object that the operation is performed on
         const timespec startTime,      // The start time of the operation
         const timespec endTime,        // The end time of the operation
         const size_t size = 0);        // The size of the object, if applicable
   private:
-    static PerformanceLogger * const _instance;
-    PerformanceLogger() {}
+    static plMutex instance_mutex;
+    plMutex write_mutex;
+    std::string timeFileName;
+
+    PerformanceLogger() : write_mutex() { generateFileNameAndWriteHeader(); }
+    void do_notify(const std::string & message, const std::string & fileName);
+    void generateFileNameAndWriteHeader();
+    
+    // Disable copy (these functions should not be implemented)
+    PerformanceLogger(const PerformanceLogger&);
+    void operator=(const PerformanceLogger&);
 };
 
 /*
@@ -60,7 +105,7 @@ class BlockPerformanceLogger {
         ended = true;
         const timespec endTime = getime::getMonotonicTime();
         PerfLoggerCls::instance()
-            ->log(operation, object, startTime, endTime, size);
+          .logTiming(operation, object, startTime, endTime, size);
       }
     }
     ~BlockPerformanceLogger() {
@@ -74,6 +119,8 @@ class BlockPerformanceLogger {
     bool ended;
 };
 
+} // namespace performance_logger
+
 // Programmers should use the macros below to time code instead of using the
 // classes above directly. This makes it easy to use compile time flags to
 // exclude the time code.
@@ -84,7 +131,14 @@ class BlockPerformanceLogger {
 // If you use multiple performance logging statements in the same scope you
 // must give each one a unique name.
 #define BEGIN_PERF_LOGGING(name, op, ...) \
-  BlockPerformanceLogger<PerformanceLogger> name(op, __VA_ARGS__)
+  performance_logger::BlockPerformanceLogger<performance_logger::PerformanceLogger> name(op, __VA_ARGS__)
 #define END_PERF_LOGGING(name) name.end()
+
+#else
+
+#define BEGIN_PERF_LOGGING( ... )
+#define END_PERF_LOGGING( ... )
+
+#endif  // LOG_PERFORMANCE
 
 #endif // PERFORMANCELOGGER_H
