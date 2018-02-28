@@ -15,6 +15,7 @@
 #ifndef PERFORMANCELOGGER_H
 #define PERFORMANCELOGGER_H
 
+#include <fstream>
 #include <pthread.h>
 #include <string>
 #include <time.h>
@@ -73,10 +74,11 @@ class PerformanceLogger {
     static plMutex instance_mutex;
     plMutex write_mutex;
     std::string timeFileName;
+    std::ofstream timeFile;
 
-    PerformanceLogger() : write_mutex() { generateFileNameAndWriteHeader(); }
-    void do_notify(const std::string & message, const std::string & fileName);
-    void generateFileNameAndWriteHeader();
+    PerformanceLogger() : write_mutex() { initializeFile(); }
+    void do_notify(const std::string & message);
+    void initializeFile();
     
     // Disable copy (these functions should not be implemented)
     PerformanceLogger(const PerformanceLogger&);
