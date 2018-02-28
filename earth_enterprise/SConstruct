@@ -124,9 +124,10 @@ env = khEnvironment(ENV={'PATH' : '/bin:/bin:/usr/bin'},
 
 def getArgumentVarsAsString():
   vars=''
-  for var, value in ARGUMENTS.iteritems():
-    if var != 'installdir':
-      vars += var + '=' + str(value) + ' '
+  for key, value in ARGUMENTS.iteritems():
+    if key != 'installdir':
+      vars += key + '=' + str(value) + ' '
+
   return vars[:-1]  # Remove the trailing space
 
 arg_vars = getArgumentVarsAsString()
@@ -206,4 +207,3 @@ if 'cleanall' in COMMAND_LINE_TARGETS:
           "src/.sconf_temp",
           "src/config.log"]:
       os.system("rm -rf " + sconsfile)
-

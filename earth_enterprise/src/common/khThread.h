@@ -24,6 +24,7 @@
 #include <pthread.h>
 #include "khGuard.h"
 #include "khFunctor.h"
+#include "performancelogger.h"
 
 // This is a statically initializeable base class for khMutex. You use this
 // only for file global variables that need to be valid even before a
@@ -123,10 +124,12 @@ class khThreadBase {
 
  protected:
   virtual ~khThreadBase(void) {
+    BEGIN_PERF_LOGGING(timingLogger, "khThreadBase::~khThreadBase", "thread");
     if (needJoin()) {
       setWantAbort();
       join();
     }
+    END_PERF_LOGGING(timingLogger);
   }
   khThreadBase(void) : tid(0), wantAbort_(false), started(false) { }
   bool wantAbort(void) {
@@ -163,10 +166,12 @@ class khThread : public khThreadBase
  public:
   khThread(const khFunctor<void> &fun_) : fun(fun_) { }
   ~khThread(void) {
+    BEGIN_PERF_LOGGING(timingLogger, "khThread::~khThread", "thread");
     if (needJoin()) {
       setWantAbort();
       join();
     }
+    END_PERF_LOGGING(timingLogger);
   }
 };
 
