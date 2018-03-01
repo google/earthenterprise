@@ -304,7 +304,7 @@ check_server_processes_running()
     retval=0
     wsgi_running_str="true"
   fi
-  echo "wsgi service: $gehttpd_running_str"
+  echo "wsgi service: $wsgi_running_str"
 
   return $retval
 }
