@@ -110,9 +110,19 @@ void PerformanceLogger::do_notify(const string & message) {
   {  // atomic inner block
     plLockGuard lock( write_mutex );
     {
-      timeFile << pid << ',' << tid << ',' << message << endl;
+      if (buffer.size() + message.size() > BUF_SIZE) {
+        flushBuffer();
+      }
+      stringstream newLine;
+      newLine << pid << ',' << tid << ',' << message << endl;
+      buffer.append(newLine.str());
     }
   }
+}
+
+void PerformanceLogger::flushBuffer() {
+  timeFile << buffer;
+  buffer.clear();
 }
 
 } // namespace performance_logger
