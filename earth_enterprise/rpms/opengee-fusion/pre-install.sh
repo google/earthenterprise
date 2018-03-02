@@ -1,6 +1,6 @@
 #! /bin/bash
 #
-# Copyright 2017 The Open GEE Contributors
+# Copyright 2018 The Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
 # limitations under the License.
 
 set +x
+set -e
+
 NEW_INSTALL=false
 if [ "$1" = "1" ] ; then
     NEW_INSTALL=true

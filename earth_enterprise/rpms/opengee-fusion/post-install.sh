@@ -1,6 +1,6 @@
 #! /bin/bash
 #
-# Copyright 2017 The Open GEE Contributors
+# Copyright 2018 The Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 # NOTE: requires xmllint from libxml2-utils
 
 set +x
+set -e
 
 #------------------------------------------------------------------------------
 # Definitions
@@ -191,8 +192,8 @@ final_assetroot_configuration()
         "$BASEINSTALLDIR_OPT/bin/geselectassetroot" --assetroot "$ASSET_ROOT"
 
         "$BASEINSTALLDIR_OPT/bin/geconfigureassetroot" --addvolume \
-            "opt:$BASEINSTALLDIR_OPT/share/tutorials" --noprompt --nochown
-        if [ $? -eq 255 ]; then
+            "opt:$BASEINSTALLDIR_OPT/share/tutorials" --noprompt --nochown || RET_VAL=$?
+        if [ "$RET_VAL" -eq "255" ]; then
             cat <<END
 The geconfigureassetroot utility has failed while attempting
 to add the volume 'opt:$BASEINSTALLDIR_OPT/share/tutorials'.
