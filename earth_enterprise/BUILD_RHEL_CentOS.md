@@ -134,7 +134,7 @@ sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel \
   libmng-devel libcap-devel libpng-devel libXmu-devel freeglut-devel \
   zlib-devel libX11-devel bison-devel openjpeg-devel openjpeg2-devel \
   geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel \
-  cmake GitPython rpm-build rpmrebuild rsync shunit2
+  cmake GitPython rpm-build rpmrebuild rsync shunit2 python-unittest2
 ```
 
 If you encounter an error about git dependency conflicts, consider 
