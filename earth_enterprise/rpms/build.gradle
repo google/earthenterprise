@@ -62,11 +62,11 @@ if (new File('build.properties').exists()) {
     }
 }
 
-def openGeeVersionFile = new File("../src/NATIVE-REL-x86_64/gee_long_version.txt")
+def openGeeVersionFile = new File("../src/NATIVE-DBG-x86_64/gee_long_version.txt")
 
 if (!openGeeVersionFile.exists()) {
     GeeCommandLine.expand(
-            ["/usr/bin/scons", "release=1", "NATIVE-REL-x86_64/gee_long_version.txt"],
+            ["/usr/bin/scons", "release=1", "NATIVE-DBG-x86_64/gee_long_version.txt"],
             "Runing `scons` to produce <gee_long_version.txt> failed!",
             null, // Use default environment variables.
             new File("../src") // Working directory.
@@ -113,7 +113,7 @@ def packageInstallLibDir = new File(packageInstallRootDir, 'opt/google/lib')
 
 def postGisInstallDir = new File(
         project.projectDir,
-        '../src/NATIVE-REL-x86_64/third_party/postgis/install'
+        '../src/NATIVE-DBG-x86_64/third_party/postgis/install'
     ).getAbsolutePath()
 
 def postGisInstallDir_opt = new File(postGisInstallDir, 'opt')
