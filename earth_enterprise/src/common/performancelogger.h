@@ -15,7 +15,9 @@
 #ifndef PERFORMANCELOGGER_H
 #define PERFORMANCELOGGER_H
 
+#include <fstream>
 #include <pthread.h>
+#include <sstream>
 #include <string>
 #include <time.h>
 
@@ -70,14 +72,22 @@ class PerformanceLogger {
         const timespec endTime,        // The end time of the operation
         const size_t size = 0);        // The size of the object, if applicable
   private:
+    static const int BUF_SIZE = 64 * 1024;
     static plMutex instance_mutex;
     plMutex write_mutex;
     std::string timeFileName;
+    std::ofstream timeFile;
+    std::string buffer;
 
-    PerformanceLogger() : write_mutex() { generateFileNameAndWriteHeader(); }
-    void do_notify(const std::string & message, const std::string & fileName);
-    void generateFileNameAndWriteHeader();
-    
+    PerformanceLogger() : buffer(BUF_SIZE, '\0') {
+      buffer.clear();
+      initializeFile();
+    }
+    ~PerformanceLogger() { flushBuffer(); }
+    void do_notify(const std::string & message);
+    void flushBuffer();
+    void initializeFile();
+
     // Disable copy (these functions should not be implemented)
     PerformanceLogger(const PerformanceLogger&);
     void operator=(const PerformanceLogger&);
