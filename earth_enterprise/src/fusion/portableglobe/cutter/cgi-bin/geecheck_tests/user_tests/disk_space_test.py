@@ -16,8 +16,14 @@
 
 
 import os
-import unittest
 import xml.etree.ElementTree as ET
+
+# Need to use unittest2 for Python 2.6.
+try:
+  import unittest2 as unittest
+except ImportError:
+  import unittest
+
 
 
 def getDiskInfo():

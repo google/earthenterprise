@@ -21,8 +21,13 @@ import sys
 import StringIO
 import time
 import traceback
-import unittest
 import os
+
+# Need to use unittest2 for Python 2.6.
+try:
+  import unittest2 as unittest
+except ImportError:
+  import unittest
 
 # Capture the error and out streams for use in test reports.
 gee_err_stream = StringIO.StringIO()
