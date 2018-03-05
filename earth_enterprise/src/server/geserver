@@ -48,13 +48,15 @@ GEPGUSER="IA_GEPGUSER"
 prog=geserver
 gehttpd_root=/opt/google/gehttpd/bin
 gebin_root=/opt/google/bin
+pidfile_gehttpd='/opt/google/gehttpd/logs/httpd.pid'
+pidfile_postmaster='/var/opt/google/pgsql/data/postmaster.pid'
 dashes='--------------------------------------------------------------------'
 
 # Variable where result of start/stop are stored for later return by
 # this script
 RETVAL=0
 
-use_su=`su $GEPGUSER -c "echo -n 1" 2>/dev/null || echo -n 0`
+use_su=`su "$GEPGUSER" -c "echo -n 1" 2>/dev/null || echo -n 0`
 
 run_as_user() {
   if [ $use_su -eq 1 ] ; then
@@ -66,7 +68,7 @@ run_as_user() {
 
 start() {
   echo $dashes
-  run_as_user $GEPGUSER "$gebin_root/pg_ctl -D /var/opt/google/pgsql/data -l /var/opt/google/pgsql/logs/pg.log start -w";
+  run_as_user "$GEPGUSER" "$gebin_root/pg_ctl -D /var/opt/google/pgsql/data -l /var/opt/google/pgsql/logs/pg.log start -w";
   echo
   echo $dashes
   $gehttpd_root/gehttpd_init start
@@ -84,31 +86,69 @@ stop() {
   echo
   echo $dashes
   # only stop if already running...
-  if [ -f /var/opt/google/pgsql/data/postmaster.pid ] ; then
-    run_as_user $GEPGUSER "$gebin_root/pg_ctl -D /var/opt/google/pgsql/data -l /var/opt/google/pgsql/logs/pg.log stop";
-    rm -f /var/opt/google/pgsql/data/postmaster.pid
+  if [ -f "$pidfile_postmaster" ] ; then
+    run_as_user "$GEPGUSER" "$gebin_root/pg_ctl -D /var/opt/google/pgsql/data -l /var/opt/google/pgsql/logs/pg.log stop";
+    rm -f "$pidfile_postmaster"
   fi
   echo $dashes
   echo 'Done Stopping Google Earth Enterprise Server'
   echo
 }
 
+status_postmaster() {
+  if [ -s "$pidfile_postmaster" ] ; then
+    pid=`head -1 "$pidfile_postmaster"`
+    # redirect to /dev/null because pg_ctl --silent option doesnt work for status subcommand
+    run_as_user "$GEPGUSER" "$gebin_root/pg_ctl -D /var/opt/google/pgsql/data status" >& /dev/null
+    if [ "$?" -eq 0 ]; then
+      echo "postmaster: Running (PID $pid)."
+      return 0
+    fi
+  fi
+  echo "postmaster: Not running"
+  return 1
+}
+
+status_gehttpd() {
+  daemon_name='gehttpd'
+  daemon_path="$gehttpd_root/gehttpd"
+  if [ -s "$pidfile_gehttpd" ] ; then
+    pid=`cat "$pidfile_gehttpd"`
+    # not using 'gehttpd_init status' because it requires lynx install
+    if [ -d "/proc/$pid" ] && [ "$(readlink "/proc/$pid/exe")" = "$daemon_path" ]; then
+      echo "$daemon_name: Running (PID $pid)."
+      return 0
+    fi
+  fi
+  echo "$daemon_name: Not running"
+  return 1
+}
+
+status() {
+  RETVAL=0
+  status_postmaster || RETVAL=1
+  status_gehttpd || RETVAL=1
+}
+
 # See how we were called.
 case "$1" in
   start)
-  start
-  ;;
+    start
+    ;;
   stop)
-  stop
-  ;;
+    stop
+    ;;
   restart)
-  stop
-  sleep 1
-  start
-  ;;
+    stop
+    sleep 1
+    start
+    ;;
+  status)
+    status
+    ;;
   *)
-  echo $"Usage: $prog {start|stop|restart}"
-  exit 1
+    echo $"Usage: $prog {start|stop|restart|status}"
+    exit 1
 esac
 
 exit $RETVAL

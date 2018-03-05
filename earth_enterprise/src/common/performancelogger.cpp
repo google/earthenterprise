@@ -60,8 +60,7 @@ plMutex::~plMutex(void) {
   (void) err; // Suppress unused variable 'err' warning.
 }
 
-// This function is only called while a lock is held
-void PerformanceLogger::generateFileNameAndWriteHeader() {
+void PerformanceLogger::initializeFile() {
   // Create a unique file name
   time_t t = time(0);
   tm date = *localtime(&t);
@@ -71,9 +70,11 @@ void PerformanceLogger::generateFileNameAndWriteHeader() {
     timeFileName = buf;
   }
 
+  // Open the file
+  timeFile.open(timeFileName.c_str(), ios::app);
+  
   // Write the header for the CSV file
-  ofstream output_stream(timeFileName.c_str(), ios::app);
-  output_stream << "pid,tid,operation,object,startTime_sec,endTime_sec,duration_sec,size" << endl;
+  timeFile << "pid,tid,operation,object,startTime_sec,endTime_sec,duration_sec,size" << endl;
 }
 
 // Log a profiling message
@@ -96,9 +97,10 @@ void PerformanceLogger::logTiming(
           << duration  << ','
           << size;
 
-  assert(timeFileName.size() > 0);
-  do_notify(message.str(), timeFileName);
+  do_notify(message.str());
 }
+
+
 
 void PerformanceLogger::logConfig(
     const string & operation,
@@ -118,11 +120,11 @@ void PerformanceLogger::logConfig(
           << value;
 
   assert(timeFileName.size() > 0);
-  do_notify(message.str(), timeFileName);
+  do_notify(message.str());
 }
 
 // Thread safety wrapper for log output
-void PerformanceLogger::do_notify(const string & message, const string & fileName) {
+void PerformanceLogger::do_notify(const string & message) {
 
   // Get the thread and process IDs
   pthread_t tid = pthread_self();
@@ -130,11 +132,20 @@ void PerformanceLogger::do_notify(const string & message, const string & fileNam
 
   {  // atomic inner block
     plLockGuard lock( write_mutex );
-    { // Make sure we flush and close the output file before unlocking the mutex:
-      ofstream output_stream(fileName.c_str(), ios::app);
-      output_stream << pid << ',' << tid << ',' << message << endl;
+    {
+      if (buffer.size() + message.size() > BUF_SIZE) {
+        flushBuffer();
+      }
+      stringstream newLine;
+      newLine << pid << ',' << tid << ',' << message << endl;
+      buffer.append(newLine.str());
     }
   }
+}
+
+void PerformanceLogger::flushBuffer() {
+  timeFile << buffer;
+  buffer.clear();
 }
 
 } // namespace performance_logger
