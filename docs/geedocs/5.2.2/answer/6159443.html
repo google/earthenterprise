@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Release notes: GEE 5.1.1</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
+</head>
+<body>
+<!-- 6159443.html -->
+<div class="container">
+<div class="sidebar1">
+  <p class="sidebar-toc"><a href="../answer/7160001.html">Open GEE 5.2.1</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160000.html">Open GEE 5.2.0</a></p>
+  <p class="sidebar-toc"><a href="../answer/7159245.html">GEE 5.1.3</a></p>
+  <p class="sidebar-toc"><a href="../answer/6259403.html">GEE 5.1.2</a></p>
+  <p class="sidebar-toc"><a href="../answer/6159443.html" class="current-file">GEE 5.1.1</a></p>
+  <p class="sidebar-toc"><a href="../answer/6078762.html">GEE 5.1.0</a></p>
+  <p class="sidebar-toc"><a href="../answer/6053170.html">GEE 5.0.2</a></p>
+  <p class="sidebar-toc"><a href="../answer/4556704.html">GEE 5.0.1</a></p>
+  <p class="sidebar-toc"><a href="../answer/3424202.html">GEE 5.0</a></p>
+</div>
+<div class="content"> <a name="top_of_file"></a>
+  <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+  <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Release notes</h1>
+  <h2>Release notes: GEE 5.1.1</h2>
+  <p>GEE 5.1.1 is an incremental release of <a href="../answer/6078762.html">GEE 5.1</a>.  It contains several bug fixes in Fusion and GEE Server, and updates to third-party libraries.</p>
+  <h5>
+    <p id="supported_5.1.1">Supported Platforms</p>
+  </h5>
+  <p>The Google Earth Enterprise 5.1.1 release is supported on 64-bit versions of the following operating systems:</p>
+  <ul>
+    <li>Red Hat Enterprise Linux versions 6.0 to 6.5, including the most recent security patches</li>
+    <li>CentOS 6.5</li>
+    <li>Ubuntu 10.04 and 12.04 LTS</li>
+  </ul>
+  <p>Google Earth Enterprise 5.1.1 is compatible with Google Earth Enterprise Client (EC) version 7.1.4 and Google Earth Plug-in versions 7.0.1 - 7.1.1.1888 for Windows, Mac, and Linux.</p>
+  <h5>
+    <p id="library_updates_5.1.1">Library updates</p>
+  </h5>
+  <table class="nice-table">
+    <tbody>
+      <tr>
+        <th width="50%">Library</th>
+        <th width="50%">Updated version</th>
+      </tr>
+      <tr>
+        <td>GDAL</td>
+        <td>1.11.1 (with libcurl support)</td>
+      </tr>
+      <tr>
+        <td>libjpeg</td>
+        <td>v8d1</td>
+      </tr>
+      <tr>
+        <td>OpenSSL</td>
+        <td>0.9.8ze</td>
+      </tr>
+      <tr>
+        <td>libcurl</td>
+        <td>7.39.0</td>
+      </tr>
+      <tr>
+        <td>MesaLib</td>
+        <td>7.11</td>
+      </tr>
+      <tr>
+        <td>NumPy</td>
+        <td>1.9.1</td>
+      </tr>
+      <tr>
+        <td>OpenLDAP</td>
+        <td>2.4.40</td>
+      </tr>
+      <tr>
+        <td>mod_wsgi</td>
+        <td>3.5</td>
+      </tr>
+      <tr>
+        <td>libgeotiff</td>
+        <td>1.4.0</td>
+      </tr>
+      <tr>
+        <td>PostgreSQL</td>
+        <td>8.4.22</td>
+      </tr>
+      <tr>
+        <td>PostGIS</td>
+        <td>1.5.8</td>
+      </tr>
+      <tr>
+        <td>GEOS</td>
+        <td>3.4.2</td>
+      </tr>
+      <tr>
+        <td>Libxml2</td>
+        <td>2.9.1</td>
+      </tr>
+      <tr>
+        <td>Google Maps JS API V3</td>
+        <td>3.19</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5>
+    <p id="resolved_issues_5.1.1">Resolved Issues</p>
+  </h5>
+  <table class="nice-table">
+    <tbody>
+      <tr>
+        <th>Number</th>
+        <th class="narrow">Description</th>
+        <th>Resolution</th>
+      </tr>
+      <tr>
+        <td>12239387, 18719211</td>
+        <td>Under certain conditions, historical imagery is not displayed correctly.</td>
+        <td>Fixed. To display historical imagery correctly, take the following steps:
+          <ul>
+            <li>Upgrade Google Earth EC to v7.1.4. Older versions of Google Earth EC do not show the most recent imagery when the time slider is activated. </li>
+            <li>Rebuild the 3D database after upgrading to GEE 5.1.1. The rebuild step is required before a database can be pushed to GEE Server again, and is usually rapid.</li>
+            <li>Publish with GEE Server and view the 3D database in Google Earth EC with the <a href="../answer/4412458.html">historical imagery</a> option turned on.</li>
+          </ul></td>
+      </tr>
+      <tr>
+        <td>15212134</td>
+        <td>Cuts of 2D maps fail if no polygon is specified. </td>
+        <td>Fixed in GEE Server. See <a href="../answer/3230777.html">Create portable globes and maps</a>. </td>
+      </tr>
+      <tr>
+        <td>15290004</td>
+        <td>When attempting to cancel a cut using the <strong>Cutter</strong> tool, the Cancel button does not properly kill any running task on GEE Server.</td>
+        <td>Fixed. The <strong>Cutter</strong> cancel process now kills any running task on GEE Server.<br/></td>
+      </tr>
+      <tr>
+        <td>16981234</td>
+        <td>Portable Server fails to run on RHEL 6.4, returning <code>Error Loading python lib libpython2.7.so.1.0</code>.</td>
+        <td>Fixed. See <a href="../answer/4594620.html">Portable release notes</a>. </td>
+      </tr>
+      <tr>
+        <td>18476901</td>
+        <td>When attempting to publish databases using disconnected publishing, <code>gedisconnectedsend</code> reports incorrect suffix for bytes.</td>
+        <td>Fixed. See <a href="../answer/6051700.html">Publishing databases using disconnected publishing</a>. </td>
+      </tr>
+      <tr>
+        <td>18506290</td>
+        <td>Serving 2D Database with <em>Mercator on the Fly</em> imagery fails when imagery has no worldwide coverage. </td>
+        <td>Fixed. See <a href="../answer/6081069.html">Add flat imagery to Mercator map databases</a>. </td>
+      </tr>
+      <tr>
+        <td>18509863</td>
+        <td>HTTPS protocol not respected in URL-based search tab.</td>
+        <td>Fixed. See <a href="../answer/3497832.html">Create search tabs</a>. </td>
+      </tr>
+      <tr>
+        <td>18572866</td>
+        <td>GEE 4.x virtual servers (<code>default_ge</code>, <code>default_map</code>) are not deleted when upgrading to GEE 5.1.x.</td>
+        <td>Fixed. </td>
+      </tr>
+      <tr>
+        <td>18668563</td>
+        <td>During the installation process, the installer returns <code>java.lang.NullPointerException</code> error.</td>
+        <td>Fixed. <br/></td>
+      </tr>
+      <tr>
+        <td>18791567</td>
+        <td>Building a 2D database without an imagery project crashes <code>gesystemmanager</code>.</td>
+        <td>Fixed. See <a href="../answer/4412455.html">Creating a map database</a>. </td>
+      </tr>
+      <tr>
+        <td>19003972</td>
+        <td>Improve <em>Mercator on the Fly</em> reprojection performance. </td>
+        <td>Fixed. See <a href="../answer/6081069.html">Add flat imagery to Mercator map databases</a>. </td>
+      </tr>
+      <tr>
+        <td>19020117</td>
+        <td><a href="../answer/4441137.html">WMS</a> GetCapabilities returns inaccurate bounding box information; transposed coordinates on GetMap 1.3.0 requests. </td>
+        <td>Fixed. <br/></td>
+      </tr>
+      <tr>
+        <td>18980809</td>
+        <td>When publishing, the Delete button may not be available for a search service that has been added to a database. </td>
+        <td>Fixed. <br/></td>
+      </tr>
+      <tr>
+        <td>18724718</td>
+        <td>Additional support in the UI for new configuration options for search service deployment:
+          <ul>
+            <li>Specify search services deployment lists in the publish dialog</li>
+            <li>Override text when creating Search tabs and Supplemental search using the Supplemental UI button</li>
+          </ul></td>
+        <td>Fixed. <br/></td>
+      </tr>
+      <tr>
+        <td>18935285</td>
+        <td>When new resources have been added, Fusion GUI produces unnecessary <code>gepackgen</code> tasks during project builds. This occurs when: a new resource is added using the Fusion GUI, which has previously been created with console tool; the new resource is created without specifying an acquisition date and also has the same base resolution as other resources in the existing raster project. </td>
+        <td>Fixed. <br/></td>
+      </tr>
+      <tr>
+        <td>19286893</td>
+        <td>Uncaught TypeError: Cannot read property <code>value</code> of <code>null</code> when publishing 2D databases. </td>
+        <td>Fixed. <br/></td>
+      </tr>
+      <tr>
+        <td>19276438</td>
+        <td>During push, Fusion GUI processes at 100%. </td>
+        <td>Fixed. <br/></td>
+      </tr>
+      <tr>
+        <td>18724718</td>
+        <td>Default search tab cannot be hidden, and custom ones are not displayed by default. </td>
+        <td>Fixed. Modified management of search services deployment for 3D Databases: you can configure a search service to deploy to an EC search tab (services with one search field) or to a Supplemental Search. <br/></td>
+      </tr>
+      <tr>
+        <td>11333524</td>
+        <td>When pushing a database: improve provision of database push status. </td>
+        <td>Fixed. <br/>
+          <ul>
+            <li>Improved logging and fixed progress bar updating when pushing</li>
+            <li>Cleanup in <code>PublisherClient</code> and profiles parser</li>
+          </ul></td>
+      </tr>
+      <tr>
+        <td>19412572</td>
+        <td>Publishing an updated map at the same target point causes <code>gehttpd</code> to crash when serving Databases that use Mercator on the Fly, caused by a request to a non-existent version of imagery layer. Returns a 404 error code.</td>
+        <td>Fixed. <br/></td>
+      </tr>
+      <tr>
+        <td>19280022</td>
+        <td>When using URL-based search tabs, erroneous search requests may occur. </td>
+        <td>Fixed. <br/></td>
+      </tr>
+      <tr>
+        <td>19338090</td>
+        <td>Support added for Google Geocoder responses for 2D searches. </td>
+        <td>Fixed. <br/></td>
+      </tr>
+      <tr>
+        <td>5447870</td>
+        <td>Segmentation fault when using the <code>geraster2kml</code> tool. </td>
+        <td>Fixed. <br/></td>
+      </tr>
+      <tr>
+        <td>19709212</td>
+        <td>Icon file cannot be read. </td>
+        <td>Fixed. <br/></td>
+      </tr>
+      <tr>
+        <td>20185775</td>
+        <td>Missing bundle.hdr file in published database, resulting in blurry imagery in some areas. </td>
+        <td>Fixed. <br/></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="footer">
+    <p class="BackToTop"><a href="#top_of_file">Back to top</a>
+    
+    <hr />
+    </p>
+    <p class="copyright">&copy;2015 Google</p>
+  </div>
+</div>
+</body>
+</html>
