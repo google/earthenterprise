@@ -205,7 +205,8 @@ END
 
 final_fusion_service_configuration()
 {
-    chcon -t texrel_shlib_t "$BASEINSTALLDIR_OPT"/lib/*so*
+    chcon -t texrel_shlib_t "$BASEINSTALLDIR_OPT"/lib/*so* ||
+      echo "Warning: chcon labeling failed. SELinux is probably not enabled"
 
     service gefusion start
 }

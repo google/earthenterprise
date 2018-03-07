@@ -27,6 +27,17 @@ fi
 #-----------------------------------------------------------------
 main_preinstall()
 {
+    # Check to see if opengee executables work and error out if not
+    RET_VAL=0
+    ERROUT=`$BASEINSTALLDIR_OPT/bin/geserveradmin 2>&1` || RET_VAL=$?
+
+    if [ "$RET_VAL" -eq "127" ]; then
+      echo "$ERROUT"
+      echo "It appears that not all library dependencies have been installed."
+      echo "This is likely to be a missing MrSID library."
+      return 127
+    fi
+
     if [ -f /etc/init.d/gefusion ]; then
         service gefusion stop
     fi
