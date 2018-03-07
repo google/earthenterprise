@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Geecheck: test your GEE Server status</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
+</head>
+<body>
+<!-- 6121524.html -->
+<div class="container">
+<div class="sidebar1">
+  <p class="sidebar-toc"><a href="../answer/6121524.html" class="current-file">Geecheck: test your GEE Server status</a></p>
+  <p class="sidebar-toc"><a href="../answer/2760674.html">Fusion diagnostics</a></p>
+  <p class="sidebar-toc"><a href="../answer/172780.html">Fusion issues</a></p>
+  <p class="sidebar-toc"><a href="../answer/179631.html">Unsupported 3D geometry files</a></p>
+  <p class="sidebar-toc"><a href="../answer/173055.html">Maps display grey tiles</a></p>
+  <p class="sidebar-toc"><a href="../answer/173202.html">Imagery or terrain gaps</a></p>
+  <p class="sidebar-toc"><a href="../answer/6363126.html">Troubleshoot connection to GEE Server</a></p>
+  <p class="sidebar-toc"><a href="../answer/173081.html">Post-installation error message: Conflicts in plugins</a></p>
+  <p class="sidebar-toc"><a href="../answer/173064.html">Post-installation error message: Permission denied</a></p>
+  <p class="sidebar-toc"><a href="../answer/173076.html">Post-installation error message: Socket connect</a></p>
+  <p class="sidebar-toc"><a href="../answer/173075.html">Post-installation error message: Segmentation fault</a></p>
+  <p class="sidebar-toc"><a href="../answer/173079.html">Post-installation error message: ValidateProtocolVersion</a></p>
+  <p class="sidebar-toc"><a href="../answer/173083.html">Resource build error message: coordinatetransformation</a></p>
+  <p class="sidebar-toc"><a href="../answer/173060.html">Resource build error message: Headers do not match</a></p>
+  <p class="sidebar-toc"><a href="../answer/173082.html">Resource build error message: No SRS</a></p>
+  <p class="sidebar-toc"><a href="../answer/173058.html">Resource build error message: SourceFile</a></p>
+  <p class="sidebar-toc"><a href="../answer/2981872.html">Resource build error message: Unable to find a suitable resource provider</a></p>
+  <p class="sidebar-toc"><a href="../answer/2981878.html">Resource build error message: Unable to make reservation</a></p>
+  <p class="sidebar-toc"><a href="../answer/3054957.html">Resource build error message: libjpeg.so.62</a></p>
+  <p class="sidebar-toc"><a href="../answer/173063.html">Project build error message: Empty layer</a></p>
+  <p class="sidebar-toc"><a href="../answer/173084.html">Project build error message: Pyramid data</a></p>
+  <p class="sidebar-toc"><a href="../answer/173071.html">Project build error message: Signal 6</a></p>
+  <p class="sidebar-toc"><a href="../answer/173072.html">Project build error message: Signal 11</a></p>
+  <p class="sidebar-toc"><a href="../answer/173078.html">Project build error message: Write to index</a></p>
+  <p class="sidebar-toc"><a href="../answer/173085.html">Database build error message: HandleAddDbRequest</a></p>
+  <p class="sidebar-toc"><a href="../answer/172797.html">Publish error message: Authentication required</a></p>
+  <p class="sidebar-toc"><a href="../answer/173061.html">Publish error message: Client/server mismatch</a></p>
+  <p class="sidebar-toc"><a href="../answer/173062.html">Publish error message: Client too old</a></p>
+  <p class="sidebar-toc"><a href="../answer/173074.html">Publish error message: Server push failed</a></p>
+  <p class="sidebar-toc"><a href="../answer/173077.html">Publish error message: Unable to contact server</a></p>
+  <p class="sidebar-toc"><a href="../answer/173080.html">Publish error message: Upload failed</a></p>
+  <p class="sidebar-toc"><a href="../answer/3029085.html">Publish error message: Error adding files to publisher database</a></p>
+</div>
+<div class="content"> <a name="top_of_file"></a>
+  <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+  <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Troubleshooting and error messages</h1>
+  <h2>Geecheck: test your GEE Server status</h2>
+  <p><strong>Geecheck</strong> is a tool that checks the health and status of a GEE Server installation. With GEE 5.1.x, you can use geecheck to run tests and then view the results in a browser-based dashboard. Results are organized into <em>suites</em> of results so that you can quickly review the status of Fusion, GEE Server, as well as see the output of other tests that you write.</p>
+  <div class="tip"> You can also run geecheck from the command line. In GEE 4.4 and earlier versions, geecheck runs from the command line only. </div>
+  <ul>
+    <li><a href="#geecheck_works">How geecheck works</a></li>
+    <li><a href="#access_tests">Access test results from GEE Server Admin console</a></li>
+    <li><a href="#run_again">Run the tests again</a></li>
+    <li><a href="#create_tests">Create your own tests</a></li>
+    <li><a href="#command_line">Run geecheck on the command line</a></li>
+    <li><a href="#run_browser">Run geecheck in a browser</a></li>
+    <li><a href="#move_tests">About moving tests</a></li>
+  </ul>
+  <h2><a name="geecheck_works"></a>How geecheck works</h2>
+  <p>Geecheck is a Python application, <code>geecheck.py</code>, and is installed in the following location:</p>
+  <p><code>/opt/google/gehttpd/cgi-bin<br/>
+        geecheck.py<br/>
+        geecheck_tests/<br/>
+            user_tests/<br/>
+            fusion_tests/<br/>
+            server_tests/<br/>
+        run_geecheck.py<br/>
+        set_geecheck_config.py<br/>
+    </code></p>
+  <ul>
+    <li><code>geecheck.py</code> runs and displays the results from any tests located in the subfolders:
+      <p><code>geecheck_tests/<br/>
+            user_tests/<br/>
+            fusion_tests/<br/>
+            server_tests/<br/>
+        </code></p>
+    </li>
+    <li>Tests must follow the naming convention <code>*_test.py</code>, for example, <code>dns_test.py</code>.  Test results are organized by the subfolder or suite they belong to, that is, all tests in <code>user_tests</code> are categorized under that results heading. </li>
+  </ul>
+  <h2><a name="access_tests"></a>Access test results from GEE Server Admin console</h2>
+  <p>
+  
+  <h3>To access geecheck from GEE Server Admin console:</h3>
+  <ol class="spaced-list">
+    <li>Go to <em>myserver.mydomainname</em>.com/admin, replacing <em>myserver</em> and <em>mydomainname</em> with your server and domain.</li>
+    <li>Sign in with the default credentials:
+      <ul>
+        <li>Username: <em>geapacheuser</em></li>
+        <li>Password: <em>geeadmin</em></li>
+      </ul>
+      <div class="tip">
+        <p>To reset the username and password:</p>
+        <p><code>sudo /opt/google/gehttpd/bin/htpasswd -c</code></p>
+        <p><code>/opt/google/gehttpd/conf.d/.htpasswd geapacheuser</code></p>
+      </div>
+    </li>
+<li>Click the <strong>Settings</strong> icon <img align="absmiddle" alt="gear icon" src="../art/server/admin/accounts_icon_gear_padded.gif"/> and select <strong>Diagnostics</strong> from the menu to display the Geecheck page. </li>
+<li>View the <strong>Test Summary</strong> and <strong>Test Details</strong> sections to verify the results of the tests that geecheck ran. </li></ol>
+<h2><a name="run_again"><a></a>Run the tests again</a></h2>
+<p>If you find you need to perform some troubleshooting based on the results of any of your tests and you need to run the tests again to confirm whether you’ve fixed the issue, simply restart GEE Server, then open the Geecheck page again.</p>
+<ul>
+  <li>On the command line:
+    <p><code>$ sudo /etc/init.d/geserver restart</code></p>
+  </li>
+  <li><a href="#access_tests">Access test results from GEE Server Admin console</a>. </li>
+</ul>
+<h2><a name="create_tests"></a>Create your own tests</h2>
+<p>GEE 5.1 includes some basic tests that you can run but geecheck is a framework that lets you easily plug in your own tests and view the results in a browser or on the command line. Tests should be Python unit tests and must be copied to one of the three test subfolders to be run from geecheck:</p>
+<p><code>geecheck_tests/<br/>
+      user_tests/<br/>
+      fusion_tests/<br/>
+      server_tests/<br/>
+  </code></p>
+<p>To get some idea of how you can write your own test, you can study the structure of the sample test, <code>sample_test.py</code>, provided in the <code>user_tests</code> subfolder. Use the code as a guide or simply copy and edit it if you are unfamiliar with Python unit tests.</p>
+<h2><a name="command_line"></a>Run geecheck on the command line</h2>
+<p>You can run <code>geecheck.py</code> from the command line with options to exclude tests and specify the output. The default settings includes all tests and output text.</p>
+<h3>Exclude tests:</h3>
+<ul>
+  <li><code>--no_user_tests</code></li>
+  <li><code>--no_fusion_tests</code></li>
+  <li><code>--no_server_tests</code></li>
+</ul>
+<h3>Specify format:</h3>
+<ul>
+  <li><code>json</code></li>
+  <li><code>text</code></li>
+</ul>
+<p>For example, to output results in JSON format, excluding <code>/user_tests</code>:</p>
+<p><code>$ /opt/google/gehttpd/cgi-bin  python geecheck.py --no_user_tests json</code></p>
+<h2><a name="run_browser"></a>Run geecheck in a browser</h2>
+<p>To provide browser-based output, geecheck uses a wrapper: <code>/opt/google/gehttpd/cgi-bin/run_geecheck.py</code>, which runs the <code>geecheck.py</code> script and makes the output available to browsers here: <code>http://MY_SERVER/cgi-bin/run_geecheck.py</code>.
+<p>The JSON response is used with the following page to make those results readable: <code>http://MY_SERVER/admin/geecheck.html</code>, which is the page that displays from the <strong>Diagnostics</strong> selection in the <strong>Settings</strong> menu icon <img align="absmiddle" alt="gear icon" src="../art/server/admin/accounts_icon_gear_padded.gif"/> of the GEE Server Admin console.</p>
+<h2><a name="move_tests"></a>About moving tests</h2>
+<p>You may want to run geecheck from a different location, for example, if you’ve already created a large number of tests in a different directory. Geecheck can be run successfully from a different location with a few simple rules:</p>
+<ol class="spaced=list">
+  <li>You can move <code>geecheck_tests</code> but you need to maintain the subfolder structure for geecheck to run:
+    <p><code>geecheck_tests/<br/>
+          user_tests/<br/>
+          fusion_tests/<br/>
+          server_tests/<br/>
+      </code></p>
+  </li>
+  <li><code>geecheck.py</code> and <code>set_geecheck_config.py</code> must be moved with <code>geecheck_tests/</code>:
+    <p><code>geecheck.py</code></p>
+    <p><code>set_geecheck_config.py</code></p>
+    <p><code>geecheck_tests/</code></p>
+  </li>
+</ol>
+</p>
+<li><code>run_geecheck.py</code> looks for test scripts to run. It should not be moved.
+  Once test scripts have been moved, <code>set_geecheck_config.py</code> should be run:
+  <p><code>$ ./set_geecheck_config.py</code></p>
+  <p>This action updates the configuration found at <code>/opt/google/geecheck/conf</code>, which tells <code>run_geecheck.py</code> where to look for tests.</p>
+</li>
+</div>
+</body>
+</html>
