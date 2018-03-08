@@ -100,6 +100,29 @@ void PerformanceLogger::logTiming(
   do_notify(message.str());
 }
 
+
+
+void PerformanceLogger::logConfig(
+    const string & operation,
+    const string & object,
+    const unsigned int value) {
+
+  const timespec now = getime::getMonotonicTime();
+  stringstream message;
+
+  message.setf(ios_base::fixed, ios_base::floatfield);
+  message << setprecision(9)
+          << operation << ','
+          << object << ','
+          << getime::getMonotonicTime() << ','
+          << getime::getMonotonicTime() << ','
+          << 0 << ','
+          << value;
+
+  assert(timeFileName.size() > 0);
+  do_notify(message.str());
+}
+
 // Thread safety wrapper for log output
 void PerformanceLogger::do_notify(const string & message) {
 
