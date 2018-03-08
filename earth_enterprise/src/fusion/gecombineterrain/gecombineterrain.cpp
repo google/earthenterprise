@@ -65,6 +65,8 @@ const uint32 kDefaultSortBufferMegabytes = 512;
 // Assume 4GB is the min recommended.
 const uint64 kDefaultMinMemoryAssumed = 4000000000U;
 
+const static std::string taskName = "gecombinterrain";
+
 void usage(const std::string &progn, const char *msg = 0, ...) {
   if (msg) {
     va_list ap;
@@ -213,6 +215,7 @@ int main(int argc, char **argv) {
     int index_version = 0;
     int sortbuf = kDefaultSortBufferMegabytes;
     uint32 numcpus = kDefaultNumCPUs;
+    PERF_CONF_LOGGING( "proc_exec_config_default_numcpus", taskName, numcpus );
     uint32 read_cache_max_blocks = kDefaultReadCacheBlocks;
     uint32 read_cache_block_size = kDefaultReadCacheBlockKilobyteSize;
 
@@ -224,6 +227,7 @@ int main(int argc, char **argv) {
     options.opt("sortbuf", sortbuf);
     options.opt("numcpus", numcpus,
                 &khGetopt::RangeValidator<uint32, 1, kMaxNumJobsLimit_2>);
+    PERF_CONF_LOGGING( "proc_exec_config_cli_numcpus", taskName, numcpus );
     options.opt("read_cache_max_blocks", read_cache_max_blocks,
                 &khGetopt::RangeValidator<uint32, 0, 1024>);
     options.opt("read_cache_block_size", read_cache_block_size,
@@ -239,8 +243,18 @@ int main(int argc, char **argv) {
       usage(progname, "No input indexes specified");
     }
 
+    notify(NFY_WARN, "gecombineterrain numcpus: %llu ",
+               static_cast<long long unsigned int>(numcpus));
+    notify(NFY_WARN, "gecombineterrain CommandlineNumCPUsDefault(): %llu ",
+               static_cast<long long unsigned int>(CommandlineNumCPUsDefault()));
+    
     numcpus = std::min(numcpus, CommandlineNumCPUsDefault());
+    
+    PERF_CONF_LOGGING( "proc_exec_vcpu_count", taskName, numcpus );
 
+    notify(NFY_WARN, "gecombineterrain actually using min numcpu: %llu ",
+               static_cast<long long unsigned int>(numcpus));
+    
     // Validate commandline options
     if (!outdir.size()) {
       usage(progname, "No output specified");
@@ -264,7 +278,7 @@ int main(int argc, char **argv) {
     // at a single time, to keep from overflowing memory.
     // Allow 50 files for other operations outside the filepool.
     int max_open_fds = GetMaxFds(-50);
-
+    PERF_CONF_LOGGING( "proc_exec_config_max_open_fds", taskName, max_open_fds );
     // Read Cache is enabled only if read_cache_max_blocks is > 2.
     if (read_cache_max_blocks < 2) {
       notify(NFY_WARN, "Read caching is disabled. This will cause %s"
@@ -274,8 +288,10 @@ int main(int argc, char **argv) {
     } else {
       // Get the physical memory size to help choose the read_cache_max_blocks.
       uint64 physical_memory_size = GetPhysicalMemorySize();
+      PERF_CONF_LOGGING( "proc_exec_config_memsize", taskName, physical_memory_size );
       if (physical_memory_size == 0) {
         physical_memory_size = kDefaultMinMemoryAssumed;
+        PERF_CONF_LOGGING( "proc_exec_config_memsize", taskName, physical_memory_size );
         notify(NFY_WARN, "Physical Memory available not found. "
                "Assuming min recommended system size: %llu bytes",
                static_cast<long long unsigned int>(physical_memory_size));

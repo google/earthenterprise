@@ -23,6 +23,7 @@
 #include <khgdal/.idl/khVirtualRaster.h>
 #include <iomanip>
 #include <autoingest/geAssetRoot.h>
+#include <common/performancelogger.h>
 
 
 // ****************************************************************************
@@ -441,6 +442,8 @@ TaskRequirements::ApplyUserSuppliedRules(const TaskDef &taskDef,
     // apply the CPU constraints
     cpu.minNumCPU = taskrule.cpuConstraint.minNumCPU;
     cpu.maxNumCPU = taskrule.cpuConstraint.maxNumCPU;
+    PERF_CONF_LOGGING( "task_config_mincpu", taskrule.taskname, cpu.minNumCPU  );
+    PERF_CONF_LOGGING( "task_config_maxcpu", taskrule.taskname, cpu.maxNumCPU  );
   }
 }
 
@@ -478,6 +481,7 @@ TaskRequirements::LoadFromFiles(void)
         notify(NFY_FATAL, "Error loading %s: taskname != %s",
                path.c_str(), rule.c_str());
       }
+      PERF_CONF_LOGGING( "task_config_loadfromfile", path, 0 );
       taskRules.insert(std::make_pair(rule, taskrule));
     } else {
       notify(NFY_FATAL, "Unable to load %s", path.c_str());
