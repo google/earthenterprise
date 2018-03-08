@@ -161,8 +161,12 @@ Removing a database does not <em>delete</em> it. Remove reverses the <em>push</e
 <li>Publish the database to GEE Server using <code>geserveradmin --publishdb db_name --targetpath target_path</code>. For example:
 <p><code>geserveradmin --publishdb /gevol/assets/Databases/SFMapDatabase.kmmdatabase/mapdb.kda/ver001/mapdb/ --targetpath http://myserver.org</code></p>
 </li>
+<li>Publish the database to GEE Server, specifying it as the default globe for GEEC, using <code>geserveradmin --publishdb db_name --targetpath target_path --setecdefault</code>. For example:
+<p><code>geserveradmin --publishdb /gevol/assets/Databases/SFMapDatabase.kmmdatabase/mapdb.kda/ver001/mapdb/ --targetpath http://myserver.org --setecdefault</code></p>
+</li>
 <p>For more information about the <code>geserveradmin</code> command options, see the <a href="../answer/3481558.html">Command Reference</a>.
 
 
-</p></ol><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</p></ol><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p>
+<p class="copyright">&copy;2018 Google, Open GEE Contributors</p></div>
 </div></body> </html>

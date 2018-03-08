@@ -96,7 +96,7 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
     "   [--setecdefault]         Publish this database as the default one for\n"
     "                            the Earth Client to connect to if no database\n"
     "                            or virtual host is specified upon initial\n"
-    "                            connection." 
+    "                            connection.\n" 
     " --unpublish <target_path>  Unpublish the DB served from the specified\n"
     "                            target path.\n"
     " --republishdb <db_name>    Publish a registered DB on the specified\n"
