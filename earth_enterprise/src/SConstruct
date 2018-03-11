@@ -428,6 +428,11 @@ else:
 if log_performance != 0 :
     extragccflags += [ '-DLOG_PERFORMANCE' ]
 
+# set the version of C++ to use
+cppStandard = []
+# cppStandard += ['-std=c++11']
+cppStandard += ['-std=gnu++11']
+
 env = khEnvironment(
     ENV={'PATH': path_string},
     release=release,
@@ -443,7 +448,7 @@ env = khEnvironment(
     installdirs=installdirs,
     skia_rel_dir=skia_rel_dir,
     LINKFLAGS=extragccflags + linkflags,
-    CXXFLAGS=optflags + extragccflags + warnflags,
+    CXXFLAGS=optflags + extragccflags + warnflags + cppStandard,
     CCFLAGS=optflags + extragccflags + warnflags,
     CPPFLAGS=cppflags,
     CPPPATH=[
