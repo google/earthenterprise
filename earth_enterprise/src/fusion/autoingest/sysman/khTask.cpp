@@ -21,6 +21,7 @@
 #include "AssetVersionD.h"
 #include <autoingest/sysman/.idl/JobStorage.h>
 #include <autoingest/geAssetRoot.h>
+#include "common/performancelogger.h"
 
 
 // ****************************************************************************
