@@ -371,7 +371,20 @@ makeset(const T &e1, const T &e2, const T &e3, const T &e4, const T &e5, const T
   tmp.insert(e6);
   return tmp;
 }
-
+template <class T>
+std::set<T>
+makeset(const T &e1, const T &e2, const T &e3, const T &e4, const T &e5, const T &e6, const T &e7)
+{
+  std::set<T> tmp;
+  tmp.insert(e1);
+  tmp.insert(e2);
+  tmp.insert(e3);
+  tmp.insert(e4);
+  tmp.insert(e5);
+  tmp.insert(e6);
+  tmp.insert(e7);
+  return tmp;
+}
 
 template <class Key, class Value>
 std::map<Key, Value>
