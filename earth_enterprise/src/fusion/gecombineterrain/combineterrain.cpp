@@ -427,7 +427,7 @@ void TerrainCombiner::MarkPacketReadyForWrite(PacketInfo* packet) {
 }
 
 bool TerrainCombiner::PopCompressQueue(PacketInfo** packet_out) {
-  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_Pop", "CompressQueue");
+  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_CompressQueue_Pop", "CompressQueue");
   *packet_out = NULL;
   bool wake_reader = false;
   {
@@ -501,7 +501,7 @@ void TerrainCombiner::PacketCompressThread() {
 }
 
 bool TerrainCombiner::PopWriteQueue(PacketInfo** packet_out) {
-  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_Pop", "WriteQueue");
+  BEGIN_PERF_LOGGING(perfLog, "CombineTerrain_WriteQueue_Pop", "WriteQueue");
   *packet_out = NULL;
   bool wake_reader = false;
   {
