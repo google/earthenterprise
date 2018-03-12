@@ -30,6 +30,9 @@ using namespace getime;
 
 #ifdef LOG_PERFORMANCE
 
+#include <sys/types.h>
+
+
 namespace performance_logger {
 
 // make sure static members get initialized
@@ -74,7 +77,7 @@ void PerformanceLogger::initializeFile() {
   timeFile.open(timeFileName.c_str(), ios::app);
   
   // Write the header for the CSV file
-  timeFile << "pid,tid,operation,object,startTime_sec,endTime_sec,duration_sec,size" << endl;
+  timeFile << "pid,tid,pthread_id,operation,object,startTime_sec,endTime_sec,duration_sec,size" << endl;
 }
 
 // Log a profiling message
@@ -100,12 +103,38 @@ void PerformanceLogger::logTiming(
   do_notify(message.str());
 }
 
+
+
+void PerformanceLogger::logConfig(
+    const string & operation,
+    const string & object,
+    const unsigned int value) {
+
+  const timespec now = getime::getMonotonicTime();
+  stringstream message;
+
+  message.setf(ios_base::fixed, ios_base::floatfield);
+  message << setprecision(9)
+          << operation << ','
+          << object << ','
+          << getime::getMonotonicTime() << ','
+          << getime::getMonotonicTime() << ','
+          << 0 << ','
+          << value;
+
+  assert(timeFileName.size() > 0);
+  do_notify(message.str());
+}
+
 // Thread safety wrapper for log output
 void PerformanceLogger::do_notify(const string & message) {
 
   // Get the thread and process IDs
-  pthread_t tid = pthread_self();
+  pthread_t pthread_tid = pthread_self();
   pid_t pid = getpid();
+  // Call the Linux kernel function directly.
+  // This won't work on other platforms:
+  pid_t tid = syscall(SYS_gettid);
 
   {  // atomic inner block
     plLockGuard lock( write_mutex );
@@ -114,7 +143,8 @@ void PerformanceLogger::do_notify(const string & message) {
         flushBuffer();
       }
       stringstream newLine;
-      newLine << pid << ',' << tid << ',' << message << endl;
+      newLine << pid << ',' << tid << ',' << pthread_tid << ',' << message <<
+        endl;
       buffer.append(newLine.str());
     }
   }

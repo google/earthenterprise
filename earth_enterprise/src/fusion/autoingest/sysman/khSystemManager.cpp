@@ -24,6 +24,8 @@
 #include <geLockfileGuard.h>
 #include <khSpawn.h>
 #include <autoingest/geAssetRoot.h>
+#include "common/performancelogger.h"
+
 
 
 // ****************************************************************************

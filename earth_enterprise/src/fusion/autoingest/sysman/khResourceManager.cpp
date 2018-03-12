@@ -29,6 +29,7 @@
 #include "fusion/autoingest/sysman/AssetVersionD.h"
 #include "fusion/autoingest/geAssetRoot.h"
 #include "common/khFileUtils.h"
+#include "common/performancelogger.h"
 
 // ****************************************************************************
 // ***  global instances
@@ -317,8 +318,13 @@ khResourceManager::MakeCPUReservation(khResourceProviderProxy *provider,
 {
   uint num = std::min(provider->AvailCPUs(), req.maxNumCPU);
   if (num >= req.minNumCPU) {
+
     provider->usedCPUs += num;
+    PERF_CONF_LOGGING( "rmanager_reservation_used_numcpus", provider->host, provider->numCPUs );
     return CPUReservationImpl::Make(provider->Host(), num);
+  }
+  else {
+    PERF_CONF_LOGGING( "rmanager_fail_reservation_insufficient_numcpus", provider->host, num );
   }
   return Reservation();
 }
@@ -330,7 +336,7 @@ khResourceManager::ReleaseCPUReservation(const std::string &host, uint num)
   Providers::iterator found = providers.find(host);
   if (found != providers.end()) {
     found->second->usedCPUs -= num;
-
+    PERF_CONF_LOGGING( "rmanager_release_numcpus_reservation", host, found->second->usedCPUs );
     // wake up the activate thread
     activateCondVar.signal_one();
   }

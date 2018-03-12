@@ -22,6 +22,8 @@
 #include "Reservation.h"
 #include "TaskRequirements.h"
 #include <qstring.h>
+#include "common/performancelogger.h"
+
 
 class khResourceProviderProxy;
 class JobProgressMsg;

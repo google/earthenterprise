@@ -1,0 +1,105 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Relocate your asset root</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 6035839.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/3481464.html">Before you configure Google Earth Enterprise Fusion</a></p>
+<p class="sidebar-toc"><a href="../answer/6008655.html">Running Fusion on a Machine with Multiple CPUs</a></p>
+<p class="sidebar-toc"><a href="../answer/176738.html">Configure task rules</a></p>
+<p class="sidebar-toc"><a href="../answer/6033487.html">Benchmarking outcomes for applying task rules</a></p>
+<p class="sidebar-toc"><a href="../answer/3481501.html">Configure font size in the GUI</a></p>
+<p class="sidebar-toc"><a href="../answer/3481506.html">Configure fonts for the Text Style dialog</a></p>
+<p class="sidebar-toc"><a href="../answer/3481478.html">Customize your Google Maps landing page</a></p>
+<p class="sidebar-toc"><a href="../answer/3481512.html">Monitor system processes</a></p>
+<p class="sidebar-toc"><a href="../answer/3481546.html">Backing up your data</a></p>
+<p class="sidebar-toc"><a href="../answer/2760661.html">Back up Fusion servers</a></p>
+<p class="sidebar-toc"><a href="../answer/176676.html">Manage Fusion disk space</a></p>
+<p class="sidebar-toc"><a href="../answer/6035839.html" class="current-file">Relocate your asset root</a></p>
+<p class="sidebar-toc"><a href="../answer/3481499.html">Configure your data locations</a></p>
+<p class="sidebar-toc"><a href="../answer/6034724.html">Push and publish databases</a></p>
+<p class="sidebar-toc"><a href="../answer/6051700.html">Publish databases using disconnected publishing</a></p>
+<p class="sidebar-toc"><a href="../answer/6086672.html">Troubleshoot push/publishing issues 5.x</a></p>
+<p class="sidebar-toc"><a href="../answer/3481558.html">Command reference</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion administration</h1>
+<h2>Relocate your asset root</h2>
+<p>When you install Google Earth Enterprise, you configure a source volume and asset root for your production data. If you accepted the default values, they are <code>/gevol/src</code> and <code>/gevol/assets</code>, respectively.</p>
+<p>You may need to relocate your asset root to a different volume for a variety of reasons. You may be migrating from a single- to a multiple-workstation configuration or when modifying the local path of a network-mounted source volume (for example, when adding a larger drive for source data).</p>
+<div class="note"><p><strong>Note:</strong> Your asset root and publish root, <code>/published_dbs/</code>, should be located on the same volume, enabling Fusion to use symbolic links. Keeping your asset root and publish root on separate volumes causes Fusion to make copies of your databases, obviously leading to greater use of disk space.
+</p></div>
+<ul>
+<li><a href="#asset_root_proot">Relocate your asset root and publish root</a></li>
+<li><a href="#asset_root_only">Relocate your asset root only</a></li>
+</ul>
+<h2><a name="asset_root_proot"></a>Relocate your asset root and publish root</h2>
+<h3>To relocate your asset root and publish root:</h3>
+<ol class="spaced-list">
+<li>Copy your asset root to the new location.
+</li>
+<li>Select your new asset root:
+<p><code>sudo /opt/google/geselectassetroot --assetroot <em>new_path</em></code></p>
+</li>
+<li>You may need to repair the relocated asset root, fixing various inconsistencies in the asset root (such as permissions, ownership, missing ID files, and so on). When you run this command, the tool auto-detects the problems that need to be repaired and fixes them.
+<p><code>sudo /opt/google/bin/geconfigureassetroot --repair <em>new_path</em></code></p>
+<div class="tip">
+You may relocate/change other volume settings by editing volumes. You can add a volume to the selected asset root or, modify the localpath definition for an existing volume, or add a volume definition:
+<p><code>sudo /opt/google/bin/geconfigureassetroot --editvolume</code></p>
+</div>
+<div class="tip">
+Make sure that your update to your asset root is successful before attempting further changes to volume settings.
+</div>
+<li>Run Fusion and verify that you see all your databases.
+</li>
+<li>Create your new publish root:
+<p><code>sudo /opt/google/bin/geconfigurepublishroot</code></p>
+</li>
+<li>Once you have configured your new publish root, you’ll need to republish all your databases, first by pushing and publishing them. You can use the <strong>Fusion GUI</strong> to push and the <strong>GEE Server Admin console</strong> to publish your databases or you can perform these steps on the command line:
+<p><code>geserveradmin -adddb</code></p>
+<p><code>geserveradmin -pushdb</code></p>
+<p><code>geserveradmin -publishdb</code></p>
+</li>
+<li>Optionally, you can delete your old asset root and your publish root.
+</li>
+</li></ol>
+<h2><a name="asset_root_only"></a>Relocate your asset root only</h2>
+<p>Your asset root and publish root, <code>/published_dbs/</code>, should be located on the same volume, enabling Fusion to use symbolic links. If you maintain your asset root and publish root on separate volumes, Fusion makes copies of your databases, obviously leading to greater use of disk space.</p>
+<h3>To relocate your asset root if your publish root will not be on the same volume:</h3>
+<ol class="spaced-list">
+<li>Unpublish all databases on the <strong>Databases</strong> page of the <strong>GEE Server Admin console</strong> or on the command line:
+<p><code>geserveradmin --unpublish <em>target_path</em></code></p>
+</li>
+<li>Delete all pushed databases:
+<p><code>geserveradmin --deletedb <em>db_name</em></code></p>
+</li>
+<li>Clean up deleted databases using <code>garbagecollect</code>. This is equivalent to emptying the <em>Trash</em> on some operating systems.
+<p><code>geserveradmin --garbagecollect</code></p>
+</li>
+<li>Copy your asset root to the new location.
+</li>
+<li>Select your new asset root:
+<p><code>sudo /opt/google/geselectassetroot --assetroot <em>new_path</em></code></p>
+</li>
+<li>You may need to repair the relocated asset root, fixing various inconsistencies in the asset root (such as permissions, ownership, missing ID files, and so on). When you run this command, the tool auto-detects the problems that need to be repaired and fixes them.
+<p><code>sudo /opt/google/bin/geconfigureassetroot --repair <em>new_path</em></code></p>
+</li>
+<li>Run Fusion and verify that you see all you databases.</li>
+<li>Once you have configured your new publish root, you’ll need to republish all your databases, first by pushing and publishing them. You can use the <strong>Fusion GUI</strong> to push and the <strong>GEE Server Admin console</strong> to publish your databases or you can perform these steps on the command line:
+<p><code>geserveradmin -adddb</code></p>
+<p><code>geserveradmin -pushdb</code></p>
+<p><code>geserveradmin -publishdb</code></p>
+</li>
+<li>Optionally, you can delete your old asset root.
+</li>
+</ol>
+<h2>Learn more</h2>
+<ul>
+<li><a href="../answer/6034724.html">Push and publish databases</a></li>
+<li><a href="../answer/6028272.html">Configure tutorial workspace</a></li>
+<li><a href="../answer/2760661.html">Back up Fusion servers</a></li>
+</ul>
+<div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>
