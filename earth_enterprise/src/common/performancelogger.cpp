@@ -30,7 +30,6 @@ using namespace getime;
 
 #ifdef LOG_PERFORMANCE
 
-#include <sys/syscall.h>
 #include <sys/types.h>
 
 
