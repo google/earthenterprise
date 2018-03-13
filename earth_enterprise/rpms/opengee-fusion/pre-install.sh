@@ -1,6 +1,6 @@
 #! /bin/bash
 #
-# Copyright 2017 The Open GEE Contributors
+# Copyright 2018 The Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
 # limitations under the License.
 
 set +x
+set -e
+
 NEW_INSTALL=false
 if [ "$1" = "1" ] ; then
     NEW_INSTALL=true
@@ -25,6 +27,17 @@ fi
 #-----------------------------------------------------------------
 main_preinstall()
 {
+    # Check to see if opengee executables work and error out if not
+    RET_VAL=0
+    ERROUT=`$BASEINSTALLDIR_OPT/bin/geserveradmin 2>&1` || RET_VAL=$?
+
+    if [ "$RET_VAL" -eq "127" ]; then
+      echo "$ERROUT"
+      echo "It appears that not all library dependencies have been installed."
+      echo "This is likely to be a missing MrSID library."
+      return 127
+    fi
+
     if [ -f /etc/init.d/gefusion ]; then
         service gefusion stop
     fi
