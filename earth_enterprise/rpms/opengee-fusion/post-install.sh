@@ -191,6 +191,8 @@ final_assetroot_configuration()
     else
         "$BASEINSTALLDIR_OPT/bin/geselectassetroot" --assetroot "$ASSET_ROOT"
 
+        RET_VAL=0
+
         "$BASEINSTALLDIR_OPT/bin/geconfigureassetroot" --addvolume \
             "opt:$BASEINSTALLDIR_OPT/share/tutorials" --noprompt --nochown || RET_VAL=$?
         if [ "$RET_VAL" -eq "255" ]; then
