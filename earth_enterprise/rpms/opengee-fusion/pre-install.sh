@@ -15,7 +15,6 @@
 # limitations under the License.
 
 set +x
-set -e
 
 NEW_INSTALL=false
 if [ "$1" = "1" ] ; then
@@ -27,6 +26,9 @@ fi
 #-----------------------------------------------------------------
 main_preinstall()
 {
+   # Report errors to RPM installer
+    set -e
+
     # Check to see if opengee executables work and error out if not
     RET_VAL=0
     ERROUT=`$BASEINSTALLDIR_OPT/bin/geserveradmin 2>&1` || RET_VAL=$?
@@ -37,6 +39,9 @@ main_preinstall()
       echo "This is likely to be a missing MrSID library."
       return 127
     fi
+
+    # Stop reporting errors to RPM installer
+    set +e
 
     if [ -f /etc/init.d/gefusion ]; then
         service gefusion stop
