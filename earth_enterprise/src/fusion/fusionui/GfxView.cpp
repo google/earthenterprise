@@ -290,7 +290,7 @@ void GfxView::selectFeatures(Qt::ButtonState btnState) {
 void GfxView::adjustLevel(int step) {
   double nl = log(2 / state_.Scale()) * M_LOG2E - level_zero_ + step;
 
-  if (nl > 24 || isnan(nl)) {
+  if (nl > 24 || std::isnan(nl)) {
     nl = 24;
   } else if (nl < 0) {
     nl = 0;

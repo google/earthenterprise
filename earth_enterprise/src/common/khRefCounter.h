@@ -112,6 +112,18 @@ class khRefGuard {
     return *this;
   }
 
+  // move assignment & copy constructor
+  khRefGuard(khRefGuard &&o) noexcept : ptr(o.ptr) { o.ptr = nullptr; }
+  khRefGuard& operator=(khRefGuard &&o) noexcept {
+    if (this != &o) {
+      T* ptr_ = ptr;
+      ptr = o.ptr;
+      o.ptr = nullptr;
+      if (ptr_) ptr_->unref();
+    }
+    return *this;
+  }
+
   // 2 assignments is cheaper than 2 mutex locks. So in case you don't care
   // about b, a.swap(b) is faster than a = b
   void swap(khRefGuard &o) {
@@ -176,9 +188,11 @@ class khRefCounterImpl : public ThreadPolicy::MutexHolder {
   mutable uint32 refcount_;
 
   // private and unimplemented
-  // classes derived from khRefCounterImpl are meant to be shared, not copied
-  khRefCounterImpl(const khRefCounterImpl &);
-  khRefCounterImpl & operator=(const khRefCounterImpl&);
+  // classes derived from khRefCounterImpl are meant to be shared, not copied/moved
+  khRefCounterImpl(const khRefCounterImpl &) = delete;
+  khRefCounterImpl & operator=(const khRefCounterImpl&) = delete;
+  khRefCounterImpl(khRefCounterImpl &&) = delete;
+  khRefCounterImpl & operator=(khRefCounterImpl&&) = delete;
 
  protected:
   inline khRefCounterImpl(void) : refcount_(1) { }
