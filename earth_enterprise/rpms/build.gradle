@@ -43,6 +43,17 @@ apply plugin: "nebula.ospackage"
 
 import org.opengee.shell.GeeCommandLine
 
+// Varables used for specifying location of two files
+// 'gee_long_version.txt' and 'gepgcommon'
+def working_dir = "../src/"
+
+// Use the command line option "-PDEBUGRPMS" in order to build
+// for NATIVE-DBG-x86_64.  Default is NATIVE-REL-x86_64
+def native_x86 = ( project.hasProperty( 'DEBUGRPMS' ) ? "NATIVE-DBG-x86_64/" : "NATIVE-REL-x86_64/" )
+
+// Build the actual file to be used
+def long_txt = working_dir + native_x86 + "gee_long_version.txt"
+
 
 def rpmPlatformString = org.opengee.os.Platform.rpmPlatformString
 
@@ -62,14 +73,14 @@ if (new File('build.properties').exists()) {
     }
 }
 
-def openGeeVersionFile = new File("../src/NATIVE-DBG-x86_64/gee_long_version.txt")
+def openGeeVersionFile = new File( long_txt )
 
 if (!openGeeVersionFile.exists()) {
     GeeCommandLine.expand(
-            ["/usr/bin/scons", "release=1", "NATIVE-DBG-x86_64/gee_long_version.txt"],
+            ["/usr/bin/scons", "release=1", long_txt ],
             "Runing `scons` to produce <gee_long_version.txt> failed!",
             null, // Use default environment variables.
-            new File("../src") // Working directory.
+            new File( working_dir )
         )
 }
 
@@ -79,7 +90,7 @@ def openGeeVersion =
         // Strip comments:
         def commentIndex = it.indexOf('#')
 
-        commentIndex < 0 ? it : it.substring(0, commentIndex)        
+        commentIndex < 0 ? it : it.substring(0, commentIndex)
     }.
     collect { it.trim() }. // Trim whitespace.
     findAll { !it.isEmpty() }. // Skip empty lines.
@@ -113,7 +124,7 @@ def packageInstallLibDir = new File(packageInstallRootDir, 'opt/google/lib')
 
 def postGisInstallDir = new File(
         project.projectDir,
-        '../src/NATIVE-DBG-x86_64/third_party/postgis/install'
+          working_dir + native_x86 + "third_party/postgis/install"
     ).getAbsolutePath()
 
 def postGisInstallDir_opt = new File(postGisInstallDir, 'opt')
@@ -178,6 +189,7 @@ ospackage {
 // Build packages for all platforms by default:
 defaultTasks 'osPackage'
 
+
 task compileOpenGee(type: Exec) {
     workingDir = '..'
     commandLine('scons', '-j8', 'release=1', 'build')
@@ -209,7 +221,7 @@ task openGeePostGisRpm(type: GeeRpm) {
     autoFindProvides = true
     autoFindRequires = true
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
-    
+
     from (postGisInstallDir_opt) {
         into new File(packageInstallRootDir, 'opt')
     }
@@ -322,7 +334,7 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeSharedFiles) {
     autoFindRequires = true
 
     // When the scons release=1 package target is run as a non-root user,
-    // scons does not include /sbin in the path, so auto-detection of 
+    // scons does not include /sbin in the path, so auto-detection of
     // chkconfig fails, so this dependency is explicit.
     requires('chkconfig')
     requires('shadow-utils')
@@ -417,7 +429,8 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     installUtils = file('build/shared/install-utils.sh')
 
     // Add geresetpgdb script:
-    installUtils = file(new File(stagedInstallDir_server_opt, 'google/bin/gepgcommon'))
+    installUtils = file( new File( working_dir + "server/gepgcommon" ) )
+
 
     preInstall = file('opengee-server/pre-install.sh')
     postInstall = file('opengee-server/post-install.sh')
@@ -430,7 +443,7 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     directory('/var/opt/google/log', 0775)
     directory('/var/opt/google/pgsql', 0700)
     directory('/var/opt/google/pgsql/logs')
-    
+
     from(stagedInstallDir_server_opt) {
         // libpq is in the opengee-postgis package:
         exclude 'google/lib/libpq.*'
@@ -512,7 +525,7 @@ built from raster, vector, and location properties data.
 
     requires('proj-devel') /* This dependency is not being picked up automatically by GeeRpm task */
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
-    
+
 
     requiresCommands(
         packageSharedCommands +
