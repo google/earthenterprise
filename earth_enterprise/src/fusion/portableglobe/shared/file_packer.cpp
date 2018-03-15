@@ -43,7 +43,7 @@ size_t GetCrc(std::string file_name, IncrementalCrcCalculator* crc_calculator) {
   // [1] Check if crc file exists, if so then use that.
   if (khExists(crc_file)) {
     std::ifstream fp_in(crc_file.c_str(), std::ios::binary);
-    if (fp_in == NULL) {
+    if (!fp_in) {
       notify(NFY_WARN, "Unable to open file: '%s'", crc_file.c_str());
     } else {
       fp_in.read(reinterpret_cast<char*>(&crc), 4);
@@ -146,7 +146,7 @@ void FilePacker::AddFile(const std::string& path, size_t prefix_len) {
   uint64 length = khGetFileSizeOrThrow(path);
 
   std::ifstream fp_in(path.c_str(), std::ios::binary);
-  if (fp_in == NULL) {
+  if (!fp_in) {
     notify(NFY_FATAL, "Unable to open file: %s", path.c_str());
   }
 
