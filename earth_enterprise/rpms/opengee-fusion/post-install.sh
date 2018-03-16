@@ -17,7 +17,6 @@
 # NOTE: requires xmllint from libxml2-utils
 
 set +x
-set -e
 
 #------------------------------------------------------------------------------
 # Definitions
