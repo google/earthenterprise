@@ -33,22 +33,22 @@ gtag('config', 'UA-108632131-2');
 <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
 <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Release notes</h1>
 <h2>Release notes: Open GEE 5.2.1</h2>
-<p>Open GEE 5.2.1 is an incremental release of <a href="../answer/7160000.html">Open GEE 5.2.0</a>. It contains new features, several bug fixes in Fusion and GEE Server, and updates to third-party libraries.</p>
+<p>Open GEE 5.2.1 is a comprehensive update of <a href="../answer/7160000.html">Open GEE 5.2.0</a>. It contains new features, several bug fixes in Fusion and GEE Server, and updates to third-party libraries.</p>
   <h5>
     <p id="overview_5_2_1">New Features</p>
   </h5> 
-    <p><strong>MrSID support</strong>. At build time open GEE 5.2.1 now checks for MrSID libraries and if found, Fusion will be built with MrSID raster format support.</p>
-    <p><strong>RPM Installers</strong>. For RedHat and Centos, RPM can now be built to enable easier installation.
-	For Ubuntu platform, installer scripts continue to be the supported way to install Open GEE.</p>
-    <p><strong>JPEG2000 performance boost</strong>. New used version of OpenJpeg2000 library has considerable performance increase.</p>
-    <p><strong>Controlling quality of terrain</strong>. Command line tool "gepackgen" producing packets does now accept a decimation value. In general reducing the decimation value for terrain produces higher quality and better looking terrain.</p>		
-    <p><strong>Testing scripts enhanced</strong>. <code>publish_tutorial.sh</code> and <code>publish_historical.sh</code> scripts do now publish the pushed databases.</p>
-    <p><strong>Detailed version info</strong>. Version number displayed in user interface shows detailed info indicating whether the product is an official release or a development build.</p>
-	<p><strong>Continuous Integration</strong>. Travis CI is used for continuous integration. Every time a commit is made to Open GEE a continuous build is run to validate the committed changes.</p>
+    <p><strong>MrSID support</strong>. At build time, open GEE checks for MrSID libraries and, if found, Fusion will be built with MrSID raster format support.</p>
+    <p><strong>RPM Installers</strong>. For RedHat and CentOS, RPMs can now be built to enable easier installation.
+	For Ubuntu, the installer scripts continue to be the supported way to install Open GEE.</p>
+    <p><strong>JPEG2000 performance boost</strong>. Updated version of OpenJpeg2000 library has considerable performance increase.</p>
+    <p><strong>Controlling quality of terrain</strong>. Command-line tool gepackgen producing packets now accepts a decimation value. In general, reducing the decimation value for terrain produces higher quality and better looking terrain.</p>		
+    <p><strong>Testing scripts enhanced</strong>. <code>publish_tutorial.sh</code> and <code>publish_historical.sh</code> scripts now publish the pushed databases.</p>
+    <p><strong>Detailed version info</strong>. Version number displayed in user interface shows detailed information indicating an official release or a development build.</p>
+	<p><strong>Continuous Integration</strong>. Travis CI is used for continuous integration. On every new commit to Open GEE a build is executed to validate the committed changes.</p>
   <h5>
     <p id="supported_5.2.1">Supported Platforms</p>
   </h5>
-  <p>The Open GEE 5.2.1 release is supported on 64-bit versions of the following operating systems:</p>
+  <p>Open GEE 5.2.1 is supported on 64-bit versions of the following operating systems:</p>
     <ul>
       <li>Red Hat Enterprise Linux version 6.x and 7.x, including the most recent security patches</li>
       <li>CentOS 6.x and 7.x</li>
@@ -59,7 +59,7 @@ gtag('config', 'UA-108632131-2');
   <h5>
     <p id="library_updates_5.2.1">New and Updated Libraries</p>
   </h5>
-    Open GEE 5.2.1 includes extensive library changes.  This list may be incomplete.
+    Open GEE 5.2.1 includes many library updates. Major updates include:
     <table class="nice-table">
       <tbody>
         <tr>
@@ -85,7 +85,7 @@ gtag('config', 'UA-108632131-2');
       </tbody>
     </table>
 
-  <p>To upgrade from Open GEE 5.2.0, Do NOT uninstall it. We recommend that you upgrade Open GEE 5.2.0 by simply installing Open GEE 5.2.1. Installing Open GEE 5.2.1 on top of Open GEE 5.2.0 will ensure that your PostgreSQL databases are backed up and upgraded correctly to the new PostgreSQL version used by Open GEE 5.2.1.</p>
+  <p>To upgrade from Open GEE 5.2.0, do NOT uninstall it. We recommend that you upgrade Open GEE 5.2.0 by simply installing Open GEE 5.2.1. Installing Open GEE 5.2.1 on top of Open GEE 5.2.0 will ensure that your PostgreSQL databases are backed-up and upgraded correctly to the new PostgreSQL version used by Open GEE 5.2.1.</p>
   <h5>
   <h5>
     <p id="known_issues_5.2.1">Known Issues</p>
@@ -124,12 +124,12 @@ gtag('config', 'UA-108632131-2');
         </tr>		
         <tr>
           <td>126</td>
-          <td>The fusion installer creates a backup on the first run</td>
+          <td>The Fusion installer creates a backup on the first run</td>
           <td>No current work around. The created backup can be deleted.</td>
         </tr>		
         <tr>
           <td>127</td>
-          <td>Incorrect error messages from fusion installer</td>
+          <td>Incorrect error messages from Fusion installer</td>
           <td>No current work around.</td>
         </tr>		
         <tr>
@@ -149,7 +149,7 @@ gtag('config', 'UA-108632131-2');
         </tr>
         <tr>
           <td>201</td>
-          <td>Some tiles are displayed incorrectly in the enterprise client when terrain is enabled</td>
+          <td>Some tiles are displayed incorrectly in the Enterprise Client when terrain is enabled</td>
           <td>No current work around.</td>
         </tr>		
         <tr>
@@ -215,7 +215,7 @@ gtag('config', 'UA-108632131-2');
         <tr>
           <td>342</td>
           <td>Fusion crashes when opening an unsupported file type</td>
-          <td>Re-open fusion and avoid opening unsupported file types.</td>
+          <td>Re-open Fusion and avoid opening unsupported file types.</td>
         </tr>
         <tr>
           <td>343</td>
@@ -254,7 +254,7 @@ gtag('config', 'UA-108632131-2');
         </tr>
         <tr>
           <td>407</td>
-          <td>Corrupt data warning when starting fusion</td>
+          <td>Corrupt data warning when starting Fusion</td>
           <td>No current work around but Fusion loads and runs correctly.</td>
         </tr>
         <tr>
@@ -269,7 +269,7 @@ gtag('config', 'UA-108632131-2');
         </tr>
         <tr>
           <td>439</td>
-          <td>Uninstalling fusion without stopping it results in unexpected error message</td>
+          <td>Uninstalling Fusion without stopping it results in unexpected error message</td>
           <td>Ignore that error message.</td>
         </tr>		
         <tr>
@@ -285,7 +285,7 @@ gtag('config', 'UA-108632131-2');
         <tr>
           <td>444</td>
           <td>Fusion installer does not upgrade the asset root on RHEL 7</td>
-          <td>Upgrade the asset root manually by running the command that is printed when you try to start the fusion service.</td>
+          <td>Upgrade the asset root manually by running the command that is printed when you try to start the Fusion service.</td>
         </tr>
         <tr>
           <td>445</td>
@@ -330,7 +330,7 @@ gtag('config', 'UA-108632131-2');
         <tr>
           <td>507</td>
           <td>Volume host is reported unavailable if `hostname` doesn't match volume host</td>
-          <td>Set the host values in <code>/gevol/assets/.config/volumes.xml</code> to the FQDN and restart the fusion service.</td>
+          <td>Set the host values in <code>/gevol/assets/.config/volumes.xml</code> to the FQDN and restart the Fusion service.</td>
         </tr>		
         <tr>
           <td>535</td>
@@ -478,7 +478,7 @@ gtag('config', 'UA-108632131-2');
         </tr>
         <tr>
           <td>671</td>
-          <td>Documentation link on server admin page is broken in release_5.2.1</td>
+          <td>Documentation link on Server admin page is broken in release_5.2.1</td>
           <td>Fixed links</td>
         </tr>		
         <tr>
