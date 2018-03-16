@@ -15,7 +15,6 @@
 # limitations under the License.
 
 set +x
-set -e
 umask 002
 
 #-----------------------------------------------------------------
