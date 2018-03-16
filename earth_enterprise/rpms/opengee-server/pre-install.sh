@@ -27,6 +27,8 @@ fi
 #-----------------------------------------------------------------
 main_preinstall()
 {
+     # Report errors to RPM installer
+    set -e
 
     # Check to see if opengee executables work and error out if not
     RET_VAL=0
@@ -38,6 +40,9 @@ main_preinstall()
       echo "This is likely to be a missing MrSID library."
       return 127
     fi
+
+    # Stop reporting errors to RPM installer
+    set +e
 
     # needed both for rpm state change and upgrading non-rpm install
     if [ -f /etc/init.d/geserver ]; then
