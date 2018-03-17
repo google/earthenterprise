@@ -24,6 +24,16 @@ from khEnvironment import khEnvironment
 
 EnsureSConsVersion(0, 96, 92)
 
+# Check for possible objects to pass on to gradle
+def gradle_options() :
+  options = ""  # Default to no option
+  if ARGUMENTS.get( 'release', '0' ) == '1' :
+    options = "-PRELEASE"
+  if ARGUMENTS.get( 'optimize', '0' ) == '1' :
+    options = "-POPTIMIZE"
+  return options
+
+
 # process commandline arguments
 installdir = ARGUMENTS.get('installdir', '/tmp/fusion_os_install')
 with open('rpms/build.properties', 'w') as f:
@@ -158,7 +168,7 @@ stage_tutorial = env.PhonyTargets(**stage_tutorial_cmds)
 env.Depends(stage_tutorial, stage_data)
 
 package_staged_cmds = {'package_install': [
-    'cd rpms; ./gradlew osPackage'
+    "cd rpms; ./gradlew osPackage " + gradle_options()
 ]}
 
 package_install = env.PhonyTargets(**package_staged_cmds)

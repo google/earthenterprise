@@ -22,6 +22,10 @@
 // This Scons target copies build artifacts, binaries and documents into the
 // /tmp/fusion_os_install path.
 //
+//     ./gradlew -PDEBUGRPMS
+// Build the RPMs using the files in 'NATIVE-DBG-x86_64'
+//
+//
 // See documentation on the osPackage plugin here:
 //
 // https://github.com/nebula-plugins/gradle-ospackage-plugin
@@ -47,12 +51,16 @@ import org.opengee.shell.GeeCommandLine
 // 'gee_long_version.txt' and 'gepgcommon'
 def working_dir = "../src/"
 
-// Use the command line option "-PDEBUGRPMS" in order to build
-// for NATIVE-DBG-x86_64.  Default is NATIVE-REL-x86_64
-def native_x86 = ( project.hasProperty( 'DEBUGRPMS' ) ? "NATIVE-DBG-x86_64/" : "NATIVE-REL-x86_64/" )
+// Check for either "-PRELEASE" or "-POPTIMIZE" command line parameters.
+// Return the correct directory based on which paramater is used.
+def native_x86 = {
+  if ( project.hasProperty( 'RELEASE' ) ) { return "NATIVE-REL-x86_64" }
+  if ( project.hasProperty( 'OPTIMIZE' ) ) { return "NATIVE-OPT-x86_64" }
+  return "NATIVE-DBG-X86_64"
+}  // end native_x86
 
 // Build the actual file to be used
-def long_txt = working_dir + native_x86 + "gee_long_version.txt"
+def gee_long_version_txt = working_dir + native_x86 + "gee_long_version.txt"
 
 
 def rpmPlatformString = org.opengee.os.Platform.rpmPlatformString
@@ -73,11 +81,12 @@ if (new File('build.properties').exists()) {
     }
 }
 
-def openGeeVersionFile = new File( long_txt )
+def openGeeVersionFile = new File( gee_long_version_txt )
 
 if (!openGeeVersionFile.exists()) {
     GeeCommandLine.expand(
-            ["/usr/bin/scons", "release=1", long_txt ],
+      //            ["/usr/bin/scons", "release=1", gee_long_version_txt ],
+            ["/usr/bin/scons", "release=1", openGeeVersionFile ],
             "Runing `scons` to produce <gee_long_version.txt> failed!",
             null, // Use default environment variables.
             new File( working_dir )
@@ -429,8 +438,8 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     installUtils = file('build/shared/install-utils.sh')
 
     // Add geresetpgdb script:
-    installUtils = file( new File( working_dir + "server/gepgcommon" ) )
-
+    //    installUtils = file( new File( working_dir + "server/gepgcommon" ) )
+    installUtils = file( new File( stagedInstallDir_server_opt, 'google/bin/gepgcommon' ) )
 
     preInstall = file('opengee-server/pre-install.sh')
     postInstall = file('opengee-server/post-install.sh')
