@@ -20,6 +20,7 @@
 #include <string>
 
 #include "common/verref_storage.h"
+#include "common/verref_storage_io.h"
 #include "common/khStringUtils.h"
 
 namespace {
