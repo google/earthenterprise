@@ -1,0 +1,422 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Release notes: GEE 5.0.1</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 4556704.html -->
+<div class="container">
+<div class="sidebar1">
+  <p class="sidebar-toc"><a href="../answer/7160003.html">Open GEE 5.2.3</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160002.html">Open GEE 5.2.2</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160001.html">Open GEE 5.2.1</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160000.html">Open GEE 5.2.0</a></p>
+  <p class="sidebar-toc"><a href="../answer/7159245.html">GEE 5.1.3</a></p>
+  <p class="sidebar-toc"><a href="../answer/6259403.html">GEE 5.1.2</a></p>
+  <p class="sidebar-toc"><a href="../answer/6159443.html">GEE 5.1.1</a></p>
+  <p class="sidebar-toc"><a href="../answer/6078762.html">GEE 5.1.0</a></p>
+  <p class="sidebar-toc"><a href="../answer/6053170.html">GEE 5.0.2</a></p>
+  <p class="sidebar-toc"><a href="../answer/4556704.html" class="current-file">GEE 5.0.1</a></p>
+  <p class="sidebar-toc"><a href="../answer/3424202.html">GEE 5.0</a></p>
+</div>
+<div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Release notes</h1>
+<h2>Release notes: GEE 5.0.1</h2>
+<p>This document includes the following information about the Google Earth Enterprise 5.0.1 release:</p>
+<div><h5>
+<p id="overview_5.0.1">Overview</p>
+</h5>
+<div>
+<p>GEE 5.0.1 is an incremental release of <a href="../answer/3424202.html">GEE 5.0</a>. It includes library updates and fixes to several bugs.
+</p>
+</div>
+</div>
+<div><h5>
+<p id="supported_5.0.1">Supported Platforms</p>
+</h5>
+<div>The Google Earth Enterprise 5.0.1 release is supported on 64-bit versions of the following operating systems:
+<ul>
+<li>Red Hat Enterprise Linux versions 6.0 to 6.5, including the most recent security patches</li>
+<li>CentOS 6.5</li>
+<li>Ubuntu 10.04 and 12.04 LTS</li>
+</ul>
+<p>Google Earth Enterprise 5.0.1 is compatible with Google Earth Enterprise Client (EC) and Plugin versions 7.0.1 - 7.1.1.1888 for Windows, Mac, and Linux.</p>
+</div>
+</div>
+<div><h5>
+<p id="library_updates_5.0.1">Library updates</p>
+</h5>
+<div>
+<strong>Google Maps Javascript Maps API V3:</strong>
+<ul>
+<li>Updated to version 3.14. See <a href="https://code.google.com/p/gmaps-api-issues/wiki/JavascriptMapsAPIv3Changelog" target="_blank">change release</a> information.
+</li>
+</ul>
+<p><strong>GDAL:</strong></p>
+<ul>
+<li>Updated to version 1.10.1. See <a href="http://trac.osgeo.org/gdal/wiki/Release/1.10.1-News" target="_blank">GDAL Release 1.10.1 News</a> for information.
+</li>
+</ul>
+<p><strong>Apache HTTP Server:</strong></p>
+<ul>
+<li>Updated to version 2.2.27. See <a href="http://www.apache.org/dist/httpd/Announcement2.2.html" target="_blank">Apache HTTP Server Project</a> for information.
+</li>
+</ul>
+<p><strong>Libattr extended file attributes:</strong></p>
+<ul>
+<li>Updated from libattr 2.4.46 to version 2.4.47.</li>
+</ul>
+<p><strong>Openssl update to address <a href="http://www.openssl.org/news/vulnerabilities.html">vulnerabilities:</a></strong></p>
+<ul>
+<li>Updated openssl from v0.9.8r to v0.9.8y.</li>
+</ul>
+</div>
+</div>
+<div><h5>
+<p id="known_issues_5">Known Issues</p>
+</h5>
+<div>
+<table class="nice-table">
+<tbody>
+<tr>
+<th>Number</th>
+<th>Description</th>
+<th>Workaround</th>
+</tr>
+<tr>
+<td><a id="#KnownIssues"></a>12239387</td>
+<td>For databases that include historical imagery, if you turn on <strong>Historical imagery</strong> in Google Earth EC and move the time slider to the current time, the most recent database in your historical imagery does not display correctly. </td>
+<td>When you move the time slider to view the current database, turn off <strong>Historical imagery</strong> to display the database correctly.</td>
+</tr>
+<tr>
+<td>14463855</td>
+<td>In GEE Server, when publishing a database or portable, the publish point you specify is now case <em>insensitive</em>. Upper and lower case are not differentiated.</td>
+<td>Specify unique publish point path names. If you have already specified publish points that are distinguished only by case, such as "Google" and "google," <strong>Unpublish</strong>, specify unique publish points, then <strong>Publish</strong> again.</td>
+</tr>
+<tr>
+<td>15221527</td>
+<td>In GEE Server, when cutting a globe or map, the Cancel operation does not stop all associated processes.</td>
+<td>Before you begin the cutting process, create a <em>kill</em> script as follows:<br/>
+<code>&gt; sudo vi /opt/google/bin/kill_uid<br/>
+<br/>
+ps -eF | grep $1 | grep -v grep | awk
+'{print $2}' | xargs kill -9<br/>
+<br/>
+&gt; sudo chmod 755 /opt/google/bin/kill_uid</code><br/>
+<p>Start a cut. If you need to cancel it, do the following steps:</p>
+<ol>
+<li>Copy the uid from the script window. It will be in the paths used in the commands and will look something like <code>14845_1401320450.614644</code>.</li>
+<li>Click the <strong>Cancel</strong> button.</li>
+<li>Kill any cutting processes on the server. For example:<br/>
+<code>&gt; sudo  /opt/google/bin/kill_uid 14845_1401320450.614644</code>
+<div class="note"><p><strong>Note:</strong> Because you are stopping the cutting process in the Javascript, your script should only need to kill one process, that is, the last process that was started.
+</p></div></li>
+</ol></td>
+</tr>
+<tr>
+<td>11736928</td>
+<td>Terrain copyright information listed in the Provider Manager does not display on the published globe in Google Earth EC. </td>
+<td>No workaround.</td>
+</tr>
+<tr>
+<td>14291339</td>
+<td>Hebrew label characters that read right to left, for example, "מִבְחָן" get rendered in reverse, for example, "ןחָבְמִ". This issue only applies to 2D databases.</td>
+<td>This example can be resolved as follows: "מִבְחָן".split("").reverse().join("")</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div><h5>
+<p id="resolved_issues_5">Resolved Issues</p>
+</h5>
+<div>
+<table class="nice-table">
+<tbody>
+<tr>
+<th>Number</th>
+<th class="narrow">Description</th>
+<th>Resolution</th>
+</tr>
+<tr>
+<td>13010755</td>
+<td>You can add the Google Base Map as imagery for map databases but viewing a map database in a browser currently requires creating and editing a copy of <code>/opt/google/gehttpd/htdocs/maps_google.html</code>, one HTML file for each map published. </td>
+<td>Fixed. No editing of <br/>
+<code>maps_google.html</code> required. <br/>
+Note that resolution allows using <br/>
+only Google Base Map or the Google Base Map <em>and</em> <br/>
+an imagery layer.<br/>
+See <a href="../answer/4412455.html#GeoDatabase">Using Google Base Map.</a></td>
+</tr>
+<tr>
+<td>14357181</td>
+<td>When running the Cutter command, the Apache server connection may not close correctly after the background process has completely executed, leading to a build failure of the portable globe or map.</td>
+<td>Fixed. The Apache server now closes the connection appropriately after the cutting process has completed.</td>
+<tr>
+<tr>
+<td>14105700</td>
+<td>Portable globes and maps may become unregistered and unpublished from GEE Server when the <code>/globes</code> directory becomes temporarily unavailable.</td>
+<td>Fixed. If you have registered and/or published portable files that are no longer available in your <code>/globes</code> directory, use the <a href="../answer/3481558.html"><code>geserveradmin --portable_cleanup</code></a> command to clean up portable globes registration information. The cleanup unregisters/unpublishes portable globes or maps that have been removed from your <code>/globes</code> directory.</td>
+<tr>
+<tr>
+<td>11315730</td>
+<td>Uninstalling GEE Fusion 5.x  prevents GEE Server 5.x  from running; likewise uninstalling GEE Server 5.x prevents GEE Fusion 5.x from running.</td>
+<td>Fixed. Uninstalling either Fusion or GEE Server does not impact the running of the remaining installed component. However, do make sure that you continue to use the same release versions of Fusion and GEE Server to avoid any compatibility issues.</td>
+<tr>
+<tr>
+<td>13232808</td>
+<td>Portable globes (<code>*.glc</code>) without a timestamp in the Manage portable dialog may not be registered with GEE Server.</td>
+<td>Fixed.</td>
+<tr>
+<td>15274582</td>
+<td>In rare circumstances, tiles may be missing from vector data in 2D portable files. </td>
+<td>Fixed.</td>
+</tr>
+<tr>
+<td>14463855</td>
+<td>
+<p>GEE Server fails when publishing to different publish points that are only distinguished by case, such as "Google" and "google."</p></td>
+<td>Fixed. In GEE Server, when publishing a database or portable, the publish point you specify is now case <em>insensitive</em>. Upper and lower case are not differentiated. Make sure you specify unique publish point path names. </td>
+</tr>
+<tr>
+<td>3941714</td>
+<td>
+<p>The GLC assembly tool doesn't clean up files correctly after a composite globe or map is created</p></td>
+<td>Fixed.
+</td>
+</tr>
+<tr>
+<td>13941482</td>
+<td>
+<p>The GLC assembly tool uses the <code>/tmp/</code> directory for composite globe or map processing, which is frequently on a limited partition space.</p></td>
+<td>Fixed. GLC assembly now uses the <br/>
+<code>/opt/google/gehttpd/htdocs<br/>
+/cutter/globes<br/>
+/.globe_builder</code> directory for<br/>
+composite file processing, that is, <br/>
+the same volume as your Portable <br/>
+globes directory.
+</td>
+</tr>
+<tr>
+<td>13931811</td>
+<td>
+<p>When deleting a layer and rebuilding a <code>.glc</code>, sometimes the GLC assembly tool does not appear to remove the layer. </p></td>
+<td>Fixed.
+</td>
+</tr>
+<tr>
+<td>13916427</td>
+<td>
+<p>The display of the build progress window of the GLC assembly tool is delayed when clicking <strong>Assemble Glc</strong>.</p></td>
+<td>Fixed.
+</td>
+</tr>
+<tr>
+<td>13916422</td>
+<td>
+<p>The pan and zoom controls in the Cutter tool window are partially obscured by the <strong>Create new offline map</strong> panel.</p></td>
+<td>Fixed. The pan and zoom controls<br/>
+are now hidden.
+</td>
+</tr>
+<tr>
+<td>12239387</td>
+<td>Historical imagery from 5.x-generated imagery projects display incorrectly.</td>
+<td>Fixed. <br/>
+Support added for displaying <br/>
+historical imagery from 5.x<br/>
+-generated imagery projects. There<br/>
+is still one remaining issue which<br/>
+requires turning off historical <br/>
+imagery in order to see the most <br/>
+current database in the current<br/>
+version of Google Earth EC.<br/>
+See <a href="#KnownIssues">Known Issues</a>.</td>
+</tr>
+<tr>
+<td>13889571</td>
+<td>
+<p>When entering subsequent search parameters in a search tab in Google Earth EC, search results from previous query parameters persist in subsequent searches.</p></td>
+<td>Fixed.
+</td>
+</tr>
+<tr>
+<td>13584831</td>
+<td>
+<p>Search parameters that include quotes are not supported.</p></td>
+<td>Fixed. Note that the comma<br/>
+delimiter cannot be quoted, so <br/>
+the workaround is "38","-122.2", <br/>
+not "38, -122.2". Just quoting either the latitude or <br/>
+the longitude will also work.
+</td>
+</tr>
+<tr>
+<td>13498453</td>
+<td>
+<p>When clicking on an item in search results in Google Earth EC that include the FlyToSpot query parameter, a javascript error may occur.</p></td>
+<td>Fixed.
+</td>
+</tr>
+<tr>
+<td>13609551</td>
+<td>
+<p>The <strong>Push</strong> option available in the context menu when clicking on a database asset that has no valid versions.</p></td>
+<td>Fixed.
+</td>
+</tr>
+<tr>
+<td>13680266</td>
+<td>
+<p>When clicking on a search result that returns a single item in Google Earth EC, a javascript error may occur.</p></td>
+<td>Fixed. Limits the search bounds
+<br/> when only one search result is
+<br/>returned and prevents the zoom
+<br/>level from exceeding level 17
+<br/>for 2D and 3D databases.
+</td>
+</tr>
+<tr>
+<td>11352561</td>
+<td>
+<p>There is no option to set a suggestion for a top-level search, typically POI search, in the <strong>Publish</strong> dialog.</p></td>
+<td>Fixed. Added a text field to set <br/>
+"suggestion" for top-level search to enable
+override of default<br/>
+suggestion of "Point of interest" <br/>
+for example, and option to set it <br/>
+to an empty string.
+</td>
+</tr>
+<tr>
+<td>1115030 </td>
+<td>
+<p>Uninstalling Fusion or Server from <code>/opt/google/install</code> fails with java.lang.OutOfMemoryError.</p></td>
+<td>Fixed.
+</td>
+</tr>
+<tr>
+<td>13459510</td>
+<td>Publishing to the same target in GEE Server may unpublish the database.</td>
+<td>Fixed.</td>
+</tr>
+<tr>
+<td>12362796</td>
+<td>Databases may disappear from GEE Server after non-use over a period of several days.</td>
+<td>Fixed.</td>
+</tr>
+<tr>
+<td>12891539</td>
+<td>Search service incorrectly handles UTF-8 encoding query for 2D maps.</td>
+<td>Fixed.</td>
+</tr>
+<tr>
+<td>12995368</td>
+<td>Missing interface control for setting <em>polygon resolution</em> in the GEE Server Cutter tool.</td>
+<td>Fixed by adding the <strong>Advanced</strong>
+<br/>option in the GEE Server Cutter
+<br/> tool to set the polygon resolution.
+<br/> See <br/>
+<a href="../answer/3230777.html">Creating portable globes and maps (5.0)</a>.</td>
+</tr>
+<tr>
+<td>12981516</td>
+<td>Limited support of UTF-8 encoded queries for <code>geplaces</code> search.</td>
+<td>Fixed. Improved the support of <br/>
+UTF-8 encoded queries for <br/>
+<code>geplaces</code> search, for example<br/>
+<code><em>cities</em></code>.</td>
+</tr>
+<tr>
+<td>11715339</td>
+<td>The Preview option in the GEE Server Admin console Databases window fails to display any preview for Fusion 3D databases.</td>
+<td>Fixed <code>/opt/google/gehttp/htdocs<br/>
+/earth/earth_local.html</code> to <br/>
+point to the correct publish point.
+</td>
+</tr>
+<tr>
+<td>12671863</td>
+<td>Support <strong>flyToFirstElement</strong> as additional query parameter for the search services. See <a href="../answer/3497832.html">Create Search Tabs</a>.</td>
+<td>Fixed.</td>
+</tr>
+<tr>
+<td>8115171</td>
+<td>Document <a href="../answer/2981878.html"><strong>Unable to make reservation</strong></a> error msg.</td>
+<td>Fixed.</td>
+</tr>
+<tr>
+<td>8114492</td>
+<td>Document <a href="../answer/2981872.html"><strong>Unable to find a suitable resource provider</strong></a> error msg.</td>
+<td>Fixed.</td>
+</tr>
+<tr>
+<td>11051993</td>
+<td>In certain cases, if a globe is corrupt or permissions are incorrectly set, the GEE Server will crash.</td>
+<td>Fix returns more information about <br/>
+damaged globes.</td>
+</tr>
+<tr>
+<td>12371493</td>
+<td>Some databases that were not successfully published still appear in the GEE Server admin page.</td>
+<td>Fix introduces better error checking.</td>
+</tr>
+<tr>
+<td>11435585</td>
+<td>Changing the port of Earth Server breaks GEE Server admin commands.</td>
+<td>Fix adds port check to match<br/>
+Apache server.</td>
+</tr>
+<tr>
+<td>9765322</td>
+<td>Vector polygons are rendered in the wrong location in certain cases.</td>
+<td>Fixed in the polygon pipeline.</td>
+</tr>
+<tr>
+<td>7737928</td>
+<td>Cannot build the tutorial <em>SF Terrain</em> project without including <strong>WorldTopography</strong> terrain resource.</td>
+<td>Fixed.</td>
+</tr>
+<tr>
+<td>11254639</td>
+<td>KML template should have no references to www.google.com.</td>
+<td>Fixed.</td>
+</tr>
+<tr>
+<td>11134962</td>
+<td>Horizontal black lines appear at tile boundaries.</td>
+<td>Fix in the imagery processing<br/>
+pipeline.</td>
+</tr>
+<tr>
+<td>11022364</td>
+<td>Issues Installing 5.x on top of 4.4.</td>
+<td>Fixed installer to improve <br/>
+upgrade process.</td>
+</tr>
+<tr>
+<td>7442639</td>
+<td>GEE supports only one field per custom Search tab in EC 6.2 and later. </td>
+<td>
+<p>Fixed. The 5.0.1 release supports<br/>
+multiple fields in EC 6.2 and <br/>
+all later versions.  To include <br/>
+multiple Search tab fields for <br/>
+EC 6.2 or later:</p>
+<ol>
+<li>Go to GEE Server admin <br/>
+console at <br/>
+<code>http://localhost/admin</code>.</li>
+<li>Click <strong>Search tabs</strong>.</li>
+<li>Click <strong>Create new</strong>.</li>
+<li>Enter your first field <br/>
+definition, then click <strong>Add field.</strong><br/>
+You can add as many fields as you want.</li>
+</ol>
+</td>
+</tr>
+</tr></tr></tr></tr></tr></tr></tr></tbody>
+</table>
+</div>
+</div><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>
