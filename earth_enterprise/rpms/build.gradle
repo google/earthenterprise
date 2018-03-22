@@ -83,14 +83,15 @@ if (new File('build.properties').exists()) {
 
 def openGeeVersionFile = new File( gee_long_version_txt )
 
-if (!openGeeVersionFile.exists()) {
+// Call scons to create the file 'gee_long_version.txt'
+// The actual parameter used by scons can remain 'release=1'
+if ( !openGeeVersionFile.exists() ) {
     GeeCommandLine.expand(
-            ["/usr/bin/scons", "release=1", gee_long_version_txt ],
-            //      ["/usr/bin/scons", "release=1", openGeeVersionFile ],
-            "Runing `scons` to produce <gee_long_version_txt> failed!",
-            null, // Use default environment variables.
-            new File( working_dir )
-        )
+      ["/usr/bin/scons", "release=1", openGeeVersionFile ],
+      "Runing `scons` to produce <gee_long_version_txt> failed!",
+      null, // Use default environment variables.
+      new File( working_dir )
+    )
 }
 
 def openGeeVersion =
