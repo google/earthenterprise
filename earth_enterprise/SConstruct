@@ -24,13 +24,18 @@ from khEnvironment import khEnvironment
 
 EnsureSConsVersion(0, 96, 92)
 
+
+
+
 # Check for possible objects to pass on to gradle
 def gradle_options() :
   options = ""  # Default to no option
   if ARGUMENTS.get( 'release', '0' ) == '1' :
-    options = "-PRELEASE"
+    options += " -PRELEASE"
+  else :
+    options += " -PDEBUG"
   if ARGUMENTS.get( 'optimize', '0' ) == '1' :
-    options = "-POPTIMIZE"
+    options += " -POPTIMIZE"
   return options
 
 

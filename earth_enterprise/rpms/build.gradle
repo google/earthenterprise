@@ -54,13 +54,13 @@ def working_dir = "../src/"
 // Check for either "-PRELEASE" or "-POPTIMIZE" command line parameters.
 // Return the correct directory based on which paramater is used.
 def native_x86 = {
-  if ( project.hasProperty( 'RELEASE' ) ) { return "NATIVE-REL-x86_64" }
   if ( project.hasProperty( 'OPTIMIZE' ) ) { return "NATIVE-OPT-x86_64" }
-  return "NATIVE-DBG-X86_64"
+  if ( project.hasProperty( 'DEBUG' ) ) { return "NATIVE-DBG-x86_64" }
+  return "NATIVE-REL-x86_64"
 }  // end native_x86
 
 // Build the actual file to be used
-def gee_long_version_txt = working_dir + native_x86 + "gee_long_version.txt"
+def gee_long_version_txt = working_dir + native_x86() + "/gee_long_version.txt"
 
 
 def rpmPlatformString = org.opengee.os.Platform.rpmPlatformString
@@ -85,9 +85,9 @@ def openGeeVersionFile = new File( gee_long_version_txt )
 
 if (!openGeeVersionFile.exists()) {
     GeeCommandLine.expand(
-      //            ["/usr/bin/scons", "release=1", gee_long_version_txt ],
-            ["/usr/bin/scons", "release=1", openGeeVersionFile ],
-            "Runing `scons` to produce <gee_long_version.txt> failed!",
+            ["/usr/bin/scons", "release=1", gee_long_version_txt ],
+            //      ["/usr/bin/scons", "release=1", openGeeVersionFile ],
+            "Runing `scons` to produce <gee_long_version_txt> failed!",
             null, // Use default environment variables.
             new File( working_dir )
         )
@@ -438,7 +438,6 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     installUtils = file('build/shared/install-utils.sh')
 
     // Add geresetpgdb script:
-    //    installUtils = file( new File( working_dir + "server/gepgcommon" ) )
     installUtils = file( new File( stagedInstallDir_server_opt, 'google/bin/gepgcommon' ) )
 
     preInstall = file('opengee-server/pre-install.sh')
