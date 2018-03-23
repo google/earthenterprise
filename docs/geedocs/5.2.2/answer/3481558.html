@@ -90,7 +90,7 @@
   <p><i>Default</i>. Uses normal imagery for the project.</p>
   <h2><a name="63542"></a>geconfigureassetroot</h2>
   <pre>
-<code><b>geconfigureassetroot</b> {<b>--new</b> <b>--assetroot </b><i>path </i> [<b>--srcvol </b><i>path</i>] | <b>--repair</b> | <b>--editvolumes</b> | <b>--listvolumes</b> | <b>--addvolume</b> | <b>--removevolume</b> | <b>--fixmasterhost</b> | <strong>--noprompt</strong>}  [--nochown]</code></pre>
+<code><b>geconfigureassetroot</b> {<b>--new</b> <b>--assetroot </b><i>path </i> [<b>--srcvol </b><i>path</i>] | <b>--repair</b> | <b>--editvolumes</b> | <b>--listvolumes</b> | <b>--addvolume</b> | <b>--fixmasterhost</b> | <strong>--noprompt</strong>}  [--nochown]</code></pre>
   <h3>Purpose</h3>
   <p>To add volume definitions or edit existing volume definitions.</p>
   <div class="tip">You must run this command as root. Except for the <b>--listvolumes</b> command, you must stop the fusion service before using this command and then start it again after you are done.</div>
@@ -133,11 +133,8 @@ geconfigureassetroot --editvolumes</code></pre>
 <code><b>--fixmasterhost</b> [--assetroot <i>path</i>]</code></pre>
 <p><i>Optional</i>. Change the <i>assetroot host</i> entry to match the current host name. (This command corrects cases where a host name is changed after installing and configuring Google Earth Enterprise Fusion.)</p>
 <pre>
-<code><b>--addvolume</b> <i>volume_name:path</i></code></pre>
-<p><i>Optional</i>. Add a volume with the given name and directory path.</p>
-<pre>
-<code><b>--removevolume</b> <i>volume_name</i></code></pre>
-<p><i>Optional</i>. Remove volume with the given name.</p>
+<code><b>--addvolume</b> <i>volume_name:path</i>]</code></pre>
+<p><i>Optional</i>. Change the <i>assetroot host</i> entry to match the current host name. (This command corrects cases where a host name is changed after installing and configuring Google Earth Enterprise Fusion.)</p>
 <h2><a name="geconfigurepublishroot"></a>geconfigurepublishroot</h2>
 <pre>
 <code>geconfigurepublishroot [--path=<em>path</em>] [--allow_symlinks] [--noprompt]</code></pre>
