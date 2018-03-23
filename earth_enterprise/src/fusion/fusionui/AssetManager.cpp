@@ -1629,6 +1629,16 @@ void AssetManager::NewFolder(const QString& folder_name) {
   if (!ok || text.isEmpty())
     return;
 
+  if (text.contains(QRegExp("[\\W+]"))) {
+      QMessageBox::warning(this, "Warning",
+                           tr("Invalid directory name: \n") +
+                           text + QString("\n\n") +
+                           tr("Please use only letters, numbers and "
+                              "underscores."),
+                           tr("OK"), 0, 0, 1);
+      return;
+  }
+
   QListViewItem* item;
 
   if (folder_name.isEmpty()) {
