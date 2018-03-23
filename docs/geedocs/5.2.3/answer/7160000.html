@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Release notes: Open GEE 5.2.0</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-108632131-2"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-108632131-2');
+</script>
+</head>
+<body>
+<!-- 7160000.html -->
+<div class="container">
+<div class="sidebar1">
+  <p class="sidebar-toc"><a href="../answer/7160003.html">Open GEE 5.2.3</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160002.html">Open GEE 5.2.2</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160001.html">Open GEE 5.2.1</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160000.html" class="current-file">Open GEE 5.2.0</a></p>
+  <p class="sidebar-toc"><a href="../answer/7159245.html">GEE 5.1.3</a></p>
+  <p class="sidebar-toc"><a href="../answer/6259403.html">GEE 5.1.2</a></p>
+  <p class="sidebar-toc"><a href="../answer/6159443.html">GEE 5.1.1</a></p>
+  <p class="sidebar-toc"><a href="../answer/6078762.html">GEE 5.1.0</a></p>
+  <p class="sidebar-toc"><a href="../answer/6053170.html">GEE 5.0.2</a></p>
+  <p class="sidebar-toc"><a href="../answer/4556704.html">GEE 5.0.1</a></p>
+  <p class="sidebar-toc"><a href="../answer/3424202.html">GEE 5.0</a></p>
+</div>
+<div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Release notes</h1>
+<h2>Release notes: Open GEE 5.2.0</h2>
+<p>Open GEE 5.2.0 is the first open source release of Google Earth Enterprise.  It is designed to be compatible with GEE 5.1.3 with the exception of MrSID support.
+Open GEE 5.2.0 includes a number of code and library changes to support the open source effort.</p>
+  <h5>
+    <p id="overview_5">New Features</p>
+  </h5>
+    <p><strong>Open Sourcing</strong>. Open GEE 5.2.0 includes a number of changes that were necessary for the open sourcing effort.  This includes several library replacements, library unbundling,
+removal of obsolete code and libraries, changes to support new compilers, updates to support git and Github, and several documentation changes.</p>
+    <p><strong>New Installers</strong>. Previous GEE installers used proprietary tools that are not appropriate for open source projects.  Open GEE 5.2.0 includes new installers that run as bash
+scripts.  There are also new build and install scripts for the Portable Server.</p>
+    <p><strong>New Tutorial Files</strong>. Images used in the Fusion tutorial are now provided in both tif and jp2 format.  In addition, the tutorial files are stored and downloaded separately
+from the rest of the Open GEE code.</p>
+    <p><strong>OpenGEE.org Web Site</strong>. The Open GEE repository now includes the source code for the Open GEE website, which can be viewed at <a href="http://www.opengee.org">http://www.opengee.org</a>.</p>
+    <p><strong>New --listvolumes Flag in geconfigureassetroot</strong>. The geconfigureassetroot utility now supports a --listvolumes flag that allows users to display the configured volumes for the
+current asset root without stopping Fusion.</p>
+  <h5>
+    <p id="supported_5.2.0">Supported Platforms</p>
+  </h5>
+  <p>The Open GEE 5.2.0 release is supported on 64-bit versions of the following operating systems:</p>
+    <ul>
+      <li>Red Hat Enterprise Linux version 7.x, including the most recent security patches</li>
+      <li>CentOS 7.x</li>
+      <li>Ubuntu 14.04 LTS and 16.04 LTS</li>
+    </ul>
+    <p>Google Earth Enterprise 5.2.0 is compatible with Google Earth Enterprise Client (EC) version 7.1.5 and above.</p>
+  <h5>
+    <p id="library_updates_5.2.0">New and Updated Libraries</p>
+  </h5>
+    Open GEE 5.2.0 includes extensive library changes.  This list may be incomplete.
+    <table class="nice-table">
+      <tbody>
+        <tr>
+          <th>Library</th>
+          <th>Version</th>
+          <th>New or Updated</th>
+        </tr>
+        <tr>
+          <td>Google Maps API V3</td>
+          <td>3.29</td>
+          <td>Updated</td>
+        </tr>
+        <tr>
+          <td>mod_wsgi</td>
+          <td>4.5.14</td>
+          <td>Updated</td>
+        </tr>
+        <tr>
+          <td>OpenJPEG</td>
+          <td>2.1.2</td>
+          <td>New</td>
+        </tr>
+        <tr>
+          <td>QT</td>
+          <td>3.3.8b-free</td>
+          <td>Updated</td>
+        </tr>
+        <tr>
+          <td>GDAL</td>
+          <td>2.1.2</td>
+          <td>Updated</td>
+        </tr>
+      </tbody>
+    </table>
+  <p>If you're upgrading from GEE 5.1.3, you may have to reinstall the prerequisite libraries after uninstalling 5.1.3 but before installing 5.2.0.</p>
+  <h5>
+  <h5>
+    <p id="known_issues_5.2.0">Known Issues</p>
+  </h5>
+    <table class="nice-table">
+      <tbody>
+        <tr>
+          <th>Number</th>
+          <th class="narrow">Description</th>
+          <th>Workaround</th>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>MrSID imagery is not supported</td>
+          <td>MrSID support can be added by purchasing a proprietary GDAL plugin that supports MrSID and modifying the build process to include the plugin.</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Google basemap fails to load in 2D Mercator Maps</td>
+          <td>Obtain a valid Google Maps API key and include it in <code>/opt/google/gehttpd/htdocs/maps/maps_google.html</code>.</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>The Portable UI reports an error any time a cut is canceled, even if the cancel was successful</td>
+          <td>Ignore the misleading error message.</td>
+        </tr>
+        <tr>
+          <td>200</td>
+          <td>stage_install fails on the tutorial files when <code>/home</code> and <code>/tmp</code> are on different file systems</td>
+          <td>Ensure that <code>/home</code> and <code>/tmp</code> are on the same file system or download the tutorial files to <code>/opt/google/share/tutorials/fusion/</code> after installing Fusion.</td>
+        </tr>
+        <tr>
+          <td>202</td>
+          <td>Icons are not displayed on vector layers in the Enterprise Client</td>
+          <td>No current work around.  It is not clear if this is an error in GEE or in the Enterprise Client.</td>
+        </tr>
+        <tr>
+          <td>203</td>
+          <td>Some vector layer options are not saved</td>
+          <td>No current work around</td>
+        </tr>
+        <tr>
+          <td>254</td>
+          <td>Automasking fails for images stored with UTM projection</td>
+          <td>Use GDAL to convert the images to a different projection before ingesting them into Fusion.</td>
+        </tr>
+        <tr>
+          <td>320</td>
+          <td>The Portable Server web page uses obsolete REST calls</td>
+          <td>Do not use the buttons on the Portable Server web interface for adding remote servers or broadcasting to remote servers as these features are no longer supported.</td>
+        </tr>
+        <tr>
+          <td>326</td>
+          <td>Libraries may be loaded from the wrong directory</td>
+          <td>Delete any library versions that should not be loaded or use LD_LIBRARY_PATH to load libraries from <code>/opt/google/lib</code>.</td>
+        </tr>
+        <tr>
+          <td>333</td>
+          <td>Portable Server is not supported on MacOS</td>
+          <td>Building and running Portable Server on MacOS should be possible with minimal changes.</td>
+        </tr>
+        <tr>
+          <td>335, 359</td>
+          <td>If there is an error while saving a resource, the resource cannot be saved again even if the error is resolved</td>
+          <td>Close the resource form and open it again to make the save option available again.</td>
+        </tr>
+        <tr>
+          <td>340</td>
+          <td>GE Fusion Terrain is black</td>
+          <td>No current work around</td>
+        </tr>
+        <tr>
+          <td>342</td>
+          <td>Fusion crashes when opening an unsupported file type</td>
+          <td>Re-open fusion and avoid opening unsupported file types.</td>
+        </tr>
+        <tr>
+          <td>375</td>
+          <td>Invalid version of psycopg2 on Ubuntu 16.04</td>
+          <td>On Ubuntu 16.04 switch to 'python-psycopg2' instead of 'python2.7-psycopg2'.</td>
+        </tr>
+        <tr>
+          <td>380</td>
+          <td>Provider field in resource-view is blank</td>
+          <td>Open the individual resource to see the provider</td>
+        </tr>
+        <tr>
+          <td>401</td>
+          <td>GEE commands are not in the path for sudo. </td>
+          <td>Specify the full path when running commands or add /opt/google/bin to the path for all users, including the super user</td>
+        </tr>
+        <tr>
+          <td>402</td>
+          <td>Provider manager window locked to main window.</td>
+          <td>No current work around</td>
+        </tr>
+        <tr>
+          <td>403</td>
+          <td>Missing close button on system manager window in RHEL 7</td>
+          <td>Right click the title bar and select close</td>
+        </tr>
+        <tr>
+          <td>404</td>
+          <td>Opaque polygons in preview.</td>
+          <td>No current work around</td>
+        </tr>
+        <tr>
+          <td>405</td>
+          <td>Vector layer preview not cleared in some situations</td>
+          <td>Reset the preview window to the correct state by either clicking on it or previewing another vector layer</td>
+        </tr>
+        <tr>
+          <td>407</td>
+          <td>Corrupt data warning when starting fusion</td>
+          <td>No current work around but Fusion loads and runs correctly.</td>
+        </tr>
+        <tr>
+          <td>423</td>
+          <td>Slower JPEG2000 performance than 5.1.3</td>
+          <td>Use Geotiff or other image formats.</td>
+        </tr>
+        <tr>
+          <td>437</td>
+          <td>Rebooting VM while it is building resources results in a corrupted XML</td>
+          <td>No current work around</td>
+        </tr>
+        <tr>
+          <td>440</td>
+          <td>Fuzzy imagery in historical imagery tests.</td>
+          <td>No current work around</td>
+        </tr>
+        <tr>
+          <td>444</td>
+          <td>Fusion installer does not upgrade the asset root on RHEL 7</td>
+          <td>Upgrade the asset root manually by running the command that is printed when you try to start the fusion service</td>
+        </tr>
+        <tr>
+          <td>453</td>
+          <td>Improve `check_server_processes_running` detection for uninstall</td>
+          <td>No current work around</td>
+        </tr>
+        <tr>
+          <td>456</td>
+          <td>Inconsistent behavior of vector layers after upgrade</td>
+          <td>No current work around</td>
+        </tr>
+        <tr>
+          <td>474</td>
+          <td>Running gee_check on some supported platforms reports that the platform is not supported</td>
+          <td>You can ignore the failed test if using a supported platform (Ubuntu 14.04, Ubuntu 16.04, RHEL 7, and CentOS 7).</td>
+        </tr>
+        <tr>
+          <td>476</td>
+          <td>Support building on CentOS6 with Python2.6</td>
+          <td>No current work around</td>
+        </tr>
+        <tr>
+          <td>477</td>
+          <td>'service geserver stop/start/restart' doesn't work on Ubuntu 16.04 without a reboot</td>
+          <td>Reboot and try again</td>
+        </tr>
+      </tbody>
+    </table>
+  <h5>
+    <p id="resolved_issues_5.2.0">Resolved Issues</p>
+  </h5>
+  <div>
+    <table class="nice-table">
+      <tbody>
+        <tr>
+          <th>Number</th>
+          <th class="narrow">Description</th>
+          <th>Resolution</th>
+        </tr>
+        <tr>
+          <td>(none)</td>
+          <td>Error when fusing a mosaic in GDAL 2.x</td>
+          <td>Implemented <code>IReadBlock()</code> API for <code>khVRRasterBand</code></td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td>gefusionuser must have write access to vector files</td>
+          <td>Removed the requirement for write access</td>
+        </tr>
+        <tr>
+          <td>26</td>
+          <td>Fusion segmentation faults when trying to push and the server is not available</td>
+          <td>Passed the correct data type to cURL function</td>
+        </tr>
+        <tr>
+          <td>167</td>
+          <td>If save fails because the Fusion server is not running, the user cannot save again even if the problem is fixed</td>
+          <td>Updated state management in resource creation form</td>
+        </tr>
+        <tr>
+          <td>179</td>
+          <td>Update date parsing to fix default date handling</td>
+          <td>Added code to handle default dates in Fusion tools</td>
+        </tr>
+        <tr>
+          <td>196</td>
+          <td>Simplify SSL settings and enable TLS 1.2 by default</td>
+          <td>Consolidated SSL settings and updated the defaults to include TLS 1.2</td>
+        </tr>
+        <tr>
+          <td>239</td>
+          <td><code>cachedreadaccessor_unittest</code> fails on <code>free()</code> call on Ubuntu 16.04</td>
+          <td>Increased the size of a buffer that was overflowing</td>
+        </tr>
+        <tr>
+          <td>243</td>
+          <td>Fix broken line in cutter script</td>
+          <td>Fixed the relevant line</td>
+        </tr>
+        <tr>
+          <td>351</td>
+          <td>Portable Globe Cutter fails with a Python error</td>
+          <td>Fixed import errors in the cutter scripts</td>
+        </tr>
+        <tr>
+          <td>381</td>
+          <td>Error running POI Search</td>
+          <td>Needed to declare the coding in headers of python script:# -- coding: utf-8 -</td>
+        </tr>
+        <tr>
+          <td>431</td>
+          <td>portable build failure - CentOS 7 - old version of pexpect. </td>
+          <td>Try loading fdpexpect for version 3.* and above. If not successful, fallback to fdpexpect from older pexpect package.</td>
+        </tr>
+        <tr>
+          <td>435</td>
+          <td>Specify C++ version for portable build</td>
+          <td>Updated the build_lib scripts to include the flag "-std=gnu++98"</td>
+        </tr>
+        <tr>
+          <td>436</td>
+          <td>Seg fault in fusion when opening vector resource created in old version</td>
+          <td>Eliminated NULL pointer error in date/time function</td>
+        </tr>
+      </tbody>
+    </table>
+  <div class="footer">
+    <p class="BackToTop"><a href="#top_of_file">Back to top</a>
+    
+    <hr />
+    </p>
+    <p class="copyright">&copy;2017 Open GEE Contributors</p>
+  </div>
+</div>
+</body>
+</html>
