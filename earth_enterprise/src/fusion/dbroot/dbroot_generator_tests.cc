@@ -130,7 +130,7 @@ class Test_dbrootgen : public testing::Test {
     khGetBasenamesMatchingPattern(golden_dir, kPostamblePrefix, "",
                                   &golden_dbroots);
     std::sort(golden_dbroots.begin(), golden_dbroots.end());
-    ASSERT_EQ(golden_dbroots, generated_dbroots);
+    ASSERT_TRUE(golden_dbroots == generated_dbroots);
 
     // Now make sure each of the output dbroots matches it's golden counterpart
     uint size = generated_dbroots.size();
