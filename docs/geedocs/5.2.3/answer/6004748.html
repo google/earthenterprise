@@ -1,0 +1,407 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Manage snippet profiles</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 6004748.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/3468004.html">GEE Server Overview</a></p>
+<p class="sidebar-toc"><a href="../answer/3470759.html">Sign in to GEE Server Admin console</a></p>
+<p class="sidebar-toc"><a href="../answer/3479919.html">Snippet profiles page</a></p>
+<p class="sidebar-toc"><a href="../answer/3480095.html">Search tabs page</a></p>
+<p class="sidebar-toc"><a href="../answer/3479921.html">Settings page</a></p>
+<p class="sidebar-toc"><a href="../answer/3480097.html">Dashboard page</a></p>
+<p class="sidebar-toc"><a href="../answer/3479922.html">Databases page</a></p>
+<p class="sidebar-toc"><a href="../answer/3497763.html">Publish databases and portables</a></p>
+<p class="sidebar-toc"><a href="../answer/6004748.html" class="current-file">Manage snippet profiles</a></p>
+<p class="sidebar-toc"><a href="../answer/176770.html">Display custom logos</a></p>
+<p class="sidebar-toc"><a href="../answer/6013604.html">Manage virtual hosts</a></p>
+<p class="sidebar-toc"><a href="../answer/4441137.html">Make Web Map Service (WMS) requests</a></p>
+<p class="sidebar-toc"><a href="../answer/6062970.html">Publish databases with search</a></p>
+<p class="sidebar-toc"><a href="../answer/6063101.html">Search your POI vector data or map layer data</a></p>
+<p class="sidebar-toc"><a href="../answer/3497832.html">Create Search tabs</a></p>
+<p class="sidebar-toc"><a href="../answer/6066597.html">Add custom search services</a></p>
+<p class="sidebar-toc"><a href="../answer/6082250.html">Troubleshoot search services</a></p>
+<p class="sidebar-toc"><a href="../answer/6091774.html">Example Search plug-in Python code sample</a></p>
+<p class="sidebar-toc"><a href="../answer/6091810.html">Custom POI Search plug-in Python code sample</a></p>
+<p class="sidebar-toc"><a href="../answer/3230777.html">Create portable globes and maps</a></p>
+<p class="sidebar-toc"><a href="../answer/4643041.html">Create composite globes and maps</a></p>
+<p class="sidebar-toc"><a href="../answer/6051534.html">View 3D databases</a></p>
+<p class="sidebar-toc"><a href="../answer/6051659.html">View 2D databases</a></p>
+<p class="sidebar-toc"><a href="../answer/6051568.html">Implement Google Earth Plugin</a></p>
+<p class="sidebar-toc"><a href="../answer/6051584.html">(Deprecated) Provide Google Earth Plug-in for your users to install</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | GEE Server administration</h1>
+<h2>Manage snippet profiles</h2>
+<p>You can customize your database view and available features in Google Earth Enterprise Client (EC) by setting up <em>snippet profiles</em> in the the GEE Server admin console.</p>
+<p><em>Snippets</em> are different properties and options that may be specified for a Fusion 3D database. When you connect to a database in Google Earth EC, snippets control its appearance and behavior. GEE Server lets you set your snippet preferences, then combine snippets into a <em>snippet profile</em>, which can then be applied to any database that you publish. The snippet profile settings then modify the database's behavior and appearance when you connect to it in Google Earth EC.</p>
+<p>For example, many of these preferences (or <i>snippets</i>) apply to display characteristics, such as showing or hiding different elements such as the Google logo or your own co-brand logo. You can also apply other settings, such as caching data on disk, enabling authentication, hiding user data in the <strong>About</strong> dialog, and specifying a reverse geocoder server URL.
+</p>
+<div class="tip">
+Google Earth EC recognizes only the settings made by the first database that you connect to in Google Earth EC. This applies when you are connecting to multiple databases.
+</div>
+<p class="caution"><strong>Caution:</strong> If you are working with multiple GEE Server users on multiple workstations, it is important to remember that snippet profiles can be accessed by all users at the same time. Be sure to coordinate with any other users to not overwrite snippet profile settings.
+</p>
+<ul>
+<li><a href="#CreateSP">Creating a snippet profile</a></li>
+<li><a href="#EditSnippets">Editing snippet settings</a></li>
+<li><a href="#TableSnippets">Table of snippet settings</a></li>
+<li><a href="#ModifySP">Modifying snippet profiles</a></li>
+<li><a href="#DeleteSP">Deleting snippet profiles</a></li>
+</ul>
+<h3><a name="CreateSP">To create a snippet profile:</a>
+</h3>
+<ol>
+<li>Access the Google Earth Enterprise Server Admin console in a browser window by going to <em>myserver.mydomainname</em>.com/admin, replacing <em>myserver</em> and <em>mydomainname</em> with your server and domain.
+</li>
+<li>Sign in with the default credentials or the username and password assigned to you:
+<ul>
+<li>Default username: <em>geapacheuser</em></li>
+<li>Default password: <em>geeadmin</em></li>
+</ul>
+<p class="note"><strong>Note:</strong> If you do not know your username and password, contact your Google Earth Enterprise Server System Administrator.</p>
+</li>
+<li>Click <strong>Snippet profiles</strong> to display your snippet profiles.</li>
+<li>Click <strong>Create New</strong>. The <strong>Create new snippet profile</strong> dialog appears.
+<p><img alt="GEE Server Create Snippet Profile dialog" src="../art/server/snippet_profiles/snippet_profilesCreateDialog.png"/></p></li>
+<li>Enter a name for the new snippet profile and click <b>Create</b>. The snippet profile name appears in red in the <strong>Existing snippet profile</strong> list and the <strong>Snippet editor</strong> opens.     </li>
+</ol>
+<h3><a name="EditSnippets">To edit snippet settings:</a></h3>
+<ol>
+<li>Click the <strong>Add a new snippet set to the profile</strong> drop-down to display the list of available snippets.
+<p><img alt="GEE Server snippet profile list" src="../art/server/snippet_profiles/snippet_profiles-list2.png"/></p>
+</li>
+<li>Select a snippet from the list. The selected snippet options are added to the current snippet profile and appear in the profile list.
+<p><img alt="GEE Server snippet examples" src="../art/server/snippet_profiles/snippet_profiles-examples2.png"/></p>
+<p>You can select some snippets multiple times per profile, For example, you may want to add more than one customized logo to be displayed in Google Earth EC. For those snippets that cannot be added to a profile more than once, such as disable authentication, the snippet name appears greyed out and a checkmark appears next to it in the snippet list.</p>
+<p><img alt="GEE Server snippet profile list-greyed" src="../art/server/snippet_profiles/snippet_profiles-list-greyed.png"/></p>
+</li>
+<li>Edit the snippet profile to specify values for the snippets. See the following <a href="#23229"><strong>Snippet Settings</strong></a> table for snippet settings.
+<div class="tip">
+When you add a snippet, you must enter values in the empty fields; if you want the snippet string to be empty, which is the default setting, you should not add the snippet and edit its values.
+</div>
+</li>
+<li>When you have finished adding snippets and specifying values for your snippet profile, click <b>Save changes</b>.
+<p>Now you can apply your snippet profile to any 3D database you
+<a href="../answer/3497763.html">publish</a>.</p>
+</li>
+</ol>
+<h3><a name="TableSnippets"></a>Snippet Settings</h3>
+<p>The following table lists the syntax for all of the available dbRoot snippets.
+</p>
+<div>
+<table class="nice-table">
+<tbody>
+<tr>
+<th>Snippet Name
+</th>
+<th>Purpose
+</th>
+<th>Syntax
+</th>
+<th>Notes
+</th>
+</tr>
+<tr>
+<td><code>bbs_server_info</code>
+</td>
+<td>Specify BBS Server info.
+</td>
+<td><code>base_url</code>—URL of the server, including protocol, domain name, and port.<br/>
+<code>file_submit_path</code>—Path on server where files can be submitted.<br/>
+<code>name</code>—Name that will be displayed in context menu to user. Must be translated. <br/>
+<code>post_wizard_path</code>—Path on server where wizard can be found.<br/>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td><code>client_options
+</code>
+</td>
+<td>Disable disk caching in Google Earth EC.
+</td>
+<td><code>disable_disk_cache</code>
+</td>
+<td>Default value is False
+</td>
+</tr>
+<tr>
+<td><code>cobrand_info</code>
+</td>
+<td>Add custom logo to Google Earth EC display window.
+</td>
+<td><code>logo_url</code>—URL of image to use as logo<br/>
+<code>screen_size</code>—Positive value &lt;=1 specifies scale with screen.<br/>
+<code>tie_point</code>—Controls the reference point in the overlay.<br/>
+<code>x_coord.is_relative</code>—If True, the coordinate is relative to the screen.<br/>
+<code>x_coord.value</code>—Coordinate value. Interpretation depends on value set in <code>x_coord.is_relative</code>.<br/>
+<code>y_coord.is_relative</code>—If True, the coordinate is relative to the screen.<br/>
+<code>y_coord.value</code>—Coordinate value. Interpretation depends on value set in <code>y_coord.is_relative</code>.<br/>
+</td>
+<td><code>logo_url</code> can be remote or local.<br/>
+<code>screen_size</code> makes logo scalable with screen by forcing its width to occupy a fraction of the screen. For example, a value of 0.25 sets the given logo to occupy 25% of the screen.<br/>
+</td>
+</tr>
+<tr>
+<td><code>default_web_page_intl_url</code>
+</td>
+<td>Default location of web page in Google Earth EC.
+</td>
+<td><code>https://www.google.com/?hl=%251</code>
+</td>
+<td>Can be set to an internal IP or host name address. Default web page value in GEE is an empty string.
+</td>
+</tr>
+<tr>
+<td><code>disable_authentication</code>
+</td>
+<td>Disable session cookie-based authentication.
+</td>
+<td><code>boolean</code>
+</td>
+<td>Indicates that this database does not require session cookie-based authentication.
+</td>
+</tr>
+<tr>
+<td><code>earth_intl_url</code>
+</td>
+<td>Location of international page for Google Earth.
+</td>
+<td><code>http://earth.google.com</code>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td><code>elevation_service<br/>
+_base_url</code>
+</td>
+<td>Terrain elevation service URL.
+</td>
+<td><code></code>
+</td>
+<td>If field is empty, service is unavailable.
+</td>
+</tr>
+<tr>
+<td><code>hide_user_data</code>
+</td>
+<td><code>True</code> = Suppress user name in the Help -&gt; About window. <code>False</code> = Display user name.
+</td>
+<td><code>boolean</code>
+</td>
+<td>Default is False.
+</td>
+</tr>
+<tr>
+<td><code>keyboard_shortcuts_url</code>
+</td>
+<td>URL for keyboard shortcuts page. If not specified, this URL is built from user_guide_intl_url as user_guide_intl_url"ug_keyboard.html"
+</td>
+<td><code></code>
+</td>
+<td>Can be set to an internal IP or host name address.
+</td>
+</tr>
+<tr>
+<td><code>model</code>
+</td>
+<td>
+</td>
+<td><code>compressed_negative_altitude_threshold</code>—Threshold below which negative altitudes are compressed<br/>
+<code>elevation_bias</code>—Elevation bias<br/>
+<code>flattening</code>—Planet flattening. Default value is 1.0/298.257223563 (from  WGS84)<br/>
+<code>negative_altitude_exponent_bias</code>—Bias for negative altitude so that ocean tiles can be streamed to older clients<br/>
+<code>radius</code>—Mean planet radius. Default value is the WGS84 model for earth
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td><code>privacy_policy_url</code>
+</td>
+<td>URL for privacy policy.
+</td>
+<td><code>IP address or host name</code>
+</td>
+<td>Can be set to an internal IP or host name address.
+</td>
+</tr>
+<tr>
+<td><code>release_notes_url</code>
+</td>
+<td>URL for release notes.
+</td>
+<td><code>IP address or host name</code>
+</td>
+<td>Can be set to an internal IP or host name address.
+</td>
+</tr>
+<tr>
+<td><code>reverse_geocoder<br/>
+_protocol_version</code>
+</td>
+<td>Reverse geocoder protocol version.
+</td>
+<td><code>numeric value</code>
+</td>
+<td>Default is 3 which is the protocol supported by newer clients.
+</td>
+</tr>
+<tr>
+<td><code>reverse_geocoder_url</code>
+</td>
+<td>Reverse geocoder server URL.
+</td>
+<td><code></code>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td><code>show_signin_button</code>
+</td>
+<td>If True, shows the signin button in the top-right corner of the display window.
+</td>
+<td><code>boolean</code>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td><code>startup_tips_intl_url</code>
+</td>
+<td>Localize international URL from which to load startup tips for Earth 7.0 or higher.
+</td>
+<td><code></code>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td><code>support_answer_intl_url</code>
+</td>
+<td>Localize international URL for support answers
+</td>
+<td><code>https://support.google.com/earth/#topic=4363013</code>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td><code>support_center_intl_url</code>
+</td>
+<td>Localize international URL for the support center
+</td>
+<td><code>http://support.google.com/earth/</code>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td><code>support_request_intl_url</code>
+</td>
+<td>Localize international URL for support requests
+</td>
+<td><code>https://support.google.com/earth/#topic=2364258</code>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td><code>support_topic_intl_url</code>
+</td>
+<td>Localize international URL for support topics
+</td>
+<td><code>http://www.google.com/earth/learn/</code>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td><code>swoop_parameters</code>
+</td>
+<td>Controls how far from a target swooping should start.
+</td>
+<td><code>start_dist_in_meters</code>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td><code>tutorial_url</code>
+</td>
+<td>URL for tutorial page. If URL is not specified, this URL is built from <code>user_guide_intl_url</code> as <code>user_guide_intl_url + "tutorials/index.html"</code>.
+</td>
+<td><code>http://www.google.com/earth/learn/</code>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td><code>use_ge_logo</code>
+</td>
+<td>Shows/hides Google Earth logo in lower right corner of display.
+</td>
+<td><code>boolean</code>
+</td>
+<td>Default is True.
+</td>
+</tr>
+<tr>
+<td><code>user_guide_intl_url</code>
+</td>
+<td>Localize international URL for documentation
+</td>
+<td><code>http://www.google.com/earth/learn/</code>
+</td>
+<td>Defaults to local PDF file for Google Earth EC. Can be set to an internal IP or hostname address.
+</td>
+</tr>
+<tr>
+<td><code>valid_database</code>
+</td>
+<td>Validates the database name and URL.
+</td>
+<td><code>database_name</code>—Human-readable name of database, for example, "Primary Database" or "Digital Globe Database"<br/>
+<code>database_url</code>—URL of server. This can include a path and a query, and must be a well-formed, absolute URL.
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3><a name="ModifySP">To modify a snippet profile:</a>
+</h3>
+<ol>
+<li>To change the snippets in a snippet profile, click the snippet profile name in the <strong>Existing snippet profiles</strong> list that you want to edit.
+<p>The <strong>Snippet editor</strong> appears with the name of your selected snippet profile and the list of included snippets.
+</p>
+<p>All your previously selected snippets can be edited with new options and settings.
+</p></li>
+<li>To add a snippet, click the drop-down list to select a new snippet.</li>
+<li>To delete a snippet from your profile, click <strong>delete</strong> in the snippet settings.
+<p><img alt="GEE Server Snippet editor: delete snippet" src="../art/server/snippet_profiles/snippet_profiles-delete-snippet.png"/></p>
+</li>
+<li>Click <strong>Save Changes</strong>.
+</li></ol>
+<h3><a name="DeleteSP">To delete a snippet profile:</a>
+</h3>
+<ol>
+<li>Hover your cursor over the name of the snippet profile that you want to delete. The <strong>delete</strong> option appears.
+<p><img alt="GEE Server Snippet profiles: delete snippet profile" src="../art/server/snippet_profiles/snippet_profiles-delete.png"/></p>
+<p>A message prompts you to confirm that you want to delete the selected snippet profile.
+</p>
+</li>
+<li>Click <b>Yes</b>.
+<p>The snippet profile disappears from the <strong>Existing snippet profiles</strong> list.
+</p>
+</li>
+</ol>
+<h2>Learn more</h2>
+<a href="../answer/6006981.html">Google Earth Enterprise Client (EC)</a><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>

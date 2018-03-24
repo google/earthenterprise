@@ -90,10 +90,10 @@ load_systemrc_config()
         VALUE=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/assetroot/text()")
         [ -z "$VALUE" ] || ASSET_ROOT="$VALUE"
 
-        VALUE=$(xml_file_get_node_text "$SYSTEMRC" "//Systemrc/fusionUsername/text()")
+        VALUE=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/fusionUsername/text()")
         [ -z "$VALUE" ] || GEFUSIONUSER="$VALUE"
 
-        VALUE=$(xml_file_get_node_text "$SYSTEMRC" "//Systemrc/userGroupname/text()")
+        VALUE=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/userGroupname/text()")
         [ -z "$VALUE" ] || GEGROUP="$VALUE"
     fi
 }
