@@ -22,6 +22,7 @@
 #include <vector>
 #include <khException.h>
 #include <khFileUtils.h>
+#include "common/khCppStd.h"
 
 
 /******************************************************************************
@@ -69,6 +70,7 @@ class DerivedAssetHandleD_ : public virtual BaseD_, public ROBase_
       // class puts a build time check to ensure BBase is a virtural base class of this class.
       BBase(ref_), BaseD(), ROBase() { }
 
+#if GEE_HAS_MOVE
   // Because we are using virtual inheritance in this class hierarchy we _should_ explicitly implement
   // copy/assigment and not allow the less effecient default generated implementations be used.
   // But, for move operations we *must* implement a correct version as the default version 
@@ -85,6 +87,7 @@ class DerivedAssetHandleD_ : public virtual BaseD_, public ROBase_
 
     return *this;
   }
+#endif // GEE_HAS_MOVE
 
   DerivedAssetHandleD_(const DerivedAssetHandleD_<ROBase_, BaseD_, Impl_>& rhs) :
       // Again we want to only call the non-default constructor for the one virtual base 
@@ -110,6 +113,7 @@ class DerivedAssetHandleD_ : public virtual BaseD_, public ROBase_
 
   ~DerivedAssetHandleD_()
   {
+#ifdef GEE_HAS_STATIC_ASSERT
     // nothing to do other than assert some compile time assuptions
     // we will get a compile error from above if BBase is not a virtual
     // base class but we also want to be sure BROBase is a virtual base
@@ -117,6 +121,7 @@ class DerivedAssetHandleD_ : public virtual BaseD_, public ROBase_
     // build time assert will give us a compile error if something changes 
     // that causes that to be untrue.
     static_assert(std::is_same<BBase, BROBase>::value, "BBase and BROBase *must* be the same type!!!");
+#endif // GEE_HAS_STATIC_ASSERT
   }
 };
 
@@ -318,6 +323,8 @@ class MutableAssetHandleD_ : public virtual Base_ {
 
     return *this;
   }
+
+#if GEE_HAS_MOVE
   MutableAssetHandleD_(MutableAssetHandleD_<Base_> &&o) noexcept :
     // Again we want to only call the non-default constructor for the one virtual base 
     // class that has state.
@@ -329,6 +336,7 @@ class MutableAssetHandleD_ : public virtual Base_ {
 
     return *this;
   }
+#endif // GEE_HAS_MOVE
 
   using Base::operator->;
   Impl* operator->(void) {
@@ -408,6 +416,7 @@ protected:
       BBase(o.Ref()), BaseD(), DerivedBase(), MutableBase() { }
 
 
+#if GEE_HAS_MOVE
   // Because we are using virtual inheritance in this class hierarchy we _should_ explicitly implement
   // copy/assigment and not allow the less effecient default generated implementations be used.
   // But, for move operations we *must* implement a correct version as the default version 
@@ -424,6 +433,7 @@ protected:
   
     return *this;
   }
+#endif // GEE_HAS_MOVE
 
   MutableDerivedAssetHandleD_(const MutableDerivedAssetHandleD_<DerivedBase_, MutableBase_>& rhs) :
       // Only call the common (virtually inherited) base class with the initializtion state.
@@ -446,6 +456,7 @@ protected:
 
   ~MutableDerivedAssetHandleD_()
   {
+#ifdef GEE_HAS_STATIC_ASSERT
     // nothing to do other than assert some compile time assuptions
     // we will get a compile error from above if BBase is not a virtual
     // base class but we also want to be sure BROBase is a virtual base
@@ -453,6 +464,7 @@ protected:
     // build time assert will give us a compile error if something changes 
     // that causes that to be untrue.
     static_assert(std::is_same<BBase, MBBase>::value, "BBase and MBBase *must* be the same type!!!");
+#endif // GEE_HAS_STATIC_ASSERT
   }
 };
 

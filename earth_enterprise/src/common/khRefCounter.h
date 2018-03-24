@@ -22,6 +22,7 @@
 #include "common/khTypes.h"
 #include "common/khGuard.h"
 #include "common/khThreadingPolicy.h"
+#include "common/khCppStd.h"
 
 
 // ****************************************************************************
@@ -112,6 +113,7 @@ class khRefGuard {
     return *this;
   }
 
+#ifdef GEE_HAS_MOVE
   // move assignment & copy constructor
   khRefGuard(khRefGuard &&o) noexcept : ptr(o.ptr) { o.ptr = nullptr; }
   khRefGuard& operator=(khRefGuard &&o) noexcept {
@@ -123,6 +125,7 @@ class khRefGuard {
     }
     return *this;
   }
+#endif // GEE_HAS_MOVE
 
   // 2 assignments is cheaper than 2 mutex locks. So in case you don't care
   // about b, a.swap(b) is faster than a = b
@@ -187,14 +190,30 @@ class khRefCounterImpl : public ThreadPolicy::MutexHolder {
  private:
   mutable uint32 refcount_;
 
-  // private and unimplemented
-  // classes derived from khRefCounterImpl are meant to be shared, not copied/moved
-  khRefCounterImpl(const khRefCounterImpl &) = delete;
-  khRefCounterImpl & operator=(const khRefCounterImpl&) = delete;
-  khRefCounterImpl(khRefCounterImpl &&) = delete;
-  khRefCounterImpl & operator=(khRefCounterImpl&&) = delete;
-
  protected:
+  // protected and implemented to do nothing
+  // classes derived from khRefCounterImpl can decide if they want to support
+  // copy/move operations on their state but this base class state should
+  // do nothing druing these operations as this state is tied to memory managment
+  // and not really object state.
+  khRefCounterImpl(const khRefCounterImpl &) : refcount_(1) {
+    // intentionally left empty.  The right thing to do is nothing.
+  }
+  khRefCounterImpl & operator=(const khRefCounterImpl&) {
+    // intentionally left empty.  The right thing to do is nothing.
+    return *this;
+  }
+
+#if GEE_HAS_MOVE
+  khRefCounterImpl(khRefCounterImpl &&) : refcount_(1) {
+    // intentionally left empty.  The right thing to do is nothing.
+  }
+  khRefCounterImpl & operator=(khRefCounterImpl&&) {
+    // intentionally left empty.  The right thing to do is nothing.
+    return *this;
+  }
+#endif // GEE_HAS_MOVE
+
   inline khRefCounterImpl(void) : refcount_(1) { }
 
   // virtual to force my derivations to be virtual this is needed since this

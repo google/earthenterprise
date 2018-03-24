@@ -174,12 +174,6 @@ class DerivedAssetHandle_ : public virtual Base_ {
       this->handle = HandleType();
     }
   }
-  DerivedAssetHandle_(Base &&o) noexcept : Base(std::move(o)) {
-    if (this->handle &&
-        !dynamic_cast<const Impl*>(this->handle.operator->())) {
-      this->handle = HandleType();
-    }
-  }
 
   // the compiler generated assignment and copy constructor are fine for us
   // we have no addition members or semantics to maintain
