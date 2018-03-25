@@ -205,10 +205,10 @@ class khRefCounterImpl : public ThreadPolicy::MutexHolder {
   }
 
 #if GEE_HAS_MOVE
-  khRefCounterImpl(khRefCounterImpl &&) : refcount_(1) {
+  khRefCounterImpl(khRefCounterImpl &&) noexcept : refcount_(1) {
     // intentionally left empty.  The right thing to do is nothing.
   }
-  khRefCounterImpl & operator=(khRefCounterImpl&&) {
+  khRefCounterImpl & operator=(khRefCounterImpl&&) noexcept {
     // intentionally left empty.  The right thing to do is nothing.
     return *this;
   }
