@@ -22,7 +22,27 @@
 // we should stop using this file and delete this file
 
 #if __cplusplus <= 199711L    // C++98
-#  define nullptr NULL
+// from Scott Meyers Effective C++:
+// https://www.amazon.com/gp/product/0321334876?ie=UTF8&tag=aristeia.com-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=0321334876
+const                         /* this is a const object...     */
+class nullptr_t
+{
+public:
+   template<class T>          /* convertible to any type       */
+   operator T*() const        /* of null non-member            */
+      { return 0; }           /* pointer...                    */
+
+   template<class C, class T> /* or any type of null           */
+      operator T C::*() const /* member pointer...             */
+      { return 0; }   
+
+private:
+   void operator&() const;    /* Can't take address of nullptr */
+
+} nullptrx = {};               /* and whose name is nullptr     */
+#  define nullptr nullptrx  // needed to avoid compiler error because nullptr
+                            // is a C++11 keyword... But we don't use this if 
+                            // C++11 or above is being used.
 #else  // C++11 or greater
 #  define GEE_HAS_MOVE 1
 #  define GEE_HAS_STATIC_ASSERT 1
