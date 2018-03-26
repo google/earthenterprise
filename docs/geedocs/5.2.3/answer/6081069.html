@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Add flat imagery to Mercator map databases in GEE 5.1.0</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
+</head>
+<body>
+<!-- 6081069.html -->
+<div class="container">
+<div class="sidebar1">
+  <p class="sidebar-toc"><a href="../answer/6153619.html">Supported file formats in GEE</a></p>
+  <p class="sidebar-toc"><a href="../answer/6053241.html">Apply alpha masking to imagery</a></p>
+  <p class="sidebar-toc"><a href="../answer/172810.html">Import pre-processed data</a></p>
+  <p class="sidebar-toc"><a href="../answer/1090589.html">Import a subset of imagery</a></p>
+  <p class="sidebar-toc"><a href="../answer/173054.html">Add .kip imagery</a></p>
+  <p class="sidebar-toc"><a href="../answer/2882131.html">Vector data handling</a></p>
+  <p class="sidebar-toc"><a href="../answer/2760298.html">Google Maps raster background</a></p>
+  <p class="sidebar-toc"><a href="../answer/4525555.html">Create custom masks</a></p>
+  <p class="sidebar-toc"><a href="../answer/6062318.html">Manage mosaics with virtual rasters</a></p>
+  <p class="sidebar-toc"><a href="../answer/6081009.html">Map projection types in GEE 5.1.0</a></p>
+  <p class="sidebar-toc"><a href="../answer/6081069.html" class="current-file">Add flat imagery to Mercator map databases in GEE 5.1.0</a></p>
+  <p class="sidebar-toc"><a href="../answer/2760457.html">Add KML layers</a></p>
+  <p class="sidebar-toc"><a href="../answer/2760534.html">Non-clickable icons</a></p>
+  <p class="sidebar-toc"><a href="../answer/173053.html">Map projections</a></p>
+  <p class="sidebar-toc"><a href="../answer/1089795.html">Map buttons</a></p>
+  <p class="sidebar-toc"><a href="../answer/4492623.html">Create terrain overlays</a></p>
+  <p class="sidebar-toc"><a href="../answer/2760655.html">Monitor builds with Twitter</a></p>
+</div>
+<div class="content"> <a name="top_of_file"></a>
+  <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+  <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion resources and projects</h1>
+  <h2>Add flat imagery to Mercator map databases in GEE 5.1.0</h2>
+  <p>When you build a Mercator-based map database, you must build imagery projects specifically for use with Mercator-based projection (EPSG: 3857). However, with GEE 5.1.0, if you already have database imagery projects in the Plate Carrée projection (EPSG: 4326), you can re-use them for your Mercator-based map database using <em>Mercator on the Fly</em>. When disk space is a key consideration, you only need imagery projects in Plate Carrée projection for 2D flat, 2D Mercator, and 3D databases, reducing the storage requirements for your assets.</p>
+  <p><em>Mercator on the Fly</em> converts a Plate Carrée-based imagery project into a Mercator-based imagery project when you create your map database in Fusion. When GEE Server hosts the published Mercator database, the server requests the <em>Mercator on the Fly</em> imagery project in the database and serves it with a Mercator projection. With some projections, you may see a reduction in serving speed when projecting a <em>Mercator on the Fly</em> imagery project. For more information about performance, see <a href="#MotF_data">Mercator on the Fly Performance Data</a>.</p>
+  <p>As you decide which type of imagery project to build, you’ll need to consider the projection types you need and whether disk space or serving speed is important. For 2D flat, 2D Mercator, and 3D databases, you can use flat imagery with <em>Mercator on the Fly</em> if disk space is a key consideration. However if serving speed is a key consideration, you should build both flat and Mercator imagery projects. The following table shows the decision matrix to guide you:</p>
+  <table class="nice-table">
+    <tbody>
+      <tr>
+        <th width="25%">Build projects/serve databases</th>
+        <th width="25%">Mercator</th>
+        <th width="25%">2D flat and 3D</th>
+        <th width="25%">2D flat, Mercator, and 3D</th>
+      </tr>
+      <tr>
+        <td>Flat imagery project</td>
+        <td class="align-center red-text"><strong>X</strong></td>
+        <td class="align-center"><img src="../art/fusion/tutorial/checkmark-g16.png"/></td>
+        <td><img src="../art/fusion/tutorial/checkmark-g16.png"/> Disk space is most important. Flat imagery projects used for all database types, with <em>Mercator on the Fly</em> used to serve flat imagery for Mercator map databases.</td>
+      </tr>
+      <tr>
+        <td>Mercator imagery project</td>
+        <td class="align-center"><img src="../art/fusion/tutorial/checkmark-g16.png"/></td>
+        <td class="align-center red-text"><strong>X</strong></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Flat and Mercator imagery projects</td>
+        <td class="align-center"><img src="../art/fusion/tutorial/checkmark-g16.png"/></td>
+        <td class="align-center"><img src="../art/fusion/tutorial/checkmark-g16.png"/></td>
+        <td><img src="../art/fusion/tutorial/checkmark-g16.png"/> Serving speed is most important. Flat imagery projects used for 3D and 2D flat databases; Mercator imagery projects for Mercator map databases.</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>Of course, if you’re serving imagery <em>only</em> as Mercator map databases, you should only build Mercator imagery projects.</p>
+  <h3>To add a flat imagery resource to a Mercator-based map database:</h3>
+  <ol class="spaced-list">
+    <li>Select <strong>Asset Manager</strong> from the <strong>Tools</strong> menu. The Asset Manager dialog appears.</li>
+    <li>Select <strong>Mercator Map Tools (2D)</strong> from the Asset Manager toolbar. The tools for Mercator maps appear in the toolbar.</li>
+    <li>Click <img height="20" src="../art/fusion/tutorial/iconDatabaseMap.png" width="20"/>. The Map Database Editor appears with no projects selected.
+      <p><img alt="Mercator Maps Database Editor" height="175" name="mapsMercDatabaseEditor" src="../art/fusion/tutorial/mapsMercDatabaseEditor.png" width="434"/> </p>
+    </li>
+    <li></li>
+  </ol>
+  Click <img src="../art/fusion/tutorial/icon_new.gif"/> next to <b>Map Project</b>. The Open Asset dialog appears.
+  <li><a name="25862"></a>Navigate to the <code>ASSET_ROOT/Projects/Map </code>folder.</li>
+  <li>Select the map project that you want to add to the map database and click <strong>Open</strong>. The map project appears in the Map Database Editor next to Map Project.</li>
+  <li>Click <img src="../art/fusion/tutorial/icon_new.gif"/> next to <strong>Imagery Project</strong>. The Open Asset dialog appears.</li>
+  <li>Navigate to the <code>ASSET_ROOT/Projects/Imagery</code> folder.</li>
+  <li>Select <strong>Flat Imagery Project</strong> from the <strong>Type</strong> drop-down list, then select the imagery project to add and click <strong>Open</strong>. The imagery project appears in the Map Database Editor next to Imagery Project.</li>
+  <li>Select <strong>File &gt; Save</strong>.</li>
+  <li>Navigate to the <code>ASSET_ROOT/Databases</code> folder.</li>
+  <li>In the <strong>Name</strong> field, enter a name, and click <strong>Save</strong>.</li>
+  <li>In the Asset Manager, the new map database appears, along with the other databases you have created. Notice that the <strong>Category</strong> column distinguishes between the Google Earth databases and the Google Maps database.</li>
+  <li>Right-click the name of your map database, and select <strong>Build</strong> from the context menu. The status of the database immediately changes to <strong>Waiting</strong> or <strong>Queued</strong> and then to <strong>In Progress</strong>.
+    <p>When Google Earth Enterprise Fusion finishes building the database, its <strong>Current State</strong> column in the Asset Manager changes to <strong>Succeeded</strong>, and its <strong>Current Version</strong> column changes to the date and time the most recent build was started.</p>
+  </li>
+  <h2><a name="MotF_data"></a>Mercator on the Fly performance data</h2>
+  <p>Mercator resolution increases relative to Plate Carrée as latitude increases (or decreases) from the equator for any given map level . Therefore to obtain the correct Mercator resolution, tiles must be sampled from higher Plate Carrée levels (known as upsampling). The higher the latitude, the greater the number of tiles required and, as a result, processing time for <em>Mercator on the Fly</em> increases although not proportionally.  The following table lists the number of Plate Carrée tiles required to produce a single <em>Mercator on the Fly</em> tile vs. latitude (north or south) and the approximate expected increase in processing time assuming cached tiles. </p>
+  <table class="nice-table">
+    <tbody>
+      <tr>
+        <th width="25%">Approximate Latitude Range(degrees)</th>
+        <th width="15%">Level Up to sample</th>
+        <th width="30%">MotF P.C. tiles processed</th>
+        <th width="30%">Max Relative Clock Time Ratio (relative to 1 tile)</th>
+      </tr>
+      <tr>
+        <td>0 to 40</td>
+        <td>1</td>
+        <td>1-2</td>
+        <td>1 to 1.2 (2 tiles)</td>
+      </tr>
+      <tr>
+        <td>40 to 65</td>
+        <td>2</td>
+        <td>up to 4</td>
+        <td>2.1 (4 tiles)</td>
+      </tr>
+      <tr>
+        <td>56 to 75</td>
+        <td>3</td>
+        <td>up to 8</td>
+        <td>3.2 (8 tiles)</td>
+      </tr>
+      <tr>
+        <td>75 to 85</td>
+        <td>4</td>
+        <td>up to 16</td>
+        <td>5.1 (16 tiles)</td>
+      </tr>
+    </tbody>
+  </table>
+  <h2>Learn more</h2>
+  <ul>
+    <li><a href="../answer/6034724.html">Push and publish databases</a></li>
+    <li><a href="../answer/4441137.html">Make Web Map Service (WMS) requests</a></li>
+  </ul>
+  <div class="footer">
+    <p class="BackToTop"><a href="#top_of_file">Back to top</a>
+    <hr />
+    </p>
+    <p class="copyright">&copy;2015 Google</p>
+  </div>
+</div>
+</div>
+</body>
+</html>
