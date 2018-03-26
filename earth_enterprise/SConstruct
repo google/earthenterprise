@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+# This file is 'earth_enterprise/SConstruct'
+
 import sys
 import os
 import commands
@@ -24,18 +26,24 @@ from khEnvironment import khEnvironment
 
 EnsureSConsVersion(0, 96, 92)
 
+# Check for the presents of the passed argument on
+# the command line.  If exists return a formated
+# string that can be passed to gradle else return
+# an empty string
+def check_for_argument( argument ) :
+  result = ""
+  if int( ARGUMENTS.get( argument, '0' ) ) > 0 :
+    result = "-P" + argument
+  return result
 
-
-
-# Check for possible objects to pass on to gradle
+# Check for command line arguments passed that must be
+# passed on to gradle
 def gradle_options() :
-  options = ""  # Default to no option
-  if ARGUMENTS.get( 'release', '0' ) == '1' :
-    options += " -PRELEASE"
-  else :
-    options += " -PDEBUG"
-  if ARGUMENTS.get( 'optimize', '0' ) == '1' :
-    options += " -POPTIMIZE"
+  options = ""
+  options = check_for_argument( 'debug' )
+  options = check_for_argument( 'release' )
+  options = check_for_argument( 'optimize' )
+  options = check_for_argument( 'profile' )
   return options
 
 

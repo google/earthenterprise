@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+//
+// This file is 'earth_enterprise/rpms/build.gradle'
+//
 // Command-line parameters:
 //
 //     ./gradlew -PbuildOpenGee:
@@ -22,8 +25,14 @@
 // This Scons target copies build artifacts, binaries and documents into the
 // /tmp/fusion_os_install path.
 //
-//     ./gradlew -PDEBUGRPMS
+//     ./gradlew -Prelease
+// Build the RPMs using the files in 'NATIVE-REL-x86_64'
+//
+//     ./gradlew -Pdebug
 // Build the RPMs using the files in 'NATIVE-DBG-x86_64'
+//
+//     ./gradlew -Poptimize
+// Build the RPMs using the files in 'NATIVE-OPT-x86_64'
 //
 //
 // See documentation on the osPackage plugin here:
@@ -49,18 +58,18 @@ import org.opengee.shell.GeeCommandLine
 
 // Varables used for specifying location of two files
 // 'gee_long_version.txt' and 'gepgcommon'
-def working_dir = "../src/"
+def src_dir = "../src/"
 
-// Check for either "-PRELEASE" or "-POPTIMIZE" command line parameters.
-// Return the correct directory based on which paramater is used.
-def native_x86 = {
-  if ( project.hasProperty( 'OPTIMIZE' ) ) { return "NATIVE-OPT-x86_64" }
-  if ( project.hasProperty( 'DEBUG' ) ) { return "NATIVE-DBG-x86_64" }
+// Look for command line paramters that specify how the packages are
+// to be built.  This can be either 'release', 'optimize' or 'debug'
+def native_dir = {
+  if ( project.hasProperty( 'optimize' ) ) { return "NATIVE-OPT-x86_64" }
+  if ( project.hasProperty( 'debug' ) ) { return "NATIVE-DBG-x86_64" }
   return "NATIVE-REL-x86_64"
-}  // end native_x86
+}  // end native_dir
 
 // Build the actual file to be used
-def gee_long_version_txt = working_dir + native_x86() + "/gee_long_version.txt"
+def gee_long_version_txt = "${src_dir}${native_dir()}/gee_long_version.txt"
 
 
 def rpmPlatformString = org.opengee.os.Platform.rpmPlatformString
@@ -81,16 +90,17 @@ if (new File('build.properties').exists()) {
     }
 }
 
+// Create a file handle for gee_long_version_txt
 def openGeeVersionFile = new File( gee_long_version_txt )
 
 // Call scons to create the file 'gee_long_version.txt'
 // The actual parameter used by scons can remain 'release=1'
 if ( !openGeeVersionFile.exists() ) {
     GeeCommandLine.expand(
-      ["/usr/bin/scons", "release=1", openGeeVersionFile ],
-      "Runing `scons` to produce <gee_long_version_txt> failed!",
+      ["/usr/bin/scons", "release=1", gee_long_version_txt ],
+      "Runing `scons` to produce <${gee_long_version_txt}> failed!",
       null, // Use default environment variables.
-      new File( working_dir )
+      new File( src_dir )
     )
 }
 
@@ -134,7 +144,7 @@ def packageInstallLibDir = new File(packageInstallRootDir, 'opt/google/lib')
 
 def postGisInstallDir = new File(
         project.projectDir,
-          working_dir + native_x86 + "third_party/postgis/install"
+          "${src_dir}${native_dir()}third_party/postgis/install"
     ).getAbsolutePath()
 
 def postGisInstallDir_opt = new File(postGisInstallDir, 'opt')
