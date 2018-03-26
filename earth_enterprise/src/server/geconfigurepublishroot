@@ -107,7 +107,7 @@ sub wanted {
    }
    chown $uid, $gid, $File::Find::name;
    # root's umask could leave the dirs with less permissions than we want
-   # getomcatuser:gegroup will need to write to these dirs which is why 775.
+   # geapacheuser:gegroup will need to write to these dirs which is why 775.
    chmod 0775, $File::Find::name if -d;
    # Don't set execute bit on files
    chmod 0664, $File::Find::name if -f;
