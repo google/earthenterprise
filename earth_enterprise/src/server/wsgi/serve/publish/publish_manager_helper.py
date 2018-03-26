@@ -1214,7 +1214,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
     for name in os.listdir(root):
       # Ignore globes that are registered.
       if name not in registered_portable_set:
-        if os.path.isfile(os.path.join(path, name)):
+        if os.path.isfile(os.path.join(root, name)):
           db_info = basic_types.DbInfo()
           db_info.name = name
           db_info.type = db_info.name[-3:]
@@ -1224,7 +1224,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
             if db_info.size > GLOBE_SIZE_THRESHOLD:
               globes_list.append(db_info)
         else:
-          logger.warn( "%s is not a valid file and is being ignored." % os.path.join(path,name) )
+          logger.warn( "%s is not a valid file and is being ignored." % os.path.join(root,name) )
           
     return globes_list
 
