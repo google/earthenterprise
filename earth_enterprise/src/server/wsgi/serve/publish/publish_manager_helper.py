@@ -1225,7 +1225,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
               globes_list.append(db_info)
         else:
           logger.warn( "%s is not a valid file and is being ignored." % os.path.join(root,name) )
-          
+
     return globes_list
 
   def _CreateVsConfig(self, vs_name, vs_url):
