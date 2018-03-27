@@ -40,9 +40,9 @@ def check_for_argument( argument ) :
 # pass them on to Gradle.
 def gradle_options() :
   options = "-Pdebug"
-  options = check_for_argument( 'release' )
-  options = check_for_argument( 'optimize' )
   options = check_for_argument( 'profile' )
+  options = check_for_argument( 'optimize' )
+  options = check_for_argument( 'release' )
   return options
 
 
