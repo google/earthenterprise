@@ -230,7 +230,7 @@ task stageOpenGeeInstall(type: Exec, dependsOn: 'compileOpenGee') {
     // "installdir=${build_install_dir.getAbsolutePath()}", so we
     // overwrite whatever is in the default stage install directory:
     commandLine(
-        'scons', '-j8', scons_options, 'stage_install',
+        'scons', '-j8', scons_option, 'stage_install',
         "installdir=${stagedInstallDir}")
 }
 
