@@ -220,7 +220,7 @@ defaultTasks 'osPackage'
 
 task compileOpenGee(type: Exec) {
     workingDir = '..'
-    commandLine('scons', '-j8', 'release=1', 'build')
+    commandLine('scons', '-j8', scons_option, 'build')
 }
 
 task stageOpenGeeInstall(type: Exec, dependsOn: 'compileOpenGee') {
