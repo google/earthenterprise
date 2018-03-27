@@ -26,9 +26,9 @@ from khEnvironment import khEnvironment
 
 EnsureSConsVersion(0, 96, 92)
 
-# Check for the presents of the passed argument on
+# Check for the presence of the passed argument on
 # the command line.  If exists return a formated
-# string that can be passed to gradle else return
+# string that can be passed to Gradle else return
 # an empty string
 def check_for_argument( argument ) :
   result = ""
@@ -36,11 +36,10 @@ def check_for_argument( argument ) :
     result = "-P" + argument
   return result
 
-# Check for command line arguments passed that must be
-# passed on to gradle
+# Check for command line arguments, if they are found
+# pass them on to Gradle.
 def gradle_options() :
   options = ""
-  options = check_for_argument( 'debug' )
   options = check_for_argument( 'release' )
   options = check_for_argument( 'optimize' )
   options = check_for_argument( 'profile' )

@@ -59,12 +59,20 @@ import org.opengee.shell.GeeCommandLine
 // Varables used for specifying location of two files
 // 'gee_long_version.txt' and 'gepgcommon'
 def src_dir = "../src/"
+def scons_option = "release=1"
 
 // Look for command line paramters that specify how the packages are
-// to be built.  This can be either 'release', 'optimize' or 'debug'
+// to be built.  This can be either 'optimize' or 'debug'.
+// Option 'release' is the default.
 def native_dir = {
-  if ( project.hasProperty( 'optimize' ) ) { return "NATIVE-OPT-x86_64" }
-  if ( project.hasProperty( 'debug' ) ) { return "NATIVE-DBG-x86_64" }
+  if ( project.hasProperty( 'optimize' ) ) {
+    scons_option = "optimize=1"
+    return "NATIVE-OPT-x86_64"
+  }  // end check for option 'optimze'
+  if ( project.hasProperty( 'debug' ) ) {
+    scons_option = ""
+    return "NATIVE-DBG-x86_64"
+  }
   return "NATIVE-REL-x86_64"
 }  // end native_dir
 
@@ -97,7 +105,7 @@ def openGeeVersionFile = new File( gee_long_version_txt )
 // The actual parameter used by scons can remain 'release=1'
 if ( !openGeeVersionFile.exists() ) {
     GeeCommandLine.expand(
-      ["/usr/bin/scons", "release=1", gee_long_version_txt ],
+      ["/usr/bin/scons", scons_option, gee_long_version_txt ],
       "Runing `scons` to produce <${gee_long_version_txt}> failed!",
       null, // Use default environment variables.
       new File( src_dir )
@@ -144,7 +152,7 @@ def packageInstallLibDir = new File(packageInstallRootDir, 'opt/google/lib')
 
 def postGisInstallDir = new File(
         project.projectDir,
-          "${src_dir}${native_dir()}third_party/postgis/install"
+        "${src_dir}${native_dir()}third_party/postgis/install"
     ).getAbsolutePath()
 
 def postGisInstallDir_opt = new File(postGisInstallDir, 'opt')
