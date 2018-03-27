@@ -70,7 +70,7 @@ def native_dir = {
     return "NATIVE-OPT-x86_64"
   }  // end check for option 'optimze'
   if ( project.hasProperty( 'debug' ) ) {
-    scons_option = ""
+    scons_option = "release=0"
     return "NATIVE-DBG-x86_64"
   }
   return "NATIVE-REL-x86_64"
