@@ -39,7 +39,7 @@ def check_for_argument( argument ) :
 # Check for command line arguments, if they are found
 # pass them on to Gradle.
 def gradle_options() :
-  options = ""
+  options = "-Pdebug"
   options = check_for_argument( 'release' )
   options = check_for_argument( 'optimize' )
   options = check_for_argument( 'profile' )
