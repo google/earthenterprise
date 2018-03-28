@@ -152,7 +152,7 @@ def packageInstallLibDir = new File(packageInstallRootDir, 'opt/google/lib')
 
 def postGisInstallDir = new File(
         project.projectDir,
-        "${src_dir}${native_dir()}third_party/postgis/install"
+        "${src_dir}${native_dir()}/third_party/postgis/install"
     ).getAbsolutePath()
 
 def postGisInstallDir_opt = new File(postGisInstallDir, 'opt')
