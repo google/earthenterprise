@@ -25,9 +25,6 @@
 // This Scons target copies build artifacts, binaries and documents into the
 // /tmp/fusion_os_install path.
 //
-//     ./gradlew -Prelease
-// Build the RPMs using the files in 'NATIVE-REL-x86_64'
-//
 //     ./gradlew -Pdebug
 // Build the RPMs using the files in 'NATIVE-DBG-x86_64'
 //
@@ -102,7 +99,8 @@ if (new File('build.properties').exists()) {
 def openGeeVersionFile = new File( gee_long_version_txt )
 
 // Call scons to create the file 'gee_long_version.txt'
-// The actual parameter used by scons can remain 'release=1'
+// The actual parameter used by scons is based on the parameter
+// passing into Gradlew
 if ( !openGeeVersionFile.exists() ) {
     GeeCommandLine.expand(
       ["/usr/bin/scons", scons_option, gee_long_version_txt ],
