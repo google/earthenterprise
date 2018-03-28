@@ -26,24 +26,17 @@ from khEnvironment import khEnvironment
 
 EnsureSConsVersion(0, 96, 92)
 
-# Check for the presence of the passed argument on
-# the command line.  If exists return a formated
-# string that can be passed to Gradle else return
-# an empty string
-def check_for_argument( argument ) :
-  result = ""
-  if int( ARGUMENTS.get( argument, '0' ) ) > 0 :
-    result = "-P" + argument
-  return result
+# An object used to check for a specific command line parameter.
+# Set the instance variable 'option' based on passed parameter.
+class CommandLineParameter( object ) :
 
-# Check for command line arguments, if they are found
-# pass them on to Gradle.
-def gradle_options() :
-  options = "-Pdebug"
-  options = check_for_argument( 'profile' )
-  options = check_for_argument( 'optimize' )
-  options = check_for_argument( 'release' )
-  return options
+  option = "-Pdebug"
+
+  def __init__( self ) :
+    for parameter in [ 'profile', 'optimize', 'release' ] :
+      if int( ARGUMENTS.get( parameter, '0' ) ) > 0 :
+        self.option = "-P" + parameter
+
 
 
 # process commandline arguments
@@ -180,7 +173,7 @@ stage_tutorial = env.PhonyTargets(**stage_tutorial_cmds)
 env.Depends(stage_tutorial, stage_data)
 
 package_staged_cmds = {'package_install': [
-    "cd rpms; ./gradlew osPackage " + gradle_options()
+    "cd rpms; ./gradlew osPackage " + CommandLineParameter().option
 ]}
 
 package_install = env.PhonyTargets(**package_staged_cmds)
