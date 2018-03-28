@@ -108,6 +108,7 @@ def stagedInstallDir_server_user_magic =
 def stagedInstallDir_server_version =
     new File(stagedInstallDir, 'server/opt/google/gehttpd/htdocs/earth/gee_long_version.txt')
 def stagedInstallDir_fusion = new File(stagedInstallDir, 'fusion')
+def stagedInstallDir_tutorial = new File(stagedInstallDir, 'tutorial')
 def packageInstallRootDir = new File('/')
 def packageInstallLibDir = new File(packageInstallRootDir, 'opt/google/lib')
 
@@ -545,6 +546,10 @@ built from raster, vector, and location properties data.
     }
 
     from(stagedInstallDir_fusion) {
+        into packageInstallRootDir
+    }
+
+    from(stagedInstallDir_tutorial) {
         into packageInstallRootDir
     }
 
