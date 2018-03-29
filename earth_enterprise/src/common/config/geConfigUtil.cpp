@@ -27,9 +27,7 @@
 #include <khFileUtils.h>
 #include <khStringUtils.h>
 #include <khSimpleException.h>
-
-#include <cstdio>
-#include <sstream>
+#include <unistd.h>
 
 void AssertRunningAsRoot(void) {
   // uid 0 -> root
@@ -43,31 +41,7 @@ bool IsRedHat(void) {
 }
 
 uint GetNumCPUs(void) {
-  uint numcpus = 0;
-  /*std::ifstream in("/proc/cpuinfo");
-  if (in) {
-    std::string line;
-    while (std::getline(in, line)) {
-      if (StartsWith(line, "processor")) {
-        ++numcpus;
-      }
-    }
-  }*/
-
-  // nproc gives the number of cpus currently available.
-
-  std::string nprocCommandString = "nproc";
-  FILE* fp = (FILE*)popen(nprocCommandString.c_str(),"r");
-  if (fp) {
-    char c[2];
-    std::stringstream buffer;
-    fread(&c, sizeof(c), 1, fp);
-    buffer << c;
-    buffer >> numcpus;
-  }
-  pclose(fp);
-
-  return std::max(uint(1), numcpus);
+  return std::max(uint(1), sysconf(_SC_NPROCESSORS_ONLN));
 }
 
 uint64 GetPhysicalMemorySize(void) {
