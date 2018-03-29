@@ -41,30 +41,14 @@ bool IsRedHat(void) {
 }
 
 uint GetNumCPUs(void) {
-  return std::max(uint(1), sysconf(_SC_NPROCESSORS_ONLN));
+  return std::max(uint(1), uint(sysconf(_SC_NPROCESSORS_ONLN)));
 }
 
+// want memory size in Kb
 uint64 GetPhysicalMemorySize(void) {
-  std::ifstream in("/proc/meminfo");
-  const std::string delimiters(" \t");
-  if (in) {
-    std::string line;
-    while (std::getline(in, line)) {
-      // will be a line of the form: MemTotal:       255944 kB
-      if (StartsWith(line, "MemTotal")) {
-        // parse out the kB.
-        std::vector<std::string> tokens;
-        TokenizeString(line, tokens, delimiters);
-        if (tokens.size() == 3 && tokens[2] == "kB") {
-          return strtouq(tokens[1].c_str(), NULL, 10) * 1000;
-        }
-        return 0;  // parse failure...too many tokens or not "kB"
-      }
-    }
-    return 0;  // parse failure
-  }
-
-  return 0;  // parse failure
+    uint64 pages = sysconf(_SC_PHYS_PAGES),
+           page_size = sysconf(_SC_PAGE_SIZE)/1024;
+    return (pages * page_size * 1000);
 }
 
 uint GetMaxFds(int requested) {
