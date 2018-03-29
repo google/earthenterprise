@@ -26,16 +26,14 @@ from khEnvironment import khEnvironment
 
 EnsureSConsVersion(0, 96, 92)
 
-# An object used to check for a specific command line parameter.
-# Set the instance variable 'option' based on passed parameter.
-class CommandLineParameter( object ) :
+# Set 'package_command_arguments' based on a parameter
+# that is to be passed on to Gradle
+package_command_arguments = "-Pdebug"
 
-  option = "-Pdebug"
-
-  def __init__( self ) :
-    for parameter in [ 'profile', 'optimize', 'release' ] :
-      if int( ARGUMENTS.get( parameter, '0' ) ) > 0 :
-        self.option = "-P" + parameter
+for parameter in [ 'release', 'optimize', 'profile' ] :
+  if int( ARGUMENTS.get( parameter, '0' ) ) :
+    package_command_arguments = "-P" + parameter
+    break;
 
 
 
