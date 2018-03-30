@@ -31,7 +31,7 @@ EnsureSConsVersion(0, 96, 92)
 package_command_arguments = "-Pdebug"
 
 for parameter in [ 'release', 'optimize', 'profile' ] :
-  if int( ARGUMENTS.get( parameter, '0' ) ) > 0 :
+  if int( ARGUMENTS.get( parameter, '0' ) ) :
     package_command_arguments = "-P" + parameter
     break;
 
