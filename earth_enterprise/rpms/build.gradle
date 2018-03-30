@@ -58,7 +58,7 @@ import org.opengee.shell.GeeCommandLine
 def src_dir = "../src/"
 def scons_option = "release=1"
 
-// Look for command line paramters that specify how the packages are
+// Look for command line parameters that specify how the packages are
 // to be built.  This can be either 'optimize' or 'debug'.
 // Option 'release' is the default.
 def native_dir = {
