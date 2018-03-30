@@ -283,13 +283,13 @@ class MutableAssetHandleD_ : public virtual Base_ {
   }
 
 
-  // We need to more explicit about copy/move constructor and assignment as we are using virtual
+  // We need to be more explicit about copy/move constructor and assignment as we are using virtual
   // inheritance.  We can't rely as much on compiler generated move operation.
  public:
   MutableAssetHandleD_(void) : BBase(), Base() { }
   MutableAssetHandleD_(const std::string &ref_) :
       // Only call the common (virtually inherited) base class with the initializtion state.
-      // Its the only one that has state anyway.  Also explicitly calling the virtual base
+      // It's the only one that has state anyway.  Also, explicitly calling the virtual base
       // class puts an explicit check to ensure BBase a virtural base class of this class.
       BBase(ref_), Base() { }
 
@@ -405,7 +405,7 @@ protected:
       BBase(), BaseD(), DerivedBase(), MutableBase() { }
   MutableDerivedAssetHandleD_(const std::string &ref_) :
       // Only call the common (virtually inherited) base class with the initializtion state.
-      // Its the only one that has state anyway.  Also explicitly calling the virtual base
+      // It's the only one that has state anyway.  Also, explicitly calling the virtual base
       // class puts a build time check to ensure BBase is a virtural base class of this class.
       BBase(ref_), BaseD(), DerivedBase(), MutableBase() { }
 
@@ -437,7 +437,7 @@ protected:
 
   MutableDerivedAssetHandleD_(const MutableDerivedAssetHandleD_<DerivedBase_, MutableBase_>& rhs) :
       // Only call the common (virtually inherited) base class with the initializtion state.
-      // Its the only one that has state anyway.
+      // It's the only one that has state anyway.
       BBase(rhs), BaseD(), DerivedBase(), MutableBase() { }
   MutableDerivedAssetHandleD_<DerivedBase_, MutableBase_>& operator =(const MutableDerivedAssetHandleD_<DerivedBase_, MutableBase_>& rhs) {
     // here we just call the one virtually inherited base class that has state.
