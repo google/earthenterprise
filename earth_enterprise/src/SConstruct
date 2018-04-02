@@ -15,6 +15,9 @@
 # limitations under the License.
 #
 
+# This file is 'earth_enterprise/scr/SConstruct'
+
+
 """Top level SConstruct file."""
 
 import os
