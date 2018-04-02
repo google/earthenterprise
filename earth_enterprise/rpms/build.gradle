@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
+//
+// This file is 'earth_enterprise/rpms/build.gradle'
+//
 // Command-line parameters:
 //
 //     ./gradlew -PbuildOpenGee:
@@ -21,6 +24,13 @@
 // main scons "stage_install" target has been called before building packages.
 // This Scons target copies build artifacts, binaries and documents into the
 // /tmp/fusion_os_install path.
+//
+//     ./gradlew -Pdebug
+// Build the RPMs using the files in 'NATIVE-DBG-x86_64'
+//
+//     ./gradlew -Poptimize
+// Build the RPMs using the files in 'NATIVE-OPT-x86_64'
+//
 //
 // See documentation on the osPackage plugin here:
 //
@@ -43,6 +53,29 @@ apply plugin: "nebula.ospackage"
 
 import org.opengee.shell.GeeCommandLine
 
+// Varables used for specifying location of two files
+// 'gee_long_version.txt' and 'gepgcommon'
+def src_dir = "../src/"
+def scons_option = "release=1"
+
+// Look for command line parameters that specify how the packages are
+// to be built.  This can be either 'optimize' or 'debug'.
+// Option 'release' is the default.
+def native_dir = {
+  if ( project.hasProperty( 'optimize' ) ) {
+    scons_option = "optimize=1"
+    return "NATIVE-OPT-x86_64"
+  }  // end check for option 'optimze'
+  if ( project.hasProperty( 'debug' ) ) {
+    scons_option = "release=0"
+    return "NATIVE-DBG-x86_64"
+  }
+  return "NATIVE-REL-x86_64"
+}  // end native_dir
+
+// Build the actual file to be used
+def gee_long_version_txt = "${src_dir}${native_dir()}/gee_long_version.txt"
+
 
 def rpmPlatformString = org.opengee.os.Platform.rpmPlatformString
 
@@ -62,15 +95,19 @@ if (new File('build.properties').exists()) {
     }
 }
 
-def openGeeVersionFile = new File("../src/NATIVE-DBG-x86_64/gee_long_version.txt")
+// Create a file handle for gee_long_version_txt
+def openGeeVersionFile = new File( gee_long_version_txt )
 
-if (!openGeeVersionFile.exists()) {
+// Call scons to create the file 'gee_long_version.txt'
+// The actual parameter used by scons is based on the parameter
+// passing into Gradlew
+if ( !openGeeVersionFile.exists() ) {
     GeeCommandLine.expand(
-            ["/usr/bin/scons", "release=1", "NATIVE-DBG-x86_64/gee_long_version.txt"],
-            "Runing `scons` to produce <gee_long_version.txt> failed!",
-            null, // Use default environment variables.
-            new File("../src") // Working directory.
-        )
+      ["/usr/bin/scons", scons_option, gee_long_version_txt ],
+      "Runing `scons` to produce <${gee_long_version_txt}> failed!",
+      null, // Use default environment variables.
+      new File( src_dir )
+    )
 }
 
 def openGeeVersion =
@@ -79,7 +116,7 @@ def openGeeVersion =
         // Strip comments:
         def commentIndex = it.indexOf('#')
 
-        commentIndex < 0 ? it : it.substring(0, commentIndex)        
+        commentIndex < 0 ? it : it.substring(0, commentIndex)
     }.
     collect { it.trim() }. // Trim whitespace.
     findAll { !it.isEmpty() }. // Skip empty lines.
@@ -113,7 +150,7 @@ def packageInstallLibDir = new File(packageInstallRootDir, 'opt/google/lib')
 
 def postGisInstallDir = new File(
         project.projectDir,
-        '../src/NATIVE-DBG-x86_64/third_party/postgis/install'
+        "${src_dir}${native_dir()}/third_party/postgis/install"
     ).getAbsolutePath()
 
 def postGisInstallDir_opt = new File(postGisInstallDir, 'opt')
@@ -178,9 +215,10 @@ ospackage {
 // Build packages for all platforms by default:
 defaultTasks 'osPackage'
 
+
 task compileOpenGee(type: Exec) {
     workingDir = '..'
-    commandLine('scons', '-j8', 'release=1', 'build')
+    commandLine('scons', '-j8', scons_option, 'build')
 }
 
 task stageOpenGeeInstall(type: Exec, dependsOn: 'compileOpenGee') {
@@ -190,7 +228,7 @@ task stageOpenGeeInstall(type: Exec, dependsOn: 'compileOpenGee') {
     // "installdir=${build_install_dir.getAbsolutePath()}", so we
     // overwrite whatever is in the default stage install directory:
     commandLine(
-        'scons', '-j8', 'release=1', 'stage_install',
+        'scons', '-j8', scons_option, 'stage_install',
         "installdir=${stagedInstallDir}")
 }
 
@@ -209,7 +247,7 @@ task openGeePostGisRpm(type: GeeRpm) {
     autoFindProvides = true
     autoFindRequires = true
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
-    
+
     from (postGisInstallDir_opt) {
         into new File(packageInstallRootDir, 'opt')
     }
@@ -322,7 +360,7 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeSharedFiles) {
     autoFindRequires = true
 
     // When the scons release=1 package target is run as a non-root user,
-    // scons does not include /sbin in the path, so auto-detection of 
+    // scons does not include /sbin in the path, so auto-detection of
     // chkconfig fails, so this dependency is explicit.
     requires('chkconfig')
     requires('shadow-utils')
@@ -417,7 +455,7 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     installUtils = file('build/shared/install-utils.sh')
 
     // Add geresetpgdb script:
-    installUtils = file(new File(stagedInstallDir_server_opt, 'google/bin/gepgcommon'))
+    installUtils = file( new File( stagedInstallDir_server_opt, 'google/bin/gepgcommon' ) )
 
     preInstall = file('opengee-server/pre-install.sh')
     postInstall = file('opengee-server/post-install.sh')
@@ -430,7 +468,7 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     directory('/var/opt/google/log', 0775)
     directory('/var/opt/google/pgsql', 0700)
     directory('/var/opt/google/pgsql/logs')
-    
+
     from(stagedInstallDir_server_opt) {
         // libpq is in the opengee-postgis package:
         exclude 'google/lib/libpq.*'
@@ -512,7 +550,7 @@ built from raster, vector, and location properties data.
 
     requires('proj-devel') /* This dependency is not being picked up automatically by GeeRpm task */
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
-    
+
 
     requiresCommands(
         packageSharedCommands +
