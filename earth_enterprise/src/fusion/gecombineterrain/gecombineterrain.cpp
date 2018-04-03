@@ -40,6 +40,8 @@
 #include "common/khFileUtils.h"
 #include "common/performancelogger.h"
 
+#include <iostream>
+
 #ifdef JOBSTATS_ENABLED
 enum {MERGER_CREATED, GATHERER_CREATED, COMBINE};
 static gstJobStats::JobName JobNames[] = {
@@ -232,29 +234,30 @@ int main(int argc, char **argv) {
                 &khGetopt::RangeValidator<uint32, 0, 1024>);
     options.opt("read_cache_block_size", read_cache_block_size,
                 &khGetopt::RangeValidator<uint32, 1, 1024>);
-
     if (!options.processAll(argc, argv, argn)) {
       usage(progname);
     }
     if (help) {
       usage(progname);
     }
-    if (argn == argc) {
-      usage(progname, "No input indexes specified");
-    }
 
-    notify(NFY_WARN, "gecombineterrain numcpus: %llu ",
+    //if (argn == argc) {
+    //  usage(progname, "No input indices specified");
+    //}
+    uint cmdDefaultCPUs = CommandlineNumCPUsDefault();
+    notify(NFY_WARN, "gecombineterrain --numcpus: %llu ",
                static_cast<long long unsigned int>(numcpus));
     notify(NFY_WARN, "gecombineterrain CommandlineNumCPUsDefault(): %llu ",
-               static_cast<long long unsigned int>(CommandlineNumCPUsDefault()));
-    
-    numcpus = std::min(numcpus, CommandlineNumCPUsDefault());
+               static_cast<long long unsigned int>(cmdDefaultCPUs));
+
+    numcpus = std::max(numcpus, cmdDefaultCPUs);
     
     PERF_CONF_LOGGING( "proc_exec_vcpu_count", taskName, numcpus );
-
     notify(NFY_WARN, "gecombineterrain actually using min numcpu: %llu ",
                static_cast<long long unsigned int>(numcpus));
     
+    exit(1);
+
     // Validate commandline options
     if (!outdir.size()) {
       usage(progname, "No output specified");
