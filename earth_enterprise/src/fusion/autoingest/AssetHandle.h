@@ -116,7 +116,7 @@ class AssetHandle_  {
   const std::string& Ref(void) const { return ref; }
   bool Valid(void) const;
   // This is better then overloading the bool operator as it
-  // more closely emulates what a pointers boolean operations does
+  // more closely emulates what a pointer's boolean operations does.
   // For example you can't pass the class as a bool parameter but you 
   // can still do other things like use it in an if statement.
   operator undefined_type *(void) const { return Valid()?reinterpret_cast<undefined_type *>(1):nullptr; }
