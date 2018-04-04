@@ -25,8 +25,8 @@ google.maps = google.maps || {};
   }
 
   google.maps.Load = function(apiLoad) {
-    /* http://mt0.google.com/vt */    apiLoad([,[,,,],['en-US',,,,,,GEE_BASE_URL+'/maps/api/icons/',],[GEE_BASE_URL+'/maps/mapfiles/390/v3','internal'],[0],0.0,,,,,], loadScriptTime);
+    /* http://mt0.google.com/vt */    apiLoad([,[,,,],['en-US',,,,,,GEE_BASE_URL+'/maps/api/icons/',],[GEE_BASE_URL+'/maps/js','internal'],[0],0.0,,,,,], loadScriptTime);
   };
   var loadScriptTime = (new Date).getTime();
-  getScript(GEE_BASE_URL+'/maps/mapfiles/390/v3/main.js');
+  getScript(GEE_BASE_URL+'/maps/api/js/main.js');
 })();
