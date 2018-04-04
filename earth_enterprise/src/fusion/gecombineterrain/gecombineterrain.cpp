@@ -242,9 +242,9 @@ int main(int argc, char **argv) {
       usage(progname);
     }
 
-    //if (argn == argc) {
-    //  usage(progname, "No input indices specified");
-    //}
+    if (argn == argc) {
+      usage(progname, "No input indices specified");
+    }
     uint cmdDefaultCPUs = CommandlineNumCPUsDefault();
     uint numavailable = GetMaxNumJobs();
 
