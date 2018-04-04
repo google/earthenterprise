@@ -39,7 +39,6 @@
 #include "common/khSimpleException.h"
 #include "common/khFileUtils.h"
 #include "common/performancelogger.h"
-#include <iostream>
 
 #ifdef JOBSTATS_ENABLED
 enum {MERGER_CREATED, GATHERER_CREATED, COMBINE};
