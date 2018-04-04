@@ -162,8 +162,6 @@ uint32 GetMaxNumJobs() {
   // Set the max_num_jobs to the min of the values: number of CPUs or max
   // allowable number of jobs.
   uint numCPUs = GetNumCPUs();
-  //notify(NFY_WARN, "GetMaxNumJobs, max_num_jobs: %llu",
-  //       static_cast<long long unsigned int>(numCPUs));
   max_num_jobs = std::min(max_num_jobs, numCPUs);
 
   return max_num_jobs;

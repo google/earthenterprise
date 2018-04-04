@@ -39,7 +39,6 @@
 #include "common/khSimpleException.h"
 #include "common/khFileUtils.h"
 #include "common/performancelogger.h"
-
 #include <iostream>
 
 #ifdef JOBSTATS_ENABLED
@@ -90,7 +89,7 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
       "      --help | -?:  Display this usage message\n"
       "      --sortbuf <buffer_size>: size of packet index sort buf in MB\n"
       "        (default %u)\n"
-      "      --numcpus:    Number of CPUs to use (default %u)\n"
+      "      --numcpus:    Number of CPUs to use (defaults to systemrc, then to number of CPUs available)\n"
       "      --read_cache_max_blocks: Number of read cache blocks for each\n"
       "                              terrain resource (between 0 and 1024)\n"
       "                              Read caching is DISABLED if num < 2.\n"
@@ -99,7 +98,7 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
       "                               between 1 and 1024 (recommend set "
       "                               num to a power of 2) (default %u)\n"
       "\n",
-      progn.c_str(), kDefaultSortBufferMegabytes, kDefaultNumCPUs,
+      progn.c_str(), kDefaultSortBufferMegabytes, 
       kDefaultReadCacheBlocks, kDefaultReadCacheBlockKilobyteSize);
   exit(1);
 }
@@ -216,7 +215,9 @@ int main(int argc, char **argv) {
     std::string outdir;
     int index_version = 0;
     int sortbuf = kDefaultSortBufferMegabytes;
-    uint32 numcpus = kDefaultNumCPUs;
+    
+    //initialize to 0 to make it easier to determine if parameter was passed
+    uint32 numcpus = 0;
     PERF_CONF_LOGGING( "proc_exec_config_default_numcpus", taskName, numcpus );
     uint32 read_cache_max_blocks = kDefaultReadCacheBlocks;
     uint32 read_cache_block_size = kDefaultReadCacheBlockKilobyteSize;
@@ -245,19 +246,36 @@ int main(int argc, char **argv) {
     //  usage(progname, "No input indices specified");
     //}
     uint cmdDefaultCPUs = CommandlineNumCPUsDefault();
-    notify(NFY_WARN, "gecombineterrain --numcpus: %llu ",
-               static_cast<long long unsigned int>(numcpus));
-    notify(NFY_WARN, "gecombineterrain CommandlineNumCPUsDefault(): %llu ",
-               static_cast<long long unsigned int>(cmdDefaultCPUs));
+    uint numavailable = GetMaxNumJobs();
 
-    numcpus = std::max(numcpus, cmdDefaultCPUs);
-    
+    /*
+ 	Choosing number of CPUs:
+
+ 	numcpus: if --numcpu parameter not present, defaults to 1
+	
+	CommandLineNumCPUsDefault(): defined in /etc/opt/google/systemrc via maxjobs tag
+
+	GetMaxNumJobs(): the number of available jobs, defined as the minimum value of either:
+	  1. the currently available jobs or the default number of jobs i.e. kMaxNumJobs (is 8) multiplied by KH_MAX_NUM_JOBS_COEFF, which is a compiler option
+	  2. kMaxNumJobsDefault = 8
+	  3. environment variable, KH_GOOGLE_MAX_NUM_JOBS, if defined
+	  4. the number of currently available cpus, obtained through sysconf
+
+	The methodology	first checks if the --numcpus flag was present, if
+	it was, it will go with what was passed, no matter the number. If
+	it was not, it will take the minimum value of what is defined in the
+	systemrc file and what is currently available (values described 
+	above). If the maxjobs tag in systemrc is invalid (i.e. less than
+	1, it will default to the available CPUs.
+    */
+    if (!numcpus) {
+	if (cmdDefaultCPUs <= 1)
+		cmdDefaultCPUs = numavailable;
+        numcpus = std::min(cmdDefaultCPUs,numavailable);
+    }   
+
     PERF_CONF_LOGGING( "proc_exec_vcpu_count", taskName, numcpus );
-    notify(NFY_WARN, "gecombineterrain actually using min numcpu: %llu ",
-               static_cast<long long unsigned int>(numcpus));
     
-    exit(1);
-
     // Validate commandline options
     if (!outdir.size()) {
       usage(progname, "No output specified");
