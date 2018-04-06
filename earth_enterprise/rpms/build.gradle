@@ -403,35 +403,19 @@ if (project.hasProperty('buildOpenGee')) {
 }
 
 task openGeeCommonDeb (type: GeeDeb, dependsOn: openGeeSharedFiles) {
-    packageName = 'opengee-common'
-    release = "1.${rpmPlatformString}"
+    packageName = openGeeCommonRpm.packageName
+    release = openGeeCommonRpm.release
     version = openGeeVersion
-    user = 'root'
-    permissionGroup = 'root'
-    packageGroup = 'Application/Productivity'
-    summary = 'Third-party libraries bundled with Open GEE'
+    user = openGeeCommonRpm.user
+    permissionGroup = openGeeCommonRpm.permissionGroup
+    packageGroup = 'misc'
+    summary = openGeeCommonRpm.summary
     // The package build failed when packageDescription was copied here from openGeeCommonRpm, so it is omitted for now
-    license =
-        'ASL 2.0 and ' +
-        'BSD and ' +
-        'GPLv2+ and ' +
-        'Psycopg2 GPL 3+ and ' +
-        'LGPLv2 and ' +
-        'MIT and ' +
-        'MPLv1.1 and ' +
-        'PSF 2 and ' +
-        'Python Imaging Library 1.1.7 and ' +
-        'mgrs 1.1.0 and mm 1.4.2 and ' +
-        'OpenLDAP and ' +
-        'OpenSSL and ' +
-        'Skia 5.1.2'
+    license = openGeeCommonRpm.license
+    priority = 'optional'
 
     setArch('amd64')	// if this is not specified, the architecture is x86_64, and dpkg won't install without the --force-architecture flag
 
-    requires('alien')
-    requires('autoconf')
-    requires('automake')
-    requires('doxygen')
     requires('flex')
     requires('freeglut3-dev')
     requires('gettext')
@@ -447,9 +431,6 @@ task openGeeCommonDeb (type: GeeDeb, dependsOn: openGeeSharedFiles) {
     requires('python-psycopg2')
     requires('python-setuptools')
     requires('python2.7')
-    requires('python-git')
-    requires('shunit2')
-    requires('swig')
 
     // Prefix variable definitions to all install scripts:
     installUtils = file('build/shared/install-utils.sh')
