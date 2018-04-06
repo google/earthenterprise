@@ -251,7 +251,7 @@ def GetLongVersion(backupFile, label=''):
 
   # Append the label, if there is one.
   if len(label):
-    ret = '-'.join([ret, label])
+    ret = '.'.join([ret, label])
 
   return ret
 
