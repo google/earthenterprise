@@ -78,7 +78,7 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
 
   fprintf(
       stderr,
-      "\nusage: %s --indexversion <ver> [--numcpus <num>] "
+      "\nusage: %s --indexversion <ver> [--numcpus/--numCompressThreads <num>] "
       "[--read_cache_max_blocks <num>\n"
       "--output <outdir> <index1> [<index2> ...]\n"
       "   Terrain packets are merged from the specified index(es)\n"
@@ -88,7 +88,9 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
       "      --help | -?:  Display this usage message\n"
       "      --sortbuf <buffer_size>: size of packet index sort buf in MB\n"
       "        (default %u)\n"
-      "      --numcpus:    Number of CPUs to use (defaults to systemrc, then to number of CPUs available)\n"
+      "      --numCompressThreads:    Number of CPUs/threads to use \n("
+      "        defaults to systemrc, then to number of CPUs available)\n"
+      "      --numcpus: deprecated in favor of --numCompressThreads\n"
       "      --read_cache_max_blocks: Number of read cache blocks for each\n"
       "                              terrain resource (between 0 and 1024)\n"
       "                              Read caching is DISABLED if num < 2.\n"
@@ -216,7 +218,8 @@ int main(int argc, char **argv) {
     int sortbuf = kDefaultSortBufferMegabytes;
     
     //initialize to 0 to make it easier to determine if parameter was passed
-    uint32 numcpus = 0;
+    uint32 numcpus = 0,
+           numCompressThreads = 0;
     PERF_CONF_LOGGING( "proc_exec_config_default_numcpus", taskName, numcpus );
     uint32 read_cache_max_blocks = kDefaultReadCacheBlocks;
     uint32 read_cache_block_size = kDefaultReadCacheBlockKilobyteSize;
@@ -227,6 +230,8 @@ int main(int argc, char **argv) {
     options.opt("output", outdir);
     options.opt("indexversion", index_version);
     options.opt("sortbuf", sortbuf);
+    options.opt("numCompressThreads",numCompressThreads,
+               &khGetopt::RangeValidator<uint32, 1, kMaxNumJobsLimit_2>);
     options.opt("numcpus", numcpus,
                 &khGetopt::RangeValidator<uint32, 1, kMaxNumJobsLimit_2>);
     PERF_CONF_LOGGING( "proc_exec_config_cli_numcpus", taskName, numcpus );
@@ -267,20 +272,37 @@ int main(int argc, char **argv) {
          systemrc file and what is currently available (values described 
          above). If the maxjobs tag in systemrc is invalid (i.e. less than
          1) it will default to the available CPUs.
+
+         
+         --numcpus is deprecated in favor of --numCompressThreads. One
+         or the other may be passed in, but not both.
     */
+ 
+    if (numCompressThread)
+    {
+       if (numcpus) {
+         usage(progname,"--numcpus deprecated in favor of --numCompressedThreads");
+       } else {
+         // if numcpus is not present, but numCompressThreads is, set
+         // numcpus equal to numCompressThreads
+         numcpus = numCompressThreads;
+    }
+    
+    if (!numcpus) {
+	if (cmdDefaultCPUs <= 1) {
+		cmdDefaultCPUs = numavailable;
+	}
+        numcpus = std::min(cmdDefaultCPUs,numavailable);
+    }
+   
+    PERF_CONF_LOGGING( "proc_exec_vcpu_count", taskName, numcpus );
+
     notify(NFY_WARN, "gecombineterrain numcpus %llu",
            static_cast<long long unsigned int>(numcpus));
     notify(NFY_WARN, "gecombineterrain CommandLineNumCPUsDefault(): %llu",
            static_cast<long long unsigned int>(cmdDefaultCPUs));
     notify(NFY_WARN, "gecombineterrain GetMaxNumJobs(): %llu",
            static_cast<long long unsigned int>(numavailable)); 
-    if (!numcpus) {
-	if (cmdDefaultCPUs <= 1) {
-		cmdDefaultCPUs = numavailable;
-	}
-        numcpus = std::min(cmdDefaultCPUs,numavailable);
-    }   
-    PERF_CONF_LOGGING( "proc_exec_vcpu_count", taskName, numcpus );
     
     // Validate commandline options
     if (!outdir.size()) {
