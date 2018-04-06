@@ -409,8 +409,7 @@ task openGeeCommonDeb (type: GeeDeb, dependsOn: openGeeSharedFiles) {
     user = openGeeCommonRpm.user
     permissionGroup = openGeeCommonRpm.permissionGroup
     packageGroup = 'misc'
-    summary = openGeeCommonRpm.summary
-    // The package build failed when packageDescription was copied here from openGeeCommonRpm, so it is omitted for now
+    formatPackageDescription(openGeeCommonRpm.summary + '\n' + openGeeCommonRpm.packageDescription)
     license = openGeeCommonRpm.license
     priority = 'optional'
 

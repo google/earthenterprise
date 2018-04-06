@@ -82,4 +82,19 @@ class GeeDeb extends com.netflix.gradle.plugins.deb.Deb {
 
         findRequires(packageInputFiles).each { requires(it) }
     }
+
+    protected void formatPackageDescription(String descrip){
+        packageDescription = ''
+        List lines = descrip.split( '\n' )
+        lines.eachWithIndex{ item, index ->
+            if(0 == index)
+                packageDescription = item
+            else{
+                if(item.trim() == '')
+                    packageDescription = packageDescription + '\n .'
+                else
+                    packageDescription = packageDescription + '\n ' + item
+            }
+        }
+    }
 }
