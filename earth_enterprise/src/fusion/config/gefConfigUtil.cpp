@@ -153,7 +153,7 @@ uint32 GetMaxNumJobs() {
   max_num_jobs = kMaxNumJobsDefault *
       static_cast<uint32>(KH_MAX_NUM_JOBS_COEFF);
 #endif
-    // Note: Apply an internal multiplier in case of GEE Fusion is built
+  // Note: Apply an internal multiplier in case of GEE Fusion is built
   // with maximum number of concurrent jobs equals 0 (internal usage).
   if (max_num_jobs == 0) {
     max_num_jobs = GetDefaultMaxNumJobs();
@@ -161,8 +161,7 @@ uint32 GetMaxNumJobs() {
 
   // Set the max_num_jobs to the min of the values: number of CPUs or max
   // allowable number of jobs.
-  uint numCPUs = GetNumCPUs();
-  max_num_jobs = std::min(max_num_jobs, numCPUs);
+  max_num_jobs = std::min(max_num_jobs, GetNumCPUs());
 
   return max_num_jobs;
 }

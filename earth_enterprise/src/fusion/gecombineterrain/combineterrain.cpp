@@ -297,9 +297,6 @@ void TerrainCombiner::StartThreads() {
   uint compress_cpus = num_cpus_;
   PERF_CONF_LOGGING( "proc_exec_config_internal_numcpus", "combine_terrain_compress", num_cpus_ );
     
-  if (num_cpus_ >= 4) {
-    compress_cpus--; // If we have more than 4 cpus save one for reads/writes.
-  }
   PERF_CONF_LOGGING( "proc_exec_compress_internal_numcpus", "combine_terrain_compress", compress_cpus );
   notify(NFY_WARN, "gecombineterrain compress_cpus: %llu ",
                static_cast<long long unsigned int>(compress_cpus));
