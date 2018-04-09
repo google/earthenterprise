@@ -260,22 +260,22 @@ int main(int argc, char **argv) {
         CommandLineNumCPUsDefault(): defined in /etc/opt/google/systemrc via maxjobs tag
 
         GetMaxNumJobs(): the number of available jobs, defined as the minimum value of either:
-         1. the currently available jobs or the default number of jobs i.e. kMaxNumJobs 
+        1. the currently available jobs or the default number of jobs i.e. kMaxNumJobs 
             (is 8) multiplied by KH_MAX_NUM_JOBS_COEFF, which is a compiler option
-	 2. kMaxNumJobsDefault = 8
-         3. environment variable, KH_GOOGLE_MAX_NUM_JOBS, if defined
-         4. the number of currently available cpus, obtained through sysconf
+        2. kMaxNumJobsDefault = 8
+        3. environment variable, KH_GOOGLE_MAX_NUM_JOBS, if defined
+        4. the number of currently available cpus, obtained through sysconf
 
-         The methodology first checks if the --numcpus flag was present, if
-         it was, it will go with what was passed, no matter the number. If
-         it was not, it will take the minimum value of what is defined in the
-         systemrc file and what is currently available (values described 
-         above). If the maxjobs tag in systemrc is invalid (i.e. less than
-         1) it will default to the available CPUs.
+        The methodology first checks if the --numcpus flag was present, if
+        it was, it will go with what was passed, no matter the number. If
+        it was not, it will take the minimum value of what is defined in the
+        systemrc file and what is currently available (values described 
+        above). If the maxjobs tag in systemrc is invalid (i.e. less than
+        1) it will default to the available CPUs.
 
          
-         --numcpus is deprecated in favor of --numCompressThreads. One
-         or the other may be passed in, but not both.
+        --numcpus is deprecated in favor of --numCompressThreads. One
+        or the other may be passed in, but not both.
     */
  
     if (numCompressThread)
@@ -283,14 +283,15 @@ int main(int argc, char **argv) {
        if (numcpus) {
          usage(progname,"--numcpus deprecated in favor of --numCompressedThreads");
        } else {
-         // if numcpus is not present, but numCompressThreads is, set
-         // numcpus equal to numCompressThreads
-         numcpus = numCompressThreads;
+          // if numcpus is not present, but numCompressThreads is, set
+          // numcpus equal to numCompressThreads
+          numcpus = numCompressThreads;
+       }
     }
     
     if (!numcpus) {
 	if (cmdDefaultCPUs <= 1) {
-		cmdDefaultCPUs = numavailable;
+          cmdDefaultCPUs = numavailable;
 	}
         numcpus = std::min(cmdDefaultCPUs,numavailable);
     }
