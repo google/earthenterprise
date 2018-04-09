@@ -79,16 +79,6 @@ def gee_long_version_txt = "${src_dir}${native_dir()}/gee_long_version.txt"
 
 def rpmPlatformString = org.opengee.os.Platform.rpmPlatformString
 
-def osId = org.opengee.os.Platform.osId
-
-def packageDep
-
-if (osId == "ubuntu") {
-    packageDep = "openGeeDebs"
-} else {
-    packageDep = "openGeeRpms"
-}
-
 def stagedInstall_path =
     project.hasProperty('stageInstallPath') ?
         project.stageInstallPath :
@@ -712,7 +702,7 @@ task openGeeRpms(
 task openGeeDebs(
     dependsOn: ['openGeeServerDeb', 'openGeeFusionDeb', 'openGeeCommonDeb'])
 
-task osPackage(dependsOn: packageDep)
+task osPackage(dependsOn: org.opengee.os.Platform.osId == 'ubuntu' ? openGeeDebs : openGeeRpms)
 
 // Mostly for documentation purposes.  You need to comment out the rest of the
 // Gradle file to run this task:

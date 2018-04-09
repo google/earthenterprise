@@ -97,18 +97,23 @@ class GeeDeb extends com.netflix.gradle.plugins.deb.Deb {
         findRequires(packageInputFiles).each { requires(it) }
     }
 
-    protected void formatPackageDescription(String descrip){
-        packageDescription = ''
-        List lines = descrip.split( '\n' )
-        lines.eachWithIndex{ item, index ->
-            if(0 == index)
-                packageDescription = item
-            else{
-                if(item.trim() == '')
-                    packageDescription = packageDescription + '\n .'
-                else
-                    packageDescription = packageDescription + '\n ' + item
+    // Formats a multi-line description to be compatible with a Debian build
+    void formatPackageDescription(String descrip){
+        def formattedDescription = ''
+        descrip.eachLine{ line ->
+            if (line.trim() == '') {
+                if (formattedDescription != '') {
+                    formattedDescription += '\n .'
+                }
+            } else {
+                if (formattedDescription == '') {
+                    formattedDescription += line.trim()
+                } else {
+                    formattedDescription += '\n ' + line.trim()
+                }
             }
         }
+
+        packageDescription = formattedDescription
     }
 }
