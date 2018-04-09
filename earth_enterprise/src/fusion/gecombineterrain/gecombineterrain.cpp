@@ -278,7 +278,7 @@ int main(int argc, char **argv) {
         or the other may be passed in, but not both.
     */
  
-    if (numCompressThread)
+    if (numCompressThreads)
     {
        if (numcpus) {
          usage(progname,"--numcpus deprecated in favor of --numCompressedThreads");
