@@ -1,4 +1,4 @@
-// Copyright 2017 the Open GEE Contributors
+// Copyright 2017, 2018 the Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -402,16 +402,64 @@ if (project.hasProperty('buildOpenGee')) {
     openGeeCommonRpm.dependsOn stageOpenGeeInstall
 }
 
+task openGeeCommonDeb (type: GeeDeb, dependsOn: openGeeSharedFiles) {
+    packageName = openGeeCommonRpm.packageName
+    release = openGeeCommonRpm.release
+    version = openGeeVersion
+    user = openGeeCommonRpm.user
+    permissionGroup = openGeeCommonRpm.permissionGroup
+    packageGroup = 'misc'
+    formatPackageDescription(openGeeCommonRpm.summary + '\n' + openGeeCommonRpm.packageDescription)
+    license = openGeeCommonRpm.license
+    priority = 'optional'
 
-task openGeeCommonDeb (type: Deb) {
-    packageName = 'opengee-common'
+    setArch('amd64')	// if this is not specified, the architecture is x86_64, and dpkg won't install without the --force-architecture flag
 
-    from(stagedInstallDir_common) {
+    requires('flex')
+    requires('freeglut3')
+    requires('gettext')
+    requires('libc6')
+    requires('libfreetype6')
+    requires('libperl4-corelibs-perl')
+    requires('libpng12-0')
+    requires('libstdc++6')
+    requires('libtool')
+    requires('libxml2-utils')
+    requires('openssl')
+    requires('python-imaging')
+    requires('python-psycopg2')
+    requires('python-setuptools')
+    requires('python2.7')
+
+    // Prefix variable definitions to all install scripts:
+    installUtils = file('build/shared/install-utils.sh')
+
+    preInstall = file('opengee-common/pre-install.sh')
+    postUninstall = file('opengee-common/post-uninstall.sh')
+
+    from (file('build/shared/gevars.sh')) {
+        into new File(packageInstallRootDir, 'etc/init.d')
+    }
+
+    from (stagedInstallDir_common_opt) {
+        into new File(packageInstallRootDir, 'opt')
+    }
+
+    from (stagedInstallDir_common_user_magic) {
         into packageInstallRootDir
     }
+
     from(stagedInstallDir_manual) {
         into packageInstallRootDir
     }
+
+    from(file('opengee-common/install')) {
+        into packageInstallRootDir
+    }
+}
+
+if (project.hasProperty('buildOpenGee')) {
+    openGeeCommonDeb.dependsOn stageOpenGeeInstall
 }
 
 task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
@@ -654,7 +702,7 @@ task openGeeRpms(
 task openGeeDebs(
     dependsOn: ['openGeeServerDeb', 'openGeeFusionDeb', 'openGeeCommonDeb'])
 
-task osPackage(dependsOn: ['openGeeRpms', 'openGeeDebs'])
+task osPackage(dependsOn: org.opengee.os.Platform.osId == 'ubuntu' ? openGeeDebs : openGeeRpms)
 
 // Mostly for documentation purposes.  You need to comment out the rest of the
 // Gradle file to run this task:
