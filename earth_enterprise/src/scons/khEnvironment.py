@@ -223,43 +223,37 @@ def EmitVersionStrfunc(target, backupFile):
   return 'EmitVersion(%s, %s)' % (target, backupFile)
   
   
-def EmitLongVersionFunc(target, backupFile, label):
+def EmitLongVersionFunc(target, backupFile):
   """Emit version information to the target file."""
 
-  versionStr = GetLongVersion(backupFile, label)
+  versionStr = GetLongVersion(backupFile)
 
   with open(target, 'w') as fp:
     fp.write(versionStr)
 
 
-def EmitLongVersionStrfunc(target, backupFile, label):
-  return 'EmitLongVersion(%s, %s, %s)' % (target, backupFile, label)
+def EmitLongVersionStrfunc(target, backupFile):
+  return 'EmitLongVersion(%s, %s)' % (target, backupFile)
   
 
-def GetLongVersion(backupFile, label=''):
+def GetLongVersion(backupFile):
   """Create a detailed version string based on the state of
      the software, as it exists in the repository."""
- 
+  
   if CheckGitAvailable():
-    ret = GitGeneratedLongVersion()
+    return GitGeneratedLongVersion()
 
   # Without git, must use the backup file to create a string.
-  else:
-    base = ReadBackupVersionFile(backupFile)
-    date = datetime.utcnow().strftime("%Y%m%d%H%M")
-    ret = '-'.join([base, date])
-
-  # Append the label, if there is one.
-  if len(label):
-    ret = '.'.join([ret, label])
-
-  return ret
+  base = ReadBackupVersionFile(backupFile)
+  date = datetime.utcnow().strftime("%Y%m%d%H%M")
+  
+  return '-'.join([base, date])
 
 
-def GetVersion(backupFile, label=''):
+def GetVersion(backupFile):
   """As getLongVersion(), but only return the leading *.*.* value."""
 
-  raw = GetLongVersion(backupFile, label)
+  raw = GetLongVersion(backupFile)
   final = raw.split("-")[0]
 
   return final
