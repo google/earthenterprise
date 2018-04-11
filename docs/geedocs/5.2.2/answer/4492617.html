@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Uninstalling</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
+</head>
+<body>
+<!-- 4492617.html -->
+<div class="container">
+<div class="sidebar1">
+  <p class="sidebar-toc"><a href="../answer/4492598.html">Installation overview</a></p>
+  <p class="sidebar-toc"><a href="../answer/4492599.html">System Requirements for Fusion and GEE Server</a></p>
+  <p class="sidebar-toc"><a href="../answer/4492484.html">Before you install</a></p>
+  <p class="sidebar-toc"><a href="../answer/4492604.html">Installing</a></p>
+  <p class="sidebar-toc"><a href="../answer/4492616.html">Verifying and troubleshooting</a></p>
+  <p class="sidebar-toc"><a href="../answer/4492617.html" class="current-file">Uninstalling</a></p>
+</div>
+<div class="content"> <a name="top_of_file"></a>
+  <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+  <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Install Google Earth Enterprise</h1>
+  <h2>Uninstalling</h2>
+<p>OpenGEE provides command line uninstall scripts.  To uninstall Google Earth Enterprise Fusion and Server:</p>
+<ol>
+<li>Open a terminal window on your Linux workstation.</li>
+<li>Log in as <code>root</code>.</li>
+<li>Stop Google Earth Enterprise processes, if you have a previous version installed and it is running:
+<p>
+<code>/etc/init.d/gefusion stop</code><br>
+<code>/etc/init.d/geserver stop</code>
+</p>
+</li>
+<li>Navigate to the location at which you initially cloned the GEE git repo.</li>
+<li>Within the GEE git repo, navigate to <code>earthenterprise/earth_enterprise/src/installer</code>
+and run the <code>uninstall_fusion.sh</code> and <code>uninstall_server.sh</code> scripts.</li></ol></div>
+  <div class="footer">
+    <p class="BackToTop"><a href="#top_of_file">Back to top</a>
+    <hr />
+    </p>
+    <p class="copyright">&copy;2015 Google</p>
+  </div>
+</div>
+</body>
+</html>

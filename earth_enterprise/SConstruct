@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+# This file is 'earth_enterprise/SConstruct'
+
 import sys
 import os
 import commands
@@ -23,6 +25,17 @@ sys.path = sys.path + ['src/scons']
 from khEnvironment import khEnvironment
 
 EnsureSConsVersion(0, 96, 92)
+
+# Set 'package_command_arguments' based on a parameter
+# that is to be passed on to Gradle
+package_command_arguments = "-Pdebug"
+
+for parameter in [ 'release', 'optimize', 'profile' ] :
+  if int( ARGUMENTS.get( parameter, '0' ) ) :
+    package_command_arguments = "-P" + parameter
+    break;
+
+
 
 # process commandline arguments
 installdir = ARGUMENTS.get('installdir', '/tmp/fusion_os_install')
@@ -124,9 +137,10 @@ env = khEnvironment(ENV={'PATH' : '/bin:/bin:/usr/bin'},
 
 def getArgumentVarsAsString():
   vars=''
-  for var, value in ARGUMENTS.iteritems():
-    if var != 'installdir':
-      vars += var + '=' + str(value) + ' '
+  for key, value in ARGUMENTS.iteritems():
+    if key != 'installdir':
+      vars += key + '=' + str(value) + ' '
+
   return vars[:-1]  # Remove the trailing space
 
 arg_vars = getArgumentVarsAsString()
@@ -157,7 +171,7 @@ stage_tutorial = env.PhonyTargets(**stage_tutorial_cmds)
 env.Depends(stage_tutorial, stage_data)
 
 package_staged_cmds = {'package_install': [
-    'cd rpms; ./gradlew osPackage'
+    "cd rpms; ./gradlew osPackage " + package_command_arguments
 ]}
 
 package_install = env.PhonyTargets(**package_staged_cmds)
@@ -206,4 +220,3 @@ if 'cleanall' in COMMAND_LINE_TARGETS:
           "src/.sconf_temp",
           "src/config.log"]:
       os.system("rm -rf " + sconsfile)
-

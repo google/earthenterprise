@@ -21,16 +21,19 @@
 #define COMMON_MANIFESTENTRY_H__
 
 #include <string>
+#include <vector>
 #include "common/khTypes.h"
 #include "common/khFileUtils.h"
 
+struct ManifestEntry;
 
 struct ManifestEntry {
   std::string orig_path;
   std::string current_path;
   uint64 data_size;
+  std::vector<ManifestEntry> dependents;
 
-  ManifestEntry() {}
+  ManifestEntry() : data_size(0) {}
 
   explicit ManifestEntry(const std::string& orig_path_) :
       orig_path(orig_path_),
@@ -56,7 +59,8 @@ struct ManifestEntry {
   bool operator==(const ManifestEntry &other) const {
     return orig_path == other.orig_path
     && current_path == other.current_path
-        && data_size == other.data_size;
+        && data_size == other.data_size
+        && dependents == other.dependents;
   }
 };
 

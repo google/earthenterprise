@@ -1,0 +1,140 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Map buttons</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 1089795.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/6153619.html">Supported file formats in GEE</a></p>
+<p class="sidebar-toc"><a href="../answer/6053241.html">Apply alpha masking to imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/172810.html">Import pre-processed data</a></p>
+<p class="sidebar-toc"><a href="../answer/1090589.html">Import a subset of imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/173054.html">Add .kip imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/2882131.html">Vector data handling</a></p>
+<p class="sidebar-toc"><a href="../answer/2760298.html">Google Maps raster background</a></p>
+<p class="sidebar-toc"><a href="../answer/4525555.html">Create custom masks</a></p>
+<p class="sidebar-toc"><a href="../answer/6062318.html">Manage mosaics with virtual rasters</a></p>
+<p class="sidebar-toc"><a href="../answer/6081009.html">Map projection types in GEE 5.1.0</a></p>
+<p class="sidebar-toc"><a href="../answer/6081069.html">Add flat imagery to Mercator map databases in GEE 5.1.0</a></p>
+<p class="sidebar-toc"><a href="../answer/2760457.html">Add KML layers</a></p>
+<p class="sidebar-toc"><a href="../answer/2760534.html">Non-clickable icons</a></p>
+<p class="sidebar-toc"><a href="../answer/173053.html">Map projections</a></p>
+<p class="sidebar-toc"><a href="../answer/1089795.html" class="current-file">Map buttons</a></p>
+<p class="sidebar-toc"><a href="../answer/4492623.html">Create terrain overlays</a></p>
+<p class="sidebar-toc"><a href="../answer/2760655.html">Monitor builds with Twitter</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion resources and projects</h1>
+<h2>Map buttons</h2>
+<p>If you're using version 2.x of the Maps JavaScript API, the procedure below explains how to create map buttons for GEE. However, this procedure isn't compatible with Maps API 3.x.</p>
+<p>GEE includes a default web interface for viewing the 2D maps that you build with Fusion and host on a GEE 2D virtual server. In the example below, the left panel shows map layers that are published with the database.</p>
+<p><img alt="Default HTML interface" src="../art/fusion/projects/2972222_default_interface.jpg"/></p>
+<p>Data courtesy of Thematic Mapping.org, <a href="http://thematicmapping.org/" target="_blank">http://thematicmapping.org/</a></p>
+<p>The default interface doesn't include layer buttons like the “Maps, Satellite, Hybrid” buttons in Google Maps. However, you can do some HTML and JavaScript editing to display Maps, Imagery, and Hybrid layer buttons that are similar. The example map below displays a <strong>Maps</strong> button for its two map layers and an <strong>Imagery</strong> button for its imagery layer.</p>
+<p><img alt="HTML interface with buttons" src="../art/fusion/projects/2972267_interface_buttons.jpg"/></p>
+<p>Data courtesy Thematic Mapping.org, <a href="http://thematicmapping.org/" target="_blank">http://thematicmapping.org/</a></p>
+<p>To create buttons like this, associate the <strong>Maps</strong>, <strong>Imagery</strong>, and <strong>Hybrid</strong> (<strong>Show Labels</strong>) buttons with map types that you define with <code>GMapType</code>. In Google Maps, map types are constants that can be called directly. However, in GEE you need to use <code>GMapType</code> to define map types in the interface itself because the map and imagery layers are different for each map.</p>
+<h3>To define map types in GEE:</h3>
+<ol class="spaced-list">
+<li>Use <code>GFusionTileLayer</code> to define a new tile layer for each map or imagery layer. <code>GFusionTileLayer</code> can directly reference the array where the map and imagery layers are stored.
+</li>
+<li>Pass these two constructors to the <code>GFusionTileLayer</code> class:
+<ul>
+<li>The URL of the hosting server.</li>
+<li>The layer definition. The definition includes information like the version of the tiles, the channel ID number, and whether the tiles are in PNG format.</li>
+</ul>
+</li>
+<li>Specify which layer in the <code>geeServerDefs</code> array to select for each <code>GFusionTileLayer</code> object.
+<ul>
+<li>The imagery layer is layer 0.</li>
+<li>The maps layer is layer 1.</li>
+<li>The hybrid (Show Labels) layer is layer 2.</li>
+</ul>
+<p><code>var imagery_map_layer = new GFusionTileLayer(geeServerDefs.serverUrl, geeServerDefs.layers[0]);<br/>
+var painted_map_layer = new GFusionTileLayer(geeServerDefs.serverUrl, geeServerDefs.layers[1]);<br/>
+var labels_layer = new GFusionTileLayer(geeServerDefs.serverUrl, geeServerDefs.layers[2]);</code></p>
+<p>You can access the server definitions and other information about map and imagery layers directly from a web browser by using a URL in this format: <code>http://yourserver.org/virtual-server-name/query?request=Json&amp;vars=geeServerDefs</code>. Responses will look like the image below:</p>
+<p><img alt="GEE server definitions" src="../art/fusion/projects/2972270_server_definitions.jpg"/></p>
+</li>
+<li>Associate layers with buttons by using the <code>GMapType</code> class to define a map type for each of the <code>GTileLayer</code> objects. See the example below:
+<p><code>var painted_map_type = new GMapType([painted_map_layer],new LatLngProjection(MAX_ZOOM_LEVEL),"Maps");<br/>
+var imagery_map_type = new GMapType([imagery_map_layer],new LatLngProjection(MAX_ZOOM_LEVEL),"Imagery");<br/>
+var labels_map_type = new GMapType([imagery_map_layer, labels_layer],new LatLngProjection(MAX_ZOOM_LEVEL),"Hybrid");</code></p>
+</li>
+<li>Use the <code>.addMapControl()</code> method to add each map type and its associated button to the map:
+<p><code>map.addMapType(painted_map_type);<br/>
+map.addMapType(imagery_map_type);<br/>
+map.addMapType(labels_map_type);</code></p>
+</li>
+<li>Remove the predefined Google Maps map types below so that the buttons display correctly:
+<p><code>map.removeMapType(G_SATELLITE_MAP);</code> // Remove the default Satellite Map Type button<br/>
+<code>map.removeMapType(G_HYBRID_MAP);</code> // Remove the default Hybrid Map Type button<br/>
+<code>map.removeMapType(G_NORMAL_MAP);</code> // Remove the default Map Type button</p>
+</li>
+<li>Add controls (like the zoom bar, the navigation bar, an overview map, and zooming options) to the map:
+<p><code>map.addControl(new GSmallMapControl());<br/>
+map.addControl(new GOverviewMapControl());<br/>
+map.addControl(new GScaleControl());<br/>
+map.enableScrollWheelZoom(); map.enableContinuousZoom();</code></p>
+</li>
+</ol>
+<h2>Display a drop-down menu instead of buttons</h2>
+<p>You can show a drop-down menu for the map layers instead of the side-by-side buttons, as shown below.</p>
+<table>
+<tbody>
+<tr>
+<td>
+<p>Standard map type buttons</p>
+</td>
+<td>
+<p>Drop-down menu for map types</p>
+</td>
+</tr>
+<tr>
+<td><img alt="Map buttons" src="../art/fusion/projects/2972268_map_buttons.jpg"/></td>
+<td><img alt="Menu buttons" src="../art/fusion/projects/2972269_menu_buttons.jpg"/></td>
+</tr>
+</tbody>
+</table>
+<p>To accomplish this, replace the <code>GHierarchicalMapTypeControl</code> call with a <code>GMenuMapTypeControl</code>.</p>
+<h2>Maintenance considerations</h2>
+<p>The layer ordering in <code>geeServerDefs</code> changes for each new version, so if you add more map layers or reorder the existing map layers in your 2D Map Database after you implement the HTML page, you must also update your <code>GFusionTileLayer</code> definitions so that the GEE Server requests the correct layer.</p>
+<h2>Make the HTML example the default display</h2>
+<p>You can set the example HTML file as the default view by changing one of the settings in the server configuration file. See below for an example of a location-based 2D virtual server configuration file.</p>
+<p>In this example, the server is hosted at</p>
+<p><code>http://machine123.company.internal/mapexample - /opt/google/gehttpd/conf.d/virtual_servers/example.location</code>.</p>
+<p><code># The mapexample virtual server<br/>
+RewriteRule ^/mapexample$ /mapexample/ [R]<br/>
+RewriteRule ^/mapexample/+$ /maps/maps_local.html [PT]<br/>
+RewriteRule ^/mapexample/+maps/+mapfiles/(.*)$ /maps/mapfiles/$1 [PT]<br/>
+&lt;Location "/mapexample/*"&gt;<br/>
+SetHandler gedb-handler Include conf.d/virtual_servers/runtime/example_runtime<br/>
+&lt;/Location&gt;</code></p>
+<p>In the example above, the second RewriteRule specifies that the <code>/maps/maps_local.html</code> web page is loaded whenever users visit the virtual server URL <code>http://machine123.company.internal/mapexample</code>.</p>
+<p>You can change this setting to load a different web page:</p>
+<p><code># The mapexample virtual server<br/>
+RewriteRule ^/mapexample$ /mapexample/ [R]<br/>
+RewriteRule ^/mapexample/+$ /maps/gmaps_buttons.html [PT]<br/>
+RewriteRule ^/mapexample/+maps/+mapfiles/(.*)$ /maps/mapfiles/$1 [PT]<br/>
+&lt;Location "/mapexample/*"&gt;<br/>
+SetHandler gedb-handler Include conf.d/virtual_servers/runtime/example_runtime<br/>
+&lt;/Location&gt;</code></p>
+<p>After you make changes to the file, restart the GEE Server to reload the configuration file and implement the change.</p>
+<h2>Access the imagery tiles hosted from another GEE 2D virtual server</h2>
+<p>You can use the <code>GTileLayer</code> Maps API class to access the web page for imagery layers that are published from different GEE servers. Then you can follow the same instructions above to assign the layer to a custom map type and display a button for it on your map.</p>
+<h2>Data used to build the map and imagery tiles</h2>
+<h3>Map data</h3>
+<p>You can obtain a complete copy of the 2D Map layer display rules from the <a href="https://groups.google.com/group/google-earth-enterprise" target="_blank">Google Earth Enterprise</a> Google Group Files section. The maps and hybrid (Show Labels) map layers were built from three different datasets:</p>
+<ul class="spaced-list">
+<li>Global borders (filled and outlined) in the maps and hybrid layers were created from the the Thematic Mapping World Borders dataset, available under a Creative Commons license at <a href="http://thematicmapping.org/downloads/world_borders.php" target="_blank">http://thematicmapping.org/downloads/world_borders.ph</a></li>
+<li>USA state boundaries in the maps and hybrid layers were created from the USA States borders vector data hosted by the National Atlas of the USA (now called the National Map).  You can download state boundaries from <a href="https://nationalmap.gov/small_scale/atlasftp.html">https://nationalmap.gov/small_scale/atlasftp.html</a>.
+<li>The background water that is visible in the maps layer was created with a global KML file. You can obtain the KML water file from the <a href="https://groups.google.com/group/google-earth-enterprise" target="_blank">Google Earth Enterprise</a> Google Group Files section.</li>
+</ul>
+<h3>Imagery data</h3>
+<p>Imagery for the globe was built from two different sources:</p>
+<ul class="spaced-list">
+<li>BlueMarble 500-meter global imagery (combined surface and bathymetric imagery) was used as the backdrop for the image.</li>
+<li>A reduced resolution (120-meter) version of imagery from the Premium Globe dataset was used for land imagery.</li>
+</ul><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>

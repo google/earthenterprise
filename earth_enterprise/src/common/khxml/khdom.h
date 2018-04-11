@@ -1247,4 +1247,27 @@ DestroyDocument(khxml::DOMDocument *doc) throw();
 extern bool
 DestroyParser(khxml::DOMLSParser *parser) throw();
 
+// specialized version of SingleDeleter for document object to be
+// used with khDeleteGuard<>
+template<typename U>
+class DomDeleter {
+ public:
+  static void Delete(U* ptr) { DestroyDocument(ptr); }
+};
+
+template <typename T, template<class U> class deleter>
+class khDeleteGuard;
+
+typedef khDeleteGuard<khxml::DOMDocument, DomDeleter> khDomDeleteGuard;
+
+// specialized version of SingleDeleter for parser object to
+// be used with khDeleteGuard<>
+template<typename U>
+class ParserDeleter {
+ public:
+  static void Delete(U* ptr) { DestroyParser(ptr); }
+};
+
+typedef khDeleteGuard<khxml::DOMLSParser, ParserDeleter> khParserDeleteGuard;
+
 #endif  // GEO_EARTH_ENTERPRISE_SRC_COMMON_KHXML_KHDOM_H_

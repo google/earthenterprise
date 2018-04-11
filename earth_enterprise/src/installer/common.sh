@@ -20,7 +20,7 @@ BADHOSTNAMELIST=(empty linux localhost dhcp bootp)
 GEE="Google Earth Enterprise"
 GEES="$GEE Server"
 GEEF="$GEE Fusion"
-LONG_VERSION="5.2.1"
+LONG_VERSION="5.2.2"
 SHORT_VERSION="5.2"
 
 ROOT_USERNAME="root"
@@ -68,6 +68,18 @@ REDHATKEY="rhel"
 CENTOSKEY="centos"
 OS_RELEASE1="/etc/os-release"
 OS_RELEASE2="/etc/system-release"
+
+xml_file_get_xpath()
+{
+    local FILE="$1"
+    local XPATH="$2"
+
+    # Warning: `xmllint --noent` doesn't recognize named entities like
+    # "&lt;" and "&gt;":
+    echo "cat $XPATH" | xmllint --noent --nocdata --shell "$FILE" |
+    # Skip the first and the last line:
+        tail -n +2 | head -n -1
+}
 
 software_check()
 {
@@ -292,7 +304,7 @@ check_server_processes_running()
     retval=0
     wsgi_running_str="true"
   fi
-  echo "wsgi service: $gehttpd_running_str"
+  echo "wsgi service: $wsgi_running_str"
 
   return $retval
 }

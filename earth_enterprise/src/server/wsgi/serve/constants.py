@@ -110,6 +110,7 @@ SUPPLEMENTAL_UI_LABEL = "SupUiLabel"
 SNIPPET_SET_NAME = "SnippetSetName"
 SNIPPET_SET = "SnippetSet"
 SERVE_WMS = "ServeWms"
+EC_DEFAULT_DB = "EcDefaultDb"
 ORIGIN_REQUEST_HOST = "OriginRequestHost"
 
 # Response header names.

@@ -93,6 +93,10 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
     "   [--vhname <vh_name>]     If virtual host is omitted,\n"
     "                            <db_name> is published to the default\n"
     "                            virtual host: \"%s\".\n"
+    "   [--setecdefault]         Publish this database as the default one for\n"
+    "                            the Earth Client to connect to if no database\n"
+    "                            or virtual host is specified upon initial\n"
+    "                            connection.\n" 
     " --unpublish <target_path>  Unpublish the DB served from the specified\n"
     "                            target path.\n"
     " --republishdb <db_name>    Publish a registered DB on the specified\n"
@@ -293,6 +297,7 @@ int main(int argc, char* argv[]) {
     bool disable_cutter = false;
     bool listdbs = false;
     bool publisheddbs = false;
+    bool ec_default_db = false;
     bool listtgs = false;
     bool only_portables = false;
     bool listvhs = false;
@@ -338,6 +343,7 @@ int main(int argc, char* argv[]) {
     options.flagOpt("force_copy", force_copy);
     options.vecOpt("pushdb", pushdbs);
     options.opt("publishdb", publishdb);
+    options.flagOpt("setecdefault", ec_default_db);
     options.opt("unpublish", unpublish);
     options.opt("republishdb", republishdb);
     options.flagOpt("swaptargets", swaptargets);
@@ -628,8 +634,8 @@ int main(int argc, char* argv[]) {
       if (fusion_host.empty()) {
         SetFusionHost(&publisher_client, gedb_path, curr_host);
       }
-      if (publisher_client.PublishDatabase(gedb_path, target_path, vhname)) {
-        fprintf(stdout, "Database successfully published.\n");
+      if (publisher_client.PublishDatabase(gedb_path, target_path, vhname, ec_default_db)) {
+        fprintf(stdout, "Database successfully published.  EC Default Database: %s\n", ec_default_db ? "true" : "false");
       } else {
         throw khException(publisher_client.ErrMsg() +
                           "\nDatabase publish request failed.\n");
