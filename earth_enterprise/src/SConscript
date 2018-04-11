@@ -73,9 +73,10 @@ built_version_file = env.Command(version_file, [ ],
                       [env.EmitVersion(version_file, backup_file)])
 env.AlwaysBuild(built_version_file)
 
+label = ARGUMENTS.get('label', '')
 long_version_file = File('gee_long_version.txt').abspath
 built_long_version_file = env.Command(long_version_file, [ ],
-                      [env.EmitLongVersion(long_version_file, backup_file)])
+                      [env.EmitLongVersion(long_version_file, backup_file, label)])
 env.AlwaysBuild(built_long_version_file)
 env.install('root', long_version_file)
 
