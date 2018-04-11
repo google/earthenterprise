@@ -1,0 +1,318 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Make Web Map Service (WMS) requests</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 4441137.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/3468004.html">GEE Server Overview</a></p>
+<p class="sidebar-toc"><a href="../answer/3470759.html">Sign in to GEE Server Admin console</a></p>
+<p class="sidebar-toc"><a href="../answer/3479919.html">Snippet profiles page</a></p>
+<p class="sidebar-toc"><a href="../answer/3480095.html">Search tabs page</a></p>
+<p class="sidebar-toc"><a href="../answer/3479921.html">Settings page</a></p>
+<p class="sidebar-toc"><a href="../answer/3480097.html">Dashboard page</a></p>
+<p class="sidebar-toc"><a href="../answer/3479922.html">Databases page</a></p>
+<p class="sidebar-toc"><a href="../answer/3497763.html">Publish databases and portables</a></p>
+<p class="sidebar-toc"><a href="../answer/6004748.html">Manage snippet profiles</a></p>
+<p class="sidebar-toc"><a href="../answer/176770.html">Display custom logos</a></p>
+<p class="sidebar-toc"><a href="../answer/6013604.html">Manage virtual hosts</a></p>
+<p class="sidebar-toc"><a href="../answer/4441137.html" class="current-file">Make Web Map Service (WMS) requests</a></p>
+<p class="sidebar-toc"><a href="../answer/6062970.html">Publish databases with search</a></p>
+<p class="sidebar-toc"><a href="../answer/6063101.html">Search your POI vector data or map layer data</a></p>
+<p class="sidebar-toc"><a href="../answer/3497832.html">Create Search tabs</a></p>
+<p class="sidebar-toc"><a href="../answer/6066597.html">Add custom search services</a></p>
+<p class="sidebar-toc"><a href="../answer/6082250.html">Troubleshoot search services</a></p>
+<p class="sidebar-toc"><a href="../answer/6091774.html">Example Search plug-in Python code sample</a></p>
+<p class="sidebar-toc"><a href="../answer/6091810.html">Custom POI Search plug-in Python code sample</a></p>
+<p class="sidebar-toc"><a href="../answer/3230777.html">Create portable globes and maps</a></p>
+<p class="sidebar-toc"><a href="../answer/4643041.html">Create composite globes and maps</a></p>
+<p class="sidebar-toc"><a href="../answer/6051534.html">View 3D databases</a></p>
+<p class="sidebar-toc"><a href="../answer/6051659.html">View 2D databases</a></p>
+<p class="sidebar-toc"><a href="../answer/6051568.html">Implement Google Earth Plugin</a></p>
+<p class="sidebar-toc"><a href="../answer/6051584.html">(Deprecated) Provide Google Earth Plug-in for your users to install</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | GEE Server administration</h1>
+<h2>Make Web Map Service (WMS) requests</h2>
+<p>Google Earth Enterprise Server 5.x supports the <a href="http://www.opengeospatial.org/standards/wms" target="_blank">OpenGIS Web Map Service Interface Standard (WMS)</a>, which provides a standard HTTP interface to request map images from one or more published geospatial databases. Mapping images that are provided through a WMS over the Internet can show information such as weather formations and conditions, topographical maps, alternate high resolution satellite imagery and more.</p>
+<p>One of the benefits of using the WMS standard is that supported clients can request images from multiple WMS servers and then combine those mapping images into a single view. Because the WMS standard is used to get all the images, they can easily be overlaid on one another. Supported clients include <a href="#GISClients">QGIS 2.0.1</a>, ArcGIS/ArcGIS Explorer Desktop, and <a href="https://github.com/google/earthenterprise/wiki/Google-Earth-Enterprise-Client-(EC)" target="_blank">Google Earth Pro/EC</a>.</p>
+<ul>
+<li><a href="#SupportedDB">Supported Database Types</a></li>
+<li><a href="#SuppProj">Supported Projections</a></li>
+<li><a href="#ChangingProj">Working with Other Projection Types</a></li>
+<li><a href="#SuppImgFormats">Supported Image Formats</a></li>
+<li><a href="#SetupWMS">Setting up Google Earth Enterprise Server 5.x Support for WMS</a></li>
+<li><a href="#MakingRequests">Making WMS Requests to Google Earth Enterprise Server 5.x</a></li>
+<li><a href="#GetCapabilities">GetCapabilities</a></li>
+<li><a href="#GetMap">GetMap</a></li>
+<li><a href="#GISClients">Making WMS Requests in GIS Clients</a>
+<ul>
+<li><a href="#QGIS">Connecting to Google Earth Server 5.x WMS using QGIS</a></li>
+</ul>
+</li>
+</ul>
+<hr/>
+<h2><a name="SupportedDB"></a>Supported Database Types</h2>
+<p>WMS is supported only with Fusion databases: 2D Plate Carrée and Mercator</p>
+<hr/>
+<h2><a name="SuppProj"></a>Supported Projections</h2>
+<p>For imagery over WMS, GEE Server supports <strong>Plate Carrée (EPSG code 4326)</strong> and <strong>Mercator (EPSG code 3857)</strong>, as well as legacy Mercator codes <strong>EPSG:3785</strong> and <strong>EPSG:900913</strong>.</p>
+<hr/>
+<h2><a name="ChangingProj"></a>Working with Other Projection Types</h2>
+<p>To work with other projection types, you will need to perform coordinate transformation in your client using <a href="http://trac.osgeo.org/proj/" target="_blank">proj.4</a> or another library . Alternatively, you can use an implementation of the OGC WCTS to reproject your coordinates to one of the supported ones. It's recommended that you use one of the well-known libraries since you are only transforming two pairs of coordinates for a bounding box.</p>
+<p>Another example of working with other projections is to use a third-party application such as MapServer to reproject your native WMS on-the-fly, for example, to change your projection from Mercator to UTM zone 35.</p>
+<hr/>
+<h2><a name="SuppImgFormats"></a>Supported Image Formats</h2>
+<p>The following image formats are supported:</p>
+<ul>
+<li>PNG</li>
+<li>JPEG</li>
+</ul>
+<hr/>
+<h2><a name="SetupWMS"></a>Setting up Google Earth Enterprise Server 5.x Support for WMS</h2>
+<p>To enable WMS for a database that you want to publish:</p>
+<ol>
+<li>In the <a href="../answer/3470759.html">GEE Server Admin</a> console, click <strong>Databases</strong>.</li>
+<li>Check the box next to the database you want to publish.</li>
+<li>Next to <strong>Serve WMS</strong>, select <strong>On</strong>.</li>
+<li>Click <strong>Publish</strong>.
+<p>Publishing a 2D Fusion or 2D portable database with <strong>Serve WMS</strong> turned on publishes both to GEE Server and WMS; it's not necessary to publish twice.</p>
+</li>
+</ol>
+<p>Databases that have WMS enabled are identified as such with a WMS label in the description.</p>
+<p><img alt="WMS-enabled databases in GEE Server" src="../art/server/wms/WMS_description.png"/></p>
+<hr/>
+<h2><a name="MakingRequests"></a>Making WMS Requests to Google Earth Enterprise Server 5.x</h2>
+<p>The first step in creating maps via HTTP requests to Google Earth Enterprise Server 5.x is to create a connection.</p>
+<p>To connect to Google Earth Enterprise Server 5.x, use the following URL:</p>
+<pre>
+<code>http://&lt;gee_server_name or ip address&gt;/&lt;target_path_of_published_db&gt;/wms</code></pre>
+<p>In this example, <code>http://localhost/merc/wms</code>, “merc” is the target path of the published database.<br/>
+Google Earth Enterprise Server 5.x supports the <strong>GetCapabilities</strong> and <strong>GetMap</strong> requests for WMS versions 1.1.1 and 1.3.0. Use <strong>GetCapabilities</strong> to first request metadata from which you can then specify the map images that you want to request using <strong>GetMap</strong>.</p>
+<hr/>
+<h2><a name="GetCapabilities"></a>GetCapabilities</h2>
+<p>The <strong>GetCapabilities</strong> operation requests information about the type of services and data (“capabilities”) that are provided by Google Earth Enterprise Server 5.x.</p>
+<p>The URL the GIS client should use to make the <strong>GetCapabilities</strong> request is as follows:</p>
+<pre>
+<code>http://&lt;hostname&gt;/&lt;target_path&gt;/wms?SERVICE=WMS&amp;REQUEST=GetCapabilities&amp;VERSION=x.y.z</code></pre>
+<p>The parameters for this operation are as follows:</p>
+<table class="nice-table">
+<caption><strong>GetCapabilities</strong> parameters</caption>
+<tbody>
+<tr>
+<th scope="col">Parameter</th>
+<th scope="col">Mandatory?</th>
+<th scope="col">Description</th>
+</tr>
+<tr>
+<td>SERVICE</td>
+<td>Yes</td>
+<td>Service name. Value is WMS</td>
+</tr>
+<tr>
+<td>REQUEST</td>
+<td>Yes</td>
+<td>Operation name. Value is <strong>GetCapabilities</strong></td>
+</tr>
+<tr>
+<td>VERSION</td>
+<td>No</td>
+<td>Service version is one of 1.1.1 or 1.3.0. If no version is submitted, the WMS request defaults to the highest serving version, in this case 1.3.0.</td>
+</tr>
+</tbody>
+</table>
+<p>An example <strong>GetCapabilities</strong> request is:</p>
+<p><code>http://localhost/merc/wms?SERVICE=WMS&amp;REQUEST=GetCapabilities&amp;VERSION=1.1.1</code></p>
+<p>The response to a <strong>GetCapabilities</strong> request includes the following information:</p>
+<ul>
+<li>Image formats supported on a published target path basis for the maps. Note that the target path database information is sent in the connection URL.</li>
+<li>A list of layers supported by the published target path database. Each layer provides the following information:
+<ul>
+<li>Name of the layer</li>
+<li>Spatial projection supported</li>
+<li>Bounding box limitations based on the projection type</li>
+</ul>
+</li>
+<li>Formats supported for any exceptions, such as invalid requests (requests not as per the international standards), service not supported etc.</li>
+</ul>
+<p>An example <strong>GetCapabilities</strong> request output is as follows:</p>
+<code>&lt;WMT_MS_Capabilities updateSequence="0" version="1.1.1"&gt;<br/>
+  &lt;Service&gt;<br/>
+    &lt;Name&gt;OGC:WMS&lt;/Name&gt;<br/>
+    &lt;Title&gt;Google Earth WMS service.&lt;/Title&gt;<br/>
+    &lt;OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"<br/>
+    xlink:type="simple" xlink:href="http://108.59.84.128/Earth/wms"/&gt;<br/>
+  &lt;/Service&gt;<br/>
+  &lt;Capability&gt;<br/>
+    &lt;Request&gt;<br/>
+      &lt;GetCapabilities&gt;<br/>
+        &lt;Format&gt;text/xml&lt;/Format&gt;<br/>
+        &lt;DCPType&gt;<br/>
+          &lt;HTTP&gt;<br/>
+            &lt;Get&gt;<br/>
+              &lt;OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"<br/>
+              xlink:type="simple" xlink:href="http://108.59.84.128/Earth/wms"/&gt;<br/>
+            &lt;/Get&gt;<br/>
+          &lt;/HTTP&gt;<br/>
+        &lt;/DCPType&gt;<br/>
+      &lt;/GetCapabilities&gt;<br/>
+      &lt;GetMap&gt;<br/>
+        &lt;Format&gt;image/png&lt;/Format&gt;<br/>
+        &lt;Format&gt;image/jpeg&lt;/Format&gt;<br/>
+        &lt;DCPType&gt;<br/>
+          &lt;HTTP&gt;<br/>
+            &lt;Get&gt;<br/>
+              &lt;OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"<br/>
+              xlink:type="simple" xlink:href="http://108.59.84.128/Earth/wms"/&gt;<br/>
+            &lt;/Get&gt;<br/>
+          &lt;/HTTP&gt;<br/>
+        &lt;/DCPType&gt;<br/>
+      &lt;/GetMap&gt;<br/>
+    &lt;/Request&gt;<br/>
+    &lt;Exception&gt;<br/>
+      &lt;Format&gt;application/vnd.ogc.se_xml&lt;/Format&gt;<br/>
+    &lt;/Exception&gt;<br/>
+    &lt;Layer opaque="0" noSubsets="0" queryable="0"&gt;<br/>
+      &lt;Title&gt;Google Earth WMS service.&lt;/Title&gt;<br/>
+      &lt;Layer opaque="1" cascaded="0" noSubsets="0" queryable="0"&gt;<br/>
+        &lt;Name&gt;Earth&lt;/Name&gt;<br/>
+        &lt;Title&gt;Imagery&lt;/Title&gt;<br/>
+        &lt;SRS&gt;EPSG:4326&lt;/SRS&gt;<br/>
+        &lt;LatLonBoundingBox minx="-180.0" miny="-90.0" maxx="180.0" maxy="90.0"/&gt;<br/>
+        &lt;BoundingBox maxx="180.0" maxy="90.0" miny="-90.0" minx="-180.0"<br/>
+        SRS="EPSG:4326"/&gt;<br/>
+      &lt;/Layer&gt;<br/>
+    &lt;/Layer&gt;<br/>
+  &lt;/Capability&gt;<br/>
+&lt;/WMT_MS_Capabilities&gt;</code>
+<p>Once you have retrieved services and data information from Google Earth Enterprise Server 5.x using <strong>GetCapabilities</strong>, you can then get the map image that you want using <strong>GetMap</strong>.</p>
+<hr/>
+<h2><a name="GetMap"></a>GetMap</h2>
+<p>The <strong>GetMap</strong> operation requests the map from Google Earth Enterprise Server 5.x, based on the layer data that was discovered in the <strong>GetCapabilities</strong> step.</p>
+<p>The URL the GIS client should use to make the <strong>GetMap</strong> request is as follows:</p>
+<pre>
+<code>http://&lt;hostname&gt;/&lt;target_path&gt;/wms?SERVICE=WMS&amp;REQUEST=
+GetMap&amp;BBOX=&lt;bounding_box_limits_of_the_requested_map&gt;&amp;SRS=&lt;projection_type&gt;&amp;WIDTH=&lt;width_of_requested_map&gt;&amp;HEIGHT=&lt;height_of_requested_map&gt;&amp;LAYERS=&lt;layer_name&gt;&amp;STYLES=&lt;style_info&gt;&amp;FORMAT=&lt;format_of_requested_map&gt;&amp;DPI=96&amp;TRANSPARENT=TRUE</code></pre>
+<p>The parameters for this operation are as follows:</p>
+<table class="nice-table">
+<caption><strong>GetMap</strong> Parameters</caption>
+<tbody>
+<tr>
+<th scope="col">Parameter</th>
+<th scope="col">Mandatory?</th>
+<th scope="col">Description</th>
+</tr>
+<tr>
+<td>SERVICE</td>
+<td>No</td>
+<td>Service name. Default value is WMS.</td>
+</tr>
+<tr>
+<td>REQUEST</td>
+<td>Yes</td>
+<td>Operation name. Value is <strong>GetMap</strong>.</td>
+</tr>
+<tr>
+<td>VERSION</td>
+<td>No</td>
+<td>Service version is one of 1.1.1 or 1.3.0. If no version is submitted, the WMS request defaults to the highest serving version, in this case 1.3.0.</td>
+</tr>
+<tr>
+<td>LAYERS</td>
+<td>Yes</td>
+<td>Layer name for the requested map/image.</td>
+</tr>
+<tr>
+<td>BBOX</td>
+<td>Yes</td>
+<td>Bounding box for map extent. Value is minx, miny, maxx, maxy in units of the SRS or CRS, depending on the version. Use SRS for version 1.1.1; use CRS for version 1.3.0.</td>
+</tr>
+<tr>
+<td>SRS or CRS</td>
+<td>Yes</td>
+<td>Spatial Reference System (SRS) of map output. Value is in form EPSG:nnn. Use SRS for version 1.1.1; use CRS as the parameter key for version 1.3.0.</td>
+</tr>
+<tr>
+<td>WIDTH</td>
+<td>Yes</td>
+<td>Width of map output, in pixels.</td>
+</tr>
+<tr>
+<td>HEIGHT</td>
+<td>Yes</td>
+<td>Height of map output, in pixels.</td>
+</tr>
+<tr>
+<td>FORMAT</td>
+<td>Yes</td>
+<td>Format for the map output. PNG or JPEG are currently supported.</td>
+</tr>
+<tr>
+<td>STYLE</td>
+<td>No</td>
+<td>Styles in which layers are to be rendered. Value is a list of required style names or empty if default styling is required.</td>
+</tr>
+<tr>
+<td>DPI</td>
+<td>No</td>
+<td>Dots per inch. Value is client-dependent. For example, the QGIS client defaults to 96dpi.</td>
+</tr>
+<tr>
+<td>TRANSPARENT</td>
+<td>No</td>
+<td>Determines if the map should be transparent. Values are TRUE and FALSE; default is FALSE. This parameter only applies when requesting PNG images. </td>
+</tr>
+<tr>
+<td>BGCOLOR</td>
+<td>No</td>
+<td>Specifies the color to be used as the background (non-data) pixels of the map. The parameter is a hexadecimal encoding of an RGB value where two hexadecimal characters are used for each of red, green, and blue color values. The values can range between
+00 and FF (0 and 255, base 10) for each. The format is 0xRRGGBB; either upper or lower case characters are allowed for RR, GG, and BB values. The “0x” prefix must have a lower case “x”. The default value is 0xFFFFFF, corresponding to the color white, which is used if this parameter is not included in the request. When FORMAT is a picture format, a WMS should set the background pixels to the color specified by BGCOLOR. When FORMAT is a graphic element format (which does not have an explicit background), or a picture format, a WMS should avoid use of the BGCOLOR value for foreground elements because they would not be visible against a background picture of the same color.</td>
+</tr>
+</tbody>
+</table>
+<p>An example <strong>GetMap</strong> request is:</p>
+<ul class="spaced-list">
+<li>For version 1.1.1:
+<p><code>http://localhost/merc/wms?VERSION=1.1.1&amp;SERVICE=WMS&amp;REQUEST=GetMap&amp;BBOX=-0037508.342789,-20039414.861177,20037508.342789,20037508.342781&amp;SRS=EPSG:900913&amp;WIDTH=1002&amp;HEIGHT=1001&amp;LAYERS=[merc]:1002&amp;STYLES=&amp;FORMAT=image/png&amp;DPI=96&amp;TRANSPARENT=TRUE</code></p>
+</li>
+<li>For version 1.3.0:
+<p><code>http://localhost/merc/wms?VERSION=1.3.0&amp;SERVICE=WMS&amp;REQUEST=GetMap&amp;BBOX=-20037508.342789,-20039414.861177,20037508.342789,20037508.342781&amp;CRS=EPSG:900913&amp;WIDTH=1002&amp;HEIGHT=1001&amp;LAYERS=[merc]:1002&amp;STYLES=&amp;FORMAT=image/png&amp;DPI=96&amp;TRANSPARENT=TRUE</code></p>
+</li>
+</ul>
+<hr/>
+<h2><a name="GISClients"></a>Making WMS Requests in GIS Clients</h2>
+<p>Any GIS client that supports WMS can query the Google Earth Server 5.x using the URLs specified in this document. The following example shows how QGIS connects to Google Earth Server 5.x, requests the server’s data, and then requests the maps to display.</p>
+<hr/>
+<h3><a name="QGIS"></a>Connecting to Google Earth Server 5.x WMS using QGIS</h3>
+<p>To connect the Google Earth Server 5.x using the QGIS client:</p>
+<ol class="spaced-list">
+<li>Start the QGIS client application. At the top of the QGIS window, click the <strong>Add WMS/WMTS Layer</strong> toolbar button or from the <strong>Layer</strong> menu choose <strong>Add &gt; Add WMS/WMTS Layer...</strong>.
+
+<p><img alt="Add WMS layer feature" src="../art/server/wms/4441250_add_layer_tab.png"/></p>
+</li>
+<li>Click <strong>New</strong> to establish a new WMS layer connection. A new connection window displays.
+<p><img alt="Create WMS connection dialog" src="../art/server/wms/4441253_connection_dialog.png"/></p>
+</li>
+<li>Enter the following details:
+<ul>
+<li>Name for the connection</li>
+<li>Connection URL as <code>http://&lt;server&gt;/&lt;target_path_of_published_database&gt;/wms</code>, for example, <code>http://localhost/my_map/wms</code></li>
+</ul>
+<p>Optionally, supply the username and password if the database has been published to a secure virtual host set up with basic authentication.</p>
+<p>Click <strong>OK</strong> to create a new connection.</p>
+</li>
+<li>In the same window, click <strong>Connect</strong> to make a <strong>GetCapabilities</strong> request for a specific published target path database.
+<p>An example response for a <strong>GetCapabilities</strong> request is shown in the following window.</p>
+<p><img alt="GetCapabilities request response" src="../art/server/wms/4441193_request_response.png"/></p>
+<p>The <strong>GetCapabilities</strong> WMS request returns imagery and vector layers for 2D databases and only imagery for 3D databases.</p>
+</li>
+<li>
+<p>Determine which layer you want to display, then double-click the layer name to send a <strong>GetMap</strong> request to Google Earth Enterprise Server 5.x. The following example shows a map retrieved from a <strong>GetMap</strong> request.</p>
+<p><img alt="GetMap request map retrieval" src="../art/server/wms/4441194_request_retrieval.png"/></p>
+</li>
+<li>If you are adding layers from a 2D database to your QGIS project, be sure to first set the <strong>Coordinate Reference System (CRS)</strong> for the project to <strong>EPSG:3857 (WGS 84 / Pseudo Mercator)</strong> by clicking the icon in the lower-right corner of the display window.
+<p><img alt="Set CRS dialog" src="../art/server/wms/4542523_crs_dialog.png"/></p>
+</li>
+</ol><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>

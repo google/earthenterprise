@@ -51,7 +51,7 @@ void usage(const char *prog, const char *msg = 0, ...) {
     (stderr,
      "\n"
      "usage:\n"
-     "  %s {--new|--repair|--editvolumes|--fixmasterhost|--addvolume|--listvolumes [options]}\n"
+     "  %s {--new|--repair|--editvolumes|--fixmasterhost|--addvolume|--removevolume|--listvolumes [options]}\n"
      "Configure this machine to run Google Earth Fusion.\n"
      "  --help, -?                  Display this usage message\n"
      "\n"
@@ -85,6 +85,8 @@ void usage(const char *prog, const char *msg = 0, ...) {
      "  --addvolume <volume_name>:<dir>\n"
      "    [--assetroot <dir>]       Add a volume with the given name and\n"
      "                              directory.\n"
+     "  --removevolume <volume_name>\n"
+     "    [--assetroot <dir>]       Remove a volume with the given name.\n"
      "\n",
      prog, CommandlineAssetRootDefault().c_str());
   exit(1);
@@ -101,6 +103,7 @@ void MakeNewAssetRoot(const AssetRootStatus &status,
 void RepairExistingAssetRoot(const AssetRootStatus &status, bool noprompt);
 void AddVolume(const AssetRootStatus &status,
                const std::string &volume_name, const std::string &volume_dir);
+void RemoveVolume(const AssetRootStatus &status, const std::string &volume_name);
 void EditVolumes(const AssetRootStatus &status);
 void ListVolumes(const AssetRootStatus &status);
 void FixMasterHost(const AssetRootStatus &status);
@@ -123,6 +126,7 @@ int main(int argc, char *argv[]) {
     std::string groupname = Systemrc::UserGroupname();
     std::string srcvol;
     std::string addvolume;
+    std::string removevolume;
     bool noprompt = false;
     bool nochown = false;
 
@@ -135,6 +139,7 @@ int main(int argc, char *argv[]) {
     options.opt("fixmasterhost", fixmasterhost);
     options.opt("srcvol", srcvol);
     options.opt("addvolume", addvolume);
+    options.opt("removevolume", removevolume);
     options.opt("listvolumes", listvolumes);
     options.opt("noprompt", noprompt);
     options.opt("nochown", nochown);
@@ -142,6 +147,7 @@ int main(int argc, char *argv[]) {
                                          std::string("repair"),
                                          std::string("editvolumes"),
                                          std::string("addvolume"),
+                                         std::string("removevolume"),
                                          std::string("listvolumes"),
                                          std::string("fixmasterhost")));
 
@@ -150,7 +156,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (argn < argc) {
-      usage(argv[0], "Unrecognized paramters specified");
+      usage(argv[0], "Unrecognized parameters specified");
     }
 
     // Make sure I'm root, everything is shut down,
@@ -218,6 +224,9 @@ int main(int argc, char *argv[]) {
                       .arg(addvolume));
       }
       AddVolume(status, volume_name, volume_directory);
+    }
+    if (!removevolume.empty()) {
+      RemoveVolume(status, removevolume);
     }
     if (!listvolumes) {
       printf("Configured %s.\n", status.assetroot_.c_str());
@@ -563,6 +572,31 @@ void AddVolume(const AssetRootStatus &status,
 
   // Update the volumes.
   SaveVolumesOrThrow(status.assetroot_, voldefs);
+  printf("Volumes modified\n");
+}
+
+
+void RemoveVolume(const AssetRootStatus &status,
+                  const std::string &volume_name) {
+
+  VolumeDefList voldefs;
+  LoadVolumesOrThrow(status.assetroot_, voldefs);
+  VolumeDefList oldvoldefs = voldefs;
+
+  // Check that the volume exists
+  VolumeDefList::VolumeDefMap::iterator found =
+          voldefs.volumedefs.find(volume_name);
+  if (found == voldefs.volumedefs.end()) {
+    throw khException(kh::tr("The volume named '%1' does not exist")
+                  .arg(volume_name));
+  }
+
+  // Update the Volume def.
+  voldefs.volumedefs.erase(found);
+
+  // Update the volumes.
+  SaveVolumesOrThrow(status.assetroot_, voldefs);
+
   printf("Volumes modified\n");
 }
 

@@ -653,8 +653,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
     query_string = ("""SELECT publish_context_table.snippets_set_name,
            publish_context_table.search_def_names,
            publish_context_table.supplemental_search_def_names,
-           publish_context_table.poifederated, 
-           publish_context_table.ec_default_db
+           publish_context_table.poifederated
            FROM target_table, target_db_table, publish_context_table
            WHERE target_table.target_path = %s AND
                  target_table.target_id = target_db_table.target_id AND
