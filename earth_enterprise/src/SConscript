@@ -15,8 +15,10 @@
 # limitations under the License.
 #
 
-""" Top level Sconscript file.
-"""
+# This file is 'earth_enterprise/src/SConscript'
+
+
+""" Top level Sconscript file."""
 
 
 import glob

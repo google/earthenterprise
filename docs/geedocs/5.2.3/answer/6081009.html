@@ -1,0 +1,62 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Map projection types in GEE 5.1.0</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 6081009.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/6153619.html">Supported file formats in GEE</a></p>
+<p class="sidebar-toc"><a href="../answer/6053241.html">Apply alpha masking to imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/172810.html">Import pre-processed data</a></p>
+<p class="sidebar-toc"><a href="../answer/1090589.html">Import a subset of imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/173054.html">Add .kip imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/2882131.html">Vector data handling</a></p>
+<p class="sidebar-toc"><a href="../answer/2760298.html">Google Maps raster background</a></p>
+<p class="sidebar-toc"><a href="../answer/4525555.html">Create custom masks</a></p>
+<p class="sidebar-toc"><a href="../answer/6062318.html">Manage mosaics with virtual rasters</a></p>
+<p class="sidebar-toc"><a href="../answer/6081009.html" class="current-file">Map projection types in GEE 5.1.0</a></p>
+<p class="sidebar-toc"><a href="../answer/6081069.html">Add flat imagery to Mercator map databases in GEE 5.1.0</a></p>
+<p class="sidebar-toc"><a href="../answer/2760457.html">Add KML layers</a></p>
+<p class="sidebar-toc"><a href="../answer/2760534.html">Non-clickable icons</a></p>
+<p class="sidebar-toc"><a href="../answer/173053.html">Map projections</a></p>
+<p class="sidebar-toc"><a href="../answer/1089795.html">Map buttons</a></p>
+<p class="sidebar-toc"><a href="../answer/4492623.html">Create terrain overlays</a></p>
+<p class="sidebar-toc"><a href="../answer/2760655.html">Monitor builds with Twitter</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion resources and projects</h1>
+<h2>Map projection types in GEE 5.1.0</h2>
+<p>In addition to using Google Earth Enterprise Fusion to prepare and publish data in Google Earth EC, you can use it to prepare and publish map data in Google Maps.</p>
+<p>Google Earth Enterprise 5.1.0 supports the following projection types for map databases:</p>
+<ul>
+<li><strong>Mercator map</strong>—The Mercator map database includes the Google Maps layer and optionally uses the Google Base Map from google.com. It also uses a local copy of the Google Maps API that requires no communication with google.com.</li>
+<li><strong>Flat Projection map</strong>—The Flat Projection map database uses the local copy of the Google Maps API that requires no communication with google.com.</li>
+</ul>
+<h2>Preparing map data</h2>
+<p>When you prepare map data, there are four components:</p>
+<ul>
+<li>Resources (vector and imagery)</li>
+<li>Map Layers (Flat projection and Mercator maps supported)</li>
+<li>Map Projects (map and imagery)</li>
+<li>Map Database</li>
+</ul>
+<h2>Vector and imagery resources</h2>
+<p>For <strong>Flat Projection</strong> maps, you can share the same vector and imagery resources for both Google Earth EC and Google Maps databases.</p>
+<p>For <strong>Mercator</strong> maps, you can create Mercator-based imagery projects or your Mercator maps can share the same imagery resources as a Flat Projection map database by projecting the flat imagery as <em>Mercator on the Fly</em>. Now that your Mercator map databases can share the same imagery projects as a Flat Projection map databases, you can save on both storage space and database building time by eliminating the need for Mercator-based imagery. </p>
+<p>For more information, see <a href="../answer/6081069.html">Add flat imagery to Mercator map databases</a>.
+
+
+<h2>Access map tools</h2>
+With map databases, in addition to vector and imagery projects, you have the extra step of creating <em>map layers</em>.
+
+<p>Defining a map layer includes adding resources and defining the display rules and filters for the layer.</p>
+<p>You access the map tools from the toolbar of the <strong>Asset Manager</strong> dialog:</p>
+<ul>
+<li>Open Fusion and click <strong>Tools &gt; Asset Manager</strong> to open the Asset Manager dialog.</li>
+<li>Select either <strong>Mercator Map Tools (2D)</strong> or <strong>Flat Projection Map Tools (2D)</strong> from the Asset Manager toolbar.
+<p><img alt="Asset Manager Flat Map Tools selection" src="../art/fusion/flat_maps/asset_mgr_flat_maps_select.png"/></p>
+</li>
+</ul>
+<p>For information about creating map projects and databases, read the tutorial lesson, <a href="../answer/4412455.html">Creating a map database</a>.</p></p><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>

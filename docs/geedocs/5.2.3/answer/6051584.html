@@ -1,0 +1,54 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>(Deprecated) Provide Google Earth Plug-in for your users to install</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 6051584.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/3468004.html">GEE Server Overview</a></p>
+<p class="sidebar-toc"><a href="../answer/3470759.html">Sign in to GEE Server Admin console</a></p>
+<p class="sidebar-toc"><a href="../answer/3479919.html">Snippet profiles page</a></p>
+<p class="sidebar-toc"><a href="../answer/3480095.html">Search tabs page</a></p>
+<p class="sidebar-toc"><a href="../answer/3479921.html">Settings page</a></p>
+<p class="sidebar-toc"><a href="../answer/3480097.html">Dashboard page</a></p>
+<p class="sidebar-toc"><a href="../answer/3479922.html">Databases page</a></p>
+<p class="sidebar-toc"><a href="../answer/3497763.html">Publish databases and portables</a></p>
+<p class="sidebar-toc"><a href="../answer/6004748.html">Manage snippet profiles</a></p>
+<p class="sidebar-toc"><a href="../answer/176770.html">Display custom logos</a></p>
+<p class="sidebar-toc"><a href="../answer/6013604.html">Manage virtual hosts</a></p>
+<p class="sidebar-toc"><a href="../answer/4441137.html">Make Web Map Service (WMS) requests</a></p>
+<p class="sidebar-toc"><a href="../answer/6062970.html">Publish databases with search</a></p>
+<p class="sidebar-toc"><a href="../answer/6063101.html">Search your POI vector data or map layer data</a></p>
+<p class="sidebar-toc"><a href="../answer/3497832.html">Create Search tabs</a></p>
+<p class="sidebar-toc"><a href="../answer/6066597.html">Add custom search services</a></p>
+<p class="sidebar-toc"><a href="../answer/6082250.html">Troubleshoot search services</a></p>
+<p class="sidebar-toc"><a href="../answer/6091774.html">Example Search plug-in Python code sample</a></p>
+<p class="sidebar-toc"><a href="../answer/6091810.html">Custom POI Search plug-in Python code sample</a></p>
+<p class="sidebar-toc"><a href="../answer/3230777.html">Create portable globes and maps</a></p>
+<p class="sidebar-toc"><a href="../answer/4643041.html">Create composite globes and maps</a></p>
+<p class="sidebar-toc"><a href="../answer/6051534.html">View 3D databases</a></p>
+<p class="sidebar-toc"><a href="../answer/6051659.html">View 2D databases</a></p>
+<p class="sidebar-toc"><a href="../answer/6051568.html">Implement Google Earth Plugin</a></p>
+<p class="sidebar-toc"><a href="../answer/6051584.html" class="current-file">(Deprecated) Provide Google Earth Plug-in for your users to install</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | GEE Server administration</h1>
+<h2>Provide Google Earth Plug-in for your users to install</h2>
+  <div class="alert">
+    <p>The Google Earth Plug-in is deprecated and is no longer available for download.  This page is only applicable if you have a copy of the Google Earth Plugin from a previous relationship with Google.</p>
+  </div>
+
+<p>If your users want to connect to GEE Server and view your databases in a browser, they must install the Google Earth Plug-in. They must also use a browser that supports NPAPI, which excludes most modern browsers. If they don’t already have the plug-in, you can provide the installer so that the plug-in downloads when they attempt to connect to GEE Server.</p>
+<p>The plug-in installer should be placed in the following directory on <strong>GEE Server</strong>:</p>
+<p><code>/opt/google/gethttpd/htdocs/earth/plugin</code></p>
+<p>The directory includes <code>install.html</code>, a landing page from which the installers are launched. When a user attempts to connect without the plug-in installed, they are automatically directed here from earth_local.html's default error page. There are two installers, which should be renamed as follows:</p>
+<ul>
+<li><code>/opt/google/gehttpd/htdocs/earth/plugin/GoogleEarth-Mac-Plugin-Latest.dmg</code></li>
+<li><code>/opt/google/gehttpd/htdocs/earth/plugin/GoogleEarth-Windows-Plugin-Latest.msi</code></li>
+</ul>
+<p>These installers do not require administrative rights on the user's machine. They also do not auto-update. If users are unable to download the installer from this location, they should contact their system administrator.</p>
+<div class="tip">
+The Google Earth Plug-in installer for Windows requires administrative rights when installing to Internet Explorer.
+</div></p><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>
