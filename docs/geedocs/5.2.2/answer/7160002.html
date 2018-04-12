@@ -35,14 +35,14 @@ gtag('config', 'UA-108632131-2');
 <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Release notes</h1>
 <h2>Release notes: Open GEE 5.2.2</h2>
 
-<p>Open GEE 5.2.2 is currently in beta testing</p>
+<p>Open GEE 5.2.2 is currently in beta testing.</p>
 
   <h5>
     <p id="overview_5.2.2">New Features</p>
   </h5>
   <p><strong>Ability to load a default globe, using Google Earth Enterprise Client, when connecting to the base URL path</strong>. This can be achieved through enhanced <code>geserveradmin</code> command
     when publishing a database using the option <code>--setecdefault</code>. Example: <code>geserveradmin --publishdb /gevol/assets/Databases/SFMapDatabase.kmmdatabase/mapdb.kda/ver001/mapdb/ --targetpath http://myserver.org --setecdefault</code></p>  
-  <p><strong>geserver and gefusion services supports status</strong>. geserver and gefusion do now supports returning the status of the services indicating whether they are running or not.</p>
+  <p><strong>geserver and gefusion services supports status</strong>. geserver and gefusion now support returning the status of the services indicating whether they are running or not.</p>
   <p><strong>Detailed profiling data for terrain processing</strong>. <code>gecombineterrain</code> operation can produces performance details if profiling is enabled. To turn on profiling use <code>log_performance=1</code> when building Open GEE. 
    Ex. <code>scons -j8 release=1 log_performance=1 build</code>.
    Executing <code>gecombineterrain</code> will, then, create a log file detailing timing of the execution. 
@@ -58,9 +58,37 @@ gtag('config', 'UA-108632131-2');
       <li>Ubuntu 14.04 LTS and 16.04 LTS</li>
     </ul>
     <p>Google Earth Enterprise 5.2.2 is compatible with Google Earth Enterprise Client (EC) version 7.1.5 and above.</p>
-<br/>
   <p><p>To upgrade from Open GEE 5.2.0, do NOT uninstall it. We recommend that you upgrade Open GEE 5.2.0 by simply installing Open GEE 5.2.2. Installing Open GEE 5.2.2 on top of Open GEE 5.2.0 will ensure that your PostgreSQL databases are backed-up and upgraded correctly to the new PostgreSQL version used by Open GEE 5.2.2.</p></p>
   <h5>
+    <h5>
+      <p id="resolved_issues_5.2.2">Resolved Issues</p>
+    </h5>
+    <div>
+      <table class="nice-table">
+        <tbody>
+          <tr>
+            <th>Number</th>
+            <th class="narrow">Description</th>
+            <th>Resolution</th>
+          </tr>
+          <tr>
+            <td>252</td>
+            <td>Google Earth Server fails to load Admin console when there is an invalid link to a published portable file</td>
+            <td>Added check to ensure files actually exist before continuing on to database object creation.</td>
+          </tr>           
+          <tr>
+            <td>660</td>
+            <td>Building OpenGee on Ubuntu 16.04 throws an error 'ImportError: No module named git:'</td>
+            <td>gitpython introduced dependency was documented in build instructions.</td>
+          </tr>
+          <tr>
+            <td>670</td>
+            <td>Diagnostics fails in current release_5.2.1</td>
+            <td>Fixed and temporary removed diagnostic link was restored.</td>
+          </tr>         
+        </tbody>
+      </table>  
+  <h5>            
   <h5>
     <p id="known_issues_5.2.2">Known Issues</p>
   </h5>
@@ -193,7 +221,7 @@ gtag('config', 'UA-108632131-2');
         </tr>
         <tr>
           <td>343</td>
-          <td>gefusion: File ->open->kiasset,ktasset,kip does not work</td>
+          <td>gefusion: File ->open->*.kiasset*,*.ktasset*,*.kip does not work</td>
           <td>kip is not a supported format. Void opening files with .kip extension.</td>
         </tr>		
         <tr>
@@ -213,8 +241,8 @@ gtag('config', 'UA-108632131-2');
         </tr>
         <tr>
           <td>403</td>
-          <td>Missing close button on system manager window in RHEL 7</td>
-          <td>Right click the title bar and select close.</td>
+          <td>Missing Close button on system manager window in RHEL 7</td>
+          <td>Right-click the title bar and select Close.</td>
         </tr>
         <tr>
           <td>404</td>
@@ -268,7 +296,7 @@ gtag('config', 'UA-108632131-2');
         </tr>		
         <tr>
           <td>448</td>
-          <td>Investigate Out of Memory issues</td>
+          <td>Out of Memory issues</td>
           <td>Use a system that has more than 4GB RAM.</td>
         </tr>		
         <tr>
@@ -319,7 +347,7 @@ gtag('config', 'UA-108632131-2');
         <tr>
           <td>569</td>
           <td>geserver service installation and uninstallation issues</td>
-          <td>Before uninstalling geserver verify if its running or not.</td>
+          <td>Before uninstalling geserver verify if it's running or not.</td>
         </tr>		
         <tr>
           <td>590</td>
@@ -349,7 +377,7 @@ gtag('config', 'UA-108632131-2');
         <tr>
           <td>682</td>
           <td>Update geconfigurepublishroot to fully correct file permissions</td>
-          <td>Correct manually the file permissions.</td>
+          <td>Manually correct the file permissions.</td>
         </tr>		
         <tr>
           <td>686</td>
@@ -368,34 +396,6 @@ gtag('config', 'UA-108632131-2');
         </tr>				
       </tbody>
     </table>
-    <h5>
-      <p id="resolved_issues_5.2.2">Resolved Issues</p>
-    </h5>
-    <div>
-      <table class="nice-table">
-        <tbody>
-          <tr>
-            <th>Number</th>
-            <th class="narrow">Description</th>
-            <th>Resolution</th>
-          </tr>
-          <tr>
-            <td>252</td>
-            <td>Google Earth Server fails to load Admin console when there is an invalid link to a published portable file</td>
-            <td>Added check to ensure files actually exist before continuing on to database object creation</td>
-          </tr>           
-          <tr>
-            <td>660</td>
-            <td>Building OpenGee on Ubuntu 16.04 throws an error 'ImportError: No module named git:'</td>
-            <td>gitpython introduced dependency was documented in build instructions</td>
-          </tr>
-          <tr>
-            <td>670</td>
-            <td>Diagnostics fails in current release_5.2.1</td>
-            <td>Fixed and temporary removed diagnostic link was restored</td>
-          </tr>         
-        </tbody>
-      </table>    
   <div class="footer">
     <p class="BackToTop"><a href="#top_of_file">Back to top</a>
     
