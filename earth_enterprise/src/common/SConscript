@@ -82,9 +82,7 @@ commonsources = [ '../third_party/rsa_md5/md5c.c',
 # Check environment for png.h file
 conf = Configure(env)
 
-if conf.CheckCHeader('libpng12/png.h'):
-    conf.env.Append(CXXFLAGS = '-I/usr/include/libpng12')
-else:
+if not conf.CheckCHeader('libpng12/png.h'):
     print "libpng12 must be installed!"
     Exit(1)
 
