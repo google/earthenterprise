@@ -75,7 +75,8 @@ ValidOptions = set(
      'coverage',
      'bundle_3rd_libs',  # Build with bundling 3rd party libs.
      'log_performance',  # Include code for performance logging
-     'cpp_standard'      # The standard of CPP that will be used.  Default is C++11
+     'cpp_standard',     # The standard of CPP that will be used.  Default is C++11
+     'label'             # Value to combine with version strings.
      ]);
 
 for argkey in ARGUMENTS:
@@ -102,6 +103,7 @@ bundle_3rd_libs = int(ARGUMENTS.get('bundle_3rd_libs', 0))
 cc_dir = ARGUMENTS.get('cc_dir', None)
 log_performance = int( ARGUMENTS.get( 'log_performance', 0 ) )
 cpp_standard = ARGUMENTS.get('cpp_standard', 'gnu++11')
+label = ARGUMENTS.get('label', '')
 
 # make some directory variables used by other parts of the build system
 top_dir = Dir('#').abspath
@@ -419,7 +421,7 @@ def is_version_ge(version_components, comparand_components):
 
   return True
 
-gee_version_number = GetVersion("version.txt")
+gee_version_number = GetVersion("version.txt", label)
 
 
 # create the environment that controls the builds
