@@ -22,10 +22,12 @@ buildGtest = False
 
 # Check environment for libgtest.so
 conf = Configure(env)
-if not conf.CheckLib('gtest'):
-    buildGtest = True
-
 env = conf.Finish()
+
+# If building release, don't include gtest so scons won't add it as a dependency.
+if not env['release']:
+    if not conf.CheckLib('gtest'):
+        buildGtest = True
 
 # Build libgtest as a shared library. If we make gtest static it forces all
 # executables linked against it to link statically and that messes up the
