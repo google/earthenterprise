@@ -17,7 +17,7 @@ is branched then any new code pushed into master and any other future branches
 is free to use the `C++11` syntax without this restriction and we will no longer
 support compiling Open GEE `C++` code using the `C++98` standard.
 
-We wanted to establish this transition period to be sure there where no major
+We wanted to establish this transition period to be sure there were no major
 side effects from changing to the new `C++11` compilation flag. In some cases we
 had to add `C++11` syntax but we were careful to make sure that the code still
 compiled and functioned as expected using `C++98` standards.
