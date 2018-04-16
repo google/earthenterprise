@@ -216,6 +216,7 @@ def GetApacheSchemeHostPortFromListen():
     assert port
     if not scheme:
       scheme = "https" if port == "443" else "http"
+    host = None
     return (scheme, host, port)
 
   logging.error("Listen directive is not specified in gehttpd config.")
