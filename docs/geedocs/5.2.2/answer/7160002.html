@@ -42,8 +42,8 @@ gtag('config', 'UA-108632131-2');
   </h5>
   <p><strong>Ability to load a default globe, using Google Earth Enterprise Client, when connecting to the base URL path</strong>. This can be achieved through enhanced <code>geserveradmin</code> command
     when publishing a database using the option <code>--setecdefault</code>. Example: <code>geserveradmin --publishdb /gevol/assets/Databases/SFMapDatabase.kmmdatabase/mapdb.kda/ver001/mapdb/ --targetpath http://myserver.org --setecdefault</code></p>  
-  <p><strong>geserver and gefusion services supports status</strong>. geserver and gefusion now support returning the status of the services indicating whether they are running or not.</p>
-  <p><strong>Detailed profiling data for terrain processing</strong>. <code>gecombineterrain</code> operation can produces performance details if profiling is enabled. To turn on profiling use <code>log_performance=1</code> when building Open GEE. 
+  <p><strong>geserver and gefusion services support status</strong>. geserver and gefusion now support returning the status of the services indicating whether they are running or not.</p>
+  <p><strong>Detailed profiling data for terrain processing</strong>. <code>gecombineterrain</code> operation can produce performance details if profiling is enabled. To turn on profiling use <code>log_performance=1</code> when building Open GEE. 
    Ex. <code>scons -j8 release=1 log_performance=1 build</code>.
    Executing <code>gecombineterrain</code> will, then, create a log file detailing timing of the execution. 
    The file is named <code>time_stats.date_time_stamp.csv</code> (ex. <code>time_stats.03-26-2018-11:23:46.csv</code>) and stored in working directory of
@@ -58,7 +58,7 @@ gtag('config', 'UA-108632131-2');
       <li>Ubuntu 14.04 LTS and 16.04 LTS</li>
     </ul>
     <p>Google Earth Enterprise 5.2.2 is compatible with Google Earth Enterprise Client (EC) version 7.1.5 and above.</p>
-  <p><p>To upgrade from Open GEE 5.2.0, do NOT uninstall it. We recommend that you upgrade Open GEE 5.2.0 by simply installing Open GEE 5.2.2. Installing Open GEE 5.2.2 on top of Open GEE 5.2.0 will ensure that your PostgreSQL databases are backed-up and upgraded correctly to the new PostgreSQL version used by Open GEE 5.2.2.</p></p>
+  <p><p>To upgrade from Open GEE 5.2.0, do NOT uninstall it. We recommend that you upgrade Open GEE 5.2.0 by simply installing Open GEE 5.2.2. Installing Open GEE 5.2.2 on top of Open GEE 5.2.0 will ensure that your PostgreSQL databases are backed up and upgraded correctly to the new PostgreSQL version used by Open GEE 5.2.2.</p></p>
   <h5>
     <h5>
       <p id="resolved_issues_5.2.2">Resolved Issues</p>
