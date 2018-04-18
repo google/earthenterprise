@@ -117,8 +117,10 @@ class AssetHandle_  {
   bool Valid(void) const;
   // This is better then overloading the bool operator as it
   // more closely emulates what a pointer's boolean operations does.
-  // For example you can't pass the class as a bool parameter but you 
+  // For example you can't pass the class as a bool parameter but you
   // can still do other things like use it in an if statement.
+  // NOTE: in C++11 we can use explicit to get same benefit without this trick
+  // see: http://en.cppreference.com/w/cpp/language/explicit
   operator undefined_type *(void) const { return Valid()?reinterpret_cast<undefined_type *>(1):nullptr; }
   const Impl* operator->(void) const {
     Bind();
