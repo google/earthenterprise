@@ -194,8 +194,10 @@ class khRefCounterImpl : public ThreadPolicy::MutexHolder {
   // protected and implemented to do nothing
   // classes derived from khRefCounterImpl can decide if they want to support
   // copy/move operations on their state but this base class state should
-  // do nothing druing these operations as this state is tied to memory managment
+  // do nothing during these operations as this state is tied to memory management
   // and not really object state.
+  // NOTE: should move to using shared_ptr<> and make_shared<> when we have C++11
+  // as this gives nearly all the same bennifets without these oddities.
   khRefCounterImpl(const khRefCounterImpl &) : refcount_(1) {
     // intentionally left empty.  The right thing to do is nothing.
   }
