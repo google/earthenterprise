@@ -55,6 +55,7 @@
               mapTypeId: google.maps.MapTypeId.SATELLITE
           };
 
+        geeServerDefs.useGoogleLayers = false;
         gmap = new geeCreateFusionMap("mymap", geeServerDefs, mapOpts);
       }
 
@@ -64,7 +65,7 @@
 
   <body onload="LoadMap()" onresize="">
 
-    <h2>Fusion Maps API - Hello World Example (online w/ google public layers)</h2>
+    <h2>Fusion Maps API - Hello World Example (local only; without google public layers)</h2>
     <!-- div where map will get installed -->
     <div id="mymap" style="width: 500px; height: 500px"></div>
 
