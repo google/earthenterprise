@@ -114,7 +114,7 @@ class PcVertex {
   virtual ~PcVertex() { }
 
   bool IsNaN() const {
-    return (isnan(x) || isnan(y) || isnan(z));
+    return (std::isnan(x) || std::isnan(y) || std::isnan(z));
   }
 
   static Self NaN() {
