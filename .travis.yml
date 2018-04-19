@@ -25,6 +25,7 @@ jobs:
         - tar cfz $HOME/cache/third_party$CPP_STD.tgz NATIVE-REL-x86_64 .sconsign.dblite .sconf_temp
       env:
         - CPP_STD=98
+      env:
         - CPP_STD=11
     - stage: build fusion and test
       script:
@@ -36,6 +37,7 @@ jobs:
         - travis_wait 20 ./RunAllTests.pl
       env:
         - CPP_STD=98
+      env:
         - CPP_STD=11
 
 notifications:
