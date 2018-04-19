@@ -14,11 +14,11 @@ cache:
   timeout: 600
   directories:
     - $HOME/cache
-env:
-  - CPP_STD=98
-  - CPP_STD=11
 jobs:
   include:
+    env:
+      - CPP_STD=98
+      - CPP_STD=11
     - stage: build third party
       script:
         - cd earth_enterprise/src
