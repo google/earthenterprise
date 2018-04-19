@@ -32,6 +32,21 @@ jobs:
         - scons -j3 release=1 build > build.log
         - cd src/NATIVE-REL-x86_64/bin/tests
         - travis_wait 20 ./RunAllTests.pl
+    - stage: build third party (C++98)
+      script:
+        - cd earth_enterprise/src
+        - if [ -f $HOME/cache/third_party98.tgz ]; then tar xf $HOME/cache/third_party98.tgz; fi
+        - scons -j3 release=1 cpp_standard=gnu++98 third_party > build.log
+        - mkdir -p $HOME/cache
+        - tar cfz $HOME/cache/third_party98.tgz NATIVE-REL-x86_64 .sconsign.dblite .sconf_temp
+    - stage: build fusion and test
+      script:
+        - cd earth_enterprise/src
+        - if [ -f $HOME/cache/third_party98.tgz ]; then tar xf $HOME/cache/third_party98.tgz; fi
+        - cd ..
+        - scons -j3 release=1 cpp_standard=gnu++98 build > build.log
+        - cd src/NATIVE-REL-x86_64/bin/tests
+        - travis_wait 20 ./RunAllTests.pl
 
 notifications:
   slack: opengee:YjzzzTnc7pgITPsrQPATIGwc
