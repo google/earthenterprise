@@ -44,6 +44,7 @@ class AssetHandle_  {
  public:
   typedef Impl_ Impl;
   typedef khRefGuard<Impl> HandleType;
+  struct undefined_type; // never defined.  Just used for bool operations
 
  protected:
   static inline khCache<std::string, HandleType>& cache(void);
@@ -108,12 +109,19 @@ class AssetHandle_  {
 
   // the compiler generated assignment and copy constructor are fine for us
   // ref & handle have stable copy semantics and we don't have to worry about
-  // adding to the cache because the src object will already have done that
+  // adding to the cache because the src object will already have done that.
+  // Same goes for move constructor and assignment.
 
   virtual ~AssetHandle_(void) { }
-  std::string Ref(void) const { return ref; }
+  const std::string& Ref(void) const { return ref; }
   bool Valid(void) const;
-  operator bool(void) const { return Valid(); }
+  // This is better then overloading the bool operator as it
+  // more closely emulates what a pointer's boolean operations does.
+  // For example you can't pass the class as a bool parameter but you
+  // can still do other things like use it in an if statement.
+  // NOTE: in C++11 we can use explicit to get same benefit without this trick
+  // see: http://en.cppreference.com/w/cpp/language/explicit
+  operator undefined_type *(void) const { return Valid()?reinterpret_cast<undefined_type *>(1):nullptr; }
   const Impl* operator->(void) const {
     Bind();
     return handle.operator->();
@@ -175,6 +183,7 @@ class DerivedAssetHandle_ : public virtual Base_ {
 
   // the compiler generated assignment and copy constructor are fine for us
   // we have no addition members or semantics to maintain
+  // Same goes for move constructor and assignment.
 
   const Impl* operator->(void) const {
     this->Bind();
