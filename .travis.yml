@@ -14,37 +14,24 @@ cache:
   timeout: 600
   directories:
     - $HOME/cache
-
+env:
+  - CPP_STD=98
+  - CPP_STD=11
 jobs:
   include:
     - stage: build third party
       script:
         - cd earth_enterprise/src
-        - if [ -f $HOME/cache/third_party.tgz ]; then tar xf $HOME/cache/third_party.tgz; fi
-        - scons -j3 release=1 third_party > build.log
+        - if [ -f $HOME/cache/third_party$CPP_STD.tgz ]; then tar xf $HOME/cache/third_party$CPP_STD.tgz; fi
+        - scons -j3 release=1 cpp_standard=gnu++$CPP_STD third_party > build.log
         - mkdir -p $HOME/cache
-        - tar cfz $HOME/cache/third_party.tgz NATIVE-REL-x86_64 .sconsign.dblite .sconf_temp
+        - tar cfz $HOME/cache/third_party$CPP_STD.tgz NATIVE-REL-x86_64 .sconsign.dblite .sconf_temp
     - stage: build fusion and test
       script:
         - cd earth_enterprise/src
-        - if [ -f $HOME/cache/third_party.tgz ]; then tar xf $HOME/cache/third_party.tgz; fi
+        - if [ -f $HOME/cache/third_party$CPP_STD.tgz ]; then tar xf $HOME/cache/third_party$CPP_STD.tgz; fi
         - cd ..
-        - scons -j3 release=1 build > build.log
-        - cd src/NATIVE-REL-x86_64/bin/tests
-        - travis_wait 20 ./RunAllTests.pl
-    - stage: build third party (C++98)
-      script:
-        - cd earth_enterprise/src
-        - if [ -f $HOME/cache/third_party98.tgz ]; then tar xf $HOME/cache/third_party98.tgz; fi
-        - scons -j3 release=1 cpp_standard=gnu++98 third_party > build.log
-        - mkdir -p $HOME/cache
-        - tar cfz $HOME/cache/third_party98.tgz NATIVE-REL-x86_64 .sconsign.dblite .sconf_temp
-    - stage: build fusion and test (C++98)
-      script:
-        - cd earth_enterprise/src
-        - if [ -f $HOME/cache/third_party98.tgz ]; then tar xf $HOME/cache/third_party98.tgz; fi
-        - cd ..
-        - scons -j3 release=1 cpp_standard=gnu++98 build > build.log
+        - scons -j3 release=1 cpp_standard=gnu++$CPP_STD build > build.log
         - cd src/NATIVE-REL-x86_64/bin/tests
         - travis_wait 20 ./RunAllTests.pl
 
