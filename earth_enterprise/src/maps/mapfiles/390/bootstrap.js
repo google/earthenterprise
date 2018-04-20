@@ -24,13 +24,7 @@ google.maps = google.maps || {};
                    '" type="text/javascript"></script>');
   }
   
-  // For backward compatability with existing applications, you can select previous versions
-  // of the Google Maps API by activating the appropriate definition of GEE_API_PATH below:
-  GEE_API_PATH='/maps/api/js';
-  //GEE_API_PATH='/maps/mapfiles/390/v3';
-  //GEE_API_PATH='/maps/mapfiles/360/v3';
-  //GEE_API_PATH='/maps/mapfiles/310/v3';
-
+  GEE_API_PATH='/maps/mapfiles/390/v3';
   FUSION_API_PATH='/maps/api';
 
   google.maps.Load = function(apiLoad) {
@@ -39,11 +33,9 @@ google.maps = google.maps || {};
 
   var loadScriptTime = (new Date).getTime();
 
-  // Note: fusion_map_obj_v3.js is tightly coupled to the Google API, and is always found in the API parent directory
   getScript(GEE_BASE_URL + GEE_API_PATH + '/main.js');
   getScript(GEE_BASE_URL + GEE_API_PATH + '/../fusion_map_obj_v3.js');
 
-  // Required fusion extensions
   getScript(GEE_BASE_URL + FUSION_API_PATH + '/fusion_extended_map.js');
   getScript(GEE_BASE_URL + FUSION_API_PATH + '/fusion_utils.js');
 })();

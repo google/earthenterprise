@@ -24,8 +24,8 @@ google.maps = google.maps || {};
                    '" type="text/javascript"></script>');
   }
   
-  GEE_API_PATH = '/maps/api/js';
-  FUSION_API_PATH = '/maps/api';
+  GEE_API_PATH='/maps/mapfiles/360/v3';
+  FUSION_API_PATH='/maps/api';
 
   google.maps.Load = function(apiLoad) {
     /* http://mt0.google.com/vt */    apiLoad([,[,,,],['en-US',,,,,,GEE_BASE_URL + '/maps/api/icons/',],[GEE_BASE_URL + GEE_API_PATH,'internal'],[0],0.0,,,,,], loadScriptTime);
