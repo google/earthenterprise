@@ -628,12 +628,12 @@ class geFilePoolUnitTest : public UnitTest<geFilePoolUnitTest> {
                i, tmpfiles[i]->name().c_str());
         return false;
       }
-    }    
+    }
 
     // Close the files
 
-    for (int i = 0; i < kTestFds; ++i) {
-      writers[i]->SyncAndClose();
+    for (auto& writer : writers) {
+      writer->SyncAndClose();
     }
 
     return true;
