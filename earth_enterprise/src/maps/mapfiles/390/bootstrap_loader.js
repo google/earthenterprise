@@ -38,7 +38,7 @@ var experiments = [];
   if (!params['sensor']) params['sensor'] = 'false';
 
   // Load bootstrap.
-  var GEE_API_PATH = '/maps/api';
+  var GEE_API_PATH='/maps/mapfiles/390';
   var bootstrap = GEE_BASE_URL + GEE_API_PATH + '/bootstrap.js';
   var params_list = [];
   for (var key in params) {
