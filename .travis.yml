@@ -23,9 +23,9 @@ jobs:
         - scons -j3 release=1 cpp_standard=gnu++$CPP_STD third_party > build.log
         - mkdir -p $HOME/cache
         - tar cfz $HOME/cache/third_party$CPP_STD.tgz NATIVE-REL-x86_64 .sconsign.dblite .sconf_temp
-      env:
+      - env:
         - CPP_STD=98
-      env:
+      - env:
         - CPP_STD=11
     - stage: build fusion and test
       script:
@@ -35,9 +35,9 @@ jobs:
         - scons -j3 release=1 cpp_standard=gnu++$CPP_STD build > build.log
         - cd src/NATIVE-REL-x86_64/bin/tests
         - travis_wait 20 ./RunAllTests.pl
-      env:
+      - env:
         - CPP_STD=98
-      env:
+      - env:
         - CPP_STD=11
 
 notifications:
