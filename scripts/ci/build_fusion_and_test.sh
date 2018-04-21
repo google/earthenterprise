@@ -17,14 +17,14 @@
 #
 # This script is used by Travis build stages (see travis.yml at root) that build
 # fuison and run unit tests. Assumes the following environment variables are set:
-# STD_CPP    - Should be set to `98` or `11` depending on the standard to build with
+# CPP_STD    - Should be set to `98` or `11` depending on the standard to build with
 # BUILD_TYPE - The type of build `release`, `optimize`, or `internal`
 
-case "$STD_CPP" in
+case "$CPP_STD" in
     98|11)
         ;;
     *)
-        echo "Unsupported value or unset STD_CPP enviroment variable: $STD_CPP" >&2
+        echo "Unsupported value or unset CPP_STD enviroment variable: $CPP_STD" >&2
         exit 1
         ;;
 esac
@@ -40,11 +40,11 @@ esac
 
 cd earth_enterprise/src
 
-if [ -f $HOME/cache/third_party$STD_CPP.tgz ]; then
-  tar xf $HOME/cache/third_party$STD_CPP.tgz;
+if [ -f $HOME/cache/third_party$CPP_STD.tgz ]; then
+  tar xf $HOME/cache/third_party$CPP_STD.tgz;
 fi
 
 cd ..
-scons -j3 $BUILD_TYPE=1 cpp_standard=gnu++$STD_CPP build > build.log
+scons -j3 $BUILD_TYPE=1 cpp_standard=gnu++$CPP_STD build > build.log
 cd src/NATIVE-REL-x86_64/bin/tests
 travis_wait 20 ./RunAllTests.pl
