@@ -17,43 +17,25 @@ cache:
 jobs:
   include:
   - stage: build third party
-    script:
-      - mkdir -p $HOME/btemp/btp98
-      - cd earth_enterprise/src
-      - if [ -f $HOME/cache/third_party98.tgz ]; then tar xf $HOME/cache/third_party98.tgz; fi
-      - scons -j3 release=1 cpp_standard=gnu++98 third_party > build.log
-      - mkdir -p $HOME/cache
-      - tar cfz $HOME/cache/third_party98.tgz NATIVE-REL-x86_64 .sconsign.dblite .sconf_temp
-      - ls $HOME/btemp
+    env:
+      - CPP_STD=98
+      - BUILD_TYPE=release
+    script: scripts/ci/build_third_party.sh
   - stage: build fusion and test
-    script:
-      - mkdir -p $HOME/btemp/bfat98
-      - cd earth_enterprise/src
-      - if [ -f $HOME/cache/third_party98.tgz ]; then tar xf $HOME/cache/third_party98.tgz; fi
-      - cd ..
-      - scons -j3 release=1 cpp_standard=gnu++98 build > build.log
-      - cd src/NATIVE-REL-x86_64/bin/tests
-      - travis_wait 20 ./RunAllTests.pl
-      - ls $HOME/btemp
+    env:
+      - CPP_STD=98
+      - BUILD_TYPE=release
+    script: scripts/ci/build_fusion_and_test.sh
   - stage: build third party
-    script:
-      - mkdir -p $HOME/btemp/btp11
-      - cd earth_enterprise/src
-      - if [ -f $HOME/cache/third_party11.tgz ]; then tar xf $HOME/cache/third_party11.tgz; fi
-      - scons -j3 release=1 cpp_standard=gnu++11 third_party > build.log
-      - mkdir -p $HOME/cache
-      - tar cfz $HOME/cache/third_party11.tgz NATIVE-REL-x86_64 .sconsign.dblite .sconf_temp
-      - ls $HOME/btemp
+    env:
+      - CPP_STD=11
+      - BUILD_TYPE=release
+    script: scripts/ci/build_third_party.sh
   - stage: build fusion and test
-    script:
-      - mkdir -p $HOME/btemp/bfat11
-      - cd earth_enterprise/src
-      - if [ -f $HOME/cache/third_party11.tgz ]; then tar xf $HOME/cache/third_party11.tgz; fi
-      - cd ..
-      - scons -j3 release=1 cpp_standard=gnu++11 build > build.log
-      - cd src/NATIVE-REL-x86_64/bin/tests
-      - travis_wait 20 ./RunAllTests.pl
-      - ls $HOME/btemp
+    env:
+      - CPP_STD=11
+      - BUILD_TYPE=release
+    script: scripts/ci/build_fusion_and_test.sh
 
 notifications:
   slack: opengee:YjzzzTnc7pgITPsrQPATIGwc

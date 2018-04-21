@@ -632,8 +632,8 @@ class geFilePoolUnitTest : public UnitTest<geFilePoolUnitTest> {
 
     // Close the files
 
-    for (auto& writer : writers) {
-      writer->SyncAndClose();
+    for (int i = 0; i < kTestFds; ++i) {
+      writers[i]->SyncAndClose();
     }
 
     return true;
