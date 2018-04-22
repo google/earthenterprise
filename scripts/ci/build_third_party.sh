@@ -39,6 +39,7 @@ case "$BUILD_TYPE" in
         ;;
 esac
 
+set -x
 cd earth_enterprise/src
 if [ -f $HOME/cache/third_party$CPP_STD.tgz ]; then
   tar xf $HOME/cache/third_party$CPP_STD.tgz;
