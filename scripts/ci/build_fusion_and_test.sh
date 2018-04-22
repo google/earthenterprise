@@ -47,4 +47,4 @@ fi
 cd ..
 scons -j3 $BUILD_TYPE=1 cpp_standard=gnu++$CPP_STD build > build.log
 cd src/NATIVE-REL-x86_64/bin/tests
-travis_wait 20 ./RunAllTests.pl
+./RunAllTests.pl
