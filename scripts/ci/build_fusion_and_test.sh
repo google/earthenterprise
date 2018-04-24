@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #
-# Copyright 2017 Open GEE Contributors
+# Copyright 2018 Open GEE Contributors
 #
 # Licensed under the Apache license, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
