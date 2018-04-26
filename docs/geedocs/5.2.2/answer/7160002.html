@@ -35,8 +35,6 @@ gtag('config', 'UA-108632131-2');
 <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Release notes</h1>
 <h2>Release notes: Open GEE 5.2.2</h2>
 
-<p>Open GEE 5.2.2 is currently in beta testing.</p>
-
   <h5>
     <p id="overview_5.2.2">New Features</p>
   </h5>
@@ -403,7 +401,12 @@ gtag('config', 'UA-108632131-2');
           <td>731</td>
           <td>Error in publish of SSL-enabled database</td>
           <td>A temporary fix was added in this release. A more permanent fix will be done in OpenGEE 5.2.3.</td>
-        </tr>        			
+        </tr>
+        <tr>
+          <td>825</td>
+          <td>Geserver fails to startup fully due to conflicting protobuf library</td>
+          <td>Run <code>pip uninstall protobuf</code> to uninstall the protobuf library installed by pip. </td>
+        </tr>
       </tbody>
     </table>
   <div class="footer">
