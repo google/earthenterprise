@@ -136,7 +136,18 @@ void RemoveUnusedLayers(const std::string &data_type,
     }
   }
 }
-
+void DumpDBRoot(geProtoDbroot *dbroot) {
+  
+  for (int i = 0; i < dbroot->nested_feature_size(); ++i) {
+    keyhole::dbroot::NestedFeatureProto *nested =
+        dbroot->mutable_nested_feature(i);
+    if (nested->has_kml_url()) {
+    }
+    
+  }
+  
+  return;
+}
 /**
  * Replaces server and port in search tabs with the given server and port.
  * @param server Server to which search queries should be addressed.
@@ -187,6 +198,7 @@ void ReplaceSearchServer(const std::string &search_service,
  */
 void ReplaceReferencedKml(const std::string &new_kml_base_url,
                           const std::string &kml_url_to_file_map_file,
+                          const bool preserve_kml_filenames,
                           geProtoDbroot *dbroot) {
   std::ofstream fout;
 
@@ -197,6 +209,9 @@ void ReplaceReferencedKml(const std::string &new_kml_base_url,
     notify(NFY_FATAL, "Unable to write kml map file: %s",
            kml_url_to_file_map_file.c_str());
   }
+  std::string kml_url;
+  std::string kml_file_name;
+
 
   // Loop through all of the nested layer entries.
   int num_kml_files = 0;
@@ -210,7 +225,8 @@ void ReplaceReferencedKml(const std::string &new_kml_base_url,
                kDbrootKmlFileNameTemplate.c_str(),
                num_kml_files);
       num_kml_files += 1;
-      std::string kml_file_name = str;
+      kml_file_name = str;
+
 
       // let's see if we have the url directly in the kml_url field or if it
       // is redirected to the translation_entry table
@@ -219,19 +235,27 @@ void ReplaceReferencedKml(const std::string &new_kml_base_url,
       if (string_id_or_value->has_value()) {
         // the url is stored directly in the kml_url field
         std::string kml_url = string_id_or_value->value();
-        fout << kml_url << " " << kml_file_name << std::endl;
+        if ( preserve_kml_filenames ) {
+            kml_file_name = kml_file_name.substr(kml_file_name.find_last_of("/") + 1);
+        }
         string_id_or_value->set_value(new_kml_base_url + "/" + kml_file_name);
       } else {
         // the url is in the translation_entry table
         // GetTraslationEntryById will throw if not found
         keyhole::dbroot::StringEntryProto *string_entry =
             dbroot->GetTranslationEntryById(string_id_or_value->string_id());
-        std::string kml_url = string_entry->string_value();
-        fout << kml_url << " " << kml_file_name << std::endl;
+        kml_url = string_entry->string_value();
+        if ( preserve_kml_filenames ) {
+            kml_file_name = kml_file_name.substr(kml_file_name.find_last_of("/") + 1);
+        }
         string_entry->set_string_value(new_kml_base_url + "/" + kml_file_name);
       }
     }
+    // TODO - write out map entry to file. 
+    fout << kml_url << " " << kml_file_name << std::endl;
   }
+
+  
 
   fout.close();
 }
@@ -239,6 +263,9 @@ void ReplaceReferencedKml(const std::string &new_kml_base_url,
 
 void usage(const std::string &progn, const char *msg = 0, ...) {
   if (msg) {
+
+
+    
     va_list ap;
     va_start(ap, msg);
     vfprintf(stderr, msg, ap);
@@ -269,6 +296,7 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
           "\n"
           " Required:\n"
           "   --source:        Server whose dbroot should be rewritten.\n"
+          "   --source_file:        Server whose dbroot should be rewritten.\n"
           "   --icon_directory: Directory where icons should be stored.\n"
           "   --dbroot_file:   File where new dbroot should be stored.\n"
           "   --kml_map_file:  File where kml map of source urls to local\n"
@@ -290,7 +318,12 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
           "                    Default: kml\n"
           "   --use_ssl_for_kml:  Use https:// instead of http:// for\n"
           "                    accessing kml files.\n"
+          "                    Default: false\n"
+          "   --preserve_kml_filenames:   Keep the original filenames when\n"
+          "                    replacing the host and path in kmlfiles in.\n"
+          "                    the dbroot"
           "                    Default: false\n",
+          
           progn.c_str());
   exit(1);
 }
@@ -300,7 +333,9 @@ int main(int argc, char *argv[]) {
   std::string progname = argv[0];
   bool help = false;
   bool use_ssl_for_kml = false;
+  bool preserve_kml_filenames;
   std::string source;
+  std::string source_file;
   std::string icon_directory;
   std::string dbroot_file;
   std::string kml_map_file;
@@ -314,7 +349,9 @@ int main(int argc, char *argv[]) {
   options.flagOpt("help", help);
   options.flagOpt("?", help);
   options.flagOpt("use_ssl_for_kml", use_ssl_for_kml);
+  options.flagOpt("preserve_kml_filenames", preserve_kml_filenames);
   options.opt("source", source);
+  options.opt("source_file", source_file);
   options.opt("icon_directory", icon_directory);
   options.opt("dbroot_file", dbroot_file);
   options.opt("kml_map_file", kml_map_file);
@@ -323,7 +360,7 @@ int main(int argc, char *argv[]) {
   options.opt("kml_server", kml_server);
   options.opt("kml_port", kml_port);
   options.opt("kml_url_path", kml_url_path);
-  options.setRequired("source", "icon_directory",
+  options.setRequired( "icon_directory",
                       "dbroot_file", "kml_map_file");
 
   int argn;
@@ -344,15 +381,27 @@ int main(int argc, char *argv[]) {
 
   // Create temp directory for doing the work
   std::string temp_dir = khDirname(dbroot_file) + "/rewrite_dbroot";
-  std::string dbroot_path = temp_dir + "/" + kBinaryDbrootPrefix;
-  khEnsureParentDir(dbroot_path);
+  std::string dbroot_path;
+  
+  
+  if ( source.size() ) { //TODO _ syntax check
+    dbroot_path = temp_dir + "/" + kBinaryDbrootPrefix;
+    khEnsureParentDir(dbroot_path);
 
-  // Fetch the live dbroot from the real server
-  if (!ServerReader::SaveServerData(dbroot_path,
+    // Fetch the live dbroot from the real server
+    if ( !ServerReader::SaveServerData(dbroot_path,
                                     source,
                                     "/dbRoot.v5?output=proto&hl=en&gl=us")) {
-    notify(NFY_FATAL, "Unable to get dbroot from source.");
+      notify(NFY_FATAL, "Unable to get dbroot from source.");
+    }
+  } else if ( source_file.size() ) { //TODO _ syntax check
+    dbroot_path = source_file;
+  } else {
+    notify(NFY_FATAL, "Either --source or --source_file must be set to retrieve dbroot information.");
+    return -1;
   }
+
+ 
 
   try {
     // load the dbroot we just fetched from the server
@@ -372,7 +421,7 @@ int main(int argc, char *argv[]) {
       new_kml_base_url = ComposeUrl(use_ssl_for_kml, kml_server,
                                     kml_port, kml_url_path);
     }
-    ReplaceReferencedKml(new_kml_base_url, kml_map_file, &dbroot);
+    ReplaceReferencedKml(new_kml_base_url, kml_map_file, preserve_kml_filenames, &dbroot);
 
     // fetch all icons from real server and save them locally
     SaveIcons(icon_directory, source, &dbroot);

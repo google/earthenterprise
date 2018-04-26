@@ -58,6 +58,7 @@ int HandleFdbRequest(request_rec* r) {
       return DECLINED;
     }
 
+    ap_log_rerror(APLOG_MARK, APLOG_WARNING, 0, r, "XXX DEBUG - Servicing request in mod_fdb");
     return fdb_service.ProcessRequest(r);
   } catch(const khSimpleNotFoundException &e) {
     // We don't want to log the tile not found errors coz the access logs
