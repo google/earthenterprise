@@ -628,7 +628,7 @@ class geFilePoolUnitTest : public UnitTest<geFilePoolUnitTest> {
                i, tmpfiles[i]->name().c_str());
         return false;
       }
-    }    
+    }
 
     // Close the files
 
