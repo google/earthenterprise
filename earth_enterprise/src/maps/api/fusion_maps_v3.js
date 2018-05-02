@@ -233,8 +233,6 @@ function doInitMap(geeMapOpts, showSearch, showGlobesList) {
 
   // Need to resize after search tabs are filled in.
   geeResizeDivs();  // Resize the map to fill the screen.
-
-  geeInitView(geeShowPolygon);
 }
 
 /**
@@ -500,55 +498,4 @@ function geeLayerIconUrl(glmId, serverUrl, layer) {
         '/query?request=Icon&icon_path=' + layer.icon;
   }
   return serverUrl + '/query?request=Icon&icon_path=' + layer.icon;
-}
-
-function geeShowPolygon(polygonKml) {
-  var coordinates = geePolygonCoordinates(polygonKml, google.maps.LatLng);
-  geeMapCutPolygon = geeDrawPolygon(coordinates, '#FF0000', '#FF00FF');
-
-  var bounds = geePolygonBounds(coordinates);
-  latDiff = bounds.north - bounds.south;
-  lngDiff = bounds.east - bounds.west;
-  if (latDiff > lngDiff) {
-    maxDist = latDiff;
-  } else {
-    maxDist = lngDiff;
-  }
-
-  zoomLevel = Math.floor(Math.log(360 / maxDist) / Math.log(2)) + 2;
-  geePanTo((bounds.south + bounds.north) / 2,
-           (bounds.west + bounds.east) / 2, zoomLevel);
-
-  setTimeout('geeClearPolygon(geeMapCutPolygon)', geePolygonDisplayTime);
-}
-
-/**
- * Draw the polygon.
- * @param {array of google.maps.LatLng} coordinates Coordinates of the polygon.
- * @param {string} stroke_color Color of polygon border.
- * @param {string} fill_color Color of polygon interior.
- * @return {google.maps.Polygon} polygon that was drawn on map.
- */
-function geeDrawPolygon(coordinates, stroke_color, fill_color) {
-  var polygon = new google.maps.Polygon({
-          paths: coordinates,
-          strokeColor: stroke_color,
-          strokeOpacity: 1.0,
-          strokeWeight: 1,
-          fillColor: fill_color,
-          fillOpacity: 0.4
-        });
-
-  // Draw the new polygon.
-  polygon.setMap(geeMap.map);
-  return polygon;
-}
-
-/**
- * Clear polygon.
- * @param {google.maps.Polygon} polygon Polygon that was drawn on map.
- */
-function geeClearPolygon(polygon) {
-  // Clear the given polygon.
-  polygon.setMap(null);
 }
