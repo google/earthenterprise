@@ -96,9 +96,9 @@ def GetSchemeHostPort(environ):
   url = "{0}://".format(environ["wsgi.url_scheme"])
 
   if environ.get("HTTP_HOST"):
-    url += environ["HTTP_HOST"]
+    url += environ["SERVER_ADDR"]
   else:
-    url += environ["SERVER_NAME"]
+    url += environ["SERVER_ADDR"]
 
     if environ["wsgi.url_scheme"] == "https":
       if environ["SERVER_PORT"] != "443":

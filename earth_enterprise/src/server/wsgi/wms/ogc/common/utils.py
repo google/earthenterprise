@@ -121,9 +121,9 @@ def GetServerURL(environ):
   server_url = environ["wsgi.url_scheme"] + "://"
 
   if environ.get("HTTP_HOST"):
-    server_url += environ["HTTP_HOST"]
+    server_url += environ["SERVER_ADDR"]
   else:
-    server_url += environ["SERVER_NAME"]
+    server_url += environ["SERVER_ADDR"]
 
     if environ["wsgi.url_scheme"] == "https":
       if environ["SERVER_PORT"] != "443":
