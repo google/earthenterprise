@@ -52,7 +52,7 @@ gtag('config', 'UA-108632131-2');
       <li>Ubuntu 14.04 LTS and 16.04 LTS</li>
     </ul>
     <p>Google Earth Enterprise 5.2.3 is compatible with Google Earth Enterprise Client (EC) version 7.1.5 and above.</p>
-    <p><p>To upgrade from Open GEE 5.2.0, do NOT uninstall it. We recommend that you upgrade Open GEE 5.2.0 by simply installing Open GEE 5.2.2. Installing Open GEE 5.2.2 on top of Open GEE 5.2.0 will ensure that your PostgreSQL databases are backed up and upgraded correctly to the new PostgreSQL version used by Open GEE 5.2.2.</p></p>
+    <p><p>To upgrade from Open GEE 5.2.0, do NOT uninstall it. We recommend that you upgrade Open GEE 5.2.0 by simply installing Open GEE 5.2.3. Installing Open GEE 5.2.3 on top of Open GEE 5.2.0 will ensure that your PostgreSQL databases are backed up and upgraded correctly to the new PostgreSQL version used by Open GEE 5.2.3.</p></p>
   <h5>
     <h5>
       <p id="resolved_issues_5.2.3">Resolved Issues</p>
@@ -66,9 +66,64 @@ gtag('config', 'UA-108632131-2');
             <th>Resolution</th>
           </tr>
           <tr>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>225</td>
+            <td>Fusion lets you create folder with space in the name</td>
+            <td>AssetManager UI only allows letters, numbers, and underscores for directory name creation</td>
+          </tr>
+          <tr>
+            <td>337</td>
+            <td>Add a compiler version check to scons scripts</td>
+            <td>Scons scripts ensure gcc version 4.8+ is installed before continuing with builds</td>
+          </tr>
+          <tr>
+            <td>498</td>
+            <td>Add option to geconfigureassetroot to delete a volume</td>
+            <td>--removevolume option added for geconfigureassetroot</td>
+          </tr>
+          <tr>
+            <td>535</td>
+            <td>DownloadTutorial.sh often is not staged properly for install</td>
+            <td>Tutorial data is included in the Fusion RPM</td>
+          </tr>
+          <tr>
+            <td>682</td>
+            <td>Update geconfigurepublishroot to fully correct file permissions</td>
+            <td>geconfigurepublishroot recursively sets the owner and permissions for publish root</td>
+          </tr>	
+          <tr>
+            <td>751</td>
+            <td>Documentation prepared for 5.2.3 release</td>
+            <td>5.2.3 release documentation will be updated as the relese progresses</td>
+          </tr>
+          <tr>
+            <td>762</td>
+            <td>Package libraries and utilities common to Fusion and Server for Ubuntu 16</td>
+            <td>opengee-common deb packages can be created for Ubuntu 16</td>
+          </tr>
+          <tr>
+            <td>764</td>
+            <td>Compile OpenGEE C++ code using c++11</td>
+            <td>Source code supports and defaults to using gnu++11</td>
+          </tr>
+          <tr>
+            <td>794</td>
+            <td>Specify custom package labels in OpenGEE RPMs</td>
+            <td>Scons build accepts a custom label argument which is appended to the version in RPM file names</td>
+          </tr>
+          <tr>
+            <td>806</td>
+            <td>gecombineterrain defaulted to only 1 cpu to process data and ignored arguments</td>
+            <td>Added --numCompressThreads option to accept the number of threads to use.  Default value is the number of CPUs available.  Deprecated --numcpus option</td>
+          </tr>
+          <tr>
+            <td>821</td>
+            <td>Calling geeInitMap results in an infinite recursive loop</td>
+            <td>Code to display non-existent polygon removed</td>
+          </tr>
+          <tr>
+            <td>835</td>
+            <td>GE Server gets its URL from the client instead of itself</td>
+            <td>Fixed code so that when you publish DB, GEServer's URL will be used and not the URL which we get from the Publish request message.</td>
           </tr>        
         </tbody>
       </table>  
@@ -152,11 +207,6 @@ gtag('config', 'UA-108632131-2');
           <td>221</td>
           <td>The asset manager may display that a job is "Queued" when in fact the job is "Blocked"</td>
           <td>No current work around.</td>
-        </tr>		
-        <tr>
-          <td>225</td>
-          <td>Fusion lets you create folder with space in the name</td>
-          <td>Avoid creating folder with space in their name.</td>
         </tr>		
         <tr>
           <td>234</td>
@@ -319,11 +369,6 @@ gtag('config', 'UA-108632131-2');
           <td>Set the host values in <code>/gevol/assets/.config/volumes.xml</code> to the FQDN and restart the Fusion service.</td>
         </tr>		
         <tr>
-          <td>535</td>
-          <td>DownloadTutorial.sh often is not staged properly for install</td>
-          <td>Copy <code>DownloadTutorial.sh</code> to <code>/tmp/fusion_os_install</code>.</td>
-        </tr>		
-        <tr>
           <td>557</td>
           <td>WMS service problem with 'width' &amp; 'height' &amp; 'bbox'</td>
           <td>No current work around.</td>
@@ -357,21 +402,11 @@ gtag('config', 'UA-108632131-2');
           <td>669</td>
           <td>Missing repo in RHEL 7 build instructions</td>
           <td>Enable <code>rhel-7-server-optional-rpms</code> and <code>rhel-7-server-optional-source-rpms</code> repos.</td>
-        </tr>
-        <tr>
-          <td>682</td>
-          <td>Update geconfigurepublishroot to fully correct file permissions</td>
-          <td>Manually correct the file permissions.</td>
-        </tr>		
+        </tr>	
         <tr>
           <td>686</td>
           <td>Scons fails to detect libpng library on CentOS 6</td>
           <td>Ensure that a default <code>g++</code> compiler is installed.</td>
-        </tr>		
-        <tr>
-          <td>694</td>
-          <td>Search fails after transferring and publishing a database using disconnected send from the command line</td>
-          <td>Re-publish the database from the web interface.</td>
         </tr>			
         <tr>
           <td>700</td>
@@ -382,6 +417,11 @@ gtag('config', 'UA-108632131-2');
           <td>731</td>
           <td>Error in publish of SSL-enabled database</td>
           <td>A temporary fix was added in this release. A more permanent fix will be done in OpenGEE 5.2.3.</td>
+        </tr>
+        <tr>
+          <td>788</td>
+          <td>Search fails after transferring and publishing a database using disconnected send from the command line</td>
+          <td>Re-publish the database from the web interface.</td>
         </tr>
         <tr>
           <td>825</td>
