@@ -653,8 +653,7 @@ class PublishManagerHelper(stream_manager.StreamManager):
     query_string = ("""SELECT publish_context_table.snippets_set_name,
            publish_context_table.search_def_names,
            publish_context_table.supplemental_search_def_names,
-           publish_context_table.poifederated, 
-           publish_context_table.ec_default_db
+           publish_context_table.poifederated
            FROM target_table, target_db_table, publish_context_table
            WHERE target_table.target_path = %s AND
                  target_table.target_id = target_db_table.target_id AND
@@ -1213,15 +1212,18 @@ class PublishManagerHelper(stream_manager.StreamManager):
     root = constants.CUTTER_GLOBES_PATH
     for name in os.listdir(root):
       # Ignore globes that are registered.
-      if (name not in registered_portable_set) and (os.path.isfile(name)):
-        db_info = basic_types.DbInfo()
-        db_info.name = name
-        db_info.type = db_info.name[-3:]
-        # Ignore files that are not Portables, eg .README
-        if serve_utils.IsPortable(db_info.type):
-          serve_utils.GlxDetails(db_info)
-          if db_info.size > GLOBE_SIZE_THRESHOLD:
-            globes_list.append(db_info)
+      if name not in registered_portable_set:
+        if os.path.isfile(os.path.join(root, name)):
+          db_info = basic_types.DbInfo()
+          db_info.name = name
+          db_info.type = db_info.name[-3:]
+          # Ignore files that are not Portables, eg .README
+          if serve_utils.IsPortable(db_info.type):
+            serve_utils.GlxDetails(db_info)
+            if db_info.size > GLOBE_SIZE_THRESHOLD:
+              globes_list.append(db_info)
+        else:
+          logger.warn( "%s is not a valid file and is being ignored." % os.path.join(root,name) )
 
     return globes_list
 

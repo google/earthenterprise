@@ -38,7 +38,8 @@ var experiments = [];
   if (!params['sensor']) params['sensor'] = 'false';
 
   // Load bootstrap.
-  var bootstrap = GEE_BASE_URL + '/maps/bootstrap.js';
+  var GEE_API_PATH = '/maps/mapfiles/360'
+  var bootstrap = GEE_BASE_URL + GEE_API_PATH + '/bootstrap.js';
   var params_list = [];
   for (var key in params) {
     params_list.push(key + '=' + params[key]);

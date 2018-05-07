@@ -103,7 +103,7 @@ const char* kGoldenContentsWithExternalBaseDbroot =
 //   if i == 8:
 //     print
 //     i = 0
-const char kGoldenEncodedOutput[] = {
+const unsigned char kGoldenEncodedOutput[] = {
   0x08, 0x00, 0x12, 0xF8, 0x07, 0x45, 0xF4, 0xBD,
   0x0B, 0x79, 0xE2, 0x6A, 0x45, 0x22, 0x05, 0x92,
   0x2C, 0x17, 0xCD, 0x06, 0x71, 0xF8, 0x49, 0x10,
@@ -613,7 +613,7 @@ TEST(TestVisibleLayers, InsertionIndependentOfOrder) {
     db_root_layers.RemoveParentLayers();
 
     // leaf is there
-    ASSERT_NE(db_root_layers.find(leaf_layer), db_root_layers.end());
+    ASSERT_TRUE(db_root_layers.find(leaf_layer) != db_root_layers.end());
     // it's the only one
     ASSERT_EQ(db_root_layers.size(), static_cast<size_t>(1));
   } while (std::next_permutation(input_layers,
@@ -756,7 +756,7 @@ TEST_F(CreateMetaDbRootTest, EncodedFormatWorks) {
 
   ScopedTempFile file_of_canonical("/tmp/canonical");
   std::ofstream out_canon(file_of_canonical.fname().c_str());
-  out_canon.write(kGoldenEncodedOutput, sizeof(kGoldenEncodedOutput));
+  out_canon.write(reinterpret_cast<const char *>(kGoldenEncodedOutput), sizeof(kGoldenEncodedOutput));
   out_canon.close();
 
   bool are_same = files_are_same(file_of_actual.fname(),
