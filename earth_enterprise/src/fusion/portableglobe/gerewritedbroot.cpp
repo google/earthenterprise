@@ -183,6 +183,9 @@ void ReplaceSearchServer(const std::string &search_service,
  * @param new_kml_base_url Base url to which kml references will be addressed.
  * @param kml_url_to_file_map_file File storing pairs of kml source urls and
  *                                 corresponding local kml file name.
+ * @param preserve_kml_filenames Flag to keep the original filenames of kml 
+ *                                references (true) or to use a sequence of
+ *                                generated filenames.
  * @param dbroot geProtoDbroot to be modified
  */
 void ReplaceReferencedKml(const std::string &new_kml_base_url,
@@ -192,9 +195,9 @@ void ReplaceReferencedKml(const std::string &new_kml_base_url,
   std::ofstream fout;
 
   // Open file for storing kml urls and local files.
-  if ( kml_url_to_file_map_file.size() )
+  if ( !kml_url_to_file_map_file.empty() )
   {
-      khEnsureParentDir(kml_url_to_file_map_file);
+    khEnsureParentDir(kml_url_to_file_map_file);
     fout.open(kml_url_to_file_map_file.c_str(), std::ios::out);
     if (!fout) {
       notify(NFY_FATAL, "Unable to write kml map file: %s",
@@ -245,8 +248,7 @@ void ReplaceReferencedKml(const std::string &new_kml_base_url,
     if ( fout ) 
       fout << kml_url << " " << kml_file_name << std::endl;
   }
-  if ( fout ) 
-    fout.close();
+  if ( fout ) fout.close();
 }
 
 
@@ -273,10 +275,11 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
           "           --kml_port=<kml_port_string> \\\n"
           "           --kml_url_path=<kml_url_path_string> \\\n"
           "           --use_ssl_for_kml=<use_ssl_for_kml_bool> \\\n"
+          "           --preserve_kml_filenames \\\n"
           "\n"
           " Reads dbroot and rewrites the search tabs so that they point\n"
-          " at the given search server and port. Creates a directory\n"
-          " of all of the icons referred to by the dbroot. Creates a file.\n"
+          " at the given search server and port. Optionally creates a directory\n"
+          " of all of the icons referred to by the dbroot. Optionally Creates a file\n"
           " listing all kml files that are referenced in the dbroot and \n"
           " optionally gives a new path and filename on the specified \n"
           " kml server.\n"
@@ -308,7 +311,7 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
           "                    Default: false\n"
           "   --preserve_kml_filenames:\n"   
           "                    Keep the original filenames when\n"
-          "                    replacing the host and path in kmlfiles in.\n"
+          "                    replacing the host and path in kmlfiles in\n"
           "                    the dbroot.  When unset, files are renamed\n"
           "                    sequentially from kml_dbroot_000.kml upwards.\n"
           "                    Default: false\n",
@@ -412,7 +415,7 @@ int main(int argc, char *argv[]) {
     ReplaceReferencedKml(new_kml_base_url, kml_map_file, preserve_kml_filenames, &dbroot);
 
     // fetch all icons from real server and save them locally
-    if (icon_directory.size()) {
+    if (!icon_directory.empty()) {
       SaveIcons(icon_directory, source, &dbroot);
     }
 

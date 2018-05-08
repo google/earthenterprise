@@ -205,8 +205,6 @@ int FusionDbService::ProcessFusionDbRequest(
     }
 
     std::string content;
-    ap_log_rerror(APLOG_MARK, APLOG_DEBUG, 0, r,
-                    "Serving data from  path: %s ", path.c_str() );
       
     if (!khReadStringFromFile(path, content)) {
       ap_log_rerror(APLOG_MARK, APLOG_WARNING, 0, r,
@@ -264,9 +262,6 @@ int FusionDbService::ProcessFusionDbRequest(
                     target_path.c_str());
       return HTTP_NOT_FOUND;
     }
-    ap_log_rerror(APLOG_MARK, APLOG_DEBUG, 0, r,
-                    "Got a  ServerdbReader object for path: %s",
-                    target_path.c_str());
     // Reproject Plate Carree Database tile(s) to requested Mercator tile.
     if (arg_map["request"] == "ImageryMapsMercator") {
       return motf.GenerateMotfTile(reader, &arg_map, r);
@@ -302,9 +297,6 @@ int FusionDbService::ProcessFusionDbRequest(
       r->content_type = "text/plain";
     } else {
       ap_rwrite(buf.data(), buf.size(), r);
- 
-      ap_log_rerror(APLOG_MARK, APLOG_DEBUG, 0, r,
-                    "RETURNING DATA FOR Request: %s  BUFFER: %s ", r->uri, buf.data());
     }
     return OK;
   }

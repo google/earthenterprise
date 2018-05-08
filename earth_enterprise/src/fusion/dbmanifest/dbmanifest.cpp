@@ -576,7 +576,7 @@ bool DbManifest::GetDbrootsAndServerConfig(
   // Process each dbroot.
   for (size_t i = 0; i < fusion_config_.toc_paths_.size(); ++i) {
     const std::string toc_local = Prefixed(fusion_config_.toc_paths_[i]);
-    notify(NFY_INFO, "Reading dbroot file: %s = ", toc_local.c_str());
+    notify(NFY_DEBUG, "Reading dbroot file: %s = ", toc_local.c_str());
     
     std::string base_name = khBasename(toc_local);
     std::string binary_dbroot_name;
