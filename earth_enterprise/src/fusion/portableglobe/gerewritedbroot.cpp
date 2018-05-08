@@ -136,18 +136,7 @@ void RemoveUnusedLayers(const std::string &data_type,
     }
   }
 }
-void DumpDBRoot(geProtoDbroot *dbroot) {
-  
-  for (int i = 0; i < dbroot->nested_feature_size(); ++i) {
-    keyhole::dbroot::NestedFeatureProto *nested =
-        dbroot->mutable_nested_feature(i);
-    if (nested->has_kml_url()) {
-    }
-    
-  }
-  
-  return;
-}
+
 /**
  * Replaces server and port in search tabs with the given server and port.
  * @param server Server to which search queries should be addressed.
@@ -203,15 +192,17 @@ void ReplaceReferencedKml(const std::string &new_kml_base_url,
   std::ofstream fout;
 
   // Open file for storing kml urls and local files.
-  khEnsureParentDir(kml_url_to_file_map_file);
-  fout.open(kml_url_to_file_map_file.c_str(), std::ios::out);
-  if (!fout) {
-    notify(NFY_FATAL, "Unable to write kml map file: %s",
+  if ( kml_url_to_file_map_file.size() )
+  {
+      khEnsureParentDir(kml_url_to_file_map_file);
+    fout.open(kml_url_to_file_map_file.c_str(), std::ios::out);
+    if (!fout) {
+      notify(NFY_FATAL, "Unable to write kml map file: %s",
            kml_url_to_file_map_file.c_str());
+    }
   }
   std::string kml_url;
   std::string kml_file_name;
-
 
   // Loop through all of the nested layer entries.
   int num_kml_files = 0;
@@ -226,7 +217,6 @@ void ReplaceReferencedKml(const std::string &new_kml_base_url,
                num_kml_files);
       num_kml_files += 1;
       kml_file_name = str;
-
 
       // let's see if we have the url directly in the kml_url field or if it
       // is redirected to the translation_entry table
@@ -251,21 +241,17 @@ void ReplaceReferencedKml(const std::string &new_kml_base_url,
         string_entry->set_string_value(new_kml_base_url + "/" + kml_file_name);
       }
     }
-    // TODO - write out map entry to file. 
-    fout << kml_url << " " << kml_file_name << std::endl;
+    // Write out map entry to file if one is specified.   
+    if ( fout ) 
+      fout << kml_url << " " << kml_file_name << std::endl;
   }
-
-  
-
-  fout.close();
+  if ( fout ) 
+    fout.close();
 }
 
 
 void usage(const std::string &progn, const char *msg = 0, ...) {
   if (msg) {
-
-
-    
     va_list ap;
     va_start(ap, msg);
     vfprintf(stderr, msg, ap);
@@ -291,16 +277,13 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
           " Reads dbroot and rewrites the search tabs so that they point\n"
           " at the given search server and port. Creates a directory\n"
           " of all of the icons referred to by the dbroot. Creates a file.\n"
-          " listing all kml files that are referenced in the dbroot and.\n"
-          " gives their new name on the kml server.\n"
+          " listing all kml files that are referenced in the dbroot and \n"
+          " optionally gives a new path and filename on the specified \n"
+          " kml server.\n"
           "\n"
           " Required:\n"
-          "   --source:        Server whose dbroot should be rewritten.\n"
-          "   --source_file:        Server whose dbroot should be rewritten.\n"
-          "   --icon_directory: Directory where icons should be stored.\n"
+          "   --source:        Server URL or local dbroot file that should be rewritten.\n"
           "   --dbroot_file:   File where new dbroot should be stored.\n"
-          "   --kml_map_file:  File where kml map of source urls to local\n"
-          "                    files should be stored.\n"
           " Options:\n"
           "   --data_type:     Type of data packet to cut (ALL, IMAGERY,\n"
           "                    TERRAIN, or VECTOR).\n"
@@ -308,6 +291,9 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
           "   --search_service: Url to search service. If none is provided\n"
           "                    then uses relative url for standard Portable\n"
           "                    search.\n"
+          "   --icon_directory: Directory where icons should be stored.\n"
+          "   --kml_map_file:  Output file where map of source kml urls to local\n"
+          "                    files will be stored.\n"
           "   --kml_server:    Server to be used for kml files in the\n"
           "                    dbroot.\n"
           "                    Default: localhost\n"
@@ -316,12 +302,15 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
           "                    Default: 8888\n"
           "   --kml_url_path:  Path in new url to prefix kml file name.\n"
           "                    Default: kml\n"
-          "   --use_ssl_for_kml:  Use https:// instead of http:// for\n"
+          "   --use_ssl_for_kml:  \n"
+          "                    Use https:// instead of http:// for\n"
           "                    accessing kml files.\n"
           "                    Default: false\n"
-          "   --preserve_kml_filenames:   Keep the original filenames when\n"
+          "   --preserve_kml_filenames:\n"   
+          "                    Keep the original filenames when\n"
           "                    replacing the host and path in kmlfiles in.\n"
-          "                    the dbroot"
+          "                    the dbroot.  When unset, files are renamed\n"
+          "                    sequentially from kml_dbroot_000.kml upwards.\n"
           "                    Default: false\n",
           
           progn.c_str());
@@ -335,7 +324,6 @@ int main(int argc, char *argv[]) {
   bool use_ssl_for_kml = false;
   bool preserve_kml_filenames;
   std::string source;
-  std::string source_file;
   std::string icon_directory;
   std::string dbroot_file;
   std::string kml_map_file;
@@ -351,7 +339,6 @@ int main(int argc, char *argv[]) {
   options.flagOpt("use_ssl_for_kml", use_ssl_for_kml);
   options.flagOpt("preserve_kml_filenames", preserve_kml_filenames);
   options.opt("source", source);
-  options.opt("source_file", source_file);
   options.opt("icon_directory", icon_directory);
   options.opt("dbroot_file", dbroot_file);
   options.opt("kml_map_file", kml_map_file);
@@ -360,9 +347,10 @@ int main(int argc, char *argv[]) {
   options.opt("kml_server", kml_server);
   options.opt("kml_port", kml_port);
   options.opt("kml_url_path", kml_url_path);
-  options.setRequired( "icon_directory",
-                      "dbroot_file", "kml_map_file");
+  options.setRequired( "source",
+                      "dbroot_file" );
 
+  
   int argn;
   if (!options.processAll(argc, argv, argn)
       || help
@@ -383,8 +371,13 @@ int main(int argc, char *argv[]) {
   std::string temp_dir = khDirname(dbroot_file) + "/rewrite_dbroot";
   std::string dbroot_path;
   
-  
-  if ( source.size() ) { //TODO _ syntax check
+  // Parameters for URL Parsing, to determine if source is a URL or a File. 
+  std::string protocol;
+  std::string host;
+  std::string path_query;
+  bool success = RelaxedUrlSplitter(source, &protocol, &host, &path_query);
+
+  if ( success && ( protocol == "http" || protocol == "https")) {
     dbroot_path = temp_dir + "/" + kBinaryDbrootPrefix;
     khEnsureParentDir(dbroot_path);
 
@@ -394,14 +387,9 @@ int main(int argc, char *argv[]) {
                                     "/dbRoot.v5?output=proto&hl=en&gl=us")) {
       notify(NFY_FATAL, "Unable to get dbroot from source.");
     }
-  } else if ( source_file.size() ) { //TODO _ syntax check
-    dbroot_path = source_file;
   } else {
-    notify(NFY_FATAL, "Either --source or --source_file must be set to retrieve dbroot information.");
-    return -1;
-  }
-
- 
+    dbroot_path = source;
+  } 
 
   try {
     // load the dbroot we just fetched from the server
@@ -424,7 +412,9 @@ int main(int argc, char *argv[]) {
     ReplaceReferencedKml(new_kml_base_url, kml_map_file, preserve_kml_filenames, &dbroot);
 
     // fetch all icons from real server and save them locally
-    SaveIcons(icon_directory, source, &dbroot);
+    if (icon_directory.size()) {
+      SaveIcons(icon_directory, source, &dbroot);
+    }
 
     // write a local copy of our modified dbroot
     dbroot.Write(dbroot_file, geProtoDbroot::kEncodedFormat);
