@@ -44,6 +44,7 @@ gtag('config', 'UA-108632131-2');
     <p><strong>C++11 support</strong>. With release 5.2.3 Open GEE C++ code now supports and defaults to compiling using the <code>-std=gnu++11</code> compile flag.  This default can be overridden and the C++ code can be compiled using the <code>-std=gnu++98</code> flag instead.  However, Open GEE 5.2.3 will be the last release to support compiling C++ code using the <code>-std=gnu++98</code> flag.  The subsequent releases after Open GEE 5.2.3 will require the use of the <code>-std=gnu++11</code> flag when compiling C++ code.</p>
     <p><strong>Volume deletion</strong>. <code>geconfigureassetroot</code> now supports the option <code>--removevolume</code> for volume deletion.</p>
     <p><strong>Performance tuning for gecombineterrain</strong>. <code>gecombineterrain</code> now supports the option <code>--numCompressThreads</code> which allows configuration of the threads used for operation.  If not specified <code>gecombineterrain</code> defaults this option to match the number of available CPUs.</p>
+    <p><strong>Package name customization at build time</strong>. Scons build now accepts a custom label argument which is appended to the version in RPM file names.</p>
   <h5>
     <p id="supported_5.2.3">Supported Platforms</p>
   </h5>
@@ -78,39 +79,19 @@ gtag('config', 'UA-108632131-2');
             <td>Scons scripts ensure gcc version 4.8+ is installed before continuing with builds</td>
           </tr>
           <tr>
-            <td>498</td>
-            <td>Add option to geconfigureassetroot to delete a volume</td>
-            <td>--removevolume option added for geconfigureassetroot</td>
-          </tr>
-          <tr>
             <td>535</td>
             <td>DownloadTutorial.sh often is not staged properly for install</td>
-            <td>Tutorial data is included in the Fusion RPM</td>
+            <td>Tutorial download script is now included in the Fusion RPM</td>
           </tr>
           <tr>
             <td>682</td>
             <td>Update geconfigurepublishroot to fully correct file permissions</td>
             <td>geconfigurepublishroot recursively sets the owner and permissions for publish root</td>
-          </tr>	
-          <tr>
-            <td>751</td>
-            <td>Documentation prepared for 5.2.3 release</td>
-            <td>5.2.3 release documentation will be updated as the relese progresses</td>
           </tr>
           <tr>
             <td>762</td>
             <td>Package libraries and utilities common to Fusion and Server for Ubuntu 16</td>
             <td>opengee-common deb packages can be created for Ubuntu 16</td>
-          </tr>
-          <tr>
-            <td>764</td>
-            <td>Compile OpenGEE C++ code using c++11</td>
-            <td>Source code supports and defaults to using gnu++11</td>
-          </tr>
-          <tr>
-            <td>794</td>
-            <td>Specify custom package labels in OpenGEE RPMs</td>
-            <td>Scons build accepts a custom label argument which is appended to the version in RPM file names</td>
           </tr>
           <tr>
             <td>806</td>
