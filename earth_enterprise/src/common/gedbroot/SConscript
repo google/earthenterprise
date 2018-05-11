@@ -56,7 +56,7 @@ geencryptdbroot = env.executable('geencryptdbroot',
                                        'gecommon',
                                        'png12'])
 
-env.install('common_bin', [geencryptdbroot])
+env.install('tools_bin', [geencryptdbroot])
 
 protobuf_walker = env.sharedLib('protobuf_walker',
                                 ['protobuf_walker.cpp',

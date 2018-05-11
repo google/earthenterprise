@@ -229,7 +229,7 @@ void ReplaceReferencedKml(const std::string &new_kml_base_url,
         // the url is stored directly in the kml_url field
         std::string kml_url = string_id_or_value->value();
         if ( preserve_kml_filenames ) {
-            kml_file_name = kml_file_name.substr(kml_file_name.find_last_of("/") + 1);
+            kml_file_name = kml_url.substr(kml_url.find_last_of("/") + 1);
         }
         string_id_or_value->set_value(new_kml_base_url + "/" + kml_file_name);
       } else {
@@ -239,7 +239,7 @@ void ReplaceReferencedKml(const std::string &new_kml_base_url,
             dbroot->GetTranslationEntryById(string_id_or_value->string_id());
         kml_url = string_entry->string_value();
         if ( preserve_kml_filenames ) {
-            kml_file_name = kml_file_name.substr(kml_file_name.find_last_of("/") + 1);
+            kml_file_name = kml_url.substr(kml_url.find_last_of("/") + 1);
         }
         string_entry->set_string_value(new_kml_base_url + "/" + kml_file_name);
       }
