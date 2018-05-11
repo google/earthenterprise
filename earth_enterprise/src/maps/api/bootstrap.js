@@ -32,6 +32,7 @@ google.maps = google.maps || {};
 
   var loadScriptTime = (new Date).getTime();
 
+  getScript(GEE_BASE_URL + '/js/jquery.js');
   getScript(GEE_BASE_URL + GEE_API_PATH + '/main.js');
   getScript(GEE_BASE_URL + GEE_API_PATH + '/../fusion_map_obj_v3.js');
 

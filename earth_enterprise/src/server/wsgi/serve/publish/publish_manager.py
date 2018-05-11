@@ -114,6 +114,7 @@ class PublishManager(object):
       raise exceptions.PublishServeException(
           "Couldn't get self-referential server URL.")
     logger.debug("PublishManager init: server URL %s", server_url)
+    self._server_url = server_url
     self.__ResetPublishManager(server_url)
 
   def HandlePingRequest(self, request, response):
@@ -154,9 +155,7 @@ class PublishManager(object):
       response: response object.
     """
     logger.debug("HandleResetRequest...")
-    request_url = request.GetParameter(constants.ORIGIN_REQUEST_HOST)
-    assert request_url
-    self.__ResetPublishManager(request_url)
+    self.__ResetPublishManager(self._server_url)
     http_io.ResponseWriter.AddBodyElement(
         response, constants.HDR_STATUS_CODE, constants.STATUS_SUCCESS)
 
@@ -224,10 +223,8 @@ class PublishManager(object):
 
     try:
       # Register FusionDb/Portable for serving in Fdb module.
-      request_url = request.GetParameter(constants.ORIGIN_REQUEST_HOST)
-      assert request_url
       self._mod_fdb_serve_handler.RegisterDatabaseForServing(
-          request_url,
+          self._server_url,
           publish_def.target_path,
           publish_def.db_type,
           target_gedb_path)
@@ -250,7 +247,7 @@ class PublishManager(object):
     except Exception:
       self._publish_helper.DoUnpublish(publish_def.target_path)
       self._mod_fdb_serve_handler.UnregisterDatabaseForServing(
-          request_url, publish_def.target_path)
+          self._server_url, publish_def.target_path)
       raise
 
   def HandleUnpublishRequest(self, request, response):
@@ -280,20 +277,18 @@ class PublishManager(object):
           "Not valid target path %s (path format is /sub_path1[/sub_path2]." %
           target_path)
 
-    request_url = request.GetParameter(constants.ORIGIN_REQUEST_HOST)
-    assert request_url
 
     try:
       self._publish_helper.HandleUnpublishRequest(norm_target_path)
     except Exception:
       # Unregister FusionDb/Portable for serving in Fdb module.
       self._mod_fdb_serve_handler.UnregisterDatabaseForServing(
-          request_url, norm_target_path)
+          self._server_url, norm_target_path)
       raise
     else:
       # Unregister FusionDb/Portable for serving in Fdb module.
       self._mod_fdb_serve_handler.UnregisterDatabaseForServing(
-          request_url, norm_target_path)
+          self._server_url, norm_target_path)
       http_io.ResponseWriter.AddBodyElement(response,
                                             constants.HDR_STATUS_CODE,
                                             constants.STATUS_SUCCESS)
