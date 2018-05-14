@@ -153,7 +153,6 @@ uint32 GetMaxNumJobs() {
   max_num_jobs = kMaxNumJobsDefault *
       static_cast<uint32>(KH_MAX_NUM_JOBS_COEFF);
 #endif
-
   // Note: Apply an internal multiplier in case of GEE Fusion is built
   // with maximum number of concurrent jobs equals 0 (internal usage).
   if (max_num_jobs == 0) {

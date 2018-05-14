@@ -91,15 +91,29 @@ my $stream_dir = "$dest_path/stream_space";
 my $search_dir = "$dest_path/search_space";
 
 use File::Path;
+use File::Find;
+use POSIX qw(lchown);
 mkpath ([$stream_dir, $search_dir], 0, 0755);
 # Change the owner of the dirs to "geapache" coz that's the uid WebDAV uses to
 # write to these dirs.
 my ($username, $pwd, $uid, $gid) = getpwnam($GEAPACHEUSER);
-chown $uid, $gid, $stream_dir;
-chown $uid, $gid, $search_dir;
-# root's umask could leave the dirs with less permissions than we want
-# getomcatuser:gegroup will need to write to these dirs which is why 775.
-chmod 0775, $stream_dir, $search_dir;
+# Change owner and permissions recursively, in case the dirs are already
+# populated from a previous install.
+sub wanted {
+   # Just change the owner of symlinks (can't do this with builtin chown)
+   if (-l) {
+      lchown $uid, $gid, $_;
+      return;
+   }
+   chown $uid, $gid, $File::Find::name;
+   # root's umask could leave the dirs with less permissions than we want
+   # geapacheuser:gegroup will need to write to these dirs which is why 775.
+   chmod 0775, $File::Find::name if -d;
+   # Don't set execute bit on files
+   chmod 0664, $File::Find::name if -f;
+}
+   
+File::Find::find({wanted=>\&wanted, follow=>0}, ($stream_dir, $search_dir));
 
 # only do this if fusion is installed
 if ($allow_symlinks_prompt eq 1) {
