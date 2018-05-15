@@ -385,12 +385,12 @@
   <code><strong>gerewritedbroot</strong></code> <code>--source=<em>server_name</em> --icon_directory=<em>directory</em><br/>
     --dbroot_file=<em>filename</em>  --kml_map_file=<em>filename</em><br/>
     [--search_service=<em>search_service_url</em>] [--kml_server=<em>server_name]</em><br/>
-    [--kml_port=<em>num]</em> [--kml_url_path=<em>prefix]</em> [--use_ssl_for_kml=<em>bool</em>]</code>
+    [--kml_port=<em>num]</em> [--kml_url_path=<em>prefix]</em> [--use_ssl_for_kml=<em>bool</em>] [--preserve_kml_filenames=<em>bool</em>]</code>
   <h4>Description</h4>
   <ul>
-    <li>Reads the dbRoot and rewrites the search tabs so that they point at the given search server and port.</li>
-    <li>Creates a directory of all of the icons referred to by the dbRoot.</li>
-    <li>Creates a file listing all KML files that are referenced in the dbRoot and gives their new name on the KML server.</li>
+    <li>Reads dbRoot and rewrites the search tabs so that they point to the given search server, port and path.</li>
+    <li>Optionally creates a directory of all of the icons referred to by the dbroot. </li>
+    <li>Optionally updates the host, path and/or filename to the network linked KML content in dbRoot. </li>
   </ul>
   <h4>Required</h4>
   <table class="nice-table">
@@ -400,22 +400,22 @@
         <td>Server whose dbRoot should be rewritten.</td>
       </tr>
       <tr>
-        <td><code>--icon_directory=<em>directory</em></code></td>
-        <td>Directory where the icons should be stored.</td>
-      </tr>
-      <tr>
         <td><code>--dbroot_file=<em>filename</em></code></td>
         <td>File where the new dbRoot should be stored.</td>
-      </tr>
-      <tr>
-        <td><code>--kml_map_file=<em>filename</em> </code></td>
-        <td>File where the KML map of source URLs to local files should be stored.</td>
       </tr>
     </tbody>
   </table>
   <h4>Options</h4>
   <table class="nice-table">
     <tbody>
+      <tr>
+        <td><code>--icon_directory=<em>directory</em></code></td>
+        <td>Directory where the icons should be stored.</td>
+      </tr>
+      <tr>
+        <td><code>--kml_map_file=<em>filename</em> </code></td>
+        <td>File where the KML map of source URLs to local files should be stored.</td>
+      </tr>
       <tr>
         <td><code>--search_service=<em>search_service_url</em></code></td>
         <td>Url to search service. If none is provided then uses relative url for standard Portable search.</td>
