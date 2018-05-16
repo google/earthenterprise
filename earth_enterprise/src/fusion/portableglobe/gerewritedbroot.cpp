@@ -281,7 +281,7 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
           " to the given search server and port. Optionally creates a directory\n"
           " of all of the icons referred to by the dbroot. \n"
           " Optionally updates the host, path and/or filename to the \n"
-          " network linked KML content in dbRoot. \n"
+          " KML Layer URLs in the dbRoot. \n"
           "\n"
           " Required:\n"
           "   --source:        Server URL or local dbroot file that should be rewritten.\n"
