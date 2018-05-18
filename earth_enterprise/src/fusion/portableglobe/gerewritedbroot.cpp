@@ -310,8 +310,8 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
           "                    Default: false\n"
           "   --preserve_kml_filenames:\n"   
           "                    Keep the original filenames when\n"
-          "                    replacing the host and path in kmlfiles in\n"
-          "                    the dbroot.  When unset, files are renamed\n"
+          "                    replacing the host and path in KML layer URLs\n"
+          "                    in the dbroot.  When unset, files are renamed\n"
           "                    sequentially from kml_dbroot_000.kml upwards.\n"
           "                    Default: false\n",
           
@@ -324,7 +324,7 @@ int main(int argc, char *argv[]) {
   std::string progname = argv[0];
   bool help = false;
   bool use_ssl_for_kml = false;
-  bool preserve_kml_filenames;
+  bool preserve_kml_filenames = false;
   std::string source;
   std::string icon_directory;
   std::string dbroot_file;
