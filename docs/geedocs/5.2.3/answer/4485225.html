@@ -385,14 +385,13 @@
   <code><strong>gerewritedbroot</strong></code> <code>--source=<em>server_name</em> --icon_directory=<em>directory</em><br/>
     --dbroot_file=<em>filename</em>  --kml_map_file=<em>filename</em><br/>
     [--search_service=<em>search_service_url</em>] [--kml_server=<em>server_name]</em><br/>
-    [--kml_port=<em>num]</em> [--kml_url_path=<em>prefix]</em> [--use_ssl_for_kml=<em>bool</em>] [--preserve_kml_filenames=<em>bool</em>]</code>
+    [--kml_port=<em>num]</em> [--kml_url_path=<em>prefix]</em> [--use_ssl_for_kml=<em>bool</em>] [--preserve_kml_filenames]</code>
   <h4>Description</h4>
   <ul>
     <li>Reads dbRoot and rewrites the search tabs so that they point to the given search server, port and path.</li>
     <li>Optionally creates a directory of all of the icons referred to by the dbroot. </li>
     <li>Optionally updates the host, path and/or filenames in KML Layer URLs in the dbRoot. </li>
-    <li>Optionally creates a text file that lists the mapping from original KML Layer URLs and their updated filenames. </li>
-  
+    <li>Optionally creates a text file that lists the mapping from original KML Layer URLs to their updated filenames. </li>
   </ul>
   <h4>Required</h4>
   <table class="nice-table">
@@ -437,6 +436,10 @@
       <tr>
         <td><code>--use_ssl_for_kml=<em>bool</em></code></td>
         <td>Use <code>https</code> instead of <code>http</code> for accessing KML files. Default is <code>false</code>.</td>
+      </tr>
+      <tr>
+        <td><code>--preserve_kml_filenames</code></td>
+        <td>Preserve the existing filenames of any KML files. Not used when creating portable globes.</td>
       </tr>
     </tbody>
   </table>
