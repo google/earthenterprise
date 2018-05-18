@@ -133,10 +133,7 @@
     <p>Copy and publish and modify the KML files on the disconnected GEE Server machine's network as needed. Validate that the referenced KML files are accessible on the disconnected network via HTTP or HTTPS using a web browser or command line tools. Note the differences in hostnames, paths and ports between their origninal locations and their locations on the disconnected network environment. </p>
     <p>KML files can be served from the <code>/opt/google/gehttpd/htdocs/</code> folder or a subfolder, or on a separate web server. </p>
   </li>
-
-  <li>Rewrite the KML Layer Links in the database on the Server. 
-    
-  <li>Identify which dbroot file needs to be updated, and store in an environmnt variable for later use:
+  <li>Identify which dbroot file needs to be updated, and store in an environment variable for later use:
     <p><code>export TARGET_DBROOT='/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/targets/new_target/dbroots/dbroot.v5p.DEFAULT'</code></p></li>
   <li>Rewrite the KML Layer Links in the database on the Server. 
     <p><code>/opt/google/bin/gerewritedbroot --source http://your_stream_server/new_target \</code></p>
@@ -147,7 +144,7 @@
   <li>Changes are not refected until the server is restarted. 
     <p><code>sudo service geserver restart</code></p>
   </li>
-  <li>Validate that the server has the correct database information by dumping the context as text for
+  <li>Validate that the server has the correct database information by dumping the dbroot as text:
     <p><code>wget -O dbroot.v5p.DEFAULT http://you_stream_server/new_target/dbRoot.v5</code></p>
     <p><code>gedumpdbroot dbroot.v5p.DEFAULT</code></p>
   </li>
