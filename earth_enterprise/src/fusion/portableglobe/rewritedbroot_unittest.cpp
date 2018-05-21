@@ -50,7 +50,11 @@ TEST(ReplaceReferencedKmlTest, NestedEntryReplaceTest) {
 
   ASSERT_TRUE(dbroot.nested_feature(0).has_kml_url());
   ASSERT_EQ(dbroot.nested_feature(0).kml_url().value(), BEFORE_URL_1);
+  ASSERT_TRUE(dbroot.nested_feature(2).has_kml_url());
+  ASSERT_EQ(dbroot.nested_feature(2).kml_url().value(), BEFORE_URL_2);
+
   ReplaceReferencedKml(AFTER_BASE_URL, "", false, &dbroot);
+
   ASSERT_EQ(dbroot.nested_feature(0).kml_url().value(), AFTER_URL_1);
   ASSERT_FALSE(dbroot.nested_feature(1).has_kml_url());
   ASSERT_EQ(dbroot.nested_feature(2).kml_url().value(), AFTER_URL_2);
@@ -74,7 +78,13 @@ TEST(ReplaceReferencedKmlTest, NestedEntryPreserveTest) {
   dbroot.add_nested_feature();
   addKmlUrlAsValue(BEFORE_URL_2, &dbroot);
 
+  ASSERT_TRUE(dbroot.nested_feature(2).has_kml_url());
+  ASSERT_EQ(dbroot.nested_feature(2).kml_url().value(), BEFORE_URL_1);
+  ASSERT_TRUE(dbroot.nested_feature(4).has_kml_url());
+  ASSERT_EQ(dbroot.nested_feature(4).kml_url().value(), BEFORE_URL_2);
+
   ReplaceReferencedKml(AFTER_BASE_URL, "", true, &dbroot);
+
   ASSERT_FALSE(dbroot.nested_feature(0).has_kml_url());
   ASSERT_FALSE(dbroot.nested_feature(1).has_kml_url());
   ASSERT_EQ(dbroot.nested_feature(2).kml_url().value(), AFTER_URL_1);
@@ -121,7 +131,13 @@ TEST(ReplaceReferencedKmlTest, TranslationEntryReplaceTest) {
 
   ASSERT_TRUE(dbroot.nested_feature(0).has_kml_url());
   ASSERT_EQ(dbroot.nested_feature(0).kml_url().string_id(), id1);
+  ASSERT_EQ(dbroot.translation_entry(id1).string_value(), BEFORE_URL_1);
+  ASSERT_TRUE(dbroot.nested_feature(4).has_kml_url());
+  ASSERT_EQ(dbroot.nested_feature(4).kml_url().string_id(), id2);
+  ASSERT_EQ(dbroot.translation_entry(id2).string_value(), BEFORE_URL_2);
+
   ReplaceReferencedKml(AFTER_BASE_URL, "", false, &dbroot);
+
   ASSERT_EQ(dbroot.nested_feature(0).kml_url().string_id(), id1);
   ASSERT_EQ(dbroot.translation_entry(id1).string_value(), AFTER_URL_1);
   ASSERT_FALSE(dbroot.nested_feature(1).has_kml_url());
@@ -137,8 +153,8 @@ TEST(ReplaceReferencedKmlTest, TranslationEntryPreserveTest) {
   const string BEFORE_URL_1 = "http://server.name/path_a/" + FILE_1;
   const string BEFORE_URL_2 = "http://other.server.name/path_b/" + FILE_2;
   const string AFTER_BASE_URL = "https://different.server/path_c";
-  //const string AFTER_URL_1 = AFTER_BASE_URL + "/" + FILE_1;
-  //const string AFTER_URL_2 = AFTER_BASE_URL + "/" + FILE_2;
+  const string AFTER_URL_1 = AFTER_BASE_URL + "/" + FILE_1;
+  const string AFTER_URL_2 = AFTER_BASE_URL + "/" + FILE_2;
   geProtoDbroot dbroot;
 
   translationEntryId = 0;
@@ -152,11 +168,21 @@ TEST(ReplaceReferencedKmlTest, TranslationEntryPreserveTest) {
   addTranslationEntry(&dbroot);
   addTranslationEntry(&dbroot);
 
+  ASSERT_TRUE(dbroot.nested_feature(2).has_kml_url());
+  ASSERT_EQ(dbroot.nested_feature(2).kml_url().string_id(), id1);
+  ASSERT_EQ(dbroot.translation_entry(id1).string_value(), BEFORE_URL_1);
+  ASSERT_TRUE(dbroot.nested_feature(3).has_kml_url());
+  ASSERT_EQ(dbroot.nested_feature(3).kml_url().string_id(), id2);
+  ASSERT_EQ(dbroot.translation_entry(id2).string_value(), BEFORE_URL_2);
+
   ReplaceReferencedKml(AFTER_BASE_URL, "", true, &dbroot);
+
   ASSERT_FALSE(dbroot.nested_feature(0).has_kml_url());
   ASSERT_FALSE(dbroot.nested_feature(1).has_kml_url());
   ASSERT_EQ(dbroot.nested_feature(2).kml_url().string_id(), id1);
+  ASSERT_EQ(dbroot.translation_entry(id1).string_value(), AFTER_URL_1);
   ASSERT_EQ(dbroot.nested_feature(3).kml_url().string_id(), id2);
+  ASSERT_EQ(dbroot.translation_entry(id2).string_value(), AFTER_URL_2);
   ASSERT_FALSE(dbroot.nested_feature(4).has_kml_url());
 }
 
