@@ -47,7 +47,7 @@ gedumpdbroot = env.executable('gedumpdbroot',
                                    'gecommon',
                                    'png12'])
 
-env.install('tools_bin', [gedumpdbroot])
+env.install('common_bin', [gedumpdbroot])
 
 geencryptdbroot = env.executable('geencryptdbroot',
                                  ['geencryptdbroot.cpp',
