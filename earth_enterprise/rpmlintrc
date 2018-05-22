@@ -1,0 +1,2 @@
+# disable what we wish to ignore
+addFilter("E: dir-or-file-in-opt")
