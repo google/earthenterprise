@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-# chkconfig: 35 98 10
+# chkconfig: 35 71 34
 # description: Keyhole system manager for fusion processing tools.
 
 ### BEGIN INIT INFO
