@@ -25,6 +25,9 @@ addFilter("E: no-binary")
 # Will need more investigation
 addFilter("E: forbidden-selinux-command-in-%post")
 
+# This we should address
+addFilter("E: standard-dir-owned-by-package")
+
 # -- never to revise
 
 # We do after all package explicitly for /opt...
