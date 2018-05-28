@@ -261,11 +261,15 @@ gstTextureGuard gstTextureManager::NewTextureFromPath(
       std::string str = path;
       str += "/" + kHeaderXmlFile;
       gstTextureGuard texture = NewPYRTexture(str, std::string());
-      *is_mercator_imagery = texture->IsMercatorImagery();
+      if (texture) {
+        *is_mercator_imagery = texture->IsMercatorImagery();
+      }
       return texture;
     } else if (base.endsWith(".xml")) {
       gstTextureGuard texture = NewPYRTexture(path, std::string());
-      *is_mercator_imagery = texture->IsMercatorImagery();
+      if (texture) {
+        *is_mercator_imagery = texture->IsMercatorImagery();
+      }
       return texture;
     }
   }
