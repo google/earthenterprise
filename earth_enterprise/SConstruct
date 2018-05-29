@@ -181,7 +181,14 @@ package_lint_cmds = {'package_lint': [
     "rpmlint -f ./rpmlintrc rpms/build/distributions/*.rpm"
 ]}
 
+package_clean_cmds = {'package_clean': [
+    "rm -f rpms/build/distributions/*.rpm"
+]}
+
+package_clean = env.PhonyTargets(**package_clean_cmds)
+
 package_lint = env.PhonyTargets(**package_lint_cmds)
+env.Depends(package_lint, package_clean)
 env.Depends(package_lint, package_install)
 
 env.Alias('stage_install', 'stage_tutorial')
