@@ -28,6 +28,9 @@ addFilter("E: forbidden-selinux-command-in-%post")
 # This we should address
 addFilter("E: standard-dir-owned-by-package")
 
+# This seems to be an issue with osPackage on rhel6 only
+addFilter("E: useless-provides opengee-server")
+
 # -- never to revise
 
 # We do after all package explicitly for /opt...
