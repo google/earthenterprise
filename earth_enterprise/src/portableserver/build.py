@@ -123,6 +123,13 @@ class Builder(object):
             os.path.join(self.server_dir, 'local', 'maps'),
             exclude_entries=['SConscript'])
 
+        # Copy WMS files
+        wms_dir = os.path.join(self.server_dir, 'wms')
+        ensure_directory(wms_dir)
+        copy_from_dir_to_dir(
+            os.path.join(self.source_dir, 'server', 'wsgi', 'wms'),
+            wms_dir)
+
         self.create_version_txt()
 
         # Copy configuration files:
