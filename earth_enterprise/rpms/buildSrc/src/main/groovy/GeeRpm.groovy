@@ -104,7 +104,7 @@ class GeeRpm extends com.netflix.gradle.plugins.rpm.Rpm {
 
         requiresFilterFile.parentFile.mkdirs()
         requiresFilterFile.write(
-"""#! /bin/bash
+"""#!/bin/bash
 
 # Pass through existing requires:
 cat

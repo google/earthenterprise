@@ -1,4 +1,3 @@
-#!/bin/bash -eu
 #
 # Copyright 2017 Google Inc.
 #
