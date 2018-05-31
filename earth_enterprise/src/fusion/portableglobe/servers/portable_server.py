@@ -373,6 +373,13 @@ class InfoHandler(portable_server_base.BaseHandler):
     tornado.web.local_server_.LocalInfoHandler(self)
     self.finish()
 
+class WmsHandler(portable_server_base.BaseHandler):
+  """Class for handling WMS requests"""
+
+  def get(self):
+    self.set_header("Content-Type", "text/plain")
+    print "Got WMS request!"
+    self.finish()
 
 def main():
   """Main for portable server."""
@@ -408,6 +415,7 @@ def main():
       (r"/maps/gen_204", MapsGen204Handler),
       (r".*/(maps/.*)", DocsHandler),
       (r"/eb_balloon", BalloonHandler),
+      (r"/wms/.*", WmsHandler),
       (r"/(.*)", portable_web_interface.SetUpHandler),
       ])
 
