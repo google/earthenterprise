@@ -51,7 +51,7 @@ class PostgresManagerWrap(object):
     db_con = postgres_manager.PostgresConnection(
         db,
         PostgresManagerWrap.DB_USER,
-        "localhost",
+        None,
         PostgresManagerWrap.DB_PORT,
         logging.getLogger())
     results = db_con.Query(query, parameters)
