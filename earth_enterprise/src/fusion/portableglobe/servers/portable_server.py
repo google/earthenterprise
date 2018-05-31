@@ -29,6 +29,7 @@ import local_server
 import portable_globe
 import portable_server_base
 import portable_web_interface
+import wms.ogc.service.wms_request_handler as wms
 
 
 class FlatFileHandler(portable_server_base.BaseHandler):
@@ -375,10 +376,24 @@ class InfoHandler(portable_server_base.BaseHandler):
 
 class WmsHandler(portable_server_base.BaseHandler):
   """Class for handling WMS requests"""
+  
+  def initialize(self):
+    self.handler = wms.WMSRequestHandler()
 
+  @tornado.web.asynchronous
   def get(self):
-    self.set_header("Content-Type", "text/plain")
     print "Got WMS request!"
+
+    parameters = {}
+    status, header_pairs, output = self.handler.GenerateResponse(parameters)
+
+    self.set_status(status[0], status[1])
+
+    for header in header_pairs:
+      self.set_header(header[0], header[1])
+
+    self.write(output)
+
     self.finish()
 
 def main():

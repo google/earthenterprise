@@ -56,7 +56,7 @@ class WMS(object):
       response_headers.append(content_type)
 
     response_body = output
-    start_response(status, response_headers)
+    start_response("%i %s" % status, response_headers)
 
     return [response_body]
 
