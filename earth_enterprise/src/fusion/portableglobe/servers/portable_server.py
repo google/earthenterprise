@@ -380,11 +380,35 @@ class WmsHandler(portable_server_base.BaseHandler):
   def initialize(self):
     self.handler = wms.WMSRequestHandler()
 
+  def getServerUrl(self):
+    """Determine server end point
+
+    Returns:
+      (server_url, complete_url): server URL (scheme+host+port) and complete URL
+      (server_url/path).
+    """
+    # Note that self.request.host includes the port, if applicable
+    server_url = self.request.protocol + "://" + self.request.host
+    complete_url = server_url + self.request.path
+    return (server_url, complete_url)
+
+  def getParameters(self):
+    """ Collects the parameters that are needed by the WMS handler"""
+    parameters = {}
+    for name, list_of_vals in self.request.arguments.iteritems():
+      for val in list_of_vals:
+        # If an argument is specified multiple times this will fail, but that
+        # is not expected for WMS requests.
+        parameters[name.lower()] = val
+        
+    (parameters["server-url"],
+     parameters["this-endpoint"]) = self.getServerUrl()
+
+    return parameters
+
   @tornado.web.asynchronous
   def get(self):
-    print "Got WMS request!"
-
-    parameters = {}
+    parameters = self.getParameters()
     status, header_pairs, output = self.handler.GenerateResponse(parameters)
 
     self.set_status(status[0], status[1])
