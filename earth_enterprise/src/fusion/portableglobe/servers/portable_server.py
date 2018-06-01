@@ -454,7 +454,7 @@ def main():
       (r"/maps/gen_204", MapsGen204Handler),
       (r".*/(maps/.*)", DocsHandler),
       (r"/eb_balloon", BalloonHandler),
-      (r"/wms/.*", WmsHandler),
+      (r"/wms.*", WmsHandler),
       (r"/(.*)", portable_web_interface.SetUpHandler),
       ])
 
