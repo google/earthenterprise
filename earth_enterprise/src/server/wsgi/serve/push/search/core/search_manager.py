@@ -41,7 +41,7 @@ class SearchManager(object):
     super(SearchManager, self).__init__()
 
     # Init database connections
-    self._host = None
+    self._host = '/tmp'
     self._search_database = "gesearch"
     self._poi_database = "gepoi"
     self._db_user = "geuser"
