@@ -53,7 +53,7 @@ class StreamManager(object):
     self.server_hostname = utils.GetServerHost()
 
     # Init PostgresManager.
-    self._host = None
+    self._host = '/tmp'
     self._database = "gestream"
     self._db_user = "geuser"
     postgres_prop = postgres_properties.PostgresProperties()

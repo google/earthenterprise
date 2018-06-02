@@ -43,7 +43,7 @@ class SnippetsDbManager(object):
     super(SnippetsDbManager, self).__init__()
 
     # Init database connection.
-    self._host = None
+    self._host = '/tmp'
     self._snippets_db_name = "geendsnippet"
     self._db_user = "geuser"
     postgres_prop = postgres_properties.PostgresProperties()
