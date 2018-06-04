@@ -426,6 +426,7 @@ class WmsHandler(portable_server_base.BaseHandler):
 
     self.finish()
 
+
 def main():
   """Main for portable server."""
   application = tornado.web.Application([
