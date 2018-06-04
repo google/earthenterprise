@@ -29,6 +29,7 @@ import local_server
 import portable_globe
 import portable_server_base
 import portable_web_interface
+import wms.ogc.service.wms_request_handler as wms
 
 
 class FlatFileHandler(portable_server_base.BaseHandler):
@@ -373,6 +374,58 @@ class InfoHandler(portable_server_base.BaseHandler):
     tornado.web.local_server_.LocalInfoHandler(self)
     self.finish()
 
+class WmsHandler(portable_server_base.BaseHandler):
+  """Class for handling WMS requests"""
+  
+  def initialize(self):
+    self.handler = wms.WMSRequestHandler()
+
+  def getServerUrl(self):
+    """Determine server end point
+
+    Returns:
+      (server_url, complete_url): server URL (scheme+host+port) and complete URL
+      (server_url/path).
+    """
+    # Note that self.request.host includes the port, if applicable
+    server_url = self.request.protocol + "://" + self.request.host
+    complete_url = server_url + self.request.path
+    return (server_url, complete_url)
+
+  def getParameters(self):
+    """ Collects the parameters that are needed by the WMS handler"""
+    parameters = {}
+    for name, list_of_vals in self.request.arguments.iteritems():
+      for val in list_of_vals:
+        # If an argument is specified multiple times this will fail, but that
+        # is not expected for WMS requests.
+        parameters[name.lower()] = val
+        
+    (parameters["server-url"],
+     parameters["this-endpoint"]) = self.getServerUrl()
+
+    return parameters
+
+  @tornado.web.asynchronous
+  def get(self):
+    """WMS endpoint.
+
+    This code performs the functions that the corresponding code in
+    server/wsgi/wms/ogc/service/wms_request_app.py performs for the standard
+    (i.e., non-portable) server.
+    """
+    parameters = self.getParameters()
+    status, header_pairs, output = self.handler.GenerateResponse(parameters)
+
+    self.set_status(status[0], status[1])
+
+    for header in header_pairs:
+      self.set_header(header[0], header[1])
+
+    self.write(output)
+
+    self.finish()
+
 
 def main():
   """Main for portable server."""
@@ -408,6 +461,7 @@ def main():
       (r"/maps/gen_204", MapsGen204Handler),
       (r".*/(maps/.*)", DocsHandler),
       (r"/eb_balloon", BalloonHandler),
+      (r"/wms.*", WmsHandler),
       (r"/(.*)", portable_web_interface.SetUpHandler),
       ])
 

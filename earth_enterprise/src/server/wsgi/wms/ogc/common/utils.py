@@ -115,7 +115,7 @@ def GetServerURL(environ):
   Args:
     environ: A list which contains the WSGI environment information.
   Returns:
-    (server_url, complete_url): server URL (shceme+host+port) and complete URL (
+    (server_url, complete_url): server URL (scheme+host+port) and complete URL (
     server_url/path).
   """
   server_url = environ["wsgi.url_scheme"] + "://"

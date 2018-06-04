@@ -63,8 +63,8 @@ class WMSRequestHandler(object):
       A tuple of status, other headers, and the output, whether an image or
         some xml representing the Capabilities or a ServiceException.
     """
-    good_request = "200 OK"
-    bad_request = "400 Bad request"
+    good_request = (200, "OK")
+    bad_request = (400, "Bad request")
 
     headers = []
     output = ""
