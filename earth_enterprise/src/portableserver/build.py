@@ -130,9 +130,10 @@ class Builder(object):
         # Copy WMS files
         wms_dir = os.path.join(self.server_dir, 'wms')
         ensure_directory(wms_dir)
+        exclude_entries = ['.*\.pyc', 'wms_request_app\..*']
         copy_from_dir_to_dir(
             os.path.join(self.source_dir, 'server', 'wsgi', 'wms'),
-            wms_dir)
+            wms_dir, exclude_entries=exclude_entries)
 
         self.create_version_txt()
 
@@ -189,7 +190,7 @@ class Builder(object):
 
         # Copy library to package directory:
         entries = ['.*\.so', '.*\.pyd', '.*\.dll', '.*\.py']
-        exclude_entries = ['test.py', 'util.py']
+        exclude_entries = ['test\.py', 'util\.py']
         dist_dir = os.path.join(task_build_dir, 'dist')
         copy_from_dir_to_dir(dist_dir, self.server_dir, entries=entries,
             exclude_entries=exclude_entries)
