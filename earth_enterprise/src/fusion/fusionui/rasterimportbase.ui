@@ -852,7 +852,7 @@
     </connection>
 </connections>
 <tabstops>
-    <tabstop>aquisitionDate</tabstop>
+    <tabstop>acquisitionDate</tabstop>
     <tabstop>providerCombo</tabstop>
     <tabstop>maskTypeCombo</tabstop>
     <tabstop>featherSpin</tabstop>
