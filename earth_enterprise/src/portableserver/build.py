@@ -25,6 +25,7 @@ import datetime
 import distutils.dir_util
 import os
 import os.path
+import re
 import shutil
 import sys
 
@@ -33,25 +34,30 @@ SELF_DIR = os.path.dirname(os.path.realpath(__file__))
 
 def ensure_directory(path):
     """Makes sure a given directory exists."""
-
     if not os.path.isdir(path):
         os.makedirs(path)
 
 def copy_from_dir_to_dir(
     source_dir, destination_dir, entries=None, exclude_entries=None):
     """Copies given directory entries from one directory to another."""
-
-    if entries is None:
-        entries = os.listdir(source_dir)
-    if exclude_entries is not None:
-        entries = [e for e in entries if e not in exclude_entries]
-    for entry in entries:
-        source_path = os.path.join(source_dir, entry)
-        destination_path = os.path.join(destination_dir, entry)
-        if os.path.isdir(source_path):
-            distutils.dir_util.copy_tree(source_path, destination_path)
-        else:
-            shutil.copy2(source_path, destination_path)
+    dir_entries = os.listdir(source_dir)
+    if entries:
+      dir_entries = [e for e in dir_entries if 
+                     any(re.match(regex, e, re.IGNORECASE)
+                     for regex in entries)]
+    if exclude_entries:
+      dir_entries = [e for e in dir_entries if
+                     not any(re.match(regex, e, re.IGNORECASE)
+                     for regex in exclude_entries)]
+    for entry in dir_entries:
+      source_path = os.path.join(source_dir, entry)
+      destination_path = os.path.join(destination_dir, entry)
+      if os.path.isdir(source_path):
+        ensure_directory(destination_path)
+        copy_from_dir_to_dir(
+            source_path, destination_path, entries, exclude_entries)
+      else:
+        shutil.copy2(source_path, destination_path)
 
 class Builder(object):
     """Builds Portable server."""
@@ -110,10 +116,8 @@ class Builder(object):
             self.source_dir, 'fusion', 'portableglobe', 'servers')
 
         exclude_entries = ['linux', 'mac', 'windows', 'fileunpacker']
-        entries = [f
-                   for f in os.listdir(servers_dir)
-                   if f.lower() not in exclude_entries]
-        copy_from_dir_to_dir(servers_dir, self.server_dir, entries=entries)
+        copy_from_dir_to_dir(
+            servers_dir, self.server_dir, exclude_entries=exclude_entries)
         copy_from_dir_to_dir(
             os.path.join(servers_dir, self.platform), self.server_dir)
 
@@ -184,14 +188,9 @@ class Builder(object):
         build_and_test.main(['build_and_test.py', self.platform])
 
         # Copy library to package directory:
+        entries = ['.*\.so', '.*\.pyd', '.*\.dll', '.*\.py']
         exclude_entries = ['test.py', 'util.py']
         dist_dir = os.path.join(task_build_dir, 'dist')
-        entries = [
-            f
-            for f in os.listdir(dist_dir)
-            if os.path.splitext(f)[1].lower() in
-            ['.so', '.pyd', '.dll', '.py']
-        ]
         copy_from_dir_to_dir(dist_dir, self.server_dir, entries=entries,
             exclude_entries=exclude_entries)
 
