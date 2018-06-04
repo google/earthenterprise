@@ -408,6 +408,12 @@ class WmsHandler(portable_server_base.BaseHandler):
 
   @tornado.web.asynchronous
   def get(self):
+    """WMS endpoint.
+
+    This code performs the functions that the corresponding code in
+    server/wsgi/wms/ogc/service/wms_request_app.py performs for the standard
+    (i.e., non-portable) server.
+    """
     parameters = self.getParameters()
     status, header_pairs, output = self.handler.GenerateResponse(parameters)
 
