@@ -1,6 +1,7 @@
 #!/usr/bin/python
 #
 # Copyright 2017 Google Inc.
+# Copyright 2018 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -43,7 +44,7 @@ class SnippetsDbManager(object):
     super(SnippetsDbManager, self).__init__()
 
     # Init database connection.
-    self._host = "localhost"
+    self._host = '/tmp'
     self._snippets_db_name = "geendsnippet"
     self._db_user = "geuser"
     postgres_prop = postgres_properties.PostgresProperties()
