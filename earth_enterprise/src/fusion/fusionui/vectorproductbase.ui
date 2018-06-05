@@ -196,12 +196,12 @@
                 <cstring>TextLabel1_5</cstring>
             </property>
             <property name="text">
-                <string>Aquisition Date:</string>
+                <string>Acquisition Date:</string>
             </property>
         </widget>
         <widget class="QDateTimeEdit" row="4" column="3" rowspan="1" colspan="4">
             <property name="name">
-                <cstring>aquisitionDate</cstring>
+                <cstring>AcquisitionDate</cstring>
             </property>
         </widget>
         <spacer row="4" column="7">
