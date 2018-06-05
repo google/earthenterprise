@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright 2017 Google Inc.
+# Copyright 2018 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -51,7 +52,7 @@ class PostgresManagerWrap(object):
     db_con = postgres_manager.PostgresConnection(
         db,
         PostgresManagerWrap.DB_USER,
-        "localhost",
+        '/tmp',
         PostgresManagerWrap.DB_PORT,
         logging.getLogger())
     results = db_con.Query(query, parameters)
