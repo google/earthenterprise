@@ -103,6 +103,8 @@ int FusionDbService::ProcessFusionDbRequest(
   bool is_time_machine = false;
 
   if (cmd_or_path == "dbRoot.v5") {
+    ap_log_rerror(APLOG_MARK, APLOG_DEBUG, 0, r,
+                      "Reading proto dbroot in fusiondbservice") ;
     cmd = "query";
     arg_map["request"] = "Dbroot";
     if (arg_map.find("output") == arg_map.end()) {
@@ -203,6 +205,7 @@ int FusionDbService::ProcessFusionDbRequest(
     }
 
     std::string content;
+      
     if (!khReadStringFromFile(path, content)) {
       ap_log_rerror(APLOG_MARK, APLOG_WARNING, 0, r,
                     "Database file %s not found.",
@@ -259,7 +262,6 @@ int FusionDbService::ProcessFusionDbRequest(
                     target_path.c_str());
       return HTTP_NOT_FOUND;
     }
-
     // Reproject Plate Carree Database tile(s) to requested Mercator tile.
     if (arg_map["request"] == "ImageryMapsMercator") {
       return motf.GenerateMotfTile(reader, &arg_map, r);
@@ -296,7 +298,6 @@ int FusionDbService::ProcessFusionDbRequest(
     } else {
       ap_rwrite(buf.data(), buf.size(), r);
     }
-
     return OK;
   }
 

@@ -106,7 +106,7 @@ gedecode = env.executable('gedecode',
 
 gerewritedbroot = env.executable(
     'gerewritedbroot',
-    ['gerewritedbroot.cpp'],
+    ['gerewritedbroot.cpp', 'rewritedbroot.cpp'],
     LIBS=['serverreaderlib', 'gedbroot', 'gesimpleearthstream',
           'gecommon', 'geutil', 'geprotobuf'])
 
@@ -168,4 +168,11 @@ createmetadbroot_unittest = env.test(
     'createmetadbroot_unittest',
     ['createmetadbroot_unittest.cpp', 'createmetadbroot'],
     LIBS=['gtest', 'gecommon', 'gedbroot', 'geprotobuf'],
+    CPPFLAGS='-Wno-error=narrowing')
+
+rewritedbroot_unittest = env.test(
+    'rewritedbroot_unittest',
+    ['rewritedbroot_unittest.cpp', 'rewritedbroot'],
+    LIBS=['gtest', 'serverreaderlib', 'gedbroot', 'gesimpleearthstream',
+          'gecommon', 'geutil', 'geprotobuf'],
     CPPFLAGS='-Wno-error=narrowing')

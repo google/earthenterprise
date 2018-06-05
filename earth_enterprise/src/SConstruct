@@ -479,14 +479,22 @@ env = khEnvironment(
     python_major_version=python_major_version
 )
 
-# Check for GCC 4.8 from an alternative toolchain installation on RHEL 6:
-if cc_dir is None and os.path.isfile('/opt/rh/devtoolset-2/root/usr/bin/g++'):
-    # Check if the version of the default compiler is, at least 4.8:
-    if not is_version_ge(get_cc_version(env['CXX']), [4, 8]):
+# Check if the version of the default compiler is at least 4.8:
+version = get_cc_version(env['CXX'])
+if not is_version_ge(version, [4, 8]):
+    # Check for GCC 4.8 from an alternative toolchain installation on RHEL 6:
+    if cc_dir is None and os.path.isfile('/opt/rh/devtoolset-2/root/usr/bin/g++'):
         cc_dir = '/opt/rh/devtoolset-2/root/usr/bin'
         rpathlink_dirs += [
           '/opt/rh/devtoolset-2/root/usr/lib64',
           '/opt/rh/devtoolset-2/root/usr/lib']
+    else:
+        if version == None:
+            print "Unable to determine GCC version, minimum required is 4.8"
+        else:
+            print ("GCC version " + '.'.join(version) + 
+                   " detected. Minimum required version is 4.8")
+            Exit(1)
 
 if cc_dir:
     env['CXX'] = cc_dir + '/g++'
