@@ -16,6 +16,9 @@
 #
 
 # Startup script for Google Earth Server.
+# chkconfig: 35 70 32
+# description: Google Earth Server
+# would run after ncsd, start before gefusion...
 
 ### BEGIN INIT INFO
 # Provides: geserver

@@ -487,6 +487,8 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     // `initscripts` package:
     requires('initscripts')
     requires('python-unittest2')
+    // The WMS Service requires PIL, which is not automatically detected:
+    requires('python-imaging')
 
     requiresCommands(
         packageSharedCommands +
@@ -517,6 +519,20 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     directory('/var/opt/google/log', 0775)
     directory('/var/opt/google/pgsql', 0700)
     directory('/var/opt/google/pgsql/logs')
+
+    filesMatching(
+        ['/etc/init.d/geserver']
+    ) {
+        it.mode = 0755
+    }
+
+    // since these are "sourced" they cannot be exec...
+    filesMatching(
+        ['/etc/profile.d/ge-server.csh',
+         '/etc/profile.d/ge-server.sh']
+    ) {
+        it.mode = 0644
+    }
 
     from(stagedInstallDir_server_opt) {
         // libpq is in the opengee-postgis package:
@@ -624,11 +640,17 @@ built from raster, vector, and location properties data.
     directory('/var/opt/google/log', 0775)
 
     filesMatching(
-        ['/etc/init.d/gefusion',
-         '/etc/profile.d/ge-fusion.csh',
-         '/etc/profile.d/ge-fusion.sh']
+        ['/etc/init.d/gefusion']
     ) {
         it.mode = 0755
+    }
+
+    // since these are "sourced" they cannot be exec...
+    filesMatching(
+        ['/etc/profile.d/ge-fusion.csh',
+         '/etc/profile.d/ge-fusion.sh']
+    ) {
+        it.mode = 0644
     }
 
     from(stagedInstallDir_fusion) {

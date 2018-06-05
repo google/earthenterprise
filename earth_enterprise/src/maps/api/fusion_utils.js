@@ -652,18 +652,6 @@ function getLatLngZoomParameter() {
 }
 
 /**
- * Initializes view based on internal polygon.
- * Queries the server for the polygon, using the function to show
- * the polygon as the SUCCESS callback.
- *
- * @param {function} showPolygon Function to show polygon in returned kml.
- */
-function geeInitView(showPolygon) {
-  url = GEE_SERVER_URL + 'earth/polygon.kml';
-  jQuery.get(url, showPolygon);
-}
-
-/**
  * Gets the value of a specified parameter in the current page's URL.
  * @param {string}
  *           param  URL parameter to extract.
