@@ -36,7 +36,7 @@ gtag('config', 'UA-108632131-2');
 <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Release notes</h1>
 <h2>Release notes: Open GEE 5.2.3</h2>
 
-<p>Open GEE 5.2.3 is currently in development</p>
+<p>Open GEE 5.2.3 is currently in beta testing</p>
 
   <h5>
     <p id="overview_5.2.3">New Features</p>
@@ -47,6 +47,7 @@ gtag('config', 'UA-108632131-2');
     <p><strong>Performance tuning for gecombineterrain</strong>. <code>gecombineterrain</code> now supports the option <code>--numCompressThreads</code> which allows configuration of the threads used for operation.  If not specified <code>gecombineterrain</code> defaults this option to match the number of available CPUs.</p>
     <p><strong>Package name customization at build time</strong>. Scons build now accepts a custom label argument which is appended to the version in RPM file names.</p>
     <p><strong>Rewrite KML URLs</strong>. Users can rewrite the URLs for KML resorces included in databases at publish time.</p>
+    <p><strong>Debian package for opengee-common for Ubuntu 16</strong>. It is now possible to produce Debian package for libraries and utilities common to Fusion and Server for Ubuntu 16.</p>    
   <h5>
     <p id="supported_5.2.3">Supported Platforms</p>
   </h5>
@@ -86,6 +87,11 @@ gtag('config', 'UA-108632131-2');
             <td>Scons scripts ensure gcc version 4.8+ is installed before continuing with builds</td>
           </tr>
           <tr>
+            <td>342</td>
+            <td>Fusion UI crashes when opening non supported type of file</td>
+            <td>Added check to kiasset, ktasset, xml file load to handle invalid files</td>
+          </tr>          
+          <tr>
             <td>535</td>
             <td>DownloadTutorial.sh often is not staged properly for install</td>
             <td>Tutorial download script is now included in the Fusion RPM</td>
@@ -101,11 +107,6 @@ gtag('config', 'UA-108632131-2');
             <td>Temporary fix from 5.2.2 was found to be the best solution</td>
           </tr>
           <tr>
-            <td>762</td>
-            <td>Package libraries and utilities common to Fusion and Server for Ubuntu 16</td>
-            <td>opengee-common deb packages can be created for Ubuntu 16</td>
-          </tr>
-          <tr>
             <td>806</td>
             <td>gecombineterrain defaulted to only 1 cpu to process data and ignored arguments</td>
             <td>Added --numCompressThreads option to accept the number of threads to use.  Default value is the number of CPUs available.  Deprecated --numcpus option</td>
@@ -119,11 +120,6 @@ gtag('config', 'UA-108632131-2');
             <td>835</td>
             <td>GE Server gets its URL from the client instead of itself</td>
             <td>Fixed code so that when you publish DB, GEServer's URL will be used and not the URL which we get from the Publish request message</td>
-          </tr>
-          <tr>
-            <td>342</td>
-            <td>Fusion UI crashes when opening non supported type of file</td>
-            <td>Added check to kiasset, ktasset, xml file load to handle invalid files</td>
           </tr>	  
         </tbody>
       </table>  
