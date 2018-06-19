@@ -20,7 +20,7 @@ BADHOSTNAMELIST=(empty linux localhost dhcp bootp)
 GEE="Google Earth Enterprise"
 GEES="$GEE Server"
 GEEF="$GEE Fusion"
-LONG_VERSION="5.2.2"
+LONG_VERSION="5.2.4"
 SHORT_VERSION="5.2"
 
 ROOT_USERNAME="root"
@@ -99,7 +99,7 @@ software_check()
             echo -e "\nInstall $3 and restart the $1."
             software_check_retval=1
         fi
-    else 
+    else
         echo -e "\nThe $1 could not determine your machine's operating system."
         echo -e "Supported Operating Systems: ${SUPPORTED_OS_LIST[*]}\n"
         software_check_retval=1
@@ -228,8 +228,8 @@ check_group() {
 
     # add group if it does not exist
     if [ -z "$GROUP_EXISTS" ]; then
-        groupadd -r $GROUPNAME &> /dev/null 
-        NEW_GEGROUP=true 
+        groupadd -r $GROUPNAME &> /dev/null
+        NEW_GEGROUP=true
     fi
 }
 
@@ -254,7 +254,7 @@ create_links()
 
     if [ ! -L "$BASEINSTALLDIR_OPT/etc" ]; then
         ln -s $BASEINSTALLDIR_ETC $BASEINSTALLDIR_OPT/etc
-    fi 
+    fi
 
     if [ ! -L "$BASEINSTALLDIR_OPT/log" ]; then
         ln -s $BASEINSTALLDIR_VAR/log $BASEINSTALLDIR_OPT/log
@@ -338,15 +338,15 @@ get_array_index()
 {
     # need to have a set test value -- technically, the return status is an unsigned 8 bit value, so negative numbers won't work
     # need a value large enough that can be tested against
-    local get_array_index_retval=$INVALID_INDEX 
+    local get_array_index_retval=$INVALID_INDEX
 
     # args $1: array
     # args $2: choice/selection
 
     local array_list=("${!1}")
     local selection=$2
-    
-    for i in "${!array_list[@]}"; 
+
+    for i in "${!array_list[@]}";
     do
         if [[ "${array_list[$i]}" == "${selection}" ]]; then
             get_array_index_retval=$i
@@ -361,7 +361,7 @@ prompt_to_action()
 {
     # args- $1: array
     # args- $2: repeatable prompt
-    
+
     local prompt_to_action_choice=""
     local prompt_to_action_validAnswers=("${!1}")
 
