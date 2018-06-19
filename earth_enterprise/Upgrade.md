@@ -1,8 +1,8 @@
-# Upgrading Earth Enterprise Fusion and Server to version 5.2.2
+# Upgrading Earth Enterprise Fusion and Server to version 5.2.3
 
-Upgrading to GEE 5.2.2 is supported from Earth Enterprise 5.2.0 or 5.2.1 version.
+Upgrading to GEE 5.2.3 is supported from Earth Enterprise 5.2.0, 5.2.1 and 5.2.2 version.
 
-Do NOT uninstall GEE 5.2.x. We recommend that you upgrade GEE 5.2.x by simply installing GEE 5.2.2. Installing GEE 5.2.2 on top of GEE 5.2.x will ensure that your PostgreSQL databases are backed up and upgraded correctly to the new PostgreSQL version used by GEE 5.2.2. 
+Do NOT uninstall GEE 5.2.x. We recommend that you upgrade GEE 5.2.x by simply installing GEE 5.2.3. Installing GEE 5.2.3 on top of GEE 5.2.0 will ensure that your PostgreSQL databases are backed up and upgraded correctly to the new PostgreSQL version introduced in GEE 5.2.1 (and now part of 5.2.2 and 5.2.3).
 
 Upgrade is supported using either scripts or RPMs:
 
@@ -19,7 +19,7 @@ Upgrade is supported using either scripts or RPMs:
     ```
 
 ## Upgrading with RPM packages (Redhat and CentOS only)
-Alternatively, instead of using scripts, on Redhat and Centos, you can upgrade GEE 5.2.0 or 5.2.1 to GEE 5.2.2 using [RPM packages](https://github.com/google/earthenterprise/blob/master/earth_enterprise/BUILD_RPMS.md).
+Alternatively, instead of using scripts, on Redhat and Centos, you can upgrade GEE 5.2.0, 5.2.1 or 5.2.2 to GEE 5.2.3 using [RPM packages](https://github.com/google/earthenterprise/blob/master/earth_enterprise/BUILD_RPMS.md).
 
 Upgrading from any previous version installed via RPM:
 1. Install the RPM like normal (e.g. `sudo yum install opengee-*.rpm`) and the RPM will take care of the upgrade for you.
@@ -42,7 +42,7 @@ Upgrading from any previous version installed via RPM:
 ## Uninstall notes
 Uninstall is NOT recommended before upgrading.
 
-If you decide that you want to uninstall GEE 5.2.0 before installing GEE 5.2.2, first make sure to backup your PostgreSQL databases. Please keep in mind that the database backup, made by 5.2.0, would not be compatible with GEE 5.2.2 PostgreSQL databases.
+If you decide that you want to uninstall GEE 5.2.0 before installing GEE 5.2.3, first make sure to backup your PostgreSQL databases. Please keep in mind that the database backup, made by 5.2.0, would not be compatible with GEE 5.2.3 PostgreSQL databases.
 
     * Create a backup folder: `mkdir -p /tmp/MyBackupFolder`
     * Make gepguser owner of the created folder: `chown gepguser /tmp/MyBackupFolder`
