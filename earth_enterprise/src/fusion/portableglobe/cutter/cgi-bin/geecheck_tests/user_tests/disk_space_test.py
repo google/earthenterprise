@@ -17,6 +17,7 @@
 
 import os
 import xml.etree.ElementTree as ET
+from geecheck_tests import common
 
 # Need to use unittest2 for Python 2.6.
 try:
@@ -69,6 +70,7 @@ def getFsFreespace(pathname):
 
 class TestDiskSpace(unittest.TestCase):
 
+    @unittest.skipUnless(common.IsFusionInstalled(), 'Fusion is not installed')
     def testAdequateDiskSpace(self):
       """Check that the remaining disk space is at least 20%."""
       self.assertLessEqual(20, getDiskInfo())
