@@ -1,0 +1,145 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Inspecting portable files</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 4590263.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/4580164.html">Welcome to Portable 5.0</a></p>
+<p class="sidebar-toc"><a href="../answer/4594620.html">Portable Release Notes 5.0</a></p>
+<p class="sidebar-toc"><a href="../answer/3230746.html">Portable User Guide</a></p>
+<p class="sidebar-toc"><a href="../answer/4485225.html">Portable Globe and Server 5.2</a></p>
+<p class="sidebar-toc"><a href="../answer/3230807.html">Portable Developer Guide</a></p>
+<p class="sidebar-toc"><a href="../answer/3253752.html">Hello Earth! code sample</a></p>
+<p class="sidebar-toc"><a href="../answer/3253275.html">Hello Maps! code sample</a></p>
+<p class="sidebar-toc"><a href="../answer/4590263.html" class="current-file">Inspecting portable files</a></p>
+<p class="sidebar-toc"><a href="../answer/1066449.html">Custom folders</a></p>
+<p class="sidebar-toc"><a href="../answer/3003324.html">Cutter tool system information</a></p>
+<p class="sidebar-toc"><a href="../answer/3003337.html">Manually halt the cutter process</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Portable</h1>
+<h2>Inspecting portable files</h2>
+<p>The <code>geglxinfo</code> command provides different tools to analyze the composition of .glm, .glb, and .glc portable files. For example, you can determine the files included in a portable, extract those files, and test whether the portable file appears to be valid.</p>
+<h2>geglxinfo</h2>
+<pre>
+<code>geglxinfo [--glx <em>glb_file_path</em>]</code></pre>
+<h4>Purpose</h4>
+<p>To inspect the .glc, .glb, .glm, or .glc files, the <code>geglxinfo</code> tool analyzes the composition and provides valuable information when you need to troubleshoot any issues that may arise when serving your portable files.</p>
+<h4>Examples</h4>
+<p><strong>Valid file check</strong></p>
+<pre><code>$ geglxinfo --glx NaturalView-US.glm --is_gee
+IsGee: 1</code>
+</pre>
+<p><strong>Get file timestamp</strong></p>
+<p><code>$ geglxinfo --glx tutorial_3d.glc --extract_file earth/info.txt --output /tmp/info.txt<br/>
+$ cat /tmp/info.txt<br/>
+Portable Globe<br/>
+Copyright 2013 Google Inc. All Rights Reserved.<br/>
+2014-01-15 16:03:15 GMT<br/>
+<br/>
+2014-01-15 08:03:15<br/>
+Globe description: Simple container for tutorial glb with gray marble backdrop.<br/>
+2014-01-15 08:03:15<br/>
+Executing: /opt/google/bin/gecreatemetadbroot --output="/tmp/cutter/glc_20598_1389801795.111116/metadbroot" --layers="/tmp/cutter/glc_20598_1389801795.111116/earth/dbroot_layer_info.txt"  --has_base_imagery<br/>
+<br/>
+2014-01-15 08:03:15<br/>
+SUCCESS<br/>
+2014-01-15 08:03:15<br/>
+Executing: /opt/google/bin/geportableglcpacker --layer_info="/tmp/cutter/glc_20598_1389801795.111116/earth/layer_info.txt" --output="/tmp/cutter/glc_20598_1389801795.111116/temp.glc" --make_copy<br/>
+</code></p>
+<br/>
+<div class="tip">
+<p>You can use the timestamp information if you need to determine which version of GEE was used to create your portable globes or map. This information can be useful if you use the new feature in GEE 5.x that lets you cut globes and maps from existing portable files that have been built using GEE 5.x only. See <a href="../answer/3230777.html">Create portable globes and maps</a>.</p>
+<p>If you attempt to cut a portable file that was created using GEE 4.x, the cutting process will fail. However, you can serve portable files created using previous versions.</p>
+<p>To determine which version of GEE was used to create a portable file, use <code>geglxinfo</code> or view the timestamp information for served globes or maps via <code>http://localhost:9335/earth/info.txt</code> on a local
+Portable Server, or <code>http://&lt;server&gt;/&lt;mount_point&gt;/earth/info.txt</code> on Earth Server.</p>
+</div>
+<p><strong>Check CRC</strong></p>
+<pre><code>$ geglxinfo --glx NaturalView-US.glm --check_crc
+
+File crc: 0x7e6fbbfc
+Calculated crc :0x7e6fbbfc
+Good crc!
+</code></pre>
+<p><strong>List files</strong></p>
+<pre><code>$ geglxinfo --glx NaturalView-US.glm --list_files<br>
+Index has 11 files.
+0: earth/earth_local.html
+offset: 233330751
+size: 1731
+1: earth/info.txt
+offset: 233332482
+size: 1849
+2: earth/polygon.kml
+offset: 233334331
+size: 124947
+3: icons/541_l.png
+offset: 233463282
+size: 363
+4: icons/773_l.png
+offset: 233463645
+size: 226
+5: icons/shield1_l.png
+offset: 233462733
+size: 549
+6: mapdata/index
+offset: 226176927
+size: 7153824
+7: mapdata/pbundle_0000
+offset: 0
+size: 226176927
+8: maps/map.json
+offset: 233461561
+size: 1172
+9: maps/map_v3.html
+offset: 233459278
+size: 2283
+10: search_db/gepoi_14
+offset: 233463871
+size: 250
+</br></code></pre>
+<p><strong>Number of packets</strong></p>
+<pre><code>$ geglxinfo --glx NaturalView-US.glm --number_of_packets
+298076 packets
+</code></pre>
+<h3>geglxinfo commands</h3>
+<pre>
+<code>--is_gee</code></pre>
+<p><em>Optional</em>. Checks whether the glx file appears to be a valid globe or map. Returns a value of 1 is globe is valid; 0 if found to have errors. Use this validity check before testing your globe using <code>--crc</code>, especially on larger files, as it will catch almost all integrity issues.</p>
+<pre>
+<code>--glx <em>glb_file_path</em></code></pre>
+<p>The path and file name of the portable globe or map that you want to analyze. </p>
+<pre>
+<code>--list_files</code></pre>
+<p><em>Optional</em>. Lists all of the files in the glx.</p>
+<pre>
+<code>--id</code></pre>
+<p><em>Optional</em>. Unused.</p>
+<pre>
+<code>--check_crc</code></pre>
+<p><em>Optional</em>. Checks the crc of the glx. </p>
+<pre>
+<code>--extract_file <em>relative_file_path</em></code></pre>
+<p><em>Optional</em>. File to be extracted from the glx. Use this option when you want to extract a .glm or .glb layer from one .glc in order to add it to a second .glc file. </p>
+<pre>
+<code>--extract_all_files</code></pre>
+<p><em>Optional</em>. Extract all files from the glx. Use this option when you want to extract .glm or .glb layers from one .glc in order to add them to a second .glc file. </p>
+<pre>
+<code>--number_of_packets</code></pre>
+<p><em>Optional</em>. Returns the number of data packets in the glx. </p>
+<pre>
+<code>--extract_packet <em>quadtree_address</em> </code></pre>
+<p><em>Optional</em>. Extracts a packet at a given quadtree address, for example, 310. </p>
+<pre>
+<code>--packet_type <em>type_string</em> </code></pre>
+<p><em>Optional</em>. Type of packet to extract: <code>dbroot, qtp, img, ter, or vec</code>.</p>
+<pre>
+<code>--packet_channel <em>channel_int</em> </code></pre>
+<p><em>Optional</em>. Channel of packet to extract.</p>
+<pre>
+<code>--output <em>dest_file_path</em> </code></pre>
+<p><em>Optional</em>. Destination file path where extracted file(s) should be written.</p>
+<p>See <a href="../answer/3479921.html">Settings</a> to learn about globe assembly and disassembly tools in the GEE Server Admin console.</p><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>

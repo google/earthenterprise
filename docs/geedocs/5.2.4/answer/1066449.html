@@ -1,0 +1,53 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Custom folders</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 1066449.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/4580164.html">Welcome to Portable 5.0</a></p>
+<p class="sidebar-toc"><a href="../answer/4594620.html">Portable Release Notes 5.0</a></p>
+<p class="sidebar-toc"><a href="../answer/3230746.html">Portable User Guide</a></p>
+<p class="sidebar-toc"><a href="../answer/4485225.html">Portable Globe and Server 5.2</a></p>
+<p class="sidebar-toc"><a href="../answer/3230807.html">Portable Developer Guide</a></p>
+<p class="sidebar-toc"><a href="../answer/3253752.html">Hello Earth! code sample</a></p>
+<p class="sidebar-toc"><a href="../answer/3253275.html">Hello Maps! code sample</a></p>
+<p class="sidebar-toc"><a href="../answer/4590263.html">Inspecting portable files</a></p>
+<p class="sidebar-toc"><a href="../answer/1066449.html" class="current-file">Custom folders</a></p>
+<p class="sidebar-toc"><a href="../answer/3003324.html">Cutter tool system information</a></p>
+<p class="sidebar-toc"><a href="../answer/3003337.html">Manually halt the cutter process</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Portable</h1>
+<h2>Custom folders</h2>
+<p>By default, GEE Portable stores cut globes in the Apache Document root of the GEE Server at <code>/opt/google/gehttpd/htdocs/cutter/globes</code>. However, you can move the portable globes folder to a custom location. You might want to do this, for example, if this path is within a volume with limited storage space and you have space available in a separate volume.</p>
+<h2>Before you begin</h2>
+<ul>
+<li>Install and configure GEE Server on the machine that will support users who create portable globes.</li>
+<li>Identify the path to your globes folder. This can be the same mount point for external storage of source data or the GEE Server Publish Root.</li>
+<li>Gain access to an account with root-level privileges.</li>
+</ul>
+<h3>To create a custom globes folder:</h3>
+<ol>
+<li>Make sure that no globe cutting operations are in progress. Creating a custom folder makes modifications directly to the folder where portable globes are hosted and can interfere with any ongoing globe cutting operations.</li>
+<li>Stop the GEE Server service:<br/>
+<code>sudo /etc/init.d/geserver stop </code><br/>
+<li>Use either of the methods below to set up your custom folder:
+<ul>
+<li>Create a new folder:<br/>
+<code>mkdir <em>/gevol/src/globes</em></code></li>
+<li>Move the original folder to a storage volume:<br/>
+<code>mv /opt/google/gehttpd/htdocs/cutter/globes <em>/gevol/src/globes</em></code></li>
+</ul>
+</li>
+<li>Create a symbolic link from the custom folder to the original folder location:<br/>
+<code>ln -sf <em>/gevol/src/globes</em> /opt/google/gehttpd/htdocs/cutter/globes</code></li>
+<li>Change ownership of the custom folder to <code>geapacheuser:gegroup</code> and change permissions to 755 (rwxr-wr-w):<br/>
+<code>chown -R geapacheuser:gegroup <em>/gevol/src/globes</em></code><br/>
+<code>chmod -R 755 <em>/gevol/src/globes</em></code></li>
+<li>Start the GEE Server service.</li>
+<li>To test that globe cutting works, load the GEE Globe Cutting web page and either create a new portable globe or test with an existing globe. If you have an existing globe, click <strong>List globes and maps directory</strong> in the GEE Globe Cutting web page and make sure that your globe appears there.</li>
+</ol>
+<div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>
