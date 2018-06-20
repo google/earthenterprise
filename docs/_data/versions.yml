@@ -1,0 +1,10 @@
+- version: 5.2.0
+  stability: stable
+- version: 5.2.1
+  stability: stable
+- version: 5.2.2
+  stability: latest stable
+- version: 5.2.3
+  stability: unstable
+- version: 5.2.4
+  stability: unstable
