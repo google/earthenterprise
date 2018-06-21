@@ -68,7 +68,6 @@ AssetProperties::AssetProperties( QWidget* parent, const gstAssetHandle &handle 
     : AssetPropertiesBase( parent, 0, false, Qt::WDestructiveClose ), assetHandle( handle )
 {
   versionsList->setSorting( 0, false );
-  //aquisitionDate->setSeparator( "-" );
 
   Asset asset = handle->getAsset();
   nameLabel->setText( shortAssetName( handle->getName() ) );

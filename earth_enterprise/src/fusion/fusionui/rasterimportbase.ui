@@ -152,12 +152,12 @@
                 <cstring>TextLabel1_5</cstring>
             </property>
             <property name="text">
-                <string>Aquisition Date (Y/M/D):</string>
+                <string>Acquisition Date (Y/M/D):</string>
             </property>
         </widget>
         <widget class="QDateEdit" row="2" column="1">
             <property name="name">
-                <cstring>aquisitionDate</cstring>
+                <cstring>AcquisitionDate</cstring>
             </property>
             <property name="order">
                 <enum>YMD</enum>
@@ -852,7 +852,7 @@
     </connection>
 </connections>
 <tabstops>
-    <tabstop>aquisitionDate</tabstop>
+    <tabstop>AcquisitionDate</tabstop>
     <tabstop>providerCombo</tabstop>
     <tabstop>maskTypeCombo</tabstop>
     <tabstop>featherSpin</tabstop>
