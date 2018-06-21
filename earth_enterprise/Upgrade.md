@@ -1,8 +1,8 @@
 # Upgrading Earth Enterprise Fusion and Server to version 5.2.3
 
-Upgrading to GEE 5.2.3 is supported from Earth Enterprise 5.2.0, 5.2.1, and 5.2.2 version.
+Upgrading to GEE 5.2.3 is supported from Earth Enterprise versions 5.2.0, 5.2.1, and 5.2.2.
 
-Do NOT uninstall GEE 5.2.x. We recommend that you upgrade GEE 5.2.x by simply installing GEE 5.2.3. Installing GEE 5.2.3 on top of GEE 5.2.x will ensure that your PostgreSQL databases are backed up and upgraded correctly to the new PostgreSQL version introduced in GEE 5.2.1 (and now part of 5.2.2 and 5.2.3). 
+Do NOT uninstall GEE 5.2.x. We recommend that you upgrade GEE 5.2.x by simply installing GEE 5.2.3. Installing GEE 5.2.3 on top of GEE 5.2.x will ensure that your PostgreSQL databases are backed up and upgraded correctly to the new PostgreSQL version introduced in GEE 5.2.1 (now part of 5.2.2 and 5.2.3). 
 
 Upgrade is supported using either scripts or RPMs:
 
