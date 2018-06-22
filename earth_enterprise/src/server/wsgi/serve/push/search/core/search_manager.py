@@ -1,6 +1,7 @@
 #!/usr/bin/python
 #
 # Copyright 2017 Google Inc.
+# Copyright 2018 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -41,7 +42,7 @@ class SearchManager(object):
     super(SearchManager, self).__init__()
 
     # Init database connections
-    self._host = "localhost"
+    self._host = '/tmp'
     self._search_database = "gesearch"
     self._poi_database = "gepoi"
     self._db_user = "geuser"

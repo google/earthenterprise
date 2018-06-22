@@ -520,6 +520,20 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     directory('/var/opt/google/pgsql', 0700)
     directory('/var/opt/google/pgsql/logs')
 
+    filesMatching(
+        ['/etc/init.d/geserver']
+    ) {
+        it.mode = 0755
+    }
+
+    // since these are "sourced" they cannot be exec...
+    filesMatching(
+        ['/etc/profile.d/ge-server.csh',
+         '/etc/profile.d/ge-server.sh']
+    ) {
+        it.mode = 0644
+    }
+
     from(stagedInstallDir_server_opt) {
         // libpq is in the opengee-postgis package:
         exclude 'google/lib/libpq.*'
@@ -626,11 +640,17 @@ built from raster, vector, and location properties data.
     directory('/var/opt/google/log', 0775)
 
     filesMatching(
-        ['/etc/init.d/gefusion',
-         '/etc/profile.d/ge-fusion.csh',
-         '/etc/profile.d/ge-fusion.sh']
+        ['/etc/init.d/gefusion']
     ) {
         it.mode = 0755
+    }
+
+    // since these are "sourced" they cannot be exec...
+    filesMatching(
+        ['/etc/profile.d/ge-fusion.csh',
+         '/etc/profile.d/ge-fusion.sh']
+    ) {
+        it.mode = 0644
     }
 
     from(stagedInstallDir_fusion) {
