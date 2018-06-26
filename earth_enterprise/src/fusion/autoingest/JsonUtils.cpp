@@ -316,7 +316,7 @@ std::string JsonUtils::JsonObject(
     if (iter != field_map.begin()) {
       buffer << ",\n";  // Note: IE6 doesn't like trailing commas.
     }
-    buffer << iter->first << " : " << iter->second;
+    buffer << Quoted(iter->first) << " : " << iter->second;
   }
   buffer << "\n}\n";
   return buffer.str();
