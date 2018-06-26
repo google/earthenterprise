@@ -124,8 +124,16 @@ gtag('config', 'UA-108632131-2');
           <tr>
             <td>835</td>
             <td>GE Server gets its URL from the client instead of itself</td>
-            <td>Fixed code so that when you publish DB, GEServer's URL will be used and not the URL which we get from the Publish request message</td>
-          </tr>
+            <td>Fixed code so that when you publish DB, GEServer's URL will be used and not the URL which we get from the Publish request message.</td>
+          </tr>        
+          <tr>
+            <td>877</td>
+            <td>Fusion RPM install scripts to only <code>chown</code> the asset root when necessary</td>
+            <td>
+              Recursively <code>chown</code> only when the asset root directory has incorrect ownership on a Fusion master host.
+              This allows upgrading Fusion on machines where changing asset root ownership recursively would be very expensive.
+            </td>
+          </tr>        
         </tbody>
       </table>
   <h5>
