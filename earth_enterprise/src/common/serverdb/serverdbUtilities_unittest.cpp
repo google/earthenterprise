@@ -14,50 +14,50 @@ protected:
     }
 
     std::string GetJavaScriptString() {
-        std::string test_string =
-        "{"
-        "dbType : \"gedb\","
-        "isAuthenticated : false,"
-        "layers :"
-        "["
-        "{"
-        "description : \"\","
-        "id : \"4c8ca722-73cd-11e8-8e36-a969646ae0ac\","
-        "isEnabled : true,"
-        "isExpandable : false,"
-        "isInitiallyOn : true,"
-        "isVisible : true,"
-        "label : \"Imagery\","
-        "lookAt : \"none\""
-        "}"
-        "]"
-        ","
-        "serverUrl : \"http://localhost/testdb-v001\""
-        "}";
+        std::string test_string = R"(
+        {
+            dbType : "gedb",
+            isAuthenticated : false,
+            layers :
+            [
+                {
+                    description : "",
+                    id : "4c8ca722-73cd-11e8-8e36-a969646ae0ac",
+                    isEnabled : true,
+                    isExpandable : false,
+                    isInitiallyOn : true,
+                    isVisible : true,
+                    label : "Imagery",
+                    lookAt : "none"
+                }
+            ]
+            ,
+            serverUrl : "http://localhost/testdb-v001"
+        })";
         return test_string;
     }
 
     std::string GetJSONString() {
-        std::string json_string =
-        "{"
-        "\"dbType\" : \"gedb\","
-        "\"isAuthenticated\" : false,"
-        "\"layers\" :"
-        "["
-        "{"
-        "\"description\" : \"\","
-        "\"id\" : \"4c8ca722-73cd-11e8-8e36-a969646ae0ac\","
-        "\"isEnabled\" : true,"
-        "\"isExpandable\" : false,"
-        "\"isInitiallyOn\" : true,"
-        "\"isVisible\" : true,"
-        "\"label\" : \"Imagery\","
-        "\"lookAt\" : \"none\""
-        "}"
-        "]"
-        ","
-        "\"serverUrl\" : \"http://localhost/testdb-v001\""
-        "}";
+        std::string json_string = R"(
+        {
+            "dbType" : "gedb",
+            "isAuthenticated" : false,
+            "layers" :
+            [
+                {
+                    "description" : "",
+                    "id" : "4c8ca722-73cd-11e8-8e36-a969646ae0ac",
+                    "isEnabled" : true,
+                    "isExpandable" : false,
+                    "isInitiallyOn" : true,
+                    "isVisible" : true,
+                    "label" : "Imagery",
+                    "lookAt" : "none"
+                }
+            ]
+            ,
+            "serverUrl" : "http://localhost/testdb-v001"
+        })";
         return json_string;
     }
 
