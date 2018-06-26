@@ -21,3 +21,6 @@ earth_enterprise/tutorial/FusionTutorial/KML
 /*.files
 /*.includes
 
+# CLion project files.
+.idea/
+cmake-build*/
