@@ -149,9 +149,10 @@ install_or_upgrade_asset_root()
     if [ ! -d "$ASSET_ROOT/.config" ]; then
         "$BASEINSTALLDIR_OPT/bin/geconfigureassetroot" --new --noprompt \
             --assetroot "$ASSET_ROOT" --srcvol "$SOURCE_VOLUME"
-        chown -R "$GEFUSIONUSER:$GEGROUP" "$ASSET_ROOT"
     else
-        # upgrade asset root -- if this is a master
+        # Upgrade the asset root, if this is a Fusion master host.
+        #   Fusion slaves access the same files over NFS, and they rely on the
+        # master to keep proper confguration and file permissions.
         if [ "$IS_SLAVE" = "false" ]; then
             OWNERSHIP=`find "$ASSET_ROOT" -maxdepth 0 -printf "%g:%u"`
             if [ "$OWNERSHIP" != "$GEGROUP:$GEFUSIONUSER" ] ; then
@@ -176,10 +177,10 @@ END
             # unless absolutely necessary
             "$BASEINSTALLDIR_OPT/bin/geconfigureassetroot" --fixmasterhost \
                 --noprompt  $NOCHOWN --assetroot $ASSET_ROOT
-            "$BASEINSTALLDIR_OPT/bin/geupgradeassetroot" --noprompt $NOCHOWN \
+            # If `geconfigureassetroot` already updated ownership, don't do it again:
+            "$BASEINSTALLDIR_OPT/bin/geupgradeassetroot" --noprompt --nochown \
                 --assetroot "$ASSET_ROOT"
-            chown -R "$GEFUSIONUSER:$GEGROUP" "$ASSET_ROOT"
-        fi  
+        fi
     fi
 }
 
