@@ -45,6 +45,7 @@ class MapTileUtils {
   static const MimeType kJpegMimeType;
   static const MimeType kPngMimeType;
   static const MimeType kJavascriptMimeType;
+  static const MimeType kJSONMimeType;
   static const MimeType kRedirectMimeType;
   static const MimeType kNotFoundMimeType;
 

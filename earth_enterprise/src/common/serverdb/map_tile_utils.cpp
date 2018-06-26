@@ -171,6 +171,7 @@ const MimeType MapTileUtils::kOctetMimeType("application/octet-stream");
 const MimeType MapTileUtils::kJpegMimeType("image/jpeg");
 const MimeType MapTileUtils::kPngMimeType("image/png");
 const MimeType MapTileUtils::kJavascriptMimeType("text/javascript");
+const MimeType MapTileUtils::kJSONMimeType("application/json");
 const MimeType MapTileUtils::kRedirectMimeType("redirect");
 const MimeType MapTileUtils::kNotFoundMimeType("not found");
 

@@ -28,6 +28,8 @@
 #include "common/proto_streaming_imagery.h"
 #include "common/geGdalUtils.h"
 #include "common/generic_utils.h"
+#include "common/serverdb/serverdbUtilities.h"
+
 
 int ServerdbReader::CheckLevel(const geindex::TypedEntry::ReadKey &read_key,
                                uint32 level, uint32 row, uint32 col) {
@@ -138,7 +140,7 @@ ServerdbReader::ServerdbReader(geFilePool& file_pool,
   for (; iter != config_.json_paths.end(); ++iter) {
     std::string buf;
     file_pool.ReadStringFile(serverdb_path_ + "/" + iter->second, &buf);
-    json_[iter->first] = buf;
+    javascript_[iter->first] = buf;
   }
 
   // Load the icons from the icons dir in memory as well.
@@ -396,8 +398,11 @@ const MimeType ServerdbReader::GetData(
     } else if (request == "Json") {
       std::string json_variable_name = arg_map["var"];
       // CheckJavascriptName(json_variable_name);
-      GetJson(json_variable_name, language, region, buf);
+      GetJavaScript(json_variable_name, language, region, buf);
       return MapTileUtils::kJavascriptMimeType;
+    } else if (request == "JsonOnly") {
+      GetJSON(language, region, buf);
+      return MapTileUtils::kJSONMimeType;
     } else if (request == "LayerDefs") {
       if (GetToc(language, region,
                  std::string() /* output= not supported for LayerDefs */,
@@ -576,19 +581,28 @@ const MimeType ServerdbReader::GetResampledImageryMapsTile(
                                               format);
 }
 
-void ServerdbReader::GetJson(const std::string& json_variable_name,
+void ServerdbReader::GetJavaScript(const std::string& javascript_variable_name,
                              const std::string& language,
                              const std::string& region,
                              ReadBuffer& buf) {
-  const std::string& json = GetLocaleKey(json_, language, region);
-  if (json_variable_name.empty()) {
-    // Return raw JSON
-    buf.SetValue(json);
+  const std::string& javascript = GetLocaleKey(javascript_, language, region);
+  if (javascript_variable_name.empty()) {
+    // Return raw JavaScript
+    buf.SetValue(javascript);
   } else {
-    // Return a Javascript version of the JSON with the variable name declared.
-    std::string javascript = "var " + json_variable_name + " = " + json + ";\n";
+    // Return a version of the JavaScript with the variable name declared.
+    std::string javascript = "var " + javascript_variable_name + " = " + javascript + ";\n";
     buf.SetValue(javascript);
   }
+}
+
+void ServerdbReader::GetJSON(const std::string& language,
+                             const std::string& region,
+                             ReadBuffer& buf) {
+  const std::string& javascript = GetLocaleKey(javascript_, language, region);
+  ServerdbUtilities utilities;
+  std::string json = utilities.ParseValidJSON(javascript);
+  buf.SetValue(json);
 }
 
 namespace {

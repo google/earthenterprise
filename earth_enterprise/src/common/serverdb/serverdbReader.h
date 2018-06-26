@@ -107,14 +107,21 @@ class ServerdbReader {
   bool GetToc(const std::string& language, const std::string& region,
               const std::string& output,
               ReadBuffer& buf);
-  // Get the JSON text buffer associated with the given language and region.
-  // json_variable_name : an optional variable name to be prepended on the JSON
+  // Get the JavaScript text buffer associated with the given language and region.
+  // json_variable_name : an optional variable name to be prepended on the JavaScript
   //                      which allows it to be loaded as a JS variable.
-  // buf : buffer for the ouptut JSON/Javascript text.
-  void GetJson(const std::string& json_variable_name,
+  // buf : buffer for the output Javascript text.
+  void GetJavaScript(const std::string& json_variable_name,
                const std::string& language,
                const std::string& region,
                ReadBuffer& buf);
+
+  // Get the JSON text buffer associated with the given language and region.
+  // buf : buffer for the output JSON text.
+  void GetJSON(const std::string& language,
+               const std::string& region,
+               ReadBuffer& buf);
+
   void GetIcon(const std::string& icon_path, ReadBuffer& buf,
                const bool size_only);
 
@@ -147,7 +154,7 @@ class ServerdbReader {
   ServerdbConfig config_;
   ServerdbConfig::Map proto_toc_;
   ServerdbConfig::Map toc_;
-  ServerdbConfig::Map json_;
+  ServerdbConfig::Map javascript_;
   std::map<std::string, std::string> icons_;
   geindex::UnifiedReader* index_reader_;
   std::string searchtabs_js_;
