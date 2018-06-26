@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Release notes: GEE 5.1.3</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
+</head>
+<body>
+<!-- 7159245.html -->
+<div class="container">
+<div class="sidebar1">
+  <p class="sidebar-toc"><a href="../answer/7160004.html">Open GEE 5.2.4</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160003.html">Open GEE 5.2.3</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160002.html">Open GEE 5.2.2</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160001.html">Open GEE 5.2.1</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160000.html">Open GEE 5.2.0</a></p>
+  <p class="sidebar-toc"><a href="../answer/7159245.html" class="current-file">GEE 5.1.3</a></p>
+  <p class="sidebar-toc"><a href="../answer/6259403.html">GEE 5.1.2</a></p>
+  <p class="sidebar-toc"><a href="../answer/6159443.html">GEE 5.1.1</a></p>
+  <p class="sidebar-toc"><a href="../answer/6078762.html">GEE 5.1.0</a></p>
+  <p class="sidebar-toc"><a href="../answer/6053170.html">GEE 5.0.2</a></p>
+  <p class="sidebar-toc"><a href="../answer/4556704.html">GEE 5.0.1</a></p>
+  <p class="sidebar-toc"><a href="../answer/3424202.html">GEE 5.0</a></p>
+</div>
+<div class="content"> <a name="top_of_file"></a>
+  <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+  <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Release notes</h1>
+  <h2>Release notes: GEE 5.1.3</h2>
+  <p>GEE 5.1.3 is an incremental release of <a href="../answer/6078762.html">GEE 5.1</a>. It contains several bug fixes in Fusion and GEE Server, and updates to third-party libraries.</p>
+  <h5>
+    <p id="supported_5.1.3">Supported Platforms</p>
+  </h5>
+  <p>The Google Earth Enterprise 5.1.3 release is supported on 64-bit versions of the following operating systems:</p>
+  <ul>
+    <li>Red Hat Enterprise Linux versions 6.0 to 7.2, including the most recent security patches</li>
+    <li>CentOS 6.0 to 7.2</li>
+    <li>Ubuntu 10.04, 12.04 and 14.04 LTS</li>
+  </ul>
+  <p>Google Earth Enterprise 5.1.3 is compatible with Google Earth Enterprise Client (EC) version 7.1.8 and Google Earth Plug-in versions 7.0.1 - 7.1.5.1557 for Windows and Mac.</p>
+  <h5>
+    <p id="library_updates_5.1.3">Library updates</p>
+  </h5>
+  <table class="nice-table">
+    <tbody>
+      <tr>
+        <th width="50%">Library</th>
+        <th width="50%">Updated version</th>
+      </tr>
+      <tr>
+        <td>GDAL</td>
+        <td>2.1.2</td>
+      </tr>
+      <tr>
+        <td>Google Maps JS API V3</td>
+        <td>3.27</td>
+      </tr>
+      <tr>
+        <td>Apache httpd</td>
+        <td>2.2.32</td>
+      </tr>
+      <tr>
+        <td>OpenSSL</td>
+        <td>1.0.2k</td>
+      </tr>
+      <tr>
+        <td>freetype</td>
+        <td>2.6.1</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5>
+    <p id="known_issues_5_1_3">Known Issues</p>
+  </h5>
+  <table class="nice-table">
+    <tbody>
+      <tr>
+        <th>Number</th>
+        <th class="narrow">Description</th>
+        <th>Workaround</th>
+      </tr>
+      <tr>
+        <td>31619151</td>
+        <td>Missing historical imagery dates in EC timeslider</td>
+        <td>Ensure all assets in the project have valid timestamps and they are unique (in case some of the resources have the same date &amp; time).</td>
+      </tr>
+      <tr>
+        <td>35093485</td>
+        <td>Google basemap fails to load in 2D Mercator databases built with "Use Google Basemap" option</td>
+        <td>Edit /opt/google/gehttpd/htdocs/maps/maps_google.html to include a valid API Key (or client id) to the Maps API Javascript call.  See https://developers.google.com/maps/documentation/javascript/error-messages#no-api-keys</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5>
+    <p id="resolved_issues_5.1.3">Resolved Issues</p>
+  </h5>
+  <table class="nice-table">
+    <tbody>
+      <tr>
+        <th>Number</th>
+        <th class="narrow">Description</th>
+        <th>Resolution</th>
+      </tr>
+      <tr>
+        <td>1644180</td>
+        <td>Improve granularity of image acquisition date</td>
+        <td>Fixed in Fusion: imagery acquisition date now supports hours, minutes and seconds with the (ISO-8601) format <code>YYYY-MM-DD hh:mm:ss</code>.  This new extended timestamp is backward compatible and enabled in the Fusion UI as well as command-line tools. Client support is being added to EC's timeslider; updated version coming soon.</td>
+      </tr>
+      <tr>
+        <td>11271105</td>
+        <td><code>gekmlgrabber</code> fails to grab KML files referenced with relative URLs</td>
+        <td>Fixed in Cutter.</td>
+      </tr>
+      <tr>
+        <td>17300345, 18021264</td>
+        <td>Missing cache_alpha files reported when building projects with pre-processed source data (KIP)</td>
+        <td>Fixed in Fusion: after upgrading, clean the latest blocked version of the database, clean the latest blocked version of the imagery/terrain project, and then rebuild.</td>
+      </tr>
+      <tr>
+        <td>21760202</td>
+        <td>gesystemmanager consumes large amount of of resources (cpu &amp; memory) when cancelling large projects</td>
+        <td>Fixed in Fusion: optimized cache when building raster projects.</td>
+      </tr>
+      <tr>
+        <td>24375793</td>
+        <td>Use asynchronous communication with server in Portable Viewer</td>
+        <td>Fixed in Portable Server.</td>
+      </tr>
+      <tr>
+        <td>24469566</td>
+        <td>Search bar disappears after clicking 'go to polygon' in Portable Viewer</td>
+        <td>Fixed in Portable Server.</td>
+      </tr>
+      <tr>
+        <td>25954774</td>
+        <td>Implement swap and replace functions when publishing databases</td>
+        <td>Fixed in GEE Server: to facilitate updates to existing published databases, <code>geserveradmin</code> supports <code>--republish</code> of databases which involves unpublishing an existing target, and publishing a new database on that same target while retaining its publish context i.e. virtual host, snippets, search services, WMS-serving.  The <code>--swaptargets</code> option swaps the target path of two published databases along with their publish context.  This makes it easy to test or revert databases in production environments.  For more information, see <code>geserveradmin</code> usage.</td>
+      </tr>
+      <tr>
+        <td>26964919, 27346002</td>
+        <td>POI searches fail when servers deployed behind load-balancer</td>
+        <td>Fixed in GEE Server: deprecate database ID (db_id), and modify POI search service to query poi_id based on target_path instead.</td>
+      </tr>
+      <tr>
+        <td>27689103</td>
+        <td>Large POI files break database push</td>
+        <td>Fixed in Fusion: Split POI files in 1 GB parts.</td>
+      </tr>
+      <tr>
+        <td>28941507</td>
+        <td> Coordinate search doesn't send search status to Federated search</td>
+        <td>Fixed in GEE Server.</td>
+      </tr>
+      <tr>
+        <td>30189080</td>
+        <td>Security: High risk HTTPoxy vulnerability</td>
+        <td>Fixed in GEE Server: block HTTP Proxy headers in Apache environment.</td>
+      </tr>
+      <tr>
+        <td>30512788</td>
+        <td>Publish fails when only supplementary search tabs are enabled</td>
+        <td>Fixed in GEE Server.</td>
+      </tr>
+      <tr>
+        <td>30974078</td>
+        <td>Portable throws error with blank lines in portable.cfg</td>
+        <td>Fixed in Portable Server.</td>
+      </tr>
+      <tr>
+        <td>31713095</td>
+        <td>Check for duplicate images in Asset Manager</td>
+        <td>Fixed in Fusion: Imagery Resource file dialog checks for duplicates such that the same image cannot be added more than once.</td>
+      </tr>
+      <tr>
+        <td>32120563</td>
+        <td>Get postgreSQL port number from configuration file</td>
+        <td>Fixed in GEE Server: custom port numbers for GEE's postgres service should be specified in the files: /var/opt/google/pgsql/data/postgresql.conf and
+          /opt/google/gehttpd/wsgi-bin/conf/postgres.properties.  (The default port is 5432.)</td>
+      </tr>
+      <tr>
+        <td>32547956</td>
+        <td>Cutter fails if 'rsync' not present on system</td>
+        <td>Fixed in GEE Server: gecutter is no longer dependent on 'rsync' utility.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="footer">
+    <p class="BackToTop"><a href="#top_of_file">Back to top</a>
+    <hr />
+    </p>
+    <p class="copyright">&copy;2015 Google</p>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Troubleshoot push/publishing issues 5.x</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
+</head>
+<body>
+<!-- 6086672.html -->
+<div class="container">
+<div class="sidebar1">
+  <p class="sidebar-toc"><a href="../answer/3481464.html">Before you configure Google Earth Enterprise Fusion</a></p>
+  <p class="sidebar-toc"><a href="../answer/6008655.html">Running Fusion on a Machine with Multiple CPUs</a></p>
+  <p class="sidebar-toc"><a href="../answer/176738.html">Configure task rules</a></p>
+  <p class="sidebar-toc"><a href="../answer/6033487.html">Benchmarking outcomes for applying task rules</a></p>
+  <p class="sidebar-toc"><a href="../answer/3481501.html">Configure font size in the GUI</a></p>
+  <p class="sidebar-toc"><a href="../answer/3481506.html">Configure fonts for the Text Style dialog</a></p>
+  <p class="sidebar-toc"><a href="../answer/3481478.html">Customize your Google Maps landing page</a></p>
+  <p class="sidebar-toc"><a href="../answer/3481512.html">Monitor system processes</a></p>
+  <p class="sidebar-toc"><a href="../answer/3481546.html">Backing up your data</a></p>
+  <p class="sidebar-toc"><a href="../answer/2760661.html">Back up Fusion servers</a></p>
+  <p class="sidebar-toc"><a href="../answer/176676.html">Manage Fusion disk space</a></p>
+  <p class="sidebar-toc"><a href="../answer/6035839.html">Relocate your asset root</a></p>
+  <p class="sidebar-toc"><a href="../answer/3481499.html">Configure your data locations</a></p>
+  <p class="sidebar-toc"><a href="../answer/6034724.html">Push and publish databases</a></p>
+  <p class="sidebar-toc"><a href="../answer/6051700.html">Publish databases using disconnected publishing</a></p>
+  <p class="sidebar-toc"><a href="../answer/6086672.html" class="current-file">Troubleshoot push/publishing issues 5.x</a></p>
+  <p class="sidebar-toc"><a href="../answer/3481558.html">Command reference</a></p>
+</div>
+<div class="content"> <a name="top_of_file"></a>
+  <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+  <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion administration</h1>
+  <h2>Troubleshoot push/publishing issues 5.x</h2>
+  <p>If you're having problems pushing/publishing a database, follow the troubleshooting steps below to debug the issue.</p>
+  <h4>A note about pushing and publishing databases</h4>
+  <p>The <em>push</em> operation copies all the necessary files associated with a given 2D/3D Fusion database version from the Fusion host to Google Earth Enterprise Server and <em>registers</em> the database. Pushing is performed from Fusion.</p>
+  <p>The <em>publish</em> operation makes a previously pushed database available for serving at a specified publish point. Publishing is performed on Google Earth Enterprise Server.</p>
+<p>WIth <em>disconnected publishing</em>, you can create a database that can be output to portable media, which can then be pushed and published to GEE Server.</p>
+<ul>
+  <li><a href="../answer/6034724.html">Push and publish databases</a></li>
+  <li><a href="../answer/3497763.html">Publish databases and portables</a></li>
+  <li><a href="../answer/6051700.html">Publish databases using disconnected publishing</a></li>
+</ul>
+<h3>Troubleshoot Push Issues</h3>
+<p>Errors in the push operation may occur when Fusion fails to copy and register the database files to GEE Server. Use the following debugging steps, presented in a logical order, to uncover and solve any push issues. The error you encounter may depend on the push method you use. For example, a local push may fail simply because of a shortage of disk space. A remote push may fail because of an incorrect server association setting.</p>
+<h3>Push methods</h3>
+<p>The push method depends on how data is transferred between the GEE Fusion host and GEE Server.</p>
+<ul>
+  <li><strong>Local push</strong>. GEE Fusion and Server are on the same host.</li>
+  <li><strong>Remote push</strong>. GEE Fusion pushes to a physically separate GEE Server.</li>
+  <li><strong>Disconnected push</strong>. Data is transferred from the Fusion host to the GEE Server by hard disk instead of a network. For information about pushing disconnected databases, see <a href="../answer/6051700.html">Publish databases using disconnected publishing</a>.</li>
+</ul>
+<h3>Check your server is running correctly</h3>
+<p>If your attempts to push a database result in an error message: “No status message returned from request: http://your.GEEServer.com Unable to contact stream data server,” GEE Server may not be running. Try these steps to determine the state of GEE Server:</p>
+<ol class="spaced-list">
+  <li>Try restarting GEE Server:
+    <p><code>sudo /etc/init.d/geserver restart</code></p>
+  </li>
+  <li>Enter the URL of GEE Server in a browser. You should see the Google Earth Enterprise Server splash screen.</li>
+  <li>Login to the Admin console of GEE Server:
+    <ul>
+      <li>Go to <em>myserver.mydomainname.com/admin</em>, replacing <em>myserver</em> and <em>mydomainname</em> with your server and domain.</li>
+      <li>Sign in with the default credentials:
+        <p>Username: <em>geapacheuser</em></p>
+        <p>Password: <em>geeadmin</em></p>
+      </li>
+    </ul>
+    <div class="tip"> To reset the username and password, run the following command, which prompts you to enter a new username and password:
+      <p><code>sudo /opt/google/gehttpd/bin/htpasswd -c<br/>
+        /opt/google/gehttpd/conf.d/.htpasswd new_user_name</code></p>
+      <p>If you do not know your username and password, contact your system administrator.</p>
+    </div>
+  </li>
+  <li>Review the HTTP and Postgres processes. They should look something like this:
+    <p><code># ps -ef | grep http<br/>
+      root  	9220 	1  0 Mar13 ?    	00:00:00 /opt/google/gehttpd/bin/gehttpd<br/>
+      505  	14608  9220  0 Mar15 ?    	00:00:00 /opt/google/gehttpd/bin/gehttpd<br/>
+      505  	14609  9220  0 Mar15 ?    	00:00:00 /opt/google/gehttpd/bin/gehttpd<br/>
+      <br/>
+      # ps -ef | grep post<br/>
+      gepguser  9206  9195  0 Mar13 ?    	00:00:00 postgres: writer process<br/>
+      gepguser  9207  9195  0 Mar13 ?    	00:00:00 postgres: stats buffer process<br/>
+      gepguser  9208  9207  0 Mar13 ?    	00:00:00 postgres: stats collector process<br/>
+      gepguser 10639  9195  0 Mar13 ?    	00:00:00 postgres: geuser gesearch 127.0.0.1(32772) idle<br/>
+      gepguser 10640  9195  0 Mar13 ?    	00:00:00 postgres: geuser gesearch 127.0.0.1(32773) idle<br/>
+      gepguser 10641  9195  0 Mar13 ?    	00:00:00 postgres: geuser gepoi 127.0.0.1(32774) idle<br/>
+      gepguser 10642  9195  0 Mar13 ?    	00:00:00 postgres: geuser geplaces 127.0.0.1(32775) idle<br/>
+      </code></p>
+    <p>If you have any defunct processes or other unusual entries, stop them or try to find out why they are running. Run <code>/etc/init.d/geserver restart</code> to make sure that the server shuts down and starts up quickly with no error messages. If you still get error messages, take the following steps:</p>
+    <ul>
+      <li>Shut down the server: <code>/etc/init.d/geserver stop</code>.</li>
+      <li>Delete the <code>postmaster.pid</code> file: <code>rm /var/opt/google/pgsql/data/postmaster.pid</code>. (The <code>postmaster.pid</code> file may not have been deleted if PostgreSQL services have not been stopped correctly, thereby preventing another instance of GEE Server from starting.)</li>
+      <li>Reboot your GEE server.</li>
+      <li>Re-run the two <code>ps</code> commands and the <code>geserver restart</code> command to make sure that everything is running properly.</li>
+    </ul>
+  </li>
+  <li>Review the <code>wsgi:ge</code> processes, which are GEE Server services that support pushing and publishing. They should look something like this:
+    <p><code>ps -ef | grep 'wsgi:ge'<br/>
+      65609 7272 3445 0 Aug10 ? 00:00:11 (wsgi:ge_push_serve) -k start<br/>
+      65609 7273 3445 0 Aug10 ? 00:00:12 (wsgi:ge_publish_serve) -k start<br/>
+      65609 7274 3445 0 Aug10 ? 00:00:11 (wsgi:ge_publish_aux_serve) -k start<br/>
+      </code></p>
+  </li>
+</ol>
+<h3>Check your hostnames</h3>
+<p>Check sure that <code>hostname -f</code> returns the hostname you think it should. Make sure that the <code>hostname -f</code> is consistent between the GEE server, the DNS entry for the GEE server, and any local hosts files. When you install Fusion and GEE Server on your machine, the software queries the hostname of the server. This is used in all asset builds on Fusion. You can see what Fusion has registered as your hostname by looking at the host entry in the <code>volumes.xml</code> file in <code>/ASSET_ROOT/.config/volumes.xml</code>. Do not edit this file by hand.</p>
+<p>To correct the hostname for all assets on your server, run <code>geconfigureassetroot --fixmasterhost</code>.
+<h3>Check your GEE Server with geserveradmin</h3>
+<p>From the Fusion server, list the virtual servers on the GEE server and show the databases that have been pushed:</p>
+<p><code>geserveradmin --stream_server_url http://earth.int --listvhs</code></p>
+<p><code>geserveradmin --stream_server_url http://earth.int --listdbs</code></p>
+<p>Show the databases that are currently published:</p>
+<p><code>geserveradmin --stream_server_url http://earth.int --publisheddbs</code></p>
+<p>These commands should all work without error.</p>
+<h3>Check your server associations</h3>
+<p>Open the <strong>Server Associations Manager</strong> tool from Fusion. Make sure that the server associations are correct. Open the server association that you are trying to push to. There should be no error messages when you open it.</p>
+<h3>Verify which user account you are pushing with</h3>
+<p>All pushes from the Fusion system should be performed by a <em>non-root</em> user account. A basic user account has sufficient privileges to push databases locally on the Fusion system or remotely to the GEE Server system. Using the root account for pushes can introduce file-level permission problems (see next topic).</p>
+<h3>Verify the umask settings are 0022</h3>
+<p>Temporary files are written into the <code>/tmp</code> folder of the Fusion system during a publish, which inherit permission settings of the user account used to publish (<code>geuser</code>, <code>root</code>, etc). These files are then read by the GEE Server user accounts (<code>geapacheuser</code>), which belong to the <code>gegroup</code> user group. Publish failures can happen if the <code>gegroup</code> accounts cannot read the files in <code>/tmp</code>, such as having very restrictive umask settings such as 0077 for all user accounts, or in the case of publishing while logged in as root.
+  To check the unmask settings for your GEE Server accounts, type <code>umask</code> on the command line while logged into the Fusion system.</p>
+<h3>Check your disk space</h3>
+<p>If the GEE Server runs out of disk space, the push will fail. Run <code>df -h</code> to see if you have space left on the server. If you are out of space, use <code>geserveradmin</code> to delete some of the old databases that have been pushed to the server and then run <code>garbagecollect</code> to clean up the old data.</p>
+<p>Garbage collection deletes unused data from database versions deleted with <code>geserveradmin</code>. It is not the same as deleting a database version in its entirety. If a database version is deleted directly from the file system, it usually breaks all subsequent versions of the database.</p>
+<p>You can use the <code>geserveradmin</code> command on the Fusion server to manage both locally pushed and remotely pushed databases. The <code>geserveradmin</code> command includes a <code>--stream_server_url</code> option that directs it to the server IP address or URL where the function should be run. If you omit this option, the <code>geserveradmin</code> command defaults to the local machine.</p>
+<p>The commands below show how to use <code>geserveradmin</code> to clean up unused data from the <code>earth.int</code> server.</p>
+<p>Assuming that <code>fusion.int</code> is the Fusion system and <code>server.int</code> is the GEE Server system, the commands on the remote server (<code>earth.int</code>) are:</p>
+<ol class="spaced-list">
+  <li>To list all pushed databases, optionally using <code>--portable</code> to specify portable databases only:
+    <p><code>geserveradmin --stream_server_url http://earth.int --listdbs [--portable]</code></p>
+  </li>
+  <li>To list published databases, optionally using <code>--portable</code> to specify portable databases only:
+    <p><code>geserveradmin --stream_server_url http://earth.int --publisheddbs [--portable]</code></p>
+  </li>
+  <li>To delete specific database versions:
+    <p><code>geserveradmin --stream_server_url http://earth.int --deletedb /path/to/mydatabase.kdatabase/verZYX/gedb</code></p>
+  </li>
+  <li>To perform garbage collecting for deleted databases (stream): <code>geserveradmin --stream_server_url http://earth.int --garbagecollect</code></li>
+</ol>
+<h2>Troubleshoot Publishing Issues</h2>
+<p>Errors in the publish operation may occur when GEE Server cannot publish to the specified publish point.</p>
+<h3>Delete your broken publish and try again</h3>
+<p>If you have had a successful publish previously, then you should already have at least one good copy of the database pushed to the GEE Server. If a recent publish keeps failing, you can remove the recent broken publish and try again.</p>
+<p>Show the pushed and published databases, adding the optional <code>--portable</code> to specify portable databases only:</p>
+<p><code>geserveradmin --stream_server_url http://earth.int --listdbs [--portable]</code></p>
+<p><code>geserveradmin --stream_server_url http://earth.int --publisheddbs [--portable]</code></p>
+<p>Use <code>geserveradmin</code> to publish one of your older database versions, then use <code>geserveradmin</code> to delete the recent, broken publish. Clean up the garbage, then try the publish again.
+<p>For example, if version 2 was working but version 4 is broken, re-try pushing version 4 of the database:</p>
+<p><code>geserveradmin --stream_server_url http://earth.int --deletedb /gevol/assets/Databases/GoogleEarth.kdatabase/gedb.kda/ver004/gedb</code></p>
+<p><code>geserveradmin --garbagecollect --server_type stream</code></p>
+<p><code>geserveradmin --stream_server_url http://earth.int --adddb /gevol/assets/Databases/GoogleEarth.kdatabase/gedb.kda/ver004/gedb</code></p>
+<p><code>geserveradmin --stream_server_url http://earth.int --pushdb /gevol/assets/Databases/GoogleEarth.kdatabase/gedb.kda/ver004/gedb</code></p>
+<div ..="" 6034724"="" answer="" class="tip&gt;Instead of using &lt;code&gt;geserveradmin --adddb/pushdb&lt;/code&gt; commands, you can push the database directly from Fusion. See &lt;a href=">Push and publish databases</div>
+</p>
+</p>
+.
+<h3>Disconnected publishing issues</h3>
+<p>If you publish a disconnected database and it fails when you attempt to push the database, it may be that <code>gedisconnectedsend --sendpath</code> created folders with user/group permissions only, preventing the file from being read by <code>geapacheuser:<em>gegroup</em></code>, which is used by <code>geserveradmin --pushdb</code>.</p>
+<p>Try resetting the permissions on the folders created by <code>gedisconnectedsend --sendpath</code> and try the <code>--pushdb</code> again.</p>
+<ul>
+  <li>See <a href="../answer/6051700.html">Publish databases using disconnected publishing</a>.</li>
+</ul>
+<h3>Check your log files</h3>
+<p>If you're having push or publishing issues, there are several log files you can review for errors.
+<table class="nice-table">
+  <tbody>
+    <tr>
+      <th width="50%">Log file</th>
+      <th width="50%">Error logging reported</th>
+    </tr>
+    <tr>
+      <td><code>/opt/google/gehttpd/logs/error_log</code></td>
+      <td>Log file containing GEE Server publishing errors and authentication notices.</td>
+    </tr>
+    <tr>
+      <td><code>/opt/google/gehttpd/logs/access_log</code></td>
+      <td>Log file containing HTTP GET requests for GEE Server.</td>
+    </tr>
+    <tr>
+      <td><code>/opt/google/gehttpd/logs/gestream_publisher.out</code> <code>/opt/google/gehttpd/logs/gesearch_publisher.out</code></td>
+      <td>Log files containing detailed GEE Server publishing errors.</td>
+    </tr>
+    <tr>
+      <td><code>/var/opt/google/pgsql/logs/pg.log</code></td>
+      <td>Log file containing postgres processing information for GEE Server. Note that “root” privileges are required to open this log file: use sudo su.</td>
+    </tr>
+    <tr>
+      <td><code>/home_dir_of_user/.fusion/gepublishdatabase.date.time</code></td>
+      <td>Log file containing information about push attempts from Fusion.</td>
+    </tr>
+  </tbody>
+</table>
+</p>
+</body>
+</html>
