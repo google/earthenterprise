@@ -42,7 +42,14 @@ gtag('config', 'UA-108632131-2');
     <p id="overview_5.2.3">New Features</p>
   </h5>
     <p><strong>C++11 support</strong>. With release 5.2.3 Open GEE C++ code now supports and defaults to compiling using the <code>-std=gnu++11</code> compile flag.  This default can be overridden and the C++ code can be compiled using the <code>-std=gnu++98</code> flag instead.  However, Open GEE 5.2.3 will be the last release to support compiling C++ code using the <code>-std=gnu++98</code> flag.  The subsequent releases after Open GEE 5.2.3 will require the use of the <code>-std=gnu++11</code> flag when compiling C++ code.</p>
-    <p><strong>Remove TCP/IP connections to PostgreSQL</strong>. With release 5.2.3 Open GEE code will now connect to PostgreSQL exclusively using Unix domain sockets. This will make it easier to secure PostgreSQL for security sensitive installations.</p>
+    <p><strong>Remove TCP/IP connections to PostgreSQL</strong>. With release 5.2.3 Open GEE code will now, by default, connect to PostgreSQL exclusively using Unix domain sockets. This will make it easier to secure PostgreSQL for security sensitive installations. For those upgrading from a previous release the following files will need to be changed before disabling PostgreSQL tcp listener:
+      <ul>
+        <li>/opt/google/search/conf/ExampleSearch.conf</li>
+        <li>/opt/google/search/conf/GEPlacesSearch.conf</li>
+        <li>/opt/google/search/conf/PoiSearch.conf</li>
+      </ul>
+      You will need to change the host from '127.0.0.1' to '/tmp'
+    </p>
     <p><strong>Volume deletion</strong>. <code>geconfigureassetroot</code> now supports the option <code>--removevolume</code> for volume deletion.</p>
     <p><strong>Performance tuning for gecombineterrain</strong>. <code>gecombineterrain</code> now supports the option <code>--numCompressThreads</code> which allows configuration of the threads used for operation.  If not specified <code>gecombineterrain</code> defaults this option to match the number of available CPUs.</p>
     <p><strong>Package name customization at build time</strong>. Scons build now accepts a custom label argument which is appended to the version in RPM file names.</p>
