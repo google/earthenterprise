@@ -58,7 +58,7 @@ def getMountPoint(pathname):
 
 
 def getFsInfo(pathname):
-  """Get the free space of the filesystem containing pathname."""
+  """Get the free space and total size of the filesystem containing pathname."""
   statvfs = os.statvfs(pathname)
   # Size of filesystem in bytes
   size = statvfs.f_frsize * statvfs.f_blocks
