@@ -40,9 +40,9 @@ def getDiskInfo():
   mount_point = getMountPoint(asset_root)
 
   available_space, size = getFsFreespace(mount_point)
-  percentage_used = (size - available_space) * 100 / size
+  percentage_avail = 100 - ((size - available_space) * 100 / size)
 
-  return percentage_used
+  return percentage_avail
 
 
 def getMountPoint(pathname):
