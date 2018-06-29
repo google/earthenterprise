@@ -96,7 +96,6 @@ class AssetBase : public QMainWindow {
   virtual void SetHidden(bool on);
   virtual void AboutToShowFileMenu();
   virtual void AboutToHideFileMenu();
-  virtual void SaveAndBuild();
 
  private:
   // inherited from qwidget
@@ -104,6 +103,7 @@ class AssetBase : public QMainWindow {
   virtual void closeEvent(QCloseEvent* event);
 
   bool EnsureNameValid();
+  void SaveAndBuild();
   khMetaData meta_;
   QString asset_path_;
   bool save_error_;
