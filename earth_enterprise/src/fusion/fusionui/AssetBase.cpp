@@ -345,7 +345,7 @@ void AssetBase::AboutToShowFileMenu() {
   save_action_->setEnabled(dirty && !save_error_);
   saveas_action_->setEnabled(!save_error_);
   build_action_->setEnabled(!dirty);
-  savebuild_action_->setEnabled(!save_error_);
+  savebuild_action_->setEnabled(dirty && !save_error_);
 }
 
 void AssetBase::AboutToHideFileMenu() {
