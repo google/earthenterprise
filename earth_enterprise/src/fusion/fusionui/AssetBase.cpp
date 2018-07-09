@@ -70,7 +70,6 @@ AssetBase::AssetBase(QWidget* parent)
   hidden_action_->setToggleAction(true);
   notes_action_ = new QAction(this);
   notes_action_->setIconSet(QIconSet(QPixmap::fromMimeSource("notes.png")));
-  savebuild_action_ = new QAction(this);
 
   // menubar
   menu_bar_ = new QMenuBar(this);
