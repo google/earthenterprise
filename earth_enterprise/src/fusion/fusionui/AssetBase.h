@@ -82,6 +82,7 @@ class AssetBase : public QMainWindow {
   QAction* hidden_action_;
   QAction* notes_action_;
   QAction* build_action_;
+  QAction* savebuild_action_;
 
  protected slots:
   virtual void languageChange();
@@ -92,6 +93,7 @@ class AssetBase : public QMainWindow {
   virtual void Close();
   virtual void EditNotes();
   virtual void Build();
+  virtual void SaveAndBuild();
   virtual void SetHidden(bool on);
   virtual void AboutToShowFileMenu();
   virtual void AboutToHideFileMenu();
