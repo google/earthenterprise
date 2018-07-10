@@ -35,9 +35,6 @@ gtag('config', 'UA-108632131-2');
 <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
 <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Release notes</h1>
 <h2>Release notes: Open GEE 5.2.3</h2>
-
-<p>Open GEE 5.2.3 is currently in beta testing</p>
-
   <h5>
     <p id="overview_5.2.3">New Features</p>
   </h5>
@@ -83,11 +80,11 @@ gtag('config', 'UA-108632131-2');
             <td>Fusion lets you create folder with space in the name</td>
             <td>AssetManager UI only allows letters, numbers, and underscores for directory name creation</td>
           </tr>
-	  <tr>
-	    <td>226</td>
-	    <td>Verify the wrongly spelled "aquisition" is not appearing anywhere in the product</td>
-	    <td>Fixed these spelling errors by replacing with Acquisition in multiple files.</td>
-	  </tr>
+          <tr>
+            <td>226</td>
+            <td>Verify the wrongly spelled "aquisition" is not appearing anywhere in the product</td>
+            <td>Fixed these spelling errors by replacing with Acquisition in multiple files.</td>
+          </tr>
           <tr>
             <td>337</td>
             <td>Add a compiler version check to scons scripts</td>
@@ -133,6 +130,11 @@ gtag('config', 'UA-108632131-2');
             <td>GE Server gets its URL from the client instead of itself</td>
             <td>Fixed code so that when you publish DB, GEServer's URL will be used and not the URL which we get from the Publish request message.</td>
           </tr>
+          <tr>
+            <td>861</td>
+            <td>Running diagnostics on a server only installation will result in a failure for testAdqeuateDiskSpace</td>
+            <td>This test is skipped if Fusion is not present.</td>
+          </tr>          
           <tr>
             <td>877</td>
             <td>Fusion RPM install scripts to only <code>chown</code> the asset root when necessary</td>
@@ -445,6 +447,16 @@ gtag('config', 'UA-108632131-2');
           <td>Geserver fails to startup fully due to conflicting protobuf library</td>
           <td>Run <code>pip uninstall protobuf</code> to uninstall the protobuf library installed by pip. </td>
         </tr>
+        <tr>
+          <td>882</td>
+          <td>GEE Portable Build script fails on CentOS 6</td>
+          <td>Portable server can be built manually if the developer build instructions for Open GEE are followed and then <code>'source /opt/rh/devtoolset-2/enable'</code> is performed to make the newer g++ compiler available.</td>
+        </tr>
+        <tr>
+          <td>884</td>
+          <td>Some diagnostic tests are skipping on Ubuntu 14.04</td>
+          <td>No current work around.</td>
+        </tr>        
       </tbody>
     </table>
   <div class="footer">
