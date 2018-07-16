@@ -6,7 +6,7 @@
   <div class="sidebar1">
 <p class="sidebar-toc"><a href="../answer/3481464.html">Before you configure Google Earth Enterprise Fusion</a></p>
 <p class="sidebar-toc"><a href="../answer/6008655.html" class="current-file">Running Fusion on a Machine with Multiple CPUs</a></p>
-<p class="sidebar-toc"><a href="../answer/176738.html">Configure task rules</a></p>
+<p class="sidebar-toc"><a href="../answer/176738.html">Configure Fusion performance</a></p>
 <p class="sidebar-toc"><a href="../answer/6033487.html">Benchmarking outcomes for applying task rules</a></p>
 <p class="sidebar-toc"><a href="../answer/3481501.html">Configure font size in the GUI</a></p>
 <p class="sidebar-toc"><a href="../answer/3481506.html">Configure fonts for the Text Style dialog</a></p>
@@ -36,7 +36,7 @@
 <li>gemaptilegen (2D vector-based map tiles)</li>
 <li>gecombineterrain (3D databases)</li>
 </ul>
-<p>These tasks may be multithreaded by enabling <em>task rules</em> within Fusion. Implementation of task rules is described in more detail in <a href="../answer/176738.html">Configure task rules</a>.</p>
+<p>These tasks may be multithreaded by enabling <em>task rules</em> within Fusion. Implementation of task rules is described in more detail in <a href="../answer/176738.html">Configure Fusion performance</a>.</p>
 <p>The <strong>ImageryPacketLevel.taskrule</strong>, <strong>TerrainPacketLevel.taskrule</strong>, <strong>MapLayerLevel.taskrule</strong>, and <strong>CombinedTerrain.taskrule</strong> task rules enable multiple CPUs to work on each individual task. For example, configuring a <code>minNumCPUs</code> and <code>maxNumCPUs</code> of 2 for the <strong>ImageryPacketLevel.taskrule</strong> means that up to 4 gepackgen processes may run on Fusion, with 2 CPUs assigned each, when 8 CPU cores are allocated.</p>
 <p>As a best practice, <strong>ImageryPacketLevel.taskrule</strong>, <strong>TerrainPacketLevel.taskrule</strong> and <strong>MapLayerLevel.taskrule</strong> should be configured such that multiple gepackgen and gemaptilegen processes can run concurrently.</p>
 <p>Since <code>gecombineterrain</code> is CPU-intensive and can be an operational bottleneck, more CPUs should be assigned to that task to expedite processing. So on a machine with 8 CPU cores available for Fusion processing:</p>
