@@ -48,7 +48,7 @@ gtag('config', 'UA-108632131-2');
       You will need to change the host from '127.0.0.1' to '/tmp'
     </p>
     <p><strong>Volume deletion</strong>. <code>geconfigureassetroot</code> now supports the option <code>--removevolume</code> for volume deletion.</p>
-    <p><strong>Performance tuning for gecombineterrain</strong>. <code>gecombineterrain</code> now supports the option <code>--numCompressThreads</code> which allows configuration of the threads used for this operation.  If not specified <code>gecombineterrain</code> defaults this option to match the number of available CPUs.</p>
+    <p><strong>Performance tuning for gecombineterrain</strong>. <code>gecombineterrain</code> now supports the option <code>--numCompressThreads</code> which specifies the number of maximum worker threads used to compress packets in this operation.  If not specified <code>gecombineterrain</code> defaults this option to match the number of available CPUs.</p>
     <p><strong>Package name customization at build time</strong>. Scons build now accepts a custom label argument which is appended to the version in RPM file names.</p>
     <p><strong>Rewrite KML URLs</strong>. Users can rewrite the URLs for KML resources included in databases at publish time.</p>
     <p><strong>Maps API Javascript Files</strong>. Maps API Javascript files are now available and installed at <code>/opt/google/gehttpd/htdocs/maps/mapfiles</code>.</p>
