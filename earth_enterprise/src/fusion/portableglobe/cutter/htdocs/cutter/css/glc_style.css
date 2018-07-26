@@ -480,3 +480,8 @@ input[type=checkbox]:focus {
   overflow: auto;
   background-color: #fff;
 }
+
+#BuildProgress .warning {
+  color: #ff7600;
+  font-weight: bold;
+}

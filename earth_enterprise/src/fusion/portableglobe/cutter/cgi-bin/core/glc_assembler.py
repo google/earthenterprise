@@ -22,9 +22,11 @@ import os
 import re
 import shutil
 import sys
+import subprocess
 import traceback
 import time
 import urllib
+import yaml
 from common import utils
 import common.configs
 
@@ -85,7 +87,7 @@ isAuthenticated : false,
 layers : [
 %s
 ],
-projection : "mercator",
+projection : "%s",
 serverUrl : "http://localhost:9335"
 };"""
 
@@ -197,9 +199,9 @@ class GlcAssembler(object):
               "--extract_file=\"%s\" "
               "--output=\"%s\""
               % (COMMAND_DIR, glc_path, file_in_glc, output_file))
-    utils.RunCmd(os_cmd)
+    result = utils.RunCmd(os_cmd)
     if not os.path.isfile(output_file):
-      return "FAILED: Unable to create %s" % output_file
+      return "FAILED: Unable to create {0}\n{1!r}".format(output_file, result)
     else:
       return "Extracting %s %s\n" % (
           output_file, utils.FileSizeAsString(output_file))
@@ -281,9 +283,30 @@ class GlcAssembler(object):
     self.ExtractFileFromGlx(
         path, "maps/map.json", self.extract_map_json_file)
     return self.ExtractLayerInfo()
+  
+  def GetJson(self, path):
+    """Extract <map.json> from a GLM, and return it parsed."""
+    subprocess.check_call([
+      os.path.join(COMMAND_DIR, "geglxinfo"),
+      "--glx={0}".format(path),
+      "--extract_file={0}".format("maps/map.json"),
+      "--output={0}".format(self.extract_map_json_file)
+    ])
 
-  def CreateMapJson(self, index, layers_info):
-    """Create the glc json (geeserverdefs) from that of the glms."""
+    with open(self.extract_map_json_file, 'r') as f:
+      # Skip "var geeServerDefs =" to get to the JSON:
+      while f.read(1) != '=':
+        continue
+      json_string = f.read()
+    # Skip the last ";" to leave just the JSON:
+    json_string = json_string[0 : json_string.rfind(';')]
+
+    # Fusion does not currently produce valid JSON for geeServerDefs, so we
+    # (mis)use a YAML parser instead:
+    return yaml.load(json_string)
+
+  def CreateMapJson(self, index, layers_info, projection):
+    """Create the glc JSON (geeServerDefs) from that of the glms."""
     layer_defs = []
     for layer_info in layers_info:
       layer_defs.append(GEE_LAYER_DEF % (
@@ -295,7 +318,7 @@ class GlcAssembler(object):
           ""))
 
     fp = open(self.map_json_file, "w")
-    fp.write(GEE_SERVER_DEFS % ",".join(layer_defs))
+    fp.write(GEE_SERVER_DEFS % (",".join(layer_defs), projection))
     fp.close()
 
   def LayerInfoFiles(self, index, layer_type, layers_info):
@@ -404,18 +427,36 @@ class GlcAssembler(object):
 
     utils.CreateFile(self.dbroot_layers_info_file, dbroot_layer_info_content)
 
-  def Create2dLayerInfoFile(self, layers_info, glms):
+  def Create2dLayerInfoFile(self, layers_info, glms, projection):
     """Build 2d layerinfo.txt file."""
     layer_info_content = self.LayerInfoFiles(
         GLM_STARTING_INDEX, "MAP", glms)
-
-    self.CreateMapJson(GLM_STARTING_INDEX, layers_info)
+    self.CreateMapJson(GLM_STARTING_INDEX, layers_info, projection)
     layer_info_content += "map.json maps/map.json FILE 0 0\n"
     utils.CreateFile(self.layers_info_file, layer_info_content)
 
-  def Assemble2dGlcFiles(self, layers_info, glms):
+  def Assemble2dGlcFiles(self, layers_info, glms, logger):
     """Assemble glms into a glc."""
-    self.Create2dLayerInfoFile(layers_info, glms)
+    first_glm_json = self.GetJson(glms[0]['path'])
+
+    # Verify all GLMs have the same projection:
+    warned_about_projections = False
+    for i in xrange(1, len(glms)):
+      glm_json = self.GetJson(glms[i]['path'])
+      if glm_json['projection'] != first_glm_json['projection']:
+        if not warned_about_projections:
+          utils.PrintAndLog(
+            """<span class="warning">WARNING: GLMs with different projections, clients may display mismatched layers.</span>""",
+            logger, None)
+          utils.PrintAndLog(
+            "  First file {0}, projection: {1}".format(glms[0]['path'], first_glm_json['projection']),
+            logger, None)
+          warned_about_projections = True
+        utils.PrintAndLog(
+          "  File {0}, projection: {1}".format(glms[i]['path'], glm_json['projection']),
+          logger, None)
+
+    self.Create2dLayerInfoFile(layers_info, glms, first_glm_json['projection'])
 
   def Assemble3dGlcFiles(self, layers_info, base_glb_info, logger):
     """Assemble glbs into a glc."""
@@ -565,7 +606,7 @@ class GlcAssembler(object):
 
       if spec["is_2d"]:
         utils.PrintAndLog("Building 2d glc at %s ..." % path, logger)
-        self.Assemble2dGlcFiles(layers_info, glms)
+        self.Assemble2dGlcFiles(layers_info, glms, logger)
       else:
         utils.PrintAndLog("Building 3d glc at %s ..." % path, logger)
         self.Assemble3dGlcFiles(layers_info, base_glb_info, logger)
@@ -581,7 +622,7 @@ class GlcAssembler(object):
       utils.PrintAndLog("Error: Unable to run OS command.", logger)
       msg = "FAILED"
     except:
-      utils.PrintAndLog("Exception: %s" % sys.exc_info().__str__())
+      utils.PrintAndLog("Exception: {0}".format(traceback.format_exc()))
       msg = "FAILED"
     return msg
 
