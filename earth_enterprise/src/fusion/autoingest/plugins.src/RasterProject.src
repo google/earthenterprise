@@ -270,6 +270,10 @@ void RasterProjectAssetImplD::AddInsets(
   for (std::vector<RasterProjectModifyRequest::Item>::const_iterator item =
          items.begin();
        item != items.end(); ++item) {
+    
+    notify(NFY_PROGRESS, "Raster project::AddInsets: Finding position to add inset %lu of %lu.",
+      item - items.begin(), items.size());
+
     // error if there's anything I already have
     if (have.find(item->dataAsset) != have.end()) {
       throw khException(kh::tr("Project already has inset '%1'")
@@ -315,6 +319,8 @@ void RasterProjectAssetImplD::AddInsets(
   }
 
   SyncInputRefs();
+
+  notify(NFY_PROGRESS, "Raster project::AddInsets: Complete.");
 }
 
 
