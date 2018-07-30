@@ -20,7 +20,7 @@
 #include <cctype>
 #include <sys/types.h>
 #include <time.h>
-
+#include <locale>
 #include <notify.h>
 
 // notify() -- format and report notification message
@@ -76,7 +76,7 @@ std::string khNotifyLevelToString(khNotifyLevel level)
     {
     case NFY_FATAL: retval = "NFY_FATAL"; break;
     case NFY_WARN: retval = "NFY_WARN"; break;
-    case NFY_PROGRESS: retval = "NFY_NOTICE"; break;
+    case NFY_PROGRESS: retval = "NFY_PROGRESS"; break;
     case NFY_INFO: retval = "NFY_INFO"; break;
     case NFY_INFO2: retval = "NFY_INFO2"; break;
     case NFY_DEBUG: retval = "NFY_DEBUG"; break;
@@ -86,6 +86,34 @@ std::string khNotifyLevelToString(khNotifyLevel level)
     };
     return retval;
 }
+
+khNotifyLevel stringTokhNotifyLevel(std::string level)
+{
+    khNotifyLevel retval;
+    std::locale loc;
+
+    // make it case-insensitive
+    for(std::string::size_type i = 0; i < level.length(); ++i)
+        level[i] = std::toupper(level[i],loc);
+
+    if (level == "NFY_FATAL")
+        retval = NFY_FATAL;
+    else if (level == "NFY_WARN")
+        retval = NFY_WARN;
+    else if (level == "NFY_PROGRESS")
+        retval = NFY_PROGRESS;
+    else if (level == "NFY_INFO")
+        retval = NFY_INFO;
+    else if (level == "NFY_INFO2")
+        retval = NFY_INFO2;
+    else if (level == "NFY_DEBUG")
+        retval = NFY_DEBUG;
+    else if (level == "NFY_VERBOSE")
+        retval = NFY_VERBOSE;
+    else
+        retval = NFY_NOTICE;          // NFY_NOTICE is default, either do this or handle error
+    return retval;
+};
 
 std::string NotifyPrefix("Fusion");
 const std::string TimePrefix("[time]");

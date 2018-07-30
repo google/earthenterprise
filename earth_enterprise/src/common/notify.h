@@ -45,6 +45,7 @@ extern void notify(khNotifyLevel, const char*, ...)
 extern void setNotifyHandler(notifyFuncType, void*);
 extern khNotifyLevel getNotifyLevel();
 extern std::string khNotifyLevelToString(khNotifyLevel);
+extern khNotifyLevel stringTokhNotifyLevel(std::string);
 extern void setNotifyLevel(khNotifyLevel);
 extern void HexDump(FILE *, const void *, uint32);
 extern std::string khstrerror(int err);

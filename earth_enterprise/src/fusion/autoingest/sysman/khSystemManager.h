@@ -18,7 +18,7 @@
 #define __khSystemManager_h
 
 #include <khMTTypes.h>
-#include "notify.h"
+
 
 class khSystemManager  {
   khMutex mutex;
