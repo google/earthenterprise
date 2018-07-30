@@ -25,7 +25,6 @@ class khSystemManager  {
   bool wantexit;
 
   void SignalLoop(void);
-  void ChangeLogLevel(khNotifyLevel level = NFY_VERBOSE);
  public:
   bool WantExit(void) {
     khLockGuard guard(mutex);

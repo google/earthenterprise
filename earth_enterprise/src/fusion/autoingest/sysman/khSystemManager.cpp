@@ -72,16 +72,6 @@ khSystemManager::SetWantExit(void)
   }
 }
 
-// TODO: lock?
-void khSystemManager::ChangeLogLevel(khNotifyLevel level)
-{
-    std::string currlevel(khNotifyLevelToString(getNotifyLevel())),
-                newlevel(khNotifyLevelToString(level));
-    notify(NFY_WARN, "changing logging level from %s to %s",
-           currlevel.c_str(), newlevel.c_str());
-    setNotifyLevel(level);
-}
-
 void
 khSystemManager::SignalLoop(void)
 {
