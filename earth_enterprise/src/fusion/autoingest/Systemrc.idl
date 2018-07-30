@@ -23,6 +23,7 @@ class Systemrc {
   bool        locked           = false;
   std::string fusionUsername   = std::string("gefusionuser");
   std::string userGroupname    = std::string("gegroup");
+  uint        logLevel         = uint(2);
 
   deprecated std::string defaultImageryIndex  = std::string();
   deprecated std::string defaultImageryCopyright  = std::string();
