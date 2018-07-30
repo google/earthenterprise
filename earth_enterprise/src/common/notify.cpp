@@ -87,7 +87,7 @@ std::string khNotifyLevelToString(khNotifyLevel level)
     return retval;
 }
 
-khNotifyLevel stringTokhNotifyLevel(std::string level)
+khNotifyLevel stringTokhNotifyLevel(const std::string&s level)
 {
     khNotifyLevel retval;
     std::locale loc;
