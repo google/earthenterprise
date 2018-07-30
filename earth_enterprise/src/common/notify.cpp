@@ -60,12 +60,31 @@ khNotifyLevel getDefaultNotifyLevel() {
 
 static khNotifyLevel notifyLevel = getDefaultNotifyLevel();
 
+// TODO: lock?
 void setNotifyLevel(khNotifyLevel level) {
   notifyLevel = level;
 }
 
 khNotifyLevel getNotifyLevel() {
   return notifyLevel;
+}
+
+std::string khNotifyLevelToString(khNotifyLevel level)
+{
+    std::string retval;
+    switch(level)
+    {
+    case NFY_FATAL: retval = "NFY_FATAL"; break;
+    case NFY_WARN: retval = "NFY_WARN"; break;
+    case NFY_PROGRESS: retval = "NFY_NOTICE"; break;
+    case NFY_INFO: retval = "NFY_INFO"; break;
+    case NFY_INFO2: retval = "NFY_INFO2"; break;
+    case NFY_DEBUG: retval = "NFY_DEBUG"; break;
+    case NFY_VERBOSE: retval = "NFY_VERBOSE"; break;
+    case NFY_NOTICE:
+    default: retval = "NFY_NOTICE";
+    };
+    return retval;
 }
 
 std::string NotifyPrefix("Fusion");

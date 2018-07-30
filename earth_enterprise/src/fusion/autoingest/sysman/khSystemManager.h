@@ -18,12 +18,14 @@
 #define __khSystemManager_h
 
 #include <khMTTypes.h>
+#include "notify.h"
 
 class khSystemManager  {
   khMutex mutex;
   bool wantexit;
 
   void SignalLoop(void);
+  void ChangeLogLevel(khNotifyLevel level = NFY_VERBOSE);
  public:
   bool WantExit(void) {
     khLockGuard guard(mutex);
