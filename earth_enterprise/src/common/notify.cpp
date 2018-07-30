@@ -87,10 +87,11 @@ std::string khNotifyLevelToString(khNotifyLevel level)
     return retval;
 }
 
-khNotifyLevel stringTokhNotifyLevel(const std::string&s level)
+khNotifyLevel stringTokhNotifyLevel(const std::string& _level)
 {
     khNotifyLevel retval;
     std::locale loc;
+    std::string level(_level);
 
     // make it case-insensitive
     for(std::string::size_type i = 0; i < level.length(); ++i)
