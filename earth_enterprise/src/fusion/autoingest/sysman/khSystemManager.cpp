@@ -85,6 +85,8 @@ void systemrc_reload()
     setNotifyLevel(static_cast<khNotifyLevel>(logLevel));
 }
 
+
+
 void
 khSystemManager::SignalLoop(void)
 {

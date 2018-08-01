@@ -120,7 +120,7 @@ class khResourceProvider
   ~khResourceProvider(void);
   void Run(void);
 };
-extern void resetLogLevelFromSystemrc();
+
 extern khResourceProvider theResourceProvider;
 
 #endif /* __khResourceProvider_h */
