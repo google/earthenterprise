@@ -18,6 +18,7 @@
 #include <notify.h>
 #include <khException.h>
 #include <fusionversion.h>
+#include <signal.h>
 
 int main(int argc, char *argv[])
 {
