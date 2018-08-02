@@ -102,6 +102,7 @@ khSystemManager::SignalLoop(void)
   {
     if (sig == SIGHUP)
     {
+        notify(NFY_NOTICE, "Recieved signal %d. Reload systemrc...", sig);
         systemrc_reload();
     }
     else

@@ -102,10 +102,6 @@ int main(int argc, char *argv[]) {
   if (verbose) {
     setNotifyLevel(NFY_VERBOSE);  
   } else if (debug) {
-    //  why is this set to NFY_VERBOSE if its supposed to
-    //  be debug?
-    //
-    //setNotifyLevel(NFY_VERBOSE);
     setNotifyLevel(NFY_DEBUG);
   }
 

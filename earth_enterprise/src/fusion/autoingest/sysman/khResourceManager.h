@@ -23,9 +23,6 @@
 #include <khMTTypes.h>
 #include <autoingest/sysman/.idl/TaskStorage.h>
 #include "khTask.h"
-#include "fusion/autoingest/sysman/khResourceProvider.h"
-
-extern void resetLogLevelFromSystemrc();
 
 class khResourceProviderProxy;
 class khAssetManager;
