@@ -34,7 +34,7 @@ import util
 
 def get_cc_version(cc_path):
   """Extracts the version number of a C/C++ compiler (like GCC) as a list of
-  strings."""
+  strings.  (Like ['5', '4', '0'].)"""
 
   process = subprocess.Popen(
     [cc_path, '--version'], stdout=subprocess.PIPE)
@@ -73,9 +73,10 @@ def path_prepend(value, new_path, if_present='skip', separator=':'):
   """Adds a component to a PATH variable, where paths are separated by
   `separator`.
 
-  if_present = What to do, if PATH already contains `new_path`.
-    'skip': leave PATH as is.
-    'move': move `new_path` to the beginning of PATH.
+    if_present = What to do, if PATH already contains `new_path`.
+      'skip': leave PATH as is.
+      'move': move `new_path` to the beginning of PATH.
+    separator = String that separates path components in the variable value.
   """
 
   # Check if the PATH variable already contains `new_path`:
@@ -111,6 +112,18 @@ def path_prepend(value, new_path, if_present='skip', separator=':'):
 def environ_var_path_prepend(
   var_name, new_path, if_present='skip', separator=':'
 ):
+  """Prepend a path component to a PATH-like environment variable (i.e., one
+  which contains paths separated by `separator`).
+
+    var_name = Name of the environment variable to add a path component to.
+  The variable is created, if it doesn't exist.
+    new_path = Path to add to the variable value.
+    if_present = What to do, if the variable already contains `new_path`.
+      'skip': Leave the variable value as is.
+      'move': Move `new_path` to the beginning of the variable value.
+    separator = String that separates path components in the variable value.
+  """
+
   try:
     value = os.environ[var_name]
   except KeyError:
@@ -125,7 +138,7 @@ def configure_c_compiler(os_dir):
   if not version:
     raise ValueError('Unable to determine g++ version!')
   if not is_version_ge(version, [4, 8]):
-    # Check for GCC 4.8 from an the devtoolchain installation on Red Hat 6:
+    # Check for GCC 4.8 from the devtoolset-2-toolchain package on Red Hat 6:
     cc_dir = '/opt/rh/devtoolset-2/root/usr/bin'
     if os.path.isfile('{0}/g++'.format(cc_dir)):
       environ_var_path_prepend('PATH', cc_dir, if_present='move')
