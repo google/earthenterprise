@@ -25,10 +25,122 @@ maps.
 
 import distutils.sysconfig
 import os
+import re
 import shutil
+import subprocess
 import sys
 import util
 
+
+def get_cc_version(cc_path):
+  """Extracts the version number of a C/C++ compiler (like GCC) as a list of
+  strings."""
+
+  process = subprocess.Popen(
+    [cc_path, '--version'], stdout=subprocess.PIPE)
+  (stdout, _) = process.communicate()
+  match = re.search('[0-9][0-9.]*', stdout)
+
+  # If match is None we don't know the version.
+  if match is None:
+    return None
+
+  version = match.group().split('.')
+
+  return version
+
+def is_version_ge(version_components, comparand_components):
+  """Tests if a version number is greater than, or equal to another version
+  number.  Both version numbers are specified as lists of version components.
+  """
+
+  if version_components is None or comparand_components is None:
+    return False
+
+  for i in xrange(len(comparand_components)):
+    if i >= len(version_components):
+      version_component = 0
+    else:
+      version_component = int(version_components[i])
+    if int(comparand_components[i]) > version_component:
+      return False
+    if int(comparand_components[i]) < version_component:
+      return True
+
+  return True
+
+def path_prepend(value, new_path, if_present='skip', separator=':'):
+  """Adds a component to a PATH variable, where paths are separated by
+  `separator`.
+
+  if_present = What to do, if PATH already contains `new_path`.
+    'skip': leave PATH as is.
+    'move': move `new_path` to the beginning of PATH.
+  """
+
+  # Check if the PATH variable already contains `new_path`:
+  if value == new_path:
+    return value
+  if value.startswith(new_path + separator):
+    if if_present == 'skip' or 'move':
+      return value
+    else:
+      raise ValueError('Invalid if_present argument: {0}'.format(if_present))
+  if value.endswith(separator + new_path):
+    if if_present == 'skip':
+      return value
+    elif if_present == 'move':
+      return new_path + separator + value[ : -len(new_path) - 1]
+    else:
+      raise ValueError('Invalid if_present argument: {0}'.format(if_present))
+  i = value.find(separator + new_path + separator)
+  if i >= 0:
+    if if_present == 'skip':
+      return value
+    elif if_present == 'move':
+      return new_path + separator + value[: i] + value[i + len(new_path) + 1:]
+    else:
+      raise ValueError('Invalid if_present argument: {0}'.format(if_present))
+
+  # PATH doesn't contain `new_path`, prepend it:
+  if value == '':
+    return new_path
+
+  return new_path + separator + value
+
+def environ_var_path_prepend(
+  var_name, new_path, if_present='skip', separator=':'
+):
+  try:
+    value = os.environ[var_name]
+  except KeyError:
+    value = ''
+  os.environ[var_name] = path_prepend(
+    value, new_path, if_present=if_present, separator=separator)
+
+def configure_c_compiler(os_dir):
+  if os_dir != 'Linux':
+    return
+  version = get_cc_version('g++')
+  if not version:
+    raise ValueError('Unable to determine g++ version!')
+  if not is_version_ge(version, [4, 8]):
+    # Check for GCC 4.8 from an the devtoolchain installation on Red Hat 6:
+    cc_dir = '/opt/rh/devtoolset-2/root/usr/bin'
+    if os.path.isfile('{0}/g++'.format(cc_dir)):
+      environ_var_path_prepend('PATH', cc_dir, if_present='move')
+      environ_var_path_prepend(
+        'LIBRARY_PATH',
+        '/opt/rh/devtoolset-2/root/usr/lib',
+        if_present='move'
+      )
+      environ_var_path_prepend(
+        'LIBRARY_PATH',
+        '/opt/rh/devtoolset-2/root/usr/lib64',
+        if_present='move')
+    else:
+      raise ValueError('Version of g++ ({0}) is below minimum (4.8)!'.format(
+          '.'.join(version)))
 
 def BuildLibrary(os_dir, ignore_results):
   """Returns whether able to build file unpacker library."""
@@ -36,6 +148,8 @@ def BuildLibrary(os_dir, ignore_results):
     os.mkdir("dist")
   except OSError:
     pass  # ok if it already exists
+
+  configure_c_compiler(os_dir)
 
   os.chdir("dist")
   fp = open("../%s/build_lib" % os_dir)
