@@ -1,7 +1,7 @@
 - title: Loads of Features
   icon: tools
   desc:
-    An enterprise, production ready geospatial stack with over 12 years of development behind it.
+    An enterprise, production ready geospatial stack with over 13 years of development behind it.
 - title: Large Datasets
   icon: layout
   desc:
@@ -10,6 +10,7 @@
   icon: globe
   desc:
     Fusion and Server, that work together to build and host your private Google Earth and Google Maps layers.
+    Portable server to take cuts of fused terrain and imagery data into mobile environments.
 - title: Community Supported
   icon: users
   desc:
