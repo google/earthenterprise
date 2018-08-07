@@ -95,6 +95,12 @@ void LoadSystemrc(Systemrc &systemrc) {
       if (tmp.maxjobs == 0 || tmp.maxjobs > max_num_jobs) {
         tmp.maxjobs = std::min(max_num_jobs, kMaxNumJobsLimit);
       }
+      if (tmp.logLevel < 0 || tmp.logLevel > 7)
+      {
+          notify(NFY_WARN, "systemrc contains invalid logLevel parameter! Defaulting to: %s",
+                 khNotifyLevelToString(NFY_DEFAULT_LEVEL).c_str());
+          tmp.logLevel = NFY_DEFAULT_LEVEL;
+      }
       systemrc = cached_systemrc = tmp;
     }
   } else {

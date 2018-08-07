@@ -137,7 +137,6 @@ khResourceProvider::Run(void)
   LoadSystemrc(systemrc);
 
   uint32 logLevel = systemrc.logLevel;
-  assert(logLevel >=0 && logLevel <= 7);
   notify(NFY_NOTICE,"system log level: %s",
          khNotifyLevelToString(static_cast<khNotifyLevel>(logLevel)).c_str());
   setNotifyLevel(static_cast<khNotifyLevel>(logLevel));

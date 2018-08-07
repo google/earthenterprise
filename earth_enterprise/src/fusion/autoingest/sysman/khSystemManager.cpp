@@ -79,7 +79,6 @@ void systemrc_reload()
     Systemrc systemrc;
     LoadSystemrc(systemrc);
     uint32 logLevel = systemrc.logLevel;
-    assert(logLevel >= 0 && logLevel <= 7);
     notify(NFY_WARN, "system log level changed to: %s",
            khNotifyLevelToString(static_cast<khNotifyLevel>(logLevel)).c_str());
     setNotifyLevel(static_cast<khNotifyLevel>(logLevel));
