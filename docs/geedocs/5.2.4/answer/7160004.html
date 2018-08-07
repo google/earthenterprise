@@ -68,9 +68,13 @@ gtag('config', 'UA-108632131-2');
             <th>Resolution</th>
           </tr>
           <tr>
-            <td>999999999</td>
-            <td>Example Description</td>
-            <td>Example Resolution</td>
+            <td>934</td>
+            <td>Polygon displayed at the wrong location when viewing GLC assemly</td>
+            <td>
+              The Cutter WSGI script now looks at the projection of the GLM files going into the assembly,
+              rather than using a hardcoded Mercator projection for the assembly.  Also, if a user tries to
+              assemble GLMs with differing projections, a warning will be issued.
+            </td>
           </tr>
         </tbody>
       </table>
