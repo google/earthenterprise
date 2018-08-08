@@ -214,6 +214,8 @@ def main(argv):
   if BuildLibrary(os_dir, argv[1].lower()=="windows"):
     print "Library built."
     RunTests()
+  else:
+    sys.exit(1)
 
 
 if __name__ == "__main__":
