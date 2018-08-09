@@ -74,8 +74,10 @@ khSystemManager::SetWantExit(void)
 }
 
 // when SIGHUP is given, reload systemrc
-void systemrc_reload()
+void systemrc_reload(int signum)
 {
+    notify(NFY_WARN, "Recieved signal %s, Reloading systemrc...",
+           khNotifyLevelToString(static_cast<khNotifyLevel>(signum)).c_str());
     Systemrc systemrc;
     LoadSystemrc(systemrc);
     uint32 logLevel = systemrc.logLevel;
@@ -84,34 +86,21 @@ void systemrc_reload()
     setNotifyLevel(static_cast<khNotifyLevel>(logLevel));
 }
 
+void handleExitSignals(int signum)
+{
+    notify(NFY_WARN, "Recieved signal %s, Exiting...",
+           khNotifyLevelToString(static_cast<khNotifyLevel>(signum)).c_str());
+    theSystemManager.SetWantExit();
+}
 
 
 void
 khSystemManager::SignalLoop(void)
 {
-  sigset_t waitset;
-  sigemptyset(&waitset);
-  sigaddset(&waitset, SIGINT);
-  sigaddset(&waitset, SIGTERM);
-  sigaddset(&waitset, SIGHUP);
-
-  int sig;
-  sigwait(&waitset, &sig);
-  if (sig > 0)
-  {
-    if (sig == SIGHUP)
-    {
-        notify(NFY_NOTICE, "Recieved signal %d. Reload systemrc...", sig);
-        systemrc_reload();
-    }
-    else
-    {
-        notify(NFY_NOTICE, "Received signal %d. Exiting ...", sig);
-        SetWantExit();
-    }
-  } else {
-    notify(NFY_NOTICE, "Received signal %d. Ignoring ...", sig);
-  }
+  signal(SIGINT,handleExitSignals);
+  signal(SIGTERM,handleExitSignals);
+  signal(SIGHUP,systemrc_reload);
+  while(1);
 }
 
 
