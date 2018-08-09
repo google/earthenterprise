@@ -131,7 +131,18 @@ status() {
   return "$return_code"
 }
 
+reload() {
+  pidfile="/var/opt/google/run/gesystemmanager.pid"
+  systemrc="/etc/opt/google/systemrc"
+  pid=`cat $pidfile`
+  echo "reloading $systemrc"
+  kill -1 $pid
+}
+
 case "$1" in
+    reload)
+      reload
+      ;;
     restart)
       stop
       sleep 1
@@ -148,7 +159,7 @@ case "$1" in
       exit $?
       ;;
     *)
-      echo "usage: $0 {start|stop|restart|status}"
+      echo "usage: $0 {start|stop|reload|restart|status}"
       exit 1
       ;;
 esac
