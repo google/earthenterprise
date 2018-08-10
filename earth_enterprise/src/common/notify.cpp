@@ -113,7 +113,7 @@ khNotifyLevel stringTokhNotifyLevel(const std::string& _level)
         retval = NFY_VERBOSE;
     else if (level == "NFY_NOTICE")
         retval = NFY_NOTICE;
-    else if (level == "NFY_DEFAULT_LEVEL")
+    else
         retval = NFY_DEFAULT_LEVEL;
     return retval;
 };

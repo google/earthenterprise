@@ -88,8 +88,7 @@ void systemrc_reload(int signum)
 
 void handleExitSignals(int signum)
 {
-    notify(NFY_WARN, "Recieved signal %s, Exiting...",
-           khNotifyLevelToString(static_cast<khNotifyLevel>(signum)).c_str());
+    notify(NFY_WARN, "Recieved SIGINT or SIGTERM, Exiting...");
     theSystemManager.SetWantExit();
 }
 
@@ -100,7 +99,6 @@ khSystemManager::SignalLoop(void)
   signal(SIGINT,handleExitSignals);
   signal(SIGTERM,handleExitSignals);
   signal(SIGHUP,systemrc_reload);
-  while(1);
 }
 
 
