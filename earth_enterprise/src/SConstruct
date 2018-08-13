@@ -28,6 +28,15 @@ sys.path += ['scons']
 from khEnvironment import khEnvironment
 from khEnvironment import GetVersion
 
+# Add the OpenGEE Python libraries to the module search path:
+opengee_lib_path = os.path.join('lib', 'python')
+
+if opengee_lib_path not in sys.path:
+  sys.path.insert(1, opengee_lib_path)
+
+import opengee.c_compiler
+import opengee.version
+
 
 # Path to crosstool root directory.
 crosstool_path = '/usr/local/crosstool'
@@ -387,40 +396,6 @@ installdirs = {
     'htdocs': InstServerDir('gehttpd/htdocs'),
 }
 
-def get_cc_version(cc_path):
-  """Extracts the version number of a C/C++ compiler (like GCC) as a list of
-  strings."""
-
-  process = subprocess.Popen(
-    [cc_path, '--version'], stdout=subprocess.PIPE)
-  (stdout, stderr) = process.communicate()
-  match = re.search('[0-9][0-9.]*', stdout)
-  # If match is None we don't know the version.
-  if match is None:
-    return None
-  version = match.group().split('.')
-  return version
-
-def is_version_ge(version_components, comparand_components):
-  """Tests if a version number is greater than, or equal to another version
-  number.  Both version numbers are specified as lists of version components.
-  """
-
-  if version_components is None or comparand_components is None:
-    return False
-
-  for i in xrange(len(comparand_components)):
-    if i >= len(version_components):
-      version_component = 0
-    else:
-      version_component = int(version_components[i])
-    if int(comparand_components[i]) > version_component:
-      return False
-    if int(comparand_components[i]) < version_component:
-      return True
-
-  return True
-
 gee_version_number = GetVersion("version.txt", label)
 
 
@@ -480,8 +455,8 @@ env = khEnvironment(
 )
 
 # Check if the version of the default compiler is at least 4.8:
-version = get_cc_version(env['CXX'])
-if not is_version_ge(version, [4, 8]):
+version = opengee.c_compiler.get_cc_version(env['CXX'])
+if not opengee.version.is_version_ge(version, [4, 8]):
     # Check for GCC 4.8 from an alternative toolchain installation on RHEL 6:
     if cc_dir is None and os.path.isfile('/opt/rh/devtoolset-2/root/usr/bin/g++'):
         cc_dir = '/opt/rh/devtoolset-2/root/usr/bin'

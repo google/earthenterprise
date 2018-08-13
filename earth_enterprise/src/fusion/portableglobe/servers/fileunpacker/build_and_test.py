@@ -25,10 +25,49 @@ maps.
 
 import distutils.sysconfig
 import os
+import re
 import shutil
+import subprocess
 import sys
 import util
 
+# Add the OpenGEE Python libraries to the module search path:
+opengee_lib_path = os.path.join(
+  os.path.dirname(os.path.realpath(__file__)),
+  '..', '..', '..', 'lib', 'python')
+
+if opengee_lib_path not in sys.path:
+  sys.path.insert(1, opengee_lib_path)
+
+import opengee.c_compiler
+import opengee.environ
+import opengee.version
+
+
+
+def configure_c_compiler(os_dir):
+  if os_dir != 'Linux':
+    return
+  version = opengee.c_compiler.get_cc_version('g++')
+  if not version:
+    raise ValueError('Unable to determine g++ version!')
+  if not opengee.version.is_version_ge(version, [4, 8]):
+    # Check for GCC 4.8 from the devtoolset-2-toolchain package on Red Hat 6:
+    cc_dir = '/opt/rh/devtoolset-2/root/usr/bin'
+    if os.path.isfile('{0}/g++'.format(cc_dir)):
+      opengee.environ.env_prepend_path('PATH', cc_dir, if_present='move')
+      opengee.environ.env_prepend_path(
+        'LIBRARY_PATH',
+        '/opt/rh/devtoolset-2/root/usr/lib',
+        if_present='move'
+      )
+      opengee.environ.env_prepend_path(
+        'LIBRARY_PATH',
+        '/opt/rh/devtoolset-2/root/usr/lib64',
+        if_present='move')
+    else:
+      raise ValueError('Version of g++ ({0}) is below minimum (4.8)!'.format(
+          '.'.join(version)))
 
 def BuildLibrary(os_dir, ignore_results):
   """Returns whether able to build file unpacker library."""
@@ -36,6 +75,8 @@ def BuildLibrary(os_dir, ignore_results):
     os.mkdir("dist")
   except OSError:
     pass  # ok if it already exists
+
+  configure_c_compiler(os_dir)
 
   os.chdir("dist")
   fp = open("../%s/build_lib" % os_dir)
@@ -87,6 +128,8 @@ def main(argv):
   if BuildLibrary(os_dir, argv[1].lower()=="windows"):
     print "Library built."
     RunTests()
+  else:
+    sys.exit(1)
 
 
 if __name__ == "__main__":
