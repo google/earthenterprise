@@ -21,7 +21,7 @@
 # BUILD_TYPE - The type of build `release`, `optimize`, or `internal`
 
 case "$CPP_STD" in
-    98|11)
+    11)
         ;;
     *)
         echo "Unsupported value or unset CPP_STD enviroment variable: $CPP_STD" >&2

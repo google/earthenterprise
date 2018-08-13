@@ -63,6 +63,7 @@ AssetBase::AssetBase(QWidget* parent)
   saveas_action_->setIconSet(QIconSet(QPixmap::fromMimeSource("filesaveas.png")));
   build_action_ = new QAction(this);
   //  build_action_->setIconSet(QIconSet(QPixmap::fromMimeSource("notes.png")));
+  savebuild_action_ = new QAction(this);
   close_action_ = new QAction(this);
   close_action_->setIconSet(QIconSet(QPixmap::fromMimeSource("fileclose.png")));
   hidden_action_ = new QAction(this);
@@ -78,6 +79,7 @@ AssetBase::AssetBase(QWidget* parent)
   saveas_action_->addTo(file_menu_);
   file_menu_->insertSeparator();
   build_action_->addTo(file_menu_);
+  savebuild_action_->addTo(file_menu_);
   file_menu_->insertSeparator();
   close_action_->addTo(file_menu_);
 
@@ -96,6 +98,7 @@ AssetBase::AssetBase(QWidget* parent)
   connect(save_action_, SIGNAL(activated()), this, SLOT(Save()));
   connect(saveas_action_, SIGNAL(activated()), this, SLOT(SaveAs()));
   connect(build_action_, SIGNAL(activated()), this, SLOT(Build()));
+  connect(savebuild_action_, SIGNAL(activated()), this, SLOT(SaveAndBuild()));
   connect(close_action_, SIGNAL(activated()), this, SLOT(Close()));
   connect(notes_action_, SIGNAL(activated()), this, SLOT(EditNotes()));
   connect(file_menu_, SIGNAL(aboutToShow()), this, SLOT(AboutToShowFileMenu()));
@@ -140,6 +143,8 @@ void AssetBase::languageChange() {
   saveas_action_->setMenuText(tr("Save &As..."));
   build_action_->setText(tr("Build"));
   build_action_->setMenuText(tr("&Build"));
+  savebuild_action_->setText(tr("Save and Build"));
+  savebuild_action_->setMenuText(tr("&Save and Build"));
   close_action_->setText(tr("Close"));
   close_action_->setMenuText(tr("&Close"));
   close_action_->setAccel(tr("Ctrl+W"));
@@ -327,11 +332,19 @@ void AssetBase::Build(void) {
 }
 
 
+void AssetBase::SaveAndBuild(void) {
+  if (Save()) {
+    Build();
+  }
+}
+
+
 void AssetBase::AboutToShowFileMenu() {
   bool dirty = IsModified();
   save_action_->setEnabled(dirty && !save_error_);
   saveas_action_->setEnabled(!save_error_);
   build_action_->setEnabled(!dirty);
+  savebuild_action_->setEnabled(dirty && !save_error_);
 }
 
 void AssetBase::AboutToHideFileMenu() {
@@ -342,6 +355,7 @@ void AssetBase::AboutToHideFileMenu() {
   save_action_->setEnabled(!save_error_);
   saveas_action_->setEnabled(!save_error_);
   build_action_->setEnabled(true);
+  savebuild_action_->setEnabled(!save_error_);
 }
 
 void AssetBase::SetErrorMsg(const QString& text, bool red) {
@@ -361,6 +375,7 @@ void AssetBase::SetSaveError(bool state) {
   save_error_ = state;
   save_action_->setEnabled(!save_error_);
   saveas_action_->setEnabled(!save_error_);
+  savebuild_action_->setEnabled(!save_error_);
 }
 
 void AssetBase::SetLastSaveError(bool state) {

@@ -1,0 +1,145 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>PostgreSQL authentication</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 2848305.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/173056.html">Ports</a></p>
+<p class="sidebar-toc"><a href="../answer/172794.html">Server hostname</a></p>
+<p class="sidebar-toc"><a href="../answer/6080928.html">Configure GEE Server 5.1.0 for SSL/HTTPS</a></p>
+<p class="sidebar-toc"><a href="../answer/2848305.html" class="current-file">PostgreSQL authentication</a></p>
+<p class="sidebar-toc"><a href="../answer/2760544.html">Configure a GEE virtual host for LDAP authentication</a></p>
+<p class="sidebar-toc"><a href="../answer/172814.html">Set up HTTPS</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | GEE Server configuration and security</h1>
+<h2>PostgreSQL authentication</h2>
+<p>Client authentication determines which users are allowed to view published databases. By default, the GEE Server does not require authentication for user access. However, you can configure authentication for your server. </p>
+<p>If you use a load-balanced grid of GEE servers, a single common authentication source (such as PostgreSQL or LDAP) makes user administration easier. When you add users, you can add them to a single database instead of to each virtual server.</p>
+<p>Authentication encrypts passwords before transmitting and storing them. Besides the security benefits, there are performance benefits to encrypting passwords instead of storing them in plaintext. As a plaintext password file grows to more than 200 users, there will likely be a noticeable slowdown. This is because the entire password file is read into memory each time the virtual server is accessed to search for a password.</p>
+<p>If you have a PostgreSQL database, you can use standard Apache authentication methods such as Digest authentication to control user access. This is useful if you already store user passwords in a PostgreSQL table, or if you want to use a unified authentication mechanism other than LDAP for your GEE Server and other systems. </p>
+<h2>Before you begin</h2>
+<ul>
+<li>Don't use the PostgreSQL database that ships with GEE. Instead, install PostgreSQL on a separate port or a different host. </li>
+<li>You must set up client authentication for each virtual server you want to use authentication with.</li>
+</ul>
+<h2>Apache modules</h2>
+<p>The Apache configuration below uses these modules:</p>
+<ul>
+<li>The <code>mod_authn_dbd</code> module provides the authentication back-end with a PostgreSQL server. For more information about the module, see the <a href="http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmod%2Fmod_authn_dbd.html&amp;sa=D&amp;sntz=1&amp;usg=AFrqEzcLzX90MM12j49RNuWEy_X7y6wTrQ" target="_blank">mod_authn_dbd</a> section in the Apache documentation.</li>
+<li>The <code>mod_auth_digest</code> module is used for Digest authentication. For more information about <code>mod_auth_digest</code>, see the <a href="http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmod%2Fmod_auth_digest.html&amp;sa=D&amp;sntz=1&amp;usg=AFrqEzfaZylqvLk4_vXVqc3jCj7EJESuhw" target="_blank">mod_auth_digest</a> section in the Apache documentation.</li>
+</ul>
+<h2>Terms</h2>
+<p>In the steps below, you can replace these names with the names you want to use. For example, you can replace <em>geeauthdb</em> with the name of your database.</p>
+<ul>
+<li><code>geeauthdb</code>. The database to connect to.</li>
+<li><code>geepasswd</code>. The table that stores user information.</li>
+<li><code>geeuser</code>. The user login to connect to the database.</li>
+<li><code>postgres</code>. The default PostgreSQL adminstrator user on Ubuntu.</li>
+</ul>
+<h3>To configure client authentication for PostgreSQL:</h3>
+<ol>
+<li>
+<p>Connect to the PostgreSQL server:<br/>
+<code>sudo su - postgres<br/>
+psql --port=5433</code></p>
+</li>
+<li>
+<p>Create the database and user:<br/>
+<code>CREATE USER geeuser WITH PASSWORD 'geeuserpasswd';<br/>
+CREATE DATABASE geeauthdb;<br/>
+GRANT ALL PRIVILEGES ON DATABASE geeauthdb to mypguser;<br/>
+\q</code></p>
+</li>
+<li>Create a table to store the passwords:<br/>
+<code>psql --port=5433 --username=geeuser geauthdb<br/>
+CREATE TABLE geepasswd (username varchar(32) NOT NULL, realm varchar(255)<br/>
+NOT NULL, passwd varchar(255) NOT NULL,<br/>
+    realname varchar(255), PRIMARY KEY (username, realm));<br/>
+\q</code>
+<ul>
+The table includes these fields:
+<li><code>username</code>.</li>
+<li><code>realm</code>.</li>
+<li><code>password</code>.</li>
+<li><code>realname</code>. <em>Optional</em>. The realname field doesn't require a value, but is included in case you want to use it. You can also add other optional fields if needed.</li>
+</ul>
+</li>
+<li>
+<p>Create the encrypted password by inserting encyption functions into the database with the <code>pgcrypto</code> contributed module:<br/>
+<code>psql --port=5433 --username=geeuser <em>geauthdb</em> &lt; /usr/share/postgresql/8.4/contrib/pgcrypto.sql</code></p>
+<p>Note: You can substitute a different method for this step. The <a href="http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmisc%2Fpassword_encryptions.html&amp;sa=D&amp;sntz=1&amp;usg=AFrqEzdBJJpsOLV3eL6UCAatZv_IhxEZdg" target="_blank">Password Formats</a> section in the Apache documentation gives examples in multiple programming languages for encrypting the password so that it is readable by Apache.</p>
+</li>
+<li>
+<p>Make sure the database works by inserting a test user:<br/>
+<code>psql --port=5433 --username=geeuser geauthdb<br/>
+INSERT INTO geepasswd VALUES ('jsmith', 'realm', encode(digest( 'jsmith' || ':' || 'realm' || ':' ||'password', 'md5'), 'hex'), 'Jane Smith');<br/>
+\q</code></p>
+<p>Replace "jsmith", "realm", "password" and "Jane Smith" with the values you want to use.</p>
+<p>Note: The password is hashed with MD5 because the Apache <code>mod_authn_dbd</code> module requires it. This also prevents the password from appearing in plaintext.</p>
+</li>
+<li>
+<p>Create a file named <code>pgsql-auth.conf </code>at <code>/opt/google/gehttpd/conf/extra/pgsql-auth.conf</code>.</p>
+</li>
+<li>
+<p>Add these lines to the <code>pgsql-auth.conf</code> file:<br/>
+<code>DBDriver pgsql<br/>
+DBDParams "hostaddr=<em>yourpgserver </em>port=<em>yourport </em>user=<em>geuser </em>password=<em>yourpassword </em>dbname=gee_auth"<br/>
+DBDMin 4<br/>
+DBDKeep 8<br/>
+DBDMax 20<br/>
+DBDExptime 300</code></p>
+<p>Replace <code><em>yourpgserver</em></code> and <code><em>yourport</em></code> with the address or hostname of your PostgreSQL database. Replace <code><em>geuser</em></code> and <code><em>yourpassword</em></code> with the username and password of your test user.</p>
+</li>
+<li>
+<p>Open the <code>/opt/google/gehttpd/conf/gehttpd.conf</code> file and insert the line:<br/>
+<code>Include /opt/google/gehttpd/conf/extra/pgsql-auth.conf</code></p>
+<p>above the line:<br/>
+<code>Include conf.d/*.conf</code></p>
+<p>The result is:<br/>
+<code># Include Google Earth Server-specific files<br/>
+Include /opt/google/gehttpd/conf/extra/pgsql-auth.conf<br/>
+Include conf.d/*.conf</code></p>
+</li>
+<li>
+<p>Add the following lines at the beginning of the <code>&lt;Location&gt;</code> directive of your virtual server:<br/>
+<code>  AuthType Digest</code><br/>
+<code>  AuthName "realm"</code><br/>
+<code>  AuthDigestDomain '/default_map/'</code><br/>
+<code>  AuthDigestProvider dbd</code><br/>
+<code>  AuthDBDUserRealmQuery "SELECT passwd FROM geeauth WHERE username = %s and realm = %s"</code><br/>
+<code>  BrowserMatch "MSIE" AuthDigestEnableQueryStringHack=On</code></p>
+<p>If this is a <code>_ge_ virtual</code> server, add:<br/>
+<code>BrowserMatch "GoogleEarth" AuthDigestEnableQueryStringHack=On</code></p>
+<p>If this is a <code>_map_ virtual</code> server, add:<br/>
+<code>BrowserMatch "MSIE" AuthDigestEnableQueryStringHack=On</code></p>
+<p>For more information about <code>AuthDigestEnableQueryStringHack</code>, see the <a href="http://www.google.com/url?q=http%3A%2F%2Fhttpd.apache.org%2Fdocs%2F2.2%2Fmod%2Fmod_auth_digest.html%23msie&amp;sa=D&amp;sntz=1&amp;usg=AFrqEze9uh13hmi22IsT3-GMw3t8j7VHcA" target="_blank">mod_auth_digest</a> section in the Apache documentation.</p>
+<p>The final <code>&lt;Location&gt;</code> directive looks like:<br/>
+<code>&lt;Location "/default_map/*"&gt;<br/>
+AuthType Digest<br/>
+AuthName "realm"<br/>
+AuthDigestDomain '/default_map/'<br/>
+<br/>
+AuthDigestProvider dbd<br/>
+AuthDBDUserRealmQuery "SELECT passwd FROM geeauth WHERE username = %s and realm = %s"<br/>
+BrowserMatch "MSIE" AuthDigestEnableQueryStringHack=On<br/>
+<br/>
+Require valid-user<br/>
+SetHandler gedb-handler<br/>
+Include<br/>
+conf.d/virtual_servers/runtime/default_map_runtime<br/>
+&lt;/Location&gt;</code></p>
+</li>
+<li>
+<p>Save and close the virtual server configuration file.</p>
+</li>
+<li>
+<p>Restart the server:<br/>
+<code>/etc/init.d/geserver restart</code></p>
+<p>After you verify the configuration with your test user, you can add your users to the database.</p>
+</li>
+</ol>
+<div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>

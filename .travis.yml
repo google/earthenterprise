@@ -18,16 +18,6 @@ jobs:
   include:
   - stage: build third party
     env:
-      - CPP_STD=98
-      - BUILD_TYPE=release
-    script: scripts/ci/build_third_party.sh
-  - stage: build fusion and test
-    env:
-      - CPP_STD=98
-      - BUILD_TYPE=release
-    script: travis_wait 45 scripts/ci/build_fusion_and_test.sh
-  - stage: build third party
-    env:
       - CPP_STD=11
       - BUILD_TYPE=release
     script: scripts/ci/build_third_party.sh
