@@ -71,11 +71,11 @@ std::string ValidateHostReadyForConfig(void) {
   return GetAndValidateHostname();
 }
 
-void LoadSystemrc(Systemrc &systemrc) {
+void LoadSystemrc(Systemrc &systemrc, bool override_cache) {
   static Systemrc cached_systemrc;
   static bool     use_cached = false;
 
-  if (use_cached) {
+  if (use_cached && !override_cache) {
     systemrc = cached_systemrc;
     return;
   }

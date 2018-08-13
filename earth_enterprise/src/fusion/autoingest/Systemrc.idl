@@ -41,7 +41,7 @@ protected:
   bool Load(void) {
     return Load(Filename());
   }
-  friend void LoadSystemrc(Systemrc &systemrc);
+  friend void LoadSystemrc(Systemrc &systemrc, bool override_cache);
 public:
   static std::string Filename(void);
   bool Save(void) const;

@@ -76,10 +76,9 @@ khSystemManager::SetWantExit(void)
 // when SIGHUP is given, reload systemrc
 void systemrc_reload(int signum)
 {
-    notify(NFY_WARN, "Recieved signal %s, Reloading systemrc...",
-           khNotifyLevelToString(static_cast<khNotifyLevel>(signum)).c_str());
+    notify(NFY_WARN, "Recieved SIGHUP, Reloading systemrc...");
     Systemrc systemrc;
-    LoadSystemrc(systemrc);
+    LoadSystemrc(systemrc,true);
     uint32 logLevel = systemrc.logLevel;
     notify(NFY_WARN, "system log level changed to: %s",
            khNotifyLevelToString(static_cast<khNotifyLevel>(logLevel)).c_str());
