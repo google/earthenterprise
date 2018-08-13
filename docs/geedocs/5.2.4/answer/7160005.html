@@ -28,6 +28,8 @@
 <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
 <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion administration</h1>
 <h2>Dynamically adjusting logging levels</h2>
-<p>In some instances, it may be desirable to change the logging level of gesystemmanager dynamically during execution.  The log level can be set in <code>/etc/opt/google/systemrc</code> with the <code>&lt;logLevel&gt;</code> tag
+<p>In some instances, it may be desirable to change the logging level of gesystemmanager dynamically during execution.  The log level can be set in <code>/etc/opt/google/systemrc</code> with the <code>&lt;logLevel&gt;</code> tag. Accetable values range from 0-7, with 7 corresponding to the highest level.  When gesystemmanager loads, it will give preference to the <code>KH_NFY_LEVEL</code> environment variable.
+
+To dynamically reload the systemrc file: <code>/etc/init.d/gefusion reload</code>
 <div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
 </div></body> </html>
