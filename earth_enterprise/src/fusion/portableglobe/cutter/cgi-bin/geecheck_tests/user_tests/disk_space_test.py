@@ -17,6 +17,7 @@
 
 import os
 import xml.etree.ElementTree as ET
+from geecheck_tests import common
 
 # Need to use unittest2 for Python 2.6.
 try:
@@ -26,8 +27,8 @@ except ImportError:
 
 
 
-def getDiskInfo():
-  """Returns disk usage represented as percent of total available."""
+def getDiskFreeSpace():
+  """Returns free space on disk represented as percent of total available."""
   tree = ET.parse('/etc/opt/google/systemrc')
   root = tree.getroot()
 
@@ -38,10 +39,10 @@ def getDiskInfo():
   asset_root = sys_rc["assetroot"];
   mount_point = getMountPoint(asset_root)
 
-  available_space, size = getFsFreespace(mount_point)
-  percentage_used = (size - available_space) * 100 / size
+  available_space, size = getFsInfo(mount_point)
+  percentage_avail = 100 - ((size - available_space) * 100 / size)
 
-  return percentage_used
+  return percentage_avail
 
 
 def getMountPoint(pathname):
@@ -56,8 +57,8 @@ def getMountPoint(pathname):
     return mount_point
 
 
-def getFsFreespace(pathname):
-  """Get the free space of the filesystem containing pathname."""
+def getFsInfo(pathname):
+  """Get the free space and total size of the filesystem containing pathname."""
   statvfs = os.statvfs(pathname)
   # Size of filesystem in bytes
   size = statvfs.f_frsize * statvfs.f_blocks
@@ -69,9 +70,10 @@ def getFsFreespace(pathname):
 
 class TestDiskSpace(unittest.TestCase):
 
+    @unittest.skipUnless(common.IsFusionInstalled(), 'Fusion is not installed')
     def testAdequateDiskSpace(self):
       """Check that the remaining disk space is at least 20%."""
-      self.assertLessEqual(20, getDiskInfo())
+      self.assertLessEqual(20, getDiskFreeSpace())
 
 if __name__ == '__main__':
     unittest.main()

@@ -247,12 +247,12 @@
                         <cstring>TextLabel1_5</cstring>
                     </property>
                     <property name="text">
-                        <string>Aquisition Date:</string>
+                        <string>Acquisition Date:</string>
                     </property>
                 </widget>
                 <widget class="QDateTimeEdit">
                     <property name="name">
-                        <cstring>aquisitionDate</cstring>
+                        <cstring>AcquisitionDate</cstring>
                     </property>
                 </widget>
                 <spacer>

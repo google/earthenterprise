@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Manage mosaics with virtual rasters</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
+</head>
+<body>
+<!-- 6062318.html -->
+<div class="container">
+<div class="sidebar1">
+  <p class="sidebar-toc"><a href="../answer/6153619.html">Supported file formats in GEE</a></p>
+  <p class="sidebar-toc"><a href="../answer/6053241.html">Apply alpha masking to imagery</a></p>
+  <p class="sidebar-toc"><a href="../answer/172810.html">Import pre-processed data</a></p>
+  <p class="sidebar-toc"><a href="../answer/1090589.html">Import a subset of imagery</a></p>
+  <p class="sidebar-toc"><a href="../answer/173054.html">Add .kip imagery</a></p>
+  <p class="sidebar-toc"><a href="../answer/2882131.html">Vector data handling</a></p>
+  <p class="sidebar-toc"><a href="../answer/2760298.html">Google Maps raster background</a></p>
+  <p class="sidebar-toc"><a href="../answer/4525555.html">Create custom masks</a></p>
+  <p class="sidebar-toc"><a href="../answer/6062318.html" class="current-file">Manage mosaics with virtual rasters</a></p>
+  <p class="sidebar-toc"><a href="../answer/6081009.html">Map projection types in GEE 5.1.0</a></p>
+  <p class="sidebar-toc"><a href="../answer/6081069.html">Add flat imagery to Mercator map databases in GEE 5.1.0</a></p>
+  <p class="sidebar-toc"><a href="../answer/2760457.html">Add KML layers</a></p>
+  <p class="sidebar-toc"><a href="../answer/2760534.html">Non-clickable icons</a></p>
+  <p class="sidebar-toc"><a href="../answer/173053.html">Map projections</a></p>
+  <p class="sidebar-toc"><a href="../answer/1089795.html">Map buttons</a></p>
+  <p class="sidebar-toc"><a href="../answer/4492623.html">Create terrain overlays</a></p>
+  <p class="sidebar-toc"><a href="../answer/2760655.html">Monitor builds with Twitter</a></p>
+</div>
+<div class="content"> <a name="top_of_file"></a>
+  <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+  <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion resources and projects</h1>
+  <h2>Manage mosaics with virtual rasters</h2>
+  <p>When you have large data sets of imagery or terrain resources, importing them into Fusion can be inefficient and lead to gaps between data tiles. GEE provides a tool, <code>gevirtualraster</code>, which is ideal for grouping blocks (or subsets) of contiguous imagery or terrain and creating a <em>virtual mosaic</em> from them.</p>
+  <p>In the following example, this SRTM 90meter terrain data set has over 14,476 source files.</p>
+  <p><img alt="Virtual raster mosaic example" src="../art/fusion/resources/virtual_raster_mosaic_example.png"/></p>
+  <p>This example of a large set of terrain data presents three potential ways to import all large data sets of source files:</p>
+  <ul>
+    <li>Create one resource for all source TIF tiles. This data processing is inefficient as Fusion must fill all missing data between source terrain tiles (oceans).</li>
+    <li>Create one terrain resource per tif file (14, 476 in total). This data processing is inefficient and introduces feather gaps between terrain resources due to no overlap between source files.</li>
+    <li>Group the 14,476 files into virtual mosaics enabling you to select which files are grouped into mosaics.</li>
+  </ul>
+  <p>The most efficient method of grouping tiles into virtual mosaics is to use <code>gevirtualraster</code>, a command line tool that lets you access the tile groups directly, making your mosaic management very flexible. <code>Gevirtualraster</code> validates that each source file has geographic coordinates and that all files are consistent projections, number of bands, and band formats.</p>
+  <h2>Overview</h2>
+  <p>A <em>virtual mosaic</em> or virtual raster file is a simple text file that describes a mosaic of peer raster files with the following elements:</p>
+  <ul>
+    <li>Projection parameters (all peers with same projection)</li>
+    <li>Coordinate location of the overall raster (sum of parts)</li>
+    <li>Pixel dimensions</li>
+    <li>Band count and format (3 x 8 bit vs. 1 x 8 bit)</li>
+    <li>File path of all included source files</li>
+  </ul>
+  <p>Fusion can display the virtual raster file in <strong>Preview</strong> for simple visualization.</p>
+  <p>Fusion can also use the virtual raster file as source.</p>
+  <div class="note">
+    <p><strong>Note:</strong> <code>Gevirtualraster</code> is necessary if you are creating a custom mask file for the imagery or terrain resource as there is a software requirement of one source file for one custom mask file. See <a href="../answer/4525555.html">Create custom masks</a>. </p>
+  </div>
+  <h2>Example Usage</h2>
+  <p>This end-to-end example uses <code>gevirtualraster</code> to create a new Fusion resource from a set of 800+ contiguous imagery resources (jpeg2000) with consistent pixel size, projection, etc.</p>
+  <ol class="spaced-list">
+    <li>List the jpeg2000 files that are to be used for the virtual mosaic:
+      <p><code>$ ls -l *.tif | wc -l</code></p>
+      <p>863</p>
+    </li>
+  </ol>
+<li>Create a virtual raster file, specifiying the fill value to be used for the mosaic (<code>0,0,0 = black</code>), the name of the file to be generated (<code>my_virtualmosaic_20140624_1.khvr</code>), and include all of the <code>.tif</code> files in the current folder as input.
+  <p><code>$ gevirtualraster --fill 0,0,0 --tolerance 3 -o my_virtualmosaic_20140624_1.khvr *.tif</code></p>
+</li>
+<li>Import the virtual raster imagery file into Fusion, specifying the resource type, the virtual raster file to import and the output resource file, <code>$ my_virtualmosaic_20140624.kip</code>.
+  <p><code>gerasterimport --imagery my_virtualmosaic_20140624_1.khvr -o my_virtualmosaic_20140624.kip</code></p>
+</li>
+<li>Create a mask for the imagery resource, specifying band, fill, tolerance and feather values, and the imagery resource file and the name of the mask created.
+  <add article="" custom="" link="" mask="" to="">
+    <p><code>$ gemaskgen --mask --band 1 --fill 0 --tolerance 3 --feather 100 my_virtualmosaic_20140624_1.kip my_virtualmosaic_20140624_1-mask.tif</code></p>
+  </add>
+</li>
+<li>Import the generated alpha mask, creating a <code>.kmp</code> folder. Corresponding <code>.kip</code> and <code>.kmp</code> folders should be stored in the same directory.
+  <p><code>$ gerasterimport --alphamask my_virtualmosaic_20140624_1-mask.tif --imagery my_virtualmosaic_20140624_1.kip --output my_virtualmosaic_20140624_1.kmp</code></p>
+</li>
+<li>Define a new imagery resource.
+  <p><code>$ genewimageryresource -o Resources/Imagery/candid_my_virtualmosaic_20140624_1 /gevol/src/candid/my_virtualmosaic_20140624_1/my_virtualmosaic_20140624_1.kip</code></p>
+</li>
+<li>Build the new imagery resource.
+  <p><code>$ gebuild Resources/Imagery/candid_my_virtualmosaic_20140624_1</code></p>
+</li>
+<div class="tip"> For more information about using virtual mosaics, see <a href="../answer/4412688.html">Create virtual mosaics</a>. </div>
+<h2>Creating a virtual raster from a file list</h2>
+<p>You can create a virtual raster of all source files stored in a test file using the <code>gevirtualraster --filelist</code> option:</p>
+<p><code>$ gevirtualraster --fill 0,0,0 -o /gevol/src/imagery/example/example-mosaic-list.khvr --filelist /gevol/src/imagery/example/source-files.txt</code></p>
+<p>The file list must include one column of filenames and the full path of each source file must be included in the file list.</p>
+<h2>Gevirtualraster command line options</h2>
+<p>Various options are available to facilitate the creation of virtual raster files, including specifying the band values to be used as fill, tolerance values for the fill, and a file list of the source imagery or terrain files.</p>
+<p><code><strong>gevirtualraster</strong> [<strong>--crop</strong> <em>pixelx,pixely,pixelx,pixelh</em>] [<strong>--fill</strong> <em>a,b,...</em>] [<strong>--src</strong> <em>override_srs</em>] [<strong>--tolerance</strong> <em>num</em>] [<strong>--validate</strong>] <strong>-o</strong> <em>output</em>.khvr {<strong>sourcefile</strong> ... | <strong>--filelist</strong> file}</code></p>
+<h3>Example</h3>
+<p><code>gevirtualraster --fill 0,0,0 -o /gevol/src/imagery/usa/XX/new_location/all_files.khvr/gevol/src/imagery/usa/
+  XX/new_location/*.tif</code></p>
+<h3>Parameters</h3>
+<table class="nice-table">
+  <tbody>
+    <tr>
+      <th>Header</th>
+      <th>Header</th>
+    </tr>
+    <tr>
+      <td><code><strong>--crop</strong> <em>pixelx,pixely,pixelx,pixelh</em></code></td>
+      <td><p><em>Optional</em>. Crop the image to the specified pixel extents.</p></td>
+    </tr>
+    <tr>
+      <td><code><strong>--fill</strong> <em>a,b,...</em></code></td>
+      <td><p><em>Optional</em>. Specify band values to use as fill.</p></td>
+    </tr>
+    <tr>
+      <td><code><strong>--src</strong> <em>override_srs</em></code></td>
+      <td><p><em>Optional</em>. Specify the SRS.</p></td>
+    </tr>
+    <tr>
+      <td><code><strong>--tolerance</strong> <em>num</em></code></td>
+      <td><p><em>Optional</em>. Specify the tolerance to be applied to the fill. The default is 0.</p></td>
+    </tr>
+    <tr>
+      <td><code><strong>--validate</strong></code></td>
+      <td><p><em>Optional</em>. Validate the inputs and exit.</p></td>
+    </tr>
+    <tr>
+      <td><code><strong>-o</strong> <em>output</em>.khvr</code></td>
+      <td><p><em>Required</em>. Specify the name of the output file, which must have the <code>.khvr</code> extension.</p></td>
+    </tr>
+    <tr>
+      <td><code><strong>sourcefile</strong></code></td>
+      <td><p><em>Required</em>. Specify the path and file name of the source file for the resource. You can reference any network-available source file as this value. (Optional if you specify <code><strong>--filelist</strong></code> file.)</p></td>
+    </tr>
+    <tr>
+      <td><code><strong>--filelist</strong> file</code></td>
+      <td><p><em>Optional</em>. Specify the path and file name of a file that contains a list of source files that you want to include in the resource. You can use this option, list files individually, or use a combination of the two.</p></td>
+    </tr>
+  </tbody>
+</table>
+<h2>Splitting large virtual raster mosaics</h2>
+<p>If you create larger virtual raster mosaics, you may want to split them into smaller subsets. You can use the <code>gesplitkhvr</code> command line tool to automatically split large <code>.khvr</code> mosaics into subsets by specifying the number of rows and columns.</p>
+<p><code>gesplitkhvr [<strong>--rows</strong> <em>num</em>] [<strong>--cols</strong> <em>num</em>] [<strong>--overlap</strong> <em>num</em>] [<strong>--quiet</strong>] <strong><em>input</em>.khvr</strong></code></p>
+<p>The <code>gesplitkhvr</code> command creates two or more source files from a large imagery or terrain source file to reduce the size of each source file to under 80 GB in raw size. (Raw size = number of pixels width * number of pixels height * 3.) This tool produces a grid of image files designated as rows and columns.
+<h3>Example</h3>
+<p><code>gesplitkhvr --rows 4 --cols 4 --overlap 10 image_file.khvr</code></p>
+<h3>Parameters</h3>
+<table class="nice-table">
+  <tbody>
+    <tr>
+      <th>Header</th>
+      <th>Header</th>
+    </tr>
+    <tr>
+      <td><code><strong>--rows</strong> <em>num</em></code></td>
+      <td><p><em>Required</em>. Specify the number of resulting image files across.</p></td>
+    </tr>
+    <tr>
+      <td><code><strong>--cols</strong> <em>num</em></code></td>
+      <td><p><em>Required</em>. Specify the number of resulting image files high.</p></td>
+    </tr>
+    <tr>
+      <td><code><strong>--overlap</strong> <em>num</em></code></td>
+      <td><p><em>Optional</em>. Specify the number of pixels of overlap between the resulting images. The default is 300.</p></td>
+    </tr>
+    <tr>
+      <td><code><strong>--quiet</strong></code></td>
+      <td><p><em>Optional</em>. Do not display the progress messages in the terminal window.</p></td>
+    </tr>
+    <tr>
+      <td><code><strong><em>input</em></strong>.khvr</code></td>
+      <td><p><em>Required</em>. Specify the name of the input file. It must be a <code>.khvr</code> file.</p></td>
+    </tr>
+  </tbody>
+</table>
+<h2>Learn more</h2>
+<p><a href="../answer/4412688.html">Create virtual mosaics</a></p>
+<p><a href="../answer/4412689.html">Segment large imagery files</a></p>
+<p><a href="../answer/4525555.html">Create custom masks</a></p>
+</p>
+<div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>

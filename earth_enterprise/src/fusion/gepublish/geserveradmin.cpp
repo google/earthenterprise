@@ -250,7 +250,6 @@ void DisableCutter() {
   int ret_status =
     system("cd /opt/google/bin; "
            "chmod -x gepolygontoqtnodes; "
-           "chmod -x gerewritedbroot; "
            "chmod -x gekmlgrabber; "
            "chmod -x geportableglobebuilder; "
            "chmod -x geportableglobepacker; "
@@ -268,7 +267,6 @@ void EnableCutter() {
   int ret_status =
     system("cd /opt/google/bin; "
            "chmod +x gepolygontoqtnodes; "
-           "chmod +x gerewritedbroot; "
            "chmod +x gekmlgrabber; "
            "chmod +x geportableglobebuilder; "
            "chmod +x geportableglobepacker; "
