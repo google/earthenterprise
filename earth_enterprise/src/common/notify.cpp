@@ -44,6 +44,7 @@ static void* notifyCallData = NULL;
 khNotifyLevel getDefaultNotifyLevel() {
   char* variable;
   khNotifyLevel lev;
+  notify(NFY_WARN,"in getDefaultNotifyLevel");
   if ((variable = getenv("KH_NFY_LEVEL")) != NULL) {
     lev = (khNotifyLevel)atoi(variable);
     if (lev < NFY_WARN) {

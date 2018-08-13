@@ -136,11 +136,13 @@ khResourceProvider::Run(void)
   Systemrc systemrc;
   LoadSystemrc(systemrc);
 
-  uint32 logLevel = systemrc.logLevel;
-  notify(NFY_NOTICE,"system log level: %s",
+  if (getenv("KH_NFY_LEVEL") == NULL)
+  {
+       uint32 logLevel = systemrc.logLevel;
+       notify(NFY_NOTICE,"system log level: %s",
          khNotifyLevelToString(static_cast<khNotifyLevel>(logLevel)).c_str());
-  setNotifyLevel(static_cast<khNotifyLevel>(logLevel));
-
+       setNotifyLevel(static_cast<khNotifyLevel>(logLevel));
+  }
   uint32 numCPUs = systemrc.maxjobs;
   PERF_CONF_LOGGING( "rprovider_config_numcpus", "numcpus", numCPUs  );
   notify(NFY_WARN, "khResourceProvider: systemrc.maxjobs =  %d",  numCPUs  );
