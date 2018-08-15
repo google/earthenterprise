@@ -30,6 +30,7 @@
 #include "fusion/autoingest/geAssetRoot.h"
 #include "common/khFileUtils.h"
 #include "common/performancelogger.h"
+#include "fusion/config/gefConfigUtil.h"
 
 // ****************************************************************************
 // ***  global instances
@@ -89,6 +90,15 @@ khResourceManager::Init(void)
     geAssetRoot::Dirname(AssetDefs::AssetRoot(), geAssetRoot::StateDir);
 
   khLockGuard lock(mutex);
+  if(getenv("KH_NFY_LEVEL") == NULL)
+  {
+      Systemrc systemrc;
+      LoadSystemrc(systemrc);
+      uint32 logLevel = systemrc.logLevel;
+      notify(NFY_WARN, "system log level changed to: %s",
+             khNotifyLevelToString(static_cast<khNotifyLevel>(logLevel)).c_str());
+      setNotifyLevel(static_cast<khNotifyLevel>(logLevel));
+  }
 
   // Find all the old task symlinks and tell the asset manager to resubmit
   // them. The symlinks have the form (taskid.task -> verref)

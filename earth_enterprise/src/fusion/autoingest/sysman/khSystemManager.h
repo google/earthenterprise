@@ -19,6 +19,7 @@
 
 #include <khMTTypes.h>
 
+
 class khSystemManager  {
   khMutex mutex;
   bool wantexit;

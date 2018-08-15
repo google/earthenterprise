@@ -25,6 +25,7 @@
 #include <khSpawn.h>
 #include <autoingest/geAssetRoot.h>
 #include "common/performancelogger.h"
+#include "fusion/config/gefConfigUtil.h"
 
 
 
@@ -72,23 +73,31 @@ khSystemManager::SetWantExit(void)
   }
 }
 
+// when SIGHUP is given, reload systemrc
+void systemrc_reload(int signum)
+{
+    notify(NFY_WARN, "Recieved SIGHUP, Reloading systemrc...");
+    Systemrc systemrc;
+    LoadSystemrc(systemrc,true);
+    uint32 logLevel = systemrc.logLevel;
+    notify(NFY_WARN, "system log level changed to: %s",
+           khNotifyLevelToString(static_cast<khNotifyLevel>(logLevel)).c_str());
+    setNotifyLevel(static_cast<khNotifyLevel>(logLevel));
+}
+
+void handleExitSignals(int signum)
+{
+    notify(NFY_WARN, "Recieved SIGINT or SIGTERM, Exiting...");
+    theSystemManager.SetWantExit();
+}
+
+
 void
 khSystemManager::SignalLoop(void)
 {
-  sigset_t waitset;
-  sigemptyset(&waitset);
-  sigaddset(&waitset, SIGINT);
-  sigaddset(&waitset, SIGTERM);
-
-
-  int sig;
-  sigwait(&waitset, &sig);
-  if (sig > 0) {
-    notify(NFY_NOTICE, "Received signal %d. Exiting ...", sig);
-    SetWantExit();
-  } else {
-    notify(NFY_NOTICE, "Received signal %d. Ignoring ...", sig);
-  }
+  signal(SIGINT,handleExitSignals);
+  signal(SIGTERM,handleExitSignals);
+  signal(SIGHUP,systemrc_reload);
 }
 
 
