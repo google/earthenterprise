@@ -71,11 +71,11 @@ std::string ValidateHostReadyForConfig(void) {
   return GetAndValidateHostname();
 }
 
-void LoadSystemrc(Systemrc &systemrc) {
+void LoadSystemrc(Systemrc &systemrc, bool override_cache) {
   static Systemrc cached_systemrc;
   static bool     use_cached = false;
 
-  if (use_cached) {
+  if (use_cached && !override_cache) {
     systemrc = cached_systemrc;
     return;
   }
@@ -94,6 +94,12 @@ void LoadSystemrc(Systemrc &systemrc) {
       // of jobs.
       if (tmp.maxjobs == 0 || tmp.maxjobs > max_num_jobs) {
         tmp.maxjobs = std::min(max_num_jobs, kMaxNumJobsLimit);
+      }
+      if (tmp.logLevel < 0 || tmp.logLevel > 7)
+      {
+          notify(NFY_WARN, "systemrc contains invalid logLevel parameter! Defaulting to: %s",
+                 khNotifyLevelToString(NFY_DEFAULT_LEVEL).c_str());
+          tmp.logLevel = NFY_DEFAULT_LEVEL;
       }
       systemrc = cached_systemrc = tmp;
     }

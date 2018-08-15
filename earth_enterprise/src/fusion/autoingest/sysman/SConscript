@@ -108,7 +108,7 @@ gesystemmanager = env.executable('gesystemmanager',
       env['FUSIONVER'],
       ] +
     env.ObjFromOtherDir(extraObjs),
-    LIBS=['gegdal', 'geraster', 'gesearchtabs', 'genet', 'gepublish',
+    LIBS=['gegdal', 'geraster', 'gesearchtabs', 'genet', 'gepublish', 'gefconfigutil',
           'geindex_r', 'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'qt-mt', 'xerces-c', 'geos']
     )
 
