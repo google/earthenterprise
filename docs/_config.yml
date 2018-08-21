@@ -8,12 +8,11 @@ releasesUrl: https://github.com/google/earthenterprise/releases
 #highlighter: pygments
 excerpt_separator: <!--more-->
 
-gems:
+plugins:
   - jekyll-paginate
 
 paginate: 1
 paginate_path: "blog/page:num"
 
-#google analytics
+# Google Analytics Tracking ID
 google_analytics: UA—108632131-2
-
