@@ -248,13 +248,15 @@ smaller mask files</td>
 </tr>
 </tbody>
 </table>
-<h2 id="configure_cache_sizes">Configure cache sizes</h2>
+<h2 id="cache_configuration">Cache configuration</h2>
 <p><code>gesystemmanager</code> caches information about the assets and asset versions it is working with.
 The default sizes for these caches should work fine for most builds; however, increasing the cache sizes may speed up very large builds at the cost of increased memory usage.
 The cache sizes are controlled by the file <code>misc.xml</code> which can be found at <code>/gevol/assets/.config/misc.xml</code>
 (assuming your asset root is <code>/gevol/assets</code>; if not, modify the path accordingly).
 The asset cache size is controlled by <code>AssetCacheSize</code> and the asset version cache size is controlled by <code>VersionCacheSize</code>.
 Note that the asset version cache is generally larger than the asset cache because it may contain multiple versions of the same asset.</p>
+
+Also included within <code>misc.xml</code> is an experimental option, which allows for the user to disable cache purging while projects build. This is controlled by <code>DisablePacketLevelVersionCachePurge</code> and its default value is <code>false</code>.
 <h2>Learn more</h2>
 <ul>
 <li><a href="../answer/6033487.html">Benchmarking outcomes for applying task rules</a></li>
