@@ -28,7 +28,7 @@ class MiscConfigStorage {
 
   bool        GenerateProductPreviews = true;
   
-  bool        disablePacketLevelVersionCachePurge = false;
+  bool        DisablePacketLevelVersionCachePurge = false;
 
 #pragma LoadAndSave
 
