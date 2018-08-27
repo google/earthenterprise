@@ -26,6 +26,7 @@
 #include <string>
 #include <vector>
 #include "./packetbundle.h"
+#include "./callbacks.h"
 
 class GlcReader;
 
@@ -51,6 +52,8 @@ class PacketBundleFinder : public PacketBundle {
    * @return whether the index item was found.
    */
   bool FindPacketInIndex(IndexItem* index_item);
+
+  bool MapDataPacketWalker(int layer, const map_packet_walker& walker);
 
  private:
   const GlcReader& glc_reader_;

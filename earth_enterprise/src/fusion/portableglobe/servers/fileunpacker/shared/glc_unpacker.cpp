@@ -20,6 +20,7 @@
 #include <map>
 #include <sstream>  // NOLINT(readability/streams)
 #include <string>
+#include <cstring>
 #include <cassert>
 #include "./file_package.h"
 #include "./file_unpacker.h"
@@ -303,6 +304,21 @@ bool GlcUnpacker::FindMapDataPacket(const char* qtpath,
   }
 }
 
+
+void GlcUnpacker::MapDataPacketWalker(const map_packet_walker& walker) const
+{
+  if (!is_gee_) {
+    std::cerr << "Not a GEE file." << std::endl;
+    return;
+  }
+
+  for( auto& index_item : unpacker_index_) {
+    if (index_item.second->MapDataPacketWalker(index_item.first, walker) == true) {
+      break;
+    }
+  }
+}
+
 /**
  * Find qtp packet and set offset and size for the packet. Qtp packets can
  * be quadtree packets or a dbroot packet.
@@ -405,8 +421,8 @@ bool GlcUnpacker::FindLayerFile(const char* file_name,
  * package.
  */
 bool GlcUnpacker::FindFile(const char* file_name,
-                           PackageFileLoc* file_loc) {
-  std::map<std::string, PackageFileLoc>::iterator it;
+                           PackageFileLoc* file_loc) const {
+  std::map<std::string, PackageFileLoc>::const_iterator it;
   it = index_.find(file_name);
   if (it != index_.end()) {
     file_loc->Set(it->second.Offset(), it->second.Size());
@@ -449,8 +465,8 @@ bool GlcUnpacker::FindDbRoot(PackageFileLoc* data_loc) {
  * Get idx-th file in index. Assumes iteration order is stable if
  * index is unchanged.
  */
-const char* GlcUnpacker::IndexFile(int idx) {
-  std::map<std::string, PackageFileLoc>::iterator it;
+const char* GlcUnpacker::IndexFile(int idx) const {
+  std::map<std::string, PackageFileLoc>::const_iterator it;
   it = index_.begin();
   for (int i = 0; (i < idx) && (it != index_.end()); ++i, ++it) ;
 
@@ -549,4 +565,35 @@ const char* GlcUnpacker::Id() {
 
   id_ = sstream.str();
   return id_.c_str();
+}
+
+std::map<int, std::string> GlcUnpacker::getKmlData() {
+  std::map<int, std::string> kmlData;
+
+  for (auto &mapLayer : unpacker_index_) {
+    FileUnpacker *layerFile = mapLayer.second;
+    auto layerId = mapLayer.first;
+
+    for (int i = 0; i < layerFile->IndexSize(); ++i) {
+      auto package_file = layerFile->IndexFile(i);
+
+      if (strcmp(package_file, "earth/polygon.kml")) {
+        continue;
+      }
+
+      PackageFileLoc file_loc;
+      if (layerFile->FindFile(package_file, &file_loc)) {
+        auto& kmlDataStr = kmlData[layerId];
+        if (!glc_reader_.Read(&kmlDataStr, file_loc.Offset(), file_loc.Size())) {
+            std::cerr << "Unable to read kml file data." << std::endl;
+        }
+      } else {
+          std::cerr << "Unable to to position to the earth/polygon.kml file data." << std::endl;
+      }
+
+      break;
+    }
+  }
+
+  return kmlData;
 }
