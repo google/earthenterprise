@@ -1,0 +1,44 @@
+# -- revisit for later review
+
+# Disable to review/remediate later...
+addFilter("E: non-standard-executable-perm")
+
+# Disable to ignore for now, often issues from third party code, some is valid though.
+addFilter("^.* /opt/")
+addFilter("^.* /var/opt/")
+
+# Because this is in init.d it gets LOTS of error hits...
+addFilter("E: .* /etc/init.d/gevars.sh")
+
+# We are not currently renaming the logrotate file...
+addFilter("E: incoherent-logrotate-file")
+
+# We do not currently do changelogs in rpm specfiles...
+addFilter("E: no-changelogname-tag")
+
+# We should fix this...
+addFilter("E: devel-dependency proj-devel")
+
+# I believe this is spurious to how osPackage builds the rpm...
+addFilter("E: no-binary")
+
+# Will need more investigation
+addFilter("E: forbidden-selinux-command-in-%post")
+
+# This we should address
+addFilter("E: standard-dir-owned-by-package")
+
+# This seems to be an issue with osPackage on rhel6 only
+addFilter("E: useless-provides opengee-server")
+
+# -- never to revise
+
+# We do after all package explicitly for /opt...
+addFilter("E: dir-or-file-in-opt")
+
+# This is for systems (rhel7 or later) which use systemd, since we still have init scripts.
+addFilter("E: subsys-not-used")
+
+# We are not renaming geserver or gefusion at all
+addFilter("E: incoherent-init-script-name")
+

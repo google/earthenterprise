@@ -1,36 +1,15 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Google Earth Enterprise Documentation 5.2.1</title>
-<link rel="stylesheet" href="css/styles.css" type="text/css" media="all" />
-<link rel="stylesheet" href="css/containers.css" type="text/css" media="all" />
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-108632131-2"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'UA-108632131-2');
-</script>
-</head>
+---
+layout: doc
+section_id: geedocs
+---
+<div class="content"> <a name="top_of_file"></a>
+  <p><img src="art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+  <h2>Google Earth Enterprise  Documentation</h2>
+  <p>Select a Google Earth Enterprise Open Source version to view the documentation</p>
 
-<body>
-<div class="container" style="width: 75%">
-  <div class="sidebar1"> </div>
-  <div class="content"> <a name="top_of_file"></a>
-    <p><img src="art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
-    <h2>Google Earth Enterprise  Documentation</h2>
-    <p>Select a Google Earth Enterprise Open Source version to view the documentation</p>
-    <h4><a href="5.2.3/index.html">5.2.3 (unstable)</a></h4>
-    <h4><a href="5.2.2/index.html">5.2.2 (latest stable)</a></h4>
-    <h4><a href="5.2.1/index.html">5.2.1 (stable)</a></h4>
-    <h4><a href="5.2.0/index.html">5.2.0 (stable)</a></h4>
-  </div>
-  <div class="footer">
-    <hr />
-    <p class="copyright">&copy;2017 Google, &copy;2017-2018 Open GEE Contributors</p>
-  </div>
+  <!-- list versions in descending order -->
+  {% for version in site.data.versions reversed %}
+    <h4><a href="{{ version.version }}/index.html">{{ version.version }} ({{ version.stability }})</a></h4>
+  {% endfor %}
+
 </div>
-</body>
-</html>

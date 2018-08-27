@@ -20,7 +20,7 @@
 #include <cctype>
 #include <sys/types.h>
 #include <time.h>
-
+#include <locale>
 #include <notify.h>
 
 // notify() -- format and report notification message
@@ -60,6 +60,7 @@ khNotifyLevel getDefaultNotifyLevel() {
 
 static khNotifyLevel notifyLevel = getDefaultNotifyLevel();
 
+// TODO: lock?
 void setNotifyLevel(khNotifyLevel level) {
   notifyLevel = level;
 }
@@ -67,6 +68,55 @@ void setNotifyLevel(khNotifyLevel level) {
 khNotifyLevel getNotifyLevel() {
   return notifyLevel;
 }
+
+std::string khNotifyLevelToString(khNotifyLevel level)
+{
+    std::string retval;
+    switch(level)
+    {
+    case NFY_FATAL: retval = "NFY_FATAL"; break;
+    case NFY_WARN: retval = "NFY_WARN"; break;
+    case NFY_PROGRESS: retval = "NFY_PROGRESS"; break;
+    case NFY_INFO: retval = "NFY_INFO"; break;
+    case NFY_INFO2: retval = "NFY_INFO2"; break;
+    case NFY_DEBUG: retval = "NFY_DEBUG"; break;
+    case NFY_VERBOSE: retval = "NFY_VERBOSE"; break;
+    case NFY_NOTICE:
+    default: retval = "NFY_NOTICE";
+    };
+    return retval;
+}
+
+khNotifyLevel stringTokhNotifyLevel(const std::string& _level)
+{
+    khNotifyLevel retval;
+    std::locale loc;
+    std::string level(_level);
+
+    // make it case-insensitive
+    for(std::string::size_type i = 0; i < level.length(); ++i)
+        level[i] = std::toupper(level[i],loc);
+
+    if (level == "NFY_FATAL")
+        retval = NFY_FATAL;
+    else if (level == "NFY_WARN")
+        retval = NFY_WARN;
+    else if (level == "NFY_PROGRESS")
+        retval = NFY_PROGRESS;
+    else if (level == "NFY_INFO")
+        retval = NFY_INFO;
+    else if (level == "NFY_INFO2")
+        retval = NFY_INFO2;
+    else if (level == "NFY_DEBUG")
+        retval = NFY_DEBUG;
+    else if (level == "NFY_VERBOSE")
+        retval = NFY_VERBOSE;
+    else if (level == "NFY_NOTICE")
+        retval = NFY_NOTICE;
+    else
+        retval = NFY_DEFAULT_LEVEL;
+    return retval;
+};
 
 std::string NotifyPrefix("Fusion");
 const std::string TimePrefix("[time]");
