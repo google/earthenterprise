@@ -27,6 +27,7 @@
 #include "./file_package.h"
 #include "./glc_reader.h"
 #include "./packetbundle_finder.h"
+#include "./callbacks.h"
 
 class GlcReader;
 
@@ -57,6 +58,8 @@ class FileUnpacker {
                          int packet_type,
                          int channel,
                          PackageFileLoc* data_loc);
+
+  bool MapDataPacketWalker(int layer, const map_packet_walker& walker);
 
   /**
    * Find qtp packet and set offset and size for the packet. Qtp packets can

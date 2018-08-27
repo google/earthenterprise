@@ -71,9 +71,16 @@ class PortableGlcReader : public GlcReader {
    */
   virtual std::string Suffix() const { return suffix_; }
 
+  /**
+   * Return the name of the file without the suffix.
+   */
+  virtual std::string Filename() const { return filename_nosuffix_; }
+
  private:
   mutable FILE* glc_file_;
   uint64 glc_file_size_;
+  const std::string path_;
+  std::string filename_nosuffix_;
   std::string suffix_;
 };
 

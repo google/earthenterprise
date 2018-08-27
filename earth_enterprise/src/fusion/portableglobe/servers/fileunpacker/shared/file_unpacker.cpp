@@ -293,6 +293,11 @@ bool FileUnpacker::FindMapDataPacket(const char* qtpath,
   return false;
 }
 
+bool FileUnpacker::MapDataPacketWalker(int layer, const map_packet_walker& walker)
+{
+  return mapdata_packet_finder_->MapDataPacketWalker(layer, walker);
+}
+
 /**
  * Find qtp packet and set offset and size for the packet. Qtp packets can
  * be quadtree packets or a dbroot packet.
