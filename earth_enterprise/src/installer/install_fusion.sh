@@ -70,6 +70,7 @@ main_preinstall()
 		IS_NEWINSTALL=false
 	else
 		IS_NEWINSTALL=true
+		BACKUPFUSION=false
 	fi
 
 	# Argument check
