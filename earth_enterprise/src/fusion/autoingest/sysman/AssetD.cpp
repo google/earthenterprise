@@ -74,7 +74,9 @@ AssetImplD::InputsUpToDate(const AssetVersion &version,
 void
 AssetImplD::UpdateInputs(std::vector<AssetVersion> &inputvers) const
 {
-  inputvers.reserve(inputs.size());
+  std::size_t inputs_count = inputs.size();
+
+  inputvers.reserve(inputs_count);
   for (std::vector<std::string>::const_iterator i = inputs.begin();
        i != inputs.end(); ++i) {
     AssetVersionRef verref(*i);
@@ -85,8 +87,11 @@ AssetImplD::UpdateInputs(std::vector<AssetVersion> &inputvers) const
       AssetD asset(verref.AssetRef());
       bool needed = false;
       inputvers.push_back(asset->Update(needed));
+      notify(NFY_PROGRESS, "Updating asset input %lu (of %lu input%s).",
+        i - inputs.begin(), inputs_count, inputs_count == 1 ? "" : "s");
     } else {
       inputvers.push_back(AssetVersion(verref));
     }
   }
+  notify(NFY_PROGRESS, "Updating asset inputs complete.");
 }
