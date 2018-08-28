@@ -78,3 +78,18 @@ bool PacketBundleFinder::FindPacketInIndex(IndexItem* index_item) {
 }
 
 
+bool PacketBundleFinder::MapDataPacketWalker(int layer, const map_packet_walker& walker)
+{
+  IndexItem next_item;
+  for(uint64 idx = 0; idx < num_index_items_; ++idx) {
+    uint64 offset = index_offset_ + idx * sizeof(IndexItem);
+    glc_reader_.ReadData(reinterpret_cast<char*>(&next_item),
+                         offset, sizeof(IndexItem));
+    if ( walker(layer, next_item) == true ) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
