@@ -500,7 +500,9 @@ prompt_install_confirmation()
 	echo -e "# CPU's: \t\t$NUM_CPUS"
 	echo -e "Operating System: \t$MACHINE_OS_FRIENDLY"
 	echo -e "64 bit OS: \t\tYES"	# Will always be true because we exit if 32 bit OS
-	echo -e "Backup Fusion: \t\t$backupStringValue"
+	if [ $IS_NEWINSTALL == false ]; then
+		echo -e "Backup Fusion: \t\t$backupStringValue"
+	fi
 	echo -e "Install Location: \t$BASEINSTALLDIR_OPT"
 	echo -e "Asset Root: \t\t$ASSET_ROOT"
     echo -e "Source Volume: \t\t$SOURCE_VOLUME"
