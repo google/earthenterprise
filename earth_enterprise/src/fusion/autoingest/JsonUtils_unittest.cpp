@@ -23,13 +23,342 @@ namespace {
 
 class JsonUnitTest : public testing::Test { };
 
-TEST_F(JsonUnitTest, singleFieldNospaces) {
+// Testing when the Javascript is simply null
+// The conversion method should handle it correctly
+TEST_F(JsonUnitTest, nullFields) {
+    const std::string js = R"js_()js_";
+    const std::string expectedJson = R"js_()js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// Testing the Javascript could be simply empty
+TEST_F(JsonUnitTest, emptyFields) {
+    const std::string js = R"js_({})js_";
+    const std::string expectedJson = R"js_({})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// Testing the value can be empty
+TEST_F(JsonUnitTest, unsetValue) {
+    const std::string js = R"js_({name:""})js_";
+    const std::string expectedJson = R"js_({"name":""})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// this checks the quotes are added to the key when string
+TEST_F(JsonUnitTest, noKeyQuotes) {
     const std::string js = R"js_({name:"fred"})js_";
     const std::string expectedJson = R"js_({"name":"fred"})js_";
     std::string result = JsonUtils::JsToJson(js);
 
     EXPECT_EQ(expectedJson, result);
 }
+
+// this checks the conversion detects they are strings and quotes them
+TEST_F(JsonUnitTest, noValueQuotes) {
+    const std::string js = R"js_({name:fred})js_";
+    const std::string expectedJson = R"js_({"name":"fred"})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// this is the most "normal" string case
+TEST_F(JsonUnitTest, doubleKeyQuotes) {
+    const std::string js = R"js_({"name":"fred"})js_";
+    const std::string expectedJson = R"js_({"name":"fred"})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// Ok so apparently using single quotes is somewhat common
+// Surely the conversion utility shouldn't just "accept" them
+// and put double quotes INSIDE of them!
+//TEST_F(JsonUnitTest, singleQuotes) {
+//    const std::string js = R"js_({'name':'fred'})js_";
+//    const std::string expectedJson = R"js_({"name":"fred"})js_";
+//    std::string result = JsonUtils::JsToJson(js);
+//
+//    EXPECT_EQ(expectedJson, result);
+//}
+
+// single quotes are just another character in keyname
+TEST_F(JsonUnitTest, singleQuoteInKey) {
+    const std::string js = R"js_({"fred's":"name"})js_";
+    const std::string expectedJson = R"js_({"fred's":"name"})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// While unlikely and dangerous, this seems legal in Javascript
+// Perhaps a bogus test/unlikely edge case
+//TEST_F(JsonUnitTest, doubleQuoteInKey) {
+//    const std::string js = R"js_({"freds\"car\"":"christine"})js_";
+//    const std::string expectedJson = R"js_({"freds\"car\"":"christine"})js_";
+//    std::string result = JsonUtils::JsToJson(js);
+//
+//    EXPECT_EQ(expectedJson, result);
+//}
+
+// single quotes are just another character
+TEST_F(JsonUnitTest, singleQuoteInValue) {
+    const std::string js = R"js_({"car":"fred's"})js_";
+    const std::string expectedJson = R"js_({"car":"fred's"})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// Can we escape quotes?  This is legit for Javascript
+//TEST_F(JsonUnitTest, doubleQuoteInValue) {
+//    const std::string js = R"js_({"carname":"\"christine\""})js_";
+//    const std::string expectedJson = R"js_({"carname":"\"christine\""})js_";
+//    std::string result = JsonUtils::JsToJson(js);
+//
+//    EXPECT_EQ(expectedJson, result);
+//}
+
+// this is legal in json
+TEST_F(JsonUnitTest, spaceInKey) {
+    const std::string js = R"js_({"my name is":"fred"})js_";
+    const std::string expectedJson = R"js_({"my name is":"fred"})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// this is legal in json
+TEST_F(JsonUnitTest, spaceInValue) {
+    const std::string js = R"js_({name:"fred flintstone"})js_";
+    const std::string expectedJson = R"js_({"name":"fred flintstone"})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// this is legal in json
+TEST_F(JsonUnitTest, underscoreInKey) {
+    const std::string js = R"js_({"my_name_is":"fred"})js_";
+    const std::string expectedJson = R"js_({"my_name_is":"fred"})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// this is legal in json
+TEST_F(JsonUnitTest, underscoreInValue) {
+    const std::string js = R"js_({name:"fred_flintstone"})js_";
+    const std::string expectedJson = R"js_({"name":"fred_flintstone"})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// this is legal in json
+TEST_F(JsonUnitTest, dotInKey) {
+    const std::string js = R"js_({"my.name.is":"fred"})js_";
+    const std::string expectedJson = R"js_({"my.name.is":"fred"})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// this is legal in json
+TEST_F(JsonUnitTest, dotInValue) {
+    const std::string js = R"js_({name:"fred.flintstone"})js_";
+    const std::string expectedJson = R"js_({"name":"fred.flintstone"})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// this is legal in json
+TEST_F(JsonUnitTest, dashInKey) {
+    const std::string js = R"js_({"my-name-is":"fred"})js_";
+    const std::string expectedJson = R"js_({"my-name-is":"fred"})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// this is legal in json
+TEST_F(JsonUnitTest, dashInValue) {
+    const std::string js = R"js_({name:"fred-flintstone"})js_";
+    const std::string expectedJson = R"js_({"name":"fred-flintstone"})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// this is legal in json
+TEST_F(JsonUnitTest, spaceStartValue) {
+    const std::string js = R"js_({" name":"fred"})js_";
+    const std::string expectedJson = R"js_({" name":"fred"})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// This is legal in json
+TEST_F(JsonUnitTest, underscoreStartValue) {
+    const std::string js = R"js_({"_name":"fred"})js_";
+    const std::string expectedJson = R"js_({"_name":"fred"})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// this is legal in json
+TEST_F(JsonUnitTest, dotStartValue) {
+    const std::string js = R"js_({".name":"fred"})js_";
+    const std::string expectedJson = R"js_({".name":"fred"})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// this is legal in json
+TEST_F(JsonUnitTest, dashStartValue) {
+    const std::string js = R"js_({"-name":"fred"})js_";
+    const std::string expectedJson = R"js_({"-name":"fred"})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// While illegal in json with . reference it is ok otherwise
+TEST_F(JsonUnitTest, numericStartValue) {
+    const std::string js = R"js_({"123name":"fred"})js_";
+    const std::string expectedJson = R"js_({"123name":"fred"})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// Simple multiple pair case
+TEST_F(JsonUnitTest, multiplePairs) {
+    const std::string js = R"js_({name:"fred",car:"christine"})js_";
+    const std::string expectedJson = 
+        R"js_({"name":"fred","car":"christine"})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// Should it eat white space? I would think the conversion would collapse it.
+// This may not be a bug.  Yes the test is ugly on purpose to contrast output
+//TEST_F(JsonUnitTest, spansMultipleLines) {
+//    const std::string js = R"js_({name:"fred", 
+//         car:"christine"
+//        ,color:"red"})js_";
+//    const std::string expectedJson = 
+//        R"js_({"name":"fred","car":"christine","color":"red"})js_";
+//    std::string result = JsonUtils::JsToJson(js);
+//
+//    EXPECT_EQ(expectedJson, result);
+//}
+
+// Return/NewLine should be... eaten? Replaced with a space?
+// Surely not just have extra escape chars thrown at it
+//TEST_F(JsonUnitTest, newlineInValue) {
+//    const std::string js = R"js_({"name":"fred\r\nis\r\ncool\r\n"})js_";
+//    const std::string expectedJson = R"js_({"name":"frediscool"})js_";
+//    std::string result = JsonUtils::JsToJson(js);
+//
+//    EXPECT_EQ(expectedJson, result);
+//}
+
+// should allow for a numeric key, and not convert to string
+TEST_F(JsonUnitTest, numericKey) {
+    const std::string js = R"js_({0:"fred"})js_";
+    const std::string expectedJson = R"js_({0:"fred"})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// should allow for numeric and not convert to string
+TEST_F(JsonUnitTest, numericValue) {
+    const std::string js = R"js_({number:5})js_";
+    const std::string expectedJson = R"js_({"number":5})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// should allow for boolean and not convert to string
+TEST_F(JsonUnitTest, booleanValue) {
+    const std::string js = R"js_({isBugFree:false})js_";
+    const std::string expectedJson = R"js_({"isBugFree":false})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// the least complex array case, all strings
+TEST_F(JsonUnitTest, stringArrayValue) {
+    const std::string js = 
+        R"js_({name:["tom","dick","harry"],me:"fred"})js_";
+    const std::string expectedJson = 
+        R"js_({"name":["tom","dick","harry"],"me":"fred"})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// should allow for boolean array and not convert to strings
+TEST_F(JsonUnitTest, booleanArrayValue) {
+    const std::string js = 
+        R"js_({today:true,isBugFree:[false,false,false]})js_";
+    const std::string expectedJson = 
+        R"js_({"today":true,"isBugFree":[false,false,false]})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// should allow for numeric array and not convert to strings
+TEST_F(JsonUnitTest, numericArrayValue) {
+    const std::string js = 
+        R"js_({0:"true",salary:[1000,2000,1990]})js_";
+    const std::string expectedJson = 
+        R"js_({0:"true","salary":[1000,2000,1990]})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// should not convert either key or value to string
+TEST_F(JsonUnitTest, numericBoolean) {
+    const std::string js = R"js_({0:false,1:true})js_";
+    const std::string expectedJson = R"js_({0:false,1:true})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// should not convert boolean or numeric subobjects to strings
+TEST_F(JsonUnitTest, subObjectTest) {
+    const std::string js = 
+        R"js_({names:{first:fred,new:false,house:10}})js_";
+    const std::string expectedJson = 
+        R"js_({"names":{"first":"fred","new":false,"house":10}})js_";
+    std::string result = JsonUtils::JsToJson(js);
+
+    EXPECT_EQ(expectedJson, result);
+}
+
+// possible additional tests
+// 1. Arrays that span multiple lines
+// 2. Subobjects that span multiple lines
 
 }  // namespace
 
