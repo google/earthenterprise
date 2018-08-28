@@ -28,13 +28,33 @@
 /**
  * Constructor.
  */
-PortableGlcReader::PortableGlcReader(const char* path) {
-  glc_file_ = fopen(path, "rb");
-  std::string path_str = path;
-  if (path_str.size() > 3) {
-    suffix_ = path_str.substr(path_str.size() - 3, 3);
+PortableGlcReader::PortableGlcReader(const char* path)
+  : path_(path) {
+  glc_file_ = fopen(path_.c_str(), "rb");
+
+  auto last_sep = path_.find_last_of('/');
+  if (last_sep == std::string::npos) {
+    // No forward slash.  Look for backward slash in case we're on Windows.
+    last_sep = path_.find_last_of('\\');
+  }
+
+  std::string full_filename;
+  if (last_sep != std::string::npos) {
+    full_filename = path_.substr(last_sep + 1);
   } else {
-    suffix_ = path_str;
+    full_filename = path_;
+  }
+
+  auto last_dot = full_filename.find_last_of('.');
+  if (last_dot != std::string::npos) {
+    filename_nosuffix_ = full_filename.substr(0, last_dot);
+
+    last_dot++;
+    if (last_dot < full_filename.length()) {
+      suffix_ = full_filename.substr(last_dot);
+    }
+  } else {
+    filename_nosuffix_ = full_filename;
   }
 
   // Set file size (important for negative offsets).
