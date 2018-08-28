@@ -85,7 +85,8 @@ ValidOptions = set(
      'bundle_3rd_libs',  # Build with bundling 3rd party libs.
      'log_performance',  # Include code for performance logging
      'cpp_standard',     # The standard of CPP that will be used.  Default is C++11
-     'label'             # Value to combine with version strings.
+     'label',            # Value to combine with version strings.
+     'build_folder'      # where to put the build output and intermediate files 
      ]);
 
 for argkey in ARGUMENTS:
@@ -112,6 +113,7 @@ bundle_3rd_libs = int(ARGUMENTS.get('bundle_3rd_libs', 0))
 cc_dir = ARGUMENTS.get('cc_dir', None)
 log_performance = int( ARGUMENTS.get( 'log_performance', 0 ) )
 cpp_standard = ARGUMENTS.get('cpp_standard', 'gnu++11')
+build_folder = ARGUMENTS.get('build_folder', Dir('#/.').abspath)
 label = ARGUMENTS.get('label', '')
 
 # make some directory variables used by other parts of the build system
@@ -151,7 +153,8 @@ if native_cc:
   builddir = 'NATIVE-' + builddir
 
 # setup export directories
-exportdir = Dir('#/%s' % builddir).abspath
+exportdir = os.path.join(build_folder, builddir) 
+# Dir('/home/rick/builds/mnt/c/Users/rwildes/projects/geoplatform/earthenterprise/earth_enterprise/src/%s' % builddir).abspath
 exportdirs = {
     'root': exportdir+'/',
     'lib': exportdir+'/lib/',
@@ -433,10 +436,10 @@ env = khEnvironment(
     CPPFLAGS=cppflags,
     CPPPATH=[
              # generated 3rd party headers
-             Dir(builddir + '/include'),
-             Dir(builddir),  # generated headers
+             Dir(exportdir + '/include'),
+             Dir(exportdir),  # generated headers
              Dir('.'),
-             Dir(builddir+'/common'),
+             Dir(exportdir+'/common'),
              Dir('common'),
              Dir('common/khmisc'),
              src_keyhole_abs_dir],
@@ -506,6 +509,6 @@ env['LRELEASE'] = qtdir+'/bin/lrelease'
 
 env['KHIDL'] = File('#common/khxml/khidl.pl')
 
-SConscript('SConscript', build_dir=builddir, duplicate=0)
+SConscript('SConscript', build_dir=exportdir, duplicate=0)
 
 env.Clean('cleanall', [[exportdir+"/"+x for x in os.listdir(exportdir) if x != "third_party"]])

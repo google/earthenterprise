@@ -24,6 +24,7 @@ protobuf_version='protobuf-2.4.1'
 protobuf_ge_version = protobuf_version.replace('protobuf', 'protobuf-ge')
 
 protobuf_source = Dir('#/../../earth_enterprise/src/google/protobuf-py').abspath
+gee_protoc = File('#/../../earth_enterprise/tools/bin/protoc').abspath
 
 local_env = env.DeepCopy()
 
@@ -53,8 +54,8 @@ protobuf_build = local_env.Command(
     protobuf_target, protobuf_copy,
     [local_env.MultiCommand(
         'cd %s\n'
-        '%s setup.py\n'
-        'touch %s' % (build_root, python_cmd, protobuf_target))])
+        '%s setup.py compiler "%s"\n'
+        'touch %s' % (build_root, python_cmd, gee_protoc, protobuf_target))])
 
 # TODO: use setup.py for creating master installer (install
 # into local directory)?
