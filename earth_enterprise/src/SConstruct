@@ -154,7 +154,6 @@ if native_cc:
 
 # setup export directories
 exportdir = os.path.join(build_folder, builddir) 
-# Dir('/home/rick/builds/mnt/c/Users/rwildes/projects/geoplatform/earthenterprise/earth_enterprise/src/%s' % builddir).abspath
 exportdirs = {
     'root': exportdir+'/',
     'lib': exportdir+'/lib/',
