@@ -18,16 +18,14 @@
 #define GEO_EARTH_ENTERPRISE_SRC_FUSION_AUTOINGEST_JSUTILS_H_
 
 #include <string>
-#include <vector>
-#include <map>
 
 
 // JsUtils is a static utility class for JS
 class JsUtils {
- private:
-  JsUtils() {}  // Static class. Do not allow construction.
 
  public:
+  JsUtils() = delete;
+  JsUtils(const JsUtils&) = delete;
 
   // Utility for converting a string with a Java Script object definition
   // to a string with a JSON format.  Note: this function does not validate

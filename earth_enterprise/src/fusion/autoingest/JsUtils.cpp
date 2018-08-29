@@ -14,11 +14,6 @@
 
 
 #include "fusion/autoingest/JsUtils.h"
-#include <math.h>
-#include <map>
-#include <string>
-#include <vector>
-#include <iostream>
 #include <sstream>
 #include <array>
 
