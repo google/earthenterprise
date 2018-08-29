@@ -176,7 +176,7 @@ commoncpp = [
     'LayerConfigImpl.cpp', 'MapProjectConfigImpl.cpp',
     'QueryConfigImpl.cpp', 'AssetTraverser.cpp',
     'geAssetRoot.cpp', 'SearchTabReferenceImpl.cpp',
-    'JsonUtils.cpp'
+    'JsonUtils.cpp', 'JsUtils.cpp'
     ] + \
     map(lambda n: '.idl/'+n+'.cpp', idlfiles) + \
     map(lambda p: 'plugins/'+p+'Asset.cpp', plugins)
@@ -206,8 +206,8 @@ env.test('AssetDefsExtra_unittest',
          'AssetDefsExtra_unittest.cpp',
          LIBS=['geautoingest', 'gemiscconfig', 'gtest'])
 
-env.test('JsonUtils_unittest',
-         'JsonUtils_unittest.cpp',
+env.test('JsUtils_unittest',
+         'JsUtils_unittest.cpp',
          LIBS=['geautoingest', 'gemiscconfig', 'gtest'])
 
 SConscript('sysman/SConscript', exports=['env', 'commonobj', 'plugins'])
