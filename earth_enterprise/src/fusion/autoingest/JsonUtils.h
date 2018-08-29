@@ -69,12 +69,6 @@ class JsonUtils {
     const DbHeader& db_header,
     const std::string& locale);
 
-  // Utility for converting a string with a Java Script object definition
-  // to a string with a JSON format.  Note: this function does not validate
-  // the JS object definition string and assumes the input is valid JS.  If
-  // the input is not valid JS undefined results will happen.
-  static std::string JsToJson(const std::string& in);
-
  protected:
   // Create a JSON string for a set of search tabs.
   // search_tabs: the list of search tab definitions

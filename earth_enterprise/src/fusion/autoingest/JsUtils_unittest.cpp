@@ -13,20 +13,20 @@
 // limitations under the License.
 
 
-// Unit tests for Json Utilities 
+// Unit tests for Js Utilities
 
 #include <string>
 #include <gtest/gtest.h>
-#include "fusion/autoingest/JsonUtils.h"
+#include "fusion/autoingest/JsUtils.h"
 
 namespace {
 
-class JsonUnitTest : public testing::Test { };
+class JsUnitTest : public testing::Test { };
 
-TEST_F(JsonUnitTest, singleFieldNospaces) {
+TEST_F(JsUnitTest, singleFieldNospaces) {
     const std::string js = R"js_({name:"fred"})js_";
     const std::string expectedJson = R"js_({"name":"fred"})js_";
-    std::string result = JsonUtils::JsToJson(js);
+    std::string result = JsUtils::JsToJson(js);
 
     EXPECT_EQ(expectedJson, result);
 }
