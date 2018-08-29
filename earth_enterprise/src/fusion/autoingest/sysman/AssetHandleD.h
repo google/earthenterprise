@@ -189,7 +189,13 @@ class MutableAssetHandleD_ : public virtual Base_ {
       for (std::vector<std::string>::iterator it = toDelete.begin();
            it != toDelete.end(); ++it) {
         if (dirtyMap.find(*it) != dirtyMap.end()) {
-          std::string filename = dirtyMap[*it]->XMLFilename() + ".new";
+          std::string filename = dirtyMap[*it]->XMLFilename();// + ".new";
+          notify(NFY_NOTICE,"AssetHandleD.h:193: filename = %s",
+                 filename.c_str());
+          if (filename.rfind(".new") == std::string::npos)
+          {
+              filename += ".new";
+          }
           if (dirtyMap[*it]->Save(filename)) {
             filetrans.AddNewPath(filename);
           }
