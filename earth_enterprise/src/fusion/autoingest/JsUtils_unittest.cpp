@@ -13,7 +13,7 @@
 // limitations under the License.
 
 
-// Unit tests for Json Utilities 
+// Unit tests for Js Utilities 
 
 #include <string>
 #include <gtest/gtest.h>
