@@ -113,7 +113,7 @@ bundle_3rd_libs = int(ARGUMENTS.get('bundle_3rd_libs', 0))
 cc_dir = ARGUMENTS.get('cc_dir', None)
 log_performance = int( ARGUMENTS.get( 'log_performance', 0 ) )
 cpp_standard = ARGUMENTS.get('cpp_standard', 'gnu++11')
-build_folder = ARGUMENTS.get('build_folder', Dir('#/.').abspath)
+build_folder = ARGUMENTS.get('build_folder', 0)
 label = ARGUMENTS.get('label', '')
 
 # make some directory variables used by other parts of the build system
@@ -136,6 +136,7 @@ if not native_cc and not os.path.isdir(compatibility_dir):
   print "ERROR: %s doesn't exist.\nPlease run %s/../rpms/build_scripts/update_ghardy.sh" % (compatibility_dir, top_dir)
   Exit(1)
 
+
 if release:
   builddir = 'REL-'
 elif optimize:
@@ -151,8 +152,15 @@ builddir += march
 if native_cc:
   builddir = 'NATIVE-' + builddir
 
+if build_folder:
+  builddir = build_folder
+
 # setup export directories
-exportdir = os.path.join(build_folder, builddir)
+if os.path.isabs(builddir):
+  exportdir = builddir
+else:
+  exportdir = Dir('#/%s' % builddir).abspath
+
 exportdirs = {
     'root': exportdir+'/',
     'lib': exportdir+'/lib/',
@@ -434,10 +442,10 @@ env = khEnvironment(
     CPPFLAGS=cppflags,
     CPPPATH=[
              # generated 3rd party headers
-             Dir(exportdir + '/include'),
-             Dir(exportdir),  # generated headers
+             Dir(builddir + '/include'),
+             Dir(builddir),  # generated headers
              Dir('.'),
-             Dir(exportdir+'/common'),
+             Dir(builddir + '/common'),
              Dir('common'),
              Dir('common/khmisc'),
              src_keyhole_abs_dir],
