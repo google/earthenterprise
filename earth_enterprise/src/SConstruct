@@ -516,6 +516,7 @@ env['LRELEASE'] = qtdir+'/bin/lrelease'
 env['KHIDL'] = File('#common/khxml/khidl.pl')
 
 env.PhonyTargets(build_dir = 'BUILD_DIR=' + builddir)
+env.SConsignFile(os.path.join(builddir, 'scons-signatures'))
 SConscript('SConscript', variant_dir=builddir, duplicate=0)
 
 env.Clean('cleanall', [[exportdir+"/"+x for x in os.listdir(exportdir) if x != "third_party"]])
