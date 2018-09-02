@@ -50,6 +50,10 @@ for root, dirs, files in os.walk('..'):
       # If we find one tar file that seems OK, assume all are OK
       break
 
+cache_dir = ARGUMENTS.get('cache_dir', 0)
+if cache_dir:
+  CacheDir(cache_dir)
+
 # list of dirs to try to build (if present)
 dirs = ['third_party', 'google', 'keyhole', 'common', 'fusion', 'server',
         'maps', 'share/taskrules', 'support', 'earthplugin', 'javascript']
