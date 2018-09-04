@@ -86,7 +86,8 @@ ValidOptions = set(
      'log_performance',  # Include code for performance logging
      'cpp_standard',     # The standard of CPP that will be used.  Default is C++11
      'label',            # Value to combine with version strings.
-     'build_folder'      # where to put the build output and intermediate files
+     'build_folder',     # where to put the build output and intermediate files
+     'cache_dir'         # use a cache dir to speed up build
      ]);
 
 for argkey in ARGUMENTS:
@@ -516,7 +517,6 @@ env['LRELEASE'] = qtdir+'/bin/lrelease'
 env['KHIDL'] = File('#common/khxml/khidl.pl')
 
 env.PhonyTargets(build_dir = 'BUILD_DIR=' + builddir)
-env.SConsignFile(os.path.join(builddir, 'scons-signatures'))
 SConscript('SConscript', variant_dir=builddir, duplicate=0)
 
 env.Clean('cleanall', [[exportdir+"/"+x for x in os.listdir(exportdir) if x != "third_party"]])
