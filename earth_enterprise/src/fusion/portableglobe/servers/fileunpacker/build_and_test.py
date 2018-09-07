@@ -25,6 +25,7 @@ maps.
 
 import distutils.sysconfig
 import os
+import platform
 import re
 import shutil
 import subprocess
@@ -78,13 +79,24 @@ def BuildLibrary(os_dir, ignore_results):
 
   configure_c_compiler(os_dir)
 
+  specialDefs = ''
+  if os_dir == "Windows":
+    # The logic below fixes a method used by the swig c++ wrapper. Mingw python headers
+    # should detect and fix this but for some reason they aren't working with mingw64
+    pythonCLib = "libpython" + sys.version + ".a"
+    pathToLib = os.path.join(sys.exec_prefix, "libs", pythonCLib)
+    archData = platform.architecture(pathToLib)
+    if archData[0] == "64bit":
+      specialDefs = "-DMS_WIN64"
+
   os.chdir("dist")
   fp = open("../%s/build_lib" % os_dir)
   build_vars = {
     'prefix': sys.prefix,
     'exec_prefix': sys.exec_prefix,
     'python_inc_dir': distutils.sysconfig.get_python_inc(),
-    'python_lib_dir': distutils.sysconfig.get_python_lib()
+    'python_lib_dir': distutils.sysconfig.get_python_lib(),
+    'special_defs': specialDefs
   }
   for line in fp:
     result = util.ExecuteCmd(line.format(**build_vars), use_shell=True)
