@@ -83,7 +83,7 @@ def BuildLibrary(os_dir, ignore_results):
   if os_dir == "Windows":
     # The logic below fixes a method used by the swig c++ wrapper. Mingw python headers
     # should detect and fix this but for some reason they aren't working with mingw64
-    pythonCLib = "libpython" + sys.version + ".a"
+    pythonCLib = "libpython{0}.{1}.a".format(sys.version_info[0], sys.version_info[1])
     pathToLib = os.path.join(sys.exec_prefix, "libs", pythonCLib)
     archData = platform.architecture(pathToLib)
     if archData[0] == "64bit":
