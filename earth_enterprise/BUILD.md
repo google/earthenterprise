@@ -21,7 +21,7 @@ For Linux build environments, see either the [Redhat and Centos Setup Instructio
 or the [Ubuntu Setup Instructions](./BUILD_Ubuntu.md) for those specific
 platforms on how to setup the dependencies, tools, and compilers.
 
-1. Clone the _earthenterprise_ repository in your build environment:
+2. Clone the _earthenterprise_ repository in your build environment:
 
     __NOTE:__ For development you should follow the instructions on the [Git Contributions](https://github.com/google/earthenterprise/wiki/Development:-Git-Contributions)
     page to clone the GEE repo to your personal fork, so that you can submit
@@ -42,7 +42,7 @@ platforms on how to setup the dependencies, tools, and compilers.
         git lfs pull
         ```
 
-1. In the build instructions below, the scons commands for building GEE/Fusion
+3. In the build instructions below, the scons commands for building GEE/Fusion
     have the following options:
 
     * `internal=1`: Build using non-optimized code, best for development and
@@ -69,14 +69,14 @@ platforms on how to setup the dependencies, tools, and compilers.
         the configuration to run again, otherwise the scons build may complain
         about missing libraries
 
-2. Build Earth Enterprise Fusion and Server:
+4. Build Earth Enterprise Fusion and Server:
 
     ```bash
     cd earthenterprise/earth_enterprise
     scons -j8 release=1 build
     ```
 
-3. Run unit tests (note: that the `REL` part of the path will vary if you use
+5. Run unit tests (note: that the `REL` part of the path will vary if you use
     `internal=1` or `optimize=1` instead of `release=1` or the full path may be
     something completly different if you used `build_folder`):
 
