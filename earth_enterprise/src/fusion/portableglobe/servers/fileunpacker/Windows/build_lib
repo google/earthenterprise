@@ -1,6 +1,6 @@
 copy /Y ..\shared\* .
 copy /Y ..\Windows\khTypes.h .
 swig -python -c++ glc_unpacker.i
-g++ -std=gnu++11 -c glc_unpacker.cpp portable_glc_reader.cpp file_unpacker.cpp file_package.cpp packetbundle.cpp packetbundle_finder.cpp
-g++ -std=gnu++11 -c glc_unpacker_wrap.cxx -I{exec_prefix}\include
-g++ -std=gnu++11 -static-libgcc -static-libstdc++ -shared glc_unpacker_wrap.o glc_unpacker.o portable_glc_reader.o file_unpacker.o file_package.o packetbundle.o packetbundle_finder.o -o _glc_unpacker.pyd -L{exec_prefix}\libs -lpython27
+g++ -std=gnu++11 {special_defs} -c glc_unpacker.cpp portable_glc_reader.cpp file_unpacker.cpp file_package.cpp packetbundle.cpp packetbundle_finder.cpp
+g++ -std=gnu++11 {special_defs} -D_hypot=hypot -c glc_unpacker_wrap.cxx -I{exec_prefix}\include
+g++ -std=gnu++11 {special_defs} -static-libgcc -static-libstdc++ -shared glc_unpacker_wrap.o glc_unpacker.o portable_glc_reader.o file_unpacker.o file_package.o packetbundle.o packetbundle_finder.o -o _glc_unpacker.pyd -L{exec_prefix}\libs -lpython27
