@@ -92,7 +92,7 @@ main(int argc, char *argv[])
     if (delay <= 0)
       usage(progname, "--delay must be positive");
     if (timeout < 0)
-      usage(progname, "--timeout must be zero or greater");
+      usage(progname, "--timeout must not be less than zero");
 
 
     std::string master    = AssetDefs::MasterHostName();
