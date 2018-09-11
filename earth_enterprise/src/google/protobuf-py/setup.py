@@ -132,6 +132,12 @@ if __name__ == '__main__':
     # Generate necessary .proto file if it doesn't exist.
     # TODO:  Maybe we should hook this into a distutils command?
 
+    if len(sys.argv) >= 3 and sys.argv[1] == "compiler":
+      protoc = sys.argv[2]
+      if not os.path.exists(protoc):
+        sys.stderr.write("\nERROR: protoc does not exist at %s\n" % protoc)
+        sys.exit(-1)
+
 # Note: modified for GEE build.
 #    generate_proto("../src/google/protobuf/descriptor.proto")
 #    generate_proto("../src/google/protobuf/compiler/plugin.proto")

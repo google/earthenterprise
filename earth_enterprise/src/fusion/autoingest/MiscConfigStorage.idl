@@ -23,10 +23,12 @@ class MiscConfigStorage {
   // help work around the delayed NFS visibility problem.
   uint        NFSVisibilityDelay = uint(0);
 
-  uint        AssetCacheSize = uint(32000);
-  uint        VersionCacheSize = uint(32000);
+  uint        AssetCacheSize = uint(128000);
+  uint        VersionCacheSize = uint(128000);
 
   bool        GenerateProductPreviews = true;
+  
+  bool        DisablePacketLevelVersionCachePurge = false;
 
 #pragma LoadAndSave
 

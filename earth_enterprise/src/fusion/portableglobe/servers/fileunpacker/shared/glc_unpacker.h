@@ -23,10 +23,12 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <list>
 #include "./file_package.h"
 #include "./file_unpacker.h"
 #include "./glc_reader.h"
 #include "./packetbundle_finder.h"
+#include "./callbacks.h"
 
 /**
  * Class for unpacking files from a single file that is a composite of
@@ -73,6 +75,8 @@ class GlcUnpacker {
                          int channel,
                          int layer,
                          PackageFileLoc* data_loc);
+
+  void MapDataPacketWalker(const map_packet_walker& walker) const;
 
   /**
    * Find qtp packet and set offset and size for the packet. Qtp packets can
@@ -126,7 +130,7 @@ class GlcUnpacker {
    * @param file_loc Returns location of file data.
    * @return whether file was found.
    */
-  bool FindFile(const char* file_name, PackageFileLoc* file_loc);
+  bool FindFile(const char* file_name, PackageFileLoc* file_loc) const;
 
   /**
    * Find meta dbroot from a 3d glc file and set offset and size for the
@@ -175,12 +179,12 @@ class GlcUnpacker {
   /**
    * Get idx-th file in index.
    */
-  const char* IndexFile(int idx);
+  const char* IndexFile(int idx) const;
 
   /**
    * Get path of file in index.
    */
-  int IndexSize() { return index_.size(); }
+  int IndexSize() const { return index_.size(); }
 
   /**
    * Get number of layers in current globe or map.
@@ -197,7 +201,9 @@ class GlcUnpacker {
    */
   const std::map<std::string, PackageFileLoc>& Index() { return index_; }
 
- private:
+  std::map<int, std::string> getKmlData();
+
+private:
   /**
    * Set up file_unpackers for each layer in the composite.
    */

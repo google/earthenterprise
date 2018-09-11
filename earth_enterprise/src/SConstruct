@@ -28,6 +28,15 @@ sys.path += ['scons']
 from khEnvironment import khEnvironment
 from khEnvironment import GetVersion
 
+# Add the OpenGEE Python libraries to the module search path:
+opengee_lib_path = os.path.join('lib', 'python')
+
+if opengee_lib_path not in sys.path:
+  sys.path.insert(1, opengee_lib_path)
+
+import opengee.c_compiler
+import opengee.version
+
 
 # Path to crosstool root directory.
 crosstool_path = '/usr/local/crosstool'
@@ -76,7 +85,9 @@ ValidOptions = set(
      'bundle_3rd_libs',  # Build with bundling 3rd party libs.
      'log_performance',  # Include code for performance logging
      'cpp_standard',     # The standard of CPP that will be used.  Default is C++11
-     'label'             # Value to combine with version strings.
+     'label',            # Value to combine with version strings.
+     'build_folder',     # where to put the build output and intermediate files
+     'cache_dir'         # use a cache dir to speed up build
      ]);
 
 for argkey in ARGUMENTS:
@@ -103,6 +114,7 @@ bundle_3rd_libs = int(ARGUMENTS.get('bundle_3rd_libs', 0))
 cc_dir = ARGUMENTS.get('cc_dir', None)
 log_performance = int( ARGUMENTS.get( 'log_performance', 0 ) )
 cpp_standard = ARGUMENTS.get('cpp_standard', 'gnu++11')
+build_folder = ARGUMENTS.get('build_folder', 0)
 label = ARGUMENTS.get('label', '')
 
 # make some directory variables used by other parts of the build system
@@ -141,8 +153,15 @@ builddir += march
 if native_cc:
   builddir = 'NATIVE-' + builddir
 
+if build_folder:
+  builddir = build_folder
+
 # setup export directories
-exportdir = Dir('#/%s' % builddir).abspath
+if os.path.isabs(builddir):
+  exportdir = builddir
+else:
+  exportdir = Dir('#/%s' % builddir).abspath
+
 exportdirs = {
     'root': exportdir+'/',
     'lib': exportdir+'/lib/',
@@ -387,40 +406,6 @@ installdirs = {
     'htdocs': InstServerDir('gehttpd/htdocs'),
 }
 
-def get_cc_version(cc_path):
-  """Extracts the version number of a C/C++ compiler (like GCC) as a list of
-  strings."""
-
-  process = subprocess.Popen(
-    [cc_path, '--version'], stdout=subprocess.PIPE)
-  (stdout, stderr) = process.communicate()
-  match = re.search('[0-9][0-9.]*', stdout)
-  # If match is None we don't know the version.
-  if match is None:
-    return None
-  version = match.group().split('.')
-  return version
-
-def is_version_ge(version_components, comparand_components):
-  """Tests if a version number is greater than, or equal to another version
-  number.  Both version numbers are specified as lists of version components.
-  """
-
-  if version_components is None or comparand_components is None:
-    return False
-
-  for i in xrange(len(comparand_components)):
-    if i >= len(version_components):
-      version_component = 0
-    else:
-      version_component = int(version_components[i])
-    if int(comparand_components[i]) > version_component:
-      return False
-    if int(comparand_components[i]) < version_component:
-      return True
-
-  return True
-
 gee_version_number = GetVersion("version.txt", label)
 
 
@@ -461,7 +446,7 @@ env = khEnvironment(
              Dir(builddir + '/include'),
              Dir(builddir),  # generated headers
              Dir('.'),
-             Dir(builddir+'/common'),
+             Dir(builddir + '/common'),
              Dir('common'),
              Dir('common/khmisc'),
              src_keyhole_abs_dir],
@@ -480,8 +465,8 @@ env = khEnvironment(
 )
 
 # Check if the version of the default compiler is at least 4.8:
-version = get_cc_version(env['CXX'])
-if not is_version_ge(version, [4, 8]):
+version = opengee.c_compiler.get_cc_version(env['CXX'])
+if not opengee.version.is_version_ge(version, [4, 8]):
     # Check for GCC 4.8 from an alternative toolchain installation on RHEL 6:
     if cc_dir is None and os.path.isfile('/opt/rh/devtoolset-2/root/usr/bin/g++'):
         cc_dir = '/opt/rh/devtoolset-2/root/usr/bin'
@@ -492,7 +477,7 @@ if not is_version_ge(version, [4, 8]):
         if version == None:
             print "Unable to determine GCC version, minimum required is 4.8"
         else:
-            print ("GCC version " + '.'.join(version) + 
+            print ("GCC version " + '.'.join(version) +
                    " detected. Minimum required version is 4.8")
             Exit(1)
 
@@ -531,6 +516,7 @@ env['LRELEASE'] = qtdir+'/bin/lrelease'
 
 env['KHIDL'] = File('#common/khxml/khidl.pl')
 
-SConscript('SConscript', build_dir=builddir, duplicate=0)
+env.PhonyTargets(build_dir = 'BUILD_DIR=' + builddir)
+SConscript('SConscript', variant_dir=builddir, duplicate=0)
 
 env.Clean('cleanall', [[exportdir+"/"+x for x in os.listdir(exportdir) if x != "third_party"]])

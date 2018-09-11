@@ -41,7 +41,7 @@ std::string ValidateHostReadyForConfig(void);
 // Fusion now assumes systemrc exists in the proper location which is now
 // created during installation.
 // An exception is thrown if the file does not exist.
-void LoadSystemrc(Systemrc &systemrc);
+void LoadSystemrc(Systemrc &systemrc, bool override_cache = false);
 // Command-line defaults for asset root and maxjobs.
 std::string CommandlineAssetRootDefault(void);
 uint CommandlineNumCPUsDefault(void);

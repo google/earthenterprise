@@ -1,6 +1,6 @@
 #-*- Python -*-
 #
-# Copyright 2017 Google Inc.
+# Copyright 2017 Google Inc. Copyright 2018 the Open GEE Contributors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -176,7 +176,7 @@ commoncpp = [
     'LayerConfigImpl.cpp', 'MapProjectConfigImpl.cpp',
     'QueryConfigImpl.cpp', 'AssetTraverser.cpp',
     'geAssetRoot.cpp', 'SearchTabReferenceImpl.cpp',
-    'JsonUtils.cpp'
+    'JsonUtils.cpp', 'JsUtils.cpp'
     ] + \
     map(lambda n: '.idl/'+n+'.cpp', idlfiles) + \
     map(lambda p: 'plugins/'+p+'Asset.cpp', plugins)
@@ -204,6 +204,10 @@ env.install('common_lib', [geautoingest, gemiscconfig])
 
 env.test('AssetDefsExtra_unittest',
          'AssetDefsExtra_unittest.cpp',
+         LIBS=['geautoingest', 'gemiscconfig', 'gtest'])
+
+env.test('JsUtils_unittest',
+         'JsUtils_unittest.cpp',
          LIBS=['geautoingest', 'gemiscconfig', 'gtest'])
 
 SConscript('sysman/SConscript', exports=['env', 'commonobj', 'plugins'])

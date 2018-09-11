@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Google Inc.
+ * Copyright 2017 Google Inc. Copyright 2018 the Open GEE Contributors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -143,7 +143,7 @@ class JsonUtils {
     return value ? "true" : "false";
   }
 
-  // Utilility for converting a look-at point spec to JSON object.
+  // Utilitiy for converting a look-at point spec to JSON object.
   // lookAtSpec: a string with the following format
   //   longitude|latitude|altitude|...
   //   we only care for these 3.
