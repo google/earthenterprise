@@ -16,7 +16,8 @@
 
 #ifndef GEO_EARTH_ENTERPRISE_SRC_COMMON_GENERIC_UTILS_H_
 #define GEO_EARTH_ENTERPRISE_SRC_COMMON_GENERIC_UTILS_H_
-
+#include <string>
+#include <map>
 namespace gecommon {
 
 // Returns whether it is JPEG buffer.
@@ -28,6 +29,13 @@ inline bool IsJpegBuffer(const char* buffer) {
 // Returns whether it is PNG buffer.
 inline bool IsPngBuffer(const char* buffer) {
   return (buffer[1] == 'P' && buffer[2] == 'N' && buffer[3] == 'G');
+}
+
+// small utility function to get name of mapped value
+template <typename KEY, typename VALUE> inline
+std::string getMappedValue(const std::map<KEY,VALUE>& aMap)
+{
+    return typeid(VALUE).name();
 }
 
 }  // namespace gecommon.

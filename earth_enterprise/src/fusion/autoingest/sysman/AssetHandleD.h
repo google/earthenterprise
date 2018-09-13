@@ -401,7 +401,7 @@ protected:
       this->cache().Add(this->ref, this->handle);
 
       // add it to the dirty list - since it just sprang into existence
-      // we need to make sure it get's saved
+      // we need to make sure it gets saved
       MutableBase::dirtyMap.insert(std::make_pair(this->ref, *this));
     }
   }
