@@ -105,7 +105,10 @@ main(int argc, char *argv[])
       TaskLists taskLists;
       if (!khAssetManagerProxy::GetCurrTasks("dummy", taskLists,
                                              error, timeout)) {
-        notify(NFY_FATAL, "%s", error.latin1());
+      	if (error.compare("GetCurrTasks: socket recvall: Resource temporarily unavailable") == 0)
+          outline("No data received from gesystemmanager\nStarting new request");
+        else
+          notify(NFY_FATAL, "%s", error.latin1());
       } else {
         // get the list of active keyhole processes
         std::vector<std::string> pslist;
