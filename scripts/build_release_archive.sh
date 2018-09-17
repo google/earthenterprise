@@ -29,7 +29,7 @@ if [ -z "${SMUDGE_HOOK}" ]; then
   exit
 fi
 
-REPO_NAME="tst-eclamar"
+REPO_NAME="earthenterprise"
 TAR_FILE=${REPO_NAME}.tar.gz
 ZIP_FILE=${REPO_NAME}.zip
 RUN_DIR=`pwd`
@@ -39,9 +39,12 @@ CLONE_DIR=`mktemp -d`
 
 # Download the repository
 cd "${CLONE_DIR}"
-git clone -b "${1}" "https://github.com/google/${REPO_NAME}.git" || exit
+git clone -b "${1}" "https://github.com/tst-eclamar/${REPO_NAME}.git" || exit
 
 cd "${CLONE_DIR}"/earthenterprise/earth_enterprise/src
+git remote add upstream git://github.com/google/earthenterprise.git # TEMPORARY
+git fetch upstream
+git pull upstream master
 scons version_files
 cd ../..
 git clean -f -d -x -e version.txt
