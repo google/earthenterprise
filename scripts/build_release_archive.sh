@@ -13,8 +13,6 @@
 # branch, run
 # ./build_release_archive.sh release_5.2.0
 
-#set -v -x
-
 if [ "$#" -ne 1 ]; then
   echo "Usage: $0 <branch>"
   echo "where <branch> is a branch or tag that defines the release to be archived."

@@ -79,7 +79,6 @@ env.Command(date_file, [env.Value(build_date_str)],
             [env.WriteToFile(date_file, build_date_str)])
 
 # get the build version
-
 backup_file = File('#version.txt').abspath
 version_file = File('gee_version.txt').abspath
 built_version_file = env.Command(version_file, [ ],
