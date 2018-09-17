@@ -13,6 +13,8 @@
 # branch, run
 # ./build_release_archive.sh release_5.2.0
 
+#set -v -x
+
 if [ "$#" -ne 1 ]; then
   echo "Usage: $0 <branch>"
   echo "where <branch> is a branch or tag that defines the release to be archived."
@@ -27,7 +29,7 @@ if [ -z "${SMUDGE_HOOK}" ]; then
   exit
 fi
 
-REPO_NAME="earthenterprise"
+REPO_NAME="tst-eclamar"
 TAR_FILE=${REPO_NAME}.tar.gz
 ZIP_FILE=${REPO_NAME}.zip
 RUN_DIR=`pwd`
@@ -37,7 +39,13 @@ CLONE_DIR=`mktemp -d`
 
 # Download the repository
 cd "${CLONE_DIR}"
-git clone -b "${1}" --depth 1 "https://github.com/google/${REPO_NAME}.git" || exit
+git clone -b "${1}" "https://github.com/google/${REPO_NAME}.git" || exit
+
+cd "${CLONE_DIR}"/earthenterprise/earth_enterprise/src
+scons version_files
+cd ../..
+git clean -f -d -x -e version.txt
+cd ..
 
 # Remove the git-related files from the repo
 find "${REPO_NAME}" -name ".git*" -exec rm -Rf {} +
