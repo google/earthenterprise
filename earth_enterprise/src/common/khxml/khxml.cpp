@@ -21,7 +21,7 @@
 #include <notify.h>
 #include <khThread.h>
 #include <khFileUtils.h>
-
+#include <cstdlib>
 #include "khxml.h"
 #include "khdom.h"
 
@@ -165,6 +165,7 @@ WriteDocument(DOMDocument *doc, const std::string &filename) throw()
   if (!WriteDocumentImpl(doc, newname)) {
     return false;
   }
+  abort();
   if (!khReplace(filename, newext, backupext)) {
     (void) khUnlink(newname);
     return false;
