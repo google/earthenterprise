@@ -50,7 +50,7 @@ def GetHostInfo():
     raise AssertionError('Hostname cannot be one of %s' % ','.join(BAD_HOSTNAMES))
   ipaddr = GetIP(hostname)
   host_check, host_aliases, _ = socket.gethostbyaddr(ipaddr)
-  return hostname, ipaddr, (host_aliases + [host_check])
+  return hostname, ipaddr, host_aliases + [host_check]
 
 
 def IsFusionInstalled():
