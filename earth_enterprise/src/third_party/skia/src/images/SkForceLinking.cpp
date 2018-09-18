@@ -15,7 +15,7 @@ int SkForceLinking(bool doNotPassTrue) {
     if (doNotPassTrue) {
         SkASSERT(false);
         CreateJPEGImageDecoder();
-//        CreateWEBPImageDecoder();
+        CreateWEBPImageDecoder();
         CreateBMPImageDecoder();
         CreateICOImageDecoder();
         CreateWBMPImageDecoder();
@@ -31,4 +31,3 @@ int SkForceLinking(bool doNotPassTrue) {
     }
     return 0;
 }
-
