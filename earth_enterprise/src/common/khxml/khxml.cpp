@@ -165,12 +165,13 @@ WriteDocument(DOMDocument *doc, const std::string &filename) throw()
   if (!WriteDocumentImpl(doc, newname)) {
     return false;
   }
-  abort();
+
   if (!khReplace(filename, newext, backupext)) {
     (void) khUnlink(newname);
     return false;
   }
   if (khExists(backupname)) {
+    notify(NFY_VERBOSE,"WriteDocument() backupname %s exists", backupname.c_str());
     (void) khUnlink(backupname);
   }
   return true;
