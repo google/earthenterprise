@@ -336,18 +336,17 @@ def DirCat(install_dir, subdir1, subdir2):
 def InstCommonDir(subdir):
   return DirCat(installdir, 'common%s/' % optdir, subdir)
 
-
 def InstFusionDir(subdir):
   return DirCat(installdir, 'fusion%s/' % optdir, subdir)
 
+def InstPostgisDir(subdir):
+   return DirCat(installdir, 'postgis/opt/google/', subdir)
 
 def InstServerDir(subdir):
   return DirCat(installdir, 'server%s/' % optdir, subdir)
 
-
 def InstToolsDir(subdir):
   return DirCat(installdir, 'tools%s/' % optdir, subdir)
-
 
 def InstDisconnectedDir(subdir):
   return DirCat(installdir, 'disconnected%s/' % optdir, subdir)
@@ -382,6 +381,10 @@ installdirs = {
 
     'tools_bin': InstToolsDir('bin'),
     'tools_lib': InstToolsDir('lib'),
+
+    'postgis_bin': InstPostgisDir('bin'),
+    'postgis_lib': InstPostgisDir('lib'),
+    'postgis_share': InstPostgisDir('share'),
 
     'server_bin': InstServerDir('bin'),
     'server_etc': Dir('server/etc%s' % optdir, installdir),
