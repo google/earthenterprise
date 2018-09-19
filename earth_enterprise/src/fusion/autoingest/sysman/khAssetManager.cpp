@@ -578,8 +578,8 @@ khAssetManager::NotifyVersionStateChange(const std::string &ref,
 
   pendingStateChanges[ref] = state;
   notify(NFY_VERBOSE, "Set pendingStateChanges[ref]: %s to state: %s", 
-         pendingStateChanges[ref].c_str(), 
-         state.c_str());
+         ToString(pendingStateChanges[ref]).c_str(), 
+         ToString(state).c_str());
 }
 
 void

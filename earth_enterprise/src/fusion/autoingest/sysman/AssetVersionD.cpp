@@ -173,21 +173,21 @@ AssetVersionImplD::SetState(AssetDefs::State newstate, bool propagate)
            GetRef().c_str());
     notify(NFY_VERBOSE, "newstate: %s not equal to current state: %s", 
            ToString(newstate).c_str(), 
-           state);
+           ToString(state).c_str());
     AssetDefs::State oldstate = state;
     notify(NFY_VERBOSE, "Set oldstate: %s to current state: %s", 
-           oldstate.c_str(), 
-           state.c_str());
+           ToString(oldstate).c_str(), 
+           ToString(state).c_str());
     state = newstate;
     notify(NFY_VERBOSE, "Set current state: %s to newstate: %s", 
-           state.c_str(), 
+           ToString(state).c_str(), 
            ToString(newstate).c_str());
     try {
       // NOTE: This can end up calling back here to switch us to
       // another state (usually Failed or Succeded)
       notify(NFY_VERBOSE, "Trying OnStateChange(%s, %s)", 
              ToString(newstate).c_str(), 
-             oldstate.c_str());
+             ToString(oldstate).c_str());
       OnStateChange(newstate, oldstate);
     } catch (const std::exception &e) {
       notify(NFY_WARN, "Exception during OnStateChange: %s", 
@@ -201,7 +201,7 @@ AssetVersionImplD::SetState(AssetDefs::State newstate, bool propagate)
     // don't want to notify/propagate an old state.
     if (propagate && (state == newstate)) {
       notify(NFY_VERBOSE, "We wish to propagate and state: %s is equal to newstate: %s", 
-             state.c_str(), 
+             ToString(state).c_str(), 
              ToString(newstate).c_str());
       notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
              GetRef().c_str(), 
@@ -258,7 +258,7 @@ AssetVersionImplD::PropagateStateChange(void)
     AssetVersionD parent(*p);
     if (parent) {
       notify(NFY_VERBOSE, "parent: %s exists", 
-             parent.c_str());
+             ToString(parent).c_str());
       notify(NFY_VERBOSE, "Calling parent->HandleChildStateChange(%s)", 
              GetRef().c_str());
       parent->HandleChildStateChange(GetRef());
@@ -281,10 +281,10 @@ AssetVersionImplD::PropagateStateChange(void)
     AssetVersionD listener(*l);
     if (listener) {
       notify(NFY_VERBOSE, "listener: %s exists",
-             listener.c_str());
+             ToString(listener).c_str());
       notify(NFY_VERBOSE, "Calling listener->HandleChildStateChange(%s, %s)", 
              GetRef().c_str(), 
-             state.c_str());
+             ToString(state).c_str());
       listener->HandleInputStateChange(GetRef(), state);
     } else {
       notify(NFY_WARN, "'%s' has broken listener '%s'",
