@@ -77,7 +77,7 @@ if (new File('build.properties').exists()) {
 if ( project.hasProperty( 'optimize' ) ) {
     scons_option = "optimize=1"
 }  // end check for option 'optimze'
-else if ( project.hasProperty( 'debug' ) ) {
+else if ( project.hasProperty( 'debug' ) || project.hasProperty( 'internal' ) ) {
     scons_option = "internal=1"
 }
 
