@@ -121,8 +121,8 @@ postgis_install = postgis_env.Command(
                       install_root_opt,
                       install_root_opt, ge_version,
                       install_root_opt, ge_version,
-                      install_root_opt, 
-                      build_root, install_root_opt, 
+                      install_root_opt,
+                      build_root, install_root_opt,
                       install_root, root_dir,
                       install_root_opt,
                       install_root_opt,
@@ -147,16 +147,15 @@ postgis_env.ExecuteOnClean('rm -rf %s' % current_dir)
 if 'install' in COMMAND_LINE_TARGETS:
   postgis_env.InstallFileOrDir(
       '%s/bin/' % install_root_opt,
-      '%s/' % postgis_env.installdirs['server_bin'],
+      '%s/' % postgis_env.installdirs['postgis_bin'],
           postgis_install_build, 'install')
   postgis_env.InstallFileOrDir(
       '%s/lib/' % install_root_opt,
-      '%s/' % postgis_env.installdirs['server_lib'],
+      '%s/' % postgis_env.installdirs['postgis_lib'],
           postgis_install_build, 'install')
   postgis_env.InstallFileOrDir(
       '%s/share/' % install_root_opt,
-      '%s/' % postgis_env.installdirs['server_share'],
+      '%s/' % postgis_env.installdirs['postgis_share'],
           postgis_install_build, 'install')
 
 Return('postgis_extract postgis_install_build')
-
