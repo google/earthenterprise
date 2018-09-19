@@ -214,7 +214,7 @@ env.PhonyTargets(**this_dict)
 
 if 'cleanall' in COMMAND_LINE_TARGETS:
     #clean the search and getomcat install folders.
-    file = installdir.get_path()
+    file = installdir
     commands.getstatusoutput("rm -rf " + file)
 
     #clean /tmp/fusion_os_install
