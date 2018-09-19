@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-# This file is 'earth_enterprise/scr/SConstruct'
+# This file is 'earth_enterprise/src/SConstruct'
 
 
 """Top level SConstruct file."""
