@@ -43,8 +43,10 @@ cd "${CLONE_DIR}"/earthenterprise/earth_enterprise/src
 git remote add upstream git://github.com/google/earthenterprise.git # TEMPORARY
 git fetch upstream # TEMPORARY
 git pull upstream master # TEMPORARY
+# generate version files based on tags within git
 scons version_files
 cd ../..
+# remove all un-tracked files except for version.txt
 git clean -f -d -x -e version.txt
 cd ..
 
