@@ -171,14 +171,27 @@ AssetVersionImplD::SetState(AssetDefs::State newstate, bool propagate)
     notify(NFY_DEBUG, "SetState: %s %s",
            ToString(newstate).c_str(),
            GetRef().c_str());
+    notify(NFY_VERBOSE, "newstate: %s not equal to current state: %s", 
+           ToString(newstate).c_str(), 
+           state);
     AssetDefs::State oldstate = state;
+    notify(NFY_VERBOSE, "Set oldstate: %s to current state: %s", 
+           oldstate.c_str(), 
+           state.c_str());
     state = newstate;
+    notify(NFY_VERBOSE, "Set current state: %s to newstate: %s", 
+           state.c_str(), 
+           ToString(newstate).c_str());
     try {
       // NOTE: This can end up calling back here to switch us to
       // another state (usually Failed or Succeded)
+      notify(NFY_VERBOSE, "Trying OnStateChange(%s, %s)", 
+             ToString(newstate).c_str(), 
+             oldstate.c_str());
       OnStateChange(newstate, oldstate);
     } catch (const std::exception &e) {
-      notify(NFY_WARN, "Exception during OnStateChange: %s", e.what());
+      notify(NFY_WARN, "Exception during OnStateChange: %s", 
+             e.what());
     } catch (...) {
       notify(NFY_WARN, "Unknown exception during OnStateChange");
     }
@@ -187,7 +200,14 @@ AssetVersionImplD::SetState(AssetDefs::State newstate, bool propagate)
     // set it to above. OnStateChange can call SetState recursively. We
     // don't want to notify/propagate an old state.
     if (propagate && (state == newstate)) {
+      notify(NFY_VERBOSE, "We wish to propagate and state: %s is equal to newstate: %s", 
+             state.c_str(), 
+             ToString(newstate).c_str());
+      notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
+             GetRef().c_str(), 
+             ToString(newstate).c_str());
       theAssetManager.NotifyVersionStateChange(GetRef(), newstate);
+      notify(NFY_VERBOSE, "Calling PropagateStateChange()");
       PropagateStateChange();
     }
   }
@@ -230,11 +250,17 @@ void
 AssetVersionImplD::PropagateStateChange(void)
 {
   notify(NFY_VERBOSE, "PropagateStateChange(%s): %s",
-         ToString(state).c_str(), GetRef().c_str());
+         ToString(state).c_str(), 
+         GetRef().c_str());
+  notify(NFY_VERBOSE, "Iterate through parents");
   for (std::vector<std::string>::const_iterator p = parents.begin();
        p != parents.end(); ++p) {
     AssetVersionD parent(*p);
     if (parent) {
+      notify(NFY_VERBOSE, "parent: %s exists", 
+             parent.c_str());
+      notify(NFY_VERBOSE, "Calling parent->HandleChildStateChange(%s)", 
+             GetRef().c_str());
       parent->HandleChildStateChange(GetRef());
     } else {
       notify(NFY_WARN, "'%s' has broken parent '%s'",
@@ -249,10 +275,16 @@ AssetVersionImplD::PropagateStateChange(void)
   // which build new versions with me as an input.
   std::vector<std::string> toNotify = listeners;
 
+  notify(NFY_VERBOSE, "Iterate through listeners to notify");
   for (std::vector<std::string>::const_iterator l = toNotify.begin();
        l != toNotify.end(); ++l) {
     AssetVersionD listener(*l);
     if (listener) {
+      notify(NFY_VERBOSE, "listener: %s exists",
+             listener.c_str());
+      notify(NFY_VERBOSE, "Calling listener->HandleChildStateChange(%s, %s)", 
+             GetRef().c_str(), 
+             state.c_str());
       listener->HandleInputStateChange(GetRef(), state);
     } else {
       notify(NFY_WARN, "'%s' has broken listener '%s'",
@@ -321,8 +353,13 @@ AssetVersionImplD::OnStateChange(AssetDefs::State newstate,
 {
   // NoOp in base class
   if (newstate == AssetDefs::Succeeded) {
+    notify(NFY_VERBOSE, "newstate: %s equals Succeeded", 
+           ToString(newstate).c_str());
 #ifdef TEMP_ASSETS
+    notify(NFY_VERBOSE, "TEMP_ASSETS has been defined");
     if (haveTemporaryInputs) {
+      notify(NFY_VERBOSE, "haveTemporaryInputs: %s", 
+             haveTemporaryInputs.c_str());
       if (OfflineInputsBreakMe()) {
         throw khException(kh:tr("Internal Error: AssetVersion with temporary "
                                 "inputs but marked as OfflineInputsBreakMe"));
