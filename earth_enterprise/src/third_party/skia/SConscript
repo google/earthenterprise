@@ -40,7 +40,7 @@ cpp_downselect_re = re.compile(r'^src/utils/[^/]*(?:SkDeferredCanvas|SkLua|SkThr
 # Get a listing of the contents of the skia tarball
 tar_p = subprocess.Popen(['tar', 'tzf', skia_source], stdout=subprocess.PIPE)
 
-# Define a helper function to read form the tar command
+# Define a helper function to read from the tar command
 def gather_cpp_files(file_list):
     cpp_list = []
     for entry in file_list:
