@@ -78,7 +78,7 @@ if ( project.hasProperty( 'optimize' ) ) {
     scons_option = "optimize=1"
 }  // end check for option 'optimze'
 else if ( project.hasProperty( 'debug' ) ) {
-    scons_option = "release=0"
+    scons_option = "internal=1"
 }
 
 // Build the actual file to be used
