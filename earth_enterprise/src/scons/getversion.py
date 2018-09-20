@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 import os
-#import sys
 import argparse
-import re
+#import re
 import git
-import subprocess
+#import subprocess
 from datetime import datetime
 
 def GetLongVersion(backupFile, label=''):
@@ -65,11 +64,6 @@ def CheckDirtyRepository():
 
     repo = GetRepository()
     str = repo.git.status("--porcelain")
-    
-    # Ignore version.txt for this purpose, as a build may modify the file
-    # and lead to an erroneous interpretation on repeated consecutive builds.
-    if (str == " M earth_enterprise/src/version.txt\n"):
-        return False
     
     return (len(str) > 0)
     
