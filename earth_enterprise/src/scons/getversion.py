@@ -1,21 +1,19 @@
 #!/usr/bin/env python
 import os
 import argparse
-#import re
 import git
-#import subprocess
 from datetime import datetime
 
 def GetLongVersion(backupFile, label=''):
   """Create a detailed version string based on the state of
      the software, as it exists in the repository."""
  
-  if CheckGitAvailable():
-    ret = GitGeneratedLongVersion()
+  if _CheckGitAvailable():
+    ret = _GitGeneratedLongVersion()
 
   # Without git, must use the backup file to create a string.
   else:
-    base = ReadBackupVersionFile(backupFile)
+    base = _ReadBackupVersionFile(backupFile)
     date = datetime.utcnow().strftime("%Y%m%d%H%M")
     ret = '-'.join([base, date])
 
@@ -35,7 +33,7 @@ def GetVersion(backupFile, label=''):
   return final
 
 
-def GetRepository():
+def _GetRepository():
     """Get a reference to the Git Repository.
     Is there a cleaner option than searching from the current location?"""
 
@@ -47,28 +45,28 @@ def GetRepository():
         return git.Repo('.')
  
 
-def CheckGitAvailable():
+def _CheckGitAvailable():
     """Try the most basic of git commands, to see if there is
        currently any access to a repository."""
     
     try:
-        repo = GetRepository()
+        repo = _GetRepository()
     except git.exc.InvalidGitRepositoryError:
         return False
     
     return True
 
 
-def CheckDirtyRepository():
+def _CheckDirtyRepository():
     """Check to see if the repository is not in a cleanly committed state."""
 
-    repo = GetRepository()
+    repo = _GetRepository()
     str = repo.git.status("--porcelain")
     
     return (len(str) > 0)
     
 
-def ReadBackupVersionFile(target):
+def _ReadBackupVersionFile(target):
   """There should be a file checked in with the latest version
      information available; if git isn't available to provide
      information, then use this file instead."""
@@ -78,11 +76,11 @@ def ReadBackupVersionFile(target):
 
   return line
 
-def GitGeneratedLongVersion():
+def _GitGeneratedLongVersion():
     """Take the raw information parsed by git, and use it to
        generate an appropriate version string for GEE."""
 
-    repo = GetRepository()
+    repo = _GetRepository()
     raw = repo.git.describe('--tags', '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*')
     raw = raw.rstrip()
 
@@ -91,12 +89,12 @@ def GitGeneratedLongVersion():
 
     # If this condition hits, then we are currently on a tagged commit.
     if (len(raw.split("-")) < 4):
-        if CheckDirtyRepository():
+        if _CheckDirtyRepository():
             return '.'.join([raw, date])
         return raw
 
     # Tear apart the information in the version string.
-    components = ParseRawVersionString(raw)
+    components = _ParseRawVersionString(raw)
   
     # Determine how to update, since we are *not* on tagged commit.
     if components['isFinal']:
@@ -109,13 +107,13 @@ def GitGeneratedLongVersion():
     # Rebuild.
     base = '.'.join([str(components[x]) for x in ("major", "minor", "revision")])
     patch = '.'.join([str(components["patch"]), components["patchType"], date])
-    if not CheckDirtyRepository():
+    if not _CheckDirtyRepository():
         patch = '.'.join([patch, components['hash']])
     
     return '-'.join([base, patch])
 
 
-def ParseRawVersionString(raw):
+def _ParseRawVersionString(raw):
     """Break apart a raw version string into its various components,
     and return those entries via a dictionary."""
 
