@@ -81,7 +81,11 @@ def _GitGeneratedLongVersion():
        generate an appropriate version string for GEE."""
 
     repo = _GetRepository()
-    raw = repo.git.describe('--tags', '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*')
+
+    # Get reverse sorted list of tags that are reachable (--merged) from HEAD:
+    tags = repo.git.tag('--list', '[0-9]*\.[0-9]*\.[0-9]*\-*', '--sort=-v:refname', '--merged').split('\n')
+    # Get the first one safely (or '')
+    raw = next(iter(tags or ['']), '')
     raw = raw.rstrip()
 
     # Grab the datestamp.
