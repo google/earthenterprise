@@ -193,15 +193,13 @@ class MutableAssetHandleD_ : public virtual Base_ {
           std::string filename = dirtyMap[*it]->XMLFilename();
           notify(NFY_VERBOSE,"AssetHandleD.h:193: filename = %s",
                  filename.c_str());
-          if (filename.rfind(".new") == std::string::npos)
-          {
-              filename += ".new";
-          }
-          else
+
+          if (filename.rfind(".new") != std::string::npos) 
           {
               notify(NFY_VERBOSE,"PurgeCacheIfNeeded(), filename contains .new:  %s", filename.c_str());
               ++numDotNew;
           }
+          filename += ".new";
           if (dirtyMap[*it]->Save(filename)) {
             filetrans.AddNewPath(filename);
           }

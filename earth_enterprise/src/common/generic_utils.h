@@ -16,6 +16,7 @@
 
 #ifndef GEO_EARTH_ENTERPRISE_SRC_COMMON_GENERIC_UTILS_H_
 #define GEO_EARTH_ENTERPRISE_SRC_COMMON_GENERIC_UTILS_H_
+
 #include <string>
 #include <map>
 
