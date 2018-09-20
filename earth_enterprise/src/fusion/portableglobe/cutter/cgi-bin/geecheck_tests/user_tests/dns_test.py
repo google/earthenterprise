@@ -28,8 +28,8 @@ class TestDns(unittest.TestCase):
 
     def testDns(self):
       """Test DNS to ensure hostname is correct for IP Address. """
-      self.hostname, self.ip, self.host_check = common.GetHostInfo()
-      self.assertEqual(self.hostname, self.host_check)
+      self.hostname, self.ip, self.host_check_list = common.GetHostInfo()
+      self.assertTrue(self.hostname in self.host_check_list)
 
 if __name__ == '__main__':
     unittest.main()
