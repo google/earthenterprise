@@ -97,7 +97,7 @@ Asset::DoBind(const std::string &ref, bool checkFileExistenceFirst) const
   HandleType entry = CacheFind(ref);
   bool addToCache = false;
 
-  notify(NFY_NOTICE,"CheckFileExistence: %d",checkFileExistenceFirst);
+  notify(NFY_VERBOSE,"CheckFileExistence: %d",checkFileExistenceFirst);
   // Try to load from XML
   if (!entry) {
     if (checkFileExistenceFirst) {
