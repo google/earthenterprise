@@ -253,9 +253,14 @@ AssetVersionImplD::PropagateStateChange(void)
          ToString(state).c_str(), 
          GetRef().c_str());
   notify(NFY_VERBOSE, "Iterate through parents");
+  int i = 0;
   for (std::vector<std::string>::const_iterator p = parents.begin();
        p != parents.end(); ++p) {
     AssetVersionD parent(*p);
+    notify(NFY_PROGRESS, "Iteration: %d | Total Iterations: %s | Parent: %s",
+           i,
+           ToString(parents.size()).c_str(),
+           ToString(parent).c_str());
     if (parent) {
       notify(NFY_VERBOSE, "parent: %s exists", 
              ToString(parent).c_str());
@@ -266,6 +271,7 @@ AssetVersionImplD::PropagateStateChange(void)
       notify(NFY_WARN, "'%s' has broken parent '%s'",
              GetRef().c_str(), p->c_str());
     }
+    i++;
   }
 
   // Make a copy of the listeners that I need to notify. We have to make
@@ -276,9 +282,14 @@ AssetVersionImplD::PropagateStateChange(void)
   std::vector<std::string> toNotify = listeners;
 
   notify(NFY_VERBOSE, "Iterate through listeners to notify");
+  i = 0;
   for (std::vector<std::string>::const_iterator l = toNotify.begin();
        l != toNotify.end(); ++l) {
     AssetVersionD listener(*l);
+    notify(NFY_PROGRESS, "Iteration: %d | Total Iterations: %s | Listener: %s",
+           i,
+           ToString(toNotify.size()).c_str(),
+           ToString(listener).c_str());
     if (listener) {
       notify(NFY_VERBOSE, "listener: %s exists",
              ToString(listener).c_str());
@@ -290,6 +301,7 @@ AssetVersionImplD::PropagateStateChange(void)
       notify(NFY_WARN, "'%s' has broken listener '%s'",
              GetRef().c_str(), l->c_str());
     }
+    i++;
   }
 }
 
@@ -332,6 +344,7 @@ void
 AssetVersionImplD::HandleChildStateChange(const std::string &) const
 {
   // NoOp in base since leaves don't need to do anything
+  notify(NFY_VERBOSE, "HandleChildStateChange: %s", GetRef().c_str());
 }
 
 void
