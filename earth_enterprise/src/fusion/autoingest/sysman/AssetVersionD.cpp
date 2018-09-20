@@ -344,7 +344,7 @@ void
 AssetVersionImplD::HandleChildStateChange(const std::string &) const
 {
   // NoOp in base since leaves don't need to do anything
-  notify(NFY_VERBOSE, "HandleChildStateChange: %s", GetRef().c_str());
+  notify(NFY_VERBOSE, "AssetVersionImplD::HandleChildStateChange: %s", GetRef().c_str());
 }
 
 void
@@ -968,7 +968,7 @@ LeafAssetVersionImplD::DoClean(void)
 void
 CompositeAssetVersionImplD::HandleChildStateChange(const std::string &) const
 {
-  notify(NFY_VERBOSE, "HandleChildStateChange: %s", GetRef().c_str());
+  notify(NFY_VERBOSE, "CompositeAssetVersionImplD::HandleChildStateChange: %s", GetRef().c_str());
   SyncState();
 }
 
