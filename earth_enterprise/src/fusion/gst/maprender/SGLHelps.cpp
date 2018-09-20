@@ -15,7 +15,7 @@
 
 #include "fusion/gst/maprender/SGLHelps.h"
 
-//#include <SkForceLinking.h>
+#include <SkForceLinking.h>
 #include <qcolor.h>
 
 #include "common/khFileUtils.h"
@@ -24,7 +24,7 @@
 #include "fusion/autoingest/.idl/storage/MapSubLayerConfig.h"
 
 
-//__SK_FORCE_IMAGE_DECODER_LINKING;
+__SK_FORCE_IMAGE_DECODER_LINKING;
 
 
 SkColor SkColorFromQColor(const QColor &color) {
