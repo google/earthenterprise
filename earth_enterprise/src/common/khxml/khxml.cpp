@@ -21,7 +21,6 @@
 #include <notify.h>
 #include <khThread.h>
 #include <khFileUtils.h>
-#include <cstdlib>
 #include "khxml.h"
 #include "khdom.h"
 

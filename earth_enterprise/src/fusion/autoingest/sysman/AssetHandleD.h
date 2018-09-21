@@ -186,7 +186,7 @@ class MutableAssetHandleD_ : public virtual Base_ {
 
       // Save mutable items.
       khFilesTransaction filetrans(".new");
-      uint8 numDotNew=0;
+      uint32 numDotNew=0;
       for (std::vector<std::string>::iterator it = toDelete.begin();
            it != toDelete.end(); ++it) {
         if (dirtyMap.find(*it) != dirtyMap.end()) {
