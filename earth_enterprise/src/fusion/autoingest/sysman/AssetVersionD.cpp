@@ -245,10 +245,10 @@ AssetVersionImplD::PropagateStateChange(void)
     notify(NFY_PROGRESS, "Iteration: %d | Total Iterations: %s | Parent: %s",
            i,
            ToString(parents.size()).c_str(),
-           ToString(parents.at(1)).c_str());
+           p->c_str());
     if (parent) {
       notify(NFY_VERBOSE, "parent: %s exists", 
-             ToString(parent).c_str());
+             p->c_str());
       notify(NFY_VERBOSE, "Calling parent->HandleChildStateChange(%s)", 
              GetRef().c_str());
       parent->HandleChildStateChange(GetRef());
@@ -274,10 +274,10 @@ AssetVersionImplD::PropagateStateChange(void)
     notify(NFY_PROGRESS, "Iteration: %d | Total Iterations: %s | Listener: %s",
            i,
            ToString(toNotify.size()).c_str(),
-           ToString(listener).c_str());
+           l->c_str());
     if (listener) {
       notify(NFY_VERBOSE, "listener: %s exists",
-             ToString(listener).c_str());
+             l->c_str());
       notify(NFY_VERBOSE, "Calling listener->HandleChildStateChange(%s, %s)", 
              GetRef().c_str(), 
              ToString(state).c_str());
