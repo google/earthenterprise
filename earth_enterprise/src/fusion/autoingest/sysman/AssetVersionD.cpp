@@ -168,26 +168,15 @@ void
 AssetVersionImplD::SetState(AssetDefs::State newstate, bool propagate)
 {
   if (newstate != state) {
-    notify(NFY_DEBUG, "SetState: %s %s",
+    notify(NFY_DEBUG, "SetState: current state: %s | newstate: %s | asset: %s",
+    	   ToString(state).c_str(),
            ToString(newstate).c_str(),
            GetRef().c_str());
-    notify(NFY_VERBOSE, "newstate: %s not equal to current state: %s", 
-           ToString(newstate).c_str(), 
-           ToString(state).c_str());
     AssetDefs::State oldstate = state;
-    notify(NFY_VERBOSE, "Set oldstate: %s to current state: %s", 
-           ToString(oldstate).c_str(), 
-           ToString(state).c_str());
     state = newstate;
-    notify(NFY_VERBOSE, "Set current state: %s to newstate: %s", 
-           ToString(state).c_str(), 
-           ToString(newstate).c_str());
     try {
       // NOTE: This can end up calling back here to switch us to
       // another state (usually Failed or Succeded)
-      notify(NFY_VERBOSE, "Trying OnStateChange(%s, %s)", 
-             ToString(newstate).c_str(), 
-             ToString(oldstate).c_str());
       OnStateChange(newstate, oldstate);
     } catch (const std::exception &e) {
       notify(NFY_WARN, "Exception during OnStateChange: %s", 
@@ -200,14 +189,10 @@ AssetVersionImplD::SetState(AssetDefs::State newstate, bool propagate)
     // set it to above. OnStateChange can call SetState recursively. We
     // don't want to notify/propagate an old state.
     if (propagate && (state == newstate)) {
-      notify(NFY_VERBOSE, "We wish to propagate and state: %s is equal to newstate: %s", 
-             ToString(state).c_str(), 
-             ToString(newstate).c_str());
       notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
              GetRef().c_str(), 
              ToString(newstate).c_str());
       theAssetManager.NotifyVersionStateChange(GetRef(), newstate);
-      notify(NFY_VERBOSE, "Calling PropagateStateChange()");
       PropagateStateChange();
     }
   }
@@ -249,18 +234,18 @@ AssetVersionImplD::SyncState(void) const
 void
 AssetVersionImplD::PropagateStateChange(void)
 {
-  notify(NFY_VERBOSE, "PropagateStateChange(%s): %s",
+  notify(NFY_PROGRESS, "PropagateStateChange(%s): %s",
          ToString(state).c_str(), 
          GetRef().c_str());
   notify(NFY_VERBOSE, "Iterate through parents");
-  int i = 0;
+  int i = 1;
   for (std::vector<std::string>::const_iterator p = parents.begin();
        p != parents.end(); ++p) {
     AssetVersionD parent(*p);
     notify(NFY_PROGRESS, "Iteration: %d | Total Iterations: %s | Parent: %s",
            i,
            ToString(parents.size()).c_str(),
-           ToString(parent).c_str());
+           ToString(parents.at(1)).c_str());
     if (parent) {
       notify(NFY_VERBOSE, "parent: %s exists", 
              ToString(parent).c_str());
@@ -282,7 +267,7 @@ AssetVersionImplD::PropagateStateChange(void)
   std::vector<std::string> toNotify = listeners;
 
   notify(NFY_VERBOSE, "Iterate through listeners to notify");
-  i = 0;
+  i = 1;
   for (std::vector<std::string>::const_iterator l = toNotify.begin();
        l != toNotify.end(); ++l) {
     AssetVersionD listener(*l);
@@ -366,7 +351,7 @@ AssetVersionImplD::OnStateChange(AssetDefs::State newstate,
 {
   // NoOp in base class
   if (newstate == AssetDefs::Succeeded) {
-    notify(NFY_VERBOSE, "newstate: %s equals Succeeded", 
+    notify(NFY_VERBOSE, "newstate: %s", 
            ToString(newstate).c_str());
 #ifdef TEMP_ASSETS
     notify(NFY_VERBOSE, "TEMP_ASSETS has been defined");
