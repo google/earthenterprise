@@ -89,34 +89,6 @@ def rpmPlatformString = org.opengee.os.Platform.rpmPlatformString
 // Create a file handle for gee_long_version_txt
 def openGeeVersionFile = new File( gee_long_version_txt )
 
-// Call scons to create the file 'gee_long_version.txt'
-// The actual parameter used by scons is based on the parameter
-// passing into Gradlew
-if ( !openGeeVersionFile.exists() ) {
-    GeeCommandLine.expand(
-      ["/usr/bin/scons", scons_option, gee_long_version_txt ],
-      "Runing `scons` to produce <${gee_long_version_txt}> failed!",
-      null, // Use default environment variables.
-      new File( src_dir )
-    )
-}
-
-def openGeeVersion =
-    openGeeVersionFile.readLines().
-    collect {
-        // Strip comments:
-        def commentIndex = it.indexOf('#')
-
-        commentIndex < 0 ? it : it.substring(0, commentIndex)
-    }.
-    collect { it.trim() }. // Trim whitespace.
-    findAll { !it.isEmpty() }. // Skip empty lines.
-    findResult {
-        it // The first string that remains is the version string.
-    }.
-    replaceAll(/-.*release/, '').
-    replaceAll('-', '.')
-
 def stagedInstallDir = new File(stagedInstall_path)
 def stagedInstallDir_common = new File(stagedInstallDir, 'common')
 def stagedInstallDir_common_opt = new File(stagedInstallDir, 'common/opt')
@@ -186,10 +158,8 @@ def rpmCommandFilter = {
     return rpmCapabilityMap.containsKey(it) ? rpmCapabilityMap[it] : it
 }
 
-
-
 ospackage {
-    version = openGeeVersion
+    version = "<version unset>"
     release = "1.${rpmPlatformString}"
     distribution = rpmPlatformString
     packager = 'gee-oss@googlegroups.com'
@@ -198,6 +168,29 @@ ospackage {
     os = LINUX
 }
 
+task setGeeVersion {
+    doLast {
+        // if the version file does not exist raise an error
+        if ( !openGeeVersionFile.exists() ) {
+            throw new GradleException("Missing version file '${openGeeVersionFile}'.")
+        }
+        ospackage.version =
+            openGeeVersionFile.readLines().
+            collect {
+                // Strip comments:
+                def commentIndex = it.indexOf('#')
+
+                commentIndex < 0 ? it : it.substring(0, commentIndex)
+            }.
+            collect { it.trim() }. // Trim whitespace.
+            findAll { !it.isEmpty() }. // Skip empty lines.
+            findResult {
+                it // The first string that remains is the version string.
+            }.
+            replaceAll(/-.*release/, '').
+            replaceAll('-', '.')
+    }
+}
 
 // Build packages for all platforms by default:
 defaultTasks 'osPackage'
@@ -219,7 +212,14 @@ task stageOpenGeeInstall(type: Exec, dependsOn: 'compileOpenGee') {
         "installdir=${stagedInstallDir}")
 }
 
-task openGeePostGisRpm(type: GeeRpm) {
+if (project.hasProperty('buildOpenGee')) {
+    setGeeVersion.dependsOn stageOpenGeeInstall
+}
+
+task openGeePostGisRpm(type: GeeRpm, dependsOn: [setGeeVersion]) {
+    doFirst {
+        requires('opengee-common', ospackage.version, GREATER | EQUAL)
+    }
     packageName = 'opengee-postgis'
     release = "1.${rpmPlatformString}"
     version = '2.3.4'
@@ -233,7 +233,6 @@ task openGeePostGisRpm(type: GeeRpm) {
     type = BINARY
     autoFindProvides = true
     autoFindRequires = true
-    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
 
     from (stagedInstallDir_postgis_opt) {
         into new File(packageInstallRootDir, 'opt')
@@ -247,14 +246,10 @@ task openGeePostGisRpm(type: GeeRpm) {
     }
 }
 
-if (project.hasProperty('buildOpenGee')) {
-    openGeePostGisRpm.dependsOn stageOpenGeeInstall
-}
-
 // Expands the `gevars.sh.template` and any other templates so they can be
 // used in the `common` package, and prefixed to install scripts for all the
 // various packages.
-task openGeeSharedFiles(type: Copy) {
+task openGeeSharedFiles(type: Copy, dependsOn: [setGeeVersion]) {
     from file('shared')
     into file('build/shared')
 
@@ -271,7 +266,7 @@ task openGeeSharedFiles(type: Copy) {
             def templateDir = it.file.parent
 
             def templateVariables = [
-                'openGeeVersion': openGeeVersion
+                'openGeeVersion': ospackage.version
             ]
 
             def expandTemplate = { text_or_file ->
@@ -293,10 +288,12 @@ task openGeeSharedFiles(type: Copy) {
     }
 }
 
-task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeSharedFiles) {
+task openGeeCommonRpm(type: GeeRpm, dependsOn: [openGeeSharedFiles, setGeeVersion]) {
+    doFirst{
+        version = ospackage.version
+    }
     packageName = 'opengee-common'
     release = "1.${rpmPlatformString}"
-    version = openGeeVersion
     user = 'root'
     permissionGroup = 'root'
     packageGroup = 'Application/Productivity'
@@ -384,14 +381,12 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeSharedFiles) {
     }
 }
 
-if (project.hasProperty('buildOpenGee')) {
-    openGeeCommonRpm.dependsOn stageOpenGeeInstall
-}
-
-task openGeeCommonDeb (type: GeeDeb, dependsOn: openGeeSharedFiles) {
+task openGeeCommonDeb (type: GeeDeb, dependsOn: [openGeeSharedFiles, setGeeVersion]) {
+    doFirst {
+        version = ospackage.version
+    }
     packageName = openGeeCommonRpm.packageName
     release = openGeeCommonRpm.release
-    version = openGeeVersion
     user = openGeeCommonRpm.user
     permissionGroup = openGeeCommonRpm.permissionGroup
     packageGroup = 'misc'
@@ -448,11 +443,14 @@ if (project.hasProperty('buildOpenGee')) {
     openGeeCommonDeb.dependsOn stageOpenGeeInstall
 }
 
-task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
-    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
+task openGeeServerRpm (type: GeeRpm, dependsOn: [openGeeSharedFiles, setGeeVersion]) {
+    doFirst{
+        version = ospackage.version
+        requires('opengee-common', ospackage.version, GREATER | EQUAL)
+        requiresPre('opengee-common', ospackage.version, GREATER | EQUAL)
+    }
     packageName = 'opengee-server'
     release = "1.${rpmPlatformString}"
-    version = openGeeVersion
     user = 'root'
     permissionGroup = 'root'
     packageGroup = 'Application/Productivity'
@@ -467,8 +465,6 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     requires('opengee-postgis', '2.3.4', GREATER | EQUAL)
     conflicts('opengee-postgis', '2.0', LESS )
     conflicts('opengee-postgis', '2.4', GREATER | EQUAL)
-    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
-    requiresPre('opengee-common', openGeeVersion, GREATER | EQUAL)
     // `opengee-server` bundles Apache, and Apache requires utilities from the
     // `initscripts` package:
     requires('initscripts')
@@ -554,10 +550,11 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     link('/opt/google/gehttpd/htdocs/shared_assets/docs', '/opt/google/share/doc')
 }
 
-task openGeeServerDeb (type: Deb) {
+task openGeeServerDeb (type: Deb, dependsOn: [setGeeVersion]) {
+    doFirst {
+        requires('opengee-common', ospackage.version, GREATER | EQUAL)
+    }
     packageName = 'opengee-server'
-
-    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
 
     from(stagedInstallDir_server_etc) {
         into new File(packageInstallRootDir, 'etc')
@@ -572,10 +569,13 @@ task openGeeServerDeb (type: Deb) {
     }
 }
 
-task openGeeFusionRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
+task openGeeFusionRpm (type: GeeRpm, dependsOn: [openGeeSharedFiles, setGeeVersion]) {
+    doFirst{
+        version = ospackage.version
+        requires('opengee-common', ospackage.version, GREATER | EQUAL)
+    }
     packageName = 'opengee-fusion'
     release = "1.${rpmPlatformString}"
-    version = openGeeVersion
     user = 'root'
     permissionGroup = 'root'
     packageGroup = 'Application/Productivity'
@@ -593,8 +593,6 @@ built from raster, vector, and location properties data.
     autoFindRequires = true
 
     requires('proj-devel') /* This dependency is not being picked up automatically by GeeRpm task */
-    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
-
 
     requiresCommands(
         packageSharedCommands +
@@ -656,7 +654,7 @@ built from raster, vector, and location properties data.
                 def templateDir = it.file.parent
 
                 def templateVariables = [
-                    'openGeeVersion': openGeeVersion
+                    'openGeeVersion': ospackage.version
                 ]
 
                 def expandTemplate = { text_or_file ->
@@ -685,9 +683,11 @@ built from raster, vector, and location properties data.
     link('/opt/google/gehttpd/htdocs/shared_assets/docs', '/opt/google/share/doc')
 }
 
-task openGeeFusionDeb (type: Deb) {
+task openGeeFusionDeb (type: Deb, dependsOn: [setGeeVersion]) {
+    doFirst{
+        requires('opengee-common', ospackage.version, GREATER | EQUAL)
+    }
     packageName = 'opengee-fusion'
-    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
 
     from(stagedInstallDir_fusion) {
         into packageInstallRootDir
