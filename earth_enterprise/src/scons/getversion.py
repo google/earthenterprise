@@ -79,10 +79,6 @@ def _ReadBackupVersionFile(target):
 
 def _GetCommitRawDescription():
     """Returns description of current commit"""
-    # Get reverse sorted list of tags that are reachable (--merged) from HEAD:
-    #tags = repo.git.tag('--list', '[0-9]*\.[0-9]*\.[0-9]*\-*', '--sort=-v:refname', '--merged').split('\n')
-    #raw = next(iter(tags or ['']), '')
-
     repo = _GetRepository()
     raw = repo.git.describe('--tags', '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*')
     raw = raw.rstrip()
@@ -93,6 +89,13 @@ def _IsCurrentCommitTagged(description):
     """True if the current commit is tagged, otherwise False"""
     # If this condition hits, then we are currently on a tagged commit.
     return (len(description.split("-")) < 4)
+
+
+def _GetCommitVersionTag():
+    """Returns the highest tag that's reachable from the current HEAD of git repo"""
+    repo = _GetRepository()
+    tags = repo.git.tag('--list', '[0-9]*\.[0-9]*\.[0-9]*\-*', '--sort=-v:refname', '--merged').split('\n')
+    return next(iter(tags or ['']), '')
 
 
 def _GitGeneratedLongVersion():
@@ -111,8 +114,10 @@ def _GitGeneratedLongVersion():
             return '.'.join([raw, date])
         return raw
 
+    tag = _GetCommitVersionTag()
+
     # Tear apart the information in the version string.
-    components = _ParseRawVersionString(raw)
+    components = _ParseRawVersionString(tag)
   
     # Determine how to update, since we are *not* on tagged commit.
     if components['isFinal']:
@@ -140,8 +145,6 @@ def _ParseRawVersionString(raw):
     
     base = rawComponents[0]
     patchRaw = rawComponents[1]
-    components['numCommits'] = rawComponents[2]
-    components['hash'] = rawComponents[3]
     components['isFinal'] = ((patchRaw[-5:] == "final") or
                              (patchRaw[-7:] == "release"))
   
