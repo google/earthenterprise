@@ -122,15 +122,6 @@ geresourceprovider = env.executable('geresourceprovider',
      ],
     LIBS=['geautoingest', 'geconfigutil', 'gefconfigutil', 'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'xerces-c', 'qt-mt'])
 
-gestartdaemon = env.executable('gestartdaemon',
-                               ['gestartdaemon.cpp'],
-                               LIBS=['geutil', 'gecommon', 'gemiscconfig'])
 
-gestopdaemon = env.executable('gestopdaemon',
-                              ['gestopdaemon.cpp'],
-                              LIBS=['geutil', 'gecommon'])
-
-
-env.install('fusion_bin', [ gesystemmanager, geresourceprovider,
-                     gestartdaemon, gestopdaemon ] )
+env.install('fusion_bin', [ gesystemmanager, geresourceprovider ] )
 env.install('fusion_root', [ 'gefusion' ], 'etc/init.d')
