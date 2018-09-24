@@ -1,5 +1,6 @@
 package org.opengee.shell
 
+
 class GeeCommandLine {
     class ExpectedResult {
         Integer exitCode = null
@@ -15,7 +16,7 @@ class GeeCommandLine {
 
     // Returns the standard output that results from executing a given command.
     //     To pipe to standard input set `stdInAction` to a lambda that
-    // accepts the standard input writer as an parameter.
+    // accepts the standard input writer as a parameter.
     //     To suppress known command results (return `null`), use the
     // `suppressedResults` parameter.
     static def expand(
