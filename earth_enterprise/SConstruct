@@ -44,7 +44,7 @@ with open('rpms/build.properties', 'w') as f:
     print >> f, "## Manual changes will be overwritten."
     print >> f, str('staged=') + installdir.strip()
 
-installdir = Dir(installdir)
+installdir = Dir(installdir).abspath
 def dir_cat(installdir, subdir1, subdir2):
    if (len(subdir2) > 0):
       return Dir(subdir1 + subdir2, installdir)
@@ -214,7 +214,7 @@ env.PhonyTargets(**this_dict)
 
 if 'cleanall' in COMMAND_LINE_TARGETS:
     #clean the search and getomcat install folders.
-    file = installdir.get_path()
+    file = installdir
     commands.getstatusoutput("rm -rf " + file)
 
     #clean /tmp/fusion_os_install

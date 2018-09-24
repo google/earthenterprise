@@ -58,33 +58,9 @@ import org.opengee.shell.GeeCommandLine
 def src_dir = "../src/"
 def scons_option = "release=1"
 
-// Look for command line parameters that specify how the packages are
-// to be built.  This can be either 'optimize' or 'debug'.
-// Option 'release' is the default.
-def native_dir = {
-  if ( project.hasProperty( 'optimize' ) ) {
-    scons_option = "optimize=1"
-    return "NATIVE-OPT-x86_64"
-  }  // end check for option 'optimze'
-  if ( project.hasProperty( 'debug' ) ) {
-    scons_option = "release=0"
-    return "NATIVE-DBG-x86_64"
-  }
-  return "NATIVE-REL-x86_64"
-}  // end native_dir
-
-// Build the actual file to be used
-def gee_long_version_txt = "${src_dir}${native_dir()}/gee_long_version.txt"
-
-
-def rpmPlatformString = org.opengee.os.Platform.rpmPlatformString
-
 def stagedInstall_path =
-    project.hasProperty('stageInstallPath') ?
-        project.stageInstallPath :
-        (project.hasProperty('buildOpenGee') ?
-            "${buildDir.getAbsolutePath()}/install" :
-            '/tmp/fusion_os_install')
+    project.hasProperty('stageInstallPath') ? project.stageInstallPath : '/tmp/fusion_os_install'
+
 if (new File('build.properties').exists()) {
     def props = new Properties()
     new File('build.properties').withInputStream {
@@ -94,6 +70,21 @@ if (new File('build.properties').exists()) {
         stagedInstall_path = props["staged"]
     }
 }
+
+// Look for command line parameters that specify how the packages are
+// to be built.  This can be either 'optimize' or 'debug'.
+// Option 'release' is the default.
+if ( project.hasProperty( 'optimize' ) ) {
+    scons_option = "optimize=1"
+}  // end check for option 'optimze'
+else if ( project.hasProperty( 'debug' ) || project.hasProperty( 'internal' ) ) {
+    scons_option = "internal=1"
+}
+
+// Build the actual file to be used
+def gee_long_version_txt = "${stagedInstall_path}/gee_long_version.txt"
+
+def rpmPlatformString = org.opengee.os.Platform.rpmPlatformString
 
 // Create a file handle for gee_long_version_txt
 def openGeeVersionFile = new File( gee_long_version_txt )
@@ -149,12 +140,7 @@ def stagedInstallDir_tutorial = new File(stagedInstallDir, 'tutorial')
 def packageInstallRootDir = new File('/')
 def packageInstallLibDir = new File(packageInstallRootDir, 'opt/google/lib')
 
-def postGisInstallDir = new File(
-        project.projectDir,
-        "${src_dir}${native_dir()}/third_party/postgis/install"
-    ).getAbsolutePath()
-
-def postGisInstallDir_opt = new File(postGisInstallDir, 'opt')
+def stagedInstallDir_postgis_opt = new File(stagedInstallDir, 'postgis/opt')
 
 // Commands used in install-utils.sh:
 def packageSharedCommands = ['bash', 'flock', 'sed', 'xmllint']
@@ -249,7 +235,7 @@ task openGeePostGisRpm(type: GeeRpm) {
     autoFindRequires = true
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
 
-    from (postGisInstallDir_opt) {
+    from (stagedInstallDir_postgis_opt) {
         into new File(packageInstallRootDir, 'opt')
     }
 
@@ -559,13 +545,6 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
 
     from(stagedInstallDir_server_apachesupport) {
         into packageInstallRootDir
-    }
-
-    // Exclude files that go into the PostGIS RPM from this package:
-    eachFile {
-        if (new File(postGisInstallDir_opt, "../${it.path}").exists()) {
-            it.exclude()
-        }
     }
 
     // Create links

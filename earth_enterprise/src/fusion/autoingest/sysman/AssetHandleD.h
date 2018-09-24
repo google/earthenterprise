@@ -186,16 +186,28 @@ class MutableAssetHandleD_ : public virtual Base_ {
 
       // Save mutable items.
       khFilesTransaction filetrans(".new");
+      uint32 numDotNew=0;
       for (std::vector<std::string>::iterator it = toDelete.begin();
            it != toDelete.end(); ++it) {
         if (dirtyMap.find(*it) != dirtyMap.end()) {
-          std::string filename = dirtyMap[*it]->XMLFilename() + ".new";
+          std::string filename = dirtyMap[*it]->XMLFilename();
+          notify(NFY_VERBOSE,"AssetHandleD.h:193: filename = %s",
+                 filename.c_str());
+
+          if (filename.rfind(".new") != std::string::npos) 
+          {
+              notify(NFY_VERBOSE,"PurgeCacheIfNeeded(), filename contains .new:  %s", filename.c_str());
+              ++numDotNew;
+          }
+          filename += ".new";
           if (dirtyMap[*it]->Save(filename)) {
             filetrans.AddNewPath(filename);
           }
         }
       }
-      if (!filetrans.Commit()) {
+      notify(NFY_VERBOSE, "PurgeCacheIfNeeded() number of files containing .new: %u", numDotNew);
+      if (!filetrans.Commit())
+      {
         throw khException("Unable to commit file saving in cache purge.");
       }
 
@@ -395,7 +407,7 @@ protected:
       this->cache().Add(this->ref, this->handle);
 
       // add it to the dirty list - since it just sprang into existence
-      // we need to make sure it get's saved
+      // we need to make sure it gets saved
       MutableBase::dirtyMap.insert(std::make_pair(this->ref, *this));
     }
   }
