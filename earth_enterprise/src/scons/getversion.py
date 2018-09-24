@@ -160,7 +160,9 @@ def _ParseRawVersionString(raw):
         components['patch'] = -1
     else:
         components['patchType'] = patchComponents[1]
-        
+    
+    repo = _GetRepository()
+    components['hash'] = repo.git.rev_parse('--short=8', 'HEAD')  
     return components
   
 def main():
