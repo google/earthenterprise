@@ -13,9 +13,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+# OSPackage hard-codes the interpreter to `/bin/sh` for Debian systems, so make
+# sure this scripts runs in `sh`, even if you specify `bash` above.
 
 # gevars.sh:
-<%= expandTemplateFile('gevars.sh.template') %>
+<%= expandTemplateFile.call('gevars.sh.template') %>
 
 # Directory locations:
 BININSTALLROOTDIR="/etc/init.d"
@@ -36,8 +39,8 @@ NEWLINECLEANER="sed -e s:\\n::g"
 
 if [ -f /sbin/chkconfig ]; then
     # Use the Red Hat tool for managing services:
-<%
-    out << '''
+<%=
+    '''
     add_service()
     {
         local SERVICE_NAME="$1"
@@ -55,8 +58,8 @@ if [ -f /sbin/chkconfig ]; then
 %>
 elif [ -f /usr/sbin/update-rc.d ]; then
     # Use the Debian tool for managing services:
-<%
-    out << '''
+<%=
+    '''
     add_service()
     {
         local SERVICE_NAME="$1"
@@ -79,8 +82,8 @@ else
 fi
 
 
-<%
-out << '''
+<%=
+'''
 load_systemrc_config()
 {
     local VALUE

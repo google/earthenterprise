@@ -13,6 +13,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+# OSPackage hard-codes the interpreter to `/bin/sh` for Debian systems, so make
+# sure this scripts runs in `sh`, even if you specify `bash` above.
 
 set +x
 set -e
@@ -33,8 +36,10 @@ remove_users_groups()
 # Main Function:
 #-----------------------------------------------------------------
 
-# at end of actual un-install, not an upgrade...
-if [ "$1" = "0" ]; then
+# * In Red Hat $1 = 0 indicates un-install, and not an upgrade.
+# * On Debian $1 = "purge" happens only during an uninstall when the user
+# requests no configuration be left behind.
+if [ "$1" = "0" ] || [ "$1" = "purge" ]; then
     remove_users_groups
 fi
 #-----------------------------------------------------------------

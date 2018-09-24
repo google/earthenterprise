@@ -200,6 +200,47 @@ def rpmCommandFilter = {
     return rpmCapabilityMap.containsKey(it) ? rpmCapabilityMap[it] : it
 }
 
+def copySpecExpandTemplates = { copySpec, templateVariablesMap, templateSuffix = '.template' ->
+    def stringStripSuffix = { value, suffix ->
+        return value.substring(0, value.length() - suffix.length())
+    }
+
+    def templateVariables = templateVariablesMap.clone()
+
+    def addExpandTemplateFileFunction = !templateVariables.containsKey('expandTemplateFile')
+
+    copySpec.eachFile {
+        if (it.sourceName.endsWith(templateSuffix)) {
+            it.name = stringStripSuffix(it.getSourceName(), templateSuffix)
+
+            def templateDir = it.file.parent
+
+            // Add a function for expanding a template from within a template
+            // file, if necessary:
+            if (addExpandTemplateFileFunction) {
+                def expandTemplate = { text_or_file ->
+                    def engine = new groovy.text.SimpleTemplateEngine()
+                    def template = engine.createTemplate(text_or_file).make(templateVariables)
+
+                    return template.toString()
+                }
+
+                templateVariables.put(
+                    'expandTemplateFile',
+                    { relative_path ->
+                        expandTemplate(new File(new File(templateDir), relative_path))
+                    },
+                )
+            }
+
+            it.filter(
+                org.opengee.io.StreamingTemplateReader,
+                bindings: templateVariables
+            )
+        }
+    }
+}
+
 
 
 ospackage {
@@ -261,8 +302,36 @@ task openGeePostGisRpm(type: GeeRpm) {
     }
 }
 
+task openGeePostGisDeb(type: GeeDeb) {
+    packageName = openGeePostGisRpm.packageName
+    release = '1'
+    version = openGeePostGisRpm.version
+    user = openGeePostGisRpm.user
+    permissionGroup = openGeePostGisRpm.permissionGroup
+    packageGroup = 'misc'
+    summary = openGeePostGisRpm.summary
+    packageDescription = openGeePostGisRpm.packageDescription
+    license = openGeePostGisRpm.license
+    url = openGeePostGisRpm.url
+    type = BINARY
+
+    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
+
+    from (postGisInstallDir_opt) {
+        into new File(packageInstallRootDir, 'opt')
+    }
+
+    from (new File(stagedInstallDir_server_opt, 'google/lib')) {
+        // Include libpq, since it's used by postgis command-line utilities:
+        include 'libpq.*'
+
+        into packageInstallLibDir
+    }
+}
+
 if (project.hasProperty('buildOpenGee')) {
     openGeePostGisRpm.dependsOn stageOpenGeeInstall
+    openGeePostGisDeb.dependsOn stageOpenGeeInstall
 }
 
 // Expands the `gevars.sh.template` and any other templates so they can be
@@ -272,39 +341,10 @@ task openGeeSharedFiles(type: Copy) {
     from file('shared')
     into file('build/shared')
 
-    def templateSuffix = '.template'
-    def stringStripSuffix = { value, suffix ->
-        return value.substring(0, value.length() - suffix.length())
-    }
-
-    eachFile {
-        if (it.getSourceName().endsWith(templateSuffix)) {
-            it.setName(stringStripSuffix(
-                it.getSourceName(), templateSuffix))
-
-            def templateDir = it.file.parent
-
-            def templateVariables = [
-                'openGeeVersion': openGeeVersion
-            ]
-
-            def expandTemplate = { text_or_file ->
-                def engine = new groovy.text.SimpleTemplateEngine()
-                def template = engine.createTemplate(text_or_file).make(templateVariables)
-
-                return template.toString()
-            }
-
-            templateVariables.put(
-                'expandTemplateFile',
-                { relative_path ->
-                    expandTemplate(new File(new File(templateDir), relative_path))
-                },
-            )
-
-            it.expand(templateVariables.clone())
-        }
-    }
+    copySpecExpandTemplates(delegate,
+        [
+            'openGeeVersion': openGeeVersion
+        ])
 }
 
 task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeSharedFiles) {
@@ -404,16 +444,15 @@ if (project.hasProperty('buildOpenGee')) {
 
 task openGeeCommonDeb (type: GeeDeb, dependsOn: openGeeSharedFiles) {
     packageName = openGeeCommonRpm.packageName
-    release = openGeeCommonRpm.release
+    release = '1'
     version = openGeeVersion
     user = openGeeCommonRpm.user
     permissionGroup = openGeeCommonRpm.permissionGroup
     packageGroup = 'misc'
-    formatPackageDescription(openGeeCommonRpm.summary + '\n' + openGeeCommonRpm.packageDescription)
+    summary = openGeeCommonRpm.summary
+    packageDescription = openGeeCommonRpm.packageDescription
     license = openGeeCommonRpm.license
     priority = 'optional'
-
-    setArch('amd64')	// if this is not specified, the architecture is x86_64, and dpkg won't install without the --force-architecture flag
 
     requires('flex')
     requires('freeglut3')
@@ -463,7 +502,6 @@ if (project.hasProperty('buildOpenGee')) {
 }
 
 task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
-    requires('opengee-common', openGeeVersion, GREATER | EQUAL)
     packageName = 'opengee-server'
     release = "1.${rpmPlatformString}"
     version = openGeeVersion
@@ -575,22 +613,105 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     link('/opt/google/gehttpd/htdocs/shared_assets/docs', '/opt/google/share/doc')
 }
 
-task openGeeServerDeb (type: Deb) {
-    packageName = 'opengee-server'
+task openGeeServerDeb (type: GeeDeb) {
+    packageName = openGeeServerRpm.packageName
+    release = '1'
+    version = openGeeVersion
+    user = openGeeServerRpm.user
+    permissionGroup = openGeeServerRpm.permissionGroup
+    packageGroup = 'misc'
+    summary = openGeeServerRpm.summary
+    packageDescription = openGeeServerRpm.packageDescription
+    license = openGeeServerRpm.license
+    url = openGeeServerRpm.url
 
+    requires('opengee-postgis', '2.3.4', GREATER | EQUAL)
+    conflicts('opengee-postgis', '2.0', LESS )
+    conflicts('opengee-postgis', '2.4', GREATER | EQUAL)
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
+
+    requires('python-pil')
+
+    requiresCommands(
+        packageSharedCommands +
+        [
+            // Install script commands:
+            'cat', 'chmod', 'chown', 'cut', 'find', 'getent', 'mkdir', 'python',
+            'sed', 'su', 'sudo'
+        ]
+    )
+
+    // Prefix variable definitions to all install scripts:
+    installUtils = file('build/shared/install-utils.sh')
+
+    // Add geresetpgdb script:
+    installUtils = file( new File( stagedInstallDir_server_opt, 'google/bin/gepgcommon' ) )
+
+    preInstall = file('opengee-server/pre-install.sh')
+    postInstall = file('opengee-server/post-install.sh')
+    preUninstall = file('opengee-server/pre-uninstall.sh')
+    postUninstall = file('opengee-server/post-uninstall.sh')
+
+    directory('/opt/google/install', 0700)
+    directory('/opt/google/gehttpd/logs', 0755)
+    directory('/var/opt/google/run', 0775)
+    directory('/var/opt/google/log', 0775)
+    directory('/var/opt/google/pgsql', 0700)
+    directory('/var/opt/google/pgsql/logs')
+
+    filesMatching(
+        ['/etc/init.d/geserver']
+    ) {
+        it.mode = 0755
+    }
+
+    // since these are "sourced" they cannot be exec...
+    filesMatching(
+        ['/etc/profile.d/ge-server.csh',
+         '/etc/profile.d/ge-server.sh']
+    ) {
+        it.mode = 0644
+    }
+
+    from(stagedInstallDir_server_opt) {
+        // libpq is in the opengee-postgis package:
+        exclude 'google/lib/libpq.*'
+
+        into new File(packageInstallRootDir, 'opt')
+    }
 
     from(stagedInstallDir_server_etc) {
         into new File(packageInstallRootDir, 'etc')
     }
 
-    from(stagedInstallDir_server_opt) {
-        into new File(packageInstallRootDir, 'opt')
+    from(stagedInstallDir_server_user_magic) {
+        into packageInstallRootDir
+    }
+
+    from(stagedInstallDir_server_geplaces) {
+        into new File(packageInstallRootDir, 'opt/google/share/geplaces')
+    }
+
+    from(stagedInstallDir_server_searchexample) {
+        into new File(packageInstallRootDir, 'opt/google/share/searchexample')
     }
 
     from(stagedInstallDir_server_apachesupport) {
         into packageInstallRootDir
     }
+
+    // Exclude files that go into the PostGIS package from this package:
+    eachFile {
+        if (new File(postGisInstallDir_opt, "../${it.path}").exists()) {
+            it.exclude()
+        }
+    }
+
+    // Create links
+    link('/opt/google/etc', '/etc/opt/google')
+    link('/opt/google/log', '/var/opt/google/log')
+    link('/opt/google/run', '/var/opt/google/run')
+    link('/opt/google/gehttpd/htdocs/shared_assets/docs', '/opt/google/share/doc')
 }
 
 task openGeeFusionRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
@@ -616,14 +737,14 @@ built from raster, vector, and location properties data.
     requires('proj-devel') /* This dependency is not being picked up automatically by GeeRpm task */
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
 
-
+    requires('/etc/rc.d/init.d/functions')
     requiresCommands(
         packageSharedCommands +
         [
             // Install script commands:
-            'cat', 'chcon', 'chmod', 'chown', 'cut', 'df', 'dirname', 'expr',
-            'find', 'getent', 'grep', 'hostname', 'mkdir', 'nproc',
-            'tr'
+            'cat', 'chcon', 'chmod', 'chown', 'cut', 'daemonize', 'df',
+            'dirname', 'expr', 'find', 'getent', 'grep', 'hostname', 'mkdir',
+            'nproc', 'tr'
         ]
     )
 
@@ -664,39 +785,9 @@ built from raster, vector, and location properties data.
     from(file('opengee-fusion/install')) {
         into packageInstallRootDir
 
-        def templateSuffix = '.template'
-        def stringStripSuffix = { value, suffix ->
-            return value.substring(0, value.length() - suffix.length())
-        }
-
-        eachFile {
-            if (it.getSourceName().endsWith(templateSuffix)) {
-                it.setName(stringStripSuffix(
-                    it.getSourceName(), templateSuffix))
-
-                def templateDir = it.file.parent
-
-                def templateVariables = [
-                    'openGeeVersion': openGeeVersion
-                ]
-
-                def expandTemplate = { text_or_file ->
-                    def engine = new groovy.text.SimpleTemplateEngine()
-                    def template = engine.createTemplate(text_or_file).make(templateVariables)
-
-                    return template.toString()
-                }
-
-                templateVariables.put(
-                    'expandTemplateFile',
-                    { relative_path ->
-                        expandTemplate(new File(new File(templateDir), relative_path))
-                    },
-                )
-
-                it.expand(templateVariables.clone())
-            }
-        }
+        copySpecExpandTemplates(delegate, [
+                'openGeeVersion': openGeeVersion
+            ])
     }
 
     // Create links
@@ -706,13 +797,70 @@ built from raster, vector, and location properties data.
     link('/opt/google/gehttpd/htdocs/shared_assets/docs', '/opt/google/share/doc')
 }
 
-task openGeeFusionDeb (type: Deb) {
-    packageName = 'opengee-fusion'
+task openGeeFusionDeb (type: GeeDeb) {
+    packageName = openGeeFusionRpm.packageName
+    release = '1'
+    version = openGeeVersion
+    user = openGeeFusionRpm.user
+    permissionGroup = openGeeFusionRpm.permissionGroup
+    packageGroup = 'misc'
+    summary = openGeeFusionRpm.summary
+    packageDescription = openGeeFusionRpm.packageDescription
+    license = openGeeFusionRpm.license
+    url = openGeeFusionRpm.url
+    type = BINARY
+
+    requires('dpkg')
+    requires('lsb-base')
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
+
+    // Prefix variable definitions to all install scripts:
+    installUtils = file('build/shared/install-utils.sh')
+
+    preInstall = file('opengee-fusion/pre-install.sh')
+    postInstall = file('opengee-fusion/post-install.sh')
+    preUninstall = file('opengee-fusion/pre-uninstall.sh')
+    postUninstall = file('opengee-fusion/post-uninstall.sh')
+
+    directory('/opt/google/share/tutorials', 0755)
+    directory('/var/opt/google/run', 0775)
+    directory('/var/opt/google/log', 0775)
+
+    filesMatching(
+        ['/etc/init.d/gefusion']
+    ) {
+        it.mode = 0755
+    }
+
+    // since these are "sourced" they cannot be exec...
+    filesMatching(
+        ['/etc/profile.d/ge-fusion.csh',
+         '/etc/profile.d/ge-fusion.sh']
+    ) {
+        it.mode = 0644
+    }
 
     from(stagedInstallDir_fusion) {
         into packageInstallRootDir
     }
+
+    from(stagedInstallDir_tutorial) {
+        into packageInstallRootDir
+    }
+
+    from(file('opengee-fusion/install')) {
+        into packageInstallRootDir
+
+        copySpecExpandTemplates(delegate, [
+                'openGeeVersion': openGeeVersion
+            ])
+    }
+
+    // Create links
+    link('/opt/google/etc', '/etc/opt/google')
+    link('/opt/google/log', '/var/opt/google/log')
+    link('/opt/google/run', '/var/opt/google/run')
+    link('/opt/google/gehttpd/htdocs/shared_assets/docs', '/opt/google/share/doc')
 }
 
 task openGeeRpms(
@@ -722,7 +870,10 @@ task openGeeRpms(
     ])
 
 task openGeeDebs(
-    dependsOn: ['openGeeServerDeb', 'openGeeFusionDeb', 'openGeeCommonDeb'])
+    dependsOn: [
+        'openGeeServerDeb', 'openGeeFusionDeb', 'openGeeCommonDeb',
+        'openGeePostGisDeb'
+    ])
 
 task osPackage(dependsOn: org.opengee.os.Platform.osId == 'ubuntu' ? openGeeDebs : openGeeRpms)
 

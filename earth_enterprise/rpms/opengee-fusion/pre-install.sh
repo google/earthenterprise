@@ -13,6 +13,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+# OSPackage hard-codes the interpreter to `/bin/sh` for Debian systems, so make
+# sure this scripts runs in `sh`, even if you specify `bash` above.
 
 set +x
 
@@ -78,7 +81,7 @@ check_asset_root_volume_size()
 
     ASSET_ROOT_VOLUME_SIZE=$(df -k "$VOLUME_PATH" | grep -v Avail | tr -s ' ' | cut -d ' ' -f 4)
 
-    if [[ "$ASSET_ROOT_VOLUME_SIZE" -lt "$MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB" ]]; then
+    if [ "$ASSET_ROOT_VOLUME_SIZE" -lt "$MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB" ]; then
         MIN_ASSET_ROOT_VOLUME_SIZE_IN_GB=$(expr "$MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB" / 1024 / 1024)
 
         cat <<END
