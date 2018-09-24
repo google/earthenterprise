@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import com.netflix.gradle.plugins.deb.Deb
+import org.gradle.api.tasks.TaskAction
 import org.opengee.shell.GeeCommandLine
 
 class GeeDeb extends com.netflix.gradle.plugins.deb.Deb {
@@ -56,6 +57,20 @@ class GeeDeb extends com.netflix.gradle.plugins.deb.Deb {
         }
     }
 
+    // This is used to rewrite the value of the 'arch' field.  If you're
+    // building both RPM and Deb packages, you may set the architecture to
+    // the name used by Red Hat, and have it rewritten here to the name
+    // defined by Debian policy.
+    def archNameMap = [
+            'x86_64': 'amd64',
+            'x86': 'i386'
+        ]
+
+    // Whether to fix formatting of the `packageDescription` field from
+    // plain-text empty lines, and no indentation to a Debian control field
+    // format.  Set this to falso to forward `packageDescription` to the
+    // Debian package creation as is.
+    def fixPackageDescriptionFormat = true
 
     protected File[] packageInputFiles = null
 
@@ -77,7 +92,7 @@ class GeeDeb extends com.netflix.gradle.plugins.deb.Deb {
 
     // Adds the packages that provide all of the given commands to the package
     // dependency list.
-    def requireCommands(Iterable<String> commands) {
+    def requiresCommands(Iterable<String> commands) {
         (whatProvidesCommand(commands) as Set).each {
             requires(it)
         }
@@ -115,5 +130,22 @@ class GeeDeb extends com.netflix.gradle.plugins.deb.Deb {
         }
 
         packageDescription = formattedDescription
+    }
+
+    // Override the @TaskAction from the base class, so we can run a few fixes
+    // first.
+    @Override
+    @TaskAction
+    protected void copy() {
+        // Fix the architecture field:
+        if (archNameMap != null && archNameMap.containsKey(archString)) {
+            arch = archNameMap[archString]
+        }
+
+        if (fixPackageDescriptionFormat) {
+            formatPackageDescription(packageDescription)
+        }
+
+        super.copy()
     }
 }
