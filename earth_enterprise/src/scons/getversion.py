@@ -76,24 +76,38 @@ def _ReadBackupVersionFile(target):
 
   return line
 
+
+def _GetCommitRawDescription():
+    """Returns description of current commit"""
+    # Get reverse sorted list of tags that are reachable (--merged) from HEAD:
+    #tags = repo.git.tag('--list', '[0-9]*\.[0-9]*\.[0-9]*\-*', '--sort=-v:refname', '--merged').split('\n')
+    #raw = next(iter(tags or ['']), '')
+
+    repo = _GetRepository()
+    raw = repo.git.describe('--tags', '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*')
+    raw = raw.rstrip()
+    return raw
+
+
+def _IsCurrentCommitTagged(description):
+    """True if the current commit is tagged, otherwise False"""
+    # If this condition hits, then we are currently on a tagged commit.
+    return (len(description.split("-")) < 4)
+
+
 def _GitGeneratedLongVersion():
     """Take the raw information parsed by git, and use it to
        generate an appropriate version string for GEE."""
 
-    repo = _GetRepository()
-
-    # Get reverse sorted list of tags that are reachable (--merged) from HEAD:
-    tags = repo.git.tag('--list', '[0-9]*\.[0-9]*\.[0-9]*\-*', '--sort=-v:refname', '--merged').split('\n')
-    # Get the first one safely (or '')
-    raw = next(iter(tags or ['']), '')
-    raw = raw.rstrip()
-
     # Grab the datestamp.
     date = datetime.utcnow().strftime("%Y%m%d%H%M")
 
-    # If this condition hits, then we are currently on a tagged commit.
-    if (len(raw.split("-")) < 4):
+    raw = _GetCommitRawDescription()
+
+    # For tagged commits, return the tag itself
+    if _IsCurrentCommitTagged(raw):
         if _CheckDirtyRepository():
+            # Append the date if the repo contains uncommitted files
             return '.'.join([raw, date])
         return raw
 
