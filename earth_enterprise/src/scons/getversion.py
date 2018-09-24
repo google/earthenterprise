@@ -154,6 +154,7 @@ def _ParseRawVersionString(raw):
     components['patch'] = int(patchComponents[0])
     if (len(patchComponents) < 2):
         components['patchType'] = "alpha"
+        components['patch'] = -1
     else:
         components['patchType'] = patchComponents[1]
         
