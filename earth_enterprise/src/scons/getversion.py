@@ -4,39 +4,76 @@ import argparse
 import git
 from datetime import datetime
 
+def GetVersion(backupFile, label=''):
+    """As getLongVersion(), but only return the leading *.*.* value."""
+
+    raw = GetLongVersion(backupFile, label)
+    final = raw.split("-")[0]
+
+    return final
+
+
 def GetLongVersion(backupFile, label=''):
-  """Create a detailed version string based on the state of
-     the software, as it exists in the repository."""
+    """Create a detailed version string based on the state of
+    the software, as it exists in the repository."""
  
-  if _CheckGitAvailable():
-    ret = _GitGeneratedLongVersion()
+    if _CheckGitAvailable():
+        ret = _GitGeneratedLongVersion()
 
   # Without git, must use the backup file to create a string.
-  else:
-    base = _ReadBackupVersionFile(backupFile)
-    date = datetime.utcnow().strftime("%Y%m%d%H%M")
-    ret = '-'.join([base, date])
+    else:
+        base = _ReadBackupVersionFile(backupFile)
+        ret = '-'.join([base, _GetDateString()])
 
   # Append the label, if there is one.
-  if len(label):
-    ret = '.'.join([ret, label])
+    if len(label):
+        ret = '.'.join([ret, label])
 
-  return ret
+    return ret
 
 
-def GetVersion(backupFile, label=''):
-  """As getLongVersion(), but only return the leading *.*.* value."""
+def _GetDateString():
+    """Returns formatted date string representing current UTC time"""
+    return datetime.utcnow().strftime("%Y%m%d%H%M")
 
-  raw = GetLongVersion(backupFile, label)
-  final = raw.split("-")[0]
+def _GitGeneratedLongVersion():
+    """Take the raw information parsed by git, and use it to
+       generate an appropriate version string for GEE."""
 
-  return final
+    raw = _GetCommitRawDescription()
+
+    # For tagged commits, return the tag itself
+    if _IsCurrentCommitTagged(raw):
+        if _CheckDirtyRepository():
+            # Append the date if the repo contains uncommitted files
+            return '.'.join([raw, _GetDateString()])
+        return raw
+
+    tag = _GetCommitVersionTag()
+
+    # Tear apart the information in the version string.
+    components = _ParseRawVersionString(tag)
+  
+    # Determine how to update, since we are *not* on tagged commit.
+    if components['isFinal']:
+        components['patch'] = 0
+        components['patchType'] = "alpha"
+        components['revision'] = components['revision'] + 1
+    else:
+        components['patch'] = components['patch'] + 1
+    
+    # Rebuild.
+    base = '.'.join([str(components[x]) for x in ("major", "minor", "revision")])
+    patch = '.'.join([str(components["patch"]), components["patchType"], _GetDateString()])
+    if not _CheckDirtyRepository():
+        patch = '.'.join([patch, components['hash']])
+    
+    return '-'.join([base, patch])
 
 
 def _GetRepository():
     """Get a reference to the Git Repository.
     Is there a cleaner option than searching from the current location?"""
-
     # The syntax is different between library versions (particularly,
     # those used by Centos 6 vs Centos 7).
     try:
@@ -48,7 +85,6 @@ def _GetRepository():
 def _CheckGitAvailable():
     """Try the most basic of git commands, to see if there is
        currently any access to a repository."""
-    
     try:
         repo = _GetRepository()
     except git.exc.InvalidGitRepositoryError:
@@ -59,22 +95,21 @@ def _CheckGitAvailable():
 
 def _CheckDirtyRepository():
     """Check to see if the repository is not in a cleanly committed state."""
-
     repo = _GetRepository()
     str = repo.git.status("--porcelain")
     
     return (len(str) > 0)
-    
+
 
 def _ReadBackupVersionFile(target):
-  """There should be a file checked in with the latest version
-     information available; if git isn't available to provide
-     information, then use this file instead."""
+    """There should be a file checked in with the latest version
+    information available; if git isn't available to provide
+    information, then use this file instead."""
 
-  with open(target, 'r') as fp:
-    line = fp.readline()
+    with open(target, 'r') as fp:
+        line = fp.readline()
 
-  return line
+    return line
 
 
 def _GetCommitRawDescription():
@@ -96,44 +131,6 @@ def _GetCommitVersionTag():
     repo = _GetRepository()
     tags = repo.git.tag('--list', '[0-9]*\.[0-9]*\.[0-9]*\-*', '--sort=-v:refname', '--merged').split('\n')
     return next(iter(tags or ['']), '')
-
-
-def _GitGeneratedLongVersion():
-    """Take the raw information parsed by git, and use it to
-       generate an appropriate version string for GEE."""
-
-    # Grab the datestamp.
-    date = datetime.utcnow().strftime("%Y%m%d%H%M")
-
-    raw = _GetCommitRawDescription()
-
-    # For tagged commits, return the tag itself
-    if _IsCurrentCommitTagged(raw):
-        if _CheckDirtyRepository():
-            # Append the date if the repo contains uncommitted files
-            return '.'.join([raw, date])
-        return raw
-
-    tag = _GetCommitVersionTag()
-
-    # Tear apart the information in the version string.
-    components = _ParseRawVersionString(tag)
-  
-    # Determine how to update, since we are *not* on tagged commit.
-    if components['isFinal']:
-        components['patch'] = 0
-        components['patchType'] = "alpha"
-        components['revision'] = components['revision'] + 1
-    else:
-        components['patch'] = components['patch'] + 1
-    
-    # Rebuild.
-    base = '.'.join([str(components[x]) for x in ("major", "minor", "revision")])
-    patch = '.'.join([str(components["patch"]), components["patchType"], date])
-    if not _CheckDirtyRepository():
-        patch = '.'.join([patch, components['hash']])
-    
-    return '-'.join([base, patch])
 
 
 def _ParseRawVersionString(raw):
@@ -164,7 +161,8 @@ def _ParseRawVersionString(raw):
     repo = _GetRepository()
     components['hash'] = repo.git.rev_parse('--short=8', 'HEAD')  
     return components
-  
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-l", "--long", action="store_true", help="Output long format of version string")
@@ -181,6 +179,7 @@ def main():
         version = GetVersion(version_file)
 
     print version
+
 
 if __name__ == "__main__":
     main()
