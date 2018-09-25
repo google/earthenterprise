@@ -87,7 +87,7 @@ ValidOptions = set(
      'cpp_standard',     # The standard of CPP that will be used.  Default is C++11
      'label',            # Value to combine with version strings.
      'build_folder',     # where to put the build output and intermediate files
-     'cache_dir'         # use a cache dir to speed up build
+     'cache_dir',        # use a cache dir to speed up build
      'third_party_only'  # build third party code only
      ]);
 
