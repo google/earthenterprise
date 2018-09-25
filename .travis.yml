@@ -5,7 +5,7 @@ language: cpp
 
 compiler:  
   -gcc-48
-  -gcc-54
+  -gcc-5
 
 before_install:
 - sudo apt-get update -qq
