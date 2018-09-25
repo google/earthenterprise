@@ -17,17 +17,17 @@
 
 # Startup script for Google Earth Server.
 # chkconfig: 35 70 32
-# description: Google Earth Server
+# description: Open Google Earth Server services
 # would run after ncsd, start before gefusion...
 
 ### BEGIN INIT INFO
-# Provides: geserver
-# Required-Start: nscd
-# Should-Start:
+# Provides:       geserver
+# Required-Start:
+# Should-Start:   nscd
 # Required-Stop:
-# Default-Start:     3 5
-# Default-Stop:
-# Description:    Startup script for Google Earth Server.
+# Default-Start:  2 3 4 5
+# Default-Stop:   0 1 6
+# Description:    Open Google Earth Server services
 ### END INIT INFO
 
 if [ "$EUID" != "0" ] ; then
