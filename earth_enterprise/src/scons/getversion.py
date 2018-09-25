@@ -36,20 +36,50 @@ def _GitGeneratedLongVersion():
     """Take the raw information parsed by git, and use it to
        generate an appropriate version string for GEE."""
 
-    raw = _GetCommitRawDescription()
 
     # For tagged commits, return the tag itself
-    if _IsCurrentCommitTagged(raw):
-        if _CheckDirtyRepository():
-            # Append the date if the repo contains uncommitted files
-            return '.'.join([raw, _GetDateString()])
-        return raw
+    if _IsCurrentCommitTagged():
+        return _VersionForTaggedHead()
+    else:
+        return _VersionFromTagHistory()
 
+
+def _IsCurrentCommitTagged():
+    """True if the current commit is tagged, otherwise False"""
+    raw = _GetCommitRawDescription()
+    # If this condition hits, then we are currently on a tagged commit.
+    return (len(raw.split("-")) < 4)
+
+
+def _GetCommitRawDescription():
+    """Returns description of current commit"""
+    repo = _GetRepository()
+    raw = repo.git.describe('--tags', '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*')
+    raw = raw.rstrip()
+    return raw
+
+
+def _VersionForTaggedHead():
+    """When we're on the tagged commit, the version string is
+    either the tag itself (when repo is clean), or the tag with
+    date appended (when repo has uncommitted changes)"""
+    raw = _GetCommitRawDescription()
+    if _CheckDirtyRepository():
+        # Append the date if the repo contains uncommitted files
+        return '.'.join([raw, _GetDateString()])
+    return raw
+
+
+def _VersionFromTagHistory():
+    """From the HEAD revision, this function finds the most recent
+    reachable version tag and returns a string representing the
+    version being built -- which is one version beyond the latest
+    found in the history."""
     tag = _GetCommitVersionTag()
 
     # Tear apart the information in the version string.
     components = _ParseRawVersionString(tag)
-  
+
     # Determine how to update, since we are *not* on tagged commit.
     if components['isFinal']:
         components['patch'] = 0
@@ -65,20 +95,6 @@ def _GitGeneratedLongVersion():
         patch = '.'.join([patch, components['hash']])
     
     return '-'.join([base, patch])
-
-
-def _GetCommitRawDescription():
-    """Returns description of current commit"""
-    repo = _GetRepository()
-    raw = repo.git.describe('--tags', '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*')
-    raw = raw.rstrip()
-    return raw
-
-
-def _IsCurrentCommitTagged(description):
-    """True if the current commit is tagged, otherwise False"""
-    # If this condition hits, then we are currently on a tagged commit.
-    return (len(description.split("-")) < 4)
 
 
 def _GetCommitVersionTag():
