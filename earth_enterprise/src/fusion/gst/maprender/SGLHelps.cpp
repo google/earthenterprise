@@ -15,7 +15,11 @@
 
 #include "fusion/gst/maprender/SGLHelps.h"
 
+#pragma GCC diagnostic ignored "-Wunused-variable"
+#pragma GCC diagnostic push
 #include <SkForceLinking.h>
+#pragma GCC diagnostic pop
+
 #include <qcolor.h>
 
 #include "common/khFileUtils.h"
@@ -155,4 +159,3 @@ bool FontInfo::CheckTextStyleSanity(MapTextStyleConfig* config,
 }
 
 }  // namespace maprender
-
