@@ -13,23 +13,29 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+# OSPackage hard-codes the interpreter to `/bin/sh` for Debian systems, so make
+# sure this scripts runs in `sh`, even if you specify `bash` above.
 
 set +x
 set -e
 
 #-----------------------------------------------------------------
-# Main Functions
-#-----------------------------------------------------------------
-main_postuninstall()
-{
-    echo "OpenGEE users $GEAPACHEUSER and $GEPGUSER may be removed once associated data files are purged."
-}
-
-
-#-----------------------------------------------------------------
-# Post-Uninstall Main
+# Main Function
 #-----------------------------------------------------------------
 
-if [ "$1" = "0" ] ; then
-    main_postuninstall $@
-fi
+# Remove if actually uninstalling.
+#
+# On Red Hat the first argument to install scripts is "the number of versions
+# of the package that are installed".  It is 0 when uninstalling the last
+# version, 1 on first install, 2 or higher on upgrade.
+#     On Debian systems the first parameter is "upgrade", or "remove".
+# (See <https://wiki.debian.org/MaintainerScripts>.)
+case "$1" in
+	0|remove|upgrade)
+		service gefusion stop
+		remove_service gefusion
+		;;
+esac
+
+#-----------------------------------------------------------------

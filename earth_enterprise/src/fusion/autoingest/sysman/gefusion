@@ -16,7 +16,7 @@
 #
 
 # chkconfig: 35 71 34
-# description: Keyhole system manager for fusion processing tools.
+# description: Open Google Earth Fusion services
 
 ### BEGIN INIT INFO
 # Provides:          gefusion
@@ -25,7 +25,7 @@
 # Required-Stop:
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Description:       Google Earth Fusion Services
+# Description:       Open Google Earth Fusion services
 ### END INIT INFO
 
 

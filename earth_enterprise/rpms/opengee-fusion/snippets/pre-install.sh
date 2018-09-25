@@ -19,10 +19,6 @@
 
 set +x
 
-NEW_INSTALL=false
-if [ "$1" = "1" ] ; then
-    NEW_INSTALL=true
-fi
 
 #-----------------------------------------------------------------
 # Main Functions
@@ -60,10 +56,7 @@ main_preinstall()
         show_invalid_assetroot_name "$INVALID_ASSETROOT_NAMES"
     fi
 
-    # only on new install do we need to create user...
-    if [ "$NEW_INSTALL" = "true" ] ; then
-        create_users_and_groups
-    fi
+    create_users_and_groups
 }
 
 #-----------------------------------------------------------------

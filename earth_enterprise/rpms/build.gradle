@@ -208,6 +208,7 @@ def copySpecExpandTemplates = { copySpec, templateVariablesMap, templateSuffix =
     def templateVariables = templateVariablesMap.clone()
 
     def addExpandTemplateFileFunction = !templateVariables.containsKey('expandTemplateFile')
+    def addThisTemplateFile = !templateVariables.containsKey('thisTemplateFile')
 
     copySpec.eachFile {
         if (it.sourceName.endsWith(templateSuffix)) {
@@ -227,10 +228,18 @@ def copySpecExpandTemplates = { copySpec, templateVariablesMap, templateSuffix =
 
                 templateVariables.put(
                     'expandTemplateFile',
-                    { relative_path ->
-                        expandTemplate(new File(new File(templateDir), relative_path))
+                    { template_path ->
+                        def path = new File(template_path)
+
+                        expandTemplate(
+                            path.absolute ?
+                                path : new File(new File(templateDir), template_path))
                     },
                 )
+            }
+
+            if (addThisTemplateFile) {
+                templateVariables['thisTemplateFile'] = it.file
             }
 
             it.filter(
@@ -347,7 +356,20 @@ task openGeeSharedFiles(type: Copy) {
         ])
 }
 
-task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeSharedFiles) {
+task openGeeCommonInitScripts(type: Copy, dependsOn: openGeeSharedFiles) {
+    from(file('opengee-common')) {
+        include '*'
+
+        copySpecExpandTemplates(delegate, [
+                'openGeeVersion': openGeeVersion,
+                'project': project
+            ])
+    }
+
+    into "${buildDir}/opengee-common"
+}
+
+task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
     packageName = 'opengee-common'
     release = "1.${rpmPlatformString}"
     version = openGeeVersion
@@ -411,11 +433,8 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeSharedFiles) {
 
     autoFindRequiresFilter = rpmCapabilityFilter
 
-    // Prefix variable definitions to all install scripts:
-    installUtils = file('build/shared/install-utils.sh')
-
-    preInstall = file('opengee-common/pre-install.sh')
-    postUninstall = file('opengee-common/post-uninstall.sh')
+    preInstallFile file("${buildDir}/opengee-common/pre-install.sh")
+    postUninstallFile file("${buildDir}/opengee-common/post-uninstall.sh")
 
     from (file('build/shared/gevars.sh')) {
         into new File(packageInstallRootDir, 'etc/init.d')
@@ -442,7 +461,7 @@ if (project.hasProperty('buildOpenGee')) {
     openGeeCommonRpm.dependsOn stageOpenGeeInstall
 }
 
-task openGeeCommonDeb (type: GeeDeb, dependsOn: openGeeSharedFiles) {
+task openGeeCommonDeb (type: GeeDeb, dependsOn: openGeeCommonInitScripts) {
     packageName = openGeeCommonRpm.packageName
     release = '1'
     version = openGeeVersion
@@ -470,11 +489,10 @@ task openGeeCommonDeb (type: GeeDeb, dependsOn: openGeeSharedFiles) {
     requires('python-setuptools')
     requires('python2.7')
 
-    // Prefix variable definitions to all install scripts:
-    installUtils = file('build/shared/install-utils.sh')
-
-    preInstall = file('opengee-common/pre-install.sh')
-    postUninstall = file('opengee-common/post-uninstall.sh')
+    // Use single files for install scripts.  Othewrise, OS Package wraps the
+    // code in extra statements.
+    preInstallFile file("${buildDir}/opengee-common/pre-install.sh")
+    postUninstallFile file("${buildDir}/opengee-common/post-uninstall.sh")
 
     from (file('build/shared/gevars.sh')) {
         into new File(packageInstallRootDir, 'etc/init.d')
@@ -501,7 +519,21 @@ if (project.hasProperty('buildOpenGee')) {
     openGeeCommonDeb.dependsOn stageOpenGeeInstall
 }
 
-task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
+task openGeeServerInitScripts(type: Copy, dependsOn: openGeeSharedFiles) {
+    from(file('opengee-server')) {
+        include '*'
+
+        copySpecExpandTemplates(delegate, [
+                'openGeeVersion': openGeeVersion,
+                'stagedInstallDir_server_opt': stagedInstallDir_server_opt,
+                'project': project
+            ])
+    }
+
+    into "${buildDir}/opengee-server"
+}
+
+task openGeeServerRpm(type: GeeRpm, dependsOn: openGeeServerInitScripts) {
     packageName = 'opengee-server'
     release = "1.${rpmPlatformString}"
     version = openGeeVersion
@@ -540,16 +572,10 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     autoFindRequiresFilter = rpmCapabilityFilter
     requiresCommandFilter = rpmCommandFilter
 
-    // Prefix variable definitions to all install scripts:
-    installUtils = file('build/shared/install-utils.sh')
-
-    // Add geresetpgdb script:
-    installUtils = file( new File( stagedInstallDir_server_opt, 'google/bin/gepgcommon' ) )
-
-    preInstall = file('opengee-server/pre-install.sh')
-    postInstall = file('opengee-server/post-install.sh')
-    preUninstall = file('opengee-server/pre-uninstall.sh')
-    postUninstall = file('opengee-server/post-uninstall.sh')
+    preInstallFile file("${buildDir}/opengee-server/pre-install.sh")
+    postInstallFile file("${buildDir}/opengee-server/post-install.sh")
+    preUninstallFile file("${buildDir}/opengee-server/pre-uninstall.sh")
+    postUninstallFile file("${buildDir}/opengee-server/post-uninstall.sh")
 
     directory('/opt/google/install', 0700)
     directory('/opt/google/gehttpd/logs', 0755)
@@ -613,7 +639,7 @@ task openGeeServerRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
     link('/opt/google/gehttpd/htdocs/shared_assets/docs', '/opt/google/share/doc')
 }
 
-task openGeeServerDeb (type: GeeDeb) {
+task openGeeServerDeb (type: GeeDeb, dependsOn: openGeeServerInitScripts) {
     packageName = openGeeServerRpm.packageName
     release = '1'
     version = openGeeVersion
@@ -641,16 +667,13 @@ task openGeeServerDeb (type: GeeDeb) {
         ]
     )
 
-    // Prefix variable definitions to all install scripts:
-    installUtils = file('build/shared/install-utils.sh')
-
-    // Add geresetpgdb script:
-    installUtils = file( new File( stagedInstallDir_server_opt, 'google/bin/gepgcommon' ) )
-
-    preInstall = file('opengee-server/pre-install.sh')
-    postInstall = file('opengee-server/post-install.sh')
-    preUninstall = file('opengee-server/pre-uninstall.sh')
-    postUninstall = file('opengee-server/post-uninstall.sh')
+    // Specify a single file for each install script.  Otherwise, OSPackage
+    // wraps the code in extra statements that, e.g., only run the
+    // post-install script on a new install, and not on upgrade:
+    preInstallFile file("${buildDir}/opengee-server/pre-install.sh")
+    postInstallFile file("${buildDir}/opengee-server/post-install.sh")
+    preUninstallFile file("${buildDir}/opengee-server/pre-uninstall.sh")
+    postUninstallFile file("${buildDir}/opengee-server/post-uninstall.sh")
 
     directory('/opt/google/install', 0700)
     directory('/opt/google/gehttpd/logs', 0755)
@@ -714,7 +737,20 @@ task openGeeServerDeb (type: GeeDeb) {
     link('/opt/google/gehttpd/htdocs/shared_assets/docs', '/opt/google/share/doc')
 }
 
-task openGeeFusionRpm (type: GeeRpm, dependsOn: openGeeSharedFiles) {
+task openGeeFusionInitScripts(type: Copy, dependsOn: openGeeSharedFiles) {
+    from(file('opengee-fusion')) {
+        include '*'
+
+        copySpecExpandTemplates(delegate, [
+                'openGeeVersion': openGeeVersion,
+                'project': project
+            ])
+    }
+
+    into "${buildDir}/opengee-fusion"
+}
+
+task openGeeFusionRpm (type: GeeRpm, dependsOn: openGeeFusionInitScripts) {
     packageName = 'opengee-fusion'
     release = "1.${rpmPlatformString}"
     version = openGeeVersion
@@ -748,13 +784,10 @@ built from raster, vector, and location properties data.
         ]
     )
 
-    // Prefix variable definitions to all install scripts:
-    installUtils = file('build/shared/install-utils.sh')
-
-    preInstall = file('opengee-fusion/pre-install.sh')
-    postInstall = file('opengee-fusion/post-install.sh')
-    preUninstall = file('opengee-fusion/pre-uninstall.sh')
-    postUninstall = file('opengee-fusion/post-uninstall.sh')
+    preInstallFile file("${buildDir}/opengee-fusion/pre-install.sh")
+    postInstallFile file("${buildDir}/opengee-fusion/post-install.sh")
+    preUninstallFile file("${buildDir}/opengee-fusion/pre-uninstall.sh")
+    postUninstallFile file("${buildDir}/opengee-fusion/post-uninstall.sh")
 
     directory('/opt/google/share/tutorials', 0755)
     directory('/var/opt/google/run', 0775)
@@ -797,7 +830,7 @@ built from raster, vector, and location properties data.
     link('/opt/google/gehttpd/htdocs/shared_assets/docs', '/opt/google/share/doc')
 }
 
-task openGeeFusionDeb (type: GeeDeb) {
+task openGeeFusionDeb (type: GeeDeb, dependsOn: openGeeFusionInitScripts) {
     packageName = openGeeFusionRpm.packageName
     release = '1'
     version = openGeeVersion
@@ -814,13 +847,14 @@ task openGeeFusionDeb (type: GeeDeb) {
     requires('lsb-base')
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
 
-    // Prefix variable definitions to all install scripts:
-    installUtils = file('build/shared/install-utils.sh')
 
-    preInstall = file('opengee-fusion/pre-install.sh')
-    postInstall = file('opengee-fusion/post-install.sh')
-    preUninstall = file('opengee-fusion/pre-uninstall.sh')
-    postUninstall = file('opengee-fusion/post-uninstall.sh')
+    // Specify a single file for each install script.  Otherwise, OSPackage
+    // wraps the code in extra statements that, e.g., only run the
+    // post-install script on a new install, and not on upgrade:
+    preInstallFile file("${buildDir}/opengee-fusion/pre-install.sh")
+    postInstallFile file("${buildDir}/opengee-fusion/post-install.sh")
+    preUninstallFile file("${buildDir}/opengee-fusion/pre-uninstall.sh")
+    postUninstallFile file("${buildDir}/opengee-fusion/post-uninstall.sh")
 
     directory('/opt/google/share/tutorials', 0755)
     directory('/var/opt/google/run', 0775)

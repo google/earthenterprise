@@ -41,12 +41,7 @@ PUBLISH_ROOT_VOLUME=""
 
 EXISTING_HOST=""
 IS_SLAVE=false
-NEW_INSTALL=false
 
-# we can now infer install/upgrade directly from package install/upgrade state
-if [ "$1" = "1" ] ; then
-    NEW_INSTALL=true
-fi
 
 #-----------------------------------------------------------------
 # Main Functions
