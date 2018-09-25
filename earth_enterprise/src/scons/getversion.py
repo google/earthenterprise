@@ -32,10 +32,6 @@ def GetLongVersion(backupFile, label=''):
     return ret
 
 
-def _GetDateString():
-    """Returns formatted date string representing current UTC time"""
-    return datetime.utcnow().strftime("%Y%m%d%H%M")
-
 def _GitGeneratedLongVersion():
     """Take the raw information parsed by git, and use it to
        generate an appropriate version string for GEE."""
@@ -81,36 +77,6 @@ def _GetRepository():
     except TypeError:
         return git.Repo('.')
  
-
-def _CheckGitAvailable():
-    """Try the most basic of git commands, to see if there is
-       currently any access to a repository."""
-    try:
-        repo = _GetRepository()
-    except git.exc.InvalidGitRepositoryError:
-        return False
-    
-    return True
-
-
-def _CheckDirtyRepository():
-    """Check to see if the repository is not in a cleanly committed state."""
-    repo = _GetRepository()
-    str = repo.git.status("--porcelain")
-    
-    return (len(str) > 0)
-
-
-def _ReadBackupVersionFile(target):
-    """There should be a file checked in with the latest version
-    information available; if git isn't available to provide
-    information, then use this file instead."""
-
-    with open(target, 'r') as fp:
-        line = fp.readline()
-
-    return line
-
 
 def _GetCommitRawDescription():
     """Returns description of current commit"""
@@ -161,6 +127,41 @@ def _ParseRawVersionString(raw):
     repo = _GetRepository()
     components['hash'] = repo.git.rev_parse('--short=8', 'HEAD')  
     return components
+
+
+def _CheckGitAvailable():
+    """Try the most basic of git commands, to see if there is
+       currently any access to a repository."""
+    try:
+        repo = _GetRepository()
+    except git.exc.InvalidGitRepositoryError:
+        return False
+    
+    return True
+
+
+def _CheckDirtyRepository():
+    """Check to see if the repository is not in a cleanly committed state."""
+    repo = _GetRepository()
+    str = repo.git.status("--porcelain")
+    
+    return (len(str) > 0)
+
+
+def _ReadBackupVersionFile(target):
+    """There should be a file checked in with the latest version
+    information available; if git isn't available to provide
+    information, then use this file instead."""
+
+    with open(target, 'r') as fp:
+        line = fp.readline()
+
+    return line
+
+
+def _GetDateString():
+    """Returns formatted date string representing current UTC time"""
+    return datetime.utcnow().strftime("%Y%m%d%H%M")
 
 
 def main():
