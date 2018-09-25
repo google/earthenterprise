@@ -18,29 +18,57 @@
 
 import time
 import os
+import subprocess
+import re
 Import('third_party_env')
 
 current_dir = Dir('.').abspath
 skia_version = 'skia-5.1.2'
 
+# Gather the listing of skia source files from the tarball
+skia_source = File('#/../../earth_enterprise/third_party/skia/%s.tar.gz'
+                   % skia_version).abspath
+
+# This regexp selects the desired groups of cpp files out from everything else.
+# Strings are assumed to begin with './' as they are in the skia-5.1.2 tarball,
+# and may have trailing whitespace (e.g. newlines).  The path of the cpp file
+# is captured.
+cpp_select_re = re.compile(r'^\./(src/(?:core|effects|effects/gradients|gpu|gpu/gl|gpu/effects|images|image|pathops|utils)/[^/]+\.cpp)\s*$')
+# This regexp identifies certain cpp files to be removed from the list selected by cpp_select_re
+cpp_downselect_re = re.compile(r'^src/utils/[^/]*(?:SkDeferredCanvas|SkLua|SkThreadUtils_pthread_mach|SkThreadUtils_win|SkDumpCanvas|SkCamera)[^/]*\.cpp$')
+
+# Get a listing of the contents of the skia tarball
+tar_p = subprocess.Popen(['tar', 'tzf', skia_source], stdout=subprocess.PIPE)
+
+# Define a helper function to read from the tar command
+def gather_cpp_files(file_list):
+    cpp_list = []
+    for entry in file_list:
+        cpp_match = cpp_select_re.search(entry)
+        if cpp_match is not None:
+            cpp_list.append(cpp_match.groups(0)[0])
+    return cpp_list
+
+sgl_cpps = []
+# Because the output of the tar command is long and the pipe attached to stdout
+# has a limited buffer size, deadlock will occur before the process completes
+# if the buffer is not depleted through reads while the tar command is running.
+while tar_p.poll() is None:
+   # don't be too busy in this loop
+   time.sleep(.5)
+   # readlines() will reach EOF and stop when the pipe is exhausted, but the
+   # process is still running and producing output!
+   sgl_cpps.extend(gather_cpp_files(tar_p.stdout.readlines()))
+
+#Gather the last remnants from stdout
+sgl_cpps.extend(gather_cpp_files(tar_p.stdout.readlines()))
+
+# Prune the list of cpp files
+sgl_cpps = [cpp_file for cpp_file in sgl_cpps if not cpp_downselect_re.match(cpp_file)]
+
 # Build third_party libraries
 
-sgl_cpps = Glob('src/[!FlingState].cpp', True, False, True)
-sgl_cpps.extend(Glob('src/core/*.cpp', True, False, True))
-sgl_cpps.extend(Glob('src/effects/*.cpp', True, False, True))
-sgl_cpps.extend(Glob('src/effects/gradients/*.cpp', True, False, True))
-sgl_cpps.extend(Glob('src/gpu/*.cpp', True, False, True))
-sgl_cpps.extend(Glob('src/gpu/gl/*.cpp', True, False, True))
-sgl_cpps.extend(Glob('src/gpu/effects/*.cpp', True, False, True))
-sgl_cpps.extend(Glob('src/images/*.cpp', True, False, True))
-sgl_cpps.extend(Glob('src/image/*.cpp', True, False, True))
-sgl_cpps.extend(Glob('src/pathops/*.cpp', True, False, True))
-sgl_cpps.extend(Glob('src/utils/*[!SkDeferredCanvas|SkLua|SkThreadUtils_pthread_mach|SkThreadUtils_win]*.cpp', True, False, True))
-
-# SkForceLinking.cpp is added before Skia has been extracted, but it should be
-# the only one
 if len(sgl_cpps) > 1:
-  sgl_cpps.remove('src/images/SkForceLinking.cpp')
   sgl_cpps.remove('src/images/SkImageDecoder_libwebp.cpp')
   sgl_cpps.remove('src/pathops/main.cpp')
   sgl_cpps.remove('src/gpu/GrAddPathRenderers_none.cpp')
@@ -147,9 +175,6 @@ sgl_opts_ssse3_objects = map(
 sgl_opts_files = map(lambda f: os.path.join(sgl_src_abs_dir, f), sgl_opts_cpps)
 sgl_opts_ssse3_files = map(lambda f: os.path.join(sgl_src_abs_dir, f), sgl_opts_ssse3_cpps)
 
-skia_source = File('#/../../earth_enterprise/third_party/skia/%s.tar.gz'
-                   % skia_version).abspath
-
 skia_source_files = sgl_opts_files + sgl_opts_ssse3_files + sgl_cpps
 skia_target = '%s/.extract_skia' % current_dir
 skia_extract = sgl_env.Command(
@@ -159,6 +184,7 @@ skia_extract = sgl_env.Command(
           'mkdir -p %s\n'
           'cd %s\n'
           'tar xzf %s\n'
+          'sed -i.orig -e \'/WEBP/s|^|//|\' src/images/SkForceLinking.cpp\n'
           'touch %s' % (current_dir, current_dir, current_dir, skia_source,
                         skia_target))])
 
