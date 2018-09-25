@@ -67,17 +67,6 @@ def _GitGeneratedLongVersion():
     return '-'.join([base, patch])
 
 
-def _GetRepository():
-    """Get a reference to the Git Repository.
-    Is there a cleaner option than searching from the current location?"""
-    # The syntax is different between library versions (particularly,
-    # those used by Centos 6 vs Centos 7).
-    try:
-        return git.Repo('.', search_parent_directories=True)
-    except TypeError:
-        return git.Repo('.')
- 
-
 def _GetCommitRawDescription():
     """Returns description of current commit"""
     repo = _GetRepository()
@@ -139,6 +128,17 @@ def _CheckGitAvailable():
     
     return True
 
+
+def _GetRepository():
+    """Get a reference to the Git Repository.
+    Is there a cleaner option than searching from the current location?"""
+    # The syntax is different between library versions (particularly,
+    # those used by Centos 6 vs Centos 7).
+    try:
+        return git.Repo('.', search_parent_directories=True)
+    except TypeError:
+        return git.Repo('.')
+ 
 
 def _CheckDirtyRepository():
     """Check to see if the repository is not in a cleanly committed state."""
