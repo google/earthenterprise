@@ -75,7 +75,7 @@
 --<strong>no_historical_imagery</strong>] -o <em>projectname</em>{[--<strong>maxlevel</strong> <em>level</em>] <em>insetresource</em>}</code>...</pre>
   <h3>Purpose</h3>
   <p>Creates a new imagery project. This tool is capable of building Mercator imagery projects for 2D databases, or Flat (Plate Carrée) imagery projects with or without Historic Imagery Support for 3D databases.
-  
+
   <h3>Commands</h3>
   <pre>
 <code><b>--mercator </b></code></pre>
@@ -442,6 +442,16 @@ geserveradmin --garbagecollect
       <td><pre><code><b>--setecdefault</b> </code></pre></td>
       <td>Optional</td>
       <td>Publish this database as the default one for the Earth Client to connect to if no database or virtual host is specified upon initial connection.</td>
+    </tr>
+    <tr>
+      <td><pre><code><b>--enable_poisearch</b> </code></pre></td>
+      <td>Optional</td>
+      <td>Enable Point of Interest search if database contains POI data.</td>
+    </tr>
+    <tr>
+      <td><pre><code><b>--enable_enhancedsearch</b> </code></pre></td>
+      <td>Optional</td>
+      <td>If POI search is enabled, enable enhanced search.</td>
     </tr>
   </tbody>
 </table>

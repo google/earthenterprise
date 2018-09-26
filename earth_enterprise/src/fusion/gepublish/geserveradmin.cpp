@@ -97,7 +97,8 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
     "                            the Earth Client to connect to if no database\n"
     "                            or virtual host is specified upon initial\n"
     "                            connection.\n"
-    "   [--enable_poisearch]     Enable Point of Interest search.\n"
+    "   [--enable_poisearch]     Enable Point of Interest search if database\n"
+    "                            contains POI data.\n"
     "   [--enable_enhancedsearch]If POI search is enabled, enable enhanced\n"
     "                            search.\n"
     " --unpublish <target_path>  Unpublish the DB served from the specified\n"
@@ -628,6 +629,10 @@ int main(int argc, char* argv[]) {
       fflush(stdout);
       if (target_path.empty()) {
         throw khException("Target path is not specified.\n");
+      }
+
+      if ((enable_poiseach || enable_enhancedsearch) && !publishedb) {
+        throw khException("POI search and enhanced search are only used when publishing a database.\n");
       }
 
       if (enable_enhancedsearch && !enable_poisearch) {
