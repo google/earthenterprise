@@ -5,9 +5,6 @@
 /*.files
 /*.includes
 
-# vs code files
-/*.vscode
-
 # compiled python
 /**/*.pyc
 
