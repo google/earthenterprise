@@ -46,11 +46,11 @@ PROCESS_INFO_LIST = ['cmdline']
 def GetHostInfo():
   """Get information about the host."""
   hostname = GetFQDN()
-  ipaddr = GetIP(hostname)
-  host_check, _, _ = socket.gethostbyaddr(ipaddr)
   if hostname in BAD_HOSTNAMES:
     raise AssertionError('Hostname cannot be one of %s' % ','.join(BAD_HOSTNAMES))
-  return hostname, ipaddr, host_check
+  ipaddr = GetIP(hostname)
+  host_check, host_aliases, _ = socket.gethostbyaddr(ipaddr)
+  return hostname, ipaddr, host_aliases + [host_check]
 
 
 def IsFusionInstalled():
