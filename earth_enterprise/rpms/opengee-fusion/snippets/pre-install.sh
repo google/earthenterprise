@@ -13,9 +13,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
-# OSPackage hard-codes the interpreter to `/bin/sh` for Debian systems, so make
-# sure this scripts runs in `sh`, even if you specify `bash` above.
 
 set +x
 
