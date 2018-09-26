@@ -16,7 +16,6 @@
 #include "fusion/gst/maprender/SGLHelps.h"
 
 #include <SkForceLinking.h>
-
 #include <qcolor.h>
 
 #include "common/khFileUtils.h"
