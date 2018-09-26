@@ -37,12 +37,9 @@ CLONE_DIR=`mktemp -d`
 
 # Download the repository
 cd "${CLONE_DIR}"
-git clone -b "${1}" "https://github.com/tst-eclamar/${REPO_NAME}.git" || exit # TEMPORARY: tst-eclamar => google
+git clone -b "${1}" "https://github.com/google/${REPO_NAME}.git" || exit
 
 cd "${CLONE_DIR}"/earthenterprise/earth_enterprise/src
-git remote add upstream git://github.com/google/earthenterprise.git # TEMPORARY
-git fetch upstream # TEMPORARY
-git pull upstream master # TEMPORARY
 # generate version files based on tags within git
 scons version_files
 cd ../..
