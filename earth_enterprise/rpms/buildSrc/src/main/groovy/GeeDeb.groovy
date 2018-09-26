@@ -74,6 +74,10 @@ class GeeDeb extends com.netflix.gradle.plugins.deb.Deb {
 
     protected File[] packageInputFiles = null
 
+    // A set of the commands set as dependencies for this package by calling
+    // the `requiresCommands` method:
+    protected Set<String> requiredCommands = new HashSet<String>()
+
     GeeDeb() {
         super()
     }
@@ -93,9 +97,7 @@ class GeeDeb extends com.netflix.gradle.plugins.deb.Deb {
     // Adds the packages that provide all of the given commands to the package
     // dependency list.
     def requiresCommands(Iterable<String> commands) {
-        (whatProvidesCommand(commands) as Set).each {
-            requires(it)
-        }
+        requiredCommands.addAll(commands)
     }
 
     // Runs find-provides, and add provided artifacts to the package.
@@ -145,6 +147,12 @@ class GeeDeb extends com.netflix.gradle.plugins.deb.Deb {
         if (fixPackageDescriptionFormat) {
             formatPackageDescription(packageDescription)
         }
+
+        requiredCommands.
+            collect { whatProvidesCommand(it) }.
+            each {
+                requires(it)
+            }
 
         super.copy()
     }
