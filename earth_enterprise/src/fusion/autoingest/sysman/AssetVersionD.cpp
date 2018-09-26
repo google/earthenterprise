@@ -168,7 +168,8 @@ void
 AssetVersionImplD::SetState(AssetDefs::State newstate, bool propagate)
 {
   if (newstate != state) {
-    notify(NFY_DEBUG, "SetState: %s %s",
+    notify(NFY_DEBUG, "SetState: current state: %s | newstate: %s | asset: %s",
+    	   ToString(state).c_str(),
            ToString(newstate).c_str(),
            GetRef().c_str());
     AssetDefs::State oldstate = state;
@@ -178,7 +179,8 @@ AssetVersionImplD::SetState(AssetDefs::State newstate, bool propagate)
       // another state (usually Failed or Succeded)
       OnStateChange(newstate, oldstate);
     } catch (const std::exception &e) {
-      notify(NFY_WARN, "Exception during OnStateChange: %s", e.what());
+      notify(NFY_WARN, "Exception during OnStateChange: %s", 
+             e.what());
     } catch (...) {
       notify(NFY_WARN, "Unknown exception during OnStateChange");
     }
@@ -187,6 +189,9 @@ AssetVersionImplD::SetState(AssetDefs::State newstate, bool propagate)
     // set it to above. OnStateChange can call SetState recursively. We
     // don't want to notify/propagate an old state.
     if (propagate && (state == newstate)) {
+      notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
+             GetRef().c_str(), 
+             ToString(newstate).c_str());
       theAssetManager.NotifyVersionStateChange(GetRef(), newstate);
       PropagateStateChange();
     }
@@ -229,17 +234,29 @@ AssetVersionImplD::SyncState(void) const
 void
 AssetVersionImplD::PropagateStateChange(void)
 {
-  notify(NFY_VERBOSE, "PropagateStateChange(%s): %s",
-         ToString(state).c_str(), GetRef().c_str());
+  notify(NFY_PROGRESS, "PropagateStateChange(%s): %s",
+         ToString(state).c_str(), 
+         GetRef().c_str());
+  notify(NFY_VERBOSE, "Iterate through parents");
+  int i = 1;
   for (std::vector<std::string>::const_iterator p = parents.begin();
        p != parents.end(); ++p) {
     AssetVersionD parent(*p);
+    notify(NFY_PROGRESS, "Iteration: %d | Total Iterations: %s | Parent: %s",
+           i,
+           ToString(parents.size()).c_str(),
+           p->c_str());
     if (parent) {
+      notify(NFY_VERBOSE, "parent: %s exists", 
+             p->c_str());
+      notify(NFY_VERBOSE, "Calling parent->HandleChildStateChange(%s)", 
+             GetRef().c_str());
       parent->HandleChildStateChange(GetRef());
     } else {
       notify(NFY_WARN, "'%s' has broken parent '%s'",
              GetRef().c_str(), p->c_str());
     }
+    i++;
   }
 
   // Make a copy of the listeners that I need to notify. We have to make
@@ -249,15 +266,27 @@ AssetVersionImplD::PropagateStateChange(void)
   // which build new versions with me as an input.
   std::vector<std::string> toNotify = listeners;
 
+  notify(NFY_VERBOSE, "Iterate through listeners to notify");
+  i = 1;
   for (std::vector<std::string>::const_iterator l = toNotify.begin();
        l != toNotify.end(); ++l) {
     AssetVersionD listener(*l);
+    notify(NFY_PROGRESS, "Iteration: %d | Total Iterations: %s | Listener: %s",
+           i,
+           ToString(toNotify.size()).c_str(),
+           l->c_str());
     if (listener) {
+      notify(NFY_VERBOSE, "listener: %s exists",
+             l->c_str());
+      notify(NFY_VERBOSE, "Calling listener->HandleChildStateChange(%s, %s)", 
+             GetRef().c_str(), 
+             ToString(state).c_str());
       listener->HandleInputStateChange(GetRef(), state);
     } else {
       notify(NFY_WARN, "'%s' has broken listener '%s'",
              GetRef().c_str(), l->c_str());
     }
+    i++;
   }
 }
 
@@ -300,6 +329,7 @@ void
 AssetVersionImplD::HandleChildStateChange(const std::string &) const
 {
   // NoOp in base since leaves don't need to do anything
+  notify(NFY_VERBOSE, "AssetVersionImplD::HandleChildStateChange: %s", GetRef().c_str());
 }
 
 void
@@ -321,8 +351,13 @@ AssetVersionImplD::OnStateChange(AssetDefs::State newstate,
 {
   // NoOp in base class
   if (newstate == AssetDefs::Succeeded) {
+    notify(NFY_VERBOSE, "newstate: %s", 
+           ToString(newstate).c_str());
 #ifdef TEMP_ASSETS
+    notify(NFY_VERBOSE, "TEMP_ASSETS has been defined");
     if (haveTemporaryInputs) {
+      notify(NFY_VERBOSE, "haveTemporaryInputs: %s", 
+             haveTemporaryInputs.c_str());
       if (OfflineInputsBreakMe()) {
         throw khException(kh:tr("Internal Error: AssetVersion with temporary "
                                 "inputs but marked as OfflineInputsBreakMe"));
@@ -918,7 +953,7 @@ LeafAssetVersionImplD::DoClean(void)
 void
 CompositeAssetVersionImplD::HandleChildStateChange(const std::string &) const
 {
-  notify(NFY_VERBOSE, "HandleChildStateChange: %s", GetRef().c_str());
+  notify(NFY_VERBOSE, "CompositeAssetVersionImplD::HandleChildStateChange: %s", GetRef().c_str());
   SyncState();
 }
 
