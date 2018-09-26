@@ -422,8 +422,10 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
 
     autoFindRequiresFilter = rpmCapabilityFilter
 
-    preInstallFile file("${buildDir}/opengee-common/pre-install.sh")
-    postUninstallFile file("${buildDir}/opengee-common/post-uninstall.sh")
+    // Don't specify install scripts as single files.  It doesn't work for
+    // RPMs:
+    preInstall = file("${buildDir}/opengee-common/pre-install.sh")
+    postUninstall = file("${buildDir}/opengee-common/post-uninstall.sh")
 
     from (file('build/shared/gevars.sh')) {
         into new File(packageInstallRootDir, 'etc/init.d')
@@ -561,10 +563,12 @@ task openGeeServerRpm(type: GeeRpm, dependsOn: openGeeServerInitScripts) {
     autoFindRequiresFilter = rpmCapabilityFilter
     requiresCommandFilter = rpmCommandFilter
 
-    preInstallFile file("${buildDir}/opengee-server/pre-install.sh")
-    postInstallFile file("${buildDir}/opengee-server/post-install.sh")
-    preUninstallFile file("${buildDir}/opengee-server/pre-uninstall.sh")
-    postUninstallFile file("${buildDir}/opengee-server/post-uninstall.sh")
+    // Don't specify install scripts as single files.  It doesn't work for
+    // RPMs:
+    preInstall = file("${buildDir}/opengee-server/pre-install.sh")
+    postInstall = file("${buildDir}/opengee-server/post-install.sh")
+    preUninstall = file("${buildDir}/opengee-server/pre-uninstall.sh")
+    postUninstall = file("${buildDir}/opengee-server/post-uninstall.sh")
 
     directory('/opt/google/install', 0700)
     directory('/opt/google/gehttpd/logs', 0755)
@@ -759,10 +763,12 @@ built from raster, vector, and location properties data.
         ]
     )
 
-    preInstallFile file("${buildDir}/opengee-fusion/pre-install.sh")
-    postInstallFile file("${buildDir}/opengee-fusion/post-install.sh")
-    preUninstallFile file("${buildDir}/opengee-fusion/pre-uninstall.sh")
-    postUninstallFile file("${buildDir}/opengee-fusion/post-uninstall.sh")
+    // Don't specify install scripts as single files.  It doesn't work for
+    // RPMs:
+    preInstall = file("${buildDir}/opengee-fusion/pre-install.sh")
+    postInstall = file("${buildDir}/opengee-fusion/post-install.sh")
+    preUninstall = file("${buildDir}/opengee-fusion/pre-uninstall.sh")
+    postUninstall = file("${buildDir}/opengee-fusion/post-uninstall.sh")
 
     directory('/opt/google/share/tutorials', 0755)
     directory('/var/opt/google/run', 0775)
