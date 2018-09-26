@@ -81,20 +81,23 @@ else if ( project.hasProperty( 'debug' ) || project.hasProperty( 'internal' ) ) 
     scons_option = "internal=1"
 }
 
-// Build the actual file to be used
-def gee_long_version_txt = "${stagedInstall_path}/gee_long_version.txt"
-
 def rpmPlatformString = org.opengee.os.Platform.rpmPlatformString
 
-// Create a file handle for gee_long_version_txt
+// Get the version of OpenGEE we're building:
+def gee_long_version_txt = "${stagedInstall_path}/gee_long_version.txt"
 def openGeeVersionFile = new File( gee_long_version_txt )
+
+if (!openGeeVersionFile.exists()) {
+    gee_long_version_txt = "${src_dir}/NATIVE-REL-x86_64/gee_long_version.txt"
+    openGeeVersionFile = new File( gee_long_version_txt )
+}
 
 // Call scons to create the file 'gee_long_version.txt'
 // The actual parameter used by scons is based on the parameter
 // passing into Gradlew
 if ( !openGeeVersionFile.exists() ) {
     GeeCommandLine.expand(
-      ["/usr/bin/scons", scons_option, gee_long_version_txt ],
+      ["/usr/bin/scons", "release=1", gee_long_version_txt ],
       "Runing `scons` to produce <${gee_long_version_txt}> failed!",
       null, // Use default environment variables.
       new File( src_dir )
@@ -312,7 +315,7 @@ task openGeePostGisDeb(type: GeeDeb) {
 
     requires('opengee-common', openGeeVersion, GREATER | EQUAL)
 
-    from (postGisInstallDir_opt) {
+    from (stagedInstallDir_postgis_opt) {
         into new File(packageInstallRootDir, 'opt')
     }
 
@@ -700,13 +703,6 @@ task openGeeServerDeb (type: GeeDeb, dependsOn: openGeeServerInitScripts) {
 
     from(stagedInstallDir_server_apachesupport) {
         into packageInstallRootDir
-    }
-
-    // Exclude files that go into the PostGIS package from this package:
-    eachFile {
-        if (new File(postGisInstallDir_opt, "../${it.path}").exists()) {
-            it.exclude()
-        }
     }
 
     // Create links
