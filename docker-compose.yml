@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  earth-enterprise:
+    build: .
+    image: "${PRIVATE_DOCKER_REGISTRY}earth-enterprise:latest"
+    container_name: earth-enterprise
+    volumes:
+      - .:/data:Z
+    networks: 
+      - earth-enterprise
+    command: bash
+    stdin_open: true
+    tty: true
+    user: root
+    cap_add:
+      - ALL
+networks:
+    earth-enterprise:
+        
