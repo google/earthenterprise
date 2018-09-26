@@ -15,10 +15,7 @@
 
 #include "fusion/gst/maprender/SGLHelps.h"
 
-#pragma GCC diagnostic ignored "-Wunused-variable"
-#pragma GCC diagnostic push
 #include <SkForceLinking.h>
-#pragma GCC diagnostic pop
 
 #include <qcolor.h>
 
@@ -26,9 +23,6 @@
 #include "common/notify.h"
 #include "common/geInstallPaths.h"
 #include "fusion/autoingest/.idl/storage/MapSubLayerConfig.h"
-
-
-__SK_FORCE_IMAGE_DECODER_LINKING;
 
 
 SkColor SkColorFromQColor(const QColor &color) {
@@ -159,3 +153,9 @@ bool FontInfo::CheckTextStyleSanity(MapTextStyleConfig* config,
 }
 
 }  // namespace maprender
+
+
+// Always leave these two lines last, otherwise it will
+// silence unused variables from the code below.
+#pragma GCC diagnostic ignored "-Wunused-variable"
+__SK_FORCE_IMAGE_DECODER_LINKING;
