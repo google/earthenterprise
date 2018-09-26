@@ -42,10 +42,10 @@ git clone -b "${1}" "https://github.com/google/${REPO_NAME}.git" || exit
 cd "${CLONE_DIR}"/earthenterprise/earth_enterprise/src
 # generate version files based on tags within git
 scons version_files
-cd ../..
+cd "${CLONE_DIR}"/earthenterprise
 # remove all un-tracked files except for version.txt
 git clean -f -d -x -e version.txt
-cd ..
+cd "${CLONE_DIR}"
 
 # Remove the git-related files from the repo
 find "${REPO_NAME}" -name ".git*" -exec rm -Rf {} +
