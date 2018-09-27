@@ -81,7 +81,7 @@ else if ( project.hasProperty( 'debug' ) || project.hasProperty( 'internal' ) ) 
     scons_option = "internal=1"
 }
 
-//  defile a group for user facing packaging tasks
+//  define a group name for user facing packaging tasks
 def PACKAGE_GROUP = 'Packaging'
 
 // Build the actual file to be used
