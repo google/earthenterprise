@@ -394,6 +394,14 @@ int main(int argc, char* argv[]) {
       usage(progname);
     }
 
+    if ((enable_poisearch || enable_enhancedsearch) && !publishdb.size()) {
+      throw khException("POI search and enhanced search are only used when publishing a database.\n");
+    }
+
+    if (enable_enhancedsearch && !enable_poisearch) {
+      throw khException("Enhanced search cannot be enabled without POI search.\n");
+    }
+
     if (disable_cutter) {
       DisableCutter();
       return 0;
@@ -629,14 +637,6 @@ int main(int argc, char* argv[]) {
       fflush(stdout);
       if (target_path.empty()) {
         throw khException("Target path is not specified.\n");
-      }
-
-      if ((enable_poisearch || enable_enhancedsearch) && !publishdb.size()) {
-        throw khException("POI search and enhanced search are only used when publishing a database.\n");
-      }
-
-      if (enable_enhancedsearch && !enable_poisearch) {
-        throw khException("Enhanced search cannot be enabled without POI search.\n");
       }
 
       // Convert the db name to a full gedb path.
