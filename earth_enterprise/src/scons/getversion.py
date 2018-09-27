@@ -36,49 +36,47 @@ def _GitGeneratedLongVersion():
     """Take the raw information parsed by git, and use it to
        generate an appropriate version string for GEE."""
 
+    raw = _GetCommitRawDescription()
 
     # For tagged commits, return the tag itself
-    if _IsCurrentCommitTagged():
-        return _VersionForTaggedHead()
+    if _IsCurrentCommitTagged(raw):
+        return _VersionForTaggedHead(raw)
     else:
-        return _VersionFromTagHistory()
-
-
-def _IsCurrentCommitTagged():
-    """True if the current commit is tagged, otherwise False"""
-    raw = _GetCommitRawDescription()
-    # If this condition hits, then we are currently on a tagged commit.
-    return (len(raw.split("-")) < 4)
+        return _VersionFromTagHistory(raw)
 
 
 def _GetCommitRawDescription():
     """Returns description of current commit"""
     repo = _GetRepository()
-    raw = repo.git.describe('--tags', '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*')
+    raw = repo.git.describe('--first-parent', '--tags', '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*')
     raw = raw.rstrip()
     return raw
 
 
-def _VersionForTaggedHead():
+def _IsCurrentCommitTagged(raw):
+    """True if the current commit is tagged, otherwise False"""
+    # If this condition hits, then we are currently on a tagged commit.
+    return (len(raw.split("-")) < 4)
+
+
+def _VersionForTaggedHead(raw):
     """When we're on the tagged commit, the version string is
     either the tag itself (when repo is clean), or the tag with
     date appended (when repo has uncommitted changes)"""
-    raw = _GetCommitRawDescription()
     if _CheckDirtyRepository():
         # Append the date if the repo contains uncommitted files
         return '.'.join([raw, _GetDateString()])
     return raw
 
 
-def _VersionFromTagHistory():
+def _VersionFromTagHistory(raw):
     """From the HEAD revision, this function finds the most recent
     reachable version tag and returns a string representing the
     version being built -- which is one version beyond the latest
     found in the history."""
-    tag = _GetCommitVersionTag()
 
     # Tear apart the information in the version string.
-    components = _ParseRawVersionString(tag)
+    components = _ParseRawVersionString(raw)
 
     # Determine how to update, since we are *not* on tagged commit.
     if components['isFinal']:
@@ -97,40 +95,35 @@ def _VersionFromTagHistory():
     return '-'.join([base, patch])
 
 
-def _GetCommitVersionTag():
-    """Returns the highest tag that's reachable from the current HEAD of git repo"""
-    repo = _GetRepository()
-    tags = repo.git.tag('--list', '[0-9]*\.[0-9]*\.[0-9]*\-*', '--sort=-v:refname', '--merged').split('\n')
-    return next(iter(tags or ['']), '')
-
-
 def _ParseRawVersionString(raw):
     """Break apart a raw version string into its various components,
     and return those entries via a dictionary."""
 
-    components = { }    
+    components = { }
+
+    # major.minor.revision-patch[.patchType][-commits][-hash]    
     rawComponents = raw.split("-")
     
     base = rawComponents[0]
-    patchRaw = rawComponents[1]
-    components['isFinal'] = ((patchRaw[-5:] == "final") or
-                             (patchRaw[-7:] == "release"))
-  
+    patchRaw = '' if not len(rawComponents) > 1 else rawComponents[1]
+    components['commits'] = -1 if not len(rawComponents) > 2 else rawComponents[2]
+    components['hash'] = None if not len(rawComponents) > 3 else rawComponents[3]
+
+    # Primary version (major.minor.revision)
     baseComponents = base.split(".")
     components['major'] = int(baseComponents[0])
     components['minor'] = int(baseComponents[1])
     components['revision'] = int(baseComponents[2])
+ 
+    # Patch (patch[.patchType])
+    components['isFinal'] = ((patchRaw[-5:] == "final") or
+                             (patchRaw[-7:] == "release"))
   
     patchComponents = patchRaw.split(".")
     components['patch'] = int(patchComponents[0])
-    if (len(patchComponents) < 2):
-        components['patchType'] = "alpha"
-        components['patch'] = -1
-    else:
-        components['patchType'] = patchComponents[1]
+    components['patchType'] = 'alpha' if not len(patchComponents) > 1 else patchComponents[1]
     
     repo = _GetRepository()
-    components['hash'] = repo.git.rev_parse('--short=8', 'HEAD')  
     return components
 
 
