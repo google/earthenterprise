@@ -322,6 +322,12 @@ copy_files_to_target()
   if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf "$TMPINSTALLDIR/common/opt/google/gepython" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
+  cp -rf "$TMPINSTALLDIR/postgis/opt/google/share" "$BASEINSTALLDIR_OPT"
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
+  cp -rf "$TMPINSTALLDIR/postgis/opt/google/bin" "$BASEINSTALLDIR_OPT"
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
+  cp -rf "$TMPINSTALLDIR/postgis/opt/google/lib" "$BASEINSTALLDIR_OPT"
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf "$TMPINSTALLDIR/server/opt/google/share" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf "$TMPINSTALLDIR/server/opt/google/bin" "$BASEINSTALLDIR_OPT"
