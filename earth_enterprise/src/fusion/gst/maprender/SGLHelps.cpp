@@ -24,9 +24,6 @@
 #include "fusion/autoingest/.idl/storage/MapSubLayerConfig.h"
 
 
-__SK_FORCE_IMAGE_DECODER_LINKING;
-
-
 SkColor SkColorFromQColor(const QColor &color) {
   QRgb rgb = color.rgb();
   return SkColorSetARGB(qAlpha(rgb), qRed(rgb), qGreen(rgb), qBlue(rgb));
@@ -156,3 +153,7 @@ bool FontInfo::CheckTextStyleSanity(MapTextStyleConfig* config,
 
 }  // namespace maprender
 
+// Always leave these two lines last, otherwise it will
+// silence unused variables from the code below.
+#pragma GCC diagnostic ignored "-Wunused-variable"
+__SK_FORCE_IMAGE_DECODER_LINKING;
