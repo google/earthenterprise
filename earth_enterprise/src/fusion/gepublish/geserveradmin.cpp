@@ -631,7 +631,7 @@ int main(int argc, char* argv[]) {
         throw khException("Target path is not specified.\n");
       }
 
-      if ((enable_poiseach || enable_enhancedsearch) && !publishedb) {
+      if ((enable_poisearch || enable_enhancedsearch) && !publishdb.size()) {
         throw khException("POI search and enhanced search are only used when publishing a database.\n");
       }
 
