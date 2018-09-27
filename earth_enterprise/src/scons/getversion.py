@@ -121,11 +121,7 @@ def _ParseRawVersionString(raw):
   
     patchComponents = patchRaw.split(".")
     components['patch'] = int(patchComponents[0])
-    if (len(patchComponents) < 2):
-        components['patchType'] = "alpha"
-        components['patch'] = -1
-    else:
-        components['patchType'] = patchComponents[1]
+    components['patchType'] = 'alpha' if not len(patchComponents) > 1 else patchComponents[1]
     
     repo = _GetRepository()
     return components
