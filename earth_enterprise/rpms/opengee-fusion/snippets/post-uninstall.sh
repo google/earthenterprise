@@ -17,14 +17,21 @@
 set +x
 set -e
 
+remove_users_and_groups()
+{
+    echo "OpenGEE user $GEFUSIONUSER may be removed once associated data files are purged."
+}
+
+
 #-----------------------------------------------------------------
 # Main Function
 #-----------------------------------------------------------------
 
-# remove if actually uninstalling
-if [ "$1" = "0" ] ; then
-	service gefusion stop
-	remove_service gefusion
+# On Red Hat the first argument to install scripts is "the number of versions
+# of the package that are installed".  It is 0 when uninstalling the last
+# version, 1 on first install, 2 or higher on upgrade.
+#     On Debian systems the first parameter is "upgrade", "remove" or "purge".
+# (See <https://wiki.debian.org/MaintainerScripts>.)
+if [ "$1" = "0" ] || [ "$1" = "purge" ] ; then
+    remove_users_and_groups
 fi
-
-#-----------------------------------------------------------------

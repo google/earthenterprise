@@ -33,8 +33,10 @@ remove_users_groups()
 # Main Function:
 #-----------------------------------------------------------------
 
-# at end of actual un-install, not an upgrade...
-if [ "$1" = "0" ]; then
+# * In Red Hat $1 = 0 indicates un-install, and not an upgrade.
+# * On Debian $1 = "purge" happens only during an uninstall when the user
+# requests no configuration be left behind.
+if [ "$1" = "0" ] || [ "$1" = "purge" ]; then
     remove_users_groups
 fi
 #-----------------------------------------------------------------

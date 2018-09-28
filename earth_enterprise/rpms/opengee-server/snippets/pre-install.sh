@@ -17,10 +17,6 @@
 set +x
 set -e
 
-NEW_INSTALL=false
-if [ "$1" = "1" ] ; then
-    NEW_INSTALL=true
-fi
 
 #-----------------------------------------------------------------
 # Main Functions
@@ -49,12 +45,8 @@ main_preinstall()
         service geserver stop
     fi
 
-    # only if a new install, has failsafe to protect non-rpm upgrades
-    if [ "$NEW_INSTALL" = "true" ] ; then
-        check_username "$GEAPACHEUSER"
-        check_username "$GEPGUSER"
-
-    fi
+    check_username "$GEAPACHEUSER"
+    check_username "$GEPGUSER"
 
     # Dump database if it exists
     database_backup
