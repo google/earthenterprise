@@ -68,7 +68,7 @@ class GeeCommandLine {
     // Returns the path to a given command found in a standard system PATH:
     static def resolveCommandPath(command_name) {
         return expand(
-                ["bash", "-c", "type -P -p ${command_name}"],
+                ["bash", "-l", "-c", "type -P -p ${command_name}"],
                 "Failed to find command ${command_name} in current PATH!"
             ).readLines()[0]
     }
