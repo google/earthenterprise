@@ -12,8 +12,8 @@ class GeeRpm extends com.netflix.gradle.plugins.rpm.Rpm {
     // Gets the name of the RPM package that provides a given capability:
     static def whatProvides(capability_path) {
         return GeeCommandLine.expand(
-                ["rpm", "-q", "--queryformat=%{NAME}\\n", "--whatprovides",
-                    capability_path],
+                ["/bin/rpm", "-q", "--whatprovides",
+                    "--queryformat=%{NAME}\\n", capability_path],
                 "Failed to find an RPM that provides ${capability_path}!"
             ).readLines()[0]
     }
@@ -29,11 +29,11 @@ class GeeRpm extends com.netflix.gradle.plugins.rpm.Rpm {
         return command_names.collect { whatProvidesCommand(it) }
     }
 
-    // Returns a list of the files in a given Yum package.
+    // Returns a list of the files in a given RPM package.
     static def packageGetFileList(package_name) {
         return GeeCommandLine.expand(
-                ['/usr/bin/repoquery', '--list', package_name],
-                "Failed to read the file list in Yum package: ${package_name}"
+                ['/bin/rpm', '-q', '--list', package_name],
+                "Failed to read the file list in RPM package: ${package_name}"
             ).readLines()
     }
 
