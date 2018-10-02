@@ -763,7 +763,7 @@ bool PublisherClient::PublishDatabase(const std::string& in_db_name,
       stream_args += "&EcDefaultDb=1" ;
     }
     if (serve_wms) {
-      stream_args += "&ServerWms=1";
+      stream_args += "&ServeWms=1";
     }
     std::vector<std::string> empty_vector;
     if (!ProcessPublishGetRequest(
