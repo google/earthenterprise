@@ -213,21 +213,36 @@ else
     exit 1
 fi
 
+# Echoes the PID of a given daemon, if the daemon is running, or nothing,
+# if that daemon is not found running.
+#
+#     $1 = Name of daemon to get PID of ('gesystemmanager' or
+# 'geresourceprovider').
+function get_daemon_pid {
+    daemon_path=$(command -v "$1")
+    pidfile="/var/opt/google/run/$1.pid"
+
+    if [ -s "$pidfile" ] ; then
+        pid=$(cat "$pidfile")
+        if [ -d "/proc/$pid" ] && [ "$(readlink "/proc/$pid/exe")" = "$daemon_path" ]; then
+            echo "$pid"
+        fi
+    fi
+}
+
 function check_daemon {
     # more DRY to use "gefdaemoncheck --checkrunning"
     #   but it seems to assume --checksysman is true
     #   thus wont work on non-master hosts.
-    daemon_path=$(command -v "$1")
-    pidfile="/var/opt/google/run/$1.pid"
-    if [ -s "$pidfile" ] ; then
-      pid=`cat "$pidfile"`
-      if [ -d "/proc/$pid" ] && [ "$(readlink "/proc/$pid/exe")" = "$daemon_path" ]; then
+    pid=$(get_daemon_pid $@)
+
+    if [ -z "$pid" ] ; then
+        echo "$1:  Not running."
+        return 1
+    else
         echo "$1:  Running (PID $pid)."
         return 0
-      fi
     fi
-    echo "$1:  Not running."
-    return 1
 }
 
 start() {
@@ -266,6 +281,23 @@ stop() {
     return "$return_code"
 }
 
+reload() {
+    cat <<END
+FIXME: This command only reloads System Manager configuration.
+Resource Provider will still run with its old configuration.
+END
+
+    pid=$(get_daemon_pid gesystemmanager)
+    if [ -n "$pid" ]; then
+        systemrc="/etc/opt/google/systemrc"
+        echo "Reloading gesystemmanager configuration ($systemrc)."
+        kill -1 "$pid"
+    else
+        echo "No gesystemmanager found running.  Not reloading configuration."
+        return 1
+    fi
+}
+
 status() {
     local return_code=0
 
@@ -278,10 +310,6 @@ status() {
 }
 
 case "$1" in
-    restart)
-        stop
-        start
-        ;;
     start)
         start
         ;;
@@ -291,12 +319,19 @@ case "$1" in
     force-stop)
         stop kill
         ;;
+    restart)
+        stop
+        start
+        ;;
+    reload)
+        reload
+        ;;
     status)
         status
         exit $?
         ;;
     *)
-        echo "usage: $0 {start|stop|force-stop|restart|status}"
+        echo "usage: $0 {start|stop|force-stop|restart|reload|status}"
         exit 1
         ;;
 esac
