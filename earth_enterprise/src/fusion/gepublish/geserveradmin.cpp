@@ -101,6 +101,7 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
     "                            contains POI data.\n"
     "   [--enable_enhancedsearch]If POI search is enabled, enable enhanced\n"
     "                            search.\n"
+    "   [--serve_wms]            Serve content via WMS.\n"
     " --unpublish <target_path>  Unpublish the DB served from the specified\n"
     "                            target path.\n"
     " --republishdb <db_name>    Publish a registered DB on the specified\n"
@@ -311,6 +312,7 @@ int main(int argc, char* argv[]) {
     bool swaptargets = false;
     bool enable_poisearch = false;
     bool enable_enhancedsearch = false;
+    bool serve_wms = false;
     std::string adddb, dbdetails, deletedb, publishdb,  unpublish;
     std::string republishdb, targetdetails;
     std::string target_path, dbalias;
@@ -350,6 +352,7 @@ int main(int argc, char* argv[]) {
     options.flagOpt("setecdefault", ec_default_db);
     options.flagOpt("enable_poisearch", enable_poisearch);
     options.flagOpt("enable_enhancedsearch", enable_enhancedsearch);
+    options.flagOpt("serve_wms", serve_wms);
     options.opt("unpublish", unpublish);
     options.opt("republishdb", republishdb);
     options.flagOpt("swaptargets", swaptargets);
@@ -648,7 +651,7 @@ int main(int argc, char* argv[]) {
       if (fusion_host.empty()) {
         SetFusionHost(&publisher_client, gedb_path, curr_host);
       }
-      if (publisher_client.PublishDatabase(gedb_path, target_path, vhname, ec_default_db, enable_poisearch, enable_enhancedsearch)) {
+      if (publisher_client.PublishDatabase(gedb_path, target_path, vhname, ec_default_db, enable_poisearch, enable_enhancedsearch, serve_wms)) {
         fprintf(stdout, "Database successfully published.  EC Default Database: %s\n", ec_default_db ? "true" : "false");
       } else {
         throw khException(publisher_client.ErrMsg() +

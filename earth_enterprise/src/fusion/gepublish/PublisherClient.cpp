@@ -710,7 +710,8 @@ bool PublisherClient::PublishDatabase(const std::string& in_db_name,
                                       const std::string& vh_name,
                                       const bool ec_default_db,
                                       const bool poi_search,
-                                      const bool enhanced_search) {
+                                      const bool enhanced_search,
+                                      const bool serve_wms) {
   try {
     std::string target_path = NormalizeTargetPath(in_target_path);
     if (target_path.empty()) {
@@ -760,6 +761,9 @@ bool PublisherClient::PublishDatabase(const std::string& in_db_name,
     }
     if (ec_default_db) {
       stream_args += "&EcDefaultDb=1" ;
+    }
+    if (serve_wms) {
+      stream_args += "&ServerWms=1";
     }
     std::vector<std::string> empty_vector;
     if (!ProcessPublishGetRequest(
