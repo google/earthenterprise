@@ -76,7 +76,7 @@ khSystemManager::SetWantExit(void)
 // when SIGHUP is given, reload systemrc
 void systemrc_reload(int signum)
 {
-    notify(NFY_WARN, "Recieved SIGHUP, Reloading systemrc...");
+    notify(NFY_WARN, "Received SIGHUP, Reloading systemrc...");
     Systemrc systemrc;
     LoadSystemrc(systemrc,true);
     uint32 logLevel = systemrc.logLevel;
@@ -87,7 +87,7 @@ void systemrc_reload(int signum)
 
 void handleExitSignals(int signum)
 {
-    notify(NFY_WARN, "Recieved SIGINT or SIGTERM, Exiting...");
+    notify(NFY_WARN, "Received SIGINT or SIGTERM, Exiting...");
     theSystemManager.SetWantExit();
 }
 
