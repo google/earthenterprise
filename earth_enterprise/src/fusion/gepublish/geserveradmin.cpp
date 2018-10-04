@@ -405,6 +405,10 @@ int main(int argc, char* argv[]) {
       throw khException("Enhanced search cannot be enabled without POI search.\n");
     }
 
+    if (serve_wms && !publishdb) {
+      throw khException("serve_wms can only be used with --publishdb.\n");
+    }
+
     if (disable_cutter) {
       DisableCutter();
       return 0;
