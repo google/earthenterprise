@@ -27,8 +27,10 @@ class MiscConfigStorage {
   uint        VersionCacheSize = uint(128000);
 
   bool        GenerateProductPreviews = true;
-  
+
   bool        DisablePacketLevelVersionCachePurge = false;
+
+  bool        ConsolidateListenerNotifications = false;
 
 #pragma LoadAndSave
 
