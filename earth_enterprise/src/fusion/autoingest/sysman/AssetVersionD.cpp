@@ -132,11 +132,19 @@ AssetVersionImplD::StateByInputs(bool *blockersAreOffline,
                            AssetDefs::Canceled |
                            AssetDefs::Bad)) {
         ++numblocking;
+        // At this point we already know what the values of all of the outputs
+        // (statebyinputs, blockersAreOffline, and numWaiting) will be, so
+        // there's no need to continue looping.
+        break;
       }
     } else {
       notify(NFY_WARN, "StateByInputs: %s missing input %s",
              GetRef().c_str(), input->GetRef().c_str());
       ++numblocking;
+      // At this point we already know what the values of all of the outputs
+      // (statebyinputs, blockersAreOffline, and numWaiting) will be, so
+      // there's no need to continue looping.
+      break;
     }
   }
 
