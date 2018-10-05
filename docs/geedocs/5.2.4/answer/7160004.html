@@ -46,7 +46,7 @@ gtag('config', 'UA-108632131-2');
     <p><strong>Added "Save and Build" file menu option</strong>. As of 5.2.4 the Fusion UI will include an additional file menu option that allows users to save and build assets with one click, instead of clicking the save option and then the build option immediately after.</p>
     <p><strong>Added build parameter to redirect the build output</strong>. Build output can now be optionally directed to a folder of your choosing instead of the current hard coded defaults. See earth_enterprise/BUILD.md in source code for more details.</p>
     <p><strong>Added experimental build cache folder parameter to the build</strong>. Currently this was added as an experimental option to potentially speed up builds. Some more work remains to be done before using this option in production builds. Use of this option is not recommended except for giving feedback and/or helping to address issues with Open GEE's build process using scons cache. See earth_enterprise/BUILD.md in source code for more details.</p>
-    <p><strong>Added progress indicators during gesystemmanager processing </strong>.Add progress log messages to `gesystemmanager` while assets are being built.
+    <p><strong>Added progress indicators during gesystemmanager processing </strong>.Add progress log messages to <code>gesystemmanager</code> while assets are being built.
   <h5>
     <p id="supported_5.2.4">Supported Platforms</p>
   </h5>
@@ -403,6 +403,16 @@ gtag('config', 'UA-108632131-2');
           <td>Geserver fails to startup fully due to conflicting protobuf library</td>
           <td>Run <code>pip uninstall protobuf</code> to uninstall the protobuf library installed by pip. </td>
         </tr>
+        <tr>
+          <td>1012</td>
+          <td>Cutter produces incorrect very low resolution result from 2d mercator map</td>
+          <td>No current work around. </td>
+        </tr>
+        <tr>
+          <td>1041</td>
+          <td>In-place upgrade from previous release fails on Ubuntu 14</td>
+          <td>Edit earth_enterprise/src/installer/common.sh. In the xml_file_get_xpath() function, change the tail command to from "+2" to "+3" </td>
+        </tr>                
       </tbody>
     </table>
   <div class="footer">
