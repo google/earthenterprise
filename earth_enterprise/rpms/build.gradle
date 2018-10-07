@@ -246,7 +246,7 @@ task setGeeVersion {
     }
 }
 
-// Build packages for all platforms by default:
+// Build packages for the current platform by default:
 defaultTasks 'osPackage'
 
 

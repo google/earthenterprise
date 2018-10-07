@@ -141,6 +141,14 @@ if command -v start-stop-daemon >/dev/null; then
         log_end_msg "$?"
     }
 
+    # Check if `start-stop-daemon` supports `--remove-pidfile`.  The version
+    # on Ubuntu 14.04 is pre 1.17.19, and doesn't support it:
+    if [ -z "$(start-stop-daemon --help | grep -e --remove-pidfile)" ]; then
+        start_stop_daemon_remove_pidfile=""
+    else
+        start_stop_daemon_remove_pidfile="--remove-pidfile"
+    fi
+
     function stop_daemon {
         local name="$1"
         local desc="$2"
@@ -158,7 +166,7 @@ if command -v start-stop-daemon >/dev/null; then
         log_daemon_msg "Stopping $desc" "$name"
         start-stop-daemon --stop \
             --exec "$daemon" --retry="$retry" \
-            --pidfile "$pid_file" --remove-pidfile --user "$DAEMON_USER"
+            --pidfile "$pid_file" $start_stop_daemon_remove_pidfile --user "$DAEMON_USER"
         RETVAL="$?"
         # This has a race condition, but, hopefully, you're not starting and
         # stopping this service from multiple threads:
