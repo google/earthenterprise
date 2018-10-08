@@ -76,7 +76,7 @@ khSystemManager::SetWantExit(void)
 // when SIGHUP is given, reload systemrc
 void systemrc_reload(int signum)
 {
-    notify(NFY_WARN, "Recieved SIGHUP, Reloading systemrc...");
+    notify(NFY_WARN, "Received SIGHUP, Reloading systemrc...");
     Systemrc systemrc;
     LoadSystemrc(systemrc,true);
     uint32 logLevel = systemrc.logLevel;
@@ -87,7 +87,7 @@ void systemrc_reload(int signum)
 
 void handleExitSignals(int signum)
 {
-    notify(NFY_WARN, "Recieved SIGINT or SIGTERM, Exiting...");
+    notify(NFY_WARN, "Received SIGINT or SIGTERM, Exiting...");
     theSystemManager.SetWantExit();
 }
 
@@ -95,8 +95,18 @@ void handleExitSignals(int signum)
 void
 khSystemManager::SignalLoop(void)
 {
-  signal(SIGINT,handleExitSignals);
-  signal(SIGTERM,handleExitSignals);
+  // In Fusion versions 5.2.3 and earlier there was code to handle SIGTERM and
+  // SIGINT, but this code was not called when the relevant signals were sent
+  // to system manager. We fixed this in 5.2.4 with the unexpected side effect
+  // that gesystemmanager may not stop when the user runs
+  // "/etc/init.d/gefusion stop". Instead, gesystemmanager will catch the
+  // SIGTERM and wait until it finishes the current operation before stopping,
+  // which could take days. As a stopgap, we are reverting to the behavior
+  // from 5.2.3 and not handling SIGINT and SIGTERM. In 5.2.5 we will revisit
+  // this and implement better methods of starting and stopping system manager.
+  // At that point, the two lines below can be uncommented.
+  //signal(SIGINT,handleExitSignals);
+  //signal(SIGTERM,handleExitSignals);
   signal(SIGHUP,systemrc_reload);
 }
 
