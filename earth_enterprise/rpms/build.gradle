@@ -344,7 +344,7 @@ if (project.hasProperty('buildOpenGee')) {
 // used in the `common` package, and prefixed to install scripts for all the
 // various packages.
 task openGeeSharedFiles(type: Copy, dependsOn: [setGeeVersion]) {
-    from file('shared')
+    from file('shared/src')
     into file('build/shared')
 
     copySpecExpandTemplates(delegate,
@@ -354,16 +354,13 @@ task openGeeSharedFiles(type: Copy, dependsOn: [setGeeVersion]) {
 }
 
 task openGeeCommonInitScripts(type: Copy, dependsOn: openGeeSharedFiles) {
-    from(file('opengee-common')) {
-        include '*'
-
-        copySpecExpandTemplates(delegate, [
-                'openGeeVersion': ospackage.version,
-                'project': project
-            ])
-    }
-
+    from(file('opengee-common/src'))
     into "${buildDir}/opengee-common"
+
+    copySpecExpandTemplates(delegate, [
+            'openGeeVersion': ospackage.version,
+            'project': project
+        ])
 }
 
 task openGeeCommonRpm(type: GeeRpm, dependsOn: [openGeeCommonInitScripts, setGeeVersion]) {
@@ -526,17 +523,14 @@ if (project.hasProperty('buildOpenGee')) {
 }
 
 task openGeeServerInitScripts(type: Copy, dependsOn: openGeeSharedFiles) {
-    from(file('opengee-server')) {
-        include '*'
-
-        copySpecExpandTemplates(delegate, [
-                'openGeeVersion': ospackage.version,
-                'stagedInstallDir_server_opt': stagedInstallDir_server_opt,
-                'project': project
-            ])
-    }
-
+    from(file('opengee-server/src'))
     into "${buildDir}/opengee-server"
+
+    copySpecExpandTemplates(delegate, [
+            'openGeeVersion': ospackage.version,
+            'stagedInstallDir_server_opt': stagedInstallDir_server_opt,
+            'project': project
+        ])
 }
 
 task openGeeServerRpm(type: GeeRpm, dependsOn: [openGeeServerInitScripts, setGeeVersion]) {
@@ -748,16 +742,13 @@ if (project.hasProperty('buildOpenGee')) {
 
 
 task openGeeFusionInitScripts(type: Copy, dependsOn: openGeeSharedFiles) {
-    from(file('opengee-fusion')) {
-        include '*'
-
-        copySpecExpandTemplates(delegate, [
-                'openGeeVersion': ospackage.version,
-                'project': project
-            ])
-    }
-
+    from(file('opengee-fusion/src'))
     into "${buildDir}/opengee-fusion"
+
+    copySpecExpandTemplates(delegate, [
+            'openGeeVersion': ospackage.version,
+            'project': project
+        ])
 }
 
 

@@ -1,22 +1,3 @@
-#!/bin/bash
-#
-# Copyright 2017 the Open GEE Contributors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# gevars.sh:
-<%= expandTemplateFile.call('gevars.sh.template') %>
-
 # Directory locations:
 BININSTALLROOTDIR="/etc/init.d"
 BASEINSTALLDIR_OPT="/opt/google"
@@ -24,7 +5,7 @@ BASEINSTALLDIR_ETC="/etc/opt/google"
 BASEINSTALLDIR_VAR="/var/opt/google"
 
 # Derived directories:
-SYSTEMRC=<%= '"$BASEINSTALLDIR_ETC/systemrc"' %>
+SYSTEMRC="$BASEINSTALLDIR_ETC/systemrc"
 MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB=1048576
 
 # Configuration values:
@@ -36,8 +17,6 @@ NEWLINECLEANER="sed -e s:\\n::g"
 
 if [ -f /sbin/chkconfig ]; then
     # Use the Red Hat tool for managing services:
-<%=
-    '''
     add_service()
     {
         local SERVICE_NAME="$1"
@@ -51,12 +30,8 @@ if [ -f /sbin/chkconfig ]; then
 
         /sbin/chkconfig --del "$SERVICE_NAME"
     }
-    '''
-%>
 elif [ -f /usr/sbin/update-rc.d ]; then
     # Use the Debian tool for managing services:
-<%=
-    '''
     add_service()
     {
         local SERVICE_NAME="$1"
@@ -71,16 +46,12 @@ elif [ -f /usr/sbin/update-rc.d ]; then
 
         /usr/sbin/update-rc.d -f "$SERVICE_NAME" remove
     }
-    '''
-%>
 else
     echo "Error: Unable to find a command for adding and removing services." >&2
     exit 1
 fi
 
 
-<%=
-'''
 load_systemrc_config()
 {
     local VALUE
@@ -109,8 +80,3 @@ xml_file_get_xpath()
     # Skip the first and the last line:
         tail -n +2 | head -n -1
 }
-'''
-%>
-
-# Key-value library:
-<%= (new File('shared/lib/key-value.sh').text) %>

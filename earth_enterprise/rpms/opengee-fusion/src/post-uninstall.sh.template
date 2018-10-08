@@ -1,0 +1,3 @@
+
+<%= new File("${project.buildDir}/shared/install-utils.sh").text %>
+<%= new File(thisTemplateFile.parent, '../snippets/post-uninstall.sh').text %>

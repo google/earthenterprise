@@ -6,4 +6,4 @@
     // Add geresetpgdb script:
     new File(stagedInstallDir_server_opt, 'google/bin/gepgcommon').text
 %>
-<%= new File(thisTemplateFile.parent, 'snippets/pre-install.sh').text %>
+<%= new File(thisTemplateFile.parent, '../snippets/pre-install.sh').text %>
