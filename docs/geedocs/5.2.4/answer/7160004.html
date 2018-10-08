@@ -401,6 +401,26 @@ gtag('config', 'UA-108632131-2');
           <td>Run <code>pip uninstall protobuf</code> to uninstall the protobuf library installed by pip. </td>
         </tr>
         <tr>
+          <td>1026</td>
+          <td>High resolution imagery sometimes doesn't appear when paired with low-resolution imagery and terrain</td>
+          <td>No current work around. </td>
+        </tr> 
+        <tr>
+          <td>1032</td>
+          <td>Cannot build on Centos7 ('error: unknown option `first-parent')</td>
+          <td>Upgrade git to 1.84+.</td>
+        </tr> 
+        <tr>
+          <td>1037</td>
+          <td>Projects use different level numbers on CLI than displayed in Fusion UI</td> 
+          <td>For Terrain projects add 5 to the desired level, for Imagery projects add 7.</td>
+        </tr>  
+        <tr>
+          <td>1038</td>
+          <td>genewmapdatabase doesn't accept flat imagery project when --mercator specified/td> 
+          <td>Configure the new database using the Fusion UI instead of CLI.</td>
+        </tr>        
+        <tr>
           <td>1041</td>
           <td>In-place upgrade from previous release fails on Ubuntu 14</td>
           <td>Edit earth_enterprise/src/installer/common.sh. In the xml_file_get_xpath() function, change the tail command to from "+2" to "+3" </td>
