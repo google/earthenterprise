@@ -53,11 +53,6 @@ apply plugin: "nebula.ospackage"
 
 import org.opengee.shell.GeeCommandLine
 
-// Varables used for specifying location of two files
-// 'gee_long_version.txt' and 'gepgcommon'
-def src_dir = "../src/"
-def scons_option = "release=1"
-
 def stagedInstall_path =
     project.hasProperty('stageInstallPath') ? project.stageInstallPath : '/tmp/fusion_os_install'
 
@@ -74,6 +69,8 @@ if (new File('build.properties').exists()) {
 // Look for command line parameters that specify how the packages are
 // to be built.  This can be either 'optimize' or 'debug'.
 // Option 'release' is the default.
+def scons_option = "release=1"
+
 if ( project.hasProperty( 'optimize' ) ) {
     scons_option = "optimize=1"
 }  // end check for option 'optimze'
@@ -87,8 +84,14 @@ def rpmPlatformString = org.opengee.os.Platform.rpmPlatformString
 def gee_long_version_txt = "${stagedInstall_path}/gee_long_version.txt"
 def openGeeVersionFile = new File( gee_long_version_txt )
 
-def getVersionFromOpenGeeVersionFile(file) {
-    return file.readLines().
+def getOsPackageVersionFromOpenGeeVersion(value) {
+    return value.replaceAll(/-.*release/, '').
+        replaceAll('-', '.')
+}
+
+def getOsPackageVersionFromOpenGeeVersionFile(file) {
+    return getOsPackageVersionFromOpenGeeVersion(
+        file.readLines().
         collect {
             // Strip comments:
             def commentIndex = it.indexOf('#')
@@ -99,9 +102,8 @@ def getVersionFromOpenGeeVersionFile(file) {
         findAll { !it.isEmpty() }. // Skip empty lines.
         findResult {
             it // The first string that remains is the version string.
-        }.
-        replaceAll(/-.*release/, '').
-        replaceAll('-', '.')
+        }
+    )
 }
 
 
@@ -122,8 +124,6 @@ def stagedInstallDir_server_geplaces =
     new File(stagedInstallDir, 'geplaces/opt/google/share/geplaces')
 def stagedInstallDir_server_user_magic =
     new File(stagedInstallDir, 'server/user_magic')
-def stagedInstallDir_server_version =
-    new File(stagedInstallDir, 'server/opt/google/gehttpd/htdocs/earth/gee_long_version.txt')
 def stagedInstallDir_fusion = new File(stagedInstallDir, 'fusion')
 def stagedInstallDir_tutorial = new File(stagedInstallDir, 'tutorial')
 def packageInstallRootDir = new File('/')
@@ -234,17 +234,15 @@ ospackage {
     vendor = 'The OpenGEE Contributors'
     arch = X86_64
     os = LINUX
+    version = (!openGeeVersionFile.exists() || project.hasProperty('buildOpenGee')) ?
+        GeeCommandLine.expand(
+                ["../src/scons/getversion.py", "--long"],
+                "Failed to get Open GEE version!"
+            ) :
+        getOsPackageVersionFromOpenGeeVersionFile(openGeeVersionFile)
 }
 
-task setGeeVersion {
-    doLast {
-        // if the version file does not exist raise an error
-        if ( !openGeeVersionFile.exists() ) { // src_dir
-            throw new GradleException("Missing version file '${openGeeVersionFile}'.")
-        }
-        ospackage.version = getVersionFromOpenGeeVersionFile(openGeeVersionFile)
-    }
-}
+logger.quiet("Open GEE version: ${ospackage.version}")
 
 // Build packages for the current platform by default:
 defaultTasks 'osPackage'
@@ -266,19 +264,10 @@ task stageOpenGeeInstall(type: Exec, dependsOn: 'compileOpenGee') {
         "installdir=${stagedInstallDir}")
 }
 
-if (project.hasProperty('buildOpenGee')) {
-    setGeeVersion.dependsOn stageOpenGeeInstall
-}
-else {
-    setGeeVersion.mustRunAfter stageOpenGeeInstall
-}
 
-task openGeePostGisRpm(type: GeeRpm, dependsOn: [setGeeVersion]) {
+task openGeePostGisRpm(type: GeeRpm) {
     mustRunAfter stageOpenGeeInstall
 
-    doFirst {
-        requires('opengee-common', ospackage.version, GREATER | EQUAL)
-    }
     packageName = 'opengee-postgis'
     release = "1.${rpmPlatformString}"
     version = '2.3.4'
@@ -292,6 +281,8 @@ task openGeePostGisRpm(type: GeeRpm, dependsOn: [setGeeVersion]) {
     type = BINARY
     autoFindProvides = true
     autoFindRequires = true
+
+    requires('opengee-common', ospackage.version, GREATER | EQUAL)
 
     from (stagedInstallDir_postgis_opt) {
         into new File(packageInstallRootDir, 'opt')
@@ -308,9 +299,6 @@ task openGeePostGisRpm(type: GeeRpm, dependsOn: [setGeeVersion]) {
 task openGeePostGisDeb(type: GeeDeb) {
     mustRunAfter stageOpenGeeInstall
 
-    doFirst {
-        requires('opengee-common', ospackage.version, GREATER | EQUAL)
-    }
     packageName = openGeePostGisRpm.packageName
     release = '1'
     version = openGeePostGisRpm.version
@@ -322,6 +310,8 @@ task openGeePostGisDeb(type: GeeDeb) {
     license = openGeePostGisRpm.license
     url = openGeePostGisRpm.url
     type = BINARY
+
+    requires('opengee-common', ospackage.version, GREATER | EQUAL)
 
     from (stagedInstallDir_postgis_opt) {
         into new File(packageInstallRootDir, 'opt')
@@ -343,7 +333,7 @@ if (project.hasProperty('buildOpenGee')) {
 // Expands the `gevars.sh.template` and any other templates so they can be
 // used in the `common` package, and prefixed to install scripts for all the
 // various packages.
-task openGeeSharedFiles(type: Copy, dependsOn: [setGeeVersion]) {
+task openGeeSharedFiles(type: Copy) {
     from file('shared/src')
     into file('build/shared')
 
@@ -363,14 +353,11 @@ task openGeeCommonInitScripts(type: Copy, dependsOn: openGeeSharedFiles) {
         ])
 }
 
-task openGeeCommonRpm(type: GeeRpm, dependsOn: [openGeeCommonInitScripts, setGeeVersion]) {
+task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
     mustRunAfter stageOpenGeeInstall
 
-    doFirst{
-        println "Setting version for GEE common RPM to ${ospackage.version}"
-        version = ospackage.version
-    }
     packageName = 'opengee-common'
+    version = ospackage.version
     release = "1.${rpmPlatformString}"
     user = 'root'
     permissionGroup = 'root'
@@ -458,14 +445,11 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: [openGeeCommonInitScripts, setGee
     }
 }
 
-task openGeeCommonDeb (type: GeeDeb, dependsOn: [openGeeCommonInitScripts, setGeeVersion]) {
+task openGeeCommonDeb (type: GeeDeb, dependsOn: openGeeCommonInitScripts) {
     mustRunAfter stageOpenGeeInstall
 
-    doFirst {
-        println "Setting version for GEE common DEB to ${ospackage.version}"
-        version = ospackage.version
-    }
     packageName = openGeeCommonRpm.packageName
+    version = ospackage.version
     release = '1'
     user = openGeeCommonRpm.user
     permissionGroup = openGeeCommonRpm.permissionGroup
@@ -533,16 +517,11 @@ task openGeeServerInitScripts(type: Copy, dependsOn: openGeeSharedFiles) {
         ])
 }
 
-task openGeeServerRpm(type: GeeRpm, dependsOn: [openGeeServerInitScripts, setGeeVersion]) {
+task openGeeServerRpm(type: GeeRpm, dependsOn: openGeeServerInitScripts) {
     mustRunAfter stageOpenGeeInstall
 
-    doFirst{
-        println "Setting version for GEE server RPM to ${ospackage.version}"
-        version = ospackage.version
-        requires('opengee-common', ospackage.version, GREATER | EQUAL)
-        requiresPre('opengee-common', ospackage.version, GREATER | EQUAL)
-    }
     packageName = 'opengee-server'
+    version = ospackage.version
     release = "1.${rpmPlatformString}"
     user = 'root'
     permissionGroup = 'root'
@@ -555,6 +534,8 @@ task openGeeServerRpm(type: GeeRpm, dependsOn: [openGeeServerInitScripts, setGee
     autoFindProvides = true
     autoFindRequires = true
 
+    requires('opengee-common', ospackage.version, GREATER | EQUAL)
+    requiresPre('opengee-common', ospackage.version, GREATER | EQUAL)
     requires('opengee-postgis', '2.3.4', GREATER | EQUAL)
     conflicts('opengee-postgis', '2.0', LESS )
     conflicts('opengee-postgis', '2.4', GREATER | EQUAL)
@@ -639,15 +620,11 @@ task openGeeServerRpm(type: GeeRpm, dependsOn: [openGeeServerInitScripts, setGee
     link('/opt/google/gehttpd/htdocs/shared_assets/docs', '/opt/google/share/doc')
 }
 
-task openGeeServerDeb (type: GeeDeb, dependsOn: [openGeeServerInitScripts, setGeeVersion]) {
+task openGeeServerDeb (type: GeeDeb, dependsOn: openGeeServerInitScripts) {
     mustRunAfter stageOpenGeeInstall
 
-    doFirst {
-        println "Setting version for GEE server DEB to ${ospackage.version}"
-        version = ospackage.version
-        requires('opengee-common', ospackage.version, GREATER | EQUAL)
-    }
     packageName = openGeeServerRpm.packageName
+    version = ospackage.version
     release = '1'
     user = openGeeServerRpm.user
     permissionGroup = openGeeServerRpm.permissionGroup
@@ -657,6 +634,7 @@ task openGeeServerDeb (type: GeeDeb, dependsOn: [openGeeServerInitScripts, setGe
     license = openGeeServerRpm.license
     url = openGeeServerRpm.url
 
+    requires('opengee-common', ospackage.version, GREATER | EQUAL)
     requires('opengee-postgis', '2.3.4', GREATER | EQUAL)
     conflicts('opengee-postgis', '2.0', LESS )
     conflicts('opengee-postgis', '2.4', GREATER | EQUAL)
@@ -752,15 +730,11 @@ task openGeeFusionInitScripts(type: Copy, dependsOn: openGeeSharedFiles) {
 }
 
 
-task openGeeFusionRpm (type: GeeRpm, dependsOn: [openGeeFusionInitScripts, setGeeVersion]) {
+task openGeeFusionRpm (type: GeeRpm, dependsOn: openGeeFusionInitScripts) {
     mustRunAfter stageOpenGeeInstall
 
-    doFirst{
-        println "Setting version for GEE fusion RPM to ${ospackage.version}"
-        version = ospackage.version
-        requires('opengee-common', ospackage.version, GREATER | EQUAL)
-    }
     packageName = 'opengee-fusion'
+    version = ospackage.version
     release = "1.${rpmPlatformString}"
     user = 'root'
     permissionGroup = 'root'
@@ -778,6 +752,7 @@ built from raster, vector, and location properties data.
     autoFindProvides = true
     autoFindRequires = true
 
+    requires('opengee-common', ospackage.version, GREATER | EQUAL)
     requires('proj-devel') /* This dependency is not being picked up automatically by GeeRpm task */
     requires('/etc/rc.d/init.d/functions')
     requiresCommands(
@@ -841,12 +816,8 @@ built from raster, vector, and location properties data.
 task openGeeFusionDeb (type: GeeDeb, dependsOn: openGeeFusionInitScripts) {
     mustRunAfter stageOpenGeeInstall
 
-    doFirst{
-        println "Setting version for GEE fusion DEB to ${ospackage.version}"
-        version = ospackage.version
-        requires('opengee-common', ospackage.version, GREATER | EQUAL)
-    }
     packageName = openGeeFusionRpm.packageName
+    version = ospackage.version
     release = '1'
     user = openGeeFusionRpm.user
     permissionGroup = openGeeFusionRpm.permissionGroup
@@ -857,6 +828,7 @@ task openGeeFusionDeb (type: GeeDeb, dependsOn: openGeeFusionInitScripts) {
     url = openGeeFusionRpm.url
     type = BINARY
 
+    requires('opengee-common', ospackage.version, GREATER | EQUAL)
     requires('dpkg')
     requires('lsb-base')
 
