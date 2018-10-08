@@ -52,6 +52,7 @@ buildscript {
 apply plugin: "nebula.ospackage"
 
 import org.opengee.shell.GeeCommandLine
+import org.opengee.io.CopySpecTemplates
 
 def stagedInstall_path =
     project.hasProperty('stageInstallPath') ? project.stageInstallPath : '/tmp/fusion_os_install'
@@ -175,57 +176,6 @@ def rpmCommandFilter = {
     return rpmCapabilityMap.containsKey(it) ? rpmCapabilityMap[it] : it
 }
 
-def copySpecExpandTemplates = { copySpec, templateVariablesMap, templateSuffix = '.template' ->
-    def stringStripSuffix = { value, suffix ->
-        return value.substring(0, value.length() - suffix.length())
-    }
-
-    def templateVariables = templateVariablesMap.clone()
-
-    def addExpandTemplateFileFunction = !templateVariables.containsKey('expandTemplateFile')
-    def addThisTemplateFile = !templateVariables.containsKey('thisTemplateFile')
-
-    copySpec.eachFile {
-        if (it.sourceName.endsWith(templateSuffix)) {
-            it.name = stringStripSuffix(it.getSourceName(), templateSuffix)
-
-            def templateDir = it.file.parent
-
-            // Add a function for expanding a template from within a template
-            // file, if necessary:
-            if (addExpandTemplateFileFunction) {
-                def expandTemplate = { text_or_file ->
-                    def engine = new groovy.text.SimpleTemplateEngine()
-                    def template = engine.createTemplate(text_or_file).make(templateVariables)
-
-                    return template.toString()
-                }
-
-                templateVariables.put(
-                    'expandTemplateFile',
-                    { template_path ->
-                        def path = new File(template_path)
-
-                        expandTemplate(
-                            path.absolute ?
-                                path : new File(new File(templateDir), template_path))
-                    },
-                )
-            }
-
-            if (addThisTemplateFile) {
-                templateVariables['thisTemplateFile'] = it.file
-            }
-
-            it.filter(
-                org.opengee.io.StreamingTemplateReader,
-                bindings: templateVariables
-            )
-        }
-    }
-}
-
-
 
 ospackage {
     release = "1.${rpmPlatformString}"
@@ -337,7 +287,7 @@ task openGeeSharedFiles(type: Copy) {
     from file('shared/src')
     into file('build/shared')
 
-    copySpecExpandTemplates(delegate,
+    CopySpecTemplates.expand(delegate,
         [
             'openGeeVersion': ospackage.version
         ])
@@ -347,7 +297,7 @@ task openGeeCommonInitScripts(type: Copy, dependsOn: openGeeSharedFiles) {
     from(file('opengee-common/src'))
     into "${buildDir}/opengee-common"
 
-    copySpecExpandTemplates(delegate, [
+    CopySpecTemplates.expand(delegate, [
             'openGeeVersion': ospackage.version,
             'project': project
         ])
@@ -510,7 +460,7 @@ task openGeeServerInitScripts(type: Copy, dependsOn: openGeeSharedFiles) {
     from(file('opengee-server/src'))
     into "${buildDir}/opengee-server"
 
-    copySpecExpandTemplates(delegate, [
+    CopySpecTemplates.expand(delegate, [
             'openGeeVersion': ospackage.version,
             'stagedInstallDir_server_opt': stagedInstallDir_server_opt,
             'project': project
@@ -723,7 +673,7 @@ task openGeeFusionInitScripts(type: Copy, dependsOn: openGeeSharedFiles) {
     from(file('opengee-fusion/src'))
     into "${buildDir}/opengee-fusion"
 
-    copySpecExpandTemplates(delegate, [
+    CopySpecTemplates.expand(delegate, [
             'openGeeVersion': ospackage.version,
             'project': project
         ])
@@ -801,7 +751,7 @@ built from raster, vector, and location properties data.
     from(file('opengee-fusion/install')) {
         into packageInstallRootDir
 
-        copySpecExpandTemplates(delegate, [
+        CopySpecTemplates.expand(delegate, [
                 'openGeeVersion': ospackage.version
             ])
     }
@@ -870,7 +820,7 @@ task openGeeFusionDeb (type: GeeDeb, dependsOn: openGeeFusionInitScripts) {
     from(file('opengee-fusion/install')) {
         into packageInstallRootDir
 
-        copySpecExpandTemplates(delegate, [
+        CopySpecTemplates.expand(delegate, [
                 'openGeeVersion': ospackage.version
             ])
     }
