@@ -5,8 +5,6 @@
 - version: 5.2.2
   stability: stable
 - version: 5.2.3
-  stability: stable
-- version: 5.2.4
   stability: latest stable
 - version: 5.2.4
   stability: unstable
