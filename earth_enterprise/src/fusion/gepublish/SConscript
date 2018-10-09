@@ -26,6 +26,10 @@ libgepublish = env.sharedLib('gepublish',
                              LIBS=['curl', 'geutil', 'dbmanifest',
                                    'gecommon'])
 
+env.test('curl_request_unittest',
+         'CurlRequest_unittest.cpp',
+         LIBS=['gepublish', 'curl', 'gtest'])
+
 geserveradmin = env.executable('geserveradmin', 'geserveradmin.cpp',
                            LIBS=['dbmanifest', 'gepublish', 'gemiscconfig',
                                  'geutil', 'gecommon', 'geautoingest', 'qt-mt',
