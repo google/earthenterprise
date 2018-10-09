@@ -574,7 +574,18 @@ khAssetManager::NotifyVersionStateChange(const std::string &ref,
 {
   // assert that we're already locked
   assert(!mutex.TryLock());
-
+  
+  if (ToString(pendingStateChanges[ref]) == "") {
+    notify(NFY_VERBOSE, "Set pendingStateChanges[%s]: <empty> to state: %s",
+         ref.c_str(),
+         ToString(state).c_str());
+  }
+  else {
+    notify(NFY_VERBOSE, "Set pendingStateChanges[%s]: %s to state: %s",
+         ref.c_str(),
+         ToString(pendingStateChanges[ref]).c_str(),
+         ToString(state).c_str());
+  }
   pendingStateChanges[ref] = state;
 }
 
