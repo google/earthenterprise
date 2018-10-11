@@ -24,7 +24,6 @@
 #include "common/serverdb/serverdb.h"
 #include "common/serverdb/map_tile_utils.h"
 
-
 class ServerdbReader {
  public:
   typedef geindex::UnifiedReader::ReadBuffer ReadBuffer;
