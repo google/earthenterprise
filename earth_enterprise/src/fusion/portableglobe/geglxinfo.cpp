@@ -23,13 +23,16 @@
 #include <map>
 #include <sstream>  // NOLINT(readability/streams)
 #include <string>
+#include "common/etencoder.h"
 #include "common/khAbortedException.h"
 #include "common/khFileUtils.h"
+#include "common/khEndian.h"
 #include "common/khGetopt.h"
 #include "common/khSimpleException.h"
 #include "common/khTypes.h"
 #include "common/proto_streaming_imagery.h"
-#include "common/etencoder.h"
+#include "common/packetcompress.h"
+#include "common/qtpacket/quadtreepacket.h"
 #include "fusion/portableglobe/servers/fileunpacker/shared/file_package.h"
 #include "fusion/portableglobe/servers/fileunpacker/shared/packetbundle.h"
 #include "fusion/portableglobe/servers/fileunpacker/shared/portable_glc_reader.h"
@@ -68,6 +71,145 @@ void GetXY(int level, uint64 btree, uint64* x, uint64* y) {
   }
 }
 
+void writePacketToFile(const IndexItem& index_item,
+                       const std::string& buffer,
+                       const bool skipSmall = true,
+                       const std::string& extraSuffix = "") {
+  char path[256];
+  const char* suffix;
+  uint64 x;
+  uint64 y;
+  uint64 btree = index_item.btree_high;
+  btree <<= 16;
+  btree |= (index_item.btree_low & 0xffff);
+  GetXY(index_item.level, btree, &x, &y);
+  if ((buffer[6] == 'J') && (buffer[7] == 'F')
+      && (buffer[8] == 'I') && (buffer[9] == 'F')) {
+    suffix = "jpg";
+  } else if ((buffer[1] == 'P') && (buffer[2] == 'N')
+             && (buffer[3] == 'G')) {
+    suffix = "png";
+  } else {
+    suffix = "unk";
+  }
+  snprintf(path, sizeof(path), "maptiles/%d/%d/%lu/%lu%s.%s",
+           index_item.channel, index_item.level, x, y, extraSuffix.c_str(), suffix);
+  if (skipSmall && buffer.size() <= 153) {
+    std::cout << "Skipping small: " << path << std::endl;
+  } else {
+    khEnsureParentDir(path);
+    khWriteSimpleFile(path, &buffer[0], buffer.size());
+  }
+}
+
+void extractAllPackets(GlcUnpacker* const unpacker,
+                    PortableGlcReader* const reader,
+                    uint64 start_idx,
+                    uint64 end_idx,
+                    const std::string& index_file,
+                    const std::string& data_file) {
+  PackageFileLoc index_file_loc;
+  PackageFileLoc data_file_loc;
+
+  if (!unpacker->FindFile(index_file.c_str(), &index_file_loc)) {
+      std::cout << "Unable to find index: " << index_file << std::endl;
+    return;
+  }
+  if (!unpacker->FindFile(data_file.c_str(), &data_file_loc)) {
+      std::cout << "Unable to find data: " << data_file << std::endl;
+    return;
+  }
+
+  // Sanity check.
+  if (index_file_loc.Size() % sizeof(IndexItem) != 0) {
+    std::cout << "Index is damaged." << std::endl;
+    return;
+  }
+
+  uint64 number_of_packets = index_file_loc.Size() / sizeof(IndexItem);
+  std::cout << "Extracting " << (end_idx - start_idx)
+            << " of " << number_of_packets
+            << " packets" << std::endl;
+
+  if (number_of_packets  < end_idx) {
+    std::cout << "Insufficient packets. " <<
+        "Resetting end packet to: " << number_of_packets << std::endl;
+    end_idx = number_of_packets;
+  }
+
+  uint64 offset = index_file_loc.Offset() + sizeof(IndexItem) * start_idx;
+  std::string buffer;
+  uint64 max_size = 200000;
+  buffer.resize(max_size);
+  // Main extraction loop.
+  // Reads sequential index entries and saves packets as files
+  // to disk. Directories are arranged in z, x, y order and the
+  // name of the file corresponds to the channel.
+  for (uint64 i = start_idx; i < end_idx; ++i) {
+    IndexItem index_item;
+    // std::cout << "index offset: " << offset << std::endl;
+    if (reader->ReadData(&index_item, offset, sizeof(IndexItem))) {
+      uint64 data_offset = data_file_loc.Offset() + index_item.offset;
+      buffer.resize(MIN(max_size, index_item.packet_size));
+      if (index_item.packet_size >= max_size) {
+        std::cout << "Data item is too big: " << i
+                  << " size: " << index_item.packet_size << std::endl;
+      } else if (reader->ReadData(
+          &buffer[0], data_offset, index_item.packet_size)) {
+        if (unpacker->Is2d()) {
+          writePacketToFile(index_item, buffer);
+        }
+        else if (index_item.packet_type == kImagePacket) {
+          etEncoder::DecodeWithDefaultKey(&buffer[0], index_item.packet_size);
+          geEarthImageryPacket protoPacket;
+          if (!protoPacket.ParseFromString(buffer)) {
+            std::cout << "Error parsing protobuf imagery packet" << std::endl;
+          }
+          
+          if (protoPacket.HasImageData()) {
+            writePacketToFile(index_item, protoPacket.ImageData(), true);
+          }
+          if (protoPacket.HasImageAlpha()) {
+            writePacketToFile(index_item, protoPacket.ImageAlpha(), true, "_alpha");
+          }
+        }
+        else if (index_item.packet_type == kQtpPacket) {
+          LittleEndianReadBuffer decompressed;
+          etEncoder::DecodeWithDefaultKey(&buffer[0],
+                                          buffer.size());
+          if (KhPktDecompress(buffer.data(),
+                              buffer.size(),
+                              &decompressed)) {
+            // todo: some magic here to make metadata into a human readable string
+            //qtpacket::KhQuadTreeQuantum16 theMetadata;
+            //decompressed >> theMetadata;
+            std::string metadataObjAsString;  // <- replace this when above is done
+            decompressed >> metadataObjAsString;
+            writePacketToFile(index_item, metadataObjAsString, false, "_meta");
+          }
+        }
+        else if (index_item.packet_type == kTerrainPacket) {
+          writePacketToFile(index_item, buffer, true, "_terrain");
+        }
+        else if (index_item.packet_type == kDbRootPacket) {
+          writePacketToFile(index_item, buffer, true, "_dbroot");
+        }
+        else if (index_item.packet_type == kVectorPacket) {
+          writePacketToFile(index_item, buffer, true, "_vector");
+        }
+        else {
+          std::cout << "Found unhandled packet type of " << int(index_item.packet_type) << std::endl;
+        }
+      }  else {
+        std::cout << "Unable to read data item." << std::endl;
+      }
+    } else {
+      std::cout << "Unable to read index item." << std::endl;
+    }
+    offset += sizeof(IndexItem);
+  }
+}
+
 // Extract tiles for all channels from glm or 2d glc.
 // Begin with the start_idx-th entry in the index and continue
 // until the last index entry before end_idx-th entry.
@@ -91,8 +233,11 @@ void ExtractPackets(GlcUnpacker* const unpacker,
     index_file = "data/index";
     data_file = "data/pbundle_0000";
     std::cout << "Extracting packets for a globe file" << std::endl;
+    extractAllPackets(unpacker, reader, start_idx, end_idx, "data/index", "data/pbundle_0000");
+    extractAllPackets(unpacker, reader, start_idx, end_idx, "qtp/index", "qtp/pbundle_0000");
+    return;
   }
-
+  
   // For glcs, we need to look inside each layer for the indexes.
   if (is_composite) {
     // Determine if the glc is 2d, 3d, or both
@@ -171,20 +316,6 @@ void ExtractPackets(GlcUnpacker* const unpacker,
           &buffer[0], data_offset, index_item.packet_size)) {
         char path[256];
         const char* suffix;
-
-        if (index_item.packet_type != kImagePacket) {
-          //todo: dump terrain packets as well
-        }
-        else {
-          etEncoder::DecodeWithDefaultKey(&buffer[0], index_item.packet_size);
-          geEarthImageryPacket protoPacket;
-          if (!protoPacket.ParseFromString(buffer)) {
-            std::cout << "Error parsing protobuf imagery packet" << std::endl;
-            continue;
-          }
-          buffer = protoPacket.ImageData();
-        }
-
         uint64 x;
         uint64 y;
         uint64 btree = index_item.btree_high;
