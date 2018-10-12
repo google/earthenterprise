@@ -28,6 +28,8 @@
 #include "common/khGetopt.h"
 #include "common/khSimpleException.h"
 #include "common/khTypes.h"
+#include "common/proto_streaming_imagery.h"
+#include "common/etencoder.h"
 #include "fusion/portableglobe/servers/fileunpacker/shared/file_package.h"
 #include "fusion/portableglobe/servers/fileunpacker/shared/packetbundle.h"
 #include "fusion/portableglobe/servers/fileunpacker/shared/portable_glc_reader.h"
@@ -85,6 +87,12 @@ void ExtractPackets(GlcUnpacker* const unpacker,
   std::string index_file = "mapdata/index";
   PackageFileLoc data_file_loc;
   std::string data_file = "mapdata/pbundle_0000";
+  if (reader->Suffix() == "glb") {
+    index_file = "data/index";
+    data_file = "data/pbundle_0000";
+    std::cout << "Extracting packets for a globe file" << std::endl;
+  }
+
   // For glcs, we need to look inside each layer for the indexes.
   if (is_composite) {
     // Determine if the glc is 2d, 3d, or both
@@ -155,6 +163,7 @@ void ExtractPackets(GlcUnpacker* const unpacker,
     // std::cout << "index offset: " << offset << std::endl;
     if (reader->ReadData(&index_item, offset, sizeof(IndexItem))) {
       uint64 data_offset = data_file_loc.Offset() + index_item.offset;
+      buffer.resize(MIN(max_size, index_item.packet_size));
       if (index_item.packet_size >= max_size) {
         std::cout << "Data item is too big: " << i
                   << " size: " << index_item.packet_size << std::endl;
@@ -162,6 +171,20 @@ void ExtractPackets(GlcUnpacker* const unpacker,
           &buffer[0], data_offset, index_item.packet_size)) {
         char path[256];
         const char* suffix;
+
+        if (index_item.packet_type != kImagePacket) {
+          //todo: dump terrain packets as well
+        }
+        else {
+          etEncoder::DecodeWithDefaultKey(&buffer[0], index_item.packet_size);
+          geEarthImageryPacket protoPacket;
+          if (!protoPacket.ParseFromString(buffer)) {
+            std::cout << "Error parsing protobuf imagery packet" << std::endl;
+            continue;
+          }
+          buffer = protoPacket.ImageData();
+        }
+
         uint64 x;
         uint64 y;
         uint64 btree = index_item.btree_high;
