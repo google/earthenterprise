@@ -83,22 +83,25 @@ env.Command(date_file, [env.Value(build_date_str)],
             [env.WriteToFile(date_file, build_date_str)])
 
 # get the build version
-backup_file = File('#version.txt').abspath
+env.get_open_gee_version().backup_file = File('#version.txt').abspath
+env.get_open_gee_version().label = ARGUMENTS.get('label', '')
+if ARGUMENTS.get('long_version'):
+  env.get_open_gee_version().set_long(ARGUMENTS.get('long_version'))
+
 version_file = File('gee_version.txt').abspath
 built_version_file = env.Command(version_file, [ ],
-                      [env.EmitVersion(version_file, backup_file)])
+                      [env.EmitVersion(version_file)])
 env.AlwaysBuild(built_version_file)
 
-label = ARGUMENTS.get('label', '')
 long_version_file = File('gee_long_version.txt').abspath
 built_long_version_file = env.Command(long_version_file, [ ],
-                      [env.EmitLongVersion(long_version_file, backup_file, label)])
+                      [env.EmitLongVersion(long_version_file)])
 env.AlwaysBuild(built_long_version_file)
 env.install('root', long_version_file)
 
 version_header = File('gee_version.h').abspath
 built_version_header = env.Command(version_header, [ ],
-            [env.EmitVersionHeader(version_header, backup_file)])
+            [env.EmitVersionHeader(version_header)])
 env.AlwaysBuild(built_version_header)
 
 env.Alias('version_files', [version_header, long_version_file, version_file])
