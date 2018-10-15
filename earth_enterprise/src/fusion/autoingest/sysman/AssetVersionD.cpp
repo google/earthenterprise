@@ -124,8 +124,8 @@ AssetVersionImplD::StateChangeNotifier::SendNotifications(
           break;
       }
     } else {
-      notify(NFY_WARN, "'%s' has broken parent '%s'",
-             assetVersion->GetRef().c_str(), ref.c_str());
+      notify(NFY_WARN, "'%s' has broken %s '%s'",
+             assetVersion->GetRef().c_str(), typeName.c_str(), ref.c_str());
     }
   }
   toNotify->clear();
