@@ -14,8 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set +x
-set -e
 
 #-----------------------------------------------------------------
 # Main Function
@@ -30,7 +28,7 @@ set -e
 # (See <https://wiki.debian.org/MaintainerScripts>.)
 case "$1" in
 	0|remove|upgrade)
-		service geserver stop
+		service geserver stop || exit 1
 		remove_service geserver
 		;;
 esac

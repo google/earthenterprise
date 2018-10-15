@@ -390,7 +390,7 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
         into packageInstallRootDir
     }
 
-    from(file('opengee-common/install')) {
+    from(file('opengee-common/src/install')) {
         into packageInstallRootDir
     }
 }
@@ -446,7 +446,7 @@ task openGeeCommonDeb (type: GeeDeb, dependsOn: openGeeCommonInitScripts) {
         into packageInstallRootDir
     }
 
-    from(file('opengee-common/install')) {
+    from(file('opengee-common/src/install')) {
         into packageInstallRootDir
     }
 }
@@ -748,7 +748,7 @@ built from raster, vector, and location properties data.
         into packageInstallRootDir
     }
 
-    from(file('opengee-fusion/install')) {
+    from(file('opengee-fusion/src/install')) {
         into packageInstallRootDir
 
         CopySpecTemplates.expand(delegate, [
@@ -817,7 +817,7 @@ task openGeeFusionDeb (type: GeeDeb, dependsOn: openGeeFusionInitScripts) {
         into packageInstallRootDir
     }
 
-    from(file('opengee-fusion/install')) {
+    from(file('opengee-fusion/src/install')) {
         into packageInstallRootDir
 
         CopySpecTemplates.expand(delegate, [
