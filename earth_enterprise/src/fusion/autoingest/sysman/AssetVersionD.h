@@ -21,6 +21,7 @@
 #include "AssetHandleD.h"
 #include <autoingest/sysman/.idl/TaskStorage.h>
 #include <set>
+#include <memory>
 
 // ****************************************************************************
 // ***  AssetVersionImplD
@@ -46,15 +47,16 @@ class AssetVersionImplD : public virtual AssetVersionImpl
       AssetVersionImplD * const assetVersion;
       std::set<std::string> parentsToNotify;
       std::set<std::string> listenersToNotify;
-      StateChangeNotifier(AssetVersionImplD * const assetVersion) : assetVersion(assetVersion) {}
       static void AddToSet(std::set<std::string> &, const std::vector<std::string> &);
-      void NotifyParents(StateChangeNotifier *);
-      void NotifyListeners(StateChangeNotifier *);
+      void NotifyParents(std::shared_ptr<StateChangeNotifier>);
+      void NotifyListeners(std::shared_ptr<StateChangeNotifier>);
     public:
-      static StateChangeNotifier * GetNotifier(AssetVersionImplD * const, StateChangeNotifier *);
+      static std::shared_ptr<StateChangeNotifier>
+      GetNotifier(AssetVersionImplD * const, std::shared_ptr<StateChangeNotifier>);
+      StateChangeNotifier(AssetVersionImplD * const assetVersion) : assetVersion(assetVersion) {}
+      ~StateChangeNotifier();
       void AddParentsToNotify(const std::vector<std::string> &);
       void AddListenersToNotify(const std::vector<std::string> &);
-      void SendNotifications(StateChangeNotifier *);
   };
 
   static khRefGuard<AssetVersionImplD> Load(const std::string &boundref);
@@ -85,18 +87,18 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   void AddInputAssetRefs(const std::vector<std::string> &inputs_);
   AssetDefs::State StateByInputs(bool *blockersAreOffline = 0,
                                  uint32 *numWaiting = 0) const;
-  void SetState(AssetDefs::State newstate, bool propagate = true, StateChangeNotifier * const = nullptr);
+  void SetState(AssetDefs::State newstate, bool propagate = true, const std::shared_ptr<StateChangeNotifier> = nullptr);
   void SetProgress(double newprogress);
-  void SyncState(StateChangeNotifier * const = nullptr) const; // const so can be called w/o mutable handle
+  void SyncState(const std::shared_ptr<StateChangeNotifier> = nullptr) const; // const so can be called w/o mutable handle
   // will create a mutable handle itself if it
   // needs to call SetState
-  void PropagateStateChange(StateChangeNotifier * const = nullptr);
+  void PropagateStateChange(const std::shared_ptr<StateChangeNotifier> = nullptr);
   void PropagateProgress(void);
   virtual void HandleTaskLost(const TaskLostMsg &msg);
   virtual void HandleTaskProgress(const TaskProgressMsg &msg);
   virtual void HandleTaskDone(const TaskDoneMsg &msg);
-  virtual void HandleChildStateChange(StateChangeNotifier * const) const;
-  virtual void HandleInputStateChange(AssetDefs::State, StateChangeNotifier * const) const;
+  virtual void HandleChildStateChange(const std::shared_ptr<StateChangeNotifier>) const;
+  virtual void HandleInputStateChange(AssetDefs::State, const std::shared_ptr<StateChangeNotifier>) const;
   virtual void HandleChildProgress(const std::string &) const;
   virtual void OnStateChange(AssetDefs::State newstate,
                              AssetDefs::State oldstate);
@@ -108,9 +110,9 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   void SetBad(void);
   void ClearBad(void);
   void Clean(void);
-  virtual void Cancel(StateChangeNotifier * const = nullptr) = 0;
-  virtual void Rebuild(StateChangeNotifier * const = nullptr) = 0;
-  virtual void DoClean(StateChangeNotifier * const = nullptr) = 0;
+  virtual void Cancel(const std::shared_ptr<StateChangeNotifier> = nullptr) = 0;
+  virtual void Rebuild(const std::shared_ptr<StateChangeNotifier> = nullptr) = 0;
+  virtual void DoClean(const std::shared_ptr<StateChangeNotifier> = nullptr) = 0;
   virtual bool MustForceUpdate(void) const { return false; }
 
   class InputVersionHolder : public khRefCounter {
@@ -173,16 +175,16 @@ class LeafAssetVersionImplD : public virtual LeafAssetVersionImpl,
   virtual void HandleTaskLost(const TaskLostMsg &msg);
   virtual void HandleTaskProgress(const TaskProgressMsg &msg);
   virtual void HandleTaskDone(const TaskDoneMsg &msg);
-  virtual void HandleInputStateChange(AssetDefs::State, StateChangeNotifier * const) const;
+  virtual void HandleInputStateChange(AssetDefs::State, const std::shared_ptr<StateChangeNotifier>) const;
   virtual void OnStateChange(AssetDefs::State newstate,
                              AssetDefs::State oldstate);
   virtual void DoSubmitTask(void) = 0;
   virtual bool OfflineInputsBreakMe(void) const { return false; }
 
  public:
-  virtual void Cancel(StateChangeNotifier * const = nullptr);
-  virtual void Rebuild(StateChangeNotifier * const = nullptr);
-  virtual void DoClean(StateChangeNotifier * const = nullptr);
+  virtual void Cancel(const std::shared_ptr<StateChangeNotifier> = nullptr);
+  virtual void Rebuild(const std::shared_ptr<StateChangeNotifier> = nullptr);
+  virtual void DoClean(const std::shared_ptr<StateChangeNotifier> = nullptr);
 };
 
 
@@ -204,8 +206,8 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
 
   virtual AssetDefs::State ComputeState(void) const;
   virtual bool CacheInputVersions(void) const;
-  virtual void HandleChildStateChange(StateChangeNotifier * const) const;
-  virtual void HandleInputStateChange(AssetDefs::State, StateChangeNotifier * const) const;
+  virtual void HandleChildStateChange(const std::shared_ptr<StateChangeNotifier>) const;
+  virtual void HandleInputStateChange(AssetDefs::State, const std::shared_ptr<StateChangeNotifier>) const;
   virtual void HandleChildProgress(const std::string &) const;
   virtual void DelayedBuildChildren(void);
   virtual void OnStateChange(AssetDefs::State newstate,
@@ -217,9 +219,9 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
   void AddChildren(std::vector<MutableAssetVersionD> &children);
 
  public:
-  virtual void Cancel(StateChangeNotifier * const = nullptr);
-  virtual void Rebuild(StateChangeNotifier * const = nullptr);
-  virtual void DoClean(StateChangeNotifier * const = nullptr);
+  virtual void Cancel(const std::shared_ptr<StateChangeNotifier> = nullptr);
+  virtual void Rebuild(const std::shared_ptr<StateChangeNotifier> = nullptr);
+  virtual void DoClean(const std::shared_ptr<StateChangeNotifier> = nullptr);
 };
 
 #endif /* __AssetVersionD_h */
