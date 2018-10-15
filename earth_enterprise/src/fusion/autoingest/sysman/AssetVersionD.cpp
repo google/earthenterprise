@@ -50,7 +50,7 @@ AssetVersionImplD::StateChangeNotifier::AddParentsToNotify(const std::vector<std
   if (!MiscConfig::Instance().ConsolidateListenerNotifications) {
     // If the user has opted not to consolidate notifications, send
     // notifications immediately
-    NotifyParents(nullptr);
+    SendNotifications(PARENTS, nullptr);
   }
 }
 
@@ -60,7 +60,7 @@ AssetVersionImplD::StateChangeNotifier::AddListenersToNotify(const std::vector<s
   if (!MiscConfig::Instance().ConsolidateListenerNotifications) {
     // If the user has opted not to consolidate notifications, send
     // notifications immediately
-    NotifyListeners(nullptr);
+    SendNotifications(LISTENERS, nullptr);
   }
 }
 
@@ -80,56 +80,55 @@ AssetVersionImplD::StateChangeNotifier::~StateChangeNotifier() {
     // duplicates need to be notified again since a relevant state might change
     // as part of this operation.
     std::shared_ptr<StateChangeNotifier> notifier = GetNotifier(assetVersion, nullptr);
-    NotifyParents(notifier);
-    NotifyListeners(notifier);
+    SendNotifications(PARENTS, notifier);
+    SendNotifications(LISTENERS, notifier);
   }
 }
 
 void
-AssetVersionImplD::StateChangeNotifier::NotifyParents(std::shared_ptr<StateChangeNotifier> notifier) {
-  notify(NFY_VERBOSE, "Iterate through parents");
+AssetVersionImplD::StateChangeNotifier::SendNotifications(
+    NotifyType type,
+    std::shared_ptr<StateChangeNotifier> notifier) {
+  std::string typeName;
+  std::set<std::string> * toNotify;
+  switch(type) {
+    case PARENTS:
+      typeName = "parent";
+      toNotify = &parentsToNotify;
+      break;
+    case LISTENERS:
+      typeName = "listener";
+      toNotify = &listenersToNotify;
+      break;
+  }
+
+  notify(NFY_VERBOSE, "Iterate through %ss", typeName.c_str());
   int i = 1;
-  for (const std::string & p : parentsToNotify) {
-    AssetVersionD parent(p);
-    notify(NFY_PROGRESS, "Iteration: %d | Total Iterations: %s | Parent: %s",
+  for (const std::string & ref : *toNotify) {
+    AssetVersionD assetVersion(ref);
+    notify(NFY_PROGRESS, "Iteration: %d | Total Iterations: %s | %s: %s",
            i,
-           ToString(parentsToNotify.size()).c_str(),
-           p.c_str());
-    if (parent) {
-      notify(NFY_VERBOSE, "parent: %s exists", 
-             p.c_str());
-      notify(NFY_VERBOSE, "Calling parent->HandleChildStateChange()");
-      parent->HandleChildStateChange(notifier);
+           ToString(toNotify->size()).c_str(),
+           typeName.c_str(),
+           ref.c_str());
+    if (assetVersion) {
+      switch(type) {
+        case PARENTS:
+          notify(NFY_VERBOSE, "Calling parent->HandleChildStateChange()");
+          assetVersion->HandleChildStateChange(notifier);
+          break;
+        case LISTENERS:
+          notify(NFY_VERBOSE, "Calling listener->HandleInputStateChange(%s)", 
+                ToString(assetVersion->state).c_str());
+          assetVersion->HandleInputStateChange(assetVersion->state, notifier);
+          break;
+      }
     } else {
       notify(NFY_WARN, "'%s' has broken parent '%s'",
-             assetVersion->GetRef().c_str(), p.c_str());
+             assetVersion->GetRef().c_str(), ref.c_str());
     }
   }
-  parentsToNotify.clear();
-}
-
-void
-AssetVersionImplD::StateChangeNotifier::NotifyListeners(std::shared_ptr<StateChangeNotifier> notifier) {
-  notify(NFY_VERBOSE, "Iterate through listeners to notify");
-  int i = 1;
-  for (const std::string & l : listenersToNotify) {
-    AssetVersionD listener(l);
-    notify(NFY_PROGRESS, "Iteration: %d | Total Iterations: %s | Listener: %s",
-           i,
-           ToString(listenersToNotify.size()).c_str(),
-           l.c_str());
-    if (listener) {
-      notify(NFY_VERBOSE, "listener: %s exists",
-             l.c_str());
-      notify(NFY_VERBOSE, "Calling listener->HandleInputStateChange(%s)", 
-             ToString(assetVersion->state).c_str());
-      listener->HandleInputStateChange(assetVersion->state, notifier);
-    } else {
-      notify(NFY_WARN, "'%s' has broken listener '%s'",
-             assetVersion->GetRef().c_str(), l.c_str());
-    }
-  }
-  listenersToNotify.clear();
+  toNotify->clear();
 }
 
 // ****************************************************************************
