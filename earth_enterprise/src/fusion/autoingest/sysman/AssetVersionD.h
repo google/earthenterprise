@@ -87,7 +87,8 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   void AddInputAssetRefs(const std::vector<std::string> &inputs_);
   AssetDefs::State StateByInputs(bool *blockersAreOffline = 0,
                                  uint32 *numWaiting = 0) const;
-  void SetState(AssetDefs::State newstate, bool propagate = true, const std::shared_ptr<StateChangeNotifier> = nullptr);
+  template<bool propagate = true>
+  void SetState(AssetDefs::State newstate, const std::shared_ptr<StateChangeNotifier> = nullptr);
   void SetProgress(double newprogress);
   void SyncState(const std::shared_ptr<StateChangeNotifier> = nullptr) const; // const so can be called w/o mutable handle
   // will create a mutable handle itself if it

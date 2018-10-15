@@ -281,10 +281,10 @@ AssetVersionImplD::StateByInputs(bool *blockersAreOffline,
   return statebyinputs;
 }
 
-void
-AssetVersionImplD::SetState(AssetDefs::State newstate,
-                            bool propagate,
-                            const std::shared_ptr<StateChangeNotifier> notifier)
+template <bool propagate>
+void AssetVersionImplD::SetState(
+    AssetDefs::State newstate,
+    const std::shared_ptr<StateChangeNotifier> notifier)
 {
   if (newstate != state) {
     notify(NFY_DEBUG, "SetState: %s %s",
@@ -334,13 +334,13 @@ AssetVersionImplD::SyncState(const std::shared_ptr<StateChangeNotifier> notifier
     AssetDefs::State newstate = ComputeState();
     if (newstate != state) {
       MutableAssetVersionD self(GetRef());
-      self->SetState(newstate, true, notifier);
+      self->SetState(newstate, notifier);
     }
   } else {
     AssetDefs::State newstate = ComputeState();
     if (newstate != state) {
       MutableAssetVersionD self(GetRef());
-      self->SetState(newstate, true, notifier);
+      self->SetState(newstate, notifier);
     }
   }
 }
@@ -959,7 +959,7 @@ LeafAssetVersionImplD::Rebuild(const std::shared_ptr<StateChangeNotifier> caller
   // of stopping any running tasks, etc
   // false -> don't propagate the new state (we're going to change
   // it right away by calling SyncState)
-  SetState(AssetDefs::New, false, notifier);
+  SetState<false>(AssetDefs::New, notifier);
 
   // Now get my state back to where it should be
   SyncState(notifier);
@@ -978,7 +978,7 @@ LeafAssetVersionImplD::Cancel(const std::shared_ptr<StateChangeNotifier> callerN
   
   // On state change will take care of cleanup (deleting task,
   // clearing fields, etc)
-  SetState(AssetDefs::Canceled, true, notifier);
+  SetState(AssetDefs::Canceled, notifier);
 }
 
 
@@ -996,7 +996,7 @@ LeafAssetVersionImplD::DoClean(const std::shared_ptr<StateChangeNotifier> caller
 
   // On state change will take care of cleanup (deleting task,
   // clearing fields, etc)
-  SetState(AssetDefs::Offline, true, notifier);
+  SetState(AssetDefs::Offline, notifier);
 
   // now try to clean my inputs too
   for (std::vector<std::string>::const_iterator i = inputs.begin();
@@ -1261,7 +1261,7 @@ CompositeAssetVersionImplD::Cancel(const std::shared_ptr<StateChangeNotifier> ca
 
   std::shared_ptr<StateChangeNotifier> notifier = StateChangeNotifier::GetNotifier(this, callerNotifier);
 
-  SetState(AssetDefs::Canceled, true, notifier);
+  SetState(AssetDefs::Canceled, notifier);
 
   std::vector<AssetVersion> tocancel;
   ChildrenToCancel(tocancel);
@@ -1293,7 +1293,7 @@ CompositeAssetVersionImplD::DoClean(const std::shared_ptr<StateChangeNotifier> c
 
   // On state change will take care of cleanup (deleting task,
   // clearing fields, etc)
-  SetState(AssetDefs::Offline, true, notifier);
+  SetState(AssetDefs::Offline, notifier);
 
   // now try to clean my children
   for (std::vector<std::string>::const_iterator c = children.begin();
