@@ -1,0 +1,772 @@
+State Propagation Correctness Tests
+===================================
+
+Test handling and propagation of state changes.
+
+These tests assume you have installed fusion, that the asset root is at
+/gevol/assets, that the source volume contains the tutorial data, stored by default 
+in /gevol/src/gauge_tests/.:quickly:~.:
+
+
+Some of these tests are timing dependent. For example, if we are testing that
+the state of a particular asset is "InProgress", that step will fail if the
+build completes too quickly and the asset goes to the "Succeeded" state.
+
+Missing tests: there is no test that transitions a resource to a failed state.
+Such a test requires an invalid image with a valid extension (such as .tif or
+.jp2). No such image is provided by default and adding one to a source volume
+requires superuser permissions.
+
+For a clean setup to run these tests multiple times, run `clean_test_setup.sh`,
+located in the same directory as this file.  WARNING: this script DELETES assets
+in the asset_root and may require privileged access to run.
+
+Set up
+* Create asset root directories
+
+## Build, Clean, and Rebuild Project Test
+
+Build
+* Create and build default project "BasicBuild"
+* Wait for imagery project "StatePropagationTest_BasicBuild" to reach state "Succeeded"
+* Verify that the state of images for default project "BasicBuild" is "Succeeded"
+
+Clean
+* Clean imagery project "StatePropagationTest_BasicBuild"
+* Verify that the state of imagery project "StatePropagationTest_BasicBuild" is "Cleaned"
+* Verify that the state of images for default project "BasicBuild" is "Succeeded"
+
+Rebuild
+* Build imagery project "StatePropagationTest_BasicBuild"
+* Wait for imagery project "StatePropagationTest_BasicBuild" to reach state "Succeeded"
+* Verify that the state of images for default project "BasicBuild" is "Succeeded"
+
+## Cancel and Resume Project Before Packgen
+
+Build
+* Create and build default project "CancelProjectEarly"
+
+Cancel
+* Cancel imagery project "StatePropagationTest_CancelProjectEarly"
+* Verify that the state of images for default project "CancelProjectEarly" is in
+  | State      |
+  |------------|
+  | InProgress |
+  | Queued     |
+* Verify that the state of imagery project "StatePropagationTest_CancelProjectEarly" is "Canceled"
+
+Resume
+* Resume imagery project "StatePropagationTest_CancelProjectEarly"
+* Verify that the state of imagery project "StatePropagationTest_CancelProjectEarly" is "Waiting"
+* Wait for imagery project "StatePropagationTest_CancelProjectEarly" to reach state "Succeeded"
+* Verify that the state of images for default project "CancelProjectEarly" is "Succeeded"
+
+## Cancel, Resume, Clean, and Rebuild Resource While Project is Building
+
+Build
+* Create and build default project "CancelResourceDuringBuild"
+
+Cancel
+* Cancel imagery resource "BlueMarble_CancelResourceDuringBuild"
+* Verify that the state of imagery resource "BlueMarble_CancelResourceDuringBuild" is "Canceled"
+* Verify that the state of imagery resource "i3SF15meter_CancelResourceDuringBuild" is in
+  | State      |
+  |------------|
+  | InProgress |
+  | Queued     |
+  | Succeeded  |
+* Verify that the state of imagery resource "USGSLanSat_CancelResourceDuringBuild" is in
+  | State      |
+  |------------|
+  | InProgress |
+  | Queued     |
+  | Succeeded  |
+* Verify that the state of imagery resource "SFHiRes_CancelResourceDuringBuild" is in
+  | State      |
+  |------------|
+  | InProgress |
+  | Queued     |
+  | Succeeded  |
+* Verify that the state of imagery project "StatePropagationTest_CancelResourceDuringBuild" is "Blocked"
+
+Resume
+* Resume imagery resource "BlueMarble_CancelResourceDuringBuild"
+* Verify that the state of imagery resource "BlueMarble_CancelResourceDuringBuild" is in
+  | State      |
+  |------------|
+  | InProgress |
+  | Queued     |
+* Verify that the state of imagery project "StatePropagationTest_CancelResourceDuringBuild" is "Waiting"
+* Wait for imagery project "StatePropagationTest_CancelResourceDuringBuild" to reach state "Succeeded"
+* Verify that the state of images for default project "CancelResourceDuringBuild" is "Succeeded"
+
+Clean
+* Clean imagery resource "BlueMarble_CancelResourceDuringBuild"
+* Verify that the state of imagery resource "BlueMarble_CancelResourceDuringBuild" is "Cleaned"
+* Verify that the state of imagery project "StatePropagationTest_CancelResourceDuringBuild" is "Succeeded"
+* Verify that the state of imagery resource "i3SF15meter_CancelResourceDuringBuild" is "Succeeded"
+* Verify that the state of imagery resource "USGSLanSat_CancelResourceDuringBuild" is "Succeeded"
+* Verify that the state of imagery resource "SFHiRes_CancelResourceDuringBuild" is "Succeeded"
+
+Rebuild
+* Build imagery project "StatePropagationTest_CancelResourceDuringBuild"
+* Verify that the state of imagery project "StatePropagationTest_CancelResourceDuringBuild" is "Waiting"
+* Wait for imagery project "StatePropagationTest_CancelResourceDuringBuild" to reach state "Succeeded"
+* Verify that the state of imagery resource "BlueMarble_CancelResourceDuringBuild" is "Succeeded"
+
+## Cancel, Resume, Clean, and Rebuild Project During Packgen
+
+Build
+* Create and build default project "CancelProjectLate"
+* Wait for imagery project "StatePropagationTest_CancelProjectLate" to reach state "Queued"
+
+Cancel
+* Cancel imagery project "StatePropagationTest_CancelProjectLate"
+* Verify that the state of images for default project "CancelProjectLate" is "Succeeded"
+* Verify that the state of imagery project "StatePropagationTest_CancelProjectLate" is "Canceled"
+
+Resume
+* Resume imagery project "StatePropagationTest_CancelProjectLate"
+* Verify that the state of images for default project "CancelProjectLate" is "Succeeded"
+* Verify that the state of imagery project "StatePropagationTest_CancelProjectLate" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+* Wait for imagery project "StatePropagationTest_CancelProjectLate" to reach state "Succeeded"
+* Verify that the state of images for default project "CancelProjectLate" is "Succeeded"
+
+Clean
+* Clean imagery project "StatePropagationTest_CancelProjectLate"
+* Verify that the state of imagery project "StatePropagationTest_CancelProjectLate" is "Cleaned"
+* Verify that the state of images for default project "CancelProjectLate" is "Succeeded"
+
+Rebuild
+* Build imagery project "StatePropagationTest_CancelProjectLate"
+* Wait for imagery project "StatePropagationTest_CancelProjectLate" to reach state "Succeeded"
+* Verify that the state of images for default project "CancelProjectLate" is "Succeeded"
+
+## Clean After Cancel
+
+Build
+* Create and build default project "CleanAfterCancel"
+
+Cancel Resource
+* Cancel imagery resource "BlueMarble_CleanAfterCancel"
+* Verify that the state of imagery resource "BlueMarble_CleanAfterCancel" is "Canceled"
+* Verify that the state of imagery resource "i3SF15meter_CleanAfterCancel" is in
+  | State      |
+  |------------|
+  | InProgress |
+  | Queued     |
+  | Succeeded  |
+* Verify that the state of imagery resource "USGSLanSat_CleanAfterCancel" is in
+  | State      |
+  |------------|
+  | InProgress |
+  | Queued     |
+  | Succeeded  |
+* Verify that the state of imagery resource "SFHiRes_CleanAfterCancel" is in
+  | State      |
+  |------------|
+  | InProgress |
+  | Queued     |
+  | Succeeded  |
+* Verify that the state of imagery project "StatePropagationTest_CleanAfterCancel" is "Blocked"
+
+Clean Resource
+* Clean imagery resource "BlueMarble_CleanAfterCancel"
+* Verify that the state of imagery resource "BlueMarble_CleanAfterCancel" is "Cleaned"
+* Verify that the state of imagery project "StatePropagationTest_CleanAfterCancel" is "Blocked"
+* Verify that the state of imagery resource "i3SF15meter_CleanAfterCancel" is in
+  | State      |
+  |------------|
+  | InProgress |
+  | Queued     |
+  | Succeeded  |
+* Verify that the state of imagery resource "USGSLanSat_CleanAfterCancel" is in
+  | State      |
+  |------------|
+  | InProgress |
+  | Queued     |
+  | Succeeded  |
+* Verify that the state of imagery resource "SFHiRes_CleanAfterCancel" is in
+  | State      |
+  |------------|
+  | InProgress |
+  | Queued     |
+  | Succeeded  |
+
+Rebuild Resource
+* Build imagery resource "BlueMarble_CleanAfterCancel"
+* Verify that the state of images for default project "CleanAfterCancel" is in
+  | State      |
+  |------------|
+  | InProgress |
+  | Queued     |
+  | Succeeded  |
+The project will not start building again without user input
+* Resume imagery project "StatePropagationTest_CleanAfterCancel"
+
+Cancel Project
+* Cancel imagery project "StatePropagationTest_CleanAfterCancel"
+* Verify that the state of images for default project "CleanAfterCancel" is in
+  | State      |
+  |------------|
+  | InProgress |
+  | Queued     |
+* Verify that the state of imagery project "StatePropagationTest_CleanAfterCancel" is "Canceled"
+
+Clean Project
+* Clean imagery project "StatePropagationTest_CleanAfterCancel"
+* Verify that the state of images for default project "CleanAfterCancel" is in
+  | State      |
+  |------------|
+  | InProgress |
+  | Queued     |
+  | Succeeded  |
+* Verify that the state of imagery project "StatePropagationTest_CleanAfterCancel" is "Cleaned"
+
+Rebuild Project
+* Build imagery project "StatePropagationTest_CleanAfterCancel"
+* Wait for imagery project "StatePropagationTest_CleanAfterCancel" to reach state "Succeeded"
+* Verify that the state of images for default project "CleanAfterCancel" is "Succeeded"
+
+## Clean and Cancel Project and Resource, Then Rebuild Project
+
+Build
+* Create and build default project "CleanCancelRebuildProject"
+
+Cancel Resource and Project
+* Cancel imagery resource "BlueMarble_CleanCancelRebuildProject"
+* Verify that the state of imagery resource "BlueMarble_CleanCancelRebuildProject" is "Canceled"
+* Cancel imagery project "StatePropagationTest_CleanCancelRebuildProject"
+* Verify that the state of imagery project "StatePropagationTest_CleanCancelRebuildProject" is "Canceled"
+
+Rebuild Project
+* Build imagery project "StatePropagationTest_CleanCancelRebuildProject"
+* Verify that the state of imagery project "StatePropagationTest_CleanCancelRebuildProject" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+* Verify that the state of imagery resource "BlueMarble_CleanCancelRebuildProject" is in
+  | State      |
+  |------------|
+  | InProgress |
+  | Queued     |
+
+Cancel Resource and Project
+* Cancel imagery resource "BlueMarble_CleanCancelRebuildProject"
+* Verify that the state of imagery resource "BlueMarble_CleanCancelRebuildProject" is "Canceled"
+* Cancel imagery project "StatePropagationTest_CleanCancelRebuildProject"
+* Verify that the state of imagery project "StatePropagationTest_CleanCancelRebuildProject" is "Canceled"
+
+Clean Resource and Project
+* Clean imagery resource "BlueMarble_CleanCancelRebuildProject"
+* Verify that the state of imagery resource "BlueMarble_CleanCancelRebuildProject" is "Cleaned"
+* Clean imagery project "StatePropagationTest_CleanCancelRebuildProject"
+* Verify that the state of imagery project "StatePropagationTest_CleanCancelRebuildProject" is "Cleaned"
+
+Rebuild Project
+* Build imagery project "StatePropagationTest_CleanCancelRebuildProject"
+* Verify that the state of imagery project "StatePropagationTest_CleanCancelRebuildProject" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+  | Succeeded  |
+* Verify that the state of imagery resource "BlueMarble_CleanCancelRebuildProject" is in
+  | State      |
+  |------------|
+  | InProgress |
+  | Queued     |
+  | Succeeded  |
+* Wait for imagery project "StatePropagationTest_CleanCancelRebuildProject" to reach state "Succeeded"
+* Verify that the state of images for default project "CleanCancelRebuildProject" is "Succeeded"
+
+## Resources Belonging to Multiple Projects
+This is the longest test (in terms of time) because it includes buliding a
+terrain resource.
+
+Set up
+* Create imagery project "StatePropagationTest_MultiProject1"
+* Create imagery project "StatePropagationTest_MultiProject2"
+* Create imagery resource "BlueMarble_MultiProject" from "Imagery/bluemarble_4km.tif"
+* Add imagery resource "BlueMarble_MultiProject" to project "StatePropagationTest_MultiProject1"
+* Add imagery resource "BlueMarble_MultiProject" to project "StatePropagationTest_MultiProject2"
+* Create imagery resource "USGSLanSat_MultiProject" from "Imagery/usgsLanSat.tif"
+* Add imagery resource "USGSLanSat_MultiProject" to project "StatePropagationTest_MultiProject1"
+* Add imagery resource "USGSLanSat_MultiProject" to project "StatePropagationTest_MultiProject2"
+
+Build
+* Build imagery project "StatePropagationTest_MultiProject1"
+* Build imagery project "StatePropagationTest_MultiProject2"
+
+Cancel Resource
+* Cancel imagery resource "USGSLanSat_MultiProject"
+* Verify that the state of imagery resource "USGSLanSat_MultiProject" is "Canceled"
+* Verify that the state of imagery project "StatePropagationTest_MultiProject1" is "Blocked"
+* Verify that the state of imagery project "StatePropagationTest_MultiProject2" is "Blocked"
+
+Build Resource
+* Build imagery resource "USGSLanSat_MultiProject"
+* Verify that the state of imagery resource "USGSLanSat_MultiProject" is in
+  | State      |
+  |------------|
+  | InProgress |
+  | Queued     |
+* Verify that the state of imagery project "StatePropagationTest_MultiProject1" is "Waiting"
+* Verify that the state of imagery project "StatePropagationTest_MultiProject2" is "Waiting"
+
+Cancel and Clean Resource
+* Cancel imagery resource "USGSLanSat_MultiProject"
+* Clean imagery resource "USGSLanSat_MultiProject"
+* Verify that the state of imagery resource "USGSLanSat_MultiProject" is "Cleaned"
+* Verify that the state of imagery project "StatePropagationTest_MultiProject1" is "Blocked"
+* Verify that the state of imagery project "StatePropagationTest_MultiProject2" is "Blocked"
+
+Build Resource
+* Build imagery resource "USGSLanSat_MultiProject"
+* Verify that the state of imagery resource "USGSLanSat_MultiProject" is in
+  | State      |
+  |------------|
+  | InProgress |
+  | Queued     |
+* Build imagery project "StatePropagationTest_MultiProject1"
+* Build imagery project "StatePropagationTest_MultiProject2"
+* Verify that the state of imagery project "StatePropagationTest_MultiProject1" is "Waiting"
+* Verify that the state of imagery project "StatePropagationTest_MultiProject2" is "Waiting"
+
+Cancel Project
+* Cancel imagery project "StatePropagationTest_MultiProject1"
+* Verify that the state of imagery project "StatePropagationTest_MultiProject1" is "Canceled"
+* Verify that the state of imagery resource "USGSLanSat_MultiProject" is in
+  | State      |
+  |------------|
+  | InProgress |
+  | Queued     |
+* Verify that the state of imagery project "StatePropagationTest_MultiProject2" is "Waiting"
+
+Clean Project
+* Clean imagery project "StatePropagationTest_MultiProject1"
+* Verify that the state of imagery project "StatePropagationTest_MultiProject1" is "Cleaned"
+* Verify that the state of imagery resource "USGSLanSat_MultiProject" is in
+  | State      |
+  |------------|
+  | InProgress |
+  | Queued     |
+* Verify that the state of imagery project "StatePropagationTest_MultiProject2" is "Waiting"
+
+Wait for project 2 to build
+* Wait for imagery project "StatePropagationTest_MultiProject2" to reach state "Succeeded"
+* Verify that the state of imagery project "StatePropagationTest_MultiProject1" is "Cleaned"
+* Verify that the state of imagery resource "BlueMarble_MultiProject" is "Succeeded"
+* Verify that the state of imagery resource "USGSLanSat_MultiProject" is "Succeeded"
+
+Finish building project 1
+* Build imagery project "StatePropagationTest_MultiProject1"
+* Wait for imagery project "StatePropagationTest_MultiProject1" to reach state "Succeeded"
+* Verify that the state of imagery project "StatePropagationTest_MultiProject2" is "Succeeded"
+* Verify that the state of imagery resource "BlueMarble_MultiProject" is "Succeeded"
+* Verify that the state of imagery resource "USGSLanSat_MultiProject" is "Succeeded"
+
+Clean resource after build
+* Clean imagery resource "USGSLanSat_MultiProject"
+* Verify that the state of imagery project "StatePropagationTest_MultiProject1" is "Succeeded"
+* Verify that the state of imagery project "StatePropagationTest_MultiProject2" is "Succeeded"
+* Build imagery resource "USGSLanSat_MultiProject"
+* Build imagery project "StatePropagationTest_MultiProject1"
+* Verify that the state of imagery project "StatePropagationTest_MultiProject1" is "Waiting"
+* Verify that the state of imagery project "StatePropagationTest_MultiProject2" is "Succeeded"
+* Cancel imagery resource "USGSLanSat_MultiProject"
+* Verify that the state of imagery project "StatePropagationTest_MultiProject1" is "Blocked"
+* Verify that the state of imagery project "StatePropagationTest_MultiProject2" is "Succeeded"
+* Build imagery resource "USGSLanSat_MultiProject"
+* Verify that the state of imagery project "StatePropagationTest_MultiProject1" is "Waiting"
+* Verify that the state of imagery project "StatePropagationTest_MultiProject2" is "Succeeded"
+* Wait for imagery project "StatePropagationTest_MultiProject1" to reach state "Succeeded"
+* Verify that the state of imagery project "StatePropagationTest_MultiProject2" is "Succeeded"
+
+## Set Bad and Good
+
+Set up and build
+* Create and build default project "BadAndGood"
+* Create database "Database_BadAndGood" from imagery project "StatePropagationTest_BadAndGood"
+* Build database "Database_BadAndGood"
+* Wait for database "Database_BadAndGood" to reach state "Succeeded"
+* Verify that the state of imagery project "StatePropagationTest_BadAndGood" is "Succeeded"
+* Verify that the state of images for default project "BadAndGood" is "Succeeded"
+
+Mark resource bad
+* Mark imagery resource "BlueMarble_BadAndGood" bad
+* Verify that the state of database "Database_BadAndGood" is "Succeeded"
+* Verify that the state of imagery project "StatePropagationTest_BadAndGood" is "Succeeded"
+* Verify that the state of imagery resource "BlueMarble_BadAndGood" is "Bad"
+* Verify that the state of imagery resource "i3SF15meter_BadAndGood" is "Succeeded"
+* Verify that the state of imagery resource "USGSLanSat_BadAndGood" is "Succeeded"
+* Verify that the state of imagery resource "SFHiRes_BadAndGood" is "Succeeded"
+
+Mark resource good
+* Mark imagery resource "BlueMarble_BadAndGood" good
+* Verify that the state of database "Database_BadAndGood" is "Succeeded"
+* Verify that the state of imagery project "StatePropagationTest_BadAndGood" is "Succeeded"
+* Verify that the state of images for default project "BadAndGood" is "Succeeded"
+
+Mark project bad
+* Mark imagery project "StatePropagationTest_BadAndGood" bad
+* Verify that the state of database "Database_BadAndGood" is "Succeeded"
+* Verify that the state of imagery project "StatePropagationTest_BadAndGood" is "Bad"
+* Verify that the state of images for default project "BadAndGood" is "Succeeded"
+
+Mark project good
+* Mark imagery project "StatePropagationTest_BadAndGood" good
+* Verify that the state of database "Database_BadAndGood" is "Succeeded"
+* Verify that the state of imagery project "StatePropagationTest_BadAndGood" is "Succeeded"
+* Verify that the state of images for default project "BadAndGood" is "Succeeded"
+
+Mark database bad
+* Mark database "Database_BadAndGood" bad
+* Verify that the state of database "Database_BadAndGood" is "Bad"
+* Verify that the state of imagery project "StatePropagationTest_BadAndGood" is "Succeeded"
+* Verify that the state of images for default project "BadAndGood" is "Succeeded"
+
+Mark database good
+* Mark database "Database_BadAndGood" good
+* Verify that the state of database "Database_BadAndGood" is "Succeeded"
+* Verify that the state of imagery project "StatePropagationTest_BadAndGood" is "Succeeded"
+* Verify that the state of images for default project "BadAndGood" is "Succeeded"
+
+## Cancel resource before building database or project
+
+Set up
+* Create imagery project "StatePropagationTest_CancelBeforeBuild"
+* Create imagery resource "BlueMarble_CancelBeforeBuild" from "Imagery/bluemarble_4km.tif" and add to project "StatePropagationTest_CancelBeforeBuild"
+* Create database "Database_CancelBeforeBuild" from imagery project "StatePropagationTest_CancelBeforeBuild"
+* Build imagery resource "BlueMarble_CancelBeforeBuild"
+
+Cancel resource before the project or database is built
+* Cancel imagery resource "BlueMarble_CancelBeforeBuild"
+* Verify that the state of imagery resource "BlueMarble_CancelBeforeBuild" is "Canceled"
+* Verify that the state of imagery project "StatePropagationTest_CancelBeforeBuild" is "Bad"
+* Verify that the state of database "Database_CancelBeforeBuild" is "Bad"
+
+Build the database
+* Build database "Database_CancelBeforeBuild"
+* Verify that the state of imagery resource "BlueMarble_CancelBeforeBuild" is in
+  | State      |
+  |------------|
+  | Queued     |
+  | InProgress |
+* Verify that the state of imagery project "StatePropagationTest_CancelBeforeBuild" is "Waiting"
+* Verify that the state of database "Database_CancelBeforeBuild" is "Waiting"
+* Wait for database "Database_CancelBeforeBuild" to reach state "Succeeded"
+* Verify that the state of imagery resource "BlueMarble_CancelBeforeBuild" is "Succeeded"
+* Verify that the state of imagery project "StatePropagationTest_CancelBeforeBuild" is "Succeeded"
+
+## Build bad project
+* Create imagery project "StatePropagationTest_BadImageryProject1"
+* Create imagery resource "BadImagery_MultiProject" from "Imagery/BadTestImage1.jp2"
+* Add imagery resource "BadImagery_MultiProject" to project "StatePropagationTest_BadImageryProject1"
+* Verify that the state of imagery resource "StatePropagationTest_BadImageryProject1" is "Failed"
+  
+## Map Projects and Mercator Assets
+We do not test Map and Mercator assets as thoroughly as flat assets since much
+of the processing is the same.
+
+Set up
+* Create mercator imagery project "StatePropagationTest_Mercator"
+* Create mercator imagery resource "BlueMarble_Mercator" from "Imagery/bluemarble_4km.tif"
+* Add mercator imagery resource "BlueMarble_Mercator" to project "StatePropagationTest_Mercator"
+* Create vector resource "CA_POIs_Merc" from "Vector/california_popplaces.csv"
+* Build vector resource "CA_POIs_Merc"
+* Wait for vector resource "CA_POIs_Merc" to reach state "Succeeded"
+* Create map layer "StatePropagationTest_Mercator" from resource "CA_POIs_Merc"
+* Create map project "StatePropagationTest_Mercator" from layer "StatePropagationTest_Mercator"
+* Create map database "Database_Mercator" from imagery project "StatePropagationTest_Mercator" and map project "StatePropagationTest_Mercator"
+
+Build database
+* Build database "Database_Mercator"
+* Verify that the state of database "Database_Mercator" is "Waiting"
+* Verify that the state of map project "StatePropagationTest_Mercator" is "Waiting"
+* Verify that the state of map layer "StatePropagationTest_Mercator" is "InProgress"
+* Verify that the state of vector resource "CA_POIs_Merc" is "Succeeded"
+* Verify that the state of imagery project "StatePropagationTest_Mercator" is "Waiting"
+* Verify that the state of imagery resource "BlueMarble_Mercator" is "InProgress"
+
+Wait for success
+* Wait for database "Database_Mercator" to reach state "Succeeded"
+* Verify that the state of database "Database_Mercator" is "Succeeded"
+* Verify that the state of map project "StatePropagationTest_Mercator" is "Succeeded"
+* Verify that the state of map layer "StatePropagationTest_Mercator" is "Succeeded"
+* Verify that the state of vector resource "CA_POIs_Merc" is "Succeeded"
+* Verify that the state of imagery project "StatePropagationTest_Mercator" is "Succeeded"
+* Verify that the state of imagery resource "BlueMarble_Mercator" is "Succeeded"
+
+## Database, Terrain, and Vector Tests
+We do not test terrain and vector assets as thoroughly as imagery assets since much of the
+processing will be the same.
+
+Set up and Build
+* Create imagery project "StatePropagationTest_Database"
+* Create terrain project "StatePropagationTest_Database"
+* Create vector project "StatePropagationTest_Database"
+* Create imagery resource "BlueMarble_Database" from "Imagery/bluemarble_4km.tif" and add to project "StatePropagationTest_Database"
+* Create terrain resource "GTopo_Database" from "Terrain/gtopo30_4km.tif" and add to project "StatePropagationTest_Database"
+* Create and build vector resource "CA_POIs_Database" from "Vector/california_popplaces.csv" and add to project "StatePropagationTest_Database"
+* Create database "Database_DatabaseTest" from imagery project "StatePropagationTest_Database", terrain project "StatePropagationTest_Database", and vector project "StatePropagationTest_Database"
+* Build database "Database_DatabaseTest"
+* Verify that the state of imagery project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+* Verify that the state of terrain project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+* Verify that the state of vector project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+  | Succeeded  |
+* Verify that the state of database "Database_DatabaseTest" is "Waiting"
+
+Cancel project
+* Cancel imagery project "StatePropagationTest_Database"
+* Verify that the state of imagery project "StatePropagationTest_Database" is "Canceled"
+* Verify that the state of terrain project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+* Verify that the state of vector project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+  | Succeeded  |
+* Verify that the state of database "Database_DatabaseTest" is "Blocked"
+
+Rebuild project
+* Build imagery project "StatePropagationTest_Database"
+* Build database "Database_DatabaseTest"
+* Verify that the state of imagery project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+* Verify that the state of terrain project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+* Verify that the state of vector project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+  | Succeeded  |
+* Verify that the state of database "Database_DatabaseTest" is "Waiting"
+
+Cancel resource
+* Cancel imagery resource "BlueMarble_Database"
+* Verify that the state of imagery resource "BlueMarble_Database" is "Canceled"
+* Verify that the state of imagery project "StatePropagationTest_Database" is "Blocked"
+* Verify that the state of terrain project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+* Verify that the state of vector project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+  | Succeeded  |
+* Verify that the state of database "Database_DatabaseTest" is "Blocked"
+
+Clean resource
+* Clean imagery resource "BlueMarble_Database"
+* Verify that the state of imagery resource "BlueMarble_Database" is "Cleaned"
+* Verify that the state of imagery project "StatePropagationTest_Database" is "Blocked"
+* Verify that the state of terrain project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+* Verify that the state of vector project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+  | Succeeded  |
+* Verify that the state of database "Database_DatabaseTest" is "Blocked"
+
+Rebuild resource
+* Build imagery resource "BlueMarble_Database"
+* Build imagery project "StatePropagationTest_Database"
+* Build database "Database_DatabaseTest"
+* Verify that the state of imagery project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+* Verify that the state of terrain project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+* Verify that the state of vector project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+  | Succeeded  |
+* Verify that the state of database "Database_DatabaseTest" is "Waiting"
+
+Cancel database
+* Cancel database "Database_DatabaseTest"
+* Verify that the state of imagery project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+* Verify that the state of terrain project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+* Verify that the state of vector project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+  | Succeeded  |
+* Verify that the state of imagery resource "BlueMarble_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+* Verify that the state of terrain resource "GTopo_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+* Verify that the state of vector resource "CA_POIs_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Succeeded  |
+* Verify that the state of database "Database_DatabaseTest" is "Canceled"
+
+Clean database
+* Clean database "Database_DatabaseTest"
+* Verify that the state of imagery project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+* Verify that the state of terrain project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+* Verify that the state of vector project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+  | Succeeded  |
+* Verify that the state of imagery resource "BlueMarble_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+* Verify that the state of terrain resource "GTopo_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+* Verify that the state of vector resource "CA_POIs_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Succeeded  |
+* Verify that the state of database "Database_DatabaseTest" is "Cleaned"
+
+Rebuild Database
+* Build database "Database_DatabaseTest"
+* Verify that the state of imagery project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+* Verify that the state of terrain project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+* Verify that the state of vector project "StatePropagationTest_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Queued     |
+  | Succeeded  |
+* Verify that the state of imagery resource "BlueMarble_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+* Verify that the state of terrain resource "GTopo_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+* Verify that the state of vector resource "CA_POIs_Database" is in
+  | State      |
+  |------------|
+  | Waiting    |
+  | InProgress |
+  | Succeeded  |
+* Verify that the state of database "Database_DatabaseTest" is "Waiting"
+
+Wait for database to succeed
+* Wait for database "Database_DatabaseTest" to reach state "Succeeded"
+* Verify that the state of imagery project "StatePropagationTest_Database" is "Succeeded"
+* Verify that the state of terrain project "StatePropagationTest_Database" is "Succeeded"
+* Verify that the state of vector project "StatePropagationTest_Database" is "Succeeded"
+* Verify that the state of imagery resource "BlueMarble_Database" is "Succeeded"
+* Verify that the state of terrain resource "GTopo_Database" is "Succeeded"
+* Verify that the state of vector resource "CA_POIs_Database" is "Succeeded"
