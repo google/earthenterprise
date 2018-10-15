@@ -44,12 +44,12 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   // versions.
   class StateChangeNotifier {
     private:
+      enum NotifyType {PARENTS, LISTENERS};
       AssetVersionImplD * const assetVersion;
       std::set<std::string> parentsToNotify;
       std::set<std::string> listenersToNotify;
       static void AddToSet(std::set<std::string> &, const std::vector<std::string> &);
-      void NotifyParents(std::shared_ptr<StateChangeNotifier>);
-      void NotifyListeners(std::shared_ptr<StateChangeNotifier>);
+      void SendNotifications(NotifyType, std::shared_ptr<StateChangeNotifier>);
     public:
       static std::shared_ptr<StateChangeNotifier>
       GetNotifier(AssetVersionImplD * const, std::shared_ptr<StateChangeNotifier>);
