@@ -240,8 +240,9 @@ AssetVersionImplD::StateByInputs(bool *blockersAreOffline,
                            AssetDefs::Bad)) {
         ++numblocking;
         // At this point we already know what the values of all of the outputs
-        // (statebyinputs, blockersAreOffline, and numWaiting) will be, so
-        // there's no need to continue looping.
+        // will be (statebyinputs will be Blocked, blockersAreOffline will
+        // be false since numblockers will be different from numoffline, and
+        // numWaiting will be 0 because statebyinputs is not Waiting).
         break;
       }
     } else {
@@ -249,8 +250,9 @@ AssetVersionImplD::StateByInputs(bool *blockersAreOffline,
              GetRef().c_str(), input->GetRef().c_str());
       ++numblocking;
       // At this point we already know what the values of all of the outputs
-      // (statebyinputs, blockersAreOffline, and numWaiting) will be, so
-      // there's no need to continue looping.
+      // will be (statebyinputs will be Blocked, blockersAreOffline will
+      // be false since numblockers will be different from numoffline, and
+      // numWaiting will be 0 because statebyinputs is not Waiting).
       break;
     }
   }
