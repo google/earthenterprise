@@ -43,7 +43,8 @@ gtag('config', 'UA-108632131-2');
   <h5>
     <p id="overview_5.2.5">New Features</p>
   </h5>
-  <p><strong>When a GEE server is queried for server definitions the response can be returned in proper JSON format.</strong> The <code>v</code> parameter can be added to query string to specify which version of the API will be returned. The valid options are <code>v=1</code> and <code>v=2</code>. Version one returns data in the current format. Version two returns data in JSON format. An example url which returns data in JSON format looks like: <code>http://&lt;GEE earth server&gt;/&lt;database_publish_point&gt;/query?request=Json&amp;v=2</code>.</p>
+    <p><strong>When a GEE server is queried for server definitions the response can be returned in proper JSON format.</strong> The <code>v</code> parameter can be added to query string to specify which version of the API will be returned. The valid options are <code>v=1</code> and <code>v=2</code>. Version one returns data in the current format. Version two returns data in JSON format. An example url which returns data in JSON format looks like: <code>http://&lt;GEE earth server&gt;/&lt;database_publish_point&gt;/query?request=Json&amp;v=2</code>.</p>
+    <p><strong>Enable WMS when publishing from the commaind line.</strong> <code>geserveradmin --publishdb</code> has a new option <code>--serve_wms</code>. Passing this flag enables WMS for the database you are publishing.</p>
   <h5>
     <p id="supported_5.2.5">Supported Platforms</p>
   </h5>
