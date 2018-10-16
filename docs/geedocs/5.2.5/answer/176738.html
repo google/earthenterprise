@@ -1,0 +1,265 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Configure Fusion performance</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 176738.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/3481464.html">Before you configure Google Earth Enterprise Fusion</a></p>
+<p class="sidebar-toc"><a href="../answer/6008655.html">Running Fusion on a Machine with Multiple CPUs</a></p>
+<p class="sidebar-toc"><a href="../answer/7160005.html">Dynamically adjusting logging levels</a></p>
+<p class="sidebar-toc"><a href="../answer/176738.html" class="current-file">Configure Fusion performance</a></p>
+<p class="sidebar-toc"><a href="../answer/6033487.html">Benchmarking outcomes for applying task rules</a></p>
+<p class="sidebar-toc"><a href="../answer/3481501.html">Configure font size in the GUI</a></p>
+<p class="sidebar-toc"><a href="../answer/3481506.html">Configure fonts for the Text Style dialog</a></p>
+<p class="sidebar-toc"><a href="../answer/3481478.html">Customize your Google Maps landing page</a></p>
+<p class="sidebar-toc"><a href="../answer/3481512.html">Monitor system processes</a></p>
+<p class="sidebar-toc"><a href="../answer/3481546.html">Backing up your data</a></p>
+<p class="sidebar-toc"><a href="../answer/2760661.html">Back up Fusion servers</a></p>
+<p class="sidebar-toc"><a href="../answer/176676.html">Manage Fusion disk space</a></p>
+<p class="sidebar-toc"><a href="../answer/6035839.html">Relocate your asset root</a></p>
+<p class="sidebar-toc"><a href="../answer/3481499.html">Configure your data locations</a></p>
+<p class="sidebar-toc"><a href="../answer/6034724.html">Push and publish databases</a></p>
+<p class="sidebar-toc"><a href="../answer/6051700.html">Publish databases using disconnected publishing</a></p>
+<p class="sidebar-toc"><a href="../answer/6086672.html">Troubleshoot push/publishing issues 5.x</a></p>
+<p class="sidebar-toc"><a href="../answer/3481558.html">Command reference</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion administration</h1>
+<h2>Configure Fusion performance</h2>
+<p>You can tune the performance of Fusion by setting up task rules and by modifying the sizes of the asset caches.</p>
+<h2>Configure task rules</h2>
+<p>You can use <em>task rules</em> to change how Fusion builds data. As soon as you implement a task rule, it customizes how specific processes in Fusion operate. In other words, you can't apply task rules to individual assets or projects.</p>
+<ul>
+<li><a href="#SetCPUs">Set the number of CPUs assigned to Fusion processing</a></li>
+<li><a href="#TRTypes">Task rule types</a></li>
+<li><a href="#ImplementTR">Implement task rules</a></li>
+</ul>
+<h3><a name="SetCPUs"></a>Set the number of CPUs assigned to Fusion processing</h3>
+<p>As some of the task rules described here rely on setting the number of CPUs assigned to Fusion processing, it’s useful for you to know how many CPUs are available on your machine and how many are assigned for Fusion processing. The <code>getop</code> output lists the available CPUs on your machine as the <code>maxjobs</code> entry and corresponds to how many concurrent jobs Fusion may spawn at any one time.</p>
+<p>You can use the tool <code>geselectassetroot --assetroot path --numcpus</code> to assign more CPUs. For example:</p>
+<p><code>geselectassetroot --assetroot /gevol/assets --numcpus 7</code>
+<p>For information about assigning CPUs to Fusion processing, see <a href="../answer/6008655.html">Running Fusion on a Machine with Multiple CPUs</a>.</p>
+<p>Task rules impact Fusion processing in two different ways: by enabling/disabling multithreading, and by specifying output locations (KRP/KRMP), as shown in the following table.</p>
+<h3><a name="TRTypes"></a>Task rule types</h3>
+<div>
+<table class="nice-table">
+<tbody>
+<tr>
+<th width="15%">Task rule type</th>
+<th width="30%">Task rule</th>
+<th width="55%">Description</th>
+</tr>
+<tr>
+<td>Enable/Disable Multithreading</td>
+<td><strong>ImageryPacketLevel</strong></td>
+<td>Makes imagery project builds faster by assigning multiple CPUs to each task.</td>
+</tr>
+<tr>
+<td>Enable/Disable Multithreading</td>
+<td><strong>TerrainPacketLevel</strong></td>
+<td>Makes terrain project builds faster by assigning multiple CPUs to each task.</td>
+</tr>
+<tr>
+<td>Enable/Disable Multithreading</td>
+<td><strong>CombinedTerrain</strong></td>
+<td>Makes 3D database builds faster by assigning multiple CPUs to terrain completion tasks.</td>
+</tr>
+<tr>
+<td>Enable/Disable Multithreading</td>
+<td><strong>MapLayerLevel</strong></td>
+<td>Makes 2D database builds faster by assigning multiple CPUs to each task.</td>
+</tr>
+<tr>
+<td>Specify output locations</td>
+<td><strong>KRP</strong></td>
+<td>Lets you specify the location of where image resources will be written by Fusion for better storage management.</td>
+</tr>
+<tr>
+<td>Specify output locations</td>
+<td><strong>KRMP</strong></td>
+<td>Lets you specify the location of  where the mask files will be written by Fusion for better storage management. Note that the same storage volume must be specified for the KRMP as the KRP.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>You can add one or more of these task rules to your asset root’s <code>.config</code> directory.</p>
+<h3><a name="ImplementTR"></a>Implement task rules</h3>
+<p>To implement a task rule:</p>
+<ol>
+<li>Make sure you have superuser privileges, that is, root or sudo access.</li>
+<li>Create the task rule using the XML sample code shown below for each rule.</li>
+<li>Depending on the rule you want to use, name the task rule:
+<ul>
+<li><strong>ImageryPacketLevel.taskrule</strong></li>
+<li><strong>TerrainPacketLevel.taskrule</strong></li>
+<li><strong>CombinedTerrain.taskrule</strong></li>
+<li><strong>MapLayerLevel.taskrule</strong></li>
+<li><strong>KRP.taskrule</strong></li>
+<li><strong>KRMP.taskrule</strong></li>
+</ul>
+<div class="note"><p><strong>Note:</strong> Fusion uses these names when the tasks run, so don't change them.
+</p></div>
+</li>
+<li>For the KRP and KRMP task rules, define the volumes you want Fusion to write files to. See <a href="#defining_volumes">Defining volumes</a>.</li>
+<li>Set file permissions to read only for all (<code>chmod 444</code>).</li>
+<li>Set file ownership to the <code>gefusionuser</code> user account and <code>gegroup</code> group (<code>chown gefusionuser:gegroup</code>).</li>
+<li>Place the task rule files in the asset root's <code>.config</code> directory.</li>
+<li>Restart the system manager using the <code>/etc/init.d/gefusion</code> <strong><code>stop</code></strong> and <strong><code>start</code></strong> commands.</li>
+</ol>
+<h3>ImageryPacketLevel task rule</h3>
+<p>During a project build, Fusion will have multiple concurrent imagery project tasks. The watchpoint is balancing the total number of CPUs assigned for Fusion, and the number of CPUs assigned for each imagery project process. For example, with 8 CPUs assigned for Fusion, with 2 CPUs per imagery project task, you can have 4 concurrent imagery project tasks with 2 CPUs per imagery project task.</p>
+<div class="note"><p><strong>Note:</strong> Assigning more than two CPUs for each imagery project task doesn't necessarily speed up processing, so you should keep the <code>maxNumCPU</code> value at 2.
+</p></div>
+<h5>Sample: ImageryPacketLevel.taskrule</h5>
+<div><code>&lt;TaskRule&gt;<br/>
+ &lt;taskname&gt;ImageryPacketLevel&lt;/taskname&gt;<br/>
+ &lt;inputConstraints/&gt;<br/>
+ &lt;outputConstraints/&gt;<br/>
+ &lt;cpuConstraint&gt;<br/>
+   &lt;minNumCPU&gt;2&lt;/minNumCPU&gt;<br/>
+   &lt;maxNumCPU&gt;2&lt;/maxNumCPU&gt;<br/>
+ &lt;/cpuConstraint&gt;<br/>
+&lt;/TaskRule&gt;</code></div>
+<h3>TerrainPacketLevel task rule</h3>
+<p>During a project build, Fusion will have multiple concurrent terrain project tasks. The watchpoint is balancing the total number of CPUs assigned for Fusion, and the number of CPUs assigned for each imagery project process. For example, with 8 CPUs assigned for Fusion, with 2 CPUs per terrain project task, you can have 4 concurrent terrain project tasks with 2 CPUs per terrain project task.</p>
+<p>By default, Fusion assigns one CPU to work on each terrain project task. You can use this task rule to assign up to six CPUs instead. Set the minimum CPU value to a number from 1 to 6, and set the maximum to a number between 2 and 6.</p>
+<h5>Sample: TerrainPacketLevel.taskrule</h5>
+<div><code>&lt;TaskRule&gt;<br/>
+ &lt;taskname&gt;TerrainPacketLevel&lt;/taskname&gt;<br/>
+ &lt;inputConstraints/&gt;<br/>
+ &lt;outputConstraints/&gt;<br/>
+ &lt;cpuConstraint&gt;<br/>
+   &lt;minNumCPU&gt;1&lt;/minNumCPU&gt;<br/>
+   &lt;maxNumCPU&gt;6&lt;/maxNumCPU&gt;<br/>
+ &lt;/cpuConstraint&gt;<br/>
+&lt;/TaskRule&gt;</code></div>
+<h3>CombinedTerrain task rule</h3>
+<p>Since <code>gecombineterrain</code> is a serial process and must be completed before the other database-level building activities can start, you can use the CombinedTerrain task rule to assign all available CPUs  to the build. For example, with 8 CPUs assigned for Fusion, assuming that one CPU is reserved for the system, you can assign 7 CPUs to the CombinedTerrain serial process.
+</p>
+<h5>Sample: CombinedTerrain.taskrule</h5>
+<div><code>&lt;TaskRule&gt;<br/>
+ &lt;taskname&gt;CombinedTerrain&lt;/taskname&gt;<br/>
+ &lt;inputConstraints/&gt;<br/>
+ &lt;outputConstraints/&gt;<br/>
+ &lt;cpuConstraint&gt;<br/>
+   &lt;minNumCPU&gt;7&lt;/minNumCPU&gt;<br/>
+   &lt;maxNumCPU&gt;7&lt;/maxNumCPU&gt;<br/>
+ &lt;/cpuConstraint&gt;<br/>
+&lt;/TaskRule&gt;</code></div>
+<h3>MapLayerLevel task rule</h3>
+<p>By default, Fusion assigns one CPU to work on map tile generation. As <code>maptilegen</code> can be run concurrently, you can use this task rule to assign multiple CPUs instead. Set the rule to min/max 4 on a 2 dual-core CPU system (3 may work well enough).  On a 2 quad-core CPU system, set the rule to min/max 3.
+</p>
+<h5>Sample: MapLayerLevel.taskrule</h5>
+<div><code>&lt;TaskRule&gt;<br/>
+ &lt;taskname&gt;MapLayerLevel&lt;/taskname&gt;<br/>
+ &lt;inputConstraints/&gt;<br/>
+ &lt;outputConstraints/&gt;<br/>
+ &lt;cpuConstraint&gt;<br/>
+   &lt;minNumCPU&gt;4&lt;/minNumCPU&gt;<br/>
+   &lt;maxNumCPU&gt;4&lt;/maxNumCPU&gt;<br/>
+ &lt;/cpuConstraint&gt;<br/>
+&lt;/TaskRule&gt;</code></div>
+<h3>KRP task rule</h3>
+<p>When Fusion creates an asset, it writes large imagery files to the raster.kip directory in asset root by default. You can manage your disk space by using the KRP task rule to write these files to a different volume. See <a href="#example_file_locations">Example of File Locations</a>. </p>
+<p>In the sample below, the volume you’ve created is <code>products</code>. To learn how to create a new volume, see <a href="#defining_volumes">Defining volumes</a>.</p>
+<h5>Sample: KRP.taskrule</h5>
+<div><code>&lt;TaskRule&gt;<br/>
+ &lt;taskname&gt;KRP&lt;/taskname&gt;<br/>
+ &lt;inputConstraints/&gt;<br/>
+ &lt;outputConstraints&gt;<br/>
+   &lt;outputConstraint&gt;<br/>
+     &lt;num&gt;0&lt;/num&gt;<br/>
+     &lt;requiredVolume&gt;products&lt;/requiredVolume&gt;<br/>
+     &lt;pathPattern&gt;${assetref:dirname:sansext}-
+<br/>     ${vernum}${defaultpath:ext}&lt;/pathPattern&gt;<br/>
+   &lt;/outputConstraint&gt;<br/>
+ &lt;/outputConstraints&gt;<br/>
+ &lt;cpuConstraint&gt;<br/>
+   &lt;minNumCPU&gt;1&lt;/minNumCPU&gt;<br/>
+   &lt;maxNumCPU&gt;1&lt;/maxNumCPU&gt;<br/>
+ &lt;/cpuConstraint&gt;<br/>
+&lt;/TaskRule&gt;</code></div>
+<p>You can also enter a second <code>requiredvolume</code> tag in your task rule to specify the next available volume in case the first volume fills up. However, you'll need to restart the system manager to trigger Fusion to write files to the next volume.</p>
+<h3>KRMP task rule</h3>
+<p>When Fusion creates an asset, it writes the mask files to the <code>mask.kmp</code> directory in asset root by default. You can manage your disk space by using the KRMP task rule to write these files to a different volume. See <a href="#example_file_locations">Example of File Locations</a>. In the sample below, the volume you’ve created is <code>products</code>. To learn how to create a new volume, see <a href="#defining_volumes">Defining volumes</a>.</p>
+<h5>Sample: KRMP.taskrule</h5>
+<div><code>&lt;TaskRule&gt;<br/>
+ &lt;taskname&gt;KRMP&lt;/taskname&gt;<br/>
+ &lt;inputConstraints/&gt;<br/>
+ &lt;outputConstraints&gt;<br/>
+   &lt;outputConstraint&gt;<br/>
+     &lt;num&gt;0&lt;/num&gt;<br/>
+     &lt;requiredVolume&gt;products&lt;/requiredVolume&gt;<br/>
+     &lt;pathPattern&gt;${assetref:dirname:sansext}-
+<br/>     ${vernum}${defaultpath:ext}&lt;/pathPattern&gt;<br/>
+   &lt;/outputConstraint&gt;<br/>
+ &lt;/outputConstraints&gt;<br/>
+ &lt;cpuConstraint&gt;<br/>
+   &lt;minNumCPU&gt;1&lt;/minNumCPU&gt;<br/>
+   &lt;maxNumCPU&gt;1&lt;/maxNumCPU&gt;<br/>
+ &lt;/cpuConstraint&gt;<br/>
+&lt;/TaskRule&gt;</code></div>
+<p>You can also enter a second <code>requiredvolume</code> tag in your task rule to specify the next available volume in case the first volume fills up. However, you'll need to restart the system manager to trigger Fusion to write files to the next volume.</p>
+<h3 id="defining_volumes">Defining volumes</h3>
+<p>The KRP and KRMP task rules include a <code>requiredvolume</code> tag that indicates where to write files. You need to make sure that this volume is defined and has enough space to hold the files. To define the volume, use the <code>geconfigureassetroot -- editvolumes</code> command, then edit the XML as shown in the sample below. In this sample, the volume you’re creating is called <code>products</code>.</p>
+<h5>Sample: volumes.xml</h5>
+<div><code>&lt;products&gt;<br/>
+ &lt;netpath&gt;/gevol/products&lt;/netpath&gt;<br/>
+ &lt;host&gt;linux&lt;/host&gt;<br/>
+ &lt;localpath&gt;/gevol/products&lt;/localpath&gt;<br/>
+ &lt;reserveSpace&gt;100000&lt;/reserveSpace&gt;<br/>
+ &lt;isTmp&gt;0&lt;/isTmp&gt;<br/>
+&lt;/products&gt;</code></div>
+<h3 id="example_file_locations">Example of File Locations</h3>
+<p>The table below shows an example of the default file locations and the locations after applying the KMP and KRMP task rules. In this example, the asset root is <code>/gevol/assets</code>, the volume you’ve created is <code>products</code>, and you’ve built an asset called <code>TestImage</code> in the imagery subdirectory.</p>
+<table class="nice-table">
+<tbody>
+<tr>
+<th>
+Task rule</th>
+<th>
+File type</th>
+<th>
+Default location</th>
+<th>
+Location with task rule</th>
+</tr>
+<tr>
+<td>
+KMP</td>
+<td>
+large imagery files</td>
+<td>
+<code>/gevol/assets/imagery/TestImage.kiasset/products.kia/ver001/raster.kip</code></td>
+<td>
+<code>/gevol/products/imagery/ TestImage-001.kip</code></td>
+</tr>
+<tr>
+<td>
+KRMP</td>
+<td>
+smaller mask files</td>
+<td>
+<code>/gevol/assets/imagery/TestImage.kiasset/maskproducts.kia/ver001/mask.kmp</code></td>
+<td>
+<code>/gevol/products/imagery/TestImage-001.kmp</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="cache_configuration">Cache configuration</h2>
+<p><code>gesystemmanager</code> caches information about the assets and asset versions it is working with.
+The default sizes for these caches should work fine for most builds; however, increasing the cache sizes may speed up very large builds at the cost of increased memory usage.
+The cache sizes are controlled by the file <code>misc.xml</code> which can be found at <code>/gevol/assets/.config/misc.xml</code>
+(assuming your asset root is <code>/gevol/assets</code>; if not, modify the path accordingly).
+The asset cache size is controlled by <code>AssetCacheSize</code> and the asset version cache size is controlled by <code>VersionCacheSize</code>.
+Note that the asset version cache is generally larger than the asset cache because it may contain multiple versions of the same asset.</p>
+
+Also included within <code>misc.xml</code> is an experimental option, which allows for the user to disable cache purging while projects build. This is controlled by <code>DisablePacketLevelVersionCachePurge</code> and its default value is <code>false</code>.
+<h2>Learn more</h2>
+<ul>
+<li><a href="../answer/6033487.html">Benchmarking outcomes for applying task rules</a></li>
+</li></ul>
+<p> </p></p><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>

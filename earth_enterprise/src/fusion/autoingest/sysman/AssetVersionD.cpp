@@ -287,7 +287,8 @@ void AssetVersionImplD::SetState(
     const std::shared_ptr<StateChangeNotifier> notifier)
 {
   if (newstate != state) {
-    notify(NFY_DEBUG, "SetState: %s %s",
+    notify(NFY_DEBUG, "SetState: current state: %s | newstate: %s | asset: %s",
+    	   ToString(state).c_str(),
            ToString(newstate).c_str(),
            GetRef().c_str());
     AssetDefs::State oldstate = state;
@@ -297,7 +298,8 @@ void AssetVersionImplD::SetState(
       // another state (usually Failed or Succeded)
       OnStateChange(newstate, oldstate);
     } catch (const std::exception &e) {
-      notify(NFY_WARN, "Exception during OnStateChange: %s", e.what());
+      notify(NFY_WARN, "Exception during OnStateChange: %s", 
+             e.what());
     } catch (...) {
       notify(NFY_WARN, "Unknown exception during OnStateChange");
     }
@@ -306,6 +308,9 @@ void AssetVersionImplD::SetState(
     // set it to above. OnStateChange can call SetState recursively. We
     // don't want to notify/propagate an old state.
     if (propagate && (state == newstate)) {
+      notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
+             GetRef().c_str(), 
+             ToString(newstate).c_str());
       theAssetManager.NotifyVersionStateChange(GetRef(), newstate);
       PropagateStateChange(notifier);
     }
@@ -395,6 +400,7 @@ void
 AssetVersionImplD::HandleChildStateChange(const std::shared_ptr<StateChangeNotifier>) const
 {
   // NoOp in base since leaves don't need to do anything
+  notify(NFY_VERBOSE, "AssetVersionImplD::HandleChildStateChange: %s", GetRef().c_str());
 }
 
 void
@@ -415,8 +421,13 @@ AssetVersionImplD::OnStateChange(AssetDefs::State newstate,
 {
   // NoOp in base class
   if (newstate == AssetDefs::Succeeded) {
+    notify(NFY_VERBOSE, "newstate: %s", 
+           ToString(newstate).c_str());
 #ifdef TEMP_ASSETS
+    notify(NFY_VERBOSE, "TEMP_ASSETS has been defined");
     if (haveTemporaryInputs) {
+      notify(NFY_VERBOSE, "haveTemporaryInputs: %s", 
+             haveTemporaryInputs.c_str());
       if (OfflineInputsBreakMe()) {
         throw khException(kh:tr("Internal Error: AssetVersion with temporary "
                                 "inputs but marked as OfflineInputsBreakMe"));
@@ -980,8 +991,6 @@ LeafAssetVersionImplD::Cancel(const std::shared_ptr<StateChangeNotifier> callerN
   // clearing fields, etc)
   SetState(AssetDefs::Canceled, notifier);
 }
-
-
 
 void
 LeafAssetVersionImplD::DoClean(const std::shared_ptr<StateChangeNotifier> callerNotifier)
