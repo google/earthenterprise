@@ -26,6 +26,7 @@
 #include "common/etencoder.h"
 #include "common/khAbortedException.h"
 #include "common/khFileUtils.h"
+#include "common/geterrain.h"
 #include "common/khEndian.h"
 #include "common/khGetopt.h"
 #include "common/khSimpleException.h"
@@ -189,7 +190,15 @@ void extractAllPackets(GlcUnpacker* const unpacker,
           }
         }
         else if (index_item.packet_type == kTerrainPacket) {
-          writePacketToFile(index_item, buffer, true, "_terrain");
+          LittleEndianReadBuffer decompressed;
+          etEncoder::DecodeWithDefaultKey(&buffer[0], buffer.size());
+          if (KhPktDecompress(buffer.data(), buffer.size(), &decompressed)) {
+            geterrain::Mesh m;
+            m.Pull(decompressed);
+            std::ostringstream s;
+            m.PrintMesh(s);
+            writePacketToFile(index_item, s.str(), false, "_terrain");
+          }
         }
         else if (index_item.packet_type == kDbRootPacket) {
           writePacketToFile(index_item, buffer, true, "_dbroot");
