@@ -3,7 +3,9 @@ dist: trusty
 
 language: cpp
 
-compiler:  gcc
+compiler:  
+  -gcc-48
+  -gcc-5
 
 before_install:
 - sudo apt-get update -qq
