@@ -115,26 +115,30 @@ prerequisites will be missing and the build will fail.
 Execute:
 
 ```bash
-sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel \
-  python-devel perl-Alien-Packages openssl-devel libxml2-devel \
-  libXinerama-devel libXft-devel libXrandr-devel libXcursor-devel gdbm-devel \
-  libmng-devel libcap-devel libpng12-devel libXmu-devel freeglut-devel \
-  zlib-devel libX11-devel bison-devel openjpeg-devel openjpeg2-devel \
-  geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel \
-  cmake GitPython rpm-build rpmrebuild rsync
+sudo yum install -y \
+  bison-devel cmake daemonize freeglut-devel \
+  gdbm-devel geos-devel giflib-devel GitPython \
+  libcap-devel libmng-devel libpng12-devel libX11-devel libXcursor-devel \
+    libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
+  ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel \
+  perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-devel \
+  rpm-build rpmrebuild rsync scons \
+  xerces-c xerces-c-devel xorg-x11-server-devel zlib-devel
 ```
 
 ### CentOS 6 and RHEL 6
 Execute:
 
 ```bash
-sudo yum install -y scons perl-Perl4-CoreLibs xorg-x11-server-devel \
-  python-devel perl-Alien-Packages openssl-devel libxml2-devel \
-  libXinerama-devel libXft-devel libXrandr-devel libXcursor-devel gdbm-devel \
-  libmng-devel libcap-devel libpng-devel libXmu-devel freeglut-devel \
-  zlib-devel libX11-devel bison-devel openjpeg-devel openjpeg2-devel \
-  geos-devel proj-devel ogdi-devel giflib-devel xerces-c xerces-c-devel \
-  cmake GitPython rpm-build rpmrebuild rsync shunit2 python-unittest2
+sudo yum install -y \
+  bison-devel  cmake daemonize freeglut-devel \
+  gdbm-devel geos-devel giflib-devel GitPython \
+  libcap-devel libmng-devel libpng-devel libX11-devel libXcursor-devel \
+    libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
+  ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel \
+  perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-devel python-unittest2 \
+  rpm-build rpmrebuild rsync scons shunit2 \
+  xerces-c xerces-c-devel xorg-x11-server-devel zlib-devel
 ```
 
 If you encounter an error about git dependency conflicts, consider 
