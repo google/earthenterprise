@@ -14,20 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set +x
-set -e
-
-NEW_INSTALL=false
-if [ "$1" = "1" ] ; then
-    NEW_INSTALL=true
-fi
 
 #-----------------------------------------------------------------
 # Main Functions
 #-----------------------------------------------------------------
 main_preinstall()
 {
-     # Report errors to RPM installer
+    # Report errors to RPM installer
     set -e
 
     # Check to see if opengee executables work and error out if not
@@ -35,10 +28,10 @@ main_preinstall()
     ERROUT=`$BASEINSTALLDIR_OPT/bin/geserveradmin 2>&1` || RET_VAL=$?
 
     if [ "$RET_VAL" -eq "127" ]; then
-      echo "$ERROUT"
-      echo "It appears that not all library dependencies have been installed."
-      echo "This is likely to be a missing MrSID library."
-      return 127
+        echo "$ERROUT"
+        echo "It appears that not all library dependencies have been installed."
+        echo "This is likely to be a missing MrSID library."
+        return 127
     fi
 
     # Stop reporting errors to RPM installer
@@ -49,16 +42,11 @@ main_preinstall()
         service geserver stop
     fi
 
-    # only if a new install, has failsafe to protect non-rpm upgrades
-    if [ "$NEW_INSTALL" = "true" ] ; then
-        check_username "$GEAPACHEUSER"
-        check_username "$GEPGUSER"
-
-    fi
+    check_username "$GEAPACHEUSER"
+    check_username "$GEPGUSER"
 
     # Dump database if it exists
     database_backup
-
 }
 
 #-----------------------------------------------------------------
@@ -71,7 +59,7 @@ check_username()
 
     # add user if it does not exist
     if [ -z "$USERNAME_EXISTS" ]; then
-        mkdir -p "$BASEINSTALLDIR_OPT/.users/$1"
+        mkdir -p "$BASEINSTALLDIR_OPT/.users/$1" || return 1
         useradd --home "$BASEINSTALLDIR_OPT/.users/$1" --system --gid "$GEGROUP" "$1"
     else
         # user already exists -- update primary group

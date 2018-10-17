@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2018 The Open GEE Contributors
+# Copyright 2018 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,17 +14,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set +x
-set -e
+
+#------------------------------------------------------------------------------
+# Directory locations:
+BININSTALLROOTDIR="/etc/init.d"
+
+#------------------------------------------------------------------------------
+# Group names:
+
+remove_users_groups()
+{
+    echo "OpenGEE group $GEGROUP may be removed once associated data files are purged."
+}
 
 #-----------------------------------------------------------------
-# Main Function
+# Main Function:
 #-----------------------------------------------------------------
 
-# remove if actually uninstalling
-if [ "$1" = "0" ] ; then
-	service gefusion stop
-	remove_service gefusion
+# * In Red Hat $1 = 0 indicates un-install, and not an upgrade.
+# * On Debian $1 = "purge" happens only during an uninstall when the user
+# requests no configuration be left behind.
+if [ "$1" = "0" ] || [ "$1" = "purge" ]; then
+    remove_users_groups
 fi
-
 #-----------------------------------------------------------------

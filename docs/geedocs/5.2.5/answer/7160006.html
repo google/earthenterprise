@@ -77,6 +77,16 @@ gtag('config', 'UA-108632131-2');
               assemble GLMs with differing projections, a warning will be issued.
             </td>
           </tr>
+          <tr>
+            <td>968</td>
+            <td><code>/etc/init.d/gefusion stop</code> Does Not Ensure Daemons Stop</td>
+            <td>
+              The System V init script has been migrated to using platform-specific utilities for
+              starting and stopping daemons (Damonize on Red Hat, <code>start-stop-daemon</code>
+              on Debian platforms).  Those handle daemon states correctly.  The
+              <code>gestartdaemon</code> and <code>gestopdaemon</code> utilities have been removed.
+            </td>
+          </tr>
         </tbody>
       </table>
   <h5>

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2018 the Open GEE Contributors
+# Copyright 2018 The Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,27 +14,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set +x
-set -e
-
-#------------------------------------------------------------------------------
-# Directory locations:
-BININSTALLROOTDIR="/etc/init.d"
-
-#------------------------------------------------------------------------------
-# Group names:
-
-remove_users_groups()
-{
-    echo "OpenGEE group $GEGROUP may be removed once associated data files are purged."
-}
 
 #-----------------------------------------------------------------
-# Main Function:
+# Main Function
 #-----------------------------------------------------------------
 
-# at end of actual un-install, not an upgrade...
-if [ "$1" = "0" ]; then
-    remove_users_groups
-fi
-#-----------------------------------------------------------------
+# Remove if actually uninstalling.
+#
+# On Red Hat the first argument to install scripts is "the number of versions
+# of the package that are installed".  It is 0 when uninstalling the last
+# version, 1 on first install, 2 or higher on upgrade.
+#     On Debian systems the first parameter is "upgrade", or "remove".
+# (See <https://wiki.debian.org/MaintainerScripts>.)
+case "$1" in
+	0|remove|upgrade)
+		service geserver stop || exit 1
+		remove_service geserver
+		;;
+esac
