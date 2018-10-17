@@ -152,7 +152,9 @@ class PublisherClient : public PublishHelper {
                        const std::string& vh_name = "",
                        const bool default_db = false,
                        const bool poi_search = false,
-                       const bool enhanced_search = false);
+                       const bool enhanced_search = false,
+                       const bool serve_wms = false);
+            
 
   // Re-publish database to be served with the existing target path.
   bool RepublishDatabase(const std::string& in_db_name,

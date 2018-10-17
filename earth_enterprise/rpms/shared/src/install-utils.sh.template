@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2018 The Open GEE Contributors
+# Copyright 2017 the Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,15 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set +x
-set -e
+# gevars.sh:
+<%= expandTemplateFile.call('gevars.sh.template') %>
 
-#-----------------------------------------------------------------
-# Main Function
-#-----------------------------------------------------------------
+# Install Utils:
+<%= new File(thisTemplateFile.parent, '../snippets/install-utils-main.sh').text %>
 
-# remove if actually uninstalling
-if [ "$1" = "0" ] ; then
-	service geserver stop
-	remove_service geserver
-fi
+# Key-value library:
+<%= new File(thisTemplateFile.parent, 'lib/key-value.sh').text %>

@@ -29,7 +29,7 @@ sudo apt install git-lfs
 Run the following command:
 ```
 sudo apt-get install \
-    alien autoconf automake bison++ bisonc++ cmake doxygen \
+    alien autoconf automake bison++ bisonc++ cmake doxygen dpkg \
     flex freeglut3-dev g++ gcc gettext \
     libc6 libc6-dev libcap-dev libfreetype6 libfreetype6-dev \
     libgdbm-dev libgeos-dev libgeos++-dev libgif-dev libgtest-dev \
