@@ -288,7 +288,8 @@ class GlobeBuilder(object):
     self.Status("Build map ...")
     # Run this task as a background task.
     # Having trouble with permissions if output is redirected to a file.
-    os_cmd = ("%s/geportablemapbuilder --source=\"%s\" "
+    os_cmd = ("%s/geportablemapbuilder --ignore_imagery_depth "
+              "--source=\"%s\" "
               "--hires_qt_nodes_file=\"%s\" "
               "--map_directory=\"%s\"  --default_level=%d --max_level=%d "
               % (COMMAND_DIR, source, self.qtnodes_file,
