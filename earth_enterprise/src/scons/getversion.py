@@ -16,18 +16,24 @@ def GetVersion(backupFile, label='', useFirstParent=True):
 def GetLongVersion(backupFile, label='', useFirstParent=True):
     """Create a detailed version string based on the state of
     the software, as it exists in the repository."""
- 
+
+    if open_gee_version.long_version_string:
+        return open_gee_version.long_version_string
+
     if _CheckGitAvailable():
         ret = _GitGeneratedLongVersion(useFirstParent)
 
-  # Without git, must use the backup file to create a string.
+    # Without git, must use the backup file to create a string.
     else:
         base = _ReadBackupVersionFile(backupFile)
         ret = '-'.join([base, _GetDateString()])
 
-  # Append the label, if there is one.
+    # Append the label, if there is one.
     if len(label):
         ret = '.'.join([ret, label])
+
+    # Cache the long version string:
+    open_gee_version.long_version_string = ret
 
     return ret
 
@@ -90,13 +96,13 @@ def _VersionFromTagHistory(raw):
         components['revision'] = components['revision'] + 1
     else:
         components['patch'] = components['patch'] + 1
-    
+
     # Rebuild.
     base = '.'.join([str(components[x]) for x in ("major", "minor", "revision")])
     patch = '.'.join([str(components["patch"]), components["patchType"], _GetDateString()])
     if not _CheckDirtyRepository():
         patch = '.'.join([patch, components['hash']])
-    
+
     return '-'.join([base, patch])
 
 
@@ -106,9 +112,9 @@ def _ParseRawVersionString(raw):
 
     components = { }
 
-    # major.minor.revision-patch[.patchType][-commits][-hash]    
+    # major.minor.revision-patch[.patchType][-commits][-hash]
     rawComponents = raw.split("-")
-    
+
     base = rawComponents[0]
     patchRaw = '' if not len(rawComponents) > 1 else rawComponents[1]
     components['commits'] = -1 if not len(rawComponents) > 2 else rawComponents[2]
@@ -119,15 +125,15 @@ def _ParseRawVersionString(raw):
     components['major'] = int(baseComponents[0])
     components['minor'] = int(baseComponents[1])
     components['revision'] = int(baseComponents[2])
- 
+
     # Patch (patch[.patchType])
     components['isFinal'] = ((patchRaw[-5:] == "final") or
                              (patchRaw[-7:] == "release"))
-  
+
     patchComponents = patchRaw.split(".")
     components['patch'] = int(patchComponents[0])
     components['patchType'] = 'alpha' if not len(patchComponents) > 1 else patchComponents[1]
-    
+
     repo = _GetRepository()
     return components
 
@@ -139,7 +145,7 @@ def _CheckGitAvailable():
         repo = _GetRepository()
     except git.exc.InvalidGitRepositoryError:
         return False
-    
+
     return True
 
 
@@ -152,13 +158,13 @@ def _GetRepository():
         return git.Repo('.', search_parent_directories=True)
     except TypeError:
         return git.Repo('.')
- 
+
 
 def _CheckDirtyRepository():
     """Check to see if the repository is not in a cleanly committed state."""
     repo = _GetRepository()
     str = repo.git.status("--porcelain")
-    
+
     return (len(str) > 0)
 
 
@@ -177,6 +183,63 @@ def _GetDateString():
     """Returns formatted date string representing current UTC time"""
     return datetime.utcnow().strftime("%Y%m%d%H%M")
 
+class OpenGeeVersion(object):
+    """A class for storing Open GEE version information."""
+
+    def __init__(self):
+        # Cache version strings:
+        self.short_version_string = None
+        self.long_version_string = None
+
+        # Default parameter for GetVersion functions
+        self_path, _ = os.path.split(os.path.realpath(__file__))
+        self.backup_file = os.path.join(self_path, '..', 'version.txt')
+        self.label = ''
+        self.use_first_parent = True
+
+    def get_short(self):
+        """Returns the short version string."""
+
+        if not self.short_version_string:
+            self.short_version_string = self.get_long().split("-")[0]
+
+        return self.short_version_string
+
+    def set_short(self, value):
+        """Overrides the short version string by using the given value."""
+
+        self.short_version_string = value
+
+    def get_long(self):
+        """Returns the short version string."""
+
+        if not self.long_version_string:
+            self.long_version_string = GetLongVersion(self.backup_file, self.label, self.use_first_parent)
+
+        return self.long_version_string
+
+    def set_long(self, value):
+        """Overrides the long version string by using the given value.
+        Overriding the long version string would indirectly override the short
+        version string, as well, unless the former is also overridden.
+        """
+
+        self.long_version_string = value
+
+    def set_use_first_parent(self, value):
+        """Overrides the flag controlling whether the 'git describe' command
+        Can use the --first-parent parameter, which was introduced in git 1.8.4.
+        Set this to False when using earlier versions of git.  Build works with
+        earlier versions, but the version calculated may be incorrect.
+        """
+
+        self.use_first_parent = value
+
+
+
+# Exported variable for use by other modules:
+open_gee_version = OpenGeeVersion()
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -184,19 +247,12 @@ def main():
     parser.add_argument("-o", "--original", action="store_true", help="Use original algorithm compatible with git v1.7.1-1.8.3.  Deprecated.")
     args = parser.parse_args()
 
-    # default parameter to GetVersion functions
-    self_path, _ = os.path.split(os.path.realpath(__file__))
-    version_file = os.path.join(self_path, '../version.txt')
-    use_first_parent = not args.original
+    open_gee_version.set_use_first_parent(not args.original)
 
-    version = ""
-    if args.long:
-        version = GetLongVersion(version_file, '', use_first_parent)
-    else:
-        version = GetVersion(version_file, '', use_first_parent)
+    print open_gee_version.get_long() if args.long else open_gee_version.get_short()
 
-    print version
 
+__all__ = ['open_gee_version']
 
 if __name__ == "__main__":
     main()

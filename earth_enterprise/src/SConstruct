@@ -26,7 +26,6 @@ import subprocess
 import sys
 sys.path += ['scons']
 from khEnvironment import khEnvironment
-from khEnvironment import GetVersion
 
 # Add the OpenGEE Python libraries to the module search path:
 opengee_lib_path = os.path.join('lib', 'python')
@@ -86,6 +85,7 @@ ValidOptions = set(
      'log_performance',  # Include code for performance logging
      'cpp_standard',     # The standard of CPP that will be used.  Default is C++11
      'label',            # Value to combine with version strings.
+     'long_version',     # Value to override the Open GEE long version string.
      'build_folder',     # where to put the build output and intermediate files
      'cache_dir',        # use a cache dir to speed up build
      'third_party_only'  # build third party code only
@@ -117,6 +117,7 @@ log_performance = int( ARGUMENTS.get( 'log_performance', 0 ) )
 cpp_standard = ARGUMENTS.get('cpp_standard', 'gnu++11')
 build_folder = ARGUMENTS.get('build_folder', 0)
 label = ARGUMENTS.get('label', '')
+long_version = ARGUMENTS.get('long_version', None)
 
 # make some directory variables used by other parts of the build system
 top_dir = Dir('#').abspath
@@ -424,7 +425,6 @@ if not opengee_version_ge(git_version, [1,8,4]):
 
 gee_version_number = GetVersion(*get_version_args)
 
-
 # create the environment that controls the builds
 
 if is_min_ubuntu:
@@ -479,6 +479,14 @@ env = khEnvironment(
     python_version=python_version,
     python_major_version=python_major_version
 )
+
+env.get_open_gee_version().backup_file = "version.txt"
+env.get_open_gee_version().label = label
+if long_version:
+  env.get_open_gee_version().set_long(long_version)
+gee_version_number = env.get_open_gee_version().get_short()
+
+
 
 # Check if the version of the default compiler is at least 4.8:
 version = opengee.c_compiler.get_cc_version(env['CXX'])
