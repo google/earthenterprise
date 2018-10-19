@@ -4,21 +4,21 @@ import argparse
 import git
 from datetime import datetime
 
-def GetVersion(backupFile, label=''):
+def GetVersion(backupFile, label='', useFirstParent=True):
     """As getLongVersion(), but only return the leading *.*.* value."""
 
-    raw = GetLongVersion(backupFile, label)
+    raw = GetLongVersion(backupFile, label, useFirstParent)
     final = raw.split("-")[0]
 
     return final
 
 
-def GetLongVersion(backupFile, label=''):
+def GetLongVersion(backupFile, label='', useFirstParent=True):
     """Create a detailed version string based on the state of
     the software, as it exists in the repository."""
  
     if _CheckGitAvailable():
-        ret = _GitGeneratedLongVersion()
+        ret = _GitGeneratedLongVersion(useFirstParent)
 
   # Without git, must use the backup file to create a string.
     else:
@@ -32,11 +32,11 @@ def GetLongVersion(backupFile, label=''):
     return ret
 
 
-def _GitGeneratedLongVersion():
+def _GitGeneratedLongVersion(useFirstParent=True):
     """Take the raw information parsed by git, and use it to
        generate an appropriate version string for GEE."""
 
-    raw = _GetCommitRawDescription()
+    raw = _GetCommitRawDescription(useFirstParent)
 
     # For tagged commits, return the tag itself
     if _IsCurrentCommitTagged(raw):
@@ -45,10 +45,15 @@ def _GitGeneratedLongVersion():
         return _VersionFromTagHistory(raw)
 
 
-def _GetCommitRawDescription():
+def _GetCommitRawDescription(useFirstParent=True):
     """Returns description of current commit"""
     repo = _GetRepository()
-    raw = repo.git.describe('--first-parent', '--tags', '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*')
+
+    args = ['--tags', '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*']
+    if useFirstParent:
+        args.insert(0, '--first-parent')
+
+    raw = repo.git.describe(*args)
     raw = raw.rstrip()
     return raw
 
@@ -176,17 +181,19 @@ def _GetDateString():
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-l", "--long", action="store_true", help="Output long format of version string")
+    parser.add_argument("-o", "--original", action="store_true", help="Use original algorithm compatible with git v1.7.1-1.8.3.  Deprecated.")
     args = parser.parse_args()
 
     # default parameter to GetVersion functions
     self_path, _ = os.path.split(os.path.realpath(__file__))
     version_file = os.path.join(self_path, '../version.txt')
+    use_first_parent = not args.original
 
     version = ""
     if args.long:
-        version = GetLongVersion(version_file)
+        version = GetLongVersion(version_file, '', use_first_parent)
     else:
-        version = GetVersion(version_file)
+        version = GetVersion(version_file, '', use_first_parent)
 
     print version
 
