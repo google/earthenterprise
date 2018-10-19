@@ -167,7 +167,7 @@ void extractAllPackets(GlcUnpacker* const unpacker,
           if (!protoPacket.ParseFromString(buffer)) {
             std::cout << "Error parsing protobuf imagery packet" << std::endl;
           }
-          
+
           if (protoPacket.HasImageData()) {
             writePacketToFile(index_item, protoPacket.ImageData(), true);
           }
@@ -185,7 +185,7 @@ void extractAllPackets(GlcUnpacker* const unpacker,
             // todo: some magic here to make metadata into a human readable string
             qtpacket::KhQuadTreePacket16 theMetadata;
             decompressed >> theMetadata;
-            writePacketToFile(index_item, theMetadata.ToString(true,true), false, "_meta");
+            writePacketToFile(index_item, theMetadata.ToString(index_item.level == 0,true), false, "_meta");
           }
         }
         else if (index_item.packet_type == kTerrainPacket) {
@@ -230,7 +230,7 @@ void extractAllPackets(GlcUnpacker* const unpacker,
                   default:
                     std::cout << "Found an unhandled vector packet of type " << p->packetHeader.dataTypeID << std::endl;
                 }
-                
+
               }
             }
             // decompressed data format
@@ -305,7 +305,7 @@ void ExtractPackets(GlcUnpacker* const unpacker,
     extractAllPackets(unpacker, reader, start_idx, end_idx, "qtp/index", "qtp/pbundle_0000");
     return;
   }
-  
+
   // For glcs, we need to look inside each layer for the indexes.
   if (is_composite) {
     // Determine if the glc is 2d, 3d, or both
