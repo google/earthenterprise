@@ -169,7 +169,7 @@ void extractAllPackets(GlcUnpacker* const unpacker,
           }
           
           if (protoPacket.HasImageData()) {
-            writePacketToFile(index_item, protoPacket.ImageData(), true);
+            writePacketToFile(index_item, protoPacket.ImageData(), true, "_img");
           }
           if (protoPacket.HasImageAlpha()) {
             writePacketToFile(index_item, protoPacket.ImageAlpha(), true, "_alpha");
@@ -203,66 +203,28 @@ void extractAllPackets(GlcUnpacker* const unpacker,
           writePacketToFile(index_item, buffer, true, "_dbroot");
         }
         else if (index_item.packet_type == kVectorPacket) {
-          // uint32 magic word
-          // uint32 size of payload (after decompression)
           LittleEndianReadBuffer decompressed;
           etEncoder::DecodeWithDefaultKey(&buffer[0], buffer.size());
-          //writePacketToFile(index_item, buffer, false, "_vector");
-          if (KhPktDecompress(buffer.data(), buffer.size(), &decompressed)) {
-            std::vector<char> mutableData(decompressed.size());
-            memcpy(mutableData.data(), decompressed.data(), decompressed.size());
-            etDrawablePacket thePacket;
-            if (thePacket.load(mutableData.data(), mutableData.size()) != 0) {
-              std::cout << "Error loading data into vector packet format!" << std::endl;
+          if (KhPktDecompress(buffer.data(), buffer.size(), &decompressed) &&
+             (decompressed.size() >= sizeof(uint32)*2)) {
+            const uint32* vectorData = reinterpret_cast<const uint32*>(decompressed.data());
+            std::map<uint32, std::string> vTypeNames = {
+              {TYPE_STREETPACKET, "street"},
+              {TYPE_SITEPACKET, "site"},
+              {TYPE_DRAWABLEPACKET, "drawable"},
+              {TYPE_POLYLINEPACKET, "polyline"},
+              {TYPE_AREAPACKET, "area"},
+              {TYPE_STREETPACKET_UTF8, "streetutf"},
+              {TYPE_SITEPACKET_UTF8, "siteutf"},
+              {TYPE_LANDMARK, "landmark"},
+              {TYPE_POLYGONPACKET, "polygon"}
+            };
+            auto typeNameIter = vTypeNames.find(vectorData[1]);
+            std::string vectorDataType = "unknown";
+            if (typeNameIter != vTypeNames.end()) {
+              vectorDataType = typeNameIter->second;
             }
-            else {
-              thePacket.offsetToPointer();
-              for ( uint jj = 0; jj < thePacket.packetHeader.numInstances; ++jj ) {
-                etDataPacket* p = thePacket.getPtr(jj);
-                switch (p->packetHeader.dataTypeID) {
-                  case TYPE_STREETPACKET_UTF8:
-                    ((etStreetPacket*)p)->offsetToPointer();
-                    for ( uint ii = 0; ii < p->packetHeader.numInstances; ++ii ) {
-                      etStreetPacketData* sd = ((etStreetPacket*)p)->getPtr(ii);
-                      std::cout << "Found data for " << sd->name.string << std::endl;
-                    }
-                    break;
-                  default:
-                    std::cout << "Found an unhandled vector packet of type " << p->packetHeader.dataTypeID << std::endl;
-                }
-                
-              }
-            }
-            // decompressed data format
-            // uint32 keyhole magic ID (32301)
-            // uint32 datatypeId
-            // uint32 packetVersion
-            // uint32 numInstances
-            // uint32 dataInstanceSize
-            // uint32 dataBufferOffset
-            // uint32 dataBufferSize
-            // uint32 metaBufferSize
-            /*qtpacket::KhQuadTreePacket16 theMetadata;
-            decompressed >> theMetadata;
-            std::vector<qtpacket::KhQuadtreeDataReference> qtp_refs1;
-            std::vector<qtpacket::KhQuadtreeDataReference> qtp2_refs1;
-            std::vector<qtpacket::KhQuadtreeDataReference> img_refs1;
-            std::vector<qtpacket::KhQuadtreeDataReference> ter_refs1;
-            std::vector<qtpacket::KhQuadtreeDataReference> vec_refs1;
-            qtpacket::KhQuadtreeDataReferenceGroup refs(&qtp_refs1,
-                                                         &qtp2_refs1,
-                                                         &img_refs1,
-                                                         &ter_refs1,
-                                                         &vec_refs1);
-            qtpacket::KhQuadtreeDataReference qtp_read;
-            QuadtreePath qt_path = qtp_read.qt_path();
-            keyhole::JpegCommentDate unused;
-            theMetadata.GetDataReferences(&refs, qt_path, unused);
-            std::cout << "q=" << qtp_refs1.size() << " q2=" << qtp2_refs1.size() << " i=" << img_refs1.size() << " t=" << ter_refs1.size() << " v=" << vec_refs1.size() << std::endl;
-            writePacketToFile(index_item, theMetadata.ToString(true, true), false, "_vector");
-          }*/
-            std::string mystr(decompressed);
-            writePacketToFile(index_item, mystr, false, "_vector");
+            writePacketToFile(index_item, decompressed, false, "_vector_"+vectorDataType);
           }
         }
         else {
