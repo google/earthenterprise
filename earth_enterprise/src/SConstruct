@@ -420,7 +420,7 @@ if not opengee_version_ge(git_version, [1,8,4]):
     print 'The opengee version is calculated from tags using the "git describe" command.'
     print 'The "--first-parent" parameter introduced in git 1.8.4 allows proper version calcuation on all branches.'
     print 'Without the --first-parent parameter, the version calculated may be incorrect, depending on which branch is being built.'
-    print 'For information on upgrading git, see: http://nexus3.corp.t-sciences.com/#browse/browse:vmimages:ova'
+    print 'For information on upgrading git, see: https://github.com/google/earthenterprise/wiki/Frequently-Asked-Questions-(FAQs)#how-do-i-upgrade-git-to-the-recommended-version-for-building-google-earth-enterprise'
     get_version_args.append(False)
 
 gee_version_number = GetVersion(*get_version_args)
