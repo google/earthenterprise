@@ -105,6 +105,12 @@ def do_add_imagery_resource_to_project(resource, project, isMercator):
 def add_imagery_resource_to_project(resource, project):
   do_add_imagery_resource_to_project(resource, project, isMercator=False)
 
+@step("Drop imagery resource <resource> from project <project>")
+def drop_imagery_resource_to_project(resource, project):
+  commandLine = ["/opt/google/bin/gedropfromimageryproject", "-o", os.path.join(IMAGERY_PROJECT_PATH, project), os.path.join(IMAGERY_RESOURCE_PATH, resource)]
+  call(commandLine, "Failed to drop imagery resource %s from project %s" % (resource, project))
+
+
 @step("Add mercator imagery resource <resource> to project <project>")
 def add_merc_imagery_resource_to_project(resource, project):
   do_add_imagery_resource_to_project(resource, project, isMercator=True)
@@ -234,10 +240,10 @@ def cancel_map_project(project):
 def create_and_build_blue_marble_proj(projectName):
   project = "StatePropagationTest_" + projectName
   create_imagery_proj(project)
-  create_imagery_resource_add_to_proj("BlueMarble_" + projectName, "/opt/google/share/tutorials/fusion/Imagery/bluemarble_4km.tif", project)
-  create_imagery_resource_add_to_proj("i3SF15meter_" + projectName, "/opt/google/share/tutorials/fusion/Imagery/i3SF15-meter.tif", project)
-  create_imagery_resource_add_to_proj("USGSLanSat_" + projectName, "/opt/google/share/tutorials/fusion/Imagery/usgsLanSat.tif", project)
-  create_imagery_resource_add_to_proj("SFHiRes_" + projectName, "/opt/google/share/tutorials/fusion/Imagery/usgsSFHiRes.tif", project)
+  create_imagery_resource_add_to_proj("BlueMarble_" + projectName, os.path.join(get_src_data_path(), "Imagery/bluemarble_4km.tif"), project)
+  create_imagery_resource_add_to_proj("i3SF15meter_" + projectName,  os.path.join(get_src_data_path(), "Imagery/i3SF15-meter.tif"), project)
+  create_imagery_resource_add_to_proj("USGSLanSat_" + projectName,  os.path.join(get_src_data_path(), "Imagery/usgsLanSat.tif"), project)
+  create_imagery_resource_add_to_proj("SFHiRes_" + projectName,  os.path.join(get_src_data_path(), "Imagery/usgsSFHiRes.tif"), project)
   verify_imagery_proj_no_versions(project)
   build_imagery_project(project)
 
@@ -364,7 +370,7 @@ def create_database_imagery(database, imagery):
 @step("Create map layer <layer> from resource <resource>")
 def create_map_layer_from_resource(layer, resource):
   call(["/opt/google/bin/genewmaplayer", "--legend", layer, "--output", os.path.join(MAP_LAYER_PATH, layer),
-        "--template", "resources/CA_POIs_template.kmdsp", os.path.join(VECTOR_RESOURCE_PATH, resource)],
+       os.path.join(VECTOR_RESOURCE_PATH, resource)],
        "Failed to create map layer %s" % layer)
 
 @step("Create map project <project> from layer <layer>")

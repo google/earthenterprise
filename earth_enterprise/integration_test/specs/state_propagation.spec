@@ -24,7 +24,8 @@ in the asset_root and may require privileged access to run.
 Set up
 * Create asset root directories
 
-## Build, Clean, and Rebuild Project Test
+## Build, Clean and Rebuild Project Test
+Tags: basic, build, clean, rebuild
 
 Build
 * Create and build default project "BasicBuild"
@@ -42,6 +43,7 @@ Rebuild
 * Verify that the state of images for default project "BasicBuild" is "Succeeded"
 
 ## Cancel and Resume Project Before Packgen
+Tags: basic, build, clean, rebuild
 
 Build
 * Create and build default project "CancelProjectEarly"
@@ -62,6 +64,7 @@ Resume
 * Verify that the state of images for default project "CancelProjectEarly" is "Succeeded"
 
 ## Cancel, Resume, Clean, and Rebuild Resource While Project is Building
+Tags: cancel, clean, resume, rebuild
 
 Build
 * Create and build default project "CancelResourceDuringBuild"
@@ -115,6 +118,7 @@ Rebuild
 * Verify that the state of imagery resource "BlueMarble_CancelResourceDuringBuild" is "Succeeded"
 
 ## Cancel, Resume, Clean, and Rebuild Project During Packgen
+Tags: cancel, clean, resume, rebuild
 
 Build
 * Create and build default project "CancelProjectLate"
@@ -148,6 +152,7 @@ Rebuild
 * Verify that the state of images for default project "CancelProjectLate" is "Succeeded"
 
 ## Clean After Cancel
+Tags: cancel, clean, rebuild
 
 Build
 * Create and build default project "CleanAfterCancel"
@@ -234,6 +239,7 @@ Rebuild Project
 * Verify that the state of images for default project "CleanAfterCancel" is "Succeeded"
 
 ## Clean and Cancel Project and Resource, Then Rebuild Project
+Tags: cancel, clean, resume, rebuild
 
 Build
 * Create and build default project "CleanCancelRebuildProject"
@@ -289,6 +295,7 @@ Rebuild Project
 * Verify that the state of images for default project "CleanCancelRebuildProject" is "Succeeded"
 
 ## Resources Belonging to Multiple Projects
+Tags: multiproject, build, cancel, clean, rebuild
 This is the longest test (in terms of time) because it includes buliding a
 terrain resource.
 
@@ -392,9 +399,10 @@ Clean resource after build
 * Verify that the state of imagery project "StatePropagationTest_MultiProject2" is "Succeeded"
 
 ## Set Bad and Good
+Tags: bad, build 
 
 Set up and build
-* Create and build default project "BadAndGood"
+* Create and build default project "BadAndGood" 
 * Create database "Database_BadAndGood" from imagery project "StatePropagationTest_BadAndGood"
 * Build database "Database_BadAndGood"
 * Wait for database "Database_BadAndGood" to reach state "Succeeded"
@@ -440,7 +448,8 @@ Mark database good
 * Verify that the state of imagery project "StatePropagationTest_BadAndGood" is "Succeeded"
 * Verify that the state of images for default project "BadAndGood" is "Succeeded"
 
-## Cancel resource before building database or project
+## Cancel Resource Before Building Database or Project
+Tags: cancel, build 
 
 Set up
 * Create imagery project "StatePropagationTest_CancelBeforeBuild"
@@ -467,13 +476,27 @@ Build the database
 * Verify that the state of imagery resource "BlueMarble_CancelBeforeBuild" is "Succeeded"
 * Verify that the state of imagery project "StatePropagationTest_CancelBeforeBuild" is "Succeeded"
 
-## Build bad project
+## Build Database with Failed Resources
+Tags: failed, build, rebuild
 * Create imagery project "StatePropagationTest_BadImageryProject1"
-* Create imagery resource "BadImagery_MultiProject" from "Imagery/BadTestImage1.jp2"
-* Add imagery resource "BadImagery_MultiProject" to project "StatePropagationTest_BadImageryProject1"
-* Verify that the state of imagery resource "StatePropagationTest_BadImageryProject1" is "Failed"
-  
+* Add imagery resource "StatePropagationTest_FailedImageryResource" to project "StatePropagationTest_BadImageryProject1"
+* Add imagery resource "BlueMarble_MultiProject" to project "StatePropagationTest_BadImageryProject1"
+* Build imagery project "StatePropagationTest_BadImageryProject1"
+* Wait for imagery project "StatePropagationTest_BadImageryProject1" to reach state "Blocked"
+
+Build database with failed imagery resource project
+* Create database "StatePropagationTest_Database_FailedResources" from imagery project "StatePropagationTest_BadImageryProject1"
+* Build database "StatePropagationTest_Database_FailedResources"
+* Wait for database "StatePropagationTest_Database_FailedResources" to reach state "Blocked"
+
+Rebuild failed database without failed resource
+* Drop imagery resource "StatePropagationTest_FailedImageryResource" from project "StatePropagationTest_BadImageryProject1"
+* Build database "StatePropagationTest_Database_FailedResources"
+* Wait for database "StatePropagationTest_Database_FailedResources" to reach state "Succeeded"
+
+
 ## Map Projects and Mercator Assets
+Tags: mercator, build
 We do not test Map and Mercator assets as thoroughly as flat assets since much
 of the processing is the same.
 
@@ -507,6 +530,7 @@ Wait for success
 * Verify that the state of imagery resource "BlueMarble_Mercator" is "Succeeded"
 
 ## Database, Terrain, and Vector Tests
+Tags: terrain, vector, build
 We do not test terrain and vector assets as thoroughly as imagery assets since much of the
 processing will be the same.
 
