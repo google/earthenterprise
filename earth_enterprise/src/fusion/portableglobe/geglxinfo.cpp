@@ -75,8 +75,8 @@ void GetXY(int level, uint64 btree, uint64* x, uint64* y) {
 
 void writePacketToFile(const IndexItem& index_item,
                        const std::string& buffer,
-                       const bool skipSmall = true,
-                       const std::string& extraSuffix = "") {
+                       const bool skipSmall,
+                       const std::string& extraSuffix) {
   char path[256];
   const char* suffix;
   uint64 x;
@@ -104,21 +104,57 @@ void writePacketToFile(const IndexItem& index_item,
   }
 }
 
+bool getPackageFileLocs(GlcUnpacker* const unpacker,
+                    const std::string& index_file,
+                    const std::string& data_file,
+                    bool is_composite,
+                    int layer_idx,
+                    PackageFileLoc& index_file_loc,
+                    PackageFileLoc& data_file_loc) {
+  // For glcs, we need to look inside each layer for the indexes.
+  if (is_composite) {
+    int layer_index = unpacker->LayerIndex(layer_idx);
+    if (!unpacker->FindLayerFile(
+           index_file.c_str(), layer_index, &index_file_loc)) {
+       std::cout << "Unable to find layer index: " << index_file << std::endl;
+       return false;
+    }
+
+    if (!unpacker->FindLayerFile(
+           data_file.c_str(), layer_index, &data_file_loc)) {
+       std::cout << "Unable to find layer data: " << data_file << std::endl;
+       return false;
+    }
+
+  // For glms and glbs, just use the corresponding data index and divide
+  // by its size (sizeof(IndexItem)).
+  } else {
+    if (!unpacker->FindFile(index_file.c_str(), &index_file_loc)) {
+        std::cout << "Unable to find index: " << index_file << std::endl;
+      return false;
+    }
+    if (!unpacker->FindFile(data_file.c_str(), &data_file_loc)) {
+        std::cout << "Unable to find data: " << data_file << std::endl;
+      return false;
+    }
+  }
+
+  return true;
+}
+
 void extractAllPackets(GlcUnpacker* const unpacker,
                     PortableGlcReader* const reader,
                     uint64 start_idx,
                     uint64 end_idx,
+                    int layer_idx,
+                    bool is_composite,
                     const std::string& index_file,
                     const std::string& data_file) {
   PackageFileLoc index_file_loc;
   PackageFileLoc data_file_loc;
 
-  if (!unpacker->FindFile(index_file.c_str(), &index_file_loc)) {
-      std::cout << "Unable to find index: " << index_file << std::endl;
-    return;
-  }
-  if (!unpacker->FindFile(data_file.c_str(), &data_file_loc)) {
-      std::cout << "Unable to find data: " << data_file << std::endl;
+  if (!getPackageFileLocs(unpacker, index_file, data_file, is_composite, layer_idx,
+                          index_file_loc, data_file_loc)) {
     return;
   }
 
@@ -159,7 +195,7 @@ void extractAllPackets(GlcUnpacker* const unpacker,
       } else if (reader->ReadData(
           &buffer[0], data_offset, index_item.packet_size)) {
         if (unpacker->Is2d()) {
-          writePacketToFile(index_item, buffer);
+          writePacketToFile(index_item, buffer, true, "");
         }
         else if (index_item.packet_type == kImagePacket) {
           etEncoder::DecodeWithDefaultKey(&buffer[0], index_item.packet_size);
@@ -169,10 +205,10 @@ void extractAllPackets(GlcUnpacker* const unpacker,
           }
 
           if (protoPacket.HasImageData()) {
-            writePacketToFile(index_item, protoPacket.ImageData(), true, "_img");
+            writePacketToFile(index_item, protoPacket.ImageData(), false, "_img");
           }
           if (protoPacket.HasImageAlpha()) {
-            writePacketToFile(index_item, protoPacket.ImageAlpha(), true, "_alpha");
+            writePacketToFile(index_item, protoPacket.ImageAlpha(), false, "_alpha");
           }
         }
         else if (index_item.packet_type == kQtpPacket) {
@@ -182,7 +218,6 @@ void extractAllPackets(GlcUnpacker* const unpacker,
           if (KhPktDecompress(buffer.data(),
                               buffer.size(),
                               &decompressed)) {
-            // todo: some magic here to make metadata into a human readable string
             qtpacket::KhQuadTreePacket16 theMetadata;
             decompressed >> theMetadata;
             writePacketToFile(index_item, theMetadata.ToString(index_item.level == 0,true), false, "_meta");
@@ -200,7 +235,7 @@ void extractAllPackets(GlcUnpacker* const unpacker,
           }
         }
         else if (index_item.packet_type == kDbRootPacket) {
-          writePacketToFile(index_item, buffer, true, "_dbroot");
+          writePacketToFile(index_item, buffer, false, "_dbroot");
         }
         else if (index_item.packet_type == kVectorPacket) {
           LittleEndianReadBuffer decompressed;
@@ -255,127 +290,14 @@ void ExtractPackets(GlcUnpacker* const unpacker,
                     int layer_idx,
                     uint64 start_idx,
                     uint64 end_idx) {
-  PackageFileLoc index_file_loc;
-  std::string index_file = "mapdata/index";
-  PackageFileLoc data_file_loc;
-  std::string data_file = "mapdata/pbundle_0000";
-  if (reader->Suffix() == "glb") {
-    index_file = "data/index";
-    data_file = "data/pbundle_0000";
+  if (unpacker->Is3d()) {
     std::cout << "Extracting packets for a globe file" << std::endl;
-    extractAllPackets(unpacker, reader, start_idx, end_idx, "data/index", "data/pbundle_0000");
-    extractAllPackets(unpacker, reader, start_idx, end_idx, "qtp/index", "qtp/pbundle_0000");
+    extractAllPackets(unpacker, reader, start_idx, end_idx, layer_idx, is_composite, "data/index", "data/pbundle_0000");
+    extractAllPackets(unpacker, reader, start_idx, end_idx, layer_idx, is_composite, "qtp/index", "qtp/pbundle_0000");
     return;
   }
-
-  // For glcs, we need to look inside each layer for the indexes.
-  if (is_composite) {
-    // Determine if the glc is 2d, 3d, or both
-    for (int i = 0; i < unpacker->IndexSize(); ++i) {
-      std::string package_file = unpacker->IndexFile(i);
-      std::string layer_suffix = package_file.substr(package_file.size() - 3);
-      if (layer_suffix == "glb") {
-        std::cout << "Only 2d is supported." << std::endl;
-        return;
-      } else if (layer_suffix == "glm") {
-        std::cout << "2d glc" << std::endl;
-      }
-    }
-
-    int layer_index = unpacker->LayerIndex(layer_idx);
-    if (!unpacker->FindLayerFile(
-           index_file.c_str(), layer_index, &index_file_loc)) {
-       std::cout << "Unable to find layer index: " << index_file << std::endl;
-       return;
-    }
-
-    if (!unpacker->FindLayerFile(
-           data_file.c_str(), layer_index, &data_file_loc)) {
-       std::cout << "Unable to find layer data: " << data_file << std::endl;
-       return;
-    }
-
-  // For glms and glbs, just use the corresponding data index and divide
-  // by its size (sizeof(IndexItem)).
-  } else {
-    if (!unpacker->FindFile(index_file.c_str(), &index_file_loc)) {
-        std::cout << "Unable to find index: " << index_file << std::endl;
-      return;
-    }
-    if (!unpacker->FindFile(data_file.c_str(), &data_file_loc)) {
-        std::cout << "Unable to find data: " << data_file << std::endl;
-      return;
-    }
-  }
-
-  // Sanity check.
-  if (index_file_loc.Size() % sizeof(IndexItem) != 0) {
-    std::cout << "Index is damaged." << std::endl;
-    return;
-  }
-
-  uint64 number_of_packets = index_file_loc.Size() / sizeof(IndexItem);
-  std::cout << "Extracting " << (end_idx - start_idx)
-            << " of " << number_of_packets
-            << " packets" << std::endl;
-
-  if (number_of_packets  < end_idx) {
-    std::cout << "Insufficient packets. " <<
-        "Resetting end packet to: " << number_of_packets << std::endl;
-    end_idx = number_of_packets;
-  }
-
-  uint64 offset = index_file_loc.Offset() + sizeof(IndexItem) * start_idx;
-  std::string buffer;
-  uint64 max_size = 200000;
-  buffer.resize(max_size);
-  // Main extraction loop.
-  // Reads sequential index entries and saves packets as files
-  // to disk. Directories are arranged in z, x, y order and the
-  // name of the file corresponds to the channel.
-  for (uint64 i = start_idx; i < end_idx; ++i) {
-    IndexItem index_item;
-    // std::cout << "index offset: " << offset << std::endl;
-    if (reader->ReadData(&index_item, offset, sizeof(IndexItem))) {
-      uint64 data_offset = data_file_loc.Offset() + index_item.offset;
-      buffer.resize(MIN(max_size, index_item.packet_size));
-      if (index_item.packet_size >= max_size) {
-        std::cout << "Data item is too big: " << i
-                  << " size: " << index_item.packet_size << std::endl;
-      } else if (reader->ReadData(
-          &buffer[0], data_offset, index_item.packet_size)) {
-        char path[256];
-        const char* suffix;
-        uint64 x;
-        uint64 y;
-        uint64 btree = index_item.btree_high;
-        btree <<= 16;
-        btree |= (index_item.btree_low & 0xffff);
-        GetXY(index_item.level, btree, &x, &y);
-        if ((buffer[6] == 'J') && (buffer[7] == 'F')
-            && (buffer[8] == 'I') && (buffer[9] == 'F')) {
-          suffix = "jpg";
-        } else if ((buffer[1] == 'P') && (buffer[2] == 'N')
-                   && (buffer[3] == 'G')) {
-          suffix = "png";
-        } else {
-          suffix = "unk";
-        }
-        snprintf(path, sizeof(path), "maptiles/%d/%d/%lu/%lu.%s",
-                 index_item.channel, index_item.level, x, y, suffix);
-        if (index_item.packet_size <= 153) {
-          std::cout << "Skipping small: " << path << std::endl;
-        } else {
-          khEnsureParentDir(path);
-          khWriteSimpleFile(path, &buffer[0], index_item.packet_size);
-        }
-      }  else {
-        std::cout << "Unable to read data item." << std::endl;
-      }
-    } else {
-      std::cout << "Unable to read index item." << std::endl;
-    }
-    offset += sizeof(IndexItem);
+  else {
+    extractAllPackets(unpacker, reader, start_idx, end_idx, layer_idx, is_composite, "mapdata/index", "mapdata/pbundle_0000");
   }
 }
 
