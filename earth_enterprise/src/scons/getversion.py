@@ -214,7 +214,7 @@ class OpenGeeVersion(object):
         """Returns the short version string."""
 
         if not self.long_version_string:
-            self.long_version_string = GetLongVersion(self.backup_file, self.label)
+            self.long_version_string = GetLongVersion(self.backup_file, self.label, self.use_first_parent)
 
         return self.long_version_string
 
@@ -249,8 +249,9 @@ def main():
     parser.add_argument("-l", "--long", action="store_true", help="Output long format of version string")
     parser.add_argument("-o", "--original", action="store_true", help="Use original algorithm compatible with git v1.7.1-1.8.3.  Deprecated.")
     args = parser.parse_args()
-    
-    open_gee_version.set_use_first_parent = not args.original
+
+    open_gee_version.set_use_first_parent(not args.original)
+
     print open_gee_version.get_long() if args.long else open_gee_version.get_short()
 
 

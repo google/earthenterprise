@@ -426,7 +426,6 @@ if not opengee_version_ge(git_version, [1,8,4]):
 
 gee_version_number = GetVersion(*get_version_args)
 
-
 # create the environment that controls the builds
 
 if is_min_ubuntu:
