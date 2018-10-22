@@ -195,6 +195,7 @@ class OpenGeeVersion(object):
         self_path, _ = os.path.split(os.path.realpath(__file__))
         self.backup_file = os.path.join(self_path, '..', 'version.txt')
         self.label = ''
+        self.use_first_parent = True
 
     def get_short(self):
         """Returns the short version string."""
@@ -225,6 +226,19 @@ class OpenGeeVersion(object):
 
         self.long_version_string = value
 
+    def get_use_first_parent(self):
+        """Returns value of the option to use the git describe --first-parent parameter."""
+
+        return self.use_first_parent
+
+    def set_use_first_parent(self, value):
+        """For git v1.8.4+, it is safe to use the --first-parent parameter
+        to determine the latest version tag from your current branch.  For
+        git v1.7.1-1.8.3, this option must be set to False or the call to
+        check version will fail."""
+
+        self.use_first_parent = value
+
 
 # Exported variable for use by other modules:
 open_gee_version = OpenGeeVersion()
@@ -235,7 +249,8 @@ def main():
     parser.add_argument("-l", "--long", action="store_true", help="Output long format of version string")
     parser.add_argument("-o", "--original", action="store_true", help="Use original algorithm compatible with git v1.7.1-1.8.3.  Deprecated.")
     args = parser.parse_args()
-
+    
+    open_gee_version.set_use_first_parent = not args.original
     print open_gee_version.get_long() if args.long else open_gee_version.get_short()
 
 
