@@ -35,6 +35,7 @@ if opengee_lib_path not in sys.path:
 
 import opengee.c_compiler
 import opengee.version
+import opengee.git
 
 
 # Path to crosstool root directory.
