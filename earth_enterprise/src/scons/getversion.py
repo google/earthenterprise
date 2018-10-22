@@ -1,19 +1,31 @@
 #!/usr/bin/env python
+from __future__ import print_function
 import os
 import argparse
 import git
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '../lib', 'python'))
+import opengee.git, opengee.version
+
 from datetime import datetime
 
-def GetVersion(backupFile, label='', useFirstParent=True):
+def eprint(*args, **kwargs):
+    """Print to stderr"""
+
+    print(*args, file=sys.stderr, **kwargs)
+
+
+def GetVersion(backupFile, label=''):
     """As getLongVersion(), but only return the leading *.*.* value."""
 
-    raw = GetLongVersion(backupFile, label, useFirstParent)
+    raw = GetLongVersion(backupFile, label)
     final = raw.split("-")[0]
 
     return final
 
 
-def GetLongVersion(backupFile, label='', useFirstParent=True):
+def GetLongVersion(backupFile, label=''):
     """Create a detailed version string based on the state of
     the software, as it exists in the repository."""
 
@@ -21,7 +33,7 @@ def GetLongVersion(backupFile, label='', useFirstParent=True):
         return open_gee_version.long_version_string
 
     if _CheckGitAvailable():
-        ret = _GitGeneratedLongVersion(useFirstParent)
+        ret = _GitGeneratedLongVersion()
 
     # Without git, must use the backup file to create a string.
     else:
@@ -38,11 +50,11 @@ def GetLongVersion(backupFile, label='', useFirstParent=True):
     return ret
 
 
-def _GitGeneratedLongVersion(useFirstParent=True):
+def _GitGeneratedLongVersion():
     """Take the raw information parsed by git, and use it to
        generate an appropriate version string for GEE."""
 
-    raw = _GetCommitRawDescription(useFirstParent)
+    raw = _GetCommitRawDescription()
 
     # For tagged commits, return the tag itself
     if _IsCurrentCommitTagged(raw):
@@ -51,14 +63,21 @@ def _GitGeneratedLongVersion(useFirstParent=True):
         return _VersionFromTagHistory(raw)
 
 
-def _GetCommitRawDescription(useFirstParent=True):
+def _IsFirstParentGitDescribeSupported():
+    """Checks whether --first-parent parameter is valid for the
+    version of git available"""
+
+    return opengee.version.is_version_ge(git.Git().version_info, (1, 8, 4))
+
+
+def _GetCommitRawDescription():
     """Returns description of current commit"""
-    repo = _GetRepository()
 
     args = ['--tags', '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*']
-    if useFirstParent:
+    if _IsFirstParentGitDescribeSupported():
         args.insert(0, '--first-parent')
 
+    repo = _GetRepository()
     raw = repo.git.describe(*args)
     raw = raw.rstrip()
     return raw
@@ -195,7 +214,6 @@ class OpenGeeVersion(object):
         self_path, _ = os.path.split(os.path.realpath(__file__))
         self.backup_file = os.path.join(self_path, '..', 'version.txt')
         self.label = ''
-        self.use_first_parent = True
 
     def get_short(self):
         """Returns the short version string."""
@@ -214,7 +232,7 @@ class OpenGeeVersion(object):
         """Returns the short version string."""
 
         if not self.long_version_string:
-            self.long_version_string = GetLongVersion(self.backup_file, self.label, self.use_first_parent)
+            self.long_version_string = GetLongVersion(self.backup_file, self.label)
 
         return self.long_version_string
 
@@ -226,33 +244,36 @@ class OpenGeeVersion(object):
 
         self.long_version_string = value
 
-    def get_use_first_parent(self):
-        """Returns value of the option to use the git describe --first-parent parameter."""
+    def is_warning_available(self):
+        """Returns whether a warning message should be shown."""
 
-        return self.use_first_parent
+        return not _IsFirstParentGitDescribeSupported()
 
-    def set_use_first_parent(self, value):
-        """For git v1.8.4+, it is safe to use the --first-parent parameter
-        to determine the latest version tag from your current branch.  For
-        git v1.7.1-1.8.3, this option must be set to False or the call to
-        check version will fail."""
+    def warning_message(self):
+        """Returns any issues with version calculation with mitigation steps."""
 
-        self.use_first_parent = value
+        return '' if not is_warning_available() else '''\
+WARNING: git version 1.8.4 or later is required to correctly determine the opengee version being built.'
+The opengee version is calculated from tags using the "git describe" command.'
+The "--first-parent" parameter introduced in git 1.8.4 allows proper version calcuation on all branches.'
+Without the --first-parent parameter, the version calculated may be incorrect, depending on which branch is being built.'
+For information on upgrading git, see:
+https://github.com/google/earthenterprise/wiki/Frequently-Asked-Questions-(FAQs)#how-do-i-upgrade-git-to-the-recommended-version-for-building-google-earth-enterprise'\
+'''
 
 
 # Exported variable for use by other modules:
 open_gee_version = OpenGeeVersion()
 
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-l", "--long", action="store_true", help="Output long format of version string")
-    parser.add_argument("-o", "--original", action="store_true", help="Use original algorithm compatible with git v1.7.1-1.8.3.  Deprecated.")
     args = parser.parse_args()
 
-    open_gee_version.set_use_first_parent(not args.original)
+    print(open_gee_version.get_long() if args.long else open_gee_version.get_short())
 
-    print open_gee_version.get_long() if args.long else open_gee_version.get_short()
+    if open_gee_version.is_warning_available():
+        eprint(open_gee_version.warning_message)
 
 
 __all__ = ['open_gee_version']

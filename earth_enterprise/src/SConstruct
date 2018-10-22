@@ -27,6 +27,8 @@ import sys
 sys.path += ['scons']
 from khEnvironment import khEnvironment
 
+import getversion
+
 # Add the OpenGEE Python libraries to the module search path:
 opengee_lib_path = os.path.join('lib', 'python')
 
@@ -35,7 +37,6 @@ if opengee_lib_path not in sys.path:
 
 import opengee.c_compiler
 import opengee.version
-import opengee.git
 
 
 # Path to crosstool root directory.
@@ -412,22 +413,12 @@ installdirs = {
     'htdocs': InstServerDir('gehttpd/htdocs'),
 }
 
-
 # Check version of git -- may not be able to reliably generate correct opengee version string.
-get_version_args = ['version.txt', label]
-git_version = opengee.git.get_git_version('/usr/bin/git')
-if not opengee_version_ge(git_version, [1,8,4]):
-    print 'WARNING: git version 1.8.4 or later is required to correctly determine the opengee version being built.'
-    print 'The opengee version is calculated from tags using the "git describe" command.'
-    print 'The "--first-parent" parameter introduced in git 1.8.4 allows proper version calcuation on all branches.'
-    print 'Without the --first-parent parameter, the version calculated may be incorrect, depending on which branch is being built.'
-    print 'For information on upgrading git, see: https://github.com/google/earthenterprise/wiki/Frequently-Asked-Questions-(FAQs)#how-do-i-upgrade-git-to-the-recommended-version-for-building-google-earth-enterprise'
-    get_version_args.append(False)
-
-gee_version_number = GetVersion(*get_version_args)
+gee_version_number = getversion.open_gee_version.get_short()
+if getversion.open_gee_version.is_warning_available():
+    print getversion.open_gee_version.warning_message()
 
 # create the environment that controls the builds
-
 if is_min_ubuntu:
   path_string = '%sbin:/bin:/usr/bin' % (exportdirs['root'])
 else:
