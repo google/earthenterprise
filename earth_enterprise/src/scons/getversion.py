@@ -6,7 +6,7 @@ import git
 import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../lib', 'python'))
-import opengee.git, opengee.version
+import opengee.version
 
 from datetime import datetime
 
@@ -249,16 +249,16 @@ class OpenGeeVersion(object):
 
         return not _IsFirstParentGitDescribeSupported()
 
-    def warning_message(self):
+    def get_warning_message(self):
         """Returns any issues with version calculation with mitigation steps."""
 
-        return '' if not is_warning_available() else '''\
-WARNING: git version 1.8.4 or later is required to correctly determine the opengee version being built.'
-The opengee version is calculated from tags using the "git describe" command.'
-The "--first-parent" parameter introduced in git 1.8.4 allows proper version calcuation on all branches.'
-Without the --first-parent parameter, the version calculated may be incorrect, depending on which branch is being built.'
+        return '' if not self.is_warning_available() else '''\
+WARNING: git version 1.8.4 or later is required to correctly determine the opengee version being built.
+The opengee version is calculated from tags using the "git describe" command.
+The "--first-parent" parameter introduced in git 1.8.4 allows proper version calcuation on all branches.
+Without the --first-parent parameter, the version calculated may be incorrect, depending on which branch is being built.
 For information on upgrading git, see:
-https://github.com/google/earthenterprise/wiki/Frequently-Asked-Questions-(FAQs)#how-do-i-upgrade-git-to-the-recommended-version-for-building-google-earth-enterprise'\
+https://github.com/google/earthenterprise/wiki/Frequently-Asked-Questions-(FAQs)#how-do-i-upgrade-git-to-the-recommended-version-for-building-google-earth-enterprise\
 '''
 
 
@@ -273,7 +273,7 @@ def main():
     print(open_gee_version.get_long() if args.long else open_gee_version.get_short())
 
     if open_gee_version.is_warning_available():
-        eprint(open_gee_version.warning_message)
+        eprint(open_gee_version.get_warning_message())
 
 
 __all__ = ['open_gee_version']
