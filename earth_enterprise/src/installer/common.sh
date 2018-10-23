@@ -80,6 +80,26 @@ xml_file_get_xpath()
         tail -n +2 | head -n -1
 }
 
+is_package_installed()
+{
+    local package_installed_retval=1
+
+    # args: $1: Ubuntu package
+    # args: $2: RHEL package
+
+    if [ "$MACHINE_OS" == "$UBUNTUKEY" ] && [ ! -z "$1" ]; then
+        if [[ ! -z "$(dpkg --get-selections | sed s:install:: | sed -e 's:\s::g' | grep ^$1)" ]]; then
+            package_installed_retval=0
+        fi
+    elif { [ "$MACHINE_OS" == "$REDHATKEY" ] || [ "$MACHINE_OS" == "$CENTOSKEY" ]; } && [ ! -z "$2" ]; then
+        if [[ ! -z "$(rpm -qa | grep ^$2)" ]]; then
+            package_installed_retval=0
+        fi
+    fi
+
+    return $package_installed_retval
+}
+
 software_check()
 {
     local software_check_retval=0
@@ -88,20 +108,14 @@ software_check()
     # args: $2: Ubuntu package
     # args: $3: RHEL package
 
-    if [ "$MACHINE_OS" == "$UBUNTUKEY" ] && [ ! -z "$2" ]; then
-        if [[ -z "$(dpkg --get-selections | sed s:install:: | sed -e 's:\s::g' | grep ^$2\$)" ]]; then
+    if ! is_package_installed $2 $3 ; then
+	if [ "$MACHINE_OS" == "$UBUNTUKEY" ] && [ ! -z "$2" ]; then
             echo -e "\nInstall $2 and restart the $1."
             software_check_retval=1
-        fi
-    elif { [ "$MACHINE_OS" == "$REDHATKEY" ] || [ "$MACHINE_OS" == "$CENTOSKEY" ]; } && [ ! -z "$3" ]; then
-        if [[ -z "$(rpm -qa | grep ^$3\$)" ]]; then
+	elif { [ "$MACHINE_OS" == "$REDHATKEY" ] || [ "$MACHINE_OS" == "$CENTOSKEY" ]; } && [ ! -z "$3" ]; then 
             echo -e "\nInstall $3 and restart the $1."
             software_check_retval=1
         fi
-    else
-        echo -e "\nThe $1 could not determine your machine's operating system."
-        echo -e "Supported Operating Systems: ${SUPPORTED_OS_LIST[*]}\n"
-        software_check_retval=1
     fi
 
     return $software_check_retval
@@ -147,6 +161,15 @@ determine_os()
 
     return $retval
 }
+
+
+show_opengee_package_installed()
+{
+    #args: $1 "install" or "uninstall"
+    echo -e "\nThe opengee-common package is installed."
+    echo -e "This installer cannot $1 OpenGEE when a package manager install is present."
+}
+
 
 run_as_user() {
     local use_su=`su $1 -c 'echo -n 1' 2> /dev/null  || echo -n 0`
