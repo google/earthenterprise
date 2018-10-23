@@ -23,8 +23,14 @@ import commands
 
 sys.path = sys.path + ['src/scons']
 from khEnvironment import khEnvironment
+import getversion
 
 EnsureSConsVersion(0, 96, 92)
+
+# Check version of git -- may not be able to reliably generate correct opengee version string.
+gee_version_number = getversion.open_gee_version.get_short()
+if getversion.open_gee_version.is_warning_available():
+    print getversion.open_gee_version.get_warning_message()
 
 # Set 'package_command_arguments' based on a parameter
 # that is to be passed on to Gradle
