@@ -415,7 +415,7 @@ installdirs = {
 
 # Check version of git -- may not be able to reliably generate correct opengee version string.
 gee_version_number = getversion.open_gee_version.get_short()
-if getversion.open_gee_version.is_warning_available():
+if getversion.open_gee_version.get_warning_message():
     print getversion.open_gee_version.get_warning_message()
 
 # create the environment that controls the builds

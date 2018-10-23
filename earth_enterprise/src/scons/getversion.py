@@ -1,19 +1,10 @@
 #!/usr/bin/env python
-from __future__ import print_function
 import os
 import argparse
 import git
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../lib', 'python'))
-import opengee.version
-
 from datetime import datetime
-
-def eprint(*args, **kwargs):
-    """Print to stderr"""
-
-    print(*args, file=sys.stderr, **kwargs)
 
 
 def GetVersion(backupFile, label=''):
@@ -63,18 +54,25 @@ def _GitGeneratedLongVersion():
         return _VersionFromTagHistory(raw)
 
 
-def _IsFirstParentGitDescribeSupported():
+def _IsGitDescribeFirstParentSupported():
     """Checks whether --first-parent parameter is valid for the
     version of git available"""
+    
+    try:
+        repo = _GetRepository()
+        repo.git.describe('--first-parent')
+        return True
+    except git.exc.GitCommandError:
+        pass
 
-    return opengee.version.is_version_ge(git.Git().version_info, (1, 8, 4))
+    return False
 
 
 def _GetCommitRawDescription():
     """Returns description of current commit"""
 
     args = ['--tags', '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*']
-    if _IsFirstParentGitDescribeSupported():
+    if _IsGitDescribeFirstParentSupported():
         args.insert(0, '--first-parent')
 
     repo = _GetRepository()
@@ -244,20 +242,15 @@ class OpenGeeVersion(object):
 
         self.long_version_string = value
 
-    def is_warning_available(self):
-        """Returns whether a warning message should be shown."""
-
-        return not _IsFirstParentGitDescribeSupported()
-
     def get_warning_message(self):
-        """Returns any issues with version calculation with mitigation steps."""
+        """Returns None, or a string describing known issues."""
 
-        return '' if not self.is_warning_available() else '''\
-WARNING: git version 1.8.4 or later is required to correctly determine the opengee version being built.
-The opengee version is calculated from tags using the "git describe" command.
-The "--first-parent" parameter introduced in git 1.8.4 allows proper version calcuation on all branches.
+        return None if _IsGitDescribeFirstParentSupported() else '''\
+WARNING: Git version 1.8.4 or later is required to correctly determine the Open GEE version being built.
+The Open GEE version is calculated from tags using the "git describe" command.
+The "--first-parent" parameter introduced in Git 1.8.4 allows proper version calcuation on all branches.
 Without the --first-parent parameter, the version calculated may be incorrect, depending on which branch is being built.
-For information on upgrading git, see:
+For information on upgrading Git, see:
 https://github.com/google/earthenterprise/wiki/Frequently-Asked-Questions-(FAQs)#how-do-i-upgrade-git-to-the-recommended-version-for-building-google-earth-enterprise\
 '''
 
@@ -270,10 +263,9 @@ def main():
     parser.add_argument("-l", "--long", action="store_true", help="Output long format of version string")
     args = parser.parse_args()
 
-    print(open_gee_version.get_long() if args.long else open_gee_version.get_short())
-
-    if open_gee_version.is_warning_available():
-        eprint(open_gee_version.get_warning_message())
+    print open_gee_version.get_long() if args.long else open_gee_version.get_short()
+    if open_gee_version.get_warning_message():
+        print >> sys.stderr, open_gee_version.get_warning_message()
 
 
 __all__ = ['open_gee_version']
