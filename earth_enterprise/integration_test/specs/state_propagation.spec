@@ -3,23 +3,17 @@ State Propagation Correctness Tests
 
 Test handling and propagation of state changes.
 
-These tests assume you have installed fusion, that the asset root is at
-/gevol/assets, that the source volume contains the tutorial data, stored by default 
-in /gevol/src/gauge_tests/.:quickly:~.:
+These tests assume you have installed fusion and that the asset root is at
+/gevol/assets.
 
+Before running these tests you must run `test_setup.sh` located in the same
+directory as this file.  You can also run `test-teardown.sh` to clean up after
+these tests. WARNING: these scripts DELETE assets under /gevol/assets and
+require privileged access to run.
 
 Some of these tests are timing dependent. For example, if we are testing that
 the state of a particular asset is "InProgress", that step will fail if the
 build completes too quickly and the asset goes to the "Succeeded" state.
-
-Missing tests: there is no test that transitions a resource to a failed state.
-Such a test requires an invalid image with a valid extension (such as .tif or
-.jp2). No such image is provided by default and adding one to a source volume
-requires superuser permissions.
-
-For a clean setup to run these tests multiple times, run `clean_test_setup.sh`,
-located in the same directory as this file.  WARNING: this script DELETES assets
-in the asset_root and may require privileged access to run.
 
 Set up
 * Create asset root directories

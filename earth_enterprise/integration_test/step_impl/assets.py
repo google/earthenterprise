@@ -3,15 +3,16 @@ import os
 import subprocess
 import time
 
-DATABASE_PATH = "Databases"
-MAP_LAYER_PATH = "MapLayers"
-IMAGERY_PROJECT_PATH = os.path.join("Projects", "Imagery")
-TERRAIN_PROJECT_PATH = os.path.join("Projects", "Terrain")
-VECTOR_PROJECT_PATH = os.path.join("Projects", "Vector")
-MAP_PROJECT_PATH = os.path.join("Projects", "Map")
-IMAGERY_RESOURCE_PATH = os.path.join("Resources", "Imagery")
-TERRAIN_RESOURCE_PATH = os.path.join("Resources", "Terrain")
-VECTOR_RESOURCE_PATH = os.path.join("Resources", "Vector")
+BASE_ASSET_PATH = "gauge_tests"
+DATABASE_PATH = os.path.join(BASE_ASSET_PATH, "Databases")
+MAP_LAYER_PATH = os.path.join(BASE_ASSET_PATH, "MapLayers")
+IMAGERY_PROJECT_PATH = os.path.join(BASE_ASSET_PATH, "Projects", "Imagery")
+TERRAIN_PROJECT_PATH = os.path.join(BASE_ASSET_PATH, "Projects", "Terrain")
+VECTOR_PROJECT_PATH = os.path.join(BASE_ASSET_PATH, "Projects", "Vector")
+MAP_PROJECT_PATH = os.path.join(BASE_ASSET_PATH, "Projects", "Map")
+IMAGERY_RESOURCE_PATH = os.path.join(BASE_ASSET_PATH, "Resources", "Imagery")
+TERRAIN_RESOURCE_PATH = os.path.join(BASE_ASSET_PATH, "Resources", "Terrain")
+VECTOR_RESOURCE_PATH = os.path.join(BASE_ASSET_PATH, "Resources", "Vector")
 
 def get_asset_root():
   return os.getenv('ge_asset_root')
@@ -146,7 +147,6 @@ def create_vector_resource(resource, srcPath):
 
 @step("Add vector resource <resource> to project <project>")
 def add_vector_resource_to_project(resource, project):
-  # For now we hard code the template
   call(["/opt/google/bin/geaddtovectorproject", "-o", os.path.join(VECTOR_PROJECT_PATH, project),
         "--template", "resources/CA_POIs_template.khdsp", os.path.join(VECTOR_RESOURCE_PATH, resource)],
        "Failed to add vector resource %s to project %s" % (resource, project))
@@ -370,7 +370,7 @@ def create_database_imagery(database, imagery):
 @step("Create map layer <layer> from resource <resource>")
 def create_map_layer_from_resource(layer, resource):
   call(["/opt/google/bin/genewmaplayer", "--legend", layer, "--output", os.path.join(MAP_LAYER_PATH, layer),
-       os.path.join(VECTOR_RESOURCE_PATH, resource)],
+       "--template", "resources/CA_POIs_template.kmdsp", os.path.join(VECTOR_RESOURCE_PATH, resource)],
        "Failed to create map layer %s" % layer)
 
 @step("Create map project <project> from layer <layer>")

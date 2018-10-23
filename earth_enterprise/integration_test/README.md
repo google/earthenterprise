@@ -11,8 +11,7 @@ To run these tests, do the following:
     2. Install gauge plugins using python pip: `getguage`, `colorama` and `requests`
 2. Build and install GEE Fusion and Server
     1. Be sure to leave the asset root at the default location (`/gevol/assets`)
-3. Download the tutorial files to the default location by running `/opt/google/share/tutorials/fusion/download_tutorial.sh`
-4. Run `clean_test_setup.sh`
+4. Run `test_setup.sh`
     1. This may delete some assets. Do not run these tests on a production system.
 5. Run the tests: `gauge run specs`
-6. Optionally run `clean_test_setup.sh` again to remove the assets created by the tests.
+6. Optionally run `test_teardown.sh` to remove the assets created by the tests.
