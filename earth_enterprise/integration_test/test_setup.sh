@@ -36,3 +36,5 @@ find ${FAILED_RESOURCE_ASSET_PATH} -name "khassetver.xml" -exec sudo sed -i.bak 
 if [ `gequery ${FAILED_RESOURCE_NAME} --status` != "Failed" ]; then
   echo "Error setting up tests. Please try again."
 fi
+
+sudo /etc/init.d/gefusion restart

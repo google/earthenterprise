@@ -472,19 +472,19 @@ Build the database
 
 ## Build Database with Failed Resources
 Tags: failed, build, rebuild
-* Create imagery project "StatePropagationTest_BadImageryProject1"
-* Add imagery resource "StatePropagationTest_FailedImageryResource" to project "StatePropagationTest_BadImageryProject1"
-* Add imagery resource "BlueMarble_MultiProject" to project "StatePropagationTest_BadImageryProject1"
-* Build imagery project "StatePropagationTest_BadImageryProject1"
-* Wait for imagery project "StatePropagationTest_BadImageryProject1" to reach state "Blocked"
+* Create imagery project "StatePropagationTest_FailedResources"
+* Add imagery resource "StatePropagationTest_FailedImageryResource" to project "StatePropagationTest_FailedResources"
+* Create imagery resource "BlueMarble_FailedResources" from "Imagery/bluemarble_4km.tif" and add to project "StatePropagationTest_FailedResources"
+* Build imagery project "StatePropagationTest_FailedResources"
+* Wait for imagery project "StatePropagationTest_FailedResources" to reach state "Blocked"
 
 Build database with failed imagery resource project
-* Create database "StatePropagationTest_Database_FailedResources" from imagery project "StatePropagationTest_BadImageryProject1"
+* Create database "StatePropagationTest_Database_FailedResources" from imagery project "StatePropagationTest_FailedResources"
 * Build database "StatePropagationTest_Database_FailedResources"
 * Wait for database "StatePropagationTest_Database_FailedResources" to reach state "Blocked"
 
 Rebuild failed database without failed resource
-* Drop imagery resource "StatePropagationTest_FailedImageryResource" from project "StatePropagationTest_BadImageryProject1"
+* Drop imagery resource "StatePropagationTest_FailedImageryResource" from project "StatePropagationTest_FailedResources"
 * Build database "StatePropagationTest_Database_FailedResources"
 * Wait for database "StatePropagationTest_Database_FailedResources" to reach state "Succeeded"
 
