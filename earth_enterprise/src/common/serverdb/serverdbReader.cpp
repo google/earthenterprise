@@ -13,6 +13,7 @@
 // limitations under the License.
 
 
+#include <array>
 #include "common/serverdb/serverdbReader.h"
 #include "keyhole/jpeg_comment_date.h"
 #include "common/quadtreepath.h"
@@ -28,6 +29,53 @@
 #include "common/proto_streaming_imagery.h"
 #include "common/geGdalUtils.h"
 #include "common/generic_utils.h"
+
+// TODO this code is from fusion/JsUtils and needs to be refactored to remove code duplication.
+namespace {
+  std::string JsToJson(const std::string& in)
+  {
+    std::ostringstream oss;
+
+    const std::string alphaNumSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789-abcdefghijklmnopqrstuvwxyz.";
+    const std::string valueSet = "0123456789.eE";  // .eE should only appear once but let something else enforce that
+
+    for (size_t i = 0; i < in.length(); ++i) {
+      if (isalpha(in[i])) {
+        static const std::array<std::string, 3> jsonLiterals = {"true", "false", "null"};
+        bool isLiteral = false;
+        for (const std::string& jlit : jsonLiterals) {
+          if (!jlit.compare(in.substr(i, jlit.size()))) {
+            oss << jlit;
+            i += jlit.size()-1;
+            isLiteral = true;
+          }
+        }
+
+        if (!isLiteral) {
+          size_t endEscape = in.find_first_not_of(alphaNumSet, i);
+          oss << "\"" << in.substr(i, endEscape-i) << "\"";
+          i = endEscape - 1;
+        }
+      }
+      else if (isdigit(in[i])) {
+        size_t endValue = in.find_first_not_of(valueSet, i);
+        oss << in.substr(i, endValue-i);
+        i = endValue - 1;
+      }
+      else if (in[i] == '\"') {
+        size_t escapedStrEnd = in.find("\"", i+1);
+        std::string temp = in.substr(i, escapedStrEnd-i+1);
+        oss << in.substr(i, escapedStrEnd-i+1);
+        i = escapedStrEnd;
+      }
+      else {
+        oss << in[i];
+      }
+    }
+
+    return oss.str();
+  }
+}
 
 int ServerdbReader::CheckLevel(const geindex::TypedEntry::ReadKey &read_key,
                                uint32 level, uint32 row, uint32 col) {
@@ -395,9 +443,21 @@ const MimeType ServerdbReader::GetData(
       }
     } else if (request == "Json") {
       std::string json_variable_name = arg_map["var"];
-      // CheckJavascriptName(json_variable_name);
-      GetJson(json_variable_name, language, region, buf);
-      return MapTileUtils::kJavascriptMimeType;
+      if (!arg_map["v"].empty()) {
+        // CheckJavascriptName(json_variable_name);
+        if (arg_map["v"] == "2") {
+          GetJson(json_variable_name, language, region, buf);
+        } else if (arg_map["v"] == "1") {
+          // This is added for backwards compatibility reasons.
+          GetJsonV1(json_variable_name, language, region, buf);
+        } else {
+          throw khSimpleException("Invalid argument found in v parameter: " + arg_map["v"] + ". Valid values are 1 and 2.");
+        }
+        return MapTileUtils::kJavascriptMimeType;
+      } else {
+        GetJsonV1(json_variable_name, language, region, buf);
+        return MapTileUtils::kJavascriptMimeType;
+      }
     } else if (request == "LayerDefs") {
       if (GetToc(language, region,
                  std::string() /* output= not supported for LayerDefs */,
@@ -577,6 +637,21 @@ const MimeType ServerdbReader::GetResampledImageryMapsTile(
 }
 
 void ServerdbReader::GetJson(const std::string& json_variable_name,
+                             const std::string& language,
+                             const std::string& region,
+                             ReadBuffer& buf) {
+  const std::string& json = GetLocaleKey(json_, language, region);
+  if (json_variable_name.empty()) {
+    // Return raw JSON
+    buf.SetValue(JsToJson(json));
+  } else {
+    // Return a Javascript version of the JSON with the variable name declared.
+    std::string javascript = "var " + json_variable_name + " = " + json + ";\n";
+    buf.SetValue(javascript);
+  }
+}
+
+void ServerdbReader::GetJsonV1(const std::string& json_variable_name,
                              const std::string& language,
                              const std::string& region,
                              ReadBuffer& buf) {
