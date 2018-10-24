@@ -51,6 +51,7 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
           "           --kml_url_path=<kml_url_path_string> \\\n"
           "           --use_ssl_for_kml=<use_ssl_for_kml_bool> \\\n"
           "           --preserve_kml_filenames \\\n"
+          "           --disable_historical \\\n"
           "\n"
           " Reads dbroot and rewrites the search tabs so that they point\n"
           " to the given search server and port. Optionally creates a directory\n"
@@ -88,7 +89,10 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
           "                    replacing the host and path in KML layer URLs\n"
           "                    in the dbroot.  When unset, files are renamed\n"
           "                    sequentially from kml_dbroot_000.kml upwards.\n"
-          "                    Default: false\n",
+          "                    Default: false\n"
+          "   --disable_historical:\n"    
+          "                    Removes the reference to the server for  \n"
+          "                    historical imagery.\n",
           
           progn.c_str());
   exit(1);
@@ -109,12 +113,14 @@ int main(int argc, char *argv[]) {
   std::string kml_server = "";
   std::string kml_port = "";
   std::string kml_url_path = "kml";
+  bool disable_historical = false;
 
   khGetopt options;
   options.flagOpt("help", help);
   options.flagOpt("?", help);
   options.flagOpt("use_ssl_for_kml", use_ssl_for_kml);
   options.flagOpt("preserve_kml_filenames", preserve_kml_filenames);
+  options.flagOpt("disable_historical", disable_historical);
   options.opt("source", source);
   options.opt("icon_directory", icon_directory);
   options.opt("dbroot_file", dbroot_file);
@@ -171,6 +177,11 @@ int main(int argc, char *argv[]) {
   try {
     // load the dbroot we just fetched from the server
     geProtoDbroot dbroot(dbroot_path, geProtoDbroot::kEncodedFormat);
+
+    // Remove reference to historical imagery server
+    if (disable_historical) {
+        DisableTimeMachine(&dbroot);
+    }
 
     // Remove layers of unused data types.
     RemoveUnusedLayers(data_type, &dbroot);
