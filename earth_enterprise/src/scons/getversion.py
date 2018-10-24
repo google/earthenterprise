@@ -264,8 +264,10 @@ def main():
     args = parser.parse_args()
 
     print open_gee_version.get_long() if args.long else open_gee_version.get_short()
-    if open_gee_version.get_warning_message():
-        print >> sys.stderr, open_gee_version.get_warning_message()
+
+    warning_message = open_gee_version.get_warning_message()
+    if warning_message is not None:
+        print >> sys.stderr, warning_message
 
 
 __all__ = ['open_gee_version']
