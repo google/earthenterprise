@@ -70,8 +70,6 @@
 %{gebindir}/gefdaemoncheck
 %{gebindir}/gesystemmanager
 %{gebindir}/geresourceprovider
-%{gebindir}/gestartdaemon
-%{gebindir}/gestopdaemon
 %{gebindir}/genewvectorresource
 %{gebindir}/gemodifyvectorresource
 %{gebindir}/genewvectorproject

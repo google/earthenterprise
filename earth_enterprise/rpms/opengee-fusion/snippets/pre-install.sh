@@ -14,19 +14,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set +x
 
-NEW_INSTALL=false
-if [ "$1" = "1" ] ; then
-    NEW_INSTALL=true
-fi
 
 #-----------------------------------------------------------------
 # Main Functions
 #-----------------------------------------------------------------
 main_preinstall()
 {
-   # Report errors to RPM installer
+    # Report errors to RPM installer
     set -e
 
     # Check to see if opengee executables work and error out if not
@@ -34,10 +29,10 @@ main_preinstall()
     ERROUT=`$BASEINSTALLDIR_OPT/bin/geserveradmin 2>&1` || RET_VAL=$?
 
     if [ "$RET_VAL" -eq "127" ]; then
-      echo "$ERROUT"
-      echo "It appears that not all library dependencies have been installed."
-      echo "This is likely to be a missing MrSID library."
-      return 127
+        echo "$ERROUT"
+        echo "It appears that not all library dependencies have been installed."
+        echo "This is likely to be a missing MrSID library."
+        return 127
     fi
 
     # Stop reporting errors to RPM installer
@@ -57,10 +52,7 @@ main_preinstall()
         show_invalid_assetroot_name "$INVALID_ASSETROOT_NAMES"
     fi
 
-    # only on new install do we need to create user...
-    if [ "$NEW_INSTALL" = "true" ] ; then
-        create_users_and_groups
-    fi
+    create_users_and_groups
 }
 
 #-----------------------------------------------------------------
@@ -78,7 +70,7 @@ check_asset_root_volume_size()
 
     ASSET_ROOT_VOLUME_SIZE=$(df -k "$VOLUME_PATH" | grep -v Avail | tr -s ' ' | cut -d ' ' -f 4)
 
-    if [[ "$ASSET_ROOT_VOLUME_SIZE" -lt "$MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB" ]]; then
+    if [ "$ASSET_ROOT_VOLUME_SIZE" -lt "$MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB" ]; then
         MIN_ASSET_ROOT_VOLUME_SIZE_IN_GB=$(expr "$MIN_ASSET_ROOT_VOLUME_SIZE_IN_KB" / 1024 / 1024)
 
         cat <<END

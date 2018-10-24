@@ -1,0 +1,9 @@
+<%= 
+    // Prefix variable definitions to install script:
+    new File("${project.buildDir}/shared/install-utils.sh").text
+%>
+<%=
+    // Add geresetpgdb script:
+    new File(stagedInstallDir_server_opt, 'google/bin/gepgcommon').text
+%>
+<%= new File(thisTemplateFile.parent, '../snippets/pre-install.sh').text %>

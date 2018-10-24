@@ -16,39 +16,98 @@
 #
 
 # chkconfig: 35 71 34
-# description: Keyhole system manager for fusion processing tools.
+# description: Open Google Earth Fusion services
 
 ### BEGIN INIT INFO
 # Provides:          gefusion
-# Required-Start: nscd
-# Should-Start:
+# Required-Start:
+# Should-Start:      nscd
 # Required-Stop:
-# Default-Start:     3 5
-# Default-Stop:
-# Description:       Start Keyhole System Daemons
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Description:       Open Google Earth Fusion services
 ### END INIT INFO
 
+
+source /etc/init.d/gevars.sh
+
+DAEMON_USER="$GEFUSIONUSER"
+DAEMON_GROUP="$GEGROUP"
+DAEMON_WORKING_DIR="/opt/google"
+
 if [ "$EUID" != "0" ] ; then
-    echo `basename $0` "must be run as root"
-    exit 1;
+    echo "$(basename "$0") must be run as root."
+    exit 1
 fi
+
+# Provided by `initscripts` on Red Hat platforms:
+[ -f /etc/rc.d/init.d/functions ] && source /etc/rc.d/init.d/functions
+
+# Provided by `redhat-lsb-core` on Red Hat platforms, by `lsb-base` on Debian
+# platforms, etc.:
+[ -f /lib/lsb/init-functions ] && source /lib/lsb/init-functions
+
+# We fill in Debian convention functions, since other platforms don't provide
+# functions for all of these cases.
+
+# Fill in `log_daemon_msg`, if necessary:
+if ! command -v log_daemon_msg >/dev/null; then
+    log_daemon_msg() {
+        echo -n "$1: $2"
+    }
+fi
+
+# Fill in `log_end_msg`, if necessary:
+if ! command -v log_end_msg >/dev/null; then
+    if command -v success >/dev/null && command -v failure >/dev/null; then
+        log_end_msg() {
+            local RETVAL="$1"
+
+            shift
+            echo -n "$@"
+            if [ "$RETVAL" = 0 ]; then
+                success
+            else
+                failure
+            fi
+            echo
+
+            return "$RETVAL"
+        }
+    else
+        log_end_msg() {
+            local RETVAL="$1"
+
+            shift
+            echo -n "$@"
+            if [ "$RETVAL" = 0 ]; then
+                echo "  [ OK ]"
+            else
+                echo "  [ FAILURE ]"
+            fi
+
+            return "$RETVAL"
+        }
+    fi
+fi
+
 
 # Fix the hostname to equal hostname -f
 hostname_f=`hostname -f`
-`hostname $hostname_f`
+hostname "$hostname_f"
 
 # set up the path for the daemons
 if [ -n "$KEYHOLE_DAEMON_PATH" ] ; then
     export PATH=$KEYHOLE_DAEMON_PATH
 else
-    export PATH=/opt/google/bin:/usr/bin:/bin
+    export PATH="/opt/google/bin:/usr/bin:/bin:/sbin:/usr/sbin"
 fi
 
 
 function check_configuration {
     if ! gefdaemoncheck --checkassetroot ; then
-	# gefdaemoncheck generates its own output
-	exit 1
+        # gefdaemoncheck generates its own output
+        exit 1
     fi
 }
 
@@ -57,111 +116,232 @@ function check_if_master {
     gefdaemoncheck --checksysman
 }
 
-function stop_daemon {
-  echo -n "Shutting down $2... "
-  pidfile="/var/opt/google/run/$1.pid"
-  if [ -e "$pidfile" ] ; then
-    if gestopdaemon $1 ; then
-      echo "Done"
+# Use `start-stop-daemon`, if available:
+if command -v start-stop-daemon >/dev/null; then
+    function start_command_as_daemon {
+        local name="$1"
+        local desc="$2"
+        local pid_file="/var/opt/google/run/$name.pid"
+        local log_file="/var/opt/google/log/$name.log"
+        local daemon=/opt/google/bin/"$name"
+
+        # Turn "$@" into the arguments to the daemon command:
+        shift 2
+
+        log_daemon_msg "Starting $desc" "$name"
+        start-stop-daemon --start \
+            --pidfile "$pid_file" \
+            --make-pidfile \
+            --group "$DAEMON_GROUP" \
+            --chuid "$DAEMON_USER" \
+            --background \
+            --no-close \
+            --startas "$daemon" \
+            -- $@ >> "$log_file" 2>&1
+        log_end_msg "$?"
+    }
+
+    # Check if `start-stop-daemon` supports `--remove-pidfile`.  The version
+    # on Ubuntu 14.04 is pre 1.17.19, and doesn't support it:
+    if [ -z "$(start-stop-daemon --help | grep -e --remove-pidfile)" ]; then
+        start_stop_daemon_remove_pidfile=""
     else
-      echo "Failed"
+        start_stop_daemon_remove_pidfile="--remove-pidfile"
     fi
-  else
-    echo "Not running"
-  fi
+
+    function stop_daemon {
+        local name="$1"
+        local desc="$2"
+        local force_kill="$3"
+        local pid_file="/var/opt/google/run/$name.pid"
+        local daemon=/opt/google/bin/"$name"
+        local RETVAL
+        local retry
+
+        if [ -z "$force_kill" ]; then
+            retry="TERM/30/KILL/5"
+        else
+            retry="KILL/5"
+        fi
+        log_daemon_msg "Stopping $desc" "$name"
+        start-stop-daemon --stop \
+            --exec "$daemon" --retry="$retry" \
+            --pidfile "$pid_file" $start_stop_daemon_remove_pidfile --user "$DAEMON_USER"
+        RETVAL="$?"
+        # This has a race condition, but, hopefully, you're not starting and
+        # stopping this service from multiple threads:
+        [ "$RETVAL" -eq 0 ] && [ -e "$pid_file" ] && rm -f "$pid_file"
+        log_end_msg "$RETVAL"
+    }
+# Fall back to `daemonize` and `killproc`:
+elif command -v daemonize >/dev/null && command -v killproc >/dev/null; then
+    function start_command_as_daemon {
+        local name="$1"
+        local desc="$2"
+        local pid_file="/var/opt/google/run/$name.pid"
+        local log_file="/var/opt/google/log/$name.log"
+        local daemon=/opt/google/bin/"$name"
+
+        # Turn "$@" into the arguments to the daemon command:
+        shift 2
+
+        log_daemon_msg "Starting $desc" "$name"
+        daemonize -a \
+            -c "$DAEMON_WORKING_DIR" \
+            -e "$log_file" \
+            -o "$log_file" \
+            -p "$pid_file" \
+            -u "$DAEMON_USER" \
+            "$daemon" $@
+        log_end_msg "$?"
+    }
+
+    function stop_daemon {
+        local name="$1"
+        local desc="$2"
+        local force_kill="$3"
+        local pid_file="/var/opt/google/run/$name.pid"
+        local daemon=/opt/google/bin/"$name"
+        local RETVAL
+
+        log_daemon_msg "Stopping $desc" "$name"
+        if [ -z "$force_kill" ]; then
+            killproc -p "$pid_file" "$daemon"
+        else
+            killproc -p "$pid_file" "$daemon" -KILL
+        fi
+        RETVAL="$?"
+        # This has a race condition, but, hopefully, you're not starting and
+        # stopping this service from multiple threads:
+        [ "$RETVAL" -eq 0 ] && [ -e "$pid_file" ] && rm -f "$pid_file"
+        log_end_msg "$RETVAL"
+    }
+else
+    echo "This init script requires the 'start-stop-daemon', or the 'daemonize' and 'killproc' commands to be present." >&2
+    exit 1
+fi
+
+# Echoes the PID of a given daemon, if the daemon is running, or nothing,
+# if that daemon is not found running.
+#
+#     $1 = Name of daemon to get PID of ('gesystemmanager' or
+# 'geresourceprovider').
+function get_daemon_pid {
+    daemon_path=$(command -v "$1")
+    pidfile="/var/opt/google/run/$1.pid"
+
+    if [ -s "$pidfile" ] ; then
+        pid=$(cat "$pidfile")
+        if [ -d "/proc/$pid" ] && [ "$(readlink "/proc/$pid/exe")" = "$daemon_path" ]; then
+            echo "$pid"
+        fi
+    fi
 }
 
 function check_daemon {
-  # more DRY to use "gefdaemoncheck --checkrunning"
-  #   but it seems to assume --checksysman is true
-  #   thus wont work on non-master hosts.
-  daemon_path=$(which "$1")
-  pidfile="/var/opt/google/run/$1.pid"
-  if [ -s "$pidfile" ] ; then
-    pid=`cat "$pidfile"`
-    if [ -d "/proc/$pid" ] && [ "$(readlink "/proc/$pid/exe")" = "$daemon_path" ]; then
-      echo "$1:  Running (PID $pid)."
-      return 0
+    # more DRY to use "gefdaemoncheck --checkrunning"
+    #   but it seems to assume --checksysman is true
+    #   thus wont work on non-master hosts.
+    pid=$(get_daemon_pid $@)
+
+    if [ -z "$pid" ] ; then
+        echo "$1:  Not running."
+        return 1
+    else
+        echo "$1:  Running (PID $pid)."
+        return 0
     fi
-  fi
-  echo "$1:  Not running."
-  return 1
 }
 
 start() {
-  # check to make sure the system has been configured
-  check_configuration
+    # check to make sure the system has been configured
+    check_configuration
 
-  if [ "$2" == "allowcore" ] ; then
-    echo "Enabling core files"
-    ulimit -c unlimited
-  fi
+    local pidfile
 
-  if check_if_master ; then
-    echo -n "Starting System Manager... "
-    if ! gestartdaemon gesystemmanager ; then
-      exit 1
+    source "$(dirname "$0")/gevars.sh" || exit 1
+
+    if [ "$2" == "allowcore" ] ; then
+        echo "Enabling core files"
+        ulimit -c unlimited
     fi
-    echo "Done"
-  fi
 
-  echo -n "Starting Resource Provider... "
-  if ! gestartdaemon geresourceprovider ; then
     if check_if_master ; then
-      stop_daemon gesystemmanager "System Manager"
+        start_command_as_daemon "gesystemmanager" "Fusion worker services manager" || exit 1
     fi
-    exit 1
-  fi
-  echo "Done"
+
+    start_command_as_daemon "geresourceprovider" "Fusion worker service" || {
+        if check_if_master; then
+            stop_daemon gesystemmanager "Fusion System Manager"
+        fi
+        exit 1
+    }
 }
 
 stop() {
-  stop_daemon geresourceprovider "Resource Provider"
-  if check_if_master ; then
-    stop_daemon gesystemmanager "System Manager"
-  fi
-}
+    local return_code=0
 
-status() {
-  return_code=0
-  if check_if_master ; then
-    check_daemon gesystemmanager || return_code=1
-  fi
-  check_daemon geresourceprovider || return_code=1
-  return "$return_code"
+    stop_daemon geresourceprovider "Fusion Resource Provider" "$1" || return_code=1
+    if check_if_master ; then
+        stop_daemon gesystemmanager "Fusion System Manager" "$1" || return_code=1
+    fi
+
+    return "$return_code"
 }
 
 reload() {
-  pidfile="/var/opt/google/run/gesystemmanager.pid"
-  systemrc="/etc/opt/google/systemrc"
-  pid=`cat $pidfile`
-  echo "reloading $systemrc"
-  kill -1 $pid
+    cat <<END
+FIXME: This command only reloads System Manager configuration.
+Resource Provider will still run with its old configuration.
+END
+
+    pid=$(get_daemon_pid gesystemmanager)
+    if [ -n "$pid" ]; then
+        systemrc="/etc/opt/google/systemrc"
+        echo "Reloading gesystemmanager configuration ($systemrc)."
+        kill -1 "$pid"
+    else
+        echo "No gesystemmanager found running.  Not reloading configuration."
+        return 1
+    fi
+}
+
+status() {
+    local return_code=0
+
+    if check_if_master ; then
+        check_daemon gesystemmanager || return_code=1
+    fi
+    check_daemon geresourceprovider || return_code=1
+
+    return "$return_code"
 }
 
 case "$1" in
-    reload)
-      reload
-      ;;
-    restart)
-      stop
-      sleep 1
-      start
-      ;;
     start)
-      start
-      ;;
+        start
+        ;;
     stop)
-      stop
-      ;;
+        stop
+        ;;
+    force-stop)
+        stop kill
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    reload)
+        reload
+        ;;
     status)
-      status
-      exit $?
-      ;;
+        status
+        exit $?
+        ;;
     *)
-      echo "usage: $0 {start|stop|reload|restart|status}"
-      exit 1
-      ;;
+        echo "usage: $0 {start|stop|force-stop|restart|reload|status}"
+        exit 1
+        ;;
 esac
 
 exit 0

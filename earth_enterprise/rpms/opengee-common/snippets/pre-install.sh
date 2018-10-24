@@ -14,8 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set +x
-set -e
 
 #------------------------------------------------------------------------------
 check_group()
@@ -58,11 +56,11 @@ remove_nonlink_directories()
 #-----------------------------------------------------------------
 # 8) Check if group and users exist
 
-# only if we are going to install, added as pre so cpio can carry
-# group name if needed.  skip if upgrade.
-if [ "$1" = "1" ]; then
-    check_group
-else
+check_group
+
+# On Red Hat, only if we are going to install, remove some directories in the
+# pre-install stage, so cpio can carry group name if needed.  Skip on upgrade.
+if [ "$1" != "1" ]; then
     remove_nonlink_directories
 fi
 #-----------------------------------------------------------------
