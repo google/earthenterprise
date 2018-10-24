@@ -147,14 +147,17 @@ void PortableMapBuilder::BuildMap() {
       if (WriteMapPackets(qt_string, level,
                           level_col[level], level_row[level])) {
         ++num_image_packets;
-        ++level;
-        qt_char[level] = '0';
-        level_row[level] = (level_row[level - 1] << 1) + 1;
-        level_col[level] = level_col[level - 1] << 1;
 
-        if (level >= 24) {
-          std::cout << "Bad level" << std::endl;
-          exit(0);
+        if (level < 23) {
+          ++level;
+          qt_char[level] = '0';
+          level_row[level] = (level_row[level - 1] << 1) + 1;
+          level_col[level] = level_col[level - 1] << 1;
+        } else if (level == 23) {
+          qt_char[level] += 1;
+        } else {
+          std::cout << "Bad level (" << level << ")" << std::endl;
+          exit(1);
         }
       } else {
         qt_char[level] += 1;
@@ -360,7 +363,19 @@ bool PortableMapBuilder::WriteMapPackets(const std::string& qtpath_str,
                                            uint32 level,
                                            uint32 col,
                                            uint32 row) {
-  if (!KeepNode(qtpath_str)) {
+  /*
+  // The following debug output is formatted for use in a spreadsheet.
+  // It captures all calls to this function and indicates if the call
+  // will result in an HTTP request.
+  static bool first = true;
+  if (first) {
+    first = false;
+    std::cout << "request,qtpath,level(z),col(x),row(y)" << std::endl;
+  }
+  */
+  bool keep_node = KeepNode(qtpath_str);
+  //std::cout << (keep_node ? "true," : "false,") << qtpath_str << "," << level << "," << col << "," << row << std::endl;
+  if (!keep_node) {
     return false;
   }
 
