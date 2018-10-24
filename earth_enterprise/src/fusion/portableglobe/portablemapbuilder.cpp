@@ -102,10 +102,6 @@ PortableMapBuilder::~PortableMapBuilder() {
  */
 void PortableMapBuilder::BuildMap() {
   num_image_packets = 0;
-  num_vector_packets = 0;
-  image_size = 0;
-  vector_size = 0;
-  total_size = 0;
 
   // Add writers for the different packet types.
   AddWriter(kMapDataDirectory);
@@ -363,7 +359,7 @@ bool PortableMapBuilder::WriteMapPackets(const std::string& qtpath_str,
                                            uint32 level,
                                            uint32 col,
                                            uint32 row) {
-  /*
+  #ifdef WRITE_MAP_PACKETS_OUTPUT
   // The following debug output is formatted for use in a spreadsheet.
   // It captures all calls to this function and indicates if the call
   // will result in an HTTP request.
@@ -372,9 +368,11 @@ bool PortableMapBuilder::WriteMapPackets(const std::string& qtpath_str,
     first = false;
     std::cout << "request,qtpath,level(z),col(x),row(y)" << std::endl;
   }
-  */
+  #endif
   bool keep_node = KeepNode(qtpath_str);
-  //std::cout << (keep_node ? "true," : "false,") << qtpath_str << "," << level << "," << col << "," << row << std::endl;
+  #ifdef WRITE_MAP_PACKETS_OUTPUT
+  std::cout << (keep_node ? "true," : "false,") << qtpath_str << "," << level << "," << col << "," << row << std::endl;
+  #endif
   if (!keep_node) {
     return false;
   }
