@@ -11,8 +11,8 @@ export PATH=${PATH}:/opt/google/bin
 
 # Script will only download if necessary
 sudo sh ${TUTORIAL_PATH}/download_tutorial.sh
-rm -rf ${TEST_DATA_PATH}/*
-rsync -arv ${TUTORIAL_PATH}/ ${TEST_DATA_PATH}
+sudo rm -rf ${TEST_DATA_PATH}/*
+sudo rsync -arv ${TUTORIAL_PATH}/ ${TEST_DATA_PATH}
 
 # Create a failed imagery resource
 FAILED_RESOURCE_NAME="gauge_tests/Resources/Imagery/StatePropagationTest_FailedImageryResource"
@@ -25,12 +25,6 @@ while [ `gequery ${FAILED_RESOURCE_NAME} --status` != "Succeeded" ] && [[ ${WAIT
   sleep 1
   (( WAIT_COUNT++ ))
 done
-#for WAIT_COUNT in `seq 1 60`; do
-#  if [ `gequery ${FAILED_RESOURCE_NAME} --status` == "Succeeded" ]; then
-#    break
-#  fi
-#  sleep 1
-#done
 # Mark ALL versions as failed
 find ${FAILED_RESOURCE_ASSET_PATH} -name "khassetver.xml" -exec sudo sed -i.bak "s/<state>Succeeded/<state>Failed/g" {} \;
 if [ `gequery ${FAILED_RESOURCE_NAME} --status` != "Failed" ]; then
