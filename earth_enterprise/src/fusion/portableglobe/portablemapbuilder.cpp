@@ -111,6 +111,7 @@ void PortableMapBuilder::BuildMap() {
   std::vector<uint32> level_row(24);
   std::vector<uint32> level_col(24);
   int32 level = 0;
+  int32 max_level_traversed = 0;
   std::string qt_string = "";
   qt_char[level] = '0';
   level_row[level] = 1;
@@ -135,6 +136,9 @@ void PortableMapBuilder::BuildMap() {
       // Go to next qtnode at this level.
       qt_char[level] += 1;
     } else {
+      if (level > max_level_traversed) {
+        max_level_traversed = level;
+      }
       qt_string = qt_string.substr(0, level) + qt_char[level];
       // Note that we stop descending once we reach the first
       // missing packet, which is important since this cue
@@ -172,6 +176,14 @@ void PortableMapBuilder::BuildMap() {
 
   // Finish up writing all of the packet bundles.
   DeleteWriter();
+
+  // The "+1" for max_level_traversed is because the code uses zero
+  // for the first level but the cutter page and most humans use one.
+  if (max_level_traversed+1 < max_level_) {
+    notify(NFY_WARN,
+      "Max level is %d but processing stopped at level %d.",
+      max_level_, max_level_traversed+1);
+  }
 }
 
 // TODO: Keep track of these as we go along rather than
