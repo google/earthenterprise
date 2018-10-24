@@ -1,3 +1,5 @@
+import java.nio.file.NoSuchFileException
+import java.nio.file.Paths
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import org.gradle.api.tasks.TaskAction
@@ -10,8 +12,8 @@ class GeeRpm extends com.netflix.gradle.plugins.rpm.Rpm {
     // Gets the name of the RPM package that provides a given capability:
     static def whatProvides(capability_path) {
         return GeeCommandLine.expand(
-                ["rpm", "-q", "--queryformat=%{NAME}\\n", "--whatprovides",
-                    capability_path],
+                ["/bin/rpm", "-q", "--whatprovides",
+                    "--queryformat=%{NAME}\\n", capability_path],
                 "Failed to find an RPM that provides ${capability_path}!"
             ).readLines()[0]
     }
@@ -25,6 +27,37 @@ class GeeRpm extends com.netflix.gradle.plugins.rpm.Rpm {
     // (E.g., whatProvidesCommand(['sed'] as List) == ['sed'])
     static def whatProvidesCommand(Iterable<String> command_names) {
         return command_names.collect { whatProvidesCommand(it) }
+    }
+
+    // Returns a list of the files in a given RPM package.
+    static def packageGetFileList(package_name) {
+        return GeeCommandLine.expand(
+                ['/bin/rpm', '-q', '--list', package_name],
+                "Failed to read the file list in RPM package: ${package_name}"
+            ).readLines()
+    }
+
+    // Returns the path at which a command with a given names was installed,
+    // or `null`.
+    //     This may not be the location resolved by using the `PATH`
+    // environment variable, if `PATH` contains symlinked directories.  (This
+    // happens on Red Hat 7 platforms.)
+    static def getCommandInstallPath(command_name) {
+        def command_path = 
+            Paths.get(GeeCommandLine.resolveCommandPath(command_name)).
+                toRealPath()
+        def package_name = whatProvides(command_path.toString())
+
+        return packageGetFileList(package_name).find {
+                try {
+                    return Paths.get(it).toRealPath() == command_path
+                } catch (NoSuchFileException) {
+                    // Files that belong to packages should not normally be
+                    // removed while the package is installed, but, if one is,
+                    // it can't be defining the command we're looking for.
+                    return false
+                }
+            }
     }
 
     // Runs `find-provides` from `rpm-build` to find a list of capabilities
@@ -156,7 +189,7 @@ RequiresEND
         }
 
         requiredCommands.
-            collect { GeeCommandLine.resolveCommandPath(it) }.
+            collect { getCommandInstallPath(it) }.
             collect(requiresCommandFilter).
             findAll { it != null }.
             each {

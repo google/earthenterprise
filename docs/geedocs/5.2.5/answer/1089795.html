@@ -56,6 +56,13 @@ var painted_map_layer = new GFusionTileLayer(geeServerDefs.serverUrl, geeServerD
 var labels_layer = new GFusionTileLayer(geeServerDefs.serverUrl, geeServerDefs.layers[2]);</code></p>
 <p>You can access the server definitions and other information about map and imagery layers directly from a web browser by using a URL in this format: <code>http://yourserver.org/virtual-server-name/query?request=Json&amp;vars=geeServerDefs</code>. Responses will look like the image below:</p>
 <p><img alt="GEE server definitions" src="../art/fusion/projects/2972270_server_definitions.jpg"/></p>
+<p>This data can also be returned by using the optional <code>v</code> parameter.o</p>
+<ul>
+<li><code>v=1</code> returns the data in the format shown in the image above.</li>
+<li><code>v=2</code> returns the data in the JSON format.</li>
+<li> A query without the <code>v</code> parameter acts as <code>v=1</code>.</li>
+</ul>
+<p>A example of a query using the <code>v</code> parameter: <code>http://&lt;GEE earth server&gt;/&lt;database_publish_point&gt;/query?request=Json&amp;v=2</code>
 </li>
 <li>Associate layers with buttons by using the <code>GMapType</code> class to define a map type for each of the <code>GTileLayer</code> objects. See the example below:
 <p><code>var painted_map_type = new GMapType([painted_map_layer],new LatLngProjection(MAX_ZOOM_LEVEL),"Maps");<br/>
