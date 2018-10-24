@@ -1,17 +1,27 @@
 # Integration Tests
 
-This folder contains integration tests for Google Earth Enterprise.
+This folder contains integration tests for Open GEE.
 Tests are written using [Gauge](https://gauge.org/).
-Set up and clean up require super user priviledges, so these steps
+Set up and tear down require super user priviledges, so these steps
 are performed by separate scripts.
+The set up and tear down scripts DELETE assets. Do not run these
+scripts on production systems.
 To run these tests, do the following:
 
 1. Install test framework
     1. [Install Gauge](https://gauge.org/get_started/#yum)
-    2. Install gauge plugins using python pip: `getguage`, `colorama` and `requests`
+    2. Install packages used by the tests:
+
+        ```bash
+        sudo yum -y install python-pip wget
+        sudo pip install getgauge colorama requests
+        ```
+
 2. Build and install GEE Fusion and Server
     1. Be sure to leave the asset root at the default location (`/gevol/assets`)
 4. Run `test_setup.sh`
-    1. This may delete some assets. Do not run these tests on a production system.
 5. Run the tests: `gauge run specs`
 6. Optionally run `test_teardown.sh` to remove the assets created by the tests.
+
+Note: Gauge supports Python 2.7 and above. CentOS 6 and RHEL 6 ship with Python 2.6,
+so Gauge tests will not run on those platforms.
