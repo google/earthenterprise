@@ -104,6 +104,7 @@ int main(int argc, char *argv[]) {
   bool help = false;
   bool use_ssl_for_kml = false;
   bool preserve_kml_filenames = false;
+  bool disable_historical = false;
   std::string source;
   std::string icon_directory;
   std::string dbroot_file;
@@ -113,7 +114,6 @@ int main(int argc, char *argv[]) {
   std::string kml_server = "";
   std::string kml_port = "";
   std::string kml_url_path = "kml";
-  bool disable_historical = false;
 
   khGetopt options;
   options.flagOpt("help", help);
