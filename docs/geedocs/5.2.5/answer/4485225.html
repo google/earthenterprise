@@ -384,7 +384,7 @@
   <h4>Usage</h4>
   <code><strong>gerewritedbroot</strong></code> <code>--source=<em>server_name</em> --icon_directory=<em>directory</em><br/>
     --dbroot_file=<em>filename</em>  --kml_map_file=<em>filename</em><br/>
-    [--search_service=<em>search_service_url</em>] [--kml_server=<em>server_name]</em><br/>
+    [--search_service=<em>search_service_url</em>] [--preserve_search_service] [--kml_server=<em>server_name]</em><br/>
     [--kml_port=<em>num]</em> [--kml_url_path=<em>prefix]</em> [--use_ssl_for_kml=<em>bool</em>] 
     [--preserve_kml_filenames] [--disable_historical]</code>
   <h4>Description</h4>
@@ -422,6 +422,10 @@
       <tr>
         <td><code>--search_service=<em>search_service_url</em></code></td>
         <td>Url to search service. If none is provided then uses relative url for standard Portable search.</td>
+      </tr>
+       <tr>
+        <td><code>--preserve_search_service</code></td>
+        <td>Preserve the existing search service url.</td>
       </tr>
       <tr>
         <td><code>--kml_server=<em>server_name</em></code></td>
