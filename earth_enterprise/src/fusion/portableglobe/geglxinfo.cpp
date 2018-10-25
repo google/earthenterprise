@@ -76,6 +76,7 @@ void GetXY(int level, uint64 btree, uint64* x, uint64* y) {
 void writePacketToFile(const IndexItem& index_item,
                        const std::string& buffer,
                        const bool skipSmall,
+                       const std::string& writeDir,
                        const std::string& extraSuffix) {
   char path[256];
   const char* suffix;
@@ -94,8 +95,8 @@ void writePacketToFile(const IndexItem& index_item,
   } else {
     suffix = "unk";
   }
-  snprintf(path, sizeof(path), "maptiles/%d/%d/%lu/%lu%s.%s",
-           index_item.channel, index_item.level, x, y, extraSuffix.c_str(), suffix);
+  snprintf(path, sizeof(path), "%s/%d/%d/%lu/%lu%s.%s",
+           writeDir.c_str(), index_item.channel, index_item.level, x, y, extraSuffix.c_str(), suffix);
   if (skipSmall && buffer.size() <= 153) {
     std::cout << "Skipping small: " << path << std::endl;
   } else {
@@ -113,6 +114,13 @@ bool getPackageFileLocs(GlcUnpacker* const unpacker,
                     PackageFileLoc& data_file_loc) {
   // For glcs, we need to look inside each layer for the indexes.
   if (is_composite) {
+    if (unpacker->Is2d()) {
+      std::cout << "2d glc" << std::endl;
+    }
+    if (unpacker->Is3d()) {
+      std::cout << "3d glc" << std::endl;
+    }
+
     int layer_index = unpacker->LayerIndex(layer_idx);
     if (!unpacker->FindLayerFile(
            index_file.c_str(), layer_index, &index_file_loc)) {
@@ -195,7 +203,7 @@ void extractAllPackets(GlcUnpacker* const unpacker,
       } else if (reader->ReadData(
           &buffer[0], data_offset, index_item.packet_size)) {
         if (unpacker->Is2d()) {
-          writePacketToFile(index_item, buffer, true, "");
+          writePacketToFile(index_item, buffer, true, "maptiles", "");
         }
         else if (index_item.packet_type == kImagePacket) {
           etEncoder::DecodeWithDefaultKey(&buffer[0], index_item.packet_size);
@@ -205,10 +213,10 @@ void extractAllPackets(GlcUnpacker* const unpacker,
           }
 
           if (protoPacket.HasImageData()) {
-            writePacketToFile(index_item, protoPacket.ImageData(), false, "_img");
+            writePacketToFile(index_item, protoPacket.ImageData(), false, "globetiles", "_img");
           }
           if (protoPacket.HasImageAlpha()) {
-            writePacketToFile(index_item, protoPacket.ImageAlpha(), false, "_alpha");
+            writePacketToFile(index_item, protoPacket.ImageAlpha(), false, "globetiles", "_alpha");
           }
         }
         else if (index_item.packet_type == kQtpPacket) {
@@ -220,7 +228,7 @@ void extractAllPackets(GlcUnpacker* const unpacker,
                               &decompressed)) {
             qtpacket::KhQuadTreePacket16 theMetadata;
             decompressed >> theMetadata;
-            writePacketToFile(index_item, theMetadata.ToString(index_item.level == 0,true), false, "_meta");
+            writePacketToFile(index_item, theMetadata.ToString(index_item.level == 0,true), false, "globetiles", "_meta");
           }
         }
         else if (index_item.packet_type == kTerrainPacket) {
@@ -231,11 +239,11 @@ void extractAllPackets(GlcUnpacker* const unpacker,
             m.Pull(decompressed);
             std::ostringstream s;
             m.PrintMesh(s);
-            writePacketToFile(index_item, s.str(), false, "_terrain");
+            writePacketToFile(index_item, s.str(), false, "globetiles", "_terrain");
           }
         }
         else if (index_item.packet_type == kDbRootPacket) {
-          writePacketToFile(index_item, buffer, false, "_dbroot");
+          writePacketToFile(index_item, buffer, false, "globetiles", "_dbroot");
         }
         else if (index_item.packet_type == kVectorPacket) {
           LittleEndianReadBuffer decompressed;
@@ -259,7 +267,7 @@ void extractAllPackets(GlcUnpacker* const unpacker,
             if (typeNameIter != vTypeNames.end()) {
               vectorDataType = typeNameIter->second;
             }
-            writePacketToFile(index_item, decompressed, false, "_vector_"+vectorDataType);
+            writePacketToFile(index_item, decompressed, false, "globetiles", "_vector_"+vectorDataType);
           }
         }
         else {
@@ -480,7 +488,7 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
           "   --packet_channel <channel_int>: Channel of packet to extract.\n"
           "   --output <dest_{file,dir}_path>: Where extracted file(s) should be\n"
           "                     written.\n"
-          "   --extract_packets Extract all packets from a glm or 2d glc.\n"
+          "   --extract_packets Extract all packets from a portable file.\n"
           "                     Can be used with start_idx and end_idx\n"
           "                     parameters, and the layer_idx parameter\n"
           "                     if it's a glc.\n"
