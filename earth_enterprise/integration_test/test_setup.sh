@@ -14,6 +14,9 @@ sudo sh ${TUTORIAL_PATH}/download_tutorial.sh
 sudo rm -rf ${TEST_DATA_PATH}/*
 sudo rsync -arv ${TUTORIAL_PATH}/ ${TEST_DATA_PATH}
 
+# Copy template files so that gefusionuser can access them
+sudo cp resources/* /gevol/src/gauge_tests
+
 # Create a failed imagery resource
 FAILED_RESOURCE_NAME="gauge_tests/Resources/Imagery/StatePropagationTest_FailedImageryResource"
 FAILED_RESOURCE_ASSET_PATH=${ASSETROOT}/${FAILED_RESOURCE_NAME}.kiasset

@@ -148,7 +148,8 @@ def create_vector_resource(resource, srcPath):
 @step("Add vector resource <resource> to project <project>")
 def add_vector_resource_to_project(resource, project):
   call(["/opt/google/bin/geaddtovectorproject", "-o", os.path.join(VECTOR_PROJECT_PATH, project),
-        "--template", "resources/CA_POIs_template.khdsp", os.path.join(VECTOR_RESOURCE_PATH, resource)],
+        "--template", os.path.join(get_src_data_path(), "CA_POIs_template.khdsp"),
+        os.path.join(VECTOR_RESOURCE_PATH, resource)],
        "Failed to add vector resource %s to project %s" % (resource, project))
 
 @step("Create and build vector resource <resource> from <srcPath> and add to project <project>")
@@ -370,7 +371,8 @@ def create_database_imagery(database, imagery):
 @step("Create map layer <layer> from resource <resource>")
 def create_map_layer_from_resource(layer, resource):
   call(["/opt/google/bin/genewmaplayer", "--legend", layer, "--output", os.path.join(MAP_LAYER_PATH, layer),
-       "--template", "resources/CA_POIs_template.kmdsp", os.path.join(VECTOR_RESOURCE_PATH, resource)],
+        "--template", os.path.join(get_src_data_path(), "CA_POIs_template.kmdsp"),
+        os.path.join(VECTOR_RESOURCE_PATH, resource)],
        "Failed to create map layer %s" % layer)
 
 @step("Create map project <project> from layer <layer>")
