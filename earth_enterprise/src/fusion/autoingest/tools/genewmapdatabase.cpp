@@ -33,7 +33,7 @@ usage(const std::string &progn, const char *msg = 0, ...)
   }
 
   fprintf(stderr,
-          "\nusage: %s [options] [--meta <key>=<value>]... -o <dbname> [--imagery <imagery project>] [--map <map project>] [--mercator : use mercator projection] [--flat : use flat(Plate Carre) projection (default)]\n"
+          "\nusage: %s [options] [--meta <key>=<value>]... -o <dbname> [--imagery <imagery project>] [--map <map project>] [--mercator : use mercator projection database] [--flat : use flat(Plate Carre) projection database (default)]\n"
           "   Supported options are:\n"
           "      --help | -?:               Display this usage message\n",
           progn.c_str());
@@ -97,12 +97,29 @@ main(int argc, char *argv[]) {
         req.assetname, AssetDefs::Database,
         mercator ? kMercatorMapDatabaseSubtype : kMapDatabaseSubtype);
 
+    // If the database is mercator, prioritize mercator imagery projects if
+    // there is a naming collision. Flat databases can only use flat imagery
+    // projects.
     if (req.config.imageryProject.size()) {
-      req.config.imageryProject =
-        AssetDefs::NormalizeAssetName(
-            req.config.imageryProject, AssetDefs::Imagery,
-            mercator ? kMercatorProjectSubtype : kProjectSubtype);
+      if (mercator) {
+        req.config.imageryProject =
+          AssetDefs::NormalizeAssetName(
+              req.config.imageryProject, AssetDefs::Imagery,
+              kMercatorProjectSubtype);
+        if (!khDirExists(AssetDefs::AssetPathToFilename(req.config.imageryProject))) {
+          req.config.imageryProject =
+            AssetDefs::NormalizeAssetName(
+                khDropExtension(req.config.imageryProject), AssetDefs::Imagery,
+                kProjectSubtype);
+        }
+      }
+      else {
+        req.config.imageryProject =
+          AssetDefs::NormalizeAssetName(
+              req.config.imageryProject, AssetDefs::Imagery, kProjectSubtype);
+      }
     }
+
     if (req.config.mapProject.size()) {
       req.config.mapProject =
         AssetDefs::NormalizeAssetName(req.config.mapProject,
