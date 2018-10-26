@@ -41,7 +41,6 @@
 #include "mttypes/DrainableQueue.h"
 #include "mttypes/WaitBaseManager.h"
 
-
 // TODO: Use Manas' technique for bundling packet requests.
 namespace fusion_portableglobe {
 
@@ -378,14 +377,17 @@ bool PortableMapBuilder::WriteMapPackets(const std::string& qtpath_str,
   static bool first = true;
   if (first) {
     first = false;
-    std::cout << "request,qtpath,level(z),col(x),row(y)" << std::endl;
+    std::cout << "request,qtpath,level(z),col(x),row(y),packet.size" << std::endl;
   }
   #endif
   bool keep_node = KeepNode(qtpath_str);
   #ifdef WRITE_MAP_PACKETS_OUTPUT
-  std::cout << (keep_node ? "true," : "false,") << qtpath_str << "," << level << "," << col << "," << row << std::endl;
+  std::cout << (keep_node ? "true," : "false,") << qtpath_str << "," << level << "," << col << "," << row << ",";
   #endif
   if (!keep_node) {
+    #ifdef WRITE_MAP_PACKETS_OUTPUT
+    std::cout << "0" << std::endl;
+    #endif
     return false;
   }
 
@@ -403,6 +405,9 @@ bool PortableMapBuilder::WriteMapPackets(const std::string& qtpath_str,
     std::string url = url_str;
     std::string raw_packet;
     server_->GetRawPacket(url, &raw_packet);
+    #ifdef WRITE_MAP_PACKETS_OUTPUT
+    std::cout << raw_packet.size() << std::endl;
+    #endif
     uint32 packet_type = layers_[i]->type_id;
     if (raw_packet.size() > 0) {
       if (packet_type == kImagePacket) {
