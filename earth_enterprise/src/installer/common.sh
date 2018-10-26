@@ -82,22 +82,20 @@ xml_file_get_xpath()
 
 is_package_installed()
 {
-    local package_installed_retval=1
-
     # args: $1: Ubuntu package
     # args: $2: RHEL package
 
     if [ "$MACHINE_OS" == "$UBUNTUKEY" ] && [ ! -z "$1" ]; then
-        if [[ ! -z "$(dpkg --get-selections | sed s:install:: | sed -e 's:\s::g' | grep ^$1)" ]]; then
-            package_installed_retval=0
+        if [[ ! -z "$(dpkg -l $1 | grep "^ii")" ]]; then
+            return 0
         fi
     elif { [ "$MACHINE_OS" == "$REDHATKEY" ] || [ "$MACHINE_OS" == "$CENTOSKEY" ]; } && [ ! -z "$2" ]; then
         if [[ ! -z "$(rpm -qa | grep ^$2)" ]]; then
-            package_installed_retval=0
+            return 0
         fi
     fi
 
-    return $package_installed_retval
+    return 1
 }
 
 software_check()
