@@ -107,11 +107,15 @@ software_check()
     # args: $3: RHEL package
 
     if ! is_package_installed $2 $3 ; then
-	if [ "$MACHINE_OS" == "$UBUNTUKEY" ] && [ ! -z "$2" ]; then
+        if [ "$MACHINE_OS" == "$UBUNTUKEY" ] && [ ! -z "$2" ]; then
             echo -e "\nInstall $2 and restart the $1."
             software_check_retval=1
-	elif { [ "$MACHINE_OS" == "$REDHATKEY" ] || [ "$MACHINE_OS" == "$CENTOSKEY" ]; } && [ ! -z "$3" ]; then 
+        elif { [ "$MACHINE_OS" == "$REDHATKEY" ] || [ "$MACHINE_OS" == "$CENTOSKEY" ]; } && [ ! -z "$3" ]; then 
             echo -e "\nInstall $3 and restart the $1."
+            software_check_retval=1
+        else
+            echo -e "\nThe installer could not determine your machine's operating system."
+            echo -e "Supported Operating Systems: ${SUPPORTED_OS_LIST[*]}\n"
             software_check_retval=1
         fi
     fi
@@ -164,8 +168,10 @@ determine_os()
 show_opengee_package_installed()
 {
     #args: $1 "install" or "uninstall"
-    echo -e "\nThe opengee-common package is installed."
-    echo -e "This installer cannot $1 OpenGEE when a package manager install is present."
+    #args: $2 Software name, "Open GEE Fusion", "Open GEE Server"
+
+    echo -e "\nOpen GEE packages installed."
+    echo -e "Cannot $1 $2 because Open GEE packages have been installed with a package manager."
 }
 
 

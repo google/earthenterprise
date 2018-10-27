@@ -69,6 +69,15 @@ gtag('config', 'UA-108632131-2');
             <th>Resolution</th>
           </tr>
           <tr>
+            <td>837</td>
+            <td>Manual install/uninstall scripts should be disabled when rpm installs active</td>
+            <td>
+              The install and uninstall scripts now check if Open GEE has been installed with a package
+              manager before installation begins, and will not install or remove any files when the
+              packages are installed.
+            </td>
+          </tr>
+          <tr>
             <td>934</td>
             <td>Polygon displayed at the wrong location when viewing GLC assemly</td>
             <td>

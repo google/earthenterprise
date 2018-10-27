@@ -60,7 +60,7 @@ main_preuninstall()
     fi
 
     if is_package_installed "opengee-common" "opengee-common"; then
-        show_opengee_package_installed "uninstall"
+        show_opengee_package_installed "uninstall" "$GEEF"
         exit 1
     fi
 
