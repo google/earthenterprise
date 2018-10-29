@@ -9,7 +9,7 @@ scripts on production systems.
 To run these tests, do the following:
 
 1. Install test framework
-    1. [Install Gauge](https://gauge.org/get_started/#yum)
+    1. [Install Gauge](https://docs.gauge.org/latest/installation.html)
     2. Install packages used by the tests:
 
         ```bash
