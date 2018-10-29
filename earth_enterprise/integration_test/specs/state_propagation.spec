@@ -15,9 +15,6 @@ Some of these tests are timing dependent. For example, if we are testing that
 the state of a particular asset is "InProgress", that step will fail if the
 build completes too quickly and the asset goes to the "Succeeded" state.
 
-Set up
-* Create asset root directories
-
 ## Build, Clean and Rebuild Project Test
 Tags: basic, build, clean, rebuild
 

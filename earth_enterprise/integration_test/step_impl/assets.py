@@ -20,10 +20,6 @@ def get_asset_root():
 def get_src_data_path():
   return os.getenv('ge_src_data_path')
 
-def make_dirs(dirs):
-  if not os.path.isdir(dirs):
-    os.makedirs(dirs)
-
 def call(command, errorMsg):
   result = subprocess.call(command)
   assert result == 0, errorMsg
@@ -38,19 +34,6 @@ def list_from_table(table):
 
 def get_status(asset):
   return subprocess.check_output(["/opt/google/bin/gequery", "--status", asset]).strip()
-
-@step("Create asset root directories")
-def create_asset_root_dirs():
-  asset_root = get_asset_root()
-  make_dirs(os.path.join(asset_root, DATABASE_PATH))
-  make_dirs(os.path.join(asset_root, MAP_LAYER_PATH))
-  make_dirs(os.path.join(asset_root, IMAGERY_PROJECT_PATH))
-  make_dirs(os.path.join(asset_root, TERRAIN_PROJECT_PATH))
-  make_dirs(os.path.join(asset_root, VECTOR_PROJECT_PATH))
-  make_dirs(os.path.join(asset_root, MAP_PROJECT_PATH))
-  make_dirs(os.path.join(asset_root, IMAGERY_RESOURCE_PATH))
-  make_dirs(os.path.join(asset_root, TERRAIN_RESOURCE_PATH))
-  make_dirs(os.path.join(asset_root, VECTOR_RESOURCE_PATH))
 
 def do_create_imagery_proj(project, isMercator):
   commandLine = ["/opt/google/bin/genewimageryproject", "-o", os.path.join(IMAGERY_PROJECT_PATH, project)]
