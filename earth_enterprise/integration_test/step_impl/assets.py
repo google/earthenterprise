@@ -237,14 +237,21 @@ def map_project_operation(operation, project):
 def cancel_map_project(project):
   map_project_operation("cancel", project)
 
+def get_short_project_name(project):
+  prefix = "StatePropagationTest_"
+  if project.startswith(prefix):
+    return project[len(prefix):]
+  else:
+    return project
+
 @step("Create and build default project <project>")
-def create_and_build_blue_marble_proj(projectName):
-  project = "StatePropagationTest_" + projectName
+def create_and_build_blue_marble_proj(project):
+  shortName = get_short_project_name(project)
   create_imagery_proj(project)
-  create_imagery_resource_add_to_proj("BlueMarble_" + projectName, os.path.join(get_src_data_path(), "Imagery/bluemarble_4km.tif"), project)
-  create_imagery_resource_add_to_proj("i3SF15meter_" + projectName,  os.path.join(get_src_data_path(), "Imagery/i3SF15-meter.tif"), project)
-  create_imagery_resource_add_to_proj("USGSLanSat_" + projectName,  os.path.join(get_src_data_path(), "Imagery/usgsLanSat.tif"), project)
-  create_imagery_resource_add_to_proj("SFHiRes_" + projectName,  os.path.join(get_src_data_path(), "Imagery/usgsSFHiRes.tif"), project)
+  create_imagery_resource_add_to_proj("BlueMarble_" + shortName, os.path.join(get_src_data_path(), "Imagery/bluemarble_4km.tif"), project)
+  create_imagery_resource_add_to_proj("i3SF15meter_" + shortName,  os.path.join(get_src_data_path(), "Imagery/i3SF15-meter.tif"), project)
+  create_imagery_resource_add_to_proj("USGSLanSat_" + shortName,  os.path.join(get_src_data_path(), "Imagery/usgsLanSat.tif"), project)
+  create_imagery_resource_add_to_proj("SFHiRes_" + shortName,  os.path.join(get_src_data_path(), "Imagery/usgsSFHiRes.tif"), project)
   verify_imagery_proj_no_versions(project)
   build_imagery_project(project)
 
@@ -296,10 +303,11 @@ def verify_state_imagery_resource_table(resource, table):
 
 @step("Verify that the state of images for default project <project> is <state>")
 def verify_state_default_images(project, state):
-  verify_state_imagery_resource("BlueMarble_" + project, state)
-  verify_state_imagery_resource("i3SF15meter_" + project, state)
-  verify_state_imagery_resource("USGSLanSat_" + project, state)
-  verify_state_imagery_resource("SFHiRes_" + project, state)
+  shortName = get_short_project_name(project)
+  verify_state_imagery_resource("BlueMarble_" + shortName, state)
+  verify_state_imagery_resource("i3SF15meter_" + shortName, state)
+  verify_state_imagery_resource("USGSLanSat_" + shortName, state)
+  verify_state_imagery_resource("SFHiRes_" + shortName, state)
 
 @step("Verify that the state of images for default project <project> is in <table>")
 def verify_state_default_images_table(project, table):

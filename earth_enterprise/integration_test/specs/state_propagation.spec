@@ -22,29 +22,29 @@ Set up
 Tags: basic, build, clean, rebuild
 
 Build
-* Create and build default project "BasicBuild"
+* Create and build default project "StatePropagationTest_BasicBuild"
 * Wait for imagery project "StatePropagationTest_BasicBuild" to reach state "Succeeded"
-* Verify that the state of images for default project "BasicBuild" is "Succeeded"
+* Verify that the state of images for default project "StatePropagationTest_BasicBuild" is "Succeeded"
 
 Clean
 * Clean imagery project "StatePropagationTest_BasicBuild"
 * Verify that the state of imagery project "StatePropagationTest_BasicBuild" is "Cleaned"
-* Verify that the state of images for default project "BasicBuild" is "Succeeded"
+* Verify that the state of images for default project "StatePropagationTest_BasicBuild" is "Succeeded"
 
 Rebuild
 * Build imagery project "StatePropagationTest_BasicBuild"
 * Wait for imagery project "StatePropagationTest_BasicBuild" to reach state "Succeeded"
-* Verify that the state of images for default project "BasicBuild" is "Succeeded"
+* Verify that the state of images for default project "StatePropagationTest_BasicBuild" is "Succeeded"
 
 ## Cancel and Resume Project Before Packgen
 Tags: basic, build, clean, rebuild
 
 Build
-* Create and build default project "CancelProjectEarly"
+* Create and build default project "StatePropagationTest_CancelProjectEarly"
 
 Cancel
 * Cancel imagery project "StatePropagationTest_CancelProjectEarly"
-* Verify that the state of images for default project "CancelProjectEarly" is in
+* Verify that the state of images for default project "StatePropagationTest_CancelProjectEarly" is in
   | State      |
   |------------|
   | InProgress |
@@ -55,13 +55,13 @@ Resume
 * Resume imagery project "StatePropagationTest_CancelProjectEarly"
 * Verify that the state of imagery project "StatePropagationTest_CancelProjectEarly" is "Waiting"
 * Wait for imagery project "StatePropagationTest_CancelProjectEarly" to reach state "Succeeded"
-* Verify that the state of images for default project "CancelProjectEarly" is "Succeeded"
+* Verify that the state of images for default project "StatePropagationTest_CancelProjectEarly" is "Succeeded"
 
 ## Cancel, Resume, Clean, and Rebuild Resource While Project is Building
 Tags: cancel, clean, resume, rebuild
 
 Build
-* Create and build default project "CancelResourceDuringBuild"
+* Create and build default project "StatePropagationTest_CancelResourceDuringBuild"
 
 Cancel
 * Cancel imagery resource "BlueMarble_CancelResourceDuringBuild"
@@ -95,7 +95,7 @@ Resume
   | Queued     |
 * Verify that the state of imagery project "StatePropagationTest_CancelResourceDuringBuild" is "Waiting"
 * Wait for imagery project "StatePropagationTest_CancelResourceDuringBuild" to reach state "Succeeded"
-* Verify that the state of images for default project "CancelResourceDuringBuild" is "Succeeded"
+* Verify that the state of images for default project "StatePropagationTest_CancelResourceDuringBuild" is "Succeeded"
 
 Clean
 * Clean imagery resource "BlueMarble_CancelResourceDuringBuild"
@@ -115,17 +115,17 @@ Rebuild
 Tags: cancel, clean, resume, rebuild
 
 Build
-* Create and build default project "CancelProjectLate"
+* Create and build default project "StatePropagationTest_CancelProjectLate"
 * Wait for imagery project "StatePropagationTest_CancelProjectLate" to reach state "Queued"
 
 Cancel
 * Cancel imagery project "StatePropagationTest_CancelProjectLate"
-* Verify that the state of images for default project "CancelProjectLate" is "Succeeded"
+* Verify that the state of images for default project "StatePropagationTest_CancelProjectLate" is "Succeeded"
 * Verify that the state of imagery project "StatePropagationTest_CancelProjectLate" is "Canceled"
 
 Resume
 * Resume imagery project "StatePropagationTest_CancelProjectLate"
-* Verify that the state of images for default project "CancelProjectLate" is "Succeeded"
+* Verify that the state of images for default project "StatePropagationTest_CancelProjectLate" is "Succeeded"
 * Verify that the state of imagery project "StatePropagationTest_CancelProjectLate" is in
   | State      |
   |------------|
@@ -133,23 +133,23 @@ Resume
   | InProgress |
   | Queued     |
 * Wait for imagery project "StatePropagationTest_CancelProjectLate" to reach state "Succeeded"
-* Verify that the state of images for default project "CancelProjectLate" is "Succeeded"
+* Verify that the state of images for default project "StatePropagationTest_CancelProjectLate" is "Succeeded"
 
 Clean
 * Clean imagery project "StatePropagationTest_CancelProjectLate"
 * Verify that the state of imagery project "StatePropagationTest_CancelProjectLate" is "Cleaned"
-* Verify that the state of images for default project "CancelProjectLate" is "Succeeded"
+* Verify that the state of images for default project "StatePropagationTest_CancelProjectLate" is "Succeeded"
 
 Rebuild
 * Build imagery project "StatePropagationTest_CancelProjectLate"
 * Wait for imagery project "StatePropagationTest_CancelProjectLate" to reach state "Succeeded"
-* Verify that the state of images for default project "CancelProjectLate" is "Succeeded"
+* Verify that the state of images for default project "StatePropagationTest_CancelProjectLate" is "Succeeded"
 
 ## Clean After Cancel
 Tags: cancel, clean, rebuild
 
 Build
-* Create and build default project "CleanAfterCancel"
+* Create and build default project "StatePropagationTest_CleanAfterCancel"
 
 Cancel Resource
 * Cancel imagery resource "BlueMarble_CleanAfterCancel"
@@ -199,7 +199,7 @@ Clean Resource
 
 Rebuild Resource
 * Build imagery resource "BlueMarble_CleanAfterCancel"
-* Verify that the state of images for default project "CleanAfterCancel" is in
+* Verify that the state of images for default project "StatePropagationTest_CleanAfterCancel" is in
   | State      |
   |------------|
   | InProgress |
@@ -210,7 +210,7 @@ The project will not start building again without user input
 
 Cancel Project
 * Cancel imagery project "StatePropagationTest_CleanAfterCancel"
-* Verify that the state of images for default project "CleanAfterCancel" is in
+* Verify that the state of images for default project "StatePropagationTest_CleanAfterCancel" is in
   | State      |
   |------------|
   | InProgress |
@@ -219,7 +219,7 @@ Cancel Project
 
 Clean Project
 * Clean imagery project "StatePropagationTest_CleanAfterCancel"
-* Verify that the state of images for default project "CleanAfterCancel" is in
+* Verify that the state of images for default project "StatePropagationTest_CleanAfterCancel" is in
   | State      |
   |------------|
   | InProgress |
@@ -230,13 +230,13 @@ Clean Project
 Rebuild Project
 * Build imagery project "StatePropagationTest_CleanAfterCancel"
 * Wait for imagery project "StatePropagationTest_CleanAfterCancel" to reach state "Succeeded"
-* Verify that the state of images for default project "CleanAfterCancel" is "Succeeded"
+* Verify that the state of images for default project "StatePropagationTest_CleanAfterCancel" is "Succeeded"
 
 ## Clean and Cancel Project and Resource, Then Rebuild Project
 Tags: cancel, clean, resume, rebuild
 
 Build
-* Create and build default project "CleanCancelRebuildProject"
+* Create and build default project "StatePropagationTest_CleanCancelRebuildProject"
 
 Cancel Resource and Project
 * Cancel imagery resource "BlueMarble_CleanCancelRebuildProject"
@@ -286,7 +286,7 @@ Rebuild Project
   | Queued     |
   | Succeeded  |
 * Wait for imagery project "StatePropagationTest_CleanCancelRebuildProject" to reach state "Succeeded"
-* Verify that the state of images for default project "CleanCancelRebuildProject" is "Succeeded"
+* Verify that the state of images for default project "StatePropagationTest_CleanCancelRebuildProject" is "Succeeded"
 
 ## Resources Belonging to Multiple Projects
 Tags: multiproject, build, cancel, clean, rebuild
@@ -396,12 +396,12 @@ Clean resource after build
 Tags: bad, build 
 
 Set up and build
-* Create and build default project "BadAndGood" 
+* Create and build default project "StatePropagationTest_BadAndGood" 
 * Create database "Database_BadAndGood" from imagery project "StatePropagationTest_BadAndGood"
 * Build database "Database_BadAndGood"
 * Wait for database "Database_BadAndGood" to reach state "Succeeded"
 * Verify that the state of imagery project "StatePropagationTest_BadAndGood" is "Succeeded"
-* Verify that the state of images for default project "BadAndGood" is "Succeeded"
+* Verify that the state of images for default project "StatePropagationTest_BadAndGood" is "Succeeded"
 
 Mark resource bad
 * Mark imagery resource "BlueMarble_BadAndGood" bad
@@ -416,31 +416,31 @@ Mark resource good
 * Mark imagery resource "BlueMarble_BadAndGood" good
 * Verify that the state of database "Database_BadAndGood" is "Succeeded"
 * Verify that the state of imagery project "StatePropagationTest_BadAndGood" is "Succeeded"
-* Verify that the state of images for default project "BadAndGood" is "Succeeded"
+* Verify that the state of images for default project "StatePropagationTest_BadAndGood" is "Succeeded"
 
 Mark project bad
 * Mark imagery project "StatePropagationTest_BadAndGood" bad
 * Verify that the state of database "Database_BadAndGood" is "Succeeded"
 * Verify that the state of imagery project "StatePropagationTest_BadAndGood" is "Bad"
-* Verify that the state of images for default project "BadAndGood" is "Succeeded"
+* Verify that the state of images for default project "StatePropagationTest_BadAndGood" is "Succeeded"
 
 Mark project good
 * Mark imagery project "StatePropagationTest_BadAndGood" good
 * Verify that the state of database "Database_BadAndGood" is "Succeeded"
 * Verify that the state of imagery project "StatePropagationTest_BadAndGood" is "Succeeded"
-* Verify that the state of images for default project "BadAndGood" is "Succeeded"
+* Verify that the state of images for default project "StatePropagationTest_BadAndGood" is "Succeeded"
 
 Mark database bad
 * Mark database "Database_BadAndGood" bad
 * Verify that the state of database "Database_BadAndGood" is "Bad"
 * Verify that the state of imagery project "StatePropagationTest_BadAndGood" is "Succeeded"
-* Verify that the state of images for default project "BadAndGood" is "Succeeded"
+* Verify that the state of images for default project "StatePropagationTest_BadAndGood" is "Succeeded"
 
 Mark database good
 * Mark database "Database_BadAndGood" good
 * Verify that the state of database "Database_BadAndGood" is "Succeeded"
 * Verify that the state of imagery project "StatePropagationTest_BadAndGood" is "Succeeded"
-* Verify that the state of images for default project "BadAndGood" is "Succeeded"
+* Verify that the state of images for default project "StatePropagationTest_BadAndGood" is "Succeeded"
 
 ## Cancel Resource Before Building Database or Project
 Tags: cancel, build 
