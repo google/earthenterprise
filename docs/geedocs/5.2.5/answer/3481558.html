@@ -254,6 +254,25 @@ instead.
 <pre>
 <code>--sendver dbver </code></pre>
 <p><i>Optional</i>. Specify which database version to send. Use the <code>?version=...</code> syntax. Available database versions may be found with the <code>gequery --versions</code> command.</p>
+<h2>genewmapdatabase</h2>
+  <pre>
+<code><b>genewmapdatabase</b> [--<strong>mercator</strong> | --<strong>flat]</strong> ] -o <em>databasename</em> [--<strong>imagery</strong> <em>imagery project</em>] [--<strong>map</strong> <em>imap project</em>]</code>...</pre>
+  <h3>Purpose</h3>
+  <p>Creates a new 2D map database. If an imagery or map project is specified, it is added to the database. Flat or mercator databases can be created. Mercator databases can use either mercator or flat imagery projects, with mercator projects given priority if there is a nameing collision. Flat databases can only use flat imagery projects.
+
+  <h3>Commands</h3>
+  <pre>
+<code>--mercator </code></pre>
+  <p><i>Optional</i>. Uses Mercator map projection.</p>
+  <pre>
+<code>--flat </code></pre>
+  <p><i>Default</i>. Uses Flat map (Plate Carrée) projection.</p>
+  <pre>
+<code><b>--imagery</b> imagery project </code></pre>
+  <p><i>Optional</i>. The imagery project to be added to the database. If the database is mercator, the imagery project can be flat or mercator, with mercator being given priority during naming collisions. If the database is flat, the imagery project must be flat.</p>
+  <pre>
+<code><b>--map</b> map project </code></pre>
+  <p><i>Optional</i>. The map project to be added to the database.</p>
 <h2>gepublishdatabase</h2>
 <div class="alert">
   <p>Deprecated in GEE 4.0.</p>
