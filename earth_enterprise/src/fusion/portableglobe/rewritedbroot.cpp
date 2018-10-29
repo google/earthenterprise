@@ -171,7 +171,8 @@ void DisableTimeMachine(geProtoDbroot *dbroot) {
   assert(dbroot); 
   keyhole::dbroot::EndSnippetProto* end_snippet =
       dbroot->mutable_end_snippet();
-  keyhole::dbroot::TimeMachineOptionsProto* time_machine_options = end_snippet->mutable_time_machine_options(); 
+  keyhole::dbroot::TimeMachineOptionsProto* time_machine_options =
+      end_snippet->mutable_time_machine_options(); 
   time_machine_options->set_server_url("");
 }
 
