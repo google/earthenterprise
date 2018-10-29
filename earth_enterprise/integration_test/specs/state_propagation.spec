@@ -3,7 +3,7 @@ State Propagation Correctness Tests
 
 Test handling and propagation of state changes.
 
-These tests assume you have installed fusion and that the asset root is at
+These tests assume you have installed Fusion and that the asset root is at
 /gevol/assets.
 
 Before running these tests you must run `test_setup.sh` located in the same
