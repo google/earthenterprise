@@ -71,7 +71,7 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
           "                    then uses relative url for standard Portable\n"
           "                    search.\n"
           "   --preserve_search_service:\n" 
-          "                    Keep original search service url\n"
+          "                    Keep original search service url.\n"
           "   --icon_directory: Directory where icons should be stored.\n"
           "   --kml_map_file:  Output file where map of source kml urls to local\n"
           "                    files will be stored.\n"
