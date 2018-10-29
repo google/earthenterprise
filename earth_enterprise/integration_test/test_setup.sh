@@ -11,7 +11,6 @@ export PATH=${PATH}:/opt/google/bin
 
 # Script will only download if necessary
 sudo sh ${TUTORIAL_PATH}/download_tutorial.sh
-sudo rm -rf ${TEST_DATA_PATH}/*
 sudo rsync -arv ${TUTORIAL_PATH}/ ${TEST_DATA_PATH}
 
 # Copy template files so that gefusionuser can access them

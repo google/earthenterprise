@@ -21,11 +21,8 @@ def get_src_data_path():
   return os.getenv('ge_src_data_path')
 
 def make_dirs(dirs):
-  try:
+  if not os.path.isdir(dirs):
     os.makedirs(dirs)
-  except OSError:
-    # Directory already exists - ignore
-    pass
 
 def call(command, errorMsg):
   result = subprocess.call(command)
