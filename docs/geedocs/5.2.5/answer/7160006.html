@@ -44,8 +44,7 @@ gtag('config', 'UA-108632131-2');
     <p id="overview_5.2.5">New Features</p>
   </h5>
     <p><strong>When a GEE server is queried for server definitions the response can be returned in proper JSON format.</strong> The <code>v</code> parameter can be added to query string to specify which version of the API will be returned. The valid options are <code>v=1</code> and <code>v=2</code>. Version one returns data in the current format. Version two returns data in JSON format. An example url which returns data in JSON format looks like: <code>http://&lt;GEE earth server&gt;/&lt;database_publish_point&gt;/query?request=Json&amp;v=2</code>.</p>
-    <p><strong>Enable POI search when publishing from the command line.</strong> Users can now pass the <code>enable_poisearch</code> and <code>--enable_enhancedsearch</code> parameters to <code>geserveradmin</code> to enable POI search and enhanced search when publishing from the command line.
-    <p><strong>Enable WMS when publishing from the command line.</strong> <code>geserveradmin --publishdb</code> has a new option <code>--serve_wms</code>. Passing this flag enables WMS for the database you are publishing.</p>
+    <p><strong>Additional options when publishing from the command line.</strong> Users can now enable POI search, enhanced search, and WMS when publishing from the command line.
     <p><strong>Portable globe packet dumps</strong>.
         <code>geglxinfo</code> is now capable of extracting packets from 3d portable globes.
         This is useful for exploring contents of a 3d portable file.
@@ -79,13 +78,6 @@ gtag('config', 'UA-108632131-2');
             <th>Resolution</th>
           </tr>
           <tr>
-            <td>1020</td>
-            <td>State updates are slow for large builds</td>
-            <td>
-              Updating the state of asset versions used in large builds (such as when canceling or cleaning a project) is now much more efficient.
-            </td>
-          </tr>
-          <tr>
             <td>968</td>
             <td><code>/etc/init.d/gefusion stop</code> Does Not Ensure Daemons Stop</td>
             <td>
@@ -102,6 +94,13 @@ gtag('config', 'UA-108632131-2');
               If a 2d map contains imagery at resolution level 24 and cutter tries to create a portable
               map with a region level of 24 the resulting portable map will now contain the high
               resolution imagery.
+            </td>
+          </tr>
+          <tr>
+            <td>1020</td>
+            <td>State updates are slow for large builds</td>
+            <td>
+              Updating the state of asset versions used in large builds (such as when canceling or cleaning a project) is now much more efficient.
             </td>
           </tr>
         </tbody>
