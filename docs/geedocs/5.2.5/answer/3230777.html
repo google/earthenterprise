@@ -165,14 +165,17 @@ Executing: /opt/google/bin/geportableglcpacker --layer_info="/tmp/cutter/glc_205
 <p>The maximum resolution of the cut polygon area is no higher than the maximum resolution of the source map or globe. For example, if the maximum resolution in the cutter is specified at 24, but the source imagery is at 18 (approximately 1-meter resolution), the cut map or globe will contain level 18 imagery. You can leave this field blank to use the highest available imagery.</p>
 <p>You may enter a lower number to reduce the size of your map or globe, by not including the highest resolution imagery.</p>
 <hr/>
-<h3 id="advanced_polygon_resolution">Advanced Polygon Resolution</h3>
+<h3 id="advanced_settings">Advanced Settings</h3>
+<h4 id="advanced_polygon_resolution">Polygon Resolution</h4>
 <p>The <strong>Advanced</strong> option provides an additional globe-cutting option, namely <em>Polygon Resolution</em>. This setting is useful when cutting with large polygons. For example, you may use 12 for a country-sized polygon or 18 for a city-sized polygon. </p>
-<div class="note"> <strong>Note:</strong> Additional advanced settings may be offered in future versions. Use caution when changing them as they may dramatically increase build times and globe sizes. </div>
 <h4>To set the polygon resolution:</h4>
 <ul>
 <li>Click <strong>Advanced</strong> to display the Polygon Resolution option. </li>
 <li>Click the drop-down list to set the resolution value you want. </li>
 </ul>
+<h4 id="use_alternate_method">Continue Past Empty Levels</h4>
+<p>This option only applies to portable maps (2D databases). If a portable map does not contain imagery in the polygon at the resolution that you think it should, try recreating the portable map with this option set to Yes. This option will likely increase the build time, possibly significantly.</p>
+<div class="note"> <strong>Note:</strong> Additional advanced settings may be offered in future versions. Use caution when changing them as they may dramatically increase build times and globe sizes. </div>
 <hr/>
 <h3 id="building_the_globe">Building the map or globe</h3>
 <p>Depending on the size of your polygon, building your cut map or globe can take from a few minutes to a few hours; likewise, file size varies widely depending on the area selected and the desired resolution.</p>
