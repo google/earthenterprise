@@ -27,6 +27,8 @@ void RemoveUnusedLayers(const std::string &data_type,
 void ReplaceSearchServer(const std::string &search_service,
                          geProtoDbroot *dbroot);
 
+void DisableTimeMachine(geProtoDbroot *dbroot);
+
 void ReplaceReferencedKml(const std::string &new_kml_base_url,
                           const std::string &kml_url_to_file_map_file,
                           const bool preserve_kml_filenames,
