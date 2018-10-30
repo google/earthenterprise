@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<MapSubLayerConfig>
+
+  <asset_ref>Resources/Vector/CA_POIs_Merc.kvasset</asset_ref>
+
+  <display_rules>
+    <display_rule>
+      <name>default select all</name>
+      <site>
+        <label>
+          <enabled>1</enabled>
+          <levelRange max="14" min="8"/>
+          <hasOutlineLabel>0</hasOutlineLabel>
+          <text mode="RecordFormatter">«NAME»</text>
+          <outlineText mode="RecordFormatter"></outlineText>
+          <textStyle>
+            <font>Sans</font>
+            <weight>Regular</weight>
+            <size>12</size>
+            <color a="255" b="0" g="0" r="0"/>
+            <drawOutline>1</drawOutline>
+            <outlineThickness>4</outlineThickness>
+            <outlineColor a="255" b="255" g="255" r="255"/>
+          </textStyle>
+          <displayAll>0</displayAll>
+        </label>
+        <reduceMethod>ReduceSiteNone</reduceMethod>
+      </site>
+      <filter>
+        <match>MatchAll</match>
+        <selectRules/>
+        <matchScript></matchScript>
+      </filter>
+    </display_rule>
+  </display_rules>
+
+  <allowFeatureDuplication>0</allowFeatureDuplication>
+
+  <contextScript></contextScript>
+
+  <searchFields/>
+
+  <allowEmptyLayer>0</allowEmptyLayer>
+
+</MapSubLayerConfig>
