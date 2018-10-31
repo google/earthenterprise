@@ -2,8 +2,9 @@
 import os
 import argparse
 import git
-from datetime import datetime
+import sys
 
+from datetime import datetime
 
 
 def GetVersion(backupFile, label=''):
@@ -53,10 +54,29 @@ def _GitGeneratedLongVersion():
         return _VersionFromTagHistory(raw)
 
 
+def _IsGitDescribeFirstParentSupported():
+    """Checks whether --first-parent parameter is valid for the
+    version of git available"""
+    
+    try:
+        repo = _GetRepository()
+        repo.git.describe('--first-parent')
+        return True
+    except git.exc.GitCommandError:
+        pass
+
+    return False
+
+
 def _GetCommitRawDescription():
     """Returns description of current commit"""
+
+    args = ['--tags', '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*']
+    if _IsGitDescribeFirstParentSupported():
+        args.insert(0, '--first-parent')
+
     repo = _GetRepository()
-    raw = repo.git.describe('--first-parent', '--tags', '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*')
+    raw = repo.git.describe(*args)
     raw = raw.rstrip()
     return raw
 
@@ -222,10 +242,21 @@ class OpenGeeVersion(object):
 
         self.long_version_string = value
 
+    def get_warning_message(self):
+        """Returns None, or a string describing known issues."""
+
+        return None if _IsGitDescribeFirstParentSupported() else '''\
+WARNING: Git version 1.8.4 or later is required to correctly determine the Open GEE version being built.
+The Open GEE version is calculated from tags using the "git describe" command.
+The "--first-parent" parameter introduced in Git 1.8.4 allows proper version calcuation on all branches.
+Without the --first-parent parameter, the version calculated may be incorrect, depending on which branch is being built.
+For information on upgrading Git, see:
+https://github.com/google/earthenterprise/wiki/Frequently-Asked-Questions-(FAQs)#how-do-i-upgrade-git-to-the-recommended-version-for-building-google-earth-enterprise\
+'''
+
 
 # Exported variable for use by other modules:
 open_gee_version = OpenGeeVersion()
-
 
 def main():
     parser = argparse.ArgumentParser()
@@ -233,6 +264,10 @@ def main():
     args = parser.parse_args()
 
     print open_gee_version.get_long() if args.long else open_gee_version.get_short()
+
+    warning_message = open_gee_version.get_warning_message()
+    if warning_message is not None:
+        print >> sys.stderr, warning_message
 
 
 __all__ = ['open_gee_version']
