@@ -82,10 +82,15 @@ main_preinstall()
             exit 1
         fi
 
+	if is_package_installed "opengee-common" "opengee-common" ; then
+        show_opengee_package_installed "install" "$GEEF"
+        exit 1
+	fi
+
 	if ! check_prereq_software; then
 		exit 1
 	fi
-	
+
 	# check to see if GE Fusion processes are running
 	if ! check_fusion_processes_running; then
 		show_fusion_running_message
