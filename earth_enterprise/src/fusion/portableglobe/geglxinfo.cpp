@@ -23,11 +23,18 @@
 #include <map>
 #include <sstream>  // NOLINT(readability/streams)
 #include <string>
+#include "common/etencoder.h"
 #include "common/khAbortedException.h"
 #include "common/khFileUtils.h"
+#include "common/geterrain.h"
+#include "common/khEndian.h"
 #include "common/khGetopt.h"
 #include "common/khSimpleException.h"
 #include "common/khTypes.h"
+#include "common/proto_streaming_imagery.h"
+#include "common/packet.h"
+#include "common/packetcompress.h"
+#include "common/qtpacket/quadtreepacket.h"
 #include "fusion/portableglobe/servers/fileunpacker/shared/file_package.h"
 #include "fusion/portableglobe/servers/fileunpacker/shared/packetbundle.h"
 #include "fusion/portableglobe/servers/fileunpacker/shared/portable_glc_reader.h"
@@ -66,50 +73,65 @@ void GetXY(int level, uint64 btree, uint64* x, uint64* y) {
   }
 }
 
-// Extract tiles for all channels from glm or 2d glc.
-// Begin with the start_idx-th entry in the index and continue
-// until the last index entry before end_idx-th entry.
-// All channels are extracted from the glm, which may be
-// the file itself or may be a layer within a glc.
-// Tiles are saved to directory tree:
-//    maptiles/<z>/<x>/<y>/<channel>.<sfx>
-// Where sfx indicates the tile type (jpg or png).
-void ExtractPackets(GlcUnpacker* const unpacker,
-                    PortableGlcReader* const reader,
-                    const std::string& suffix,
+void writePacketToFile(const IndexItem& index_item,
+                       const std::string& buffer,
+                       const bool skipSmall,
+                       const std::string& writeDir,
+                       const std::string& extraSuffix) {
+  char path[256];
+  const char* suffix;
+  uint64 x;
+  uint64 y;
+  uint64 btree = index_item.btree_high;
+  btree <<= 16;
+  btree |= (index_item.btree_low & 0xffff);
+  GetXY(index_item.level, btree, &x, &y);
+  if ((buffer[6] == 'J') && (buffer[7] == 'F')
+      && (buffer[8] == 'I') && (buffer[9] == 'F')) {
+    suffix = "jpg";
+  } else if ((buffer[1] == 'P') && (buffer[2] == 'N')
+             && (buffer[3] == 'G')) {
+    suffix = "png";
+  } else {
+    suffix = "unk";
+  }
+  snprintf(path, sizeof(path), "%s/%d/%d/%lu/%lu%s.%s",
+           writeDir.c_str(), index_item.channel, index_item.level, x, y, extraSuffix.c_str(), suffix);
+  if (skipSmall && buffer.size() <= 153) {
+    std::cout << "Skipping small: " << path << std::endl;
+  } else {
+    khEnsureParentDir(path);
+    khWriteSimpleFile(path, &buffer[0], buffer.size());
+  }
+}
+
+bool getPackageFileLocs(GlcUnpacker* const unpacker,
+                    const std::string& index_file,
+                    const std::string& data_file,
                     bool is_composite,
                     int layer_idx,
-                    uint64 start_idx,
-                    uint64 end_idx) {
-  PackageFileLoc index_file_loc;
-  std::string index_file = "mapdata/index";
-  PackageFileLoc data_file_loc;
-  std::string data_file = "mapdata/pbundle_0000";
+                    PackageFileLoc& index_file_loc,
+                    PackageFileLoc& data_file_loc) {
   // For glcs, we need to look inside each layer for the indexes.
   if (is_composite) {
-    // Determine if the glc is 2d, 3d, or both
-    for (int i = 0; i < unpacker->IndexSize(); ++i) {
-      std::string package_file = unpacker->IndexFile(i);
-      std::string layer_suffix = package_file.substr(package_file.size() - 3);
-      if (layer_suffix == "glb") {
-        std::cout << "Only 2d is supported." << std::endl;
-        return;
-      } else if (layer_suffix == "glm") {
-        std::cout << "2d glc" << std::endl;
-      }
+    if (unpacker->Is2d()) {
+      std::cout << "2d glc" << std::endl;
+    }
+    if (unpacker->Is3d()) {
+      std::cout << "3d glc" << std::endl;
     }
 
     int layer_index = unpacker->LayerIndex(layer_idx);
     if (!unpacker->FindLayerFile(
            index_file.c_str(), layer_index, &index_file_loc)) {
        std::cout << "Unable to find layer index: " << index_file << std::endl;
-       return;
+       return false;
     }
 
     if (!unpacker->FindLayerFile(
            data_file.c_str(), layer_index, &data_file_loc)) {
        std::cout << "Unable to find layer data: " << data_file << std::endl;
-       return;
+       return false;
     }
 
   // For glms and glbs, just use the corresponding data index and divide
@@ -117,12 +139,31 @@ void ExtractPackets(GlcUnpacker* const unpacker,
   } else {
     if (!unpacker->FindFile(index_file.c_str(), &index_file_loc)) {
         std::cout << "Unable to find index: " << index_file << std::endl;
-      return;
+      return false;
     }
     if (!unpacker->FindFile(data_file.c_str(), &data_file_loc)) {
         std::cout << "Unable to find data: " << data_file << std::endl;
-      return;
+      return false;
     }
+  }
+
+  return true;
+}
+
+void extractAllPackets(GlcUnpacker* const unpacker,
+                    PortableGlcReader* const reader,
+                    uint64 start_idx,
+                    uint64 end_idx,
+                    int layer_idx,
+                    bool is_composite,
+                    const std::string& index_file,
+                    const std::string& data_file) {
+  PackageFileLoc index_file_loc;
+  PackageFileLoc data_file_loc;
+
+  if (!getPackageFileLocs(unpacker, index_file, data_file, is_composite, layer_idx,
+                          index_file_loc, data_file_loc)) {
+    return;
   }
 
   // Sanity check.
@@ -155,35 +196,82 @@ void ExtractPackets(GlcUnpacker* const unpacker,
     // std::cout << "index offset: " << offset << std::endl;
     if (reader->ReadData(&index_item, offset, sizeof(IndexItem))) {
       uint64 data_offset = data_file_loc.Offset() + index_item.offset;
+      buffer.resize(MIN(max_size, index_item.packet_size));
       if (index_item.packet_size >= max_size) {
         std::cout << "Data item is too big: " << i
                   << " size: " << index_item.packet_size << std::endl;
       } else if (reader->ReadData(
           &buffer[0], data_offset, index_item.packet_size)) {
-        char path[256];
-        const char* suffix;
-        uint64 x;
-        uint64 y;
-        uint64 btree = index_item.btree_high;
-        btree <<= 16;
-        btree |= (index_item.btree_low & 0xffff);
-        GetXY(index_item.level, btree, &x, &y);
-        if ((buffer[6] == 'J') && (buffer[7] == 'F')
-            && (buffer[8] == 'I') && (buffer[9] == 'F')) {
-          suffix = "jpg";
-        } else if ((buffer[1] == 'P') && (buffer[2] == 'N')
-                   && (buffer[3] == 'G')) {
-          suffix = "png";
-        } else {
-          suffix = "unk";
+        if (unpacker->Is2d()) {
+          writePacketToFile(index_item, buffer, true, "maptiles", "");
         }
-        snprintf(path, sizeof(path), "maptiles/%d/%d/%lu/%lu.%s",
-                 index_item.channel, index_item.level, x, y, suffix);
-        if (index_item.packet_size <= 153) {
-          std::cout << "Skipping small: " << path << std::endl;
-        } else {
-          khEnsureParentDir(path);
-          khWriteSimpleFile(path, &buffer[0], index_item.packet_size);
+        else if (index_item.packet_type == kImagePacket) {
+          etEncoder::DecodeWithDefaultKey(&buffer[0], index_item.packet_size);
+          geEarthImageryPacket protoPacket;
+          if (!protoPacket.ParseFromString(buffer)) {
+            std::cout << "Error parsing protobuf imagery packet" << std::endl;
+          }
+
+          if (protoPacket.HasImageData()) {
+            writePacketToFile(index_item, protoPacket.ImageData(), false, "globetiles", "_img");
+          }
+          if (protoPacket.HasImageAlpha()) {
+            writePacketToFile(index_item, protoPacket.ImageAlpha(), false, "globetiles", "_alpha");
+          }
+        }
+        else if (index_item.packet_type == kQtpPacket) {
+          LittleEndianReadBuffer decompressed;
+          etEncoder::DecodeWithDefaultKey(&buffer[0],
+                                          buffer.size());
+          if (KhPktDecompress(buffer.data(),
+                              buffer.size(),
+                              &decompressed)) {
+            qtpacket::KhQuadTreePacket16 theMetadata;
+            decompressed >> theMetadata;
+            writePacketToFile(index_item, theMetadata.ToString(index_item.level == 0,true), false, "globetiles", "_meta");
+          }
+        }
+        else if (index_item.packet_type == kTerrainPacket) {
+          LittleEndianReadBuffer decompressed;
+          etEncoder::DecodeWithDefaultKey(&buffer[0], buffer.size());
+          if (KhPktDecompress(buffer.data(), buffer.size(), &decompressed)) {
+            geterrain::Mesh m;
+            m.Pull(decompressed);
+            std::ostringstream s;
+            m.PrintMesh(s);
+            writePacketToFile(index_item, s.str(), false, "globetiles", "_terrain");
+          }
+        }
+        else if (index_item.packet_type == kDbRootPacket) {
+          writePacketToFile(index_item, buffer, false, "globetiles", "_dbroot");
+        }
+        else if (index_item.packet_type == kVectorPacket) {
+          LittleEndianReadBuffer decompressed;
+          etEncoder::DecodeWithDefaultKey(&buffer[0], buffer.size());
+          if (KhPktDecompress(buffer.data(), buffer.size(), &decompressed) &&
+             (decompressed.size() >= sizeof(uint32)*2)) {
+            const uint32* vectorData = reinterpret_cast<const uint32*>(decompressed.data());
+            std::map<uint32, std::string> vTypeNames = {
+              {TYPE_STREETPACKET, "street"},
+              {TYPE_SITEPACKET, "site"},
+              {TYPE_DRAWABLEPACKET, "drawable"},
+              {TYPE_POLYLINEPACKET, "polyline"},
+              {TYPE_AREAPACKET, "area"},
+              {TYPE_STREETPACKET_UTF8, "streetutf"},
+              {TYPE_SITEPACKET_UTF8, "siteutf"},
+              {TYPE_LANDMARK, "landmark"},
+              {TYPE_POLYGONPACKET, "polygon"}
+            };
+            auto typeNameIter = vTypeNames.find(vectorData[1]);
+            std::string vectorDataType = "unknown";
+            if (typeNameIter != vTypeNames.end()) {
+              vectorDataType = typeNameIter->second;
+            }
+            writePacketToFile(index_item, decompressed, false, "globetiles", "_vector_"+vectorDataType);
+          }
+        }
+        else {
+          std::cout << "Found unhandled packet type of " << int(index_item.packet_type) << std::endl;
         }
       }  else {
         std::cout << "Unable to read data item." << std::endl;
@@ -192,6 +280,32 @@ void ExtractPackets(GlcUnpacker* const unpacker,
       std::cout << "Unable to read index item." << std::endl;
     }
     offset += sizeof(IndexItem);
+  }
+}
+
+// Extract tiles for all channels from glm or 2d glc.
+// Begin with the start_idx-th entry in the index and continue
+// until the last index entry before end_idx-th entry.
+// All channels are extracted from the glm, which may be
+// the file itself or may be a layer within a glc.
+// Tiles are saved to directory tree:
+//    maptiles/<z>/<x>/<y>/<channel>.<sfx>
+// Where sfx indicates the tile type (jpg or png).
+void ExtractPackets(GlcUnpacker* const unpacker,
+                    PortableGlcReader* const reader,
+                    const std::string& suffix,
+                    bool is_composite,
+                    int layer_idx,
+                    uint64 start_idx,
+                    uint64 end_idx) {
+  if (unpacker->Is3d()) {
+    std::cout << "Extracting packets for a globe file" << std::endl;
+    extractAllPackets(unpacker, reader, start_idx, end_idx, layer_idx, is_composite, "data/index", "data/pbundle_0000");
+    extractAllPackets(unpacker, reader, start_idx, end_idx, layer_idx, is_composite, "qtp/index", "qtp/pbundle_0000");
+    return;
+  }
+  else {
+    extractAllPackets(unpacker, reader, start_idx, end_idx, layer_idx, is_composite, "mapdata/index", "mapdata/pbundle_0000");
   }
 }
 
@@ -374,7 +488,7 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
           "   --packet_channel <channel_int>: Channel of packet to extract.\n"
           "   --output <dest_{file,dir}_path>: Where extracted file(s) should be\n"
           "                     written.\n"
-          "   --extract_packets Extract all packets from a glm or 2d glc.\n"
+          "   --extract_packets Extract all packets from a portable file.\n"
           "                     Can be used with start_idx and end_idx\n"
           "                     parameters, and the layer_idx parameter\n"
           "                     if it's a glc.\n"
