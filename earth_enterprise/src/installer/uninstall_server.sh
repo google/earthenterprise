@@ -61,6 +61,11 @@ main_preuninstall()
     exit 1
   fi
 
+  if is_package_installed "opengee-common" "opengee-common"; then
+    show_opengee_package_installed "uninstall" "$GEES"
+    exit 1
+  fi
+
   # check to see if GE Server processes are running
   if check_server_processes_running; then
     show_server_running_message
