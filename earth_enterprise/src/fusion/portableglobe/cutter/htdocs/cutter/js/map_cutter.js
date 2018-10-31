@@ -74,6 +74,7 @@ function geeCheckMapParameters() {
  */
 function checkAndBuild() {
   var allowOverwriting = geeAllowOverwrite();
+  var useAlternateMethod = geeUseAlternateMethod();
 
   // Refresh the list of databases to be sure information is up to date.
   gees.initialize.databases();
@@ -96,7 +97,7 @@ function checkAndBuild() {
   }
 
   // If no published items are being overwritten, build the map.
-  geeBuildMap(allowOverwriting);
+  geeBuildMap(allowOverwriting, useAlternateMethod);
 }
 
 /**
@@ -117,7 +118,7 @@ function overwritingPublishedItemsMessage() {
  * Use a series of AJAX calls to cut a portable Map and make it available
  * for downloading. The AJAX calls provide some feedback along the way.
  */
-function geeBuildMap(allowOverwriting) {
+function geeBuildMap(allowOverwriting, useAlternateMethod) {
   hideBuildComplete();
   geeSetResponse('Building portable map ...');
   var msg = geeCheckMapParameters();
@@ -129,6 +130,7 @@ function geeBuildMap(allowOverwriting) {
     return;
   }
 
+  var useAlternateMethodStr = '';
   var url = '/cgi-bin/globe_cutter_app.py?cmd=UID&globe_name=' + geeGlobeName();
 
   if (isServing == '2D') {
@@ -137,6 +139,10 @@ function geeBuildMap(allowOverwriting) {
 
   if (allowOverwriting) {
     url += '&allow_overwrite=t';
+  }
+
+  if (useAlternateMethod) {
+    useAlternateMethodStr = '&ignore_imagery_depth=t';
   }
 
   jQuery.get(url,
@@ -203,7 +209,7 @@ function geeBuildMap(allowOverwriting) {
                        globe_name + '&' + polygon + '&' + polygon_level + back1;
                    sequence[2] = front + base_url + 'BUILD_GLOBE&' +
                        globe_name + '&' + source + '&' + default_level +
-                       '&' + max_level + back1;
+                       '&' + max_level + useAlternateMethodStr + back1;
                    sequence[3] = wait_for_task;
                    sequence[4] = front + base_url + 'EXTRACT_SEARCH_DB&' +
                        globe_name + '&' + source + '&' + polygon + back1;

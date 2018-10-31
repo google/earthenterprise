@@ -26,6 +26,7 @@ import subprocess
 import sys
 sys.path += ['scons']
 from khEnvironment import khEnvironment
+import getversion
 
 # Add the OpenGEE Python libraries to the module search path:
 opengee_lib_path = os.path.join('lib', 'python')
@@ -411,9 +412,12 @@ installdirs = {
     'htdocs': InstServerDir('gehttpd/htdocs'),
 }
 
+# Check version of git -- may not be able to reliably generate correct opengee version string.
+gee_version_number = getversion.open_gee_version.get_short()
+if getversion.open_gee_version.get_warning_message():
+    print getversion.open_gee_version.get_warning_message()
 
 # create the environment that controls the builds
-
 if is_min_ubuntu:
   path_string = '%sbin:/bin:/usr/bin' % (exportdirs['root'])
 else:
