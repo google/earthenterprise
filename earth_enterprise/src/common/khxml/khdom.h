@@ -875,7 +875,7 @@ FromElement(khxml::DOMElement *elem, EncryptedQString &val)
             tmp[i] = tmp[i].unicode() - 13;
           }
           val = tmp;
-          val.squeeze();
+          val.squeeze();  // need docs on QStrin
           return;
         } else {
           throw khDOMException(khDOMException::InvalidAttribute,
@@ -899,11 +899,11 @@ FromElement(khxml::DOMElement *elem, std::string &val)
   if (!valNode ||
       (valNode->getNodeType() != khxml::DOMNode::TEXT_NODE)) {
     val.clear();
-    val.shrink_to_fit();
+    val.shrink_to_fit(); // O(1) to clear and reclaim memory, O(1) insertion
   } else {
     khxml::DOMText* valText = reinterpret_cast<khxml::DOMText*>(valNode);
     val = FromXMLStr(valText->getData());//((khxml::DOMText*)valNode)->getData());
-    val.shrink_to_fit();
+    val.shrink_to_fit(); // at most, O(m); m=string::size()
   }
 }
 
@@ -914,6 +914,7 @@ FromElementWithChildName(khxml::DOMElement *elem,
                          std::vector<T> &vec)
 {
   vec.clear();
+  vec.shrink_to_fit(); // O(1) to clear and reclaim memory, O(1) insertion)
   khDOMElemList kids = GetChildrenByTagName(elem, childTagName);
   for (khDOMElemList::iterator iter = kids.begin();
        iter != kids.end(); ++iter) {
@@ -930,6 +931,7 @@ FromElementWithChildName(khxml::DOMElement *elem,
                          std::deque<T> &deque)
 {
   deque.clear();
+  deque.shrink_to_fit(); // O(1) to clear and reclaim memory, O(1) insertion
   khDOMElemList kids = GetChildrenByTagName(elem, childTagName);
   for (khDOMElemList::iterator iter = kids.begin();
        iter != kids.end(); ++iter) {
@@ -1041,7 +1043,6 @@ void
 FromElement(khxml::DOMElement *elem, std::map<std::string, U> &map)
 {
   map.clear();
-
   // see if this is the old way or the new way
   // Old way used keys for tagnames. New way has "item" elements w/
   // "key" attributes

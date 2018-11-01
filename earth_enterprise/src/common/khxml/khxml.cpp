@@ -29,11 +29,16 @@ using namespace khxml;
 std::string
 ListElementTagName(const std::string &tagname)
 {
+  std::string retval;
   if (tagname[tagname.length()-1] == 's') {
-    return tagname.substr(0, tagname.length()-1);
+    retval = tagname.substr(0, tagname.length()-1);
+    //return tagname.substr(0, tagname.length()-1);
   } else {
-    return tagname + "_element";
+    retval = tagname + "_element";
+    //return tagname + "_element";
   }
+  retval.shrink_to_fit();
+  return retval;
 }
 
 
