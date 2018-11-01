@@ -840,6 +840,7 @@ FromElement(khxml::DOMElement *elem, QString &val)
   if (!valNode ||
       (valNode->getNodeType() != khxml::DOMNode::TEXT_NODE)) {
     val = "";
+    val.squeeze();
   } else {
     val = QString::fromUcs2(((khxml::DOMText*)valNode)->getData());
   }
@@ -862,10 +863,11 @@ FromElement(khxml::DOMElement *elem, EncryptedQString &val)
   khxml::DOMNode *node = elem->getFirstChild();
   while (node) {
     if ((node->getNodeType() == khxml::DOMNode::CDATA_SECTION_NODE)) {
-      khxml::DOMCharacterData* data = (khxml::DOMCharacterData*)node;
+      khxml::DOMCharacterData* data = reinterpret_cast<khxml::DOMCharacterData*>(node);//(khxml::DOMCharacterData*)node;
       if (data->getLength() > 0) {
         if (method == "plaintext") {
           val = QString::fromUcs2(data->getData());
+          val.squeeze();
           return;
         } else if (method == "simple") {
           QString tmp = QString::fromUcs2(data->getData());
@@ -873,6 +875,7 @@ FromElement(khxml::DOMElement *elem, EncryptedQString &val)
             tmp[i] = tmp[i].unicode() - 13;
           }
           val = tmp;
+          val.squeeze();
           return;
         } else {
           throw khDOMException(khDOMException::InvalidAttribute,
@@ -885,6 +888,7 @@ FromElement(khxml::DOMElement *elem, EncryptedQString &val)
     node = node->getNextSibling();
   }
   val = "";
+  val.squeeze();
 }
 
 inline
@@ -894,9 +898,12 @@ FromElement(khxml::DOMElement *elem, std::string &val)
   khxml::DOMNode *valNode = elem->getFirstChild();
   if (!valNode ||
       (valNode->getNodeType() != khxml::DOMNode::TEXT_NODE)) {
-    val = "";
+    val.clear();
+    val.shrink_to_fit();
   } else {
-    val = FromXMLStr(((khxml::DOMText*)valNode)->getData());
+    khxml::DOMText* valText = reinterpret_cast<khxml::DOMText*>(valNode);
+    val = FromXMLStr(valText->getData());//((khxml::DOMText*)valNode)->getData());
+    val.shrink_to_fit();
   }
 }
 
