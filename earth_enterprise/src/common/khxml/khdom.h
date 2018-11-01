@@ -281,10 +281,12 @@ ToElementWithChildName(khxml::DOMElement *elem,
                        const std::string &childTagName,
                        const std::vector<T> &vec)
 {
-  for (typename std::vector<T>::const_iterator iter = vec.begin();
-       iter != vec.end();
-       ++iter) {
-    AddElement(elem, childTagName, *iter);
+  //for (typename std::vector<T>::const_iterator iter = vec.begin();
+  //     iter != vec.end();
+  //     ++iter) {
+  for (auto iter : vec)
+  {
+    AddElement(elem, childTagName, iter);
   }
 }
 
@@ -294,10 +296,12 @@ ToElementWithChildName(khxml::DOMElement *elem,
                        const std::string &childTagName,
                        const std::deque<T> &deque)
 {
-  for (typename std::deque<T>::const_iterator iter = deque.begin();
-       iter != deque.end();
-       ++iter) {
-    AddElement(elem, childTagName, *iter);
+  //for (typename std::deque<T>::const_iterator iter = deque.begin();
+  //     iter != deque.end();
+  //     ++iter) {
+  for (auto iter : deque)
+  {
+    AddElement(elem, childTagName, iter);
   }
 }
 
@@ -307,10 +311,12 @@ ToElementWithChildName(khxml::DOMElement *elem,
                        const std::string &childTagName,
                        const std::list<T> &list)
 {
-  for (typename std::list<T>::const_iterator iter = list.begin();
-       iter != list.end();
-       ++iter) {
-    AddElement(elem, childTagName, *iter);
+  //for (typename std::list<T>::const_iterator iter = list.begin();
+  //     iter != list.end();
+  //     ++iter) {
+  for (auto iter : list)
+  {
+    AddElement(elem, childTagName, iter);
   }
 }
 
@@ -320,9 +326,11 @@ ToElementWithChildName(khxml::DOMElement *elem,
                        const std::string &childTagName,
                        const std::set<T> &set)
 {
-  for (typename std::set<T>::const_iterator iter = set.begin();
-       iter != set.end(); ++iter) {
-    AddElement(elem, childTagName, *iter);
+  //for (typename std::set<T>::const_iterator iter = set.begin();
+  //     iter != set.end(); ++iter) {
+  for (auto iter : set)
+  {
+    AddElement(elem, childTagName, iter);
   }
 }
 
@@ -372,13 +380,15 @@ template <class T, class U>
 void
 ToElement(khxml::DOMElement *elem, const std::map<T, U> &map)
 {
-  for (typename std::map<T, U>::const_iterator iter = map.begin();
-       iter != map.end();
-       ++iter) {
+  //for (typename std::map<T, U>::const_iterator iter = map.begin();
+  //     iter != map.end();
+  //     ++iter) {
+  for (auto iter : map)
+  {
     khxml::DOMElement* item =
         elem->getOwnerDocument()->createElement(ToXMLStr("item"));
-    AddElement(item, "name", iter->first);
-    AddElement(item, "value", iter->second);
+    AddElement(item, "name", iter.first);
+    AddElement(item, "value", iter.second);
     elem->appendChild(item);
   }
 }
@@ -387,13 +397,15 @@ template <class U>
 void
 ToElement(khxml::DOMElement *elem, const std::map<std::string, U> &map)
 {
-  for (typename std::map<std::string, U>::const_iterator iter = map.begin();
-       iter != map.end();
-       ++iter) {
+  //for (typename std::map<std::string, U>::const_iterator iter = map.begin();
+  //     iter != map.end();
+  //     ++iter) {
+  for (auto iter : map)
+  {
     khxml::DOMElement* item =
         elem->getOwnerDocument()->createElement(ToXMLStr("item"));
-    AddAttribute(item, "key", iter->first);
-    ToElement(item, iter->second);
+    AddAttribute(item, "key", iter.first);
+    ToElement(item, iter.second);
     elem->appendChild(item);
   }
 }
@@ -402,13 +414,15 @@ template <class U>
 void
 ToElement(khxml::DOMElement *elem, const std::map<QString, U> &map)
 {
-  for (typename std::map<QString, U>::const_iterator iter = map.begin();
-       iter != map.end();
-       ++iter) {
+  //for (typename std::map<QString, U>::const_iterator iter = map.begin();
+  //     iter != map.end();
+  //     ++iter) {
+  for (auto iter : map)
+  {
     khxml::DOMElement* item =
         elem->getOwnerDocument()->createElement(ToXMLStr("item"));
-    AddAttribute(item, "key", iter->first);
-    ToElement(item, iter->second);
+    AddAttribute(item, "key", iter.first);
+    ToElement(item, iter.second);
     elem->appendChild(item);
   }
 }
@@ -867,7 +881,6 @@ FromElement(khxml::DOMElement *elem, EncryptedQString &val)
       if (data->getLength() > 0) {
         if (method == "plaintext") {
           val = QString::fromUcs2(data->getData());
-          val.squeeze();
           return;
         } else if (method == "simple") {
           QString tmp = QString::fromUcs2(data->getData());
@@ -875,7 +888,6 @@ FromElement(khxml::DOMElement *elem, EncryptedQString &val)
             tmp[i] = tmp[i].unicode() - 13;
           }
           val = tmp;
-          val.squeeze();  // need docs on QStrin
           return;
         } else {
           throw khDOMException(khDOMException::InvalidAttribute,
@@ -903,7 +915,6 @@ FromElement(khxml::DOMElement *elem, std::string &val)
   } else {
     khxml::DOMText* valText = reinterpret_cast<khxml::DOMText*>(valNode);
     val = FromXMLStr(valText->getData());//((khxml::DOMText*)valNode)->getData());
-    val.shrink_to_fit(); // at most, O(m); m=string::size()
   }
 }
 
@@ -916,10 +927,12 @@ FromElementWithChildName(khxml::DOMElement *elem,
   vec.clear();
   vec.shrink_to_fit(); // O(1) to clear and reclaim memory, O(1) insertion)
   khDOMElemList kids = GetChildrenByTagName(elem, childTagName);
-  for (khDOMElemList::iterator iter = kids.begin();
-       iter != kids.end(); ++iter) {
+  //for (khDOMElemList::iterator iter = kids.begin();
+  //     iter != kids.end(); ++iter) {
+  for(auto iter : kids)
+  {
     T tmp;
-    FromElement(*iter, tmp);
+    FromElement(iter, tmp);
     vec.push_back(tmp);
   }
 }
@@ -933,10 +946,12 @@ FromElementWithChildName(khxml::DOMElement *elem,
   deque.clear();
   deque.shrink_to_fit(); // O(1) to clear and reclaim memory, O(1) insertion
   khDOMElemList kids = GetChildrenByTagName(elem, childTagName);
-  for (khDOMElemList::iterator iter = kids.begin();
-       iter != kids.end(); ++iter) {
+  //for (khDOMElemList::iterator iter = kids.begin();
+  //     iter != kids.end(); ++iter) {
+  for (auto iter : kids)
+  {
     T tmp;
-    FromElement(*iter, tmp);
+    FromElement(iter, tmp);
     deque.push_back(tmp);
   }
 }
@@ -949,10 +964,12 @@ FromElementWithChildName(khxml::DOMElement *elem,
 {
   list.clear();
   khDOMElemList kids = GetChildrenByTagName(elem, childTagName);
-  for (khDOMElemList::iterator iter = kids.begin();
-       iter != kids.end(); ++iter) {
+  //for (khDOMElemList::iterator iter = kids.begin();
+  //     iter != kids.end(); ++iter) {
+  for(auto iter : kids)
+  {
     T tmp;
-    FromElement(*iter, tmp);
+    FromElement(iter,tmp);//*iter, tmp);
     list.push_back(tmp);
   }
 }
@@ -965,10 +982,12 @@ FromElementWithChildName(khxml::DOMElement *elem,
 {
   set.clear();
   khDOMElemList kids = GetChildrenByTagName(elem, childTagName);
-  for (khDOMElemList::iterator iter = kids.begin();
-       iter != kids.end(); ++iter) {
+  //for (khDOMElemList::iterator iter = kids.begin();
+  //     iter != kids.end(); ++iter) {
+  for (auto iter : kids)
+  {
     T tmp;
-    FromElement(*iter, tmp);
+    FromElement(iter, tmp);
     set.insert(tmp);
   }
 }
@@ -1028,12 +1047,14 @@ FromElement(khxml::DOMElement *elem, std::map<T, U> &map)
 {
   map.clear();
   khDOMElemList kids = GetChildrenByTagName(elem, "item");
-  for (khDOMElemList::iterator iter = kids.begin();
-       iter != kids.end(); ++iter) {
+  //for (khDOMElemList::iterator iter = kids.begin();
+  //     iter != kids.end(); ++iter) {
+  for (auto iter : kids)
+  {
     T name;
     U value;
-    GetElement(*iter, "name", name);
-    GetElement(*iter, "value", value);
+    GetElement(iter, "name", name);
+    GetElement(iter, "value", value);
     map.insert(std::make_pair(name, value));
   }
 }
@@ -1050,12 +1071,14 @@ FromElement(khxml::DOMElement *elem, std::map<std::string, U> &map)
   if (item && GetNamedAttr(item, "key")) {
     // new way
     khDOMElemList kids = GetChildrenByTagName(elem, "item");
-    for (khDOMElemList::iterator iter = kids.begin();
-         iter != kids.end(); ++iter) {
+    //for (khDOMElemList::iterator iter = kids.begin();
+    //     iter != kids.end(); ++iter) {
+    for (auto iter : kids)
+    {
       std::string key;
       U value;
-      GetAttribute(*iter, "key", key);
-      FromElement(*iter, value);
+      GetAttribute(iter, "key", key);
+      FromElement(iter, value);
       map.insert(std::make_pair(key, value));
     }
   } else {
@@ -1087,12 +1110,14 @@ FromElement(khxml::DOMElement *elem, std::map<QString, U> &map)
   if (item && GetNamedAttr(item, "key")) {
     // new way
     khDOMElemList kids = GetChildrenByTagName(elem, "item");
-    for (khDOMElemList::iterator iter = kids.begin();
-         iter != kids.end(); ++iter) {
+    //for (khDOMElemList::iterator iter = kids.begin();
+    //     iter != kids.end(); ++iter) {
+    for (auto iter : kids)
+    {
       QString key;
       U value;
-      GetAttribute(*iter, "key", key);
-      FromElement(*iter, value);
+      GetAttribute(iter, "key", key);
+      FromElement(iter, value);
       map.insert(std::make_pair(key, value));
     }
   } else {
