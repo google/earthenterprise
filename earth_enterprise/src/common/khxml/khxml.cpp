@@ -34,7 +34,6 @@ ListElementTagName(const std::string &tagname)
   } else {
     return tagname + "_element";
   }
-  return retval;
 }
 
 
