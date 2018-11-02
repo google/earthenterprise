@@ -81,7 +81,7 @@ public:
 //  will clean up the memory. The other calls are ignored.
 //
 //  To ensure all the memory held by the parser are freed, the number of
-// XMLPlatformUtils::Terminate() calls should match the number
+//  XMLPlatformUtils::Terminate() calls should match the number
 //  of XMLPlatformUtils::Initialize() calls.
 //  -------------------------------------------------------------------
     void ReInitXerces(void) throw()
@@ -106,7 +106,7 @@ static khMutexBase xmlLibLock = KH_MUTEX_BASE_INITIALIZER;
 
 void InitializeXMLLibrary(void) throw()
 {
-  static khLockGuard guard(xmlLibLock);
+  khLockGuard guard(xmlLibLock);
   static UsingXMLGuard XMLLibGuard;
 }
 
