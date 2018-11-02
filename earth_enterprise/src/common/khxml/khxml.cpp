@@ -29,15 +29,11 @@ using namespace khxml;
 std::string
 ListElementTagName(const std::string &tagname)
 {
-  std::string retval;
   if (tagname[tagname.length()-1] == 's') {
-    retval = tagname.substr(0, tagname.length()-1);
-    //return tagname.substr(0, tagname.length()-1);
+    return tagname.substr(0, tagname.length()-1);
   } else {
-    retval = tagname + "_element";
-    //return tagname + "_element";
+    return tagname + "_element";
   }
-  retval.shrink_to_fit();
   return retval;
 }
 
@@ -55,6 +51,23 @@ class UsingXMLGuard
              FromXMLStr(toCatch.getMessage()).c_str());
     }
   }
+
+  friend void ReInitXerces(void) throw()
+  {
+      try {
+          XMLPlatformUtils::Terminate();
+      } catch (const XMLException& toCatch) {
+          notify(NFY_FATAL,"Unable to Terminate and ReInitialize Xerces: %s",
+                 FromXMLStr(toCatch.getMessage()).c_str());
+      }
+      try {
+          XMLPlatformUtils::Initialize();
+      } catch (const XMLException& toCatch) {
+          notify(NFY_FATAL,"Unable to ReInitialize Xerces: %s",
+                 FromXMLStr(toCatch.getMessage()).c_str());
+      }
+  }
+
   ~UsingXMLGuard(void) throw() {
     try {
       XMLPlatformUtils::Terminate();
@@ -67,7 +80,7 @@ static khMutexBase xmlLibLock = KH_MUTEX_BASE_INITIALIZER;
 
 void InitializeXMLLibrary(void) throw()
 {
-  khLockGuard guard(xmlLibLock);
+  static khLockGuard guard(xmlLibLock);
   static UsingXMLGuard XMLLibGuard;
 }
 
