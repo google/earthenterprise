@@ -27,7 +27,7 @@ import os
 import os.path
 import shutil
 import sys
-sys.path.append(os.path.relpath("../scons"))
+sys.path.append("../scons")
 from getversion import *
 
 SELF_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -37,9 +37,20 @@ def ensure_directory(path):
     """Makes sure a given directory exists."""
 
     if not os.path.isdir(path):
-        if os.name is "nt" and path[1] is ":":
+        if os.name is 'nt' and path[1] is ':':
             path = u'\\\\?\\' + path
         os.makedirs(path)
+
+def remove_directory(path):
+    """Removes directory tree."""
+
+    if os.path.isdir(path):
+        if os.name is 'nt' and path[1] is ':':
+            path = u'\\\\?\\' + path
+        else:
+            path = path
+        shutil.rmtree(path, ignore_errors=True)
+
 
 def copy_from_dir_to_dir(
     source_dir, destination_dir, entries=None, exclude_entries=None):
@@ -95,12 +106,7 @@ class Builder(object):
     def build(self):
         """Builds and packages Portable server."""
 
-        if os.name is 'nt' and self.build_dir[1] is ':':
-            temp_build_dir = u'\\\\?\\' + self.build_dir
-        else:
-            temp_build_dir = self.build_dir
-
-        shutil.rmtree(temp_build_dir, ignore_errors=True)
+        remove_directory(self.build_dir)
         ensure_directory(self.build_dir)
         ensure_directory(self.package_dir)
         ensure_directory(self.server_dir)
