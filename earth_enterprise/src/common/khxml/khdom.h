@@ -281,9 +281,7 @@ ToElementWithChildName(khxml::DOMElement *elem,
                        const std::string &childTagName,
                        const std::vector<T> &vec)
 {
-  //for (typename std::vector<T>::const_iterator iter = vec.begin();
-  //     iter != vec.end();
-  //     ++iter) {
+
   for (auto iter : vec)
   {
     AddElement(elem, childTagName, iter);
@@ -296,9 +294,6 @@ ToElementWithChildName(khxml::DOMElement *elem,
                        const std::string &childTagName,
                        const std::deque<T> &deque)
 {
-  //for (typename std::deque<T>::const_iterator iter = deque.begin();
-  //     iter != deque.end();
-  //     ++iter) {
   for (auto iter : deque)
   {
     AddElement(elem, childTagName, iter);
@@ -311,9 +306,6 @@ ToElementWithChildName(khxml::DOMElement *elem,
                        const std::string &childTagName,
                        const std::list<T> &list)
 {
-  //for (typename std::list<T>::const_iterator iter = list.begin();
-  //     iter != list.end();
-  //     ++iter) {
   for (auto iter : list)
   {
     AddElement(elem, childTagName, iter);
@@ -326,8 +318,6 @@ ToElementWithChildName(khxml::DOMElement *elem,
                        const std::string &childTagName,
                        const std::set<T> &set)
 {
-  //for (typename std::set<T>::const_iterator iter = set.begin();
-  //     iter != set.end(); ++iter) {
   for (auto iter : set)
   {
     AddElement(elem, childTagName, iter);
@@ -380,9 +370,6 @@ template <class T, class U>
 void
 ToElement(khxml::DOMElement *elem, const std::map<T, U> &map)
 {
-  //for (typename std::map<T, U>::const_iterator iter = map.begin();
-  //     iter != map.end();
-  //     ++iter) {
   for (auto iter : map)
   {
     khxml::DOMElement* item =
@@ -397,9 +384,6 @@ template <class U>
 void
 ToElement(khxml::DOMElement *elem, const std::map<std::string, U> &map)
 {
-  //for (typename std::map<std::string, U>::const_iterator iter = map.begin();
-  //     iter != map.end();
-  //     ++iter) {
   for (auto iter : map)
   {
     khxml::DOMElement* item =
@@ -414,9 +398,6 @@ template <class U>
 void
 ToElement(khxml::DOMElement *elem, const std::map<QString, U> &map)
 {
-  //for (typename std::map<QString, U>::const_iterator iter = map.begin();
-  //     iter != map.end();
-  //     ++iter) {
   for (auto iter : map)
   {
     khxml::DOMElement* item =
@@ -520,7 +501,7 @@ GetChildrenByTagName(khxml::DOMElement *parent, const std::string &tagname)
   khxml::DOMNode *node = parent->getFirstChild();
   while (node) {
     if (node->getNodeType() == khxml::DOMNode::ELEMENT_NODE) {
-      khxml::DOMElement *elem = (khxml::DOMElement*)node;
+      khxml::DOMElement *elem = reinterpret_cast<khxml::DOMElement*>(node);
       if (FromXMLStr(elem->getTagName()) == tagname) {
         kids.push_back(elem);
       }
@@ -537,7 +518,7 @@ GetFirstNamedChild(khxml::DOMElement *parent, const std::string &tagname)
   khxml::DOMNode *node = parent->getFirstChild();
   while (node) {
     if (node->getNodeType() == khxml::DOMNode::ELEMENT_NODE) {
-      khxml::DOMElement *elem = (khxml::DOMElement*)node;
+      khxml::DOMElement *elem = reinterpret_cast<khxml::DOMElement*>(node;)
       if (FromXMLStr(elem->getTagName()) == tagname) {
         return elem;
       }
@@ -783,7 +764,7 @@ GetTextAndCDATA(khxml::DOMElement *elem)
   while (node) {
     if ((node->getNodeType() == khxml::DOMNode::TEXT_NODE) ||
         (node->getNodeType() == khxml::DOMNode::CDATA_SECTION_NODE)) {
-      khxml::DOMCharacterData* data = (khxml::DOMCharacterData*)node;
+      khxml::DOMCharacterData* data = reinterpret_cast<khxml::DOMCharacterData*>(node);
       if (data->getLength() > 0) {
         result.append(QString::fromUcs2(data->getData()));
       }
@@ -856,7 +837,7 @@ FromElement(khxml::DOMElement *elem, QString &val)
     val = "";
     val.squeeze();
   } else {
-    val = QString::fromUcs2(((khxml::DOMText*)valNode)->getData());
+    val = QString::fromUcs2((reinterpret_cast<khxml::DOMText*>(valNode))->getData());
   }
 }
 
@@ -911,10 +892,10 @@ FromElement(khxml::DOMElement *elem, std::string &val)
   if (!valNode ||
       (valNode->getNodeType() != khxml::DOMNode::TEXT_NODE)) {
     val.clear();
-    val.shrink_to_fit(); // O(1) to clear and reclaim memory, O(1) insertion
+    val.shrink_to_fit();
   } else {
     khxml::DOMText* valText = reinterpret_cast<khxml::DOMText*>(valNode);
-    val = FromXMLStr(valText->getData());//((khxml::DOMText*)valNode)->getData());
+    val = FromXMLStr(valText->getData());
   }
 }
 
@@ -925,10 +906,9 @@ FromElementWithChildName(khxml::DOMElement *elem,
                          std::vector<T> &vec)
 {
   vec.clear();
-  vec.shrink_to_fit(); // O(1) to clear and reclaim memory, O(1) insertion)
+  vec.shrink_to_fit();
   khDOMElemList kids = GetChildrenByTagName(elem, childTagName);
-  //for (khDOMElemList::iterator iter = kids.begin();
-  //     iter != kids.end(); ++iter) {
+
   for(auto iter : kids)
   {
     T tmp;
@@ -946,8 +926,7 @@ FromElementWithChildName(khxml::DOMElement *elem,
   deque.clear();
   deque.shrink_to_fit(); // O(1) to clear and reclaim memory, O(1) insertion
   khDOMElemList kids = GetChildrenByTagName(elem, childTagName);
-  //for (khDOMElemList::iterator iter = kids.begin();
-  //     iter != kids.end(); ++iter) {
+
   for (auto iter : kids)
   {
     T tmp;
@@ -964,8 +943,7 @@ FromElementWithChildName(khxml::DOMElement *elem,
 {
   list.clear();
   khDOMElemList kids = GetChildrenByTagName(elem, childTagName);
-  //for (khDOMElemList::iterator iter = kids.begin();
-  //     iter != kids.end(); ++iter) {
+
   for(auto iter : kids)
   {
     T tmp;
@@ -982,8 +960,7 @@ FromElementWithChildName(khxml::DOMElement *elem,
 {
   set.clear();
   khDOMElemList kids = GetChildrenByTagName(elem, childTagName);
-  //for (khDOMElemList::iterator iter = kids.begin();
-  //     iter != kids.end(); ++iter) {
+
   for (auto iter : kids)
   {
     T tmp;
@@ -1047,8 +1024,7 @@ FromElement(khxml::DOMElement *elem, std::map<T, U> &map)
 {
   map.clear();
   khDOMElemList kids = GetChildrenByTagName(elem, "item");
-  //for (khDOMElemList::iterator iter = kids.begin();
-  //     iter != kids.end(); ++iter) {
+
   for (auto iter : kids)
   {
     T name;
@@ -1071,8 +1047,7 @@ FromElement(khxml::DOMElement *elem, std::map<std::string, U> &map)
   if (item && GetNamedAttr(item, "key")) {
     // new way
     khDOMElemList kids = GetChildrenByTagName(elem, "item");
-    //for (khDOMElemList::iterator iter = kids.begin();
-    //     iter != kids.end(); ++iter) {
+
     for (auto iter : kids)
     {
       std::string key;
@@ -1086,7 +1061,7 @@ FromElement(khxml::DOMElement *elem, std::map<std::string, U> &map)
     khxml::DOMNode *node = elem->getFirstChild();
     while (node) {
       if (node->getNodeType() == khxml::DOMNode::ELEMENT_NODE) {
-        khxml::DOMElement *elem = (khxml::DOMElement*)node;
+        khxml::DOMElement *elem = reinterpret_cast<khxml::DOMElement*>(node);
         std::string name = FromXMLStr(elem->getTagName());
         U value;
         FromElement(elem, value);
@@ -1110,8 +1085,7 @@ FromElement(khxml::DOMElement *elem, std::map<QString, U> &map)
   if (item && GetNamedAttr(item, "key")) {
     // new way
     khDOMElemList kids = GetChildrenByTagName(elem, "item");
-    //for (khDOMElemList::iterator iter = kids.begin();
-    //     iter != kids.end(); ++iter) {
+    /
     for (auto iter : kids)
     {
       QString key;
@@ -1125,7 +1099,7 @@ FromElement(khxml::DOMElement *elem, std::map<QString, U> &map)
     khxml::DOMNode *node = elem->getFirstChild();
     while (node) {
       if (node->getNodeType() == khxml::DOMNode::ELEMENT_NODE) {
-        khxml::DOMElement *elem = (khxml::DOMElement*)node;
+        khxml::DOMElement *elem = reinterpret_cast<khxml::DOMElement*>(node);
         QString name = QString::fromUcs2(elem->getTagName());
         U value;
         FromElement(elem, value);
