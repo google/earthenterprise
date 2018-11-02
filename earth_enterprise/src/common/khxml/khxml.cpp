@@ -52,28 +52,55 @@ class UsingXMLGuard
     }
   }
 
-  friend void ReInitXerces(void) throw()
-  {
-      try {
-          XMLPlatformUtils::Terminate();
-      } catch (const XMLException& toCatch) {
-          notify(NFY_FATAL,"Unable to Terminate and ReInitialize Xerces: %s",
-                 FromXMLStr(toCatch.getMessage()).c_str());
-      }
-      try {
-          XMLPlatformUtils::Initialize();
-      } catch (const XMLException& toCatch) {
-          notify(NFY_FATAL,"Unable to ReInitialize Xerces: %s",
-                 FromXMLStr(toCatch.getMessage()).c_str());
-      }
-  }
-
   ~UsingXMLGuard(void) throw() {
     try {
       XMLPlatformUtils::Terminate();
     } catch (...) {
     }
   }
+
+public:
+
+//  ------------------------------------------------------------------
+//  From: https://xml.apache.org/xerces-c-new/faq-parse.html#faq-4
+//
+//  Is it OK to call the XMLPlatformUtils::Initialize/Terminate pair
+//  of routines multiple times in one program?
+//
+//  Yes. Since Xerces-C++ 1.5.2, the code has been enhanced so that
+//  calling XMLPlatformUtils::Initialize/Terminate pair of routines
+//  multiple times in one process is now allowed.
+//
+//  But the application needs to guarantee that only one thread has
+//  entered either the method XMLPlatformUtils::Initialize() or the
+//  method XMLPlatformUtils::Terminate() at any one time.
+//
+//  If you are calling XMLPlatformUtils::Initialize() a number of
+//  times, and then follow with XMLPlatformUtils::Terminate() the same
+//  number of times, only the first XMLPlatformUtils::Initialize() will
+//  do the initialization, and only the last XMLPlatformUtils::Terminate()
+//  will clean up the memory. The other calls are ignored.
+//
+//  To ensure all the memory held by the parser are freed, the number of
+// XMLPlatformUtils::Terminate() calls should match the number
+//  of XMLPlatformUtils::Initialize() calls.
+//  -------------------------------------------------------------------
+    void ReInitXerces(void) throw()
+    {
+        try {
+            XMLPlatformUtils::Terminate();
+        } catch (const XMLException& toCatch) {
+            notify(NFY_FATAL,"Unable to Terminate and ReInitialize Xerces: %s",
+                   FromXMLStr(toCatch.getMessage()).c_str());
+        }
+        try {
+            XMLPlatformUtils::Initialize();
+        } catch (const XMLException& toCatch) {
+            notify(NFY_FATAL,"Unable to ReInitialize Xerces: %s",
+                   FromXMLStr(toCatch.getMessage()).c_str());
+        }
+    }
+
 };
 
 static khMutexBase xmlLibLock = KH_MUTEX_BASE_INITIALIZER;
