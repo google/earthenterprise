@@ -23,9 +23,10 @@
 #include <khFileUtils.h>
 #include "khxml.h"
 #include "khdom.h"
-
+#include <fstream>
+#include <string>
 using namespace khxml;
-static uint32 bytes=0;
+
 std::string
 ListElementTagName(const std::string &tagname)
 {
@@ -39,9 +40,9 @@ ListElementTagName(const std::string &tagname)
 // parameters that can be passed into XMLPlatformUtils::Initialize() dealing
 // with heap memory. hard-coded now, may be worthwhile to be able to set these
 // via systemrc
-const XMLSize_t initialDOMHeapAllocSize = 0x4000;  // size_t, default: 0x4000
-const XMLSize_t maxDOMHeapAllocSize     = 0x20000; // size_t, default: 0x20000
-const XMLSize_t maxDOMSubAllocationSize = 0x1000;  // size_t, defailt: 0x1000
+XMLSize_t initialDOMHeapAllocSize; // size_t, default: 0x4000
+XMLSize_t maxDOMHeapAllocSize;     // size_t, default: 0x20000
+XMLSize_t maxDOMSubAllocationSize; // size_t, defailt: 0x1000
 
 // This is used only in the following function
 class UsingXMLGuard
@@ -49,7 +50,24 @@ class UsingXMLGuard
   friend void InitializeXMLLibrary(bool) throw();
 
   UsingXMLGuard(void) throw() {
-    try {
+   //XMLSSize_t  initialDOMHeapAllocSize,
+   //            maxDOMHeapAllocSize,
+   //            maxDOMSubAllocationSize;
+   std::string fn("/home/ec2-user/xerces_init_defaults.txt");
+   try {
+       std::ifstream file;
+       file.open(fn.c_str());
+       file >> initialDOMHeapAllocSize >> maxDOMHeapAllocSize >> maxDOMSubAllocationSize;
+       file.close();
+   } catch (std::ifstream::failure &readError) {
+       initialDOMHeapAllocSize = 0x4000;
+       maxDOMHeapAllocSize = 0x20000;
+       maxDOMSubAllocationSize = 0x1000;
+       notify(NFY_WARN,"xerces heap defaults file %s not found!",
+              fn.c_str());
+   }
+   try {
+
       XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
                                    maxDOMHeapAllocSize,
                                    maxDOMSubAllocationSize);
