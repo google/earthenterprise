@@ -40,7 +40,7 @@ ListElementTagName(const std::string &tagname)
 // This is used only in the following function
 class UsingXMLGuard
 {
-  friend void InitializeXMLLibrary(void) throw();
+  friend void InitializeXMLLibrary(bool) throw();
 
   UsingXMLGuard(void) throw() {
     try {
@@ -57,8 +57,6 @@ class UsingXMLGuard
     } catch (...) {
     }
   }
-
-public:
 
 //  ------------------------------------------------------------------
 //  From: https://xml.apache.org/xerces-c-new/faq-parse.html#faq-4
@@ -104,10 +102,11 @@ public:
 
 static khMutexBase xmlLibLock = KH_MUTEX_BASE_INITIALIZER;
 
-void InitializeXMLLibrary(void) throw()
+void InitializeXMLLibrary(bool reinit=false) throw()
 {
   khLockGuard guard(xmlLibLock);
   static UsingXMLGuard XMLLibGuard;
+  if (reinit) XMLLibGuard.ReInitXerces();
 }
 
 
