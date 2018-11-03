@@ -25,7 +25,7 @@
 #include "khdom.h"
 
 using namespace khxml;
-
+static uint32 bytes=0;
 std::string
 ListElementTagName(const std::string &tagname)
 {
@@ -36,6 +36,12 @@ ListElementTagName(const std::string &tagname)
   }
 }
 
+// parameters that can be passed into XMLPlatformUtils::Initialize() dealing
+// with heap memory. hard-coded now, may be worthwhile to be able to set these
+// via systemrc
+const XMLSize_t initialDOMHeapAllocSize = 0x4000;  // size_t, default: 0x4000
+const XMLSize_t maxDOMHeapAllocSize     = 0x20000; // size_t, default: 0x20000
+const XMLSize_t maxDOMSubAllocationSize = 0x1000;  // size_t, defailt: 0x1000
 
 // This is used only in the following function
 class UsingXMLGuard
@@ -44,7 +50,9 @@ class UsingXMLGuard
 
   UsingXMLGuard(void) throw() {
     try {
-      XMLPlatformUtils::Initialize();
+      XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
+                                   maxDOMHeapAllocSize,
+                                   maxDOMSubAllocationSize);
     } catch(const XMLException& toCatch) {
       notify(NFY_FATAL, "Unable to initialize Xerces: %s",
              FromXMLStr(toCatch.getMessage()).c_str());
@@ -91,7 +99,9 @@ class UsingXMLGuard
                    FromXMLStr(toCatch.getMessage()).c_str());
         }
         try {
-            XMLPlatformUtils::Initialize();
+            XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
+                                         maxDOMHeapAllocSize,
+                                         maxDOMSubAllocationSize);
         } catch (const XMLException& toCatch) {
             notify(NFY_FATAL,"Unable to ReInitialize Xerces: %s",
                    FromXMLStr(toCatch.getMessage()).c_str());
