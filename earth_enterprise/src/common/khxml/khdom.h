@@ -501,7 +501,7 @@ GetChildrenByTagName(khxml::DOMElement *parent, const std::string &tagname)
   khxml::DOMNode *node = parent->getFirstChild();
   while (node) {
     if (node->getNodeType() == khxml::DOMNode::ELEMENT_NODE) {
-      khxml::DOMElement *elem = reinterpret_cast<khxml::DOMElement*>(node);
+      khxml::DOMElement *elem = static_cast<khxml::DOMElement*>(node);
       if (FromXMLStr(elem->getTagName()) == tagname) {
         kids.push_back(elem);
       }
@@ -518,7 +518,7 @@ GetFirstNamedChild(khxml::DOMElement *parent, const std::string &tagname)
   khxml::DOMNode *node = parent->getFirstChild();
   while (node) {
     if (node->getNodeType() == khxml::DOMNode::ELEMENT_NODE) {
-      khxml::DOMElement *elem = reinterpret_cast<khxml::DOMElement*>(node;)
+      khxml::DOMElement *elem = static_cast<khxml::DOMElement*>(node);
       if (FromXMLStr(elem->getTagName()) == tagname) {
         return elem;
       }
@@ -764,7 +764,7 @@ GetTextAndCDATA(khxml::DOMElement *elem)
   while (node) {
     if ((node->getNodeType() == khxml::DOMNode::TEXT_NODE) ||
         (node->getNodeType() == khxml::DOMNode::CDATA_SECTION_NODE)) {
-      khxml::DOMCharacterData* data = reinterpret_cast<khxml::DOMCharacterData*>(node);
+      khxml::DOMCharacterData* data = static_cast<khxml::DOMCharacterData*>(node);
       if (data->getLength() > 0) {
         result.append(QString::fromUcs2(data->getData()));
       }
@@ -837,7 +837,7 @@ FromElement(khxml::DOMElement *elem, QString &val)
     val = "";
     val.squeeze();
   } else {
-    val = QString::fromUcs2((reinterpret_cast<khxml::DOMText*>(valNode))->getData());
+    val = QString::fromUcs2((static_cast<khxml::DOMText*>(valNode))->getData());
   }
 }
 
@@ -858,7 +858,7 @@ FromElement(khxml::DOMElement *elem, EncryptedQString &val)
   khxml::DOMNode *node = elem->getFirstChild();
   while (node) {
     if ((node->getNodeType() == khxml::DOMNode::CDATA_SECTION_NODE)) {
-      khxml::DOMCharacterData* data = reinterpret_cast<khxml::DOMCharacterData*>(node);//(khxml::DOMCharacterData*)node;
+      khxml::DOMCharacterData* data = static_cast<khxml::DOMCharacterData*>(node);;
       if (data->getLength() > 0) {
         if (method == "plaintext") {
           val = QString::fromUcs2(data->getData());
@@ -894,7 +894,7 @@ FromElement(khxml::DOMElement *elem, std::string &val)
     val.clear();
     val.shrink_to_fit();
   } else {
-    khxml::DOMText* valText = reinterpret_cast<khxml::DOMText*>(valNode);
+    khxml::DOMText* valText = static_cast<khxml::DOMText*>(valNode);
     val = FromXMLStr(valText->getData());
   }
 }
@@ -924,7 +924,7 @@ FromElementWithChildName(khxml::DOMElement *elem,
                          std::deque<T> &deque)
 {
   deque.clear();
-  deque.shrink_to_fit(); // O(1) to clear and reclaim memory, O(1) insertion
+  deque.shrink_to_fit();
   khDOMElemList kids = GetChildrenByTagName(elem, childTagName);
 
   for (auto iter : kids)
@@ -947,7 +947,7 @@ FromElementWithChildName(khxml::DOMElement *elem,
   for(auto iter : kids)
   {
     T tmp;
-    FromElement(iter,tmp);//*iter, tmp);
+    FromElement(iter,tmp);
     list.push_back(tmp);
   }
 }
@@ -1061,7 +1061,7 @@ FromElement(khxml::DOMElement *elem, std::map<std::string, U> &map)
     khxml::DOMNode *node = elem->getFirstChild();
     while (node) {
       if (node->getNodeType() == khxml::DOMNode::ELEMENT_NODE) {
-        khxml::DOMElement *elem = reinterpret_cast<khxml::DOMElement*>(node);
+        khxml::DOMElement *elem = static_cast<khxml::DOMElement*>(node);
         std::string name = FromXMLStr(elem->getTagName());
         U value;
         FromElement(elem, value);
@@ -1085,7 +1085,7 @@ FromElement(khxml::DOMElement *elem, std::map<QString, U> &map)
   if (item && GetNamedAttr(item, "key")) {
     // new way
     khDOMElemList kids = GetChildrenByTagName(elem, "item");
-    /
+
     for (auto iter : kids)
     {
       QString key;
@@ -1099,7 +1099,7 @@ FromElement(khxml::DOMElement *elem, std::map<QString, U> &map)
     khxml::DOMNode *node = elem->getFirstChild();
     while (node) {
       if (node->getNodeType() == khxml::DOMNode::ELEMENT_NODE) {
-        khxml::DOMElement *elem = reinterpret_cast<khxml::DOMElement*>(node);
+        khxml::DOMElement *elem = static_cast<khxml::DOMElement*>(node);
         QString name = QString::fromUcs2(elem->getTagName());
         U value;
         FromElement(elem, value);
