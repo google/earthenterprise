@@ -24,7 +24,7 @@ namespace geAssetRoot {
 
 
 
-extern char VolumeName[];
+extern const char VolumeName[];
 
 // ****************************************************************************
 // ***  Special directories
