@@ -25,7 +25,11 @@
 #include "khdom.h"
 #include <fstream>
 #include <string>
+#include <csignal>
 using namespace khxml;
+
+// forward declaration
+void ReInitializeXMLLibrary(int) throw();
 
 std::string
 ListElementTagName(const std::string &tagname)
@@ -40,24 +44,29 @@ ListElementTagName(const std::string &tagname)
 // parameters that can be passed into XMLPlatformUtils::Initialize() dealing
 // with heap memory. hard-coded now, may be worthwhile to be able to set these
 // via systemrc
-XMLSize_t initialDOMHeapAllocSize; // size_t, default: 0x4000
-XMLSize_t maxDOMHeapAllocSize;     // size_t, default: 0x20000
-XMLSize_t maxDOMSubAllocationSize; // size_t, defailt: 0x1000
+// XMLSize_t initialDOMHeapAllocSize; // size_t, default: 0x4000
+// XMLSize_t maxDOMHeapAllocSize;     // size_t, default: 0x20000
+// XMLSize_t maxDOMSubAllocationSize; // size_t, defailt: 0x1000
 
 // This is used only in the following function
 class UsingXMLGuard
 {
   friend void InitializeXMLLibrary(bool) throw();
 
+  XMLSSize_t  initialDOMHeapAllocSize;
+  XMLSSize_t  maxDOMHeapAllocSize;
+  XMLSSize_t  maxDOMSubAllocationSize;
+
   UsingXMLGuard(void) throw() {
-   //XMLSSize_t  initialDOMHeapAllocSize,
-   //            maxDOMHeapAllocSize,
-   //            maxDOMSubAllocationSize;
+   std::signal(SIGUSR2,ReInitializeXMLLibrary);
    std::string fn("/home/ec2-user/xerces_init_defaults.txt");
    try {
        std::ifstream file;
+       file.exceptions(std::ifstream::failbit);
        file.open(fn.c_str());
-       file >> initialDOMHeapAllocSize >> maxDOMHeapAllocSize >> maxDOMSubAllocationSize;
+       file >> initialDOMHeapAllocSize
+            >> maxDOMHeapAllocSize
+            >> maxDOMSubAllocationSize;
        file.close();
    } catch (std::ifstream::failure &readError) {
        initialDOMHeapAllocSize = 0x4000;
@@ -67,7 +76,6 @@ class UsingXMLGuard
               fn.c_str());
    }
    try {
-
       XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
                                    maxDOMHeapAllocSize,
                                    maxDOMSubAllocationSize);
@@ -135,6 +143,22 @@ void InitializeXMLLibrary(bool reinit=false) throw()
   khLockGuard guard(xmlLibLock);
   static UsingXMLGuard XMLLibGuard;
   if (reinit) XMLLibGuard.ReInitXerces();
+}
+
+// Logic:
+//
+// $ kill -12 <PID>
+//
+// 1. ReInitializeXMLLibrary declared to handle SIGUSR2 signal in
+//    UsingXMLGuard::UsingXMLGuard
+// 2. ReInitializeXMLLibrary handles this signal and calls
+//    InitializeXMLLibrary, and uses a flag to signify reinit
+// 3. InitializeXMLLibrary has the lock and calls UsingXMLGuard::ReInitXerces
+//    which calls XMLPlatformUtils::Terminate, then Initialize
+
+void ReInitializeXMLLibrary(int sig) throw()
+{
+    InitializeXMLLibrary(true);
 }
 
 
