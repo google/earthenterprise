@@ -27,6 +27,8 @@ import os
 import os.path
 import shutil
 import sys
+sys.path.append("../scons")
+from getversion import *
 
 SELF_DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -35,11 +37,30 @@ def ensure_directory(path):
     """Makes sure a given directory exists."""
 
     if not os.path.isdir(path):
+        if os.name is 'nt' and path[1] is ':':
+            path = u'\\\\?\\' + path
         os.makedirs(path)
+
+def remove_directory(path):
+    """Removes directory tree."""
+
+    if os.path.isdir(path):
+        if os.name is 'nt' and path[1] is ':':
+            path = u'\\\\?\\' + path
+        else:
+            path = path
+        shutil.rmtree(path, ignore_errors=True)
+
 
 def copy_from_dir_to_dir(
     source_dir, destination_dir, entries=None, exclude_entries=None):
     """Copies given directory entries from one directory to another."""
+
+    if os.name is 'nt' and source_dir[1] is ':':
+        source_dir = u'\\\\?\\' + source_dir
+
+    if os.name is 'nt' and destination_dir[1] is ':':
+        destination_dir = u'\\\\?\\' + destination_dir
 
     if entries is None:
         entries = os.listdir(source_dir)
@@ -85,7 +106,7 @@ class Builder(object):
     def build(self):
         """Builds and packages Portable server."""
 
-        shutil.rmtree(self.build_dir, ignore_errors=True)
+        remove_directory(self.build_dir)
         ensure_directory(self.build_dir)
         ensure_directory(self.package_dir)
         ensure_directory(self.server_dir)
@@ -132,21 +153,20 @@ class Builder(object):
         """Creates <server/local/version.txt>."""
 
         self.get_version()
-        path = os.path.join(self.server_dir, 'local', 'version.txt')
+
+        if os.name is 'nt':
+            temp_path = '\\\\?\\' + self.server_dir
+        else:
+            temp_path = self.server_dir
+
+        path = os.path.join(temp_path, 'local', 'version.txt')
         with open(path, 'w') as output_file:
             output_file.write(self.version_string)
 
     def get_version(self):
         """Parses version information, and sets member variables."""
 
-        if self.base_version is None:
-            path = os.path.join(self.source_dir, 'version.txt')
-            with open(path, 'r') as input_file:
-                while True:
-                    base_version = input_file.readline().strip()
-                    if base_version and not base_version.startswith('#'):
-                        break
-            self.base_version = base_version
+        self.base_version = open_gee_version.get_short()
 
         if self.build_date is None:
             self.build_date = datetime.date.today()
@@ -193,8 +213,14 @@ class Builder(object):
 
         globes_dir = os.path.join(
             self.source_dir, 'fusion', 'portableglobe', 'globes')
+
+        if os.name is 'nt' and self.package_dir[1] is ':':
+            temp_package_dir = '\\\\?\\' + self.package_dir
+        else:
+            temp_package_dir = self.package_dir
+
         distutils.dir_util.copy_tree(
-            globes_dir, os.path.join(self.package_dir, 'data'))
+            globes_dir, os.path.join(temp_package_dir, 'data'))
 
     def create_tar_package(self):
         """Archives and compresses the install directory."""
@@ -228,7 +254,7 @@ def main(argv):
     packages Portable server."""
 
     build_dir = os.path.join(SELF_DIR, 'build')
-    source_dir = os.path.join(SELF_DIR, '..')
+    source_dir = os.path.abspath(os.path.join(SELF_DIR, '..'))
 
     parser = argparse.ArgumentParser(
         description=__doc__, prog=os.path.basename(argv[0]))
