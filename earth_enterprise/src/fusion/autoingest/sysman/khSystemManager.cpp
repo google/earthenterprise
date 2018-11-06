@@ -26,6 +26,7 @@
 #include <autoingest/geAssetRoot.h>
 #include "common/performancelogger.h"
 #include "fusion/config/gefConfigUtil.h"
+#include "common/khxml/khxml.h"
 
 
 
@@ -83,6 +84,7 @@ void systemrc_reload(int signum)
   notify(NFY_WARN, "system log level changed to: %s",
           khNotifyLevelToString(static_cast<khNotifyLevel>(logLevel)).c_str());
   setNotifyLevel(static_cast<khNotifyLevel>(logLevel));
+  ReInitializeXMLLibrary(signum);
 }
 
 void handleExitSignals(int signum)

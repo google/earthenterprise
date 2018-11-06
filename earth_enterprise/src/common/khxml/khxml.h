@@ -23,6 +23,8 @@
 #include <qstring.h>
 
 namespace khxml = xercesc;
+// forward declaration
+void ReInitializeXMLLibrary(int) throw();
 
 // ---------------------------------------------------------------------------
 //    This is a simple class that lets us do easy trancoding of native strings
