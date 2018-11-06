@@ -32,3 +32,7 @@ echo "Using asset root: $ASSET_ROOT"
 /opt/google/bin/geserveradmin --adddb "$ASSET_ROOT/Tutorial/Databases/SF_2d_Merc.kmmdatabase/mapdb.kda/ver001/mapdb"
 /opt/google/bin/geserveradmin --pushdb "$ASSET_ROOT/Tutorial/Databases/SF_2d_Merc.kmmdatabase/mapdb.kda/ver001/mapdb"
 /opt/google/bin/geserveradmin --publishdb "$ASSET_ROOT/Tutorial/Databases/SF_2d_Merc.kmmdatabase/mapdb.kda/ver001/mapdb" --targetpath /SF_2d_Merc
+
+/opt/google/bin/geserveradmin --adddb "$ASSET_ROOT/Tutorial/Databases/SF_2d_Merc_With_Flat_Imagery.kmmdatabase/mapdb.kda/ver001/mapdb"
+/opt/google/bin/geserveradmin --pushdb "$ASSET_ROOT/Tutorial/Databases/SF_2d_Merc_With_Flat_Imagery.kmmdatabase/mapdb.kda/ver001/mapdb"
+/opt/google/bin/geserveradmin --publishdb "$ASSET_ROOT/Tutorial/Databases/SF_2d_Merc_With_Flat_Imagery.kmmdatabase/mapdb.kda/ver001/mapdb" --targetpath /SF_2d_Merc_With_Flat_Imagery
