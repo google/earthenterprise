@@ -25,11 +25,8 @@
 #include "khdom.h"
 #include <fstream>
 #include <string>
-#include <csignal>
+//#include <csignal>
 using namespace khxml;
-
-// forward declaration
-void ReInitializeXMLLibrary(int) throw();
 
 std::string
 ListElementTagName(const std::string &tagname)
@@ -58,7 +55,7 @@ class UsingXMLGuard
   XMLSSize_t  maxDOMSubAllocationSize;
 
   UsingXMLGuard(void) throw() {
-   std::signal(SIGUSR2,ReInitializeXMLLibrary);
+   //std::signal(SIGUSR2,ReInitializeXMLLibrary);
    std::string fn("/home/ec2-user/xerces_init_defaults.txt");
    try {
        std::ifstream file;
