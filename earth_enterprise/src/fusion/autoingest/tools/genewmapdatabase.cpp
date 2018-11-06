@@ -34,7 +34,7 @@ usage(const std::string &progn, const char *msg = 0, ...)
   }
 
   fprintf(stderr,
-          "\nusage: %s [options] [--meta <key>=<value>]... -o <dbname> [--imagery <imagery project>] [--map <map project>] [--mercator : use mercator projection database] [--flat : use flat(Plate Carre) projection database (default)]\n"
+          "\nusage: %s [options] [--meta <key>=<value>]... -o <dbname> [--imagery <imagery project>] [--map <map project>] [--mercator : use mercator projection] [--flat : use flat(Plate Carre) projection (default)]\n"
           "   Supported options are:\n"
           "      --help | -?:               Display this usage message\n",
           progn.c_str());
