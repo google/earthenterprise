@@ -76,6 +76,11 @@ main_preinstall()
     exit 1
   fi
 
+  if is_package_installed "opengee-common" "opengee-common"; then
+    show_opengee_package_installed "install" "$GEES" 
+    exit 1
+  fi
+
   # 7) Check prerequisite software
   if ! check_prereq_software; then
     exit 1

@@ -97,7 +97,7 @@ portable_glc_reader_sobj = env.SharedObject('servers/fileunpacker/shared/portabl
 geglxinfo = env.executable(
     'geglxinfo',
     ['geglxinfo.cpp', portable_glc_reader_sobj],
-    LIBS=['geutil', 'gecommon', 'glb'])
+    LIBS=['geutil', 'gecommon', 'glb', 'geprotobuf', 'geqtpacket'])
 
 # Do NOT install this tool.
 gedecode = env.executable('gedecode',
