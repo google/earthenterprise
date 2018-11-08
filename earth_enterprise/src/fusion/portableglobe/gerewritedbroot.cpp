@@ -45,12 +45,14 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
           "           --icon_directory=<icon_directory_string> \\\n"
           "           --dbroot_file=<dbroot_file_string> \\\n"
           "           --search_service=<search_service_url_string> \\\n"
+          "           --preserve_search_service \\\n"
           "           --kml_map_file=<kml_map_file_string> \\\n"
           "           --kml_server=<kml_server_string> \\\n"
           "           --kml_port=<kml_port_string> \\\n"
           "           --kml_url_path=<kml_url_path_string> \\\n"
           "           --use_ssl_for_kml=<use_ssl_for_kml_bool> \\\n"
           "           --preserve_kml_filenames \\\n"
+          "           --disable_historical \\\n"
           "\n"
           " Reads dbroot and rewrites the search tabs so that they point\n"
           " to the given search server and port. Optionally creates a directory\n"
@@ -68,6 +70,8 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
           "   --search_service: Url to search service. If none is provided\n"
           "                    then uses relative url for standard Portable\n"
           "                    search.\n"
+          "   --preserve_search_service:\n" 
+          "                    Keep original search service url.\n"
           "   --icon_directory: Directory where icons should be stored.\n"
           "   --kml_map_file:  Output file where map of source kml urls to local\n"
           "                    files will be stored.\n"
@@ -88,7 +92,10 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
           "                    replacing the host and path in KML layer URLs\n"
           "                    in the dbroot.  When unset, files are renamed\n"
           "                    sequentially from kml_dbroot_000.kml upwards.\n"
-          "                    Default: false\n",
+          "                    Default: false\n"
+          "   --disable_historical:\n"    
+          "                    Removes the reference to the server for  \n"
+          "                    historical imagery.\n",
           
           progn.c_str());
   exit(1);
@@ -100,6 +107,8 @@ int main(int argc, char *argv[]) {
   bool help = false;
   bool use_ssl_for_kml = false;
   bool preserve_kml_filenames = false;
+  bool preserve_search_service = false;
+  bool disable_historical = false;
   std::string source;
   std::string icon_directory;
   std::string dbroot_file;
@@ -115,6 +124,8 @@ int main(int argc, char *argv[]) {
   options.flagOpt("?", help);
   options.flagOpt("use_ssl_for_kml", use_ssl_for_kml);
   options.flagOpt("preserve_kml_filenames", preserve_kml_filenames);
+  options.flagOpt("preserve_search_service", preserve_search_service);
+  options.flagOpt("disable_historical", disable_historical);
   options.opt("source", source);
   options.opt("icon_directory", icon_directory);
   options.opt("dbroot_file", dbroot_file);
@@ -172,11 +183,18 @@ int main(int argc, char *argv[]) {
     // load the dbroot we just fetched from the server
     geProtoDbroot dbroot(dbroot_path, geProtoDbroot::kEncodedFormat);
 
+    // Remove reference to historical imagery server
+    if (disable_historical) {
+      DisableTimeMachine(&dbroot);
+    }
+
     // Remove layers of unused data types.
     RemoveUnusedLayers(data_type, &dbroot);
 
     // modify base_url fields in search tabs
-    ReplaceSearchServer(search_service, &dbroot);
+    if (!preserve_search_service) {
+      ReplaceSearchServer(search_service, &dbroot);
+    }
 
     // modify kml_url fields in layers
     std::string new_kml_base_url;

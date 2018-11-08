@@ -76,38 +76,30 @@ khSystemManager::SetWantExit(void)
 // when SIGHUP is given, reload systemrc
 void systemrc_reload(int signum)
 {
-    notify(NFY_WARN, "Received SIGHUP, Reloading systemrc...");
-    Systemrc systemrc;
-    LoadSystemrc(systemrc,true);
-    uint32 logLevel = systemrc.logLevel;
-    notify(NFY_WARN, "system log level changed to: %s",
-           khNotifyLevelToString(static_cast<khNotifyLevel>(logLevel)).c_str());
-    setNotifyLevel(static_cast<khNotifyLevel>(logLevel));
+  notify(NFY_WARN, "Received SIGHUP, Reloading systemrc...");
+  Systemrc systemrc;
+  LoadSystemrc(systemrc,true);
+  uint32 logLevel = systemrc.logLevel;
+  notify(NFY_WARN, "system log level changed to: %s",
+          khNotifyLevelToString(static_cast<khNotifyLevel>(logLevel)).c_str());
+  setNotifyLevel(static_cast<khNotifyLevel>(logLevel));
 }
 
 void handleExitSignals(int signum)
 {
-    notify(NFY_WARN, "Received SIGINT or SIGTERM, Exiting...");
-    theSystemManager.SetWantExit();
+  notify(NFY_WARN, "Received SIGINT or SIGTERM, Exiting...");
+  theSystemManager.SetWantExit();
 }
 
 
 void
 khSystemManager::SignalLoop(void)
 {
-  // In Fusion versions 5.2.3 and earlier there was code to handle SIGTERM and
-  // SIGINT, but this code was not called when the relevant signals were sent
-  // to system manager. We fixed this in 5.2.4 with the unexpected side effect
-  // that gesystemmanager may not stop when the user runs
-  // "/etc/init.d/gefusion stop". Instead, gesystemmanager will catch the
-  // SIGTERM and wait until it finishes the current operation before stopping,
-  // which could take days. As a stopgap, we are reverting to the behavior
-  // from 5.2.3 and not handling SIGINT and SIGTERM. In 5.2.5 we will revisit
-  // this and implement better methods of starting and stopping system manager.
-  // At that point, the two lines below can be uncommented.
-  //signal(SIGINT,handleExitSignals);
-  //signal(SIGTERM,handleExitSignals);
-  signal(SIGHUP,systemrc_reload);
+  // This is not a loop.  We're not iterating over any messages.
+  // We just install signal handlers, and return.
+  signal(SIGINT, handleExitSignals);
+  signal(SIGTERM, handleExitSignals);
+  signal(SIGHUP, systemrc_reload);
 }
 
 
