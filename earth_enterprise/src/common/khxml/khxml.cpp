@@ -129,11 +129,37 @@ class UsingXMLGuard
             notify(NFY_FATAL,"Unable to ReInitialize Xerces: %s",
                    FromXMLStr(toCatch.getMessage()).c_str());
         }
+       notify(NFY_NOTICE,"successful xerces reinit...");
     }
 
 };
 
 static khMutexBase xmlLibLock = KH_MUTEX_BASE_INITIALIZER;
+
+class XercesReInitGuard
+{
+private:
+    static bool Outer;
+    static uint32_t Inner;
+    XercesReInitGuard() {}
+
+public:
+    static inline XercesReInitGuard& instance()
+    {
+        static XercesReInitGuard _instance;
+        return _instance;
+    }
+
+    static inline bool OuterLocked() { return Outer;     }
+    static inline bool InnerLocked() { return Inner > 0; }
+    static inline void P_inner()     { ++Inner;          }
+    static inline void P_outer()     { Outer = false;    }
+    static inline void V_inner()     { --Inner;          }
+    static inline void V_outer()     { Outer = false;    }
+};
+bool XercesReInitGuard::Outer = false;
+uint32_t XercesReInitGuard::Inner = 0;
+
 
 void InitializeXMLLibrary(bool reinit=false) throw()
 {
@@ -155,7 +181,10 @@ void InitializeXMLLibrary(bool reinit=false) throw()
 
 void ReInitializeXMLLibrary(int sig) throw()
 {
+    XercesReInitGuard::instance().P_outer();
+    while(XercesReInitGuard::instance().InnerLocked());
     InitializeXMLLibrary(true);
+    XercesReInitGuard::instance().V_outer();
 }
 
 
@@ -248,24 +277,27 @@ WriteDocumentImpl(DOMDocument *doc, const std::string &filename) throw()
 bool
 WriteDocument(DOMDocument *doc, const std::string &filename) throw()
 {
+  while (XercesReInitGuard::instance().OuterLocked());
+  XercesReInitGuard::instance().P_inner();
   static const std::string newext = ".new";
   static const std::string backupext = ".old";
   const std::string newname = filename + newext;
   const std::string backupname = filename + backupext;
-
+  bool retval = true;
   if (!WriteDocumentImpl(doc, newname)) {
-    return false;
+    retval = false;
   }
 
-  if (!khReplace(filename, newext, backupext)) {
+  if (retval && !khReplace(filename, newext, backupext)) {
     (void) khUnlink(newname);
-    return false;
+    retval = false;
   }
   if (khExists(backupname)) {
     notify(NFY_VERBOSE,"WriteDocument() backupname %s exists", backupname.c_str());
     (void) khUnlink(backupname);
   }
-  return true;
+  XercesReInitGuard::instance().V_inner();
+  return retval;
 }
 
 
@@ -274,7 +306,8 @@ WriteDocument(DOMDocument *doc, const std::string &filename) throw()
 bool
 WriteDocumentToString(DOMDocument *doc, std::string &buf) throw()
 {
-
+  while (XercesReInitGuard::instance().OuterLocked());
+  XercesReInitGuard::instance().P_inner();
   InitializeXMLLibrary();
   bool success = false;
 
@@ -322,7 +355,7 @@ WriteDocumentToString(DOMDocument *doc, std::string &buf) throw()
   } catch (...) {
     notify(NFY_WARN, "Unable to create DOM writer: Unknown exception");
   }
-
+  XercesReInitGuard::instance().V_inner();
   return success;
 }
 
@@ -366,6 +399,8 @@ CreateDOMParser(void) throw()
 khxml::DOMDocument*
 ReadDocument(khxml::DOMLSParser *parser, const std::string &filename) throw()
 {
+  while (XercesReInitGuard::instance().OuterLocked());
+  XercesReInitGuard::instance().P_inner();
   DOMDocument *doc = 0;
 
   try {
@@ -385,7 +420,7 @@ ReadDocument(khxml::DOMLSParser *parser, const std::string &filename) throw()
   } catch (...) {
     notify(NFY_WARN, "Unable to read XML");
   }
-
+  XercesReInitGuard::instance().V_inner();
   return doc;
 }
 
@@ -394,6 +429,8 @@ ReadDocumentFromString(khxml::DOMLSParser *parser,
                        const std::string &buf,
                        const std::string &ref) throw()
 {
+  while (XercesReInitGuard::instance().OuterLocked());
+  XercesReInitGuard::instance().P_inner();
   DOMDocument *doc = 0;
 
   try {
@@ -414,7 +451,7 @@ ReadDocumentFromString(khxml::DOMLSParser *parser,
   } catch (...) {
     notify(NFY_WARN, "Unable to read XML");
   }
-
+  XercesReInitGuard::instance().V_inner();
   return doc;
 }
 
