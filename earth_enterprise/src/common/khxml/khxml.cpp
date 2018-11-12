@@ -141,7 +141,7 @@ class XercesReInitGuard
 private:
     static bool Outer;
     static uint32_t Inner;
-    XercesReInitGuard() {}
+    XercesReInitGuard() = default;
 
 public:
     static inline XercesReInitGuard& instance()
@@ -153,9 +153,14 @@ public:
     static inline bool OuterLocked() { return Outer;     }
     static inline bool InnerLocked() { return Inner > 0; }
     static inline void P_inner()     { ++Inner;          }
-    static inline void P_outer()     { Outer = false;    }
+    static inline void P_outer()     { Outer = true;     }
     static inline void V_inner()     { --Inner;          }
     static inline void V_outer()     { Outer = false;    }
+
+    XercesReInitGuard(const XercesReInitGuard&) = delete;
+    XercesReInitGuard(XercesReInitGuard&&) = delete;
+    XercesReInitGuard& operator=(const XercesReInitGuard&) = delete;
+    XercesReInitGuard& operator=(XercesReInitGuard&&) = delete;
 };
 bool XercesReInitGuard::Outer = false;
 uint32_t XercesReInitGuard::Inner = 0;
