@@ -295,7 +295,11 @@ bool FileUnpacker::FindMapDataPacket(const char* qtpath,
 
 bool FileUnpacker::MapDataPacketWalker(int layer, const map_packet_walker& walker)
 {
-  return mapdata_packet_finder_->MapDataPacketWalker(layer, walker);
+  PacketBundleFinder* finder = mapdata_packet_finder_;
+  if (has_3d_data_) {
+    finder = data_packet_finder_;
+  }
+  return finder->MapDataPacketWalker(layer, walker);
 }
 
 /**
