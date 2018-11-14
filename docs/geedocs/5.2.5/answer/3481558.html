@@ -72,7 +72,7 @@
   <h2>geaddtoimageryproject</h2>
   <pre>
 <code><b>geaddtoimageryproject</b> [--<strong>mercator</strong> | --<strong>flat]</strong> [--<strong>historical_imagery</strong> |
---<strong>no_historical_imagery</strong>] -o <em>projectname</em>{[--<strong>maxlevel</strong> <em>level</em>] <em>insetresource</em>}</code>...</pre>
+--<strong>no_historical_imagery</strong>] -o <em>projectname</em> {[--<strong>maxlevel</strong> <em>level</em> | --<strong>maxleveloverride</strong> <em>level</em>] <em>insetresource</em>}</code>...</pre>
   <h3>Purpose</h3>
   <p>Creates a new imagery project. This tool is capable of building Mercator imagery projects for 2D databases, or Flat (Plate Carrée) imagery projects with or without Historic Imagery Support for 3D databases.
 
@@ -89,8 +89,15 @@
   <pre>
 <code><b>--no_historical_imagery </b></code></pre>
   <p><i>Default</i>. Uses normal imagery for the project.</p>
-  <h2><a name="63542"></a>geconfigureassetroot</h2>
+  <h3>Options</h3>
   <pre>
+  <code><b>--maxlevel </b><i>level</i></code></pre>
+  <div class="alert"> Deprecated in release GEE 5.2.5 and higher. Use <code>--maxleveloverride</code></a> instead.</div>
+  <p><i>Optional</i>. Sets the maximum level for the imagery. Uses internal Fusion scale. Does not match the levels in the Fusion UI.</p>
+  <pre>
+  <code><b>-maxleveloverride </b><i>level</i></code></pre>
+  <p><i>Optional</i>. Sets the maximum level for the imagery. Uses the imagery scale in Fusion. Matches the levels in the Fusion UI.</p>
+ <h2><a name="63542"></a>geconfigureassetroot</h2>
 <code><b>geconfigureassetroot</b> {<b>--new</b> <b>--assetroot </b><i>path </i> [<b>--srcvol </b><i>path</i>] | <b>--repair</b> | <b>--editvolumes</b> | <b>--listvolumes</b> | <b>--addvolume</b> | <b>--fixmasterhost</b> | <strong>--noprompt</strong>}  [--nochown]</code></pre>
   <h3>Purpose</h3>
   <p>To add volume definitions or edit existing volume definitions.</p>
