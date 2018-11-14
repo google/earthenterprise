@@ -17,6 +17,8 @@
 #include <khConstants.h>
 #include <khGetopt.h>
 #include <khFileUtils.h>
+#include <khTileAddr.h>
+#include <khException.h>
 #include <autoingest/.idl/storage/AssetDefs.h>
 #include <autoingest/khAssetManagerProxy.h>
 #include <autoingest/plugins/RasterProjectAsset.h>
@@ -72,6 +74,7 @@ main(int argc, char *argv[]) {
     bool enable_historical_imagery = false;
     bool disable_historical_imagery = false;
     uint peergroup = 0;
+    uint overridemax_deprecated = 0;
     uint overridemax = 0;
 
     RasterProjectModifyRequest req(AssetType);
@@ -85,7 +88,8 @@ main(int argc, char *argv[]) {
     options.setExclusive("flat", "mercator");
     options.opt("output", req.assetname);
     options.opt("peergroup", peergroup);
-    options.opt("maxlevel", overridemax);
+    options.opt("maxlevel", overridemax_deprecated);
+    options.opt("maxleveloverride", overridemax);
     options.opt("historical_imagery", enable_historical_imagery);
     options.opt("no_historical_imagery", disable_historical_imagery);
 
@@ -104,6 +108,23 @@ main(int argc, char *argv[]) {
     }
     if (help) {
       usage(progname);
+    }
+    
+    if (overridemax && overridemax_deprecated) {
+      throw khException("Cannot use maxlevel and maxleveloverride together, " 
+                       "maxlevel is deprecated.\n");
+    }
+
+    if (overridemax) {
+      if (AssetType == AssetDefs::Imagery) {
+        overridemax = ProductToImageryLevel(overridemax_deprecated);
+      }
+      else {
+        overridemax = ProductToTmeshLevel(overriddemax_deprecated);
+    }
+    
+    if (overridemax_deprecated) {
+      overridemax = overridemax_deprecated;
     }
 
     // Default to flat unless mercator imagery is specified.
