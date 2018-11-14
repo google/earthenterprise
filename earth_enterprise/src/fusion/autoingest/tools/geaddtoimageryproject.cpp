@@ -117,10 +117,10 @@ main(int argc, char *argv[]) {
 
     if (overridemax) {
       if (AssetType == AssetDefs::Imagery) {
-        overridemax = ProductToImageryLevel(overridemax_deprecated);
+        overridemax = ImageryToProductLevel(overridemax_deprecated);
       }
       else {
-        overridemax = ProductToTmeshLevel(overriddemax_deprecated);
+        overridemax = TmeshToProductLevel(overriddemax_deprecated);
     }
     
     if (overridemax_deprecated) {
