@@ -243,9 +243,15 @@ khResourceManager::InsertProvider(khResourceProviderProxy *proxy)
   // instantiate the Volumes that this provider will manage
   std::vector<std::string> volnames;
   GetHostVolumes(host, volnames);
-  for (std::vector<std::string>::const_iterator vn = volnames.begin();
-       vn != volnames.end(); ++vn) {
-    volumes[*vn] = new Volume(*vn, proxy);
+  //for (std::vector<std::string>::const_iterator vn = volnames.begin();
+  //     vn != volnames.end(); ++vn) {
+  for (const auto& vn : volnames) {
+        if (volumes.find(vn) != volumes.end())
+        {
+            delete volumes[vn];
+            volumes.erase(vn);
+        }
+        volumes[vn] = new Volume(vn, proxy);
   }
 
   // wake up the activate thread
@@ -267,6 +273,8 @@ khResourceManager::EraseProvider(khResourceProviderProxy *proxy)
     delete volumes[*vn];
     volumes.erase(*vn);
   }
+  if (volumes.empty())
+      volumes.clear();
 }
 
 

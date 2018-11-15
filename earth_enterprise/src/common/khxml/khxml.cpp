@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc.
+﻿// Copyright 2017 Google Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@
 #include "khdom.h"
 #include <fstream>
 #include <string>
-//#include <csignal>
 using namespace khxml;
 
 std::string
@@ -38,12 +37,6 @@ ListElementTagName(const std::string &tagname)
   }
 }
 
-// parameters that can be passed into XMLPlatformUtils::Initialize() dealing
-// with heap memory. hard-coded now, may be worthwhile to be able to set these
-// via systemrc
-// XMLSize_t initialDOMHeapAllocSize; // size_t, default: 0x4000
-// XMLSize_t maxDOMHeapAllocSize;     // size_t, default: 0x20000
-// XMLSize_t maxDOMSubAllocationSize; // size_t, defailt: 0x1000
 
 // This is used only in the following function
 class UsingXMLGuard
@@ -51,31 +44,30 @@ class UsingXMLGuard
   friend void InitializeXMLLibrary(bool) throw();
 
   XMLSSize_t  initialDOMHeapAllocSize;
-  XMLSSize_t  maxDOMHeapAllocSize;
-  XMLSSize_t  maxDOMSubAllocationSize;
-
-  UsingXMLGuard(void) throw() {
-   //std::signal(SIGUSR2,ReInitializeXMLLibrary);
-   std::string fn("/home/ec2-user/xerces_init_defaults.txt");
+    XMLSSize_t  maxDOMHeapAllocSize;
+    XMLSSize_t  maxDOMSubAllocationSize;
+  UsingXMLGuard(void) throw()
+  {
+      std::string fn("/home/ec2-user/xerces_init_defaults.txt");
+         try {
+             std::ifstream file;
+             file.exceptions(std::ifstream::failbit);
+             file.open(fn.c_str());
+             file >> initialDOMHeapAllocSize
+                  >> maxDOMHeapAllocSize
+                  >> maxDOMSubAllocationSize;
+             file.close();
+         } catch (std::ifstream::failure &readError) {
+             initialDOMHeapAllocSize = 0x4000;
+             maxDOMHeapAllocSize = 0x20000;
+             maxDOMSubAllocationSize = 0x1000;
+             notify(NFY_WARN,"xerces heap defaults file %s not found!",
+                    fn.c_str());
+         }
    try {
-       std::ifstream file;
-       file.exceptions(std::ifstream::failbit);
-       file.open(fn.c_str());
-       file >> initialDOMHeapAllocSize
-            >> maxDOMHeapAllocSize
-            >> maxDOMSubAllocationSize;
-       file.close();
-   } catch (std::ifstream::failure &readError) {
-       initialDOMHeapAllocSize = 0x4000;
-       maxDOMHeapAllocSize = 0x20000;
-       maxDOMSubAllocationSize = 0x1000;
-       notify(NFY_WARN,"xerces heap defaults file %s not found!",
-              fn.c_str());
-   }
-   try {
-      XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
-                                   maxDOMHeapAllocSize,
-                                   maxDOMSubAllocationSize);
+      XMLPlatformUtils::Initialize(/*MiscConfig::Instance().*/initialDOMHeapAllocSize,
+                                   /*MiscConfig::Instance().*/maxDOMHeapAllocSize,
+                                   /*MiscConfig::Instance().*/maxDOMSubAllocationSize);
     } catch(const XMLException& toCatch) {
       notify(NFY_FATAL, "Unable to initialize Xerces: %s",
              FromXMLStr(toCatch.getMessage()).c_str());
@@ -122,9 +114,9 @@ class UsingXMLGuard
                    FromXMLStr(toCatch.getMessage()).c_str());
         }
         try {
-            XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
-                                         maxDOMHeapAllocSize,
-                                         maxDOMSubAllocationSize);
+            XMLPlatformUtils::Initialize(/*MiscConfig::Instance().*/initialDOMHeapAllocSize,
+                                         /*MiscConfig::Instance().*/maxDOMHeapAllocSize,
+                                         /*MiscConfig::Instance().*/maxDOMSubAllocationSize);
         } catch (const XMLException& toCatch) {
             notify(NFY_FATAL,"Unable to ReInitialize Xerces: %s",
                    FromXMLStr(toCatch.getMessage()).c_str());
@@ -156,7 +148,7 @@ public:
     static inline void P_outer()     { Outer = true;     }
     static inline void V_inner()     { --Inner;          }
     static inline void V_outer()     { Outer = false;    }
-
+    static inline uint32_t p_inner() { return Inner; }
     XercesReInitGuard(const XercesReInitGuard&) = delete;
     XercesReInitGuard(XercesReInitGuard&&) = delete;
     XercesReInitGuard& operator=(const XercesReInitGuard&) = delete;
@@ -187,6 +179,7 @@ void InitializeXMLLibrary(bool reinit=false) throw()
 void ReInitializeXMLLibrary(int sig) throw()
 {
     XercesReInitGuard::instance().P_outer();
+    notify(NFY_NOTICE,"re-init xerces, inner %d...", XercesReInitGuard::instance().p_inner());
     while(XercesReInitGuard::instance().InnerLocked());
     InitializeXMLLibrary(true);
     XercesReInitGuard::instance().V_outer();
@@ -412,7 +405,9 @@ ReadDocument(khxml::DOMLSParser *parser, const std::string &filename) throw()
     // Note: parseURI doesn't handle missing files nicely...returns
     // invalid doc object. Must check file existence ourselves.
     if (khExists(filename)) {
-      doc = parser->parseURI(filename.c_str());
+        notify(NFY_NOTICE,"ReadDocument, filename: %s",
+               filename.c_str());
+         doc = parser->parseURI(filename.c_str());
     } else {
       notify(NFY_WARN, "XML file does not exist: %s", filename.c_str());
     }
