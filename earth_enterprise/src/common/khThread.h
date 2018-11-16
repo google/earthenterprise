@@ -50,6 +50,7 @@ class khMutexBase {
   bool TryLock(void);
 };
 #define KH_MUTEX_BASE_INITIALIZER {PTHREAD_MUTEX_INITIALIZER}
+#define kH_MUTEX_BASE_RECURSIVE (PTHREAD_MUTEX_RECURSIVE)
 
 
 // Simple non-recursive, non-checking mutex
@@ -80,6 +81,9 @@ class khLockGuard {
   khLockGuard(khMutexBase &mutex_) : mutex(mutex_) {
     mutex.Lock();
   }
+  khLockGuard() = delete;
+  khLockGuard(const khLockGuard&) = delete;
+  khLockGuard(khLockGuard&&) = delete;
   ~khLockGuard(void) {
     mutex.Unlock();
   }
@@ -91,6 +95,9 @@ class khUnlockGuard {
   khUnlockGuard(khMutexBase &mutex_) : mutex(mutex_) {
     mutex.Unlock();
   }
+  khUnlockGuard() = delete;
+  khUnlockGuard(const khUnlockGuard&) = delete;
+  khUnlockGuard(khUnlockGuard&&) = delete;
   ~khUnlockGuard(void) {
     mutex.Lock();
   }

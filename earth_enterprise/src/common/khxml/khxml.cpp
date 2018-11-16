@@ -27,6 +27,9 @@
 #include <string>
 using namespace khxml;
 
+class XMLParser
+{};
+
 std::string
 ListElementTagName(const std::string &tagname)
 {
@@ -127,35 +130,8 @@ class UsingXMLGuard
 };
 
 static khMutexBase xmlLibLock = KH_MUTEX_BASE_INITIALIZER;
-
-class XercesReInitGuard
-{
-private:
-    static bool Outer;
-    static uint32_t Inner;
-    XercesReInitGuard() = default;
-
-public:
-    static inline XercesReInitGuard& instance()
-    {
-        static XercesReInitGuard _instance;
-        return _instance;
-    }
-
-    static inline bool OuterLocked() { return Outer;     }
-    static inline bool InnerLocked() { return Inner > 0; }
-    static inline void P_inner()     { ++Inner;          }
-    static inline void P_outer()     { Outer = true;     }
-    static inline void V_inner()     { --Inner;          }
-    static inline void V_outer()     { Outer = false;    }
-    static inline uint32_t p_inner() { return Inner; }
-    XercesReInitGuard(const XercesReInitGuard&) = delete;
-    XercesReInitGuard(XercesReInitGuard&&) = delete;
-    XercesReInitGuard& operator=(const XercesReInitGuard&) = delete;
-    XercesReInitGuard& operator=(XercesReInitGuard&&) = delete;
-};
-bool XercesReInitGuard::Outer = false;
-uint32_t XercesReInitGuard::Inner = 0;
+static khMutexBase reInitOuterLock = KH_MUTEX_BASE_INITIALIZER;
+static khMutexBase reInitInnerLock = kH_MUTEX_BASE_RECURSIVE;//;kH_MUTEX_BASE_RECURSIVE;
 
 
 void InitializeXMLLibrary(bool reinit=false) throw()
@@ -167,9 +143,9 @@ void InitializeXMLLibrary(bool reinit=false) throw()
 
 // Logic:
 //
-// $ kill -12 <PID>
+// $ kill -1 <PID>
 //
-// 1. ReInitializeXMLLibrary declared to handle SIGUSR2 signal in
+// 1. ReInitializeXMLLibrary declared to handle SIGHUP signal in
 //    UsingXMLGuard::UsingXMLGuard
 // 2. ReInitializeXMLLibrary handles this signal and calls
 //    InitializeXMLLibrary, and uses a flag to signify reinit
@@ -178,30 +154,32 @@ void InitializeXMLLibrary(bool reinit=false) throw()
 
 void ReInitializeXMLLibrary(int sig) throw()
 {
-    XercesReInitGuard::instance().P_outer();
-    notify(NFY_NOTICE,"re-init xerces, inner %d...", XercesReInitGuard::instance().p_inner());
-    while(XercesReInitGuard::instance().InnerLocked());
+    khLockGuard outer(reInitOuterLock);
+    khLockGuard inner(reInitInnerLock);
     InitializeXMLLibrary(true);
-    XercesReInitGuard::instance().V_outer();
 }
 
 
 DOMDocument *
 CreateEmptyDocument(const std::string &rootTagname) throw()
 {
-  InitializeXMLLibrary();
+  khLockGuard outer(reInitOuterLock);
+  {
+      khLockGuard inner(reInitInnerLock);
+      InitializeXMLLibrary();
 
-  try {
-    DOMImplementation* impl =
-      DOMImplementationRegistry::getDOMImplementation(0);
+      try {
+        DOMImplementation* impl =
+          DOMImplementationRegistry::getDOMImplementation(0);
 
-    DOMDocument* doc =
-      impl->createDocument( 0,// root element namespace URI.
-                            ToXMLStr(rootTagname),// root element name
-                            0);// document type object (DTD)
-    return doc;
-  } catch (...) {
-    return 0;
+        DOMDocument* doc =
+          impl->createDocument( 0,// root element namespace URI.
+                                ToXMLStr(rootTagname),// root element name
+                                0);// document type object (DTD)
+        return doc;
+      } catch (...) {
+        return 0;
+      }
   }
 }
 
@@ -275,26 +253,27 @@ WriteDocumentImpl(DOMDocument *doc, const std::string &filename) throw()
 bool
 WriteDocument(DOMDocument *doc, const std::string &filename) throw()
 {
-  while (XercesReInitGuard::instance().OuterLocked());
-  XercesReInitGuard::instance().P_inner();
-  static const std::string newext = ".new";
-  static const std::string backupext = ".old";
-  const std::string newname = filename + newext;
-  const std::string backupname = filename + backupext;
+  khLockGuard outer(reInitOuterLock);
   bool retval = true;
-  if (!WriteDocumentImpl(doc, newname)) {
-    retval = false;
-  }
+  {
+      khLockGuard inner(reInitInnerLock);
+      static const std::string newext = ".new";
+      static const std::string backupext = ".old";
+      const std::string newname = filename + newext;
+      const std::string backupname = filename + backupext;
+      if (!WriteDocumentImpl(doc, newname)) {
+        retval = false;
+      }
 
-  if (retval && !khReplace(filename, newext, backupext)) {
-    (void) khUnlink(newname);
-    retval = false;
+      if (retval && !khReplace(filename, newext, backupext)) {
+        (void) khUnlink(newname);
+        retval = false;
+      }
+      if (khExists(backupname)) {
+        notify(NFY_VERBOSE,"WriteDocument() backupname %s exists", backupname.c_str());
+        (void) khUnlink(backupname);
+      }
   }
-  if (khExists(backupname)) {
-    notify(NFY_VERBOSE,"WriteDocument() backupname %s exists", backupname.c_str());
-    (void) khUnlink(backupname);
-  }
-  XercesReInitGuard::instance().V_inner();
   return retval;
 }
 
@@ -304,56 +283,57 @@ WriteDocument(DOMDocument *doc, const std::string &filename) throw()
 bool
 WriteDocumentToString(DOMDocument *doc, std::string &buf) throw()
 {
-  while (XercesReInitGuard::instance().OuterLocked());
-  XercesReInitGuard::instance().P_inner();
-  InitializeXMLLibrary();
+  khLockGuard outer(reInitOuterLock);
   bool success = false;
+  {
+      khLockGuard inner(reInitInnerLock);
+      InitializeXMLLibrary();
 
-  try {
-    // "LS" -> Load/Save extensions
-    DOMImplementationLS* impl = (DOMImplementationLS*)
-                                DOMImplementationRegistry::getDOMImplementation(ToXMLStr("LS"));
+      try {
+        // "LS" -> Load/Save extensions
+        DOMImplementationLS* impl = (DOMImplementationLS*)
+                                    DOMImplementationRegistry::getDOMImplementation(ToXMLStr("LS"));
 
-    DOMLSSerializer* writer = impl->createLSSerializer();
+        DOMLSSerializer* writer = impl->createLSSerializer();
 
-    try {
-      // optionally you can set some features on this serializer
-      if (writer->getDomConfig()->canSetParameter(XMLUni::fgDOMWRTDiscardDefaultContent, true))
-        writer->getDomConfig()->setParameter(XMLUni::fgDOMWRTDiscardDefaultContent, true);
-      if (writer->getDomConfig()->canSetParameter(XMLUni::fgDOMWRTFormatPrettyPrint, true))
-        writer->getDomConfig()->setParameter(XMLUni::fgDOMWRTFormatPrettyPrint, true);
+        try {
+          // optionally you can set some features on this serializer
+          if (writer->getDomConfig()->canSetParameter(XMLUni::fgDOMWRTDiscardDefaultContent, true))
+            writer->getDomConfig()->setParameter(XMLUni::fgDOMWRTDiscardDefaultContent, true);
+          if (writer->getDomConfig()->canSetParameter(XMLUni::fgDOMWRTFormatPrettyPrint, true))
+            writer->getDomConfig()->setParameter(XMLUni::fgDOMWRTFormatPrettyPrint, true);
 
-      MemBufFormatTarget formatTarget;
-      DOMLSOutput* lsOutput = impl->createLSOutput();
-      lsOutput->setByteStream(&formatTarget);
-      if (writer->write(doc, lsOutput)) {
-        buf.append((const char *)formatTarget.getRawBuffer(),
-                   formatTarget.getLen());
-        success = true;
-      } else {
-        notify(NFY_WARN, "Unable to write XML to string: Xerces didn't tell me why not.");
+          MemBufFormatTarget formatTarget;
+          DOMLSOutput* lsOutput = impl->createLSOutput();
+          lsOutput->setByteStream(&formatTarget);
+          if (writer->write(doc, lsOutput)) {
+            buf.append((const char *)formatTarget.getRawBuffer(),
+                       formatTarget.getLen());
+            success = true;
+          } else {
+            notify(NFY_WARN, "Unable to write XML to string: Xerces didn't tell me why not.");
+          }
+          lsOutput->release();
+        } catch (const XMLException& toCatch) {
+          notify(NFY_WARN, "Unable to write XML: %s",
+                 XMLString::transcode(toCatch.getMessage()));
+        } catch (const DOMException& toCatch) {
+          notify(NFY_WARN, "Unable to write XML: %s",
+                 XMLString::transcode(toCatch.msg));
+        } catch (...) {
+          notify(NFY_WARN, "Unable to write XML: Unknown exception");
+        }
+        writer->release();
+      } catch (const XMLException& toCatch) {
+        notify(NFY_WARN, "Unable to create DOM Writer: %s",
+               XMLString::transcode(toCatch.getMessage()));
+      } catch (const DOMException& toCatch) {
+        notify(NFY_WARN, "Unable to create DOM writer: %s",
+               XMLString::transcode(toCatch.msg));
+      } catch (...) {
+        notify(NFY_WARN, "Unable to create DOM writer: Unknown exception");
       }
-      lsOutput->release();
-    } catch (const XMLException& toCatch) {
-      notify(NFY_WARN, "Unable to write XML: %s",
-             XMLString::transcode(toCatch.getMessage()));
-    } catch (const DOMException& toCatch) {
-      notify(NFY_WARN, "Unable to write XML: %s",
-             XMLString::transcode(toCatch.msg));
-    } catch (...) {
-      notify(NFY_WARN, "Unable to write XML: Unknown exception");
-    }
-    writer->release();
-  } catch (const XMLException& toCatch) {
-    notify(NFY_WARN, "Unable to create DOM Writer: %s",
-           XMLString::transcode(toCatch.getMessage()));
-  } catch (const DOMException& toCatch) {
-    notify(NFY_WARN, "Unable to create DOM writer: %s",
-           XMLString::transcode(toCatch.msg));
-  } catch (...) {
-    notify(NFY_WARN, "Unable to create DOM writer: Unknown exception");
   }
-  XercesReInitGuard::instance().V_inner();
   return success;
 }
 
@@ -397,30 +377,31 @@ CreateDOMParser(void) throw()
 khxml::DOMDocument*
 ReadDocument(khxml::DOMLSParser *parser, const std::string &filename) throw()
 {
-  while (XercesReInitGuard::instance().OuterLocked());
-  XercesReInitGuard::instance().P_inner();
-  DOMDocument *doc = 0;
+  khLockGuard outer(reInitOuterLock);
+  DOMDocument* doc = nullptr;
+      {
+      khLockGuard inner(reInitInnerLock);
 
-  try {
-    // Note: parseURI doesn't handle missing files nicely...returns
-    // invalid doc object. Must check file existence ourselves.
-    if (khExists(filename)) {
-        notify(NFY_NOTICE,"ReadDocument, filename: %s",
-               filename.c_str());
-         doc = parser->parseURI(filename.c_str());
-    } else {
-      notify(NFY_WARN, "XML file does not exist: %s", filename.c_str());
-    }
-  } catch (const XMLException& toCatch) {
-    notify(NFY_WARN, "Unable to read XML: %s",
-           XMLString::transcode(toCatch.getMessage()));
-  } catch (const DOMException& toCatch) {
-    notify(NFY_WARN, "Unable to read XML: %s",
-           XMLString::transcode(toCatch.msg));
-  } catch (...) {
-    notify(NFY_WARN, "Unable to read XML");
+      try {
+        // Note: parseURI doesn't handle missing files nicely...returns
+        // invalid doc object. Must check file existence ourselves.
+        if (khExists(filename)) {
+            notify(NFY_NOTICE,"ReadDocument, filename: %s",
+                   filename.c_str());
+             doc = parser->parseURI(filename.c_str());
+        } else {
+          notify(NFY_WARN, "XML file does not exist: %s", filename.c_str());
+        }
+      } catch (const XMLException& toCatch) {
+        notify(NFY_WARN, "Unable to read XML: %s",
+               XMLString::transcode(toCatch.getMessage()));
+      } catch (const DOMException& toCatch) {
+        notify(NFY_WARN, "Unable to read XML: %s",
+               XMLString::transcode(toCatch.msg));
+      } catch (...) {
+        notify(NFY_WARN, "Unable to read XML");
+      }
   }
-  XercesReInitGuard::instance().V_inner();
   return doc;
 }
 
@@ -429,29 +410,30 @@ ReadDocumentFromString(khxml::DOMLSParser *parser,
                        const std::string &buf,
                        const std::string &ref) throw()
 {
-  while (XercesReInitGuard::instance().OuterLocked());
-  XercesReInitGuard::instance().P_inner();
-  DOMDocument *doc = 0;
+  khLockGuard outer(reInitOuterLock);
+  DOMDocument *doc = nullptr;
+  {
+      khLockGuard inner(reInitInnerLock);
 
-  try {
-    MemBufInputSource memBufIS(
-        (const XMLByte*)buf.data(),
-        buf.size(),
-        ref.c_str(),
-        false);  // don't adopt buffer
-    Wrapper4InputSource inputSource(&memBufIS,
-                                    false);  // don't adopt input source
-    doc = parser->parse(&inputSource);
-  } catch (const XMLException& toCatch) {
-    notify(NFY_WARN, "Unable to read XML: %s",
-           XMLString::transcode(toCatch.getMessage()));
-  } catch (const DOMException& toCatch) {
-    notify(NFY_WARN, "Unable to read XML: %s",
-           XMLString::transcode(toCatch.msg));
-  } catch (...) {
-    notify(NFY_WARN, "Unable to read XML");
+      try {
+        MemBufInputSource memBufIS(
+            (const XMLByte*)buf.data(),
+            buf.size(),
+            ref.c_str(),
+            false);  // don't adopt buffer
+        Wrapper4InputSource inputSource(&memBufIS,
+                                        false);  // don't adopt input source
+        doc = parser->parse(&inputSource);
+      } catch (const XMLException& toCatch) {
+        notify(NFY_WARN, "Unable to read XML: %s",
+               XMLString::transcode(toCatch.getMessage()));
+      } catch (const DOMException& toCatch) {
+        notify(NFY_WARN, "Unable to read XML: %s",
+               XMLString::transcode(toCatch.msg));
+      } catch (...) {
+        notify(NFY_WARN, "Unable to read XML");
+      }
   }
-  XercesReInitGuard::instance().V_inner();
   return doc;
 }
 

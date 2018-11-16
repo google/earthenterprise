@@ -97,5 +97,7 @@ XMLStr2QString(const XMLCh *xmlch)
   return QString::fromUcs2(xmlch);
 }
 
+// Forward declaration for XML wrapper class
+class XMLParser;
 
 #endif /* __KHXML_H */
