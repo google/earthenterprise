@@ -131,8 +131,7 @@ class UsingXMLGuard
 
 static khMutexBase xmlLibLock = KH_MUTEX_BASE_INITIALIZER;
 static khMutexBase reInitOuterLock = KH_MUTEX_BASE_INITIALIZER;
-static khMutexBase reInitInnerLock = kH_MUTEX_BASE_RECURSIVE;//;kH_MUTEX_BASE_RECURSIVE;
-
+static khMutexBase reInitInnerLock = kH_MUTEX_BASE_RECURSIVE;
 
 void InitializeXMLLibrary(bool reinit=false) throw()
 {
