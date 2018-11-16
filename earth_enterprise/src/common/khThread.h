@@ -50,7 +50,7 @@ class khMutexBase {
   bool TryLock(void);
 };
 #define KH_MUTEX_BASE_INITIALIZER {PTHREAD_MUTEX_INITIALIZER}
-#define kH_MUTEX_BASE_RECURSIVE (PTHREAD_MUTEX_RECURSIVE)
+#define kH_MUTEX_BASE_RECURSIVE {PTHREAD_MUTEX_RECURSIVE}
 
 
 // Simple non-recursive, non-checking mutex
