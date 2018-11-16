@@ -268,10 +268,11 @@ khResourceManager::EraseProvider(khResourceProviderProxy *proxy)
   // remove the Volumes that this provider used to manage
   std::vector<std::string> volnames;
   GetHostVolumes(host, volnames);
-  for (std::vector<std::string>::const_iterator vn = volnames.begin();
-       vn != volnames.end(); ++vn) {
-    delete volumes[*vn];
-    volumes.erase(*vn);
+  //for (std::vector<std::string>::const_iterator vn = volnames.begin();
+  //     vn != volnames.end(); ++vn) {
+  for (const auto& vn : volnames) {
+    delete volumes[vn];
+    volumes.erase(vn);
   }
   if (volumes.empty())
       volumes.clear();
