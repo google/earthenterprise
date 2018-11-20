@@ -126,6 +126,9 @@ main(int argc, char *argv[]) {
     
     if (overridemax_deprecated) {
       overridemax = overridemax_deprecated;
+      notify(NFY_WARN, "--maxlevel is deprecated, please use --maxleveloverride. "
+		      "To move to the new  command, subtract 8 from the level for imagery, and "
+		      "subtract 5 from the level for terrain.");
     }
 
     // Default to flat unless mercator imagery is specified.
