@@ -27,9 +27,6 @@
 #include <string>
 using namespace khxml;
 
-class XMLParser
-{};
-
 std::string
 ListElementTagName(const std::string &tagname)
 {
@@ -51,7 +48,8 @@ class UsingXMLGuard
     XMLSSize_t  maxDOMSubAllocationSize;
   UsingXMLGuard(void) throw()
   {
-      std::string fn("/home/ec2-user/xerces_init_defaults.txt");
+      // file subject to change
+      std::string fn("~/xerces_init_defaults.txt");
          try {
              std::ifstream file;
              file.exceptions(std::ifstream::failbit);
