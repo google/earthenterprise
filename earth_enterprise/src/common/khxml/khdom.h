@@ -125,29 +125,12 @@ ToElement(khxml::DOMElement *elem, const T &value)
   elem->appendChild(elem->getOwnerDocument()->createTextNode(ToXMLStr(str)));
 }
 
-template <class T>
-void
-ToElementWithChildName(khxml::DOMElement *elem,
-                       const std::string &childTagName,
-                       const std::vector<T> &vec);
 
 template <class T>
 void
 ToElementWithChildName(khxml::DOMElement *elem,
                        const std::string &childTagName,
-                       const std::deque<T> &deque);
-
-template <class T>
-void
-ToElementWithChildName(khxml::DOMElement *elem,
-                       const std::string &childTagName,
-                       const std::list<T> &list);
-
-template <class T>
-void
-ToElementWithChildName(khxml::DOMElement *elem,
-                       const std::string &childTagName,
-                       const std::set<T> &set);
+                       const T &container);
 
 inline void
 ToElementWithChildName(khxml::DOMElement *elem,
@@ -279,50 +262,14 @@ template <class T>
 void
 ToElementWithChildName(khxml::DOMElement *elem,
                        const std::string &childTagName,
-                       const std::vector<T> &vec)
+                       const T &container)
 {
-
-  for (const auto& iter : vec)
-  {
-    AddElement(elem, childTagName, iter);
-  }
+    for (const auto& iter : container)
+    {
+        AddElement(elem, childTagName, iter);
+    }
 }
 
-template <class T>
-void
-ToElementWithChildName(khxml::DOMElement *elem,
-                       const std::string &childTagName,
-                       const std::deque<T> &deque)
-{
-  for (const auto& iter : deque)
-  {
-    AddElement(elem, childTagName, iter);
-  }
-}
-
-template <class T>
-void
-ToElementWithChildName(khxml::DOMElement *elem,
-                       const std::string &childTagName,
-                       const std::list<T> &list)
-{
-  for (const auto& iter : list)
-  {
-    AddElement(elem, childTagName, iter);
-  }
-}
-
-template <class T>
-void
-ToElementWithChildName(khxml::DOMElement *elem,
-                       const std::string &childTagName,
-                       const std::set<T> &set)
-{
-  for (const auto& iter : set)
-  {
-    AddElement(elem, childTagName, iter);
-  }
-}
 
 inline void
 ToElementWithChildName(khxml::DOMElement *elem,
@@ -584,7 +531,6 @@ FromElement(khxml::DOMElement *elem, std::list<T> &list);
 template <class T>
 void
 FromElement(khxml::DOMElement *elem, std::set<T> &set);
-
 template <class T, class U>
 void
 FromElement(khxml::DOMElement *elem, std::map<T, U> &map);
