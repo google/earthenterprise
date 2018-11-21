@@ -50,7 +50,7 @@ usage(const std::string &progn, const char *msg = 0, ...)
           "                         (i.e., not a historical imagery project)\n"
           "   By default, new projects are NOT time machine projects"
           " unless --historical_imagery is specified.\n"
-	  "      --maxleveloverride <level> : Set the max level for a resource.\n",
+          "      --maxleveloverride <level> : Set the max level for a resource.\n",
           progn.c_str());
   exit(1);
 }
