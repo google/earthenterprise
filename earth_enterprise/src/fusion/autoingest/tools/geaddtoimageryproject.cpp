@@ -38,7 +38,7 @@ usage(const std::string &progn, const char *msg = 0, ...)
   }
 
   fprintf(stderr,
-          "\nusage: %s [options] -o <projectname> {[--maxlevel <level>] "
+          "\nusage: %s [options] -o <projectname> {[--maxleveloverride <level>] "
           "<insetresource>}...\n"
           "   Supported options are:\n"
           "      --help | -?:      Display this usage message\n"
@@ -49,7 +49,8 @@ usage(const std::string &progn, const char *msg = 0, ...)
           "      --no_historical_imagery : make this a normal project\n"
           "                         (i.e., not a historical imagery project)\n"
           "   By default, new projects are NOT time machine projects"
-          " unless --historical_imagery is specified.\n",
+          " unless --historical_imagery is specified.\n"
+	  "      --maxleveloverride <level> : Set the max level for a resource.\n",
           progn.c_str());
   exit(1);
 }
