@@ -148,6 +148,10 @@ void InitializeXMLLibrary(bool reinit=false) throw()
 //    InitializeXMLLibrary, and uses a flag to signify reinit
 // 3. InitializeXMLLibrary has the lock and calls UsingXMLGuard::ReInitXerces
 //    which calls XMLPlatformUtils::Terminate, then Initialize
+//
+// Currently, reads intermittently cause segfaults. This will be handled
+// in the final form by guards on individual parser creation methods within
+// the main xerces wrapper class. Code remains, but commented out to get an idea
 
 void ReInitializeXMLLibrary(int sig) throw()
 {
@@ -160,24 +164,24 @@ void ReInitializeXMLLibrary(int sig) throw()
 DOMDocument *
 CreateEmptyDocument(const std::string &rootTagname) throw()
 {
-  khLockGuard outer(reInitOuterLock);
-  {
-      khLockGuard inner(reInitInnerLock);
-      InitializeXMLLibrary();
+  //khLockGuard outer(reInitOuterLock);
+  //{
+  //khLockGuard inner(reInitInnerLock);
+  InitializeXMLLibrary();
 
-      try {
-        DOMImplementation* impl =
-          DOMImplementationRegistry::getDOMImplementation(0);
+  try {
+    DOMImplementation* impl =
+    DOMImplementationRegistry::getDOMImplementation(0);
 
-        DOMDocument* doc =
-          impl->createDocument( 0,// root element namespace URI.
-                                ToXMLStr(rootTagname),// root element name
-                                0);// document type object (DTD)
-        return doc;
-      } catch (...) {
-        return 0;
-      }
-  }
+    DOMDocument* doc =
+    impl->createDocument( 0,// root element namespace URI.
+                          ToXMLStr(rootTagname),// root element name
+                          0);// document type object (DTD)
+   return doc;
+   } catch (...) {
+     return 0;
+   }
+  //}
 }
 
 namespace {
@@ -250,27 +254,27 @@ WriteDocumentImpl(DOMDocument *doc, const std::string &filename) throw()
 bool
 WriteDocument(DOMDocument *doc, const std::string &filename) throw()
 {
-  khLockGuard outer(reInitOuterLock);
+  //khLockGuard outer(reInitOuterLock);
   bool retval = true;
-  {
-      khLockGuard inner(reInitInnerLock);
-      static const std::string newext = ".new";
-      static const std::string backupext = ".old";
-      const std::string newname = filename + newext;
-      const std::string backupname = filename + backupext;
-      if (!WriteDocumentImpl(doc, newname)) {
-        retval = false;
-      }
-
-      if (retval && !khReplace(filename, newext, backupext)) {
-        (void) khUnlink(newname);
-        retval = false;
-      }
-      if (khExists(backupname)) {
-        notify(NFY_VERBOSE,"WriteDocument() backupname %s exists", backupname.c_str());
-        (void) khUnlink(backupname);
-      }
+  //{
+  //khLockGuard inner(reInitInnerLock);
+  static const std::string newext = ".new";
+  static const std::string backupext = ".old";
+  const std::string newname = filename + newext;
+  const std::string backupname = filename + backupext;
+  if (!WriteDocumentImpl(doc, newname)) {
+    retval = false;
   }
+
+  if (retval && !khReplace(filename, newext, backupext)) {
+    (void) khUnlink(newname);
+    retval = false;
+  }
+  if (retval && khExists(backupname)) {
+    notify(NFY_VERBOSE,"WriteDocument() backupname %s exists", backupname.c_str());
+    (void) khUnlink(backupname);
+  }
+  //}
   return retval;
 }
 
@@ -280,47 +284,47 @@ WriteDocument(DOMDocument *doc, const std::string &filename) throw()
 bool
 WriteDocumentToString(DOMDocument *doc, std::string &buf) throw()
 {
-  khLockGuard outer(reInitOuterLock);
+  //khLockGuard outer(reInitOuterLock);
   bool success = false;
-  {
-      khLockGuard inner(reInitInnerLock);
-      InitializeXMLLibrary();
+  //{
+  //khLockGuard inner(reInitInnerLock);
+  InitializeXMLLibrary();
 
-      try {
-        // "LS" -> Load/Save extensions
-        DOMImplementationLS* impl = (DOMImplementationLS*)
-                                    DOMImplementationRegistry::getDOMImplementation(ToXMLStr("LS"));
+  try {
+    // "LS" -> Load/Save extensions
+    DOMImplementationLS* impl = (DOMImplementationLS*)
+                                DOMImplementationRegistry::getDOMImplementation(ToXMLStr("LS"));
 
-        DOMLSSerializer* writer = impl->createLSSerializer();
+    DOMLSSerializer* writer = impl->createLSSerializer();
 
-        try {
-          // optionally you can set some features on this serializer
-          if (writer->getDomConfig()->canSetParameter(XMLUni::fgDOMWRTDiscardDefaultContent, true))
-            writer->getDomConfig()->setParameter(XMLUni::fgDOMWRTDiscardDefaultContent, true);
-          if (writer->getDomConfig()->canSetParameter(XMLUni::fgDOMWRTFormatPrettyPrint, true))
-            writer->getDomConfig()->setParameter(XMLUni::fgDOMWRTFormatPrettyPrint, true);
+    try {
+      // optionally you can set some features on this serializer
+      if (writer->getDomConfig()->canSetParameter(XMLUni::fgDOMWRTDiscardDefaultContent, true))
+          writer->getDomConfig()->setParameter(XMLUni::fgDOMWRTDiscardDefaultContent, true);
+      if (writer->getDomConfig()->canSetParameter(XMLUni::fgDOMWRTFormatPrettyPrint, true))
+          writer->getDomConfig()->setParameter(XMLUni::fgDOMWRTFormatPrettyPrint, true);
 
-          MemBufFormatTarget formatTarget;
-          DOMLSOutput* lsOutput = impl->createLSOutput();
-          lsOutput->setByteStream(&formatTarget);
-          if (writer->write(doc, lsOutput)) {
-            buf.append((const char *)formatTarget.getRawBuffer(),
-                       formatTarget.getLen());
-            success = true;
-          } else {
-            notify(NFY_WARN, "Unable to write XML to string: Xerces didn't tell me why not.");
-          }
-          lsOutput->release();
-        } catch (const XMLException& toCatch) {
-          notify(NFY_WARN, "Unable to write XML: %s",
-                 XMLString::transcode(toCatch.getMessage()));
-        } catch (const DOMException& toCatch) {
-          notify(NFY_WARN, "Unable to write XML: %s",
-                 XMLString::transcode(toCatch.msg));
-        } catch (...) {
-          notify(NFY_WARN, "Unable to write XML: Unknown exception");
-        }
-        writer->release();
+      MemBufFormatTarget formatTarget;
+      DOMLSOutput* lsOutput = impl->createLSOutput();
+      lsOutput->setByteStream(&formatTarget);
+      if (writer->write(doc, lsOutput)) {
+          buf.append((const char *)formatTarget.getRawBuffer(),
+          formatTarget.getLen());
+        success = true;
+      } else {
+        notify(NFY_WARN, "Unable to write XML to string: Xerces didn't tell me why not.");
+      }
+        lsOutput->release();
+      } catch (const XMLException& toCatch) {
+        notify(NFY_WARN, "Unable to write XML: %s",
+               XMLString::transcode(toCatch.getMessage()));
+      } catch (const DOMException& toCatch) {
+        notify(NFY_WARN, "Unable to write XML: %s",
+               XMLString::transcode(toCatch.msg));
+      } catch (...) {
+        notify(NFY_WARN, "Unable to write XML: Unknown exception");
+      }
+      writer->release();
       } catch (const XMLException& toCatch) {
         notify(NFY_WARN, "Unable to create DOM Writer: %s",
                XMLString::transcode(toCatch.getMessage()));
@@ -330,10 +334,11 @@ WriteDocumentToString(DOMDocument *doc, std::string &buf) throw()
       } catch (...) {
         notify(NFY_WARN, "Unable to create DOM writer: Unknown exception");
       }
-  }
+  //}
   return success;
 }
 
+// eventually lock parser from creation to destruction
 khxml::DOMLSParser*
 CreateDOMParser(void) throw()
 {
@@ -374,31 +379,31 @@ CreateDOMParser(void) throw()
 khxml::DOMDocument*
 ReadDocument(khxml::DOMLSParser *parser, const std::string &filename) throw()
 {
-  khLockGuard outer(reInitOuterLock);
+  //khLockGuard outer(reInitOuterLock);
   DOMDocument* doc = nullptr;
-      {
-      khLockGuard inner(reInitInnerLock);
+  //{
+  //khLockGuard inner(reInitInnerLock);
 
-      try {
-        // Note: parseURI doesn't handle missing files nicely...returns
-        // invalid doc object. Must check file existence ourselves.
-        if (khExists(filename)) {
-            notify(NFY_NOTICE,"ReadDocument, filename: %s",
-                   filename.c_str());
-             doc = parser->parseURI(filename.c_str());
-        } else {
-          notify(NFY_WARN, "XML file does not exist: %s", filename.c_str());
-        }
-      } catch (const XMLException& toCatch) {
-        notify(NFY_WARN, "Unable to read XML: %s",
-               XMLString::transcode(toCatch.getMessage()));
-      } catch (const DOMException& toCatch) {
-        notify(NFY_WARN, "Unable to read XML: %s",
-               XMLString::transcode(toCatch.msg));
-      } catch (...) {
-        notify(NFY_WARN, "Unable to read XML");
-      }
+  try {
+    // Note: parseURI doesn't handle missing files nicely...returns
+    // invalid doc object. Must check file existence ourselves.
+    if (khExists(filename)) {
+        notify(NFY_NOTICE,"ReadDocument, filename: %s",
+               filename.c_str());
+         doc = parser->parseURI(filename.c_str());
+    } else {
+      notify(NFY_WARN, "XML file does not exist: %s", filename.c_str());
+    }
+  } catch (const XMLException& toCatch) {
+    notify(NFY_WARN, "Unable to read XML: %s",
+           XMLString::transcode(toCatch.getMessage()));
+  } catch (const DOMException& toCatch) {
+    notify(NFY_WARN, "Unable to read XML: %s",
+           XMLString::transcode(toCatch.msg));
+  } catch (...) {
+    notify(NFY_WARN, "Unable to read XML");
   }
+  //}
   return doc;
 }
 
@@ -407,30 +412,30 @@ ReadDocumentFromString(khxml::DOMLSParser *parser,
                        const std::string &buf,
                        const std::string &ref) throw()
 {
-  khLockGuard outer(reInitOuterLock);
+  //khLockGuard outer(reInitOuterLock);
   DOMDocument *doc = nullptr;
-  {
-      khLockGuard inner(reInitInnerLock);
+  //{
+  //khLockGuard inner(reInitInnerLock);
 
-      try {
-        MemBufInputSource memBufIS(
-            (const XMLByte*)buf.data(),
-            buf.size(),
-            ref.c_str(),
-            false);  // don't adopt buffer
-        Wrapper4InputSource inputSource(&memBufIS,
-                                        false);  // don't adopt input source
-        doc = parser->parse(&inputSource);
-      } catch (const XMLException& toCatch) {
-        notify(NFY_WARN, "Unable to read XML: %s",
-               XMLString::transcode(toCatch.getMessage()));
-      } catch (const DOMException& toCatch) {
-        notify(NFY_WARN, "Unable to read XML: %s",
-               XMLString::transcode(toCatch.msg));
-      } catch (...) {
-        notify(NFY_WARN, "Unable to read XML");
-      }
+  try {
+    MemBufInputSource memBufIS(
+        (const XMLByte*)buf.data(),
+        buf.size(),
+        ref.c_str(),
+        false);  // don't adopt buffer
+    Wrapper4InputSource inputSource(&memBufIS,
+                                    false);  // don't adopt input source
+    doc = parser->parse(&inputSource);
+  } catch (const XMLException& toCatch) {
+    notify(NFY_WARN, "Unable to read XML: %s",
+           XMLString::transcode(toCatch.getMessage()));
+  } catch (const DOMException& toCatch) {
+    notify(NFY_WARN, "Unable to read XML: %s",
+           XMLString::transcode(toCatch.msg));
+  } catch (...) {
+    notify(NFY_WARN, "Unable to read XML");
   }
+  //}
   return doc;
 }
 
