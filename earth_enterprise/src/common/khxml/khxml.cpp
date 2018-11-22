@@ -43,32 +43,10 @@ class UsingXMLGuard
 {
   friend void InitializeXMLLibrary(bool) throw();
 
-  XMLSSize_t  initialDOMHeapAllocSize;
-    XMLSSize_t  maxDOMHeapAllocSize;
-    XMLSSize_t  maxDOMSubAllocationSize;
   UsingXMLGuard(void) throw()
   {
-      // file subject to change
-      std::string fn("~/xerces_init_defaults.txt");
-         try {
-             std::ifstream file;
-             file.exceptions(std::ifstream::failbit);
-             file.open(fn.c_str());
-             file >> initialDOMHeapAllocSize
-                  >> maxDOMHeapAllocSize
-                  >> maxDOMSubAllocationSize;
-             file.close();
-         } catch (std::ifstream::failure &readError) {
-             initialDOMHeapAllocSize = 0x4000;
-             maxDOMHeapAllocSize = 0x20000;
-             maxDOMSubAllocationSize = 0x1000;
-             notify(NFY_WARN,"xerces heap defaults file %s not found!",
-                    fn.c_str());
-         }
    try {
-      XMLPlatformUtils::Initialize(/*MiscConfig::Instance().*/initialDOMHeapAllocSize,
-                                   /*MiscConfig::Instance().*/maxDOMHeapAllocSize,
-                                   /*MiscConfig::Instance().*/maxDOMSubAllocationSize);
+      XMLPlatformUtils::Initialize();
     } catch(const XMLException& toCatch) {
       notify(NFY_FATAL, "Unable to initialize Xerces: %s",
              FromXMLStr(toCatch.getMessage()).c_str());
@@ -81,6 +59,7 @@ class UsingXMLGuard
     } catch (...) {
     }
   }
+
 
 //  ------------------------------------------------------------------
 //  From: https://xml.apache.org/xerces-c-new/faq-parse.html#faq-4
@@ -115,9 +94,7 @@ class UsingXMLGuard
                    FromXMLStr(toCatch.getMessage()).c_str());
         }
         try {
-            XMLPlatformUtils::Initialize(/*MiscConfig::Instance().*/initialDOMHeapAllocSize,
-                                         /*MiscConfig::Instance().*/maxDOMHeapAllocSize,
-                                         /*MiscConfig::Instance().*/maxDOMSubAllocationSize);
+            XMLPlatformUtils::Initialize();
         } catch (const XMLException& toCatch) {
             notify(NFY_FATAL,"Unable to ReInitialize Xerces: %s",
                    FromXMLStr(toCatch.getMessage()).c_str());
@@ -128,8 +105,6 @@ class UsingXMLGuard
 };
 
 static khMutexBase xmlLibLock = KH_MUTEX_BASE_INITIALIZER;
-static khMutexBase reInitOuterLock = KH_MUTEX_BASE_INITIALIZER;
-static khMutexBase reInitInnerLock = kH_MUTEX_BASE_RECURSIVE;
 
 void InitializeXMLLibrary(bool reinit=false) throw()
 {
@@ -155,8 +130,6 @@ void InitializeXMLLibrary(bool reinit=false) throw()
 
 void ReInitializeXMLLibrary(int sig) throw()
 {
-    khLockGuard outer(reInitOuterLock);
-    khLockGuard inner(reInitInnerLock);
     InitializeXMLLibrary(true);
 }
 
@@ -164,24 +137,19 @@ void ReInitializeXMLLibrary(int sig) throw()
 DOMDocument *
 CreateEmptyDocument(const std::string &rootTagname) throw()
 {
-  //khLockGuard outer(reInitOuterLock);
-  //{
-  //khLockGuard inner(reInitInnerLock);
   InitializeXMLLibrary();
 
   try {
     DOMImplementation* impl =
     DOMImplementationRegistry::getDOMImplementation(0);
 
-    DOMDocument* doc =
-    impl->createDocument( 0,// root element namespace URI.
-                          ToXMLStr(rootTagname),// root element name
-                          0);// document type object (DTD)
-   return doc;
+    DOMDocument* doc = impl->createDocument(0,// root element namespace URI.
+                                            ToXMLStr(rootTagname),// root element name
+                                            0);// document type object (DTD)
+    return doc;
    } catch (...) {
      return 0;
    }
-  //}
 }
 
 namespace {
@@ -195,7 +163,7 @@ WriteDocumentImpl(DOMDocument *doc, const std::string &filename) throw()
   try {
     // "LS" -> Load/Save extensions
     DOMImplementationLS* impl = (DOMImplementationLS*)
-                                DOMImplementationRegistry::getDOMImplementation(ToXMLStr("LS"));
+                                 DOMImplementationRegistry::getDOMImplementation(ToXMLStr("LS"));
 
     DOMLSSerializer* writer = impl->createLSSerializer();
 
@@ -254,10 +222,8 @@ WriteDocumentImpl(DOMDocument *doc, const std::string &filename) throw()
 bool
 WriteDocument(DOMDocument *doc, const std::string &filename) throw()
 {
-  //khLockGuard outer(reInitOuterLock);
   bool retval = true;
-  //{
-  //khLockGuard inner(reInitInnerLock);
+
   static const std::string newext = ".new";
   static const std::string backupext = ".old";
   const std::string newname = filename + newext;
@@ -274,7 +240,6 @@ WriteDocument(DOMDocument *doc, const std::string &filename) throw()
     notify(NFY_VERBOSE,"WriteDocument() backupname %s exists", backupname.c_str());
     (void) khUnlink(backupname);
   }
-  //}
   return retval;
 }
 
@@ -284,10 +249,7 @@ WriteDocument(DOMDocument *doc, const std::string &filename) throw()
 bool
 WriteDocumentToString(DOMDocument *doc, std::string &buf) throw()
 {
-  //khLockGuard outer(reInitOuterLock);
   bool success = false;
-  //{
-  //khLockGuard inner(reInitInnerLock);
   InitializeXMLLibrary();
 
   try {
@@ -338,7 +300,6 @@ WriteDocumentToString(DOMDocument *doc, std::string &buf) throw()
   return success;
 }
 
-// eventually lock parser from creation to destruction
 khxml::DOMLSParser*
 CreateDOMParser(void) throw()
 {
@@ -379,17 +340,13 @@ CreateDOMParser(void) throw()
 khxml::DOMDocument*
 ReadDocument(khxml::DOMLSParser *parser, const std::string &filename) throw()
 {
-  //khLockGuard outer(reInitOuterLock);
+
   DOMDocument* doc = nullptr;
-  //{
-  //khLockGuard inner(reInitInnerLock);
 
   try {
     // Note: parseURI doesn't handle missing files nicely...returns
     // invalid doc object. Must check file existence ourselves.
     if (khExists(filename)) {
-        notify(NFY_NOTICE,"ReadDocument, filename: %s",
-               filename.c_str());
          doc = parser->parseURI(filename.c_str());
     } else {
       notify(NFY_WARN, "XML file does not exist: %s", filename.c_str());
@@ -403,7 +360,6 @@ ReadDocument(khxml::DOMLSParser *parser, const std::string &filename) throw()
   } catch (...) {
     notify(NFY_WARN, "Unable to read XML");
   }
-  //}
   return doc;
 }
 
@@ -412,10 +368,7 @@ ReadDocumentFromString(khxml::DOMLSParser *parser,
                        const std::string &buf,
                        const std::string &ref) throw()
 {
-  //khLockGuard outer(reInitOuterLock);
   DOMDocument *doc = nullptr;
-  //{
-  //khLockGuard inner(reInitInnerLock);
 
   try {
     MemBufInputSource memBufIS(
@@ -435,7 +388,6 @@ ReadDocumentFromString(khxml::DOMLSParser *parser,
   } catch (...) {
     notify(NFY_WARN, "Unable to read XML");
   }
-  //}
   return doc;
 }
 

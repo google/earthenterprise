@@ -243,8 +243,6 @@ khResourceManager::InsertProvider(khResourceProviderProxy *proxy)
   // instantiate the Volumes that this provider will manage
   std::vector<std::string> volnames;
   GetHostVolumes(host, volnames);
-  //for (std::vector<std::string>::const_iterator vn = volnames.begin();
-  //     vn != volnames.end(); ++vn) {
   for (const auto& vn : volnames) {
         if (volumes.find(vn) != volumes.end())
         {
@@ -268,14 +266,14 @@ khResourceManager::EraseProvider(khResourceProviderProxy *proxy)
   // remove the Volumes that this provider used to manage
   std::vector<std::string> volnames;
   GetHostVolumes(host, volnames);
-  //for (std::vector<std::string>::const_iterator vn = volnames.begin();
-  //     vn != volnames.end(); ++vn) {
   for (const auto& vn : volnames) {
     delete volumes[vn];
     volumes.erase(vn);
   }
   if (volumes.empty())
+  {
       volumes.clear();
+  }
 }
 
 
@@ -425,6 +423,13 @@ khResourceManager::TryActivate(void) throw()
       }
     }
 
+    for (const auto& p : providers)
+    {
+        if (p.second->usedCPUs < p.second->numCPUs)
+        {
+            availProviders.insert(p);
+        }
+    }
     notify(NFY_DEBUG, "     avail providers = %lu",
            static_cast<long unsigned>(availProviders.size()));
     if (availProviders.size() != 0) {
