@@ -22,6 +22,7 @@
 #include <khThread.h>
 #include <khFileUtils.h>
 #include "khxml.h"
+#include <fstream>
 #include "khdom.h"
 
 using namespace khxml;
@@ -42,9 +43,34 @@ class UsingXMLGuard
 {
   friend void InitializeXMLLibrary(void) throw();
 
+  XMLSSize_t  initialDOMHeapAllocSize;
+  XMLSSize_t  maxDOMHeapAllocSize;
+  XMLSSize_t  maxDOMSubAllocationSize;
+
   UsingXMLGuard(void) throw() {
+    // can change this to anything, just using this for convenience
+    // format is:
+    // <initialDOMHeapAllocSize> <maxDOMHeapAllocSize> <maxDOMSubAllocationSize"
+    std::string fn("~/xerces_init_params.ini");
     try {
-      XMLPlatformUtils::Initialize();
+      std::ifstream file;
+      file.exceptions(std::ifstream::failbit);
+      file.open(fn.c_str());
+      file >> initialDOMHeapAllocSize
+           >> maxDOMHeapAllocSize
+           >> maxDOMSubAllocationSize;
+      file.close();
+    } catch (std::ifstream::failure &readError) {
+      // these are the default values for XMLPlatformUtils::Initialize()
+      // if they are not passed in
+      initialDOMHeapAllocSize = 16384; // 0x4000 hex
+      maxDOMHeapAllocSize = 131072;    // 0x20000 hex
+      maxDOMSubAllocationSize = 4096;  // 0x1000 hex
+    }
+    try {
+      XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
+                                   maxDOMHeapAllocSize,
+                                   maxDOMSubAllocationSize);
     } catch(const XMLException& toCatch) {
       notify(NFY_FATAL, "Unable to initialize Xerces: %s",
              FromXMLStr(toCatch.getMessage()).c_str());
