@@ -21,6 +21,10 @@
 
 // declare base class for XML operations
 class khXMLOperation;
+class khXMLWriteToFile;
+class khXMLWriteToString;
+class khXMLReadFromFile;
+class khXMLReadFromString;
 
 class khXML
 {
