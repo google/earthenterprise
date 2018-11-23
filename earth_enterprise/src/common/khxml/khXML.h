@@ -37,7 +37,7 @@ public:
     return _instance;
   }
 	
-  static bool doOp(unique_ptr<khXMLOperation>);
+  static bool doOp(std::unique_ptr<khXMLOperation>);
 };
 
 #endif
