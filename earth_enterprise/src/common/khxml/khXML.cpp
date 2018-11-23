@@ -1,3 +1,19 @@
+/*
+ * Copyright 2018 the OpenGEE Contributors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 #include "khXML.h"
 #include <string>
 #include <thread>
@@ -5,63 +21,42 @@
 
 static khMutexBase xmlLibLock = KH_MUTEX_BASE_INITIALIZER;
 
-bool khXML::doOp(unique_ptr<khXMLOperation> op)
+bool khXML::doOp(shared_ptr<khXMLOperation> op) throw()
 {
   khLockGuard guard(xmlLibLock);
   return op->op();
 }
 
-class khXMLOperation
+
+bool khXMLWriteToFile::op(const std::string& filename) throw()
 {
-  khXMLOperation(const khXMLOperation&) = delete;
-  khXMLOperation(khXMLOperation&&) = delete;
-  khXMLOperation& khXMLOperation(const khXMLOperation&) = delete;
-  khXMLOperation& khXMLOperation(khXMLOperation&&) = delete;
+}
 
-protected:
-   
-
-public:
-  khXMLOperation()
-  {
-    XMLPlatformUtils::Initialize();
-  }
-
-  virtual ~khXMLOperation()
-  {
-    khXMLOperation::Terminate();
-  }
-
-  virtual bool op();
-};
-
-class khXMLWriteToFile : public khXMLOperation
+bool khXMLWriteToFile::op(const std::string& filename, const std::string& unused) throw()
 {
+	// use of buffer is not allowed here
+}
 
-public:
-  khXMLWriteToFile() : khXMLOperation()
-  {}
-};
+bool khXMLWriteToString::op(const std::string& filename, const std::string& buffer) throw()
+{}
 
-class khXMLWriteToString : public khXMLOperation
+bool khXMLWriteToString::op(const std::string& filename) throw()
 {
-public:
-  khXMLWriteToString() : khXMLOperation()
-  {}
-};
+	// buffer is necessary here
+}
 
-class khXMLReadFromFile : public khXMLOperation
+bool khXMLReadFromFile::op(const std::string& filename) throw()
+{}
+
+bool khXMLReadFromFile::op(const std::string& filename, const std::string& buffer) throw()
 {
-public:
-  khXMLReadFromFile() : khXMLOperation()
-  {}
-};
+	// use of buffer is not allowed here
+}
 
-class khXMLReadFromString : public khXMLOperation
+bool khXMLReadFromString::op(const std::string& filename, const std::string& buffer) throw()
+{}
+
+bool khXMLReadFromString::op(const std::string& filename) throw()
 {
-public:
-  khXMLReadFromString() : khXMLOperation()
-  {}
-};
-
- 
+	// buffer is nessary here
+} 

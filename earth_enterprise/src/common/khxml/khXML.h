@@ -20,11 +20,90 @@
 #include <memory>
 
 // declare base class for XML operations
-class khXMLOperation;
-class khXMLWriteToFile;
-class khXMLWriteToString;
-class khXMLReadFromFile;
-class khXMLReadFromString;
+class khXMLOperation
+{
+  khXMLOperation(const khXMLOperation&) = delete;
+  khXMLOperation(khXMLOperation&&) = delete;
+  khXMLOperation& khXMLOperation(const khXMLOperation&) = delete;
+  khXMLOperation& khXMLOperation(khXMLOperation&&) = delete;
+
+protected:
+  std::unique_ptr<DOMDocument> doc;
+  std::unique_ptr<DOMLSParser> parser; 
+
+public:
+  khXMLOperation() 
+  { 
+    XMLPlatformUtils::Initialize();
+    unique_ptr<DOMImplementation> impl(std::move(reinterpret_cast<DOMImplementation*>
+                                  (DOMImplementationRegistry::getDOMImplementation(0))));
+  }
+
+  virtual ~khXMLOperation()
+  {
+    try
+    {
+      doc->release();
+    } 
+    catch (...) {}
+    try
+    {
+      parser->release();
+    }
+    catch (...) {}
+    khXMLOperation::Terminate(); 
+  }
+
+  virtual bool op(const std::string&) throw() = 0;
+  virtual bool op(const std::string&, const std::string&) throw();
+};
+
+class khXMLWriteToFile : public khXMLOperation
+{
+private:
+  std::unique_ptr<DOMLSSerializer> writer;
+public:
+  khXMLWriteToFile() : khXMLOperation()
+  {
+
+  }
+
+  bool op(cons std::string&) throw();
+  bool op(const std::string&, const std::string&) throw();
+};
+
+class khXMLWriteToString : public khXMLOperation
+{
+private:
+  std::unique_ptr<DOMLSSerializer> writer;
+public:
+  khXMLWriteToString() : khXMLOperation()
+  {
+  }
+ 
+  bool op(const std::string&, const std::string&) throw();
+  bool op(const std::string&) throw();
+};
+
+class khXMLReadFromFile : public khXMLOperation
+{
+public:
+  khXMLReadFromFile() : khXMLOperation()
+  {}
+
+  bool op(const std::string&, const std::string&) throw();
+  bool op(const std::string&) throw();
+};
+
+class khXMLReadFromString : public khXMLOperation
+{
+public:
+  khXMLReadFromString() : khXMLOperation()
+  {}
+
+  vool op(const std::string&) throw();
+  bool op(const std::string&, const std::string&) throw();
+};
 
 class khXML
 {
@@ -41,7 +120,7 @@ public:
     return _instance;
   }
 	
-  static bool doOp(std::unique_ptr<khXMLOperation>);
+  static bool doOp(std::unique_ptr<khXMLOperation>) throw();
 };
 
 #endif
