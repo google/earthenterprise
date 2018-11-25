@@ -28,35 +28,18 @@ bool khXML::doOp(shared_ptr<khXMLOperation> op) throw()
 }
 
 
-bool khXMLWriteToFile::op(const std::string& filename) throw()
+bool khXMLWriteToFile::op() throw()
 {
 }
 
-bool khXMLWriteToFile::op(const std::string& filename, const std::string& unused) throw()
+bool khXMLWriteToString::op() throw()
 {
-	// use of buffer is not allowed here
 }
 
-bool khXMLWriteToString::op(const std::string& filename, const std::string& buffer) throw()
-{}
-
-bool khXMLWriteToString::op(const std::string& filename) throw()
+bool khXMLReadFromFile::op() throw()
 {
-	// buffer is necessary here
 }
 
-bool khXMLReadFromFile::op(const std::string& filename) throw()
-{}
-
-bool khXMLReadFromFile::op(const std::string& filename, const std::string& buffer) throw()
+bool khXMLReadFromString::op() throw()
 {
-	// use of buffer is not allowed here
-}
-
-bool khXMLReadFromString::op(const std::string& filename, const std::string& buffer) throw()
-{}
-
-bool khXMLReadFromString::op(const std::string& filename) throw()
-{
-	// buffer is nessary here
 } 
