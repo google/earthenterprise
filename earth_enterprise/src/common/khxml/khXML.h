@@ -54,55 +54,71 @@ public:
     khXMLOperation::Terminate(); 
   }
 
-  virtual bool op(const std::string&) throw() = 0;
-  virtual bool op(const std::string&, const std::string&) throw();
+  virtual bool op() throw() = 0;
 };
 
 class khXMLWriteToFile : public khXMLOperation
 {
 private:
   std::unique_ptr<DOMLSSerializer> writer;
+  khXMLWriteToFile() = delete;
+  std::string filename;
+
 public:
-  khXMLWriteToFile() : khXMLOperation()
-  {
-
+  khXMLWriteToFile(std::string _filename) : khXMLOperation() 
+  { 
+    filename = std::move(_filename); 
   }
+  
 
-  bool op(cons std::string&) throw();
-  bool op(const std::string&, const std::string&) throw();
+  bool op() throw();
 };
 
 class khXMLWriteToString : public khXMLOperation
 {
 private:
   std::unique_ptr<DOMLSSerializer> writer;
+  std::string filename;
+  std::string buffer;
+  khXMLWriteToString() = delete;
 public:
-  khXMLWriteToString() : khXMLOperation()
+  khXMLWriteToString(std::string _filename, std::string _buffer) : khXMLOperation()
   {
+    filename = std::move(_filename);
+    buffer = std::move(_buffer);
   }
  
-  bool op(const std::string&, const std::string&) throw();
-  bool op(const std::string&) throw();
+  bool op() throw();
 };
 
 class khXMLReadFromFile : public khXMLOperation
 {
+private:
+  khXMLReadFromFile() = delete;
+  std::string filename;
 public:
-  khXMLReadFromFile() : khXMLOperation()
-  {}
+  khXMLReadFromFile(std::string _filename) : khXMLOperation()
+  {
+    filename = std::move(_filename);
+  }
 
-  bool op(const std::string&, const std::string&) throw();
-  bool op(const std::string&) throw();
+  bool op() throw();
 };
 
 class khXMLReadFromString : public khXMLOperation
 {
+private:
+  khXMLReadFromString() = delete;
+  std::string filename;
+  std::string buffer;
 public:
-  khXMLReadFromString() : khXMLOperation()
-  {}
+  khXMLReadFromString(std::string _filename, std::string _buffer) : khXMLOperation()
+  {
+    filename = std::move(_filename);
+    buffer = std::move(_buffer);
+  }
 
-  vool op(const std::string&) throw();
-  bool op(const std::string&, const std::string&) throw();
+  bool op() throw();
 };
 
 class khXML
