@@ -22,7 +22,14 @@
 #include "notify.h"
 using namespace khxml;
 
-
+enum class khXMLOperationType : uint8_t
+{
+    KH_XML_READ_FILE = 0,
+    KH_XML_READ_STRING = 1,
+    KH_XML_WRITE_FILE = 2,
+    KH_XML_WRITE_STRING = 3,
+    DEFAULT = KH_XML_READ_FILE
+};
 // declare base class for XML operations
 class khXMLOperation
 {
@@ -64,8 +71,14 @@ public:
     khXMLOperation::Terminate(); 
   }
 
-  virtual bool op() throw() = 0;
-};
+  // declare list of operations to be  virtual
+  virtual bool op(std::string, std::string&) throw(); //write to string
+  virtual bool op(std::string) throw(); //read/write to file
+  virtual bool op(std::string,const std::string&) throw(); //read from string
+
+  virtual
+
+ }
 
 
 class khXMLWriteToFile : public khXMLOperation
