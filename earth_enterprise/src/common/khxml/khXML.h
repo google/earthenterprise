@@ -18,6 +18,10 @@
 #define KHXML_H
 
 #include <memory>
+#include "khdom.h"
+#include "notify.h"
+using namespace khxml;
+
 
 // declare base class for XML operations
 class khXMLOperation
@@ -32,11 +36,17 @@ protected:
   std::unique_ptr<DOMLSParser> parser; 
 
 public:
-  khXMLOperation() 
-  { 
-    XMLPlatformUtils::Initialize();
-    unique_ptr<DOMImplementation> impl(std::move(reinterpret_cast<DOMImplementation*>
-                                  (DOMImplementationRegistry::getDOMImplementation(0))));
+  khXMLOperation() throw()
+  {
+    try {
+      XMLPlatformUtils::Initialize();
+      unique_ptr<DOMImplementation> impl(std::move(reinterpret_cast<DOMImplementation*>
+                                        (DOMImplementationRegistry::getDOMImplementation(0))));
+
+      } catch (const XMLException& e) {
+        notify(NFY_FATAL, "Unable to initialize Xerces: %s",
+               FromXMLStr(e.getMessage()).c_str());
+      }
   }
 
   virtual ~khXMLOperation()
@@ -56,6 +66,7 @@ public:
 
   virtual bool op() throw() = 0;
 };
+
 
 class khXMLWriteToFile : public khXMLOperation
 {
@@ -136,7 +147,7 @@ public:
     return _instance;
   }
 	
-  static bool doOp(std::unique_ptr<khXMLOperation>) throw();
+  static bool doOp(std::shared__ptr<khXMLOperation>) throw();
 };
 
 #endif
