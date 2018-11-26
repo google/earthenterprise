@@ -17,6 +17,8 @@
 #include <khConstants.h>
 #include <khGetopt.h>
 #include <khFileUtils.h>
+#include <khTileAddr.h>
+#include <khException.h>
 #include <autoingest/.idl/storage/AssetDefs.h>
 #include <autoingest/khAssetManagerProxy.h>
 #include <autoingest/plugins/RasterProjectAsset.h>
@@ -36,7 +38,7 @@ usage(const std::string &progn, const char *msg = 0, ...)
   }
 
   fprintf(stderr,
-          "\nusage: %s [options] -o <projectname> {[--maxlevel <level>] "
+          "\nusage: %s [options] -o <projectname> {[--maxleveloverride <level>] "
           "<insetresource>}...\n"
           "   Supported options are:\n"
           "      --help | -?:      Display this usage message\n"
@@ -47,7 +49,8 @@ usage(const std::string &progn, const char *msg = 0, ...)
           "      --no_historical_imagery : make this a normal project\n"
           "                         (i.e., not a historical imagery project)\n"
           "   By default, new projects are NOT time machine projects"
-          " unless --historical_imagery is specified.\n",
+          " unless --historical_imagery is specified.\n"
+          "      --maxleveloverride <level> : Set the max level for a resource.\n",
           progn.c_str());
   exit(1);
 }
@@ -72,6 +75,7 @@ main(int argc, char *argv[]) {
     bool enable_historical_imagery = false;
     bool disable_historical_imagery = false;
     uint peergroup = 0;
+    uint overridemax_deprecated = 0;
     uint overridemax = 0;
 
     RasterProjectModifyRequest req(AssetType);
@@ -85,7 +89,8 @@ main(int argc, char *argv[]) {
     options.setExclusive("flat", "mercator");
     options.opt("output", req.assetname);
     options.opt("peergroup", peergroup);
-    options.opt("maxlevel", overridemax);
+    options.opt("maxlevel", overridemax_deprecated);
+    options.opt("maxleveloverride", overridemax);
     options.opt("historical_imagery", enable_historical_imagery);
     options.opt("no_historical_imagery", disable_historical_imagery);
 
@@ -104,6 +109,27 @@ main(int argc, char *argv[]) {
     }
     if (help) {
       usage(progname);
+    }
+    
+    if (overridemax && overridemax_deprecated) {
+      throw khException("Cannot use maxlevel and maxleveloverride together, " 
+                       "maxlevel is deprecated.\n");
+    }
+
+    if (overridemax) {
+      if (AssetType == AssetDefs::Imagery) {
+        overridemax = ImageryToProductLevel(overridemax);
+      }
+      else {
+        overridemax = TmeshToProductLevel(overridemax);
+      }
+    }
+    
+    if (overridemax_deprecated) {
+      overridemax = overridemax_deprecated;
+      notify(NFY_WARN, "--maxlevel is deprecated, please use --maxleveloverride. "
+		      "To move to the new command, subtract 8 from the level for imagery, and "
+		      "subtract 5 from the level for terrain.");
     }
 
     // Default to flat unless mercator imagery is specified.
