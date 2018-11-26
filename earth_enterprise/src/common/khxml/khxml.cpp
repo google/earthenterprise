@@ -59,7 +59,7 @@ class UsingXMLGuard
     } catch (...) {
     }
   }
-
+};
 
 static khMutexBase xmlLibLock = KH_MUTEX_BASE_INITIALIZER;
 
