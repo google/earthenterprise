@@ -41,7 +41,7 @@ ListElementTagName(const std::string &tagname)
 // This is used only in the following function
 class UsingXMLGuard
 {
-  friend void InitializeXMLLibrary(bool) throw();
+  friend void InitializeXMLLibrary() throw();
 
   UsingXMLGuard(void) throw()
   {
@@ -61,76 +61,12 @@ class UsingXMLGuard
   }
 
 
-//  ------------------------------------------------------------------
-//  From: https://xml.apache.org/xerces-c-new/faq-parse.html#faq-4
-//
-//  Is it OK to call the XMLPlatformUtils::Initialize/Terminate pair
-//  of routines multiple times in one program?
-//
-//  Yes. Since Xerces-C++ 1.5.2, the code has been enhanced so that
-//  calling XMLPlatformUtils::Initialize/Terminate pair of routines
-//  multiple times in one process is now allowed.
-//
-//  But the application needs to guarantee that only one thread has
-//  entered either the method XMLPlatformUtils::Initialize() or the
-//  method XMLPlatformUtils::Terminate() at any one time.
-//
-//  If you are calling XMLPlatformUtils::Initialize() a number of
-//  times, and then follow with XMLPlatformUtils::Terminate() the same
-//  number of times, only the first XMLPlatformUtils::Initialize() will
-//  do the initialization, and only the last XMLPlatformUtils::Terminate()
-//  will clean up the memory. The other calls are ignored.
-//
-//  To ensure all the memory held by the parser are freed, the number of
-//  XMLPlatformUtils::Terminate() calls should match the number
-//  of XMLPlatformUtils::Initialize() calls.
-//  -------------------------------------------------------------------
-    void ReInitXerces(void) throw()
-    {
-        try {
-            XMLPlatformUtils::Terminate();
-        } catch (const XMLException& toCatch) {
-            notify(NFY_FATAL,"Unable to Terminate and ReInitialize Xerces: %s",
-                   FromXMLStr(toCatch.getMessage()).c_str());
-        }
-        try {
-            XMLPlatformUtils::Initialize();
-        } catch (const XMLException& toCatch) {
-            notify(NFY_FATAL,"Unable to ReInitialize Xerces: %s",
-                   FromXMLStr(toCatch.getMessage()).c_str());
-        }
-       notify(NFY_NOTICE,"successful xerces reinit...");
-    }
-
-};
-
 static khMutexBase xmlLibLock = KH_MUTEX_BASE_INITIALIZER;
 
-void InitializeXMLLibrary(bool reinit=false) throw()
+void InitializeXMLLibrary() throw()
 {
   khLockGuard guard(xmlLibLock);
   static UsingXMLGuard XMLLibGuard;
-  if (reinit) XMLLibGuard.ReInitXerces();
-}
-
-// Logic:
-//
-// $ kill -1 <PID>
-//
-// 1. ReInitializeXMLLibrary declared to handle SIGHUP signal in
-//    UsingXMLGuard::UsingXMLGuard
-// 2. ReInitializeXMLLibrary handles this signal and calls
-//    InitializeXMLLibrary, and uses a flag to signify reinit
-// 3. InitializeXMLLibrary has the lock and calls UsingXMLGuard::ReInitXerces
-//    which calls XMLPlatformUtils::Terminate, then Initialize
-//
-// Currently, reads intermittently cause segfaults. This will be handled
-// in the final form by guards on individual parser creation methods within
-// the main xerces wrapper class. Code remains, but commented out to get an idea
-
-void ReInitializeXMLLibrary(int sig) throw()
-{
-    InitializeXMLLibrary(true);
 }
 
 
@@ -296,7 +232,6 @@ WriteDocumentToString(DOMDocument *doc, std::string &buf) throw()
       } catch (...) {
         notify(NFY_WARN, "Unable to create DOM writer: Unknown exception");
       }
-  //}
   return success;
 }
 

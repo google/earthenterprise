@@ -84,9 +84,6 @@ void systemrc_reload(int signum)
   notify(NFY_WARN, "system log level changed to: %s",
           khNotifyLevelToString(static_cast<khNotifyLevel>(logLevel)).c_str());
   setNotifyLevel(static_cast<khNotifyLevel>(logLevel));
-  // triggering XMLPlatformUtils::Terminate() causes intermittent segfailts
-  // call remains but commented out in order to give an idea
-  //ReInitializeXMLLibrary(signum);
 }
 
 void handleExitSignals(int signum)
