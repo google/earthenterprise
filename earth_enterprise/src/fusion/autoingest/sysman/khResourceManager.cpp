@@ -415,13 +415,6 @@ khResourceManager::TryActivate(void) throw()
       taskWaitingQueue.size() &&
       providers.size()) {
     // figure out which providers have CPU resources to spare
-    Providers availProviders;
-    for (Providers::iterator p = providers.begin();
-         p != providers.end(); ++p) {
-      if (p->second->usedCPUs < p->second->numCPUs) {
-        availProviders.insert(*p);
-      }
-    }
 
     for (const auto& p : providers)
     {
