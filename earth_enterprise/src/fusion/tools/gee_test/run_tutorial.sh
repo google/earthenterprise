@@ -1,6 +1,7 @@
 #!/bin/bash -eu
 #
 # Copyright 2017 Google Inc.
+# Copyright 2018 Open GEE Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -135,7 +136,11 @@ sudo /etc/init.d/geserver restart
 
 /opt/google/bin/genewmapdatabase --mercator -o Tutorial/Databases/SF_2d_Merc --imagery Tutorial/Projects/Imagery/SFBayArea_merc --map Tutorial/Projects/Maps/CAProjects
 
+/opt/google/bin/genewmapdatabase --mercator -o Tutorial/Databases/SF_2d_Merc_With_Flat_Imagery --imagery Tutorial/Projects/Imagery/SFBayArea --map Tutorial/Projects/Maps/CAProjects
+
 /opt/google/bin/gebuild Tutorial/Databases/SF_2d_Merc
+
+/opt/google/bin/gebuild Tutorial/Databases/SF_2d_Merc_With_Flat_Imagery
 
 set +x
 
@@ -156,3 +161,4 @@ echo " The same for all other databases..."
 /opt/google/bin/gequery Tutorial/Databases/SFDb_3d --status
 /opt/google/bin/gequery Tutorial/Databases/SFDb_3d_TM --status
 /opt/google/bin/gequery Tutorial/Databases/SF_2d_Merc --status
+/opt/google/bin/gequery Tutorial/Databases/SF_2d_Merc_With_Flat_Imagery --status

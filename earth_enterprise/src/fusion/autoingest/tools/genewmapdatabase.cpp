@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2018 the Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -97,12 +98,29 @@ main(int argc, char *argv[]) {
         req.assetname, AssetDefs::Database,
         mercator ? kMercatorMapDatabaseSubtype : kMapDatabaseSubtype);
 
+    // If the database is mercator, prioritize mercator imagery projects if
+    // there is a naming collision. Flat databases can only use flat imagery
+    // projects.
     if (req.config.imageryProject.size()) {
-      req.config.imageryProject =
-        AssetDefs::NormalizeAssetName(
-            req.config.imageryProject, AssetDefs::Imagery,
-            mercator ? kMercatorProjectSubtype : kProjectSubtype);
+      if (mercator) {
+        req.config.imageryProject =
+          AssetDefs::NormalizeAssetName(
+              req.config.imageryProject, AssetDefs::Imagery,
+              kMercatorProjectSubtype);
+        if (!khDirExists(AssetDefs::AssetPathToFilename(req.config.imageryProject))) {
+          req.config.imageryProject =
+            AssetDefs::NormalizeAssetName(
+                khDropExtension(req.config.imageryProject), AssetDefs::Imagery,
+                kProjectSubtype);
+        }
+      }
+      else {
+        req.config.imageryProject =
+          AssetDefs::NormalizeAssetName(
+              req.config.imageryProject, AssetDefs::Imagery, kProjectSubtype);
+      }
     }
+
     if (req.config.mapProject.size()) {
       req.config.mapProject =
         AssetDefs::NormalizeAssetName(req.config.mapProject,

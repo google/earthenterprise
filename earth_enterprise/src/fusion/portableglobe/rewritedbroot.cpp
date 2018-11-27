@@ -163,6 +163,20 @@ void ReplaceSearchServer(const std::string &search_service,
 }
 
 /**
+ * Removes the reference to the server that the dbroot references for 
+ * historical imagery.
+ * @param dbroot geProtoDbroot to be modified
+ */
+void DisableTimeMachine(geProtoDbroot *dbroot) {
+  assert(dbroot); 
+  keyhole::dbroot::EndSnippetProto* end_snippet =
+      dbroot->mutable_end_snippet();
+  keyhole::dbroot::TimeMachineOptionsProto* time_machine_options =
+      end_snippet->mutable_time_machine_options(); 
+  time_machine_options->set_server_url("");
+}
+
+/**
  * Replaces server and port in kml references with the given server and port.
  * It also saves the old kml references so that these can be pulled into
  * local files.

@@ -26,7 +26,7 @@ import os.path
 import sys
 import time
 from datetime import datetime
-from getversion import GetVersion, GetLongVersion
+from getversion import open_gee_version
 import SCons
 from SCons.Environment import Environment
 
@@ -187,11 +187,11 @@ def EmitBuildDateStrfunc(target, build_date):
   return 'EmitBuildDate(%s, %s)' % (target, build_date)
 
 
-def EmitVersionHeaderFunc(target, backupFile):
+def EmitVersionHeaderFunc(target):
   """Emit version information to the target file."""
 
-  versionStr = GetVersion(backupFile)
-  longVersionStr = GetLongVersion(backupFile)
+  versionStr = open_gee_version.get_short()
+  longVersionStr = open_gee_version.get_long()
 
   fp = open(target, 'w')
   fp.writelines(['// DO NOT MODIFY - auto-generated file\n',
@@ -203,38 +203,38 @@ def EmitVersionHeaderFunc(target, backupFile):
   fp.close()
 
 
-def EmitVersionHeaderStrfunc(target, backupFile):
-  return 'EmitVersionHeader(%s, %s)' % (target, backupFile)
+def EmitVersionHeaderStrfunc(target):
+  return 'EmitVersionHeader(%s)' % (target,)
   
 
-def EmitVersionFunc(target, backupFile):
+def EmitVersionFunc(target):
   """Emit version information to the target file."""
 
-  versionStr = GetVersion(backupFile)
-
-  with open(target, 'w') as fp:
-    fp.write(versionStr)
-  
-  with open(backupFile, 'w') as fp:
-    fp.write(versionStr)
-
-
-def EmitVersionStrfunc(target, backupFile):
-  return 'EmitVersion(%s, %s)' % (target, backupFile)
-  
-  
-def EmitLongVersionFunc(target, backupFile, label):
-  """Emit version information to the target file."""
-
-  versionStr = GetLongVersion(backupFile, label)
+  versionStr = open_gee_version.get_short()
 
   with open(target, 'w') as fp:
     fp.write(versionStr)
 
+  with open(open_gee_version.backup_file, 'w') as fp:
+    fp.write(versionStr)
 
-def EmitLongVersionStrfunc(target, backupFile, label):
-  return 'EmitLongVersion(%s, %s, %s)' % (target, backupFile, label)
-  
+
+def EmitVersionStrfunc(target):
+  return 'EmitVersion(%s)' % (target,)
+
+
+def EmitLongVersionFunc(target):
+  """Emit version information to the target file."""
+
+  versionStr = open_gee_version.get_long()
+
+  with open(target, 'w') as fp:
+    fp.write(versionStr)
+
+
+def EmitLongVersionStrfunc(target):
+  return 'EmitLongVersion(%s)' % (target,)
+
 
 # our derived class
 class khEnvironment(Environment):
@@ -537,6 +537,9 @@ class khEnvironment(Environment):
     root_dir = self.exportdirs['root']
     shobj_suffix = self['SHOBJSUFFIX']
     return [root_dir + p + shobj_suffix for p in sources if p]
+
+  def get_open_gee_version(self):
+    return open_gee_version
 
 
 def ProtocolBufferGenerator(source, target, env, for_signature):
