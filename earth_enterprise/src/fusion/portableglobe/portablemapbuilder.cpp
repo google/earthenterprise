@@ -41,7 +41,6 @@
 #include "mttypes/DrainableQueue.h"
 #include "mttypes/WaitBaseManager.h"
 
-
 // TODO: Use Manas' technique for bundling packet requests.
 namespace fusion_portableglobe {
 
@@ -102,10 +101,6 @@ PortableMapBuilder::~PortableMapBuilder() {
  */
 void PortableMapBuilder::BuildMap() {
   num_image_packets = 0;
-  num_vector_packets = 0;
-  image_size = 0;
-  vector_size = 0;
-  total_size = 0;
 
   // Add writers for the different packet types.
   AddWriter(kMapDataDirectory);
@@ -115,6 +110,7 @@ void PortableMapBuilder::BuildMap() {
   std::vector<uint32> level_row(24);
   std::vector<uint32> level_col(24);
   int32 level = 0;
+  int32 max_level_traversed = 0;
   std::string qt_string = "";
   qt_char[level] = '0';
   level_row[level] = 1;
@@ -139,6 +135,9 @@ void PortableMapBuilder::BuildMap() {
       // Go to next qtnode at this level.
       qt_char[level] += 1;
     } else {
+      if (level > max_level_traversed) {
+        max_level_traversed = level;
+      }
       qt_string = qt_string.substr(0, level) + qt_char[level];
       // Note that we stop descending once we reach the first
       // missing packet, which is important since this cue
@@ -147,14 +146,17 @@ void PortableMapBuilder::BuildMap() {
       if (WriteMapPackets(qt_string, level,
                           level_col[level], level_row[level])) {
         ++num_image_packets;
-        ++level;
-        qt_char[level] = '0';
-        level_row[level] = (level_row[level - 1] << 1) + 1;
-        level_col[level] = level_col[level - 1] << 1;
 
-        if (level >= 24) {
-          std::cout << "Bad level" << std::endl;
-          exit(0);
+        if (level < 23) {
+          ++level;
+          qt_char[level] = '0';
+          level_row[level] = (level_row[level - 1] << 1) + 1;
+          level_col[level] = level_col[level - 1] << 1;
+        } else if (level == 23) {
+          qt_char[level] += 1;
+        } else {
+          std::cout << "Bad level (" << level << ")" << std::endl;
+          exit(1);
         }
       } else {
         qt_char[level] += 1;
@@ -173,6 +175,14 @@ void PortableMapBuilder::BuildMap() {
 
   // Finish up writing all of the packet bundles.
   DeleteWriter();
+
+  // The "+1" for max_level_traversed is because the code uses zero
+  // for the first level but the cutter page and most humans use one.
+  if (max_level_traversed+1 < max_level_) {
+    notify(NFY_WARN,
+      "Max level is %d but processing stopped at level %d.",
+      max_level_, max_level_traversed+1);
+  }
 }
 
 // TODO: Keep track of these as we go along rather than
@@ -360,7 +370,24 @@ bool PortableMapBuilder::WriteMapPackets(const std::string& qtpath_str,
                                            uint32 level,
                                            uint32 col,
                                            uint32 row) {
-  if (!KeepNode(qtpath_str)) {
+  #ifdef WRITE_MAP_PACKETS_OUTPUT
+  // The following debug output is formatted for use in a spreadsheet.
+  // It captures all calls to this function and indicates if the call
+  // will result in an HTTP request.
+  static bool first = true;
+  if (first) {
+    first = false;
+    std::cout << "request,qtpath,level(z),col(x),row(y),packet.size" << std::endl;
+  }
+  #endif
+  bool keep_node = KeepNode(qtpath_str);
+  #ifdef WRITE_MAP_PACKETS_OUTPUT
+  std::cout << (keep_node ? "true," : "false,") << qtpath_str << "," << level << "," << col << "," << row << ",";
+  #endif
+  if (!keep_node) {
+    #ifdef WRITE_MAP_PACKETS_OUTPUT
+    std::cout << "0" << std::endl;
+    #endif
     return false;
   }
 
@@ -378,6 +405,9 @@ bool PortableMapBuilder::WriteMapPackets(const std::string& qtpath_str,
     std::string url = url_str;
     std::string raw_packet;
     server_->GetRawPacket(url, &raw_packet);
+    #ifdef WRITE_MAP_PACKETS_OUTPUT
+    std::cout << raw_packet.size() << std::endl;
+    #endif
     uint32 packet_type = layers_[i]->type_id;
     if (raw_packet.size() > 0) {
       if (packet_type == kImagePacket) {

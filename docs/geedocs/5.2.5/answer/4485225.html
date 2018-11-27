@@ -384,14 +384,16 @@
   <h4>Usage</h4>
   <code><strong>gerewritedbroot</strong></code> <code>--source=<em>server_name</em> --icon_directory=<em>directory</em><br/>
     --dbroot_file=<em>filename</em>  --kml_map_file=<em>filename</em><br/>
-    [--search_service=<em>search_service_url</em>] [--kml_server=<em>server_name]</em><br/>
-    [--kml_port=<em>num]</em> [--kml_url_path=<em>prefix]</em> [--use_ssl_for_kml=<em>bool</em>] [--preserve_kml_filenames]</code>
+    [--search_service=<em>search_service_url</em>] [--preserve_search_service] [--kml_server=<em>server_name]</em><br/>
+    [--kml_port=<em>num]</em> [--kml_url_path=<em>prefix]</em> [--use_ssl_for_kml=<em>bool</em>] 
+    [--preserve_kml_filenames] [--disable_historical]</code>
   <h4>Description</h4>
   <ul>
     <li>Reads dbRoot and rewrites the search tabs so that they point to the given search server, port and path.</li>
     <li>Optionally creates a directory of all of the icons referred to by the dbroot. </li>
     <li>Optionally updates the host, path and/or filenames in KML Layer URLs in the dbRoot. </li>
     <li>Optionally creates a text file that lists the mapping from original KML Layer URLs to their updated filenames. </li>
+    <li>Optionally removes the reference to the server for historical imagery data. </li>
   </ul>
   <h4>Required</h4>
   <table class="nice-table">
@@ -421,6 +423,10 @@
         <td><code>--search_service=<em>search_service_url</em></code></td>
         <td>Url to search service. If none is provided then uses relative url for standard Portable search.</td>
       </tr>
+       <tr>
+        <td><code>--preserve_search_service</code></td>
+        <td>Preserve the existing search service url.</td>
+      </tr>
       <tr>
         <td><code>--kml_server=<em>server_name</em></code></td>
         <td>Server to be used for KML files in the dbRoot. Default is <code>localhost</code>.</td>
@@ -440,6 +446,10 @@
       <tr>
         <td><code>--preserve_kml_filenames</code></td>
         <td>Preserve the existing filenames of any KML files. Not used when creating portable globes.</td>
+      </tr>
+      <tr>
+        <td><code>--disable_historical</code></td>
+        <td>Remove the reference to the server to obtain historical data.</td>
       </tr>
     </tbody>
   </table>
