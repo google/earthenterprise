@@ -21,7 +21,7 @@
 
 static khMutexBase xmlLibLock = KH_MUTEX_BASE_INITIALIZER;
 
-bool khXML::doOp(shared_ptr<khXMLOperation> op) throw()
+bool khXML::doOp(std::shared_ptr<khXMLOperation> op) throw()
 {
   khLockGuard guard(xmlLibLock);
   return op->op();
@@ -43,3 +43,6 @@ bool khXMLReadFromFile::op() throw()
 bool khXMLReadFromString::op() throw()
 {
 } 
+
+bool khXMLLoadFromString::op() throw()
+{}

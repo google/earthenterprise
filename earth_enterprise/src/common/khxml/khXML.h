@@ -22,15 +22,25 @@
 #include "notify.h"
 using namespace khxml;
 
+
+// class for enumerated types, to allow for derived classes to id themselvesx
 enum class khXMLOperationType : uint8_t
 {
     KH_XML_READ_FILE = 0,
     KH_XML_READ_STRING = 1,
     KH_XML_WRITE_FILE = 2,
     KH_XML_WRITE_STRING = 3,
+    KH_XML_LOAD_FROM_STRING = 4,
     DEFAULT = KH_XML_READ_FILE
 };
-// declare base class for XML operations
+
+
+/*******************************************************************
+*
+*  Base class for all XML operations. Facilitates interaction with
+*  strategy contrete class.
+*
+*******************************************************************/
 class khXMLOperation
 {
   khXMLOperation(const khXMLOperation&) = delete;
@@ -39,20 +49,28 @@ class khXMLOperation
   khXMLOperation& khXMLOperation(khXMLOperation&&) = delete;
 
 protected:
-  std::unique_ptr<DOMDocument> doc;
-  std::unique_ptr<DOMLSParser> parser; 
+  std::shared_ptr<DOMDocument> doc;
+  khXMLOperationType type;
 
 public:
-  khXMLOperation() throw()
+  khXMLOperation(const std::string& rootTagName) throw()
   {
     try {
-      XMLPlatformUtils::Initialize();
-      unique_ptr<DOMImplementation> impl(std::move(reinterpret_cast<DOMImplementation*>
-                                        (DOMImplementationRegistry::getDOMImplementation(0))));
+    XMLPlatformUtils::Initialize();
+    } catch (const XMLException& e) {
+      notify(NFY_FATAL, "Unable to initialize Xerces: %s",
+             FromXMLStr(e.getMessage()).c_str());
+    }
+    try {
 
-      } catch (const XMLException& e) {
-        notify(NFY_FATAL, "Unable to initialize Xerces: %s",
-               FromXMLStr(e.getMessage()).c_str());
+      std::shared_ptr_ptr<DOMImplementation> impl
+              (std::move(reinterpret_cast<DOMImplementation*>
+              (DOMImplementationRegistry::getDOMImplementation(0))));
+      doc.reset(impl->createDocument(0, ToXMLStr(rootTagName), 0));
+    } catch (...) {
+          std::string error {"unable to create document"};
+          notify(NFY_FATAL,"XML error: %s", error.c_str());
+          throw khException(kh::tr(error.c_str()));
       }
   }
 
@@ -63,70 +81,131 @@ public:
       doc->release();
     } 
     catch (...) {}
-    try
-    {
-      parser->release();
-    }
-    catch (...) {}
-    khXMLOperation::Terminate(); 
+    if (type != khXMLOperationType::KH_XML_LOAD_FROM_STRING) khXMLOperation::Terminate();
   }
 
-  // declare list of operations to be  virtual
-  virtual bool op(std::string, std::string&) throw(); //write to string
-  virtual bool op(std::string) throw(); //read/write to file
-  virtual bool op(std::string,const std::string&) throw(); //read from string
-
-  virtual
+  // polymorphic function to allow for use of strategy
+  virtual bool op() throw() = 0;
+  // allow the derived classes to give type
+  virtual inline const khXMLOperationType getType() = 0;
 
  }
 
+/*******************************************************************
+ *
+ * Base class for load operations. Perhaps tied to reads, so do not
+ * Terminate() in destructor
+ *
+ ******************************************************************/
 
-class khXMLWriteToFile : public khXMLOperation
+class khXMLLoadFromString : public khXMLOperation
 {
 private:
+    std::string buffer;
+    std::string ref;
+public:
+  khXMLLoadFromString(const std::string& _buffer, const std::string& _ref)
+      : khXMLOperation()
+  {
+      type = khXMLOperationType::KH_XML_LOAD_FROM_STRING;
+      buffer = _buffer;
+      ref = _ref;
+  }
+
+  bool op() throw();
+};
+
+/*****************************************************************
+ *
+ * Base class for write operations. Right now, allows for file and
+ * string writes. Can be further expanded.
+ *
+ ****************************************************************/
+class khXMLWriteOp : public khXMLOperation
+{
+protected:
   std::unique_ptr<DOMLSSerializer> writer;
+  std::string buffer;
+public:
+  // polymorphic functions explained above, pass to derived class
+  khXMLWriteOp(const std::string& buf)
+  {
+      buffer = buf;
+  }
+  virtual bool op() = 0;
+};
+
+class khXMLWriteToFile : public khXMLWriteOp
+{
+private:
+
   khXMLWriteToFile() = delete;
   std::string filename;
 
 public:
-  khXMLWriteToFile(std::string _filename) : khXMLOperation() 
+  khXMLWriteToFile(const std::string& _filename, const std::string _buffer)
+      : khXMLOperation(_buffer)
   { 
-    filename = std::move(_filename); 
+    filename = _filename;
   }
-  
 
+  inline khXMLOperationType getType() { return khXMLOperationType::KH_XML_WRITE_FILE; }
+  // op writes the
   bool op() throw();
 };
 
-class khXMLWriteToString : public khXMLOperation
+
+// Usage: buffer = concrete::instance().doOp(writefilestrat)
+// buf = writefilestart->getBufferString
+class khXMLWriteToString : public khXMLWriteOp
 {
 private:
   std::unique_ptr<DOMLSSerializer> writer;
-  std::string filename;
   std::string buffer;
   khXMLWriteToString() = delete;
 public:
-  khXMLWriteToString(std::string _filename, std::string _buffer) : khXMLOperation()
-  {
-    filename = std::move(_filename);
-    buffer = std::move(_buffer);
-  }
  
   bool op() throw();
+  inline khXMLOperationType getType() { return khXMLOperationType::KH_XML_WRITE_STRING; }
+  inline std::string getBufferString() { return buffer; }
+
 };
 
-class khXMLReadFromFile : public khXMLOperation
+
+
+/*****************************************************************
+ *
+ * Base class for write operations. Right now, allows for file and
+ * string reads. Can be further expanded.
+ *
+ ****************************************************************/
+
+
+class khXMLReadOp : public khXMLOperation
+{
+protected:
+    std::unique_ptr<DOMLSParser> parser;
+    std::shared_pre<DOMDocument> doc;
+
+public:
+    virtual khXMLOperationType getType();
+
+};
+
+class khXMLReadFromFile : public khXMLReadOp
 {
 private:
   khXMLReadFromFile() = delete;
   std::string filename;
 public:
-  khXMLReadFromFile(std::string _filename) : khXMLOperation()
+  khXMLReadFromFile(const std::string& _filename) : khXMLOperation()
   {
-    filename = std::move(_filename);
+    filename = _filename;
   }
 
   bool op() throw();
+  inline khXMLOperationType getType() { return khXMLOperationType::KH_XML_READ_FILE; }
+  inline std::shared_ptr<khxml::DOMDocument> getFile();
 };
 
 class khXMLReadFromString : public khXMLOperation
@@ -136,14 +215,17 @@ private:
   std::string filename;
   std::string buffer;
 public:
-  khXMLReadFromString(std::string _filename, std::string _buffer) : khXMLOperation()
+  khXMLReadFromString(std::string _filename, const std::string& _buffer) : khXMLOperation()
   {
     filename = std::move(_filename);
-    buffer = std::move(_buffer);
+    buffer =
   }
 
   bool op() throw();
+  inline std::shared_ptr<khxml::DOMDocument> getFile();
+  inline khXMLOperationType getType() { return khXMLOperationType::KH_XML_READ_STRING; }
 };
+
 
 class khXML
 {
