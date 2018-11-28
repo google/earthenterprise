@@ -17,7 +17,7 @@
 
 import sys
 import os
-import commands
+import commands         # TODO: This has been deprecated since 2.6 (?)
 
 env = Environment()
 
@@ -39,7 +39,7 @@ def makeHardLinks(instdir, target_dir, excluded_list):
     # recurse down the directories
 
     contents = os.listdir(target_dir)
-    target_dir = target_dir + "/"
+    target_dir = target_dir + "/"	# TODO: This should probably be os.sep()
     # Ensure the install dir exists at each step
     commands.getstatusoutput("mkdir -p " + instdir)
     for file in contents:
@@ -51,8 +51,10 @@ def makeHardLinks(instdir, target_dir, excluded_list):
             makeHardLinks(subdir, target_file,
                                              excluded_list)
         else:
-            commands.getstatusoutput("ln \"" + target_file + "\" " +
-                                     instdir)
+            commands.getstatusoutput('ln -s "' +target_file + '" ' +
+                                    instdir)
+            #_# commands.getstatusoutput("ln \"" + target_file + "\" " +
+            #_#                          instdir)
 
 # Clean install dir (note: the current sconscripts leave stuff behind, like
 # directories).
