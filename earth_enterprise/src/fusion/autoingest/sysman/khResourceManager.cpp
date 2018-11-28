@@ -246,6 +246,7 @@ khResourceManager::InsertProvider(khResourceProviderProxy *proxy)
   for (const auto& vn : volnames) {
         if (volumes.find(vn) != volumes.end())
         {
+	    notify(NFY_WARN,"Volume %s already present in list of names", vn.c_str());
             delete volumes[vn];
             volumes.erase(vn);
         }
