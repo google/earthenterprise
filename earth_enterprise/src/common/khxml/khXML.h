@@ -45,8 +45,8 @@ class khXMLOperation
 {
   khXMLOperation(const khXMLOperation&) = delete;
   khXMLOperation(khXMLOperation&&) = delete;
-  khXMLOperation& khXMLOperation(const khXMLOperation&) = delete;
-  khXMLOperation& khXMLOperation(khXMLOperation&&) = delete;
+  khXMLOperation& operator=(const khXMLOperation&) = delete;
+  khXMLOperation& operator(khXMLOperation&&) = delete;
 
 protected:
   std::shared_ptr<DOMDocument> doc;
@@ -185,11 +185,12 @@ class khXMLReadOp : public khXMLOperation
 {
 protected:
     std::unique_ptr<DOMLSParser> parser;
-    std::shared_pre<DOMDocument> doc;
+    std::shared_ptr<DOMDocument> doc;
 
 public:
-    virtual khXMLOperationType getType();
-
+    khXMLReadOp() : khXMLOperation() throw();
+    virtual khXMLOperationType getType() = 0;
+    virtual bool op() = 0;
 };
 
 class khXMLReadFromFile : public khXMLReadOp
@@ -198,7 +199,7 @@ private:
   khXMLReadFromFile() = delete;
   std::string filename;
 public:
-  khXMLReadFromFile(const std::string& _filename) : khXMLOperation()
+  khXMLReadFromFile(const std::string& _filename) : khXMLReadOp() throw()
   {
     filename = _filename;
   }
@@ -215,14 +216,14 @@ private:
   std::string filename;
   std::string buffer;
 public:
-  khXMLReadFromString(std::string _filename, const std::string& _buffer) : khXMLOperation()
+  khXMLReadFromString(std::string _filename, const std::string& _buffer) : khXMLOperation() throw()
   {
     filename = std::move(_filename);
     buffer =
   }
 
   bool op() throw();
-  inline std::shared_ptr<khxml::DOMDocument> getFile();
+  inline std::string getString();
   inline khXMLOperationType getType() { return khXMLOperationType::KH_XML_READ_STRING; }
 };
 
