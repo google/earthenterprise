@@ -51,10 +51,33 @@ def makeHardLinks(instdir, target_dir, excluded_list):
             makeHardLinks(subdir, target_file,
                                              excluded_list)
         else:
-            commands.getstatusoutput('ln -s "' +target_file + '" ' +
-                                    instdir)
-            #_# commands.getstatusoutput("ln \"" + target_file + "\" " +
-            #_#                          instdir)
+            commands.getstatusoutput("ln \"" + target_file + "\" " +
+                                     instdir)
+
+
+def makeSoftLinks(instdir, target_dir, excluded_list):
+    """Make soft links of all files in target_dir and place
+    them in instdir. Don't link to files in excluded_list.
+    Recurse through all subdirectories of targete_dir.
+    """
+
+    contents = os.listdir(target_dir)
+    target_dir = target_dir + "/"	# TODO: This should probably be os.sep()
+    # Ensure the install dir exists at each step
+    commands.getstatusoutput("mkdir -p " + instdir)
+    for file in contents:
+        if file in excluded_list:
+            continue
+        # Use full paths to all files so 'ln -s ... ' succeeds 
+        target_filepath = os.sep.join((os.getcwd(), target_dir, file))
+        dest_filepath = os.sep.join((instdir, file))
+        if os.path.isdir(target_filepath):
+            subdir = dest_filepath + "/" + file
+            makeSoftLinks(subdir, target_filepath,
+                                             excluded_list)
+        else:
+            commands.getstatusoutput('ln -s "' + target_filepath + '" ' +
+                                    dest_filepath)
 
 # Clean install dir (note: the current sconscripts leave stuff behind, like
 # directories).
@@ -62,4 +85,4 @@ if env.GetOption('clean'):
     # clean the search and getomcat install folders.
     commands.getstatusoutput("rm -rf " + tutorials_dir)
 else:
-    makeHardLinks(root_dir, 'FusionTutorial/', ['.svn'])
+    makeSoftLinks(root_dir, 'FusionTutorial/', ['.svn'])
