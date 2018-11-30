@@ -69,7 +69,7 @@ void get_random_info(unsigned char seed[16])
         struct timeval t;
         char hostname[257];
     } r;
-
+    memset(&r,0,sizeof r);
     MD5Init(&c);
     sysinfo(&r.s);
     gettimeofday(&r.t, (struct timezone *)0);
