@@ -5,7 +5,7 @@ import git
 import sys
 
 from datetime import datetime
-
+import re
 
 def GetVersion(backupFile, label=''):
     """As getLongVersion(), but only return the leading *.*.* value."""
@@ -40,19 +40,63 @@ def GetLongVersion(backupFile, label=''):
 
     return ret
 
+def _GitCommitCount(baseRef=''):
+    """calculate git commit counts"""
+    repo = _GetRepository()
+    if not baseRef:
+        return len(list(repo.iter_commits('HEAD')))
+    else:
+        return len(list(repo.iter_commits(baseRef + '..HEAD')))
+
+def _GitVersionNameAndBuildNumber():
+    """Get the version name and build number based on state of git"""
+
+    # For tagged commits use the tag
+    raw = _GetCommitRawDescription()
+    if _IsCurrentCommitTagged(raw):
+        splitTag = raw.split('-')
+        return splitTag[0], splitTag[1]
+    else:
+        branchName = _GitBranchName()
+        if not branchName:
+            # we are a detached head not on a tag so just treat it like a topic branch
+            return raw, _GitCommitCount()
+        else:
+            if _IsReleaseBranch(branchName):
+                versionName = _GetReleaseVersionName(branchName)
+                return versionName, '{0}.{1}'.format(_GitCommitCount(), _GitCommitCount(versionName))
+            else:
+                return _sanitizeBranchName(branchName),  _GitCommitCount()
+
+def _IsReleaseBranch(branchName):
+    if branchName[:8] == 'release_':
+        if _gitHasTag(branchName[8:]):
+            return True
+    
+    return False
+
+def _gitHasTag(tagName):
+    return (next((tag for tag in _GetRepository().tags if tag.name == tagName), None) is not None)
+
+def _sanitizeBranchName(branchName):
+    return re.sub('[$?*`\\-"\'\\\\/\\s]', '_', branchName)
+
+def _GetReleaseVersionName(branchName):
+    return branchName[8:]
 
 def _GitGeneratedLongVersion():
     """Take the raw information parsed by git, and use it to
        generate an appropriate version string for GEE."""
 
-    raw = _GetCommitRawDescription()
+    versionName, buildNumber = _GitVersionNameAndBuildNumber()
+    return "{0}-{1}".format(versionName, buildNumber)
 
-    # For tagged commits, return the tag itself
-    if _IsCurrentCommitTagged(raw):
-        return _VersionForTaggedHead(raw)
-    else:
-        return _VersionFromTagHistory(raw)
-
+def _GitBranchName():
+    """Returns current branch name or empty string"""
+    try:
+        return _GetRepository().active_branch.name
+    except TypeError:
+        return ''
 
 def _IsGitDescribeFirstParentSupported():
     """Checks whether --first-parent parameter is valid for the
