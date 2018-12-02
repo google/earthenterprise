@@ -40,6 +40,12 @@ def GetLongVersion(backupFile, label=''):
 
     return ret
 
+def _GitGeneratedLongVersion():
+    """Calculate the version name and build number into a single build string."""
+
+    versionName, buildNumber = _GitVersionNameAndBuildNumber()
+    return "{0}-{1}".format(versionName, buildNumber)
+
 def _GitCommitCount(baseRef=''):
     """calculate git commit counts"""
     repo = _GetRepository()
@@ -49,19 +55,27 @@ def _GitCommitCount(baseRef=''):
         return len(list(repo.iter_commits(baseRef + '..HEAD')))
 
 def _GitVersionNameAndBuildNumber():
-    """Get the version name and build number based on state of git"""
+    """Get the version name and build number based on state of git
+    Use a tag only if HEAD is directly pointing to it and it is a
+    release build tag (see _GetCommitRawDescription for details)
+    otherwise use the branch name"""
 
     # For tagged commits use the tag
     raw = _GetCommitRawDescription()
     if _IsCurrentCommitTagged(raw):
+        # Extract version name and build number
+        # from the tag (should be a release build tag)
         splitTag = raw.split('-')
         return splitTag[0], splitTag[1]
     else:
+        # Use branch name if we are not a detached HEAD
         branchName = _GitBranchName()
         if not branchName:
-            # we are a detached head not on a tag so just treat it like a topic branch
+            # we are a detached head not on a tag so just treat the
+            # raw describe like a topic branch name
             return raw, _GitCommitCount()
         else:
+            # Get the version name from the branch name
             if _IsReleaseBranch(branchName):
                 versionName = _GetReleaseVersionName(branchName)
                 return versionName, '{0}.{1}'.format(_GitCommitCount(), _GitCommitCount(versionName))
@@ -69,8 +83,11 @@ def _GitVersionNameAndBuildNumber():
                 return _sanitizeBranchName(branchName),  _GitCommitCount()
 
 def _IsReleaseBranch(branchName):
+    """Check if the branch name is a release branch"""
+    # a release branch begins with 'release_' and has
+    # a base tag that matches the release name
     if branchName[:8] == 'release_':
-        if _gitHasTag(branchName[8:]):
+        if _gitHasTag(_GetReleaseVersionName(branchName)):
             return True
     
     return False
@@ -83,13 +100,6 @@ def _sanitizeBranchName(branchName):
 
 def _GetReleaseVersionName(branchName):
     return branchName[8:]
-
-def _GitGeneratedLongVersion():
-    """Take the raw information parsed by git, and use it to
-       generate an appropriate version string for GEE."""
-
-    versionName, buildNumber = _GitVersionNameAndBuildNumber()
-    return "{0}-{1}".format(versionName, buildNumber)
 
 def _GitBranchName():
     """Returns current branch name or empty string"""
