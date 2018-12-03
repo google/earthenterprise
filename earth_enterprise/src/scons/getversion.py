@@ -7,6 +7,7 @@ import sys
 from datetime import datetime
 import re
 
+
 def GetVersion(backupFile, label=''):
     """As getLongVersion(), but only return the leading *.*.* value."""
 
@@ -40,11 +41,13 @@ def GetLongVersion(backupFile, label=''):
 
     return ret
 
+
 def _GitGeneratedLongVersion():
     """Calculate the version name and build number into a single build string."""
 
     versionName, buildNumber = _GitVersionNameAndBuildNumber()
     return "{0}-{1}".format(versionName, buildNumber)
+
 
 def _GitCommitCount(baseRef=''):
     """calculate git commit counts"""
@@ -53,6 +56,7 @@ def _GitCommitCount(baseRef=''):
         return len(list(repo.iter_commits('HEAD')))
     else:
         return len(list(repo.iter_commits(baseRef + '..HEAD')))
+
 
 def _GitVersionNameAndBuildNumber():
     """Get the version name and build number based on state of git
@@ -82,6 +86,7 @@ def _GitVersionNameAndBuildNumber():
             else:
                 return _sanitizeBranchName(branchName),  _GitCommitCount()
 
+
 def _IsReleaseBranch(branchName):
     """Check if the branch name is a release branch"""
     # a release branch begins with 'release_' and has
@@ -102,17 +107,21 @@ def _IsReleaseBranch(branchName):
             # try one more time after the fetch attempt(s)
             return _gitHasTag(versionName)
 
+
 def _gitHasTag(tagName):
     """See if a tag exists in git"""
     return (next((tag for tag in _GetRepository().tags if tag.name == tagName), None) is not None)
+
 
 def _sanitizeBranchName(branchName):
     """sanitize branch names to ensure some characters are not used"""
     return re.sub('[$?*`\\-"\'\\\\/\\s]', '_', branchName)
 
+
 def _GetReleaseVersionName(branchName):
     """removes pre-pended 'release_' from branch name"""
     return branchName[8:]
+
 
 def _GitBranchName():
     """Returns current branch name or empty string"""
@@ -120,6 +129,7 @@ def _GitBranchName():
         return _GetRepository().active_branch.name
     except TypeError:
         return ''
+
 
 def _IsGitDescribeFirstParentSupported():
     """Checks whether --first-parent parameter is valid for the
@@ -154,74 +164,6 @@ def _IsCurrentCommitTagged(raw):
     return (len(raw.split("-")) < 4)
 
 
-def _VersionForTaggedHead(raw):
-    """When we're on the tagged commit, the version string is
-    either the tag itself (when repo is clean), or the tag with
-    date appended (when repo has uncommitted changes)"""
-    if _CheckDirtyRepository():
-        # Append the date if the repo contains uncommitted files
-        return '.'.join([raw, _GetDateString()])
-    return raw
-
-
-def _VersionFromTagHistory(raw):
-    """From the HEAD revision, this function finds the most recent
-    reachable version tag and returns a string representing the
-    version being built -- which is one version beyond the latest
-    found in the history."""
-
-    # Tear apart the information in the version string.
-    components = _ParseRawVersionString(raw)
-
-    # Determine how to update, since we are *not* on tagged commit.
-    if components['isFinal']:
-        components['patch'] = 0
-        components['patchType'] = "alpha"
-        components['revision'] = components['revision'] + 1
-    else:
-        components['patch'] = components['patch'] + 1
-
-    # Rebuild.
-    base = '.'.join([str(components[x]) for x in ("major", "minor", "revision")])
-    patch = '.'.join([str(components["patch"]), components["patchType"], _GetDateString()])
-    if not _CheckDirtyRepository():
-        patch = '.'.join([patch, components['hash']])
-
-    return '-'.join([base, patch])
-
-
-def _ParseRawVersionString(raw):
-    """Break apart a raw version string into its various components,
-    and return those entries via a dictionary."""
-
-    components = { }
-
-    # major.minor.revision-patch[.patchType][-commits][-hash]
-    rawComponents = raw.split("-")
-
-    base = rawComponents[0]
-    patchRaw = '' if not len(rawComponents) > 1 else rawComponents[1]
-    components['commits'] = -1 if not len(rawComponents) > 2 else rawComponents[2]
-    components['hash'] = None if not len(rawComponents) > 3 else rawComponents[3]
-
-    # Primary version (major.minor.revision)
-    baseComponents = base.split(".")
-    components['major'] = int(baseComponents[0])
-    components['minor'] = int(baseComponents[1])
-    components['revision'] = int(baseComponents[2])
-
-    # Patch (patch[.patchType])
-    components['isFinal'] = ((patchRaw[-5:] == "final") or
-                             (patchRaw[-7:] == "release"))
-
-    patchComponents = patchRaw.split(".")
-    components['patch'] = int(patchComponents[0])
-    components['patchType'] = 'alpha' if not len(patchComponents) > 1 else patchComponents[1]
-
-    repo = _GetRepository()
-    return components
-
-
 def _CheckGitAvailable():
     """Try the most basic of git commands, to see if there is
        currently any access to a repository."""
@@ -244,14 +186,6 @@ def _GetRepository():
         return git.Repo('.')
 
 
-def _CheckDirtyRepository():
-    """Check to see if the repository is not in a cleanly committed state."""
-    repo = _GetRepository()
-    str = repo.git.status("--porcelain")
-
-    return (len(str) > 0)
-
-
 def _ReadBackupVersionFile(target):
     """There should be a file checked in with the latest version
     information available; if git isn't available to provide
@@ -266,6 +200,7 @@ def _ReadBackupVersionFile(target):
 def _GetDateString():
     """Returns formatted date string representing current UTC time"""
     return datetime.utcnow().strftime("%Y%m%d%H%M")
+
 
 class OpenGeeVersion(object):
     """A class for storing Open GEE version information."""
