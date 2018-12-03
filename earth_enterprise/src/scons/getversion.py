@@ -96,7 +96,7 @@ def _IsReleaseBranch(branchName):
             for remote in repo.remotes:
                 try:
                     remote.fetch('+refs/tags/{0}:refs/tags/{0}'.format(versionName), None, **{'no-tags':True})
-                except TypeError:
+                except git.exc.GitCommandError:
                     pass
             
             # try one more time after the fetch attempt(s)
