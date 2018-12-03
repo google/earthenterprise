@@ -61,11 +61,11 @@ def _GitVersionNameAndBuildNumber():
     otherwise use the branch name"""
 
     # For tagged commits use the tag
-    raw = _GetCommitRawDescription()
-    if _IsCurrentCommitTagged(raw):
+    rawDescription = _GetCommitRawDescription()
+    if _IsCurrentCommitTagged(rawDescription):
         # Extract version name and build number
         # from the tag (should be a release build tag)
-        splitTag = raw.split('-')
+        splitTag = rawDescription.split('-')
         return splitTag[0], splitTag[1]
     else:
         # Use branch name if we are not a detached HEAD
@@ -73,7 +73,7 @@ def _GitVersionNameAndBuildNumber():
         if not branchName:
             # we are a detached head not on a tag so just treat the
             # raw describe like a topic branch name
-            return raw, _GitCommitCount()
+            return rawDescription, _GitCommitCount()
         else:
             # Get the version name from the branch name
             if _IsReleaseBranch(branchName):
@@ -93,12 +93,15 @@ def _IsReleaseBranch(branchName):
     return False
 
 def _gitHasTag(tagName):
+    """See if a tag exists in git"""
     return (next((tag for tag in _GetRepository().tags if tag.name == tagName), None) is not None)
 
 def _sanitizeBranchName(branchName):
+    """sanitize branch names to ensure some characters are not used"""
     return re.sub('[$?*`\\-"\'\\\\/\\s]', '_', branchName)
 
 def _GetReleaseVersionName(branchName):
+    """removes pre-pended 'release_' from branch name"""
     return branchName[8:]
 
 def _GitBranchName():
