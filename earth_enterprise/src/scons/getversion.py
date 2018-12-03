@@ -55,7 +55,7 @@ def _GitCommitCount(tagName='HEAD', baseRef=''):
     if not baseRef:
         return len(list(repo.iter_commits(tagName)))
     else:
-        return len(list(repo.iter_commits(baseRef + '.' + tagName)))
+        return len(list(repo.iter_commits(baseRef + '..' + tagName)))
 
 
 def _GitVersionNameAndBuildNumber():
