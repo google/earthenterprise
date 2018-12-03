@@ -38,47 +38,48 @@ ListElementTagName(const std::string &tagname)
   }
 }
 
+XMLSSize_t  initialDOMHeapAllocSize;
+XMLSSize_t  maxDOMHeapAllocSize;
+XMLSSize_t  maxDOMSubAllocationSize;
+bool doTerminate = false;
+bool readOnce = true;
 
 // This is used only in the following function
 class UsingXMLGuard
 {
   friend void InitializeXMLLibrary() throw();
 
-<<<<<<< HEAD
-  XMLSSize_t  initialDOMHeapAllocSize;
-  XMLSSize_t  maxDOMHeapAllocSize;
-  XMLSSize_t  maxDOMSubAllocationSize;
-
   UsingXMLGuard(void) throw() {
     // can change this to anything, just using this for convenience
     // format is:
     // <initialDOMHeapAllocSize> <maxDOMHeapAllocSize> <maxDOMSubAllocationSize"
     std::string fn("~/xerces_init_params.ini");
-    try {
-      std::ifstream file;
-      file.exceptions(std::ifstream::failbit);
-      file.open(fn.c_str());
-      file >> initialDOMHeapAllocSize
-           >> maxDOMHeapAllocSize
-           >> maxDOMSubAllocationSize;
-      file.close();
-    } catch (std::ifstream::failure &readError) {
-      // these are the default values for XMLPlatformUtils::Initialize()
-      // if they are not passed in
-      initialDOMHeapAllocSize = 16384; // 0x4000 hex
-      maxDOMHeapAllocSize = 131072;    // 0x20000 hex
-      maxDOMSubAllocationSize = 4096;  // 0x1000 hex
+    if (readOnce) {
+      readOnce = false;
+      try {
+        std::ifstream file;
+        file.exceptions(std::ifstream::failbit);
+        file.open(fn.c_str());
+        file >> initialDOMHeapAllocSize
+             >> maxDOMHeapAllocSize
+             >> maxDOMSubAllocationSize
+             >> doTerminate;
+        file.close();
+      } catch (std::ifstream::failure &readError) {
+        notify(NFY_WARN, "%s not found, using default xerces init values",
+               fn.c_str());
+        // these are the default values for XMLPlatformUtils::Initialize()
+        // if they are not passed in
+        initialDOMHeapAllocSize = 16384; // 0x4000 hex
+        maxDOMHeapAllocSize = 131072;    // 0x20000 hex
+        maxDOMSubAllocationSize = 4096;  // 0x1000 hex
+        doTerminate = false;
+      }
     }
     try {
       XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
                                    maxDOMHeapAllocSize,
                                    maxDOMSubAllocationSize);
-=======
-  UsingXMLGuard(void) throw()
-  {
-   try {
-      XMLPlatformUtils::Initialize();
->>>>>>> master
     } catch(const XMLException& toCatch) {
       notify(NFY_FATAL, "Unable to initialize Xerces: %s",
              FromXMLStr(toCatch.getMessage()).c_str());
@@ -94,6 +95,8 @@ class UsingXMLGuard
 };
 
 static khMutexBase xmlLibLock = KH_MUTEX_BASE_INITIALIZER;
+//static khMutexBase xmlDocLock = KH_MUTEX_BASE_INITIALIZER;
+static pthread_mutex_t xmlDocLock = PTHREAD_MUTEX_INITIALIZER;
 
 void InitializeXMLLibrary() throw()
 {
@@ -106,7 +109,7 @@ DOMDocument *
 CreateEmptyDocument(const std::string &rootTagname) throw()
 {
   InitializeXMLLibrary();
-
+  if (doTerminate) pthread_mutex_lock(&xmlDocLock);
   try {
     DOMImplementation* impl =
     DOMImplementationRegistry::getDOMImplementation(0);
@@ -116,6 +119,7 @@ CreateEmptyDocument(const std::string &rootTagname) throw()
                                             0);// document type object (DTD)
     return doc;
    } catch (...) {
+     if (doTerminate) pthread_mutex_unlock(&xmlDocLock);
      return 0;
    }
 }
@@ -361,12 +365,15 @@ ReadDocumentFromString(khxml::DOMLSParser *parser,
 bool
 DestroyDocument(khxml::DOMDocument *doc) throw()
 {
+  bool retval = false;
   try {
     doc->release();
-    return true;
+    retval = true;
   } catch (...) {
   }
-  return false;
+  if (doTerminate) pthread_mutex_unlock(&xmlDocLock);
+
+  return retval;
 }
 
 
