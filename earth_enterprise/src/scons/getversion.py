@@ -49,13 +49,13 @@ def _GitGeneratedLongVersion():
     return "{0}-{1}".format(versionName, buildNumber)
 
 
-def _GitCommitCount(baseRef=''):
+def _GitCommitCount(tagName='HEAD', baseRef=''):
     """calculate git commit counts"""
     repo = _GetRepository()
     if not baseRef:
-        return len(list(repo.iter_commits('HEAD')))
+        return len(list(repo.iter_commits(tagName)))
     else:
-        return len(list(repo.iter_commits(baseRef + '..HEAD')))
+        return len(list(repo.iter_commits(baseRef + '.' + tagName)))
 
 
 def _GitVersionNameAndBuildNumber():
@@ -77,14 +77,47 @@ def _GitVersionNameAndBuildNumber():
         if not branchName:
             # we are a detached head not on a tag so just treat the
             # raw describe like a topic branch name
-            return rawDescription, _GitCommitCount()
+            return rawDescription, str(_GitCommitCount())
         else:
             # Get the version name from the branch name
             if _IsReleaseBranch(branchName):
                 versionName = _GetReleaseVersionName(branchName)
-                return versionName, '{0}.{1}'.format(_GitCommitCount(), _GitCommitCount(versionName))
+                return versionName, '{0}.{1}'.format(_GitBranchedBuildNumber(versionName), _GitCommitCount('HEAD', versionName))
             else:
-                return _sanitizeBranchName(branchName),  _GitCommitCount()
+                return _sanitizeBranchName(branchName),  str(_GitCommitCount())
+
+
+def _GitBranchedBuildNumber(versionName):
+    """Returns what the build number was from the branch point"""
+    prevRelTag = _GitPreviousReleaseTag(versionName)
+    prevBuildNumber = ''
+
+    if prevRelTag:
+        prevBuildNumber = prevRelTag.split('-')[1]
+    else:
+        prevBuildNumber = str(_GitCommitCount(versionName))
+
+    return prevBuildNumber
+
+
+def _GitPreviousReleaseTag(versionName):
+    """Looks for the tail tag for this versionName (the tag with the same name as the version name)
+    and if it finds it then it looks for any release build tags that are also pointing to the same
+    commit"""
+    tags = _GetRepository().tags
+    tailTag = next((tag for tag in _GetRepository().tags if tag.name == versionName), None)
+    if tailTag is None:
+        return ''
+
+    for tag in tags:
+        if tag.commit == tailTag.commit and tag.name <> tailTag.name and _IsReleseBuildTag(tag.name):
+            return tag.name
+    
+    return ''
+
+
+def _IsReleseBuildTag(tagName):
+    return re.match(r'[0-9]*\.[0-9]*\.[0-9]*\-*', tagName)
 
 
 def _IsReleaseBranch(branchName):
