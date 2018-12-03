@@ -87,10 +87,20 @@ def _IsReleaseBranch(branchName):
     # a release branch begins with 'release_' and has
     # a base tag that matches the release name
     if branchName[:8] == 'release_':
-        if _gitHasTag(_GetReleaseVersionName(branchName)):
+        versionName = _GetReleaseVersionName(branchName)
+        if _gitHasTag(versionName):
             return True
-    
-    return False
+        else:
+            # see if we can pull the tag down from any of the remotes
+            repo = _GetRepository()
+            for remote in repo.remotes:
+                try:
+                    remote.fetch('+refs/tags/{0}:refs/tags/{0}'.format(versionName), None, **{'no-tags':True})
+                except TypeError:
+                    pass
+            
+            # try one more time after the fetch attempt(s)
+            return _gitHasTag(versionName)
 
 def _gitHasTag(tagName):
     """See if a tag exists in git"""
