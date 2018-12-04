@@ -34,12 +34,17 @@ if (not installdir) and ('install' in COMMAND_LINE_TARGETS):
 tutorials_dir = installdir + '/tutorial'
 root_dir = tutorials_dir + '/opt/google/share/tutorials/fusion/'
 
+# Get the current directory, since SCons will move into the directory
+#   it's using, and FusionTutorial is expected below the SConscript file.
+tutorial_src_dir = os.sep.join((os.getcwd().split(os.sep) +
+                    ['FusionTutorial']))
+
 def makeHardLinks(install_dir, target_dir, excluded_list):
     # get contents of target_dir and make hard links to files in install_dir
     # recurse down the directories
 
     contents = os.listdir(target_dir)
-    target_dir = target_dir + "/"	# TODO: This should probably be os.sep()
+    target_dir = target_dir + "/"	
     # Ensure the install dir exists at each step
     commands.getstatusoutput("mkdir -p " + install_dir)
     for file in contents:
@@ -66,8 +71,6 @@ def makeSoftLinks(dest_dir, src_dir, excluded_list):
     src_contents = os.listdir(src_dir)
     # Ensure the destination directory exists at each step
     commands.getstatusoutput("mkdir -p " + dest_dir)
-    import pdb   ###############################
-    pdb.set_trace()
     for file in src_contents:
         if file in excluded_list:
             continue
@@ -89,8 +92,4 @@ if env.GetOption('clean'):
     # clean the search and getomcat install folders.
     commands.getstatusoutput("rm -rf " + tutorials_dir)
 else:
-    # Get the current directory, since SCons will move into the directory
-    #   it's using, and FusionTutorial is expected below the SConscript file.
-    tutorial_dir = os.sep.join((os.getcwd().split(os.sep) +
-                        ['FusionTutorial'])) #TODO: Move this constant to top
-    makeSoftLinks(root_dir, tutorial_dir, ['.svn'])
+    makeSoftLinks(root_dir, tutorial_src_dir, ['.svn'])
