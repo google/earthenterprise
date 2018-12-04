@@ -60,7 +60,9 @@ def makeSoftLinks(dest_dir, src_dir, excluded_list):
     them in dest_dir. Don't link to files in excluded_list.
     Recurse through all subdirectories of src_dir.
     """
-
+    
+    # Strip trailing slashes because they cause trouble later
+    dest_dir = dest_dir.strip(os.sep)
     src_contents = os.listdir(src_dir)
     #src_dir = src_dir + "/"	# TODO: This should probably be os.sep()
     #       ^^ Do I even need this?
