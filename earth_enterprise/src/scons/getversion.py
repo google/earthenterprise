@@ -82,22 +82,22 @@ def _GitVersionNameAndBuildNumber():
             # Get the version name from the branch name
             if _IsReleaseBranch(branchName):
                 versionName = _GetReleaseVersionName(branchName)
-                return versionName, '{0}.{1}'.format(_GitBranchedBuildNumber(versionName), _GitCommitCount('HEAD', versionName))
+                return versionName, '{0}.{1}'.format(_GitBranchedCommitCount(versionName), _GitCommitCount('HEAD', versionName))
             else:
                 return _sanitizeBranchName(branchName),  str(_GitCommitCount())
 
 
-def _GitBranchedBuildNumber(versionName):
+def _GitBranchedCommitCount(versionName):
     """Returns what the build number was from the branch point"""
     prevRelTag = _GitPreviousReleaseTag(versionName)
-    prevBuildNumber = ''
+    prevCommitCount = ''
 
     if prevRelTag:
-        prevBuildNumber = prevRelTag.split('-')[1]
+        prevCommitCount = prevRelTag.split('-')[1]
     else:
-        prevBuildNumber = str(_GitCommitCount(versionName))
+        prevCommitCount = str(_GitCommitCount(versionName))
 
-    return prevBuildNumber
+    return prevCommitCount
 
 
 def _GitPreviousReleaseTag(versionName):
@@ -105,7 +105,12 @@ def _GitPreviousReleaseTag(versionName):
     and if it finds it then it looks for any release build tags that are also pointing to the same
     commit"""
     tags = _GetRepository().tags
-    tailTag = next((tag for tag in tags if tag.name == versionName), None)
+    tailTag = None
+    for tag in tags:
+        if tag.name == versionName:
+            tailTag = tag
+            break
+
     if tailTag is None:
         return ''
 
@@ -154,13 +159,18 @@ def _IsReleaseBranch(branchName):
                     pass
             
             # try one more time after the fetch attempt(s)
-            return _gitHasTag(versionName)
+            return (_gitHasTag(versionName) is not None)
 
 
 def _gitHasTag(tagName):
     """See if a tag exists in git"""
-    return (next((tag for tag in _GetRepository().tags if tag.name == tagName), None) is not None)
+    tags =  _GetRepository().tags
+    for tag in tags:
+        if tag.name == tagName:
+            return tag
 
+    return None
+ 
 
 def _sanitizeBranchName(branchName):
     """sanitize branch names to ensure some characters are not used"""
@@ -249,7 +259,6 @@ def _ReadBackupVersionFile(target):
 def _GetDateString():
     """Returns formatted date string representing current UTC time"""
     return datetime.utcnow().strftime("%Y%m%d%H%M")
-
 
 class OpenGeeVersion(object):
     """A class for storing Open GEE version information."""
