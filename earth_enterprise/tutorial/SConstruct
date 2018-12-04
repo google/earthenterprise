@@ -34,50 +34,64 @@ if (not installdir) and ('install' in COMMAND_LINE_TARGETS):
 tutorials_dir = installdir + '/tutorial'
 root_dir = tutorials_dir + '/opt/google/share/tutorials/fusion/'
 
-def makeHardLinks(instdir, target_dir, excluded_list):
-    # get contents of target_dir and make hard links to files in instdir
+def makeHardLinks(install_dir, target_dir, excluded_list):
+    # get contents of target_dir and make hard links to files in install_dir
     # recurse down the directories
 
     contents = os.listdir(target_dir)
     target_dir = target_dir + "/"	# TODO: This should probably be os.sep()
     # Ensure the install dir exists at each step
-    commands.getstatusoutput("mkdir -p " + instdir)
+    commands.getstatusoutput("mkdir -p " + install_dir)
     for file in contents:
         if file in excluded_list:
             continue
         target_file = target_dir + file
         if os.path.isdir(target_file):
-            subdir = instdir + "/" + file
+            subdir = install_dir + "/" + file
             makeHardLinks(subdir, target_file,
                                              excluded_list)
         else:
             commands.getstatusoutput("ln \"" + target_file + "\" " +
-                                     instdir)
+                                     install_dir)
 
 
-def makeSoftLinks(instdir, target_dir, excluded_list):
-    """Make soft links of all files in target_dir and place
-    them in instdir. Don't link to files in excluded_list.
-    Recurse through all subdirectories of targete_dir.
+def makeSoftLinks(dest_dir, src_dir, excluded_list):
+    """Make soft links of all files in src_dir and place
+    them in dest_dir. Don't link to files in excluded_list.
+    Recurse through all subdirectories of src_dir.
     """
 
-    contents = os.listdir(target_dir)
-    target_dir = target_dir + "/"	# TODO: This should probably be os.sep()
+    src_contents = os.listdir(src_dir)
+    #src_dir = src_dir + "/"	# TODO: This should probably be os.sep()
+    #       ^^ Do I even need this?
     # Ensure the install dir exists at each step
-    commands.getstatusoutput("mkdir -p " + instdir)
-    for file in contents:
+    commands.getstatusoutput("mkdir -p " + dest_dir)
+
+    import pdb
+    pdb.set_trace()
+
+    for file in src_contents:
         if file in excluded_list:
             continue
-        # Use full paths to all files so 'ln -s ... ' succeeds 
-        target_filepath = os.sep.join((os.getcwd(), target_dir, file))
-        dest_filepath = os.sep.join((instdir, file))
-        if os.path.isdir(target_filepath):
-            subdir = dest_filepath + "/" + file
-            makeSoftLinks(subdir, target_filepath,
+        # Use full paths to all files so `ln -s ... ` succeeds 
+        #src_filepath = os.sep.join((os.getcwd(), src_dir, file))
+        #src_filepath = os.sep.join((src_dir, file))
+        src_filepath = os.sep.join((os.getcwd().split(os.sep) +
+                            filter(None,src_dir.split(os.sep)) + [file]))
+        #dest_filepath = os.sep.join((os.getcwd().split(os.sep) +
+        dest_filepath = os.sep.join((
+                            filter(None,dest_dir.split(os.sep)) + [file]))
+        #dest_filepath = os.sep.join((dest_dir.split(os.sep) + [file]))
+        #dest_filepath = os.sep.join((dest_dir, file))
+        if os.path.isdir(src_filepath):
+            #dest_subdir = dest_filepath + "/" + file
+            # Recurse for next-lower directory
+            makeSoftLinks(dest_filepath, src_filepath,
+            #makeSoftLinks(dest_subdir, src_filepath,
                                              excluded_list)
         else:
-            commands.getstatusoutput('ln -s "' + target_filepath + '" ' +
-                                    dest_filepath)
+            commands.getstatusoutput('ln -s "' + src_filepath + '" "' +
+                                    dest_filepath + '"')
 
 # Clean install dir (note: the current sconscripts leave stuff behind, like
 # directories).
