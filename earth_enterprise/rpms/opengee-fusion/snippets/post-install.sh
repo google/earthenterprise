@@ -46,6 +46,8 @@ main_postinstall()
 {
     create_system_main_directories
 
+    fix_symlinks
+
     compare_asset_root_publishvolume
 
     setup_fusion_daemon
@@ -66,6 +68,91 @@ main_postinstall()
 #-----------------------------------------------------------------
 # Post-install Functions
 #-----------------------------------------------------------------
+
+fix_symlinks()
+{
+    # remove files that should be symlinks
+ 
+    echo "Fixing symlink issues..."    
+
+    declare -A fusionSymLinks
+    fusionSymLinks["khtop"]="getop"
+    fusionSymLinks["khaddtovectorproject"]="geaddtovectorproject"
+    fusionSymLinks["khdropfromvectorproject"]="gedropfromvectorproject"
+    fusionSymLinks["khmodifyvectorproject"]="gemodifyvectorproject"
+    fusionSymLinks["khnewvectorproject"]="genewvectorproject"
+    fusionSymLinks["khnewvectorasset"]="genewvectorresource"
+    fusionSymLinks["khmodifyvectorasset"]="gemodifyvectorresource"
+    fusionSymLinks["khnewdatabase"]="genewdatabase"
+    fusionSymLinks["khmodifydatabase"]="gemodifydatabase"
+    fusionSymLinks["khbuild"]="gebuild"
+    fusionSymLinks["khcancel"]="gecancel"
+    fusionSymLinks["khclean"]="geclean"
+    fusionSymLinks["khclearbad"]="geclearbad"
+    fusionSymLinks["khresume"]="geresume"
+    fusionSymLinks["khsetbad"]="gesetbad"
+    fusionSymLinks["khinfo"]="geinfo"
+    fusionSymLinks["khquery"]="gequery"
+    fusionSymLinks["khaddtoimageryproject"]="geaddtoimageryproject"
+    fusionSymLinks["khaddtoterrainproject"]="geaddtoterrainproject"
+    fusionSymLinks["khdropfromimageryproject"]="gedropfromimageryproject"
+    fusionSymLinks["khdropfromterrainproject"]="gedropfromterrainproject"
+    fusionSymLinks["khmodifyimageryproject"]="gemodifyimageryproject"
+    fusionSymLinks["khmodifyterrainproject"]="gemodifyterrainproject"
+    fusionSymLinks["khnewimageryproject"]="genewimageryproject"
+    fusionSymLinks["khnewterrainproject"]="genewterrainproject"
+    fusionSymLinks["khnewimageryasset"]="genewimageryresource"
+    fusionSymLinks["khnewterrainasset"]="genewterrainresource"
+    fusionSymLinks["khmodifyimageryasset"]="gemodifyimageryresource"
+    fusionSymLinks["khmodifyterrainasset"]="gemodifyterrainresource"
+    fusionSymLinks["khmaskgen"]="gemaskgen"
+    fusionSymLinks["khvirtualraster"]="gevirtualraster"
+    fusionSymLinks["khtranslate"]="getranslate"
+    fusionSymLinks["khreproject"]="gereproject"
+   
+    for link in "${!fusionSymLinks[@]}"
+    do 
+       rm "$BASEINSTALLDIR_OPT/bin/$link"
+       ln "$BASEINSTALLDIR_OPT/bin/${fusionSymLinks[$link]}" "$BASEINSTALLDIR_OPT/bin/$link" -s
+    done
+
+    libSymLinks=($(find "$BASEINSTALLDIR_OPT/lib" -maxdepth 1 -perm -777 -type f))
+    libFiles=($(find "$BASEINSTALLDIR_OPT/lib" -maxdepth 1 -not -perm -777 -type f))
+
+    for link in ${libSymLinks[@]}
+    do
+      for file in ${libFiles[@]}
+      do
+        if [[ $file =~ ${link%%.so*} ]]; then
+          if [[ $( stat -c %s $file ) == $( stat -c %s $link ) ]]; then
+            rm "$link"
+            ln "$file" "$link" -s
+            break
+          fi
+        fi
+      done
+    done
+
+    qtLibSymLinks=($(find "$BASEINSTALLDIR_OPT/qt/lib" -maxdepth 1 -perm -777 -type f))
+    qtLibFiles=($(find "$BASEINSTALLDIR_OPT/qt/lib" -maxdepth 1 -not -perm -777 -type f))
+
+    for link in ${qtLibSymLinks[@]}
+    do
+      for file in ${qtLibFiles[@]}
+      do
+        if [[ $file =~ ${link%%.so*} ]]; then
+          if [[ $( stat -c %s $file ) == $( stat -c %s $link) ]]; then
+            rm "$link"
+            ln "$file" "$link" -s
+            break
+          fi
+        fi
+      done
+    done
+
+
+    echo "Symlinks fixed."
+}
 
 setup_fusion_daemon()
 {
@@ -158,12 +245,10 @@ install_or_upgrade_asset_root()
             fi
 
             cat <<END
-
 The asset root must be upgraded to work with the current version of $GEEF $GEE_VERSION.
 You cannot use an upgraded asset root with older versions of $GEEF. 
 Consider backing up your asset root. $GEEF will warn you when
 attempting to run with a non-upgraded asset root.
-
 $UPGRADE_MESSAGE
 END
             
@@ -212,3 +297,4 @@ final_fusion_service_configuration()
 #-----------------------------------------------------------------
 
 main_postinstall
+
