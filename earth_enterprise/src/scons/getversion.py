@@ -105,19 +105,35 @@ def _GitPreviousReleaseTag(versionName):
     and if it finds it then it looks for any release build tags that are also pointing to the same
     commit"""
     tags = _GetRepository().tags
-    tailTag = next((tag for tag in _GetRepository().tags if tag.name == versionName), None)
+    tailTag = next((tag for tag in tags if tag.name == versionName), None)
     if tailTag is None:
         return ''
 
     for tag in tags:
-        if tag.commit == tailTag.commit and tag.name <> tailTag.name and _IsReleseBuildTag(tag.name):
-            return tag.name
+        if tag.name != tailTag.name:
+            if  _IsReleseBuildTag(tag.name):
+                if  _GitTagRealCommitId(tag.name) == _GitTagRealCommitId(tailTag.name):
+                    return tag.name
     
     return ''
 
 
+def _GitTagRealCommitId(tagName):
+    """use shell command to retreive commit id of where the tag points to"""
+    # for some reason .hexsha was not returning the same id....
+    return os.popen("git rev-list -n 1 '{0}'".format(tagName.replace("'", "'\"'\"'"))).read().strip()
+
+
 def _IsReleseBuildTag(tagName):
-    return re.match(r'[0-9]*\.[0-9]*\.[0-9]*\-*', tagName)
+    """checks if the tag follows the pattern where if the
+    tag is split on dash and the has at least two elements
+    and the first two elements is a series of numbers delimited
+    by dot and nothing else in those first two elements"""
+    splitTag = tagName.split('-')
+    if len(splitTag) > 1:
+        return (re.match('^[0-9]+((\.[0-9]+)+)$', splitTag[0]) and re.match('^([0-9]+((\.[0-9]+)+)|[0-9]+)$', splitTag[1]))
+
+    return False
 
 
 def _IsReleaseBranch(branchName):
@@ -134,7 +150,7 @@ def _IsReleaseBranch(branchName):
             for remote in repo.remotes:
                 try:
                     remote.fetch('+refs/tags/{0}:refs/tags/{0}'.format(versionName), None, **{'no-tags':True})
-                except git.exc.GitCommandError:
+                except:
                     pass
             
             # try one more time after the fetch attempt(s)
