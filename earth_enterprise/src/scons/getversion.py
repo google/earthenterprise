@@ -116,7 +116,7 @@ def _GitPreviousReleaseTag(versionName):
 
     for tag in tags:
         if tag.name != tailTag.name:
-            if  _IsReleseBuildTag(tag.name):
+            if  _IsReleaseBuildTag(tag.name):
                 if  _GitTagRealCommitId(tag.name) == _GitTagRealCommitId(tailTag.name):
                     return tag.name
     
@@ -129,7 +129,7 @@ def _GitTagRealCommitId(tagName):
     return os.popen("git rev-list -n 1 '{0}'".format(tagName.replace("'", "'\"'\"'"))).read().strip()
 
 
-def _IsReleseBuildTag(tagName):
+def _IsReleaseBuildTag(tagName):
     """checks if the tag follows the pattern where if the
     tag is split on dash and the has at least two elements
     and the first two elements is a series of numbers delimited
