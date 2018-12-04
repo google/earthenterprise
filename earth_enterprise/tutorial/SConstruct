@@ -60,38 +60,25 @@ def makeSoftLinks(dest_dir, src_dir, excluded_list):
     them in dest_dir. Don't link to files in excluded_list.
     Recurse through all subdirectories of src_dir.
     """
-    
     # Strip trailing slashes because they cause trouble later
-    dest_dir = dest_dir.strip(os.sep)
+    dest_dir = dest_dir.rstrip(os.sep)
+    src_dir = src_dir.rstrip(os.sep)
     src_contents = os.listdir(src_dir)
-    #src_dir = src_dir + "/"	# TODO: This should probably be os.sep()
-    #       ^^ Do I even need this?
-    # Ensure the install dir exists at each step
+    # Ensure the destination directory exists at each step
     commands.getstatusoutput("mkdir -p " + dest_dir)
-
-    import pdb
+    import pdb   ###############################
     pdb.set_trace()
-
     for file in src_contents:
         if file in excluded_list:
             continue
         # Use full paths to all files so `ln -s ... ` succeeds 
-        #src_filepath = os.sep.join((os.getcwd(), src_dir, file))
-        #src_filepath = os.sep.join((src_dir, file))
-        src_filepath = os.sep.join((os.getcwd().split(os.sep) +
-                            filter(None,src_dir.split(os.sep)) + [file]))
-        #dest_filepath = os.sep.join((os.getcwd().split(os.sep) +
         dest_filepath = os.sep.join((dest_dir.split(os.sep) + [file]))
-        #dest_filepath = os.sep.join((dest_dir.split(os.sep) + [file]))
-        #dest_filepath = os.sep.join((dest_dir, file))
+        src_filepath = os.sep.join((src_dir.split(os.sep) + [file]))
         if os.path.isdir(src_filepath):
-            #dest_subdir = dest_filepath + "/" + file
-            dest_subdir = os.sep.join((
-                                filter(None,dest_dir.split(os.sep)), [file]))
+            dest_subdir = os.sep.join((dest_dir.split(os.sep) + [file]))
+            src_subdir = os.sep.join((src_dir.split(os.sep) + [file]))
             # Recurse for next-lower directory
-            #makeSoftLinks(dest_filepath, src_filepath,
-            makeSoftLinks(dest_subdir, src_filepath,
-                                             excluded_list)
+            makeSoftLinks(dest_subdir, src_subdir, excluded_list)
         else:
             commands.getstatusoutput('ln -s "' + src_filepath + '" "' +
                                     dest_filepath + '"')
@@ -102,4 +89,8 @@ if env.GetOption('clean'):
     # clean the search and getomcat install folders.
     commands.getstatusoutput("rm -rf " + tutorials_dir)
 else:
-    makeSoftLinks(root_dir, 'FusionTutorial/', ['.svn'])
+    # Get the current directory, since SCons will move into the directory
+    #   it's using, and FusionTutorial is expected below the SConscript file.
+    tutorial_dir = os.sep.join((os.getcwd().split(os.sep) +
+                        ['FusionTutorial'])) #TODO: Move this constant to top
+    makeSoftLinks(root_dir, tutorial_dir, ['.svn'])
