@@ -79,15 +79,16 @@ def makeSoftLinks(dest_dir, src_dir, excluded_list):
         src_filepath = os.sep.join((os.getcwd().split(os.sep) +
                             filter(None,src_dir.split(os.sep)) + [file]))
         #dest_filepath = os.sep.join((os.getcwd().split(os.sep) +
-        dest_filepath = os.sep.join((
-                            filter(None,dest_dir.split(os.sep)) + [file]))
+        dest_filepath = os.sep.join((dest_dir.split(os.sep) + [file]))
         #dest_filepath = os.sep.join((dest_dir.split(os.sep) + [file]))
         #dest_filepath = os.sep.join((dest_dir, file))
         if os.path.isdir(src_filepath):
             #dest_subdir = dest_filepath + "/" + file
+            dest_subdir = os.sep.join((
+                                filter(None,dest_dir.split(os.sep)), [file]))
             # Recurse for next-lower directory
-            makeSoftLinks(dest_filepath, src_filepath,
-            #makeSoftLinks(dest_subdir, src_filepath,
+            #makeSoftLinks(dest_filepath, src_filepath,
+            makeSoftLinks(dest_subdir, src_filepath,
                                              excluded_list)
         else:
             commands.getstatusoutput('ln -s "' + src_filepath + '" "' +
