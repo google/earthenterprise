@@ -5,6 +5,7 @@ import git
 import sys
 
 from datetime import datetime
+import re
 
 
 def GetVersion(backupFile, label=''):
@@ -42,16 +43,153 @@ def GetLongVersion(backupFile, label=''):
 
 
 def _GitGeneratedLongVersion():
-    """Take the raw information parsed by git, and use it to
-       generate an appropriate version string for GEE."""
+    """Calculate the version name and build number into a single build string."""
 
-    raw = _GetCommitRawDescription()
+    versionName, buildNumber = _GitVersionNameAndBuildNumber()
+    return "{0}-{1}".format(versionName, buildNumber)
 
-    # For tagged commits, return the tag itself
-    if _IsCurrentCommitTagged(raw):
-        return _VersionForTaggedHead(raw)
+
+def _GitCommitCount(tagName='HEAD', baseRef=''):
+    """calculate git commit counts"""
+    repo = _GetRepository()
+    if not baseRef:
+        return len(list(repo.iter_commits(tagName)))
     else:
-        return _VersionFromTagHistory(raw)
+        return len(list(repo.iter_commits(baseRef + '..' + tagName)))
+
+
+def _GitVersionNameAndBuildNumber():
+    """Get the version name and build number based on state of git
+    Use a tag only if HEAD is directly pointing to it and it is a
+    release build tag (see _GetCommitRawDescription for details)
+    otherwise use the branch name"""
+
+    # For tagged commits use the tag
+    rawDescription = _GetCommitRawDescription()
+    if _IsCurrentCommitTagged(rawDescription):
+        # Extract version name and build number
+        # from the tag (should be a release build tag)
+        splitTag = rawDescription.split('-')
+        return splitTag[0], splitTag[1]
+    else:
+        # Use branch name if we are not a detached HEAD
+        branchName = _GitBranchName()
+        if not branchName:
+            # we are a detached head not on a tag so just treat the
+            # raw describe like a topic branch name
+            return rawDescription, str(_GitCommitCount())
+        else:
+            # Get the version name from the branch name
+            if _IsReleaseBranch(branchName):
+                versionName = _GetReleaseVersionName(branchName)
+                return versionName, '{0}.{1}'.format(_GitBranchedCommitCount(versionName), _GitCommitCount('HEAD', versionName))
+            else:
+                return _sanitizeBranchName(branchName),  str(_GitCommitCount())
+
+
+def _GitBranchedCommitCount(versionName):
+    """Returns what the build number was from the branch point"""
+    prevRelTag = _GitPreviousReleaseTag(versionName)
+    prevCommitCount = ''
+
+    if prevRelTag:
+        prevCommitCount = prevRelTag.split('-')[1]
+    else:
+        prevCommitCount = str(_GitCommitCount(versionName))
+
+    return prevCommitCount
+
+
+def _GitPreviousReleaseTag(versionName):
+    """Looks for the tail tag for this versionName (the tag with the same name as the version name)
+    and if it finds it then it looks for any release build tags that are also pointing to the same
+    commit"""
+    tags = _GetRepository().tags
+    tailTag = None
+    for tag in tags:
+        if tag.name == versionName:
+            tailTag = tag
+            break
+
+    if tailTag is None:
+        return ''
+
+    for tag in tags:
+        if tag.name != tailTag.name:
+            if  _IsReleaseBuildTag(tag.name):
+                if  _GitTagRealCommitId(tag.name) == _GitTagRealCommitId(tailTag.name):
+                    return tag.name
+    
+    return ''
+
+
+def _GitTagRealCommitId(tagName):
+    """use shell command to retreive commit id of where the tag points to"""
+    # for some reason .hexsha was not returning the same id....
+    return os.popen("git rev-list -n 1 '{0}'".format(tagName.replace("'", "'\"'\"'"))).read().strip()
+
+
+def _IsReleaseBuildTag(tagName):
+    """checks if the tag follows the pattern where if the
+    tag is split on dash and the has at least two elements
+    and the first two elements is a series of numbers delimited
+    by dot and nothing else in those first two elements"""
+    splitTag = tagName.split('-')
+    if len(splitTag) > 1:
+        return (re.match('^[0-9]+((\.[0-9]+)+)$', splitTag[0]) and re.match('^([0-9]+((\.[0-9]+)+)|[0-9]+)$', splitTag[1]))
+
+    return False
+
+
+def _IsReleaseBranch(branchName):
+    """Check if the branch name is a release branch"""
+    # a release branch begins with 'release_' and has
+    # a base tag that matches the release name
+    if branchName[:8] == 'release_':
+        versionName = _GetReleaseVersionName(branchName)
+        if _gitHasTag(versionName):
+            return True
+        else:
+            # see if we can pull the tag down from any of the remotes
+            repo = _GetRepository()
+            for remote in repo.remotes:
+                try:
+                    remote.fetch('+refs/tags/{0}:refs/tags/{0}'.format(versionName), None, **{'no-tags':True})
+                except:
+                    pass
+            
+            # try one more time after the fetch attempt(s)
+            return (_gitHasTag(versionName) is not None)
+    else:
+        return False
+
+
+def _gitHasTag(tagName):
+    """See if a tag exists in git"""
+    tags =  _GetRepository().tags
+    for tag in tags:
+        if tag.name == tagName:
+            return tag
+
+    return None
+ 
+
+def _sanitizeBranchName(branchName):
+    """sanitize branch names to ensure some characters are not used"""
+    return re.sub('[$?*`\\-"\'\\\\/\\s]', '_', branchName)
+
+
+def _GetReleaseVersionName(branchName):
+    """removes pre-pended 'release_' from branch name"""
+    return branchName[8:]
+
+
+def _GitBranchName():
+    """Returns current branch name or empty string"""
+    try:
+        return _GetRepository().active_branch.name
+    except TypeError:
+        return ''
 
 
 def _IsGitDescribeFirstParentSupported():
@@ -87,74 +225,6 @@ def _IsCurrentCommitTagged(raw):
     return (len(raw.split("-")) < 4)
 
 
-def _VersionForTaggedHead(raw):
-    """When we're on the tagged commit, the version string is
-    either the tag itself (when repo is clean), or the tag with
-    date appended (when repo has uncommitted changes)"""
-    if _CheckDirtyRepository():
-        # Append the date if the repo contains uncommitted files
-        return '.'.join([raw, _GetDateString()])
-    return raw
-
-
-def _VersionFromTagHistory(raw):
-    """From the HEAD revision, this function finds the most recent
-    reachable version tag and returns a string representing the
-    version being built -- which is one version beyond the latest
-    found in the history."""
-
-    # Tear apart the information in the version string.
-    components = _ParseRawVersionString(raw)
-
-    # Determine how to update, since we are *not* on tagged commit.
-    if components['isFinal']:
-        components['patch'] = 0
-        components['patchType'] = "alpha"
-        components['revision'] = components['revision'] + 1
-    else:
-        components['patch'] = components['patch'] + 1
-
-    # Rebuild.
-    base = '.'.join([str(components[x]) for x in ("major", "minor", "revision")])
-    patch = '.'.join([str(components["patch"]), components["patchType"], _GetDateString()])
-    if not _CheckDirtyRepository():
-        patch = '.'.join([patch, components['hash']])
-
-    return '-'.join([base, patch])
-
-
-def _ParseRawVersionString(raw):
-    """Break apart a raw version string into its various components,
-    and return those entries via a dictionary."""
-
-    components = { }
-
-    # major.minor.revision-patch[.patchType][-commits][-hash]
-    rawComponents = raw.split("-")
-
-    base = rawComponents[0]
-    patchRaw = '' if not len(rawComponents) > 1 else rawComponents[1]
-    components['commits'] = -1 if not len(rawComponents) > 2 else rawComponents[2]
-    components['hash'] = None if not len(rawComponents) > 3 else rawComponents[3]
-
-    # Primary version (major.minor.revision)
-    baseComponents = base.split(".")
-    components['major'] = int(baseComponents[0])
-    components['minor'] = int(baseComponents[1])
-    components['revision'] = int(baseComponents[2])
-
-    # Patch (patch[.patchType])
-    components['isFinal'] = ((patchRaw[-5:] == "final") or
-                             (patchRaw[-7:] == "release"))
-
-    patchComponents = patchRaw.split(".")
-    components['patch'] = int(patchComponents[0])
-    components['patchType'] = 'alpha' if not len(patchComponents) > 1 else patchComponents[1]
-
-    repo = _GetRepository()
-    return components
-
-
 def _CheckGitAvailable():
     """Try the most basic of git commands, to see if there is
        currently any access to a repository."""
@@ -175,14 +245,6 @@ def _GetRepository():
         return git.Repo('.', search_parent_directories=True)
     except TypeError:
         return git.Repo('.')
-
-
-def _CheckDirtyRepository():
-    """Check to see if the repository is not in a cleanly committed state."""
-    repo = _GetRepository()
-    str = repo.git.status("--porcelain")
-
-    return (len(str) > 0)
 
 
 def _ReadBackupVersionFile(target):
