@@ -109,6 +109,7 @@ fix_symlinks()
     fusionSymLinks["khvirtualraster"]="gevirtualraster"
     fusionSymLinks["khtranslate"]="getranslate"
     fusionSymLinks["khreproject"]="gereproject"
+    fusionSymLinks["ldapadd"]="ldapmodify"
    
     for link in "${!fusionSymLinks[@]}"
     do 
@@ -150,6 +151,11 @@ fix_symlinks()
       done
     done
 
+    rm "$BASEINSTALLDIR_OPT/share/man/man1/ldapadd.1"
+    ln "$BASEINSTALLDIR_OPT/share/man/man1/ldapmodify.1" "$BASEINSTALLDIR_OPT/share/man/man1/ldapadd.1" -s
+
+    rm "$BASEINSTALLDIR_OPT/share/fonts/sans.ttf"
+    ln "$BASEINSTALLDIR_OPT/share/fonts/luxisr.ttf" "$BASEINSTALLDIR_OPT/share/fonts/sans.ttf" -s
 
     echo "Symlinks fixed."
 }
