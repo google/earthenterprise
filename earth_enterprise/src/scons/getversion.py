@@ -160,6 +160,8 @@ def _IsReleaseBranch(branchName):
             
             # try one more time after the fetch attempt(s)
             return (_gitHasTag(versionName) is not None)
+    else:
+        return False
 
 
 def _gitHasTag(tagName):
