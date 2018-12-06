@@ -87,12 +87,12 @@ khVolumeManager::Init(void)
       volumedefs.find(geAssetRoot::VolumeName);
     if (found == volumedefs.end()) {
       notify(NFY_WARN, "Cannot find volume definition for \"%s\"",
-             geAssetRoot::VolumeName.c_str());
+             geAssetRoot::VolumeName);
       volsok = false;
     } else if (AssetDefs::AssetRoot() != found->second.netpath) {
       notify(NFY_WARN,
              "\"%s\" volume's netpath must match systemrc's assetroot",
-             geAssetRoot::VolumeName.c_str());
+             geAssetRoot::VolumeName);
       volsok = false;
     }
 
