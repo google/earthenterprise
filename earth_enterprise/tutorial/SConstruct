@@ -36,7 +36,7 @@ root_dir = tutorials_dir + '/opt/google/share/tutorials/fusion/'
 
 # Get the current directory, since SCons will move into the directory
 #   it's using, and FusionTutorial is expected below the SConscript file.
-tutorial_src_dir = os.path.join(os.getcwd(), 'FusionTutorial')
+tutorial_src_dir = os.path.join(os.getcwd(), 'FusionTutorial')  
 
 def makeSoftLinks(dest_dir, src_dir, excluded_list):
     """Make soft links of all files in src_dir and place
