@@ -4,7 +4,8 @@
 # TODO fix tabs/spaces
 
 import unittest
-import migrate_fusion_hostname
+#import subprocess
+import migrate_fusion_hostname as mfh
 
 class TestMigrateFusionHostname(unittest.TestCase):
 
@@ -34,10 +35,21 @@ class TestMigrateFusionHostname(unittest.TestCase):
 		pass
 
 
+# TODO split into smaller functions (1 per test?)
 	def testDaemonStartStop(self):
-		with self.assertRaises(subprocess.CalledProcessError):
+		# Test Bad Input for daemon:
+		with self.assertRaises(OSError):
+			mfh.daemon_start_stop("/etc/init.d/fake_daemon_asdf", "start")
 
-			# TODO test bad start/stop input (custom exception?)
+		# Test Bad Input for command:
+		with self.assertRaises(ValueError):
+			mfh.daemon_start_stop("/etc/init.d/gefusion", None)
+			mfh.daemon_start_stop("/etc/init.d/gefusion", 1)
+			mfh.daemon_start_stop("/etc/init.d/gefusion", "")
+			mfh.daemon_start_stop("/etc/init.d/gefusion", "asdf")
 
-			daemon_start_stop("/etc/init.d/fake_daemon_asdf", "start"))
+
 			
+
+if __name__ == "__main__":
+	unittest.main()
