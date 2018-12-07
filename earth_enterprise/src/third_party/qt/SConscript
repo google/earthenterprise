@@ -69,8 +69,6 @@ if third_party_env['is_min_ubuntu'] and not third_party_env['native_cc']:
 else:
   env_opt += ''
 
-env_opt += ' PKG_CONFIG_PATH=. '
-
 if qt_env['release'] or qt_env['optimize']:
   config_opt = '-release'
 else:
@@ -82,12 +80,12 @@ qt_configure = qt_env.Command(
     qt_target, qt_patch,
     [qt_env.MultiCommand(
         'cd %s\n'
-        'ln -s /usr/lib64/pkgconfig/libpng12.pc libpng.pc\n'
         'echo yes | %s%s ./configure -platform linux-g++-64 '
         '-prefix /opt/google/qt '
         '-no-exceptions '
         '-system-zlib '
         '-system-libjpeg -system-libmng ' #-system-libpng
+        '-I/usr/include/libpng12 '
         '-qt-imgfmt-jpeg -qt-imgfmt-mng '
         '-thread '
         '-shared -no-cups -freetype -stl -xcursor -xinerama -xrandr -xrender '
