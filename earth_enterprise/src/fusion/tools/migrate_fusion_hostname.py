@@ -72,7 +72,7 @@ def handle_input_args():
 
     parser.add_argument("old_hostname", help="Required - Current hostname of Fusion machine", type=str)
     parser.add_argument("new_hostname", help="Required - New hostname for Fusion machine", type=str)
-    parser.add_argument("--dry-run", help="Test only - do not make any actual changes", action="store_true")
+    parser.add_argument("--dryrun", help="Test only - do not make any actual changes", action="store_true")
 
     # TODO is mutex group required or do we need to specify that??
     # TODO necessary to do default=False for store_trues?

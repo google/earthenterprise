@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 # TODO docstring?
-# TODO fix tabs/spaces
 
 import unittest
 #import subprocess
@@ -28,16 +27,20 @@ class TestMigrateFusionHostname(unittest.TestCase):
         """Runs once after every test."""
 
 
+    #### Full Program Tests ####
+    
+    # All of these should be run with the --dryrun flag
+
     def testFullProgram(self):
         # TODO big tests of full program as subprocess calls
-        # TODO test bad input, etc.
+        # TODO test bad commandline args, etc.
         # *** run all of these ase DRYRUNS!
         pass
 
+    ### Individual Method Tests ####
 
-# TODO split into smaller functions (1 per test?)
-    def testDaemonStartStop(self):
-        # Test Bad Input for daemon:
+    def daemon_start_stop_badInput(self):
+        # Test Bad Input for daemon name:
         with self.assertRaises(OSError):
             mfh.daemon_start_stop("/etc/init.d/fake_daemon_asdf", "start")
 
