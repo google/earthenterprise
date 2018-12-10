@@ -226,7 +226,6 @@ def _GetCommitRawDescription():
 def _IsCurrentCommitReleaseTagged():
     """True if the current commit is tagged, otherwise False"""
     # If this condition hits, then we are currently on a tagged commit.
-    repo = _GetRepository()
     tags = _GetRepository().tags
     headCommit = _GitTagRealCommitId('HEAD')
     for tag in tags:
