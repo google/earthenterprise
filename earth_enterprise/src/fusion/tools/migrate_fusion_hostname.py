@@ -31,7 +31,9 @@ import subprocess
 from socket import gethostname    # preferred way to get hostname
 
 
-# TODO fix tabs/spaces, use pylint to check
+# Main To-Do List (see also inline TODO's!):
+# TODO run pylint
+# TODO add user confirmation before deletions, etc.
 
 # GLOBALS:
 
@@ -101,12 +103,14 @@ def change_hostname_server_only():
     # Remove the contents of /gevol/published_dbs/stream_space
     # and /gevol/published_dbs/search_space.
     # TODO Prompt user before deletion?
+    # TODO use return codes?
     delete_folder_contents(_PUBLISHED_STREAM_FOLDER)
     delete_folder_contents(_PUBLISHED_SEARCH_FOLDER)
 
     # TODO Change directory to /tmp 
     # and execute 
     # sudo -u gepguser /opt/google/bin/geresetpgdb.
+    # TODO START HERE. CHECK ABOVE STUFF TOO!
 
     # Start the GEE Server: /etc/init.d/geserver start.
     daemon_start_stop(_SERVER_DAEMON, "start")
