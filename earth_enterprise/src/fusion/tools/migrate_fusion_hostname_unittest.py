@@ -10,6 +10,9 @@
         Some individual tests may change _DRYRUN to False,
         but this should be used very carefully and only on 
         very granular cases, using disposable temporary files, etc.
+
+        Both setUp and tearDown methods reset 
+        _DRYRUN = True for safety.
     
     WARNING: Writes and deletes some temporary files. Uses default 
         temp file directory as per Python tempfile specification:
@@ -36,7 +39,23 @@ import tempfile
 from socket import gethostname
 import migrate_fusion_hostname as mfh   # Module to Test
 
+# Global Variables
+# TODO use argparse to set these?
+_ALLOW_DAEMON_STARTSTOP = True      # this only applies to module tests
+                                    # to allow starting/stopping daemons
+                                    # and should only be used for 
+                                    # @unittest.skip... decorators
+                                    # DO NOT rely on this for safety.
+                                    # Only the -dryrun flag is safe.
+# TODO implement this:                                    
+# _ALLOW_DRYRUN_OVERRIDE = True     # Enable direct manipulation of 
+                                    # mfh._DRYRUN flag for tests
+                                    # This should be reset in setUp and/or
+                                    # tearDown for safety.
+
 # TODO find a way to run full/destructive tests on a disposable VM
+
+
 
 # Helper Functions:
 
@@ -146,23 +165,33 @@ class TestMigrateFusionHostname(unittest.TestCase):
         with self.assertRaises(OSError):
             mfh.daemon_start_stop("/etc/init.d/fake_daemon_asdf", "start")
 
+    #@unittest.skipUnless(os.path.isfile(mfh._SERVER_DAEMON), "Missing GEE Server Daemon") 
+    # this should run in dryrun mode so shouldn't require actual daemon file to exist...
     def test_daemon_start_stop_bad_daemon(self):
         """Test Bad Input for command."""
         with self.assertRaises(ValueError):
-            mfh.daemon_start_stop("/etc/init.d/gefusion", None)
-            mfh.daemon_start_stop("/etc/init.d/gefusion", 1)
-            mfh.daemon_start_stop("/etc/init.d/gefusion", "")
-            mfh.daemon_start_stop("/etc/init.d/gefusion", "asdf")
+            mfh.daemon_start_stop(mfh._SERVER_DAEMON, None)
+            mfh.daemon_start_stop(mfh._SERVER_DAEMON, 1)
+            mfh.daemon_start_stop(mfh._SERVER_DAEMON, "")
+            mfh.daemon_start_stop(mfh._SERVER_DAEMON, "asdf")
 
-    #@unittest.skipUnless(check_root(), "Requires root.")
-    #def test_daemon_start_stop_live_test(self):
-    #    """Actually stop and start a service.
-    #
-    #    WARNING this will affect actual services running
-    #    """
-    #    # TODO implement this?
-    #    #mfh.daemon_start_stop(mfh._SERVER_DAEMON
-    #    pass
+    @unittest.skipUnless(check_root(), "Requires root.")
+    @unittest.skipUnless(os.path.isfile(mfh._SERVER_DAEMON), "Missing GEE Server Daemon")
+    @unittest.skipUnless(_ALLOW_DAEMON_STARTSTOP, "Must enable _ALLOW_DAEMON_STARTSTOP")
+    def test_daemon_start_stop_live_test(self):
+        """Actually stop and start a service.
+    
+        WARNING this will affect actual services running
+
+        Requires _ALLOW_DAEMON_STARTSTOP to be True
+        """
+        # TODO check if server is running first
+        # TODO make sure we return it to its original state? maybe in tearDownClass() ?
+        self.assertEqual(0, 
+            mfh.daemon_start_stop(mfh._SERVER_DAEMON, "stop"))
+        # TODO check that server stopped
+        self.assertEqual(0, 
+            mfh.daemon_start_stop(mfh._SERVER_DAEMON, "start"))
 
 
     def test_delete_folder_contents_startsWithSlash(self):
