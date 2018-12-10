@@ -79,6 +79,14 @@ gtag('config', 'UA-108632131-2');
             <th>Resolution</th>
           </tr>
           <tr>
+            <td>200</td>
+            <td><code>stage_install</code> fails on the tutorial files when <code>/home</code>
+              and <code>/tmp</code> are on different file systems</td>
+            <td>
+              Files are linked in <code>/tmp</code> using symbolic links back to original locations.
+            </td>
+          </tr>
+          <tr>
             <td>968</td>
             <td><code>/etc/init.d/gefusion stop</code> Does Not Ensure Daemons Stop</td>
             <td>
