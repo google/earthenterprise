@@ -64,6 +64,7 @@ def _GitVersionNameAndBuildNumber():
     release build tag (see _GetCommitRawDescription for details)
     otherwise use the branch name"""
 
+    tags =  _GetRepository().tags
     # For tagged commits use the tag
     rawDescription = _GetCommitRawDescription()
     if _IsCurrentCommitTagged(rawDescription):
