@@ -64,27 +64,27 @@ def _GitVersionNameAndBuildNumber():
     release build tag (see _GetCommitRawDescription for details)
     otherwise use the branch name"""
 
-    # For tagged commits use the tag
-    rawDescription = _GetCommitRawDescription()
-    if _IsCurrentCommitReleaseTagged():
-        # Extract version name and build number
-        # from the tag (should be a release build tag)
-        splitTag = rawDescription.split('-')
-        return splitTag[0], splitTag[1]
-    else:
-        # Use branch name if we are not a detached HEAD
-        branchName = _GitBranchName()
-        if not branchName:
-            # we are a detached head not on a tag so just treat the
-            # raw describe like a topic branch name
-            return rawDescription, str(_GitCommitCount())
+    # Use branch name if we are not a detached HEAD
+    branchName = _GitBranchName()
+    if not branchName:
+        # For tagged commits use the tag
+        releaseTag = _GetCurrentCommitReleaseTag()
+        if releaseTag:
+            # Extract version name and build number
+            # from the tag (should be a release build tag)
+            splitTag = releaseTag.split('-')
+            return splitTag[0], splitTag[1]
         else:
-            # Get the version name from the branch name
-            if _IsReleaseBranch(branchName):
-                tailTag = _GetReleaseTailTag(branchName)
-                return _GetReleaseVersionName(branchName), '{0}.{1}'.format(_GitBranchedCommitCount(tailTag), _GitCommitCount('HEAD', tailTag))
-            else:
-                return _sanitizeBranchName(branchName),  str(_GitCommitCount())
+            # we are a detached head not on a release tag so just treat
+            # the raw describe like a topic branch name
+            return _GetCommitRawDescription(), str(_GitCommitCount())
+    else:
+        # Get the version name from the branch name
+        if _IsReleaseBranch(branchName):
+            tailTag = _GetReleaseTailTag(branchName)
+            return _GetReleaseVersionName(branchName), '{0}.{1}'.format(_GitBranchedCommitCount(tailTag), _GitCommitCount('HEAD', tailTag))
+        else:
+            return _sanitizeBranchName(branchName),  str(_GitCommitCount())
 
 
 def _GitBranchedCommitCount(tailTag):
@@ -223,18 +223,18 @@ def _GetCommitRawDescription():
     return raw
 
 
-def _IsCurrentCommitReleaseTagged():
-    """True if the current commit is tagged, otherwise False"""
+def _GetCurrentCommitReleaseTag():
+    """If head is pointing to a relase tag it returns the name of the tag"""
     # If this condition hits, then we are currently on a tagged commit.
     tags = _GetRepository().tags
     headCommit = _GitTagRealCommitId('HEAD')
     for tag in tags:
-        if headCommit == _GitTagRealCommitId(tag.name) and _IsReleaseBuildTag(tag.name):
-            return True
+        if _IsReleaseBuildTag(tag.name) and headCommit == _GitTagRealCommitId(tag.name):
+            return tag.name
         else:
             pass
     
-    return False
+    return ''
 
 
 def _CheckGitAvailable():
