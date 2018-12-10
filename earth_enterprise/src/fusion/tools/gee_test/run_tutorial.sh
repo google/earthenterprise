@@ -128,11 +128,7 @@ sudo /etc/init.d/geserver restart
 
 /opt/google/bin/genewdatabase -o Tutorial/Databases/SFDb_3d --imagery Tutorial/Projects/Imagery/SFBayArea --terrain Tutorial/Projects/Terrain/SFTopo30Terrain  --vector Tutorial/Projects/Vector/CA_Projects
 
-/opt/google/bin/genewdatabase -o Tutorial/Databases/SFDb_3d_TM --imagery Tutorial/Projects/Imagery/SFBayArea_TM --terrain Tutorial/Projects/Terrain/SFTopo30Terrain  --vector Tutorial/Projects/Vector/CA_Projects
-
 /opt/google/bin/gebuild Tutorial/Databases/SFDb_3d
-
-/opt/google/bin/gebuild Tutorial/Databases/SFDb_3d_TM
 
 /opt/google/bin/genewmapdatabase --mercator -o Tutorial/Databases/SF_2d_Merc --imagery Tutorial/Projects/Imagery/SFBayArea_merc --map Tutorial/Projects/Maps/CAProjects
 
@@ -159,6 +155,5 @@ echo ""
 echo " The same for all other databases..."
 
 /opt/google/bin/gequery Tutorial/Databases/SFDb_3d --status
-/opt/google/bin/gequery Tutorial/Databases/SFDb_3d_TM --status
 /opt/google/bin/gequery Tutorial/Databases/SF_2d_Merc --status
 /opt/google/bin/gequery Tutorial/Databases/SF_2d_Merc_With_Flat_Imagery --status
