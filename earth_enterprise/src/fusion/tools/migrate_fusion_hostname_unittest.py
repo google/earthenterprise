@@ -3,9 +3,21 @@
 # TODO docstring?
 
 import unittest
+import os
 import subprocess
 from socket import gethostname
 import migrate_fusion_hostname as mfh   # Module to Test
+
+# Helper Functions:
+
+def check_root():
+    """Check for root permission.
+
+    Returns: 
+        True if this unittest module is run as root,
+        otherwise returns False.
+    """
+    return os.geteuid() == 0
 
 class TestMigrateFusionHostname(unittest.TestCase):
 
@@ -19,12 +31,15 @@ class TestMigrateFusionHostname(unittest.TestCase):
     _BASE_ARG_LIST = None   # Prefix for all full-program test
                             # function calls (must include --dryrun)
                             # for safety
+    _HAVE_ROOT = False      # skip any tests that require root
 
     """Setup/Teardown"""
     @classmethod
     def setUpClass(cls):
         """Runs ONLY once at beginning."""
 
+        if os.geteuid() == 0:
+            cls._HAVE_ROOT = True
         cls._CURRENT_HOSTNAME = gethostname()
 
     @classmethod
@@ -51,6 +66,7 @@ class TestMigrateFusionHostname(unittest.TestCase):
     
     # All of these should be run with the --dryrun flag
 
+    @unittest.skipUnless(check_root(), "Requires root.")
     def test_full_program_dryrun_server_mode(self):
         """Run tests of full program in DRYRUN mode.
 
@@ -88,11 +104,11 @@ class TestMigrateFusionHostname(unittest.TestCase):
 
     ### Individual Method Tests ####
 
-    # TODO doesn't work with dryrun mode...
-    #def test_daemon_start_stop_bad_daemon(self):
-    #    """Test Bad Input for daemon name."""
-    #    with self.assertRaises(OSError):
-    #        mfh.daemon_start_stop("/etc/init.d/fake_daemon_asdf", "start")
+    @unittest.skip("Won't throw expected error in --dryrun mode")
+    def test_daemon_start_stop_bad_daemon(self):
+        """Test Bad Input for daemon name."""
+        with self.assertRaises(OSError):
+            mfh.daemon_start_stop("/etc/init.d/fake_daemon_asdf", "start")
 
     def test_daemon_start_stop_bad_daemon(self):
         """Test Bad Input for command."""
@@ -102,8 +118,17 @@ class TestMigrateFusionHostname(unittest.TestCase):
             mfh.daemon_start_stop("/etc/init.d/gefusion", "")
             mfh.daemon_start_stop("/etc/init.d/gefusion", "asdf")
 
+    #@unittest.skipUnless(check_root(), "Requires root.")
+    #def test_daemon_start_stop_live_test(self):
+    #    """Actually stop and start a service.
+
+    #    WARNING this will affect actual services running
+    #    """
+    #    # TODO implement this?
+    #    #mfh.daemon_start_stop(mfh._SERVER_DAEMON)
+    #    pass
 
             
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(verbosity=2)
