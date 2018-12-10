@@ -1,12 +1,42 @@
 #!/usr/bin/python
 
-# TODO docstring?
+"""Unit tests for migrate_fusion_hostname.py
+
+    WARNING: Do NOT run these tests on a production machine.
+        All full-program unit tests are run with -dryrun flag
+        to avoid destructive behavior, but just to be safe,
+        ONLY RUN THIS ON A TEST MACHINE!
+
+        Some individual tests may change _DRYRUN to False,
+        but this should be used very carefully and only on 
+        very granular cases, using disposable temporary files, etc.
+    
+    WARNING: Writes and deletes some temporary files. Uses default 
+        temp file directory as per Python tempfile specification:
+        https://docs.python.org/2/library/tempfile.html#tempfile.mkstemp
+        
+    See the above link for changing default temp file directory.
+
+    Usage:
+        Most unit tests can be run as default user.
+
+        However, there are also some tests which require root
+        permission and must be run with sudo; otherwise 
+        they are skipped.
+
+        Run as:
+        python migrate_fusion_hostname_unittest.py 
+            or optionally with sudo to run all tests.
+    """
 
 import unittest
 import os
 import subprocess
+import tempfile
 from socket import gethostname
 import migrate_fusion_hostname as mfh   # Module to Test
+
+# TODO find a way to run full/destructive tests on a disposable VM
 
 # Helper Functions:
 
@@ -49,6 +79,10 @@ class TestMigrateFusionHostname(unittest.TestCase):
 
     def setUp(self):
         """Runs once before every test."""
+
+        # Reset internal _DRYRUN variable just to be safe
+        # NOTE: some tests may change this (eg. file deletion)
+        mfh._DRYRUN = True
         
         # Reset basic arguments with --dryrun 
         # for safety before each test
@@ -59,7 +93,8 @@ class TestMigrateFusionHostname(unittest.TestCase):
 
     def tearDown(self):
         """Runs once after every test."""
-        pass
+        
+        mfh._DRYRUN = True  # double check just for safety
 
 
     #### Full Program Tests ####
@@ -104,9 +139,10 @@ class TestMigrateFusionHostname(unittest.TestCase):
 
     ### Individual Method Tests ####
 
-    @unittest.skip("Won't throw expected error in --dryrun mode")
+    #@unittest.skip("Won't throw expected error in --dryrun mode")
     def test_daemon_start_stop_bad_daemon(self):
         """Test Bad Input for daemon name."""
+        mfh._DRYRUN = False
         with self.assertRaises(OSError):
             mfh.daemon_start_stop("/etc/init.d/fake_daemon_asdf", "start")
 
@@ -121,12 +157,72 @@ class TestMigrateFusionHostname(unittest.TestCase):
     #@unittest.skipUnless(check_root(), "Requires root.")
     #def test_daemon_start_stop_live_test(self):
     #    """Actually stop and start a service.
-
+    #
     #    WARNING this will affect actual services running
     #    """
     #    # TODO implement this?
-    #    #mfh.daemon_start_stop(mfh._SERVER_DAEMON)
+    #    #mfh.daemon_start_stop(mfh._SERVER_DAEMON
     #    pass
+
+
+    def test_delete_folder_contents_startsWithSlash(self):
+        """Omitting leading slash should throw ValueError."""
+        with self.assertRaises(ValueError):
+            mfh.delete_folder_contents("tmp/asdffakedir123")
+
+    def test_delete_folder_contents_missingDir(self):
+        """Correct leading slash but missing dir should throw OSError."""
+        with self.assertRaises(OSError):
+            mfh.delete_folder_contents("/tmp/asdffakedir123")
+
+    def test_delete_folder_contents_actual_delete(self):
+        """Create some fake tmp files/folders and delete them.
+
+            WARNING: Creates and deletes some temp files.
+        
+            You may wish to change the default temp directory:
+            (see Python documentation for 'tempfile' module)
+        """
+
+        tmpdir = tempfile.mkdtemp(prefix="mfh_test_delete_folder")
+        fake_folders = ["testdir1", "testdir2", "testdir3"]
+        fake_files = ["file1.txt", "file2.txt", "file3.txt"]
+
+        # Create temporary file tree
+        # Create files in top-level directory
+        for f in fake_files:
+            with open(os.path.join(tmpdir, f), 'w') as my_file:
+                my_file.write("testwords1234567890")
+        # Create subfolders and files within them
+        for d in fake_folders:
+            my_dir = os.path.join(tmpdir, d)
+            os.mkdir(my_dir)
+            for f in fake_files:
+                with open(os.path.join(my_dir, f), 'w') as my_file:
+                    my_file.write("testwords1234567890")
+
+        # TODO try/catch file creation errors?
+
+        # verify fake files exist
+        n_files = len(os.listdir(tmpdir))
+        self.assertGreater(n_files, 0)
+
+        # make sure files are NOT deleted in _DRYRUN mode:
+        mfh.delete_folder_contents(tmpdir)
+        self.assertEqual(len(os.listdir(tmpdir)), n_files)
+
+        # switch to live mode
+        mfh._DRYRUN = False
+        
+        # delete the files for real this time
+        mfh.delete_folder_contents(tmpdir)
+
+        # now, tmpdir should still exist but it should be empty
+        self.assertTrue(os.path.isdir(tmpdir))
+        self.assertEqual(len(os.listdir(tmpdir)), 0)
+
+        # clean up:
+        os.rmdir(tmpdir)
 
             
 
