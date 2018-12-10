@@ -25,6 +25,7 @@
 
 import os
 import sys
+import shutil
 import argparse
 import subprocess
 from socket import gethostname    # preferred way to get hostname
@@ -77,7 +78,8 @@ def change_hostname_server_only():
 
     # Shut down the geserver daemon at /etc/init.d/geserver stop.
     daemon_start_stop(_SERVER_DAEMON, "stop")
-    # TODO confirm daemones stopped?
+
+    # TODO confirm daemons stopped?
 
     # TODO Update the hostname and IP address to the correct 
     # entries for the machine.
@@ -85,6 +87,7 @@ def change_hostname_server_only():
     # TODO Edit /opt/google/gehttpd/htdocs/intl/en/tips/tip*.html
     # and update any hardcoded URLs to the new machine URL.
     # TODO What is the format for the * part?
+    # does it include hostname? or just a unique id?
 
     # TODO Remove the contents of /gevol/published_dbs/stream_space
     # and /gevol/published_dbs/search_space.
@@ -93,7 +96,7 @@ def change_hostname_server_only():
     # sudo -u gepguser /opt/google/bin/geresetpgdb.
 
     # Start the GEE Server: /etc/init.d/geserver start.
-    daemon_start_stop("_SERVER_DAEMON", "start")
+    daemon_start_stop(_SERVER_DAEMON, "start")
 
     # TODO return something?
 
@@ -244,6 +247,51 @@ def daemon_start_stop(daemon, command):
 
     return 0
 
+def delete_folder_contents(path):
+    """Delete entire contents of a folder, but not the actual folder.
+
+    Deletes all files/subfolders contained in folder specified
+    by 'path', but leaves the containing folder in place.
+
+    TODO likely requires root? Might fail on permissions issues
+    but we assume this program is run as root.
+
+    Globals:
+        _DRYRUN: will not actually delete anything if _DRYRUN is True
+
+    Args:
+        path: absolute path to folder to delete (string)
+            Must begin with "/" to ensure full absolute path.
+            e.g. "/gevol/published_dbs/stream_space"
+
+    Raises:
+        ValueError: If path does not start with "/"
+        OSError: on any os/shutil deletion errors
+
+    Returns:
+        TODO
+    """
+
+    if path[0] != "/":
+        raise(ValueError, "path must be absolute and start with '/'")
+    
+    # TODO add try/catch 
+    for f in os.listdir(path):
+        full_path = os.path.join(path, f)
+        if os.path.isfile(full_path):
+            if not _DRYRUN:
+                os.unlink(full_path)
+            else:
+                print "Dryrun: Skipping file deletion %s" % full_path
+        elif os.path.isdir(full_path):
+            if not _DRYRUN:
+                shutil.rmtree(full_path)
+                # TODO add ignore_errors?
+                # TODO add onerror? 
+            else:
+                print "Dryrun: Skipping directory deletion %s" % full_path
+
+
 
 def exit_early(msg="", errcode=1):
     """Print msg and exit with status code errcode.
@@ -266,7 +314,8 @@ def exit_early(msg="", errcode=1):
 def main():
     handle_input_args()
 
-    # TODO check for root permission, if necessary?
+    if os.geteuid() != 0:
+        exit_early("Error: Requires Root Permission (try sudo)")
 
     if _MODE == "DEV":
         if (_OLD_HOSTNAME != gethostname()):
