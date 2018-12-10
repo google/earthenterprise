@@ -81,33 +81,32 @@ def _GitVersionNameAndBuildNumber():
         else:
             # Get the version name from the branch name
             if _IsReleaseBranch(branchName):
-                versionName = _GetReleaseVersionName(branchName)
-                return versionName, '{0}.{1}'.format(_GitBranchedCommitCount(versionName), _GitCommitCount('HEAD', versionName))
+                tailTag = _GetReleaseTailTag(branchName)
+                return _GetReleaseVersionName(branchName), '{0}.{1}'.format(_GitBranchedCommitCount(tailTag), _GitCommitCount('HEAD', tailTag))
             else:
                 return _sanitizeBranchName(branchName),  str(_GitCommitCount())
 
 
-def _GitBranchedCommitCount(versionName):
+def _GitBranchedCommitCount(tailTag):
     """Returns what the build number was from the branch point"""
-    prevRelTag = _GitPreviousReleaseTag(versionName)
+    prevRelTag = _GitPreviousReleaseTag(tailTag)
     prevCommitCount = ''
 
     if prevRelTag:
         prevCommitCount = prevRelTag.split('-')[1]
     else:
-        prevCommitCount = str(_GitCommitCount(versionName))
+        prevCommitCount = str(_GitCommitCount(tailTag))
 
     return prevCommitCount
 
 
-def _GitPreviousReleaseTag(versionName):
-    """Looks for the tail tag for this versionName (the tag with the same name as the version name)
-    and if it finds it then it looks for any release build tags that are also pointing to the same
-    commit"""
+def _GitPreviousReleaseTag(tailTagName):
+    """Looks for the tail tag and if it finds it then it looks for any release build tags
+    that are also pointing to the same commit"""
     tags = _GetRepository().tags
     tailTag = None
     for tag in tags:
-        if tag.name == versionName:
+        if tag.name == tailTagName:
             tailTag = tag
             break
 
@@ -146,20 +145,20 @@ def _IsReleaseBranch(branchName):
     # a release branch begins with 'release_' and has
     # a base tag that matches the release name
     if branchName[:8] == 'release_':
-        versionName = _GetReleaseVersionName(branchName)
-        if _gitHasTag(versionName):
+        tailTag = _GetReleaseTailTag(branchName)
+        if _gitHasTag(tailTag):
             return True
         else:
             # see if we can pull the tag down from any of the remotes
             repo = _GetRepository()
             for remote in repo.remotes:
                 try:
-                    remote.fetch('+refs/tags/{0}:refs/tags/{0}'.format(versionName), None, **{'no-tags':True})
+                    remote.fetch('+refs/tags/{0}:refs/tags/{0}'.format(tailTag), None, **{'no-tags':True})
                 except:
                     pass
             
             # try one more time after the fetch attempt(s)
-            return (_gitHasTag(versionName) is not None)
+            return (_gitHasTag(tailTag) is not None)
     else:
         return False
 
@@ -182,6 +181,11 @@ def _sanitizeBranchName(branchName):
 def _GetReleaseVersionName(branchName):
     """removes pre-pended 'release_' from branch name"""
     return branchName[8:]
+
+
+def _GetReleaseTailTag(branchName):
+    """removes pre-pended 'release_' from branch name"""
+    return _GetReleaseVersionName(branchName) + '-RC1'
 
 
 def _GitBranchName():
