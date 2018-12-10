@@ -69,7 +69,6 @@ def _GitVersionNameAndBuildNumber():
     if _IsCurrentCommitReleaseTagged():
         # Extract version name and build number
         # from the tag (should be a release build tag)
-        print "spliting raw description: " + rawDescription
         splitTag = rawDescription.split('-')
         return splitTag[0], splitTag[1]
     else:
@@ -83,10 +82,8 @@ def _GitVersionNameAndBuildNumber():
             # Get the version name from the branch name
             if _IsReleaseBranch(branchName):
                 tailTag = _GetReleaseTailTag(branchName)
-                print "looking for tail tag: " + tailTag
                 return _GetReleaseVersionName(branchName), '{0}.{1}'.format(_GitBranchedCommitCount(tailTag), _GitCommitCount('HEAD', tailTag))
             else:
-                print "not a release branch"
                 return _sanitizeBranchName(branchName),  str(_GitCommitCount())
 
 
@@ -234,7 +231,6 @@ def _IsCurrentCommitReleaseTagged():
     headCommit = _GitTagRealCommitId('HEAD')
     for tag in tags:
         if headCommit == _GitTagRealCommitId(tag.name) and _IsReleaseBuildTag(tag.name):
-            print "releaes tag found"
             return True
         else:
             pass
