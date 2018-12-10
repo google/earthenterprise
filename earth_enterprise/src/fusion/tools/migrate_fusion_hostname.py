@@ -2,7 +2,7 @@
 #
 # TODO insert appropriate copyright info
 #
-# TODO insert license info
+# TODO insert appropriate license info
 
 # 
 # Tool to automate the necessary database changes after changing 
@@ -34,10 +34,18 @@ from socket import gethostname    # preferred way to get hostname
 # TODO fix tabs/spaces, use pylint to check
 
 # GLOBALS:
-# Internal Globals:
+
 # Constants:
+# All paths should be absolute paths starting with "/" for safety.
 _FUSION_DAEMON = "/etc/init.d/gefusion"
 _SERVER_DAEMON = "/etc/init.d/geserver"
+_PUBLISHED_STREAM_FOLDER = "/gevol/published_dbs/stream_space"
+_PUBLISHED_SEARCH_FOLDER = "/gevol/published_dbs/search_space"
+# Constants for
+# sudo -u gepguser /opt/google/bin/geresetpgdb
+_GOOGLE_SCRIPT_FOLDER = "/opt/google/bin"
+_RESET_DB_SCRIPT = "geresetpgdb"
+_RESET_DB_USER = "gepguser"
 
 
 # TODO change non-consts to lowercase
@@ -67,12 +75,13 @@ def change_hostname_server_only():
     If global _DRYRUN is true, will test each step but 
     not execute any permanent changes.
 
-    Args: None
-
-    Raises:
-        TODO
+    Args:
+        None
 
     Returns:
+        TODO
+
+    Raises:
         TODO
     """
 
@@ -89,10 +98,14 @@ def change_hostname_server_only():
     # TODO What is the format for the * part?
     # does it include hostname? or just a unique id?
 
-    # TODO Remove the contents of /gevol/published_dbs/stream_space
+    # Remove the contents of /gevol/published_dbs/stream_space
     # and /gevol/published_dbs/search_space.
+    # TODO Prompt user before deletion?
+    delete_folder_contents(_PUBLISHED_STREAM_FOLDER)
+    delete_folder_contents(_PUBLISHED_SEARCH_FOLDER)
 
-    # TODO Change directory to /tmp and execute 
+    # TODO Change directory to /tmp 
+    # and execute 
     # sudo -u gepguser /opt/google/bin/geresetpgdb.
 
     # Start the GEE Server: /etc/init.d/geserver start.
@@ -118,12 +131,13 @@ def change_hostname_dev_machine():
     If global _DRYRUN is true, will test each step but 
     not execute any permanent changes.
 
-    Args: None
-
-    Raises:
-        TODO
+    Args:
+        None
 
     Returns:
+        TODO
+
+    Raises:
         TODO
     """
 
@@ -147,11 +161,15 @@ def change_hostname_dev_machine():
         # TODO /gevol/assets/.userdata/snippets.xml
     # TODO Replace assets with the name of your asset root. For example, /gevol/tutorial.
 
-    # TODO Edit the /gevol/assets/.userdata/snippets.xml file and update the hardcoded URLs to match the new hostname URL of the production machine.
+    # TODO Edit the /gevol/assets/.userdata/snippets.xml file 
+    # and 
+    # TODO update the hardcoded URLs to match the new hostname URL of the production machine.
 
-    # TODO Edit /opt/google/gehttpd/htdocs/intl/en/tips/tip*.html and update any hardcoded URLs to the new machine URL.
+    # TODO Edit /opt/google/gehttpd/htdocs/intl/en/tips/tip*.html 
+    # and update any hardcoded URLs to the new machine URL.
 
-    # TODO Remove the contents of /gevol/published_dbs/stream_space and /gevol/published_dbs/search_space.
+    # TODO Remove the contents of /gevol/published_dbs/stream_space 
+    # TODO and /gevol/published_dbs/search_space.
 
     # TODO Change directory to /tmp and execute sudo -u gepguser /opt/google/bin/geresetpgdb.
 
@@ -236,16 +254,43 @@ def daemon_start_stop(daemon, command):
         print "dryrun: skipping %s %s" % (daemon, command)
         return 0
 
+    return subproc_check_call_wrapper([daemon, command])
+
+
+def subproc_check_call_wrapper(arglist):
+    """Wrapper for subprocess.check_call, to catch exceptions.
+
+    Calls subprocess.check_call(arglist) and handles/prints
+    exception information if necessary.
+
+    Args:
+        arglist: list of string arguments passed to 
+            subprocess.check_call()
+            See subprocess documentation for correct formatting
+            of the 'args' input variable
+
+    Returns:
+        Return code of called function (int)
+
+    Raises:
+        -Should not raise any exceptions if used properly.
+        -Handles subprocess.CalledProcessError if return code 
+            of called function is non-zero.
+    """
+
+    ret_code = -1
+
     try:
-        subprocess.check_call([daemon, command])
+        ret_code = subprocess.check_call(arglist)
     except subprocess.CalledProcessError as e:
-        print "Subprocess Error in %s, exit code: %d" % (daemon, e.returncode)
+        print "Subprocess Error in %s, exit code: %d" % (arglist[0], e.returncode)
         print e.cmd
         print e.message
         print e.output
         return e.returncode
 
-    return 0
+    return ret_code
+
 
 def delete_folder_contents(path):
     """Delete entire contents of a folder, but not the actual folder.
@@ -264,12 +309,13 @@ def delete_folder_contents(path):
             Must begin with "/" to ensure full absolute path.
             e.g. "/gevol/published_dbs/stream_space"
 
+    Returns:
+        TODO
+
     Raises:
         ValueError: If path does not start with "/"
         OSError: on any os/shutil deletion errors
 
-    Returns:
-        TODO
     """
 
     if path[0] != "/":
