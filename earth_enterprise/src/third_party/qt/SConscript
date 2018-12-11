@@ -85,6 +85,7 @@ qt_configure = qt_env.Command(
         '-no-exceptions '
         '-system-zlib '
         '-system-libjpeg -system-libmng ' #-system-libpng
+        '-I/usr/include/libpng12 '
         '-qt-imgfmt-jpeg -qt-imgfmt-mng '
         '-thread '
         '-shared -no-cups -freetype -stl -xcursor -xinerama -xrandr -xrender '
