@@ -4,24 +4,39 @@
 #
 # TODO insert appropriate license info
 
-# 
-# Tool to automate the necessary database changes after changing 
-# the Fusion hostname, to avoid having to delete/re-push/re-publish 
-# existing (already published) GEE databases
-#
-# Reference:
-# This tool automates the steps found in "Fusion Issues":
-# http://www.opengee.org/geedocs/answer/172780.html
-# 
-# The mode must be specified by the user:
-#    - GEE Server only (no Fusion)
-#    - Development System (both Fusion and GEE Server)
-# Both have similar steps with minor differences.
-#
-# Usage:
-# - user provides current hostname and the new hostname
-#    - and optionally, the Server hostname, if different
-# 
+"""Submitted as part of interview/Github Challenge for
+   Thermopylae Google Earth Enterprise Open Source Developer
+
+    by Douglas J. Brantner, December 2018
+    https://github.com/float13/earthenterprise
+
+    See also:
+        migrate_fusion_hostname_unittest.py
+
+    Forked from:
+    https://github.com/google/earthenterprise
+"""
+
+"""migrate_fusion_hostname.py
+
+Tool to automate the necessary database changes after changing
+the Fusion hostname, to avoid having to delete/re-push/re-publish
+existing (already published) GEE databases
+
+Reference:
+This tool automates the steps found in "Fusion Issues":
+http://www.opengee.org/geedocs/answer/172780.html
+
+The mode must be specified by the user:
+   - GEE Server only (no Fusion)
+   - Development System (both Fusion and GEE Server)
+Both have similar steps with minor differences.
+
+Usage:
+- user provides current hostname and the new hostname
+   - and optionally, the Server hostname, if different
+"""
+
 
 import os
 import sys
@@ -54,11 +69,11 @@ _RESET_DB_USER = "gepguser"
 _OLD_HOSTNAME = None    # Current hostname of Fusion machine
 _NEW_HOSTNAME = None    # New hostname to change to
 # TODO replace "MODE" with something like "_HAS_FUSION"?
-_MODE = None        # Server-only or Dev/Combo machine (Fusion + Server)
+_MODE = None    # Server-only or Dev/Combo machine (Fusion + Server)
 _VALID_MODES = ["SERVER", "DEV"]    # valid values for _MODE
     # SERVER: This is a GEE-Server-only machine
     # DEV: This machine has both Fusion and Server
-_DRYRUN = True  # Don't make any real changes, just test workflow/permissions
+_DRYRUN = True  # Test only - Skip all permanent/destructive changes
 
 
 def change_hostname_server_only():
@@ -66,7 +81,7 @@ def change_hostname_server_only():
 
     *** Requires root permissions. ***
 
-    Automates the instructions for changing the GEE Fusion 
+    Automates the instructions for changing the GEE Fusion
     hostname found at:
     http://www.opengee.org/geedocs/answer/172780.html
 
@@ -74,7 +89,7 @@ def change_hostname_server_only():
         For a Development machine (Server + Fusion), use
         change_hostname_dev_machine()
 
-    If global _DRYRUN is true, will test each step but 
+    If global _DRYRUN is true, will test each step but
     not execute any permanent changes.
 
     Args:
@@ -92,7 +107,7 @@ def change_hostname_server_only():
 
     # TODO confirm daemons stopped?
 
-    # TODO Update the hostname and IP address to the correct 
+    # TODO Update the hostname and IP address to the correct
     # entries for the machine.
 
     # TODO Edit /opt/google/gehttpd/htdocs/intl/en/tips/tip*.html
@@ -107,8 +122,8 @@ def change_hostname_server_only():
     delete_folder_contents(_PUBLISHED_STREAM_FOLDER)
     delete_folder_contents(_PUBLISHED_SEARCH_FOLDER)
 
-    # TODO Change directory to /tmp 
-    # and execute 
+    # TODO Change directory to /tmp
+    # and execute
     # sudo -u gepguser /opt/google/bin/geresetpgdb.
     # TODO START HERE. CHECK ABOVE STUFF TOO!
 
@@ -124,7 +139,7 @@ def change_hostname_dev_machine():
 
     *** Requires root permissions. ***
 
-    Automates the instructions for changing the GEE Fusion 
+    Automates the instructions for changing the GEE Fusion
     hostname found at:
     http://www.opengee.org/geedocs/answer/172780.html
 
@@ -132,7 +147,7 @@ def change_hostname_dev_machine():
         For GEE Server-only machines, use
         change_hostname_server_only()
 
-    If global _DRYRUN is true, will test each step but 
+    If global _DRYRUN is true, will test each step but
     not execute any permanent changes.
 
     Args:
@@ -145,16 +160,18 @@ def change_hostname_dev_machine():
         TODO
     """
 
-    
     # Shut down both the gefusion and geserver daemons:
     daemon_start_stop(_FUSION_DAEMON, "stop")
     daemon_start_stop(_SERVER_DAEMON, "stop")
 
     # TODO confirm daemones stopped?
 
-    # TODO Update the hostname and IP address to the correct entries for the machines.
+    # TODO Update the hostname and IP address to the correct entries
+    # for the machines.
 
-    # TODO If needed, edit the /etc/hosts file to update the IP address and hostname entries for the production machine.
+    # TODO If needed, edit the /etc/hosts file to update the
+    # IP address
+    # and hostname entries for the production machine.
 
     # TODO Execute /opt/google/bin/geconfigureassetroot --fixmasterhost.
 
@@ -163,25 +180,29 @@ def change_hostname_dev_machine():
         # TODO /gevol/assets/.config/PacketLevel.taskrule
         # TODO /gevol/assets/.userdata/serverAssociations.xml
         # TODO /gevol/assets/.userdata/snippets.xml
-    # TODO Replace assets with the name of your asset root. For example, /gevol/tutorial.
+    # TODO Replace assets with the name of your asset root.
+    # For example, /gevol/tutorial.
 
-    # TODO Edit the /gevol/assets/.userdata/snippets.xml file 
-    # and 
-    # TODO update the hardcoded URLs to match the new hostname URL of the production machine.
+    # TODO Edit the /gevol/assets/.userdata/snippets.xml file
+    # and
+    # TODO update the hardcoded URLs to match the new hostname URL
+    # of the production machine.
 
-    # TODO Edit /opt/google/gehttpd/htdocs/intl/en/tips/tip*.html 
+    # TODO Edit /opt/google/gehttpd/htdocs/intl/en/tips/tip*.html
     # and update any hardcoded URLs to the new machine URL.
 
-    # TODO Remove the contents of /gevol/published_dbs/stream_space 
+    # TODO Remove the contents of /gevol/published_dbs/stream_space
     # TODO and /gevol/published_dbs/search_space.
 
-    # TODO Change directory to /tmp and execute sudo -u gepguser /opt/google/bin/geresetpgdb.
+    # TODO Change directory to /tmp and execute
+    # sudo -u gepguser /opt/google/bin/geresetpgdb.
 
     # Start the geserver and gefusion services:
     daemon_start_stop(_FUSION_DAEMON, "start")
     daemon_start_stop(_SERVER_DAEMON, "start")
 
-    # TODO You can now change the server associations and publish the databases.
+    # TODO You can now change the server associations and publish
+    # the databases.
 
     # TODO return something?
 
@@ -192,20 +213,40 @@ def handle_input_args():
 
     global _MODE, _DRYRUN, _OLD_HOSTNAME, _NEW_HOSTNAME
 
-    parser = argparse.ArgumentParser(description="Update GEE Fusion Hostname andfix all existing published GEE databases")
+    parser = argparse.ArgumentParser(
+        description="Update GEE Fusion Hostname and fix all existing published GEE databases")
 
-    parser.add_argument("old_hostname", help="Required - Current hostname of Fusion machine", type=str)
-    parser.add_argument("new_hostname", help="Required - New hostname for Fusion machine", type=str)
-    parser.add_argument("--dryrun", help="Test only - do not make any actual changes", action="store_true")
+    parser.add_argument(
+        "old_hostname",
+        help="Required - Current hostname of Fusion machine",
+        type=str)
+    parser.add_argument(
+        "new_hostname",
+        help="Required - New hostname for Fusion machine",
+        type=str)
+    parser.add_argument(
+        "--dryrun",
+        help="Test only - do not make any actual changes",
+        action="store_true")
     # TODO set defaults?
 
     # TODO is mutex group required or do we need to specify that??
     # TODO necessary to do default=False for store_trues?
+    # TODO change this to positional/required!
     mode_grp = parser.add_mutually_exclusive_group()
-    mode_grp.add_argument("-s", "--server_only", help="Use -s if this machine is GEE Server ONLY, and not shared with Fusion", action="store_true")
-    mode_grp.add_argument("-c", "--dev_machine", help="Use -d if this is a Development Machine (Fusion AND GEE Server combined)", action="store_true")
+    mode_grp.add_argument(
+        "-s",
+        "--server_only",
+        help="Use -s if this machine is GEE Server ONLY, and not shared with Fusion",
+        action="store_true")
+    mode_grp.add_argument(
+        "-c",
+        "--dev_machine",
+        help="Use -d if this is a Development Machine (Fusion AND GEE Server combined)",
+        action="store_true")
 
-    # TODO do we need the Server hostname? maybe good idea for -s mode even if only as a double check...
+    # TODO do we need the Server hostname? maybe good idea for -s mode
+    # even if only as a double check...
     args = parser.parse_args()
 
     if not args.dryrun:
@@ -222,7 +263,7 @@ def handle_input_args():
     elif args.dev_machine:
         _MODE = "DEV"
     else:
-        exit_early("Error: Must specify mode (Server/Dev)")    
+        exit_early("Error: Must specify mode (Server/Dev)")
         # TODO add "usage" message?
 
 
@@ -231,8 +272,8 @@ def handle_input_args():
 def daemon_start_stop(daemon, command):
     """Send start/stop command to a daemon service.
 
-    Sends the given command to an existing daemon.
-    Only "start" or "stop" are allowed, as stdout output is not checked.
+    Sends the given command to an existing daemon. Only "start" or
+    "stop" are allowed, as stdout output is not checked.
 
     *** Requires root privileges. ***
 
@@ -252,7 +293,8 @@ def daemon_start_stop(daemon, command):
     # TODO is service ok?
 
     if command not in ["start", "stop"]:
-        raise ValueError("Invalid argument for 'command': only 'start' and 'stop' are allowed.")
+        raise ValueError("Invalid arg for 'command': only 'start' and 'stop' are allowed.")
+
 
     if _DRYRUN:
         print "dryrun: skipping %s %s" % (daemon, command)
@@ -268,7 +310,7 @@ def subproc_check_call_wrapper(arglist):
     exception information if necessary.
 
     Args:
-        arglist: list of string arguments passed to 
+        arglist: list of string arguments passed to
             subprocess.check_call()
             See subprocess documentation for correct formatting
             of the 'args' input variable
@@ -278,7 +320,7 @@ def subproc_check_call_wrapper(arglist):
 
     Raises:
         -Should not raise any exceptions if used properly.
-        -Handles subprocess.CalledProcessError if return code 
+        -Handles subprocess.CalledProcessError if return code
             of called function is non-zero.
     """
 
@@ -286,12 +328,12 @@ def subproc_check_call_wrapper(arglist):
 
     try:
         ret_code = subprocess.check_call(arglist)
-    except subprocess.CalledProcessError as e:
-        print "Subprocess Error in %s, exit code: %d" % (arglist[0], e.returncode)
-        print e.cmd
-        print e.message
-        print e.output
-        return e.returncode
+    except subprocess.CalledProcessError as err:
+        print "Subprocess Error in %s, exit code: %d" % (arglist[0], err.returncode)
+        print err.cmd
+        print err.message
+        print err.output
+        return err.returncode
 
     return ret_code
 
@@ -324,10 +366,10 @@ def delete_folder_contents(path):
 
     if path[0] != "/":
         raise(ValueError, "path must be absolute and start with '/'")
-    
-    # TODO add try/catch 
-    for f in os.listdir(path):
-        full_path = os.path.join(path, f)
+
+    # TODO add try/catch
+    for f_name in os.listdir(path):
+        full_path = os.path.join(path, f_name)
         if os.path.isfile(full_path):
             if not _DRYRUN:
                 os.unlink(full_path)
@@ -337,7 +379,7 @@ def delete_folder_contents(path):
             if not _DRYRUN:
                 shutil.rmtree(full_path)
                 # TODO add ignore_errors?
-                # TODO add onerror? 
+                # TODO add onerror?
             else:
                 print "Dryrun: Skipping directory deletion %s" % full_path
 
@@ -345,9 +387,11 @@ def delete_folder_contents(path):
 
 def exit_early(msg="", errcode=1):
     """Print msg and exit with status code errcode.
-    
-    Convenience function to exit early. Set msg with useful error message
-    if exiting due to an error/exception.
+
+    Convenience function to end program with message and error code.
+    Message is optional but should be specified for user help/
+    troubleshooting.
+
     Change errcode to 0 if exiting normally.
 
     Args:
@@ -362,13 +406,15 @@ def exit_early(msg="", errcode=1):
 
 
 def main():
+    """Main Function."""
+
     handle_input_args()
 
     if os.geteuid() != 0:
         exit_early("Error: Requires Root Permission (try sudo)")
 
     if _MODE == "DEV":
-        if (_OLD_HOSTNAME != gethostname()):
+        if _OLD_HOSTNAME != gethostname():
             exit_early("Error: Incorrect current hostname - please double check and retry.")
         else:
             print "Old hostname matches... ok!"
