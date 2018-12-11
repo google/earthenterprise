@@ -1,5 +1,18 @@
 #!/usr/bin/python
 
+"""Submitted as part of interview/Github Challenge for
+   Thermopylae Google Earth Enterprise Open Source Developer
+
+    by Douglas J. Brantner, December 2018
+    https://github.com/float13/earthenterprise
+
+    See also:
+        migrate_fusion_hostname.py
+
+    Forked from:
+    https://github.com/google/earthenterprise
+"""
+
 """Unit tests for migrate_fusion_hostname.py
 
     WARNING: Do NOT run these tests on a production machine.
