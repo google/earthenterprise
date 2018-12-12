@@ -175,6 +175,10 @@ RequiresEND
         }
     }
 
+    // Variable to autodetect symlinks. Detected symlinks are fixed, so they
+    // are not created as files.
+    boolean autoSymlinkDetection = true
+
     // Override the @TaskAction from the base class, so we can run automatic
     // depedency detection, first.
     @Override
@@ -196,13 +200,14 @@ RequiresEND
                 requires(it)
             }
 
-        eachFile {
-            if (it.getFile().isFile() && Files.isSymbolicLink(it.getFile().toPath())) {
-                link("/" + it.getRelativePath().toString(), Files.readSymbolicLink(it.getFile().toPath()).toString())
-                it.exclude()
+        if (autoSymlinkDetection) {
+            eachFile {
+                if (it.getFile().isFile() && Files.isSymbolicLink(it.getFile().toPath())) {
+                    link("/" + it.getRelativePath().toString(), Files.readSymbolicLink(it.getFile().toPath()).toString())
+                    it.exclude()
+                }
             }
         }
-
 
         super.copy()
 
