@@ -15,6 +15,8 @@
 import com.netflix.gradle.plugins.deb.Deb
 import org.gradle.api.tasks.TaskAction
 import org.opengee.shell.GeeCommandLine
+import java.nio.file.Files
+import java.nio.file.Paths
 
 class GeeDeb extends com.netflix.gradle.plugins.deb.Deb {
     // Get the name of the Deb package that provides a given file path:
@@ -134,6 +136,10 @@ class GeeDeb extends com.netflix.gradle.plugins.deb.Deb {
         packageDescription = formattedDescription
     }
 
+    // Variable to autodetect symlinks. Detected symlinks are fixed, so they
+    // are not created as files.
+    boolean autoSymlinkDetection = true
+
     // Override the @TaskAction from the base class, so we can run a few fixes
     // first.
     @Override
@@ -150,10 +156,16 @@ class GeeDeb extends com.netflix.gradle.plugins.deb.Deb {
 
         requiredCommands.
             collect { whatProvidesCommand(it) }.
-            each {
+            each {     
                 requires(it)
             }
 
+        eachFile {
+            if (it.getFile().isFile() && Files.isSymbolicLink(it.getFile().toPath())) {
+                link("/" + it.getRelativePath().toString(), Files.readSymbolicLink(it.getFile().toPath()).toString())
+                it.exclude()
+            }
+        }
         super.copy()
     }
 }

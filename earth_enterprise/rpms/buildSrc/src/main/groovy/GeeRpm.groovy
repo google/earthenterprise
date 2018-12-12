@@ -196,6 +196,14 @@ RequiresEND
                 requires(it)
             }
 
+        eachFile {
+            if (it.getFile().isFile() && Files.isSymbolicLink(it.getFile().toPath())) {
+                link("/" + it.getRelativePath().toString(), Files.readSymbolicLink(it.getFile().toPath()).toString())
+                it.exclude()
+            }
+        }
+
+
         super.copy()
 
         if (requiresPre_set) {
