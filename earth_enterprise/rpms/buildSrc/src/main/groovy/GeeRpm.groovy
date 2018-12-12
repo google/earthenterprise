@@ -203,7 +203,6 @@ RequiresEND
             }
         }
 
-
         super.copy()
 
         if (requiresPre_set) {
