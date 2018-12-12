@@ -156,9 +156,10 @@ class GeeDeb extends com.netflix.gradle.plugins.deb.Deb {
 
         requiredCommands.
             collect { whatProvidesCommand(it) }.
-            each {     
+            each {
                 requires(it)
             }
+        
         if (autoSymLinkDetection) {
             eachFile {
                 if (it.getFile().isFile() && Files.isSymbolicLink(it.getFile().toPath())) {
@@ -167,6 +168,7 @@ class GeeDeb extends com.netflix.gradle.plugins.deb.Deb {
                 }
             }
         }
+        
         super.copy()
     }
 }
