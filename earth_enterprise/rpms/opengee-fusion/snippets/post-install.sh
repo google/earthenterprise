@@ -158,10 +158,12 @@ install_or_upgrade_asset_root()
             fi
 
             cat <<END
+
 The asset root must be upgraded to work with the current version of $GEEF $GEE_VERSION.
 You cannot use an upgraded asset root with older versions of $GEEF. 
 Consider backing up your asset root. $GEEF will warn you when
 attempting to run with a non-upgraded asset root.
+
 $UPGRADE_MESSAGE
 END
             
@@ -210,4 +212,3 @@ final_fusion_service_configuration()
 #-----------------------------------------------------------------
 
 main_postinstall
-
