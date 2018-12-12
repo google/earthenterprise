@@ -31,6 +31,8 @@ DEFAULTGEFUSIONUSER_NAME="gefusionuser"
 DEFAULTGROUPNAME="gegroup"
 GEFUSIONUSER_NAME=$DEFAULTGEFUSIONUSER_NAME
 GROUPNAME=$DEFAULTGROUPNAME
+GEPGUSER_NAME="gepguser"
+GEAPACHEUSER_NAME="geapacheuser"
 
 # script arguments
 BACKUPFUSION=true
@@ -164,7 +166,7 @@ main_install()
 
 main_postinstall()
 {
-	create_system_main_directories
+    create_system_main_directories
 
     if ! compare_asset_root_publishvolume; then
         exit 1
@@ -676,6 +678,9 @@ setup_fusion_daemon()
 {
 	# setup fusion daemon
 	printf "Setting up the Fusion daemon...\n"
+
+    # Create a new file ‘/etc/init.d/gevars.sh’ and add the below lines.
+    echo -e "GEAPACHEUSER=$GEAPACHEUSER_NAME\nGEPGUSER=$GEPGUSER_NAME\nGEFUSIONUSER=$GEFUSIONUSER_NAME\nGEGROUP=$GROUPNAME" > $BININSTALLROOTDIR/gevars.sh
 
 	test -f $CHKCONFIG && $CHKCONFIG --add gefusion
 	test -f $INITSCRIPTUPDATE && $INITSCRIPTUPDATE -f gefusion remove
