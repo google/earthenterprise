@@ -29,8 +29,8 @@ import sys
 
 try:
   pil_enabled = True
-  import Image
-  import ImageFile
+  from PIL import Image
+  from PIL import ImageFile
 except ImportError:
   pil_enabled = False
   print "PIL is not available."
