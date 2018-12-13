@@ -864,6 +864,7 @@ fix_postinstall_filepermissions()
     chmod 755 $BASEINSTALLDIR_ETC
     chmod 755 $BASEINSTALLDIR_OPT/etc
     chmod 644 $SYSTEMRC
+    chmod 755 "$BININSTALLROOTDIR/gevars.sh"
 
     # Other folders
     chmod 755 $BASEINSTALLDIR_OPT
