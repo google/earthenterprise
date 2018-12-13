@@ -138,7 +138,7 @@ class GeeDeb extends com.netflix.gradle.plugins.deb.Deb {
 
     // Variable to autodetect symlinks. Detected symlinks are fixed, so they
     // are not created as files.
-    boolean autoSymlinkDetection = true
+    boolean preserveSymlinks = true
 
     // Override the @TaskAction from the base class, so we can run a few fixes
     // first.
@@ -160,7 +160,7 @@ class GeeDeb extends com.netflix.gradle.plugins.deb.Deb {
                 requires(it)
             }
         
-        if (autoSymLinkDetection) {
+        if (preserveSymlinks) {
             eachFile {
                 if (it.getFile().isFile() && Files.isSymbolicLink(it.getFile().toPath())) {
                     link("/" + it.getRelativePath().toString(), Files.readSymbolicLink(it.getFile().toPath()).toString())
