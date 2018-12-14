@@ -61,11 +61,14 @@ _ALLOW_DAEMON_STARTSTOP = True      # this only applies to module tests
                                     # @unittest.skip... decorators
                                     # DO NOT rely on this for safety.
                                     # Only the -dryrun flag is safe.
-# TODO implement this:
+
+# TODO implement _ALLOW_DRYRUN_OVERRIDE checks!
 # _ALLOW_DRYRUN_OVERRIDE = True     # Enable direct manipulation of
                                     # mfh._DRYRUN flag for tests
                                     # This should be reset in setUp and/or
                                     # tearDown for safety.
+
+# TODO run full tests with --override flag?
 
 # TODO find a way to run full/destructive tests on a disposable VM
 
@@ -121,10 +124,15 @@ class TestMigrateFusionHostname(unittest.TestCase):
 
         # Reset internal _DRYRUN variable just to be safe
         # NOTE: some tests may change this (eg. file deletion)
+        # (for individual module/function tests)
         mfh._DRYRUN = True
+
+        # Reset _OVERRIDE_USER_CONFIRM flag
+        mfh._OVERRIDE_USER_CONFIRM = False
 
         # Reset basic arguments with --dryrun
         # for safety before each test
+        # (for full-program tests called w/ subprocess)
         self._base_arg_list = [self._PYTHON_RUNTIME,
                                self._TEST_PROGRAM,
                                "--dryrun",
@@ -136,9 +144,16 @@ class TestMigrateFusionHostname(unittest.TestCase):
         mfh._DRYRUN = True  # double check just for safety
 
 
-    #### Full Program Tests ####
-
+    #### Full Program Dry-Run Tests ####
     # All of these should be run with the --dryrun flag
+    # to avoid deleting files or stopping services.
+
+    # These are also run with the --override flag to avoid
+    # stopping for user input. (only safe with --dryrun flag!)
+
+    # These tests all use the class variable '_base_arg_list'
+    # which includes the --dryrun flag implicitly.
+
 
     @unittest.skipUnless(check_root(), "Requires root.")
     def test_full_program_dryrun_server_mode(self):
@@ -151,19 +166,24 @@ class TestMigrateFusionHostname(unittest.TestCase):
 
         # TODO test bad commandline args, etc.
 
-        my_args = ["--server_only",
+        my_args = ["--override",
+                   "--server_only",
                    self._CURRENT_HOSTNAME,
                    self._NEW_HOSTNAME,
                   ]
         full_args = self._base_arg_list + my_args
         self.assertEquals(0, subprocess.check_call(full_args))
 
+
     #def test_full_program_dryrun_dev_mode(self):
-    # TODO implement this
+        # TODO implement this
+
 
     def test_full_program_missing_mode_arg(self):
         """Test argparse for missing arg.
             (omitting the --server_only arg on purpose)
+            also omitting --override, this should fail before
+                it hits a user prompt.
         """
         my_args = [self._CURRENT_HOSTNAME,
                    self._NEW_HOSTNAME,
@@ -180,22 +200,26 @@ class TestMigrateFusionHostname(unittest.TestCase):
 
     ### Individual Method Tests ####
 
-    #@unittest.skip("Won't throw expected error in --dryrun mode")
     def test_daemon_start_stop_bad_daemon(self):
         """Test Bad Input for daemon name."""
         mfh._DRYRUN = False
         with self.assertRaises(OSError):
             mfh.daemon_start_stop("/etc/init.d/fake_daemon_asdf", "start")
 
-    #@unittest.skipUnless(os.path.isfile(mfh._SERVER_DAEMON), "Missing GEE Server Daemon")
-    # this should run in dryrun mode so shouldn't require actual daemon file to exist...
+
     def test_daemon_start_stop_bad_command(self):
-        """Test Bad Input for command."""
+        """Test Bad Input for command.
+
+        Should not require root since it should fail much earlier,
+        likewise should not require daemon to exist because it should
+        fail before the subprocess is called.
+        """
         with self.assertRaises(ValueError):
             mfh.daemon_start_stop(mfh._SERVER_DAEMON, None)
             mfh.daemon_start_stop(mfh._SERVER_DAEMON, 1)
             mfh.daemon_start_stop(mfh._SERVER_DAEMON, "")
             mfh.daemon_start_stop(mfh._SERVER_DAEMON, "asdf")
+
 
     @unittest.skipUnless(check_root(), "Requires root.")
     @unittest.skipUnless(os.path.isfile(mfh._SERVER_DAEMON), "Missing GEE Server Daemon")
@@ -225,10 +249,12 @@ class TestMigrateFusionHostname(unittest.TestCase):
         with self.assertRaises(ValueError):
             mfh.delete_folder_contents("tmp/asdffakedir123")
 
+
     def test_delete_folder_contents_missingDir(self):
         """Correct leading slash but missing dir should throw OSError."""
         with self.assertRaises(OSError):
             mfh.delete_folder_contents("/tmp/asdffakedir123")
+
 
     def test_delete_folder_contents_actual_delete(self):
         """Create some fake tmp files/folders and delete them.
@@ -280,6 +306,15 @@ class TestMigrateFusionHostname(unittest.TestCase):
         os.rmdir(tmpdir)
 
 
+    # TODO for prompt_user_confirm(...) testing actual user input
+    # requires unittest.mocks 
+    # which is not part of Python 2.7 standard library
+    # These should be tested but would introduce extra dependencies.
+    def test_prompt_user_confirm_override(self):
+        """Test that override returns true."""
+
+        mfh._OVERRIDE_USER_CONFIRM = True
+        self.assertTrue(mfh.prompt_user_confirm("fake user prompt"))
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
