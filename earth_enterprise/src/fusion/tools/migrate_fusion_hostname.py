@@ -47,12 +47,19 @@ from socket import gethostname    # preferred way to get hostname
 
 
 # Main To-Do List (see also inline TODO's!):
+# TODO remove globals and pass input args dict/namespace as argument
+    # to any function that needs them.
+    # (this will require a significant restructuring both here
+    # and in unit tests which rely on manipulating the globals)
+# TODO add user confirmation before deletions, etc. (in progress)
+# TODO exit early on function fails/check return values
+# TODO write logfile of errors; use logging module?
+# TODO make logfile useful for resuming starting after error?
 # TODO run pylint
-# TODO add user confirmation before deletions, etc.
 
-# GLOBALS:
+#### GLOBALS: ####
 
-# Constants:
+# CONSTANTS:
 # All paths should be absolute paths starting with "/" for safety.
 _FUSION_DAEMON = "/etc/init.d/gefusion"
 _SERVER_DAEMON = "/etc/init.d/geserver"
@@ -65,6 +72,9 @@ _RESET_DB_SCRIPT = "geresetpgdb"
 _RESET_DB_USER = "gepguser"
 
 
+# COMMAND LINE ARGUMENT "CONSTANTS"
+# (these should only be assigned once after argparse)
+
 # TODO change non-consts to lowercase
 _OLD_HOSTNAME = None    # Current hostname of Fusion machine
 _NEW_HOSTNAME = None    # New hostname to change to
@@ -73,8 +83,18 @@ _MODE = None    # Server-only or Dev/Combo machine (Fusion + Server)
 _VALID_MODES = ["SERVER", "DEV"]    # valid values for _MODE
     # SERVER: This is a GEE-Server-only machine
     # DEV: This machine has both Fusion and Server
+_OVERRIDE_USER_CONFIRM = False  # skip all user prompts and always
+                                # continue with 'yes'
+                                # (this should be used carefully!)
 _DRYRUN = True  # Test only - Skip all permanent/destructive changes
+# TODO change 'dryrun' to 'live mode'? So that program always runs
+# as a dryrun by default, and a '--live' flag needs to be passed
+# in order to make any real changes to system?
 
+#### End of Globals ####
+
+
+#### Function Definitions ####
 
 def change_hostname_server_only():
     """Change the hostname for a GEE Server-only machine.
@@ -115,12 +135,22 @@ def change_hostname_server_only():
     # TODO What is the format for the * part?
     # does it include hostname? or just a unique id?
 
-    # Remove the contents of /gevol/published_dbs/stream_space
-    # and /gevol/published_dbs/search_space.
-    # TODO Prompt user before deletion?
+    # Remove the contents of
+    # /gevol/published_dbs/stream_space
+    # and
+    # /gevol/published_dbs/search_space.
+    if prompt_user_confirm("Deleting published files at %s"
+            % _PUBLISHED_STREAM_FOLDER):
+        delete_folder_contents(_PUBLISHED_STREAM_FOLDER)
+    else:
+        exit_early("Files must be deleted before continuing.")
+
+    if prompt_user_confirm("Deleting published files at %s"
+            % _PUBLISHED_SEARCH_FOLDER):
+        delete_folder_contents(_PUBLISHED_SEARCH_FOLDER)
+    else:
+        exit_early("Files must be deleted before continuing.")
     # TODO use return codes?
-    delete_folder_contents(_PUBLISHED_STREAM_FOLDER)
-    delete_folder_contents(_PUBLISHED_SEARCH_FOLDER)
 
     # TODO Change directory to /tmp
     # and execute
@@ -211,7 +241,11 @@ def change_hostname_dev_machine():
 def handle_input_args():
     """Parse command line arguments and set global variables."""
 
-    global _MODE, _DRYRUN, _OLD_HOSTNAME, _NEW_HOSTNAME
+    global _MODE
+    global _DRYRUN
+    global _OLD_HOSTNAME
+    global _NEW_HOSTNAME
+    global _OVERRIDE_USER_CONFIRM
 
     parser = argparse.ArgumentParser(
         description="Update GEE Fusion Hostname and fix all existing published GEE databases")
@@ -228,36 +262,42 @@ def handle_input_args():
         "--dryrun",
         help="Test only - do not make any actual changes",
         action="store_true")
-    # TODO set defaults?
+    parser.add_argument(
+        "--override",
+        help="Override (skip) ALL user prompts (eg. before deletions). Use this with care!",
+        action="store_true")
 
-    # TODO is mutex group required or do we need to specify that??
-    # TODO necessary to do default=False for store_trues?
-    # TODO change this to positional/required!
-    mode_grp = parser.add_mutually_exclusive_group()
+    # TODO change -s/-d to a single positional argument so help message is more useful
+    mode_grp = parser.add_mutually_exclusive_group(required=True)
     mode_grp.add_argument(
         "-s",
         "--server_only",
-        help="Use -s if this machine is GEE Server ONLY, and not shared with Fusion",
+        help="Use -s if this machine is GEE Server ONLY, and not shared with Fusion (either -s or -d is required)",
         action="store_true")
     mode_grp.add_argument(
-        "-c",
+        "-d",
         "--dev_machine",
-        help="Use -d if this is a Development Machine (Fusion AND GEE Server combined)",
+        help="Use -d if this is a Development Machine with both Fusion AND GEE Server together (either -s or -d is required)",
         action="store_true")
 
     # TODO do we need the Server hostname? maybe good idea for -s mode
     # even if only as a double check...
+
     args = parser.parse_args()
 
+    # Test and Assign Globals:
     if not args.dryrun:
         _DRYRUN = False
 
-    # Test and Assign Globals:
+    if args.override:
+        _OVERRIDE_USER_CONFIRM = True
+
     _OLD_HOSTNAME = args.old_hostname
 
     # TODO test that new hostname is a valid hostname, and not null?
     _NEW_HOSTNAME = args.new_hostname
 
+    # TODO this check might be redundant w/ argparse mutex group
     if args.server_only:
         _MODE = "SERVER"
     elif args.dev_machine:
@@ -265,7 +305,6 @@ def handle_input_args():
     else:
         exit_early("Error: Must specify mode (Server/Dev)")
         # TODO add "usage" message?
-
 
 
 
@@ -367,7 +406,7 @@ def delete_folder_contents(path):
     if path[0] != "/":
         raise(ValueError, "path must be absolute and start with '/'")
 
-    # TODO add try/catch
+    # TODO add try/catch, or let exceptions propagate?
     for f_name in os.listdir(path):
         full_path = os.path.join(path, f_name)
         if os.path.isfile(full_path):
@@ -383,6 +422,51 @@ def delete_folder_contents(path):
             else:
                 print "Dryrun: Skipping directory deletion %s" % full_path
 
+
+
+
+#### Helper Functions ####
+
+def prompt_user_confirm(explanation, prompt="Continue?"):
+    """Prompt user for confirmation before continuing.
+
+    Reads from stdin for user confirmation, with options
+    "y/n/yes/no". Only "y" or "yes" result in a True return value.
+
+    User input is NOT case sensitive.
+
+    If global _OVERRIDE_USER_CONFIRM is True, user prompts are
+    skipped and this function will always return True. This should
+    be used carefully.
+
+    Args:
+        explanation: Required - Message to explain to end user
+            what they are being asked to confirm (string)
+
+            Example: "13 files will be deleted."
+
+            'explanation' should be short but informative; try to
+            limit to 70 chars, or insert newlines manually; otherwise
+            terminal will wrap message.
+
+        prompt: Message to print as part of raw_input prompt (string)
+
+            Follows 'explanation' after a newline;
+            Should be as short as possible (eg. 1 word)
+
+    Returns:
+        True or False, depending on user response.
+
+    Raises:
+        TODO
+    """
+
+    if _OVERRIDE_USER_CONFIRM:
+        return True
+
+    print explanation   # TODO print explanation before override?
+    answer = raw_input(prompt + " (y/n/yes/no): ").strip()
+    return answer.upper() in ["Y", "YES"]
 
 
 def exit_early(msg="", errcode=1):
@@ -406,7 +490,7 @@ def exit_early(msg="", errcode=1):
 
 
 def main():
-    """Main Function."""
+    """Main Function/Control Flow"""
 
     handle_input_args()
 
