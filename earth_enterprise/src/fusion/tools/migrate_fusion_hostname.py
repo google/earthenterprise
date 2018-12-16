@@ -64,8 +64,10 @@ _FUSION_DAEMON = "/etc/init.d/gefusion"
 _SERVER_DAEMON = "/etc/init.d/geserver"
 _PUBLISHED_STREAM_FOLDER = "/gevol/published_dbs/stream_space"
 _PUBLISHED_SEARCH_FOLDER = "/gevol/published_dbs/search_space"
-# Constants for
+
+# Constants for run_geresetpgdb()
 # sudo -u gepguser /opt/google/bin/geresetpgdb
+_TEMP_FOLDER = "/tmp"
 _GOOGLE_SCRIPT_FOLDER = "/opt/google/bin"
 _RESET_DB_SCRIPT = "geresetpgdb"
 _RESET_DB_USER = "gepguser"
@@ -137,7 +139,7 @@ def change_hostname_server_only():
     # Remove the contents of
     # /gevol/published_dbs/stream_space
     # and
-    # /gevol/published_dbs/search_space.
+    # /gevol/published_dbs/search_space
     if prompt_user_confirm("Deleting published files at %s"
             % _PUBLISHED_STREAM_FOLDER):
         delete_folder_contents(_PUBLISHED_STREAM_FOLDER)
@@ -151,10 +153,12 @@ def change_hostname_server_only():
         exit_early("Files must be deleted before continuing.")
     # TODO use return codes?
 
-    # TODO Change directory to /tmp
-    # and execute
-    # sudo -u gepguser /opt/google/bin/geresetpgdb.
-    # TODO START HERE. CHECK ABOVE STUFF TOO!
+    # Change directory to /tmp and execute
+    # "sudo -u gepguser /opt/google/bin/geresetpgdb"
+    if prompt_user_confirm("Run %s reset script..." % _RESET_DB_SCRIPT):
+        run_geresetpgdb()
+    else:
+        exit_early("%s is required." % _RESET_DB_SCRIPT)
 
     # Start the GEE Server: /etc/init.d/geserver start.
     daemon_start_stop(_SERVER_DAEMON, "start")
@@ -357,9 +361,12 @@ def subproc_check_call_wrapper(arglist):
         Return code of called function (int)
 
     Raises:
-        -Should not raise any exceptions if used properly.
-        -Handles subprocess.CalledProcessError if return code
-            of called function is non-zero.
+        Handles subprocess.CalledProcessError if return code of
+        called function is non-zero.
+
+        Other exceptions raised by subprocess are not handled:
+            ValueError, OSError
+        These will be propagated upward. See subprocess documentation.
     """
 
     ret_code = -1
@@ -420,6 +427,62 @@ def delete_folder_contents(path):
                 # TODO add onerror?
             else:
                 print "Dryrun: Skipping directory deletion %s" % full_path
+
+
+def run_geresetpgdb():
+    """Change directory to /tmp and run geresetpgdb.
+
+    If global _DRYRUN is True, skips running the actual script.
+
+    From geresetpgdb documentation:
+    Resets geserve-databases to default/initial state.
+    'geresetpgdb soft' (default)
+       - back up (dump) current geserve-databases;
+       - delete geserve-databases;
+       - recreate geserve-databases in their initial state of
+         GEE system;
+
+    Args:
+        None
+
+    Global Constants:
+        _TEMP_FOLDER: system temp folder to cd to
+        _GOOGLE_SCRIPT_FOLDER: folder containing the script
+        _RESET_DB_SCRIPT: the script to run
+        _RESET_DB_USER: the user to run the script as
+
+    Returns:
+        Return code of geresetpgdb (int)
+
+    Raises:
+        OSError, ValueError are propagated if raised by 
+            'os' or 'subprocess'
+    """
+
+    # change dir to temp directory
+    my_cwd = os.getcwd()
+    os.chdir(_TEMP_FOLDER)
+    # TODO double check dir?
+    
+    # execute "sudo -u gepguser /opt/google/bin/geresetpgdb"
+    script_path = os.path.join(_GOOGLE_SCRIPT_FOLDER, 
+                               _RESET_DB_SCRIPT)
+
+    script_args = ["sudo",
+                   "-u",
+                   _RESET_DB_USER,
+                   script_path
+                  ]
+
+    if not _DRYRUN:
+        ret_code = subproc_check_call_wrapper(script_args)
+    else:
+        print "dryrun: skipping database reset (%s)" % _RESET_DB_SCRIPT
+        ret_code = 0
+
+    os.chdir(my_cwd)   # return to previous directory
+    return ret_code
+
 
 
 
