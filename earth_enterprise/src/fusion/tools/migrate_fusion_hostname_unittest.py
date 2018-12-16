@@ -305,6 +305,12 @@ class TestMigrateFusionHostname(unittest.TestCase):
         # clean up:
         os.rmdir(tmpdir)
 
+    def test_run_geresetpgdb_dryrun(self):
+        """Check return value in dryrun mode."""
+        self.assertEqual(0, mfh.run_geresetpgdb())
+
+        # TODO other tests for run_geresetpgdb? Anything else requires
+        # running actual script (not safe)
 
     # TODO for prompt_user_confirm(...) testing actual user input
     # requires unittest.mocks 
