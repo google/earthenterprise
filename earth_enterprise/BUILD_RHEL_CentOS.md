@@ -75,12 +75,14 @@ sudo yum install git-lfs
 
 ## GCC 4.8
 
-### CentOS 7 and RHEL 7
+For all flavors, install the standard development/build tools:
 
 ```bash
 yum install ant bzip2 doxygen gcc-c++ patch python-argparse python-setuptools \
   swig tar
 ```
+
+For CentOS 6 and RHEL 6, also install the devtoolset toolchain.
 
 ### CentOS 6
 
@@ -163,6 +165,7 @@ the rest of the GEE build process.
 To clone this Git repository and build the RPM on RHEL6, execute the following:
 
 ```bash
+sudo yum install -y cmake gettext rpm-build
 mkdir -p ~/opengee/rpm-build/
 cd ~/opengee/rpm-build/
 
