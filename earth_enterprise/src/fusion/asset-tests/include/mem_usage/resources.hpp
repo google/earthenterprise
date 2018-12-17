@@ -40,7 +40,7 @@ struct timeval operator-(const struct timeval &a, const struct timeval &b)
     if (result.tv_usec < 0)
     {
         result.tv_sec += result.tv_usec / 1000000;
-        // The sign of the module of a negative integer is
+        // The sign of the modulus of a negative integer is
         // "implementation dependent" in C++. :P
         result.tv_usec %= 1000000;
         if (result.tv_usec < 0)
