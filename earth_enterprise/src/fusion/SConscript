@@ -15,6 +15,8 @@
 #
 
 # -*- Python -*-
+import os
+
 Import('env')
 
 # ****************************************************************************
@@ -102,7 +104,18 @@ env = origenv.Clone();
 
 env.Append(CPPPATH = [Dir('.'),    # generated header files
                       '#fusion',   # static header files
+                      '#fusion/asset-tests/include', # asset tests headers
                       ])
+
+# Define the path to assets for unit and memory tests:
+env.Append(test_extra_cppflags = [
+   '-DOPENGEE_ASSETS_DIR={0}'.format(
+      'get_self_dir() + "{0}{1}"'.format(
+         os.sep,
+         repr(os.path.join(
+            'fusion', 'testdata', 'gevol', 'assets'
+         ))[1:-1].replace('"', '\\"') ) )])
+
 SConscript('khraster/SConscript', exports='env')
 SConscript('khgdal/SConscript', exports='env')
 SConscript('ffio/SConscript', exports='env')
@@ -125,12 +138,14 @@ SConscript('gecrawler/SConscript', exports='env')
 SConscript('geindexcheck/SConscript', exports='env')
 
 # let subdirs refer to headers as relative to the fusion directory
-# also include the gst directory
+# also include the gst directory.
 env = origenv.Clone();
 env.Append(CPPPATH = [Dir('.'),    # generated header files
                       '#fusion',   # static header files
                       '#fusion/gst',
                       ])
+
+SConscript('asset-tests/SConscript', exports='env')
 SConscript('gst/SConscript', exports='env')
 SConscript('tools/SConscript', exports='env')
 SConscript('portableglobe/SConscript', exports='env')
