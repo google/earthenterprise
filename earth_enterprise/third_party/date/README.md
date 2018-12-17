@@ -1,14 +1,11 @@
-URL: http://httpd.apache.org/
-Version: 2.2.32
-License: Apache 2.0
+URL: https://github.com/HowardHinnant/date
+Version: 2.4.1
+License: MIT
 License File: LICENSE
 
 Description:
-The Apache HTTP Server Project is an effort to develop and
-maintain an open-source HTTP server for modern operating systems including UNIX
-and Windows NT. The goal of this project is to provide a secure, efficient and
-extensible server that provides HTTP services in sync with the current HTTP
-standards.
+A library for reading, writing and calculating operations with date and time
+types in the `<chrono>` library.
 
 Local Modifications:
 None
