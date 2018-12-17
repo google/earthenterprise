@@ -244,6 +244,9 @@ class TestMigrateFusionHostname(unittest.TestCase):
             0)
 
 
+    # TODO tests for update_htdocs_urls()
+
+
     def test_delete_folder_contents_startsWithSlash(self):
         """Omitting leading slash should throw ValueError."""
         with self.assertRaises(ValueError):
