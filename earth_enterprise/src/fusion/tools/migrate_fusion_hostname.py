@@ -98,7 +98,7 @@ _DRYRUN = True  # Test only - Skip all permanent/destructive changes
 
 #### Function Definitions ####
 
-def change_hostname_server_only():
+def migrate_hostname_server_only():
     """Change the hostname for a GEE Server-only machine.
 
     *** Requires root permissions. ***
@@ -109,7 +109,7 @@ def change_hostname_server_only():
 
     Note: This is for GEE Server-only machines.
         For a Development machine (Server + Fusion), use
-        change_hostname_dev_machine()
+        migrate_hostname_dev_machine()
 
     If global _DRYRUN is true, will test each step but
     not execute any permanent changes.
@@ -168,7 +168,7 @@ def change_hostname_server_only():
     # TODO return something?
 
 
-def change_hostname_dev_machine():
+def migrate_hostname_dev_machine():
     """Change the hostname for a Development machine
         (contains both Fusion and GEE Server)
 
@@ -180,7 +180,7 @@ def change_hostname_dev_machine():
 
     Note: This is for machines with BOTH GEE Fusion and GEE Server
         For GEE Server-only machines, use
-        change_hostname_server_only()
+        migrate_hostname_server_only()
 
     If global _DRYRUN is true, will test each step but
     not execute any permanent changes.
@@ -311,6 +311,43 @@ def handle_input_args():
         exit_early("Error: Must specify mode (Server/Dev)")
         # TODO add "usage" message?
 
+
+def change_hostname(new_name):
+    """Update system hostname.
+
+    Args:
+        new_name: The new hostname (str)
+                  Must be a valid Unix hostname
+
+    Returns:
+        Return code of hostnamectl call
+
+    Raises:
+        Passes any uncaught exceptions from subprocess call
+        (ValueError, OSError, etc.)
+    """
+    # TODO this might be OS dependent - only tested on Centos7
+
+    my_args = ["hostnamectl",
+               "set-hostname",
+               _NEW_HOSTNAME,
+               ]
+
+    if _DRYRUN:
+        print "dryrun: skipping change_hostname"
+        return 0
+    else:
+        # run subprocess
+        pass
+
+               
+
+def change_IP():
+    """Update system IP address.
+
+    """
+    print "Warning: udpate_IP() not yet implemented."
+    pass
 
 
 def daemon_start_stop(daemon, command):
@@ -597,12 +634,12 @@ def main():
 
         # TODO any more checks?
 
-        change_hostname_dev_machine()
+        migrate_hostname_dev_machine()
 
     elif _MODE == "SERVER":
         # TODO check if in SERVER mode if hostname matches (need new input arg)
 
-        change_hostname_server_only()
+        migrate_hostname_server_only()
 
     else:
         # TODO raise exception instead?
