@@ -200,6 +200,13 @@ class TestMigrateFusionHostname(unittest.TestCase):
 
     ### Individual Method Tests ####
 
+    def test_change_hostname_dryrun(self):
+        """Check that hostname doesn't change in dryrun mode
+        and that return value is 0.
+        """
+        self.assertEqual(0, mfh.change_hostname("fakehostname"))
+        self.assertEqual(self._CURRENT_HOSTNAME, gethostname())
+
     def test_daemon_start_stop_bad_daemon(self):
         """Test Bad Input for daemon name."""
         mfh._DRYRUN = False
