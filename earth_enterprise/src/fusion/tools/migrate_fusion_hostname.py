@@ -121,7 +121,8 @@ def migrate_hostname_server_only():
         TODO
 
     Raises:
-        TODO
+        Passes any uncaught exceptions from called functions,
+        particularly OSError and ValueError from subprocess calls.
     """
 
     # Shut down the geserver daemon at /etc/init.d/geserver stop.
@@ -129,8 +130,16 @@ def migrate_hostname_server_only():
 
     # TODO confirm daemons stopped?
 
-    # TODO Update the hostname and IP address to the correct
+    # Update the hostname 
+    if prompt_user_confirm("Change hostname to: %s" % _NEW_HOSTNAME):
+        change_hostname(_NEW_HOSTNAME)
+    else:
+        exit_early()  # TODO message?
+
+    # TODO update IP address to the correct
     # entries for the machine.
+    # TODO make argparse arg for changing the IP, and only call this
+    # if the IP argument is specified
 
     # Edit /opt/google/gehttpd/htdocs/intl/en/tips/tip*.html
     # and update any hardcoded URLs to the new machine URL.
@@ -312,7 +321,7 @@ def handle_input_args():
         # TODO add "usage" message?
 
 
-def change_hostname(new_name):
+def change_hostname(new_hostname):
     """Update system hostname.
 
     Args:
@@ -327,20 +336,23 @@ def change_hostname(new_name):
         (ValueError, OSError, etc.)
     """
     # TODO this might be OS dependent - only tested on Centos7
+    # TODO may need to check OS (Centos/Red Hat/Ubuntu at runtime)
 
     my_args = ["hostnamectl",
+               # TODO add --no-ask-password arg?
                "set-hostname",
-               _NEW_HOSTNAME,
+               new_hostname,
                ]
 
     if _DRYRUN:
-        print "dryrun: skipping change_hostname"
+        print "dryrun: skipping change_hostname()"
         return 0
     else:
-        # run subprocess
-        pass
+        ret_code = subproc_check_call_wrapper(my_args)
 
-               
+    return ret_code
+
+
 
 def change_IP():
     """Update system IP address.
