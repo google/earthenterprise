@@ -55,6 +55,7 @@ from socket import gethostname    # preferred way to get hostname
 # TODO write logfile of errors; use logging module?
 # TODO make logfile useful for resuming starting after error?
 # TODO run pylint
+# TODO use return codes in main fn's
 
 #### GLOBALS: ####
 
@@ -131,10 +132,12 @@ def change_hostname_server_only():
     # TODO Update the hostname and IP address to the correct
     # entries for the machine.
 
-    # TODO Edit /opt/google/gehttpd/htdocs/intl/en/tips/tip*.html
+    # Edit /opt/google/gehttpd/htdocs/intl/en/tips/tip*.html
     # and update any hardcoded URLs to the new machine URL.
-    # TODO What is the format for the * part?
-    # does it include hostname? or just a unique id?
+    if prompt_user_confirm("Updating htdocs tips URLs"):
+        update_htdocs_urls()
+    else:
+        exit_early()    # TODO message?
 
     # Remove the contents of
     # /gevol/published_dbs/stream_space
@@ -151,7 +154,6 @@ def change_hostname_server_only():
         delete_folder_contents(_PUBLISHED_SEARCH_FOLDER)
     else:
         exit_early("Files must be deleted before continuing.")
-    # TODO use return codes?
 
     # Change directory to /tmp and execute
     # "sudo -u gepguser /opt/google/bin/geresetpgdb"
@@ -381,6 +383,34 @@ def subproc_check_call_wrapper(arglist):
         return err.returncode
 
     return ret_code
+
+
+def update_htdocs_urls():
+    """Update hardcoded URL's for documentation tips.
+
+    Edit /opt/google/gehttpd/htdocs/intl/en/tips/tip*.html
+    and update any hardcoded URLs to the new machine URL.
+
+    Args:
+        TODO
+
+    Returns:
+        TODO
+
+    Raises:
+        TODO
+    """
+
+    # TODO Not yet implemented - What is the format for the * part?
+    # does it include hostname? or just a unique id?
+
+    # pseudocode:
+    # loop over URLs in folder (glob?)
+    #   if not _DRYRUN:
+    #       rename file (try/catch)
+    #       track non-zero return codes?
+
+    print "WARNING: update_htdocs_urls not yet implemented."
 
 
 def delete_folder_contents(path):
