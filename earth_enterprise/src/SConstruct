@@ -481,7 +481,7 @@ gee_version_number = env.get_open_gee_version().get_short()
 
 # Check if the version of the default compiler is at least 4.8:
 if not env['CXX']:
-    print "Please install the default C++ compiler for your distribution."
+    print "Please, install the default C++ compiler for your distribution."
     Exit(1)
 
 version = opengee.c_compiler.get_cc_version(env['CXX'])
