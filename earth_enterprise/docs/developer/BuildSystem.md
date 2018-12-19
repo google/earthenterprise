@@ -13,13 +13,13 @@ Each of them can have a few different items that can be built.  They include:
 * Packages for installing on various operating systems
 * Documentation for browsing off-line, or publishing on Open GEE Web sites
 
-There are a couple of build tools used for building these items:
+There are a few build tools used for building these items:
 
 * SCons
 * Gradle
 * Python scripts
 
-The code and bulid scripts for the different software products (Server,
+The code and build scripts for the different software products (Server,
 Fusion, Portable Globe) are not modularized, and the build script for one
 may reference the source code file structure for another.
 
