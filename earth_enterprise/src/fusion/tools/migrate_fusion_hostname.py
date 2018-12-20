@@ -337,6 +337,7 @@ def change_hostname(new_hostname):
     """
     # TODO this might be OS dependent - only tested on Centos7
     # TODO may need to check OS (Centos/Red Hat/Ubuntu at runtime)
+    # TODO update /etc/hosts too?
 
     my_args = ["hostnamectl",
                # TODO add --no-ask-password arg?
