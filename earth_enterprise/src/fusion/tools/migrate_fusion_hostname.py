@@ -131,6 +131,8 @@ def migrate_hostname_server_only():
     # TODO confirm daemons stopped?
 
     # Update the hostname 
+    # TODO is this the correct thing to do on the SERVER?
+    # we want to change the FUSION hostname, not the SERVER hostname
     if prompt_user_confirm("Change hostname to: %s" % _NEW_HOSTNAME):
         change_hostname(_NEW_HOSTNAME)
     else:
