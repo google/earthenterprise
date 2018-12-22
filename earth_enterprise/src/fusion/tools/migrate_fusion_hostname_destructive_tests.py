@@ -152,15 +152,15 @@ class TestMigrateFusionHostname(unittest.TestCase):
         """Test & confirm hostname change, then revert to original."""
 
         old_hostname = gethostname()
-        new_hostname = "testinghost123"
+        new_hostname = "testhost123"
 
         mfh._DRYRUN = False
-        mfh.change_hostname(new_hostname)
+        self.assertEqual(mfh.change_hostname(new_hostname), 0)
         self.assertEqual(gethostname(), new_hostname)
 
         # change it back & test again
-        mfh.change_hostname(old_hostname)
-        self.assertEqual(gethostname(), new_hostname)
+        self.assertEqual(mfh.change_hostname(old_hostname), 0)
+        self.assertEqual(gethostname(), old_hostname)
 
 
 
