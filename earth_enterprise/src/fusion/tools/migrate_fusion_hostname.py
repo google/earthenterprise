@@ -326,6 +326,9 @@ def handle_input_args():
 def change_hostname(new_hostname):
     """Update system hostname.
 
+    Requires sufficient user permission to change hostname,
+    but not necessarily root.
+
     Args:
         new_name: The new hostname (str)
                   Must be a valid Unix hostname
