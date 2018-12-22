@@ -163,8 +163,15 @@ class TestMigrateFusionHostname(unittest.TestCase):
         self.assertEqual(gethostname(), old_hostname)
 
 
+    # TODO tests for change_IP()
 
+    # TODO tests for update_htdocs_urls()
 
+    # TODO tests for delete_folder_contents()
+    # dummy tests w/ dummy files already done in _unittest
+    # necessary to test live here? Or just in full program test?
+
+    # TODO tests for run_geresetpgdb()
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
