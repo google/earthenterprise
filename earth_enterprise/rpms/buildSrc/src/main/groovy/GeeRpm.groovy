@@ -1,5 +1,6 @@
 import java.nio.file.NoSuchFileException
 import java.nio.file.Paths
+import java.nio.file.Files
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import org.gradle.api.tasks.TaskAction
@@ -175,6 +176,10 @@ RequiresEND
         }
     }
 
+    // Variable to autodetect symlinks. Detected symlinks are fixed, so they
+    // are not created as files.
+    boolean preserveSymlinks = true
+
     // Override the @TaskAction from the base class, so we can run automatic
     // depedency detection, first.
     @Override
@@ -195,6 +200,15 @@ RequiresEND
             each {
                 requires(it)
             }
+
+        if (preserveSymlinks) {
+            eachFile {
+                if (it.getFile().isFile() && Files.isSymbolicLink(it.getFile().toPath())) {
+                    link("/" + it.getRelativePath().toString(), Files.readSymbolicLink(it.getFile().toPath()).toString())
+                    it.exclude()
+                }
+            }
+        }
 
         super.copy()
 

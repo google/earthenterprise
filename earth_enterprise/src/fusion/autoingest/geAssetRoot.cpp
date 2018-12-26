@@ -19,7 +19,7 @@
 
 namespace geAssetRoot {
 
-std::string VolumeName = "assetroot";
+const char VolumeName[] = "assetroot";
 
 struct WantPerms {
   std::string name_;

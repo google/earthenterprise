@@ -125,3 +125,16 @@ geresourceprovider = env.executable('geresourceprovider',
 
 env.install('fusion_bin', [ gesystemmanager, geresourceprovider ] )
 env.install('fusion_root', [ 'gefusion' ], 'etc/init.d')
+
+
+SConscript(
+    'parse-raster-project-xml-no-content_unittest/SConscript',
+    exports=[
+        'env', 'commonobj', 'plugins', 'extraObjs', 'TaskStorageObj',
+        'JobStorageObj', 'NextTaskIdObj', 'TaskRuleObj', 'FusionUniqueIdObj'])
+
+SConscript(
+    'memory-tests/SConscript',
+    exports=[
+        'env', 'commonobj', 'plugins', 'extraObjs', 'TaskStorageObj',
+        'JobStorageObj', 'NextTaskIdObj', 'TaskRuleObj', 'FusionUniqueIdObj'])
