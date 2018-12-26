@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<CombinedRPAssetVersion>
+
+  <name>{{ name }}</name>
+
+  <type>Imagery</type>
+
+  <subtype>CombinedRP</subtype>
+
+  <version>{{ version }}</version>
+
+  <state>{{ state }}</state>
+
+  <progress>0</progress>
+
+  <locked>0</locked>
+
+  <inputs>
+{% for name in inputs %}
+    <input>{{ inputs }}</input>
+{% endfor %}
+  </inputs>
+
+  <children>
+{% for name in children %}
+    <children_element>{{ name }}</children_element>
+{% endfor %}
+  </children>
+
+  <parents>
+{% for name in parents %}
+    <parent>{{ name }}</parent>
+{% endfor %}
+  </parents>
+
+  <listeners>
+{% for name in listeners %}
+    <listener>{{ name }}</listener>
+{% endfor %}
+  </listeners>
+
+  <outfiles/>
+
+  <meta>
+    <item key="createdtime">2018-07-26 01:25:06</item>
+    <item key="extents">90,-90,180,-180</item>
+    <item key="maxlevel">14</item>
+    <item key="minlevel">8</item>
+    <item key="preview">TDa/Basemap.kiasset/product.kia/ver001/preview.png</item>
+  </meta>
+
+  <beginTime>0</beginTime>
+
+  <progressTime>0</progressTime>
+
+  <endTime>0</endTime>
+
+  <taskid>0</taskid>
+
+  <config>
+    <fuid_resource>1000</fuid_resource>
+    <mask_mode>AutoMask</mask_mode>
+    <source_is_product>0</source_is_product>
+    <need_khvr>0</need_khvr>
+    <krp_config>
+      <scale>1</scale>
+      <clampNonnegative>0</clampNonnegative>
+      <overridesrs></overridesrs>
+      <useMercatorProjection>0</useMercatorProjection>
+      <north_boundary>90</north_boundary>
+      <south_boundary>-90</south_boundary>
+      <east_boundary>180</east_boundary>
+      <west_boundary>-180</west_boundary>
+    </krp_config>
+    <maskgen_config>
+      <feather>100</feather>
+      <mode>Mask</mode>
+      <band>1</band>
+      <fillvalue>-1</fillvalue>
+      <threshold>0</threshold>
+      <holesize>0</holesize>
+      <whitefill>0</whitefill>
+      <nodata></nodata>
+    </maskgen_config>
+  </config>
+
+</CombinedRPAssetVersion>
