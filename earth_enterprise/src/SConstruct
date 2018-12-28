@@ -264,6 +264,7 @@ if gprof:
 
 # setup -rpath-link and -rpath options
 rpathlink_dirs = [Dir(exportdirs['lib']).abspath]
+
 # SetUID binaries don't use RPATH's containing '$ORIGIN' (since that would be
 # exploitable).  Use absolute paths to library install locations instead:
 rpath_dirs = ["'$$ORIGIN/../qt/lib'",
@@ -272,6 +273,13 @@ rpath_dirs = ["'$$ORIGIN/../qt/lib'",
               '%s/lib64' % optdir,
               '%s/lib' % optdir,
               '%s/qt/lib' % optdir]
+
+# Binaries for unit tests, and other tests don't reside in the `bin` directory
+# where other executables go.  Instead, they are put in `bin/tests`.  So, the
+# the paths relative to the `$ORIGIN` directory need an extra `..`:
+test_rpath_dirs = map(
+  lambda p: p.replace('$ORIGIN', os.path.join('$ORIGIN', '..')),
+  rpath_dirs)
 
 # setup crosstool directories.
 if not native_cc:
@@ -316,7 +324,10 @@ if not native_cc:
 
 rpathlink_flags = map(lambda dir_name: '-Wl,-rpath-link,'+dir_name,
                       rpathlink_dirs)
-rpath_flags = map(lambda dir_name: '-Wl,-rpath,'+dir_name, rpath_dirs)
+rpath_flags = map(lambda dir_name: '-Wl,-rpath,' + dir_name, rpath_dirs)
+test_rpath_flags = map(
+  lambda dir_name: '-Wl,-rpath,' + dir_name, test_rpath_dirs)
+test_linkflags = linkflags + rpathlink_flags + test_rpath_flags
 linkflags = linkflags + rpathlink_flags + rpath_flags
 
 # Enforce that installdir=BLAH is specified when 'install'
@@ -444,6 +455,8 @@ env = khEnvironment(
     exportdirs=exportdirs,
     installdirs=installdirs,
     skia_rel_dir=skia_rel_dir,
+    test_linkflags=extragccflags + test_linkflags,
+    test_extra_cppflags=None,
     LINKFLAGS=extragccflags + linkflags,
     CXXFLAGS=optflags + extragccflags + warnflags + cppStandard,
     CCFLAGS=optflags + extragccflags + warnflags,

@@ -1,0 +1,63 @@
+#-*- Python -*-
+#
+# Copyright 2018 the Open GEE Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Scons build file for date library.
+# Upstream: <https://github.com/HowardHinnant/date>.
+
+import os.path
+Import('env')
+Import('third_party_env')
+
+date_version = '2.4.1'
+
+
+date_source = File(
+    '#/../../earth_enterprise/third_party/date/v{0}.tar.gz'.format(
+        date_version)).abspath
+current_dir = Dir('.').abspath
+build_root = os.path.join(current_dir, 'date-{0}'.format(date_version))
+date_target = os.path.join(current_dir, '.extract')
+
+
+date_env = third_party_env.DeepCopy()
+
+# [1] Extract date
+date_extract = date_env.Command(
+    [date_target], [date_source],
+    [date_env.MultiCommand(
+        'mkdir -p {0}\n'.format(current_dir) + \
+        'cd {0}\n'.format(current_dir) + \
+        'tar xzf {0}\n'.format(date_source) + \
+        'cp -R date-{0}/include ../..\n'.format(date_version) + \
+        'touch {0}'.format(date_target)
+    )])
+
+print 'date target: {0}'.format(date_target)
+print 'date build_root: {0}'.format(build_root)
+
+# We don't do a build.  It fails on Ubuntu 16.04 with C++11.  However, all we
+# need for our purposes are the header files from the <include> directory.
+# So, we just extract and add the directive to the include path.
+
+
+date_env['CPPFLAGS'] += ['-I' + os.path.join(build_root, 'include')]
+date_env.ExecuteOnClean('rm -rf {0} {1}'.format(build_root, date_extract))
+
+# date = date_env.staticLib('date_env', [os.path.join(build_root, 'include', 'date')])
+Default(date_extract)
+# env.Alias('date', 'date_extract')
+
+Return('date_extract date_extract')
