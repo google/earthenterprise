@@ -21,6 +21,9 @@
 # CPP_STD    - Should be set to `98` or `11` depending on the standard to build with
 # BUILD_TYPE - The type of build `release`, `optimize`, or `internal`
 
+# Terminate with an non-zero exit code, if a command doesn't succeed:
+set -e
+
 case "$CPP_STD" in
     11)
         ;;
@@ -42,7 +45,7 @@ esac
 set -x
 cd earth_enterprise/src
 if [ -f $HOME/cache/third_party$CPP_STD.tgz ]; then
-  tar xf $HOME/cache/third_party$CPP_STD.tgz;
+    tar xf $HOME/cache/third_party$CPP_STD.tgz;
 fi
 
 scons -j3 $BUILD_TYPE=1 cpp_standard=gnu++$CPP_STD third_party > build.log
