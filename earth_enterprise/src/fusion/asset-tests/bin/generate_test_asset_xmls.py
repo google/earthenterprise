@@ -9,13 +9,73 @@ WARNING: This scripts generates 1,000,000 asset directories.  This may make
 file operations in the test assets directory slow.
 """
 
+import argparse
+import functools
 import jinja2
+import math
 import os
 import os.path
 import sys
 import uuid
 
 
+# Create some decorators for methods that serve as tasks to be executed.
+def execute_once(func):
+    """Make a function exectule only once.  Calls after the first one return
+    immediately.
+    """
+
+    @functools.wraps(func)
+    def wrapper_execute_once(*args, **kwargs):
+        if wrapper_execute_once.executed:
+            return
+
+        res = func(*args, **kwargs)
+        wrapper_execute_once.executed = True
+
+        return res
+
+    wrapper_execute_once.executed = False
+
+    return wrapper_execute_once
+
+
+class ProgressMeter(object):
+    """A basic interface for reporting task progress."""
+
+    def __init__(self, start_value, end_value, update_interval=1000):
+        """
+            update_interval = How much the progress value should change before
+        the display is updated.
+        """
+
+        self.start_value = start_value
+        self.end_value = end_value
+        self.value = start_value
+        self.update_interval = update_interval
+        self.display_last_value = None
+
+    def advance(self, progress_amount):
+        self.value += progress_amount
+        self.update_progress()
+
+    def close(self):
+        sys.stdout.write(os.linesep)
+
+    def update_progress(self):
+        if (self.value - self.start_value) % self.update_interval == 0:
+            self.update_display()
+
+    def update_display(self):
+        remaining_ratio = float(self.end_value - self.value) / \
+            (self.end_value - self.start_value)
+        display_value = math.floor(remaining_ratio * 10.0)
+        if display_value != self.display_last_value:
+            sys.stdout.write('{0:.0f}'.format(display_value))
+            self.display_last_value = display_value
+        else:
+            sys.stdout.write('.')
+        sys.stdout.flush()
 
 class AssetXmlWriter(object):
     def __init__(self, templates_dir):
@@ -308,7 +368,7 @@ class RasterProductCombinedRpAssetVersion(AssetVersion):
             })
 
 
-class TestAssetGenerator(object):
+class TestAssetGeneratorBase(object):
     def __init__(self):
         # Capture our current directory:
         self_dir = os.path.dirname(os.path.abspath(__file__))
@@ -316,14 +376,20 @@ class TestAssetGenerator(object):
         self.asset_root = os.path.join(
             self_dir, 'fusion', 'testdata', 'gevol', 'assets')
         self.templates_dir = os.path.join(
-            self_dir, '..', '..', 'share', 'generate_test_asset_xmls',
-            'templates')
+            self_dir, 'fusion', 'testdata', 'assets', 'templates')
         self.xml_writer = AssetXmlWriter(self.templates_dir)
         self.valid_raster_project_count = 1000000
+        self.progress_meter = ProgressMeter(0, 2)
 
     def get_asset_basename(self, asset_number, asset_suffix):
         return 'asset-{0:07}{1}'.format(asset_number, asset_suffix)
 
+
+class TestValidAssetGenerator(TestAssetGeneratorBase):
+    def __init__(self):
+        super(TestValidAssetGenerator, self).__init__()
+
+    @execute_once
     def create_valid_raster_product_asset(self):
         asset_dir = os.path.join('RasterProducts', 'Valid')
 
@@ -353,30 +419,7 @@ class TestAssetGenerator(object):
         self.valid_raster_product_asset_version.add_child(
             combined_rp_asset_version)
 
-    def create_invalid_raster_product_asset(self):
-        asset_dir = os.path.join('RasterProducts', 'Invalid')
-
-        self.invalid_raster_product_asset = RasterProductAsset(
-            os.path.join(asset_dir, 'asset-01-no-content-files.kiasset'))
-        self.invalid_raster_product_asset_version = RasterProductAssetVersion(
-            self.invalid_raster_product_asset, 666)
-
-        source_asset = RasterProductSourceAsset(
-            self.invalid_raster_product_asset)
-        _ = RasterProductSourceAssetVersion(source_asset, 667)
-        combined_rp_asset = RasterProductCombinedRpAsset(
-            self.valid_raster_product_asset)
-        _ = RasterProductCombinedRpAssetVersion(combined_rp_asset, 668)
-
-    def create_common_assets(self):
-        self.create_valid_raster_product_asset()
-        self.create_invalid_raster_product_asset()
-
-    def write_common_assets(self):
-        self.valid_raster_product_asset.output(self.asset_root, self.xml_writer)
-        self.invalid_raster_product_asset.output(
-            self.asset_root, self.xml_writer)
-
+    @execute_once
     def generate_valid_raster_projects(self):
         asset_dir = os.path.join('RasterProjects', 'Valid')
 
@@ -396,12 +439,32 @@ class TestAssetGenerator(object):
 
             raster_project_asset.output(self.asset_root, self.xml_writer)
 
-            if n % 1000 == 0:
-                sys.stdout.write('.')
-                sys.stdout.flush()
+            self.progress_meter.advance(1)
 
-        sys.stdout.write(os.linesep)
+class TestInvalidAssetGenerator(TestValidAssetGenerator):
+    def __init__(self):
+        super(TestInvalidAssetGenerator, self).__init__()
+        self.invalid_raster_project_count = 1
 
+    @execute_once
+    def create_invalid_raster_product_asset(self):
+        self.create_valid_raster_product_asset()
+
+        asset_dir = os.path.join('RasterProducts', 'Invalid')
+
+        self.invalid_raster_product_asset = RasterProductAsset(
+            os.path.join(asset_dir, 'asset-01-no-content-files.kiasset'))
+        self.invalid_raster_product_asset_version = RasterProductAssetVersion(
+            self.invalid_raster_product_asset, 666)
+
+        source_asset = RasterProductSourceAsset(
+            self.invalid_raster_product_asset)
+        _ = RasterProductSourceAssetVersion(source_asset, 667)
+        combined_rp_asset = RasterProductCombinedRpAsset(
+            self.valid_raster_product_asset)
+        _ = RasterProductCombinedRpAssetVersion(combined_rp_asset, 668)
+
+    @execute_once
     def generate_invalid_raster_projects(self):
         asset_dir = os.path.join('RasterProjects', 'Invalid')
 
@@ -417,18 +480,63 @@ class TestAssetGenerator(object):
             inset, self.invalid_raster_product_asset_version)
         raster_project_asset.output(self.asset_root, self.xml_writer)
 
+        self.progress_meter.advance(1)
+
+class TestAssetGenerator(TestInvalidAssetGenerator):
+    def __init__(
+        self, output_valid_raster_projects=True,
+        output_invalid_raster_projects=True
+    ):
+        super(TestAssetGenerator, self).__init__()
+        self.output_valid_raster_projects = output_valid_raster_projects
+        self.output_invalid_raster_projects = output_invalid_raster_projects
+
+    def create_common_assets(self):
+        self.create_valid_raster_product_asset()
+        self.create_invalid_raster_product_asset()
+
+    def write_common_assets(self):
+        self.valid_raster_product_asset.output(self.asset_root, self.xml_writer)
+        self.invalid_raster_product_asset.output(
+            self.asset_root, self.xml_writer)
+
+        self.progress_meter.advance(2)
+
     def generate_raster_projects(self):
-        self.generate_valid_raster_projects()
-        self.generate_invalid_raster_projects()
-    
+        if self.output_valid_raster_projects:
+            self.generate_valid_raster_projects()
+        if self.output_invalid_raster_projects:
+            self.generate_invalid_raster_projects()
+
     def generate_assets(self):
+        if self.output_valid_raster_projects:
+            self.progress_meter.end_value += self.valid_raster_project_count
+        if self.output_invalid_raster_projects:
+            self.progress_meter.end_value += self.invalid_raster_project_count
+
         self.create_common_assets()
         self.generate_raster_projects()
         self.write_common_assets()
 
+        self.progress_meter.close()
+
 
 def main():
-    generator = TestAssetGenerator()
+    parser = argparse.ArgumentParser(
+        description="Generate Fusion asset XMLs for testing.")
+
+    parser.add_argument(
+        '--skip-valid-raster-projects', action='store_true',
+        help="Don't generate valid raster project XMLs.")
+    parser.add_argument(
+        '--skip-invalid-raster-projects', action='store_true',
+        help="Don't generate invalid raster project XMLs.")
+
+    args = parser.parse_args()
+
+    generator = TestAssetGenerator(
+        not args.skip_valid_raster_projects,
+        not args.skip_invalid_raster_projects)
     generator.generate_assets()
 
 
