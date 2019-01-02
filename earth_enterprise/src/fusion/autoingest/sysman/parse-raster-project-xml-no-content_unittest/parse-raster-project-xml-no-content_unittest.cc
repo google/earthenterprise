@@ -52,7 +52,7 @@ class ParseRasterProjectXmlNoContent_Test :
     {
         // This names an asset with XMLs, but no content directories, such as
         // mask, mosaic, product:
-        std::string asset_name = get_invalid_raster_project_asset_name(
+        std::string asset_name = acquire_invalid_raster_project_asset_name(
             "asset-01-input-with-no-content-files");
 
         assert(asset_name_exists(asset_name));
