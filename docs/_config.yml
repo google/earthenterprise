@@ -17,4 +17,4 @@ paginate_path: "blog/page:num"
 # Google Analytics Tracking ID
 google_analytics: UA—108632131-2
 
-theme: jekyll-theme-cayman
+theme: jekyll-theme-modernist
