@@ -431,6 +431,8 @@ remove_files_from_target()
         rm -rf $BASEINSTALLDIR_OPT/gepython
         rm -rf $BASEINSTALLDIR_OPT/bin
         rm -rf $BASEINSTALLDIR_OPT/tutorial
+
+        rm -f $BININSTALLROOTDIR/gevars.sh
     fi
 
     # final file -- remove systemrc
