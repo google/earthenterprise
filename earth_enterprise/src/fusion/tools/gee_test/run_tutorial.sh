@@ -114,8 +114,6 @@ sudo /etc/init.d/geserver restart
 
 /opt/google/bin/genewimageryproject -o Tutorial/Projects/Imagery/SFBayArea Tutorial/Resources/Imagery/BlueMarble Tutorial/Resources/Imagery/SFBayAreaLanSat Tutorial/Resources/Imagery/i3_15Meter Tutorial/Resources/Imagery/SFHighResInset
 
-/opt/google/bin/genewimageryproject -o Tutorial/Projects/Imagery/SFBayArea_TM --historical_imagery Tutorial/Resources/Imagery/BlueMarble Tutorial/Resources/Imagery/SFBayAreaLanSat Tutorial/Resources/Imagery/i3_15Meter Tutorial/Resources/Imagery/SFHighResInset
-
 /opt/google/bin/genewimageryproject -o Tutorial/Projects/Imagery/SFBayArea_merc --mercator Tutorial/Resources/Imagery/BlueMarble_merc Tutorial/Resources/Imagery/SFBayAreaLanSat_merc Tutorial/Resources/Imagery/i3_15Meter_merc Tutorial/Resources/Imagery/SFHighResInset_merc
 
 /opt/google/bin/genewterrainproject -o Tutorial/Projects/Terrain/SFTerrain Tutorial/Resources/Terrain/SFTerrain
