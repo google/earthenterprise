@@ -30,6 +30,13 @@ my $OSLABEL = "";
 #set to 1 to include stdout output for non-error tests
 my $VERBOSE = 0;
 
+# List tests that should be skipped here:
+my %DISABLE_TESTS;
+
+for my $name ('parse-raster-project-xml-no-content_unittest') {
+  $DISABLE_TESTS{$name} = 1;
+}
+
 sub usage() {
   print "USAGE:  RunAllTests.pl [OPTIONAL ARGUMENTS]\n";
   print "\tOPTIONAL ARGUMENTS: \n";
@@ -71,7 +78,11 @@ open(my $fh, '>', $logfile) or die $!;
 # gdal_rasterize,...) used in tests.
 $ENV{'PATH'} = join ":", "..", $ENV{'PATH'};
 
-my @tests = glob("./*test*");
+# Find binary names that contain 'test' in their name, but don't end in
+# '_resourcetest':
+my @tests =
+  grep { $_ !~ /_resourcetest$/ && $_ !~ /.yaml$/ && $_ ne './generate_test_asset_xmls.py' }
+  glob("./*test*");
 
 my $longest = 0;
 foreach my $test (@tests) {
@@ -94,6 +105,11 @@ foreach my $test (@tests) {
     my $basename = basename($test);
     next if $basename eq $Script;
     print "Running $basename ... ", ' 'x($longest-length($basename));
+
+    if ($DISABLE_TESTS{$basename}) {
+      print "DISABLED\n";
+      next;
+    }
 
     #set up xml tags for this file
     my $testsuite = "\t<testsuite ";
