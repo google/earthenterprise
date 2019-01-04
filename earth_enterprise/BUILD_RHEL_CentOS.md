@@ -123,7 +123,7 @@ sudo yum install -y \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel \
   perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-devel \
   rpm-build rpmrebuild rsync scons \
-  xerces-c xerces-c-devel xorg-x11-server-devel zlib-devel
+  xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```
 
 ### CentOS 6 and RHEL 6
@@ -138,7 +138,7 @@ sudo yum install -y \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel \
   perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-devel python-unittest2 \
   rpm-build rpmrebuild rsync scons shunit2 \
-  xerces-c xerces-c-devel xorg-x11-server-devel zlib-devel
+  xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```
 
 If you encounter an error about git dependency conflicts, consider 
