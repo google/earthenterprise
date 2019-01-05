@@ -12,12 +12,12 @@
 #include <thread>
 
 #include <date/date.h>
-#include <yaml-cpp/yaml.h>
 
 #include "ostream_tee.hpp"
 #include "resource_usage_info.hpp"
 #include "resources.hpp"
 #include "utils.hpp"
+#include "yaml-cpp-wrapper.hpp"
 
 
 namespace opengee {
@@ -56,7 +56,7 @@ class ThreadMemberFunctionTester
 
     protected:
 
-    YAML::Emitter log_emitter;
+    YamlEmitter log_emitter;
 
     public:
 
