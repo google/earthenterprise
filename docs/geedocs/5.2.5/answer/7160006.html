@@ -160,6 +160,41 @@ gtag('config', 'UA-108632131-2');
           <th>Workaround</th>
         </tr>
         <tr>
+          <td>1142</td>
+          <td>Builds do not work without system default compiler</td>
+          <td>Install the system default compiler</td>
+        </tr>
+        <tr>
+          <td>1135</td>
+          <td>Javascript console error in portable server when loading build date</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>1102</td>
+          <td>Build instructions for Centos 6 are incorrect</td>
+          <td>Install <code>gcc-c++</code>, <code>gettext</code>, <code>doxygen</code>, and <code>swig</code>. Also run <code>source /opt/rh/devtoolset-2/enable</code> in the same manner as REHL6.
+        </tr>
+        <tr>
+          <td>1092</td>
+          <td><code>geselectpublishroot</code> offers no help when the --help flag is specified</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>1070</td>
+          <td>Scons build succeeds even if fusionui folder is missing resulting in the Fusion UI not being installed.</td>
+          <td>If the Fusion UI does not get installed, ensure that the fusionui folder is where it belongs.</td>
+        </tr>
+        <tr>
+          <td>1026</td>
+          <td>High resolution imagery sometimes does not appear when paired with low resolution imagery and terrain</td>
+          <td>Toggling off the terrain reveals the high resolution imagery.</td>
+        </tr>
+        <tr>
+          <td>885</td>
+          <td>Geserver installation scripts fail silently when extensions fail to load</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
           <td>825</td>
           <td>Geserver fails to startup fully due to conflicting protobuf library</td>
           <td>Run <code>pip uninstall protobuf</code> to uninstall the protobuf library installed by pip. </td>
@@ -392,11 +427,6 @@ gtag('config', 'UA-108632131-2');
           <td>201</td>
           <td>Some tiles are displayed incorrectly in the Enterprise Client when terrain is enabled</td>
           <td>No current work around.</td>
-        </tr>
-        <tr>
-          <td>200</td>
-          <td>stage_install fails on the tutorial files when <code>/home</code> and <code>/tmp</code> are on different file systems</td>
-          <td>Ensure that <code>/home</code> and <code>/tmp</code> are on the same file system or download the tutorial files to <code>/opt/google/share/tutorials/fusion/</code> after installing Fusion.</td>
         </tr>
         <tr>
           <td>193</td>
