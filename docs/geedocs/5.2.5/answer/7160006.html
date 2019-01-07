@@ -55,6 +55,7 @@ gtag('config', 'UA-108632131-2');
       the GEE server thinks there is no imagery to display at intermediate zoom levels.
     </p>
     <p><strong>Installations scripts are disabled when Open GEE packages are installed.</strong>  The install and uninstall scripts will now check if Open GEE has been installed with a package manager before installation begins, and will not make any changes when the packages are installed.
+    </p>
   <h5>
     <p id="supported_5.2.5">Supported Platforms</p>
   </h5>
@@ -125,7 +126,7 @@ gtag('config', 'UA-108632131-2');
           <tr>
             <td>1037</td>
             <td>Projects use different level numbers on the command line than in the Fusion User Interface</td>
-            <td>A new parameter, <code>--maxleveloverride</code> for the <code>genew*project</code>, <code>geaddto*project</code>, and <code>gemodify*project</code> families of command line utilities. This parameter is to be used instead of the <code>--maxlevel</code>, which is now deprecated. The new parameter uses the Terrain and Imagery levels found in the Fusion UI, so they match.</td>
+            <td>A new parameter, <code>--maxleveloverride</code>, has been added for the <code>genew*project</code>, <code>geaddto*project</code>, and <code>gemodify*project</code> families of command line utilities. This parameter is to be used instead of the <code>--maxlevel</code>, which is now deprecated. The new parameter uses the Terrain and Imagery levels found in the Fusion UI, so they match.</td>
           </tr>
           <tr>
             <td>1038</td>
@@ -137,14 +138,14 @@ gtag('config', 'UA-108632131-2');
                projects.</td>
           </tr>
           <tr>
+            <td>1079</td>
+            <td>Earth client can hang on a portable globe cut from a server with historical data that no longer has access to the server.</td>
+            <td>A new parameter, <code>--disable_historical</code>, has been added to <code>gerewritedbroot</code>. This parameter removes the problematic reference to the historical data url, allowing it to be viewed in Earth Client.
+          </tr>
+          <tr>
             <td>1105</td>
             <td>Symlinks are incorrectly world-writable files after installation from RPM or Deb</td>
             <td>Symlinks are now detected during the building of RPMs and Debs and are copied into the package correctly.</td>
-          </tr>
-          <tr>
-             <td>1120</td>
-             <td>Installing fusion without server fails because of a missing vars file</td>
-             <td>The missing file is created during both fusion and server install.</td>
           </tr>
         </tbody>
       </table>
