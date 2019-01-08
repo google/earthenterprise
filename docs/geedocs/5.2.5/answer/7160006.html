@@ -43,18 +43,18 @@ gtag('config', 'UA-108632131-2');
   <h5>
     <p id="overview_5.2.5">New Features</p>
   </h5>
-    <p><strong>When a GEE server is queried for server definitions the response can be returned in proper JSON format.</strong> The <code>v</code> parameter can be added to query string to specify which version of the API will be returned. The valid options are <code>v=1</code> and <code>v=2</code>. Version one returns data in the current format. Version two returns data in JSON format. An example url which returns data in JSON format looks like: <code>http://&lt;GEE earth server&gt;/&lt;database_publish_point&gt;/query?request=Json&amp;v=2</code>.</p>
+    <p><strong>When a GEE server is queried for server definitions the response can be returned in proper JSON format.</strong> The <code>v</code> parameter can be added to the query string to specify which version of the API will be returned. The valid options are <code>v=1</code> and <code>v=2</code>. Version one returns data in the current format. Version two returns data in JSON format. An example URL that returns data in JSON format looks like: <code>http://&lt;GEE earth server&gt;/&lt;database_publish_point&gt;/query?request=Json&amp;v=2</code>.</p>
     <p><strong>Additional options when publishing from the command line.</strong> Users can now enable POI search, enhanced search, and WMS when publishing from the command line.
     <p><strong>Portable globe packet dumps</strong>.
-        <code>geglxinfo</code> is now capable of extracting packets from 3d portable globes.
-        This is useful for exploring contents of a 3d portable file.
+        <code>geglxinfo</code> is now capable of extracting packets from 3D portable globes.
+        This is useful for exploring contents of a 3D portable file.
     </p>
     <p><strong>Continue past empty levels.</strong>
-      Cutter has a new advanced option when cutting from a 2d map.  This "Continue past empty levels"
-      option causes cutter to continue building the cutfile in the polygon region down to the region level even if
+      Cutter has a new advanced option when cutting from a 2D map.  This "Continue past empty levels"
+      option causes Cutter to continue building the cutfile in the polygon region down to the region level even if
       the GEE server thinks there is no imagery to display at intermediate zoom levels.
     </p>
-    <p><strong>Installations scripts are disabled when Open GEE packages are installed.</strong>  The install and uninstall scripts will now check if Open GEE has been installed with a package manager before installation begins, and will not make any changes when the packages are installed.
+    <p><strong>Installation scripts are disabled when Open GEE packages are installed.</strong>  The install and uninstall scripts will now check if Open GEE has been installed with a package manager before installation begins, and will not make any changes when the packages are installed.
     </p>
   <h5>
     <p id="supported_5.2.5">Supported Platforms</p>
@@ -109,9 +109,9 @@ gtag('config', 'UA-108632131-2');
           </tr>
           <tr>
             <td>1012</td>
-            <td>Cutter produces incorrect very low resolution result from 2d mercator map</td>
+            <td>Cutter produces incorrect very low resolution result from 2D Mercator map</td>
             <td>
-              If a 2d map contains imagery at resolution level 24 and cutter tries to create a portable
+              If a 2D map contains imagery at resolution level 24 and Cutter tries to create a portable
               map with a region level of 24 the resulting portable map will now contain the high
               resolution imagery.
             </td>
@@ -130,16 +130,16 @@ gtag('config', 'UA-108632131-2');
           </tr>
           <tr>
             <td>1038</td>
-            <td><code>genewmapdatabase</code> does not allow flat imagery to be used with mercator databses</td>
+            <td><code>genewmapdatabase</code> does not allow flat imagery to be used with Mercator databses</td>
             <td><code>genewmapdatabase</code> now looks for flat imagery projects as well as 
-               mercator imagery projects when adding imagery projects to mercator databases. 
+               Mercator imagery projects when adding imagery projects to Mercator databases. 
                Mercator imagery projects are given priority over flat imagery projects in the 
                case of a naming collision. Flat databases can still only use flat imagery 
                projects.</td>
           </tr>
           <tr>
             <td>1079</td>
-            <td>Earth client can hang on a portable globe cut from a server with historical data that no longer has access to the server.</td>
+            <td>Earth Client can hang on a portable globe cut from a server with historical data that no longer has access to the server.</td>
             <td>A new parameter, <code>--disable_historical</code>, has been added to <code>gerewritedbroot</code>. This parameter removes the problematic reference to the historical data url, allowing it to be viewed in Earth Client.
           </tr>
           <tr>
@@ -172,13 +172,13 @@ gtag('config', 'UA-108632131-2');
         </tr>
         <tr>
           <td>1135</td>
-          <td>Javascript console error in portable server when loading build date</td>
+          <td>JavaScript console error in portable server when loading build date</td>
           <td>No current work around.</td>
         </tr>
         <tr>
           <td>1102</td>
           <td>Build instructions for Centos 6 are incorrect</td>
-          <td>Install <code>gcc-c++</code>, <code>gettext</code>, <code>doxygen</code>, and <code>swig</code>. Also run <code>source /opt/rh/devtoolset-2/enable</code> in the same manner as REHL6.
+          <td>Install <code>gcc-c++</code>, <code>gettext</code>, <code>doxygen</code>, and <code>swig</code>. Also run <code>source /opt/rh/devtoolset-2/enable</code> in the same manner as RHEL6.
         </tr>
         <tr>
           <td>1092</td>
@@ -202,7 +202,7 @@ gtag('config', 'UA-108632131-2');
         </tr>
         <tr>
           <td>825</td>
-          <td>Geserver fails to startup fully due to conflicting protobuf library</td>
+          <td>Geserver fails to start up fully due to conflicting protobuf library</td>
           <td>Run <code>pip uninstall protobuf</code> to uninstall the protobuf library installed by pip. </td>
         </tr>
         <tr>
