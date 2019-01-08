@@ -20,7 +20,7 @@ sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noa
 ### CentOS 6
 
 ```bash
-wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
+sudo wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
 sudo yum install -y epel-release
 ```
 
@@ -75,7 +75,7 @@ sudo yum install git-lfs
 
 ## GCC 4.8
 
-For all flavors, install the standard development/build tools:
+For all versions of CentOS and RHEL, install the standard development/build tools:
 
 ```bash
 yum install ant bzip2 doxygen gcc-c++ patch python-argparse python-setuptools \
@@ -134,7 +134,7 @@ Execute:
 ```bash
 sudo yum install -y \
   bison-devel  cmake daemonize freeglut-devel \
-  gdbm-devel geos-devel giflib-devel GitPython \
+  gdbm-devel geos-devel gettext giflib-devel GitPython \
   libcap-devel libmng-devel libpng-devel libX11-devel libXcursor-devel \
     libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel \
@@ -165,7 +165,6 @@ the rest of the GEE build process.
 To clone this Git repository and build the RPM on RHEL6, execute the following:
 
 ```bash
-sudo yum install -y cmake gettext rpm-build
 mkdir -p ~/opengee/rpm-build/
 cd ~/opengee/rpm-build/
 
