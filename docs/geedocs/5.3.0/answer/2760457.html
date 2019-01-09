@@ -1,0 +1,67 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Add KML layers</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 2760457.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/6153619.html">Supported file formats in GEE</a></p>
+<p class="sidebar-toc"><a href="../answer/6053241.html">Apply alpha masking to imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/172810.html">Import pre-processed data</a></p>
+<p class="sidebar-toc"><a href="../answer/1090589.html">Import a subset of imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/173054.html">Add .kip imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/2882131.html">Vector data handling</a></p>
+<p class="sidebar-toc"><a href="../answer/2760298.html">Google Maps raster background</a></p>
+<p class="sidebar-toc"><a href="../answer/4525555.html">Create custom masks</a></p>
+<p class="sidebar-toc"><a href="../answer/6062318.html">Manage mosaics with virtual rasters</a></p>
+<p class="sidebar-toc"><a href="../answer/6081009.html">Map projection types in GEE 5.1.0</a></p>
+<p class="sidebar-toc"><a href="../answer/6081069.html">Add flat imagery to Mercator map databases in GEE 5.1.0</a></p>
+<p class="sidebar-toc"><a href="../answer/2760457.html" class="current-file">Add KML layers</a></p>
+<p class="sidebar-toc"><a href="../answer/2760534.html">Non-clickable icons</a></p>
+<p class="sidebar-toc"><a href="../answer/173053.html">Map projections</a></p>
+<p class="sidebar-toc"><a href="../answer/1089795.html">Map buttons</a></p>
+<p class="sidebar-toc"><a href="../answer/4492623.html">Create terrain overlays</a></p>
+<p class="sidebar-toc"><a href="../answer/2760655.html">Monitor builds with Twitter</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion resources and projects</h1>
+<h2>Add KML layers</h2>
+<p>Fusion lets you add <strong>KML layers</strong> in addition to fused vector layers. KML layers consist of a wrapper layer (typically a small, simple resource) that contains a link to a KML or KMZ file. The layer displays the linked content, not the wrapper layer content.</p>
+<p>KML layers are useful if you want to give users access to data that isn't hosted on the Earth server, or to data that changes frequently. In fact, the free edition of Google Earth includes many KML layers that stream data from Google servers to the client.</p>
+<div class="alert">
+Each vector project must include at least one resource that is not a KML layer.  If you try to build a project consisting only of KML layers, the build will fail with the error "No vector packets for indexing."
+</div>
+<h4>To add a KML layer:</h4>
+<ol>
+<li>Open your Fusion vector project and click the blank-page icon in the top right corner of the dialog box.
+<p>The <strong>Add a layer</strong> dialog box appears.</p>
+</li>
+<li>Add a resource to use as a wrapper layer for the KML or KMZ link.
+<p>Users won't see the content of the wrapper layer, so add any small, simple resource that contains lines or polygons. For example, the "CAHighways" resource in the Fusion tutorial dataset. If you want to use a resource that is already in your project, add it a second time.</p>
+</li>
+<li>Right click the new layer and select <strong>Layer Properties</strong>.
+<p>The <strong>Layer Properties</strong> dialog box appears.</p>
+</li>
+<li>In the <strong>KML URL</strong> field, enter the link to your KML or KMZ file.
+<p>The file must be on a server that is accessible to users at all times. If the file is missing, the client may fail. To prevent this, place the file on the Google Earth server or place a small KML file on the Earth server that contains a NetworkLink reference to your target KML or KMZ file on another server.</p>
+</li>
+<li>Enter a name and select an icon for the layer.</li>
+<li>Click <strong>OK</strong> to save your changes and exit the <strong>Layer Properties</strong> dialog box.
+<p>Your vector project lists your new KML layer.</p>
+</li>
+<li>Save your vector project, then rebuild and publish your database.
+<p>After the client connects to the published database, users can view the KML layer.</p>
+</li>
+</ol>
+<h4>To add multiple KML layers:</h4>
+<p>If you want to add multiple KML or KMZ files that aren't hosted on the Google Earth server, the best practice is to place one KML file on the Earth server that links to all your files on other servers. Then you can create a layer that loads the single KML file. That way, even if the server that hosts your KML or KMZ files stops responding, the client is unlikely to fail.</p>
+<ol>
+<li>Place your KML or KMZ files on the server or servers that will host them.</li>
+<li>Create a new parent KML file that contains NetworkLink references to each of your KML or KMZ files.</li>
+<li>Place the parent KML file on the Earth server.</li>
+<li>In Fusion, create a KML layer that links to the parent KML file on the Earth server.
+<p>In the Earth client, users can expand the parent KML layer to select a child KML layer.</p>
+</li>
+</ol><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>
