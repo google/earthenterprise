@@ -1,0 +1,146 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Create terrain overlays</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 4492623.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/6153619.html">Supported file formats in GEE</a></p>
+<p class="sidebar-toc"><a href="../answer/6053241.html">Apply alpha masking to imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/172810.html">Import pre-processed data</a></p>
+<p class="sidebar-toc"><a href="../answer/1090589.html">Import a subset of imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/173054.html">Add .kip imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/2882131.html">Vector data handling</a></p>
+<p class="sidebar-toc"><a href="../answer/2760298.html">Google Maps raster background</a></p>
+<p class="sidebar-toc"><a href="../answer/4525555.html">Create custom masks</a></p>
+<p class="sidebar-toc"><a href="../answer/6062318.html">Manage mosaics with virtual rasters</a></p>
+<p class="sidebar-toc"><a href="../answer/6081009.html">Map projection types in GEE 5.1.0</a></p>
+<p class="sidebar-toc"><a href="../answer/6081069.html">Add flat imagery to Mercator map databases in GEE 5.1.0</a></p>
+<p class="sidebar-toc"><a href="../answer/2760457.html">Add KML layers</a></p>
+<p class="sidebar-toc"><a href="../answer/2760534.html">Non-clickable icons</a></p>
+<p class="sidebar-toc"><a href="../answer/173053.html">Map projections</a></p>
+<p class="sidebar-toc"><a href="../answer/1089795.html">Map buttons</a></p>
+<p class="sidebar-toc"><a href="../answer/4492623.html" class="current-file">Create terrain overlays</a></p>
+<p class="sidebar-toc"><a href="../answer/2760655.html">Monitor builds with Twitter</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion resources and projects</h1>
+<h2>Create terrain overlays</h2>
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#createOverlay">Creating Terrain Overlays</a></li>
+<li><a href="#defineBuildPush">Define, Build, and Push a Database for the Terrain Overlay</a></li>
+<li><a href="#publishDB">Publish a Database for the Terrain Overlay</a></li>
+<li><a href="#viewDB">View Your Database</a></li>
+</ul>
+<hr/>
+<h2><a id="intro" name="intro"></a>Introduction</h2>
+<p>A terrain overlay is a secondary terrain database that you can use to “overlay” on top of another database in Google Earth EC. For example, you may want to add a terrain overlay as an inset of terrain data at a higher resolution. Another great benefit is how easy it is to add new terrain resources for just a specific area of an existing database, requiring less storage space and less time; instead of having to rebuild the entire terrain project, you can now just build a new database for a terrain overlay, based on the new resource, then add it as an additional database (terrain layer) in Google Earth EC.</p>
+<p>A terrain database is defined by the resolution tiles that contain it, but the actual terrain can have an irregular shape. For example, a geo-spatially smaller database of terrain that contains the land mass for a country includes areas of the resolution tiles that are outside the country's borders. These areas are called fill, and Google Earth Enterprise Fusion lets you create an overlay that uses lower resolution data for the fill area, which can then “blend” as you add your secondary terrain database on top.</p>
+<h4>Base terrain database:</h4>
+<p><img alt="Base terrain database" src="../art/fusion/projects/4492668_base.png"/></p>
+<h4>Secondary terrain overlay database with low resolution "fill":</h4>
+<p><img alt="Secondary terrain overlay" src="../art/fusion/projects/4492692_secondary_overlay.png"/></p>
+<p>In Google Earth EC, you overlay the secondary database using Add Database, blending the two terrain databases together.</p>
+<h4>Base terrain database and secondary terrain database blend together with low resolution “fill” created by the terrain overlay:</h4>
+<p><img alt="Base and secondary database blend" src="../art/fusion/projects/4492672_base_secondary_blend.png"/></p>
+<div class="tip">
+<p>Using the base terrain as the fill for the secondary terrain ensures smooth viewing transitions at the overlay borders.</p>
+</div>
+<hr/>
+<h2><a id="createOverlay" name="createOverlay"></a>Creating Terrain Overlays</h2>
+<p>You create the terrain overlay in the Terrain Project Editor:</p>
+<ol class="spaced-list">
+<li>Select <strong>Tools &gt; Asset Manager</strong>. The <strong>Asset Manager</strong> appears.</li>
+<li>Click <img alt="Terrain project icon" src="../art/fusion/projects/4492673_project_icon.png"/>. The <strong>Terrain Project Editor</strong> opens.<br/>
+<br/>
+<img alt="New Terrain project editor window" src="../art/fusion/projects/4492696_new_project.png"/></li>
+<li>Click <img alt="Open file icon" src="../art/fusion/projects/4492675_open_file_icon.png"/>. The <strong>Open</strong> dialog appears.
+<div class="note"><strong>Note:</strong> The selection in the Type drop-down list near the bottom of this dialog determines the type of resources that appear on the list. Terrain Resource is automatically selected when you open this dialog from the Terrain Project Editor, so only terrain resources appear on the list.</div>
+</li>
+<li>Navigate to the folder that contains your terrain resources.</li>
+<li>Select the resource that you want to add to the project and click <strong>Open</strong>. The selected resource appears in the Terrain Project Editor.</li>
+<li>Repeat steps <strong>3</strong> through <strong>5</strong> for each additional resource that you want to include in your terrain project.</li>
+<li>Check the <strong>Build "Overlay"</strong> box and specify the <strong>Start Level</strong> and <strong>Resources Min Level</strong> values.
+<p><strong>Start Level</strong> determines the resolution level from which the terrain overlay will be built. For example, specifying a value of 4 denotes the initial resolution level of 4 is used to build the overlay. You should specify a start level to a value where the terrain inset becomes significant based on the minimal resolution level of the terrain resources used to build the terrain overlay.</p>
+<p>For example, if the resolution level for terrain insets used for building the terrain overlay is 17 while the resolution level for filling terrain is 9, as in the example below, then the <strong>Start Level</strong> might be set to 14 or 16. This would build a terrain overlay from a resolution level of 14 or 16 where the higher resolution terrain will typically begin to be relevant.</p>
+<div class="tip">In some cases, where smoother transitions across zoom levels are desired, a lower <strong>Start Level</strong> might be used, and in very rare cases where the overlay data differs radically from the base terrain data, the <strong>Start Level</strong> might be set even lower than the fill terrain resolution.</div>
+<p><strong>Resources Min Level</strong> defines a threshold level that separates the resources into either fill terrain or the actual overlay terrain. Resources with a resolution level that are less than the <strong>Resources Min Level</strong> level are used to create the "fill" for the terrain overlay. Resources with a resolution level at or above the threshold level are used to create the overlay terrain itself. In this example, using the WorldTopography resource with a resolution level of 9 and setting the <strong>Resources Min Level</strong> to 14 specifies WorldTopography as fill in the terrain overlay. Likewise in this example, the SFTerrain resource with a resolution level of 17, higher than the <strong>Resources Min Level</strong> of 14, is used as the actual overlay terrain.</p>
+<div class="note"><strong>Note:</strong> It is the overlay resources and not the fill resources that determine the extent of the overlay.</div>
+<div class="note">
+<p><strong>Note:</strong> If every resource is at or above the <strong>Resources Min Level</strong>, then 0 (sea level) is used for the fill terrain. Equally, if you set the <strong>Start Level</strong> to a resolution beyond the extent of the base terrain resource resolution, then 0 (sea level) is used for fill terrain.</p>
+</div>
+<p><img alt="Terrain project editor window with resources" src="../art/fusion/projects/4492676_project_resources.png"/></p>
+</li>
+<li>When you have finished setting the terrain overlay options, click <strong>File &gt; Save</strong>.</li>
+<li>Navigate to the folder where you want to save your project or click <img alt="New folder icon" src="../art/fusion/projects/4492677_new_folder_icon.png"/> to create a folder in the desired location.</li>
+<li>Enter the name of your project, and click <strong>Save</strong>. The new project name appears in the Asset Manager’s asset list.</li>
+<li>Right-click the project name and select <strong>Build</strong> from the context menu.
+<p>The status of the project immediately changes to <strong>Queued</strong> and then <strong>In Progress</strong>.</p>
+<p>When the status of the build changes to <strong>Succeeded</strong>, go on to add the project to a new database.</p>
+</li>
+</ol>
+<hr/>
+<h2><a id="defineBuildPush" name="defineBuildPush"></a>Define, Build, and Push a Database for the Terrain Overlay</h2>
+<p>This exercise walks you through the process of defining, building, and pushing a database using the projects you created in the previous exercise.</p>
+<h4>To define, build, and push a database:</h4>
+<ol class="spaced-list">
+<li>In the Asset Manager click <img alt="Database editor icon" src="../art/fusion/projects/4492700_db_editor_icon.png"/>. The Database Editor appears with no projects selected.</li>
+<li>Click <img alt="Open file icon" src="../art/fusion/projects/4492675_open_file_icon.png"/> next to Terrain Project. The Open dialog appears.</li>
+<li>Navigate to the folder where you saved your terrain overlay project.</li>
+<li>Select the name of your terrain overlay project and click <strong>Open</strong>. The terrain overlay project appears next to Terrain Project in the Database Editor.</li>
+<li>Select <strong>File &gt; Save</strong>.</li>
+<li>Navigate to the <code>/ASSET_ROOT/Databases</code> folder.</li>
+<li>Enter the name for your database, and click <strong>Save</strong>. The name of the database appears on the right when you select the <code>/ASSET_ROOT/Databases</code> folder in the asset navigation tree.</li>
+<li>Right-click the name of your database and select <strong>Build</strong> from the context menu. Google Earth Enterprise Fusion builds the database.</li>
+<li>Right-click the name of your database and select <strong>Push</strong> from the context menu. The Push Database dialog appears.</li>
+<li>Click <strong>Push</strong>. Google Earth Enterprise Fusion runs the process of pushing the database to the Google Earth Enterprise Server, and displays a success message when it is done.</li>
+</ol>
+<hr/>
+<h2><a id="publishDB" name="publishDB"></a>Publish a Database for the Terrain Overlay</h2>
+<p>This exercise walks you through the process of publishing your terrain overlay database.</p>
+<h4>To publish a database:</h4>
+<ol class="spaced-list">
+<li>Access the Google Earth Enterprise Server Admin console in a browser window by going to <code><em>myserver.mydomainname.com/</em>admin</code>, replacing <code><em>myserver</em></code> and <code><em>mydomainname</em></code> with your server and domain.</li>
+<li>Sign in with the default credentials or the username and password assigned to you:
+<ul>
+<li>Default username: geapacheuser</li>
+<li>Default password: geeadmin</li>
+</ul>
+<div class="note"><strong>Note:</strong> If you do not know your username and password, contact your Google Earth Enterprise Server System Administrator.</div>
+</li>
+<li>Click <strong>Databases</strong> to display the list of databases pushed to the Server.
+<p>The name of your terrain overlay database is listed but not yet published.</p>
+<p>A pushed database is appended to the list so you may need to click through to the last page of your database list to display it.</p>
+</li>
+<li>Check the box next to the name of your database. The <strong>Publish</strong> button appears.</li>
+<li>Click <strong>Publish</strong>. The Publish dialog appears.</li>
+<li>Accept the default Publish point and click <strong>Publish</strong>.</li>
+<li>The Databases page now indicates the published status of your database.
+<p>Now you are ready to add your terrain overlay as a secondary database in Google Earth EC.</p>
+</li>
+</ol>
+<hr/>
+<h2><a id="viewDB" name="viewDB"></a>View Your Database</h2>
+<p>After you publish your database, you can add your terrain overlay as a secondary database in Google Earth EC. You first connect to the primary database you want to add the terrain overlay to.</p>
+<h4>To add your terrain overlay database:</h4>
+<ol class="spaced-list">
+<li>Launch Google Earth EC.</li>
+<li>The Select Server dialog appears.</li>
+<li>Specify the <strong>Publish point</strong> of the primary database you want to add your terrain overlay to by entering or selecting the URL or IP address of your server and database in the Server field. For example, the Publish point is <code><em>myserver.mydomainname.com/</em>mydatabase</code>, where <code><em>myserver</em></code> and <code><em>mydomainname</em></code> are specific to your server.</li>
+<li>Click <strong>Sign In</strong>.
+<div class="alert"><p><strong>Caution:</strong> If you have logged in to this server with Google Earth EC previously, log out, clear your cache, and log back in. See <a href="../answer/6010060.html"> clearing your cache</a>.</p></div>
+</li>
+<li>Google Earth EC displays your database. The Layers panel shows any terrain, imagery, and vector layers in the database.</li>
+<li>Select <strong>File &gt; Add Database</strong>. The Select Server dialog appears.</li>
+<li>Specify the Publish point of your terrain overlay database by entering or selecting the URL or IP address of your server and database in the Server field. For example, the Publish point is <code><em>myserver.mydomainname.com/</em>myterrainoverlay</code>, where <code><em>myserver</em></code> and <code><em>mydomainname</em></code> are specific to your server.</li>
+<li>Click <strong>Sign In</strong>.</li>
+<li>Google Earth EC adds your database. The Layers panel shows the secondary database.</li>
+<li>Check the box next to Terrain to add your terrain overlay. Google Earth EC displays your terrain overlay on top of your existing database.</li>
+</ol>
+<h2>Learn more</h2>
+<ul>
+<li><a href="../answer/4412421.html">Defining and Building Projects</a></li>
+</ul><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>
