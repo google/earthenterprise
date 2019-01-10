@@ -1,3 +1,19 @@
+/*
+ * Copyright 2017 Google Inc. Copyright 2019 the Open GEE Contributors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 #include "khConfigFileParser.h"
 #include <algorithm>
 #include <regex>
@@ -85,11 +101,11 @@ static khMutexBase xmlParmsLock = KH_MUTEX_BASE_INITIALIZER;
 
 void khConfigFileParser::parse(const std::string& fn)
 {
-	std::ifstream file;
-	khLockGuard guard(xmlParmsLock);
+    std::ifstream file;
+    khLockGuard guard(xmlParmsLock);
 
-	contents.clear(); //clear out the old contents	
-	if (options.size() == 0) throw OptionsEmptyException(); // nothing to search on, exit
+    contents.clear(); //clear out the old contents	
+    if (options.size() == 0) throw OptionsEmptyException(); // nothing to search on, exit
 
     file.open(fn.c_str());
     if (file.fail()) 
@@ -106,12 +122,12 @@ void khConfigFileParser::parse(const std::string& fn)
             split(line,key,value);
             if (!isKeyPresent(key)) 
             {
-				file.close();
+                file.close();
                 throw KeyNotPresentException(key);
             }
             if (value.size() == 0)
             {
-				file.close();
+			    file.close();
                 throw ValueNotPresentException(key);
             }
             contents.insert(std::pair<std::string,std::string>(key,value));
