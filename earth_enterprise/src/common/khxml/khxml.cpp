@@ -27,7 +27,10 @@
 #include <fstream>
 #include <string>
 #include <exception>
+#include "common/khConfigFileParser.h"
 using namespace khxml;
+
+static khConfigFileParser config_parser;
 
 std::string
 ListElementTagName(const std::string &tagname)

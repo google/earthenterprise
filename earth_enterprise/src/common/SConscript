@@ -107,6 +107,7 @@ utilsources = [
     'khPresenceMask.cpp',
     'khCoverageMask.cpp',
     'RuntimeOptions.cpp',
+    'khConfigFileParser.cpp',
     'packet.cpp',
     'filebundle/filebundlewriter.cpp',
     'packetfile/packetindexwriter.cpp',
