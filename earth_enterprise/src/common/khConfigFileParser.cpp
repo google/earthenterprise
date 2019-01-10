@@ -9,6 +9,11 @@ FileNotPresentException::FileNotPresentException(const std::string& fn)
     str = fn + " is not present";
 }
 
+OptionsEmptyException::OptionsEmptyException()
+{
+	str = "no list of options present";
+}
+
 ValueNotPresentException::ValueNotPresentException(const std::string& key)
 {
     str = key + " has an unset value";
@@ -80,10 +85,11 @@ static khMutexBase xmlParmsLock = KH_MUTEX_BASE_INITIALIZER;
 
 void khConfigFileParser::parse(const std::string& fn)
 {
-	if (options.size() == 0) return;
 	std::ifstream file;
 	khLockGuard guard(xmlParmsLock);
+
 	contents.clear(); //clear out the old contents	
+	if (options.size() == 0) throw OptionsEmptyException(); // nothing to search on, exit
 
     file.open(fn.c_str());
     if (file.fail()) 

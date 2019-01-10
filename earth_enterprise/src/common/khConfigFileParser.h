@@ -18,6 +18,11 @@ class FileNotPresentException : public khConfigFileParserException
 public:
     FileNotPresentException(const std::string&);
 };
+class OptionsEmptyException : public khConfigFileParserException
+{
+public:
+    OptionsEmptyException();
+};
 class KeyNotPresentException : public khConfigFileParserException
 {
 public:
