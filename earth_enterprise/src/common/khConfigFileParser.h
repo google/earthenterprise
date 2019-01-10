@@ -49,6 +49,11 @@ class ValueNotPresentException : public khConfigFileParserException
 public:
     ValueNotPresentException(const std::string&);
 };
+class ValidateIntegersException : public khConfigFileParserException
+{
+public:
+    ValidateIntegersException();
+};
 
 class khConfigFileParser
 {
@@ -64,7 +69,8 @@ public:
     
     void addOption(std::string);
     void parse(const std::string&);
-	void clearOptions() { options.clear(); }    
+    void clearOptions() { options.clear(); }
+    void validateIntegerValues();
 
     // allow for normal looping
     int size()   { return contents.size();   }

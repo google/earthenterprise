@@ -30,6 +30,11 @@ OptionsEmptyException::OptionsEmptyException()
 	str = "no list of options present";
 }
 
+ValidateIntegersException::ValidateIntegersException()
+{
+    str = "contains non-integer values";
+}
+
 ValueNotPresentException::ValueNotPresentException(const std::string& key)
 {
     str = key + " has an unset value";
@@ -48,7 +53,27 @@ void khConfigFileParser::addOption(std::string option)
                    option.begin(), ::toupper);
     options.push_back(option);
 }
-    
+
+void khConfigFileParser::validateIntegerValues()
+{
+    for (const auto& a : contents)
+    {
+        try
+        {
+            auto num = std::stol(a.second);
+
+            // stol throws exception below whenever the string begins with non-numerical characters
+            // but will convert otherwise. we want to disallow this
+            auto backToString = std::to_string(num);
+            if (a.second != backToString)
+                throw ValidateIntegersException();
+        }
+        catch (const std::invalid_argument& e)
+        {
+            throw ValidateIntegersException();
+        }
+    }
+}
 
 bool khConfigFileParser::sanitize(std::string& line)
 {
@@ -127,7 +152,7 @@ void khConfigFileParser::parse(const std::string& fn)
             }
             if (value.size() == 0)
             {
-			    file.close();
+                file.close();
                 throw ValueNotPresentException(key);
             }
             contents.insert(std::pair<std::string,std::string>(key,value));

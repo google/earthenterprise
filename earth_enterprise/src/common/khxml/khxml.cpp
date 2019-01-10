@@ -24,10 +24,12 @@
 #include "khxml.h"
 #include <fstream>
 #include "khdom.h"
-#include <fstream>
 #include <string>
+#include <array>
 #include <exception>
+#include <algorithm>
 #include "common/khConfigFileParser.h"
+#include <cstdlib>
 using namespace khxml;
 
 static khConfigFileParser config_parser;
@@ -45,7 +47,20 @@ ListElementTagName(const std::string &tagname)
 XMLSSize_t  initialDOMHeapAllocSize;
 XMLSSize_t  maxDOMHeapAllocSize;
 XMLSSize_t  maxDOMSubAllocationSize;
-bool doTerminate = false;
+bool doTerminate;
+
+const std::string INIT_HEAP_SIZE = "INIT_HEAP_SIZE";
+const std::string MAX_HEAP_SIZE = "MAX_HEAP_SIZE";
+const std::string BLOCK_SIZE = "BLOCK_SIZE";
+const std::string PURGE = "PURGE";
+
+static std::array<std::string,4> options
+{{
+    INIT_HEAP_SIZE,
+    MAX_HEAP_SIZE,
+    BLOCK_SIZE,
+    PURGE
+}};
 
 class XmlParamsException : public std::exception {};
 class MinValuesNotMet : public XmlParamsException
@@ -103,20 +118,29 @@ class UsingXMLGuard
     // can change this to anything, just using this for convenience
     // format is:
     // <initialDOMHeapAllocSize> <maxDOMHeapAllocSize> <maxDOMSubAllocationSize"
+    setDefaultValues();
     std::string fn("/etc/opt/google/XMLparams");
     try {
-      std::ifstream file;
-      file.exceptions(std::ifstream::failbit);
-      file.open(fn.c_str());
-      file >> initialDOMHeapAllocSize
-           >> maxDOMHeapAllocSize
-           >> maxDOMSubAllocationSize
-           >> doTerminate;
-      file.close();
-    } catch (std::ifstream::failure &readError) {
-      notify(NFY_WARN, "%s not found, using default xerces init values",
-             fn.c_str());
-      setDefaultValues();
+      for (const auto& a : options)
+      {
+          config_parser.addOption(a);
+      }
+      config_parser.parse(fn);
+      config_parser.validateIntegerValues();
+      for (const auto& a : config_parser)
+      {
+          // will only set the values that are present, otherwise will stay at defaults
+          if (a.first == INIT_HEAP_SIZE)
+              initialDOMHeapAllocSize = std::stol(a.second);
+          else if (a.first == MAX_HEAP_SIZE)
+              maxDOMHeapAllocSize = std::stol(a.second);
+          else if (a.first == BLOCK_SIZE)
+              maxDOMSubAllocationSize = std::stol(a.second);
+          else if (a.first == PURGE)
+              doTerminate = std::stol(a.second);
+      }
+    } catch (const khConfigFileParserException& e) {
+      notify(NFY_WARN, "%s , using default xerces init values", e.what());
     }
     
     try {
