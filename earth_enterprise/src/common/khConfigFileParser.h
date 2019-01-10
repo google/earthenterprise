@@ -72,8 +72,10 @@ public:
     const std::string& operator[](const std::string&);
     
     // allow for range looping
-    std::map<std::string,std::string>::const_iterator begin() { return contents.begin(); }
-    std::map<std::string,std::string>::const_iterator end() { return contents.end(); }	
+    std::map<std::string,std::string>::const_iterator 
+    begin() { return contents.begin(); }
+    std::map<std::string,std::string>::const_iterator 
+    end() { return contents.end(); }	
     
     // delete everything but constructor/destructor
     khConfigFileParser()                                     = default;
