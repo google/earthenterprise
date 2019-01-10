@@ -80,8 +80,10 @@ static khMutexBase xmlParmsLock = KH_MUTEX_BASE_INITIALIZER;
 
 void khConfigFileParser::parse(const std::string& fn)
 {
+	if (options.size() == 0) return;
 	std::ifstream file;
 	khLockGuard guard(xmlParmsLock);
+	contents.clear(); //clear out the old contents	
 
     file.open(fn.c_str());
     if (file.fail()) 

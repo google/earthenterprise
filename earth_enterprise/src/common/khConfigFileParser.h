@@ -43,7 +43,8 @@ public:
     
     void addOption(std::string);
     void parse(const std::string&);
-    
+	void clearOptions() { options.clear(); }    
+
     // allow for normal looping
     int size()   { return contents.size();   }
     const std::string& at(const std::string&);
