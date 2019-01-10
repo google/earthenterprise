@@ -13,20 +13,54 @@
 // limitations under the License.
 
 #include <gtest/gtest.h>
+#include <vector>
 #include "gee_version.h"
 #include "AssetVersionD.h"
 
-class LeafAssetVersionImplDTest : public LeafAssetVersionImpl, public testing::Test {
-    
+class LeafAssetVersionImplDTest : public LeafAssetVersionImplD, public testing::Test {
+ protected:
+  mutable size_t stateSyncs = 0;
+  // Override state sync so we can record when it's called
+  void SyncState(const std::shared_ptr<StateChangeNotifier>) const {
+    ++stateSyncs;
+  }
+ public:
+  // Handle multiple input state changes (useful for testing)
+  void HandleInputStateChanges(AssetDefs::State myState, uint32 waiting, std::vector<AssetDefs::State> states) {
+    state = myState;
+    numWaitingFor = waiting;
+    //numWaitingFor = waiting;
+    for (AssetDefs::State state : states) {
+      HandleInputStateChange(state, nullptr);
+    }
+  }
+
 // Define pure virutal functions
  protected:
   virtual void DoSubmitTask() {}
+  virtual bool Save(const std::string &) const { return true; }
  public:
   virtual std::string PluginName() const { return "LeafAssetVersionImplDTest"; }
 };
 
-TEST_F(LeafAssetVersionImplDTest, TrueTest) {
-  EXPECT_TRUE(true);
+TEST_F(LeafAssetVersionImplDTest, SingleSucceededTest) {
+  HandleInputStateChanges(AssetDefs::Waiting, 10, {AssetDefs::Succeeded});
+  EXPECT_EQ(numWaitingFor, 9);
+  EXPECT_EQ(stateSyncs, 0);
+}
+
+TEST_F(LeafAssetVersionImplDTest, MultipleSucceededTest) {
+  HandleInputStateChanges(AssetDefs::Waiting, 10,
+      {AssetDefs::Succeeded, AssetDefs::Succeeded, AssetDefs::Succeeded});
+  EXPECT_EQ(numWaitingFor, 7);
+  EXPECT_EQ(stateSyncs, 0);
+}
+
+TEST_F(LeafAssetVersionImplDTest, AllSucceededTest) {
+  HandleInputStateChanges(AssetDefs::Waiting, 5,
+      {AssetDefs::Succeeded, AssetDefs::Succeeded, AssetDefs::Succeeded, AssetDefs::Succeeded, AssetDefs::Succeeded});
+  EXPECT_LE(numWaitingFor, 1);
+  EXPECT_GT(stateSyncs, 0);
 }
 
 int main(int argc, char **argv) {

@@ -95,7 +95,7 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   template<bool propagate = true>
   void SetState(AssetDefs::State newstate, const std::shared_ptr<StateChangeNotifier> = nullptr);
   void SetProgress(double newprogress);
-  void SyncState(const std::shared_ptr<StateChangeNotifier> = nullptr) const; // const so can be called w/o mutable handle
+  virtual void SyncState(const std::shared_ptr<StateChangeNotifier> = nullptr) const; // const so can be called w/o mutable handle
   // will create a mutable handle itself if it
   // needs to call SetState
   void PropagateStateChange(const std::shared_ptr<StateChangeNotifier> = nullptr);
@@ -159,8 +159,9 @@ typedef MutableAssetHandleD_<AssetVersionD> MutableAssetVersionD;
 class LeafAssetVersionImplD : public virtual LeafAssetVersionImpl,
                               public AssetVersionImplD
 {
-  mutable uint32 numWaitingFor;
  protected:
+  mutable uint32 numWaitingFor;
+
   // since AssetVersionImpl and LeafAssetVersionImpl are virtual base
   // classes my derived classes will initialize it directly
   // therefore I don't need a contructor from storage
