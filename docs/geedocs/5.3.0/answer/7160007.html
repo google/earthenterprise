@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8"/>
-<title>Release notes: Open GEE 5.2.3</title>
+<title>Release notes: Open GEE 5.2.5</title>
 <link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
 <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
 <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -18,10 +18,10 @@ gtag('config', 'UA-108632131-2');
 <!-- 7160002.html -->
 <div class="container">
 <div class="sidebar1">
-  <p class="sidebar-toc"><a href="../answer/7160007.html">Open GEE 5.3.0</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160007.html" class="current-file">Open GEE 5.3.0</a></p>
   <p class="sidebar-toc"><a href="../answer/7160006.html">Open GEE 5.2.5</a></p>
   <p class="sidebar-toc"><a href="../answer/7160004.html">Open GEE 5.2.4</a></p>
-  <p class="sidebar-toc"><a href="../answer/7160003.html" class="current-file">Open GEE 5.2.3</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160003.html">Open GEE 5.2.3</a></p>
   <p class="sidebar-toc"><a href="../answer/7160002.html">Open GEE 5.2.2</a></p>
   <p class="sidebar-toc"><a href="../answer/7160001.html">Open GEE 5.2.1</a></p>
   <p class="sidebar-toc"><a href="../answer/7160000.html">Open GEE 5.2.0</a></p>
@@ -37,39 +37,28 @@ gtag('config', 'UA-108632131-2');
 <a name="top_of_file"></a>
 <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
 <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Release notes</h1>
-<h2>Release notes: Open GEE 5.2.3</h2>
+<h2>Release notes: Open GEE 5.3.0</h2>
+
+<p>Open GEE 5.3.0 is currently in development</p>
 
   <h5>
-    <p id="overview_5.2.3">New Features</p>
+    <p id="overview_5.3.0">New Features</p>
   </h5>
-  <p><strong>C++11 support</strong>. With release 5.2.3 Open GEE C++ code now supports and defaults to compiling using the <code>-std=gnu++11</code> compile flag.  This default can be overridden and the C++ code can be compiled using the <code>-std=gnu++98</code> flag instead.  However, Open GEE 5.2.3 will be the last release to support compiling C++ code using the <code>-std=gnu++98</code> flag.  The subsequent releases after Open GEE 5.2.3 will no longer support the <code>-std=gnu++98</code> flag. All C++ code will need to conform to the gnu++11 standard.</p>
-  <p><strong>Remove TCP/IP connections to PostgreSQL</strong>. With release 5.2.3 Open GEE code will now, by default, connect to PostgreSQL exclusively using Unix domain sockets. This will make it easier to secure PostgreSQL for security sensitive installations. For those upgrading from a previous release the following files will need to be changed before disabling PostgreSQL tcp listener:
-    <ul>
-      <li>/opt/google/search/conf/ExampleSearch.conf</li>
-      <li>/opt/google/search/conf/GEPlacesSearch.conf</li>
-      <li>/opt/google/search/conf/PoiSearch.conf</li>
-    </ul>
-    You will need to change the host from '127.0.0.1' to '/tmp'
-  </p>
-  <p><strong>Volume deletion</strong>. <code>geconfigureassetroot</code> now supports the option <code>--removevolume</code> for volume deletion.</p>
-  <p><strong>Performance tuning for gecombineterrain</strong>. <code>gecombineterrain</code> now supports the option <code>--numCompressThreads</code> which specifies the number of maximum worker threads used to compress packets in this operation.  If not specified <code>gecombineterrain</code> defaults this option to match the number of available CPUs.</p>
-  <p><strong>Package name customization at build time</strong>. Scons build now accepts a custom label argument which is appended to the version in RPM file names.</p>
-  <p><strong>Rewrite KML URLs</strong>. Users can rewrite the URLs for KML resources included in databases at publish time.</p>
-  <p><strong>Maps API Javascript Files</strong>. Maps API Javascript files are now available and installed at <code>/opt/google/gehttpd/htdocs/maps/mapfiles</code>.</p>
-<h5>
-    <p id="supported_5.2.3">Supported Platforms</p>
+    <p><strong>Example feature</strong> replace with real feature description.</p>
+  <h5>
+    <p id="supported_5.3.0">Supported Platforms</p>
   </h5>
-  <p>The Open GEE 5.2.3 release is supported on 64-bit versions of the following operating systems:</p>
+  <p>The Open GEE 5.3.0 release is supported on 64-bit versions of the following operating systems:</p>
     <ul>
       <li>Red Hat Enterprise Linux version 6.x and 7.x, including the most recent security patches</li>
       <li>CentOS 6.x and 7.x</li>
       <li>Ubuntu 14.04 LTS and 16.04 LTS</li>
     </ul>
-    <p>Google Earth Enterprise 5.2.3 is compatible with Google Earth Enterprise Client (EC) version 7.1.5 and above.</p>
-    <p><p>To upgrade from Open GEE 5.2.0, do NOT uninstall it. We recommend that you upgrade Open GEE 5.2.0 by simply installing Open GEE 5.2.3. Installing Open GEE 5.2.3 on top of Open GEE 5.2.0 will ensure that your PostgreSQL databases are backed up and upgraded correctly to the new PostgreSQL version used by Open GEE 5.2.3.</p></p>
+    <p>Google Earth Enterprise 5.3.0 is compatible with Google Earth Enterprise Client (EC) version 7.1.5 and above.</p>
+    <p><p>To upgrade from Open GEE 5.2.0, do NOT uninstall it. We recommend that you upgrade Open GEE 5.2.0 by simply installing Open GEE 5.3.0. Installing Open GEE 5.3.0 on top of Open GEE 5.2.0 will ensure that your PostgreSQL databases are backed up and upgraded correctly to the new PostgreSQL version used by Open GEE 5.3.0.</p></p>
   <h5>
     <h5>
-      <p id="resolved_issues_5.2.3">Resolved Issues</p>
+      <p id="resolved_issues_5.3.0">Resolved Issues</p>
     </h5>
     <div>
       <table class="nice-table">
@@ -80,84 +69,18 @@ gtag('config', 'UA-108632131-2');
             <th>Resolution</th>
           </tr>
           <tr>
-            <td>225</td>
-            <td>Fusion lets you create folder with space in the name</td>
-            <td>AssetManager UI only allows letters, numbers, and underscores for directory name creation</td>
-          </tr>
-          <tr>
-            <td>226</td>
-            <td>Verify the wrongly spelled "aquisition" is not appearing anywhere in the product</td>
-            <td>Fixed these spelling errors by replacing with Acquisition in multiple files.</td>
-          </tr>
-          <tr>
-            <td>337</td>
-            <td>Add a compiler version check to scons scripts</td>
-            <td>Scons scripts ensure gcc version 4.8+ is installed before continuing with builds</td>
-          </tr>
-          <tr>
-            <td>342</td>
-            <td>Fusion UI crashes when opening non supported type of file</td>
-            <td>Added check to kiasset, ktasset, xml file load to handle invalid files</td>
-          </tr>
-          <tr>
-            <td>535</td>
-            <td>DownloadTutorial.sh often is not staged properly for install</td>
-            <td>Tutorial download script is now included in the Fusion RPM</td>
-          </tr>
-          <tr>
-            <td>682</td>
-            <td>Update geconfigurepublishroot to fully correct file permissions</td>
-            <td>geconfigurepublishroot recursively sets the owner and permissions for publish root</td>
-          </tr>
-          <tr>
-            <td>731</td>
-            <td>Error in publish of SSL-enabled database</td>
-            <td>Temporary fix from 5.2.2 was found to be the best solution</td>
-          </tr>
-          <tr>
-            <td>762</td>
-            <td>Package libraries and utilities common to Fusion and Server for Ubuntu 16</td>
-            <td>opengee-common deb packages can be created for Ubuntu 16</td>
-          </tr>
-          <tr>
-            <td>806</td>
-            <td>gecombineterrain defaulted to only 1 cpu to process data and ignored arguments</td>
-            <td>Added --numCompressThreads option to accept the number of threads to use.  Default value is the number of CPUs available.  Deprecated --numcpus option</td>
-          </tr>
-          <tr>
-            <td>821</td>
-            <td>Calling geeInitMap results in an infinite recursive loop</td>
-            <td>Code to display non-existent polygon removed</td>
-          </tr>
-          <tr>
-            <td>835</td>
-            <td>GE Server gets its URL from the client instead of itself</td>
-            <td>Fixed code so that when you publish DB, GEServer's URL will be used and not the URL which we get from the Publish request message.</td>
-          </tr>
-          <tr>
-            <td>861</td>
-            <td>Running diagnostics on a server only installation will result in a failure for testAdqeuateDiskSpace</td>
-            <td>This test is skipped if Fusion is not present.</td>
-          </tr>          
-          <tr>
-            <td>877</td>
-            <td>Fusion RPM install scripts to only <code>chown</code> the asset root when necessary</td>
+            <td>200</td>
+            <td><code>stage_install</code> fails on the tutorial files when <code>/home</code>
+              and <code>/tmp</code> are on different file systems</td>
             <td>
-              Recursively <code>chown</code> only when the asset root directory has incorrect ownership on a Fusion master host.
-              This allows upgrading Fusion on machines where changing asset root ownership recursively would be very expensive.
-            </td>
-          </tr>
-          <tr>
-            <td>912</td>
-            <td>TestDiskSpace diagnostics test fails on CentOS7</td>
-            <td>Changed a function to return the percentage of available disk space instead of the percentage of used disk space.
+              Files are linked in <code>/tmp</code> using symbolic links back to original locations.
             </td>
           </tr>
         </tbody>
       </table>
   <h5>
   <h5>
-    <p id="known_issues_5.2.3">Known Issues</p>
+    <p id="known_issues_5.3.0">Known Issues</p>
   </h5>
     <table class="nice-table">
       <tbody>
@@ -210,11 +133,6 @@ gtag('config', 'UA-108632131-2');
           <td>193</td>
           <td>Updated docs are not copied if the <code>/tmp/fusion_os_install</code> directory already exists</td>
           <td>Delete <code>/tmp/fusion_os_install</code> at the beginning of the stage_install build process.</td>
-        </tr>
-        <tr>
-          <td>200</td>
-          <td>stage_install fails on the tutorial files when <code>/home</code> and <code>/tmp</code> are on different file systems</td>
-          <td>Ensure that <code>/home</code> and <code>/tmp</code> are on the same file system or download the tutorial files to <code>/opt/google/share/tutorials/fusion/</code> after installing Fusion.</td>
         </tr>
         <tr>
           <td>201</td>
