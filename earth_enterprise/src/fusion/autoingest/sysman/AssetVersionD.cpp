@@ -79,7 +79,7 @@ AssetVersionImplD::StateChangeNotifier::~StateChangeNotifier() {
     // between what I've notified and what they're going to notify, those
     // duplicates need to be notified again since a relevant state might change
     // as part of this operation.
-    std::shared_ptr<StateChangeNotifier> notifier = GetNotifier(assetVersion, nullptr);
+    std::shared_ptr<StateChangeNotifier> notifier = GetNotifier(changedAssetVersion, nullptr);
     SendNotifications(PARENTS, notifier);
     SendNotifications(LISTENERS, notifier);
   }
@@ -120,7 +120,7 @@ AssetVersionImplD::StateChangeNotifier::SendNotifications(
         case LISTENERS:
           notify(NFY_VERBOSE, "Calling listener->HandleInputStateChange(%s)", 
                 ToString(assetVersion->state).c_str());
-          assetVersion->HandleInputStateChange(assetVersion->state, notifier);
+          assetVersion->HandleInputStateChange(changedAssetVersion->state, notifier);
           break;
       }
     } else {

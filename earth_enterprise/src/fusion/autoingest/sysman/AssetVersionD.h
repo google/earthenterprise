@@ -21,6 +21,7 @@
 #include "AssetHandleD.h"
 #include <autoingest/sysman/.idl/TaskStorage.h>
 #include <set>
+#include <map>
 #include <memory>
 
 // ****************************************************************************
@@ -40,12 +41,16 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   AssetVersionImplD& operator=(const AssetVersionImplD&);
 
  protected:
+  // Tracks the state of inputs to a given asset version that have changed. Each
+  // entry maps a state to the number of inputs that have changed to that state.
+  typedef std::map<AssetDefs::State, size_t> InputStates;
+
   // Helper class to efficently send updates of state changes to other asset
   // versions.
   class StateChangeNotifier {
     private:
       enum NotifyType {PARENTS, LISTENERS};
-      AssetVersionImplD * const assetVersion;
+      AssetVersionImplD * const changedAssetVersion;
       std::set<std::string> parentsToNotify;
       std::set<std::string> listenersToNotify;
       static void AddToSet(std::set<std::string> &, const std::vector<std::string> &);
@@ -53,7 +58,7 @@ class AssetVersionImplD : public virtual AssetVersionImpl
     public:
       static std::shared_ptr<StateChangeNotifier>
       GetNotifier(AssetVersionImplD * const, std::shared_ptr<StateChangeNotifier>);
-      StateChangeNotifier(AssetVersionImplD * const assetVersion) : assetVersion(assetVersion) {}
+      StateChangeNotifier(AssetVersionImplD * const assetVersion) : changedAssetVersion(assetVersion) {}
       ~StateChangeNotifier();
       void AddParentsToNotify(const std::vector<std::string> &);
       void AddListenersToNotify(const std::vector<std::string> &);
