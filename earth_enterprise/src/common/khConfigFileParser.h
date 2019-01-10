@@ -77,7 +77,7 @@ public:
     
     // delete everything but constructor/destructor
     khConfigFileParser()                                     = default;
-	~khConfigFileParser()									 = default;
+    ~khConfigFileParser()                                    = default;
 
     khConfigFileParser(const khConfigFileParser&)            = delete;
     khConfigFileParser(khConfigFileParser&&)                 = delete;
