@@ -80,8 +80,7 @@ void validateXMLParameters()
 
     // check to make sure that the initial size is less than the max size
     if (maxDOMHeapAllocSize < initialDOMHeapAllocSize ||
-        maxDOMHeapAllocSize < maxDOMSubAllocationSize ||
-        initialDOMHeapAllocSize > maxDOMHeapAllocSize)
+        maxDOMHeapAllocSize < maxDOMSubAllocationSize)
     {
         throw SizeError();
     }	
@@ -426,12 +425,6 @@ DestroyDocument(khxml::DOMDocument *doc) throw()
   {
     XMLPlatformUtils::Terminate();
     try {
-      try {
-         validateXMLParameters();
-      } catch (const XmlParamsException& e) {
-         notify(NFY_WARN, "%s, using default xerces init values", e.what());
-         setDefaultValues();
-      }
       XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
                                    maxDOMHeapAllocSize,
                                    maxDOMSubAllocationSize);
