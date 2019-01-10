@@ -134,3 +134,21 @@ gestopdaemon = env.executable('gestopdaemon',
 env.install('fusion_bin', [ gesystemmanager, geresourceprovider,
                      gestartdaemon, gestopdaemon ] )
 env.install('fusion_root', [ 'gefusion' ], 'etc/init.d')
+
+env.test('AssetVersionD_unittest',
+       commonobj +
+       map(lambda p: 'plugins/'+p+'AssetD.o', plugins) +
+       [ 'AssetVersionD_unittest.cpp',
+         'AssetD.o', 'AssetVersionD.o',
+         'khSystemManager.o',
+         'khAssetManager.o', 'khAssetManagerDispatch.o',
+         'khResourceManager.o', 'khTask.o', 'TaskRequirements.o',
+         'khResourceProviderProxy.o', 'khResourceProviderProxyDispatch.o',
+         'ResourceProviderProxy.o', 'Reservation.o',
+         'SysManExtra.o', 'SysManFromStorage.o', 'InsetInfo.o',
+         TaskStorageObj, JobStorageObj, NextTaskIdObj, TaskRuleObj,
+         FusionUniqueIdObj] +
+         env.ObjFromOtherDir(extraObjs),
+       LIBS=['gegdal', 'geraster', 'gesearchtabs', 'genet', 'gepublish', 'gefconfigutil',
+         'geindex_r', 'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'qt-mt', 'xerces-c', 'geos',
+         'gtest'])
