@@ -72,7 +72,6 @@ public:
     void clearOptions() { options.clear(); }
     void validateIntegerValues();
 
-    // allow for normal looping
     int size()   { return contents.size();   }
     const std::string& at(const std::string&);
     const std::string& operator[](const std::string&);
@@ -93,4 +92,4 @@ public:
     khConfigFileParser& operator=(khConfigFileParser&&)      = delete;
 };
 
-#endif // KHPARSECONFIGFILE_H
+#endif 

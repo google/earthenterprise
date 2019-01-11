@@ -16,7 +16,6 @@
 
 #include "khConfigFileParser.h"
 #include <algorithm>
-#include <regex>
 #include <fstream>
 #include "common/khThread.h"
 #include <cctype>

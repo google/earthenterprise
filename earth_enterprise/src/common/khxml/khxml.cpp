@@ -22,12 +22,11 @@
 #include <khThread.h>
 #include <khFileUtils.h>
 #include "khxml.h"
-#include <fstream>
 #include "khdom.h"
 #include <string>
 #include <array>
-#include <exception>
 #include <algorithm>
+#include <exception>
 #include "common/khConfigFileParser.h"
 #include <cstdlib>
 using namespace khxml;
@@ -53,7 +52,7 @@ const std::string INIT_HEAP_SIZE = "INIT_HEAP_SIZE";
 const std::string MAX_HEAP_SIZE = "MAX_HEAP_SIZE";
 const std::string BLOCK_SIZE = "BLOCK_SIZE";
 const std::string PURGE = "PURGE";
-
+const std::string XMLConfigFile = "/etc/opt/google/XMLparams";
 static std::array<std::string,4> options
 {{
     INIT_HEAP_SIZE,
@@ -87,8 +86,7 @@ void validateXMLParameters()
 
     // check to make sure they meet the minimum size
     if (initialDOMHeapAllocSize < lowestBlock ||
-   	maxDOMHeapAllocSize < lowestBlock     ||
-	maxDOMSubAllocationSize < lowestBlock)
+   	maxDOMHeapAllocSize < lowestBlock)     
     {
 	throw MinValuesNotMet();
     }
@@ -115,11 +113,8 @@ class UsingXMLGuard
   friend void InitializeXMLLibrary() throw();
 
   UsingXMLGuard(void) throw() {
-    // can change this to anything, just using this for convenience
-    // format is:
-    // <initialDOMHeapAllocSize> <maxDOMHeapAllocSize> <maxDOMSubAllocationSize"
     setDefaultValues();
-    std::string fn("/etc/opt/google/XMLparams");
+    std::string fn(XMLConfigFile);
     try {
       for (const auto& a : options)
       {
@@ -153,6 +148,11 @@ class UsingXMLGuard
       XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
                                    maxDOMHeapAllocSize,
                                    maxDOMSubAllocationSize);
+      notify(NFY_NOTICE, "XML initialization values: %s=%zx %s=%zx %s=%zx %s=%d",
+             "initialDOMHeapAllocSize", initialDOMHeapAllocSize,
+             "maxDOMHeapAllocSize", maxDOMHeapAllocSize,
+             "maxDOMSubAllocationSize", maxDOMSubAllocationSize,
+             "doTerminate", doTerminate);
     } catch(const XMLException& toCatch) {
       notify(NFY_FATAL, "Unable to initialize Xerces: %s",
              FromXMLStr(toCatch.getMessage()).c_str());
