@@ -671,6 +671,11 @@ LeafAssetVersionImplD::HandleInputStateChange(InputStates newStates,
                                               const std::shared_ptr<StateChangeNotifier> notifier) const
 {
   notify(NFY_VERBOSE, "HandleInputStateChange: %s", GetRef().c_str());
+  // If I'm waiting on my inputs to complete there's no need to do a full sync.
+  // I just reduce the number that I'm waiting for by the number that have
+  // succeeded. However, if any of my assets have fallen out of a working state
+  // without succeeding I still need to sync my state so that I can respond
+  // to the error encountered by my input.
   if (state == AssetDefs::Waiting &&
       newStates.allWorkingOrSucceeded &&
       numWaitingFor > newStates.numSucceeded) {
