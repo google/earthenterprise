@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #include <gtest/gtest.h>
+#include <algorithm>
 #include <vector>
 #include "gee_version.h"
 #include "AssetVersionD.h"
@@ -29,9 +30,15 @@ class LeafAssetVersionImplDTest : public LeafAssetVersionImplD, public testing::
   void HandleInputStateChanges(AssetDefs::State myState, uint32 waiting, std::vector<AssetDefs::State> states) {
     state = myState;
     numWaitingFor = waiting;
-    for (AssetDefs::State state : states) {
-      HandleInputStateChange(state, nullptr);
-    }
+    InputStates inputStates;
+    inputStates.numSucceeded = std::count_if(states.begin(), states.end(), [](AssetDefs::State s) {
+      return s == AssetDefs::Succeeded;
+    });
+    inputStates.allWorkingOrSucceeded = std::all_of(states.begin(), states.end(), [](AssetDefs::State s) {
+      return AssetDefs::Working(s) || s == AssetDefs::Succeeded;
+    });
+
+    HandleInputStateChange(inputStates, nullptr);
   }
 
 // Define pure virutal functions so this class can be instantiated
@@ -42,21 +49,23 @@ class LeafAssetVersionImplDTest : public LeafAssetVersionImplD, public testing::
   virtual std::string PluginName() const { return "LeafAssetVersionImplDTest"; }
 };
 
+// In any case below in which stateSyncs ends up greater than zero, the value
+// of numWaitingFor at the end of the test does not matter. If stateSyncs is
+// greater than zero, that means we called SyncState, which will set
+// numWaitingFor to the correct value in the actual code.
+
 TEST_F(LeafAssetVersionImplDTest, NewTest) {
   HandleInputStateChanges(AssetDefs::Waiting, 10, {AssetDefs::New});
-  EXPECT_EQ(numWaitingFor, 10);
   EXPECT_GT(stateSyncs, 0);
 }
 
 TEST_F(LeafAssetVersionImplDTest, WaitingTest) {
   HandleInputStateChanges(AssetDefs::Waiting, 10, {AssetDefs::Waiting});
-  EXPECT_EQ(numWaitingFor, 10);
   EXPECT_GT(stateSyncs, 0);
 }
 
 TEST_F(LeafAssetVersionImplDTest, BlockedTest) {
   HandleInputStateChanges(AssetDefs::Waiting, 10, {AssetDefs::Blocked});
-  EXPECT_EQ(numWaitingFor, 10);
   EXPECT_GT(stateSyncs, 0);
 }
 
@@ -66,7 +75,7 @@ TEST_F(LeafAssetVersionImplDTest, QueuedTest) {
   EXPECT_EQ(stateSyncs, 0);
 }
 
-TEST_F(LeafAssetVersionImplDTest, InProgress) {
+TEST_F(LeafAssetVersionImplDTest, InProgressTest) {
   HandleInputStateChanges(AssetDefs::Waiting, 10, {AssetDefs::InProgress});
   EXPECT_EQ(numWaitingFor, 10);
   EXPECT_EQ(stateSyncs, 0);
@@ -74,7 +83,6 @@ TEST_F(LeafAssetVersionImplDTest, InProgress) {
 
 TEST_F(LeafAssetVersionImplDTest, FailedTest) {
   HandleInputStateChanges(AssetDefs::Waiting, 10, {AssetDefs::Failed});
-  EXPECT_EQ(numWaitingFor, 10);
   EXPECT_GT(stateSyncs, 0);
 }
 
@@ -86,19 +94,16 @@ TEST_F(LeafAssetVersionImplDTest, SucceededTest) {
 
 TEST_F(LeafAssetVersionImplDTest, CanceledTest) {
   HandleInputStateChanges(AssetDefs::Waiting, 10, {AssetDefs::Canceled});
-  EXPECT_EQ(numWaitingFor, 10);
   EXPECT_GT(stateSyncs, 0);
 }
 
 TEST_F(LeafAssetVersionImplDTest, OfflineTest) {
   HandleInputStateChanges(AssetDefs::Waiting, 10, {AssetDefs::Offline});
-  EXPECT_EQ(numWaitingFor, 10);
   EXPECT_GT(stateSyncs, 0);
 }
 
 TEST_F(LeafAssetVersionImplDTest, BadTest) {
   HandleInputStateChanges(AssetDefs::Waiting, 10, {AssetDefs::Bad});
-  EXPECT_EQ(numWaitingFor, 10);
   EXPECT_GT(stateSyncs, 0);
 }
 
@@ -112,7 +117,6 @@ TEST_F(LeafAssetVersionImplDTest, MultipleSucceededTest) {
 TEST_F(LeafAssetVersionImplDTest, AllSucceededTest) {
   HandleInputStateChanges(AssetDefs::Waiting, 5,
       {AssetDefs::Succeeded, AssetDefs::Succeeded, AssetDefs::Succeeded, AssetDefs::Succeeded, AssetDefs::Succeeded});
-  EXPECT_LE(numWaitingFor, 1);
   EXPECT_GT(stateSyncs, 0);
 }
 
