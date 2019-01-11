@@ -1,0 +1,67 @@
+#-*- Python -*-
+#
+# Copyright 2018 the Open GEE Contributors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+import os
+
+Import(
+    'env', 'commonobj', 'plugins', 'extraObjs', 'TaskStorageObj',
+    'JobStorageObj', 'NextTaskIdObj', 'TaskRuleObj', 'FusionUniqueIdObj')
+
+env = env.Clone()
+env.UpdateCppflagsForSkia()
+
+
+env.Append(CPPFLAGS = [
+        '-fno-strict-aliasing'
+    ])
+
+env.test('parse-raster-project-xml-no-content_unittest',
+    commonobj +
+        env.ObjFromOtherDir(
+                extraObjs
+            ) +
+        map(lambda p: '../plugins/'+p+'AssetD.o', plugins) +
+        map(lambda o: os.path.join(env.exportdirs['root'], o),
+            [
+                'fusion/autoingest/sysman/AssetD.o',
+                'fusion/autoingest/sysman/AssetVersionD.o',
+	            'fusion/autoingest/sysman/khSystemManager.o',
+	            'fusion/autoingest/sysman/khAssetManager.o',
+	            'fusion/autoingest/sysman/khAssetManagerDispatch.o',
+	            'fusion/autoingest/sysman/khResourceManager.o',
+	            'fusion/autoingest/sysman/khTask.o',
+	            'fusion/autoingest/sysman/TaskRequirements.o',
+	            'fusion/autoingest/sysman/khResourceProviderProxy.o',
+	            'fusion/autoingest/sysman/khResourceProviderProxyDispatch.o',
+	            'fusion/autoingest/sysman/ResourceProviderProxy.o',
+	            'fusion/autoingest/sysman/Reservation.o',
+	            'fusion/autoingest/sysman/SysManExtra.o',
+	            'fusion/autoingest/sysman/SysManFromStorage.o',
+	            'fusion/autoingest/sysman/InsetInfo.o',
+            ]) +
+        map(lambda o: o,
+            [
+                TaskStorageObj, JobStorageObj, NextTaskIdObj, TaskRuleObj,
+                FusionUniqueIdObj,
+            ]) +
+        ['parse-raster-project-xml-no-content_unittest.cc'],
+    LIBS = [
+        'dbmanifest', 'geautoingest', 'gegdal', 'geraster',
+        'gesearchtabs', 'genet', 'gepublish', 'gefconfigutil', 'geindex_r',
+        'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'gtest', 'qt-mt',
+        'xerces-c', 'yaml-cpp'
+    ])

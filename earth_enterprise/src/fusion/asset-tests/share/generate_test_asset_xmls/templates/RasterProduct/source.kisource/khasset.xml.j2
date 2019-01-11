@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<SourceAsset>
+
+  <name>{{ name }}</name>
+
+  <type>Imagery</type>
+
+  <subtype>Source</subtype>
+
+  <inputs/>
+
+  <meta/>
+
+  <versions>
+{% for name in versions %}
+    <version>{{ name }}</version>
+{% endfor %}
+  </versions>
+
+  <config>
+    <sources>
+{% for source in sources %}
+      <source>
+        <uri>{{ source.uri }}</uri>
+        <size>{{ source.size }}</size>
+        <mtime>{{ source.mtime }}</mtime>
+      </source>
+{% endfor %}
+    </sources>
+  </config>
+
+</SourceAsset>

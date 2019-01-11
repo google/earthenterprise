@@ -277,6 +277,8 @@ remove_files_from_target()
     rm -rf $BASEINSTALLDIR_OPT/lib
     rm -rf $BASEINSTALLDIR_OPT/gepython
     rm -rf $BASEINSTALLDIR_VAR/openssl
+
+    rm -f $BININSTALLROOTDIR/gevars.sh
   fi
 
   rm -rf $BASEINSTALLDIR_OPT/geecheck/geecheck.conf
@@ -292,8 +294,6 @@ remove_files_from_target()
   rm -f $BININSTALLPROFILEDIR/ge-server.csh
 
   rm -rf $BASEINSTALLLOGROTATEDIR/gehttpd
-
-  rm -f $BININSTALLROOTDIR/gevars.sh
 
   printf "DONE\n"
 }
