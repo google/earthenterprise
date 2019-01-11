@@ -19,6 +19,8 @@
 #include <regex>
 #include <fstream>
 #include "common/khThread.h"
+#include <cctype>
+#include <sstream>
 
 FileNotPresentException::FileNotPresentException(const std::string& fn)
 {
@@ -78,8 +80,13 @@ void khConfigFileParser::validateIntegerValues()
 bool khConfigFileParser::sanitize(std::string& line)
 {
     // remove whitespace
-    line = std::regex_replace(line, std::regex("\\s+"),"");
-    
+    auto it = line.begin();
+    while(it != line.end())
+    {
+        if (isspace(*it)) line.erase(it);
+        if (it != line.end()) ++it;
+    }   
+ 
     // remove comments
     auto idx = line.find('#');
     if (idx != std::string::npos) 
@@ -100,12 +107,11 @@ bool khConfigFileParser::sanitize(std::string& line)
 
 void khConfigFileParser::split(const std::string& line, std::string& key, std::string& value)
 {
-    std::regex eq("=");
-    std::vector<std::string> splitLine
-    {
-        std::sregex_token_iterator(line.begin(),line.end(),eq,-1),
-        {}
-    };
+    std::stringstream ss(line);
+    std::string buf;
+    std::vector<std::string> splitLine;
+    while(getline(ss, buf, '='))
+        splitLine.push_back(buf);
     key = splitLine[0];
     if (splitLine.size() == 2)
     {
