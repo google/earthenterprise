@@ -127,6 +127,8 @@ AssetVersionImplD::StateChangeNotifier::SendNotifications(
       notify(NFY_WARN, "'%s' has broken %s '%s'",
              assetVersion->GetRef().c_str(), typeName.c_str(), ref.c_str());
     }
+
+    i++;
   }
   toNotify->clear();
 }
