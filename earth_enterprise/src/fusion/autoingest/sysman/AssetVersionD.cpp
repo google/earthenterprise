@@ -104,6 +104,7 @@ AssetVersionImplD::StateChangeNotifier::NotifyParents(
       notify(NFY_WARN, "'%s' has broken parent '%s'",
              assetVersion->GetRef().c_str(), ref.c_str());
     }
+    i++;
   }
   parentsToNotify.clear();
 }
@@ -130,7 +131,6 @@ AssetVersionImplD::StateChangeNotifier::NotifyListeners(
       notify(NFY_WARN, "'%s' has broken listener '%s'",
              assetVersion->GetRef().c_str(), ref.c_str());
     }
-
     i++;
   }
   listenersToNotify.clear();
