@@ -539,9 +539,11 @@ void RasterProjectAssetImplD::HandleNewRequest(
       project->ThrowIfAnyInvalidDates();
       is_timemachine_project = true;
     }
+
     project->config.is_timemachine_project_ = is_timemachine_project;
     notify(NFY_DEBUG, "TimeMachine: %s for %s\n", req.assetname.c_str(),
            is_timemachine_project ? "on" : "off");
+    project->config.is_overlay_terrain_project_ = req.enable_terrain_overlay;
   }
 }
 

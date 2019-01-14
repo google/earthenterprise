@@ -71,6 +71,8 @@ main(int argc, char *argv[]) {
     bool mercator = false;
     bool enable_historical_imagery = false;
     bool disable_historical_imagery = false;
+    bool enable_terrain_overlay = false;
+    
     uint peergroup = 0;
     uint overridemax = 0;
 
@@ -88,6 +90,7 @@ main(int argc, char *argv[]) {
     options.opt("maxlevel", overridemax);
     options.opt("historical_imagery", enable_historical_imagery);
     options.opt("no_historical_imagery", disable_historical_imagery);
+    options.opt("enable_terrain_overlay", enable_terrain_overlay);
 
     // While processing the command line args, we must record the request items
     // which are a variable length list of strings.
@@ -129,6 +132,11 @@ main(int argc, char *argv[]) {
       usage(argv[0], "--historical_imagery is not a valid option for mercator "
           "imagery projects.");
     }
+    if (enable_terrain_overlay && AssetDefs::Terrain != AssetType){
+      usage(argv[0], "--enable_terrain_overlay is not a valid option for "
+          "imagery projects.");
+    }
+
 
     // Process the request items, which are a variable length list of strings.
     for(uint i = 0; i < request_items.size(); ++i) {
@@ -151,9 +159,13 @@ main(int argc, char *argv[]) {
         (mercator? kMercatorProjectSubtype : kProjectSubtype));
 
     // TimeMachine only applies to non-mercator
-     if (!mercator) {
+    if (!mercator) {
       req.enable_timemachine = enable_historical_imagery;
       req.disable_timemachine = disable_historical_imagery;
+    }
+
+    if (AssetDefs::Terrain == AssetType){
+      req.enable_terrain_overlay = enable_terrain_overlay;
     }
 
     if (req.items.empty()) {
