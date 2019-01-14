@@ -187,10 +187,12 @@ class RasterProjectModifyRequest {
   std::vector<Item> items;
   bool enable_timemachine;
   bool disable_timemachine;
+  bool enable_terrain_overlay;
 #pragma StrLoadAndSave
 #hquote
   RasterProjectModifyRequest(AssetDefs::Type t)
-  : type(t), enable_timemachine(false), disable_timemachine(false) { }
+  : type(t), enable_timemachine(false), disable_timemachine(false), 
+    enable_terrain_overlay(false) { }
 #/hquote
 
 };
