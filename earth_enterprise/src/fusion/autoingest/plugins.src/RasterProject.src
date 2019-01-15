@@ -544,6 +544,8 @@ void RasterProjectAssetImplD::HandleNewRequest(
     notify(NFY_DEBUG, "TimeMachine: %s for %s\n", req.assetname.c_str(),
            is_timemachine_project ? "on" : "off");
     project->config.is_overlay_terrain_project_ = req.enable_terrain_overlay;
+    project->config.overlay_terrain_start_level_ = req.overlay_terrain_start_level;
+    project->config.overlay_terrain_resources_min_level_ = req.overlay_terrain_resources_min_level;
   }
 }
 

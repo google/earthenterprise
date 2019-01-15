@@ -75,6 +75,8 @@ main(int argc, char *argv[]) {
     
     uint peergroup = 0;
     uint overridemax = 0;
+    uint start_level = 4;           // Applicable only when enable_terrain_overlay is true
+    uint resource_min_level = 12;   // Applicable only when enable_terrain_overlay is true
 
     RasterProjectModifyRequest req(AssetType);
 
@@ -91,6 +93,9 @@ main(int argc, char *argv[]) {
     options.opt("historical_imagery", enable_historical_imagery);
     options.opt("no_historical_imagery", disable_historical_imagery);
     options.opt("enable_terrain_overlay", enable_terrain_overlay);
+    options.opt("start_level", start_level);
+    options.opt("resource_min_level", resource_min_level);
+
 
     // While processing the command line args, we must record the request items
     // which are a variable length list of strings.
@@ -166,6 +171,8 @@ main(int argc, char *argv[]) {
 
     if (AssetDefs::Terrain == AssetType){
       req.enable_terrain_overlay = enable_terrain_overlay;
+      req.overlay_terrain_start_level = start_level;
+      req.overlay_terrain_resources_min_level = resource_min_level;
     }
 
     if (req.items.empty()) {
