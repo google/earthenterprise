@@ -28,7 +28,7 @@ FileNotPresentException::FileNotPresentException(const std::string& fn)
 
 OptionsEmptyException::OptionsEmptyException()
 {
-	str = "no list of options present";
+    str = "no list of options present";
 }
 
 ValidateIntegersException::ValidateIntegersException()
