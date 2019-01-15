@@ -55,7 +55,7 @@ AssetVersionImplD::StateChangeNotifier::AddParentsToNotify(const std::vector<std
 
 void
 AssetVersionImplD::StateChangeNotifier::AddListenersToNotify(const std::vector<std::string> & listeners, AssetDefs::State inputState) {
-  for (std::string listener : listeners) {
+  for (const std::string & listener : listeners) {
     // This ensures that the listener is in the list of listeners to notify
     InputStates & elem = listenersToNotify[listener];
     if (inputState == AssetDefs::Succeeded) {
