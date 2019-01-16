@@ -136,7 +136,7 @@ class UsingXMLGuard
       try {
          validateXMLParameters();
       } catch (const XmlParamsException& e) {
-         notify(NFY_WARN, "%s, using default xerces init values", e.what());
+         notify(NFY_DEBUG, "%s, using default xerces init values", e.what());
          setDefaultValues();
       }
       XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
