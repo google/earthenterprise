@@ -129,7 +129,7 @@ class UsingXMLGuard
               maxDOMSubAllocationSize = std::stol(a.second);
       }
     } catch (const khConfigFileParserException& e) {
-      notify(NFY_WARN, "%s , using default xerces init values", e.what());
+      notify(NFY_DEBUG, "%s , using default xerces init values", e.what());
     }
     
     try {
