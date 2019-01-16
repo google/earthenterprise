@@ -75,8 +75,8 @@ main(int argc, char *argv[]) {
     
     uint peergroup = 0;
     uint overridemax = 0;
-    uint start_level = 4;           // Applicable only when enable_terrain_overlay is true
-    uint resource_min_level = 12;   // Applicable only when enable_terrain_overlay is true
+    uint start_level = 0;           // Applicable only when enable_terrain_overlay is true
+    uint resource_min_level = 0;   // Applicable only when enable_terrain_overlay is true
 
     RasterProjectModifyRequest req(AssetType);
 
@@ -93,8 +93,8 @@ main(int argc, char *argv[]) {
     options.opt("historical_imagery", enable_historical_imagery);
     options.opt("no_historical_imagery", disable_historical_imagery);
     options.opt("enable_terrain_overlay", enable_terrain_overlay);
-    options.opt("start_level", start_level);
-    options.opt("resource_min_level", resource_min_level);
+    options.opt("start_level", start_level, &khGetopt::IsEvenNumberInRange<uint, 4, 24>); 
+    options.opt("resource_min_level", resource_min_level, &khGetopt::RangeValidator<uint, 4, 24>);
 
 
     // While processing the command line args, we must record the request items
@@ -169,6 +169,9 @@ main(int argc, char *argv[]) {
       req.disable_timemachine = disable_historical_imagery;
     }
 
+printf("enable_terrain_overlay = %s\n", enable_terrain_overlay ? "true" : "false");
+printf("start_level = %u\n", start_level);
+printf("resource_min_level = %u\n", resource_min_level);
     if (AssetDefs::Terrain == AssetType){
       req.enable_terrain_overlay = enable_terrain_overlay;
       req.overlay_terrain_start_level = start_level;
