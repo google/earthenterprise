@@ -142,7 +142,7 @@ class UsingXMLGuard
       XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
                                    maxDOMHeapAllocSize,
                                    maxDOMSubAllocationSize);
-      notify(NFY_DEBUG, "XML initialization values: %s=%zx %s=%zx %s=%zx",
+      notify(NFY_DEBUG, "XML initialization values: %s=%zu %s=%zu %s=%zu",
              "initialDOMHeapAllocSize", initialDOMHeapAllocSize,
              "maxDOMHeapAllocSize", maxDOMHeapAllocSize,
              "maxDOMSubAllocationSize", maxDOMSubAllocationSize);
