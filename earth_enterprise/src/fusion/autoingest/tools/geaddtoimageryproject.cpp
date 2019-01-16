@@ -72,11 +72,12 @@ main(int argc, char *argv[]) {
     bool enable_historical_imagery = false;
     bool disable_historical_imagery = false;
     bool enable_terrain_overlay = false;
+    bool disable_terrain_overlay = false;
     
     uint peergroup = 0;
     uint overridemax = 0;
-    uint start_level = 0;           // Applicable only when enable_terrain_overlay is true
-    uint resource_min_level = 0;   // Applicable only when enable_terrain_overlay is true
+    uint start_level = 0;          
+    uint resource_min_level = 0;  
 
     RasterProjectModifyRequest req(AssetType);
 
@@ -92,7 +93,8 @@ main(int argc, char *argv[]) {
     options.opt("maxlevel", overridemax);
     options.opt("historical_imagery", enable_historical_imagery);
     options.opt("no_historical_imagery", disable_historical_imagery);
-    options.opt("enable_terrain_overlay", enable_terrain_overlay);
+    options.opt("terrain_overlay", enable_terrain_overlay);
+    options.opt("no_terrain_overlay", disable_terrain_overlay);
     options.opt("start_level", start_level, &khGetopt::IsEvenNumberInRange<uint, 4, 24>); 
     options.opt("resource_min_level", resource_min_level, &khGetopt::RangeValidator<uint, 4, 24>);
 
@@ -169,11 +171,13 @@ main(int argc, char *argv[]) {
       req.disable_timemachine = disable_historical_imagery;
     }
 
+    if (AssetDefs::Terrain == AssetType){
 printf("enable_terrain_overlay = %s\n", enable_terrain_overlay ? "true" : "false");
+printf("disable_terrain_overlay = %s\n", disable_terrain_overlay ? "true" : "false");
 printf("start_level = %u\n", start_level);
 printf("resource_min_level = %u\n", resource_min_level);
-    if (AssetDefs::Terrain == AssetType){
       req.enable_terrain_overlay = enable_terrain_overlay;
+      req.disable_terrain_overlay = disable_terrain_overlay;
       req.overlay_terrain_start_level = start_level;
       req.overlay_terrain_resources_min_level = resource_min_level;
     }
