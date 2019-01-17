@@ -79,13 +79,13 @@ void khConfigFileParser::validateIntegerValues()
 bool khConfigFileParser::sanitize(std::string& line)
 {
     // remove whitespace
-    auto it = line.begin();
-    while(it != line.end())
-    {
-        if (isspace(*it)) line.erase(it);
-        if (it != line.end()) ++it;
-    }   
  
+    line.erase(std::remove_if(line.begin(), line.end(),
+        [](char c)
+        {
+            return isspace(static_cast<unsigned char>(c));
+        }), line.end());
+
     // remove comments
     auto idx = line.find('#');
     if (idx != std::string::npos) 
@@ -129,12 +129,34 @@ bool khConfigFileParser::isKeyPresent(const std::string& key)
 
 static khMutexBase xmlParmsLock = KH_MUTEX_BASE_INITIALIZER;
 
+void khConfigFileParser::parse(std::stringstream& fileContents)
+{
+    std::string line;
+    contents.clear(); //clear out the old contents
+    while (getline(fileContents,line))
+    {
+        if (sanitize(line))
+        {
+            std::string key, value;
+            split(line,key,value);
+            if (!isKeyPresent(key))
+            {
+                throw KeyNotPresentException(key);
+            }
+            if (value.size() == 0)
+            {
+                throw ValueNotPresentException(key);
+            }
+            contents.insert(std::pair<std::string,std::string>(key,value));
+        }
+    }
+}
+
 void khConfigFileParser::parse(const std::string& fn)
 {
     std::ifstream file;
     khLockGuard guard(xmlParmsLock);
 
-    contents.clear(); //clear out the old contents	
     if (options.size() == 0) throw OptionsEmptyException(); // nothing to search on, exit
 
     file.open(fn.c_str());
@@ -142,27 +164,9 @@ void khConfigFileParser::parse(const std::string& fn)
     {
         throw FileNotPresentException(fn);
     }
-    
-    std::string line;
-    while (getline(file,line))
-    {
-        if (sanitize(line))
-        {
-            std::string key, value;
-            split(line,key,value);
-            if (!isKeyPresent(key)) 
-            {
-                file.close();
-                throw KeyNotPresentException(key);
-            }
-            if (value.size() == 0)
-            {
-                file.close();
-                throw ValueNotPresentException(key);
-            }
-            contents.insert(std::pair<std::string,std::string>(key,value));
-        }
-    }
+    std::stringstream fileContents;
+    fileContents << file.rdbuf();
+    parse(fileContents);
     file.close();
 }
 

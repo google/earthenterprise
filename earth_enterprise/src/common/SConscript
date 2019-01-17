@@ -188,5 +188,9 @@ env.test('performancelogger_unittest',
          'performancelogger_unittest.cpp',
          LIBS=['gecommon', 'gtest'])
 
+env.test('khconfigparser_unittest',
+         'khconfigparser_unittest.cpp',
+          LIBS=['geutil', 'gtest'])
+
 env.install('common_lib', [gecommon])
 env.install('common_lib', [geutil])
