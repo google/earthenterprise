@@ -20,7 +20,7 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <sstream>
+#include <istream>
 #include <exception>
 
 class khConfigFileParserException : public std::exception 
@@ -67,7 +67,7 @@ private:
     bool isKeyPresent(const std::string&);
 
 protected:
-    void parse(std::stringstream&);
+    void parse(std::istream&);
     
 public:
     

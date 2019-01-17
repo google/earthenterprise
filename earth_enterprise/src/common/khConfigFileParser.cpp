@@ -19,7 +19,6 @@
 #include <fstream>
 #include "common/khThread.h"
 #include <cctype>
-#include <sstream>
 
 FileNotPresentException::FileNotPresentException(const std::string& fn)
 {
@@ -129,7 +128,7 @@ bool khConfigFileParser::isKeyPresent(const std::string& key)
 
 static khMutexBase xmlParmsLock = KH_MUTEX_BASE_INITIALIZER;
 
-void khConfigFileParser::parse(std::stringstream& fileContents)
+void khConfigFileParser::parse(std::istream& fileContents)
 {
     std::string line;
     contents.clear(); //clear out the old contents
@@ -164,9 +163,7 @@ void khConfigFileParser::parse(const std::string& fn)
     {
         throw FileNotPresentException(fn);
     }
-    std::stringstream fileContents;
-    fileContents << file.rdbuf();
-    parse(fileContents);
+    parse(file);
     file.close();
 }
 
