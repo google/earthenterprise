@@ -222,7 +222,7 @@ std::string khstrerror(int err) {
   auto retval = strerror_r(err, buf, sizeof(buf));
   char* msg = strerror_wrapper(retval, buf);
   if (msg)
-      return msg;
+    return msg;
   else
-      return "Unknown error";
+    return "Unknown error";
 }
