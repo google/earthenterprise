@@ -26,6 +26,7 @@ import subprocess
 import sys
 sys.path += ['scons']
 from khEnvironment import khEnvironment
+import getversion
 
 # Add the OpenGEE Python libraries to the module search path:
 opengee_lib_path = os.path.join('lib', 'python')
