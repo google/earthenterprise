@@ -8,6 +8,8 @@ from datetime import datetime
 import re
 
 
+
+
 def GetVersion(backupFile, label=''):
     """As getLongVersion(), but only return the leading *.*.* value."""
 
