@@ -188,10 +188,15 @@ printf("resource_min_level = %u\n", resource_min_level);
         notify(NFY_WARN,
                "No insets specified. Project will be empty.");
       } else if (mercator ||
-            !(enable_historical_imagery || disable_historical_imagery)) {
-        // For adding/modifying, we always need insets except:
-        // non-mercator when historical_imagery/no_historical_imagery is
-        // specified.
+            !(enable_historical_imagery || disable_historical_imagery) ||
+            !(AssetDefs::Terrain == AssetType && 
+              (enable_terrain_overlay || disable_terrain_overlay || 
+              start_level != 0 || resource_min_level != 0))) {
+        // For adding/modifying, we always need insets when:
+        // - It's a mercator project
+        // - OR it's a non-mercator project and the historical imagery flag is NOT being modified
+        // - OR it's a terrain project and no overlay-related options are being modified
+        // In those cases, show the usage text and exit.
         usage(progname, "No insets specified");
       }
     }
