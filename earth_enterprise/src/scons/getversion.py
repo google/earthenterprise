@@ -2,7 +2,11 @@
 import os
 import argparse
 import git
+import sys
+
 from datetime import datetime
+import re
+
 
 
 
@@ -41,98 +45,197 @@ def GetLongVersion(backupFile, label=''):
 
 
 def _GitGeneratedLongVersion():
-    """Take the raw information parsed by git, and use it to
-       generate an appropriate version string for GEE."""
+    """Calculate the version name and build number into a single build string."""
 
-    raw = _GetCommitRawDescription()
+    versionName, buildNumber = _GitVersionNameAndBuildNumber()
+    return "{0}-{1}".format(versionName, buildNumber)
 
-    # For tagged commits, return the tag itself
-    if _IsCurrentCommitTagged(raw):
-        return _VersionForTaggedHead(raw)
+
+def _GitCommitCount(tagName='HEAD', baseRef=''):
+    """calculate git commit counts"""
+    repo = _GetRepository()
+    if not baseRef:
+        return len(list(repo.iter_commits(tagName)))
     else:
-        return _VersionFromTagHistory(raw)
+        return len(list(repo.iter_commits(baseRef + '..' + tagName)))
+
+
+def _GitVersionNameAndBuildNumber():
+    """Get the version name and build number based on state of git
+    Use a tag only if HEAD is directly pointing to it and it is a
+    release build tag (see _GetCommitRawDescription for details)
+    otherwise use the branch name"""
+
+    # if head is pointing to a release tag use that
+    # this is needed so that if a release branch is 
+    # checked out and the tail tag was removed if the
+    # head of that release branch is pointing to a 
+    # release tag we still do the expected thing
+    releaseTag = _GetCurrentCommitReleaseTag()
+    if releaseTag:
+        # Extract version name and build number
+        # from the tag (should be a release build tag)
+        splitTag = releaseTag.split('-')
+        return splitTag[0], splitTag[1]
+    else:
+        # Use branch name if we are not a detached HEAD
+        branchName = _GitBranchName()
+        if not branchName:
+            # we are a detached head not on a release tag so just treat
+            # the the first part of the raw describe as the release name
+            # added the b to the build number to signal this is not a releasable build
+            return _GetCommitRawDescription().split('-')[0], "b{0}-{1}".format(_GitCommitCount(), open_gee_version.get_commit_hash_from_tag('HEAD'))
+        else:
+            # Get the version name from the branch name
+            if _IsReleaseBranch(branchName):
+                tailTag = _GetReleaseTailTag(branchName)
+                return _GetReleaseVersionName(branchName), '{0}.{1}'.format(_GitBranchedCommitCount(tailTag), _GitCommitCount('HEAD', tailTag))
+            else:
+                # added the b to the build number to signal this is not a releasable build
+                return _GetCommitRawDescription().split('-')[0],  "b{0}-{1}".format(_GitCommitCount(), _sanitizeBranchName(branchName))
+
+
+def _GitBranchedCommitCount(tailTag):
+    """Returns what the build number was from the branch point"""
+    prevRelTag = _GitPreviousReleaseTag(tailTag)
+    prevCommitCount = ''
+
+    if prevRelTag:
+        prevCommitCount = prevRelTag.split('-')[1]
+    else:
+        prevCommitCount = str(_GitCommitCount(tailTag))
+
+    return prevCommitCount
+
+
+def _GitPreviousReleaseTag(tailTagName):
+    """Looks for the tail tag and if it finds it then it looks for any release build tags
+    that are also pointing to the same commit"""
+    tailCommitHash = open_gee_version.get_commit_hash_from_tag(tailTagName)
+    tags = open_gee_version.get_tags_from_commit_hash(tailCommitHash)
+    for tag in tags:
+        if tag != tailTagName:
+            if _IsReleaseBuildTag(tag):
+                return tag
+            else:
+                pass
+        else:
+            pass
+
+    return ''
+
+
+def _GitTagRealCommitId(tagName):
+    """use shell command to retrieve commit id of where the tag points to"""
+    # for some reason .hexsha was not returning the same id....
+    return os.popen("git rev-list -n 1 '{0}'".format(tagName.replace("'", "'\"'\"'"))).read().strip()
+
+def _git_tag_list():
+    """use shell command to retrieve a list of tags"""
+    # python-git is broken on some plateforms so just using this more reliable method
+    return os.popen("git tag -l").read().split('\n')
+
+def _IsReleaseBuildTag(tagName):
+    """checks if the tag follows the pattern where if the
+    tag is split on dash and the has at least two elements
+    and the first two elements is a series of numbers delimited
+    by dot and nothing else in those first two elements"""
+    splitTag = tagName.split('-')
+    if len(splitTag) > 1:
+        return (re.match('^[0-9]+((\.[0-9]+)+)$', splitTag[0]) and re.match('^([0-9]+((\.[0-9]+)+)|[0-9]+)$', splitTag[1]))
+
+    return False
+
+
+def _IsReleaseBranch(branchName):
+    """Check if the branch name is a release branch"""
+    # a release branch begins with 'release_' and has
+    # a base tag that matches the release name
+    if branchName[:8] == 'release_':
+        tailTag = _GetReleaseTailTag(branchName)
+        if _gitHasTag(tailTag):
+            return True
+        else:
+            # see if we can pull the tag down from any of the remotes
+            repo = _GetRepository()
+            for remote in repo.remotes:
+                try:
+                    remote.fetch('+refs/tags/{0}:refs/tags/{0}'.format(tailTag), None, **{'no-tags':True})
+                except:
+                    pass
+            
+            # try one more time after the fetch attempt(s)
+            return (_gitHasTag(tailTag) != '')
+    else:
+        return False
+
+
+def _gitHasTag(tagName):
+    """See if a tag exists in git"""
+    return open_gee_version.get_commit_hash_from_tag(tagName)
+ 
+
+def _sanitizeBranchName(branchName):
+    """sanitize branch names to ensure some characters are not used"""
+    return re.sub('[$?*`\\-"\'\\\\/\\s]', '_', branchName)
+
+
+def _GetReleaseVersionName(branchName):
+    """removes pre-pended 'release_' from branch name"""
+    return branchName[8:]
+
+
+def _GetReleaseTailTag(branchName):
+    """removes pre-pended 'release_' from branch name"""
+    return _GetReleaseVersionName(branchName) + '-RC1'
+
+
+def _GitBranchName():
+    """Returns current branch name or empty string"""
+    try:
+        return _GetRepository().active_branch.name
+    except TypeError:
+        return ''
+
+
+def _IsGitDescribeFirstParentSupported():
+    """Checks whether --first-parent parameter is valid for the
+    version of git available"""
+    
+    try:
+        repo = _GetRepository()
+        repo.git.describe('--first-parent')
+        return True
+    except git.exc.GitCommandError:
+        pass
+
+    return False
 
 
 def _GetCommitRawDescription():
     """Returns description of current commit"""
+
+    args = ['--tags', '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*']
+    if _IsGitDescribeFirstParentSupported():
+        args.insert(0, '--first-parent')
+
     repo = _GetRepository()
-    raw = repo.git.describe('--first-parent', '--tags', '--match', '[0-9]*\.[0-9]*\.[0-9]*\-*')
+    raw = repo.git.describe(*args)
     raw = raw.rstrip()
     return raw
 
 
-def _IsCurrentCommitTagged(raw):
-    """True if the current commit is tagged, otherwise False"""
-    # If this condition hits, then we are currently on a tagged commit.
-    return (len(raw.split("-")) < 4)
-
-
-def _VersionForTaggedHead(raw):
-    """When we're on the tagged commit, the version string is
-    either the tag itself (when repo is clean), or the tag with
-    date appended (when repo has uncommitted changes)"""
-    if _CheckDirtyRepository():
-        # Append the date if the repo contains uncommitted files
-        return '.'.join([raw, _GetDateString()])
-    return raw
-
-
-def _VersionFromTagHistory(raw):
-    """From the HEAD revision, this function finds the most recent
-    reachable version tag and returns a string representing the
-    version being built -- which is one version beyond the latest
-    found in the history."""
-
-    # Tear apart the information in the version string.
-    components = _ParseRawVersionString(raw)
-
-    # Determine how to update, since we are *not* on tagged commit.
-    if components['isFinal']:
-        components['patch'] = 0
-        components['patchType'] = "alpha"
-        components['revision'] = components['revision'] + 1
-    else:
-        components['patch'] = components['patch'] + 1
-
-    # Rebuild.
-    base = '.'.join([str(components[x]) for x in ("major", "minor", "revision")])
-    patch = '.'.join([str(components["patch"]), components["patchType"], _GetDateString()])
-    if not _CheckDirtyRepository():
-        patch = '.'.join([patch, components['hash']])
-
-    return '-'.join([base, patch])
-
-
-def _ParseRawVersionString(raw):
-    """Break apart a raw version string into its various components,
-    and return those entries via a dictionary."""
-
-    components = { }
-
-    # major.minor.revision-patch[.patchType][-commits][-hash]
-    rawComponents = raw.split("-")
-
-    base = rawComponents[0]
-    patchRaw = '' if not len(rawComponents) > 1 else rawComponents[1]
-    components['commits'] = -1 if not len(rawComponents) > 2 else rawComponents[2]
-    components['hash'] = None if not len(rawComponents) > 3 else rawComponents[3]
-
-    # Primary version (major.minor.revision)
-    baseComponents = base.split(".")
-    components['major'] = int(baseComponents[0])
-    components['minor'] = int(baseComponents[1])
-    components['revision'] = int(baseComponents[2])
-
-    # Patch (patch[.patchType])
-    components['isFinal'] = ((patchRaw[-5:] == "final") or
-                             (patchRaw[-7:] == "release"))
-
-    patchComponents = patchRaw.split(".")
-    components['patch'] = int(patchComponents[0])
-    components['patchType'] = 'alpha' if not len(patchComponents) > 1 else patchComponents[1]
-
-    repo = _GetRepository()
-    return components
+def _GetCurrentCommitReleaseTag():
+    """If head is pointing to a release tag return the name of the release tag"""
+    headCommitHash = open_gee_version.get_commit_hash_from_tag('HEAD')
+    tags = open_gee_version.get_tags_from_commit_hash(headCommitHash)
+    for tag in tags:
+        if _IsReleaseBuildTag(tag):
+            return tag
+        else:
+            pass
+    
+    return ''
 
 
 def _CheckGitAvailable():
@@ -192,7 +295,35 @@ class OpenGeeVersion(object):
         self_path, _ = os.path.split(os.path.realpath(__file__))
         self.backup_file = os.path.join(self_path, '..', 'version.txt')
         self.label = ''
+        self.tag_to_git_hash = None
+        self.git_hash_to_tags = None
 
+    def _init_tag_maps(self):
+        if self.tag_to_git_hash is None or self.git_hash_to_tags is None:
+            self.tag_to_git_hash = {}
+            self.git_hash_to_tags = {}
+            tags = _git_tag_list()
+            tags.append('HEAD') # make sure HEAD is in the list even thought it really isn't a tag
+            for tag in tags:
+                tag.strip()
+                if tag:
+                    git_hash = _GitTagRealCommitId(tag)
+                    self.tag_to_git_hash[tag] = git_hash
+                    if git_hash in self.git_hash_to_tags:
+                        self.git_hash_to_tags[git_hash].append(tag)
+                    else:
+                        self.git_hash_to_tags[git_hash] = [tag]
+                else:
+                    pass # ignore empty strings
+
+    def get_commit_hash_from_tag(self, tagName):
+        self._init_tag_maps()
+        return self.tag_to_git_hash.get(tagName, '')
+
+    def get_tags_from_commit_hash(self, commitHash):
+        self._init_tag_maps()
+        return self.git_hash_to_tags.get(commitHash, [])
+ 
     def get_short(self):
         """Returns the short version string."""
 
@@ -222,10 +353,21 @@ class OpenGeeVersion(object):
 
         self.long_version_string = value
 
+    def get_warning_message(self):
+        """Returns None, or a string describing known issues."""
+
+        return None if not _CheckGitAvailable() or _IsGitDescribeFirstParentSupported() else '''\
+WARNING: Git version 1.8.4 or later is required to correctly determine the Open GEE version being built.
+The Open GEE version is calculated from tags using the "git describe" command.
+The "--first-parent" parameter introduced in Git 1.8.4 allows proper version calcuation on all branches.
+Without the --first-parent parameter, the version calculated may be incorrect, depending on which branch is being built.
+For information on upgrading Git, see:
+https://github.com/google/earthenterprise/wiki/Frequently-Asked-Questions-(FAQs)#how-do-i-upgrade-git-to-the-recommended-version-for-building-google-earth-enterprise\
+'''
+
 
 # Exported variable for use by other modules:
 open_gee_version = OpenGeeVersion()
-
 
 def main():
     parser = argparse.ArgumentParser()
@@ -233,6 +375,10 @@ def main():
     args = parser.parse_args()
 
     print open_gee_version.get_long() if args.long else open_gee_version.get_short()
+
+    warning_message = open_gee_version.get_warning_message()
+    if warning_message is not None:
+        print >> sys.stderr, warning_message
 
 
 __all__ = ['open_gee_version']

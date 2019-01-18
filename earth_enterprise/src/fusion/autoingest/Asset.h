@@ -97,10 +97,13 @@ Asset::DoBind(const std::string &ref, bool checkFileExistenceFirst) const
   HandleType entry = CacheFind(ref);
   bool addToCache = false;
 
+  notify(NFY_VERBOSE,"CheckFileExistence: %d",checkFileExistenceFirst);
   // Try to load from XML
   if (!entry) {
     if (checkFileExistenceFirst) {
       std::string filename = Impl::XMLFilename(ref);
+
+      // checks to see whether or not this XML file exists
       if (!khExists(Impl::XMLFilename(ref))) {
         // in this case DoBind is allowed not to throw even if
         // we configured to normally throw

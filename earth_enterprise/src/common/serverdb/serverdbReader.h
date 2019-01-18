@@ -115,6 +115,11 @@ class ServerdbReader {
                const std::string& language,
                const std::string& region,
                ReadBuffer& buf);
+  //
+  void GetJsonV1(const std::string& json_variable_name,
+                 const std::string& language,
+                 const std::string& region,
+                 ReadBuffer& buf);
   void GetIcon(const std::string& icon_path, ReadBuffer& buf,
                const bool size_only);
 

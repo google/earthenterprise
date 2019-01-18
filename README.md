@@ -1,3 +1,4 @@
+
 # Earth Enterprise [![Chat on Slack](https://img.shields.io/badge/chat-on%20slack-ff69b4.svg)](http://slack.opengee.org) [![build](https://travis-ci.org/google/earthenterprise.svg?branch=master)](https://travis-ci.org/google/earthenterprise/builds)
 
 Earth Enterprise is the open source release of Google Earth Enterprise, a geospatial application which provides the ability to build and host custom 3D globes and 2D maps.  Earth Enterprise does not provide a private version of Google imagery that's currently available in Google Maps or Earth.
@@ -10,6 +11,10 @@ The application suite consists of three core components:
 ![flow](https://lh3.googleusercontent.com/ZGQH04lc2mYmw1JEx0Jvwiardw5H6cwrmRhSj75pSKF6r1FRwwYUBUIBnTE6n5uY071XV7__mmVDKdV6B1tEpUQwFNYnt1HBfxiz3Hrqbw99HUFQKVFnht11EkPz70xCtuhFlCi3)
 
 ### Releases
+
+[Release 5.2.4](https://github.com/google/earthenterprise/releases/tag/5.2.4-4.final)
+* [Release Notes](http://www.opengee.org/geedocs/5.2.4/answer/7160004.html)
+* [Release Documentation](http://www.opengee.org/geedocs/5.2.4/)
 
 [Release 5.2.3](https://github.com/google/earthenterprise/releases/tag/5.2.3-4.final)
 * [Release Notes](http://www.opengee.org/geedocs/5.2.3/answer/7160003.html)

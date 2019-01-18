@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<SourceAssetVersion>
+
+  <name>{{ name }}</name>
+
+  <type>Imagery</type>
+
+  <subtype>Source</subtype>
+
+  <version>{{ version }}</version>
+
+  <state>{{ state }}</state>
+
+  <progress>1</progress>
+
+  <locked>0</locked>
+
+  <inputs/>
+
+  <children/>
+
+  <parents/>
+
+  <listeners>
+{% for name in listeners %}
+    <listener>{{ name }}</listener>
+{% endfor %}
+  </listeners>
+
+  <outfiles>
+{% for path in outfiles %}
+    <outfile>{{ path }}</outfile>
+{% endfor %}
+  </outfiles>
+
+  <meta>
+    <item key="createdtime">2018-07-26 01:24:30</item>
+  </meta>
+
+  <beginTime>0</beginTime>
+
+  <progressTime>0</progressTime>
+
+  <endTime>0</endTime>
+
+  <taskid>0</taskid>
+
+  <config>
+    <sources>
+{% for source in sources %}
+      <source>
+        <uri>{{ source.uri }}</uri>
+        <size>{{ source.size }}</size>
+        <mtime>{{ source.mtime }}</mtime>
+      </source>
+{% endfor %}
+    </sources>
+  </config>
+
+</SourceAssetVersion>

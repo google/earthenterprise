@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<CombinedRPAsset>
+
+  <name>{{ name }}</name>
+
+  <type>Imagery</type>
+
+  <subtype>CombinedRP</subtype>
+
+  <inputs>
+{% for name in inputs %}
+    <input>{{ name }}</input>
+{% endfor %}
+  </inputs>
+
+  <meta/>
+
+  <versions>
+{% for name in versions %}
+    <version>{{ name }}</version>
+{% endfor %}
+  </versions>
+
+  <config>
+    <fuid_resource>1000</fuid_resource>
+    <mask_mode>AutoMask</mask_mode>
+    <source_is_product>0</source_is_product>
+    <need_khvr>0</need_khvr>
+    <krp_config>
+      <scale>1</scale>
+      <clampNonnegative>0</clampNonnegative>
+      <overridesrs></overridesrs>
+      <useMercatorProjection>0</useMercatorProjection>
+      <north_boundary>90</north_boundary>
+      <south_boundary>-90</south_boundary>
+      <east_boundary>180</east_boundary>
+      <west_boundary>-180</west_boundary>
+    </krp_config>
+    <maskgen_config>
+      <feather>100</feather>
+      <mode>Mask</mode>
+      <band>1</band>
+      <fillvalue>-1</fillvalue>
+      <threshold>0</threshold>
+      <holesize>0</holesize>
+      <whitefill>0</whitefill>
+      <nodata></nodata>
+    </maskgen_config>
+  </config>
+
+</CombinedRPAsset>

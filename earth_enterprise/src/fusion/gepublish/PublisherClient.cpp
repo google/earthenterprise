@@ -708,7 +708,10 @@ bool PublisherClient::SyncDatabase(const std::string& db_name) {
 bool PublisherClient::PublishDatabase(const std::string& in_db_name,
                                       const std::string& in_target_path,
                                       const std::string& vh_name,
-                                      const bool ec_default_db) {
+                                      const bool ec_default_db,
+                                      const bool poi_search,
+                                      const bool enhanced_search,
+                                      const bool serve_wms) {
   try {
     std::string target_path = NormalizeTargetPath(in_target_path);
     if (target_path.empty()) {
@@ -750,8 +753,17 @@ bool PublisherClient::PublishDatabase(const std::string& in_db_name,
     stream_args += "&VirtualHostName=" + stream_vs_name;
     stream_args += "&TargetPath=" + target_path;
     stream_args += "&DbType=" + Itoa(db_manifest.GetDbType());
-    if (ec_default_db) { 
+    if (poi_search) {
+      stream_args += "&SearchDefName=POISearch";
+      if (enhanced_search) {
+        stream_args += "&PoiFederated=1";
+      }
+    }
+    if (ec_default_db) {
       stream_args += "&EcDefaultDb=1" ;
+    }
+    if (serve_wms) {
+      stream_args += "&ServeWms=1";
     }
     std::vector<std::string> empty_vector;
     if (!ProcessPublishGetRequest(
@@ -1355,7 +1367,7 @@ bool PublisherClient::SyncFiles(
         upload_entries.push_back(manifest_entries[index]);
 
         // some files are 'dependent files' that are not part of the original manifest reported to
-        // server but we still need to upload those files as they complete the specified file in the 
+        // server but we still need to upload those files as they complete the specified file in the
         // original manifest.  We can't include the file in the original manifest because in cases
         // like search manifests server does special processing on files in that manifest that
         // can't be done on the dependent files.

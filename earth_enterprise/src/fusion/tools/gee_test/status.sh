@@ -23,5 +23,5 @@ ASSET_ROOT="/usr/local/google/gevol_test/assets"
 echo "Using asset root: $ASSET_ROOT"
 
 /opt/google/bin/gequery Tutorial/Databases/SFDb_3d --status
-/opt/google/bin/gequery Tutorial/Databases/SFDb_3d_TM --status
 /opt/google/bin/gequery Tutorial/Databases/SF_2d_Merc --status
+/opt/google/bin/gequery Tutorial/Databases/SF_2d_Merc_With_Flat_Imagery --status
