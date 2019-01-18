@@ -69,26 +69,70 @@
       </tr>
     </tbody>
   </table>
+
+
   <h2>geaddtoimageryproject</h2>
   <pre>
-<code><b>geaddtoimageryproject</b> [--<strong>mercator</strong> | --<strong>flat]</strong> [--<strong>historical_imagery</strong> |
---<strong>no_historical_imagery</strong>] -o <em>projectname</em>{[--<strong>maxlevel</strong> <em>level</em>] <em>insetresource</em>}</code>...</pre>
+<code><b>geaddtoimageryproject</b> [--<strong>mercator</strong> | --<strong>flat]</strong> [--<strong>historical_imagery</strong> | --<strong>no_historical_imagery</strong>]
+ -o <em>projectname</em> {[--<strong>maxleveloverride</strong> <em>level</em>]}
+ [--<strong>no_terrain_overlay</strong> | {--<strong>terrain_overlay</strong> --<strong>start_level</strong> <em>level</em> --<strong>resource_min_level</strong> <em>level</em> }]
+ <em>insetresource</em>} </code>...</pre>
+
+
   <h3>Purpose</h3>
   <p>Creates a new imagery project. This tool is capable of building Mercator imagery projects for 2D databases, or Flat (Plate Carrée) imagery projects with or without Historic Imagery Support for 3D databases.
   
   <h3>Commands</h3>
-  <pre>
-<code><b>--mercator </b></code></pre>
+  <pre><code><b>--mercator </b></code></pre>
   <p><i>Optional</i>. Uses Mercator map projection for the imagery project.</p>
-  <pre>
-<code><b>--flat </b></code></pre>
+  <pre><code><b>--flat </b></code></pre>
   <p><i>Default</i>. Uses Flat map (Plate Carrée) projection.</p>
-  <pre>
-<code><b>--historical_imagery </b></code></pre>
+  <pre><code><b>--historical_imagery </b></code></pre>
   <p><i>Optional</i>. Uses historical imagery for the project..</p>
-  <pre>
-<code><b>--no_historical_imagery </b></code></pre>
+  <pre><code><b>--no_historical_imagery </b></code></pre>
   <p><i>Default</i>. Uses normal imagery for the project.</p>
+  <pre><code><b>--maxleveloverride</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. ...</p>
+  <pre><code><b>--no_terrain_overlay</b></code></pre>
+  <p><i>Default</i>. ...</p>
+  <pre><code><b>--terrain_overlay</b></code></pre>
+  <p><i>Optional</i>. ...</p>
+  <pre><code><b>--start_level</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. start_level is an even unsigned integer between 4 and 24 inclusive.</p>
+  <pre><code><b>--resource_min_level</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. resource_min_level is any integer between 4 and 24 inclusive.</p>
+
+
+  <h2>geaddtoterrainproject</h2>
+  <pre>
+<code><b>geaddtoterrainproject</b> [--<strong>mercator</strong> | --<strong>flat]</strong> [--<strong>historical_imagery</strong> | --<strong>no_historical_imagery</strong>]
+ -o <em>projectname</em> {[--<strong>maxleveloverride</strong> <em>level</em>]}
+ [--<strong>no_terrain_overlay</strong> | {--<strong>terrain_overlay</strong> --<strong>start_level</strong> <em>level</em> --<strong>resource_min_level</strong> <em>level</em> }]
+ <em>insetresource</em>} </code>...</pre>
+  <h3>Purpose</h3>
+  <p>Creates a new terrain project. This tool is capable of building Mercator imagery projects for 2D databases, or Flat (Plate Carrée) imagery projects with or without Historic Imagery Support for 3D databases.
+  
+  <h3>Commands</h3>
+  <pre><code><b>--mercator </b></code></pre>
+  <p><i>Optional</i>. Uses Mercator map projection for the imagery project.</p>
+  <pre><code><b>--flat </b></code></pre>
+  <p><i>Default</i>. Uses Flat map (Plate Carrée) projection.</p>
+  <pre><code><b>--historical_imagery </b></code></pre>
+  <p><i>Optional</i>. Uses historical imagery for the project..</p>
+  <pre><code><b>--no_historical_imagery </b></code></pre>
+  <p><i>Default</i>. Uses normal imagery for the project.</p>
+  <pre><code><b>--maxleveloverride</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. ...</p>
+  <pre><code><b>--no_terrain_overlay</b></code></pre>
+  <p><i>Default</i>. ...</p>
+  <pre><code><b>--terrain_overlay</b></code></pre>
+  <p><i>Optional</i>. ...</p>
+  <pre><code><b>--start_level</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. start_level is an even unsigned integer between 4 and 24 inclusive.</p>
+  <pre><code><b>--resource_min_level</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. resource_min_level is any integer between 4 and 24 inclusive.</p>
+
+
   <h2><a name="63542"></a>geconfigureassetroot</h2>
   <pre>
 <code><b>geconfigureassetroot</b> {<b>--new</b> <b>--assetroot </b><i>path </i> [<b>--srcvol </b><i>path</i>] | <b>--repair</b> | <b>--editvolumes</b> | <b>--listvolumes</b> | <b>--addvolume</b> | <b>--fixmasterhost</b> | <strong>--noprompt</strong>}  [--nochown]</code></pre>
@@ -254,6 +298,132 @@ instead.
 <pre>
 <code>--sendver dbver </code></pre>
 <p><i>Optional</i>. Specify which database version to send. Use the <code>?version=...</code> syntax. Available database versions may be found with the <code>gequery --versions</code> command.</p>
+
+
+  <h2>gemodifyimageryproject</h2>
+  <pre>
+<code><b>gemodifyimageryproject</b> [--<strong>mercator</strong> | --<strong>flat]</strong> [--<strong>historical_imagery</strong> | --<strong>no_historical_imagery</strong>]
+ -o <em>projectname</em> {[--<strong>maxleveloverride</strong> <em>level</em>]}
+ [--<strong>no_terrain_overlay</strong> | {--<strong>terrain_overlay</strong> --<strong>start_level</strong> <em>level</em> --<strong>resource_min_level</strong> <em>level</em> }]
+ <em>insetresource</em>} </code>...</pre>
+
+  <h3>Purpose</h3>
+  <p> </p>
+  
+  <h3>Commands</h3>
+  <pre><code><b>--mercator </b></code></pre>
+  <p><i>Optional</i>. Uses Mercator map projection for the imagery project.</p>
+  <pre><code><b>--flat </b></code></pre>
+  <p><i>Default</i>. Uses Flat map (Plate Carrée) projection.</p>
+  <pre><code><b>--historical_imagery </b></code></pre>
+  <p><i>Optional</i>. Uses historical imagery for the project..</p>
+  <pre><code><b>--no_historical_imagery </b></code></pre>
+  <p><i>Default</i>. Uses normal imagery for the project.</p>
+  <pre><code><b>--maxleveloverride</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. ...</p>
+  <pre><code><b>--no_terrain_overlay</b></code></pre>
+  <p><i>Default</i>. ...</p>
+  <pre><code><b>--terrain_overlay</b></code></pre>
+  <p><i>Optional</i>. ...</p>
+  <pre><code><b>--start_level</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. start_level is an even unsigned integer between 4 and 24 inclusive.</p>
+  <pre><code><b>--resource_min_level</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. resource_min_level is any integer between 4 and 24 inclusive.</p>
+
+
+  <h2>gemodifyterrainproject</h2>
+  <pre>
+<code><b>gemodifyterrainproject</b> [--<strong>mercator</strong> | --<strong>flat]</strong> [--<strong>historical_imagery</strong> | --<strong>no_historical_imagery</strong>]
+ -o <em>projectname</em> {[--<strong>maxleveloverride</strong> <em>level</em>]}
+ [--<strong>no_terrain_overlay</strong> | {--<strong>terrain_overlay</strong> --<strong>start_level</strong> <em>level</em> --<strong>resource_min_level</strong> <em>level</em> }]
+ <em>insetresource</em>} </code>...</pre>
+
+  <h3>Purpose</h3>
+  <p> </p>
+  
+  <h3>Commands</h3>
+  <pre><code><b>--mercator </b></code></pre>
+  <p><i>Optional</i>. Uses Mercator map projection for the imagery project.</p>
+  <pre><code><b>--flat </b></code></pre>
+  <p><i>Default</i>. Uses Flat map (Plate Carrée) projection.</p>
+  <pre><code><b>--historical_imagery </b></code></pre>
+  <p><i>Optional</i>. Uses historical imagery for the project..</p>
+  <pre><code><b>--no_historical_imagery </b></code></pre>
+  <p><i>Default</i>. Uses normal imagery for the project.</p>
+  <pre><code><b>--maxleveloverride</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. ...</p>
+  <pre><code><b>--no_terrain_overlay</b></code></pre>
+  <p><i>Default</i>. ...</p>
+  <pre><code><b>--terrain_overlay</b></code></pre>
+  <p><i>Optional</i>. ...</p>
+  <pre><code><b>--start_level</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. start_level is an even unsigned integer between 4 and 24 inclusive.</p>
+  <pre><code><b>--resource_min_level</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. resource_min_level is any integer between 4 and 24 inclusive.</p>
+
+
+  <h2>genewimageproject</h2>
+  <pre>
+<code><b>genewimageproject</b> [--<strong>mercator</strong> | --<strong>flat]</strong> [--<strong>historical_imagery</strong> | --<strong>no_historical_imagery</strong>]
+ -o <em>projectname</em> {[--<strong>maxleveloverride</strong> <em>level</em>]}
+ [--<strong>no_terrain_overlay</strong> | {--<strong>terrain_overlay</strong> --<strong>start_level</strong> <em>level</em> --<strong>resource_min_level</strong> <em>level</em> }]
+ <em>insetresource</em>} </code>...</pre>
+
+  <h3>Purpose</h3>
+  <p> </p>
+  
+  <h3>Commands</h3>
+  <pre><code><b>--mercator </b></code></pre>
+  <p><i>Optional</i>. Uses Mercator map projection for the imagery project.</p>
+  <pre><code><b>--flat </b></code></pre>
+  <p><i>Default</i>. Uses Flat map (Plate Carrée) projection.</p>
+  <pre><code><b>--historical_imagery </b></code></pre>
+  <p><i>Optional</i>. Uses historical imagery for the project..</p>
+  <pre><code><b>--no_historical_imagery </b></code></pre>
+  <p><i>Default</i>. Uses normal imagery for the project.</p>
+  <pre><code><b>--maxleveloverride</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. ...</p>
+  <pre><code><b>--no_terrain_overlay</b></code></pre>
+  <p><i>Default</i>. ...</p>
+  <pre><code><b>--terrain_overlay</b></code></pre>
+  <p><i>Optional</i>. ...</p>
+  <pre><code><b>--start_level</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. start_level is an even unsigned integer between 4 and 24 inclusive.</p>
+  <pre><code><b>--resource_min_level</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. resource_min_level is any integer between 4 and 24 inclusive.</p>
+
+
+  <h2>genewterrainproject</h2>
+  <pre>
+<code><b>genewterrainproject</b> [--<strong>mercator</strong> | --<strong>flat]</strong> [--<strong>historical_imagery</strong> | --<strong>no_historical_imagery</strong>]
+ -o <em>projectname</em> {[--<strong>maxleveloverride</strong> <em>level</em>]}
+ [--<strong>no_terrain_overlay</strong> | {--<strong>terrain_overlay</strong> --<strong>start_level</strong> <em>level</em> --<strong>resource_min_level</strong> <em>level</em> }]
+ <em>insetresource</em>} </code>...</pre>
+
+  <h3>Purpose</h3>
+  <p> </p>
+  
+  <h3>Commands</h3>
+  <pre><code><b>--mercator </b></code></pre>
+  <p><i>Optional</i>. Uses Mercator map projection for the imagery project.</p>
+  <pre><code><b>--flat </b></code></pre>
+  <p><i>Default</i>. Uses Flat map (Plate Carrée) projection.</p>
+  <pre><code><b>--historical_imagery </b></code></pre>
+  <p><i>Optional</i>. Uses historical imagery for the project..</p>
+  <pre><code><b>--no_historical_imagery </b></code></pre>
+  <p><i>Default</i>. Uses normal imagery for the project.</p>
+  <pre><code><b>--maxleveloverride</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. ...</p>
+  <pre><code><b>--no_terrain_overlay</b></code></pre>
+  <p><i>Default</i>. ...</p>
+  <pre><code><b>--terrain_overlay</b></code></pre>
+  <p><i>Optional</i>. ...</p>
+  <pre><code><b>--start_level</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. start_level is an even unsigned integer between 4 and 24 inclusive.</p>
+  <pre><code><b>--resource_min_level</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. resource_min_level is any integer between 4 and 24 inclusive.</p>
+
+
 <h2>gepublishdatabase</h2>
 <div class="alert">
   <p>Deprecated in GEE 4.0.</p>
