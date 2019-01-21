@@ -139,8 +139,8 @@ main(int argc, char *argv[]) {
       usage(argv[0], "--historical_imagery is not a valid option for mercator "
           "imagery projects.");
     }
-    if (enable_terrain_overlay && AssetDefs::Terrain != AssetType){
-      usage(argv[0], "--enable_terrain_overlay is not a valid option for "
+    if ((enable_terrain_overlay || disable_terrain_overlay) && AssetDefs::Terrain != AssetType){
+      usage(argv[0], "--terrain_overlay and --no_terrain_overlay are not valid options for "
           "imagery projects.");
     }
 
