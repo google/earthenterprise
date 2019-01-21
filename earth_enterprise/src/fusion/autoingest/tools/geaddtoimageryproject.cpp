@@ -47,7 +47,13 @@ usage(const std::string &progn, const char *msg = 0, ...)
           "      --no_historical_imagery : make this a normal project\n"
           "                         (i.e., not a historical imagery project)\n"
           "   By default, new projects are NOT time machine projects"
-          " unless --historical_imagery is specified.\n",
+          " unless --historical_imagery is specified.\n"
+          "      --terrain_overlay : make this terrain project an overlay project\n"
+          "      --no_terrain_overlay : make this terrain project a normal project\n"
+          "      --start_level : specify the start level of this terrain overlay project\n"
+          "      --resource_min_level : specify the resources minimum level for this terrain overlay project\n"
+          "   By default, new terrain projects are NOT overlay projects"
+          " unless --terrain_overlay is specified.\n",
           progn.c_str());
   exit(1);
 }
@@ -172,11 +178,8 @@ main(int argc, char *argv[]) {
       req.disable_timemachine = disable_historical_imagery;
     }
 
+    // Only pass along the overlay-related options if it's a terrain project
     if (AssetDefs::Terrain == AssetType){
-printf("enable_terrain_overlay = %s\n", enable_terrain_overlay ? "true" : "false");
-printf("disable_terrain_overlay = %s\n", disable_terrain_overlay ? "true" : "false");
-printf("start_level = %u\n", start_level);
-printf("resource_min_level = %u\n", resource_min_level);
       req.enable_terrain_overlay = enable_terrain_overlay;
       req.disable_terrain_overlay = disable_terrain_overlay;
       req.overlay_terrain_start_level = start_level;
