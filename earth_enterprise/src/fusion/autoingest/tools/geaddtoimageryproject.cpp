@@ -139,9 +139,10 @@ main(int argc, char *argv[]) {
       usage(argv[0], "--historical_imagery is not a valid option for mercator "
           "imagery projects.");
     }
-    if ((enable_terrain_overlay || disable_terrain_overlay) && AssetDefs::Terrain != AssetType){
-      usage(argv[0], "--terrain_overlay and --no_terrain_overlay are not valid options for "
-          "imagery projects.");
+    if ((enable_terrain_overlay || disable_terrain_overlay || start_level != 0 ||
+         resource_min_level != 0) && AssetDefs::Terrain != AssetType){
+      usage(argv[0], "--terrain_overlay, --no_terrain_overlay, --start_level, and "
+          "--resource_min_level are only valid for terrain projects.");
     }
 
 
@@ -188,10 +189,15 @@ printf("resource_min_level = %u\n", resource_min_level);
         notify(NFY_WARN,
                "No insets specified. Project will be empty.");
       } else if (mercator ||
-            !(enable_historical_imagery || disable_historical_imagery) ||
-            !(AssetDefs::Terrain == AssetType && 
+        !( (AssetDefs::Imagery == AssetType && (enable_historical_imagery || disable_historical_imagery)) ||
+           (AssetDefs::Terrain == AssetType && 
               (enable_terrain_overlay || disable_terrain_overlay || 
-              start_level != 0 || resource_min_level != 0))) {
+              start_level != 0 || resource_min_level != 0))
+        )){
+            // !(AssetDefs::Imagery == AssetType && (enable_historical_imagery || disable_historical_imagery)) ||
+            // !(AssetDefs::Terrain == AssetType && 
+            //   (enable_terrain_overlay || disable_terrain_overlay || 
+            //   start_level != 0 || resource_min_level != 0))) {
         // For adding/modifying, we always need insets when:
         // - It's a mercator project
         // - OR it's a non-mercator project and the historical imagery flag is NOT being modified
