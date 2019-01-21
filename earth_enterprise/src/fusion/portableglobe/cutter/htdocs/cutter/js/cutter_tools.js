@@ -500,6 +500,7 @@ function updateOuterZoom(inner_zoom) {
 
 function toggleAdvancedZoom() {
   toggleElementDisplay(gees.dom.get('polyZoomHolder'));
+  toggleElementDisplay(gees.dom.get('IncludeHistoricalHolder'));
   if (isServing == '2D') {
     toggleElementDisplay(gees.dom.get('UseAlternateMethodHolder'));
   }
