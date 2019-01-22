@@ -88,7 +88,7 @@ void validateXMLParameters()
     if (initialDOMHeapAllocSize < lowestBlock ||
    	maxDOMHeapAllocSize < lowestBlock)     
     {
-	throw MinValuesNotMet();
+        throw MinValuesNotMet();
     }
 
     // check to make sure that the initial size is less than the max size
@@ -170,6 +170,12 @@ void initXercesValues()
     }
 }
 
+void ReInitializeXerces()
+{
+    XMLPlatformUtils::Terminate();
+    initXercesValues();
+}
+
 // This is used only in the following function
 class UsingXMLGuard
 {
@@ -188,6 +194,7 @@ class UsingXMLGuard
 };
 
 static khMutexBase xmlLibLock = KH_MUTEX_BASE_INITIALIZER;
+static uint16_t docCount = 0;
 
 void InitializeXMLLibrary() throw()
 {
@@ -195,11 +202,15 @@ void InitializeXMLLibrary() throw()
   static UsingXMLGuard XMLLibGuard;
 }
 
-
 DOMDocument *
 CreateEmptyDocument(const std::string &rootTagname) throw()
 {
   InitializeXMLLibrary();
+  if (terminateCache)
+  {
+      xmlLibLock.Lock();
+      ++docCount;
+  }
   try {
     DOMImplementation* impl =
     DOMImplementationRegistry::getDOMImplementation(0);
@@ -209,6 +220,11 @@ CreateEmptyDocument(const std::string &rootTagname) throw()
                                             0);// document type object (DTD)
     return doc;
    } catch (...) {
+     if (terminateCache)
+     {
+       xmlLibLock.Unlock();
+       if (!docCount--) notify(NFY_FATAL, "Non-zero document count");
+     }
      return 0;
    }
 }
@@ -364,6 +380,11 @@ khxml::DOMLSParser*
 CreateDOMParser(void) throw()
 {
   InitializeXMLLibrary();
+  if (terminateCache)
+  {
+    xmlLibLock.Lock();
+    ++docCount;
+  }
   class FatalErrorHandler : public DOMErrorHandler {
    public:
     virtual bool handleError(const DOMError &err) {
@@ -393,6 +414,11 @@ CreateDOMParser(void) throw()
                                          &fatalHandler);
     return parser;
   } catch (...) {
+    if (terminateCache)
+    {
+      xmlLibLock.Unlock();
+      if (!--docCount) notify(NFY_FATAL, "Non-zero document count");
+    }
     return 0;
   }
 }
@@ -457,8 +483,16 @@ DestroyDocument(khxml::DOMDocument *doc) throw()
   bool retval = false;
   try {
     doc->release();
+    if (docCount--) notify(NFY_FATAL, "Non-zero document count");
     retval = true;
   } catch (...) {
+  }
+  if (terminateCache)
+  {
+      // wait for remaining dom objects to release
+      while (docCount);
+      ReInitializeXerces();
+      xmlLibLock.Unlock();
   }
   return retval;
 }
@@ -469,8 +503,16 @@ DestroyParser(khxml::DOMLSParser *parser) throw()
 {
   try {
     parser->release();
+    if (docCount--) notify(NFY_FATAL, "Non-zero document count");
     return true;
   } catch (...) {
+  }
+  if (terminateCache)
+  {
+      // wait for remaining dom objects to release
+      while (docCount);
+      ReInitializeXerces();
+      xmlLibLock.Unlock();
   }
   return false;
 }
