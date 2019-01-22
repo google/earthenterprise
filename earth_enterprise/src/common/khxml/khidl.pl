@@ -1820,6 +1820,7 @@ $class->{qualname}::Load(const std::string &file) throw()
 	    } catch (...) {
 		notify(NFY_WARN, "Unable to load %s", file.c_str());
 	    }
+            DestroyDocument(doc);
 	} else {
 	    notify(NFY_WARN, "Unable to read %s", file.c_str());
 	}

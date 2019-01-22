@@ -46,16 +46,19 @@ ListElementTagName(const std::string &tagname)
 XMLSSize_t  initialDOMHeapAllocSize;
 XMLSSize_t  maxDOMHeapAllocSize;
 XMLSSize_t  maxDOMSubAllocationSize;
+bool terminateCache;
 
 const std::string INIT_HEAP_SIZE = "INIT_HEAP_SIZE";
 const std::string MAX_HEAP_SIZE = "MAX_HEAP_SIZE";
 const std::string BLOCK_SIZE = "BLOCK_SIZE";
+const std::string PURGE = "PURGE";
 const std::string XMLConfigFile = "/etc/opt/google/XMLparams";
-static std::array<std::string,3> options
+static std::array<std::string,4> options
 {{
     INIT_HEAP_SIZE,
     MAX_HEAP_SIZE,
-    BLOCK_SIZE
+    BLOCK_SIZE,
+    PURGE
 }};
 
 class XmlParamsException : public std::exception {};
@@ -101,6 +104,70 @@ void setDefaultValues()
    initialDOMHeapAllocSize = 0x4000;
    maxDOMHeapAllocSize     = 0x20000;
    maxDOMSubAllocationSize = 0x1000;
+   terminateCache = false;
+}
+
+void getInitValues()
+{
+    static bool callGuard = false;
+    if (callGuard) return;
+    callGuard = true;
+    setDefaultValues();
+    try
+    {
+        for(const auto& i : options)
+        {
+            config_parser.addOption(i);
+        }
+        config_parser.parse(XMLConfigFile.c_str());
+        config_parser.validateIntegerValues();
+        for (const auto& it : config_parser)
+        {
+            if (it.first == INIT_HEAP_SIZE)
+                initialDOMHeapAllocSize = std::stol(it.second);
+            else if (it.first == MAX_HEAP_SIZE)
+                maxDOMHeapAllocSize = std::stol(it.second);
+            else if (it.first == BLOCK_SIZE)
+                maxDOMSubAllocationSize = std::stol(it.second);
+            else if (it.first == PURGE)
+                terminateCache = std::stol(it.second);
+        }
+    }
+    catch (const khConfigFileParserException& e)
+    {
+        notify(NFY_DEBUG, "%s , using default xerces init values", e.what());
+    }
+    try
+    {
+        validateXMLParameters();
+        setDefaultValues();
+    }
+    catch (const XMLException& e)
+    {
+        notify(NFY_DEBUG, "%s, using default xerces init values",
+               FromXMLStr(e.getMessage()).c_str());
+    }
+}
+
+void initXercesValues()
+{
+    getInitValues();
+    try
+    {
+        XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
+                                     maxDOMHeapAllocSize,
+                                     maxDOMSubAllocationSize);
+        notify(NFY_DEBUG, "XML initialization values: %s=%zu %s=%zu %s=%zu %s=%d",
+               "initialDOMHeapAllocSize", initialDOMHeapAllocSize,
+               "maxDOMHeapAllocSize", maxDOMHeapAllocSize,
+               "maxDOMSubAllocationSize", maxDOMSubAllocationSize,
+               "purge cache", terminateCache);
+    }
+    catch (const XMLException& toCatch)
+    {
+        notify(NFY_FATAL, "Unable to initialize Xerces: %s",
+               FromXMLStr(toCatch.getMessage()).c_str());
+    }
 }
 
 // This is used only in the following function
@@ -109,47 +176,7 @@ class UsingXMLGuard
   friend void InitializeXMLLibrary() throw();
 
   UsingXMLGuard(void) throw() {
-    setDefaultValues();
-    std::string fn(XMLConfigFile);
-    try {
-      for (const auto& a : options)
-      {
-          config_parser.addOption(a);
-      }
-      config_parser.parse(fn);
-      config_parser.validateIntegerValues();
-      for (const auto& a : config_parser)
-      {
-          // will only set the values that are present, otherwise will stay at defaults
-          if (a.first == INIT_HEAP_SIZE)
-              initialDOMHeapAllocSize = std::stol(a.second);
-          else if (a.first == MAX_HEAP_SIZE)
-              maxDOMHeapAllocSize = std::stol(a.second);
-          else if (a.first == BLOCK_SIZE)
-              maxDOMSubAllocationSize = std::stol(a.second);
-      }
-    } catch (const khConfigFileParserException& e) {
-      notify(NFY_DEBUG, "%s , using default xerces init values", e.what());
-    }
-    
-    try {
-      try {
-         validateXMLParameters();
-      } catch (const XmlParamsException& e) {
-         notify(NFY_DEBUG, "%s, using default xerces init values", e.what());
-         setDefaultValues();
-      }
-      XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
-                                   maxDOMHeapAllocSize,
-                                   maxDOMSubAllocationSize);
-      notify(NFY_DEBUG, "XML initialization values: %s=%zu %s=%zu %s=%zu",
-             "initialDOMHeapAllocSize", initialDOMHeapAllocSize,
-             "maxDOMHeapAllocSize", maxDOMHeapAllocSize,
-             "maxDOMSubAllocationSize", maxDOMSubAllocationSize);
-    } catch(const XMLException& toCatch) {
-      notify(NFY_FATAL, "Unable to initialize Xerces: %s",
-             FromXMLStr(toCatch.getMessage()).c_str());
-    }
+    initXercesValues();
   }
 
   ~UsingXMLGuard(void) throw() {
