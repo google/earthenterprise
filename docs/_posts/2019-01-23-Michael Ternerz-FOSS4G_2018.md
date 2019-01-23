@@ -8,7 +8,7 @@ author: Michael Terner
 
 <br />
 
-In late August of last year I was privileged to attend the [Free and Open Source Software for Geospatial Conference (FOSS4G) in Dar es Salaam, Tanzania](https://2018.foss4g.org/). This conference is hosted annually by the Open Source Geospatial Foundation ([OSGeo](https://www.osgeo.org/)) and it rotates between Europe (this year’s [2019 conference will be held in Bucharest, Romania](https://2019.foss4g.org/)), North America (the 2020 conference will be held in Calgary, Canada) and “other continents” which was represented by Africa in 2018 (and Asia via Seoul, Korea in 2015).
+In late August of last year I was privileged to attend the <a href="https://2018.foss4g.org/" target="_blank">Free and Open Source Software for Geospatial Conference (FOSS4G) in Dar es Salaam, Tanzania</a>. This conference is hosted annually by the Open Source Geospatial Foundation ([OSGeo](https://www.osgeo.org/)) and it rotates between Europe (this year’s [2019 conference will be held in Bucharest, Romania](https://2019.foss4g.org/)), North America (the 2020 conference will be held in Calgary, Canada) and “other continents” which was represented by Africa in 2018 (and Asia via Seoul, Korea in 2015).
 
 Needless to say, attending this particular FOSS4G was a tremendously unique experience and was unlike any other technology or geospatial conference I’ve participated in. Chief among the novel aspects of this conference was the diversity of the participants. Whether gender, or race, or economic means, Dar es Salaam achieved a mix of attendees that truly reflected the global interest in open geospatial technologies, and how those technologies are particularly well suited for the developing world.
 
@@ -34,7 +34,7 @@ While the participants at this conference were a unique mix of people and perspe
 
 Here’s to a great 2019 where you can expect a variety of similarly interesting and productive open geospatial events where the OpenGEE project will be represented. I’ll hope to see you in San Diego for [FOSS4G North America](https://2019.foss4g-na.org/) in April and/or in Bucharest for the [2019 Global FOSS4G](https://2019.foss4g.org/) in late August.
 
-_<center>See earlier thoughts on OpenGEE and FOSS4G in [pre-conference blog](http://www.t-sciences.com/news/foss4g-and-the-open-sourcing-of-google-earth-enterprise-gee).</center>_
+_See earlier thoughts on OpenGEE and FOSS4G in [pre-conference blog](http://www.t-sciences.com/news/foss4g-and-the-open-sourcing-of-google-earth-enterprise-gee)._
 
 
 Michael Terner <br>
