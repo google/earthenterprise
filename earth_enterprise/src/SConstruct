@@ -493,7 +493,10 @@ gee_version_number = env.get_open_gee_version().get_short()
 
 
 # Check if the version of the default compiler is at least 4.8:
-version = opengee.c_compiler.get_cc_version(env['CXX'])
+if env['CXX']:
+    version = opengee.c_compiler.get_cc_version(env['CXX'])
+else:
+    version = None
 if not opengee.version.is_version_ge(version, [4, 8]):
     # Check for GCC 4.8 from an alternative toolchain installation on RHEL 6:
     if cc_dir is None and os.path.isfile('/opt/rh/devtoolset-2/root/usr/bin/g++'):
