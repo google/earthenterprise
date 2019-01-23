@@ -34,7 +34,7 @@ While the participants at this conference were a unique mix of people and perspe
 
 Here’s to a great 2019 where you can expect a variety of similarly interesting and productive open geospatial events where the OpenGEE project will be represented. I’ll hope to see you in San Diego for [FOSS4G North America](https://2019.foss4g-na.org/) in April and/or in Bucharest for the [2019 Global FOSS4G](https://2019.foss4g.org/) in late August.
 
-_See earlier thoughts on OpenGEE and FOSS4G in [pre-conference blog](http://www.t-sciences.com/news/foss4g-and-the-open-sourcing-of-google-earth-enterprise-gee)._
+See earlier thoughts on OpenGEE and FOSS4G in [pre-conference blog](http://www.t-sciences.com/news/foss4g-and-the-open-sourcing-of-google-earth-enterprise-gee).
 
 
 Michael Terner <br>
