@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Portable Developer Guide</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
+</head>
+<body>
+<!-- 3230807.html -->
+<div class="container">
+<div class="sidebar1">
+  <p class="sidebar-toc"><a href="../answer/4580164.html">Welcome to Portable 5.0</a></p>
+  <p class="sidebar-toc"><a href="../answer/4594620.html">Portable Release Notes 5.0</a></p>
+  <p class="sidebar-toc"><a href="../answer/3230746.html">Portable User Guide</a></p>
+  <p class="sidebar-toc"><a href="../answer/4485225.html">Portable Globe and Server 5.2</a></p>
+  <p class="sidebar-toc"><a href="../answer/3230807.html" class="current-file">Portable Developer Guide</a></p>
+  <p class="sidebar-toc"><a href="../answer/3253752.html">Hello Earth! code sample</a></p>
+  <p class="sidebar-toc"><a href="../answer/3253275.html">Hello Maps! code sample</a></p>
+  <p class="sidebar-toc"><a href="../answer/4590263.html">Inspecting portable files</a></p>
+  <p class="sidebar-toc"><a href="../answer/1066449.html">Custom folders</a></p>
+  <p class="sidebar-toc"><a href="../answer/3003324.html">Cutter tool system information</a></p>
+  <p class="sidebar-toc"><a href="../answer/3003337.html">Manually halt the cutter process</a></p>
+</div>
+<div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Portable</h1>
+<h2>Portable Developer Guide</h2>
+<a name="top">
+<h2>Contents</h2>
+</a>
+<android-toc ul="">
+  <li><a href="#Introduction">Introduction</a></li>
+  <li><a href="#Usefulresources">Useful resources</a></li>
+  <li><a href="#HelloMaps">Hello Maps!</a></li>
+  <li><a href="#HelloEarth">Hello Earth!</a></li>
+  <li><a href="#JSONdocuments">JSON documents</a></li>
+  <li><a href="#PolygonKMLdocument">Polygon KML document</a></li>
+</android-toc>
+<h2><a name="Introduction">Introduction</a></h2>
+<p>You can customize or extend GEE Portable, or create applications that work with it.</p>
+<p>To help you get started, Google provides two <code>Hello World!</code> files that you can copy and use as templates. These files (<code>Hello_Maps.html</code> for 2D maps and <code>Hello_Earth.html</code> for 3D globes) call the required scripts, load the globe or map, define the <code>.css</code> file, and so on. The files include JSON and, if needed, KML polygons.</p>
+<p>See the resources linked to below to learn how to edit and extend the <code>Hello_Maps.html</code> and <code>Hello_Earth.html</code> files.</p>
+<h2><a id="Usefulresources" name="Usefulresources">Useful resources</a></h2>
+<p><strong>Note</strong>: Clicking any of these links connects you to a site outside your network. If you’re not sure if your organization allows outside connections, check with your administrator first.</p>
+<p><code>Hello_Maps.html</code> and <code>Hello_Earth.html</code> are based on the Google Maps API and Google Earth API. More information about these APIs is linked to below. Also included are links to some resources for learning how to parse your JSON data and KML coordinates.</p>
+<ul>
+  <li><a href="https://developers.google.com/maps/" target="_blank">Google Maps API help</a> at <a href="https://developers.google.com/maps/" target="_blank">https://developers.google.com/maps/</a>. Examples that use the Maps API.</li>
+  <li><a href="https://developers.google.com/earth/" target="_blank">Google Earth API help</a> at <a href="https://developers.google.com/earth/" target="_blank">https://developers.google.com/earth/</a>. <em>The Earth Plug-in and its API have been discontinued.</em></li>
+  <li><a href="http://api.jquery.com/jQuery.parseJSON/" target="_blank">jQuery help</a> at <a href="http://api.jquery.com/jQuery.parseJSON/" target="_blank">http://api.jquery.com/jQuery.parseJSON/</a>. A method for parsing JSON.</li>
+  <li><a href="https://code.google.com/p/geoxml3/" target="_blank">geoxml3</a> at <a href="https://code.google.com/p/geoxml3/" target="_blank">https://code.google.com/p/geoxml3/</a>. A KML processor for use with the Google Maps API.</li>
+</ul>
+<h2><a id="HelloMaps" name="HelloMaps">Hello Maps!</a></h2>
+<p>To write a script to display portable 2D maps, start with <code>hello_maps.html</code> and edit as needed. <code>hello_maps.html</code> is based on the Google Maps API.</p>
+<h3>To access the <code>hello_maps.html</code> file:</h3>
+<ol>
+  <li>Launch GEE Portable on <code>localhost:9335</code>.</li>
+  <li>Enter <code>http://localhost:9335/local/preview/developers/hello_maps.html</code> in your browser.</li>
+  <li>View the page source. If you're not sure how to view the page source, see your browser's help.</li>
+</ol>
+<p>Alternatively, click the link below:</p>
+<p><a href="../answer/3253275.html">Hello Maps! code sample</a></p>
+<h2><a id="HelloEarth" name="HelloEarth">Hello Earth!</a></h2>
+<p>To write a script to display portable 3D maps (globes), start with <code>hello_earth.html</code> and edit as needed. <em>The <code>hello_earth.html</code> example is based on the discontinued Google Earth API.</em> Take that into consideration when developing new applications.</p>
+<h3>To access the <code>Hello_Earth</code> file:</h3>
+<ol>
+  <li>Launch GME Portable on <code>localhost:9335</code>.</li>
+  <li>Enter <code>http://localhost:9335/local/preview/developers/hello_earth.html</code> in your browser.</li>
+  <li>View the page source. If you're not sure how to view the page source, see your browser's help.</li>
+</ol>
+<p>Alternatively, click the link below:</p>
+<p><a href="../answer/3253752.html">Hello Earth! code sample</a></p>
+<h2><a id="JSONdocuments" name="JSONdocuments">JSON documents</a></h2>
+<p>Whenever your Portable instance is running, multiple JSON documents are serving. The JSON finds information about all your available globes and maps, as well as your current globe or map. Below are some code snippets that show how the JSON works.</p>
+<h5>
+  <h3>Globes JSON example</h3>
+</h5>
+<div>
+  <p>This code snippet is from the Globes JSON document, which provides information about each available globe.</p>
+  <code>Globes JSON: [yourhost]/?cmd=globes_info_json<br/>
+  <br/>
+  [ {  "name":"test.glb",<br/>
+   "timestamp":"2013-01-01 12:00:00",<br/>
+   "size":"20.00MB",<br/>
+   "description":"Some globe description.",<br/>
+   "path":"../../../../globes/test.glb",<br/>
+   "is_gee":true,<br/>
+   "is_2d":false,<br/>
+   "is_3d":true,<br/>
+   "has_polygon":true,<br/>
+   "is_mercator":false,<br/>
+   "is_being_served":false<br/>
+  },<br/>
+  {<br/>
+   some other globe<br/>
+  },...<br/>
+  ]</code></div>
+<h5>
+  <h3>2D JSON and 3D JSON examples</h3>
+</h5>
+<div>
+  <p>The 2D and 3D JSON documents contain layer information as well as information that helps the Search feature categorize the results.</p>
+  <p>If you’re currently serving a map, 2D JSON will be serving:</p>
+  <code>2D JSON: [yourhost]/query?request=Json&amp;vars=geeServerDefs&amp;is2d=t</code>
+  <p>If you’re currently serving a globe, 3D JSON will be serving:</p>
+  <code>3D JSON: [yourhost]/query?request=Json&amp;vars=geeServerDefs</code></div>
+<h3>Layer Definition examples</h3>
+<p>Below are examples of layer definitions. The first is an imagery layer and the second is a vector layer.</p>
+<h5>
+  <h3>Imagery layer example</h3>
+</h5>
+<div><code>[<br/>
+  ...{<br/>
+   icon : "icons/1.png",<br/>
+   id : 1001,<br/>
+   initialState : true,<br/>
+   isPng : false,<br/>
+   label : "Imagery",<br/>
+   lookAt : "none",<br/>
+   opacity : 1,<br/>
+   requestType : "ImageryMaps", // A layer of imagery. version : 8<br/>
+  }...<br/>
+  ]</code></div>
+<h5>
+  <h3>Vector data example</h3>
+</h5>
+<div><code>[<br/>
+  ...{<br/>
+   icon : "icons/2.png",<br/>
+   id : 1002,<br/>
+   initialState : true,<br/>
+   isPng : true,<br/>
+   label : "Tokyo",<br/>
+   lookAt : "none",<br/>
+   opacity : 1,<br/>
+   requestType : "VectorMapsRaster", // Vector data, such as roads, points, and borders. version : 4<br/>
+  }...<br/>
+  ]</code></div>
+<h2><a id="PolygonKMLdocument" name="PolygonKMLdocument">Polygon KML document</a></h2>
+<p>Some globes also serve a KML file that contains polygon coordinates, which define the initial display when the globe or map loads. Polygon KML files also let Google Earth and Google Maps draw a polygon on the globe or map. If a globe doesn’t have any polygon data, the Polygon KML file is empty.</p>
+<h5>
+  <h3>Polygon KML example</h3>
+</h5>
+<div>
+  <p>This is an example of a KML document that contains a set of coordinates that define the bounds of your globe's cut.</p>
+  <code>Polygon KML: [your host]/earth/polygon.kml<br/>
+  <br/>
+  &lt;?xml version="1.0" <br/>
+  encoding="UTF-8"?&gt;<br/>
+  &lt;kml&gt;<br/>
+  &lt;Document&gt;<br/>
+   &lt;name&gt;polygons&lt;/name&gt;<br/>
+  &lt;Placemark&gt;<br/>
+   &lt;Polygon&gt;<br/>
+    &lt;tessellate&gt;1&lt;/tessellate&gt;<br/>
+    &lt;outerBoundaryIs&gt;<br/>
+    &lt;LinearRing&gt;<br/>
+    &lt;coordinates&gt;<br/>
+  -122.3185062675476,37.790043919799245,0 <br/>
+  -122.3395950675476,37.84095511979925,0 <br/>
+  -122.39050626754761,37.86204391979925,0 <br/>
+  -122.44141746754761,37.84095511979925,0 <br/>
+  -122.46250626754761,37.790043919799245,0 <br/>
+  -122.44141746754761,37.739132719799244,0 <br/>
+  -122.39050626754761,37.71804391979924,0 <br/>
+  -122.3395950675476,37.739132719799244,0 <br/>
+  -122.3185062675476,37.790043919799245,0<br/>
+  &lt;/coordinates&gt;<br/>
+    &lt;/LinearRing&gt;<br/>
+   &lt;/outerBoundaryIs&gt;<br/>
+   &lt;/Polygon&gt;<br/>
+   &lt;/Placemark&gt;<br/>
+  &lt;Placemark&gt;<br/>
+   &lt;Polygon&gt;<br/>
+   &lt;tessellate&gt;1&lt;/tessellate&gt;<br/>
+   &lt;outerBoundaryIs&gt;<br/>
+   &lt;LinearRing&gt;<br/>
+   &lt;coordinates&gt;<br/>
+  -122.01254132080078,37.42221919299647,0 <br/>
+  -122.03363012080078,37.473130392996474,0 <br/>
+  -122.08454132080078,37.494219192996475,0 <br/>
+  -122.13545252080078,37.473130392996474,0 <br/>
+  -122.15654132080078,37.42221919299647,0 <br/>
+  -122.13545252080078,37.37130799299647,0 <br/>
+  -122.08454132080078,37.35021919299647,0 <br/>
+  -122.03363012080078,37.37130799299647,0 <br/>
+  -122.01254132080078,37.42221919299647,0<br/>
+  &lt;/coordinates&gt;<br/>
+   &lt;/LinearRing&gt;<br/>
+   &lt;/outerBoundaryIs&gt;<br/>
+   &lt;/Polygon&gt;<br/>
+  &lt;/Placemark&gt;<br/>
+  &lt;/Document&gt;<br/>
+  &lt;/kml&gt;</code>
+  <div class="footer">
+    <p class="BackToTop"><a href="#top_of_file">Back to top</a>
+    <hr />
+    </p>
+    <p class="copyright">&copy;2015 Google</p>
+  </div>
+</div>
+</body>
+</html>
