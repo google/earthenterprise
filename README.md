@@ -12,6 +12,10 @@ The application suite consists of three core components:
 
 ### Releases
 
+[Release 5.2.5](https://github.com/google/earthenterprise/releases/tag/5.2.5-714.41)
+* [Release Notes](http://www.opengee.org/geedocs/5.2.5/answer/7160006.html)
+* [Release Documentation](http://www.opengee.org/geedocs/5.2.5/)
+
 [Release 5.2.4](https://github.com/google/earthenterprise/releases/tag/5.2.4-4.final)
 * [Release Notes](http://www.opengee.org/geedocs/5.2.4/answer/7160004.html)
 * [Release Documentation](http://www.opengee.org/geedocs/5.2.4/)
@@ -19,18 +23,6 @@ The application suite consists of three core components:
 [Release 5.2.3](https://github.com/google/earthenterprise/releases/tag/5.2.3-4.final)
 * [Release Notes](http://www.opengee.org/geedocs/5.2.3/answer/7160003.html)
 * [Release Documentation](http://www.opengee.org/geedocs/5.2.3/)
-
-[Release 5.2.2](https://github.com/google/earthenterprise/releases/tag/5.2.2-2.final)
-* [Release Notes](http://www.opengee.org/geedocs/5.2.2/answer/7160002.html)
-* [Release Documentation](http://www.opengee.org/geedocs/5.2.2/)
-
-[Release 5.2.1](https://github.com/google/earthenterprise/releases/tag/5.2.1-6.final)
-* [Release Notes](http://www.opengee.org/geedocs/5.2.1/answer/7160001.html)
-* [Release Documentation](http://www.opengee.org/geedocs/5.2.1/)
-
-[Release 5.2.0](https://github.com/google/earthenterprise/releases/tag/5.2.0-3.final)
-* [Release Notes](http://www.opengee.org/geedocs/5.2.0/answer/7160000.html)
-* [Release Documentation](http://www.opengee.org/geedocs/5.2.0/)
 
 ### More information
 * [OpenGEE website](http://www.opengee.org)
