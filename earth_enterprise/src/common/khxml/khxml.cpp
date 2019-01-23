@@ -29,6 +29,9 @@
 #include <exception>
 #include "common/khConfigFileParser.h"
 #include <cstdlib>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 using namespace khxml;
 
 static khConfigFileParser config_parser;
@@ -53,6 +56,7 @@ const std::string MAX_HEAP_SIZE = "MAX_HEAP_SIZE";
 const std::string BLOCK_SIZE = "BLOCK_SIZE";
 const std::string PURGE = "PURGE";
 const std::string XMLConfigFile = "/etc/opt/google/XMLparams";
+static XMLSSize_t cacheCapacity = 0;
 static std::array<std::string,4> options
 {{
     INIT_HEAP_SIZE,
@@ -194,7 +198,24 @@ class UsingXMLGuard
 };
 
 static khMutexBase xmlLibLock = KH_MUTEX_BASE_INITIALIZER;
-static uint16_t docCount = 0;
+static khMutexBase checkTermLock = KH_MUTEX_BASE_INITIALIZER;
+static uint16_t objCount = 0;
+static DOMDocument* currDoc = nullptr;
+static khxml::DOMLSParser* currParser = nullptr;
+
+// only terminate when certain conditions are met
+// i.e. cache is full
+bool readyForTerm()
+{
+  bool retval = false;
+  khLockGuard guard(checkTermLock);
+  if (cacheCapacity >= maxDOMHeapAllocSize)
+  {
+    cacheCapacity = 0;
+    retval = true;
+  }
+  return retval;
+}
 
 void InitializeXMLLibrary() throw()
 {
@@ -202,14 +223,21 @@ void InitializeXMLLibrary() throw()
   static UsingXMLGuard XMLLibGuard;
 }
 
+
 DOMDocument *
 CreateEmptyDocument(const std::string &rootTagname) throw()
 {
   InitializeXMLLibrary();
+  bool flag = false;
   if (terminateCache)
   {
+    if (readyForTerm()) 
+    {
       xmlLibLock.Lock();
-      ++docCount;
+      currParser = nullptr;
+      flag = true;
+    }
+    ++objCount;
   }
   try {
     DOMImplementation* impl =
@@ -218,12 +246,13 @@ CreateEmptyDocument(const std::string &rootTagname) throw()
     DOMDocument* doc = impl->createDocument(0,// root element namespace URI.
                                             ToXMLStr(rootTagname),// root element name
                                             0);// document type object (DTD)
+    if (flag) currDoc = doc;
     return doc;
    } catch (...) {
      if (terminateCache)
      {
        xmlLibLock.Unlock();
-       if (!docCount--) notify(NFY_FATAL, "Non-zero document count");
+       if (!objCount--) notify(NFY_FATAL, "Non-zero document count");
      }
      return 0;
    }
@@ -308,6 +337,12 @@ WriteDocument(DOMDocument *doc, const std::string &filename) throw()
   if (!WriteDocumentImpl(doc, newname)) {
     retval = false;
   }
+  else
+  {
+    struct stat check;
+    stat(filename.c_str(), &check);
+    cacheCapacity += check.st_size;  
+  }
 
   if (retval && !khReplace(filename, newext, backupext)) {
     (void) khUnlink(newname);
@@ -349,6 +384,7 @@ WriteDocumentToString(DOMDocument *doc, std::string &buf) throw()
       if (writer->write(doc, lsOutput)) {
           buf.append((const char *)formatTarget.getRawBuffer(),
           formatTarget.getLen());
+          cacheCapacity += buf.size();
         success = true;
       } else {
         notify(NFY_WARN, "Unable to write XML to string: Xerces didn't tell me why not.");
@@ -380,10 +416,15 @@ khxml::DOMLSParser*
 CreateDOMParser(void) throw()
 {
   InitializeXMLLibrary();
+  bool flag = false;
   if (terminateCache)
   {
-    xmlLibLock.Lock();
-    ++docCount;
+    if (readyForTerm())
+    {
+       xmlLibLock.Lock();
+       currDoc = nullptr;
+    }
+    ++objCount;
   }
   class FatalErrorHandler : public DOMErrorHandler {
    public:
@@ -412,12 +453,13 @@ CreateDOMParser(void) throw()
       parser->getDomConfig()->setParameter(XMLUni::fgDOMNamespaces, true);
     parser->getDomConfig()->setParameter(XMLUni::fgDOMErrorHandler,
                                          &fatalHandler);
+    if (flag) currParser = parser;
     return parser;
   } catch (...) {
     if (terminateCache)
     {
       xmlLibLock.Unlock();
-      if (!--docCount) notify(NFY_FATAL, "Non-zero document count");
+      if (!--objCount) notify(NFY_FATAL, "Non-zero document count");
     }
     return 0;
   }
@@ -434,6 +476,10 @@ ReadDocument(khxml::DOMLSParser *parser, const std::string &filename) throw()
     // invalid doc object. Must check file existence ourselves.
     if (khExists(filename)) {
          doc = parser->parseURI(filename.c_str());
+         // TODO: find out size of contents in doc, not immediately available
+         struct stat file;
+         stat(filename.c_str(), &file);
+         cacheCapacity += file.st_size;
     } else {
       notify(NFY_WARN, "XML file does not exist: %s", filename.c_str());
     }
@@ -465,6 +511,7 @@ ReadDocumentFromString(khxml::DOMLSParser *parser,
     Wrapper4InputSource inputSource(&memBufIS,
                                     false);  // don't adopt input source
     doc = parser->parse(&inputSource);
+    cacheCapacity += buf.size();
   } catch (const XMLException& toCatch) {
     notify(NFY_WARN, "Unable to read XML: %s",
            XMLString::transcode(toCatch.getMessage()));
@@ -481,18 +528,24 @@ bool
 DestroyDocument(khxml::DOMDocument *doc) throw()
 {
   bool retval = false;
+  bool checkEquals = (doc == currDoc && currParser == nullptr);
   try {
     doc->release();
-    if (docCount--) notify(NFY_FATAL, "Non-zero document count");
+    if (objCount--) notify(NFY_FATAL, "Non-zero document count");
     retval = true;
   } catch (...) {
   }
   if (terminateCache)
   {
-      // wait for remaining dom objects to release
-      while (docCount);
-      ReInitializeXerces();
-      xmlLibLock.Unlock();
+      if (checkEquals)
+      {
+        // wait for remaining dom objects to release
+        while (objCount);
+        ReInitializeXerces();
+        xmlLibLock.Unlock();
+        currParser = nullptr;
+        currDoc = nullptr;
+      }
   }
   return retval;
 }
@@ -501,18 +554,25 @@ DestroyDocument(khxml::DOMDocument *doc) throw()
 bool
 DestroyParser(khxml::DOMLSParser *parser) throw()
 {
+  bool retval = false;
+  bool checkEquals = (parser == currParser && currDoc == nullptr);
   try {
     parser->release();
-    if (docCount--) notify(NFY_FATAL, "Non-zero document count");
-    return true;
+    if (objCount--) notify(NFY_FATAL, "Non-zero document count");
+    retval = true;
   } catch (...) {
   }
   if (terminateCache)
   {
-      // wait for remaining dom objects to release
-      while (docCount);
-      ReInitializeXerces();
-      xmlLibLock.Unlock();
+      if (checkEquals)
+      {
+        // wait for remaining dom objects to release     
+        while (objCount);
+        ReInitializeXerces();
+        xmlLibLock.Unlock();
+        currParser = nullptr;
+        currDoc = nullptr;
+      }
   }
-  return false;
+  return retval;
 }
