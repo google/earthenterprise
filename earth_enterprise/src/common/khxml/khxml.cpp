@@ -204,12 +204,14 @@ static DOMDocument* currDoc = nullptr;
 static khxml::DOMLSParser* currParser = nullptr;
 
 // only terminate when certain conditions are met
-// i.e. cache is full
+const float percent = 0.75;
 bool readyForTerm()
 {
   bool retval = false;
   khLockGuard guard(checkTermLock);
-  if (cacheCapacity >= maxDOMHeapAllocSize)
+  static XMLSSize_t threashold = static_cast<XMLSSize_t>
+         (maxDOMHeapAllocSize * percent); 
+  if (cacheCapacity >= threashold)
   {
     cacheCapacity = 0;
     retval = true;
