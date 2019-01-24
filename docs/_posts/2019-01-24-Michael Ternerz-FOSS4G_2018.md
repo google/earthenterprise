@@ -2,13 +2,13 @@
 layout: blogpost
 title:  "2018 FOSS4G"
 section_id: blog
-date:   2019-01-23 12:00:00
+date:   2019-01-24 12:00:00
 author: Michael Terner
 ---
 
 <br />
 
-In late August of last year I was privileged to attend the <a href="https://2018.foss4g.org/" target="_blank">Free and Open Source Software for Geospatial Conference (FOSS4G) in Dar es Salaam, Tanzania</a>. This conference is hosted annually by the Open Source Geospatial Foundation ([OSGeo](https://www.osgeo.org/)) and it rotates between Europe (this year’s <a href="https://2019.foss4g.org" target="_blank">2019 conference will be held in Bucharest, Romania</a>), North America (the 2020 conference will be held in Calgary, Canada) and “other continents” which was represented by Africa in 2018 (and Asia via Seoul, Korea in 2015).
+In late August of last year I was privileged to attend the <a href="https://2018.foss4g.org/" target="_blank">Free and Open Source Software for Geospatial Conference (FOSS4G) in Dar es Salaam, Tanzania</a>. This conference is hosted annually by the Open Source Geospatial Foundation (<a href="https://www.osgeo.org/" target="_blank">OSGeo</a>) and it rotates between Europe (this year’s <a href="https://2019.foss4g.org" target="_blank">2019 conference will be held in Bucharest, Romania</a>), North America (the 2020 conference will be held in Calgary, Canada) and “other continents” which was represented by Africa in 2018 (and Asia via Seoul, Korea in 2015).
 
 Needless to say, attending this particular FOSS4G was a tremendously unique experience and was unlike any other technology or geospatial conference I’ve participated in. Chief among the novel aspects of this conference was the diversity of the participants. Whether gender, or race, or economic means, Dar es Salaam achieved a mix of attendees that truly reflected the global interest in open geospatial technologies, and how those technologies are particularly well suited for the developing world.
 
