@@ -17,7 +17,7 @@ Needless to say, attending this particular FOSS4G was a tremendously unique expe
 
 In spite of the location in Tanzania, achieving this diversity was not a given, nor easy, and conference co-chairs <a href="https://twitter.com/markiliffe" target="_blank">Mark Iliffe</a> and <a href="https://twitter.com/msilikale05" target="_blank">Msilikale Msilanga</a> deserve huge credit for tireless work in creating avenues for broader participation. These mechanisms included securing Flagship Sponsor support from the World Bank Group to achieve core funding; working with OSGeo to create the largest ever Travel Grant Program for a FOSS4G Conference; partnering with <a href="https://www.hotosm.org/" target="_blank">Humanitarian Open Streetmap</a> (HOTOSM) to co-locate their conference in Dar es Salaam; and creating a ticket price for African residents that was ~20% of the list price.
 
-While a longstanding attendee and supporter of FOSS4G events (dating back to 2011), Dar es Salaam was the first FOSS4G I attended representing my new employer, Thermopylae Science & Technology (T-Sciences), and our involvement in the **Open Google Earth Enterprise** (<a href="https://www.opengee.org/" target="_blank">OpenGEE</a>) Project. Almost 8,000 miles from my home in Boston, it was gratifying to see a diverse group of people fill the room for my  “<a href="https://drive.google.com/file/d/1Fmc3yUkR1O4kqt62vz1lIjQwFOrqXZW8/view/" target="_blank">What is Open Source Google Earth Enterprise (OpenGEE)" talk</a> almost exactly one year after Google open sourced the GEE code base in 2017 (see <a href="https://techcrunch.com/2017/01/31/google-will-soon-open-source-google-earth-enterprise/" target="_blank">TechCrunch article</a>).
+While a longstanding attendee and supporter of FOSS4G events (dating back to 2011), Dar es Salaam was the first FOSS4G I attended representing my new employer, Thermopylae Science & Technology (T-Sciences), and our involvement in the **Open Google Earth Enterprise** (<a href="https://www.opengee.org/" target="_blank">OpenGEE</a>) Project. Almost 8,000 miles from my home in Boston, it was gratifying to see a diverse group of people fill the room for my  “<a href="https://drive.google.com/file/d/1Fmc3yUkR1O4kqt62vz1lIjQwFOrqXZW8/view" target="_blank">What is Open Source Google Earth Enterprise (OpenGEE)" talk</a> almost exactly one year after Google open sourced the GEE code base in 2017 (see <a href="https://techcrunch.com/2017/01/31/google-will-soon-open-source-google-earth-enterprise/" target="_blank">TechCrunch article</a>).
 
  ![FOSS4G 2018 session]({{ site.baseurl}}/images/FOSS4G_2018_Session.jpg "FOSS4G 2018 session")
 
@@ -35,7 +35,7 @@ While the participants at this conference were a unique mix of people and perspe
 Here’s to a great 2019 where you can expect a variety of similarly interesting and productive open geospatial events where the OpenGEE project will be represented. I’ll hope to see you in San Diego for <a href="https://2019.foss4g-na.org/" target="_blank">FOSS4G North America</a> in April and/or in Bucharest for the <a href="https://2019.foss4g.org/" target="_blank">2019 Global FOSS4G</a> in late August.
 
 
-_See earlier thoughts on FOSS4G in <a href="http://www.t-sciences.com/news/foss4g-and-the-open-sourcing-of-google-earth-enterprise-gee" target="_blank">pre-conference blog</a>_.
+_See earlier thoughts on FOSS4G in <a href="https://www.t-sciences.com/news/foss4g-and-the-open-sourcing-of-google-earth-enterprise-gee" target="_blank">pre-conference blog</a>_.
 
 
 Michael Terner <br>
