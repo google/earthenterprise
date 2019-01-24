@@ -40,7 +40,7 @@ _See earlier thoughts on FOSS4G in <a href="https://www.t-sciences.com/news/foss
 
 Michael Terner <br>
 Thermopylae Science & Technology (T-Sciences)
-<a href="https://twitter.com/TernerGeo)" target="_blank">@TernerGeo</a>
+<a href="https://twitter.com/TernerGeo" target="_blank">@TernerGeo</a>
 
 
 
