@@ -49,7 +49,7 @@ ListElementTagName(const std::string &tagname)
 XMLSSize_t  initialDOMHeapAllocSize;
 XMLSSize_t  maxDOMHeapAllocSize;
 XMLSSize_t  maxDOMSubAllocationSize;
-bool terminateCache;
+bool terminateCache = false;
 
 const std::string INIT_HEAP_SIZE = "INIT_HEAP_SIZE";
 const std::string MAX_HEAP_SIZE = "MAX_HEAP_SIZE";
@@ -199,7 +199,7 @@ class UsingXMLGuard
 
 static khMutexBase xmlLibLock = KH_MUTEX_BASE_INITIALIZER;
 static khMutexBase checkTermLock = KH_MUTEX_BASE_INITIALIZER;
-static uint16_t objCount = 0;
+uint16_t objCount = 0;
 static DOMDocument* currDoc = nullptr;
 static khxml::DOMLSParser* currParser = nullptr;
 
@@ -531,7 +531,7 @@ DestroyDocument(khxml::DOMDocument *doc) throw()
   bool checkEquals = (doc == currDoc && currParser == nullptr);
   try {
     doc->release();
-    if (objCount--) notify(NFY_FATAL, "Non-zero document count");
+    if (terminateCache && !objCount--) notify(NFY_FATAL, "Negative document count");
     retval = true;
   } catch (...) {
   }
@@ -558,7 +558,7 @@ DestroyParser(khxml::DOMLSParser *parser) throw()
   bool checkEquals = (parser == currParser && currDoc == nullptr);
   try {
     parser->release();
-    if (objCount--) notify(NFY_FATAL, "Non-zero document count");
+    if (terminateCache && !objCount--) notify(NFY_FATAL, "Negative document count");
     retval = true;
   } catch (...) {
   }
