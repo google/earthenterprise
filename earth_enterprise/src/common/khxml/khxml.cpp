@@ -89,7 +89,7 @@ public:
  * helper class for synchronizing events related to purging
  * the Xerces cache
  *
- * keeps an internal queue and a notifier as to whether or
+ * keeps an internal count and a notifier as to whether or
  * not the mutex on creating docs/parsers is currently locked
  *
  * singeton class, thread-safe
@@ -98,7 +98,7 @@ class terminateGuard
 {
 private:
     static khMutexBase qMutex, lockMutex;
-    static std::queue<char> objQ;
+    static uint32_t numDocs;
     static bool objLock;
     terminateGuard() = default;
 
@@ -109,22 +109,22 @@ public:
         return _instance;
     }
 
-    static void enqueue()
+    static void addObj()
     {
         khLockGuard guard(qMutex);
-        objQ.push('0');
+        ++numDocs;
     }
 
-    static void dequeue()
+    static void removeObj()
     {
         khLockGuard guard(qMutex);
-        objQ.pop();
+        if (numDocs > 0) --numDocs;
     }
 
     static uint32_t size()
     {
         khLockGuard guard(qMutex);
-        return objQ.size();
+        return numDocs;
     }
 
     static void lock()
@@ -148,7 +148,7 @@ public:
 
 khMutexBase terminateGuard::qMutex = KH_MUTEX_BASE_INITIALIZER; 
 khMutexBase terminateGuard::lockMutex = KH_MUTEX_BASE_INITIALIZER; 
-std::queue<char> terminateGuard::objQ;
+uint32_t terminateGuard::numDocs = 0;
 bool terminateGuard::objLock = false;
 
 void validateXMLParameters()
@@ -302,7 +302,7 @@ CreateEmptyDocument(const std::string &rootTagname) throw()
       xmlLibLock.Lock();
       terminateGuard::instance().lock();
     }
-    terminateGuard::instance().enqueue();
+    terminateGuard::instance().addObj();
   }
   try {
     DOMImplementation* impl =
@@ -317,7 +317,7 @@ CreateEmptyDocument(const std::string &rootTagname) throw()
      {
        xmlLibLock.Unlock();
        terminateGuard::instance().unlock();
-       terminateGuard::instance().dequeue();
+       terminateGuard::instance().removeObj();
      }
      return 0;
    }
@@ -488,7 +488,7 @@ CreateDOMParser(void) throw()
        xmlLibLock.Lock();
        terminateGuard::instance().lock();
     }
-    terminateGuard::instance().enqueue();
+    terminateGuard::instance().addObj();
   }
   class FatalErrorHandler : public DOMErrorHandler {
    public:
@@ -522,7 +522,7 @@ CreateDOMParser(void) throw()
     if (terminateCache)
     {
       xmlLibLock.Unlock();
-      terminateGuard::instance().dequeue();
+      terminateGuard::instance().removeObj();
     }
     return 0;
   }
@@ -603,7 +603,7 @@ DestroyDocument(khxml::DOMDocument *doc) throw()
   if (terminateCache)
   {
         khLockGuard guard(checkTermLock);
-        terminateGuard::instance().dequeue();
+        terminateGuard::instance().removeObj();
         if (terminateGuard::instance().isLocked() &&
             !terminateGuard::instance().size())
         {
@@ -628,7 +628,7 @@ DestroyParser(khxml::DOMLSParser *parser) throw()
   if (terminateCache)
   {
         khLockGuard guard(checkTermLock);
-        terminateGuard::instance().dequeue();
+        terminateGuard::instance().removeObj();
         if (terminateGuard::instance().isLocked() &&
             !terminateGuard::instance().size())
         {
