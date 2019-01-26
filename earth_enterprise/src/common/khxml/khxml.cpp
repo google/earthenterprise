@@ -522,6 +522,7 @@ CreateDOMParser(void) throw()
     if (terminateCache)
     {
       xmlLibLock.Unlock();
+      terminateGuard::instance().unlock();
       terminateGuard::instance().removeObj();
     }
     return 0;
