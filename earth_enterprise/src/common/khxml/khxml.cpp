@@ -27,6 +27,7 @@
 #include <array>
 #include <algorithm>
 #include <exception>
+#include <queue>
 #include "common/khConfigFileParser.h"
 #include <cstdlib>
 #include <sys/types.h>
@@ -82,6 +83,73 @@ public:
         return "Initial heap size and block allocation size must be less than the max heap size";
     }
 };
+
+
+/**************************************************************
+ * helper class for synchronizing events related to purging
+ * the Xerces cache
+ *
+ * keeps an internal queue and a notifier as to whether or
+ * not the mutex on creating docs/parsers is currently locked
+ *
+ * singeton class, thread-safe
+**************************************************************/
+class terminateGuard
+{
+private:
+    static khMutexBase qMutex, lockMutex;
+    static std::queue<char> objQ;
+    static bool objLock;
+    terminateGuard() = default;
+
+public:
+    static terminateGuard& instance()
+    {
+        static terminateGuard _instance;
+        return _instance;
+    }
+
+    static void enqueue()
+    {
+        khLockGuard guard(qMutex);
+        objQ.push('0');
+    }
+
+    static void dequeue()
+    {
+        khLockGuard guard(qMutex);
+        objQ.pop();
+    }
+
+    static uint32_t size()
+    {
+        khLockGuard guard(qMutex);
+        return objQ.size();
+    }
+
+    static void lock()
+    {
+        khLockGuard guard(lockMutex);
+        objLock = true;
+    }
+
+    static void unlock()
+    {
+        khLockGuard guard(lockMutex);
+        objLock = true;
+    }
+
+    static bool isLocked()
+    {
+        khLockGuard guard(lockMutex);
+        return objLock;
+    }
+};
+
+khMutexBase terminateGuard::qMutex = KH_MUTEX_BASE_INITIALIZER; 
+khMutexBase terminateGuard::lockMutex = KH_MUTEX_BASE_INITIALIZER; 
+std::queue<char> terminateGuard::objQ;
+bool terminateGuard::objLock = false;
 
 void validateXMLParameters()
 {
@@ -144,10 +212,10 @@ void getInitValues()
     try
     {
         validateXMLParameters();
-        setDefaultValues();
     }
     catch (const XMLException& e)
     {
+        setDefaultValues();
         notify(NFY_DEBUG, "%s, using default xerces init values",
                FromXMLStr(e.getMessage()).c_str());
     }
@@ -199,9 +267,6 @@ class UsingXMLGuard
 
 static khMutexBase xmlLibLock = KH_MUTEX_BASE_INITIALIZER;
 static khMutexBase checkTermLock = KH_MUTEX_BASE_INITIALIZER;
-uint16_t objCount = 0;
-static DOMDocument* currDoc = nullptr;
-static khxml::DOMLSParser* currParser = nullptr;
 
 // only terminate when certain conditions are met
 const float percent = 0.75;
@@ -230,16 +295,14 @@ DOMDocument *
 CreateEmptyDocument(const std::string &rootTagname) throw()
 {
   InitializeXMLLibrary();
-  bool flag = false;
   if (terminateCache)
   {
     if (readyForTerm()) 
     {
       xmlLibLock.Lock();
-      currParser = nullptr;
-      flag = true;
+      terminateGuard::instance().lock();
     }
-    ++objCount;
+    terminateGuard::instance().enqueue();
   }
   try {
     DOMImplementation* impl =
@@ -248,13 +311,13 @@ CreateEmptyDocument(const std::string &rootTagname) throw()
     DOMDocument* doc = impl->createDocument(0,// root element namespace URI.
                                             ToXMLStr(rootTagname),// root element name
                                             0);// document type object (DTD)
-    if (flag) currDoc = doc;
     return doc;
    } catch (...) {
      if (terminateCache)
      {
        xmlLibLock.Unlock();
-       if (!objCount--) notify(NFY_FATAL, "Non-zero document count");
+       terminateGuard::instance().unlock();
+       terminateGuard::instance().dequeue();
      }
      return 0;
    }
@@ -265,7 +328,7 @@ bool
 WriteDocumentImpl(DOMDocument *doc, const std::string &filename) throw()
 {
 
-  InitializeXMLLibrary();
+  //InitializeXMLLibrary();
   bool success = false;
 
   try {
@@ -364,7 +427,7 @@ bool
 WriteDocumentToString(DOMDocument *doc, std::string &buf) throw()
 {
   bool success = false;
-  InitializeXMLLibrary();
+  //InitializeXMLLibrary();
 
   try {
     // "LS" -> Load/Save extensions
@@ -418,15 +481,14 @@ khxml::DOMLSParser*
 CreateDOMParser(void) throw()
 {
   InitializeXMLLibrary();
-  bool flag = false;
   if (terminateCache)
   {
     if (readyForTerm())
     {
        xmlLibLock.Lock();
-       currDoc = nullptr;
+       terminateGuard::instance().lock();
     }
-    ++objCount;
+    terminateGuard::instance().enqueue();
   }
   class FatalErrorHandler : public DOMErrorHandler {
    public:
@@ -455,13 +517,12 @@ CreateDOMParser(void) throw()
       parser->getDomConfig()->setParameter(XMLUni::fgDOMNamespaces, true);
     parser->getDomConfig()->setParameter(XMLUni::fgDOMErrorHandler,
                                          &fatalHandler);
-    if (flag) currParser = parser;
     return parser;
   } catch (...) {
     if (terminateCache)
     {
       xmlLibLock.Unlock();
-      if (!--objCount) notify(NFY_FATAL, "Non-zero document count");
+      terminateGuard::instance().dequeue();
     }
     return 0;
   }
@@ -526,28 +587,30 @@ ReadDocumentFromString(khxml::DOMLSParser *parser,
   return doc;
 }
 
+// want to purge when there are no active objects and when
+// we know that there is a lock on creating new objects
+// 
+// ideally, when those conditions are met, 
 bool
 DestroyDocument(khxml::DOMDocument *doc) throw()
 {
   bool retval = false;
-  bool checkEquals = (doc == currDoc && currParser == nullptr);
   try {
     doc->release();
-    if (terminateCache && !objCount--) notify(NFY_FATAL, "Negative document count");
     retval = true;
   } catch (...) {
   }
   if (terminateCache)
   {
-      if (checkEquals)
-      {
-        // wait for remaining dom objects to release
-        while (objCount);
-        ReInitializeXerces();
-        xmlLibLock.Unlock();
-        currParser = nullptr;
-        currDoc = nullptr;
-      }
+        khLockGuard guard(checkTermLock);
+        terminateGuard::instance().dequeue();
+        if (terminateGuard::instance().isLocked() &&
+            !terminateGuard::instance().size())
+        {
+            ReInitializeXerces();
+            terminateGuard::instance().unlock();
+            xmlLibLock.Unlock();
+        }
   }
   return retval;
 }
@@ -557,24 +620,22 @@ bool
 DestroyParser(khxml::DOMLSParser *parser) throw()
 {
   bool retval = false;
-  bool checkEquals = (parser == currParser && currDoc == nullptr);
   try {
     parser->release();
-    if (terminateCache && !objCount--) notify(NFY_FATAL, "Negative document count");
     retval = true;
   } catch (...) {
   }
   if (terminateCache)
   {
-      if (checkEquals)
-      {
-        // wait for remaining dom objects to release     
-        while (objCount);
-        ReInitializeXerces();
-        xmlLibLock.Unlock();
-        currParser = nullptr;
-        currDoc = nullptr;
-      }
+        khLockGuard guard(checkTermLock);
+        terminateGuard::instance().dequeue();
+        if (terminateGuard::instance().isLocked() &&
+            !terminateGuard::instance().size())
+        {
+            ReInitializeXerces();
+            terminateGuard::instance().unlock();
+            xmlLibLock.Unlock();
+        }
   }
   return retval;
 }
