@@ -641,6 +641,24 @@ void RasterProjectAssetImplD::HandleAddToRequest(
     project->config.is_timemachine_project_ = is_timemachine_project;
     notify(NFY_DEBUG, "TimeMachine: %s for %s\n", req.assetname.c_str(),
            is_timemachine_project ? "on" : "off");
+
+    // By default keep is_overlay_terrain_project_ the same unless directed
+    // otherwise.
+    bool is_overlay_terrain_project = project->config.is_overlay_terrain_project_;
+    if (req.enable_terrain_overlay){
+      is_overlay_terrain_project = true;
+    }
+    else if (req.disable_terrain_overlay){
+      is_overlay_terrain_project = false;
+    }
+    if (is_overlay_terrain_project) {
+      // Set start level and/or resources min level if specified
+      if (req.overlay_terrain_start_level != 0)
+        project->config.overlay_terrain_start_level_ = req.overlay_terrain_start_level;
+      if (req.overlay_terrain_resources_min_level != 0)
+        project->config.overlay_terrain_resources_min_level_ = req.overlay_terrain_resources_min_level;
+    }
+    project->config.is_overlay_terrain_project_ = is_overlay_terrain_project;
   } else {
     throw khException(kh::tr("No %1 project named %2")
                       .arg(ToQString(req.type), ToQString(req.assetname)));
