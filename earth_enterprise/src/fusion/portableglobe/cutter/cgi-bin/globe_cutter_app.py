@@ -247,14 +247,22 @@ class GlobeBuilder(object):
     postgis_polygon = "POLYGON((%s))" % postgis_polygon
     return postgis_polygon
 
-  def RewriteDbRoot(self, source):
+  def RewriteDbRoot(self, source, include_historical):
     """Executes command to rewrite the dbroot and extract the icons it uses."""
     self.Status("Rewrite dbroot ...")
+
+    historical_flag = '--disable_historical'
+    if include_historical:
+      historical_flag = ''
+
     os_cmd = ("%s/gerewritedbroot --source=\"%s\" --icon_directory=\"%s\" "
               "--dbroot_file=\"%s\" --search_service=\"%s\" "
-              "--kml_map_file=\"%s\""
+              "--kml_map_file=\"%s\" "
+              "%s"
               % (COMMAND_DIR, source, self.icons_dir, self.dbroot_file,
-                 self.search_service, self.kml_map_file))
+                 self.search_service, self.kml_map_file,
+                 historical_flag))
+
     common.utils.ExecuteCmd(os_cmd, self.logger)
     self.Status("%d icons" % len(os.listdir(self.icons_dir)))
 
@@ -834,7 +842,8 @@ if __name__ == "__main__":
 
     elif cgi_cmd == "REWRITE_DB_ROOT":
       globe_builder.CheckArgs(["globe_name", "source"], FORM)
-      globe_builder.RewriteDbRoot(FORM.getvalue_url("source"))
+      include_historic = FORM.getvalue("include_historical_imagery") is not None
+      globe_builder.RewriteDbRoot(FORM.getvalue_url("source"), include_historic)
 
     elif cgi_cmd == "GRAB_KML":
       globe_builder.CheckArgs(["globe_name", "source"], FORM)
