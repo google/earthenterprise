@@ -45,8 +45,10 @@ usage(const std::string &progn, const char *msg = 0, ...)
             "      --flat : use flat(Plate Carre) projection (default)\n"
             "      --terrain_overlay : make this terrain project an overlay project\n"
             "      --no_terrain_overlay : make this terrain project a normal project\n"
-            "      --start_level : the level from which to start building the terrain overlay project\n"
-            "      --resource_min_level : the threshold level that separates fill terrain from overlay terrain\n"
+            "      --start_level : the level from which to start building the\n"
+            "                      terrain overlay project\n"
+            "      --resource_min_level : the threshold level that separates\n"
+            "                             fill terrain from overlay terrain\n"
             "   By default, new terrain projects are NOT overlay projects"
             " unless --terrain_overlay is specified.\n",
             progn.c_str());
@@ -163,12 +165,6 @@ main(int argc, char *argv[]) {
       usage(argv[0], "--historical_imagery is not a valid option for mercator "
           "imagery projects.");
     }
-    if ((enable_terrain_overlay || disable_terrain_overlay || start_level != 0 ||
-         resource_min_level != 0) && AssetDefs::Terrain != AssetType){
-      usage(argv[0], "--terrain_overlay, --no_terrain_overlay, --start_level, and "
-          "--resource_min_level are only valid for terrain projects.");
-    }
-
 
     // Process the request items, which are a variable length list of strings.
     for(uint i = 0; i < request_items.size(); ++i) {
