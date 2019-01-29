@@ -87,7 +87,7 @@ public:
             ++elem->second;       
         }
         notify(NFY_DEBUG, "%s read %d time(s)",
-               fn.c_str(), writtenFiles.find(fn)->second);
+               fn.c_str(), readFiles.find(fn)->second);
     }
 
     static void insertWritten(std::string fn)
