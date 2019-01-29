@@ -35,26 +35,38 @@ usage(const std::string &progn, const char *msg = 0, ...)
     fprintf(stderr, "\n");
   }
 
-  fprintf(stderr,
-          "\nusage: %s [options] -o <projectname> {[--maxlevel <level>] "
-          "<insetresource>}...\n"
-          "   Supported options are:\n"
-          "      --help | -?:      Display this usage message\n"
-          "      --mercator : use mercator projection\n"
-          "      --flat : use flat(Plate Carre) projection (default)\n"
-          "      --historical_imagery : change this project to be a historical\n"
-          "                             imagery project\n"
-          "      --no_historical_imagery : make this a normal project\n"
-          "                         (i.e., not a historical imagery project)\n"
-          "   By default, new projects are NOT time machine projects"
-          " unless --historical_imagery is specified.\n"
-          "      --terrain_overlay : make this terrain project an overlay project\n"
-          "      --no_terrain_overlay : make this terrain project a normal project\n"
-          "      --start_level : the level from which to start building the terrain overlay project\n"
-          "      --resource_min_level : the threshold level that separates fill terrain from overlay terrain\n"
-          "   By default, new terrain projects are NOT overlay projects"
-          " unless --terrain_overlay is specified.\n",
-          progn.c_str());
+  if (AssetDefs::Terrain == AssetType){
+    fprintf(stderr,
+            "\nusage: %s [options] -o <projectname> {[--maxlevel <level>] "
+            "<insetresource>}...\n"
+            "   Supported options are:\n"
+            "      --help | -?:      Display this usage message\n"
+            "      --mercator : use mercator projection\n"
+            "      --flat : use flat(Plate Carre) projection (default)\n"
+            "      --terrain_overlay : make this terrain project an overlay project\n"
+            "      --no_terrain_overlay : make this terrain project a normal project\n"
+            "      --start_level : the level from which to start building the terrain overlay project\n"
+            "      --resource_min_level : the threshold level that separates fill terrain from overlay terrain\n"
+            "   By default, new terrain projects are NOT overlay projects"
+            " unless --terrain_overlay is specified.\n",
+            progn.c_str());
+  }
+  else {
+    fprintf(stderr,
+            "\nusage: %s [options] -o <projectname> {[--maxlevel <level>] "
+            "<insetresource>}...\n"
+            "   Supported options are:\n"
+            "      --help | -?:      Display this usage message\n"
+            "      --mercator : use mercator projection\n"
+            "      --flat : use flat(Plate Carre) projection (default)\n"
+            "      --historical_imagery : change this project to be a historical\n"
+            "                             imagery project\n"
+            "      --no_historical_imagery : make this a normal project\n"
+            "                         (i.e., not a historical imagery project)\n"
+            "   By default, new projects are NOT time machine projects"
+            " unless --historical_imagery is specified.\n",
+            progn.c_str());
+  }
   exit(1);
 }
 
@@ -69,6 +81,10 @@ main(int argc, char *argv[]) {
       AssetType = AssetDefs::Terrain;
     else
       AssetType = AssetDefs::Imagery;
+    
+    // constants
+    const uint MINIMUM_LEVEL = 4;
+    const uint MAXIMUM_LEVEL = 24;
 
     // process commandline options
     bool help = false;
@@ -101,8 +117,10 @@ main(int argc, char *argv[]) {
     options.opt("no_historical_imagery", disable_historical_imagery);
     options.opt("terrain_overlay", enable_terrain_overlay);
     options.opt("no_terrain_overlay", disable_terrain_overlay);
-    options.opt("start_level", start_level, &khGetopt::IsEvenNumberInRange<uint, 4, 24>); 
-    options.opt("resource_min_level", resource_min_level, &khGetopt::RangeValidator<uint, 4, 24>);
+    options.opt("start_level", start_level, 
+      &khGetopt::IsEvenNumberInRange<uint, MINIMUM_LEVEL, MAXIMUM_LEVEL>); 
+    options.opt("resource_min_level", resource_min_level, 
+      &khGetopt::RangeValidator<uint, MINIMUM_LEVEL, MAXIMUM_LEVEL>);
 
 
     // While processing the command line args, we must record the request items
@@ -197,10 +215,6 @@ main(int argc, char *argv[]) {
               (enable_terrain_overlay || disable_terrain_overlay || 
               start_level != 0 || resource_min_level != 0))
         )){
-            // !(AssetDefs::Imagery == AssetType && (enable_historical_imagery || disable_historical_imagery)) ||
-            // !(AssetDefs::Terrain == AssetType && 
-            //   (enable_terrain_overlay || disable_terrain_overlay || 
-            //   start_level != 0 || resource_min_level != 0))) {
         // For adding/modifying, we always need insets when:
         // - It's a mercator project
         // - OR it's a non-mercator project and the historical imagery flag is NOT being modified
