@@ -28,6 +28,7 @@
 #include <algorithm>
 #include <exception>
 #include "common/khConfigFileParser.h"
+#include "map"
 #include <cstdlib>
 using namespace khxml;
 
@@ -57,6 +58,82 @@ static std::array<std::string,3> options
     MAX_HEAP_SIZE,
     BLOCK_SIZE
 }};
+
+class tsMap
+{
+private:
+    static std::map<std::string, uint32_t> readFiles;
+    static std::map<std::string, uint32_t> writtenFiles;
+    tsMap() = default;
+    static khMutexBase mapLock;
+public:
+    static tsMap& instance()
+    {
+        static tsMap _instance;
+        return _instance;
+    }
+
+    static void insertRead(std::string fn)
+    {
+        khLockGuard guard(mapLock);
+        if (readFiles.find(fn) == readFiles.end())
+        {
+            auto elem = std::make_pair(fn,1);
+            readFiles.emplace(elem);
+        }
+        else
+        {
+            auto elem = readFiles.find(fn);
+            ++elem->second;       
+        }
+        notify(NFY_DEBUG, "%s read %d time(s)",
+               fn.c_str(), writtenFiles.find(fn)->second);
+    }
+
+    static void insertWritten(std::string fn)
+    {
+        khLockGuard guard(mapLock);
+        if (writtenFiles.find(fn) == writtenFiles.end())
+        {
+            auto elem = std::make_pair(fn,1);
+            writtenFiles.emplace(elem);
+        }
+        else
+        {
+            auto elem = writtenFiles.find(fn);
+            ++elem->second;
+        }
+        notify(NFY_DEBUG, "%s written %d time(s)",
+               fn.c_str(), writtenFiles.find(fn)->second);
+        
+    }
+
+    static uint32_t getNumWritten(std::string fn)
+    {
+        khLockGuard guard(mapLock);
+        auto elem = writtenFiles.find(fn);
+
+        uint32_t retval;
+        if (elem == writtenFiles.end()) retval = 0;
+        else retval = elem->second;
+        return retval;
+    }
+
+    static uint32_t getNumRead(std::string fn)
+    {
+        khLockGuard guard(mapLock);
+        auto elem = readFiles.find(fn);
+
+        uint32_t retval;
+        if (elem == readFiles.end()) retval = 0;
+        else retval = elem->second;
+        return retval;
+    }
+};
+
+std::map<std::string, uint32_t> tsMap::readFiles;
+std::map<std::string, uint32_t> tsMap::writtenFiles;
+khMutexBase tsMap::mapLock = KH_MUTEX_BASE_INITIALIZER;
 
 class XmlParamsException : public std::exception {};
 class MinValuesNotMet : public XmlParamsException
@@ -265,7 +342,10 @@ WriteDocument(DOMDocument *doc, const std::string &filename) throw()
   if (!WriteDocumentImpl(doc, newname)) {
     retval = false;
   }
-
+  else
+  {
+    tsMap::instance().insertWritten(filename);
+  }
   if (retval && !khReplace(filename, newext, backupext)) {
     (void) khUnlink(newname);
     retval = false;
@@ -381,6 +461,7 @@ ReadDocument(khxml::DOMLSParser *parser, const std::string &filename) throw()
     // invalid doc object. Must check file existence ourselves.
     if (khExists(filename)) {
          doc = parser->parseURI(filename.c_str());
+         tsMap::instance().insertRead(filename.c_str());
     } else {
       notify(NFY_WARN, "XML file does not exist: %s", filename.c_str());
     }
