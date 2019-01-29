@@ -388,21 +388,58 @@ class LocalServer(object):
         search_term = handler.request.arguments[key][0].lower()
         handler.write(tornado.web.globe_.search_db_.JsonSearch(search_term, cb))
 
+  def ParseGlobeReqName(self, req):
+    globe_name = ""
+    if "/" in req:
+      try:
+        globe_name = req.split("/")[1]
+      except:
+        globe_name = req.split("/")[0]
+    if globe_name != tornado.web.globe_.GlobeName():
+      if globe_name in portable_web_interface.SetUpHandler.GlobeNameList(
+          tornado.web.globe_.GlobeBaseDirectory(),[".glc", ".glb", ".glm"]):
+        print "found globe name in the list" 
+        return globe_name
+      else:
+        #invalid globe name
+        return -1
+    else:
+      #globe requested is the current selectedGlobe
+      return 1
+    
+
   def LocalJsonHandler(self, handler, is_2d=False):
     """Handle GET request for JSON file for plugin."""
     if not handler.IsValidRequest():
       raise tornado.web.HTTPError(404)
 
+    globe_request_name = self.ParseGlobeReqName(handler.request.uri)
+    if globe_request_name != -1 and globe_request_name != 1:
+      # Select the requested globe name, as it is a legit globe name
+      globe_path = "%s%s%s" % (
+          tornado.web.globe_.GlobeBaseDirectory(),
+          os.sep, globe_request_name)
+      tornado.web.globe_.ServeGlobe(globe_path)
+    print tornado.web.globe_.GlobeName() 
+
     # Get to end of serverUrl so we can add globe name.
+    # This will fail if serverDefs are requested for a glc file
     try:
       if is_2d:
         # TODO: Add real layer support for mbtiles.
         if tornado.web.globe_.IsMbtiles():
           json = MBTILES_JSON
         else:
-          json = tornado.web.globe_.ReadFile("maps/map.json")
+          try:
+            json = tornado.web.globe_.ReadFile("maps/map.json")
+          except:
+            json = tornado.web.globe_.ReadFile("earth/earth.json")
       else:
-        json = tornado.web.globe_.ReadFile("earth/earth.json")
+        try:
+          json = tornado.web.globe_.ReadFile("earth/earth.json")
+        except:
+          json = tornado.web.globe_.ReadFile("maps/map.json")
+
     except:
       handler.write("var geeServerDefs = {};")
       return
