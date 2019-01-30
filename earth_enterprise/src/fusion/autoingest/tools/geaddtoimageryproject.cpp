@@ -21,6 +21,54 @@
 #include <autoingest/khAssetManagerProxy.h>
 #include <autoingest/plugins/RasterProjectAsset.h>
 
+const char * NEW_TERRAIN_USAGE = "\nusage: %s [options] -o <projectname> {[--maxlevel <level>] "
+            "<insetresource>}...\n"
+            "   Supported options are:\n"
+            "      --help | -?:      Display this usage message\n"
+            "      --mercator : use mercator projection\n"
+            "      --flat : use flat(Plate Carre) projection (default)\n"
+            "      --terrain_overlay : make this terrain project an overlay project\n"
+            "      --start_level : the level from which to start building the\n"
+            "                      terrain overlay project\n"
+            "      --resource_min_level : the threshold level that separates\n"
+            "                             fill terrain from overlay terrain\n"
+            "   By default, new terrain projects are NOT overlay projects"
+            " unless --terrain_overlay is specified.\n";
+
+const char * MODIFY_TERRAIN_USAGE = "\nusage: %s [options] -o <projectname> {[--maxlevel <level>] "
+            "<insetresource>}...\n"
+            "   Supported options are:\n"
+            "      --help | -?:      Display this usage message\n"
+            "      --mercator : use mercator projection\n"
+            "      --flat : use flat(Plate Carre) projection (default)\n"
+            "      --terrain_overlay : make this terrain project an overlay project\n"
+            "      --no_terrain_overlay : make this terrain project a normal project\n"
+            "      --start_level : the level from which to start building the\n"
+            "                      terrain overlay project\n"
+            "      --resource_min_level : the threshold level that separates\n"
+            "                             fill terrain from overlay terrain\n";
+
+const char * NEW_IMAGERY_USAGE = "\nusage: %s [options] -o <projectname> {[--maxlevel <level>] "
+            "<insetresource>}...\n"
+            "   Supported options are:\n"
+            "      --help | -?:      Display this usage message\n"
+            "      --mercator : use mercator projection\n"
+            "      --flat : use flat(Plate Carre) projection (default)\n"
+            "      --historical_imagery : change this project to be a historical\n"
+            "                             imagery project\n"
+            "   By default, new projects are NOT time machine projects"
+            " unless --historical_imagery is specified.\n";
+
+const char * MODIFY_IMAGERY_USAGE = "\nusage: %s [options] -o <projectname> {[--maxlevel <level>] "
+            "<insetresource>}...\n"
+            "   Supported options are:\n"
+            "      --help | -?:      Display this usage message\n"
+            "      --mercator : use mercator projection\n"
+            "      --flat : use flat(Plate Carre) projection (default)\n"
+            "      --historical_imagery : change this project to be a historical\n"
+            "                             imagery project\n"
+            "      --no_historical_imagery : make this a normal project\n"
+            "                         (i.e., not a historical imagery project)\n";
 
 AssetDefs::Type AssetType = AssetDefs::Invalid;
 
@@ -35,38 +83,16 @@ usage(const std::string &progn, const char *msg = 0, ...)
     fprintf(stderr, "\n");
   }
 
+  bool is_new_project_command = progn.find("new") != std::string::npos;
   if (AssetDefs::Terrain == AssetType){
+    char * 
     fprintf(stderr,
-            "\nusage: %s [options] -o <projectname> {[--maxlevel <level>] "
-            "<insetresource>}...\n"
-            "   Supported options are:\n"
-            "      --help | -?:      Display this usage message\n"
-            "      --mercator : use mercator projection\n"
-            "      --flat : use flat(Plate Carre) projection (default)\n"
-            "      --terrain_overlay : make this terrain project an overlay project\n"
-            "      --no_terrain_overlay : make this terrain project a normal project\n"
-            "      --start_level : the level from which to start building the\n"
-            "                      terrain overlay project\n"
-            "      --resource_min_level : the threshold level that separates\n"
-            "                             fill terrain from overlay terrain\n"
-            "   By default, new terrain projects are NOT overlay projects"
-            " unless --terrain_overlay is specified.\n",
+            is_new_project_command ? NEW_TERRAIN_USAGE : MODIFY_TERRAIN_USAGE,
             progn.c_str());
   }
   else {
     fprintf(stderr,
-            "\nusage: %s [options] -o <projectname> {[--maxlevel <level>] "
-            "<insetresource>}...\n"
-            "   Supported options are:\n"
-            "      --help | -?:      Display this usage message\n"
-            "      --mercator : use mercator projection\n"
-            "      --flat : use flat(Plate Carre) projection (default)\n"
-            "      --historical_imagery : change this project to be a historical\n"
-            "                             imagery project\n"
-            "      --no_historical_imagery : make this a normal project\n"
-            "                         (i.e., not a historical imagery project)\n"
-            "   By default, new projects are NOT time machine projects"
-            " unless --historical_imagery is specified.\n",
+            is_new_project_command ? NEW_IMAGERY_USAGE : MODIFY_IMAGERY_USAGE,
             progn.c_str());
   }
   exit(1);
