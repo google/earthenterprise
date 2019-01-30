@@ -85,7 +85,6 @@ usage(const std::string &progn, const char *msg = 0, ...)
 
   bool is_new_project_command = progn.find("new") != std::string::npos;
   if (AssetDefs::Terrain == AssetType){
-    char * 
     fprintf(stderr,
             is_new_project_command ? NEW_TERRAIN_USAGE : MODIFY_TERRAIN_USAGE,
             progn.c_str());
