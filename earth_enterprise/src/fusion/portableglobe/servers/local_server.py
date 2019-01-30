@@ -416,9 +416,11 @@ class LocalServer(object):
     if not handler.IsValidRequest():
       raise tornado.web.HTTPError(404)
 
+    current_globe = ""
     globe_request_name = self.ParseGlobeReqName(handler.request.uri)
     if globe_request_name != -1 and globe_request_name != 1:
       # Requested globe name is valid, so select it
+      current_globe = tornado.web.globe_.GlobeName()
       globe_path = "%s%s%s" % (
           tornado.web.globe_.GlobeBaseDirectory(),
           os.sep, globe_request_name)
@@ -506,6 +508,13 @@ class LocalServer(object):
     # Adding globe name helps ensure clearing of cache for new globes.
     handler.write("%s/%s%s" % (
         json_start, tornado.web.globe_.GlobeShortName(), json_end))
+
+    # If we switched globes, switch back
+    if len(current_globe):
+      globe_path = "%s%s%s" % (
+          tornado.web.globe_.GlobeBaseDirectory(),
+          os.sep, globe_request_name)
+      tornado.web.globe_.ServeGlobe(globe_path)
 
   def ConvertToQtNode(self, col, row, level):
     """Converts col, row, and level to corresponding qtnode string."""
