@@ -28,7 +28,7 @@
 #include <algorithm>
 #include <exception>
 #include "common/khConfigFileParser.h"
-#include "map"
+#include <map>
 #include <cstdlib>
 using namespace khxml;
 
