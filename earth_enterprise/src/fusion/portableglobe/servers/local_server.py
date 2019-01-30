@@ -389,22 +389,25 @@ class LocalServer(object):
         handler.write(tornado.web.globe_.search_db_.JsonSearch(search_term, cb))
 
   def ParseGlobeReqName(self, req):
+    """Ascertain whether requested globe name exists in data directory."""
     globe_name = ""
     if "/" in req:
       try:
         globe_name = req.split("/")[1]
       except:
         globe_name = req.split("/")[0]
+
+    # If the globe requested is not already selected
     if globe_name != tornado.web.globe_.GlobeName():
       if globe_name in portable_web_interface.SetUpHandler.GlobeNameList(
           tornado.web.globe_.GlobeBaseDirectory(),[".glc", ".glb", ".glm"]):
-        print "found globe name in the list" 
+        # Globe requested is in the list of globes
         return globe_name
       else:
-        #invalid globe name
+        # Invalid globe name
         return -1
     else:
-      #globe requested is the current selectedGlobe
+      # Globe requested is the current selectedGlobe
       return 1
     
 
@@ -415,12 +418,11 @@ class LocalServer(object):
 
     globe_request_name = self.ParseGlobeReqName(handler.request.uri)
     if globe_request_name != -1 and globe_request_name != 1:
-      # Select the requested globe name, as it is a legit globe name
+      # Requested globe name is valid, so select it
       globe_path = "%s%s%s" % (
           tornado.web.globe_.GlobeBaseDirectory(),
           os.sep, globe_request_name)
       tornado.web.globe_.ServeGlobe(globe_path)
-    print tornado.web.globe_.GlobeName() 
 
     # Get to end of serverUrl so we can add globe name.
     # This will fail if serverDefs are requested for a glc file
@@ -430,6 +432,9 @@ class LocalServer(object):
         if tornado.web.globe_.IsMbtiles():
           json = MBTILES_JSON
         else:
+          # Portable seems to believe that 2D files are 3D when they
+          # are not actively being viewed by a client, so handle
+          # both possibilities in either case.
           try:
             json = tornado.web.globe_.ReadFile("maps/map.json")
           except:
