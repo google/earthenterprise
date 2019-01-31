@@ -606,7 +606,7 @@ DestroyDocument(khxml::DOMDocument *doc) throw()
         khLockGuard guard(checkTermLock);
         terminateGuard::instance().removeObj();
         if (terminateGuard::instance().isLocked() &&
-            !terminateGuard::instance().size())
+           (terminateGuard::instance().size() != 0))
         {
             ReInitializeXerces();
             terminateGuard::instance().unlock();
@@ -631,7 +631,7 @@ DestroyParser(khxml::DOMLSParser *parser) throw()
         khLockGuard guard(checkTermLock);
         terminateGuard::instance().removeObj();
         if (terminateGuard::instance().isLocked() &&
-            !terminateGuard::instance().size())
+           (terminateGuard::instance().size() != 0))
         {
             ReInitializeXerces();
             terminateGuard::instance().unlock();
