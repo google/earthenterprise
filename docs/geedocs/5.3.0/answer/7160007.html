@@ -1,4 +1,12 @@
-<!DOCTYPE html>
+<        <tr>
+            <td>200</td>
+            <td><code>stage_install</code> fails on the tutorial files when <code>/home</code>
+              and <code>/tmp</code> are on different file systems</td>
+            <td>
+              Files are linked in <code>/tmp</code> using symbolic links back to original locations.
+            </td>
+          </tr>
+   !DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8"/>
@@ -74,6 +82,13 @@ gtag('config', 'UA-108632131-2');
               and <code>/tmp</code> are on different file systems</td>
             <td>
               Files are linked in <code>/tmp</code> using symbolic links back to original locations.
+            </td>
+          </tr>
+           <tr>
+            <td>1158</td>
+            <td><code>geeServerDefs</code> are not returned by Portable Server after being requested, once the globe has been viewed by a client. It is not possible to request <code>geeServerDefs</code> for globes other than the current <code>selectedGlobe</code>.</td>
+            <td>
+              <code>geeServerDefs</code> are returned correctly and can be requested for any valid globe at any time.
             </td>
           </tr>
         </tbody>
