@@ -6,7 +6,6 @@ date:   2017-09-07 13:00:00
 author: Alexander Hernandez
 thumbnail: ahernandez.jpg
 ---
-
 Hello OpenGEE,
 
 I recently had the opportunity to travel to FOSS4G in Boston. It was a great chance to meet those involved in the open source community and spread the word of OpenGEE. There was also a dedicated block to discuss the history of GEE and the current state of OpenGEE. It was a very informative week and I enjoyed seeing all the various solutions using open source software.
