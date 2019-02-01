@@ -105,7 +105,7 @@ bool PortableGlcReader::ReadData(
 
   try {
     lseek64(glc_file_, offset, SEEK_SET);
-    read(reinterpret_cast<char*>(buffer), size, 1, glc_file_);
+    read(glc_file_, buffer, size);
     return true;
   } catch(...) {
     return false;
