@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 # Copyright 2017 Google Inc.
+# Copyright 2018-2019 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -441,6 +442,9 @@ parse_arguments()
 				if [ $IS_NEWINSTALL == false ]; then
 					echo -e "\nYou cannot modify the fusion user group using the installer because Fusion is already installed on this server."
 					parse_arguments_retval=1
+					# Don't show the User Group dialog since it is invalid to change the fusion
+					# username once fusion is installed on the server
+					show_user_group_recommendation=false
 					break
 				else
 					shift
