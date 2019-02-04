@@ -1,3 +1,4 @@
+
 # Earth Enterprise [![Chat on Slack](https://img.shields.io/badge/chat-on%20slack-ff69b4.svg)](http://slack.opengee.org) [![build](https://travis-ci.org/google/earthenterprise.svg?branch=master)](https://travis-ci.org/google/earthenterprise/builds)
 
 Earth Enterprise is the open source release of Google Earth Enterprise, a geospatial application which provides the ability to build and host custom 3D globes and 2D maps.  Earth Enterprise does not provide a private version of Google imagery that's currently available in Google Maps or Earth.
@@ -11,25 +12,21 @@ The application suite consists of three core components:
 
 ### Releases
 
+[Release 5.2.5](https://github.com/google/earthenterprise/releases/tag/5.2.5-714.41)
+* [Release Notes](https://www.opengee.org/geedocs/5.2.5/answer/7160006.html)
+* [Release Documentation](https://www.opengee.org/geedocs/5.2.5/)
+
+[Release 5.2.4](https://github.com/google/earthenterprise/releases/tag/5.2.4-4.final)
+* [Release Notes](https://www.opengee.org/geedocs/5.2.4/answer/7160004.html)
+* [Release Documentation](https://www.opengee.org/geedocs/5.2.4/)
+
 [Release 5.2.3](https://github.com/google/earthenterprise/releases/tag/5.2.3-4.final)
-* [Release Notes](http://www.opengee.org/geedocs/5.2.3/answer/7160003.html)
-* [Release Documentation](http://www.opengee.org/geedocs/5.2.3/)
-
-[Release 5.2.2](https://github.com/google/earthenterprise/releases/tag/5.2.2-2.final)
-* [Release Notes](http://www.opengee.org/geedocs/5.2.2/answer/7160002.html)
-* [Release Documentation](http://www.opengee.org/geedocs/5.2.2/)
-
-[Release 5.2.1](https://github.com/google/earthenterprise/releases/tag/5.2.1-6.final)
-* [Release Notes](http://www.opengee.org/geedocs/5.2.1/answer/7160001.html)
-* [Release Documentation](http://www.opengee.org/geedocs/5.2.1/)
-
-[Release 5.2.0](https://github.com/google/earthenterprise/releases/tag/5.2.0-3.final)
-* [Release Notes](http://www.opengee.org/geedocs/5.2.0/answer/7160000.html)
-* [Release Documentation](http://www.opengee.org/geedocs/5.2.0/)
+* [Release Notes](https://www.opengee.org/geedocs/5.2.3/answer/7160003.html)
+* [Release Documentation](https://www.opengee.org/geedocs/5.2.3/)
 
 ### More information
-* [OpenGEE website](http://www.opengee.org)
-* [GEE User/Administrator Documentation](http://www.opengee.org/geedocs/)
+* [OpenGEE website](https://www.opengee.org)
+* [GEE User/Administrator Documentation](https://www.opengee.org/geedocs/)
 * [Forum](https://groups.google.com/forum/#!forum/google-earth-enterprise)
 
 ### Building

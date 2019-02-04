@@ -181,6 +181,22 @@ function geeAllowOverwrite() {
 }
 
 /**
+ * Checks flag for using alternate method of gathering tiles.
+ * @return {bool} whether alternate method should be used.
+ */
+function geeUseAlternateMethod() {
+  return gees.dom.isChecked('useAlternateMethod_radio');
+}
+
+/**
+ * Checks flag for including historical imagery in cut globe.
+ * @return {bool} whether historical imagery should be included.
+ */
+function geeIncludeHistoricalImagery() {
+  return gees.dom.isChecked('includeHistorical_radio');
+}
+
+/**
  * Get description of the globe.
  * @return {string} Description of the globe.
  */

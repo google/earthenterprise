@@ -27,6 +27,8 @@
 #include <unistd.h>         // for getpagesize() on mac
 #elif defined(OS_CYGWIN)
 #include <malloc.h>         // for memalign()
+#elif defined(ANDROID)
+#include "khTypes.h"        // for uint64 definition
 #endif
 
 #include "base/integral_types.h"
@@ -45,7 +47,7 @@
 /* We use SIGPWR since that seems unlikely to be used for other reasons. */
 #define GOOGLE_OBSCURE_SIGNAL  SIGPWR
 
-#if defined OS_LINUX || defined OS_CYGWIN
+#if defined OS_LINUX || defined OS_CYGWIN || defined ANDROID
 
 // _BIG_ENDIAN
 #include <endian.h>
@@ -127,7 +129,7 @@ typedef uint16_t u_int16_t;
 #define bswap_32(x) OSSwapInt32(x)
 #define bswap_64(x) OSSwapInt64(x)
 
-#elif defined(__GLIBC__)
+#elif defined(__GLIBC__) || defined(ANDROID)
 #include <byteswap.h>  // IWYU pragma: export
 
 #else

@@ -247,14 +247,22 @@ class GlobeBuilder(object):
     postgis_polygon = "POLYGON((%s))" % postgis_polygon
     return postgis_polygon
 
-  def RewriteDbRoot(self, source):
+  def RewriteDbRoot(self, source, include_historical):
     """Executes command to rewrite the dbroot and extract the icons it uses."""
     self.Status("Rewrite dbroot ...")
+
+    historical_flag = '--disable_historical'
+    if include_historical:
+      historical_flag = ''
+
     os_cmd = ("%s/gerewritedbroot --source=\"%s\" --icon_directory=\"%s\" "
               "--dbroot_file=\"%s\" --search_service=\"%s\" "
-              "--kml_map_file=\"%s\""
+              "--kml_map_file=\"%s\" "
+              "%s"
               % (COMMAND_DIR, source, self.icons_dir, self.dbroot_file,
-                 self.search_service, self.kml_map_file))
+                 self.search_service, self.kml_map_file,
+                 historical_flag))
+
     common.utils.ExecuteCmd(os_cmd, self.logger)
     self.Status("%d icons" % len(os.listdir(self.icons_dir)))
 
@@ -283,16 +291,22 @@ class GlobeBuilder(object):
                  self.packet_info_file))
     common.utils.ExecuteCmdInBackground(os_cmd, self.logger)
 
-  def BuildMap(self, source, default_level, max_level):
+  def BuildMap(self, source, default_level, max_level, ignore_imagery_depth):
     """Executes command to cut map and save data into packet bundles."""
     self.Status("Build map ...")
+    ignore_imagery_depth_str = str()
+    if ignore_imagery_depth:
+        ignore_imagery_depth_str = "--ignore_imagery_depth"
     # Run this task as a background task.
     # Having trouble with permissions if output is redirected to a file.
-    os_cmd = ("%s/geportablemapbuilder --source=\"%s\" "
+    os_cmd = ("%s/geportablemapbuilder "
+              "%s "
+              "--source=\"%s\" "
               "--hires_qt_nodes_file=\"%s\" "
               "--map_directory=\"%s\"  --default_level=%d --max_level=%d "
-              % (COMMAND_DIR, source, self.qtnodes_file,
-                 self.globe_dir, default_level, max_level))
+              % (COMMAND_DIR, ignore_imagery_depth_str, source,
+                 self.qtnodes_file, self.globe_dir, default_level, 
+                 max_level))
 
     common.utils.ExecuteCmdInBackground(os_cmd, self.logger)
 
@@ -828,20 +842,23 @@ if __name__ == "__main__":
 
     elif cgi_cmd == "REWRITE_DB_ROOT":
       globe_builder.CheckArgs(["globe_name", "source"], FORM)
-      globe_builder.RewriteDbRoot(FORM.getvalue_url("source"))
+      include_historic = FORM.getvalue("include_historical_imagery") is not None
+      globe_builder.RewriteDbRoot(FORM.getvalue_url("source"), include_historic)
 
     elif cgi_cmd == "GRAB_KML":
       globe_builder.CheckArgs(["globe_name", "source"], FORM)
       globe_builder.GrabKml(FORM.getvalue_url("source"))
 
     elif cgi_cmd == "BUILD_GLOBE":
+      ignore_imagery_depth = (FORM.getvalue("ignore_imagery_depth") is not None)
       globe_builder.CheckArgs(["globe_name", "source", "default_level",
                                "max_level"], FORM)
       is_2d = FORM.getvalue("is_2d")
       if is_2d == "t":
         globe_builder.BuildMap(FORM.getvalue_url("source"),
                                int(FORM.getvalue("default_level")),
-                               int(FORM.getvalue("max_level")))
+                               int(FORM.getvalue("max_level")),
+                               ignore_imagery_depth)
       else:
         globe_builder.BuildGlobe(FORM.getvalue_url("source"),
                                  int(FORM.getvalue("default_level")),

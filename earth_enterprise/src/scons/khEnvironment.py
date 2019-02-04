@@ -26,7 +26,7 @@ import os.path
 import sys
 import time
 from datetime import datetime
-from getversion import GetVersion, GetLongVersion
+from getversion import open_gee_version
 import SCons
 from SCons.Environment import Environment
 
@@ -187,11 +187,11 @@ def EmitBuildDateStrfunc(target, build_date):
   return 'EmitBuildDate(%s, %s)' % (target, build_date)
 
 
-def EmitVersionHeaderFunc(target, backupFile):
+def EmitVersionHeaderFunc(target):
   """Emit version information to the target file."""
 
-  versionStr = GetVersion(backupFile)
-  longVersionStr = GetLongVersion(backupFile)
+  versionStr = open_gee_version.get_short()
+  longVersionStr = open_gee_version.get_long()
 
   fp = open(target, 'w')
   fp.writelines(['// DO NOT MODIFY - auto-generated file\n',
@@ -203,38 +203,38 @@ def EmitVersionHeaderFunc(target, backupFile):
   fp.close()
 
 
-def EmitVersionHeaderStrfunc(target, backupFile):
-  return 'EmitVersionHeader(%s, %s)' % (target, backupFile)
+def EmitVersionHeaderStrfunc(target):
+  return 'EmitVersionHeader(%s)' % (target,)
   
 
-def EmitVersionFunc(target, backupFile):
+def EmitVersionFunc(target):
   """Emit version information to the target file."""
 
-  versionStr = GetVersion(backupFile)
-
-  with open(target, 'w') as fp:
-    fp.write(versionStr)
-  
-  with open(backupFile, 'w') as fp:
-    fp.write(versionStr)
-
-
-def EmitVersionStrfunc(target, backupFile):
-  return 'EmitVersion(%s, %s)' % (target, backupFile)
-  
-  
-def EmitLongVersionFunc(target, backupFile, label):
-  """Emit version information to the target file."""
-
-  versionStr = GetLongVersion(backupFile, label)
+  versionStr = open_gee_version.get_short()
 
   with open(target, 'w') as fp:
     fp.write(versionStr)
 
+  with open(open_gee_version.backup_file, 'w') as fp:
+    fp.write(versionStr)
 
-def EmitLongVersionStrfunc(target, backupFile, label):
-  return 'EmitLongVersion(%s, %s, %s)' % (target, backupFile, label)
-  
+
+def EmitVersionStrfunc(target):
+  return 'EmitVersion(%s)' % (target,)
+
+
+def EmitLongVersionFunc(target):
+  """Emit version information to the target file."""
+
+  versionStr = open_gee_version.get_long()
+
+  with open(target, 'w') as fp:
+    fp.write(versionStr)
+
+
+def EmitLongVersionStrfunc(target):
+  return 'EmitLongVersion(%s)' % (target,)
+
 
 # our derived class
 class khEnvironment(Environment):
@@ -280,7 +280,8 @@ class khEnvironment(Environment):
 
     DefineProtocolBufferBuilder(self)
 
-  def bash_escape(self, value):
+  @staticmethod
+  def bash_escape(value):
     """Escapes a given value as a BASH string."""
 
     return "'{0}'".format(value.replace("'", "'\\''"))
@@ -408,10 +409,24 @@ class khEnvironment(Environment):
     base = os.path.basename(target)
     newtarget = os.path.join(self.exportdirs['bin'], 'tests', base)
     args = (newtarget, source)
-    ret = self.Program(*args, **kw)
+    test_env = self.Clone()
+    test_env['LINKFLAGS'] = test_env['test_linkflags']
+    if test_env['test_extra_cppflags']:
+      # FIXME: The SCons shell escape seems to be broken, and the 'ESCAPE'
+      # environment variable isn't respected for some reason, so we add a
+      # dirty patch:
+      test_env['CPPFLAGS'] += map(
+        lambda s: s.replace('"', '\\"'), test_env['test_extra_cppflags'])
+    ret = test_env.Program(*args, **kw)
 
     self.Default(self.alias(target_src_node, ret))
     return ret
+
+  def testScript(self, target, dest='bin', subdir='tests'):
+    instdir = self.fs.Dir(subdir, self.exportdirs[dest])
+    if not SCons.Util.is_List(target):
+      target = [target]
+    self.Install(instdir, target)
 
   def executableLink(self, dest, target, source, **unused_kw):
     """path to the target in the srcdir (not builddir)."""
@@ -455,6 +470,15 @@ class khEnvironment(Environment):
     if not SCons.Util.is_List(newname):
       newname = [newname]
     self.InstallAs([self.fs.File(i, instdir) for i in newname], src)
+
+  def installRecursive(self, dest_root, source_path):
+    for root_dir, _, files in os.walk(source_path):
+        for file_path in files:
+            self.Install(
+                os.path.join(
+                  dest_root,
+                  os.path.relpath(root_dir, os.path.dirname(source_path))),
+                os.path.join(root_dir, file_path))
 
   def installDirExcluding(self, dest, target_dir, excluded_list, subdir=''):
     instdir = self.fs.Dir(subdir, self.installdirs[dest])
@@ -537,6 +561,9 @@ class khEnvironment(Environment):
     root_dir = self.exportdirs['root']
     shobj_suffix = self['SHOBJSUFFIX']
     return [root_dir + p + shobj_suffix for p in sources if p]
+
+  def get_open_gee_version(self):
+    return open_gee_version
 
 
 def ProtocolBufferGenerator(source, target, env, for_signature):

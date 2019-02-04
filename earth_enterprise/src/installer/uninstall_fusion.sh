@@ -59,6 +59,11 @@ main_preuninstall()
         exit 1
     fi
 
+    if is_package_installed "opengee-common" "opengee-common"; then
+        show_opengee_package_installed "uninstall" "$GEEF"
+        exit 1
+    fi
+
     if ! check_prereq_software; then
         exit 1
     fi
@@ -426,6 +431,8 @@ remove_files_from_target()
         rm -rf $BASEINSTALLDIR_OPT/gepython
         rm -rf $BASEINSTALLDIR_OPT/bin
         rm -rf $BASEINSTALLDIR_OPT/tutorial
+
+        rm -f $BININSTALLROOTDIR/gevars.sh
     fi
 
     # final file -- remove systemrc

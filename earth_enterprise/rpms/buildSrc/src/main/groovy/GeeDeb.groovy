@@ -13,7 +13,10 @@
 // limitations under the License.
 
 import com.netflix.gradle.plugins.deb.Deb
+import org.gradle.api.tasks.TaskAction
 import org.opengee.shell.GeeCommandLine
+import java.nio.file.Files
+import java.nio.file.Paths
 
 class GeeDeb extends com.netflix.gradle.plugins.deb.Deb {
     // Get the name of the Deb package that provides a given file path:
@@ -56,8 +59,26 @@ class GeeDeb extends com.netflix.gradle.plugins.deb.Deb {
         }
     }
 
+    // This is used to rewrite the value of the 'arch' field.  If you're
+    // building both RPM and Deb packages, you may set the architecture to
+    // the name used by Red Hat, and have it rewritten here to the name
+    // defined by Debian policy.
+    def archNameMap = [
+            'x86_64': 'amd64',
+            'x86': 'i386'
+        ]
+
+    // Whether to fix formatting of the `packageDescription` field from
+    // plain-text empty lines, and no indentation to a Debian control field
+    // format.  Set this to falso to forward `packageDescription` to the
+    // Debian package creation as is.
+    def fixPackageDescriptionFormat = true
 
     protected File[] packageInputFiles = null
+
+    // A set of the commands set as dependencies for this package by calling
+    // the `requiresCommands` method:
+    protected Set<String> requiredCommands = new HashSet<String>()
 
     GeeDeb() {
         super()
@@ -77,10 +98,8 @@ class GeeDeb extends com.netflix.gradle.plugins.deb.Deb {
 
     // Adds the packages that provide all of the given commands to the package
     // dependency list.
-    def requireCommands(Iterable<String> commands) {
-        (whatProvidesCommand(commands) as Set).each {
-            requires(it)
-        }
+    def requiresCommands(Iterable<String> commands) {
+        requiredCommands.addAll(commands)
     }
 
     // Runs find-provides, and add provided artifacts to the package.
@@ -115,5 +134,41 @@ class GeeDeb extends com.netflix.gradle.plugins.deb.Deb {
         }
 
         packageDescription = formattedDescription
+    }
+
+    // Variable to autodetect symlinks. Detected symlinks are fixed, so they
+    // are not created as files.
+    boolean preserveSymlinks = true
+
+    // Override the @TaskAction from the base class, so we can run a few fixes
+    // first.
+    @Override
+    @TaskAction
+    protected void copy() {
+        // Fix the architecture field:
+        if (archNameMap != null && archNameMap.containsKey(archString)) {
+            arch = archNameMap[archString]
+        }
+
+        if (fixPackageDescriptionFormat) {
+            formatPackageDescription(packageDescription)
+        }
+
+        requiredCommands.
+            collect { whatProvidesCommand(it) }.
+            each {
+                requires(it)
+            }
+        
+        if (preserveSymlinks) {
+            eachFile {
+                if (it.getFile().isFile() && Files.isSymbolicLink(it.getFile().toPath())) {
+                    link("/" + it.getRelativePath().toString(), Files.readSymbolicLink(it.getFile().toPath()).toString())
+                    it.exclude()
+                }
+            }
+        }
+        
+        super.copy()
     }
 }

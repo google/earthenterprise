@@ -500,6 +500,12 @@ function updateOuterZoom(inner_zoom) {
 
 function toggleAdvancedZoom() {
   toggleElementDisplay(gees.dom.get('polyZoomHolder'));
+  if (isServing == '3D') {
+    toggleElementDisplay(gees.dom.get('IncludeHistoricalHolder'));
+  }
+  if (isServing == '2D') {
+    toggleElementDisplay(gees.dom.get('UseAlternateMethodHolder'));
+  }
 }
 
 // First step to loading cutter is loading vardefs. If those fail, throw an

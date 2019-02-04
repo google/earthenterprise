@@ -25,38 +25,40 @@ CurlRequest::CurlRequest(const std::string& username,
                          const std::string& password,
                          const std::string& url,
                          const std::string& cacert,
-                         const bool insecure)
+                         const bool insecure,
+                         curl_api* curl)
     : userpwd_(),
       url_(url),
       curl_easy_handle_(NULL),
-      curl_slist_(NULL) {
-  curl_easy_handle_ = curl_easy_init();
+      curl_slist_(NULL),
+      curl_(curl) {
+  curl_easy_handle_ = curl_->easy_init();
   if (curl_easy_handle_ == NULL) {
     notify(NFY_FATAL, "Could not start libcurl easy session.");
   }
-  curl_easy_setopt(curl_easy_handle_, CURLOPT_NOSIGNAL, true);
-  curl_easy_setopt(curl_easy_handle_, CURLOPT_FAILONERROR, true);
-  curl_easy_setopt(curl_easy_handle_, CURLOPT_FOLLOWLOCATION, true);
-  curl_easy_setopt(curl_easy_handle_, CURLOPT_MAXREDIRS, 16);
-  curl_easy_setopt(curl_easy_handle_, CURLOPT_ERRORBUFFER, error_buffer_);
+  curl_->easy_setopt(curl_easy_handle_, CURLOPT_NOSIGNAL, true);
+  curl_->easy_setopt(curl_easy_handle_, CURLOPT_FAILONERROR, true);
+  curl_->easy_setopt(curl_easy_handle_, CURLOPT_FOLLOWLOCATION, true);
+  curl_->easy_setopt(curl_easy_handle_, CURLOPT_MAXREDIRS, 16);
+  curl_->easy_setopt(curl_easy_handle_, CURLOPT_ERRORBUFFER, error_buffer_);
   if (insecure) {
-    curl_easy_setopt(curl_easy_handle_, CURLOPT_SSL_VERIFYPEER, 0L);
+    curl_->easy_setopt(curl_easy_handle_, CURLOPT_SSL_VERIFYPEER, 0L);
   } else if (!cacert.empty()) {
-    curl_easy_setopt(curl_easy_handle_, CURLOPT_CAINFO, cacert.c_str());
+    curl_->easy_setopt(curl_easy_handle_, CURLOPT_CAINFO, cacert.c_str());
   }
 
   // Ask for a persistent connection
-  curl_slist_ = curl_slist_append(curl_slist_, "Connection: Keep-Alive");
+  curl_slist_ = curl_->slist_append(curl_slist_, "Connection: Keep-Alive");
   if (curl_slist_ != NULL)
-    curl_easy_setopt(curl_easy_handle_, CURLOPT_HTTPHEADER, curl_slist_);
+    curl_->easy_setopt(curl_easy_handle_, CURLOPT_HTTPHEADER, curl_slist_);
 
   SetUserPwd(username, password);
 }
 
 CurlRequest::~CurlRequest() {
   if (curl_easy_handle_) {
-    curl_slist_free_all(curl_slist_);
-    curl_easy_cleanup(curl_easy_handle_);
+    curl_->slist_free_all(curl_slist_);
+    curl_->easy_cleanup(curl_easy_handle_);
   }
 }
 
@@ -64,8 +66,8 @@ void CurlRequest::SetUserPwd(const std::string& username,
                              const std::string& password) {
   if (!username.empty() && !password.empty()) {
     userpwd_ = username + ":" + password;
-    curl_easy_setopt(curl_easy_handle_, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-    curl_easy_setopt(curl_easy_handle_, CURLOPT_USERPWD, userpwd_.c_str());
+    curl_->easy_setopt(curl_easy_handle_, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+    curl_->easy_setopt(curl_easy_handle_, CURLOPT_USERPWD, userpwd_.c_str());
   }
 }
 
@@ -84,8 +86,9 @@ UploadRequest::UploadRequest(const std::string& username,
                              const std::string& cacert,
                              const bool insecure,
                              const std::string& root_dir,
-                             const std::vector<ManifestEntry>* const entries)
-    : CurlRequest(username, password, url, cacert, insecure),
+                             const std::vector<ManifestEntry>* const entries,
+                             curl_api* curl)
+    : CurlRequest(username, password, url, cacert, insecure, curl),
       root_dir_(root_dir),
       entries_(entries),
       src_fp_(NULL) {
@@ -98,11 +101,11 @@ UploadRequest::~UploadRequest() {
 
 
 bool UploadRequest::Init(std::string src_file_path) {
-  curl_easy_setopt(curl_easy_handle_,
+  curl_->easy_setopt(curl_easy_handle_,
                    CURLOPT_READFUNCTION, UploadRequest::CurlReadFunc);
-  curl_easy_setopt(curl_easy_handle_,
+  curl_->easy_setopt(curl_easy_handle_,
                    CURLOPT_WRITEFUNCTION, CurlRequest::CurlWriteFunc);
-  curl_easy_setopt(
+  curl_->easy_setopt(
       curl_easy_handle_, CURLOPT_INFILE, reinterpret_cast<void*>(this));
   src_fp_ = fopen(src_file_path.c_str(), "r");
   if (src_fp_ == NULL) {
@@ -126,17 +129,17 @@ bool UploadRequest::CreateDir(const std::string& dir) {
   notify(NFY_VERBOSE, "Creating directory: %s", dir.c_str());
   std::string dest_root = url_;
   std::string complete_dir = url_ + "/" + dir;
-  curl_easy_setopt(curl_easy_handle_, CURLOPT_URL, complete_dir.c_str());
+  curl_->easy_setopt(curl_easy_handle_, CURLOPT_URL, complete_dir.c_str());
   // Create MKCOL request to create directory. We don't need to check if the
   // directory already exists coz if it does then we'll get a
   // METHOD_NOT_ALLOWED. This way is more efficient.
-  curl_easy_setopt(curl_easy_handle_, CURLOPT_CUSTOMREQUEST, "MKCOL");
-  curl_easy_perform(curl_easy_handle_);
+  curl_->easy_setopt(curl_easy_handle_, CURLOPT_CUSTOMREQUEST, "MKCOL");
+  curl_->easy_perform(curl_easy_handle_);
   // Set the custom request back to null so that the following requests can
   // be set correctly.
-  curl_easy_setopt(curl_easy_handle_, CURLOPT_CUSTOMREQUEST, NULL);
+  curl_->easy_setopt(curl_easy_handle_, CURLOPT_CUSTOMREQUEST, nullptr);
   long result_code = 0;
-  curl_easy_getinfo(curl_easy_handle_, CURLINFO_RESPONSE_CODE, &result_code);
+  curl_->easy_getinfo(curl_easy_handle_, CURLINFO_RESPONSE_CODE, &result_code);
   // We're OK with METHOD_NOT_ALLOWED coz that just means that the directory
   // already exists.
   if (result_code > 400 && result_code != METHOD_NOT_ALLOWED) {
@@ -188,10 +191,10 @@ bool UploadRequest::Start(bool report_progress, geProgress* progress) {
     }
 
     std::string dest_url = url_ + "/" + root_dir_ + escaped_orig_path;
-    curl_easy_setopt(curl_easy_handle_, CURLOPT_URL, dest_url.c_str());
-    curl_easy_setopt(curl_easy_handle_, CURLOPT_UPLOAD, true);
-    CURLcode code = curl_easy_perform(curl_easy_handle_);
-    curl_easy_setopt(curl_easy_handle_, CURLOPT_UPLOAD, false);
+    curl_->easy_setopt(curl_easy_handle_, CURLOPT_URL, dest_url.c_str());
+    curl_->easy_setopt(curl_easy_handle_, CURLOPT_UPLOAD, true);
+    CURLcode code = curl_->easy_perform(curl_easy_handle_);
+    curl_->easy_setopt(curl_easy_handle_, CURLOPT_UPLOAD, false);
     if (code != CURLE_OK) {
       notify(NFY_DEBUG, "Could not copy: Curl error code: %d", code);
       notify(NFY_DEBUG, "HTTP Error: %s", error_buffer_);
@@ -237,8 +240,9 @@ GetRequest::GetRequest(const std::string& username,
                        const std::string& cacert,
                        const bool insecure,
                        const std::vector<std::string> &header_names,
-                       int timeout_secs)
-    : CurlRequest(username, password, url, cacert, insecure),
+                       int timeout_secs,
+                       curl_api* curl)
+    : CurlRequest(username, password, url, cacert, insecure, curl),
       status_code_(-1),
       timeout_secs_(timeout_secs) {
   for (uint i = 0; i < header_names.size(); ++i) {
@@ -253,9 +257,9 @@ GetRequest::~GetRequest() {
 
 
 bool GetRequest::Init() {
-  curl_easy_setopt(curl_easy_handle_,
+  curl_->easy_setopt(curl_easy_handle_,
                    CURLOPT_WRITEFUNCTION, GetRequest::CurlWriteFunc);
-  curl_easy_setopt(
+  curl_->easy_setopt(
       curl_easy_handle_, CURLOPT_WRITEDATA, reinterpret_cast<void*>(this));
   return true;
 }
@@ -263,21 +267,21 @@ bool GetRequest::Init() {
 
 int GetRequest::Start(const std::string& args) {
   Init();
-  curl_easy_setopt(curl_easy_handle_, CURLOPT_POSTFIELDS, args.c_str());
-  curl_easy_setopt(curl_easy_handle_, CURLOPT_URL, url_.c_str());
+  curl_->easy_setopt(curl_easy_handle_, CURLOPT_POSTFIELDS, args.c_str());
+  curl_->easy_setopt(curl_easy_handle_, CURLOPT_URL, url_.c_str());
 
   notify(NFY_DEBUG, "GetRequest: url: %s", url_.c_str());
   notify(NFY_DEBUG, "GetRequest: args: %s", args.c_str());
 
   if (timeout_secs_ > 0) {
-    curl_easy_setopt(curl_easy_handle_, CURLOPT_TIMEOUT, timeout_secs_);
+    curl_->easy_setopt(curl_easy_handle_, CURLOPT_TIMEOUT, timeout_secs_);
   }
-  CURLcode code = curl_easy_perform(curl_easy_handle_);
+  CURLcode code = curl_->easy_perform(curl_easy_handle_);
 
   if (code != CURLE_OK) {
     long result_code = 0;
     CURLcode getinfoCode =
-        curl_easy_getinfo(curl_easy_handle_, CURLINFO_RESPONSE_CODE, &result_code);
+        curl_->easy_getinfo(curl_easy_handle_, CURLINFO_RESPONSE_CODE, &result_code);
     // Authentication required.
     if (getinfoCode == CURLE_OK && result_code == AUTH_REQD)
       return result_code;
