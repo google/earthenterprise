@@ -77,7 +77,7 @@ class PortableGlcReader : public GlcReader {
   virtual std::string Filename() const { return filename_nosuffix_; }
 
  private:
-  mutable FILE* glc_file_;
+  mutable int glc_file_;
   uint64 glc_file_size_;
   const std::string path_;
   std::string filename_nosuffix_;
