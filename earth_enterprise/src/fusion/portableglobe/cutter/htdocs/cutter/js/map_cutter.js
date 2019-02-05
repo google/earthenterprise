@@ -75,6 +75,7 @@ function geeCheckMapParameters() {
 function checkAndBuild() {
   var allowOverwriting = geeAllowOverwrite();
   var useAlternateMethod = geeUseAlternateMethod();
+  var includeHistorical = geeIncludeHistoricalImagery();
 
   // Refresh the list of databases to be sure information is up to date.
   gees.initialize.databases();
@@ -97,7 +98,7 @@ function checkAndBuild() {
   }
 
   // If no published items are being overwritten, build the map.
-  geeBuildMap(allowOverwriting, useAlternateMethod);
+  geeBuildMap(allowOverwriting, useAlternateMethod, includeHistorical);
 }
 
 /**
@@ -118,7 +119,7 @@ function overwritingPublishedItemsMessage() {
  * Use a series of AJAX calls to cut a portable Map and make it available
  * for downloading. The AJAX calls provide some feedback along the way.
  */
-function geeBuildMap(allowOverwriting, useAlternateMethod) {
+function geeBuildMap(allowOverwriting, useAlternateMethod, includeHistorical) {
   hideBuildComplete();
   geeSetResponse('Building portable map ...');
   var msg = geeCheckMapParameters();
@@ -131,6 +132,7 @@ function geeBuildMap(allowOverwriting, useAlternateMethod) {
   }
 
   var useAlternateMethodStr = '';
+  var includeHistoricalStr = '';
   var url = '/cgi-bin/globe_cutter_app.py?cmd=UID&globe_name=' + geeGlobeName();
 
   if (isServing == '2D') {
@@ -143,6 +145,10 @@ function geeBuildMap(allowOverwriting, useAlternateMethod) {
 
   if (useAlternateMethod) {
     useAlternateMethodStr = '&ignore_imagery_depth=t';
+  }
+
+  if (includeHistorical) {
+    includeHistoricalStr = '&include_historical_imagery=t';
   }
 
   jQuery.get(url,
@@ -228,7 +234,7 @@ function geeBuildMap(allowOverwriting, useAlternateMethod) {
                    sequence[1] = front + base_url + 'POLYGON_TO_QTNODES&' +
                        globe_name + '&' + polygon + '&' + polygon_level + back1;
                    sequence[2] = front + base_url + 'REWRITE_DB_ROOT&' +
-                       globe_name + '&' + source + back1;
+                       globe_name + '&' + source + includeHistoricalStr + back1;
                    sequence[3] = front + base_url + 'GRAB_KML&' +
                        globe_name + '&' + source + back1;
                    sequence[4] = front + base_url + 'BUILD_GLOBE&' +
