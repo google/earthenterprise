@@ -23,9 +23,15 @@
 #include <khFileUtils.h>
 #include "khxml.h"
 #include "khdom.h"
-#include <fstream>
 #include <string>
+#include <array>
+#include <algorithm>
+#include <exception>
+#include "common/khConfigFileParser.h"
+#include <cstdlib>
 using namespace khxml;
+
+static khConfigFileParser config_parser;
 
 std::string
 ListElementTagName(const std::string &tagname)
@@ -37,16 +43,109 @@ ListElementTagName(const std::string &tagname)
   }
 }
 
+XMLSSize_t  initialDOMHeapAllocSize;
+XMLSSize_t  maxDOMHeapAllocSize;
+XMLSSize_t  maxDOMSubAllocationSize;
+
+const std::string INIT_HEAP_SIZE = "INIT_HEAP_SIZE";
+const std::string MAX_HEAP_SIZE = "MAX_HEAP_SIZE";
+const std::string BLOCK_SIZE = "BLOCK_SIZE";
+const std::string XMLConfigFile = "/etc/opt/google/XMLparams";
+static std::array<std::string,3> options
+{{
+    INIT_HEAP_SIZE,
+    MAX_HEAP_SIZE,
+    BLOCK_SIZE
+}};
+
+class XmlParamsException : public std::exception {};
+class MinValuesNotMet : public XmlParamsException
+{
+public:
+    const char* what() const noexcept 
+    { 
+        return "Initialization Parameters must be 1024 or greater"; 
+    }
+};
+class SizeError : public XmlParamsException
+{
+public:
+    const char* what() const noexcept
+    {
+        return "Initial heap size and block allocation size must be less than the max heap size";
+    }
+};
+
+void validateXMLParameters()
+{
+    // using 1024 as the lowest setting
+    XMLSSize_t lowestBlock = 0x400;
+
+    // check to make sure they meet the minimum size
+    if (initialDOMHeapAllocSize < lowestBlock ||
+   	maxDOMHeapAllocSize < lowestBlock)     
+    {
+	throw MinValuesNotMet();
+    }
+
+    // check to make sure that the initial size is less than the max size
+    if (maxDOMHeapAllocSize < initialDOMHeapAllocSize ||
+        maxDOMHeapAllocSize < maxDOMSubAllocationSize)
+    {
+        throw SizeError();
+    }	
+}
+
+void setDefaultValues()
+{
+   initialDOMHeapAllocSize = 0x4000;
+   maxDOMHeapAllocSize     = 0x20000;
+   maxDOMSubAllocationSize = 0x1000;
+}
 
 // This is used only in the following function
 class UsingXMLGuard
 {
   friend void InitializeXMLLibrary() throw();
 
-  UsingXMLGuard(void) throw()
-  {
-   try {
-      XMLPlatformUtils::Initialize();
+  UsingXMLGuard(void) throw() {
+    setDefaultValues();
+    std::string fn(XMLConfigFile);
+    try {
+      for (const auto& a : options)
+      {
+          config_parser.addOption(a);
+      }
+      config_parser.parse(fn);
+      config_parser.validateIntegerValues();
+      for (const auto& a : config_parser)
+      {
+          // will only set the values that are present, otherwise will stay at defaults
+          if (a.first == INIT_HEAP_SIZE)
+              initialDOMHeapAllocSize = std::stol(a.second);
+          else if (a.first == MAX_HEAP_SIZE)
+              maxDOMHeapAllocSize = std::stol(a.second);
+          else if (a.first == BLOCK_SIZE)
+              maxDOMSubAllocationSize = std::stol(a.second);
+      }
+    } catch (const khConfigFileParserException& e) {
+      notify(NFY_DEBUG, "%s , using default xerces init values", e.what());
+    }
+    
+    try {
+      try {
+         validateXMLParameters();
+      } catch (const XmlParamsException& e) {
+         notify(NFY_DEBUG, "%s, using default xerces init values", e.what());
+         setDefaultValues();
+      }
+      XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
+                                   maxDOMHeapAllocSize,
+                                   maxDOMSubAllocationSize);
+      notify(NFY_DEBUG, "XML initialization values: %s=%zu %s=%zu %s=%zu",
+             "initialDOMHeapAllocSize", initialDOMHeapAllocSize,
+             "maxDOMHeapAllocSize", maxDOMHeapAllocSize,
+             "maxDOMSubAllocationSize", maxDOMSubAllocationSize);
     } catch(const XMLException& toCatch) {
       notify(NFY_FATAL, "Unable to initialize Xerces: %s",
              FromXMLStr(toCatch.getMessage()).c_str());
@@ -74,7 +173,6 @@ DOMDocument *
 CreateEmptyDocument(const std::string &rootTagname) throw()
 {
   InitializeXMLLibrary();
-
   try {
     DOMImplementation* impl =
     DOMImplementationRegistry::getDOMImplementation(0);
@@ -329,12 +427,13 @@ ReadDocumentFromString(khxml::DOMLSParser *parser,
 bool
 DestroyDocument(khxml::DOMDocument *doc) throw()
 {
+  bool retval = false;
   try {
     doc->release();
-    return true;
+    retval = true;
   } catch (...) {
   }
-  return false;
+  return retval;
 }
 
 
