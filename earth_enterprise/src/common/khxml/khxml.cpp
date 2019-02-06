@@ -99,13 +99,13 @@ public:
  *
  * singeton class, thread-safe
 **************************************************************/
+static int qml_count = 0;
 class terminateGuard
 {
 private:
-    static khMutexBase qMutex, lockMutex;
+    static khMutexBase qMutex;
     static uint32_t numObjs, numDocs, numParsers;
     static uint64_t totalNumDocs;
-    static bool objLock;
     terminateGuard() = default;
 
 public:
@@ -117,71 +117,66 @@ public:
 
     static void addObj(int type)
     {
+        ++qml_count;
         khLockGuard guard(qMutex);
         ++numObjs;
         if (type == 0) ++numDocs;
         else ++numParsers;
         ++totalNumDocs;
+        --qml_count;
     }
 
     static void removeObj(int type)
     {
+        ++qml_count;
         khLockGuard guard(qMutex);
         if (numObjs > 0) --numObjs;
-        else return;
+        else 
+        {
+            --qml_count;
+            return;
+        }
         if (type == 0) --numDocs;
         else --numParsers;
+        --qml_count;
     }
 
     static uint32_t getNumDocs()
     {
+        ++qml_count;
         khLockGuard guard(qMutex);
+        --qml_count;
         return numDocs;
     }
 
     static uint32_t getNumParsers()	
     {
+        ++qml_count;
         khLockGuard guard(qMutex);
+        --qml_count;
         return numParsers;
     }
 
     static uint32_t size()
     {
-        khLockGuard guard(qMutex);
+        //khLockGuard guard(qMutex);
         return numObjs;
     }
 
     static uint64_t getTotalNumProcessed()
     {
+        ++qml_count;
         khLockGuard guard(qMutex);
+        --qml_count;
         return totalNumDocs;
-    }
-    static void lock()
-    {
-        khLockGuard guard(lockMutex);
-        objLock = true;
-    }
-
-    static void unlock()
-    {
-        khLockGuard guard(lockMutex);
-        objLock = true;
-    }
-
-    static bool isLocked()
-    {
-        khLockGuard guard(lockMutex);
-        return objLock;
     }
 };
 
 khMutexBase terminateGuard::qMutex = KH_MUTEX_BASE_INITIALIZER; 
-khMutexBase terminateGuard::lockMutex = KH_MUTEX_BASE_INITIALIZER; 
 uint32_t terminateGuard::numObjs = 0;
 uint32_t terminateGuard::numDocs = 0;
 uint32_t terminateGuard::numParsers = 0;
 uint64_t terminateGuard::totalNumDocs = 0;
-bool terminateGuard::objLock = false;
 
 void validateXMLParameters()
 {
@@ -287,13 +282,17 @@ void ReInitializeXerces()
     initXercesValues();
 }
 
+static int ctl_count = 0;
+static int xll_count = 0;
+
 void handleSIGABRT(int signal)
 {
-    notify(NFY_DEBUG, "number of active objs %d, total objs %lu, num docs %d, num parsers %d",
+    notify(NFY_DEBUG, "number of active objs %d, total objs %lu, num docs %d, num parsers %d, checkTermLock %d xmlLibLock %d qMutex %d ",
            terminateGuard::instance().size(),
            terminateGuard::instance().getTotalNumProcessed(),
            terminateGuard::instance().getNumDocs(),
-           terminateGuard::instance().getNumParsers());
+           terminateGuard::instance().getNumParsers(),
+           ctl_count, xll_count, qml_count);
 }
 
 void registerSig()
@@ -324,43 +323,45 @@ class UsingXMLGuard
 
 static khMutexBase xmlLibLock = KH_MUTEX_BASE_INITIALIZER;
 static khMutexBase checkTermLock = KH_MUTEX_BASE_INITIALIZER;
-//static khMutexBase createLock = KH_MUTEX_BASE_INITIALIZER;
+#include <thread>
 
 // only terminate when certain conditions are met
-//bool
 void  readyForTerm()
 {
-  //bool retval = false;
+  ++ctl_count;
   khLockGuard guard(checkTermLock);
   static XMLSSize_t threashold = static_cast<XMLSSize_t>
          (maxDOMHeapAllocSize * percent); 
   registerSig();
   if (cacheCapacity >= threashold)
   {
-    //while (terminateGuard::instance().size());
     notify(NFY_DEBUG, "READY TO PURGE XERCES CACHE!!!");
-    auto start = std::chrono::system_clock::now();
-    while (terminateGuard::instance().size())
-    {
-        auto end = std::chrono::system_clock::now();
-        if (std::chrono::duration_cast<std::chrono::seconds>(end-start).count() >= 3)
-            return;
-    }
+    //auto start = std::chrono::system_clock::now();
+    //while (terminateGuard::instance().size());
+    //;//{
+    //    auto end = std::chrono::system_clock::now();
+    //    if (std::chrono::duration_cast<std::chrono::seconds>(end-start).count() >= 3)
+    //        return;
+    //}
+    //while(1)
+	//{
+    //    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    //    if (terminateGuard::instance().size() == 0) break;
+    //}
     ReInitializeXerces();
     notify(NFY_DEBUG, "XERCES CACHE PURGED!!!");
     cacheCapacity = 0;
-    //retval = true;
   }
-  //return retval;
+  --ctl_count;
 }
 
 void InitializeXMLLibrary() throw()
 {
   khLockGuard guard(xmlLibLock);
+  ++xll_count;
   static UsingXMLGuard XMLLibGuard;
+  --xll_count;
 }
-
-//static khMutexBase createLock = KH_MUTEX_BASE_INITIALIZER;
 
 DOMDocument *
 CreateEmptyDocument(const std::string &rootTagname) throw()
@@ -370,17 +371,6 @@ CreateEmptyDocument(const std::string &rootTagname) throw()
   if (terminateCache)
   {
     readyForTerm();
-    //khLockGuard guard(createLock);
-    //if (readyForTerm()) 
-    //{
-      //if (terminateGuard::instance().isLocked()) 
-      //    notify(NFY_DEBUG, "is locked [CreateEmptyDocument]");
-      //xmlLibLock.Lock();
-      //terminateGuard::instance().lock();
-      //notify(NFY_DEBUG, "READY FOR PURGE [CreateEmptyDocument], %s%d",
-      //       "Number of active objs: ", terminateGuard::instance().size());
-    //}
-    //terminateGuard::instance().addObj();
   }
   try {
     DOMImplementation* impl =
@@ -392,13 +382,8 @@ CreateEmptyDocument(const std::string &rootTagname) throw()
     terminateGuard::instance().addObj(0);
     return doc;
    } catch (...) {
-     //if (terminateCache)
-     //{
-     //  xmlLibLock.Unlock();
-     //  terminateGuard::instance().unlock();
-     //  terminateGuard::instance().removeObj();
-     //}
-     return 0;
+     notify(NFY_DEBUG, "Error when trying to create DOMDocument.");
+     return nullptr;
    }
 }
 
@@ -560,21 +545,9 @@ khxml::DOMLSParser*
 CreateDOMParser(void) throw()
 {
   InitializeXMLLibrary();
-  //notify(NFY_DEBUG, "creating parser, obj # %lu", terminateGuard::instance().getTotalNumProcessed() + 1);
   if (terminateCache)
   {
     readyForTerm();
-    //khLockGuard guard(createLock);
-    //if (terminateGuard::instance().isLocked())
-    //    notify(NFY_DEBUG, "is locked [CreateDOMParser"); 
-    //if (readyForTerm())
-    //{
-    //   xmlLibLock.Lock();
-    //   notify(NFY_DEBUG, "READY FOR PURGE [CreateDOMParser] %s%d",
-    //         "Number of active objs: ", terminateGuard::instance().size());
-    //   terminateGuard::instance().lock();
-    //}
-    //terminateGuard::instance().addObj();
   }
   class FatalErrorHandler : public DOMErrorHandler {
    public:
@@ -606,13 +579,8 @@ CreateDOMParser(void) throw()
     terminateGuard::instance().addObj(1);
     return parser;
   } catch (...) {
-    //if (terminateCache)
-    //{
-    //  xmlLibLock.Unlock();
-    //  terminateGuard::instance().unlock();
-    //  terminateGuard::instance().removeObj();
-    //}
-    return 0;
+    notify(NFY_DEBUG, "Error when trying to create DOMLSParser");
+    return nullptr;
   }
 }
 
@@ -676,30 +644,6 @@ ReadDocumentFromString(khxml::DOMLSParser *parser,
 }
 
 
-void terminate(std::string loc)
-{
-	notify(NFY_DEBUG, "in [%s]", loc.c_str());
-    //terminateGuard::instance().removeObj();
-    if (terminateGuard::instance().isLocked())
-    {
-        notify(NFY_DEBUG, "in [%s], its locked. num docs %d",
-               loc.c_str(), terminateGuard::instance().size());
-        if (terminateGuard::instance().size() == 0)
-        {
-            notify(NFY_DEBUG, "XML cache purge from [%s], total num docs %lu",
-                   loc.c_str(), terminateGuard::instance().getTotalNumProcessed());
-            ReInitializeXerces();
-            terminateGuard::instance().unlock();
-            xmlLibLock.Unlock();
-        }
-        notify(NFY_DEBUG, "leaving [%s] while locked", loc.c_str());
-    }
-}
-
-// want to purge when there are no active objects and when
-// we know that there is a lock on creating new objects
-// 
-// ideally, when those conditions are met, 
 bool
 DestroyDocument(khxml::DOMDocument *doc) throw()
 {
@@ -708,28 +652,13 @@ DestroyDocument(khxml::DOMDocument *doc) throw()
     doc->release();
     retval = true;
   } catch (...) {
+    notify(NFY_DEBUG, "Error when trying to release DOMDocument");
   }
   if (terminateCache)
   {
-  //      khLockGuard guard(checkTermLock);
-        /*notify(NFY_DEBUG, "in [DestroyDocument]");
-        terminateGuard::instance().removeObj();
-        if (terminateGuard::instance().isLocked()) {
-            notify(NFY_DEBUG, "in [DestroyDocument], its locked. num docs %d",
-                   terminateGuard::instance().size());
-            if (terminateGuard::instance().size() == 0)
-            {
-                notify(NFY_DEBUG, "XML cache purge from DestroyDocument(), total num docs %lu", 
-                       terminateGuard::instance().getTotalNumProcessed());
-                ReInitializeXerces();
-                terminateGuard::instance().unlock();
-                xmlLibLock.Unlock();
-            }
-            notify(NFY_DEBUG, "leaving [DestroyDocument] while locked");
-		}*/
-  //      terminate("DestroyDocument");
-  
+    notify(NFY_DEBUG, "[DestroyDocument] num active docs %d", terminateGuard::instance().size());
     terminateGuard::instance().removeObj(0);
+    notify(NFY_DEBUG, "[DestroyDocument] leaving");
   }
   return retval;
 }
@@ -743,27 +672,13 @@ DestroyParser(khxml::DOMLSParser *parser) throw()
     parser->release();
     retval = true;
   } catch (...) {
+    notify(NFY_DEBUG, "Error when trying to release DOMLSParser");
   }
   if (terminateCache)
   {
-        //khLockGuard guard(checkTermLock);
-        /*terminateGuard::instance().removeObj();
-        if (terminateGuard::instance().isLocked()) 
-        {
-           notify(NFY_DEBUG, "in [DestroyParser], its locked. num docs %d",
-                  terminateGuard::instance().size());
-            if (terminateGuard::instance().size() == 0)
-            {
-                notify(NFY_WARN, "XML cache purge from DestroyParser(), total num docs %lu", 
-                       terminateGuard::instance().getTotalNumProcessed());
-                ReInitializeXerces();
-                terminateGuard::instance().unlock();
-                xmlLibLock.Unlock();
-            }
-            notify(NFY_DEBUG, "leaving [DestroyParser] while locked");
-        }*/
-        //terminate("DestroyParser");
+        notify(NFY_DEBUG, "[DestroyParser] num active docs %d", terminateGuard::instance().size());
         terminateGuard::instance().removeObj(1);
+        notify(NFY_DEBUG, "[DestroyParser] leaving");
   }
   return retval;
 }
