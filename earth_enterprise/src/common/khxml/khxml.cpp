@@ -27,14 +27,11 @@
 #include <array>
 #include <algorithm>
 #include <exception>
-#include <queue>
 #include "common/khConfigFileParser.h"
 #include <cstdlib>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <signal.h>
-#include <chrono>
 using namespace khxml;
 
 static khConfigFileParser config_parser;
@@ -89,94 +86,14 @@ public:
     }
 };
 
-
-/**************************************************************
- * helper class for synchronizing events related to purging
- * the Xerces cache
- *
- * keeps an internal count and a notifier as to whether or
- * not the mutex on creating docs/parsers is currently locked
- *
- * singeton class, thread-safe
-**************************************************************/
-static int qml_count = 0;
-class terminateGuard
+class PercentError : public XmlParamsException
 {
-private:
-    static khMutexBase qMutex;
-    static uint32_t numObjs, numDocs, numParsers;
-    static uint64_t totalNumDocs;
-    terminateGuard() = default;
-
 public:
-    static terminateGuard& instance()
+    const char* what() const noexcept
     {
-        static terminateGuard _instance;
-        return _instance;
-    }
-
-    static void addObj(int type)
-    {
-        ++qml_count;
-        khLockGuard guard(qMutex);
-        ++numObjs;
-        if (type == 0) ++numDocs;
-        else ++numParsers;
-        ++totalNumDocs;
-        --qml_count;
-    }
-
-    static void removeObj(int type)
-    {
-        ++qml_count;
-        khLockGuard guard(qMutex);
-        if (numObjs > 0) --numObjs;
-        else 
-        {
-            --qml_count;
-            return;
-        }
-        if (type == 0) --numDocs;
-        else --numParsers;
-        --qml_count;
-    }
-
-    static uint32_t getNumDocs()
-    {
-        ++qml_count;
-        khLockGuard guard(qMutex);
-        --qml_count;
-        return numDocs;
-    }
-
-    static uint32_t getNumParsers()	
-    {
-        ++qml_count;
-        khLockGuard guard(qMutex);
-        --qml_count;
-        return numParsers;
-    }
-
-    static uint32_t size()
-    {
-        //khLockGuard guard(qMutex);
-        return numObjs;
-    }
-
-    static uint64_t getTotalNumProcessed()
-    {
-        ++qml_count;
-        khLockGuard guard(qMutex);
-        --qml_count;
-        return totalNumDocs;
+        return "Cache purging can only be performed when capacity is between 0-100%";
     }
 };
-
-khMutexBase terminateGuard::qMutex = KH_MUTEX_BASE_INITIALIZER; 
-uint32_t terminateGuard::numObjs = 0;
-uint32_t terminateGuard::numDocs = 0;
-uint32_t terminateGuard::numParsers = 0;
-uint64_t terminateGuard::totalNumDocs = 0;
 
 void validateXMLParameters()
 {
@@ -195,6 +112,11 @@ void validateXMLParameters()
         maxDOMHeapAllocSize < maxDOMSubAllocationSize)
     {
         throw SizeError();
+    }
+
+    if (percent > 100 || percent < 0)
+    {
+        throw PercentError();
     }	
 }
 
@@ -245,15 +167,12 @@ void getInitValues()
     {
         validateXMLParameters();
     }
-    catch (const XMLException& e)
+    catch (const XmlParamsException& e)
     {
         setDefaultValues();
-        notify(NFY_DEBUG, "%s, using default xerces init values",
-               FromXMLStr(e.getMessage()).c_str());
+        notify(NFY_DEBUG, "%s, using default xerces init values", e.what());
     }
 }
-
-#include <cassert>
 
 void initXercesValues()
 {
@@ -282,27 +201,6 @@ void ReInitializeXerces()
     initXercesValues();
 }
 
-static int ctl_count = 0;
-static int xll_count = 0;
-
-void handleSIGABRT(int signal)
-{
-    notify(NFY_DEBUG, "number of active objs %d, total objs %lu, num docs %d, num parsers %d, checkTermLock %d xmlLibLock %d qMutex %d ",
-           terminateGuard::instance().size(),
-           terminateGuard::instance().getTotalNumProcessed(),
-           terminateGuard::instance().getNumDocs(),
-           terminateGuard::instance().getNumParsers(),
-           ctl_count, xll_count, qml_count);
-}
-
-void registerSig()
-{
-    static bool once = false;
-    if (once) return;
-    once = true;
-    notify(NFY_DEBUG, "registering signal...");
-    signal(SIGABRT,handleSIGABRT);
-}
 
 // This is used only in the following function
 class UsingXMLGuard
@@ -323,44 +221,26 @@ class UsingXMLGuard
 
 static khMutexBase xmlLibLock = KH_MUTEX_BASE_INITIALIZER;
 static khMutexBase checkTermLock = KH_MUTEX_BASE_INITIALIZER;
-#include <thread>
+static khMutexBase cacheLock = KH_MUTEX_BASE_INITIALIZER;
 
 // only terminate when certain conditions are met
 void  readyForTerm()
 {
-  ++ctl_count;
   khLockGuard guard(checkTermLock);
   static XMLSSize_t threashold = static_cast<XMLSSize_t>
          (maxDOMHeapAllocSize * percent); 
-  registerSig();
   if (cacheCapacity >= threashold)
   {
-    notify(NFY_DEBUG, "READY TO PURGE XERCES CACHE!!!");
-    //auto start = std::chrono::system_clock::now();
-    //while (terminateGuard::instance().size());
-    //;//{
-    //    auto end = std::chrono::system_clock::now();
-    //    if (std::chrono::duration_cast<std::chrono::seconds>(end-start).count() >= 3)
-    //        return;
-    //}
-    //while(1)
-	//{
-    //    std::this_thread::sleep_for(std::chrono::milliseconds(1));
-    //    if (terminateGuard::instance().size() == 0) break;
-    //}
     ReInitializeXerces();
-    notify(NFY_DEBUG, "XERCES CACHE PURGED!!!");
+    khLockGuard guard(cacheLock);
     cacheCapacity = 0;
   }
-  --ctl_count;
 }
 
 void InitializeXMLLibrary() throw()
 {
   khLockGuard guard(xmlLibLock);
-  ++xll_count;
   static UsingXMLGuard XMLLibGuard;
-  --xll_count;
 }
 
 DOMDocument *
@@ -379,7 +259,6 @@ CreateEmptyDocument(const std::string &rootTagname) throw()
     DOMDocument* doc = impl->createDocument(0,// root element namespace URI.
                                             ToXMLStr(rootTagname),// root element name
                                             0);// document type object (DTD)
-    terminateGuard::instance().addObj(0);
     return doc;
    } catch (...) {
      notify(NFY_DEBUG, "Error when trying to create DOMDocument.");
@@ -453,7 +332,6 @@ WriteDocumentImpl(DOMDocument *doc, const std::string &filename) throw()
 }
 } // anonymous namespace
 
-
 bool
 WriteDocument(DOMDocument *doc, const std::string &filename) throw()
 {
@@ -468,6 +346,7 @@ WriteDocument(DOMDocument *doc, const std::string &filename) throw()
   }
   else
   {
+    khLockGuard guard(cacheLock);
     struct stat check;
     stat(filename.c_str(), &check);
     cacheCapacity += check.st_size;  
@@ -511,6 +390,7 @@ WriteDocumentToString(DOMDocument *doc, std::string &buf) throw()
       DOMLSOutput* lsOutput = impl->createLSOutput();
       lsOutput->setByteStream(&formatTarget);
       if (writer->write(doc, lsOutput)) {
+          khLockGuard guard(cacheLock);
           buf.append((const char *)formatTarget.getRawBuffer(),
           formatTarget.getLen());
           cacheCapacity += buf.size();
@@ -576,7 +456,6 @@ CreateDOMParser(void) throw()
       parser->getDomConfig()->setParameter(XMLUni::fgDOMNamespaces, true);
     parser->getDomConfig()->setParameter(XMLUni::fgDOMErrorHandler,
                                          &fatalHandler);
-    terminateGuard::instance().addObj(1);
     return parser;
   } catch (...) {
     notify(NFY_DEBUG, "Error when trying to create DOMLSParser");
@@ -594,6 +473,7 @@ ReadDocument(khxml::DOMLSParser *parser, const std::string &filename) throw()
     // Note: parseURI doesn't handle missing files nicely...returns
     // invalid doc object. Must check file existence ourselves.
     if (khExists(filename)) {
+         khLockGuard guard(cacheLock);
          doc = parser->parseURI(filename.c_str());
          // TODO: find out size of contents in doc, not immediately available
          struct stat file;
@@ -630,6 +510,7 @@ ReadDocumentFromString(khxml::DOMLSParser *parser,
     Wrapper4InputSource inputSource(&memBufIS,
                                     false);  // don't adopt input source
     doc = parser->parse(&inputSource);
+    khLockGuard guard(cacheLock);
     cacheCapacity += buf.size();
   } catch (const XMLException& toCatch) {
     notify(NFY_WARN, "Unable to read XML: %s",
@@ -654,12 +535,6 @@ DestroyDocument(khxml::DOMDocument *doc) throw()
   } catch (...) {
     notify(NFY_DEBUG, "Error when trying to release DOMDocument");
   }
-  if (terminateCache)
-  {
-    notify(NFY_DEBUG, "[DestroyDocument] num active docs %d", terminateGuard::instance().size());
-    terminateGuard::instance().removeObj(0);
-    notify(NFY_DEBUG, "[DestroyDocument] leaving");
-  }
   return retval;
 }
 
@@ -673,12 +548,6 @@ DestroyParser(khxml::DOMLSParser *parser) throw()
     retval = true;
   } catch (...) {
     notify(NFY_DEBUG, "Error when trying to release DOMLSParser");
-  }
-  if (terminateCache)
-  {
-        notify(NFY_DEBUG, "[DestroyParser] num active docs %d", terminateGuard::instance().size());
-        terminateGuard::instance().removeObj(1);
-        notify(NFY_DEBUG, "[DestroyParser] leaving");
   }
   return retval;
 }
