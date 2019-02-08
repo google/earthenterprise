@@ -91,7 +91,7 @@ class PercentError : public XmlParamsException
 public:
     const char* what() const noexcept
     {
-        return "Cache purging can only be performed when capacity is between 0-100%";
+        return "Cache purging levels can only be 1-5";
     }
 };
 
@@ -114,7 +114,7 @@ void validateXMLParameters()
         throw SizeError();
     }
 
-    if (percent > 100 || percent < 0)
+    if (percent > 5 || percent < 1)
     {
         throw PercentError();
     }	
@@ -126,7 +126,7 @@ void setDefaultValues()
    maxDOMHeapAllocSize     = 0x20000;
    maxDOMSubAllocationSize = 0x1000;
    terminateCache = false;
-   percent = 1.0;
+   percent = 1.5;
 }
 
 void getInitValues()
@@ -155,7 +155,14 @@ void getInitValues()
                 terminateCache = std::stol(it.second);
             else
             {
-                percent = static_cast<float>(std::stol(it.second)/100.0);
+                switch (std::stol(it.second))
+                {
+                    case 1: percent = 0.00; break;
+                    case 2: percent = 0.75; break;
+                    case 3: percent = 1.50; break;
+                    case 4: percent = 2.25; break;
+                    case 5: percent = 3.00; break;
+                };
             }
         }
     }
@@ -224,7 +231,7 @@ static khMutexBase checkTermLock = KH_MUTEX_BASE_INITIALIZER;
 static khMutexBase cacheLock = KH_MUTEX_BASE_INITIALIZER;
 
 // only terminate when certain conditions are met
-void  readyForTerm()
+void  reInitIfReady()
 {
   khLockGuard guard(checkTermLock);
   static XMLSSize_t threashold = static_cast<XMLSSize_t>
@@ -250,7 +257,7 @@ CreateEmptyDocument(const std::string &rootTagname) throw()
 
   if (terminateCache)
   {
-    readyForTerm();
+    reInitIfReady();
   }
   try {
     DOMImplementation* impl =
@@ -427,7 +434,7 @@ CreateDOMParser(void) throw()
   InitializeXMLLibrary();
   if (terminateCache)
   {
-    readyForTerm();
+    reInitIfReady();
   }
   class FatalErrorHandler : public DOMErrorHandler {
    public:
