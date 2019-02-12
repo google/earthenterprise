@@ -152,10 +152,10 @@ void getInitValues()
             else if (it.first == BLOCK_SIZE)
                 maxDOMSubAllocationSize = std::stol(it.second);
             else if (it.first == PURGE)
-                terminateCache = std::stol(it.second);
+                terminateCache = std::stoi(it.second);
             else
             {
-                switch (std::stol(it.second))
+                switch (std::stoi(it.second))
                 {
                     case  1: percent = 0.00; break;
                     case  2: percent = 0.75; break;
@@ -205,10 +205,63 @@ void initXercesValues()
 }
 
 static khMutexBase xmlLibLock = KH_MUTEX_BASE_INITIALIZER;
-static khMutexBase purgeLock = KH_MUTEX_BASE_INITIALIZER;
 static khMutexBase checkTermLock = KH_MUTEX_BASE_INITIALIZER;
 static khMutexBase cacheLock = KH_MUTEX_BASE_INITIALIZER;
 static khMutexBase reinitLock = KH_MUTEX_BASE_INITIALIZER;
+
+class purgeGuard
+{
+private:
+    static bool _lock;
+    static uint32_t count;
+    purgeGuard() = default;
+    static khMutexBase pLock;
+public:
+    static purgeGuard& instance()
+    {
+        static purgeGuard _instance;
+        return _instance;
+    }
+
+    static void increment()
+    {
+        khLockGuard guard(pLock);
+        ++count;
+    }
+
+    static void decrement()
+    {
+        khLockGuard guard(pLock);
+        --count;
+    }
+
+    static uint32_t getCount()
+    {
+        khLockGuard guard(pLock);
+        return count;
+    }
+
+    static void lock()
+    {
+        khLockGuard guard(pLock);
+        _lock = true;
+    }
+
+    static void unlock()
+    {
+        khLockGuard guard(pLock);
+        _lock = false;
+    }
+
+    static bool isLocked()
+    {
+        khLockGuard guard(pLock);
+        return _lock;
+    }
+};
+bool purgeGuard::_lock = false;
+khMutexBase purgeGuard::pLock = KH_MUTEX_BASE_INITIALIZER;
+uint32_t purgeGuard::count = 0;
 
 void ReInitializeXerces()
 {
@@ -254,10 +307,12 @@ void  reInitIfReady()
          (maxDOMHeapAllocSize * percent); 
   if (cacheCapacity >= threashold)
   {
-    khLockGuard pguard(purgeLock);
+    purgeGuard::instance().lock();
+    while(purgeGuard::instance().getCount() != 0);
     ReInitializeXerces();
     khLockGuard guard(cacheLock);
     cacheCapacity = 0;
+    purgeGuard::instance().unlock();
   }
 }
 
@@ -296,7 +351,12 @@ namespace {
 bool
 WriteDocumentImpl(DOMDocument *doc, const std::string &filename) throw()
 {
-  khLockGuard guard(purgeLock);
+  
+  if (terminateCache) 
+  {
+    while(purgeGuard::instance().isLocked());
+  }
+  purgeGuard::instance().increment();
   bool success = false;
   notify(NFY_INFO2, "starting WriteDocumentImpl()");
   try {
@@ -352,7 +412,7 @@ WriteDocumentImpl(DOMDocument *doc, const std::string &filename) throw()
     notify(NFY_WARN, "Unable to create DOM Writer for %s: Unknown exception",
            filename.c_str());
   }
-  notify(NFY_INFO2, "ending WriteDocumentImpl()");
+  purgeGuard::instance().decrement();
   return success;
 }
 } // anonymous namespace
@@ -392,7 +452,11 @@ WriteDocument(DOMDocument *doc, const std::string &filename) throw()
 bool
 WriteDocumentToString(DOMDocument *doc, std::string &buf) throw()
 {
-  khLockGuard guard(purgeLock);
+  if (terminateCache)
+  {
+    while(purgeGuard::instance().isLocked());
+  }
+  purgeGuard::instance().increment();
   bool success = false;
   try {
     // "LS" -> Load/Save extensions
@@ -440,6 +504,7 @@ WriteDocumentToString(DOMDocument *doc, std::string &buf) throw()
       } catch (...) {
         notify(NFY_WARN, "Unable to create DOM writer: Unknown exception");
       }
+  purgeGuard::instance().decrement();
   return success;
 }
 
@@ -488,14 +553,13 @@ CreateDOMParser(void) throw()
 khxml::DOMDocument*
 ReadDocument(khxml::DOMLSParser *parser, const std::string &filename) throw()
 {
-  //khLockGuard guard(purgeLock);
   DOMDocument* doc = nullptr;
 
   try {
     // Note: parseURI doesn't handle missing files nicely...returns
     // invalid doc object. Must check file existence ourselves.
     if (khExists(filename)) {
-         //khLockGuard guard(cacheLock);
+         khLockGuard guard(cacheLock);
          doc = parser->parseURI(filename.c_str());
          // TODO: find out size of contents in doc, not immediately available
          struct stat file;
@@ -521,7 +585,6 @@ ReadDocumentFromString(khxml::DOMLSParser *parser,
                        const std::string &buf,
                        const std::string &ref) throw()
 {
-  //khLockGuard guard(purgeLock);
   DOMDocument *doc = nullptr;
   try {
     MemBufInputSource memBufIS(
