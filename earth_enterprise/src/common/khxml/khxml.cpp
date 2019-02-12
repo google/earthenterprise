@@ -157,11 +157,12 @@ void getInitValues()
             {
                 switch (std::stol(it.second))
                 {
-                    case 1: percent = 0.00; break;
-                    case 2: percent = 0.75; break;
-                    case 3: percent = 1.50; break;
-                    case 4: percent = 2.25; break;
-                    case 5: percent = 3.00; break;
+                    case  1: percent = 0.00; break;
+                    case  2: percent = 0.75; break;
+                    case  3: percent = 1.50; break;
+                    case  4: percent = 2.25; break;
+                    case  5: percent = 3.00; break;
+                    default: percent = 1.50;
                 };
             }
         }
@@ -189,11 +190,12 @@ void initXercesValues()
         XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
                                      maxDOMHeapAllocSize,
                                      maxDOMSubAllocationSize);
-        notify(NFY_DEBUG, "XML initialization values: %s=%zu %s=%zu %s=%zu %s=%d",
+        notify(NFY_DEBUG, "XML initialization values: %s=%zu %s=%zu %s=%zu %s=%d %s=%f",
                "initialDOMHeapAllocSize", initialDOMHeapAllocSize,
                "maxDOMHeapAllocSize", maxDOMHeapAllocSize,
                "maxDOMSubAllocationSize", maxDOMSubAllocationSize,
-               "purge cache", terminateCache);
+               "purge cache", terminateCache,
+               "level", percent);
     }
     catch (const XMLException& toCatch)
     {
@@ -202,9 +204,24 @@ void initXercesValues()
     }
 }
 
+static khMutexBase xmlLibLock = KH_MUTEX_BASE_INITIALIZER;
+static khMutexBase purgeLock = KH_MUTEX_BASE_INITIALIZER;
+static khMutexBase checkTermLock = KH_MUTEX_BASE_INITIALIZER;
+static khMutexBase cacheLock = KH_MUTEX_BASE_INITIALIZER;
+static khMutexBase reinitLock = KH_MUTEX_BASE_INITIALIZER;
+
 void ReInitializeXerces()
 {
-    XMLPlatformUtils::Terminate();
+    khLockGuard guard(reinitLock);
+    try
+    {
+        XMLPlatformUtils::Terminate();
+    }
+    catch(...)
+    {
+        notify(NFY_WARN, "Failure to terminate in ReInitializeXerces()");
+    }
+    notify(NFY_INFO2, "Xerces Purged...");
     initXercesValues();
 }
 
@@ -219,18 +236,17 @@ class UsingXMLGuard
   }
 
   ~UsingXMLGuard(void) throw() {
-    try {
-      XMLPlatformUtils::Terminate();
-    } catch (...) {
+    if (!terminateCache)
+    {
+        try {
+            XMLPlatformUtils::Terminate();
+        } catch (...) {
+            notify(NFY_DEBUG, "Failure to terminate in ~UsingXMLGuard");
+        }
     }
   }
 };
 
-static khMutexBase xmlLibLock = KH_MUTEX_BASE_INITIALIZER;
-static khMutexBase checkTermLock = KH_MUTEX_BASE_INITIALIZER;
-static khMutexBase cacheLock = KH_MUTEX_BASE_INITIALIZER;
-
-// only terminate when certain conditions are met
 void  reInitIfReady()
 {
   khLockGuard guard(checkTermLock);
@@ -238,6 +254,7 @@ void  reInitIfReady()
          (maxDOMHeapAllocSize * percent); 
   if (cacheCapacity >= threashold)
   {
+    khLockGuard pguard(purgeLock);
     ReInitializeXerces();
     khLockGuard guard(cacheLock);
     cacheCapacity = 0;
@@ -250,11 +267,13 @@ void InitializeXMLLibrary() throw()
   static UsingXMLGuard XMLLibGuard;
 }
 
+
+
 DOMDocument *
 CreateEmptyDocument(const std::string &rootTagname) throw()
 {
   InitializeXMLLibrary();
-
+  
   if (terminateCache)
   {
     reInitIfReady();
@@ -277,10 +296,9 @@ namespace {
 bool
 WriteDocumentImpl(DOMDocument *doc, const std::string &filename) throw()
 {
-
-  //InitializeXMLLibrary();
+  khLockGuard guard(purgeLock);
   bool success = false;
-
+  notify(NFY_INFO2, "starting WriteDocumentImpl()");
   try {
     // "LS" -> Load/Save extensions
     DOMImplementationLS* impl = (DOMImplementationLS*)
@@ -334,7 +352,7 @@ WriteDocumentImpl(DOMDocument *doc, const std::string &filename) throw()
     notify(NFY_WARN, "Unable to create DOM Writer for %s: Unknown exception",
            filename.c_str());
   }
-
+  notify(NFY_INFO2, "ending WriteDocumentImpl()");
   return success;
 }
 } // anonymous namespace
@@ -343,7 +361,6 @@ bool
 WriteDocument(DOMDocument *doc, const std::string &filename) throw()
 {
   bool retval = true;
-
   static const std::string newext = ".new";
   static const std::string backupext = ".old";
   const std::string newname = filename + newext;
@@ -364,7 +381,6 @@ WriteDocument(DOMDocument *doc, const std::string &filename) throw()
     retval = false;
   }
   if (retval && khExists(backupname)) {
-    notify(NFY_VERBOSE,"WriteDocument() backupname %s exists", backupname.c_str());
     (void) khUnlink(backupname);
   }
   return retval;
@@ -376,9 +392,8 @@ WriteDocument(DOMDocument *doc, const std::string &filename) throw()
 bool
 WriteDocumentToString(DOMDocument *doc, std::string &buf) throw()
 {
+  khLockGuard guard(purgeLock);
   bool success = false;
-  //InitializeXMLLibrary();
-
   try {
     // "LS" -> Load/Save extensions
     DOMImplementationLS* impl = (DOMImplementationLS*)
@@ -473,14 +488,14 @@ CreateDOMParser(void) throw()
 khxml::DOMDocument*
 ReadDocument(khxml::DOMLSParser *parser, const std::string &filename) throw()
 {
-
+  khLockGuard guard(purgeLock);
   DOMDocument* doc = nullptr;
 
   try {
     // Note: parseURI doesn't handle missing files nicely...returns
     // invalid doc object. Must check file existence ourselves.
     if (khExists(filename)) {
-         khLockGuard guard(cacheLock);
+         //khLockGuard guard(cacheLock);
          doc = parser->parseURI(filename.c_str());
          // TODO: find out size of contents in doc, not immediately available
          struct stat file;
@@ -506,8 +521,8 @@ ReadDocumentFromString(khxml::DOMLSParser *parser,
                        const std::string &buf,
                        const std::string &ref) throw()
 {
+  khLockGuard guard(purgeLock);
   DOMDocument *doc = nullptr;
-
   try {
     MemBufInputSource memBufIS(
         (const XMLByte*)buf.data(),
