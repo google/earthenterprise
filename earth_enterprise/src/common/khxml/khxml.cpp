@@ -56,7 +56,7 @@ const std::string INIT_HEAP_SIZE = "INIT_HEAP_SIZE";
 const std::string MAX_HEAP_SIZE = "MAX_HEAP_SIZE";
 const std::string BLOCK_SIZE = "BLOCK_SIZE";
 const std::string PURGE = "PURGE";
-const std::string PERCENT = "PERCENT";
+const std::string PURGE_LEVEL = "PURGE_LEVEL";
 const std::string XMLConfigFile = "/etc/opt/google/XMLparams";
 static XMLSSize_t cacheCapacity = 0;
 static std::array<std::string,5> options
@@ -65,7 +65,7 @@ static std::array<std::string,5> options
     MAX_HEAP_SIZE,
     BLOCK_SIZE,
     PURGE,
-    PERCENT
+    PURGE_LEVEL
 }};
 
 class XmlParamsException : public std::exception {};
@@ -488,7 +488,7 @@ CreateDOMParser(void) throw()
 khxml::DOMDocument*
 ReadDocument(khxml::DOMLSParser *parser, const std::string &filename) throw()
 {
-  khLockGuard guard(purgeLock);
+  //khLockGuard guard(purgeLock);
   DOMDocument* doc = nullptr;
 
   try {
@@ -521,7 +521,7 @@ ReadDocumentFromString(khxml::DOMLSParser *parser,
                        const std::string &buf,
                        const std::string &ref) throw()
 {
-  khLockGuard guard(purgeLock);
+  //khLockGuard guard(purgeLock);
   DOMDocument *doc = nullptr;
   try {
     MemBufInputSource memBufIS(
