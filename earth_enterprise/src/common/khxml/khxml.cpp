@@ -274,7 +274,6 @@ void ReInitializeXerces()
     {
         notify(NFY_WARN, "Failure to terminate in ReInitializeXerces()");
     }
-    notify(NFY_INFO2, "Xerces Purged...");
     initXercesValues();
 }
 
@@ -358,7 +357,6 @@ WriteDocumentImpl(DOMDocument *doc, const std::string &filename) throw()
   }
   purgeGuard::instance().increment();
   bool success = false;
-  notify(NFY_INFO2, "starting WriteDocumentImpl()");
   try {
     // "LS" -> Load/Save extensions
     DOMImplementationLS* impl = (DOMImplementationLS*)
