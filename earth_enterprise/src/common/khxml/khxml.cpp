@@ -209,6 +209,22 @@ static khMutexBase checkTermLock = KH_MUTEX_BASE_INITIALIZER;
 static khMutexBase cacheLock = KH_MUTEX_BASE_INITIALIZER;
 static khMutexBase reinitLock = KH_MUTEX_BASE_INITIALIZER;
 
+// A read-write guard to aid in purging
+//
+// Before the creation of DOMDocuments and DOMLSParsers, a call to
+// reInitIfNeeded() is made where it is determined whether or not
+// to purge the XML cache.  There are 5 levels at which to purge
+// the cache: 1 being the most frequent, 5 being the least frequent
+// 
+// Every time a DOMDocument enters into a write operation (in this
+// a "write lock" is made, which essentially is just keeping a count 
+// of write operations remaining. When it is determined it is time 
+// for a purge to occur, a "purge lock" is made on purgeGuard.
+//
+// When a "purge lock" occurs, it waits for all "write locks" to finish
+// and then takes control. It will execute all purge operations and then
+// cede control  back to the control of write operations.
+
 class purgeGuard
 {
 private:
