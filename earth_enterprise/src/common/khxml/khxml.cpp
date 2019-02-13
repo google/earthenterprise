@@ -26,6 +26,7 @@
 #include <string>
 #include <array>
 #include <algorithm>
+#include <memory>
 #include <exception>
 #include "common/khConfigFileParser.h"
 #include <cstdlib>
@@ -225,6 +226,40 @@ static khMutexBase reinitLock = KH_MUTEX_BASE_INITIALIZER;
 // and then takes control. It will execute all purge operations and then
 // cede control  back to the control of write operations.
 
+static pthread_rwlock_t rwlock = PTHREAD_RWLOCK_INITIALIZER;
+
+class XmlWriteLock
+{
+private:
+    pthread_rwlock_t& xml_lock;
+public:
+    XmlWriteLock(pthread_rwlock_t& _lock) : xml_lock(_lock)
+    {
+        pthread_rwlock_rdlock(&xml_lock);
+    }
+    
+    ~XmlWriteLock()
+    {
+        pthread_rwlock_unlock(&xml_lock);
+    }
+};
+
+class PurgeLock
+{
+private:
+    pthread_rwlock_t& purge_lock;
+public:
+    PurgeLock(pthread_rwlock_t& _lock) : purge_lock(_lock)
+    {
+        pthread_rwlock_wrlock(&purge_lock);
+    }
+
+    ~PurgeLock()
+    {
+        pthread_rwlock_unlock(&purge_lock);
+    }
+};
+
 class purgeGuard
 {
 private:
@@ -322,12 +357,13 @@ void  reInitIfReady()
          (maxDOMHeapAllocSize * percent); 
   if (cacheCapacity >= threashold)
   {
-    purgeGuard::instance().lock();
-    while(purgeGuard::instance().getCount() != 0);
+    //purgeGuard::instance().lock();
+    PurgeLock pguard(rwlock);
+    //while(purgeGuard::instance().getCount() != 0);
     ReInitializeXerces();
     khLockGuard guard(cacheLock);
     cacheCapacity = 0;
-    purgeGuard::instance().unlock();
+    //purgeGuard::instance().unlock();
   }
 }
 
@@ -366,12 +402,13 @@ namespace {
 bool
 WriteDocumentImpl(DOMDocument *doc, const std::string &filename) throw()
 {
-  
+  std::shared_ptr<XmlWriteLock> guard;
   if (terminateCache) 
   {
-    while(purgeGuard::instance().isLocked());
+    guard.reset(new XmlWriteLock(rwlock));
+    //while(purgeGuard::instance().isLocked());
   }
-  purgeGuard::instance().increment();
+  //purgeGuard::instance().increment();
   bool success = false;
   try {
     // "LS" -> Load/Save extensions
@@ -426,7 +463,7 @@ WriteDocumentImpl(DOMDocument *doc, const std::string &filename) throw()
     notify(NFY_WARN, "Unable to create DOM Writer for %s: Unknown exception",
            filename.c_str());
   }
-  purgeGuard::instance().decrement();
+  //purgeGuard::instance().decrement();
   return success;
 }
 } // anonymous namespace
@@ -466,11 +503,13 @@ WriteDocument(DOMDocument *doc, const std::string &filename) throw()
 bool
 WriteDocumentToString(DOMDocument *doc, std::string &buf) throw()
 {
+  std::shared_ptr<XmlWriteLock> guard;
   if (terminateCache)
   {
-    while(purgeGuard::instance().isLocked());
+    guard.reset(new XmlWriteLock(rwlock));
+    //while(purgeGuard::instance().isLocked());
   }
-  purgeGuard::instance().increment();
+  //purgeGuard::instance().increment();
   bool success = false;
   try {
     // "LS" -> Load/Save extensions
@@ -518,7 +557,7 @@ WriteDocumentToString(DOMDocument *doc, std::string &buf) throw()
       } catch (...) {
         notify(NFY_WARN, "Unable to create DOM writer: Unknown exception");
       }
-  purgeGuard::instance().decrement();
+  //purgeGuard::instance().decrement();
   return success;
 }
 
