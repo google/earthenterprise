@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 #
 # Copyright 2017 Google Inc.
 #
@@ -19,13 +19,11 @@ use strict;
 use Getopt::Long qw(:config no_ignore_case no_auto_abbrev);
 use FindBin qw($Script);
 
-my $cmd_args_good = 0;
 my $help = 0;
-my $no_prompt = 1;
 
 sub usage {
   warn "usage: $Script [-h] <publish_root_dir>\n";
-  warn "   Update the GE http server to point to the given\n";
+  warn "   Update the OpenGEE server to point to the given\n";
   warn "   published databases directory\n";
   warn "Valid options are:\n";
   warn "  -h, --help             Display this message\n";
@@ -33,14 +31,8 @@ sub usage {
   exit(1);
 }
 
-# The --noprompt option is always implied due to requiring the dir arg on the
-# command line. Nothing different has to happen if specified. It is here for
-# consistency to avoid errors/confusion if it is specified.
-$cmd_args_good = GetOptions('help|h'   => \$help,
-                            'noprompt' => \$no_prompt);
-if (not $cmd_args_good or $help or $#ARGV < 0) {
-  usage();
-}
+GetOptions('help|h' => \$help) || usage();
+usage() if $help or $#ARGV != 0;
 
 my $dest_path = $ARGV[0];
 $dest_path =~ s/\/$//;
