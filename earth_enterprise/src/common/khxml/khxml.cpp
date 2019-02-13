@@ -217,102 +217,50 @@ static khMutexBase reinitLock = KH_MUTEX_BASE_INITIALIZER;
 // to purge the XML cache.  There are 5 levels at which to purge
 // the cache: 1 being the most frequent, 5 being the least frequent
 // 
-// Every time a DOMDocument enters into a write operation (in this
+// Every time a DOMDocument enters into a write operation
 // a "write lock" is made, which essentially is just keeping a count 
 // of write operations remaining. When it is determined it is time 
-// for a purge to occur, a "purge lock" is made on purgeGuard.
+// for a purge to occur, a "purge lock" is made.
 //
 // When a "purge lock" occurs, it waits for all "write locks" to finish
 // and then takes control. It will execute all purge operations and then
 // cede control  back to the control of write operations.
+//
+// TODO: generalize and move read-write lock to khThread
 
-static pthread_rwlock_t rwlock = PTHREAD_RWLOCK_INITIALIZER;
+static pthread_rwlock_t purge_lock = PTHREAD_RWLOCK_INITIALIZER;
 
 class XmlWriteLock
 {
 private:
-    pthread_rwlock_t& xml_lock;
+    pthread_rwlock_t& lock;
 public:
-    XmlWriteLock(pthread_rwlock_t& _lock) : xml_lock(_lock)
+    XmlWriteLock(pthread_rwlock_t& _lock) : lock(_lock)
     {
-        pthread_rwlock_rdlock(&xml_lock);
+        pthread_rwlock_rdlock(&lock);
     }
     
     ~XmlWriteLock()
     {
-        pthread_rwlock_unlock(&xml_lock);
+        pthread_rwlock_unlock(&lock);
     }
 };
 
 class PurgeLock
 {
 private:
-    pthread_rwlock_t& purge_lock;
+    pthread_rwlock_t& lock;
 public:
-    PurgeLock(pthread_rwlock_t& _lock) : purge_lock(_lock)
+    PurgeLock(pthread_rwlock_t& _lock) : lock(_lock)
     {
-        pthread_rwlock_wrlock(&purge_lock);
+        pthread_rwlock_wrlock(&lock);
     }
 
     ~PurgeLock()
     {
-        pthread_rwlock_unlock(&purge_lock);
+        pthread_rwlock_unlock(&lock);
     }
 };
-
-class purgeGuard
-{
-private:
-    static bool _lock;
-    static uint32_t count;
-    purgeGuard() = default;
-    static khMutexBase pLock;
-public:
-    static purgeGuard& instance()
-    {
-        static purgeGuard _instance;
-        return _instance;
-    }
-
-    static void increment()
-    {
-        khLockGuard guard(pLock);
-        ++count;
-    }
-
-    static void decrement()
-    {
-        khLockGuard guard(pLock);
-        --count;
-    }
-
-    static uint32_t getCount()
-    {
-        khLockGuard guard(pLock);
-        return count;
-    }
-
-    static void lock()
-    {
-        khLockGuard guard(pLock);
-        _lock = true;
-    }
-
-    static void unlock()
-    {
-        khLockGuard guard(pLock);
-        _lock = false;
-    }
-
-    static bool isLocked()
-    {
-        khLockGuard guard(pLock);
-        return _lock;
-    }
-};
-bool purgeGuard::_lock = false;
-khMutexBase purgeGuard::pLock = KH_MUTEX_BASE_INITIALIZER;
-uint32_t purgeGuard::count = 0;
 
 void ReInitializeXerces()
 {
@@ -357,13 +305,10 @@ void  reInitIfReady()
          (maxDOMHeapAllocSize * percent); 
   if (cacheCapacity >= threashold)
   {
-    //purgeGuard::instance().lock();
-    PurgeLock pguard(rwlock);
-    //while(purgeGuard::instance().getCount() != 0);
+    PurgeLock pguard(purge_lock);
     ReInitializeXerces();
     khLockGuard guard(cacheLock);
     cacheCapacity = 0;
-    //purgeGuard::instance().unlock();
   }
 }
 
@@ -402,13 +347,14 @@ namespace {
 bool
 WriteDocumentImpl(DOMDocument *doc, const std::string &filename) throw()
 {
+  // will initially be nullptr, reset to do a write lock
+  // release lock when it goes out of scope at the end of
+  // the function
   std::shared_ptr<XmlWriteLock> guard;
   if (terminateCache) 
   {
-    guard.reset(new XmlWriteLock(rwlock));
-    //while(purgeGuard::instance().isLocked());
+    guard.reset(new XmlWriteLock(purge_lock));
   }
-  //purgeGuard::instance().increment();
   bool success = false;
   try {
     // "LS" -> Load/Save extensions
@@ -463,7 +409,6 @@ WriteDocumentImpl(DOMDocument *doc, const std::string &filename) throw()
     notify(NFY_WARN, "Unable to create DOM Writer for %s: Unknown exception",
            filename.c_str());
   }
-  //purgeGuard::instance().decrement();
   return success;
 }
 } // anonymous namespace
@@ -506,10 +451,8 @@ WriteDocumentToString(DOMDocument *doc, std::string &buf) throw()
   std::shared_ptr<XmlWriteLock> guard;
   if (terminateCache)
   {
-    guard.reset(new XmlWriteLock(rwlock));
-    //while(purgeGuard::instance().isLocked());
+    guard.reset(new XmlWriteLock(purge_lock));
   }
-  //purgeGuard::instance().increment();
   bool success = false;
   try {
     // "LS" -> Load/Save extensions
@@ -557,7 +500,6 @@ WriteDocumentToString(DOMDocument *doc, std::string &buf) throw()
       } catch (...) {
         notify(NFY_WARN, "Unable to create DOM writer: Unknown exception");
       }
-  //purgeGuard::instance().decrement();
   return success;
 }
 
