@@ -103,7 +103,7 @@ void validateXMLParameters()
 
     // check to make sure they meet the minimum size
     if (initialDOMHeapAllocSize < lowestBlock ||
-   	maxDOMHeapAllocSize < lowestBlock)     
+        maxDOMHeapAllocSize < lowestBlock)
     {
         throw MinValuesNotMet();
     }
@@ -170,6 +170,7 @@ void getInitValues()
     }
     catch (const khConfigFileParserException& e)
     {
+        setDefaultValues();
         notify(NFY_DEBUG, "%s , using default xerces init values", e.what());
     }
     try
@@ -205,8 +206,6 @@ void initXercesValues()
     }
 }
 
-static khMutexBase xmlLibLock = KH_MUTEX_BASE_INITIALIZER;
-static khMutexBase checkTermLock = KH_MUTEX_BASE_INITIALIZER;
 static khMutexBase cacheLock = KH_MUTEX_BASE_INITIALIZER;
 static khMutexBase reinitLock = KH_MUTEX_BASE_INITIALIZER;
 
@@ -283,6 +282,7 @@ class UsingXMLGuard
   friend void InitializeXMLLibrary() throw();
 
   UsingXMLGuard(void) throw() {
+    khLockGuard guard(reinitLock);
     initXercesValues();
   }
 
@@ -290,6 +290,7 @@ class UsingXMLGuard
     if (!terminateCache)
     {
         try {
+            khLockGuard guard(reinitLock);
             XMLPlatformUtils::Terminate();
         } catch (...) {
             notify(NFY_DEBUG, "Failure to terminate in ~UsingXMLGuard");
@@ -300,21 +301,19 @@ class UsingXMLGuard
 
 void  reInitIfReady()
 {
-  khLockGuard guard(checkTermLock);
+  khLockGuard guard(cacheLock);
   static XMLSSize_t threashold = static_cast<XMLSSize_t>
          (maxDOMHeapAllocSize * percent); 
   if (cacheCapacity >= threashold)
   {
     PurgeLock pguard(purge_lock);
     ReInitializeXerces();
-    khLockGuard guard(cacheLock);
     cacheCapacity = 0;
   }
 }
 
 void InitializeXMLLibrary() throw()
 {
-  khLockGuard guard(xmlLibLock);
   static UsingXMLGuard XMLLibGuard;
 }
 
@@ -426,9 +425,9 @@ WriteDocument(DOMDocument *doc, const std::string &filename) throw()
   }
   else
   {
-    khLockGuard guard(cacheLock);
     struct stat check;
     stat(filename.c_str(), &check);
+    khLockGuard guard(cacheLock);
     cacheCapacity += check.st_size;  
   }
 
@@ -472,9 +471,9 @@ WriteDocumentToString(DOMDocument *doc, std::string &buf) throw()
       DOMLSOutput* lsOutput = impl->createLSOutput();
       lsOutput->setByteStream(&formatTarget);
       if (writer->write(doc, lsOutput)) {
-          khLockGuard guard(cacheLock);
           buf.append((const char *)formatTarget.getRawBuffer(),
           formatTarget.getLen());
+          khLockGuard guard(cacheLock);
           cacheCapacity += buf.size();
         success = true;
       } else {
@@ -548,17 +547,23 @@ CreateDOMParser(void) throw()
 khxml::DOMDocument*
 ReadDocument(khxml::DOMLSParser *parser, const std::string &filename) throw()
 {
+  std::shared_ptr<XmlWriteLock> guard;
+  if (terminateCache)
+  {
+    guard.reset(new XmlWriteLock(purge_lock));
+  }
+
   DOMDocument* doc = nullptr;
 
   try {
     // Note: parseURI doesn't handle missing files nicely...returns
     // invalid doc object. Must check file existence ourselves.
     if (khExists(filename)) {
-         khLockGuard guard(cacheLock);
          doc = parser->parseURI(filename.c_str());
          // TODO: find out size of contents in doc, not immediately available
          struct stat file;
          stat(filename.c_str(), &file);
+         khLockGuard guard(cacheLock);
          cacheCapacity += file.st_size;
     } else {
       notify(NFY_WARN, "XML file does not exist: %s", filename.c_str());
@@ -580,6 +585,12 @@ ReadDocumentFromString(khxml::DOMLSParser *parser,
                        const std::string &buf,
                        const std::string &ref) throw()
 {
+  std::shared_ptr<XmlWriteLock> guard;
+  if (terminateCache)
+  {
+    guard.reset(new XmlWriteLock(purge_lock));
+  }
+
   DOMDocument *doc = nullptr;
   try {
     MemBufInputSource memBufIS(
