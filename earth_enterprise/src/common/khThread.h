@@ -48,6 +48,8 @@ class khMutexBase {
   void Unlock(void);
   bool trylock(void) { return TryLock(); }
   bool TryLock(void);
+  bool timedTryLock(uint secToWait) { return TimedTryLock(secToWait); }
+  bool TimedTryLock(uint secToWait);
 };
 #define KH_MUTEX_BASE_INITIALIZER {PTHREAD_MUTEX_INITIALIZER}
 #define kH_MUTEX_BASE_RECURSIVE {PTHREAD_MUTEX_RECURSIVE}

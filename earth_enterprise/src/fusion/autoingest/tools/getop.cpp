@@ -80,11 +80,13 @@ main(int argc, char *argv[])
     bool help  = false;
     int delay = 5;
     int timeout = 60;
+    bool freezeTime = false;
     khGetopt options;
     options.flagOpt("help", help);
     options.flagOpt("?", help);
     options.opt("delay", delay);
     options.opt("timeout", timeout);
+    options.flagOpt("freeze", freezeTime);
     if (!options.processAll(argc, argv, argn))
       usage(progname);
     if (help)
@@ -93,12 +95,21 @@ main(int argc, char *argv[])
       usage(progname, "--delay must be positive");
     if (timeout < 0)
       usage(progname, "--timeout must not be less than zero");
-
+    if (freezeTime) {
+      outline("Freezing system manager");
+      QString error;
+      TaskLists taskLists;
+      std::string delayStr = "FreezeSysMan";
+      khAssetManagerProxy::GetCurrTasks("FreezeSysMan", taskLists,
+                                             error, 2);
+      exit(0);
+    }
 
     std::string master    = AssetDefs::MasterHostName();
     std::string assetroot = AssetDefs::AssetRoot();
     CmdLine clearscreen;
     clearscreen << "clear";
+    outline("Connecting to gesystemmanager to retrieve status...");
 
     while (1) {
       QString error;
@@ -107,6 +118,8 @@ main(int argc, char *argv[])
                                              error, timeout)) {
       	if (error.compare("GetCurrTasks: socket recvall: Resource temporarily unavailable") == 0)
           outline("No data received from gesystemmanager\nStarting new request");
+        else if (error.compare("GetCurrTasks: ERROR: Timed out waiting for lock") == 0)
+          outline("System Manager is busy.  Retrying in %d seconds", delay);
         else
           notify(NFY_FATAL, "%s", error.latin1());
       } else {

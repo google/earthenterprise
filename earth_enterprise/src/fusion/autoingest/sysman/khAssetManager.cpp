@@ -458,6 +458,8 @@ khAssetManager::HandleClientLoop(FusionConnection::Handle client) throw()
           } else if (cmdname == PUBLISH_DATABASE) {
             // TODO: Deserialize parameters from protobuf here.
             replyPayload = PublishDatabase(msg.payload);
+          } else if (cmdname == GET_TASKS) {
+            replyPayload = RetrieveTasking(msg);
           } else {
             DispatchRequest(msg, replyPayload);
           }
@@ -1060,6 +1062,7 @@ khAssetManager::MakeAssetDir(const std::string &assetdir) {
 const std::string khAssetManager::ASSET_STATUS = "AssetStatus";
 const std::string khAssetManager::PUSH_DATABASE = "PushDatabase";
 const std::string khAssetManager::PUBLISH_DATABASE = "PublishDatabase";
+const std::string khAssetManager::GET_TASKS = "GetCurrTasks";
 
 /**
  * Get status of all versions of an asset.
@@ -1230,4 +1233,36 @@ std::string khAssetManager::PublishDatabase(
   }
 
   return std::string("Database Successfully Published.");
+}
+
+std::string khAssetManager::RetrieveTasking(const FusionConnection::RecvPacket& msg) {
+  uint mutexWaitTime = MiscConfig::Instance().MutexTimedWaitSec;
+  std::string cmdString;
+  std::string replyPayload;
+  FromPayload(msg.payload, cmdString);
+  if (cmdString == "FreezeSysMan") {
+  //int delayTime = atoi(cmdString.substr(12).c_str());
+  int delayTime = 300;
+  khLockGuard lock(mutex);
+  notify(NFY_WARN, "Holding the mutex for %d seconds", delayTime);
+  sleep(delayTime);
+  notify(NFY_WARN, "Releasing the mutex");
+  }else {
+  //
+  TaskLists ret;
+  std::string dummy;
+  if (mutex.timedTryLock(mutexWaitTime)) {
+    GetCurrTasks(dummy, ret);
+    mutex.Unlock();
+    if (!ToPayload(ret, replyPayload)) {
+	    throw khException(kh::tr("Unable to encode %1 reply payload")
+	      .arg(ToQString(GET_TASKS)));
+	  }
+  }
+  else {
+    notify(NFY_WARN, "Timed out waiting for lock on current task request");
+    replyPayload = "ERROR: Timed out waiting for lock";
+  }
+  }
+  return replyPayload;
 }
