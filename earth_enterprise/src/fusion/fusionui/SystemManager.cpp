@@ -147,14 +147,19 @@ SystemManager::updateTasks(void)
   QString error;
   TaskLists taskLists;
   if (!khAssetManagerProxy::GetCurrTasks("dummy", taskLists, error)) {
+    QString errorMsg;
+    if (error.compare("GetCurrTasks: ERROR: Timed out waiting for lock") == 0)
+      errorMsg = tr("--- System Manager is busy ---");
+    else
+      errorMsg = tr("--- Unable to contact System Manager ---");
+    
     // Can't get TaskList...
     // clean top panes and display message about
     // being unable to connect to asset manager
     waitingList->clear();
     activeList->clear();
-    (void) new WaitingItem(waitingList,
-                           tr("--- Unable to contact System Manager ---"));
-    activeList->insertItem(tr("--- Unable to contact System Manager ---"));
+    (void) new WaitingItem(waitingList, errorMsg);
+    activeList->insertItem(errorMsg);
 
   } else {
     // Waiting list
