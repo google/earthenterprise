@@ -338,6 +338,11 @@ def verify_state_database(database, state):
 def verify_state_map_layer(layer, state):
   verify_state(os.path.join(MAP_LAYER_PATH, layer), state)
 
+@step("Verify that the state of map layer <layer> is in <table>")
+def verify_state_map_layer(layer, table):
+  states = list_from_table(table)
+  verify_state(os.path.join(MAP_LAYER_PATH, layer), states)
+  
 @step("Verify that the state of map project <project> is <state>")
 def verify_state_map_project(project, state):
   verify_state(os.path.join(MAP_PROJECT_PATH, project), state)
