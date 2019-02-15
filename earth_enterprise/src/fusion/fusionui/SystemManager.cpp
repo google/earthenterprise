@@ -148,7 +148,8 @@ SystemManager::updateTasks(void)
   TaskLists taskLists;
   if (!khAssetManagerProxy::GetCurrTasks("dummy", taskLists, error)) {
     QString errorMsg;
-    if (error.compare("GetCurrTasks: ERROR: Timed out waiting for lock") == 0)
+    static const QString BUSY_MSG = "GetCurrTasks: " + sysManBusyMsg;
+    if (error.compare(BUSY_MSG) == 0)
       errorMsg = tr("--- System Manager is busy ---");
     else
       errorMsg = tr("--- Unable to contact System Manager ---");
