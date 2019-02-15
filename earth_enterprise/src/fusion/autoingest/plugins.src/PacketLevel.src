@@ -84,11 +84,11 @@ void PacketLevelAssetVersionImplD::DoSubmitTask(void) {
   // misc.xml now contains an option, DisablePacketLevelVersionCachePurge, which
   // allows the user to disable cache purging. The default value is false
 
-  if (! MiscConfig::Instance().DisablePacketLevelVersionCachePurge)
-  {
+  //if (! MiscConfig::Instance().DisablePacketLevelVersionCachePurge)
+  //{
      MutableAssetVersionD::PurgeCacheIfNeeded(
        (taskConfig.insets.size() << 1) + 32);
-  }
+  //}
 
   // get my input filenames so I can pass them to the TaskDef
   std::vector<std::string> inputFilenames;
