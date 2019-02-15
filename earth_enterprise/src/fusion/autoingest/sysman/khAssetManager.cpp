@@ -1260,8 +1260,8 @@ std::string khAssetManager::RetrieveTasking(const FusionConnection::RecvPacket& 
 	  }
   }
   else {
-    notify(NFY_WARN, "Timed out waiting for lock on current task request");
-    replyPayload = "ERROR: Timed out waiting for lock";
+    // Replying with a string beginning "ERROR:" passes an exception message back to the caller
+    replyPayload = sysManBusyMsg;
   }
   }
   return replyPayload;

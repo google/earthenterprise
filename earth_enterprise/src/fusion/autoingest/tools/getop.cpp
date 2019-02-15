@@ -26,6 +26,8 @@
 // global for convenience
 int numcols = 80;
 
+static const std::string SYS_MGR_BUSY_MSG = "GetCurrTasks: " + sysManBusyMsg;
+
 void
 outline(const char *format, ...)
 {
@@ -118,7 +120,7 @@ main(int argc, char *argv[])
                                              error, timeout)) {
       	if (error.compare("GetCurrTasks: socket recvall: Resource temporarily unavailable") == 0)
           outline("No data received from gesystemmanager\nStarting new request");
-        else if (error.compare("GetCurrTasks: ERROR: Timed out waiting for lock") == 0)
+        else if (error.compare(SYS_MGR_BUSY_MSG) == 0)
           outline("System Manager is busy.  Retrying in %d seconds", delay);
         else
           notify(NFY_FATAL, "%s", error.latin1());
