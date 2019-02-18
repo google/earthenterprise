@@ -83,6 +83,13 @@ gtag('config', 'UA-108632131-2');
               Files are linked in <code>/tmp</code> using symbolic links back to original locations.
             </td>
           </tr>
+          <tr>
+            <td>799</td>
+            <td>The GEE Portable Server does not return valid JSON when queried with <code>http://&lt;server&gt;/&lt;map&gt;/query?request=Json</code>.</td>
+            <td>
+              Added a <code>v</code> parameter to the query; when its value is above 1, the GEE Portable Server will return proper JSON.  Currently, it defaults to 1 if not specified.
+            </td>
+          </tr> 
            <tr>
             <td>1158</td>
             <td><code>geeServerDefs</code> are not returned by Portable Server after being requested, once the globe has been viewed by a client. It is not possible to request <code>geeServerDefs</code> for globes other than the current <code>selectedGlobe</code>.</td>
