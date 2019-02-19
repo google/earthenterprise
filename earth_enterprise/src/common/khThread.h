@@ -76,12 +76,25 @@ class khNoDestroyMutex : public khMutexBase {
   ~khNoDestroyMutex(void) {}
 };
 
+class khTimedMutexException : public std::runtime_error
+{
+ public:
+  khTimedMutexException(const std::string &msg) :
+    std::runtime_error(msg) { }
+  virtual ~khTimedMutexException(void) throw() { }
+};
 
 class khLockGuard {
   khMutexBase &mutex;
  public:
   khLockGuard(khMutexBase &mutex_) : mutex(mutex_) {
     mutex.Lock();
+  }
+  khLockGuard(khMutexBase &mutex_, uint waitTime) : mutex(mutex_) {
+    if (!mutex.TimedTryLock(waitTime)) {
+      std::string errMsg = "Failed to acquire mutex within " + std::to_string(waitTime) +  " seconds";
+      throw khTimedMutexException(errMsg);
+    }
   }
   khLockGuard() = delete;
   khLockGuard(const khLockGuard&) = delete;
