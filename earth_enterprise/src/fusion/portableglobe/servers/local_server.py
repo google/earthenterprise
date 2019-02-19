@@ -24,6 +24,7 @@ sharing the same key.
 
 import os
 import re
+import json
 import StringIO
 import sys
 
@@ -409,9 +410,19 @@ class LocalServer(object):
     else:
       # Globe requested is the current selectedGlobe
       return 1
-    
 
-  def LocalJsonHandler(self, handler, is_2d=False):
+  def JStoJson(self, js_string):
+    """Converts a JS server definition string to valid JSON."""
+    # Remove "var geeServerDefs = " or similar from start.
+    # Then add quotes to JSON keys that don't have them.
+    # Strip out the trailing ';'
+    # Finally, push it through json.dumps to ensure consistently-formatted output.
+    out_string = re.sub(r"^var \w+ ?= ?", "", js_string)
+    out_string = re.sub(r"([,{]\s+)(\w+):", r'\1"\2":', out_string)
+    out_string = out_string.strip(";")
+    return json.dumps(json.loads(out_string))
+
+  def LocalJsonHandler(self, handler, is_2d=False, json_version=1):
     """Handle GET request for JSON file for plugin."""
     if not handler.IsValidRequest():
       raise tornado.web.HTTPError(404)
@@ -506,8 +517,13 @@ class LocalServer(object):
       json_end += "};"
 
     # Adding globe name helps ensure clearing of cache for new globes.
-    handler.write("%s/%s%s" % (
-        json_start, tornado.web.globe_.GlobeShortName(), json_end))
+    json_text = "%s/%s%s" % (
+      json_start, tornado.web.globe_.GlobeShortName(), json_end)
+
+    if json_version == 2:
+      json_text = self.JStoJson(json_text)
+
+    handler.write(json_text)
 
     # If we switched globes, switch back
     if len(current_globe):
