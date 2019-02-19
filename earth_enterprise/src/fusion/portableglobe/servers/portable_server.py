@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #
-# Copyright 2017 Google Inc.
+# Copyright 2017 Google Inc, 2019 Open GEE Contributors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -292,14 +292,18 @@ class QueryHandler(portable_server_base.BaseHandler):
   def get(self):
     """Handle GET request for JSON file for plugin."""
     if self.request.arguments["request"][0] == "Json":
+      if "v" in self.request.arguments:
+        json_version = int(self.request.arguments["v"][0])
+      else:
+        json_version = 1
       self.set_header("Content-Type", "text/plain; charset=utf-8")
       # TODO: Need way to distinguish 2d/3d for
       # TODO: composite with both.
       if ("is2d" in self.request.arguments.keys() and
           self.request.arguments["is2d"][0] == "t"):
-        tornado.web.local_server_.LocalJsonHandler(self, True)
+        tornado.web.local_server_.LocalJsonHandler(self, True, json_version)
       else:
-        tornado.web.local_server_.LocalJsonHandler(self, False)
+        tornado.web.local_server_.LocalJsonHandler(self, False, json_version)
 
     elif self.request.arguments["request"][0] == "ImageryMaps":
       self.set_header("Content-Type", "image/jpeg")
