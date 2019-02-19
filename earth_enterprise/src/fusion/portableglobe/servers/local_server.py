@@ -520,7 +520,7 @@ class LocalServer(object):
     json_text = "%s/%s%s" % (
       json_start, tornado.web.globe_.GlobeShortName(), json_end)
 
-    if json_version > 1:
+    if json_version == 2:
       json_text = self.JStoJson(json_text)
 
     handler.write(json_text)
