@@ -242,6 +242,11 @@ class khAssetManager
   // TODO: receive and return results as serialized protobufs.
   std::string PublishDatabase(const std::string arguments_string);
 
+  /**
+   * Retrieve the current System Manager tasking
+   * @param msg Received request message from client
+   * @return serialized tasks list or error message beginning with "ERROR:"
+   */
   std::string RetrieveTasking(const FusionConnection::RecvPacket& msg);
 };
 
