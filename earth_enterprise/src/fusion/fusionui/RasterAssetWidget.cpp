@@ -737,6 +737,9 @@ void RasterAssetWidget::AssembleEditRequest(
   if (!boundary_error.empty()) {
     throw khException(boundary_error);
   }
+  if (acquisition_date_wrapper_->IsValidDate()) {
+    throw khException(tr("Invalid date."));
+  }
 }
 
 RasterAssetWidget::MaskType RasterAssetWidget::GetMaskType() const {
