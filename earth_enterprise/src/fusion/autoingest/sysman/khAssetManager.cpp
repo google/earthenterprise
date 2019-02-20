@@ -1240,16 +1240,7 @@ std::string khAssetManager::RetrieveTasking(const FusionConnection::RecvPacket& 
 
   std::string replyPayload;
   try {
-    std::string cmdString;
-    FromPayload(msg.payload, cmdString);
-    if (cmdString == "FreezeSysMan") {
-      khLockGuard lock(mutex);
-      notify(NFY_WARN, "Holding the mutex for 300 seconds");
-      sleep(300);
-      notify(NFY_WARN, "Releasing the mutex");
-      return "";
-    }
-    
+    // will throw an exception if mutexWaitTime is exceeded trying to acquire the lock
     khLockGuard timedLock(mutex, mutexWaitTime);
     TaskLists ret;
     std::string dummy;
