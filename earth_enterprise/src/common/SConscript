@@ -190,7 +190,7 @@ env.test('performancelogger_unittest',
 
 env.test('khThread_unittest',
          'khThread_unittest.cpp',
-         LIBS=['gecommon', 'gtest'])
+         LIBS=['gecommon', 'gtest', 'rt'])
 
 env.test('khconfigparser_unittest',
          'khconfigparser_unittest.cpp',
