@@ -47,6 +47,9 @@ main_preinstall()
 
     # Dump database if it exists
     database_backup
+
+    # If user previously symlinked to another location for portable globes storage don't let the installer mess that up
+    save_portable_globe_symlink
 }
 
 #-----------------------------------------------------------------
@@ -73,6 +76,15 @@ database_backup()
     # If the GEE data directory exists and PostgreSQL is installed
     if [ -d "$BASEINSTALLDIR_VAR/pgsql/data" ] && [ -f "$BASEINSTALLDIR_OPT/bin/psql" ]; then
         do_dump
+    fi
+}
+
+save_portable_globe_symlink()
+{
+    # Move a symlink for portables to save it from the RPM extract changing ownership to root:root
+    # It will be moved back as part of the post install script
+    if [ -L "$BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/globes" ]; then
+        mv "$BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/globes" "$BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/globes_symlink"
     fi
 }
 
