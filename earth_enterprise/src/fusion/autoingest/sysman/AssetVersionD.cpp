@@ -46,7 +46,6 @@ AssetVersionImplD::StateChangeNotifier::GetNotifier(
 void
 AssetVersionImplD::StateChangeNotifier::AddParentsToNotify(const std::vector<std::string> & parents) {
   std::copy(parents.begin(), parents.end(), std::inserter(parentsToNotify, parentsToNotify.end()));
-  NotifyParents(nullptr);
 }
 
 void
@@ -61,7 +60,6 @@ AssetVersionImplD::StateChangeNotifier::AddListenersToNotify(const std::vector<s
       elem.allWorkingOrSucceeded = false;
     }
   }
-  NotifyListeners(nullptr);
 }
 
 AssetVersionImplD::StateChangeNotifier::~StateChangeNotifier() {
