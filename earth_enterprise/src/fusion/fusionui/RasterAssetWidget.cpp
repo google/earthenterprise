@@ -651,7 +651,7 @@ void RasterAssetWidget::AssembleEditRequest(
   }
 
   if (!acquisition_date_wrapper_->IsValidDate()) {
-    throw khException(tr("Invalid date: Must be present or future."));
+    throw khException(tr("Invalid date."));
   }
   request->meta.SetValue("sourcedate", acquisition_date_wrapper_->GetDate());
 
