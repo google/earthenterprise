@@ -638,17 +638,11 @@ if ($hasinputs) {
 
 $template
 ${name}AssetVersionD
-${name}AssetImplD::MyUpdate(bool &needed $formalcachedinputarg
-                            $formalExtraUpdateArg) const
+${name}AssetImplD::MyUpdate(bool &needed $formalcachedinputarg) const
 {
     std::vector<AssetVersion> updatedInputVers;
-    const std::vector<AssetVersion> *inputvers;
-    if (cachedinputs_.size()) {
-        inputvers = &cachedinputs_;
-    } else {
-        UpdateInputs(updatedInputVers);
-        inputvers = &updatedInputVers;
-    }
+    UpdateInputs(updatedInputVers);
+    const std::vector<AssetVersion> *inputvers = &updatedInputVers;
 EOF
 
 if ($hasfixconfig) {
