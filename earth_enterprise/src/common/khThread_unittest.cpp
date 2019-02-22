@@ -67,7 +67,7 @@ TEST_F(ThreadUnitTest, timedMutex_normal) {
   EXPECT_TRUE(info.start.tv_sec + waittime > info.stop.tv_sec);
 }
 
-// should wait atleast timeout time and then fail to create khLockGuard if mutex is already held
+// should wait at least timeout time and then fail to create khLockGuard if mutex is already held
 TEST_F(ThreadUnitTest, timedMutex_timeout) {
   uint waittime = 3; // seconds
 
