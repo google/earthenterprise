@@ -32,6 +32,8 @@ class MiscConfigStorage {
 
   bool        ConsolidateListenerNotifications = false;
 
+  uint        MutexTimedWaitSec = uint(30);
+
 #pragma LoadAndSave
 
 #hquote
