@@ -200,8 +200,6 @@ class AssetFunctionTester : public ThreadMemberFunctionTester
             YAML::Value << FriendlyAsset::cache().capacity() <<
             YAML::Key << "asset version cache capacity" <<
             YAML::Value << FriendlyAssetVersion::cache().capacity() <<
-            YAML::Key << "DisablePacketLevelVersionCachePurge" <<
-            YAML::Value << MiscConfig::Instance().DisablePacketLevelVersionCachePurge <<
             YAML::Key << "notify level" <<
             YAML::Value << min_kh_notify_level <<
             YAML::Key << "notify level name" <<
