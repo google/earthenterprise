@@ -20,6 +20,7 @@
 
 void khMutexBase::Lock(void) {}
 void khMutexBase::Unlock(void) {}
+bool khMutexBase::TimedTryLock(uint) { return true; }
 khMutex::khMutex(void) {};
 khMutex::~khMutex() {};
 
