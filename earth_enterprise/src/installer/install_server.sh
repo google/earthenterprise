@@ -104,6 +104,10 @@ main_preinstall()
     exit 1
   fi
 
+	if ! prompt_install_confirmation; then
+		exit 1
+	fi
+
   # 5b) Perform backup
   if [ "$BACKUPSERVER" = true ]; then
     # Backing up current Server Install...
@@ -627,6 +631,47 @@ check_server_running()
              /var/opt/google/pgsql/logs \n
              for more details. "
   fi
+}
+
+prompt_install_confirmation()
+{
+	local backupStringValue=""
+
+	if [ $BACKUPSERVER == true ]; then
+		backupStringValue="YES"
+	else
+		backupStringValue="NO"
+	fi
+
+	echo -e "\nYou have chosen to install $GEES with the following settings:\n"
+	echo -e "# CPU's: \t\t$NUM_CPUS"
+	echo -e "Operating System: \t$MACHINE_OS_FRIENDLY"
+	echo -e "64 bit OS: \t\tYES"	# Will always be true because we exit if 32 bit OS
+	if [ $IS_NEWINSTALL == false ]; then
+		echo -e "Backup Fusion: \t\t$backupStringValue"
+	fi
+	echo -e "Install Location: \t$BASEINSTALLDIR_OPT"
+	echo -e "Asset Root: \t\t$ASSET_ROOT"
+  echo -e "Source Volume: \t\t$SOURCE_VOLUME"
+	echo -e "Fusion User: \t\t$GEFUSIONUSER_NAME"
+	echo -e "Fusion User Group: \t$GROUPNAME"
+	echo -e "Apache User: \t\t$GEAPACHEUSER_NAME"
+  echo -e "Disk Space:\n"
+
+#	GRPNAME="gegroup"
+#	GEPGUSER_NAME="gepguser"
+
+	# display disk space
+	df -h | grep -v -E "^none"
+
+	echo ""
+
+	if ! prompt_to_quit "X (Exit) the installer and cancel the installation - C (Continue) to install/upgrade."; then
+		return 1
+	else
+        echo -e "\nProceeding with installation..."
+		return 0
+    fi
 }
 
 #-----------------------------------------------------------------
