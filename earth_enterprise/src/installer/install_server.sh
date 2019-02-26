@@ -77,7 +77,7 @@ main_preinstall()
   fi
 
   if is_package_installed "opengee-common" "opengee-common"; then
-    show_opengee_package_installed "install" "$GEES" 
+    show_opengee_package_installed "install" "$GEES"
     exit 1
   fi
 
@@ -98,6 +98,12 @@ main_preinstall()
     exit 1
   fi
 
+  # 64 bit check
+  if [[ "$(uname -i)" != "x86_64" ]]; then
+    echo -e "\n$GEES $LONG_VERSION can only be installed on a 64 bit operating system."
+    exit 1
+  fi
+
   # 5b) Perform backup
   if [ "$BACKUPSERVER" = true ]; then
     # Backing up current Server Install...
@@ -115,12 +121,6 @@ main_preinstall()
   fi
 
   if ! check_mismatched_hostname; then
-    exit 1
-  fi
-
-  # 64 bit check
-  if [[ "$(uname -i)" != "x86_64" ]]; then
-    echo -e "\n$GEES $LONG_VERSION can only be installed on a 64 bit operating system."
     exit 1
   fi
 
