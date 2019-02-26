@@ -55,6 +55,8 @@ PROMPT_FOR_START="n"
 
 # addition variables
 IS_NEWINSTALL=false
+PUBLISER_ROOT_VOLUME_SIZE=0
+PUBLISHER_ROOT_VOLUME_AVAIL=0
 
 #-----------------------------------------------------------------
 # Main Functions
@@ -114,6 +116,12 @@ main_preinstall()
 		exit 1
 	fi
 
+	# 10) Configure Publish Root
+	configure_publish_root
+
+  # Check publisher root volume size
+  check_publisher_root_volume
+
 	if ! prompt_install_confirmation; then
 		exit 1
 	fi
@@ -144,8 +152,6 @@ main_preinstall()
 	check_username "$GEAPACHEUSER_NAME"
 	check_username "$GEPGUSER_NAME"
 
-	# 10) Configure Publish Root
-	configure_publish_root
 }
 
 check_prereq_software()
@@ -221,13 +227,15 @@ show_intro()
 # TODO: Add additional parameters for GEE Server
 show_help()
 {
-	echo -e "\nUsage: \tsudo ./install_server.sh [-h] [-dir /tmp/fusion_os_install -hnf -hnmf]\n"
+	echo -e "\nUsage: \tsudo ./install_server.sh [-h] [-dir /tmp/fusion_os_install -hnf -hnmf] [-nobk]\n"
 
 	echo -e "-h --help \tHelp - display this help screen"
 	echo -e "-dir \t\tTemp Install Directory - specify the temporary install directory. Default is [$TMPINSTALLDIR]."
 	echo -e "-hnf \t\tHostname Force - force the installer to continue installing with a bad \n\t\thostname. Bad hostname values are [${BADHOSTNAMELIST[*]}]."
-	echo -e "-hnmf \t\tHostname Mismatch Force - force the installer to continue installing with a \n\t\tmismatched hostname.\n"
+	echo -e "-hnmf \t\tHostname Mismatch Force - force the installer to continue installing with a \n\t\tmismatched hostname."
 	echo -e "-nobk \t\tNo Backup - do not backup the current server setup. Default is to backup \n\t\tthe setup before installing."
+  echo -e "-p"
+  echo -e "\n"
 }
 
 # TODO convert to common function
@@ -317,6 +325,15 @@ configure_publish_root()
 	if [ -e "$STREAM_SPACE" ]; then
 		PUBLISHER_ROOT=`cat $STREAM_SPACE | cut -d" " -f3 | sed 's/.\{13\}$//'`
 	fi
+}
+
+check_publisher_root_volume()
+{
+  # Get size and available for publisher root volume
+  local DF_H=`df -h $PUBLISHER_ROOT | tail -1 2> /tmp/error.log`
+  echo "DF_H:  $DF_H"
+  PUBLISHER_ROOT_VOLUME_SIZE=`echo $DF_H | awk '{print $2}'`
+  PUBLISHER_ROOT_VOLUME_AVAIL=`echo $DF_H | awk '{print $4}'`
 }
 
 backup_pgsql_data()
@@ -682,12 +699,15 @@ prompt_install_confirmation()
 	if [ $IS_NEWINSTALL == false ]; then
 		echo -e "Backup Fusion: \t\t$backupStringValue"
 	fi
+  echo -e "Publisher Root: \t$PUBLISHER_ROOT"
+  echo -e "Publisher Root Size: \t$PUBLISHER_ROOT_VOLUME_SIZE"
+  echo -e "Publisher Root Avail: \t$PUBLISHER_ROOT_VOLUME_AVAIL"
 	echo -e "Install Location: \t$BASEINSTALLDIR_OPT"
 	echo -e "Asset Root: \t\t$ASSET_ROOT"
 	echo -e "Source Volume: \t\t$SOURCE_VOLUME"
-	echo -e "Fusion User: \t\t$GEFUSIONUSER_NAME"
-	echo -e "Fusion User Group: \t$GROUPNAME"
+	echo -e "Postgres User: \t\t$GEPGUSER_NAME"
 	echo -e "Apache User: \t\t$GEAPACHEUSER_NAME"
+	echo -e "Group: \t\t\t$GRPNAME"
 	echo -e "Disk Space:\n"
 
 #	GRPNAME="gegroup"
