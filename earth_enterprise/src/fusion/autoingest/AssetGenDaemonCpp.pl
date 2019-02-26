@@ -636,6 +636,7 @@ EOF
 # cachedinputs_ is empty. when this happens, 
 # UpdateInputs()is called twice: here, and in the
 # FixConfigBeforeUpdateCheck() if block, we want
+# to prevent this
 
 if ($hasinputs) {
     print $fh <<EOF;
