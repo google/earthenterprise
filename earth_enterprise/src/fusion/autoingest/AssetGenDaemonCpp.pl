@@ -632,22 +632,35 @@ EOF
 
 }
 
+# in some permutations, there are instances where 
+# cachedinputs_ is empty. when this happens, 
+# UpdateInputs()is called twice: here, and in the
+# FixConfigBeforeUpdateCheck() if block, we want
 
 if ($hasinputs) {
     print $fh <<EOF;
 
 $template
 ${name}AssetVersionD
-${name}AssetImplD::MyUpdate(bool &needed $formalcachedinputarg) const
+${name}AssetImplD::MyUpdate(bool &needed $formalcachedinputarg
+                            $formalExtraUpdateArg) const
 {
+    // if applicable, prevent multiple calls to UpdateInputs()
+    bool hasUpdated = false;
     std::vector<AssetVersion> updatedInputVers;
-    UpdateInputs(updatedInputVers);
-    const std::vector<AssetVersion> *inputvers = &updatedInputVers;
+    const std::vector<AssetVersion> *inputvers;
+    if (cachedinputs_.size()) {
+        inputvers = &cachedinputs_;
+    } else {
+        hasUpdated = true;
+        UpdateInputs(updatedInputVers);
+        inputvers = &updatedInputVers;
+    }
 EOF
 
 if ($hasfixconfig) {
     print $fh <<EOF;
-    if (FixConfigBeforeUpdateCheck()) {
+    if (!hasUpdated && FixConfigBeforeUpdateCheck()) {
         // I've changed something (possibly my input order). So I need to
         // refetch my inputvers
         updatedInputVers.clear();
