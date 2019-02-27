@@ -13,29 +13,18 @@
 // limitations under the License.
 
 
-#include <xercesc/framework/LocalFileFormatTarget.hpp>
-#include <xercesc/framework/MemBufFormatTarget.hpp>
-#include <xercesc/framework/MemBufInputSource.hpp>
-#include <xercesc/framework/Wrapper4InputSource.hpp>
-#include <xercesc/util/PlatformUtils.hpp>
 #include <notify.h>
-#include <khThread.h>
 #include <khFileUtils.h>
 #include "khxml.h"
 #include "khdom.h"
-#include <string>
-#include <array>
-#include <algorithm>
-#include <memory>
-#include <exception>
 #include "common/khConfigFileParser.h"
+#include <string>
+#include <algorithm>
+#include <exception>
 #include <cstdlib>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-using namespace khxml;
+#include <list>
 
-static khConfigFileParser config_parser;
+using namespace khxml;
 
 std::string
 ListElementTagName(const std::string &tagname)
@@ -47,27 +36,25 @@ ListElementTagName(const std::string &tagname)
   }
 }
 
-XMLSSize_t  initialDOMHeapAllocSize;
-XMLSSize_t  maxDOMHeapAllocSize;
-XMLSSize_t  maxDOMSubAllocationSize;
-bool terminateCache = false;
-float percent;
-
-const std::string INIT_HEAP_SIZE = "INIT_HEAP_SIZE";
-const std::string MAX_HEAP_SIZE = "MAX_HEAP_SIZE";
-const std::string BLOCK_SIZE = "BLOCK_SIZE";
-const std::string PURGE = "PURGE";
-const std::string PURGE_LEVEL = "PURGE_LEVEL";
-const std::string XMLConfigFile = "/etc/opt/google/XMLparams";
-static XMLSSize_t cacheCapacity = 0;
-static std::array<std::string,5> options
+const std::string GEXMLObject::INIT_HEAP_SIZE = "INIT_HEAP_SIZE";
+const std::string GEXMLObject::MAX_HEAP_SIZE = "MAX_HEAP_SIZE";
+const std::string GEXMLObject::BLOCK_SIZE = "BLOCK_SIZE";
+const std::string GEXMLObject::PURGE = "PURGE";
+const std::string GEXMLObject::XMLConfigFile = "/etc/opt/google/XMLparams";
+const std::array<std::string,4> GEXMLObject::options
 {{
     INIT_HEAP_SIZE,
     MAX_HEAP_SIZE,
     BLOCK_SIZE,
-    PURGE,
-    PURGE_LEVEL
+    PURGE
 }};
+khMutex GEXMLObject::mutex;
+
+XMLSize_t GEXMLObject::initialDOMHeapAllocSize;
+XMLSize_t GEXMLObject::maxDOMHeapAllocSize;
+XMLSize_t GEXMLObject::maxDOMSubAllocationSize;
+bool GEXMLObject::doPurge;
+bool GEXMLObject::initialized = false;
 
 class XmlParamsException : public std::exception {};
 class MinValuesNotMet : public XmlParamsException
@@ -87,273 +74,158 @@ public:
     }
 };
 
-class PercentError : public XmlParamsException
+void GEXMLObject::validateXMLParameters()
 {
-public:
-    const char* what() const noexcept
+  // using 1024 as the lowest setting
+  const XMLSize_t lowestBlock = 0x400;
+  
+  // check to make sure they meet the minimum size
+  if (initialDOMHeapAllocSize < lowestBlock ||
+      maxDOMHeapAllocSize < lowestBlock)
     {
-        return "Cache purging levels can only be 1-5";
+      throw MinValuesNotMet();
     }
-};
-
-void validateXMLParameters()
-{
-    // using 1024 as the lowest setting
-    XMLSSize_t lowestBlock = 0x400;
-
-    // check to make sure they meet the minimum size
-    if (initialDOMHeapAllocSize < lowestBlock ||
-        maxDOMHeapAllocSize < lowestBlock)
+  
+  // check to make sure that the initial size is less than the max size
+  if (maxDOMHeapAllocSize < initialDOMHeapAllocSize ||
+      maxDOMHeapAllocSize < maxDOMSubAllocationSize)
     {
-        throw MinValuesNotMet();
+      throw SizeError();
     }
-
-    // check to make sure that the initial size is less than the max size
-    if (maxDOMHeapAllocSize < initialDOMHeapAllocSize ||
-        maxDOMHeapAllocSize < maxDOMSubAllocationSize)
-    {
-        throw SizeError();
-    }
-
-    if (percent > 5 || percent < 1)
-    {
-        throw PercentError();
-    }	
 }
 
-void setDefaultValues()
+void GEXMLObject::setDefaultValues()
 {
    initialDOMHeapAllocSize = 0x4000;
    maxDOMHeapAllocSize     = 0x20000;
    maxDOMSubAllocationSize = 0x1000;
-   terminateCache = false;
-   percent = 1.5;
+   doPurge = false;
 }
 
-void getInitValues()
-{
-    static bool callGuard = false;
-    if (callGuard) return;
-    callGuard = true;
+void GEXMLObject::initializeXMLParameters() {
+  if (initialized) return;
+  initialized = true;
+
+  setDefaultValues();
+  khConfigFileParser config_parser;
+  try
+  {
+    for(const auto& i : options)
+    {
+      config_parser.addOption(i);
+    }
+    config_parser.parse(XMLConfigFile.c_str());
+    config_parser.validateIntegerValues();
+    for (const auto& it : config_parser)
+    {
+      if (it.first == INIT_HEAP_SIZE)
+        initialDOMHeapAllocSize = std::stol(it.second);
+      else if (it.first == MAX_HEAP_SIZE)
+        maxDOMHeapAllocSize = std::stol(it.second);
+      else if (it.first == BLOCK_SIZE)
+        maxDOMSubAllocationSize = std::stol(it.second);
+      else if (it.first == PURGE)
+        doPurge = (std::stol(it.second) == 1);
+    }
+  }
+  catch (const khConfigFileParserException& e)
+  {
     setDefaultValues();
-    try
-    {
-        for(const auto& i : options)
-        {
-            config_parser.addOption(i);
-        }
-        config_parser.parse(XMLConfigFile.c_str());
-        config_parser.validateIntegerValues();
-        for (const auto& it : config_parser)
-        {
-            if (it.first == INIT_HEAP_SIZE)
-                initialDOMHeapAllocSize = std::stol(it.second);
-            else if (it.first == MAX_HEAP_SIZE)
-                maxDOMHeapAllocSize = std::stol(it.second);
-            else if (it.first == BLOCK_SIZE)
-                maxDOMSubAllocationSize = std::stol(it.second);
-            else if (it.first == PURGE)
-                terminateCache = std::stoi(it.second);
-            else
-            {
-                switch (std::stoi(it.second))
-                {
-                    case  1: percent = 0.00; break;
-                    case  2: percent = 0.75; break;
-                    case  3: percent = 1.50; break;
-                    case  4: percent = 2.25; break;
-                    case  5: percent = 3.00; break;
-                    default: percent = 1.50;
-                };
-            }
-        }
-    }
-    catch (const khConfigFileParserException& e)
-    {
-        setDefaultValues();
-        notify(NFY_DEBUG, "%s , using default xerces init values", e.what());
-    }
-    try
-    {
-        validateXMLParameters();
-    }
-    catch (const XmlParamsException& e)
-    {
-        setDefaultValues();
-        notify(NFY_DEBUG, "%s, using default xerces init values", e.what());
-    }
+    notify(NFY_DEBUG, "%s , using default xerces init values", e.what());
+  }
+  try
+  {
+    validateXMLParameters();
+  }
+  catch (const XmlParamsException& e)
+  {
+    setDefaultValues();
+    notify(NFY_DEBUG, "%s, using default xerces init values", e.what());
+  }
 }
 
-void initXercesValues()
-{
-    getInitValues();
+GEXMLObject::GEXMLObject() {
+  if (doPurge || !initialized) {
+    // The Xerces programming guide (https://xerces.apache.org/xerces-c/program-3.html)
+    // states that you must call Terminate the same number of times you call
+    // Initialize. By calling these functions in the constructor and destructor
+    // of all XML objects we ensure that Initialize is called before any other
+    // XML functions and that Initialize and Terminate are called the same
+    // number of times.
     try
     {
-        XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
-                                     maxDOMHeapAllocSize,
-                                     maxDOMSubAllocationSize);
-        notify(NFY_DEBUG, "XML initialization values: %s=%zu %s=%zu %s=%zu %s=%d %s=%f",
-               "initialDOMHeapAllocSize", initialDOMHeapAllocSize,
-               "maxDOMHeapAllocSize", maxDOMHeapAllocSize,
-               "maxDOMSubAllocationSize", maxDOMSubAllocationSize,
-               "purge cache", terminateCache,
-               "level", percent);
+      khLockGuard guard(mutex);
+      initializeXMLParameters();
+      XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
+                                   maxDOMHeapAllocSize,
+                                   maxDOMSubAllocationSize,
+                                   XMLUni::fgXercescDefaultLocale,
+                                   0,
+                                   0);
+      notify(NFY_DEBUG, "XML initialization values: %s=%zu %s=%zu %s=%zu",
+             "initialDOMHeapAllocSize", initialDOMHeapAllocSize,
+             "maxDOMHeapAllocSize", maxDOMHeapAllocSize,
+             "maxDOMSubAllocationSize", maxDOMSubAllocationSize);
     }
     catch (const XMLException& toCatch)
     {
-        notify(NFY_FATAL, "Unable to initialize Xerces: %s",
-               FromXMLStr(toCatch.getMessage()).c_str());
-    }
-}
-
-static khMutexBase cacheLock = KH_MUTEX_BASE_INITIALIZER;
-static khMutexBase reinitLock = KH_MUTEX_BASE_INITIALIZER;
-
-// A read-write guard to aid in purging
-//
-// Before the creation of DOMDocuments and DOMLSParsers, a call to
-// reInitIfNeeded() is made where it is determined whether or not
-// to purge the XML cache.  There are 5 levels at which to purge
-// the cache: 1 being the most frequent, 5 being the least frequent
-// 
-// Every time a DOMDocument enters into a write operation
-// a "write lock" is made, which essentially is just keeping a count 
-// of write operations remaining. When it is determined it is time 
-// for a purge to occur, a "purge lock" is made.
-//
-// When a "purge lock" occurs, it waits for all "write locks" to finish
-// and then takes control. It will execute all purge operations and then
-// cede control  back to the control of write operations.
-//
-// TODO: generalize and move read-write lock to khThread
-
-static pthread_rwlock_t purge_lock = PTHREAD_RWLOCK_INITIALIZER;
-
-class XmlWriteLock
-{
-private:
-    pthread_rwlock_t& lock;
-public:
-    XmlWriteLock(pthread_rwlock_t& _lock) : lock(_lock)
-    {
-        pthread_rwlock_rdlock(&lock);
-    }
-    
-    ~XmlWriteLock()
-    {
-        pthread_rwlock_unlock(&lock);
-    }
-};
-
-class PurgeLock
-{
-private:
-    pthread_rwlock_t& lock;
-public:
-    PurgeLock(pthread_rwlock_t& _lock) : lock(_lock)
-    {
-        pthread_rwlock_wrlock(&lock);
-    }
-
-    ~PurgeLock()
-    {
-        pthread_rwlock_unlock(&lock);
-    }
-};
-
-void ReInitializeXerces()
-{
-    khLockGuard guard(reinitLock);
-    try
-    {
-        XMLPlatformUtils::Terminate();
-    }
-    catch(...)
-    {
-        notify(NFY_WARN, "Failure to terminate in ReInitializeXerces()");
-    }
-    initXercesValues();
-}
-
-
-// This is used only in the following function
-class UsingXMLGuard
-{
-  friend void InitializeXMLLibrary() throw();
-
-  UsingXMLGuard(void) throw() {
-    khLockGuard guard(reinitLock);
-    initXercesValues();
-  }
-
-  ~UsingXMLGuard(void) throw() {
-    if (!terminateCache)
-    {
-        try {
-            khLockGuard guard(reinitLock);
-            XMLPlatformUtils::Terminate();
-        } catch (...) {
-            notify(NFY_DEBUG, "Failure to terminate in ~UsingXMLGuard");
-        }
+      notify(NFY_FATAL, "Unable to initialize Xerces: %s",
+             FromXMLStr(toCatch.getMessage()).c_str());
     }
   }
-};
+}
 
-void  reInitIfReady()
-{
-  khLockGuard guard(cacheLock);
-  static XMLSSize_t threashold = static_cast<XMLSSize_t>
-         (maxDOMHeapAllocSize * percent); 
-  if (cacheCapacity >= threashold)
-  {
-    PurgeLock pguard(purge_lock);
-    ReInitializeXerces();
-    cacheCapacity = 0;
+GEXMLObject::~GEXMLObject() {
+  if (doPurge) {
+    try {
+      khLockGuard guard(mutex);
+      XMLPlatformUtils::Terminate();
+    } catch(const XMLException& toCatch) {
+      notify(NFY_WARN, "Unable to terminate Xerces: %s",
+             FromXMLStr(toCatch.getMessage()).c_str());
+    }
   }
 }
 
-void InitializeXMLLibrary() throw()
-{
-  static UsingXMLGuard XMLLibGuard;
-}
-
-
-
-DOMDocument *
+std::unique_ptr<GEDocument>
 CreateEmptyDocument(const std::string &rootTagname) throw()
 {
-  InitializeXMLLibrary();
-  
-  if (terminateCache)
-  {
-    reInitIfReady();
+  std::unique_ptr<GEDocument> doc(new GECreatedDocument(rootTagname));
+  if (doc->valid()) {
+    return doc;
   }
+  else {
+    return nullptr;
+  }
+}
+
+GECreatedDocument::GECreatedDocument(const std::string & rootTagname) {
   try {
     DOMImplementation* impl =
     DOMImplementationRegistry::getDOMImplementation(0);
-
-    DOMDocument* doc = impl->createDocument(0,// root element namespace URI.
-                                            ToXMLStr(rootTagname),// root element name
-                                            0);// document type object (DTD)
-    return doc;
-   } catch (...) {
-     notify(NFY_DEBUG, "Error when trying to create DOMDocument.");
-     return nullptr;
-   }
+    doc = impl->createDocument(0,// root element namespace URI.
+                               ToXMLStr(rootTagname),// root element name
+                               0 // document type object (DTD)
+                               );
+  } catch (...) {
+    notify(NFY_DEBUG, "Error when trying to create DOMDocument.");
+    doc = nullptr;
+  }
 }
 
-namespace {
-bool
-WriteDocumentImpl(DOMDocument *doc, const std::string &filename) throw()
-{
-  // will initially be nullptr, reset to do a write lock
-  // release lock when it goes out of scope at the end of
-  // the function
-  std::shared_ptr<XmlWriteLock> guard;
-  if (terminateCache) 
-  {
-    guard.reset(new XmlWriteLock(purge_lock));
+GECreatedDocument::~GECreatedDocument() {
+  try {
+    if (doc) {
+      doc->release();
+    }
   }
+  catch (...) {
+    notify(NFY_DEBUG, "Error when trying to release DOMDocument");
+  }
+}
+
+bool GEDocument::writeToFile(const std::string &filename) {
+  if (!valid()) return false;
   bool success = false;
   try {
     // "LS" -> Load/Save extensions
@@ -410,25 +282,17 @@ WriteDocumentImpl(DOMDocument *doc, const std::string &filename) throw()
   }
   return success;
 }
-} // anonymous namespace
 
 bool
-WriteDocument(DOMDocument *doc, const std::string &filename) throw()
+WriteDocument(GEDocument * doc, const std::string &filename) throw()
 {
   bool retval = true;
   static const std::string newext = ".new";
   static const std::string backupext = ".old";
   const std::string newname = filename + newext;
   const std::string backupname = filename + backupext;
-  if (!WriteDocumentImpl(doc, newname)) {
+  if (!doc->writeToFile(newname)) {
     retval = false;
-  }
-  else
-  {
-    struct stat check;
-    stat(filename.c_str(), &check);
-    khLockGuard guard(cacheLock);
-    cacheCapacity += check.st_size;  
   }
 
   if (retval && !khReplace(filename, newext, backupext)) {
@@ -436,6 +300,7 @@ WriteDocument(DOMDocument *doc, const std::string &filename) throw()
     retval = false;
   }
   if (retval && khExists(backupname)) {
+    notify(NFY_VERBOSE,"WriteDocument() backupname %s exists", backupname.c_str());
     (void) khUnlink(backupname);
   }
   return retval;
@@ -445,18 +310,18 @@ WriteDocument(DOMDocument *doc, const std::string &filename) throw()
 
 
 bool
-WriteDocumentToString(DOMDocument *doc, std::string &buf) throw()
+WriteDocumentToString(GEDocument *doc, std::string &buf) throw()
 {
-  std::shared_ptr<XmlWriteLock> guard;
-  if (terminateCache)
-  {
-    guard.reset(new XmlWriteLock(purge_lock));
-  }
+  return doc->writeToString(buf);
+}
+
+bool GEDocument::writeToString(std::string &buf) {
+  if (!valid()) return false;
   bool success = false;
   try {
     // "LS" -> Load/Save extensions
-    DOMImplementationLS* impl = (DOMImplementationLS*)
-                                DOMImplementationRegistry::getDOMImplementation(ToXMLStr("LS"));
+    DOMImplementationLS* impl = static_cast<DOMImplementationLS*>(
+                                DOMImplementationRegistry::getDOMImplementation(ToXMLStr("LS")));
 
     DOMLSSerializer* writer = impl->createLSSerializer();
 
@@ -473,62 +338,49 @@ WriteDocumentToString(DOMDocument *doc, std::string &buf) throw()
       if (writer->write(doc, lsOutput)) {
           buf.append((const char *)formatTarget.getRawBuffer(),
           formatTarget.getLen());
-          khLockGuard guard(cacheLock);
-          cacheCapacity += buf.size();
         success = true;
       } else {
         notify(NFY_WARN, "Unable to write XML to string: Xerces didn't tell me why not.");
       }
-        lsOutput->release();
-      } catch (const XMLException& toCatch) {
-        notify(NFY_WARN, "Unable to write XML: %s",
-               XMLString::transcode(toCatch.getMessage()));
-      } catch (const DOMException& toCatch) {
-        notify(NFY_WARN, "Unable to write XML: %s",
-               XMLString::transcode(toCatch.msg));
-      } catch (...) {
-        notify(NFY_WARN, "Unable to write XML: Unknown exception");
-      }
-      writer->release();
-      } catch (const XMLException& toCatch) {
-        notify(NFY_WARN, "Unable to create DOM Writer: %s",
-               XMLString::transcode(toCatch.getMessage()));
-      } catch (const DOMException& toCatch) {
-        notify(NFY_WARN, "Unable to create DOM writer: %s",
-               XMLString::transcode(toCatch.msg));
-      } catch (...) {
-        notify(NFY_WARN, "Unable to create DOM writer: Unknown exception");
-      }
+      lsOutput->release();
+    } catch (const XMLException& toCatch) {
+      notify(NFY_WARN, "Unable to write XML: %s",
+             XMLString::transcode(toCatch.getMessage()));
+    } catch (const DOMException& toCatch) {
+      notify(NFY_WARN, "Unable to write XML: %s",
+             XMLString::transcode(toCatch.msg));
+    } catch (...) {
+      notify(NFY_WARN, "Unable to write XML: Unknown exception");
+    }
+    writer->release();
+  } catch (const XMLException& toCatch) {
+    notify(NFY_WARN, "Unable to create DOM Writer: %s",
+           XMLString::transcode(toCatch.getMessage()));
+  } catch (const DOMException& toCatch) {
+    notify(NFY_WARN, "Unable to create DOM writer: %s",
+           XMLString::transcode(toCatch.msg));
+  } catch (...) {
+    notify(NFY_WARN, "Unable to create DOM writer: Unknown exception");
+  }
   return success;
 }
 
-khxml::DOMLSParser*
-CreateDOMParser(void) throw()
-{
-  InitializeXMLLibrary();
-  if (terminateCache)
-  {
-    reInitIfReady();
+bool GEParsedDocument::FatalErrorHandler::handleError(const DOMError &err) {
+  if (err.getSeverity() >= DOMError::DOM_SEVERITY_FATAL_ERROR) {
+    char* message = XMLString::transcode(err.getMessage());
+    notify(NFY_DEBUG, "XML Error: %s", message);
+    XMLString::release(&message);
+    throw DOMException(DOMException::SYNTAX_ERR);
   }
-  class FatalErrorHandler : public DOMErrorHandler {
-   public:
-    virtual bool handleError(const DOMError &err) {
-      if (err.getSeverity() >= DOMError::DOM_SEVERITY_FATAL_ERROR) {
-        char* message = XMLString::transcode(err.getMessage());
-        notify(NFY_DEBUG, "XML Error: %s", message);
-        XMLString::release(&message);
-        throw DOMException(DOMException::SYNTAX_ERR);
-      }
-      return true;
-    }
-  };
-  static FatalErrorHandler fatalHandler;
+  return true;
+}
 
+void GEParsedDocument::CreateParser() {
   try {
     // "LS" -> Load/Save extensions
-    DOMImplementationLS* impl = (DOMImplementationLS*)
-                                DOMImplementationRegistry::getDOMImplementation(ToXMLStr("LS"));
-    DOMLSParser* parser =
+    DOMImplementationLS* impl = static_cast<DOMImplementationLS*>(
+        DOMImplementationRegistry::getDOMImplementation(ToXMLStr("LS")));
+    parser =
       impl->createLSParser(DOMImplementationLS::MODE_SYNCHRONOUS, 0);
     // optionally you can set some features on this builder
     if (parser->getDomConfig()->canSetParameter(XMLUni::fgDOMValidate, true))
@@ -536,109 +388,125 @@ CreateDOMParser(void) throw()
     if (parser->getDomConfig()->canSetParameter(XMLUni::fgDOMNamespaces, true))
       parser->getDomConfig()->setParameter(XMLUni::fgDOMNamespaces, true);
     parser->getDomConfig()->setParameter(XMLUni::fgDOMErrorHandler,
-                                         &fatalHandler);
-    return parser;
+                                         &fatalErrorHandler);
   } catch (...) {
     notify(NFY_DEBUG, "Error when trying to create DOMLSParser");
+    parser = nullptr;
+  }
+}
+
+std::unique_ptr<GEDocument>
+ReadDocument(const std::string &filename) throw()
+{
+  std::unique_ptr<GEDocument> doc(new GEParsedDocument(filename));
+  if (doc->valid()) {
+    return doc;
+  }
+  else {
     return nullptr;
   }
 }
 
-khxml::DOMDocument*
-ReadDocument(khxml::DOMLSParser *parser, const std::string &filename) throw()
-{
-  std::shared_ptr<XmlWriteLock> guard;
-  if (terminateCache)
-  {
-    guard.reset(new XmlWriteLock(purge_lock));
-  }
-
-  DOMDocument* doc = nullptr;
+GEParsedDocument::GEParsedDocument(const std::string &filename) {
+  CreateParser();
 
   try {
-    // Note: parseURI doesn't handle missing files nicely...returns
-    // invalid doc object. Must check file existence ourselves.
-    if (khExists(filename)) {
-         doc = parser->parseURI(filename.c_str());
-         // TODO: find out size of contents in doc, not immediately available
-         struct stat file;
-         stat(filename.c_str(), &file);
-         khLockGuard guard(cacheLock);
-         cacheCapacity += file.st_size;
-    } else {
-      notify(NFY_WARN, "XML file does not exist: %s", filename.c_str());
+    if (parser) {
+      // Note: parseURI doesn't handle missing files nicely...returns
+      // invalid doc object. Must check file existence ourselves.
+      if (khExists(filename)) {
+        doc = parser->parseURI(filename.c_str());
+      } else {
+        notify(NFY_WARN, "XML file does not exist: %s", filename.c_str());
+      }
     }
   } catch (const XMLException& toCatch) {
     notify(NFY_WARN, "Unable to read XML: %s",
            XMLString::transcode(toCatch.getMessage()));
+    doc = nullptr;
   } catch (const DOMException& toCatch) {
     notify(NFY_WARN, "Unable to read XML: %s",
            XMLString::transcode(toCatch.msg));
+    doc = nullptr;
   } catch (...) {
     notify(NFY_WARN, "Unable to read XML");
+    doc = nullptr;
   }
-  return doc;
 }
 
-khxml::DOMDocument*
-ReadDocumentFromString(khxml::DOMLSParser *parser,
-                       const std::string &buf,
+std::unique_ptr<GEDocument>
+ReadDocumentFromString(const std::string &buf,
                        const std::string &ref) throw()
 {
-  std::shared_ptr<XmlWriteLock> guard;
-  if (terminateCache)
-  {
-    guard.reset(new XmlWriteLock(purge_lock));
+  std::unique_ptr<GEDocument> doc(new GEParsedDocument(buf, ref));
+  if (doc->valid()) {
+    return doc;
   }
+  else {
+    return nullptr;
+  }
+}
 
-  DOMDocument *doc = nullptr;
+GEParsedDocument::GEParsedDocument(const std::string &buf,
+                                   const std::string &ref) {
+  CreateParser();
   try {
-    MemBufInputSource memBufIS(
-        (const XMLByte*)buf.data(),
-        buf.size(),
-        ref.c_str(),
-        false);  // don't adopt buffer
-    Wrapper4InputSource inputSource(&memBufIS,
-                                    false);  // don't adopt input source
-    doc = parser->parse(&inputSource);
-    khLockGuard guard(cacheLock);
-    cacheCapacity += buf.size();
+    if (parser) {
+      MemBufInputSource memBufIS(
+          (const XMLByte*)buf.data(),
+          buf.size(),
+          ref.c_str(),
+          false  // don't adopt buffer
+          );
+      Wrapper4InputSource inputSource(&memBufIS,
+                                      false  // don't adopt input source
+                                      );
+      doc = parser->parse(&inputSource);
+    }
   } catch (const XMLException& toCatch) {
     notify(NFY_WARN, "Unable to read XML: %s",
            XMLString::transcode(toCatch.getMessage()));
+    doc = nullptr;
   } catch (const DOMException& toCatch) {
     notify(NFY_WARN, "Unable to read XML: %s",
            XMLString::transcode(toCatch.msg));
+    doc = nullptr;
   } catch (...) {
     notify(NFY_WARN, "Unable to read XML");
+    doc = nullptr;
   }
-  return doc;
 }
 
-
-bool
-DestroyDocument(khxml::DOMDocument *doc) throw()
-{
-  bool retval = false;
+GEParsedDocument::~GEParsedDocument() {
   try {
-    doc->release();
-    retval = true;
-  } catch (...) {
-    notify(NFY_DEBUG, "Error when trying to release DOMDocument");
+    if (parser) {
+      parser->release();
+      // Don't release the document - releasing the parser will release the document
+    }
   }
-  return retval;
-}
-
-
-bool
-DestroyParser(khxml::DOMLSParser *parser) throw()
-{
-  bool retval = false;
-  try {
-    parser->release();
-    retval = true;
-  } catch (...) {
+  catch (...) {
     notify(NFY_DEBUG, "Error when trying to release DOMLSParser");
   }
-  return retval;
+}
+
+bool GEDocument::valid() const {
+  return (doc != nullptr);
+}
+
+khxml::DOMElement * GEDocument::getDocumentElement() {
+  if (valid()) {
+    return doc->getDocumentElement();
+  }
+  else {
+    return nullptr;
+  }
+}
+
+khxml::DOMElement * GEDocument::createElement(const std::string tagName) {
+  if (valid()) {
+    return doc->createElement(ToXMLStr(tagName));
+  }
+  else {
+    return nullptr;
+  }
 }

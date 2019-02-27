@@ -118,11 +118,7 @@ ${name}AssetImpl::Load(const std::string &ref)
     uint64 filesize = 0;
 
     if (khGetFileInfo(filename, filesize, timestamp) && (filesize > 0)) {
-	DOMLSParser *parser = CreateDOMParser();
-	if (parser) {
-	    khCallGuard<DOMLSParser*,bool> parserrelease(&::DestroyParser,
-							parser);
-	    DOMDocument *doc = ReadDocument(parser, filename);
+	    std::unique_ptr<GEDocument> doc = ReadDocument(filename);
 	    if (doc) {
 		try {
 		    DOMElement *top = doc->getDocumentElement();
@@ -146,10 +142,6 @@ ${name}AssetImpl::Load(const std::string &ref)
 	        AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to read ")
 					      + filename);
 	    }
-        } else {
-            AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to get parser for ")
-					  + filename);
-        }
     } else {
         AssetThrowPolicy::WarnOrThrow(kh::tr("No such file: ") + filename);
     }
@@ -207,11 +199,7 @@ ${name}AssetVersionImpl::Load(const std::string &boundref)
     uint64 filesize = 0;
 
     if (khGetFileInfo(filename, filesize, timestamp) && (filesize > 0)) {
-	DOMLSParser *parser = CreateDOMParser();
-	if (parser) {
-	    khCallGuard<DOMLSParser*,bool> parserrelease(&::DestroyParser,
-							parser);
-	    DOMDocument *doc = ReadDocument(parser, filename);
+	    std::unique_ptr<GEDocument> doc = ReadDocument(filename);
 	    if (doc) {
 		try {
 		    DOMElement *top = doc->getDocumentElement();
@@ -235,10 +223,6 @@ ${name}AssetVersionImpl::Load(const std::string &boundref)
 	        AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to read ")
 					      + filename);
 	    }
-        } else {
-            AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to get parser for ")
-					  + filename);
-        }
     } else {
         AssetThrowPolicy::WarnOrThrow(kh::tr("No such file: ") + filename);
     }
