@@ -427,7 +427,7 @@ get_default_user()
 {
 	# $1 -- is file/directory from which to obtain user
 	# $2 -- user to return if file/directory does not exist (or unable to stat file)
-	local USER=`stat --printf="%U" $1 2> /dev/null`
+	local USER=$(stat --printf="%U" $1 2> /dev/null)
 	[ -z "$USER" ] && USER=$2
 	echo "$USER"
 }
@@ -437,7 +437,38 @@ get_default_group()
 {
 	# $1 -- is file/directory from which to obtain group
 	# $2 -- group to return if file/directory does not exist (or unable to stat file)
-	local GRP=`stat --printf="%G" $1 2> /dev/null`
+	local GRP=$(stat --printf="%G" $1 2> /dev/null)
 	[ -z "$GRP" ] && GRP=$2
 	echo "$GRP"
+}
+
+# For given absolute directory (must start with /) array containing
+# directory, size, available, and mount point
+get_volume_info()
+{
+	local DF_K
+	local SIZE
+	local AVAIL
+	local MP
+	local DIR=$1
+
+	# Check if dir exists.  If so, do a df at this point
+	while true; do
+		if [ -d "$DIR" ] ; then
+			DF_K=$(df -k $DIR | tail -1)
+			break
+		fi
+
+		#Drop last part of path retry
+		DIR=${DIR%/*}
+		if [ -z $DIR ]; then
+			DF_K=$(df -k / | tail -1)
+			break
+		fi
+	done
+	SIZE=$(echo $DF_K | awk '{print $2}')
+	AVAIL=$(echo $DF_K | awk '{print $4}')
+	MP=$(echo $DF_K | awk '{print $6}')
+	local info=( $1 $SIZE $AVAIL $MP )
+	echo "${info[@]}"
 }
