@@ -58,7 +58,7 @@ GEFUSIONUSER_NAME=$DEFAULTGEFUSIONUSER_NAME
 IS_NEWINSTALL=false
 PUBLISHER_ROOT_VOLUME_INFO=()
 ASSET_ROOT_VOLUME_INFO=()
-MIN_PUBLISER_ROOT_VALUE_IN_KB=1048576
+MIN_PUBLISHER_ROOT_VOLUME_SIZE_IN_KB=1048576
 
 #-----------------------------------------------------------------
 # Main Functions
@@ -381,6 +381,7 @@ check_publisher_root_volume()
   # Get size and available for publisher root volume
   PUBLISHER_ROOT_VOLUME_INFO=($(get_volume_info "$PUBLISHER_ROOT"))
 	if [[ ${PUBLISHER_ROOT_VOLUME_INFO[2]} -lt $MIN_PUBLISER_ROOT_VALUE_IN_KB ]]; then
+    MIN_PUBLISHER_ROOT_VOLUME_SIZE_IN_GB=$(expr $MIN_PUBLISHER_ROOT_VOLUME_SIZE_IN_KB / 1024 / 1024)
 		echo -e "\nThe publisher root volume [$PUBLISHER_ROOT] has only ${PUBLISHER_ROOT_VOLUME_INFO[2]} KB available."
 		echo -e "We recommend that an publisher root directory have a minimum of $MIN_PUBLISHER_ROOT_VOLUME_SIZE_IN_GB GB of free disk space."
 		echo ""
