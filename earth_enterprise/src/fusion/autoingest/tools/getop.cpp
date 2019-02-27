@@ -26,6 +26,8 @@
 // global for convenience
 int numcols = 80;
 
+static const std::string SYS_MGR_BUSY_MSG = "GetCurrTasks: " + sysManBusyMsg;
+
 void
 outline(const char *format, ...)
 {
@@ -94,11 +96,11 @@ main(int argc, char *argv[])
     if (timeout < 0)
       usage(progname, "--timeout must not be less than zero");
 
-
     std::string master    = AssetDefs::MasterHostName();
     std::string assetroot = AssetDefs::AssetRoot();
     CmdLine clearscreen;
     clearscreen << "clear";
+    outline("Connecting to gesystemmanager to retrieve status...");
 
     while (1) {
       QString error;
@@ -107,6 +109,8 @@ main(int argc, char *argv[])
                                              error, timeout)) {
       	if (error.compare("GetCurrTasks: socket recvall: Resource temporarily unavailable") == 0)
           outline("No data received from gesystemmanager\nStarting new request");
+        else if (error.compare(SYS_MGR_BUSY_MSG) == 0)
+          outline("System Manager is busy.  Retrying in %d seconds", delay);
         else
           notify(NFY_FATAL, "%s", error.latin1());
       } else {

@@ -26,6 +26,8 @@ class MiscConfigStorage {
   uint        VersionCacheSize = uint(128000);
   bool        GenerateProductPreviews = true;
 
+  uint        MutexTimedWaitSec = uint(30);
+
 #pragma LoadAndSave
 
 #hquote
