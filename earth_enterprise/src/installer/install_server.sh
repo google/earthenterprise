@@ -34,15 +34,6 @@ BACKUP_DATA_DIR=$BACKUP_DIR/data.backup
 BACKUPSERVER=true
 BADHOSTNAMEOVERRIDE=false
 MISMATCHHOSTNAMEOVERRIDE=false
-DEFAULTGROUPNAME="gegroup"
-GROUPNAME=$DEFAULTGROUPNAME
-
-# user names
-GRPNAME="gegroup"
-GEPGUSER_NAME="gepguser"
-GEAPACHEUSER_NAME="geapacheuser"
-DEFAULTGEFUSIONUSER_NAME="gefusionuser"
-GEFUSIONUSER_NAME=$DEFAULTGEFUSIONUSER_NAME
 
 SERVER_INSTALL_OR_UPGRADE="install"
 GEE_CHECK_CONFIG_SCRIPT="/opt/google/gehttpd/cgi-bin/set_geecheck_config.py"
@@ -52,6 +43,15 @@ PGSQL_PROGRAM="/opt/google/bin/pg_ctl"
 PRODUCT_NAME="$GEE"
 START_SERVER_DAEMON=1
 PROMPT_FOR_START="n"
+
+# user names
+DEFAULTGROUPNAME=`get_default_group "$PUBLISHER_ROOT/stream_space" "gegroup"`
+GROUPNAME=$DEFAULTGROUPNAME
+GRPNAME=$DEFAULTGROUPNAME
+GEAPACHEUSER_NAME=`get_default_user "$PUBLISHER_ROOT/stream_space" "geapacheuser"`
+GEPGUSER_NAME=`get_default_user "/var/opt/google/pgsql" "gepguser"`
+DEFAULTGEFUSIONUSER_NAME=`get_default_user $FUSIONBININSTALL "gefusionuser"`
+GEFUSIONUSER_NAME=$DEFAULTGEFUSIONUSER_NAME
 
 # addition variables
 IS_NEWINSTALL=false
@@ -227,14 +227,17 @@ show_intro()
 # TODO: Add additional parameters for GEE Server
 show_help()
 {
-	echo -e "\nUsage: \tsudo ./install_server.sh [-h] [-dir /tmp/fusion_os_install -hnf -hnmf] [-nobk]\n"
-
+	echo -e "\nUsage: \tsudo ./install_server.sh [-h] [-dir /tmp/fusion_os_install -hnf -hnmf] [-pgu gepguser]"
+  echo -e "\t\t[-au geapacheuser] [-g gegroup] [-nobk]"
+  echo -e "\n"
 	echo -e "-h --help \tHelp - display this help screen"
 	echo -e "-dir \t\tTemp Install Directory - specify the temporary install directory. Default is [$TMPINSTALLDIR]."
 	echo -e "-hnf \t\tHostname Force - force the installer to continue installing with a bad \n\t\thostname. Bad hostname values are [${BADHOSTNAMELIST[*]}]."
 	echo -e "-hnmf \t\tHostname Mismatch Force - force the installer to continue installing with a \n\t\tmismatched hostname."
+  echo -e "-au \t\tApache user name. Default is [$GEAPACHEUSER_NAME]. \n\t\tNote: this is only used for new installations."
+  echo -e "-pgu \t\tPostgres user name. Default is [$GEPGUSER_NAME]. \n\t\tNote: this is only used for new installations."
+	echo -e "-g \t\tUser Group Name - the group name to use for the Server, Postgress, and Apache user. Default is [$GROUPNAME]. \n\t\tNote: this is only used for new installations."
 	echo -e "-nobk \t\tNo Backup - do not backup the current server setup. Default is to backup \n\t\tthe setup before installing."
-  echo -e "-p"
   echo -e "\n"
 }
 
@@ -278,8 +281,25 @@ parse_arguments()
 					break
 				fi
 				;;
+      -au)
+        if [ $IS_NEWINSTALL == false -o "$GEAPACHEUSER_NAME" != "${1// }"]; then
+					echo -e "\nYou cannot modify the Apache user name using the installer because $GEES is already installed on this server."
+					parse_arguments_retval=1
+          break
+        else
+          shift
+          if is_valid_alphanumeric ${1// }; then
+            GEAPACHEUSER_NAME=${1// }
+          else
+            echo -e "\nThe Apache user name you specified is not valid. Valid characters are upper/lowercase letters, "
+            echo -e "numbers, dashes and the underscore characters. The user name cannot start with a number or dash."
+            parse_arguments_retval=1
+            break
+          fi
+        fi
+        ;;
       -pgu)
-        if [ $IS_NEWINSTALL == false ]; then
+        if [ $IS_NEWINSTALL == false -o "$GEPGUSER_NAME" != "${1// }" ]; then
 					echo -e "\nYou cannot modify the postgres user name using the installer because $GEES is already installed on this server."
 					parse_arguments_retval=1
           break
@@ -288,19 +308,41 @@ parse_arguments()
           if is_valid_alphanumeric ${1// }; then
             GEPGUSER_NAME=${1// }
           else
-            echo -e "\nThe fusion user name you specified is not valid. Valid characters are upper/lowercase letters, "
+            echo -e "\nThe Postgres user name you specified is not valid. Valid characters are upper/lowercase letters, "
             echo -e "numbers, dashes and the underscore characters. The user name cannot start with a number or dash."
             parse_arguments_retval=1
             break
           fi
         fi
         ;;
-			*)
-				echo -e "\nArgument Error: $1 is not a valid argument."
-				show_help
-				parse_arguments_retval=1
-				break
-				;;
+      -g)
+        if [ $IS_NEWINSTALL == false -o $GRPNAME != ${1// } ]; then
+          echo -e "\nYou cannot modify the fusion user group using the installer because Fusion is already installed on this server."
+          parse_arguments_retval=1
+          # Don't show the User Group dialog since it is invalid to change the fusion
+          # username once fusion is installed on the server
+          show_user_group_recommendation=false
+          break
+        else
+          shift
+
+          if is_valid_alphanumeric ${1// }; then
+            GRPNAME=${1// }
+						GROUPNAME=$GRPNAME
+          else
+            echo -e "\nThe group name you specified is not valid. Valid characters are upper/lowercase letters, "
+            echo -e "numbers, dashes and the underscore characters. The group name cannot start with a number or dash."
+            parse_arguments_retval=1
+            break
+          fi
+        fi
+      ;;
+    *)
+      echo -e "\nArgument Error: $1 is not a valid argument."
+      show_help
+      parse_arguments_retval=1
+      break
+      ;;
 		esac
 
 		if [ $# -gt 0 ]
@@ -330,8 +372,12 @@ configure_publish_root()
 check_publisher_root_volume()
 {
   # Get size and available for publisher root volume
-  local DF_H=`df -h $PUBLISHER_ROOT | tail -1 2> /tmp/error.log`
-  echo "DF_H:  $DF_H"
+  local DF_H
+  if [ -d $PUBLISHER_ROOT ]; then
+    DF_H=`df -h $PUBLISHER_ROOT | tail -1`
+  else  # PUBLISHER_ROOT does not exist, it will be created on root filesystem
+    DF_H=`df -h / | tail -1`
+  fi
   PUBLISHER_ROOT_VOLUME_SIZE=`echo $DF_H | awk '{print $2}'`
   PUBLISHER_ROOT_VOLUME_AVAIL=`echo $DF_H | awk '{print $4}'`
 }
@@ -681,6 +727,20 @@ check_server_running()
 	fi
 }
 
+# Candidate to move to common
+is_valid_alphanumeric()
+{
+	# Standard function that tests a string to see if it passes the "valid" alphanumeric for user name and group name.
+	# For simplicity -- we limit to letters, numbers and underscores.
+	regex="^[a-zA-Z_]{1}[a-zA-Z0-9_-]*$"
+
+	if [ ! -z "$1" ] && [[ $1 =~ $regex ]]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
 # Show config values and prompt user for confirmation to continue install
 prompt_install_confirmation()
 {
@@ -697,14 +757,12 @@ prompt_install_confirmation()
 	echo -e "Operating System: \t$MACHINE_OS_FRIENDLY"
 	echo -e "64 bit OS: \t\tYES"	# Will always be true because we exit if 32 bit OS
 	if [ $IS_NEWINSTALL == false ]; then
-		echo -e "Backup Fusion: \t\t$backupStringValue"
+		echo -e "Backup Server: \t\t$backupStringValue"
 	fi
   echo -e "Publisher Root: \t$PUBLISHER_ROOT"
   echo -e "Publisher Root Size: \t$PUBLISHER_ROOT_VOLUME_SIZE"
   echo -e "Publisher Root Avail: \t$PUBLISHER_ROOT_VOLUME_AVAIL"
 	echo -e "Install Location: \t$BASEINSTALLDIR_OPT"
-	echo -e "Asset Root: \t\t$ASSET_ROOT"
-	echo -e "Source Volume: \t\t$SOURCE_VOLUME"
 	echo -e "Postgres User: \t\t$GEPGUSER_NAME"
 	echo -e "Apache User: \t\t$GEAPACHEUSER_NAME"
 	echo -e "Group: \t\t\t$GRPNAME"

@@ -110,7 +110,7 @@ software_check()
         if [ "$MACHINE_OS" == "$UBUNTUKEY" ] && [ ! -z "$2" ]; then
             echo -e "\nInstall $2 and restart the $1."
             software_check_retval=1
-        elif { [ "$MACHINE_OS" == "$REDHATKEY" ] || [ "$MACHINE_OS" == "$CENTOSKEY" ]; } && [ ! -z "$3" ]; then 
+        elif { [ "$MACHINE_OS" == "$REDHATKEY" ] || [ "$MACHINE_OS" == "$CENTOSKEY" ]; } && [ ! -z "$3" ]; then
             echo -e "\nInstall $3 and restart the $1."
             software_check_retval=1
         else
@@ -420,4 +420,24 @@ prompt_to_quit()
     fi
 
     return $prompt_to_quit_retval
+}
+
+# Returns the default user
+get_default_user()
+{
+	# $1 -- is file/directory from which to obtain user
+	# $2 -- user to return if file/directory does not exist (or unable to stat file)
+	local USER=`stat --printf="%U" $1 2> /dev/null`
+	[ -z "$USER" ] && USER=$2
+	echo "$USER"
+}
+
+# Returns the default group
+get_default_group()
+{
+	# $1 -- is file/directory from which to obtain group
+	# $2 -- group to return if file/directory does not exist (or unable to stat file)
+	local GRP=`stat --printf="%G" $1 2> /dev/null`
+	[ -z "$GRP" ] && GRP=$2
+	echo "$GRP"
 }
