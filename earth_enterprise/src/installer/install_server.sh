@@ -282,12 +282,12 @@ parse_arguments()
 				fi
 				;;
       -au)
-        if [ $IS_NEWINSTALL == false -o "$GEAPACHEUSER_NAME" != "${1// }"]; then
+				shift
+        if [ $IS_NEWINSTALL == false -a "$GEAPACHEUSER_NAME" != "${1// }"]; then
 					echo -e "\nYou cannot modify the Apache user name using the installer because $GEES is already installed on this server."
 					parse_arguments_retval=1
           break
         else
-          shift
           if is_valid_alphanumeric ${1// }; then
             GEAPACHEUSER_NAME=${1// }
           else
@@ -299,12 +299,12 @@ parse_arguments()
         fi
         ;;
       -pgu)
-        if [ $IS_NEWINSTALL == false -o "$GEPGUSER_NAME" != "${1// }" ]; then
+				shift
+        if [ $IS_NEWINSTALL == false -a "$GEPGUSER_NAME" != "${1// }" ]; then
 					echo -e "\nYou cannot modify the postgres user name using the installer because $GEES is already installed on this server."
 					parse_arguments_retval=1
           break
         else
-          shift
           if is_valid_alphanumeric ${1// }; then
             GEPGUSER_NAME=${1// }
           else
@@ -316,7 +316,8 @@ parse_arguments()
         fi
         ;;
       -g)
-        if [ $IS_NEWINSTALL == false -o $GRPNAME != ${1// } ]; then
+				shift
+        if [ $IS_NEWINSTALL == false -a $GRPNAME != ${1// } ]; then
           echo -e "\nYou cannot modify the fusion user group using the installer because Fusion is already installed on this server."
           parse_arguments_retval=1
           # Don't show the User Group dialog since it is invalid to change the fusion
@@ -324,7 +325,6 @@ parse_arguments()
           show_user_group_recommendation=false
           break
         else
-          shift
 
           if is_valid_alphanumeric ${1// }; then
             GRPNAME=${1// }
