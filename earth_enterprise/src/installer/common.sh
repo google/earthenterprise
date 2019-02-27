@@ -446,29 +446,22 @@ get_default_group()
 # directory, size, available, and mount point
 get_volume_info()
 {
-	local DF_K
-	local SIZE
-	local AVAIL
-	local MP
+	local info=()
 	local DIR=$1
 
 	# Check if dir exists.  If so, do a df at this point
 	while true; do
 		if [ -d "$DIR" ] ; then
-			DF_K=$(df -k $DIR | tail -1)
+			info=($1 $(df -k $DIR --output=size,avail,target | tail -1))
 			break
 		fi
 
 		#Drop last part of path retry
 		DIR=${DIR%/*}
 		if [ -z $DIR ]; then
-			DF_K=$(df -k / | tail -1)
+			info=($1 $(df -k / --output=size,avail,target | tail -1))
 			break
 		fi
 	done
-	SIZE=$(echo $DF_K | awk '{print $2}')
-	AVAIL=$(echo $DF_K | awk '{print $4}')
-	MP=$(echo $DF_K | awk '{print $6}')
-	local info=( $1 $SIZE $AVAIL $MP )
 	echo "${info[@]}"
 }
