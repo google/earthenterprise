@@ -25,6 +25,7 @@ SCRIPTDIR=`dirname $0`
 . $SCRIPTDIR/common.sh
 
 # config values
+ASSET_ROOT="/gevol/assets"
 PUBLISHER_ROOT="/gevol/published_dbs"
 INSTALL_LOG="$INSTALL_LOG_DIR/geserver_install_$(date +%Y_%m_%d.%H%M%S).log"
 BACKUP_DIR="$BASEINSTALLDIR_VAR/server-backups/$(date +%Y_%m_%d.%H%M%S)"
@@ -55,8 +56,9 @@ GEFUSIONUSER_NAME=$DEFAULTGEFUSIONUSER_NAME
 
 # addition variables
 IS_NEWINSTALL=false
-PUBLISER_ROOT_VOLUME_SIZE=0
-PUBLISHER_ROOT_VOLUME_AVAIL=0
+PUBLISHER_ROOT_VOLUME_INFO=()
+ASSET_ROOT_VOLUME_INFO=()
+MIN_PUBLISER_ROOT_VALUE_IN_KB=1048576
 
 #-----------------------------------------------------------------
 # Main Functions
@@ -120,7 +122,11 @@ main_preinstall()
 	configure_publish_root
 
   # Check publisher root volume size
-  check_publisher_root_volume
+	if ! check_publisher_root_volume; then
+		exit 1
+	fi
+
+#	ASSEST_ROOT_VOLUME_INFO=($(get_volume_info "$ASSET_ROOT"))
 
 	if ! prompt_install_confirmation; then
 		exit 1
@@ -371,15 +377,20 @@ configure_publish_root()
 
 check_publisher_root_volume()
 {
+	local check_publisher_root_volume_retval=0
   # Get size and available for publisher root volume
-  local DF_H
-  if [ -d $PUBLISHER_ROOT ]; then
-    DF_H=`df -h $PUBLISHER_ROOT | tail -1`
-  else  # PUBLISHER_ROOT does not exist, it will be created on root filesystem
-    DF_H=`df -h / | tail -1`
-  fi
-  PUBLISHER_ROOT_VOLUME_SIZE=`echo $DF_H | awk '{print $2}'`
-  PUBLISHER_ROOT_VOLUME_AVAIL=`echo $DF_H | awk '{print $4}'`
+  PUBLISHER_ROOT_VOLUME_INFO=($(get_volume_info "$PUBLISHER_ROOT"))
+	if [[ ${PUBLISHER_ROOT_VOLUME_INFO[2]} -lt $MIN_PUBLISER_ROOT_VALUE_IN_KB ]]; then
+		echo -e "\nThe publisher root volume [$PUBLISHER_ROOT] has only ${PUBLISHER_ROOT_VOLUME_INFO[2]} KB available."
+		echo -e "We recommend that an publisher root directory have a minimum of $MIN_PUBLISHER_ROOT_VOLUME_SIZE_IN_GB GB of free disk space."
+		echo ""
+
+		if ! prompt_to_quit "X (Exit) the installer and change the asset root location with larger volume - C (Continue) to use the asset root that you have specified."; then
+				check_publisher_root_volume_retval=1
+		fi
+	fi
+
+	return $check_publisher_root_volume_retval
 }
 
 backup_pgsql_data()
@@ -759,9 +770,10 @@ prompt_install_confirmation()
 	if [ $IS_NEWINSTALL == false ]; then
 		echo -e "Backup Server: \t\t$backupStringValue"
 	fi
-  echo -e "Publisher Root: \t$PUBLISHER_ROOT"
-  echo -e "Publisher Root Size: \t$PUBLISHER_ROOT_VOLUME_SIZE"
-  echo -e "Publisher Root Avail: \t$PUBLISHER_ROOT_VOLUME_AVAIL"
+  echo -e "Publisher Root: \t${PUBLISHER_ROOT_VOLUME_INFO[0]}s"
+  echo -e "Publisher Root Size: \t${PUBLISHER_ROOT_VOLUME_INFO[1]} Kbyte"
+  echo -e "Publisher Root Avail: \t${PUBLISHER_ROOT_VOLUME_INFO[2]} Kbyte"
+  echo -e "Publisher Root Mount Point: \t${PUBLISHER_ROOT_VOLUME_INFO[3]}"
 	echo -e "Install Location: \t$BASEINSTALLDIR_OPT"
 	echo -e "Postgres User: \t\t$GEPGUSER_NAME"
 	echo -e "Apache User: \t\t$GEAPACHEUSER_NAME"
