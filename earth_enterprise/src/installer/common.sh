@@ -442,8 +442,7 @@ get_default_group()
 	echo "$GRP"
 }
 
-# For given absolute directory (must start with /) array containing
-# directory, size, available, and mount point
+# For given directory, array containing directory, size, available, and mount point
 get_volume_info()
 {
 	local info=()
@@ -456,8 +455,9 @@ get_volume_info()
 			break
 		fi
 
-		#Drop last part of path retry
+		# Drop last part of path and retry
 		DIR=${DIR%/*}
+		# Check if reached the root
 		if [ -z $DIR ]; then
 			info=($1 $(df -k / --output=size,avail,target | tail -1))
 			break
