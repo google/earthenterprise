@@ -40,13 +40,15 @@ const std::string GEXMLObject::INIT_HEAP_SIZE = "INIT_HEAP_SIZE";
 const std::string GEXMLObject::MAX_HEAP_SIZE = "MAX_HEAP_SIZE";
 const std::string GEXMLObject::BLOCK_SIZE = "BLOCK_SIZE";
 const std::string GEXMLObject::PURGE = "PURGE";
+const std::string GEXMLObject::DEALLOCATE_ALL = "DEALLOCATE_ALL";
 const std::string GEXMLObject::XMLConfigFile = "/etc/opt/google/XMLparams";
-const std::array<std::string,4> GEXMLObject::options
+const std::array<std::string,5> GEXMLObject::options
 {{
     INIT_HEAP_SIZE,
     MAX_HEAP_SIZE,
     BLOCK_SIZE,
-    PURGE
+    PURGE,
+    DEALLOCATE_ALL
 }};
 khMutex GEXMLObject::mutex;
 
@@ -54,6 +56,7 @@ XMLSize_t GEXMLObject::initialDOMHeapAllocSize;
 XMLSize_t GEXMLObject::maxDOMHeapAllocSize;
 XMLSize_t GEXMLObject::maxDOMSubAllocationSize;
 bool GEXMLObject::doPurge;
+bool GEXMLObject::deallocateAll;
 bool GEXMLObject::initialized = false;
 
 uint32_t GEXMLObject::activeObjects = 0;
@@ -111,11 +114,17 @@ class SimpleMemoryManager : public MemoryManager {
       delete [] bytep;
     }
     // Deallocate anything that hasn't been deallocated yet
-    virtual void deallocateAll() {
+    void deallocateAll() {
       khLockGuard guard(mutex);
       for (std::pair<byte *, XMLSize_t> entry : allocated) {
         delete [] entry.first;
       }
+      allocated.clear();
+      allocatedSize = 0;
+    }
+    // Clear storage without deallocating anything
+    void clear() {
+      khLockGuard guard(mutex);
       allocated.clear();
       allocatedSize = 0;
     }
@@ -149,6 +158,7 @@ void GEXMLObject::setDefaultValues()
    maxDOMHeapAllocSize     = 0x20000;
    maxDOMSubAllocationSize = 0x1000;
    doPurge = false;
+   deallocateAll = false;
 }
 
 void GEXMLObject::initializeXMLParameters() {
@@ -175,6 +185,8 @@ void GEXMLObject::initializeXMLParameters() {
         maxDOMSubAllocationSize = std::stol(it.second);
       else if (it.first == PURGE)
         doPurge = (std::stol(it.second) == 1);
+      else if (it.first == DEALLOCATE_ALL)
+        deallocateAll = (std::stol(it.second) == 1);
     }
   }
   catch (const khConfigFileParserException& e)
@@ -208,10 +220,12 @@ GEXMLObject::GEXMLObject() {
                                      0,
                                      0,
                                      &memoryManager);
-        notify(NFY_DEBUG, "XML initialization values: %s=%zu %s=%zu %s=%zu",
+        notify(NFY_INFO, "XML initialization values:\n%s=%zu\n%s=%zu\n%s=%zu\n%s=%s\n%s=%s",
                "initialDOMHeapAllocSize", initialDOMHeapAllocSize,
                "maxDOMHeapAllocSize", maxDOMHeapAllocSize,
-               "maxDOMSubAllocationSize", maxDOMSubAllocationSize);
+               "maxDOMSubAllocationSize", maxDOMSubAllocationSize,
+               "doPurge", (doPurge ? "true" : "false"),
+               "deallocateAll", (deallocateAll ? "true" : "false"));
       }
       catch (const XMLException& toCatch)
       {
@@ -230,7 +244,12 @@ GEXMLObject::~GEXMLObject() {
     if (activeObjects == 0) {
       try {
         XMLPlatformUtils::Terminate();
-        memoryManager.deallocateAll();
+        if (deallocateAll) {
+          memoryManager.deallocateAll();
+        }
+        else {
+          memoryManager.clear();
+        }
       } catch(const XMLException& toCatch) {
         notify(NFY_WARN, "Unable to terminate Xerces: %s",
                FromXMLStr(toCatch.getMessage()).c_str());
