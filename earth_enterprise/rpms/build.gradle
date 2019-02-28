@@ -185,10 +185,10 @@ ospackage {
     arch = X86_64
     os = LINUX
     version = (!openGeeVersionFile.exists() || project.hasProperty('buildOpenGee')) ?
-        GeeCommandLine.expand(
+        getOsPackageVersionFromOpenGeeVersion(GeeCommandLine.expand(
                 ["../src/scons/getversion.py", "--long"],
                 "Failed to get Open GEE version!"
-            ) :
+            )) :
         getOsPackageVersionFromOpenGeeVersionFile(openGeeVersionFile)
 }
 
