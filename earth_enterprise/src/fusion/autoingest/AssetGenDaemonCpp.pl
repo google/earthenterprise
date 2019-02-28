@@ -665,11 +665,7 @@ EOF
 if ($hasfixconfig) {
     if (index($thiscommand,"RasterProject") != -1)
     {
-        if (index($thiscommand, "MercatorRasterProject") != -1) {
-            print $fh "if (cachedinputs_.size() && FixConfigBeforeUpdateCheck()) {";
-        } else {    
-            print $fh "if (FixConfigBeforeUpdateCheck()) {";
-        }
+        print $fh "if (FixConfigBeforeUpdateCheck()) {";
     } else {
         print $fh "if (cachedinputs_.size() && FixConfigBeforeUpdateCheck()) {";
     }
