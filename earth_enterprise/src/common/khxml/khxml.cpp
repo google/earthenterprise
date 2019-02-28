@@ -97,9 +97,9 @@ class SimpleMemoryManager : public MemoryManager {
     }
     // Deallocate the memory and remove it from the list of allocated memory
     virtual void deallocate(void * p) {
-      /*
-      khLockGuard guard(mutex);
+      if (p == nullptr) return;
       byte * bytep = static_cast<byte *>(p);
+      khLockGuard guard(mutex);
       std::map<byte *, XMLSize_t>::iterator iter = allocated.find(bytep);
       if (iter != allocated.end()) {
         allocatedSize -= iter->second;
@@ -109,7 +109,6 @@ class SimpleMemoryManager : public MemoryManager {
         notify(NFY_WARN, "Deallocating Xerces memory that was never allocated.");
       }
       delete [] bytep;
-      */
     }
     // Deallocate anything that hasn't been deallocated yet
     virtual void deallocateAll() {
