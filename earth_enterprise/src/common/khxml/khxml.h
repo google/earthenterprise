@@ -140,6 +140,8 @@ class GEXMLObject {
     static bool doPurge;
     static bool initialized;
 
+    static uint32_t activeObjects;
+
     static void initializeXMLParameters();
     static void validateXMLParameters();
     static void setDefaultValues();

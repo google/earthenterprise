@@ -22,7 +22,7 @@
 #include <algorithm>
 #include <exception>
 #include <cstdlib>
-#include <list>
+#include <map>
 
 using namespace khxml;
 
@@ -56,6 +56,8 @@ XMLSize_t GEXMLObject::maxDOMSubAllocationSize;
 bool GEXMLObject::doPurge;
 bool GEXMLObject::initialized = false;
 
+uint32_t GEXMLObject::activeObjects = 0;
+
 class XmlParamsException : public std::exception {};
 class MinValuesNotMet : public XmlParamsException
 {
@@ -73,6 +75,54 @@ public:
         return "Initial heap size and block allocation size must be less than the max heap size";
     }
 };
+
+// A simple memory manager class that allows us to ensure all memory used by
+// Xerces is released. We keep track of memory that is allocated but not
+// deallocated and deallocate it all when terminating Xerces.
+class SimpleMemoryManager : public MemoryManager {
+  private:
+    typedef uint8_t byte;
+    khMutex mutex;
+    std::map<byte *, XMLSize_t> allocated;
+    XMLSize_t allocatedSize;
+  public:
+    virtual MemoryManager * getExceptionMemoryManager() { return this; }
+    // Allocate the requeste memory and store it in the list of allocated memory
+    virtual void * allocate(XMLSize_t size) {
+      khLockGuard guard(mutex);
+      byte * p = new byte[size];
+      allocated[p] = size;
+      allocatedSize += size;
+      return p;
+    }
+    // Deallocate the memory and remove it from the list of allocated memory
+    virtual void deallocate(void * p) {
+      /*
+      khLockGuard guard(mutex);
+      byte * bytep = static_cast<byte *>(p);
+      std::map<byte *, XMLSize_t>::iterator iter = allocated.find(bytep);
+      if (iter != allocated.end()) {
+        allocatedSize -= iter->second;
+        allocated.erase(iter);
+      }
+      else {
+        notify(NFY_WARN, "Deallocating Xerces memory that was never allocated.");
+      }
+      delete [] bytep;
+      */
+    }
+    // Deallocate anything that hasn't been deallocated yet
+    virtual void deallocateAll() {
+      khLockGuard guard(mutex);
+      for (std::pair<byte *, XMLSize_t> entry : allocated) {
+        delete [] entry.first;
+      }
+      allocated.clear();
+      allocatedSize = 0;
+    }
+};
+
+static SimpleMemoryManager memoryManager;
 
 void GEXMLObject::validateXMLParameters()
 {
@@ -146,43 +196,46 @@ void GEXMLObject::initializeXMLParameters() {
 
 GEXMLObject::GEXMLObject() {
   if (doPurge || !initialized) {
-    // The Xerces programming guide (https://xerces.apache.org/xerces-c/program-3.html)
-    // states that you must call Terminate the same number of times you call
-    // Initialize. By calling these functions in the constructor and destructor
-    // of all XML objects we ensure that Initialize is called before any other
-    // XML functions and that Initialize and Terminate are called the same
-    // number of times.
-    try
-    {
-      khLockGuard guard(mutex);
-      initializeXMLParameters();
-      XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
-                                   maxDOMHeapAllocSize,
-                                   maxDOMSubAllocationSize,
-                                   XMLUni::fgXercescDefaultLocale,
-                                   0,
-                                   0);
-      notify(NFY_DEBUG, "XML initialization values: %s=%zu %s=%zu %s=%zu",
-             "initialDOMHeapAllocSize", initialDOMHeapAllocSize,
-             "maxDOMHeapAllocSize", maxDOMHeapAllocSize,
-             "maxDOMSubAllocationSize", maxDOMSubAllocationSize);
-    }
-    catch (const XMLException& toCatch)
-    {
-      notify(NFY_FATAL, "Unable to initialize Xerces: %s",
-             FromXMLStr(toCatch.getMessage()).c_str());
+    khLockGuard guard(mutex);
+    ++activeObjects;
+    // Only the first object created should initialize Xerces
+    if (activeObjects == 1) {
+      try {
+        initializeXMLParameters();
+        XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
+                                     maxDOMHeapAllocSize,
+                                     maxDOMSubAllocationSize,
+                                     XMLUni::fgXercescDefaultLocale,
+                                     0,
+                                     0,
+                                     &memoryManager);
+        notify(NFY_DEBUG, "XML initialization values: %s=%zu %s=%zu %s=%zu",
+               "initialDOMHeapAllocSize", initialDOMHeapAllocSize,
+               "maxDOMHeapAllocSize", maxDOMHeapAllocSize,
+               "maxDOMSubAllocationSize", maxDOMSubAllocationSize);
+      }
+      catch (const XMLException& toCatch)
+      {
+        notify(NFY_FATAL, "Unable to initialize Xerces: %s",
+               FromXMLStr(toCatch.getMessage()).c_str());
+      }
     }
   }
 }
 
 GEXMLObject::~GEXMLObject() {
   if (doPurge) {
-    try {
-      khLockGuard guard(mutex);
-      XMLPlatformUtils::Terminate();
-    } catch(const XMLException& toCatch) {
-      notify(NFY_WARN, "Unable to terminate Xerces: %s",
-             FromXMLStr(toCatch.getMessage()).c_str());
+    khLockGuard guard(mutex);
+    --activeObjects;
+    // Terminate Xerces and clear all memory when the last object is destroyed.
+    if (activeObjects == 0) {
+      try {
+        XMLPlatformUtils::Terminate();
+        memoryManager.deallocateAll();
+      } catch(const XMLException& toCatch) {
+        notify(NFY_WARN, "Unable to terminate Xerces: %s",
+               FromXMLStr(toCatch.getMessage()).c_str());
+      }
     }
   }
 }
@@ -205,8 +258,8 @@ GECreatedDocument::GECreatedDocument(const std::string & rootTagname) {
     DOMImplementationRegistry::getDOMImplementation(0);
     doc = impl->createDocument(0,// root element namespace URI.
                                ToXMLStr(rootTagname),// root element name
-                               0 // document type object (DTD)
-                               );
+                               0, // document type object (DTD)
+                               &memoryManager);
   } catch (...) {
     notify(NFY_DEBUG, "Error when trying to create DOMDocument.");
     doc = nullptr;
@@ -232,7 +285,7 @@ bool GEDocument::writeToFile(const std::string &filename) {
     DOMImplementationLS* impl = (DOMImplementationLS*)
                                  DOMImplementationRegistry::getDOMImplementation(ToXMLStr("LS"));
 
-    DOMLSSerializer* writer = impl->createLSSerializer();
+    DOMLSSerializer* writer = impl->createLSSerializer(&memoryManager);
 
     try {
       // optionally you can set some features on this serializer
@@ -247,7 +300,7 @@ bool GEDocument::writeToFile(const std::string &filename) {
       } else {
         ToXMLStr fname(filename);
         LocalFileFormatTarget formatTarget(fname);
-        DOMLSOutput* lsOutput = impl->createLSOutput();
+        DOMLSOutput* lsOutput = impl->createLSOutput(&memoryManager);
         lsOutput->setByteStream(&formatTarget);
         if (writer->write(doc, lsOutput)) {
           success = true;
@@ -306,9 +359,6 @@ WriteDocument(GEDocument * doc, const std::string &filename) throw()
   return retval;
 }
 
-
-
-
 bool
 WriteDocumentToString(GEDocument *doc, std::string &buf) throw()
 {
@@ -323,7 +373,7 @@ bool GEDocument::writeToString(std::string &buf) {
     DOMImplementationLS* impl = static_cast<DOMImplementationLS*>(
                                 DOMImplementationRegistry::getDOMImplementation(ToXMLStr("LS")));
 
-    DOMLSSerializer* writer = impl->createLSSerializer();
+    DOMLSSerializer* writer = impl->createLSSerializer(&memoryManager);
 
     try {
       // optionally you can set some features on this serializer
@@ -333,7 +383,7 @@ bool GEDocument::writeToString(std::string &buf) {
           writer->getDomConfig()->setParameter(XMLUni::fgDOMWRTFormatPrettyPrint, true);
 
       MemBufFormatTarget formatTarget;
-      DOMLSOutput* lsOutput = impl->createLSOutput();
+      DOMLSOutput* lsOutput = impl->createLSOutput(&memoryManager);
       lsOutput->setByteStream(&formatTarget);
       if (writer->write(doc, lsOutput)) {
           buf.append((const char *)formatTarget.getRawBuffer(),
@@ -381,7 +431,7 @@ void GEParsedDocument::CreateParser() {
     DOMImplementationLS* impl = static_cast<DOMImplementationLS*>(
         DOMImplementationRegistry::getDOMImplementation(ToXMLStr("LS")));
     parser =
-      impl->createLSParser(DOMImplementationLS::MODE_SYNCHRONOUS, 0);
+      impl->createLSParser(DOMImplementationLS::MODE_SYNCHRONOUS, 0, &memoryManager);
     // optionally you can set some features on this builder
     if (parser->getDomConfig()->canSetParameter(XMLUni::fgDOMValidate, true))
       parser->getDomConfig()->setParameter(XMLUni::fgDOMValidate, true);
@@ -456,11 +506,11 @@ GEParsedDocument::GEParsedDocument(const std::string &buf,
           (const XMLByte*)buf.data(),
           buf.size(),
           ref.c_str(),
-          false  // don't adopt buffer
-          );
+          false,  // don't adopt buffer
+          &memoryManager);
       Wrapper4InputSource inputSource(&memBufIS,
-                                      false  // don't adopt input source
-                                      );
+                                      false,  // don't adopt input source
+                                      &memoryManager);
       doc = parser->parse(&inputSource);
     }
   } catch (const XMLException& toCatch) {
