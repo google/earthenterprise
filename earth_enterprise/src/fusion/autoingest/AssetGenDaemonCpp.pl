@@ -24,6 +24,11 @@ use AssetGen;
 
 my $help = 0;
 our $thiscommand = "@ARGV";
+#my $doUpdateWhenRaster;
+#if ($thiscommand && index($thiscommand, "RasterProject") != -1)
+#{
+#    $doUpdateWhenRaster="true";    
+#}
 
 sub usage() {
     die "usage: $FindBin::Script <.srcfile> <outputfile>\n";
@@ -647,21 +652,28 @@ ${name}AssetImplD::MyUpdate(bool &needed $formalcachedinputarg
                             $formalExtraUpdateArg) const
 {
     // if applicable, prevent multiple calls to UpdateInputs()
-    bool hasUpdated = false;
     std::vector<AssetVersion> updatedInputVers;
     const std::vector<AssetVersion> *inputvers;
     if (cachedinputs_.size()) {
         inputvers = &cachedinputs_;
     } else {
-        hasUpdated = true;
         UpdateInputs(updatedInputVers);
         inputvers = &updatedInputVers;
     }
 EOF
 
 if ($hasfixconfig) {
+    if (index($thiscommand,"RasterProject") != -1)
+    {
+        if (index($thiscommand, "MercatorRasterProject") != -1) {
+            print $fh "if (cachedinputs_.size() && FixConfigBeforeUpdateCheck()) {";
+        } else {    
+            print $fh "if (FixConfigBeforeUpdateCheck()) {";
+        }
+    } else {
+        print $fh "if (cachedinputs_.size() && FixConfigBeforeUpdateCheck()) {";
+    }
     print $fh <<EOF;
-    if (!hasUpdated && FixConfigBeforeUpdateCheck()) {
         // I've changed something (possibly my input order). So I need to
         // refetch my inputvers
         updatedInputVers.clear();
