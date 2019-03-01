@@ -44,7 +44,7 @@ gtag('config', 'UA-108632131-2');
   <h5>
     <p id="overview_5.3.0">New Features</p>
   </h5>
-    <p><strong>Added the ability to control the XML cache size . </strong>
+    <p><strong>Added the ability to control the XML cache size. </strong>
       The size can be modified by configuring the <code>INIT_HEAP_SIZE</code>, <code>MAX_HEAP_SIZE</code>, and <code>BLOCK_SIZE</code> settings in
     <code>/etc/opt/google/XMLparams</code>. This file must be created manually. View the <a href="../answer/176738.html">Configure Fusion performance</a> document for more details.</p>
     <p><strong>Users can now force the XML cache to purge periodically. </strong>
@@ -120,7 +120,7 @@ gtag('config', 'UA-108632131-2');
           <tr>
             <td>1194</td>
             <td>Sockets build up during large project builds</td>
-            <td>The Fusion UI and <code>getop</code> will now timeout when attempting to communicate with System Manager in order to avoid keeping sockets open indefinitely. The timeout is configurable.</td>
+            <td>gesystemmanager now has a timeout when trying to respond to a request for status. This prevents a backlog of requests that could build up while it is busy handling a long-running request. The timeout is configurable.</td>
           </tr>
         </tbody>
       </table>
