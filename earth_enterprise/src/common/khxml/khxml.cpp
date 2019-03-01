@@ -40,14 +40,16 @@ const std::string GEXMLObject::INIT_HEAP_SIZE = "INIT_HEAP_SIZE";
 const std::string GEXMLObject::MAX_HEAP_SIZE = "MAX_HEAP_SIZE";
 const std::string GEXMLObject::BLOCK_SIZE = "BLOCK_SIZE";
 const std::string GEXMLObject::PURGE = "PURGE";
+const std::string GEXMLObject::PURGE_LEVEL = "PURGE_LEVEL";
 const std::string GEXMLObject::DEALLOCATE_ALL = "DEALLOCATE_ALL";
 const std::string GEXMLObject::XMLConfigFile = "/etc/opt/google/XMLparams";
-const std::array<std::string,5> GEXMLObject::options
+const std::array<std::string,6> GEXMLObject::options
 {{
     INIT_HEAP_SIZE,
     MAX_HEAP_SIZE,
     BLOCK_SIZE,
     PURGE,
+    PURGE_LEVEL,
     DEALLOCATE_ALL
 }};
 khMutex GEXMLObject::mutex;
@@ -56,8 +58,10 @@ XMLSize_t GEXMLObject::initialDOMHeapAllocSize;
 XMLSize_t GEXMLObject::maxDOMHeapAllocSize;
 XMLSize_t GEXMLObject::maxDOMSubAllocationSize;
 bool GEXMLObject::doPurge;
+int GEXMLObject::purgeLevel;
+XMLSize_t GEXMLObject::purgeThreshold;
 bool GEXMLObject::deallocateAll;
-bool GEXMLObject::initialized = false;
+bool GEXMLObject::xercesInitialized = false;
 
 uint32_t GEXMLObject::activeObjects = 0;
 
@@ -78,6 +82,14 @@ public:
         return "Initial heap size and block allocation size must be less than the max heap size";
     }
 };
+class PurgeLevelError : public XmlParamsException
+{
+public:
+    const char* what() const noexcept
+    {
+        return "Cache purging levels can only be 1-5";
+    }
+};
 
 // A simple memory manager class that allows us to ensure all memory used by
 // Xerces is released. We keep track of memory that is allocated but not
@@ -90,6 +102,7 @@ class SimpleMemoryManager : public MemoryManager {
     XMLSize_t allocatedSize;
   public:
     virtual MemoryManager * getExceptionMemoryManager() { return this; }
+    XMLSize_t size() { return allocatedSize; }
     // Allocate the requeste memory and store it in the list of allocated memory
     virtual void * allocate(XMLSize_t size) {
       khLockGuard guard(mutex);
@@ -140,16 +153,21 @@ void GEXMLObject::validateXMLParameters()
   // check to make sure they meet the minimum size
   if (initialDOMHeapAllocSize < lowestBlock ||
       maxDOMHeapAllocSize < lowestBlock)
-    {
-      throw MinValuesNotMet();
-    }
+  {
+    throw MinValuesNotMet();
+  }
   
   // check to make sure that the initial size is less than the max size
   if (maxDOMHeapAllocSize < initialDOMHeapAllocSize ||
       maxDOMHeapAllocSize < maxDOMSubAllocationSize)
-    {
-      throw SizeError();
-    }
+  {
+    throw SizeError();
+  }
+
+  if (purgeLevel > 5 || purgeLevel < 1)
+  {
+    throw PurgeLevelError();
+  }
 }
 
 void GEXMLObject::setDefaultValues()
@@ -157,13 +175,15 @@ void GEXMLObject::setDefaultValues()
    initialDOMHeapAllocSize = 0x4000;
    maxDOMHeapAllocSize     = 0x20000;
    maxDOMSubAllocationSize = 0x1000;
+   purgeLevel = 3;
    doPurge = false;
    deallocateAll = false;
 }
 
 void GEXMLObject::initializeXMLParameters() {
-  if (initialized) return;
-  initialized = true;
+  static bool callGuard = false;
+  if (callGuard) return;
+  callGuard = true;
 
   setDefaultValues();
   khConfigFileParser config_parser;
@@ -187,6 +207,10 @@ void GEXMLObject::initializeXMLParameters() {
         doPurge = (std::stol(it.second) == 1);
       else if (it.first == DEALLOCATE_ALL)
         deallocateAll = (std::stol(it.second) == 1);
+      else if (it.first == PURGE_LEVEL)
+      {
+        purgeLevel = std::stoi(it.second);
+      }
     }
   }
   catch (const khConfigFileParserException& e)
@@ -203,57 +227,77 @@ void GEXMLObject::initializeXMLParameters() {
     setDefaultValues();
     notify(NFY_DEBUG, "%s, using default xerces init values", e.what());
   }
+
+  // Calculate purge threshold from purge level
+  float purgePercent;
+  switch (purgeLevel)
+  {
+      case  1: purgePercent = 0.00; break;
+      case  2: purgePercent = 0.75; break;
+      case  3: purgePercent = 1.50; break;
+      case  4: purgePercent = 2.25; break;
+      case  5: purgePercent = 3.00; break;
+      default: purgePercent = 1.50;
+  }
+  purgeThreshold = static_cast<XMLSize_t>(maxDOMHeapAllocSize * purgePercent);
 }
 
 GEXMLObject::GEXMLObject() {
-  if (doPurge || !initialized) {
-    khLockGuard guard(mutex);
-    ++activeObjects;
-    // Only the first object created should initialize Xerces
-    if (activeObjects == 1) {
-      try {
-        initializeXMLParameters();
-        XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
-                                     maxDOMHeapAllocSize,
-                                     maxDOMSubAllocationSize,
-                                     XMLUni::fgXercescDefaultLocale,
-                                     0,
-                                     0,
-                                     &memoryManager);
-        notify(NFY_INFO, "XML initialization values:\n%s=%zu\n%s=%zu\n%s=%zu\n%s=%s\n%s=%s",
-               "initialDOMHeapAllocSize", initialDOMHeapAllocSize,
-               "maxDOMHeapAllocSize", maxDOMHeapAllocSize,
-               "maxDOMSubAllocationSize", maxDOMSubAllocationSize,
-               "doPurge", (doPurge ? "true" : "false"),
-               "deallocateAll", (deallocateAll ? "true" : "false"));
-      }
-      catch (const XMLException& toCatch)
-      {
-        notify(NFY_FATAL, "Unable to initialize Xerces: %s",
-               FromXMLStr(toCatch.getMessage()).c_str());
-      }
+  khLockGuard guard(mutex);
+  ++activeObjects;
+  if (!xercesInitialized) {
+    try {
+      initializeXMLParameters();
+      XMLPlatformUtils::Initialize(initialDOMHeapAllocSize,
+                                   maxDOMHeapAllocSize,
+                                   maxDOMSubAllocationSize,
+                                   XMLUni::fgXercescDefaultLocale,
+                                   0,
+                                   0,
+                                   &memoryManager);
+      xercesInitialized = true;
+      notify(NFY_DEBUG, "XML initialization values:\n"
+                       "initialDOMHeapAllocSize=%zu\n"
+                       "maxDOMHeapAllocSize=%zu\n"
+                       "maxDOMSubAllocationSize=%zu\n"
+                       "doPurge=%s\n"
+                       "purgeLevel=%d\n"
+                       "purgeThreshold=%zu\n"
+                       "deallocateAll=%s",
+             initialDOMHeapAllocSize,
+             maxDOMHeapAllocSize,
+             maxDOMSubAllocationSize,
+             (doPurge ? "true" : "false"),
+             purgeLevel,
+             purgeThreshold,
+             (deallocateAll ? "true" : "false"));
+    }
+    catch (const XMLException& toCatch)
+    {
+      notify(NFY_FATAL, "Unable to initialize Xerces: %s",
+             FromXMLStr(toCatch.getMessage()).c_str());
     }
   }
 }
 
 GEXMLObject::~GEXMLObject() {
-  if (doPurge) {
-    khLockGuard guard(mutex);
-    --activeObjects;
-    // Terminate Xerces and clear all memory when the last object is destroyed.
-    if (activeObjects == 0) {
-      try {
-        XMLPlatformUtils::Terminate();
-        if (deallocateAll) {
-          memoryManager.deallocateAll();
-        }
-        else {
-          memoryManager.clear();
-        }
-      } catch(const XMLException& toCatch) {
-        notify(NFY_WARN, "Unable to terminate Xerces: %s",
-               FromXMLStr(toCatch.getMessage()).c_str());
+  khLockGuard guard(mutex);
+  --activeObjects;
+  // Terminate Xerces and clear all memory when the user says we can, the last
+  // object is destroyed, and the cache size is over the threshold.
+  if (doPurge && activeObjects == 0 && memoryManager.size() >= purgeThreshold) {
+    try {
+      XMLPlatformUtils::Terminate();
+      xercesInitialized = false;
+      if (deallocateAll) {
+        memoryManager.deallocateAll();
       }
+      else {
+        memoryManager.clear();
+      }
+    } catch(const XMLException& toCatch) {
+      notify(NFY_WARN, "Unable to terminate Xerces: %s",
+             FromXMLStr(toCatch.getMessage()).c_str());
     }
   }
 }
@@ -273,13 +317,13 @@ CreateEmptyDocument(const std::string &rootTagname) throw()
 GECreatedDocument::GECreatedDocument(const std::string & rootTagname) {
   try {
     DOMImplementation* impl =
-    DOMImplementationRegistry::getDOMImplementation(0);
+        DOMImplementationRegistry::getDOMImplementation(0);
     doc = impl->createDocument(0,// root element namespace URI.
                                ToXMLStr(rootTagname),// root element name
                                0, // document type object (DTD)
                                &memoryManager);
   } catch (...) {
-    notify(NFY_DEBUG, "Error when trying to create DOMDocument.");
+    notify(NFY_WARN, "Error when trying to create DOMDocument.");
     doc = nullptr;
   }
 }
