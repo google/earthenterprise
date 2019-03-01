@@ -19,8 +19,8 @@ sudo cp resources/* /gevol/src/gauge_tests
 # Create a failed imagery resource
 FAILED_RESOURCE_NAME="gauge_tests/Resources/Imagery/StatePropagationTest_FailedImageryResource"
 FAILED_RESOURCE_ASSET_PATH=${ASSETROOT}/${FAILED_RESOURCE_NAME}.kiasset
-valgrind --log-file=/home/lsavoie/valgrind1.out genewimageryresource -o ${FAILED_RESOURCE_NAME} ${TEST_DATA_PATH}/Imagery/usgsSFHiRes.tif
-valgrind --log-file=/home/lsavoie/valgrind2.out gebuild ${FAILED_RESOURCE_NAME}
+genewimageryresource -o ${FAILED_RESOURCE_NAME} ${TEST_DATA_PATH}/Imagery/usgsSFHiRes.tif
+gebuild ${FAILED_RESOURCE_NAME}
 echo "Waiting for test resources to build: ${FAILED_RESOURCE_NAME}"
 WAIT_COUNT=0
 while [ `gequery ${FAILED_RESOURCE_NAME} --status` != "Succeeded" ] && [[ ${WAIT_COUNT} -lt 60 ]]; do
