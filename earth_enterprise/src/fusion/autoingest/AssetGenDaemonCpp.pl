@@ -24,11 +24,6 @@ use AssetGen;
 
 my $help = 0;
 our $thiscommand = "@ARGV";
-#my $doUpdateWhenRaster;
-#if ($thiscommand && index($thiscommand, "RasterProject") != -1)
-#{
-#    $doUpdateWhenRaster="true";    
-#}
 
 sub usage() {
     die "usage: $FindBin::Script <.srcfile> <outputfile>\n";
@@ -651,21 +646,38 @@ ${name}AssetVersionD
 ${name}AssetImplD::MyUpdate(bool &needed $formalcachedinputarg
                             $formalExtraUpdateArg) const
 {
-    // if applicable, prevent multiple calls to UpdateInputs()
     std::vector<AssetVersion> updatedInputVers;
     const std::vector<AssetVersion> *inputvers;
-    if (cachedinputs_.size()) {
+    if (cachedinputs_.size()) 
+    {
         inputvers = &cachedinputs_;
-    } else {
+    }
+EOF
+
+if (index($thiscommand, "RasterProject") == -1) {
+
+print $fh <<EOF; 
+    else 
+    {
         UpdateInputs(updatedInputVers);
         inputvers = &updatedInputVers;
     }
+
 EOF
+}
+else
+{
+print $fh <<EOF;
+
+    else inputvers = nullptr;
+    
+EOF
+}
 
 if ($hasfixconfig) {
     if (index($thiscommand,"RasterProject") != -1)
     {
-        print $fh "if (FixConfigBeforeUpdateCheck()) {";
+        print $fh "if (inputvers == nullptr || FixConfigBeforeUpdateCheck()) {";
     } else {
         print $fh "if (cachedinputs_.size() && FixConfigBeforeUpdateCheck()) {";
     }
@@ -720,6 +732,9 @@ print $fh <<EOF;
     // If my current version has not changed but has been canceled,
     // then to update I must resume it.
     Mutable${name}AssetVersionD curr_ver(CurrVersionRef());
+
+    notify(NFY_FATAL, "inputvers never updated in ${name}AssetD");
+
     AssetVersionImplD::InputVersionGuard guard(curr_ver.operator->(),
                                                *inputvers);
     if (curr_ver->state == AssetDefs::Canceled) {
