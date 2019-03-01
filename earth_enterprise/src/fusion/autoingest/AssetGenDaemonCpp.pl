@@ -652,11 +652,6 @@ ${name}AssetImplD::MyUpdate(bool &needed $formalcachedinputarg
     {
         inputvers = &cachedinputs_;
     }
-EOF
-
-if (index($thiscommand, "RasterProject") == -1) {
-
-print $fh <<EOF; 
     else 
     {
         UpdateInputs(updatedInputVers);
@@ -664,21 +659,13 @@ print $fh <<EOF;
     }
 
 EOF
-}
-else
-{
-print $fh <<EOF;
-
-    else inputvers = nullptr;
-    
-EOF
-}
 
 if ($hasfixconfig) {
     if (index($thiscommand,"RasterProject") != -1)
     {
-        print $fh "if (inputvers == nullptr || FixConfigBeforeUpdateCheck()) {";
-    } else {
+        print $fh "if (FixConfigBeforeUpdateCheck()) {";
+    } 
+    else {
         print $fh "if (cachedinputs_.size() && FixConfigBeforeUpdateCheck()) {";
     }
     print $fh <<EOF;
@@ -732,8 +719,6 @@ print $fh <<EOF;
     // If my current version has not changed but has been canceled,
     // then to update I must resume it.
     Mutable${name}AssetVersionD curr_ver(CurrVersionRef());
-
-    notify(NFY_FATAL, "inputvers never updated in ${name}AssetD");
 
     AssetVersionImplD::InputVersionGuard guard(curr_ver.operator->(),
                                                *inputvers);
