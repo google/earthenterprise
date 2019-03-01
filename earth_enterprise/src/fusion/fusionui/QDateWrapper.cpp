@@ -132,9 +132,14 @@ void QDateWrapper::SetDate(const std::string& date) {
 }
 
 bool QDateWrapper::IsValidDate() {
-  return QDate::isValid(year_edit_->text().toInt(),
-                     month_edit_->text().toInt(),
-                     day_edit_->text().toInt());
+  //  A date is valid if it exists or if the field is blank
+  //  A value of '0000-00-00' implies the field is blank
+  int zeroVal = year_edit_->text().toInt() |
+                month_edit_->text().toInt() |
+                day_edit_->text().toInt();
+  return (zeroVal == 0) || QDate::isValid(year_edit_->text().toInt(),
+                                          month_edit_->text().toInt(),
+                                          day_edit_->text().toInt());
 }
 
 std::string QDateWrapper::GetDate() const {
