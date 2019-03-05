@@ -458,6 +458,8 @@ khAssetManager::HandleClientLoop(FusionConnection::Handle client) throw()
           } else if (cmdname == PUBLISH_DATABASE) {
             // TODO: Deserialize parameters from protobuf here.
             replyPayload = PublishDatabase(msg.payload);
+          } else if (cmdname == GET_TASKS) {
+            replyPayload = RetrieveTasking(msg);
           } else {
             DispatchRequest(msg, replyPayload);
           }
@@ -1060,6 +1062,7 @@ khAssetManager::MakeAssetDir(const std::string &assetdir) {
 const std::string khAssetManager::ASSET_STATUS = "AssetStatus";
 const std::string khAssetManager::PUSH_DATABASE = "PushDatabase";
 const std::string khAssetManager::PUBLISH_DATABASE = "PublishDatabase";
+const std::string khAssetManager::GET_TASKS = "GetCurrTasks";
 
 /**
  * Get status of all versions of an asset.
@@ -1230,4 +1233,32 @@ std::string khAssetManager::PublishDatabase(
   }
 
   return std::string("Database Successfully Published.");
+}
+
+std::string khAssetManager::RetrieveTasking(const FusionConnection::RecvPacket& msg) {
+  uint mutexWaitTime = MiscConfig::Instance().MutexTimedWaitSec;
+
+  std::string replyPayload;
+  try {
+    // will throw an exception if mutexWaitTime is exceeded trying to acquire the lock
+    khLockGuard timedLock(mutex, mutexWaitTime);
+    TaskLists ret;
+    std::string dummy;
+    GetCurrTasks(dummy, ret);
+    if (!ToPayload(ret, replyPayload)) {
+	    throw khException(kh::tr("Unable to encode %1 reply payload")
+	      .arg(ToQString(GET_TASKS)));
+	  }
+  }
+  catch (khTimedMutexException e) {
+    // Replying with a string beginning "ERROR:" passes an exception message back to the caller
+    // alternatively we could throw an exception but that could flood fusion logs with warnings
+    replyPayload = sysManBusyMsg;
+  }
+  catch (...) {
+    // Allow all other exceptions to continue as before
+    throw;
+  }
+
+  return replyPayload;
 }
