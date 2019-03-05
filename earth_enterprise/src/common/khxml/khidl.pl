@@ -1557,8 +1557,8 @@ $class->{qualname}::Save(const std::string &file) const throw()
 {
     std::unique_ptr<GEDocument> doc = CreateEmptyDocument("$class->{TagName}");
     if (!doc) {
+        notify(NFY_WARN, "Unable to create empty document: $class->{TagName}");
         return false;
-	notify(NFY_WARN, "Unable to create empty document: $class->{TagName}");
     }
     bool status = false;
     try {
@@ -1799,26 +1799,26 @@ bool
 $class->{qualname}::Load(const std::string &file) throw()
 {
     bool result = false;
-	std::unique_ptr<GEDocument> doc = ReadDocument(file);
-	if (doc) {
-	    try {
-		DOMElement *docelem = doc->getDocumentElement();
-		if (docelem) {
-		    $DECLARE_DEPRECATED
-		    $CALL_FROMELEMENT(docelem, *this$PASS_DEPRECATED);
-		    result = true;
-		} else {
-		    notify(NFY_WARN, "No document element loading %s",
-			   file.c_str());
-		}
-	    } catch (const std::exception &e) {
-		notify(NFY_WARN, "%s while loading %s", e.what(), file.c_str());
-	    } catch (...) {
-		notify(NFY_WARN, "Unable to load %s", file.c_str());
-	    }
-	} else {
-	    notify(NFY_WARN, "Unable to read %s", file.c_str());
-	}
+    std::unique_ptr<GEDocument> doc = ReadDocument(file);
+    if (doc) {
+        try {
+            DOMElement *docelem = doc->getDocumentElement();
+            if (docelem) {
+                $DECLARE_DEPRECATED
+                $CALL_FROMELEMENT(docelem, *this$PASS_DEPRECATED);
+                result = true;
+            } else {
+                notify(NFY_WARN, "No document element loading %s",
+                       file.c_str());
+            }
+        } catch (const std::exception &e) {
+            notify(NFY_WARN, "%s while loading %s", e.what(), file.c_str());
+        } catch (...) {
+            notify(NFY_WARN, "Unable to load %s", file.c_str());
+        }
+    } else {
+        notify(NFY_WARN, "Unable to read %s", file.c_str());
+    }
     return result;
 }
 
@@ -1830,29 +1830,29 @@ EOF
 
 bool
 $class->{qualname}::LoadFromString(const std::string &buf,
-			       const std::string &ref) throw()
+    const std::string &ref) throw()
 {
     bool result = false;
-	std::unique_ptr<GEDocument> doc = ReadDocumentFromString(buf, ref);
-	if (doc) {
-	    try {
-		DOMElement *docelem = doc->getDocumentElement();
-		if (docelem) {
-		    $DECLARE_DEPRECATED
-		    $CALL_FROMELEMENT(docelem, *this$PASS_DEPRECATED);
-		    result = true;
-		} else {
-		    notify(NFY_WARN, "No document element loading %s",
-			   ref.c_str());
-		}
-	    } catch (const std::exception &e) {
-		notify(NFY_WARN, "%s while loading %s", e.what(), ref.c_str());
-	    } catch (...) {
-		notify(NFY_WARN, "Unable to load %s", ref.c_str());
-	    }
-	} else {
-	    notify(NFY_WARN, "Unable to read %s", ref.c_str());
-	}
+    std::unique_ptr<GEDocument> doc = ReadDocumentFromString(buf, ref);
+    if (doc) {
+        try {
+            DOMElement *docelem = doc->getDocumentElement();
+            if (docelem) {
+                $DECLARE_DEPRECATED
+                $CALL_FROMELEMENT(docelem, *this$PASS_DEPRECATED);
+                result = true;
+            } else {
+                notify(NFY_WARN, "No document element loading %s",
+                       ref.c_str());
+            }
+        } catch (const std::exception &e) {
+            notify(NFY_WARN, "%s while loading %s", e.what(), ref.c_str());
+        } catch (...) {
+            notify(NFY_WARN, "Unable to load %s", ref.c_str());
+        }
+    } else {
+        notify(NFY_WARN, "Unable to read %s", ref.c_str());
+    }
     return result;
 }
 

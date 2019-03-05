@@ -295,6 +295,7 @@ GEXMLObject::~GEXMLObject() {
       else {
         memoryManager.clear();
       }
+      notify(NFY_DEBUG, "Terminated XML library");
     } catch(const XMLException& toCatch) {
       notify(NFY_WARN, "Unable to terminate Xerces: %s",
              FromXMLStr(toCatch.getMessage()).c_str());
@@ -323,7 +324,8 @@ GECreatedDocument::GECreatedDocument(const std::string & rootTagname) {
                                0, // document type object (DTD)
                                &memoryManager);
   } catch (...) {
-    notify(NFY_WARN, "Error when trying to create DOMDocument.");
+    notify(NFY_WARN, "Error when trying to create DOMDocument. Root tag name: %s",
+           rootTagname.c_str());
     doc = nullptr;
   }
 }
@@ -363,12 +365,16 @@ bool GEDocument::writeToFile(const std::string &filename) {
         ToXMLStr fname(filename);
         LocalFileFormatTarget formatTarget(fname);
         DOMLSOutput* lsOutput = impl->createLSOutput(&memoryManager);
-        lsOutput->setByteStream(&formatTarget);
-        if (writer->write(doc, lsOutput)) {
-          success = true;
-        } else {
-          notify(NFY_WARN, "Unable to write %s: Xerces didn't tell me why not.",
-                 filename.c_str());
+        try {
+          lsOutput->setByteStream(&formatTarget);
+          if (writer->write(doc, lsOutput)) {
+            success = true;
+          } else {
+            notify(NFY_WARN, "Unable to write %s: Xerces didn't tell me why not.",
+                   filename.c_str());
+          }
+        } catch (...) {
+          notify(NFY_WARN, "Unexpected error writing %s", filename.c_str());
         }
         lsOutput->release();
       }
@@ -446,13 +452,17 @@ bool GEDocument::writeToString(std::string &buf) {
 
       MemBufFormatTarget formatTarget;
       DOMLSOutput* lsOutput = impl->createLSOutput(&memoryManager);
-      lsOutput->setByteStream(&formatTarget);
-      if (writer->write(doc, lsOutput)) {
+      try {
+        lsOutput->setByteStream(&formatTarget);
+        if (writer->write(doc, lsOutput)) {
           buf.append((const char *)formatTarget.getRawBuffer(),
           formatTarget.getLen());
-        success = true;
-      } else {
-        notify(NFY_WARN, "Unable to write XML to string: Xerces didn't tell me why not.");
+          success = true;
+        } else {
+          notify(NFY_WARN, "Unable to write XML to string: Xerces didn't tell me why not.");
+        }
+      } catch (...) {
+        notify(NFY_WARN, "Unexpected error writing to string buffer.");
       }
       lsOutput->release();
     } catch (const XMLException& toCatch) {
