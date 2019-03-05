@@ -281,6 +281,12 @@ PURGE=0
 # default is 3
 PURGE_LEVEL=3
 </code>
+<h2 id="status_request_timeout">Status request timeout</h2>
+<p>Status requests to the system manager from clients like <code>getop</code> must wait to be fulfilled if the system manager
+   is already engaged in another task. The system manager has a timeout that specifies the maximum amount of time it should
+   spend waiting to fulfill a status request before it times out. This timeout can be configured manually by setting
+   <code>MutexTimedWaitSec</code> in <code>/gevol/assets/.config/misc.xml</code></p>
+<code>&lt;MutexTimedWaitSec&gt;60&lt;/MutexTimedWaitSec&gt;</code>
 <h2>Learn more</h2>
 <ul>
 <li><a href="../answer/6033487.html">Benchmarking outcomes for applying task rules</a></li>

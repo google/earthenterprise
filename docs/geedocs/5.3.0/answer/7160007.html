@@ -44,7 +44,13 @@ gtag('config', 'UA-108632131-2');
   <h5>
     <p id="overview_5.3.0">New Features</p>
   </h5>
-    <p><strong>Example feature</strong> replace with real feature description.</p>
+    <p><strong>Added the ability to control the XML cache size. </strong>
+      The size can be modified by configuring the <code>INIT_HEAP_SIZE</code>, <code>MAX_HEAP_SIZE</code>, and <code>BLOCK_SIZE</code> settings in
+    <code>/etc/opt/google/XMLparams</code>. This file must be created manually. View the <a href="../answer/176738.html">Configure Fusion performance</a> document for more details.</p>
+    <p><strong>Users can now force the XML cache to purge periodically. </strong>
+      This can be done by configuring the <code>PURGE</code> and <code>PURGE_LEVEL</code> settings in <code>/etc/opt/google/XMLparams</code>. 
+      This file must be created manually. View the <a href="../answer/176738.html">Configure Fusion performance</a> document for more details.</p>
+    <p><strong>Added a <code>long_version</code> parameter to the SCons build. </strong>This will allow the user to override the long version string.</p>
   <h5>
     <p id="supported_5.3.0">Supported Platforms</p>
   </h5>
@@ -110,6 +116,11 @@ gtag('config', 'UA-108632131-2');
             <td>
               Help has been added through the <code>--help</code> option, or if any invalid parameter is given
             </td>
+          </tr>
+          <tr>
+            <td>1194</td>
+            <td>Sockets build up during large project builds</td>
+            <td>gesystemmanager now has a timeout when trying to respond to a request for status. This prevents a backlog of requests that could build up while it is busy handling a long-running request. The timeout is configurable.</td>
           </tr>
         </tbody>
       </table>
