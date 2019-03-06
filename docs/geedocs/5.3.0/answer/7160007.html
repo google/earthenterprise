@@ -122,6 +122,13 @@ gtag('config', 'UA-108632131-2');
             <td>Sockets build up during large project builds</td>
             <td>gesystemmanager now has a timeout when trying to respond to a request for status. This prevents a backlog of requests that could build up while it is busy handling a long-running request. The timeout is configurable.</td>
           </tr>
+          <tr>
+            <td>1166</td>
+            <td>Imagery resources can be created with invalid dates</td>
+            <td>
+              Added a validity check that ensures a valid date is entered. A date of 0000-00-00 can also be entered as a default value. The user will not be allowed to save with an invalid date entered.
+            </td>
+          </tr>
         </tbody>
       </table>
   <h5>
