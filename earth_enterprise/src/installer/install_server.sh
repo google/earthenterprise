@@ -25,7 +25,6 @@ SCRIPTDIR=`dirname $0`
 . $SCRIPTDIR/common.sh
 
 # config values
-ASSET_ROOT="/gevol/assets"
 PUBLISHER_ROOT="/gevol/published_dbs"
 INSTALL_LOG="$INSTALL_LOG_DIR/geserver_install_$(date +%Y_%m_%d.%H%M%S).log"
 BACKUP_DIR="$BASEINSTALLDIR_VAR/server-backups/$(date +%Y_%m_%d.%H%M%S)"
@@ -804,23 +803,12 @@ prompt_install_confirmation()
     fi
 }
 
-load_systemrc_config()
-{
-  if [ -f "$SYSTEMRC" ]; then
-    # read existing config information
-    ASSET_ROOT=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/assetroot/text()")
-    GEFUSIONUSER_NAME=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/fusionUsername/text()")
-    GRPNAME=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/userGroupname/text()")
-  fi
-}
-
 # Get user/group info from previous installation.  Uses user/group for particular files/directories
 get_server_installation_info()
 {
   GEAPACHEUSER_NAME=$(get_default_user "$PUBLISHER_ROOT/search_space" $GEAPACHEUSER_NAME)
   GRPNAME=$(get_default_group "$PUBLISHER_ROOT/search_space" $GRPNAME)
   GEPGUSER_NAME=$(get_default_user "$PGSQL_DATA" $GEPGUSER_NAME)
-  GEFUSIONUSER_NAME=$(get_default_user "$ASSET_ROOT" $GEFUSIONUSER_NAME)
 }
 
 #-----------------------------------------------------------------
