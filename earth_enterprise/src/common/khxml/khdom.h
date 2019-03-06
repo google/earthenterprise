@@ -1172,7 +1172,7 @@ FromElement(khxml::DOMElement *elem, VerRefGen &val)
 }
 
 /******************************************************************************
- ***  DOM Parser routines that catch Xercves' exceptions
+ ***  DOM Parser routines that catch Xerces' exceptions
  ******************************************************************************/
 
 extern std::unique_ptr<GEDocument>

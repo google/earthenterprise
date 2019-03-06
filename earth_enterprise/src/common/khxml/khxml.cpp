@@ -103,7 +103,7 @@ class SimpleMemoryManager : public MemoryManager {
   public:
     virtual MemoryManager * getExceptionMemoryManager() { return this; }
     XMLSize_t size() { return allocatedSize; }
-    // Allocate the requeste memory and store it in the list of allocated memory
+    // Allocate the requested memory and store it in the list of allocated memory
     virtual void * allocate(XMLSize_t size) {
       khLockGuard guard(mutex);
       byte * p = new byte[size];
@@ -209,7 +209,7 @@ void GEXMLObject::initializeXMLParameters() {
         deallocateAll = (std::stol(it.second) == 1);
       else if (it.first == PURGE_LEVEL)
       {
-        purgeLevel = std::stoi(it.second);
+        purgeLevel = std::stol(it.second);
       }
     }
   }
