@@ -88,7 +88,7 @@ AssetImplD::UpdateInputs(std::vector<AssetVersion> &inputvers) const
       bool needed = false;
       inputvers.push_back(asset->Update(needed));
       notify(NFY_PROGRESS, "Updating asset input %lu (of %lu input%s).",
-        i - inputs.begin(), inputs_count, inputs_count == 1 ? "" : "s");
+        i - inputs.begin() + 1, inputs_count, inputs_count == 1 ? "" : "s");
     } else {
       inputvers.push_back(AssetVersion(verref));
     }

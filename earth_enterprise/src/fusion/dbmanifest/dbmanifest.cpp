@@ -382,9 +382,7 @@ void DbManifest::GetPoiDataFiles(ManifestEntry* stream_manifest_entry,
   assert(stream_manifest_entry->current_path == search_manifest_entry->current_path);
   notify(NFY_DEBUG,
         "Parsing POI file %s looking for data files", poi_file.c_str());
-  khParserDeleteGuard parser(TransferOwnership(CreateDOMParser()));
-  if (parser) {
-    khxml::DOMDocument* doc(ReadDocument(parser, poi_file));
+    std::unique_ptr<GEDocument> doc = ReadDocument(poi_file);
     if (doc) {
       try {
         if (khxml::DOMElement *root = doc->getDocumentElement()) {
@@ -441,9 +439,6 @@ void DbManifest::GetPoiDataFiles(ManifestEntry* stream_manifest_entry,
     } else {
       notify(NFY_WARN, "Unable to read POI file %s", poi_file.c_str());
     }
-  } else {
-    notify(NFY_WARN, "Unable to get parser for POI file %s", poi_file.c_str());
-  }
 }
 
 std::string DbManifest::LocalesFilename() const {
