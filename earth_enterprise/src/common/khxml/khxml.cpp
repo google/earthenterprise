@@ -23,6 +23,7 @@
 #include <exception>
 #include <cstdlib>
 #include <map>
+#include <fstream>
 
 using namespace khxml;
 
@@ -185,6 +186,13 @@ void GEXMLObject::initializeXMLParameters() {
   if (callGuard) return;
   callGuard = true;
 
+  std::ifstream file(XMLConfigFile.c_str());
+  initializeXMLParametersFromStream(file);
+}
+
+// This function does not perform any synchronization. Callers must avoid
+// concurrency issues.
+void GEXMLObject::initializeXMLParametersFromStream(std::istream &) {
   setDefaultValues();
   khConfigFileParser config_parser;
   try
