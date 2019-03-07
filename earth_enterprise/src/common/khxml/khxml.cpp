@@ -631,12 +631,3 @@ khxml::DOMElement * GEDocument::getDocumentElement() {
     return nullptr;
   }
 }
-
-khxml::DOMElement * GEDocument::createElement(const std::string tagName) {
-  if (valid()) {
-    return doc->createElement(ToXMLStr(tagName));
-  }
-  else {
-    return nullptr;
-  }
-}

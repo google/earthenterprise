@@ -167,7 +167,6 @@ class GEDocument : private GEXMLObject {
   public:
     bool valid() const;
     khxml::DOMElement * getDocumentElement();
-    khxml::DOMElement * createElement(const std::string);
     bool writeToFile(const std::string &);
     bool writeToString(std::string &);
 };
