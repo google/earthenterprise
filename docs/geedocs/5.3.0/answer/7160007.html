@@ -82,6 +82,22 @@ gtag('config', 'UA-108632131-2');
             </td>
           </tr>
           <tr>
+          <tr>
+            <td><br><br>171</td>
+            <td>
+                PUBLISH_ROOT_VOLUME size checking<br>
+                ASSET_ROOT and PUBLISH_ROOT volume checking<br>
+                Some script parameters - parsing and execution (based on those provided by the Fusion installer)<br>
+                Prompts and summary output similar Fusion installer
+            </td>
+            <td>
+              Added PUBLISHER_ROOT size checking.<br>
+              ASSET_ROOT checking is performed in fusion installer - not duplicated in server installer<br>
+              Added <code>-pgu pguser</code>, <code>-au apacheuser</code>, and <code>-g group</code> options.<br>
+              Added prompt and summary output similar to fusion installer.
+            </td>
+          </tr>
+          <tr>
             <td>200</td>
             <td><code>stage_install</code> fails on the tutorial files when <code>/home</code>
               and <code>/tmp</code> are on different file systems</td>
