@@ -163,3 +163,6 @@ const std::string kVirtualRasterFileExtension = ".khvr";
 
 // Geo Coordinate System Plate Carree Projection (EPGS:4326).
 const char* const kPlateCarreeGeoCoordSysName = "EPSG:4326";
+
+// Error message from SystemManager to clients querying current tasks
+const std::string sysManBusyMsg = "ERROR: Timed out waiting for lock";
