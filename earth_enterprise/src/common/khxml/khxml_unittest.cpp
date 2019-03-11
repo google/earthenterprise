@@ -26,10 +26,11 @@
 using namespace std;
 using namespace khxml;
 
-// These tests are focused on testing the Open GEE XMl code, not the Xerces
+// These tests are focused on testing the Open GEE XML code, not the Xerces
 // code. Thus, they do not try to hit every possible error condition; rather
 // they hit at least one error condition in every function and make sure Open
 // GEE handles it gracefully.
+// The functions tested here are declared in khdom.h and defined in khxml.cpp.
 
 const string TEST_DIR = "fusion/testdata/khxml";
 const string VALID_XML = TEST_DIR + "/valid.xml";
@@ -38,12 +39,12 @@ class KhxmlTest : public ::testing::Test {
   protected:
     void SetUp() override {
       stringstream params;
-      params << "INIT_HEAP_SIZE=16384\n"
-                "MAX_HEAP_SIZE=131072\n"
-                "BLOCK_SIZE=4096\n"
-                "PURGE=1\n"
-                "PURGE_LEVEL=1\n"
-                "DEALLOCATE_ALL=1\n";
+      params << "INIT_HEAP_SIZE=16384" << endl
+             << "MAX_HEAP_SIZE=131072" << endl
+             << "BLOCK_SIZE=4096" << endl
+             << "PURGE=1" << endl
+             << "PURGE_LEVEL=1" << endl
+             << "DEALLOCATE_ALL=1" << endl;
       GEXMLObject::initializeXMLParametersFromStream(params);
     }
 };

@@ -192,7 +192,7 @@ void GEXMLObject::initializeXMLParameters() {
 
 // This function does not perform any synchronization. Callers must avoid
 // concurrency issues.
-void GEXMLObject::initializeXMLParametersFromStream(std::istream &) {
+void GEXMLObject::initializeXMLParametersFromStream(std::istream & input) {
   setDefaultValues();
   khConfigFileParser config_parser;
   try
@@ -201,7 +201,7 @@ void GEXMLObject::initializeXMLParametersFromStream(std::istream &) {
     {
       config_parser.addOption(i);
     }
-    config_parser.parse(XMLConfigFile.c_str());
+    config_parser.parse(input);
     config_parser.validateIntegerValues();
     for (const auto& it : config_parser)
     {
