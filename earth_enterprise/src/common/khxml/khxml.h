@@ -27,6 +27,7 @@
 #include <xercesc/util/XMLString.hpp>
 #include <khThread.h>
 #include <array>
+#include <istream>
 #include <memory>
 #include <string>
 #include <qstring.h>
@@ -153,6 +154,9 @@ class GEXMLObject {
   protected:
     GEXMLObject();
     ~GEXMLObject();
+  public:
+    // Allow users to specify the initialization file
+    static void initializeXMLParametersFromStream(std::istream &);
 };
 
 class GEDocument : private GEXMLObject {
@@ -163,7 +167,6 @@ class GEDocument : private GEXMLObject {
   public:
     bool valid() const;
     khxml::DOMElement * getDocumentElement();
-    khxml::DOMElement * createElement(const std::string);
     bool writeToFile(const std::string &);
     bool writeToString(std::string &);
 };
