@@ -255,31 +255,41 @@ The cache sizes are controlled by the file <code>misc.xml</code> which can be fo
 (assuming your asset root is <code>/gevol/assets</code>; if not, modify the path accordingly).
 The asset cache size is controlled by <code>AssetCacheSize</code> and the asset version cache size is controlled by <code>VersionCacheSize</code>.
 Note that the asset version cache is generally larger than the asset cache because it may contain multiple versions of the same asset.</p>
-<br><br>
-Within <code>misc.xml</code>, the following options are deprecated and are treated as if they are permanently enabled: <code>DisablePacketLevelVersionCachePurge</code> and <code>ConsolidateListenerNotifications</code>.
-<br><br>
-In some instances, memory utilization may become problematic. An experimental feature is included which will allow for modifying aspects of the the XML cache.  This is controlled through <code>/etc/opt/google/XMLparams</code>. It takes the form of a standard configuration file, and it is in the following format.
-<br><br>
+
+<p>Within <code>misc.xml</code>, the following options are deprecated and are treated as if they are permanently enabled: <code>DisablePacketLevelVersionCachePurge</code> and <code>ConsolidateListenerNotifications</code>.</p>
+
+<p>The Xerces library maintains a separate cache for dealing with XML files. Users can modify aspects of this cache through a configuration file at
+<code>/etc/opt/google/XMLparams</code>. This file is not created automatically as part of the Open GEE Fusion install,
+so users that want to modify the parameters below must first create an <code>XMLparams</code> file. The <code>XMLparams</code> file has the following format:</p>
+
 <code>
 # comments are preceded by '#'
 <br>
 # options are case-insensitive, and all need not be present
-<br>
-# the initial size of the heap<br>
+<br><br>
+# the initial size of the XML heap in bytes<br>
+# default is 16384<br>
 INIT_HEAP_SIZE=&lt;value&gt;
 <br><br>
-# the max size of the heap<br>
+# the max size of the XML heap in bytes<br>
+# default is 131072<br>
 MAX_HEAP_SIZE=&lt;value&gt;
 <br><br>
-# the size of the allocation blocks<br>
+# the size of XML heap allocation blocks in bytes<br>
+# default is 4096<br>
 BLOCK_SIZE=&lt;value&gt;
 <br><br>
-# whether or not to purge: 0 or 1, default is 0
+# whether or not to purge the XML cache; valid values are 0 or 1<br>
+# default is 0<br>
 PURGE=0
 <br><br>
-# the level at which to purge, may be 1 (most often) to 5 (least often)
-# default is 3
+# the level at which to purge the XML cache; can be 1 (most often) to 5 (least often)<br>
+# default is 3<br>
 PURGE_LEVEL=3
+<br><br>
+# deallocate all memory allocated by Xerces when the Xerces cache is purged; valid values are 0 or 1<br>
+# default is 0<br>
+DEALLOCATE_ALL=0
 </code>
 <h2 id="status_request_timeout">Status request timeout</h2>
 <p>Status requests to the system manager from clients like <code>getop</code> must wait to be fulfilled if the system manager
