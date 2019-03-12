@@ -438,13 +438,12 @@ extern void ToElement(DOMElement *elem, const AssetStorage &self);
 bool
 ${name}AssetImplD::Save(const std::string &filename) const
 {
-    DOMDocument *doc = CreateEmptyDocument("${name}Asset");
+    std::unique_ptr<GEDocument> doc = CreateEmptyDocument("${name}Asset");
     if (!doc) {
         notify(NFY_WARN, "Unable to create empty document: ${name}Asset");
         return false;
     }
     bool status = false;
-    khCallGuard<DOMDocument*,bool> docrelease(&::DestroyDocument, doc);
     try {
         DOMElement *top = doc->getDocumentElement();
         if (top) {
@@ -453,7 +452,7 @@ ${name}AssetImplD::Save(const std::string &filename) const
             const AssetStorage &storage = *this;
             ToElement(top, storage);
             AddConfig(top, config);
-            status = WriteDocument(doc, filename);
+            status = WriteDocument(doc.get(), filename);
             if (!status && khExists(filename)) {
                 khUnlink(filename);
             }
@@ -806,21 +805,20 @@ extern void ToElement(DOMElement *elem, const AssetVersionStorage &self);
 bool
 ${name}AssetVersionImplD::Save(const std::string &filename) const
 {
-    DOMDocument *doc = CreateEmptyDocument("${name}AssetVersion");
+    std::unique_ptr<GEDocument> doc = CreateEmptyDocument("${name}AssetVersion");
     if (!doc) {
         notify(NFY_WARN,
                "Unable to create empty document: ${name}AssetVersion");
         return false;
     }
     bool status = false;
-    khCallGuard<DOMDocument*,bool> docrelease(&::DestroyDocument, doc);
     try {
         DOMElement *top = doc->getDocumentElement();
         if (top) {
             const AssetVersionStorage &storage = *this;
             ToElement(top, storage);
             AddConfig(top, config);
-            status = WriteDocument(doc, filename);
+            status = WriteDocument(doc.get(), filename);
             if (!status && khExists(filename)) {
                 khUnlink(filename);
             }

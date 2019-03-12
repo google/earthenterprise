@@ -118,37 +118,31 @@ ${name}AssetImpl::Load(const std::string &ref)
     uint64 filesize = 0;
 
     if (khGetFileInfo(filename, filesize, timestamp) && (filesize > 0)) {
-	DOMLSParser *parser = CreateDOMParser();
-	if (parser) {
-	    khCallGuard<DOMLSParser*,bool> parserrelease(&::DestroyParser,
-							parser);
-	    DOMDocument *doc = ReadDocument(parser, filename);
-	    if (doc) {
-		try {
-		    DOMElement *top = doc->getDocumentElement();
-		    if (!top)
-			throw khException(kh::tr("No document element"));
-		    std::string tagname = FromXMLStr(top->getTagName());
-		    if (tagname != "${name}Asset")
-			throw khException(kh::tr("Expected '%1', found '%2'")
-					  .arg(ToQString("${name}Asset"),
-					       ToQString(tagname)));
-		    result = NewFromDOM(top);
-		} catch (const std::exception &e) {
-		    AssetThrowPolicy::WarnOrThrow
-		      (kh::tr("Error loading %1: %2")
-		       .arg(ToQString(filename), QString::fromUtf8(e.what())));
-		} catch (...) {
-		    AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to load ")
-						  + filename);
-		}
-	    } else {
-	        AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to read ")
-					      + filename);
-	    }
+        std::unique_ptr<GEDocument> doc = ReadDocument(filename);
+        if (doc) {
+            try {
+                DOMElement *top = doc->getDocumentElement();
+                if (!top) {
+                    throw khException(kh::tr("No document element"));
+                }
+                std::string tagname = FromXMLStr(top->getTagName());
+                if (tagname != "${name}Asset") {
+                    throw khException(kh::tr("Expected '%1', found '%2'")
+                        .arg(ToQString("${name}Asset"),
+                        ToQString(tagname)));
+                }
+                result = NewFromDOM(top);
+            } catch (const std::exception &e) {
+                AssetThrowPolicy::WarnOrThrow
+                    (kh::tr("Error loading %1: %2")
+                    .arg(ToQString(filename), QString::fromUtf8(e.what())));
+            } catch (...) {
+                AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to load ")
+                    + filename);
+            }
         } else {
-            AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to get parser for ")
-					  + filename);
+            AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to read ")
+                + filename);
         }
     } else {
         AssetThrowPolicy::WarnOrThrow(kh::tr("No such file: ") + filename);
@@ -156,10 +150,10 @@ ${name}AssetImpl::Load(const std::string &ref)
 
 
     if (!result) {
-	result = NewInvalid(ref);
-	// leave timestamp alone
+        result = NewInvalid(ref);
+        // leave timestamp alone
         // if it failed but there was a vlid timestamp we want
-	// to remember the timestamp of the one that failed
+        // to remember the timestamp of the one that failed
     }
 
     // store the timestamp so the cache can check it later
@@ -207,47 +201,41 @@ ${name}AssetVersionImpl::Load(const std::string &boundref)
     uint64 filesize = 0;
 
     if (khGetFileInfo(filename, filesize, timestamp) && (filesize > 0)) {
-	DOMLSParser *parser = CreateDOMParser();
-	if (parser) {
-	    khCallGuard<DOMLSParser*,bool> parserrelease(&::DestroyParser,
-							parser);
-	    DOMDocument *doc = ReadDocument(parser, filename);
-	    if (doc) {
-		try {
-		    DOMElement *top = doc->getDocumentElement();
-		    if (!top)
-			throw khException(kh::tr("No document element"));
-		    std::string tagname = FromXMLStr(top->getTagName());
-		    if (tagname != "${name}AssetVersion")
-			throw khException(kh::tr("Expected '%1', found '%2'")
-					  .arg(ToQString("${name}AssetVersion"),
-					       ToQString(tagname)));
-		    result = NewFromDOM(top);
-		} catch (const std::exception &e) {
-		    AssetThrowPolicy::WarnOrThrow
-		      (kh::tr("Error loading %1: %2")
-		       .arg(ToQString(filename), QString::fromUtf8(e.what())));
-		} catch (...) {
-		    AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to load ")
-						  + filename);
-		}
-	    } else {
-	        AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to read ")
-					      + filename);
-	    }
+        std::unique_ptr<GEDocument> doc = ReadDocument(filename);
+        if (doc) {
+            try {
+                DOMElement *top = doc->getDocumentElement();
+                if (!top) {
+                    throw khException(kh::tr("No document element"));
+                }
+                std::string tagname = FromXMLStr(top->getTagName());
+                if (tagname != "${name}AssetVersion") {
+                    throw khException(kh::tr("Expected '%1', found '%2'")
+                        .arg(ToQString("${name}AssetVersion"),
+                        ToQString(tagname)));
+                }
+                result = NewFromDOM(top);
+            } catch (const std::exception &e) {
+                AssetThrowPolicy::WarnOrThrow
+                    (kh::tr("Error loading %1: %2")
+                    .arg(ToQString(filename), QString::fromUtf8(e.what())));
+            } catch (...) {
+                AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to load ")
+                    + filename);
+            }
         } else {
-            AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to get parser for ")
-					  + filename);
+            AssetThrowPolicy::WarnOrThrow(kh::tr("Unable to read ")
+                + filename);
         }
     } else {
         AssetThrowPolicy::WarnOrThrow(kh::tr("No such file: ") + filename);
     }
 
     if (!result) {
-	result = NewInvalid(boundref);
-	// leave timestamp alone
+        result = NewInvalid(boundref);
+        // leave timestamp alone
         // if it failed but there was a vlid timestamp we want
-	// to remember the timestamp of the one that failed
+        // to remember the timestamp of the one that failed
     }
 
     // store the timestamp so the cache can check it later
