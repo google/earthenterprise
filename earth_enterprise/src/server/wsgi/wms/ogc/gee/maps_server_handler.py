@@ -213,17 +213,6 @@ def _GetServerVars(target_url):
   logger.debug("Opening url: [%s]", target_url)
 
   try:
-    fp2 = urllib2.urlopen('https://www.google.com')
-    result2 = fp2.read()
-    logger.debug("google:\n%s\n", result)
-
-  except urllib2.HTTPError, e:
-    logger.warning("Google failed: %s.", e)
-    return {}
-
-  fp2.close()
-
-  try:
     fp = urllib2.urlopen(target_url)
     result = fp.read()
   except urllib2.HTTPError, e:
