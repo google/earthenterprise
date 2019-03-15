@@ -39,7 +39,7 @@ struct MeshVertex {
   }
 };
 
-std::ostream &operator<<(std::ostream &strm, const MeshVertex &v) {
+inline std::ostream &operator<<(std::ostream &strm, const MeshVertex &v) {
   FormatThree(strm, v.x, v.y, v.z);
   return strm;
 }
@@ -52,7 +52,7 @@ struct MeshFace {
   }
 };
 
-std::ostream &operator<<(std::ostream &strm, const MeshFace &f) {
+inline std::ostream &operator<<(std::ostream &strm, const MeshFace &f) {
   FormatThree(strm, f.a, f.b, f.c);
   return strm;
 }
@@ -158,7 +158,7 @@ inline bool IsAlmostEqual(const MeshVertex &v1, const MeshVertex &v2) {
   return v1.x == v2.x && v1.y == v2.y && IsAlmostEqual(v1.z, v2.z, kEpsilonZ);
 }
 
-bool CompareMesh(int mesh_number,
+inline bool CompareMesh(int mesh_number,
                  EndianReadBuffer *buffer1,
                  EndianReadBuffer *buffer2,
                  const bool ignore_mesh,

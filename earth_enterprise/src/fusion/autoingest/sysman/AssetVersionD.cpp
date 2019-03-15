@@ -46,11 +46,6 @@ AssetVersionImplD::StateChangeNotifier::GetNotifier(
 void
 AssetVersionImplD::StateChangeNotifier::AddParentsToNotify(const std::vector<std::string> & parents) {
   std::copy(parents.begin(), parents.end(), std::inserter(parentsToNotify, parentsToNotify.end()));
-  if (!MiscConfig::Instance().ConsolidateListenerNotifications) {
-    // If the user has opted not to consolidate notifications, send
-    // notifications immediately
-    NotifyParents(nullptr);
-  }
 }
 
 void
@@ -64,11 +59,6 @@ AssetVersionImplD::StateChangeNotifier::AddListenersToNotify(const std::vector<s
     else if (!AssetDefs::Working(inputState)) {
       elem.allWorkingOrSucceeded = false;
     }
-  }
-  if (!MiscConfig::Instance().ConsolidateListenerNotifications) {
-    // If the user has opted not to consolidate notifications, send
-    // notifications immediately
-    NotifyListeners(nullptr);
   }
 }
 
