@@ -22,15 +22,11 @@ class MiscConfigStorage {
   // delay between writing a file and reading it from NFS in order to
   // help work around the delayed NFS visibility problem.
   uint        NFSVisibilityDelay = uint(0);
-
   uint        AssetCacheSize = uint(128000);
   uint        VersionCacheSize = uint(128000);
-
   bool        GenerateProductPreviews = true;
 
-  bool        DisablePacketLevelVersionCachePurge = false;
-
-  bool        ConsolidateListenerNotifications = false;
+  uint        MutexTimedWaitSec = uint(30);
 
 #pragma LoadAndSave
 

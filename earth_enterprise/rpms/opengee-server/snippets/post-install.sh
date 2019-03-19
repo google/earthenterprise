@@ -62,7 +62,10 @@ main_postinstall()
         python ./set_geecheck_config.py
     fi
 
-    #9) done!
+    # 9) Restore portable globes symlink if it existed previously
+    restore_portable_symlink
+ 
+    #10) done!
     service geserver start
 }
 
@@ -215,6 +218,14 @@ install_search_databases()
     # d) Stop the PSQL Server
     echo "# d) Stop the PSQL Server"
     run_as_user "$GEPGUSER" "$PGSQL_PROGRAM -D $PGSQL_DATA stop"
+}
+
+restore_portable_symlink()
+{
+    if [ -L "$BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/globes_symlink" ]; then
+        rm -rf "$BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/globes"
+        mv "$BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/globes_symlink" "$BASEINSTALLDIR_OPT/gehttpd/htdocs/cutter/globes"
+    fi
 }
 
 #-----------------------------------------------------------------
