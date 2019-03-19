@@ -253,4 +253,6 @@ extern const std::string kVirtualRasterFileExtension;
 // Geo Coordinate System Plate Carree Projection (EPGS:4326).
 extern const char* const kPlateCarreeGeoCoordSysName;
 
+extern const std::string sysManBusyMsg;
+
 #endif  // GEO_EARTH_ENTERPRISE_SRC_COMMON_KHCONSTANTS_H_

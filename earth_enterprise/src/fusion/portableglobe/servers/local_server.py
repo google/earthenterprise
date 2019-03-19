@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #
-# Copyright 2017 Google Inc.
+# Copyright 2017 Google Inc, 2019 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,13 +24,14 @@ sharing the same key.
 
 import os
 import re
+import json
 import StringIO
 import sys
 
 try:
   pil_enabled = True
-  import Image
-  import ImageFile
+  from PIL import Image
+  from PIL import ImageFile
 except ImportError:
   pil_enabled = False
   print "PIL is not available."
@@ -388,21 +389,75 @@ class LocalServer(object):
         search_term = handler.request.arguments[key][0].lower()
         handler.write(tornado.web.globe_.search_db_.JsonSearch(search_term, cb))
 
-  def LocalJsonHandler(self, handler, is_2d=False):
+  def ParseGlobeReqName(self, req):
+    """Ascertain whether requested globe name exists in data directory."""
+    globe_name = ""
+    if "/" in req:
+      try:
+        globe_name = req.split("/")[1]
+      except:
+        globe_name = req.split("/")[0]
+
+    # If the globe requested is not already selected
+    if globe_name != tornado.web.globe_.GlobeName():
+      if globe_name in portable_web_interface.SetUpHandler.GlobeNameList(
+          tornado.web.globe_.GlobeBaseDirectory(),[".glc", ".glb", ".glm"]):
+        # Globe requested is in the list of globes
+        return globe_name
+      else:
+        # Invalid globe name
+        return -1
+    else:
+      # Globe requested is the current selectedGlobe
+      return 1
+
+  def JStoJson(self, js_string):
+    """Converts a JS server definition string to valid JSON."""
+    # Remove "var geeServerDefs = " or similar from start.
+    # Then add quotes to JSON keys that don't have them.
+    # Strip out the trailing ';'
+    # Finally, push it through json.dumps to ensure consistently-formatted output.
+    out_string = re.sub(r"^var \w+ ?= ?", "", js_string)
+    out_string = re.sub(r"([,{]\s+)(\w+):", r'\1"\2":', out_string)
+    out_string = out_string.strip(";")
+    return json.dumps(json.loads(out_string))
+
+  def LocalJsonHandler(self, handler, is_2d=False, json_version=1):
     """Handle GET request for JSON file for plugin."""
     if not handler.IsValidRequest():
       raise tornado.web.HTTPError(404)
 
+    current_globe = ""
+    globe_request_name = self.ParseGlobeReqName(handler.request.uri)
+    if globe_request_name != -1 and globe_request_name != 1:
+      # Requested globe name is valid, so select it
+      current_globe = tornado.web.globe_.GlobeName()
+      globe_path = "%s%s%s" % (
+          tornado.web.globe_.GlobeBaseDirectory(),
+          os.sep, globe_request_name)
+      tornado.web.globe_.ServeGlobe(globe_path)
+
     # Get to end of serverUrl so we can add globe name.
+    # This will fail if serverDefs are requested for a glc file
     try:
       if is_2d:
         # TODO: Add real layer support for mbtiles.
         if tornado.web.globe_.IsMbtiles():
           json = MBTILES_JSON
         else:
-          json = tornado.web.globe_.ReadFile("maps/map.json")
+          # Portable seems to believe that 2D files are 3D when they
+          # are not actively being viewed by a client, so handle
+          # both possibilities in either case.
+          try:
+            json = tornado.web.globe_.ReadFile("maps/map.json")
+          except:
+            json = tornado.web.globe_.ReadFile("earth/earth.json")
       else:
-        json = tornado.web.globe_.ReadFile("earth/earth.json")
+        try:
+          json = tornado.web.globe_.ReadFile("earth/earth.json")
+        except:
+          json = tornado.web.globe_.ReadFile("maps/map.json")
+
     except:
       handler.write("var geeServerDefs = {};")
       return
@@ -462,8 +517,20 @@ class LocalServer(object):
       json_end += "};"
 
     # Adding globe name helps ensure clearing of cache for new globes.
-    handler.write("%s/%s%s" % (
-        json_start, tornado.web.globe_.GlobeShortName(), json_end))
+    json_text = "%s/%s%s" % (
+      json_start, tornado.web.globe_.GlobeShortName(), json_end)
+
+    if json_version == 2:
+      json_text = self.JStoJson(json_text)
+
+    handler.write(json_text)
+
+    # If we switched globes, switch back
+    if len(current_globe):
+      globe_path = "%s%s%s" % (
+          tornado.web.globe_.GlobeBaseDirectory(),
+          os.sep, globe_request_name)
+      tornado.web.globe_.ServeGlobe(globe_path)
 
   def ConvertToQtNode(self, col, row, level):
     """Converts col, row, and level to corresponding qtnode string."""

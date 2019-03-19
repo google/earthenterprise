@@ -24,6 +24,14 @@
 class EndianWriteBuffer;
 class EndianReadBuffer;
 
+namespace QuadtreePathConstants {
+    namespace {
+        const uint32 kMaxLevel = 24;
+        const uint32 kStoreSize = sizeof(uint64);
+        const uint32 kChildCount = 4;
+    }
+}
+
 // QuadtreePath - define packed representation for quadtree path.
 //
 // The path is stored in a uint64.  The upper 48 bits store the path
@@ -36,9 +44,9 @@ class EndianReadBuffer;
 
 class QuadtreePath {
  public:
-  static const uint32 kMaxLevel = 24;  // number of levels represented
-  static const uint32 kStoreSize = sizeof(uint64);  // bytes required to store
-  static const uint32 kChildCount = 4;  // number of children at each level
+  static const uint32 kMaxLevel = QuadtreePathConstants::kMaxLevel;  // number of levels represented
+  static const uint32 kStoreSize = QuadtreePathConstants::kStoreSize;  // bytes required to store
+  static const uint32 kChildCount = QuadtreePathConstants::kChildCount;  // number of children at each level
 
   QuadtreePath() : path_(0) {}
   QuadtreePath(uint32 level, uint32 row, uint32 col);

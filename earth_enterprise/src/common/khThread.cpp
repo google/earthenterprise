@@ -51,6 +51,14 @@ bool khMutexBase::TryLock(void) {
   return (err == 0);
 }
 
+bool khMutexBase::TimedTryLock(uint secToWait) {
+  timespec timeoutThreshold;
+  clock_gettime(CLOCK_REALTIME, &timeoutThreshold);
+  timeoutThreshold.tv_sec += secToWait;
+  int err = pthread_mutex_timedlock(&mutex, &timeoutThreshold);
+  return (err == 0);
+}
+
 khMutex::khMutex(void) {
   BEGIN_PERF_LOGGING(timingLogger, "khMutex::khMutex", "mutex");
   // always returns 0

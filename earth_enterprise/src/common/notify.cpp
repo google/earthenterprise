@@ -200,9 +200,27 @@ void HexDump(FILE* out, const void* data, uint32 size) {
   }
 }
 
+/* strerror_r behaves differently between POSIX and non-POSIX implementations
+ * the compiler will select the appropriate wrapper to utilize and return the error message pointer as expected
+ */
+char* strerror_wrapper(int strerr_ret, char* buf) {
+  if (strerr_ret) {
+    // POSIX strerr_r encountered a problem, khstrerror expects a null pointer in this case
+    return nullptr;
+  }
+  // no error returned so the local buffer pointer is returned
+  return buf;
+}
+
+// non-POSIX implementation wrapper may or may not write anything into local buffer so ignore it
+char* strerror_wrapper(char* strerr_ret, char*) {
+  return strerr_ret;
+}
+
 std::string khstrerror(int err) {
   char buf[256];
-  char* msg = strerror_r(err, buf, sizeof(buf));
+  auto retval = strerror_r(err, buf, sizeof(buf));
+  char* msg = strerror_wrapper(retval, buf);
   if (msg)
     return msg;
   else

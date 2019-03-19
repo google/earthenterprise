@@ -107,6 +107,7 @@ utilsources = [
     'khPresenceMask.cpp',
     'khCoverageMask.cpp',
     'RuntimeOptions.cpp',
+    'khConfigFileParser.cpp',
     'packet.cpp',
     'filebundle/filebundlewriter.cpp',
     'packetfile/packetindexwriter.cpp',
@@ -186,6 +187,14 @@ env.test('timeutils_unittest',
 env.test('performancelogger_unittest',
          'performancelogger_unittest.cpp',
          LIBS=['gecommon', 'gtest'])
+
+env.test('khThread_unittest',
+         'khThread_unittest.cpp',
+         LIBS=['gecommon', 'gtest', 'rt'])
+
+env.test('khconfigparser_unittest',
+         'khconfigparser_unittest.cpp',
+          LIBS=['geutil', 'gtest'])
 
 env.install('common_lib', [gecommon])
 env.install('common_lib', [geutil])
