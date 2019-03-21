@@ -170,8 +170,8 @@ stage_data = env.Alias('stage_data', installdirs['root'])
 env.Depends(stage_data, stage_bin)
 
 # Copy the uninstall scripts to the install staging directory
-uninstall_fusion = env.copyfile(installdirs['fusion_root'], './src/installer/uninstall_fusion.sh')
-uninstall_server = env.copyfile(installdirs['server_root'], './src/installer/uninstall_server.sh')
+env.copyfile(installdirs['fusion_root'], './src/installer/uninstall_fusion.sh')
+env.copyfile(installdirs['server_root'], './src/installer/uninstall_server.sh')
 
 # Copy the tutorial to the install staging directory if it exists.
 stage_tutorial_cmds = {'stage_tutorial': [

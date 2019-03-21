@@ -550,7 +550,7 @@ class khEnvironment(Environment):
     # Re-call all the target  builders to add the sources to each target.
     result = []
     for t in tlist:
-      bld = t.get_builder() or my_alias_builder
+      bld = t.get_builder() if t.has_builder() else my_alias_builder
       result.extend(bld(self, t, source))
     return result
 
