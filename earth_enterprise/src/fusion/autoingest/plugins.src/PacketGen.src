@@ -190,9 +190,12 @@ void PacketGenAssetVersionImplD::UpdateChildren(
                                     inset.alphaRPFile,
                                     std::string(), /* cached blend */
                                     std::string()  /* cached blend alpha */));
+        std::string acquisitionDate = inset.resource_->GetAcquisitionDate();
+
         packetLevelConfig.attributions.push_back
           (PacketLevelConfig::Attribution(
               inset.dataRPFile,
+              acquisitionDate,
               inset.combinedrp_->config.fuid_resource_));
       }
     } else {
@@ -221,9 +224,12 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
            idx != neededIndexes.end(); ++idx) {
         const InsetInfo<ProductAssetVersion> &inset(*extra.insetInfo[*idx]);
+        std::string acquisitionDate = inset.resource_->GetAcquisitionDate();
+
         packetLevelConfig.attributions.push_back
           (PacketLevelConfig::Attribution(
               inset.dataRPFile,
+              acquisitionDate,
               inset.combinedrp_->config.fuid_resource_));
       }
 
