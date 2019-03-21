@@ -29,7 +29,7 @@ AttributionByExtents::Inset::Inset(const std::string &rppath, uint32 id, const s
   }
   max_level_   = rp->maxLevel();
   deg_extents_ = rp->degOrMeterExtents();
-  if (acquisitionDate != kUnknownDateTimeUTC) {
+  if (acquisitionDate != kUnknownDateTimeUTC && acquisitionDate != kUnknownDate) {
     acquisition_date_ = acquisitionDate;
   } else {
     acquisition_date_ = rp->GetAcquisitionDate();
