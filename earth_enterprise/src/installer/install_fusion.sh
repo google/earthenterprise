@@ -662,6 +662,8 @@ copy_files_to_target()
 	if [ $? -ne 0 ]; then error_on_copy=1; fi
 	cp -f $TMPINSTALLDIR/common/opt/google/common.sh $INSTALL_LOG_DIR
 	if [ $? -ne 0 ]; then error_on_copy=1; fi
+	cp -f $TMPINSTALLDIR/common/opt/google/version.txt $BASEINSTALLDIR_OPT
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 
 	if [ $error_on_copy -ne 0 ]
 	then
