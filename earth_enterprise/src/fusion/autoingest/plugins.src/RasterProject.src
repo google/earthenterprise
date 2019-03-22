@@ -241,7 +241,7 @@ class RasterProjectAssetVersionImplD {
 #include "common/khTileAddr.h"
 #include "common/khConstants.h"
 #include <third_party/rfc_uuid/uuid.h>
-#include <time.h>
+#include <chrono>
 
 
 // Throw and exception about invalid dates in time machine projects if the
@@ -984,9 +984,9 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     RasterProductAssetVersion> >::const_reverse_iterator last_iter =
       inset_infos.rbegin();
   notify(NFY_PROGRESS, "Building GERasterIndex: %zu insets, level %d for %s\n", inset_infos.size(), last_iter->effectiveMaxLevel, date.c_str());
-  timespec prevTime;
-  timespec curTime;
-  clock_gettime(CLOCK_MONOTONIC, &prevTime);
+  std::chrono::high_resolution_clock::time_point prevTime = std::chrono::high_resolution_clock::now();
+  std::chrono::high_resolution_clock::time_point curTime;
+  std::chrono::duration<double> timeDiff; 
 
   // get the range of levels that we're going to generate
   const uint beginProjectLevel =
@@ -1011,16 +1011,18 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
                     config.overlay_terrain_resources_min_level_);
 #if 1
   // Calculate levels where transparent tiles may be skipped.
-  clock_gettime(CLOCK_MONOTONIC, &curTime);
-  notify(NFY_PROGRESS, "BuildIndex finished calculation of packet gen info - %ld.%09ld seconds elapsed",
-         curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
-  clock_gettime(CLOCK_MONOTONIC, &prevTime);
+  curTime = std::chrono::high_resolution_clock::now();
+  timeDiff = std::chrono::duration_cast<std::chrono::duration<double>>(curTime - prevTime);
+  notify(NFY_PROGRESS, "BuildIndex finished calculation of packet gen info - %f seconds elapsed",
+         timeDiff.count());
+  prevTime = curTime;
   CalcLevelsToSkipTransparentTiles(&genInfo, beginProjectLevel, endMinifyLevel);
 #endif
-  clock_gettime(CLOCK_MONOTONIC, &curTime);
-  notify(NFY_PROGRESS, "BuildIndex finished calcLevelsToSkipTransparentTiles - %ld.%09ld seconds elapsed",
-         curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
-  clock_gettime(CLOCK_MONOTONIC, &prevTime);
+  curTime = std::chrono::high_resolution_clock::now();
+  timeDiff = std::chrono::duration_cast<std::chrono::duration<double>>(curTime - prevTime);
+  notify(NFY_PROGRESS, "BuildIndex finished calcLevelsToSkipTransparentTiles - %f seconds elapsed",
+         timeDiff.count());
+  prevTime = curTime;
   // make a copy of the inset_infos w/ pointers. The FindNeeded*
   // routines want pointers.
   std::vector<const InsetInfo<RasterProductAssetVersion> *> insetInfoPtrs;
@@ -1049,10 +1051,11 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     std::vector<uint> neededIndexes;
     neededIndexes.reserve(i);
 
-    clock_gettime(CLOCK_MONOTONIC, &curTime);
-    notify(NFY_PROGRESS, "BuildIndex starting inner loop for inset %d of %lu - %ld.%09ld seconds elapsed",
-           i+1, genInfo.size(), curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
-    clock_gettime(CLOCK_MONOTONIC, &prevTime);
+    curTime = std::chrono::high_resolution_clock::now();
+    timeDiff = std::chrono::duration_cast<std::chrono::duration<double>>(curTime - prevTime);
+    notify(NFY_PROGRESS, "BuildIndex starting inner loop for inset %d of %lu - %f seconds elapsed",
+           i+1, genInfo.size(), timeDiff.count());
+    prevTime = curTime;
 
     if (type == AssetDefs::Imagery) {
       FindNeededImageryInsets(genInfo[i].coverage,
@@ -1069,10 +1072,11 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     }
     neededIndexes.push_back(i); // each inset always intersects itself
 
-    clock_gettime(CLOCK_MONOTONIC, &curTime);
-    notify(NFY_PROGRESS, "BuildIndex finished compiling %lu needed indices for inset %d - %ld.%09ld seconds elapsed",
-           neededIndexes.size(), i, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
-    clock_gettime(CLOCK_MONOTONIC, &prevTime);
+    curTime = std::chrono::high_resolution_clock::now();
+    timeDiff = std::chrono::duration_cast<std::chrono::duration<double>>(curTime - prevTime);
+    notify(NFY_PROGRESS, "BuildIndex finished compiling %lu needed indices for inset %d - %f seconds elapsed",
+           neededIndexes.size(), i, timeDiff.count());
+    prevTime = curTime;
 
     // calculate the level range that will be minified
     uint effectiveBeginMinifyLevel =
@@ -1118,10 +1122,11 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
           packgenVerRef));
     }
 
-    clock_gettime(CLOCK_MONOTONIC, &curTime);
-    notify(NFY_PROGRESS, "BuildIndex finished nested loop for inset %d - %ld.%09ld seconds elapsed",
-           i, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
-    clock_gettime(CLOCK_MONOTONIC, &prevTime);
+    curTime = std::chrono::high_resolution_clock::now();
+    timeDiff = std::chrono::duration_cast<std::chrono::duration<double>>(curTime - prevTime);
+    notify(NFY_PROGRESS, "BuildIndex finished nested loop for inset %d - %f seconds elapsed",
+           i, timeDiff.count());
+    prevTime = curTime;
 
     // Build a PacketGenExtraUpdateArg
     PacketGenExtraUpdateArg<RasterProductAssetVersion> extraArg;
@@ -1154,9 +1159,10 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     packgenvers.push_back(packgen);
   }
 
-  clock_gettime(CLOCK_MONOTONIC, &curTime);
-  notify(NFY_PROGRESS, "BuildIndex finished looping through insets - %ld.%09ld seconds elapsed",
-         curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
+  curTime = std::chrono::high_resolution_clock::now();
+  timeDiff = std::chrono::duration_cast<std::chrono::duration<double>>(curTime - prevTime);
+  notify(NFY_PROGRESS, "BuildIndex finished looping through insets - %f seconds elapsed",
+         timeDiff.count());
 
   // Make index subasset (RasterGEIndex).
   return MakeIndexSubAsset(packgenkids, packgenassets, packgenvers, genInfo, date);

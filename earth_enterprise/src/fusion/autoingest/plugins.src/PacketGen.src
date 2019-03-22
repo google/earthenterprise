@@ -44,7 +44,7 @@ class PacketGenExtraUpdateArg {
 #include <autoingest/sysman/plugins/PacketLevelAssetD.h>
 #include <autoingest/plugins/RasterProductAsset.h>
 #include <autoingest/plugins/MercatorRasterProductAsset.h>
-#include <time.h>
+#include <chrono>
 
 
 template
@@ -101,9 +101,9 @@ void PacketGenAssetVersionImplD::UpdateChildren(
   std::vector<MutableAssetVersionD> kids;
   kids.reserve(numLevels);
 
-  timespec prevTime;
-  timespec curTime;
-  clock_gettime(CLOCK_MONOTONIC, &prevTime);
+  std::chrono::high_resolution_clock::time_point prevTime = std::chrono::high_resolution_clock::now();
+  std::chrono::high_resolution_clock::time_point curTime;
+  std::chrono::duration<double> timeDiff; 
   notify(NFY_PROGRESS, "UpdateChildren starting for %s", assetRef.c_str());
   // Create my children giving them each a different level
   // Go from end to begin so we can use the results from one level to make
@@ -112,10 +112,11 @@ void PacketGenAssetVersionImplD::UpdateChildren(
   while (level > config.coverage.beginLevel()) {
     --level;
 
-    clock_gettime(CLOCK_MONOTONIC, &curTime);
-    notify(NFY_PROGRESS, "UpdateChildren starting to find needed insets for level %d.  %ld.%09ld seconds elapsed",
-           level, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
-    clock_gettime(CLOCK_MONOTONIC, &prevTime);
+    curTime = std::chrono::high_resolution_clock::now();
+    timeDiff = std::chrono::duration_cast<std::chrono::duration<double>>(curTime - prevTime);
+    notify(NFY_PROGRESS, "UpdateChildren starting to find needed insets for level %d.  %f seconds elapsed",
+           level, timeDiff.count());
+    prevTime = curTime;
 
     // Determine which insets intersect us at this level
     const khLevelCoverage levCov(config.coverage.levelCoverage(level));
@@ -135,10 +136,11 @@ void PacketGenAssetVersionImplD::UpdateChildren(
                               config.endMinifyLevel);
     }
 
-    clock_gettime(CLOCK_MONOTONIC, &curTime);
-    notify(NFY_PROGRESS, "UpdateChildren finished finding insets for level %d. %ld.%09ld seconds elapsed",
-           level, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
-    clock_gettime(CLOCK_MONOTONIC, &prevTime);
+    curTime = std::chrono::high_resolution_clock::now();
+    timeDiff = std::chrono::duration_cast<std::chrono::duration<double>>(curTime - prevTime);
+    notify(NFY_PROGRESS, "UpdateChildren finished finding insets for level %d. %f seconds elapsed",
+           level, timeDiff.count());
+    prevTime = curTime;
 
     // Build most of PacketLevelConfig
     PacketLevelConfig packetLevelConfig;
@@ -182,10 +184,11 @@ void PacketGenAssetVersionImplD::UpdateChildren(
     if (!packetLevelConfig.minify) {
       // ***** Normal Blend *****
 
-      clock_gettime(CLOCK_MONOTONIC, &curTime);
-      notify(NFY_PROGRESS, "UpdateChildren starting normal blend for level %d.  %ld.%09ld seconds elapsed",
-             level, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
-      clock_gettime(CLOCK_MONOTONIC, &prevTime);
+      curTime = std::chrono::high_resolution_clock::now();
+      timeDiff = std::chrono::duration_cast<std::chrono::duration<double>>(curTime - prevTime);
+      notify(NFY_PROGRESS, "UpdateChildren starting normal blend for level %d.  %f seconds elapsed",
+             level, timeDiff.count());
+      prevTime = curTime;
 
       // we cache the raster if we're in the appropriate range
       // and if we've been told to (because we have alpha)
@@ -215,17 +218,19 @@ void PacketGenAssetVersionImplD::UpdateChildren(
               inset.dataRPFile,
               inset.combinedrp_->config.fuid_resource_));
       }
-      clock_gettime(CLOCK_MONOTONIC, &curTime);
-      notify(NFY_PROGRESS, "UpdateChildren normal blend level %d finished inner loop over %lu other insets.  %ld.%09ld seconds elapsed",
-             level, neededIndexes.size(), curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
-      clock_gettime(CLOCK_MONOTONIC, &prevTime);
+      curTime = std::chrono::high_resolution_clock::now();
+      timeDiff = std::chrono::duration_cast<std::chrono::duration<double>>(curTime - prevTime);
+      notify(NFY_PROGRESS, "UpdateChildren normal blend level %d finished inner loop over %lu other insets.  %f seconds elapsed",
+             level, neededIndexes.size(), timeDiff.count());
+      prevTime = curTime;
     } else {
       // ***** Minify *****
 
-      clock_gettime(CLOCK_MONOTONIC, &curTime);
-      notify(NFY_PROGRESS, "UpdateChildren starting minification for level %d.  %ld.%09ld seconds elapsed",
-             level, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
-      clock_gettime(CLOCK_MONOTONIC, &prevTime);
+      curTime = std::chrono::high_resolution_clock::now();
+      timeDiff = std::chrono::duration_cast<std::chrono::duration<double>>(curTime - prevTime);
+      notify(NFY_PROGRESS, "UpdateChildren starting minification for level %d.  %f seconds elapsed",
+             level, timeDiff.count());
+      prevTime = curTime;
       // if we want to short circuit the merge with opaque product
       // tiles, fill in the info about our top product
       if (config.useOpaqueTopInsetInsteadOfMerge) {
@@ -255,10 +260,11 @@ void PacketGenAssetVersionImplD::UpdateChildren(
               inset.combinedrp_->config.fuid_resource_));
       }
 
-      clock_gettime(CLOCK_MONOTONIC, &curTime);
-      notify(NFY_PROGRESS, "UpdateChildren packet level attributions for level %d finished inner loop over %lu other insets.  %ld.%09ld seconds elapsed",
-             level, neededIndexes.size(), curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
-      clock_gettime(CLOCK_MONOTONIC, &prevTime);
+      curTime = std::chrono::high_resolution_clock::now();
+      timeDiff = std::chrono::duration_cast<std::chrono::duration<double>>(curTime - prevTime);
+      notify(NFY_PROGRESS, "UpdateChildren packet level attributions for level %d finished inner loop over %lu other insets.  %f seconds elapsed",
+             level, neededIndexes.size(), timeDiff.count());
+      prevTime = curTime;
 
       // for insets we only care about those that have done work at
       // minifySrcLevel
@@ -271,10 +277,11 @@ void PacketGenAssetVersionImplD::UpdateChildren(
         }
       }
 
-      clock_gettime(CLOCK_MONOTONIC, &curTime);
-      notify(NFY_PROGRESS, "UpdateChildren finished adding to mergeIndexes for level %d result is %lu items.  %ld.%09ld seconds elapsed",
-             level, mergeIndexes.size(), curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
-      clock_gettime(CLOCK_MONOTONIC, &prevTime);
+      curTime = std::chrono::high_resolution_clock::now();
+      timeDiff = std::chrono::duration_cast<std::chrono::duration<double>>(curTime - prevTime);
+      notify(NFY_PROGRESS, "UpdateChildren finished adding to mergeIndexes for level %d result is %lu items.  %f seconds elapsed",
+             level, mergeIndexes.size(), timeDiff.count());
+      prevTime = curTime;
 
       // populate inputs and inputVers & config.insets
       levInputs.reserve(mergeIndexes.size() * 2 + 1);
@@ -363,10 +370,11 @@ void PacketGenAssetVersionImplD::UpdateChildren(
         }
       }
 
-      clock_gettime(CLOCK_MONOTONIC, &curTime);
-      notify(NFY_PROGRESS, "UpdateChildren finished looping over mergeIndexes for level %d.  %ld.%09ld seconds elapsed",
-             level, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
-      clock_gettime(CLOCK_MONOTONIC, &prevTime);
+      curTime = std::chrono::high_resolution_clock::now();
+      timeDiff = std::chrono::duration_cast<std::chrono::duration<double>>(curTime - prevTime);
+      notify(NFY_PROGRESS, "UpdateChildren finished looping over mergeIndexes for level %d.  %f seconds elapsed",
+             level, timeDiff.count());
+      prevTime = curTime;
 
       if (config.cacheRaster) {
         // If I've cached my raster blends, I should
@@ -396,10 +404,11 @@ void PacketGenAssetVersionImplD::UpdateChildren(
               cache_alpha_exist ?
                   prevLevelVer.Ref() : std::string() /* cached blend alpha */));
 
-        clock_gettime(CLOCK_MONOTONIC, &curTime);
-        notify(NFY_PROGRESS, "UpdateChildren finished cacheRaster block for level %d.  %ld.%09ld seconds elapsed",
-               level, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
-        clock_gettime(CLOCK_MONOTONIC, &prevTime);
+        curTime = std::chrono::high_resolution_clock::now();
+        timeDiff = std::chrono::duration_cast<std::chrono::duration<double>>(curTime - prevTime);
+        notify(NFY_PROGRESS, "UpdateChildren finished cacheRaster block for level %d.  %f seconds elapsed",
+               level, timeDiff.count());
+        prevTime = curTime;
       }
 
     }
@@ -417,17 +426,19 @@ void PacketGenAssetVersionImplD::UpdateChildren(
        levInputVers);
 
     kids.push_back(packLevelVer);
-    clock_gettime(CLOCK_MONOTONIC, &curTime);
-    notify(NFY_PROGRESS, "UpdateChildren finished all work for level %d.  %ld.%09ld seconds elapsed",
-           level, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
-    clock_gettime(CLOCK_MONOTONIC, &prevTime);
+    curTime = std::chrono::high_resolution_clock::now();
+    timeDiff = std::chrono::duration_cast<std::chrono::duration<double>>(curTime - prevTime);
+    notify(NFY_PROGRESS, "UpdateChildren finished all work for level %d.  %f seconds elapsed",
+           level, timeDiff.count());
+    prevTime = curTime;
 
   } // foreach level
 
   AddChildren(kids);
-  clock_gettime(CLOCK_MONOTONIC, &curTime);
-  notify(NFY_PROGRESS, "UpdateChildren finished adding all children.  %ld.%09ld seconds elapsed",
-         curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
+  curTime = std::chrono::high_resolution_clock::now();
+  timeDiff = std::chrono::duration_cast<std::chrono::duration<double>>(curTime - prevTime);
+  notify(NFY_PROGRESS, "UpdateChildren finished adding all children.  %f seconds elapsed",
+         timeDiff.count());
 }
 
 
