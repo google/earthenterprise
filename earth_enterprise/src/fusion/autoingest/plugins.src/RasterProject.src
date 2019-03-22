@@ -1048,7 +1048,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     neededIndexes.reserve(i);
 
     clock_gettime(CLOCK_MONOTONIC, &curTime);
-    notify(NFY_PROGRESS, "BuildIndex starting inner loop for inset %d of %lu - %ld.%09ld seconds elapsed", i, genInfo.size(), curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
+    notify(NFY_PROGRESS, "BuildIndex starting inner loop for inset %d of %lu - %ld.%09ld seconds elapsed", i+1, genInfo.size(), curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
     clock_gettime(CLOCK_MONOTONIC, &prevTime);
 
     if (type == AssetDefs::Imagery) {
