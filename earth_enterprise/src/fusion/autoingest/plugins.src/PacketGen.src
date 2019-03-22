@@ -104,7 +104,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
   timespec prevTime;
   timespec curTime;
   clock_gettime(CLOCK_MONOTONIC, &prevTime);
-  notify(NFY_PROGRESS, "Starting UpdateChildren for %s", assetRef.c_str());
+  notify(NFY_PROGRESS, "UpdateChildren starting for %s", assetRef.c_str());
   // Create my children giving them each a different level
   // Go from end to begin so we can use the results from one level to make
   // the next lower resolution level
@@ -113,7 +113,8 @@ void PacketGenAssetVersionImplD::UpdateChildren(
     --level;
 
     clock_gettime(CLOCK_MONOTONIC, &curTime);
-    notify(NFY_PROGRESS, "Starting to find needed insets for level %d.  %ld.%09ld seconds elapsed", level, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
+    notify(NFY_PROGRESS, "UpdateChildren starting to find needed insets for level %d.  %ld.%09ld seconds elapsed",
+           level, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
     clock_gettime(CLOCK_MONOTONIC, &prevTime);
 
     // Determine which insets intersect us at this level
@@ -135,7 +136,8 @@ void PacketGenAssetVersionImplD::UpdateChildren(
     }
 
     clock_gettime(CLOCK_MONOTONIC, &curTime);
-    notify(NFY_PROGRESS, "Finished finding insets for level %d. %ld.%09ld seconds elapsed", level, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
+    notify(NFY_PROGRESS, "UpdateChildren finished finding insets for level %d. %ld.%09ld seconds elapsed",
+           level, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
     clock_gettime(CLOCK_MONOTONIC, &prevTime);
 
     // Build most of PacketLevelConfig
@@ -181,7 +183,8 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       // ***** Normal Blend *****
 
       clock_gettime(CLOCK_MONOTONIC, &curTime);
-      notify(NFY_PROGRESS, "Starting normal blend for level %d.  %ld.%09ld seconds elapsed", level, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
+      notify(NFY_PROGRESS, "UpdateChildren starting normal blend for level %d.  %ld.%09ld seconds elapsed",
+             level, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
       clock_gettime(CLOCK_MONOTONIC, &prevTime);
 
       // we cache the raster if we're in the appropriate range
@@ -213,13 +216,15 @@ void PacketGenAssetVersionImplD::UpdateChildren(
               inset.combinedrp_->config.fuid_resource_));
       }
       clock_gettime(CLOCK_MONOTONIC, &curTime);
-      notify(NFY_PROGRESS, "Normal blend level %d finished inner loop over %lu other insets.  %ld.%09ld seconds elapsed", level, neededIndexes.size(), curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
+      notify(NFY_PROGRESS, "UpdateChildren normal blend level %d finished inner loop over %lu other insets.  %ld.%09ld seconds elapsed",
+             level, neededIndexes.size(), curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
       clock_gettime(CLOCK_MONOTONIC, &prevTime);
     } else {
       // ***** Minify *****
 
       clock_gettime(CLOCK_MONOTONIC, &curTime);
-      notify(NFY_PROGRESS, "Starting to minification for level %d.  %ld.%09ld seconds elapsed", level, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
+      notify(NFY_PROGRESS, "UpdateChildren starting minification for level %d.  %ld.%09ld seconds elapsed",
+             level, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
       clock_gettime(CLOCK_MONOTONIC, &prevTime);
       // if we want to short circuit the merge with opaque product
       // tiles, fill in the info about our top product
@@ -251,7 +256,8 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       }
 
       clock_gettime(CLOCK_MONOTONIC, &curTime);
-      notify(NFY_PROGRESS, "Packet level attributions for level %d finished inner loop over %lu other insets.  %ld.%09ld seconds elapsed", level, neededIndexes.size(), curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
+      notify(NFY_PROGRESS, "UpdateChildren packet level attributions for level %d finished inner loop over %lu other insets.  %ld.%09ld seconds elapsed",
+             level, neededIndexes.size(), curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
       clock_gettime(CLOCK_MONOTONIC, &prevTime);
 
       // for insets we only care about those that have done work at
@@ -266,7 +272,8 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       }
 
       clock_gettime(CLOCK_MONOTONIC, &curTime);
-      notify(NFY_PROGRESS, "Finished adding to mergeIndexes for level %d result is %lu items.  %ld.%09ld seconds elapsed", level, mergeIndexes.size(), curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
+      notify(NFY_PROGRESS, "UpdateChildren finished adding to mergeIndexes for level %d result is %lu items.  %ld.%09ld seconds elapsed",
+             level, mergeIndexes.size(), curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
       clock_gettime(CLOCK_MONOTONIC, &prevTime);
 
       // populate inputs and inputVers & config.insets
@@ -357,7 +364,8 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       }
 
       clock_gettime(CLOCK_MONOTONIC, &curTime);
-      notify(NFY_PROGRESS, "Finished looping over mergeIndexes for level %d.  %ld.%09ld seconds elapsed", level, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
+      notify(NFY_PROGRESS, "UpdateChildren finished looping over mergeIndexes for level %d.  %ld.%09ld seconds elapsed",
+             level, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
       clock_gettime(CLOCK_MONOTONIC, &prevTime);
 
       if (config.cacheRaster) {
@@ -389,7 +397,8 @@ void PacketGenAssetVersionImplD::UpdateChildren(
                   prevLevelVer.Ref() : std::string() /* cached blend alpha */));
 
         clock_gettime(CLOCK_MONOTONIC, &curTime);
-        notify(NFY_PROGRESS, "Finished cacheRaster block for level %d.  %ld.%09ld seconds elapsed", level, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
+        notify(NFY_PROGRESS, "UpdateChildren finished cacheRaster block for level %d.  %ld.%09ld seconds elapsed",
+               level, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
         clock_gettime(CLOCK_MONOTONIC, &prevTime);
       }
 
@@ -409,14 +418,16 @@ void PacketGenAssetVersionImplD::UpdateChildren(
 
     kids.push_back(packLevelVer);
     clock_gettime(CLOCK_MONOTONIC, &curTime);
-    notify(NFY_PROGRESS, "Finished all work for level %d.  %ld.%09ld seconds elapsed", level, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
+    notify(NFY_PROGRESS, "UpdateChildren finished all work for level %d.  %ld.%09ld seconds elapsed",
+           level, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
     clock_gettime(CLOCK_MONOTONIC, &prevTime);
 
   } // foreach level
 
   AddChildren(kids);
   clock_gettime(CLOCK_MONOTONIC, &curTime);
-  notify(NFY_PROGRESS, "Finished adding all children.  %ld.%09ld seconds elapsed", curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
+  notify(NFY_PROGRESS, "UpdateChildren finished adding all children.  %ld.%09ld seconds elapsed",
+         curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
 }
 
 

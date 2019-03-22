@@ -1012,12 +1012,14 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
 #if 1
   // Calculate levels where transparent tiles may be skipped.
   clock_gettime(CLOCK_MONOTONIC, &curTime);
-  notify(NFY_PROGRESS, "Finished calculation of packet gen info - %ld.%09ld seconds elapsed", curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
+  notify(NFY_PROGRESS, "BuildIndex finished calculation of packet gen info - %ld.%09ld seconds elapsed",
+         curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
   clock_gettime(CLOCK_MONOTONIC, &prevTime);
   CalcLevelsToSkipTransparentTiles(&genInfo, beginProjectLevel, endMinifyLevel);
 #endif
   clock_gettime(CLOCK_MONOTONIC, &curTime);
-  notify(NFY_PROGRESS, "Finished calcLevelsToSkipTransparentTiles - %ld.%09ld seconds elapsed", curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
+  notify(NFY_PROGRESS, "BuildIndex finished calcLevelsToSkipTransparentTiles - %ld.%09ld seconds elapsed",
+         curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
   clock_gettime(CLOCK_MONOTONIC, &prevTime);
   // make a copy of the inset_infos w/ pointers. The FindNeeded*
   // routines want pointers.
@@ -1048,7 +1050,8 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     neededIndexes.reserve(i);
 
     clock_gettime(CLOCK_MONOTONIC, &curTime);
-    notify(NFY_PROGRESS, "BuildIndex starting inner loop for inset %d of %lu - %ld.%09ld seconds elapsed", i+1, genInfo.size(), curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
+    notify(NFY_PROGRESS, "BuildIndex starting inner loop for inset %d of %lu - %ld.%09ld seconds elapsed",
+           i+1, genInfo.size(), curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
     clock_gettime(CLOCK_MONOTONIC, &prevTime);
 
     if (type == AssetDefs::Imagery) {
@@ -1067,7 +1070,8 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     neededIndexes.push_back(i); // each inset always intersects itself
 
     clock_gettime(CLOCK_MONOTONIC, &curTime);
-    notify(NFY_PROGRESS, "BuildIndex finished compiling %lu needed indices for inset %d - %ld.%09ld seconds elapsed", neededIndexes.size(), i, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
+    notify(NFY_PROGRESS, "BuildIndex finished compiling %lu needed indices for inset %d - %ld.%09ld seconds elapsed",
+           neededIndexes.size(), i, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
     clock_gettime(CLOCK_MONOTONIC, &prevTime);
 
     // calculate the level range that will be minified
@@ -1115,7 +1119,8 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     }
 
     clock_gettime(CLOCK_MONOTONIC, &curTime);
-    notify(NFY_PROGRESS, "BuildIndex finished nested loop for inset %d - %ld.%09ld seconds elapsed", i, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
+    notify(NFY_PROGRESS, "BuildIndex finished nested loop for inset %d - %ld.%09ld seconds elapsed",
+           i, curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
     clock_gettime(CLOCK_MONOTONIC, &prevTime);
 
     // Build a PacketGenExtraUpdateArg
@@ -1150,7 +1155,8 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   }
 
   clock_gettime(CLOCK_MONOTONIC, &curTime);
-  notify(NFY_PROGRESS, "BuildIndex finished looping through insets - %ld.%09ld seconds elapsed", curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
+  notify(NFY_PROGRESS, "BuildIndex finished looping through insets - %ld.%09ld seconds elapsed",
+         curTime.tv_sec-prevTime.tv_sec, curTime.tv_nsec-prevTime.tv_nsec);
 
   // Make index subasset (RasterGEIndex).
   return MakeIndexSubAsset(packgenkids, packgenassets, packgenvers, genInfo, date);
