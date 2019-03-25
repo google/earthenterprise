@@ -983,7 +983,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   std::vector<InsetInfo<
     RasterProductAssetVersion> >::const_reverse_iterator last_iter =
       inset_infos.rbegin();
-  notify(NFY_PROGRESS, "Building GERasterIndex: %zu insets, level %d for %s\n", inset_infos.size(), last_iter->effectiveMaxLevel, date.c_str());
+  notify(NFY_INFO2, "Building GERasterIndex: %zu insets, level %d for %s\n", inset_infos.size(), last_iter->effectiveMaxLevel, date.c_str());
   std::chrono::high_resolution_clock::time_point prevTime = std::chrono::high_resolution_clock::now();
   std::chrono::high_resolution_clock::time_point curTime;
   std::chrono::duration<double> timeDiff; 
@@ -1012,15 +1012,15 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
 #if 1
   // Calculate levels where transparent tiles may be skipped.
   curTime = std::chrono::high_resolution_clock::now();
-  timeDiff = std::chrono::duration_cast<std::chrono::duration<double>>(curTime - prevTime);
-  notify(NFY_PROGRESS, "BuildIndex finished calculation of packet gen info - %f seconds elapsed",
+  timeDiff = std::chrono::duration<double>(curTime - prevTime);
+  notify(NFY_INFO2, "BuildIndex finished calculation of packet gen info - %f seconds elapsed",
          timeDiff.count());
   prevTime = curTime;
   CalcLevelsToSkipTransparentTiles(&genInfo, beginProjectLevel, endMinifyLevel);
 #endif
   curTime = std::chrono::high_resolution_clock::now();
-  timeDiff = std::chrono::duration_cast<std::chrono::duration<double>>(curTime - prevTime);
-  notify(NFY_PROGRESS, "BuildIndex finished calcLevelsToSkipTransparentTiles - %f seconds elapsed",
+  timeDiff = std::chrono::duration<double>(curTime - prevTime);
+  notify(NFY_INFO2, "BuildIndex finished calcLevelsToSkipTransparentTiles - %f seconds elapsed",
          timeDiff.count());
   prevTime = curTime;
   // make a copy of the inset_infos w/ pointers. The FindNeeded*
@@ -1052,8 +1052,8 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     neededIndexes.reserve(i);
 
     curTime = std::chrono::high_resolution_clock::now();
-    timeDiff = std::chrono::duration_cast<std::chrono::duration<double>>(curTime - prevTime);
-    notify(NFY_PROGRESS, "BuildIndex starting inner loop for inset %d of %lu - %f seconds elapsed",
+    timeDiff = std::chrono::duration<double>(curTime - prevTime);
+    notify(NFY_INFO2, "BuildIndex starting inner loop for inset %d of %lu - %f seconds elapsed",
            i+1, genInfo.size(), timeDiff.count());
     prevTime = curTime;
 
@@ -1073,8 +1073,8 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     neededIndexes.push_back(i); // each inset always intersects itself
 
     curTime = std::chrono::high_resolution_clock::now();
-    timeDiff = std::chrono::duration_cast<std::chrono::duration<double>>(curTime - prevTime);
-    notify(NFY_PROGRESS, "BuildIndex finished compiling %lu needed indices for inset %d - %f seconds elapsed",
+    timeDiff = std::chrono::duration<double>(curTime - prevTime);
+    notify(NFY_INFO2, "BuildIndex finished compiling %lu needed indices for inset %d - %f seconds elapsed",
            neededIndexes.size(), i, timeDiff.count());
     prevTime = curTime;
 
@@ -1123,8 +1123,8 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     }
 
     curTime = std::chrono::high_resolution_clock::now();
-    timeDiff = std::chrono::duration_cast<std::chrono::duration<double>>(curTime - prevTime);
-    notify(NFY_PROGRESS, "BuildIndex finished nested loop for inset %d - %f seconds elapsed",
+    timeDiff = std::chrono::duration<double>(curTime - prevTime);
+    notify(NFY_INFO2, "BuildIndex finished nested loop for inset %d - %f seconds elapsed",
            i, timeDiff.count());
     prevTime = curTime;
 
@@ -1160,8 +1160,8 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   }
 
   curTime = std::chrono::high_resolution_clock::now();
-  timeDiff = std::chrono::duration_cast<std::chrono::duration<double>>(curTime - prevTime);
-  notify(NFY_PROGRESS, "BuildIndex finished looping through insets - %f seconds elapsed",
+  timeDiff = std::chrono::duration<double>(curTime - prevTime);
+  notify(NFY_INFO2, "BuildIndex finished looping through insets - %f seconds elapsed",
          timeDiff.count());
 
   // Make index subasset (RasterGEIndex).
