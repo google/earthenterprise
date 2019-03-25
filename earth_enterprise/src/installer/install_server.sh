@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2017 Google Inc.
+# Copyright 2017 Google Inc., 2019 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -459,7 +459,15 @@ copy_files_to_target()
   if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf "$TMPINSTALLDIR/server/opt/google/lib" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf "$TMPINSTALLDIR/server/opt/google/gehttpd" "$BASEINSTALLDIR_OPT"
+
+  if [ -f "$BASEINSTALLDIR_OPT/gehttpd/conf.d/.htpasswd" ]
+  then
+    # Preserve Admin Console password
+    rsync -rl "$TMPINSTALLDIR/server/opt/google/gehttpd" "$BASEINSTALLDIR_OPT" --exclude conf.d/.htpasswd
+  else
+    cp -rf "$TMPINSTALLDIR/server/opt/google/gehttpd" "$BASEINSTALLDIR_OPT"
+  fi
+
   if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf "$TMPINSTALLDIR/server/opt/google/search" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
