@@ -145,6 +145,13 @@ gtag('config', 'UA-108632131-2');
               Added a validity check that ensures a valid date is entered. A date of 0000-00-00 can also be entered as a default value. The user will not be allowed to save with an invalid date entered.
             </td>
           </tr>
+          <tr>
+            <td>279</td>
+            <td>Server upgrade resets the Admin Console password</td>
+            <td>
+              When the GEE server is upgraded, either through the <code>install_server.sh</code> script or the RPMs, the Admin Console password will be preserved if the password file is found at the expected location.
+            </td>
+          </tr>
         </tbody>
       </table>
   <h5>
