@@ -90,7 +90,7 @@ class Polygons {
 
   explicit Polygons(const std::string& kml_file);
 
-  explicit Polygons(const kml_as_string&, const std::string& kml_string);
+  Polygons(const kml_as_string&, const std::string& kml_string);
 
   Polygon* GetPolygon(size_t index) { return &polygons[index]; }
 
