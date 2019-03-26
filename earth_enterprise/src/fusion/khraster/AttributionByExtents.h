@@ -33,7 +33,7 @@ class AttributionByExtents {
     uint32            inset_id_;
     std::string       acquisition_date_;
 
-    Inset(const std::string &rppath, uint32 id);
+    Inset(const std::string &rppath, uint32 id, const std::string &acquisitionDate);
   };
 
   // will we ordered low-res to high-res
@@ -42,8 +42,8 @@ class AttributionByExtents {
 public:
   AttributionByExtents(void) { }
 
-  void AddInset(const std::string &rppath, uint32 id) {
-    insets.push_back(Inset(rppath, id));
+  void AddInset(const std::string &rppath, uint32 id, const std::string &acquisitionDate) {
+    insets.push_back(Inset(rppath, id, acquisitionDate));
   }
 
   // Return the inset id for the most significant inset for the
