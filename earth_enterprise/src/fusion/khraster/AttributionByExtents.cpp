@@ -20,7 +20,7 @@
 #include <khTileAddr.h>
 #include <common/khConstants.h>
 
-AttributionByExtents::Inset::Inset(const std::string &rppath, uint32 id) :
+AttributionByExtents::Inset::Inset(const std::string &rppath, uint32 id, const std::string &acquisitionDate) :
     inset_id_(id)
 {
   khDeleteGuard<khRasterProduct> rp(khRasterProduct::Open(rppath));
@@ -29,7 +29,11 @@ AttributionByExtents::Inset::Inset(const std::string &rppath, uint32 id) :
   }
   max_level_   = rp->maxLevel();
   deg_extents_ = rp->degOrMeterExtents();
-  acquisition_date_ = rp->GetAcquisitionDate();
+  if (acquisitionDate != kUnknownDateTimeUTC && acquisitionDate != kUnknownDate) {
+    acquisition_date_ = acquisitionDate;
+  } else {
+    acquisition_date_ = rp->GetAcquisitionDate();
+  }
 }
 
 uint32 AttributionByExtents::GetInternalInsetIndex(const khTileAddr &addr)
