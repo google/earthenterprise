@@ -46,6 +46,8 @@ PROMPT_FOR_START="n"
 
 # user names
 DEFAULTGROUPNAME="gegroup"
+# $GROUPNAME is used in common.sh by the check_group and check_username functions
+GROUPNAME=$DEFAULTGROUPNAME
 GRPNAME=$DEFAULTGROUPNAME
 GEAPACHEUSER_NAME="geapacheuser"
 GEPGUSER_NAME="gepguser"
