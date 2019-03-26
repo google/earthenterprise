@@ -92,7 +92,7 @@ Polygons::Polygons(const std::string& kml_file) {
  * Polygons constructor.
  * Reads in the polygons from the given kml string.
  */
-Polygons::Polygons(const kml_as_string, const std::string& kml_string) {
+Polygons::Polygons(const kml_as_string&, const std::string& kml_string) {
   std::istringstream iss(kml_string);
   AddPolygonsFromStream(iss);
 }
