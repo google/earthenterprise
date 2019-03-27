@@ -20,6 +20,7 @@
 
 #include <map>
 #include <vector>
+#include "khThread.h"
 
 // #define SUPPORT_VERBOSE
 #ifdef SUPPORT_VERBOSE
@@ -55,6 +56,7 @@ class khCacheItem {
   // private and unimplemented - no copying allowed, would mess up links
   khCacheItem(const khCacheItem&);
   khCacheItem& operator=(const khCacheItem&);
+  khMutex mutex;
  public:
   khCacheItem *next;
   khCacheItem *prev;
@@ -62,6 +64,8 @@ class khCacheItem {
   Value val;
   khCacheItem(const Key &key_, const Value &val_)
       : next(0), prev(0), key(key_), val(val_) { }
+  void Lock(void) { mutex.Lock(); }
+  void Unlock(void) { mutex.Unlock(); }
 };
 
 // #define CHECK_INVARIANTS
@@ -131,19 +135,28 @@ class khCache {
     item->next = head;
     item->prev = 0;
     head = item;
-    if (item->next)
+    if (item->next) {
+      item->next->Lock();
       item->next->prev = item;
+      item->next->Unlock();
+    }
     else
       tail = item;
     ++numItems;
   }
   void Unlink(Item *item) {
-    if (item->prev)
+    if (item->prev) {
+      item->prev->Lock();
       item->prev->next = item->next;
+      item->prev->Unlock();
+    }
     else
       head = item->next;
-    if (item->next)
+    if (item->next) {
+      item->next->Lock();
       item->next->prev = item->prev;
+      item->next->Unlock();
+    }
     else
       tail = item->prev;
     item->next = 0;
@@ -197,6 +210,7 @@ class khCache {
     // delete any previous item
     Item *item = FindItem(key);
     if (item) {
+      item->Lock();
       Unlink(item);
 #ifdef SUPPORT_VERBOSE
       if (verbose) notify(NFY_ALWAYS, "Deleting previous %s from cache", key.c_str());
@@ -206,7 +220,9 @@ class khCache {
 
     // make a new item, link it in and add to map
     item = new Item(key, val);
+    item->Lock();
     Link(item);
+    item->Unlock();
     map[key] = item;
 #ifdef SUPPORT_VERBOSE
     if (verbose) notify(NFY_ALWAYS, "Adding %s to cache", key.c_str());
@@ -225,6 +241,7 @@ class khCache {
 
     Item *item = FindItem(key);
     if (item) {
+      item->Lock();
       Unlink(item);
       map.erase(key);
 #ifdef SUPPORT_VERBOSE
@@ -245,8 +262,10 @@ class khCache {
     Item *item = FindItem(key);
     if (item) {
       // move it to the head of the list
+      item->Lock();
       Unlink(item);
       Link(item);
+      item->Unlock();
 
       CheckListInvariant();
 
@@ -270,6 +289,7 @@ class khCache {
       if (item) {
         Item *tokill = item;
         item = item->prev;
+        tokill->Lock();
         Unlink(tokill);
         map.erase(tokill->key);
 #ifdef SUPPORT_VERBOSE
