@@ -1,0 +1,157 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Hello Earth! code sample</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 3253752.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/4580164.html">Welcome to Portable 5.0</a></p>
+<p class="sidebar-toc"><a href="../answer/4594620.html">Portable Release Notes 5.0</a></p>
+<p class="sidebar-toc"><a href="../answer/3230746.html">Portable User Guide</a></p>
+<p class="sidebar-toc"><a href="../answer/4485225.html">Portable Globe and Server 5.2</a></p>
+<p class="sidebar-toc"><a href="../answer/3230807.html">Portable Developer Guide</a></p>
+<p class="sidebar-toc"><a href="../answer/3253752.html" class="current-file">Hello Earth! code sample</a></p>
+<p class="sidebar-toc"><a href="../answer/3253275.html">Hello Maps! code sample</a></p>
+<p class="sidebar-toc"><a href="../answer/4590263.html">Inspecting portable files</a></p>
+<p class="sidebar-toc"><a href="../answer/1066449.html">Custom folders</a></p>
+<p class="sidebar-toc"><a href="../answer/3003324.html">Cutter tool system information</a></p>
+<p class="sidebar-toc"><a href="../answer/3003337.html">Manually halt the cutter process</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Portable</h1>
+<h2>Hello Earth! code sample</h2>
+<p><code>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;<br/>
+<br/>
+&lt;html&gt;<br/>
+<br/>
+ &lt;head&gt;<br/>
+<br/>
+  &lt;meta http-equiv="content-type" content="text/html; charset=utf-8" /&gt;<br/>
+  &lt;meta http-equiv="cache-control" content="max-age=0" /&gt;<br/>
+  &lt;meta http-equiv="cache-control" content="no-cache" /&gt;<br/>
+  &lt;meta http-equiv="expires" content="0" /&gt;<br/>
+  &lt;meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" /&gt;<br/>
+  &lt;meta http-equiv="pragma" content="no-cache" /&gt;<br/>
+  &lt;META HTTP-EQUIV="Pragma" CONTENT="no-cache"&gt;<br/>
+<br/>
+   &lt;!--This sample loads the necessary scripts for jQuery, Google Earth Plug-in, geeServerDefs, and the Maps API Fusion extension--&gt;<br/>
+   &lt;title&gt;Google Maps Engine Portable - Hello Earth Example&lt;/title&gt;<br/>
+<br/>
+    &lt;!--Loads jQuery from the local source.--&gt;<br/>
+    &lt;script src="/local/js/jquery-1.8.3.js"&gt;&lt;/script&gt;<br/>
+<br/>
+    &lt;!--Loads the Google Earth Plug-in from the local source.--&gt;<br/>
+    &lt;script src="/local/maps/api/earth_plugin_loader.js"&gt;&lt;/script&gt;<br/>
+<br/>
+    &lt;!--Loads the server database definitions (geeServerDefs) from the local source. To view your server database definitions, navigate to http://localhost:9335/query?request=Json--&gt;<br/>
+    &lt;script type="text/javascript"&gt;<br/>
+<br/>
+     $.ajax({<br/>
+      url: "http://localhost:9335/query?request=Json&amp;var=geeServerDefs",<br/>
+      statusCode: {<br/>
+       500: function() {<br/>
+        document.getElementById('not_serving').style.display = 'block';<br/>
+        document.getElementById('earth').style.display = 'none';<br/>
+        document.getElementById('not_serving').innerHTML =<br/>
+        'Error: To view this example, you need to run Google Maps Engine Portable\<br/>
+        and serve a 3D globe on http://localhost:9335.'<br/>
+       }<br/>
+      }<br/>
+     });<br/>
+<br/>
+     function initEarth() {<br/>
+       google.earth.createInstance(<br/>
+        'earth', initCB, failureCB, {database: 'http://localhost:9335'});<br/>
+     }<br/>
+<br/>
+     // The Earth callback function sets the navigation controls for your 3D maps.<br/>
+     // Unlike the Hello Maps code, Hello Earth requires the three functions below for initialization.<br/>
+     // Some additional control options are listed in the comments below.<br/>
+     // For even more options, see the Google Earth API Reference at: https://developers.google.com/earth/documentation/reference/.<br/>
+<br/>
+     function initCB(earth) {<br/>
+      ge = earth;<br/>
+      ge.getWindow().setVisibility(true);<br/>
+      ge.getNavigationControl().setVisibility(ge.VISIBILITY_AUTO);<br/>
+ <br/>
+      //Other visibility options for Controls<br/>
+      //ge.getNavigationControl().setVisibility(ge.VISIBILITY_HIDE);<br/>
+      //ge.getNavigationControl().setVisibility(ge.VISIBILITY_SHOW);<br/>
+<br/>
+      //Set Controls in Bottom Right<br/>
+      //ge.getNavigationControl().getScreenXY().setXUnits(ge.UNITS_INSET_PIXELS);<br/>
+      //ge.getNavigationControl().getScreenXY().setYUnits(ge.UNITS_PIXELS);<br/>
+<br/>
+      //Set Controls in Top Left<br/>
+      //ge.getNavigationControl().getScreenXY().setXUnits(ge.UNITS_PIXELS);<br/>
+      //ge.getNavigationControl().getScreenXY().setYUnits(ge.UNITS_INSET_PIXELS);<br/>
+<br/>
+     }<br/>
+<br/>
+     // Error handling in case the map doesn't load.<br/>
+     function failureCB(earth) {<br/>
+       alert('ALERT! The Google Earth Plug-in failed to load!');<br/>
+<br/>
+     }<br/>
+<br/>
+    &lt;/script&gt;<br/>
+<br/>
+   &lt;style type="text/css"&gt;<br/>
+   #head {<br/>
+    margin: 0 auto;<br/>
+    margin-top: 16px;<br/>
+    height: 20px;<br/>
+    width: 600px;<br/>
+    font-family: "Arial", sans-serif;<br/>
+    font-size: 16px;<br/>
+    font-weight: normal;<br/>
+   }<br/>
+   #head span {<br/>
+    background-color: #F1F1F1;<br/>
+    color: #333;<br/>
+   }<br/>
+   #not_serving {<br/>
+    background-color: #CB392A;<br/>
+    color: #FFF;<br/>
+    font-weight: bold;<br/>
+   }<br/>
+   #head span,<br/>
+   #not_serving {<br/>
+    display: block;<br/>
+    padding: 16px;<br/>
+    border: 1px solid #DCDCDC;<br/>
+    font-size: 13px;<br/>
+    margin: 8px 0 8px 0;<br/>
+    box-shadow: 1px 1px 3px #F1F1F1;<br/>
+   }<br/>
+   #earth {<br/>
+    margin: 0 auto;<br/>
+    margin-top: 120px;<br/>
+    width: 600px;<br/>
+    height: 600px;<br/>
+   }<br/>
+<br/>
+   &lt;/style&gt;<br/>
+<br/>
+ &lt;/head&gt;<br/>
+<br/>
+ &lt;body onload='initEarth()' id='body'&gt;<br/>
+<br/>
+   &lt;div id="head"&gt;Hello Earth! &amp;#8212; Google Earth Plug-in &amp;amp; Portable<br/>
+<br/>
+    &lt;span&gt;<br/>
+    To see how to initialize the Google Earth Plug-in and make a call to Portable, view the source for this page. To view this example, you need to run Google Maps Engine Portable and serve a 3D globe on http://localhost:9335.<br/>
+    &lt;/span&gt;<br/>
+<br/>
+    &lt;div id="not_serving" style="display:none;"&gt;&lt;/div&gt;<br/>
+<br/>
+   &lt;/div&gt;<br/>
+<br/>
+  &lt;div id="earth"&gt;&lt;/div&gt;<br/>
+<br/>
+ &lt;/body&gt;<br/>
+<br/>
+&lt;/html&gt; </code></p>
+<div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>
