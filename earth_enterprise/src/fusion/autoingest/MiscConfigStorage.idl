@@ -34,6 +34,8 @@ class MiscConfigStorage {
 
   uint        MutexTimedWaitSec = uint(30);
 
+  uint        BuildIndexThreads = uint(1);
+
 #pragma LoadAndSave
 
 #hquote
