@@ -1,0 +1,91 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Settings page</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 3479921.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/3468004.html">GEE Server Overview</a></p>
+<p class="sidebar-toc"><a href="../answer/3470759.html">Sign in to GEE Server Admin console</a></p>
+<p class="sidebar-toc"><a href="../answer/3479919.html">Snippet profiles page</a></p>
+<p class="sidebar-toc"><a href="../answer/3480095.html">Search tabs page</a></p>
+<p class="sidebar-toc"><a href="../answer/3479921.html" class="current-file">Settings page</a></p>
+<p class="sidebar-toc"><a href="../answer/3480097.html">Dashboard page</a></p>
+<p class="sidebar-toc"><a href="../answer/3479922.html">Databases page</a></p>
+<p class="sidebar-toc"><a href="../answer/3497763.html">Publish databases and portables</a></p>
+<p class="sidebar-toc"><a href="../answer/6004748.html">Manage snippet profiles</a></p>
+<p class="sidebar-toc"><a href="../answer/176770.html">Display custom logos</a></p>
+<p class="sidebar-toc"><a href="../answer/6013604.html">Manage virtual hosts</a></p>
+<p class="sidebar-toc"><a href="../answer/4441137.html">Make Web Map Service (WMS) requests</a></p>
+<p class="sidebar-toc"><a href="../answer/6062970.html">Publish databases with search</a></p>
+<p class="sidebar-toc"><a href="../answer/6063101.html">Search your POI vector data or map layer data</a></p>
+<p class="sidebar-toc"><a href="../answer/3497832.html">Create Search tabs</a></p>
+<p class="sidebar-toc"><a href="../answer/6066597.html">Add custom search services</a></p>
+<p class="sidebar-toc"><a href="../answer/6082250.html">Troubleshoot search services</a></p>
+<p class="sidebar-toc"><a href="../answer/6091774.html">Example Search plug-in Python code sample</a></p>
+<p class="sidebar-toc"><a href="../answer/6091810.html">Custom POI Search plug-in Python code sample</a></p>
+<p class="sidebar-toc"><a href="../answer/3230777.html">Create portable globes and maps</a></p>
+<p class="sidebar-toc"><a href="../answer/4643041.html">Create composite globes and maps</a></p>
+<p class="sidebar-toc"><a href="../answer/6051534.html">View 3D databases</a></p>
+<p class="sidebar-toc"><a href="../answer/6051659.html">View 2D databases</a></p>
+<p class="sidebar-toc"><a href="../answer/6051568.html">Implement Google Earth Plugin</a></p>
+<p class="sidebar-toc"><a href="../answer/6051584.html">(Deprecated) Provide Google Earth Plug-in for your users to install</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | GEE Server administration</h1>
+<h2>Settings page</h2>
+<p>Click <strong>Settings </strong><img align="absmiddle" alt="gear icon" src="../art/server/admin/accounts_icon_gear_padded.gif"/> icon in the <a href="../answer/3470759.html">GEE Server Admin console</a> to:</p>
+<div><h5>
+<p>Perform GLC Assembly</p>
+</h5>
+<div>Create new Glc globes from existing globes (Glm/Glb):
+<ol>
+<li dir="ltr">Enter a name and description for the new Glc.</li>
+<li dir="ltr">Paste <strong>Polygon</strong> KML for use with the new globe.</li>
+<li dir="ltr">Select either <strong>2d</strong> layers to build a Glc using selected layers of existing Glm files, or <strong>3d</strong> layers to build a Glc using Glb files at the layers.</li>
+<li dir="ltr">Click <strong>Assemble Glc</strong>. </li>
+</ol>
+<p>Glc files are added to the default globes directory when they are created.</p>
+<p>See <a href="../answer/4643041.html">Create composite globes and maps</a>.</p>
+</div>
+</div>
+<div><h5>
+<p>Perform Glc disassembly</p>
+</h5>
+<div>Extract Glm/Glb files:<ol>
+<li>Select a Glc to disassemble.</li>
+<li>Enter a <strong>New output directory</strong> where the files will be placed.</li>
+<li>Click <strong>Disassemble Glc</strong>.</li>
+</ol>
+<p>See <a href="../answer/4643041.html">Create composite globes and maps</a>.</p>
+</div></div>
+<div><h5>
+<p>Launch Cutter</p>
+</h5>
+<div>Create a new Glm/Glb from published Fusion databases or Portable globes (Glm/Glb, not Glc):
+<ol>
+<li dir="ltr">Select a source map.</li>
+<li dir="ltr">Enter a name and description for the offline map.</li>
+<li dir="ltr">Choose to <strong>Overwrite</strong> existing globes with the same name.</li>
+<li dir="ltr">Choose a <strong>Region Selection </strong>method:
+<ol>
+<li><strong>Manual</strong>: Manually draw the boundaries of your region using the polygon button in the top right of the map. </li>
+<li><strong>Paste KML</strong>: Define your region by pasting a KML file.</li>
+</ol>
+</li>
+<li dir="ltr">Specify a <strong>World level</strong>; this represents the highest resolution at which the entire world will be available.</li>
+<li dir="ltr">Optionally use the zoom buttons in the lower right of the map to change your zoom level. This represents the highest resolution at which the data within the region of interest will be available. </li>
+<li dir="ltr">Click <b>Cut map</b>. </li>
+</ol>
+<p>The cut progress will be displayed at the bottom of the screen. Upon successful completion, the globe is saved to the default globes directory.</p>
+<p>See <a href="../answer/3230777.html">Create portable globes and maps</a>.</p>
+</div>
+</div>
+<div><h5>
+<p>View Apache logs</p>
+</h5>
+<div>View Apache logs for troubleshooting errors or unexpected behavior with GEE Server.</div>
+</div>
+<p> </p><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>
