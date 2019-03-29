@@ -21,6 +21,7 @@
 #include "AssetHandle.h"
 #include <khFileUtils.h>
 #include "MiscConfig.h"
+#include "common/khMTTypes.h
 
 
 /******************************************************************************
@@ -36,7 +37,7 @@
  ***  ... = asset->config.layers.size();
  ***
  ******************************************************************************/
-class AssetImpl : public khRefCounter, public AssetStorage {
+class AssetImpl : public khMTRefCounter, public AssetStorage {
   friend class AssetHandle_<AssetImpl>;
 
   // private and unimplemented -- illegal to copy an AssetImpl

@@ -23,6 +23,7 @@
 #include "fusion/autoingest/AssetHandle.h"
 #include "fusion/autoingest/MiscConfig.h"
 #include "common/khFileUtils.h"
+#include "common/khMTTypes.h"
 
 /******************************************************************************
  ***  AssetVersionImpl
@@ -38,7 +39,7 @@
  ***     ... = ver->config.layers.size();
  ***  }
  ******************************************************************************/
-class AssetVersionImpl : public khRefCounter, public AssetVersionStorage {
+class AssetVersionImpl : public khMTRefCounter, public AssetVersionStorage {
   friend class AssetImpl;
   friend class AssetHandle_<AssetVersionImpl>;
 
