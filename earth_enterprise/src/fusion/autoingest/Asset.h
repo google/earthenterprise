@@ -21,7 +21,7 @@
 #include "AssetHandle.h"
 #include <khFileUtils.h>
 #include "MiscConfig.h"
-#include "common/khMTTypes.h
+#include "common/khMTTypes.h"
 
 
 /******************************************************************************
