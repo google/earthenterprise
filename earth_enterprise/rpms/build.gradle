@@ -193,7 +193,7 @@ def rpmCommandFilter = {
     return rpmCapabilityMap.containsKey(it) ? rpmCapabilityMap[it] : it
 }
 
-// A lamda to figure out the best way to get the build number
+// A lambda to figure out the best way to get the build number
 def findBuildNumber = {
     return (!openGeeVersionFile.exists() || project.hasProperty('buildOpenGee')) ?
         getOsPackageBuildFromOpenGeeVersion(GeeCommandLine.expand(
@@ -203,7 +203,7 @@ def findBuildNumber = {
         getOsPackageBuildFromOpenGeeVersionFile(openGeeVersionFile)
 }
 
-// A lamda to figure out the best way to get the version number
+// A lambda to figure out the best way to get the version number
 def findVersionNumber = {
     return (!openGeeVersionFile.exists() || project.hasProperty('buildOpenGee')) ?
         getOsPackageVersionFromOpenGeeVersion(GeeCommandLine.expand(
