@@ -106,26 +106,19 @@ gtag('config', 'UA-108632131-2');
             </td>
           </tr>
           <tr>
+            <td>279</td>
+            <td>Server upgrade resets the Admin Console password</td>
+            <td>
+              When the GEE server is upgraded, either through the <code>install_server.sh</code> script or the RPMs, the Admin Console password will be preserved if the password file is found at the expected location.
+            </td>
+          </tr>
+          <tr>
             <td>799</td>
             <td>The GEE Portable Server does not return valid JSON when queried with <code>http://&lt;server&gt;/&lt;map&gt;/query?request=Json</code>.</td>
             <td>
               Added a <code>v</code> parameter to the query; when its value is 2, the GEE Portable Server will return proper JSON.  Currently, it defaults to 1 if not specified.
             </td>
           </tr> 
-           <tr>
-            <td>1158</td>
-            <td><code>geeServerDefs</code> are not returned by Portable Server after being requested, once the globe has been viewed by a client. It is not possible to request <code>geeServerDefs</code> for globes other than the current <code>selectedGlobe</code>.</td>
-            <td>
-              <code>geeServerDefs</code> are returned correctly and can be requested for any valid globe at any time.
-            </td>
-          </tr>
-          <tr>
-            <td>1187</td>
-            <td>RPM upgrades change owner and permissions on symlinked portable globes directories</td>
-            <td>
-              Symlinked portable globe directories are not modified during geserver upgrades
-            </td>
-          </tr>
           <tr>
             <td>1093</td>
             <td>The <code>geselectpublishroot</code> server command line tool offers no help, and appears to take some action when the <code>--help</code> flag is specified</td>
@@ -134,15 +127,71 @@ gtag('config', 'UA-108632131-2');
             </td>
           </tr>
           <tr>
-            <td>1194</td>
-            <td>Sockets build up during large project builds</td>
-            <td>gesystemmanager now has a timeout when trying to respond to a request for status. This prevents a backlog of requests that could build up while it is busy handling a long-running request. The timeout is configurable.</td>
+            <td>1098</td>
+            <td>TravisCI can pass when compilation fails</td>
+            <td>
+              Add logic to cause compilation failures to be detected and reported
+            </td>
+          </tr>
+          <tr>
+            <td>1122</td>
+            <td>Check for PIL (Python Imager Library) returns an error</td>
+            <td>
+              Change how PIL is included.
+            </td>
+          </tr>
+          <tr>
+            <td>1138</td>
+            <td>A recent merge introduced memory test code that fails to build on older compilers</td>
+            <td>
+              Add libyaml-cpp-dev to build requirements and remove some old includes.
+            </td>
+          </tr>
+          <tr>
+            <td>1158</td>
+            <td><code>geeServerDefs</code> are not returned by Portable Server after being requested, once the globe has been viewed by a client. It is not possible to request <code>geeServerDefs</code> for globes other than the current <code>selectedGlobe</code>.</td>
+            <td>
+              <code>geeServerDefs</code> are returned correctly and can be requested for any valid globe at any time.
+            </td>
           </tr>
           <tr>
             <td>1166</td>
             <td>Imagery resources can be created with invalid dates</td>
             <td>
               Added a validity check that ensures a valid date is entered. A date of 0000-00-00 can also be entered as a default value. The user will not be allowed to save with an invalid date entered.
+            </td>
+          </tr>
+          <tr>
+            <td>1169</td>
+            <td>Cutting a globe with historical imagery embeds a link to the original Google Earth Server that served the historical imagery.</td>
+            <td>
+              There is an advanced option to include historical imagery links or not. The default option will be to NOT include links to historical imagery, and the links will be stripped from the cut globe.  When the historical imagery links are enabled, the existing behavior will be preserved.
+            </td>
+          </tr>
+          <tr>
+            <td>1187</td>
+            <td>RPM upgrades change owner and permissions on symlinked portable globes directories</td>
+            <td>
+              Symlinked portable globe directories are not modified during geserver upgrades.
+            </td>
+          </tr>
+          <tr>
+            <td>1190</td>
+            <td>Some 32-bit platforms are unable to open files of size >2GB</td>
+            <td>
+              Use POSIX file API to support large files on some 32-bit platforms.
+            </td>
+          </tr>
+          <tr>
+            <td>1194</td>
+            <td>Sockets build up during large project builds</td>
+            <td>gesystemmanager now has a timeout when trying to respond to a request for status. This prevents a backlog of requests that could build up while it is busy handling a long-running request. The timeout is configurable.</td>
+          </tr>
+          <tr>
+            <td>1201</td>
+            <td>Fusion uses incorrect or no date if using .kip files as source</td>
+            <td>
+              Fusion now uses acquisition data correctly.
             </td>
           </tr>
           <tr>
@@ -157,13 +206,6 @@ gtag('config', 'UA-108632131-2');
             <td>Assemble button is not fully visible, making it difficult to use the GLC assembly tool</td>
             <td>
               Added a scroll-bar to glc_assemble webpage to allow scrolling to 'Assemble' button.
-            </td>
-          </tr>
-          <tr>
-            <td>279</td>
-            <td>Server upgrade resets the Admin Console password</td>
-            <td>
-              When the GEE server is upgraded, either through the <code>install_server.sh</code> script or the RPMs, the Admin Console password will be preserved if the password file is found at the expected location.
             </td>
           </tr>
         </tbody>
