@@ -14,9 +14,11 @@ def GetVersion(backupFile, label=''):
     """As getLongVersion(), but only return the leading *.*.* value."""
 
     raw = GetLongVersion(backupFile, label)
-    final = raw.split("-")[0]
 
-    return final
+    # Just return the first 3 parts of the version
+    short_ver = re.findall("^\\d+\\.\\d+\\.\\d+", raw)
+
+    return short_ver[0]
 
 
 def GetLongVersion(backupFile, label=''):
@@ -320,7 +322,9 @@ class OpenGeeVersion(object):
         """Returns the short version string."""
 
         if not self.short_version_string:
-            self.short_version_string = self.get_long().split("-")[0]
+            # Just return the first 3 parts of the version string
+            short_ver = re.findall("^\\d+\\.\\d+\\.\\d+", self.get_long())
+            self.short_version_string = short_ver[0]
 
         return self.short_version_string
 
