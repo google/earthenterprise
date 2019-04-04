@@ -85,13 +85,16 @@ def rpmPlatformString = org.opengee.os.Platform.rpmPlatformString
 def gee_long_version_txt = "${stagedInstall_path}/gee_long_version.txt"
 def openGeeVersionFile = new File( gee_long_version_txt )
 
-def getOsPackageVersionFromOpenGeeVersion(value) {
-    return value.replaceAll(/-.*release/, '').
-        replaceAll('-', '.')
+ext.getOsPackageVersionFromOpenGeeVersion = { value -> 
+    return value.split('-')[0]
 }
 
-def getOsPackageVersionFromOpenGeeVersionFile(file) {
-    return getOsPackageVersionFromOpenGeeVersion(
+ext.getOsPackageBuildFromOpenGeeVersion = { value ->
+    return value.split('-')[1]
+}
+
+def getOsPackageVersionOrBuildFromOpenGeeVersionFile(file, getString) {
+    return getString(
         file.readLines().
         collect {
             // Strip comments:
@@ -104,6 +107,20 @@ def getOsPackageVersionFromOpenGeeVersionFile(file) {
         findResult {
             it // The first string that remains is the version string.
         }
+    )
+}
+
+def getOsPackageVersionFromOpenGeeVersionFile(file) {
+    return getOsPackageVersionOrBuildFromOpenGeeVersionFile(
+        file,
+        getOsPackageVersionFromOpenGeeVersion
+    )
+}
+
+def getOsPackageBuildFromOpenGeeVersionFile(file) {
+    return getOsPackageVersionOrBuildFromOpenGeeVersionFile(
+        file,
+        getOsPackageBuildFromOpenGeeVersion
     )
 }
 
@@ -176,20 +193,34 @@ def rpmCommandFilter = {
     return rpmCapabilityMap.containsKey(it) ? rpmCapabilityMap[it] : it
 }
 
+// A lambda to figure out the best way to get the build number
+def findBuildNumber = {
+    return (!openGeeVersionFile.exists() || project.hasProperty('buildOpenGee')) ?
+        getOsPackageBuildFromOpenGeeVersion(GeeCommandLine.expand(
+                ["../src/scons/getversion.py", "--long"],
+                "Failed to get Open GEE build!"
+            )) :
+        getOsPackageBuildFromOpenGeeVersionFile(openGeeVersionFile)
+}
 
-ospackage {
-    release = "1.${rpmPlatformString}"
-    distribution = rpmPlatformString
-    packager = 'gee-oss@googlegroups.com'
-    vendor = 'The OpenGEE Contributors'
-    arch = X86_64
-    os = LINUX
-    version = (!openGeeVersionFile.exists() || project.hasProperty('buildOpenGee')) ?
+// A lambda to figure out the best way to get the version number
+def findVersionNumber = {
+    return (!openGeeVersionFile.exists() || project.hasProperty('buildOpenGee')) ?
         getOsPackageVersionFromOpenGeeVersion(GeeCommandLine.expand(
                 ["../src/scons/getversion.py", "--long"],
                 "Failed to get Open GEE version!"
             )) :
         getOsPackageVersionFromOpenGeeVersionFile(openGeeVersionFile)
+}
+
+ospackage {
+    release = "${findBuildNumber()}.${rpmPlatformString}"
+    distribution = rpmPlatformString
+    packager = 'gee-oss@googlegroups.com'
+    vendor = 'The OpenGEE Contributors'
+    arch = X86_64
+    os = LINUX
+    version = "${findVersionNumber()}"
 }
 
 logger.quiet("Open GEE version: ${ospackage.version}")
@@ -219,7 +250,7 @@ task openGeePostGisRpm(type: GeeRpm) {
     mustRunAfter stageOpenGeeInstall
 
     packageName = 'opengee-postgis'
-    release = "1.${rpmPlatformString}"
+    release = ospackage.release
     version = '2.3.4'
     user = 'root'
     permissionGroup = 'root'
@@ -250,7 +281,7 @@ task openGeePostGisDeb(type: GeeDeb) {
     mustRunAfter stageOpenGeeInstall
 
     packageName = openGeePostGisRpm.packageName
-    release = '1'
+    release = "${findBuildNumber()}"
     version = openGeePostGisRpm.version
     user = openGeePostGisRpm.user
     permissionGroup = openGeePostGisRpm.permissionGroup
@@ -308,7 +339,7 @@ task openGeeCommonRpm(type: GeeRpm, dependsOn: openGeeCommonInitScripts) {
 
     packageName = 'opengee-common'
     version = ospackage.version
-    release = "1.${rpmPlatformString}"
+    release = ospackage.release
     user = 'root'
     permissionGroup = 'root'
     packageGroup = 'Application/Productivity'
@@ -400,7 +431,7 @@ task openGeeCommonDeb (type: GeeDeb, dependsOn: openGeeCommonInitScripts) {
 
     packageName = openGeeCommonRpm.packageName
     version = ospackage.version
-    release = '1'
+    release = ospackage.release
     user = openGeeCommonRpm.user
     permissionGroup = openGeeCommonRpm.permissionGroup
     packageGroup = 'misc'
@@ -472,7 +503,7 @@ task openGeeServerRpm(type: GeeRpm, dependsOn: openGeeServerInitScripts) {
 
     packageName = 'opengee-server'
     version = ospackage.version
-    release = "1.${rpmPlatformString}"
+    release = ospackage.release
     user = 'root'
     permissionGroup = 'root'
     packageGroup = 'Application/Productivity'
@@ -575,7 +606,7 @@ task openGeeServerDeb (type: GeeDeb, dependsOn: openGeeServerInitScripts) {
 
     packageName = openGeeServerRpm.packageName
     version = ospackage.version
-    release = '1'
+    release = ospackage.release
     user = openGeeServerRpm.user
     permissionGroup = openGeeServerRpm.permissionGroup
     packageGroup = 'misc'
@@ -685,7 +716,7 @@ task openGeeFusionRpm (type: GeeRpm, dependsOn: openGeeFusionInitScripts) {
 
     packageName = 'opengee-fusion'
     version = ospackage.version
-    release = "1.${rpmPlatformString}"
+    release = ospackage.release
     user = 'root'
     permissionGroup = 'root'
     packageGroup = 'Application/Productivity'
@@ -768,7 +799,7 @@ task openGeeFusionDeb (type: GeeDeb, dependsOn: openGeeFusionInitScripts) {
 
     packageName = openGeeFusionRpm.packageName
     version = ospackage.version
-    release = '1'
+    release = ospackage.release
     user = openGeeFusionRpm.user
     permissionGroup = openGeeFusionRpm.permissionGroup
     packageGroup = 'misc'
