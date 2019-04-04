@@ -21,6 +21,7 @@
 #include "common/khRefCounter.h"
 #include "common/khCache.h"
 #include "common/khTypes.h"
+#include "common/SharedString.h"
 
 class AssetVersionRef;
 
@@ -69,7 +70,7 @@ class AssetHandle_  {
 
  protected:
   static const bool check_timestamps;
-  std::string ref;
+  SharedString ref;
   mutable HandleType handle;
 
   // Only implemented/used by Asset variant.
