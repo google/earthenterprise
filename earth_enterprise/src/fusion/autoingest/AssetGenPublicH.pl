@@ -82,13 +82,13 @@ $config{"Asset.h"}
 class ${name}AssetImpl : public virtual AssetImpl
 {
     friend class DerivedAssetHandle_<Asset, ${name}AssetImpl>;
-    friend khRefGuard<AssetImpl> AssetImpl::Load(const std::string &);
+    friend khRefGuard<AssetImpl> AssetImpl::Load(const SharedString &);
 public:
     typedef $config Config;
     Config config;
 
 protected:
-    static khRefGuard<${name}AssetImpl> Load(const std::string &ref);
+    static khRefGuard<${name}AssetImpl> Load(const SharedString &ref);
 
     // used only by ${name}AssetImplD, it has to pass
     // the storage directly to the virtual base classes
@@ -99,7 +99,7 @@ protected:
         : AssetImpl(storage), config(config_) { }
 
     static khRefGuard<${name}AssetImpl> NewFromDOM(void *e);
-    static khRefGuard<${name}AssetImpl> NewInvalid(const std::string &ref);
+    static khRefGuard<${name}AssetImpl> NewInvalid(const SharedString &ref);
 
     // implemented in ReadOnlyFromStorage.cpp and
     // sysman/SysManFromStorage.cpp
@@ -119,7 +119,7 @@ $config{"${name}AssetImpl"}
 class ${name}AssetVersionImpl : public virtual ${base}AssetVersionImpl
 {
     friend class DerivedAssetHandle_<AssetVersion, ${name}AssetVersionImpl>;
-    friend khRefGuard<AssetVersionImpl> AssetVersionImpl::Load(const std::string &);
+    friend khRefGuard<AssetVersionImpl> AssetVersionImpl::Load(const SharedString &);
 
 public:
     typedef $config Config;
@@ -127,7 +127,7 @@ public:
 
     virtual std::string PluginName(void) const;
 protected:
-    static khRefGuard<${name}AssetVersionImpl> Load(const std::string &ref);
+    static khRefGuard<${name}AssetVersionImpl> Load(const SharedString &ref);
 
     // used only by ${name}AssetVersionImplD, it has to pass
     // the storage directly to the virtual base classes
@@ -142,7 +142,7 @@ protected:
           config(config_) { }
 
     static khRefGuard<${name}AssetVersionImpl> NewFromDOM(void *e);
-    static khRefGuard<${name}AssetVersionImpl> NewInvalid(const std::string &ref);
+    static khRefGuard<${name}AssetVersionImpl> NewInvalid(const SharedString &ref);
 
     // implemented in ReadOnlyFromStorage.cpp and
     // sysman/SysManFromStorage.cpp

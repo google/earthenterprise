@@ -16,6 +16,7 @@
 #include <string>
 #include <autoingest/AssetVersionRef.h>
 #include <khConstants.h>
+#include "common/SharedString.h"
 
 class AssetDefs {
   enum Type { Invalid, Vector, Imagery, Terrain, Database, Map, KML };
@@ -24,6 +25,8 @@ class AssetDefs {
 #hquote
   static const Type LastType = KML;
 #/hquote
+
+  typedef SharedString AssetKey;
 
   enum State { New = 1, Waiting = 2, Blocked = 4, Queued = 8, InProgress = 16, Failed = 32, Succeeded = 64, Canceled = 128, Offline = 256, Bad = 512};
 #hquote
