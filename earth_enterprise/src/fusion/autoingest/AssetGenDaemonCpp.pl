@@ -103,7 +103,7 @@ $config{"AssetD.cpp"}
 // ***  ${name}Factory - Auto generated
 // ****************************************************************************
 ${name}AssetD
-${name}Factory::Find(const std::string &ref_ $formaltypearg)
+${name}Factory::Find(const SharedString &ref_ $formaltypearg)
 {
     try {
         Asset asset(ref_);
@@ -119,7 +119,7 @@ ${name}Factory::Find(const std::string &ref_ $formaltypearg)
 }
 
 ${name}AssetVersionD
-${name}Factory::FindVersion(const std::string &ref_ $formaltypearg)
+${name}Factory::FindVersion(const SharedString &ref_ $formaltypearg)
 {
     try {
         AssetVersion version(ref_);
@@ -135,7 +135,7 @@ ${name}Factory::FindVersion(const std::string &ref_ $formaltypearg)
 }
 
 void
-${name}Factory::ValidateRefForInput(const std::string &ref $formaltypearg)
+${name}Factory::ValidateRefForInput(const SharedString &ref $formaltypearg)
 {
     if (AssetVersionRef(ref).Version() == "current") {
         Asset asset = Find(ref $forwardtypearg);
@@ -153,9 +153,9 @@ ${name}Factory::ValidateRefForInput(const std::string &ref $formaltypearg)
     }
 }
 
-std::string
+SharedString
 ${name}Factory::SubAssetName(
-        const std::string &parentAssetRef
+        const SharedString &parentAssetRef
         $formaltypearg,
         const std::string &basename)
 {
@@ -165,7 +165,7 @@ ${name}Factory::SubAssetName(
 
 
 Mutable${name}AssetD
-${name}Factory::Make(const std::string &ref_ $formaltypearg,
+${name}Factory::Make(const SharedString &ref_ $formaltypearg,
                      $formalinputarg
                      const khMetaData &meta_,
                      const $config& config_)
@@ -183,7 +183,7 @@ ${name}Factory::Make(const std::string &ref_ $formaltypearg,
 }
 
 Mutable${name}AssetD
-${name}Factory::FindMake(const std::string &ref_ $formaltypearg,
+${name}Factory::FindMake(const SharedString &ref_ $formaltypearg,
                          $formalinputarg
                          const khMetaData &meta_,
                          const $config& config_)
@@ -203,7 +203,7 @@ ${name}Factory::FindMake(const std::string &ref_ $formaltypearg,
 
 
 Mutable${name}AssetD
-${name}Factory::FindAndModify(const std::string &ref_ $formaltypearg,
+${name}Factory::FindAndModify(const SharedString &ref_ $formaltypearg,
                               $formalinputarg
                               const khMetaData &meta_,
                               const $config& config_)
@@ -220,7 +220,7 @@ ${name}Factory::FindAndModify(const std::string &ref_ $formaltypearg,
 
 
 Mutable${name}AssetD
-${name}Factory::MakeNew(const std::string &ref_ $formaltypearg,
+${name}Factory::MakeNew(const SharedString &ref_ $formaltypearg,
                         $formalinputarg
                         const khMetaData &meta_,
                         const $config& config_)
@@ -240,7 +240,7 @@ ${name}Factory::MakeNew(const std::string &ref_ $formaltypearg,
 $template
 Mutable${name}AssetVersionD
 ${name}Factory::FindMakeAndUpdate(
-        const std::string &ref_ $formaltypearg,
+        const SharedString &ref_ $formaltypearg,
         $formalinputarg
         const khMetaData &meta_,
         const $config& config_
@@ -257,7 +257,7 @@ ${name}Factory::FindMakeAndUpdate(
 $template
 Mutable${name}AssetVersionD
 ${name}Factory::FindMakeAndUpdateSubAsset(
-        const std::string &parentAssetRef
+        const SharedString &parentAssetRef
         $formaltypearg,
         const std::string &basename,
         $formalinputarg
@@ -281,7 +281,7 @@ if ($withreuse) {
 $template
 Mutable${name}AssetVersionD
 ${name}Factory::ReuseOrMakeAndUpdate(
-        const std::string &ref_ $formaltypearg,
+        const SharedString &ref_ $formaltypearg,
         $formalinputarg
         const khMetaData &meta_,
         const $config& config_
@@ -290,9 +290,9 @@ ${name}Factory::ReuseOrMakeAndUpdate(
 {
     // make a copy since actualinputarg is macro substituted, so begin() &
     // end() could be called on different temporary objects
-    std::vector<std::string> inputarg = $actualinputarg;
+    std::vector<SharedString> inputarg = $actualinputarg;
     // bind my input versions refs
-    std::vector<std::string> boundInputs;
+    std::vector<SharedString> boundInputs;
     boundInputs.reserve(inputarg.size());
     std::transform(inputarg.begin(), inputarg.end(), back_inserter(boundInputs),
                    ptr_fun(&AssetVersionRef::Bind));
@@ -315,13 +315,13 @@ ${name}Factory::ReuseOrMakeAndUpdate(
                        "${name}: ReuseOrMakeAndUpdate (reusing %s)",
                        version->GetRef().c_str());
                 notify(NFY_NOTICE, "         boundinputs:");
-                for (std::vector<std::string>::const_iterator bi =
+                for (std::vector<SharedString>::const_iterator bi =
                      boundInputs.begin();
                      bi != boundInputs.end(); ++bi) {
                     notify(NFY_NOTICE, "             %s", bi->c_str());
                 }
                 notify(NFY_NOTICE, "         version inputs:");
-                for (std::vector<std::string>::const_iterator iv =
+                for (std::vector<SharedString>::const_iterator iv =
                      version->inputs.begin();
                      iv != version->inputs.end(); ++iv) {
                     notify(NFY_NOTICE, "             %s", iv->c_str());
@@ -351,7 +351,7 @@ ${name}Factory::ReuseOrMakeAndUpdate(
 $template
 Mutable${name}AssetVersionD
 ${name}Factory::ReuseOrMakeAndUpdateSubAsset(
-        const std::string &parentAssetRef
+        const SharedString &parentAssetRef
         $formaltypearg,
         const std::string &basename,
         $formalinputarg
@@ -417,7 +417,7 @@ namespace {
 }
 
 khRefGuard<${name}AssetImplD>
-${name}AssetImplD::Load(const std::string &boundref)
+${name}AssetImplD::Load(const SharedString &boundref)
 {
     khRefGuard<${name}AssetImplD> result;
 
@@ -784,7 +784,7 @@ print $fh <<EOF;
 // ***  ${name}AssetVersionImplD - Auto generated
 // ****************************************************************************
 khRefGuard<${name}AssetVersionImplD>
-${name}AssetVersionImplD::Load(const std::string &boundref)
+${name}AssetVersionImplD::Load(const SharedString &boundref)
 {
     khRefGuard<${name}AssetVersionImplD> result;
 

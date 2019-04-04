@@ -43,7 +43,7 @@ AssetVersionImpl::WorkingDir(const AssetVersionRef &ref)
 void
 AssetVersionImpl::GetInputFilenames(std::vector<std::string> &out) const
 {
-  for (std::vector<std::string>::const_iterator i = inputs.begin();
+  for (std::vector<SharedString>::const_iterator i = inputs.begin();
        i != inputs.end(); ++i) {
     AssetVersion(*i)->GetOutputFilenames(out);
   }
@@ -59,7 +59,7 @@ CompositeAssetVersionImpl::GetOutputFilenames(std::vector<std::string> &out) con
 {
   // We only have outputs when we are succeeded, bad or offline
   if (state & (AssetDefs::Succeeded | AssetDefs::Bad | AssetDefs::Offline)) {
-    for (std::vector<std::string>::const_iterator c = children.begin();
+    for (std::vector<SharedString>::const_iterator c = children.begin();
          c != children.end(); ++c) {
       AssetVersion(*c)->GetOutputFilenames(out);
     }
@@ -119,7 +119,7 @@ bool AssetVersionImpl::SimpleGetGedbPathAndType(
     const std::string& dbname,
     std::string* gedb_path,
     std::string* db_type,
-    std::string* db_ref) {
+    SharedString* db_ref) {
   // The dbname may be of the form.
   // db/test.kdatabase
   // db/test.kdatabase?version=74
@@ -127,7 +127,7 @@ bool AssetVersionImpl::SimpleGetGedbPathAndType(
   AssetVersion db_asset_version;
   if (khIsAbspath(dbname)) {
     // Absolute path is full name
-    std::string asset_name = DbFilenameToAssetPath(dbname);
+    SharedString asset_name = DbFilenameToAssetPath(dbname);
     db_asset_version = asset_name;
   } else {
     // Otherwise, must extract the ref from the relative name.
@@ -179,7 +179,7 @@ bool AssetVersionImpl::GetGedbPathAndType(
     const std::string& dbname,
     std::string* gedb_path,
     std::string* db_type,
-    std::string* db_ref) {
+    SharedString* db_ref) {
 
   if (!SimpleGetGedbPathAndType(dbname, gedb_path, db_type, db_ref)) {
     return false;

@@ -337,7 +337,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
                 inset.alphaRPFile,
                 blendVer.Ref(), /* cached blend */
                 cache_alpha_exist ?
-                    blendVer.Ref() : std::string() /* cached blend alpha */));
+                    blendVer.Ref() : SharedString() /* cached blend alpha */));
         } else {
           // This is a subsequent merge (from cached merges) It's
           // possible that earlier merges also short circuited the

@@ -48,11 +48,11 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage {
 
  protected:
   // implemented in LoadAny.cpp
-  static khRefGuard<AssetVersionImpl> Load(const std::string &boundref);
+  static khRefGuard<AssetVersionImpl> Load(const SharedString &boundref);
 
   std::string XMLFilename() const { return XMLFilename(GetRef()); }
   std::string WorkingDir(void) const { return WorkingDir(GetRef()); }
-  std::string WorkingFileRef(const std::string &fname) const {
+  SharedString WorkingFileRef(const std::string &fname) const {
     return WorkingDir() + fname;
   }
 
@@ -105,15 +105,15 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage {
     return (state == AssetDefs::Bad);
   }
 
-  std::string GetRef(void) const { return name; }
-  std::string GetAssetRef(void) const {
+  SharedString GetRef(void) const { return name; }
+  SharedString GetAssetRef(void) const {
     AssetVersionRef verref(name);
     return verref.AssetRef();
   }
 
   template <class outIter>
   outIter GetInputs(outIter oi) const {
-    for (std::vector<std::string>::const_iterator i = inputs.begin();
+    for (std::vector<SharedString>::const_iterator i = inputs.begin();
          i != inputs.end(); ++i) {
       oi++ = *i;
     }
@@ -151,7 +151,7 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage {
   static bool SimpleGetGedbPathAndType(const std::string& dbname,
                                        std::string* gedb_path,
                                        std::string* db_type,
-                                       std::string* db_ref);
+                                       SharedString* db_ref);
 
   static bool SimpleGetGedbPath(const std::string& dbname,
                                 std::string* gedb_path) {
@@ -160,7 +160,7 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage {
       *gedb_path = khNormalizeDir(dbname, false);
       return khIsAbsoluteDbName(*gedb_path, &db_type);
     }
-    std::string db_ref;
+    SharedString db_ref;
     return SimpleGetGedbPathAndType(dbname, gedb_path, &db_type, &db_ref);
   }
 
@@ -169,7 +169,7 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage {
   static bool GetGedbPathAndType(const std::string& dbname,
                                  std::string* gedb_path,
                                  std::string* db_type,
-                                 std::string* db_ref);
+                                 SharedString* db_ref);
 
   static bool GetGedbPath(const std::string& dbname, std::string* gedb_path) {
     std::string db_type;
@@ -177,7 +177,7 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage {
       *gedb_path = khNormalizeDir(dbname, false);
       return khIsAbsoluteDbName(*gedb_path, &db_type);
     }
-    std::string db_ref;
+    SharedString db_ref;
     return GetGedbPathAndType(dbname, gedb_path, &db_type, &db_ref);
   }
 };
@@ -190,16 +190,16 @@ typedef AssetHandle_<AssetVersionImpl> AssetVersion;
 
 
 template <>
-inline khCache<std::string, AssetVersion::HandleType>&
+inline khCache<SharedString, AssetVersion::HandleType>&
 AssetVersion::cache(void) {
-  static khCache<std::string, AssetVersion::HandleType>
+  static khCache<SharedString, AssetVersion::HandleType>
     instance(MiscConfig::Instance().VersionCacheSize);
   return instance;
 }
 
 // DoBind() specialization with caching Version.
 template <> template <>
-inline void AssetVersion::DoBind<1>(const std::string &boundref,
+inline void AssetVersion::DoBind<1>(const SharedString &boundref,
                                     const AssetVersionRef &boundVerRef,
                                     bool checkFileExistenceFirst,
                                     Int2Type<1>) const {
@@ -252,7 +252,7 @@ inline void AssetVersion::DoBind<1>(const std::string &boundref,
 
 // DoBind() specialization without caching Version.
 template <> template <>
-inline void AssetVersion::DoBind<0>(const std::string &boundref,
+inline void AssetVersion::DoBind<0>(const SharedString &boundref,
                         const AssetVersionRef &boundVerRef,
                         bool checkFileExistenceFirst,
                         Int2Type<0>) const {
@@ -298,7 +298,7 @@ inline void AssetVersion::DoBind<0>(const std::string &boundref,
 
 
 template <>
-inline void AssetVersion::DoBind(const std::string &boundRef,
+inline void AssetVersion::DoBind(const SharedString &boundRef,
                      const AssetVersionRef &boundVerRef,
                      bool checkFileExistenceFirst) const {
   DoBind(boundRef, boundVerRef, checkFileExistenceFirst, Int2Type<1>());
@@ -315,7 +315,7 @@ inline bool AssetVersion::Valid(void) const {
       return false;
 
     // bind the ref
-    std::string boundRef = AssetVersionRef::Bind(ref);
+    SharedString boundRef = AssetVersionRef::Bind(ref);
     AssetVersionRef boundVerRef(boundRef);
 
     // deal quickly with an invalid version
@@ -335,7 +335,7 @@ inline bool AssetVersion::Valid(void) const {
 template <>
 inline void AssetVersion::Bind(void) const {
   if (!handle) {
-    std::string boundref = AssetVersionRef::Bind(ref);
+    SharedString boundref = AssetVersionRef::Bind(ref);
     AssetVersionRef boundVerRef(boundref);
     DoBind(boundref, boundVerRef, false);
   }
@@ -345,7 +345,7 @@ inline void AssetVersion::Bind(void) const {
 template <>
 inline void AssetVersion::BindNoCache() const {
   if (!handle) {
-    std::string boundref = AssetVersionRef::Bind(ref);
+    SharedString boundref = AssetVersionRef::Bind(ref);
     AssetVersionRef boundVerRef(boundref);
     DoBind(boundref, boundVerRef, false, Int2Type<false>());
   }

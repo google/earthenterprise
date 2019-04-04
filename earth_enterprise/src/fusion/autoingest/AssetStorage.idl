@@ -20,6 +20,7 @@
 #include <autoingest/Misc.h>
 #include <autoingest/.idl/storage/AssetDefs.h>
 #include "common/verref_storage.h"
+#include "common/SharedString.h"
 
 #cppquote
 #include <autoingest/.idl/storage/AssetDefs_impl.h>
@@ -88,10 +89,10 @@ class AssetVersionStorage {
   AssetDefs::State state;
   double       progress;
   bool         locked;
-  std::vector<std::string> inputs;
-  std::vector<std::string> children;
-  std::vector<std::string> parents;
-  std::vector<std::string> listeners;
+  std::vector<SharedString> inputs;
+  std::vector<SharedString> children;
+  std::vector<SharedString> parents;
+  std::vector<SharedString> listeners;
   std::vector<std::string> outfiles;
   khMetaData               meta;
   time_t             beginTime = time_t(0);
@@ -123,10 +124,10 @@ class AssetVersionStorage {
                                 AssetDefs::New,        // state
                                 0,                // progress
                                 false,             // locked
-                                std::vector<std::string>(),    // inputs
-                                std::vector<std::string>(),    // children
-                                std::vector<std::string>(),    // parents
-                                std::vector<std::string>(),    // listeners
+                                std::vector<SharedString>(),    // inputs
+                                std::vector<SharedString>(),    // children
+                                std::vector<SharedString>(),    // parents
+                                std::vector<SharedString>(),    // listeners
                                 std::vector<std::string>(),    // outfiles
                                 asset.meta,
                                 0,                // beginTime

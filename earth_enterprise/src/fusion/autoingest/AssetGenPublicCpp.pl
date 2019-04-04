@@ -99,7 +99,7 @@ ${name}AssetImpl::NewFromDOM(void *e)
 
 
 khRefGuard<${name}AssetImpl>
-${name}AssetImpl::NewInvalid(const std::string &ref)
+${name}AssetImpl::NewInvalid(const SharedString &ref)
 {
     AssetStorage storage;
     Config      config;
@@ -110,7 +110,7 @@ ${name}AssetImpl::NewInvalid(const std::string &ref)
 
 
 khRefGuard<${name}AssetImpl>
-${name}AssetImpl::Load(const std::string &ref)
+${name}AssetImpl::Load(const SharedString &ref)
 {
     std::string filename = XMLFilename(ref);
     khRefGuard<${name}AssetImpl> result;
@@ -180,7 +180,7 @@ ${name}AssetVersionImpl::NewFromDOM(void *e)
 }
 
 khRefGuard<${name}AssetVersionImpl>
-${name}AssetVersionImpl::NewInvalid(const std::string &ref)
+${name}AssetVersionImpl::NewInvalid(const SharedString &ref)
 {
     AssetVersionStorage storage;
     Config      config;
@@ -193,7 +193,7 @@ std::string ${name}AssetVersionImpl::PluginName(void) const {
 }
 
 khRefGuard<${name}AssetVersionImpl>
-${name}AssetVersionImpl::Load(const std::string &boundref)
+${name}AssetVersionImpl::Load(const SharedString &boundref)
 {
     std::string filename = XMLFilename(boundref);
     khRefGuard<${name}AssetVersionImpl> result;

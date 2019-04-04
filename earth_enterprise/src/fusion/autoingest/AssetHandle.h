@@ -48,7 +48,7 @@ class AssetHandle_  {
   struct undefined_type; // never defined.  Just used for bool operations
 
  protected:
-  static inline khCache<std::string, HandleType>& cache(void);
+  static inline khCache<SharedString, HandleType>& cache(void);
 
  public:
   static uint32 CacheSize(void) { return cache().size(); }
@@ -114,7 +114,7 @@ class AssetHandle_  {
   // Same goes for move constructor and assignment.
 
   virtual ~AssetHandle_(void) { }
-  const std::string& Ref(void) const { return ref; }
+  const SharedString& Ref(void) const { return ref; }
   bool Valid(void) const;
   // This is better then overloading the bool operator as it
   // more closely emulates what a pointer's boolean operations does.
