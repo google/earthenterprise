@@ -242,7 +242,6 @@ class RasterProjectAssetVersionImplD {
 #include "common/khConstants.h"
 #include <third_party/rfc_uuid/uuid.h>
 #include <chrono>
-#include <omp.h>
 
 // Throw and exception about invalid dates in time machine projects if the
 // missing_dates string is non-empty.
@@ -1039,10 +1038,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   packgenassets.reserve(numInsets);
   packgenvers.reserve(numInsets);
 
-  int threadsToUse = MiscConfig::Instance().BuildIndexThreads;
-  #pragma omp parallel for schedule(dynamic) num_threads(threadsToUse)
   for (uint i = 0; i < genInfo.size(); ++i) {
-    notify(NFY_WARN, "Starting loop %d from thread %d", i+1, omp_get_thread_num());
     // Check if I even need to do any packet generation at all
     // Maybe the other insets will completely replace everything
     // that this one would generate
@@ -1165,6 +1161,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   timeDiff = std::chrono::duration<double>(curTime - prevTime);
   notify(NFY_INFO2, "BuildIndex finished looping through insets - %f seconds elapsed",
          timeDiff.count());
+  assert(MiscConfig::Instance().ContLoadAndThink);
 
   // Make index subasset (RasterGEIndex).
   return MakeIndexSubAsset(packgenkids, packgenassets, packgenvers, genInfo, date);

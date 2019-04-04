@@ -36,6 +36,7 @@ class MiscConfigStorage {
 
   uint        BuildIndexThreads = uint(1);
 
+  uint        ContLoadAndThink = uint(0);
 #pragma LoadAndSave
 
 #hquote
