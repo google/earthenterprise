@@ -88,11 +88,11 @@ class AssetVersionStorage {
   AssetDefs::State state;
   double       progress;
   bool         locked;
-  std::vector<std::string> inputs;
-  std::vector<std::string> children;
-  std::vector<std::string> parents;
-  std::vector<std::string> listeners;
-  std::vector<std::string> outfiles;
+  MTVector<std::string> inputs;
+  MTVector<std::string> children;
+  MTVector<std::string> parents;
+  MTVector<std::string> listeners;
+  MTVector<std::string> outfiles;
   khMetaData               meta;
   time_t             beginTime = time_t(0);
   time_t             progressTime = time_t(0);
@@ -123,11 +123,11 @@ class AssetVersionStorage {
                                 AssetDefs::New,        // state
                                 0,                // progress
                                 false,             // locked
-                                std::vector<std::string>(),    // inputs
-                                std::vector<std::string>(),    // children
-                                std::vector<std::string>(),    // parents
-                                std::vector<std::string>(),    // listeners
-                                std::vector<std::string>(),    // outfiles
+                                MTVector<std::string>(),    // inputs
+                                MTVector<std::string>(),    // children
+                                MTVector<std::string>(),    // parents
+                                MTVector<std::string>(),    // listeners
+                                MTVector<std::string>(),    // outfiles
                                 asset.meta,
                                 0,                // beginTime
                                 0,                // progressTime

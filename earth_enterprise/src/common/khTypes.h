@@ -19,6 +19,26 @@
 #define GEO_EARTH_ENTERPRISE_SRC_COMMON_KHTYPES_H_
 
 #include <assert.h>
+#include <mutex>
+#include <vector>
+
+template <typename T>
+class MTVector : public std::vector<T> {
+  private:
+    mutable std::mutex mtx;
+
+    MTVector(const MTVector& a, const std::lock_guard<std::mutex> &) : Base(a) { }
+  public:
+    //using std::vector<T>::vector;
+    typedef std::vector<T> Base;
+    void push_back(const T& v) {
+      std::lock_guard<std::mutex> lock(mtx);
+      Base::push_back(v);
+    }
+    MTVector() : Base() { }
+    // forward to private copy constructor to protect vector from modification
+    MTVector(const MTVector& a) : MTVector(a, std::lock_guard<std::mutex>(a.mtx)) { }
+};
 
 #if defined(__sgi)
 #include <sys/types.h>

@@ -606,7 +606,8 @@ khAssetManager::SubmitTask(const std::string &verref, const TaskDef &taskdef,
 {
   // assert that we're already locked
   assert(!mutex.TryLock());
-
+  static std::mutex theMutex;
+  std::lock_guard<std::mutex> submitProtect(theMutex); 
   uint32 taskid = NextTaskId::Get();
   MutableAssetVersionD(verref)->taskid = taskid;
 

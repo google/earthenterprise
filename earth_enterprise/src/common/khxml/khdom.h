@@ -292,6 +292,14 @@ ToElement(khxml::DOMElement *elem, const std::vector<T> &vec)
 
 template <class T>
 void
+ToElement(khxml::DOMElement *elem, const MTVector<T> &vec)
+{
+  std::string childname = ListElementTagName(FromXMLStr(elem->getTagName()));
+  ToElementWithChildName(elem, childname, vec);
+}
+
+template <class T>
+void
 ToElement(khxml::DOMElement *elem, const std::deque<T> &deque)
 {
   std::string childname = ListElementTagName(FromXMLStr(elem->getTagName()));
@@ -936,6 +944,15 @@ FromElementWithChildName(khxml::DOMElement *elem,
 template <class T>
 void
 FromElement(khxml::DOMElement *elem, std::vector<T> &vec)
+{
+  std::string childname = ListElementTagName(FromXMLStr(elem->getTagName()));
+  FromElementWithChildName(elem, childname, vec);
+}
+
+
+template <class T>
+void
+FromElement(khxml::DOMElement *elem, MTVector<T> &vec)
 {
   std::string childname = ListElementTagName(FromXMLStr(elem->getTagName()));
   FromElementWithChildName(elem, childname, vec);

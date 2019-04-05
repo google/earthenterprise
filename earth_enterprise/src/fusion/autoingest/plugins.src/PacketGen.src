@@ -45,20 +45,7 @@ class PacketGenExtraUpdateArg {
 #include <autoingest/plugins/RasterProductAsset.h>
 #include <autoingest/plugins/MercatorRasterProductAsset.h>
 #include <chrono>
-#include <mutex>
-#include <omp.h>
 
-void safe_push_back(std::vector<std::string>& vec, const std::string& str) {
-  static std::mutex mtx;
-  std::lock_guard<std::mutex> lock(mtx);
-  vec.push_back(str);
-}
-
-void safe_push_back(std::vector<AssetVersion>& vec, const AssetVersion& av) {
-  static std::mutex mtx;
-  std::lock_guard<std::mutex> lock(mtx);
-  vec.push_back(av);
-}
 
 template
 MutablePacketGenAssetVersionD
@@ -300,14 +287,11 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       // populate inputs and inputVers & config.insets
       levInputs.reserve(mergeIndexes.size() * 2 + 1);
       levInputVers.reserve(mergeIndexes.size() * 2 + 1);
-      packetLevelConfig.insets.resize(mergeIndexes.size() + 1);
-      int threadsToUse = MiscConfig::Instance().BuildIndexThreads;
-      #pragma omp parallel for num_threads(threadsToUse) schedule(dynamic)
-      for (int i = 0; i < mergeIndexes.size(); ++i) {
-        notify(NFY_WARN, "Starting loop %d from thread %d", i+1, omp_get_thread_num());
-        const uint& indexNum = mergeIndexes[i];
-        const InsetInfo<ProductAssetVersion> &inset(*extra.insetInfo[indexNum]);
-        const PacketGenInfo &genInfo(*extra.genInfo[indexNum]);
+      packetLevelConfig.insets.reserve(mergeIndexes.size() + 1);
+      for (std::vector<uint>::const_iterator idx = mergeIndexes.begin();
+           idx != mergeIndexes.end(); ++idx) {
+        const InsetInfo<ProductAssetVersion> &inset(*extra.insetInfo[*idx]);
+        const PacketGenInfo &genInfo(*extra.genInfo[*idx]);
         AssetVersion blendVer;
         if (!inset.alphaRPFile.empty() &&
             (genInfo.packetLevels.size() > minifySrcLevel)) {
@@ -320,24 +304,24 @@ void PacketGenAssetVersionImplD::UpdateChildren(
           // In these cases we pull directly from the product. It
           // will also happen for the last thing on the stack who
           // hasn't had his blendvers filled in yet.
-          safe_push_back(levInputs, inset.combinedrp_->GetRef());
-          safe_push_back(levInputVers, inset.combinedrp_);
+          levInputs.push_back(inset.combinedrp_->GetRef());
+          levInputVers.push_back(inset.combinedrp_);
 
-          packetLevelConfig.insets[i] =
-             PacketLevelConfig::Inset(
+          packetLevelConfig.insets.push_back
+            (PacketLevelConfig::Inset(
                 inset.dataRPFile,
                 inset.alphaRPFile,
                 std::string(), /* cached blend */
-                std::string()  /* cached blend alpha */);
+                std::string()  /* cached blend alpha */));
         } else if (highestResMinify) {
           // This is the first merge (from cached blends)
           // It is possible that some of the cached blends are only
           // partially populated. So we pull from both the cached
           // blend and the product
-          safe_push_back(levInputs, inset.combinedrp_->GetRef());
-          safe_push_back(levInputVers, inset.combinedrp_);
-          safe_push_back(levInputs, blendVer.Ref());
-          safe_push_back(levInputVers, blendVer);
+          levInputs.push_back(inset.combinedrp_->GetRef());
+          levInputVers.push_back(inset.combinedrp_);
+          levInputs.push_back(blendVer.Ref());
+          levInputVers.push_back(blendVer);
 
           // Note: Before creating a merge inset, we check if the cached alpha
           // blend directory exists for the asset since in GEE-5.x we need to
@@ -347,13 +331,13 @@ void PacketGenAssetVersionImplD::UpdateChildren(
               blendVer->GetOutputFilename(0) + "/cache_alpha.pack";
           const bool cache_alpha_exist = khExists(cache_alpha_path);
 
-          packetLevelConfig.insets[i] =
-             PacketLevelConfig::Inset(
+          packetLevelConfig.insets.push_back
+            (PacketLevelConfig::Inset(
                 inset.dataRPFile,
                 inset.alphaRPFile,
                 blendVer.Ref(), /* cached blend */
                 cache_alpha_exist ?
-                    blendVer.Ref() : std::string() /* cached blend alpha */);
+                    blendVer.Ref() : std::string() /* cached blend alpha */));
         } else {
           // This is a subsequent merge (from cached merges) It's
           // possible that earlier merges also short circuited the
@@ -364,10 +348,10 @@ void PacketGenAssetVersionImplD::UpdateChildren(
           // one above. Maybe later we can put some more smarts
           // here to limit dependencies on the products?
 
-          safe_push_back(levInputs, inset.combinedrp_->GetRef());
-          safe_push_back(levInputVers, inset.combinedrp_);
-          safe_push_back(levInputs, blendVer.Ref());
-          safe_push_back(levInputVers, blendVer);
+          levInputs.push_back(inset.combinedrp_->GetRef());
+          levInputVers.push_back(inset.combinedrp_);
+          levInputs.push_back(blendVer.Ref());
+          levInputVers.push_back(blendVer);
 
           // Note: Before creating a merge inset, we check if the cached alpha
           // blend directory exists for the asset since in GEE-5.x we need to
@@ -377,13 +361,13 @@ void PacketGenAssetVersionImplD::UpdateChildren(
               blendVer->GetOutputFilename(0) + "/cache_alpha.pack";
           const bool cache_alpha_exist = khExists(cache_alpha_path);
 
-          packetLevelConfig.insets[i] =
-            PacketLevelConfig::Inset(
+          packetLevelConfig.insets.push_back
+            (PacketLevelConfig::Inset(
                 inset.dataRPFile,
                 inset.alphaRPFile,
                 blendVer.Ref(), /* cached blend */
                 cache_alpha_exist ?
-                    blendVer.Ref() : std::string()  /* cached blend alpha */);
+                    blendVer.Ref() : std::string()  /* cached blend alpha */));
         }
       }
 
