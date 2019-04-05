@@ -25,13 +25,19 @@ Description: Helper class for extracting/manipulating pieces of a verion ref
 
 #include <string>
 #include <common/khTypes.h>
+#include <common/SharedString.h>
 
 class AssetVersionRef {
   std::string assetRef;
   std::string version;
+  void InitFromSharedString(const SharedString &ref);
  public:
   AssetVersionRef(const std::string &ref_);
   AssetVersionRef& operator=(const std::string &ref) {
+    return (*this = AssetVersionRef(ref));
+  }
+  AssetVersionRef(const SharedString &ref_);
+  AssetVersionRef& operator=(const SharedString &ref) {
     return (*this = AssetVersionRef(ref));
   }
   operator std::string() const;

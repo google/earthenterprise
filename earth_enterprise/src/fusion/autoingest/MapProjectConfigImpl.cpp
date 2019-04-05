@@ -53,7 +53,8 @@ MapProjectConfig::HasSearchFields(void) const
   for (std::vector<LayerItem>::const_iterator l = layers.begin();
        l != layers.end(); ++l) {
 
-    MapLayerAssetVersion query((*l).assetRef);
+    SharedString sharedStr((*l).assetRef);
+    MapLayerAssetVersion query(sharedStr);
     if (!query) {
       notify(NFY_WARN, "Unable to get good version of asset %s.\n",(*l).assetRef.c_str());
       continue;

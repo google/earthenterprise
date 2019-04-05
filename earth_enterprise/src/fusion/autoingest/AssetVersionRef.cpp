@@ -22,10 +22,32 @@
 
 AssetVersionRef::AssetVersionRef(const std::string &ref)
 {
-  std::string::size_type verstart = ref.rfind("?version=");
-  assetRef = ref.substr(0, verstart);
+  SharedString sharedStr(ref);
+  InitFromSharedString(sharedStr);
+}
+//AssetVersionRef::AssetVersionRef(const std::string &ref)
+//{
+//  std::string::size_type verstart = ref.rfind("?version=");
+//  assetRef = ref.substr(0, verstart);
+//  if (verstart != std::string::npos) {
+//    version = ref.substr(verstart+9, std::string::npos);
+//  } else {
+//    version = "current";
+//  }
+//}
+
+AssetVersionRef::AssetVersionRef(/*const std::string*/const SharedString &ref)
+{
+  InitFromSharedString(ref);
+}
+
+void AssetVersionRef::InitFromSharedString(const SharedString &ref)
+{
+  std::string strRef = ref;
+  std::string::size_type verstart = strRef.rfind("?version=");
+  assetRef = strRef.substr(0, verstart);
   if (verstart != std::string::npos) {
-    version = ref.substr(verstart+9, std::string::npos);
+    version = strRef.substr(verstart+9, std::string::npos);
   } else {
     version = "current";
   }

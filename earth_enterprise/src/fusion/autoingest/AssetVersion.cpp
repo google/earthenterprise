@@ -127,7 +127,8 @@ bool AssetVersionImpl::SimpleGetGedbPathAndType(
   AssetVersion db_asset_version;
   if (khIsAbspath(dbname)) {
     // Absolute path is full name
-    SharedString asset_name = DbFilenameToAssetPath(dbname);
+    //SharedString asset_name = DbFilenameToAssetPath(dbname);
+    std::string asset_name = DbFilenameToAssetPath(dbname);
     db_asset_version = asset_name;
   } else {
     // Otherwise, must extract the ref from the relative name.

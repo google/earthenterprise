@@ -74,18 +74,18 @@ class AssetHandle_  {
   mutable HandleType handle;
 
   // Only implemented/used by Asset variant.
-  void DoBind(const std::string &ref,
+  void DoBind(const SharedString &ref,
               bool checkFileExistenceFirst) const;
 
   // Only implemented/used by Version variant.
   template <int do_cache>
-  void DoBind(const std::string &boundRef,
+  void DoBind(const SharedString &boundRef,
               const AssetVersionRef &boundVerRef,
               bool checkFileExistenceFirst,
               Int2Type<do_cache> do_cache_val) const;
 
   // Only implemented/used by Version variant.
-  void DoBind(const std::string &boundRef,
+  void DoBind(const SharedString &boundRef,
               const AssetVersionRef &boundVerRef,
               bool checkFileExistenceFirst) const;
 
@@ -171,7 +171,7 @@ class DerivedAssetHandle_ : public virtual Base_ {
 
  public:
   DerivedAssetHandle_(void) : Base() { }
-  DerivedAssetHandle_(const std::string &ref_) : Base(ref_) { }
+  DerivedAssetHandle_(const SharedString &ref_) : Base(ref_) { }
 
   // it's OK to construct a derived from a base, we just check first
   // and clear the handle if the types don't match

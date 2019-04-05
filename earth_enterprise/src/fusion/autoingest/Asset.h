@@ -45,7 +45,7 @@ class AssetImpl : public khRefCounter, public AssetStorage {
 
  protected:
   // implemented in LoadAny.cpp
-  static khRefGuard<AssetImpl> Load(const std::string &boundref);
+  static khRefGuard<AssetImpl> Load(const SharedString &boundref);
 
   // used by my intermediate derived classes since their calls to
   // my constructor will never actualy be used
@@ -91,7 +91,7 @@ Asset::cache(void)
 
 template <>
 inline void
-Asset::DoBind(const std::string &ref, bool checkFileExistenceFirst) const
+Asset::DoBind(const SharedString &ref, bool checkFileExistenceFirst) const
 {
   // Check in cache
   HandleType entry = CacheFind(ref);

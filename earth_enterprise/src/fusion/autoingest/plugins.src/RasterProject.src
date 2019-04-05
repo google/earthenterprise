@@ -83,7 +83,8 @@ class RasterProjectAssetVersionImpl {
     const std::vector<InsetStackItem>& insets = config.insets;
     for(uint i = 0; i < insets.size(); ++i) {
       // Note: the date is stored in the asset, not the version!!!
-      RasterProductAsset resource(insets[i].dataAsset);
+      SharedString sharedStr(insets[i].dataAsset);
+      RasterProductAsset resource(sharedStr);
       std::string resource_date = resource->GetAcquisitionDate();
       if (resource_date != kUnknownDate) {
         if (result == kUnknownDate || resource_date.compare(result) > 0) {

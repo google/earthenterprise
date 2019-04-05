@@ -179,14 +179,16 @@ std::string khRasterProduct::GetAcquisitionDate() const {
   size_t pos = asset_name.rfind(kImageryAssetSuffix);
   if (pos != asset_name.npos) {
     pos += kImageryAssetSuffix.size();
-    asset_name = asset_name.substr(0, pos);
-    RasterProductAsset resource(asset_name);
+    //asset_name = asset_name.substr(0, pos);
+    SharedString sharedStr(asset_name.substr(0, pos));
+    RasterProductAsset resource(sharedStr);
     date = resource->GetAcquisitionDate();
   } else if ((pos = asset_name.rfind(kMercatorImageryAssetSuffix))
              != asset_name.npos) {
     pos += kMercatorImageryAssetSuffix.size();
-    asset_name = asset_name.substr(0, pos);
-    MercatorRasterProductAsset resource(asset_name);
+    //asset_name = asset_name.substr(0, pos);
+    SharedString sharedStr(asset_name.substr(0, pos));
+    MercatorRasterProductAsset resource(sharedStr);
     date = resource->GetAcquisitionDate();
   }
 

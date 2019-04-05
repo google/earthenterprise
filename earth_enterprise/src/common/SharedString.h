@@ -18,13 +18,96 @@
 #define GEO_EARTH_ENTERPRISE_SRC_COMMON_SHAREDSTRING_H_
 
 #include <string>
+#include <unordered_map>
+#include <vector>
+#include <iostream>
 
-class SharedString: public std::string {
-public:
-    SharedString() {}
-    SharedString(const SharedString& str): std::string(str) {}
-    SharedString(const std::string& str): std::string(str) {} 
-    SharedString(const char* s): std::string(s) {}
+class SharedString/*: public std::string*/ {
+private:
+   class RefStorage {
+      private:
+        std::unordered_map</*AssetDefs::AssetKey*/uint32, std::string> refFromKeyTable;
+        std::unordered_map<std::string, /*AssetDefs::AssetKey*/uint32> keyFromRefTable;
+        static uint32 nextID;
+      public:
+        std::string RefFromKey(const /*AssetDefs::AssetKey*/uint32 &key) {
+          auto refIter = refFromKeyTable.find(key);
+          assert(refIter != refFromKeyTable.end());
+          return refIter->second;
+        }
+        /*AssetDefs::AssetKey*/uint32 KeyFromRef(const std::string &ref) {
+          auto keyIter = keyFromRefTable.find(ref);
+          if (keyIter != keyFromRefTable.end()) {
+            return keyIter->second;
+          }
+          else {
+            // We've never seen this ref before, so make a new key
+            /*AssetDefs::AssetKey*/uint32 key = nextID++; // For the initial pass, key == ref
+            refFromKeyTable.insert(std::pair<uint32, std::string>(key, ref));
+            keyFromRefTable.insert(std::pair<std::string, uint32>(ref, key));
+            return key;
+          }
+        }
+    };    
+
+    static RefStorage refStore;
+    uint32 key;
+
+    friend std::ostream & operator<<(std::ostream &out, const SharedString & ref);
+    friend std::istream & operator>>(std::istream &in, SharedString & reff); 
+  public:
+    SharedString(): key(0) {}
+
+    SharedString(const SharedString& str): key(str.key) {
+    }
+
+    SharedString(const std::string& str) {
+        key = refStore.KeyFromRef(str);
+    } 
+
+    bool empty() const {
+        return 0 == key;
+    }
+    
+    operator std::string() const {
+        return refStore.RefFromKey(key);
+    }
+
+    const char* c_str() const noexcept {
+      return refStore.RefFromKey(key).c_str();
+    }
+    
+    bool operator<(const SharedString &other) const {
+      return (refStore.RefFromKey(key) < refStore.RefFromKey(other.key));
+    }
+
+    bool operator==(const SharedString &other) const {
+      return key == other.key;
+    }
+
+
+    // SharedString(const char* s) {
+
+    // }
 };
+
+
+    std::ostream & operator<<(std::ostream &out, const SharedString & str) {
+      out << SharedString::refStore.RefFromKey(str.key);
+      return out;
+    }
+
+    std::istream & operator>>(std::istream &in, SharedString & str) {
+      // Not entirely sure if the best thing to do here is to add a new ref to
+      // the RefStorage as below or to add a function to re-map a key to a ref
+      // if the current key is non-zero
+      std::string ref;
+      in >> ref;
+      str.key = SharedString::refStore.KeyFromRef(ref);
+      return in;
+    }
+
+uint32 SharedString::RefStorage::nextID = 1;
+SharedString::RefStorage SharedString::refStore;
 
 #endif
