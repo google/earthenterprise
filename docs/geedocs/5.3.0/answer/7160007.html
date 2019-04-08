@@ -39,8 +39,6 @@ gtag('config', 'UA-108632131-2');
 <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Release notes</h1>
 <h2>Release notes: Open GEE 5.3.0</h2>
 
-<p>Open GEE 5.3.0 is currently in development</p>
-
   <h5>
     <p id="overview_5.3.0">New Features</p>
   </h5>
@@ -206,6 +204,13 @@ gtag('config', 'UA-108632131-2');
             <td>Assemble button is not fully visible, making it difficult to use the GLC assembly tool.</td>
             <td>
               Added a scroll-bar to glc_assemble webpage to allow scrolling to 'Assemble' button.
+            </td>
+          </tr>
+          <tr>
+            <td>1251</td>
+            <td>Build number was incorrectly being appended to the version in RPM packaging</td>
+            <td>
+              RPM packaging should put the build number in the <code>release</code> field of the RPM properties and not append it to the version number in the <code>version</code> field.  This was preventing point releases from properly upgrading.
             </td>
           </tr>
         </tbody>
