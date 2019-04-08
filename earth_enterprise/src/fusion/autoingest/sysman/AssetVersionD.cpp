@@ -165,7 +165,7 @@ AssetVersionImplD::Load(const std::string &boundref)
 
 // since AssetVersionImpl is a virtual base class
 // my derived classes will initialize it directly
-AssetVersionImplD::AssetVersionImplD(const std::vector<std::string> &inputs)
+AssetVersionImplD::AssetVersionImplD(const std::vector<SharedString> &inputs)
     : AssetVersionImpl(), verholder(0)
 {
   AddInputAssetRefs(inputs);
@@ -173,9 +173,9 @@ AssetVersionImplD::AssetVersionImplD(const std::vector<std::string> &inputs)
 
 
 void
-AssetVersionImplD::AddInputAssetRefs(const std::vector<std::string> &inputs_)
+AssetVersionImplD::AddInputAssetRefs(const std::vector<SharedString> &inputs_)
 {
-  for (std::vector<std::string>::const_iterator i = inputs_.begin();
+  for (std::vector<SharedString>::const_iterator i = inputs_.begin();
        i != inputs_.end(); ++i) {
     // Add myself to the input's list of listeners.
     MutableAssetVersionD input(*i);
@@ -1011,7 +1011,7 @@ LeafAssetVersionImplD::DoClean(const std::shared_ptr<StateChangeNotifier> caller
   SetState(AssetDefs::Offline, notifier);
 
   // now try to clean my inputs too
-  for (std::vector<std::string>::const_iterator i = inputs.begin();
+  for (std::vector<SharedString>::const_iterator i = inputs.begin();
        i != inputs.end(); ++i) {
     AssetVersionD input(*i);
     if (input) {
@@ -1308,7 +1308,7 @@ CompositeAssetVersionImplD::DoClean(const std::shared_ptr<StateChangeNotifier> c
   SetState(AssetDefs::Offline, notifier);
 
   // now try to clean my children
-  for (std::vector<std::string>::const_iterator c = children.begin();
+  for (std::vector<SharedString>::const_iterator c = children.begin();
        c != children.end(); ++c) {
     AssetVersionD child(*c);
     if (child) {
@@ -1322,7 +1322,7 @@ CompositeAssetVersionImplD::DoClean(const std::shared_ptr<StateChangeNotifier> c
   }
 
   // now try to clean my inputs too
-  for (std::vector<std::string>::const_iterator i = inputs.begin();
+  for (std::vector<SharedString>::const_iterator i = inputs.begin();
        i != inputs.end(); ++i) {
     AssetVersionD input(*i);
     if (input) {

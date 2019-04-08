@@ -268,7 +268,7 @@ FindFilesOnVol(const std::string &verref,
     }
   }
 
-  for (std::vector<std::string>::const_iterator input =
+  for (std::vector<SharedString>::const_iterator input =
          version->inputs.begin();
        input != version->inputs.end(); ++input) {
     FindFilesOnVol(*input, volset, seen,

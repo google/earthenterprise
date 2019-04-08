@@ -1128,8 +1128,8 @@ sub DumpClass
 
     # StrLoadAndSave
     if (defined $class->{StrLoadAndSave}) {
-	print $fh $pad, $indent, "bool LoadFromString(const std::string &buf, const std::string &ref) throw();\n";
-	print $fh $pad, $indent, "bool SaveToString(std::string &buf, const std::string &ref) const throw();\n";
+	print $fh $pad, $indent, "bool LoadFromString(const std::string &buf, const SharedString &ref) throw();\n";
+	print $fh $pad, $indent, "bool SaveToString(std::string &buf, const SharedString &ref) const throw();\n";
     }
 
     if (defined $class->{idl_version}) {
@@ -1591,7 +1591,7 @@ EOF
 	print $fh <<EOF;
 
 bool
-$class->{qualname}::SaveToString(std::string &buf, const std::string &ref) const throw()
+$class->{qualname}::SaveToString(std::string &buf, const SharedString &ref) const throw()
 {
     std::unique_ptr<GEDocument> doc = CreateEmptyDocument("$class->{TagName}");
     if (!doc) return false;
@@ -1830,7 +1830,7 @@ EOF
 
 bool
 $class->{qualname}::LoadFromString(const std::string &buf,
-    const std::string &ref) throw()
+    const SharedString &ref) throw()
 {
     bool result = false;
     std::unique_ptr<GEDocument> doc = ReadDocumentFromString(buf, ref);

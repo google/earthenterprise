@@ -348,14 +348,14 @@ void DisplayBlockerDependencies(const AssetVersion &version,
 
       if (version->inputs.size()) {
         if (myskipext.empty()) {
-          for (std::vector<std::string>::const_iterator input =
+          for (std::vector<SharedString>::const_iterator input =
                  version->inputs.begin();
                input != version->inputs.end(); ++input) {
             DisplayBlockerDependencies(AssetVersion(*input),
                                        seen, myskipext);
           }
         } else {
-          for (std::vector<std::string>::const_iterator input =
+          for (std::vector<SharedString>::const_iterator input =
                  version->inputs.begin();
                input != version->inputs.end(); ++input) {
             if (!EndsWith(*input, myskipext)) {
@@ -394,7 +394,7 @@ void DisplayRasterProjectProgress(const AssetVersion &version,
     // be good. (RasterProject has DelayedBuildChildren)
   } else {
     // We don't have children, so all me need to look at is our inputs
-    for (std::vector<std::string>::const_iterator input =
+    for (std::vector<SharedString>::const_iterator input =
            version->inputs.begin();
          input != version->inputs.end(); ++input) {
       // TODO: implementation.
