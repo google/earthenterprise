@@ -25,7 +25,7 @@
 #include <assert.h>
 
 class SharedString/*: public std::string*/ {
-private:
+protected:
    class RefStorage {
       private:
         std::unordered_map</*AssetDefs::AssetKey*/uint32_t, std::string> refFromKeyTable;
