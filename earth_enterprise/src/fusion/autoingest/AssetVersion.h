@@ -190,9 +190,9 @@ typedef AssetHandle_<AssetVersionImpl> AssetVersion;
 
 
 template <>
-inline khCache<std::string, AssetVersion::HandleType>&
+inline khCache<SharedString, AssetVersion::HandleType>&
 AssetVersion::cache(void) {
-  static khCache<std::string, AssetVersion::HandleType>
+  static khCache<SharedString, AssetVersion::HandleType>
     instance(MiscConfig::Instance().VersionCacheSize);
   return instance;
 }

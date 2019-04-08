@@ -81,10 +81,10 @@ class AssetImpl : public khRefCounter, public AssetStorage {
 typedef AssetHandle_<AssetImpl> Asset;
 
 template <>
-inline khCache<std::string, Asset::HandleType>&
+inline khCache<SharedString, Asset::HandleType>&
 Asset::cache(void)
 {
-  static khCache<std::string, Asset::HandleType>
+  static khCache<SharedString, Asset::HandleType>
     instance(MiscConfig::Instance().AssetCacheSize);
   return instance;
 }

@@ -88,7 +88,7 @@ class AssetVersionImplD : public virtual AssetVersionImpl
 
   // used when being contructed from an asset
   // these are the inputs I need to bind and attach to
-  AssetVersionImplD(const std::vector<std::string> &inputs);
+  AssetVersionImplD(const std::vector<SharedString> &inputs);
 
   void AddInputAssetRefs(const std::vector<std::string> &inputs_);
   AssetDefs::State StateByInputs(bool *blockersAreOffline = 0,
@@ -171,7 +171,7 @@ class LeafAssetVersionImplD : public virtual LeafAssetVersionImpl,
         AssetVersionImplD(), numWaitingFor(0) { }
   // used when being contructed from an asset
   // these are the inputs I need to bind and attach to
-  LeafAssetVersionImplD(const std::vector<std::string> &inputs)
+  LeafAssetVersionImplD(const std::vector<SharedString> &inputs)
       : AssetVersionImpl(), LeafAssetVersionImpl(),
         AssetVersionImplD(inputs), numWaitingFor(0) { }
 
@@ -208,7 +208,7 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
         AssetVersionImplD() { }
   // used when being contructed from an asset
   // these are the inputs I need to bind and attach to
-  CompositeAssetVersionImplD(const std::vector<std::string> &inputs)
+  CompositeAssetVersionImplD(const std::vector<SharedString> &inputs)
       : AssetVersionImpl(), CompositeAssetVersionImpl(),
         AssetVersionImplD(inputs) { }
 

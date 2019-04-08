@@ -48,7 +48,7 @@ class AssetHandle_  {
   struct undefined_type; // never defined.  Just used for bool operations
 
  protected:
-  static inline khCache<std::string, HandleType>& cache(void);
+  static inline khCache<SharedString, HandleType>& cache(void);
 
  public:
   static uint32 CacheSize(void) { return cache().size(); }

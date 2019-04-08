@@ -33,7 +33,7 @@ std::vector<std::string> ProjectedMapLayerAssetVersionImpl::GetPOIFiles(void) co
 
   std::vector<std::string> results;
   MapLayerAssetVersion asset(inputs[0]);
-  for (std::vector<std::string>::const_iterator iter = asset->children.begin();
+  for (auto iter = asset->children.begin();
        iter != asset->children.end(); ++iter ) {
     AssetVersion child(*iter);
     if (child->subtype == "MapPOI") {
