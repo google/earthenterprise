@@ -43,7 +43,7 @@ AssetVersionImpl::WorkingDir(const AssetVersionRef &ref)
 void
 AssetVersionImpl::GetInputFilenames(std::vector<std::string> &out) const
 {
-  for (std::vector<std::string>::const_iterator i = inputs.begin();
+  for (auto i = inputs.begin();
        i != inputs.end(); ++i) {
     AssetVersion(*i)->GetOutputFilenames(out);
   }
@@ -59,7 +59,7 @@ CompositeAssetVersionImpl::GetOutputFilenames(std::vector<std::string> &out) con
 {
   // We only have outputs when we are succeeded, bad or offline
   if (state & (AssetDefs::Succeeded | AssetDefs::Bad | AssetDefs::Offline)) {
-    for (std::vector<std::string>::const_iterator c = children.begin();
+    for (auto c = children.begin();
          c != children.end(); ++c) {
       AssetVersion(*c)->GetOutputFilenames(out);
     }

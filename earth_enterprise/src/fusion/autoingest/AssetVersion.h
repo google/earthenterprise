@@ -113,7 +113,7 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage {
 
   template <class outIter>
   outIter GetInputs(outIter oi) const {
-    for (std::vector<std::string>::const_iterator i = inputs.begin();
+    for (auto i = inputs.begin();
          i != inputs.end(); ++i) {
       oi++ = *i;
     }
@@ -315,7 +315,7 @@ inline bool AssetVersion::Valid(void) const {
       return false;
 
     // bind the ref
-    std::string boundRef = AssetVersionRef::Bind(ref);
+    std::string boundRef = AssetVersionRef::Bind(ref.toString());
     AssetVersionRef boundVerRef(boundRef);
 
     // deal quickly with an invalid version
@@ -335,7 +335,7 @@ inline bool AssetVersion::Valid(void) const {
 template <>
 inline void AssetVersion::Bind(void) const {
   if (!handle) {
-    std::string boundref = AssetVersionRef::Bind(ref);
+    std::string boundref = AssetVersionRef::Bind(ref.toString());
     AssetVersionRef boundVerRef(boundref);
     DoBind(boundref, boundVerRef, false);
   }
@@ -345,7 +345,7 @@ inline void AssetVersion::Bind(void) const {
 template <>
 inline void AssetVersion::BindNoCache() const {
   if (!handle) {
-    std::string boundref = AssetVersionRef::Bind(ref);
+    std::string boundref = AssetVersionRef::Bind(ref.toString());
     AssetVersionRef boundVerRef(boundref);
     DoBind(boundref, boundVerRef, false, Int2Type<false>());
   }
