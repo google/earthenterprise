@@ -106,7 +106,7 @@ class AssetHandle_  {
 
  public:
   AssetHandle_(void) : ref(), handle() { }
-  AssetHandle_(const std::string &ref_) : ref(ref_), handle() { }
+  AssetHandle_(const SharedString &ref_) : ref(ref_), handle() { }
 
   // the compiler generated assignment and copy constructor are fine for us
   // ref & handle have stable copy semantics and we don't have to worry about

@@ -41,6 +41,7 @@ class AssetVersionRef {
     return (*this = AssetVersionRef(ref));
   }
   operator std::string() const;
+  operator SharedString() const;
 
   AssetVersionRef(const std::string &assetRef_, const std::string &version_);
   AssetVersionRef(const std::string &assetRef_, uint vernum);

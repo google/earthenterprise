@@ -85,6 +85,9 @@ private:
       return key == other.key;
     }
 
+    bool operator!=(const SharedString &other) const {
+      return !(*this == other);
+    }
 
     // SharedString(const char* s) {
 

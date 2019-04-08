@@ -62,6 +62,16 @@ AssetVersionRef::operator std::string() const
   }
 }
 
+AssetVersionRef::operator SharedString() const
+{
+  return SharedString(static_cast<std::string>(*this));
+//  if (version == "current") {
+//    return SharedString(assetRef);
+//  } else {
+//    return SharedString(assetRef + "?version=" + version);
+//  }
+}
+
 AssetVersionRef::AssetVersionRef(const std::string &assetRef_,
                                  const std::string &version_)
     : assetRef(assetRef_), version(version_) {
