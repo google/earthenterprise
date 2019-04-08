@@ -21,37 +21,39 @@
 #include <unordered_map>
 #include <vector>
 #include <iostream>
+#include <stdint.h>
+#include <assert.h>
 
 class SharedString/*: public std::string*/ {
 private:
    class RefStorage {
       private:
-        std::unordered_map</*AssetDefs::AssetKey*/uint32, std::string> refFromKeyTable;
-        std::unordered_map<std::string, /*AssetDefs::AssetKey*/uint32> keyFromRefTable;
-        static uint32 nextID;
+        std::unordered_map</*AssetDefs::AssetKey*/uint32_t, std::string> refFromKeyTable;
+        std::unordered_map<std::string, /*AssetDefs::AssetKey*/uint32_t> keyFromRefTable;
+        static uint32_t nextID;
       public:
-        std::string RefFromKey(const /*AssetDefs::AssetKey*/uint32 &key) {
+        std::string RefFromKey(const /*AssetDefs::AssetKey*/uint32_t &key) {
           auto refIter = refFromKeyTable.find(key);
           assert(refIter != refFromKeyTable.end());
           return refIter->second;
         }
-        /*AssetDefs::AssetKey*/uint32 KeyFromRef(const std::string &ref) {
+        /*AssetDefs::AssetKey*/uint32_t KeyFromRef(const std::string &ref) {
           auto keyIter = keyFromRefTable.find(ref);
           if (keyIter != keyFromRefTable.end()) {
             return keyIter->second;
           }
           else {
             // We've never seen this ref before, so make a new key
-            /*AssetDefs::AssetKey*/uint32 key = nextID++; // For the initial pass, key == ref
-            refFromKeyTable.insert(std::pair<uint32, std::string>(key, ref));
-            keyFromRefTable.insert(std::pair<std::string, uint32>(ref, key));
+            /*AssetDefs::AssetKey*/uint32_t key = nextID++; // For the initial pass, key == ref
+            refFromKeyTable.insert(std::pair<uint32_t, std::string>(key, ref));
+            keyFromRefTable.insert(std::pair<std::string, uint32_t>(ref, key));
             return key;
           }
         }
     };    
 
     static RefStorage refStore;
-    uint32 key;
+    uint32_t key;
 
     friend std::ostream & operator<<(std::ostream &out, const SharedString & ref);
     friend std::istream & operator>>(std::istream &in, SharedString & reff); 
@@ -64,6 +66,10 @@ private:
     SharedString(const std::string& str) {
         key = refStore.KeyFromRef(str);
     } 
+
+    SharedString(const char* s) {
+        key = refStore.KeyFromRef(s);
+    }
 
     bool empty() const {
         return 0 == key;
@@ -88,10 +94,6 @@ private:
     bool operator!=(const SharedString &other) const {
       return !(*this == other);
     }
-
-    // SharedString(const char* s) {
-
-    // }
 };
 
 
@@ -110,7 +112,7 @@ private:
       return in;
     }
 
-uint32 SharedString::RefStorage::nextID = 1;
+uint32_t SharedString::RefStorage::nextID = 1;
 SharedString::RefStorage SharedString::refStore;
 
 #endif

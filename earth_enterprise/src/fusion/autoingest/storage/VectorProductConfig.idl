@@ -17,6 +17,7 @@
 #include <khTypes.h>
 #include <khMetaData.h>
 #include <autoingest/.idl/storage/SourceConfig.h>
+#include <common/SharedString.h>
 
 #cppquote
 #include <autoingest/.idl/storage/SourceConfig_impl.h>

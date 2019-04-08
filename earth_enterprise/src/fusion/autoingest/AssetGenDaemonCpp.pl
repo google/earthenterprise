@@ -214,7 +214,7 @@ ${name}Factory::FindAndModify(const SharedString &ref_ $formaltypearg,
         return asset;
     } else {
         throw khException(kh::tr("$subtype '%2' doesn't exist")
-                          .arg(ref_));
+                          .arg(static_cast<std::string>(ref_)));
     }
 }
 
@@ -228,7 +228,7 @@ ${name}Factory::MakeNew(const SharedString &ref_ $formaltypearg,
     Mutable${name}AssetD asset = Find(ref_ $forwardtypearg);
     if (asset) {
         throw khException(kh::tr("$subtype '%2' already exists")
-                          .arg(ref_));
+                          .arg(static_cast<std::string>(ref_)));
     } else {
         return Make(ref_ $forwardtypearg,
                     $forwardinputarg

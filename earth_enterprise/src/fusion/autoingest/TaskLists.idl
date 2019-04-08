@@ -18,6 +18,7 @@
 #include <khTypes.h>
 #include <sys/types.h>
 #include <qstring.h>
+#include <common/SharedString.h>
 
 class TaskLists {
   class WaitingTask {

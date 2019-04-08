@@ -19,6 +19,7 @@
 #include <khMetaData.h>
 #include <autoingest/.idl/storage/LayerConfig.h>
 #include <searchtabs/.idl/SearchTabs.h>
+#include <common/SharedString.h>
 
 #cppquote
 #include <autoingest/.idl/storage/LayerConfig_impl.h>

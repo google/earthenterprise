@@ -37,7 +37,7 @@ class AssetStorage {
   std::string name;
   AssetDefs::Type type;
   std::string subtype;
-  std::vector<std::string> inputs;
+  std::vector<SharedString> inputs;
   khMetaData          meta;
   VersionList versions;
 
@@ -51,7 +51,7 @@ class AssetStorage {
   MakeStorage(const std::string &name_,
               AssetDefs::Type type_,
               const std::string &subtype_,
-              const std::vector<std::string> &inputs_,
+              const std::vector<SharedString> &inputs_,
               const khMetaData &meta_) {
     AssetStorage storage(name_, type_, subtype_,
                          inputs_, meta_,

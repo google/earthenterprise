@@ -16,6 +16,7 @@
 #include <map>
 #include <vector>
 #include <khTypes.h>
+#include <common/SharedString.h>
 
 class VolumeDefList
 {

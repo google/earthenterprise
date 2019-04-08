@@ -17,6 +17,7 @@
 #include <vector>
 #include <khTypes.h>
 #include <khMetaData.h>
+#include <SharedString.h>
 
 class KMLProjectConfig {
   class LayerItem {

@@ -18,6 +18,7 @@
 #include <vector>
 #include <qstring.h>
 #include <khTypes.h>
+#include <common/SharedString.h>
 
 class SnippetSet
 {
