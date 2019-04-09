@@ -73,7 +73,12 @@ protected:
     bool empty() const {
         return 0 == key;
     }
-    
+
+    SharedString & operator=(const std::string &str) {
+        key = refStore.KeyFromRef(str);
+        return *this;
+    }
+
     operator std::string() const {
         return refStore.RefFromKey(key);
     }
