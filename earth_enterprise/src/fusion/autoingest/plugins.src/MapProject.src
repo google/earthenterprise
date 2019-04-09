@@ -77,7 +77,7 @@ MapProjectAssetImplD::HandleEditRequest(const MapProjectEditRequest &req)
                       AssetDefs::FileExtension(AssetDefs::Map,
                                                kProjectSubtype));
   // will be filled in later
-  std::vector<std::string> inputs;
+  std::vector<SharedString> inputs;
 
   MutableMapProjectAssetD project =
     MapProjectFactory::FindMake(projname, inputs,

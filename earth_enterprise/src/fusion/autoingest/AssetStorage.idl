@@ -51,10 +51,10 @@ class AssetStorage {
   MakeStorage(const std::string &name_,
               AssetDefs::Type type_,
               const std::string &subtype_,
-              const std::vector<std::string> &inputs_,
+              const std::vector<SharedString> &inputs_,
               const khMetaData &meta_) {
     AssetStorage storage(name_, type_, subtype_,
-                         toSharedStringVec(inputs_), meta_,
+                         inputs_, meta_,
                          VersionList());
     return storage;
   }

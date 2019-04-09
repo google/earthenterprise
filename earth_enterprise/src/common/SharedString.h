@@ -120,8 +120,4 @@ inline std::vector<std::string> toStdStringVec(const std::vector<SharedString> &
   return std::vector<std::string>(sharedVec.begin(), sharedVec.end());
 }
 
-inline std::vector<SharedString> toSharedStringVec(const std::vector<std::string> &stdVec) {
-  return std::vector<SharedString>(stdVec.begin(), stdVec.end());
-}
-
 #endif
