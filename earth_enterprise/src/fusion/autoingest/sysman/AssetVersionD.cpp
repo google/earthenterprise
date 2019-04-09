@@ -55,7 +55,7 @@ AssetVersionImplD::StateChangeNotifier::AddParentsToNotify(const std::vector<std
 
 void
 AssetVersionImplD::StateChangeNotifier::AddListenersToNotify(const std::vector<SharedString> & listeners, AssetDefs::State inputState) {
-  for (const std::string & listener : listeners) {
+  for (const auto & listener : listeners) {
     // This ensures that the listener is in the list of listeners to notify
     InputStates & elem = listenersToNotify[listener];
     if (inputState == AssetDefs::Succeeded) {
@@ -114,8 +114,8 @@ AssetVersionImplD::StateChangeNotifier::NotifyListeners(
     std::shared_ptr<StateChangeNotifier> notifier) {
   notify(NFY_VERBOSE, "Iterate through listeners");
   int i = 1;
-  for (const std::pair<std::string, InputStates> & elem : listenersToNotify) {
-    const std::string & ref = elem.first;
+  for (const std::pair<SharedString, InputStates> & elem : listenersToNotify) {
+    const SharedString & ref = elem.first;
     const InputStates & states = elem.second;
     AssetVersionD assetVersion(ref);
     notify(NFY_PROGRESS, "Iteration: %d | Total Iterations: %s | listener: %s",
