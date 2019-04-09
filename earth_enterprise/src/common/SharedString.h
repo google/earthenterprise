@@ -116,7 +116,4 @@ inline std::istream & operator>>(std::istream &in, SharedString & str) {
   return in;
 }
 
-uint32_t SharedString::RefStorage::nextID = 1;
-SharedString::RefStorage SharedString::refStore;
-
 #endif

@@ -292,7 +292,7 @@ ${name}Factory::ReuseOrMakeAndUpdate(
     // end() could be called on different temporary objects
     std::vector<std::string> inputarg = $actualinputarg;
     // bind my input versions refs
-    std::vector<std::string> boundInputs;
+    std::vector<SharedString> boundInputs;
     boundInputs.reserve(inputarg.size());
     std::transform(inputarg.begin(), inputarg.end(), back_inserter(boundInputs),
                    ptr_fun(&AssetVersionRef::Bind));

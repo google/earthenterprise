@@ -115,7 +115,7 @@ class AssetHandle_  {
   // Same goes for move constructor and assignment.
 
   virtual ~AssetHandle_(void) { }
-  const std::string& Ref(void) const { return ref; }
+  const std::string Ref(void) const { return ref; }
   bool Valid(void) const;
   // This is better then overloading the bool operator as it
   // more closely emulates what a pointer's boolean operations does.
