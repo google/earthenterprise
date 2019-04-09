@@ -161,6 +161,11 @@ AssetVersionImplD::AssetVersionImplD(const std::vector<std::string> &inputs)
   AddInputAssetRefs(inputs);
 }
 
+AssetVersionImplD::AssetVersionImplD(const std::vector<SharedString> &inputs)
+    : AssetVersionImpl(), verholder(0)
+{
+  AddInputAssetRefs(toStdStringVec(inputs));
+}
 
 void
 AssetVersionImplD::AddInputAssetRefs(const std::vector<std::string> &inputs_)

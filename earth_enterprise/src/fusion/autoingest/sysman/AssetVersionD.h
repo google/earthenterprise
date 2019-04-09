@@ -88,6 +88,7 @@ class AssetVersionImplD : public virtual AssetVersionImpl
 
   // used when being contructed from an asset
   // these are the inputs I need to bind and attach to
+  AssetVersionImplD(const std::vector<std::string> &inputs);
   AssetVersionImplD(const std::vector<SharedString> &inputs);
 
   void AddInputAssetRefs(const std::vector<std::string> &inputs_);
