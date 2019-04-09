@@ -658,8 +658,12 @@ copy_files_to_target()
 	cp -f $TMPOPENLDAPPATH/ldap.conf.default $BASEINSTALLDIR_ETC/openldap
 	if [ $? -ne 0 ]; then error_on_copy=1; fi
 
-	# TODO: final step: copy uninstall script
-	# cp -f $TMPOPENLDAPPATH/<........> $INSTALL_LOG_DIR
+	cp -f $TMPINSTALLDIR/common/opt/google/uninstall_fusion.sh $INSTALL_LOG_DIR
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
+	cp -f $TMPINSTALLDIR/common/opt/google/common.sh $INSTALL_LOG_DIR
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
+	cp -f $TMPINSTALLDIR/common/opt/google/version.txt $BASEINSTALLDIR_OPT
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 
 	if [ $error_on_copy -ne 0 ]
 	then

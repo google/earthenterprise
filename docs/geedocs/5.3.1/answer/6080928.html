@@ -1,0 +1,145 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Configure GEE Server 5.1.0 for SSL/HTTPS</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 6080928.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/173056.html">Ports</a></p>
+<p class="sidebar-toc"><a href="../answer/172794.html">Server hostname</a></p>
+<p class="sidebar-toc"><a href="../answer/6080928.html" class="current-file">Configure GEE Server 5.1.0 for SSL/HTTPS</a></p>
+<p class="sidebar-toc"><a href="../answer/2848305.html">PostgreSQL authentication</a></p>
+<p class="sidebar-toc"><a href="../answer/2760544.html">Configure a GEE virtual host for LDAP authentication</a></p>
+<p class="sidebar-toc"><a href="../answer/172814.html">Set up HTTPS</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | GEE Server configuration and security</h1>
+<h2>Configure GEE Server 5.1.0 for SSL/HTTPS</h2>
+<p>Data transmission between Google Earth EC and GEE Server occurs on unencrypted HTTP by default. However, you may have strict requirements that secure HTTP (HTTPS) be used for all data communications. This article provides the steps to configure a GEE Server release 5.1.0 for use with HTTPS.</p>
+<p>We also include the steps required to generate a self-signed SSL certificate for your server but we recommend you obtain a third-party certificate from a CA (Certificate Authority). Third-party certificates generally are trusted and do not lead to any issues with warning messages or exceptions. However, you may want to set up your own self-signed certificates to get up and running quickly.</p>
+<ul>
+<li><a href="#requirements">Requirements</a></li>
+<li><a href="#gen_ssl_cert">Generate self-signed SSL certificate and key</a></li>
+<li><a href="#apply_cert">Apply third-party/CA-verified certificates and keys</a></li>
+<li><a href="#setup_ssl">Setting up SSL/HTTPS</a></li>
+<li><a href="#set_vh_ssl">Set your virtual host as a SSL server</a></li>
+</ul>
+<h2><a name="requirements"></a>Requirements</h2>
+<ul class="spaced-list">
+<li>Google Earth Enterprise Server 5.1.0</li>
+<li>A third-party or self-signed SSL certificate. Instructions for generating the latter are provided in the following setup procedure.</li>
+</ul>
+<h2><a name="gen_ssl_cert"></a>Generate self-signed SSL certificate and key</h2>
+<p>A self-signed server certificate is generated for demonstration purposes in the following steps.  If you’re using CA-verified server certificates and keys, see the following section, <a href="#apply_cert">Apply third-party/CA-verified certificates and keys</a>.
+
+<h3>To generate a self-signed SSL certificate and key:</h3>
+<ol class="spaced-list">
+<li>Change directory to the default certificate folder:
+<p><code>cd /opt/google/gehttpd/conf</code></p>
+<p>The default SSL certificate and key files generated in the following steps and used in this example virtual host are <code>/opt/google/gehttpd/conf/server.crt</code> and <code>/opt/google/gehttpd/conf/server.key</code> respectively.</p>
+<div class="tip">
+Your certificate location and names may be different but make sure that they match the entries in the <code>httpd-ssl.conf</code> file, as shown in <a href="#set_vh_ssl">Set your virtual host as a SSL server</a>.
+</div>
+</li>
+<li>Generate the server key:
+<p><code>openssl genrsa –out server.key 1024</code></p>
+<div class="tip">
+It is recommended that you do not use the <code>–des3</code> option, which adds password protection when a key is created. While this adds an extra layer of security, it also requires manual input of the password should your system accidentally power down and restart, for example. Instead, generate the server key without a password or strip out the password with <code>openssl rsa -in server.key -out myservername_nopasswd.key</code> and use that instead.
+</div>
+</li>
+<li>Generate the server certificate based on the server key:
+<p><code>openssl req –new –x509 –days 365 –key server.key –out server.crt</code></p>
+<div class="tip">
+Include as much information into the certificate as desired or accept the defaults, that is, Country, State, City, Company Name, Department, Server Name, Administrator email address.
+</div>
+</li>
+<li>Test the server certificate and verify all information is correct:
+<p><code>openssl x509 -noout -text -in server.crt</code></p>
+</li>
+</ol>
+<hr>
+<h2><a name="apply_cert"></a>Apply third-party/CA-verified certificates and keys</h2>
+<p>If you are using third-party/CA-verified certificates and keys, we recommend renaming them to use the default names for the virtual host configuration:</p>
+<ol class="spaced-list">
+<li>Change your third-party server certificate file name to <code>SSLCertificateFile /opt/google/gehttpd/conf/server.crt</code>
+</li>
+<li>Change your third-party/CA verified key file name to <code>SSLCertificateKeyFile /opt/google/gehttpd/conf/server.key</code>
+</li>
+</ol>
+<p>Optionally, if you choose not to use the default certificate and key names, you’ll need to modify the entries in <code>/opt/google/gehttpd/conf/extra/httpd-ssl.conf</code> with the custom names accordingly, listed under <code># Server Certificate</code> and <code># Server Private Key</code> respectively.</p>
+<h2><a name="setup_ssl"></a>Setting up SSL/HTTPS</h2>
+<p>In this example procedure, you perform the following steps:</p>
+<ul>
+<li>Add a virtual host <code>ssl</code></li>
+<li>Set up the Apache server configuration to serve virtual hosts over HTTPS.</li>
+<li>Restart GEE Server</li>
+</ul>
+<div class="note"><p><strong>Note:</strong> The virtual host name “secure” is reserved for GEE Server use.
+</p></div>
+<h3>To add a virtual host for HTTPS serving:</h3>
+<ol class="spaced-list">
+<li>Register your new virtual host using the <code>geserveradmin</code> command. See <a href="../answer/6013604.html">Manage virtual hosts</a>.
+<p><code>geserveradmin –-addvh --ssl</code>
+<p>The <strong>--ssl</strong> option registers the newly created virtual host by creating a configuration file with the naming convention: <strong>_host.location_ssl</strong> located in the path <code>&lt;Apache path&gt;/conf.d/virtual_servers/</code>.</p>
+<p>For example, to create a location-based virtual host with a configuration file that specifies SSL:</p>
+<pre>
+# /opt/google/bin$ ./geserveradmin --addvh test_ssl --ssl
+Registering Virtual Host: test_ssl ...
+Virtual Host registration successful.
+Location-based Virtual Host created:
+
+<apache path="">/conf.d/virtual_servers/test_ssl_host.location_ssl
+</apache></pre>
+</p></li>
+<li>The newly created virtual host configuration file in this example, <code>/opt/google/gehttpd/conf.d/virtual_servers/test_ssl_host.location_ssl</code>, includes the <code>&lt;Location&gt;</code> directives for SSL, in this case, <code>test_ssl</code>.
+<p><code>
+&lt;Location “/test_ssl_host/*”&gt;<br/>
+    SetHandler fdb-handler<br/>
+    SSLRequireSSL<br/>
+    SSLVerifyClient none<br/>
+&lt;/Location&gt;</code>
+</p>
+<div class="tip">
+Use of the <code>SSLRequireSSL</code> directive prevents all HTTP requests that don’t use SSL, thereby protecting your data from all but HTTPS requests. See <a href="http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslrequiressl" target="_blank">Apache HTTP Server Version 2.2 Documentation</a> for more information.
+</div>
+<div class="tip">
+Use of the <code>SSLVerifyClient</code> directive specifies the level of certificate verification required for the client. See <a href="http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslverifyclient" target="_blank">Apache HTTP Server Version 2.2 Documentation</a> for more information.
+</div>
+</li>
+</ol>
+<hr>
+<h2><a name="set_vh_ssl"></a>Set your virtual host as a SSL server</h2>
+<div class="tip">
+All commands must be executed as the root user unless otherwise specified.
+</div>
+<h3>To set your virtual host as a SSL server:</h3>
+<ol class="spaced-list">
+<li>Edit the Apache HTTP server configuration file, <code>/opt/google/gehttpd/conf/gehttpd.conf</code> file, as follows:
+<ol class="spaced-list">
+<li>Uncomment and change <code>ServerName www.example.com</code> to <code>ServerName <em>MyServerName</em></code>, where <code><em>MyServerName</em></code> is the real address users would enter in the network.
+</li>
+<li>Check that <code>Include conf/extra/httpd-ssl.conf</code> appears and uncomment it. Note that this <code>Include</code> for the <code>httpd-ssl.conf</code> configuration is commented out by default as it should only be loaded if you serve a virtual host over HTTPS.
+</li>
+<li>Save and close the <code>/opt/google/gehttpd/conf/gehttpd.conf</code> file.</li>
+</ol>
+</li>
+<li>Edit the Apache server configuration file, <code>/opt/google/gehttpd/conf/extra/httpd-ssl.conf</code> file, which provides SSL support. It contains the configuration directives to instruct the server how to serve pages over an HTTPS connection. For detailed information about these directives see <a href="http://httpd.apache.org/docs/2.2/mod/mod_ssl.html" target="_blank">Apache 2.2 documentation</a>.
+<ol class="spaced-list">
+<li>Ensure the <code>ServerName www.example.com</code> is uncommented and matches that defined in the <code>/opt/google/gehttpd/conf/gehttpd.conf</code> file, that is, the alias or real address users would enter in the network.
+</li>
+<li>Check that the SSL virtual hosts configuration file location is already included in the <br/> <code>&lt;VirtualHost _default_:443&gt;</code> list of directives:
+<p><code>&lt;VirtualHost_default_:443&gt;<br/>
+    Include conf.d/virtual_servers/*.location_ssl</code></p>
+</li>
+<li>Save and close the <code>/opt/google/gehttpd/conf/extra/httpd-ssl.conf</code> file.     </li>
+</ol>
+<li>Restart the Google Earth Enterprise Server software:
+<p><code>/etc/init.d/geserver restart</code></p>
+</li>
+<li>Publish a database to the SSL/HTTPS virtual host.</li>
+<li>Test the connections with Google Earth Enterprise Client for HTTP and HTTPS-based virtual servers.</li>
+</li></ol>
+<hr>
+</hr></hr></hr></p><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>
