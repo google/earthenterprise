@@ -596,7 +596,7 @@ AssetVersionImplD::InputVersionGuard::InputVersionGuard
     impl(ver.operator->())
 {
   if (!operator bool()) {
-    impl->verholder = new InputVersionHolder(impl->inputs);
+    impl->verholder = new InputVersionHolder(toStdStringVec(impl->inputs));
     khRefGuard<InputVersionHolder>::operator=(khRefGuardFromNew(impl->verholder));
   }
 }
@@ -607,7 +607,7 @@ AssetVersionImplD::InputVersionGuard::InputVersionGuard
     impl(impl_)
 {
   if (!operator bool()) {
-    impl->verholder = new InputVersionHolder(impl->inputs);
+    impl->verholder = new InputVersionHolder(toStdStringVec(impl->inputs));
     khRefGuard<InputVersionHolder>::operator=(khRefGuardFromNew(impl->verholder));
   }
 }
@@ -623,7 +623,7 @@ AssetVersionImplD::InputVersionGuard::InputVersionGuard
     if (inputvers.size()) {
       impl->verholder = new InputVersionHolder(inputvers);
     } else {
-      impl->verholder = new InputVersionHolder(impl->inputs);
+      impl->verholder = new InputVersionHolder(toStdStringVec(impl->inputs));
     }
     khRefGuard<InputVersionHolder>::operator=(khRefGuardFromNew(impl->verholder));
   }
