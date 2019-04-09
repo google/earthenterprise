@@ -155,25 +155,18 @@ AssetVersionImplD::Load(const std::string &boundref)
 
 // since AssetVersionImpl is a virtual base class
 // my derived classes will initialize it directly
-AssetVersionImplD::AssetVersionImplD(const std::vector<std::string> &inputs)
+AssetVersionImplD::AssetVersionImplD(const std::vector<SharedString> &inputs)
     : AssetVersionImpl(), verholder(0)
 {
   AddInputAssetRefs(inputs);
 }
 
-AssetVersionImplD::AssetVersionImplD(const std::vector<SharedString> &inputs)
-    : AssetVersionImpl(), verholder(0)
-{
-  AddInputAssetRefs(toStdStringVec(inputs));
-}
-
 void
-AssetVersionImplD::AddInputAssetRefs(const std::vector<std::string> &inputs_)
+AssetVersionImplD::AddInputAssetRefs(const std::vector<SharedString> &inputs_)
 {
-  for (std::vector<std::string>::const_iterator i = inputs_.begin();
-       i != inputs_.end(); ++i) {
+  for (const auto &i : inputs) {
     // Add myself to the input's list of listeners.
-    MutableAssetVersionD input(*i);
+    MutableAssetVersionD input(i);
 
     // NOTE: we don't need to put listeners to asset versions of any type
     // which state is 'Succeeded'. A state is 'Succeeded', so the state

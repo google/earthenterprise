@@ -88,10 +88,9 @@ class AssetVersionImplD : public virtual AssetVersionImpl
 
   // used when being contructed from an asset
   // these are the inputs I need to bind and attach to
-  AssetVersionImplD(const std::vector<std::string> &inputs);
   AssetVersionImplD(const std::vector<SharedString> &inputs);
 
-  void AddInputAssetRefs(const std::vector<std::string> &inputs_);
+  void AddInputAssetRefs(const std::vector<SharedString> &inputs_);
   AssetDefs::State StateByInputs(bool *blockersAreOffline = 0,
                                  uint32 *numWaiting = 0) const;
   template<bool propagate = true>
