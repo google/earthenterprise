@@ -54,7 +54,7 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   class StateChangeNotifier {
     private:
       std::set<std::string> parentsToNotify;
-      std::map<std::string, InputStates> listenersToNotify;
+      std::map<SharedString, InputStates> listenersToNotify;
       void NotifyParents(std::shared_ptr<StateChangeNotifier>);
       void NotifyListeners(std::shared_ptr<StateChangeNotifier>);
     public:
@@ -62,7 +62,7 @@ class AssetVersionImplD : public virtual AssetVersionImpl
       StateChangeNotifier() = default;
       ~StateChangeNotifier();
       void AddParentsToNotify(const std::vector<std::string> &);
-      void AddListenersToNotify(const std::vector<std::string> &, AssetDefs::State);
+      void AddListenersToNotify(const std::vector<SharedString> &, AssetDefs::State);
   };
 
   static khRefGuard<AssetVersionImplD> Load(const std::string &boundref);

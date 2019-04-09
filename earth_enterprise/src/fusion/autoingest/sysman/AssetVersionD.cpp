@@ -54,7 +54,7 @@ AssetVersionImplD::StateChangeNotifier::AddParentsToNotify(const std::vector<std
 }
 
 void
-AssetVersionImplD::StateChangeNotifier::AddListenersToNotify(const std::vector<std::string> & listeners, AssetDefs::State inputState) {
+AssetVersionImplD::StateChangeNotifier::AddListenersToNotify(const std::vector<SharedString> & listeners, AssetDefs::State inputState) {
   for (const std::string & listener : listeners) {
     // This ensures that the listener is in the list of listeners to notify
     InputStates & elem = listenersToNotify[listener];
@@ -488,10 +488,9 @@ AssetVersionImplD::OkToClean(std::vector<std::string> *wouldbreak) const
     }
   }
 
-  // If I have succesfull listeners that depend on me, then my cleaning woul
+  // If I have succesfull listeners that depend on me, then my cleaning would
   // break them
-  for (std::vector<std::string>::const_iterator l = listeners.begin();
-       l != listeners.end(); ++l) {
+  for (auto l = listeners.begin(); l != listeners.end(); ++l) {
     AssetVersionD listener(*l);
     if (listener) {
       if (((listener->state != AssetDefs::Offline) &&
