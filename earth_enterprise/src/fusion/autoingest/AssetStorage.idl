@@ -53,9 +53,8 @@ class AssetStorage {
               const std::string &subtype_,
               const std::vector<std::string> &inputs_,
               const khMetaData &meta_) {
-    std::vector<SharedString> sharedInputs(inputs_.begin(), inputs_.end());
     AssetStorage storage(name_, type_, subtype_,
-                         sharedInputs, meta_,
+                         toSharedStringVec(inputs_), meta_,
                          VersionList());
     return storage;
   }

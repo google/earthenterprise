@@ -485,21 +485,21 @@ AssetVersionImplD::OkToClean(std::vector<std::string> *wouldbreak) const
 
   // If I have succesfull listeners that depend on me, then my cleaning would
   // break them
-  for (auto l = listeners.begin(); l != listeners.end(); ++l) {
-    AssetVersionD listener(*l);
+  for (const auto &l : listeners) {
+    AssetVersionD listener(l);
     if (listener) {
       if (((listener->state != AssetDefs::Offline) &&
            (listener->state != AssetDefs::Bad)) &&
           listener->OfflineInputsBreakMe()) {
         if (wouldbreak) {
-          wouldbreak->push_back(*l);
+          wouldbreak->push_back(l);
         } else {
           return false;
         }
       }
     } else {
       notify(NFY_WARN, "'%s' has broken listener '%s'",
-             GetRef().c_str(), l->c_str());
+             GetRef().c_str(), l.c_str());
     }
   }
 
@@ -1005,15 +1005,15 @@ LeafAssetVersionImplD::DoClean(const std::shared_ptr<StateChangeNotifier> caller
   SetState(AssetDefs::Offline, notifier);
 
   // now try to clean my inputs too
-  for (auto i = inputs.begin(); i != inputs.end(); ++i) {
-    AssetVersionD input(*i);
+  for (const auto &i : inputs) {
+    AssetVersionD input(i);
     if (input) {
       if (input->OkToCleanAsInput()) {
-        MutableAssetVersionD(*i)->DoClean(notifier);
+        MutableAssetVersionD(i)->DoClean(notifier);
       }
     } else {
       notify(NFY_WARN, "'%s' has broken input '%s'",
-             GetRef().c_str(), i->c_str());
+             GetRef().c_str(), i.c_str());
     }
   }
 }
