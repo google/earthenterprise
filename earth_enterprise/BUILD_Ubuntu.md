@@ -43,3 +43,7 @@ sudo apt-get install \
     python2.7-dev python-git \
     scons shunit2 swig xorg-dev zlib1g-dev
 ```
+For Ubuntu 14, in addition of the above command, run this extra one:
+```
+sudo apt install libboost-all-dev
+```
