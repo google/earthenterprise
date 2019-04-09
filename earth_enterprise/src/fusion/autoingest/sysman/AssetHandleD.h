@@ -23,6 +23,7 @@
 #include <khException.h>
 #include <khFileUtils.h>
 #include "common/khCppStd.h"
+#include "common/SharedString.h"
 
 
 /******************************************************************************
@@ -303,6 +304,8 @@ class MutableAssetHandleD_ : public virtual Base_ {
       // Only call the common (virtually inherited) base class with the initializtion state.
       // It's the only one that has state anyway.  Also, explicitly calling the virtual base
       // class puts an explicit check to ensure BBase a virtural base class of this class.
+      BBase(ref_), Base() { }
+  MutableAssetHandleD_(const SharedString &ref_) :
       BBase(ref_), Base() { }
 
   // you should be able to create a mutable handle from the non-mutable
