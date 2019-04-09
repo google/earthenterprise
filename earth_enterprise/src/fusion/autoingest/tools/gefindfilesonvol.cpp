@@ -268,8 +268,8 @@ FindFilesOnVol(const std::string &verref,
     }
   }
 
-  for (auto input = version->inputs.begin(); input != version->inputs.end(); ++input) {
-    FindFilesOnVol(*input, volset, seen,
+  for (const auto &input : version->inputs) {
+    FindFilesOnVol(input, volset, seen,
                    found, currentStack,
                    count, interval);
   }

@@ -127,7 +127,7 @@ class AssetVersionImplD : public virtual AssetVersionImpl
    public:
     std::vector<AssetVersion> inputvers;
 
-    InputVersionHolder(const std::vector<std::string> &inputrefs);
+    InputVersionHolder(const std::vector<SharedString> &inputrefs);
     InputVersionHolder(const std::vector<AssetVersion> &inputvers_);
   };
 

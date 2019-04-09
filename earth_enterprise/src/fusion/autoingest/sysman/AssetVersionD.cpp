@@ -485,21 +485,21 @@ AssetVersionImplD::OkToClean(std::vector<std::string> *wouldbreak) const
 
   // If I have succesfull listeners that depend on me, then my cleaning would
   // break them
-  for (auto l = listeners.begin(); l != listeners.end(); ++l) {
-    AssetVersionD listener(*l);
+  for (const auto &l : listeners) {
+    AssetVersionD listener(l);
     if (listener) {
       if (((listener->state != AssetDefs::Offline) &&
            (listener->state != AssetDefs::Bad)) &&
           listener->OfflineInputsBreakMe()) {
         if (wouldbreak) {
-          wouldbreak->push_back(*l);
+          wouldbreak->push_back(l);
         } else {
           return false;
         }
       }
     } else {
       notify(NFY_WARN, "'%s' has broken listener '%s'",
-             GetRef().c_str(), l->c_str());
+             GetRef().c_str(), l.c_str());
     }
   }
 
@@ -570,12 +570,11 @@ AssetVersionImplD::Clean(void)
 
 
 AssetVersionImplD::InputVersionHolder::InputVersionHolder
-(const std::vector<std::string> &inputrefs)
+(const std::vector<SharedString> &inputrefs)
 {
   inputvers.reserve(inputrefs.size());
-  for (std::vector<std::string>::const_iterator i = inputrefs.begin();
-       i != inputrefs.end(); ++i) {
-    inputvers.push_back(*i);
+  for (const auto &i : inputrefs) {
+    inputvers.push_back(i);
   }
 }
 
@@ -591,7 +590,7 @@ AssetVersionImplD::InputVersionGuard::InputVersionGuard
     impl(ver.operator->())
 {
   if (!operator bool()) {
-    impl->verholder = new InputVersionHolder(toStdStringVec(impl->inputs));
+    impl->verholder = new InputVersionHolder(impl->inputs);
     khRefGuard<InputVersionHolder>::operator=(khRefGuardFromNew(impl->verholder));
   }
 }
@@ -602,7 +601,7 @@ AssetVersionImplD::InputVersionGuard::InputVersionGuard
     impl(impl_)
 {
   if (!operator bool()) {
-    impl->verholder = new InputVersionHolder(toStdStringVec(impl->inputs));
+    impl->verholder = new InputVersionHolder(impl->inputs);
     khRefGuard<InputVersionHolder>::operator=(khRefGuardFromNew(impl->verholder));
   }
 }
@@ -618,7 +617,7 @@ AssetVersionImplD::InputVersionGuard::InputVersionGuard
     if (inputvers.size()) {
       impl->verholder = new InputVersionHolder(inputvers);
     } else {
-      impl->verholder = new InputVersionHolder(toStdStringVec(impl->inputs));
+      impl->verholder = new InputVersionHolder(impl->inputs);
     }
     khRefGuard<InputVersionHolder>::operator=(khRefGuardFromNew(impl->verholder));
   }
@@ -1005,15 +1004,15 @@ LeafAssetVersionImplD::DoClean(const std::shared_ptr<StateChangeNotifier> caller
   SetState(AssetDefs::Offline, notifier);
 
   // now try to clean my inputs too
-  for (auto i = inputs.begin(); i != inputs.end(); ++i) {
-    AssetVersionD input(*i);
+  for (const auto &i : inputs) {
+    AssetVersionD input(i);
     if (input) {
       if (input->OkToCleanAsInput()) {
-        MutableAssetVersionD(*i)->DoClean(notifier);
+        MutableAssetVersionD(i)->DoClean(notifier);
       }
     } else {
       notify(NFY_WARN, "'%s' has broken input '%s'",
-             GetRef().c_str(), i->c_str());
+             GetRef().c_str(), i.c_str());
     }
   }
 }
