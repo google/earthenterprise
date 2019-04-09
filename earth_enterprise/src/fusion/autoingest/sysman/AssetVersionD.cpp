@@ -1010,8 +1010,7 @@ LeafAssetVersionImplD::DoClean(const std::shared_ptr<StateChangeNotifier> caller
   SetState(AssetDefs::Offline, notifier);
 
   // now try to clean my inputs too
-  for (std::vector<std::string>::const_iterator i = inputs.begin();
-       i != inputs.end(); ++i) {
+  for (auto i = inputs.begin(); i != inputs.end(); ++i) {
     AssetVersionD input(*i);
     if (input) {
       if (input->OkToCleanAsInput()) {
@@ -1321,8 +1320,7 @@ CompositeAssetVersionImplD::DoClean(const std::shared_ptr<StateChangeNotifier> c
   }
 
   // now try to clean my inputs too
-  for (std::vector<std::string>::const_iterator i = inputs.begin();
-       i != inputs.end(); ++i) {
+  for (auto i = inputs.begin(); i != inputs.end(); ++i) {
     AssetVersionD input(*i);
     if (input) {
       if (input->OkToCleanAsInput()) {

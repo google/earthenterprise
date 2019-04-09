@@ -113,8 +113,7 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage {
 
   template <class outIter>
   outIter GetInputs(outIter oi) const {
-    for (auto i = inputs.begin();
-         i != inputs.end(); ++i) {
+    for (auto i = inputs.begin(); i != inputs.end(); ++i) {
       oi++ = *i;
     }
     return oi;

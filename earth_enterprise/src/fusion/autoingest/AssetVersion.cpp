@@ -43,8 +43,7 @@ AssetVersionImpl::WorkingDir(const AssetVersionRef &ref)
 void
 AssetVersionImpl::GetInputFilenames(std::vector<std::string> &out) const
 {
-  for (auto i = inputs.begin();
-       i != inputs.end(); ++i) {
+  for (auto i = inputs.begin(); i != inputs.end(); ++i) {
     AssetVersion(*i)->GetOutputFilenames(out);
   }
 }

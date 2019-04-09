@@ -217,7 +217,7 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
         krmp =
           KRMPFactory::ReuseOrMakeAndUpdateSubAsset
           (assetRef, type, "maskproduct",
-           makevec2(krp->GetRef(), inputs[1]),
+           makevec2(krp->GetRef(), inputs[1].toString()),
            khMetaData(),
            KRMPConfig(config.krp_config_.overridesrs,
                       config.krp_config_.useMercatorProjection),

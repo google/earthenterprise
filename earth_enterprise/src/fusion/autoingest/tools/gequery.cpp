@@ -287,9 +287,7 @@ void DisplayVersionDependencies(const AssetVersion &version,
            statestr.c_str());
     ++indent;
     if (version->inputs.size()) {
-      for (std::vector<std::string>::const_iterator input =
-             version->inputs.begin();
-           input != version->inputs.end(); ++input) {
+      for (auto input = version->inputs.begin(); input != version->inputs.end(); ++input) {
         DisplayVersionDependencies(AssetVersion(*input), indent,
                                    maxdepth,
                                    seen, "< ");
@@ -348,16 +346,12 @@ void DisplayBlockerDependencies(const AssetVersion &version,
 
       if (version->inputs.size()) {
         if (myskipext.empty()) {
-          for (std::vector<std::string>::const_iterator input =
-                 version->inputs.begin();
-               input != version->inputs.end(); ++input) {
+          for (auto input = version->inputs.begin(); input != version->inputs.end(); ++input) {
             DisplayBlockerDependencies(AssetVersion(*input),
                                        seen, myskipext);
           }
         } else {
-          for (std::vector<std::string>::const_iterator input =
-                 version->inputs.begin();
-               input != version->inputs.end(); ++input) {
+          for (auto input = version->inputs.begin(); input != version->inputs.end(); ++input) {
             if (!EndsWith(*input, myskipext)) {
               DisplayBlockerDependencies(AssetVersion(*input),
                                          seen, myskipext);
@@ -394,9 +388,7 @@ void DisplayRasterProjectProgress(const AssetVersion &version,
     // be good. (RasterProject has DelayedBuildChildren)
   } else {
     // We don't have children, so all me need to look at is our inputs
-    for (std::vector<std::string>::const_iterator input =
-           version->inputs.begin();
-         input != version->inputs.end(); ++input) {
+    for (auto input = version->inputs.begin(); input != version->inputs.end(); ++input) {
       // TODO: implementation.
     }
   }

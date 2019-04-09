@@ -386,7 +386,7 @@ MercatorRasterProductAssetVersionImplD::UpdateChildren(void)
   MutableCombinedRPAssetVersionD crp =
     CombinedRPFactory::FindMakeAndUpdateSubAsset
       (assetRef, type, kCombinedRPSubtype,
-       inputs,
+       toStdStringVec(inputs),
        khMetaData(),
        CombinedRPConfig(num_sources, config),
        guard->inputvers);
