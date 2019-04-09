@@ -44,7 +44,7 @@ AssetVersionImplD::StateChangeNotifier::GetNotifier(
 }
 
 void
-AssetVersionImplD::StateChangeNotifier::AddParentsToNotify(const std::vector<std::string> & parents) {
+AssetVersionImplD::StateChangeNotifier::AddParentsToNotify(const std::vector<SharedString> & parents) {
   std::copy(parents.begin(), parents.end(), std::inserter(parentsToNotify, parentsToNotify.end()));
 }
 
@@ -81,7 +81,7 @@ AssetVersionImplD::StateChangeNotifier::NotifyParents(
     std::shared_ptr<StateChangeNotifier> notifier) {
   notify(NFY_VERBOSE, "Iterate through parents");
   int i = 1;
-  for (const std::string & ref : parentsToNotify) {
+  for (auto ref : parentsToNotify) {
     AssetVersionD assetVersion(ref);
     notify(NFY_PROGRESS, "Iteration: %d | Total Iterations: %s | parent: %s",
            i,
@@ -366,7 +366,7 @@ AssetVersionImplD::PropagateProgress(void)
 {
   notify(NFY_VERBOSE, "PropagateProgress(%s): %s",
          ToString(progress).c_str(), GetRef().c_str());
-  for (std::vector<std::string>::const_iterator p = parents.begin();
+  for (auto p = parents.begin();
        p != parents.end(); ++p) {
     AssetVersionD parent(*p);
     if (parent) {
@@ -465,7 +465,7 @@ AssetVersionImplD::OkToClean(std::vector<std::string> *wouldbreak) const
 {
   // --- check that it's ok to clean me ---
   // If I have a successful parent, then my cleaning would break him
-  for (std::vector<std::string>::const_iterator p = parents.begin();
+  for (auto p = parents.begin();
        p != parents.end(); ++p) {
     AssetVersionD parent(*p);
     if (parent) {
