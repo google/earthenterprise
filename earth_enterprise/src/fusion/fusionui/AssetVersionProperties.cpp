@@ -84,7 +84,7 @@ AssetChildItem::setOpen(bool open)
     // add my children
     AssetVersion ver(ref);
     if ( !ver->IsLeaf() ) {
-      for ( std::vector<std::string>::const_iterator it =
+      for ( auto it =
               ver->children.begin();
             it != ver->children.end(); ++it ) {
         AssetVersion child(*it);
@@ -94,7 +94,7 @@ AssetChildItem::setOpen(bool open)
       }
     }
 
-    for ( std::vector<std::string>::const_iterator it = ver->inputs.begin();
+    for ( auto it = ver->inputs.begin();
           it != ver->inputs.end(); ++it ) {
       AssetVersion input(*it);
       // AssetChildItem *item =
