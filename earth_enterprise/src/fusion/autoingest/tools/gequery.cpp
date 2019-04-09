@@ -384,8 +384,8 @@ void DisplayRasterProjectProgress(const AssetVersion &version,
     // be good. (RasterProject has DelayedBuildChildren)
   } else {
     // We don't have children, so all me need to look at is our inputs
-    for (const auto &input : version->inputs) {
+    //for (const auto &input : version->inputs) {
       // TODO: implementation.
-    }
+    //}
   }
 }
