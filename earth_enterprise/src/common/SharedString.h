@@ -50,13 +50,12 @@ protected:
             return key;
           }
         }
-    };    
+    };
 
     static RefStorage refStore;
     uint32_t key;
 
     friend std::ostream & operator<<(std::ostream &out, const SharedString & ref);
-    friend std::istream & operator>>(std::istream &in, SharedString & reff); 
   public:
     SharedString(): key(0) {}
 
@@ -104,16 +103,6 @@ protected:
 inline std::ostream & operator<<(std::ostream &out, const SharedString & str) {
   out << SharedString::refStore.RefFromKey(str.key);
   return out;
-}
-
-inline std::istream & operator>>(std::istream &in, SharedString & str) {
-  // Not entirely sure if the best thing to do here is to add a new ref to
-  // the RefStorage as below or to add a function to re-map a key to a ref
-  // if the current key is non-zero
-  std::string ref;
-  in >> ref;
-  str.key = SharedString::refStore.KeyFromRef(ref);
-  return in;
 }
 
 #endif
