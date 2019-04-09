@@ -1303,7 +1303,7 @@ CompositeAssetVersionImplD::DoClean(const std::shared_ptr<StateChangeNotifier> c
       }
     } else {
       notify(NFY_WARN, "'%s' has broken child '%s'",
-             GetRef().c_str(), c->c_str());
+             GetRef().c_str(), c.c_str());
     }
   }
 
