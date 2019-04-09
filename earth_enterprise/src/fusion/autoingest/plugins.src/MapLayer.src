@@ -32,8 +32,7 @@ class MapLayerAssetVersionImpl {
 std::vector<std::string> MapLayerAssetVersionImpl::GetPOIFiles(void) const {
   std::vector<std::string> results;
   if (children.size() > 2) {
-    for (auto iter = children.begin() + 2;
-         iter != children.end(); ++iter ) {
+    for (auto iter = children.begin() + 2; iter != children.end(); ++iter ) {
       AssetVersion child(*iter);
       if (child->subtype == "MapPOI") {
         results.push_back(child->GetOutputFilename(0));

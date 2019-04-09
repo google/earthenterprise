@@ -1093,9 +1093,8 @@ CompositeAssetVersionImplD::ComputeState(void) const
   uint numblocking = 0;
   uint numinprog = 0;
   uint numfailed = 0;
-  for (std::vector<std::string>::const_iterator c = children.begin();
-       c != children.end(); ++c) {
-    AssetVersion child(*c);
+  for (const auto &c : children) {
+    AssetVersion child(c);
     if (child) {
       AssetDefs::State cstate = child->state;
       if (cstate == AssetDefs::Succeeded) {
@@ -1296,12 +1295,11 @@ CompositeAssetVersionImplD::DoClean(const std::shared_ptr<StateChangeNotifier> c
   SetState(AssetDefs::Offline, notifier);
 
   // now try to clean my children
-  for (std::vector<std::string>::const_iterator c = children.begin();
-       c != children.end(); ++c) {
-    AssetVersionD child(*c);
+  for (const auto &c : children) {
+    AssetVersionD child(c);
     if (child) {
       if ((child->state != AssetDefs::Offline) && child->OkToClean()) {
-        MutableAssetVersionD(*c)->DoClean(notifier);
+        MutableAssetVersionD(c)->DoClean(notifier);
       }
     } else {
       notify(NFY_WARN, "'%s' has broken child '%s'",
@@ -1310,15 +1308,15 @@ CompositeAssetVersionImplD::DoClean(const std::shared_ptr<StateChangeNotifier> c
   }
 
   // now try to clean my inputs too
-  for (auto i = inputs.begin(); i != inputs.end(); ++i) {
-    AssetVersionD input(*i);
+  for (const auto &i : inputs) {
+    AssetVersionD input(i);
     if (input) {
       if (input->OkToCleanAsInput()) {
-        MutableAssetVersionD(*i)->DoClean(notifier);
+        MutableAssetVersionD(i)->DoClean(notifier);
       }
     } else {
       notify(NFY_WARN, "'%s' has broken input '%s'",
-             GetRef().c_str(), i->c_str());
+             GetRef().c_str(), i.c_str());
     }
   }
 }

@@ -294,10 +294,8 @@ void DisplayVersionDependencies(const AssetVersion &version,
       }
     }
     if (!version->IsLeaf()) {
-      for (std::vector<std::string>::const_iterator child =
-             version->children.begin();
-           child != version->children.end(); ++child) {
-        DisplayVersionDependencies(AssetVersion(*child), indent,
+      for (const auto &child : version->children) {
+        DisplayVersionDependencies(AssetVersion(child), indent,
                                    maxdepth,
                                    seen, "+ ");
       }
@@ -360,10 +358,8 @@ void DisplayBlockerDependencies(const AssetVersion &version,
         }
       }
       if (!version->IsLeaf()) {
-        for (std::vector<std::string>::const_iterator child =
-               version->children.begin();
-             child != version->children.end(); ++child) {
-          DisplayBlockerDependencies(AssetVersion(*child),
+        for (const auto &child : version->children) {
+          DisplayBlockerDependencies(AssetVersion(child),
                                      seen, myskipext);
         }
       }

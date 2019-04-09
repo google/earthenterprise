@@ -274,10 +274,8 @@ FindFilesOnVol(const std::string &verref,
                    count, interval);
   }
   if (!version->IsLeaf()) {
-    for (std::vector<std::string>::const_iterator child =
-           version->children.begin();
-         child != version->children.end(); ++child) {
-      FindFilesOnVol(*child, volset, seen,
+    for (const auto &child: version->children) {
+      FindFilesOnVol(child, volset, seen,
                      found, currentStack,
                      count, interval);
     }

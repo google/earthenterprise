@@ -58,9 +58,8 @@ CompositeAssetVersionImpl::GetOutputFilenames(std::vector<std::string> &out) con
 {
   // We only have outputs when we are succeeded, bad or offline
   if (state & (AssetDefs::Succeeded | AssetDefs::Bad | AssetDefs::Offline)) {
-    for (auto c = children.begin();
-         c != children.end(); ++c) {
-      AssetVersion(*c)->GetOutputFilenames(out);
+    for (const auto &c : children) {
+      AssetVersion(c)->GetOutputFilenames(out);
     }
   }
 }

@@ -207,16 +207,14 @@ ProjectedMapProjectAssetVersionImplD::UpdateChildren(void)
                                     geindex::TypedEntry::VectorMapsRaster));
         geindexConfig.layers_.back().levels_.reserve(
             layerver->children.size());
-        for (std::vector<std::string>::const_iterator levelverref =
-               layerver->children.begin();
-             levelverref != layerver->children.end(); ++levelverref) {
-          AssetVersion ver(*levelverref);
+        for (const auto &levelverref : layerver->children) {
+          AssetVersion ver(levelverref);
           if (ver->subtype != "MapLayerLevel") {
             // we've traversed past all our level children, stop looking
             break;
           }
           geindexConfig.layers_.back().levels_.push_back(
-              MapGEIndexConfig::Level(*levelverref));
+              MapGEIndexConfig::Level(levelverref));
         }
       }
     }
