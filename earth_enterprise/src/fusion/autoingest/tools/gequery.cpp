@@ -350,7 +350,7 @@ void DisplayBlockerDependencies(const AssetVersion &version,
           }
         } else {
           for (const auto &input : version->inputs) {
-            if (!EndsWith(*input, myskipext)) {
+            if (!EndsWith(input, myskipext)) {
               DisplayBlockerDependencies(AssetVersion(input),
                                          seen, myskipext);
             }
