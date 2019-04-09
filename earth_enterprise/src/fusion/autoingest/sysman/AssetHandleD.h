@@ -70,6 +70,8 @@ class DerivedAssetHandleD_ : public virtual BaseD_, public ROBase_
       // It's the only one that has state anyway.  Also, explicitly calling the virtual base
       // class puts a build time check to ensure BBase is a virtural base class of this class.
       BBase(ref_), BaseD(), ROBase() { }
+  DerivedAssetHandleD_(const SharedString &ref_) :
+      BBase(ref_), BaseD(), ROBase() { }
 
 #if GEE_HAS_MOVE
   // Because we are using virtual inheritance in this class hierarchy we _should_ explicitly implement
