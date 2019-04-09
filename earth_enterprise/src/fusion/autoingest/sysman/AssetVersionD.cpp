@@ -570,12 +570,11 @@ AssetVersionImplD::Clean(void)
 
 
 AssetVersionImplD::InputVersionHolder::InputVersionHolder
-(const std::vector<std::string> &inputrefs)
+(const std::vector<SharedString> &inputrefs)
 {
   inputvers.reserve(inputrefs.size());
-  for (std::vector<std::string>::const_iterator i = inputrefs.begin();
-       i != inputrefs.end(); ++i) {
-    inputvers.push_back(*i);
+  for (const auto &i : inputrefs) {
+    inputvers.push_back(i);
   }
 }
 
@@ -591,7 +590,7 @@ AssetVersionImplD::InputVersionGuard::InputVersionGuard
     impl(ver.operator->())
 {
   if (!operator bool()) {
-    impl->verholder = new InputVersionHolder(toStdStringVec(impl->inputs));
+    impl->verholder = new InputVersionHolder(impl->inputs);
     khRefGuard<InputVersionHolder>::operator=(khRefGuardFromNew(impl->verholder));
   }
 }
@@ -602,7 +601,7 @@ AssetVersionImplD::InputVersionGuard::InputVersionGuard
     impl(impl_)
 {
   if (!operator bool()) {
-    impl->verholder = new InputVersionHolder(toStdStringVec(impl->inputs));
+    impl->verholder = new InputVersionHolder(impl->inputs);
     khRefGuard<InputVersionHolder>::operator=(khRefGuardFromNew(impl->verholder));
   }
 }
@@ -618,7 +617,7 @@ AssetVersionImplD::InputVersionGuard::InputVersionGuard
     if (inputvers.size()) {
       impl->verholder = new InputVersionHolder(inputvers);
     } else {
-      impl->verholder = new InputVersionHolder(toStdStringVec(impl->inputs));
+      impl->verholder = new InputVersionHolder(impl->inputs);
     }
     khRefGuard<InputVersionHolder>::operator=(khRefGuardFromNew(impl->verholder));
   }
