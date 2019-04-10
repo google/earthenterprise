@@ -34,7 +34,7 @@ class AssetStorage {
   //typedef std::deque<std::string> VersionList;
   typedef VerRefGen VersionList;
 
-  std::string name;
+  SharedString name;
   AssetDefs::Type type;
   std::string subtype;
   std::vector<SharedString> inputs;
@@ -48,13 +48,13 @@ class AssetStorage {
     type  = AssetDefs::Invalid;
   }
   static AssetStorage
-  MakeStorage(const std::string &name_,
+  MakeStorage(const SharedString &name_,
               AssetDefs::Type type_,
               const std::string &subtype_,
-              const std::vector<std::string> &inputs_,
+              const std::vector<SharedString> &inputs_,
               const khMetaData &meta_) {
     AssetStorage storage(name_, type_, subtype_,
-                         toSharedStringVec(inputs_), meta_,
+                         inputs_, meta_,
                          VersionList());
     return storage;
   }
@@ -82,7 +82,7 @@ class AssetStorage {
 };
 
 class AssetVersionStorage {
-  std::string  name;
+  SharedString  name;
   AssetDefs::Type  type;
   std::string  subtype;
   uint         version;
@@ -117,7 +117,8 @@ class AssetVersionStorage {
   static AssetVersionStorage
   MakeStorageFromAsset(const AssetStorage &asset) {
     uint vernum = asset.CurrVersionNumber() + 1;
-    AssetVersionStorage storage(AssetVersionRef(asset.name, vernum),
+    std::string name = AssetVersionRef(asset.name, vernum);
+    AssetVersionStorage storage(name,
                                 asset.type,
                                 asset.subtype,
                                 vernum,

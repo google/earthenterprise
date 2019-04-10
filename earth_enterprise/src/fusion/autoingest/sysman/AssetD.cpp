@@ -50,9 +50,9 @@ AssetImplD::AddVersionRef(const std::string &verref)
 }
 
 void
-AssetImplD::Modify(const std::vector<std::string>& inputs_,
+AssetImplD::Modify(const std::vector<SharedString>& inputs_,
                    const khMetaData &meta_) {
-  inputs = toSharedStringVec(inputs_);
+  inputs = inputs_;
   meta = meta_;
 }
 

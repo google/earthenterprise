@@ -64,7 +64,7 @@ class MercatorMapDatabaseAssetImplD {
  protected:
   void PostUpdate(void) { IncrementIndexVersion(); }
   static void PopulateInputs(const MapDatabaseConfig &config,
-                             std::vector<std::string> &inputs);
+                             std::vector<SharedString> &inputs);
 
  public:
   static void HandleEditRequest(const MapDatabaseEditRequest &);
@@ -108,7 +108,7 @@ class MercatorMapDatabaseAssetVersionImplD {
 
 
 void MercatorMapDatabaseAssetImplD::PopulateInputs(
-    const MapDatabaseConfig &config, std::vector<std::string> &inputs)
+    const MapDatabaseConfig &config, std::vector<SharedString> &inputs)
 {
   if (!config.imageryProject.empty()) {
     // Depends on imagery project sub-type detected based on the path extension,
@@ -142,7 +142,7 @@ void MercatorMapDatabaseAssetImplD::PopulateInputs(
 
     MutableProjectedMapProjectAssetD proj_asset =
       ProjectedMapProjectFactory::FindMake(projected_proj_name,
-                                           makevec(config.mapProject),
+                                           makevec<SharedString>(config.mapProject),
                                            khMetaData(),
                                            proj_config);
     inputs.push_back(proj_asset->GetRef());
@@ -153,7 +153,7 @@ void
 MercatorMapDatabaseAssetImplD::HandleEditRequest(const MapDatabaseEditRequest &req)
 {
   // make sure the project assetRef's are valid
-  std::vector<std::string> inputs;
+  std::vector<SharedString> inputs;
   PopulateInputs(req.config, inputs);
 
   // normalize the supplied asset name
@@ -172,7 +172,7 @@ void
 MercatorMapDatabaseAssetImplD::HandleNewRequest(const MapDatabaseEditRequest &req)
 {
   // make sure the project assetRef's are valid
-  std::vector<std::string> inputs;
+  std::vector<SharedString> inputs;
   PopulateInputs(req.config, inputs);
 
   // normalize the supplied asset name
@@ -192,7 +192,7 @@ void
 MercatorMapDatabaseAssetImplD::HandleModifyRequest(const MapDatabaseEditRequest &req)
 {
   // make sure the project assetRef's are valid
-  std::vector<std::string> inputs;
+  std::vector<SharedString> inputs;
   PopulateInputs(req.config, inputs);
 
   // normalize the supplied asset name
@@ -277,7 +277,7 @@ MercatorMapDatabaseAssetVersionImplD::DelayedBuildChildren(void)
     std::string unified_index_asset_name
       (UnifiedIndexFactory::SubAssetName(assetRef, "unifiedindex"));
     std::vector<AssetVersion> index_input_versions;
-    std::vector<std::string>  index_input_verrefs;
+    std::vector<SharedString>  index_input_verrefs;
 
     UnifiedIndexConfig unified_index_config;
     if (mercatorRasterProject || rasterProject) {
@@ -324,7 +324,7 @@ MercatorMapDatabaseAssetVersionImplD::DelayedBuildChildren(void)
     std::string mapdb_asset_name
       (MapDBFactory::SubAssetName(assetRef, kMapdbBase));
     std::vector<AssetVersion> mapdb_input_versions;
-    std::vector<std::string>  mapdb_input_verrefs;
+    std::vector<SharedString>  mapdb_input_verrefs;
 
     // populate inputs
     // Adding the unified index as my input and registering that offline inputs

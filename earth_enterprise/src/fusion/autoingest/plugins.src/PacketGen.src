@@ -180,7 +180,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       }
     }
 
-    std::vector<std::string> levInputs;
+    std::vector<SharedString> levInputs;
     std::vector<AssetVersion> levInputVers;
     if (!packetLevelConfig.minify) {
       // ***** Normal Blend *****
