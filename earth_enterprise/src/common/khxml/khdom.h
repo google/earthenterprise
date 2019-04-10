@@ -527,6 +527,12 @@ FromElementWithChildName(khxml::DOMElement *elem,
 
 template <class T>
 void
+FromElementWithChildName(khxml::DOMElement *elem,
+                         const std::string &childTagName,
+                         MTVector<T> &val);
+
+template <class T>
+void
 FromElement(khxml::DOMElement *elem, std::vector<T> &vec);
 
 template <class T>
@@ -859,6 +865,24 @@ void
 FromElementWithChildName(khxml::DOMElement *elem,
                          const std::string &childTagName,
                          std::vector<T> &vec)
+{
+  vec.clear();
+  vec.shrink_to_fit();
+  khDOMElemList kids = GetChildrenByTagName(elem, childTagName);
+
+  for (const auto& iter : kids)
+  {
+    T tmp;
+    FromElement(iter, tmp);
+    vec.push_back(tmp);
+  }
+}
+
+template <class T>
+void
+FromElementWithChildName(khxml::DOMElement *elem,
+                         const std::string &childTagName,
+                         MTVector<T> &vec)
 {
   vec.clear();
   vec.shrink_to_fit();

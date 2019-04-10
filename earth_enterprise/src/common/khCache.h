@@ -133,22 +133,19 @@ class khCache {
     item->next = head;
     item->prev = 0;
     head = item;
-    if (item->next) {
+    if (item->next)
       item->next->prev = item;
-    }
     else
       tail = item;
     ++numItems;
   }
   void Unlink(Item *item) {
-    if (item->prev) {
+    if (item->prev)
       item->prev->next = item->next;
-    }
     else
       head = item->next;
-    if (item->next) {
+    if (item->next)
       item->next->prev = item->prev;
-    }
     else
       tail = item->prev;
     item->next = 0;

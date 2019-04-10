@@ -20,9 +20,9 @@
 
 #include "khThread.h"
 #include "khGuard.h"
-#include <queue>
 #include <deque>
 #include <set>
+#include <unordered_map>
 
 template <class T>
 class khAtomic {
@@ -150,6 +150,66 @@ class khMTSet
   }
 };
 
+
+template <class K, class V>
+class khMTMap
+{
+ protected:
+  typedef std::unordered_map<K,V> Map;
+  Map     map;
+  mutable std::mutex mutex;
+
+ private:
+  // private and unimplimented
+  khMTMap& operator=(const khMTMap&);
+
+ public:
+  khMTMap(void) { }
+
+  void insert(const std::pair<K,V> &val) {
+    std::lock_guard<std::mutex> guard(mutex);
+    (void)map.insert(val);
+  }
+  void erase(const K &val) {
+    std::lock_guard<std::mutex> guard(mutex);
+    if (map.find(val) != map.end()) {
+      (void)map.erase(val);
+    }
+  }
+  size_t size(void) {
+    std::lock_guard<std::mutex> guard(mutex);
+    return map.size();
+  }
+  V& operator[](const K& key) {
+    std::lock_guard<std::mutex> guard(mutex);
+    return map[key];
+  }
+  void clear(void) {
+    std::lock_guard<std::mutex> guard(mutex);
+    map.clear();
+  }
+  std::vector<K> keys(void) const {
+    std::lock_guard<std::mutex> guard(mutex);
+    std::vector<K> thekeys;
+    thekeys.reserve(map.size());
+    for (const auto& p : map) {
+      thekeys.push_back(p.first);
+    }
+    return thekeys;
+  }
+  bool contains(const K& key) {
+    std::lock_guard<std::mutex> guard(mutex);
+    return map.find(key) != map.end();
+  }
+  bool empty(void) const {
+    std::lock_guard<std::mutex> guard(mutex);
+    return map.empty();
+  }
+  khMTMap(const khMTMap&) {
+    // todo: this is only used for setting up an empty dirtymap by AssetD and AssetVersionD
+    // should probably really remove this
+  }
+};
 
 
 // ****************************************************************************

@@ -31,6 +31,7 @@ class MTVector : public std::vector<T> {
   public:
     //using std::vector<T>::vector;
     typedef std::vector<T> Base;
+    typedef typename Base::const_iterator const_iterator;
     void push_back(const T& v) {
       std::lock_guard<std::mutex> lock(mtx);
       Base::push_back(v);
@@ -38,6 +39,43 @@ class MTVector : public std::vector<T> {
     MTVector() : Base() { }
     // forward to private copy constructor to protect vector from modification
     MTVector(const MTVector& a) : MTVector(a, std::lock_guard<std::mutex>(a.mtx)) { }
+    const T& operator[] (const size_t idx) const {
+      std::lock_guard<std::mutex> lock(mtx);
+      return Base::operator[](idx); 
+    }
+
+    bool operator==(const MTVector& x) const {
+      std::lock_guard<std::mutex> lock(mtx);
+      return true;
+    }
+
+    bool operator==(const Base& x) const {
+      std::lock_guard<std::mutex> lock(mtx);
+      return true;
+    }
+
+    void clear(void) {
+      std::lock_guard<std::mutex> lock(mtx);
+      Base::clear();
+    }
+
+    void shrink_to_fit(void) {
+      std::lock_guard<std::mutex> lock(mtx);
+      Base::shrink_to_fit();
+    }
+
+    const_iterator begin(void) const {
+      return Base::begin();
+    }
+
+    const_iterator end(void) const {
+      return Base::end();
+    }
+
+    size_t size(void) const {
+      std::lock_guard<std::mutex> lock(mtx);
+      return Base::size();
+    }
 };
 
 #if defined(__sgi)
