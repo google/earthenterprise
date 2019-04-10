@@ -56,12 +56,12 @@ class AssetHandle_  {
   // Adds handle-object to cache.
   void CacheAdd() {
     assert(handle);
-    cache().Add(Key(), handle);
+    cache().Add(Ref(), handle);
   }
 
   // Removes handle-object from cache.
   void CacheRemove() {
-    cache().Remove(Key());
+    cache().Remove(Ref());
   }
 
   // Only implemented/used by Version variant.
@@ -115,8 +115,7 @@ class AssetHandle_  {
   // Same goes for move constructor and assignment.
 
   virtual ~AssetHandle_(void) { }
-  const std::string Ref(void) const { return ref; }
-  const SharedString Key(void) const { return ref; }
+  const SharedString & Ref(void) const { return ref; }
   bool Valid(void) const;
   // This is better then overloading the bool operator as it
   // more closely emulates what a pointer's boolean operations does.
