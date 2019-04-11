@@ -1555,18 +1555,17 @@ sub EmitDOMWriter
 bool
 $class->{qualname}::Save(const std::string &file) const throw()
 {
-    DOMDocument *doc = CreateEmptyDocument("$class->{TagName}");
+    std::unique_ptr<GEDocument> doc = CreateEmptyDocument("$class->{TagName}");
     if (!doc) {
+        notify(NFY_WARN, "Unable to create empty document: $class->{TagName}");
         return false;
-	notify(NFY_WARN, "Unable to create empty document: $class->{TagName}");
     }
     bool status = false;
-    khCallGuard<DOMDocument*,bool> docrelease(&::DestroyDocument, doc);
     try {
         DOMElement *top = doc->getDocumentElement();
         if (top) {
             ToElement(top, *this);
-            status = WriteDocument(doc, file);
+            status = WriteDocument(doc.get(), file);
         } else {
             notify(NFY_WARN, "Unable to create document element %s", file.c_str());
         }
@@ -1594,14 +1593,14 @@ EOF
 bool
 $class->{qualname}::SaveToString(std::string &buf, const std::string &ref) const throw()
 {
-    DOMDocument *doc = CreateEmptyDocument("$class->{TagName}");
+    std::unique_ptr<GEDocument> doc = CreateEmptyDocument("$class->{TagName}");
     if (!doc) return false;
     bool status = false;
     try {
         DOMElement *top = doc->getDocumentElement();
         if (top) {
             ToElement(top, *this);
-            status = WriteDocumentToString(doc, buf);
+            status = WriteDocumentToString(doc.get(), buf);
         } else {
             notify(NFY_WARN, "Unable to create document element %s", ref.c_str());
         }
@@ -1610,7 +1609,6 @@ $class->{qualname}::SaveToString(std::string &buf, const std::string &ref) const
     } catch (...) {
         notify(NFY_WARN, "Unknown problem saving %s", ref.c_str());
     }
-    try { doc->release(); } catch (...) { }
     return status;
 }
 
@@ -1801,31 +1799,25 @@ bool
 $class->{qualname}::Load(const std::string &file) throw()
 {
     bool result = false;
-    DOMLSParser *parser = CreateDOMParser();
-    if (parser) {
-	DOMDocument *doc = ReadDocument(parser, file);
-	if (doc) {
-	    try {
-		DOMElement *docelem = doc->getDocumentElement();
-		if (docelem) {
-		    $DECLARE_DEPRECATED
-		    $CALL_FROMELEMENT(docelem, *this$PASS_DEPRECATED);
-		    result = true;
-		} else {
-		    notify(NFY_WARN, "No document element loading %s",
-			   file.c_str());
-		}
-	    } catch (const std::exception &e) {
-		notify(NFY_WARN, "%s while loading %s", e.what(), file.c_str());
-	    } catch (...) {
-		notify(NFY_WARN, "Unable to load %s", file.c_str());
-	    }
-	} else {
-	    notify(NFY_WARN, "Unable to read %s", file.c_str());
-	}
-	DestroyParser(parser);
+    std::unique_ptr<GEDocument> doc = ReadDocument(file);
+    if (doc) {
+        try {
+            DOMElement *docelem = doc->getDocumentElement();
+            if (docelem) {
+                $DECLARE_DEPRECATED
+                $CALL_FROMELEMENT(docelem, *this$PASS_DEPRECATED);
+                result = true;
+            } else {
+                notify(NFY_WARN, "No document element loading %s",
+                       file.c_str());
+            }
+        } catch (const std::exception &e) {
+            notify(NFY_WARN, "%s while loading %s", e.what(), file.c_str());
+        } catch (...) {
+            notify(NFY_WARN, "Unable to load %s", file.c_str());
+        }
     } else {
-	notify(NFY_WARN, "Unable to get parser for %s", file.c_str());
+        notify(NFY_WARN, "Unable to read %s", file.c_str());
     }
     return result;
 }
@@ -1838,34 +1830,28 @@ EOF
 
 bool
 $class->{qualname}::LoadFromString(const std::string &buf,
-			       const std::string &ref) throw()
+    const std::string &ref) throw()
 {
     bool result = false;
-    DOMLSParser *parser = CreateDOMParser();
-    if (parser) {
-	DOMDocument *doc = ReadDocumentFromString(parser, buf, ref);
-	if (doc) {
-	    try {
-		DOMElement *docelem = doc->getDocumentElement();
-		if (docelem) {
-		    $DECLARE_DEPRECATED
-		    $CALL_FROMELEMENT(docelem, *this$PASS_DEPRECATED);
-		    result = true;
-		} else {
-		    notify(NFY_WARN, "No document element loading %s",
-			   ref.c_str());
-		}
-	    } catch (const std::exception &e) {
-		notify(NFY_WARN, "%s while loading %s", e.what(), ref.c_str());
-	    } catch (...) {
-		notify(NFY_WARN, "Unable to load %s", ref.c_str());
-	    }
-	} else {
-	    notify(NFY_WARN, "Unable to read %s", ref.c_str());
-	}
-	DestroyParser(parser);
+    std::unique_ptr<GEDocument> doc = ReadDocumentFromString(buf, ref);
+    if (doc) {
+        try {
+            DOMElement *docelem = doc->getDocumentElement();
+            if (docelem) {
+                $DECLARE_DEPRECATED
+                $CALL_FROMELEMENT(docelem, *this$PASS_DEPRECATED);
+                result = true;
+            } else {
+                notify(NFY_WARN, "No document element loading %s",
+                       ref.c_str());
+            }
+        } catch (const std::exception &e) {
+            notify(NFY_WARN, "%s while loading %s", e.what(), ref.c_str());
+        } catch (...) {
+            notify(NFY_WARN, "Unable to load %s", ref.c_str());
+        }
     } else {
-	notify(NFY_WARN, "Unable to get parser for %s", ref.c_str());
+        notify(NFY_WARN, "Unable to read %s", ref.c_str());
     }
     return result;
 }

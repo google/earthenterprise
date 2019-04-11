@@ -213,6 +213,7 @@ class khAssetManager
   static const std::string ASSET_STATUS;
   static const std::string PUSH_DATABASE;
   static const std::string PUBLISH_DATABASE;
+  static const std::string GET_TASKS;
 
  /**
   * Get build status of each version of an asset and return as a
@@ -240,6 +241,13 @@ class khAssetManager
   */
   // TODO: receive and return results as serialized protobufs.
   std::string PublishDatabase(const std::string arguments_string);
+
+  /**
+   * Retrieve the current System Manager tasking
+   * @param msg Received request message from client
+   * @return serialized tasks list or error message beginning with "ERROR:"
+   */
+  std::string RetrieveTasking(const FusionConnection::RecvPacket& msg);
 };
 
 extern khAssetManager theAssetManager;

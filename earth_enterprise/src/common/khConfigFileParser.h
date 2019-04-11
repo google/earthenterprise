@@ -61,18 +61,16 @@ class khConfigFileParser
 private:
     std::vector<std::string> options;
     std::map<std::string,std::string> contents;
-    
+
     bool sanitize(std::string&);
     void split(const std::string&, std::string&, std::string&);
     bool isKeyPresent(const std::string&);
 
-protected:
-    void parse(std::istream&);
-    
 public:
     
     void addOption(std::string);
     void parse(const std::string&);
+    void parse(std::istream&);
     void clearOptions() { options.clear(); }
     void validateIntegerValues();
 
@@ -85,7 +83,7 @@ public:
     begin() { return contents.begin(); }
     std::map<std::string,std::string>::const_iterator 
     end() { return contents.end(); }	
-    
+
     // delete everything but constructor/destructor
     khConfigFileParser()                                     = default;
     ~khConfigFileParser()                                    = default;

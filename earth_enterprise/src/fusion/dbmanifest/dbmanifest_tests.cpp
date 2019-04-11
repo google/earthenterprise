@@ -128,17 +128,21 @@ class DbManifestTest : public testing::Test {
     }
 
     // Create a header file for the DB that has one POI file it points to.
-    khDomDeleteGuard dom(TransferOwnership(CreateEmptyDocument("DbHeader")));
+    std::unique_ptr<GEDocument> dom = CreateEmptyDocument("DbHeader");
     khxml::DOMElement* root_elm = dom->getDocumentElement();
     AddElement(root_elm, "index_path", ge_unified_index_root_);
-    khxml::DOMElement* toc_paths_elm = dom->createElement(ToXMLStr("toc_paths"));
+    khxml::DOMElement* toc_paths_elm =
+        root_elm->getOwnerDocument()->createElement(ToXMLStr("toc_paths"));
     root_elm->appendChild(toc_paths_elm);
     AddElement(toc_paths_elm, "toc_path", toc_path_);
-    khxml::DOMElement* search_tabs_elm = dom->createElement(ToXMLStr("search_tabs"));
+    khxml::DOMElement* search_tabs_elm =
+        root_elm->getOwnerDocument()->createElement(ToXMLStr("search_tabs"));
     root_elm->appendChild(search_tabs_elm);
-    khxml::DOMElement* poi_file_paths_elm = dom->createElement(ToXMLStr("poi_file_paths"));
+    khxml::DOMElement* poi_file_paths_elm =
+        root_elm->getOwnerDocument()->createElement(ToXMLStr("poi_file_paths"));
     root_elm->appendChild(poi_file_paths_elm);
-    khxml::DOMElement* icons_dirs_elm = dom->createElement(ToXMLStr("icons_dirs"));
+    khxml::DOMElement* icons_dirs_elm =
+        root_elm->getOwnerDocument()->createElement(ToXMLStr("icons_dirs"));
     root_elm->appendChild(icons_dirs_elm);
     AddElement(root_elm, "database_version", "3");
     AddElement(root_elm, "db_type", "TYPE_GEDB");
@@ -181,9 +185,10 @@ class DbManifestTest : public testing::Test {
       AddElement(poi_file_paths_elm, "poi_file_path", poi_entry.poi_file);
 
       // Create the mock poi file
-      khDomDeleteGuard poi_file_dom(TransferOwnership(CreateEmptyDocument("POISearchFile")));
+      std::unique_ptr<GEDocument> poi_file_dom = CreateEmptyDocument("POISearchFile");
       khxml::DOMElement* poi_file_root_elm = poi_file_dom->getDocumentElement();
-      khxml::DOMElement* search_table_values_elm = poi_file_dom->createElement(ToXMLStr("SearchTableValues"));
+      khxml::DOMElement* search_table_values_elm =
+          poi_file_root_elm->getOwnerDocument()->createElement(ToXMLStr("SearchTableValues"));
       poi_file_root_elm->appendChild(search_table_values_elm);
 
       for (size_t jdx = 0; jdx < poi_entry.poi_data_files.size(); ++jdx) {
@@ -205,12 +210,12 @@ class DbManifestTest : public testing::Test {
 
       // write out the poi file
       khEnsureParentDir(actual_poi_file_path);
-      WriteDocument(poi_file_dom, actual_poi_file_path);
+      WriteDocument(poi_file_dom.get(), actual_poi_file_path);
     }
 
     // write out the header file
     khEnsureParentDir(actual_db_header_path);
-    WriteDocument(dom, actual_db_header_path);
+    WriteDocument(dom.get(), actual_db_header_path);
 
     // create a dummy empty index file
     khEnsureParentDir(actual_toc_path);
