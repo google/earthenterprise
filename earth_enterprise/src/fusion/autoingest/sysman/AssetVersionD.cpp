@@ -45,7 +45,8 @@ AssetVersionImplD::StateChangeNotifier::GetNotifier(
 
 void
 AssetVersionImplD::StateChangeNotifier::AddParentsToNotify(const std::vector<std::string> & parents) {
-  std::copy(parents.begin(), parents.end(), std::inserter(parentsToNotify, parentsToNotify.end()));
+  for (const auto& p : parents)
+    parentsToNotify.insert(p);
   if (!MiscConfig::Instance().ConsolidateListenerNotifications) {
     // If the user has opted not to consolidate notifications, send
     // notifications immediately
@@ -91,11 +92,12 @@ AssetVersionImplD::StateChangeNotifier::NotifyParents(
     std::shared_ptr<StateChangeNotifier> notifier) {
   notify(NFY_VERBOSE, "Iterate through parents");
   int i = 1;
-  for (const std::string & ref : parentsToNotify) {
+  std::vector<std::string> theRefs = parentsToNotify.keys();
+  for (const std::string & ref : theRefs) {
     AssetVersionD assetVersion(ref);
     notify(NFY_PROGRESS, "Iteration: %d | Total Iterations: %s | parent: %s",
            i,
-           ToString(parentsToNotify.size()).c_str(),
+           ToString(theRefs.size()).c_str(),
            ref.c_str());
     if (assetVersion) {
       notify(NFY_VERBOSE, "Calling parent->HandleChildStateChange()");
@@ -114,9 +116,9 @@ AssetVersionImplD::StateChangeNotifier::NotifyListeners(
     std::shared_ptr<StateChangeNotifier> notifier) {
   notify(NFY_VERBOSE, "Iterate through listeners");
   int i = 1;
-  for (const std::pair<std::string, InputStates> & elem : listenersToNotify) {
-    const std::string & ref = elem.first;
-    const InputStates & states = elem.second;
+  std::vector<std::string> theRefs = listenersToNotify.keys();
+  for (const std::string& ref : theRefs) {
+    const InputStates & states = listenersToNotify[ref];
     AssetVersionD assetVersion(ref);
     notify(NFY_PROGRESS, "Iteration: %d | Total Iterations: %s | listener: %s",
            i,
