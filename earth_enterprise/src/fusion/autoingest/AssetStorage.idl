@@ -17,6 +17,7 @@
 #include <deque>
 #include <khTypes.h>
 #include <khMetaData.h>
+#include <khMTTypes.h>
 #include <autoingest/Misc.h>
 #include <autoingest/.idl/storage/AssetDefs.h>
 #include "common/verref_storage.h"

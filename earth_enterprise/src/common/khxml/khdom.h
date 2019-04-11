@@ -34,6 +34,7 @@
 
 #include "common/khTypes.h"
 #include "common/khExtents.h"
+#include "common/khMTTypes.h"
 #include "common/khTileAddr.h"
 #include "common/khInsetCoverage.h"
 #include "common/verref_storage.h"
