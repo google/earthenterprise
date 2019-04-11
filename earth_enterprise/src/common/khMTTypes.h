@@ -21,8 +21,10 @@
 #include "khThread.h"
 #include "khGuard.h"
 #include <deque>
+#include <memory>
 #include <set>
 #include <unordered_map>
+#include <mutex>
 
 template <class T>
 class khAtomic {
@@ -148,6 +150,14 @@ class khMTSet
     khLockGuard guard(mutex);
     return std::vector<T>(set.begin(), set.end());
   }
+  void clear(void) {
+    khLockGuard guard(mutex);
+    set.clear();
+  }
+  size_t size(void) {
+    khLockGuard guard(mutex);
+    return set.size();
+  }
 };
 
 
@@ -211,6 +221,45 @@ class khMTMap
   }
 };
 
+class khTargetedLock {
+  private:
+    // no such thing as a targeted lock which doesn't have a target
+    khTargetedLock() = delete;
+    khTargetedLock(const khTargetedLock&) = delete;
+    typedef std::unordered_map<std::string, std::shared_ptr<std::mutex>> FileLocks;
+    
+    static std::mutex& globalMutex(void) {
+      static std::mutex classMutex;
+      return classMutex;
+    }
+    std::shared_ptr<std::mutex> theFileMutex;
+    const std::string& s;
+    static FileLocks& getFileLocks(void) {
+      static FileLocks file_locks;
+      return file_locks;
+    } 
+  public:
+    khTargetedLock(const std::string& filename) : s(filename) {
+      FileLocks& file_mutexes = getFileLocks();
+      {
+        std::lock_guard<std::mutex> global_lock(globalMutex());
+        if (file_mutexes.find(s) == file_mutexes.end()) {
+          file_mutexes[s] = std::make_shared<std::mutex>();
+        }
+        theFileMutex = file_mutexes[s];
+      }
+      theFileMutex->lock();
+    }
+    ~khTargetedLock(void) {
+      theFileMutex->unlock();
+      std::lock_guard<std::mutex> global_lock(globalMutex());
+      if (theFileMutex.use_count() == 2) {
+        FileLocks& file_mutexes = getFileLocks();
+        file_mutexes.erase(s);
+      }
+      theFileMutex = nullptr;
+    } 
+};
 
 // ****************************************************************************
 // ***  MultiThreadingPolicy
