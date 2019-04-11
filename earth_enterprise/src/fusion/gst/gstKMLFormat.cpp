@@ -154,9 +154,7 @@ void gstKMLFormat::ParseKml(khxml::DOMNode* root) {
 
 gstStatus gstKMLFormat::ParseKml(const std::string& kml_file) {
   gstStatus result = GST_OPEN_FAIL;
-  khxml::DOMLSParser *parser = CreateDOMParser();
-  if (parser) {
-    khxml::DOMDocument *doc = ReadDocument(parser, kml_file);
+    std::unique_ptr<GEDocument> doc = ReadDocument(kml_file);
     if (doc) {
       try {
         khxml::DOMNode *root = (khxml::DOMNode*) doc->getDocumentElement();
@@ -181,10 +179,6 @@ gstStatus gstKMLFormat::ParseKml(const std::string& kml_file) {
     } else {
       notify(NFY_WARN, "Unable to read %s", kml_file.c_str());
     }
-    DestroyParser(parser);
-  } else {
-    notify(NFY_WARN, "Unable to get parser for %s", kml_file.c_str());
-  }
 
   return result;
 }

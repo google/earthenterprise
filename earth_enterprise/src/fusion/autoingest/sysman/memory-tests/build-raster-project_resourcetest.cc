@@ -40,7 +40,6 @@ class BuildRasterProject_Tester : public opengee::mem_usage::RasterProjectFuncti
     : opengee::mem_usage::RasterProjectFunctionTester(
         test_name, operation_count, report_operation_count, max_thread_count)
     {
-        MiscConfig::Instance().DisablePacketLevelVersionCachePurge = true;
         MiscConfig::Instance().AssetCacheSize = 128000;
         MiscConfig::Instance().VersionCacheSize = 128000;
         setNotifyLevel(NFY_NOTICE);

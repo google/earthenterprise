@@ -506,7 +506,11 @@ Build database
 * Build database "Database_Mercator"
 * Verify that the state of database "Database_Mercator" is "Waiting"
 * Verify that the state of map project "StatePropagationTest_Mercator" is "Waiting"
-* Verify that the state of map layer "StatePropagationTest_Mercator" is "InProgress"
+* Verify that the state of map layer "StatePropagationTest_Mercator" is in
+  | State      |
+  |------------|
+  | InProgress |
+  | Queued     |
 * Verify that the state of vector resource "CA_POIs_Merc" is "Succeeded"
 * Verify that the state of imagery project "StatePropagationTest_Mercator" is "Waiting"
 * Verify that the state of imagery resource "BlueMarble_Mercator" is "InProgress"

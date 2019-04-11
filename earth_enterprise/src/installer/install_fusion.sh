@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 # Copyright 2017 Google Inc.
+# Copyright 2018-2019 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -418,6 +419,9 @@ parse_arguments()
 				if [ $IS_NEWINSTALL == false ]; then
 					echo -e "\nYou cannot modify the fusion user name using the installer because Fusion is already installed on this server."
 					parse_arguments_retval=1
+					# Don't show the User Group dialog since it is invalid to change the fusion
+					# username once fusion is installed on the server
+					show_user_group_recommendation=false
 					break
 				else
 					shift
@@ -438,6 +442,9 @@ parse_arguments()
 				if [ $IS_NEWINSTALL == false ]; then
 					echo -e "\nYou cannot modify the fusion user group using the installer because Fusion is already installed on this server."
 					parse_arguments_retval=1
+					# Don't show the User Group dialog since it is invalid to change the fusion
+					# username once fusion is installed on the server
+					show_user_group_recommendation=false
 					break
 				else
 					shift
@@ -485,9 +492,9 @@ parse_arguments()
 	    echo -e "Selected Fusion User Group: \t\t\t$GROUPNAME"
     
         # START WORK HERE
-        if ! prompt_to_quit "X (Exit) the installer and change the asset root location - C (Continue) to use the asset root that you have specified."; then
+        if ! prompt_to_quit "X (Exit) the installer and use the default username - C (Continue) to use the username that you have specified."; then
             parse_arguments_retval=1
-        fi  
+        fi
     fi
 	
 	return $parse_arguments_retval;
@@ -651,8 +658,12 @@ copy_files_to_target()
 	cp -f $TMPOPENLDAPPATH/ldap.conf.default $BASEINSTALLDIR_ETC/openldap
 	if [ $? -ne 0 ]; then error_on_copy=1; fi
 
-	# TODO: final step: copy uninstall script
-	# cp -f $TMPOPENLDAPPATH/<........> $INSTALL_LOG_DIR
+	cp -f $TMPINSTALLDIR/common/opt/google/uninstall_fusion.sh $INSTALL_LOG_DIR
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
+	cp -f $TMPINSTALLDIR/common/opt/google/common.sh $INSTALL_LOG_DIR
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
+	cp -f $TMPINSTALLDIR/common/opt/google/version.txt $BASEINSTALLDIR_OPT
+	if [ $? -ne 0 ]; then error_on_copy=1; fi
 
 	if [ $error_on_copy -ne 0 ]
 	then
@@ -744,7 +755,7 @@ check_asset_root_volume_size()
         echo -e "We recommend that an asset root directory have a minimum of $MIN_ASSET_ROOT_VOLUME_SIZE_IN_GB GB of free disk space."
         echo ""
 
-        if ! prompt_to_quit "X (Exit) the installer and change the asset root location - C (Continue) to use the asset root that you have specified."; then
+        if ! prompt_to_quit "X (Exit) the installer and change the asset root location with larger volume - C (Continue) to use the asset root that you have specified."; then
             check_asset_root_volume_size_retval=1
         fi
     fi
