@@ -43,7 +43,7 @@ protected:
         std::unordered_map<std::string, uint32_t> keyFromRefTable;
         static uint32_t nextID;
       public:
-        std::string RefFromKey(const uint32_t &key) {
+        const std::string & RefFromKey(const uint32_t &key) {
 					notify(NFY_INFO2, "SharedString::RefStorage::RefFromKey called with %u\n", key);
           auto refIter = refFromKeyTable.find(key);
           assert(refIter != refFromKeyTable.end());
@@ -103,8 +103,12 @@ protected:
         return refStore.RefFromKey(key);
     }
 
-    std::string toString() const {
+    const std::string & toString() const {
         return refStore.RefFromKey(key);
+    }
+    
+    const char * c_str() const {
+      return toString().c_str();
     }
 
     bool operator<(const SharedString &other) const {
