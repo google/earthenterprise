@@ -106,10 +106,6 @@ protected:
     const std::string & toString() const {
         return refStore.RefFromKey(key);
     }
-    
-    const char * c_str() const {
-      return toString().c_str();
-    }
 
     bool operator<(const SharedString &other) const {
       return (refStore.RefFromKey(key) < refStore.RefFromKey(other.key));
