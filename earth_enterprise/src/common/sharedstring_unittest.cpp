@@ -75,13 +75,13 @@ TEST(SharedStringTest, construction_assignment)
     EXPECT_FALSE(tsst1.empty());
    
     // make sure that copy constructor works
-	SharedString tsst4(tsst2);
-	EXPECT_FALSE(tsst4.empty());
+    SharedString tsst4(tsst2);
+    EXPECT_FALSE(tsst4.empty());
 
     // make sure that copy assignment works
     SharedString tsst5;
-	tsst5 = tsst4;
-	EXPECT_FALSE(tsst5.empty()); 
+    tsst5 = tsst4;
+    EXPECT_FALSE(tsst5.empty()); 
 }
 
 int main(int argc, char** argv)
