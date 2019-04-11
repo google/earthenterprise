@@ -64,7 +64,7 @@ AssetImplD::InputsUpToDate(const AssetVersion &version,
     return false;
 
   for (uint i = 0; i < cachedInputs.size(); ++i) {
-    if (cachedInputs[i]->GetRef() != version->inputs[i].toString())
+    if (cachedInputs[i]->GetRef() != version->inputs[i])
       return false;
   }
 
