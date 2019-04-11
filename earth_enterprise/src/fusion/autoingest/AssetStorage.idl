@@ -68,11 +68,11 @@ class AssetStorage {
       return 0;
     }
   }
-  std::string CurrVersionRef(void) const {
+  SharedString CurrVersionRef(void) const {
     if (versions.size()) {
       return versions.front();
     } else {
-      return AssetVersionRef(name, 0); // an invalid version ref
+      return SharedString(AssetVersionRef(name, 0)); // an invalid version ref
     }
   }
   std::string PrettySubtype(void) const {

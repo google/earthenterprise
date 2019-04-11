@@ -63,7 +63,7 @@ class AssetImpl : public khRefCounter, public AssetStorage {
 
 
   virtual ~AssetImpl(void) { }
-  std::string GetRef(void) const { return name; }
+  const SharedString & GetRef(void) const { return name; }
 
 
   std::string  GetLastGoodVersionRef(void) const;

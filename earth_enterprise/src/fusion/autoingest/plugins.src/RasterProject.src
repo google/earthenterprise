@@ -338,7 +338,7 @@ bool RasterProjectAssetImplD::FixConfigBeforeUpdateCheck(void) const {
     throw khException(
       kh::tr("\nInternal error: invalid \"overlay_terrain_start_level_\" (%1)"
              " in (%2).\nThe start level value should be even.").arg(
-               config.overlay_terrain_start_level_).arg(GetRef()));
+               config.overlay_terrain_start_level_).arg(GetRef().toString()));
   }
 
   bool changed = false;
@@ -690,7 +690,7 @@ void RasterProjectAssetVersionImplD::UpdateChildren(void) {
 
   if (numInsets == 0) {
     throw khException(kh::tr("No insets defined for project %1.\n"
-                             "Cannot build").arg(GetRef()));
+                             "Cannot build").arg(GetRef().toString()));
   }
 }
 
@@ -769,19 +769,19 @@ void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
   const uint numInsets = inputs.size();
   if (numInsets == 0) {
     throw khException(kh::tr("No insets defined for project %1.\n"
-                             "Cannot build").arg(GetRef()));
+                             "Cannot build").arg(GetRef().toString()));
   }
 
   // sanity check in case the previous logic to ensure a valid channel id
   // fails
   if (config.fuid_channel_ == 0) {
     throw khException(kh::tr("Internal Error: No channel id for %1")
-                      .arg(GetRef()));
+                      .arg(GetRef().toString()));
   }
 
   if (config.asset_uuid_ == "") {
     throw khException(kh::tr("Internal Error: No UUID for %1")
-                      .arg(GetRef()));
+                      .arg(GetRef().toString()));
   }
 
 
@@ -977,7 +977,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   if (numInsets == 0) {
     throw khException(kh::tr("Attempt to build index with too few "
                              "insets for project: %1.\n"
-                             "Cannot build").arg(GetRef()));
+                             "Cannot build").arg(GetRef().toString()));
   }
 
   std::vector<InsetInfo<

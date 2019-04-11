@@ -105,7 +105,7 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage {
     return (state == AssetDefs::Bad);
   }
 
-  std::string GetRef(void) const { return name; }
+  const SharedString & GetRef(void) const { return name; }
   std::string GetAssetRef(void) const {
     AssetVersionRef verref(name);
     return verref.AssetRef();

@@ -65,12 +65,10 @@ class DerivedAssetHandleD_ : public virtual BaseD_, public ROBase_
   }
  public:
   DerivedAssetHandleD_(void) : BBase(), BaseD(), ROBase() { }
-  DerivedAssetHandleD_(const std::string &ref_) :
+  DerivedAssetHandleD_(const SharedString &ref_) :
       // Only call the common (virtually inherited) base class with the initializtion state.
       // It's the only one that has state anyway.  Also, explicitly calling the virtual base
       // class puts a build time check to ensure BBase is a virtural base class of this class.
-      BBase(ref_), BaseD(), ROBase() { }
-  DerivedAssetHandleD_(const SharedString &ref_) :
       BBase(ref_), BaseD(), ROBase() { }
 
 #if GEE_HAS_MOVE
@@ -329,7 +327,7 @@ protected:
  public:
   MutableDerivedAssetHandleD_(void) :
       BBase(), BaseD(), DerivedBase(), MutableBase() { }
-  MutableDerivedAssetHandleD_(const std::string &ref_) :
+  MutableDerivedAssetHandleD_(const SharedString &ref_) :
       // Only call the common (virtually inherited) base class with the initializtion state.
       // It's the only one that has state anyway.  Also, explicitly calling the virtual base
       // class puts a build time check to ensure BBase is a virtural base class of this class.
