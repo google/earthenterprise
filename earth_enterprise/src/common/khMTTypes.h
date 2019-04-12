@@ -219,67 +219,84 @@ class khMTMap
 };
 
 // WARNING: Use this with extreme caution
-// It protects some obvious problems but inheriting from vector publicly isn't great
+// It protects some obvious problems but creates some less obvious ones
 template <typename T>
-class MTVector : public std::vector<T> {
-  private:
-    mutable std::mutex mtx;
-
-    MTVector(const MTVector& a, const std::lock_guard<std::mutex> &) : Base(a) { }
+class MTVector {
   public:
     typedef std::vector<T> Base;
     typedef typename Base::const_iterator const_iterator;
+
+  private:
+    mutable std::mutex mtx;
+    Base vec;
+
+    MTVector(const MTVector& a, const std::lock_guard<std::mutex> &) : vec(a.vec) { }
+
+  public:
     void push_back(const T& v) {
       std::lock_guard<std::mutex> lock(mtx);
-      Base::push_back(v);
+      vec.push_back(v);
     }
-    MTVector() : Base() { }
+    MTVector() { }
     // forward to private copy constructor to protect vector from modification
     MTVector(const MTVector& a) : MTVector(a, std::lock_guard<std::mutex>(a.mtx)) { }
 
     const T& operator[] (const size_t idx) const {
       std::lock_guard<std::mutex> lock(mtx);
-      return Base::operator[](idx); 
+      return vec[idx]; 
     }
 
     bool operator==(const MTVector& x) const {
       std::mutex* firstMtx = &x.mtx;
       std::mutex* secondMtx = &mtx;
+      // Be sure to always lock in the same order just in case two threads attempt a==b and b==a
       if (firstMtx > secondMtx)
         swap(firstMtx, secondMtx);
+      // also protect against the unlikely a==a to be safe
       else if (firstMtx == secondMtx)
         return true;
       std::lock_guard<std::mutex> lock1(*firstMtx);
       std::lock_guard<std::mutex> lock2(*secondMtx);
-      return std::equal(begin(), end(), x.begin());
+      return std::equal(vec.begin(), vec.end(), x.vec.begin());
     }
 
     bool operator==(const Base& x) const {
       std::lock_guard<std::mutex> lock(mtx);
-      std::equal(begin(), end(), x.begin());
+      std::equal(vec.begin(), vec.end(), x.begin());
       return true;
     }
 
     void clear(void) {
       std::lock_guard<std::mutex> lock(mtx);
-      Base::clear();
+      vec.clear();
+    }
+
+    size_t size(void) const {
+      return vec.size();
+    }
+
+    bool empty(void) const {
+      return vec.empty();
     }
 
     void shrink_to_fit(void) {
       std::lock_guard<std::mutex> lock(mtx);
-      Base::shrink_to_fit();
+      vec.shrink_to_fit();
     }
-
+// The remaining methods are bad news but are currently needed to compile
     const_iterator begin(void) const {
-      return Base::begin();
+      return vec.begin();
     }
 
     const_iterator end(void) const {
-      return Base::end();
+      return vec.end();
     }
 
-    size_t size(void) const {
-      return Base::size();
+    operator const Base&(void) const {
+      return vec;
+    }
+    operator const Base*(void) const {
+      return &vec;
     }
 };
 
