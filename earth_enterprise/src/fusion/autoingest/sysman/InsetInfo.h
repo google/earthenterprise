@@ -29,6 +29,7 @@ Description: Support for terrain "overlay" projects.
 #include <functional>
 #include "common/khExtents.h"
 #include "common/khInsetCoverage.h"
+#include "common/SharedString.h"
 #include "autoingest/plugins/CombinedRPAsset.h"
 
 
@@ -112,7 +113,7 @@ class PacketGenInfo {
   // cache of my sub asset versions - initially empty, filled after build
   // Indexed by level number! There will be leading "blanks".
   std::vector<AssetVersion> packetLevels;
-  std::string               packetgenverref;
+  SharedString              packetgenverref;
 
   uint beginSkipTransparentLevel;
 
@@ -146,16 +147,16 @@ class PacketGenInfo {
 // Predicate for searching the asset by name.
 class AssetNameEqualToPred : public std::unary_function<PacketGenInfo, bool> {
  public:
-  explicit AssetNameEqualToPred(const std::string &_val)
+  explicit AssetNameEqualToPred(const SharedString &_val)
       : val_(_val) {
   }
 
   bool operator()(const PacketGenInfo &elem) const {
-    return (elem.assetname == val_);
+    return (elem.assetname == val_.toString());
   }
 
  private:
-  std::string val_;
+  SharedString val_;
 };
 
 template <class InsetInfo>

@@ -51,7 +51,7 @@ class AssetDefs {
   static std::string FilenameToAssetPath(const std::string &filepath);
   static std::string FileExtension(Type type, const std::string &subtype);
 
-  static std::string SubAssetName(const std::string &parentAssetRef,
+  static std::string SubAssetName(const SharedString &parentAssetRef,
                                   const std::string &basename,
                                   Type type,
                                   const std::string &subtype);

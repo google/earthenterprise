@@ -85,7 +85,7 @@ VectorFuseAssetVersionImplD::DoSubmitTask(void)
   // generate packet filenames based on my name
   // TODO: - implement size estimates
   std::string packet_path = WorkingFileRef(khReplaceExtension
-                                (khBasename(GetAssetRef()), ".kvpacket"));
+                                (khBasename(GetAssetRef().toString()), ".kvpacket"));
   task.AddOutput(packet_path, 0); // size estimate
 
   // submit the task
@@ -108,7 +108,7 @@ VectorFuseAssetVersionImplD::AttemptConvertFromOldLastGood(void)
   }
 
   // get the old name of the this asset
-  std::string oldassetref = GetAssetRef();
+  std::string oldassetref = GetAssetRef().toString();
   {
     static const std::string oldsuffix = "pack.kva";
     static const std::string newsuffix = "packet.kva";
@@ -150,7 +150,7 @@ VectorFuseAssetVersionImplD::AttemptConvertFromOldLastGood(void)
 
   if (lastgood->config != checkconfig) {
     notify(NFY_DEBUG, "AssetVer (%s) config doesn't match",
-           lastgood->GetRef().c_str());
+           lastgood->GetRef().toString().c_str());
     return false;
   }
 
@@ -171,7 +171,7 @@ VectorFuseAssetVersionImplD::MakeConvertTask(const AssetVersion &oldver) {
   // version. This information will be used by merge PacketLevels to determine
   // if they can upgrade instead of doing their own work.
   (void)khWriteStringToFile(WorkingFilename("upgradedfrom"),
-                            oldver->GetRef());
+                            oldver->GetRef().toString());
 
   // get my input filenames so I can pass them to the TaskDef
   std::string input_filename = oldver->GetOutputFilename(0);
@@ -179,7 +179,7 @@ VectorFuseAssetVersionImplD::MakeConvertTask(const AssetVersion &oldver) {
 
   // generate output filename based on my name
   std::string output_filename = WorkingFileRef(
-      khReplaceExtension(khBasename(GetAssetRef()), ".kvpacket"));
+      khReplaceExtension(khBasename(GetAssetRef().toString()), ".kvpacket"));
   // TODO: - implement size estimates
   task.AddOutput(output_filename, 0); // size estimate
 

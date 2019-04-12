@@ -275,12 +275,12 @@ AssetDefs::FileExtension(Type type, const std::string &subtype)
 
 
 std::string
-AssetDefs::SubAssetName(const std::string &parentAssetRef,
+AssetDefs::SubAssetName(const SharedString &parentAssetRef,
                         const std::string &basename,
                         Type type,
                         const std::string &subtype)
 {
-  return khComposePath(parentAssetRef,
+  return khComposePath(parentAssetRef.toString(),
                        basename + FileExtension(type, subtype));
 }
 

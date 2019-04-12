@@ -104,7 +104,7 @@ class MercatorRasterProjectAssetVersionImpl {
     // The first 3 children are reserved, the rest are dated imagery indexes.
     for(uint i = 3; i < children.size(); ++i) {
       RasterGEIndexAssetVersion index(children[i]);
-      std::string index_ref(index->GetRef());
+      SharedString index_ref(index->GetRef());
       std::string date_string(index->config.date_string_);
       std::string index_file = index->GetOutputFilename(0);
       DatedImageryIndexInfo info(index_ref, date_string, channel_id++);
@@ -627,7 +627,7 @@ void MercatorRasterProjectAssetVersionImplD::LoadInsetInfo<
       MercatorRasterProductAssetVersion> > &insets) const;
 
 void MercatorRasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
-  std::string assetRef = GetAssetRef();
+  SharedString assetRef = GetAssetRef();
 
   // short circuit on degenerate case. Do this so the rest of the code
   // can assume that there is at least one inset.
@@ -685,7 +685,7 @@ void MercatorRasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
       notify(NFY_DEBUG,
              "  Historical Inset: %d %s, level %d, start date: %s\n",
              i,
-             inset_infos[i].resource_->GetRef().c_str(),
+             inset_infos[i].resource_->GetRef().toString().c_str(),
              inset_infos[i].effectiveMaxLevel,
              inset_infos[i].date_string_.c_str());
     }
@@ -926,7 +926,7 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
 
   // create my children giving them each a bigger piece of the stack
   std::vector<SharedString> packgenkids;
-  std::vector<std::string> packgenassets;
+  std::vector<SharedString> packgenassets;
   std::vector<AssetVersion> packgenvers;
   packgenkids.reserve(numInsets);
   packgenassets.reserve(numInsets);
@@ -988,7 +988,7 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
       // see if we want to depend on the packgen for this guy
       // packetgenverref will only be populated if the other one
       // actually cached raster blends.
-      std::string packgenVerRef;
+      SharedString packgenVerRef;
       if (!otherGenInfo.packetgenverref.empty() &&
           otherWillContribToMinify) {
         packgenVerRef = otherGenInfo.packetgenverref;
@@ -1035,8 +1035,8 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
   // ------------------------
   // make index sub asset
   // ------------------------
-  std::string assetRef = GetAssetRef();
-  std::string dbname = khDropExtension(khBasename(assetRef));
+  SharedString assetRef = GetAssetRef();
+  std::string dbname = khDropExtension(khBasename(assetRef.toString()));
   RasterGEIndexConfig geindexConfig;
   geindexConfig.db_name_ = dbname;
   //  figure out the packetvers for the geindex
@@ -1106,7 +1106,7 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
           (*packgenver)->children.size());
       for (const auto &packlevelref : (*packgenver)->children) {
         geindexConfig.packet_insets_.back().levels_.push_back(
-            RasterPacketLevelVersion(packlevelref, indexVer));
+            RasterPacketLevelVersion(packlevelref.toString(), indexVer));
       }
     }
   }

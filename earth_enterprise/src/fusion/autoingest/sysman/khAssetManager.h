@@ -38,6 +38,7 @@
 #include <autoingest/.idl/storage/VectorProjectConfig.h>
 #include <autoingest/.idl/storage/KMLProjectConfig.h>
 #include <autoingest/.idl/storage/MapDatabaseConfig.h>
+#include "common/SharedString.h"
 
 
 
@@ -83,7 +84,7 @@ class khAssetManager
   void NotifyVersionStateChange(const std::string &ref,
                                 AssetDefs::State state);
   void NotifyVersionProgress(const std::string &ref,double progress);
-  void SubmitTask(const std::string &verref, const TaskDef &taskdef,
+  void SubmitTask(const SharedString &verref, const TaskDef &taskdef,
                   int32 priority = 0);
   void DeleteTask(const std::string &verref);
   void DeleteFile(const std::string &path) {

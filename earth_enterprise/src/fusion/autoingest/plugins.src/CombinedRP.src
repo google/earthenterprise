@@ -54,7 +54,7 @@ CombinedRPAssetVersionImpl::GetExtents(void) const
   }
 
   throw khException(kh::tr("Unable to get extents for ")
-                    + GetRef());
+                    + GetRef().toString());
 }
 
 
@@ -65,7 +65,7 @@ CombinedRPAssetVersionImpl::GetMaxLevel(void) const
   FromString(meta.GetValue("maxlevel"), prodMaxLevel);
   if (!prodMaxLevel) {
     throw khException(kh::tr("Unable to get maxlevel for ")
-                      + GetRef());
+                      + GetRef().toString());
   }
   return prodMaxLevel;
 }
@@ -162,7 +162,7 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
 
   // We want to make our children as siblings in the assetroot.
   // This is so we can reuse the old ones built before CombinedRP existed.
-  std::string assetRef = khDirname(GetAssetRef());
+  std::string assetRef = khDirname(GetAssetRef().toString());
 
   // ***** load my input versions (only if they aren't already loaded)
   // I'll use this list of my inputs to pass to my children so they don't

@@ -16,6 +16,7 @@
 #include <string>
 #include <vector>
 #include <khTypes.h>
+#include "common/SharedString.h"
 
 
 // ****************************************************************************
@@ -24,7 +25,7 @@
 class VectorPacketVersion {
   // cannot pre-bind this to a packetfile output name, since this config
   // gets built before all the vectorfuses are completed
-  std::string packet_verref_;
+  SharedString packet_verref_;
   uint32 channel_id_;
   uint32 version_;
 };

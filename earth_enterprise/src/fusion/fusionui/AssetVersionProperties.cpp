@@ -44,13 +44,13 @@ static QPixmap uic_load_pixmap( const QString &name )
 #define COL_REF 3
 
 AssetChildItem::AssetChildItem( QListView *parent, const AssetVersion &ver)
-    : QListViewItem( parent ), AssetWatcher(ver->GetRef())
+    : QListViewItem( parent ), AssetWatcher(ver->GetRef().toString())
 {
   configureWidgets(ver);
 }
 
 AssetChildItem::AssetChildItem( QListViewItem *parent, const AssetVersion &ver, const std::string &msg )
-    : QListViewItem( parent ), AssetWatcher(ver->GetRef())
+    : QListViewItem( parent ), AssetWatcher(ver->GetRef().toString())
 {
   configureWidgets(ver, msg);
 }
@@ -63,7 +63,7 @@ AssetChildItem::configureWidgets(const AssetVersion &ver,
   setText( COL_STATE, ver->PrettyState() );
   if ( ver->Logfile().size() != 0 )
     setPixmap( COL_LOG, uic_load_pixmap( "history.png" ) );
-  setText( COL_REF, ver->GetRef().c_str() );
+  setText( COL_REF, ver->GetRef().toString().c_str() );
 
   setExpandable(ver->inputs.size() ||
                 (!ver->IsLeaf() && ver->children.size()));
