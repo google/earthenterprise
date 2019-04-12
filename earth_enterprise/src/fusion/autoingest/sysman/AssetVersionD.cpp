@@ -1238,7 +1238,7 @@ CompositeAssetVersionImplD::Rebuild(const std::shared_ptr<StateChangeNotifier> c
         }
       } else {
         notify(NFY_WARN, "'%s' has broken child to resume '%s'",
-               GetRef().c_str(), i->Ref().c_str());
+               GetRef().c_str(), i->Ref().toString().c_str());
       }
     }
   }
@@ -1272,7 +1272,7 @@ CompositeAssetVersionImplD::Cancel(const std::shared_ptr<StateChangeNotifier> ca
         }
       } else {
         notify(NFY_WARN, "'%s' has broken child to cancel '%s'",
-               GetRef().c_str(), i->Ref().c_str());
+               GetRef().c_str(), i->Ref().toString().c_str());
       }
     }
   }

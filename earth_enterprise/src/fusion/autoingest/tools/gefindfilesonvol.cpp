@@ -229,7 +229,7 @@ FindFilesOnVol(const std::string &verref,
   AssetVersion version(verref);
   if (!version) {
     notify(NFY_WARN, "Unable to load asset version %s",
-           version.Ref().c_str());
+           version.Ref().toString().c_str());
   }
 
   RebuildNode *node = new RebuildNode(verref, currentStack);
