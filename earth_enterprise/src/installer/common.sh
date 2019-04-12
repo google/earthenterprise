@@ -75,7 +75,7 @@ xml_file_get_xpath()
 
     # Warning: `xmllint --noent` doesn't recognize named entities like
     # "&lt;" and "&gt;":
-    xmllint --nonet --noent --nocdata --xpath "$XPATH" "$FILE"
+    echo "cat $XPATH" | xmllint --noent --nonet --shell "$FILE" | tail -2 | head -1
 }
 
 is_package_installed()
