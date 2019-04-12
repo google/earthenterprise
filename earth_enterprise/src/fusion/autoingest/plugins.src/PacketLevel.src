@@ -70,26 +70,6 @@ void PacketLevelAssetVersionImplD::DoSubmitTask(void) {
   std::string configfile = WorkingFilename("config.xml");
   taskConfig.Save(configfile);
 
-  // Purge the asset version cache, keeping (2n + 32) recent items:
-  // (n combinedRp + n product + 24 pyramid levels + constant 8 = 2n + 32),
-  // other items will be saved and removed from the cache. This way we are
-  // trying to keep in the cache all the needed asset version items for
-  // building current packetLevel, free the space for loading new items, thus
-  // prevent complete cache purging in GetInputFilenames().
-  // If we do not purge, the cache could be filled up with mutable packetLevel
-  // asset versions that are not being purged automatically (since they are
-  // referenced in DirtyMap), thus ends up complete cache purging when the
-  // cache is fully filled.
-
-  // misc.xml now contains an option, DisablePacketLevelVersionCachePurge, which
-  // allows the user to disable cache purging. The default value is false
-
-  if (! MiscConfig::Instance().DisablePacketLevelVersionCachePurge)
-  {
-     MutableAssetVersionD::PurgeCacheIfNeeded(
-       (taskConfig.insets.size() << 1) + 32);
-  }
-
   // get my input filenames so I can pass them to the TaskDef
   std::vector<std::string> inputFilenames;
   inputFilenames.reserve(inputs.size());

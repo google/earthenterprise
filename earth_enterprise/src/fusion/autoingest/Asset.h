@@ -94,7 +94,8 @@ template <>
 inline void
 Asset::DoBind(const std::string &ref, bool checkFileExistenceFirst) const
 {
-  khTargetedLock lock(ref);
+  std::lock_guard<std::mutex> lock(getBindMutex());
+
   // Check in cache
   HandleType entry = CacheFind(ref);
   bool addToCache = false;

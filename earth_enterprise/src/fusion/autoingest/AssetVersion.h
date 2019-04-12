@@ -204,7 +204,7 @@ inline void AssetVersion::DoBind<1>(const std::string &boundref,
                                     const AssetVersionRef &boundVerRef,
                                     bool checkFileExistenceFirst,
                                     Int2Type<1>) const {
-  khTargetedLock lock(boundref);
+  std::lock_guard<std::mutex> lock(getBindMutex());
   // Check in cache.
   HandleType entry = CacheFind(boundref);
   bool addToCache = false;
@@ -258,7 +258,7 @@ inline void AssetVersion::DoBind<0>(const std::string &boundref,
                         const AssetVersionRef &boundVerRef,
                         bool checkFileExistenceFirst,
                         Int2Type<0>) const {
-  khTargetedLock lock(boundref);
+  std::lock_guard<std::mutex> lock(getBindMutex());
   // Check in cache.
   HandleType entry = CacheFind(boundref);
 

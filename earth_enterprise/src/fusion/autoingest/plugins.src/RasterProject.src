@@ -1155,7 +1155,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
       genInfo[i].PopulatePacketLevels(packgen);
     }
 
-#pragma omp ordered 
+#pragma omp critical 
     {
       // remember this new PacketGen version
       packgenkids.push_back(packgen->GetRef());

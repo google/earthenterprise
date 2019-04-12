@@ -149,95 +149,6 @@ class MutableAssetHandleD_ : public virtual Base_ {
     return assetName.find(kProjectAssetVersionNumPrefix) != std::string::npos;
   }
 
-  // Purge the cache if needed and keep recent "toKeep" items.
-  static void PurgeCacheIfNeeded(size_t toKeep) {
-    // Proceed only when the cache gets full.
-    if (Base::cache().size() < (Base::cache().capacity()) ||
-      // Don't proceed if there are no more than 1 mutable items to purge,
-      // since immutable items will be purged automatically by LRU cache.
-      dirtyMap.size() <= 1) {
-      return;
-    }
-    try {
-      // When there are more items to keep than cache's capacity,
-      // nothing can be purged and cache's capacity needs to be increased
-      // for better performance.
-      if (Base::cache().capacity() < toKeep) {
-        static bool warned = false;
-        if (!warned) {
-          notify(NFY_FATAL, "You may need to increase cache capacity for "
-            "better performance: cache size %lu, cache capacity %lu, number "
-            "of items requested to keep %lu", Base::cache().size(),
-            Base::cache().capacity(), toKeep);
-          warned = true;
-        }
-        return;
-      }
-
-      // Get old cache items that could be purged.
-      std::vector<std::string> toDelete;
-      Base::cache().GetOldKeys(toKeep, &toDelete);
-
-      // Skip project asset versions, which should always stay in the cache.
-      toDelete.erase(
-          std::remove_if(toDelete.begin(), toDelete.end(),
-              MutableAssetHandleD_::IsProjectAssetVersion),
-          toDelete.end());
-
-      // Save mutable items.
-      khFilesTransaction filetrans(".new");
-      uint32 numDotNew=0;
-      for (std::vector<std::string>::iterator it = toDelete.begin();
-           it != toDelete.end(); ++it) {
-        if (dirtyMap.contains(*it)) {
-          std::string filename = dirtyMap[*it]->XMLFilename();
-          notify(NFY_VERBOSE,"AssetHandleD.h:193: filename = %s",
-                 filename.c_str());
-
-          if (filename.rfind(".new") != std::string::npos) 
-          {
-              notify(NFY_VERBOSE,"PurgeCacheIfNeeded(), filename contains .new:  %s", filename.c_str());
-              ++numDotNew;
-          }
-          filename += ".new";
-          if (dirtyMap[*it]->Save(filename)) {
-            filetrans.AddNewPath(filename);
-          }
-        }
-      }
-      notify(NFY_VERBOSE, "PurgeCacheIfNeeded() number of files containing .new: %u", numDotNew);
-      if (!filetrans.Commit())
-      {
-        throw khException("Unable to commit file saving in cache purge.");
-      }
-
-      // Discard saved mutable items from dirtyMap.
-      size_t dirties = dirtyMap.size();
-      for (std::vector<std::string>::iterator it = toDelete.begin();
-           it != toDelete.end(); ++it) {
-        dirtyMap.erase(*it);
-      }
-
-      // Remove both immutable and mutable items from cache.
-      size_t cached = Base::cache().size();
-      for (std::vector<std::string>::iterator it = toDelete.begin();
-           it != toDelete.end(); ++it) {
-        Base::cache().Remove(*it, false);  // Do not prune for now.
-      }
-
-      // Prune the cache in the end.
-      Base::cache().Prune();
-
-      notify(NFY_INFO, "cache size %lu, dirty map %lu, "
-        "assets to keep %lu, mutable assets purged %lu, total purged %lu",
-        Base::cache().size(), dirtyMap.size(), toKeep,
-        dirties - dirtyMap.size(), cached - Base::cache().size());
-    }
-    catch (const std::runtime_error& e) {
-      notify(NFY_INFO, "Exception in cache purge: %s", e.what());
-    }
-  }
-
  protected:
   virtual void OnBind(const std::string &boundref) const {
     Base::OnBind(boundref);
@@ -274,12 +185,13 @@ class MutableAssetHandleD_ : public virtual Base_ {
 
   static bool SaveDirtyToDotNew(khFilesTransaction &savetrans,
                                 std::vector<std::string> *saveDirty) {
-    std::vector<std::string> dirtyKeys = dirtyMap.keys();
+    DirtyMap tempDirty = std::move(dirtyMap);
+    std::vector<std::string> dirtyKeys = tempDirty.keys();
     for (const auto& d : dirtyKeys) {
       // TODO: - check to see if actually dirty
       if ( 1 ) {
-        std::string filename = dirtyMap[d]->XMLFilename() + ".new";
-        if (dirtyMap[d]->Save(filename)) {
+        std::string filename = tempDirty[d]->XMLFilename() + ".new";
+        if (tempDirty[d]->Save(filename)) {
           savetrans.AddNewPath(filename);
           if (saveDirty) {
             saveDirty->push_back(d);

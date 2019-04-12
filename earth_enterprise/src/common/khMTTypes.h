@@ -156,7 +156,6 @@ class khMTSet
     set.clear();
   }
   size_t size(void) {
-    khLockGuard guard(mutex);
     return set.size();
   }
 };
@@ -172,10 +171,14 @@ class khMTMap
 
  private:
   // private and unimplimented
-  khMTMap& operator=(const khMTMap&);
+  khMTMap& operator=(const khMTMap&) = delete;
 
+  khMTMap(const khMTMap& o, const std::lock_guard<std::mutex>&) : map(o.map) { }
+  khMTMap(khMTMap&& o, const std::lock_guard<std::mutex>&) : map(std::move(o.map)) { }
  public:
   khMTMap(void) { }
+  khMTMap(const khMTMap& o) : khMTMap(o, std::lock_guard<std::mutex>(o.mutex)) { }
+  khMTMap(khMTMap&& o) : khMTMap(o, std::lock_guard<std::mutex>(o.mutex)){ }
 
   void insert(const std::pair<K,V> &val) {
     std::lock_guard<std::mutex> guard(mutex);
@@ -183,12 +186,9 @@ class khMTMap
   }
   void erase(const K &val) {
     std::lock_guard<std::mutex> guard(mutex);
-    if (map.find(val) != map.end()) {
-      (void)map.erase(val);
-    }
+    (void)map.erase(val);
   }
   size_t size(void) {
-    std::lock_guard<std::mutex> guard(mutex);
     return map.size();
   }
   V& operator[](const K& key) {
@@ -216,10 +216,6 @@ class khMTMap
     std::lock_guard<std::mutex> guard(mutex);
     return map.empty();
   }
-  khMTMap(const khMTMap&) {
-    // todo: this is only used for setting up an empty dirtymap by AssetD and AssetVersionD
-    // should probably really remove this
-  }
 };
 
 // WARNING: Use this with extreme caution
@@ -240,18 +236,27 @@ class MTVector : public std::vector<T> {
     MTVector() : Base() { }
     // forward to private copy constructor to protect vector from modification
     MTVector(const MTVector& a) : MTVector(a, std::lock_guard<std::mutex>(a.mtx)) { }
+
     const T& operator[] (const size_t idx) const {
       std::lock_guard<std::mutex> lock(mtx);
       return Base::operator[](idx); 
     }
 
     bool operator==(const MTVector& x) const {
-      std::lock_guard<std::mutex> lock(mtx);
-      return true;
+      std::mutex* firstMtx = &x.mtx;
+      std::mutex* secondMtx = &mtx;
+      if (firstMtx > secondMtx)
+        swap(firstMtx, secondMtx);
+      else if (firstMtx == secondMtx)
+        return true;
+      std::lock_guard<std::mutex> lock1(*firstMtx);
+      std::lock_guard<std::mutex> lock2(*secondMtx);
+      return std::equal(begin(), end(), x.begin());
     }
 
     bool operator==(const Base& x) const {
       std::lock_guard<std::mutex> lock(mtx);
+      std::equal(begin(), end(), x.begin());
       return true;
     }
 
@@ -274,49 +279,8 @@ class MTVector : public std::vector<T> {
     }
 
     size_t size(void) const {
-      std::lock_guard<std::mutex> lock(mtx);
       return Base::size();
     }
-};
-
-class khTargetedLock {
-  private:
-    // no such thing as a targeted lock which doesn't have a target
-    khTargetedLock() = delete;
-    khTargetedLock(const khTargetedLock&) = delete;
-    typedef std::unordered_map<std::string, std::shared_ptr<std::mutex>> FileLocks;
-    
-    static std::mutex& globalMutex(void) {
-      static std::mutex classMutex;
-      return classMutex;
-    }
-    std::shared_ptr<std::mutex> theFileMutex;
-    const std::string& s;
-    static FileLocks& getFileLocks(void) {
-      static FileLocks file_locks;
-      return file_locks;
-    } 
-  public:
-    khTargetedLock(const std::string& filename) : s(filename) {
-      FileLocks& file_mutexes = getFileLocks();
-      {
-        std::lock_guard<std::mutex> global_lock(globalMutex());
-        if (file_mutexes.find(s) == file_mutexes.end()) {
-          file_mutexes[s] = std::make_shared<std::mutex>();
-        }
-        theFileMutex = file_mutexes[s];
-      }
-      theFileMutex->lock();
-    }
-    ~khTargetedLock(void) {
-      theFileMutex->unlock();
-      std::lock_guard<std::mutex> global_lock(globalMutex());
-      if (theFileMutex.use_count() == 2) {
-        FileLocks& file_mutexes = getFileLocks();
-        file_mutexes.erase(s);
-      }
-      theFileMutex = nullptr;
-    } 
 };
 
 // ****************************************************************************

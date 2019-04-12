@@ -226,8 +226,6 @@ khAssetManager::ApplyPending(void)
   pendingProgress.clear();
   pendingTaskCmds.clear();
   pendingFileDeletes.clear();
-  MutableAssetD::dirtyMap.clear();
-  MutableAssetVersionD::dirtyMap.clear();
   elapsed = timer.elapsed();
   notify(NFY_INFO, "Elapsed cleanup time: %s",
          khProgressMeter::msToString(elapsed).latin1());
