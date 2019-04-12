@@ -1308,7 +1308,7 @@ uint32 RasterProjectAssetVersionImplD::MakeIndexSubAsset(
 
       if (kFillingTerrainInset == genInfoIt->terrain_inset_type) {
         notify(NFY_DEBUG, "Skip \"Filling\"-terrain inset: %s",
-               genInfoIt->assetname.c_str());
+               genInfoIt->assetname.toString().c_str());
         continue;  // Skip "Filling" terrain inset.
       }
     }
