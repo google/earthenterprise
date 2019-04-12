@@ -45,6 +45,7 @@ TEST(SharedStringTest, accessors)
     tsst4 = test_string2;
     EXPECT_TRUE(string(tsst4) == test_string2);
     EXPECT_TRUE(tsst4.toString() == test_string2);
+    EXPECT_TRUE(string(tsst4) == tsst4.toString());
 
     // check to make sure that operator<< contains the correct string
     stringstream ss;
