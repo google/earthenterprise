@@ -62,7 +62,7 @@ bool VectorLayerAssetVersionImplD::MustForceUpdate(void) const {
 void
 VectorLayerAssetVersionImplD::UpdateChildren(void)
 {
-  std::string assetRef = GetAssetRef();
+  SharedString assetRef = GetAssetRef();
 
   // ***** load my input versions (only if they aren't already loaded)
   // I'll use this list of my inputs to pass to my children so they don't
@@ -85,7 +85,7 @@ VectorLayerAssetVersionImplD::UpdateChildren(void)
   // ********** VectorFuseAsset child **********
   // build the name of my fuse child from the name of this layer asset
   // so it will be unique when we symlink it into the same dir as the index
-  std::string fusename=khReplaceExtension(khBasename(assetRef),"packet");
+  std::string fusename=khReplaceExtension(khBasename(assetRef.toString()),"packet");
   // Update my fuse child
   MutableAssetVersionD fuse =
     VectorFuseFactory::FindMakeAndUpdateSubAsset(assetRef, fusename,

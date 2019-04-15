@@ -58,12 +58,12 @@ class AssetImpl : public khRefCounter, public AssetStorage {
   time_t timestamp;
   uint64 filesize;
 
-  std::string WorkingDir(void) const { return WorkingDir(GetRef()); }
-  std::string XMLFilename() const { return XMLFilename(GetRef()); }
+  std::string WorkingDir(void) const { return WorkingDir(GetRef().toString()); }
+  std::string XMLFilename() const { return XMLFilename(GetRef().toString()); }
 
 
   virtual ~AssetImpl(void) { }
-  std::string GetRef(void) const { return name; }
+  const SharedString & GetRef(void) const { return name; }
 
 
   std::string  GetLastGoodVersionRef(void) const;
@@ -91,7 +91,7 @@ Asset::cache(void)
 
 template <>
 inline void
-Asset::DoBind(const std::string &ref, bool checkFileExistenceFirst) const
+Asset::DoBind(const SharedString &ref, bool checkFileExistenceFirst) const
 {
   // Check in cache
   HandleType entry = CacheFind(ref);
@@ -101,10 +101,10 @@ Asset::DoBind(const std::string &ref, bool checkFileExistenceFirst) const
   // Try to load from XML
   if (!entry) {
     if (checkFileExistenceFirst) {
-      std::string filename = Impl::XMLFilename(ref);
+      std::string filename = Impl::XMLFilename(ref.toString());
 
       // checks to see whether or not this XML file exists
-      if (!khExists(Impl::XMLFilename(ref))) {
+      if (!khExists(Impl::XMLFilename(ref.toString()))) {
         // in this case DoBind is allowed not to throw even if
         // we configured to normally throw
         return;
@@ -112,10 +112,10 @@ Asset::DoBind(const std::string &ref, bool checkFileExistenceFirst) const
     }
 
     // will succeed, generate stub, or throw exception
-    entry = Load(ref);
+    entry = Load(ref.toString());
     addToCache = true;
   } else if (check_timestamps) {
-    std::string filename = Impl::XMLFilename(ref);
+    std::string filename = Impl::XMLFilename(ref.toString());
     uint64 filesize = 0;
     time_t timestamp = 0;
     if (khGetFileInfo(filename, filesize, timestamp) &&
@@ -127,7 +127,7 @@ Asset::DoBind(const std::string &ref, bool checkFileExistenceFirst) const
       cache().Remove(ref, false); // don't prune, the Add will
 
       // will succeed, generate stub, or throw exception
-      entry = Load(ref);
+      entry = Load(ref.toString());
       addToCache = true;
     }
   }

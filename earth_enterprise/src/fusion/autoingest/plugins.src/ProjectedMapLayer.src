@@ -72,7 +72,7 @@ class SubLayer {
 void
 ProjectedMapLayerAssetVersionImplD::UpdateChildren(void)
 {
-  std::string assetRef = GetAssetRef();
+  SharedString assetRef = GetAssetRef();
 
   // ***** load my input versions (only if they aren't already loaded)
   // I'll use this list of my inputs to pass to my children so they don't

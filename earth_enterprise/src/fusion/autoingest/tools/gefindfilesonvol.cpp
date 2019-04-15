@@ -269,13 +269,13 @@ FindFilesOnVol(const std::string &verref,
   }
 
   for (const auto &input : version->inputs) {
-    FindFilesOnVol(input, volset, seen,
+    FindFilesOnVol(input.toString(), volset, seen,
                    found, currentStack,
                    count, interval);
   }
   if (!version->IsLeaf()) {
     for (const auto &child: version->children) {
-      FindFilesOnVol(child, volset, seen,
+      FindFilesOnVol(child.toString(), volset, seen,
                      found, currentStack,
                      count, interval);
     }

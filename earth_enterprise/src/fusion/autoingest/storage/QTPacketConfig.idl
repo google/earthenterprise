@@ -17,6 +17,7 @@
 #include <vector>
 #include <khTypes.h>
 #include <autoingest/.idl/storage/DatedImageryIndexInfo.h>
+#include "common/SharedString.h"
 
 #cppquote
 #include <autoingest/.idl/storage/DatedImageryIndexInfo_impl.h>
@@ -30,11 +31,11 @@
 // ****************************************************************************
 class QTPacketConfig {
   IsUpToDateIgnore uint      index_version_;
-  std::string imagery_verref_;                     // RasterGEIndex
-  std::string terrain_verref_;                     // CombinedTerrain
-  std::string vector_verref_;                      // VectorGEIndex
-  std::string imageryproj_verref_ = std::string(); // RasterProject
-  std::string terrainproj_verref_ = std::string(); // RasterProject
+  SharedString imagery_verref_;                     // RasterGEIndex
+  SharedString terrain_verref_;                     // CombinedTerrain
+  SharedString vector_verref_;                      // VectorGEIndex
+  SharedString imageryproj_verref_ = SharedString(); // RasterProject
+  SharedString terrainproj_verref_ = SharedString(); // RasterProject
 
   // Acquisition date of the imagery project.
   std::string imagery_date_string_ = std::string();

@@ -92,7 +92,7 @@ AssetVersionImplD::StateChangeNotifier::NotifyParents(
       assetVersion->HandleChildStateChange(notifier);
     } else {
       notify(NFY_WARN, "'%s' has broken parent '%s'",
-             assetVersion->GetRef().c_str(), ref.toString().c_str());
+             assetVersion->GetRef().toString().c_str(), ref.toString().c_str());
     }
     i++;
   }
@@ -119,7 +119,7 @@ AssetVersionImplD::StateChangeNotifier::NotifyListeners(
       assetVersion->HandleInputStateChange(states, notifier);
     } else {
       notify(NFY_WARN, "'%s' has broken listener '%s'",
-             assetVersion->GetRef().c_str(), ref.toString().c_str());
+             assetVersion->GetRef().toString().c_str(), ref.toString().c_str());
     }
     i++;
   }
@@ -240,7 +240,7 @@ AssetVersionImplD::StateByInputs(bool *blockersAreOffline,
       }
     } else {
       notify(NFY_WARN, "StateByInputs: %s missing input %s",
-             GetRef().c_str(), input->GetRef().c_str());
+             GetRef().toString().c_str(), input->GetRef().toString().c_str());
       ++numblocking;
       // At this point we already know what the values of all of the outputs
       // will be (statebyinputs will be Blocked, blockersAreOffline will
@@ -283,7 +283,7 @@ void AssetVersionImplD::SetState(
     notify(NFY_DEBUG, "SetState: current state: %s | newstate: %s | asset: %s",
     	   ToString(state).c_str(),
            ToString(newstate).c_str(),
-           GetRef().c_str());
+           GetRef().toString().c_str());
     AssetDefs::State oldstate = state;
     state = newstate;
     try {
@@ -302,9 +302,9 @@ void AssetVersionImplD::SetState(
     // don't want to notify/propagate an old state.
     if (propagate && (state == newstate)) {
       notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
-             GetRef().c_str(), 
+             GetRef().toString().c_str(), 
              ToString(newstate).c_str());
-      theAssetManager.NotifyVersionStateChange(GetRef(), newstate);
+      theAssetManager.NotifyVersionStateChange(GetRef().toString(), newstate);
       PropagateStateChange(notifier);
     }
   }
@@ -315,7 +315,7 @@ AssetVersionImplD::SetProgress(double newprogress)
 {
   progress = newprogress;
   if (!AssetDefs::Finished(state)) {
-    theAssetManager.NotifyVersionProgress(GetRef(), progress);
+    theAssetManager.NotifyVersionProgress(GetRef().toString(), progress);
     PropagateProgress();
   }
 }
@@ -348,7 +348,7 @@ AssetVersionImplD::PropagateStateChange(const std::shared_ptr<StateChangeNotifie
 {
   notify(NFY_PROGRESS, "PropagateStateChange(%s): %s",
          ToString(state).c_str(), 
-         GetRef().c_str());
+         GetRef().toString().c_str());
   std::shared_ptr<StateChangeNotifier> notifier = StateChangeNotifier::GetNotifier(callerNotifier);
   notifier->AddParentsToNotify(parents);
   notifier->AddListenersToNotify(listeners, state);
@@ -358,15 +358,15 @@ void
 AssetVersionImplD::PropagateProgress(void)
 {
   notify(NFY_VERBOSE, "PropagateProgress(%s): %s",
-         ToString(progress).c_str(), GetRef().c_str());
+         ToString(progress).c_str(), GetRef().toString().c_str());
   for (auto p = parents.begin();
        p != parents.end(); ++p) {
     AssetVersionD parent(*p);
     if (parent) {
-      parent->HandleChildProgress(GetRef());
+      parent->HandleChildProgress(GetRef().toString());
     } else {
       notify(NFY_WARN, "'%s' has broken parent '%s'",
-             GetRef().c_str(), p->toString().c_str());
+             GetRef().toString().c_str(), p->toString().c_str());
     }
   }
 }
@@ -393,7 +393,7 @@ void
 AssetVersionImplD::HandleChildStateChange(const std::shared_ptr<StateChangeNotifier>) const
 {
   // NoOp in base since leaves don't need to do anything
-  notify(NFY_VERBOSE, "AssetVersionImplD::HandleChildStateChange: %s", GetRef().c_str());
+  notify(NFY_VERBOSE, "AssetVersionImplD::HandleChildStateChange: %s", GetRef().toString().c_str());
 }
 
 void
@@ -458,21 +458,20 @@ AssetVersionImplD::OkToClean(std::vector<std::string> *wouldbreak) const
 {
   // --- check that it's ok to clean me ---
   // If I have a successful parent, then my cleaning would break him
-  for (auto p = parents.begin();
-       p != parents.end(); ++p) {
+  for (auto p = parents.begin(); p != parents.end(); ++p) {
     AssetVersionD parent(*p);
     if (parent) {
       if ((parent->state != AssetDefs::Offline) &&
           (parent->state != AssetDefs::Bad)) {
         if (wouldbreak) {
-          wouldbreak->push_back(*p);
+          wouldbreak->push_back(p->toString());
         } else {
           return false;
         }
       }
     } else {
       notify(NFY_WARN, "'%s' has broken parent '%s'",
-             GetRef().c_str(), p->toString().c_str());
+             GetRef().toString().c_str(), p->toString().c_str());
     }
   }
 
@@ -485,14 +484,14 @@ AssetVersionImplD::OkToClean(std::vector<std::string> *wouldbreak) const
            (listener->state != AssetDefs::Bad)) &&
           listener->OfflineInputsBreakMe()) {
         if (wouldbreak) {
-          wouldbreak->push_back(l);
+          wouldbreak->push_back(l.toString());
         } else {
           return false;
         }
       }
     } else {
       notify(NFY_WARN, "'%s' has broken listener '%s'",
-             GetRef().c_str(), l.toString().c_str());
+             GetRef().toString().c_str(), l.toString().c_str());
     }
   }
 
@@ -554,7 +553,7 @@ AssetVersionImplD::Clean(void)
   if (!OkToClean(&wouldbreak)) {
     throw khException
       (kh::tr("Unable to clean '%1'.\nIt would break the following:\n")
-       .arg(GetRef()) +
+       .arg(GetRef().toString()) +
        join<std::vector<std::string>::iterator>(wouldbreak.begin(), wouldbreak.end(), "\n"));
   }
 
@@ -667,7 +666,7 @@ void
 LeafAssetVersionImplD::HandleInputStateChange(InputStates newStates,
                                               const std::shared_ptr<StateChangeNotifier> notifier) const
 {
-  notify(NFY_VERBOSE, "HandleInputStateChange: %s", GetRef().c_str());
+  notify(NFY_VERBOSE, "HandleInputStateChange: %s", GetRef().toString().c_str());
   // If I'm waiting on my inputs to complete there's no need to do a full sync.
   // I just reduce the number that I'm waiting for by the number that have
   // succeeded. However, if any of my assets have fallen out of a working state
@@ -812,12 +811,12 @@ LeafAssetVersionImplD::SubmitTask(void)
     DoSubmitTask();
   } catch (const std::exception &e) {
     notify(NFY_WARN, "Exception during SubmitTask: %s : %s",
-           GetRef().c_str(), e.what());
+           GetRef().toString().c_str(), e.what());
     WriteFatalLogfile(GetRef(), "SubmitTask", e.what());
     SetState(AssetDefs::Failed);
   } catch (...) {
     notify(NFY_WARN, "Unknown exception during SubmitTask: %s",
-           GetRef().c_str());
+           GetRef().toString().c_str());
     WriteFatalLogfile(GetRef(), "SubmitTask", "Unknown error");
     SetState(AssetDefs::Failed);
   }
@@ -884,7 +883,7 @@ LeafAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
       beginTime = 0;
       endTime = 0;
       if (taskid) {
-        theAssetManager.DeleteTask(GetRef());
+        theAssetManager.DeleteTask(GetRef().toString());
         taskid = 0;
       }
 
@@ -1005,7 +1004,7 @@ LeafAssetVersionImplD::DoClean(const std::shared_ptr<StateChangeNotifier> caller
       }
     } else {
       notify(NFY_WARN, "'%s' has broken input '%s'",
-             GetRef().c_str(), i.toString().c_str());
+             GetRef().toString().c_str(), i.toString().c_str());
     }
   }
 }
@@ -1017,7 +1016,7 @@ LeafAssetVersionImplD::DoClean(const std::shared_ptr<StateChangeNotifier> caller
 void
 CompositeAssetVersionImplD::HandleChildStateChange(const std::shared_ptr<StateChangeNotifier> notifier) const
 {
-  notify(NFY_VERBOSE, "CompositeAssetVersionImplD::HandleChildStateChange: %s", GetRef().c_str());
+  notify(NFY_VERBOSE, "CompositeAssetVersionImplD::HandleChildStateChange: %s", GetRef().toString().c_str());
   SyncState(notifier);
 }
 
@@ -1026,7 +1025,7 @@ CompositeAssetVersionImplD::HandleInputStateChange(InputStates, const std::share
 {
   if (children.empty()) {
     // Undecided composites need to listen to inputs
-    notify(NFY_VERBOSE, "HandleInputStateChange: %s", GetRef().c_str());
+    notify(NFY_VERBOSE, "HandleInputStateChange: %s", GetRef().toString().c_str());
     SyncState(notifier);
   }
 }
@@ -1137,7 +1136,7 @@ CompositeAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
 {
   notify(NFY_VERBOSE,
          "CompositeAssetVersionImplD::OnStateChange() %s: %s -> %s",
-         GetRef().c_str(),
+         GetRef().toString().c_str(),
          ToString(oldstate).c_str(),
          ToString(newstate).c_str());
   AssetVersionImplD::OnStateChange(newstate, oldstate);
@@ -1238,7 +1237,7 @@ CompositeAssetVersionImplD::Rebuild(const std::shared_ptr<StateChangeNotifier> c
         }
       } else {
         notify(NFY_WARN, "'%s' has broken child to resume '%s'",
-               GetRef().c_str(), i->Ref().toString().c_str());
+               GetRef().toString().c_str(), i->Ref().toString().c_str());
       }
     }
   }
@@ -1272,7 +1271,7 @@ CompositeAssetVersionImplD::Cancel(const std::shared_ptr<StateChangeNotifier> ca
         }
       } else {
         notify(NFY_WARN, "'%s' has broken child to cancel '%s'",
-               GetRef().c_str(), i->Ref().toString().c_str());
+               GetRef().toString().c_str(), i->Ref().toString().c_str());
       }
     }
   }
@@ -1300,7 +1299,7 @@ CompositeAssetVersionImplD::DoClean(const std::shared_ptr<StateChangeNotifier> c
       }
     } else {
       notify(NFY_WARN, "'%s' has broken child '%s'",
-             GetRef().c_str(), c.toString().c_str());
+             GetRef().toString().c_str(), c.toString().c_str());
     }
   }
 
@@ -1313,7 +1312,7 @@ CompositeAssetVersionImplD::DoClean(const std::shared_ptr<StateChangeNotifier> c
       }
     } else {
       notify(NFY_WARN, "'%s' has broken input '%s'",
-             GetRef().c_str(), i.toString().c_str());
+             GetRef().toString().c_str(), i.toString().c_str());
     }
   }
 }

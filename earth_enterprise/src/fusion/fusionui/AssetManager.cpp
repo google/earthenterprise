@@ -1116,7 +1116,7 @@ void AssetManager::ShowAssetProperties(const gstAssetHandle& handle) {
 
 void AssetManager::ShowCurrVerProperties(const gstAssetHandle& handle) {
   Asset currAsset = handle->getAsset();
-  AssetVersionProperties::Open(currAsset->CurrVersionRef());
+  AssetVersionProperties::Open(currAsset->CurrVersionRef().toString());
 }
 
 gstAssetHandle AssetManager::GetAssetByRow(int row) {
@@ -1217,7 +1217,7 @@ void AssetManager::PushDatabase(const gstAssetHandle& handle) {
   // Update the preferences with the user's choice. We want to remember these
   // choices so that we can automatically select this server next time they
   // push/publish.
-  std::string database_name = shortAssetName(asset->GetRef());
+  std::string database_name = shortAssetName(asset->GetRef().toString());
   Preferences::UpdatePublishServerDbMap(database_name, nickname);
 
   ServerConfig stream_server, search_server;
@@ -1351,7 +1351,7 @@ void AssetManager::PublishDatabase(const gstAssetHandle& handle) {
   // Update the preferences with the user's choice. We want to remember these
   // choices so that we can automatically select this server next time they
   // push/publish.
-  std::string database_name = shortAssetName(asset->GetRef());
+  std::string database_name = shortAssetName(asset->GetRef().toString());
   Preferences::UpdatePublishServerDbMap(database_name, nickname);
 
   ServerConfig stream_server, search_server;
@@ -1421,8 +1421,8 @@ void AssetManager::PublishDatabase(const gstAssetHandle& handle) {
 
 void AssetManager::ModifyAsset(const gstAssetHandle& handle) {
   Asset current_asset = handle->getAsset();
-  std::string assetref = current_asset->GetRef();
-  if (RestoreExisting(assetref))
+  SharedString assetref = current_asset->GetRef();
+  if (RestoreExisting(assetref.toString()))
     return;
 
   AssetBase* asset_window = NULL;
@@ -1430,7 +1430,7 @@ void AssetManager::ModifyAsset(const gstAssetHandle& handle) {
       current_asset->subtype == kProductSubtype) {
     RasterProductAsset prod(assetref);
     RasterProductImportRequest request(prod->type);
-    request.assetname = assetref;
+    request.assetname = assetref.toString();
     request.config = prod->config;
     request.meta = prod->meta;
     SourceAssetVersion source(prod->inputs[0]);
@@ -1441,7 +1441,7 @@ void AssetManager::ModifyAsset(const gstAssetHandle& handle) {
       current_asset->subtype == kMercatorProductSubtype) {
     MercatorRasterProductAsset prod(assetref);
     RasterProductImportRequest request(prod->type);
-    request.assetname = assetref;
+    request.assetname = assetref.toString();
     request.config = prod->config;
     request.meta = prod->meta;
     SourceAssetVersion source(prod->inputs[0]);
@@ -1452,7 +1452,7 @@ void AssetManager::ModifyAsset(const gstAssetHandle& handle) {
       current_asset->subtype == kProductSubtype) {
     RasterProductAsset prod(assetref);
     RasterProductImportRequest request(prod->type);
-    request.assetname = assetref;
+    request.assetname = assetref.toString();
     request.config = prod->config;
     request.meta = prod->meta;
     SourceAssetVersion source(prod->inputs[0]);
@@ -1463,7 +1463,7 @@ void AssetManager::ModifyAsset(const gstAssetHandle& handle) {
              current_asset->subtype == kProductSubtype) {
     VectorProductAsset prod(assetref);
     VectorProductImportRequest request;
-    request.assetname = assetref;
+    request.assetname = assetref.toString();
     request.config = prod->config;
     request.meta = prod->meta;
     SourceAssetVersion source(prod->inputs[0]);
@@ -1474,7 +1474,7 @@ void AssetManager::ModifyAsset(const gstAssetHandle& handle) {
              current_asset->subtype == kDatabaseSubtype) {
     DatabaseAsset dbasset(assetref);
     DatabaseEditRequest request;
-    request.assetname = assetref;
+    request.assetname = assetref.toString();
     request.config = dbasset->config;
     request.meta = dbasset->meta;
     asset_window = new Database(this, request);
@@ -1482,7 +1482,7 @@ void AssetManager::ModifyAsset(const gstAssetHandle& handle) {
              current_asset->subtype == kMapDatabaseSubtype) {
     MapDatabaseAsset dbasset(assetref);
     MapDatabaseEditRequest request;
-    request.assetname = assetref;
+    request.assetname = assetref.toString();
     request.config = dbasset->config;
     request.meta = dbasset->meta;
     asset_window = new MapDatabase(this, request);
@@ -1490,14 +1490,14 @@ void AssetManager::ModifyAsset(const gstAssetHandle& handle) {
              current_asset->subtype == kMercatorMapDatabaseSubtype) {
     MercatorMapDatabaseAsset dbasset(assetref);
     MapDatabaseEditRequest request;
-    request.assetname = assetref;
+    request.assetname = assetref.toString();
     request.config = dbasset->config;
     request.meta = dbasset->meta;
     asset_window = new MercatorMapDatabase(this, request);
   } else if (current_asset->type == AssetDefs::Map &&
              current_asset->subtype == kLayer) {
     MapLayerEditRequest request;
-    request.assetname = assetref;
+    request.assetname = assetref.toString();
     MapLayerAsset layer(assetref);
     request.config = layer->config;
     request.meta = layer->meta;
@@ -1505,7 +1505,7 @@ void AssetManager::ModifyAsset(const gstAssetHandle& handle) {
   } else if (current_asset->type == AssetDefs::Map &&
              current_asset->subtype == kProjectSubtype) {
     MapProjectEditRequest request;
-    request.assetname = assetref;
+    request.assetname = assetref.toString();
     MapProjectAsset project(assetref);
     request.config = project->config;
     request.meta = project->meta;
@@ -1513,7 +1513,7 @@ void AssetManager::ModifyAsset(const gstAssetHandle& handle) {
   } else if (current_asset->type == AssetDefs::Vector &&
              current_asset->subtype == kLayer) {
     VectorLayerXEditRequest request;
-    request.assetname = assetref;
+    request.assetname = assetref.toString();
     VectorLayerXAsset layer(assetref);
     request.config = layer->config;
     request.meta = layer->meta;
@@ -1521,7 +1521,7 @@ void AssetManager::ModifyAsset(const gstAssetHandle& handle) {
   } else if (current_asset->type == AssetDefs::Vector &&
              current_asset->subtype == kProjectSubtype) {
     VectorProjectEditRequest request;
-    request.assetname = assetref;
+    request.assetname = assetref.toString();
     VectorProjectAsset project(assetref);
     request.config = project->config;
     request.meta = project->meta;
@@ -1529,7 +1529,7 @@ void AssetManager::ModifyAsset(const gstAssetHandle& handle) {
   } else if (current_asset->type == AssetDefs::Imagery &&
              current_asset->subtype == kProjectSubtype) {
     RasterProjectEditRequest request(AssetDefs::Imagery);
-    request.assetname = assetref;
+    request.assetname = assetref.toString();
     RasterProjectAsset project(assetref);
     request.config = project->config;
     request.meta = project->meta;
@@ -1537,7 +1537,7 @@ void AssetManager::ModifyAsset(const gstAssetHandle& handle) {
   } else if (current_asset->type == AssetDefs::Imagery &&
              current_asset->subtype == kMercatorProjectSubtype) {
     RasterProjectEditRequest request(AssetDefs::Imagery);
-    request.assetname = assetref;
+    request.assetname = assetref.toString();
     MercatorRasterProjectAsset project(assetref);
     request.config = project->config;
     request.meta = project->meta;
@@ -1545,7 +1545,7 @@ void AssetManager::ModifyAsset(const gstAssetHandle& handle) {
   } else if (current_asset->type == AssetDefs::Terrain &&
              current_asset->subtype == kProjectSubtype) {
     RasterProjectEditRequest request(AssetDefs::Terrain);
-    request.assetname = assetref;
+    request.assetname = assetref.toString();
     RasterProjectAsset project(assetref);
     request.config = project->config;
     request.meta = project->meta;
@@ -1553,7 +1553,7 @@ void AssetManager::ModifyAsset(const gstAssetHandle& handle) {
   } else if (current_asset->type == AssetDefs::KML &&
              current_asset->subtype == kProjectSubtype) {
     KMLProjectEditRequest request;
-    request.assetname = assetref;
+    request.assetname = assetref.toString();
     KMLProjectAsset project(assetref);
     request.config = project->config;
     request.meta = project->meta;

@@ -35,7 +35,7 @@ AssetVersionItem::AssetVersionItem( QListView *parent, const AssetVersion &ver )
     : QListViewItem( parent, QString( "%1" ).arg( ver->version ),
                      ver->meta.GetValue("createdtime"),
                      ver->PrettyState() ),
-      AssetWatcher(ver->GetRef())
+      AssetWatcher(ver->GetRef().toString())
 {
 }
 

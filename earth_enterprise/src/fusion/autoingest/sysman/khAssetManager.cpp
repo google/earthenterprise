@@ -601,7 +601,7 @@ khAssetManager::NotifyVersionProgress(const std::string &ref, double progress)
 }
 
 void
-khAssetManager::SubmitTask(const std::string &verref, const TaskDef &taskdef,
+khAssetManager::SubmitTask(const SharedString &verref, const TaskDef &taskdef,
                            int priority)
 {
   // assert that we're already locked
@@ -610,7 +610,7 @@ khAssetManager::SubmitTask(const std::string &verref, const TaskDef &taskdef,
   uint32 taskid = NextTaskId::Get();
   MutableAssetVersionD(verref)->taskid = taskid;
 
-  SubmitTaskMsg submitMsg(verref,
+  SubmitTaskMsg submitMsg(verref.toString(),
                           taskid,
                           priority,
                           taskdef);

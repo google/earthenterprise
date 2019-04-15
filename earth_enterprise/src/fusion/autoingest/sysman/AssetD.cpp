@@ -43,10 +43,10 @@ AssetImplD::Load(const std::string &boundref)
 }
 
 void
-AssetImplD::AddVersionRef(const std::string &verref)
+AssetImplD::AddVersionRef(const SharedString &verref)
 {
   // add to beginning of my list of versions
-  versions.insert(versions.begin(), verref);
+  versions.insert(versions.begin(), verref.toString());
 }
 
 void
@@ -64,7 +64,7 @@ AssetImplD::InputsUpToDate(const AssetVersion &version,
     return false;
 
   for (uint i = 0; i < cachedInputs.size(); ++i) {
-    if (cachedInputs[i]->GetRef() != version->inputs[i].toString())
+    if (cachedInputs[i]->GetRef() != version->inputs[i])
       return false;
   }
 

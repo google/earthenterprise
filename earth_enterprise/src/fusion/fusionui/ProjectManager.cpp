@@ -1553,15 +1553,15 @@ void ProjectManager::AddAssetLayer(const char* assetname) {
     bool isasset = (ver->type == AssetDefs::Imagery ||
                     ver->type == AssetDefs::Terrain);
     gstSource* newsource = openSource(isasset ?
-                                      ver->GetRef().c_str() :
+                                      ver->GetRef().toString().c_str() :
                                       ver->GetOutputFilename(0).c_str(),
                                       0,
                                       isasset);
     if (newsource) {
-      QString layername = shortAssetName(khBasename(asset->GetRef()));
+      QString layername = shortAssetName(khBasename(asset->GetRef().toString()));
       gstLayer* layer = CreateNewLayer(layername,
                                        newsource, 0 /* src layer num */,
-                                       asset->GetRef());
+                                       asset->GetRef().toString());
       if (!layer) {
         // will already have reported error
         newsource->unref();    // cleanup before leaving
@@ -1576,7 +1576,7 @@ void ProjectManager::AddAssetLayer(const char* assetname) {
                              tr("Yes"), tr("No"), 0, 1) == 0) {
       QString error;
       bool needed;
-      if (!khAssetManagerProxy::BuildAsset(asset->GetRef(),
+      if (!khAssetManagerProxy::BuildAsset(asset->GetRef().toString(),
                                            needed, error)) {
         QMessageBox::critical(this, "Error",
                               tr("Unable to schedule build. ") +

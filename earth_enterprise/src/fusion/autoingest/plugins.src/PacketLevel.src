@@ -79,7 +79,7 @@ void PacketLevelAssetVersionImplD::DoSubmitTask(void) {
   std::string packExt = (type == AssetDefs::Imagery) ?
                         ".kipacket" : ".ktpacket";
   std::string outdir =
-    WorkingFileRef(khReplaceExtension(khBasename(GetAssetRef()),
+    WorkingFileRef(khReplaceExtension(khBasename(GetAssetRef().toString()),
                                       packExt));
 
   // create and submit the task
@@ -128,7 +128,7 @@ bool PacketLevelAssetVersionImplD::AttemptConvertFromOldLastGood(void) {
 
   // find the appropriate directly under the resource (old way) instead of
   // under CombinedRP (the new way)
-  std::string oldassetref = GetAssetRef();
+  std::string oldassetref = GetAssetRef().toString();
   if (type == AssetDefs::Imagery) {
     if (find_and_replace(oldassetref, "CombinedRP.kia/", std::string()) ==
         std::string::npos) {
@@ -213,7 +213,7 @@ bool PacketLevelAssetVersionImplD::AttemptConvertFromOldLastGood(void) {
 
     if (!IsUpToDate(version->config, checkconfig)) {
       notify(NFY_DEBUG, "Configs don't match: %s",
-             version->GetRef().c_str());
+             version->GetRef().toString().c_str());
       continue;
     }
 
@@ -222,7 +222,7 @@ bool PacketLevelAssetVersionImplD::AttemptConvertFromOldLastGood(void) {
     GetInputChildren(version, oldinputkids);
     if (inputkids != oldinputkids) {
       notify(NFY_DEBUG, "Input kids don't match: %s",
-             version->GetRef().c_str());
+             version->GetRef().toString().c_str());
       continue;
     }
 
@@ -249,7 +249,7 @@ void PacketLevelAssetVersionImplD::MakeConvertTask(
   // version. This information will be used by merge PacketLevels to determine
   // if they can upgrade instead of doing their own work.
   (void)khWriteStringToFile(WorkingFilename("upgradedfrom"),
-                            oldver->GetRef());
+                            oldver->GetRef().toString());
 
   // get my input filenames so I can pass them to the TaskDef
   std::vector<std::string> inputFilenames;
@@ -259,7 +259,7 @@ void PacketLevelAssetVersionImplD::MakeConvertTask(
   std::string packExt = (type == AssetDefs::Imagery) ?
                         ".kipacket" : ".ktpacket";
   std::string outdir =
-    WorkingFileRef(khReplaceExtension(khBasename(GetAssetRef()),
+    WorkingFileRef(khReplaceExtension(khBasename(GetAssetRef().toString()),
                                       packExt));
 
   // create and submit the task

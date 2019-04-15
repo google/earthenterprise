@@ -105,7 +105,7 @@ class RasterProjectAssetVersionImpl {
     // The first 3 children are reserved, the rest are dated imagery indexes.
     for(uint i = 3; i < children.size(); ++i) {
       RasterGEIndexAssetVersion index(children[i]);
-      std::string index_ref(index->GetRef());
+      SharedString index_ref(index->GetRef());
       std::string date_string(index->config.date_string_);
       std::string index_file = index->GetOutputFilename(0);
       DatedImageryIndexInfo info(index_ref, date_string, channel_id++);
@@ -205,7 +205,7 @@ class RasterProjectAssetVersionImplD {
   // Makes index subasset (subfunction for BuildIndex()).
   // Returns the version of the new geindex.
   uint32 MakeIndexSubAsset(const std::vector<SharedString> &packgenkids,
-                           const std::vector<std::string> &packgenassets,
+                           const std::vector<SharedString> &packgenassets,
                            const std::vector<AssetVersion> &packgenvers,
                            const std::vector<PacketGenInfo> &genInfo,
                            const std::string &date);
@@ -338,7 +338,7 @@ bool RasterProjectAssetImplD::FixConfigBeforeUpdateCheck(void) const {
     throw khException(
       kh::tr("\nInternal error: invalid \"overlay_terrain_start_level_\" (%1)"
              " in (%2).\nThe start level value should be even.").arg(
-               config.overlay_terrain_start_level_).arg(GetRef()));
+               config.overlay_terrain_start_level_).arg(GetRef().toString()));
   }
 
   bool changed = false;
@@ -498,7 +498,7 @@ void RasterProjectAssetImplD::ThrowIfAnyInvalidDates() {
     std::string date_string = asset->GetAcquisitionDate();
     notify(NFY_DEBUG, "DATESTRING: %s\n", date_string.c_str());
     if (date_string == kUnknownDate) {
-      missing_dates += "\n\t" + asset->GetRef();
+      missing_dates += "\n\t" + asset->GetRef().toString();
       notify(NFY_DEBUG, "UNKNOWN DATESTRING: %s\n", missing_dates.c_str());
     }
   }
@@ -690,7 +690,7 @@ void RasterProjectAssetVersionImplD::UpdateChildren(void) {
 
   if (numInsets == 0) {
     throw khException(kh::tr("No insets defined for project %1.\n"
-                             "Cannot build").arg(GetRef()));
+                             "Cannot build").arg(GetRef().toString()));
   }
 }
 
@@ -752,7 +752,7 @@ void RasterProjectAssetVersionImplD::ThrowIfAnyInvalidDates(
     const InsetInfo<RasterProductAssetVersion>& info = inset_infos[i];
     notify(NFY_DEBUG, "DATESTRING: %s\n", info.date_string_.c_str());
     if (info.date_string_ == kUnknownDate) {
-      missing_dates += "\n\t" + info.resource_->GetRef();
+      missing_dates += "\n\t" + info.resource_->GetRef().toString();
       notify(NFY_DEBUG, "UNKNOWN DATESTRING: %s\n", missing_dates.c_str());
     }
   }
@@ -762,26 +762,26 @@ void RasterProjectAssetVersionImplD::ThrowIfAnyInvalidDates(
 }
 
 void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
-  std::string assetRef = GetAssetRef();
+  SharedString assetRef = GetAssetRef();
 
   // short circuit on degenerate case. Do this so the rest of the code
   // can assume that there is at least one inset.
   const uint numInsets = inputs.size();
   if (numInsets == 0) {
     throw khException(kh::tr("No insets defined for project %1.\n"
-                             "Cannot build").arg(GetRef()));
+                             "Cannot build").arg(GetRef().toString()));
   }
 
   // sanity check in case the previous logic to ensure a valid channel id
   // fails
   if (config.fuid_channel_ == 0) {
     throw khException(kh::tr("Internal Error: No channel id for %1")
-                      .arg(GetRef()));
+                      .arg(GetRef().toString()));
   }
 
   if (config.asset_uuid_ == "") {
     throw khException(kh::tr("Internal Error: No UUID for %1")
-                      .arg(GetRef()));
+                      .arg(GetRef().toString()));
   }
 
 
@@ -822,7 +822,7 @@ void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
       dates.insert(info.date_string_);
       notify(NFY_DEBUG, "  Historical Inset: %d %s, level %d, start date: %s\n",
              i,
-             info.resource_->GetRef().c_str(),
+             info.resource_->GetRef().toString().c_str(),
              info.effectiveMaxLevel,
              info.date_string_.c_str());
     }
@@ -977,7 +977,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   if (numInsets == 0) {
     throw khException(kh::tr("Attempt to build index with too few "
                              "insets for project: %1.\n"
-                             "Cannot build").arg(GetRef()));
+                             "Cannot build").arg(GetRef().toString()));
   }
 
   std::vector<InsetInfo<
@@ -1033,7 +1033,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
 
   // create my children giving them each a bigger piece of the stack
   std::vector<SharedString> packgenkids;
-  std::vector<std::string> packgenassets;
+  std::vector<SharedString> packgenassets;
   std::vector<AssetVersion> packgenvers;
   packgenkids.reserve(numInsets);
   packgenassets.reserve(numInsets);
@@ -1110,7 +1110,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
       // see if we want to depend on the packgen for this guy
       // packetgenverref will only be populated if the other one
       // actually cached raster blends.
-      std::string packgenVerRef;
+      SharedString packgenVerRef;
       if (!otherGenInfo.packetgenverref.empty() &&
           otherWillContribToMinify) {
         packgenVerRef = otherGenInfo.packetgenverref;
@@ -1244,12 +1244,12 @@ void RasterProjectAssetVersionImplD::CalcLevelsToSkipTransparentTiles(
 
 uint32 RasterProjectAssetVersionImplD::MakeIndexSubAsset(
     const std::vector<SharedString> &packgenkids,
-    const std::vector<std::string> &packgenassets,
+    const std::vector<SharedString> &packgenassets,
     const std::vector<AssetVersion> &packgenvers,
     const std::vector<PacketGenInfo> &genInfo,
     const std::string &date) {
-  std::string assetRef = GetAssetRef();
-  std::string dbname = khDropExtension(khBasename(assetRef));
+  SharedString assetRef = GetAssetRef();
+  std::string dbname = khDropExtension(khBasename(assetRef.toString()));
   RasterGEIndexConfig geindexConfig;
   geindexConfig.db_name_ = dbname;
   //  figure out the packetvers for the geindex
@@ -1308,7 +1308,7 @@ uint32 RasterProjectAssetVersionImplD::MakeIndexSubAsset(
 
       if (kFillingTerrainInset == genInfoIt->terrain_inset_type) {
         notify(NFY_DEBUG, "Skip \"Filling\"-terrain inset: %s",
-               genInfoIt->assetname.c_str());
+               genInfoIt->assetname.toString().c_str());
         continue;  // Skip "Filling" terrain inset.
       }
     }
@@ -1319,7 +1319,7 @@ uint32 RasterProjectAssetVersionImplD::MakeIndexSubAsset(
           (*packgenver)->children.size());
       for (const auto &packlevelref : (*packgenver)->children) {
         geindexConfig.packet_insets_.back().levels_.push_back(
-            RasterPacketLevelVersion(packlevelref, indexVer));
+            RasterPacketLevelVersion(packlevelref.toString(), indexVer));
       }
     }
   }

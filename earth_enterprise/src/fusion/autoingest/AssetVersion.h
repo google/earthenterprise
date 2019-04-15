@@ -105,8 +105,8 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage {
     return (state == AssetDefs::Bad);
   }
 
-  std::string GetRef(void) const { return name; }
-  std::string GetAssetRef(void) const {
+  const SharedString & GetRef(void) const { return name; }
+  SharedString GetAssetRef(void) const {
     AssetVersionRef verref(name);
     return verref.AssetRef();
   }
@@ -198,7 +198,7 @@ AssetVersion::cache(void) {
 
 // DoBind() specialization with caching Version.
 template <> template <>
-inline void AssetVersion::DoBind<1>(const std::string &boundref,
+inline void AssetVersion::DoBind<1>(const SharedString &boundref,
                                     const AssetVersionRef &boundVerRef,
                                     bool checkFileExistenceFirst,
                                     Int2Type<1>) const {
@@ -218,7 +218,7 @@ inline void AssetVersion::DoBind<1>(const std::string &boundref,
     }
 
     // Will succeed, generate stub, or throw exception.
-    entry = Load(boundref);
+    entry = Load(boundref.toString());
     addToCache = true;
   } else if (check_timestamps) {
     std::string filename = Impl::XMLFilename(boundVerRef);
@@ -233,7 +233,7 @@ inline void AssetVersion::DoBind<1>(const std::string &boundref,
       cache().Remove(boundref, false);  // Don't prune, the Add() will.
 
       // Will succeed, generate stub, or throw exception.
-      entry = Load(boundref);
+      entry = Load(boundref.toString());
       addToCache = true;
     }
   }
@@ -251,7 +251,7 @@ inline void AssetVersion::DoBind<1>(const std::string &boundref,
 
 // DoBind() specialization without caching Version.
 template <> template <>
-inline void AssetVersion::DoBind<0>(const std::string &boundref,
+inline void AssetVersion::DoBind<0>(const SharedString &boundref,
                         const AssetVersionRef &boundVerRef,
                         bool checkFileExistenceFirst,
                         Int2Type<0>) const {
@@ -270,7 +270,7 @@ inline void AssetVersion::DoBind<0>(const std::string &boundref,
     }
 
     // Will succeed, generate stub, or throw exception.
-    entry = Load(boundref);
+    entry = Load(boundref.toString());
   } else if (check_timestamps) {
     std::string filename = Impl::XMLFilename(boundVerRef);
     uint64 filesize = 0;
@@ -284,7 +284,7 @@ inline void AssetVersion::DoBind<0>(const std::string &boundref,
       cache().Remove(boundref, false);  // Don't prune, the Add() will.
 
       // Will succeed, generate stub, or throw exception.
-      entry = Load(boundref);
+      entry = Load(boundref.toString());
     }
   }
 
@@ -297,7 +297,7 @@ inline void AssetVersion::DoBind<0>(const std::string &boundref,
 
 
 template <>
-inline void AssetVersion::DoBind(const std::string &boundRef,
+inline void AssetVersion::DoBind(const SharedString &boundRef,
                      const AssetVersionRef &boundVerRef,
                      bool checkFileExistenceFirst) const {
   DoBind(boundRef, boundVerRef, checkFileExistenceFirst, Int2Type<1>());
@@ -314,7 +314,7 @@ inline bool AssetVersion::Valid(void) const {
       return false;
 
     // bind the ref
-    std::string boundRef = AssetVersionRef::Bind(ref.toString());
+    SharedString boundRef = AssetVersionRef::Bind(ref.toString());
     AssetVersionRef boundVerRef(boundRef);
 
     // deal quickly with an invalid version
@@ -334,7 +334,7 @@ inline bool AssetVersion::Valid(void) const {
 template <>
 inline void AssetVersion::Bind(void) const {
   if (!handle) {
-    std::string boundref = AssetVersionRef::Bind(ref.toString());
+    SharedString boundref = AssetVersionRef::Bind(ref.toString());
     AssetVersionRef boundVerRef(boundref);
     DoBind(boundref, boundVerRef, false);
   }
@@ -344,7 +344,7 @@ inline void AssetVersion::Bind(void) const {
 template <>
 inline void AssetVersion::BindNoCache() const {
   if (!handle) {
-    std::string boundref = AssetVersionRef::Bind(ref.toString());
+    SharedString boundref = AssetVersionRef::Bind(ref.toString());
     AssetVersionRef boundVerRef(boundref);
     DoBind(boundref, boundVerRef, false, Int2Type<false>());
   }
@@ -396,7 +396,7 @@ class CompositeAssetVersionImpl : public virtual AssetVersionImpl {
     // composite assets can only have a logfile if the plugin threw an
     // exception during the DelayedBuildChildren. So don't bother
     // stating the filesystem to look for a logfile unless we're failed.
-    std::string logfile = LogFilename(GetRef());
+    std::string logfile = LogFilename(GetRef().toString());
     return ((state == AssetDefs::Failed) && khExists(logfile)) ?
                     logfile : std::string();
   }

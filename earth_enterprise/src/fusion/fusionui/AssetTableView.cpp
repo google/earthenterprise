@@ -138,7 +138,7 @@ void AssetTableView::contentsMouseMoveEvent(QMouseEvent* event) {
           assert(item != NULL);
           if (!asset_group.isEmpty())
             asset_group += QChar(127);  // special character used as a separator
-          asset_group += item->GetAssetHandle()->getAsset()->GetRef();
+          asset_group += item->GetAssetHandle()->getAsset()->GetRef().toString();
         }
       }
       drag_object->setText(asset_group);

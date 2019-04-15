@@ -432,7 +432,7 @@ VectorProjectAssetImplD::HandleDropFromRequest(const VectorProjectDropFromReques
 void
 VectorProjectAssetVersionImplD::UpdateChildren(void)
 {
-  std::string assetRef = GetAssetRef();
+  SharedString assetRef = GetAssetRef();
   std::vector<MutableAssetVersionD> layers;
   std::vector<SharedString> vecfuses;
   std::vector<AssetVersion> vecfusevers;
@@ -517,7 +517,7 @@ VectorProjectAssetVersionImplD::UpdateChildren(void)
   // ******************************
   {
     // make his name like mine
-    std::string basename = khDropExtension(khBasename(assetRef));
+    std::string basename = khDropExtension(khBasename(assetRef.toString()));
     // we leave packvers empty for the asset, just the assetver uses it
     std::vector<VectorPacketVersion> packvers;
 
