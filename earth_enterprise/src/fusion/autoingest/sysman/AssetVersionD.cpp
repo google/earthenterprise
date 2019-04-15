@@ -304,7 +304,7 @@ void AssetVersionImplD::SetState(
       notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
              GetRef().toString().c_str(), 
              ToString(newstate).c_str());
-      theAssetManager.NotifyVersionStateChange(GetRef().toString(), newstate);
+      theAssetManager.NotifyVersionStateChange(GetRef(), newstate);
       PropagateStateChange(notifier);
     }
   }

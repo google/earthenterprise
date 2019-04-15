@@ -167,10 +167,10 @@ khAssetManager::ApplyPending(void)
        i != savedAssets.end(); ++i) {
     changes.items.push_back(AssetChanges::Item(*i, "Modified"));
   }
-  for (std::map<std::string, AssetDefs::State>::const_iterator i
+  for (std::map<SharedString, AssetDefs::State>::const_iterator i
          = pendingStateChanges.begin();
        i != pendingStateChanges.end(); ++i) {
-    changes.items.push_back(AssetChanges::Item(i->first,
+    changes.items.push_back(AssetChanges::Item(i->first.toString(),
                                                ToString(i->second)));
   }
   for (std::map<std::string, double>::const_iterator i
@@ -571,7 +571,7 @@ khAssetManager::ClientListenerLoop(void) throw() {
 // ***  khAssetManager - routines that gather changes while AssetGuard is held
 // ****************************************************************************
 void
-khAssetManager::NotifyVersionStateChange(const std::string &ref,
+khAssetManager::NotifyVersionStateChange(const SharedString &ref,
                                          AssetDefs::State state)
 {
   // assert that we're already locked
@@ -579,12 +579,12 @@ khAssetManager::NotifyVersionStateChange(const std::string &ref,
   
   if (ToString(pendingStateChanges[ref]) == "") {
     notify(NFY_VERBOSE, "Set pendingStateChanges[%s]: <empty> to state: %s",
-         ref.c_str(),
+         ref.toString().c_str(),
          ToString(state).c_str());
   }
   else {
     notify(NFY_VERBOSE, "Set pendingStateChanges[%s]: %s to state: %s",
-         ref.c_str(),
+         ref.toString().c_str(),
          ToString(pendingStateChanges[ref]).c_str(),
          ToString(state).c_str());
   }
