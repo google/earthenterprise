@@ -74,18 +74,18 @@ class AssetHandle_  {
   mutable HandleType handle;
 
   // Only implemented/used by Asset variant.
-  void DoBind(const std::string &ref,
+  void DoBind(const SharedString &ref,
               bool checkFileExistenceFirst) const;
 
   // Only implemented/used by Version variant.
   template <int do_cache>
-  void DoBind(const std::string &boundRef,
+  void DoBind(const SharedString &boundRef,
               const AssetVersionRef &boundVerRef,
               bool checkFileExistenceFirst,
               Int2Type<do_cache> do_cache_val) const;
 
   // Only implemented/used by Version variant.
-  void DoBind(const std::string &boundRef,
+  void DoBind(const SharedString &boundRef,
               const AssetVersionRef &boundVerRef,
               bool checkFileExistenceFirst) const;
 
@@ -93,9 +93,9 @@ class AssetHandle_  {
   void Bind(void) const;
 
   // Allows subclasses to do extra work.
-  virtual void OnBind(const std::string &) const { }
+  virtual void OnBind(const SharedString &) const { }
 
-  virtual HandleType CacheFind(const std::string &boundref) const {
+  virtual HandleType CacheFind(const SharedString &boundref) const {
     HandleType entry;
     (void)cache().Find(boundref, entry);
     return entry;

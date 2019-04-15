@@ -17,6 +17,7 @@
 #include <vector>
 #include <khTypes.h>
 #include <geindex/Entries.h>
+#include "common/SharedString.h"
 
 // ****************************************************************************
 // ***  MapGEIndex
@@ -25,7 +26,7 @@ class MapGEIndexConfig {
   class Level {
     // cannot pre-bind this to a packetfile output name, since this config
     // gets built before all the packetlevels are completed
-    std::string verref_;
+    SharedString verref_;
 #pragma GenerateIsUpToDate
   };
   class Layer {

@@ -272,18 +272,18 @@ void DisplayVersionDependencies(const AssetVersion &version,
   if (indent > maxdepth) return;
   bool printLegend = (indent == 0);
   std::string statestr = version->PrettyState();
-  if (seen.find(version->GetRef()) != seen.end()) {
+  if (seen.find(version->GetRef().toString()) != seen.end()) {
     printf("R  %s%s%s: %s\n",
            std::string((indent-1)*3, ' ').c_str(),
            prefix.c_str(),
-           version->GetRef().c_str(),
+           version->GetRef().toString().c_str(),
            statestr.c_str());
   } else {
-    seen.insert(version->GetRef());
+    seen.insert(version->GetRef().toString());
     printf("%s%s%s: %s\n",
            std::string(indent*3, ' ').c_str(),
            prefix.c_str(),
-           version->GetRef().c_str(),
+           version->GetRef().toString().c_str(),
            statestr.c_str());
     ++indent;
     if (version->inputs.size()) {
@@ -314,15 +314,15 @@ static
 void DisplayBlockerDependencies(const AssetVersion &version,
                                 SeenSet &seen,
                                 const std::string &skipInputExt) {
-  if (seen.find(version->GetRef()) == seen.end()) {
+  if (seen.find(version->GetRef().toString()) == seen.end()) {
     // we have not seen this one yet
-    seen.insert(version->GetRef());
+    seen.insert(version->GetRef().toString());
 
     if (version->state & (AssetDefs::Canceled |
                           AssetDefs::Failed |
                           AssetDefs::Offline |
                           AssetDefs::Bad)) {
-      printf("%s: %s\n", version->GetRef().c_str(),
+      printf("%s: %s\n", version->GetRef().toString().c_str(),
              version->PrettyState().c_str());
     } else if (version->state == AssetDefs::Blocked) {
       std::string myskipext = skipInputExt;
@@ -350,7 +350,7 @@ void DisplayBlockerDependencies(const AssetVersion &version,
           }
         } else {
           for (const auto &input : version->inputs) {
-            if (!EndsWith(input, myskipext)) {
+            if (!EndsWith(input.toString(), myskipext)) {
               DisplayBlockerDependencies(AssetVersion(input),
                                          seen, myskipext);
             }

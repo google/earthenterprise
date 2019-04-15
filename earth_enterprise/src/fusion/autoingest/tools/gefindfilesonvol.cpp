@@ -229,7 +229,7 @@ FindFilesOnVol(const std::string &verref,
   AssetVersion version(verref);
   if (!version) {
     notify(NFY_WARN, "Unable to load asset version %s",
-           version.Ref().c_str());
+           version.Ref().toString().c_str());
   }
 
   RebuildNode *node = new RebuildNode(verref, currentStack);
@@ -269,13 +269,13 @@ FindFilesOnVol(const std::string &verref,
   }
 
   for (const auto &input : version->inputs) {
-    FindFilesOnVol(input, volset, seen,
+    FindFilesOnVol(input.toString(), volset, seen,
                    found, currentStack,
                    count, interval);
   }
   if (!version->IsLeaf()) {
     for (const auto &child: version->children) {
-      FindFilesOnVol(child, volset, seen,
+      FindFilesOnVol(child.toString(), volset, seen,
                      found, currentStack,
                      count, interval);
     }

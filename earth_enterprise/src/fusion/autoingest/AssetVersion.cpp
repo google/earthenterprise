@@ -149,7 +149,7 @@ bool AssetVersionImpl::SimpleGetGedbPathAndType(
   }
 
   *db_type = db_asset_version->subtype;
-  *db_ref = db_asset_version->GetRef();
+  *db_ref = db_asset_version->GetRef().toString();
 
   AssetVersion gedb_version;
   if (*db_type == kMapDatabaseSubtype) {

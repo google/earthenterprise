@@ -101,7 +101,7 @@ class ProjectedMapProjectAssetImplD {
 void
 ProjectedMapProjectAssetVersionImplD::UpdateChildren(void)
 {
-  std::string assetRef = GetAssetRef();
+  SharedString assetRef = GetAssetRef();
 
   // ***** load my input versions (only if they aren't already loaded)
   // I'll use this list of my inputs to pass to my children so they don't
@@ -136,7 +136,7 @@ ProjectedMapProjectAssetVersionImplD::UpdateChildren(void)
     std::vector<AssetVersion> index_input_vers;
     std::vector<SharedString> index_input_refs;
 
-    std::string dbname = khDropExtension(khBasename(assetRef));
+    std::string dbname = khDropExtension(khBasename(assetRef.toString()));
     geindexConfig.db_name_ = dbname;
     uint indexVer = config.index_version_;
     bool tryReuse = true;

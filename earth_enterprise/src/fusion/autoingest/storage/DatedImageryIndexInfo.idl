@@ -14,6 +14,7 @@
 
 
 #include <string>
+#include "common/SharedString.h"
 
 #hquote
 #/hquote
@@ -23,7 +24,7 @@ class DatedImageryIndexInfo
 {
 #pragma LoadAndSave
 
-  std::string imagery_index_version_;
+  SharedString imagery_index_version_;
   std::string date_string_;
   uint32 channel_id_;
 
