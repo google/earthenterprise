@@ -36,18 +36,6 @@ class TestSharedString : public SharedString
 public:
     TestSharedString(const SharedString& other) : SharedString(other) {}
     inline const uint32_t operator()() noexcept { return key; }
-    const string operator[](const uint8_t& _key)
-    {
-        try
-        {
-            string retval = RefFromKey(_key);
-		}
-        catch (const out_of_range& e)
-        {
-            throw e;
-        }
-        return retval; 
-    }
 };
 
              
@@ -56,7 +44,6 @@ TEST(SharedStringTest, accessors)
     // test operator=, string(), toString(), and c_str()
     SharedString tsst4;
     tsst4 = test_string2;
-    EXPECT_TRUE(string(tsst4) == test_string2);
     EXPECT_TRUE(tsst4.toString() == test_string2);
 
     // check to make sure that operator<< contains the correct string
@@ -77,6 +64,10 @@ TEST(SharedStringTest, booleans)
     // make sure that comparisons to strings work
     EXPECT_TRUE(tsst1 == test_string1);
     EXPECT_TRUE(tsst1 != test_string2);
+    EXPECT_TRUE(tsst2 == test_string2);
+    EXPECT_TRUE(tsst2 != test_string3);
+    EXPECT_TRUE(tsst3 == test_string3);
+    EXPECT_TRUE(tsst3 != test_string1);
 }
 
 TEST(SharedStringTest, construction_assignment)
@@ -86,6 +77,7 @@ TEST(SharedStringTest, construction_assignment)
 
     // make sure that std::string/c-string constructor works
     EXPECT_FALSE(tsst1.empty());
+    
    
     // make sure that copy constructor works
     SharedString tsst4(tsst2);
@@ -95,9 +87,23 @@ TEST(SharedStringTest, construction_assignment)
     SharedString tsst5;
     tsst5 = tsst4;
     EXPECT_FALSE(tsst5.empty());
+    string test4 = tsst4.toString(), test5 = tsst5.toString();
+    EXPECT_TRUE(tsst4 == tsst5);
 
     tsst5 = std::string();
     EXPECT_TRUE(tsst5.empty()); 
+    test5 = tsst5.toString();
+    EXPECT_TRUE(test5.size() == 0);
+
+    // check default
+    SharedString defSS;
+    string defS = defSS.toString();
+    EXPECT_TRUE(defS.size() == 0);
+
+    // non empty
+    SharedString nonEmptySS("non-empty string");
+    nonEmptySS = std::string();
+    EXPECT_TRUE(nonEmptySS.empty());
 }
 
 int main(int argc, char** argv)
