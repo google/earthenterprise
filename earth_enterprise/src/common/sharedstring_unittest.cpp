@@ -17,7 +17,10 @@
 #include <sstream>
 #include <string>
 #include <cstring>
+<<<<<<< HEAD
 #include <stdexcept>
+=======
+>>>>>>> fb64106996480107c904f0c4cf114d05fbc11484
 using namespace testing;
 using namespace std;
 
@@ -46,10 +49,14 @@ TEST(SharedStringTest, accessors)
     tsst4 = test_string2;
     EXPECT_TRUE(string(tsst4) == test_string2);
     EXPECT_TRUE(tsst4.toString() == test_string2);
+<<<<<<< HEAD
     
     EXPECT_TRUE(string(tsst1) == test_string1);
     EXPECT_TRUE(string(tsst2) == test_string2);
     EXPECT_TRUE(tsst3.toString() == test_string3);
+=======
+    EXPECT_TRUE(string(tsst4) == tsst4.toString());
+>>>>>>> fb64106996480107c904f0c4cf114d05fbc11484
 
     // check to make sure that operator<< contains the correct string
     stringstream ss;
@@ -82,11 +89,15 @@ TEST(SharedStringTest, construction_assignment)
     // make sure that copy constructor works
     SharedString tsst4(tsst2);
     EXPECT_FALSE(tsst4.empty());
+<<<<<<< HEAD
     EXPECT_TRUE(tsst4.toString() == test_string2);    
+=======
+>>>>>>> fb64106996480107c904f0c4cf114d05fbc11484
 
     // make sure that copy assignment works
     SharedString tsst5;
     tsst5 = tsst4;
+<<<<<<< HEAD
     EXPECT_FALSE(tsst5.empty());
     
 	string tsst4_string = string(tsst4),
@@ -99,6 +110,9 @@ TEST(SharedStringTest, construction_assignment)
     SharedString emptyString;
     emptyString = string();
     EXPECT_TRUE(emptyString.empty());
+=======
+    EXPECT_FALSE(tsst5.empty()); 
+>>>>>>> fb64106996480107c904f0c4cf114d05fbc11484
 }
 
 int main(int argc, char** argv)
