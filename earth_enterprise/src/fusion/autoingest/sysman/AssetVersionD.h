@@ -106,7 +106,7 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   virtual void HandleTaskDone(const TaskDoneMsg &msg);
   virtual void HandleChildStateChange(const std::shared_ptr<StateChangeNotifier>) const;
   virtual void HandleInputStateChange(InputStates, const std::shared_ptr<StateChangeNotifier>) const = 0;
-  virtual void HandleChildProgress(const std::string &) const;
+  virtual void HandleChildProgress(const SharedString &) const;
   virtual void OnStateChange(AssetDefs::State newstate,
                              AssetDefs::State oldstate);
   virtual bool OfflineInputsBreakMe(void) const { return false; }
@@ -216,7 +216,7 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
   virtual bool CacheInputVersions(void) const;
   virtual void HandleChildStateChange(const std::shared_ptr<StateChangeNotifier>) const;
   virtual void HandleInputStateChange(InputStates, const std::shared_ptr<StateChangeNotifier>) const;
-  virtual void HandleChildProgress(const std::string &) const;
+  virtual void HandleChildProgress(const SharedString &) const;
   virtual void DelayedBuildChildren(void);
   virtual void OnStateChange(AssetDefs::State newstate,
                              AssetDefs::State oldstate);

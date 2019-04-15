@@ -363,7 +363,7 @@ AssetVersionImplD::PropagateProgress(void)
        p != parents.end(); ++p) {
     AssetVersionD parent(*p);
     if (parent) {
-      parent->HandleChildProgress(GetRef().toString());
+      parent->HandleChildProgress(GetRef());
     } else {
       notify(NFY_WARN, "'%s' has broken parent '%s'",
              GetRef().toString().c_str(), p->toString().c_str());
@@ -397,7 +397,7 @@ AssetVersionImplD::HandleChildStateChange(const std::shared_ptr<StateChangeNotif
 }
 
 void
-AssetVersionImplD::HandleChildProgress(const std::string &) const
+AssetVersionImplD::HandleChildProgress(const SharedString &) const
 {
   // NoOp in base since leaves don't do anything
 }
@@ -1031,7 +1031,7 @@ CompositeAssetVersionImplD::HandleInputStateChange(InputStates, const std::share
 }
 
 void
-CompositeAssetVersionImplD::HandleChildProgress(const std::string &) const
+CompositeAssetVersionImplD::HandleChildProgress(const SharedString &) const
 {
   // TODO: - implement me some day
 }
