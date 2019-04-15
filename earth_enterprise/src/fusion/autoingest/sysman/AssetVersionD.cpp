@@ -315,7 +315,7 @@ AssetVersionImplD::SetProgress(double newprogress)
 {
   progress = newprogress;
   if (!AssetDefs::Finished(state)) {
-    theAssetManager.NotifyVersionProgress(GetRef().toString(), progress);
+    theAssetManager.NotifyVersionProgress(GetRef(), progress);
     PropagateProgress();
   }
 }

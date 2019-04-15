@@ -83,7 +83,7 @@ class khAssetManager
   // once the AssetGuard has been released
   void NotifyVersionStateChange(const SharedString &ref,
                                 AssetDefs::State state);
-  void NotifyVersionProgress(const std::string &ref,double progress);
+  void NotifyVersionProgress(const SharedString &ref,double progress);
   void SubmitTask(const SharedString &verref, const TaskDef &taskdef,
                   int32 priority = 0);
   void DeleteTask(const std::string &verref);
@@ -141,7 +141,7 @@ class khAssetManager
   // even while the application exists
   khNoDestroyMutex                        mutex;
   std::map<SharedString, AssetDefs::State> pendingStateChanges;
-  std::map<std::string, double>           pendingProgress;
+  std::map<SharedString, double>           pendingProgress;
   std::vector<TaskCmd>                    pendingTaskCmds;
   std::vector<std::string>                pendingFileDeletes;
   void AssertPendingEmpty(void);

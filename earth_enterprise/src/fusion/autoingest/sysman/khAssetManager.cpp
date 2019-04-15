@@ -173,10 +173,10 @@ khAssetManager::ApplyPending(void)
     changes.items.push_back(AssetChanges::Item(i->first.toString(),
                                                ToString(i->second)));
   }
-  for (std::map<std::string, double>::const_iterator i
+  for (std::map<SharedString, double>::const_iterator i
          = pendingProgress.begin();
        i != pendingProgress.end(); ++i) {
-    changes.items.push_back(AssetChanges::Item(i->first,
+    changes.items.push_back(AssetChanges::Item(i->first.toString(),
                                                "Progress( " +
                                                ToString(i->second) +
                                                ")"));
@@ -592,7 +592,7 @@ khAssetManager::NotifyVersionStateChange(const SharedString &ref,
 }
 
 void
-khAssetManager::NotifyVersionProgress(const std::string &ref, double progress)
+khAssetManager::NotifyVersionProgress(const SharedString &ref, double progress)
 {
   // assert that we're already locked
   assert(!mutex.TryLock());
