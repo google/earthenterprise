@@ -152,7 +152,7 @@ class AssetNameEqualToPred : public std::unary_function<PacketGenInfo, bool> {
   }
 
   bool operator()(const PacketGenInfo &elem) const {
-    return (elem.assetname == val_.toString());
+    return (elem.assetname == val_);
   }
 
  private:
