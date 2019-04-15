@@ -36,18 +36,6 @@ class TestSharedString : public SharedString
 public:
     TestSharedString(const SharedString& other) : SharedString(other) {}
     inline const uint32_t operator()() noexcept { return key; }
-    const string operator[](const uint8_t& _key)
-    {
-        try
-        {
-            string retval = RefFromKey(_key);
-		}
-        catch (const out_of_range& e)
-        {
-            throw e;
-        }
-        return retval; 
-    }
 };
 
              
@@ -58,6 +46,10 @@ TEST(SharedStringTest, accessors)
     tsst4 = test_string2;
     EXPECT_TRUE(string(tsst4) == test_string2);
     EXPECT_TRUE(tsst4.toString() == test_string2);
+    
+    EXPECT_TRUE(string(tsst1) == test_string1);
+    EXPECT_TRUE(string(tsst2) == test_string2);
+    EXPECT_TRUE(tsst3.toString() == test_string3);
 
     // check to make sure that operator<< contains the correct string
     stringstream ss;
@@ -90,14 +82,23 @@ TEST(SharedStringTest, construction_assignment)
     // make sure that copy constructor works
     SharedString tsst4(tsst2);
     EXPECT_FALSE(tsst4.empty());
+    EXPECT_TRUE(tsst4.toString() == test_string2);    
 
     // make sure that copy assignment works
     SharedString tsst5;
     tsst5 = tsst4;
     EXPECT_FALSE(tsst5.empty());
+    
+	string tsst4_string = string(tsst4),
+           tsst5_string = string(tsst5);
+    EXPECT_TRUE(tsst4_string == tsst5_string);
 
     tsst5 = std::string();
     EXPECT_TRUE(tsst5.empty()); 
+
+    SharedString emptyString;
+    emptyString = string();
+    EXPECT_TRUE(emptyString.empty());
 }
 
 int main(int argc, char** argv)
