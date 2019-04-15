@@ -314,7 +314,7 @@ inline bool AssetVersion::Valid(void) const {
       return false;
 
     // bind the ref
-    SharedString boundRef = AssetVersionRef::Bind(ref.toString());
+    SharedString boundRef = AssetVersionRef::Bind(ref);
     AssetVersionRef boundVerRef(boundRef);
 
     // deal quickly with an invalid version
@@ -334,7 +334,7 @@ inline bool AssetVersion::Valid(void) const {
 template <>
 inline void AssetVersion::Bind(void) const {
   if (!handle) {
-    SharedString boundref = AssetVersionRef::Bind(ref.toString());
+    SharedString boundref = AssetVersionRef::Bind(ref);
     AssetVersionRef boundVerRef(boundref);
     DoBind(boundref, boundVerRef, false);
   }
@@ -344,7 +344,7 @@ inline void AssetVersion::Bind(void) const {
 template <>
 inline void AssetVersion::BindNoCache() const {
   if (!handle) {
-    SharedString boundref = AssetVersionRef::Bind(ref.toString());
+    SharedString boundref = AssetVersionRef::Bind(ref);
     AssetVersionRef boundVerRef(boundref);
     DoBind(boundref, boundVerRef, false, Int2Type<false>());
   }
