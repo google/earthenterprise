@@ -17,7 +17,7 @@
 
 
 Import('third_party_env')
-openjpeg_version = 'openjpeg-2.3.0'
+openjpeg_version = 'openjpeg-2.3.1'
 #ge_version = openjpeg_version.replace('curl', 'curl-ge')
 
 num_cpu = GetOption('num_jobs')
