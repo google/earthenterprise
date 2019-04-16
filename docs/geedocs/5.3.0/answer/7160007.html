@@ -50,12 +50,12 @@ gtag('config', 'UA-108632131-2');
       This file must be created manually. View the <a href="../answer/176738.html">Configure Fusion performance</a> document for more details.</p>
     <p><strong>Added a <code>long_version</code> parameter to the SCons build. </strong>This will allow the user to override the long version string.</p>
 
-    <p><strong>Added PUBLISHER_ROOT size checking.</strong>
-       ASSET_ROOT checking is performed in fusion installer - not duplicated in server installer.
-       Added <code>-pgu pguser</code>, <code>-au apacheuser</code>, and <code>-g group</code> options.
-       Added prompt and summary output similar to fusion installer.</p>
+<p><strong>Added options to the Server install script</strong>
+       The server install script now checks the size of the publish root and allows the user to set custom user and group names.
+</p>
 
-    <p><strong>We have improved the performance of large builds</strong> by consolidating some of the notifications that an asset's child or input has changed. By preventing (some) duplicate notifications we reduce the number of times each asset has to calculate its state, significantly improving performance.
+<p><strong>Improved system manager performance for large builds.</strong> This release eliminates some duplicate processing in system manager, which reduces the amount of time it takes to initiate large builds.
+</p>
 
     <p><strong>Google has developed updated kmlrender libraries.</strong></p>
 
@@ -140,13 +140,6 @@ gtag('config', 'UA-108632131-2');
             </td>
           </tr>
           <tr>
-            <td>1138</td>
-            <td>A recent merge introduced memory test code that fails to build on older compilers</td>
-            <td>
-              Add libyaml-cpp-dev to build requirements and remove some old includes.
-            </td>
-          </tr>
-          <tr>
             <td>1158</td>
             <td><code>geeServerDefs</code> are not returned by Portable Server after being requested, once the globe has been viewed by a client. It is not possible to request <code>geeServerDefs</code> for globes other than the current <code>selectedGlobe</code>.</td>
             <td>
@@ -185,15 +178,7 @@ gtag('config', 'UA-108632131-2');
             <td>1192</td>
             <td>There appears to be a regression issue in OpenJpeg 2000 lib version 2.3.0 (that Fusion uses), causing an error when fusing jp2 files.</td>
             <td>
-               This OpenJpeg 2000 issue is fixed in OpenJpeg master but since the fix was made there was no new released version of OpenJpeg 2000 library (as per today: 2/8/2019).
-               <br> Two workarounds:
-               <ll>
-               <li>
-                   Uses QGIS tool to convert the jp2 file into Geotiff. QGIS would uses Erdas jp2 driver to do the jp2 reading in order to convert to Geotiff. Then use the produced Geotiff in Fusion.
-               </li>
-               <li>
-                   Get OpenJpeg 2000 master and uses that .zip after converting it to .tar.gz to replace current OpenJpeg 2000 shipped with OpenGEE. Build OpenGEE (with updated OpenJpeg 2000) and fuse the jp2 that had the issue.
-               </li>
+               We have upgraded to OpenJpeg 2.3.1.
             </td>
           </tr>
           <tr>
@@ -523,6 +508,16 @@ gtag('config', 'UA-108632131-2');
           <td>825</td>
           <td>Geserver fails to startup fully due to conflicting protobuf library</td>
           <td>Run <code>pip uninstall protobuf</code> to uninstall the protobuf library installed by pip. </td>
+        </tr>
+        <tr>
+          <td>1202</td>
+          <td>Can't select .kip, .ktp, or .kvp as source for resource using Fusion UI.</td>
+          <td>Add the resource from the command line.</td>
+        </tr>
+        <tr>
+          <td>1257</td>
+          <td>Fusion CLI allows users to enter an invalid date/time for Imagery Resources.</td>
+          <td>Ensure you use a valid date when creating resources from the command line.</td>
         </tr>
       </tbody>
     </table>
