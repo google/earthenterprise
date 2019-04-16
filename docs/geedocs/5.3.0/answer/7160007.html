@@ -49,6 +49,16 @@ gtag('config', 'UA-108632131-2');
       This can be done by configuring the <code>PURGE</code> and <code>PURGE_LEVEL</code> settings in <code>/etc/opt/google/XMLparams</code>. 
       This file must be created manually. View the <a href="../answer/176738.html">Configure Fusion performance</a> document for more details.</p>
     <p><strong>Added a <code>long_version</code> parameter to the SCons build. </strong>This will allow the user to override the long version string.</p>
+
+    <p><strong>Added PUBLISHER_ROOT size checking.</strong>
+       ASSET_ROOT checking is performed in fusion installer - not duplicated in server installer.
+       Added <code>-pgu pguser</code>, <code>-au apacheuser</code>, and <code>-g group</code> options.
+       Added prompt and summary output similar to fusion installer.</p>
+
+    <p><strong>We have improved the performance of large builds</strong> by consolidating some of the notifications that an asset's child or input has changed. By preventing (some) duplicate notifications we reduce the number of times each asset has to calculate its state, significantly improving performance.
+
+    <p><strong>Google has developed updated kmlrender libraries.</strong></p>
+
   <h5>
     <p id="supported_5.3.0">Supported Platforms</p>
   </h5>
@@ -77,22 +87,6 @@ gtag('config', 'UA-108632131-2');
             <td>Incorrect error messages from Fusion installer</td>
             <td>
               Stop incorrect error from showing when re-installing with<code> -u </code>flag
-            </td>
-          </tr>
-          <tr>
-          <tr>
-            <td><br><br>171</td>
-            <td>
-                PUBLISH_ROOT_VOLUME size checking<br>
-                ASSET_ROOT and PUBLISH_ROOT volume checking<br>
-                Some script parameters - parsing and execution (based on those provided by the Fusion installer)<br>
-                Prompts and summary output similar Fusion installer
-            </td>
-            <td>
-              Added PUBLISHER_ROOT size checking.<br>
-              ASSET_ROOT checking is performed in fusion installer - not duplicated in server installer<br>
-              Added <code>-pgu pguser</code>, <code>-au apacheuser</code>, and <code>-g group</code> options.<br>
-              Added prompt and summary output similar to fusion installer.
             </td>
           </tr>
           <tr>
@@ -129,6 +123,13 @@ gtag('config', 'UA-108632131-2');
             <td>TravisCI can pass when compilation fails</td>
             <td>
               Add logic to cause compilation failures to be detected and reported
+            </td>
+          </tr>
+          <tr>
+            <td>1104</td>
+            <td>Centos 7 (and maybe others) fails to build OpenGEE. Build seems to fail when building third party parts of Qt. This appears to be an issue with libpng.</td>
+            <td>
+              Fixed by including <code>libpng12</code> in the build script.
             </td>
           </tr>
           <tr>
@@ -181,6 +182,21 @@ gtag('config', 'UA-108632131-2');
             </td>
           </tr>
           <tr>
+            <td>1192</td>
+            <td>There appears to be a regression issue in OpenJpeg 2000 lib version 2.3.0 (that Fusion uses), causing an error when fusing jp2 files.</td>
+            <td>
+               This OpenJpeg 2000 issue is fixed in OpenJpeg master but since the fix was made there was no new released version of OpenJpeg 2000 library (as per today: 2/8/2019).
+               <br> Two workarounds:
+               <ll>
+               <li>
+                   Uses QGIS tool to convert the jp2 file into Geotiff. QGIS would uses Erdas jp2 driver to do the jp2 reading in order to convert to Geotiff. Then use the produced Geotiff in Fusion.
+               </li>
+               <li>
+                   Get OpenJpeg 2000 master and uses that .zip after converting it to .tar.gz to replace current OpenJpeg 2000 shipped with OpenGEE. Build OpenGEE (with updated OpenJpeg 2000) and fuse the jp2 that had the issue.
+               </li>
+            </td>
+          </tr>
+          <tr>
             <td>1194</td>
             <td>Sockets build up during large project builds</td>
             <td>gesystemmanager now has a timeout when trying to respond to a request for status. This prevents a backlog of requests that could build up while it is busy handling a long-running request. The timeout is configurable.</td>
@@ -211,6 +227,13 @@ gtag('config', 'UA-108632131-2');
             <td>Build number was incorrectly being appended to the version in RPM packaging</td>
             <td>
               RPM packaging should put the build number in the <code>release</code> field of the RPM properties and not append it to the version number in the <code>version</code> field.  This was preventing point releases from properly upgrading.
+            </td>
+          </tr>
+          <tr>
+            <td>1276</td>
+            <td>System manager purges the asset and asset version caches unnecessarily during builds. For large builds this can evict most of the items from the cache.</td>
+            <td>
+               Remove the calls to these purge functions.
             </td>
           </tr>
         </tbody>
@@ -254,7 +277,7 @@ gtag('config', 'UA-108632131-2');
         <tr>
           <td>126</td>
           <td>The Fusion installer creates a backup on the first run</td>
-          <td>No current work around. The created backup can be deleted.</td>
+          <td>The created backup can be deleted.</td>
         </tr>
         <tr>
           <td>190</td>
@@ -334,7 +357,7 @@ gtag('config', 'UA-108632131-2');
         <tr>
           <td>343</td>
           <td>gefusion: File ->open->*.kiasset*,*.ktasset*,*.kip does not work</td>
-          <td>kip is not a supported format. Void opening files with .kip extension.</td>
+          <td>kip is not a supported format. Avoid opening files with .kip extension.</td>
         </tr>
         <tr>
           <td>380</td>
