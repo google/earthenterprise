@@ -670,7 +670,8 @@ void RasterProjectAssetVersionImplD::ChildrenToCancel(
     std::vector<AssetVersion> &out) {
   if (children.size()) {
     // my direct children are my index and optionally a copyright
-    std::copy(children.begin(), children.end(), back_inserter(out));
+    auto theClosure = [&out](const std::string& v){ out.push_back(v); };
+    children.doForEach(theClosure);
 
     // additionally, my indexes' inputs are my sub assets as well
     for(uint i = 0; i < children.size(); ++i) {
@@ -1322,12 +1323,12 @@ uint32 RasterProjectAssetVersionImplD::MakeIndexSubAsset(
       geindexConfig.packet_insets_.push_back(RasterPacketInset());
       geindexConfig.packet_insets_.back().levels_.reserve(
           (*packgenver)->children.size());
-      for (std::vector<std::string>::const_iterator packlevelref =
-             (*packgenver)->children.begin();
-           packlevelref != (*packgenver)->children.end(); ++packlevelref) {
+      auto theClosure = [&geindexConfig, &indexVer](const std::string& v)
+      {
         geindexConfig.packet_insets_.back().levels_.push_back(
-            RasterPacketLevelVersion(*packlevelref, indexVer));
-      }
+            RasterPacketLevelVersion(v, indexVer));
+      };
+      (*packgenver)->children.doForEach(theClosure);
     }
   }
   if (tryReuse) {

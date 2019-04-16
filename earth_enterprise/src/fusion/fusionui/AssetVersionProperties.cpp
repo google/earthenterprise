@@ -84,23 +84,24 @@ AssetChildItem::setOpen(bool open)
     // add my children
     AssetVersion ver(ref);
     if ( !ver->IsLeaf() ) {
-      for ( std::vector<std::string>::const_iterator it =
-              ver->children.begin();
-            it != ver->children.end(); ++it ) {
-        AssetVersion child(*it);
+      auto childClosure = [&](const std::string& v)
+      {
+        AssetVersion child(v);
         // AssetChildItem *item =
         new AssetChildItem( this, child, "CHILD: " );
         //              item->setOpen( false );
-      }
+      };
+      ver->children.doForEach(childClosure);
     }
 
-    for ( std::vector<std::string>::const_iterator it = ver->inputs.begin();
-          it != ver->inputs.end(); ++it ) {
-      AssetVersion input(*it);
+    auto inputClosure = [&](const std::string& v)
+    {
+      AssetVersion input(v);
       // AssetChildItem *item =
       new AssetChildItem( this, input, "INPUT: " );
       //      item->setOpen( false );
-    }
+    };
+    ver->inputs.doForEach(inputClosure);
 
 
     // open second

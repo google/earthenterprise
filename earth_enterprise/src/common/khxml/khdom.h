@@ -141,6 +141,12 @@ ToElementWithChildName(khxml::DOMElement *elem,
 
 template <class T>
 void
+ToElementWithChildName(khxml::DOMElement *elem,
+                       const std::string &childTagName,
+                       const MTVector<T> &val);
+
+template <class T>
+void
 ToElement(khxml::DOMElement *elem, const std::vector<T> &vec);
 
 template <class T>
@@ -282,6 +288,18 @@ ToElementWithChildName(khxml::DOMElement *elem,
     AddElement(elem, childTagName, ToString(val));
   }
 }
+
+
+template <class T>
+void
+ToElementWithChildName(khxml::DOMElement *elem,
+                       const std::string &childTagName,
+                       const MTVector<T> &val)
+{
+  auto theClosure = [&](const std::string& v) { AddElement(elem, childTagName, v); };
+  val.doForEach(theClosure);
+}
+
 
 template <class T>
 void

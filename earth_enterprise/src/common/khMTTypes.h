@@ -283,15 +283,27 @@ class MTVector {
       std::lock_guard<std::mutex> lock(mtx);
       vec.shrink_to_fit();
     }
+    
+    void doForEach(std::function<void (const T&)> func) const {
+      if (!func) return; // can't do anyting with an invalid function
+      std::lock_guard<std::mutex> lock(mtx);
+      for_each(vec.begin(), vec.end(), func);
+    }
+
+    bool doForEachUntil(std::function<bool (const T&)> func) const {
+      if (!func) return false; // can't do anyting with an invalid function
+      std::lock_guard<std::mutex> lock(mtx);
+      bool loopedThroughAll = true;
+      for (const auto& v : vec) {
+        if (!func(v)) {
+          loopedThroughAll = false;
+          break;
+        }
+      }
+      return loopedThroughAll;
+    }
+
 // The remaining methods are bad news but are currently needed to compile
-    const_iterator begin(void) const {
-      return vec.begin();
-    }
-
-    const_iterator end(void) const {
-      return vec.end();
-    }
-
     operator const Base&(void) const {
       return vec;
     }

@@ -32,13 +32,17 @@ class MapLayerAssetVersionImpl {
 std::vector<std::string> MapLayerAssetVersionImpl::GetPOIFiles(void) const {
   std::vector<std::string> results;
   if (children.size() > 2) {
-    for (std::vector<std::string>::const_iterator iter = children.begin() + 2;
-         iter != children.end(); ++iter ) {
-      AssetVersion child(*iter);
-      if (child->subtype == "MapPOI") {
-        results.push_back(child->GetOutputFilename(0));
+    int closureCount = 0;
+    auto theClosure = [&results, &closureCount](const std::string& v)
+    {
+      if (closureCount++ > 2) {
+        AssetVersion child(v);
+        if (child->subtype == "MapPOI") {
+          results.push_back(child->GetOutputFilename(0));
+        }
       }
-    }
+    };
+    children.doForEach(theClosure);
   }
   return results;
 }

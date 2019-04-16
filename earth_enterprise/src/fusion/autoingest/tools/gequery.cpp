@@ -287,22 +287,22 @@ void DisplayVersionDependencies(const AssetVersion &version,
            statestr.c_str());
     ++indent;
     if (version->inputs.size()) {
-      for (std::vector<std::string>::const_iterator input =
-             version->inputs.begin();
-           input != version->inputs.end(); ++input) {
-        DisplayVersionDependencies(AssetVersion(*input), indent,
+      auto inClosure = [&](const std::string& v)
+      {
+        DisplayVersionDependencies(AssetVersion(v), indent,
                                    maxdepth,
                                    seen, "< ");
-      }
+      };
+      version->inputs.doForEach(inClosure);
     }
     if (!version->IsLeaf()) {
-      for (std::vector<std::string>::const_iterator child =
-             version->children.begin();
-           child != version->children.end(); ++child) {
-        DisplayVersionDependencies(AssetVersion(*child), indent,
+      auto kidClosure = [&](const std::string& v)
+      {
+        DisplayVersionDependencies(AssetVersion(v), indent,
                                    maxdepth,
                                    seen, "+ ");
-      }
+      };
+      version->children.doForEach(kidClosure);
     }
   }
   if (printLegend) {
@@ -346,32 +346,26 @@ void DisplayBlockerDependencies(const AssetVersion &version,
         myskipext = kMercatorImageryAssetSuffix;
       }
 
+      auto unconditionalClosure = [&](const std::string& v)
+      {
+        DisplayBlockerDependencies(AssetVersion(v), seen, myskipext);
+      };
       if (version->inputs.size()) {
         if (myskipext.empty()) {
-          for (std::vector<std::string>::const_iterator input =
-                 version->inputs.begin();
-               input != version->inputs.end(); ++input) {
-            DisplayBlockerDependencies(AssetVersion(*input),
-                                       seen, myskipext);
-          }
+          version->inputs.doForEach(unconditionalClosure);
         } else {
-          for (std::vector<std::string>::const_iterator input =
-                 version->inputs.begin();
-               input != version->inputs.end(); ++input) {
-            if (!EndsWith(*input, myskipext)) {
-              DisplayBlockerDependencies(AssetVersion(*input),
+          auto conditionalClosure = [&](const std::string& v)
+          {
+            if (!EndsWith(v, myskipext)) {
+              DisplayBlockerDependencies(AssetVersion(v),
                                          seen, myskipext);
             }
-          }
+          };
+          version->inputs.doForEach(conditionalClosure);
         }
       }
       if (!version->IsLeaf()) {
-        for (std::vector<std::string>::const_iterator child =
-               version->children.begin();
-             child != version->children.end(); ++child) {
-          DisplayBlockerDependencies(AssetVersion(*child),
-                                     seen, myskipext);
-        }
+        version->children.doForEach(unconditionalClosure);
       }
     }
   }
@@ -394,10 +388,6 @@ void DisplayRasterProjectProgress(const AssetVersion &version,
     // be good. (RasterProject has DelayedBuildChildren)
   } else {
     // We don't have children, so all me need to look at is our inputs
-    for (std::vector<std::string>::const_iterator input =
-           version->inputs.begin();
-         input != version->inputs.end(); ++input) {
-      // TODO: implementation.
-    }
+    // TODO: implementation.
   }
 }
