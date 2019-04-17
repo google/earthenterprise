@@ -116,7 +116,6 @@ class AssetVersionImpl : public khMTRefCounter, public AssetVersionStorage {
   outIter GetInputs(outIter oi) const {
     auto theClosure = [&oi](const std::string& v) { oi++ = v; };
     outfiles.doForEach(theClosure);
-    //inputs.copyTo(oi);
     return oi;
   }
 
