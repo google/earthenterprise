@@ -50,14 +50,12 @@ gtag('config', 'UA-108632131-2');
       This file must be created manually. View the <a href="../answer/176738.html">Configure Fusion performance</a> document for more details.</p>
     <p><strong>Added a <code>long_version</code> parameter to the SCons build. </strong>This will allow the user to override the long version string.</p>
 
-<p><strong>Added options to the Server install script</strong>
+<p><strong>Added options to the Server install script.</strong>
        The server install script now checks the size of the publish root and allows the user to set custom user and group names.
 </p>
 
 <p><strong>Improved system manager performance for large builds.</strong> This release eliminates some duplicate processing in system manager, which reduces the amount of time it takes to initiate large builds.
 </p>
-
-    <p><strong>Google has developed updated kmlrender libraries.</strong></p>
 
   <h5>
     <p id="supported_5.3.0">Supported Platforms</p>
@@ -212,6 +210,13 @@ gtag('config', 'UA-108632131-2');
             <td>Build number was incorrectly being appended to the version in RPM packaging</td>
             <td>
               RPM packaging should put the build number in the <code>release</code> field of the RPM properties and not append it to the version number in the <code>version</code> field.  This was preventing point releases from properly upgrading.
+            </td>
+          </tr>
+          <tr>
+            <td>1275</td>
+            <td>Search results from KML layers do not display properly in Earth Client.</td>
+            <td>
+               Updated KML rendering libraries with new versions provided by Google.
             </td>
           </tr>
           <tr>
