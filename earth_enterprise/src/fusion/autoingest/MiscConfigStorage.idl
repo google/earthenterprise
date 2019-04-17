@@ -26,6 +26,10 @@ class MiscConfigStorage {
   uint        AssetCacheSize = uint(128000);
   uint        VersionCacheSize = uint(128000);
 
+  uint        MaxMemoryUtilization = uint(90);
+
+  bool        LimitMemoryUtilization = false;
+
   bool        GenerateProductPreviews = true;
 
   bool        DisablePacketLevelVersionCachePurge = false;
