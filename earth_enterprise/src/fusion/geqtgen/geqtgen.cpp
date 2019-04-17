@@ -337,7 +337,7 @@ int main(int argc, char **argv) {
     input_files.push_back(config.vector_index_);
     for (uint i = 0; i < config.dated_imagery_indexes_.size(); ++i) {
       input_files.push_back(config.dated_imagery_indexes_[i].
-                            imagery_index_version_.toString());
+                            imagery_index_version_);
     }
     khPrintFileSizes("Input File Sizes", input_files);
 
@@ -422,7 +422,7 @@ int main(int argc, char **argv) {
       khDeleteGuard<BlendTraverser>
         traverser(TransferOwnership(new BlendTraverser(
           "ImageryTraverser", file_pool,
-          dated_imagery.imagery_index_version_.toString())));
+          dated_imagery.imagery_index_version_)));
       progress_meter.incrementTotal(
           CountIndexPackets(traverser->GetIndexBundleReader()));
       std::string date_string = dated_imagery.date_string_;

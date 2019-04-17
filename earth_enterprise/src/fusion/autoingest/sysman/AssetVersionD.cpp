@@ -484,7 +484,7 @@ AssetVersionImplD::OkToClean(std::vector<std::string> *wouldbreak) const
            (listener->state != AssetDefs::Bad)) &&
           listener->OfflineInputsBreakMe()) {
         if (wouldbreak) {
-          wouldbreak->push_back(l.toString());
+          wouldbreak->push_back(l);
         } else {
           return false;
         }
@@ -877,7 +877,7 @@ LeafAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
       beginTime = 0;
       endTime = 0;
       if (taskid) {
-        theAssetManager.DeleteTask(GetRef().toString());
+        theAssetManager.DeleteTask(GetRef());
         taskid = 0;
       }
 

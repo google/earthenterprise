@@ -285,8 +285,8 @@ RasterMerger<CachingDataReader>::RasterMerger(
         targetLevel+1,
         insets_[i].dataRP,
         insets_[i].alphaRP,
-        insets_[i].packetLevel.toString(),
-        insets_[i].packetAlphaLevel.toString()));
+        insets_[i].packetLevel,
+        insets_[i].packetAlphaLevel));
     is_mercator_ = is_mercator_ || insets.back()->IsMercator();
   }
 

@@ -58,8 +58,8 @@ class AssetImpl : public khRefCounter, public AssetStorage {
   time_t timestamp;
   uint64 filesize;
 
-  std::string WorkingDir(void) const { return WorkingDir(GetRef().toString()); }
-  std::string XMLFilename() const { return XMLFilename(GetRef().toString()); }
+  std::string WorkingDir(void) const { return WorkingDir(GetRef()); }
+  std::string XMLFilename() const { return XMLFilename(GetRef()); }
 
 
   virtual ~AssetImpl(void) { }
@@ -91,7 +91,7 @@ Asset::cache(void)
 
 template <>
 inline void
-Asset::DoBind(const SharedString &ref, bool checkFileExistenceFirst) const
+Asset::DoBind(const std::string &ref, bool checkFileExistenceFirst) const
 {
   // Check in cache
   HandleType entry = CacheFind(ref);
@@ -101,10 +101,10 @@ Asset::DoBind(const SharedString &ref, bool checkFileExistenceFirst) const
   // Try to load from XML
   if (!entry) {
     if (checkFileExistenceFirst) {
-      std::string filename = Impl::XMLFilename(ref.toString());
+      std::string filename = Impl::XMLFilename(ref);
 
       // checks to see whether or not this XML file exists
-      if (!khExists(Impl::XMLFilename(ref.toString()))) {
+      if (!khExists(Impl::XMLFilename(ref))) {
         // in this case DoBind is allowed not to throw even if
         // we configured to normally throw
         return;
@@ -112,10 +112,10 @@ Asset::DoBind(const SharedString &ref, bool checkFileExistenceFirst) const
     }
 
     // will succeed, generate stub, or throw exception
-    entry = Load(ref.toString());
+    entry = Load(ref);
     addToCache = true;
   } else if (check_timestamps) {
-    std::string filename = Impl::XMLFilename(ref.toString());
+    std::string filename = Impl::XMLFilename(ref);
     uint64 filesize = 0;
     time_t timestamp = 0;
     if (khGetFileInfo(filename, filesize, timestamp) &&
@@ -127,7 +127,7 @@ Asset::DoBind(const SharedString &ref, bool checkFileExistenceFirst) const
       cache().Remove(ref, false); // don't prune, the Add will
 
       // will succeed, generate stub, or throw exception
-      entry = Load(ref.toString());
+      entry = Load(ref);
       addToCache = true;
     }
   }

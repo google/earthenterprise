@@ -44,13 +44,13 @@ static QPixmap uic_load_pixmap( const QString &name )
 #define COL_REF 3
 
 AssetChildItem::AssetChildItem( QListView *parent, const AssetVersion &ver)
-    : QListViewItem( parent ), AssetWatcher(ver->GetRef().toString())
+    : QListViewItem( parent ), AssetWatcher(ver->GetRef())
 {
   configureWidgets(ver);
 }
 
 AssetChildItem::AssetChildItem( QListViewItem *parent, const AssetVersion &ver, const std::string &msg )
-    : QListViewItem( parent ), AssetWatcher(ver->GetRef().toString())
+    : QListViewItem( parent ), AssetWatcher(ver->GetRef())
 {
   configureWidgets(ver, msg);
 }

@@ -921,7 +921,7 @@ void FeatureEditor::dropEvent(QDropEvent* event) {
                                tr("Yes"), tr("No"), 0, 1) == 0) {
         QString error;
         bool needed;
-        if (!khAssetManagerProxy::BuildAsset(asset->GetRef().toString(),
+        if (!khAssetManagerProxy::BuildAsset(asset->GetRef(),
                                              needed, error)) {
           QMessageBox::critical(this, "Error",
                                 tr("Unable to schedule build. ") +

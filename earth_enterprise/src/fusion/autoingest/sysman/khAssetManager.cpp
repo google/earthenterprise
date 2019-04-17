@@ -610,7 +610,7 @@ khAssetManager::SubmitTask(const SharedString &verref, const TaskDef &taskdef,
   uint32 taskid = NextTaskId::Get();
   MutableAssetVersionD(verref)->taskid = taskid;
 
-  SubmitTaskMsg submitMsg(verref.toString(),
+  SubmitTaskMsg submitMsg(verref,
                           taskid,
                           priority,
                           taskdef);

@@ -50,7 +50,7 @@ class PacketGenExtraUpdateArg {
 template
 MutablePacketGenAssetVersionD
 PacketGenFactory::ReuseOrMakeAndUpdate(
-    const SharedString &ref_ , AssetDefs::Type type_,
+    const std::string &ref_ , AssetDefs::Type type_,
     const khMetaData &meta_,
     const PacketGenConfig& config_,
     const PacketGenExtraUpdateArg<RasterProductAssetVersion> &extra);
@@ -58,7 +58,7 @@ PacketGenFactory::ReuseOrMakeAndUpdate(
 template
 MutablePacketGenAssetVersionD
 PacketGenFactory::ReuseOrMakeAndUpdate(
-    const SharedString &ref_ , AssetDefs::Type type_,
+    const std::string &ref_ , AssetDefs::Type type_,
     const khMetaData &meta_,
     const PacketGenConfig& config_,
     const PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> &extra);
@@ -66,7 +66,7 @@ PacketGenFactory::ReuseOrMakeAndUpdate(
 template
 MutablePacketGenAssetVersionD
 PacketGenFactory::ReuseOrMakeAndUpdateSubAsset(
-    const SharedString &parentAssetRef,
+    const std::string &parentAssetRef,
     AssetDefs::Type type_,
     const std::string &basename,
     const khMetaData &meta_,
@@ -76,7 +76,7 @@ PacketGenFactory::ReuseOrMakeAndUpdateSubAsset(
 template
 MutablePacketGenAssetVersionD
 PacketGenFactory::ReuseOrMakeAndUpdateSubAsset(
-    const SharedString &parentAssetRef,
+    const std::string &parentAssetRef,
     AssetDefs::Type type_,
     const std::string &basename,
     const khMetaData &meta_,
@@ -86,7 +86,7 @@ PacketGenFactory::ReuseOrMakeAndUpdateSubAsset(
 template <typename ProductAssetVersion>
 void PacketGenAssetVersionImplD::UpdateChildren(
     const PacketGenExtraUpdateArg<ProductAssetVersion> &extra) {
-  SharedString assetRef = GetAssetRef();
+  std::string assetRef = GetAssetRef();
 
   uint numLevels = config.coverage.numLevels();
   if (numLevels == 0) {
@@ -104,7 +104,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
   std::chrono::high_resolution_clock::time_point prevTime = std::chrono::high_resolution_clock::now();
   std::chrono::high_resolution_clock::time_point curTime;
   std::chrono::duration<double> timeDiff; 
-  notify(NFY_INFO2, "UpdateChildren starting for %s", assetRef.toString().c_str());
+  notify(NFY_INFO2, "UpdateChildren starting for %s", assetRef.c_str());
   // Create my children giving them each a different level
   // Go from end to begin so we can use the results from one level to make
   // the next lower resolution level

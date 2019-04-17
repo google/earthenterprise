@@ -38,7 +38,6 @@
 #include <autoingest/.idl/storage/VectorProjectConfig.h>
 #include <autoingest/.idl/storage/KMLProjectConfig.h>
 #include <autoingest/.idl/storage/MapDatabaseConfig.h>
-#include "common/SharedString.h"
 
 
 

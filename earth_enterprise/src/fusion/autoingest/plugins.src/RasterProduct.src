@@ -92,7 +92,7 @@ RasterProductAssetImpl::GetMaxLevel(void) const
   uint prodMaxLevel = GetMaxLevelFromMeta(meta);
   if (!prodMaxLevel) {
     throw khException(kh::tr("Unable to get maxlevel for ")
-                      + GetRef().toString());
+                      + GetRef());
   }
   return prodMaxLevel;
 }
@@ -117,7 +117,7 @@ RasterProductAssetVersionImpl::GetExtents(void) const
   }
 
   throw khException(kh::tr("Unable to get extents for ")
-                    + GetRef().toString());
+                    + GetRef());
 }
 
 
@@ -136,7 +136,7 @@ RasterProductAssetVersionImpl::GetMaxLevel(void) const
   uint prodMaxLevel = GetMaxLevelFromMeta(meta);
   if (!prodMaxLevel) {
     throw khException(kh::tr("Unable to get maxlevel for ")
-                      + GetRef().toString());
+                      + GetRef());
   }
   return prodMaxLevel;
 }
@@ -366,7 +366,7 @@ RasterProductAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
 void
 RasterProductAssetVersionImplD::UpdateChildren(void)
 {
-  SharedString assetRef = GetAssetRef();
+  std::string assetRef = GetAssetRef();
 
   // ***** load my input versions (only if they aren't already loaded)
   // I'll use this list of my inputs to pass to my children so they don't

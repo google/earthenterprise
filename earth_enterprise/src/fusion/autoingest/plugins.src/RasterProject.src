@@ -105,7 +105,7 @@ class RasterProjectAssetVersionImpl {
     // The first 3 children are reserved, the rest are dated imagery indexes.
     for(uint i = 3; i < children.size(); ++i) {
       RasterGEIndexAssetVersion index(children[i]);
-      SharedString index_ref(index->GetRef());
+      std::string index_ref(index->GetRef());
       std::string date_string(index->config.date_string_);
       std::string index_file = index->GetOutputFilename(0);
       DatedImageryIndexInfo info(index_ref, date_string, channel_id++);
@@ -205,7 +205,7 @@ class RasterProjectAssetVersionImplD {
   // Makes index subasset (subfunction for BuildIndex()).
   // Returns the version of the new geindex.
   uint32 MakeIndexSubAsset(const std::vector<SharedString> &packgenkids,
-                           const std::vector<SharedString> &packgenassets,
+                           const std::vector<std::string> &packgenassets,
                            const std::vector<AssetVersion> &packgenvers,
                            const std::vector<PacketGenInfo> &genInfo,
                            const std::string &date);
@@ -498,7 +498,7 @@ void RasterProjectAssetImplD::ThrowIfAnyInvalidDates() {
     std::string date_string = asset->GetAcquisitionDate();
     notify(NFY_DEBUG, "DATESTRING: %s\n", date_string.c_str());
     if (date_string == kUnknownDate) {
-      missing_dates += "\n\t" + asset->GetRef().toString();
+      missing_dates += "\n\t" + asset->GetRef();
       notify(NFY_DEBUG, "UNKNOWN DATESTRING: %s\n", missing_dates.c_str());
     }
   }
@@ -752,7 +752,7 @@ void RasterProjectAssetVersionImplD::ThrowIfAnyInvalidDates(
     const InsetInfo<RasterProductAssetVersion>& info = inset_infos[i];
     notify(NFY_DEBUG, "DATESTRING: %s\n", info.date_string_.c_str());
     if (info.date_string_ == kUnknownDate) {
-      missing_dates += "\n\t" + info.resource_->GetRef().toString();
+      missing_dates += "\n\t" + info.resource_->GetRef();
       notify(NFY_DEBUG, "UNKNOWN DATESTRING: %s\n", missing_dates.c_str());
     }
   }
@@ -762,7 +762,7 @@ void RasterProjectAssetVersionImplD::ThrowIfAnyInvalidDates(
 }
 
 void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
-  SharedString assetRef = GetAssetRef();
+  std::string assetRef = GetAssetRef();
 
   // short circuit on degenerate case. Do this so the rest of the code
   // can assume that there is at least one inset.
@@ -1033,7 +1033,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
 
   // create my children giving them each a bigger piece of the stack
   std::vector<SharedString> packgenkids;
-  std::vector<SharedString> packgenassets;
+  std::vector<std::string> packgenassets;
   std::vector<AssetVersion> packgenvers;
   packgenkids.reserve(numInsets);
   packgenassets.reserve(numInsets);
@@ -1110,7 +1110,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
       // see if we want to depend on the packgen for this guy
       // packetgenverref will only be populated if the other one
       // actually cached raster blends.
-      SharedString packgenVerRef;
+      std::string packgenVerRef;
       if (!otherGenInfo.packetgenverref.empty() &&
           otherWillContribToMinify) {
         packgenVerRef = otherGenInfo.packetgenverref;
@@ -1244,12 +1244,12 @@ void RasterProjectAssetVersionImplD::CalcLevelsToSkipTransparentTiles(
 
 uint32 RasterProjectAssetVersionImplD::MakeIndexSubAsset(
     const std::vector<SharedString> &packgenkids,
-    const std::vector<SharedString> &packgenassets,
+    const std::vector<std::string> &packgenassets,
     const std::vector<AssetVersion> &packgenvers,
     const std::vector<PacketGenInfo> &genInfo,
     const std::string &date) {
-  SharedString assetRef = GetAssetRef();
-  std::string dbname = khDropExtension(khBasename(assetRef.toString()));
+  std::string assetRef = GetAssetRef();
+  std::string dbname = khDropExtension(khBasename(assetRef));
   RasterGEIndexConfig geindexConfig;
   geindexConfig.db_name_ = dbname;
   //  figure out the packetvers for the geindex
@@ -1319,7 +1319,7 @@ uint32 RasterProjectAssetVersionImplD::MakeIndexSubAsset(
           (*packgenver)->children.size());
       for (const auto &packlevelref : (*packgenver)->children) {
         geindexConfig.packet_insets_.back().levels_.push_back(
-            RasterPacketLevelVersion(packlevelref.toString(), indexVer));
+            RasterPacketLevelVersion(packlevelref, indexVer));
       }
     }
   }

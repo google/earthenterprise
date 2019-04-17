@@ -202,7 +202,7 @@ protected:
                                   $formalcachedinputarg
 				  $formalExtraUpdateArg) const;
 
-    ${name}AssetImplD(const SharedString &ref_ $formaltypearg,
+    ${name}AssetImplD(const std::string &ref_ $formaltypearg,
 		$formalinputarg
                 const khMetaData &meta_,
                 const Config& config_)
@@ -282,43 +282,43 @@ print $fh <<EOF;
 class ${name}Factory
 {
 public:
-    static ${name}AssetD Find(const SharedString &ref_ $formaltypearg);
+    static ${name}AssetD Find(const std::string &ref_ $formaltypearg);
 
-    static ${name}AssetVersionD FindVersion(const SharedString &ref_ $formaltypearg);
+    static ${name}AssetVersionD FindVersion(const std::string &ref_ $formaltypearg);
 
-    static void ValidateRefForInput(const SharedString &ref $formaltypearg);
+    static void ValidateRefForInput(const std::string &ref $formaltypearg);
 
     static std::string
-    SubAssetName(const SharedString &parentAssetRef
+    SubAssetName(const std::string &parentAssetRef
                  $formaltypearg,
                  const std::string &basename);
 
     static Mutable${name}AssetD
-    Make(const SharedString &ref_ $formaltypearg,
+    Make(const std::string &ref_ $formaltypearg,
 	 $formalinputarg
 	 const khMetaData &meta_,
 	 const $config& config_);
 
 
     static Mutable${name}AssetD
-    FindMake(const SharedString &ref_ $formaltypearg,
+    FindMake(const std::string &ref_ $formaltypearg,
 	     $formalinputarg
 	     const khMetaData &meta_,
 	     const $config& config_);
     static Mutable${name}AssetD
-    FindAndModify(const SharedString &ref_ $formaltypearg,
+    FindAndModify(const std::string &ref_ $formaltypearg,
 	     $formalinputarg
 	     const khMetaData &meta_,
 	     const $config& config_);
     static Mutable${name}AssetD
-    MakeNew(const SharedString &ref_ $formaltypearg,
+    MakeNew(const std::string &ref_ $formaltypearg,
 	     $formalinputarg
 	     const khMetaData &meta_,
 	     const $config& config_);
 
     $template
     static Mutable${name}AssetVersionD
-    FindMakeAndUpdate(const SharedString &ref_ $formaltypearg,
+    FindMakeAndUpdate(const std::string &ref_ $formaltypearg,
 		      $formalinputarg
 		      const khMetaData &meta_,
 		      const $config& config_
@@ -327,7 +327,7 @@ public:
 
     $template
     static Mutable${name}AssetVersionD
-    FindMakeAndUpdateSubAsset(const SharedString &parentAssetRef
+    FindMakeAndUpdateSubAsset(const std::string &parentAssetRef
 			      $formaltypearg,
 			      const std::string &basename,
 			      $formalinputarg
@@ -341,7 +341,7 @@ if ($withreuse) {
     print $fh <<EOF;
     $template
     static Mutable${name}AssetVersionD
-    ReuseOrMakeAndUpdate(const SharedString &ref_ $formaltypearg,
+    ReuseOrMakeAndUpdate(const std::string &ref_ $formaltypearg,
 			 $formalinputarg
 			 const khMetaData &meta_,
 			 const $config& config_
@@ -350,7 +350,7 @@ if ($withreuse) {
 
     $template
     static Mutable${name}AssetVersionD
-    ReuseOrMakeAndUpdateSubAsset(const SharedString &parentAssetRef
+    ReuseOrMakeAndUpdateSubAsset(const std::string &parentAssetRef
 				 $formaltypearg,
 				 const std::string &basename,
 				 $formalinputarg

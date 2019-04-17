@@ -1558,10 +1558,10 @@ void ProjectManager::AddAssetLayer(const char* assetname) {
                                       0,
                                       isasset);
     if (newsource) {
-      QString layername = shortAssetName(khBasename(asset->GetRef().toString()));
+      QString layername = shortAssetName(khBasename(asset->GetRef()));
       gstLayer* layer = CreateNewLayer(layername,
                                        newsource, 0 /* src layer num */,
-                                       asset->GetRef().toString());
+                                       asset->GetRef());
       if (!layer) {
         // will already have reported error
         newsource->unref();    // cleanup before leaving
@@ -1576,7 +1576,7 @@ void ProjectManager::AddAssetLayer(const char* assetname) {
                              tr("Yes"), tr("No"), 0, 1) == 0) {
       QString error;
       bool needed;
-      if (!khAssetManagerProxy::BuildAsset(asset->GetRef().toString(),
+      if (!khAssetManagerProxy::BuildAsset(asset->GetRef(),
                                            needed, error)) {
         QMessageBox::critical(this, "Error",
                               tr("Unable to schedule build. ") +

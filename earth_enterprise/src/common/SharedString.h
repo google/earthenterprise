@@ -99,6 +99,10 @@ protected:
         return *this;
     }
 
+    operator std::string() const {
+        return refStore.RefFromKey(key);
+    }
+
     const std::string & toString() const {
         return refStore.RefFromKey(key);
     }

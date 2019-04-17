@@ -31,7 +31,6 @@
 #include <geRange.h>
 #include <khInsetCoverage.h>
 #include <khTileAddr.h>
-#include "common/SharedString.h"
 
 #define DEFINE_ISUPTODATE(T)                     \
 inline bool IsUpToDate(const T &a, const T &b) { \
@@ -62,7 +61,6 @@ inline bool IsUpToDate(const Cont<T> &a, const Cont<T> &b) {    \
 
 
 DEFINE_ISUPTODATE(std::string);
-DEFINE_ISUPTODATE(SharedString);
 DEFINE_ISUPTODATE(signed             char);
 DEFINE_ISUPTODATE(unsigned           char);
 DEFINE_ISUPTODATE(signed   short     int);

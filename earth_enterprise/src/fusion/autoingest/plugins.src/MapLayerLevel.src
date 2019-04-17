@@ -79,7 +79,7 @@ MapLayerLevelAssetVersionImplD::DoSubmitTask(void)
 
   // generate packet filename based on my name
   std::string outdir =
-    WorkingFileRef(khReplaceExtension(khBasename(GetAssetRef().toString()),
+    WorkingFileRef(khReplaceExtension(khBasename(GetAssetRef()),
                                       ".kmpacket"));
 
   // create and submit the task

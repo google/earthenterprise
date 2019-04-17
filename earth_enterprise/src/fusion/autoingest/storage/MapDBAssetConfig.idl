@@ -17,16 +17,15 @@
 #include <vector>
 #include <khTypes.h>
 #include <searchtabs/.idl/SearchTabs.h>
-#include "common/SharedString.h"
 
 #cppquote
 #include <searchtabs/.idl/SearchTabs_impl.h>
 #/cppquote
 
 class MapDBAssetConfig {
-  SharedString index_verref_;
-  SharedString map_project_;
-  SharedString imagery_project_;
+  std::string index_verref_;
+  std::string map_project_;
+  std::string imagery_project_;
   // TODO: deprecate search_tabs_.
   std::vector<SearchTabDefinition> search_tabs_;
   uint database_version_;

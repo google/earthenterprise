@@ -142,7 +142,7 @@ class MutableAssetHandleD_ : public virtual Base_ {
   typedef typename Base::Base BBase;
   typedef typename Base::Impl Impl;
 
-  typedef std::map<SharedString, Base> DirtyMap;
+  typedef std::map<std::string, Base> DirtyMap;
   static DirtyMap dirtyMap;
 
   // Test whether an asset is a project asset version.
@@ -194,7 +194,7 @@ class MutableAssetHandleD_ : public virtual Base_ {
         if (d->second->Save(filename)) {
           savetrans.AddNewPath(filename);
           if (saveDirty) {
-            saveDirty->push_back(d->first.toString());
+            saveDirty->push_back(d->first);
           }
         } else {
           return false;
