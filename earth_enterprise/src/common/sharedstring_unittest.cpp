@@ -60,7 +60,7 @@ TEST(SharedStringTest, booleans)
                      tsst2_key(tsst2);
     TestSharedString tsst1_alt(test_string1);
     EXPECT_FALSE(tsst1_key() == tsst2_key());
-    EXPECT_TRUE(tsst1_key() == tsst2_alt());
+    EXPECT_TRUE(tsst1_key() == tsst1_alt());
 
     // make sure that operator< gives the correct result
     EXPECT_TRUE(tsst1 < tsst2);
@@ -93,7 +93,7 @@ TEST(SharedStringTest, construction_assignment)
     EXPECT_FALSE(tsst5.empty());
     string test4 = tsst4.toString(), test5 = tsst5.toString();
     EXPECT_TRUE(tsst4 == tsst5);
-    EXPECT_TRUE(test4 == tsst5);
+    EXPECT_TRUE(tsst5 == test4);
 
     tsst5 = std::string();
     EXPECT_TRUE(tsst5.empty()); 
