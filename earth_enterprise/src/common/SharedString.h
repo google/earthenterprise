@@ -37,24 +37,24 @@
 // much faster as we only need to compare the identifiers.
 class SharedString {
 protected:
-   class RefStorage {
+   class StringStorage {
       private:
         std::unordered_map<uint32_t, std::string> refFromKeyTable;
         std::unordered_map<std::string, uint32_t> keyFromRefTable;
         static uint32_t nextID;
       public:
         const std::string & RefFromKey(const uint32_t &key) {
-					notify(NFY_INFO2, "SharedString::RefStorage::RefFromKey called with %u\n", key);
+					notify(NFY_INFO2, "SharedString::StringStorage::RefFromKey called with %u\n", key);
           auto refIter = refFromKeyTable.find(key);
           assert(refIter != refFromKeyTable.end());
-					notify(NFY_INFO2, "In SharedString::RefStorage::RefFromKey, found ref %s\n", refIter->second.c_str());
+					notify(NFY_INFO2, "In SharedString::StringStorage::RefFromKey, found ref %s\n", refIter->second.c_str());
           return refIter->second;
         }
         uint32_t KeyFromRef(const std::string &ref) {
-					notify(NFY_INFO2, "SharedString::RefStorage::KeyFromRef called with %s\n", ref.c_str());
+					notify(NFY_INFO2, "SharedString::StringStorage::KeyFromRef called with %s\n", ref.c_str());
           auto keyIter = keyFromRefTable.find(ref);
           if (keyIter != keyFromRefTable.end()) {
-						notify(NFY_INFO2, "In SharedString::RefStorage::KeyFromRef found key %u\n", keyIter->second);
+						notify(NFY_INFO2, "In SharedString::StringStorage::KeyFromRef found key %u\n", keyIter->second);
             return keyIter->second;
           }
           else {
@@ -62,17 +62,17 @@ protected:
             uint32_t key = nextID++; 
             refFromKeyTable.insert(std::pair<uint32_t, std::string>(key, ref));
             keyFromRefTable.insert(std::pair<std::string, uint32_t>(ref, key));
-						notify(NFY_INFO2, "Added new entry in RefStorage: ref=%s  key=%u\n", ref.c_str(), key);
+						notify(NFY_INFO2, "Added new entry in StringStorage: ref=%s  key=%u\n", ref.c_str(), key);
             return key;
           }
         }
- 				RefStorage(){
+ 				StringStorage(){
 	          refFromKeyTable.insert(std::pair<uint32_t, std::string>(0, ""));
             keyFromRefTable.insert(std::pair<std::string, uint32_t>("", 0));
 				}
     };
 
-    static RefStorage refStore;
+    static StringStorage strStore;
     uint32_t key;
 
     friend std::ostream & operator<<(std::ostream &out, const SharedString & ref);
@@ -83,11 +83,11 @@ protected:
     }
 
     SharedString(const std::string& str) {
-        key = refStore.KeyFromRef(str);
+        key = strStore.KeyFromRef(str);
     } 
 
     SharedString(const char* s) {
-        key = refStore.KeyFromRef(s);
+        key = strStore.KeyFromRef(s);
     }
 
     bool empty() const {
@@ -95,7 +95,7 @@ protected:
     }
 
     SharedString & operator=(const std::string &str) {
-        key = refStore.KeyFromRef(str);
+        key = strStore.KeyFromRef(str);
         return *this;
     }
 
@@ -104,11 +104,11 @@ protected:
     }
 
     const std::string & toString() const {
-        return refStore.RefFromKey(key);
+        return strStore.RefFromKey(key);
     }
 
     bool operator<(const SharedString &other) const {
-      return (refStore.RefFromKey(key) < refStore.RefFromKey(other.key));
+      return (strStore.RefFromKey(key) < strStore.RefFromKey(other.key));
     }
 
     bool operator==(const SharedString &other) const {
@@ -122,7 +122,7 @@ protected:
 
 
 inline std::ostream & operator<<(std::ostream &out, const SharedString & str) {
-  out << SharedString::refStore.RefFromKey(str.key);
+  out << SharedString::strStore.RefFromKey(str.key);
   return out;
 }
 

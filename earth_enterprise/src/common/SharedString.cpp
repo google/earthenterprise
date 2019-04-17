@@ -16,5 +16,5 @@
 
 #include "SharedString.h"
 
-uint32_t SharedString::RefStorage::nextID = 1;
-SharedString::RefStorage SharedString::refStore;
+uint32_t SharedString::StringStorage::nextID = 1;
+SharedString::StringStorage SharedString::strStore;
