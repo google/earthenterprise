@@ -122,6 +122,44 @@ class khMTQueue
 };
 
 
+class khRWLock
+{
+  private:
+    pthread_rwlock_t rwlock;
+  public:
+    khRWLock() : rwlock(PTHREAD_RWLOCK_INITIALIZER) { }
+    virtual ~khRWLock() {}
+    void lockRead(void) { pthread_rwlock_rdlock(&rwlock); }
+    void lockWrite(void) {  pthread_rwlock_wrlock(&rwlock); }
+    void unlock(void) { pthread_rwlock_unlock(&rwlock); }
+};
+
+class khReadGuard
+{
+  private:
+    khReadGuard() = delete;
+    khRWLock& theLock;
+  public:
+    khReadGuard(khRWLock& lock) : theLock(lock) {
+      theLock.lockRead();
+    }
+    virtual ~khReadGuard(void) { theLock.unlock(); }
+};
+
+
+class khWriteGuard
+{
+  private:
+    khWriteGuard() = delete;
+    khRWLock& theLock;
+  public:
+    khWriteGuard(khRWLock& lock) : theLock(lock) {
+      theLock.lockWrite();
+    }
+    virtual ~khWriteGuard(void) { theLock.unlock(); }
+};
+
+
 template <class T>
 class khMTSet
 {
@@ -213,7 +251,6 @@ class khMTMap
     return map.find(key) != map.end();
   }
   bool empty(void) const {
-    std::lock_guard<std::mutex> guard(mutex);
     return map.empty();
   }
 };
@@ -227,47 +264,40 @@ class MTVector {
     typedef typename Base::const_iterator const_iterator;
 
   private:
-    mutable std::mutex mtx;
+    mutable khRWLock mtx;
     Base vec;
 
-    MTVector(const MTVector& a, const std::lock_guard<std::mutex> &) : vec(a.vec) { }
+    MTVector(const MTVector& a, const khReadGuard&) : vec(a.vec) { }
 
   public:
     void push_back(const T& v) {
-      std::lock_guard<std::mutex> lock(mtx);
+      khWriteGuard lock(mtx);
       vec.push_back(v);
     }
     MTVector() { }
     // forward to private copy constructor to protect vector from modification
-    MTVector(const MTVector& a) : MTVector(a, std::lock_guard<std::mutex>(a.mtx)) { }
+    MTVector(const MTVector& a) : MTVector(a, khReadGuard(a.mtx)) { }
 
     const T& operator[] (const size_t idx) const {
-      std::lock_guard<std::mutex> lock(mtx);
+      khReadGuard lock(mtx);
       return vec[idx]; 
     }
 
     bool operator==(const MTVector& x) const {
-      std::mutex* firstMtx = &x.mtx;
-      std::mutex* secondMtx = &mtx;
-      // Be sure to always lock in the same order just in case two threads attempt a==b and b==a
-      if (firstMtx > secondMtx)
-        swap(firstMtx, secondMtx);
-      // also protect against the unlikely a==a to be safe
-      else if (firstMtx == secondMtx)
-        return true;
-      std::lock_guard<std::mutex> lock1(*firstMtx);
-      std::lock_guard<std::mutex> lock2(*secondMtx);
+      // Since using a read lock, no need to worry about lock ordering or things like a==a
+      khReadGuard lock1(mtx);
+      khReadGuard lock2(x.mtx);
       return std::equal(vec.begin(), vec.end(), x.vec.begin());
     }
 
     bool operator==(const Base& x) const {
-      std::lock_guard<std::mutex> lock(mtx);
+      khReadGuard lock(mtx);
       std::equal(vec.begin(), vec.end(), x.begin());
       return true;
     }
 
     void clear(void) {
-      std::lock_guard<std::mutex> lock(mtx);
+      khWriteGuard lock(mtx);
       vec.clear();
     }
 
@@ -280,19 +310,19 @@ class MTVector {
     }
 
     void shrink_to_fit(void) {
-      std::lock_guard<std::mutex> lock(mtx);
+      khWriteGuard lock(mtx);
       vec.shrink_to_fit();
     }
     
     void doForEach(std::function<void (const T&)> func) const {
       if (!func) return; // can't do anyting with an invalid function
-      std::lock_guard<std::mutex> lock(mtx);
+      khReadGuard lock(mtx);
       for_each(vec.begin(), vec.end(), func);
     }
 
     bool doForEachUntil(std::function<bool (const T&)> func) const {
       if (!func) return false; // can't do anyting with an invalid function
-      std::lock_guard<std::mutex> lock(mtx);
+      khReadGuard lock(mtx);
       bool loopedThroughAll = true;
       for (const auto& v : vec) {
         if (!func(v)) {

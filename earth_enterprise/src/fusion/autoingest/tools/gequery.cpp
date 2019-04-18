@@ -287,22 +287,18 @@ void DisplayVersionDependencies(const AssetVersion &version,
            statestr.c_str());
     ++indent;
     if (version->inputs.size()) {
-      auto inClosure = [&](const std::string& v)
-      {
+      version->inputs.doForEach([&](const std::string& v) {
         DisplayVersionDependencies(AssetVersion(v), indent,
                                    maxdepth,
                                    seen, "< ");
-      };
-      version->inputs.doForEach(inClosure);
+      });
     }
     if (!version->IsLeaf()) {
-      auto kidClosure = [&](const std::string& v)
-      {
+      version->children.doForEach([&](const std::string& v) {
         DisplayVersionDependencies(AssetVersion(v), indent,
                                    maxdepth,
                                    seen, "+ ");
-      };
-      version->children.doForEach(kidClosure);
+      });
     }
   }
   if (printLegend) {
@@ -346,26 +342,24 @@ void DisplayBlockerDependencies(const AssetVersion &version,
         myskipext = kMercatorImageryAssetSuffix;
       }
 
-      auto unconditionalClosure = [&](const std::string& v)
-      {
-        DisplayBlockerDependencies(AssetVersion(v), seen, myskipext);
-      };
       if (version->inputs.size()) {
         if (myskipext.empty()) {
-          version->inputs.doForEach(unconditionalClosure);
+          version->inputs.doForEach([&](const std::string& v) {
+            DisplayBlockerDependencies(AssetVersion(v), seen, myskipext);
+          });
         } else {
-          auto conditionalClosure = [&](const std::string& v)
-          {
+          version->inputs.doForEach([&](const std::string& v) {
             if (!EndsWith(v, myskipext)) {
               DisplayBlockerDependencies(AssetVersion(v),
                                          seen, myskipext);
             }
-          };
-          version->inputs.doForEach(conditionalClosure);
+          });
         }
       }
       if (!version->IsLeaf()) {
-        version->children.doForEach(unconditionalClosure);
+        version->children.doForEach([&](const std::string& v) {
+          DisplayBlockerDependencies(AssetVersion(v), seen, myskipext);
+        });
       }
     }
   }

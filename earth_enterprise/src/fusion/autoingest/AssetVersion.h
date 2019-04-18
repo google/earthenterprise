@@ -114,8 +114,9 @@ class AssetVersionImpl : public khMTRefCounter, public AssetVersionStorage {
 
   template <class outIter>
   outIter GetInputs(outIter oi) const {
-    auto theClosure = [&oi](const std::string& v) { oi++ = v; };
-    outfiles.doForEach(theClosure);
+    outfiles.doForEach([&oi](const std::string& v) {
+      oi++ = v;
+    });
     return oi;
   }
 
@@ -368,8 +369,9 @@ class LeafAssetVersionImpl : public virtual AssetVersionImpl {
   virtual bool IsLeaf(void) const { return true; }
 
   virtual void GetOutputFilenames(std::vector<std::string> &out) const {
-    auto theClosure = [&out](const std::string& v) { out.push_back(AssetDefs::AssetPathToFilename(v)); };
-    outfiles.doForEach(theClosure);
+    outfiles.doForEach([&out](const std::string& v) {
+      out.push_back(AssetDefs::AssetPathToFilename(v));
+    });
   }
   std::string GetOutputFilename(uint i) const {
     if (i < outfiles.size()) {

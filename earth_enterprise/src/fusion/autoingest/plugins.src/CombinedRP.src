@@ -132,8 +132,9 @@ CombinedRPAssetVersionImplD::ChildrenToCancel(std::vector<AssetVersion> &out)
   }
 
   // my direct children (KRP & optionally KRMP) need to be canceled
-  auto theClosure = [&out](const std::string& v) { out.push_back(v); };
-  children.doForEach(theClosure);
+  children.doForEach([&out](const std::string& v) {
+    out.push_back(v);
+  });
 
   // my KRP's inputs _may_ by my subassets as well
   // and it cascades up until you hit a 'Source'

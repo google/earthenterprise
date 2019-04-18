@@ -1203,8 +1203,9 @@ CompositeAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
 void
 CompositeAssetVersionImplD::ChildrenToCancel(std::vector<AssetVersion> &out)
 {
-  auto theClosure = [&out](const std::string& v) { out.push_back(v); };
-  children.doForEach(theClosure);
+  children.doForEach([&out](const std::string& v) {
+    out.push_back(v);
+  });
 }
 
 void

@@ -296,8 +296,9 @@ ToElementWithChildName(khxml::DOMElement *elem,
                        const std::string &childTagName,
                        const MTVector<T> &val)
 {
-  auto theClosure = [&](const std::string& v) { AddElement(elem, childTagName, v); };
-  val.doForEach(theClosure);
+  val.doForEach([&](const std::string& v) {
+    AddElement(elem, childTagName, v);
+  });
 }
 
 

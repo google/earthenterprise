@@ -84,24 +84,20 @@ AssetChildItem::setOpen(bool open)
     // add my children
     AssetVersion ver(ref);
     if ( !ver->IsLeaf() ) {
-      auto childClosure = [&](const std::string& v)
-      {
+      ver->children.doForEach([&](const std::string& v) {
         AssetVersion child(v);
         // AssetChildItem *item =
         new AssetChildItem( this, child, "CHILD: " );
         //              item->setOpen( false );
-      };
-      ver->children.doForEach(childClosure);
+      });
     }
 
-    auto inputClosure = [&](const std::string& v)
-    {
+    ver->inputs.doForEach([&](const std::string& v) {
       AssetVersion input(v);
       // AssetChildItem *item =
       new AssetChildItem( this, input, "INPUT: " );
       //      item->setOpen( false );
-    };
-    ver->inputs.doForEach(inputClosure);
+    });
 
 
     // open second

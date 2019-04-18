@@ -268,20 +268,16 @@ FindFilesOnVol(const std::string &verref,
     }
   }
 
-  auto inClosure = [&](const std::string& v)
-  {
+  version->inputs.doForEach([&](const std::string& v) {
     FindFilesOnVol(v, volset, seen,
                    found, currentStack,
                    count, interval);
-  };
-  version->inputs.doForEach(inClosure);
+  });
   if (!version->IsLeaf()) {
-    auto kidClosure = [&](const std::string& v)
-    {
+    version->children.doForEach([&](const std::string& v) {
       FindFilesOnVol(v, volset, seen,
                      found, currentStack,
                      count, interval);
-    };
-    version->children.doForEach(kidClosure);
+    });
   }
 }

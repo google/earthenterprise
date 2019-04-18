@@ -110,17 +110,17 @@ namespace {
 void GetInputChildren(const AssetVersion &ver,
                       std::vector<std::string> &inputkids) {
   std::queue<std::shared_ptr<AssetVersion>> goodVersions;
-  auto theClosure = [&](const std::string& v)
-  {
+  ver->inputs.doForEach([&](const std::string& v) {
     std::shared_ptr<AssetVersion> p = std::make_shared<AssetVersion>(v);
     if (*p)
       goodVersions.push(p);
-  };
-  ver->inputs.doForEach(theClosure);
+  });
+
   while (!goodVersions.empty()) {
     AssetVersion& input = *(goodVersions.front().get());
-    auto anotherClosure = [&inputkids](const std::string& v) { inputkids.push_back(v); };
-    input->children.doForEach(anotherClosure);
+    input->children.doForEach([&inputkids](const std::string& v) {
+      inputkids.push_back(v);
+    });
     goodVersions.pop();
   }
 }

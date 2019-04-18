@@ -540,8 +540,9 @@ void MercatorRasterProjectAssetVersionImplD::ChildrenToCancel(
     std::vector<AssetVersion> &out) {
   if (children.size()) {
     // my direct children are my index and optionally a copyright
-    auto theClosure = [&out](const std::string& v){ out.push_back(v); };
-    children.doForEach(theClosure);
+    children.doForEach([&out](const std::string& v){
+      out.push_back(v);
+    });
 
     // additionally, my indexes' inputs are my sub assets as well
     for(uint i = 0; i < children.size(); ++i) {
@@ -1105,12 +1106,10 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
       geindexConfig.packet_insets_.push_back(RasterPacketInset());
       geindexConfig.packet_insets_.back().levels_.reserve(
           (*packgenver)->children.size());
-      auto theClosure = [&geindexConfig, &indexVer](const std::string& v)
-      {
+      (*packgenver)->children.doForEach([&geindexConfig, &indexVer](const std::string& v) {
         geindexConfig.packet_insets_.back().levels_.push_back(
             RasterPacketLevelVersion(v, indexVer));
-      };
-      (*packgenver)->children.doForEach(theClosure);
+      });
     }
   }
   if (tryReuse) {
