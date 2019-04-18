@@ -40,8 +40,6 @@ class AssetVersionRef {
 
   AssetVersionRef(const std::string &assetRef_, const std::string &version_);
   AssetVersionRef(const std::string &assetRef_, uint vernum);
-  AssetVersionRef(const SharedString &assetRef_, const std::string &version_);
-  AssetVersionRef(const SharedString &assetRef_, uint vernum);
 
   std::string Bind(void) const;
   static std::string Bind(const AssetVersionRef &o) { return o.Bind(); }

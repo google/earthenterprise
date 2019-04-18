@@ -170,35 +170,35 @@ private:
 
   // Utility methods used to simplify readability of DelayedBuildChildren()
   MutableCombinedTerrainAssetVersionD CreateCombinedTerrain(
-      const SharedString& asset_ref_string,
+      const std::string& asset_ref_string,
       RasterProjectAssetVersionD& terrain_project
 #ifdef CREATE_SUBSAMPLED_TERRAIN
       , MutableRasterGEIndexAssetVersionD& ssindex
 #endif
       );
   MutableQTPacketAssetVersionD CreateQTPacket(
-      const SharedString& asset_ref_string,
+      const std::string& asset_ref_string,
       RasterProjectAssetVersionD& imagery_project,
       RasterProjectAssetVersionD& terrain_project,
       MutableCombinedTerrainAssetVersionD& combined_terrain,
       VectorProjectAssetVersionD& vector_project,
       std::vector<DatedImageryIndexInfo>& dated_imagery_indexes);
   MutableUnifiedIndexAssetVersionD CreateUnifiedIndex(
-      const SharedString& asset_ref_string,
+      const std::string& asset_ref_string,
       RasterProjectAssetVersionD& imagery_project,
       MutableCombinedTerrainAssetVersionD& combined_terrain,
       VectorProjectAssetVersionD& vector_project,
       std::vector<DatedImageryIndexInfo>& dated_imagery_indexes,
       MutableQTPacketAssetVersionD& qtpacket);
   MutableGEDBAssetVersionD CreateGedbAsset(
-      const SharedString& asset_ref_string,
+      const std::string& asset_ref_string,
       RasterProjectAssetVersionD& imagery_project,
       RasterProjectAssetVersionD& terrain_project,
       VectorProjectAssetVersionD& vector_project,
       MutableUnifiedIndexAssetVersionD& unified_index);
 #ifdef CREATE_SUBSAMPLED_TERRAIN
   MutableRasterGEIndexAssetVersionD CreateSubsampledTerrain(
-      const SharedString& asset_ref_string,
+      const std::string& asset_ref_string,
       RasterProjectAssetVersionD& imagery_project,
       RasterProjectAssetVersionD& terrain_project);
 #endif
@@ -370,7 +370,7 @@ DatabaseAssetVersionImplD::UpdateChildren(void)
 void
 DatabaseAssetVersionImplD::DelayedBuildChildren(void)
 {
-  SharedString asset_ref_string = GetAssetRef();
+  std::string asset_ref_string = GetAssetRef();
 
   // get my project inputs
   RasterProjectAssetVersionD imagery_project;
@@ -413,7 +413,7 @@ DatabaseAssetVersionImplD::DelayedBuildChildren(void)
     for(uint i = 0; i < dated_imagery_indexes.size(); ++i) {
       const DatedImageryIndexInfo& info = dated_imagery_indexes[i];
       if (info.date_string_ == kUnknownDate) {
-        missing_dates += "\n\t" + info.imagery_index_version_.toString();
+        missing_dates += "\n\t" + info.imagery_index_version_;
       }
     }
     if (!missing_dates.empty()) {
@@ -482,7 +482,7 @@ DatabaseAssetVersionImplD::DelayedBuildChildren(void)
 // ------------------------
 MutableCombinedTerrainAssetVersionD
 DatabaseAssetVersionImplD::CreateCombinedTerrain(
-    const SharedString& asset_ref_string,
+    const std::string& asset_ref_string,
     RasterProjectAssetVersionD& terrain_project
 #ifdef CREATE_SUBSAMPLED_TERRAIN
     , MutableRasterGEIndexAssetVersionD& ssindex
@@ -491,10 +491,10 @@ DatabaseAssetVersionImplD::CreateCombinedTerrain(
 
   MutableCombinedTerrainAssetVersionD combined_terrain;
   if (terrain_project) {
-    SharedString combinedTerrainAssetName
+    std::string combinedTerrainAssetName
       (CombinedTerrainFactory::SubAssetName(asset_ref_string, "terrain"));
 
-    std::string dbname = khDropExtension(khBasename(asset_ref_string.toString()));
+    std::string dbname = khDropExtension(khBasename(asset_ref_string));
     RasterGEIndexAssetVersion terrainIndex =
       terrain_project->GetGEIndexVersion();
 
@@ -534,7 +534,7 @@ DatabaseAssetVersionImplD::CreateCombinedTerrain(
 // ------------------------
 MutableQTPacketAssetVersionD
 DatabaseAssetVersionImplD::CreateQTPacket(
-    const SharedString& asset_ref_string,
+    const std::string& asset_ref_string,
     RasterProjectAssetVersionD& imagery_project,
     RasterProjectAssetVersionD& terrain_project,
     MutableCombinedTerrainAssetVersionD& combined_terrain,
@@ -590,7 +590,7 @@ DatabaseAssetVersionImplD::CreateQTPacket(
 // ------------------------
 MutableUnifiedIndexAssetVersionD
 DatabaseAssetVersionImplD::CreateUnifiedIndex(
-    const SharedString& asset_ref_string,
+    const std::string& asset_ref_string,
     RasterProjectAssetVersionD& imagery_project,
     MutableCombinedTerrainAssetVersionD& combined_terrain,
     VectorProjectAssetVersionD& vector_project,
@@ -688,7 +688,7 @@ DatabaseAssetVersionImplD::CreateUnifiedIndex(
   // ------------------------
 MutableGEDBAssetVersionD
 DatabaseAssetVersionImplD::CreateGedbAsset(
-    const SharedString& asset_ref_string,
+    const std::string& asset_ref_string,
     RasterProjectAssetVersionD& imagery_project,
     RasterProjectAssetVersionD& terrain_project,
     VectorProjectAssetVersionD& vector_project,
@@ -740,7 +740,7 @@ const int kImageryToSSClientLevelDelta = 0;
 // ------------------------
 MutableRasterGEIndexAssetVersionD
 DatabaseAssetVersionImplD::CreateSubsampledTerrain(
-    const SharedString& asset_ref_string,
+    const std::string& asset_ref_string,
     RasterProjectAssetVersionD& imagery_project,
     RasterProjectAssetVersionD& terrain_project) {
   MutableRasterGEIndexAssetVersionD ssindex;

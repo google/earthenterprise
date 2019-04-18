@@ -79,7 +79,7 @@ void PacketLevelAssetVersionImplD::DoSubmitTask(void) {
   std::string packExt = (type == AssetDefs::Imagery) ?
                         ".kipacket" : ".ktpacket";
   std::string outdir =
-    WorkingFileRef(khReplaceExtension(khBasename(GetAssetRef().toString()),
+    WorkingFileRef(khReplaceExtension(khBasename(GetAssetRef()),
                                       packExt));
 
   // create and submit the task
@@ -128,7 +128,7 @@ bool PacketLevelAssetVersionImplD::AttemptConvertFromOldLastGood(void) {
 
   // find the appropriate directly under the resource (old way) instead of
   // under CombinedRP (the new way)
-  std::string oldassetref = GetAssetRef().toString();
+  std::string oldassetref = GetAssetRef();
   if (type == AssetDefs::Imagery) {
     if (find_and_replace(oldassetref, "CombinedRP.kia/", std::string()) ==
         std::string::npos) {
@@ -249,7 +249,7 @@ void PacketLevelAssetVersionImplD::MakeConvertTask(
   // version. This information will be used by merge PacketLevels to determine
   // if they can upgrade instead of doing their own work.
   (void)khWriteStringToFile(WorkingFilename("upgradedfrom"),
-                            oldver->GetRef().toString());
+                            oldver->GetRef());
 
   // get my input filenames so I can pass them to the TaskDef
   std::vector<std::string> inputFilenames;
@@ -259,7 +259,7 @@ void PacketLevelAssetVersionImplD::MakeConvertTask(
   std::string packExt = (type == AssetDefs::Imagery) ?
                         ".kipacket" : ".ktpacket";
   std::string outdir =
-    WorkingFileRef(khReplaceExtension(khBasename(GetAssetRef().toString()),
+    WorkingFileRef(khReplaceExtension(khBasename(GetAssetRef()),
                                       packExt));
 
   // create and submit the task

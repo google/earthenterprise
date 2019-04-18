@@ -103,7 +103,7 @@ $config{"AssetD.cpp"}
 // ***  ${name}Factory - Auto generated
 // ****************************************************************************
 ${name}AssetD
-${name}Factory::Find(const SharedString &ref_ $formaltypearg)
+${name}Factory::Find(const std::string &ref_ $formaltypearg)
 {
     try {
         Asset asset(ref_);
@@ -119,7 +119,7 @@ ${name}Factory::Find(const SharedString &ref_ $formaltypearg)
 }
 
 ${name}AssetVersionD
-${name}Factory::FindVersion(const SharedString &ref_ $formaltypearg)
+${name}Factory::FindVersion(const std::string &ref_ $formaltypearg)
 {
     try {
         AssetVersion version(ref_);
@@ -135,27 +135,27 @@ ${name}Factory::FindVersion(const SharedString &ref_ $formaltypearg)
 }
 
 void
-${name}Factory::ValidateRefForInput(const SharedString &ref $formaltypearg)
+${name}Factory::ValidateRefForInput(const std::string &ref $formaltypearg)
 {
     if (AssetVersionRef(ref).Version() == "current") {
         Asset asset = Find(ref $forwardtypearg);
         if (!asset) {
             throw std::invalid_argument(
-                "No such " + ToString($typeref) + " $subtype asset: " + ref.toString());
+                "No such " + ToString($typeref) + " $subtype asset: " + ref);
         }
     } else {
         ${name}AssetVersionD version = FindVersion(ref $forwardtypearg);
         if (!version) {
             throw std::invalid_argument(
                 "No such " + ToString($typeref) + " $subtype asset version: " +
-                ref.toString());
+                ref);
         }
     }
 }
 
 std::string
 ${name}Factory::SubAssetName(
-        const SharedString &parentAssetRef
+        const std::string &parentAssetRef
         $formaltypearg,
         const std::string &basename)
 {
@@ -165,8 +165,8 @@ ${name}Factory::SubAssetName(
 
 
 Mutable${name}AssetD
-${name}Factory::Make(const SharedString &ref_ $formaltypearg,
-                     $formalinputarg  
+${name}Factory::Make(const std::string &ref_ $formaltypearg,
+                     $formalinputarg
                      const khMetaData &meta_,
                      const $config& config_)
 {
@@ -183,7 +183,7 @@ ${name}Factory::Make(const SharedString &ref_ $formaltypearg,
 }
 
 Mutable${name}AssetD
-${name}Factory::FindMake(const SharedString &ref_ $formaltypearg,
+${name}Factory::FindMake(const std::string &ref_ $formaltypearg,
                          $formalinputarg
                          const khMetaData &meta_,
                          const $config& config_)
@@ -203,7 +203,7 @@ ${name}Factory::FindMake(const SharedString &ref_ $formaltypearg,
 
 
 Mutable${name}AssetD
-${name}Factory::FindAndModify(const SharedString &ref_ $formaltypearg,
+${name}Factory::FindAndModify(const std::string &ref_ $formaltypearg,
                               $formalinputarg
                               const khMetaData &meta_,
                               const $config& config_)
@@ -214,13 +214,13 @@ ${name}Factory::FindAndModify(const SharedString &ref_ $formaltypearg,
         return asset;
     } else {
         throw khException(kh::tr("$subtype '%2' doesn't exist")
-                          .arg(ref_.toString()));
+                          .arg(ref_));
     }
 }
 
 
 Mutable${name}AssetD
-${name}Factory::MakeNew(const SharedString &ref_ $formaltypearg,
+${name}Factory::MakeNew(const std::string &ref_ $formaltypearg,
                         $formalinputarg
                         const khMetaData &meta_,
                         const $config& config_)
@@ -228,7 +228,7 @@ ${name}Factory::MakeNew(const SharedString &ref_ $formaltypearg,
     Mutable${name}AssetD asset = Find(ref_ $forwardtypearg);
     if (asset) {
         throw khException(kh::tr("$subtype '%2' already exists")
-                          .arg(ref_.toString()));
+                          .arg(ref_));
     } else {
         return Make(ref_ $forwardtypearg,
                     $forwardinputarg
@@ -240,7 +240,7 @@ ${name}Factory::MakeNew(const SharedString &ref_ $formaltypearg,
 $template
 Mutable${name}AssetVersionD
 ${name}Factory::FindMakeAndUpdate(
-        const SharedString &ref_ $formaltypearg,
+        const std::string &ref_ $formaltypearg,
         $formalinputarg
         const khMetaData &meta_,
         const $config& config_
@@ -257,7 +257,7 @@ ${name}Factory::FindMakeAndUpdate(
 $template
 Mutable${name}AssetVersionD
 ${name}Factory::FindMakeAndUpdateSubAsset(
-        const SharedString &parentAssetRef
+        const std::string &parentAssetRef
         $formaltypearg,
         const std::string &basename,
         $formalinputarg
@@ -281,7 +281,7 @@ if ($withreuse) {
 $template
 Mutable${name}AssetVersionD
 ${name}Factory::ReuseOrMakeAndUpdate(
-        const SharedString &ref_ $formaltypearg,
+        const std::string &ref_ $formaltypearg,
         $formalinputarg
         const khMetaData &meta_,
         const $config& config_
@@ -349,7 +349,7 @@ ${name}Factory::ReuseOrMakeAndUpdate(
 $template
 Mutable${name}AssetVersionD
 ${name}Factory::ReuseOrMakeAndUpdateSubAsset(
-        const SharedString &parentAssetRef
+        const std::string &parentAssetRef
         $formaltypearg,
         const std::string &basename,
         $formalinputarg

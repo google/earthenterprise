@@ -17,7 +17,6 @@
 #include <vector>
 #include <khTypes.h>
 #include <khInsetCoverage.h>
-#include "common/SharedString.h"
 
 class PacketGenConfig {
 #pragma DontEmitDefaults
@@ -28,8 +27,8 @@ class PacketGenConfig {
   class Inset {
 #pragma DontEmitDefaults
 
-    SharedString rasterProductVersion;
-    SharedString packgenVersion = SharedString();
+    std::string rasterProductVersion;
+    std::string packgenVersion = std::string();
 #pragma GenerateIsUpToDate
   };
 

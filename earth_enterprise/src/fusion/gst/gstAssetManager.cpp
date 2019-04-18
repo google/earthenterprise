@@ -49,7 +49,7 @@ bool gstAssetManager::buildAsset(const gstAssetHandle& handle, QString& error) {
   }
 
   bool needed;
-  bool success = khAssetManagerProxy::BuildAsset(handle->getAsset()->GetRef().toString(),
+  bool success = khAssetManagerProxy::BuildAsset(handle->getAsset()->GetRef(),
                                                  needed, error);
   if (success && !needed) {
     error = kh::tr("Nothing to do. Already up to date.");
@@ -67,7 +67,7 @@ bool gstAssetManager::rebuildAsset(const gstAssetHandle& handle,
 
   AssetVersion ver(handle->getAsset()->CurrVersionRef());
   if (ver) {
-    return khAssetManagerProxy::RebuildVersion(ver->GetRef().toString(), error);
+    return khAssetManagerProxy::RebuildVersion(ver->GetRef(), error);
   } else {
     error = kh::tr("No current version");
     return false;
@@ -84,7 +84,7 @@ bool gstAssetManager::cancelAsset(const gstAssetHandle& handle,
 
   AssetVersion ver(handle->getAsset()->CurrVersionRef());
   if (ver) {
-    return khAssetManagerProxy::CancelVersion(ver->GetRef().toString(), error);
+    return khAssetManagerProxy::CancelVersion(ver->GetRef(), error);
   } else {
     error = kh::tr("No current version");
     return false;

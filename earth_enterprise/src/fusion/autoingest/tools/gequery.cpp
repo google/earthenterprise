@@ -272,14 +272,14 @@ void DisplayVersionDependencies(const AssetVersion &version,
   if (indent > maxdepth) return;
   bool printLegend = (indent == 0);
   std::string statestr = version->PrettyState();
-  if (seen.find(version->GetRef().toString()) != seen.end()) {
+  if (seen.find(version->GetRef()) != seen.end()) {
     printf("R  %s%s%s: %s\n",
            std::string((indent-1)*3, ' ').c_str(),
            prefix.c_str(),
            version->GetRef().toString().c_str(),
            statestr.c_str());
   } else {
-    seen.insert(version->GetRef().toString());
+    seen.insert(version->GetRef());
     printf("%s%s%s: %s\n",
            std::string(indent*3, ' ').c_str(),
            prefix.c_str(),
@@ -314,9 +314,9 @@ static
 void DisplayBlockerDependencies(const AssetVersion &version,
                                 SeenSet &seen,
                                 const std::string &skipInputExt) {
-  if (seen.find(version->GetRef().toString()) == seen.end()) {
+  if (seen.find(version->GetRef()) == seen.end()) {
     // we have not seen this one yet
-    seen.insert(version->GetRef().toString());
+    seen.insert(version->GetRef());
 
     if (version->state & (AssetDefs::Canceled |
                           AssetDefs::Failed |
@@ -350,7 +350,7 @@ void DisplayBlockerDependencies(const AssetVersion &version,
           }
         } else {
           for (const auto &input : version->inputs) {
-            if (!EndsWith(input.toString(), myskipext)) {
+            if (!EndsWith(input, myskipext)) {
               DisplayBlockerDependencies(AssetVersion(input),
                                          seen, myskipext);
             }

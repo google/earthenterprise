@@ -90,7 +90,7 @@ MercatorRasterProductAssetImpl::GetMaxLevel(void) const
   uint prodMaxLevel = GetMaxLevelFromMeta(meta);
   if (!prodMaxLevel) {
     throw khException(kh::tr("Unable to get maxlevel for ")
-                      + GetRef().toString());
+                      + GetRef());
   }
   return prodMaxLevel;
 }
@@ -120,7 +120,7 @@ MercatorRasterProductAssetVersionImpl::GetExtents(void) const
   }
 
   throw khException(kh::tr("Unable to get extents for ")
-                    + GetRef().toString());
+                    + GetRef());
 }
 
 
@@ -130,7 +130,7 @@ MercatorRasterProductAssetVersionImpl::GetMaxLevel(void) const
   uint prodMaxLevel = GetMaxLevelFromMeta(meta);
   if (!prodMaxLevel) {
     throw khException(kh::tr("Unable to get maxlevel for ")
-                      + GetRef().toString());
+                      + GetRef());
   }
   return prodMaxLevel;
 }
@@ -367,7 +367,7 @@ MercatorRasterProductAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
 void
 MercatorRasterProductAssetVersionImplD::UpdateChildren(void)
 {
-  SharedString assetRef = GetAssetRef();
+  std::string assetRef = GetAssetRef();
 
   // ***** load my input versions (only if they aren't already loaded)
   // I'll use this list of my inputs to pass to my children so they don't

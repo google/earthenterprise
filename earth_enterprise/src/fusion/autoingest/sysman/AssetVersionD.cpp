@@ -304,7 +304,7 @@ void AssetVersionImplD::SetState(
       notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
              GetRef().toString().c_str(), 
              ToString(newstate).c_str());
-      theAssetManager.NotifyVersionStateChange(GetRef().toString(), newstate);
+      theAssetManager.NotifyVersionStateChange(GetRef(), newstate);
       PropagateStateChange(notifier);
     }
   }
@@ -315,7 +315,7 @@ AssetVersionImplD::SetProgress(double newprogress)
 {
   progress = newprogress;
   if (!AssetDefs::Finished(state)) {
-    theAssetManager.NotifyVersionProgress(GetRef().toString(), progress);
+    theAssetManager.NotifyVersionProgress(GetRef(), progress);
     PropagateProgress();
   }
 }
@@ -363,7 +363,7 @@ AssetVersionImplD::PropagateProgress(void)
        p != parents.end(); ++p) {
     AssetVersionD parent(*p);
     if (parent) {
-      parent->HandleChildProgress(GetRef().toString());
+      parent->HandleChildProgress(GetRef());
     } else {
       notify(NFY_WARN, "'%s' has broken parent '%s'",
              GetRef().toString().c_str(), p->toString().c_str());
@@ -397,7 +397,7 @@ AssetVersionImplD::HandleChildStateChange(const std::shared_ptr<StateChangeNotif
 }
 
 void
-AssetVersionImplD::HandleChildProgress(const std::string &) const
+AssetVersionImplD::HandleChildProgress(const SharedString &) const
 {
   // NoOp in base since leaves don't do anything
 }
@@ -458,20 +458,20 @@ AssetVersionImplD::OkToClean(std::vector<std::string> *wouldbreak) const
 {
   // --- check that it's ok to clean me ---
   // If I have a successful parent, then my cleaning would break him
-  for (auto p = parents.begin(); p != parents.end(); ++p) {
-    AssetVersionD parent(*p);
+  for (const auto &p : parents) {
+    AssetVersionD parent(p);
     if (parent) {
       if ((parent->state != AssetDefs::Offline) &&
           (parent->state != AssetDefs::Bad)) {
         if (wouldbreak) {
-          wouldbreak->push_back(p->toString());
+          wouldbreak->push_back(p.toString());
         } else {
           return false;
         }
       }
     } else {
       notify(NFY_WARN, "'%s' has broken parent '%s'",
-             GetRef().toString().c_str(), p->toString().c_str());
+             GetRef().toString().c_str(), p.toString().c_str());
     }
   }
 
@@ -484,7 +484,7 @@ AssetVersionImplD::OkToClean(std::vector<std::string> *wouldbreak) const
            (listener->state != AssetDefs::Bad)) &&
           listener->OfflineInputsBreakMe()) {
         if (wouldbreak) {
-          wouldbreak->push_back(l.toString());
+          wouldbreak->push_back(l);
         } else {
           return false;
         }
@@ -630,10 +630,8 @@ AssetVersionImplD::GetInputFilenames(std::vector<std::string> &out) const
   // load my input versions (only if they aren't already loaded)
   InputVersionGuard guard(this);
 
-  for (std::vector<AssetVersion>::const_iterator iver =
-         guard->inputvers.begin();
-       iver != guard->inputvers.end(); ++iver) {
-    (*iver)->GetOutputFilenames(out);
+  for (const auto &ver : guard->inputvers) {
+    ver->GetOutputFilenames(out);
   }
 }
 
@@ -793,10 +791,8 @@ LeafAssetVersionImplD::HandleTaskDone(const TaskDoneMsg &msg)
     // the output files in the msg have full paths, make them relative to
     // the AssetRoot again
     ClearOutfiles();                // should already be empty
-    for (std::vector<std::string>::const_iterator of
-           = msg.outfiles.begin();
-         of != msg.outfiles.end(); ++of) {
-      outfiles.push_back(*of);
+    for (const auto &of : msg.outfiles) {
+      outfiles.push_back(of);
     }
     SetState(AssetDefs::Succeeded);
   } else {
@@ -825,27 +821,25 @@ LeafAssetVersionImplD::SubmitTask(void)
 void
 LeafAssetVersionImplD::ClearOutfiles(void)
 {
-  for (std::vector<std::string>::const_iterator o = outfiles.begin();
-       o != outfiles.end(); ++o) {
-    if (khIsURI(*o)) {
+  for (const auto &o : outfiles) {
+    if (khIsURI(o)) {
       // don't do anything for URI outfiles
     } else {
       // version 2.0 specified the outfiles relative to the assetroot
       // version 2.1 specifies them as volume netpath's (abs paths)
       // Calling AssetPathToFilename is needed to 2.0 and won't
       // hurt for 2.1
-      std::string filename = AssetDefs::AssetPathToFilename(*o);
+      std::string filename = AssetDefs::AssetPathToFilename(o);
 
       // get list of all files to delete (incl. piggybacks & overflows)
       std::vector<std::string> todelete;
       todelete.push_back(filename);
       khGetOverflowFilenames(filename, todelete);
 
-      for (std::vector<std::string>::const_iterator d = todelete.begin();
-           d != todelete.end(); ++d) {
-        if (khExists(*d)) {
+      for (const auto &d : todelete) {
+        if (khExists(d)) {
           // add to list of files to delete
-          theAssetManager.DeleteFile(*d);
+          theAssetManager.DeleteFile(d);
         }
       }
     }
@@ -883,7 +877,7 @@ LeafAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
       beginTime = 0;
       endTime = 0;
       if (taskid) {
-        theAssetManager.DeleteTask(GetRef().toString());
+        theAssetManager.DeleteTask(GetRef());
         taskid = 0;
       }
 
@@ -1031,7 +1025,7 @@ CompositeAssetVersionImplD::HandleInputStateChange(InputStates, const std::share
 }
 
 void
-CompositeAssetVersionImplD::HandleChildProgress(const std::string &) const
+CompositeAssetVersionImplD::HandleChildProgress(const SharedString &) const
 {
   // TODO: - implement me some day
 }
@@ -1191,14 +1185,13 @@ void
 CompositeAssetVersionImplD::AddChildren
 (std::vector<MutableAssetVersionD> &kids)
 {
-  for (std::vector<MutableAssetVersionD>::iterator child = kids.begin();
-       child != kids.end(); ++child) {
+  for (auto &child : kids) {
 
     // add ourself as the parent
-    (*child)->parents.push_back(GetRef());
+    child->parents.push_back(GetRef());
 
     // add the child to our list
-    children.push_back((*child)->GetRef());
+    children.push_back(child->GetRef());
   }
 }
 
@@ -1227,17 +1220,16 @@ CompositeAssetVersionImplD::Rebuild(const std::shared_ptr<StateChangeNotifier> c
   std::vector<AssetVersion> tocancel;
   ChildrenToCancel(tocancel);
   if (tocancel.size()) {
-    for (std::vector<AssetVersion>::const_iterator i = tocancel.begin();
-         i != tocancel.end(); ++i) {
+    for (const auto &i : tocancel) {
       // only rebuild the child if it is necessary
-      if (*i) {
-        if ((*i)->state & (AssetDefs::Canceled | AssetDefs::Failed)) {
-          MutableAssetVersionD child((*i)->GetRef());
+      if (i) {
+        if (i->state & (AssetDefs::Canceled | AssetDefs::Failed)) {
+          MutableAssetVersionD child(i->GetRef());
           child->Rebuild(notifier);
         }
       } else {
         notify(NFY_WARN, "'%s' has broken child to resume '%s'",
-               GetRef().toString().c_str(), i->Ref().toString().c_str());
+               GetRef().toString().c_str(), i.Ref().toString().c_str());
       }
     }
   }
@@ -1261,17 +1253,16 @@ CompositeAssetVersionImplD::Cancel(const std::shared_ptr<StateChangeNotifier> ca
   std::vector<AssetVersion> tocancel;
   ChildrenToCancel(tocancel);
   if (tocancel.size()) {
-    for (std::vector<AssetVersion>::const_iterator i = tocancel.begin();
-         i != tocancel.end(); ++i) {
+    for (const auto &i : tocancel) {
       // only cancel the child if it's not already finished
-      if (*i) {
-        if (!AssetDefs::Finished((*i)->state)) {
-          MutableAssetVersionD child((*i)->GetRef());
+      if (i) {
+        if (!AssetDefs::Finished(i->state)) {
+          MutableAssetVersionD child(i->GetRef());
           child->Cancel(notifier);
         }
       } else {
         notify(NFY_WARN, "'%s' has broken child to cancel '%s'",
-               GetRef().toString().c_str(), i->Ref().toString().c_str());
+               GetRef().toString().c_str(), i.Ref().toString().c_str());
       }
     }
   }

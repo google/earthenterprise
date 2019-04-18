@@ -43,10 +43,10 @@ AssetImplD::Load(const std::string &boundref)
 }
 
 void
-AssetImplD::AddVersionRef(const SharedString &verref)
+AssetImplD::AddVersionRef(const std::string &verref)
 {
   // add to beginning of my list of versions
-  versions.insert(versions.begin(), verref.toString());
+  versions.insert(versions.begin(), verref);
 }
 
 void

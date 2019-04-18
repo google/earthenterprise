@@ -240,7 +240,7 @@ MercatorMapDatabaseAssetVersionImplD::UpdateChildren(void)
 void
 MercatorMapDatabaseAssetVersionImplD::DelayedBuildChildren(void)
 {
-  SharedString assetRef = GetAssetRef();
+  std::string assetRef = GetAssetRef();
   std::vector<std::string> children;
 
   // get my project inputs

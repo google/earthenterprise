@@ -31,8 +31,9 @@ AssetVersionRef::AssetVersionRef(const std::string &ref)
   }
 }
 
-AssetVersionRef::AssetVersionRef(const SharedString &ref) :
-     AssetVersionRef(ref.toString()) {}
+AssetVersionRef::AssetVersionRef(const SharedString &ref) : AssetVersionRef(ref.toString())
+{
+}
 
 AssetVersionRef::operator std::string() const
 {
@@ -51,22 +52,15 @@ AssetVersionRef::AssetVersionRef(const std::string &assetRef_,
   }
 }
 
-AssetVersionRef::AssetVersionRef(const SharedString &assetRef_,
-                                 const std::string &version_) :
-    AssetVersionRef(assetRef_.toString(), version_) {}
-
 AssetVersionRef::AssetVersionRef(const std::string &assetRef_, uint vernum)
     : assetRef(assetRef_), version(ToString(vernum)) {
 }
-
-AssetVersionRef::AssetVersionRef(const SharedString &assetRef_, uint vernum) :
-    AssetVersionRef(assetRef_.toString(), vernum) {}
 
 std::string
 AssetVersionRef::Bind(void) const
 {
   if (version == "current") {
-    return Asset(assetRef)->CurrVersionRef().toString();
+    return Asset(assetRef)->CurrVersionRef();
   } else if (version == "lastgood") {
     return Asset(assetRef)->GetLastGoodVersionRef();
   } else {

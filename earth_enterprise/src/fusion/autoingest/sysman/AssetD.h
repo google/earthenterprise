@@ -40,7 +40,7 @@ class AssetImplD : public virtual AssetImpl
   AssetImplD(const AssetStorage &storage)
       : AssetImpl(storage) { }
 
-  void AddVersionRef(const SharedString &verref);
+  void AddVersionRef(const std::string &verref);
 
   bool InputsUpToDate(const AssetVersion &,
                       const std::vector<AssetVersion> &cachedInputs) const;
