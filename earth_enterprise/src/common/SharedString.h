@@ -100,7 +100,7 @@ protected:
     }
 
     operator std::string() const {
-        return refStore.RefFromKey(key);
+        return strStore.RefFromKey(key);
     }
 
     const std::string & toString() const {
