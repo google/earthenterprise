@@ -22,7 +22,8 @@
 #include <fusionversion.h>
 #include <config/gefConfigUtil.h>
 #include <autoingest/.idl/Systemrc.h>
-#include <MemoryMonitor.h>
+#include "MemoryMonitor.h"
+#include "MiscConfig.h"
 
 // global for convenience
 int numcols = 80;
@@ -106,7 +107,6 @@ main(int argc, char *argv[])
     while (1) {
       QString error;
       TaskLists taskLists;
-      MemoryMonitor memoryMonitor;
       if (!khAssetManagerProxy::GetCurrTasks("dummy", taskLists,
                                              error, timeout)) {
       	if (error.compare("GetCurrTasks: socket recvall: Resource temporarily unavailable") == 0)
@@ -223,9 +223,11 @@ main(int argc, char *argv[])
             break;
           }
         }
-        memoryMonitor.CalculateMemoryUsage();
+
         outline("");
-        outline("Memory utilization: %u", memoryMonitor.GetUsage());
+        if (MiscConfig::Instance().LimitMemoryUtilization) {
+          outline("System memory utilization: %u%%", memoryMonitor.used);
+        }
         outline("Number of cached assets: %u", taskLists.num_assets_cached);
         outline("Number of cached asset versions: %u",
                 taskLists.num_assetversions_cached);
