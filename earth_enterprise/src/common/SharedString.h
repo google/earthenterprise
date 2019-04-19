@@ -44,17 +44,13 @@ protected:
         static uint32_t nextID;
       public:
         const std::string & RefFromKey(const uint32_t &key) {
-					notify(NFY_INFO2, "SharedString::StringStorage::RefFromKey called with %u\n", key);
           auto refIter = refFromKeyTable.find(key);
           assert(refIter != refFromKeyTable.end());
-					notify(NFY_INFO2, "In SharedString::StringStorage::RefFromKey, found ref %s\n", refIter->second.c_str());
           return refIter->second;
         }
         uint32_t KeyFromRef(const std::string &ref) {
-					notify(NFY_INFO2, "SharedString::StringStorage::KeyFromRef called with %s\n", ref.c_str());
           auto keyIter = keyFromRefTable.find(ref);
           if (keyIter != keyFromRefTable.end()) {
-						notify(NFY_INFO2, "In SharedString::StringStorage::KeyFromRef found key %u\n", keyIter->second);
             return keyIter->second;
           }
           else {
@@ -62,7 +58,6 @@ protected:
             uint32_t key = nextID++; 
             refFromKeyTable.insert(std::pair<uint32_t, std::string>(key, ref));
             keyFromRefTable.insert(std::pair<std::string, uint32_t>(ref, key));
-						notify(NFY_INFO2, "Added new entry in StringStorage: ref=%s  key=%u\n", ref.c_str(), key);
             return key;
           }
         }
