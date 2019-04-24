@@ -65,6 +65,9 @@ protected:
 	          refFromKeyTable.insert(std::pair<uint32_t, std::string>(0, ""));
             keyFromRefTable.insert(std::pair<std::string, uint32_t>("", 0));
 				}
+        size_t size() const {
+          return refFromKeyTable.size();
+        }
     };
 
     static StringStorage strStore;
@@ -72,6 +75,10 @@ protected:
 
     friend std::ostream & operator<<(std::ostream &out, const SharedString & ref);
   public:
+    static size_t StoreSize() {
+      return strStore.size();
+    }
+
     SharedString(): key(0) {}
 
     SharedString(const SharedString& str): key(str.key) {
