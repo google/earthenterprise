@@ -125,10 +125,24 @@ def _GitPreviousReleaseTag(tailTagName):
     return ''
 
 
+def _GitTagRealCommitIdWindows(tagName):
+    """use shell command to retrieve commit id of where the tag points to (Windows version)"""
+    # for some reason .hexsha was not returning the same id....
+    commitId = os.popen("git rev-list -n 1 \"{0}\"".format(tagName.replace("\"", "\\\""))).read().strip()
+    return commitId
+
+def _GitTagRealCommitIdLinux(tagName):
+    """use shell command to retrieve commit id of where the tag points to (Linux version)"""
+    # for some reason .hexsha was not returning the same id....
+    commitId = os.popen("git rev-list -n 1 '{0}'".format(tagName.replace("'", "'\"'\"'"))).read().strip()
+    return commitId
+
 def _GitTagRealCommitId(tagName):
     """use shell command to retrieve commit id of where the tag points to"""
-    # for some reason .hexsha was not returning the same id....
-    return os.popen("git rev-list -n 1 '{0}'".format(tagName.replace("'", "'\"'\"'"))).read().strip()
+    if os.name is 'nt':
+        return _GitTagRealCommitIdWindows(tagName)
+    else:
+        return _GitTagRealCommitIdLinux(tagName)
 
 def _git_tag_list():
     """use shell command to retrieve a list of tags"""

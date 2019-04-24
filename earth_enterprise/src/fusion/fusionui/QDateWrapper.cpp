@@ -17,6 +17,7 @@
 #include <string>
 #include <qlineedit.h>
 #include <qvalidator.h>
+#include <qdatetime.h>
 #include <common/khConstants.h>
 
 namespace qt_fusion {
@@ -128,6 +129,17 @@ void QDateWrapper::SetDate(const std::string& date) {
       SetDate(year, month, day);
     }
   }
+}
+
+bool QDateWrapper::IsValidDate() {
+  //  A date is valid if it exists or if the field is blank
+  //  A value of '0000-00-00' implies the field is blank
+  int zeroVal = year_edit_->text().toInt() |
+                month_edit_->text().toInt() |
+                day_edit_->text().toInt();
+  return (zeroVal == 0) || QDate::isValid(year_edit_->text().toInt(),
+                                          month_edit_->text().toInt(),
+                                          day_edit_->text().toInt());
 }
 
 std::string QDateWrapper::GetDate() const {

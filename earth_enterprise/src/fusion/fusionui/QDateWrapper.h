@@ -91,6 +91,9 @@ public:
   // "YYYY-MM-DD" for Terrain and vector assets.
   std::string GetDate() const;
 
+  // Check if the date occurs before the current system date.
+  bool IsValidDate();
+
 private:
   // Date utilities
   // Set some basic date validators for the line edit widgets and make sure

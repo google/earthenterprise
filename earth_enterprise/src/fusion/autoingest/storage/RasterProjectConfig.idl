@@ -104,7 +104,8 @@ class RasterProjectConfig {
      is_timemachine_project_(false),
      is_overlay_terrain_project_(false),
      overlay_terrain_resources_min_level_(uint32(MaxTmeshLevel/2)),
-     overlay_terrain_start_level_(uint32(StartTmeshLevel)) {
+     overlay_terrain_start_level_(uint32(StartTmeshLevel)),
+     idl_version(0) {
   }
 
   void AfterLoad(RasterProjectConfig::DeprecatedMembers &depmembers);
