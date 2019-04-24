@@ -330,7 +330,7 @@ geselectassetroot --assetroot /gevol/assets --role slave --numcpus 3</code></pre
 <p><i>Optional. </i>Specify the number of CPUs on this machine to use for processing. The default will be the maximum number of CPUs detected on the machine during installation. This command is available only in combination with --<code>assetroot</code>.</p>
 <h2>geselectpublishroot</h2>
 <pre>
-<code>geselectpublishroot <i>path</i></code> [--<strong>noprompt</strong>]</pre>
+<code>geselectpublishroot <i>path</i></code></pre>
 <h3>Purpose</h3>
 <p>To specify a different publish root. The specified path must exist. If you want to create a publish root, see <a href="#geconfigurepublishroot"><code>geconfigurepublishroot</code></a>.</p>
 <h3>Example</h3>
@@ -339,10 +339,6 @@ geselectassetroot --assetroot /gevol/assets --role slave --numcpus 3</code></pre
 <h3>Arguments</h3>
 <p><code><i>path</i></code></p>
 <p><i>Required</i>. Specify the path to the desired publish root.</p>
-<h3>Options</h3>
-<pre>
-<code><b>--noprompt</b></code></pre>
-<p><i>Optional</i>. Perform the command without prompting the user for any input. This option requires that some commands have arguments specified on the command line.</p>
 <h2><a name="#geserveradmin"></a>geserveradmin</h2>
 <pre>
 <code><b>geserveradmin</b> [<i>options</i>] <i>commands</i></code></pre>
@@ -602,6 +598,6 @@ geserveradmin --garbagecollect
 <p><i>Optional</i>. Perform the upgrade without prompting the user for any input. This option requires that some commands have arguments specified on the command line.</p>
 <p> </p>
 </p>
-<p class="copyright">&copy;2018 Google, Open GEE Contributors</p>
+<p class="copyright">&copy;2018 Google, 2018-2019 Open GEE Contributors</p>
 </body>
 </html>

@@ -58,7 +58,7 @@ class Polygon {
    */
   Polygon() {}
 
-  explicit Polygon(std::ifstream* fin);
+  explicit Polygon(std::istream* fin);
 
   std::vector<Vertex> *Vertices() { return &vertices; }
 
@@ -67,6 +67,16 @@ class Polygon {
  private:
   std::vector<Vertex> vertices;
 };
+
+
+/**
+ * This is a dummy struct for passing to the Polygons constructor
+ * to indicate that the accompanying string is actual KML and not
+ * the name of a KML file.
+ */
+struct kml_as_string {
+};
+
 
 /**
  * Set of Polygons read in from a kml file.
@@ -80,6 +90,8 @@ class Polygons {
 
   explicit Polygons(const std::string& kml_file);
 
+  Polygons(const kml_as_string&, const std::string& kml_string);
+
   Polygon* GetPolygon(size_t index) { return &polygons[index]; }
 
   size_t NumberOfPolygons() { return polygons.size(); }
@@ -91,6 +103,8 @@ class Polygons {
 
  private:
   std::vector<Polygon> polygons;
+
+  void AddPolygonsFromStream(std::istream& in_stream);
 };
 
 /**
