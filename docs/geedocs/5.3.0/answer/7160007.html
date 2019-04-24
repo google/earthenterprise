@@ -39,8 +39,6 @@ gtag('config', 'UA-108632131-2');
 <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Release notes</h1>
 <h2>Release notes: Open GEE 5.3.0</h2>
 
-<p>Open GEE 5.3.0 is currently in development</p>
-
   <h5>
     <p id="overview_5.3.0">New Features</p>
   </h5>
@@ -146,12 +144,55 @@ gtag('config', 'UA-108632131-2');
             </td>
           </tr>
           <tr>
+            <td>1192</td>
+            <td>Fusion fails to create a resource from certain jp2 files</td>
+            <td>
+              Upgrade bundled OpenJPEG to v2.3.1 to fix regression introduced in v2.3.0 that affected certain .jp2 files.
+            </td>
+          </tr>
+          <tr>
             <td>1210</td>
             <td>Fix Xerces-related memory leaks</td>
             <td>
               Added an experimental option that fixes several memory leaks related to our usage of the Xerces library.
             </td>
           </tr>
+          <tr>
+            <td>1226</td>
+            <td>Ubuntu 14.04 Installation Requires Boost</td>
+            <td>
+              Documented this required dependency.
+            </td>
+          </tr>          
+          <tr>
+            <td>1228</td>
+            <td>Assemble button is not fully visible, making it difficult to use the GLC assembly tool</td>
+            <td>
+              Added a scroll-bar to glc_assemble webpage to allow scrolling to 'Assemble' button.
+            </td>
+          </tr>
+          <tr>
+            <td>279</td>
+            <td>Server upgrade resets the Admin Console password</td>
+            <td>
+              When the GEE server is upgraded, either through the <code>install_server.sh</code> script or the RPMs, the Admin Console password will be preserved if the password file is found at the expected location.
+            </td>
+          </tr>
+          <tr>
+            <td>1251</td>
+            <td>Build number was incorrectly being appended to the version in RPM packaging</td>
+            <td>
+              RPM packaging should put the build number in the <code>release</code> field of the RPM properties and not append it to the version number in the <code>version</code> field.  This was preventing point releases from properly upgrading.
+            </td>
+          </tr>
+          <tr>
+            <td>1270</td>
+            <td>Fusion uninstaller uses incorrect username " ------"</td>
+            <td>
+              Fixed XML parsing in common.sh that could return incorrect values.
+            </td>
+          </tr>
+
         </tbody>
       </table>
   <h5>

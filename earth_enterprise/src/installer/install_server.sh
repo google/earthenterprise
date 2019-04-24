@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2017 Google Inc.
+# Copyright 2017 Google Inc., 2018-2019 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -46,6 +46,8 @@ PROMPT_FOR_START="n"
 
 # user names
 DEFAULTGROUPNAME="gegroup"
+# $GROUPNAME is used in common.sh by the check_group and check_username functions
+GROUPNAME=$DEFAULTGROUPNAME
 GRPNAME=$DEFAULTGROUPNAME
 GEAPACHEUSER_NAME="geapacheuser"
 GEPGUSER_NAME="gepguser"
@@ -457,7 +459,15 @@ copy_files_to_target()
   if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf "$TMPINSTALLDIR/server/opt/google/lib" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf "$TMPINSTALLDIR/server/opt/google/gehttpd" "$BASEINSTALLDIR_OPT"
+  
+  if [ -f "$BASEINSTALLDIR_OPT/gehttpd/conf.d/.htpasswd" ]
+  then
+    # Preserve Admin Console password
+    rsync -rl "$TMPINSTALLDIR/server/opt/google/gehttpd" "$BASEINSTALLDIR_OPT" --exclude conf.d/.htpasswd
+  else
+    rsync -rl "$TMPINSTALLDIR/server/opt/google/gehttpd" "$BASEINSTALLDIR_OPT"
+  fi
+
   if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf "$TMPINSTALLDIR/server/opt/google/search" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
@@ -516,8 +526,12 @@ copy_files_to_target()
   cp -f "$TMPOPENLDAPPATH/ldap.conf.default" "$BASEINSTALLDIR_ETC/openldap"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
 
-  # TODO: final step: copy uninstall script
-  # cp -f $TMPOPENLDAPPATH/<........> $INSTALL_LOG_DIR
+  cp -f $TMPINSTALLDIR/common/opt/google/uninstall_server.sh $INSTALL_LOG_DIR
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
+  cp -f $TMPINSTALLDIR/common/opt/google/common.sh $INSTALL_LOG_DIR
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
+  cp -f $TMPINSTALLDIR/common/opt/google/version.txt $BASEINSTALLDIR_OPT
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
 
   if [ "$error_on_copy" -ne 0 ]
   then

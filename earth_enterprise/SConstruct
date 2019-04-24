@@ -1,6 +1,7 @@
 #-*- Python -*-
 #
 # Copyright 2017 Google Inc.
+# Copyright 2019 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -168,6 +169,12 @@ stage_bin = env.PhonyTargets(**stage_bin_cmds)
 # Copy the data and docs to the install staging directory
 stage_data = env.Alias('stage_data', installdirs['root'])
 env.Depends(stage_data, stage_bin)
+
+# Copy the uninstall scripts to the install staging directory
+env.copyfile(inst_common_dir('.'), './src/installer/uninstall_fusion.sh')
+env.copyfile(inst_common_dir('.'), './src/installer/uninstall_server.sh')
+env.copyfile(inst_common_dir('.'), './src/installer/common.sh')
+env.copyfile(inst_common_dir('.'), './src/version.txt')
 
 # Copy the tutorial to the install staging directory if it exists.
 stage_tutorial_cmds = {'stage_tutorial': [

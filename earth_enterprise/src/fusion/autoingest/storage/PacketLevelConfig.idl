@@ -48,6 +48,7 @@ class PacketLevelConfig {
 
   class Attribution {
     std::string dataRP;
+    std::string acquisitionDate;
     uint32      fuid_resource_;
   };
 
