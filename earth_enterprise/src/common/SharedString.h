@@ -61,10 +61,10 @@ protected:
             return key;
           }
         }
- 				StringStorage(){
-	          refFromKeyTable.insert(std::pair<uint32_t, std::string>(0, ""));
-            keyFromRefTable.insert(std::pair<std::string, uint32_t>("", 0));
-				}
+        StringStorage(){
+          refFromKeyTable.insert(std::pair<uint32_t, std::string>(0, ""));
+          keyFromRefTable.insert(std::pair<std::string, uint32_t>("", 0));
+        }
         size_t size() const {
           return refFromKeyTable.size();
         }
