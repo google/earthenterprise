@@ -331,11 +331,12 @@ void
 DatabaseAssetVersionImplD::ChildrenToCancel(std::vector<AssetVersion> &out)
 {
   if (children.size()) {
+    auto theClosure = [&out](const std::string& v) { out.push_back(v); };
     if (children.size() >= 2) {
       // new format w/ unified index and gedb
 
       // all my children belong only to me and should be canceled
-      copy(children.begin(), children.end(), back_inserter(out));
+      children.doForEach(theClosure);
 #ifdef CREATE_SUBSAMPLED_TERRAIN
       // the inputs of my optional SS index are also mine to cancel. If the
       // SS child exists, we're guaranteed that the Combined terrain child
@@ -343,7 +344,7 @@ DatabaseAssetVersionImplD::ChildrenToCancel(std::vector<AssetVersion> &out)
       // scanning.
       if (children.size() > kSSTerrainChildPos) {
         AssetVersion index = children[kSSTerrainChildPos];
-        copy(index->inputs.begin(), index->inputs.end(), back_inserter(out));
+        index->inputs.doForEach(theClosure);
       }
 #endif
     } else {
@@ -354,7 +355,7 @@ DatabaseAssetVersionImplD::ChildrenToCancel(std::vector<AssetVersion> &out)
       out.push_back(index);
 
       // its inputs are also my sub assets and should be canceled
-      copy(index->inputs.begin(), index->inputs.end(), back_inserter(out));
+      index->inputs.doForEach(theClosure);
     }
   } else {
     // old database w/ no SS
@@ -990,12 +991,12 @@ DatabaseAssetVersionImplD::CreateSubsampledTerrain(
           geindexConfig.packet_insets_.push_back(RasterPacketInset());
           geindexConfig.packet_insets_.back().levels_.reserve(
               (*packgenver)->children.size());
-          for (std::vector<std::string>::const_iterator packlevelref =
-                 (*packgenver)->children.begin();
-               packlevelref != (*packgenver)->children.end(); ++packlevelref) {
+          auto theClosure = [&geindexConfig](const std::string& v)
+          {
             geindexConfig.packet_insets_.back().levels_.push_back(
-                RasterPacketLevelVersion(*packlevelref, indexVer));
-          }
+                RasterPacketLevelVersion(v, indexVer));
+          };
+          (*packgenver)->children.doForEach(theClosure);
         }
       }
       RasterGEIndexAssetD asset(geindexAssetName);
