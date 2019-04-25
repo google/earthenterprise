@@ -226,7 +226,7 @@ main(int argc, char *argv[])
 
         outline("");
         if (MiscConfig::Instance().LimitMemoryUtilization) {
-          outline("System memory utilization: %u%%", memoryMonitor.used);
+          outline("System memory utilization: %u%%", MemoryMonitor::Instance()->getUsed());
         }
         outline("Number of cached assets: %u", taskLists.num_assets_cached);
         outline("Number of cached asset versions: %u",

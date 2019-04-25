@@ -14,64 +14,25 @@
  * limitations under the License.
  */
 
+#ifndef __MemoryMonitor_h
+#define __MemoryMonitor_h
+
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <vector>
+#include <string>
 
 class MemoryMonitor {
+private:
+    static MemoryMonitor* memoryMonitor;
+    static uint& used();
 public:
-    uint used;
-
-    void CalculateMemoryUsage() {
-      ulong memTotal;
-      ulong memFree;
-      ulong buffers;
-      ulong cached;
-      std::string line;
-      std::ifstream memFile;
-      std::vector <std::string> tokens;
-      memFile.open("/proc/meminfo");
-      while (getline(memFile,line)) {
-          std::stringstream stringStream(line);
-          std::string intermediate;
-          while(getline(stringStream, intermediate, ' ')) {
-              if (intermediate.find_first_not_of(' ') != std::string::npos){
-                  tokens.push_back(intermediate);
-              }
-          }
-          if (tokens[0].compare("MemTotal:") == 0) {
-              memTotal = stoul(tokens[1]);
-          }
-          else if (tokens[0].compare("MemFree:") == 0) {
-              memFree = stoul(tokens[1]);
-          }
-          else if (tokens[0].compare("Buffers:") == 0) {
-              buffers = stoul(tokens[1]);
-          }
-          else if (tokens[0].compare("Cached:") == 0) {
-              cached = stoul(tokens[1]);
-              tokens.clear();
-              break;
-          }
-          tokens.clear();
-      }
-      memFile.close();
-      used = (((float) (memTotal - memFree - buffers - cached))/memTotal)*100;
-    }
-
-    MemoryMonitor() {
-      used = 0;
-      CalculateMemoryUsage();
-    }
-
-    /*if (MiscConfig::Instance().LimitMemoryUtilization) {
-      if (used > MiscConfig::Instance().MaxMemoryUtilization){
-        notify(NFY_WARN, "Usage:%u", used);
-      }
-      else{
-        notify(NFY_NOTICE, "Usage:%u", used);
-      }
-    }*/
+    static MemoryMonitor* Instance();
+    void CalculateMemoryUsage();
+    static void setUsed(const uint);
+    static const uint& getUsed();
+    //MemoryMonitor(MemoryMonitor const&) = delete;
+    //void operator=(MemoryMonitor const&) = delete;
 };
-
-MemoryMonitor memoryMonitor;
+#endif /* __MemoryMonitor_h */
