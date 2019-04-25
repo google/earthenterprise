@@ -26,6 +26,10 @@
 #include <notify.h>
 #endif
 
+#include "fusion/autoingest/MiscConfig.h"
+#include "MemoryMonitor.h"
+#include <notify.h>
+
 /******************************************************************************
  ***  Simple cache of refcounted objects
  ***
@@ -260,7 +264,8 @@ class khCache {
   void Prune(void) {
     CheckListInvariant();
     Item *item = tail;
-    while (item && (map.size() > targetMax)) {
+    while (item && ((map.size() > targetMax) 
+    || (MiscConfig::Instance().LimitMemoryUtilization && (MemoryMonitor::Instance()->getUsed() > MiscConfig::Instance().MaxMemoryUtilization)))) {
       // Note: this refcount() > 1 check is safe even with
       // khMTRefCounter based guards. See explanaition with the
       // definition of khMTRefCounter in khMTTypes.h.
@@ -276,6 +281,10 @@ class khCache {
         if (verbose) notify(NFY_ALWAYS, "Pruning %s from cache", tokill->key.c_str());
 #endif
         delete tokill;
+      }
+      if (MiscConfig::Instance().LimitMemoryUtilization) {
+        MemoryMonitor::Instance()->CalculateMemoryUsage();
+        notify(NFY_NOTICE, "Memory Usage Updated: %u%%", MemoryMonitor::Instance()->getUsed());
       }
     }
     CheckListInvariant();
