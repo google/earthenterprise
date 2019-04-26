@@ -142,7 +142,7 @@ class MutableAssetHandleD_ : public virtual Base_ {
   typedef typename Base::Base BBase;
   typedef typename Base::Impl Impl;
 
-  typedef std::map<std::string, Base> DirtyMap;
+  typedef std::map<SharedString, Base> DirtyMap;
   static DirtyMap dirtyMap;
 
   // Test whether an asset is a project asset version.
@@ -154,7 +154,7 @@ class MutableAssetHandleD_ : public virtual Base_ {
   virtual void OnBind(const std::string &boundref) const {
     Base::OnBind(boundref);
     // if already exists, old one will win, that's OK
-    dirtyMap.insert(std::make_pair(boundref, *this));
+    dirtyMap.insert(std::make_pair(SharedString(boundref), *this));
   }
 
   // must not throw since it's called during stack unwinding
