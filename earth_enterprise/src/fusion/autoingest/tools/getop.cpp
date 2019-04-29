@@ -22,8 +22,8 @@
 #include <fusionversion.h>
 #include <config/gefConfigUtil.h>
 #include <autoingest/.idl/Systemrc.h>
-#include "MemoryMonitor.h"
-#include "MiscConfig.h"
+#include "common/MemoryMonitor.h"
+#include "autoingest/MiscConfig.h"
 
 // global for convenience
 int numcols = 80;
