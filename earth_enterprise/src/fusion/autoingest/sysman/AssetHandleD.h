@@ -154,7 +154,7 @@ class MutableAssetHandleD_ : public virtual Base_ {
   virtual void OnBind(const std::string &boundref) const {
     Base::OnBind(boundref);
     // if already exists, old one will win, that's OK
-    dirtyMap.insert(std::make_pair(SharedString(boundref), *this));
+    dirtyMap.emplace(SharedString(boundref), *this);
   }
 
   // must not throw since it's called during stack unwinding
@@ -320,7 +320,7 @@ protected:
 
       // add it to the dirty list - since it just sprang into existence
       // we need to make sure it gets saved
-      MutableBase::dirtyMap.insert(std::make_pair(this->ref, *this));
+      MutableBase::dirtyMap.emplace(this->ref, *this);
     }
   }
  
