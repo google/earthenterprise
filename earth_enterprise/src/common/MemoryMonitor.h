@@ -22,6 +22,7 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include "notify.h"
 
 class MemoryMonitor {
 private:
@@ -35,4 +36,5 @@ public:
     //MemoryMonitor(MemoryMonitor const&) = delete;
     //void operator=(MemoryMonitor const&) = delete;
 };
+
 #endif /* __MemoryMonitor_h */

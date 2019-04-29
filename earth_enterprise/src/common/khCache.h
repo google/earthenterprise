@@ -28,7 +28,6 @@
 
 #include "fusion/autoingest/MiscConfig.h"
 #include "MemoryMonitor.h"
-#include <notify.h>
 
 /******************************************************************************
  ***  Simple cache of refcounted objects
@@ -284,7 +283,6 @@ class khCache {
       }
       if (MiscConfig::Instance().LimitMemoryUtilization) {
         MemoryMonitor::Instance()->CalculateMemoryUsage();
-        notify(NFY_NOTICE, "Memory Usage Updated: %u%%", MemoryMonitor::Instance()->getUsed());
       }
     }
     CheckListInvariant();
