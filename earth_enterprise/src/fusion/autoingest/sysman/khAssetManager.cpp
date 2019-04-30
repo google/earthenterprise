@@ -226,8 +226,6 @@ khAssetManager::ApplyPending(void)
   pendingProgress.clear();
   pendingTaskCmds.clear();
   pendingFileDeletes.clear();
-  MutableAssetD::dirtyMap.clear();
-  MutableAssetVersionD::dirtyMap.clear();
   elapsed = timer.elapsed();
   notify(NFY_INFO, "Elapsed cleanup time: %s",
          khProgressMeter::msToString(elapsed).latin1());
@@ -576,6 +574,8 @@ khAssetManager::NotifyVersionStateChange(const std::string &ref,
 {
   // assert that we're already locked
   assert(!mutex.TryLock());
+  static std::mutex mtx;
+  std::lock_guard<std::mutex> lock(mtx);
   
   if (ToString(pendingStateChanges[ref]) == "") {
     notify(NFY_VERBOSE, "Set pendingStateChanges[%s]: <empty> to state: %s",
@@ -606,7 +606,8 @@ khAssetManager::SubmitTask(const std::string &verref, const TaskDef &taskdef,
 {
   // assert that we're already locked
   assert(!mutex.TryLock());
-
+  static std::mutex theMutex;
+  std::lock_guard<std::mutex> submitProtect(theMutex); 
   uint32 taskid = NextTaskId::Get();
   MutableAssetVersionD(verref)->taskid = taskid;
 

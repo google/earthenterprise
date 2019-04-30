@@ -48,6 +48,10 @@ class AssetHandle_  {
 
  protected:
   static inline khCache<std::string, HandleType>& cache(void);
+  static std::mutex& getBindMutex(void) {
+    static std::mutex bindMutex;
+    return bindMutex;
+  }
 
  public:
   static uint32 CacheSize(void) { return cache().size(); }

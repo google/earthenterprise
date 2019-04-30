@@ -268,20 +268,16 @@ FindFilesOnVol(const std::string &verref,
     }
   }
 
-  for (std::vector<std::string>::const_iterator input =
-         version->inputs.begin();
-       input != version->inputs.end(); ++input) {
-    FindFilesOnVol(*input, volset, seen,
+  version->inputs.doForEach([&](const std::string& v) {
+    FindFilesOnVol(v, volset, seen,
                    found, currentStack,
                    count, interval);
-  }
+  });
   if (!version->IsLeaf()) {
-    for (std::vector<std::string>::const_iterator child =
-           version->children.begin();
-         child != version->children.end(); ++child) {
-      FindFilesOnVol(*child, volset, seen,
+    version->children.doForEach([&](const std::string& v) {
+      FindFilesOnVol(v, volset, seen,
                      found, currentStack,
                      count, interval);
-    }
+    });
   }
 }

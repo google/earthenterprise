@@ -141,7 +141,7 @@ class MutableAssetHandleD_ : public virtual Base_ {
   typedef typename Base::Base BBase;
   typedef typename Base::Impl Impl;
 
-  typedef std::map<std::string, Base> DirtyMap;
+  typedef khMTMap<std::string, Base> DirtyMap;
   static DirtyMap dirtyMap;
 
   // Test whether an asset is a project asset version.
@@ -189,7 +189,7 @@ class MutableAssetHandleD_ : public virtual Base_ {
       uint32 numDotNew=0;
       for (std::vector<std::string>::iterator it = toDelete.begin();
            it != toDelete.end(); ++it) {
-        if (dirtyMap.find(*it) != dirtyMap.end()) {
+        if (dirtyMap.contains(*it)) {
           std::string filename = dirtyMap[*it]->XMLFilename();
           notify(NFY_VERBOSE,"AssetHandleD.h:193: filename = %s",
                  filename.c_str());
@@ -215,9 +215,7 @@ class MutableAssetHandleD_ : public virtual Base_ {
       size_t dirties = dirtyMap.size();
       for (std::vector<std::string>::iterator it = toDelete.begin();
            it != toDelete.end(); ++it) {
-        if (dirtyMap.find(*it) != dirtyMap.end()) {
-          dirtyMap.erase(*it);
-        }
+        dirtyMap.erase(*it);
       }
 
       // Remove both immutable and mutable items from cache.
@@ -251,9 +249,9 @@ class MutableAssetHandleD_ : public virtual Base_ {
   static void AbortDirty(void) throw()
   {
     // remove all the dirty Impls from the cache
-    for (typename DirtyMap::const_iterator d = dirtyMap.begin();
-         d != dirtyMap.end(); ++d) {
-      Base::cache().Remove(d->first, false); // false -> don't prune
+    auto dirtyKeys = dirtyMap.keys();
+    for (auto& d : dirtyKeys) {
+      Base::cache().Remove(d, false); // false -> don't prune
     }
     Base::cache().Prune(); // prune at the end to avoid possible prune thrashing
 
@@ -265,10 +263,10 @@ class MutableAssetHandleD_ : public virtual Base_ {
     if (dirtyMap.size()) {
       fprintf(stderr, "========== %d dirty %s ==========\n",
               dirtyMap.size(), header.c_str());
-      for (typename DirtyMap::const_iterator d = dirtyMap.begin();
-           d != dirtyMap.end(); ++d) {
+      std::vector<std::string> dirtyKeys = dirtyMap.keys();
+      for (auto& d : dirtyKeys) {
         fprintf(stderr, "%s -> %p\n",
-                d->first.c_str(), d->second.operator->());
+                d.c_str(), dirtyMap[d].operator->());
       }
     }
   }
@@ -276,19 +274,18 @@ class MutableAssetHandleD_ : public virtual Base_ {
 
   static bool SaveDirtyToDotNew(khFilesTransaction &savetrans,
                                 std::vector<std::string> *saveDirty) {
-    for (typename DirtyMap::const_iterator d = dirtyMap.begin();
-         d != dirtyMap.end(); ++d) {
+    std::vector<std::string> dirtyKeys = dirtyMap.keys();
+    for (const auto& d : dirtyKeys) {
       // TODO: - check to see if actually dirty
-      if ( 1 ) {
-        std::string filename = d->second->XMLFilename() + ".new";
-        if (d->second->Save(filename)) {
-          savetrans.AddNewPath(filename);
-          if (saveDirty) {
-            saveDirty->push_back(d->first);
-          }
-        } else {
-          return false;
+      std::string filename = dirtyMap[d]->XMLFilename() + ".new";
+      if (dirtyMap[d]->Save(filename)) {
+        savetrans.AddNewPath(filename);
+        if (saveDirty) {
+          saveDirty->push_back(d);
         }
+        dirtyMap.erase(d);
+      } else {
+        return false;
       }
     }
     return true;
