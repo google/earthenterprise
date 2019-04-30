@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Building a Historical Imagery Project</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
+</head>
+<body>
+<!-- 4412458.html -->
+<div class="container">
+  <div class="sidebar1">
+    <p class="sidebar-toc"><a href="../answer/4412440.html">About This Tutorial</a></p>
+    <p class="sidebar-toc"><a href="../answer/4412441.html">Setting Up the Tutorial</a></p>
+    <p class="sidebar-toc"><a href="../answer/4412443.html">Defining and Building Resources</a></p>
+    <p class="sidebar-toc"><a href="../answer/4412421.html">Defining and Building Projects</a></p>
+    <p class="sidebar-toc"><a href="../answer/4412422.html">Defining and Building Databases</a></p>
+    <p class="sidebar-toc"><a href="../answer/4412446.html">Pushing, Publishing, and Viewing a Database</a></p>
+    <p class="sidebar-toc"><a href="../answer/4412447.html">Configuring Display Rules for Point Data</a></p>
+    <p class="sidebar-toc"><a href="../answer/4412681.html">Configuring Display Rules for Polygon Data</a></p>
+    <p class="sidebar-toc"><a href="../answer/4412449.html">Importing and Exporting Style Templates</a></p>
+    <p class="sidebar-toc"><a href="../answer/4412684.html">Specifying Search Fields for Individual Layers</a></p>
+    <p class="sidebar-toc"><a href="../answer/4412683.html">Configuring a Searchable Database</a></p>
+    <p class="sidebar-toc"><a href="../answer/4412455.html">Creating a Map Database</a></p>
+    <p class="sidebar-toc"><a href="../answer/4412688.html">Creating Imagery Mosaics</a></p>
+    <p class="sidebar-toc"><a href="../answer/4412689.html">Segmenting Large Imagery Files</a></p>
+    <p class="sidebar-toc"><a href="../answer/4412458.html" class="current-file">Building a Historical Imagery Project</a></p>
+    <p class="sidebar-toc"><a href="../answer/4412690.html">Sample Data Files</a></p>
+    <p class="sidebar-toc"><a href="../answer/6028272.html">Configure tutorial workspace</a></p>
+  </div>
+  <div class="content"> <a name="top_of_file"></a>
+    <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+    <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion tutorial</h1>
+    <h2>Building a Historical Imagery Project</h2>
+    <p>To build a historical imagery project:</p>
+    <ol class="spaced-list">
+      <li>
+        <p>Follow the steps  in <a href="../answer/4412443.html"><em>Defining
+          and Building Resources</em></a> to define and build the following:</p>
+        <table class="nice-table">
+          <tr>
+            <th>Name<br/>
+              (Resources/Imagery/...)</th>
+            <th>Acquisition Date</th>
+            <th>Provider</th>
+            <th>Mask</th>
+            <th>Source file</th>
+          </tr>
+          <tr>
+            <td><strong>BlueMarble</strong></td>
+            <td>Any date. The date of the base image does not affect
+              historical imagery browsing.</td>
+            <td>NASA Imagery</td>
+            <td><strong>No Mask</strong></td>
+            <td><code>bluemarble_4km.tif</code></td>
+          </tr>
+          <tr>
+            <td><strong>SFBayAreaLanSat_20021010</strong></td>
+            <td>2002-10-10</td>
+            <td>USGS Imagery</td>
+            <td><strong>Auto Mask</strong><br/>
+              <strong>Tolerance</strong>: 2<br/>
+              Default for all other mask values.</td>
+            <td><code>usgsLanSat.tif</code></td>
+          </tr>
+          <tr>
+            <td><strong>i3_15Meter_20041010</strong></td>
+            <td>2004-10-10</td>
+            <td>i3</td>
+            <td><p><strong>Auto Mask</strong><br/>
+                Default values.</p></td>
+            <td><code>i3SF15-meter.tif</code></td>
+          </tr>
+          <tr>
+            <td><strong>SFHighResInset_20061010</strong></td>
+            <td>2006-10-10</td>
+            <td>USGS Imagery</td>
+            <td><strong>Auto Mask</strong><br/>
+              Default values.</td>
+            <td><code>usgsSFHiRes.tif</code></td>
+          </tr>
+        </table>
+      </li>
+      <div class="tip">The date of the <em>base image</em> in a historical imagery project, in this case, <strong>BlueMarble</strong>, is not included and does not impact historical imagery browsing. </div>
+  <li>Open a new Imagery Project and add each of the image resources to the project:
+    <ul>
+      <li><strong>Resources/Imagery/BlueMarble</strong></li>
+      <li><strong>Resources/Imagery/SFBayAreaLanSat_20021010</strong></li>
+      <li><strong>Resources/Imagery/i3_15Meter_20041010</strong></li>
+      <li><strong>Resources/Imagery/SFHighResInset_20061010</strong></li>
+    </ul>
+  </li>
+  <li>Select the <strong>Support Historical Imagery</strong> checkbox.</li>
+  <li>Select <strong>File &gt; Save</strong>. Enter <strong>Projects/Imagery/SFBayAreaHistorical</strong> as the name of your project, and click <strong>Save</strong>.</li>
+  <li>Build the <strong>SFBayAreaHistorical</strong> project.</li>
+  <li>Create a new Earth Database and add the <strong>SFBayAreaHistorical</strong> project.</li>
+  <li>Save the new database as <strong>Databases/SFBayAreaHistorical</strong>.</li>
+  <li>Build and push the database to GEE Server, then publish it on GEE Server to the default <strong>Publish point</strong>.</li>
+  <li>Launch Google Earth EC. </li>
+  <li>Enter or select the host name or IP address of your server in the Server field, and specify the <strong>Publish point</strong> that you selected when you published your map database.
+    <p>For example, if you specify SFBayAreaHistorical-v001, it will be accessible from <em>myserver.mydomainname</em>.com/SFBayAreaHistorical-v001.</p>
+  </li>
+  <li>Zoom in to the San Francisco Bay Area.</li>
+  <li>Select the <strong>Historical Imagery</strong> toolbar button <img alt="Historical Imagery toolbar button" src="../art/fusion/tutorial/historical_imagery_button.png"/> to display a
+    time slider. The time slider allows you to move the view through time.</li></ol>
+  <p>The following two screens show how this project is displayed in the Google Earth
+    EC client. Notice the timeslider is visible and the differences between the imagery
+    dates and content.<br/>
+    <img alt="Historical Image From Oct 10 2004" src="../art/fusion/tutorial/EC_Historical1.png"/></p>
+  <p><img alt="Historical Image From Oct 10 2006" src="../art/fusion/tutorial/EC_Historical2.png"/></p>
+  <div class="footer">
+    <p class="BackToTop"><a href="#top_of_file">Back to top</a>
+
+    <hr />
+    </p>
+    <p class="copyright">&copy;2015 Google</p>
+  </div>
+</div>
+</body>
+</html>
