@@ -1053,7 +1053,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
 
     curTime = std::chrono::high_resolution_clock::now();
     timeDiff = std::chrono::duration<double>(curTime - prevTime);
-    notify(NFY_INFO2, "BuildIndex starting inner loop for inset %d of %lu - %f seconds elapsed",
+     notify(NFY_PROGRESS, "BuildIndex finding intersections for inset %d of %lu - %f seconds elapsed",
            i+1, genInfo.size(), timeDiff.count());
     prevTime = curTime;
 
