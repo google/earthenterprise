@@ -25,16 +25,10 @@
 #include "notify.h"
 
 class MemoryMonitor {
-private:
-    static MemoryMonitor* memoryMonitor;
-    static uint& used();
 public:
-    static MemoryMonitor* Instance();
+    uint used = 0;
+    static MemoryMonitor& Instance();
     void CalculateMemoryUsage();
-    static void setUsed(const uint);
-    static const uint& getUsed();
-    //MemoryMonitor(MemoryMonitor const&) = delete;
-    //void operator=(MemoryMonitor const&) = delete;
 };
 
 #endif /* __MemoryMonitor_h */
