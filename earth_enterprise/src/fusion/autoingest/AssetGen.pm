@@ -235,9 +235,9 @@ sub ReadSrcFile
     $actualtypearg = $type ? "AssetDefs::$type" : 'type_';
     $typeref = $type ? "AssetDefs::$type" : 'type_';
 
-    $formalinputarg = $hasinputs?'const std::vector<std::string>& inputs_,':'';
+    $formalinputarg = $hasinputs?'const std::vector<SharedString>& inputs_,':'';
     $forwardinputarg = $hasinputs ? 'inputs_,' : '';
-    $actualinputarg = $hasinputs ? 'inputs_' : 'std::vector<std::string>()';
+    $actualinputarg = $hasinputs ? 'inputs_' : 'std::vector<SharedString>()';
 
     $formalcachedinputarg = $hasinputs?',const std::vector<AssetVersion>& cachedinputs_':'';
     $singleformalcachedinputarg = $hasinputs?'const std::vector<AssetVersion>& cachedinputs_':'';

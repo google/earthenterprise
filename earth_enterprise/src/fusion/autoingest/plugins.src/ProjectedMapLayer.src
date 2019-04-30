@@ -33,9 +33,8 @@ std::vector<std::string> ProjectedMapLayerAssetVersionImpl::GetPOIFiles(void) co
 
   std::vector<std::string> results;
   MapLayerAssetVersion asset(inputs[0]);
-  for (std::vector<std::string>::const_iterator iter = asset->children.begin();
-       iter != asset->children.end(); ++iter ) {
-    AssetVersion child(*iter);
+  for (const auto &c : asset->children) {
+    AssetVersion child(c);
     if (child->subtype == "MapPOI") {
       std::vector<std::string> outputFilenames;
       child->GetOutputFilenames(outputFilenames);
@@ -116,7 +115,7 @@ ProjectedMapLayerAssetVersionImplD::UpdateChildren(void)
     MapLayerLevelConfig level_config(level, config.projection_);
     level_config.sub_layers_.reserve(layer_config.subLayers.size());
     std::vector<AssetVersion> inputvers;
-    std::vector<std::string>  inputrefs;
+    std::vector<SharedString>  inputrefs;
     for (uint sl = 0; sl < layer_config.subLayers.size(); ++sl) {
       const MapSubLayerConfig &sl_config = layer_config.subLayers[sl];
       // Change logic here so that mapping of layers to vector query output is

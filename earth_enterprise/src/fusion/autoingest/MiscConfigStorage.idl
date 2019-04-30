@@ -28,10 +28,6 @@ class MiscConfigStorage {
 
   bool        GenerateProductPreviews = true;
 
-  bool        DisablePacketLevelVersionCachePurge = false;
-
-  bool        ConsolidateListenerNotifications = false;
-
   uint        MutexTimedWaitSec = uint(30);
 
 #pragma LoadAndSave

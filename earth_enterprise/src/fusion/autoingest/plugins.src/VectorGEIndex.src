@@ -76,11 +76,10 @@ VectorGEIndexAssetVersionImplD::DoSubmitTask(void)
   // prefill a table with channelId, packAsset and latest indexVer
   // *************************************************************
   std::vector<VectorPacketVersion> packvers;
-  for (std::vector<std::string>::const_iterator input = inputs.begin();
-       input != inputs.end(); ++input) {
+  for (const auto &input : inputs) {
     // get the channelIds by grocking my input refs - they are guaranteed
     // to contain their channelId /layer(\d+)packet.kva$/
-    std::string assetref = AssetVersionRef(*input).AssetRef();
+    std::string assetref = AssetVersionRef(input).AssetRef();
     uint assetreflen = assetref.size();
     uint suffixlen = 10; // strlen("packet.kva");
     // start just before the prefix
@@ -102,7 +101,7 @@ VectorGEIndexAssetVersionImplD::DoSubmitTask(void)
     uint channelId=atoi(assetref.substr(channelBegin, channelLen).c_str());
 
 
-    packvers.push_back(VectorPacketVersion(*input, channelId, indexVer));
+    packvers.push_back(VectorPacketVersion(input, channelId, indexVer));
   }
 
 

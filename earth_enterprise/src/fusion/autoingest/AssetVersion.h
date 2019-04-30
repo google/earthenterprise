@@ -105,7 +105,7 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage {
     return (state == AssetDefs::Bad);
   }
 
-  std::string GetRef(void) const { return name; }
+  const SharedString & GetRef(void) const { return name; }
   std::string GetAssetRef(void) const {
     AssetVersionRef verref(name);
     return verref.AssetRef();
@@ -113,9 +113,8 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage {
 
   template <class outIter>
   outIter GetInputs(outIter oi) const {
-    for (std::vector<std::string>::const_iterator i = inputs.begin();
-         i != inputs.end(); ++i) {
-      oi++ = *i;
+    for (const auto &i : inputs) {
+      oi++ = i;
     }
     return oi;
   }
@@ -190,9 +189,9 @@ typedef AssetHandle_<AssetVersionImpl> AssetVersion;
 
 
 template <>
-inline khCache<std::string, AssetVersion::HandleType>&
+inline khCache<SharedString, AssetVersion::HandleType>&
 AssetVersion::cache(void) {
-  static khCache<std::string, AssetVersion::HandleType>
+  static khCache<SharedString, AssetVersion::HandleType>
     instance(MiscConfig::Instance().VersionCacheSize);
   return instance;
 }
@@ -315,7 +314,7 @@ inline bool AssetVersion::Valid(void) const {
       return false;
 
     // bind the ref
-    std::string boundRef = AssetVersionRef::Bind(ref);
+    SharedString boundRef = AssetVersionRef::Bind(ref);
     AssetVersionRef boundVerRef(boundRef);
 
     // deal quickly with an invalid version
@@ -335,7 +334,7 @@ inline bool AssetVersion::Valid(void) const {
 template <>
 inline void AssetVersion::Bind(void) const {
   if (!handle) {
-    std::string boundref = AssetVersionRef::Bind(ref);
+    SharedString boundref = AssetVersionRef::Bind(ref);
     AssetVersionRef boundVerRef(boundref);
     DoBind(boundref, boundVerRef, false);
   }
@@ -345,7 +344,7 @@ inline void AssetVersion::Bind(void) const {
 template <>
 inline void AssetVersion::BindNoCache() const {
   if (!handle) {
-    std::string boundref = AssetVersionRef::Bind(ref);
+    SharedString boundref = AssetVersionRef::Bind(ref);
     AssetVersionRef boundVerRef(boundref);
     DoBind(boundref, boundVerRef, false, Int2Type<false>());
   }

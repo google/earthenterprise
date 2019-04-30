@@ -21,6 +21,7 @@
 #include "common/khRefCounter.h"
 #include "common/khCache.h"
 #include "common/khTypes.h"
+#include "common/SharedString.h"
 
 class AssetVersionRef;
 
@@ -47,7 +48,7 @@ class AssetHandle_  {
   struct undefined_type; // never defined.  Just used for bool operations
 
  protected:
-  static inline khCache<std::string, HandleType>& cache(void);
+  static inline khCache<SharedString, HandleType>& cache(void);
 
  public:
   static uint32 CacheSize(void) { return cache().size(); }
@@ -69,7 +70,7 @@ class AssetHandle_  {
 
  protected:
   static const bool check_timestamps;
-  std::string ref;
+  SharedString ref;
   mutable HandleType handle;
 
   // Only implemented/used by Asset variant.
@@ -92,7 +93,7 @@ class AssetHandle_  {
   void Bind(void) const;
 
   // Allows subclasses to do extra work.
-  virtual void OnBind(const std::string &boundref) const { }
+  virtual void OnBind(const std::string &) const { }
 
   virtual HandleType CacheFind(const std::string &boundref) const {
     HandleType entry;
@@ -106,6 +107,7 @@ class AssetHandle_  {
  public:
   AssetHandle_(void) : ref(), handle() { }
   AssetHandle_(const std::string &ref_) : ref(ref_), handle() { }
+  AssetHandle_(const SharedString &ref_) : ref(ref_), handle() { }
 
   // the compiler generated assignment and copy constructor are fine for us
   // ref & handle have stable copy semantics and we don't have to worry about
@@ -113,7 +115,7 @@ class AssetHandle_  {
   // Same goes for move constructor and assignment.
 
   virtual ~AssetHandle_(void) { }
-  const std::string& Ref(void) const { return ref; }
+  const SharedString & Ref(void) const { return ref; }
   bool Valid(void) const;
   // This is better then overloading the bool operator as it
   // more closely emulates what a pointer's boolean operations does.
@@ -171,6 +173,7 @@ class DerivedAssetHandle_ : public virtual Base_ {
  public:
   DerivedAssetHandle_(void) : Base() { }
   DerivedAssetHandle_(const std::string &ref_) : Base(ref_) { }
+  DerivedAssetHandle_(const SharedString &ref_) : Base(ref_) { }
 
   // it's OK to construct a derived from a base, we just check first
   // and clear the handle if the types don't match

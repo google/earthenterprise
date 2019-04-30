@@ -180,7 +180,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       }
     }
 
-    std::vector<std::string> levInputs;
+    std::vector<SharedString> levInputs;
     std::vector<AssetVersion> levInputVers;
     if (!packetLevelConfig.minify) {
       // ***** Normal Blend *****
@@ -212,8 +212,8 @@ void PacketGenAssetVersionImplD::UpdateChildren(
         packetLevelConfig.insets.push_back
           (PacketLevelConfig::Inset(inset.dataRPFile,
                                     inset.alphaRPFile,
-                                    std::string(), /* cached blend */
-                                    std::string()  /* cached blend alpha */));
+                                    SharedString(), /* cached blend */
+                                    SharedString()  /* cached blend alpha */));
         packetLevelConfig.attributions.push_back
           (PacketLevelConfig::Attribution(
               inset.dataRPFile,
@@ -311,8 +311,8 @@ void PacketGenAssetVersionImplD::UpdateChildren(
             (PacketLevelConfig::Inset(
                 inset.dataRPFile,
                 inset.alphaRPFile,
-                std::string(), /* cached blend */
-                std::string()  /* cached blend alpha */));
+                SharedString(), /* cached blend */
+                SharedString()  /* cached blend alpha */));
         } else if (highestResMinify) {
           // This is the first merge (from cached blends)
           // It is possible that some of the cached blends are only
@@ -337,7 +337,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
                 inset.alphaRPFile,
                 blendVer.Ref(), /* cached blend */
                 cache_alpha_exist ?
-                    blendVer.Ref() : std::string() /* cached blend alpha */));
+                    blendVer.Ref() : SharedString() /* cached blend alpha */));
         } else {
           // This is a subsequent merge (from cached merges) It's
           // possible that earlier merges also short circuited the
@@ -367,7 +367,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
                 inset.alphaRPFile,
                 blendVer.Ref(), /* cached blend */
                 cache_alpha_exist ?
-                    blendVer.Ref() : std::string()  /* cached blend alpha */));
+                    blendVer.Ref() : SharedString()  /* cached blend alpha */));
         }
       }
 
@@ -403,7 +403,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
               std::string() /* alphaRP */,
               prevLevelVer.Ref(), /* cached blend */
               cache_alpha_exist ?
-                  prevLevelVer.Ref() : std::string() /* cached blend alpha */));
+                  prevLevelVer.Ref() : SharedString() /* cached blend alpha */));
 
         curTime = std::chrono::high_resolution_clock::now();
         timeDiff = std::chrono::duration<double>(curTime - prevTime);
