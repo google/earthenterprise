@@ -16,34 +16,19 @@
 
 #include "MemoryMonitor.h"
 
-MemoryMonitor* MemoryMonitor::memoryMonitor = 0;
-
-MemoryMonitor* MemoryMonitor::Instance() {
-    if (memoryMonitor == 0) {
-        memoryMonitor = new MemoryMonitor();
-        memoryMonitor->CalculateMemoryUsage();
+MemoryMonitor& MemoryMonitor::Instance() {
+    static MemoryMonitor _instance;
+    static bool doOnce = true;
+    if (doOnce) {
+        notify(NFY_WARN, "Created Memory Monitor Instance");
+        doOnce = false;
+        _instance.CalculateMemoryUsage();
     }
-    return memoryMonitor;
-}
-
-uint& MemoryMonitor::used() {
-    static uint used = 0;
-    return used;
-}
-
-void MemoryMonitor::setUsed(const uint u) {
-    used() = u;
-}
-
-const uint& MemoryMonitor::getUsed() {
-    return used();
+    return _instance;
 }
 
 void MemoryMonitor::CalculateMemoryUsage(void) {
-    ulong memTotal;
-    ulong memFree;
-    ulong buffers;
-    ulong cached;
+    std::vector<ulong> memoryVars(4, 0);
     uint memoryUsed;
     std::string line;
     std::ifstream memFile;
@@ -58,22 +43,28 @@ void MemoryMonitor::CalculateMemoryUsage(void) {
             }
         }
         if (tokens[0].compare("MemTotal:") == 0) {
-            memTotal = stoul(tokens[1]);
+            memoryVars[0] = stoul(tokens[1]);
         }
         else if (tokens[0].compare("MemFree:") == 0) {
-            memFree = stoul(tokens[1]);
+            memoryVars[1] = stoul(tokens[1]);
         }
         else if (tokens[0].compare("Buffers:") == 0) {
-            buffers = stoul(tokens[1]);
+            memoryVars[2] = stoul(tokens[1]);
         }
         else if (tokens[0].compare("Cached:") == 0) {
-            cached = stoul(tokens[1]);
+            memoryVars[3] = stoul(tokens[1]);
             tokens.clear();
             break;
         }
         tokens.clear();
     }
     memFile.close();
-    memoryUsed = (((float) (memTotal - memFree - buffers - cached))/memTotal)*100;
-    setUsed(memoryUsed);
+    if (memoryVars[0] == 0) {
+        memoryUsed = 0;
+    }
+    else {
+        memoryUsed = (((float) (memoryVars[0] - memoryVars[1] - memoryVars[2] - memoryVars[3]))/memoryVars[0])*100;
+    }
+    used = memoryUsed;
+    notify(NFY_WARN, "Memory Calcualted: %u%%", memoryUsed);
 }
