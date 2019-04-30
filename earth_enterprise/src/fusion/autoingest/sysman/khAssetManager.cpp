@@ -167,16 +167,16 @@ khAssetManager::ApplyPending(void)
        i != savedAssets.end(); ++i) {
     changes.items.push_back(AssetChanges::Item(*i, "Modified"));
   }
-  for (std::map<std::string, AssetDefs::State>::const_iterator i
+  for (std::map<SharedString, AssetDefs::State>::const_iterator i
          = pendingStateChanges.begin();
        i != pendingStateChanges.end(); ++i) {
-    changes.items.push_back(AssetChanges::Item(i->first,
+    changes.items.push_back(AssetChanges::Item(i->first.toString(),
                                                ToString(i->second)));
   }
-  for (std::map<std::string, double>::const_iterator i
+  for (std::map<SharedString, double>::const_iterator i
          = pendingProgress.begin();
        i != pendingProgress.end(); ++i) {
-    changes.items.push_back(AssetChanges::Item(i->first,
+    changes.items.push_back(AssetChanges::Item(i->first.toString(),
                                                "Progress( " +
                                                ToString(i->second) +
                                                ")"));
@@ -571,7 +571,7 @@ khAssetManager::ClientListenerLoop(void) throw() {
 // ***  khAssetManager - routines that gather changes while AssetGuard is held
 // ****************************************************************************
 void
-khAssetManager::NotifyVersionStateChange(const std::string &ref,
+khAssetManager::NotifyVersionStateChange(const SharedString &ref,
                                          AssetDefs::State state)
 {
   // assert that we're already locked
@@ -579,12 +579,12 @@ khAssetManager::NotifyVersionStateChange(const std::string &ref,
   
   if (ToString(pendingStateChanges[ref]) == "") {
     notify(NFY_VERBOSE, "Set pendingStateChanges[%s]: <empty> to state: %s",
-         ref.c_str(),
+         ref.toString().c_str(),
          ToString(state).c_str());
   }
   else {
     notify(NFY_VERBOSE, "Set pendingStateChanges[%s]: %s to state: %s",
-         ref.c_str(),
+         ref.toString().c_str(),
          ToString(pendingStateChanges[ref]).c_str(),
          ToString(state).c_str());
   }
@@ -592,7 +592,7 @@ khAssetManager::NotifyVersionStateChange(const std::string &ref,
 }
 
 void
-khAssetManager::NotifyVersionProgress(const std::string &ref, double progress)
+khAssetManager::NotifyVersionProgress(const SharedString &ref, double progress)
 {
   // assert that we're already locked
   assert(!mutex.TryLock());
@@ -601,7 +601,7 @@ khAssetManager::NotifyVersionProgress(const std::string &ref, double progress)
 }
 
 void
-khAssetManager::SubmitTask(const std::string &verref, const TaskDef &taskdef,
+khAssetManager::SubmitTask(const SharedString &verref, const TaskDef &taskdef,
                            int priority)
 {
   // assert that we're already locked

@@ -101,7 +101,7 @@ class InsetInfo : public SimpleInsetInfo<ProductAssetVersion> {
 
 class PacketGenInfo {
  public:
-  std::string               assetname;
+  SharedString              assetname;
 
   // Type of terrain inset. it is used only for terrain assets.
   TerrainInsetType terrain_inset_type;
@@ -117,7 +117,7 @@ class PacketGenInfo {
   uint beginSkipTransparentLevel;
 
   // Constructor for create PacketGenInfo with imagery inset.
-  inline PacketGenInfo(const std::string &name,
+  inline PacketGenInfo(const SharedString &name,
                        const khInsetCoverage &cov) :
       assetname(name),
       terrain_inset_type(kNormalTerrainInset),
@@ -127,7 +127,7 @@ class PacketGenInfo {
   }
 
   // Constructor for create PacketGenInfo with terrain inset.
-  inline PacketGenInfo(const std::string &name,
+  inline PacketGenInfo(const SharedString &name,
                        const TerrainInsetType _terrain_inset_type,
                        const khInsetCoverage &cov)
       : assetname(name),

@@ -259,11 +259,11 @@ MercatorRasterProductAssetImplD::HandleImportRequest(
     if (product_config.fuid_resource_ == 0) {
       product_config.fuid_resource_ = asset->config.fuid_resource_;
     }
-    asset->Modify(std::vector<std::string>(), req.meta, product_config);
+    asset->Modify(std::vector<SharedString>(), req.meta, product_config);
   } else {
     // It is a "Save" or "SaveAs" request when creating a new asset.
     asset = MercatorRasterProductFactory::Make(assetname,
-                                               std::vector<std::string>(),
+                                               std::vector<SharedString>(),
                                                req.meta, req.config);
   }
   if (!asset) {

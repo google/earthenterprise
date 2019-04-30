@@ -899,7 +899,7 @@ void FeatureEditor::dropEvent(QDropEvent* event) {
     //
     // Handle assets (products)
     //
-    notify(NFY_DEBUG, "Got asset %s", asset->GetRef().c_str());
+    notify(NFY_DEBUG, "Got asset %s", asset->GetRef().toString().c_str());
     AssetVersion ver(asset->GetLastGoodVersionRef());
     if (ver) {
       notify(NFY_DEBUG, "Last good kvp is %s",
@@ -907,7 +907,7 @@ void FeatureEditor::dropEvent(QDropEvent* event) {
       bool isasset = (ver->type == AssetDefs::Imagery ||
                       ver->type == AssetDefs::Terrain);
       gstSource* new_source = OpenSource(isasset ?
-                                         ver->GetRef().c_str() :
+                                         ver->GetRef().toString().c_str() :
                                          ver->GetOutputFilename(0).c_str(),
                                          0,
                                          isasset);

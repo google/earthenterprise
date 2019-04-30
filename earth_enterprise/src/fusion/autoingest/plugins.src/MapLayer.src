@@ -32,8 +32,7 @@ class MapLayerAssetVersionImpl {
 std::vector<std::string> MapLayerAssetVersionImpl::GetPOIFiles(void) const {
   std::vector<std::string> results;
   if (children.size() > 2) {
-    for (std::vector<std::string>::const_iterator iter = children.begin() + 2;
-         iter != children.end(); ++iter ) {
+    for (auto iter = children.begin() + 2; iter != children.end(); ++iter ) {
       AssetVersion child(*iter);
       if (child->subtype == "MapPOI") {
         results.push_back(child->GetOutputFilename(0));
@@ -71,7 +70,7 @@ void
 MapLayerAssetImplD::HandleEditRequest(const MapLayerEditRequest &req)
 {
   // Validate our inputs (Make sure they are all VectorProducts)
-  std::vector<std::string> productrefs;
+  std::vector<SharedString> productrefs;
   productrefs.reserve(req.config.subLayers.size());
   for (uint s = 0; s < req.config.subLayers.size(); ++s) {
     VectorProductFactory::ValidateRefForInput
@@ -138,7 +137,7 @@ MapLayerAssetVersionImplD::UpdateChildren(void)
   AssetVersion source = guard->inputvers[0];
 
   std::vector<AssetVersion> queries;
-  std::vector<std::string> queryRefs;
+  std::vector<SharedString> queryRefs;
   queries.push_back(source);
   queryRefs.push_back(source->GetRef());
 
@@ -163,7 +162,7 @@ MapLayerAssetVersionImplD::UpdateChildren(void)
     MutableAssetVersionD query_version =
       VectorQueryFactory::FindMakeAndUpdateSubAsset
       (assetRef, queryname,
-       makevec1(guard->inputvers[sl]->GetRef()),
+       makevec1<SharedString>(guard->inputvers[sl]->GetRef()),
        khMetaData(),
        queryconfig,
        makevec1(guard->inputvers[sl]));

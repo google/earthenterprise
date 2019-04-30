@@ -204,7 +204,7 @@ class RasterProjectAssetVersionImplD {
 
   // Makes index subasset (subfunction for BuildIndex()).
   // Returns the version of the new geindex.
-  uint32 MakeIndexSubAsset(const std::vector<std::string> &packgenkids,
+  uint32 MakeIndexSubAsset(const std::vector<SharedString> &packgenkids,
                            const std::vector<std::string> &packgenassets,
                            const std::vector<AssetVersion> &packgenvers,
                            const std::vector<PacketGenInfo> &genInfo,
@@ -338,7 +338,7 @@ bool RasterProjectAssetImplD::FixConfigBeforeUpdateCheck(void) const {
     throw khException(
       kh::tr("\nInternal error: invalid \"overlay_terrain_start_level_\" (%1)"
              " in (%2).\nThe start level value should be even.").arg(
-               config.overlay_terrain_start_level_).arg(GetRef()));
+               config.overlay_terrain_start_level_).arg(GetRef().toString()));
   }
 
   bool changed = false;
@@ -435,7 +435,7 @@ void RasterProjectAssetImplD::HandleEditRequest(
                         AssetDefs::FileExtension(req.type, kProjectSubtype));
 
   // Will be filled in later.
-  std::vector<std::string> inputs;
+  std::vector<SharedString> inputs;
 
 
   // Custom FindMake - modified to set/preserve indexVersion & fuid_channel_.
@@ -529,7 +529,7 @@ void RasterProjectAssetImplD::HandleNewRequest(
     MutableRasterProjectAssetD project =
       RasterProjectFactory::Make(projname,
                                  req.type,
-                                 std::vector<std::string>(),
+                                 std::vector<SharedString>(),
                                  khMetaData(),
                                  projConfig);
 
@@ -690,7 +690,7 @@ void RasterProjectAssetVersionImplD::UpdateChildren(void) {
 
   if (numInsets == 0) {
     throw khException(kh::tr("No insets defined for project %1.\n"
-                             "Cannot build").arg(GetRef()));
+                             "Cannot build").arg(GetRef().toString()));
   }
 }
 
@@ -769,19 +769,19 @@ void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
   const uint numInsets = inputs.size();
   if (numInsets == 0) {
     throw khException(kh::tr("No insets defined for project %1.\n"
-                             "Cannot build").arg(GetRef()));
+                             "Cannot build").arg(GetRef().toString()));
   }
 
   // sanity check in case the previous logic to ensure a valid channel id
   // fails
   if (config.fuid_channel_ == 0) {
     throw khException(kh::tr("Internal Error: No channel id for %1")
-                      .arg(GetRef()));
+                      .arg(GetRef().toString()));
   }
 
   if (config.asset_uuid_ == "") {
     throw khException(kh::tr("Internal Error: No UUID for %1")
-                      .arg(GetRef()));
+                      .arg(GetRef().toString()));
   }
 
 
@@ -822,7 +822,7 @@ void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
       dates.insert(info.date_string_);
       notify(NFY_DEBUG, "  Historical Inset: %d %s, level %d, start date: %s\n",
              i,
-             info.resource_->GetRef().c_str(),
+             info.resource_->GetRef().toString().c_str(),
              info.effectiveMaxLevel,
              info.date_string_.c_str());
     }
@@ -860,7 +860,7 @@ void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
   MutableAssetVersionD dbroot =
     RasterDBRootFactory::FindMakeAndUpdateSubAsset(
         assetRef, type, "dbroot",
-        std::vector<std::string>(),
+        std::vector<SharedString>(),
         khMetaData(),
         dbrootConfig,
         std::vector<AssetVersion>());
@@ -884,7 +884,7 @@ void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
             config.legend));
     MutableAssetVersionD layerjs =
       MapLayerJSFactory::FindMakeAndUpdate(layerJSAssetName,
-                                           std::vector<std::string>(),
+                                           std::vector<SharedString>(),
                                            khMetaData(),
                                            layerJSConfig,
                                            std::vector<AssetVersion>());
@@ -977,7 +977,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   if (numInsets == 0) {
     throw khException(kh::tr("Attempt to build index with too few "
                              "insets for project: %1.\n"
-                             "Cannot build").arg(GetRef()));
+                             "Cannot build").arg(GetRef().toString()));
   }
 
   std::vector<InsetInfo<
@@ -1032,7 +1032,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   }
 
   // create my children giving them each a bigger piece of the stack
-  std::vector<std::string> packgenkids;
+  std::vector<SharedString> packgenkids;
   std::vector<std::string> packgenassets;
   std::vector<AssetVersion> packgenvers;
   packgenkids.reserve(numInsets);
@@ -1243,7 +1243,7 @@ void RasterProjectAssetVersionImplD::CalcLevelsToSkipTransparentTiles(
 
 
 uint32 RasterProjectAssetVersionImplD::MakeIndexSubAsset(
-    const std::vector<std::string> &packgenkids,
+    const std::vector<SharedString> &packgenkids,
     const std::vector<std::string> &packgenassets,
     const std::vector<AssetVersion> &packgenvers,
     const std::vector<PacketGenInfo> &genInfo,
@@ -1308,7 +1308,7 @@ uint32 RasterProjectAssetVersionImplD::MakeIndexSubAsset(
 
       if (kFillingTerrainInset == genInfoIt->terrain_inset_type) {
         notify(NFY_DEBUG, "Skip \"Filling\"-terrain inset: %s",
-               genInfoIt->assetname.c_str());
+               genInfoIt->assetname.toString().c_str());
         continue;  // Skip "Filling" terrain inset.
       }
     }
@@ -1317,11 +1317,9 @@ uint32 RasterProjectAssetVersionImplD::MakeIndexSubAsset(
       geindexConfig.packet_insets_.push_back(RasterPacketInset());
       geindexConfig.packet_insets_.back().levels_.reserve(
           (*packgenver)->children.size());
-      for (std::vector<std::string>::const_iterator packlevelref =
-             (*packgenver)->children.begin();
-           packlevelref != (*packgenver)->children.end(); ++packlevelref) {
+      for (const auto &packlevelref : (*packgenver)->children) {
         geindexConfig.packet_insets_.back().levels_.push_back(
-            RasterPacketLevelVersion(*packlevelref, indexVer));
+            RasterPacketLevelVersion(packlevelref, indexVer));
       }
     }
   }
