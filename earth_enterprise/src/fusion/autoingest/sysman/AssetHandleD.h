@@ -188,9 +188,13 @@ class MutableAssetHandleD_ : public virtual Base_ {
     for (typename DirtyMap::const_iterator d = dirtyMap.begin();
          d != dirtyMap.end(); ++d) {
       // TODO: - check to see if actually dirty
-      if ( 1 ) {
+
         std::string filename = d->second->XMLFilename() + ".new";
-        if (d->second->Save(filename)) {
+        // should never get here, but do not allow .new.new to be
+        // written
+        bool flag = (filename.find(".new") != filename.rfind(".new"));
+        notify(NFY_WARN, "%s present, skip!", filename.c_str());
+        if (!flag && d->second->Save(filename)) {
           savetrans.AddNewPath(filename);
           if (saveDirty) {
             saveDirty->push_back(d->first);
@@ -198,7 +202,6 @@ class MutableAssetHandleD_ : public virtual Base_ {
         } else {
           return false;
         }
-      }
     }
     return true;
   }
