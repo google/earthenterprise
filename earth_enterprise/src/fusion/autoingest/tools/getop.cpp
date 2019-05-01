@@ -22,7 +22,6 @@
 #include <fusionversion.h>
 #include <config/gefConfigUtil.h>
 #include <autoingest/.idl/Systemrc.h>
-#include "common/MemoryMonitor.h"
 #include "autoingest/MiscConfig.h"
 
 // global for convenience
@@ -225,8 +224,8 @@ main(int argc, char *argv[])
         }
 
         outline("");
-        if (MiscConfig::Instance().LimitMemoryUtilization) {
-          outline("System memory utilization: %u%%", MemoryMonitor::Instance().used);
+        if (MiscConfig::Instance().LimitMemoryUtilization && (taskLists.memory_usage != 0)) {
+          outline("System memory utilization: %u%%", taskLists.memory_usage);
         }
         outline("Number of cached assets: %u", taskLists.num_assets_cached);
         outline("Number of cached asset versions: %u",

@@ -22,13 +22,12 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <array>
+#include <mutex>
 #include "notify.h"
 
-class MemoryMonitor {
-public:
-    uint used = 0;
-    static MemoryMonitor& Instance();
-    void CalculateMemoryUsage();
-};
+void CalculateMemoryUsage(void);
+void WriteToMemFile(uint u);
+uint ReadFromMemFile(void);
 
 #endif /* __MemoryMonitor_h */

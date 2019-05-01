@@ -49,6 +49,8 @@ class TaskLists {
   uint32 num_assets_cached = uint32(0);
   // Number of asset versions cached.
   uint32 num_assetversions_cached = uint32(0);
+  //Curent total system memory usage.
+  uint32 memory_usage = uint32(0);
 
 #pragma StrLoadAndSave
 };

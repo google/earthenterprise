@@ -31,6 +31,7 @@
 #include "common/khFileUtils.h"
 #include "common/performancelogger.h"
 #include "fusion/config/gefConfigUtil.h"
+#include "common/MemoryMonitor.h"
 
 // ****************************************************************************
 // ***  global instances
@@ -944,6 +945,8 @@ khResourceManager::GetCurrTasks(TaskLists &ret)
   // Get total numbers of assets and asset's versions cached.
   ret.num_assets_cached = Asset::CacheSize();
   ret.num_assetversions_cached = AssetVersion::CacheSize();
+  //Get the total system memory in use.
+  ret.memory_usage = ReadFromMemFile();
 }
 
 void
