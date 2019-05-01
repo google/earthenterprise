@@ -16,19 +16,11 @@
 
 #include "MemoryMonitor.h"
 
-MemoryMonitor& MemoryMonitor::Instance() {
-    static MemoryMonitor _instance;
-    static bool doOnce = true;
-    if (doOnce) {
-        notify(NFY_WARN, "Created Memory Monitor Instance");
-        doOnce = false;
-        _instance.CalculateMemoryUsage();
-    }
-    return _instance;
-}
+std::string memoryUsedFile = "/tmp/MemoryUsed";
+std::mutex mtx;
 
-void MemoryMonitor::CalculateMemoryUsage(void) {
-    std::vector<ulong> memoryVars(4, 0);
+void CalculateMemoryUsage(void) {
+    std::array<ulong, 4> memoryVars = {};
     uint memoryUsed;
     std::string line;
     std::ifstream memFile;
@@ -65,6 +57,26 @@ void MemoryMonitor::CalculateMemoryUsage(void) {
     else {
         memoryUsed = (((float) (memoryVars[0] - memoryVars[1] - memoryVars[2] - memoryVars[3]))/memoryVars[0])*100;
     }
-    used = memoryUsed;
-    notify(NFY_WARN, "Memory Calcualted: %u%%", memoryUsed);
+    WriteToMemFile(memoryUsed);
+}
+
+void WriteToMemFile(uint u) {
+    mtx.lock();
+    std::ofstream memoryUsed;
+    memoryUsed.open(memoryUsedFile);
+    memoryUsed << u;
+    memoryUsed.close();
+    mtx.unlock();
+}
+
+uint ReadFromMemFile(void) {
+    uint used = 0;
+    std::string line;
+    std::ifstream memoryUsed;
+    memoryUsed.open(memoryUsedFile);
+    if (getline(memoryUsed, line)) {
+        used = atoi(line.c_str());
+    }
+    memoryUsed.close();
+    return used;
 }

@@ -263,9 +263,12 @@ class khCache {
   void Prune(void) {
     CheckListInvariant();
     Item *item = tail;
-    MemoryMonitor::Instance().CalculateMemoryUsage();
+    uint memoryUsed;
+    CalculateMemoryUsage();
+    memoryUsed = ReadFromMemFile();
+    notify(NFY_WARN, "Begin: %u%%", memoryUsed);
     while (item && ((map.size() > targetMax) 
-    || (MiscConfig::Instance().LimitMemoryUtilization && (MemoryMonitor::Instance().used > MiscConfig::Instance().MaxMemoryUtilization)))) {
+    || (MiscConfig::Instance().LimitMemoryUtilization && (memoryUsed > MiscConfig::Instance().MaxMemoryUtilization)))) {
       // Note: this refcount() > 1 check is safe even with
       // khMTRefCounter based guards. See explanaition with the
       // definition of khMTRefCounter in khMTTypes.h.
@@ -283,7 +286,9 @@ class khCache {
         delete tokill;
       }
       if (MiscConfig::Instance().LimitMemoryUtilization) {
-        MemoryMonitor::Instance().CalculateMemoryUsage();
+        CalculateMemoryUsage();
+        memoryUsed = ReadFromMemFile();
+        notify(NFY_WARN, "Update: %u%%", memoryUsed);
       }
     }
     CheckListInvariant();
