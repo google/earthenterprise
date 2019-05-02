@@ -25,6 +25,7 @@
 #include <cctype>
 #include <algorithm>
 #include "common/khTypes.h"
+#include "common/SharedString.h"
 
 template <class T>
 std::string
@@ -77,6 +78,13 @@ FromString(const std::string &str, T &val)
 {
   std::istringstream in(str);
   in >> val;
+}
+
+inline
+void
+FromString(const std::string &str, SharedString &val)
+{
+  val = str;
 }
 
 inline
