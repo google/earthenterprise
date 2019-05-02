@@ -23,6 +23,7 @@
 #include <khException.h>
 #include <khFileUtils.h>
 #include "common/khCppStd.h"
+#include "common/SharedString.h"
 
 
 /******************************************************************************
@@ -64,7 +65,7 @@ class DerivedAssetHandleD_ : public virtual BaseD_, public ROBase_
   }
  public:
   DerivedAssetHandleD_(void) : BBase(), BaseD(), ROBase() { }
-  DerivedAssetHandleD_(const std::string &ref_) :
+  DerivedAssetHandleD_(const SharedString &ref_) :
       // Only call the common (virtually inherited) base class with the initializtion state.
       // It's the only one that has state anyway.  Also, explicitly calling the virtual base
       // class puts a build time check to ensure BBase is a virtural base class of this class.
@@ -141,7 +142,7 @@ class MutableAssetHandleD_ : public virtual Base_ {
   typedef typename Base::Base BBase;
   typedef typename Base::Impl Impl;
 
-  typedef std::map<std::string, Base> DirtyMap;
+  typedef std::map<SharedString, Base> DirtyMap;
   static DirtyMap dirtyMap;
 
   // Test whether an asset is a project asset version.
@@ -149,102 +150,11 @@ class MutableAssetHandleD_ : public virtual Base_ {
     return assetName.find(kProjectAssetVersionNumPrefix) != std::string::npos;
   }
 
-  // Purge the cache if needed and keep recent "toKeep" items.
-  static void PurgeCacheIfNeeded(size_t toKeep) {
-    // Proceed only when the cache gets full.
-    if (Base::cache().size() < (Base::cache().capacity()) ||
-      // Don't proceed if there are no more than 1 mutable items to purge,
-      // since immutable items will be purged automatically by LRU cache.
-      dirtyMap.size() <= 1) {
-      return;
-    }
-    try {
-      // When there are more items to keep than cache's capacity,
-      // nothing can be purged and cache's capacity needs to be increased
-      // for better performance.
-      if (Base::cache().capacity() < toKeep) {
-        static bool warned = false;
-        if (!warned) {
-          notify(NFY_FATAL, "You may need to increase cache capacity for "
-            "better performance: cache size %lu, cache capacity %lu, number "
-            "of items requested to keep %lu", Base::cache().size(),
-            Base::cache().capacity(), toKeep);
-          warned = true;
-        }
-        return;
-      }
-
-      // Get old cache items that could be purged.
-      std::vector<std::string> toDelete;
-      Base::cache().GetOldKeys(toKeep, &toDelete);
-
-      // Skip project asset versions, which should always stay in the cache.
-      toDelete.erase(
-          std::remove_if(toDelete.begin(), toDelete.end(),
-              MutableAssetHandleD_::IsProjectAssetVersion),
-          toDelete.end());
-
-      // Save mutable items.
-      khFilesTransaction filetrans(".new");
-      uint32 numDotNew=0;
-      for (std::vector<std::string>::iterator it = toDelete.begin();
-           it != toDelete.end(); ++it) {
-        if (dirtyMap.find(*it) != dirtyMap.end()) {
-          std::string filename = dirtyMap[*it]->XMLFilename();
-          notify(NFY_VERBOSE,"AssetHandleD.h:193: filename = %s",
-                 filename.c_str());
-
-          if (filename.rfind(".new") != std::string::npos) 
-          {
-              notify(NFY_VERBOSE,"PurgeCacheIfNeeded(), filename contains .new:  %s", filename.c_str());
-              ++numDotNew;
-          }
-          filename += ".new";
-          if (dirtyMap[*it]->Save(filename)) {
-            filetrans.AddNewPath(filename);
-          }
-        }
-      }
-      notify(NFY_VERBOSE, "PurgeCacheIfNeeded() number of files containing .new: %u", numDotNew);
-      if (!filetrans.Commit())
-      {
-        throw khException("Unable to commit file saving in cache purge.");
-      }
-
-      // Discard saved mutable items from dirtyMap.
-      size_t dirties = dirtyMap.size();
-      for (std::vector<std::string>::iterator it = toDelete.begin();
-           it != toDelete.end(); ++it) {
-        if (dirtyMap.find(*it) != dirtyMap.end()) {
-          dirtyMap.erase(*it);
-        }
-      }
-
-      // Remove both immutable and mutable items from cache.
-      size_t cached = Base::cache().size();
-      for (std::vector<std::string>::iterator it = toDelete.begin();
-           it != toDelete.end(); ++it) {
-        Base::cache().Remove(*it, false);  // Do not prune for now.
-      }
-
-      // Prune the cache in the end.
-      Base::cache().Prune();
-
-      notify(NFY_INFO, "cache size %lu, dirty map %lu, "
-        "assets to keep %lu, mutable assets purged %lu, total purged %lu",
-        Base::cache().size(), dirtyMap.size(), toKeep,
-        dirties - dirtyMap.size(), cached - Base::cache().size());
-    }
-    catch (const std::runtime_error& e) {
-      notify(NFY_INFO, "Exception in cache purge: %s", e.what());
-    }
-  }
-
  protected:
   virtual void OnBind(const std::string &boundref) const {
     Base::OnBind(boundref);
     // if already exists, old one will win, that's OK
-    dirtyMap.insert(std::make_pair(boundref, *this));
+    dirtyMap.emplace(SharedString(boundref), *this);
   }
 
   // must not throw since it's called during stack unwinding
@@ -303,6 +213,8 @@ class MutableAssetHandleD_ : public virtual Base_ {
       // Only call the common (virtually inherited) base class with the initializtion state.
       // It's the only one that has state anyway.  Also, explicitly calling the virtual base
       // class puts an explicit check to ensure BBase a virtural base class of this class.
+      BBase(ref_), Base() { }
+  MutableAssetHandleD_(const SharedString &ref_) :
       BBase(ref_), Base() { }
 
   // you should be able to create a mutable handle from the non-mutable
@@ -408,14 +320,14 @@ protected:
 
       // add it to the dirty list - since it just sprang into existence
       // we need to make sure it gets saved
-      MutableBase::dirtyMap.insert(std::make_pair(this->ref, *this));
+      MutableBase::dirtyMap.emplace(this->ref, *this);
     }
   }
  
  public:
   MutableDerivedAssetHandleD_(void) :
       BBase(), BaseD(), DerivedBase(), MutableBase() { }
-  MutableDerivedAssetHandleD_(const std::string &ref_) :
+  MutableDerivedAssetHandleD_(const SharedString &ref_) :
       // Only call the common (virtually inherited) base class with the initializtion state.
       // It's the only one that has state anyway.  Also, explicitly calling the virtual base
       // class puts a build time check to ensure BBase is a virtural base class of this class.

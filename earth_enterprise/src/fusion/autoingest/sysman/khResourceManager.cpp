@@ -945,8 +945,10 @@ khResourceManager::GetCurrTasks(TaskLists &ret)
   // Get total numbers of assets and asset's versions cached.
   ret.num_assets_cached = Asset::CacheSize();
   ret.num_assetversions_cached = AssetVersion::CacheSize();
-  //Get the total system memory in use.
+  // Get the total system memory in use.
   ret.memory_usage = ReadFromMemFile();
+  // Get the number of strings in SharedString string store.
+  ret.str_store_size = SharedString::StoreSize();
 }
 
 void

@@ -293,21 +293,6 @@ class khCache {
     }
     CheckListInvariant();
   }
-
-  // Get old items from the LRU cache, excluding recent "toKeep" items.
-  void GetOldKeys(size_t toKeep, std::vector<Key> *oldKeys) {
-    if (map.size() <= toKeep) {
-      return;
-    }
-    Item *p = tail;
-    size_t numOldKeys = map.size() - toKeep;
-    oldKeys->reserve(numOldKeys);
-    for (size_t i = 0; i < numOldKeys; ++i) {
-      assert(p);
-      oldKeys->push_back(p->key);
-      p = p->prev;
-    }
-  }
 };
 
 

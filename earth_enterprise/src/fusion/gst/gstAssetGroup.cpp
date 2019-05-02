@@ -70,7 +70,7 @@ bool gstAssetHandleImpl::isValid() const {
 }
 
 Asset gstAssetHandleImpl::getAsset() const {
-  return Asset(relativePath().latin1());
+  return Asset(relativePath());
 }
 
 QString gstAssetHandleImpl::getName() const {

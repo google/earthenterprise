@@ -76,7 +76,7 @@ VectorLayerAssetVersionImplD::UpdateChildren(void)
   MutableAssetVersionD query =
     VectorQueryFactory::FindMakeAndUpdateSubAsset
     (assetRef, "query",
-     makevec1(source->GetRef()),
+     makevec1<SharedString>(source->GetRef()),
      khMetaData(),
      config.query_config_,
      makevec1(source));
@@ -89,8 +89,9 @@ VectorLayerAssetVersionImplD::UpdateChildren(void)
   // Update my fuse child
   MutableAssetVersionD fuse =
     VectorFuseFactory::FindMakeAndUpdateSubAsset(assetRef, fusename,
-                                                 makevec2(source->GetRef(),
-                                                          query->GetRef()),
+                                                 makevec2<SharedString>(
+                                                     source->GetRef(),
+                                                     query->GetRef()),
                                                  khMetaData(),
                                                  config.fuse_config_,
                                                  makevec2(source, (AssetVersion&)query));
@@ -112,7 +113,7 @@ VectorLayerAssetVersionImplD::UpdateChildren(void)
     MutableAssetVersionD poi =
       VectorPOIFactory::FindMakeAndUpdateSubAsset
       (assetRef, "poi",
-       makevec2(source->GetRef(), query->GetRef()),
+       makevec2<SharedString>(source->GetRef(), query->GetRef()),
        khMetaData(),
        config.poi_config_,
        makevec2(source, (AssetVersion&)query));

@@ -1217,7 +1217,7 @@ void AssetManager::PushDatabase(const gstAssetHandle& handle) {
   // Update the preferences with the user's choice. We want to remember these
   // choices so that we can automatically select this server next time they
   // push/publish.
-  std::string database_name = shortAssetName(asset->GetRef());
+  std::string database_name = shortAssetName(asset->GetRef().toString());
   Preferences::UpdatePublishServerDbMap(database_name, nickname);
 
   ServerConfig stream_server, search_server;
@@ -1351,7 +1351,7 @@ void AssetManager::PublishDatabase(const gstAssetHandle& handle) {
   // Update the preferences with the user's choice. We want to remember these
   // choices so that we can automatically select this server next time they
   // push/publish.
-  std::string database_name = shortAssetName(asset->GetRef());
+  std::string database_name = shortAssetName(asset->GetRef().toString());
   Preferences::UpdatePublishServerDbMap(database_name, nickname);
 
   ServerConfig stream_server, search_server;

@@ -52,11 +52,10 @@ MapPOIAssetVersionImplD::DoSubmitTask(void)
 
   // For map projects there are several map layers. Start a task for each one:
   //
-  for (std::vector<std::string>::const_iterator input = inputs.begin()+1;
-       input != inputs.end() ; ++input ) {
+  for (const auto &input : inputs) {
 
     std::vector<std::string> selectfiles;
-    AssetVersion query(*input);
+    AssetVersion query(input);
     query->GetOutputFilenames(selectfiles);
 
     // If there are no search fields continue w/ next layer:
