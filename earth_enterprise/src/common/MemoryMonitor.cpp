@@ -55,7 +55,7 @@ void CalculateMemoryUsage(void) {
         memoryUsed = 0;
     }
     else {
-        memoryUsed = (((float) (memoryVars[0] - memoryVars[1] - memoryVars[2] - memoryVars[3]))/memoryVars[0])*100;
+        memoryUsed = (((static_cast<float> (std::accumulate(memoryVars.begin()+1, memoryVars.end(), memoryVars[0], std::minus<ulong>())))/memoryVars[0])*100);
     }
     WriteToMemFile(memoryUsed);
 }

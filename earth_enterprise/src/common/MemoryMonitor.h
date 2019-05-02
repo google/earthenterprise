@@ -24,6 +24,7 @@
 #include <string>
 #include <array>
 #include <mutex>
+#include <numeric>
 #include "notify.h"
 
 void CalculateMemoryUsage(void);
