@@ -42,12 +42,12 @@ class AddToAssetVersionCache_Tester : public opengee::mem_usage::RasterProjectFu
 
         // Construct an asset reference:
         AssetVersion asset(asset_name);
+        asset.LoadAsTemporary();
 
-        // Cause the reference to be resolved by loading the XML:
         asset_ref_character_count += asset->GetRef().length();
 
-        asset.CacheAdd();
-        asset.CacheRemove();
+        asset.MakePermanent();
+        asset.NoLongerNeeded();
 
         // Keep processing operations:
         return false;

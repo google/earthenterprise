@@ -33,13 +33,14 @@ class AddToAssetCache_Tester : public opengee::mem_usage::RasterProjectFunctionT
 
         // Construct an asset reference:
         Asset asset(asset_name);
+        asset.LoadAsTemporary();
 
-        asset.CacheAdd();
+        asset.MakePermanent();
 
         // Cause the reference to be resolved by loading the XML:
         asset_ref_character_count += asset->GetRef().length();
 
-        asset.CacheRemove();
+        asset.NoLongerNeeded();
 
         // Keep processing operations:
         return false;

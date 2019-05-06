@@ -23,6 +23,7 @@
 #include "fusion/autoingest/AssetHandle.h"
 #include "fusion/autoingest/MiscConfig.h"
 #include "common/khFileUtils.h"
+#include "StorageManager.h"
 
 /******************************************************************************
  ***  AssetVersionImpl
@@ -38,7 +39,7 @@
  ***     ... = ver->config.layers.size();
  ***  }
  ******************************************************************************/
-class AssetVersionImpl : public khRefCounter, public AssetVersionStorage {
+class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public StorageManaged {
   friend class AssetImpl;
   friend class AssetHandle_<AssetVersionImpl>;
 
@@ -46,17 +47,20 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage {
   AssetVersionImpl(const AssetVersionImpl&);
   AssetVersionImpl& operator=(const AssetVersionImpl&);
 
- protected:
-  // implemented in LoadAny.cpp
-  static khRefGuard<AssetVersionImpl> Load(const std::string &boundref);
-
+ public:
   std::string XMLFilename() const { return XMLFilename(GetRef()); }
   std::string WorkingDir(void) const { return WorkingDir(GetRef()); }
   std::string WorkingFileRef(const std::string &fname) const {
     return WorkingDir() + fname;
   }
 
- public:
+  // implemented in LoadAny.cpp
+  static khRefGuard<AssetVersionImpl> Load(const std::string &boundref);
+
+  virtual bool Save(const std::string &filename) const {
+    assert(false); // Can only save from sub-classes
+  };
+
   std::string WorkingFilename(const std::string &fname) const {
     return AssetDefs::AssetPathToFilename(WorkingFileRef(fname));
   }
@@ -64,16 +68,12 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage {
  protected:
   // used by my intermediate derived classes since their calls to
   // my constructor will never actualy be used
-  AssetVersionImpl(void) : timestamp(0), filesize(0) { }
+  AssetVersionImpl(void) = default;
 
   AssetVersionImpl(const AssetVersionStorage &storage)
-      : AssetVersionStorage(storage), timestamp(0), filesize(0) { }
+      : AssetVersionStorage(storage) { }
 
  public:
-  // use by cache - maintained outside of constructors
-  time_t timestamp;
-  uint64 filesize;
-
   virtual std::string PluginName(void) const = 0;
   virtual ~AssetVersionImpl(void) { }
   virtual bool IsLeaf(void) const { return false; }
@@ -188,122 +188,14 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage {
 // ****************************************************************************
 typedef AssetHandle_<AssetVersionImpl> AssetVersion;
 
-
 template <>
-inline khCache<std::string, AssetVersion::HandleType>&
-AssetVersion::cache(void) {
-  static khCache<std::string, AssetVersion::HandleType>
-    instance(MiscConfig::Instance().VersionCacheSize);
-  return instance;
+inline StorageManager<AssetVersionImpl>&
+AssetVersion::storageManager(void)
+{
+  static StorageManager<AssetVersionImpl> storageManager(
+      MiscConfig::Instance().VersionCacheSize, "version");
+  return storageManager;
 }
-
-// DoBind() specialization with caching Version.
-template <> template <>
-inline void AssetVersion::DoBind<1>(const std::string &boundref,
-                                    const AssetVersionRef &boundVerRef,
-                                    bool checkFileExistenceFirst,
-                                    Int2Type<1>) const {
-  // Check in cache.
-  HandleType entry = CacheFind(boundref);
-  bool addToCache = false;
-
-  // Try to load from XML.
-  if (!entry) {
-    if (checkFileExistenceFirst) {
-      std::string filename = Impl::XMLFilename(boundVerRef);
-      if (!khExists(Impl::XMLFilename(boundVerRef))) {
-        // In this case DoBind is allowed not to throw even if
-        // we configured to normally throw.
-        return;
-      }
-    }
-
-    // Will succeed, generate stub, or throw exception.
-    entry = Load(boundref);
-    addToCache = true;
-  } else if (check_timestamps) {
-    std::string filename = Impl::XMLFilename(boundVerRef);
-    uint64 filesize = 0;
-    time_t timestamp = 0;
-    if (khGetFileInfo(filename, filesize, timestamp) &&
-        ((timestamp != entry->timestamp) ||
-         (filesize != entry->filesize))) {
-      // The file has changed on disk.
-
-      // Drop the current entry from the cache.
-      cache().Remove(boundref, false);  // Don't prune, the Add() will.
-
-      // Will succeed, generate stub, or throw exception.
-      entry = Load(boundref);
-      addToCache = true;
-    }
-  }
-
-  // Set my handle.
-  handle = entry;
-
-  // Add it to the cache.
-  if (addToCache)
-    cache().Add(boundref, entry);
-
-  // Used by derived class to mark dirty.
-  OnBind(boundref);
-}
-
-// DoBind() specialization without caching Version.
-template <> template <>
-inline void AssetVersion::DoBind<0>(const std::string &boundref,
-                        const AssetVersionRef &boundVerRef,
-                        bool checkFileExistenceFirst,
-                        Int2Type<0>) const {
-  // Check in cache.
-  HandleType entry = CacheFind(boundref);
-
-  // Try to load from XML.
-  if (!entry) {
-    if (checkFileExistenceFirst) {
-      std::string filename = Impl::XMLFilename(boundVerRef);
-      if (!khExists(Impl::XMLFilename(boundVerRef))) {
-        // In this case DoBind is allowed not to throw even if
-        // we configured to normally throw.
-        return;
-      }
-    }
-
-    // Will succeed, generate stub, or throw exception.
-    entry = Load(boundref);
-  } else if (check_timestamps) {
-    std::string filename = Impl::XMLFilename(boundVerRef);
-    uint64 filesize = 0;
-    time_t timestamp = 0;
-    if (khGetFileInfo(filename, filesize, timestamp) &&
-        ((timestamp != entry->timestamp) ||
-         (filesize != entry->filesize))) {
-      // The file has changed on disk.
-
-      // Drop the current entry from the cache.
-      cache().Remove(boundref, false);  // Don't prune, the Add() will.
-
-      // Will succeed, generate stub, or throw exception.
-      entry = Load(boundref);
-    }
-  }
-
-  // Set my handle.
-  handle = entry;
-
-  // Used by derived class to mark dirty.
-  OnBind(boundref);
-}
-
-
-template <>
-inline void AssetVersion::DoBind(const std::string &boundRef,
-                     const AssetVersionRef &boundVerRef,
-                     bool checkFileExistenceFirst) const {
-  DoBind(boundRef, boundVerRef, checkFileExistenceFirst, Int2Type<1>());
-}
-
 
 template <>
 inline bool AssetVersion::Valid(void) const {
@@ -323,7 +215,7 @@ inline bool AssetVersion::Valid(void) const {
       return false;
 
     try {
-      DoBind(boundRef, boundVerRef, true /* check file & maybe not throw */);
+      DoBind(true /* check file & maybe not throw */, true /* add to cache */);
     } catch (...) {
       return false;
     }
@@ -331,26 +223,17 @@ inline bool AssetVersion::Valid(void) const {
   }
 }
 
-
 template <>
-inline void AssetVersion::Bind(void) const {
-  if (!handle) {
-    std::string boundref = AssetVersionRef::Bind(ref);
-    AssetVersionRef boundVerRef(boundref);
-    DoBind(boundref, boundVerRef, false);
-  }
+inline std::string AssetVersion::Filename() const {
+  std::string boundref = AssetVersionRef::Bind(ref);
+  AssetVersionRef boundVerRef(boundref);
+  return AssetVersionImpl::XMLFilename(boundVerRef);
 }
 
-
 template <>
-inline void AssetVersion::BindNoCache() const {
-  if (!handle) {
-    std::string boundref = AssetVersionRef::Bind(ref);
-    AssetVersionRef boundVerRef(boundref);
-    DoBind(boundref, boundVerRef, false, Int2Type<false>());
-  }
+inline const std::string AssetVersion::Key() const {
+  return AssetVersionRef::Bind(ref);
 }
-
 
 
 // ****************************************************************************
