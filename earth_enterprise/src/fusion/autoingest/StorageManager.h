@@ -17,9 +17,7 @@
 #ifndef STORAGEMANAGER_H
 #define STORAGEMANAGER_H
 
-#include <functional>
 #include <map>
-#include <mutex>
 #include <string>
 #include <time.h>
 #include <vector>
@@ -65,7 +63,6 @@ class StorageManager
     using CacheType = khCache<std::string, HandleType>;
 
     static const bool check_timestamps;
-    static std::mutex mtx;
 
     CacheType cache;
     std::map<AssetKey, HandleType> dirtyMap;
@@ -74,8 +71,6 @@ class StorageManager
     StorageManager(const StorageManager &) = delete;
     StorageManager& operator=(const StorageManager &) = delete;
 };
-
-template<class AssetType> std::mutex StorageManager<AssetType>::mtx;
 
 // Handles to items stored in the storage manager must implement the asset handle interface
 template<class AssetType>
@@ -90,7 +85,6 @@ class AssetHandleInterface {
 template<class AssetType>
 inline void
 StorageManager<AssetType>::AddNew(const AssetKey & key, HandleType & value) {
-  std::lock_guard<std::mutex> lock(mtx);
   cache.Add(key, value);
   // New assets are automatically dirty
   dirtyMap.emplace(key, value);
@@ -99,14 +93,12 @@ StorageManager<AssetType>::AddNew(const AssetKey & key, HandleType & value) {
 template<class AssetType>
 inline void
 StorageManager<AssetType>::AddExisting(const AssetKey & key, HandleType & value) {
-  std::lock_guard<std::mutex> lock(mtx);
   cache.Add(key, value);
 }
 
 template<class AssetType>
 inline void
 StorageManager<AssetType>::NoLongerNeeded(const AssetKey & key, bool prune) {
-  std::lock_guard<std::mutex> lock(mtx);
   cache.Remove(key, prune);
 }
 
@@ -119,8 +111,6 @@ StorageManager<AssetType>::Get(
     bool makeMutable) {
   const AssetKey key = handle->Key();
   const std::string filename = handle->Filename();
-
-  std::lock_guard<std::mutex> lock(mtx);
 
   // Check in cache.
   HandleType entry;
@@ -172,7 +162,6 @@ StorageManager<AssetType>::Get(
 
 template<class AssetType>
 void StorageManager<AssetType>::Abort() {
-  std::lock_guard<std::mutex> lock(mtx);
   // remove all the dirty Impls from the cache
   for (const std::pair<AssetKey, HandleType> & entry : dirtyMap) {
     cache.Remove(entry.first, false); // false -> don't prune
@@ -188,7 +177,6 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
     khFilesTransaction &savetrans,
     std::vector<AssetKey> *saved) {
   notify(NFY_INFO, "Writing %lu %s records", dirtyMap.size(), assetType.c_str());
-  std::lock_guard<std::mutex> lock(mtx);
   for (const  std::pair<AssetKey, HandleType> & entry : dirtyMap) {
     std::string filename = entry.second->XMLFilename() + ".new";
     if (entry.second->Save(filename)) {
