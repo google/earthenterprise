@@ -212,7 +212,7 @@ main(int argc, char *argv[])
         numlines -= 5;
 
         for (uint i = 0; i < pslist.size(); ++i) {
-          if (numlines > 2) {
+          if (numlines > 3) {
             outline("%s", pslist[i].c_str());
             --numlines;
           } else {
