@@ -7,14 +7,14 @@ TEST_DATA_PATH=${SRC_VOLUME}/gauge_tests
 export PATH=${PATH}:/opt/google/bin
 
 # Clean up from any previous tests
-#./test_teardown.sh
+./test_teardown.sh
 
 # Script will only download if necessary
-#sudo sh ${TUTORIAL_PATH}/download_tutorial.sh
-#sudo rsync -arv ${TUTORIAL_PATH}/ ${TEST_DATA_PATH}
+sudo sh ${TUTORIAL_PATH}/download_tutorial.sh
+sudo rsync -arv ${TUTORIAL_PATH}/ ${TEST_DATA_PATH}
 
 # Copy template files so that gefusionuser can access them
-#sudo cp resources/* /gevol/src/gauge_tests
+sudo cp resources/* /gevol/src/gauge_tests
 
 # Create a failed imagery resource
 FAILED_RESOURCE_NAME="gauge_tests/Resources/Imagery/StatePropagationTest_FailedImageryResource"
