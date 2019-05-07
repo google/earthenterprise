@@ -53,8 +53,8 @@ class StorageManager
     inline uint32 CacheSize() const { return cache.size(); }
     inline uint32 CacheCapacity() const { return cache.capacity(); }
     inline uint32 DirtySize() const { return dirtyMap.size(); }
-    inline void AddNew(const AssetKey &, HandleType &);
-    inline void AddExisting(const AssetKey &, HandleType &);
+    inline void AddNew(const AssetKey &, const HandleType &);
+    inline void AddExisting(const AssetKey &, const HandleType &);
     inline void NoLongerNeeded(const AssetKey &, bool = true);
     void Abort();
     bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<AssetKey> *);
@@ -84,7 +84,7 @@ class AssetHandleInterface {
 
 template<class AssetType>
 inline void
-StorageManager<AssetType>::AddNew(const AssetKey & key, HandleType & value) {
+StorageManager<AssetType>::AddNew(const AssetKey & key, const HandleType & value) {
   cache.Add(key, value);
   // New assets are automatically dirty
   dirtyMap.emplace(key, value);
@@ -92,7 +92,7 @@ StorageManager<AssetType>::AddNew(const AssetKey & key, HandleType & value) {
 
 template<class AssetType>
 inline void
-StorageManager<AssetType>::AddExisting(const AssetKey & key, HandleType & value) {
+StorageManager<AssetType>::AddExisting(const AssetKey & key, const HandleType & value) {
   cache.Add(key, value);
 }
 

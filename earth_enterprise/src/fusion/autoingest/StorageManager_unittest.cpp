@@ -89,6 +89,19 @@ TEST_F(StorageManagerTest, AddAndRemove) {
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
 }
 
+TEST_F(StorageManagerTest, LoadWithoutCache) {
+  TestHandle newItem(storageManager, "new", false, false, false);
+  ASSERT_EQ(storageManager.CacheSize(), 0) << "Storage manager has unexpected item in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
+  
+  storageManager.AddExisting(newItem.name, newItem.handle);
+  ASSERT_EQ(storageManager.CacheSize(), 1) << "Storage manager has wrong number of items in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
+  
+  TestHandle new2(storageManager, "new", false, true, false);
+  ASSERT_EQ(newItem.handle->val, new2.handle->val) << "Could not retrieve existing item from storage manager.";
+}
+
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
   return RUN_ALL_TESTS();
