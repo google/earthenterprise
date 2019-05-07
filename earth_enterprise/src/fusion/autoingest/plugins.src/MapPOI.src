@@ -52,16 +52,18 @@ MapPOIAssetVersionImplD::DoSubmitTask(void)
 
   // For map projects there are several map layers. Start a task for each one:
   //
-  for (const auto &input : inputs) {
-
+  int iterCount = 0;
+  auto theClosure = [&](const std::string& v) 
+  {
+    if (iterCount++ < 1) return; // skip the first input
     std::vector<std::string> selectfiles;
-    AssetVersion query(input);
+    AssetVersion query(v);
     query->GetOutputFilenames(selectfiles);
 
     // If there are no search fields continue w/ next layer:
     if (config.all_search_fields_[layer].search_fields_.size() < 1) {
       layer++;
-      continue;
+      return;
     }
 
     // add the product file to the task's inputs
@@ -109,7 +111,8 @@ MapPOIAssetVersionImplD::DoSubmitTask(void)
 
     layer++;
     index++;
-  }
+  };
+  inputs.doForEach(theClosure);
 
   // submit the task
   theAssetManager.SubmitTask(GetRef(), task);

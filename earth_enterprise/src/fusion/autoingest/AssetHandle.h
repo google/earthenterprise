@@ -48,7 +48,12 @@ class AssetHandle_  {
   struct undefined_type; // never defined.  Just used for bool operations
 
  protected:
+
   static inline khCache<SharedString, HandleType>& cache(void);
+  static std::mutex& getBindMutex(void) {
+    static std::mutex bindMutex;
+    return bindMutex;
+  }
 
  public:
   static uint32 CacheSize(void) { return cache().size(); }

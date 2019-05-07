@@ -21,6 +21,7 @@
 #include "AssetHandle.h"
 #include <khFileUtils.h>
 #include "MiscConfig.h"
+#include "common/khMTTypes.h"
 
 
 /******************************************************************************
@@ -36,7 +37,7 @@
  ***  ... = asset->config.layers.size();
  ***
  ******************************************************************************/
-class AssetImpl : public khRefCounter, public AssetStorage {
+class AssetImpl : public khMTRefCounter, public AssetStorage {
   friend class AssetHandle_<AssetImpl>;
 
   // private and unimplemented -- illegal to copy an AssetImpl
@@ -93,6 +94,8 @@ template <>
 inline void
 Asset::DoBind(const std::string &ref, bool checkFileExistenceFirst) const
 {
+  std::lock_guard<std::mutex> lock(getBindMutex());
+
   // Check in cache
   HandleType entry = CacheFind(ref);
   bool addToCache = false;

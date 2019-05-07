@@ -23,6 +23,7 @@
 #include "fusion/autoingest/AssetHandle.h"
 #include "fusion/autoingest/MiscConfig.h"
 #include "common/khFileUtils.h"
+#include "common/khMTTypes.h"
 
 /******************************************************************************
  ***  AssetVersionImpl
@@ -38,7 +39,7 @@
  ***     ... = ver->config.layers.size();
  ***  }
  ******************************************************************************/
-class AssetVersionImpl : public khRefCounter, public AssetVersionStorage {
+class AssetVersionImpl : public khMTRefCounter, public AssetVersionStorage {
   friend class AssetImpl;
   friend class AssetHandle_<AssetVersionImpl>;
 
@@ -113,9 +114,9 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage {
 
   template <class outIter>
   outIter GetInputs(outIter oi) const {
-    for (const auto &i : inputs) {
-      oi++ = i;
-    }
+    outfiles.doForEach([&oi](const std::string& v) {
+      oi++ = v;
+    });
     return oi;
   }
 
@@ -202,6 +203,7 @@ inline void AssetVersion::DoBind<1>(const std::string &boundref,
                                     const AssetVersionRef &boundVerRef,
                                     bool checkFileExistenceFirst,
                                     Int2Type<1>) const {
+  std::lock_guard<std::mutex> lock(getBindMutex());
   // Check in cache.
   HandleType entry = CacheFind(boundref);
   bool addToCache = false;
@@ -255,6 +257,7 @@ inline void AssetVersion::DoBind<0>(const std::string &boundref,
                         const AssetVersionRef &boundVerRef,
                         bool checkFileExistenceFirst,
                         Int2Type<0>) const {
+  std::lock_guard<std::mutex> lock(getBindMutex());
   // Check in cache.
   HandleType entry = CacheFind(boundref);
 
@@ -366,10 +369,9 @@ class LeafAssetVersionImpl : public virtual AssetVersionImpl {
   virtual bool IsLeaf(void) const { return true; }
 
   virtual void GetOutputFilenames(std::vector<std::string> &out) const {
-    for (std::vector<std::string>::const_iterator o = outfiles.begin();
-         o != outfiles.end(); ++o) {
-      out.push_back(AssetDefs::AssetPathToFilename(*o));
-    }
+    outfiles.doForEach([&out](const std::string& v) {
+      out.push_back(AssetDefs::AssetPathToFilename(v));
+    });
   }
   std::string GetOutputFilename(uint i) const {
     if (i < outfiles.size()) {

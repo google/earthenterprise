@@ -142,12 +142,101 @@ class MutableAssetHandleD_ : public virtual Base_ {
   typedef typename Base::Base BBase;
   typedef typename Base::Impl Impl;
 
-  typedef std::map<SharedString, Base> DirtyMap;
+  typedef khMTMap<std::string, Base> DirtyMap;
   static DirtyMap dirtyMap;
 
   // Test whether an asset is a project asset version.
   static inline bool IsProjectAssetVersion(const std::string& assetName) {
     return assetName.find(kProjectAssetVersionNumPrefix) != std::string::npos;
+  }
+
+  // Purge the cache if needed and keep recent "toKeep" items.
+  static void PurgeCacheIfNeeded(size_t toKeep) {
+    // Proceed only when the cache gets full.
+    if (Base::cache().size() < (Base::cache().capacity()) ||
+      // Don't proceed if there are no more than 1 mutable items to purge,
+      // since immutable items will be purged automatically by LRU cache.
+      dirtyMap.size() <= 1) {
+      return;
+    }
+    try {
+      // When there are more items to keep than cache's capacity,
+      // nothing can be purged and cache's capacity needs to be increased
+      // for better performance.
+      if (Base::cache().capacity() < toKeep) {
+        static bool warned = false;
+        if (!warned) {
+          notify(NFY_FATAL, "You may need to increase cache capacity for "
+            "better performance: cache size %lu, cache capacity %lu, number "
+            "of items requested to keep %lu", Base::cache().size(),
+            Base::cache().capacity(), toKeep);
+          warned = true;
+        }
+        return;
+      }
+
+      // Get old cache items that could be purged.
+      std::vector<std::string> toDelete;
+      Base::cache().GetOldKeys(toKeep, &toDelete);
+
+      // Skip project asset versions, which should always stay in the cache.
+      toDelete.erase(
+          std::remove_if(toDelete.begin(), toDelete.end(),
+              MutableAssetHandleD_::IsProjectAssetVersion),
+          toDelete.end());
+
+      // Save mutable items.
+      khFilesTransaction filetrans(".new");
+      uint32 numDotNew=0;
+      for (std::vector<std::string>::iterator it = toDelete.begin();
+           it != toDelete.end(); ++it) {
+        if (dirtyMap.contains(*it)) {
+          std::string filename = dirtyMap[*it]->XMLFilename();
+          notify(NFY_VERBOSE,"AssetHandleD.h:193: filename = %s",
+                 filename.c_str());
+
+          if (filename.rfind(".new") != std::string::npos) 
+          {
+              notify(NFY_VERBOSE,"PurgeCacheIfNeeded(), filename contains .new:  %s", filename.c_str());
+              ++numDotNew;
+          }
+          filename += ".new";
+          if (dirtyMap[*it]->Save(filename)) {
+            filetrans.AddNewPath(filename);
+          }
+        }
+      }
+      notify(NFY_VERBOSE, "PurgeCacheIfNeeded() number of files containing .new: %u", numDotNew);
+      if (!filetrans.Commit())
+      {
+        throw khException("Unable to commit file saving in cache purge.");
+      }
+
+      // Discard saved mutable items from dirtyMap.
+      size_t dirties = dirtyMap.size();
+      for (std::vector<std::string>::iterator it = toDelete.begin();
+           it != toDelete.end(); ++it) {
+        dirtyMap.erase(*it);
+      }
+
+      // Remove both immutable and mutable items from cache.
+      size_t cached = Base::cache().size();
+      for (std::vector<std::string>::iterator it = toDelete.begin();
+           it != toDelete.end(); ++it) {
+        Base::cache().Remove(*it, false);  // Do not prune for now.
+      }
+
+      // Prune the cache in the end.
+      Base::cache().Prune();
+
+      notify(NFY_INFO, "cache size %lu, dirty map %lu, "
+        "assets to keep %lu, mutable assets purged %lu, total purged %lu",
+        Base::cache().size(), dirtyMap.size(), toKeep,
+        dirties - dirtyMap.size(), cached - Base::cache().size());
+    }
+    catch (const std::runtime_error& e) {
+      notify(NFY_INFO, "Exception in cache purge: %s", e.what());
+    }
   }
 
  protected:
@@ -161,9 +250,9 @@ class MutableAssetHandleD_ : public virtual Base_ {
   static void AbortDirty(void) throw()
   {
     // remove all the dirty Impls from the cache
-    for (typename DirtyMap::const_iterator d = dirtyMap.begin();
-         d != dirtyMap.end(); ++d) {
-      Base::cache().Remove(d->first, false); // false -> don't prune
+    auto dirtyKeys = dirtyMap.keys();
+    for (auto& d : dirtyKeys) {
+      Base::cache().Remove(d, false); // false -> don't prune
     }
     Base::cache().Prune(); // prune at the end to avoid possible prune thrashing
 
@@ -175,10 +264,10 @@ class MutableAssetHandleD_ : public virtual Base_ {
     if (dirtyMap.size()) {
       fprintf(stderr, "========== %d dirty %s ==========\n",
               dirtyMap.size(), header.c_str());
-      for (typename DirtyMap::const_iterator d = dirtyMap.begin();
-           d != dirtyMap.end(); ++d) {
+      std::vector<std::string> dirtyKeys = dirtyMap.keys();
+      for (auto& d : dirtyKeys) {
         fprintf(stderr, "%s -> %p\n",
-                d->first.c_str(), d->second.operator->());
+                d.c_str(), dirtyMap[d].operator->());
       }
     }
   }
@@ -186,19 +275,18 @@ class MutableAssetHandleD_ : public virtual Base_ {
 
   static bool SaveDirtyToDotNew(khFilesTransaction &savetrans,
                                 std::vector<std::string> *saveDirty) {
-    for (typename DirtyMap::const_iterator d = dirtyMap.begin();
-         d != dirtyMap.end(); ++d) {
+    std::vector<std::string> dirtyKeys = dirtyMap.keys();
+    for (const auto& d : dirtyKeys) {
       // TODO: - check to see if actually dirty
-      if ( 1 ) {
-        std::string filename = d->second->XMLFilename() + ".new";
-        if (d->second->Save(filename)) {
-          savetrans.AddNewPath(filename);
-          if (saveDirty) {
-            saveDirty->push_back(d->first);
-          }
-        } else {
-          return false;
+      std::string filename = dirtyMap[d]->XMLFilename() + ".new";
+      if (dirtyMap[d]->Save(filename)) {
+        savetrans.AddNewPath(filename);
+        if (saveDirty) {
+          saveDirty->push_back(d);
         }
+        dirtyMap.erase(d);
+      } else {
+        return false;
       }
     }
     return true;

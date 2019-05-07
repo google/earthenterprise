@@ -53,8 +53,8 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   // versions.
   class StateChangeNotifier {
     private:
-      std::set<SharedString> parentsToNotify;
-      std::map<SharedString, InputStates> listenersToNotify;
+      khMTSet<SharedString> parentsToNotify;
+      khMTMap<SharedString, InputStates> listenersToNotify;
       void NotifyParents(std::shared_ptr<StateChangeNotifier>);
       void NotifyListeners(std::shared_ptr<StateChangeNotifier>);
     public:

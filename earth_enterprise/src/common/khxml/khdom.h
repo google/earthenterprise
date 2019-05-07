@@ -34,6 +34,7 @@
 
 #include "common/khTypes.h"
 #include "common/khExtents.h"
+#include "common/khMTTypes.h"
 #include "common/khTileAddr.h"
 #include "common/khInsetCoverage.h"
 #include "common/verref_storage.h"
@@ -137,6 +138,12 @@ inline void
 ToElementWithChildName(khxml::DOMElement *elem,
                        const std::string &childTagName,
                        const VerRefGen &val);
+
+template <class T>
+void
+ToElementWithChildName(khxml::DOMElement *elem,
+                       const std::string &childTagName,
+                       const MTVector<T> &val);
 
 template <class T>
 void
@@ -282,9 +289,30 @@ ToElementWithChildName(khxml::DOMElement *elem,
   }
 }
 
+
+template <class T>
+void
+ToElementWithChildName(khxml::DOMElement *elem,
+                       const std::string &childTagName,
+                       const MTVector<T> &val)
+{
+  val.doForEach([&](const std::string& v) {
+    AddElement(elem, childTagName, v);
+  });
+}
+
+
 template <class T>
 void
 ToElement(khxml::DOMElement *elem, const std::vector<T> &vec)
+{
+  std::string childname = ListElementTagName(FromXMLStr(elem->getTagName()));
+  ToElementWithChildName(elem, childname, vec);
+}
+
+template <class T>
+void
+ToElement(khxml::DOMElement *elem, const MTVector<T> &vec)
 {
   std::string childname = ListElementTagName(FromXMLStr(elem->getTagName()));
   ToElementWithChildName(elem, childname, vec);
@@ -516,6 +544,12 @@ void
 FromElementWithChildName(khxml::DOMElement *elem,
                          const std::string &childTagName,
                          VerRefGen &val);
+
+template <class T>
+void
+FromElementWithChildName(khxml::DOMElement *elem,
+                         const std::string &childTagName,
+                         MTVector<T> &val);
 
 template <class T>
 void
@@ -868,6 +902,24 @@ template <class T>
 void
 FromElementWithChildName(khxml::DOMElement *elem,
                          const std::string &childTagName,
+                         MTVector<T> &vec)
+{
+  vec.clear();
+  vec.shrink_to_fit();
+  khDOMElemList kids = GetChildrenByTagName(elem, childTagName);
+
+  for (const auto& iter : kids)
+  {
+    T tmp;
+    FromElement(iter, tmp);
+    vec.push_back(tmp);
+  }
+}
+
+template <class T>
+void
+FromElementWithChildName(khxml::DOMElement *elem,
+                         const std::string &childTagName,
                          std::deque<T> &deque)
 {
   deque.clear();
@@ -936,6 +988,15 @@ FromElementWithChildName(khxml::DOMElement *elem,
 template <class T>
 void
 FromElement(khxml::DOMElement *elem, std::vector<T> &vec)
+{
+  std::string childname = ListElementTagName(FromXMLStr(elem->getTagName()));
+  FromElementWithChildName(elem, childname, vec);
+}
+
+
+template <class T>
+void
+FromElement(khxml::DOMElement *elem, MTVector<T> &vec)
 {
   std::string childname = ListElementTagName(FromXMLStr(elem->getTagName()));
   FromElementWithChildName(elem, childname, vec);

@@ -17,6 +17,7 @@
 #include <deque>
 #include <khTypes.h>
 #include <khMetaData.h>
+#include <khMTTypes.h>
 #include <autoingest/Misc.h>
 #include <autoingest/.idl/storage/AssetDefs.h>
 #include "common/SharedString.h"
@@ -89,11 +90,11 @@ class AssetVersionStorage {
   AssetDefs::State state;
   double       progress;
   bool         locked;
-  std::vector<SharedString> inputs;
-  std::vector<SharedString> children;
-  std::vector<SharedString> parents;
-  std::vector<SharedString> listeners;
-  std::vector<std::string> outfiles;
+  MTVector<std::string> inputs;
+  MTVector<std::string> children;
+  MTVector<std::string> parents;
+  MTVector<std::string> listeners;
+  MTVector<std::string> outfiles;
   khMetaData               meta;
   time_t             beginTime = time_t(0);
   time_t             progressTime = time_t(0);
@@ -125,11 +126,11 @@ class AssetVersionStorage {
                                 AssetDefs::New,        // state
                                 0,                // progress
                                 false,             // locked
-                                std::vector<SharedString>(),    // inputs
-                                std::vector<SharedString>(),    // children
-                                std::vector<SharedString>(),    // parents
-                                std::vector<SharedString>(),    // listeners
-                                std::vector<std::string>(),    // outfiles
+                                MTVector<std::string>(),    // inputs
+                                MTVector<std::string>(),    // children
+                                MTVector<std::string>(),    // parents
+                                MTVector<std::string>(),    // listeners
+                                MTVector<std::string>(),    // outfiles
                                 asset.meta,
                                 0,                // beginTime
                                 0,                // progressTime

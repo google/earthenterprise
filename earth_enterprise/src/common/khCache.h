@@ -20,6 +20,7 @@
 
 #include <map>
 #include <vector>
+#include <mutex>
 
 // #define SUPPORT_VERBOSE
 #ifdef SUPPORT_VERBOSE
@@ -80,6 +81,7 @@ class khCache {
   bool verbose;
 #endif
   uint numItems;
+  std::recursive_mutex mtx;
 
   bool InList(Item *item) {
     Item *tmp = head;
@@ -181,6 +183,7 @@ class khCache {
     clear();
   }
   void clear(void) {
+    std::lock_guard<std::recursive_mutex> lock(mtx);
     CheckListInvariant();
     // Delete all the items.
     for (typename MapType::iterator i = map.begin(); i != map.end(); ++i) {
@@ -192,6 +195,7 @@ class khCache {
     head = tail = 0;
   }
   void Add(const Key &key, const Value &val, bool prune = true) {
+    std::lock_guard<std::recursive_mutex> lock(mtx);
     CheckListInvariant();
 
     // delete any previous item
@@ -221,6 +225,7 @@ class khCache {
   }
 
   void Remove(const Key &key, bool prune = true) {
+    std::lock_guard<std::recursive_mutex> lock(mtx);
     CheckListInvariant();
 
     Item *item = FindItem(key);
@@ -242,6 +247,7 @@ class khCache {
   }
 
   bool Find(const Key &key, Value &val) {
+    std::lock_guard<std::recursive_mutex> lock(mtx);
     Item *item = FindItem(key);
     if (item) {
       // move it to the head of the list
@@ -258,6 +264,7 @@ class khCache {
   }
 
   void Prune(void) {
+    std::lock_guard<std::recursive_mutex> lock(mtx);
     CheckListInvariant();
     Item *item = tail;
     while (item && (map.size() > targetMax)) {
@@ -279,6 +286,22 @@ class khCache {
       }
     }
     CheckListInvariant();
+  }
+
+  // Get old items from the LRU cache, excluding recent "toKeep" items.
+  void GetOldKeys(size_t toKeep, std::vector<Key> *oldKeys) {
+    std::lock_guard<std::recursive_mutex> lock(mtx);
+    if (map.size() <= toKeep) {
+      return;
+    }
+    Item *p = tail;
+    size_t numOldKeys = map.size() - toKeep;
+    oldKeys->reserve(numOldKeys);
+    for (size_t i = 0; i < numOldKeys; ++i) {
+      assert(p);
+      oldKeys->push_back(p->key);
+      p = p->prev;
+    }
   }
 };
 

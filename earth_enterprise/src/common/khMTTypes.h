@@ -20,9 +20,12 @@
 
 #include "khThread.h"
 #include "khGuard.h"
-#include <queue>
 #include <deque>
+#include <memory>
 #include <set>
+#include <unordered_map>
+#include <mutex>
+#include <vector>
 
 template <class T>
 class khAtomic {
@@ -119,6 +122,44 @@ class khMTQueue
 };
 
 
+class khRWLock
+{
+  private:
+    pthread_rwlock_t rwlock;
+  public:
+    khRWLock() : rwlock(PTHREAD_RWLOCK_INITIALIZER) { }
+    virtual ~khRWLock() {}
+    void lockRead(void) { pthread_rwlock_rdlock(&rwlock); }
+    void lockWrite(void) {  pthread_rwlock_wrlock(&rwlock); }
+    void unlock(void) { pthread_rwlock_unlock(&rwlock); }
+};
+
+class khReadGuard
+{
+  private:
+    khReadGuard() = delete;
+    khRWLock& theLock;
+  public:
+    khReadGuard(khRWLock& lock) : theLock(lock) {
+      theLock.lockRead();
+    }
+    virtual ~khReadGuard(void) { theLock.unlock(); }
+};
+
+
+class khWriteGuard
+{
+  private:
+    khWriteGuard() = delete;
+    khRWLock& theLock;
+  public:
+    khWriteGuard(khRWLock& lock) : theLock(lock) {
+      theLock.lockWrite();
+    }
+    virtual ~khWriteGuard(void) { theLock.unlock(); }
+};
+
+
 template <class T>
 class khMTSet
 {
@@ -148,9 +189,158 @@ class khMTSet
     khLockGuard guard(mutex);
     return std::vector<T>(set.begin(), set.end());
   }
+  void clear(void) {
+    khLockGuard guard(mutex);
+    set.clear();
+  }
+  size_t size(void) {
+    return set.size();
+  }
 };
 
 
+template <class K, class V>
+class khMTMap
+{
+ protected:
+  typedef std::unordered_map<K,V> Map;
+  Map     map;
+  mutable std::mutex mutex;
+
+ private:
+  // private and unimplimented
+  khMTMap& operator=(const khMTMap&) = delete;
+
+  khMTMap(const khMTMap& o, const std::lock_guard<std::mutex>&) : map(o.map) { }
+  khMTMap(khMTMap&& o, const std::lock_guard<std::mutex>&) : map(std::move(o.map)) { }
+ public:
+  khMTMap(void) { }
+  khMTMap(const khMTMap& o) : khMTMap(o, std::lock_guard<std::mutex>(o.mutex)) { }
+  khMTMap(khMTMap&& o) : khMTMap(o, std::lock_guard<std::mutex>(o.mutex)){ }
+
+  void insert(const std::pair<K,V> &val) {
+    std::lock_guard<std::mutex> guard(mutex);
+    (void)map.insert(val);
+  }
+  void erase(const K &val) {
+    std::lock_guard<std::mutex> guard(mutex);
+    (void)map.erase(val);
+  }
+  size_t size(void) {
+    return map.size();
+  }
+  V& operator[](const K& key) {
+    std::lock_guard<std::mutex> guard(mutex);
+    return map[key];
+  }
+  void clear(void) {
+    std::lock_guard<std::mutex> guard(mutex);
+    map.clear();
+  }
+  std::vector<K> keys(void) const {
+    std::lock_guard<std::mutex> guard(mutex);
+    std::vector<K> thekeys;
+    thekeys.reserve(map.size());
+    for (const auto& p : map) {
+      thekeys.push_back(p.first);
+    }
+    return thekeys;
+  }
+  bool contains(const K& key) {
+    std::lock_guard<std::mutex> guard(mutex);
+    return map.find(key) != map.end();
+  }
+  bool empty(void) const {
+    return map.empty();
+  }
+};
+
+// WARNING: Use this with extreme caution
+// It protects some obvious problems but creates some less obvious ones
+template <typename T>
+class MTVector {
+  public:
+    typedef std::vector<T> Base;
+    typedef typename Base::const_iterator const_iterator;
+
+  private:
+    mutable khRWLock mtx;
+    Base vec;
+
+    MTVector(const MTVector& a, const khReadGuard&) : vec(a.vec) { }
+
+  public:
+    void push_back(const T& v) {
+      khWriteGuard lock(mtx);
+      vec.push_back(v);
+    }
+    MTVector() { }
+    // forward to private copy constructor to protect vector from modification
+    MTVector(const MTVector& a) : MTVector(a, khReadGuard(a.mtx)) { }
+
+    const T& operator[] (const size_t idx) const {
+      khReadGuard lock(mtx);
+      return vec[idx]; 
+    }
+
+    bool operator==(const MTVector& x) const {
+      // Since using a read lock, no need to worry about lock ordering or things like a==a
+      khReadGuard lock1(mtx);
+      khReadGuard lock2(x.mtx);
+      return std::equal(vec.begin(), vec.end(), x.vec.begin());
+    }
+
+    bool operator==(const Base& x) const {
+      khReadGuard lock(mtx);
+      std::equal(vec.begin(), vec.end(), x.begin());
+      return true;
+    }
+
+    void clear(void) {
+      khWriteGuard lock(mtx);
+      vec.clear();
+    }
+
+    size_t size(void) const {
+      return vec.size();
+    }
+
+    bool empty(void) const {
+      return vec.empty();
+    }
+
+    void shrink_to_fit(void) {
+      khWriteGuard lock(mtx);
+      vec.shrink_to_fit();
+    }
+    
+    void doForEach(std::function<void (const T&)> func) const {
+      if (!func) return; // can't do anyting with an invalid function
+      khReadGuard lock(mtx);
+      for_each(vec.begin(), vec.end(), func);
+    }
+
+    bool doForEachUntil(std::function<bool (const T&)> func) const {
+      if (!func) return false; // can't do anyting with an invalid function
+      khReadGuard lock(mtx);
+      bool loopedThroughAll = true;
+      for (const auto& v : vec) {
+        if (!func(v)) {
+          loopedThroughAll = false;
+          break;
+        }
+      }
+      return loopedThroughAll;
+    }
+
+// The remaining methods are bad news but are currently needed to compile
+    operator const Base&(void) const {
+      return vec;
+    }
+    operator const Base*(void) const {
+      return &vec;
+    }
+};
 
 // ****************************************************************************
 // ***  MultiThreadingPolicy
