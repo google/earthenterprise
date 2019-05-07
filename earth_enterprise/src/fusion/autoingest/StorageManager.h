@@ -177,14 +177,16 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
     khFilesTransaction &savetrans,
     std::vector<AssetKey> *saved) {
   notify(NFY_INFO, "Writing %lu %s records", dirtyMap.size(), assetType.c_str());
-  for (const  std::pair<AssetKey, HandleType> & entry : dirtyMap) {
-    std::string filename = entry.second->XMLFilename() + ".new";
-    if (entry.second->Save(filename)) {
+  typename std::map<AssetKey, HandleType>::iterator entry = dirtyMap.begin();
+  while (entry != dirtyMap.end()) {
+    std::string filename = entry->second->XMLFilename() + ".new";
+    if (entry->second->Save(filename)) {
       savetrans.AddNewPath(filename);
       if (saved) {
-        saved->push_back(entry.first);
+        saved->push_back(entry->first);
       }
-      dirtyMap.erase(entry.first);
+      // Remove the element and advance the pointer
+      entry = dirtyMap.erase(entry);
     } else {
       return false;
     }
