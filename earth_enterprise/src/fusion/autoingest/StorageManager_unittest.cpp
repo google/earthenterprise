@@ -141,8 +141,17 @@ TEST_F(StorageManagerTest, CheckFileExistence) {
   ASSERT_FALSE(badFile.handle) << "Should get empty handle from non-existant file";
 }
 
+TEST_F(StorageManagerTest, Mutable) {
+  TestHandle mut = Get<TestHandle>(storageManager, "mutable", false, true, true);
+  ASSERT_EQ(storageManager.CacheSize(), 1) << "Storage manager has wrong number of items in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has wrong number of items in dirty map";
+
+  TestHandle another = Get<TestHandle>(storageManager, "another", false, true, false);
+  ASSERT_EQ(storageManager.CacheSize(), 2) << "Storage manager has wrong number of items in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has wrong number of items in dirty map";
+}
+
 // TODO:
-// all parameters to Get
 // purging cache
 // invalid
 
