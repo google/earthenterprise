@@ -102,6 +102,23 @@ TEST_F(StorageManagerTest, LoadWithoutCache) {
   ASSERT_EQ(newItem.handle->val, new2.handle->val) << "Could not retrieve existing item from storage manager.";
 }
 
+TEST_F(StorageManagerTest, AddNew) {
+  HandleType newItem(khRefGuardFromNew(new TestItem()));
+  ASSERT_EQ(storageManager.CacheSize(), 0) << "Storage manager has unexpected item in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
+  
+  storageManager.AddNew("newItem", newItem);
+  ASSERT_EQ(storageManager.CacheSize(), 1) << "Storage manager has wrong number of items in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has wrong number of items in dirty map";
+  
+  TestHandle another(storageManager, "another", false, true, false);
+  ASSERT_EQ(storageManager.CacheSize(), 2) << "Storage manager has wrong number of items in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has wrong number of items in dirty map";
+
+  TestHandle retrieved(storageManager, "newItem", false, true, false);
+  ASSERT_EQ(newItem->val, retrieved.handle->val) << "Could not retrieve new item from storage manager.";
+}
+
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
   return RUN_ALL_TESTS();
