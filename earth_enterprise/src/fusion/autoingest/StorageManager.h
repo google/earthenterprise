@@ -148,14 +148,16 @@ StorageManager<AssetType>::Get(
     }
   }
 
-  // Add it to the cache.
-  if (addToCache && updated)
-    cache.Add(key, entry);
+  if (entry) {
+    // Add it to the cache.
+    if (addToCache && updated)
+      cache.Add(key, entry);
 
-  // Add it to the dirty map. If it's already in the dirty map the existing
-  // one will win; that's OK.
-  if (makeMutable)
-    dirtyMap.emplace(key, entry);
+    // Add it to the dirty map. If it's already in the dirty map the existing
+    // one will win; that's OK.
+    if (makeMutable)
+      dirtyMap.emplace(key, entry);
+  }
 
   return entry;
 }

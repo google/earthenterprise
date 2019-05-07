@@ -41,16 +41,21 @@ class TestHandle : public AssetHandleInterface<TestItem> {
       return khRefGuardFromNew<TestItem>(new TestItem());
     }
     virtual bool Valid(const HandleType &) const { return true; }
-    TestHandle(StorageManager<TestItem> & storageManager,
-               const AssetKey & name,
-               bool checkFileExistenceFirst,
-               bool addToCache,
-               bool makeMutable) :
-        name(name),
-        handle(storageManager.Get(this, checkFileExistenceFirst, addToCache, makeMutable)) {}
+    TestHandle(const AssetKey & name) : name(name) {}
     const AssetKey name;
-    const HandleType handle;
+    HandleType handle;
 };
+
+template<class HandleClass>
+HandleClass Get(StorageManager<TestItem> & storageManager,
+                const AssetKey & name,
+                bool checkFileExistenceFirst,
+                bool addToCache,
+                bool makeMutable) {
+  HandleClass handle(name);
+  handle.handle = storageManager.Get(&handle, checkFileExistenceFirst, addToCache, makeMutable);
+  return handle;
+}
 
 class StorageManagerTest : public testing::Test {
  protected:
@@ -64,9 +69,9 @@ TEST_F(StorageManagerTest, AddAndRemove) {
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
   
   // Create some items
-  TestHandle first(storageManager, "first", false, true, false);
-  TestHandle second(storageManager, "second", false, true, false);
-  TestHandle third(storageManager, "third", false, true, false);
+  TestHandle first = Get<TestHandle>(storageManager, "first", false, true, false);
+  TestHandle second = Get<TestHandle>(storageManager, "second", false, true, false);
+  TestHandle third = Get<TestHandle>(storageManager, "third", false, true, false);
   
   ASSERT_EQ(storageManager.CacheSize(), 3) << "Storage manager has wrong number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
@@ -75,7 +80,7 @@ TEST_F(StorageManagerTest, AddAndRemove) {
   ASSERT_EQ(third.handle->val, 3) << "Third item has unexpected value";
   
   // Retrieve one of the items
-  TestHandle second2(storageManager, "second", false, true, false);
+  TestHandle second2 = Get<TestHandle>(storageManager, "second", false, true, false);
   ASSERT_EQ(storageManager.CacheSize(), 3) << "Storage manager has wrong number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
   ASSERT_EQ(second.handle->val, second2.handle->val) << "Could not retrieve existing item from storage manager";
@@ -90,7 +95,7 @@ TEST_F(StorageManagerTest, AddAndRemove) {
 }
 
 TEST_F(StorageManagerTest, LoadWithoutCache) {
-  TestHandle newItem(storageManager, "new", false, false, false);
+  TestHandle newItem = Get<TestHandle>(storageManager, "new", false, false, false);
   ASSERT_EQ(storageManager.CacheSize(), 0) << "Storage manager has unexpected item in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
   
@@ -98,7 +103,7 @@ TEST_F(StorageManagerTest, LoadWithoutCache) {
   ASSERT_EQ(storageManager.CacheSize(), 1) << "Storage manager has wrong number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
   
-  TestHandle new2(storageManager, "new", false, true, false);
+  TestHandle new2 = Get<TestHandle>(storageManager, "new", false, true, false);
   ASSERT_EQ(newItem.handle->val, new2.handle->val) << "Could not retrieve existing item from storage manager.";
 }
 
@@ -111,13 +116,35 @@ TEST_F(StorageManagerTest, AddNew) {
   ASSERT_EQ(storageManager.CacheSize(), 1) << "Storage manager has wrong number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has wrong number of items in dirty map";
   
-  TestHandle another(storageManager, "another", false, true, false);
+  TestHandle another = Get<TestHandle>(storageManager, "another", false, true, false);
   ASSERT_EQ(storageManager.CacheSize(), 2) << "Storage manager has wrong number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has wrong number of items in dirty map";
 
-  TestHandle retrieved(storageManager, "newItem", false, true, false);
+  TestHandle retrieved = Get<TestHandle>(storageManager, "newItem", false, true, false);
   ASSERT_EQ(newItem->val, retrieved.handle->val) << "Could not retrieve new item from storage manager.";
 }
+
+class TestHandleBadFile : public TestHandle {
+  public:
+    virtual std::string Filename() const { return "notafile"; }
+    TestHandleBadFile(const AssetKey & name) : TestHandle(name) {}
+};
+
+TEST_F(StorageManagerTest, CheckFileExistence) {
+  TestHandle goodFile = Get<TestHandle>(storageManager, "good", true, true, false);
+  ASSERT_EQ(storageManager.CacheSize(), 1) << "Storage manager has wrong number of items in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
+  
+  TestHandleBadFile badFile = Get<TestHandleBadFile>(storageManager, "bad", true, true, false);
+  ASSERT_EQ(storageManager.CacheSize(), 1) << "Storage manager has wrong number of items in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
+  ASSERT_FALSE(badFile.handle) << "Should get empty handle from non-existant file";
+}
+
+// TODO:
+// all parameters to Get
+// purging cache
+// invalid
 
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
