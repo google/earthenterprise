@@ -16,7 +16,11 @@
 
 #include "StorageManager.h"
 
+#include <algorithm>
 #include <gtest/gtest.h>
+#include <sstream>
+
+using namespace std;
 
 const size_t CACHE_SIZE = 5;
 
@@ -36,13 +40,14 @@ using AssetKey = typename StorageManager<TestItem>::AssetKey;
 class TestHandle : public AssetHandleInterface<TestItem> {
   public:
     virtual const AssetKey Key() const { return name; }
-    virtual std::string Filename() const { return "/dev/null"; }
-    virtual HandleType Load(const std::string &) const {
+    virtual string Filename() const { return "/dev/null"; }
+    virtual HandleType Load(const string &) const {
       return khRefGuardFromNew<TestItem>(new TestItem());
     }
     virtual bool Valid(const HandleType &) const { return true; }
     TestHandle(const AssetKey & name) : name(name) {}
-    const AssetKey name;
+    TestHandle() = default;
+    AssetKey name;
     HandleType handle;
 };
 
@@ -64,7 +69,7 @@ class StorageManagerTest : public testing::Test {
   StorageManagerTest() : storageManager(CACHE_SIZE, "test") {}
 };
 
-TEST_F(StorageManagerTest, AddAndRemove) {
+TEST_F(StorageManagerTest, AddAndRetrieve) {
   ASSERT_EQ(storageManager.CacheSize(), 0) << "Storage manager has unexpected item in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
   
@@ -84,14 +89,6 @@ TEST_F(StorageManagerTest, AddAndRemove) {
   ASSERT_EQ(storageManager.CacheSize(), 3) << "Storage manager has wrong number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
   ASSERT_EQ(second.handle->val, second2.handle->val) << "Could not retrieve existing item from storage manager";
-  
-  // Remove one of the items
-  storageManager.NoLongerNeeded(first.name);
-  ASSERT_EQ(storageManager.CacheSize(), 2) << "Storage manager has wrong number of items in cache";
-  ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
-  storageManager.NoLongerNeeded(first.name);
-  ASSERT_EQ(storageManager.CacheSize(), 2) << "Storage manager has wrong number of items in cache";
-  ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
 }
 
 TEST_F(StorageManagerTest, LoadWithoutCache) {
@@ -126,7 +123,7 @@ TEST_F(StorageManagerTest, AddNew) {
 
 class TestHandleBadFile : public TestHandle {
   public:
-    virtual std::string Filename() const { return "notafile"; }
+    virtual string Filename() const { return "notafile"; }
     TestHandleBadFile(const AssetKey & name) : TestHandle(name) {}
 };
 
@@ -151,9 +148,49 @@ TEST_F(StorageManagerTest, Mutable) {
   ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has wrong number of items in dirty map";
 }
 
+TEST_F(StorageManagerTest, PurgeCache) {
+  // Put items in the cache but don't hold handles so they will be purged
+  for(size_t i = 0; i < CACHE_SIZE + 2; ++i) {
+    stringstream s;
+    s << "asset" << i;
+    Get<TestHandle>(storageManager, s.str(), false, true, false);
+    ASSERT_EQ(storageManager.CacheSize(), min(i+1, CACHE_SIZE)) << "Unexpected number of items in cache";
+    ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
+  }
+}
+
+TEST_F(StorageManagerTest, PurgeCacheWithHandles) {
+  {
+    // Put items in the cache and hold handles so they won't be purged
+    TestHandle handles[CACHE_SIZE+3];
+    for(size_t i = 0; i < CACHE_SIZE + 3; ++i) {
+      stringstream s;
+      s << "asset" << i;
+      handles[i] = Get<TestHandle>(storageManager, s.str(), false, true, false);
+      ASSERT_EQ(storageManager.CacheSize(), i+1) << "Unexpected number of items in cache";
+      ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
+    }
+  }
+  
+  // Now that we no longer have handles items can be removed from the cache.
+  // Remove an item but don't purge the cache
+  storageManager.NoLongerNeeded("asset0", false);
+  ASSERT_EQ(storageManager.CacheSize(), CACHE_SIZE+2) << "Unexpected number of items in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
+  
+  // Remove an item and do purge the cache
+  storageManager.NoLongerNeeded("asset1");
+  ASSERT_EQ(storageManager.CacheSize(), CACHE_SIZE) << "Unexpected number of items in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
+  storageManager.NoLongerNeeded("asset1");
+  ASSERT_EQ(storageManager.CacheSize(), CACHE_SIZE) << "Unexpected number of items in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
+}
+
 // TODO:
-// purging cache
 // invalid
+// abort
+// save dirty to dot new
 
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
