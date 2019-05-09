@@ -160,9 +160,8 @@ class MutableAssetHandleD_ : public virtual Base_ {
   static void AbortDirty(void) throw()
   {
     // remove all the dirty Impls from the cache
-    for (typename DirtyMap::const_iterator d = dirtyMap.begin();
-         d != dirtyMap.end(); ++d) {
-      Base::cache().Remove(d->first, false); // false -> don't prune
+    for (const auto& d : dirtyMap) {
+      Base::cache().Remove(d.first, false); // false -> don't prune
     }
     Base::cache().Prune(); // prune at the end to avoid possible prune thrashing
 
@@ -174,10 +173,9 @@ class MutableAssetHandleD_ : public virtual Base_ {
     if (dirtyMap.size()) {
       fprintf(stderr, "========== %d dirty %s ==========\n",
               dirtyMap.size(), header.c_str());
-      for (typename DirtyMap::const_iterator d = dirtyMap.begin();
-           d != dirtyMap.end(); ++d) {
+      for (const auto& d : dirtyMap) {
         fprintf(stderr, "%s -> %p\n",
-                d->first.c_str(), d->second.operator->());
+                d.first.c_str(), d.second.operator->());
       }
     }
   }
@@ -185,19 +183,13 @@ class MutableAssetHandleD_ : public virtual Base_ {
 
   static bool SaveDirtyToDotNew(khFilesTransaction &savetrans,
                                 std::vector<std::string> *saveDirty) {
-    for (typename DirtyMap::const_iterator d = dirtyMap.begin();
-         d != dirtyMap.end(); ++d) {
       // TODO: - check to see if actually dirty
-
-        std::string filename = d->second->XMLFilename() + ".new";
-        // should never get here, but do not allow .new.new to be
-        // written
-        bool flag = (filename.find(".new") != filename.rfind(".new"));
-        notify(NFY_WARN, "%s present, skip!", filename.c_str());
-        if (!flag && d->second->Save(filename)) {
+    for (const auto& d : dirtyMap) {
+        std::string filename = d.second->XMLFilename() + ".new";
+        if (d.second->Save(filename)) {
           savetrans.AddNewPath(filename);
           if (saveDirty) {
-            saveDirty->push_back(d->first);
+            saveDirty->push_back(d.first);
           }
         } else {
           return false;
