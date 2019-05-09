@@ -55,6 +55,36 @@ const std::array<std::string,6> GEXMLObject::options
 }};
 khMutex GEXMLObject::mutex;
 
+#include <unordered_map>
+class files
+{
+private:
+	static khMutex _m;
+    static std::unordered_map<std::string, int> hash;
+    files(){}
+
+public:
+    static files& instance() noexcept
+    {
+        static files _instance;
+		return _instance;
+    }
+
+	static bool insert(std::string _s) noexcept
+	{
+		khLockGuard m(_m);
+        
+        auto loc = _s.find(".new");
+        // if it equals hash.end(), that means it is already present
+        if (hash.find(_s.substr(0,loc)) != hash.end()) return false;
+ 
+		hash.emplace(_s.substr(0,loc),0);
+        return true;
+	}
+};
+khMutex files::_m; 
+std::unordered_map<std::string, int> files::hash;
+
 XMLSize_t GEXMLObject::initialDOMHeapAllocSize;
 XMLSize_t GEXMLObject::maxDOMHeapAllocSize;
 XMLSize_t GEXMLObject::maxDOMSubAllocationSize;
@@ -420,6 +450,9 @@ WriteDocument(GEDocument * doc, const std::string &filename) throw()
   static const std::string backupext = ".old";
   const std::string newname = filename + newext;
   const std::string backupname = filename + backupext;
+  if (! files::instance().insert(newname))
+    notify(NFY_WARN, "WriteDocument: %s written!", newname.c_str());
+
   if (!doc->writeToFile(newname)) {
     retval = false;
   }
