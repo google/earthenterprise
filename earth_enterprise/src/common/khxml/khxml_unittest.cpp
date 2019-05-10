@@ -199,8 +199,8 @@ void toStringTest() {
   unique_ptr<GEDocument> doc = ReadDocumentFromString(xml, "dummy");
   DOMElement * elem = doc->getDocumentElement();
   ASSERT_EQ(FromXMLStr(elem->getTagName()), "test") << "Invalid tag name when reading string from XML";
-  DOMNode * node = elem->getFirstChild();
-  String value = FromXMLStr(((khxml::DOMText*)node)->getData());
+  String value;
+  FromElement(elem, value);
   ASSERT_EQ(value, "expected_value") << "Could not read string value from XML correctly";
 }
 
@@ -214,6 +214,70 @@ TEST_F(KhxmlTest, SharedStringReadString) {
 
 TEST_F(KhxmlTest, QStringReadString) {
   toStringTest<QString>();
+}
+
+template <class String>
+void runXmlToStringMapTest(const std::string & xml) {
+  unique_ptr<GEDocument> doc = ReadDocumentFromString(xml, "dummy");
+  DOMElement * elem = doc->getDocumentElement();
+  ASSERT_EQ(FromXMLStr(elem->getTagName()), "data") << "Invalid tag name when reading string from XML";
+  map<String, int> results;
+  FromElement(elem, results);
+  ASSERT_EQ(results["xyz"], 42) << "Error reading map of strings from XML";
+  ASSERT_EQ(results["wvu"], 12) << "Error reading map of strings from XML";
+}
+
+template <class String>
+void toStringMap() {
+  // There are two methods of parsing maps from XML. We test both.
+  string newxml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n"
+      "<data>\n"
+         "<item key=\"xyz\">42</item>\n"
+         "<item key=\"wvu\">12</item>\n"
+      "</data>\n";
+  runXmlToStringMapTest<String>(newxml);
+  string oldxml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n"
+      "<data>\n"
+        "<xyz>42</xyz>\n"
+        "<wvu>12</wvu>\n"
+      "</data>\n";
+  runXmlToStringMapTest<String>(oldxml);
+}
+
+TEST_F(KhxmlTest, StdStringReadMap) {
+  toStringMap<string>();
+}
+
+TEST_F(KhxmlTest, SharedStringReadMap) {
+  toStringMap<SharedString>();
+}
+
+TEST_F(KhxmlTest, QStringReadMap) {
+  toStringMap<QString>();
+}
+
+template <class String>
+void readEmptyStringFromXml() {
+  string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n"
+      "<value></value>\n";
+  unique_ptr<GEDocument> doc = ReadDocumentFromString(xml, "dummy");
+  DOMElement * elem = doc->getDocumentElement();
+  ASSERT_EQ(FromXMLStr(elem->getTagName()), "value") << "Invalid tag name when reading empty string from XML";
+  String val;
+  FromElement(elem, val);
+  ASSERT_EQ(val, String("")) << "Error reading empty string from XML";
+}
+
+TEST_F(KhxmlTest, StdStringReadEmpty) {
+  readEmptyStringFromXml<string>();
+}
+
+TEST_F(KhxmlTest, SharedStringReadEmpty) {
+  readEmptyStringFromXml<SharedString>();
+}
+
+TEST_F(KhxmlTest, QStringReadEmpty) {
+  readEmptyStringFromXml<QString>();
 }
 
 int main(int argc, char** argv)
