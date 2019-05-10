@@ -427,7 +427,7 @@ def verify_state_database(database, state):
     # Check the states of the database's children
     verify_state(os.path.join(DATABASE_PATH, database + ".kdatabase", "gedb"), state)
     verify_state(os.path.join(DATABASE_PATH, database + ".kdatabase", "unifiedindex"), state)
-    #verify_state(os.path.join(DATABASE_PATH, database + ".kdatabase", "qtpacket"), state)
+    verify_state(os.path.join(DATABASE_PATH, database + ".kdatabase", "qtpacket"), state)
     terrainPath = os.path.join(DATABASE_PATH, database + ".kdatabase", "terrain")
     if os.path.isdir(terrainPath + ".kta"):
       # Only check for the terrain task if it's there. Not all databases have terrain.
