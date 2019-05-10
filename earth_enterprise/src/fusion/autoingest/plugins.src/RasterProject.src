@@ -1041,8 +1041,18 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   packgenassets.reserve(numInsets);
   packgenvers.reserve(numInsets);
 
+  // Temporary versions of the vectors that will allow multiple threads to safely insert
+  // items by index. The valid values elements will be placed into the above vectors
+  // after the loop.
+  //std::vector<std::string> prelim_packgenkids;
+  //std::vector<std::string> prelim_packgenassets;
+  std::vector<AssetVersion> prelim_packgenvers;
+  //prelim_packgenkids.resize(numInsets);
+  //prelim_packgenassets.resize(numInsets);
+  prelim_packgenvers.resize(numInsets);
+
   int threadsToUse = MiscConfig::Instance().BuildIndexThreads;
-  // Create separate vectors for each thread to operate on. We'll combine them after
+/*  // Create separate vectors for each thread to operate on. We'll combine them after
   // the loop finishes.
   std::vector<std::vector<std::string>> packgenkids_vectors(threadsToUse);
   std::vector<std::vector<std::string>> packgenassets_vectors(threadsToUse);
@@ -1053,6 +1063,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     vec.reserve(numInsets/threadsToUse);
   for(auto & vec : packgenvers_vectors)
     vec.reserve(numInsets/threadsToUse);
+*/
 
 
   #pragma omp parallel for schedule(static) num_threads(threadsToUse)
@@ -1062,8 +1073,10 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     // Check if I even need to do any packet generation at all
     // Maybe the other insets will completely replace everything
     // that this one would generate
-    if (genInfo[i].coverage.numLevels() == 0)
+    if (genInfo[i].coverage.numLevels() == 0) {
+      notify(NFY_DEBUG, "Don't need to do packgen for genInfo[%d]", i);
       continue;
+    }
 
 
     // Determine which insets (0 .. i) intersect this coverage area.
@@ -1171,13 +1184,17 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
       genInfo[i].PopulatePacketLevels(packgen);
     }
 
-    // remember this new PacketGen version
+/*    // remember this new PacketGen version
     packgenkids_vectors[threadNum].push_back(packgen->GetRef());
     packgenassets_vectors[threadNum].push_back(packgen->GetAssetRef());
     packgenvers_vectors[threadNum].push_back(packgen);
+*/
+//    prelim_packgenkids[i] = packgen->GetRef();
+//    prelim_packgenassets[i] = packgen->GetAssetRef();
+    prelim_packgenvers[i] = packgen;
   }
 
-  // Concatenate all of the vectors
+/*  // Concatenate all of the vectors
   for(auto & vec : packgenkids_vectors)
     packgenkids.insert(packgenkids.end(), vec.begin(), vec.end());
   for(auto & vec : packgenassets_vectors)
@@ -1185,11 +1202,21 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   for(auto & vec : packgenvers_vectors)
     packgenvers.insert(packgenvers.end(), vec.begin(), vec.end());
   assert(packgenkids.size() == packgenassets.size() && packgenkids.siz() == packgenvers.size());
+*/
+  for(auto & packgen : prelim_packgenvers) {
+    if( !packgen->GetRef().empty() ) {
+      packgenkids.push_back(packgen->GetRef());
+      packgenassets.push_back(packgen->GetAssetRef());
+      packgenvers.push_back(packgen);
+    }
+  }
 
   curTime = std::chrono::high_resolution_clock::now();
   timeDiff = std::chrono::duration<double>(curTime - prevTime);
   notify(NFY_INFO2, "BuildIndex finished looping through insets - %f seconds elapsed",
          timeDiff.count());
+
+assert(false);  // TEMP DEBUG assert: bail out before we start writing the files
 
   // Make index subasset (RasterGEIndex).
   return MakeIndexSubAsset(packgenkids, packgenassets, packgenvers, genInfo, date);
