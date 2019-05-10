@@ -16,6 +16,7 @@
 #include <sys/stat.h>
 #include <cstdlib>
 #include <fstream>
+#include <map>
 #include <memory>
 #include <sstream>
 #include <string>
@@ -140,6 +141,79 @@ TEST_F(KhxmlTest, WriteInvalidDocument) {
   unique_ptr<GEDocument> doc = getInvalidDocument();
   bool status = WriteDocument(doc.get(), TEST_DIR + "writeinvaliddocument.xml");
   ASSERT_FALSE(status) << "Writing an invalid document to a file should fail";
+}
+
+std::string getAttribute(DOMElement * elem, const std::string & name) {
+  return FromXMLStr(elem->getAttribute(ToXMLStr(name)));
+}
+
+int getValue(DOMElement * elem) {
+  DOMNode * valNode = elem->getFirstChild();
+  string valStr = FromXMLStr(((khxml::DOMText*)valNode)->getData());
+  return stoi(valStr);
+}
+
+template <class String>
+void fromStringMapTest() {
+  map<String, int> stringMap;
+  stringMap["abc"] = 1;
+  stringMap["def"] = 10;
+  stringMap["ghi"] = 3;
+  unique_ptr<GEDocument> doc = CreateEmptyDocument("test");
+  DOMElement * elem = doc->getDocumentElement();
+  AddElement(elem, "data", stringMap);
+  elem = elem->getFirstElementChild();
+  ASSERT_EQ(FromXMLStr(elem->getTagName()), "data") << "Invalid parent element when writing map of strings";
+  elem = elem->getFirstElementChild();
+  ASSERT_EQ(FromXMLStr(elem->getTagName()), "item") << "Invalid parent element when writing map of strings";
+  ASSERT_EQ(getAttribute(elem, "key"), "abc") << "Invalid key when writing map of strings";
+  ASSERT_EQ(getValue(elem), 1) << "Invalid value when writing map of strings";
+  elem = elem->getNextElementSibling();
+  ASSERT_EQ(FromXMLStr(elem->getTagName()), "item") << "Invalid parent element when writing map of strings";
+  ASSERT_EQ(getAttribute(elem, "key"), "def") << "Invalid key when writing map of strings";
+  ASSERT_EQ(getValue(elem), 10) << "Invalid value when writing map of strings";
+  elem = elem->getNextElementSibling();
+  ASSERT_EQ(FromXMLStr(elem->getTagName()), "item") << "Invalid parent element when writing map of strings";
+  ASSERT_EQ(getAttribute(elem, "key"), "ghi") << "Invalid key when writing map of strings";
+  ASSERT_EQ(getValue(elem), 3) << "Invalid value when writing map of strings";
+  elem = elem->getNextElementSibling();
+  ASSERT_EQ(elem, nullptr) << "Unexpected element";
+}
+
+TEST_F(KhxmlTest, StdStringMapToElement) {
+  fromStringMapTest<string>();
+}
+
+TEST_F(KhxmlTest, SharedStringMapToElement) {
+  fromStringMapTest<SharedString>();
+}
+
+TEST_F(KhxmlTest, QStringMapToElement) {
+  fromStringMapTest<QString>();
+}
+
+template <class String>
+void toStringTest() {
+  string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n"
+      "<test>expected_value</test>";
+  unique_ptr<GEDocument> doc = ReadDocumentFromString(xml, "dummy");
+  DOMElement * elem = doc->getDocumentElement();
+  ASSERT_EQ(FromXMLStr(elem->getTagName()), "test") << "Invalid tag name when reading string from XML";
+  DOMNode * node = elem->getFirstChild();
+  String value = FromXMLStr(((khxml::DOMText*)node)->getData());
+  ASSERT_EQ(value, "expected_value") << "Could not read string value from XML correctly";
+}
+
+TEST_F(KhxmlTest, StdStringReadString) {
+  toStringTest<string>();
+}
+
+TEST_F(KhxmlTest, SharedStringReadString) {
+  toStringTest<SharedString>();
+}
+
+TEST_F(KhxmlTest, QStringReadString) {
+  toStringTest<QString>();
 }
 
 int main(int argc, char** argv)
