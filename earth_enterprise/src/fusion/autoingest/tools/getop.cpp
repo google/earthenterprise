@@ -193,7 +193,7 @@ main(int argc, char *argv[])
         for (std::vector<TaskLists::WaitingTask>::const_iterator w =
                taskLists.waitingTasks.begin();
              w != taskLists.waitingTasks.end(); ++w) {
-          if (numlines > 5) {
+          if (numlines > 6) {
             outline("  %s", w->verref.c_str());
             --numlines;
             if (!w->activationError.isEmpty()) {
@@ -209,7 +209,7 @@ main(int argc, char *argv[])
 
         outline("");
         outline("Fusion processes on this host:");
-        numlines -= 5;
+        numlines -= 6;
 
         for (uint i = 0; i < pslist.size(); ++i) {
           if (numlines > 2) {
