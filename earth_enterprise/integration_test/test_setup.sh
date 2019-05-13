@@ -33,4 +33,4 @@ if [ `gequery ${FAILED_RESOURCE_NAME} --status` != "Failed" ]; then
   echo "Error setting up tests. Please try again."
 fi
 
-#sudo /etc/init.d/gefusion restart
+sudo /etc/init.d/gefusion restart
