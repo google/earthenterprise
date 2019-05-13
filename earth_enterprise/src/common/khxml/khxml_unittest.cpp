@@ -228,7 +228,7 @@ void runXmlToStringMapTest(const std::string & xml) {
 }
 
 template <class String>
-void toStringMap() {
+void toStringMapTest() {
   // There are two methods of parsing maps from XML. We test both.
   string newxml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n"
       "<data>\n"
@@ -245,15 +245,15 @@ void toStringMap() {
 }
 
 TEST_F(KhxmlTest, StdStringReadMap) {
-  toStringMap<string>();
+  toStringMapTest<string>();
 }
 
 TEST_F(KhxmlTest, SharedStringReadMap) {
-  toStringMap<SharedString>();
+  toStringMapTest<SharedString>();
 }
 
 TEST_F(KhxmlTest, QStringReadMap) {
-  toStringMap<QString>();
+  toStringMapTest<QString>();
 }
 
 template <class String>
@@ -278,6 +278,30 @@ TEST_F(KhxmlTest, SharedStringReadEmpty) {
 
 TEST_F(KhxmlTest, QStringReadEmpty) {
   readEmptyStringFromXml<QString>();
+}
+
+template <class String>
+void readNonEmptyStringFromXml() {
+  string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n"
+      "<value>qwertyuiop</value>\n";
+  unique_ptr<GEDocument> doc = ReadDocumentFromString(xml, "dummy");
+  DOMElement * elem = doc->getDocumentElement();
+  ASSERT_EQ(FromXMLStr(elem->getTagName()), "value") << "Invalid tag name when reading empty string from XML";
+  String val;
+  FromElement(elem, val);
+  ASSERT_EQ(val, String("qwertyuiop")) << "Error reading empty string from XML";
+}
+
+TEST_F(KhxmlTest, StdStringReadNonEmpty) {
+  readNonEmptyStringFromXml<string>();
+}
+
+TEST_F(KhxmlTest, SharedStringReadNonEmpty) {
+  readNonEmptyStringFromXml<SharedString>();
+}
+
+TEST_F(KhxmlTest, QStringReadNonEmpty) {
+  readNonEmptyStringFromXml<QString>();
 }
 
 int main(int argc, char** argv)
