@@ -20,6 +20,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <utility>
 #include <khException.h>
 #include <khFileUtils.h>
 #include "common/khCppStd.h"
@@ -142,7 +143,7 @@ class MutableAssetHandleD_ : public virtual Base_ {
   typedef typename Base::Base BBase;
   typedef typename Base::Impl Impl;
 
-  typedef khMTMap<std::string, Base> DirtyMap;
+  typedef khMTMap<SharedString, Base> DirtyMap;
   static DirtyMap dirtyMap;
 
   // Test whether an asset is a project asset version.
@@ -219,7 +220,7 @@ class MutableAssetHandleD_ : public virtual Base_ {
         dirtyMap.erase(*it);
       }
 
-      // Remove both immutable and mutable items from cache.
+      // Remove both   immutable and mutable items from cache.
       size_t cached = Base::cache().size();
       for (std::vector<std::string>::iterator it = toDelete.begin();
            it != toDelete.end(); ++it) {
@@ -243,7 +244,7 @@ class MutableAssetHandleD_ : public virtual Base_ {
   virtual void OnBind(const std::string &boundref) const {
     Base::OnBind(boundref);
     // if already exists, old one will win, that's OK
-    dirtyMap.emplace(SharedString(boundref), *this);
+    dirtyMap.insert(std::make_pair(SharedString(boundref), *this));
   }
 
   // must not throw since it's called during stack unwinding
@@ -275,7 +276,7 @@ class MutableAssetHandleD_ : public virtual Base_ {
 
   static bool SaveDirtyToDotNew(khFilesTransaction &savetrans,
                                 std::vector<std::string> *saveDirty) {
-    std::vector<std::string> dirtyKeys = dirtyMap.keys();
+    std::vector<SharedString> dirtyKeys = dirtyMap.keys();
     for (const auto& d : dirtyKeys) {
       // TODO: - check to see if actually dirty
       std::string filename = dirtyMap[d]->XMLFilename() + ".new";
@@ -408,7 +409,7 @@ protected:
 
       // add it to the dirty list - since it just sprang into existence
       // we need to make sure it gets saved
-      MutableBase::dirtyMap.emplace(this->ref, *this);
+      MutableBase::dirtyMap.insert(std::make_pair(this->ref, *this));
     }
   }
  

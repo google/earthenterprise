@@ -38,7 +38,7 @@ class AssetStorage {
   SharedString name;
   AssetDefs::Type type;
   std::string subtype;
-  std::vector<SharedString> inputs;
+  MTVector<SharedString> inputs;
   khMetaData          meta;
   VersionList versions;
 
@@ -52,7 +52,7 @@ class AssetStorage {
   MakeStorage(const SharedString &name_,
               AssetDefs::Type type_,
               const std::string &subtype_,
-              const std::vector<SharedString> &inputs_,
+              const MTVector<SharedString> &inputs_,
               const khMetaData &meta_) {
     AssetStorage storage(name_, type_, subtype_,
                          inputs_, meta_,
@@ -90,10 +90,10 @@ class AssetVersionStorage {
   AssetDefs::State state;
   double       progress;
   bool         locked;
-  MTVector<std::string> inputs;
-  MTVector<std::string> children;
-  MTVector<std::string> parents;
-  MTVector<std::string> listeners;
+  MTVector<SharedString> inputs;
+  MTVector<SharedString> children;
+  MTVector<SharedString> parents;
+  MTVector<SharedString> listeners;
   MTVector<std::string> outfiles;
   khMetaData               meta;
   time_t             beginTime = time_t(0);
@@ -126,10 +126,10 @@ class AssetVersionStorage {
                                 AssetDefs::New,        // state
                                 0,                // progress
                                 false,             // locked
-                                MTVector<std::string>(),    // inputs
-                                MTVector<std::string>(),    // children
-                                MTVector<std::string>(),    // parents
-                                MTVector<std::string>(),    // listeners
+                                MTVector<SharedString>(),    // inputs
+                                MTVector<SharedString>(),    // children
+                                MTVector<SharedString>(),    // parents
+                                MTVector<SharedString>(),    // listeners
                                 MTVector<std::string>(),    // outfiles
                                 asset.meta,
                                 0,                // beginTime

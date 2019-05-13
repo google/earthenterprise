@@ -20,10 +20,12 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <mutex>
 #include <iostream>
 #include <stdint.h>
 #include <assert.h>
 #include <common/notify.h>
+
 
 // The goal of this class is to keep in memory only one copy of the name of
 // a cached asset or asset version. Previously, each asset stored the full names
@@ -39,31 +41,34 @@ class SharedString {
 protected:
    class StringStorage {
       private:
-        std::unordered_map<uint32_t, std::string> refFromKeyTable;
-        std::unordered_map<std::string, uint32_t> keyFromRefTable;
-        static uint32_t nextID;
+        mutable std::mutex mutex;
+        std::unordered_map<size_t, std::string> refFromKeyTable;
+        std::unordered_map<std::string, size_t> keyFromRefTable;
+        static size_t nextID;
       public:
-        const std::string & RefFromKey(const uint32_t &key) {
+        const std::string & RefFromKey(const size_t &key) {
+          std::lock_guard<std::mutex> guard(mutex);
           auto refIter = refFromKeyTable.find(key);
           assert(refIter != refFromKeyTable.end());
           return refIter->second;
         }
-        uint32_t KeyFromRef(const std::string &ref) {
+        size_t KeyFromRef(const std::string &ref) {
+          std::lock_guard<std::mutex> guard(mutex);
           auto keyIter = keyFromRefTable.find(ref);
           if (keyIter != keyFromRefTable.end()) {
             return keyIter->second;
           }
           else {
             // We've never seen this ref before, so make a new key
-            uint32_t key = nextID++; 
-            refFromKeyTable.insert(std::pair<uint32_t, std::string>(key, ref));
-            keyFromRefTable.insert(std::pair<std::string, uint32_t>(ref, key));
+            size_t key = nextID++; 
+            refFromKeyTable.insert(std::pair<size_t, std::string>(key, ref));
+            keyFromRefTable.insert(std::pair<std::string, size_t>(ref, key));
             return key;
           }
         }
         StringStorage(){
-          refFromKeyTable.insert(std::pair<uint32_t, std::string>(0, ""));
-          keyFromRefTable.insert(std::pair<std::string, uint32_t>("", 0));
+          refFromKeyTable.insert(std::pair<size_t, std::string>(0, ""));
+          keyFromRefTable.insert(std::pair<std::string, size_t>("", 0));
         }
         size_t size() const {
           return refFromKeyTable.size();
@@ -71,7 +76,7 @@ protected:
     };
 
     static StringStorage strStore;
-    uint32_t key;
+    size_t key;
 
     friend std::ostream & operator<<(std::ostream &out, const SharedString & ref);
   public:
@@ -101,6 +106,10 @@ protected:
         return *this;
     }
 
+    size_t getKey() const {
+       return key;
+    }
+
     operator std::string() const {
         return strStore.RefFromKey(key);
     }
@@ -128,4 +137,17 @@ inline std::ostream & operator<<(std::ostream &out, const SharedString & str) {
   return out;
 }
 
-#endif
+
+
+namespace std {
+    template <>
+        class hash<SharedString>{
+        public :  
+            size_t operator()(const SharedString &s ) const
+            {
+                return s.getKey();
+            }
+    };
+};
+#endif 
+

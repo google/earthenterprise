@@ -379,7 +379,7 @@ Clean resource after build
 * Build imagery resource "USGSLanSat_MultiProject"
 * Build imagery project "StatePropagationTest_MultiProject1"
 * Verify that the state of imagery project "StatePropagationTest_MultiProject1" is "Waiting"
-* Verify that the state of imagery project "StatePropagationTest_MultiProject2" is "Succeeded"
+* Verify that the state of imagery project "StatePropagationTest_Database" is "Succeeded"
 * Cancel imagery resource "USGSLanSat_MultiProject"
 * Verify that the state of imagery project "StatePropagationTest_MultiProject1" is "Blocked"
 * Verify that the state of imagery project "StatePropagationTest_MultiProject2" is "Succeeded"
