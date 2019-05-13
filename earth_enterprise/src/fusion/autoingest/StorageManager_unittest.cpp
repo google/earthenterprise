@@ -187,8 +187,25 @@ TEST_F(StorageManagerTest, PurgeCacheWithHandles) {
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
 }
 
+class TestHandleInvalid : public TestHandle {
+  public:
+    virtual bool Valid(const HandleType &) const { return false; }
+    TestHandleInvalid(const AssetKey & name) : TestHandle(name) {}
+};
+
+TEST_F(StorageManagerTest, InvalidItemInCache) {
+  TestHandle invalid = Get<TestHandle>(storageManager, "invalid", false, true, false);
+  ASSERT_EQ(storageManager.CacheSize(), 1) << "Storage manager has wrong number of items in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
+  
+  // Ensure that if we get it again it is reloaded since it's invalid
+  TestHandle invalid2 = Get<TestHandleInvalid>(storageManager, "invalid", false, true, false);
+  ASSERT_EQ(storageManager.CacheSize(), 1) << "Storage manager has wrong number of items in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
+  ASSERT_NE(invalid.handle->val, invalid2.handle->val) << "Did not reload invalid item";
+}
+
 // TODO:
-// invalid
 // abort
 // save dirty to dot new
 
