@@ -205,6 +205,32 @@ TEST_F(StorageManagerTest, InvalidItemInCache) {
   ASSERT_NE(invalid.handle->val, invalid2.handle->val) << "Did not reload invalid item";
 }
 
+TEST_F(StorageManagerTest, Abort) {
+  TestHandle handles[5];
+  handles[0] = Get<TestHandle>(storageManager, "asset0", false, true, false);
+  handles[1] = Get<TestHandle>(storageManager, "asset1", false, true, false);
+  handles[2] = Get<TestHandle>(storageManager, "mutable2", false, true, true);
+  handles[3] = Get<TestHandle>(storageManager, "asset3", false, true, false);
+  handles[4] = Get<TestHandle>(storageManager, "mutable4", false, true, true);
+  ASSERT_EQ(storageManager.CacheSize(), 5) << "Unexpected number of items in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 2) << "Storage manager has wrong number of items in dirty map";
+  
+  // Abort should remove the mutable items but nothing else
+  storageManager.Abort();
+  ASSERT_EQ(storageManager.CacheSize(), 3) << "Unexpected number of items in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has wrong number of items in dirty map";
+  
+  // Try to reload one of the non-dirty items
+  TestHandle notdirty = Get<TestHandle>(storageManager, "asset3", false, true, false);
+  ASSERT_EQ(handles[3].handle->val, notdirty.handle->val) << "Non-dirty item was removed from cache on abort";
+  
+  // Try to reload one of the dirty items
+  TestHandle dirty = Get<TestHandle>(storageManager, "mutable2", false, true, true);
+  ASSERT_NE(handles[2].handle->val, dirty.handle->val) << "Dirty item was not removed from cache on abort";
+  ASSERT_EQ(storageManager.CacheSize(), 4) << "Unexpected number of items in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has wrong number of items in dirty map";
+}
+
 // TODO:
 // abort
 // save dirty to dot new
