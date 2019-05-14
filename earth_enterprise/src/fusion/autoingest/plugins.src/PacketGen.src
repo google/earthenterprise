@@ -207,7 +207,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
            idx != neededIndexes.end(); ++idx) {
         const InsetInfo<ProductAssetVersion> &inset(*extra.insetInfo[*idx]);
-        levInputs.push_back(inset.combinedrp_->GetRef());
+        levInputs.push_back(inset.combinedrp_.Ref());
         levInputVers.push_back(inset.combinedrp_);
         packetLevelConfig.insets.push_back
           (PacketLevelConfig::Inset(inset.dataRPFile,
@@ -304,7 +304,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
           // In these cases we pull directly from the product. It
           // will also happen for the last thing on the stack who
           // hasn't had his blendvers filled in yet.
-          levInputs.push_back(inset.combinedrp_->GetRef());
+          levInputs.push_back(inset.combinedrp_.Ref());
           levInputVers.push_back(inset.combinedrp_);
 
           packetLevelConfig.insets.push_back
@@ -318,7 +318,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
           // It is possible that some of the cached blends are only
           // partially populated. So we pull from both the cached
           // blend and the product
-          levInputs.push_back(inset.combinedrp_->GetRef());
+          levInputs.push_back(inset.combinedrp_.Ref());
           levInputVers.push_back(inset.combinedrp_);
           levInputs.push_back(blendVer.Ref());
           levInputVers.push_back(blendVer);
@@ -348,7 +348,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
           // one above. Maybe later we can put some more smarts
           // here to limit dependencies on the products?
 
-          levInputs.push_back(inset.combinedrp_->GetRef());
+          levInputs.push_back(inset.combinedrp_.Ref());
           levInputVers.push_back(inset.combinedrp_);
           levInputs.push_back(blendVer.Ref());
           levInputVers.push_back(blendVer);
