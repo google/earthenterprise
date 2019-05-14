@@ -4,7 +4,8 @@
 /*.creator.user
 /*.files
 /*.includes
+/*.cflags
+/*.cxxflags
 
 # compiled python
 /**/*.pyc
-
