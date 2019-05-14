@@ -26,17 +26,18 @@ const size_t CACHE_SIZE = 5;
 
 class TestItem : public khRefCounter, public StorageManaged {
  public:
-  TestItem() : val(nextValue++) {}
+  TestItem() : val(nextValue++), saveSucceeds(true) {}
   const int val;
   string savename;
+  bool saveSucceeds;
   const string XMLFilename() {
     stringstream filename;
     filename << val;
     return filename.str();
   }
-  bool Save(const std::string &filename) {
+  virtual bool Save(const std::string &filename) {
     savename = filename;
-    return true;
+    return saveSucceeds;
   }
  private:
   static int nextValue;
@@ -241,8 +242,7 @@ TEST_F(StorageManagerTest, Abort) {
   ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has wrong number of items in dirty map";
 }
 
-TEST_F(StorageManagerTest, SaveDirty) {
-  TestHandle handles[5];
+void getAssetsForDirtyTest(StorageManager<TestItem> & storageManager, TestHandle handles[5]) {
   handles[0] = Get<TestHandle>(storageManager, "asset0", false, true, false);
   handles[1] = Get<TestHandle>(storageManager, "asset1", false, true, false);
   handles[2] = Get<TestHandle>(storageManager, "mutable2", false, true, true);
@@ -250,6 +250,11 @@ TEST_F(StorageManagerTest, SaveDirty) {
   handles[4] = Get<TestHandle>(storageManager, "mutable4", false, true, true);
   ASSERT_EQ(storageManager.CacheSize(), 5) << "Unexpected number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 2) << "Storage manager has wrong number of items in dirty map";
+}
+
+TEST_F(StorageManagerTest, SaveDirty) {
+  TestHandle handles[5];
+  getAssetsForDirtyTest(storageManager, handles);
   
   khFilesTransaction trans;
   storageManager.SaveDirtyToDotNew(trans, nullptr);
@@ -264,10 +269,28 @@ TEST_F(StorageManagerTest, SaveDirty) {
   ASSERT_TRUE(equal(ext.rbegin(), ext.rend(), savename.rbegin())) << "Saved file name must end in .new";
 }
 
-// TODO:
-// save dirty to dot new
-// failed save
-// save with vector of saved items
+TEST_F(StorageManagerTest, SaveDirtyToVector) {
+  TestHandle handles[5];
+  getAssetsForDirtyTest(storageManager, handles);
+  
+  khFilesTransaction trans;
+  vector<AssetKey> saved;
+  storageManager.SaveDirtyToDotNew(trans, &saved);
+  ASSERT_EQ(saved.size(), 2) << "Wrong number of items in saved vector";
+  ASSERT_TRUE(find(saved.begin(), saved.end(), "mutable2") != saved.end()) << "Dirty item missing from saved vector";
+  ASSERT_TRUE(find(saved.begin(), saved.end(), "mutable4") != saved.end()) << "Dirty item missing from saved vector";
+}
+
+TEST_F(StorageManagerTest, FailedSave) {
+  TestHandle item = Get<TestHandle>(storageManager, "item", false, true, true);
+  item.handle->saveSucceeds = false;
+  khFilesTransaction trans;
+  storageManager.SaveDirtyToDotNew(trans, nullptr);
+  ASSERT_EQ(storageManager.CacheSize(), 1) << "Unexpected number of items in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has wrong number of items in dirty map";
+  ASSERT_EQ(trans.NumNew(), 0) << "Transaction should be empty after failed save";
+  ASSERT_EQ(trans.NumDeleted(), 0) << "Wrong number of deleted items in file transaction";
+}
 
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
