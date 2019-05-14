@@ -383,7 +383,8 @@ print $fh <<EOF;
 // ****************************************************************************
 EOF
 
-khMT
+if (@modify_resistant_config_members) {
+
 print $fh <<EOF;
 void ${name}AssetImplD::Modify($formalinputarg
             const khMetaData & meta_,
