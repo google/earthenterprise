@@ -28,6 +28,16 @@ class TestItem : public khRefCounter, public StorageManaged {
  public:
   TestItem() : val(nextValue++) {}
   const int val;
+  string savename;
+  const string XMLFilename() {
+    stringstream filename;
+    filename << val;
+    return filename.str();
+  }
+  bool Save(const std::string &filename) {
+    savename = filename;
+    return true;
+  }
  private:
   static int nextValue;
 };
@@ -231,9 +241,33 @@ TEST_F(StorageManagerTest, Abort) {
   ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has wrong number of items in dirty map";
 }
 
+TEST_F(StorageManagerTest, SaveDirty) {
+  TestHandle handles[5];
+  handles[0] = Get<TestHandle>(storageManager, "asset0", false, true, false);
+  handles[1] = Get<TestHandle>(storageManager, "asset1", false, true, false);
+  handles[2] = Get<TestHandle>(storageManager, "mutable2", false, true, true);
+  handles[3] = Get<TestHandle>(storageManager, "asset3", false, true, false);
+  handles[4] = Get<TestHandle>(storageManager, "mutable4", false, true, true);
+  ASSERT_EQ(storageManager.CacheSize(), 5) << "Unexpected number of items in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 2) << "Storage manager has wrong number of items in dirty map";
+  
+  khFilesTransaction trans;
+  storageManager.SaveDirtyToDotNew(trans, nullptr);
+  ASSERT_EQ(storageManager.CacheSize(), 5) << "Unexpected number of items in cache";
+  ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has wrong number of items in dirty map";
+  ASSERT_EQ(trans.NumNew(), 2) << "Wrong number of new items in file transaction";
+  ASSERT_EQ(trans.NumDeleted(), 0) << "Wrong number of deleted items in file transaction";
+  ASSERT_EQ(handles[0].handle->savename, string()) << "Non-dirty files should not be saved";
+  ASSERT_NE(handles[4].handle->savename, string()) << "Dirty files should be saved";
+  string savename = handles[4].handle->savename;
+  string ext = ".new";
+  ASSERT_TRUE(equal(ext.rbegin(), ext.rend(), savename.rbegin())) << "Saved file name must end in .new";
+}
+
 // TODO:
-// abort
 // save dirty to dot new
+// failed save
+// save with vector of saved items
 
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
