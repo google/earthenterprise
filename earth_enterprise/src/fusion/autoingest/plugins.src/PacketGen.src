@@ -248,7 +248,6 @@ void PacketGenAssetVersionImplD::UpdateChildren(
          (level <= config.endMinifyLevel));
 
       const uint minifySrcLevel = level + 1;
-      bool highestResMinify = (level+1 == config.endMinifyLevel);
 
       // for attribution we care about everybody
       packetLevelConfig.attributions.reserve(neededIndexes.size() + 1);
@@ -313,11 +312,18 @@ void PacketGenAssetVersionImplD::UpdateChildren(
                 inset.alphaRPFile,
                 SharedString(), /* cached blend */
                 SharedString()  /* cached blend alpha */));
-        } else if (highestResMinify) {
-          // This is the first merge (from cached blends)
-          // It is possible that some of the cached blends are only
-          // partially populated. So we pull from both the cached
-          // blend and the product
+        } else {
+          // This covers two cases:
+          // 1) If level+1 == config.endMinifyLevel:
+          //   This is the first merge (from cached blends)
+          //   It is possible that some of the cached blends are only
+          //   partially populated. So we pull from both the cached
+          //   blend and the product.
+          // 2) Otherwise:
+          //   This is a subsequent merge (from cached merges) It's
+          //   possible that earlier merges also short circuited the
+          //   merge with opaque top tiles. So we may need to pull
+          //   from the product too.
           levInputs.push_back(inset.combinedrp_.Ref());
           levInputVers.push_back(inset.combinedrp_);
           levInputs.push_back(blendVer.Ref());
@@ -338,36 +344,6 @@ void PacketGenAssetVersionImplD::UpdateChildren(
                 blendVer.Ref(), /* cached blend */
                 cache_alpha_exist ?
                     blendVer.Ref() : SharedString() /* cached blend alpha */));
-        } else {
-          // This is a subsequent merge (from cached merges) It's
-          // possible that earlier merges also short circuited the
-          // merge with opaque top tiles. So we may need to pull
-          // from the product too.
-
-          // NOTE: For now this case should be identical to the
-          // one above. Maybe later we can put some more smarts
-          // here to limit dependencies on the products?
-
-          levInputs.push_back(inset.combinedrp_.Ref());
-          levInputVers.push_back(inset.combinedrp_);
-          levInputs.push_back(blendVer.Ref());
-          levInputVers.push_back(blendVer);
-
-          // Note: Before creating a merge inset, we check if the cached alpha
-          // blend directory exists for the asset since in GEE-5.x we need to
-          // pick up the GEE-4.x Imagery/Terrain Projects (the PacketLevel
-          // assets) that have no alpha blend cached.
-          const std::string cache_alpha_path =
-              blendVer->GetOutputFilename(0) + "/cache_alpha.pack";
-          const bool cache_alpha_exist = khExists(cache_alpha_path);
-
-          packetLevelConfig.insets.push_back
-            (PacketLevelConfig::Inset(
-                inset.dataRPFile,
-                inset.alphaRPFile,
-                blendVer.Ref(), /* cached blend */
-                cache_alpha_exist ?
-                    blendVer.Ref() : SharedString()  /* cached blend alpha */));
         }
       }
 
