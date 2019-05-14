@@ -305,7 +305,7 @@ ${name}Factory::ReuseOrMakeAndUpdate(
             ${name}AssetVersionD version(*v);
             // Load an asset version without caching since we may not need it
             // (offline, obsolete and so on).
-            version.BindNoCache();
+            version.LoadAsTemporary();
             if ((version->state != AssetDefs::Offline) &&
                 (version->inputs == boundInputs) &&
                 ::IsUpToDate(config_, version->config)) {
@@ -325,14 +325,14 @@ ${name}Factory::ReuseOrMakeAndUpdate(
                     notify(NFY_NOTICE, "             %s", iv->c_str());
                 }
 #endif
-                // Add the assetversion object to cache.
-                version.CacheAdd();
+                // Tell the storage manager that we're going to use this
+                // version again.
+                version.MakePermanent();
 
                 return version;
             } else {
-              // Remove from cache the assetversion object we don't need
-              // (offline, obsolete, and so on).
-              version.CacheRemove();
+              // Tell the storage manager we don't need this one any more.
+              version.NoLongerNeeded();
             }
         }
         asset->Modify($forwardinputarg meta_, config_);

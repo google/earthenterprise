@@ -66,7 +66,6 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   };
 
   static khRefGuard<AssetVersionImplD> Load(const std::string &boundref);
-  virtual bool Save(const std::string &filename) const = 0;
 
   bool NeedComputeState(void) const {
     if (state & (AssetDefs::Bad |
