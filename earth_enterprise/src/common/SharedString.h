@@ -128,4 +128,8 @@ inline std::ostream & operator<<(std::ostream &out, const SharedString & str) {
   return out;
 }
 
+inline std::string ToString(const SharedString & str) {
+  return str.toString();
+}
+
 #endif
