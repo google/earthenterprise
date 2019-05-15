@@ -330,7 +330,7 @@ class MTVector : public std::vector<T>{
       khReadGuard lock(mtx);
       bool loopedThroughAll = true;
       for (uint i = 0; i < Base::size(); ++i) {
-        if (!func(this[i])) {
+        if (!func(operator [] (i))) {
           loopedThroughAll = false;
           break;
         }
