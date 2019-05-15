@@ -155,7 +155,9 @@ std::string getAttribute(DOMNode * child, const std::string & name) {
 }
 
 int getValue(DOMNode * child) {
-  const XMLCh * value = child->getFirstChild()->getNodeValue();
+  DOMNode * grandchild = child->getFirstChild();
+  if (!grandchild) return -2;
+  const XMLCh * value = grandchild->getNodeValue();
   if (!value) return -1;
   string valStr = FromXMLStr(value);
   return stoi(valStr);
