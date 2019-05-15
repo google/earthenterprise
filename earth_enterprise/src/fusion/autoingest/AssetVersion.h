@@ -192,7 +192,8 @@ template <>
 inline khCache<SharedString, AssetVersion::HandleType>&
 AssetVersion::cache(void) {
   static khCache<SharedString, AssetVersion::HandleType>
-    instance(MiscConfig::Instance().VersionCacheSize);
+    instance(MiscConfig::Instance().MaxVersionCacheSize);
+    //instance(MiscConfig::Instance().VersionCacheSize);
   return instance;
 }
 
@@ -230,6 +231,7 @@ inline void AssetVersion::DoBind<1>(const std::string &boundref,
       // The file has changed on disk.
 
       // Drop the current entry from the cache.
+      //notify(NFY_WARN, "VERSION REMOVE: %s", Impl::XMLFilename(boundVerRef).c_str());
       cache().Remove(boundref, false);  // Don't prune, the Add() will.
 
       // Will succeed, generate stub, or throw exception.
@@ -243,6 +245,7 @@ inline void AssetVersion::DoBind<1>(const std::string &boundref,
 
   // Add it to the cache.
   if (addToCache)
+    //notify(NFY_WARN, "VERSION ADD: %s", Impl::XMLFilename(boundVerRef).c_str());
     cache().Add(boundref, entry);
 
   // Used by derived class to mark dirty.

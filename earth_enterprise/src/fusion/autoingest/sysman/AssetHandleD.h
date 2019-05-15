@@ -316,6 +316,7 @@ protected:
       this->ref = this->handle->GetRef();
 
       // add it to the cache
+      //notify(NFY_WARN, "Mutable Add");
       this->cache().Add(this->ref, this->handle);
 
       // add it to the dirty list - since it just sprang into existence

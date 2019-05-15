@@ -26,7 +26,8 @@ class MiscConfigStorage {
   uint        AssetCacheSize = uint(128000);
   uint        VersionCacheSize = uint(128000);
 
-  uint        MaxMemoryUtilization = uint(90);
+  uint        MaxAssetCacheSize = uint(1073741824);
+  uint        MaxVersionCacheSize = uint(1073741824);
 
   bool        LimitMemoryUtilization = false;
 
