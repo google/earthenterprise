@@ -318,6 +318,7 @@ class MTVector : public std::vector<T>{
       Base::shrink_to_fit();
     }
     
+    
     void doForEach(std::function<void (const T&)> func) const {
       if (!func) return; // can't do anyting with an invalid function
       khReadGuard lock(mtx);
@@ -328,8 +329,8 @@ class MTVector : public std::vector<T>{
       if (!func) return false; // can't do anyting with an invalid function
       khReadGuard lock(mtx);
       bool loopedThroughAll = true;
-      for (const auto& v : this) {
-        if (!func(v)) {
+      for (uint i = 0; i < this.size(); ++i) {
+        if (!func(this[i])) {
           loopedThroughAll = false;
           break;
         }
