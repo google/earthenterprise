@@ -329,7 +329,7 @@ class MTVector : public std::vector<T>{
       if (!func) return false; // can't do anyting with an invalid function
       khReadGuard lock(mtx);
       bool loopedThroughAll = true;
-      for (uint i = 0; i < this.size(); ++i) {
+      for (uint i = 0; i < Base::size(); ++i) {
         if (!func(this[i])) {
           loopedThroughAll = false;
           break;
