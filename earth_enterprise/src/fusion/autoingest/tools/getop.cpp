@@ -224,13 +224,13 @@ main(int argc, char *argv[])
         }
 
         outline("");
-        if (MiscConfig::Instance().LimitMemoryUtilization && (taskLists.memory_usage != 0)) {
-          outline("System memory utilization: %u%%", taskLists.memory_usage);
-        }
         outline("Number of cached assets: %u", taskLists.num_assets_cached);
         outline("Number of cached asset versions: %u",
                 taskLists.num_assetversions_cached);
         outline("Number of strings cached: %u", taskLists.str_store_size);
+        outline("Total size of asset cache: %lu", taskLists.asset_cache_size);
+        outline("Total size of asset version cache: %lu",
+                taskLists.version_cache_size);
 
       }
       sleep(delay);

@@ -83,6 +83,7 @@ class khCache {
   bool verbose;
 #endif
   uint numItems;
+  uint64 cacheFileSize;
 
   bool InList(Item *item) {
     Item *tmp = head;
@@ -166,6 +167,7 @@ class khCache {
   typedef typename MapType::size_type size_type;
   size_type size(void) const { return map.size(); }
   size_type capacity(void) const { return targetMax; }
+  uint64 objectsizes(void) const { return cacheFileSize; }
 
   khCache(uint targetMax_
 #ifdef SUPPORT_VERBOSE
@@ -175,7 +177,7 @@ class khCache {
 #ifdef SUPPORT_VERBOSE
               verbose(verbose_),
 #endif
-              numItems(0)
+              numItems(0), cacheFileSize(0)
 
   {
     CheckListInvariant();
@@ -193,6 +195,7 @@ class khCache {
     }
     map.clear();
     head = tail = 0;
+    cacheFileSize = 0;
   }
   void Add(const Key &key, const Value &val, bool prune = true) {
     CheckListInvariant();
@@ -200,17 +203,23 @@ class khCache {
     // delete any previous item
     Item *item = FindItem(key);
     if (item) {
+      //notify(NFY_WARN, "Size of old item: %lu", sizeof(item));
       Unlink(item);
 #ifdef SUPPORT_VERBOSE
       if (verbose) notify(NFY_ALWAYS, "Deleting previous %s from cache", key.c_str());
 #endif
       delete item;
+      cacheFileSize -= sizeof(item);
+      //notify(NFY_WARN, "Cache updated before add: %lu", cacheFileSize);
     }
 
     // make a new item, link it in and add to map
     item = new Item(key, val);
+    cacheFileSize += sizeof(item);
+    //notify(NFY_WARN, "Size of new item: %lu", sizeof(item));
     Link(item);
     map[key] = item;
+    //notify(NFY_WARN, "Cache updated after add: %lu", cacheFileSize);
 #ifdef SUPPORT_VERBOSE
     if (verbose) notify(NFY_ALWAYS, "Adding %s to cache", key.c_str());
 #endif
@@ -227,6 +236,7 @@ class khCache {
     CheckListInvariant();
 
     Item *item = FindItem(key);
+    //notify(NFY_WARN, "Size of remove item: %lu", sizeof(item));
     if (item) {
       Unlink(item);
       map.erase(key);
@@ -234,6 +244,8 @@ class khCache {
       if (verbose) notify(NFY_ALWAYS, "Removing %s from cache", key.c_str());
 #endif
       delete item;
+      cacheFileSize -= sizeof(item);
+      //notify(NFY_WARN, "Cache updated after remove: %lu", cacheFileSize);
     }
 
     CheckListInvariant();
@@ -263,32 +275,27 @@ class khCache {
   void Prune(void) {
     CheckListInvariant();
     Item *item = tail;
-    uint memoryUsed;
-    CalculateMemoryUsage();
-    memoryUsed = ReadFromMemFile();
-    notify(NFY_WARN, "Begin: %u%%", memoryUsed);
-    while (item && ((map.size() > targetMax) 
-    || (MiscConfig::Instance().LimitMemoryUtilization && (memoryUsed > MiscConfig::Instance().MaxMemoryUtilization)))) {
+    notify(NFY_WARN, "Size of prune item: %lu", sizeof(item));
+    while (item && ( cacheFileSize > targetMax )/*(map.size() > targetMax)*/) {
       // Note: this refcount() > 1 check is safe even with
       // khMTRefCounter based guards. See explanaition with the
       // definition of khMTRefCounter in khMTTypes.h.
       while (item && (item->val.refcount() > 1)) {
+        //notify(NFY_WARN, "refcount: %d", item->val.refcount());
         item = item->prev;
       }
       if (item) {
         Item *tokill = item;
         item = item->prev;
+        //notify(NFY_WARN, "ToKill: %s", typeid(tokill->val).name());
         Unlink(tokill);
         map.erase(tokill->key);
 #ifdef SUPPORT_VERBOSE
         if (verbose) notify(NFY_ALWAYS, "Pruning %s from cache", tokill->key.c_str());
 #endif
         delete tokill;
-      }
-      if (MiscConfig::Instance().LimitMemoryUtilization) {
-        CalculateMemoryUsage();
-        memoryUsed = ReadFromMemFile();
-        notify(NFY_WARN, "Update: %u%%", memoryUsed);
+        cacheFileSize -= sizeof(item);
+        notify(NFY_WARN, "Cache updated after prune: %lu", cacheFileSize);
       }
     }
     CheckListInvariant();
