@@ -145,12 +145,19 @@ TEST_F(KhxmlTest, WriteInvalidDocument) {
 
 std::string getAttribute(DOMNode * child, const std::string & name) {
   DOMNamedNodeMap * attributes = child->getAttributes();
+  if (!attributes) return "no attributes";
+  if (attributes->getLength() != 1) return "wrong length";
   DOMNode * attr = attributes->getNamedItem(ToXMLStr(name));
-  return FromXMLStr(attr->getNodeValue());
+  if (!attr) return "missing attribute";
+  const XMLCh * value = attr->getNodeValue();
+  if (!value) return "no value";
+  return FromXMLStr(value);
 }
 
 int getValue(DOMNode * child) {
-  string valStr = FromXMLStr(child->getNodeValue());
+  const XMLCh * value = child->getFirstChild()->getNodeValue();
+  if (!value) return -1;
+  string valStr = FromXMLStr(value);
   return stoi(valStr);
 }
 
