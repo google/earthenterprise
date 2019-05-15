@@ -296,6 +296,7 @@ class khCache {
         delete tokill;
         cacheFileSize -= sizeof(item);
         //notify(NFY_WARN, "Cache updated after prune: %lu", cacheFileSize);
+        //
       }
     }
     CheckListInvariant();
