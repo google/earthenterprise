@@ -16,6 +16,7 @@
 #include <sys/stat.h>
 #include <cstdlib>
 #include <fstream>
+#include <map>
 #include <memory>
 #include <sstream>
 #include <string>
@@ -140,6 +141,167 @@ TEST_F(KhxmlTest, WriteInvalidDocument) {
   unique_ptr<GEDocument> doc = getInvalidDocument();
   bool status = WriteDocument(doc.get(), TEST_DIR + "writeinvaliddocument.xml");
   ASSERT_FALSE(status) << "Writing an invalid document to a file should fail";
+}
+
+std::string getAttribute(DOMElement * elem, const std::string & name) {
+  return FromXMLStr(elem->getAttribute(ToXMLStr(name)));
+}
+
+int getValue(DOMElement * elem) {
+  DOMNode * valNode = elem->getFirstChild();
+  string valStr = FromXMLStr(((khxml::DOMText*)valNode)->getData());
+  return stoi(valStr);
+}
+
+template <class String>
+void fromStringMapTest() {
+  map<String, int> stringMap;
+  stringMap["abc"] = 1;
+  stringMap["def"] = 10;
+  stringMap["ghi"] = 3;
+  unique_ptr<GEDocument> doc = CreateEmptyDocument("test");
+  DOMElement * elem = doc->getDocumentElement();
+  AddElement(elem, "data", stringMap);
+  elem = elem->getFirstElementChild();
+  ASSERT_EQ(FromXMLStr(elem->getTagName()), "data") << "Invalid parent element when writing map of strings";
+  elem = elem->getFirstElementChild();
+  ASSERT_EQ(FromXMLStr(elem->getTagName()), "item") << "Invalid parent element when writing map of strings";
+  ASSERT_EQ(getAttribute(elem, "key"), "abc") << "Invalid key when writing map of strings";
+  ASSERT_EQ(getValue(elem), 1) << "Invalid value when writing map of strings";
+  elem = elem->getNextElementSibling();
+  ASSERT_EQ(FromXMLStr(elem->getTagName()), "item") << "Invalid parent element when writing map of strings";
+  ASSERT_EQ(getAttribute(elem, "key"), "def") << "Invalid key when writing map of strings";
+  ASSERT_EQ(getValue(elem), 10) << "Invalid value when writing map of strings";
+  elem = elem->getNextElementSibling();
+  ASSERT_EQ(FromXMLStr(elem->getTagName()), "item") << "Invalid parent element when writing map of strings";
+  ASSERT_EQ(getAttribute(elem, "key"), "ghi") << "Invalid key when writing map of strings";
+  ASSERT_EQ(getValue(elem), 3) << "Invalid value when writing map of strings";
+  elem = elem->getNextElementSibling();
+  ASSERT_EQ(elem, nullptr) << "Unexpected element";
+}
+
+TEST_F(KhxmlTest, StdStringMapToElement) {
+  fromStringMapTest<string>();
+}
+
+TEST_F(KhxmlTest, SharedStringMapToElement) {
+  fromStringMapTest<SharedString>();
+}
+
+TEST_F(KhxmlTest, QStringMapToElement) {
+  fromStringMapTest<QString>();
+}
+
+template <class String>
+void toStringTest() {
+  string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n"
+      "<test>expected_value</test>";
+  unique_ptr<GEDocument> doc = ReadDocumentFromString(xml, "dummy");
+  DOMElement * elem = doc->getDocumentElement();
+  ASSERT_EQ(FromXMLStr(elem->getTagName()), "test") << "Invalid tag name when reading string from XML";
+  String value;
+  FromElement(elem, value);
+  ASSERT_EQ(value, "expected_value") << "Could not read string value from XML correctly";
+}
+
+TEST_F(KhxmlTest, StdStringReadString) {
+  toStringTest<string>();
+}
+
+TEST_F(KhxmlTest, SharedStringReadString) {
+  toStringTest<SharedString>();
+}
+
+TEST_F(KhxmlTest, QStringReadString) {
+  toStringTest<QString>();
+}
+
+template <class String>
+void runXmlToStringMapTest(const std::string & xml) {
+  unique_ptr<GEDocument> doc = ReadDocumentFromString(xml, "dummy");
+  DOMElement * elem = doc->getDocumentElement();
+  ASSERT_EQ(FromXMLStr(elem->getTagName()), "data") << "Invalid tag name when reading string from XML";
+  map<String, int> results;
+  FromElement(elem, results);
+  ASSERT_EQ(results["xyz"], 42) << "Error reading map of strings from XML";
+  ASSERT_EQ(results["wvu"], 12) << "Error reading map of strings from XML";
+}
+
+template <class String>
+void toStringMapTest() {
+  // There are two methods of parsing maps from XML. We test both.
+  string newxml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n"
+      "<data>\n"
+         "<item key=\"xyz\">42</item>\n"
+         "<item key=\"wvu\">12</item>\n"
+      "</data>\n";
+  runXmlToStringMapTest<String>(newxml);
+  string oldxml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n"
+      "<data>\n"
+        "<xyz>42</xyz>\n"
+        "<wvu>12</wvu>\n"
+      "</data>\n";
+  runXmlToStringMapTest<String>(oldxml);
+}
+
+TEST_F(KhxmlTest, StdStringReadMap) {
+  toStringMapTest<string>();
+}
+
+TEST_F(KhxmlTest, SharedStringReadMap) {
+  toStringMapTest<SharedString>();
+}
+
+TEST_F(KhxmlTest, QStringReadMap) {
+  toStringMapTest<QString>();
+}
+
+template <class String>
+void readEmptyStringFromXml() {
+  string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n"
+      "<value></value>\n";
+  unique_ptr<GEDocument> doc = ReadDocumentFromString(xml, "dummy");
+  DOMElement * elem = doc->getDocumentElement();
+  ASSERT_EQ(FromXMLStr(elem->getTagName()), "value") << "Invalid tag name when reading empty string from XML";
+  String val;
+  FromElement(elem, val);
+  ASSERT_EQ(val, String("")) << "Error reading empty string from XML";
+}
+
+TEST_F(KhxmlTest, StdStringReadEmpty) {
+  readEmptyStringFromXml<string>();
+}
+
+TEST_F(KhxmlTest, SharedStringReadEmpty) {
+  readEmptyStringFromXml<SharedString>();
+}
+
+TEST_F(KhxmlTest, QStringReadEmpty) {
+  readEmptyStringFromXml<QString>();
+}
+
+template <class String>
+void readNonEmptyStringFromXml() {
+  string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n"
+      "<value>qwertyuiop</value>\n";
+  unique_ptr<GEDocument> doc = ReadDocumentFromString(xml, "dummy");
+  DOMElement * elem = doc->getDocumentElement();
+  ASSERT_EQ(FromXMLStr(elem->getTagName()), "value") << "Invalid tag name when reading empty string from XML";
+  String val;
+  FromElement(elem, val);
+  ASSERT_EQ(val, String("qwertyuiop")) << "Error reading empty string from XML";
+}
+
+TEST_F(KhxmlTest, StdStringReadNonEmpty) {
+  readNonEmptyStringFromXml<string>();
+}
+
+TEST_F(KhxmlTest, SharedStringReadNonEmpty) {
+  readNonEmptyStringFromXml<SharedString>();
+}
+
+TEST_F(KhxmlTest, QStringReadNonEmpty) {
+  readNonEmptyStringFromXml<QString>();
 }
 
 int main(int argc, char** argv)
