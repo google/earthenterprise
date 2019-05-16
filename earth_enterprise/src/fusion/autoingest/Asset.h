@@ -39,9 +39,11 @@
 class AssetImpl : public khRefCounter, public AssetStorage, public StorageManaged {
   friend class AssetHandle_<AssetImpl>;
 
-  // private and unimplemented -- illegal to copy an AssetImpl
-  AssetImpl(const AssetImpl&);
-  AssetImpl& operator=(const AssetImpl&);
+  // Illegal to copy an AssetImpl
+  AssetImpl(const AssetImpl&) = delete;
+  AssetImpl& operator=(const AssetImpl&) = delete;
+  AssetImpl(const AssetImpl&&) = delete;
+  AssetImpl& operator=(const AssetImpl&&) = delete;
 
  protected:
   // used by my intermediate derived classes since their calls to

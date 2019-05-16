@@ -43,9 +43,11 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
   friend class AssetImpl;
   friend class AssetHandle_<AssetVersionImpl>;
 
-  // private and unimplemented -- illegal to copy an AssetVersionImpl
-  AssetVersionImpl(const AssetVersionImpl&);
-  AssetVersionImpl& operator=(const AssetVersionImpl&);
+  // Illegal to copy an AssetVersionImpl
+  AssetVersionImpl(const AssetVersionImpl&) = delete;
+  AssetVersionImpl& operator=(const AssetVersionImpl&) = delete;
+  AssetVersionImpl(const AssetVersionImpl&&) = delete;
+  AssetVersionImpl& operator=(const AssetVersionImpl&&) = delete;
 
  public:
   std::string XMLFilename() const { return XMLFilename(GetRef()); }
