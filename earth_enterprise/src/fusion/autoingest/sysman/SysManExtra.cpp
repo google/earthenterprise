@@ -16,12 +16,10 @@
 #include <AssetThrowPolicy.h>
 #include <Asset.h>
 #include <AssetVersion.h>
+#include "StorageManager.h"
 
 
-template <>
-const bool AssetHandle_<AssetImpl>::check_timestamps(false);
-
-template <>
-const bool AssetHandle_<AssetVersionImpl>::check_timestamps(false);
+template<> const bool StorageManager<AssetImpl>::check_timestamps(false);
+template<> const bool StorageManager<AssetVersionImpl>::check_timestamps(false);
 
 bool AssetThrowPolicy::allow_throw(true);
