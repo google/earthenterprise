@@ -61,6 +61,7 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
 
   virtual bool Save(const std::string &filename) const {
     assert(false); // Can only save from sub-classes
+    return false;
   };
 
   std::string WorkingFilename(const std::string &fname) const {
