@@ -65,7 +65,6 @@ class khCacheItem {
       : next(0), prev(0), key(key_), val(val_) { }
 };
 
-// #define CHECK_INVARIANTS
 
 // TODO: rework this to use khLRUCache
 
@@ -177,14 +176,14 @@ class khCache {
               numItems(0)
 
   {
-    CheckListInvariant();
+    
   }
   ~khCache(void) {
     clear();
   }
   void clear(void) {
     std::lock_guard<std::recursive_mutex> lock(mtx);
-    CheckListInvariant();
+
     // Delete all the items.
     for (typename MapType::iterator i = map.begin(); i != map.end(); ++i) {
       assert(i->second);
@@ -196,7 +195,7 @@ class khCache {
   }
   void Add(const Key &key, const Value &val, bool prune = true) {
     std::lock_guard<std::recursive_mutex> lock(mtx);
-    CheckListInvariant();
+    
 
     // delete any previous item
     Item *item = FindItem(key);
@@ -216,7 +215,7 @@ class khCache {
     if (verbose) notify(NFY_ALWAYS, "Adding %s to cache", key.c_str());
 #endif
 
-    CheckListInvariant();
+    
 
     // prune old items to maintain max size
     if (prune) {
@@ -226,7 +225,7 @@ class khCache {
 
   void Remove(const Key &key, bool prune = true) {
     std::lock_guard<std::recursive_mutex> lock(mtx);
-    CheckListInvariant();
+    
 
     Item *item = FindItem(key);
     if (item) {
@@ -238,7 +237,7 @@ class khCache {
       delete item;
     }
 
-    CheckListInvariant();
+    
 
     // prune old items to maintain max size
     if (prune) {
@@ -254,7 +253,7 @@ class khCache {
       Unlink(item);
       Link(item);
 
-      CheckListInvariant();
+      
 
       val = item->val;
       return true;
@@ -265,7 +264,7 @@ class khCache {
 
   void Prune(void) {
     std::lock_guard<std::recursive_mutex> lock(mtx);
-    CheckListInvariant();
+    
     Item *item = tail;
     while (item && (map.size() > targetMax)) {
       // Note: this refcount() > 1 check is safe even with
@@ -285,7 +284,7 @@ class khCache {
         delete tokill;
       }
     }
-    CheckListInvariant();
+    
   }
 
   // Get old items from the LRU cache, excluding recent "toKeep" items.

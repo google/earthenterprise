@@ -263,6 +263,8 @@ template <typename T>
 class MTVector : public std::vector<T>{
   public:
     typedef std::vector<T> Base;
+    using Base::begin;
+    using Base::end;
     typedef typename Base::const_iterator const_iterator;
 
   private:
@@ -304,12 +306,12 @@ class MTVector : public std::vector<T>{
     }
 
     size_t size(void) const {
-      khWriteGuard lock(mtx);
+      khReadGuard lock(mtx);
       return Base::size();
     }
 
     bool empty(void) const {
-      khWriteGuard lock(mtx);
+      khReadGuard lock(mtx);
       return Base::empty();
     }
 
@@ -322,34 +324,20 @@ class MTVector : public std::vector<T>{
     void doForEach(std::function<void (const T&)> func) const {
       if (!func) return; // can't do anyting with an invalid function
       khReadGuard lock(mtx);
-      for_each(Base::begin(), Base::end(), func);
+      for_each(begin(), end(), func);
     }
 
     bool doForEachUntil(std::function<bool (const T&)> func) const {
       if (!func) return false; // can't do anyting with an invalid function
       khReadGuard lock(mtx);
       bool loopedThroughAll = true;
-      for (uint i = 0; i < Base::size(); ++i) {
-        if (!func(operator [] (i))) {
+      for (const auto& v : *this) {
+        if (!func(v)) {
           loopedThroughAll = false;
           break;
         }
       }
       return loopedThroughAll;
-    }
-
-// The remaining methods are bad news but are currently needed to compile
-    operator const Base&(void) const {
-      return this;
-    }
-    operator const Base*(void) const {
-      return &this;
-    }
-    operator  Base&(void) {
-      return this;
-    }
-    operator  Base*(void) {
-      return &this;
     }
 };
 
