@@ -31,7 +31,6 @@
 #include "common/khFileUtils.h"
 #include "common/performancelogger.h"
 #include "fusion/config/gefConfigUtil.h"
-#include "common/MemoryMonitor.h"
 
 // ****************************************************************************
 // ***  global instances
