@@ -1088,7 +1088,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     curTime = std::chrono::high_resolution_clock::now();
     timeDiff = std::chrono::duration<double>(curTime - prevTime);
     notify(NFY_INFO2, "BuildIndex finished compiling %lu needed indices for inset %d - %f seconds elapsed",
-           neededIndexes.size(), i, timeDiff.count());
+           neededIndexes.size(), i+1, timeDiff.count());
     prevTime = curTime;
 
     // calculate the level range that will be minified
@@ -1138,7 +1138,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     curTime = std::chrono::high_resolution_clock::now();
     timeDiff = std::chrono::duration<double>(curTime - prevTime);
     notify(NFY_INFO2, "BuildIndex finished nested loop for inset %d - %f seconds elapsed",
-           i, timeDiff.count());
+           i+1, timeDiff.count());
     prevTime = curTime;
 
     // Build a PacketGenExtraUpdateArg
