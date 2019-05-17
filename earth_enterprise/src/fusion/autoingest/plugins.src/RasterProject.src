@@ -1183,8 +1183,6 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   notify(NFY_INFO2, "BuildIndex finished looping through insets - %f seconds elapsed",
          timeDiff.count());
 
-assert(false);  // TEMP DEBUG assert: bail out before we start writing the files
-
   // Make index subasset (RasterGEIndex).
   return MakeIndexSubAsset(packgenkids, packgenassets, packgenvers, genInfo, date);
 }
