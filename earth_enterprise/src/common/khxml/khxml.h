@@ -132,6 +132,8 @@ class GEXMLObject {
     const static std::string BLOCK_SIZE;
     const static std::string PURGE;
     const static std::string PURGE_LEVEL;
+    // The DEALLOCATE_ALL option does nothing now, but it is still accepted for
+    // backwards compatibility.
     const static std::string DEALLOCATE_ALL;
     const static std::string XMLConfigFile;
     const static std::array<std::string,6> options;
@@ -143,7 +145,6 @@ class GEXMLObject {
     static bool doPurge;
     static int purgeLevel;
     static XMLSize_t purgeThreshold;
-    static bool deallocateAll;
     static bool xercesInitialized;
 
     static uint32_t activeObjects;
