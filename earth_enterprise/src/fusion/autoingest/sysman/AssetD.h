@@ -34,7 +34,6 @@ class AssetImplD : public virtual AssetImpl
   AssetImplD& operator=(const AssetImplD&);
  protected:
   static khRefGuard<AssetImplD> Load(const std::string &boundref);
-  virtual bool Save(const std::string &filename) const = 0;
 
   AssetImplD(void) : AssetImpl() { }
   AssetImplD(const AssetStorage &storage)

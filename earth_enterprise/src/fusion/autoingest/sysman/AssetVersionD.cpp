@@ -127,13 +127,6 @@ AssetVersionImplD::StateChangeNotifier::NotifyListeners(
 }
 
 // ****************************************************************************
-// ***  MutableAssetVersionD
-// ****************************************************************************
-template <>
-MutableAssetVersionD::DirtyMap MutableAssetVersionD::dirtyMap = MutableAssetVersionD::DirtyMap();
-
-
-// ****************************************************************************
 // ***  AssetVersionImplD
 // ****************************************************************************
 khRefGuard<AssetVersionImplD>
