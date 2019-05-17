@@ -91,41 +91,7 @@ class khCache {
     }
     return false;
   }
-  void CheckListInvariant(void) {
-#ifdef CHECK_INVARIANTS
-    assert(numItems == map.size());
-    if (!numItems) {
-      assert(!head);
-      assert(!tail);
-      return;
-    }
-
-    assert(head);
-    assert(tail);
-
-    // check forward links
-    Item *tmp = head;
-    while (tmp) {
-      if (!tmp->next)
-        assert(tmp == tail);
-      tmp = tmp->next;
-    }
-
-    // check reverse links
-    tmp = tail;
-    while (tmp) {
-      if (!tmp->prev)
-        assert(tmp == head);
-      tmp = tmp->prev;
-    }
-
-    // check map contents
-    for (typename MapType::const_iterator i = map.begin();
-         i != map.end(); ++i) {
-      assert(InList(i->second));
-    }
-#endif
-  }
+ 
   void Link(Item *item) {
     assert(item->next == 0);
     assert(item->prev == 0);

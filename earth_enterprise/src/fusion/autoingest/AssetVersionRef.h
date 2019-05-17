@@ -34,7 +34,6 @@ class AssetVersionRef {
   AssetVersionRef(const std::string &ref_);
   AssetVersionRef(const SharedString &ref_);
   AssetVersionRef(const SharedString &ref_, uint vernum);
-  AssetVersionRef(const SharedString &ref,  const std::string &version_);
   AssetVersionRef& operator=(const std::string &ref) {
     return (*this = AssetVersionRef(ref));
   }

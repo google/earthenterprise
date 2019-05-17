@@ -128,10 +128,10 @@ class khRWLock
   private:
     pthread_rwlock_t rwlock;
   public:
-    khRWLock() : rwlock(PTHREAD_RWLOCK_INITIALIZER) { }
+    khRWLock() { pthread_rwlock_init(&rwlock,NULL); }
     virtual ~khRWLock() {}
     void lockRead(void) { pthread_rwlock_rdlock(&rwlock); }
-    void lockWrite(void) {  pthread_rwlock_wrlock(&rwlock); }
+    void lockWrite(void) { pthread_rwlock_wrlock(&rwlock); }
     void unlock(void) { pthread_rwlock_unlock(&rwlock); }
 };
 
