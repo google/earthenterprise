@@ -27,7 +27,8 @@
 #endif
 
 #include "fusion/autoingest/MiscConfig.h"
-#include "MemoryMonitor.h"
+#include <typeinfo>
+#include <string.h>
 
 /******************************************************************************
  ***  Simple cache of refcounted objects
@@ -209,16 +210,24 @@ class khCache {
       if (verbose) notify(NFY_ALWAYS, "Deleting previous %s from cache", key.c_str());
 #endif
       delete item;
-      cacheFileSize -= sizeof(item);
+      cacheFileSize -= sizeof(item) + sizeof(*item) + sizeof(item->key) + sizeof(item->val) 
+    + sizeof(item->prev) + sizeof(*(item->prev)) + sizeof(item->next) + sizeof(*(item->next));
       //notify(NFY_WARN, "Cache updated before add: %lu", cacheFileSize);
     }
 
     // make a new item, link it in and add to map
     item = new Item(key, val);
-    cacheFileSize += sizeof(item);
-    //notify(NFY_WARN, "Size of new item: %lu", sizeof(item));
+    cacheFileSize += sizeof(item) + sizeof(*item) + sizeof(item->key) + sizeof(item->val) 
+    + sizeof(item->prev) + sizeof(*(item->prev)) + sizeof(item->next) + sizeof(*(item->next));
+    //notify(NFY_WARN, "New Item: %s %lu", typeid(item).name(), sizeof(item));
+    notify(NFY_WARN, "item: %s %lu %s %lu", typeid(item).name(), sizeof(item), typeid(*item).name(), sizeof(*item));
+    notify(NFY_WARN, "item->key: %s %lu", typeid((item->key)).name(), sizeof(item->key));
+    notify(NFY_WARN, "item->val: %s %lu", typeid(item->val).name(), sizeof(item->val));
+    notify(NFY_WARN, "item->prev: %s %lu %s %lu", typeid(item->prev).name(), sizeof(item->prev), typeid(*(item->prev)).name(), sizeof(*(item->prev)));
+    notify(NFY_WARN, "item->next: %s %lu %s %lu", typeid(item->next).name(), sizeof(item->next), typeid(*(item->next)).name(), sizeof(*(item->next)));
     Link(item);
     map[key] = item;
+    notify(NFY_WARN, "Map Size: %lu", sizeof(map));
     //notify(NFY_WARN, "Cache updated after add: %lu", cacheFileSize);
 #ifdef SUPPORT_VERBOSE
     if (verbose) notify(NFY_ALWAYS, "Adding %s to cache", key.c_str());
@@ -244,7 +253,8 @@ class khCache {
       if (verbose) notify(NFY_ALWAYS, "Removing %s from cache", key.c_str());
 #endif
       delete item;
-      cacheFileSize -= sizeof(item);
+      cacheFileSize -= sizeof(item) + sizeof(*item) + sizeof(item->key) + sizeof(item->val) 
+    + sizeof(item->prev) + sizeof(*(item->prev)) + sizeof(item->next) + sizeof(*(item->next));
       //notify(NFY_WARN, "Cache updated after remove: %lu", cacheFileSize);
     }
 
@@ -294,9 +304,9 @@ class khCache {
         if (verbose) notify(NFY_ALWAYS, "Pruning %s from cache", tokill->key.c_str());
 #endif
         delete tokill;
-        cacheFileSize -= sizeof(item);
+        cacheFileSize -= sizeof(item) + sizeof(*item) + sizeof(item->key) + sizeof(item->val) 
+    + sizeof(item->prev) + sizeof(*(item->prev)) + sizeof(item->next) + sizeof(*(item->next));
         //notify(NFY_WARN, "Cache updated after prune: %lu", cacheFileSize);
-        //
       }
     }
     CheckListInvariant();

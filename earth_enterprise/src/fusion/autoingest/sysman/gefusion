@@ -286,8 +286,6 @@ stop() {
         stop_daemon gesystemmanager "Fusion System Manager" "$1" || return_code=1
     fi
 
-    rm /tmp/MemoryUsed
-
     return "$return_code"
 }
 
