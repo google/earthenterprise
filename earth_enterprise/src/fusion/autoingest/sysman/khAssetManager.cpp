@@ -82,8 +82,8 @@ khAssetManager::AssertPendingEmpty(void) {
   assert(pendingTaskCmds.size() == 0);
   assert(pendingFileDeletes.size() == 0);
   assert(alwaysTaskCmds.size() == 0);
-  assert(MutableAssetD::dirtyMap.size() == 0);
-  assert(MutableAssetVersionD::dirtyMap.size() == 0);
+  assert(Asset::DirtySize() == 0);
+  assert(AssetVersion::DirtySize() == 0);
 }
 
 // ****************************************************************************
@@ -116,34 +116,20 @@ khAssetManager::ApplyPending(void)
 
   // ***** prep the pending changes *****
   // save the asset & version records to ".new"
-  if (MutableAssetD::dirtyMap.size()) {
-    notify(NFY_INFO, "Writing %lu asset records",
-           static_cast<long unsigned>(MutableAssetD::dirtyMap.size()));
-#if 0
-    MutableAssetD::PrintDirty("Assets");
-#endif
-    timer.start();
-    if (!MutableAssetD::SaveDirtyToDotNew(filetrans, &savedAssets)) {
-      throw khException(kh::tr("Unable to save modified assets"));
-    }
-    int elapsed = timer.elapsed();
-    notify(NFY_INFO, "Elapsed writing time: %s",
-           khProgressMeter::msToString(elapsed).latin1());
+  timer.start();
+  if (!MutableAssetD::SaveDirtyToDotNew(filetrans, &savedAssets)) {
+    throw khException(kh::tr("Unable to save modified assets"));
   }
-  if (MutableAssetVersionD::dirtyMap.size()) {
-    notify(NFY_INFO, "Writing %lu version records",
-           static_cast<long unsigned>(MutableAssetVersionD::dirtyMap.size()));
-#if 0
-    MutableAssetVersionD::PrintDirty("Versions");
-#endif
-    timer.start();
-    if (!MutableAssetVersionD::SaveDirtyToDotNew(filetrans, 0)) {
-      throw khException(kh::tr("Unable to save modified versions"));
-    }
-    int elapsed = timer.elapsed();
-    notify(NFY_INFO, "Elapsed writing time: %s",
+  elapsed = timer.elapsed();
+  notify(NFY_INFO, "Elapsed writing time: %s",
            khProgressMeter::msToString(elapsed).latin1());
+  timer.start();
+  if (!MutableAssetVersionD::SaveDirtyToDotNew(filetrans, 0)) {
+    throw khException(kh::tr("Unable to save modified versions"));
   }
+  elapsed = timer.elapsed();
+  notify(NFY_INFO, "Elapsed writing time: %s",
+         khProgressMeter::msToString(elapsed).latin1());
 
 
 
@@ -228,8 +214,6 @@ khAssetManager::ApplyPending(void)
   pendingProgress.clear();
   pendingTaskCmds.clear();
   pendingFileDeletes.clear();
-  MutableAssetD::dirtyMap.clear();
-  MutableAssetVersionD::dirtyMap.clear();
   elapsed = timer.elapsed();
   notify(NFY_INFO, "Elapsed cleanup time: %s",
          khProgressMeter::msToString(elapsed).latin1());

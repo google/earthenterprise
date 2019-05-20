@@ -21,6 +21,8 @@
 #include <map>
 #include <vector>
 
+#include "khTypes.h"
+
 // #define SUPPORT_VERBOSE
 #ifdef SUPPORT_VERBOSE
 #include <notify.h>
@@ -69,8 +71,6 @@ class khCacheItem {
 };
 
 // #define CHECK_INVARIANTS
-
-// TODO: rework this to use khLRUCache
 
 template <class Key, class Value>
 class khCache {
@@ -300,6 +300,7 @@ class khCache {
     }
     CheckListInvariant();
   }
+
 };
 
 

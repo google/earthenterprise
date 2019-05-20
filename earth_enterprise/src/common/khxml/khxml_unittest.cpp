@@ -143,13 +143,23 @@ TEST_F(KhxmlTest, WriteInvalidDocument) {
   ASSERT_FALSE(status) << "Writing an invalid document to a file should fail";
 }
 
-std::string getAttribute(DOMElement * elem, const std::string & name) {
-  return FromXMLStr(elem->getAttribute(ToXMLStr(name)));
+std::string getAttribute(DOMNode * child, const std::string & name) {
+  DOMNamedNodeMap * attributes = child->getAttributes();
+  if (!attributes) return "no attributes";
+  if (attributes->getLength() != 1) return "wrong length";
+  DOMNode * attr = attributes->getNamedItem(ToXMLStr(name));
+  if (!attr) return "missing attribute";
+  const XMLCh * value = attr->getNodeValue();
+  if (!value) return "no value";
+  return FromXMLStr(value);
 }
 
-int getValue(DOMElement * elem) {
-  DOMNode * valNode = elem->getFirstChild();
-  string valStr = FromXMLStr(((khxml::DOMText*)valNode)->getData());
+int getValue(DOMNode * child) {
+  DOMNode * grandchild = child->getFirstChild();
+  if (!grandchild) return -2;
+  const XMLCh * value = grandchild->getNodeValue();
+  if (!value) return -1;
+  string valStr = FromXMLStr(value);
   return stoi(valStr);
 }
 
@@ -162,22 +172,24 @@ void fromStringMapTest() {
   unique_ptr<GEDocument> doc = CreateEmptyDocument("test");
   DOMElement * elem = doc->getDocumentElement();
   AddElement(elem, "data", stringMap);
-  elem = elem->getFirstElementChild();
-  ASSERT_EQ(FromXMLStr(elem->getTagName()), "data") << "Invalid parent element when writing map of strings";
-  elem = elem->getFirstElementChild();
-  ASSERT_EQ(FromXMLStr(elem->getTagName()), "item") << "Invalid parent element when writing map of strings";
-  ASSERT_EQ(getAttribute(elem, "key"), "abc") << "Invalid key when writing map of strings";
-  ASSERT_EQ(getValue(elem), 1) << "Invalid value when writing map of strings";
-  elem = elem->getNextElementSibling();
-  ASSERT_EQ(FromXMLStr(elem->getTagName()), "item") << "Invalid parent element when writing map of strings";
-  ASSERT_EQ(getAttribute(elem, "key"), "def") << "Invalid key when writing map of strings";
-  ASSERT_EQ(getValue(elem), 10) << "Invalid value when writing map of strings";
-  elem = elem->getNextElementSibling();
-  ASSERT_EQ(FromXMLStr(elem->getTagName()), "item") << "Invalid parent element when writing map of strings";
-  ASSERT_EQ(getAttribute(elem, "key"), "ghi") << "Invalid key when writing map of strings";
-  ASSERT_EQ(getValue(elem), 3) << "Invalid value when writing map of strings";
-  elem = elem->getNextElementSibling();
-  ASSERT_EQ(elem, nullptr) << "Unexpected element";
+  
+  DOMNodeList * dataElem = elem->getElementsByTagName(ToXMLStr("data"));
+  ASSERT_EQ(dataElem->getLength(), 1) << "Wrong number of data elements extracted from XML";
+  ASSERT_EQ(FromXMLStr(dataElem->item(0)->getNodeName()), "data") << "Unexpected tag name when extracting data element";
+  DOMNode * child = dataElem->item(0)->getFirstChild();
+  ASSERT_EQ(FromXMLStr(child->getNodeName()), "item") << "Invalid parent element when writing map of strings";
+  ASSERT_EQ(getAttribute(child, "key"), "abc") << "Invalid key when writing map of strings";
+  ASSERT_EQ(getValue(child), 1) << "Invalid value when writing map of strings";
+  child = child->getNextSibling();
+  ASSERT_EQ(FromXMLStr(child->getNodeName()), "item") << "Invalid parent element when writing map of strings";
+  ASSERT_EQ(getAttribute(child, "key"), "def") << "Invalid key when writing map of strings";
+  ASSERT_EQ(getValue(child), 10) << "Invalid value when writing map of strings";
+  child = child->getNextSibling();
+  ASSERT_EQ(FromXMLStr(child->getNodeName()), "item") << "Invalid parent element when writing map of strings";
+  ASSERT_EQ(getAttribute(child, "key"), "ghi") << "Invalid key when writing map of strings";
+  ASSERT_EQ(getValue(child), 3) << "Invalid value when writing map of strings";
+  child = child->getNextSibling();
+  ASSERT_EQ(child, nullptr) << "Unexpected element";
 }
 
 TEST_F(KhxmlTest, StdStringMapToElement) {
