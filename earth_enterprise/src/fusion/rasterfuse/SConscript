@@ -31,7 +31,7 @@ gepackgen = env.executable('gepackgen',
                            LIBS=['geautoingest', 'khrasterffio', 'gegdal',
                                  'geraster', 'khffio', 'gefconfigutil',
                                  'geutil', 'gecommon', 'geprotobuf',
-                                 'qt-mt', 'geos', 'gemiscconfig'])
+                                 'qt-mt', 'geos'])
 
 pyr_info = env.executable('pyr_info', ['pyrinfo.cpp', '../tools/geImageWriter.o'],
                           LIBS=['geraster', 'geutil', 'gecommon',
@@ -41,7 +41,7 @@ pyr_info = env.executable('pyr_info', ['pyrinfo.cpp', '../tools/geImageWriter.o'
 # ***** They share a .cpp file and SCons whines if they override the LIBS
 # ***** themselves.
 env = env.Clone();
-env.Append(LIBS=['geraster', 'gegdal', 'gegdalutil', 'gdal', 'geutil', 'gecommon', 'qt-mt', 'geos', 'gemiscconfig'])
+env.Append(LIBS=['geraster', 'gegdal', 'gegdalutil', 'gdal', 'geutil', 'gecommon', 'qt-mt', 'geos'])
 
 gerasterimport = env.executable('gerasterimport',
                                 ['gerasterimport.cpp',

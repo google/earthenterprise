@@ -22,7 +22,6 @@
 #include <fusionversion.h>
 #include <config/gefConfigUtil.h>
 #include <autoingest/.idl/Systemrc.h>
-#include "autoingest/MiscConfig.h"
 
 // global for convenience
 int numcols = 80;
