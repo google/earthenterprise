@@ -27,8 +27,8 @@
 #endif
 
 #include "fusion/autoingest/MiscConfig.h"
-#include <typeinfo>
-#include <string.h>
+//#include <typeinfo>
+//#include <string.h>
 
 /******************************************************************************
  ***  Simple cache of refcounted objects

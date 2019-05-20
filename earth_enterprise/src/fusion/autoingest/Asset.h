@@ -21,8 +21,6 @@
 #include "AssetHandle.h"
 #include <khFileUtils.h>
 #include "MiscConfig.h"
-#include <fstream>
-#include <iostream>
 
 
 /******************************************************************************
@@ -88,7 +86,6 @@ Asset::cache(void)
 {
   static khCache<SharedString, Asset::HandleType>
     instance(MiscConfig::Instance().MaxAssetCacheSize);
-    //instance(MiscConfig::Instance().AssetCacheSize);
   return instance;
 }
 
@@ -127,7 +124,6 @@ Asset::DoBind(const std::string &ref, bool checkFileExistenceFirst) const
       // the file has changed on disk
 
       // drop the current entry from the cache
-      //notify(NFY_WARN, "ASSET REMOVE: %s", Impl::XMLFilename(ref).c_str());
       cache().Remove(ref, false); // don't prune, the Add will
 
       // will succeed, generate stub, or throw exception
@@ -141,7 +137,6 @@ Asset::DoBind(const std::string &ref, bool checkFileExistenceFirst) const
 
   // add it to the cache
   if (addToCache)
-    //notify(NFY_WARN, "ASSET ADD: %s", Impl::XMLFilename(ref).c_str());
     cache().Add(ref, entry);
 
   // used by derived class to mark dirty
