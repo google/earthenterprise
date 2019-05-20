@@ -52,7 +52,7 @@ class AssetHandle_  {
 
  public:
   static uint32 CacheSize(void) { return cache().size(); }
-  static uint64 CacheFileSize(void) { return cache().objectsizes(); }
+  static uint64 CacheObjectSize(void) { return cache().objectsizes(); }
 
   // Adds handle-object to cache.
   void CacheAdd() {

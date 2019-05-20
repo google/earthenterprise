@@ -194,7 +194,7 @@ main(int argc, char *argv[])
         for (std::vector<TaskLists::WaitingTask>::const_iterator w =
                taskLists.waitingTasks.begin();
              w != taskLists.waitingTasks.end(); ++w) {
-          if (numlines > 6) {
+          if (numlines > 8) {
             outline("  %s", w->verref.c_str());
             --numlines;
             if (!w->activationError.isEmpty()) {
@@ -210,7 +210,7 @@ main(int argc, char *argv[])
 
         outline("");
         outline("Fusion processes on this host:");
-        numlines -= 6;
+        numlines -= 8;
 
         for (uint i = 0; i < pslist.size(); ++i) {
           if (numlines > 2) {
@@ -227,10 +227,10 @@ main(int argc, char *argv[])
         outline("Number of cached assets: %u", taskLists.num_assets_cached);
         outline("Number of cached asset versions: %u",
                 taskLists.num_assetversions_cached);
-        outline("Number of strings cached: %u", taskLists.str_store_size);
-        outline("Total size of asset cache: %lu", taskLists.asset_cache_size);
-        outline("Total size of asset version cache: %lu",
+        outline("Total size of cached assets: %lu", taskLists.asset_cache_size);
+        outline("Total size of cached asset versions: %lu",
                 taskLists.version_cache_size);
+        outline("Number of strings cached: %u", taskLists.str_store_size);
 
       }
       sleep(delay);
