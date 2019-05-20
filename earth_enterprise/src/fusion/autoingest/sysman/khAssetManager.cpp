@@ -109,8 +109,8 @@ khAssetManager::ApplyPending(void)
 
   notify(NFY_INFO, "Asset cache size = %d", Asset::CacheSize());
   notify(NFY_INFO, "Version cache size = %d", AssetVersion::CacheSize());
-  notify(NFY_INFO, "Asset cache file size = %lu", Asset::CacheFileSize());
-  notify(NFY_INFO, "Version cache file size = %lu", AssetVersion::CacheFileSize());
+  notify(NFY_INFO, "Asset cache file size = %lu", Asset::CacheObjectSize());
+  notify(NFY_INFO, "Version cache file size = %lu", AssetVersion::CacheObjectSize());
 
 #ifndef SKIP_SAVE
 

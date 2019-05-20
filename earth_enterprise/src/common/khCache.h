@@ -84,7 +84,7 @@ class khCache {
   bool verbose;
 #endif
   uint numItems;
-  uint64 cacheFileSize;
+  uint64 cacheObjectSizes;
 
   bool InList(Item *item) {
     Item *tmp = head;
@@ -168,7 +168,7 @@ class khCache {
   typedef typename MapType::size_type size_type;
   size_type size(void) const { return map.size(); }
   size_type capacity(void) const { return targetMax; }
-  uint64 objectsizes(void) const { return cacheFileSize; }
+  uint64 objectsizes(void) const { return cacheObjectSizes; }
 
   khCache(uint targetMax_
 #ifdef SUPPORT_VERBOSE
@@ -178,7 +178,7 @@ class khCache {
 #ifdef SUPPORT_VERBOSE
               verbose(verbose_),
 #endif
-              numItems(0), cacheFileSize(0)
+              numItems(0), cacheObjectSizes(0)
 
   {
     CheckListInvariant();
@@ -196,7 +196,7 @@ class khCache {
     }
     map.clear();
     head = tail = 0;
-    cacheFileSize = 0;
+    cacheObjectSizes = 0;
   }
   void Add(const Key &key, const Value &val, bool prune = true) {
     CheckListInvariant();
@@ -204,31 +204,26 @@ class khCache {
     // delete any previous item
     Item *item = FindItem(key);
     if (item) {
-      //notify(NFY_WARN, "Size of old item: %lu", sizeof(item));
       Unlink(item);
 #ifdef SUPPORT_VERBOSE
       if (verbose) notify(NFY_ALWAYS, "Deleting previous %s from cache", key.c_str());
 #endif
       delete item;
-      cacheFileSize -= sizeof(item) + sizeof(*item) + sizeof(item->key) + sizeof(item->val) 
-    + sizeof(item->prev) + sizeof(*(item->prev)) + sizeof(item->next) + sizeof(*(item->next));
-      //notify(NFY_WARN, "Cache updated before add: %lu", cacheFileSize);
+      cacheObjectSizes -= sizeof(item) + sizeof(*item) + sizeof(item->key) + sizeof(item->val)
+      + sizeof(item->prev) + sizeof(*(item->prev)) + sizeof(item->next) + sizeof(*(item->next));
     }
 
     // make a new item, link it in and add to map
     item = new Item(key, val);
-    cacheFileSize += sizeof(item) + sizeof(*item) + sizeof(item->key) + sizeof(item->val) 
+    cacheObjectSizes += sizeof(item) + sizeof(*item) + sizeof(item->key) + sizeof(item->val)
     + sizeof(item->prev) + sizeof(*(item->prev)) + sizeof(item->next) + sizeof(*(item->next));
-    //notify(NFY_WARN, "New Item: %s %lu", typeid(item).name(), sizeof(item));
-    notify(NFY_WARN, "item: %s %lu %s %lu", typeid(item).name(), sizeof(item), typeid(*item).name(), sizeof(*item));
-    notify(NFY_WARN, "item->key: %s %lu", typeid((item->key)).name(), sizeof(item->key));
-    notify(NFY_WARN, "item->val: %s %lu", typeid(item->val).name(), sizeof(item->val));
-    notify(NFY_WARN, "item->prev: %s %lu %s %lu", typeid(item->prev).name(), sizeof(item->prev), typeid(*(item->prev)).name(), sizeof(*(item->prev)));
-    notify(NFY_WARN, "item->next: %s %lu %s %lu", typeid(item->next).name(), sizeof(item->next), typeid(*(item->next)).name(), sizeof(*(item->next)));
+    //notify(NFY_WARN, "item: %s %lu %s %lu", typeid(item).name(), sizeof(item), typeid(*item).name(), sizeof(*item));
+    //notify(NFY_WARN, "item->key: %s %lu", typeid((item->key)).name(), sizeof(item->key));
+    //notify(NFY_WARN, "item->val: %s %lu", typeid(item->val).name(), sizeof(item->val));
+    //notify(NFY_WARN, "item->prev: %s %lu %s %lu", typeid(item->prev).name(), sizeof(item->prev), typeid(*(item->prev)).name(), sizeof(*(item->prev)));
+    //notify(NFY_WARN, "item->next: %s %lu %s %lu", typeid(item->next).name(), sizeof(item->next), typeid(*(item->next)).name(), sizeof(*(item->next)));
     Link(item);
     map[key] = item;
-    notify(NFY_WARN, "Map Size: %lu", sizeof(map));
-    //notify(NFY_WARN, "Cache updated after add: %lu", cacheFileSize);
 #ifdef SUPPORT_VERBOSE
     if (verbose) notify(NFY_ALWAYS, "Adding %s to cache", key.c_str());
 #endif
@@ -245,7 +240,6 @@ class khCache {
     CheckListInvariant();
 
     Item *item = FindItem(key);
-    //notify(NFY_WARN, "Size of remove item: %lu", sizeof(item));
     if (item) {
       Unlink(item);
       map.erase(key);
@@ -253,9 +247,8 @@ class khCache {
       if (verbose) notify(NFY_ALWAYS, "Removing %s from cache", key.c_str());
 #endif
       delete item;
-      cacheFileSize -= sizeof(item) + sizeof(*item) + sizeof(item->key) + sizeof(item->val) 
-    + sizeof(item->prev) + sizeof(*(item->prev)) + sizeof(item->next) + sizeof(*(item->next));
-      //notify(NFY_WARN, "Cache updated after remove: %lu", cacheFileSize);
+      cacheObjectSizes -= sizeof(item) + sizeof(*item) + sizeof(item->key) + sizeof(item->val)
+      + sizeof(item->prev) + sizeof(*(item->prev)) + sizeof(item->next) + sizeof(*(item->next));
     }
 
     CheckListInvariant();
@@ -285,28 +278,24 @@ class khCache {
   void Prune(void) {
     CheckListInvariant();
     Item *item = tail;
-    //notify(NFY_WARN, "Size of prune item: %lu", sizeof(item));
-    while (item && ( (cacheFileSize > targetMax) && MiscConfig::Instance().LimitMemoryUtilization )/*(map.size() > targetMax)*/) {
+    while (item && ( (cacheObjectSizes > targetMax) && MiscConfig::Instance().LimitMemoryUtilization )/*(map.size() > targetMax)*/) {
       // Note: this refcount() > 1 check is safe even with
       // khMTRefCounter based guards. See explanaition with the
       // definition of khMTRefCounter in khMTTypes.h.
       while (item && (item->val.refcount() > 1)) {
-        //notify(NFY_WARN, "refcount: %d", item->val.refcount());
         item = item->prev;
       }
       if (item) {
         Item *tokill = item;
         item = item->prev;
-        //notify(NFY_WARN, "ToKill: %s", typeid(tokill->val).name());
         Unlink(tokill);
         map.erase(tokill->key);
 #ifdef SUPPORT_VERBOSE
         if (verbose) notify(NFY_ALWAYS, "Pruning %s from cache", tokill->key.c_str());
 #endif
         delete tokill;
-        cacheFileSize -= sizeof(item) + sizeof(*item) + sizeof(item->key) + sizeof(item->val) 
-    + sizeof(item->prev) + sizeof(*(item->prev)) + sizeof(item->next) + sizeof(*(item->next));
-        //notify(NFY_WARN, "Cache updated after prune: %lu", cacheFileSize);
+        cacheObjectSizes -= sizeof(item) + sizeof(*item) + sizeof(item->key) + sizeof(item->val)
+        + sizeof(item->prev) + sizeof(*(item->prev)) + sizeof(item->next) + sizeof(*(item->next));
       }
     }
     CheckListInvariant();
