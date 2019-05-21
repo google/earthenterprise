@@ -22,15 +22,12 @@
 #include <vector>
 
 #include "khTypes.h"
+#include "fusion/autoingest/MiscConfig.h"
 
 // #define SUPPORT_VERBOSE
 #ifdef SUPPORT_VERBOSE
 #include <notify.h>
 #endif
-
-#include "fusion/autoingest/MiscConfig.h"
-//#include <typeinfo>
-//#include <string.h>
 
 /******************************************************************************
  ***  Simple cache of refcounted objects
@@ -85,6 +82,7 @@ class khCache {
 #endif
   uint numItems;
   uint64 cacheObjectSizes;
+  bool limitCache;
 
   bool InList(Item *item) {
     Item *tmp = head;
@@ -178,13 +176,17 @@ class khCache {
 #ifdef SUPPORT_VERBOSE
               verbose(verbose_),
 #endif
-              numItems(0), cacheObjectSizes(0)
+              numItems(0), cacheObjectSizes(0),
+              limitCache(MiscConfig::Instance().LimitMemoryUtilization)
 
   {
     CheckListInvariant();
   }
   ~khCache(void) {
     clear();
+  }
+  void setLimitCheck(bool limit) {
+    limitCache = limit;
   }
   void clear(void) {
     CheckListInvariant();
@@ -217,11 +219,6 @@ class khCache {
     item = new Item(key, val);
     cacheObjectSizes += sizeof(item) + sizeof(*item) + sizeof(item->key) + sizeof(item->val)
     + sizeof(item->prev) + sizeof(*(item->prev)) + sizeof(item->next) + sizeof(*(item->next));
-    //notify(NFY_WARN, "item: %s %lu %s %lu", typeid(item).name(), sizeof(item), typeid(*item).name(), sizeof(*item));
-    //notify(NFY_WARN, "item->key: %s %lu", typeid((item->key)).name(), sizeof(item->key));
-    //notify(NFY_WARN, "item->val: %s %lu", typeid(item->val).name(), sizeof(item->val));
-    //notify(NFY_WARN, "item->prev: %s %lu %s %lu", typeid(item->prev).name(), sizeof(item->prev), typeid(*(item->prev)).name(), sizeof(*(item->prev)));
-    //notify(NFY_WARN, "item->next: %s %lu %s %lu", typeid(item->next).name(), sizeof(item->next), typeid(*(item->next)).name(), sizeof(*(item->next)));
     Link(item);
     map[key] = item;
 #ifdef SUPPORT_VERBOSE
@@ -278,7 +275,7 @@ class khCache {
   void Prune(void) {
     CheckListInvariant();
     Item *item = tail;
-    while (item && ( (cacheObjectSizes > targetMax) && MiscConfig::Instance().LimitMemoryUtilization )/*(map.size() > targetMax)*/) {
+    while (item && ( (cacheObjectSizes > targetMax) && limitCache )) {
       // Note: this refcount() > 1 check is safe even with
       // khMTRefCounter based guards. See explanaition with the
       // definition of khMTRefCounter in khMTTypes.h.
