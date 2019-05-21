@@ -82,7 +82,7 @@ class khCache {
 #endif
   uint numItems;
   uint64 cacheObjectSizes;
-  bool limitCache;
+  bool limitCache = MiscConfig::Instance().LimitMemoryUtilization;
 
   bool InList(Item *item) {
     Item *tmp = head;
@@ -176,8 +176,7 @@ class khCache {
 #ifdef SUPPORT_VERBOSE
               verbose(verbose_),
 #endif
-              numItems(0), cacheObjectSizes(0),
-              limitCache(MiscConfig::Instance().LimitMemoryUtilization)
+              numItems(0), cacheObjectSizes(0)
 
   {
     CheckListInvariant();
