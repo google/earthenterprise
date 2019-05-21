@@ -23,6 +23,8 @@
 using namespace std;
 
 const size_t CACHE_SIZE = 5;
+const size_t OBJECT_SIZE = 232;
+const size_t CACHE_LIMIT = 5*OBJECT_SIZE;
 
 class TestItem : public khRefCounter, public StorageManaged {
  public:
@@ -77,7 +79,7 @@ class StorageManagerTest : public testing::Test {
  protected:
   StorageManager<TestItem> storageManager;
  public:
-  StorageManagerTest() : storageManager(CACHE_SIZE, "test") {}
+  StorageManagerTest() : storageManager(CACHE_LIMIT, "test") {}
 };
 
 TEST_F(StorageManagerTest, AddAndRetrieve) {
@@ -161,6 +163,7 @@ TEST_F(StorageManagerTest, Mutable) {
 
 TEST_F(StorageManagerTest, PurgeCache) {
   // Put items in the cache but don't hold handles so they will be purged
+  storageManager.SetLimitCheck(1);
   for(size_t i = 0; i < CACHE_SIZE + 2; ++i) {
     stringstream s;
     s << "asset" << i;
@@ -170,10 +173,23 @@ TEST_F(StorageManagerTest, PurgeCache) {
   }
 }
 
+TEST_F(StorageManagerTest, DontPurgeCache) {
+  // Put items in the cache and don't hold handles but don't purge
+  storageManager.SetLimitCheck(0);
+  for(size_t i = 0; i < CACHE_SIZE + 2; ++i) {
+    stringstream s;
+    s << "asset" << i;
+    Get<TestHandle>(storageManager, s.str(), false, true, false);
+    ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
+  }
+  ASSERT_GT(storageManager.CacheSize(), CACHE_SIZE) << "Unexpected number of items in cache";
+}
+
 TEST_F(StorageManagerTest, PurgeCacheWithHandles) {
   {
     // Put items in the cache and hold handles so they won't be purged
     TestHandle handles[CACHE_SIZE+3];
+    storageManager.SetLimitCheck(1);
     for(size_t i = 0; i < CACHE_SIZE + 3; ++i) {
       stringstream s;
       s << "asset" << i;
