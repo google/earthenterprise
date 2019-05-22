@@ -82,7 +82,7 @@ class khCache {
 #endif
   uint numItems;
   uint64 cacheObjectSizes;
-  bool limitCache = MiscConfig::Instance().LimitMemoryUtilization;
+  bool limitCache;
 
   bool InList(Item *item) {
     Item *tmp = head;
@@ -176,7 +176,8 @@ class khCache {
 #ifdef SUPPORT_VERBOSE
               verbose(verbose_),
 #endif
-              numItems(0), cacheObjectSizes(0)
+              numItems(0), cacheObjectSizes(0),
+              limitCache(0)
 
   {
     CheckListInvariant();
@@ -184,8 +185,13 @@ class khCache {
   ~khCache(void) {
     clear();
   }
+  uint64 sumObjectSizes(Item *item) {
+    uint64 size = sizeof(item) + sizeof(*item) + sizeof(item->key) + sizeof(item->val)
+    + sizeof(item->prev) + sizeof(*(item->prev)) + sizeof(item->next) + sizeof(*(item->next));
+    return size;
+  }
   void setLimitCheck(bool limit) {
-    limitCache = limit;
+      limitCache = limit;
   }
   void clear(void) {
     CheckListInvariant();
@@ -210,14 +216,12 @@ class khCache {
       if (verbose) notify(NFY_ALWAYS, "Deleting previous %s from cache", key.c_str());
 #endif
       delete item;
-      cacheObjectSizes -= sizeof(item) + sizeof(*item) + sizeof(item->key) + sizeof(item->val)
-      + sizeof(item->prev) + sizeof(*(item->prev)) + sizeof(item->next) + sizeof(*(item->next));
+      cacheObjectSizes -= sumObjectSizes(item);
     }
 
     // make a new item, link it in and add to map
     item = new Item(key, val);
-    cacheObjectSizes += sizeof(item) + sizeof(*item) + sizeof(item->key) + sizeof(item->val)
-    + sizeof(item->prev) + sizeof(*(item->prev)) + sizeof(item->next) + sizeof(*(item->next));
+    cacheObjectSizes += sumObjectSizes(item);
     Link(item);
     map[key] = item;
 #ifdef SUPPORT_VERBOSE
@@ -243,8 +247,7 @@ class khCache {
       if (verbose) notify(NFY_ALWAYS, "Removing %s from cache", key.c_str());
 #endif
       delete item;
-      cacheObjectSizes -= sizeof(item) + sizeof(*item) + sizeof(item->key) + sizeof(item->val)
-      + sizeof(item->prev) + sizeof(*(item->prev)) + sizeof(item->next) + sizeof(*(item->next));
+      cacheObjectSizes -= sumObjectSizes(item);
     }
 
     CheckListInvariant();
@@ -290,8 +293,7 @@ class khCache {
         if (verbose) notify(NFY_ALWAYS, "Pruning %s from cache", tokill->key.c_str());
 #endif
         delete tokill;
-        cacheObjectSizes -= sizeof(item) + sizeof(*item) + sizeof(item->key) + sizeof(item->val)
-        + sizeof(item->prev) + sizeof(*(item->prev)) + sizeof(item->next) + sizeof(*(item->next));
+        cacheObjectSizes -= sumObjectSizes(item);
       }
     }
     CheckListInvariant();
