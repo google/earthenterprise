@@ -23,6 +23,7 @@ class MiscConfigStorage {
   // help work around the delayed NFS visibility problem.
   uint        NFSVisibilityDelay = uint(0);
 
+  // The maximum amount of memory allocated for each cache in bytes.
   uint64        MaxAssetCacheSize = uint64(1073741824);
   uint64        MaxVersionCacheSize = uint64(1073741824);
 

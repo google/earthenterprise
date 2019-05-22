@@ -76,7 +76,7 @@ class khCache {
   MapType map;
   Item *head;
   Item *tail;
-  const uint targetMax;
+  const uint64 targetMax;
 #ifdef SUPPORT_VERBOSE
   bool verbose;
 #endif
@@ -165,10 +165,10 @@ class khCache {
  public:
   typedef typename MapType::size_type size_type;
   size_type size(void) const { return map.size(); }
-  size_type capacity(void) const { return targetMax; }
+  uint64 capacity(void) const { return targetMax; }
   uint64 objectsizes(void) const { return cacheObjectSizes; }
 
-  khCache(uint targetMax_
+  khCache(uint64 targetMax_
 #ifdef SUPPORT_VERBOSE
           , bool verbose_ = false
 #endif
@@ -176,8 +176,7 @@ class khCache {
 #ifdef SUPPORT_VERBOSE
               verbose(verbose_),
 #endif
-              numItems(0), cacheObjectSizes(0),
-              limitCache(0)
+              numItems(0), cacheObjectSizes(0)
 
   {
     CheckListInvariant();

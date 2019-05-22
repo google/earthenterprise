@@ -23,8 +23,8 @@
 using namespace std;
 
 const size_t CACHE_SIZE = 5;
-const size_t OBJECT_SIZE = 232;
-const size_t CACHE_LIMIT = 5*OBJECT_SIZE;
+const uint64 OBJECT_SIZE = 232;
+const uint64 CACHE_LIMIT = 5*OBJECT_SIZE;
 
 class TestItem : public khRefCounter, public StorageManaged {
  public:
