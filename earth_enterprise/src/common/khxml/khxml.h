@@ -132,11 +132,8 @@ class GEXMLObject {
     const static std::string BLOCK_SIZE;
     const static std::string PURGE;
     const static std::string PURGE_LEVEL;
-    // The DEALLOCATE_ALL option does nothing now, but it is still accepted for
-    // backwards compatibility.
-    const static std::string DEALLOCATE_ALL;
     const static std::string XMLConfigFile;
-    const static std::array<std::string,6> options;
+    const static std::array<std::string,5> options;
     static khMutex mutex;
 
     static XMLSize_t initialDOMHeapAllocSize;
