@@ -65,6 +65,7 @@ private:
     bool sanitize(std::string&);
     void split(const std::string&, std::string&, std::string&);
     bool isKeyPresent(const std::string&);
+    void validateIntegerValues();
 
 public:
     
@@ -72,7 +73,6 @@ public:
     void parse(const std::string&);
     void parse(std::istream&);
     void clearOptions() { options.clear(); }
-    void validateIntegerValues();
 
     int size()   { return contents.size();   }
     const std::string& at(const std::string&);

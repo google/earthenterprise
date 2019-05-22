@@ -149,6 +149,7 @@ void khConfigFileParser::parse(std::istream& fileContents)
             contents.insert(std::pair<std::string,std::string>(key,value));
         }
     }
+    validateIntegerValues();
 }
 
 void khConfigFileParser::parse(const std::string& fn)

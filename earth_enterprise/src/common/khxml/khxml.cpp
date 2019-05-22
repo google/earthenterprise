@@ -194,7 +194,6 @@ void GEXMLObject::initializeXMLParametersFromStream(std::istream & input) {
       config_parser.addOption(i);
     }
     config_parser.parse(input);
-    config_parser.validateIntegerValues();
     for (const auto& it : config_parser)
     {
       if (it.first == INIT_HEAP_SIZE)
