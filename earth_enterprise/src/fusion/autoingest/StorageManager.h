@@ -53,7 +53,7 @@ class StorageManager
     ~StorageManager() = default;
 
     inline uint32 CacheSize() const { return cache.size(); }
-    inline uint32 CacheCapacity() const { return cache.capacity(); }
+    inline uint64 CacheCapacity() const { return cache.capacity(); }
     inline uint32 DirtySize() const { return dirtyMap.size(); }
     inline uint64 CacheObjectSize() const { return cache.objectsizes(); }
     inline void SetLimitCheck(bool limit) { cache.setLimitCheck(limit); }
