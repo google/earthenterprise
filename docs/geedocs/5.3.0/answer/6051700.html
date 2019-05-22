@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Publish databases using disconnected publishing</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
+</head>
+<body>
+<!-- 6051700.html -->
+<div class="container">
+<div class="sidebar1">
+  <p class="sidebar-toc"><a href="../answer/3481464.html">Before you configure Google Earth Enterprise Fusion</a></p>
+  <p class="sidebar-toc"><a href="../answer/6008655.html">Running Fusion on a Machine with Multiple CPUs</a></p>
+<p class="sidebar-toc"><a href="../answer/7160005.html">Dynamically adjusting logging levels</a></p>
+  <p class="sidebar-toc"><a href="../answer/176738.html">Configure Fusion performance</a></p>
+  <p class="sidebar-toc"><a href="../answer/6033487.html">Benchmarking outcomes for applying task rules</a></p>
+  <p class="sidebar-toc"><a href="../answer/3481501.html">Configure font size in the GUI</a></p>
+  <p class="sidebar-toc"><a href="../answer/3481506.html">Configure fonts for the Text Style dialog</a></p>
+  <p class="sidebar-toc"><a href="../answer/3481478.html">Customize your Google Maps landing page</a></p>
+  <p class="sidebar-toc"><a href="../answer/3481512.html">Monitor system processes</a></p>
+  <p class="sidebar-toc"><a href="../answer/3481546.html">Backing up your data</a></p>
+  <p class="sidebar-toc"><a href="../answer/2760661.html">Back up Fusion servers</a></p>
+  <p class="sidebar-toc"><a href="../answer/176676.html">Manage Fusion disk space</a></p>
+  <p class="sidebar-toc"><a href="../answer/6035839.html">Relocate your asset root</a></p>
+  <p class="sidebar-toc"><a href="../answer/3481499.html">Configure your data locations</a></p>
+  <p class="sidebar-toc"><a href="../answer/6034724.html">Push and publish databases</a></p>
+  <p class="sidebar-toc"><a href="../answer/6051700.html" class="current-file">Publish databases using disconnected publishing</a></p>
+  <p class="sidebar-toc"><a href="../answer/6086672.html">Troubleshoot push/publishing issues 5.x</a></p>
+  <p class="sidebar-toc"><a href="../answer/3481558.html">Command reference</a></p>
+</div>
+<div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion administration</h1>
+<h2>Publish databases using disconnected publishing</h2>
+<p>If you want to publish databases on a server that does not have a network connection to your Google Earth Enterprise Fusion workstations, you can create a database that can be output to portable media, which can then be pushed and published to GEE Server.</p>
+<p>A large database can be copied to portable media and loaded onto the server using <code>geserveradmin</code> commands, saving the time and bandwidth required to send terabytes of data over the network. In addition, you can also create deltas for the same databases, which can then be sent over the network.</p>
+<h2>Before you begin</h2>
+<p>To use the disconnected publishing service, you need to install the <strong>GEE Server - Disconnected Add-on</strong>, which you can add by running the installation process and choosing <strong>Custom</strong> as the installation type.
+<p>
+<div class="tip"> Disconnected production servers require X11 libraries, including Mesa. Google Earth Enterprise Server does not require an X server to be running or installed, however; only the libraries are required. </div>
+<h2>Prepare a disconnected database</h2>
+<p>Before creating a disconnected database, you can estimate the space required to store the disconnected database by running <code>gedisconnectedsend</code> with the <code>--report_size_only</code> option.
+<h3>To estimate the size of a disconnected database:</h3>
+<ol>
+  <li>From the command line, specify the database that you want to publish with the <code>--report_size_only</code> flag:
+    <p><code># gedisconnectedsend --report_size_only --sendpath \<br/>
+      /gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb</code></p>
+  </li>
+</ol>
+<h3>To create a disconnected database:</h3>
+<ol>
+  <li>Create an output directory on your portable media, which you will specify when you create the disconnected database.
+    <p><code>rm -rf /media/ddb/test_ver001/</code></p>
+    <p>mkdir -p /media/ddb/test_ver001/</p>
+  </li>
+</ol>
+</p>
+</p>
+</p>
+<li>Create the disconnected database and output the file to your portable media:
+  <p><code>gedisconnectedsend --output /media/ddb/test_ver001/ \</code></p>
+  <p>--sendpath /gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb</p>
+</li>
+<p>In this example, <code>/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/</code> is the path to the <code>gedb</code> directory of the disconnected database.</p>
+<h2>Prepare delta disconnected databases</h2>
+<p>The disconnected database command includes the option, <code>--havepath</code> or <code>--havepathfile</code>, to create a delta disconnected database, based on different versions of the same database. To create the delta, the assetroot of the GEE Fusion machine must store the versions of databases, as reported by geserveradmin <code>--listdbs</code> on the GEE Server machine, from which the delta disconnected database is created.</p>
+<p>When publishing from a GEE Fusion machine, in this example, <code>machine_one</code>, to a disconnected GEE Server machine, in this example, <code>machine_two</code>, verify the list of versions of the disconnected database for which you want to create the delta:</p>
+<p>For example, on <code>machine_two</code>:</p>
+<p><code>geserveradmin --fusion_host machine_one --listdbs &gt; /home/user_name/ddb/dblist_server_host</code></p>
+<p>On <code>machine_one</code>, create the delta disconnected database using the <code>--havepathfile</code> option:</p>
+<p><code>gedisconnectedsend --output /media/ddb/test_ver001/ \</code></p>
+<p><code>--havepathfile /home/user_name/ddb/dblist_server_host \</code></p>
+<p><code>--sendpath /gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb</code></p>
+<h2>Publish on the remote server host</h2>
+<p>Connect the portable media to the Server host and mount the drive. In this example, <code>/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/</code> is the path to the <code>gedb</code> directory of the disconnected database.</p>
+<h3>To publish on the remote server host:</h3>
+<ol>
+  <li>Set ownership and permissions for the <code>gedb</code> directory:
+    <p><code>$ sudo chown -R gefusionuser:gegroup ddb/</code></p>
+    <p><code>$ sudo chmod -R 755 ddb/</code></p>
+  </li>
+  <li>Register the database on the Server. Specifying the --stream_server_url is optional.
+    <p><code>geserveradmin --fusion_host fusion_host.company.com \</code></p>
+    <p><code>--stream_server_url http://your_stream_server  \</code></p>
+    <p><code>--adddb \</code></p>
+    <p><code>/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/</code></p>
+  </li>
+  <li>Push the files to the Server:
+    <p><code>geserveradmin --fusion_host fusion_host.company.com \</code></p>
+    <p><code>--stream_server_url http://your_stream_server \</code></p>
+    <p><code>--pushdb \</code></p>
+    <p><code>/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/</code></p>
+  </li>
+  <li>Publish the database on the Server either using the <a href="../answer/3497763.html">GEE Server Admin console</a> or on the command line. The GEE Server Admin console Publish dialog includes options to add <a href="../answer/3497832.html">search</a>, <a href="../answer/6004748.html">snippet profiles</a>, specify a <a href="../answer/6013604.html">virtual host</a>, and turn on <a href="../answer/4441137.html">WMS</a>.
+    <p><strong>To publish on the command line:</strong>
+    
+    <p><code>geserveradmin --fusion_host fusion_host.company.com \</code></p>
+    <p><code>--stream_server_url http://your_stream_server \</code></p>
+    <p><code>--publishdb \</code></p>
+    <p><code>/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/</code></p>
+    </p>
+  </li>
+  <li>Verify that the database manifests:
+    <p><code>geserveradmin --stream_server_url http://your_stream_server \</code></p>
+    <p><code>--listdbs</code></p>
+    <p><code>geserveradmin --stream_server_url http://your_stream_server \</code></p>
+    <p><code>--dbdetails \</code></p>
+    <p><code>/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb</code></p>
+  </li>
+  <li>Verify the integrity of files in the published database:
+    <p><code>ssh your_server </code></p>
+    <p><code>/opt/google/bin/geindexcheck --database \</code></p>
+    <p><code>/gevol/published_dbs/stream_space/your_fusion_host/gevol/assets/</code></p>
+    <p><code>Databases/test.kdatabase/gedb.kda/ver001/gedb</code></p>
+    <p><code>/opt/google/bin/geindexcheck --mode all --database \</code></p>
+    <p><code>/gevol/published_dbs/stream_space/your_fusion_host/gevol/assets/</code></p>
+    <p><code>Databases/test.kdatabase/gedb.kda/ver001/gedb</code></p>
+    <div class="tip"> The paths in the examples above were split onto multiple lines for documentation using backslashes. They should be entered on one line when completing your commands. </div>
+  </li>
+</ol>
+<h3>Symbolic links</h3>
+<p>Symbolic links are turned on by default in the published databases configuration file, <code>AllowSymLinks=Y</code> in the <code>/gevol/published_dbs/.config</code>, resulting in hard or soft symbolic links being created, depending on the logical volumes of the relevant directories:
+<ul>
+  <li><strong>hard-link</strong>: the disconnected database folder and published_dbs folder are on the same logical volume.</li>
+  <li><strong>soft-link</strong>: the disconnected database folder and published_dbs folder are on different logical volumes.</li>
+  <li>If the disconnected database folder is in <code>/tmp</code>, the directory files will be copied. </li>
+</ul>
+<h3>Rewrite KML Layer URLs</h3>
+<p>If the disconnected database contains KML Layers, the KML Layer's URLs may require adjustments in order to resolve the KML content in a disconnected environment.   (See <a href="../answer/2760457.html">Add KML Layers</a>). Use the <code>gerewritedbroot</code> command to update the disconnected database KML Links with new hostname, ports, paths or filenames. </p>
+<ol>
+  <li>Publish KML Content
+    <p>Copy and publish and modify the KML files on the disconnected GEE Server machine's network as needed. Validate that the referenced KML files are accessible on the disconnected network via HTTP or HTTPS using a web browser or command line tools. Note the differences in hostnames, paths and ports between their origninal locations and their locations on the disconnected network environment. </p>
+    <p>KML files can be served from the <code>/opt/google/gehttpd/htdocs/</code> folder or a subfolder, or on a separate web server. </p>
+  </li>
+  <li>Identify which dbroot file needs to be updated, and store in an environment variable for later use:
+    <p><code>export TARGET_DBROOT='/media/ddb/test_ver001/gevol/assets/Databases/test.kdatabase/gedb.kda/ver001/gedb/targets/new_target/dbroots/dbroot.v5p.DEFAULT'</code></p></li>
+  <li>Rewrite the KML Layer Links in the database on the Server. 
+    <p><code>/opt/google/bin/gerewritedbroot --source http://your_stream_server/new_target \</code></p>
+    <p><code>--dbroot_file $TARGET_DBROOT\ </code></p>
+    <p><code>--kml_server your_stream_server --kml_url_path  your_htdoc_path/ \</code></p>
+    <p><code>--preserve_kml_filenames</code></p>
+  </li>
+  <li>Changes are not refected until the server is restarted. 
+    <p><code>sudo service geserver restart</code></p>
+  </li>
+  <li>Validate that the server has the correct database information by dumping the dbroot as text:
+    <p><code>wget -O dbroot.v5p.DEFAULT http://you_stream_server/new_target/dbRoot.v5</code></p>
+    <p><code>gedumpdbroot dbroot.v5p.DEFAULT</code></p>
+  </li>
+</ol>
+  
+<h2>Delete disconnected databases</h2>
+<p>To delete disconnected databases at their end of life use <code>geserveradmin --deletedb</code>, the same procedure used for databases that are published normally. </p>
+</p>
+</body>
+</html>

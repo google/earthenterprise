@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<RasterProductAsset>
+
+  <name>{{ name }}</name>
+
+  <type>Imagery</type>
+
+  <subtype>Product</subtype>
+
+  <inputs>
+{% for name in inputs %}
+    <input>{{ name }}</input>
+{% endfor %}
+  </inputs>
+
+  <meta>
+    <item key="maxlevel">14</item>
+    <item key="minlevel">8</item>
+    <item key="sourcedate">0000-00-00T00:00:00Z</item>
+  </meta>
+
+  <versions>
+{% for name in versions %}
+    <version>{{ name }}</version>
+{% endfor %}
+  </versions>
+
+  <config>
+    <fill></fill>
+    <srs></srs>
+    <clampNonnegative>0</clampNonnegative>
+    <maskgenConfig>
+      <feather>100</feather>
+      <mode>Mask</mode>
+      <band>1</band>
+      <fillvalue>-1</fillvalue>
+      <threshold>0</threshold>
+      <holesize>0</holesize>
+      <whitefill>0</whitefill>
+      <nodata></nodata>
+    </maskgenConfig>
+    <fuid_resource>1000</fuid_resource>
+  </config>
+
+</RasterProductAsset>
