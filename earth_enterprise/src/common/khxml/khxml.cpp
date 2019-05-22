@@ -42,16 +42,14 @@ const std::string GEXMLObject::MAX_HEAP_SIZE = "MAX_HEAP_SIZE";
 const std::string GEXMLObject::BLOCK_SIZE = "BLOCK_SIZE";
 const std::string GEXMLObject::PURGE = "PURGE";
 const std::string GEXMLObject::PURGE_LEVEL = "PURGE_LEVEL";
-const std::string GEXMLObject::DEALLOCATE_ALL = "DEALLOCATE_ALL";
 const std::string GEXMLObject::XMLConfigFile = "/etc/opt/google/XMLparams";
-const std::array<std::string,6> GEXMLObject::options
+const std::array<std::string,5> GEXMLObject::options
 {{
     INIT_HEAP_SIZE,
     MAX_HEAP_SIZE,
     BLOCK_SIZE,
     PURGE,
-    PURGE_LEVEL,
-    DEALLOCATE_ALL
+    PURGE_LEVEL
 }};
 khMutex GEXMLObject::mutex;
 
