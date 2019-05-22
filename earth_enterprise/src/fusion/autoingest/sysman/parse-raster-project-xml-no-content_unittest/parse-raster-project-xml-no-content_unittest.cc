@@ -78,7 +78,7 @@ class ParseRasterProjectXmlNoContent_Test :
 
         // Currently, this causes a segmentation fault:
         // Cause the reference to be resolved by loading the XML:
-        asset_ref_character_count += asset->GetRef().length();
+        asset_ref_character_count += asset->GetRef().toString().length();
     }
 
     virtual bool run_test_operation()
