@@ -49,9 +49,10 @@ TEST(ConfigParserTest, key_not_present)
     try
     {
         testParser.parse(ss);
-        FAIL() << "Expected KeyNotPresentException";
     }
-    catch (const KeyNotPresentException& e) {}
+    catch (...) {
+        FAIL() << "Should ignore invalid options";
+    }
 }
 
 TEST(ConfigParserTest, check_data)
