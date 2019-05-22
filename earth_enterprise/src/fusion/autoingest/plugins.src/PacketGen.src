@@ -214,9 +214,12 @@ void PacketGenAssetVersionImplD::UpdateChildren(
                                     inset.alphaRPFile,
                                     SharedString(), /* cached blend */
                                     SharedString()  /* cached blend alpha */));
+        std::string acquisitionDate = inset.resource_->GetAcquisitionDate();
+
         packetLevelConfig.attributions.push_back
           (PacketLevelConfig::Attribution(
               inset.dataRPFile,
+              acquisitionDate,
               inset.combinedrp_->config.fuid_resource_));
       }
       curTime = std::chrono::high_resolution_clock::now();
@@ -255,9 +258,12 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
            idx != neededIndexes.end(); ++idx) {
         const InsetInfo<ProductAssetVersion> &inset(*extra.insetInfo[*idx]);
+        std::string acquisitionDate = inset.resource_->GetAcquisitionDate();
+
         packetLevelConfig.attributions.push_back
           (PacketLevelConfig::Attribution(
               inset.dataRPFile,
+              acquisitionDate,
               inset.combinedrp_->config.fuid_resource_));
       }
 

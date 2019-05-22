@@ -6,7 +6,6 @@ date:   2017-07-17 16:00:00
 author: Alexander Hernandez
 thumbnail: ahernandez.jpg
 ---
-
 Hello Everyone!
 
 My name is Alexander Hernandez and I would like to introduce myself as your Open GEE Community Manager. I’m currently employed at Thermopylae Sciences and Technology and I’m excited to be a part of this new community. At TST we’re looking forward to improving the project with other Google partners as well as working with the open source community.

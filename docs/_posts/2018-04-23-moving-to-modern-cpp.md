@@ -6,6 +6,8 @@ date:   2018-04-23 13:30:00
 author: Open GEE Development Team
 ---
 
+<br />
+
 Hello Everyone!
 
 The Open GEE Development Team would like to make a special announcement about an

@@ -1,0 +1,113 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Overview</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 6353404.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/2995465.html">Welcome to Google Earth Enterprise</a></p>
+<p class="sidebar-toc"><a href="../answer/6353404.html" class="current-file">Overview</a></p>
+<p class="sidebar-toc"><a href="../answer/3468016.html">Build and install GEE 5.x</a></p>
+<p class="sidebar-toc"><a href="../answer/3477797.html">Upgrade to GEE 5.x</a></p>
+<p class="sidebar-toc"><a href="../answer/6025486.html">Download documentation for GEE 5.1.x</a></p>
+<p class="sidebar-toc"><a href="../answer/2760566.html">Installation tips</a></p>
+</div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Get started</h1>
+<h2>Overview</h2>
+<p dir="ltr">Google Earth Enterprise (GEE) enables you to store and process terabytes of imagery, terrain and vector data on your own server infrastructure, and publish globes and maps securely for your users to view using the Google Earth Enterprise Client (EC), or through your own application using the Google Maps and Earth APIs.</p>
+<p dir="ltr">Google Earth Enterprise is comprised of two distinct software packages, Fusion and Server, that work together to build and host your private Google Earth and Google Maps layers. Your users can view these 3D globes and 2D maps using the Google Earth Enterprise Client or web browser, respectively. You can also create ‘portable’ globes and maps that your users can view using Portable Server.</p>
+<h2 dir="ltr">10 Things to Know About Building and Publishing Globes &amp; Maps</h2>
+ 
+
+<div class="tip">
+<p>Here are some common tasks and key tips when working with Google Earth Enterprise.  To learn more, click on the references at the end of each section.</p>
+</div>
+<h2 dir="ltr">1. Build databases with Fusion</h2>
+<p dir="ltr">Google Earth Enterprise Fusion combines all of your imagery, terrain, and vector data into a single, flyable Google Earth globe (3D) or a Google Map (2D).  After you import source data into your asset root and begin working with it, it becomes part of three fundamental components of Fusion: Resources, Projects and Databases.  The relationship among these three components is well defined.  Resources comprise projects, and projects comprise databases.  A given resource can be used in more than one project, and a given project can be used in more than one database.</p>
+<p dir="ltr">If you are working with Mercator map data, you also specify which resource(s) comprise each map layer, which map layer(s) comprise each Maps vector project, and which Maps vector project and imagery project comprise each Maps database.</p>
+  To build databases and manage all the resources and projects they comprise, you use the Asset Manager UI (or its command-line equivalents), from where you can also modify and push your databases. 
+
+<h3 dir="ltr"><span class="websearch-blue-text">Learn More</span></h3>
+<ul dir="ltr">
+<li><a href="../answer/4412422.html">Defining and Building Databases</a></li>
+<li><a href="../answer/4412455.html">Creating a Map Database</a></li>
+</ul>
+<h2 dir="ltr">2. View your build logs</h2>
+<p dir="ltr">During the course of creating resources, projects, and databases, you can check on the various processes that control the builds, helping you determine how your system is performing as your assets are being built.  Error messages and warnings are also displayed here.  To view the asset logs in the Fusion <strong>Asset Manager</strong>, right-click on an Asset to open its Current Version Properties. The System Manager also lets you follow the progress of your builds, letting you review waiting and active builds, as well as a complete activity log.</p>
+<h3 dir="ltr"><span class="websearch-blue-text">Learn More</span></h3>
+<ul dir="ltr">
+<li><a href="../answer/4492616.html">Verifying and troubleshooting</a></li>
+<li><a href="../answer/3481464.html">Fusion Administration Guide</a></li>
+</ul>
+<h2 dir="ltr">3. Push Databases to GEE Server</h2>
+<p dir="ltr">Google Earth Enterprise Fusion prepares 2D and 3D databases for hosting by first pushing them to GEE server. Pushing a database registers it with an associated server and transfers database files to the <strong>publish root</strong>, which contains all the files needed to serve that database version from GEE Server.</p>
+<p dir="ltr">Once it’s registered, you “publish” a database on GEE server by specifying a “publish point”, virtual host, and optionally, search tabs and snippets.  Once published, your database is ready to be accessed by users through Google Earth EC (3D) or a web browser (2D).<br/>
+If you want to publish databases on a server that does not have a network connection to your Fusion workstation, you can create a “disconnected database” which can be output to portable media, and then pushed and published on a GEE Server.</p>
+<h3 dir="ltr"><span class="websearch-blue-text">Learn More</span></h3>
+<ul dir="ltr">
+<li><a href="../answer/6034724.html">Push and publish databases</a></li>
+<li><a href="../answer/6051700.html">Publish databases using disconnected publishing</a></li>
+</ul>
+<h2 dir="ltr">4. Publish databases securely with GEE Server</h2>
+<p dir="ltr">Does your organization host multiple servers with different authentication protocols? If you need to specify unique options to publish a map or globe at a given URL, you create individual <strong>publish points </strong>so that the map or globe can then be easily published multiple times at different URLs.  And if you need to apply different security protocols to that map or globe, you can create new <strong>virtual hosts</strong>.</p>
+<p dir="ltr">Associating <strong>search services</strong> and <strong>snippet profiles</strong> at the time of publishing allows you to present different versions on the same underlying Fusion database, which can then be made available at different URLs and under different security protocols. For example, to protect one set of searchable data but display it on the same globe as you do an unprotected set of searchable data. You might then publish the database at one URL with the sensitive search and a secured <strong>virtual host</strong>, then publish the same database at a different URL with a non-sensitive search and public virtual host. </p>
+<h3 dir="ltr"><span class="websearch-blue-text">Learn More</span></h3>
+<ul dir="ltr">
+<li><a href="../answer/6013604.html">Manage virtual hosts</a></li>
+<li><a href="../answer/2760544.html">Configure a GEE virtual host for LDAP authentication</a></li>
+<li><a href="../answer/6080928.html">Configure GEE Server 5.1.0 for SSL/HTTPS</a></li>
+</ul>
+<h2 dir="ltr">5. Make Web Map Service (WMS) requests</h2>
+<p dir="ltr">GEE Server supports the OpenGIS Web Map Service Interface Standard (WMS), which provides a standard HTTP interface to request map images from one or more published geospatial databases.  One of the benefits of using the WMS standard is that supported clients can request images from multiple WMS servers and then combine those mapping images into a single view.  Because the WMS standard is used to fetch the images, they can easily be overlaid on one another.  Supported clients include <a href="../answer/4441137.html#GISClients">QGIS</a>, ArcGIS/ArcGIS Explorer Desktop, and <a href="https://github.com/google/earthenterprise/wiki/Google-Earth-Enterprise-Client-(EC)">Google Earth Pro/EC</a>.</p>
+<h3 dir="ltr"><span class="websearch-blue-text">Learn More</span></h3>
+<ul dir="ltr">
+<li><a href="../answer/4441137.html">Make Web Map Service (WMS) requests</a> </li>
+</ul>
+<h2 dir="ltr">6. View databases</h2>
+<p dir="ltr">You can enable your users to access your private or public 3D globe via Google Earth Enterprise Client (EC), or they can access your 2D maps through a browser using the Google Maps API.</p>
+<p dir="ltr">Google Earth EC is similar to the familiar Google Earth client and offers your users an easy way to view geospatial data compared to traditional desktop GIS software. Search data is made accessible by <strong>search tabs</strong> in the EC client window, and each search tab can appear with customizable query fields and parameters for your specific users’ needs.</p>
+<h3 dir="ltr"><span class="websearch-blue-text">Learn More</span></h3>
+<ul dir="ltr">
+<li><a href="../answer/4412446.html">Pushing, Publishing, and Viewing a Database</a> </li>
+</ul>
+<h2 dir="ltr">7. Google Maps Javascript API</h2>
+<p dir="ltr">Web-based maps mashups can be easily built with your data through Google Earth Enterprise and data is securely viewable and accessible through a browser using the Google Earth or Google Maps API. Use the GEE-specific <code>geeCreateFusionMap</code> class to instantiate and interact with map layers to create a container within an HTML page and then apply the same options as you would use with <code>google.maps.Map</code>.</p>
+<h3 dir="ltr"><span class="websearch-blue-text">Learn More</span></h3>
+<ul dir="ltr">
+<li><a href="../answer/6078457.html">Google Maps API v3 for GEE 5.x</a></li>
+</ul>
+<h2 dir="ltr">8. Search Services</h2>
+<p dir="ltr">GEE provides <strong>search tabs</strong> that you can incorporate into your published databases. You can access search services in different ways: by specifying search fields (POI) in one or more of your vector layers, by adding one of the default search tabs, or by writing a custom application that uses “search plug-ins” to query external databases.</p>
+ 
+
+<p dir="ltr">Search data is accessed via a query interface in Google Earth EC or a browser in the form of search tabs. You can customize the labels and fields in a search tab and use query parameter settings to control how the results of a query will be displayed. </p>
+<h3 dir="ltr"><span class="websearch-blue-text">Learn More</span></h3>
+<ul dir="ltr">
+<li><a href="../answer/6062970.html">Publish databases with search</a></li>
+<li><a href="../answer/6063101.html">Search your POI vector data or map layer data</a></li>
+<li><a href="../answer/3497832.html">Create Search tabs</a></li>
+<li><a href="../answer/6066597.html">Add custom search services</a> </li>
+</ul>
+<h2 dir="ltr">9. Portable</h2>
+<p dir="ltr">With the <strong>Google Earth Enterprise Portable Server</strong>, your users can take Google Earth and Maps with them into the field for completely disconnected, offline use.  A portable globe or map is a single self-contained file that stores all the geospatial data available within your specified area of interest — including all high-resolution imagery, terrain, vector data, KML files, and searchable point of interest (POI) locations.</p>
+<p dir="ltr">To create a portable map or globe, you launch the <strong>cutter tool</strong> from GEE Server and “cut” a polygon or provide KML to define the area of interest. Google Earth Enterprise Portable launches a web browser to display your portable globes or maps that have been saved to the GEE Portable maps directory. You can also assemble different cuts into <strong>composite portable files</strong>. You might want to apply layers that use different cuts or regions of interest, then assemble them to create one single portable map or globe.  You can serve these portable globes from Portable Server or GEE Server, and then view the portable 3D globes (.glb) from EC, or 2D portable maps (.glm) from a web browser.</p>
+<h3 dir="ltr"><span class="websearch-blue-text">Learn More</span></h3>
+<ul dir="ltr">
+<li><a href="../answer/3230746.html">Portable User Guide for Mac OS, Windows, and Linux</a></li>
+<li><a href="../answer/3230807.html">Portable Developer Guide</a></li>
+<li><a href="../answer/3230777.html">Create portable globes and maps</a> </li>
+</ul>
+<h2 dir="ltr">10. Manage your GEE system</h2>
+<p dir="ltr">Before you even install, you’ll need to make sure you have planned for the location of your resources and your published databases, your <strong>asset</strong> and <strong>publish roots</strong>.  And you’ll need to consider administrative privileges, keeping in mind that you’ll need to accept the default user and group access privileges for GEE Server or customize them for your organization.  As you’re likely to be processing large amounts of data, we recommend having maintenance plan in place for your GEE system to include backup &amp; restore strategies, and periodic clean-up of unwanted asset versions.</p>
+<h3 dir="ltr"><span class="websearch-blue-text">Learn More</span></h3>
+<ul dir="ltr">
+<li><a href="../answer/3481464.html">Fusion Administration Guide</a></li>
+<li><a href="../answer/176676.html">Manage Fusion disk space</a></li>
+</ul>
+<p> </p>
+</div>
+
+<div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>
