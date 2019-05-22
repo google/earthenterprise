@@ -79,7 +79,7 @@ class StorageManagerTest : public testing::Test {
  protected:
   StorageManager<TestItem> storageManager;
  public:
-  StorageManagerTest() : storageManager(CACHE_LIMIT, "test") {}
+  StorageManagerTest() : storageManager(CACHE_LIMIT, 0, "test") {}
 };
 
 TEST_F(StorageManagerTest, AddAndRetrieve) {

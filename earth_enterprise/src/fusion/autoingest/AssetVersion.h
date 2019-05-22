@@ -195,7 +195,7 @@ inline StorageManager<AssetVersionImpl>&
 AssetVersion::storageManager(void)
 {
   static StorageManager<AssetVersionImpl> storageManager(
-      MiscConfig::Instance().MaxVersionCacheSize, "version");
+      MiscConfig::Instance().MaxVersionCacheSize, MiscConfig::Instance().LimitMemoryUtilization, "version");
   return storageManager;
 }
 
