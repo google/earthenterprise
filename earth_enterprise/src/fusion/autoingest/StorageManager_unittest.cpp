@@ -23,8 +23,7 @@
 using namespace std;
 
 const size_t CACHE_SIZE = 5;
-const uint64 OBJECT_SIZE = 232;
-const uint64 CACHE_LIMIT = 5*OBJECT_SIZE;
+const uint64 MEMORY_LIMIT = 400;
 
 class TestItem : public khRefCounter, public StorageManaged {
  public:
@@ -79,7 +78,7 @@ class StorageManagerTest : public testing::Test {
  protected:
   StorageManager<TestItem> storageManager;
  public:
-  StorageManagerTest() : storageManager(CACHE_LIMIT, 0, "test") {}
+  StorageManagerTest() : storageManager(CACHE_SIZE, 0, MEMORY_LIMIT, "test") {}
 };
 
 TEST_F(StorageManagerTest, AddAndRetrieve) {
@@ -161,9 +160,8 @@ TEST_F(StorageManagerTest, Mutable) {
   ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has wrong number of items in dirty map";
 }
 
-TEST_F(StorageManagerTest, PurgeCache) {
+TEST_F(StorageManagerTest, PurgeCacheBasedOnNumberOfObjects) {
   // Put items in the cache but don't hold handles so they will be purged
-  storageManager.SetLimitCheck(1);
   for(size_t i = 0; i < CACHE_SIZE + 2; ++i) {
     stringstream s;
     s << "asset" << i;
@@ -173,23 +171,21 @@ TEST_F(StorageManagerTest, PurgeCache) {
   }
 }
 
-TEST_F(StorageManagerTest, DontPurgeCache) {
-  // Put items in the cache and don't hold handles but don't purge
-  storageManager.SetLimitCheck(0);
+TEST_F(StorageManagerTest, PurgeCacheBasedOnMemoryUtilization) {
+  storageManager.SetCacheMemoryLimit(1, MEMORY_LIMIT);
   for(size_t i = 0; i < CACHE_SIZE + 2; ++i) {
     stringstream s;
     s << "asset" << i;
     Get<TestHandle>(storageManager, s.str(), false, true, false);
     ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
   }
-  ASSERT_GT(storageManager.CacheSize(), CACHE_SIZE) << "Unexpected number of items in cache";
+  ASSERT_LE(storageManager.CacheSize(), CACHE_SIZE) << "Unexpected number of items in cache";
 }
 
 TEST_F(StorageManagerTest, PurgeCacheWithHandles) {
   {
     // Put items in the cache and hold handles so they won't be purged
     TestHandle handles[CACHE_SIZE+3];
-    storageManager.SetLimitCheck(1);
     for(size_t i = 0; i < CACHE_SIZE + 3; ++i) {
       stringstream s;
       s << "asset" << i;

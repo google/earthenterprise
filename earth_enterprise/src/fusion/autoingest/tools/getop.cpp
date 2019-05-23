@@ -73,6 +73,22 @@ usage(const std::string &progn, const char *msg = 0, ...)
   exit(1);
 }
 
+std::string
+readableMemorySize(uint64 size) {
+  double readable = static_cast<double>(size);
+  const char* units[] = {"B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
+  int i = 0;
+  char buf[100];
+
+  while (readable > 1024) {
+    readable /= 1024;
+    i++;
+  }
+
+  sprintf(buf, "%.2f %s", readable, units[i]);
+  return std::string(buf);
+}
+
 int
 main(int argc, char *argv[])
 {
@@ -226,9 +242,10 @@ main(int argc, char *argv[])
         outline("Number of cached assets: %u", taskLists.num_assets_cached);
         outline("Number of cached asset versions: %u",
                 taskLists.num_assetversions_cached);
-        outline("Total size of cached assets: %lu", taskLists.asset_cache_size);
-        outline("Total size of cached asset versions: %lu",
-                taskLists.version_cache_size);
+        outline("Total size of cached assets: %s",
+                readableMemorySize(taskLists.asset_cache_size).c_str());
+        outline("Total size of cached asset versions: %s",
+                readableMemorySize(taskLists.version_cache_size).c_str());
         outline("Number of strings cached: %u", taskLists.str_store_size);
 
       }
