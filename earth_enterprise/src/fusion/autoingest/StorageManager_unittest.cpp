@@ -274,7 +274,7 @@ TEST_F(StorageManagerTest, SaveDirtyToVector) {
   getAssetsForDirtyTest(storageManager, handles);
   
   khFilesTransaction trans;
-  vector<string> saved;
+  vector<SharedString> saved;
   storageManager.SaveDirtyToDotNew(trans, &saved);
   ASSERT_EQ(saved.size(), 2) << "Wrong number of items in saved vector";
   ASSERT_TRUE(find(saved.begin(), saved.end(), "mutable2") != saved.end()) << "Dirty item missing from saved vector";
