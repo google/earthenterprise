@@ -76,13 +76,14 @@ class khCache {
   MapType map;
   Item *head;
   Item *tail;
-  const uint64 targetMax;
+  const uint targetMax;
 #ifdef SUPPORT_VERBOSE
   bool verbose;
 #endif
   uint numItems;
   uint64 cacheObjectSizes;
-  bool limitCache;
+  bool limitCacheMemory;
+  uint64 maxCacheMemory;
 
   bool InList(Item *item) {
     Item *tmp = head;
@@ -187,10 +188,12 @@ class khCache {
   uint64 sumObjectSizes(Item *item) {
     uint64 size = sizeof(item) + sizeof(*item) + sizeof(item->key) + sizeof(item->val)
     + sizeof(item->prev) + sizeof(*(item->prev)) + sizeof(item->next) + sizeof(*(item->next));
+
     return size;
   }
-  void setLimitCheck(bool limit) {
-      limitCache = limit;
+  void setCacheMemoryLimit(bool check, uint limit) {
+    limitCacheMemory = check;
+    maxCacheMemory = limit;
   }
   void clear(void) {
     CheckListInvariant();
@@ -276,7 +279,7 @@ class khCache {
   void Prune(void) {
     CheckListInvariant();
     Item *item = tail;
-    while (item && ( (cacheObjectSizes > targetMax) && limitCache )) {
+    while (item && ( ((cacheObjectSizes > maxCacheMemory) && limitCacheMemory) || ((map.size() > targetMax) && !limitCacheMemory) )) {
       // Note: this refcount() > 1 check is safe even with
       // khMTRefCounter based guards. See explanaition with the
       // definition of khMTRefCounter in khMTTypes.h.
