@@ -40,28 +40,23 @@ ge new imagery test: Root Directory Test
 Tags: OGCommandgnir02
 * perform ge new imagery resource root directory test
 
-ge new imagery test: Directory Traversal Test
----------------------------------------------
-Tags: OGCommandgnir03
-* perform ge new imagery resource directory traversal test
-
 ge new imagery test: Multi Level Directory Test
 -----------------------------------------------
-Tags: OGCommandgnir04
+Tags: OGCommandgnir03
 * perform ge new imagery resource multi level directory test
 
 ge new imagery test: Unacceptable Characters Test
 -------------------------------------------------
-Tags: OGCommandgnir05
+Tags: OGCommandgnir04
 * perform ge new imagery resource having unacceptable characters test
 
 ge new imagery test: Unspecified Special Characters Test
 --------------------------------------------------------
-Tags: OGCommandgnir06
+Tags: OGCommandgnir05
 * perform ge new imagery resource having unspecified special characters test
 
 ge new imagery test: Empty Directory Test
 -----------------------------------------
-Tags: OGCommandgnir07
+Tags: OGCommandgnir06
 * perform ge new imagery resource having empty directory test
 

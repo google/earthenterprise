@@ -53,15 +53,6 @@ def genewimageryresourceMultiLevelDirectoryTest() :
    executeCommand(testDir)
    assert (doesKhassetFileExist(outputROOT+"/"+testDir) == True)
 
-# The directory traversal should have not been feasible:
-# Reason: We do not allow directories to start with "/".  So, allowing this will subvert the feature.
-@step("perform ge new imagery resource directory traversal test")
-def genewimageryresourceDirectoryTraversal() :
-   # Although it is supposed to be written into /gevol/asset, can I please try /gevol/src?
-   testDir = "../../../../../gevol/src/" + outputDirectoryForTest + "DirTraversal"
-   executeCommand(testDir)
-   assert (doesKhassetFileExist(testDir) == False), " Performing directory traversal and writing somewhere else should not be possible"
-
 @step("perform ge new imagery resource root directory test")
 def genewimageryresourceDirStartsAtRoot() :
    testDir = "/gevol/assets/" + outputDirectoryForTest + "RootDir"
