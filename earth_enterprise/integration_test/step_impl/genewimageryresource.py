@@ -12,14 +12,6 @@ def get_env_value(sKey):
 def doesKhassetFileExist(sPathUntilDotKiasset):
    return os.path.exists(sPathUntilDotKiasset + ".kiasset/khasset.xml" )
 
-def resetAssets():
-   sCommandToRun = "/workdir/geoplatform/test/regression/States/Purge_Assets.sh > /dev/null"
-   pHandle = subprocess.Popen(sCommandToRun, shell=True)
-   assert (pHandle.wait() == 0)
-   sCommandToRun = "/workdir/geoplatform/test/regression/States/Set_Assets.sh > /dev/null"
-   pHandle = subprocess.Popen(sCommandToRun, shell=True)
-   assert (pHandle.wait() == 0)
-
 def executeCommand(sTestDir):
    sImageryRoot = "/opt/google/share/tutorials/fusion/";
    sImageryFile = "Imagery/bluemarble_4km.tif"
@@ -40,7 +32,8 @@ def executeCommand(sTestDir):
 # Helpful ENV settings
 # ------------------------
 HOME = get_env_value("HOME")
-outputDirectoryForTest = "genewimageryresourceTestOutput"
+now = datetime.datetime.now()
+outputDirectoryForTest = "genewimageryresourceTestOutput" + "." + now.strftime("%Y.%m.%d.%H.%M.%S")
 outputROOT = "/gevol/assets"
 
 sCommandScript = "./step_impl/balaOutputPathTestDriver.sh "
@@ -48,19 +41,15 @@ sCommandScript = "./step_impl/balaOutputPathTestDriver.sh "
 # ---------------------------
 # The Tests
 # ------------------------
-@step("reset all assets")
-def resetAllAssets() :
-   resetAssets ()
-
 @step("perform ge new imagery resource simple test")
 def genewimageryresourceSimpleTest() :
-   testDir = outputDirectoryForTest
+   testDir = outputDirectoryForTest + "SimpleTest"
    executeCommand(testDir)
    assert (doesKhassetFileExist(outputROOT+"/"+testDir) == True)
 
 @step("perform ge new imagery resource multi level directory test")
 def genewimageryresourceMultiLevelDirectoryTest() :
-   testDir = outputDirectoryForTest + "/dir1/dir2/dir3_prefix"
+   testDir = outputDirectoryForTest + "MultiDir/dir1/dir2/dir3_prefix"
    executeCommand(testDir)
    assert (doesKhassetFileExist(outputROOT+"/"+testDir) == True)
 
@@ -69,13 +58,13 @@ def genewimageryresourceMultiLevelDirectoryTest() :
 @step("perform ge new imagery resource directory traversal test")
 def genewimageryresourceDirectoryTraversal() :
    # Although it is supposed to be written into /gevol/asset, can I please try /gevol/src?
-   testDir = "../../../../../gevol/src/" + outputDirectoryForTest
+   testDir = "../../../../../gevol/src/" + outputDirectoryForTest + "DirTraversal"
    executeCommand(testDir)
    assert (doesKhassetFileExist(testDir) == False), " Performing directory traversal and writing somewhere else should not be possible"
 
 @step("perform ge new imagery resource root directory test")
 def genewimageryresourceDirStartsAtRoot() :
-   testDir = "/gevol/assets/" + outputDirectoryForTest
+   testDir = "/gevol/assets/" + outputDirectoryForTest + "RootDir"
    executeCommand(testDir)
    assert (doesKhassetFileExist(testDir) == False)
 
@@ -89,7 +78,7 @@ def genewimageryresourceHavingUnacceptableCharacters() :
 def genewimageryresourceUnspecifiedSpecialCharacters() :
    testDir = outputDirectoryForTest + 'TEMP/VAL\tUE'
    executeCommand(testDir)
-   assert (doesKhassetFileExist(outputROOT+"/"+testDir) == False), " Creating Files and Dirs with TAB char should not have been allowed!"
+   assert (doesKhassetFileExist(outputROOT+"/"+testDir) == True), " Creating Files and Dirs with TAB char has been traiditionally allowed"
 
 @step("perform ge new imagery resource having empty directory test")
 def genewimageryresourceNegativeCaseEmptyDir() :

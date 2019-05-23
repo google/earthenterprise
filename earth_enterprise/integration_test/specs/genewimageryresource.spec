@@ -29,7 +29,6 @@ Ge New Imagery Resource command Test
 ====================================
 Testing the Command: genewimageryresource
 
-* reset all assets
 
 ge new imagery test: Simple Test
 --------------------------------
