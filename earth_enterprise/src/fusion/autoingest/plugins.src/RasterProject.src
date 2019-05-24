@@ -1041,10 +1041,18 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   packgenassets.reserve(numInsets);
   packgenvers.reserve(numInsets);
 
+  // Temporary version of the vectors that will allow multiple threads to safely insert
+  // items by index. The valid elements will be placed into the above vectors
+  // after the loop.
+  std::vector<AssetVersion> prelim_packgenvers;
+  prelim_packgenvers.resize(numInsets);
+
   int threadsToUse = MiscConfig::Instance().BuildIndexThreads;
-  #pragma omp parallel for ordered schedule(static,1) num_threads(threadsToUse)
+
+  #pragma omp parallel for schedule(static) num_threads(threadsToUse)
   for (uint i = 0; i < genInfo.size(); ++i) {
-    notify(NFY_DEBUG, "Starting loop %d from thread %d", i+1, omp_get_thread_num());
+    int threadNum = omp_get_thread_num();
+    notify(NFY_DEBUG, "Starting loop %d from thread %d", i+1, threadNum);
     // Check if I even need to do any packet generation at all
     // Maybe the other insets will completely replace everything
     // that this one would generate
@@ -1080,7 +1088,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     curTime = std::chrono::high_resolution_clock::now();
     timeDiff = std::chrono::duration<double>(curTime - prevTime);
     notify(NFY_INFO2, "BuildIndex finished compiling %lu needed indices for inset %d - %f seconds elapsed",
-           neededIndexes.size(), i, timeDiff.count());
+           neededIndexes.size(), i+1, timeDiff.count());
     prevTime = curTime;
 
     // calculate the level range that will be minified
@@ -1130,7 +1138,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     curTime = std::chrono::high_resolution_clock::now();
     timeDiff = std::chrono::duration<double>(curTime - prevTime);
     notify(NFY_INFO2, "BuildIndex finished nested loop for inset %d - %f seconds elapsed",
-           i, timeDiff.count());
+           i+1, timeDiff.count());
     prevTime = curTime;
 
     // Build a PacketGenExtraUpdateArg
@@ -1157,9 +1165,13 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
       genInfo[i].PopulatePacketLevels(packgen);
     }
 
-#pragma omp critical 
-    {
-      // remember this new PacketGen version
+    // remember this new PacketGen version
+    prelim_packgenvers[i] = packgen;
+  }
+
+  // Populate packgenkids, packgenassets, and packgenvers from prelim_packgenvers
+  for(const auto & packgen : prelim_packgenvers) {
+    if( !packgen->GetRef().empty() ) {
       packgenkids.push_back(packgen->GetRef());
       packgenassets.push_back(packgen->GetAssetRef());
       packgenvers.push_back(packgen);
