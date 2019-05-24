@@ -1,4 +1,3 @@
-Copyright 2019 Thermopylae Sciences and Technology
 
 text underlined with = chars denotes the spec name
 text underlined with - chars denotes the scenario name
@@ -10,11 +9,11 @@ PRE-TEST steps go here.   These steps will be run before EACH and EVERY test (sc
 
 
 Example for scenario including cleanups (aka POST-STEP):
-' Testing RPM install of OpenGee
-' ------------------------------
-' Tags: tbd
-' * tbd
-' ----------------------
+' * Example clean up steps to be performed.
+' -----------------------------------------
+' Tags: Comma separated list of Tag Names
+' * Example steps
+' -----------------------------------------
 ' POST-STEPs for this SCENARIO go here.
 
 '##########################################
@@ -25,10 +24,17 @@ Example for scenario including cleanups (aka POST-STEP):
 
 
 
-Ge New Imagery Resource command Test
-====================================
+Open GEE New Imagery Resource Command Test
+==========================================
 Testing the Command: genewimageryresource
 
+
+BTW: Naming for these tags is done with the format of:
+OGCommand = Open Gee Command
+gnir      = Ge New Imagery Resource (The name of the command)
+xx        = Test case number.
+
+These tests can be individually run by using gauge run -t OGCommandgnir01 specs
 
 ge new imagery test: Simple Test
 --------------------------------

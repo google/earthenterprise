@@ -14,6 +14,9 @@ IMAGERY_RESOURCE_PATH = os.path.join(BASE_ASSET_PATH, "Resources", "Imagery")
 TERRAIN_RESOURCE_PATH = os.path.join(BASE_ASSET_PATH, "Resources", "Terrain")
 VECTOR_RESOURCE_PATH = os.path.join(BASE_ASSET_PATH, "Resources", "Vector")
 
+def get_env_value(sKey):
+   return os.getenv(sKey, "unset")
+
 def get_asset_root():
   return os.getenv('ge_asset_root')
 

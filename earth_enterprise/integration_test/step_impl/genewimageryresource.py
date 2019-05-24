@@ -3,12 +3,12 @@ import os, random, fnmatch, subprocess, datetime
 from subprocess import Popen
 import shutil
 
+# Re-use some of the functionalities
+import assets
+
 # ------------------------
 # Helpful Not-Step Methods
 # ------------------------
-def get_env_value(sKey):
-   return os.getenv(sKey, "unset")
-
 def doesKhassetFileExist(sPathUntilDotKiasset):
    return os.path.exists(sPathUntilDotKiasset + ".kiasset/khasset.xml" )
 
@@ -31,12 +31,10 @@ def executeCommand(sTestDir):
 # ------------------------
 # Helpful ENV settings
 # ------------------------
-HOME = get_env_value("HOME")
+HOME = assets.get_env_value("HOME")
 now = datetime.datetime.now()
 outputDirectoryForTest = "genewimageryresourceTestOutput" + "." + now.strftime("%Y.%m.%d.%H.%M.%S")
 outputROOT = "/gevol/assets"
-
-sCommandScript = "./step_impl/balaOutputPathTestDriver.sh "
 
 # ---------------------------
 # The Tests
