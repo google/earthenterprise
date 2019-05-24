@@ -1170,7 +1170,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   }
 
   // Populate packgenkids, packgenassets, and packgenvers from prelim_packgenvers
-  for(auto & packgen : prelim_packgenvers) {
+  for(const auto & packgen : prelim_packgenvers) {
     if( !packgen->GetRef().empty() ) {
       packgenkids.push_back(packgen->GetRef());
       packgenassets.push_back(packgen->GetAssetRef());
