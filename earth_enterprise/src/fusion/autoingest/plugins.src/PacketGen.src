@@ -284,25 +284,22 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       prevTime = curTime;
 
       // populate inputs and inputVers & config.insets
-      levInputs.reserve(mergeIndexes.size() * 2 + 1);
-      levInputVers.reserve(mergeIndexes.size() * 2 + 1);
       packetLevelConfig.insets.reserve(mergeIndexes.size() + 1);
       packetLevelConfig.insets.resize(mergeIndexes.size());
+      std::vector<AssetVersion> combRps(mergeIndexes.size());
+      std::vector<AssetVersion> blendVers(mergeIndexes.size());
       for (size_t idx = 0; idx < mergeIndexes.size(); ++idx) {
         const InsetInfo<ProductAssetVersion> &inset(*extra.insetInfo[mergeIndexes[idx]]);
         const PacketGenInfo &genInfo(*extra.genInfo[mergeIndexes[idx]]);
-        AssetVersion blendVer;
         if (!inset.alphaRPFile.empty() &&
             (genInfo.packetLevels.size() > minifySrcLevel)) {
-          blendVer = genInfo.packetLevels[minifySrcLevel];
+          blendVers[idx] = genInfo.packetLevels[minifySrcLevel];
         }
-
-        levInputs.push_back(inset.combinedrp_.Ref());
-        levInputVers.push_back(inset.combinedrp_);
+        combRps[idx] = inset.combinedrp_;
 
         SharedString cached_blend;
         SharedString cached_blend_alpha;
-        if (blendVer) {
+        if (blendVers[idx]) {
           // This covers two cases:
           // 1) If level+1 == config.endMinifyLevel:
           //   This is the first merge (from cached blends)
@@ -320,19 +317,17 @@ void PacketGenAssetVersionImplD::UpdateChildren(
           // In these cases we pull directly from the product. It
           // will also happen for the last thing on the stack who
           // hasn't had his blendvers filled in yet.
-          levInputs.push_back(blendVer.Ref());
-          levInputVers.push_back(blendVer);
 
           // Note: Before creating a merge inset, we check if the cached alpha
           // blend directory exists for the asset since in GEE-5.x we need to
           // pick up the GEE-4.x Imagery/Terrain Projects (the PacketLevel
           // assets) that have no alpha blend cached.
           const std::string cache_alpha_path =
-              blendVer->GetOutputFilename(0) + "/cache_alpha.pack";
+              blendVers[idx]->GetOutputFilename(0) + "/cache_alpha.pack";
           if (khExists(cache_alpha_path)) {
-            cached_blend_alpha = blendVer.Ref();
+            cached_blend_alpha = blendVers[idx].Ref();
           }
-          cached_blend = blendVer.Ref();
+          cached_blend = blendVers[idx].Ref();
         }
 
         packetLevelConfig.insets[idx] = 
@@ -341,6 +336,17 @@ void PacketGenAssetVersionImplD::UpdateChildren(
                 inset.alphaRPFile,
                 cached_blend,
                 cached_blend_alpha);
+      }
+
+      levInputs.reserve(mergeIndexes.size() * 2 + 1);
+      levInputVers.reserve(mergeIndexes.size() * 2 + 1);
+      for (size_t idx = 0; idx < mergeIndexes.size(); ++idx) {
+        levInputs.push_back(combRps[idx].Ref());
+        levInputVers.push_back(combRps[idx]);
+        if (blendVers[idx]) {
+          levInputs.push_back(blendVers[idx].Ref());
+          levInputVers.push_back(blendVers[idx]);
+        }
       }
 
       curTime = std::chrono::high_resolution_clock::now();
