@@ -287,32 +287,22 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       levInputs.reserve(mergeIndexes.size() * 2 + 1);
       levInputVers.reserve(mergeIndexes.size() * 2 + 1);
       packetLevelConfig.insets.reserve(mergeIndexes.size() + 1);
-      for (std::vector<uint>::const_iterator idx = mergeIndexes.begin();
-           idx != mergeIndexes.end(); ++idx) {
-        const InsetInfo<ProductAssetVersion> &inset(*extra.insetInfo[*idx]);
-        const PacketGenInfo &genInfo(*extra.genInfo[*idx]);
+      packetLevelConfig.insets.resize(mergeIndexes.size());
+      for (size_t idx = 0; idx < mergeIndexes.size(); ++idx) {
+        const InsetInfo<ProductAssetVersion> &inset(*extra.insetInfo[mergeIndexes[idx]]);
+        const PacketGenInfo &genInfo(*extra.genInfo[mergeIndexes[idx]]);
         AssetVersion blendVer;
         if (!inset.alphaRPFile.empty() &&
             (genInfo.packetLevels.size() > minifySrcLevel)) {
           blendVer = genInfo.packetLevels[minifySrcLevel];
         }
 
-        if (!blendVer) {
-          // This inset doesn't have a cached blend file. This
-          // will only happen for things that have no alpha mask.
-          // In these cases we pull directly from the product. It
-          // will also happen for the last thing on the stack who
-          // hasn't had his blendvers filled in yet.
-          levInputs.push_back(inset.combinedrp_.Ref());
-          levInputVers.push_back(inset.combinedrp_);
+        levInputs.push_back(inset.combinedrp_.Ref());
+        levInputVers.push_back(inset.combinedrp_);
 
-          packetLevelConfig.insets.push_back
-            (PacketLevelConfig::Inset(
-                inset.dataRPFile,
-                inset.alphaRPFile,
-                SharedString(), /* cached blend */
-                SharedString()  /* cached blend alpha */));
-        } else {
+        SharedString cached_blend;
+        SharedString cached_blend_alpha;
+        if (blendVer) {
           // This covers two cases:
           // 1) If level+1 == config.endMinifyLevel:
           //   This is the first merge (from cached blends)
@@ -324,8 +314,12 @@ void PacketGenAssetVersionImplD::UpdateChildren(
           //   possible that earlier merges also short circuited the
           //   merge with opaque top tiles. So we may need to pull
           //   from the product too.
-          levInputs.push_back(inset.combinedrp_.Ref());
-          levInputVers.push_back(inset.combinedrp_);
+          // If we do not enter this if statment, then
+          // this inset doesn't have a cached blend file. This
+          // will only happen for things that have no alpha mask.
+          // In these cases we pull directly from the product. It
+          // will also happen for the last thing on the stack who
+          // hasn't had his blendvers filled in yet.
           levInputs.push_back(blendVer.Ref());
           levInputVers.push_back(blendVer);
 
@@ -335,16 +329,18 @@ void PacketGenAssetVersionImplD::UpdateChildren(
           // assets) that have no alpha blend cached.
           const std::string cache_alpha_path =
               blendVer->GetOutputFilename(0) + "/cache_alpha.pack";
-          const bool cache_alpha_exist = khExists(cache_alpha_path);
+          if (khExists(cache_alpha_path)) {
+            cached_blend_alpha = blendVer.Ref();
+          }
+          cached_blend = blendVer.Ref();
+        }
 
-          packetLevelConfig.insets.push_back
-            (PacketLevelConfig::Inset(
+        packetLevelConfig.insets[idx] = 
+            PacketLevelConfig::Inset(
                 inset.dataRPFile,
                 inset.alphaRPFile,
-                blendVer.Ref(), /* cached blend */
-                cache_alpha_exist ?
-                    blendVer.Ref() : SharedString() /* cached blend alpha */));
-        }
+                cached_blend,
+                cached_blend_alpha);
       }
 
       curTime = std::chrono::high_resolution_clock::now();
