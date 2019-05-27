@@ -51,7 +51,7 @@ VectorLayerXAssetImplD::HandleEditRequest(const VectorLayerXEditRequest &req)
   // Validate our input (Make sure it's a VectorProduct)
   // make sure the vprod asset_ref is valid
   VectorProductFactory::ValidateRefForInput(req.config.vectorResource);
-  std::vector<std::string> productrefs;
+  std::vector<SharedString> productrefs;
   productrefs.push_back(req.config.vectorResource);
 
   // Normalize our asset name

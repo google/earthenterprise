@@ -202,7 +202,7 @@ VectorProjectAssetImplD::HandleEditRequest(const VectorProjectEditRequest &req)
                       AssetDefs::FileExtension(AssetDefs::Vector,
                                                kProjectSubtype));
   // Will be filled in later.
-  std::vector<std::string> inputs;
+  std::vector<SharedString> inputs;
 
   // Custom FindMake - modified to set/preserve indexVersion and IDs.
 
@@ -280,7 +280,7 @@ VectorProjectAssetImplD::HandleNewRequest(const VectorProjectNewRequest &req)
                                    std::vector<LayerConfig>());
     MutableVectorProjectAssetD project =
       VectorProjectFactory::Make(projname,
-                                 std::vector<std::string>(),
+                                 std::vector<SharedString>(),
                                  khMetaData(),
                                  projConfig);
 
@@ -434,7 +434,7 @@ VectorProjectAssetVersionImplD::UpdateChildren(void)
 {
   std::string assetRef = GetAssetRef();
   std::vector<MutableAssetVersionD> layers;
-  std::vector<std::string> vecfuses;
+  std::vector<SharedString> vecfuses;
   std::vector<AssetVersion> vecfusevers;
   std::map<uint, AssetVersion> vecfusemap;
 
@@ -493,7 +493,7 @@ VectorProjectAssetVersionImplD::UpdateChildren(void)
     MutableAssetVersionD layer
       = VectorLayerFactory::FindMakeAndUpdateSubAsset
       (assetRef, layername,
-       makevec1(kvp->GetRef()),
+       makevec1<SharedString>(kvp->GetRef()),
        khMetaData(),
        *layerConfig,
        makevec1<AssetVersion>(kvp));
@@ -529,7 +529,7 @@ VectorProjectAssetVersionImplD::UpdateChildren(void)
     // They MUST be sorted by channelId & not client display order, which
     // is how mine are listed. That way a reorder of the layers will not
     // force a re-index.
-    std::vector<std::string> geindexinputs;
+    std::vector<SharedString> geindexinputs;
     std::vector<AssetVersion> geindexinputvers;
     geindexinputs.reserve(vecfusemap.size());
     geindexinputvers.reserve(vecfusemap.size());

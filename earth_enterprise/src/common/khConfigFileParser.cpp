@@ -138,17 +138,22 @@ void khConfigFileParser::parse(std::istream& fileContents)
         {
             std::string key, value;
             split(line,key,value);
-            if (!isKeyPresent(key))
+            // Keys not specified as options will be ignored
+            if (isKeyPresent(key))
             {
-                throw KeyNotPresentException(key);
+                if (value.size() == 0)
+                {
+                    throw ValueNotPresentException(key);
+                }
+                contents.insert(std::pair<std::string,std::string>(key,value));
             }
-            if (value.size() == 0)
+            else
             {
-                throw ValueNotPresentException(key);
+                notify(NFY_WARN, "Invalid key in configuration file: %s", key.c_str());
             }
-            contents.insert(std::pair<std::string,std::string>(key,value));
         }
     }
+    validateIntegerValues();
 }
 
 void khConfigFileParser::parse(const std::string& fn)
