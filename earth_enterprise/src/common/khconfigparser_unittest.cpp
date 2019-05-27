@@ -49,9 +49,10 @@ TEST(ConfigParserTest, key_not_present)
     try
     {
         testParser.parse(ss);
-        FAIL() << "Expected KeyNotPresentException";
     }
-    catch (const KeyNotPresentException& e) {}
+    catch (...) {
+        FAIL() << "Should ignore invalid options";
+    }
 }
 
 TEST(ConfigParserTest, check_data)
@@ -96,7 +97,6 @@ TEST(ConfigParserTest, validate_integer_data)
     try
     {
         testParser.parse(ss1);
-        testParser.validateIntegerValues();
         EXPECT_EQ(3, testParser.size());
     }
     catch (const khConfigFileParserException& e)
@@ -106,7 +106,6 @@ TEST(ConfigParserTest, validate_integer_data)
     try
     {
         testParser.parse(ss2);
-        testParser.validateIntegerValues();
         FAIL() << "Expected ValidateIntegersException";
     }
     catch (const ValidateIntegersException& e) {}

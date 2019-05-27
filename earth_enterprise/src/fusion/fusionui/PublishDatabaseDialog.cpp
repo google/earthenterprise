@@ -31,7 +31,7 @@ PublishDatabaseDialog::PublishDatabaseDialog(
     const std::vector<QString>& nicknames)
     : PublishDatabaseDialogBase(parent, 0, false, 0) {
 
-  std::string database_name = shortAssetName(asset->GetRef());
+  std::string database_name = shortAssetName(asset->GetRef().toString());
   db_name_label->setText(database_name);
 
   std::vector<QString>::const_iterator nickname = nicknames.begin();

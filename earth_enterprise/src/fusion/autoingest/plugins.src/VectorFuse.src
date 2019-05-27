@@ -150,7 +150,7 @@ VectorFuseAssetVersionImplD::AttemptConvertFromOldLastGood(void)
 
   if (lastgood->config != checkconfig) {
     notify(NFY_DEBUG, "AssetVer (%s) config doesn't match",
-           lastgood->GetRef().c_str());
+           lastgood->GetRef().toString().c_str());
     return false;
   }
 

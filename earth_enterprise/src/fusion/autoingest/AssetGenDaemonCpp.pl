@@ -290,9 +290,9 @@ ${name}Factory::ReuseOrMakeAndUpdate(
 {
     // make a copy since actualinputarg is macro substituted, so begin() &
     // end() could be called on different temporary objects
-    std::vector<std::string> inputarg = $actualinputarg;
+    std::vector<SharedString> inputarg = $actualinputarg;
     // bind my input versions refs
-    std::vector<std::string> boundInputs;
+    std::vector<SharedString> boundInputs;
     boundInputs.reserve(inputarg.size());
     std::transform(inputarg.begin(), inputarg.end(), back_inserter(boundInputs),
                    ptr_fun(&AssetVersionRef::Bind));
@@ -305,7 +305,7 @@ ${name}Factory::ReuseOrMakeAndUpdate(
             ${name}AssetVersionD version(*v);
             // Load an asset version without caching since we may not need it
             // (offline, obsolete and so on).
-            version.BindNoCache();
+            version.LoadAsTemporary();
             if ((version->state != AssetDefs::Offline) &&
                 (version->inputs == boundInputs) &&
                 ::IsUpToDate(config_, version->config)) {
@@ -315,10 +315,8 @@ ${name}Factory::ReuseOrMakeAndUpdate(
                        "${name}: ReuseOrMakeAndUpdate (reusing %s)",
                        version->GetRef().c_str());
                 notify(NFY_NOTICE, "         boundinputs:");
-                for (std::vector<std::string>::const_iterator bi =
-                     boundInputs.begin();
-                     bi != boundInputs.end(); ++bi) {
-                    notify(NFY_NOTICE, "             %s", bi->c_str());
+                for (const auto & bi : boundInputs) {
+                    notify(NFY_NOTICE, "             %s", bi.c_str());
                 }
                 notify(NFY_NOTICE, "         version inputs:");
                 for (std::vector<std::string>::const_iterator iv =
@@ -327,14 +325,14 @@ ${name}Factory::ReuseOrMakeAndUpdate(
                     notify(NFY_NOTICE, "             %s", iv->c_str());
                 }
 #endif
-                // Add the assetversion object to cache.
-                version.CacheAdd();
+                // Tell the storage manager that we're going to use this
+                // version again.
+                version.MakePermanent();
 
                 return version;
             } else {
-              // Remove from cache the assetversion object we don't need
-              // (offline, obsolete, and so on).
-              version.CacheRemove();
+              // Tell the storage manager we don't need this one any more.
+              version.NoLongerNeeded();
             }
         }
         asset->Modify($forwardinputarg meta_, config_);

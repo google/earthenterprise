@@ -210,6 +210,9 @@ env.test('JsUtils_unittest',
          'JsUtils_unittest.cpp',
          LIBS=['geautoingest', 'gemiscconfig', 'gtest'])
 
+env.test('StorageManager_unittest',
+         'StorageManager_unittest.cpp',
+         LIBS=['gecommon', 'gemiscconfig', 'gtest'])
 
 SConscript('sysman/SConscript', exports=['env', 'commonobj', 'plugins'])
 SConscript('tools/SConscript', exports='env')

@@ -197,9 +197,9 @@ class AssetFunctionTester : public ThreadMemberFunctionTester
         ThreadMemberFunctionTester::log_test_start_fields();
 
         log_emitter << YAML::Key << "asset cache capacity" <<
-            YAML::Value << FriendlyAsset::cache().capacity() <<
+            YAML::Value << FriendlyAsset::CacheCapacity() <<
             YAML::Key << "asset version cache capacity" <<
-            YAML::Value << FriendlyAssetVersion::cache().capacity() <<
+            YAML::Value << FriendlyAssetVersion::CacheCapacity() <<
             YAML::Key << "notify level" <<
             YAML::Value << min_kh_notify_level <<
             YAML::Key << "notify level name" <<
