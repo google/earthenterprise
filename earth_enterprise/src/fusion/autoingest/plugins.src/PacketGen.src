@@ -288,7 +288,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       packetLevelConfig.insets.resize(mergeIndexes.size());
       std::vector<AssetVersion> combRps(mergeIndexes.size());
       std::vector<AssetVersion> blendVers(mergeIndexes.size());
-      int threadsToUse = 4;
+      int threadsToUse = MiscConfig::Instance().PackGenThreads;
       #pragma omp parallel for schedule(static) num_threads(threadsToUse)
       for (size_t idx = 0; idx < mergeIndexes.size(); ++idx) {
         const InsetInfo<ProductAssetVersion> &inset(*extra.insetInfo[mergeIndexes[idx]]);
