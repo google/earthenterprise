@@ -35,6 +35,7 @@
 #include "common/packetcompress.h"
 #include "common/qtpacket/quadtreepacket.h"
 #include "fusion/gst/gstSimpleEarthStream.h"
+#include "fusion/portableglobe/quadtree/qtutils.h"
 #include "fusion/portableglobe/shared/packetbundle.h"
 #include "fusion/portableglobe/shared/packetbundle_reader.h"
 #include "fusion/portableglobe/shared/packetbundle_writer.h"
@@ -250,6 +251,7 @@ PortableGlobeBuilder::PortableGlobeBuilder(
     const std::string& globe_directory,
     const std::string& additional_args,
     const std::string& qtpacket_version,
+    const std::string& metadata_file,
     bool no_write,
     bool use_post)
     : globe_directory_(globe_directory),
@@ -266,7 +268,8 @@ PortableGlobeBuilder::PortableGlobeBuilder(
     terrain_pac_size_req_cache_(kBundleSizeForSizeQuery, this,
                                 &PortableGlobeBuilder::GetTerrainPacketsSize),
     vector_pac_size_req_cache_(kBundleSizeForSizeQuery, this,
-                               &PortableGlobeBuilder::GetVectorPacketsSize) {
+                               &PortableGlobeBuilder::GetVectorPacketsSize),
+      metadata_file_(metadata_file) {
   // Set up the connection to the server.
   server_ = new gstSimpleEarthStream(source_, additional_args_, use_post);
 
@@ -402,10 +405,35 @@ void PortableGlobeBuilder::BuildGlobe() {
     // write_cache goes out of scope and the destructor flushes the cache.
   }
 
+  write_bounds_file();
+
   // Finish up writing all of the packet bundles.
   DeleteWriter();
 }
 
+void PortableGlobeBuilder::write_bounds_file() {
+  if (metadata_file_.empty()) {
+    return;
+  }
+  khEnsureParentDir(metadata_file_);
+  std::ofstream fout(metadata_file_.c_str());
+  fout << "{\n"
+       << "  \"top\": " << layer_bounds_.top << ",\n"
+       << "  \"bottom\": " << layer_bounds_.bottom << ",\n"
+       << "  \"left\": " << layer_bounds_.left << ",\n"
+       << "  \"right\": " << layer_bounds_.right << ",\n"
+       << "  \"min_image_level\": " << layer_bounds_.min_image_level << ",\n"
+       << "  \"max_image_level\": " << layer_bounds_.max_image_level << ",\n"
+       << "  \"min_terrain_level\": " << layer_bounds_.min_terrain_level << ",\n"
+       << "  \"max_terrain_level\": " << layer_bounds_.max_terrain_level << ",\n"
+       << "  \"min_vector_level\": " << layer_bounds_.min_vector_level << ",\n"
+       << "  \"max_vector_level\": " << layer_bounds_.max_vector_level << ",\n"
+       << "  \"imageTileChannel\": " << layer_bounds_.imageTileChannel << ",\n"
+       << "  \"terrainTileChannel\": " << layer_bounds_.terrainTileChannel << ",\n"
+       << "  \"vectorTileChannel\": " << layer_bounds_.vectorTileChannel << ",\n"
+       << "}\n";
+  fout.close();
+}
 
 template< typename T >
 QtPacketLookAheadRequestor<T>::QtPacketLookAheadRequestor(
@@ -631,12 +659,15 @@ void PortableGlobeBuilder::ProcessDataInQtPacketNodes(
   // If packet_level == 0 there is no data, it is only for children.
   // For this qt_path the data was there at packet_level == 4 rather.
   if (node->children.GetImageBit()) {
+    update_imagery_bounds(qtpath);
     WriteImagePacket(qtpath, node->image_version);
   }
   if (node->children.GetTerrainBit()) {
+    update_terrain_bounds(qtpath);
     WriteTerrainPacket(qtpath, node->terrain_version);
   }
   if (node->children.GetDrawableBit()) {
+    update_vector_bounds(qtpath);
     for (size_t i = 0; i < node->num_channels(); ++i) {
       // Assuming that channel_type is in increasing order,
       // otherwise we are going to need to sort.
@@ -885,6 +916,38 @@ void PortableGlobeBuilder::WriteImagePacket(const std::string& qtpath,
   write_cache_->WriteImagePacket(qtpath, version);
 }
 
+uint32_t PortableGlobeBuilder::update_bounds(const std::string& qtpath) {
+  std::string real_path = "0" + qtpath;
+
+  uint32_t column, row, zoom;
+  ConvertFromQtNode(real_path, &column, &row, &zoom);
+  //  std::cout << "real_path " << real_path << " became column " << column << " row " << row << " zoom " << zoom << "\n";
+  layer_bounds_.left = std::min(column, layer_bounds_.left);
+  layer_bounds_.right = std::max(column, layer_bounds_.right);
+
+  layer_bounds_.top = std::max(row, layer_bounds_.top);
+  layer_bounds_.bottom = std::min(row, layer_bounds_.bottom);
+  return zoom;
+}
+
+void PortableGlobeBuilder::update_imagery_bounds(const std::string& qtpath) {
+  uint32_t zoom = update_bounds(qtpath);
+  layer_bounds_.min_image_level = std::min(layer_bounds_.min_image_level, zoom);
+  layer_bounds_.max_image_level = std::max(layer_bounds_.max_image_level, zoom);
+}
+
+void PortableGlobeBuilder::update_terrain_bounds(const std::string& qtpath) {
+
+  uint32_t zoom = update_bounds(qtpath);
+  layer_bounds_.min_terrain_level = std::min(layer_bounds_.min_terrain_level, zoom);
+  layer_bounds_.max_terrain_level = std::max(layer_bounds_.max_terrain_level, zoom);
+}
+
+void PortableGlobeBuilder::update_vector_bounds(const std::string& qtpath) {
+  uint32_t zoom = update_bounds(qtpath);
+  layer_bounds_.min_vector_level = std::min(layer_bounds_.min_vector_level, zoom);
+  layer_bounds_.max_vector_level = std::max(layer_bounds_.max_vector_level, zoom);
+}
 
 // Ignores 3rd param channel
 // TODO: Switch to POST if we start using.

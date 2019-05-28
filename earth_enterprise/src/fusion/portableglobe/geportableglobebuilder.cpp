@@ -78,6 +78,8 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
           "                    the total size of the globe.\n"
           "   --use_post:      Use HTTP POST (e.g. for Earth Builder) to get\n"
           "                    packets from server.\n"
+          "   --metadata_file:   Name of file that will store boundary metadata.\n"
+          "                    Default is no file.\n"
           "   --additional_args: Arguments to be added to each request to\n"
           "                    the Earth Server being cut.\n"
           "                    Default is \"&ct=c\" indicating Cutter\n"
@@ -100,6 +102,7 @@ int main(int argc, char **argv) {
     std::string dbroot_file;
     std::string globe_directory;
     std::string qtpacket_version = "1";
+    std::string metadata_file;
     // Default indicates Cutter context.
     std::string additional_args = "&ct=c";
     uint32 default_level = 7;
@@ -118,6 +121,8 @@ int main(int argc, char **argv) {
     options.opt("hires_qt_nodes_file", hires_qt_nodes_file);
     options.opt("additional_args", additional_args);
     options.opt("dbroot_file", dbroot_file);
+    options.opt("metadata_file", metadata_file);
+
     options.setRequired("source", "globe_directory");
 
     if (!options.processAll(argc, argv, argn)
@@ -136,6 +141,7 @@ int main(int argc, char **argv) {
                       globe_directory,
                       additional_args,
                       qtpacket_version,
+                      metadata_file,
                       no_write,
                       use_post);
 
