@@ -72,6 +72,7 @@ class AssetHandle_ : public AssetHandleInterface<Impl_> {
   // These two functions are implemented separately by Assets and AssetVersions
   inline virtual std::string Filename() const;
   inline const SharedString Key() const;
+  //inline const uint64 GetObjectSize() const;
 
   inline void NoLongerNeeded() {
     storageManager().NoLongerNeeded(Ref());

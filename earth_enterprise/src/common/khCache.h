@@ -20,9 +20,11 @@
 
 #include <map>
 #include <vector>
+#include <memory>
 
 #include "khTypes.h"
 #include "fusion/autoingest/MiscConfig.h"
+#include "khRefCounter.h"
 
 // #define SUPPORT_VERBOSE
 #ifdef SUPPORT_VERBOSE
@@ -63,8 +65,9 @@ class khCacheItem {
   khCacheItem *prev;
   Key   key;
   Value val;
+  uint64 size;
   khCacheItem(const Key &key_, const Value &val_)
-      : next(0), prev(0), key(key_), val(val_) { }
+      : next(0), prev(0), key(key_), val(val_), size(0) { }
 };
 
 // #define CHECK_INVARIANTS
@@ -84,6 +87,7 @@ class khCache {
   uint64 cacheObjectSizes;
   bool limitCacheMemory;
   uint64 maxCacheMemory;
+  const uint64 khCacheItemSize;
 
   bool InList(Item *item) {
     Item *tmp = head;
@@ -168,6 +172,7 @@ class khCache {
   size_type size(void) const { return map.size(); }
   uint64 capacity(void) const { return targetMax; }
   uint64 objectsizes(void) const { return cacheObjectSizes; }
+  uint64 itemSizeMinusKeyAndValue(void) const { return sizeof(khCacheItem<Key, Value>) - sizeof(Key) - sizeof(Value); }
 
   khCache(uint64 targetMax_
 #ifdef SUPPORT_VERBOSE
@@ -177,7 +182,8 @@ class khCache {
 #ifdef SUPPORT_VERBOSE
               verbose(verbose_),
 #endif
-              numItems(0), cacheObjectSizes(0)
+              numItems(0), cacheObjectSizes(0),
+              khCacheItemSize(itemSizeMinusKeyAndValue())
 
   {
     CheckListInvariant();
@@ -185,11 +191,52 @@ class khCache {
   ~khCache(void) {
     clear();
   }
+  template<class T>
+  uint64 getKeyOrValueSize(const T obj) {
+    notify(NFY_WARN, "Default: %s\t%lu", typeid(obj).name(), sizeof(obj));
+    return sizeof(obj);
+  }
+  uint64 getKeyOrValueSize(const std::string obj) {
+    notify(NFY_WARN, "String: %s\t%lu\t%lu", obj.c_str(), sizeof(obj), (obj.capacity() * sizeof(char)));
+    return (sizeof(obj) + (obj.capacity() * sizeof(char)));
+  }
+  template<class T>
+  uint64 getKeyOrValueSize(const khRefGuard<T> obj) {
+    notify(NFY_WARN, "khRefGuard: %lu\t%lu", sizeof(obj), obj.getSize());
+    return sizeof(obj);
+  }/*
+  template<class T>
+  uint64 getKeyOrValueSize(const std::vector<T> obj) {
+    return sizeof(obj) + (obj.capacity() * sizeof(T));
+  }
   uint64 sumObjectSizes(Item *item) {
-    uint64 size = sizeof(item) + sizeof(*item) + sizeof(item->key) + sizeof(item->val)
-    + sizeof(item->prev) + sizeof(*(item->prev)) + sizeof(item->next) + sizeof(*(item->next));
+    notify(NFY_WARN, "%s\t%s", typeid(item->key).name(), typeid(item->val).name());
+    notify(NFY_WARN, "%lu\t%lu", getKeyOrValueSize(item->key), getKeyOrValueSize(item->val));
+    uint64 size = khCacheItemSize + getKeyOrValueSize(item->key) + getKeyOrValueSize(item->val);
+    item->size = size;
 
     return size;
+  }*/
+  void updateObjectSize(const Key &key) {
+    if ( FindItem(key) != 0 ) {
+      notify(NFY_WARN, "%s", key.c_str());
+      Item *item = FindItem(key);
+      //notify(NFY_WARN, "%lu\t%lu\t%lu", khCacheItemSize, getKeyOrValueSize(item->key), getKeyOrValueSize(item->val));
+      uint64 size = khCacheItemSize + getKeyOrValueSize(item->key) + getKeyOrValueSize(item->val);
+      if (size > item->size) {
+        notify(NFY_WARN, "SIZE INCREASED");
+        cacheObjectSizes += (size - item->size);
+      }
+      else if (size < item->size) {
+        notify(NFY_WARN, "SIZE DECREASED");
+        cacheObjectSizes -= (item->size - size);
+      }
+      else {
+        notify(NFY_WARN, "SIZE NOT CHANGED");
+      }
+
+      item->size = size;
+    }
   }
   void setCacheMemoryLimit(bool check, uint limit) {
     limitCacheMemory = check;
@@ -218,12 +265,12 @@ class khCache {
       if (verbose) notify(NFY_ALWAYS, "Deleting previous %s from cache", key.c_str());
 #endif
       delete item;
-      cacheObjectSizes -= sumObjectSizes(item);
+      //cacheObjectSizes -= sumObjectSizes(item);
     }
 
     // make a new item, link it in and add to map
     item = new Item(key, val);
-    cacheObjectSizes += sumObjectSizes(item);
+    //cacheObjectSizes += sumObjectSizes(item);
     Link(item);
     map[key] = item;
 #ifdef SUPPORT_VERBOSE
@@ -249,7 +296,7 @@ class khCache {
       if (verbose) notify(NFY_ALWAYS, "Removing %s from cache", key.c_str());
 #endif
       delete item;
-      cacheObjectSizes -= sumObjectSizes(item);
+      //cacheObjectSizes -= sumObjectSizes(item);
     }
 
     CheckListInvariant();
@@ -295,7 +342,7 @@ class khCache {
         if (verbose) notify(NFY_ALWAYS, "Pruning %s from cache", tokill->key.c_str());
 #endif
         delete tokill;
-        cacheObjectSizes -= sumObjectSizes(item);
+        //cacheObjectSizes -= sumObjectSizes(item);
       }
     }
     CheckListInvariant();
