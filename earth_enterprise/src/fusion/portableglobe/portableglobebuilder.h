@@ -200,6 +200,30 @@ class QtPacketLookAheadRequestor {
   std::vector<QuadtreePath> paths_with_qt_packets_;
 };
 
+struct layer_bounds {
+  uint32_t top = 0;
+  uint32_t left = UINT32_MAX;
+  uint32_t bottom = UINT32_MAX;
+  uint32_t right = 0;
+
+  uint32_t min_image_level = 32;
+  uint32_t max_image_level = 0;
+
+  uint32_t min_terrain_level = 32;
+  uint32_t max_terrain_level = 0;
+
+  uint32_t min_vector_level = 32;
+  uint32_t max_vector_level = 0;
+
+  // save off the location and size of the first packet encountered at the highest level we
+  // find, so that we can check if there is another layer after that
+  uint64_t terrain_packet_offset = UINT64_MAX;
+  uint32_t terrain_packet_size = UINT32_MAX;
+
+  uint16_t imageTileChannel = UINT16_MAX;
+  uint16_t terrainTileChannel = UINT16_MAX;
+  uint16_t vectorTileChannel = UINT16_MAX;
+};
 
 /**
  * Class for constructing a portable globe.
@@ -245,6 +269,7 @@ class PortableGlobeBuilder : public PortableBuilder {
                        const std::string& globe_directory,
                        const std::string& additional_args,
                        const std::string& qtpacket_version,
+                       const std::string& metadata_file,
                        bool no_write,
                        bool use_post);
 
@@ -271,10 +296,10 @@ class PortableGlobeBuilder : public PortableBuilder {
 
   // 3rd param will not be used
   void GetImagePacketsSize(
-      const std::string& paths, size_t num_paths, uint32 version, uint32);
+      const std::string& paths, size_t num_paths, uint32 version, uint32 channel);
   // 3rd param will not be used
   void GetTerrainPacketsSize(
-      const std::string& paths, size_t num_paths, uint32 version, uint32);
+      const std::string& paths, size_t num_paths, uint32 version, uint32 channel);
   // Existense of 3rd param is to bring uniformity for this vector
   void GetVectorPacketsSize(const std::string& paths, size_t num_paths,
                             uint32 version, uint32 channel);
@@ -378,6 +403,17 @@ class PortableGlobeBuilder : public PortableBuilder {
   RequestBundlerForPacketSize<PortableGlobeBuilder> image_pac_size_req_cache_;
   RequestBundlerForPacketSize<PortableGlobeBuilder> terrain_pac_size_req_cache_;
   RequestBundlerForPacketSize<PortableGlobeBuilder> vector_pac_size_req_cache_;
+
+  // Path to file that will hold metadata
+  std::string metadata_file_;
+  // Map to hold metadata as globe is built.
+  layer_bounds layer_bounds_;
+
+  uint32_t update_bounds(const std::string& qtpath);
+  void update_imagery_bounds(const std::string& qtpath);
+  void update_terrain_bounds(const std::string& qtpath);
+  void update_vector_bounds(const std::string& qtpath);
+  void write_bounds_file();
 
   DISALLOW_COPY_AND_ASSIGN(PortableGlobeBuilder);
 };
