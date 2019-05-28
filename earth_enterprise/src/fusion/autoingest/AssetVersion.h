@@ -114,6 +114,12 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
     return verref.AssetRef();
   }
 
+  const uint64 GetSize() const {
+    notify(NFY_WARN, "VersionStorage: %lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu", sizeof(name), sizeof(type), sizeof(subtype), 
+    (subtype.capacity() * sizeof(char)), sizeof(state), sizeof(progress), sizeof(locked));
+    return (sizeof(name) + sizeof(type) + sizeof(subtype) + (subtype.capacity() * sizeof(char)) + sizeof(state) + sizeof(progress) + sizeof(locked));
+  }
+
   template <class outIter>
   outIter GetInputs(outIter oi) const {
     for (const auto &i : inputs) {

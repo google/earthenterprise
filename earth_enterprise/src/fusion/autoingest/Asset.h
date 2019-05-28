@@ -63,10 +63,16 @@ class AssetImpl : public khRefCounter, public AssetStorage, public StorageManage
 
   std::string WorkingDir(void) const { return WorkingDir(GetRef()); }
   std::string XMLFilename() const { return XMLFilename(GetRef()); }
+  //uint64 GetAssetSize() const { return GetAssetSize(GetSize()); }
 
 
   virtual ~AssetImpl(void) { }
   const SharedString & GetRef(void) const { return name; }
+
+  const uint64 GetSize() {
+    notify(NFY_WARN, "AssetStorage: %lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu", sizeof(name), sizeof(type), sizeof(subtype), (subtype.capacity() * sizeof(char)), sizeof(inputs), sizeof(meta), sizeof(versions));
+    return (sizeof(name) + sizeof(type) + sizeof(subtype) + (subtype.capacity() * sizeof(char)) + sizeof(inputs) + sizeof(meta) + sizeof(versions));
+  }
 
 
   std::string  GetLastGoodVersionRef(void) const;
@@ -76,6 +82,7 @@ class AssetImpl : public khRefCounter, public AssetStorage, public StorageManage
   // static helpers
   static std::string WorkingDir(const std::string &ref);
   static std::string XMLFilename(const std::string &ref);
+  //static uint64 GetAssetSize(const uint64 size);
 };
 
 // ****************************************************************************
@@ -119,5 +126,6 @@ inline std::string Asset::Filename() const {
 
 template <> inline const SharedString Asset::Key() const { return ref; }
 
+//template <> inline const uint64 Asset::GetObjectSize() const { return AssetImpl::GetAssetSize(AssetImpl::GetSize()); }
 
 #endif /* __Asset_h */

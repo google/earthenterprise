@@ -18,6 +18,7 @@
 #define GEO_EARTH_ENTERPRISE_SRC_COMMON_KHREFCOUNTER_H_
 
 #include <assert.h>
+#include <typeinfo>
 
 #include "common/khTypes.h"
 #include "common/khGuard.h"
@@ -84,7 +85,7 @@ class khRefGuard {
 
   // expose refcount function from my shared object
   inline uint32 refcount(void) const  { return ptr ? ptr->refcount() : 0; }
-
+  inline uint64 getSize(void) const { return ptr->GetSize(); }
   inline void release(void) {
     if (ptr) {
       ptr->unref();

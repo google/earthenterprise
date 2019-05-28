@@ -55,6 +55,7 @@ class StorageManager
     inline uint32 DirtySize() const { return dirtyMap.size(); }
     inline uint64 CacheObjectSize() const { return cache.objectsizes(); }
     inline void SetCacheMemoryLimit(bool check, uint64 memoryLimit) { cache.setCacheMemoryLimit(check, memoryLimit); }
+    inline void UpdateObjectSize(const AssetKey & key) { cache.updateObjectSize(key); }
     inline void AddNew(const AssetKey &, const HandleType &);
     inline void AddExisting(const AssetKey &, const HandleType &);
     inline void NoLongerNeeded(const AssetKey &, bool = true);
