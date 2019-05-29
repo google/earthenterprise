@@ -220,9 +220,9 @@ struct layer_bounds {
   uint64_t terrain_packet_offset = UINT64_MAX;
   uint32_t terrain_packet_size = UINT32_MAX;
 
-  uint16_t imageTileChannel = UINT16_MAX;
-  uint16_t terrainTileChannel = UINT16_MAX;
-  uint16_t vectorTileChannel = UINT16_MAX;
+  uint16_t image_tile_channel = UINT16_MAX;
+  uint16_t terrain_tile_channel = UINT16_MAX;
+  uint16_t vector_tile_channel = UINT16_MAX;
 };
 
 /**
