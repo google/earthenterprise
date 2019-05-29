@@ -417,21 +417,25 @@ void PortableGlobeBuilder::write_bounds_file() {
   }
   khEnsureParentDir(metadata_file_);
   std::ofstream fout(metadata_file_.c_str());
-  fout << "{\n"
-       << "  \"top\": " << layer_bounds_.top << ",\n"
-       << "  \"bottom\": " << layer_bounds_.bottom << ",\n"
-       << "  \"left\": " << layer_bounds_.left << ",\n"
-       << "  \"right\": " << layer_bounds_.right << ",\n"
-       << "  \"min_image_level\": " << layer_bounds_.min_image_level << ",\n"
-       << "  \"max_image_level\": " << layer_bounds_.max_image_level << ",\n"
-       << "  \"min_terrain_level\": " << layer_bounds_.min_terrain_level << ",\n"
-       << "  \"max_terrain_level\": " << layer_bounds_.max_terrain_level << ",\n"
-       << "  \"min_vector_level\": " << layer_bounds_.min_vector_level << ",\n"
-       << "  \"max_vector_level\": " << layer_bounds_.max_vector_level << ",\n"
-       << "  \"imageTileChannel\": " << layer_bounds_.imageTileChannel << ",\n"
-       << "  \"terrainTileChannel\": " << layer_bounds_.terrainTileChannel << ",\n"
-       << "  \"vectorTileChannel\": " << layer_bounds_.vectorTileChannel << ",\n"
-       << "}\n";
+  fout << "[\n"
+       << "  {\n"
+       << "    \"layer_id\": 0\n"
+       << "    \"top\": " << layer_bounds_.top << ",\n"
+       << "    \"bottom\": " << layer_bounds_.bottom << ",\n"
+       << "    \"left\": " << layer_bounds_.left << ",\n"
+       << "    \"right\": " << layer_bounds_.right << ",\n"
+       << "    \"min_image_level\": " << layer_bounds_.min_image_level << ",\n"
+       << "    \"max_image_level\": " << layer_bounds_.max_image_level << ",\n"
+       << "    \"min_terrain_level\": " << layer_bounds_.min_terrain_level << ",\n"
+       << "    \"max_terrain_level\": " << layer_bounds_.max_terrain_level << ",\n"
+       << "    \"min_vector_level\": " << layer_bounds_.min_vector_level << ",\n"
+       << "    \"max_vector_level\": " << layer_bounds_.max_vector_level << ",\n"
+       << "    \"image_tile_channel\": " << layer_bounds_.image_tile_channel << ",\n"
+       << "    \"terrain_tile_channel\": " << layer_bounds_.terrain_tile_channel << ",\n"
+       << "    \"vector_tile_channel\": " << layer_bounds_.vector_tile_channel << ",\n"
+       << "  }\n"
+       << "]\n";
+
   fout.close();
 }
 
