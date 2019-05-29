@@ -916,37 +916,44 @@ void PortableGlobeBuilder::WriteImagePacket(const std::string& qtpath,
   write_cache_->WriteImagePacket(qtpath, version);
 }
 
-uint32_t PortableGlobeBuilder::update_bounds(const std::string& qtpath) {
+void PortableGlobeBuilder::update_bounds(const std::string& qtpath, uint32_t& min_level, uint32_t& max_level, bool update) {
   std::string real_path = "0" + qtpath;
 
   uint32_t column, row, zoom;
   ConvertFromQtNode(real_path, &column, &row, &zoom);
-  //  std::cout << "real_path " << real_path << " became column " << column << " row " << row << " zoom " << zoom << "\n";
-  layer_bounds_.left = std::min(column, layer_bounds_.left);
-  layer_bounds_.right = std::max(column, layer_bounds_.right);
+  if (zoom < min_level) {
+    min_level = zoom;
+  }
+  if (zoom > max_level) {
+    max_level = zoom;
+    if (update) {
+      layer_bounds_.left = column;
+      layer_bounds_.right = column;
+      layer_bounds_.top = row;
+      layer_bounds_.bottom = row;
+    }
+  }
 
-  layer_bounds_.top = std::max(row, layer_bounds_.top);
-  layer_bounds_.bottom = std::min(row, layer_bounds_.bottom);
-  return zoom;
+  //  std::cout << "real_path " << real_path << " became column " << column << " row " << row << " zoom " << zoom << "\n";
+  if (zoom == max_level && update) {
+    layer_bounds_.left = std::min(column, layer_bounds_.left);
+    layer_bounds_.right = std::max(column, layer_bounds_.right);
+
+    layer_bounds_.top = std::min(row, layer_bounds_.top);
+    layer_bounds_.bottom = std::max(row, layer_bounds_.bottom);
+  }
 }
 
 void PortableGlobeBuilder::update_imagery_bounds(const std::string& qtpath) {
-  uint32_t zoom = update_bounds(qtpath);
-  layer_bounds_.min_image_level = std::min(layer_bounds_.min_image_level, zoom);
-  layer_bounds_.max_image_level = std::max(layer_bounds_.max_image_level, zoom);
+  update_bounds(qtpath, layer_bounds_.min_image_level, layer_bounds_.max_image_level, true);
 }
 
 void PortableGlobeBuilder::update_terrain_bounds(const std::string& qtpath) {
-
-  uint32_t zoom = update_bounds(qtpath);
-  layer_bounds_.min_terrain_level = std::min(layer_bounds_.min_terrain_level, zoom);
-  layer_bounds_.max_terrain_level = std::max(layer_bounds_.max_terrain_level, zoom);
+  update_bounds(qtpath, layer_bounds_.min_terrain_level, layer_bounds_.max_terrain_level);
 }
 
 void PortableGlobeBuilder::update_vector_bounds(const std::string& qtpath) {
-  uint32_t zoom = update_bounds(qtpath);
-  layer_bounds_.min_vector_level = std::min(layer_bounds_.min_vector_level, zoom);
-  layer_bounds_.max_vector_level = std::max(layer_bounds_.max_vector_level, zoom);
+  update_bounds(qtpath, layer_bounds_.min_vector_level, layer_bounds_.max_vector_level);
 }
 
 // Ignores 3rd param channel

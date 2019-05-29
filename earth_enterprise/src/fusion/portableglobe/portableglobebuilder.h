@@ -409,7 +409,7 @@ class PortableGlobeBuilder : public PortableBuilder {
   // Map to hold metadata as globe is built.
   layer_bounds layer_bounds_;
 
-  uint32_t update_bounds(const std::string& qtpath);
+  void update_bounds(const std::string& qtpath, uint32_t& min_level, uint32_t& max_level, bool update=false);
   void update_imagery_bounds(const std::string& qtpath);
   void update_terrain_bounds(const std::string& qtpath);
   void update_vector_bounds(const std::string& qtpath);
