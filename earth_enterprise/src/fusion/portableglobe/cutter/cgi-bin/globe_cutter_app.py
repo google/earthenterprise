@@ -306,9 +306,10 @@ class GlobeBuilder(object):
               "--source=\"%s\" "
               "--hires_qt_nodes_file=\"%s\" "
               "--map_directory=\"%s\"  --default_level=%d --max_level=%d "
+              "--metadata_file=\"%s\" "
               % (COMMAND_DIR, ignore_imagery_depth_str, source,
                  self.qtnodes_file, self.globe_dir, default_level, 
-                 max_level))
+                 max_level, self.metadata_file))
 
     common.utils.ExecuteCmdInBackground(os_cmd, self.logger)
 

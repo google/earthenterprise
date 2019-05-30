@@ -29,6 +29,7 @@
 #include <vector>
 #include "common/qtpacket/quadtreepacket.h"
 #include "fusion/gst/gstSimpleEarthStream.h"
+#include "fusion/portableglobe/shared/bounds_tracker.h"
 #include "fusion/portableglobe/shared/packetbundle_reader.h"
 #include "fusion/portableglobe/shared/packetbundle_writer.h"
 #include "fusion/portableglobe/portablepacketwriter.h"
@@ -198,31 +199,6 @@ class QtPacketLookAheadRequestor {
   size_t cache_index_;
   size_t prefetched_;
   std::vector<QuadtreePath> paths_with_qt_packets_;
-};
-
-struct layer_bounds {
-  uint32_t top = 0;
-  uint32_t left = UINT32_MAX;
-  uint32_t bottom = UINT32_MAX;
-  uint32_t right = 0;
-
-  uint32_t min_image_level = 32;
-  uint32_t max_image_level = 0;
-
-  uint32_t min_terrain_level = 32;
-  uint32_t max_terrain_level = 0;
-
-  uint32_t min_vector_level = 32;
-  uint32_t max_vector_level = 0;
-
-  // save off the location and size of the first packet encountered at the highest level we
-  // find, so that we can check if there is another layer after that
-  uint64_t terrain_packet_offset = UINT64_MAX;
-  uint32_t terrain_packet_size = UINT32_MAX;
-
-  uint16_t image_tile_channel = UINT16_MAX;
-  uint16_t terrain_tile_channel = UINT16_MAX;
-  uint16_t vector_tile_channel = UINT16_MAX;
 };
 
 /**
@@ -404,16 +380,10 @@ class PortableGlobeBuilder : public PortableBuilder {
   RequestBundlerForPacketSize<PortableGlobeBuilder> terrain_pac_size_req_cache_;
   RequestBundlerForPacketSize<PortableGlobeBuilder> vector_pac_size_req_cache_;
 
-  // Path to file that will hold metadata
+  // Path to file that will hold metadata.
   std::string metadata_file_;
-  // Map to hold metadata as globe is built.
-  layer_bounds layer_bounds_;
-
-  void update_bounds(const std::string& qtpath, uint32_t& min_level, uint32_t& max_level, bool update=false);
-  void update_imagery_bounds(const std::string& qtpath);
-  void update_terrain_bounds(const std::string& qtpath);
-  void update_vector_bounds(const std::string& qtpath);
-  void write_bounds_file();
+  // Structure to keep track of globe boundaries.
+  BoundsTracker bounds_tracker_;
 
   DISALLOW_COPY_AND_ASSIGN(PortableGlobeBuilder);
 };

@@ -78,7 +78,7 @@ void usage(const std::string &progn, const char *msg = 0, ...) {
           "                    the total size of the globe.\n"
           "   --use_post:      Use HTTP POST (e.g. for Earth Builder) to get\n"
           "                    packets from server.\n"
-          "   --metadata_file:   Name of file that will store boundary metadata.\n"
+          "   --metadata_file: Name of file that will store boundary metadata.\n"
           "                    Default is no file.\n"
           "   --additional_args: Arguments to be added to each request to\n"
           "                    the Earth Server being cut.\n"

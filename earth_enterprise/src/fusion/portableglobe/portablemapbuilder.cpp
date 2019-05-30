@@ -35,6 +35,7 @@
 #include "fusion/gst/gstSimpleEarthStream.h"
 #include "fusion/gst/gstSimpleStream.h"
 #include "fusion/portableglobe/portableglobebuilder.h"
+#include "fusion/portableglobe/quadtree/qtutils.h"
 #include "fusion/portableglobe/shared/packetbundle.h"
 #include "fusion/portableglobe/shared/packetbundle_reader.h"
 #include "fusion/portableglobe/shared/packetbundle_writer.h"
@@ -63,6 +64,7 @@ PortableMapBuilder::PortableMapBuilder(
     const std::string& hires_qt_nodes_file,
     const std::string& map_directory,
     const std::string& additional_args,
+    const std::string& metadata_file,
     bool ignore_imagery_depth,
     bool no_write)
     : map_directory_(map_directory),
@@ -70,6 +72,7 @@ PortableMapBuilder::PortableMapBuilder(
     max_level_(max_level),
     source_(source),
     additional_args_(additional_args),
+    metadata_file_(metadata_file),
     ignore_imagery_depth_(ignore_imagery_depth),
     is_no_write_(no_write) {
   // Build a structure for filtering quadtree addresses.
@@ -176,6 +179,8 @@ void PortableMapBuilder::BuildMap() {
   // Finish up writing all of the packet bundles.
   DeleteWriter();
 
+  
+  
   // The "+1" for max_level_traversed is because the code uses zero
   // for the first level but the cutter page and most humans use one.
   if (max_level_traversed+1 < max_level_) {
