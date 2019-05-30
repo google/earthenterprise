@@ -85,7 +85,7 @@ class khRefGuard {
 
   // expose refcount function from my shared object
   inline uint32 refcount(void) const  { return ptr ? ptr->refcount() : 0; }
-  inline uint64 getSize(void) const { return ptr->GetSize(); }
+  inline uint64 getRefGuardSize(void) const { return ptr->GetSize(); }
   inline void release(void) {
     if (ptr) {
       ptr->unref();

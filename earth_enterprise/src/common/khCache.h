@@ -25,6 +25,7 @@
 #include "khTypes.h"
 #include "fusion/autoingest/MiscConfig.h"
 #include "khRefCounter.h"
+#include "SharedString.h"
 
 // #define SUPPORT_VERBOSE
 #ifdef SUPPORT_VERBOSE
@@ -171,7 +172,7 @@ class khCache {
   typedef typename MapType::size_type size_type;
   size_type size(void) const { return map.size(); }
   uint64 capacity(void) const { return targetMax; }
-  uint64 objectsizes(void) const { return cacheObjectSizes; }
+  uint64 getMemoryUse(void) const { return cacheObjectSizes; }
   uint64 itemSizeMinusKeyAndValue(void) const { return sizeof(khCacheItem<Key, Value>) - sizeof(Key) - sizeof(Value); }
 
   khCache(uint64 targetMax_
@@ -183,6 +184,7 @@ class khCache {
               verbose(verbose_),
 #endif
               numItems(0), cacheObjectSizes(0),
+              limitCacheMemory(0),
               khCacheItemSize(itemSizeMinusKeyAndValue())
 
   {
@@ -193,38 +195,35 @@ class khCache {
   }
   template<class T>
   uint64 getKeyOrValueSize(const T obj) {
-    notify(NFY_WARN, "Default: %s\t%lu", typeid(obj).name(), sizeof(obj));
+    //notify(NFY_WARN, "Default: %s\t%lu", typeid(obj).name(), sizeof(obj));
     return sizeof(obj);
   }
-  uint64 getKeyOrValueSize(const std::string obj) {
-    notify(NFY_WARN, "String: %s\t%lu\t%lu", obj.c_str(), sizeof(obj), (obj.capacity() * sizeof(char)));
-    return (sizeof(obj) + (obj.capacity() * sizeof(char)));
+  uint64 getKeyOrValueSize(const std::string str) {
+    //notify(NFY_WARN, "String: %s\t%lu\t%lu", str.c_str(), sizeof(str), (str.capacity() * sizeof(char)));
+    return (sizeof(str) + (str.capacity() * sizeof(char)));
+  }
+  uint64 getKeyOrValueSize(const SharedString shstr) {
+    return shstr.GetSharedStringSize();
   }
   template<class T>
   uint64 getKeyOrValueSize(const khRefGuard<T> obj) {
-    notify(NFY_WARN, "khRefGuard: %lu\t%lu", sizeof(obj), obj.getSize());
-    return sizeof(obj);
-  }/*
-  template<class T>
-  uint64 getKeyOrValueSize(const std::vector<T> obj) {
-    return sizeof(obj) + (obj.capacity() * sizeof(T));
+    //notify(NFY_WARN, "khRefGuard: %lu", sizeof(obj));
+    return (sizeof(obj) + obj.getRefGuardSize());
   }
-  uint64 sumObjectSizes(Item *item) {
-    notify(NFY_WARN, "%s\t%s", typeid(item->key).name(), typeid(item->val).name());
-    notify(NFY_WARN, "%lu\t%lu", getKeyOrValueSize(item->key), getKeyOrValueSize(item->val));
-    uint64 size = khCacheItemSize + getKeyOrValueSize(item->key) + getKeyOrValueSize(item->val);
-    item->size = size;
-
-    return size;
-  }*/
   void updateObjectSize(const Key &key) {
     if ( FindItem(key) != 0 ) {
-      notify(NFY_WARN, "%s", key.c_str());
+      //notify(NFY_WARN, "%s", key.c_str());
       Item *item = FindItem(key);
       //notify(NFY_WARN, "%lu\t%lu\t%lu", khCacheItemSize, getKeyOrValueSize(item->key), getKeyOrValueSize(item->val));
       uint64 size = khCacheItemSize + getKeyOrValueSize(item->key) + getKeyOrValueSize(item->val);
+      notify(NFY_WARN, "%s: %lu", key.c_str(), size);
       if (size > item->size) {
-        notify(NFY_WARN, "SIZE INCREASED");
+        if (item->size == 0) {
+          notify(NFY_WARN, "NEW OBJECT");
+        }
+        else {
+          notify(NFY_WARN, "SIZE INCREASED");
+        }
         cacheObjectSizes += (size - item->size);
       }
       else if (size < item->size) {
@@ -265,12 +264,10 @@ class khCache {
       if (verbose) notify(NFY_ALWAYS, "Deleting previous %s from cache", key.c_str());
 #endif
       delete item;
-      //cacheObjectSizes -= sumObjectSizes(item);
     }
 
     // make a new item, link it in and add to map
     item = new Item(key, val);
-    //cacheObjectSizes += sumObjectSizes(item);
     Link(item);
     map[key] = item;
 #ifdef SUPPORT_VERBOSE
@@ -296,7 +293,6 @@ class khCache {
       if (verbose) notify(NFY_ALWAYS, "Removing %s from cache", key.c_str());
 #endif
       delete item;
-      //cacheObjectSizes -= sumObjectSizes(item);
     }
 
     CheckListInvariant();
@@ -342,7 +338,6 @@ class khCache {
         if (verbose) notify(NFY_ALWAYS, "Pruning %s from cache", tokill->key.c_str());
 #endif
         delete tokill;
-        //cacheObjectSizes -= sumObjectSizes(item);
       }
     }
     CheckListInvariant();

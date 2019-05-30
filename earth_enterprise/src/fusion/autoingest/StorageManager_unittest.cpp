@@ -23,7 +23,7 @@
 using namespace std;
 
 const size_t CACHE_SIZE = 5;
-const uint64 MEMORY_LIMIT = 400;
+const uint64 MEMORY_LIMIT = 0;
 
 class TestItem : public khRefCounter, public StorageManaged {
  public:
@@ -173,13 +173,14 @@ TEST_F(StorageManagerTest, PurgeCacheBasedOnNumberOfObjects) {
 
 TEST_F(StorageManagerTest, PurgeCacheBasedOnMemoryUtilization) {
   storageManager.SetCacheMemoryLimit(1, MEMORY_LIMIT);
-  for(size_t i = 0; i < CACHE_SIZE + 2; ++i) {
+  size_t i;
+  for(i = 0; i < CACHE_SIZE + 2; ++i) {
     stringstream s;
     s << "asset" << i;
     Get<TestHandle>(storageManager, s.str(), false, true, false);
     ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
   }
-  ASSERT_LE(storageManager.CacheSize(), CACHE_SIZE) << "Unexpected number of items in cache";
+  ASSERT_LE(storageManager.CacheSize(), i+1) << "Unexpected number of items in cache";
 }
 
 TEST_F(StorageManagerTest, PurgeCacheWithHandles) {
