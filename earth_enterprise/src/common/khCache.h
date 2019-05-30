@@ -195,11 +195,9 @@ class khCache {
   }
   template<class T>
   uint64 getKeyOrValueSize(const T obj) {
-    //notify(NFY_WARN, "Default: %s\t%lu", typeid(obj).name(), sizeof(obj));
     return sizeof(obj);
   }
   uint64 getKeyOrValueSize(const std::string str) {
-    //notify(NFY_WARN, "String: %s\t%lu\t%lu", str.c_str(), sizeof(str), (str.capacity() * sizeof(char)));
     return (sizeof(str) + (str.capacity() * sizeof(char)));
   }
   uint64 getKeyOrValueSize(const SharedString shstr) {
@@ -207,39 +205,24 @@ class khCache {
   }
   template<class T>
   uint64 getKeyOrValueSize(const khRefGuard<T> obj) {
-    //notify(NFY_WARN, "khRefGuard: %lu", sizeof(obj));
     return (sizeof(obj) + obj.getRefGuardSize());
   }
   void updateObjectSize(const Key &key) {
     if ( FindItem(key) != 0 ) {
-      //notify(NFY_WARN, "%s", key.c_str());
       Item *item = FindItem(key);
-      //notify(NFY_WARN, "%lu\t%lu\t%lu", khCacheItemSize, getKeyOrValueSize(item->key), getKeyOrValueSize(item->val));
       uint64 size = khCacheItemSize + getKeyOrValueSize(item->key) + getKeyOrValueSize(item->val);
-      notify(NFY_WARN, "%s: %lu", key.c_str(), size);
       if (size > item->size) {
-        if (item->size == 0) {
-          notify(NFY_WARN, "NEW OBJECT");
-        }
-        else {
-          notify(NFY_WARN, "SIZE INCREASED");
-        }
         cacheObjectSizes += (size - item->size);
       }
       else if (size < item->size) {
-        notify(NFY_WARN, "SIZE DECREASED");
         cacheObjectSizes -= (item->size - size);
       }
-      else {
-        notify(NFY_WARN, "SIZE NOT CHANGED");
-      }
-
       item->size = size;
     }
   }
-  void setCacheMemoryLimit(bool check, uint limit) {
-    limitCacheMemory = check;
-    maxCacheMemory = limit;
+  void setCacheMemoryLimit(bool enabled, uint maxMemory) {
+    limitCacheMemory = enabled;
+    maxCacheMemory = maxMemory;
   }
   void clear(void) {
     CheckListInvariant();

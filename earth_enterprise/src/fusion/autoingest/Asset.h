@@ -69,19 +69,15 @@ class AssetImpl : public khRefCounter, public AssetStorage, public StorageManage
   const SharedString & GetRef(void) const { return name; }
 
   const uint64 GetSize() {
-    notify(NFY_WARN, "AssetStorage: %lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu", name.GetSharedStringSize(), sizeof(type), sizeof(subtype),
-    (subtype.capacity() * sizeof(char)), sizeof(inputs), GetVectorSize(inputs), sizeof(meta), sizeof(versions));
     return (name.GetSharedStringSize() + sizeof(type) + sizeof(subtype) + (subtype.capacity() * sizeof(char)) + sizeof(inputs)
     + GetVectorSize(inputs) + sizeof(meta) + sizeof(versions));
   }
   
   template<class T>
   const uint64 GetVectorSize(std::vector<T> vec) {
-    //notify(NFY_WARN, "Vec<T>: %lu", (vec.capacity() * sizeof(T)));
     return (vec.capacity() * sizeof(T));
   }
   const uint64 GetVectorSize(std::vector<SharedString> vec) {
-    //notify(NFY_WARN, "Vec<shstr>: %lu", (vec.capacity() * ((vec.front()).GetSharedStringSize())));
     return (vec.capacity() * ((vec.front()).GetSharedStringSize()));
   }
 
@@ -135,7 +131,5 @@ inline std::string Asset::Filename() const {
 }
 
 template <> inline const SharedString Asset::Key() const { return ref; }
-
-//template <> inline const uint64 Asset::GetObjectSize() const { return AssetImpl::GetAssetSize(AssetImpl::GetSize()); }
 
 #endif /* __Asset_h */

@@ -219,10 +219,10 @@ class MutableAssetHandleD_ : public virtual Base_ {
   Impl* operator->(void) {
     return const_cast<Impl*>(Base::operator->());
   }
-/*
+
   ~MutableAssetHandleD_() {
-    notify(NFY_WARN, "MutableAssetHandle deconstructed!");
-  }*/
+    this->storageManager().UpdateObjectSize(this->ref);
+  }
 };
 
 
@@ -341,7 +341,6 @@ class MutableDerivedAssetHandleD_ : public DerivedBase_, public MutableBase_
     // that causes that to be untrue.
     static_assert(std::is_same<BBase, MBBase>::value, "BBase and MBBase *must* be the same type!!!");
 #endif // GEE_HAS_STATIC_ASSERT
-    notify(NFY_WARN, "MutableDerivedAssetHandle deconstructed!");
     this->storageManager().UpdateObjectSize(this->ref);
   }
 };
