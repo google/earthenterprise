@@ -18,7 +18,6 @@
 #define GEO_EARTH_ENTERPRISE_SRC_COMMON_KHREFCOUNTER_H_
 
 #include <assert.h>
-#include <typeinfo>
 
 #include "common/khTypes.h"
 #include "common/khGuard.h"

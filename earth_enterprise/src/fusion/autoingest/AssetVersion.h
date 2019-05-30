@@ -115,10 +115,6 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
   }
 
   const uint64 GetSize() {
-    notify(NFY_WARN, "VersionStorage: %lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu", name.GetSharedStringSize(), sizeof(type),
-    sizeof(subtype), (subtype.capacity() * sizeof(char)), sizeof(state), sizeof(progress), sizeof(locked), GetVectorSize(inputs),
-    GetVectorSize(children), GetVectorSize(parents), GetVectorSize(listeners), sizeof(meta), sizeof(beginTime), sizeof(progressTime),
-    sizeof(endTime), sizeof(taskid));
     return (name.GetSharedStringSize() + sizeof(type) + sizeof(subtype) + (subtype.capacity() * sizeof(char)) + sizeof(state) + sizeof(progress) + sizeof(locked)
     + GetVectorSize(inputs) + GetVectorSize(children) + GetVectorSize(parents) + GetVectorSize(listeners) + GetVectorSize(outfiles) + sizeof(meta)
     + sizeof(beginTime) + sizeof(progressTime) + sizeof(endTime) + sizeof(taskid));
@@ -126,7 +122,6 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
 
   template<class T>
   const uint64 GetVectorSize(std::vector<T> vec) {
-    //notify(NFY_WARN, "Vec<T>: %lu", (vec.capacity() * sizeof(T)));
     return (vec.capacity() * sizeof(T));
   }
   const uint64 GetVectorSize(std::vector<std::string> vec) {
@@ -134,11 +129,9 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
     for(uint i = 0; i < vec.size(); i++) {
       total += (sizeof(vec.at(i)) + vec.at(i).capacity());
     }
-    notify(NFY_WARN, "Vec<str>: %lu", total);
     return total;
   }
   const uint64 GetVectorSize(std::vector<SharedString> vec) {
-    //notify(NFY_WARN, "Vec<shstr>: %lu", (vec.capacity() * ((vec.front()).GetSharedStringSize())));
     return (vec.capacity() * ((vec.front()).GetSharedStringSize()));
   }
 

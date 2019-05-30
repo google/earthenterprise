@@ -80,7 +80,6 @@ protected:
     }
 
     static uint64 GetSharedStringSize() {
-      //notify(NFY_WARN, "key: %lu\tstrStore: %lu", sizeof(key), sizeof(strStore));
       return sizeof(key) + sizeof(strStore);
     }
 

@@ -45,16 +45,16 @@ class StorageManager
     using HandleType = khRefGuard<AssetType>;
     using AssetKey = SharedString;
 
-    StorageManager(uint cacheSize, bool check, uint64 memoryLimit, const std::string & type) :
+    StorageManager(uint cacheSize, bool enabled, uint64 maxMemory, const std::string & type) :
         cache(cacheSize),
-        assetType(type) { SetCacheMemoryLimit(check, memoryLimit); }
+        assetType(type) { SetCacheMemoryLimit(enabled, maxMemory); }
     ~StorageManager() = default;
 
     inline uint32 CacheSize() const { return cache.size(); }
     inline uint64 CacheCapacity() const { return cache.capacity(); }
     inline uint32 DirtySize() const { return dirtyMap.size(); }
-    inline uint64 CacheObjectSize() const { return cache.getMemoryUse(); }
-    inline void SetCacheMemoryLimit(bool check, uint64 memoryLimit) { cache.setCacheMemoryLimit(check, memoryLimit); }
+    inline uint64 CacheMemoryUse() const { return cache.getMemoryUse(); }
+    inline void SetCacheMemoryLimit(bool enabled, uint64 maxMemory) { cache.setCacheMemoryLimit(enabled, maxMemory); }
     inline void UpdateObjectSize(const AssetKey & key) { cache.updateObjectSize(key); }
     inline void AddNew(const AssetKey &, const HandleType &);
     inline void AddExisting(const AssetKey &, const HandleType &);
