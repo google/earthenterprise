@@ -63,15 +63,26 @@ class AssetImpl : public khRefCounter, public AssetStorage, public StorageManage
 
   std::string WorkingDir(void) const { return WorkingDir(GetRef()); }
   std::string XMLFilename() const { return XMLFilename(GetRef()); }
-  //uint64 GetAssetSize() const { return GetAssetSize(GetSize()); }
 
 
   virtual ~AssetImpl(void) { }
   const SharedString & GetRef(void) const { return name; }
 
   const uint64 GetSize() {
-    notify(NFY_WARN, "AssetStorage: %lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu", sizeof(name), sizeof(type), sizeof(subtype), (subtype.capacity() * sizeof(char)), sizeof(inputs), sizeof(meta), sizeof(versions));
-    return (sizeof(name) + sizeof(type) + sizeof(subtype) + (subtype.capacity() * sizeof(char)) + sizeof(inputs) + sizeof(meta) + sizeof(versions));
+    notify(NFY_WARN, "AssetStorage: %lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu\t%lu", name.GetSharedStringSize(), sizeof(type), sizeof(subtype),
+    (subtype.capacity() * sizeof(char)), sizeof(inputs), GetVectorSize(inputs), sizeof(meta), sizeof(versions));
+    return (name.GetSharedStringSize() + sizeof(type) + sizeof(subtype) + (subtype.capacity() * sizeof(char)) + sizeof(inputs)
+    + GetVectorSize(inputs) + sizeof(meta) + sizeof(versions));
+  }
+  
+  template<class T>
+  const uint64 GetVectorSize(std::vector<T> vec) {
+    //notify(NFY_WARN, "Vec<T>: %lu", (vec.capacity() * sizeof(T)));
+    return (vec.capacity() * sizeof(T));
+  }
+  const uint64 GetVectorSize(std::vector<SharedString> vec) {
+    //notify(NFY_WARN, "Vec<shstr>: %lu", (vec.capacity() * ((vec.front()).GetSharedStringSize())));
+    return (vec.capacity() * ((vec.front()).GetSharedStringSize()));
   }
 
 
@@ -82,7 +93,6 @@ class AssetImpl : public khRefCounter, public AssetStorage, public StorageManage
   // static helpers
   static std::string WorkingDir(const std::string &ref);
   static std::string XMLFilename(const std::string &ref);
-  //static uint64 GetAssetSize(const uint64 size);
 };
 
 // ****************************************************************************
