@@ -47,3 +47,8 @@ packetbundle_test = env.test('packetbundle_test',
 file_packer_test = env.test('file_packer_test',
                             ['file_packer_unittest.cpp'],
                              LIBS=['sharedportablelib', 'gtest', 'gecommon'])
+
+bounds_tracker_test = env.test('bounds_tracker_test',
+                             ['bounds_tracker_unittest.cpp'],
+                              LIBS=['sharedportablelib', 'gtest', 'gecommon', 'qtutils'])
+
