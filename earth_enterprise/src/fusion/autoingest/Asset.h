@@ -68,15 +68,23 @@ class AssetImpl : public khRefCounter, public AssetStorage, public StorageManage
   virtual ~AssetImpl(void) { }
   const SharedString & GetRef(void) const { return name; }
 
+// Get the total memory used by an asset
   const uint64 GetSize() {
-    return (name.GetSharedStringSize() + sizeof(type) + sizeof(subtype) + (subtype.capacity() * sizeof(char)) + sizeof(inputs)
-    + GetVectorSize(inputs) + sizeof(meta) + sizeof(versions));
+    return (name.GetSharedStringSize()
+    + sizeof(type)
+    + sizeof(subtype)
+    + (subtype.capacity() * sizeof(char))
+    + sizeof(inputs)
+    + GetVectorSize(inputs)
+    + sizeof(meta)
+    + sizeof(versions));
   }
-  
+  // Get the total memory used by a template vector
   template<class T>
   const uint64 GetVectorSize(std::vector<T> vec) {
     return (vec.capacity() * sizeof(T));
   }
+  // Get the total memory used by a vector of SharedStrings
   const uint64 GetVectorSize(std::vector<SharedString> vec) {
     return (vec.capacity() * ((vec.front()).GetSharedStringSize()));
   }

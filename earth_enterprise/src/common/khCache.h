@@ -305,7 +305,9 @@ class khCache {
   void Prune(void) {
     CheckListInvariant();
     Item *item = tail;
-    while (item && ( ((cacheObjectSizes > maxCacheMemory) && limitCacheMemory) || ((map.size() > targetMax) && !limitCacheMemory) )) {
+    while (item && (
+    ( (cacheObjectSizes > maxCacheMemory) && limitCacheMemory ) ||
+    ( (map.size() > targetMax) && !limitCacheMemory ) )) {
       // Note: this refcount() > 1 check is safe even with
       // khMTRefCounter based guards. See explanaition with the
       // definition of khMTRefCounter in khMTTypes.h.
