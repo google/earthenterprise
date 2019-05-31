@@ -56,7 +56,7 @@ void BoundsTracker::write_json_file(const std::string& filename) {
   std::ofstream fout(filename.c_str());
   fout << "[\n"
        << "  {\n"
-       << "    \"layer_id\": 0\n"
+       << "    \"layer_id\": 0,\n"
        << "    \"top\": " << this->top << ",\n"
        << "    \"bottom\": " << this->bottom << ",\n"
        << "    \"left\": " << this->left << ",\n"
@@ -69,7 +69,7 @@ void BoundsTracker::write_json_file(const std::string& filename) {
        << "    \"max_vector_level\": " << this->max_vector_level << ",\n"
        << "    \"image_tile_channel\": " << this->image_tile_channel << ",\n"
        << "    \"terrain_tile_channel\": " << this->terrain_tile_channel << ",\n"
-       << "    \"vector_tile_channel\": " << this->vector_tile_channel << ",\n"
+       << "    \"vector_tile_channel\": " << this->vector_tile_channel << "\n"
        << "  }\n"
        << "]\n";
 
@@ -81,12 +81,12 @@ void BoundsTracker::update(const std::string& qtpath, uint32_t& min_level, uint3
 
   uint32_t column, row, zoom;
   ConvertFromQtNode(real_path, &column, &row, &zoom);
-
-  if (zoom < min_level) {
+  uint32_t level = qtpath.size();
+  if (level < min_level) {
     min_level = zoom;
   }
-  if (zoom > max_level) {
-    max_level = zoom;
+  if (level > max_level) {
+    max_level = level;
     if (update_bounding_box) {
       this->left = column;
       this->right = column;
@@ -95,7 +95,7 @@ void BoundsTracker::update(const std::string& qtpath, uint32_t& min_level, uint3
     }
   }
 
-  if (zoom == max_level && update_bounding_box) {
+  if (level == max_level && update_bounding_box) {
     this->left = std::min(column, this->left);
     this->right = std::max(column, this->right);
 
