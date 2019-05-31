@@ -299,6 +299,52 @@ class MTVector : public std::vector<T>{
       khReadGuard lock(mtx);
       return Base::operator==(x);
     }
+   
+    bool operator<(const MTVector& x) const {
+      // Since using a read lock, no need to worry about lock ordering or things like a==a
+      khReadGuard lock1(mtx);
+      khReadGuard lock2(x.mtx);
+      return std::less<T>(Base::begin(), Base::end(), x.begin());
+    }
+
+    bool operator<(const Base& x) const {
+      khReadGuard lock(mtx);
+      return std::less<T>(Base::begin(), Base::end(), x.begin());
+    }
+
+    bool operator<=(const MTVector& x) const {
+      // Since using a read lock, no need to worry about lock ordering or things like a==a
+      khReadGuard lock1(mtx);
+      khReadGuard lock2(x.mtx);
+      return std::less_equal<T>(Base::begin(), Base::end(), x.begin());
+    }
+
+    bool operator<=(const Base& x) const {
+      khReadGuard lock(mtx);
+      return std::less_equal<T>(Base::begin(), Base::end(), x.begin());
+    }
+
+    bool operator>(const MTVector& x) const {
+      khReadGuard lock1(mtx);
+      khReadGuard lock2(x.mtx);
+      return std::greater<T>(Base::begin(), Base::end(), x.begin());
+    }
+
+    bool operator>(const Base& x) const {
+      khReadGuard lock(mtx);
+      return std::greater<T>(Base::begin(), Base::end(), x.begin());
+    }
+
+    bool operator>=(const MTVector& x) const {
+      khReadGuard lock1(mtx);
+      khReadGuard lock2(x.mtx);
+      return std::greater_equal<T>(Base::begin(), Base::end(), x.begin());
+    }
+
+    bool operator>=(const Base& x) const {
+      khReadGuard lock(mtx);
+      return std::greater_equal<T>(Base::begin(), Base::end(), x.begin());
+    }
 
     void clear(void) {
       khWriteGuard lock(mtx);
