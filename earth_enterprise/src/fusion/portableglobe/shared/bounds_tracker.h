@@ -20,11 +20,44 @@
 #include <fstream>  // NOLINT(readability/streams)
 #include <string>
 #include <vector>
+#include <map>
 #include "common/base/macros.h"
 #include "common/khTypes.h"
 #include "fusion/portableglobe/shared/packetbundle.h"
 
 namespace fusion_portableglobe {
+
+
+struct channel_info {
+  uint32_t top = 0;
+  uint32_t bottom = UINT32_MAX;
+  uint32_t left = UINT32_MAX;
+  uint32_t right = 0;
+
+  uint32_t min_level = UINT32_MAX;
+  uint32_t max_level = 0;
+  uint16_t channel = UINT16_MAX;
+  PacketType type;
+  channel_info() : top(0),
+                   bottom(UINT32_MAX),
+                   left(UINT32_MAX),
+                   right(0),
+                   min_level(UINT32_MAX),
+                   max_level(0),
+                   channel(UINT16_MAX)
+  {};
+  channel_info(uint32_t row,
+               uint32_t column,
+               uint32_t level,
+               uint16_t channel,
+               PacketType type) :
+    top(row), bottom(row),
+    left(column), right(column),
+    min_level(level), max_level(level),
+    channel(channel),
+    type(type)
+  {}
+};
 
 /**
    A class to keep track of imagery, terrain, and vector boundaries while
@@ -49,32 +82,10 @@ public:
   void write_json_file(const std::string& filename);
 
 public:
-  // top, left, bottom, and right keep track of the bounding box for imagery
-  uint32_t top = 0;
-  uint32_t bottom = UINT32_MAX;
-  uint32_t left = UINT32_MAX;
-  uint32_t right = 0;
-
-  // Minimum and maximum zoom levels with imagery packets
-  uint32_t min_image_level = 32;
-  uint32_t max_image_level = 0;
-
-  // Minimum and maximum zoom levels with terrain packets
-  uint32_t min_terrain_level = 32;
-  uint32_t max_terrain_level = 0;
-
-  // Minimum and maximum zoom levels with vector packets
-  uint32_t min_vector_level = 32;
-  uint32_t max_vector_level = 0;
-
-  // Keep track of which channels contain imagery, terrain, and vector data.
-  uint16_t image_tile_channel = UINT16_MAX;
-  uint16_t terrain_tile_channel = UINT16_MAX;
-  uint16_t vector_tile_channel = UINT16_MAX;
+  // Minimum and maximum zoom level and channel for imagery, terrain, and vector data
+  std::map<uint16_t, channel_info> channels;
 
 private:
-  void update(const std::string& qtpath, uint32_t& min_level, uint32_t& max_level, bool update_bounding_box=false);
-
   DISALLOW_COPY_AND_ASSIGN(BoundsTracker);
 };
 
