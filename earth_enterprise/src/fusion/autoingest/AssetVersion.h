@@ -112,7 +112,7 @@ class AssetVersionImpl : public khMTRefCounter, public AssetVersionStorage {
     return verref.AssetRef();
   }
 
-  template <class outIter> 
+  template <class outIter>
   outIter GetInputs(outIter oi) const {
     outfiles.doForEach([&oi](const std::string& v) {
       oi++ = v;

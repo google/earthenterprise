@@ -24,7 +24,6 @@
 #include <memory>
 #include <set>
 #include <unordered_map>
-//#include <map>
 #include <mutex>
 #include <vector>
 
@@ -204,7 +203,6 @@ template <class K, class V>
 class khMTMap
 {
  protected:
-  //typedef std::unordered_map<K,V> Map;
   typedef std::unordered_map<K,V> Map;
   Map     map;
   mutable std::mutex mutex;

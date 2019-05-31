@@ -20,7 +20,6 @@
 #include <map>
 #include <string>
 #include <vector>
-#include <utility>
 #include <khException.h>
 #include <khFileUtils.h>
 #include "common/khCppStd.h"
