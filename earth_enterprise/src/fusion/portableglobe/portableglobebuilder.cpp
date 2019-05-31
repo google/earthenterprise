@@ -639,15 +639,15 @@ void PortableGlobeBuilder::ProcessDataInQtPacketNodes(
   // If packet_level == 0 there is no data, it is only for children.
   // For this qt_path the data was there at packet_level == 4 rather.
   if (node->children.GetImageBit()) {
-    bounds_tracker_.update_imagery(qtpath);
+    bounds_tracker_.update(qtpath, PacketType::kImagePacket, kGEImageryChannelId);
     WriteImagePacket(qtpath, node->image_version);
   }
   if (node->children.GetTerrainBit()) {
-    bounds_tracker_.update_terrain(qtpath);
+    bounds_tracker_.update(qtpath, PacketType::kTerrainPacket, kGETerrainChannelId - 1);
     WriteTerrainPacket(qtpath, node->terrain_version);
   }
   if (node->children.GetDrawableBit()) {
-    bounds_tracker_.update_vector(qtpath);
+    bounds_tracker_.update(qtpath, PacketType::kVectorPacket, 2);
     for (size_t i = 0; i < node->num_channels(); ++i) {
       // Assuming that channel_type is in increasing order,
       // otherwise we are going to need to sort.
