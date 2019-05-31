@@ -176,11 +176,13 @@ void PortableMapBuilder::BuildMap() {
     }
   }
 
+  if (!metadata_file_.empty()) {
+    bounds_tracker_.write_json_file(metadata_file_);
+  }
+
   // Finish up writing all of the packet bundles.
   DeleteWriter();
 
-  
-  
   // The "+1" for max_level_traversed is because the code uses zero
   // for the first level but the cutter page and most humans use one.
   if (max_level_traversed+1 < max_level_) {
@@ -423,6 +425,10 @@ bool PortableMapBuilder::WriteMapPackets(const std::string& qtpath_str,
         // (1 x 1 clear pngs) to unnecessarily deep levels.
         found_something = true;
       }
+
+      bounds_tracker_.update(qtpath_str,
+                             static_cast<PacketType>(packet_type),
+                             layers_[i]->channel_num);
 
       std::string full_qtpath = "0" + qtpath_str;
       writer_->AppendPacket(full_qtpath, packet_type, layers_[i]->channel_num,

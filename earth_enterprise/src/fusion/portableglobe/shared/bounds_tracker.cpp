@@ -21,23 +21,36 @@
 #include <string>
 #include "common/khFileUtils.h"
 #include "fusion/portableglobe/quadtree/qtutils.h"
+#include "fusion/portableglobe/shared/packetbundle.h"
 
 namespace fusion_portableglobe {
 
 BoundsTracker::BoundsTracker() {}
 
-void BoundsTracker::update_imagery(const std::string& qtpath) {
-  update(qtpath, this->min_image_level, this->max_image_level, true);
-}
+void BoundsTracker::update(const std::string& qtpath, PacketType type, uint16_t channel) {
 
-void BoundsTracker::update_terrain(const std::string& qtpath) {
-  update(qtpath, this->min_terrain_level, this->max_terrain_level);
-}
+  // Pass min_level and max_level parameters based on type
+  switch (type) {
 
-void BoundsTracker::update_vector(const std::string& qtpath) {
-  update(qtpath, this->min_vector_level, this->max_vector_level);
-}
+  case kImagePacket:
+    update(qtpath, this->min_image_level, this->max_image_level, true);
+    image_tile_channel = channel;
+    break;
 
+  case kTerrainPacket:
+    update(qtpath, this->min_terrain_level, this->max_terrain_level);
+    terrain_tile_channel = channel;
+    break;
+
+  case kVectorPacket:
+    update(qtpath, this->min_vector_level, this->max_vector_level);
+    vector_tile_channel = channel;
+    break;
+
+  default:
+    return;
+  }
+}
 void BoundsTracker::write_json_file(const std::string& filename) {
   khEnsureParentDir(filename);
   std::ofstream fout(filename.c_str());
@@ -63,10 +76,7 @@ void BoundsTracker::write_json_file(const std::string& filename) {
   fout.close();
 }
 
-inline void BoundsTracker::update(const std::string& qtpath,
-                                  uint32_t& min_level,
-                                  uint32_t& max_level,
-                                  bool update) {
+void BoundsTracker::update(const std::string& qtpath, uint32_t& min_level, uint32_t& max_level, bool update_bounding_box) {
   std::string real_path = "0" + qtpath;
 
   uint32_t column, row, zoom;
@@ -77,7 +87,7 @@ inline void BoundsTracker::update(const std::string& qtpath,
   }
   if (zoom > max_level) {
     max_level = zoom;
-    if (update) {
+    if (update_bounding_box) {
       this->left = column;
       this->right = column;
       this->top = row;
@@ -85,7 +95,7 @@ inline void BoundsTracker::update(const std::string& qtpath,
     }
   }
 
-  if (zoom == max_level && update) {
+  if (zoom == max_level && update_bounding_box) {
     this->left = std::min(column, this->left);
     this->right = std::max(column, this->right);
 
