@@ -73,20 +73,21 @@ usage(const std::string &progn, const char *msg = 0, ...)
   exit(1);
 }
 
+// Convert the amount of memory used by caches to a more easily read format
 std::string
 readableMemorySize(uint64 size) {
   double readable = static_cast<double>(size);
-  const char* units[] = {"B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
-  int i = 0;
-  char buf[100];
+  const std::array<std::string, 9> units = {"B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
+  uint8 i = 0;
+  std::stringstream memoryUsed;
 
   while (readable > 1024) {
     readable /= 1024;
     i++;
   }
 
-  sprintf(buf, "%.2f %s", readable, units[i]);
-  return std::string(buf);
+  memoryUsed << round(readable) << ' ' << units[i];
+  return memoryUsed.str();
 }
 
 int

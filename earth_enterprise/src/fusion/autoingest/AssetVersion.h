@@ -113,24 +113,40 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
     AssetVersionRef verref(name);
     return verref.AssetRef();
   }
-
+// Get the total memory used by an asset version
   const uint64 GetSize() {
-    return (name.GetSharedStringSize() + sizeof(type) + sizeof(subtype) + (subtype.capacity() * sizeof(char)) + sizeof(state) + sizeof(progress) + sizeof(locked)
-    + GetVectorSize(inputs) + GetVectorSize(children) + GetVectorSize(parents) + GetVectorSize(listeners) + GetVectorSize(outfiles) + sizeof(meta)
-    + sizeof(beginTime) + sizeof(progressTime) + sizeof(endTime) + sizeof(taskid));
+    return (name.GetSharedStringSize()
+    + sizeof(type)
+    + sizeof(subtype)
+    + (subtype.capacity() * sizeof(char))
+    + sizeof(state)
+    + sizeof(progress)
+    + sizeof(locked)
+    + GetVectorSize(inputs)
+    + GetVectorSize(children)
+    + GetVectorSize(parents)
+    + GetVectorSize(listeners)
+    + GetVectorSize(outfiles)
+    + sizeof(meta)
+    + sizeof(beginTime)
+    + sizeof(progressTime)
+    + sizeof(endTime)
+    + sizeof(taskid));
   }
-
+// Get the total memory used by a template vector
   template<class T>
   const uint64 GetVectorSize(std::vector<T> vec) {
     return (vec.capacity() * sizeof(T));
   }
+// Get the total memory used by a vector of strings
   const uint64 GetVectorSize(std::vector<std::string> vec) {
     uint64 total = 0;
-    for(uint i = 0; i < vec.size(); i++) {
-      total += (sizeof(vec.at(i)) + vec.at(i).capacity());
+    for(auto i : vec) {
+      total += (sizeof(i) + i.capacity());
     }
     return total;
   }
+// Get the total memory used by a vector of SharedStrings
   const uint64 GetVectorSize(std::vector<SharedString> vec) {
     return (vec.capacity() * ((vec.front()).GetSharedStringSize()));
   }
