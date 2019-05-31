@@ -141,7 +141,7 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
 // Get the total memory used by a vector of strings
   const uint64 GetVectorSize(std::vector<std::string> vec) {
     uint64 total = 0;
-    for(auto i : vec) {
+    for(const auto &i : vec) {
       total += (sizeof(i) + i.capacity());
     }
     return total;

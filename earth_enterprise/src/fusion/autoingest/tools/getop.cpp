@@ -86,7 +86,9 @@ readableMemorySize(uint64 size) {
     i++;
   }
 
-  memoryUsed << round(readable) << ' ' << units[i];
+  memoryUsed << std::fixed;
+  memoryUsed.precision(2);
+  memoryUsed << readable << ' ' << units[i];
   return memoryUsed.str();
 }
 
