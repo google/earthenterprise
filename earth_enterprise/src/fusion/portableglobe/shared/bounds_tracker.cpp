@@ -27,81 +27,79 @@ namespace fusion_portableglobe {
 
 BoundsTracker::BoundsTracker() {}
 
-void BoundsTracker::update(const std::string& qtpath, PacketType type, uint16_t channel) {
-
-  // Pass min_level and max_level parameters based on type
-  switch (type) {
-
-  case kImagePacket:
-    update(qtpath, this->min_image_level, this->max_image_level, true);
-    image_tile_channel = channel;
-    break;
-
-  case kTerrainPacket:
-    update(qtpath, this->min_terrain_level, this->max_terrain_level);
-    terrain_tile_channel = channel;
-    break;
-
-  case kVectorPacket:
-    update(qtpath, this->min_vector_level, this->max_vector_level);
-    vector_tile_channel = channel;
-    break;
-
-  default:
-    return;
-  }
-}
-void BoundsTracker::write_json_file(const std::string& filename) {
-  khEnsureParentDir(filename);
-  std::ofstream fout(filename.c_str());
-  fout << "[\n"
-       << "  {\n"
-       << "    \"layer_id\": 0,\n"
-       << "    \"top\": " << this->top << ",\n"
-       << "    \"bottom\": " << this->bottom << ",\n"
-       << "    \"left\": " << this->left << ",\n"
-       << "    \"right\": " << this->right << ",\n"
-       << "    \"min_image_level\": " << this->min_image_level << ",\n"
-       << "    \"max_image_level\": " << this->max_image_level << ",\n"
-       << "    \"min_terrain_level\": " << this->min_terrain_level << ",\n"
-       << "    \"max_terrain_level\": " << this->max_terrain_level << ",\n"
-       << "    \"min_vector_level\": " << this->min_vector_level << ",\n"
-       << "    \"max_vector_level\": " << this->max_vector_level << ",\n"
-       << "    \"image_tile_channel\": " << this->image_tile_channel << ",\n"
-       << "    \"terrain_tile_channel\": " << this->terrain_tile_channel << ",\n"
-       << "    \"vector_tile_channel\": " << this->vector_tile_channel << "\n"
-       << "  }\n"
-       << "]\n";
-
-  fout.close();
-}
-
-void BoundsTracker::update(const std::string& qtpath, uint32_t& min_level, uint32_t& max_level, bool update_bounding_box) {
+void BoundsTracker::update(const std::string& qtpath, PacketType type, uint16_t packet_channel) {
   std::string real_path = "0" + qtpath;
 
   uint32_t column, row, zoom;
   ConvertFromQtNode(real_path, &column, &row, &zoom);
+
   uint32_t level = qtpath.size();
-  if (level < min_level) {
-    min_level = zoom;
-  }
-  if (level > max_level) {
-    max_level = level;
-    if (update_bounding_box) {
-      this->left = column;
-      this->right = column;
-      this->top = row;
-      this->bottom = row;
+
+  if (channels.find(packet_channel) == channels.end()) {
+    channels[packet_channel] = {row, column, level, packet_channel, type};
+
+  } else {
+    channel_info& channel = channels[packet_channel];
+
+    if (level < channel.min_level) {
+      channel.min_level = level;
+
+    } else if (level > channel.max_level) {
+      channel.max_level = level;
+      channel.left = column;
+      channel.right = column;
+      channel.top = row;
+      channel.bottom = row;
+
+    } else if (level == channel.max_level) {
+      channel.left = std::min(column, channel.left);
+      channel.right = std::max(column, channel.right);
+      channel.top = std::min(row, channel.top);
+      channel.bottom = std::max(row, channel.bottom);
     }
   }
-
-  if (level == max_level && update_bounding_box) {
-    this->left = std::min(column, this->left);
-    this->right = std::max(column, this->right);
-
-    this->top = std::min(row, this->top);
-    this->bottom = std::max(row, this->bottom);
-  }
 }
-  
+
+void BoundsTracker::write_json_file(const std::string& filename) {
+  khEnsureParentDir(filename);
+  static std::map<PacketType, std::string> channel_type_strings;
+  if (channel_type_strings.size() == 0) {
+    channel_type_strings[kDbRootPacket] = "DbRoot";
+    channel_type_strings[kDbRoot2Packet] = "DbRoot2";
+    channel_type_strings[kQtpPacket] = "Qtp";
+    channel_type_strings[kQtp2Packet] = "Qtp2";
+    channel_type_strings[kImagePacket] = "Image";
+    channel_type_strings[kTerrainPacket] = "Terrain";
+    channel_type_strings[kVectorPacket] = "Vector";
+  }
+    
+  std::ofstream fout(filename.c_str());
+  fout << "[\n";
+  auto last_entry = channels.end();
+  --last_entry;
+
+  for (auto iter =  channels.begin(); iter != channels.end(); ++iter) {
+    const std::pair<uint16_t, channel_info> channel = *iter;
+
+    fout << "  {\n"
+         << "    \"layer_id\": " << channel.first << ",\n"
+         << "    \"top\": " << channel.second.top << ",\n"
+         << "    \"bottom\": " << channel.second.bottom << ",\n"
+         << "    \"left\": " << channel.second.left << ",\n"
+         << "    \"right\": " << channel.second.right << ",\n"
+         << "    \"min_image_level\": " << channel.second.min_level << ",\n"
+         << "    \"max_image_level\": " << channel.second.max_level << ",\n"
+         << "    \"channel\": " << channel.second.channel << ",\n"
+         << "    \"type\": \"" << channel_type_strings[channel.second.type] << "\"\n"
+         << "  }";
+    
+    if (iter != last_entry) {
+      fout << ",";
+    }
+    fout << "\n";
+  }
+  fout << "]\n";
+  fout.close();
+}
+
 }  // namespace fusion_portableglobe
