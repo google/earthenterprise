@@ -13,13 +13,14 @@
 // limitations under the License.
 
 
-// Methods keeping track of quadtree bounds and writing to a JSON file.
+// Methods for keeping track of quadtree bounds and writing them to a JSON file.
 
 #include "fusion/portableglobe/shared/bounds_tracker.h"
 #include <fstream>  // NOLINT(readability/streams)
 #include <iostream>  // NOLINT(readability/streams)
 #include <string>
 #include "common/khFileUtils.h"
+#include "common/khSimpleException.h"
 #include "fusion/portableglobe/quadtree/qtutils.h"
 #include "fusion/portableglobe/shared/packetbundle.h"
 
@@ -27,7 +28,7 @@ namespace fusion_portableglobe {
 
 BoundsTracker::BoundsTracker() {}
 
-void BoundsTracker::update(const std::string& qtpath, PacketType type, uint16_t packet_channel) {
+void BoundsTracker::update(uint16_t channel_id, PacketType type, const std::string& qtpath) {
   std::string real_path = "0" + qtpath;
 
   uint32_t column, row, zoom;
@@ -35,22 +36,24 @@ void BoundsTracker::update(const std::string& qtpath, PacketType type, uint16_t 
 
   uint32_t level = qtpath.size();
 
-  if (channels.find(packet_channel) == channels.end()) {
-    channels[packet_channel] = {row, column, level, packet_channel, type};
+  if (channels.count(channel_id) == 0) {
+    channels[channel_id] = {channel_id, type, row, column, level};
 
   } else {
-    channel_info& channel = channels[packet_channel];
+    channel_info& channel = channels[channel_id];
 
+    // BoundsTracker only tracks bounds at the maximum zoom level (max_level)
     if (level < channel.min_level) {
       channel.min_level = level;
 
+      // If this node is at a new max_level then set max_level and also update the bounds
+      // to be the current row and column.
     } else if (level > channel.max_level) {
       channel.max_level = level;
-      channel.left = column;
-      channel.right = column;
-      channel.top = row;
-      channel.bottom = row;
+      channel.left = channel.right = column;
+      channel.top = channel.bottom = row;
 
+      // A new node at max_level, so expand the bounding box if necessary.
     } else if (level == channel.max_level) {
       channel.left = std::min(column, channel.left);
       channel.right = std::max(column, channel.right);
@@ -60,39 +63,41 @@ void BoundsTracker::update(const std::string& qtpath, PacketType type, uint16_t 
   }
 }
 
-void BoundsTracker::write_json_file(const std::string& filename) {
+void BoundsTracker::write_json_file(const std::string& filename) const {
   khEnsureParentDir(filename);
-  static std::map<PacketType, std::string> channel_type_strings;
-  if (channel_type_strings.size() == 0) {
-    channel_type_strings[kDbRootPacket] = "DbRoot";
-    channel_type_strings[kDbRoot2Packet] = "DbRoot2";
-    channel_type_strings[kQtpPacket] = "Qtp";
-    channel_type_strings[kQtp2Packet] = "Qtp2";
-    channel_type_strings[kImagePacket] = "Image";
-    channel_type_strings[kTerrainPacket] = "Terrain";
-    channel_type_strings[kVectorPacket] = "Vector";
-  }
+
+  static std::map<PacketType, std::string> channel_type_strings =
+    {{ kDbRootPacket,  "DbRoot"},
+     { kDbRoot2Packet, "DbRoot2"},
+     { kQtpPacket,     "Qtp"},
+     { kQtp2Packet,    "Qtp2"},
+     { kImagePacket,   "Image"},
+     { kTerrainPacket, "Terrain"},
+     { kVectorPacket,  "Vector"}};
     
   std::ofstream fout(filename.c_str());
-  fout << "[\n";
+
+  // Find the last entry so the last comma can be skipped
   auto last_entry = channels.end();
   --last_entry;
 
+  fout << "[\n";
   for (auto iter =  channels.begin(); iter != channels.end(); ++iter) {
-    const std::pair<uint16_t, channel_info> channel = *iter;
+
+    const std::pair<uint16_t, channel_info> channel_pair = *iter;
+    const auto &channel = channel_pair.second;
 
     fout << "  {\n"
-         << "    \"layer_id\": " << channel.first << ",\n"
-         << "    \"top\": " << channel.second.top << ",\n"
-         << "    \"bottom\": " << channel.second.bottom << ",\n"
-         << "    \"left\": " << channel.second.left << ",\n"
-         << "    \"right\": " << channel.second.right << ",\n"
-         << "    \"min_image_level\": " << channel.second.min_level << ",\n"
-         << "    \"max_image_level\": " << channel.second.max_level << ",\n"
-         << "    \"channel\": " << channel.second.channel << ",\n"
-         << "    \"type\": \"" << channel_type_strings[channel.second.type] << "\"\n"
+         << "    \"channel_id\": "      << channel.channel_id << ",\n"
+         << "    \"type\": \""          << channel_type_strings[channel.type] << "\"\n"
+         << "    \"top\": "             << channel.top << ",\n"
+         << "    \"bottom\": "          << channel.bottom << ",\n"
+         << "    \"left\": "            << channel.left << ",\n"
+         << "    \"right\": "           << channel.right << ",\n"
+         << "    \"min_image_level\": " << channel.min_level << ",\n"
+         << "    \"max_image_level\": " << channel.max_level << ",\n"
          << "  }";
-    
+
     if (iter != last_entry) {
       fout << ",";
     }
@@ -100,6 +105,13 @@ void BoundsTracker::write_json_file(const std::string& filename) {
   }
   fout << "]\n";
   fout.close();
+}
+
+const channel_info& BoundsTracker::channel(uint16_t channel_id) const {
+  if (channels.count(channel_id) == 0) {
+    throw khSimpleException("Channel not found in BoundsTracker: ") << channel_id;
+  }
+  return channels.at(channel_id);
 }
 
 }  // namespace fusion_portableglobe

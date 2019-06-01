@@ -40,175 +40,177 @@ class BoundsTrackerTest : public testing::Test {
   }
 };
 
+void populateSimpleBoundsTracker(BoundsTracker& bt, PacketType type) {
+  bt.update(123, type, "0");
+  bt.update(123, type, "00");
+  bt.update(123, type, "01");
+  bt.update(123, type, "02");
+}
+
+void populateBoundsTracker(BoundsTracker& bt) {
+  bt.update(123, kImagePacket, "0");
+  bt.update(123, kImagePacket, "00");
+  bt.update(123, kImagePacket, "01");
+  bt.update(123, kImagePacket, "02");
+  bt.update(123, kImagePacket, "023");
+  bt.update(123, kImagePacket, "0231");
+  bt.update(123, kImagePacket, "0232");
+
+  bt.update(24, kVectorPacket, "0");
+  bt.update(24, kVectorPacket, "00");
+  bt.update(24, kVectorPacket, "01");
+  bt.update(24, kVectorPacket, "02");
+  bt.update(24, kVectorPacket, "023");
+  bt.update(24, kVectorPacket, "0231");
+  bt.update(24, kVectorPacket, "0232");
+
+  // Terrain stops at a lower level than vector and imagery.
+  bt.update(1, kTerrainPacket, "0");
+  bt.update(1, kTerrainPacket, "00");
+  bt.update(1, kTerrainPacket, "01");
+  bt.update(1, kTerrainPacket, "02");
+}
+
 TEST_F(BoundsTrackerTest, SimpleImageryBounds) {
   BoundsTracker bt;
-  bt.update("0", kImagePacket, 123);
-  bt.update("00", kImagePacket, 123);
-  bt.update("01", kImagePacket, 123);
-  bt.update("02", kImagePacket, 123);
+  populateSimpleBoundsTracker(bt, kImagePacket);
 
-  EXPECT_TRUE(bt.channels.find(123) != bt.channels.end());
+  const channel_info& channel = bt.channel(123);
+  EXPECT_EQ(channel.channel_id, 123);
+  EXPECT_EQ(channel.type, kImagePacket);
 
-  EXPECT_EQ(bt.channels[123].top, 2);
-  EXPECT_EQ(bt.channels[123].bottom, 3);
-  EXPECT_EQ(bt.channels[123].left, 0);
-  EXPECT_EQ(bt.channels[123].right, 1);
+  EXPECT_EQ(channel.top, 2);
+  EXPECT_EQ(channel.bottom, 3);
+  EXPECT_EQ(channel.left, 0);
+  EXPECT_EQ(channel.right, 1);
 
-  EXPECT_EQ(bt.channels[123].min_level, 1);
-  EXPECT_EQ(bt.channels[123].max_level, 2);
-  EXPECT_EQ(bt.channels[123].channel, 123);
-  EXPECT_EQ(bt.channels[123].type, kImagePacket);
+  EXPECT_EQ(channel.min_level, 1);
+  EXPECT_EQ(channel.max_level, 2);
 }
 
 TEST_F(BoundsTrackerTest, SimpleVectorBounds) {
   BoundsTracker bt;
-  bt.update("0",  kVectorPacket, 123);
-  bt.update("00", kVectorPacket, 123);
-  bt.update("01", kVectorPacket, 123);
-  bt.update("02", kVectorPacket, 123);
+  populateSimpleBoundsTracker(bt, kVectorPacket);
 
-  EXPECT_EQ(bt.channels[123].top, 2);
-  EXPECT_EQ(bt.channels[123].bottom, 3);
-  EXPECT_EQ(bt.channels[123].left, 0);
-  EXPECT_EQ(bt.channels[123].right, 1);
+  const channel_info& channel = bt.channel(123);
+  EXPECT_EQ(channel.channel_id, 123);
+  EXPECT_EQ(channel.type, kVectorPacket);
 
-  EXPECT_EQ(bt.channels[123].min_level, 1);
-  EXPECT_EQ(bt.channels[123].max_level, 2);
-  EXPECT_EQ(bt.channels[123].channel, 123);
-  EXPECT_EQ(bt.channels[123].type, kVectorPacket);
+  EXPECT_EQ(channel.top, 2);
+  EXPECT_EQ(channel.bottom, 3);
+  EXPECT_EQ(channel.left, 0);
+  EXPECT_EQ(channel.right, 1);
+
+  EXPECT_EQ(channel.min_level, 1);
+  EXPECT_EQ(channel.max_level, 2);
 }
 
 TEST_F(BoundsTrackerTest, SimpleTerrainBounds) {
   BoundsTracker bt;
-  bt.update("0",  kTerrainPacket, 123);
-  bt.update("00", kTerrainPacket, 123);
-  bt.update("01", kTerrainPacket, 123);
-  bt.update("02", kTerrainPacket, 123);
+  populateSimpleBoundsTracker(bt, kTerrainPacket);
 
-  EXPECT_EQ(bt.channels[123].top, 2);
-  EXPECT_EQ(bt.channels[123].bottom, 3);
-  EXPECT_EQ(bt.channels[123].left, 0);
-  EXPECT_EQ(bt.channels[123].right, 1);
+  const channel_info& channel = bt.channel(123);
+  EXPECT_EQ(channel.channel_id, 123);
+  EXPECT_EQ(channel.type, kTerrainPacket);
 
-  EXPECT_EQ(bt.channels[123].min_level, 1);
-  EXPECT_EQ(bt.channels[123].max_level, 2);
-  EXPECT_EQ(bt.channels[123].channel, 123);
-  EXPECT_EQ(bt.channels[123].type, kTerrainPacket);
-}
+  EXPECT_EQ(channel.top, 2);
+  EXPECT_EQ(channel.bottom, 3);
+  EXPECT_EQ(channel.left, 0);
+  EXPECT_EQ(channel.right, 1);
 
-void populateBoundsTracker(BoundsTracker& bt) {
-    bt.update("0", kImagePacket, 123);
-    bt.update("00", kImagePacket, 123);
-    bt.update("01", kImagePacket, 123);
-    bt.update("02", kImagePacket, 123);
-    bt.update("023", kImagePacket, 123);
-    bt.update("0231", kImagePacket, 123);
-    bt.update("0232", kImagePacket, 123);
-
-    bt.update("0", kVectorPacket, 24);
-    bt.update("00", kVectorPacket, 24);
-    bt.update("01", kVectorPacket, 24);
-    bt.update("02", kVectorPacket, 24);
-    bt.update("023", kVectorPacket, 24);
-    bt.update("0231", kVectorPacket, 24);
-    bt.update("0232", kVectorPacket, 24);
-
-    // Terrain stops at a lower level than vector and imagery.
-    bt.update("0", kTerrainPacket, 1);
-    bt.update("00", kTerrainPacket, 1);
-    bt.update("01", kTerrainPacket, 1);
-    bt.update("02", kTerrainPacket, 1);
+  EXPECT_EQ(channel.min_level, 1);
+  EXPECT_EQ(channel.max_level, 2);
 }
 
 TEST_F(BoundsTrackerTest, MultipleBounds) {
-    BoundsTracker bt;
-    populateBoundsTracker(bt);
+  BoundsTracker bt;
+  populateBoundsTracker(bt);
 
-    EXPECT_EQ(bt.channels[123].top, 8);
-    EXPECT_EQ(bt.channels[123].bottom, 9);
-    EXPECT_EQ(bt.channels[123].left, 5);
-    EXPECT_EQ(bt.channels[123].right, 5);
+  const channel_info& imagery = bt.channel(123);
+  EXPECT_EQ(imagery.channel_id, 123);
+  EXPECT_EQ(imagery.type, kImagePacket);
 
-    EXPECT_EQ(bt.channels[123].min_level, 1);
-    EXPECT_EQ(bt.channels[123].max_level, 4);
-    EXPECT_EQ(bt.channels[123].channel, 123);
-    EXPECT_EQ(bt.channels[123].type, kImagePacket);
+  EXPECT_EQ(imagery.top, 8);
+  EXPECT_EQ(imagery.bottom, 9);
+  EXPECT_EQ(imagery.left, 5);
+  EXPECT_EQ(imagery.right, 5);
 
+  EXPECT_EQ(imagery.min_level, 1);
+  EXPECT_EQ(imagery.max_level, 4);
 
-    EXPECT_EQ(bt.channels[24].top, 8);
-    EXPECT_EQ(bt.channels[24].bottom, 9);
-    EXPECT_EQ(bt.channels[24].left, 5);
-    EXPECT_EQ(bt.channels[24].right, 5);
+  const channel_info& vector = bt.channel(24);
+  EXPECT_EQ(vector.channel_id, 24);
+  EXPECT_EQ(vector.type, kVectorPacket);
 
-    EXPECT_EQ(bt.channels[24].min_level, 1);
-    EXPECT_EQ(bt.channels[24].max_level, 4);
-    EXPECT_EQ(bt.channels[24].channel, 24);
-    EXPECT_EQ(bt.channels[24].type, kVectorPacket);
+  EXPECT_EQ(vector.top, 8);
+  EXPECT_EQ(vector.bottom, 9);
+  EXPECT_EQ(vector.left, 5);
+  EXPECT_EQ(vector.right, 5);
 
-    EXPECT_EQ(bt.channels[1].top, 2);
-    EXPECT_EQ(bt.channels[1].bottom, 3);
-    EXPECT_EQ(bt.channels[1].left, 0);
-    EXPECT_EQ(bt.channels[1].right, 1);
+  EXPECT_EQ(vector.min_level, 1);
+  EXPECT_EQ(vector.max_level, 4);
 
-    EXPECT_EQ(bt.channels[1].min_level, 1);
-    EXPECT_EQ(bt.channels[1].max_level, 2);
-    EXPECT_EQ(bt.channels[1].channel, 1);
-    EXPECT_EQ(bt.channels[1].type, kTerrainPacket);
+  const channel_info& terrain = bt.channel(1);
+  EXPECT_EQ(terrain.channel_id, 1);
+  EXPECT_EQ(terrain.type, kTerrainPacket);
+
+  EXPECT_EQ(terrain.top, 2);
+  EXPECT_EQ(terrain.bottom, 3);
+  EXPECT_EQ(terrain.left, 0);
+  EXPECT_EQ(terrain.right, 1);
+
+  EXPECT_EQ(terrain.min_level, 1);
+  EXPECT_EQ(terrain.max_level, 2);
 }
 
-  TEST_F(BoundsTrackerTest, TestWriteJson) {
+TEST_F(BoundsTrackerTest, TestWriteJson) {
+  // This is lame, but easier than adding a new JSON parser dependency.
+  const std::string expected_json = "[\n"
+    "  {\n"
+    "    \"channel_id\": 1,\n"
+    "    \"type\": \"Terrain\"\n"
+    "    \"top\": 2,\n"
+    "    \"bottom\": 3,\n"
+    "    \"left\": 0,\n"
+    "    \"right\": 1,\n"
+    "    \"min_image_level\": 1,\n"
+    "    \"max_image_level\": 2,\n"
+    "  },\n"
+    "  {\n"
+    "    \"channel_id\": 24,\n"
+    "    \"type\": \"Vector\"\n"
+    "    \"top\": 8,\n"
+    "    \"bottom\": 9,\n"
+    "    \"left\": 5,\n"
+    "    \"right\": 5,\n"
+    "    \"min_image_level\": 1,\n"
+    "    \"max_image_level\": 4,\n"
+    "  },\n"
+    "  {\n"
+    "    \"channel_id\": 123,\n"
+    "    \"type\": \"Image\"\n"
+    "    \"top\": 8,\n"
+    "    \"bottom\": 9,\n"
+    "    \"left\": 5,\n"
+    "    \"right\": 5,\n"
+    "    \"min_image_level\": 1,\n"
+    "    \"max_image_level\": 4,\n"
+    "  }\n"
+    "]\n";
 
-    // This is kind of hacky, but easier than adding a new JSON parser dependency.
-    const std::string expected_json = "[\n"
-      "  {\n"
-      "    \"layer_id\": 1,\n"
-      "    \"top\": 2,\n"
-      "    \"bottom\": 3,\n"
-      "    \"left\": 0,\n"
-      "    \"right\": 1,\n"
-      "    \"min_image_level\": 1,\n"
-      "    \"max_image_level\": 2,\n"
-      "    \"channel\": 1,\n"
-      "    \"type\": \"Terrain\"\n"
-      "  },\n"
-      "  {\n"
-      "    \"layer_id\": 24,\n"
-      "    \"top\": 8,\n"
-      "    \"bottom\": 9,\n"
-      "    \"left\": 5,\n"
-      "    \"right\": 5,\n"
-      "    \"min_image_level\": 1,\n"
-      "    \"max_image_level\": 4,\n"
-      "    \"channel\": 24,\n"
-      "    \"type\": \"Vector\"\n"
-      "  },\n"
-      "  {\n"
-      "    \"layer_id\": 123,\n"
-      "    \"top\": 8,\n"
-      "    \"bottom\": 9,\n"
-      "    \"left\": 5,\n"
-      "    \"right\": 5,\n"
-      "    \"min_image_level\": 1,\n"
-      "    \"max_image_level\": 4,\n"
-      "    \"channel\": 123,\n"
-      "    \"type\": \"Image\"\n"
-      "  }\n"
-      "]\n";
+  BoundsTracker bt;
+  populateBoundsTracker(bt);
 
-    BoundsTracker bt;
-    populateBoundsTracker(bt);
+  std::string filename = test_directory + "test.json";
 
-    std::string filename = test_directory + "test.json";
-    
-    bt.write_json_file(filename);
-    std::ifstream ins(filename.c_str());
+  bt.write_json_file(filename);
 
-    std::string str{ std::istreambuf_iterator<char>(ins),
-                     std::istreambuf_iterator<char>()};
+  std::ifstream ins(filename.c_str());
+  std::string str{ std::istreambuf_iterator<char>(ins),
+                   std::istreambuf_iterator<char>()};
 
-
-    EXPECT_EQ(str, expected_json);
-  }
+  EXPECT_EQ(str, expected_json);
+}
 
 }  // namespace fusion_portableglobe
 

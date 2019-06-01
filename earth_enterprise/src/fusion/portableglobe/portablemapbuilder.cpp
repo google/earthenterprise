@@ -426,9 +426,9 @@ bool PortableMapBuilder::WriteMapPackets(const std::string& qtpath_str,
         found_something = true;
       }
 
-      bounds_tracker_.update(qtpath_str,
+      bounds_tracker_.update(layers_[i]->channel_num,
                              static_cast<PacketType>(packet_type),
-                             layers_[i]->channel_num);
+                             qtpath_str);
 
       std::string full_qtpath = "0" + qtpath_str;
       writer_->AppendPacket(full_qtpath, packet_type, layers_[i]->channel_num,
