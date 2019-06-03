@@ -167,7 +167,7 @@ class RasterProjectAssetImplD {
 
 class RasterProjectAssetVersionImplD {
  protected:
-  virtual void ChildrenToCancel(std::vector<AssetVersion> &out);
+  virtual void DependentChildren(std::vector<SharedString> &out);
 
   // This will make my children after my inputs have succeeded
   virtual void DelayedBuildChildren(void);
@@ -666,8 +666,8 @@ void RasterProjectAssetImplD::HandleDropFromRequest(
 
 
 
-void RasterProjectAssetVersionImplD::ChildrenToCancel(
-    std::vector<AssetVersion> &out) {
+void RasterProjectAssetVersionImplD::DependentChildren(
+    std::vector<SharedString> &out) {
   if (children.size()) {
     // my direct children are my index and optionally a copyright
     std::copy(children.begin(), children.end(), back_inserter(out));
