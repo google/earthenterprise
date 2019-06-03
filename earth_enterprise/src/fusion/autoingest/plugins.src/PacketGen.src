@@ -84,6 +84,56 @@ PacketGenFactory::ReuseOrMakeAndUpdateSubAsset(
     const PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> &extra);
 
 template <typename ProductAssetVersion>
+void PacketGenAssetVersionImplD::CalculateOverlap(
+     const PacketGenExtraUpdateArg<ProductAssetVersion> &extra,
+     const uint& level)
+{
+    static bool doOnceNotify = true;
+
+    if (doOnceNotify)
+    {
+        doOnceNotify = false;
+        if (MiscConfig::Instance().CalculateOverlapOnce)
+        {
+            notify(NFY_WARN, "Calculate overlap once");
+        }
+        else
+        {
+            notify(NFY_WARN, "Calculate overlap per resource");
+        }
+    }
+
+    static bool singleCalculate = false;
+    if (singleCalculate) return;
+
+    const khLevelCoverage levCov(config.coverage.levelCoverage(level));
+    std::vector<uint> neededIndexes;
+    neededIndexes.reserve(extra.insetInfo.size());
+
+    if (type == AssetDefs::Imagery)
+    {
+        FindNeededImageryInsets(khInsetCoverage(levCov),
+                                extra.insetInfo,
+                                extra.insetInfo.size(), //num Insets
+                                neededIndexes,
+                                config.beginMinifyLevel,
+                                config.endMinifyLevel);
+    }
+    else
+    {
+        FindNeededTerrainInsets(khInsetCoverage(levCov),
+                                extra.insetInfo,
+                                extra.insetInfo.size(), //num Insets
+                                neededIndexes,
+                                config.beginMinifyLevel,
+                                config.endMinifyLevel);
+    }
+
+    if (!singleCalculate && MiscConfig::Instance().CalculateOverlapOnce)
+        singleCalculate = true;
+}
+
+template <typename ProductAssetVersion>
 void PacketGenAssetVersionImplD::UpdateChildren(
     const PacketGenExtraUpdateArg<ProductAssetVersion> &extra) {
   std::string assetRef = GetAssetRef();
@@ -101,8 +151,8 @@ void PacketGenAssetVersionImplD::UpdateChildren(
   std::vector<MutableAssetVersionD> kids;
   kids.reserve(numLevels);
 
-  std::chrono::high_resolution_clock::time_point prevTime = std::chrono::high_resolution_clock::now();
-  std::chrono::high_resolution_clock::time_point curTime;
+  auto prevTime = std::chrono::high_resolution_clock::now();
+  auto curTime = prevTime;
   std::chrono::duration<double> timeDiff; 
   notify(NFY_INFO2, "UpdateChildren starting for %s", assetRef.c_str());
   // Create my children giving them each a different level
@@ -123,7 +173,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
     const khLevelCoverage levCov(config.coverage.levelCoverage(level));
     std::vector<uint> neededIndexes;
     neededIndexes.reserve(numInsets);
-    if (type == AssetDefs::Imagery) {
+    /*if (type == AssetDefs::Imagery) {
       FindNeededImageryInsets(khInsetCoverage(levCov),
                               extra.insetInfo, numInsets,
                               neededIndexes,
@@ -135,7 +185,8 @@ void PacketGenAssetVersionImplD::UpdateChildren(
                               neededIndexes,
                               config.beginMinifyLevel,
                               config.endMinifyLevel);
-    }
+    }*/
+    CalculateOverlap(extra, level);
 
     curTime = std::chrono::high_resolution_clock::now();
     timeDiff = std::chrono::duration<double>(curTime - prevTime);

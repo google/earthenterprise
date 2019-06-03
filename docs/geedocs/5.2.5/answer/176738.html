@@ -257,6 +257,10 @@ The asset cache size is controlled by <code>AssetCacheSize</code> and the asset 
 Note that the asset version cache is generally larger than the asset cache because it may contain multiple versions of the same asset.</p>
 
 Also included within <code>misc.xml</code> is an experimental option, which allows for the user to disable cache purging while projects build. This is controlled by <code>DisablePacketLevelVersionCachePurge</code> and its default value is <code>false</code>.
+
+<h2 id="overlap_calculation">Overlap Calculation</h2>
+<p><code>An experimental is also included in <code>misc.xml</code> which toggles between modes for calculating resource overlap: either per resource or all at once. This is controlled by <code>CalculateOverlapOnce</code> and its default value is <code>false</code>.
+
 <h2>Learn more</h2>
 <ul>
 <li><a href="../answer/6033487.html">Benchmarking outcomes for applying task rules</a></li>
