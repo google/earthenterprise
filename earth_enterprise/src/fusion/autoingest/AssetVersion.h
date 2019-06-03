@@ -18,12 +18,15 @@
 #define GEO_EARTH_ENTERPRISE_SRC_FUSION_AUTOINGEST_ASSETVERSION_H_
 
 #include <algorithm>
+#include <memory>
 #include "fusion/autoingest/AssetVersionRef.h"
 #include "fusion/autoingest/.idl/AssetStorage.h"
 #include "fusion/autoingest/AssetHandle.h"
 #include "fusion/autoingest/MiscConfig.h"
 #include "common/khFileUtils.h"
 #include "StorageManager.h"
+
+class StateChangeNotifier;
 
 /******************************************************************************
  ***  AssetVersionImpl
@@ -60,7 +63,7 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
   static khRefGuard<AssetVersionImpl> Load(const std::string &boundref);
 
   virtual bool Save(const std::string &filename) const {
-    assert(false); // Can only save from sub-classes
+    assert(false); // Can only call from sub-classes
     return false;
   };
 
@@ -126,6 +129,22 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
   virtual void GetOutputFilenames(std::vector<std::string> &out) const = 0;
   virtual std::string GetOutputFilename(uint i) const = 0;
   virtual void AfterLoad(void) { }
+  virtual void DependentChildren(std::vector<SharedString> &) {
+    // No-op in base class. Sub-classes will override this
+    // with children that must be operated on similarly to the
+    // parent asset (ex: parent is canceled, so these children
+    // must also be canceled.
+  }
+  virtual AssetDefs::State CalcStateByInputsAndChildren(AssetDefs::State, AssetDefs::State, bool, uint32) {
+    assert(false); // Can only call from sub-classes
+  }
+  virtual void SetState(AssetDefs::State newstate, const std::shared_ptr<StateChangeNotifier> notifier = nullptr, bool propagate = true) {
+    assert(false);  // Can only call from sub-classes
+  }
+  virtual bool NeedComputeState() const {
+    assert(false);  // Can only call from sub-classes
+    return false;
+  }
 
   // static helpers
   static std::string WorkingDir(const AssetVersionRef &ref);

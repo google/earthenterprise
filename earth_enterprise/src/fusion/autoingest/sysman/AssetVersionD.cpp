@@ -29,8 +29,8 @@
 // ****************************************************************************
 // ***  StateUpdateNotifier
 // ****************************************************************************
-std::shared_ptr<AssetVersionImplD::StateChangeNotifier>
-AssetVersionImplD::StateChangeNotifier::GetNotifier(
+std::shared_ptr<StateChangeNotifier>
+StateChangeNotifier::GetNotifier(
     std::shared_ptr<StateChangeNotifier> callerNotifier) {
   if (callerNotifier) {
     // If the caller passed in a notifier there's no need to create a new one.
@@ -39,17 +39,17 @@ AssetVersionImplD::StateChangeNotifier::GetNotifier(
     return callerNotifier;
   }
   else {
-    return std::make_shared<AssetVersionImplD::StateChangeNotifier>();
+    return std::make_shared<StateChangeNotifier>();
   }
 }
 
 void
-AssetVersionImplD::StateChangeNotifier::AddParentsToNotify(const std::vector<SharedString> & parents) {
+StateChangeNotifier::AddParentsToNotify(const std::vector<SharedString> & parents) {
   std::copy(parents.begin(), parents.end(), std::inserter(parentsToNotify, parentsToNotify.end()));
 }
 
 void
-AssetVersionImplD::StateChangeNotifier::AddListenersToNotify(const std::vector<SharedString> & listeners, AssetDefs::State inputState) {
+StateChangeNotifier::AddListenersToNotify(const std::vector<SharedString> & listeners, AssetDefs::State inputState) {
   for (const auto & listener : listeners) {
     // This ensures that the listener is in the list of listeners to notify
     InputStates & elem = listenersToNotify[listener];
@@ -62,7 +62,7 @@ AssetVersionImplD::StateChangeNotifier::AddListenersToNotify(const std::vector<S
   }
 }
 
-AssetVersionImplD::StateChangeNotifier::~StateChangeNotifier() {
+StateChangeNotifier::~StateChangeNotifier() {
   if (parentsToNotify.size() > 0 || listenersToNotify.size() > 0) {
     // Notify my parents and listeners. Pass them a new notifier in case my
     // parents or listeners also need to notify their parents or listeners. I
@@ -77,7 +77,7 @@ AssetVersionImplD::StateChangeNotifier::~StateChangeNotifier() {
 }
 
 void
-AssetVersionImplD::StateChangeNotifier::NotifyParents(
+StateChangeNotifier::NotifyParents(
     std::shared_ptr<StateChangeNotifier> notifier) {
   notify(NFY_VERBOSE, "Iterate through parents");
   int i = 1;
@@ -100,7 +100,7 @@ AssetVersionImplD::StateChangeNotifier::NotifyParents(
 }
 
 void
-AssetVersionImplD::StateChangeNotifier::NotifyListeners(
+StateChangeNotifier::NotifyListeners(
     std::shared_ptr<StateChangeNotifier> notifier) {
   notify(NFY_VERBOSE, "Iterate through listeners");
   int i = 1;
@@ -267,10 +267,10 @@ AssetVersionImplD::StateByInputs(bool *blockersAreOffline,
   return statebyinputs;
 }
 
-template <bool propagate>
 void AssetVersionImplD::SetState(
     AssetDefs::State newstate,
-    const std::shared_ptr<StateChangeNotifier> notifier)
+    const std::shared_ptr<StateChangeNotifier> notifier,
+    bool propagate)
 {
   if (newstate != state) {
     notify(NFY_DEBUG, "SetState: current state: %s | newstate: %s | asset: %s",
@@ -737,6 +737,56 @@ LeafAssetVersionImplD::ComputeState(void) const
   return newstate;
 }
 
+AssetDefs::State
+LeafAssetVersionImplD::CalcStateByInputsAndChildren(
+    AssetDefs::State stateByInputs,
+    AssetDefs::State stateByChildren,
+    bool blockersAreOffline,
+    uint32 numWaitingFor) const
+{
+  this->numWaitingFor = numWaitingFor;
+  AssetDefs::State newstate = state;
+  if (!AssetDefs::Ready(state)) {
+    // I'm currently not ready, so take whatever my inputs say
+    newstate = stateByInputs;
+  } else if (stateByInputs != AssetDefs::Queued) {
+    // My imputs have regressed
+    // Let's see if I should regress too
+
+    if (AssetDefs::Working(state)) {
+      // I'm in the middle of building myself
+      // revert my state to wait/block on my inputs
+      // OnStateChange will pick up this revert and stop my running task
+      newstate = stateByInputs;
+    } else {
+      // my task has already finished
+      if ((stateByInputs == AssetDefs::Blocked) && blockersAreOffline) {
+        // If the only reason my inputs have reverted is because
+        // some of them have gone offline, that's usually OK and
+        // I don't need to revert my state.
+        // Check to see if I care about my inputs going offline
+        if (OfflineInputsBreakMe()) {
+          // I care, revert my state too.
+          newstate = stateByInputs;
+        } else {
+          // I don't care, so leave my state alone.
+          newstate = state;
+        }
+      } else {
+        // My inputs have regresseed for some reason other than some
+        // of them going offline.
+        // revert my state
+        newstate = stateByInputs;
+      }
+    }
+  } else {
+    // nothing to do
+    // my current state is correct based on what my task has told me so far
+  }
+
+  return newstate;
+}
+
 void
 LeafAssetVersionImplD::HandleTaskLost(const TaskLostMsg &msg)
 {
@@ -943,7 +993,7 @@ LeafAssetVersionImplD::Rebuild(const std::shared_ptr<StateChangeNotifier> caller
   // of stopping any running tasks, etc
   // false -> don't propagate the new state (we're going to change
   // it right away by calling SyncState)
-  SetState<false>(AssetDefs::New, notifier);
+  SetState(AssetDefs::New, notifier, false);
 
   // Now get my state back to where it should be
   SyncState(notifier);
@@ -1110,6 +1160,36 @@ CompositeAssetVersionImplD::ComputeState(void) const
   }
 }
 
+AssetDefs::State
+CompositeAssetVersionImplD:: CalcStateByInputsAndChildren(
+    AssetDefs::State stateByInputs,
+    AssetDefs::State stateByChildren,
+    bool blockersAreOffline,
+    uint32 numWaitingFor) const
+{
+  // Undecided composites take their state from their inputs
+  if (children.empty()) {
+    return stateByInputs;
+  }
+
+  // some composite assets (namely Database) care about the state of their
+  // inputs, for all others all that matters is the state of their children
+  if (CompositeStateCaresAboutInputsToo()) {
+    if (stateByInputs != AssetDefs::Queued) {
+      // something is wrong with my inputs (or they're not done yet)
+      if ((stateByInputs == AssetDefs::Blocked) && blockersAreOffline) {
+        if (OfflineInputsBreakMe()) {
+          return stateByInputs;
+        }
+      } else {
+        return stateByInputs;
+      }
+    }
+  }
+
+  return stateByChildren;
+}
+
 void
 CompositeAssetVersionImplD::DelayedBuildChildren(void)
 {
@@ -1159,7 +1239,7 @@ CompositeAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
 }
 
 void
-CompositeAssetVersionImplD::ChildrenToCancel(std::vector<AssetVersion> &out)
+CompositeAssetVersionImplD::DependentChildren(std::vector<SharedString> &out)
 {
   copy(children.begin(), children.end(), back_inserter(out));
 }
@@ -1210,19 +1290,19 @@ CompositeAssetVersionImplD::Rebuild(const std::shared_ptr<StateChangeNotifier> c
 
   std::shared_ptr<StateChangeNotifier> notifier = StateChangeNotifier::GetNotifier(callerNotifier);
 
-  std::vector<AssetVersion> tocancel;
-  ChildrenToCancel(tocancel);
-  if (tocancel.size()) {
-    for (const auto &i : tocancel) {
+  std::vector<SharedString> dependents;
+  DependentChildren(dependents);
+  if (dependents.size()) {
+    for (const auto &i : dependents) {
+      MutableAssetVersionD child(i);
       // only rebuild the child if it is necessary
-      if (i) {
-        if (i->state & (AssetDefs::Canceled | AssetDefs::Failed)) {
-          MutableAssetVersionD child(i->GetRef());
+      if (child) {
+        if (child->state & (AssetDefs::Canceled | AssetDefs::Failed)) {
           child->Rebuild(notifier);
         }
       } else {
         notify(NFY_WARN, "'%s' has broken child to resume '%s'",
-               GetRef().toString().c_str(), i.Ref().toString().c_str());
+               GetRef().toString().c_str(), i.toString().c_str());
       }
     }
   }
@@ -1243,20 +1323,18 @@ CompositeAssetVersionImplD::Cancel(const std::shared_ptr<StateChangeNotifier> ca
 
   SetState(AssetDefs::Canceled, notifier);
 
-  std::vector<AssetVersion> tocancel;
-  ChildrenToCancel(tocancel);
-  if (tocancel.size()) {
-    for (const auto &i : tocancel) {
-      // only cancel the child if it's not already finished
-      if (i) {
-        if (!AssetDefs::Finished(i->state)) {
-          MutableAssetVersionD child(i->GetRef());
-          child->Cancel(notifier);
-        }
-      } else {
-        notify(NFY_WARN, "'%s' has broken child to cancel '%s'",
-               GetRef().toString().c_str(), i.Ref().toString().c_str());
+  std::vector<SharedString> dependents;
+  DependentChildren(dependents);
+  for (const auto &i : dependents) {
+    MutableAssetVersionD child(i);
+    // only cancel the child if it's not already finished
+    if (child) {
+      if (!AssetDefs::Finished(child->state)) {
+        child->Cancel(notifier);
       }
+    } else {
+      notify(NFY_WARN, "'%s' has broken child to cancel '%s'",
+             GetRef().toString().c_str(), i.toString().c_str());
     }
   }
 }

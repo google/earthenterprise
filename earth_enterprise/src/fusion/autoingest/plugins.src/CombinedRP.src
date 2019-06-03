@@ -87,7 +87,7 @@ class CombinedRPAssetVersionImplD {
  protected:
   virtual void OnStateChange(AssetDefs::State newstate,
                              AssetDefs::State oldstate);
-  virtual void ChildrenToCancel(std::vector<AssetVersion> &out);
+  virtual void DependentChildren(std::vector<SharedString> &out);
 };
 
 
@@ -124,7 +124,7 @@ CombinedRPAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
 
 
 void
-CombinedRPAssetVersionImplD::ChildrenToCancel(std::vector<AssetVersion> &out)
+CombinedRPAssetVersionImplD::DependentChildren(std::vector<SharedString> &out)
 {
   if (config.source_is_product_) {
     // nothing to cancel in this case
@@ -139,7 +139,7 @@ CombinedRPAssetVersionImplD::ChildrenToCancel(std::vector<AssetVersion> &out)
   AssetVersion krp(children[0]);
   AssetVersion source(krp->inputs[0]);
   while (source->subtype != "Source") {
-    out.push_back(source);
+    out.push_back(source->GetRef());
     source = source->inputs[0];
   }
 
@@ -149,7 +149,7 @@ CombinedRPAssetVersionImplD::ChildrenToCancel(std::vector<AssetVersion> &out)
     AssetVersion krmp(children[1]);
     AssetVersion maskgen(krmp->inputs[1]);
     if (maskgen->subtype != "Source") {
-      out.push_back(maskgen);
+      out.push_back(maskgen->GetRef());
     }
   }
 }
