@@ -130,7 +130,7 @@ env.test('LeafAssetVersion_unittest',
     commonobj +
     map(lambda p: 'plugins/'+p+'AssetD.o', plugins) +
     [ 'LeafAssetVersion_unittest.cpp',
-      'AssetD.o', 'AssetVersionD.o',
+      'AssetD.o', 'AssetVersionD.o', 'AssetOperation.o',
       'khSystemManager.o',
       'khAssetManager.o', 'khAssetManagerDispatch.o',
       'khResourceManager.o', 'khTask.o', 'TaskRequirements.o',
