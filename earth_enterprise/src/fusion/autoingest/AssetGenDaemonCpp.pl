@@ -295,16 +295,11 @@ ${name}Factory::ReuseOrMakeAndUpdate(
     // Make a copy using the copy constructor
     MTVector<SharedString> boundInputs(inputarg);
 
-//TODO - double check that this works
-    //boundInputs.reserve(inputarg.size());
     inputarg.doForEach([&boundInputs](const SharedString& i) {
         AssetVersionRef versionedInput(i);
         boundInputs.push_back( versionedInput.Bind() );
     });
     
-//    std::transform(inputarg.begin(), inputarg.end(), back_inserter(boundInputs),
-//                   ptr_fun(&AssetVersionRef::Bind));
-
     Mutable${name}AssetD asset = Find(ref_ $forwardtypearg);
     if (asset) {
 	for (AssetStorage::VersionList::const_iterator v
