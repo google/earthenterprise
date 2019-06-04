@@ -19,7 +19,6 @@
 
 #include <algorithm>
 #include <boost/graph/adjacency_list.hpp>
-#include <boost/graph/depth_first_search.hpp>
 #include <list>
 #include <map>
 
@@ -29,6 +28,7 @@ using namespace std;
 struct AssetVertex {
   SharedString name;
   AssetDefs::State state;
+  size_t index; // Used by the dfs function
 };
 
 enum DependencyType { INPUT, CHILD };
@@ -39,45 +39,36 @@ struct AssetEdge {
 
 typedef adjacency_list<setS, setS, directedS, AssetVertex, AssetEdge> AssetTree;
 
-// Convenience class for building a graph representation of a version tree
-// for a specified version. You call it like a function. Writing a class
-// instead of a function is useful to maintain temporary state needed to
-// build the graph.
-class BuildAssetTree {
-  private:
-    typedef map<SharedString, AssetTree::vertex_descriptor> VertexMap;
-    SharedString version;
-    AssetTree graph;
-    VertexMap vertices;
-    AssetTree::vertex_descriptor GetVertex(AssetVersion version) {
-      VertexMap::iterator vertexIter = vertices.find(version->GetRef());
-      if (vertexIter != vertices.end()) {
-        return vertexIter->second;
-      }
-      else {
-        AssetTree::vertex_descriptor vertex = add_vertex({version->GetRef(), version->state}, graph);
-        vertices[version->GetRef()] = vertex;
-        return vertex;
-      }
-    }
-    void AddSelfAndDescendants(AssetVersion version) {
-      AssetTree::vertex_descriptor vertex = GetVertex(version);
-      for (const auto & child : version->children) {
-        AssetTree::vertex_descriptor childVertex = GetVertex(child);
-        add_edge(vertex, childVertex, {CHILD}, graph);
-        AddSelfAndDescendants(child);
-      }
-      for (const auto & input : version->inputs) {
-        AssetTree::vertex_descriptor childVertex = GetVertex(input);
-        add_edge(vertex, childVertex, {CHILD}, graph);
-      }
-    }
+// The depth_first_search function needs a way to map vertexes to indexes. We
+// store a unique index inside each vertex; this provides a way for boost
+// to access them. These must be defined before including depth_first_search.hpp.
+class VertexIndexMap {
   public:
-    BuildAssetTree(const SharedString & version) : version(version) {
-      AddSelfAndDescendants(version);
-    }
-    operator AssetTree() { return graph; }
+    typedef readable_property_map_tag category;
+    typedef size_t value_type;
+    typedef value_type reference;
+    typedef AssetTree::vertex_descriptor key_type;
+
+    VertexIndexMap(const AssetTree & tree) : tree(tree) {};
+    const AssetTree & tree;
 };
+
+namespace boost {
+  template<>
+  struct property_map<AssetTree, vertex_index_t> {
+    typedef VertexIndexMap const_type;
+  };
+
+  VertexIndexMap get(vertex_index_t, const AssetTree & tree) {
+    return VertexIndexMap(tree);
+  }
+
+  VertexIndexMap::value_type get(const VertexIndexMap & map, VertexIndexMap::key_type vertex) {
+    return map.tree[vertex].index;
+  }
+}
+
+#include <boost/graph/depth_first_search.hpp>
 
 void UpdateStateForSelfAndDependentChildren(
     MutableAssetVersionD version,
@@ -93,6 +84,48 @@ void UpdateStateForSelfAndDependentChildren(
     }
   }
 }
+
+// Convenience class for building a graph representation of a version tree
+// for a specified version. You call it like a function. Writing a class
+// instead of a function is useful to maintain temporary state needed to
+// build the graph.
+class GetAssetTree {
+  private:
+    typedef map<SharedString, AssetTree::vertex_descriptor> VertexMap;
+    SharedString version;
+    AssetTree tree;
+    VertexMap vertices;
+    size_t index;
+    AssetTree::vertex_descriptor GetVertex(AssetVersion version) {
+      VertexMap::iterator vertexIter = vertices.find(version->GetRef());
+      if (vertexIter != vertices.end()) {
+        return vertexIter->second;
+      }
+      else {
+        AssetTree::vertex_descriptor vertex = add_vertex({version->GetRef(), version->state, index}, tree);
+        ++index;
+        vertices[version->GetRef()] = vertex;
+        return vertex;
+      }
+    }
+    void AddSelfAndDescendants(AssetVersion version) {
+      AssetTree::vertex_descriptor vertex = GetVertex(version);
+      for (const auto & child : version->children) {
+        AssetTree::vertex_descriptor childVertex = GetVertex(child);
+        add_edge(vertex, childVertex, {CHILD}, tree);
+        AddSelfAndDescendants(child);
+      }
+      for (const auto & input : version->inputs) {
+        AssetTree::vertex_descriptor inputVertex = GetVertex(input);
+        add_edge(vertex, inputVertex, {INPUT}, tree);
+      }
+    }
+  public:
+    GetAssetTree(const SharedString & version) : version(version), index(0) {
+      AddSelfAndDescendants(version);
+    }
+    operator AssetTree() { return tree; }
+};
 
 class UpdateStateVisitor : public default_dfs_visitor {
   private:
@@ -184,6 +217,7 @@ class UpdateStateVisitor : public default_dfs_visitor {
       auto edgeEnd = edgeIters.second;
       for (auto i = edgeBegin; i != edgeEnd; ++i) {
         DependencyType type = tree[*i].type;
+        //DependencyType type = get(edge_type_t(), *i);
         AssetTree::vertex_descriptor dep = i->m_target;
         AssetDefs::State depState = tree[dep].state;
         switch(type) {
@@ -202,7 +236,7 @@ class UpdateStateVisitor : public default_dfs_visitor {
   public:
     // Update the state of an asset after we've updated the state of its
     // inputs and children.
-    virtual void finish_vertex(AssetTree::vertex_descriptor vertex, AssetTree & tree) const {
+    virtual void finish_vertex(AssetTree::vertex_descriptor vertex, const AssetTree & tree) const {
       MutableAssetVersionD version(tree[vertex].name);
       if (!version->NeedComputeState()) return;
       AssetDefs::State stateByInputs;
@@ -214,7 +248,7 @@ class UpdateStateVisitor : public default_dfs_visitor {
       newState = version->CalcStateByInputsAndChildren(stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
       // Update the state in the tree because other assets may need it to compute
       // their own states.
-      tree[vertex].state = newState;
+      //tree[vertex].state = newState;
       // false -> don't propagate state. We've already taken care of that with
       // the asset tree.
       version->SetState(newState, nullptr, false);
@@ -240,14 +274,10 @@ void RebuildVersion(const AssetVersion & version) {
   }
 
   UpdateStateForSelfAndDependentChildren(version->GetRef(), AssetDefs::New, AssetDefs::Canceled | AssetDefs::Failed);
-  AssetTree assets = BuildAssetTree(version->GetRef());
-  // Set the states of the version and children, grandchildren, etc, to new
-  // Create a graph using input->listener and parent->child relationships
-  // for all descendants (use boost graph library).
-  //    May be able to ignore parent->child relationships if they are
-  //    included as input->listener operations.
-  // Calculate and update state starting at the sinks
-  // Additional optimizations
-  //    Many assets have significant overlap in their inputs. It would be great
-  //    if we can calculate the overlapping state only once.
+  AssetTree assets = GetAssetTree(version->GetRef());
+  UpdateStateVisitor vis;
+  depth_first_search(assets, visitor(vis));
+  // Possible optimization: Many assets have significant overlap in their
+  // inputs. It might save time if we could calculate the overlapping state
+  // only once.
 }
