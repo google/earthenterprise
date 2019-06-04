@@ -134,7 +134,7 @@ ProjectedMapProjectAssetVersionImplD::UpdateChildren(void)
     std::string geindexAssetName(MapGEIndexFactory::SubAssetName(assetRef,
                                                                  "geindex"));
     std::vector<AssetVersion> index_input_vers;
-    std::vector<std::string> index_input_refs;
+    std::vector<SharedString> index_input_refs;
 
     std::string dbname = khDropExtension(khBasename(assetRef));
     geindexConfig.db_name_ = dbname;
@@ -182,7 +182,7 @@ ProjectedMapProjectAssetVersionImplD::UpdateChildren(void)
       MutableProjectedMapLayerAssetVersionD layerver =
         ProjectedMapLayerFactory::FindMakeAndUpdate(
             projected_layer_name,
-            makevec1(base_layer_ver->GetRef()),
+            makevec1<SharedString>(base_layer_ver->GetRef()),
             khMetaData(),
             ProjectedMapLayerConfig(config.projection_),
             makevec1<AssetVersion>(base_layer_ver));
@@ -207,16 +207,14 @@ ProjectedMapProjectAssetVersionImplD::UpdateChildren(void)
                                     geindex::TypedEntry::VectorMapsRaster));
         geindexConfig.layers_.back().levels_.reserve(
             layerver->children.size());
-        for (std::vector<std::string>::const_iterator levelverref =
-               layerver->children.begin();
-             levelverref != layerver->children.end(); ++levelverref) {
-          AssetVersion ver(*levelverref);
+        for (const auto &levelverref : layerver->children) {
+          AssetVersion ver(levelverref);
           if (ver->subtype != "MapLayerLevel") {
             // we've traversed past all our level children, stop looking
             break;
           }
           geindexConfig.layers_.back().levels_.push_back(
-              MapGEIndexConfig::Level(*levelverref));
+              MapGEIndexConfig::Level(levelverref));
         }
       }
     }
@@ -258,7 +256,7 @@ ProjectedMapProjectAssetVersionImplD::UpdateChildren(void)
     }
     MutableAssetVersionD layerjs =
       MapLayerJSFactory::FindMakeAndUpdate(layerJSAssetName,
-                                           std::vector<std::string>(),
+                                           std::vector<SharedString>(),
                                            khMetaData(),
                                            layerJSConfig,
                                            std::vector<AssetVersion>());

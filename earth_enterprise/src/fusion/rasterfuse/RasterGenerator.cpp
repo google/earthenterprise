@@ -736,8 +736,6 @@ class MinifiedLevelGenerator : public LevelGeneratorBase<TileType>
         averager(averager_) { }
 
   virtual const TileType& MakeTile(uint32 row, uint32 col) {
-    typedef typename TileType::PixelType PixelType;
-
     if (!this->prodLevel.tileExtents().ContainsRowCol(row, col)) {
       throw khException
         (kh::tr

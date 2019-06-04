@@ -19,8 +19,9 @@
 
 #include <string>
 #include "common/khRefCounter.h"
-#include "common/khCache.h"
 #include "common/khTypes.h"
+#include "common/SharedString.h"
+#include "StorageManager.h"
 
 class AssetVersionRef;
 
@@ -39,73 +40,70 @@ class AssetVersionRef;
  ***  typedef AssetHandle_<AssetVersionImpl> AssetVersion;
  ******************************************************************************/
 template <class Impl_>
-class AssetHandle_  {
+class AssetHandle_ : public AssetHandleInterface<Impl_> {
   friend class Impl;
  public:
   typedef Impl_ Impl;
-  typedef khRefGuard<Impl> HandleType;
+  using HandleType = typename StorageManager<Impl>::HandleType;
   struct undefined_type; // never defined.  Just used for bool operations
 
  protected:
-  static inline khCache<std::string, HandleType>& cache(void);
+  static inline StorageManager<Impl> & storageManager();
+
+  inline void DoBind(
+      bool checkFileExistenceFirst,
+      bool addToCache) const {
+    handle = storageManager().Get(this, checkFileExistenceFirst, addToCache, isMutable());
+  }
+
+  virtual bool isMutable() const { return false; }
 
  public:
-  static uint32 CacheSize(void) { return cache().size(); }
+  static inline uint32 CacheSize(void) { return storageManager().CacheSize(); }
+  static inline uint32 CacheCapacity(void) { return storageManager().CacheCapacity(); }
+  static inline uint32 DirtySize(void) { return storageManager().DirtySize(); }
 
-  // Adds handle-object to cache.
-  void CacheAdd() {
-    assert(handle);
-    cache().Add(Ref(), handle);
-  }
-
-  // Removes handle-object from cache.
-  void CacheRemove() {
-    cache().Remove(Ref());
-  }
-
-  // Only implemented/used by Version variant.
-  // Loads asset version from file without caching.
-  void BindNoCache() const;
-
- protected:
-  static const bool check_timestamps;
-  std::string ref;
-  mutable HandleType handle;
-
-  // Only implemented/used by Asset variant.
-  void DoBind(const std::string &ref,
-              bool checkFileExistenceFirst) const;
-
-  // Only implemented/used by Version variant.
-  template <int do_cache>
-  void DoBind(const std::string &boundRef,
-              const AssetVersionRef &boundVerRef,
-              bool checkFileExistenceFirst,
-              Int2Type<do_cache> do_cache_val) const;
-
-  // Only implemented/used by Version variant.
-  void DoBind(const std::string &boundRef,
-              const AssetVersionRef &boundVerRef,
-              bool checkFileExistenceFirst) const;
-
-  // Implemented by both Asset & Version variants.
-  void Bind(void) const;
-
-  // Allows subclasses to do extra work.
-  virtual void OnBind(const std::string &boundref) const { }
-
-  virtual HandleType CacheFind(const std::string &boundref) const {
-    HandleType entry;
-    (void)cache().Find(boundref, entry);
-    return entry;
-  }
   virtual HandleType Load(const std::string &boundref) const {
     return HandleType(Impl::Load(boundref));
+  }
+  virtual bool Valid(const HandleType &) const { return true; }
+
+  // These two functions are implemented separately by Assets and AssetVersions
+  inline virtual std::string Filename() const;
+  inline const SharedString Key() const;
+
+  inline void NoLongerNeeded() {
+    storageManager().NoLongerNeeded(Ref());
+  }
+
+  // Only used by Version variant.
+  // Loads asset without keeping it in the storage manager
+  inline void LoadAsTemporary() const {
+    if (!handle) {
+      DoBind(false /* don't check file */, false /* don't add to cache*/);
+    }
+  }
+
+  // Adds the asset to the storage manager
+  inline void MakePermanent() {
+    assert(handle);
+    storageManager().AddExisting(Ref(), handle);
+  }
+
+ protected:
+  SharedString ref;
+  mutable HandleType handle;
+
+  inline void Bind(void) const {
+    if (!handle) {
+      DoBind(false /* don't check file */, true /* add to cache */);
+    }
   }
 
  public:
   AssetHandle_(void) : ref(), handle() { }
   AssetHandle_(const std::string &ref_) : ref(ref_), handle() { }
+  AssetHandle_(const SharedString &ref_) : ref(ref_), handle() { }
 
   // the compiler generated assignment and copy constructor are fine for us
   // ref & handle have stable copy semantics and we don't have to worry about
@@ -113,9 +111,9 @@ class AssetHandle_  {
   // Same goes for move constructor and assignment.
 
   virtual ~AssetHandle_(void) { }
-  const std::string& Ref(void) const { return ref; }
+  const SharedString & Ref(void) const { return ref; }
   bool Valid(void) const;
-  // This is better then overloading the bool operator as it
+  // This is better than overloading the bool operator as it
   // more closely emulates what a pointer's boolean operations does.
   // For example you can't pass the class as a bool parameter but you
   // can still do other things like use it in an if statement.
@@ -149,28 +147,22 @@ class DerivedAssetHandle_ : public virtual Base_ {
   typedef Base_ Base;
   typedef typename Base::HandleType HandleType;
 
- protected:
-  virtual HandleType CacheFind(const std::string &boundref) const {
-    HandleType entry;
-    if (this->cache().Find(boundref, entry)) {
-      // we have to check if it maps to Impl* since somebody
-      // else may have put it in the cache
-      if (!dynamic_cast<Impl*>(&*entry)) {
-        entry = HandleType();
-      }
-    }
-    return entry;
-  }
+ public:
   virtual HandleType Load(const std::string &boundref) const {
     // Impl::Load will succeed or throw.
     // The derived khRefGuard will be automatically converted
     // the the base khRefGuard
     return HandleType(Impl::Load(boundref));
   }
+  virtual bool Valid(const HandleType & entry) const { 
+    // we have to check if it maps to Impl* since somebody
+    // else may have loaded it into the storage manager
+    return dynamic_cast<Impl*>(&*entry);
+  }
 
- public:
   DerivedAssetHandle_(void) : Base() { }
   DerivedAssetHandle_(const std::string &ref_) : Base(ref_) { }
+  DerivedAssetHandle_(const SharedString &ref_) : Base(ref_) { }
 
   // it's OK to construct a derived from a base, we just check first
   // and clear the handle if the types don't match

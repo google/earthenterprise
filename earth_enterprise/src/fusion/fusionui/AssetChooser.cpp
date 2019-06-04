@@ -320,7 +320,7 @@ void AssetChooser::accept() {
 
   if (mode_ == Save || mode_ == SaveAs) {
     // validate this asset name is unique and prompt if not!
-    if (Asset(fullpath.latin1())) {
+    if (Asset(fullpath)) {
       if (QMessageBox::warning(this, "Warning",
           fullpath + tr(" already exists.\nDo you want to replace it?"),
           tr("OK"), tr("Cancel"), 0, 1) == 1)
@@ -328,7 +328,7 @@ void AssetChooser::accept() {
     }
   } else {
     // Validate whether this asset exists and has compatible asset type.
-    if (!Asset(fullpath.latin1())) {
+    if (!Asset(fullpath)) {
       QMessageBox::critical(
           this, "Error",
           tr("The specified asset \"") + getName() + tr("\" does not exist."),

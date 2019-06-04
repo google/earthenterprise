@@ -68,6 +68,7 @@ commonsources = [ '../third_party/rsa_md5/md5c.c',
                   'geInstallPaths.cpp',
                   'projection.cpp',
                   'ScopeCounter.cpp',
+                  'SharedString.cpp',
                   'SignalHandler.cpp',
                   'compressor.cpp',
                   'tile_resampler.cpp',
@@ -195,6 +196,10 @@ env.test('khThread_unittest',
 env.test('khconfigparser_unittest',
          'khconfigparser_unittest.cpp',
           LIBS=['geutil', 'gtest'])
+
+env.test('sharedstring_unittest',
+         'sharedstring_unittest.cpp',
+          LIBS=['geutil', 'gtest','gecommon'])
 
 env.install('common_lib', [gecommon])
 env.install('common_lib', [geutil])
