@@ -135,8 +135,9 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
     // parent asset (ex: parent is canceled, so these children
     // must also be canceled.
   }
-  virtual AssetDefs::State CalcStateByInputsAndChildren(AssetDefs::State, AssetDefs::State, bool, uint32) {
+  virtual AssetDefs::State CalcStateByInputsAndChildren(AssetDefs::State, AssetDefs::State, bool, uint32) const {
     assert(false); // Can only call from sub-classes
+    return AssetDefs::Bad;
   }
   virtual void SetState(AssetDefs::State newstate, const std::shared_ptr<StateChangeNotifier> notifier = nullptr, bool propagate = true) {
     assert(false);  // Can only call from sub-classes

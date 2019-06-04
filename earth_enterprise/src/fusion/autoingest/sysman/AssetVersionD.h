@@ -178,11 +178,6 @@ class LeafAssetVersionImplD : public virtual LeafAssetVersionImpl,
   void ClearOutfiles(void);
 
   virtual AssetDefs::State ComputeState(void) const;
-  virtual AssetDefs::State CalcStateByInputsAndChildren(
-      AssetDefs::State stateByInputs,
-      AssetDefs::State stateByChildren,
-      bool blockersAreOffline,
-      uint32 numWaitingFor) const;
   virtual bool CacheInputVersions(void) const;
   virtual void HandleTaskLost(const TaskLostMsg &msg);
   virtual void HandleTaskProgress(const TaskProgressMsg &msg);
@@ -197,6 +192,11 @@ class LeafAssetVersionImplD : public virtual LeafAssetVersionImpl,
   virtual void Cancel(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual void Rebuild(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual void DoClean(const std::shared_ptr<StateChangeNotifier> = nullptr);
+  virtual AssetDefs::State CalcStateByInputsAndChildren(
+      AssetDefs::State stateByInputs,
+      AssetDefs::State stateByChildren,
+      bool blockersAreOffline,
+      uint32 numWaitingFor) const;
 };
 
 
@@ -217,11 +217,6 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
         AssetVersionImplD(inputs) { }
 
   virtual AssetDefs::State ComputeState(void) const;
-  virtual AssetDefs::State CalcStateByInputsAndChildren(
-      AssetDefs::State stateByInputs,
-      AssetDefs::State stateByChildren,
-      bool blockersAreOffline,
-      uint32 numWaitingFor) const;
   virtual bool CacheInputVersions(void) const;
   virtual void HandleChildStateChange(const std::shared_ptr<StateChangeNotifier>) const;
   virtual void HandleInputStateChange(InputStates, const std::shared_ptr<StateChangeNotifier>) const;
@@ -239,6 +234,11 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
   virtual void Cancel(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual void Rebuild(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual void DoClean(const std::shared_ptr<StateChangeNotifier> = nullptr);
+  virtual AssetDefs::State CalcStateByInputsAndChildren(
+      AssetDefs::State stateByInputs,
+      AssetDefs::State stateByChildren,
+      bool blockersAreOffline,
+      uint32 numWaitingFor) const;
 };
 
 #endif /* __AssetVersionD_h */

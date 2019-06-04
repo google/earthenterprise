@@ -189,7 +189,7 @@ class UpdateStateVisitor : public default_dfs_visitor {
             ++numblocking;
           }
         }
-        void GetOutputs(AssetDefs::State stateByChildren) {
+        void GetOutputs(AssetDefs::State & stateByChildren) {
           if (numkids == numgood) {
             stateByChildren = AssetDefs::Succeeded;
           } else if (numblocking || numfailed) {
@@ -217,7 +217,6 @@ class UpdateStateVisitor : public default_dfs_visitor {
       auto edgeEnd = edgeIters.second;
       for (auto i = edgeBegin; i != edgeEnd; ++i) {
         DependencyType type = tree[*i].type;
-        //DependencyType type = get(edge_type_t(), *i);
         AssetTree::vertex_descriptor dep = i->m_target;
         AssetDefs::State depState = tree[dep].state;
         switch(type) {
@@ -248,14 +247,14 @@ class UpdateStateVisitor : public default_dfs_visitor {
       newState = version->CalcStateByInputsAndChildren(stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
       // Update the state in the tree because other assets may need it to compute
       // their own states.
-      //tree[vertex].state = newState;
+      const_cast<AssetTree&>(tree)[vertex].state = newState;
       // false -> don't propagate state. We've already taken care of that with
       // the asset tree.
       version->SetState(newState, nullptr, false);
     }
 };
 
-void RebuildVersion(const AssetVersion & version) {
+void RebuildVersion(const SharedString & ref) {
   // Rebuilding an already succeeded asset is quite dangerous!
   // Those who depend on me may have already finished their work with me.
   // If I rebuild, they have the right to recognize that nothing has
@@ -268,13 +267,14 @@ void RebuildVersion(const AssetVersion & version) {
   // For this reason, requests to rebuild 'Succeeded' versions will fail.
   // Assets marked 'Bad' were once succeeded, so they too are disallowed.
   // The same logic could hold true for 'Offline' as well.
+  AssetVersion version(ref);
   if (version->state & (AssetDefs::Succeeded | AssetDefs::Offline | AssetDefs::Bad)) {
     throw khException(kh::tr("%1 marked as %2. Refusing to resume.")
-                      .arg(ToQString(version->GetRef()), ToQString(version->state)));
+                      .arg(ToQString(ref), ToQString(version->state)));
   }
 
-  UpdateStateForSelfAndDependentChildren(version->GetRef(), AssetDefs::New, AssetDefs::Canceled | AssetDefs::Failed);
-  AssetTree assets = GetAssetTree(version->GetRef());
+  UpdateStateForSelfAndDependentChildren(ref, AssetDefs::New, AssetDefs::Canceled | AssetDefs::Failed);
+  AssetTree assets = GetAssetTree(ref);
   UpdateStateVisitor vis;
   depth_first_search(assets, visitor(vis));
   // Possible optimization: Many assets have significant overlap in their

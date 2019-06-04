@@ -754,7 +754,7 @@ khAssetManager::RebuildVersion(const std::string &verref)
 {
   assert(!mutex.TryLock());
   notify(NFY_INFO, "RebuildVersion %s", verref.c_str());
-  RebuildVersion(verref);
+  ::RebuildVersion(verref);
 }
 
 void
