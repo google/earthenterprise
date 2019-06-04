@@ -48,7 +48,6 @@ AssetVersionImplD::StateChangeNotifier::AddParentsToNotify(const std::vector<Sha
    //std::copy(parents.begin(), parents.end(), std::inserter(parentsToNotify, parentsToNotify.end()));
   for (const auto& p : parents)
     parentsToNotify.insert(p);
-    NotifyParents(nullptr);
 }
 
 void
@@ -107,9 +106,8 @@ AssetVersionImplD::StateChangeNotifier::NotifyListeners(
     std::shared_ptr<StateChangeNotifier> notifier) {
   notify(NFY_VERBOSE, "Iterate through listeners");
   int i = 1;
-  //for (const std::pair<SharedString, InputStates> & elem : listenersToNotify) {
-    for (const SharedString & ref : listenersToNotify.keys()) {
-    //const SharedString & ref = elem.first;
+  
+  for (const SharedString & ref : listenersToNotify.keys()) {
     const InputStates & states = listenersToNotify[ref];
     AssetVersionD assetVersion(ref);
     notify(NFY_PROGRESS, "Iteration: %d | Total Iterations: %s | listener: %s",
