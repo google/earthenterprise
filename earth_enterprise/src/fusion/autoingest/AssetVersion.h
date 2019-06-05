@@ -18,15 +18,12 @@
 #define GEO_EARTH_ENTERPRISE_SRC_FUSION_AUTOINGEST_ASSETVERSION_H_
 
 #include <algorithm>
-#include <memory>
 #include "fusion/autoingest/AssetVersionRef.h"
 #include "fusion/autoingest/.idl/AssetStorage.h"
 #include "fusion/autoingest/AssetHandle.h"
 #include "fusion/autoingest/MiscConfig.h"
 #include "common/khFileUtils.h"
 #include "StorageManager.h"
-
-class StateChangeNotifier;
 
 /******************************************************************************
  ***  AssetVersionImpl
@@ -139,7 +136,7 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
     assert(false); // Can only call from sub-classes
     return AssetDefs::Bad;
   }
-  virtual void SetState(AssetDefs::State newstate, const std::shared_ptr<StateChangeNotifier> notifier = nullptr, bool propagate = true) {
+  virtual void SetMyStateOnly(AssetDefs::State newstate, bool sendNotifications = true) {
     assert(false);  // Can only call from sub-classes
   }
   virtual bool NeedComputeState() const {
