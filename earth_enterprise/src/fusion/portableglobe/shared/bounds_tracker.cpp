@@ -89,13 +89,13 @@ void BoundsTracker::write_json_file(const std::string& filename) const {
 
     fout << "  {\n"
          << "    \"channel_id\": "      << channel.channel_id << ",\n"
-         << "    \"type\": \""          << channel_type_strings[channel.type] << "\"\n"
+         << "    \"type\": \""          << channel_type_strings[channel.type] << "\",\n"
          << "    \"top\": "             << channel.top << ",\n"
          << "    \"bottom\": "          << channel.bottom << ",\n"
          << "    \"left\": "            << channel.left << ",\n"
          << "    \"right\": "           << channel.right << ",\n"
-         << "    \"min_image_level\": " << channel.min_level << ",\n"
-         << "    \"max_image_level\": " << channel.max_level << ",\n"
+         << "    \"min_level\": "       << channel.min_level << ",\n"
+         << "    \"max_level\": "       << channel.max_level << "\n"
          << "  }";
 
     if (iter != last_entry) {
