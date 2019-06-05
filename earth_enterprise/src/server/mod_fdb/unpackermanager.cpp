@@ -23,6 +23,7 @@
 #include "fusion/portableglobe/servers/fileunpacker/shared/glc_unpacker.h"
 #include "server/mod_fdb/apache_fdb_reader.h"
 
+APLOG_USE_MODULE(fdb);
 
 UnpackerManager::UnpackerManager() : file_pool_(-50) {
 }
