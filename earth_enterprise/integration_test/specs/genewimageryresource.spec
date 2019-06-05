@@ -29,40 +29,27 @@ Open GEE New Imagery Resource Command Test
 Testing the Command: genewimageryresource
 
 
-BTW: Naming for these tags is done with the format of:
-OGCommand = Open Gee Command
-gnir      = Ge New Imagery Resource (The name of the command)
-xx        = Test case number.
-
-These tests can be individually run by using gauge run -t OGCommandgnir01 specs
-
-ge new imagery test: Simple Test
+GEE new imagery test: Simple Test
 --------------------------------
-Tags: OGCommandgnir01
-* perform ge new imagery resource simple test
+* perform GEE new imagery resource simple test
 
-ge new imagery test: Root Directory Test
+GEE new imagery test: Root Directory Test
 ----------------------------------------
-Tags: OGCommandgnir02
-* perform ge new imagery resource root directory test
+* perform GEE new imagery resource root directory test
 
-ge new imagery test: Multi Level Directory Test
+GEE new imagery test: Multi Level Directory Test
 -----------------------------------------------
-Tags: OGCommandgnir03
-* perform ge new imagery resource multi level directory test
+* perform GEE new imagery resource multi level directory test
 
-ge new imagery test: Unacceptable Characters Test
+GEE new imagery test: Unacceptable Characters Test
 -------------------------------------------------
-Tags: OGCommandgnir04
-* perform ge new imagery resource having unacceptable characters test
+* perform GEE new imagery resource having unacceptable characters test
 
-ge new imagery test: Unspecified Special Characters Test
+GEE new imagery test: Unspecified Special Characters Test
 --------------------------------------------------------
-Tags: OGCommandgnir05
-* perform ge new imagery resource having unspecified special characters test
+* perform GEE new imagery resource having unspecified special characters test
 
-ge new imagery test: Empty Directory Test
+GEE new imagery test: Empty Directory Test
 -----------------------------------------
-Tags: OGCommandgnir06
-* perform ge new imagery resource having empty directory test
+* perform GEE new imagery resource having empty directory test
 

@@ -10,14 +10,16 @@ import assets
 # Helpful Not-Step Methods
 # ------------------------
 def doesKhassetFileExist(sPathUntilDotKiasset):
+   print "ls -l " + sPathUntilDotKiasset + ".kiasset/khasset.xml"
    return os.path.exists(sPathUntilDotKiasset + ".kiasset/khasset.xml" )
 
 def executeCommand(sTestDir):
    sImageryRoot = "/opt/google/share/tutorials/fusion/";
    sImageryFile = "Imagery/bluemarble_4km.tif"
    
-   # What if the Imagery wasn't downloaded
+   # Download the imagery, if not available.
    sCommandToRun = "sudo " + sImageryRoot + "download_tutorial.sh >/dev/null 2>/dev/null"
+   print sCommandToRun
    pHandle = subprocess.Popen(sCommandToRun, shell=True)
    assert (pHandle.wait() == 0)
    
@@ -39,38 +41,38 @@ outputROOT = "/gevol/assets"
 # ---------------------------
 # The Tests
 # ------------------------
-@step("perform ge new imagery resource simple test")
-def genewimageryresourceSimpleTest() :
+@step("perform GEE new imagery resource simple test")
+def geenewimageryresourceSimpleTest() :
    testDir = outputDirectoryForTest + "SimpleTest"
    executeCommand(testDir)
    assert (doesKhassetFileExist(outputROOT+"/"+testDir) == True)
 
-@step("perform ge new imagery resource multi level directory test")
-def genewimageryresourceMultiLevelDirectoryTest() :
+@step("perform GEE new imagery resource multi level directory test")
+def geenewimageryresourceMultiLevelDirectoryTest() :
    testDir = outputDirectoryForTest + "MultiDir/dir1/dir2/dir3_prefix"
    executeCommand(testDir)
    assert (doesKhassetFileExist(outputROOT+"/"+testDir) == True)
 
-@step("perform ge new imagery resource root directory test")
-def genewimageryresourceDirStartsAtRoot() :
+@step("perform GEE new imagery resource root directory test")
+def geenewimageryresourceDirStartsAtRoot() :
    testDir = "/gevol/assets/" + outputDirectoryForTest + "RootDir"
    executeCommand(testDir)
    assert (doesKhassetFileExist(testDir) == False)
 
-@step("perform ge new imagery resource having unacceptable characters test")
-def genewimageryresourceHavingUnacceptableCharacters() :
+@step("perform GEE new imagery resource having unacceptable characters test")
+def geenewimageryresourceHavingUnacceptableCharacters() :
    testDir = outputDirectoryForTest + "whatever:-$else"
    executeCommand(testDir)
    assert (doesKhassetFileExist(outputROOT+"/"+testDir) == False)
 
-@step("perform ge new imagery resource having unspecified special characters test")
-def genewimageryresourceUnspecifiedSpecialCharacters() :
+@step("perform GEE new imagery resource having unspecified special characters test")
+def geenewimageryresourceUnspecifiedSpecialCharacters() :
    testDir = outputDirectoryForTest + 'TEMP/VAL\tUE'
    executeCommand(testDir)
    assert (doesKhassetFileExist(outputROOT+"/"+testDir) == True), " Creating Files and Dirs with TAB char has been traiditionally allowed"
 
-@step("perform ge new imagery resource having empty directory test")
-def genewimageryresourceNegativeCaseEmptyDir() :
+@step("perform GEE new imagery resource having empty directory test")
+def geenewimageryresourceNegativeCaseEmptyDir() :
    testDir = ""
    executeCommand(testDir)
    assert (doesKhassetFileExist(outputROOT+"/"+testDir) == False)
