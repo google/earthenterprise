@@ -1,8 +1,10 @@
 from getgauge.python import step
 import os
+import re
 import subprocess
 import time
 
+ASSET_ROOT = "/gevol/assets"
 BASE_ASSET_PATH = "gauge_tests"
 DATABASE_PATH = os.path.join(BASE_ASSET_PATH, "Databases")
 MAP_LAYER_PATH = os.path.join(BASE_ASSET_PATH, "MapLayers")
@@ -13,6 +15,9 @@ MAP_PROJECT_PATH = os.path.join(BASE_ASSET_PATH, "Projects", "Map")
 IMAGERY_RESOURCE_PATH = os.path.join(BASE_ASSET_PATH, "Resources", "Imagery")
 TERRAIN_RESOURCE_PATH = os.path.join(BASE_ASSET_PATH, "Resources", "Terrain")
 VECTOR_RESOURCE_PATH = os.path.join(BASE_ASSET_PATH, "Resources", "Vector")
+
+def get_env_value(sKey):
+   return os.getenv(sKey, "unset")
 
 def get_asset_root():
   return os.getenv('ge_asset_root')
@@ -139,6 +144,7 @@ def create_vector_resource_add_to_proj(resource, srcPath, project):
   # Vector resources must be built before they can be added to projects
   build_vector_resource(resource)
   wait_for_vector_resource_state(resource, "Succeeded")
+  verify_state_vector_resource(resource, "Succeeded")
   add_vector_resource_to_project(resource, project)
 
 @step("Verify that imagery project <project> has no versions")
@@ -249,32 +255,92 @@ def wait_until_state(asset, statuses):
 @step("Wait for imagery project <project> to reach state <state>")
 def wait_for_imagery_project_state(project, state):
   wait_until_state(os.path.join(IMAGERY_PROJECT_PATH, project), state)
+  verify_state_imagery_proj(project, state)
 
 @step("Wait for vector resource <resource> to reach state <state>")
 def wait_for_vector_resource_state(resource, state):
   wait_until_state(os.path.join(VECTOR_RESOURCE_PATH, resource), state)
+  verify_state_vector_resource(resource, state)
 
 @step("Wait for database <database> to reach state <state>")
 def wait_for_database_state(database, state):
   wait_until_state(os.path.join(DATABASE_PATH, database), state)
+  verify_state_database(database, state)
+
+@step("Wait for mercator database <database> to reach state <state>")
+def wait_for_mercator_database_state(database, state):
+  wait_until_state(os.path.join(DATABASE_PATH, database), state)
+  verify_state_mercator_database(database, state)
 
 def verify_state(path, states):
   states = make_list(states)
   status = get_status(path)
   assert status in states, "Asset %s in unexpected state. Expected: %s, actual: %s" % (path, " ".join(states), status)
 
+def get_one_input(path, project, extension):
+  hasInput = re.compile(r".*/(\w*\." + extension + ").*")
+  deps = subprocess.check_output(["/opt/google/bin/gequery", "--dependencies", os.path.join(path, project)])
+  depsIter = iter(deps.splitlines())
+  for line in depsIter:
+    match = hasInput.match(line)
+    if match:
+      return match.group(1)
+  assert False, "Could not find input for " + project
+
+def get_one_packlevel(path, resource, ext):
+  fullPath = os.path.join(ASSET_ROOT, path, resource, "CombinedRP." + ext, "packgen." + ext)
+  files = os.listdir(fullPath)
+  for f in files:
+    if f.startswith("packlevel"):
+      return f
+  assert False, "Could not find packlevel for " + resource
+
+def verify_state_imagery_proj_helper(project, state, projExt, resExt):
+  verify_state(os.path.join(IMAGERY_PROJECT_PATH, project), state)
+  if state == "Succeeded":
+    # Check the states of the project's children
+    verify_state(os.path.join(IMAGERY_PROJECT_PATH, project + "." + projExt, "layerjs"), state)
+    verify_state(os.path.join(IMAGERY_PROJECT_PATH, project + "." + projExt, "dbroot"), state)
+    verify_state(os.path.join(IMAGERY_PROJECT_PATH, project + "." + projExt, "geindex"), state)
+    # Check the tasks that are built under the resource but only when the project is built (only check one resource)
+    resource = get_one_input(IMAGERY_PROJECT_PATH, project, resExt)
+    # In one test the CombinedRP ends up in a "cleaned" state even though the packgens
+    # succeeded. I'm not sure why that happens, but if it's a bug it's been there for a while.
+    verify_state(os.path.join(IMAGERY_RESOURCE_PATH, resource, "CombinedRP"), ["Succeeded", "Cleaned"])
+    verify_state(os.path.join(IMAGERY_RESOURCE_PATH, resource, "CombinedRP.kia", "packgen"), state)
+    # Only check one pack level
+    packlev = get_one_packlevel(IMAGERY_RESOURCE_PATH, resource, "kia")
+    verify_state(os.path.join(IMAGERY_RESOURCE_PATH, resource, "CombinedRP.kia", "packgen.kia", packlev), state)
+
 @step("Verify that the state of imagery project <project> is <state>")
 def verify_state_imagery_proj(project, state):
-  verify_state(os.path.join(IMAGERY_PROJECT_PATH, project), state)
+  verify_state_imagery_proj_helper(project, state, "kiproject", "kiasset")
+
+@step("Verify that the state of mercator imagery project <project> is <state>")
+def verify_state_mercator_imagery_proj(project, state):
+  verify_state_imagery_proj_helper(project, state, "kimproject", "kimasset")
 
 @step("Verify that the state of imagery project <project> is in <table>")
 def verify_state_imagery_project_table(project, table):
   states = list_from_table(table)
   verify_state(os.path.join(IMAGERY_PROJECT_PATH, project), states)
-  
+
+def verify_state_imagery_resource_helper(resource, state, resExt):
+  verify_state(os.path.join(IMAGERY_RESOURCE_PATH, resource), state)
+  if state == "Succeeded":
+    # Check the states of the resource's children
+    verify_state(os.path.join(IMAGERY_RESOURCE_PATH, resource + "." + resExt, "maskgen"), state)
+    verify_state(os.path.join(IMAGERY_RESOURCE_PATH, resource + "." + resExt, "maskproduct"), state)
+    verify_state(os.path.join(IMAGERY_RESOURCE_PATH, resource + "." + resExt, "product"), state)
+    verify_state(os.path.join(IMAGERY_RESOURCE_PATH, resource + "." + resExt, "source"), state)
+
 @step("Verify that the state of imagery resource <resource> is <state>")
 def verify_state_imagery_resource(resource, state):
-  verify_state(os.path.join(IMAGERY_RESOURCE_PATH, resource), state)
+  verify_state_imagery_resource_helper(resource, state, "kiasset")
+
+@step("Verify that the state of mercator imagery resource <resource> is <state>")
+def verify_state_mercator_imagery_resource(resource, state):
+  verify_state_imagery_resource_helper(resource, state, "kimasset")
 
 @step("Verify that the state of imagery resource <resource> is in <table>")
 def verify_state_imagery_resource_table(resource, table):
@@ -297,6 +363,17 @@ def verify_state_default_images_table(project, table):
 @step("Verify that the state of terrain project <project> is <state>")
 def verify_state_terrain_proj(project, state):
   verify_state(os.path.join(TERRAIN_PROJECT_PATH, project), state)
+  if state == "Succeeded":
+    # Check the states of the project's children
+    verify_state(os.path.join(TERRAIN_PROJECT_PATH, project + ".ktproject", "dbroot"), state)
+    verify_state(os.path.join(TERRAIN_PROJECT_PATH, project + ".ktproject", "geindex"), state)
+    # Check the tasks that are built under the resource but only when the project is built (only check one resource)
+    resource = get_one_input(TERRAIN_PROJECT_PATH, project, "ktasset")
+    verify_state(os.path.join(TERRAIN_RESOURCE_PATH, resource, "CombinedRP"), state)
+    verify_state(os.path.join(TERRAIN_RESOURCE_PATH, resource, "CombinedRP.kta", "packgen"), state)
+    # Only check one pack level
+    packlev = get_one_packlevel(TERRAIN_RESOURCE_PATH, resource, "kta")
+    verify_state(os.path.join(TERRAIN_RESOURCE_PATH, resource, "CombinedRP.kta", "packgen.kta", packlev), state)
 
 @step("Verify that the state of terrain project <project> is in <table>")
 def verify_state_terrain_project_table(project, table):
@@ -306,6 +383,12 @@ def verify_state_terrain_project_table(project, table):
 @step("Verify that the state of terrain resource <resource> is <state>")
 def verify_state_terrain_resource(resource, state):
   verify_state(os.path.join(TERRAIN_RESOURCE_PATH, resource), state)
+  if state == "Succeeded":
+    # Check the states of the resource's children
+    verify_state(os.path.join(TERRAIN_RESOURCE_PATH, resource + ".ktasset", "maskgen"), state)
+    verify_state(os.path.join(TERRAIN_RESOURCE_PATH, resource + ".ktasset", "maskproduct"), state)
+    verify_state(os.path.join(TERRAIN_RESOURCE_PATH, resource + ".ktasset", "product"), state)
+    verify_state(os.path.join(TERRAIN_RESOURCE_PATH, resource + ".ktasset", "source"), state)
 
 @step("Verify that the state of terrain resource <resource> is in <table>")
 def verify_state_terrain_resource_table(resource, table):
@@ -315,6 +398,13 @@ def verify_state_terrain_resource_table(resource, table):
 @step("Verify that the state of vector project <project> is <state>")
 def verify_state_vector_proj(project, state):
   verify_state(os.path.join(VECTOR_PROJECT_PATH, project), state)
+  if state == "Succeeded":
+    # Check the states of the project's children
+    verify_state(os.path.join(VECTOR_PROJECT_PATH, project + ".kvproject", "dbroot"), state)
+    verify_state(os.path.join(VECTOR_PROJECT_PATH, project + ".kvproject", "geindex"), state)
+    verify_state(os.path.join(VECTOR_PROJECT_PATH, project + ".kvproject", "layer005"), state)
+    verify_state(os.path.join(VECTOR_PROJECT_PATH, project + ".kvproject", "layer005.kva", "layer005packet"), state)
+    verify_state(os.path.join(VECTOR_PROJECT_PATH, project + ".kvproject", "layer005.kva", "query"), state)
 
 @step("Verify that the state of vector project <project> is in <table>")
 def verify_state_vector_project_table(project, table):
@@ -324,6 +414,9 @@ def verify_state_vector_project_table(project, table):
 @step("Verify that the state of vector resource <resource> is <state>")
 def verify_state_vector_resource(resource, state):
   verify_state(os.path.join(VECTOR_RESOURCE_PATH, resource), state)
+  if state == "Succeeded":
+    # Check the states of the resource's children
+    verify_state(os.path.join(VECTOR_RESOURCE_PATH, resource + ".kvasset", "source"), state)
 
 @step("Verify that the state of vector resource <resource> is in <table>")
 def verify_state_vector_resource_table(resource, table):
@@ -333,6 +426,23 @@ def verify_state_vector_resource_table(resource, table):
 @step("Verify that the state of database <database> is <state>")
 def verify_state_database(database, state):
   verify_state(os.path.join(DATABASE_PATH, database), state)
+  if state == "Succeeded":
+    # Check the states of the database's children
+    verify_state(os.path.join(DATABASE_PATH, database + ".kdatabase", "gedb"), state)
+    verify_state(os.path.join(DATABASE_PATH, database + ".kdatabase", "unifiedindex"), state)
+    verify_state(os.path.join(DATABASE_PATH, database + ".kdatabase", "qtpacket"), state)
+    terrainPath = os.path.join(DATABASE_PATH, database + ".kdatabase", "terrain")
+    if os.path.isdir(terrainPath + ".kta"):
+      # Only check for the terrain task if it's there. Not all databases have terrain.
+      verify_state(os.path.join(DATABASE_PATH, database + ".kdatabase", "terrain"), state)
+
+@step("Verify that the state of mercator database <database> is <state>")
+def verify_state_mercator_database(database, state):
+  verify_state(os.path.join(DATABASE_PATH, database), state)
+  if state == "Succeeded":
+    # Check the states of the database's children
+    verify_state(os.path.join(DATABASE_PATH, database + ".kmmdatabase", "mapdb"), state)
+    verify_state(os.path.join(DATABASE_PATH, database + ".kmmdatabase", "unifiedindex"), state)
 
 @step("Verify that the state of map layer <layer> is <state>")
 def verify_state_map_layer(layer, state):

@@ -177,7 +177,7 @@ gtag('config', 'UA-108632131-2');
             <td>1192</td>
             <td>There appears to be a regression issue in OpenJPEG 2000 lib version 2.3.0 (that Fusion uses), causing an error when fusing jp2 files.</td>
             <td>
-               We have upgraded to OpenJPEG 2.3.1.
+               We have upgraded to OpenJPEG 2.3.1 fixing this issue.
             </td>
           </tr>
           <tr>
@@ -218,6 +218,13 @@ gtag('config', 'UA-108632131-2');
             <td>Search results from KML layers do not display properly in Earth Client.</td>
             <td>
                Updated KML rendering libraries with new versions provided by Google.
+            </td>
+          </tr>
+          <tr>
+            <td>1276</td>
+            <td>System manager purges the asset and asset version caches unnecessarily during builds. For large builds this can evict most of the items from the cache.</td>
+            <td>
+               Remove the calls to these purge functions.
             </td>
           </tr>
           <tr>

@@ -69,12 +69,13 @@
       </tr>
     </tbody>
   </table>
+  <p>When using <code>insetresource</code> in imagery and terrain project commands below, the passed inset resource needs to be a relative path to GEE assets folder. </p>
   <h2>geaddtoimageryproject</h2>
   <pre>
 <code><b>geaddtoimageryproject</b> [--<strong>mercator</strong> | --<strong>flat]</strong> [--<strong>historical_imagery</strong> |
 --<strong>no_historical_imagery</strong>] -o <em>projectname</em> {[--<strong>maxlevel</strong> <em>level</em> | --<strong>maxleveloverride</strong> <em>level</em>] <em>insetresource</em>}</code>...</pre>
   <h3>Purpose</h3>
-  <p>Creates a new imagery project. This tool is capable of building Mercator imagery projects for 2D databases, or Flat (Plate Carrée) imagery projects with or without Historic Imagery Support for 3D databases.
+  <p>Adds additional resources to an existing imagery project. This tool is capable of building Mercator imagery projects for 2D databases, or Flat (Plate Carrée) imagery projects with or without Historic Imagery Support for 3D databases.
 
   <h3>Commands</h3>
   <pre>
@@ -97,6 +98,35 @@
   <pre>
   <code><b>--maxleveloverride </b><i>level</i></code></pre>
   <p><i>Optional</i>. Sets the maximum level for the imagery. Uses the imagery scale in Fusion. Matches the levels in the Fusion UI.</p>
+
+  <h2>geaddtoterrainproject</h2>
+  <pre>
+<code><b>geaddtoterrainproject</b> [--<strong>mercator</strong> | --<strong>flat]</strong>
+ -o <em>projectname</em> {--<strong>maxlevel</strong> <em>level</em> | --<strong>maxleveloverride</strong> <em>level</em>]}
+ [--<strong>no_terrain_overlay</strong> | {--<strong>terrain_overlay</strong> --<strong>start_level</strong> <em>level</em> --<strong>resource_min_level</strong> <em>level</em> }]
+ <em>insetresource</em>} </code>...</pre>
+  <h3>Purpose</h3>
+  <p>Adds additional resources to an existing terrain project. This tool is capable of building Mercator terrain projects for 2D databases, or Flat (Plate Carrée) terrain projects.
+  
+  <h3>Commands</h3>
+  <pre><code><b>--mercator </b></code></pre>
+  <p><i>Optional</i>. Uses Mercator map projection for the terrain project.</p>
+  <pre><code><b>--flat </b></code></pre>
+  <p><i>Default</i>. Uses Flat map (Plate Carrée) projection.</p>
+  <code><b>--maxlevel </b><i>level</i></code></pre>
+  <div class="alert"> Deprecated in release GEE 5.2.5 and higher. Use <code>--maxleveloverride</code></a> instead.</div>
+  <p><i>Optional</i>. Sets the maximum level for the terrain. Uses internal Fusion scale. Deprecated because it not match the levels specified in the Fusion UI.</p> 
+  <pre><code><b>--maxleveloverride</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. Sets the maximum level for the terrain. Uses the terrain scale in Fusion. Matches the levels in the Fusion UI.</p>
+  <pre><code><b>--no_terrain_overlay</b></code></pre>
+  <p><i>Default</i>. make this terrain project a normal project.</p>
+  <pre><code><b>--terrain_overlay</b></code></pre>
+  <p><i>Optional</i>. make this terrain project an overlay project.</p>
+  <pre><code><b>--start_level</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. the level from which to start building the terrain overlay project.  start_level is an even integer between 4 and 24 inclusive.</p>
+  <pre><code><b>--resource_min_level</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. the threshold level that separates fill terrain from overlay terrain. resource_min_level is any integer between 4 and 24 inclusive.</p>
+
  <h2><a name="63542"></a>geconfigureassetroot</h2>
 <code><b>geconfigureassetroot</b> {<b>--new</b> <b>--assetroot </b><i>path </i> [<b>--srcvol </b><i>path</i>] | <b>--repair</b> | <b>--editvolumes</b> | <b>--listvolumes</b> | <b>--addvolume</b> | <b>--fixmasterhost</b> | <strong>--noprompt</strong>}  [--nochown]</code></pre>
   <h3>Purpose</h3>
@@ -280,6 +310,128 @@ instead.
   <pre>
 <code><b>--map</b> map project </code></pre>
   <p><i>Optional</i>. The map project to be added to the database.</p>
+
+
+  <h2>gemodifyimageryproject</h2>
+  <pre>
+ <code><b>gemodifyimageryproject</b> [--<strong>mercator</strong> | --<strong>flat]</strong> [--<strong>historical_imagery</strong> | --<strong>no_historical_imagery</strong>]
+   -o <em>projectname</em> {[--<strong>maxlevel</strong> <em>level</em> | --<strong>maxleveloverride</strong> <em>level</em>] <em>insetresource</em>}</code>...</pre>
+  
+
+  <h3>Purpose</h3>
+  <p>Modifies an existing imagery project.</p>
+  
+  <h3>Commands</h3>
+  <pre><code><b>--mercator </b></code></pre>
+  <p><i>Optional</i>. Uses Mercator map projection for the imagery project.</p>
+  <pre><code><b>--flat </b></code></pre>
+  <p><i>Default</i>. Uses Flat map (Plate Carrée) projection.</p>
+  <pre><code><b>--historical_imagery </b></code></pre>
+  <p><i>Optional</i>. Uses historical imagery for the project.</p>
+  <pre><code><b>--no_historical_imagery </b></code></pre>
+  <p><i>Default</i>. Uses normal imagery for the project.</p>
+  <h3>Options</h3>
+  <pre>
+  <code><b>--maxlevel </b><i>level</i></code></pre>
+  <div class="alert"> Deprecated in release GEE 5.2.5 and higher. Use <code>--maxleveloverride</code></a> instead.</div>
+  <p><i>Optional</i>. Sets the maximum level for the imagery. Uses internal Fusion scale. Deprecated because it not match the levels specified in the Fusion UI.</p>
+  <pre>
+  <code><b>--maxleveloverride </b><i>level</i></code></pre>
+  <p><i>Optional</i>. Sets the maximum level for the imagery. Uses the imagery scale in Fusion. Matches the levels in the Fusion UI.</p>
+
+  <h2>gemodifyterrainproject</h2>
+  <pre>
+ <code><b>gemodifyterrainproject</b> [--<strong>mercator</strong> | --<strong>flat]</strong>
+  -o <em>projectname</em> {--<strong>maxlevel</strong> <em>level</em> | --<strong>maxleveloverride</strong> <em>level</em>]}
+  [--<strong>no_terrain_overlay</strong> | {--<strong>terrain_overlay</strong> --<strong>start_level</strong> <em>level</em> --<strong>resource_min_level</strong> <em>level</em> }]
+  <em>insetresource</em>} </code>...</pre>
+ 
+
+  <h3>Purpose</h3>
+  <p>Modifies an existing terrain project. </p>
+  
+  <h3>Commands</h3>
+  <pre><code><b>--mercator </b></code></pre>
+  <p><i>Optional</i>. Uses Mercator map projection for the terrain project.</p>
+  <pre><code><b>--flat </b></code></pre>
+  <p><i>Default</i>. Uses Flat map (Plate Carrée) projection.</p>
+  <code><b>--maxlevel </b><i>level</i></code></pre>
+  <div class="alert"> Deprecated in release GEE 5.2.5 and higher. Use <code>--maxleveloverride</code></a> instead.</div>
+  <p><i>Optional</i>. Sets the maximum level for the terrain. Uses internal Fusion scale. Deprecated because it not match the levels specified in the Fusion UI.</p> 
+  <pre><code><b>--maxleveloverride</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. Sets the maximum level for the terrain. Uses the terrain scale in Fusion. Matches the levels in the Fusion UI.</p>
+  <p><i>Optional</i>.</p>
+  <pre><code><b>--no_terrain_overlay</b></code></pre>
+  <p><i>Default</i>. make this terrain project a normal project.</p>
+  <pre><code><b>--terrain_overlay</b></code></pre>
+  <p><i>Optional</i>. make this terrain project an overlay project.</p>
+  <pre><code><b>--start_level</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. the level from which to start building the terrain overlay project. start_level is an even integer between 4 and 24 inclusive.</p>
+  <pre><code><b>--resource_min_level</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. the threshold level that separates fill terrain from overlay terrain. resource_min_level is any integer between 4 and 24 inclusive.</p>
+
+
+  <h2>genewimageryproject</h2>
+  <pre>
+ <code><b>genewimageryproject</b> [--<strong>mercator</strong> | --<strong>flat]</strong> [--<strong>historical_imagery</strong> | --<strong>no_historical_imagery</strong>]
+  -o <em>projectname</em> {[--<strong>maxlevel</strong> <em>level</em> | --<strong>maxleveloverride</strong> <em>level</em>] <em>insetresource</em>}</code>...</pre>
+
+
+  <h3>Purpose</h3>
+  <p>Creates a new imagery project. </p>
+  
+  <h3>Commands</h3>
+  <pre><code><b>--mercator </b></code></pre>
+  <p><i>Optional</i>. Uses Mercator map projection for the imagery project.</p>
+  <pre><code><b>--flat </b></code></pre>
+  <p><i>Default</i>. Uses Flat map (Plate Carrée) projection.</p>
+  <pre><code><b>--historical_imagery </b></code></pre>
+  <p><i>Optional</i>. Uses historical imagery for the project.</p>
+  <pre><code><b>--no_historical_imagery </b></code></pre>
+  <p><i>Default</i>. Uses normal imagery for the project.</p>
+  <h3>Options</h3>
+  <pre>
+  <code><b>--maxlevel </b><i>level</i></code></pre>
+  <div class="alert"> Deprecated in release GEE 5.2.5 and higher. Use <code>--maxleveloverride</code></a> instead.</div>
+  <p><i>Optional</i>. Sets the maximum level for the imagery. Uses internal Fusion scale. Deprecated because it not match the levels specified in the Fusion UI.</p>
+  <pre>
+  <code><b>--maxleveloverride </b><i>level</i></code></pre>
+  <p><i>Optional</i>. Sets the maximum level for the imagery. Uses the imagery scale in Fusion. Matches the levels in the Fusion UI.</p>
+
+
+  <h2>genewterrainproject</h2>
+  <pre>
+ <code><b>genewterrainproject</b> [--<strong>mercator</strong> | --<strong>flat]</strong>
+  -o <em>projectname</em> {--<strong>maxlevel</strong> <em>level</em> | --<strong>maxleveloverride</strong> <em>level</em>]}
+  [--<strong>no_terrain_overlay</strong> | {--<strong>terrain_overlay</strong> --<strong>start_level</strong> <em>level</em> --<strong>resource_min_level</strong> <em>level</em> }]
+  <em>insetresource</em>} </code>...</pre>
+
+  <h3>Purpose</h3>
+  <p>Creates a new terrain project. </p>
+  
+  <h3>Commands</h3>
+  <pre><code><b>--mercator </b></code></pre>
+  <p><i>Optional</i>. Uses Mercator map projection for the terrain project.</p>
+  <pre><code><b>--flat </b></code></pre>
+  <p><i>Default</i>. Uses Flat map (Plate Carrée) projection.</p>
+  <code><b>--maxlevel </b><i>level</i></code></pre>
+  <div class="alert"> Deprecated in release GEE 5.2.5 and higher. Use <code>--maxleveloverride</code></a> instead.</div>
+  <p><i>Optional</i>. Sets the maximum level for the terrain. Uses internal Fusion scale. Deprecated because it not match the levels specified in the Fusion UI.</p> 
+  <pre><code><b>--maxleveloverride</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. Sets the maximum level for the terrain. Uses the terrain scale in Fusion. Matches the levels in the Fusion UI.</p>
+  <p><i>Optional</i>.</p>
+  <pre><code><b>--no_terrain_overlay</b></code></pre>
+  <p><i>Default</i>. make this terrain project a normal project.</p>
+  <pre><code><b>--terrain_overlay</b></code></pre>
+  <p><i>Optional</i>. make this terrain project an overlay project.</p>
+  <pre><code><b>--start_level</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. the level from which to start building the terrain overlay project. start_level is an even integer between 4 and 24 inclusive.</p>
+  <pre><code><b>--resource_min_level</b> <i>level</i></code></pre>
+  <p><i>Optional</i>. the threshold level that separates fill terrain from overlay terrain. resource_min_level is any integer between 4 and 24 inclusive.</p>
+
+
+
+
 <h2>gepublishdatabase</h2>
 <div class="alert">
   <p>Deprecated in GEE 4.0.</p>

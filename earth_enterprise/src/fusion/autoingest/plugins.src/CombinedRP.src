@@ -179,7 +179,7 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
     if (config.need_khvr_) {
       source = MosaicFactory::ReuseOrMakeAndUpdateSubAsset
                (assetRef, type, "mosaic",
-                makevec1(source->GetRef()),
+                makevec1<SharedString>(source->GetRef()),
                 khMetaData(),
                 config.khvr_config_,
                 makevec1(source));
@@ -189,7 +189,7 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
     MutableKRPAssetVersionD krp2 =
       KRPFactory::ReuseOrMakeAndUpdateSubAsset
       (assetRef, type, "product",
-       makevec1(source->GetRef()),
+       makevec1<SharedString>(source->GetRef()),
        khMetaData(),
        config.krp_config_,
        makevec1(source));
@@ -217,7 +217,7 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
         krmp =
           KRMPFactory::ReuseOrMakeAndUpdateSubAsset
           (assetRef, type, "maskproduct",
-           makevec2(krp->GetRef(), inputs[1]),
+           makevec2<SharedString>(krp->GetRef(), inputs[1]),
            khMetaData(),
            KRMPConfig(config.krp_config_.overridesrs,
                       config.krp_config_.useMercatorProjection),
@@ -231,7 +231,7 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
       AssetVersion maskgen =
         MaskgenFactory::ReuseOrMakeAndUpdateSubAsset
         (assetRef, type, "maskgen",
-         makevec1(krp->GetRef()),
+         makevec1<SharedString>(krp->GetRef()),
          khMetaData(),
          config.maskgen_config_,
          makevec1(AssetVersion(krp)));
@@ -240,7 +240,7 @@ CombinedRPAssetVersionImplD::UpdateChildren(void)
       MutableAssetVersionD krmp =
         KRMPFactory::ReuseOrMakeAndUpdateSubAsset
         (assetRef, type, "maskproduct",
-         makevec2(krp->GetRef(), maskgen->GetRef()),
+         makevec2<SharedString>(krp->GetRef(), maskgen->GetRef()),
          khMetaData(),
          KRMPConfig("", config.krp_config_.useMercatorProjection),
          makevec2(AssetVersion(krp), maskgen));

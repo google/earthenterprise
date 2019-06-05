@@ -132,9 +132,8 @@ class GEXMLObject {
     const static std::string BLOCK_SIZE;
     const static std::string PURGE;
     const static std::string PURGE_LEVEL;
-    const static std::string DEALLOCATE_ALL;
     const static std::string XMLConfigFile;
-    const static std::array<std::string,6> options;
+    const static std::array<std::string,5> options;
     static khMutex mutex;
 
     static XMLSize_t initialDOMHeapAllocSize;
@@ -143,7 +142,6 @@ class GEXMLObject {
     static bool doPurge;
     static int purgeLevel;
     static XMLSize_t purgeThreshold;
-    static bool deallocateAll;
     static bool xercesInitialized;
 
     static uint32_t activeObjects;
