@@ -168,33 +168,33 @@ TEST_F(BoundsTrackerTest, TestWriteJson) {
   const std::string expected_json = "[\n"
     "  {\n"
     "    \"channel_id\": 1,\n"
-    "    \"type\": \"Terrain\"\n"
+    "    \"type\": \"Terrain\",\n"
     "    \"top\": 2,\n"
     "    \"bottom\": 3,\n"
     "    \"left\": 0,\n"
     "    \"right\": 1,\n"
-    "    \"min_image_level\": 1,\n"
-    "    \"max_image_level\": 2,\n"
+    "    \"min_level\": 1,\n"
+    "    \"max_level\": 2\n"
     "  },\n"
     "  {\n"
     "    \"channel_id\": 24,\n"
-    "    \"type\": \"Vector\"\n"
+    "    \"type\": \"Vector\",\n"
     "    \"top\": 8,\n"
     "    \"bottom\": 9,\n"
     "    \"left\": 5,\n"
     "    \"right\": 5,\n"
-    "    \"min_image_level\": 1,\n"
-    "    \"max_image_level\": 4,\n"
+    "    \"min_level\": 1,\n"
+    "    \"max_level\": 4\n"
     "  },\n"
     "  {\n"
     "    \"channel_id\": 123,\n"
-    "    \"type\": \"Image\"\n"
+    "    \"type\": \"Image\",\n"
     "    \"top\": 8,\n"
     "    \"bottom\": 9,\n"
     "    \"left\": 5,\n"
     "    \"right\": 5,\n"
-    "    \"min_image_level\": 1,\n"
-    "    \"max_image_level\": 4,\n"
+    "    \"min_level\": 1,\n"
+    "    \"max_level\": 4\n"
     "  }\n"
     "]\n";
 
@@ -208,7 +208,7 @@ TEST_F(BoundsTrackerTest, TestWriteJson) {
   std::ifstream ins(filename.c_str());
   std::string str{ std::istreambuf_iterator<char>(ins),
                    std::istreambuf_iterator<char>()};
-
+  bt.write_json_file("/home/jlarocco/testing.json");
   EXPECT_EQ(str, expected_json);
 }
 
