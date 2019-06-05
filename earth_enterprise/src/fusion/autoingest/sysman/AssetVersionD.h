@@ -24,30 +24,6 @@
 #include <map>
 #include <memory>
 
-// Tracks the state of inputs to a given asset version that have changed. Each
-// entry maps a state to the number of inputs that have changed to that state.
-struct InputStates {
-  size_t numSucceeded;
-  bool allWorkingOrSucceeded;
-  InputStates() : numSucceeded(0), allWorkingOrSucceeded(true) {}
-};
-
-// Helper class to efficently send updates of state changes to other asset
-// versions.
-class StateChangeNotifier {
-  private:
-    std::set<SharedString> parentsToNotify;
-    std::map<SharedString, InputStates> listenersToNotify;
-    void NotifyParents(std::shared_ptr<StateChangeNotifier>);
-    void NotifyListeners(std::shared_ptr<StateChangeNotifier>);
-  public:
-    static std::shared_ptr<StateChangeNotifier> GetNotifier(std::shared_ptr<StateChangeNotifier>);
-    StateChangeNotifier() = default;
-    ~StateChangeNotifier();
-    void AddParentsToNotify(const std::vector<SharedString> &);
-    void AddListenersToNotify(const std::vector<SharedString> &, AssetDefs::State);
-};
-
 // ****************************************************************************
 // ***  AssetVersionImplD
 // ****************************************************************************
@@ -59,13 +35,36 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   friend class DerivedAssetHandle_<AssetVersion, AssetVersionImplD>;
   friend class MutableAssetHandleD_<DerivedAssetHandle_<AssetVersion,
                                                         AssetVersionImplD> >;
-  friend class StateChangeNotifier;
 
   // private and unimplemented -- illegal to copy an AssetVersionImpl
   AssetVersionImplD(const AssetVersionImplD&);
   AssetVersionImplD& operator=(const AssetVersionImplD&);
 
  protected:
+  // Tracks the state of inputs to a given asset version that have changed. Each
+  // entry maps a state to the number of inputs that have changed to that state.
+  struct InputStates {
+    size_t numSucceeded;
+    bool allWorkingOrSucceeded;
+    InputStates() : numSucceeded(0), allWorkingOrSucceeded(true) {}
+  };
+
+  // Helper class to efficently send updates of state changes to other asset
+  // versions.
+  class StateChangeNotifier {
+    private:
+      std::set<SharedString> parentsToNotify;
+      std::map<SharedString, InputStates> listenersToNotify;
+      void NotifyParents(std::shared_ptr<StateChangeNotifier>);
+      void NotifyListeners(std::shared_ptr<StateChangeNotifier>);
+    public:
+      static std::shared_ptr<StateChangeNotifier> GetNotifier(std::shared_ptr<StateChangeNotifier>);
+      StateChangeNotifier() = default;
+      ~StateChangeNotifier();
+      void AddParentsToNotify(const std::vector<SharedString> &);
+      void AddListenersToNotify(const std::vector<SharedString> &, AssetDefs::State);
+  };
+
   static khRefGuard<AssetVersionImplD> Load(const std::string &boundref);
 
   virtual AssetDefs::State ComputeState(void) const = 0;
@@ -83,6 +82,8 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   void AddInputAssetRefs(const std::vector<SharedString> &inputs_);
   AssetDefs::State StateByInputs(bool *blockersAreOffline = 0,
                                  uint32 *numWaiting = 0) const;
+  template<bool propagate = true>
+  void SetState(AssetDefs::State newstate, const std::shared_ptr<StateChangeNotifier> = nullptr);
   void SetProgress(double newprogress);
   virtual void SyncState(const std::shared_ptr<StateChangeNotifier> = nullptr) const; // const so can be called w/o mutable handle
   // will create a mutable handle itself if it
@@ -110,14 +111,13 @@ class AssetVersionImplD : public virtual AssetVersionImpl
       return true;
     }
   }
-  virtual void SetState(AssetDefs::State newstate, const std::shared_ptr<StateChangeNotifier> = nullptr, bool propagate = true);
+  virtual void SetMyStateOnly(AssetDefs::State newstate, bool sendNotifications = true);
   bool OkToClean(std::vector<std::string> *wouldbreak = 0) const;
   bool OkToCleanAsInput(void) const;
   void SetBad(void);
   void ClearBad(void);
   void Clean(void);
   virtual void Cancel(const std::shared_ptr<StateChangeNotifier> = nullptr) = 0;
-  virtual void Rebuild(const std::shared_ptr<StateChangeNotifier> = nullptr) = 0;
   virtual void DoClean(const std::shared_ptr<StateChangeNotifier> = nullptr) = 0;
   virtual bool MustForceUpdate(void) const { return false; }
 
@@ -190,7 +190,6 @@ class LeafAssetVersionImplD : public virtual LeafAssetVersionImpl,
 
  public:
   virtual void Cancel(const std::shared_ptr<StateChangeNotifier> = nullptr);
-  virtual void Rebuild(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual void DoClean(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual AssetDefs::State CalcStateByInputsAndChildren(
       AssetDefs::State stateByInputs,
@@ -232,7 +231,6 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
 
  public:
   virtual void Cancel(const std::shared_ptr<StateChangeNotifier> = nullptr);
-  virtual void Rebuild(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual void DoClean(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual AssetDefs::State CalcStateByInputsAndChildren(
       AssetDefs::State stateByInputs,

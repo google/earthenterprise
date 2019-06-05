@@ -19,8 +19,9 @@
 
 #include <algorithm>
 #include <boost/graph/adjacency_list.hpp>
-#include <list>
+#include <functional>
 #include <map>
+#include <vector>
 
 using namespace boost;
 using namespace std;
@@ -37,34 +38,40 @@ struct AssetEdge {
   DependencyType type;
 };
 
-typedef adjacency_list<setS, setS, directedS, AssetVertex, AssetEdge> AssetTree;
+typedef adjacency_list<setS, setS, directedS, AssetVertex, AssetEdge> AssetVersionStateTree;
 
 // The depth_first_search function needs a way to map vertexes to indexes. We
-// store a unique index inside each vertex; this provides a way for boost
-// to access them. These must be defined before including depth_first_search.hpp.
-class VertexIndexMap {
+// store a unique index inside each vertex; the code below provides a way for
+// boost to access them. These must be defined before including
+// depth_first_search.hpp.
+template <class Graph>
+class InNodeVertexIndexMap {
   public:
     typedef readable_property_map_tag category;
     typedef size_t value_type;
     typedef value_type reference;
-    typedef AssetTree::vertex_descriptor key_type;
+    typedef typename Graph::vertex_descriptor key_type;
 
-    VertexIndexMap(const AssetTree & tree) : tree(tree) {};
-    const AssetTree & tree;
+    InNodeVertexIndexMap(const Graph & graph) : graph(graph) {};
+    const Graph & graph;
 };
 
 namespace boost {
   template<>
-  struct property_map<AssetTree, vertex_index_t> {
-    typedef VertexIndexMap const_type;
+  struct property_map<AssetVersionStateTree, vertex_index_t> {
+    typedef InNodeVertexIndexMap<AssetVersionStateTree> const_type;
   };
 
-  VertexIndexMap get(vertex_index_t, const AssetTree & tree) {
-    return VertexIndexMap(tree);
+  template<class Graph>
+  InNodeVertexIndexMap<Graph> get(vertex_index_t, const Graph & graph) {
+    return InNodeVertexIndexMap<Graph>(graph);
   }
 
-  VertexIndexMap::value_type get(const VertexIndexMap & map, VertexIndexMap::key_type vertex) {
-    return map.tree[vertex].index;
+  template<class Graph>
+  typename InNodeVertexIndexMap<Graph>::value_type get(
+      const InNodeVertexIndexMap<Graph> & map,
+      typename InNodeVertexIndexMap<Graph>::key_type vertex) {
+    return map.graph[vertex].index;
   }
 }
 
@@ -73,14 +80,17 @@ namespace boost {
 void UpdateStateForSelfAndDependentChildren(
     MutableAssetVersionD version,
     AssetDefs::State newState,
-    int statesToInclude) {
-  if (version->state & statesToInclude) {
-    // Don't call SetState - we don't want to trigger callbacks yet
-    version->state = newState;
+    function<bool(AssetDefs::State)> updateStatePredicate) {
+  if (updateStatePredicate(version->state)) {
+    // Set the state. The OnStateChange handler will take care
+    // of stopping any running tasks, etc
+    // false -> don't send notifications about the new state because we
+    // will change it soon.
+    version->SetMyStateOnly(newState, false);
     vector<SharedString> dependents;
     version->DependentChildren(dependents);
     for (auto & child : dependents) {
-      UpdateStateForSelfAndDependentChildren(child, newState, statesToInclude);
+      UpdateStateForSelfAndDependentChildren(child, newState, updateStatePredicate);
     }
   }
 }
@@ -91,40 +101,48 @@ void UpdateStateForSelfAndDependentChildren(
 // build the graph.
 class GetAssetTree {
   private:
-    typedef map<SharedString, AssetTree::vertex_descriptor> VertexMap;
+    typedef map<SharedString, AssetVersionStateTree::vertex_descriptor> VertexMap;
     SharedString version;
-    AssetTree tree;
+    AssetVersionStateTree tree;
     VertexMap vertices;
     size_t index;
-    AssetTree::vertex_descriptor GetVertex(AssetVersion version) {
-      VertexMap::iterator vertexIter = vertices.find(version->GetRef());
-      if (vertexIter != vertices.end()) {
-        return vertexIter->second;
+    AssetVersionStateTree::vertex_descriptor AddSelfAndConnectedAssets(const SharedString & ref) {
+      auto myVertexIter = vertices.find(ref);
+      if (myVertexIter == vertices.end()) {
+        // I'm not in the graph yet, so make a new vertex and add my connections
+        AssetVersion version(ref);
+        auto myVertex = add_vertex({ref, version->state, index}, tree);
+        ++index;
+        vertices[version->GetRef()] = myVertex;
+        for (const auto & child : version->children) {
+          auto childVertex = AddSelfAndConnectedAssets(child);
+          add_edge(myVertex, childVertex, {CHILD}, tree);
+        }
+        for (const auto & input : version->inputs) {
+          auto inputVertex = AddSelfAndConnectedAssets(input);
+          add_edge(myVertex, inputVertex, {INPUT}, tree);
+        }
+        for (const auto & parent : version->parents) {
+          auto parentVertex = AddSelfAndConnectedAssets(parent);
+          add_edge(parentVertex, myVertex, {CHILD}, tree);
+        }
+        for (const auto & listener : version->listeners) {
+          auto listenerVertex = AddSelfAndConnectedAssets(listener);
+          add_edge(listenerVertex, myVertex, {INPUT}, tree);
+        }
+        return myVertex;
       }
       else {
-        AssetTree::vertex_descriptor vertex = add_vertex({version->GetRef(), version->state, index}, tree);
-        ++index;
-        vertices[version->GetRef()] = vertex;
-        return vertex;
-      }
-    }
-    void AddSelfAndDescendants(AssetVersion version) {
-      AssetTree::vertex_descriptor vertex = GetVertex(version);
-      for (const auto & child : version->children) {
-        AssetTree::vertex_descriptor childVertex = GetVertex(child);
-        add_edge(vertex, childVertex, {CHILD}, tree);
-        AddSelfAndDescendants(child);
-      }
-      for (const auto & input : version->inputs) {
-        AssetTree::vertex_descriptor inputVertex = GetVertex(input);
-        add_edge(vertex, inputVertex, {INPUT}, tree);
+        // I'm already in the graph, so someone else is adding my connections.
+        // Just return my vertex descriptor.
+        return myVertexIter->second;
       }
     }
   public:
     GetAssetTree(const SharedString & version) : version(version), index(0) {
-      AddSelfAndDescendants(version);
+      AddSelfAndConnectedAssets(version);
     }
-    operator AssetTree() { return tree; }
+    operator AssetVersionStateTree() { return tree; }
 };
 
 class UpdateStateVisitor : public default_dfs_visitor {
@@ -158,7 +176,9 @@ class UpdateStateVisitor : public default_dfs_visitor {
           } else {
             stateByInputs = AssetDefs::Waiting;
           }
-          blockersAreOffline = numblocking == numoffline;
+
+          blockersAreOffline = (numblocking == numoffline);
+
           if (stateByInputs == AssetDefs::Waiting) {
             numWaitingFor = (numinputs - numgood);
           } else {
@@ -203,8 +223,8 @@ class UpdateStateVisitor : public default_dfs_visitor {
     };
 
     void CalcStateByInputsAndChildren(
-        AssetTree::vertex_descriptor vertex,
-        const AssetTree & tree,
+        AssetVersionStateTree::vertex_descriptor vertex,
+        const AssetVersionStateTree & tree,
         AssetDefs::State &stateByInputs,
         AssetDefs::State &stateByChildren,
         bool & blockersAreOffline,
@@ -217,7 +237,7 @@ class UpdateStateVisitor : public default_dfs_visitor {
       auto edgeEnd = edgeIters.second;
       for (auto i = edgeBegin; i != edgeEnd; ++i) {
         DependencyType type = tree[*i].type;
-        AssetTree::vertex_descriptor dep = i->m_target;
+        AssetVersionStateTree::vertex_descriptor dep = i->m_target;
         AssetDefs::State depState = tree[dep].state;
         switch(type) {
           case INPUT:
@@ -235,7 +255,7 @@ class UpdateStateVisitor : public default_dfs_visitor {
   public:
     // Update the state of an asset after we've updated the state of its
     // inputs and children.
-    virtual void finish_vertex(AssetTree::vertex_descriptor vertex, const AssetTree & tree) const {
+    virtual void finish_vertex(AssetVersionStateTree::vertex_descriptor vertex, const AssetVersionStateTree & tree) const {
       MutableAssetVersionD version(tree[vertex].name);
       if (!version->NeedComputeState()) return;
       AssetDefs::State stateByInputs;
@@ -245,12 +265,13 @@ class UpdateStateVisitor : public default_dfs_visitor {
       CalcStateByInputsAndChildren(vertex, tree, stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
       AssetDefs::State newState;
       newState = version->CalcStateByInputsAndChildren(stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
+      // Set the state and send notifications but don't propagate the change
+      // (we will take care of propagation during the graph traversal).
+      version->SetMyStateOnly(newState);
       // Update the state in the tree because other assets may need it to compute
-      // their own states.
-      const_cast<AssetTree&>(tree)[vertex].state = newState;
-      // false -> don't propagate state. We've already taken care of that with
-      // the asset tree.
-      version->SetState(newState, nullptr, false);
+      // their own states. Use the state from the version because setting the
+      // state can sometimes trigger additional state changes.
+      const_cast<AssetVersionStateTree&>(tree)[vertex].state = version->state;
     }
 };
 
@@ -273,10 +294,9 @@ void RebuildVersion(const SharedString & ref) {
                       .arg(ToQString(ref), ToQString(version->state)));
   }
 
-  UpdateStateForSelfAndDependentChildren(ref, AssetDefs::New, AssetDefs::Canceled | AssetDefs::Failed);
-  AssetTree assets = GetAssetTree(ref);
-  UpdateStateVisitor vis;
-  depth_first_search(assets, visitor(vis));
+  UpdateStateForSelfAndDependentChildren(ref, AssetDefs::New, AssetDefs::CanRebuild);
+  AssetVersionStateTree assets = GetAssetTree(ref);
+  depth_first_search(assets, visitor(UpdateStateVisitor()));
   // Possible optimization: Many assets have significant overlap in their
   // inputs. It might save time if we could calculate the overlapping state
   // only once.

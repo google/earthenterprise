@@ -29,8 +29,8 @@
 // ****************************************************************************
 // ***  StateUpdateNotifier
 // ****************************************************************************
-std::shared_ptr<StateChangeNotifier>
-StateChangeNotifier::GetNotifier(
+std::shared_ptr<AssetVersionImplD::StateChangeNotifier>
+AssetVersionImplD::StateChangeNotifier::GetNotifier(
     std::shared_ptr<StateChangeNotifier> callerNotifier) {
   if (callerNotifier) {
     // If the caller passed in a notifier there's no need to create a new one.
@@ -39,17 +39,17 @@ StateChangeNotifier::GetNotifier(
     return callerNotifier;
   }
   else {
-    return std::make_shared<StateChangeNotifier>();
+    return std::make_shared<AssetVersionImplD::StateChangeNotifier>();
   }
 }
 
 void
-StateChangeNotifier::AddParentsToNotify(const std::vector<SharedString> & parents) {
+AssetVersionImplD::StateChangeNotifier::AddParentsToNotify(const std::vector<SharedString> & parents) {
   std::copy(parents.begin(), parents.end(), std::inserter(parentsToNotify, parentsToNotify.end()));
 }
 
 void
-StateChangeNotifier::AddListenersToNotify(const std::vector<SharedString> & listeners, AssetDefs::State inputState) {
+AssetVersionImplD::StateChangeNotifier::AddListenersToNotify(const std::vector<SharedString> & listeners, AssetDefs::State inputState) {
   for (const auto & listener : listeners) {
     // This ensures that the listener is in the list of listeners to notify
     InputStates & elem = listenersToNotify[listener];
@@ -62,7 +62,7 @@ StateChangeNotifier::AddListenersToNotify(const std::vector<SharedString> & list
   }
 }
 
-StateChangeNotifier::~StateChangeNotifier() {
+AssetVersionImplD::StateChangeNotifier::~StateChangeNotifier() {
   if (parentsToNotify.size() > 0 || listenersToNotify.size() > 0) {
     // Notify my parents and listeners. Pass them a new notifier in case my
     // parents or listeners also need to notify their parents or listeners. I
@@ -77,7 +77,7 @@ StateChangeNotifier::~StateChangeNotifier() {
 }
 
 void
-StateChangeNotifier::NotifyParents(
+AssetVersionImplD::StateChangeNotifier::NotifyParents(
     std::shared_ptr<StateChangeNotifier> notifier) {
   notify(NFY_VERBOSE, "Iterate through parents");
   int i = 1;
@@ -100,7 +100,7 @@ StateChangeNotifier::NotifyParents(
 }
 
 void
-StateChangeNotifier::NotifyListeners(
+AssetVersionImplD::StateChangeNotifier::NotifyListeners(
     std::shared_ptr<StateChangeNotifier> notifier) {
   notify(NFY_VERBOSE, "Iterate through listeners");
   int i = 1;
@@ -267,10 +267,27 @@ AssetVersionImplD::StateByInputs(bool *blockersAreOffline,
   return statebyinputs;
 }
 
+template <bool propagate>
 void AssetVersionImplD::SetState(
     AssetDefs::State newstate,
-    const std::shared_ptr<StateChangeNotifier> notifier,
-    bool propagate)
+    const std::shared_ptr<StateChangeNotifier> notifier)
+{
+  if (newstate != state) {
+    SetMyStateOnly(newstate, propagate);
+
+    // only propagate changes if the state is still what we
+    // set it to above. OnStateChange can call SetState recursively. We
+    // don't want to propagate an old state.
+    if (propagate && (state == newstate)) {
+      PropagateStateChange(notifier);
+    }
+  }
+}
+
+// This is a duplicate of the function above without the call to PropagateStateChange.
+// This version is used with the new, graph-based version of state updates.
+// Ultimately it should replace the one above.
+void AssetVersionImplD::SetMyStateOnly(AssetDefs::State newstate, bool sendNotifications)
 {
   if (newstate != state) {
     notify(NFY_DEBUG, "SetState: current state: %s | newstate: %s | asset: %s",
@@ -292,13 +309,12 @@ void AssetVersionImplD::SetState(
 
     // only notify and propagate changes if the state is still what we
     // set it to above. OnStateChange can call SetState recursively. We
-    // don't want to notify/propagate an old state.
-    if (propagate && (state == newstate)) {
+    // don't want to notify an old state.
+    if (sendNotifications && (state == newstate)) {
       notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
              GetRef().toString().c_str(), 
              ToString(newstate).c_str());
       theAssetManager.NotifyVersionStateChange(GetRef(), newstate);
-      PropagateStateChange(notifier);
     }
   }
 }
@@ -959,48 +975,6 @@ LeafAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
 
 
 void
-LeafAssetVersionImplD::Rebuild(const std::shared_ptr<StateChangeNotifier> callerNotifier)
-{
-  if (!CanRebuild()) {
-    throw khException
-      (kh::tr("Resume only allowed for versions that are %1 or %2.")
-       .arg(ToQString(AssetDefs::Failed))
-       .arg(ToQString(AssetDefs::Canceled)));
-  }
-
-#if 0
-  // Rebuilding an already succeeded asset is quite dangerous!
-  // Those who depend on me may have already finished their work with me.
-  // If I rebuild, they have the right to recognize that nothing has
-  // changed (based on my version # and their config) and just reuse their
-  // previous results. Those previous results may reference my outputs.
-  // But if my inputs reference disk files that could change (sources
-  // overwritten with new versions), I may change some of my outputs,
-  // thereby invalidating the cached work from later stages.
-  //
-  // For this reason, requests to rebuild 'Succeeded' versions will fail.
-  // Assets marked 'Bad' were once succeeded, so they too are disallowed.
-  // The same logic could hold true for 'Offline' as well.
-  if (state & (AssetDefs::Succeeded | AssetDefs::Offline | AssetDefs::Bad)) {
-    throw khException(kh::tr("%1 marked as %2. Refusing to resume.")
-                      .arg(ToQString(GetRef()), ToQString(state)));
-  }
-#endif
-
-  std::shared_ptr<StateChangeNotifier> notifier = StateChangeNotifier::GetNotifier(callerNotifier);
-
-  // SetState to New. The OnStateChange handler will take care
-  // of stopping any running tasks, etc
-  // false -> don't propagate the new state (we're going to change
-  // it right away by calling SyncState)
-  SetState(AssetDefs::New, notifier, false);
-
-  // Now get my state back to where it should be
-  SyncState(notifier);
-}
-
-
-void
 LeafAssetVersionImplD::Cancel(const std::shared_ptr<StateChangeNotifier> callerNotifier)
 {
   if (!CanCancel()) {
@@ -1266,48 +1240,6 @@ CompositeAssetVersionImplD::AddChildren
     // add the child to our list
     children.push_back(child->GetRef());
   }
-}
-
-void
-CompositeAssetVersionImplD::Rebuild(const std::shared_ptr<StateChangeNotifier> callerNotifier)
-{
-  // Rebuilding an already succeeded asset is quite dangerous!
-  // Those who depend on me may have already finished their work with me.
-  // If I rebuild, they have the right to recognize that nothing has
-  // changed (based on my version # and their config) and just reuse their
-  // previous results. Those previous results may reference my outputs.
-  // But if my inputs reference disk files that could change (sources
-  // overwritten with new versions), I may change some of my outputs,
-  // thereby invalidating the cached work from later stages.
-  //
-  // For this reason, requests to rebuild 'Succeeded' versions will fail.
-  // Assets marked 'Bad' were once succeeded, so they too are disallowed.
-  // The same logic could hold true for 'Offline' as well.
-  if (state & (AssetDefs::Succeeded | AssetDefs::Offline | AssetDefs::Bad)) {
-    throw khException(kh::tr("%1 marked as %2. Refusing to resume.")
-                      .arg(ToQString(GetRef()), ToQString(state)));
-  }
-
-  std::shared_ptr<StateChangeNotifier> notifier = StateChangeNotifier::GetNotifier(callerNotifier);
-
-  std::vector<SharedString> dependents;
-  DependentChildren(dependents);
-  if (dependents.size()) {
-    for (const auto &i : dependents) {
-      MutableAssetVersionD child(i);
-      // only rebuild the child if it is necessary
-      if (child) {
-        if (child->state & (AssetDefs::Canceled | AssetDefs::Failed)) {
-          child->Rebuild(notifier);
-        }
-      } else {
-        notify(NFY_WARN, "'%s' has broken child to resume '%s'",
-               GetRef().toString().c_str(), i.toString().c_str());
-      }
-    }
-  }
-  state = AssetDefs::New; // low-level to avoid callbacks
-  SyncState(notifier);
 }
 
 

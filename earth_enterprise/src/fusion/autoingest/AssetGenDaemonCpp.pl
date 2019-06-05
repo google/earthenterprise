@@ -82,6 +82,7 @@ print $fh <<EOF;
 #include <khGuard.h>
 #include <khxml/khdom.h>
 #include <AssetThrowPolicy.h>
+#include "AssetOperation.h"
 using namespace khxml;
 EOF
 
@@ -705,7 +706,7 @@ print $fh <<EOF;
                                                *inputvers);
     if (curr_ver->state == AssetDefs::Canceled) {
       needed = true;
-      curr_ver->Rebuild();
+      RebuildVersion(curr_ver->GetRef());
     }
 
     return CurrVersionRef();
@@ -764,7 +765,7 @@ print $fh <<EOF;
     Mutable${name}AssetVersionD curr_ver(CurrVersionRef());
     if (curr_ver->state == AssetDefs::Canceled) {
       needed = true;
-      curr_ver->Rebuild();
+      RebuildVersion(curr_ver->GetRef());
     }
 
     return CurrVersionRef();
