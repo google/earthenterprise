@@ -50,6 +50,11 @@ class FFIORasterReaderCache
       reader->Close();
     }
 
+    // function for determining memory used by objects added to the cache
+    uint64 GetSize() {
+      return sizeof(reader);
+    }
+
     inline void
     ReadTile(const khTileAddr &addr, TileType &dest) const {
       if (!reader->FindReadTile(addr, dest)) {

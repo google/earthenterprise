@@ -43,6 +43,10 @@ class ProductLevelReaderCache
     const khRasterProductLevel *prodLevel;
 
    public:
+    // function for determining memory used by objects added to the cache
+    uint64 GetSize() {
+      return sizeof(prodLevel);
+    }
     inline CachedReaderImpl(const khRasterProductLevel *plev) :
         prodLevel(plev) {
       if (!prodLevel->OpenReader()) {
