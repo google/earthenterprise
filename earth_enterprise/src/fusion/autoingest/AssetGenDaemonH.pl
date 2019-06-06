@@ -70,7 +70,7 @@ my $calc="";
 if (index($thiscommand, "PacketGen") != -1)
 {
     $calc = $template . "    void CalculateOverlap($singleFormalExtraUpdateArg"
-          . ", const uint& level);\n";
+          . ", std::vector<uint>& neededIndexes, const uint& level);\n";
 }
 
     $extra{"${name}AssetVersionImplD"} =
