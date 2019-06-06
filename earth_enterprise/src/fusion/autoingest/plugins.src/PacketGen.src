@@ -104,9 +104,6 @@ void PacketGenAssetVersionImplD::CalculateOverlap(
         }
     }
 
-    //static bool singleCalculate = false;
-    //if (singleCalculate) return;
-
     const khLevelCoverage levCov(config.coverage.levelCoverage(level));
 
     if (type == AssetDefs::Imagery)
@@ -128,8 +125,6 @@ void PacketGenAssetVersionImplD::CalculateOverlap(
                                 config.endMinifyLevel);
     }
 
-    //if (!singleCalculate && MiscConfig::Instance().CalculateOverlapOnce)
-    //    singleCalculate = true;
 }
 
 template <typename ProductAssetVersion>
@@ -172,19 +167,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
     const khLevelCoverage levCov(config.coverage.levelCoverage(level));
     std::vector<uint> neededIndexes;
     neededIndexes.reserve(numInsets);
-    /*if (type == AssetDefs::Imagery) {
-      FindNeededImageryInsets(khInsetCoverage(levCov),
-                              extra.insetInfo, numInsets,
-                              neededIndexes,
-                              config.beginMinifyLevel,
-                              config.endMinifyLevel);
-    } else {
-      FindNeededTerrainInsets(khInsetCoverage(levCov),
-                              extra.insetInfo, numInsets,
-                              neededIndexes,
-                              config.beginMinifyLevel,
-                              config.endMinifyLevel);
-    }*/
+
     if (!MiscConfig::Instance().CalculateOverlapOnce)
         CalculateOverlap(extra, neededIndexes, level);
 
