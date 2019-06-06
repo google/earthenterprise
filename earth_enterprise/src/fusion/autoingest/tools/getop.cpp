@@ -26,6 +26,8 @@
 // global for convenience
 int numcols = 80;
 
+static const std::string SYS_MGR_BUSY_MSG = "GetCurrTasks: " + sysManBusyMsg;
+
 void
 outline(const char *format, ...)
 {
@@ -94,11 +96,11 @@ main(int argc, char *argv[])
     if (timeout < 0)
       usage(progname, "--timeout must not be less than zero");
 
-
     std::string master    = AssetDefs::MasterHostName();
     std::string assetroot = AssetDefs::AssetRoot();
     CmdLine clearscreen;
     clearscreen << "clear";
+    outline("Connecting to gesystemmanager to retrieve status...");
 
     while (1) {
       QString error;
@@ -107,6 +109,8 @@ main(int argc, char *argv[])
                                              error, timeout)) {
       	if (error.compare("GetCurrTasks: socket recvall: Resource temporarily unavailable") == 0)
           outline("No data received from gesystemmanager\nStarting new request");
+        else if (error.compare(SYS_MGR_BUSY_MSG) == 0)
+          outline("System Manager is busy.  Retrying in %d seconds", delay);
         else
           notify(NFY_FATAL, "%s", error.latin1());
       } else {
@@ -189,7 +193,7 @@ main(int argc, char *argv[])
         for (std::vector<TaskLists::WaitingTask>::const_iterator w =
                taskLists.waitingTasks.begin();
              w != taskLists.waitingTasks.end(); ++w) {
-          if (numlines > 5) {
+          if (numlines > 6) {
             outline("  %s", w->verref.c_str());
             --numlines;
             if (!w->activationError.isEmpty()) {
@@ -205,7 +209,7 @@ main(int argc, char *argv[])
 
         outline("");
         outline("Fusion processes on this host:");
-        numlines -= 5;
+        numlines -= 6;
 
         for (uint i = 0; i < pslist.size(); ++i) {
           if (numlines > 2) {
@@ -221,6 +225,7 @@ main(int argc, char *argv[])
         outline("Number of cached assets: %u", taskLists.num_assets_cached);
         outline("Number of cached asset versions: %u",
                 taskLists.num_assetversions_cached);
+        outline("Number of strings cached: %u", taskLists.str_store_size);
 
       }
       sleep(delay);

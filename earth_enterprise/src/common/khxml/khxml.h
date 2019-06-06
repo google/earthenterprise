@@ -18,8 +18,18 @@
 #ifndef __KHXML_H
 #define __KHXML_H
 
-#include <string>
+#include <xercesc/dom/DOM.hpp>
+#include <xercesc/framework/LocalFileFormatTarget.hpp>
+#include <xercesc/framework/MemBufFormatTarget.hpp>
+#include <xercesc/framework/MemBufInputSource.hpp>
+#include <xercesc/framework/Wrapper4InputSource.hpp>
+#include <xercesc/util/PlatformUtils.hpp>
 #include <xercesc/util/XMLString.hpp>
+#include <khThread.h>
+#include <array>
+#include <istream>
+#include <memory>
+#include <string>
 #include <qstring.h>
 
 namespace khxml = xercesc;
@@ -95,5 +105,89 @@ XMLStr2QString(const XMLCh *xmlch)
   return QString::fromUcs2(xmlch);
 }
 
+// ----------------------------------------------------------------------
+// The GEXMLObject classes and its sub-classes wrap calls to the Xerces
+// library and ensure that the library is initialized before XML
+// functions are called and terminated when we're done working with XML.
+// There are currently two exceptions to this wrapping, both of which
+// are safe.
+// 1) The GEDocument class returns DOMElements from some of its
+//    functions that are used directly by other code. DOMElements are
+//    only valid while their document is valid, so we don't have to
+//    worry about calling terminate because we're done with the document
+//    while we're still using one of its elements.
+// 2) This code and the external code that uses DOMElements can throw
+//    XMLExceptions or DOMExceptions that are handled by other code. In
+//    all relevant cases, the GEXMLObject remains valid while the
+//    exception is handled.
+// We could fix the above exceptions to the Xerces wrappers but it would
+// take significant effort. Thus, we have settled on this 80/20 solution
+// that provides the majority of the benefit for a relatively small
+// amount of work.
+// ----------------------------------------------------------------------
+class GEXMLObject {
+  private:
+    const static std::string INIT_HEAP_SIZE;
+    const static std::string MAX_HEAP_SIZE;
+    const static std::string BLOCK_SIZE;
+    const static std::string PURGE;
+    const static std::string PURGE_LEVEL;
+    const static std::string XMLConfigFile;
+    const static std::array<std::string,5> options;
+    static khMutex mutex;
+
+    static XMLSize_t initialDOMHeapAllocSize;
+    static XMLSize_t maxDOMHeapAllocSize;
+    static XMLSize_t maxDOMSubAllocationSize;
+    static bool doPurge;
+    static int purgeLevel;
+    static XMLSize_t purgeThreshold;
+    static bool xercesInitialized;
+
+    static uint32_t activeObjects;
+
+    static void initializeXMLParameters();
+    static void validateXMLParameters();
+    static void setDefaultValues();
+  protected:
+    GEXMLObject();
+    ~GEXMLObject();
+  public:
+    // Allow users to specify the initialization file
+    static void initializeXMLParametersFromStream(std::istream &);
+};
+
+class GEDocument : private GEXMLObject {
+  protected:
+    khxml::DOMDocument * doc = nullptr;
+    // Don't instantiate this class directly. Instead, use one of its sub-classes.
+    GEDocument() = default;
+  public:
+    bool valid() const;
+    khxml::DOMElement * getDocumentElement();
+    bool writeToFile(const std::string &);
+    bool writeToString(std::string &);
+};
+
+class GECreatedDocument : public GEDocument {
+  public:
+    GECreatedDocument(const std::string &);
+    ~GECreatedDocument();
+};
+
+class GEParsedDocument : public GEDocument {
+  private:
+    class FatalErrorHandler : public khxml::DOMErrorHandler {
+     public:
+      virtual bool handleError(const khxml::DOMError &err);
+    };
+    FatalErrorHandler fatalErrorHandler;
+    khxml::DOMLSParser * parser = nullptr;
+    void CreateParser();
+  public:
+    GEParsedDocument(const std::string &);
+    GEParsedDocument(const std::string &, const std::string &);
+    ~GEParsedDocument();
+};
 
 #endif /* __KHXML_H */

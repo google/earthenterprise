@@ -137,7 +137,8 @@ int main(int argc, char *argv[]) {
              attribution = config.attributions.begin();
            attribution != config.attributions.end(); ++attribution) {
         attributions.AddInset(attribution->dataRP,
-                              attribution->fuid_resource_);
+                              attribution->fuid_resource_,
+                              kUnknownDateTimeUTC);
       }
     }
 

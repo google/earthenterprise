@@ -649,6 +649,10 @@ void RasterAssetWidget::AssembleEditRequest(
   } else {
     request->config.provider_id_ = 0;
   }
+
+  if (!acquisition_date_wrapper_->IsValidDate()) {
+    throw khException(tr("Invalid date."));
+  }
   request->meta.SetValue("sourcedate", acquisition_date_wrapper_->GetDate());
 
   request->sources.clear();

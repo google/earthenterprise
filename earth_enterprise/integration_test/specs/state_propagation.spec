@@ -287,8 +287,6 @@ Rebuild Project
 
 ## Resources Belonging to Multiple Projects
 Tags: multiproject, build, cancel, clean, rebuild
-This is the longest test (in terms of time) because it includes buliding a
-terrain resource.
 
 Set up
 * Create imagery project "StatePropagationTest_MultiProject1"
@@ -504,21 +502,25 @@ Set up
 
 Build database
 * Build database "Database_Mercator"
-* Verify that the state of database "Database_Mercator" is "Waiting"
+* Verify that the state of mercator database "Database_Mercator" is "Waiting"
 * Verify that the state of map project "StatePropagationTest_Mercator" is "Waiting"
-* Verify that the state of map layer "StatePropagationTest_Mercator" is "InProgress"
+* Verify that the state of map layer "StatePropagationTest_Mercator" is in
+  | State      |
+  |------------|
+  | InProgress |
+  | Queued     |
 * Verify that the state of vector resource "CA_POIs_Merc" is "Succeeded"
-* Verify that the state of imagery project "StatePropagationTest_Mercator" is "Waiting"
-* Verify that the state of imagery resource "BlueMarble_Mercator" is "InProgress"
+* Verify that the state of mercator imagery project "StatePropagationTest_Mercator" is "Waiting"
+* Verify that the state of mercator imagery resource "BlueMarble_Mercator" is "InProgress"
 
 Wait for success
-* Wait for database "Database_Mercator" to reach state "Succeeded"
-* Verify that the state of database "Database_Mercator" is "Succeeded"
+* Wait for mercator database "Database_Mercator" to reach state "Succeeded"
+* Verify that the state of mercator database "Database_Mercator" is "Succeeded"
 * Verify that the state of map project "StatePropagationTest_Mercator" is "Succeeded"
 * Verify that the state of map layer "StatePropagationTest_Mercator" is "Succeeded"
 * Verify that the state of vector resource "CA_POIs_Merc" is "Succeeded"
-* Verify that the state of imagery project "StatePropagationTest_Mercator" is "Succeeded"
-* Verify that the state of imagery resource "BlueMarble_Mercator" is "Succeeded"
+* Verify that the state of mercator imagery project "StatePropagationTest_Mercator" is "Succeeded"
+* Verify that the state of mercator imagery resource "BlueMarble_Mercator" is "Succeeded"
 
 ## Database, Terrain, and Vector Tests
 Tags: terrain, vector, build

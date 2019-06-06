@@ -23,6 +23,8 @@
 #include <khException.h>
 #include <khFileUtils.h>
 #include "common/khCppStd.h"
+#include "common/khRefCounter.h"
+#include "common/SharedString.h"
 
 
 /******************************************************************************
@@ -42,29 +44,24 @@ class DerivedAssetHandleD_ : public virtual BaseD_, public ROBase_
   typedef typename BaseD::Base BBase; // virtual base 'Asset' or 'Version'
   typedef typename ROBase::Base BROBase; // this is assumed to be the same type as BBase
   typedef typename BBase::HandleType HandleType;
- protected:
-  // must overide both of these to verify that things match
-  // my 'Impl' type
-  virtual HandleType CacheFind(const std::string &boundref) const {
-    HandleType entry;
-    if (this->cache().Find(boundref, entry)) {
-      // we have to check if it maps to Impl* since somebody
-      // else may have put it in the cache
-      if (!dynamic_cast<Impl*>(&*entry)) {
-        entry = HandleType();
-      }
-    }
-    return entry;
-  }
+ public:
   virtual HandleType Load(const std::string &boundref) const {
     // Impl::Load will succeed or throw.
     // The derived khRefGuard will be automatically converted
     // the the base khRefGuard
     return HandleType(Impl::Load(boundref));
   }
- public:
+  virtual bool Valid(const HandleType & entry) const {
+    // we have to check if it maps to Impl* since somebody
+    // else may have loaded it into the storage manager
+    return dynamic_cast<Impl*>(&*entry);
+  }
+  virtual std::string Filename() const {
+    return BaseD::Filename();
+  }
+
   DerivedAssetHandleD_(void) : BBase(), BaseD(), ROBase() { }
-  DerivedAssetHandleD_(const std::string &ref_) :
+  DerivedAssetHandleD_(const SharedString &ref_) :
       // Only call the common (virtually inherited) base class with the initializtion state.
       // It's the only one that has state anyway.  Also, explicitly calling the virtual base
       // class puts a build time check to ensure BBase is a virtural base class of this class.
@@ -141,157 +138,23 @@ class MutableAssetHandleD_ : public virtual Base_ {
   typedef typename Base::Base BBase;
   typedef typename Base::Impl Impl;
 
-  typedef std::map<std::string, Base> DirtyMap;
-  static DirtyMap dirtyMap;
-
   // Test whether an asset is a project asset version.
   static inline bool IsProjectAssetVersion(const std::string& assetName) {
     return assetName.find(kProjectAssetVersionNumPrefix) != std::string::npos;
   }
 
-  // Purge the cache if needed and keep recent "toKeep" items.
-  static void PurgeCacheIfNeeded(size_t toKeep) {
-    // Proceed only when the cache gets full.
-    if (Base::cache().size() < (Base::cache().capacity()) ||
-      // Don't proceed if there are no more than 1 mutable items to purge,
-      // since immutable items will be purged automatically by LRU cache.
-      dirtyMap.size() <= 1) {
-      return;
-    }
-    try {
-      // When there are more items to keep than cache's capacity,
-      // nothing can be purged and cache's capacity needs to be increased
-      // for better performance.
-      if (Base::cache().capacity() < toKeep) {
-        static bool warned = false;
-        if (!warned) {
-          notify(NFY_FATAL, "You may need to increase cache capacity for "
-            "better performance: cache size %lu, cache capacity %lu, number "
-            "of items requested to keep %lu", Base::cache().size(),
-            Base::cache().capacity(), toKeep);
-          warned = true;
-        }
-        return;
-      }
-
-      // Get old cache items that could be purged.
-      std::vector<std::string> toDelete;
-      Base::cache().GetOldKeys(toKeep, &toDelete);
-
-      // Skip project asset versions, which should always stay in the cache.
-      toDelete.erase(
-          std::remove_if(toDelete.begin(), toDelete.end(),
-              MutableAssetHandleD_::IsProjectAssetVersion),
-          toDelete.end());
-
-      // Save mutable items.
-      khFilesTransaction filetrans(".new");
-      uint32 numDotNew=0;
-      for (std::vector<std::string>::iterator it = toDelete.begin();
-           it != toDelete.end(); ++it) {
-        if (dirtyMap.find(*it) != dirtyMap.end()) {
-          std::string filename = dirtyMap[*it]->XMLFilename();
-          notify(NFY_VERBOSE,"AssetHandleD.h:193: filename = %s",
-                 filename.c_str());
-
-          if (filename.rfind(".new") != std::string::npos) 
-          {
-              notify(NFY_VERBOSE,"PurgeCacheIfNeeded(), filename contains .new:  %s", filename.c_str());
-              ++numDotNew;
-          }
-          filename += ".new";
-          if (dirtyMap[*it]->Save(filename)) {
-            filetrans.AddNewPath(filename);
-          }
-        }
-      }
-      notify(NFY_VERBOSE, "PurgeCacheIfNeeded() number of files containing .new: %u", numDotNew);
-      if (!filetrans.Commit())
-      {
-        throw khException("Unable to commit file saving in cache purge.");
-      }
-
-      // Discard saved mutable items from dirtyMap.
-      size_t dirties = dirtyMap.size();
-      for (std::vector<std::string>::iterator it = toDelete.begin();
-           it != toDelete.end(); ++it) {
-        if (dirtyMap.find(*it) != dirtyMap.end()) {
-          dirtyMap.erase(*it);
-        }
-      }
-
-      // Remove both immutable and mutable items from cache.
-      size_t cached = Base::cache().size();
-      for (std::vector<std::string>::iterator it = toDelete.begin();
-           it != toDelete.end(); ++it) {
-        Base::cache().Remove(*it, false);  // Do not prune for now.
-      }
-
-      // Prune the cache in the end.
-      Base::cache().Prune();
-
-      notify(NFY_INFO, "cache size %lu, dirty map %lu, "
-        "assets to keep %lu, mutable assets purged %lu, total purged %lu",
-        Base::cache().size(), dirtyMap.size(), toKeep,
-        dirties - dirtyMap.size(), cached - Base::cache().size());
-    }
-    catch (const std::runtime_error& e) {
-      notify(NFY_INFO, "Exception in cache purge: %s", e.what());
-    }
-  }
-
  protected:
-  virtual void OnBind(const std::string &boundref) const {
-    Base::OnBind(boundref);
-    // if already exists, old one will win, that's OK
-    dirtyMap.insert(std::make_pair(boundref, *this));
-  }
+  virtual bool isMutable() const { return true; }
 
   // must not throw since it's called during stack unwinding
   static void AbortDirty(void) throw()
   {
-    // remove all the dirty Impls from the cache
-    for (typename DirtyMap::const_iterator d = dirtyMap.begin();
-         d != dirtyMap.end(); ++d) {
-      Base::cache().Remove(d->first, false); // false -> don't prune
-    }
-    Base::cache().Prune(); // prune at the end to avoid possible prune thrashing
-
-    // now clear the dirtyMap itself
-    dirtyMap.clear();
+    Base::storageManager().Abort();
   }
-
-  static void PrintDirty(const std::string &header) {
-    if (dirtyMap.size()) {
-      fprintf(stderr, "========== %d dirty %s ==========\n",
-              dirtyMap.size(), header.c_str());
-      for (typename DirtyMap::const_iterator d = dirtyMap.begin();
-           d != dirtyMap.end(); ++d) {
-        fprintf(stderr, "%s -> %p\n",
-                d->first.c_str(), d->second.operator->());
-      }
-    }
-  }
-
 
   static bool SaveDirtyToDotNew(khFilesTransaction &savetrans,
                                 std::vector<std::string> *saveDirty) {
-    for (typename DirtyMap::const_iterator d = dirtyMap.begin();
-         d != dirtyMap.end(); ++d) {
-      // TODO: - check to see if actually dirty
-      if ( 1 ) {
-        std::string filename = d->second->XMLFilename() + ".new";
-        if (d->second->Save(filename)) {
-          savetrans.AddNewPath(filename);
-          if (saveDirty) {
-            saveDirty->push_back(d->first);
-          }
-        } else {
-          return false;
-        }
-      }
-    }
-    return true;
+    return Base::storageManager().SaveDirtyToDotNew(savetrans, saveDirty);
   }
 
 
@@ -303,6 +166,8 @@ class MutableAssetHandleD_ : public virtual Base_ {
       // Only call the common (virtually inherited) base class with the initializtion state.
       // It's the only one that has state anyway.  Also, explicitly calling the virtual base
       // class puts an explicit check to ensure BBase a virtural base class of this class.
+      BBase(ref_), Base() { }
+  MutableAssetHandleD_(const SharedString &ref_) :
       BBase(ref_), Base() { }
 
   // you should be able to create a mutable handle from the non-mutable
@@ -373,19 +238,18 @@ class MutableDerivedAssetHandleD_ : public DerivedBase_, public MutableBase_
   typedef typename DerivedBase::BaseD BaseD;  // vbase 'AssetD' or 'VersionD'
   typedef typename BBase::HandleType HandleType;
   typedef typename MutableBase::BBase MBBase; // this is assumed to be the same type as BBase
-protected:
+ protected:
+  using MutableBase::isMutable;
+
+ public:
   // must overide these to resolve ambiguities
-  virtual HandleType CacheFind(const std::string &boundref) const {
-    return DerivedBase::CacheFind(boundref);
+  virtual bool Valid(const HandleType & entry) const {
+    return DerivedBase::Valid(entry);
   }
   virtual HandleType Load(const std::string &boundref) const {
     return DerivedBase::Load(boundref);
   }
-  virtual void OnBind(const std::string &boundref) const {
-    return MutableBase::OnBind(boundref);
-  }
 
- public:
   //    Only this leaf-most daemon handle can be constructed from
   // the raw Impl. Rather than give all the base classes constructors
   // that could be mistakenly used, this one will just do all the work
@@ -403,19 +267,15 @@ protected:
       // call BindRef()
       this->ref = this->handle->GetRef();
 
-      // add it to the cache
-      this->cache().Add(this->ref, this->handle);
-
-      // add it to the dirty list - since it just sprang into existence
-      // we need to make sure it gets saved
-      MutableBase::dirtyMap.insert(std::make_pair(this->ref, *this));
+      // Tell the storage manager about it
+      this->storageManager().AddNew(this->ref, this->handle);
     }
   }
  
  public:
   MutableDerivedAssetHandleD_(void) :
       BBase(), BaseD(), DerivedBase(), MutableBase() { }
-  MutableDerivedAssetHandleD_(const std::string &ref_) :
+  MutableDerivedAssetHandleD_(const SharedString &ref_) :
       // Only call the common (virtually inherited) base class with the initializtion state.
       // It's the only one that has state anyway.  Also, explicitly calling the virtual base
       // class puts a build time check to ensure BBase is a virtural base class of this class.
@@ -441,7 +301,7 @@ protected:
     // here we just call the one virtually inherited base class that has state.
     // If we didn't do this the move operation would be done twice which is something
     // we don't want as we would end up loosing our state...
-    MBBase::operator =(std::move(rhs));
+    BBase::operator =(std::move(rhs));
   
     return *this;
   }

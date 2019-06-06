@@ -48,6 +48,8 @@ class khMutexBase {
   void Unlock(void);
   bool trylock(void) { return TryLock(); }
   bool TryLock(void);
+  bool timedTryLock(uint secToWait) { return TimedTryLock(secToWait); }
+  bool TimedTryLock(uint secToWait);
 };
 #define KH_MUTEX_BASE_INITIALIZER {PTHREAD_MUTEX_INITIALIZER}
 #define kH_MUTEX_BASE_RECURSIVE {PTHREAD_MUTEX_RECURSIVE}
@@ -74,12 +76,25 @@ class khNoDestroyMutex : public khMutexBase {
   ~khNoDestroyMutex(void) {}
 };
 
+class khTimedMutexException : public std::runtime_error
+{
+ public:
+  khTimedMutexException(const std::string &msg) :
+    std::runtime_error(msg) { }
+  virtual ~khTimedMutexException(void) throw() { }
+};
 
 class khLockGuard {
   khMutexBase &mutex;
  public:
   khLockGuard(khMutexBase &mutex_) : mutex(mutex_) {
     mutex.Lock();
+  }
+  khLockGuard(khMutexBase &mutex_, uint waitTime) : mutex(mutex_) {
+    if (!mutex.TimedTryLock(waitTime)) {
+      std::string errMsg = "Failed to acquire mutex within " + std::to_string(waitTime) +  " seconds";
+      throw khTimedMutexException(errMsg);
+    }
   }
   khLockGuard() = delete;
   khLockGuard(const khLockGuard&) = delete;

@@ -19,7 +19,7 @@
 
 #include "common/khTypes.h"
 #include "common/khTileAddr.h"
-
+#include "common/SharedString.h"
 
 class PacketLevelConfig {
 #pragma DontEmitDefaults
@@ -36,18 +36,19 @@ class PacketLevelConfig {
     // Only filled/used when doing minify
     // In Asset/Versions this is a ref to another PacketLevelVersion
     // In khpacklevgen, this is the path to the cache.pack/ dir
-    std::string packetLevel = std::string();
+    SharedString packetLevel = SharedString();
 
     // Only filled/used when doing minify
     // In Asset/Versions this is a ref to another PacketLevelVersion
     // In khpacklevgen, this is the path to the cache_alpha.pack/ dir
-    std::string packetAlphaLevel = std::string();
+    SharedString packetAlphaLevel = SharedString();
 
 #pragma GenerateIsUpToDate
   };
 
   class Attribution {
     std::string dataRP;
+    std::string acquisitionDate;
     uint32      fuid_resource_;
   };
 

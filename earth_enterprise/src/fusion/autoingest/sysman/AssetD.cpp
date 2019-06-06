@@ -17,13 +17,6 @@
 #include <AssetThrowPolicy.h>
 
 // ****************************************************************************
-// ***  MutableAssetD
-// ****************************************************************************
-template <>
-MutableAssetD::DirtyMap MutableAssetD::dirtyMap = MutableAssetD::DirtyMap();
-
-
-// ****************************************************************************
 // ***  AssetImplD
 // ****************************************************************************
 
@@ -50,7 +43,7 @@ AssetImplD::AddVersionRef(const std::string &verref)
 }
 
 void
-AssetImplD::Modify(const std::vector<std::string>& inputs_,
+AssetImplD::Modify(const std::vector<SharedString>& inputs_,
                    const khMetaData &meta_) {
   inputs = inputs_;
   meta = meta_;
@@ -77,9 +70,9 @@ AssetImplD::UpdateInputs(std::vector<AssetVersion> &inputvers) const
   std::size_t inputs_count = inputs.size();
 
   inputvers.reserve(inputs_count);
-  for (std::vector<std::string>::const_iterator i = inputs.begin();
-       i != inputs.end(); ++i) {
-    AssetVersionRef verref(*i);
+  for (size_t idx = 0; idx < inputs.size(); ++idx) {
+    const auto &i = inputs[idx];
+    AssetVersionRef verref(i);
     if (verref.Version() == "current") {
       // we only need to update our input if it's an asset ref
       // or a version ref with "current"
@@ -88,7 +81,7 @@ AssetImplD::UpdateInputs(std::vector<AssetVersion> &inputvers) const
       bool needed = false;
       inputvers.push_back(asset->Update(needed));
       notify(NFY_PROGRESS, "Updating asset input %lu (of %lu input%s).",
-        i - inputs.begin(), inputs_count, inputs_count == 1 ? "" : "s");
+        idx + 1, inputs_count, inputs_count == 1 ? "" : "s");
     } else {
       inputvers.push_back(AssetVersion(verref));
     }

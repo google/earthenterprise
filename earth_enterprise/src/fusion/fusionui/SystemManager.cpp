@@ -147,14 +147,20 @@ SystemManager::updateTasks(void)
   QString error;
   TaskLists taskLists;
   if (!khAssetManagerProxy::GetCurrTasks("dummy", taskLists, error)) {
+    QString errorMsg;
+    static const QString BUSY_MSG = "GetCurrTasks: " + sysManBusyMsg;
+    if (error.compare(BUSY_MSG) == 0)
+      errorMsg = tr("--- System Manager is busy ---");
+    else
+      errorMsg = tr("--- Unable to contact System Manager ---");
+    
     // Can't get TaskList...
     // clean top panes and display message about
     // being unable to connect to asset manager
     waitingList->clear();
     activeList->clear();
-    (void) new WaitingItem(waitingList,
-                           tr("--- Unable to contact System Manager ---"));
-    activeList->insertItem(tr("--- Unable to contact System Manager ---"));
+    (void) new WaitingItem(waitingList, errorMsg);
+    activeList->insertItem(errorMsg);
 
   } else {
     // Waiting list

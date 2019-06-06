@@ -1553,7 +1553,7 @@ void ProjectManager::AddAssetLayer(const char* assetname) {
     bool isasset = (ver->type == AssetDefs::Imagery ||
                     ver->type == AssetDefs::Terrain);
     gstSource* newsource = openSource(isasset ?
-                                      ver->GetRef().c_str() :
+                                      ver->GetRef().toString().c_str() :
                                       ver->GetOutputFilename(0).c_str(),
                                       0,
                                       isasset);

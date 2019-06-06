@@ -56,7 +56,11 @@ PackgenTraverser<Config>::PackgenTraverser(
        attribution != config.attributions.end(); ++attribution) {
     if (!attribution->dataRP.empty() &&
         (attribution->fuid_resource_ != 0)) {
-      attributions.AddInset(attribution->dataRP, attribution->fuid_resource_);
+      std::string acquisitionDate = kUnknownDateTimeUTC;
+      if (!attribution->acquisitionDate.empty()) {
+        acquisitionDate = attribution->acquisitionDate;
+      }
+      attributions.AddInset(attribution->dataRP, attribution->fuid_resource_, acquisitionDate);
     }
   }
 }

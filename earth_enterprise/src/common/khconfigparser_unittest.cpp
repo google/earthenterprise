@@ -19,15 +19,6 @@
 using namespace std;
 using namespace testing;
 
-class parserSubclass : public khConfigFileParser
-{
-public:
-    inline void doParse(std::stringstream& testContents)
-    {
-        parse(testContents);
-    }
-};
-
 std::array<string, 3> options
 {{
     "OPTION1",
@@ -39,11 +30,11 @@ TEST(ConfigParserTest, no_value_present)
 {
     stringstream ss;
     ss << "OPTION1=";
-    parserSubclass testParser;
+    khConfigFileParser testParser;
     testParser.addOption("OPTION1");
     try
     {
-        testParser.doParse(ss);
+        testParser.parse(ss);
         FAIL() << "Expected ValueNotPresentException";
     }
     catch (const ValueNotPresentException& e) {}
@@ -53,19 +44,20 @@ TEST(ConfigParserTest, key_not_present)
 {
     stringstream ss;
     ss << "OPTION4=4\n";
-    parserSubclass testParser;
+    khConfigFileParser testParser;
     testParser.addOption("OPTION1");
     try
     {
-        testParser.doParse(ss);
-        FAIL() << "Expected KeyNotPresentException";
+        testParser.parse(ss);
     }
-    catch (const KeyNotPresentException& e) {}
+    catch (...) {
+        FAIL() << "Should ignore invalid options";
+    }
 }
 
 TEST(ConfigParserTest, check_data)
 {
-    parserSubclass testParser;
+    khConfigFileParser testParser;
     stringstream ss;
     testParser.addOption("OPTION1");
     testParser.addOption("OPTION2");
@@ -73,7 +65,7 @@ TEST(ConfigParserTest, check_data)
     ss << "OPTION1=1" << endl
        << "OPTION2=2" << endl
        << "OPTION3=3" << endl;
-    testParser.doParse(ss);
+    testParser.parse(ss);
     try
     {
         EXPECT_EQ("1", testParser.at("OPTION1"));
@@ -94,7 +86,7 @@ TEST(ConfigParserTest, check_data)
 
 TEST(ConfigParserTest, validate_integer_data)
 {
-    parserSubclass testParser;
+    khConfigFileParser testParser;
     stringstream ss1, ss2;
     for (const auto& a : options)
     {
@@ -104,8 +96,7 @@ TEST(ConfigParserTest, validate_integer_data)
     }
     try
     {
-        testParser.doParse(ss1);
-        testParser.validateIntegerValues();
+        testParser.parse(ss1);
         EXPECT_EQ(3, testParser.size());
     }
     catch (const khConfigFileParserException& e)
@@ -114,8 +105,7 @@ TEST(ConfigParserTest, validate_integer_data)
     }
     try
     {
-        testParser.doParse(ss2);
-        testParser.validateIntegerValues();
+        testParser.parse(ss2);
         FAIL() << "Expected ValidateIntegersException";
     }
     catch (const ValidateIntegersException& e) {}
@@ -123,7 +113,7 @@ TEST(ConfigParserTest, validate_integer_data)
 
 TEST(ConfigParserTest, ignore_comments_and_empty_lines)
 {
-    parserSubclass testParser;
+    khConfigFileParser testParser;
     stringstream ss;
     for (const auto& a : options)
         testParser.addOption(a);
@@ -134,7 +124,7 @@ TEST(ConfigParserTest, ignore_comments_and_empty_lines)
        << endl;
     try
     {
-        testParser.doParse(ss);
+        testParser.parse(ss);
         EXPECT_EQ(1, testParser.size());
     }
     catch (const khConfigFileParserException& e)
@@ -146,7 +136,7 @@ TEST(ConfigParserTest, ignore_comments_and_empty_lines)
 
 TEST(ConfigParserTest, no_file_no_options)
 {
-    parserSubclass testParser;
+    khConfigFileParser testParser;
     string fn {"absentFile.cfg"};
     try
     {

@@ -163,7 +163,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       }
     }
 
-    std::vector<std::string> levInputs;
+    std::vector<SharedString> levInputs;
     std::vector<AssetVersion> levInputVers;
     if (!packetLevelConfig.minify) {
       // ***** Normal Blend *****
@@ -180,6 +180,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       levInputVers.reserve(neededIndexes.size());
       packetLevelConfig.insets.reserve(neededIndexes.size());
       packetLevelConfig.attributions.reserve(neededIndexes.size());
+
       for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
            idx != neededIndexes.end(); ++idx) {
         const InsetInfo<ProductAssetVersion> &inset(*extra.insetInfo[*idx]);
@@ -188,11 +189,14 @@ void PacketGenAssetVersionImplD::UpdateChildren(
         packetLevelConfig.insets.push_back
           (PacketLevelConfig::Inset(inset.dataRPFile,
                                     inset.alphaRPFile,
-                                    std::string(), /* cached blend */
-                                    std::string()  /* cached blend alpha */));
+                                    SharedString(), /* cached blend */
+                                    SharedString()  /* cached blend alpha */));
+        std::string acquisitionDate = inset.resource_->GetAcquisitionDate();
+
         packetLevelConfig.attributions.push_back
           (PacketLevelConfig::Attribution(
               inset.dataRPFile,
+              acquisitionDate,
               inset.combinedrp_->config.fuid_resource_));
       }
     } else {
@@ -221,9 +225,12 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
            idx != neededIndexes.end(); ++idx) {
         const InsetInfo<ProductAssetVersion> &inset(*extra.insetInfo[*idx]);
+        std::string acquisitionDate = inset.resource_->GetAcquisitionDate();
+
         packetLevelConfig.attributions.push_back
           (PacketLevelConfig::Attribution(
               inset.dataRPFile,
+              acquisitionDate,
               inset.combinedrp_->config.fuid_resource_));
       }
 
@@ -266,8 +273,8 @@ void PacketGenAssetVersionImplD::UpdateChildren(
             (PacketLevelConfig::Inset(
                 inset.dataRPFile,
                 inset.alphaRPFile,
-                std::string(), /* cached blend */
-                std::string()  /* cached blend alpha */));
+                SharedString(), /* cached blend */
+                SharedString()  /* cached blend alpha */));
         } else if (highestResMinify) {
           // This is the first merge (from cached blends)
           // It is possible that some of the cached blends are only
@@ -292,7 +299,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
                 inset.alphaRPFile,
                 blendVer.Ref(), /* cached blend */
                 cache_alpha_exist ?
-                    blendVer.Ref() : std::string() /* cached blend alpha */));
+                    blendVer.Ref() : SharedString() /* cached blend alpha */));
         } else {
           // This is a subsequent merge (from cached merges) It's
           // possible that earlier merges also short circuited the
@@ -322,7 +329,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
                 inset.alphaRPFile,
                 blendVer.Ref(), /* cached blend */
                 cache_alpha_exist ?
-                    blendVer.Ref() : std::string()  /* cached blend alpha */));
+                    blendVer.Ref() : SharedString()  /* cached blend alpha */));
         }
       }
 
@@ -352,7 +359,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
               std::string() /* alphaRP */,
               prevLevelVer.Ref(), /* cached blend */
               cache_alpha_exist ?
-                  prevLevelVer.Ref() : std::string() /* cached blend alpha */));
+                  prevLevelVer.Ref() : SharedString() /* cached blend alpha */));
       }
 
     }

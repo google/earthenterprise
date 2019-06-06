@@ -352,6 +352,8 @@ class khFilesTransaction {
   ~khFilesTransaction(void) throw();
 
   void AddNewPath(const std::string &path);
+  size_t NumNew() const { return newlist.size(); }
+  size_t NumDeleted() const { return deletelist.size(); }
 
   // Can throw!!!
   void DeletePath(const std::string &path);

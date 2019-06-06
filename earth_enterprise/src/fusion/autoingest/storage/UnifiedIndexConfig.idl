@@ -17,13 +17,14 @@
 #include <vector>
 #include <khTypes.h>
 #include <geindex/Entries.h>
+#include "common/SharedString.h"
 
 // ****************************************************************************
 // ***  UnifiedIndex
 // ****************************************************************************
 class UnifiedIndexEntry {
   std::string type_;
-  std::string verref_;
+  SharedString verref_;
   uint32 version_;
 
   // used to add channel id to something that otherwise wouldn't have one

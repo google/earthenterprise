@@ -104,7 +104,8 @@ class RasterProjectConfig {
      is_timemachine_project_(false),
      is_overlay_terrain_project_(false),
      overlay_terrain_resources_min_level_(uint32(MaxTmeshLevel/2)),
-     overlay_terrain_start_level_(uint32(StartTmeshLevel)) {
+     overlay_terrain_start_level_(uint32(StartTmeshLevel)),
+     idl_version(0) {
   }
 
   void AfterLoad(RasterProjectConfig::DeprecatedMembers &depmembers);
@@ -187,10 +188,16 @@ class RasterProjectModifyRequest {
   std::vector<Item> items;
   bool enable_timemachine;
   bool disable_timemachine;
+  bool enable_terrain_overlay;
+  bool disable_terrain_overlay;
+  uint overlay_terrain_start_level;
+  uint overlay_terrain_resources_min_level;
 #pragma StrLoadAndSave
 #hquote
   RasterProjectModifyRequest(AssetDefs::Type t)
-  : type(t), enable_timemachine(false), disable_timemachine(false) { }
+  : type(t), enable_timemachine(false), disable_timemachine(false), 
+    enable_terrain_overlay(false), disable_terrain_overlay(false),
+    overlay_terrain_start_level(0), overlay_terrain_resources_min_level(0) { }
 #/hquote
 
 };

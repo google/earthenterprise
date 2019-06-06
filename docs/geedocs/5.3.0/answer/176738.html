@@ -256,7 +256,43 @@ The cache sizes are controlled by the file <code>misc.xml</code> which can be fo
 The asset cache size is controlled by <code>AssetCacheSize</code> and the asset version cache size is controlled by <code>VersionCacheSize</code>.
 Note that the asset version cache is generally larger than the asset cache because it may contain multiple versions of the same asset.</p>
 
-Also included within <code>misc.xml</code> is an experimental option, which allows for the user to disable cache purging while projects build. This is controlled by <code>DisablePacketLevelVersionCachePurge</code> and its default value is <code>false</code>.
+<p>Within <code>misc.xml</code>, the following options are deprecated and are treated as if they are permanently enabled: <code>DisablePacketLevelVersionCachePurge</code> and <code>ConsolidateListenerNotifications</code>.</p>
+
+<p>The Xerces library maintains a separate cache for dealing with XML files. Users can modify aspects of this cache through a configuration file at
+<code>/etc/opt/google/XMLparams</code>. This file is not created automatically as part of the Open GEE Fusion install,
+so users that want to modify the parameters below must first create an <code>XMLparams</code> file. The <code>XMLparams</code> file has the following format:</p>
+
+<code>
+# comments are preceded by '#'
+<br>
+# options are case-insensitive, and all need not be present
+<br><br>
+# the initial size of the XML heap in bytes<br>
+# default is 16384<br>
+INIT_HEAP_SIZE=&lt;value&gt;
+<br><br>
+# the max size of the XML heap in bytes<br>
+# default is 131072<br>
+MAX_HEAP_SIZE=&lt;value&gt;
+<br><br>
+# the size of XML heap allocation blocks in bytes<br>
+# default is 4096<br>
+BLOCK_SIZE=&lt;value&gt;
+<br><br>
+# whether or not to purge the XML cache; valid values are 0 or 1<br>
+# default is 1<br>
+PURGE=1
+<br><br>
+# the level at which to purge the XML cache; can be 1 (most often) to 5 (least often)<br>
+# default is 3<br>
+PURGE_LEVEL=3
+</code>
+<h2 id="status_request_timeout">Status request timeout</h2>
+<p>Status requests to the system manager from clients like <code>getop</code> must wait to be fulfilled if the system manager
+   is already engaged in another task. The system manager has a timeout that specifies the maximum amount of time it should
+   spend waiting to fulfill a status request before it times out. This timeout can be configured manually by setting
+   <code>MutexTimedWaitSec</code> in <code>/gevol/assets/.config/misc.xml</code></p>
+<code>&lt;MutexTimedWaitSec&gt;60&lt;/MutexTimedWaitSec&gt;</code>
 <h2>Learn more</h2>
 <ul>
 <li><a href="../answer/6033487.html">Benchmarking outcomes for applying task rules</a></li>

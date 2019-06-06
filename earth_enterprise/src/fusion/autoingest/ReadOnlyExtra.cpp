@@ -21,6 +21,7 @@
 #include "AssetThrowPolicy.h"
 #include "Asset.h"
 #include "AssetVersion.h"
+#include "StorageManager.h"
 #include <khVolumeManager.h>
 
 
@@ -29,11 +30,8 @@
 // ***
 // ***  see sysman/SysManExtra.cpp for the system manager definitions
 // ****************************************************************************
-template <>
-const bool AssetHandle_<AssetImpl>::check_timestamps(true);
-
-template <>
-const bool AssetHandle_<AssetVersionImpl>::check_timestamps(true);
+template<> const bool StorageManager<AssetImpl>::check_timestamps(true);
+template<> const bool StorageManager<AssetVersionImpl>::check_timestamps(true);
 
 bool AssetThrowPolicy::allow_throw(false);
 
