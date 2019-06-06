@@ -85,11 +85,10 @@ class khCache {
   bool verbose;
 #endif
   uint numItems;
-  uint64 cacheObjectSizes;
+  uint64 cacheMemoryUse;
   bool limitCacheMemory;
   uint64 maxCacheMemory;
-  const uint64 khCacheItemSize;
-
+  const uint64 khCacheItemSize = sizeof(khCacheItem<Key, Value>) - sizeof(Key) - sizeof(Value);
   bool InList(Item *item) {
     Item *tmp = head;
     while (tmp) {
@@ -172,8 +171,7 @@ class khCache {
   typedef typename MapType::size_type size_type;
   size_type size(void) const { return map.size(); }
   uint64 capacity(void) const { return targetMax; }
-  uint64 getMemoryUse(void) const { return cacheObjectSizes; }
-  uint64 itemSizeMinusKeyAndValue(void) const { return sizeof(khCacheItem<Key, Value>) - sizeof(Key) - sizeof(Value); }
+  uint64 getMemoryUse(void) const { return cacheMemoryUse; }
 
   khCache(uint64 targetMax_
 #ifdef SUPPORT_VERBOSE
@@ -183,9 +181,8 @@ class khCache {
 #ifdef SUPPORT_VERBOSE
               verbose(verbose_),
 #endif
-              numItems(0), cacheObjectSizes(0),
-              limitCacheMemory(0),
-              khCacheItemSize(itemSizeMinusKeyAndValue())
+              numItems(0), cacheMemoryUse(0),
+              limitCacheMemory(false)
 
   {
     CheckListInvariant();
@@ -207,16 +204,14 @@ class khCache {
   uint64 getKeyOrValueSize(const khRefGuard<T> obj) {
     return (sizeof(obj) + obj.getRefGuardSize());
   }
+  uint64 calculateObjectSize(Item *item) {
+    return khCacheItemSize + getKeyOrValueSize(item->key) + getKeyOrValueSize(item->val);
+  }
   void updateObjectSize(const Key &key) {
-    if ( FindItem(key) != 0 ) {
-      Item *item = FindItem(key);
-      uint64 size = khCacheItemSize + getKeyOrValueSize(item->key) + getKeyOrValueSize(item->val);
-      if (size > item->size) {
-        cacheObjectSizes += (size - item->size);
-      }
-      else if (size < item->size) {
-        cacheObjectSizes -= (item->size - size);
-      }
+    Item *item = FindItem(key);
+    if ( item ) {
+      uint64 size = calculateObjectSize(item);
+      cacheMemoryUse = (cacheMemoryUse - item->size) + size;
       item->size = size;
     }
   }
@@ -234,7 +229,7 @@ class khCache {
     }
     map.clear();
     head = tail = 0;
-    cacheObjectSizes = 0;
+    cacheMemoryUse = 0;
   }
   void Add(const Key &key, const Value &val, bool prune = true) {
     CheckListInvariant();
@@ -246,6 +241,7 @@ class khCache {
 #ifdef SUPPORT_VERBOSE
       if (verbose) notify(NFY_ALWAYS, "Deleting previous %s from cache", key.c_str());
 #endif
+      cacheMemoryUse -= item->size;
       delete item;
     }
 
@@ -253,6 +249,8 @@ class khCache {
     item = new Item(key, val);
     Link(item);
     map[key] = item;
+    item->size = calculateObjectSize(item);
+    cacheMemoryUse += item->size;
 #ifdef SUPPORT_VERBOSE
     if (verbose) notify(NFY_ALWAYS, "Adding %s to cache", key.c_str());
 #endif
@@ -275,6 +273,7 @@ class khCache {
 #ifdef SUPPORT_VERBOSE
       if (verbose) notify(NFY_ALWAYS, "Removing %s from cache", key.c_str());
 #endif
+      cacheMemoryUse -= item->size;
       delete item;
     }
 
@@ -306,7 +305,7 @@ class khCache {
     CheckListInvariant();
     Item *item = tail;
     while (item && (
-    ( (cacheObjectSizes > maxCacheMemory) && limitCacheMemory ) ||
+    ( (cacheMemoryUse > maxCacheMemory) && limitCacheMemory ) ||
     ( (map.size() > targetMax) && !limitCacheMemory ) )) {
       // Note: this refcount() > 1 check is safe even with
       // khMTRefCounter based guards. See explanaition with the
@@ -322,6 +321,7 @@ class khCache {
 #ifdef SUPPORT_VERBOSE
         if (verbose) notify(NFY_ALWAYS, "Pruning %s from cache", tokill->key.c_str());
 #endif
+        cacheMemoryUse -= tokill->size;
         delete tokill;
       }
     }

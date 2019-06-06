@@ -40,6 +40,14 @@ class TestItem : public khRefCounter, public StorageManaged {
     savename = filename;
     return saveSucceeds;
   }
+  // function for determining memory used by objects added to the cache
+  uint64 GetSize() {
+    return sizeof(val)
+    + sizeof(savename)
+    + (savename.capacity() * sizeof(char)
+    + sizeof(saveSucceeds)
+    + sizeof(nextValue));
+  }
  private:
   static int nextValue;
 };
@@ -78,7 +86,7 @@ class StorageManagerTest : public testing::Test {
  protected:
   StorageManager<TestItem> storageManager;
  public:
-  StorageManagerTest() : storageManager(CACHE_SIZE, 0, MEMORY_LIMIT, "test") {}
+  StorageManagerTest() : storageManager(CACHE_SIZE, false, MEMORY_LIMIT, "test") {}
 };
 
 TEST_F(StorageManagerTest, AddAndRetrieve) {

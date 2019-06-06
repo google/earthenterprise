@@ -80,7 +80,7 @@ protected:
     }
 
     static uint64 GetSharedStringSize() {
-      return sizeof(key) + sizeof(strStore);
+      return sizeof(key);
     }
 
     SharedString(): key(0) {}

@@ -127,6 +127,11 @@ class ImageExistanceImpl : public khRefCounter {
     versions_[NameToIndex(blist)] = ver;
   }
 
+  // function for determining memory used by objects added to the cache
+  uint64 GetSize() {
+    return sizeof(versions_);
+  }
+
   static std::string PacketName(const std::string& blist);
   static int NameToIndex(const std::string& blist);
 
