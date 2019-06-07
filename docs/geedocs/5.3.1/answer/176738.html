@@ -258,6 +258,8 @@ Note that the asset version cache is generally larger than the asset cache becau
 
 <p>Within <code>misc.xml</code>, the following options are deprecated and are treated as if they are permanently enabled: <code>DisablePacketLevelVersionCachePurge</code> and <code>ConsolidateListenerNotifications</code>.</p>
 
+<p>Also included within <code>misc.xml</code> is an experimental option, which allows the user to limit the caches by memory usage instead of number of objects. This option is controlled by <code>LimitMemoryUtilization</code> and its default value is false. The maximum memory usage for each cache can be set with <code>MaxAssetCacheMemorySize</code> and <code>MaxVersionCacheMemorySize</code>. This size is measured in bytes and the default setting is 1GB. While this option is enabled, the caches will not be limited by the number of objects in the cache.</p>
+
 <p>The Xerces library maintains a separate cache for dealing with XML files. Users can modify aspects of this cache through a configuration file at
 <code>/etc/opt/google/XMLparams</code>. This file is not created automatically as part of the Open GEE Fusion install,
 so users that want to modify the parameters below must first create an <code>XMLparams</code> file. The <code>XMLparams</code> file has the following format:</p>
