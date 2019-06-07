@@ -843,7 +843,6 @@ void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
 
   uint32 geindex_version = BuildIndex(tilespace, inset_infos,
                                       top_level_date);
-  notify(NFY_WARN, "GOT HERE");
   // ---------------------------
   // make RasterDBRoot sub asset
   // needs to be children[1]...code above assumes this (not nice).
@@ -857,7 +856,6 @@ void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
     ? kGEImageryChannelId
     : kGETerrainChannelId;
   dbrootConfig.used_provider_ids_ = used_provider_ids;
-  notify(NFY_WARN, "GOT HERE");
   MutableAssetVersionD dbroot =
     RasterDBRootFactory::FindMakeAndUpdateSubAsset(
         assetRef, type, "dbroot",
@@ -866,7 +864,6 @@ void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
         dbrootConfig,
         std::vector<AssetVersion>());
   AddChild(dbroot);
-  notify(NFY_WARN, "GOT HERE");
 
   // **********************************
   // create my Map JS layer definitions - only for imagery
@@ -1139,7 +1136,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
       extraArg.insetInfo.push_back(&inset_infos[*idx]);
       extraArg.genInfo.push_back(&genInfo[*idx]);
     }
-    //notify(NFY_WARN, "GOT HERE1");
+
     // reuse or make a new PacketGenAssetVersion
     MutableAssetVersionD packgen =
       PacketGenFactory::ReuseOrMakeAndUpdate(genInfo[i].assetname,
@@ -1147,7 +1144,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
                                              khMetaData(),
                                              packetGenConfig,
                                              extraArg);
-    notify(NFY_WARN, "GOT HERE");
+
     if (packetGenConfig.cacheRaster) {
       // Extract the PacketLevel children from the new version and store
       // them in my genInfo. My later children will use these to help

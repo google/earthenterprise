@@ -294,7 +294,6 @@ ${name}Factory::ReuseOrMakeAndUpdate(
     // bind my input versions refs
     std::vector<SharedString> boundInputs;
     boundInputs.reserve(inputarg.size());
-    notify(NFY_WARN, "GOT HERE2");
     std::transform(inputarg.begin(), inputarg.end(), back_inserter(boundInputs),
                    ptr_fun(&AssetVersionRef::Bind));
 

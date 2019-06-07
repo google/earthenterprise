@@ -292,24 +292,27 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       levInputVers.reserve(mergeIndexes.size() * 2 + 1);
       levInputs.resize(mergeIndexes.size() * 2);
       levInputVers.resize(mergeIndexes.size() * 2);
+      int i = 0;
+      std::vector<int> emptyElements;
+      emptyElements.reserve(mergeIndexes.size());
       #pragma omp parallel for schedule(static) num_threads(threadsToUse)
       for (size_t idx = 0; idx < mergeIndexes.size(); ++idx) {
         const InsetInfo<ProductAssetVersion> &inset(*extra.insetInfo[mergeIndexes[idx]]);
         const PacketGenInfo &genInfo(*extra.genInfo[mergeIndexes[idx]]);
 
-        levInputs[idx] = (inset.combinedrp_).Ref();
-        levInputVers[idx] = inset.combinedrp_;
-        idx++;
+        levInputs[i] = (inset.combinedrp_).Ref();
+        levInputVers[i] = inset.combinedrp_;
+        i++;
 
         if (!inset.alphaRPFile.empty() &&
             (genInfo.packetLevels.size() > minifySrcLevel)) {
-          levInputs[idx] = (genInfo.packetLevels[minifySrcLevel]).Ref();
-          levInputVers[idx] = genInfo.packetLevels[minifySrcLevel];
+          levInputs[i] = (genInfo.packetLevels[minifySrcLevel]).Ref();
+          levInputVers[i] = genInfo.packetLevels[minifySrcLevel];
         }
 
         SharedString cached_blend;
         SharedString cached_blend_alpha;
-        if (levInputVers[idx]) {
+        if (levInputVers[i]) {
           // This covers two cases:
           // 1) If level+1 == config.endMinifyLevel:
           //   This is the first merge (from cached blends)
@@ -333,33 +336,30 @@ void PacketGenAssetVersionImplD::UpdateChildren(
           // pick up the GEE-4.x Imagery/Terrain Projects (the PacketLevel
           // assets) that have no alpha blend cached.
           const std::string cache_alpha_path =
-              levInputVers[idx]->GetOutputFilename(0) + "/cache_alpha.pack";
+              levInputVers[i]->GetOutputFilename(0) + "/cache_alpha.pack";
           if (khExists(cache_alpha_path)) {
-            cached_blend_alpha = levInputs[idx];
+            cached_blend_alpha = levInputs[i];
           }
-          cached_blend = levInputs[idx];
+          cached_blend = levInputs[i];
         }
-        packetLevelConfig.insets[idx/2] = 
+        else {
+          emptyElements.push_back(i);
+        }
+        packetLevelConfig.insets[idx] =
             PacketLevelConfig::Inset(
                 inset.dataRPFile,
                 inset.alphaRPFile,
                 cached_blend,
                 cached_blend_alpha);
-      }/*
-      notify(NFY_WARN, "levInputs: %lu\tlevInputVers: %lu", levInputs.size(), levInputVers.size());
-      for (size_t idx= 0; idx < levInputVers.size(); ++idx) {
-        if (levInputVers[idx]) {
-          notify(NFY_WARN, "levInputs[idx]: %s", ToString(levInputs[idx]).c_str());
-        }
-        else {
-          notify(NFY_WARN, "FOUND EMPTY");
-          levInputs.erase(levInputs.begin() + idx);
-          levInputVers.erase(levInputVers.begin() + idx);
-          --idx;
-        }
+        i++;
       }
-      notify(NFY_WARN, "levInputs: %lu\tlevInputVers: %lu", levInputs.size(), levInputVers.size());
-      */
+
+      for (size_t idx = 0; idx < emptyElements.size(); ++idx) {
+        int i = emptyElements[idx];
+        levInputs.erase(levInputs.begin() + i);
+        levInputVers.erase(levInputVers.begin() + i);
+      }
+
       curTime = std::chrono::high_resolution_clock::now();
       timeDiff = std::chrono::duration<double>(curTime - prevTime);
       notify(NFY_INFO2, "UpdateChildren finished looping over mergeIndexes for level %d.  %f seconds elapsed",
@@ -378,7 +378,6 @@ void PacketGenAssetVersionImplD::UpdateChildren(
         levInputs.push_back(prevLevelVer.Ref());
         levInputVers.push_back(prevLevelVer);
 
-        notify(NFY_WARN, "levInputs: %lu\tlevInputVers: %lu", levInputs.size(), levInputVers.size());
 
         // Note: Before creating a merge inset, we check if the cached alpha
         // blend directory exists for the asset since in GEE-5.x we need to
@@ -404,7 +403,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       }
 
     }
-    //notify(NFY_WARN, "GOT HERE");
+
     // get child asset ver
     char subname[32];
     snprintf(subname, sizeof(subname), "packlevel%02d", level);

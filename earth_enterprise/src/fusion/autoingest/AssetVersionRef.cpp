@@ -60,13 +60,10 @@ std::string
 AssetVersionRef::Bind(void) const
 {
   if (version == "current") {
-    notify(NFY_WARN, "GOT HERE 3: %s", ToString(Asset(assetRef)->CurrVersionRef()).c_str());
     return Asset(assetRef)->CurrVersionRef();
   } else if (version == "lastgood") {
-    notify(NFY_WARN, "GOT HERE 4");
     return Asset(assetRef)->GetLastGoodVersionRef();
   } else {
-    notify(NFY_WARN, "GOT HERE 5");
     return *this;
   }
 }
