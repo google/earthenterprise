@@ -23,7 +23,6 @@
 using namespace std;
 
 const size_t CACHE_SIZE = 5;
-const uint64 MEMORY_LIMIT = 0;
 
 class TestItem : public khRefCounter, public StorageManaged {
  public:
@@ -86,7 +85,7 @@ class StorageManagerTest : public testing::Test {
  protected:
   StorageManager<TestItem> storageManager;
  public:
-  StorageManagerTest() : storageManager(CACHE_SIZE, false, MEMORY_LIMIT, "test") {}
+  StorageManagerTest() : storageManager(CACHE_SIZE, false, 0, "test") {}
 };
 
 TEST_F(StorageManagerTest, AddAndRetrieve) {
@@ -180,15 +179,25 @@ TEST_F(StorageManagerTest, PurgeCacheBasedOnNumberOfObjects) {
 }
 
 TEST_F(StorageManagerTest, PurgeCacheBasedOnMemoryUtilization) {
-  storageManager.SetCacheMemoryLimit(1, MEMORY_LIMIT);
+  // Purges objects from cache when the memory utilization exceeds
+  // the limit and determines if the cache memory usage reflects the size
+  // of the objects in cache.
   size_t i;
+  uint64 objectSize = 0;
+  uint64 memoryLimit = 0;
   for(i = 0; i < CACHE_SIZE + 2; ++i) {
     stringstream s;
     s << "asset" << i;
     Get<TestHandle>(storageManager, s.str(), false, true, false);
+    if (objectSize == 0) {
+      objectSize = storageManager.GetObjectSize(s.str());
+      memoryLimit = objectSize * (CACHE_SIZE - 1);
+      storageManager.SetCacheMemoryLimit(true, memoryLimit);
+    }
     ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
   }
-  ASSERT_LE(storageManager.CacheSize(), i+1) << "Unexpected number of items in cache";
+  ASSERT_EQ(storageManager.CacheSize(), (CACHE_SIZE - 1)) << "Unexpected number of items in cache";
+  ASSERT_EQ(storageManager.CacheMemoryUse(), memoryLimit) << "Unexpected memory usage";
 }
 
 TEST_F(StorageManagerTest, PurgeCacheWithHandles) {

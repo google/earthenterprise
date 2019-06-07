@@ -166,6 +166,12 @@ class khCache {
       return 0;
     }
   }
+  bool TooManyObjects() {
+    return (map.size() > targetMax) && !limitCacheMemory;
+  }
+  bool TooMuchMemory() {
+    return (cacheMemoryUse > maxCacheMemory) && limitCacheMemory;
+  }
 
  public:
   typedef typename MapType::size_type size_type;
@@ -203,6 +209,13 @@ class khCache {
   template<class T>
   uint64 getKeyOrValueSize(const khRefGuard<T> obj) {
     return (sizeof(obj) + obj.getRefGuardSize());
+  }
+  uint64 getObjectSize(const Key &key) {
+    Item *item = FindItem(key);
+    if (item) {
+      return item->size;
+    }
+    return 0;
   }
   uint64 calculateObjectSize(Item *item) {
     return khCacheItemSize + getKeyOrValueSize(item->key) + getKeyOrValueSize(item->val);
@@ -304,9 +317,7 @@ class khCache {
   void Prune(void) {
     CheckListInvariant();
     Item *item = tail;
-    while (item && (
-    ( (cacheMemoryUse > maxCacheMemory) && limitCacheMemory ) ||
-    ( (map.size() > targetMax) && !limitCacheMemory ) )) {
+    while (item && ( TooMuchMemory() || TooManyObjects() )) {
       // Note: this refcount() > 1 check is safe even with
       // khMTRefCounter based guards. See explanaition with the
       // definition of khMTRefCounter in khMTTypes.h.
