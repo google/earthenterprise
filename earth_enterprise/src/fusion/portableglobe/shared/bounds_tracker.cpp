@@ -1,4 +1,4 @@
-// Copyright 2019 Google Inc.
+// Copyright 2019 Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -66,7 +66,7 @@ void BoundsTracker::update(uint16_t channel_id, PacketType type, const std::stri
 void BoundsTracker::write_json_file(const std::string& filename) const {
   khEnsureParentDir(filename);
 
-  static std::map<PacketType, std::string> channel_type_strings =
+  static const std::map<PacketType, std::string> channel_type_strings =
     {{ kDbRootPacket,  "DbRoot"},
      { kDbRoot2Packet, "DbRoot2"},
      { kQtpPacket,     "Qtp"},
@@ -84,7 +84,7 @@ void BoundsTracker::write_json_file(const std::string& filename) const {
   fout << "[\n";
   for (auto iter =  channels.begin(); iter != channels.end(); ++iter) {
 
-    const std::pair<uint16_t, channel_info> channel_pair = *iter;
+    const std::pair<uint16_t, channel_info> &channel_pair = *iter;
     const auto &channel = channel_pair.second;
 
     fout << "  {\n"
