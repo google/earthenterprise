@@ -67,19 +67,18 @@ if ($base eq 'Composite') {
     }
 
 my $calc="";
+
 if (index($thiscommand, "PacketGen") != -1)
 {
-    $calc = $template . "    void CalculateOverlap($singleFormalExtraUpdateArg"
-          . ", std::vector<uint>& neededIndexes, const uint& level);\n";
+    $calc = $template .
+            "    void CalculateOverlap(overlapEnvelope<ProductAssetVersion>& env);\n";
 }
 
     $extra{"${name}AssetVersionImplD"} =
         $template 
         . "    void UpdateChildren($singleFormalExtraUpdateArg);\n"
         . $calc;
-        #. $template
-        #. "    void CalculateOverlap($singleFormalExtraUpdateArg, "
-        #. " const uint&);\n";
+
 } else {
     $extra{"${name}AssetVersionImplD"} =
 	"    virtual void DoSubmitTask(void);\n";

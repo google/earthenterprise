@@ -1035,6 +1035,14 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   packgenkids.reserve(numInsets);
   packgenassets.reserve(numInsets);
   packgenvers.reserve(numInsets);
+  std::vector<uint> neededIdxs;
+
+// calculate total overlap before entering here
+
+if (MiscConfig::Instance().CalculateOverlapOnce);
+{
+    notify(NFY_WARN, "RasterProject: calculate overlap once");
+}
 
   for (uint i = 0; i < genInfo.size(); ++i) {
     // Check if I even need to do any packet generation at all
@@ -1134,12 +1142,12 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
       extraArg.genInfo.push_back(&genInfo[idx]);
     }
 
-    // reuse or make a new PacketGenAssetVersion
+    // reuse or make a new PacketGenAssetVersion --> update children
     MutableAssetVersionD packgen =
       PacketGenFactory::ReuseOrMakeAndUpdate(genInfo[i].assetname,
                                              type,
                                              khMetaData(),
-                                             packetGenConfig,
+                                             packetGenConfig, // new vector?
                                              extraArg);
 
     if (packetGenConfig.cacheRaster) {

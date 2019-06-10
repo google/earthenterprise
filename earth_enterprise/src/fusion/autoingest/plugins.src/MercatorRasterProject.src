@@ -33,6 +33,7 @@
 #include "autoingest/plugins/RasterDBRootAsset.h"
 #include "autoingest/plugins/MercatorRasterProductAsset.h"
 #include "autoingest/plugins/MapLayerJSAsset.h"
+#include "autoingest/MiscConfig.h"
 
 class MercatorRasterProjectAssetVersionImpl {
  public:
@@ -928,6 +929,12 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
   packgenkids.reserve(numInsets);
   packgenassets.reserve(numInsets);
   packgenvers.reserve(numInsets);
+
+  if (MiscConfig::Instance().CalculateOverlapOnce)
+  {
+      notify(NFY_WARN, "MercatorRasterProject: calculate overlap once");
+  }
+
   for (uint i = 0; i < genInfo.size(); ++i) {
     // Check if I even need to do any packet generation at all
     // Maybe the other insets will completely replace everything

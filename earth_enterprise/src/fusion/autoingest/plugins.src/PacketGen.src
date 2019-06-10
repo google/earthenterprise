@@ -39,7 +39,6 @@ class PacketGenExtraUpdateArg {
   std::vector<const PacketGenInfo *> genInfo;
 };
 
-
 // ===== PacketGenAssetD.cpp =====
 #include <autoingest/sysman/plugins/PacketLevelAssetD.h>
 #include <autoingest/plugins/RasterProductAsset.h>
@@ -85,9 +84,7 @@ PacketGenFactory::ReuseOrMakeAndUpdateSubAsset(
 
 template <typename ProductAssetVersion>
 void PacketGenAssetVersionImplD::CalculateOverlap(
-     const PacketGenExtraUpdateArg<ProductAssetVersion> &extra,
-     std::vector<uint>& neededIndexes,
-     const uint& level)
+     overlapEnvelope<ProductAssetVersion>& env)
 {
     static bool doOnceNotify = true;
 
@@ -104,25 +101,35 @@ void PacketGenAssetVersionImplD::CalculateOverlap(
         }
     }
 
-    const khLevelCoverage levCov(config.coverage.levelCoverage(level));
-
     if (type == AssetDefs::Imagery)
     {
-        FindNeededImageryInsets(khInsetCoverage(levCov),
-                                extra.insetInfo,
-                                extra.insetInfo.size(), //num Insets
-                                neededIndexes, // BY REFERENCE
-                                config.beginMinifyLevel,
-                                config.endMinifyLevel);
+        FindNeededImageryInsets(env.gencov,
+                                env.insets,
+                                env.numInsets,
+                                env.neededIndexes,
+                                env.beginMinifyLevel,
+                                env.endMinifyLevel);
+        //FindNeededImageryInsets(khInsetCoverage(levCov),
+        //                        extra.insetInfo,
+        //                        extra.insetInfo.size(), //num Insets
+        //                        neededIndexes, // BY REFERENCE
+        //                        config.beginMinifyLevel,
+        //                        config.endMinifyLevel);
     }
     else
     {
-        FindNeededTerrainInsets(khInsetCoverage(levCov),
-                                extra.insetInfo,
-                                extra.insetInfo.size(), //num Insets
-                                neededIndexes,
-                                config.beginMinifyLevel,
-                                config.endMinifyLevel);
+        FindNeededImageryInsets(env.gencov,
+                                env.insets,
+                                env.numInsets,
+                                env.neededIndexes,
+                                env.beginMinifyLevel,
+                                env.endMinifyLevel);
+        //FindNeededTerrainInsets(khInsetCoverage(levCov),
+        //                        extra.insetInfo,
+        //                        extra.insetInfo.size(), //num Insets
+        //                        neededIndexes,
+        //                        config.beginMinifyLevel,
+        //                        config.endMinifyLevel);
     }
 
 }
@@ -169,7 +176,12 @@ void PacketGenAssetVersionImplD::UpdateChildren(
     neededIndexes.reserve(numInsets);
 
     if (!MiscConfig::Instance().CalculateOverlapOnce)
-        CalculateOverlap(extra, neededIndexes, level);
+    {
+        overlapEnvelope<ProductAssetVersion> env(khInsetCoverage(levCov),
+                             extra.insetInfo, extra.insetInfo.size(), neededIndexes,
+                             config.beginMinifyLevel, config.endMinifyLevel);
+        CalculateOverlap(env);
+    }
 
     curTime = std::chrono::high_resolution_clock::now();
     timeDiff = std::chrono::duration<double>(curTime - prevTime);
@@ -238,8 +250,6 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       packetLevelConfig.insets.reserve(neededIndexes.size());
       packetLevelConfig.attributions.reserve(neededIndexes.size());
 
-      //for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
-      //     idx != neededIndexes.end(); ++idx) {
       for (const auto& idx : neededIndexes) {
         const InsetInfo<ProductAssetVersion> &inset(*extra.insetInfo[idx]);
         levInputs.push_back(inset.combinedrp_->GetRef());
@@ -287,8 +297,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
 
       // for attribution we care about everybody
       packetLevelConfig.attributions.reserve(neededIndexes.size() + 1);
-      //for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
-      //     idx != neededIndexes.end(); ++idx) {
+
       for (const auto& idx : neededIndexes) {
         const InsetInfo<ProductAssetVersion> &inset(*extra.insetInfo[idx]);
         packetLevelConfig.attributions.push_back
@@ -307,8 +316,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       // minifySrcLevel
       std::vector<uint> mergeIndexes;
       mergeIndexes.reserve(neededIndexes.size());
-      //for (std::vector<uint>::const_iterator idx = neededIndexes.begin();
-      //     idx != neededIndexes.end(); ++idx) {
+
       for (const auto& idx : neededIndexes) {
         if (extra.genInfo[idx]->coverage.hasLevel(minifySrcLevel)) {
           mergeIndexes.push_back(idx);
@@ -325,8 +333,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       levInputs.reserve(mergeIndexes.size() * 2 + 1);
       levInputVers.reserve(mergeIndexes.size() * 2 + 1);
       packetLevelConfig.insets.reserve(mergeIndexes.size() + 1);
-      //for (std::vector<uint>::const_iterator idx = mergeIndexes.begin();
-      //     idx != mergeIndexes.end(); ++idx) {
+
       for (const auto& idx : mergeIndexes) {
         const InsetInfo<ProductAssetVersion> &inset(*extra.insetInfo[idx]);
         const PacketGenInfo &genInfo(*extra.genInfo[idx]);
@@ -455,6 +462,7 @@ void PacketGenAssetVersionImplD::UpdateChildren(
     // get child asset ver
     char subname[32];
     snprintf(subname, sizeof(subname), "packlevel%02d", level);
+
     MutableAssetVersionD packLevelVer =
       PacketLevelFactory::ReuseOrMakeAndUpdateSubAsset
       (assetRef, type,
