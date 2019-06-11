@@ -41,6 +41,18 @@ class khMetaData
     map.erase(key);
   }
 
+  const uint64 GetQStringSize(QString str) {
+    return (sizeof(str) + (str.capacity() * sizeof(char16_t)));;
+  }
+
+  const uint64 GetSize() {
+    uint64 total = 0;
+    for (MapTypeConstIterator it = map.begin(); it != map.end(); it++) {
+      total += GetQStringSize(it->first) + GetQStringSize(it->second);
+    }
+    return total;
+  }
+
 
   bool operator==(const khMetaData &o) const { return map == o.map; }
 
