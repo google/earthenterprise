@@ -176,10 +176,10 @@ class khCache {
  public:
   typedef typename MapType::size_type size_type;
   size_type size(void) const { return map.size(); }
-  uint64 capacity(void) const { return targetMax; }
+  size_type capacity(void) const { return targetMax; }
   uint64 getMemoryUse(void) const { return cacheMemoryUse; }
 
-  khCache(uint64 targetMax_
+  khCache(uint targetMax_
 #ifdef SUPPORT_VERBOSE
           , bool verbose_ = false
 #endif
