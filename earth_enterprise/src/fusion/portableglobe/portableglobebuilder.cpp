@@ -648,11 +648,10 @@ void PortableGlobeBuilder::ProcessDataInQtPacketNodes(
     WriteTerrainPacket(qtpath, node->terrain_version);
   }
   if (node->children.GetDrawableBit()) {
-    bounds_tracker_.update(2, kVectorPacket, qtpath);
-
     for (size_t i = 0; i < node->num_channels(); ++i) {
       // Assuming that channel_type is in increasing order,
       // otherwise we are going to need to sort.
+      bounds_tracker_.update(node->channel_type[i], kVectorPacket, qtpath);
       WriteVectorPacket(qtpath,
                         node->channel_type[i],
                         node->channel_version[i]);
