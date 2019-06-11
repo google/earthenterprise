@@ -96,7 +96,8 @@ gesystemmanager = env.executable('gesystemmanager',
     commonobj +
     map(lambda p: 'plugins/'+p+'AssetD.cpp', plugins) +
     [ 'gesystemmanager_main.cpp',
-      'AssetD.cpp', 'AssetVersionD.cpp', 'AssetOperation.cpp',
+      'AssetD.cpp', 'AssetVersionD.cpp',
+      'AssetOperation.cpp', 'AssetTree.cpp',
       'khSystemManager.cpp',
       'khAssetManager.cpp', 'khAssetManagerDispatch.cpp',
       'khResourceManager.cpp', 'khTask.cpp', 'TaskRequirements.cpp',
@@ -130,7 +131,8 @@ env.test('LeafAssetVersion_unittest',
     commonobj +
     map(lambda p: 'plugins/'+p+'AssetD.o', plugins) +
     [ 'LeafAssetVersion_unittest.cpp',
-      'AssetD.o', 'AssetVersionD.o', 'AssetOperation.o',
+      'AssetD.o', 'AssetVersionD.o',
+      'AssetOperation.o', 'AssetTree.o',
       'khSystemManager.o',
       'khAssetManager.o', 'khAssetManagerDispatch.o',
       'khResourceManager.o', 'khTask.o', 'TaskRequirements.o',
