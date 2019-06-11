@@ -51,7 +51,7 @@ class StorageManager
     ~StorageManager() = default;
 
     inline uint32 CacheSize() const { return cache.size(); }
-    inline uint64 CacheCapacity() const { return cache.capacity(); }
+    inline uint32 CacheCapacity() const { return cache.capacity(); }
     inline uint32 DirtySize() const { return dirtyMap.size(); }
     inline uint64 CacheMemoryUse() const { return cache.getMemoryUse(); }
     inline void SetCacheMemoryLimit(bool enabled, uint64 maxMemory) { cache.setCacheMemoryLimit(enabled, maxMemory); }
