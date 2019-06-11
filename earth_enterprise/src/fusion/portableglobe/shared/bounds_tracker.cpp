@@ -89,7 +89,7 @@ void BoundsTracker::write_json_file(const std::string& filename) const {
 
     fout << "  {\n"
          << "    \"channel_id\": "      << channel.channel_id << ",\n"
-         << "    \"type\": \""          << channel_type_strings[channel.type] << "\",\n"
+         << "    \"type\": \""          << channel_type_strings.at(channel.type) << "\",\n"
          << "    \"top\": "             << channel.top << ",\n"
          << "    \"bottom\": "          << channel.bottom << ",\n"
          << "    \"left\": "            << channel.left << ",\n"
