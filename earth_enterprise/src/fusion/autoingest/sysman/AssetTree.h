@@ -43,20 +43,21 @@ class AssetTree
         boost::setS,
         boost::directedS,
         AssetVertex,
-        AssetEdge> AssetTreeImpl;
-    typedef std::map<SharedString, AssetTreeImpl::vertex_descriptor> VertexMap;
+        AssetEdge> TreeType;
+    typedef std::map<SharedString, TreeType::vertex_descriptor> VertexMap;
 
     // Used by dfs function to update states of assets in the tree
-    friend struct boost::property_map<AssetTreeImpl, boost::vertex_index_t>;
+    friend struct boost::property_map<TreeType, boost::vertex_index_t>;
     class UpdateStateVisitor;
 
-    AssetTreeImpl tree;
-    VertexMap vertices;
-    size_t index;
-    
-    AssetTreeImpl::vertex_descriptor AddSelfAndConnectedAssets(const SharedString & ref);
-    void AddEdge(AssetTreeImpl::vertex_descriptor from,
-                 AssetTreeImpl::vertex_descriptor to,
+    TreeType tree;
+
+    TreeType::vertex_descriptor AddSelfAndConnectedAssets(
+        const SharedString & ref,
+        VertexMap & vertices,
+        size_t & index);
+    void AddEdge(TreeType::vertex_descriptor from,
+                 TreeType::vertex_descriptor to,
                  AssetEdge data);
   public:
     AssetTree(const SharedString & ref);
