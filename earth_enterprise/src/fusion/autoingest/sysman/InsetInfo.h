@@ -172,22 +172,29 @@ void CalcPacketGenInfo(const khTilespace            &tilespace,
 template <typename ProductAssetVersion>
 struct overlapEnvelope
 {
+    const AssetDefs::Type& type;
     const khInsetCoverage& gencov;
     const std::vector<const InsetInfo<ProductAssetVersion> *>& insets;
     uint numInsets;
     std::vector<uint>& neededIndexes;
     uint beginMinifyLevel;
     uint endMinifyLevel;
-    overlapEnvelope(const khInsetCoverage& _gencov,
+    overlapEnvelope(const AssetDefs::Type _type,
+                    const khInsetCoverage& _gencov,
                     const std::vector<const InsetInfo<ProductAssetVersion> *>& _insets,
                     uint _numInsets,
                     std::vector<uint>& _neededIndexes,
                     uint _beginMinifyLevel, uint _endMinifyLevel)
 
-   :                gencov(_gencov), insets(_insets),
+   :                type(_type), gencov(_gencov), insets(_insets),
                     numInsets(_numInsets), neededIndexes(_neededIndexes),
                     beginMinifyLevel(_beginMinifyLevel), endMinifyLevel(_endMinifyLevel) {}
 };
+
+template <typename ProductAssetVersion>
+extern void
+CalculateOverlap(
+        overlapEnvelope<ProductAssetVersion>& env);
 
 template <typename ProductAssetVersion>
 extern void

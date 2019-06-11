@@ -66,18 +66,18 @@ if ($base eq 'Composite') {
 	s/ExtraUpdateArg/ExtraUpdateArg\<ProductAssetVersion\>/;
     }
 
-my $calc="";
+#my $calc="";
 
-if (index($thiscommand, "PacketGen") != -1)
-{
-    $calc = $template .
-            "    void CalculateOverlap(overlapEnvelope<ProductAssetVersion>& env);\n";
-}
+#if (index($thiscommand, "PacketGen") != -1)
+#{
+#    $calc = $template .
+#            "    void CalculateOverlap(overlapEnvelope<ProductAssetVersion>& env);\n";
+#}
 
     $extra{"${name}AssetVersionImplD"} =
         $template 
-        . "    void UpdateChildren($singleFormalExtraUpdateArg);\n"
-        . $calc;
+        . "    void UpdateChildren($singleFormalExtraUpdateArg);\n";
+        # $calc;
 
 } else {
     $extra{"${name}AssetVersionImplD"} =

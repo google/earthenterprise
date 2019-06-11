@@ -933,6 +933,8 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
   if (MiscConfig::Instance().CalculateOverlapOnce)
   {
       notify(NFY_WARN, "MercatorRasterProject: calculate overlap once");
+      //overlapEnvelop<MercatorRasterProductAssetVersion> env (
+      //    genInfo
   }
 
   for (uint i = 0; i < genInfo.size(); ++i) {
@@ -946,7 +948,11 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
     // Determine which insets (0 .. i) intersect this coverage area.
     std::vector<uint> neededIndexes;
     neededIndexes.reserve(i);
-    if (type == AssetDefs::Imagery) {
+    overlapEnvelope<MercatorRasterProductAssetVersion> env (
+        type, genInfo[i].coverage, insetInfoPtrs, i,
+        neededIndexes, beginMinifyLevel, endMinifyLevel);
+    CalculateOverlap(env);
+    /*if (type == AssetDefs::Imagery) {
       FindNeededImageryInsets(genInfo[i].coverage,
                               insetInfoPtrs, i,
                               neededIndexes,
@@ -958,7 +964,7 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
                               neededIndexes,
                               beginMinifyLevel,
                               endMinifyLevel);
-    }
+    }*/
     neededIndexes.push_back(i); // each inset always intersects itself
 
 

@@ -83,58 +83,6 @@ PacketGenFactory::ReuseOrMakeAndUpdateSubAsset(
     const PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> &extra);
 
 template <typename ProductAssetVersion>
-void PacketGenAssetVersionImplD::CalculateOverlap(
-     overlapEnvelope<ProductAssetVersion>& env)
-{
-    static bool doOnceNotify = true;
-
-    if (doOnceNotify)
-    {
-        doOnceNotify = false;
-        if (MiscConfig::Instance().CalculateOverlapOnce)
-        {
-            notify(NFY_WARN, "Calculate overlap once");
-        }
-        else
-        {
-            notify(NFY_WARN, "Calculate overlap per resource");
-        }
-    }
-
-    if (type == AssetDefs::Imagery)
-    {
-        FindNeededImageryInsets(env.gencov,
-                                env.insets,
-                                env.numInsets,
-                                env.neededIndexes,
-                                env.beginMinifyLevel,
-                                env.endMinifyLevel);
-        //FindNeededImageryInsets(khInsetCoverage(levCov),
-        //                        extra.insetInfo,
-        //                        extra.insetInfo.size(), //num Insets
-        //                        neededIndexes, // BY REFERENCE
-        //                        config.beginMinifyLevel,
-        //                        config.endMinifyLevel);
-    }
-    else
-    {
-        FindNeededImageryInsets(env.gencov,
-                                env.insets,
-                                env.numInsets,
-                                env.neededIndexes,
-                                env.beginMinifyLevel,
-                                env.endMinifyLevel);
-        //FindNeededTerrainInsets(khInsetCoverage(levCov),
-        //                        extra.insetInfo,
-        //                        extra.insetInfo.size(), //num Insets
-        //                        neededIndexes,
-        //                        config.beginMinifyLevel,
-        //                        config.endMinifyLevel);
-    }
-
-}
-
-template <typename ProductAssetVersion>
 void PacketGenAssetVersionImplD::UpdateChildren(
     const PacketGenExtraUpdateArg<ProductAssetVersion> &extra) {
   std::string assetRef = GetAssetRef();
@@ -177,7 +125,8 @@ void PacketGenAssetVersionImplD::UpdateChildren(
 
     if (!MiscConfig::Instance().CalculateOverlapOnce)
     {
-        overlapEnvelope<ProductAssetVersion> env(khInsetCoverage(levCov),
+        auto gencov = khInsetCoverage(levCov);
+        overlapEnvelope<ProductAssetVersion> env(type, gencov,
                              extra.insetInfo, extra.insetInfo.size(), neededIndexes,
                              config.beginMinifyLevel, config.endMinifyLevel);
         CalculateOverlap(env);

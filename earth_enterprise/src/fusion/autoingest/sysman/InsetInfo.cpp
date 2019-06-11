@@ -330,6 +330,56 @@ void CalcPacketGenInfo<InsetInfo<MercatorRasterProductAssetVersion> > (
     const bool             is_overlay_terrain_proj,
     const uint32           overlay_terrain_resources_min_level);
 
+// ****************************************************************************
+// ***  CalculateOverlap
+// ***  used to separate algorithmic logic
+// ****************************************************************************
+
+template <typename ProductAssetVersion>
+void CalculateOverlap(
+        overlapEnvelope<ProductAssetVersion>& env)
+{
+    static bool doOnceNotify = true;
+
+    if (doOnceNotify)
+    {
+        doOnceNotify = false;
+        if (MiscConfig::Instance().CalculateOverlapOnce)
+        {
+            notify(NFY_WARN, "Calculate overlap once");
+        }
+        else
+        {
+            notify(NFY_WARN, "Calculate overlap per resource");
+        }
+    }
+
+    if (env.type == AssetDefs::Imagery)
+    {
+        FindNeededImageryInsets(env.gencov,
+                                env.insets,
+                                env.numInsets,
+                                env.neededIndexes,
+                                env.beginMinifyLevel,
+                                env.endMinifyLevel);
+    }
+    else
+    {
+        FindNeededImageryInsets(env.gencov,
+                                env.insets,
+                                env.numInsets,
+                                env.neededIndexes,
+                                env.beginMinifyLevel,
+                                env.endMinifyLevel);
+    }
+}
+
+// explicit instantiations
+template void
+CalculateOverlap(overlapEnvelope<RasterProductAssetVersion>& env);
+
+template void
+CalculateOverlap(overlapEnvelope<MercatorRasterProductAssetVersion>& env);
 
 // ****************************************************************************
 // ***  FindNeededImageryInsets

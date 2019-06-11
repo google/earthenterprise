@@ -1061,8 +1061,11 @@ if (MiscConfig::Instance().CalculateOverlapOnce);
     notify(NFY_PROGRESS, "BuildIndex finding intersections for inset %d of %lu - %f seconds elapsed",
            i+1, genInfo.size(), timeDiff.count());
     prevTime = curTime;
-
-    if (type == AssetDefs::Imagery) {
+    overlapEnvelope<RasterProductAssetVersion> env (
+        type, genInfo[i].coverage, insetInfoPtrs, i,
+        neededIndexes, beginMinifyLevel, endMinifyLevel);
+    CalculateOverlap(env);
+    /*if (type == AssetDefs::Imagery) {
       FindNeededImageryInsets(genInfo[i].coverage,
                               insetInfoPtrs, i,
                               neededIndexes,
@@ -1074,7 +1077,8 @@ if (MiscConfig::Instance().CalculateOverlapOnce);
                               neededIndexes,
                               beginMinifyLevel,
                               endMinifyLevel);
-    }
+    }*/
+
     neededIndexes.push_back(i); // each inset always intersects itself
 
     curTime = std::chrono::high_resolution_clock::now();
