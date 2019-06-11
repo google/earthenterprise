@@ -55,6 +55,7 @@ ReadSrcFile($srcfile, \%config);
 # ****************************************************************************
 my %extra;
 my ($template);
+$template = "";
 
 
 if ($base eq 'Composite') {
@@ -66,18 +67,9 @@ if ($base eq 'Composite') {
 	s/ExtraUpdateArg/ExtraUpdateArg\<ProductAssetVersion\>/;
     }
 
-#my $calc="";
-
-#if (index($thiscommand, "PacketGen") != -1)
-#{
-#    $calc = $template .
-#            "    void CalculateOverlap(overlapEnvelope<ProductAssetVersion>& env);\n";
-#}
-
     $extra{"${name}AssetVersionImplD"} =
         $template 
         . "    void UpdateChildren($singleFormalExtraUpdateArg);\n";
-        # $calc;
 
 } else {
     $extra{"${name}AssetVersionImplD"} =
@@ -110,9 +102,6 @@ print $fh <<EOF;
 
 #include <$header>
 #include <sysman/AssetD.h>
-#include <khxml/khdom.h>
-#include <AssetThrowPolicy.h>
-
 
 // ****************************************************************************
 // ***  Supplied from ${name}.src

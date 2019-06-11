@@ -169,6 +169,8 @@ void CalcPacketGenInfo(const khTilespace            &tilespace,
                        const uint32 overlay_terrain_resources_min_level);
 
 // helper struct to make more generic calls from multiple locations possible
+// can be modified to allow for easier usage in possible new algorithms
+// for calculating overlap
 template <typename ProductAssetVersion>
 struct overlapEnvelope
 {
