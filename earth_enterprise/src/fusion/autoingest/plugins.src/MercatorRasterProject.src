@@ -933,8 +933,6 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
   if (MiscConfig::Instance().CalculateOverlapOnce)
   {
       notify(NFY_WARN, "MercatorRasterProject: calculate overlap once");
-      //overlapEnvelop<MercatorRasterProductAssetVersion> env (
-      //    genInfo
   }
 
   for (uint i = 0; i < genInfo.size(); ++i) {
