@@ -236,7 +236,7 @@ class AssetTree::UpdateStateVisitor : public default_dfs_visitor {
     }
 };
 
-void AssetTree::UpdateStates() {
+void AssetTree::RecalculateStates() {
   // Possible optimization: Many assets have significant overlap in their
   // inputs. It might save time if we could calculate the overlapping state
   // only once.

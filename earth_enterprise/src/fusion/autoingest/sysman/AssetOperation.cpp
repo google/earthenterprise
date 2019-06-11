@@ -23,7 +23,7 @@
 
 using namespace std;
 
-void UpdateStateForSelfAndDependentChildren(
+static void UpdateStateForSelfAndDependentChildren(
     MutableAssetVersionD version,
     AssetDefs::State newState,
     function<bool(AssetDefs::State)> updateStatePredicate) {
@@ -39,6 +39,11 @@ void UpdateStateForSelfAndDependentChildren(
       UpdateStateForSelfAndDependentChildren(child, newState, updateStatePredicate);
     }
   }
+}
+
+static void RecalculateStates(const SharedString & ref) {
+  AssetTree assets(ref);
+  assets.RecalculateStates();
 }
 
 void RebuildVersion(const SharedString & ref) {
@@ -64,6 +69,5 @@ void RebuildVersion(const SharedString & ref) {
   }
 
   UpdateStateForSelfAndDependentChildren(ref, AssetDefs::New, AssetDefs::CanRebuild);
-  AssetTree assets(ref);
-  assets.UpdateStates();
+  RecalculateStates(ref);
 }
