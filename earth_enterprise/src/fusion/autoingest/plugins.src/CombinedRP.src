@@ -87,6 +87,7 @@ class CombinedRPAssetVersionImplD {
  protected:
   virtual void OnStateChange(AssetDefs::State newstate,
                              AssetDefs::State oldstate);
+ public:
   virtual void DependentChildren(std::vector<SharedString> &out);
 };
 

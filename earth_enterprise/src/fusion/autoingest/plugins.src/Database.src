@@ -146,13 +146,14 @@ private:
 
 
 class DatabaseAssetVersionImplD {
+ public:
+  virtual void DependentChildren(std::vector<SharedString> &out);
+
  protected:
   // Before fusion 3.0 a Database had 0 or 1 chidren (depending on whether
   // or not it needed to do super sampling). We can use that information to
   // know if this version was one of the old ones or one of the new ones.
   bool IsBeforeGEDB(void) const { return (children.size() <= 1); }
-
-  virtual void DependentChildren(std::vector<SharedString> &out);
 
   // Old Databases needed to be marked as broken if their inputs wen
   // offline. The new ones don't beed to bother because their GEDB child

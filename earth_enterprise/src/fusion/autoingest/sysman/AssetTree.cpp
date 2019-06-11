@@ -37,8 +37,8 @@ class InNodeVertexIndexMap {
 
 namespace boost {
   template<>
-  struct property_map<AssetTree::AssetTreeImpl, vertex_index_t> {
-    typedef InNodeVertexIndexMap<AssetTree::AssetTreeImpl> const_type;
+  struct property_map<AssetTree::TreeType, vertex_index_t> {
+    typedef InNodeVertexIndexMap<AssetTree::TreeType> const_type;
   };
 
   template<class Graph>
@@ -56,12 +56,17 @@ namespace boost {
 
 #include <boost/graph/depth_first_search.hpp>
 
-AssetTree::AssetTree(const SharedString & ref) : index(0) {
-  AddSelfAndConnectedAssets(ref);
+AssetTree::AssetTree(const SharedString & ref) {
+  VertexMap vertices;
+  size_t index = 0;
+  AddSelfAndConnectedAssets(ref, vertices, index);
 }
 
-AssetTree::AssetTreeImpl::vertex_descriptor
-AssetTree::AddSelfAndConnectedAssets(const SharedString & ref) {
+AssetTree::TreeType::vertex_descriptor
+AssetTree::AddSelfAndConnectedAssets(
+    const SharedString & ref,
+    VertexMap & vertices,
+    size_t & index) {
   auto myVertexIter = vertices.find(ref);
   if (myVertexIter == vertices.end()) {
     // I'm not in the graph yet, so make a new vertex and add my connections
@@ -71,19 +76,19 @@ AssetTree::AddSelfAndConnectedAssets(const SharedString & ref) {
     ++index;
     vertices[version->GetRef()] = myVertex;
     for (const auto & child : version->children) {
-      auto childVertex = AddSelfAndConnectedAssets(child);
+      auto childVertex = AddSelfAndConnectedAssets(child, vertices, index);
       AddEdge(myVertex, childVertex, {CHILD});
     }
     for (const auto & input : version->inputs) {
-      auto inputVertex = AddSelfAndConnectedAssets(input);
+      auto inputVertex = AddSelfAndConnectedAssets(input, vertices, index);
       AddEdge(myVertex, inputVertex, {INPUT});
     }
     for (const auto & parent : version->parents) {
-      auto parentVertex = AddSelfAndConnectedAssets(parent);
+      auto parentVertex = AddSelfAndConnectedAssets(parent, vertices, index);
       AddEdge(parentVertex, myVertex, {CHILD});
     }
     for (const auto & listener : version->listeners) {
-      auto listenerVertex = AddSelfAndConnectedAssets(listener);
+      auto listenerVertex = AddSelfAndConnectedAssets(listener, vertices, index);
       AddEdge(listenerVertex, myVertex, {INPUT});
     }
     return myVertex;
@@ -96,8 +101,8 @@ AssetTree::AddSelfAndConnectedAssets(const SharedString & ref) {
 }
 
 void AssetTree::AddEdge(
-    AssetTreeImpl::vertex_descriptor from,
-    AssetTreeImpl::vertex_descriptor to,
+    TreeType::vertex_descriptor from,
+    TreeType::vertex_descriptor to,
     AssetEdge data) {
   auto edgeData = add_edge(from, to, tree);
   if (edgeData.second) tree[edgeData.first] = data;
@@ -181,8 +186,8 @@ class AssetTree::UpdateStateVisitor : public default_dfs_visitor {
     };
 
     void CalcStateByInputsAndChildren(
-        AssetTree::AssetTreeImpl::vertex_descriptor vertex,
-        const AssetTree::AssetTreeImpl & tree,
+        AssetTree::TreeType::vertex_descriptor vertex,
+        const AssetTree::TreeType & tree,
         AssetDefs::State &stateByInputs,
         AssetDefs::State &stateByChildren,
         bool & blockersAreOffline,
@@ -195,7 +200,7 @@ class AssetTree::UpdateStateVisitor : public default_dfs_visitor {
       auto edgeEnd = edgeIters.second;
       for (auto i = edgeBegin; i != edgeEnd; ++i) {
         AssetTree::DependencyType type = tree[*i].type;
-        AssetTree::AssetTreeImpl::vertex_descriptor dep = i->m_target;
+        AssetTree::TreeType::vertex_descriptor dep = i->m_target;
         AssetDefs::State depState = tree[dep].state;
         switch(type) {
           case AssetTree::INPUT:
@@ -214,9 +219,8 @@ class AssetTree::UpdateStateVisitor : public default_dfs_visitor {
     // Update the state of an asset after we've updated the state of its
     // inputs and children.
     virtual void finish_vertex(
-        AssetTree::AssetTreeImpl::vertex_descriptor vertex,
-        const AssetTree::AssetTreeImpl & tree) const {
-      // TODO: could optimize here to short circuit if no inputs or children changed state
+        AssetTree::TreeType::vertex_descriptor vertex,
+        const AssetTree::TreeType & tree) const {
       MutableAssetVersionD version(tree[vertex].name);
       if (!version->NeedComputeState()) return;
       AssetDefs::State stateByInputs;
@@ -232,7 +236,7 @@ class AssetTree::UpdateStateVisitor : public default_dfs_visitor {
       // Update the state in the tree because other assets may need it to compute
       // their own states. Use the state from the version because setting the
       // state can sometimes trigger additional state changes.
-      const_cast<AssetTree::AssetTreeImpl&>(tree)[vertex].state = version->state;
+      const_cast<AssetTree::TreeType&>(tree)[vertex].state = version->state;
     }
 };
 

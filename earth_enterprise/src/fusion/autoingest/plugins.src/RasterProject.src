@@ -166,9 +166,10 @@ class RasterProjectAssetImplD {
 };
 
 class RasterProjectAssetVersionImplD {
- protected:
+ public:
   virtual void DependentChildren(std::vector<SharedString> &out);
 
+ protected:
   // This will make my children after my inputs have succeeded
   virtual void DelayedBuildChildren(void);
 

@@ -223,7 +223,6 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
   virtual void DelayedBuildChildren(void);
   virtual void OnStateChange(AssetDefs::State newstate,
                              AssetDefs::State oldstate);
-  virtual void DependentChildren(std::vector<SharedString> &out);
   virtual bool CompositeStateCaresAboutInputsToo(void) const { return false; }
 
   void AddChild(MutableAssetVersionD &child);
@@ -237,6 +236,7 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
       AssetDefs::State stateByChildren,
       bool blockersAreOffline,
       uint32 numWaitingFor) const;
+  virtual void DependentChildren(std::vector<SharedString> &out);
 };
 
 #endif /* __AssetVersionD_h */
