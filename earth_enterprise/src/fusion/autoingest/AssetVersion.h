@@ -128,11 +128,13 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
     + GetVectorSize(listeners)
     + GetVectorSize(outfiles)
     + sizeof(meta)
+    + meta.GetSize()
     + sizeof(beginTime)
     + sizeof(progressTime)
     + sizeof(endTime)
     + sizeof(taskid));
   }
+
 // Get the total memory used by a template vector
   template<class T>
   const uint64 GetVectorSize(std::vector<T> vec) {

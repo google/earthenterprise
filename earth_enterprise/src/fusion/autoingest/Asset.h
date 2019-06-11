@@ -77,6 +77,7 @@ class AssetImpl : public khRefCounter, public AssetStorage, public StorageManage
     + sizeof(inputs)
     + GetVectorSize(inputs)
     + sizeof(meta)
+    + meta.GetSize()
     + sizeof(versions));
   }
   // Get the total memory used by a template vector
