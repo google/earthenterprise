@@ -60,7 +60,7 @@ class AssetTree
                  AssetEdge data);
   public:
     AssetTree(const SharedString & ref);
-    void UpdateStates();
+    void RecalculateStates();
 };
 
 #endif // ASSETTREE_H
