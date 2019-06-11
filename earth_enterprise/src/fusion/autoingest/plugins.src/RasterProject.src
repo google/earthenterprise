@@ -763,7 +763,6 @@ void RasterProjectAssetVersionImplD::ThrowIfAnyInvalidDates(
 
 void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
   std::string assetRef = GetAssetRef();
-  notify(NFY_WARN, "%s: Delayed Start", assetRef.c_str());
 
   // short circuit on degenerate case. Do this so the rest of the code
   // can assume that there is at least one inset.
@@ -913,7 +912,6 @@ void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
       BuildIndex(tilespace, inset_infos, *iter);
     }
   }
-  notify(NFY_WARN, "%s: Delayed End", assetRef.c_str());
 }
 
 void RasterProjectAssetVersionImplD::LoadInsetInfoForIndexing(

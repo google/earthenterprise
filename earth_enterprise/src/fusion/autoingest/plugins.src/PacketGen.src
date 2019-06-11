@@ -287,32 +287,32 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       packetLevelConfig.insets.reserve(mergeIndexes.size() + 1);
       packetLevelConfig.insets.resize(mergeIndexes.size());
       int threadsToUse = MiscConfig::Instance().PackGenThreads;
-      notify(NFY_WARN, "mergeIndexes: %lu", mergeIndexes.size());
       levInputs.reserve(mergeIndexes.size() * 2 + 1);
       levInputVers.reserve(mergeIndexes.size() * 2 + 1);
       levInputs.resize(mergeIndexes.size() * 2);
       levInputVers.resize(mergeIndexes.size() * 2);
-      int i = 0;
       std::vector<int> emptyElements;
+      // Used to store indexes of Input and Input Version vectors which are empty.
+      // Empty elements are only present if an given inset has no alpha mask.
       emptyElements.reserve(mergeIndexes.size());
+      // Run the following loop in parallel using the amount of threads set in misc.xml.
       #pragma omp parallel for schedule(static) num_threads(threadsToUse)
       for (size_t idx = 0; idx < mergeIndexes.size(); ++idx) {
         const InsetInfo<ProductAssetVersion> &inset(*extra.insetInfo[mergeIndexes[idx]]);
         const PacketGenInfo &genInfo(*extra.genInfo[mergeIndexes[idx]]);
-
+        int i = idx*2;
         levInputs[i] = (inset.combinedrp_).Ref();
         levInputVers[i] = inset.combinedrp_;
-        i++;
 
         if (!inset.alphaRPFile.empty() &&
             (genInfo.packetLevels.size() > minifySrcLevel)) {
-          levInputs[i] = (genInfo.packetLevels[minifySrcLevel]).Ref();
-          levInputVers[i] = genInfo.packetLevels[minifySrcLevel];
+          levInputs[i+1] = (genInfo.packetLevels[minifySrcLevel]).Ref();
+          levInputVers[i+1] = genInfo.packetLevels[minifySrcLevel];
         }
 
         SharedString cached_blend;
         SharedString cached_blend_alpha;
-        if (levInputVers[i]) {
+        if (levInputVers[i+1]) {
           // This covers two cases:
           // 1) If level+1 == config.endMinifyLevel:
           //   This is the first merge (from cached blends)
@@ -336,14 +336,14 @@ void PacketGenAssetVersionImplD::UpdateChildren(
           // pick up the GEE-4.x Imagery/Terrain Projects (the PacketLevel
           // assets) that have no alpha blend cached.
           const std::string cache_alpha_path =
-              levInputVers[i]->GetOutputFilename(0) + "/cache_alpha.pack";
+              levInputVers[i+1]->GetOutputFilename(0) + "/cache_alpha.pack";
           if (khExists(cache_alpha_path)) {
-            cached_blend_alpha = levInputs[i];
+            cached_blend_alpha = levInputs[i+1];
           }
-          cached_blend = levInputs[i];
+          cached_blend = levInputs[i+1];
         }
         else {
-          emptyElements.push_back(i);
+          emptyElements.push_back(i+1);
         }
         packetLevelConfig.insets[idx] =
             PacketLevelConfig::Inset(
@@ -351,7 +351,6 @@ void PacketGenAssetVersionImplD::UpdateChildren(
                 inset.alphaRPFile,
                 cached_blend,
                 cached_blend_alpha);
-        i++;
       }
 
       for (size_t idx = 0; idx < emptyElements.size(); ++idx) {
@@ -415,8 +414,6 @@ void PacketGenAssetVersionImplD::UpdateChildren(
        khMetaData(),
        packetLevelConfig,
        levInputVers);
-
-    notify(NFY_WARN, "PASSED: %lu\t%lu", levInputs.size(), levInputVers.size());
 
     kids.push_back(packLevelVer);
     curTime = std::chrono::high_resolution_clock::now();
