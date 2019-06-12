@@ -62,7 +62,7 @@ class MapDatabaseAssetImplD {
  protected:
   void PostUpdate(void) { IncrementIndexVersion(); }
   static void PopulateInputs(const MapDatabaseConfig &config,
-                             std::vector<std::string> &inputs);
+                             std::vector<SharedString> &inputs);
 
  public:
   static void HandleEditRequest(const MapDatabaseEditRequest &);
@@ -101,7 +101,7 @@ class MapDatabaseAssetVersionImplD {
 #include "fusion/fusionversion.h"
 
 void MapDatabaseAssetImplD::PopulateInputs(const MapDatabaseConfig &config,
-                                           std::vector<std::string> &inputs)
+                                           std::vector<SharedString> &inputs)
 {
   if (!config.imageryProject.empty()) {
     RasterProjectFactory::ValidateRefForInput(config.imageryProject,
@@ -125,7 +125,7 @@ void MapDatabaseAssetImplD::PopulateInputs(const MapDatabaseConfig &config,
 
     MutableProjectedMapProjectAssetD proj_asset =
       ProjectedMapProjectFactory::FindMake(projected_proj_name,
-                                           makevec(config.mapProject),
+                                           makevec<SharedString>(config.mapProject),
                                            khMetaData(),
                                            proj_config);
     inputs.push_back(proj_asset->GetRef());
@@ -136,7 +136,7 @@ void
 MapDatabaseAssetImplD::HandleEditRequest(const MapDatabaseEditRequest &req)
 {
   // make sure the project assetRef's are valid
-  std::vector<std::string> inputs;
+  std::vector<SharedString> inputs;
   PopulateInputs(req.config, inputs);
 
   // normalize the supplied asset name
@@ -155,7 +155,7 @@ void
 MapDatabaseAssetImplD::HandleNewRequest(const MapDatabaseEditRequest &req)
 {
   // make sure the project assetRef's are valid
-  std::vector<std::string> inputs;
+  std::vector<SharedString> inputs;
   PopulateInputs(req.config, inputs);
 
   // normalize the supplied asset name
@@ -174,7 +174,7 @@ void
 MapDatabaseAssetImplD::HandleModifyRequest(const MapDatabaseEditRequest &req)
 {
   // make sure the project assetRef's are valid
-  std::vector<std::string> inputs;
+  std::vector<SharedString> inputs;
   PopulateInputs(req.config, inputs);
 
   // normalize the supplied asset name
@@ -244,7 +244,7 @@ MapDatabaseAssetVersionImplD::DelayedBuildChildren(void)
     std::string unified_index_asset_name
       (UnifiedIndexFactory::SubAssetName(assetRef, "unifiedindex"));
     std::vector<AssetVersion> index_input_versions;
-    std::vector<std::string>  index_input_verrefs;
+    std::vector<SharedString>  index_input_verrefs;
 
     UnifiedIndexConfig unified_index_config;
     if (imageryProject) {
@@ -287,7 +287,7 @@ MapDatabaseAssetVersionImplD::DelayedBuildChildren(void)
     std::string mapdb_asset_name
       (MapDBFactory::SubAssetName(assetRef, kMapdbBase));
     std::vector<AssetVersion> mapdb_input_versions;
-    std::vector<std::string>  mapdb_input_verrefs;
+    std::vector<SharedString>  mapdb_input_verrefs;
 
     // populate inputs
     // Adding the unified index as my input and registering that offline inputs
