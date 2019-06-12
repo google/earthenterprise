@@ -42,16 +42,14 @@ const std::string GEXMLObject::MAX_HEAP_SIZE = "MAX_HEAP_SIZE";
 const std::string GEXMLObject::BLOCK_SIZE = "BLOCK_SIZE";
 const std::string GEXMLObject::PURGE = "PURGE";
 const std::string GEXMLObject::PURGE_LEVEL = "PURGE_LEVEL";
-const std::string GEXMLObject::DEALLOCATE_ALL = "DEALLOCATE_ALL";
 const std::string GEXMLObject::XMLConfigFile = "/etc/opt/google/XMLparams";
-const std::array<std::string,6> GEXMLObject::options
+const std::array<std::string,5> GEXMLObject::options
 {{
     INIT_HEAP_SIZE,
     MAX_HEAP_SIZE,
     BLOCK_SIZE,
     PURGE,
-    PURGE_LEVEL,
-    DEALLOCATE_ALL
+    PURGE_LEVEL
 }};
 khMutex GEXMLObject::mutex;
 
@@ -61,7 +59,6 @@ XMLSize_t GEXMLObject::maxDOMSubAllocationSize;
 bool GEXMLObject::doPurge;
 int GEXMLObject::purgeLevel;
 XMLSize_t GEXMLObject::purgeThreshold;
-bool GEXMLObject::deallocateAll;
 bool GEXMLObject::xercesInitialized = false;
 
 uint32_t GEXMLObject::activeObjects = 0;
@@ -136,12 +133,6 @@ class SimpleMemoryManager : public MemoryManager {
       allocated.clear();
       allocatedSize = 0;
     }
-    // Clear storage without deallocating anything
-    void clear() {
-      khLockGuard guard(mutex);
-      allocated.clear();
-      allocatedSize = 0;
-    }
 };
 
 static SimpleMemoryManager memoryManager;
@@ -177,8 +168,7 @@ void GEXMLObject::setDefaultValues()
    maxDOMHeapAllocSize     = 0x20000;
    maxDOMSubAllocationSize = 0x1000;
    purgeLevel = 3;
-   doPurge = false;
-   deallocateAll = false;
+   doPurge = true;
 }
 
 void GEXMLObject::initializeXMLParameters() {
@@ -202,7 +192,6 @@ void GEXMLObject::initializeXMLParametersFromStream(std::istream & input) {
       config_parser.addOption(i);
     }
     config_parser.parse(input);
-    config_parser.validateIntegerValues();
     for (const auto& it : config_parser)
     {
       if (it.first == INIT_HEAP_SIZE)
@@ -213,8 +202,6 @@ void GEXMLObject::initializeXMLParametersFromStream(std::istream & input) {
         maxDOMSubAllocationSize = std::stol(it.second);
       else if (it.first == PURGE)
         doPurge = (std::stol(it.second) == 1);
-      else if (it.first == DEALLOCATE_ALL)
-        deallocateAll = (std::stol(it.second) == 1);
       else if (it.first == PURGE_LEVEL)
       {
         purgeLevel = std::stol(it.second);
@@ -270,15 +257,13 @@ GEXMLObject::GEXMLObject() {
                        "maxDOMSubAllocationSize=%zu\n"
                        "doPurge=%s\n"
                        "purgeLevel=%d\n"
-                       "purgeThreshold=%zu\n"
-                       "deallocateAll=%s",
+                       "purgeThreshold=%zu",
              initialDOMHeapAllocSize,
              maxDOMHeapAllocSize,
              maxDOMSubAllocationSize,
              (doPurge ? "true" : "false"),
              purgeLevel,
-             purgeThreshold,
-             (deallocateAll ? "true" : "false"));
+             purgeThreshold);
     }
     catch (const XMLException& toCatch)
     {
@@ -297,12 +282,7 @@ GEXMLObject::~GEXMLObject() {
     try {
       XMLPlatformUtils::Terminate();
       xercesInitialized = false;
-      if (deallocateAll) {
-        memoryManager.deallocateAll();
-      }
-      else {
-        memoryManager.clear();
-      }
+      memoryManager.deallocateAll();
       notify(NFY_DEBUG, "Terminated XML library");
     } catch(const XMLException& toCatch) {
       notify(NFY_WARN, "Unable to terminate Xerces: %s",
