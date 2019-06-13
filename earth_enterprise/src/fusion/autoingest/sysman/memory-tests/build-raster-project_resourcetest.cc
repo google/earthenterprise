@@ -66,7 +66,7 @@ class BuildRasterProject_Tester : public opengee::mem_usage::RasterProjectFuncti
         asset->Update(needed);
 
         // Cause the reference to be resolved by loading the XML:
-        asset_ref_character_count += asset->GetRef().length();
+        asset_ref_character_count += asset->GetRef().toString().length();
     }
 
     virtual bool run_test_operation()

@@ -280,16 +280,12 @@ MAX_HEAP_SIZE=&lt;value&gt;
 BLOCK_SIZE=&lt;value&gt;
 <br><br>
 # whether or not to purge the XML cache; valid values are 0 or 1<br>
-# default is 0<br>
-PURGE=0
+# default is 1<br>
+PURGE=1
 <br><br>
 # the level at which to purge the XML cache; can be 1 (most often) to 5 (least often)<br>
 # default is 3<br>
 PURGE_LEVEL=3
-<br><br>
-# deallocate all memory allocated by Xerces when the Xerces cache is purged; valid values are 0 or 1<br>
-# default is 0<br>
-DEALLOCATE_ALL=0
 </code>
 <h2 id="status_request_timeout">Status request timeout</h2>
 <p>Status requests to the system manager from clients like <code>getop</code> must wait to be fulfilled if the system manager

@@ -43,7 +43,6 @@ class PixelAverager<T, Averager, 1>
                              uint32 from3,
                              uint32 from4,
                              Averager averager) {
-    typedef typename khCalcHelper<T>::AccumType AccumType;
     dest[0][to] = averager(src[0][from1],
                            src[0][from2],
                            src[0][from3],
@@ -64,7 +63,6 @@ class PixelAverager<T, Averager, 3>
                              uint32 from3,
                              uint32 from4,
                              Averager averager) {
-    typedef typename khCalcHelper<T>::AccumType AccumType;
     dest[0][to] = averager(src[0][from1],
                            src[0][from2],
                            src[0][from3],

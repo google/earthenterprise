@@ -21,7 +21,7 @@
 #include "AssetHandle.h"
 #include <khFileUtils.h>
 #include "MiscConfig.h"
-
+#include "StorageManager.h"
 
 /******************************************************************************
  ***  AssetImpl
@@ -36,34 +36,37 @@
  ***  ... = asset->config.layers.size();
  ***
  ******************************************************************************/
-class AssetImpl : public khRefCounter, public AssetStorage {
+class AssetImpl : public khRefCounter, public AssetStorage, public StorageManaged {
   friend class AssetHandle_<AssetImpl>;
 
-  // private and unimplemented -- illegal to copy an AssetImpl
-  AssetImpl(const AssetImpl&);
-  AssetImpl& operator=(const AssetImpl&);
+  // Illegal to copy an AssetImpl
+  AssetImpl(const AssetImpl&) = delete;
+  AssetImpl& operator=(const AssetImpl&) = delete;
+  AssetImpl(const AssetImpl&&) = delete;
+  AssetImpl& operator=(const AssetImpl&&) = delete;
 
  protected:
+  // used by my intermediate derived classes since their calls to
+  // my constructor will never actualy be used
+  AssetImpl(void) = default;
+  AssetImpl(const AssetStorage &storage) :
+      AssetStorage(storage) { }
+
+ public:
   // implemented in LoadAny.cpp
   static khRefGuard<AssetImpl> Load(const std::string &boundref);
 
-  // used by my intermediate derived classes since their calls to
-  // my constructor will never actualy be used
-  AssetImpl(void) : timestamp(0), filesize(0) { }
-  AssetImpl(const AssetStorage &storage) :
-      AssetStorage(storage), timestamp(0), filesize(0) { }
-
- public:
-  // use by cache - maintained outside of constructors
-  time_t timestamp;
-  uint64 filesize;
+  virtual bool Save(const std::string &filename) const {
+    assert(false); // Can only save from sub-classes
+    return false;
+  };
 
   std::string WorkingDir(void) const { return WorkingDir(GetRef()); }
   std::string XMLFilename() const { return XMLFilename(GetRef()); }
 
 
   virtual ~AssetImpl(void) { }
-  std::string GetRef(void) const { return name; }
+  const SharedString & GetRef(void) const { return name; }
 
 
   std::string  GetLastGoodVersionRef(void) const;
@@ -81,66 +84,12 @@ class AssetImpl : public khRefCounter, public AssetStorage {
 typedef AssetHandle_<AssetImpl> Asset;
 
 template <>
-inline khCache<std::string, Asset::HandleType>&
-Asset::cache(void)
+inline StorageManager<AssetImpl>&
+Asset::storageManager(void)
 {
-  static khCache<std::string, Asset::HandleType>
-    instance(MiscConfig::Instance().AssetCacheSize);
-  return instance;
-}
-
-template <>
-inline void
-Asset::DoBind(const std::string &ref, bool checkFileExistenceFirst) const
-{
-  // Check in cache
-  HandleType entry = CacheFind(ref);
-  bool addToCache = false;
-
-  notify(NFY_VERBOSE,"CheckFileExistence: %d",checkFileExistenceFirst);
-  // Try to load from XML
-  if (!entry) {
-    if (checkFileExistenceFirst) {
-      std::string filename = Impl::XMLFilename(ref);
-
-      // checks to see whether or not this XML file exists
-      if (!khExists(Impl::XMLFilename(ref))) {
-        // in this case DoBind is allowed not to throw even if
-        // we configured to normally throw
-        return;
-      }
-    }
-
-    // will succeed, generate stub, or throw exception
-    entry = Load(ref);
-    addToCache = true;
-  } else if (check_timestamps) {
-    std::string filename = Impl::XMLFilename(ref);
-    uint64 filesize = 0;
-    time_t timestamp = 0;
-    if (khGetFileInfo(filename, filesize, timestamp) &&
-        ((timestamp != entry->timestamp) ||
-         (filesize != entry->filesize))) {
-      // the file has changed on disk
-
-      // drop the current entry from the cache
-      cache().Remove(ref, false); // don't prune, the Add will
-
-      // will succeed, generate stub, or throw exception
-      entry = Load(ref);
-      addToCache = true;
-    }
-  }
-
-  // set my handle
-  handle = entry;
-
-  // add it to the cache
-  if (addToCache)
-    cache().Add(ref, entry);
-
-  // used by derived class to mark dirty
-  OnBind(ref);
+  static StorageManager<AssetImpl> storageManager(
+      MiscConfig::Instance().AssetCacheSize, "asset");
+  return storageManager;
 }
 
 template <>
@@ -155,7 +104,7 @@ Asset::Valid(void) const
       return false;
 
     try {
-      DoBind(ref, true /* check file & maybe not throw */);
+      DoBind(true /* check file & maybe not throw */, true /* add to cache */);
     } catch (...) {
       return false;
     }
@@ -163,14 +112,12 @@ Asset::Valid(void) const
   }
 }
 
-
 template <>
-inline void
-Asset::Bind(void) const
-{
-  if (!handle) {
-    DoBind(ref, false);
-  }
+inline std::string Asset::Filename() const {
+  return AssetImpl::XMLFilename(ref);
 }
+
+template <> inline const SharedString Asset::Key() const { return ref; }
+
 
 #endif /* __Asset_h */
