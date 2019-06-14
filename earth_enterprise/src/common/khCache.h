@@ -20,7 +20,6 @@
 
 #include <map>
 #include <vector>
-#include <memory>
 
 #include "khTypes.h"
 #include "fusion/autoingest/MiscConfig.h"

@@ -132,13 +132,15 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
     + sizeof(beginTime)
     + sizeof(progressTime)
     + sizeof(endTime)
-    + sizeof(taskid));
+    + sizeof(taskid)
+    + sizeof(timestamp)
+    + sizeof(filesize));
   }
 
 // Get the total memory used by a template vector
   template<class T>
   const uint64 GetVectorSize(std::vector<T> vec) {
-    return (vec.capacity() * sizeof(T));
+    return sizeof(vec) + (vec.capacity() * sizeof(T));
   }
 // Get the total memory used by a vector of strings
   const uint64 GetVectorSize(std::vector<std::string> vec) {
@@ -146,11 +148,11 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
     for(const auto &i : vec) {
       total += (sizeof(i) + i.capacity());
     }
-    return total;
+    return sizeof(vec) + total;
   }
 // Get the total memory used by a vector of SharedStrings
   const uint64 GetVectorSize(std::vector<SharedString> vec) {
-    return (vec.capacity() * ((vec.front()).GetSharedStringSize()));
+    return sizeof(vec) + (vec.capacity() * ((vec.front()).GetSharedStringSize()));
   }
 
   template <class outIter>
