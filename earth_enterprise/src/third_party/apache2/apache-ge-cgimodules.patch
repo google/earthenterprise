@@ -1,5 +1,5 @@
---- a/gehttpd.conf	2019-06-11 14:01:48.445999000 -0400
-+++ b/gehttpd.conf	2019-06-14 09:30:24.851536613 -0400
+--- httpd-2.2.29.orig/docs/conf/httpd.conf.in	2019-06-11 14:01:48.445999000 -0400
++++ httpd-2.2.29/docs/conf/httpd.conf.in	2019-06-14 09:30:24.851536613 -0400
 @@ -149,7 +149,7 @@
  LoadModule autoindex_module modules/mod_autoindex.so
  #LoadModule asis_module modules/mod_asis.so
