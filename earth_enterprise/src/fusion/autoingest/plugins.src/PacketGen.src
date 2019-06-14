@@ -45,6 +45,7 @@ class PacketGenExtraUpdateArg {
 #include <autoingest/plugins/RasterProductAsset.h>
 #include <autoingest/plugins/MercatorRasterProductAsset.h>
 #include <chrono>
+#include <typeinfo>
 
 
 template
@@ -287,14 +288,9 @@ void PacketGenAssetVersionImplD::UpdateChildren(
       packetLevelConfig.insets.reserve(mergeIndexes.size() + 1);
       packetLevelConfig.insets.resize(mergeIndexes.size());
       int threadsToUse = MiscConfig::Instance().PackGenThreads;
-      levInputs.reserve(mergeIndexes.size() * 2 + 1);
-      levInputVers.reserve(mergeIndexes.size() * 2 + 1);
-      levInputs.resize(mergeIndexes.size() * 2);
-      levInputVers.resize(mergeIndexes.size() * 2);
-      std::vector<int> emptyElements;
-      // Used to store indexes of Input and Input Version vectors which are empty.
-      // Empty elements are only present if an given inset has no alpha mask.
-      emptyElements.reserve(mergeIndexes.size());
+      levInputs.resize(mergeIndexes.size() * 2 + 1);
+      levInputVers.resize(mergeIndexes.size() * 2 + 1);
+
       // Run the following loop in parallel using the amount of threads set in misc.xml.
       #pragma omp parallel for schedule(static) num_threads(threadsToUse)
       for (size_t idx = 0; idx < mergeIndexes.size(); ++idx) {
@@ -342,21 +338,12 @@ void PacketGenAssetVersionImplD::UpdateChildren(
           }
           cached_blend = levInputs[i+1];
         }
-        else {
-          emptyElements.push_back(i+1);
-        }
         packetLevelConfig.insets[idx] =
             PacketLevelConfig::Inset(
                 inset.dataRPFile,
                 inset.alphaRPFile,
                 cached_blend,
                 cached_blend_alpha);
-      }
-
-      for (size_t idx = 0; idx < emptyElements.size(); ++idx) {
-        int i = emptyElements[idx];
-        levInputs.erase(levInputs.begin() + i);
-        levInputVers.erase(levInputVers.begin() + i);
       }
 
       curTime = std::chrono::high_resolution_clock::now();
@@ -374,8 +361,8 @@ void PacketGenAssetVersionImplD::UpdateChildren(
         }
         AssetVersion prevLevelVer(kids.back());
 
-        levInputs.push_back(prevLevelVer.Ref());
-        levInputVers.push_back(prevLevelVer);
+        levInputs.back() = prevLevelVer.Ref();
+        levInputVers.back() = prevLevelVer;
 
 
         // Note: Before creating a merge inset, we check if the cached alpha
@@ -401,6 +388,8 @@ void PacketGenAssetVersionImplD::UpdateChildren(
         prevTime = curTime;
       }
 
+      std::remove(levInputs.begin(), levInputs.end(), "");
+      std::remove(levInputVers.begin(), levInputVers.end(), nullptr);
     }
 
     // get child asset ver
