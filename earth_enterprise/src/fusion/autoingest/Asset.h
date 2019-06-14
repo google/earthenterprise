@@ -74,20 +74,21 @@ class AssetImpl : public khRefCounter, public AssetStorage, public StorageManage
     + sizeof(type)
     + sizeof(subtype)
     + (subtype.capacity() * sizeof(char))
-    + sizeof(inputs)
     + GetVectorSize(inputs)
     + sizeof(meta)
     + meta.GetSize()
-    + sizeof(versions));
+    + sizeof(versions)
+    + sizeof(timestamp)
+    + sizeof(filesize));
   }
   // Get the total memory used by a template vector
   template<class T>
   const uint64 GetVectorSize(std::vector<T> vec) {
-    return (vec.capacity() * sizeof(T));
+    return sizeof(vec) + (vec.capacity() * sizeof(T));
   }
   // Get the total memory used by a vector of SharedStrings
   const uint64 GetVectorSize(std::vector<SharedString> vec) {
-    return (vec.capacity() * ((vec.front()).GetSharedStringSize()));
+    return sizeof(vec) + (vec.capacity() * ((vec.front()).GetSharedStringSize()));
   }
 
 
