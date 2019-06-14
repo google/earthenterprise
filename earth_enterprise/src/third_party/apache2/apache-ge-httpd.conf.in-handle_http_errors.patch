@@ -5,7 +5,6 @@ diff -uNr httpd-2.2.29.orig/docs/conf/httpd.conf.in httpd-2.2.29/docs/conf/httpd
      # directives as to Alias.
      #
      ScriptAlias /cgi-bin/ "@exp_cgidir@/"
-+    Alias /error_handler "/opt/google/gehttpd/cgi-bin/"
  
  </IfModule>
  

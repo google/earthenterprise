@@ -1,0 +1,11 @@
+--- a/gehttpd.conf	2019-06-11 14:01:48.445999000 -0400
++++ b/gehttpd.conf	2019-06-14 09:30:24.851536613 -0400
+@@ -149,7 +149,7 @@
+ LoadModule autoindex_module modules/mod_autoindex.so
+ #LoadModule asis_module modules/mod_asis.so
+ #LoadModule info_module modules/mod_info.so
+-#LoadModule cgid_module modules/mod_cgid.so
++LoadModule cgid_module modules/mod_cgid.so
+ #LoadModule dav_fs_module modules/mod_dav_fs.so
+ #LoadModule dav_lock_module modules/mod_dav_lock.so
+ #LoadModule vhost_alias_module modules/mod_vhost_alias.so
