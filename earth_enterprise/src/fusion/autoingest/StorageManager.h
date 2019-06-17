@@ -60,7 +60,7 @@ class StorageManager
     bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<std::string> *);
     HandleType Get(const AssetHandleInterface<AssetType> *, bool, bool, bool);
   private:
-    using CacheType = khCache<std::string, HandleType>;
+    using CacheType = khCache<AssetKey, HandleType>;
 
     static const bool check_timestamps;
 
