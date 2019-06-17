@@ -302,38 +302,44 @@ ${name}Factory::ReuseOrMakeAndUpdate(
 	for (AssetStorage::VersionList::const_iterator v
                 = asset->versions.begin();
              v != asset->versions.end(); ++v) {
-            ${name}AssetVersionD version(*v);
-            // Load an asset version without caching since we may not need it
-            // (offline, obsolete and so on).
-            version.LoadAsTemporary();
-            if ((version->state != AssetDefs::Offline) &&
-                (version->inputs == boundInputs) &&
-                ::IsUpToDate(config_, version->config)) {
+            try {
+              ${name}AssetVersionD version(*v);
+              // Load an asset version without caching since we may not need it
+              // (offline, obsolete and so on).
+              version.LoadAsTemporary();
+              if ((version->state != AssetDefs::Offline) &&
+                  (version->inputs == boundInputs) &&
+                  ::IsUpToDate(config_, version->config)) {
 
 #if 0
-                notify(NFY_NOTICE,
-                       "${name}: ReuseOrMakeAndUpdate (reusing %s)",
-                       version->GetRef().c_str());
-                notify(NFY_NOTICE, "         boundinputs:");
-                for (const auto & bi : boundInputs) {
-                    notify(NFY_NOTICE, "             %s", bi.c_str());
-                }
-                notify(NFY_NOTICE, "         version inputs:");
-                for (std::vector<std::string>::const_iterator iv =
-                     version->inputs.begin();
-                     iv != version->inputs.end(); ++iv) {
-                    notify(NFY_NOTICE, "             %s", iv->c_str());
-                }
+                  notify(NFY_NOTICE,
+                         "${name}: ReuseOrMakeAndUpdate (reusing %s)",
+                         version->GetRef().c_str());
+                  notify(NFY_NOTICE, "         boundinputs:");
+                  for (const auto & bi : boundInputs) {
+                      notify(NFY_NOTICE, "             %s", bi.c_str());
+                  }
+                  notify(NFY_NOTICE, "         version inputs:");
+                  for (std::vector<std::string>::const_iterator iv =
+                       version->inputs.begin();
+                       iv != version->inputs.end(); ++iv) {
+                      notify(NFY_NOTICE, "             %s", iv->c_str());
+                  }
 #endif
                 // Tell the storage manager that we're going to use this
                 // version again.
                 version.MakePermanent();
 
                 return version;
-            } else {
+             } else {
               // Tell the storage manager we don't need this one any more.
-              version.NoLongerNeeded();
-            }
+                version.NoLongerNeeded();
+             }
+          }
+          catch (...) {
+            notify(NFY_WARN, "${name}: ReuseOrMakeAndUpdate could not reuse
+                   a version." )
+          }
         }
         asset->Modify($forwardinputarg meta_, config_);
     } else {
