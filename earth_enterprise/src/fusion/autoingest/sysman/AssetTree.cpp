@@ -84,12 +84,12 @@ AssetTree::AddSelfAndConnectedAssets(
       AddEdge(myVertex, inputVertex, {INPUT});
     }
     for (const auto & parent : version->parents) {
-      auto parentVertex = AddSelfAndConnectedAssets(parent, vertices, index);
-      AddEdge(parentVertex, myVertex, {CHILD});
+      AddSelfAndConnectedAssets(parent, vertices, index);
+      // Don't add the edge - the parent will add it
     }
     for (const auto & listener : version->listeners) {
-      auto listenerVertex = AddSelfAndConnectedAssets(listener, vertices, index);
-      AddEdge(listenerVertex, myVertex, {INPUT});
+      AddSelfAndConnectedAssets(listener, vertices, index);
+      // Don't add the edge - the listener will add it
     }
     return myVertex;
   }
