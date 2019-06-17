@@ -207,6 +207,12 @@ void CalcPacketGenInfo(const khTilespace            &tilespace,
 
   // populate list - inital coverage estimate from inset degExtents
   genInfos.reserve(insetInfos.size());
+  /*
+      For situations where you calculate once only:
+      - tilespace, insetInfo.degExtends, insetInfo.fullFullResLevel the same
+      - beginCovLevel still beginCoverageLevel
+      - endLevel = endMinifyLevel?
+  */
   for (size_t i = 0; i < insetInfos.size(); ++i) {
     const InsetInfo &insetInfo = insetInfos[i];
     AssetVersionRef verref =
@@ -344,6 +350,7 @@ void CalculateOverlap(
     if (doOnceNotify)
     {
         doOnceNotify = false;
+
         if (MiscConfig::Instance().CalculateOverlapOnce)
         {
             notify(NFY_WARN, "Calculate overlap once");
@@ -353,6 +360,15 @@ void CalculateOverlap(
             notify(NFY_WARN, "Calculate overlap per resource");
         }
     }
+
+    static uint8_t count = 0;
+    if (count++ < 5)
+        notify(NFY_WARN, "veclevel: %u begin: %u end: %u beginMinify: %u endMinify: %u",
+               env.gencov.numVLvls(),
+               env.gencov.beginLevel(),
+               env.gencov.endLevel(),
+               env.beginMinifyLevel,
+               env.endMinifyLevel);
 
     if (env.type == AssetDefs::Imagery)
     {

@@ -1035,14 +1035,25 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   packgenkids.reserve(numInsets);
   packgenassets.reserve(numInsets);
   packgenvers.reserve(numInsets);
-  std::vector<uint> neededIdxs;
+  std::vector<uint> totalNeededIndexes;
 
 // calculate total overlap before entering here
 
+#if 0
 if (MiscConfig::Instance().CalculateOverlapOnce);
 {
-    notify(NFY_WARN, "RasterProject: calculate overlap once");
+    auto levCov(config.coverage.levelCoverage(config.coverage.endLevel()));
+    auto gencov = khInsetCoverage(levCov);
+    /*overlapEnvelope<RasterProductAssetVersion> env(
+        type,
+        gencov, //khInsetCoverage
+        insetInfoPtrs,
+        inset_infos.size(),
+        totalNeededIndexes,
+        beginMinifyLevel,
+        endMinifyLevel);*/
 }
+#endif
 
   for (uint i = 0; i < genInfo.size(); ++i) {
     // Check if I even need to do any packet generation at all
@@ -1135,13 +1146,15 @@ if (MiscConfig::Instance().CalculateOverlapOnce);
     }
 
     // reuse or make a new PacketGenAssetVersion --> update children
-    MutableAssetVersionD packgen =
-      PacketGenFactory::ReuseOrMakeAndUpdate(genInfo[i].assetname,
-                                             type,
-                                             khMetaData(),
-                                             packetGenConfig, // new vector?
-                                             extraArg);
+    // refactor this method call if wanting to do all calculations at once
+      MutableAssetVersionD packgen =
+        PacketGenFactory::ReuseOrMakeAndUpdate(genInfo[i].assetname,
+                                               type,
+                                               khMetaData(),
+                                               packetGenConfig, // new vector?
+                                               extraArg);
 
+    
     if (packetGenConfig.cacheRaster) {
       // Extract the PacketLevel children from the new version and store
       // them in my genInfo. My later children will use these to help

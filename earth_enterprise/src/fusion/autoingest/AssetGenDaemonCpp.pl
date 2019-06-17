@@ -299,10 +299,8 @@ ${name}Factory::ReuseOrMakeAndUpdate(
 
     Mutable${name}AssetD asset = Find(ref_ $forwardtypearg);
     if (asset) {
-	for (AssetStorage::VersionList::const_iterator v
-                = asset->versions.begin();
-             v != asset->versions.end(); ++v) {
-            ${name}AssetVersionD version(*v);
+        for (const auto& v : asset->versions) {
+            ${name}AssetVersionD version(v);
             // Load an asset version without caching since we may not need it
             // (offline, obsolete and so on).
             version.LoadAsTemporary();
@@ -738,7 +736,12 @@ EOF
 }else {
     print $fh <<EOF;
     // now see if I'm up to date
+    static auto count = 0;
+    ++count;
     if (!IsUpToDate()) {
+        static auto countUC = 0;
+        notify(NFY_WARN, "Mutable${name}AssetVersionD count %d of %d total",
+               ++countUC, count);
         Mutable${name}AssetD self(GetRef());
         Mutable${name}AssetVersionD newver = self->MakeNewVersion();
 EOF

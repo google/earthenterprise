@@ -929,11 +929,8 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
   packgenkids.reserve(numInsets);
   packgenassets.reserve(numInsets);
   packgenvers.reserve(numInsets);
+  std::vector<uint> totalNeededIndexes;
 
-  if (MiscConfig::Instance().CalculateOverlapOnce)
-  {
-      notify(NFY_WARN, "MercatorRasterProject: calculate overlap once");
-  }
 
   for (uint i = 0; i < genInfo.size(); ++i) {
     // Check if I even need to do any packet generation at all
@@ -1006,14 +1003,14 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
       extraArg.genInfo.push_back(&genInfo[idx]);
     }
 
-    // reuse or make a new PacketGenAssetVersion
-    MutableAssetVersionD packgen =
-      PacketGenFactory::ReuseOrMakeAndUpdate(genInfo[i].assetname,
-                                             type,
-                                             khMetaData(),
-                                             packetGenConfig,
-                                             extraArg);
-
+      // reuse or make a new PacketGenAssetVersion
+      MutableAssetVersionD packgen =
+        PacketGenFactory::ReuseOrMakeAndUpdate(genInfo[i].assetname,
+                                               type,
+                                               khMetaData(),
+                                               packetGenConfig,
+                                               extraArg);
+    
     if (packetGenConfig.cacheRaster) {
       // Extract the PacketLevel children from the new version and store
       // them in my genInfo. My later children will use these to help
