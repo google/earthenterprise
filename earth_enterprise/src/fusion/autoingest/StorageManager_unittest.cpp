@@ -257,7 +257,8 @@ TEST_F(StorageManagerTest, SaveDirty) {
   getAssetsForDirtyTest(storageManager, handles);
   
   khFilesTransaction trans;
-  storageManager.SaveDirtyToDotNew(trans, nullptr);
+  bool result = storageManager.SaveDirtyToDotNew(trans, nullptr);
+  ASSERT_TRUE(result) << "SaveDirtyToDotNew should return true when there are no issues";
   ASSERT_EQ(storageManager.CacheSize(), 5) << "Unexpected number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has wrong number of items in dirty map";
   ASSERT_EQ(trans.NumNew(), 2) << "Wrong number of new items in file transaction";
@@ -285,7 +286,8 @@ TEST_F(StorageManagerTest, FailedSave) {
   TestHandle item = Get<TestHandle>(storageManager, "item", false, true, true);
   item.handle->saveSucceeds = false;
   khFilesTransaction trans;
-  storageManager.SaveDirtyToDotNew(trans, nullptr);
+  bool result = storageManager.SaveDirtyToDotNew(trans, nullptr);
+  ASSERT_FALSE(result) << "SaveDirtyToDotNew should return false when a save fails";
   ASSERT_EQ(storageManager.CacheSize(), 1) << "Unexpected number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has wrong number of items in dirty map";
   ASSERT_EQ(trans.NumNew(), 0) << "Transaction should be empty after failed save";
