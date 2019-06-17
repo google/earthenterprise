@@ -337,8 +337,8 @@ ${name}Factory::ReuseOrMakeAndUpdate(
               }
            }
            catch (...) {
-             notify(NFY_WARN, "${name}: ReuseOrMakeAndUpdate could not reuse
-                   a version." )
+             notify(NFY_WARN,
+                    "${name}: ReuseOrMakeAndUpdate could not reuse a version." );
            }
         }
         asset->Modify($forwardinputarg meta_, config_);
