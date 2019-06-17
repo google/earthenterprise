@@ -331,15 +331,15 @@ ${name}Factory::ReuseOrMakeAndUpdate(
                 version.MakePermanent();
 
                 return version;
-             } else {
-              // Tell the storage manager we don't need this one any more.
+              } else {
+                // Tell the storage manager we don't need this one any more.
                 version.NoLongerNeeded();
-             }
-          }
-          catch (...) {
-            notify(NFY_WARN, "${name}: ReuseOrMakeAndUpdate could not reuse
+              }
+           }
+           catch (...) {
+             notify(NFY_WARN, "${name}: ReuseOrMakeAndUpdate could not reuse
                    a version." )
-          }
+           }
         }
         asset->Modify($forwardinputarg meta_, config_);
     } else {
