@@ -87,7 +87,7 @@ apache_patch = apache_env.Command(
         'cd %s/%s\n'
         '%s\n'
         'touch %s' % (build_root, httpd_version,
-                      '\n'.join(map(lambda i: 'patch -g0 -p1 -s < %s' % (
+                      '\n'.join(map(lambda i: 'patch -g0 -p1 --verbose < %s' % (
                           apache_env.GetBuildPath(i)), apache_patches)),
                       apache_target))])
 
