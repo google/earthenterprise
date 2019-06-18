@@ -1,7 +1,7 @@
-diff -uNr httpd-2.2.29.orig/docs/conf/httpd.conf.in httpd-2.2.29/docs/conf/httpd.conf.in
---- httpd-2.2.29.orig/docs/conf/httpd.conf.in	2015-08-27 12:03:00.276038659 -0700
-+++ httpd-2.2.29/docs/conf/httpd.conf.in	2015-08-27 12:12:32.168159817 -0700
-@@ -285,6 +285,7 @@
+diff -uNr httpd.orig/httpd-2.4.39/docs/conf/httpd.conf.in httpd-2.4.39/docs/conf/httpd.conf.in 
+--- httpd.orig/httpd-2.4.39/docs/conf/httpd.conf.in     2016-08-16 17:12:07.000000000 -0600
++++ httpd-2.4.39/docs/conf/httpd.conf.in        2019-06-18 09:59:57.658978293 -0600
+@@ -247,6 +247,7 @@
      # directives as to Alias.
      #
      ScriptAlias /cgi-bin/ "@exp_cgidir@/"
@@ -9,10 +9,12 @@ diff -uNr httpd-2.2.29.orig/docs/conf/httpd.conf.in httpd-2.2.29/docs/conf/httpd
  
  </IfModule>
  
-@@ -304,6 +305,8 @@
+@@ -266,6 +267,8 @@
      AllowOverride None
      Options None
      Require all granted
 +    Options +ExecCGI
 +    SetHandler cgi-script
  </Directory>
+ 
+ <IfModule headers_module>
