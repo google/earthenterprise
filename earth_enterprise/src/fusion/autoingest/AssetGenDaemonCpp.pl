@@ -323,8 +323,8 @@ ${name}Factory::ReuseOrMakeAndUpdate(
                 for (std::vector<std::string>::const_iterator iv =
                      version->inputs.begin();
                      iv != version->inputs.end(); ++iv) {
-                     notify(NFY_NOTICE, "             %s", iv->c_str());
-                  }
+                    notify(NFY_NOTICE, "             %s", iv->c_str());
+                }
 #endif
                 // Tell the storage manager that we're going to use this
                 // version again.
