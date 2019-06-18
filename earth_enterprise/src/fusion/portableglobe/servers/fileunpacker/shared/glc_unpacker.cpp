@@ -330,7 +330,7 @@ void GlcUnpacker::MapDataPacketWalker(int layer, const map_packet_walker& walker
     std::cerr << "Layer " << layer << " not found." << std::endl;
     return;
   }
-  iter.second->MapDataPacketWalker(layer, walker);
+  iter->second->MapDataPacketWalker(layer, walker);
 }
 
 /**
