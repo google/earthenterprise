@@ -18,11 +18,19 @@
 #define ASSETTREE_H
 
 #include <boost/graph/adjacency_list.hpp>
+#include <list>
 #include <map>
 
 #include "autoingest/.idl/storage/AssetDefs.h"
 #include "common/SharedString.h"
 
+// This class efficiently updates the states of lots of asset versions at
+// the same time. The idea is that you create a state updater, use it to
+// perform one "macro" operation (such as a clean or resume), and then let
+// it go out of scope.
+//
+// Internally, this class represents the asset versions as a directed
+// acyclic graph, and state updates are performed as graph operations.
 class StateUpdater
 {
   private:
@@ -52,10 +60,16 @@ class StateUpdater
 
     TreeType tree;
 
-    TreeType::vertex_descriptor AddSelfAndConnectedAssets(
+    TreeType::vertex_descriptor AddEmptyVertex(
         const SharedString & ref,
         VertexMap & vertices,
-        size_t & index);
+        size_t & index,
+        std::list<TreeType::vertex_descriptor> & toLoad);
+    void FillInVertex(
+        TreeType::vertex_descriptor vertex,
+        VertexMap & vertices,
+        size_t & index,
+        std::list<TreeType::vertex_descriptor> & toLoad);
     void AddEdge(TreeType::vertex_descriptor from,
                  TreeType::vertex_descriptor to,
                  AssetEdge data);

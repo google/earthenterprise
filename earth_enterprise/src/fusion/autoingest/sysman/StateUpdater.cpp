@@ -18,6 +18,7 @@
 #include "AssetVersionD.h"
 
 using namespace boost;
+using namespace std;
 
 // The depth_first_search function needs a way to map vertexes to indexes. We
 // store a unique index inside each vertex; the code below provides a way for
@@ -59,44 +60,73 @@ namespace boost {
 StateUpdater::StateUpdater(const SharedString & ref) {
   VertexMap vertices;
   size_t index = 0;
-  AddSelfAndConnectedAssets(ref, vertices, index);
+  list<TreeType::vertex_descriptor> toLoad, toLoadNext;
+  // First create an empty vertex for the provided asset. Then fill it in,
+  // which includes adding its connections to other assets. Every time we fill
+  // in a node we will get new assets to add to the tree until all assets have
+  // been added. This basically builds the tree using a breadth first search,
+  // which allows us to keep memory usage (relatively) low by not forcing
+  // assets to stay in the cache and limiting the size of the toLoad and
+  // toLoadNext lists.
+  AddEmptyVertex(ref, vertices, index, toLoad);
+  while (toLoad.size() > 0) {
+    for (auto vertex : toLoad) {
+      FillInVertex(vertex, vertices, index, toLoadNext);
+    }
+    toLoad = std::move(toLoadNext);
+    toLoadNext.clear();
+  }
 }
 
+// Creates an "empty" node for this asset if it has not already been added to
+// the tree. The node has a default state and doesn't include links to
+// inputs/children/etc. The vertex must be "filled in" by calling FillInVertex
+// before it is useful.
 StateUpdater::TreeType::vertex_descriptor
-StateUpdater::AddSelfAndConnectedAssets(
+StateUpdater::AddEmptyVertex(
     const SharedString & ref,
     VertexMap & vertices,
-    size_t & index) {
+    size_t & index,
+    list<TreeType::vertex_descriptor> & toLoad) {
   auto myVertexIter = vertices.find(ref);
   if (myVertexIter == vertices.end()) {
-    // I'm not in the graph yet, so make a new vertex and add my connections
-    AssetVersion version(ref);
+    // I'm not in the graph yet, so make a new empty vertex and let the caller
+    // know we need to load it with the correct information
     auto myVertex = add_vertex(tree);
-    tree[myVertex] = {ref, version->state, index};
+    tree[myVertex] = {ref, AssetDefs::New, index};
     ++index;
-    vertices[version->GetRef()] = myVertex;
-    for (const auto & child : version->children) {
-      auto childVertex = AddSelfAndConnectedAssets(child, vertices, index);
-      AddEdge(myVertex, childVertex, {CHILD});
-    }
-    for (const auto & input : version->inputs) {
-      auto inputVertex = AddSelfAndConnectedAssets(input, vertices, index);
-      AddEdge(myVertex, inputVertex, {INPUT});
-    }
-    for (const auto & parent : version->parents) {
-      AddSelfAndConnectedAssets(parent, vertices, index);
-      // Don't add the edge - the parent will add it
-    }
-    for (const auto & listener : version->listeners) {
-      AddSelfAndConnectedAssets(listener, vertices, index);
-      // Don't add the edge - the listener will add it
-    }
+    vertices[ref] = myVertex;
+    toLoad.push_back(myVertex);
     return myVertex;
   }
   else {
-    // I'm already in the graph, so someone else is adding my connections.
-    // Just return my vertex descriptor.
+    // I'm already in the graph, so just return my vertex descriptor.
     return myVertexIter->second;
+  }
+}
+
+void StateUpdater::FillInVertex(
+    TreeType::vertex_descriptor myVertex,
+    VertexMap & vertices,
+    size_t & index,
+    list<TreeType::vertex_descriptor> & toLoad) {
+  AssetVersion version(tree[myVertex].name);
+  tree[myVertex].state = version->state;
+  for (const auto & child : version->children) {
+    auto childVertex = AddEmptyVertex(child, vertices, index, toLoad);
+    AddEdge(myVertex, childVertex, {CHILD});
+  }
+  for (const auto & input : version->inputs) {
+    auto inputVertex = AddEmptyVertex(input, vertices, index, toLoad);
+    AddEdge(myVertex, inputVertex, {INPUT});
+  }
+  for (const auto & parent : version->parents) {
+    auto parentVertex = AddEmptyVertex(parent, vertices, index, toLoad);
+    AddEdge(parentVertex, myVertex, {CHILD});
+  }
+  for (const auto & listener : version->listeners) {
+    auto listenerVertex = AddEmptyVertex(listener, vertices, index, toLoad);
+    AddEdge(listenerVertex, myVertex, {INPUT});
   }
 }
 
@@ -200,7 +230,7 @@ class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
       auto edgeEnd = edgeIters.second;
       for (auto i = edgeBegin; i != edgeEnd; ++i) {
         StateUpdater::DependencyType type = tree[*i].type;
-        StateUpdater::TreeType::vertex_descriptor dep = i->m_target;
+        StateUpdater::TreeType::vertex_descriptor dep = target(*i, tree);
         AssetDefs::State depState = tree[dep].state;
         switch(type) {
           case StateUpdater::INPUT:
