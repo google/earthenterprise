@@ -286,7 +286,9 @@ ${name}Factory::ReuseOrMakeAndUpdate(
         const khMetaData &meta_,
         const $config& config_
         $formalcachedinputarg
-        $formalExtraUpdateArg)
+        $formalExtraUpdateArg,
+        bool skip,
+        const std::vector<uint>& neededIndexes)
 {
     // make a copy since actualinputarg is macro substituted, so begin() &
     // end() could be called on different temporary objects
@@ -341,7 +343,7 @@ ${name}Factory::ReuseOrMakeAndUpdate(
     }
     bool needed = false;
     return asset->MyUpdate(needed $forwardcachedinputarg
-                           $forwardExtraUpdateArg);
+                           $forwardExtraUpdateArg, skip, neededIndexes);
 }
 
 $template
@@ -634,7 +636,8 @@ if ($hasinputs) {
 $template
 ${name}AssetVersionD
 ${name}AssetImplD::MyUpdate(bool &needed $formalcachedinputarg
-                            $formalExtraUpdateArg) const
+                            $formalExtraUpdateArg,
+                            bool skip, const std::vector<uint>& neededIndexes) const
 {
     std::vector<AssetVersion> updatedInputVers;
     const std::vector<AssetVersion> *inputvers;
@@ -716,7 +719,9 @@ EOF
 
 $template
 ${name}AssetVersionD
-${name}AssetImplD::MyUpdate(bool &needed $formalExtraUpdateArg) const
+${name}AssetImplD::MyUpdate(bool &needed $formalExtraUpdateArg,
+                            bool skip,
+                            const std::vector<uint>& neededIndexes) const
 {
 EOF
 
@@ -736,12 +741,7 @@ EOF
 }else {
     print $fh <<EOF;
     // now see if I'm up to date
-    static auto count = 0;
-    ++count;
     if (!IsUpToDate()) {
-        static auto countUC = 0;
-        notify(NFY_WARN, "Mutable${name}AssetVersionD count %d of %d total",
-               ++countUC, count);
         Mutable${name}AssetD self(GetRef());
         Mutable${name}AssetVersionD newver = self->MakeNewVersion();
 EOF

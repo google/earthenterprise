@@ -1152,7 +1152,9 @@ if (MiscConfig::Instance().CalculateOverlapOnce);
                                                type,
                                                khMetaData(),
                                                packetGenConfig, // new vector?
-                                               extraArg);
+                                               extraArg,
+                                               MiscConfig::Instance().CalculateOverlapOnce,
+                                               neededIndexes);
 
     
     if (packetGenConfig.cacheRaster) {

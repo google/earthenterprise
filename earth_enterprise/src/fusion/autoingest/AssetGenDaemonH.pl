@@ -67,9 +67,15 @@ if ($base eq 'Composite') {
 	s/ExtraUpdateArg/ExtraUpdateArg\<ProductAssetVersion\>/;
     }
 
+    my $extraArgs = "";
+    if (index("${name}", "PacketGen") != -1)
+    {
+        $extraArgs = ", bool skip = false, const std::vector<uint>& _neededIndexes = std::vector<uint>()";
+    }
+
     $extra{"${name}AssetVersionImplD"} =
         $template 
-        . "    void UpdateChildren($singleFormalExtraUpdateArg);\n";
+        . "    void UpdateChildren($singleFormalExtraUpdateArg $extraArgs);\n";
 
 } else {
     $extra{"${name}AssetVersionImplD"} =
@@ -203,7 +209,8 @@ protected:
     $template
     ${name}AssetVersionD MyUpdate(bool &needed
                                   $formalcachedinputarg
-				  $formalExtraUpdateArg) const;
+                                  $formalExtraUpdateArg,
+                                  bool skip = false, const std::vector<uint>& neededIndexes = std::vector<uint>()) const;
 
     ${name}AssetImplD(const std::string &ref_ $formaltypearg,
 		$formalinputarg
@@ -326,7 +333,7 @@ public:
 		      const khMetaData &meta_,
 		      const $config& config_
 		      $formalcachedinputarg
-		      $formalExtraUpdateArg);
+                      $formalExtraUpdateArg);
 
     $template
     static Mutable${name}AssetVersionD
@@ -349,7 +356,9 @@ if ($withreuse) {
 			 const khMetaData &meta_,
 			 const $config& config_
 			 $formalcachedinputarg
-			 $formalExtraUpdateArg);
+                         $formalExtraUpdateArg,
+                         bool skip = false,
+                         const std::vector<uint>& neededIndexes = std::vector<uint>());
 
     $template
     static Mutable${name}AssetVersionD

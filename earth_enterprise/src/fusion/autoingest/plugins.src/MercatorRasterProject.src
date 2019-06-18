@@ -1009,7 +1009,9 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
                                                type,
                                                khMetaData(),
                                                packetGenConfig,
-                                               extraArg);
+                                               extraArg,
+                                               MiscConfig::Instance().CalculateOverlapOnce,
+                                               neededIndexes);
     
     if (packetGenConfig.cacheRaster) {
       // Extract the PacketLevel children from the new version and store

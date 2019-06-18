@@ -52,7 +52,9 @@ PacketGenFactory::ReuseOrMakeAndUpdate(
     const std::string &ref_ , AssetDefs::Type type_,
     const khMetaData &meta_,
     const PacketGenConfig& config_,
-    const PacketGenExtraUpdateArg<RasterProductAssetVersion> &extra);
+    const PacketGenExtraUpdateArg<RasterProductAssetVersion> &extra,
+    bool skip = false,
+    const std::vector<uint>& neededIndexes = std::vector<uint>());
 
 template
 MutablePacketGenAssetVersionD
@@ -60,7 +62,9 @@ PacketGenFactory::ReuseOrMakeAndUpdate(
     const std::string &ref_ , AssetDefs::Type type_,
     const khMetaData &meta_,
     const PacketGenConfig& config_,
-    const PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> &extra);
+    const PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> &extra,
+    bool skip = false,
+    const std::vector<uint>& neededIndexes = std::vector<uint>());
 
 template
 MutablePacketGenAssetVersionD
@@ -84,8 +88,10 @@ PacketGenFactory::ReuseOrMakeAndUpdateSubAsset(
 
 template <typename ProductAssetVersion>
 void PacketGenAssetVersionImplD::UpdateChildren(
-    const PacketGenExtraUpdateArg<ProductAssetVersion> &extra) {
+    const PacketGenExtraUpdateArg<ProductAssetVersion> &extra,
+    bool skip, const std::vector<uint>& _neededIndexes) {
   std::string assetRef = GetAssetRef();
+
 
   uint numLevels = config.coverage.numLevels();
   if (numLevels == 0) {
@@ -121,10 +127,18 @@ void PacketGenAssetVersionImplD::UpdateChildren(
     // Determine which insets intersect us at this level
     const khLevelCoverage levCov(config.coverage.levelCoverage(level));
     std::vector<uint> neededIndexes;
-    neededIndexes.reserve(numInsets);
 
-    if (!MiscConfig::Instance().CalculateOverlapOnce)
+
+    if (skip)
     {
+        neededIndexes.reserve(_neededIndexes.size());
+        neededIndexes.insert(neededIndexes.begin(),
+                             _neededIndexes.begin(),
+                             _neededIndexes.end());
+    }
+    else
+    {
+        neededIndexes.reserve(numInsets);
         auto gencov = khInsetCoverage(levCov);
         overlapEnvelope<ProductAssetVersion> env(type, gencov,
                              extra.insetInfo, extra.insetInfo.size(), neededIndexes,

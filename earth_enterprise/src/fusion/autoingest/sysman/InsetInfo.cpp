@@ -361,15 +361,6 @@ void CalculateOverlap(
         }
     }
 
-    static uint8_t count = 0;
-    if (count++ < 5)
-        notify(NFY_WARN, "veclevel: %u begin: %u end: %u beginMinify: %u endMinify: %u",
-               env.gencov.numVLvls(),
-               env.gencov.beginLevel(),
-               env.gencov.endLevel(),
-               env.beginMinifyLevel,
-               env.endMinifyLevel);
-
     if (env.type == AssetDefs::Imagery)
     {
         FindNeededImageryInsets(env.gencov,
