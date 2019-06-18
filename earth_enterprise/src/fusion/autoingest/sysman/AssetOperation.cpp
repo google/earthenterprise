@@ -15,7 +15,7 @@
  */
 
 #include "AssetOperation.h"
-#include "AssetTree.h"
+#include "StateUpdater.h"
 #include "AssetVersionD.h"
 
 #include <functional>
@@ -42,7 +42,7 @@ static void UpdateStateForSelfAndDependentChildren(
 }
 
 static void RecalculateStates(const SharedString & ref) {
-  AssetTree assets(ref);
+  StateUpdater assets(ref);
   assets.RecalculateStates();
 }
 
