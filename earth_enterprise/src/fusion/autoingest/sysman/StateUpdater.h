@@ -23,7 +23,7 @@
 #include "autoingest/.idl/storage/AssetDefs.h"
 #include "common/SharedString.h"
 
-class AssetTree
+class StateUpdater
 {
   private:
     struct AssetVertex {
@@ -60,7 +60,7 @@ class AssetTree
                  TreeType::vertex_descriptor to,
                  AssetEdge data);
   public:
-    AssetTree(const SharedString & ref);
+    StateUpdater(const SharedString & ref);
     void RecalculateStates();
 };
 

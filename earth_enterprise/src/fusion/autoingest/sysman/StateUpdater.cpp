@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "AssetTree.h"
+#include "StateUpdater.h"
 #include "AssetVersionD.h"
 
 using namespace boost;
@@ -37,8 +37,8 @@ class InNodeVertexIndexMap {
 
 namespace boost {
   template<>
-  struct property_map<AssetTree::TreeType, vertex_index_t> {
-    typedef InNodeVertexIndexMap<AssetTree::TreeType> const_type;
+  struct property_map<StateUpdater::TreeType, vertex_index_t> {
+    typedef InNodeVertexIndexMap<StateUpdater::TreeType> const_type;
   };
 
   template<class Graph>
@@ -56,14 +56,14 @@ namespace boost {
 
 #include <boost/graph/depth_first_search.hpp>
 
-AssetTree::AssetTree(const SharedString & ref) {
+StateUpdater::StateUpdater(const SharedString & ref) {
   VertexMap vertices;
   size_t index = 0;
   AddSelfAndConnectedAssets(ref, vertices, index);
 }
 
-AssetTree::TreeType::vertex_descriptor
-AssetTree::AddSelfAndConnectedAssets(
+StateUpdater::TreeType::vertex_descriptor
+StateUpdater::AddSelfAndConnectedAssets(
     const SharedString & ref,
     VertexMap & vertices,
     size_t & index) {
@@ -100,7 +100,7 @@ AssetTree::AddSelfAndConnectedAssets(
   }
 }
 
-void AssetTree::AddEdge(
+void StateUpdater::AddEdge(
     TreeType::vertex_descriptor from,
     TreeType::vertex_descriptor to,
     AssetEdge data) {
@@ -108,7 +108,7 @@ void AssetTree::AddEdge(
   if (edgeData.second) tree[edgeData.first] = data;
 }
 
-class AssetTree::UpdateStateVisitor : public default_dfs_visitor {
+class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
   private:
     class InputStates {
       private:
@@ -186,8 +186,8 @@ class AssetTree::UpdateStateVisitor : public default_dfs_visitor {
     };
 
     void CalcStateByInputsAndChildren(
-        AssetTree::TreeType::vertex_descriptor vertex,
-        const AssetTree::TreeType & tree,
+        StateUpdater::TreeType::vertex_descriptor vertex,
+        const StateUpdater::TreeType & tree,
         AssetDefs::State &stateByInputs,
         AssetDefs::State &stateByChildren,
         bool & blockersAreOffline,
@@ -199,14 +199,14 @@ class AssetTree::UpdateStateVisitor : public default_dfs_visitor {
       auto edgeBegin = edgeIters.first;
       auto edgeEnd = edgeIters.second;
       for (auto i = edgeBegin; i != edgeEnd; ++i) {
-        AssetTree::DependencyType type = tree[*i].type;
-        AssetTree::TreeType::vertex_descriptor dep = i->m_target;
+        StateUpdater::DependencyType type = tree[*i].type;
+        StateUpdater::TreeType::vertex_descriptor dep = i->m_target;
         AssetDefs::State depState = tree[dep].state;
         switch(type) {
-          case AssetTree::INPUT:
+          case StateUpdater::INPUT:
             inputStates.Add(depState);
             break;
-          case AssetTree::CHILD:
+          case StateUpdater::CHILD:
             childStates.Add(depState);
             break;
         }
@@ -219,8 +219,8 @@ class AssetTree::UpdateStateVisitor : public default_dfs_visitor {
     // Update the state of an asset after we've updated the state of its
     // inputs and children.
     virtual void finish_vertex(
-        AssetTree::TreeType::vertex_descriptor vertex,
-        const AssetTree::TreeType & tree) const {
+        StateUpdater::TreeType::vertex_descriptor vertex,
+        const StateUpdater::TreeType & tree) const {
       MutableAssetVersionD version(tree[vertex].name);
       if (!version->NeedComputeState()) return;
       AssetDefs::State stateByInputs;
@@ -236,11 +236,11 @@ class AssetTree::UpdateStateVisitor : public default_dfs_visitor {
       // Update the state in the tree because other assets may need it to compute
       // their own states. Use the state from the version because setting the
       // state can sometimes trigger additional state changes.
-      const_cast<AssetTree::TreeType&>(tree)[vertex].state = version->state;
+      const_cast<StateUpdater::TreeType&>(tree)[vertex].state = version->state;
     }
 };
 
-void AssetTree::RecalculateStates() {
+void StateUpdater::RecalculateStates() {
   // Possible optimization: Many assets have significant overlap in their
   // inputs. It might save time if we could calculate the overlapping state
   // only once.
