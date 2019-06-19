@@ -141,7 +141,7 @@ class gstGeodeImpl : public khMTRefCounter {
 
   virtual ~gstGeodeImpl();
 
-  // function for determining memory used by objects added to the cache
+  // determine amount of memory used by getGeodeImpl
   uint64 GetSize() {
     return sizeof(gcount)
     + sizeof(isectCount)

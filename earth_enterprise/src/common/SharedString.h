@@ -79,10 +79,6 @@ protected:
       return strStore.size();
     }
 
-    static uint64 GetSharedStringSize() {
-      return sizeof(key);
-    }
-
     SharedString(): key(0) {}
 
     SharedString(const SharedString& str): key(str.key) {

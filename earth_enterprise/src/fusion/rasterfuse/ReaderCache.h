@@ -50,7 +50,7 @@ class FFIORasterReaderCache
       reader->Close();
     }
 
-    // function for determining memory used by objects added to the cache
+    // determine amount of memory used by FFIORasterReaderCache
     uint64 GetSize() {
       return sizeof(reader);
     }

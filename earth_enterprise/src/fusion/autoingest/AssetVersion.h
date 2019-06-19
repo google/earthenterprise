@@ -24,6 +24,7 @@
 #include "fusion/autoingest/MiscConfig.h"
 #include "common/khFileUtils.h"
 #include "StorageManager.h"
+#include "CacheSizeCalculations.h"
 
 /******************************************************************************
  ***  AssetVersionImpl
@@ -113,47 +114,28 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
     AssetVersionRef verref(name);
     return verref.AssetRef();
   }
-// Get the total memory used by an asset version
-  const uint64 GetSize() {
-    return (name.GetSharedStringSize()
-    + sizeof(type)
-    + sizeof(subtype)
-    + (subtype.capacity() * sizeof(char))
-    + sizeof(state)
-    + sizeof(progress)
-    + sizeof(locked)
-    + GetVectorSize(inputs)
-    + GetVectorSize(children)
-    + GetVectorSize(parents)
-    + GetVectorSize(listeners)
-    + GetVectorSize(outfiles)
-    + sizeof(meta)
-    + meta.GetSize()
-    + sizeof(beginTime)
-    + sizeof(progressTime)
-    + sizeof(endTime)
-    + sizeof(taskid)
-    + sizeof(timestamp)
-    + sizeof(filesize));
-  }
 
-// Get the total memory used by a template vector
-  template<class T>
-  const uint64 GetVectorSize(std::vector<T> vec) {
-    return sizeof(vec) + (vec.capacity() * sizeof(T));
-  }
-// Get the total memory used by a vector of strings
-  const uint64 GetVectorSize(std::vector<std::string> vec) {
-    uint64 total = 0;
-    for(const auto &i : vec) {
-      total += (sizeof(i) + i.capacity());
-    }
-    return sizeof(vec) + total;
-  }
-// Get the total memory used by a vector of SharedStrings
-  const uint64 GetVectorSize(std::vector<SharedString> vec) {
-    return sizeof(vec) + (vec.capacity() * ((vec.front()).GetSharedStringSize()));
-  }
+  // determine amount of memory used by an AssetVersionImpl
+  uint64 GetSize() {
+    return (GetObjectSize(name)
+    + GetObjectSize(type)
+    + GetObjectSize(subtype)
+    + GetObjectSize(state)
+    + GetObjectSize(progress)
+    + GetObjectSize(locked)
+    + GetObjectSize(inputs)
+    + GetObjectSize(children)
+    + GetObjectSize(parents)
+    + GetObjectSize(listeners)
+    + GetObjectSize(outfiles)
+    + GetObjectSize(meta)
+    + GetObjectSize(beginTime)
+    + GetObjectSize(progressTime)
+    + GetObjectSize(endTime)
+    + GetObjectSize(taskid)
+    + GetObjectSize(timestamp)
+    + GetObjectSize(filesize));
+}
 
   template <class outIter>
   outIter GetInputs(outIter oi) const {

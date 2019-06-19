@@ -15,6 +15,7 @@
  */
 
 #include "StorageManager.h"
+#include "CacheSizeCalculations.h"
 
 #include <algorithm>
 #include <gtest/gtest.h>
@@ -39,13 +40,12 @@ class TestItem : public khRefCounter, public StorageManaged {
     savename = filename;
     return saveSucceeds;
   }
-  // function for determining memory used by objects added to the cache
+  // determine amount of memory used by TestItem
   uint64 GetSize() {
-    return sizeof(val)
-    + sizeof(savename)
-    + (savename.capacity() * sizeof(char)
-    + sizeof(saveSucceeds)
-    + sizeof(nextValue));
+    return (GetObjectSize(val)
+    + GetObjectSize(savename)
+    + GetObjectSize(saveSucceeds)
+    + GetObjectSize(nextValue));
   }
  private:
   static int nextValue;

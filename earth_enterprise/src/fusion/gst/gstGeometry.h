@@ -34,7 +34,7 @@ class gstGeometryImpl : public khRefCounter {
     Point(float _x, float _y) : x(_x), y(_y) {}
   };
 
-  // function for determining memory used by objects added to the cache
+  // determine amount of memory used by gstGeometryImpl
   uint64 GetSize() {
     return sizeof(type_)
     + sizeof(origin_)

@@ -22,6 +22,7 @@
 #include <khFileUtils.h>
 #include "MiscConfig.h"
 #include "StorageManager.h"
+#include "CacheSizeCalculations.h"
 
 /******************************************************************************
  ***  AssetImpl
@@ -68,29 +69,17 @@ class AssetImpl : public khRefCounter, public AssetStorage, public StorageManage
   virtual ~AssetImpl(void) { }
   const SharedString & GetRef(void) const { return name; }
 
-// Get the total memory used by an asset
-  const uint64 GetSize() {
-    return (name.GetSharedStringSize()
-    + sizeof(type)
-    + sizeof(subtype)
-    + (subtype.capacity() * sizeof(char))
-    + GetVectorSize(inputs)
-    + sizeof(meta)
-    + meta.GetSize()
-    + sizeof(versions)
-    + sizeof(timestamp)
-    + sizeof(filesize));
+  // determine amount of memory used by an AssetImpl
+  uint64 GetSize() {
+    return(GetObjectSize(name)
+    + GetObjectSize(type)
+    + GetObjectSize(subtype)
+    + GetObjectSize(inputs)
+    + GetObjectSize(meta)
+    + GetObjectSize(versions)
+    + GetObjectSize(timestamp)
+    + GetObjectSize(filesize));
   }
-  // Get the total memory used by a template vector
-  template<class T>
-  const uint64 GetVectorSize(std::vector<T> vec) {
-    return sizeof(vec) + (vec.capacity() * sizeof(T));
-  }
-  // Get the total memory used by a vector of SharedStrings
-  const uint64 GetVectorSize(std::vector<SharedString> vec) {
-    return sizeof(vec) + (vec.capacity() * ((vec.front()).GetSharedStringSize()));
-  }
-
 
   std::string  GetLastGoodVersionRef(void) const;
   void GetInputFilenames(std::vector<std::string> &out) const;
