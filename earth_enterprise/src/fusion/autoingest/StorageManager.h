@@ -57,10 +57,10 @@ class StorageManager
     inline void AddExisting(const AssetKey &, const HandleType &);
     inline void NoLongerNeeded(const AssetKey &, bool = true);
     void Abort();
-    bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<std::string> *);
+    bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<SharedString> *);
     HandleType Get(const AssetHandleInterface<AssetType> *, bool, bool, bool);
   private:
-    using CacheType = khCache<std::string, HandleType>;
+    using CacheType = khCache<AssetKey, HandleType>;
 
     static const bool check_timestamps;
 
@@ -177,7 +177,7 @@ void StorageManager<AssetType>::Abort() {
 template<class AssetType>
 bool StorageManager<AssetType>::SaveDirtyToDotNew(
     khFilesTransaction &savetrans,
-    std::vector<std::string> *saved) {
+    std::vector<SharedString> *saved) {
   notify(NFY_INFO, "Writing %lu %s records", dirtyMap.size(), assetType.c_str());
   typename std::map<AssetKey, HandleType>::iterator entry = dirtyMap.begin();
   while (entry != dirtyMap.end()) {
