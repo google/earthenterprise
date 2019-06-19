@@ -127,7 +127,7 @@ class ImageExistanceImpl : public khRefCounter {
     versions_[NameToIndex(blist)] = ver;
   }
 
-  // function for determining memory used by objects added to the cache
+  // determine amount of memory used by ImageExistanceImpl
   uint64 GetSize() {
     return sizeof(versions_);
   }

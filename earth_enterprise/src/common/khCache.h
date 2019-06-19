@@ -25,6 +25,7 @@
 #include "fusion/autoingest/MiscConfig.h"
 #include "khRefCounter.h"
 #include "SharedString.h"
+#include "CacheSizeCalculations.h"
 
 // #define SUPPORT_VERBOSE
 #ifdef SUPPORT_VERBOSE
@@ -195,20 +196,6 @@ class khCache {
   ~khCache(void) {
     clear();
   }
-  template<class T>
-  uint64 getKeyOrValueSize(const T obj) {
-    return sizeof(obj);
-  }
-  uint64 getKeyOrValueSize(const std::string str) {
-    return (sizeof(str) + (str.capacity() * sizeof(char)));
-  }
-  uint64 getKeyOrValueSize(const SharedString shstr) {
-    return shstr.GetSharedStringSize();
-  }
-  template<class T>
-  uint64 getKeyOrValueSize(const khRefGuard<T> obj) {
-    return (sizeof(obj) + obj.getRefGuardSize());
-  }
   uint64 getObjectSize(const Key &key) {
     Item *item = FindItem(key);
     if (item) {
@@ -217,7 +204,7 @@ class khCache {
     return 0;
   }
   uint64 calculateObjectSize(Item *item) {
-    return khCacheItemSize + getKeyOrValueSize(item->key) + getKeyOrValueSize(item->val);
+    return khCacheItemSize + GetObjectSize(item->key) + GetObjectSize(item->val);
   }
   void updateObjectSize(const Key &key) {
     Item *item = FindItem(key);
