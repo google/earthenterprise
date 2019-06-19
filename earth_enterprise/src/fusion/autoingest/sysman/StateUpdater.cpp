@@ -60,34 +60,34 @@ namespace boost {
 StateUpdater::StateUpdater(const SharedString & ref) {
   VertexMap vertices;
   size_t index = 0;
-  list<TreeType::vertex_descriptor> toLoad, toLoadNext;
+  list<TreeType::vertex_descriptor> toFillIn, toFillInNext;
   // First create an empty vertex for the provided asset. Then fill it in,
   // which includes adding its connections to other assets. Every time we fill
   // in a node we will get new assets to add to the tree until all assets have
   // been added. This basically builds the tree using a breadth first search,
   // which allows us to keep memory usage (relatively) low by not forcing
-  // assets to stay in the cache and limiting the size of the toLoad and
-  // toLoadNext lists.
-  AddEmptyVertex(ref, vertices, index, toLoad);
-  while (toLoad.size() > 0) {
-    for (auto vertex : toLoad) {
-      FillInVertex(vertex, vertices, index, toLoadNext);
+  // assets to stay in the cache and limiting the size of the toFillIn and
+  // toFillInNext lists.
+  AddEmptyVertex(ref, vertices, index, toFillIn);
+  while (toFillIn.size() > 0) {
+    for (auto vertex : toFillIn) {
+      FillInVertex(vertex, vertices, index, toFillInNext);
     }
-    toLoad = std::move(toLoadNext);
-    toLoadNext.clear();
+    toFillIn = std::move(toFillInNext);
+    toFillInNext.clear();
   }
 }
 
 // Creates an "empty" node for this asset if it has not already been added to
 // the tree. The node has a default state and doesn't include links to
 // inputs/children/etc. The vertex must be "filled in" by calling FillInVertex
-// before it is useful.
+// before it can be used.
 StateUpdater::TreeType::vertex_descriptor
 StateUpdater::AddEmptyVertex(
     const SharedString & ref,
     VertexMap & vertices,
     size_t & index,
-    list<TreeType::vertex_descriptor> & toLoad) {
+    list<TreeType::vertex_descriptor> & toFillIn) {
   auto myVertexIter = vertices.find(ref);
   if (myVertexIter == vertices.end()) {
     // I'm not in the graph yet, so make a new empty vertex and let the caller
@@ -96,7 +96,7 @@ StateUpdater::AddEmptyVertex(
     tree[myVertex] = {ref, AssetDefs::New, index};
     ++index;
     vertices[ref] = myVertex;
-    toLoad.push_back(myVertex);
+    toFillIn.push_back(myVertex);
     return myVertex;
   }
   else {
@@ -106,29 +106,28 @@ StateUpdater::AddEmptyVertex(
 }
 
 // "Fills in" an existing vertex with the state of an asset and its connections
-// to other assets. Adds any connecting assets that need to be filled in to
-// toLoad.
+// to other assets. Adds any new nodes that need to be filled in to toFillIn.
 void StateUpdater::FillInVertex(
     TreeType::vertex_descriptor myVertex,
     VertexMap & vertices,
     size_t & index,
-    list<TreeType::vertex_descriptor> & toLoad) {
+    list<TreeType::vertex_descriptor> & toFillIn) {
   AssetVersion version(tree[myVertex].name);
   tree[myVertex].state = version->state;
   for (const auto & child : version->children) {
-    auto childVertex = AddEmptyVertex(child, vertices, index, toLoad);
+    auto childVertex = AddEmptyVertex(child, vertices, index, toFillIn);
     AddEdge(myVertex, childVertex, {CHILD});
   }
   for (const auto & input : version->inputs) {
-    auto inputVertex = AddEmptyVertex(input, vertices, index, toLoad);
+    auto inputVertex = AddEmptyVertex(input, vertices, index, toFillIn);
     AddEdge(myVertex, inputVertex, {INPUT});
   }
   for (const auto & parent : version->parents) {
-    auto parentVertex = AddEmptyVertex(parent, vertices, index, toLoad);
+    auto parentVertex = AddEmptyVertex(parent, vertices, index, toFillIn);
     AddEdge(parentVertex, myVertex, {CHILD});
   }
   for (const auto & listener : version->listeners) {
-    auto listenerVertex = AddEmptyVertex(listener, vertices, index, toLoad);
+    auto listenerVertex = AddEmptyVertex(listener, vertices, index, toFillIn);
     AddEdge(listenerVertex, myVertex, {INPUT});
   }
 }
