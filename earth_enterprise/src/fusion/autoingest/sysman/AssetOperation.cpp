@@ -15,8 +15,9 @@
  */
 
 #include "AssetOperation.h"
-#include "StateUpdater.h"
 #include "AssetVersionD.h"
+#include "MiscConfig.h"
+#include "StateUpdater.h"
 
 #include <functional>
 #include <vector>
@@ -47,27 +48,33 @@ static void RecalculateStates(const SharedString & ref) {
 }
 
 void RebuildVersion(const SharedString & ref) {
-  // Rebuilding an already succeeded asset is quite dangerous!
-  // Those who depend on me may have already finished their work with me.
-  // If I rebuild, they have the right to recognize that nothing has
-  // changed (based on my version # and their config) and just reuse their
-  // previous results. Those previous results may reference my outputs.
-  // But if my inputs reference disk files that could change (sources
-  // overwritten with new versions), I may change some of my outputs,
-  // thereby invalidating the cached work from later stages.
-  //
-  // For this reason, requests to rebuild 'Succeeded' versions will fail.
-  // Assets marked 'Bad' were once succeeded, so they too are disallowed.
-  // The same logic could hold true for 'Offline' as well.
-  {
-    // Limit the scope to release the AssetVersion as quickly as possible.
-    AssetVersion version(ref);
-    if (version->state & (AssetDefs::Succeeded | AssetDefs::Offline | AssetDefs::Bad)) {
-      throw khException(kh::tr("%1 marked as %2. Refusing to resume.")
-                        .arg(ToQString(ref), ToQString(version->state)));
+  if (MiscConfig::Instance().GraphOperations) {
+    // Rebuilding an already succeeded asset is quite dangerous!
+    // Those who depend on me may have already finished their work with me.
+    // If I rebuild, they have the right to recognize that nothing has
+    // changed (based on my version # and their config) and just reuse their
+    // previous results. Those previous results may reference my outputs.
+    // But if my inputs reference disk files that could change (sources
+    // overwritten with new versions), I may change some of my outputs,
+    // thereby invalidating the cached work from later stages.
+    //
+    // For this reason, requests to rebuild 'Succeeded' versions will fail.
+    // Assets marked 'Bad' were once succeeded, so they too are disallowed.
+    // The same logic could hold true for 'Offline' as well.
+    {
+      // Limit the scope to release the AssetVersion as quickly as possible.
+      AssetVersion version(ref);
+      if (version->state & (AssetDefs::Succeeded | AssetDefs::Offline | AssetDefs::Bad)) {
+        throw khException(kh::tr("%1 marked as %2. Refusing to resume.")
+                          .arg(ToQString(ref), ToQString(version->state)));
+      }
     }
-  }
 
-  UpdateStateForSelfAndDependentChildren(ref, AssetDefs::New, AssetDefs::CanRebuild);
-  RecalculateStates(ref);
+    UpdateStateForSelfAndDependentChildren(ref, AssetDefs::New, AssetDefs::CanRebuild);
+    RecalculateStates(ref);
+  }
+  else {
+    MutableAssetVersionD version(ref);
+    version->Rebuild();
+  }
 }
