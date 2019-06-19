@@ -57,7 +57,8 @@ namespace boost {
 
 #include <boost/graph/depth_first_search.hpp>
 
-StateUpdater::StateUpdater(const SharedString & ref) {
+StateUpdater::TreeType::vertex_descriptor
+StateUpdater::BuildTree(const SharedString & ref) {
   VertexMap vertices;
   size_t index = 0;
   list<TreeType::vertex_descriptor> toFillIn, toFillInNext;
@@ -68,7 +69,7 @@ StateUpdater::StateUpdater(const SharedString & ref) {
   // which allows us to keep memory usage (relatively) low by not forcing
   // assets to stay in the cache and limiting the size of the toFillIn and
   // toFillInNext lists.
-  AddEmptyVertex(ref, vertices, index, toFillIn);
+  auto myVertex = AddEmptyVertex(ref, vertices, index, toFillIn);
   while (toFillIn.size() > 0) {
     for (auto vertex : toFillIn) {
       FillInVertex(vertex, vertices, index, toFillInNext);
@@ -76,6 +77,7 @@ StateUpdater::StateUpdater(const SharedString & ref) {
     toFillIn = std::move(toFillInNext);
     toFillInNext.clear();
   }
+  return myVertex;
 }
 
 // Creates an "empty" node for this asset if it has not already been added to
@@ -112,8 +114,16 @@ void StateUpdater::FillInVertex(
     VertexMap & vertices,
     size_t & index,
     list<TreeType::vertex_descriptor> & toFillIn) {
-  AssetVersion version(tree[myVertex].name);
+  MutableAssetVersionD version(tree[myVertex].name);
   tree[myVertex].state = version->state;
+  vector<SharedString> dependents;
+  version->DependentChildren(dependents);
+  // Add the dependent children first. When we add the children next it will
+  // skip any that were already added
+  for (const auto & dep : dependents) {
+    auto depVertex = AddEmptyVertex(dep, vertices, index, toFillIn);
+    AddEdge(myVertex, depVertex, {DEPENDENT_CHILD});
+  }
   for (const auto & child : version->children) {
     auto childVertex = AddEmptyVertex(child, vertices, index, toFillIn);
     AddEdge(myVertex, childVertex, {CHILD});
@@ -137,7 +147,46 @@ void StateUpdater::AddEdge(
     TreeType::vertex_descriptor to,
     AssetEdge data) {
   auto edgeData = add_edge(from, to, tree);
-  if (edgeData.second) tree[edgeData.first] = data;
+  // If this is a new edge, set the edge data. Also, if this is a dependent
+  // child it may have been added previously as a "normal" child, so update
+  // the data in that case also.
+  if (edgeData.second || data.type == DEPENDENT_CHILD) {
+    tree[edgeData.first] = data;
+  }
+}
+
+void StateUpdater::SetStateForRefAndDependents(
+    const SharedString & ref,
+    AssetDefs::State newState,
+    std::function<bool(AssetDefs::State)> updateStatePredicate) {
+  auto refVertex = BuildTree(ref);
+  SetStateForVertexAndDependents(refVertex, newState, updateStatePredicate);
+}
+
+void StateUpdater::SetStateForVertexAndDependents(
+    TreeType::vertex_descriptor vertex,
+    AssetDefs::State newState,
+    std::function<bool(AssetDefs::State)> updateStatePredicate) {
+  if (updateStatePredicate(tree[vertex].state)) {
+    {
+      // Limit the scope of the MutableAssetVersionD so that we release it
+      // as quickly as possible.
+      MutableAssetVersionD version(tree[vertex].name);
+      // Set the state. The OnStateChange handler will take care
+      // of stopping any running tasks, etc
+      // false -> don't send notifications about the new state because we
+      // will change it soon.
+      version->SetMyStateOnly(newState, false);
+    }
+    auto edgeIters = out_edges(vertex, tree);
+    auto edgeBegin = edgeIters.first;
+    auto edgeEnd = edgeIters.second;
+    for (auto i = edgeBegin; i != edgeEnd; ++i) {
+      if (tree[*i].type == DEPENDENT_CHILD) {
+        SetStateForVertexAndDependents(target(*i, tree), newState, updateStatePredicate);
+      }
+    }
+  }
 }
 
 class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
@@ -239,6 +288,7 @@ class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
             inputStates.Add(depState);
             break;
           case StateUpdater::CHILD:
+          case StateUpdater::DEPENDENT_CHILD:
             childStates.Add(depState);
             break;
         }
