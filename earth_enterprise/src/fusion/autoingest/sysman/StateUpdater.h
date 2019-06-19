@@ -26,8 +26,8 @@
 
 // This class efficiently updates the states of lots of asset versions at
 // the same time. The idea is that you create a state updater, use it to
-// perform one "macro" operation (such as a clean or resume), and then let
-// it go out of scope.
+// perform one "macro" operation (such as a clean or resume), and then release
+// it.
 //
 // Internally, this class represents the asset versions as a directed
 // acyclic graph, and state updates are performed as graph operations.
