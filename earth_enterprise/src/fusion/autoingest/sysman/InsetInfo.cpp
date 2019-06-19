@@ -336,26 +336,26 @@ void CalcPacketGenInfo<InsetInfo<MercatorRasterProductAssetVersion> > (
 // ***  used to separate algorithmic logic
 // ****************************************************************************
 
+// right now these do the same thing, but will eventually change
+template <typename ProductAssetVersion>
+void PreprocessForInset<ProductAssetVersion>::calculate()
+{
+    CalculateOverlap(OverlapBase<ProductAssetVersion>::env);
+}
+
+template <typename ProductAssetVersion>
+void GetOverlapForLevel<ProductAssetVersion>::calculate()
+{
+    CalculateOverlap(OverlapBase<ProductAssetVersion>::env);
+}
+
+template class GetOverlapForLevel<RasterProductAssetVersion>;
+template class GetOverlapForLevel<MercatorRasterProductAssetVersion>;
+
 template <typename ProductAssetVersion>
 void CalculateOverlap(
         overlapEnvelope<ProductAssetVersion>& env)
 {
-    static bool doOnceNotify = true;
-
-    if (doOnceNotify)
-    {
-        doOnceNotify = false;
-
-        if (MiscConfig::Instance().CalculateOverlapOnce)
-        {
-            notify(NFY_WARN, "Calculate overlap once");
-        }
-        else
-        {
-            notify(NFY_WARN, "Calculate overlap per resource");
-        }
-    }
-
     if (env.type == AssetDefs::Imagery)
     {
         FindNeededImageryInsets(env.gencov,
@@ -375,6 +375,7 @@ void CalculateOverlap(
                                 env.endMinifyLevel);
     }
 }
+
 
 // explicit instantiations
 template void

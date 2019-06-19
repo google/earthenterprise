@@ -1133,9 +1133,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
                                                type,
                                                khMetaData(),
                                                packetGenConfig, // new vector?
-                                               extraArg,
-                                               MiscConfig::Instance().CalculateOverlapOnce,
-                                               neededIndexes);
+                                               extraArg);
 
     
     if (packetGenConfig.cacheRaster) {

@@ -30,7 +30,7 @@ Description: Support for terrain "overlay" projects.
 #include "common/khExtents.h"
 #include "common/khInsetCoverage.h"
 #include "autoingest/plugins/CombinedRPAsset.h"
-
+#include <memory>
 
 // TerrainInsetType enum defines types of terrain-inset in terrain
 // project.
@@ -191,6 +191,52 @@ struct overlapEnvelope
    :                type(_type), gencov(_gencov), insets(_insets),
                     numInsets(_numInsets), neededIndexes(_neededIndexes),
                     beginMinifyLevel(_beginMinifyLevel), endMinifyLevel(_endMinifyLevel) {}
+};
+
+template <typename ProductAssetVersion>
+class OverlapBase
+{
+protected:
+    overlapEnvelope<ProductAssetVersion>& env;
+
+
+public:
+    OverlapBase(overlapEnvelope<ProductAssetVersion>& _env) : env(_env) {}
+    virtual void calculate() = 0;
+};
+
+
+template <typename ProductAssetVersion>
+class PreprocessForInset : public OverlapBase<ProductAssetVersion>
+{
+public:
+    PreprocessForInset(overlapEnvelope<ProductAssetVersion>& env) :
+        OverlapBase<ProductAssetVersion>(env) {}
+
+    void calculate();
+};
+
+template <typename ProductAssetVersion>
+class GetOverlapForLevel : public OverlapBase<ProductAssetVersion>
+{
+public:
+    GetOverlapForLevel(overlapEnvelope<ProductAssetVersion>& env) :
+        OverlapBase<ProductAssetVersion>(env) {}
+    
+    void calculate();
+};
+
+template <typename ProductAssetVersion>
+class OverlapCalculator
+{
+private:
+    std::shared_ptr<OverlapBase<ProductAssetVersion>> type;
+
+public:
+    OverlapCalculator(std::shared_ptr<OverlapBase<ProductAssetVersion>> _type) :
+    type(_type) {}
+
+    void calculate() { type->calculate(); }
 };
 
 template <typename ProductAssetVersion>
