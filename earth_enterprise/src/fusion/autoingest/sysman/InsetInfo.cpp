@@ -207,12 +207,7 @@ void CalcPacketGenInfo(const khTilespace            &tilespace,
 
   // populate list - inital coverage estimate from inset degExtents
   genInfos.reserve(insetInfos.size());
-  /*
-      For situations where you calculate once only:
-      - tilespace, insetInfo.degExtends, insetInfo.fullFullResLevel the same
-      - beginCovLevel still beginCoverageLevel
-      - endLevel = endMinifyLevel?
-  */
+
   for (size_t i = 0; i < insetInfos.size(); ++i) {
     const InsetInfo &insetInfo = insetInfos[i];
     AssetVersionRef verref =

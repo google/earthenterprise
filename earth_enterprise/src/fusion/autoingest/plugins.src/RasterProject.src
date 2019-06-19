@@ -1035,25 +1035,6 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   packgenkids.reserve(numInsets);
   packgenassets.reserve(numInsets);
   packgenvers.reserve(numInsets);
-  std::vector<uint> totalNeededIndexes;
-
-// calculate total overlap before entering here
-
-#if 0
-if (MiscConfig::Instance().CalculateOverlapOnce);
-{
-    auto levCov(config.coverage.levelCoverage(config.coverage.endLevel()));
-    auto gencov = khInsetCoverage(levCov);
-    /*overlapEnvelope<RasterProductAssetVersion> env(
-        type,
-        gencov, //khInsetCoverage
-        insetInfoPtrs,
-        inset_infos.size(),
-        totalNeededIndexes,
-        beginMinifyLevel,
-        endMinifyLevel);*/
-}
-#endif
 
   for (uint i = 0; i < genInfo.size(); ++i) {
     // Check if I even need to do any packet generation at all
