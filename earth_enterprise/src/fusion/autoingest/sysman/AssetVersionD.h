@@ -118,6 +118,7 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   void ClearBad(void);
   void Clean(void);
   virtual void Cancel(const std::shared_ptr<StateChangeNotifier> = nullptr) = 0;
+  virtual void Rebuild(const std::shared_ptr<StateChangeNotifier> = nullptr) = 0;
   virtual void DoClean(const std::shared_ptr<StateChangeNotifier> = nullptr) = 0;
   virtual bool MustForceUpdate(void) const { return false; }
 
@@ -190,6 +191,7 @@ class LeafAssetVersionImplD : public virtual LeafAssetVersionImpl,
 
  public:
   virtual void Cancel(const std::shared_ptr<StateChangeNotifier> = nullptr);
+  virtual void Rebuild(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual void DoClean(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual AssetDefs::State CalcStateByInputsAndChildren(
       AssetDefs::State stateByInputs,
@@ -230,6 +232,7 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
 
  public:
   virtual void Cancel(const std::shared_ptr<StateChangeNotifier> = nullptr);
+  virtual void Rebuild(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual void DoClean(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual AssetDefs::State CalcStateByInputsAndChildren(
       AssetDefs::State stateByInputs,
