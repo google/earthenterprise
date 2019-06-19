@@ -20,7 +20,7 @@
 using namespace boost;
 using namespace std;
 
-// The depth_first_search function needs a way to map vertexes to indexes. We
+// The depth_first_search function needs a way to map vertices to indexes. We
 // store a unique index inside each vertex; the code below provides a way for
 // boost to access them. These must be defined before including
 // depth_first_search.hpp.
