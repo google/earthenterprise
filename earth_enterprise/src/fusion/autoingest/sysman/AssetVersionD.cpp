@@ -975,6 +975,48 @@ LeafAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
 
 
 void
+LeafAssetVersionImplD::Rebuild(const std::shared_ptr<StateChangeNotifier> callerNotifier)
+{
+  if (!CanRebuild()) {
+    throw khException
+      (kh::tr("Resume only allowed for versions that are %1 or %2.")
+       .arg(ToQString(AssetDefs::Failed))
+       .arg(ToQString(AssetDefs::Canceled)));
+  }
+
+#if 0
+  // Rebuilding an already succeeded asset is quite dangerous!
+  // Those who depend on me may have already finished their work with me.
+  // If I rebuild, they have the right to recognize that nothing has
+  // changed (based on my version # and their config) and just reuse their
+  // previous results. Those previous results may reference my outputs.
+  // But if my inputs reference disk files that could change (sources
+  // overwritten with new versions), I may change some of my outputs,
+  // thereby invalidating the cached work from later stages.
+  //
+  // For this reason, requests to rebuild 'Succeeded' versions will fail.
+  // Assets marked 'Bad' were once succeeded, so they too are disallowed.
+  // The same logic could hold true for 'Offline' as well.
+  if (state & (AssetDefs::Succeeded | AssetDefs::Offline | AssetDefs::Bad)) {
+    throw khException(kh::tr("%1 marked as %2. Refusing to resume.")
+                      .arg(ToQString(GetRef()), ToQString(state)));
+  }
+#endif
+
+  std::shared_ptr<StateChangeNotifier> notifier = StateChangeNotifier::GetNotifier(callerNotifier);
+
+  // SetState to New. The OnStateChange handler will take care
+  // of stopping any running tasks, etc
+  // false -> don't propagate the new state (we're going to change
+  // it right away by calling SyncState)
+  SetState<false>(AssetDefs::New, notifier);
+
+  // Now get my state back to where it should be
+  SyncState(notifier);
+}
+
+
+void
 LeafAssetVersionImplD::Cancel(const std::shared_ptr<StateChangeNotifier> callerNotifier)
 {
   if (!CanCancel()) {
@@ -1240,6 +1282,46 @@ CompositeAssetVersionImplD::AddChildren
     // add the child to our list
     children.push_back(child->GetRef());
   }
+}
+
+void
+CompositeAssetVersionImplD::Rebuild(const std::shared_ptr<StateChangeNotifier> callerNotifier)
+{
+  // Rebuilding an already succeeded asset is quite dangerous!
+  // Those who depend on me may have already finished their work with me.
+  // If I rebuild, they have the right to recognize that nothing has
+  // changed (based on my version # and their config) and just reuse their
+  // previous results. Those previous results may reference my outputs.
+  // But if my inputs reference disk files that could change (sources
+  // overwritten with new versions), I may change some of my outputs,
+  // thereby invalidating the cached work from later stages.
+  //
+  // For this reason, requests to rebuild 'Succeeded' versions will fail.
+  // Assets marked 'Bad' were once succeeded, so they too are disallowed.
+  // The same logic could hold true for 'Offline' as well.
+  if (state & (AssetDefs::Succeeded | AssetDefs::Offline | AssetDefs::Bad)) {
+    throw khException(kh::tr("%1 marked as %2. Refusing to resume.")
+                      .arg(ToQString(GetRef()), ToQString(state)));
+  }
+
+  std::shared_ptr<StateChangeNotifier> notifier = StateChangeNotifier::GetNotifier(callerNotifier);
+
+  std::vector<SharedString> dependents;
+  DependentChildren(dependents);
+  for (const auto &i : dependents) {
+    MutableAssetVersionD child(i);
+    // only rebuild the child if it is necessary
+    if (child) {
+      if (child->state & (AssetDefs::Canceled | AssetDefs::Failed)) {
+        child->Rebuild(notifier);
+      }
+    } else {
+      notify(NFY_WARN, "'%s' has broken child to resume '%s'",
+             GetRef().toString().c_str(), i.toString().c_str());
+    }
+  }
+  state = AssetDefs::New; // low-level to avoid callbacks
+  SyncState(notifier);
 }
 
 
