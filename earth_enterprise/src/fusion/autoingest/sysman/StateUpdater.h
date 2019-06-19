@@ -18,6 +18,7 @@
 #define ASSETTREE_H
 
 #include <boost/graph/adjacency_list.hpp>
+#include <functional>
 #include <list>
 #include <map>
 
@@ -40,7 +41,7 @@ class StateUpdater
       size_t index; // Used by the dfs function
     };
 
-    enum DependencyType { INPUT, CHILD };
+    enum DependencyType { INPUT, CHILD, DEPENDENT_CHILD };
 
     struct AssetEdge {
       DependencyType type;
@@ -60,6 +61,7 @@ class StateUpdater
 
     TreeType tree;
 
+    TreeType::vertex_descriptor BuildTree(const SharedString & ref);
     TreeType::vertex_descriptor AddEmptyVertex(
         const SharedString & ref,
         VertexMap & vertices,
@@ -73,8 +75,20 @@ class StateUpdater
     void AddEdge(TreeType::vertex_descriptor from,
                  TreeType::vertex_descriptor to,
                  AssetEdge data);
+    void SetStateForVertexAndDependents(
+        TreeType::vertex_descriptor vertex,
+        AssetDefs::State newState,
+        std::function<bool(AssetDefs::State)> updateStatePredicate);
+    void SetState(
+        TreeType::vertex_descriptor vertex,
+        AssetDefs::State newState,
+        bool sendNotifications = true);
   public:
-    StateUpdater(const SharedString & ref);
+    StateUpdater() = default;
+    void SetStateForRefAndDependents(
+        const SharedString & ref,
+        AssetDefs::State newState,
+        std::function<bool(AssetDefs::State)> updateStatePredicate);
     void RecalculateStates();
 };
 

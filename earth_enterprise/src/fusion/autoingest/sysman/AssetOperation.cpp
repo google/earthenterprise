@@ -24,29 +24,6 @@
 
 using namespace std;
 
-static void UpdateStateForSelfAndDependentChildren(
-    MutableAssetVersionD version,
-    AssetDefs::State newState,
-    function<bool(AssetDefs::State)> updateStatePredicate) {
-  if (updateStatePredicate(version->state)) {
-    // Set the state. The OnStateChange handler will take care
-    // of stopping any running tasks, etc
-    // false -> don't send notifications about the new state because we
-    // will change it soon.
-    version->SetMyStateOnly(newState, false);
-    vector<SharedString> dependents;
-    version->DependentChildren(dependents);
-    for (auto & child : dependents) {
-      UpdateStateForSelfAndDependentChildren(child, newState, updateStatePredicate);
-    }
-  }
-}
-
-static void RecalculateStates(const SharedString & ref) {
-  StateUpdater assets(ref);
-  assets.RecalculateStates();
-}
-
 void RebuildVersion(const SharedString & ref) {
   if (MiscConfig::Instance().GraphOperations) {
     // Rebuilding an already succeeded asset is quite dangerous!
@@ -70,8 +47,9 @@ void RebuildVersion(const SharedString & ref) {
       }
     }
 
-    UpdateStateForSelfAndDependentChildren(ref, AssetDefs::New, AssetDefs::CanRebuild);
-    RecalculateStates(ref);
+    StateUpdater updater;
+    updater.SetStateForRefAndDependents(ref, AssetDefs::New, AssetDefs::CanRebuild);
+    updater.RecalculateStates();
   }
   else {
     MutableAssetVersionD version(ref);
