@@ -64,12 +64,12 @@ class StateUpdater
         const SharedString & ref,
         VertexMap & vertices,
         size_t & index,
-        std::list<TreeType::vertex_descriptor> & toLoad);
+        std::list<TreeType::vertex_descriptor> & toFillIn);
     void FillInVertex(
         TreeType::vertex_descriptor vertex,
         VertexMap & vertices,
         size_t & index,
-        std::list<TreeType::vertex_descriptor> & toLoad);
+        std::list<TreeType::vertex_descriptor> & toFillIn);
     void AddEdge(TreeType::vertex_descriptor from,
                  TreeType::vertex_descriptor to,
                  AssetEdge data);
