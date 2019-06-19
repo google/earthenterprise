@@ -267,6 +267,8 @@ The maximum memory usage for each cache can be set with <code>MaxAssetCacheMemor
 This size is measured in bytes and the default setting is 1GB.
 <br>
 While this option is enabled, the caches will not be limited by the number of objects in the cache.
+<br>
+It should be noted that as of now the reported memory usage is very low and that this option is not recommended for production environments. 
 
 <p>The Xerces library maintains a separate cache for dealing with XML files. Users can modify aspects of this cache through a configuration file at
 <code>/etc/opt/google/XMLparams</code>. This file is not created automatically as part of the Open GEE Fusion install,
