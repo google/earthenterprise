@@ -105,6 +105,9 @@ StateUpdater::AddEmptyVertex(
   }
 }
 
+// "Fills in" an existing vertex with the state of an asset and its connections
+// to other assets. Adds any connecting assets that need to be filled in to
+// toLoad.
 void StateUpdater::FillInVertex(
     TreeType::vertex_descriptor myVertex,
     VertexMap & vertices,
