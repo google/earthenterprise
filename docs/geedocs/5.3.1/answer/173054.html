@@ -1,0 +1,42 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Add .kip imagery</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 173054.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/6153619.html">Supported file formats in GEE</a></p>
+<p class="sidebar-toc"><a href="../answer/6053241.html">Apply alpha masking to imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/172810.html">Import pre-processed data</a></p>
+<p class="sidebar-toc"><a href="../answer/1090589.html">Import a subset of imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/173054.html" class="current-file">Add .kip imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/2882131.html">Vector data handling</a></p>
+<p class="sidebar-toc"><a href="../answer/2760298.html">Google Maps raster background</a></p>
+<p class="sidebar-toc"><a href="../answer/4525555.html">Create custom masks</a></p>
+<p class="sidebar-toc"><a href="../answer/6062318.html">Manage mosaics with virtual rasters</a></p>
+<p class="sidebar-toc"><a href="../answer/6081009.html">Map projection types in GEE 5.1.0</a></p>
+<p class="sidebar-toc"><a href="../answer/6081069.html">Add flat imagery to Mercator map databases in GEE 5.1.0</a></p>
+<p class="sidebar-toc"><a href="../answer/2760457.html">Add KML layers</a></p>
+<p class="sidebar-toc"><a href="../answer/2760534.html">Non-clickable icons</a></p>
+<p class="sidebar-toc"><a href="../answer/173053.html">Map projections</a></p>
+<p class="sidebar-toc"><a href="../answer/1089795.html">Map buttons</a></p>
+<p class="sidebar-toc"><a href="../answer/4492623.html">Create terrain overlays</a></p>
+<p class="sidebar-toc"><a href="../answer/2760655.html">Monitor builds with Twitter</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion resources and projects</h1>
+<h2>Add .kip imagery</h2>
+<p>GEE can use pre-processed imagery in <strong>Keyhole Imagery Product</strong> (<code>.kip</code>) format. Each <code>.kip</code> folder has a corresponding <strong>Keyhole Mask Product</strong> (<code>.kmp</code>) folder that contains the mask for the imagery. The corresponding folders have the same name.</p>
+<p>To add <code>.kip</code> imagery to the asset tree:</p>
+<ol>
+<li>Store each <code>.kip/.kmp</code> folder pair in the same directory.</li>
+<li>Set read-and-execute permissions for the <code>keyhole:users</code> account.</li>
+<li>Use the <code>khnewimageryasset --havemask</code> command to add the files. Specify the asset name, the provider information (USGS), and the location of the <code>.kip</code> folder. For example, if <code>city_one.kip</code> and <code>city_one.kmp</code> are in <code>/gevol/src/preprocessed/noame/usa/</code>, the command is:
+<p><code>genewimageryasset --havemask --provider (<em>PROVIDER_KEY</em>) -o <em>path/to/asset/in/tree</em>/gevol/src/preprocessed/noame/usa/<em>city_one.kip</em></code></p>
+</li>
+<li>Repeat this step for each <code>.kip/.kmp</code> combination you want to add.</li>
+</ol>
+<p>You can access the assets from the Fusion Asset Manager whenever you want to use them in imagery projects. You're still required to build each asset in the system, but the build time will be insignificant because each <code>.kip/.kmp</code> combination is pre-processed.</p>
+<div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>

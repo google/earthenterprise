@@ -456,7 +456,17 @@ class khGetopt {
     }
   }
 
-
+  template <class T, T min, T max>
+  static void IsEvenNumberInRange(const T &arg) {
+    if (arg < min || arg > max) {
+      throw khSimpleException("Out of range >= ")
+          << min << " and <= " << max;
+    }
+    else if (arg % 2 != 0){
+      throw khSimpleException("Not an even number");
+    }
+  }
+  
   // Process all options, permuting non-options to the end
   // Will emit a warning and return false on failure,
   // otherwise argn will be updated to point to the first non-opt argment.

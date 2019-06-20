@@ -561,9 +561,9 @@ const char* GlcUnpacker::Id() {
       sstream << "-" << std::hex << InfoCrc();
     }
     sstream << "-" << std::hex << length_;
+    id_ = sstream.str();
   }
 
-  id_ = sstream.str();
   return id_.c_str();
 }
 

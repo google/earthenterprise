@@ -149,9 +149,8 @@ khAssetManager::ApplyPending(void)
 
   // build a list of AssetChanges
   AssetChanges changes;
-  for (std::vector<SharedString>::const_iterator i = savedAssets.begin();
-       i != savedAssets.end(); ++i) {
-    changes.items.push_back(AssetChanges::Item(*i, "Modified"));
+  for (const auto & ref : savedAssets) {
+    changes.items.push_back(AssetChanges::Item(ref, "Modified"));
   }
   for (std::map<SharedString, AssetDefs::State>::const_iterator i
          = pendingStateChanges.begin();

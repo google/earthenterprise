@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2018 The Open GEE Contributors
+# Copyright 2018-2019 The Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -65,7 +65,12 @@ main_postinstall()
     # 9) Restore portable globes symlink if it existed previously
     restore_portable_symlink
  
-    #10) done!
+    #10) Restore Admin Console password if it exists
+    if [ -f "/tmp/.htpasswd" ]; then
+        mv -f "/tmp/.htpasswd" "$BASEINSTALLDIR_OPT/gehttpd/conf.d/"
+    fi
+
+    #11) done!
     service geserver start
 }
 

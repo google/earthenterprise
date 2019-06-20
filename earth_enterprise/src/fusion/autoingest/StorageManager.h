@@ -57,6 +57,8 @@ class StorageManager
     inline void AddNew(const AssetKey &, const HandleType &);
     inline void AddExisting(const AssetKey &, const HandleType &);
     inline void NoLongerNeeded(const AssetKey &, bool = true);
+    void Abort();
+    bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<SharedString> *);
     HandleType Get(const AssetHandleInterface<AssetType> *, bool, bool, bool);
     void Abort();
     bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<SharedString> *);

@@ -37,9 +37,13 @@ sudo apt-get install \
     libperl4-corelibs-perl libpng12-0 libpng12-dev libpq-dev libproj-dev \
     libstdc++6 libtool \
     libx11-dev libxcursor-dev libxerces-c-dev libxft-dev libxinerama-dev \
-    libxml2-dev libxml2-utils libxmu-dev libxrandr-dev \
+    libxml2-dev libxml2-utils libxmu-dev libxrandr-dev libyaml-cpp-dev \
     openssl \
     python-dev python-imaging python-psycopg2 python-setuptools python2.7 \
     python2.7-dev python-git \
     scons shunit2 swig xorg-dev zlib1g-dev
+```
+For Ubuntu 14, in addition of the above command, run this extra one:
+```
+sudo apt install libboost-all-dev
 ```

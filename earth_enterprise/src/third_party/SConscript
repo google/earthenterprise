@@ -26,6 +26,7 @@ third_party_env = env.Clone()
 # The order is important as n'th one has no dependency on anything after it
 if third_party_env['bundle_3rd_libs']:
   third_party_libs = [
+      'date',
       'gtest',
       'libjs',
       'libattr',
@@ -57,9 +58,11 @@ if third_party_env['bundle_3rd_libs']:
       'setuptools',
       'mgrs',
       'PIL',
-      'skia']
+      'skia'
+  ]
 else:
   third_party_libs = [
+      'date',
       'gtest',
       'libjs',
       'openssl',
@@ -75,7 +78,8 @@ else:
       'mod_wsgi',
       'psycopg2', # requires postgresql.
       'mgrs',
-      'skia']
+      'skia'
+  ]
 
 
 third_party_bin = '%s/bin' % Dir('.').abspath

@@ -35,6 +35,7 @@
 #include "fusion/gst/gstSimpleEarthStream.h"
 #include "fusion/gst/gstSimpleStream.h"
 #include "fusion/portableglobe/portableglobebuilder.h"
+#include "fusion/portableglobe/quadtree/qtutils.h"
 #include "fusion/portableglobe/shared/packetbundle.h"
 #include "fusion/portableglobe/shared/packetbundle_reader.h"
 #include "fusion/portableglobe/shared/packetbundle_writer.h"
@@ -63,6 +64,7 @@ PortableMapBuilder::PortableMapBuilder(
     const std::string& hires_qt_nodes_file,
     const std::string& map_directory,
     const std::string& additional_args,
+    const std::string& metadata_file,
     bool ignore_imagery_depth,
     bool no_write)
     : map_directory_(map_directory),
@@ -70,6 +72,7 @@ PortableMapBuilder::PortableMapBuilder(
     max_level_(max_level),
     source_(source),
     additional_args_(additional_args),
+    metadata_file_(metadata_file),
     ignore_imagery_depth_(ignore_imagery_depth),
     is_no_write_(no_write) {
   // Build a structure for filtering quadtree addresses.
@@ -171,6 +174,10 @@ void PortableMapBuilder::BuildMap() {
     } else if (qt_char[level] == '3') {
       level_col[level] -= 1;
     }
+  }
+
+  if (!metadata_file_.empty()) {
+    bounds_tracker_.write_json_file(metadata_file_);
   }
 
   // Finish up writing all of the packet bundles.
@@ -418,6 +425,10 @@ bool PortableMapBuilder::WriteMapPackets(const std::string& qtpath_str,
         // (1 x 1 clear pngs) to unnecessarily deep levels.
         found_something = true;
       }
+
+      bounds_tracker_.update(layers_[i]->channel_num,
+                             static_cast<PacketType>(packet_type),
+                             qtpath_str);
 
       std::string full_qtpath = "0" + qtpath_str;
       writer_->AppendPacket(full_qtpath, packet_type, layers_[i]->channel_num,

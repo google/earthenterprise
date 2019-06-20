@@ -94,6 +94,7 @@ class PortableMapBuilder {
                      const std::string& hires_qt_nodes_file,
                      const std::string& map_directory,
                      const std::string& additional_args,
+                     const std::string& metadata_file,
                      bool ignore_imagery_depth,
                      bool no_write);
 
@@ -101,12 +102,6 @@ class PortableMapBuilder {
   PortableMapBuilder():server_(NULL) {}
 
   ~PortableMapBuilder();
-
-  /**
-   * Build packet bundles for all specified data types. Add data based on
-   * whether corresponding quadtree nodes is to be kept in the globe.
-   */
-  void BuildGlobe();
 
   /**
    * Build packet bundles for all specified data types. Add data based on
@@ -182,11 +177,18 @@ class PortableMapBuilder {
 
   // Packet bundle writers for the different asset types.
   PacketBundleWriter* writer_;
+
+  // Path to file that will hold metadata.
+  std::string metadata_file_;
+  // Structure to keep track of map boundaries.
+  BoundsTracker bounds_tracker_;
+
   // Flag indicating whether Cutter should continue looking for (vector) data
   // or stop cut in that region when end of imagery data is found.
   bool ignore_imagery_depth_;
   // Flag indicating whether data shouldn't be written, just checked for size.
   bool is_no_write_;
+
 
   DISALLOW_COPY_AND_ASSIGN(PortableMapBuilder);
 };
