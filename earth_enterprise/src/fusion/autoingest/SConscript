@@ -216,3 +216,4 @@ env.test('StorageManager_unittest',
 
 SConscript('sysman/SConscript', exports=['env', 'commonobj', 'plugins'])
 SConscript('tools/SConscript', exports='env')
+SConscript('memory-tests/SConscript', exports=['env'])

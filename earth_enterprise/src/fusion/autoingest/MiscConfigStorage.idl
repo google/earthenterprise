@@ -33,6 +33,8 @@ class MiscConfigStorage {
 
   bool        LimitMemoryUtilization = false;
 
+  uint        AssetCacheSize = uint(128000);
+  uint        VersionCacheSize = uint(128000);
   bool        GenerateProductPreviews = true;
 
   uint        MutexTimedWaitSec = uint(30);

@@ -1,0 +1,98 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Fusion issues</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 172780.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/6121524.html">Geecheck: test your GEE Server status</a></p>
+<p class="sidebar-toc"><a href="../answer/2760674.html">Fusion diagnostics</a></p>
+<p class="sidebar-toc"><a href="../answer/172780.html" class="current-file">Fusion issues</a></p>
+<p class="sidebar-toc"><a href="../answer/179631.html">Unsupported 3D geometry files</a></p>
+<p class="sidebar-toc"><a href="../answer/173055.html">Maps display grey tiles</a></p>
+<p class="sidebar-toc"><a href="../answer/173202.html">Imagery or terrain gaps</a></p>
+<p class="sidebar-toc"><a href="../answer/6363126.html">Troubleshoot connection to GEE Server</a></p>
+<p class="sidebar-toc"><a href="../answer/173081.html">Post-installation error message: Conflicts in plugins</a></p>
+<p class="sidebar-toc"><a href="../answer/173064.html">Post-installation error message: Permission denied</a></p>
+<p class="sidebar-toc"><a href="../answer/173076.html">Post-installation error message: Socket connect</a></p>
+<p class="sidebar-toc"><a href="../answer/173075.html">Post-installation error message: Segmentation fault</a></p>
+<p class="sidebar-toc"><a href="../answer/173079.html">Post-installation error message: ValidateProtocolVersion</a></p>
+<p class="sidebar-toc"><a href="../answer/173083.html">Resource build error message: coordinatetransformation</a></p>
+<p class="sidebar-toc"><a href="../answer/173060.html">Resource build error message: Headers do not match</a></p>
+<p class="sidebar-toc"><a href="../answer/173082.html">Resource build error message: No SRS</a></p>
+<p class="sidebar-toc"><a href="../answer/173058.html">Resource build error message: SourceFile</a></p>
+<p class="sidebar-toc"><a href="../answer/2981872.html">Resource build error message: Unable to find a suitable resource provider</a></p>
+<p class="sidebar-toc"><a href="../answer/2981878.html">Resource build error message: Unable to make reservation</a></p>
+<p class="sidebar-toc"><a href="../answer/3054957.html">Resource build error message: libjpeg.so.62</a></p>
+<p class="sidebar-toc"><a href="../answer/173063.html">Project build error message: Empty layer</a></p>
+<p class="sidebar-toc"><a href="../answer/173084.html">Project build error message: Pyramid data</a></p>
+<p class="sidebar-toc"><a href="../answer/173071.html">Project build error message: Signal 6</a></p>
+<p class="sidebar-toc"><a href="../answer/173072.html">Project build error message: Signal 11</a></p>
+<p class="sidebar-toc"><a href="../answer/173078.html">Project build error message: Write to index</a></p>
+<p class="sidebar-toc"><a href="../answer/173085.html">Database build error message: HandleAddDbRequest</a></p>
+<p class="sidebar-toc"><a href="../answer/172797.html">Publish error message: Authentication required</a></p>
+<p class="sidebar-toc"><a href="../answer/173061.html">Publish error message: Client/server mismatch</a></p>
+<p class="sidebar-toc"><a href="../answer/173062.html">Publish error message: Client too old</a></p>
+<p class="sidebar-toc"><a href="../answer/173074.html">Publish error message: Server push failed</a></p>
+<p class="sidebar-toc"><a href="../answer/173077.html">Publish error message: Unable to contact server</a></p>
+<p class="sidebar-toc"><a href="../answer/173080.html">Publish error message: Upload failed</a></p>
+<p class="sidebar-toc"><a href="../answer/3029085.html">Publish error message: Error adding files to publisher database</a></p>  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Troubleshooting and error messages</h1><h2>Fusion issues</h2>
+<p>When you install GEE on a server, the software does a query for <code>hostname -f</code>. Each time you build a resource, project, or database on the Fusion server, the initial <code>hostname -f</code> response is added to all the files in each asset’s subdirectory. Changing the hostname or moving assets from one server to another without updating the hostname in all places will make your Fusion system inoperable. To safely change your hostname, follow the instructions below.</p>
+<p>To change the hostname for a production system (GEE Server only, no Fusion):</p>
+<ol>
+<li>Shut down the <code>geserver</code> daemon at <code>/etc/init.d/geserver stop</code>.</li>
+<li>Update the hostname and IP address to the correct entries for the machine.</li>
+<li>Edit <code>/opt/google/gehttpd/htdocs/intl/en/tips/tip*.html</code> and update any hardcoded URLs to the new machine URL.</li>
+<li>Remove the contents of <code>/gevol/published_dbs/stream_space</code> and <code>/gevol/published_dbs/search_space</code>.</li>
+<li>Change directory to <code>/tmp</code> and execute <code>sudo -u gepguser /opt/google/bin/geresetpgdb</code>.</li>
+<li>Start the GEE Server: <code>/etc/init.d/geserver start</code>.</li>
+</ol>
+<p>To change the hostname for a development system (both Fusion and GEE Server):</p>
+<ol>
+<li>Shut down both the <code>gefusion</code> and <code>geserver</code> daemons:<br/>
+<code>/etc/init.d/gefusion stop<br/>
+/etc/init.d/geserver stop</code></li>
+<li>Update the hostname and IP address to the correct entries for the machines.</li>
+<li>If needed, edit the <code>/etc/hosts</code> file to update the IP address and hostname entries for the production machine.</li>
+<li>Execute <code>/opt/google/bin/geconfigureassetroot --fixmasterhost</code>.</li>
+<li>Back up the following files to <code>/tmp</code> or another archive folder:<br/>
+<code>/gevol/assets/.config/volumes.xml<br/>
+/gevol/assets/.config/PacketLevel.taskrule<br/>
+/gevol/assets/.userdata/serverAssociations.xml<br/>
+/gevol/assets/.userdata/snippets.xml</code><br/>
+Replace <code>assets</code> with the name of your asset root. For example, <code>/gevol/tutorial</code>.</li>
+<li>Edit the <code>/gevol/assets/.userdata/snippets.xml</code> file and update the hardcoded URLs to match the new hostname URL of the production machine.</li>
+<li>Edit <code>/opt/google/gehttpd/htdocs/intl/en/tips/tip*.html</code> and update any hardcoded URLs to the new machine URL.</li>
+<li>Remove the contents of <code>/gevol/published_dbs/stream_space</code> and <code>/gevol/published_dbs/search_space</code>.</li>
+<li>Change directory to <code>/tmp</code> and execute <code>sudo -u gepguser /opt/google/bin/geresetpgdb</code>.</li>
+<li>Start the geserver and gefusion services:<br/>
+<code>/etc/init.d/geserver start<br/>
+/etc/init.d/gefusion start</code>
+<p>You can now change the server associations and publish the databases.</p>
+</li>
+</ol>
+<p>To change the server associations and publish the databases:</p>
+<ol>
+<li>Log in to Fusion as a user (not as root) by entering <code>fusion</code> on the command line.</li>
+<li>Select <strong>Tools</strong> &gt; <strong>Server Associations Manager</strong>.</li>
+<li>Edit the <code>default_ge</code> and <code>default_map </code>entries and update the URL to match the hostname of the development machine.</li>
+<li>Edit the remaining entries for the production server associations and update the URL to the new production machine URL, then close the Server Associations Manager.</li>
+<li>Select <strong>Tools</strong> &gt; <strong>Asset Manager</strong>.</li>
+<li>Navigate to the Databases folder, right-click <strong>3D database</strong>, and select <strong>Publish</strong>.</li>
+<li>From the <strong>Publish</strong> menu, select <strong>default_ge</strong> and publish to the local development machine. Repeat for the production machine.</li>
+<li>Right-click <strong>2D database</strong> and select <strong>Publish</strong>.</li>
+<li>From the <strong>Publish</strong> menu, select <strong>default_map</strong> and publish to the local development machine. Repeat for the production machine.</li>
+</ol>
+<p>To verify that the databases are published and working:</p>
+<ol>
+<li>Connect a web browser to <code>http://production/default_map</code>.</li>
+<li>Connect a web browser to <code>http://development/default_map</code>.</li>
+<li>Connect Earth Client to <code>http://production</code>.</li>
+<li>Connect Earth Client to <code>http://development</code>.</li>
+</ol>
+<p><strong>Note</strong>: During testing, you can check <code>/opt/google/gehttpd/logs/access_log</code> and <code>error_log</code> to determine if any errors are reported by Apache.</p>
+<div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>

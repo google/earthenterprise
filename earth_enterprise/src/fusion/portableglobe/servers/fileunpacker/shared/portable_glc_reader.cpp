@@ -25,12 +25,17 @@
 #include <string>
 #include "./khTypes.h"
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+
 /**
  * Constructor.
  */
 PortableGlcReader::PortableGlcReader(const char* path)
   : path_(path) {
-  glc_file_ = fopen(path_.c_str(), "rb");
+  glc_file_ = open(path_.c_str(), O_RDONLY);
 
   auto last_sep = path_.find_last_of('/');
   if (last_sep == std::string::npos) {
@@ -60,8 +65,7 @@ PortableGlcReader::PortableGlcReader(const char* path)
   // Set file size (important for negative offsets).
   glc_file_size_ = 0;
   if (glc_file_) {
-    fseek(glc_file_, 0, SEEK_END);
-    glc_file_size_ = ftell(glc_file_);
+    glc_file_size_ = lseek64(glc_file_, 0, SEEK_END);
   } else {
     std::cerr << "GlcReader stream is not open." << std::endl;
   }
@@ -69,7 +73,7 @@ PortableGlcReader::PortableGlcReader(const char* path)
 
 PortableGlcReader::~PortableGlcReader() {
   if (glc_file_) {
-    fclose(glc_file_);
+    close(glc_file_);
   }
 }
 
@@ -100,8 +104,8 @@ bool PortableGlcReader::ReadData(
   }
 
   try {
-    fseek(glc_file_, offset, SEEK_SET);
-    fread(reinterpret_cast<char*>(buffer), size, 1, glc_file_);
+    lseek64(glc_file_, offset, SEEK_SET);
+    read(glc_file_, buffer, size);
     return true;
   } catch(...) {
     return false;

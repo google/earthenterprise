@@ -1,5 +1,6 @@
 /*
  * Copyright 2017 Google Inc.
+ * Copyright 2019 Open GEE Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +30,7 @@
 #include <vector>
 #include "common/qtpacket/quadtreepacket.h"
 #include "fusion/gst/gstSimpleEarthStream.h"
+#include "fusion/portableglobe/shared/bounds_tracker.h"
 #include "fusion/portableglobe/shared/packetbundle_reader.h"
 #include "fusion/portableglobe/shared/packetbundle_writer.h"
 #include "fusion/portableglobe/portablepacketwriter.h"
@@ -200,7 +202,6 @@ class QtPacketLookAheadRequestor {
   std::vector<QuadtreePath> paths_with_qt_packets_;
 };
 
-
 /**
  * Class for constructing a portable globe.
  * Traverses quadtree packets and prunes out the ones that
@@ -245,6 +246,7 @@ class PortableGlobeBuilder : public PortableBuilder {
                        const std::string& globe_directory,
                        const std::string& additional_args,
                        const std::string& qtpacket_version,
+                       const std::string& metadata_file,
                        bool no_write,
                        bool use_post);
 
@@ -271,10 +273,10 @@ class PortableGlobeBuilder : public PortableBuilder {
 
   // 3rd param will not be used
   void GetImagePacketsSize(
-      const std::string& paths, size_t num_paths, uint32 version, uint32);
+      const std::string& paths, size_t num_paths, uint32 version, uint32 channel);
   // 3rd param will not be used
   void GetTerrainPacketsSize(
-      const std::string& paths, size_t num_paths, uint32 version, uint32);
+      const std::string& paths, size_t num_paths, uint32 version, uint32 channel);
   // Existense of 3rd param is to bring uniformity for this vector
   void GetVectorPacketsSize(const std::string& paths, size_t num_paths,
                             uint32 version, uint32 channel);
@@ -378,6 +380,11 @@ class PortableGlobeBuilder : public PortableBuilder {
   RequestBundlerForPacketSize<PortableGlobeBuilder> image_pac_size_req_cache_;
   RequestBundlerForPacketSize<PortableGlobeBuilder> terrain_pac_size_req_cache_;
   RequestBundlerForPacketSize<PortableGlobeBuilder> vector_pac_size_req_cache_;
+
+  // Path to file that will hold metadata.
+  std::string metadata_file_;
+  // Structure to keep track of globe boundaries.
+  BoundsTracker bounds_tracker_;
 
   DISALLOW_COPY_AND_ASSIGN(PortableGlobeBuilder);
 };

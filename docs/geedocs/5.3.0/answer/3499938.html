@@ -1,0 +1,112 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>System Requirements for GEE Server</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 3499938.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/3499934.html">Introduction</a></p>
+<p class="sidebar-toc"><a href="../answer/3499938.html" class="current-file">System Requirements for GEE Server</a></p>
+<p class="sidebar-toc"><a href="../answer/3499396.html">Before you install</a></p>
+<p class="sidebar-toc"><a href="../answer/3499960.html">Installing</a></p>
+<p class="sidebar-toc"><a href="../answer/3499964.html">Uninstalling</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Install GEE Server</h1>
+<h2>System Requirements for GEE Server</h2>
+<div><h5>
+<p>Hardware Requirements</p>
+</h5>
+<div>
+<ul>
+<li>Minimum 2 dual-core Intel or AMD CPUs; 2.0 GHz or higher recommended.</li>
+<li>Minimum 4 GB RAM (8 GB RAM for Red Hat Enterprise Linux); 8 GB RAM (or more) per core recommended for Fusion.</li>
+<li>Minimum 500 GB of total hard disk storage.</li>
+<li>A graphics card with at least 64 MB video RAM (NVIDIA GeForce4 or higher preferred for Fusion GUI). You can install this graphics card in a separate workstation that accesses Fusion.</li>
+</ul>
+<p class="note"><strong>Note:</strong> If you plan on cutting globes, this processing can be CPU-intensive and you may also need to plan on providing more storage depending on the size of the globes.</p>
+<p><strong>Note on virtual machines</strong>: Fusion can be both CPU and I/O intensive. For optimal, stable performance, you should install it only on physical (non-virtual) machines. You can run GEE Server on a virtualized platform, provided the guest OS is one of our supported 64-bit distributions and you allocate sufficient resources to the VM.</p>
+</div>
+</div>
+<div><h5>
+<p>Software Requirements</p>
+</h5>
+<div>
+<p><strong>Operating Systems</strong></p>
+<p>OpenGEE is supported only on the 64-bit versions of the operating systems listed below.</p>
+<ul>
+<li dir="ltr">Red Hat Enterprise Linux 6.x and 7.x, including the most recent security patches</li>
+<li>CentOS 6.x and 7.x</li>
+<li dir="ltr">Ubuntu 14.04 LTS and 16.04 LTS</li>
+</ul>
+<p><strong>Browsers</strong></p>
+<p>Google Earth Enterprise is supported on the following browsers on all operating systems:</p>
+<ul>
+<li dir="ltr">The latest version of Google Chrome</li>
+<li dir="ltr">The latest version of Mozilla Firefox</li>
+</ul>
+<p>However, Google Earth Enterprise should work with any modern browser.</p>
+<p><strong>Google Earth Enterprise Client (EC)</strong></p>
+<p>The following versions of Google Earth Enterprise Client (EC) are recommended to be used with Google Earth Enterprise: </p>
+<ul>
+<li dir="ltr">For GEE 5.x, use Google Earth EC version 7.0 or later</li>
+<li dir="ltr">For GEE 4.4, use Google Earth EC version 6.1 or later</li>
+</ul>
+<div class="note"><p><strong>Note:</strong> Although older versions of Google Earth EC, that is 6.0 and earlier,  <em>may</em> still connect to Google Earth Enterprise or Portable 3D databases, not all features will be available. Also, as Google Earth Enterprise has not been tested or certified against older versions of Google Earth EC, there may be unknown operational problems.
+</p></div>
+<p>Google Earth Enterprise Client (EC) is supported on the following platforms:</p>
+<ul>
+<li>Windows/Mac/Linux</li>
+</ul>
+<p><strong>Unsupported Versions and Environments</strong></p>
+<p>There are many variations of operating systems and related software; point ("x.x") releases can sometimes contain changes that can impact your GEE installation. Although an unsupported version of these software packages may appear to function correctly, their use in a production environment is not recommended. Unexpected results may occur.</p>
+<p>Where possible, you should adhere to the hardware and software specifications listed in this document. If a problem arises in an unsupported configuration, we may not be able to help you resolve it.</p>
+</p></p></div>
+</div>
+<div><h5>
+<p>Network Requirements</p>
+</h5>
+<div>
+<p>Each destination server must meet the requirements below before you install GEE, and you must not change these settings after deploying GEE. The hostname must be the FQDN (Fully Qualified Domain Name) of your destination server. For example, <code>myserver.mydomainname.com</code>.</p>
+<p>You can verify the hostname of your workstation by entering <code>hostname</code> at a shell prompt, and you can verify the network connection by using the <code>ping</code> command to reach other hosts in the same network. The requests should resolve using both and IP address and the FQDN.</p>
+<ul>
+<li>Hostname registered in DNS</li>
+<li>Hosts file is acceptable for small-scale systems</li>
+<li>Allocated IP addresses</li>
+<li>Correct network routing paths</li>
+<li>Network connectivity (Ports 80 and 22; Port 443 for HTTPS)</li>
+<li>Default installation of a Supported OS</li>
+<li>Java Development Kit or Runtime Environment (must download from Sun; use version 1.6.0_12 or newer)</li>
+<li>OpenSSL 0.9.8y (on OS media)</li>
+<li>Python 2.7.5 (on OS media)</li>
+<li>Storage for all source data and asset tree</li>
+<li>May be local storage (i.e., RAID 5 array)</li>
+<li>NAS storage via NFS acceptable</li>
+<li>SAN storage acceptable</li>
+<li>USB drive not recommended</li>
+</ul>
+</div>
+</div>
+<div><h5>
+<p>Supported Configurations</p>
+</h5>
+<div>
+<p>Google Earth Enterprise products are developed per the hardware and software requirements listed above. The products are intended to be installed according to the processes described in this documentation. When installing Google Earth Enterprise in an unsupported environment, there are risks that the products may not operate as intended.</p>
+<p>Some factors that could affect your installation and deployment are:</p>
+<ul>
+<li>Installations on unsupported operating systems.</li>
+<li>Improperly configured DNS.</li>
+<li>3rd party or non-default permissions or security measures (no root access, sudo blockers, etc.).</li>
+<li>Complex proxy configurations that prevent the network communications from operating as intended.</li>
+</ul>
+</div>
+</div>
+<div><h5>
+<p>Important System Security Information</p>
+</h5>
+<div>
+<p>We strongly recommend users who wish to host 3D and 2D globes online with Google Earth Enterprise should follow industry standard security practices and review for their systems and networks before enabling access. Although we takes every precaution to secure the information, there is always the risk of unauthorized access outside of a closed or protected network.</p>
+</div>
+</div><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>

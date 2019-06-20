@@ -66,7 +66,7 @@ geportableglobebuilder = env.executable(
     ['geportableglobebuilder.cpp', portableglobebuilder, portablepacketwriter],
     LIBS=['sharedportablelib', 'gesimpleearthstream',
           'sgl', 'gif', 'png12', 'jpeg',
-          'freetype', 'geutil', 'gecommon', 'geqtpacket', 'geos'])
+          'freetype', 'geutil', 'gecommon', 'geqtpacket', 'geos', 'qtutils'])
 
 gecreatemetadbroot = env.executable(
     'gecreatemetadbroot',
@@ -79,7 +79,7 @@ geportablemapbuilder = env.executable(
      portableglobebuilder, portablepacketwriter],
     LIBS=['sharedportablelib', 'gesimpleearthstream',
           'sgl', 'gif', 'png12', 'jpeg',
-          'freetype', 'geutil', 'gecommon', 'geqtpacket', 'geos'])
+          'freetype', 'geutil', 'gecommon', 'geqtpacket', 'geos', 'qtutils'])
 
 geportableglobepacker = env.executable(
     'geportableglobepacker',
@@ -136,7 +136,7 @@ portableglobebuilder_test = env.test(
      portableglobebuilder, portablepacketwriter],
     LIBS=['sharedportablelib', 'gtest',
           'geutil', 'gecommon', 'geqtpacket',
-          'geos', 'gesimpleearthstream'])
+          'geos', 'gesimpleearthstream', 'qtutils'])
 
 portablemapbuilder_test = env.test(
     'portablemapbuilder_test',
@@ -144,7 +144,7 @@ portablemapbuilder_test = env.test(
      portableglobebuilder, portablepacketwriter],
      LIBS=['sharedportablelib', 'gtest',
            'geutil', 'gecommon', 'geqtpacket',
-           'geos', 'gesimpleearthstream'])
+           'geos', 'gesimpleearthstream', 'qtutils'])
 
 cutspec_test = env.test('cutspec_test',
                         ['cutspec_unittest.cpp'],
