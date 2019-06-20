@@ -114,6 +114,8 @@ void StateUpdater::FillInVertex(
     VertexMap & vertices,
     size_t & index,
     list<TreeType::vertex_descriptor> & toFillIn) {
+  // TODO: see if there's a way to do this that doesn't require
+  // making the asset mutable.
   MutableAssetVersionD version(tree[myVertex].name);
   tree[myVertex].state = version->state;
   vector<SharedString> dependents;
