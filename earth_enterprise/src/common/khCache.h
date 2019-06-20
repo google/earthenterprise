@@ -22,9 +22,6 @@
 #include <vector>
 
 #include "khTypes.h"
-#include "fusion/autoingest/MiscConfig.h"
-#include "khRefCounter.h"
-#include "SharedString.h"
 #include "CacheSizeCalculations.h"
 
 // #define SUPPORT_VERBOSE
