@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
+#ifndef _CACHE_SIZE_CALCULATIONS_H
+#define _CACHE_SIZE_CALCULATIONS_H
 #include "khTypes.h"
 #include "khRefCounter.h"
 #include "khMetaData.h"
-#include <notify.h>
-
-#ifndef _INCL_GUARD
-#define _INCL_GUARD
 
 // determine amount of memory used by generic objects
 template<class T>
