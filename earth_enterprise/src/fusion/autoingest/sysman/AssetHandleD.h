@@ -153,7 +153,7 @@ class MutableAssetHandleD_ : public virtual Base_ {
   }
 
   static bool SaveDirtyToDotNew(khFilesTransaction &savetrans,
-                                std::vector<std::string> *saveDirty) {
+                                std::vector<SharedString> *saveDirty) {
     return Base::storageManager().SaveDirtyToDotNew(savetrans, saveDirty);
   }
 
