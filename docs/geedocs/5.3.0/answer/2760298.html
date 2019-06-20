@@ -1,0 +1,139 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Google Maps raster background</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 2760298.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/6153619.html">Supported file formats in GEE</a></p>
+<p class="sidebar-toc"><a href="../answer/6053241.html">Apply alpha masking to imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/172810.html">Import pre-processed data</a></p>
+<p class="sidebar-toc"><a href="../answer/1090589.html">Import a subset of imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/173054.html">Add .kip imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/2882131.html">Vector data handling</a></p>
+<p class="sidebar-toc"><a href="../answer/2760298.html" class="current-file">Google Maps raster background</a></p>
+<p class="sidebar-toc"><a href="../answer/4525555.html">Create custom masks</a></p>
+<p class="sidebar-toc"><a href="../answer/6062318.html">Manage mosaics with virtual rasters</a></p>
+<p class="sidebar-toc"><a href="../answer/6081009.html">Map projection types in GEE 5.1.0</a></p>
+<p class="sidebar-toc"><a href="../answer/6081069.html">Add flat imagery to Mercator map databases in GEE 5.1.0</a></p>
+<p class="sidebar-toc"><a href="../answer/2760457.html">Add KML layers</a></p>
+<p class="sidebar-toc"><a href="../answer/2760534.html">Non-clickable icons</a></p>
+<p class="sidebar-toc"><a href="../answer/173053.html">Map projections</a></p>
+<p class="sidebar-toc"><a href="../answer/1089795.html">Map buttons</a></p>
+<p class="sidebar-toc"><a href="../answer/4492623.html">Create terrain overlays</a></p>
+<p class="sidebar-toc"><a href="../answer/2760655.html">Monitor builds with Twitter</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion resources and projects</h1>
+<h2>Google Maps raster background</h2>
+<p>Creating a Google Maps raster background for your vector data is useful to speed up processing times for large globes. Trying to create a vector-only globe can result in very long processing times. For example, building an ocean or a large continent using only vector data can take weeks or months. Instead, you can use Google Maps raster data to create a basic 2D background in either Mercator or Flat projection, then you can add vector layers like roads, cities, and borders.</p>
+<h2>Overview of steps</h2>
+<p>These are the main steps to create a Google Maps raster background:</p>
+<ol>
+<li>Set up your computer.</li>
+<li>Obtain the data.</li>
+<li>Create the blue background tiles.</li>
+<li>Add the vector data.</li>
+<li>Create the resource and project.</li>
+</ol>
+<h3>To create a Google Maps raster background:</h3>
+<p>The instructions below show how to create the raster background starting with the NASA 500-meter base. At this resolution, shorelines pixelate slightly at higher zoom levels. If you want a finer shoreline, you can start with a higher resolution base or re-sample the 500-meter base with increased resolution.</p>
+<ol>
+<li>Set up your computer:
+<ul>
+<li>Make sure you have at least 20 GBs of hard disk space.<br/>
+ </li>
+<li>Make sure you have all the GDAL binaries. Fusion installs <code>gdal_translate</code> and <code>gdal_rasterize</code>, but Fusion doesn't include the <code>gdal_merge</code> script. To obtain <code>gdal_merge</code>, download the latest GDAL binaries from the GDAL site or download FWTools and install it in your <code>/usr/local</code> directory. FWTools includes all the GDAL binaries and a few other useful tools.<br/>
+ </li>
+<li>If you want to view the resulting tiles before you fuse them with Fusion, install GIMP on your Linux machine.</li>
+</ul>
+</li>
+<li>Obtain the data:
+<ul>
+<li>Download the A1 file that's in the Nasa Blue Marble July data set from <a href="https://visibleearth.nasa.gov/view_cat.php?categoryID=1484">https://visibleearth.nasa.gov/view_cat.php?categoryID=1484</a>. You can also download the BlueMarble A1 file from an HTTP mirror of the BlueMarble site at the Arctic Region Supercomputing Center at <a href="http://mirrors.arsc.edu/nasa/world_500m/">http://mirrors.arsc.edu/nasa/world_500m/</a>.<br/>
+<br/>
+<strong>Note</strong>: There are eight files, named A1, A2, B1, B2, C1, C2, D1, and D2. Download the A1 file only. The A1 tile represents the top left corner of the globe, D2 is the bottom right, and so on.You'll generate the remaining seven tiles later.<br/>
+ </li>
+<li>Georeference the A1 file data:<br/>
+<br/>
+<code>gdal_translate -a_srs WGS84 -a_ullr -180 90 -90 0 world.topo.bathy.200407 .3x21600x21600.A1.png world.topo.bathy.200407.3x21600x21600.A1.tif </code><br/>
+ </li>
+<li>Download the shoreline dataset from: <a href="http://www.ngdc.noaa.gov/mgg/shorelines/gshhs.html">http://www.ngdc.noaa.gov/mgg/shorelines/gshhs.html</a>. This dataset is in a single <code>.zip</code> file that expands into several directories named <code>c</code>, <code>l</code>, <code>i</code>, <code>h</code> and <code>f</code>. The lowest resolution is in the <code>c</code> directory and the highest is in the <code>f</code> directory. There are four shapefiles in each directory:<br/>
+<br/>
+L1 = shorelines<br/>
+L2 = lakes and rivers<br/>
+L3 = islands in lakes<br/>
+L4 = ponds within islands in lakes</li>
+</ul>
+</li>
+<li>Create the blue background tiles:
+<ul>
+<li>Create the A1 tile for the ocean in the right size and in the Google Maps shade of blue. The NASA <code>.tif</code> geospatial image file is already the right size, so you can just edit its color layers to create a tile with the Google Maps RGB value of 153,179,204:<br/>
+<br/>
+<code>gdal_translate -b 1 -scale 0 255 153 153 world-topo-bathy-200407-3x21600x21600-A1.tif red.tif<br/>
+gdal_translate -b 1 -scale 0 255 179 179 world-topo-bathy-200407-3x21600x21600-A1.tif green.tif<br/>
+gdal_translate -b 1 -scale 0 255 204 204 world-topo-bathy-200407-3x21600x21600-A1.tif blue.tif</code><br/>
+ </li>
+<li>Merge the layers to form a 3-band <code>.tif</code> file called <code>GoogleBlueA1.tif:</code><br/>
+<br/>
+<code>/usr/local/FWTools-2.0.6/bin_safe/gdal_merge.py -o GoogleBlueA1.tif -separate red.tif green.tif blue.tif</code><br/>
+ </li>
+<li>Make a copy of this blue tile to use later:<br/>
+<br/>
+<code>cp GoogleBlueA1.tif GoogleBlue.tif</code><br/>
+ </li>
+<li>Create the remaining 7 blue tiles by using <code>gdal_translate</code> and inserting the appropriate corner coordinates:<br/>
+<br/>
+<code>gdal_translate -a_ullr -180  0 -90 -90 GoogleBlue.tif GoogleBlueA2.tif<br/>
+gdal_translate -a_ullr  -90 90   0   0 GoogleBlue.tif GoogleBlueB1.tif<br/>
+gdal_translate -a_ullr  -90  0   0 -90 GoogleBlue.tif GoogleBlueB2.tif<br/>
+gdal_translate -a_ullr    0 90  90   0 GoogleBlue.tif GoogleBlueC1.tif<br/>
+gdal_translate -a_ullr    0  0  90 -90 GoogleBlue.tif GoogleBlueC2.tif<br/>
+gdal_translate -a_ullr   90 90 180   0 GoogleBlue.tif GoogleBlueD1.tif<br/>
+gdal_translate -a_ullr   90  0 180 -90 GoogleBlue.tif GoogleBlueD2.tif</code></li>
+</ul>
+</li>
+<li>Add the vector data:
+<ul>
+<li>The shoreline data creates the continents, and the lake data creates the lakes within the continents. These instructions use the h level of resolution from the shoreline data set because the blue marble is only in 500-meter resolution. If you re-sample the blue marble to a higher resolution, you might want to use one of the higher-resolution shorelines.<br/>
+<br/>
+The L1 layer for shorelines uses the RGB value for Google Maps land areas, which is 242,239,233. The L2 layer for the lakes uses the same RGB value as the ocean (153,179,204).<br/>
+<br/>
+Burn the shorelines and lakes into the blue tiles one at a time:<br/>
+<br/>
+<code>gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueA1.tif<br/>
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueA1.tif<br/>
+<br/>
+gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueB1.tif<br/>
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueB1.tif<br/>
+<br/>
+gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueC1.tif<br/>
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueC1.tif<br/>
+<br/>
+gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueD1.tif<br/>
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueD1.tif<br/>
+<br/>
+gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueA2.tif<br/>
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueA2.tif<br/>
+<br/>
+gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueB2.tif<br/>
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueB2.tif<br/>
+<br/>
+gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueC2.tif<br/>
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueC2.tif<br/>
+<br/>
+gdal_rasterize -b 1 -burn 242 -b 2 -burn 239 -b 3 -burn 233 -l GSHHS_h_L1 GSHHS_h_L1.shp GoogleBlueD2.tif<br/>
+gdal_rasterize -b 1 -burn 153 -b 2 -burn 179 -b 3 -burn 204 -l GSHHS_h_L2 GSHHS_h_L2.shp GoogleBlueD2.tif</code></li>
+</ul>
+</li>
+<li>Create the resource and project:
+<ul>
+<li>Create a single imagery resource from these eight tiles, then create an imagery project that contains this resource and nothing else.<br/>
+ </li>
+<li>Use this imagery project for your 2D map. You can also create a Mercator resource and project out of these same tiles.</li>
+</ul>
+</li>
+</ol>
+<div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>

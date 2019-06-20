@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2018 The Open GEE Contributors
+# Copyright 2018-2019 The Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -50,6 +50,11 @@ main_preinstall()
 
     # If user previously symlinked to another location for portable globes storage don't let the installer mess that up
     save_portable_globe_symlink
+
+    # Preserve Admin Console password if it exists. To be restored on post-install
+    if [ -f "$BASEINSTALLDIR_OPT/gehttpd/conf.d/.htpasswd" ]; then
+        mv -f "$BASEINSTALLDIR_OPT/gehttpd/conf.d/.htpasswd" "/tmp/"
+    fi
 }
 
 #-----------------------------------------------------------------

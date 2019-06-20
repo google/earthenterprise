@@ -101,7 +101,7 @@ khAssetManager::ApplyPending(void)
   // The actual list saved may be smaller than what's
   // in the dirty set. Some things can be in the dirty set
   // even if it really didn't change
-  std::vector<std::string> savedAssets;
+  std::vector<SharedString> savedAssets;
 
 
   QTime timer;
@@ -151,9 +151,8 @@ khAssetManager::ApplyPending(void)
 
   // build a list of AssetChanges
   AssetChanges changes;
-  for (std::vector<std::string>::const_iterator i = savedAssets.begin();
-       i != savedAssets.end(); ++i) {
-    changes.items.push_back(AssetChanges::Item(*i, "Modified"));
+  for (const auto & ref : savedAssets) {
+    changes.items.push_back(AssetChanges::Item(ref, "Modified"));
   }
   for (std::map<SharedString, AssetDefs::State>::const_iterator i
          = pendingStateChanges.begin();

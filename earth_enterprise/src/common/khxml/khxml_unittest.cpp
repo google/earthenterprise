@@ -44,8 +44,7 @@ class KhxmlTest : public ::testing::Test {
              << "MAX_HEAP_SIZE=131072" << endl
              << "BLOCK_SIZE=4096" << endl
              << "PURGE=1" << endl
-             << "PURGE_LEVEL=1" << endl
-             << "DEALLOCATE_ALL=1" << endl;
+             << "PURGE_LEVEL=1" << endl;
       GEXMLObject::initializeXMLParametersFromStream(params);
     }
 };

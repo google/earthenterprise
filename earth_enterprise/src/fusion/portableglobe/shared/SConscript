@@ -24,12 +24,13 @@ portablelib_sources = ['packetbundle.cpp',
                        'packetbundle_reader.cpp',
                        'packetbundle_writer.cpp',
                        'packetbundle_finder.cpp',
+                       'bounds_tracker.cpp',
                        'file_package.cpp',
                        'file_packer.cpp',
                        'file_unpacker.cpp',
                        ]
 
-sharedportablelib = env.sharedLib('sharedportablelib', portablelib_sources)
+sharedportablelib = env.sharedLib('sharedportablelib', portablelib_sources, LIBS=['qtutils'])
 
 servereader_sources = ['serverreader.cpp',
                        ]
@@ -41,8 +42,13 @@ env.install('server_lib', [serverreaderlib, sharedportablelib])
 
 packetbundle_test = env.test('packetbundle_test',
                              ['packetbundle_unittest.cpp'],
-                              LIBS=['sharedportablelib', 'gtest', 'gecommon'])
+                              LIBS=['sharedportablelib', 'gtest', 'gecommon', 'qtutils'])
 
 file_packer_test = env.test('file_packer_test',
                             ['file_packer_unittest.cpp'],
                              LIBS=['sharedportablelib', 'gtest', 'gecommon'])
+
+bounds_tracker_test = env.test('bounds_tracker_test',
+                             ['bounds_tracker_unittest.cpp'],
+                              LIBS=['sharedportablelib', 'gtest', 'gecommon', 'qtutils'])
+
