@@ -1255,7 +1255,7 @@ CompositeAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
 }
 
 void
-CompositeAssetVersionImplD::DependentChildren(std::vector<SharedString> &out)
+CompositeAssetVersionImplD::DependentChildren(std::vector<SharedString> &out) const
 {
   copy(children.begin(), children.end(), back_inserter(out));
 }

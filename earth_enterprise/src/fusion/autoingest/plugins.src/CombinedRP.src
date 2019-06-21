@@ -88,7 +88,7 @@ class CombinedRPAssetVersionImplD {
   virtual void OnStateChange(AssetDefs::State newstate,
                              AssetDefs::State oldstate);
  public:
-  virtual void DependentChildren(std::vector<SharedString> &out);
+  virtual void DependentChildren(std::vector<SharedString> &out) const;
 };
 
 
@@ -125,7 +125,7 @@ CombinedRPAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
 
 
 void
-CombinedRPAssetVersionImplD::DependentChildren(std::vector<SharedString> &out)
+CombinedRPAssetVersionImplD::DependentChildren(std::vector<SharedString> &out) const
 {
   if (config.source_is_product_) {
     // nothing to cancel in this case

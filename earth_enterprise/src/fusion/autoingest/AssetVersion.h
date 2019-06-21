@@ -126,7 +126,7 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
   virtual void GetOutputFilenames(std::vector<std::string> &out) const = 0;
   virtual std::string GetOutputFilename(uint i) const = 0;
   virtual void AfterLoad(void) { }
-  virtual void DependentChildren(std::vector<SharedString> &) {
+  virtual void DependentChildren(std::vector<SharedString> &) const {
     // No-op in base class. Sub-classes will override this
     // with children that must be operated on similarly to the
     // parent asset (ex: parent is canceled, so these children

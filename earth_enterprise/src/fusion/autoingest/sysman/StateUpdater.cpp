@@ -114,9 +114,7 @@ void StateUpdater::FillInVertex(
     VertexMap & vertices,
     size_t & index,
     list<TreeType::vertex_descriptor> & toFillIn) {
-  // TODO: see if there's a way to do this that doesn't require
-  // making the asset mutable.
-  MutableAssetVersionD version(tree[myVertex].name);
+  AssetVersionD version(tree[myVertex].name);
   tree[myVertex].state = version->state;
   vector<SharedString> dependents;
   version->DependentChildren(dependents);
@@ -268,7 +266,7 @@ class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
         }
     };
 
-    void CalcStateByInputsAndChildren(
+    void GetStateInputs(
         StateUpdater::TreeType::vertex_descriptor vertex,
         const StateUpdater::TreeType & tree,
         AssetDefs::State &stateByInputs,
@@ -305,22 +303,25 @@ class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
     virtual void finish_vertex(
         StateUpdater::TreeType::vertex_descriptor vertex,
         const StateUpdater::TreeType & tree) const {
-      MutableAssetVersionD version(tree[vertex].name);
+      AssetVersionD version(tree[vertex].name);
       if (!version->NeedComputeState()) return;
       AssetDefs::State stateByInputs;
       AssetDefs::State stateByChildren;
       bool blockersAreOffline;
       uint32 numWaitingFor;
-      CalcStateByInputsAndChildren(vertex, tree, stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
-      AssetDefs::State newState;
-      newState = version->CalcStateByInputsAndChildren(stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
-      // Set the state and send notifications but don't propagate the change
-      // (we will take care of propagation during the graph traversal).
-      version->SetMyStateOnly(newState);
-      // Update the state in the tree because other assets may need it to compute
-      // their own states. Use the state from the version because setting the
-      // state can sometimes trigger additional state changes.
-      const_cast<StateUpdater::TreeType&>(tree)[vertex].state = version->state;
+      GetStateInputs(vertex, tree, stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
+      AssetDefs::State newState = 
+          version->CalcStateByInputsAndChildren(stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
+      if (newState != tree[vertex].state) {
+        // Set the state and send notifications but don't propagate the change
+        // (we will take care of propagation during the graph traversal).
+        MutableAssetVersionD mutableVersion(tree[vertex].name);
+        mutableVersion->SetMyStateOnly(newState);
+        // Update the state in the tree because other assets may need it to compute
+        // their own states. Use the state from the version because setting the
+        // state can sometimes trigger additional state changes.
+        const_cast<StateUpdater::TreeType&>(tree)[vertex].state = mutableVersion->state;
+      }
     }
 };
 
