@@ -1057,8 +1057,9 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     overlapEnvelope<RasterProductAssetVersion> env (
         type, genInfo[i].coverage, insetInfoPtrs, i,
         neededIndexes, beginMinifyLevel, endMinifyLevel);
+    OverlapCalculator<RasterProductAssetVersion> calc (env);
     CalculateOverlap(env);
-
+    //calc.PreprocessForInset();
     neededIndexes.push_back(i); // each inset always intersects itself
 
     curTime = std::chrono::high_resolution_clock::now();

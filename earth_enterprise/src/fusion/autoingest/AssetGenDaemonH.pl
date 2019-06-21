@@ -56,15 +56,15 @@ ReadSrcFile($srcfile, \%config);
 my %extra;
 my ($template);
 $template = "";
-
+my $templateName="ProductAssetVersion";
 
 if ($base eq 'Composite') {
     if ($singleFormalExtraUpdateArg) {
-      $template = "    template <typename ProductAssetVersion>";
+      $template = "    template <typename $templateName>";
       $singleFormalExtraUpdateArg =~
-	s/ExtraUpdateArg/ExtraUpdateArg\<ProductAssetVersion\>/;
+        s/ExtraUpdateArg/ExtraUpdateArg\<$templateName\>/;
       $formalExtraUpdateArg =~
-	s/ExtraUpdateArg/ExtraUpdateArg\<ProductAssetVersion\>/;
+        s/ExtraUpdateArg/ExtraUpdateArg\<$templateName\>/;
     }
 
     my $extraArgs = "";
@@ -209,8 +209,7 @@ protected:
     $template
     ${name}AssetVersionD MyUpdate(bool &needed
                                   $formalcachedinputarg
-                                  $formalExtraUpdateArg,
-                                  bool skip = false, const std::vector<uint>& neededIndexes = std::vector<uint>()) const;
+                                  $formalExtraUpdateArg) const;
 
     ${name}AssetImplD(const std::string &ref_ $formaltypearg,
 		$formalinputarg
@@ -356,9 +355,7 @@ if ($withreuse) {
 			 const khMetaData &meta_,
 			 const $config& config_
 			 $formalcachedinputarg
-                         $formalExtraUpdateArg,
-                         bool skip = false,
-                         const std::vector<uint>& neededIndexes = std::vector<uint>());
+                         $formalExtraUpdateArg);
 
     $template
     static Mutable${name}AssetVersionD

@@ -54,13 +54,14 @@ my $haspostupdate = $config{"${name}AssetImplD"} =~ /PostUpdate\(void\)/;
 
 my ($template);
 $template = "";
+my $templateName="ProductAssetVersion";
 if ($base eq 'Composite') {
     if ($singleFormalExtraUpdateArg) {
-      $template = "template <typename ProductAssetVersion>";
+      $template = "template <typename $templateName>";
       $singleFormalExtraUpdateArg =~
-        s/ExtraUpdateArg/ExtraUpdateArg\<ProductAssetVersion\>/;
+        s/ExtraUpdateArg/ExtraUpdateArg\<$templateName\>/;
       $formalExtraUpdateArg =~
-        s/ExtraUpdateArg/ExtraUpdateArg\<ProductAssetVersion\>/;
+        s/ExtraUpdateArg/ExtraUpdateArg\<$templateName\>/;
     }
 }
 
@@ -286,9 +287,7 @@ ${name}Factory::ReuseOrMakeAndUpdate(
         const khMetaData &meta_,
         const $config& config_
         $formalcachedinputarg
-        $formalExtraUpdateArg,
-        bool skip,
-        const std::vector<uint>& neededIndexes)
+        $formalExtraUpdateArg)
 {
     // make a copy since actualinputarg is macro substituted, so begin() &
     // end() could be called on different temporary objects
@@ -343,7 +342,7 @@ ${name}Factory::ReuseOrMakeAndUpdate(
     }
     bool needed = false;
     return asset->MyUpdate(needed $forwardcachedinputarg
-                           $forwardExtraUpdateArg, skip, neededIndexes);
+                           $forwardExtraUpdateArg);
 }
 
 $template
@@ -636,8 +635,7 @@ if ($hasinputs) {
 $template
 ${name}AssetVersionD
 ${name}AssetImplD::MyUpdate(bool &needed $formalcachedinputarg
-                            $formalExtraUpdateArg,
-                            bool skip, const std::vector<uint>& neededIndexes) const
+                            $formalExtraUpdateArg) const
 {
     std::vector<AssetVersion> updatedInputVers;
     const std::vector<AssetVersion> *inputvers;
@@ -719,9 +717,7 @@ EOF
 
 $template
 ${name}AssetVersionD
-${name}AssetImplD::MyUpdate(bool &needed $formalExtraUpdateArg,
-                            bool skip,
-                            const std::vector<uint>& neededIndexes) const
+${name}AssetImplD::MyUpdate(bool &needed $formalExtraUpdateArg) const
 {
 EOF
 

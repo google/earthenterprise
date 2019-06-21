@@ -194,49 +194,18 @@ struct overlapEnvelope
 };
 
 template <typename ProductAssetVersion>
-class OverlapBase
-{
-protected:
-    overlapEnvelope<ProductAssetVersion>& env;
-
-
-public:
-    OverlapBase(overlapEnvelope<ProductAssetVersion>& _env) : env(_env) {}
-    virtual void calculate() = 0;
-};
-
-
-template <typename ProductAssetVersion>
-class PreprocessForInset : public OverlapBase<ProductAssetVersion>
-{
-public:
-    PreprocessForInset(overlapEnvelope<ProductAssetVersion>& env) :
-        OverlapBase<ProductAssetVersion>(env) {}
-
-    void calculate();
-};
-
-template <typename ProductAssetVersion>
-class GetOverlapForLevel : public OverlapBase<ProductAssetVersion>
-{
-public:
-    GetOverlapForLevel(overlapEnvelope<ProductAssetVersion>& env) :
-        OverlapBase<ProductAssetVersion>(env) {}
-    
-    void calculate();
-};
-
-template <typename ProductAssetVersion>
 class OverlapCalculator
 {
 private:
-    std::shared_ptr<OverlapBase<ProductAssetVersion>> type;
+    overlapEnvelope<ProductAssetVersion> env;
 
 public:
-    OverlapCalculator(std::shared_ptr<OverlapBase<ProductAssetVersion>> _type) :
-    type(_type) {}
+    OverlapCalculator(overlapEnvelope<ProductAssetVersion> _env) :
+        env(_env) {}
 
-    void calculate() { type->calculate(); }
+    void PreprocessForInset() { CalculateOverlap(env); }
+    std::vector<uint>& GetOverlapForLevel() { return env.neededIndexes; }
+
 };
 
 template <typename ProductAssetVersion>

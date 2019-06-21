@@ -44,17 +44,7 @@ class PacketGenExtraUpdateArg {
 #include <autoingest/plugins/RasterProductAsset.h>
 #include <autoingest/plugins/MercatorRasterProductAsset.h>
 #include <chrono>
-
-
-template
-MutablePacketGenAssetVersionD
-PacketGenFactory::ReuseOrMakeAndUpdate(
-    const std::string &ref_ , AssetDefs::Type type_,
-    const khMetaData &meta_,
-    const PacketGenConfig& config_,
-    const PacketGenExtraUpdateArg<RasterProductAssetVersion> &extra,
-    bool skip = false,
-    const std::vector<uint>& neededIndexes = std::vector<uint>());
+#include <memory>
 
 template
 MutablePacketGenAssetVersionD
@@ -62,9 +52,15 @@ PacketGenFactory::ReuseOrMakeAndUpdate(
     const std::string &ref_ , AssetDefs::Type type_,
     const khMetaData &meta_,
     const PacketGenConfig& config_,
-    const PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> &extra,
-    bool skip = false,
-    const std::vector<uint>& neededIndexes = std::vector<uint>());
+    const PacketGenExtraUpdateArg<RasterProductAssetVersion> &extra);
+
+template
+MutablePacketGenAssetVersionD
+PacketGenFactory::ReuseOrMakeAndUpdate(
+    const std::string &ref_ , AssetDefs::Type type_,
+    const khMetaData &meta_,
+    const PacketGenConfig& config_,
+    const PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> &extra);
 
 template
 MutablePacketGenAssetVersionD

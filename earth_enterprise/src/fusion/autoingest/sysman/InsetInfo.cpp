@@ -331,27 +331,6 @@ void CalcPacketGenInfo<InsetInfo<MercatorRasterProductAssetVersion> > (
     const bool             is_overlay_terrain_proj,
     const uint32           overlay_terrain_resources_min_level);
 
-// ****************************************************************************
-// ***  CalculateOverlap
-// ***  used to separate algorithmic logic
-// ****************************************************************************
-
-// right now these do the same thing, but will eventually change
-template <typename ProductAssetVersion>
-void PreprocessForInset<ProductAssetVersion>::calculate()
-{
-    CalculateOverlap(OverlapBase<ProductAssetVersion>::env);
-}
-
-template <typename ProductAssetVersion>
-void GetOverlapForLevel<ProductAssetVersion>::calculate()
-{
-    CalculateOverlap(OverlapBase<ProductAssetVersion>::env);
-}
-
-template class GetOverlapForLevel<RasterProductAssetVersion>;
-template class GetOverlapForLevel<MercatorRasterProductAssetVersion>;
-
 template <typename ProductAssetVersion>
 void CalculateOverlap(
         overlapEnvelope<ProductAssetVersion>& env)
