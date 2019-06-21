@@ -124,23 +124,15 @@ void PacketGenAssetVersionImplD::UpdateChildren(
     const khLevelCoverage levCov(config.coverage.levelCoverage(level));
     std::vector<uint> neededIndexes;
 
-
-    if (skip)
-    {
-        neededIndexes.reserve(_neededIndexes.size());
-        neededIndexes.insert(neededIndexes.begin(),
-                             _neededIndexes.begin(),
-                             _neededIndexes.end());
-    }
-    else
-    {
-        neededIndexes.reserve(numInsets);
-        auto gencov = khInsetCoverage(levCov);
-        overlapEnvelope<ProductAssetVersion> env(type, gencov,
-                             extra.insetInfo, extra.insetInfo.size(), neededIndexes,
-                             config.beginMinifyLevel, config.endMinifyLevel);
-        CalculateOverlap(env);
-    }
+    neededIndexes.reserve(numInsets);
+    auto gencov = khInsetCoverage(levCov);
+    overlapEnvelope<ProductAssetVersion> env(type, gencov,
+                         extra.insetInfo, extra.insetInfo.size(),
+                         config.beginMinifyLevel, config.endMinifyLevel);
+    OverlapCalculator<ProductAssetVersion> calc(env);
+    calc.PreprocessForInset();
+    neededIndexes = calc.GetOverlapForLevel();
+    //neededIndexes = std::move(CalculateOverlap(env));
 
     curTime = std::chrono::high_resolution_clock::now();
     timeDiff = std::chrono::duration<double>(curTime - prevTime);
