@@ -87,8 +87,7 @@ PacketGenFactory::ReuseOrMakeAndUpdateSubAsset(
 template <typename ProductAssetVersion>
 void PacketGenAssetVersionImplD::UpdateChildren(
     const PacketGenExtraUpdateArg<ProductAssetVersion> &extra,
-    std::shared_ptr<OverlapCalculator<ProductAssetVersion>> calc,
-    bool skip, const std::vector<uint>& _neededIndexes) {
+    std::shared_ptr<OverlapCalculator<ProductAssetVersion>> calc) {
   std::string assetRef = GetAssetRef();
 
   uint numLevels = config.coverage.numLevels();

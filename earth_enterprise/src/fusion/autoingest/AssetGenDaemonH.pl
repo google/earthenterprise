@@ -72,15 +72,9 @@ if ($base eq 'Composite') {
         s/ExtraUpdateArg/ExtraUpdateArg\<$templateName\>/;
     }
 
-    my $extraArgs = "";
-    if (index("${name}", "PacketGen") != -1)
-    {
-        $extraArgs = "$finalArg, bool skip = false, const std::vector<uint>& _neededIndexes = std::vector<uint>()";
-    }
-
     $extra{"${name}AssetVersionImplD"} =
         $template 
-        . "    void UpdateChildren($singleFormalExtraUpdateArg $extraArgs);\n";
+        . "    void UpdateChildren($singleFormalExtraUpdateArg $finalArg);\n";
 
 } else {
     $extra{"${name}AssetVersionImplD"} =
