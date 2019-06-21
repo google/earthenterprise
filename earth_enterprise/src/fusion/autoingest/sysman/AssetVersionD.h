@@ -239,7 +239,7 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
       AssetDefs::State stateByChildren,
       bool blockersAreOffline,
       uint32 numWaitingFor) const;
-  virtual void DependentChildren(std::vector<SharedString> &out);
+  virtual void DependentChildren(std::vector<SharedString> &out) const;
 };
 
 #endif /* __AssetVersionD_h */

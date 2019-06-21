@@ -147,7 +147,7 @@ private:
 
 class DatabaseAssetVersionImplD {
  public:
-  virtual void DependentChildren(std::vector<SharedString> &out);
+  virtual void DependentChildren(std::vector<SharedString> &out) const;
 
  protected:
   // Before fusion 3.0 a Database had 0 or 1 chidren (depending on whether
@@ -329,7 +329,7 @@ DatabaseAssetImplD::HandleModifyRequest(const DatabaseEditRequest &req)
 
 
 void
-DatabaseAssetVersionImplD::DependentChildren(std::vector<SharedString> &out)
+DatabaseAssetVersionImplD::DependentChildren(std::vector<SharedString> &out) const
 {
   if (children.size()) {
     if (children.size() >= 2) {
