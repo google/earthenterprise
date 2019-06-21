@@ -197,6 +197,7 @@ class OverlapCalculator
 private:
     overlapEnvelope<ProductAssetVersion>& env;
     std::vector<uint> neededIndexes;
+    void CalculateOverlap();
 
 public:
     OverlapCalculator(overlapEnvelope<ProductAssetVersion> _env) :
@@ -205,17 +206,17 @@ public:
     void PreprocessForInset()
     {
         neededIndexes.clear();
-        neededIndexes = std::move(CalculateOverlap(env));
+        CalculateOverlap();
     }
 
-    std::vector<uint>& GetOverlapForLevel() { return neededIndexes; }
+    std::vector<uint> GetOverlapForLevel() { return neededIndexes; }
 
 };
 
-template <typename ProductAssetVersion>
+/*template <typename ProductAssetVersion>
 extern std::vector<uint>
 CalculateOverlap(
-        overlapEnvelope<ProductAssetVersion>& env);
+        overlapEnvelope<ProductAssetVersion>& env);*/
 
 template <typename ProductAssetVersion>
 extern void

@@ -947,10 +947,11 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
     overlapEnvelope<MercatorRasterProductAssetVersion> env (
         type, genInfo[i].coverage, insetInfoPtrs, i,
         beginMinifyLevel, endMinifyLevel);
-    OverlapCalculator<MercatorRasterProductAssetVersion> calc(env);
-    calc.PreprocessForInset();
-    neededIndexes = calc.GetOverlapForLevel();
-    //neededIndexes = std::move(CalculateOverlap(env));
+
+    std::shared_ptr<OverlapCalculator<MercatorRasterProductAssetVersion>> calc =
+        std::make_shared<OverlapCalculator<MercatorRasterProductAssetVersion>>(env);
+    calc->PreprocessForInset();
+    neededIndexes = std::move(calc->GetOverlapForLevel());
     neededIndexes.push_back(i); // each inset always intersects itself
 
 
@@ -1011,7 +1012,8 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
                                                type,
                                                khMetaData(),
                                                packetGenConfig,
-                                               extraArg);
+                                               extraArg,
+                                               calc);
     
     if (packetGenConfig.cacheRaster) {
       // Extract the PacketLevel children from the new version and store

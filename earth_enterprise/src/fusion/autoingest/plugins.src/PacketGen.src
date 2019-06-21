@@ -52,7 +52,8 @@ PacketGenFactory::ReuseOrMakeAndUpdate(
     const std::string &ref_ , AssetDefs::Type type_,
     const khMetaData &meta_,
     const PacketGenConfig& config_,
-    const PacketGenExtraUpdateArg<RasterProductAssetVersion> &extra);
+    const PacketGenExtraUpdateArg<RasterProductAssetVersion> &extra,
+    std::shared_ptr<OverlapCalculator<RasterProductAssetVersion>> calc);
 
 template
 MutablePacketGenAssetVersionD
@@ -60,7 +61,8 @@ PacketGenFactory::ReuseOrMakeAndUpdate(
     const std::string &ref_ , AssetDefs::Type type_,
     const khMetaData &meta_,
     const PacketGenConfig& config_,
-    const PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> &extra);
+    const PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> &extra,
+    std::shared_ptr<OverlapCalculator<MercatorRasterProductAssetVersion>> calc);
 
 template
 MutablePacketGenAssetVersionD
@@ -85,9 +87,9 @@ PacketGenFactory::ReuseOrMakeAndUpdateSubAsset(
 template <typename ProductAssetVersion>
 void PacketGenAssetVersionImplD::UpdateChildren(
     const PacketGenExtraUpdateArg<ProductAssetVersion> &extra,
+    std::shared_ptr<OverlapCalculator<ProductAssetVersion>> calc,
     bool skip, const std::vector<uint>& _neededIndexes) {
   std::string assetRef = GetAssetRef();
-
 
   uint numLevels = config.coverage.numLevels();
   if (numLevels == 0) {
@@ -129,9 +131,15 @@ void PacketGenAssetVersionImplD::UpdateChildren(
     overlapEnvelope<ProductAssetVersion> env(type, gencov,
                          extra.insetInfo, extra.insetInfo.size(),
                          config.beginMinifyLevel, config.endMinifyLevel);
-    OverlapCalculator<ProductAssetVersion> calc(env);
-    calc.PreprocessForInset();
-    neededIndexes = calc.GetOverlapForLevel();
+
+    // there are situations where this can happen and must be accounted for
+    if (calc == nullptr)
+    {
+        calc.reset(new OverlapCalculator<ProductAssetVersion>(env));
+        calc->PreprocessForInset();
+    }
+
+    neededIndexes = std::move(calc->GetOverlapForLevel());
     //neededIndexes = std::move(CalculateOverlap(env));
 
     curTime = std::chrono::high_resolution_clock::now();

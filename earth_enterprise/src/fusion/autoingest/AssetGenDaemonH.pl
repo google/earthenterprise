@@ -57,6 +57,11 @@ my %extra;
 my ($template);
 $template = "";
 my $templateName="ProductAssetVersion";
+my $finalArg="";
+if (index("$thiscommand","PacketGen") != -1)
+{
+    $finalArg=", std::shared_ptr<OverlapCalculator<$templateName>> calc = nullptr";
+}
 
 if ($base eq 'Composite') {
     if ($singleFormalExtraUpdateArg) {
@@ -70,7 +75,7 @@ if ($base eq 'Composite') {
     my $extraArgs = "";
     if (index("${name}", "PacketGen") != -1)
     {
-        $extraArgs = ", bool skip = false, const std::vector<uint>& _neededIndexes = std::vector<uint>()";
+        $extraArgs = "$finalArg, bool skip = false, const std::vector<uint>& _neededIndexes = std::vector<uint>()";
     }
 
     $extra{"${name}AssetVersionImplD"} =
@@ -108,6 +113,7 @@ print $fh <<EOF;
 
 #include <$header>
 #include <sysman/AssetD.h>
+#include <memory>
 
 // ****************************************************************************
 // ***  Supplied from ${name}.src
@@ -209,7 +215,7 @@ protected:
     $template
     ${name}AssetVersionD MyUpdate(bool &needed
                                   $formalcachedinputarg
-                                  $formalExtraUpdateArg) const;
+                                  $formalExtraUpdateArg $finalArg) const;
 
     ${name}AssetImplD(const std::string &ref_ $formaltypearg,
 		$formalinputarg
@@ -346,7 +352,10 @@ public:
 			      $formalExtraUpdateArg);
 EOF
 
+
+
 if ($withreuse) {
+
     print $fh <<EOF;
     $template
     static Mutable${name}AssetVersionD
@@ -355,7 +364,8 @@ if ($withreuse) {
 			 const khMetaData &meta_,
 			 const $config& config_
 			 $formalcachedinputarg
-                         $formalExtraUpdateArg);
+                         $formalExtraUpdateArg
+                         $finalArg);
 
     $template
     static Mutable${name}AssetVersionD

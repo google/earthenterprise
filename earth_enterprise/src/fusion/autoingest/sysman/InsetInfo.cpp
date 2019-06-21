@@ -332,10 +332,8 @@ void CalcPacketGenInfo<InsetInfo<MercatorRasterProductAssetVersion> > (
     const uint32           overlay_terrain_resources_min_level);
 
 template <typename ProductAssetVersion>
-std::vector<uint> CalculateOverlap(
-        overlapEnvelope<ProductAssetVersion>& env)
+void OverlapCalculator<ProductAssetVersion>::CalculateOverlap()
 {
-    std::vector<uint> neededIndexes;
     if (env.type == AssetDefs::Imagery)
     {
         FindNeededImageryInsets(env.gencov,
@@ -354,16 +352,10 @@ std::vector<uint> CalculateOverlap(
                                 env.beginMinifyLevel,
                                 env.endMinifyLevel);
     }
-    return neededIndexes;
 }
 
-
-// explicit instantiations
-template std::vector<uint>
-CalculateOverlap(overlapEnvelope<RasterProductAssetVersion>& env);
-
-template std::vector<uint>
-CalculateOverlap(overlapEnvelope<MercatorRasterProductAssetVersion>& env);
+template class OverlapCalculator<MercatorRasterProductAssetVersion>;
+template class OverlapCalculator<RasterProductAssetVersion>;
 
 // ****************************************************************************
 // ***  FindNeededImageryInsets

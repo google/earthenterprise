@@ -1057,9 +1057,11 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     overlapEnvelope<RasterProductAssetVersion> env (
         type, genInfo[i].coverage, insetInfoPtrs, i,
         beginMinifyLevel, endMinifyLevel);
-    OverlapCalculator<RasterProductAssetVersion> calc (env);
-    calc.PreprocessForInset();
-    neededIndexes = calc.GetOverlapForLevel();
+
+    std::shared_ptr<OverlapCalculator<RasterProductAssetVersion>> calc =
+        std::make_shared<OverlapCalculator<RasterProductAssetVersion>>(env);
+    calc->PreprocessForInset();
+    neededIndexes = std::move(calc->GetOverlapForLevel());
     //neededIndexes = std::move(CalculateOverlap(env));
     neededIndexes.push_back(i); // each inset always intersects itself
 
@@ -1135,7 +1137,8 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
                                                type,
                                                khMetaData(),
                                                packetGenConfig, // new vector?
-                                               extraArg);
+                                               extraArg,
+                                               calc);
 
     
     if (packetGenConfig.cacheRaster) {
