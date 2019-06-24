@@ -289,33 +289,33 @@ void AssetVersionImplD::SetState(
 // Ultimately it should replace the one above.
 void AssetVersionImplD::SetMyStateOnly(AssetDefs::State newstate, bool sendNotifications)
 {
-  if (newstate != state) {
-    notify(NFY_DEBUG, "SetState: current state: %s | newstate: %s | asset: %s",
-    	   ToString(state).c_str(),
-           ToString(newstate).c_str(),
-           GetRef().toString().c_str());
-    AssetDefs::State oldstate = state;
-    state = newstate;
-    try {
-      // NOTE: This can end up calling back here to switch us to
-      // another state (usually Failed or Succeded)
-      OnStateChange(newstate, oldstate);
-    } catch (const std::exception &e) {
-      notify(NFY_WARN, "Exception during OnStateChange: %s", 
-             e.what());
-    } catch (...) {
-      notify(NFY_WARN, "Unknown exception during OnStateChange");
-    }
+  // We don't check if the new state is different from the old state here
+  // because by the time this function is called we've already done that.
+  notify(NFY_DEBUG, "SetState: current state: %s | newstate: %s | asset: %s",
+         ToString(state).c_str(),
+         ToString(newstate).c_str(),
+         GetRef().toString().c_str());
+  AssetDefs::State oldstate = state;
+  state = newstate;
+  try {
+    // NOTE: This can end up calling back here to switch us to
+    // another state (usually Failed or Succeded)
+    OnStateChange(newstate, oldstate);
+  } catch (const std::exception &e) {
+    notify(NFY_WARN, "Exception during OnStateChange: %s", 
+           e.what());
+  } catch (...) {
+    notify(NFY_WARN, "Unknown exception during OnStateChange");
+  }
 
-    // only notify and propagate changes if the state is still what we
-    // set it to above. OnStateChange can call SetState recursively. We
-    // don't want to notify an old state.
-    if (sendNotifications && (state == newstate)) {
-      notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
-             GetRef().toString().c_str(), 
-             ToString(newstate).c_str());
-      theAssetManager.NotifyVersionStateChange(GetRef(), newstate);
-    }
+  // only notify and propagate changes if the state is still what we
+  // set it to above. OnStateChange can call SetState recursively. We
+  // don't want to notify an old state.
+  if (sendNotifications && (state == newstate)) {
+    notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
+           GetRef().toString().c_str(), 
+           ToString(newstate).c_str());
+    theAssetManager.NotifyVersionStateChange(GetRef(), newstate);
   }
 }
 
