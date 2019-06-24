@@ -89,7 +89,7 @@ class StateUpdater
         const SharedString & ref,
         AssetDefs::State newState,
         std::function<bool(AssetDefs::State)> updateStatePredicate);
-    void RecalculateStates();
+    void RecalculateAndSaveStates();
 };
 
 #endif // ASSETTREE_H
