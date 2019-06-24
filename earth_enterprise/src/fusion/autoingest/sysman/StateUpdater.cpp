@@ -116,6 +116,7 @@ void StateUpdater::FillInVertex(
     size_t & index,
     list<TreeType::vertex_descriptor> & toFillIn) {
   SharedString name = tree[myVertex].name;
+  notify(NFY_PROGRESS, "Loading '%s' for state update", name.toString().c_str());
   AssetVersionD version(name);
   if (!version) {
     notify(NFY_WARN, "Could not load asset '%s' which is referenced by another asset.",
@@ -177,10 +178,13 @@ void StateUpdater::SetStateForVertexAndDependents(
     AssetDefs::State newState,
     std::function<bool(AssetDefs::State)> updateStatePredicate) {
   if (updateStatePredicate(tree[vertex].state)) {
+    SharedString name = tree[vertex].name;
+    notify(NFY_PROGRESS, "Setting state of '%s' to '%s'",
+           name.toString().c_str(), ToString(newState).c_str());
     {
       // Limit the scope of the MutableAssetVersionD so that we release it
       // as quickly as possible.
-      MutableAssetVersionD version(tree[vertex].name);
+      MutableAssetVersionD version(name);
       if (version) {
         // Set the state. The OnStateChange handler will take care
         // of stopping any running tasks, etc
@@ -192,7 +196,7 @@ void StateUpdater::SetStateForVertexAndDependents(
         // This shoud never happen - we had to successfully load the asset
         // previously to get it into the tree.
         notify(NFY_WARN, "Could not load asset '%s' to set state.",
-               tree[vertex].name.toString().c_str());
+               name.toString().c_str());
       }
     }
     auto edgeIters = out_edges(vertex, tree);
@@ -321,6 +325,7 @@ class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
         StateUpdater::TreeType::vertex_descriptor vertex,
         const StateUpdater::TreeType & tree) const {
       SharedString name = tree[vertex].name;
+      notify(NFY_PROGRESS, "Calculating state for '%s'", name.toString().c_str());
       AssetVersionD version(name);
       if (!version) {
         // This shoud never happen - we had to successfully load the asset
@@ -338,8 +343,8 @@ class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
       AssetDefs::State newState = 
           version->CalcStateByInputsAndChildren(stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
       if (newState != tree[vertex].state) {
-        // Set the state and send notifications but don't propagate the change
-        // (we will take care of propagation during the graph traversal).
+        notify(NFY_PROGRESS, "Setting state of '%s' to '%s'",
+               name.toString().c_str(), ToString(newState).c_str());
         MutableAssetVersionD mutableVersion(name);
         if (!version) {
           // This shoud never happen - we had to successfully load the asset
@@ -348,10 +353,14 @@ class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
                  name.toString().c_str());
           return;
         }
+        // Set the state and send notifications but don't propagate the change
+        // (we will take care of propagation during the graph traversal).
         mutableVersion->SetMyStateOnly(newState);
         // Update the state in the tree because other assets may need it to compute
         // their own states. Use the state from the version because setting the
         // state can sometimes trigger additional state changes.
+        // We const_cast here because the function signature forces us to pass
+        // the tree as a const.
         const_cast<StateUpdater::TreeType&>(tree)[vertex].state = mutableVersion->state;
       }
     }
