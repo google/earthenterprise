@@ -82,7 +82,7 @@ class StateUpdater
     void SetState(
         TreeType::vertex_descriptor vertex,
         AssetDefs::State newState,
-        bool sendNotifications = true);
+        bool sendNotifications);
   public:
     StateUpdater() = default;
     void SetStateForRefAndDependents(

@@ -185,24 +185,13 @@ void StateUpdater::SetStateForVertexAndDependents(
     SharedString name = tree[vertex].name;
     notify(NFY_PROGRESS, "Setting state of '%s' to '%s'",
            name.toString().c_str(), ToString(newState).c_str());
-    {
-      // Limit the scope of the MutableAssetVersionD so that we release it
-      // as quickly as possible.
-      MutableAssetVersionD version(name);
-      if (version) {
-        // Set the state. The OnStateChange handler will take care
-        // of stopping any running tasks, etc
-        // false -> don't send notifications about the new state because we
-        // will change it soon.
-        version->SetMyStateOnly(newState, false);
-      }
-      else {
-        // This shoud never happen - we had to successfully load the asset
-        // previously to get it into the tree.
-        notify(NFY_WARN, "Could not load asset '%s' to set state.",
-               name.toString().c_str());
-      }
-    }
+    // Set the state. The OnStateChange handler will take care
+    // of stopping any running tasks, etc
+    // false -> don't send notifications about the new state because we
+    // will change it soon.
+    SetState(vertex, newState, false);
+    
+    // Now update the dependent children
     auto edgeIters = out_edges(vertex, tree);
     auto edgeBegin = edgeIters.first;
     auto edgeEnd = edgeIters.second;
@@ -214,6 +203,32 @@ void StateUpdater::SetStateForVertexAndDependents(
   }
 }
 
+void StateUpdater::SetState(
+    TreeType::vertex_descriptor vertex,
+    AssetDefs::State newState,
+    bool sendNotifications) {
+  SharedString name = tree[vertex].name;
+  if (newState != tree[vertex].state) {
+    MutableAssetVersionD version(name);
+    if (version) {
+      // Set the state. The OnStateChange handler will take care
+      // of stopping any running tasks, etc.
+      // This call does not propagate the state change to other assets. We will
+      // take care of that inside the state updater.
+      version->SetMyStateOnly(newState, sendNotifications);
+      // Setting the state can trigger additional state changes, so get the new
+      // state directly from the asset version.
+      tree[vertex].state = version->state;
+    }
+    else {
+      // This shoud never happen - we had to successfully load the asset
+      // previously to get it into the tree.
+      notify(NFY_WARN, "Could not load asset '%s' to set state.",
+             name.toString().c_str());
+    }
+  }
+}
+
 // Helper class to calculate the state of asset versions based on the states
 // of their inputs and children. It calculates states in depth-first order;
 // we use the finish_vertex function to ensure that we calculate the state
@@ -221,6 +236,9 @@ void StateUpdater::SetStateForVertexAndDependents(
 // and children.
 class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
   private:
+    // Keep a pointer to the state updater
+    StateUpdater * const updater;
+    
     // Helper class for calculating state from inputs
     class InputStates {
       private:
@@ -334,6 +352,8 @@ class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
       childStates.GetOutputs(stateByChildren);
     }
   public:
+    UpdateStateVisitor(StateUpdater * updater) : updater(updater) {};
+
     // Update the state of an asset after we've updated the state of its
     // inputs and children.
     virtual void finish_vertex(
@@ -357,27 +377,8 @@ class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
       CalculateStateParameters(vertex, tree, stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
       AssetDefs::State newState = 
           version->CalcStateByInputsAndChildren(stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
-      if (newState != tree[vertex].state) {
-        notify(NFY_PROGRESS, "Setting state of '%s' to '%s'",
-               name.toString().c_str(), ToString(newState).c_str());
-        MutableAssetVersionD mutableVersion(name);
-        if (!version) {
-          // This shoud never happen - we had to successfully load the asset
-          // previously to get it into the tree.
-          notify(NFY_WARN, "Could not load asset '%s' to set calculated state.",
-                 name.toString().c_str());
-          return;
-        }
-        // Set the state and send notifications but don't propagate the change
-        // (we will take care of propagation during the graph traversal).
-        mutableVersion->SetMyStateOnly(newState);
-        // Update the state in the tree because other assets may need it to compute
-        // their own states. Use the state from the version because setting the
-        // state can sometimes trigger additional state changes.
-        // We const_cast here because the function signature forces us to pass
-        // the tree as a const.
-        const_cast<StateUpdater::TreeType&>(tree)[vertex].state = mutableVersion->state;
-      }
+      // Set the state and send notifications.
+      updater->SetState(vertex, newState, true);
     }
 };
 
@@ -388,5 +389,5 @@ void StateUpdater::RecalculateAndSaveStates() {
   // Possible optimization: Many assets have significant overlap in their
   // inputs. It might save time if we could calculate the overlapping state
   // only once.
-  depth_first_search(tree, visitor(UpdateStateVisitor()));
+  depth_first_search(tree, visitor(UpdateStateVisitor(this)));
 }
