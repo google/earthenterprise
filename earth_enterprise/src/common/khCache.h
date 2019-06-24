@@ -24,7 +24,6 @@
 #include "khTypes.h"
 #include "CacheSizeCalculations.h"
 
-// #define SUPPORT_VERBOSE
 #ifdef SUPPORT_VERBOSE
 #include <notify.h>
 #endif
@@ -193,20 +192,23 @@ class khCache {
   ~khCache(void) {
     clear();
   }
-  uint64 getObjectSize(const Key &key) {
+  // returns the size of a cache item if it exists
+  uint64 getCacheItemSize(const Key &key) {
     Item *item = FindItem(key);
     if (item) {
       return item->size;
     }
     return 0;
   }
-  uint64 calculateObjectSize(Item *item) {
+  // calculates the current size of a cache item
+  uint64 calculateCacheItemSize(Item *item) {
     return khCacheItemSize + GetObjectSize(item->key) + GetObjectSize(item->val);
   }
-  void updateObjectSize(const Key &key) {
+  // sets a given cache item's size to its current size and updates the total cache memory in use
+  void updateCacheItemSize(const Key &key) {
     Item *item = FindItem(key);
     if ( item ) {
-      uint64 size = calculateObjectSize(item);
+      uint64 size = calculateCacheItemSize(item);
       cacheMemoryUse = (cacheMemoryUse - item->size) + size;
       item->size = size;
     }
@@ -245,7 +247,7 @@ class khCache {
     item = new Item(key, val);
     Link(item);
     map[key] = item;
-    item->size = calculateObjectSize(item);
+    item->size = calculateCacheItemSize(item);
     cacheMemoryUse += item->size;
 #ifdef SUPPORT_VERBOSE
     if (verbose) notify(NFY_ALWAYS, "Adding %s to cache", key.c_str());

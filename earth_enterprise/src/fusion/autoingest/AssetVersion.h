@@ -128,15 +128,14 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
     + GetObjectSize(parents)
     + GetObjectSize(listeners)
     + GetObjectSize(outfiles)
-    + GetObjectSize(meta)
+    + meta.GetSize()
     + GetObjectSize(beginTime)
     + GetObjectSize(progressTime)
     + GetObjectSize(endTime)
     + GetObjectSize(taskid)
     + GetObjectSize(timestamp)
     + GetObjectSize(filesize));
-}
-
+  }
   template <class outIter>
   outIter GetInputs(outIter oi) const {
     for (const auto &i : inputs) {

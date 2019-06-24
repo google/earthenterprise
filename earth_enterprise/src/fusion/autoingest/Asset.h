@@ -75,7 +75,7 @@ class AssetImpl : public khRefCounter, public AssetStorage, public StorageManage
     + GetObjectSize(type)
     + GetObjectSize(subtype)
     + GetObjectSize(inputs)
-    + GetObjectSize(meta)
+    + meta.GetSize()
     + GetObjectSize(versions)
     + GetObjectSize(timestamp)
     + GetObjectSize(filesize));

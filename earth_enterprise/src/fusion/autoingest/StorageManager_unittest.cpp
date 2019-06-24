@@ -179,19 +179,19 @@ TEST_F(StorageManagerTest, PurgeCacheBasedOnNumberOfObjects) {
 }
 
 TEST_F(StorageManagerTest, PurgeCacheBasedOnMemoryUtilization) {
-  // Purges objects from cache when the memory utilization exceeds
+  // Purges items from cache when the memory utilization exceeds
   // the limit and determines if the cache memory usage reflects the size
-  // of the objects in cache.
+  // of the items in cache.
   size_t i;
-  uint64 objectSize = 0;
+  uint64 cacheItemSize = 0;
   uint64 memoryLimit = 0;
   for(i = 0; i < CACHE_SIZE + 2; ++i) {
     stringstream s;
     s << "asset" << i;
     Get<TestHandle>(storageManager, s.str(), false, true, false);
-    if (objectSize == 0) {
-      objectSize = storageManager.GetObjectSize(s.str());
-      memoryLimit = objectSize * (CACHE_SIZE - 1);
+    if (cacheItemSize == 0) {
+      cacheItemSize = storageManager.GetCacheItemSize(s.str());
+      memoryLimit = cacheItemSize * (CACHE_SIZE - 1);
       storageManager.SetCacheMemoryLimit(true, memoryLimit);
     }
     ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
