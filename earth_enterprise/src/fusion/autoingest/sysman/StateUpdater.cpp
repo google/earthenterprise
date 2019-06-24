@@ -58,6 +58,7 @@ namespace boost {
 
 #include <boost/graph/depth_first_search.hpp>
 
+// Builds the asset version tree containing the specified asset version.
 StateUpdater::TreeType::vertex_descriptor
 StateUpdater::BuildTree(const SharedString & ref) {
   VertexMap vertices;
@@ -159,7 +160,8 @@ void StateUpdater::AddEdge(
     AssetEdge data) {
   auto edgeData = add_edge(from, to, tree);
   // If this is a new edge, set the edge data. Also, if this is a dependent
-  // child it may have been added previously as a "normal" child.
+  // child it may have been added previously as a "normal" child, so update
+  // the data in that case as well.
   if (edgeData.second || data.type == DEPENDENT_CHILD) {
     tree[edgeData.first] = data;
   }
@@ -173,6 +175,8 @@ void StateUpdater::SetStateForRefAndDependents(
   SetStateForVertexAndDependents(refVertex, newState, updateStatePredicate);
 }
 
+// Sets the state for the specified ref and recursively sets the state for
+// the ref's dependent children.
 void StateUpdater::SetStateForVertexAndDependents(
     TreeType::vertex_descriptor vertex,
     AssetDefs::State newState,
@@ -210,8 +214,14 @@ void StateUpdater::SetStateForVertexAndDependents(
   }
 }
 
+// Helper class to calculate the state of asset versions based on the states
+// of their inputs and children. It calculates states in depth-first order;
+// we use the finish_vertex function to ensure that we calculate the state
+// of an asset version after we've calculated the states of its inputs
+// and children.
 class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
   private:
+    // Helper class for calculating state from inputs
     class InputStates {
       private:
         uint numinputs = 0;
@@ -251,6 +261,7 @@ class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
           }
         }
     };
+    // Helper class for calculating state from children
     class ChildStates {
       private:
         uint numkids = 0;
@@ -287,6 +298,10 @@ class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
         }
     };
 
+    // Loops through the inputs and children of an asset and calculates
+    // everything the asset verion needs to know to figure out its state. This
+    // data will be passed to the asset version so it can calculate its own
+    // state.
     void CalculateStateParameters(
         StateUpdater::TreeType::vertex_descriptor vertex,
         const StateUpdater::TreeType & tree,
