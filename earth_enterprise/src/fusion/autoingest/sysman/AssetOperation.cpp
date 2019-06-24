@@ -19,11 +19,6 @@
 #include "MiscConfig.h"
 #include "StateUpdater.h"
 
-#include <functional>
-#include <vector>
-
-using namespace std;
-
 void RebuildVersion(const SharedString & ref) {
   if (MiscConfig::Instance().GraphOperations) {
     // Rebuilding an already succeeded asset is quite dangerous!
