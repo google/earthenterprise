@@ -16,6 +16,7 @@
 
 #include "StateUpdater.h"
 #include "AssetVersionD.h"
+#include "common/notify.h"
 
 using namespace boost;
 using namespace std;
@@ -114,7 +115,16 @@ void StateUpdater::FillInVertex(
     VertexMap & vertices,
     size_t & index,
     list<TreeType::vertex_descriptor> & toFillIn) {
-  AssetVersionD version(tree[myVertex].name);
+  SharedString name = tree[myVertex].name;
+  AssetVersionD version(name);
+  if (!version) {
+    notify(NFY_WARN, "Could not load asset '%s' which is referenced by another asset.",
+           name.toString().c_str());
+    // Set it to a bad state, but use a state that can be fixed by another
+    // rebuild operation.
+    tree[myVertex].state = AssetDefs::Blocked;
+    return;
+  }
   tree[myVertex].state = version->state;
   vector<SharedString> dependents;
   version->DependentChildren(dependents);
@@ -148,8 +158,7 @@ void StateUpdater::AddEdge(
     AssetEdge data) {
   auto edgeData = add_edge(from, to, tree);
   // If this is a new edge, set the edge data. Also, if this is a dependent
-  // child it may have been added previously as a "normal" child, so update
-  // the data in that case also.
+  // child it may have been added previously as a "normal" child.
   if (edgeData.second || data.type == DEPENDENT_CHILD) {
     tree[edgeData.first] = data;
   }
@@ -172,11 +181,19 @@ void StateUpdater::SetStateForVertexAndDependents(
       // Limit the scope of the MutableAssetVersionD so that we release it
       // as quickly as possible.
       MutableAssetVersionD version(tree[vertex].name);
-      // Set the state. The OnStateChange handler will take care
-      // of stopping any running tasks, etc
-      // false -> don't send notifications about the new state because we
-      // will change it soon.
-      version->SetMyStateOnly(newState, false);
+      if (version) {
+        // Set the state. The OnStateChange handler will take care
+        // of stopping any running tasks, etc
+        // false -> don't send notifications about the new state because we
+        // will change it soon.
+        version->SetMyStateOnly(newState, false);
+      }
+      else {
+        // This shoud never happen - we had to successfully load the asset
+        // previously to get it into the tree.
+        notify(NFY_WARN, "Could not load asset '%s' to set state.",
+               tree[vertex].name.toString().c_str());
+      }
     }
     auto edgeIters = out_edges(vertex, tree);
     auto edgeBegin = edgeIters.first;
@@ -266,7 +283,7 @@ class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
         }
     };
 
-    void GetStateInputs(
+    void CalculateStateParameters(
         StateUpdater::TreeType::vertex_descriptor vertex,
         const StateUpdater::TreeType & tree,
         AssetDefs::State &stateByInputs,
@@ -303,19 +320,34 @@ class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
     virtual void finish_vertex(
         StateUpdater::TreeType::vertex_descriptor vertex,
         const StateUpdater::TreeType & tree) const {
-      AssetVersionD version(tree[vertex].name);
+      SharedString name = tree[vertex].name;
+      AssetVersionD version(name);
+      if (!version) {
+        // This shoud never happen - we had to successfully load the asset
+        // previously to get it into the tree.
+        notify(NFY_WARN, "Could not load asset '%s' to recalculate state.",
+               name.toString().c_str());
+        return;
+      }
       if (!version->NeedComputeState()) return;
       AssetDefs::State stateByInputs;
       AssetDefs::State stateByChildren;
       bool blockersAreOffline;
       uint32 numWaitingFor;
-      GetStateInputs(vertex, tree, stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
+      CalculateStateParameters(vertex, tree, stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
       AssetDefs::State newState = 
           version->CalcStateByInputsAndChildren(stateByInputs, stateByChildren, blockersAreOffline, numWaitingFor);
       if (newState != tree[vertex].state) {
         // Set the state and send notifications but don't propagate the change
         // (we will take care of propagation during the graph traversal).
-        MutableAssetVersionD mutableVersion(tree[vertex].name);
+        MutableAssetVersionD mutableVersion(name);
+        if (!version) {
+          // This shoud never happen - we had to successfully load the asset
+          // previously to get it into the tree.
+          notify(NFY_WARN, "Could not load asset '%s' to set calculated state.",
+                 name.toString().c_str());
+          return;
+        }
         mutableVersion->SetMyStateOnly(newState);
         // Update the state in the tree because other assets may need it to compute
         // their own states. Use the state from the version because setting the
@@ -325,7 +357,10 @@ class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
     }
 };
 
-void StateUpdater::RecalculateStates() {
+void StateUpdater::RecalculateAndSaveStates() {
+  // Traverse the state tree, recalculate states, and update states as needed.
+  // State is calculated for each vertex in the tree after state is calculated
+  // for all of its child and input vertices.
   // Possible optimization: Many assets have significant overlap in their
   // inputs. It might save time if we could calculate the overlapping state
   // only once.
