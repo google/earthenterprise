@@ -150,6 +150,11 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
     return AssetDefs::AssetPathToFilename(WorkingDir(ref) +
                                           "khassetver.xml");
   }
+  static std::string Filename(const std::string & ref) {
+    std::string boundref = AssetVersionRef::Bind(ref);
+    AssetVersionRef boundVerRef(boundref);
+    return AssetVersionImpl::XMLFilename(boundVerRef);
+  }
 
   // Gets the database path, type and ref string for the given dbname.
   // This is useful for distinguishing specific types of databases and
@@ -240,13 +245,6 @@ inline bool AssetVersion::Valid(void) const {
     }
     return handle && (handle->type != AssetDefs::Invalid);
   }
-}
-
-template <>
-inline std::string AssetVersion::Filename() const {
-  std::string boundref = AssetVersionRef::Bind(ref);
-  AssetVersionRef boundVerRef(boundref);
-  return AssetVersionImpl::XMLFilename(boundVerRef);
 }
 
 template <>

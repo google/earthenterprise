@@ -68,8 +68,7 @@ class AssetHandle_ : public AssetHandleInterface<Impl_> {
   }
   virtual bool Valid(const HandleType &) const { return true; }
 
-  // These two functions are implemented separately by Assets and AssetVersions
-  inline virtual std::string Filename() const;
+  // This function is implemented separately by Assets and AssetVersions
   inline const SharedString Key() const;
 
   inline void NoLongerNeeded() {

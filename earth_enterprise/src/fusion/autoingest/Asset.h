@@ -76,6 +76,9 @@ class AssetImpl : public khRefCounter, public AssetStorage, public StorageManage
   // static helpers
   static std::string WorkingDir(const std::string &ref);
   static std::string XMLFilename(const std::string &ref);
+  static std::string Filename(const std::string &ref) {
+    return XMLFilename(ref);
+  };
 };
 
 // ****************************************************************************
@@ -110,11 +113,6 @@ Asset::Valid(void) const
     }
     return handle && (handle->type != AssetDefs::Invalid);
   }
-}
-
-template <>
-inline std::string Asset::Filename() const {
-  return AssetImpl::XMLFilename(ref);
 }
 
 template <> inline const SharedString Asset::Key() const { return ref; }
