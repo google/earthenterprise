@@ -31,7 +31,6 @@
 // ***  Base classes
 // ****************************************************************************
 class AssetStorage {
-  //typedef std::deque<std::string> VersionList;
   typedef VerRefGen VersionList;
 
   SharedString name;
