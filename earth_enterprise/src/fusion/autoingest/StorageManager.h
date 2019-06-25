@@ -60,8 +60,6 @@ class StorageManager
     void Abort();
     bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<SharedString> *);
     HandleType Get(const AssetHandleInterface<AssetType> *, bool, bool, bool);
-    void Abort();
-    bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<SharedString> *);
   private:
     using CacheType = khCache<AssetKey, HandleType>;
 

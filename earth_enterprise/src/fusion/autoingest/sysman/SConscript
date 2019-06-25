@@ -23,8 +23,8 @@ env = env.Clone();
 env.Append(CPPPATH = ['#fusion/autoingest/sysman', # static headers
                       ])
 
-env.Append( CPPFLAGS=["-fopenmp"] )
-env.Append( LINKFLAGS=["-fopenmp"] )
+env.Append( CPPFLAGS=['-fopenmp'] )
+env.Append( LINKFLAGS=['-fopenmp'] )
 
 idlfiles = [ 'NextTaskId', 'JobStorage', 'TaskStorage', 'TaskRule',
              'FusionUniqueId' ]
@@ -158,4 +158,4 @@ env.test('LeafAssetVersion_unittest',
     env.ObjFromOtherDir(extraObjs),
     LIBS=['gegdal', 'geraster', 'gesearchtabs', 'genet', 'gepublish', 'gefconfigutil',
       'geindex_r', 'geutil', 'gecommon', 'gexml', 'gemiscconfig', 'qt-mt', 'xerces-c', 'geos',
-      'gtest'])
+      'gtest', 'gomp'])

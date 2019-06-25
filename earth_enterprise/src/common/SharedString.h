@@ -24,6 +24,7 @@
 #include <stdint.h>
 #include <assert.h>
 #include <common/notify.h>
+#include <mutex>
 
 // The goal of this class is to keep in memory only one copy of the name of
 // a cached asset or asset version. Previously, each asset stored the full names
@@ -42,6 +43,7 @@ protected:
         std::unordered_map<uint32_t, std::string> refFromKeyTable;
         std::unordered_map<std::string, uint32_t> keyFromRefTable;
         static uint32_t nextID;
+        mutable std::mutex m;
       public:
         const std::string & RefFromKey(const uint32_t &key) {
           auto refIter = refFromKeyTable.find(key);
@@ -55,6 +57,7 @@ protected:
           }
           else {
             // We've never seen this ref before, so make a new key
+            std::lock_guard<std::mutex> l(m);
             uint32_t key = nextID++; 
             refFromKeyTable.insert(std::pair<uint32_t, std::string>(key, ref));
             keyFromRefTable.insert(std::pair<std::string, uint32_t>(ref, key));
@@ -62,10 +65,12 @@ protected:
           }
         }
         StringStorage(){
+          std::lock_guard<std::mutex> l(m);
           refFromKeyTable.insert(std::pair<uint32_t, std::string>(0, ""));
           keyFromRefTable.insert(std::pair<std::string, uint32_t>("", 0));
         }
         size_t size() const {
+          std::lock_guard<std::mutex> l(m);
           return refFromKeyTable.size();
         }
     };
