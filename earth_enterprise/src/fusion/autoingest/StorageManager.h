@@ -21,7 +21,7 @@
 #include <string>
 #include <time.h>
 #include <vector>
-
+#include <memory>
 #include "common/khCache.h"
 #include "common/khFileUtils.h"
 #include "common/khRefCounter.h"
@@ -42,7 +42,7 @@ template<class AssetType>
 class StorageManager
 {
   public:
-    using HandleType = khRefGuard<AssetType>;
+    using HandleType = std:;shared_ptr<AssetType>;//khRefGuard<AssetType>;
     using AssetKey = SharedString;
 
     StorageManager(uint cacheSize, const std::string & type) :

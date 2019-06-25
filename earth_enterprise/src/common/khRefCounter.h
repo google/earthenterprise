@@ -84,6 +84,7 @@ class khRefGuard {
 
   // expose refcount function from my shared object
   inline uint32 refcount(void) const  { return ptr ? ptr->refcount() : 0; }
+  inline uint32 use_count(void) const { return refcount(); }
 
   inline void release(void) {
     if (ptr) {
@@ -254,6 +255,10 @@ class khRefCounterImpl : public ThreadPolicy::MutexHolder {
     LockGuard guard(this);
     return refcount_;
   }
+
+  uint32 use_count(void) const {
+      return refcount();
+  }
 };
 typedef khRefCounterImpl<SingleThreadingPolicy> khRefCounter;
 
@@ -399,6 +404,7 @@ class khSharedHandle {
 
   // expose refcount function from my shared object
   inline uint32 refcount(void) const  { return impl ? impl->refcount() : 0; }
+  inline uint32 use_count(void) const { return refcount(); }
 };
 
 
