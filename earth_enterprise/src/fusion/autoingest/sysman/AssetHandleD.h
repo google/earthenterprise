@@ -56,9 +56,6 @@ class DerivedAssetHandleD_ : public virtual BaseD_, public ROBase_
     // else may have loaded it into the storage manager
     return dynamic_cast<Impl*>(&*entry);
   }
-  virtual std::string Filename() const {
-    return BaseD::Filename();
-  }
 
   DerivedAssetHandleD_(void) : BBase(), BaseD(), ROBase() { }
   DerivedAssetHandleD_(const SharedString &ref_) :

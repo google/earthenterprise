@@ -77,7 +77,6 @@ template<class AssetType>
 class AssetHandleInterface {
   public:
     virtual const typename StorageManager<AssetType>::AssetKey Key() const = 0;
-    virtual std::string Filename() const = 0;
     virtual typename StorageManager<AssetType>::HandleType Load(const std::string &) const = 0;
     virtual bool Valid(const typename StorageManager<AssetType>::HandleType &) const = 0;
 };
@@ -110,7 +109,7 @@ StorageManager<AssetType>::Get(
     bool addToCache,
     bool makeMutable) {
   const AssetKey key = handle->Key();
-  const std::string filename = handle->Filename();
+  const std::string filename = AssetType::Filename(key);
 
   // Check in cache.
   HandleType entry;
