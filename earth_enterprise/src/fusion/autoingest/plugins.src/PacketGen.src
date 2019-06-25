@@ -37,6 +37,7 @@ class PacketGenExtraUpdateArg {
  public:
   std::vector<const InsetInfo<ProductAssetVersion>*> insetInfo;
   std::vector<const PacketGenInfo *> genInfo;
+  std::shared_ptr<OverlapCalculator<ProductAssetVersion>> calc;
 };
 
 // ===== PacketGenAssetD.cpp =====
@@ -52,8 +53,7 @@ PacketGenFactory::ReuseOrMakeAndUpdate(
     const std::string &ref_ , AssetDefs::Type type_,
     const khMetaData &meta_,
     const PacketGenConfig& config_,
-    const PacketGenExtraUpdateArg<RasterProductAssetVersion> &extra,
-    std::shared_ptr<OverlapCalculator<RasterProductAssetVersion>> calc);
+    const PacketGenExtraUpdateArg<RasterProductAssetVersion> &extra);
 
 template
 MutablePacketGenAssetVersionD
@@ -61,8 +61,7 @@ PacketGenFactory::ReuseOrMakeAndUpdate(
     const std::string &ref_ , AssetDefs::Type type_,
     const khMetaData &meta_,
     const PacketGenConfig& config_,
-    const PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> &extra,
-    std::shared_ptr<OverlapCalculator<MercatorRasterProductAssetVersion>> calc);
+    const PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> &extra);
 
 template
 MutablePacketGenAssetVersionD
@@ -86,8 +85,7 @@ PacketGenFactory::ReuseOrMakeAndUpdateSubAsset(
 
 template <typename ProductAssetVersion>
 void PacketGenAssetVersionImplD::UpdateChildren(
-    const PacketGenExtraUpdateArg<ProductAssetVersion> &extra,
-    std::shared_ptr<OverlapCalculator<ProductAssetVersion>> calc) {
+    const PacketGenExtraUpdateArg<ProductAssetVersion> &extra) {
   std::string assetRef = GetAssetRef();
 
   uint numLevels = config.coverage.numLevels();
@@ -129,17 +127,9 @@ void PacketGenAssetVersionImplD::UpdateChildren(
     auto gencov = khInsetCoverage(levCov);
     overlapEnvelope<ProductAssetVersion> env(type, gencov,
                          extra.insetInfo, extra.insetInfo.size(),
-                         config.beginMinifyLevel, config.endMinifyLevel);
+                         config.beginMinifyLevel, config.endMinifyLevel, level);
 
-    // there are situations where this can happen and must be accounted for
-    if (calc == nullptr)
-    {
-        calc.reset(new OverlapCalculator<ProductAssetVersion>(env));
-        calc->PreprocessForInset();
-    }
-
-    neededIndexes = std::move(calc->GetOverlapForLevel());
-    //neededIndexes = std::move(CalculateOverlap(env));
+    neededIndexes = std::move(extra.calc->GetOverlapForLevel());
 
     curTime = std::chrono::high_resolution_clock::now();
     timeDiff = std::chrono::duration<double>(curTime - prevTime);

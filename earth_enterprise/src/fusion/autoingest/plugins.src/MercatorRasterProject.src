@@ -33,7 +33,6 @@
 #include "autoingest/plugins/RasterDBRootAsset.h"
 #include "autoingest/plugins/MercatorRasterProductAsset.h"
 #include "autoingest/plugins/MapLayerJSAsset.h"
-#include "autoingest/MiscConfig.h"
 
 class MercatorRasterProjectAssetVersionImpl {
  public:
@@ -929,8 +928,6 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
   packgenkids.reserve(numInsets);
   packgenassets.reserve(numInsets);
   packgenvers.reserve(numInsets);
-  std::vector<uint> totalNeededIndexes;
-
 
   for (uint i = 0; i < genInfo.size(); ++i) {
     // Check if I even need to do any packet generation at all
@@ -946,7 +943,7 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
 
     overlapEnvelope<MercatorRasterProductAssetVersion> env (
         type, genInfo[i].coverage, insetInfoPtrs, i,
-        beginMinifyLevel, endMinifyLevel);
+        beginMinifyLevel, endMinifyLevel, i);
 
     std::shared_ptr<OverlapCalculator<MercatorRasterProductAssetVersion>> calc =
         std::make_shared<OverlapCalculator<MercatorRasterProductAssetVersion>>(env);
@@ -1000,7 +997,7 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
     PacketGenExtraUpdateArg<MercatorRasterProductAssetVersion> extraArg;
     extraArg.insetInfo.reserve(neededIndexes.size());
     extraArg.genInfo.reserve(neededIndexes.size());
-
+    extraArg.calc = calc;
     for (const auto& idx : neededIndexes) {
       extraArg.insetInfo.push_back(&inset_infos[idx]);
       extraArg.genInfo.push_back(&genInfo[idx]);
@@ -1012,8 +1009,7 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
                                                type,
                                                khMetaData(),
                                                packetGenConfig,
-                                               extraArg,
-                                               calc);
+                                               extraArg);
     
     if (packetGenConfig.cacheRaster) {
       // Extract the PacketLevel children from the new version and store

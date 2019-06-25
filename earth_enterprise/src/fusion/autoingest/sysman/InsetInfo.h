@@ -180,15 +180,17 @@ struct overlapEnvelope
     uint numInsets;
     uint beginMinifyLevel;
     uint endMinifyLevel;
+    uint level;
     overlapEnvelope(const AssetDefs::Type _type,
                     const khInsetCoverage& _gencov,
                     const std::vector<const InsetInfo<ProductAssetVersion> *>& _insets,
                     uint _numInsets,
-                    uint _beginMinifyLevel, uint _endMinifyLevel)
+                    uint _beginMinifyLevel, uint _endMinifyLevel, uint _level)
 
    :                type(_type), gencov(_gencov), insets(_insets),
                     numInsets(_numInsets),
-                    beginMinifyLevel(_beginMinifyLevel), endMinifyLevel(_endMinifyLevel) {}
+                    beginMinifyLevel(_beginMinifyLevel), endMinifyLevel(_endMinifyLevel),
+                    level(_level) {}
 };
 
 template <typename ProductAssetVersion>
@@ -212,11 +214,6 @@ public:
     std::vector<uint> GetOverlapForLevel() { return neededIndexes; }
 
 };
-
-/*template <typename ProductAssetVersion>
-extern std::vector<uint>
-CalculateOverlap(
-        overlapEnvelope<ProductAssetVersion>& env);*/
 
 template <typename ProductAssetVersion>
 extern void

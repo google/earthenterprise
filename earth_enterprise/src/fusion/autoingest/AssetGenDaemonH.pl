@@ -57,11 +57,7 @@ my %extra;
 my ($template);
 $template = "";
 my $templateName="ProductAssetVersion";
-my $finalArg="";
-if (index("$thiscommand","PacketGen") != -1)
-{
-    $finalArg=", std::shared_ptr<OverlapCalculator<$templateName>> calc = nullptr";
-}
+
 
 if ($base eq 'Composite') {
     if ($singleFormalExtraUpdateArg) {
@@ -74,7 +70,7 @@ if ($base eq 'Composite') {
 
     $extra{"${name}AssetVersionImplD"} =
         $template 
-        . "    void UpdateChildren($singleFormalExtraUpdateArg $finalArg);\n";
+        . "    void UpdateChildren($singleFormalExtraUpdateArg);\n";
 
 } else {
     $extra{"${name}AssetVersionImplD"} =
@@ -209,7 +205,7 @@ protected:
     $template
     ${name}AssetVersionD MyUpdate(bool &needed
                                   $formalcachedinputarg
-                                  $formalExtraUpdateArg $finalArg) const;
+                                  $formalExtraUpdateArg) const;
 
     ${name}AssetImplD(const std::string &ref_ $formaltypearg,
 		$formalinputarg
@@ -358,8 +354,7 @@ if ($withreuse) {
 			 const khMetaData &meta_,
 			 const $config& config_
 			 $formalcachedinputarg
-                         $formalExtraUpdateArg
-                         $finalArg);
+                         $formalExtraUpdateArg);
 
     $template
     static Mutable${name}AssetVersionD
