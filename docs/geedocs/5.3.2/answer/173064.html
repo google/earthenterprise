@@ -1,0 +1,54 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Permission denied</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 173064.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/6121524.html">Geecheck: test your GEE Server status</a></p>
+<p class="sidebar-toc"><a href="../answer/2760674.html">Fusion diagnostics</a></p>
+<p class="sidebar-toc"><a href="../answer/172780.html">Fusion issues</a></p>
+<p class="sidebar-toc"><a href="../answer/179631.html">Unsupported 3D geometry files</a></p>
+<p class="sidebar-toc"><a href="../answer/173055.html">Maps display grey tiles</a></p>
+<p class="sidebar-toc"><a href="../answer/173202.html">Imagery or terrain gaps</a></p>
+<p class="sidebar-toc"><a href="../answer/6363126.html">Troubleshoot connection to GEE Server</a></p>
+<p class="sidebar-toc"><a href="../answer/173081.html">Post-installation error message: Conflicts in plugins</a></p>
+<p class="sidebar-toc"><a href="../answer/173064.html" class="current-file">Post-installation error message: Permission denied</a></p>
+<p class="sidebar-toc"><a href="../answer/173076.html">Post-installation error message: Socket connect</a></p>
+<p class="sidebar-toc"><a href="../answer/173075.html">Post-installation error message: Segmentation fault</a></p>
+<p class="sidebar-toc"><a href="../answer/173079.html">Post-installation error message: ValidateProtocolVersion</a></p>
+<p class="sidebar-toc"><a href="../answer/173083.html">Resource build error message: coordinatetransformation</a></p>
+<p class="sidebar-toc"><a href="../answer/173060.html">Resource build error message: Headers do not match</a></p>
+<p class="sidebar-toc"><a href="../answer/173082.html">Resource build error message: No SRS</a></p>
+<p class="sidebar-toc"><a href="../answer/173058.html">Resource build error message: SourceFile</a></p>
+<p class="sidebar-toc"><a href="../answer/2981872.html">Resource build error message: Unable to find a suitable resource provider</a></p>
+<p class="sidebar-toc"><a href="../answer/2981878.html">Resource build error message: Unable to make reservation</a></p>
+<p class="sidebar-toc"><a href="../answer/3054957.html">Resource build error message: libjpeg.so.62</a></p>
+<p class="sidebar-toc"><a href="../answer/173063.html">Project build error message: Empty layer</a></p>
+<p class="sidebar-toc"><a href="../answer/173084.html">Project build error message: Pyramid data</a></p>
+<p class="sidebar-toc"><a href="../answer/173071.html">Project build error message: Signal 6</a></p>
+<p class="sidebar-toc"><a href="../answer/173072.html">Project build error message: Signal 11</a></p>
+<p class="sidebar-toc"><a href="../answer/173078.html">Project build error message: Write to index</a></p>
+<p class="sidebar-toc"><a href="../answer/173085.html">Database build error message: HandleAddDbRequest</a></p>
+<p class="sidebar-toc"><a href="../answer/172797.html">Publish error message: Authentication required</a></p>
+<p class="sidebar-toc"><a href="../answer/173061.html">Publish error message: Client/server mismatch</a></p>
+<p class="sidebar-toc"><a href="../answer/173062.html">Publish error message: Client too old</a></p>
+<p class="sidebar-toc"><a href="../answer/173074.html">Publish error message: Server push failed</a></p>
+<p class="sidebar-toc"><a href="../answer/173077.html">Publish error message: Unable to contact server</a></p>
+<p class="sidebar-toc"><a href="../answer/173080.html">Publish error message: Upload failed</a></p>
+<p class="sidebar-toc"><a href="../answer/3029085.html">Publish error message: Error adding files to publisher database</a></p>  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Troubleshooting and error messages</h1><h2>Permission denied</h2>
+<h2>Error message</h2>
+<code>Permission denied</code>
+<h2>Description</h2>
+<p>Fusion tried to read from or write to disk and permission was denied, indicating that read/write permissions are not set correctly.</p>
+<p>Background daemons run as the <code>gefusionuser:gegroup</code> user and group build assets in Fusion. Even if a file has the correct permissions set, the Fusion daemons cannot access it unless all of the parent directories have both <code>read</code> and <code>execute</code> permissions set for <code>gefusionuser:gegroup</code>. You must be particularly careful to set permissions that allow these Fusion daemons to access any source files that you create or copy. Typically, you should grant <code>read</code> access for all.</p>
+<p>Publishing while logged in as <code>root</code> can cause permissions errors such as this. If you were previously able to publish and are now getting this error, correct the errors and publish under a user-level profile.</p>
+<h2>Resolution</h2>
+<p>Enter this command:</p>
+<code>chmod -R 755 /<em>src</em></code>
+<p>Replace <code><em>src</em></code> with the top-level folder that contains your resources.</p>
+<div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>
