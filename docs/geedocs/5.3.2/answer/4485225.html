@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Portable Globe and Server 5.2</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
+</head>
+<body>
+<!-- 4485225.html -->
+<div class="container">
+<div class="sidebar1">
+  <p class="sidebar-toc"><a href="../answer/4580164.html">Welcome to Portable 5.0</a></p>
+  <p class="sidebar-toc"><a href="../answer/4594620.html">Portable Release Notes 5.0</a></p>
+  <p class="sidebar-toc"><a href="../answer/3230746.html">Portable User Guide</a></p>
+  <p class="sidebar-toc"><a href="../answer/4485225.html" class="current-file">Portable Globe and Server 5.2</a></p>
+  <p class="sidebar-toc"><a href="../answer/3230807.html">Portable Developer Guide</a></p>
+  <p class="sidebar-toc"><a href="../answer/3253752.html">Hello Earth! code sample</a></p>
+  <p class="sidebar-toc"><a href="../answer/3253275.html">Hello Maps! code sample</a></p>
+  <p class="sidebar-toc"><a href="../answer/4590263.html">Inspecting portable files</a></p>
+  <p class="sidebar-toc"><a href="../answer/1066449.html">Custom folders</a></p>
+  <p class="sidebar-toc"><a href="../answer/3003324.html">Cutter tool system information</a></p>
+  <p class="sidebar-toc"><a href="../answer/3003337.html">Manually halt the cutter process</a></p>
+</div>
+<div class="content"> <a name="top_of_file"></a>
+  <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+  <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Portable</h1>
+  <h2>Portable Globe and Server 5.2</h2>
+  <ul>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#installation">Installation</a>
+      <ul>
+        <li><a href="#globe_cutter">Globe cutter installation</a></li>
+        <li><a href="#portable_globe_server">Portable globe server installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#creating_a_portable_globe">Creating a portable globe</a>
+      <ul>
+        <li><a href="#before_you_begin">Before you begin</a></li>
+        <li><a href="#the_globe_cutter_interface">The globe cutter interface</a></li>
+        <li><a href="#globe_name">Globe name</a></li>
+        <li><a href="#drawing_the_polygon">Drawing the polygon</a></li>
+        <li><a href="#globe_resolution">Globe resolution</a></li>
+        <li><a href="#building_the_globe">Building the globe</a></li>
+      </ul>
+    </li>
+    <li><a href="#portable_server">Portable server</a>
+      <ul>
+        <li><a href="#serving_a_globe">Serving a globe</a></li>
+        <li><a href="#broadcasting_a_globe">Broadcasting a globe</a></li>
+        <li><a href="#changing_the_globe_being_served">Changing the globe being served</a></li>
+      </ul>
+    </li>
+    <li><a href="#connecting">Connecting to a portable globe</a>
+      <ul>
+        <li><a href="#google_earth_ec">Google Earth EC</a></li>
+        <li><a href="#google_earth_api">Google Earth API</a></li>
+        <li><a href="#connecting_to_a_broadcasted_globe">Connecting to a broadcasted globe</a></li>
+        <li><a href="#portable_cfg">Defining options in portable.cfg</a></li>
+      </ul>
+    </li>
+    <li><a href="#glb">Usage of the Apache (glc) Module</a></li>
+    <li><a href="#command_line_reference">Command line reference</a>
+      <ul>
+        <li><a href="#gepolygontoqtnodes">gepolygontoqtnodes</a></li>
+        <li><a href="#gerewritedbroot">gerewritedbroot</a></li>
+        <li><a href="#gekmlgrabber">gekmlgrabber</a></li>
+        <li><a href="#geportableglobebuilder">geportableglobebuilder</a></li>
+        <li><a href="#geportableglobepacker">geportableglobepacker</a></li>
+      </ul>
+    </li>
+  </ul>
+  <hr/>
+  <h2 id="overview">Overview</h2>
+  <p>The Google Earth Enterprise Portable Server solution enables organizations to access portions of their custom globes in the field when no network access may be available or possible. Using a web interface, end-users may select an area of interest to download from a Google Earth Enterprise Server for offline use on their Linux or Windows laptop with the Portable Server application.</p>
+  <p>All data available within a specified area of interest is downloaded and stored in a portable globe, including all high-resolution imagery, terrain, vector data, KML files, and searchable Point of Interest (POI) locations. Outside of the specified area of interest, only low resolution imagery and terrain will be stored in a portable globe. These levels of resolution can be specified when the globe is cut.</p>
+  <p>Portable globes may be specified, generated, and downloaded in as quickly as a few minutes &mdash; depending on the area of coverage &mdash; to support rapid preparation for first responders, or larger globes may be built in advanced preparation for responders to have ready “on the shelf.”</p>
+  <p><img alt="GEE portable diagram" id="gee_portable_diagram" name="gee_portable_diagram" src="../art/fusion/portable/gee_portable_diagram.gif"/></p>
+  <p>The Portable Server solution is made up of two applications:</p>
+  <ul class="spaced-list">
+    <li>The <a href="#globe_cutter">globe cutter</a> tool, which is installed on a production Google Earth Enterprise Server system hosting a 3D database. This tool allows end-users and administrators to select, package, and download a portion of the 3D Earth as a portable globe file.</li>
+    <li>The <a href="#local_server">portable server</a> is installed on Linux or Windows machines in the field. It can operate in a single-user mode for complete offline usage by one user, or can broadcast a portable globe so that multiple Portable Server users, and/or mobile users with compatible Android-based smart phones, can view the same globe.</li>
+  </ul>
+  <div class="note">
+    <p><strong>Note:</strong> The Portable Server solution can also create portable globes from a 2D map source. This document uses the term <em>portable globe</em> only, but instructions apply to both globes and maps.</p>
+  </div>
+  <hr/>
+  <h2 id="installation">Installation</h2>
+  <p>This section describes installation of the two applications that make up the Portable Server solution.</p>
+  <hr/>
+  <h3 id="globe_cutter">Globe cutter installation</h3>
+  <p>The portable globe cutter tool is installed with Google Earth Enterprise Server Open Source. Globe cutting is disabled by default; to enable it you must set the <code>--enable_cutter</code> flag for <code>geserveradmin</code> from the command line:</p>
+  <p> <code># geserveradmin --enable_cutter</code></p>
+  <p>By default, the cut globes will be stored in the <code>/opt/google/gehttpd/htdocs/cutter/globes</code> directory. The cut globes can be large, and many servers do not have sufficient storage allocated in this directory for multiple globes. If this is the case for your server, you may consider designating a different directory as the storage area for the cut globes.</p>
+  <hr/>
+  <h3 id="portable_globe_server">Portable globe server installation</h3>
+  <p>The portable server is supported on:</p>
+  <ul>
+    <li>Linux distributions Cent OS 7, RHEL 7, Ubuntu 14, Ubuntu 16</li>
+    <li>Windows 7 and 10</li>
+  </ul>
+  <p>Refer to the <a href="https://github.com/google/earthenterprise/wiki/Portable-Server">Portable Server Wiki page</a> for build and install instructions.</p>
+  <hr/>
+  <h2 id="creating_a_portable_globe">Creating a portable globe</h2>
+  <p>Cutting a globe is accomplished with a simple web interface. You'll use your mouse, or import KML, to define a polygon, which defines your 'area of interest.' This polygon not only defines the area that will display high-resolution imagery, but is also used by Fusion to create a localized search database.</p>
+  <div class="note">
+    <p><strong>Note:</strong> The globe cutting processes are CPU and disk intensive, as they are retrieving all data within the specified polygon from the Earth Enterprise Server. This can affect the overall performance of the Server, including slowing end-user access.
+    
+    <p>To mitigate performance impact to end users, you may consider:</p>
+    <ul>
+      <li>Limiting the number of users with access to globe cutting.</li>
+      <li>Creating pre-cut portable globes to host as downloadable files for portable users.</li>
+      <li>Operating a separate GEE Server specifically to support on-demand globe cutting needs.</li>
+    </ul>
+  </div>
+  <hr/>
+  <h3 id="before_you_begin">Before you begin</h3>
+  <h4 id="enable_the_cutter">Enable the cutter</h4>
+  <p>Before cutting a globe, you must enable the cutter from the command line:</p>
+  <code># geserveradmin --enable_cutter </code>
+  <div class="alert">
+    <p><strong>Note about authentication and SSL:</strong> Cutting is not currently supported on globes that require end-user authentication e.g. LDAP. One workaround is to allow unauthenticated access from localhost on your Earth Enterprise Server. Refer to Apache documentation to enable such a configuration. Cutting of a globe over HTTPS is supported; however the SSL certificate of the target server will not be verified during cuting.</p>
+  </div>
+  <hr/>
+  <h3 id="the_globe_cutter_interface">The globe cutter interface</h3>
+  <p>To create a portable globe, point your browser to <code>http://yourserver/cutter</code>, where <code>yourserver</code> is the server on which Earth Enterprise Server is running. The <strong>Globe Creator</strong> page appears.</p>
+  <img alt="Cutter" id="cutter_interface" interface="" name="cutter_interface" src="../art/fusion/portable/cutter_interface.png"/>
+  <p>Select the globe you'd like to cut your portable version from in the drop-down menu.</p>
+  <div class="note">
+    <p><strong>Note:</strong> Additional options can be shown by clicking on the 'Advanced &hellip;' button after a cut region has been selected. These options are, namely, <em>Polygon level</em>. This setting is useful when cutting with large polygons; e.g. use 12 for a country-sized polygon and 18 for a city-sized polygon. Additional advanced settings may be offered in future versions. Use caution when changing them as they may dramatically increase build times and globe sizes.</p>
+  </div>
+  <hr/>
+  <h3 id="globe_name">Globe name</h3>
+  <p>The globe name defines the filename of this globe; it will be created as a <code>.glb</code> file, which is a single-file format for sharing Google Earth Enterprise globes. Spaces, slashes, and double dots (..) will be converted to underscores in the saved globe name.</p>
+  <p>We recommend using a descriptive name for each globe, so that others will know what geographic area, or what mission, the globe was created for.</p>
+  <div class="alert">
+    <p><strong>Note</strong>: Building a globe will overwrite any existing globes with the same name. If multiple users are cutting globes, we recommend assigning unique prefixes to each user for their globe names to ensure that files are not accidentally overwritten.</p>
+  </div>
+  <hr/>
+  <h3 id="drawing_the_polygon">Drawing the polygon</h3>
+  <p>Once the globe name has been specified, you can define the geographic region to be cut, by drawing a polygon on the globe. There are two ways to draw the polygon, one of which is deprecated.</p>
+  <h4>Defining the polygon with KML</h4>
+  <p>You can use KML to define the polygon(s). The KML should be complete, and may contain single or multiple <code>&lt;polygon&gt; &lt;/polygon&gt;</code> elements. To insert your KML:</p>
+  <ol>
+    <li>Select the <strong>Enter polygon as KML</strong> checkbox.</li>
+    <li>Paste your KML into the text field.</li>
+    <li>Click outside of the text field. Your polygon appears on the map, if you are running the deprecated Google Earth plug-in.</li>
+  </ol>
+  <h4>Hand drawing the polygon</h4>
+  <p><em>This method is only available if you are have the deprecated Google Earth plug-in running in your browser.</em></p>
+  <p>First, using the navigation controls in the plugin, zoom in to the region of interest. To use your mouse to define the polygon, click the polygon icon in the globe window:<br/>
+    <img alt="Polygon icon" id="polygon_icon" name="polygon_icon" src="../art/fusion/portable/polygon_icon.png"/></p>
+  <p>Then, click on the globe to define each point. You can use the navigation controls on the right to move the globe or change zoom levels while drawing.</p>
+  <p>Double-click the final point to complete the polygon selection, at which point the polygon should change from blue to purple.</p>
+  <p>You can view the KML of the shape you've drawn by selecting the <strong>Enter polygon as KML</strong> checkbox.</p>
+  <hr/>
+  <h3 id="globe_resolution">Globe resolution</h3>
+  <p>The polygon you specify in the previous step defines your 'area of interest.' This area will contain high-resolution imagery and data, and search tabs will be created for information that lies within this zone. The maximum and minimum resolutions are specified as integers between 1 and 24. These correspond to the zoom levels that are used in the Fusion server.</p>
+  <h4>Minimum resolution</h4>
+  <p>The zoom level for the polygon area is specified in the <strong>Maximum resolution to extract</strong> field.</p>
+  <p>A minimum zoom level of 5-7 will present a decent-looking world to the user and will most likely include vector layers such as international boundaries and state boundaries and main cities without affecting the size of the <code>.glb</code> file very much. For example:</p>
+  <ul>
+    <li>A cut globe with minimum and maximum resolution values set to 5 is 10MB.</li>
+    <li>A cut globe with minimum and maximum resolution values set to 6 is 41MB.</li>
+    <li>A cut globe with minimum and maximum resolution values set to 7 is 120MB.</li>
+  </ul>
+  <p>These numbers are small in comparison to the overall size of your globe when a suitable maximum resolution has been selected. For example, a globe that contains all of the city of Atlanta, GA, USA in 1-foot resolution requires approximately 5GB of storage. Even level 7 imagery, at 120MB, is a small percentage of the overall globe size.</p>
+  <h4>Maximum resolution</h4>
+  <p>The area outside of the defined polygon will be included in the globe at a lower resolution, which is defined within the <strong>Minimum resolution to extract</strong> field. Areas near the polygon may be included at a higher resolution.</p>
+  <p>The maximum resolution of the cut globe will be no higher than the maximum resolution of the source globe. For example, if the maximum resolution in the cutter is specified at 24, but the source imagery is at 18 (approximately 1-meter resolution), the cut globe will contain level 18 imagery. You can leave this field blank to use the highest available imagery.</p>
+  <p>You may enter a lower number to reduce the size of your globe, by not including the highest resolution imagery.</p>
+  <hr/>
+  <h3 id="building_the_globe">Building the globe</h3>
+  <p>Click <strong>Build</strong> to start the build process. Depending on the size of your polygon, this can take from a few minutes to a few hours; likewise, file size will vary widely depending on the area selected and the desired resolution.</p>
+  <p>When the build is finished, a <code>.glb</code> file is created and a download link appears to the file's location on the Earth Server. Save the file into the <code>&lt;portable-server-unpack-directory&gt;/data</code> directory with the other <code>.glb</code> files. Alternately, the globe file can be copied onto portable media like a DVD, thumb drive, or external hard drive to be delivered to users.</p>
+  <p>The <code>.glb</code> file contains all that you need to share your portable globe &mdash; imagery, terrain, and vector assets, plus the search database. For this reason, it's important to retain control of your globe if it contains sensitive or proprietary information.</p>
+  <h4>Search tabs</h4>
+  <p>When a globe is cut, the search tabs associated with the globe are also bundled with the globe. However, because search plugins in Google Earth Enterprise run within the Tomcat / Apache instance on the Earth server, most search tabs will not work in a portable globe.</p>
+  <p>The Portable Server uses its own search framework that allows Python code stored on the portable machine to execute in place of the GEE plugin.</p>
+  <!-- <p>For more information, please refer to <a href="search_tabs.html">Using Search Tabs with the Portable Server</a>.</p> -->
+  <h4>KML files</h4>
+  <p>When a portable globe is cut from a source containing KML links in the Layer panel:</p>
+  <ul class="spaced-list">
+    <li>KML files that are stored locally on the primary Earth Server will be bundled into the portable globe. Only the main KML file will be copied, not any links or files that are embedded as links in the main KML file. The default copy is not recursive.</li>
+    <li>KML links that refer to servers other than the primary Earth Server are not copied. The layer will be visible in the client, but clicking the link will not cause any data to be displayed. If access to external servers is needed, a small KML file should be stored locally on the primary Earth Server. This KML file should contain a link to the intended external server.</li>
+  </ul>
+  <p>These behaviors can be modified if the globe is built from the command line rather than from the GUI as described in the <a href="#command_line_reference">Command line reference</a> section of this document.</p>
+  <h4>Historic Imagery</h4>
+  <p>Historic Imagery is not supported in the portable globe as of Fusion 4.2.</p>
+  <p>There are, however, two situations in which historic imagery will be displayed:</p>
+  <ul class="spaced-list">
+    <li>When the computer running the portable globe has a connection to the Earth server from which the globe was cut. In this case, historic imagery can be streamed from the Earth server. Once in the field, however, and disconnected from the Earth server, no historic imagery will be displayed.</li>
+    <li>If historic imagery has been cached on the portable globe machine.</li>
+  </ul>
+  <p>If the portable globe's computer has a connection to the original Earth server from which the globe was cut,</p>
+  <p>Otherwise, the following error message will appear:</p>
+  <blockquote>
+    <div class="note">
+      <p><strong>Google Earth can't contact the imagery server to download new images.</strong><br/>
+        You'll be able to see areas that you've been to recently, but new image areas may appear blurry.</p>
+    </div>
+  </blockquote>
+  <hr/>
+  <h2 id="portable_server">Portable server</h2>
+  <p>The portable server is a lightweight web server that runs on Linux and Windows computers. The web server starts within seconds and begins serving one of the globes that has been saved to the <code>data</code> directory. Once the globe is served, it can be opened in a web browser.</p>
+  <hr/>
+  <h3 id="serving_a_globe">Serving a globe</h3>
+  <p>Copy the globe to be served into the <code>data</code> subdirectory (or whichever directory is specified as the <code>globes_directory</code> in <code>portable.cfg</code>).</p>
+  <ol class="spaced-list">
+    <li>To start serving run the following command in the directory you unpacked Portable Server:
+      <p><code>python portable_server.py</code></p>
+    </li>
+    <li>Navigate to the Portable Server administrative page at <code>http://localhost:9335</code>.  If you have set a custom <code>port</code> number in <code>portable.cfg</code>, substitute that for "9335".</li>
+  </ol>
+  <p>You can select what globe is being served from the administrative page. Click on the folder icon (<img class="inline" alt="Portable folder icon" src="../art/fusion/portable/portable_folder_icon.png"/>), and you should a see a screen where you can select what globe, or map should be served by Portable Server.</p>
+  <p>You can shut down Portable Server from the administrative page, as well. Click on the hamburger menu button (<img class="inline" alt="Portable menu icon" src="../art/fusion/portable/portable_menu_icon.png"/>), and then on 'Quit'.</p>
+  <hr/>
+  <h3 id="broadcasting_a_globe">Broadcasting a globe</h3>
+  <p>To share a globe with others on your network:</p>
+  <ol class="spaced-list">
+    <li>Make sure <code>disable_broadcasting</code> is set to <code>False</code> in your <code>portable.cfg</code>.</li>
+    <li>If you're not already serving a globe, select the globe to serve from the Portable Server interface.</li>
+    <li>On the Portable Server administrative page, click the broadcast icon (<img class="inline line-sized" alt="Broadcast globe icon" src="../art/fusion/portable/broadcast_false.gif"/>).</li>
+  </ol>
+  <hr/>
+  <h3 id="changing_the_globe_being_served">Changing the globe being served</h3>
+  <p>To change the globe being served:</p>
+  <ul>
+    <li>Point your browser to <code>http://localhost:9335</code>, click the folder button (<img class="inline" alt="Portable folder icon" src="../art/fusion/portable/portable_folder_icon.png"/>), and select your new globe.</li>
+    <br/>
+  </ul>
+  <p>If you're accessing the globe with the Google Earth Enterprise Client, log out of the client and log back in to <code>http://localhost:9335</code>.</p>
+  <hr/>
+  <h2 id="connecting">Connecting to a portable globe</h2>
+  <p>It's possible to connect to a portable globe from a variety of platforms.</p>
+  <hr/>
+  <h3 id="google_earth_ec">Google Earth EC</h3>
+  <p>Launch the Google Earth EC client. When prompted for a server address, enter <code>http://localhost:9335</code>. If you've changed the default port in portable.cfg, use the new port value instead.</p>
+  <hr/>
+  <h3 id="google_earth_api">Google Earth API</h3>
+  <p>The Google Earth Enterprise Portable Server comes with a preconfigured HTML page that displays your globe using the Earth API. The page relies on the discontinued Google Earth browser plug-in to render globes, so it doesn't work in most recent browsers. This page is at <code>http://localhost:9335/earth/earth_local.html</code>.</p>
+  <p>If you'd like to make your own custom Earth API application, make a copy of the included file from which to start.</p>
+  <p>You can also reach the page listed above by clicking <strong>view in browser</strong> from the administration page at <code>http://localhost:9335</code>.</p>
+  <hr/>
+  <h3 id="portable_cfg">Defining options in portable.cfg</h3>
+  <p>The <strong>server</strong> directory under the Portable Server installation directory contains the main configuration file, <code>portable.cfg</code>. This file defines a number of options, but is primarily used to change the port on which the globe is served, if required.</p>
+  <ul cass="spaced-list">
+    <li><strong>port</strong>: defines the port on which to serve the globe. Default is 9335.</li>
+    <li><strong>globes_directory</strong>: the directory in which to look for globe files.</li>
+    <li><strong>globe_name</strong>: the default globe to serve when the server is started.</li>
+    <li><strong>fill_missing_map_tiles</strong>: If set to 'True', enables pixel-filling from ancestor map tile when there are no more tile descendents.</li>
+    <li><strong>max_missing_maps_tile_ancestor</strong>: Limit the pixelation to 2<sup>x</sup> by 2<sup>x</sup> sized pixels.</li>
+    <li><strong>local_override</strong>: If set to 'True', Portable Server looks for all files on the server first before seeking them on the globe.</li>
+  </ul>
+  <hr/>
+  <h2 id="command_line_reference">Command line reference</h2>
+  <p>The following command line tools are available for the portable globe and server.</p>
+  <ul class="toc">
+    <li><a href="#gepolygontoqtnodes">gepolygontoqtnodes</a></li>
+    <li><a href="#gerewritedbroot">gerewritedbroot</a></li>
+    <li><a href="#gekmlgrabber">gekmlgrabber</a></li>
+    <li><a href="#geportableglobebuilder">geportableglobebuilder</a></li>
+    <li><a href="#geportableglobepacker">geportableglobepacker</a></li>
+  </ul>
+  <p>Knowledge of these command line tools is not needed for most users and system administrators. The simple cutter interface that is provided should meet the needs of nearly all users. However, if finer control is needed or if the complete creation of globes needs to be automated, these command line tools are available. The following is the series of events for creating a globe to help give a sense of what these command line tools accomplish and in what order they are run:</p>
+  <br/>
+  <code>Building LevelFive ...<br/>
+  <br/>
+  No description given. Added globe directory:<br/>
+  /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive Ok<br/>
+  <br/>
+  Saved polygon to<br/>
+  /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/earth/polygon.kml<br/>
+  Convert polygon to quadtree nodes ...<br/>
+  Executing: /opt/google/bin/<strong>gepolygontoqtnodes</strong> --qt_nodes_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/qt_nodes.txt<br/>
+  --kml_polygon_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/earth/polygon.kml<br/>
+  --max_level=18<br/>
+  0 qtnodes Ok<br/>
+  <br/>
+  Rewrite dbroot ...<br/>
+  Executing: /opt/google/bin/<strong>gerewritedbroot</strong><br/>
+  --source=http://earth.localdomain/default_ge/<br/>
+  --icon_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/icons<br/>
+  --dbroot_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/dbroot.v5<br/>
+  --search_server=localhost<br/>
+  --search_port=9335<br/>
+  --kml_server=localhost<br/>
+  --kml_port=9335<br/>
+  --kml_map_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/kml_map.txt<br/>
+  8 icons<br/>
+  Executing: cp<br/>
+  /tmp/globe_builder/LevelFive_4282_1287494655.545115/dbroot.v5<br/>
+  /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/dbroot/dbroot_localhost_9335<br/>
+  Ok<br/>
+  <br/>
+  Grab kml files ...<br/>
+  Executing: /opt/google/bin/<strong>gekmlgrabber</strong><br/>
+  --kml_map_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/kml_map.txt<br/>
+  --output_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/kml<br/>
+  --source=http://earth.localdomain/default_ge/<br/>
+  --kml_server=localhost<br/>
+  --kml_port=9335<br/>
+  0 kml files Ok<br/>
+  <br/>
+  Build globe ...<br/>
+  Executing: /opt/google/bin/<strong>geportableglobebuilder</strong><br/>
+  --source=http://earth.localdomain/default_ge/<br/>
+  --default_level=5<br/>
+  --max_level=5<br/>
+  --hires_qt_nodes_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/qt_nodes.txt<br/>
+  --metadata_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/earth/metadata.json<br/>
+  --globe_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive<br/>
+  --dbroot_file=/tmp/globe_builder/LevelFive_4282_1287494655.545115/dbroot.v5 &gt;<br/>
+  /tmp/globe_builder/LevelFive_4282_1287494655.545115/packet_info.txt &amp; Ok<br/>
+  <br/>
+  685 image packets<br/>
+  128 terrain packets<br/>
+  515 vectors packets<br/>
+  <br/>
+  Extract search data ...<br/>
+  Getting search poi ids:<br/>
+  http://earth.localdomain/cgi-bin/<strong>globe_cutter.py</strong>?<br/>
+  cmd=POI_IDS&amp;db=default_ge<br/>
+  Getting search poi data:<br/>
+  http://earth.localdomain/cgi-bin/<strong>globe_cutter.py</strong>?<br/>
+  cmd=SEARCH_FILE&amp;poi_id=&amp;<br/>
+  polygon=Paste%20in%20KML%20containing%20polygon.%20If%20KML%20contains%20more<br/>
+  %20than%20one%20polygon%2C%20the%20first%20polygon%20will%20be%20used.<br/>
+  <br/>
+  Saving search poi data:<br/>
+  /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/search_db/gepoi_ Ok<br/>
+  <br/>
+  Add plugin files ...<br/>
+  Executing: cp -r /opt/google/gehttpd/htdocs/cutter/template/earth/*<br/>
+  /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/earth Executing: cp -r /opt/google/gehttpd/htdocs/cutter/template/maps/*<br/>
+  /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/maps Executing: cp -r /opt/google/gehttpd/htdocs/cutter/template/js/*<br/>
+  /tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive/js Rewrite JSON from: http://earth.localdomain/default_ge//query?request=Json&amp;var=geeServerDefs Ok<br/>
+  <br/>
+  Packaging globe for download ...<br/>
+  Executing: /opt/google/bin/<strong>geportableglobepacker</strong><br/>
+  --globe_directory=/tmp/globe_builder/LevelFive_4282_1287494655.545115/LevelFive<br/>
+  --output=/opt/google/gehttpd/htdocs/cutter/globes/LevelFive.glb<br/>
+  Executing: chmod a+r /opt/google/gehttpd/htdocs/cutter/globes/LevelFive.glb<br/>
+  /opt/google/gehttpd/htdocs/cutter/globes/LevelFive.glb 9.62MB Ok<br/>
+  Deleting tmp directory as: /tmp/globe_builder/LevelFive_4282_1287494655.545115 Ok</code>
+  <p>This section uses the following typographic conventions:</p>
+  <table class="nice-table">
+    <tbody>
+      <tr>
+        <td><code><em>Italic</em></code></td>
+        <td>Information that the user must supply</td>
+      </tr>
+      <tr>
+        <td>Square brackets <strong>[ ]</strong></td>
+        <td>Optional items</td>
+      </tr>
+    </tbody>
+  </table>
+  <hr/>
+  <h3><a id="gepolygontoqtnodes" name="gepolygontoqtnodes"></a>gepolygontoqtnodes</h3>
+  <h4>Usage</h4>
+  <code><strong>gepolygontoqtnodes</strong> --kml_polygon_file=<em>filename</em><br/>
+    --qt_nodes_file=<em>filename</em> --max_level=<em>int</em></code>
+  <h4>Description</h4>
+  <p>Creates a list of the quadtree nodes that encompass a polygon at the given <code>max_level</code>.</p>
+  <h4>Required</h4>
+  <table class="nice-table">
+    <tbody>
+      <tr>
+        <td><code>--kml_polygon_file=<em>filename</em> </code></td>
+        <td>KML file containing a polygon that defines the region of interest.</td>
+      </tr>
+      <tr>
+        <td><code>--qt_nodes_file=<em>filename</em></code></td>
+        <td>File where quadtree addresses are stored.</td>
+      </tr>
+      <tr>
+        <td><code>--max_level=<em>int</em></code></td>
+        <td>Level of resolution of quadtree that is used to encompass the polygon.</td>
+      </tr>
+    </tbody>
+  </table>
+  <hr/>
+  <h3><a id="gerewritedbroot" name="gerewritedbroot"></a>gerewritedbroot</h3>
+  <h4>Usage</h4>
+  <code><strong>gerewritedbroot</strong></code> <code>--source=<em>server_name</em> --icon_directory=<em>directory</em><br/>
+    --dbroot_file=<em>filename</em>  --kml_map_file=<em>filename</em><br/>
+    [--search_service=<em>search_service_url</em>] [--preserve_search_service] [--kml_server=<em>server_name]</em><br/>
+    [--kml_port=<em>num]</em> [--kml_url_path=<em>prefix]</em> [--use_ssl_for_kml=<em>bool</em>] 
+    [--preserve_kml_filenames] [--disable_historical]</code>
+  <h4>Description</h4>
+  <ul>
+    <li>Reads dbRoot and rewrites the search tabs so that they point to the given search server, port and path.</li>
+    <li>Optionally creates a directory of all of the icons referred to by the dbroot. </li>
+    <li>Optionally updates the host, path and/or filenames in KML Layer URLs in the dbRoot. </li>
+    <li>Optionally creates a text file that lists the mapping from original KML Layer URLs to their updated filenames. </li>
+    <li>Optionally removes the reference to the server for historical imagery data. </li>
+  </ul>
+  <h4>Required</h4>
+  <table class="nice-table">
+    <tbody>
+      <tr>
+        <td><code>--source=<em>server_name</em> </code></td>
+        <td>Server whose dbRoot should be rewritten.</td>
+      </tr>
+      <tr>
+        <td><code>--dbroot_file=<em>filename</em></code></td>
+        <td>File where the new dbRoot should be stored.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h4>Options</h4>
+  <table class="nice-table">
+    <tbody>
+      <tr>
+        <td><code>--icon_directory=<em>directory</em></code></td>
+        <td>Directory where the icons should be stored.</td>
+      </tr>
+      <tr>
+        <td><code>--kml_map_file=<em>filename</em> </code></td>
+        <td>File where the KML map of source URLs to local files should be stored.</td>
+      </tr>
+      <tr>
+        <td><code>--search_service=<em>search_service_url</em></code></td>
+        <td>Url to search service. If none is provided then uses relative url for standard Portable search.</td>
+      </tr>
+       <tr>
+        <td><code>--preserve_search_service</code></td>
+        <td>Preserve the existing search service url.</td>
+      </tr>
+      <tr>
+        <td><code>--kml_server=<em>server_name</em></code></td>
+        <td>Server to be used for KML files in the dbRoot. Default is <code>localhost</code>.</td>
+      </tr>
+      <tr>
+        <td><code>--kml_port=<em>num</em></code></td>
+        <td>Port to be used for KML files in the dbRoot. Default is <code>8888</code>.</td>
+      </tr>
+      <tr>
+        <td><code>--kml_url_path=<em>prefix</em></code></td>
+        <td>Path in new URL to prefix KML file name. Default is <code>kml</code>.</td>
+      </tr>
+      <tr>
+        <td><code>--use_ssl_for_kml=<em>bool</em></code></td>
+        <td>Use <code>https</code> instead of <code>http</code> for accessing KML files. Default is <code>false</code>.</td>
+      </tr>
+      <tr>
+        <td><code>--preserve_kml_filenames</code></td>
+        <td>Preserve the existing filenames of any KML files. Not used when creating portable globes.</td>
+      </tr>
+      <tr>
+        <td><code>--disable_historical</code></td>
+        <td>Remove the reference to the server to obtain historical data.</td>
+      </tr>
+    </tbody>
+  </table>
+  <hr/>
+  <h3><a id="gekmlgrabber" name="gekmlgrabber"></a>gekmlgrabber</h3>
+  <code>gekmlgrabber --kml_map_file=/tmp/kml_map</code>
+  <h4>Usage</h4>
+  <code><strong>gekmlgrabber</strong> --kml_map_file=<em>filename</em> --output_directory=<em>path</em><br/>
+    [--source=<em>server_name</em>] [--kml_server=<em>server_name</em>] [--kml_port=<em>num</em>]<br/>
+    [--kml_url_path=<em>prefix]</em> [--use_ssl_for_kml=<em>bool</em>]<br/>
+    [--no_recurse=<em>bool</em>] [--ignore_absolute_urls=<em>bool</em>]</code>
+  <h4>Description</h4>
+  <p>Reads KML references, retrieves them from network, and copies them into local files. If the <code>--no_recurse</code> flag is not set, it does the same for any additional kml files referenced within the given kml files.</p>
+  <h4>Required</h4>
+  <table class="nice-table">
+    <tbody>
+      <tr>
+        <td><code>--kml_map_file=<em>filename</em></code></td>
+        <td>File where map of kml source urls to local files are stored.</td>
+      </tr>
+      <tr>
+        <td><code>--output_directory=<em>path</em></code></td>
+        <td>Directory where local kml files are to be stored.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h4>Options</h4>
+  <table class="nice-table">
+    <tbody>
+      <tr>
+        <td><code>--source=<em>server_name</em></code></td>
+        <td>Source for KML files. Default is <code>localhost</code>.</td>
+      </tr>
+      <tr>
+        <td><code>--kml_server=<em>server_name</em></code></td>
+        <td>Server to be referenced in the dbroot for kml files. Default is <code>localhost</code>.</td>
+      </tr>
+      <tr>
+        <td><code>--kml_port=<em>num</em></code></td>
+        <td>Port to be referenced in the dbroot for kml files. Default is <code>9335</code>.</td>
+      </tr>
+      <tr>
+        <td><code>--kml_url_path=<em>prefix</em></code></td>
+        <td>Path in new url to prefix kml file name. Default is <code>kml</code>.</td>
+      </tr>
+      <tr>
+        <td><code>--use_ssl_for_kml=<em>bool</em></code></td>
+        <td>Require https:// instead of http:// for accessing kml files. Default is <code>false</code>.</td>
+      </tr>
+      <tr>
+        <td><code>--no_recurse=<em>bool</em></code></td>
+        <td>Do NOT make all kml files linked within the kml files local files as well. Default is <code>false</code>.</td>
+      </tr>
+      <tr>
+        <td><code>--ignore_absolute_urls=<em>bool</em></code></td>
+        <td>If kml is linked with a full url address <code>(http://server/...)</code>, leave it as it is. Default is <code>false</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <hr/>
+  <h3><a id="geportableglobebuilder" name="geportableglobebuilder"></a>geportableglobebuilder</h3>
+  <code>geportableglobebuilder --source=http://myserver --max_level=18 --default_level=8 --hires_qt_nodes_file=qt_nodes.txt \<br/>
+  --globe_directory /tmp/my_portable_globe \</code>
+  <h4>Usage</h4>
+  <code><strong>geportableglobebuilder</strong></code><code> --source=server_name --globe_directory=path<br/>
+    [--max_level=num] [--default_level=num] [--hires_qt_nodes_file=filename]<br/>
+    [--dbroot_file=filename] [--nowrite]</code>
+  <h4>Description</h4>
+  <p>Creates a set of packet bundles and other associated files. These files can be combined into a globe file with <code>geportableglobepacker</code>.</p>
+  <h4>Required</h4>
+  <table class="nice-table">
+    <tbody>
+      <tr>
+        <td><code>--source=<em>server_name</em></code></td>
+        <td>The source globe from which the sub-globe is to be derived.</td>
+      </tr>
+      <tr>
+        <td><code>--globe_directory=<em>path</em></code></td>
+        <td>Directory where the portable globe should be built.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h4>Options</h4>
+  <table class="nice-table">
+    <tbody>
+      <tr>
+        <td><code>--max_level=<em>num</em></code></td>
+        <td>Level of resolution of the quadtree above which no packets should be saved. Default is <code>24</code>.</td>
+      </tr>
+      <tr>
+        <td><code>--default_level=<em>num</em></code></td>
+        <td>Level of resolution of the quadtree for which all packets are kept independent of the region of interest. Default is <code>7</code>.</td>
+      </tr>
+      <tr>
+        <td><code>--hires_qt_nodes_file=<em>filename</em></code></td>
+        <td>Name of file containing the quadtree nodes that define the high-resolution area of the globe. Default is no file.</td>
+      </tr>
+      <tr>
+        <td><code>--dbroot_file=<em>filename</em></code></td>
+        <td>Name of file containing the dbRoot that should be saved with the globe. Default is no file, in which case the dbRoot is read from the source.</td>
+      </tr>
+      <tr>
+        <td><code>--metadata_file=<em>filename</em></code></td>
+        <td>Name of file containing boundary metadata that should be saved with the globe. Default is no file, in which case no metadata file is included.</td>
+      </tr>
+      <tr>
+        <td><code>--no_write</code></td>
+        <td>Do not write packets; print out the total size of the globe.</td>
+      </tr>
+    </tbody>
+  </table>
+  <hr/>
+  <h3><a id="geportableglobepacker" name="geportableglobepacker"></a>geportableglobepacker</h3>
+  <h4>Usage</h4>
+     <code>geportableglobepacker --globe_directory=<em>path</em> --output=<em>filename</em> [--make_copy=<em>bool</em>] [--is_2d=<em>bool</em>]</code>
+  <h4>Description</h4>
+  <p>Packs up all globe files into a single file. If <code>--make_copy</code> is set to <code>true</code>, the globe directory is undisturbed. If not, then the globe directory is rendered unusable, but the command can run considerably faster.</p>
+  <h4>Options</h4>
+  <table class="nice-table">
+    <tbody>
+      <tr>
+        <td><code>--globe_directory=<em>path</em></code></td>
+        <td>The directory containing the globes to be packed.</td>
+      </tr>
+      <tr>
+        <td><code>--output=<em>filename</em></code></td>
+        <td>The file to which to save the packed globe, including a file path if desired. The filename should use a <code>.glb</code> file extension.</td>
+      </tr>
+      <tr>
+        <td><code>--make_copy=<em>bool</em></code></td>
+        <td>Make a copy of all files so that the globe directory is not disturbed. Default is <code>false</code>.</td>
+      </tr>
+      <tr>
+        <td><code>--is_2d=<em>bool</em></code></td>
+        <td>Are we packaging a 2d map. Default is <code>false</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="footer">
+    <p class="BackToTop"><a href="#top_of_file">Back to top</a>
+    
+    <hr />
+    </p>
+    <p class="copyright">&copy;2015 Google</p>
+  </div>
+</div>
+</body>
+</html>
