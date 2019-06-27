@@ -1010,7 +1010,7 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
                                                khMetaData(),
                                                packetGenConfig,
                                                extraArg);
-    
+
     if (packetGenConfig.cacheRaster) {
       // Extract the PacketLevel children from the new version and store
       // them in my genInfo. My later children will use these to help
@@ -1100,8 +1100,8 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
         geindexConfig.packet_insets_.back().levels_.push_back(
             RasterPacketLevelVersion(packlevelref, indexVer));
       }
-      ++asset_idx;
     }
+    ++asset_idx;
   }
   if (tryReuse) {
     RasterGEIndexAssetD asset(geindexAssetName);

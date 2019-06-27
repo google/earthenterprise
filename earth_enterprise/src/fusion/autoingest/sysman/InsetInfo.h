@@ -174,16 +174,16 @@ void CalcPacketGenInfo(const khTilespace            &tilespace,
 template <typename ProductAssetVersion>
 struct overlapEnvelope
 {
-    const AssetDefs::Type& type;
-    const khInsetCoverage& gencov;
-    const std::vector<const InsetInfo<ProductAssetVersion> *>& insets;
+    AssetDefs::Type& type;
+    khInsetCoverage& gencov;
+    std::vector<const InsetInfo<ProductAssetVersion> *>& insets;
     uint numInsets;
     uint beginMinifyLevel;
     uint endMinifyLevel;
     uint level;
-    overlapEnvelope(const AssetDefs::Type _type,
-                    const khInsetCoverage& _gencov,
-                    const std::vector<const InsetInfo<ProductAssetVersion> *>& _insets,
+    overlapEnvelope(AssetDefs::Type& _type,
+                    khInsetCoverage& _gencov,
+                    std::vector<const InsetInfo<ProductAssetVersion> *>& _insets,
                     uint _numInsets,
                     uint _beginMinifyLevel, uint _endMinifyLevel, uint _level)
 
@@ -197,7 +197,6 @@ template <typename ProductAssetVersion>
 class OverlapCalculator
 {
 private:
-    overlapEnvelope<ProductAssetVersion>& env;
     std::vector<uint> neededIndexes;
     void CalculateOverlap();
 
@@ -205,14 +204,23 @@ public:
     OverlapCalculator(overlapEnvelope<ProductAssetVersion> _env) :
         env(_env) {}
 
+    overlapEnvelope<ProductAssetVersion>& env;
+
     void PreprocessForInset()
     {
         neededIndexes.clear();
         CalculateOverlap();
     }
 
-    std::vector<uint> GetOverlapForLevel() { return neededIndexes; }
-
+    std::vector<uint> GetOverlapForLevel(bool recalculate = false)
+    {
+        if (recalculate)
+        {
+            neededIndexes.clear();
+            CalculateOverlap();
+        }
+        return neededIndexes;
+    }
 };
 
 template <typename ProductAssetVersion>
