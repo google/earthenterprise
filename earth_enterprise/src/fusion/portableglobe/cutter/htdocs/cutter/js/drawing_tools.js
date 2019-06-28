@@ -449,7 +449,7 @@ function finishKML() {
   loadMapPolygon(myKML);
   cutterMode('complete');
   gees.dom.setClass('CutButtonBlue', 'button blue');
-  var kmlFromForm = gees.dom.get('kml_field').value;
+  gees.dom.get('kml_field').value = kmlEdit;
   gees.tools.setElementDisplay(DISPLAY_ELEMENTS_KML, 'none');
  }
 }
