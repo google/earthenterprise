@@ -15,12 +15,13 @@
 
 #include "AssetD.h"
 #include <AssetThrowPolicy.h>
-
+#include <memory>
 // ****************************************************************************
 // ***  AssetImplD
 // ****************************************************************************
 
-khRefGuard<AssetImplD>
+//khRefGuard
+std::shared_ptr<AssetImplD>
 AssetImplD::Load(const std::string &boundref)
 {
   khRefGuard<AssetImplD> result;

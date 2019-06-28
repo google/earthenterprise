@@ -18,7 +18,7 @@
 #define GEO_EARTH_ENTERPRISE_SRC_COMMON_KHREFCOUNTER_H_
 
 #include <assert.h>
-
+#include <memory>
 #include "common/khTypes.h"
 #include "common/khGuard.h"
 #include "common/khThreadingPolicy.h"
@@ -171,8 +171,11 @@ class khRefGuard {
 
 template <class T> inline khRefGuard<T> khRefGuardFromNew(T *newobj);
 template <class T> inline khRefGuard<T> khRefGuardFromThis_(T *thisobj);
+template <class T> inline std::shared_ptr<T> sharedPtrFromNew(T* newobj);
+template <class T> inline std::shared_ptr<T> sharedPtrFromThis(T* thisobj);
 #define khRefGuardFromThis() khRefGuardFromThis_(this)
 #define AnotherRefGuardFromRaw(x) khRefGuardFromThis_(x)
+
 
 
 // ****************************************************************************
@@ -344,12 +347,26 @@ inline khRefGuard<T>
 khRefGuardFromNew(T *newobj) {
   return khRefGuard<T>(khUnrefNewGuard_<T>(newobj));
 }
+
+template <typename T>
+inline std::shared_ptr<T>
+sharedPtrFromNew(T* newobj)
+{
+    return std::make_shared<T>(newobj);
+}
+
 template <class T>
 inline khRefGuard<T>
 khRefGuardFromThis_(T *thisobj) {
   return khRefGuard<T>(khRerefThisGuard_<T>(thisobj));
 }
 
+template <typename T>
+inline std::shared_ptr<T>
+sharedPtrFromThis(T* thisobj)
+{
+    return std::make_shared<T>(thisobj);
+}
 
 // ****************************************************************************
 // ***  like khRefGuard but for objects w/o native ref counting ability

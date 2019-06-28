@@ -264,7 +264,7 @@ class khCache {
       // Note: this refcount() > 1 check is safe even with
       // khMTRefCounter based guards. See explanaition with the
       // definition of khMTRefCounter in khMTTypes.h.
-      while (item && (item->val.refcount() > 1)) {
+      while (item && (item->val.use_count() > 1)) {
         item = item->prev;
       }
       if (item) {

@@ -75,11 +75,13 @@ print $fh "unsigned int NumPlugins = ", scalar(@plugins), ";\n\n";
 
 print $fh <<EOF;
 
-khRefGuard<AssetImpl>
+//khRefGuard<AssetImpl>
+std::shared_ptr<AssetImpl>
 AssetImpl::Load(const std::string &boundref)
 {
     std::string filename = AssetImpl::XMLFilename(boundref);
-    khRefGuard<AssetImpl> result;
+    //khRefGuard<AssetImpl>
+    std::shared_ptr<AssetImpl> result;
     time_t timestamp = 0;
     uint64 filesize = 0;
 
@@ -147,11 +149,13 @@ EOF
 
 
 
-khRefGuard<AssetVersionImpl>
+//khRefGuard
+std::shared_ptr<AssetVersionImpl>
 AssetVersionImpl::Load(const std::string &boundref)
 {
     std::string filename = AssetVersionImpl::XMLFilename(boundref);
-    khRefGuard<AssetVersionImpl> result;
+    //khRefGuard
+    std::shared_ptr<AssetVersionImpl> result;
     time_t timestamp = 0;
     uint64 filesize = 0;
 
