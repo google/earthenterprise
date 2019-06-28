@@ -266,14 +266,9 @@ void PacketGenAssetVersionImplD::UpdateChildren(
           blendVer = genInfo.packetLevels[minifySrcLevel];
         }
 
-        if (blendVer) {
-          levInputs[inputs_idx+1] = (genInfo.packetLevels[minifySrcLevel]).Ref();
-          levInputVers[inputs_idx+1] = genInfo.packetLevels[minifySrcLevel];
-        }
-
         SharedString cached_blend;
         SharedString cached_blend_alpha;
-        if (levInputVers[inputs_idx+1]) {
+        if (blendVer) {
           // This covers two cases:
           // 1) If level+1 == config.endMinifyLevel:
           //   This is the first merge (from cached blends)
@@ -296,12 +291,14 @@ void PacketGenAssetVersionImplD::UpdateChildren(
           // blend directory exists for the asset since in GEE-5.x we need to
           // pick up the GEE-4.x Imagery/Terrain Projects (the PacketLevel
           // assets) that have no alpha blend cached.
+          levInputs[inputs_idx+1] = blendVer.Ref();
+          levInputVers[inputs_idx+1] = blendVer;
           const std::string cache_alpha_path =
-              levInputVers[inputs_idx+1]->GetOutputFilename(0) + "/cache_alpha.pack";
+              blendVer->GetOutputFilename(0) + "/cache_alpha.pack";
           if (khExists(cache_alpha_path)) {
-            cached_blend_alpha = levInputs[inputs_idx+1];
+            cached_blend_alpha = blendVer.Ref();
           }
-          cached_blend = levInputs[inputs_idx+1];
+          cached_blend = blendVer.Ref();
         }
         packetLevelConfig.insets[merge_idx] =
             PacketLevelConfig::Inset(
