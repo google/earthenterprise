@@ -43,6 +43,12 @@ class ExtraPixelsImpl : public khRefCounter {
   ExtraHeightmapCol leftPixels;
   ExtraHeightmapRow bottomPixels;
 
+  // determine amount of memory used by ExtraPixelsImpl
+  uint64 GetSize() {
+    return sizeof(leftPixels)
+    + sizeof(bottomPixels);
+  }
+
   explicit ExtraPixelsImpl(const HeightmapFloat32ProductTile& productTile);
 };
 typedef khRefGuard<ExtraPixelsImpl> ExtraPixels;
