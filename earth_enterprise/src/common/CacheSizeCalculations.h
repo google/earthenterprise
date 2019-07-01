@@ -21,12 +21,12 @@
 
 // determine amount of memory used by generic objects
 template<class T>
-inline uint64 GetObjectSize(T obj) {
+inline uint64 GetObjectSize(const T &obj) {
     return sizeof(obj);
 }
 // determine amount of memory used by a vector and all of it's contents
 template<class T>
-inline uint64 GetObjectSize(std::vector<T> vec) {
+inline uint64 GetObjectSize(const std::vector<T> &vec) {
     uint64 total = 0;
     for(const auto &t : vec) {
       total += GetObjectSize(t);
@@ -35,12 +35,12 @@ inline uint64 GetObjectSize(std::vector<T> vec) {
     return sizeof(vec) + total;
 }
 // determine amount of memory used by a string
-inline uint64 GetObjectSize(std::string str) {
+inline uint64 GetObjectSize(const std::string &str) {
     return sizeof(str) + (str.capacity() * sizeof(char));
 }
 // determine amount of memory used by a khRefGuard and the object it points to
 template<class T>
-inline uint64 GetObjectSize(khRefGuard<T> guard) {
+inline uint64 GetObjectSize(const khRefGuard<T> &guard) {
     return guard.getSize();
 }
 #endif
