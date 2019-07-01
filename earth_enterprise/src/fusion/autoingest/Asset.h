@@ -23,6 +23,7 @@
 #include "MiscConfig.h"
 #include "StorageManager.h"
 #include "khMTTypes.h"
+#include "CacheSizeCalculations.h"
 
 /******************************************************************************
  ***  AssetImpl
@@ -69,6 +70,17 @@ class AssetImpl : public khMTRefCounter, public AssetStorage, public StorageMana
   virtual ~AssetImpl(void) { }
   const SharedString & GetRef(void) const { return name; }
 
+  // determine amount of memory used by an AssetImpl
+  uint64 GetSize() {
+    return(GetObjectSize(name)
+    + GetObjectSize(type)
+    + GetObjectSize(subtype)
+    + GetObjectSize(inputs)
+    + meta.GetSize()
+    + GetObjectSize(versions)
+    + GetObjectSize(timestamp)
+    + GetObjectSize(filesize));
+  }
 
   std::string  GetLastGoodVersionRef(void) const;
   void GetInputFilenames(std::vector<std::string> &out) const;
@@ -89,7 +101,7 @@ inline StorageManager<AssetImpl>&
 Asset::storageManager(void)
 {
   static StorageManager<AssetImpl> storageManager(
-      MiscConfig::Instance().AssetCacheSize, "asset");
+      MiscConfig::Instance().AssetCacheSize, MiscConfig::Instance().LimitMemoryUtilization, MiscConfig::Instance().MaxAssetCacheMemorySize, "asset");
   return storageManager;
 }
 
@@ -119,6 +131,5 @@ inline std::string Asset::Filename() const {
 }
 
 template <> inline const SharedString Asset::Key() const { return ref; }
-
 
 #endif /* __Asset_h */

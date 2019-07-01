@@ -25,6 +25,7 @@
 #include "common/khFileUtils.h"
 #include "StorageManager.h"
 #include "khMTTypes.h"
+#include "CacheSizeCalculations.h"
 
 /******************************************************************************
  ***  AssetVersionImpl
@@ -115,6 +116,27 @@ class AssetVersionImpl : public khMTRefCounter, public AssetVersionStorage, publ
     return verref.AssetRef();
   }
 
+  // determine amount of memory used by an AssetVersionImpl
+  uint64 GetSize() {
+    return (GetObjectSize(name)
+    + GetObjectSize(type)
+    + GetObjectSize(subtype)
+    + GetObjectSize(state)
+    + GetObjectSize(progress)
+    + GetObjectSize(locked)
+    + GetObjectSize(inputs)
+    + GetObjectSize(children)
+    + GetObjectSize(parents)
+    + GetObjectSize(listeners)
+    + GetObjectSize(outfiles)
+    + meta.GetSize()
+    + GetObjectSize(beginTime)
+    + GetObjectSize(progressTime)
+    + GetObjectSize(endTime)
+    + GetObjectSize(taskid)
+    + GetObjectSize(timestamp)
+    + GetObjectSize(filesize));
+  }
   template <class outIter>
   outIter GetInputs(outIter oi) const {
     for (const auto &i : inputs) {
@@ -196,7 +218,7 @@ inline StorageManager<AssetVersionImpl>&
 AssetVersion::storageManager(void)
 {
   static StorageManager<AssetVersionImpl> storageManager(
-      MiscConfig::Instance().VersionCacheSize, "version");
+      MiscConfig::Instance().VersionCacheSize, MiscConfig::Instance().LimitMemoryUtilization, MiscConfig::Instance().MaxVersionCacheMemorySize, "version");
   return storageManager;
 }
 
