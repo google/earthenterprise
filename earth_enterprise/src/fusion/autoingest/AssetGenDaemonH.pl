@@ -119,7 +119,8 @@ class ${name}AssetVersionImplD :
     friend class DerivedAssetHandleD_<${name}AssetVersion, AssetVersionD, ${name}AssetVersionImplD>;
     virtual bool Save(const std::string &filename) const;
 protected:
-    static khRefGuard<${name}AssetVersionImplD> Load(const std::string &ref);
+    static //khRefGuard
+    std::shared_ptr<${name}AssetVersionImplD> Load(const std::string &ref);
 
     // Only used when constructing a new version from an asset.
     // The decision to use the raw ImplD* here was a tough one.
@@ -195,7 +196,8 @@ print $fh <<EOF;
     virtual AssetVersionD Update(bool &needed) const;
 
 protected:
-    static khRefGuard<${name}AssetImplD> Load(const std::string &ref);
+    static //khRefGuard
+    std::shared_ptr<${name}AssetImplD> Load(const std::string &ref);
 
     $template
     ${name}AssetVersionD MyUpdate(bool &needed

@@ -129,21 +129,23 @@ AssetVersionImplD::StateChangeNotifier::NotifyListeners(
 // ****************************************************************************
 // ***  AssetVersionImplD
 // ****************************************************************************
-khRefGuard<AssetVersionImplD>
+//khRefGuard
+std::shared_ptr<AssetVersionImplD>
 AssetVersionImplD::Load(const std::string &boundref)
 {
-  khRefGuard<AssetVersionImplD> result;
+  //khRefGuard<AssetVersionImplD> result;
 
   // make sure the base class loader actually instantiated one of me
   // this should always happen, but there are no compile time guarantees
-  result.dyncastassign(AssetVersionImpl::Load(boundref));
-  if (!result) {
-    AssetThrowPolicy::FatalOrThrow(
-        kh::tr("Internal error: AssetVersionImplD loaded wrong type for ") +
-        boundref);
-  }
+  //result.dyncastassign(AssetVersionImpl::Load(boundref));
+  //if (!result) {
+  //  AssetThrowPolicy::FatalOrThrow(
+  //      kh::tr("Internal error: AssetVersionImplD loaded wrong type for ") +
+  //      boundref);
+  //}
 
-  return result;
+  //return result;
+  return AssetVersionImpl::Load(boundref);
 }
 
 // since AssetVersionImpl is a virtual base class

@@ -257,10 +257,11 @@ class MutableDerivedAssetHandleD_ : public DerivedBase_, public MutableBase_
   //    This is public because the various {name}Factory classes must
   // invoke this constructor and there is no way to declare it a friend
   // here since we can't list the name
-  explicit MutableDerivedAssetHandleD_(const khRefGuard<Impl> &handle_) :
+  explicit MutableDerivedAssetHandleD_(const std::shared_ptr<Impl>& handle_) :
+            //const khRefGuard<Impl> &handle_) :
       BBase(), BaseD(), DerivedBase(), MutableBase() {
     this->handle = handle_;
-    if (this->handle) {
+    if (this->handle != nullptr) {
       // we have a good handle
 
       // record the ref - since it comes from GetRef() we don't have to

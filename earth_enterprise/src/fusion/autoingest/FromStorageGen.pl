@@ -92,7 +92,7 @@ ${plugin}AssetVersionImpl::NewFromStorage(const AssetVersionStorage &storage,
         tmp(TransferOwnership(new $versionimpl(storage, config)));
     tmp->AfterLoad();
     return khRefGuard<${plugin}AssetVersionImpl>(khRefGuardFromNew(tmp.take()));*/
-    return std::make_shared<${plugin}AssetImpl>
+    return std::make_shared<${plugin}AssetVersionImpl>
         (new $versionimpl(storage, config));
 }
 

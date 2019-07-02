@@ -24,16 +24,17 @@
 std::shared_ptr<AssetImplD>
 AssetImplD::Load(const std::string &boundref)
 {
-  khRefGuard<AssetImplD> result;
+  //khRefGuard<AssetImplD> result;
 
   // make sure the base class loader actually instantiated one of me
   // this should always happen, but there are no compile time guarantees
-  result.dyncastassign(AssetImpl::Load(boundref));
-  if (!result) {
-    AssetThrowPolicy::FatalOrThrow(kh::tr("Internal error: AssetImplD loaded wrong type for ") + boundref);
-  }
+  //result.dyncastassign(AssetImpl::Load(boundref));
+  //if (!result) {
+  //  AssetThrowPolicy::FatalOrThrow(kh::tr("Internal error: AssetImplD loaded wrong type for ") + boundref);
+  //}
 
-  return result;
+  //return result;
+  return AssetImpl::Load(boundref);
 }
 
 void

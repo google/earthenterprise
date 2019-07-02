@@ -414,21 +414,23 @@ namespace {
     void AddConfig(DOMElement *parent, const $config &config);
 }
 
-khRefGuard<${name}AssetImplD>
+//khRefGuard
+std::shared_ptr<${name}AssetImplD>
 ${name}AssetImplD::Load(const std::string &boundref)
 {
     khRefGuard<${name}AssetImplD> result;
 
     // make sure the base class loader actually instantiated one of me
     // this should always happen, but there are no compile time guarantees
-    result.dyncastassign(${name}AssetImpl::Load(boundref));
-    if (!result) {
-        AssetThrowPolicy::FatalOrThrow(
-            "Internal error: ${name}AssetImplD loaded wrong type for " +
-            boundref);
-    }
+    //result.dyncastassign(${name}AssetImpl::Load(boundref));
+    //if (!result) {
+    //    AssetThrowPolicy::FatalOrThrow(
+    //        "Internal error: ${name}AssetImplD loaded wrong type for " +
+    //        boundref);
+    //}
 
-    return result;
+    //return result;
+    return ${name}AssetImplD::load(boundref);
 }
 
 extern void ToElement(DOMElement *elem, const AssetStorage &self);
@@ -781,21 +783,22 @@ print $fh <<EOF;
 // ****************************************************************************
 // ***  ${name}AssetVersionImplD - Auto generated
 // ****************************************************************************
-khRefGuard<${name}AssetVersionImplD>
+//khRefGuard
+std::shared_ptr<${name}AssetVersionImplD>
 ${name}AssetVersionImplD::Load(const std::string &boundref)
 {
-    khRefGuard<${name}AssetVersionImplD> result;
+    //khRefGuard<${name}AssetVersionImplD> result;
 
     // make sure the base class loader actually instantiated one of me
     // this should always happen, but there are no compile time guarantees
-    result.dyncastassign(${name}AssetVersionImpl::Load(boundref));
-    if (!result) {
-        AssetThrowPolicy::FatalOrThrow(
-            "Internal error: ${name}AssetVersionImplD loaded wrong type for " +
-            boundref);
-    }
-
-    return result;
+    //result.dyncastassign(${name}AssetVersionImpl::Load(boundref));
+    //if (!result) {
+    //    AssetThrowPolicy::FatalOrThrow(
+    //        "Internal error: ${name}AssetVersionImplD loaded wrong type for " +
+    //        boundref);
+    //}
+    //return result;
+    return ${name}AssetVersionImpl::Load(boundref);
 }
 
 

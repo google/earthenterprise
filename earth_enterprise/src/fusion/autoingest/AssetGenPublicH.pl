@@ -107,8 +107,7 @@ protected:
 
     // implemented in ReadOnlyFromStorage.cpp and
     // sysman/SysManFromStorage.cpp
-    static //khRefGuard
-    std::shared_ptr<${name}AssetImpl>
+    static std::shared_ptr<${name}AssetImpl>
     NewFromStorage(const AssetStorage &storage, const Config &config);
 
     // supplied from ${name}.src ---v
@@ -155,8 +154,7 @@ protected:
 
     // implemented in ReadOnlyFromStorage.cpp and
     // sysman/SysManFromStorage.cpp
-    static //khRefGuard
-    std::shared_ptr<${name}AssetVersionImpl>
+    static std::shared_ptr<${name}AssetVersionImpl>
     NewFromStorage(const AssetVersionStorage &storage, const Config &config);
 
 
