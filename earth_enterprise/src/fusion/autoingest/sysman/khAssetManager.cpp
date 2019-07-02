@@ -82,8 +82,8 @@ khAssetManager::AssertPendingEmpty(void) {
   assert(pendingTaskCmds.size() == 0);
   assert(pendingFileDeletes.size() == 0);
   assert(alwaysTaskCmds.size() == 0);
-  assert(MutableAssetD::dirtyMap.size() == 0);
-  assert(MutableAssetVersionD::dirtyMap.size() == 0);
+  assert(Asset::DirtySize() == 0);
+  assert(AssetVersion::DirtySize() == 0);
 }
 
 // ****************************************************************************
@@ -101,7 +101,7 @@ khAssetManager::ApplyPending(void)
   // The actual list saved may be smaller than what's
   // in the dirty set. Some things can be in the dirty set
   // even if it really didn't change
-  std::vector<std::string> savedAssets;
+  std::vector<SharedString> savedAssets;
 
 
   QTime timer;
@@ -109,39 +109,27 @@ khAssetManager::ApplyPending(void)
 
   notify(NFY_INFO, "Asset cache size = %d", Asset::CacheSize());
   notify(NFY_INFO, "Version cache size = %d", AssetVersion::CacheSize());
+  notify(NFY_INFO, "Total memory used by asset cache = %lu B", Asset::CacheMemoryUse());
+  notify(NFY_INFO, "Total memory used by version cache = %lu B", AssetVersion::CacheMemoryUse());
 
 #ifndef SKIP_SAVE
 
   // ***** prep the pending changes *****
   // save the asset & version records to ".new"
-  if (MutableAssetD::dirtyMap.size()) {
-    notify(NFY_INFO, "Writing %lu asset records",
-           static_cast<long unsigned>(MutableAssetD::dirtyMap.size()));
-#if 0
-    MutableAssetD::PrintDirty("Assets");
-#endif
-    timer.start();
-    if (!MutableAssetD::SaveDirtyToDotNew(filetrans, &savedAssets)) {
-      throw khException(kh::tr("Unable to save modified assets"));
-    }
-    int elapsed = timer.elapsed();
-    notify(NFY_INFO, "Elapsed writing time: %s",
-           khProgressMeter::msToString(elapsed).latin1());
+  timer.start();
+  if (!MutableAssetD::SaveDirtyToDotNew(filetrans, &savedAssets)) {
+    throw khException(kh::tr("Unable to save modified assets"));
   }
-  if (MutableAssetVersionD::dirtyMap.size()) {
-    notify(NFY_INFO, "Writing %lu version records",
-           static_cast<long unsigned>(MutableAssetVersionD::dirtyMap.size()));
-#if 0
-    MutableAssetVersionD::PrintDirty("Versions");
-#endif
-    timer.start();
-    if (!MutableAssetVersionD::SaveDirtyToDotNew(filetrans, 0)) {
-      throw khException(kh::tr("Unable to save modified versions"));
-    }
-    int elapsed = timer.elapsed();
-    notify(NFY_INFO, "Elapsed writing time: %s",
+  elapsed = timer.elapsed();
+  notify(NFY_INFO, "Elapsed writing time: %s",
            khProgressMeter::msToString(elapsed).latin1());
+  timer.start();
+  if (!MutableAssetVersionD::SaveDirtyToDotNew(filetrans, 0)) {
+    throw khException(kh::tr("Unable to save modified versions"));
   }
+  elapsed = timer.elapsed();
+  notify(NFY_INFO, "Elapsed writing time: %s",
+         khProgressMeter::msToString(elapsed).latin1());
 
 
 
@@ -163,20 +151,19 @@ khAssetManager::ApplyPending(void)
 
   // build a list of AssetChanges
   AssetChanges changes;
-  for (std::vector<std::string>::const_iterator i = savedAssets.begin();
-       i != savedAssets.end(); ++i) {
-    changes.items.push_back(AssetChanges::Item(*i, "Modified"));
+  for (const auto & ref : savedAssets) {
+    changes.items.push_back(AssetChanges::Item(ref, "Modified"));
   }
-  for (std::map<std::string, AssetDefs::State>::const_iterator i
+  for (std::map<SharedString, AssetDefs::State>::const_iterator i
          = pendingStateChanges.begin();
        i != pendingStateChanges.end(); ++i) {
-    changes.items.push_back(AssetChanges::Item(i->first,
+    changes.items.push_back(AssetChanges::Item(i->first.toString(),
                                                ToString(i->second)));
   }
-  for (std::map<std::string, double>::const_iterator i
+  for (std::map<SharedString, double>::const_iterator i
          = pendingProgress.begin();
        i != pendingProgress.end(); ++i) {
-    changes.items.push_back(AssetChanges::Item(i->first,
+    changes.items.push_back(AssetChanges::Item(i->first.toString(),
                                                "Progress( " +
                                                ToString(i->second) +
                                                ")"));
@@ -226,8 +213,6 @@ khAssetManager::ApplyPending(void)
   pendingProgress.clear();
   pendingTaskCmds.clear();
   pendingFileDeletes.clear();
-  MutableAssetD::dirtyMap.clear();
-  MutableAssetVersionD::dirtyMap.clear();
   elapsed = timer.elapsed();
   notify(NFY_INFO, "Elapsed cleanup time: %s",
          khProgressMeter::msToString(elapsed).latin1());
@@ -571,7 +556,7 @@ khAssetManager::ClientListenerLoop(void) throw() {
 // ***  khAssetManager - routines that gather changes while AssetGuard is held
 // ****************************************************************************
 void
-khAssetManager::NotifyVersionStateChange(const std::string &ref,
+khAssetManager::NotifyVersionStateChange(const SharedString &ref,
                                          AssetDefs::State state)
 {
   // assert that we're already locked
@@ -579,12 +564,12 @@ khAssetManager::NotifyVersionStateChange(const std::string &ref,
   
   if (ToString(pendingStateChanges[ref]) == "") {
     notify(NFY_VERBOSE, "Set pendingStateChanges[%s]: <empty> to state: %s",
-         ref.c_str(),
+         ref.toString().c_str(),
          ToString(state).c_str());
   }
   else {
     notify(NFY_VERBOSE, "Set pendingStateChanges[%s]: %s to state: %s",
-         ref.c_str(),
+         ref.toString().c_str(),
          ToString(pendingStateChanges[ref]).c_str(),
          ToString(state).c_str());
   }
@@ -592,7 +577,7 @@ khAssetManager::NotifyVersionStateChange(const std::string &ref,
 }
 
 void
-khAssetManager::NotifyVersionProgress(const std::string &ref, double progress)
+khAssetManager::NotifyVersionProgress(const SharedString &ref, double progress)
 {
   // assert that we're already locked
   assert(!mutex.TryLock());
@@ -601,7 +586,7 @@ khAssetManager::NotifyVersionProgress(const std::string &ref, double progress)
 }
 
 void
-khAssetManager::SubmitTask(const std::string &verref, const TaskDef &taskdef,
+khAssetManager::SubmitTask(const SharedString &verref, const TaskDef &taskdef,
                            int priority)
 {
   // assert that we're already locked

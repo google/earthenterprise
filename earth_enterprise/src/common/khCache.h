@@ -21,7 +21,9 @@
 #include <map>
 #include <vector>
 
-// #define SUPPORT_VERBOSE
+#include "khTypes.h"
+#include "CacheSizeCalculations.h"
+
 #ifdef SUPPORT_VERBOSE
 #include <notify.h>
 #endif
@@ -60,13 +62,12 @@ class khCacheItem {
   khCacheItem *prev;
   Key   key;
   Value val;
+  uint64 size;
   khCacheItem(const Key &key_, const Value &val_)
-      : next(0), prev(0), key(key_), val(val_) { }
+      : next(0), prev(0), key(key_), val(val_), size(0) { }
 };
 
 // #define CHECK_INVARIANTS
-
-// TODO: rework this to use khLRUCache
 
 template <class Key, class Value>
 class khCache {
@@ -80,7 +81,10 @@ class khCache {
   bool verbose;
 #endif
   uint numItems;
-
+  uint64 cacheMemoryUse;
+  bool limitCacheMemory;
+  uint64 maxCacheMemory;
+  const uint64 khCacheItemSize = sizeof(khCacheItem<Key, Value>) - sizeof(Key) - sizeof(Value);
   bool InList(Item *item) {
     Item *tmp = head;
     while (tmp) {
@@ -158,11 +162,18 @@ class khCache {
       return 0;
     }
   }
+  bool TooManyObjects() {
+    return (map.size() > targetMax) && !limitCacheMemory;
+  }
+  bool TooMuchMemory() {
+    return (cacheMemoryUse > maxCacheMemory) && limitCacheMemory;
+  }
 
  public:
   typedef typename MapType::size_type size_type;
   size_type size(void) const { return map.size(); }
   size_type capacity(void) const { return targetMax; }
+  uint64 getMemoryUse(void) const { return cacheMemoryUse; }
 
   khCache(uint targetMax_
 #ifdef SUPPORT_VERBOSE
@@ -172,13 +183,39 @@ class khCache {
 #ifdef SUPPORT_VERBOSE
               verbose(verbose_),
 #endif
-              numItems(0)
+              numItems(0), cacheMemoryUse(0),
+              limitCacheMemory(false)
 
   {
     CheckListInvariant();
   }
   ~khCache(void) {
     clear();
+  }
+  // returns the size of a cache item if it exists
+  uint64 getCacheItemSize(const Key &key) {
+    Item *item = FindItem(key);
+    if (item) {
+      return item->size;
+    }
+    return 0;
+  }
+  // calculates the current size of a cache item
+  uint64 calculateCacheItemSize(Item *item) {
+    return khCacheItemSize + GetObjectSize(item->key) + GetObjectSize(item->val);
+  }
+  // sets a given cache item's size to its current size and updates the total cache memory in use
+  void updateCacheItemSize(const Key &key) {
+    Item *item = FindItem(key);
+    if ( item ) {
+      uint64 size = calculateCacheItemSize(item);
+      cacheMemoryUse = (cacheMemoryUse - item->size) + size;
+      item->size = size;
+    }
+  }
+  void setCacheMemoryLimit(bool enabled, uint maxMemory) {
+    limitCacheMemory = enabled;
+    maxCacheMemory = maxMemory;
   }
   void clear(void) {
     CheckListInvariant();
@@ -190,6 +227,7 @@ class khCache {
     }
     map.clear();
     head = tail = 0;
+    cacheMemoryUse = 0;
   }
   void Add(const Key &key, const Value &val, bool prune = true) {
     CheckListInvariant();
@@ -201,6 +239,7 @@ class khCache {
 #ifdef SUPPORT_VERBOSE
       if (verbose) notify(NFY_ALWAYS, "Deleting previous %s from cache", key.c_str());
 #endif
+      cacheMemoryUse -= item->size;
       delete item;
     }
 
@@ -208,6 +247,8 @@ class khCache {
     item = new Item(key, val);
     Link(item);
     map[key] = item;
+    item->size = calculateCacheItemSize(item);
+    cacheMemoryUse += item->size;
 #ifdef SUPPORT_VERBOSE
     if (verbose) notify(NFY_ALWAYS, "Adding %s to cache", key.c_str());
 #endif
@@ -230,6 +271,7 @@ class khCache {
 #ifdef SUPPORT_VERBOSE
       if (verbose) notify(NFY_ALWAYS, "Removing %s from cache", key.c_str());
 #endif
+      cacheMemoryUse -= item->size;
       delete item;
     }
 
@@ -260,7 +302,7 @@ class khCache {
   void Prune(void) {
     CheckListInvariant();
     Item *item = tail;
-    while (item && (map.size() > targetMax)) {
+    while (item && ( TooMuchMemory() || TooManyObjects() )) {
       // Note: this refcount() > 1 check is safe even with
       // khMTRefCounter based guards. See explanaition with the
       // definition of khMTRefCounter in khMTTypes.h.
@@ -275,26 +317,13 @@ class khCache {
 #ifdef SUPPORT_VERBOSE
         if (verbose) notify(NFY_ALWAYS, "Pruning %s from cache", tokill->key.c_str());
 #endif
+        cacheMemoryUse -= tokill->size;
         delete tokill;
       }
     }
     CheckListInvariant();
   }
 
-  // Get old items from the LRU cache, excluding recent "toKeep" items.
-  void GetOldKeys(size_t toKeep, std::vector<Key> *oldKeys) {
-    if (map.size() <= toKeep) {
-      return;
-    }
-    Item *p = tail;
-    size_t numOldKeys = map.size() - toKeep;
-    oldKeys->reserve(numOldKeys);
-    for (size_t i = 0; i < numOldKeys; ++i) {
-      assert(p);
-      oldKeys->push_back(p->key);
-      p = p->prev;
-    }
-  }
 };
 
 

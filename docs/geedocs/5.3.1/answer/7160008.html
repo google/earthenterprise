@@ -45,7 +45,11 @@ gtag('config', 'UA-108632131-2');
   <h5>
     <p id="overview_5.3.1">New Features</p>
   </h5>
-    <p><strong>Placeholder for first new feature in 5.3.1. </strong>Put description here</p>
+    <p><strong>Uninstallation scripts are now copied to <code>/opt/google/install</code>. </strong>This will allow the user to uninstall without having to have a copy of the source code on hand.</p>
+    <p><strong>Memory and performance improvements for large builds.</strong> Memory utilization and performance have been improved, especially for large builds.</p>
+    <p><strong>Increased logging during long Fusion operations.</strong> Fusion can now be configured to log progress while calculating overlaps between resources.</p>
+    <p><strong>Overlay option is now supported in terrain project command-line interfaces.</strong> <code>genewterrainproject</code>, <code>geaddterrainproject</code> and <code>gemodifyterrainproject</code> has new option for overlay support.</p>
+    <p><strong>Cutter embeds extra metadata into portable files.</strong>  The bounding box metadata can be used to improve loading performance in some applications.</p>
   <h5>
     <p id="supported_5.3.1">Supported Platforms</p>
   </h5>
@@ -70,10 +74,10 @@ gtag('config', 'UA-108632131-2');
             <th>Resolution</th>
           </tr>
           <tr>
-            <td>999</td>
-            <td>Put first resolved issue in 5.3.1 title here</td>
+            <td>1339</td>
+            <td>Building with incomplete assets can result in Blocked databases</td>
             <td>
-              Put first resolved issue in 5.3.1 description here
+              Added error handling to certain asset caching to prevent incomplete assets from being cached. This prevents a version of the DelayedBuildChildren class of errors, and rectifies the <code>run_historical.sh</code> script problem.
             </td>
           </tr>
         </tbody>
@@ -371,7 +375,7 @@ gtag('config', 'UA-108632131-2');
 
     <hr />
     </p>
-    <p class="copyright">&copy;2018-2019 Open GEE Contributors</p>
+    <p class="copyright">&copy;2019 Open GEE Contributors</p>
   </div>
 </div>
 </body>

@@ -1,4 +1,5 @@
 // Copyright 2017 Google Inc.
+// Copyright 2019 Open GEE Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -35,6 +36,7 @@
 #include "common/packetcompress.h"
 #include "common/qtpacket/quadtreepacket.h"
 #include "fusion/gst/gstSimpleEarthStream.h"
+#include "fusion/portableglobe/quadtree/qtutils.h"
 #include "fusion/portableglobe/shared/packetbundle.h"
 #include "fusion/portableglobe/shared/packetbundle_reader.h"
 #include "fusion/portableglobe/shared/packetbundle_writer.h"
@@ -250,6 +252,7 @@ PortableGlobeBuilder::PortableGlobeBuilder(
     const std::string& globe_directory,
     const std::string& additional_args,
     const std::string& qtpacket_version,
+    const std::string& metadata_file,
     bool no_write,
     bool use_post)
     : globe_directory_(globe_directory),
@@ -266,7 +269,8 @@ PortableGlobeBuilder::PortableGlobeBuilder(
     terrain_pac_size_req_cache_(kBundleSizeForSizeQuery, this,
                                 &PortableGlobeBuilder::GetTerrainPacketsSize),
     vector_pac_size_req_cache_(kBundleSizeForSizeQuery, this,
-                               &PortableGlobeBuilder::GetVectorPacketsSize) {
+                               &PortableGlobeBuilder::GetVectorPacketsSize),
+      metadata_file_(metadata_file) {
   // Set up the connection to the server.
   server_ = new gstSimpleEarthStream(source_, additional_args_, use_post);
 
@@ -402,9 +406,14 @@ void PortableGlobeBuilder::BuildGlobe() {
     // write_cache goes out of scope and the destructor flushes the cache.
   }
 
+  if (!metadata_file_.empty()) {
+    bounds_tracker_.write_json_file(metadata_file_);
+  }
+
   // Finish up writing all of the packet bundles.
   DeleteWriter();
 }
+
 
 
 template< typename T >
@@ -631,15 +640,18 @@ void PortableGlobeBuilder::ProcessDataInQtPacketNodes(
   // If packet_level == 0 there is no data, it is only for children.
   // For this qt_path the data was there at packet_level == 4 rather.
   if (node->children.GetImageBit()) {
+    bounds_tracker_.update(kGEImageryChannelId, kImagePacket, qtpath);
     WriteImagePacket(qtpath, node->image_version);
   }
   if (node->children.GetTerrainBit()) {
+    bounds_tracker_.update(kGETerrainChannelId - 1, kTerrainPacket, qtpath);
     WriteTerrainPacket(qtpath, node->terrain_version);
   }
   if (node->children.GetDrawableBit()) {
     for (size_t i = 0; i < node->num_channels(); ++i) {
       // Assuming that channel_type is in increasing order,
       // otherwise we are going to need to sort.
+      bounds_tracker_.update(node->channel_type[i], kVectorPacket, qtpath);
       WriteVectorPacket(qtpath,
                         node->channel_type[i],
                         node->channel_version[i]);
@@ -884,7 +896,6 @@ void PortableGlobeBuilder::WriteImagePacket(const std::string& qtpath,
   num_image_packets += 1;
   write_cache_->WriteImagePacket(qtpath, version);
 }
-
 
 // Ignores 3rd param channel
 // TODO: Switch to POST if we start using.
