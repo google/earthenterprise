@@ -51,13 +51,13 @@ class StorageManager
         assetType(type) { SetCacheMemoryLimit(limitByMemory, maxMemory); }
     ~StorageManager() = default;
 
-    inline uint32 CacheSize() const { return cache.size(); }
-    inline uint32 CacheCapacity() const { return cache.capacity(); }
-    inline uint32 DirtySize() const { return dirtyMap.size(); }
-    inline uint64 CacheMemoryUse() const { return cache.getMemoryUse(); }
-    inline void SetCacheMemoryLimit(bool limitByMemory, uint64 maxMemory) { cache.setCacheMemoryLimit(limitByMemory, maxMemory); }
-    inline void UpdateCacheItemSize(const AssetKey & key) { cache.updateCacheItemSize(key); }
-    inline uint64 GetCacheItemSize(const AssetKey & key) { return cache.getCacheItemSize(key); }
+    inline uint32 CacheSize() const;
+    inline uint32 CacheCapacity() const;
+    inline uint32 DirtySize() const;
+    inline uint64 CacheMemoryUse() const;
+    inline void SetCacheMemoryLimit(const bool & limitByMemory, const uint64 & maxMemory);
+    inline void UpdateCacheItemSize(const AssetKey & key);
+    inline uint64 GetCacheItemSize(const AssetKey & key);
     inline void AddNew(const AssetKey &, const HandleType &);
     inline void AddExisting(const AssetKey &, const HandleType &);
     inline void NoLongerNeeded(const AssetKey &, bool = true);
@@ -104,6 +104,30 @@ template<class AssetType>
 inline uint32 StorageManager<AssetType>::DirtySize() const {
   std::lock_guard<std::mutex> lock(storageMutex);
   return dirtyMap.size();
+}
+
+template<class AssetType>
+inline uint64 StorageManager<AssetType>::CacheMemoryUse() const {
+  std::lock_guard<std::mutex> lock(storageMutex);
+  return cache.getMemoryUse();
+}
+
+template<class AssetType>
+inline void StorageManager<AssetType>::SetCacheMemoryLimit(const bool & limitByMemory, const uint64 & maxMemory) {
+  std::lock_guard<std::mutex> lock(storageMutex);
+  cache.setCacheMemoryLimit(limitByMemory, maxMemory);
+}
+
+template<class AssetType>
+inline void StorageManager<AssetType>::UpdateCacheItemSize(const AssetKey & key) {
+  std::lock_guard<std::mutex> lock(storageMutex);
+  cache.updateCacheItemSize(key);
+}
+
+template<class AssetType>
+inline uint64 StorageManager<AssetType>::GetCacheItemSize(const AssetKey & key) {
+  std::lock_guard<std::mutex> lock(storageMutex);
+  return cache.getCacheItemSize(key);
 }
 
 template<class AssetType>
