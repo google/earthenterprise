@@ -338,8 +338,8 @@ void PacketGenAssetVersionImplD::UpdateChildren(
                   prevLevelVer.Ref() : SharedString() /* cached blend alpha */));
       }
 
-      levInputs.erase(std::remove(levInputs.begin(), levInputs.end(), ""));
-      levInputVers.erase(std::remove(levInputVers.begin(), levInputVers.end(), nullptr));
+      levInputs.erase(std::remove(levInputs.begin(), levInputs.end(), ""), levInputs.end());
+      levInputVers.erase(std::remove(levInputVers.begin(), levInputVers.end(), nullptr), levInputVers.end());
     }
 
     // get child asset ver
