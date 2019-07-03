@@ -34,13 +34,18 @@ line that contains the IP address the server will be listening on, like this: </
 <p><code>127.0.0.1	myserver.mydomainname.com myserver localhost</code></p>
 <p>If GEE is not using DNS other clients that connect to the server non-locally would need to have the same static
 mapping set up in their hosts files since the server hostname would not be resolved dynamically.</p>
-<p>When determining where to look for the correct FQDN Apache will use an order as defined in the
-<code>/etc/nsswitch.conf</code> file. A line like this defines the order:</p>
+<p>When determining where to look for the correct FQDN Apache calls <code>hostname</code> which will use a resolver.
+The system configuration determines what the order is for resolving the FQDN. If the <code>/etc/nsswitch.conf</code>
+file is being used there is a line like this that defines the order:</p>
 <p><code>hosts:      dns myhostname files</code></p>
 <p>This example shows that the DNS on the network would be queried first. If that does not define the FQDN then the
 hostname would be queried. If the FQDN is still not defined then configuration files would be queried, mainly
-<code>/etc/hosts</code>. For best results the order in this file should match whether DNS is being used or whether
-static names are being used.</p>
+<code>/etc/hosts</code>.</p>
+<p>If the <code>/etc/host.conf</code> file is being used to resolve the hostname, then there is a line like this
+that defines the order:
+<p><code>order hosts,bind</code></p>
+<p>In this example hosts refers to the <code>/etc/hosts</code> file and is checked first, and bind refers to the
+DNS.</p>
 <p>Here is <a href="../answer/172794.html">another note</a> on the server hostname.</p>
 </div><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p>
 <p class="copyright">&copy;2019 Open GEE Contributors</p></div>
