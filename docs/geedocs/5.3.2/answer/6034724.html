@@ -1,0 +1,173 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Push and publish databases</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 6034724.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/3481464.html">Before you configure Google Earth Enterprise Fusion</a></p>
+<p class="sidebar-toc"><a href="../answer/6008655.html">Running Fusion on a Machine with Multiple CPUs</a></p>
+<p class="sidebar-toc"><a href="../answer/7160005.html">Dynamically adjusting logging levels</a></p>
+<p class="sidebar-toc"><a href="../answer/176738.html">Configure Fusion performance</a></p>
+<p class="sidebar-toc"><a href="../answer/6033487.html">Benchmarking outcomes for applying task rules</a></p>
+<p class="sidebar-toc"><a href="../answer/3481501.html">Configure font size in the GUI</a></p>
+<p class="sidebar-toc"><a href="../answer/3481506.html">Configure fonts for the Text Style dialog</a></p>
+<p class="sidebar-toc"><a href="../answer/3481478.html">Customize your Google Maps landing page</a></p>
+<p class="sidebar-toc"><a href="../answer/3481512.html">Monitor system processes</a></p>
+<p class="sidebar-toc"><a href="../answer/3481546.html">Backing up your data</a></p>
+<p class="sidebar-toc"><a href="../answer/2760661.html">Back up Fusion servers</a></p>
+<p class="sidebar-toc"><a href="../answer/176676.html">Manage Fusion disk space</a></p>
+<p class="sidebar-toc"><a href="../answer/6035839.html">Relocate your asset root</a></p>
+<p class="sidebar-toc"><a href="../answer/3481499.html">Configure your data locations</a></p>
+<p class="sidebar-toc"><a href="../answer/6034724.html" class="current-file">Push and publish databases</a></p>
+<p class="sidebar-toc"><a href="../answer/6051700.html">Publish databases using disconnected publishing</a></p>
+<p class="sidebar-toc"><a href="../answer/6086672.html">Troubleshoot push/publishing issues 5.x</a></p>
+<p class="sidebar-toc"><a href="../answer/3481558.html">Command reference</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion administration</h1>
+<h2>Push and publish databases</h2>
+<p>Pushing a database is the process of making a Google Earth Enterprise Fusion database available on a Google Earth Enterprise Server so that it can then be published for viewing with Google Earth EC.</p>
+<p>The <em>push</em> operation copies all the necessary files associated with a given 2D/3D Fusion database version to Google Earth Enterprise Server and registers the database. Pushing is performed from Fusion.</p>
+<p>The <em>publish</em> operation makes a previously pushed database available for serving at a specified publish point. Publishing is performed on Google Earth Enterprise Server.</p>
+<p>Along with the GUI of both Fusion and GEE Server, you have the option of using the command line to push and publish databases. </p>
+<ul>
+<li><a href="#push_db">Push databases</a></li>
+<li><a href="#pub_db">Publish databases</a></li>
+<li><a href="#unpub_db">Unpublish databases</a></li>
+<li><a href="#pub_cmd_line">Using the command line</a></li>
+</ul>
+<h2><a name="push_db"><a></a>Push Databases</a></h2>
+<p>After you define and build your database <insert link="">, you <em>push</em> your database to Google Earth Enterprise Server. Pushed databases appear on the Databases page of the Google Earth Enterprise Server Admin console, from where you can then publish them.</insert></p>
+<h3>To push a database:</h3>
+<ol>
+<li>Select Asset Manager from the Tools menu. The Asset Manager appears.</li>
+<li>Navigate to the database that you want to publish.</li>
+<li>Right-click the name of the database, and select Push from the context menu.
+<div class="tip">
+If the Push option is not available, it may be because the database is still building.
+</div>
+</li>
+<li>The Push Database dialog appears.
+<p><img alt="Push Database Dialog" id="publishDatabase" name="publishDatabase" src="../art/fusion/tutorial/dbasePush-full.png"/></p>
+<p>Select the server that you want to publish to from the Server Associations drop-down list. The most recent version of the selected database is the default selection on the Version drop-down list.</p>
+</li>
+<li>Click <strong>Push</strong>. Google Earth Enterprise Fusion pushes the database to Google Earth Enterprise Server, and displays a success message when it is done.
+</li>
+</ol>
+<div class="tip">
+If you get an error message, contact your Google Earth Enterprise Server administrator for help, or check Troubleshooting Push issues for more information.
+</div>
+<h2><a name="pub_db"></a>Publish databases</h2>
+<p>After you push your database to Google Earth Enterprise Server, you <strong>publish</strong> it in the GEE Server Admin console. You can then view your published databases with Google Earth EC or the Google Earth plugin (deprecated) for 3D databases or with the Google Maps API for 2D databases.</p>
+<h3>To publish a database:</h3>
+<ol>
+<li>Access the Google Earth Enterprise Server Admin console in a browser window by going to <em>myserver.mydomainname</em>.com/admin, replacing <em>myserver</em> and <em>mydomainname</em> with your server and domain.    </li>
+<li>Sign in with the default credentials or the username and password assigned to you:
+<ul>
+<li>Default username: <em>geapacheuser</em></li>
+<li>Default password: <em>geeadmin</em></li>
+</ul>
+<div class="tip">
+If you do not know your username and password, contact your Google Earth Enterprise Server System Administrator.
+</div>
+</li>
+<li>Click <strong>Databases</strong> to display the list of databases pushed to GEE Server.
+<p> The list of databases appears <em>alphabetically</em>. Reverse the order by clicking the arrows at the top of the list: <img alt="GEE Server Database Page" src="../art/server/publish_databases/databasesListOrder.png"/></p>
+<p>Your most recently pushed database is added to the list.</p>
+<p><img alt="Database list sort arrows" src="../art/fusion/tutorial/databaseServerList.png"/></p>
+<div class="tip">
+The <strong>Databases</strong> page displays ten pushed databases per page so you may need to click the right arrow in the top-right corner of the window to see the next page of databases if your database is added to a longer list. To manage your list of databases, especially if you have multiple versions of the same database, you may want to remove unwanted versions by selecting the checkbox next to the database you want to remove and then click <strong>Remove</strong>. Note that this action removes the database from GEE Server and does not delete the database.
+</div>
+</li>
+<li>Check the box next to your pushed database. The <strong>Publish</strong> button appears.
+<p><img alt="GEE Server Publish dialog" src="../art/server/publish_databases/Publishdialog.png"/></p>
+</li>
+<li>Specify a <strong>Publish point</strong>, which is where you access the database or portable. For example, if you specify <em>sanfrancisco</em>, it will be accessible from <em>myserver.mydomainname</em>.com/<em>sanfrancisco</em>.
+</li>
+<li>Specify the following options:
+<ul>
+<li><strong>POI Search</strong> (Fusion databases with search data only)</li>
+<li><strong>Search Tabs</strong>  (Fusion databases only)</li>
+<li><strong>Snippet profile</strong> (Fusion 3D databases only)</li>
+</ul>
+</li>
+<li>Select a <strong>Virtual host</strong>.</li>
+<li>Optionally enable <strong>Serve WMS</strong>.</li>
+<li>Click <strong>Publish</strong>. The <strong>Databases</strong> page updates to indicate the published status of your database.</li>
+</ol>
+<h2><a name="unpub_db"></a>Unpublish databases</h2>
+<p>If you no longer want to make a database available for serving on GEE Server, you can unpublish it and then remove it. If you want to publish it to a different server, or apply different settings, such as a secure virtual host, a search plug-in or a snippet profile, simply unpublish your database and republish using the new settings you want.</p>
+<h3>To unpublish a published database:</h3>
+<ol>
+<li>Access the Google Earth Enterprise Server Admin console in a browser window by going to <em>myserver.mydomainname</em>.com/admin, replacing <em>myserver</em> and <em>mydomainname</em> with your server and domain.    </li>
+<li>Sign in with the default credentials or the username and password assigned to you:
+<ul>
+<li>Default username: <em>geapacheuser</em></li>
+<li>Default password: <em>geeadmin</em></li>
+</ul>
+<div class="tip">
+If you do not know your username and password, contact your Google Earth Enterprise Server System Administrator.
+</div>
+</li>
+<li>Click <strong>Databases</strong> to display the list of databases pushed to GEE Server.
+</li>
+<li>Check the box next to the database that you want to unpublish. The <strong>Unpublish</strong> button appears above the list of databases.
+</li>
+<li>Click <strong>Unpublish</strong> to unpublish a database from its publish point.
+<p>You can now either remove the database, which is to unpush an unpublished database, or you can republish to a different publish point using a different virtual host, for example.</p>
+</li>
+</ol>
+<h3>To remove an unpublished database from GEE Server:</h3>
+<ol>
+<li>From the Databases page of GEE Server, check the box next to the database that you want to remove. The <strong>Remove</strong> button appears above the list of databases.
+</li>
+<li>Click <strong>Remove</strong> to remove the database from GEE Server.
+<div class="tip">
+Removing a database does not <em>delete</em> it. Remove reverses the <em>push</em> process so that the database is no longer pushed to GEE Server.
+</div>
+</li>
+<li>The checked database is removed from the list.
+<p>To restore the removed database, push it again from Fusion. See <a href="#push_db">Push databases</a>.</p>
+</li>
+</ol>
+<h2>Learn more</h2>
+<ul>
+<li><a href="../answer/3497832.html">Create Search tabs</a></li>
+<li><a href="../answer/6004748.html">Manage snippet profiles</a></li>
+<li><a href="../answer/6013604.html">Manage virtual hosts</a></li>
+<li><a href="../answer/4441137.html">Make Web Map Service (WMS) requests</a></li>
+<li><a href="../answer/6006981.html">Google Earth EC</a></li>
+</ul>
+<h2><a name="pub_cmd_line"></a>Publish using the command line</h2>
+<p>The procedure to publish a database using the command line requires you to add, push, then publish a database. You must specify a target path and may optionally specify a virtual host to publish to. Before you begin, you may need to identify the virtual hosts registered on your default or designated stream server, and you’ll need to identify the full path and name of the database to publish.</p>
+<h3>To publish a database using the command line: </h3>
+<ol class="spaced-list">
+<li>Query GEE Server for virtual stream servers and write down which virtual server you want to publish to.  You can skip this step if you are using default servers only.
+<p><code>geserveradmin --stream_server_url http://myserver.org --server_type stream --listvhs</code></p>
+</li>
+<li>Get the full folder path for the database to publish:
+<p><code>gequery --outfiles Databases/NameOf3DDatabase.kdatabase</code> for 3D</p>
+<p>For 3D databases, look for the path ending in <code>gedb</code>.</p>
+<p><code>gequery --outfiles Databases/Nameof2DDatabase.kmmdatabase</code> for 2D</p>
+<p>For 2D databases, look for the path ending in <code>mapdb</code>.
+</p></li>
+<li>Add the database to register it with GEE Server.  In this example, we publish a 2D database, using the full folder path as discovered in the previous steps. You use <code>geserveradmin --adddb db_name</code> to register the database.
+<p><code>geserveradmin --stream_server_url http://myserver.org --adddb /gevol/assets/Databases/Nameof2DDatabase.kmmdatabase/mapdb.kda/ver001/mapdb/</code></p>
+</li>
+<li>Push the database to GEE Server using <code>geserveradmin --pushdb db_name</code>. For example:
+<p><code>geserveradmin --stream_server_url http://myserver.org --pushdb /gevol/assets/Databases/Name of 2DDatabase.kmmdatabase/mapdb.kda/ver001/mapdb/</code></p>
+</li>
+<li>Publish the database to GEE Server using <code>geserveradmin --publishdb db_name --targetpath target_path</code>. For example:
+<p><code>geserveradmin --publishdb /gevol/assets/Databases/SFMapDatabase.kmmdatabase/mapdb.kda/ver001/mapdb/ --targetpath http://myserver.org</code></p>
+</li>
+<li>Publish the database to GEE Server, specifying it as the default globe for GEEC, using <code>geserveradmin --publishdb db_name --targetpath target_path --setecdefault</code>. For example:
+<p><code>geserveradmin --publishdb /gevol/assets/Databases/SFMapDatabase.kmmdatabase/mapdb.kda/ver001/mapdb/ --targetpath http://myserver.org --setecdefault</code></p>
+</li>
+<p>For more information about the <code>geserveradmin</code> command options, see the <a href="../answer/3481558.html">Command Reference</a>.
+
+
+</p></ol><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p>
+<p class="copyright">&copy;2018 Google, Open GEE Contributors</p></div>
+</div></body> </html>

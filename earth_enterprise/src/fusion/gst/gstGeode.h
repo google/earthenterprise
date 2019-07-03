@@ -141,6 +141,17 @@ class gstGeodeImpl : public khMTRefCounter {
 
   virtual ~gstGeodeImpl();
 
+  // determine amount of memory used by getGeodeImpl
+  uint64 GetSize() {
+    return sizeof(gcount)
+    + sizeof(isectCount)
+    + sizeof(isectDeepCount)
+    + sizeof(prim_type_)
+    + sizeof(center_is_valid_)
+    + sizeof(center_)
+    + sizeof(bounding_box_);
+  }
+
   static gstGeodeHandle Create(const gstPrimType gtype);
   static gstGeodeHandle Create(const gstBBox& box,
                                const gstPrimType gtype = gstPolygon,
