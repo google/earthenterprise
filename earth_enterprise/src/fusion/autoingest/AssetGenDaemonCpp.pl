@@ -24,6 +24,7 @@ use AssetGen;
 
 my $help = 0;
 our $thiscommand = "@ARGV";
+t
 
 sub usage() {
     die "usage: $FindBin::Script <.srcfile> <outputfile>\n";
@@ -174,12 +175,18 @@ ${name}Factory::Make(const std::string &ref_ $formaltypearg,
 
     // all of this wrapping is required and makes it nearly impossible
     // to misuse the Handle and khRefGuard class
-    return Mutable${name}AssetD
-             (khRefGuardFromNew(new Impl
+    return Mutable${name}AssetD(std::make_shared<Impl>
+                               (AssetStorage::MakeStorage(
+                                   ref_, $actualtypearg, "$subtype",
+                                   $actualinputarg, meta_),
+                                config_));
+
+
+             /*(khRefGuardFromNew(new Impl
                 (AssetStorage::MakeStorage(ref_, $actualtypearg,
                                            "$subtype",$actualinputarg,
                                            meta_),
-                 config_)));
+                 config_)));*/
 }
 
 Mutable${name}AssetD
@@ -418,7 +425,7 @@ namespace {
 std::shared_ptr<${name}AssetImplD>
 ${name}AssetImplD::Load(const std::string &boundref)
 {
-    khRefGuard<${name}AssetImplD> result;
+    //khRefGuard<${name}AssetImplD> result;
 
     // make sure the base class loader actually instantiated one of me
     // this should always happen, but there are no compile time guarantees
@@ -430,7 +437,7 @@ ${name}AssetImplD::Load(const std::string &boundref)
     //}
 
     //return result;
-    return ${name}AssetImplD::load(boundref);
+    return ${name}AssetImplD::Load(boundref);
 }
 
 extern void ToElement(DOMElement *elem, const AssetStorage &self);
@@ -486,8 +493,9 @@ ${name}AssetImplD::MakeNewVersion(const ${name}AssetImplD::Config &bound_config)
 {
     typedef ${name}AssetVersionImplD VerImpl;
 
-    Mutable${name}AssetVersionD newver
-        (khRefGuardFromNew(new VerImpl(this, bound_config)));
+    Mutable${name}AssetVersionD newver(std::make_shared<VerImpl>
+                                      (this, bound_config));
+        //(khRefGuardFromNew(new VerImpl(this, bound_config)));
 
     AddVersionRef(newver->GetRef());
     return newver;
@@ -502,7 +510,10 @@ ${name}AssetImplD::MakeNewVersion(void)
 {
     typedef ${name}AssetVersionImplD VerImpl;
 
-    Mutable${name}AssetVersionD newver(khRefGuardFromNew(new VerImpl(this)));
+    Mutable${name}AssetVersionD newver(std::make_shared<VerImpl>
+                                      (this).get());
+
+        //khRefGuardFromNew(new VerImpl(this)));
 
     AddVersionRef(newver->GetRef());
     return newver;

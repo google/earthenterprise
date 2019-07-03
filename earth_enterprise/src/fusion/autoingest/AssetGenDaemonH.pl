@@ -25,6 +25,7 @@ use AssetGen;
 my $help = 0;
 our $thiscommand = "@ARGV";
 
+
 sub usage() {
     die "usage: $FindBin::Script <.srcfile> <outputfile>\n";
 }
