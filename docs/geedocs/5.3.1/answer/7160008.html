@@ -40,8 +40,6 @@ gtag('config', 'UA-108632131-2');
 <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Release notes</h1>
 <h2>Release notes: Open GEE 5.3.1</h2>
 
-<p>Open GEE 5.3.1 is currently in development</p>
-
   <h5>
     <p id="overview_5.3.1">New Features</p>
   </h5>
@@ -74,12 +72,40 @@ gtag('config', 'UA-108632131-2');
             <th>Resolution</th>
           </tr>
           <tr>
+            <td>1255</td>
+            <td>Version errors with GEE patch releases</td>
+            <td>
+              Limited internal version string to 3 parts to fix patch releases.
+            </td>
+          </tr>
+          <tr>
+            <td>1304</td>
+            <td>Creating issues tickets in OpenGEE repo does not provide guidelines</td>
+            <td>
+              Added template to create new issues in Open GEE repo.
+            </td>
+          </tr> 
+          <tr>
+            <td>1317</td>
+            <td>Lacking Test cases for genewimageryresource</td>
+            <td>
+              Added automated tests for Imagery resource creation.
+            </td>
+          </tr>                            
+          <tr>
             <td>1339</td>
             <td>Building with incomplete assets can result in Blocked databases</td>
             <td>
               Added error handling to certain asset caching to prevent incomplete assets from being cached. This prevents a version of the DelayedBuildChildren class of errors, and rectifies the <code>run_historical.sh</code> script problem.
             </td>
           </tr>
+          <tr>
+            <td>1344</td>
+            <td>No method in GlcUnpacker to "walk" a single layer</td>
+            <td>
+              Added method in GlcUnpacker to "walk" a single layer.
+            </td>
+          </tr>          
         </tbody>
       </table>
   <h5>
