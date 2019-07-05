@@ -153,7 +153,7 @@ class MutableAssetHandleD_ : public virtual Base_ {
   }
 
   static bool SaveDirtyToDotNew(khFilesTransaction &savetrans,
-                                std::vector<std::string> *saveDirty) {
+                                std::vector<SharedString> *saveDirty) {
     return Base::storageManager().SaveDirtyToDotNew(savetrans, saveDirty);
   }
 
@@ -218,6 +218,10 @@ class MutableAssetHandleD_ : public virtual Base_ {
   using Base::operator->;
   Impl* operator->(void) {
     return const_cast<Impl*>(Base::operator->());
+  }
+
+  ~MutableAssetHandleD_() {
+    this->storageManager().UpdateCacheItemSize(this->ref);
   }
 };
 
@@ -337,6 +341,7 @@ class MutableDerivedAssetHandleD_ : public DerivedBase_, public MutableBase_
     // that causes that to be untrue.
     static_assert(std::is_same<BBase, MBBase>::value, "BBase and MBBase *must* be the same type!!!");
 #endif // GEE_HAS_STATIC_ASSERT
+    this->storageManager().UpdateCacheItemSize(this->ref);
   }
 };
 
