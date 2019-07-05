@@ -306,7 +306,7 @@ ${name}Factory::ReuseOrMakeAndUpdate(
               ${name}AssetVersionD version(*v);
               // Load an asset version without caching since we may not need it
               // (offline, obsolete and so on).
-              version.LoadAsTemporary();
+              version.BindNoCache();
               if ((version->state != AssetDefs::Offline) &&
                   (version->inputs == boundInputs) &&
                   ::IsUpToDate(config_, version->config)) {
@@ -334,7 +334,7 @@ ${name}Factory::ReuseOrMakeAndUpdate(
                 return version;
               } else {
                 // Tell the storage manager we don't need this one any more.
-                version.NoLongerNeeded();
+                version.CacheRemove();
               }
            }
            catch (...) {
