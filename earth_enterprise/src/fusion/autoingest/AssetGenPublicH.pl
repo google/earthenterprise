@@ -96,9 +96,11 @@ protected:
     ${name}AssetImpl(const Config& config_)
         : AssetImpl(), config(config_) { }
 
+public:
     ${name}AssetImpl(const AssetStorage &storage, const Config& config_)
         : AssetImpl(storage), config(config_) { }
 
+protected:
     static //khRefGuard
     std::shared_ptr<${name}AssetImpl> NewFromDOM(void *e);
     static //khRefGuard
@@ -140,11 +142,14 @@ protected:
         : AssetVersionImpl(),
           ${base}AssetVersionImpl(),
           config(config_) { }
+public:
     ${name}AssetVersionImpl(const AssetVersionStorage &storage,
 			    const Config& config_)
         : AssetVersionImpl(storage),
           ${base}AssetVersionImpl(),
           config(config_) { }
+
+protected:
 
     static //khRefGuard
     std::shared_ptr<${name}AssetVersionImpl> NewFromDOM(void *e);

@@ -145,7 +145,10 @@ AssetVersionImplD::Load(const std::string &boundref)
   //}
 
   //return result;
-  return AssetVersionImpl::Load(boundref);
+  std::shared_ptr<AssetVersionImplD> result =
+      std::dynamic_pointer_cast<AssetVersionImplD>
+      (AssetVersionImpl::Load(boundref));
+  return result; //AssetVersionImpl::Load(boundref);
 }
 
 // since AssetVersionImpl is a virtual base class

@@ -34,7 +34,11 @@ AssetImplD::Load(const std::string &boundref)
   //}
 
   //return result;
-  return AssetImpl::Load(boundref);
+  std::shared_ptr<AssetImplD> result =
+      std::dynamic_pointer_cast<AssetImplD>
+      (AssetImpl::Load(boundref));
+  return result;
+  //return AssetImpl::Load(boundref);
 }
 
 void

@@ -123,6 +123,7 @@ protected:
     static //khRefGuard
     std::shared_ptr<${name}AssetVersionImplD> Load(const std::string &ref);
 
+public:
     // Only used when constructing a new version from an asset.
     // The decision to use the raw ImplD* here was a tough one.
     // Originally it had an asset handle, but the call point is a member
@@ -153,7 +154,7 @@ print $fh <<EOF;
           ${base}AssetVersionImpl(),
           ${name}AssetVersionImpl(config_),
           ${base}AssetVersionImplD() { }
-
+public:
 $extra{"${name}AssetVersionImplD"}
 
     // supplied from ${name}.src ---v
@@ -212,12 +213,14 @@ protected:
         : AssetImpl(AssetStorage::MakeStorage(ref_, $actualtypearg, "$subtype", $actualinputarg, meta_)),
           ${name}AssetImpl(config_), AssetImplD() { }
 
+public:
 
     ${name}AssetImplD(const AssetStorage &storage,
 			 const Config& config_)
         : AssetImpl(storage),
           ${name}AssetImpl(config_), AssetImplD() { }
 
+protected:
 EOF
 
 if ($haveBindConfig) {
