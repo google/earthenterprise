@@ -130,11 +130,9 @@ void StateUpdater::FillInVertex(
   tree[myVertex].state = version->state;
   vector<SharedString> dependents;
   version->DependentChildren(dependents);
-  // Add the dependent children first. When we add the children next it will
-  // skip any that were already added
   for (const auto & dep : dependents) {
     auto depVertex = AddEmptyVertex(dep, vertices, index, toFillIn);
-    AddEdge(myVertex, depVertex, {DEPENDENT_CHILD});
+    AddEdge(myVertex, depVertex, {DEPENDENT});
   }
   for (const auto & child : version->children) {
     auto childVertex = AddEmptyVertex(child, vertices, index, toFillIn);
@@ -159,11 +157,18 @@ void StateUpdater::AddEdge(
     TreeType::vertex_descriptor to,
     AssetEdge data) {
   auto edgeData = add_edge(from, to, tree);
-  // If this is a new edge, set the edge data. Also, if this is a dependent
-  // child it may have been added previously as a "normal" child, so update
-  // the data in that case as well.
-  if (edgeData.second || data.type == DEPENDENT_CHILD) {
+  if (edgeData.second) {
+    // This is a new edge
     tree[edgeData.first] = data;
+  }
+  else {
+    // Check if this is both a dependent and a child
+    DependencyType currentType = tree[edgeData.first].type;
+    DependencyType newType = data.type;
+    if ((currentType == DEPENDENT && newType == CHILD) ||
+        (currentType == CHILD && newType == DEPENDENT)) {
+      tree[edgeData.first].type = DEPENDENT_AND_CHILD;
+    }
   }
 }
 
@@ -194,7 +199,7 @@ void StateUpdater::SetStateForVertexAndDependents(
     auto edgeBegin = edgeIters.first;
     auto edgeEnd = edgeIters.second;
     for (auto i = edgeBegin; i != edgeEnd; ++i) {
-      if (tree[*i].type == DEPENDENT_CHILD) {
+      if (IsDependent(tree[*i].type)) {
         SetStateForVertexAndDependents(target(*i, tree), newState, updateStatePredicate);
       }
     }
@@ -342,8 +347,12 @@ class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
             inputStates.Add(depState);
             break;
           case StateUpdater::CHILD:
-          case StateUpdater::DEPENDENT_CHILD:
+          case StateUpdater::DEPENDENT_AND_CHILD:
             childStates.Add(depState);
+            break;
+          case StateUpdater::DEPENDENT:
+            // Dependents that are not also children are not considered when
+            // calculating state.
             break;
         }
       }
