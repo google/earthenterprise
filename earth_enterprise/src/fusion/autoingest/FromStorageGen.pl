@@ -79,7 +79,7 @@ ${plugin}AssetImpl::NewFromStorage(const AssetStorage &storage,
     tmp->AfterLoad();
     return khRefGuard<${plugin}AssetImpl>(khRefGuardFromNew(tmp.take()));*/
     return std::make_shared<${plugin}AssetImpl>
-        (new $assetimpl(storage, config));
+        (storage, config);
 }
 
 
@@ -93,7 +93,7 @@ ${plugin}AssetVersionImpl::NewFromStorage(const AssetVersionStorage &storage,
     tmp->AfterLoad();
     return khRefGuard<${plugin}AssetVersionImpl>(khRefGuardFromNew(tmp.take()));*/
     return std::make_shared<${plugin}AssetVersionImpl>
-        (new $versionimpl(storage, config));
+        (storage, config);
 }
 
 

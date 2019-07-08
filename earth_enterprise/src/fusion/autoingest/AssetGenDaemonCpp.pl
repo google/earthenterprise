@@ -24,7 +24,7 @@ use AssetGen;
 
 my $help = 0;
 our $thiscommand = "@ARGV";
-t
+
 
 sub usage() {
     die "usage: $FindBin::Script <.srcfile> <outputfile>\n";
@@ -173,7 +173,7 @@ ${name}Factory::Make(const std::string &ref_ $formaltypearg,
 {
     typedef ${name}AssetImplD Impl;
 
-    // all of this wrapping is required and makes it nearly impossible
+    // all of this wrapping is required and makes it nearl:y impossible
     // to misuse the Handle and khRefGuard class
     return Mutable${name}AssetD(std::make_shared<Impl>
                                (AssetStorage::MakeStorage(
@@ -437,7 +437,10 @@ ${name}AssetImplD::Load(const std::string &boundref)
     //}
 
     //return result;
-    return ${name}AssetImplD::Load(boundref);
+    std::shared_ptr<${name}AssetImplD> result =
+        std::dynamic_pointer_cast<${name}AssetImplD>
+        (${name}AssetImpl::Load(boundref));
+    return result; //std::dynamic${name}AssetImplD::Load(boundref);
 }
 
 extern void ToElement(DOMElement *elem, const AssetStorage &self);
@@ -509,13 +512,11 @@ Mutable${name}AssetVersionD
 ${name}AssetImplD::MakeNewVersion(void)
 {
     typedef ${name}AssetVersionImplD VerImpl;
-
-    Mutable${name}AssetVersionD newver(std::make_shared<VerImpl>
-                                      (this).get());
+    Mutable${name}AssetVersionD newver(std::make_shared<VerImpl>(this));
 
         //khRefGuardFromNew(new VerImpl(this)));
 
-    AddVersionRef(newver->GetRef());
+    AddVersionRef(newver->GetRef().toString());
     return newver;
 }
 EOF
@@ -809,7 +810,10 @@ ${name}AssetVersionImplD::Load(const std::string &boundref)
     //        boundref);
     //}
     //return result;
-    return ${name}AssetVersionImpl::Load(boundref);
+    std::shared_ptr<${name}AssetVersionImplD> result =
+        std::dynamic_pointer_cast<${name}AssetVersionImplD>
+        (${name}AssetVersionImpl::Load(boundref));
+    return result;  //${name}AssetVersionImpl::Load(boundref);
 }
 
 

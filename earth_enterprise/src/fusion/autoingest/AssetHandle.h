@@ -152,8 +152,12 @@ class DerivedAssetHandle_ : public virtual Base_ {
     // Impl::Load will succeed or throw.
     // The derived khRefGuard will be automatically converted
     // the the base khRefGuard
-    return HandleType(Impl::Load(boundref));
+
+    // when switching to using shared_ptr, manually call Base load
+    // and don't rely on auto conversion, as is done via khRefGuard
+    return HandleType(Base::Load(boundref));
   }
+
   virtual bool Valid(const HandleType & entry) const { 
     // we have to check if it maps to Impl* since somebody
     // else may have loaded it into the storage manager
