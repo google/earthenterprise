@@ -170,7 +170,7 @@ void StateUpdater::AddEdge(
 void StateUpdater::SetStateForRefAndDependents(
     const SharedString & ref,
     AssetDefs::State newState,
-    std::function<bool(AssetDefs::State)> updateStatePredicate) {
+    function<bool(AssetDefs::State)> updateStatePredicate) {
   auto refVertex = BuildTree(ref);
   SetStateForVertexAndDependents(refVertex, newState, updateStatePredicate);
 }
@@ -180,11 +180,9 @@ void StateUpdater::SetStateForRefAndDependents(
 void StateUpdater::SetStateForVertexAndDependents(
     TreeType::vertex_descriptor vertex,
     AssetDefs::State newState,
-    std::function<bool(AssetDefs::State)> updateStatePredicate) {
+    function<bool(AssetDefs::State)> updateStatePredicate) {
   if (updateStatePredicate(tree[vertex].state)) {
     SharedString name = tree[vertex].name;
-    notify(NFY_PROGRESS, "Setting state of '%s' to '%s'",
-           name.toString().c_str(), ToString(newState).c_str());
     // Set the state. The OnStateChange handler will take care
     // of stopping any running tasks, etc
     // false -> don't send notifications about the new state because we
@@ -210,6 +208,8 @@ void StateUpdater::SetState(
   SharedString name = tree[vertex].name;
   if (newState != tree[vertex].state) {
     MutableAssetVersionD version(name);
+    notify(NFY_PROGRESS, "Setting state of '%s' to '%s'",
+           name.toString().c_str(), ToString(newState).c_str());
     if (version) {
       // Set the state. The OnStateChange handler will take care
       // of stopping any running tasks, etc.
