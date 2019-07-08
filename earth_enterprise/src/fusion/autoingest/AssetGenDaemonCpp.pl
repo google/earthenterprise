@@ -417,16 +417,17 @@ namespace {
 khRefGuard<${name}AssetImplD>
 ${name}AssetImplD::Load(const std::string &boundref)
 {
-    khRefGuard<${name}AssetImplD> result;
+//    khRefGuard<${name}AssetImplD> result;
 
     // make sure the base class loader actually instantiated one of me
     // this should always happen, but there are no compile time guarantees
-    result.dyncastassign(${name}AssetImpl::Load(boundref));
-    if (!result) {
-        AssetThrowPolicy::FatalOrThrow(
-            "Internal error: ${name}AssetImplD loaded wrong type for " +
-            boundref);
-    }
+//    result.dyncastassign(${name}AssetImpl::Load(boundref));
+//    if (!result) {
+//        AssetThrowPolicy::FatalOrThrow(
+//            "Internal error: ${name}AssetImplD loaded wrong type for " +
+//            boundref);
+//    }
+    result = storageManager().LoadAssetResource(boundref);
 
     return result;
 }
@@ -784,16 +785,17 @@ print $fh <<EOF;
 khRefGuard<${name}AssetVersionImplD>
 ${name}AssetVersionImplD::Load(const std::string &boundref)
 {
-    khRefGuard<${name}AssetVersionImplD> result;
+//    khRefGuard<${name}AssetVersionImplD> result;
 
-    // make sure the base class loader actually instantiated one of me
-    // this should always happen, but there are no compile time guarantees
-    result.dyncastassign(${name}AssetVersionImpl::Load(boundref));
-    if (!result) {
-        AssetThrowPolicy::FatalOrThrow(
-            "Internal error: ${name}AssetVersionImplD loaded wrong type for " +
-            boundref);
-    }
+//    // make sure the base class loader actually instantiated one of me
+//   // this should always happen, but there are no compile time guarantees
+//    result.dyncastassign(${name}AssetVersionImpl::Load(boundref));
+//    if (!result) {
+//        AssetThrowPolicy::FatalOrThrow(
+//            "Internal error: ${name}AssetVersionImplD loaded wrong type for " +
+//            boundref);
+//    }
+    result = storageManager().LoadAssetVersionResource(boundref);
 
     return result;
 }

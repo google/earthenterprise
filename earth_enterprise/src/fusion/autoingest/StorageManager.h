@@ -27,6 +27,7 @@
 #include "common/khRefCounter.h"
 #include "common/notify.h"
 #include "common/SharedString.h"
+#include "AssetFileManager.h"
 
 // Items stored in the storage manager must inherit from the StorageManaged class
 class StorageManaged {
@@ -58,6 +59,7 @@ class StorageManager
     inline void NoLongerNeeded(const AssetKey &, bool = true);
     void Abort();
     bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<SharedString> *);
+    HandleType Load(const std::string &boundref);
     HandleType Get(const AssetHandleInterface<AssetType> *, bool, bool, bool);
   private:
     using CacheType = khCache<AssetKey, HandleType>;
@@ -196,5 +198,14 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
   return true;
 }
 
+template<class AssetType>
+HandleType LoadAssetVersionResource(const std::string &boundref){
+  return AssetFileManager::LoadAssetVersionResource<AssetType>(boundref);
+}
+
+template<class AssetType>
+HandleType LoadAssetResource(const std::string &boundref) {
+  return AssetFileManager::LoadAssetResource<AssetType>(boundref);
+}
 #endif // STORAGEMANAGER_H
 
