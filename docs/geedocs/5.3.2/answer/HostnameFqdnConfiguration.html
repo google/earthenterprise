@@ -21,7 +21,8 @@
 <p>In order to make sure that the Apache server correctly determines the Fully Qualified Domain Name (FQDN) of the
 server, and that the virtual hosts use the correct server URL the hostname should be configured correctly. This is
 preferred instead of modifying the Apache server name configuration so that all the software looks to the same
-source for determining FQDNs.</p>
+source for determining FQDNs. If the command <code>hostname -f</code> returns the correct FQDN hostname then
+the system is correctly configured to run Open GEE. If not the following instructions may help.</p>
 <p>Ideally the network where GEE is installed has a DNS set up to resolve hostnames so that IP traffic can be
 routed appropriately. However in cases where there is no DNS, static hostnames can be used as well. With static
 hostnames the <code>hostname</code> or <code>hostnamectl</code> command should be used to set the hostname to its
