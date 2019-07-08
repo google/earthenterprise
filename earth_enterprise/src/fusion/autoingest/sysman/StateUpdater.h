@@ -41,7 +41,7 @@ class StateUpdater
       size_t index; // Used by the dfs function
     };
 
-    enum DependencyType { INPUT, CHILD, DEPENDENT_CHILD };
+    enum DependencyType { INPUT, CHILD, DEPENDENT, DEPENDENT_AND_CHILD };
 
     struct AssetEdge {
       DependencyType type;
@@ -60,6 +60,8 @@ class StateUpdater
     class UpdateStateVisitor;
 
     TreeType tree;
+
+    inline bool IsDependent(DependencyType type) { return type == DEPENDENT || type == DEPENDENT_AND_CHILD; }
 
     TreeType::vertex_descriptor BuildTree(const SharedString & ref);
     TreeType::vertex_descriptor AddEmptyVertex(
