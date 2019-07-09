@@ -28,14 +28,4 @@ private:
     AssetFileManager() {}
 };
 
-template<class AssetType>
-HandleType LoadAssetVersionResource(const std::string &boundref){
- return AssetVersionImpl::Load(boundref);
-}
-
-template<class AssetType>
-HandleType LoadAssetResource(const std::string &boundref) {
-  return AssetImpl::Load(boundref);
-}
-
 #endif // ASSETFILEMANAGER_H

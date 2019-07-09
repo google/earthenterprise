@@ -61,6 +61,8 @@ class StorageManager
     bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<SharedString> *);
     HandleType Load(const std::string &boundref);
     HandleType Get(const AssetHandleInterface<AssetType> *, bool, bool, bool);
+    HandleType LoadAssetResource(const std::string &boundref)
+    HandleType LoadAssetVersionResource(const std::string &boundref)
   private:
     using CacheType = khCache<AssetKey, HandleType>;
 
@@ -199,12 +201,14 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
 }
 
 template<class AssetType>
-HandleType LoadAssetVersionResource(const std::string &boundref){
+typename StorageManager<AssetType>::HandleType
+StorageManager<AssetType>::LoadAssetVersionResource(const std::string &boundref){
   return AssetFileManager::LoadAssetVersionResource<AssetType>(boundref);
 }
 
 template<class AssetType>
-HandleType LoadAssetResource(const std::string &boundref) {
+typename StorageManager<AssetType>::HandleType
+StorageManager<AssetType>::LoadAssetResource(const std::string &boundref) {
   return AssetFileManager::LoadAssetResource<AssetType>(boundref);
 }
 #endif // STORAGEMANAGER_H
