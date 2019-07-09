@@ -14,7 +14,7 @@ sudo yum install -y epel-release
 ### RHEL 7
 
 ```bash
-sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 ```
 
 ### CentOS 6
@@ -38,7 +38,7 @@ sudo subscription-manager repos --enable=rhel-server-dts2-6-rpms
 
 # For all RHEL 6 Editions:
 sudo subscription-manager repos --enable=rhel-6-server-optional-rpms
-sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
+sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
 ```
 
 ## Install Git
