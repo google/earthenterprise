@@ -116,7 +116,7 @@ Execute:
 
 ```bash
 sudo yum install -y \
-  bison-devel cmake daemonize freeglut-devel \
+  bison-devel boost-devel cmake daemonize freeglut-devel \
   gdbm-devel geos-devel giflib-devel GitPython \
   libcap-devel libmng-devel libpng12-devel libX11-devel libXcursor-devel \
     libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
@@ -131,7 +131,7 @@ Execute:
 
 ```bash
 sudo yum install -y \
-  bison-devel  cmake daemonize freeglut-devel \
+  bison-devel boost-devel cmake daemonize freeglut-devel \
   gdbm-devel geos-devel giflib-devel GitPython \
   libcap-devel libmng-devel libpng-devel libX11-devel libXcursor-devel \
     libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
