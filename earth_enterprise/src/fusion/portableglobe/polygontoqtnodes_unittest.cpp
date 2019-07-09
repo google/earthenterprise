@@ -19,6 +19,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <fstream>
 #include <gtest/gtest.h>
 #include "common/khFileUtils.h"
 #include "fusion/portableglobe/polygontoqtnodes.h"
@@ -35,10 +36,18 @@ class PolygonToQtNodesTest : public testing::Test {
  protected:
   Grid* grid0_;
   std::string kml_file_;
+  std::string kml_string_;
 
   virtual void SetUp() {
     grid0_ = new Grid(-180.0, -90.0);
     kml_file_ = "fusion/testdata/polygon_roi.kml";
+
+    std::ifstream fin(kml_file_);
+    kml_string_ = 
+      std::string((std::istreambuf_iterator<char>(fin)), 
+                  std::istreambuf_iterator<char>());
+    fin.close();
+
     InitKnownPolygonCoordinates();
     InitDegeneratePolygonCoordinates();
   }
@@ -255,8 +264,28 @@ std::vector<std::pair<int32, int32> > PolygonToQtNodesTest::degenerate_polygon;
 
 
 // Tests reading in polygon from kml file.
-TEST_F(PolygonToQtNodesTest, PolygonReadTest) {
+TEST_F(PolygonToQtNodesTest, PolygonReadFromFileTest) {
   Polygons polygons(kml_file_);
+  Polygon* polygon = polygons.GetPolygon(0);
+  std::vector<Vertex>* vertices = polygon->Vertices();
+
+  // 9 vertices, last vertex should be the same as the first vertex.
+  EXPECT_EQ(10, static_cast<int>(polygon->Vertices()->size()));
+  EXPECT_EQ((*vertices)[0].y_,
+            (*vertices)[9].y_);
+  EXPECT_EQ((*vertices)[0].x_,
+            (*vertices)[9].x_);
+
+  // Test values on one vertex for reasonable precision.
+  // Vertex 2: -121.6655059010093,37.96161308965004
+  EXPECT_NEAR(-121.6655059, (*vertices)[2].x_, 0.000001);
+  EXPECT_NEAR(37.9616131, (*vertices)[2].y_, 0.000001);
+}
+
+// Tests reading in polygon from kml string.
+TEST_F(PolygonToQtNodesTest, PolygonReadFromStringTest) {
+  const kml_as_string dummy;
+  Polygons polygons(dummy, kml_string_);
   Polygon* polygon = polygons.GetPolygon(0);
   std::vector<Vertex>* vertices = polygon->Vertices();
 
@@ -439,8 +468,18 @@ TEST_F(PolygonToQtNodesTest, NoPolygonTest) {
 // Tests independence of starting point on polygon. I.e.
 // we should get the same quadtree nodes no matter how
 // the polygon is drawn.
-TEST_F(PolygonToQtNodesTest, PolygonStartingPointTest) {
+TEST_F(PolygonToQtNodesTest, PolygonStartingPointTestFromFile) {
   Polygons polygons(kml_file_);
+  for (int level = 3; level <= 20; ++level) {
+    TestAllStartingPoints(polygons.GetPolygon(0), level);
+  }
+}
+
+// Same as the previous test but the KML is provided 
+// as a string.
+TEST_F(PolygonToQtNodesTest, PolygonStartingPointTestFromString) {
+  const kml_as_string dummy;
+  Polygons polygons(dummy, kml_string_);
   for (int level = 3; level <= 20; ++level) {
     TestAllStartingPoints(polygons.GetPolygon(0), level);
   }
@@ -448,9 +487,31 @@ TEST_F(PolygonToQtNodesTest, PolygonStartingPointTest) {
 
 // If polygon does not cross a break, then both grids
 // should produce the same quadtree nodes.
-TEST_F(PolygonToQtNodesTest, PolygonMultigridTest) {
+TEST_F(PolygonToQtNodesTest, PolygonMultigridTestFromFile) {
   Polygons polygons0(kml_file_);
   Polygons polygons1(kml_file_);
+  std::stringstream str0_out;
+  std::stringstream str1_out;
+
+  Grid grid0(-180.0, -90.0);
+  Grid grid1(0.0, -90.0);
+  grid0.AddPolygons(&polygons0);
+  grid1.AddPolygons(&polygons1);
+
+  EXPECT_NEAR(grid0.BoundingBoxArea(), grid1.BoundingBoxArea(), 0.000001);
+
+  grid0.CalculateQuadtreeNodes(18, false, str0_out);
+  grid1.CalculateQuadtreeNodes(18, false, str1_out);
+
+  EXPECT_EQ(str0_out.str(), str1_out.str());
+}
+
+// Same as the previous test but the KML is provided 
+// as a string.
+TEST_F(PolygonToQtNodesTest, PolygonMultigridTestFromString) {
+  const kml_as_string dummy;
+  Polygons polygons0(dummy, kml_string_);
+  Polygons polygons1(dummy, kml_string_);
   std::stringstream str0_out;
   std::stringstream str1_out;
 

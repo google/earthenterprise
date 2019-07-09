@@ -1,0 +1,34 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Map projections</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 173053.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/6153619.html">Supported file formats in GEE</a></p>
+<p class="sidebar-toc"><a href="../answer/6053241.html">Apply alpha masking to imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/172810.html">Import pre-processed data</a></p>
+<p class="sidebar-toc"><a href="../answer/1090589.html">Import a subset of imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/173054.html">Add .kip imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/2882131.html">Vector data handling</a></p>
+<p class="sidebar-toc"><a href="../answer/2760298.html">Google Maps raster background</a></p>
+<p class="sidebar-toc"><a href="../answer/4525555.html">Create custom masks</a></p>
+<p class="sidebar-toc"><a href="../answer/6062318.html">Manage mosaics with virtual rasters</a></p>
+<p class="sidebar-toc"><a href="../answer/6081009.html">Map projection types in GEE 5.1.0</a></p>
+<p class="sidebar-toc"><a href="../answer/6081069.html">Add flat imagery to Mercator map databases in GEE 5.1.0</a></p>
+<p class="sidebar-toc"><a href="../answer/2760457.html">Add KML layers</a></p>
+<p class="sidebar-toc"><a href="../answer/2760534.html">Non-clickable icons</a></p>
+<p class="sidebar-toc"><a href="../answer/173053.html" class="current-file">Map projections</a></p>
+<p class="sidebar-toc"><a href="../answer/1089795.html">Map buttons</a></p>
+<p class="sidebar-toc"><a href="../answer/4492623.html">Create terrain overlays</a></p>
+<p class="sidebar-toc"><a href="../answer/2760655.html">Monitor builds with Twitter</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion resources and projects</h1>
+<h2>Map projections</h2>
+<p>Google Maps use Mercator projection for browser-based maps. When Fusion creates a map that uses <strong>maps.google.com</strong> imagery as the source, it uses Google Maps projection for the rasterized vectors so that they match the underlying Google Map tiles. This EPSG code is <strong>EPSG:900913</strong> or <strong>EPSG:3785</strong>.</p>
+<p>However, GEE builds 3D data using the <a href="http://en.wikipedia.org/wiki/World_Geodetic_System" target="_blank">WGS84</a> datum (<strong>EPSG:4326</strong>). If you want to re-use 3D database resources, you can create a flat map using the Fusion Flat (Plate Carrée) projection.</p>
+<p>If you build a Mercator-based database, you must build resources specifically for use with Mercator-based projection.</p>
+<div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>

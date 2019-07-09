@@ -75,9 +75,7 @@ xml_file_get_xpath()
 
     # Warning: `xmllint --noent` doesn't recognize named entities like
     # "&lt;" and "&gt;":
-    echo "cat $XPATH" | xmllint --noent --nocdata --shell "$FILE" |
-    # Skip the first and the last line:
-        tail -n +2 | head -n -1
+    echo "cat $XPATH" | xmllint --noent --nonet --shell "$FILE" | tail -2 | head -1
 }
 
 is_package_installed()
@@ -110,7 +108,7 @@ software_check()
         if [ "$MACHINE_OS" == "$UBUNTUKEY" ] && [ ! -z "$2" ]; then
             echo -e "\nInstall $2 and restart the $1."
             software_check_retval=1
-        elif { [ "$MACHINE_OS" == "$REDHATKEY" ] || [ "$MACHINE_OS" == "$CENTOSKEY" ]; } && [ ! -z "$3" ]; then 
+        elif { [ "$MACHINE_OS" == "$REDHATKEY" ] || [ "$MACHINE_OS" == "$CENTOSKEY" ]; } && [ ! -z "$3" ]; then
             echo -e "\nInstall $3 and restart the $1."
             software_check_retval=1
         else
@@ -420,4 +418,48 @@ prompt_to_quit()
     fi
 
     return $prompt_to_quit_retval
+}
+
+# Returns the default user
+get_default_user()
+{
+	# $1 -- is file/directory from which to obtain user
+	# $2 -- user to return if file/directory does not exist (or unable to stat file)
+	local USER=$(stat --printf="%U" $1 2> /dev/null)
+	[ -z "$USER" ] && USER=$2
+	echo "$USER"
+}
+
+# Returns the default group
+get_default_group()
+{
+	# $1 -- is file/directory from which to obtain group
+	# $2 -- group to return if file/directory does not exist (or unable to stat file)
+	local GRP=$(stat --printf="%G" $1 2> /dev/null)
+	[ -z "$GRP" ] && GRP=$2
+	echo "$GRP"
+}
+
+# For given directory, array containing directory, size, available, and mount point
+get_volume_info()
+{
+	local info=()
+	local DIR=$1
+
+	# Check if dir exists.  If so, do a df at this point
+	while true; do
+		if [ -d "$DIR" ] ; then
+			info=($1 $(df -k $DIR --output=size,avail,target | tail -1))
+			break
+		fi
+
+		# Drop last part of path and retry
+		DIR=${DIR%/*}
+		# Check if reached the root
+		if [ -z $DIR ]; then
+			info=($1 $(df -k / --output=size,avail,target | tail -1))
+			break
+		fi
+	done
+	echo "${info[@]}"
 }

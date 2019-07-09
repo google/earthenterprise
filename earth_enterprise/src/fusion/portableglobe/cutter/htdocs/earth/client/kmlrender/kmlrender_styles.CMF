@@ -1,7 +1,7 @@
-geo/earth/common/reset.gss
+geo/earth/legacy/thor/common/reset.gss
 javascript/jfk/gss/base.gss
-geo/earth/common/base.gss
-geo/earth/common/ads.gss
-geo/earth/common/boxes.gss
-geo/earth/common/ui.gss
-geo/earth/kmlrender/kmltree_qt.gss
+geo/earth/legacy/thor/common/base.gss
+geo/earth/legacy/thor/common/ads.gss
+geo/earth/legacy/thor/common/boxes.gss
+geo/earth/legacy/thor/common/ui.gss
+geo/earth/legacy/thor/kmlrender/kmltree_qt.gss

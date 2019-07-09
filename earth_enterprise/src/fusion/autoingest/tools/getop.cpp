@@ -73,6 +73,25 @@ usage(const std::string &progn, const char *msg = 0, ...)
   exit(1);
 }
 
+// Convert the amount of memory used by caches to a more easily read format
+std::string
+readableMemorySize(uint64 size) {
+  double readable = static_cast<double>(size);
+  const std::array<std::string, 9> units = {"B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
+  uint8 i = 0;
+  std::stringstream memoryUsed;
+
+  while (readable > 1024) {
+    readable /= 1024;
+    i++;
+  }
+
+  memoryUsed << std::fixed;
+  memoryUsed.precision(2);
+  memoryUsed << readable << ' ' << units[i];
+  return memoryUsed.str();
+}
+
 int
 main(int argc, char *argv[])
 {
@@ -193,7 +212,7 @@ main(int argc, char *argv[])
         for (std::vector<TaskLists::WaitingTask>::const_iterator w =
                taskLists.waitingTasks.begin();
              w != taskLists.waitingTasks.end(); ++w) {
-          if (numlines > 6) {
+          if (numlines > 8) {
             outline("  %s", w->verref.c_str());
             --numlines;
             if (!w->activationError.isEmpty()) {
@@ -209,7 +228,7 @@ main(int argc, char *argv[])
 
         outline("");
         outline("Fusion processes on this host:");
-        numlines -= 6;
+        numlines -= 8;
 
         for (uint i = 0; i < pslist.size(); ++i) {
           if (numlines > 2) {
@@ -221,10 +240,15 @@ main(int argc, char *argv[])
             break;
           }
         }
+
         outline("");
         outline("Number of cached assets: %u", taskLists.num_assets_cached);
         outline("Number of cached asset versions: %u",
                 taskLists.num_assetversions_cached);
+        outline("Total memory used by cached assets: %s",
+                readableMemorySize(taskLists.asset_cache_memory).c_str());
+        outline("Total memory used by cached asset versions: %s",
+                readableMemorySize(taskLists.version_cache_memory).c_str());
         outline("Number of strings cached: %u", taskLists.str_store_size);
 
       }

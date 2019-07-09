@@ -88,6 +88,7 @@ qt_configure = qt_env.Command(
         '-I/usr/include/libpng12 '
         '-qt-imgfmt-jpeg -qt-imgfmt-mng '
         '-thread '
+        '-fast -nomake demos -nomake examples -nomake docs -nomake tests '
         '-shared -no-cups -freetype -stl -xcursor -xinerama -xrandr -xrender '
         '-xft -no-pch -ipv6 -nis -largefile -no-gif -xshape -no-tablet -xkb '
         '-L%s/lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib64 -I%s/include '

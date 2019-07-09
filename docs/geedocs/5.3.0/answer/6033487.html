@@ -1,0 +1,141 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Benchmarking outcomes for applying task rules</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 6033487.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/3481464.html">Before you configure Google Earth Enterprise Fusion</a></p>
+<p class="sidebar-toc"><a href="../answer/6008655.html">Running Fusion on a Machine with Multiple CPUs</a></p>
+<p class="sidebar-toc"><a href="../answer/7160005.html">Dynamically adjusting logging levels</a></p>
+<p class="sidebar-toc"><a href="../answer/176738.html">Configure Fusion performance</a></p>
+<p class="sidebar-toc"><a href="../answer/6033487.html" class="current-file">Benchmarking outcomes for applying task rules</a></p>
+<p class="sidebar-toc"><a href="../answer/3481501.html">Configure font size in the GUI</a></p>
+<p class="sidebar-toc"><a href="../answer/3481506.html">Configure fonts for the Text Style dialog</a></p>
+<p class="sidebar-toc"><a href="../answer/3481478.html">Customize your Google Maps landing page</a></p>
+<p class="sidebar-toc"><a href="../answer/3481512.html">Monitor system processes</a></p>
+<p class="sidebar-toc"><a href="../answer/3481546.html">Backing up your data</a></p>
+<p class="sidebar-toc"><a href="../answer/2760661.html">Back up Fusion servers</a></p>
+<p class="sidebar-toc"><a href="../answer/176676.html">Manage Fusion disk space</a></p>
+<p class="sidebar-toc"><a href="../answer/6035839.html">Relocate your asset root</a></p>
+<p class="sidebar-toc"><a href="../answer/3481499.html">Configure your data locations</a></p>
+<p class="sidebar-toc"><a href="../answer/6034724.html">Push and publish databases</a></p>
+<p class="sidebar-toc"><a href="../answer/6051700.html">Publish databases using disconnected publishing</a></p>
+<p class="sidebar-toc"><a href="../answer/6086672.html">Troubleshoot push/publishing issues 5.x</a></p>
+<p class="sidebar-toc"><a href="../answer/3481558.html">Command reference</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion administration</h1>
+<h2>Benchmarking outcomes for applying task rules</h2>
+<p>This article describes the benchmarking outcomes for applying various task rules to a test set of data under a similar environment. The results are useful in providing guidance in how task rules can improve GEE performance of loading assets and build times.</p>
+<div class="tip">This set of tests was designed to help assess how GEE performs in a specific environment. Although certain conclusions can be drawn from the test results, your results may differ.  The figures presented here can be used as a reference for the GEE performance only. This testing was conducted with GEE 4.4 using publicly available geospatial data to build a 3D database. </div>
+<h2>GEE System Specifications</h2>
+The following table lists the software  and hardware specifications that were used for testing.
+<table class="nice-table">
+<tbody>
+<tr>
+<td>OS</td>
+<td>Ubuntu 12.04.1 LTS</td>
+</tr>
+<tr>
+<td>Processor</td>
+<td>8x Intel(R) Xeon ® CPU @2.60GHz</td>
+</tr>
+<tr>
+<td>CPU</td>
+<td>2599.998 MHz</td>
+</tr>
+<tr>
+<td>Cache size</td>
+<td>20488 KB</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>30 GB</td>
+</tr>
+</tbody>
+</table>
+<p>This set of tests used raster data, terrain data and vector data that are freely available online. Some of them provide global coverage and others provide local high resolution coverage.</p>
+<h2>Fusion Server Configurations - Task Rules</h2>
+<p>A number of task rules can be configured to increase the processing speed. You configure task rules settings to assign a number of CPUs to processes that can be run concurrently.</p>
+<p>Fusion Server has the following two binaries which are multithreaded to increase processing speed when building a 3D database:</p>
+<ul>
+<li><code>gepackgen</code></li>
+<li><code>gecombineterrain</code></li>
+</ul>
+<p>You can identify the activity of these binaries during the processing of your databases by checking the log files listed in the Version Properties dialog. (Right-click an asset in the Asset Manager dialog.)</p>
+<p><code>gepackgen</code> generates imagery or terrain project packets. Multiple <code>gepackgen</code> processes can run concurrently to speed up the building of the imagery projects. <code>gecombineterrain</code> processes 3D databases and merges terrain packets from the specified indices.</p>
+<p>Task rules can be configured based on the number of concurrent processes required to be run on the Fusion server. Since <code>gecombineterrain</code> is a serial process and must be completed before the other database-level building activities can start, the <strong>CombinedTerrain</strong> task rule is used to put all available CPUs/cores onto the build, assuming that one core is reserved for the system.</p>
+<p>The <strong>ImageryPacketLevel</strong> and <strong>TerrainPacketLevel</strong> task rules configure <code>gepackgen</code> for concurrent processing. Both assign more or less CPUs to the pack files that are created during project builds.</p>
+<p>The task rules apply to all subsequent tasks that the Fusion server performs, and can’t be applied to individual assets or projects. </p>
+<p>To compare the effect of different task rule settings on the performance of the Fusion server when loading assets and building resources, projects, and databases, three different task rule configurations were used: <em>default taskrule</em>, <em>taskrule 2</em> and <em>taskrule 3</em>. <em>Default task rule</em> is the GEE default setting after installation.</p>
+<p>Detailed settings are in the following table.</p>
+<table class="nice-table">
+<tbody>
+<tr>
+<th></th>
+<th>Default taskrule</th>
+<th>Default taskrule</th>
+<th>Taskrule 2</th>
+<th>Taskrule 2</th>
+<th>Taskrule 3</th>
+<th>Taskrule 3</th>
+</tr>
+<tr>
+<td></td>
+<td>Min CPU</td>
+<td>Max CPU</td>
+<td>Min CPU</td>
+<td>Max CPU</td>
+<td>Min CPU</td>
+<td>Max CPU</td>
+</tr>
+<tr>
+<td><strong>CombinedTerrain</strong></td>
+<td>1</td>
+<td>1</td>
+<td>7</td>
+<td>7</td>
+<td>7</td>
+<td>7</td>
+</tr>
+<tr>
+<td><strong>ImageryPacketLevel</strong></td>
+<td>1</td>
+<td>1</td>
+<td>3</td>
+<td>3</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>TerrainPacketLevel</strong></td>
+<td>1</td>
+<td>1</td>
+<td>3</td>
+<td>4</td>
+<td>3</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+<p>In this set of tests, the server was permitted to use 7 CPU cores for Fusion processing; take Taskrule 2 for example, there can be up to 2 gepackgen tasks running concurrently with 3 CPUs assigned for each task.</p>
+<h2>Project build time under different taskrules</h2>
+<p>Total raster, terrain and vector project build times are illustrated in the following charts. The vector project build time doesn’t change  much at all because the task rule settings have no impact on the <code>gevectorfuse</code> command. For the imagery project, <em>taskrule 2</em> provides the best build performance. For the terrain project, <em>taskrule 3</em> provides the best build performance. </p>
+<p><img alt="Task rule benchmarking outcomes" src="../art/fusion/benchmark_taskrules/benchmark_taskrules1.png"/></p>
+<h3>Total database build time</h3>
+<p>The database build time with <em>task rule 3</em> was the fastest - reducing the time to 25.31 hours. Under the <em>default task rule</em> setting, the total database build time took the longest time to finish, 33.52 hours. </p>
+<h2>Recommendations</h2>
+<ul>
+<li>Always set the task rule other than default to have better image project build performance. </li>
+<li>With this test dataset, <em>task rule 3</em> provides the shortest total database building time on this server - with 2 imagery <code>gepackgen</code> tasks running concurrently with 2 CPUs assigned for each task; with all available CPU assigned to <strong>CombinedTerrain</strong> and 2 terrain <code>gepackgen</code> tasks running concurrently with 3 or 4 CPUs assigned for each task.</li>
+<li>Set <strong>CombinedTerrain</strong> to put all available CPUs/cores onto the build. </li>
+<li>Select a machine with more memory if processing vector data as fusing vector data (<code>gevectorfuse</code>) can consume a lot of memory.</li>
+<h2>Learn more</h2>
+<ul>
+<li><a href="../answer/176738.html">Configure Fusion performance</a></li>
+<li><a href="../answer/6008655.html">Running Fusion on a Machine with Multiple CPUs</a>
+</li></ul>
+</ul><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>

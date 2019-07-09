@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Publish databases with search</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
+</head>
+<body>
+<!-- 6062970.html -->
+<div class="container">
+<div class="sidebar1">
+  <p class="sidebar-toc"><a href="../answer/3468004.html">GEE Server Overview</a></p>
+  <p class="sidebar-toc"><a href="../answer/3470759.html">Sign in to GEE Server Admin console</a></p>
+  <p class="sidebar-toc"><a href="../answer/3479919.html">Snippet profiles page</a></p>
+  <p class="sidebar-toc"><a href="../answer/3480095.html">Search tabs page</a></p>
+  <p class="sidebar-toc"><a href="../answer/3479921.html">Settings page</a></p>
+  <p class="sidebar-toc"><a href="../answer/3480097.html">Dashboard page</a></p>
+  <p class="sidebar-toc"><a href="../answer/3479922.html">Databases page</a></p>
+  <p class="sidebar-toc"><a href="../answer/3497763.html">Publish databases and portables</a></p>
+  <p class="sidebar-toc"><a href="../answer/6004748.html">Manage snippet profiles</a></p>
+  <p class="sidebar-toc"><a href="../answer/176770.html">Display custom logos</a></p>
+  <p class="sidebar-toc"><a href="../answer/6013604.html">Manage virtual hosts</a></p>
+  <p class="sidebar-toc"><a href="../answer/4441137.html">Make Web Map Service (WMS) requests</a></p>
+  <p class="sidebar-toc"><a href="../answer/6062970.html" class="current-file">Publish databases with search</a></p>
+  <p class="sidebar-toc"><a href="../answer/6063101.html">Search your POI vector data or map layer data</a></p>
+  <p class="sidebar-toc"><a href="../answer/3497832.html">Create Search tabs</a></p>
+  <p class="sidebar-toc"><a href="../answer/6066597.html">Add custom search services</a></p>
+  <p class="sidebar-toc"><a href="../answer/6082250.html">Troubleshoot search services</a></p>
+  <p class="sidebar-toc"><a href="../answer/6091774.html">Example Search plug-in Python code sample</a></p>
+  <p class="sidebar-toc"><a href="../answer/6091810.html">Custom POI Search plug-in Python code sample</a></p>
+  <p class="sidebar-toc"><a href="../answer/3230777.html">Create portable globes and maps</a></p>
+  <p class="sidebar-toc"><a href="../answer/4643041.html">Create composite globes and maps</a></p>
+  <p class="sidebar-toc"><a href="../answer/6051534.html">View 3D databases</a></p>
+  <p class="sidebar-toc"><a href="../answer/6051659.html">View 2D databases</a></p>
+  <p class="sidebar-toc"><a href="../answer/6051568.html">Implement Google Earth Plugin</a></p>
+  <p class="sidebar-toc"><a href="../answer/6051584.html">(Deprecated) Provide Google Earth Plug-in for your users to install</a></p>
+</div>
+<div class="content"> <a name="top_of_file"></a>
+  <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+  <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | GEE Server administration</h1>
+  <h2>Publish databases with search</h2>
+  <p>Google Earth Enterprise (GEE) provides several different ways that you can incorporate search into your published databases, depending on the complexity of the search you want to perform and the data you are searching.</p>
+  <p>Search functionality is enabled when you <em>publish</em> a database in GEE Server. Different search options are available:</p>
+  <ul>
+    <li>Turn on <strong>POI Search</strong> based on search fields you add to a vector resource in a vector project or map layer</li>
+    <li>Add default search tabs, enabling queries of local or non-local search data based on <strong>Places</strong>, <strong>Coordinate</strong>, <strong>POI</strong>, and <strong>GeocodingFederated</strong> searches</li>
+    <li>Add <strong>custom search tabs</strong>, created by <strong>custom search plug-ins</strong> that incorporate more complex queries and data, such as search results based on geometries.</li>
+  </ul>
+  <h2>Add POI Search</h2>
+  <div class="image-highlight--right">
+    <div class="ghelp-hidden">
+      <gkms:snippet contenteditable="false" id="6064574"></gkms:snippet>
+    </div>
+    <p>If you have one or more text fields that you would like to query from vector resources in a project, you can simply <a href="../answer/4412684.html">add those search fields to a vector project</a> in a 3D database; for 2D maps, you include a map layer in a map project. Once you’ve added your POI vector project or map layer to the database you want to publish, you <a href="../answer/6034724.html">push it to GEE Server</a>, then <em>turn on POI Search when you publish. </em></p>
+  </div>
+  <p>For example, you may be interested in displaying the US Census Bureau population statistics on your map or globe, based on county name. You can easily add the search fields to the individual population data layer in your vector project. You can also choose how you want the labels for your search results to appear on your globe, such as search and display a field, or simply display it.</p>
+  <p>You can also modify the appearance of the POI search tab in Google Earth EC by <a href="../answer/3497832.html">editing the system search tab</a>, <strong>POI Search</strong>, which sets the query parameters for the search fields you added to your vector layer, as well as specifying the labels for the tab, query field and suggestion box. </p>
+  <h2>Use GEE-provided Search Data</h2>
+  <p>Google Earth Enterprise provides two searchable databases, <strong>Places</strong> and <strong>ExampleSearch</strong>, firstly as data that you can add to your globes and maps and secondly as examples that demonstrate the search plug-in functionality of GEE Server.</p>
+  <p>The <em>Places database</em> in <code>/opt/google/share/geplaces</code>, provides a searchable database of countries and cities that you can connect to using the <strong>POI</strong>, <strong>GeocodingFederated</strong>, <strong>Places</strong> or <strong>Coordinate</strong> plug-ins. The Places database is a subset of the publicly available <a href="http://www.geonames.org/about.html">geonames database</a>.
+    You might use the <strong>Places search tab</strong> to perform queries based on city names, for example. You might use the <strong>Coordinate search tab</strong> to perform queries based on city, country, or lat/long values.</p>
+  <p>The <em>ExampleSearch database</em> in <code>/opt/google/share/searchexample</code> is a table of San Francisco neighborhoods. The <strong>ExampleSearch search tab</strong> is provided as a showcase of how a custom search plug-in can be coded to extract geometries from a spatial database and then return the results so that they display according to the query parameters. The plug-in supports query parameters that set <strong>flyToFirstElement</strong> and <strong>displayKeys</strong>.</p>
+  <div class="tip">
+    <p><em>Places</em> and <em>ExampleSearch</em> are both PostgreSQL databases so you can also access them using the <code>psql</code> command. See <a href="http://www.postgresql.org/docs/9.3/static/app-psql.html" target="_blank">PostgreSQL 9.3.5 Documentation</a>.</p>
+  </div>
+  <p>You can examine the Python code of the search plug-ins on which the search tabs are built, using it as a template for your own plug-in development. To customize your own search plug-ins, see <a href="../answer/6066597.html">Add custom search services</a>.</p>
+  <h2>About system search tabs</h2>
+  <div class="image-highlight--right">
+    <div class="ghelp-hidden">
+      <gkms:snippet contenteditable="false" id="6064737"></gkms:snippet>
+    </div>
+    <p>System search tabs are provided with GEE Server. They provide hard-coded queries for various search data types available in the <em>Places database</em> provided with GEE.  You can use them to access this database, a subset of the publicly available geonames database or you can edit them for your own purposes. The search tabs cannot be deleted but can be edited and saved with a different name.
+      <link/>
+    </p>
+  </div>
+  <p>The following default search tabs are available:</p>
+  <ul>
+    <li><strong>POISearch</strong>: Search for POIs.</li>
+    <li><strong>GeocodingFederated</strong>: Search for places or coordinates.</li>
+    <li><strong>Places</strong>: Search for places using the built-in locations database.</li>
+    <li><strong>Coordinate</strong>: Search for latitude, longitude pairs. The following formats are supported:
+      <ul>
+        <li>Decimal Degrees (e.g. 39.507618°  -84.168556°)</li>
+        <li>Degrees, Minutes, Seconds (e.g. 20°40'01.51" S 131°53'51.39" E)</li>
+        <li>Degrees, Decimal Minutes (e.g. 49° 32.876' N 110° 9.193' E)</li>
+        <li>Universal Transverse Mercator (e.g. 43 R 637072.95 m E 2825582.86 m N)</li>
+        <li>Military Grid Reference System (e.g. 36NTL8040632621)</li>
+      </ul>
+    </li>
+    <li><strong>ExampleSearch</strong>: Search the example table of San Francisco neighborhoods to demonstrate the search plugin functionality.
+      <add link=""></add>
+    </li>
+  </ul>
+  <h2>About search tabs definitions</h2>
+  <div class="image-highlight--right">
+    <div class="ghelp-hidden">
+      <gkms:snippet contenteditable="false" id="6066190"></gkms:snippet>
+    </div>
+    <p>Search data is accessed via a query interface in Google Earth EC or a browser in the form of search tabs. A <em>search tab definition</em>, which you specify in GEE Server, includes the <strong>label</strong> you want to apply to the search tab that your users will see, the <strong>URL</strong> that points to a local or non-local searchable database, supported query parameters, and <strong>fields</strong> that you specify for your search queries. You can customize the labels and fields in a search tab and use <strong>query parameter settings</strong> to control how the results of a query will be displayed.</p>
+  </div>
+  <p>The database to which you point your search tab definition is identified in the query parameters when the globe or map is served. The search tab identifies the database by including the database ID as a parameter in the query string, an internal structure that points to either a searchable database on GEE Server or an external server.</p>
+  <p><em>Example query string when serving a local database:</em></p>
+  <p><code>mydb/POISearch?db_id=5&amp;flyToFirstElement;=true&amp;displayKeys;=location&amp;q;=San Francisco</code></p>
+  <p><em>Example query string when serving an external database:</em></p>
+  <p><code>http://mysearch_host.com/search_serviceA?db_id=5&amp;flyToFirstElement;=true&amp;displayKeys;=location&amp;q;=San Francisco</code></p>
+  <h2>Create custom searches</h2>
+  <p>If you want to access a custom data source, you can <a href="../answer/6066597.html">create your own search plug-in</a> and access it as a search tab definition in Google Earth Enterprise Server. A custom search plug-in will create requests and responses using the common Python-based search framework, letting you adapt your search to any data source. Your custom search plug-in will receive search requests directly from Google Earth Enterprise Client (EC), or any other clients in the form of URL parameters.</p>
+  <p>For example, with custom search plug-ins you can use Maps API and Places API to leverage the power of their data sets. You can also use a proprietary database, for example, power conversion sites, then search for the sites using internal IDs or city names.</p>
+  <h2>Summary table of search options</h2>
+  <table class="nice-table">
+    <tbody>
+      <tr>
+        <th width="15%">Search options</th>
+        <th width="30%">Steps summary</th>
+        <th width="55%">Search appearance in Google Earth EC or in a browser</th>
+      </tr>
+      <tr>
+        <td>Query vector data layer using a simple text-based search.
+          <link/></td>
+        <td>Add a search field to a vector resource in a vector project or map layer. Turn on <strong>POI Search</strong> in the Publish dialog when you publish your database in GEE Server.
+          <add link=""></add></td>
+        <td>The <strong>POI Search</strong> appears in the main <strong>Search</strong> tab, labeled Point of interest, including the field label you specified in the vector data layer.</td>
+      </tr>
+      <tr>
+        <td>Query external database using a default search plugin, for example <strong>POI Search</strong>.
+          <link/></td>
+        <td>Edit the <strong>POI Search tab URL</strong> field to point to your own search database and edit or add query parameters. Add the <strong>POI Search tab</strong> in the <strong>Publish</strong> dialog.
+          <add link=""></add></td>
+        <td>When you click <strong>Query</strong>, the <strong>POI Search</strong> appears as a new additional tab in Search, displaying the custom label and any query field label and suggestion you added.</td>
+      </tr>
+      <tr>
+        <td>Query the <em>Places database</em> provided by GEE.
+          <link/></td>
+        <td>Add the <strong>Places search tab</strong> in the Publish dialog to add location search to your globe or map.
+          <add link=""></add></td>
+        <td>The  Places Search appears as a new additional tab in Search, displaying the custom label and any query field label and suggestion you added.</td>
+      </tr>
+      <tr>
+        <td>Query an external postgres database and return polygons, lines, or geometries.
+          <link/></td>
+        <td>Write a custom search plug-in using the Python-based framework for search tabs. The <strong>ExampleSearch</strong> search plug-in is a useful demonstration for this purpose.
+          <add link=""></add></td>
+        <td>Your custom search plug-in appears as a new additional tab in Search, displaying the custom label and any query field label and suggestion you added. Alternatively, you can send HTTP requests and receive a response within your own custom web application.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="footer">
+    <p class="BackToTop"><a href="#top_of_file">Back to top</a>
+    
+    <hr />
+    </p>
+    <p class="copyright">&copy;2015 Google</p>
+  </div>
+</div>
+</body>
+</html>

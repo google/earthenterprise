@@ -280,7 +280,8 @@ class khEnvironment(Environment):
 
     DefineProtocolBufferBuilder(self)
 
-  def bash_escape(self, value):
+  @staticmethod
+  def bash_escape(value):
     """Escapes a given value as a BASH string."""
 
     return "'{0}'".format(value.replace("'", "'\\''"))
@@ -408,10 +409,24 @@ class khEnvironment(Environment):
     base = os.path.basename(target)
     newtarget = os.path.join(self.exportdirs['bin'], 'tests', base)
     args = (newtarget, source)
-    ret = self.Program(*args, **kw)
+    test_env = self.Clone()
+    test_env['LINKFLAGS'] = test_env['test_linkflags']
+    if test_env['test_extra_cppflags']:
+      # FIXME: The SCons shell escape seems to be broken, and the 'ESCAPE'
+      # environment variable isn't respected for some reason, so we add a
+      # dirty patch:
+      test_env['CPPFLAGS'] += map(
+        lambda s: s.replace('"', '\\"'), test_env['test_extra_cppflags'])
+    ret = test_env.Program(*args, **kw)
 
     self.Default(self.alias(target_src_node, ret))
     return ret
+
+  def testScript(self, target, dest='bin', subdir='tests'):
+    instdir = self.fs.Dir(subdir, self.exportdirs[dest])
+    if not SCons.Util.is_List(target):
+      target = [target]
+    self.Install(instdir, target)
 
   def executableLink(self, dest, target, source, **unused_kw):
     """path to the target in the srcdir (not builddir)."""
@@ -455,6 +470,15 @@ class khEnvironment(Environment):
     if not SCons.Util.is_List(newname):
       newname = [newname]
     self.InstallAs([self.fs.File(i, instdir) for i in newname], src)
+
+  def installRecursive(self, dest_root, source_path):
+    for root_dir, _, files in os.walk(source_path):
+        for file_path in files:
+            self.Install(
+                os.path.join(
+                  dest_root,
+                  os.path.relpath(root_dir, os.path.dirname(source_path))),
+                os.path.join(root_dir, file_path))
 
   def installDirExcluding(self, dest, target_dir, excluded_list, subdir=''):
     instdir = self.fs.Dir(subdir, self.installdirs[dest])
@@ -526,7 +550,7 @@ class khEnvironment(Environment):
     # Re-call all the target  builders to add the sources to each target.
     result = []
     for t in tlist:
-      bld = t.get_builder() or my_alias_builder
+      bld = t.get_builder() if t.has_builder() else my_alias_builder
       result.extend(bld(self, t, source))
     return result
 
