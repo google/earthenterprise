@@ -8,7 +8,7 @@ install the required development tools.
 ### CentOS 7
 
 ```bash
-sudo yum install epel-release
+sudo yum install -y epel-release
 ```
 
 ### RHEL 7
@@ -20,7 +20,7 @@ sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noa
 ### CentOS 6
 
 ```bash
-wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
+sudo wget http://people.centos.org/tru/devtools-2/devtools-2.repo -O /etc/yum.repos.d/devtools-2.repo
 sudo yum install -y epel-release
 ```
 
@@ -70,7 +70,7 @@ Execute the following commands:
 ```bash
 curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh \
   | sudo bash
-sudo yum install git-lfs
+sudo yum install -y git-lfs
 ```
 
 ## GCC 4.8
@@ -78,14 +78,14 @@ sudo yum install git-lfs
 ### CentOS 7 and RHEL 7
 
 ```bash
-yum install ant bzip2 doxygen gcc-c++ patch python-argparse python-setuptools \
+sudo yum install -y ant bzip2 doxygen gcc-c++ patch python-argparse python-setuptools \
   swig tar
 ```
 
 ### CentOS 6
 
 ```bash
-yum install -y devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-toolchain devtoolset-2-gcc-gfortran
+sudo yum install -y devtoolset-2-gcc devtoolset-2-binutils devtoolset-2-toolchain devtoolset-2-gcc-gfortran
 ```
 
 ### RHEL 6
@@ -151,7 +151,7 @@ experimenting with the `--skip-broken` parameter.
 GTest is included in the EPEL and RHEL Extra Repositories. Install the RPM with:
 
 ```bash
-yum install -y gtest-devel
+sudo yum install -y gtest-devel
 ```
 
 ### CentOS 6 and RHEL 6
