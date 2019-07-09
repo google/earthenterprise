@@ -59,10 +59,7 @@ class StorageManager
     inline void NoLongerNeeded(const AssetKey &, bool = true);
     void Abort();
     bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<SharedString> *);
-    HandleType Load(const std::string &boundref);
     HandleType Get(const AssetHandleInterface<AssetType> *, bool, bool, bool);
-    HandleType LoadAssetResource(const std::string &boundref)
-    HandleType LoadAssetVersionResource(const std::string &boundref)
   private:
     using CacheType = khCache<AssetKey, HandleType>;
 
@@ -133,7 +130,7 @@ StorageManager<AssetType>::Get(
     }
 
     // Will succeed, generate stub, or throw exception.
-    entry = handle->Load(key);
+    entry = AssetType::Load(key);
     updated = true;
   } else if (check_timestamps) {
     uint64 filesize = 0;
@@ -147,7 +144,7 @@ StorageManager<AssetType>::Get(
       cache.Remove(key, false);  // Don't prune, the Add() will.
 
       // Will succeed, generate stub, or throw exception.
-      entry = handle->Load(key);
+      entry = AssetType::Load(key);
       updated = true;
     }
   }
@@ -200,16 +197,5 @@ bool StorageManager<AssetType>::SaveDirtyToDotNew(
   return true;
 }
 
-template<class AssetType>
-typename StorageManager<AssetType>::HandleType
-StorageManager<AssetType>::LoadAssetVersionResource(const std::string &boundref){
-  return AssetFileManager::LoadAssetVersionResource<AssetType>(boundref);
-}
-
-template<class AssetType>
-typename StorageManager<AssetType>::HandleType
-StorageManager<AssetType>::LoadAssetResource(const std::string &boundref) {
-  return AssetFileManager::LoadAssetResource<AssetType>(boundref);
-}
 #endif // STORAGEMANAGER_H
 
