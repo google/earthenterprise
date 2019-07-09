@@ -17,7 +17,7 @@
 
 import sys
 import os
-import commands
+import commands         # TODO: This has been deprecated since 2.6 (?)
 
 env = Environment()
 
@@ -34,25 +34,33 @@ if (not installdir) and ('install' in COMMAND_LINE_TARGETS):
 tutorials_dir = installdir + '/tutorial'
 root_dir = tutorials_dir + '/opt/google/share/tutorials/fusion/'
 
-def makeHardLinks(instdir, target_dir, excluded_list):
-    # get contents of target_dir and make hard links to files in instdir
-    # recurse down the directories
+# Get the current directory, since SCons will move into the directory
+#   it's using, and FusionTutorial is expected below the SConscript file.
+tutorial_src_dir = os.path.join(os.getcwd(), 'FusionTutorial')
 
-    contents = os.listdir(target_dir)
-    target_dir = target_dir + "/"
-    # Ensure the install dir exists at each step
-    commands.getstatusoutput("mkdir -p " + instdir)
-    for file in contents:
+def makeSoftLinks(dest_dir, src_dir, excluded_list):
+    """Make soft links of all files in src_dir and place
+    them in dest_dir. Don't link to files in excluded_list.
+    Recurse through all subdirectories of src_dir.
+    """
+    # Strip trailing slashes because they cause trouble later
+    dest_dir = dest_dir.rstrip(os.sep)
+    src_dir = src_dir.rstrip(os.sep)
+    src_contents = os.listdir(src_dir)
+    # Ensure the destination directory exists at each step
+    commands.getstatusoutput("mkdir -p " + dest_dir)
+    for file in src_contents:
         if file in excluded_list:
             continue
-        target_file = target_dir + file
-        if os.path.isdir(target_file):
-            subdir = instdir + "/" + file
-            makeHardLinks(subdir, target_file,
-                                             excluded_list)
+        # Use full paths to all files so `ln -s ... ` succeeds
+        dest_filepath = os.path.join(dest_dir, file)
+        src_filepath = os.path.join(src_dir, file)
+        if os.path.isdir(src_filepath):
+            # Recurse for next-lower directory
+            makeSoftLinks(dest_filepath, src_filepath, excluded_list)
         else:
-            commands.getstatusoutput("ln \"" + target_file + "\" " +
-                                     instdir)
+            commands.getstatusoutput('ln -s "' + src_filepath + '" "' +
+                                    dest_filepath + '"')
 
 # Clean install dir (note: the current sconscripts leave stuff behind, like
 # directories).
@@ -60,4 +68,4 @@ if env.GetOption('clean'):
     # clean the search and getomcat install folders.
     commands.getstatusoutput("rm -rf " + tutorials_dir)
 else:
-    makeHardLinks(root_dir, 'FusionTutorial/', ['.svn'])
+    makeSoftLinks(root_dir, tutorial_src_dir, ['.svn'])

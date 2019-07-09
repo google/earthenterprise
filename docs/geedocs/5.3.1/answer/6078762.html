@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Release notes: GEE 5.1.0</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
+</head>
+<body>
+<!-- 6078762.html -->
+<div class="container">
+<div class="sidebar1">
+  <p class="sidebar-toc"><a href="../answer/7160006.html">Open GEE 5.2.5</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160004.html">Open GEE 5.2.4</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160003.html">Open GEE 5.2.3</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160002.html">Open GEE 5.2.2</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160001.html">Open GEE 5.2.1</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160000.html">Open GEE 5.2.0</a></p>
+  <p class="sidebar-toc"><a href="../answer/7159245.html">GEE 5.1.3</a></p>
+  <p class="sidebar-toc"><a href="../answer/6259403.html">GEE 5.1.2</a></p>
+  <p class="sidebar-toc"><a href="../answer/6159443.html">GEE 5.1.1</a></p>
+  <p class="sidebar-toc"><a href="../answer/6078762.html" class="current-file">GEE 5.1.0</a></p>
+  <p class="sidebar-toc"><a href="../answer/6053170.html">GEE 5.0.2</a></p>
+  <p class="sidebar-toc"><a href="../answer/4556704.html">GEE 5.0.1</a></p>
+  <p class="sidebar-toc"><a href="../answer/3424202.html">GEE 5.0</a></p>
+</div>
+<div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Release notes</h1>
+<h2>Release notes: GEE 5.1.0</h2>
+<p>This document includes the following information about the Google Earth Enterprise 5.1.0 release:</p>
+  <h5>
+    <p id="overview_5">New Features</p>
+  </h5>
+    <p>Google Earth Enterprise 5.1.0 release introduces greater map building flexibility with an additional Plate Carrée map projection and for the first time adds the ability to use flat imagery resources in all three database types. Whether storage space is a key consideration or performance speed when serving your map databases, GEE now offers different options when planning your imagery resources. </p>
+    <p><strong>Support for Flat Projection</strong> (Plate Carrée—EPSG:4326). The <a href="../answer/6081009.html">Flat Projection</a> map is useful because the imagery layers for Google Earth EC and Google Maps can share the same database. </p>
+    <p><strong>Add flat imagery to a Mercator map database</strong>; when the Mercator map is served on GEE Server, the flat imagery is projected as <a href="../answer/6081069.html">Mercator on the Fly</a>. Now that your Mercator map databases can share the same imagery projects as a Flat Projection map databases, you can save on storage space and database building time by eliminating the need for Mercator-based imagery. </p>
+    <p><strong>Configure SSL/HTTPS with command line option</strong>. You can now create and register a location-based virtual host using the command line tool <code>geserveradmin --addvh --ssl</code>. See <a href="../answer/6080928.html">Configure GEE Server 5.1.0 for SSL/HTTPS</a>.</p>
+    <p><strong>Set TRANSPARENT and BGCOLOR parameters when making WMS requests</strong>. You can now determine if your map should be transparent, allowing other map layers beneath to be visible, and you can also set the background color of the map. See <a href="../answer/4441137.html">Make Web Map Service (WMS) requests</a>.</p>
+    <p><strong>Display All option for center labels for polygon settings in the Map Layer dialog</strong>. By default, GEE will display center labels of polygons so that they don't overlap, hiding some labels where necessary. Alternatively, check the <strong>Display All</strong> option for center labels for polygon settings in the <strong>Map Layer</strong> dialog to show all labels of polygons, irrespective of whether they overlap. See <a href="../answer/4412455.html">Creating a map database</a>.</p>
+  <h5>
+    <p id="supported_5">Supported Platforms</p>
+  </h5>
+  <p>The Google Earth Enterprise 5.1.0 release is supported on 64-bit versions of the following operating systems:</p>
+    <ul>
+      <li>Ubuntu 10.04 LTS and 12.04 LTS</li>
+      <li>Red Hat Enterprise Linux versions 6.0 to 6.5, including the most recent security patches</li>
+      <li>CentOS 6.5</li>
+    </ul>
+    <p>GEE 5.1.0 is compatible with Google Earth Enterprise Client (EC) and Plugin versions 7.0.1 - 7.1.1.1888 for Windows, Mac, and Linux.</p>
+<h5>
+  <p id="library_updates_5_1">Library Updates</p>
+</h5>
+<p> <strong>Google Maps Javascript Maps API V3:</strong></p>
+  <ul>
+    <li>Updated to version 3.17. See <a href="https://code.google.com/p/gmaps-api-issues/wiki/JavascriptMapsAPIv3Changelog" target="_blank">change release</a> information. </li>
+  </ul>
+  <p><strong>Apache HTTP Server:</strong></p>
+  <ul>
+    <li>Updated from version 2.2.27 to 2.2.29. See <a href="http://www.apache.org/dist/httpd/CHANGES_2.2.29" target="_blank">Apache HTTP Server Project</a> for information about the vulnerabilities addressed. </li>
+  </ul>
+  <h5>
+    <p id="known_issues_5_1">Known Issues</p>
+  </h5>
+    <table class="nice-table">
+      <tbody>
+        <tr>
+          <th>Number</th>
+          <th class="narrow">Description</th>
+          <th>Workaround</th>
+        </tr>
+        <tr>
+          <td>17725523</td>
+          <td>When attempting to install GEE 5.1.0 on RHEL 6 using the GUI installer, the process is likely to fail.</td>
+          <td>To install GEE 5.1.0 on RHEL 6, use the command line installer for Fusion and Server instead.</td>
+        <tr>
+          <td>17532512</td>
+          <td>When canceling the build process of a map database, the processes that build the map layer project will not be canceled.</td>
+          <td>When canceling the build process of a map database, you need also manually cancel the build process for the map layer project:
+            <ol>
+              <li>In the Asset Manager dialog, right-click the map database name that you are trying to cancel the build and choose <strong>Asset Versions</strong> from the context menu. The Properties dialog appears.</li>
+              <li>Select the version that you want to cancel, right-click and select <strong>Version Properties</strong> from the context menu to open the Version Properties dialog.</li>
+              <li>Click the <strong>+</strong> next to <strong>MapDatabase</strong> to open the tree of assets in the database. Right-click the <strong>MapLayer</strong> assets under <strong>Project</strong> and click <strong>Cancel</strong> in the context menu. The MapLayerLevels processing is canceled. Close the Version Properties and Properties dialogs to return to the Asset Manager.</li>
+            </ol></td>
+        </tr>
+        <tr>
+          <td>17363564</td>
+          <td>3D databases with terrain projects, including overlay insets, that do not include worldwide coverage, may cause Google Earth 7.1.1 to crash. </td>
+          <td>Include worldwide terrain in all terrain projects, even when building overlays, as worldwide coverage enables the regions of overlay inset to fill with values from the base terrain. See <a href="../answer/4412421.html#DefTerrProj">Defining terrain projects</a> and <a href="../answer/4492623.html">Create terrain overlays</a>.</td>
+        </tr>
+          </tr>
+      </tbody>
+    </table>
+<h5>
+  <p id="resolved_issues_5_1">Resolved Issues</p>
+</h5>
+  <p>The following resolved issues are incremental fixes and relative to the last official build, <a href="../answer/6053170.html">GEE 5.0.2</a>.</p>
+  <table class="nice-table">
+    <tbody>
+      <tr>
+        <th>Number</th>
+        <th class="narrow">Description</th>
+        <th>Resolution</th>
+      </tr>
+      <tr>
+        <td>14254303</td>
+        <td>When installing Fusion, the GUI installer skips the screen that enables group and user name settings to be created.</td>
+        <td>Fixed. you can accept the default <strong>user</strong> name: <em>gefusionuser</em>, and <strong>group</strong> name: <em>gegroup</em> or specify your own custom names.</td>
+      </tr>
+      <tr>
+        <td>15290004, 15313028</td>
+        <td>When attempting to cancel a cut using the <strong>Cutter</strong> tool, the Cancel button does not properly kill any running task on GEE Server.</td>
+        <td>Fixed. The <strong>Cutter</strong> cancel process now kills any running task on GEE Server.</td>
+      </tr>
+      <tr>
+        <td>16618751</td>
+        <td>When attempting to specify the <code>--lut</code> option for the <code>gevirtualraster</code> tool, no file is specified.</td>
+        <td>The <code>--lut</code> option has been removed from the <code>gevirtualraster</code> command and supporting documentation as the LUT file type is not being used.</td>
+      </tr>
+      <tr>
+        <td>16135553</td>
+        <td>When the <code>gemaskgen</code> tool terminates in error, there is insufficient error logging.</td>
+        <td>A check for size of source/output raster and logging support for gemaskgen has been improved, providing more information about processes and when they are terminated in error.</td>
+      </tr>
+      <tr>
+        <td>17300345</td>
+        <td>When adding a new imagery resource to an existing imagery project that was originally built with GEE 4.4.1, adding a new imagery resource and rebuilding the imagery project with GEE 5.x fails.</td>
+        <td>Fixed. Existing imagery projects with older imagery resources now rebuild successfully.</td>
+      </tr>
+      <tr>
+        <td>16683365</td>
+        <td>The option to serve 3D databases using WMS has been deprecated. </td>
+        <td>Fixed. WMS now serves 2D flat projection map databases in addition to Mercator projection map databases. See <a href="../answer/4441137.html">Make Web Map Service (WMS) requests</a>.</td>
+      </tr>
+      <tr>
+        <td>16701881</td>
+        <td>When attempting to set the maximum number of CPUs used for Fusion processing tasks, <strong>geselectassetroot --numcpus</strong> fails to update the value specified.</td>
+        <td>Fixed. The <strong>geselectassetroot --numcpus</strong> tool specifies the <a href="../answer/6008655.html">maximum number of CPUs</a> for Fusion processing.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="footer">
+    <p class="BackToTop"><a href="#top_of_file">Back to top</a>
+    
+    <hr />
+    </p>
+    <p class="copyright">&copy;2015 Google</p>
+  </div>
+</div>
+</body>
+</html>

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2017 Google Inc.
+# Copyright 2017 Google Inc., 2018-2019 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -34,15 +34,6 @@ BACKUP_DATA_DIR=$BACKUP_DIR/data.backup
 BACKUPSERVER=true
 BADHOSTNAMEOVERRIDE=false
 MISMATCHHOSTNAMEOVERRIDE=false
-DEFAULTGROUPNAME="gegroup"
-GROUPNAME=$DEFAULTGROUPNAME
-
-# user names
-GRPNAME="gegroup"
-GEPGUSER_NAME="gepguser"
-GEAPACHEUSER_NAME="geapacheuser"
-DEFAULTGEFUSIONUSER_NAME="gefusionuser"
-GEFUSIONUSER_NAME=$DEFAULTGEFUSIONUSER_NAME
 
 SERVER_INSTALL_OR_UPGRADE="install"
 GEE_CHECK_CONFIG_SCRIPT="/opt/google/gehttpd/cgi-bin/set_geecheck_config.py"
@@ -52,6 +43,22 @@ PGSQL_PROGRAM="/opt/google/bin/pg_ctl"
 PRODUCT_NAME="$GEE"
 START_SERVER_DAEMON=1
 PROMPT_FOR_START="n"
+
+# user names
+DEFAULTGROUPNAME="gegroup"
+# $GROUPNAME is used in common.sh by the check_group and check_username functions
+GROUPNAME=$DEFAULTGROUPNAME
+GRPNAME=$DEFAULTGROUPNAME
+GEAPACHEUSER_NAME="geapacheuser"
+GEPGUSER_NAME="gepguser"
+DEFAULTGEFUSIONUSER_NAME="gefusionuser"
+GEFUSIONUSER_NAME=$DEFAULTGEFUSIONUSER_NAME
+
+# addition variables
+IS_NEWINSTALL=false
+FUSION_INSTALLED=false
+PUBLISHER_ROOT_VOLUME_INFO=()
+MIN_PUBLISHER_ROOT_VOLUME_SIZE_IN_KB=1048576
 
 #-----------------------------------------------------------------
 # Main Functions
@@ -67,6 +74,22 @@ main_preinstall()
     exit 1
   fi
 
+  # Check if a new install
+  if [ -f "$GESERVERBININSTALL" ]; then
+    # Get usernames that were used in previous installation
+    IS_NEWINSTALL=false
+    get_server_installation_info
+  else
+    IS_NEWINSTALL=true
+    BACKUPSERVER=false
+    # If fusion has been installed, get fusion user and group name used in fusion install
+    if [ -f "$FUSIONBININSTALL" ] && [ -f "$SYSTEMRC" ]; then
+      GRPNAME=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/userGroupname/text()")
+      GEFUSIONUSER_NAME=$(xml_file_get_xpath "$SYSTEMRC" "//Systemrc/fusionUsername/text()")
+      FUSION_INSTALLED=true
+    fi
+  fi
+
   # Argument check
   if ! parse_arguments "$@"; then
     exit 1
@@ -77,7 +100,7 @@ main_preinstall()
   fi
 
   if is_package_installed "opengee-common" "opengee-common"; then
-    show_opengee_package_installed "install" "$GEES" 
+    show_opengee_package_installed "install" "$GEES"
     exit 1
   fi
 
@@ -98,15 +121,33 @@ main_preinstall()
     exit 1
   fi
 
+  # 64 bit check
+  if [[ "$(uname -i)" != "x86_64" ]]; then
+    echo -e "\n$GEES $LONG_VERSION can only be installed on a 64 bit operating system."
+    exit 1
+  fi
+
+  # 10) Configure Publish Root
+  configure_publish_root
+
+  # Check publisher root volume size
+  if ! check_publisher_root_volume; then
+    exit 1
+  fi
+
+  if ! prompt_install_confirmation; then
+    exit 1
+  fi
+
   # 5b) Perform backup
   if [ "$BACKUPSERVER" = true ]; then
     # Backing up current Server Install...
     backup_server
-  fi
 
-  # Backup PGSQL data
-  if [ -d "$PGSQL_DATA" ]; then
-    backup_pgsql_data
+    # Backup PGSQL data
+    if [ -d "$PGSQL_DATA" ]; then
+      backup_pgsql_data
+    fi
   fi
 
   # 6) Check valid host properties
@@ -118,20 +159,12 @@ main_preinstall()
     exit 1
   fi
 
-  # 64 bit check
-  if [[ "$(uname -i)" != "x86_64" ]]; then
-    echo -e "\n$GEES $LONG_VERSION can only be installed on a 64 bit operating system."
-    exit 1
-  fi
-
   # 8) Check if group and users exist
   check_group
 
   check_username "$GEAPACHEUSER_NAME"
   check_username "$GEPGUSER_NAME"
 
-  # 10) Configure Publish Root
-  configure_publish_root
 }
 
 check_prereq_software()
@@ -207,12 +240,18 @@ show_intro()
 # TODO: Add additional parameters for GEE Server
 show_help()
 {
-  echo -e "\nUsage: \tsudo ./install_server.sh [-h] [-dir /tmp/fusion_os_install -hnf -hnmf]\n"
-
+  echo -e "\nUsage: \tsudo ./install_server.sh [-h] [-dir /tmp/fusion_os_install -hnf -hnmf] [-pgu gepguser]"
+  echo -e "\t\t[-au geapacheuser] [-g gegroup] [-nobk]"
+  echo -e "\n"
   echo -e "-h --help \tHelp - display this help screen"
   echo -e "-dir \t\tTemp Install Directory - specify the temporary install directory. Default is [$TMPINSTALLDIR]."
   echo -e "-hnf \t\tHostname Force - force the installer to continue installing with a bad \n\t\thostname. Bad hostname values are [${BADHOSTNAMELIST[*]}]."
-  echo -e "-hnmf \t\tHostname Mismatch Force - force the installer to continue installing with a \n\t\tmismatched hostname.\n"
+  echo -e "-hnmf \t\tHostname Mismatch Force - force the installer to continue installing with a \n\t\tmismatched hostname."
+  echo -e "-au \t\tApache user name. Default is [$GEAPACHEUSER_NAME]. \n\t\tNote: this is only used for new installations."
+  echo -e "-pgu \t\tPostgres user name. Default is [$GEPGUSER_NAME]. \n\t\tNote: this is only used for new installations."
+  echo -e "-g \t\tUser Group Name - the group name to use for the Server, Postgress, and Apache user. Default is [$GRPNAME]. \n\t\tNote: this is only used for new installations."
+  echo -e "-nobk \t\tNo Backup - do not backup the current server setup. Default is to backup \n\t\tserver before installing."
+  echo -e "\n"
 }
 
 # TODO convert to common function
@@ -236,6 +275,9 @@ parse_arguments()
         parse_arguments_retval=1
         break
         ;;
+      -nobk)
+        BACKUPSERVER=false
+        ;;
       -hnf)
         BADHOSTNAMEOVERRIDE=true;
         ;;
@@ -252,12 +294,71 @@ parse_arguments()
           break
         fi
         ;;
-      *)
-        echo -e "\nArgument Error: $1 is not a valid argument."
-        show_help
-        parse_arguments_retval=1
-        break
+      -au)
+        shift
+        if [ $IS_NEWINSTALL = false ] && [ "$GEAPACHEUSER_NAME" != "${1// }" ]; then
+          echo -e "\nYou cannot modify the Apache user name using the installer because $GEES is already installed on this server."
+          parse_arguments_retval=1
+          break
+        else
+          if is_valid_alphanumeric ${1// }; then
+            GEAPACHEUSER_NAME=${1// }
+          else
+            echo -e "\nThe Apache user name you specified is not valid. Valid characters are upper/lowercase letters, "
+            echo -e "numbers, dashes and the underscore characters. The user name cannot start with a number or dash."
+            parse_arguments_retval=1
+            break
+          fi
+        fi
         ;;
+      -pgu)
+        shift
+        if [ $IS_NEWINSTALL == false ] && [ "$GEPGUSER_NAME" != "${1// }" ]; then
+          echo -e "\nYou cannot modify the postgres user name using the installer because $GEES is already installed on this server."
+          parse_arguments_retval=1
+          break
+        else
+          if is_valid_alphanumeric ${1// }; then
+            GEPGUSER_NAME=${1// }
+          else
+            echo -e "\nThe Postgres user name you specified is not valid. Valid characters are upper/lowercase letters, "
+            echo -e "numbers, dashes and the underscore characters. The user name cannot start with a number or dash."
+            parse_arguments_retval=1
+            break
+          fi
+        fi
+        ;;
+      -g)
+        shift
+        if [ $IS_NEWINSTALL == false ] && [ $GRPNAME != ${1// } ]; then
+          echo -e "\nYou cannot modify the $GEES user group using the installer because $GEES is already installed on this server."
+          parse_arguments_retval=1
+          # Don't show the User Group dialog since it is invalid to change the fusion
+          # username once fusion is installed on the server
+          show_user_group_recommendation=false
+          break
+        elif [ $FUSION_INSTALLED == true ] && [ $GRPNAME != ${1// } ]; then
+          echo -e "\nYou specified a different group ($1) than for fusion installation ($GRPNAME)"
+          echo -e "You must use the same group for both Fusion and Server"
+          parse_arguments_retval=1
+          break
+        else
+          if is_valid_alphanumeric ${1// }; then
+            GRPNAME=${1// }
+          else
+            echo -e "\nThe group name you specified is not valid. Valid characters are upper/lowercase letters, "
+            echo -e "numbers, dashes and the underscore characters. The group name cannot start with a number or dash."
+            parse_arguments_retval=1
+            break
+          fi
+        fi
+      ;;
+    *)
+      echo -e "\nArgument Error: $1 is not a valid argument."
+      show_help
+      parse_arguments_retval=1
+      break
+      ;;
     esac
 
     if [ $# -gt 0 ]
@@ -282,6 +383,25 @@ configure_publish_root()
   if [ -e "$STREAM_SPACE" ]; then
     PUBLISHER_ROOT=`cat $STREAM_SPACE | cut -d" " -f3 | sed 's/.\{13\}$//'`
   fi
+}
+
+check_publisher_root_volume()
+{
+  local check_publisher_root_volume_retval=0
+  # Get size and available for publisher root volume
+  PUBLISHER_ROOT_VOLUME_INFO=($(get_volume_info "$PUBLISHER_ROOT"))
+  if [[ ${PUBLISHER_ROOT_VOLUME_INFO[2]} -lt $MIN_PUBLISER_ROOT_VALUE_IN_KB ]]; then
+    MIN_PUBLISHER_ROOT_VOLUME_SIZE_IN_GB=$(expr $MIN_PUBLISHER_ROOT_VOLUME_SIZE_IN_KB / 1024 / 1024)
+    echo -e "\nThe publisher root volume [$PUBLISHER_ROOT] has only ${PUBLISHER_ROOT_VOLUME_INFO[2]} KB available."
+    echo -e "We recommend that an publisher root directory have a minimum of $MIN_PUBLISHER_ROOT_VOLUME_SIZE_IN_GB GB of free disk space."
+    echo ""
+
+    if ! prompt_to_quit "X (Exit) the installer and change the asset root location with larger volume - C (Continue) to use the asset root that you have specified."; then
+        check_publisher_root_volume_retval=1
+    fi
+  fi
+
+  return $check_publisher_root_volume_retval
 }
 
 backup_pgsql_data()
@@ -339,7 +459,15 @@ copy_files_to_target()
   if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf "$TMPINSTALLDIR/server/opt/google/lib" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
-  cp -rf "$TMPINSTALLDIR/server/opt/google/gehttpd" "$BASEINSTALLDIR_OPT"
+  
+  if [ -f "$BASEINSTALLDIR_OPT/gehttpd/conf.d/.htpasswd" ]
+  then
+    # Preserve Admin Console password
+    rsync -rl "$TMPINSTALLDIR/server/opt/google/gehttpd" "$BASEINSTALLDIR_OPT" --exclude conf.d/.htpasswd
+  else
+    rsync -rl "$TMPINSTALLDIR/server/opt/google/gehttpd" "$BASEINSTALLDIR_OPT"
+  fi
+
   if [ $? -ne 0 ]; then error_on_copy=1; fi
   cp -rf "$TMPINSTALLDIR/server/opt/google/search" "$BASEINSTALLDIR_OPT"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
@@ -398,8 +526,12 @@ copy_files_to_target()
   cp -f "$TMPOPENLDAPPATH/ldap.conf.default" "$BASEINSTALLDIR_ETC/openldap"
   if [ $? -ne 0 ]; then error_on_copy=1; fi
 
-  # TODO: final step: copy uninstall script
-  # cp -f $TMPOPENLDAPPATH/<........> $INSTALL_LOG_DIR
+  cp -f $TMPINSTALLDIR/common/opt/google/uninstall_server.sh $INSTALL_LOG_DIR
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
+  cp -f $TMPINSTALLDIR/common/opt/google/common.sh $INSTALL_LOG_DIR
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
+  cp -f $TMPINSTALLDIR/common/opt/google/version.txt $BASEINSTALLDIR_OPT
+  if [ $? -ne 0 ]; then error_on_copy=1; fi
 
   if [ "$error_on_copy" -ne 0 ]
   then
@@ -627,6 +759,70 @@ check_server_running()
              /var/opt/google/pgsql/logs \n
              for more details. "
   fi
+}
+
+# Candidate to move to common
+is_valid_alphanumeric()
+{
+  # Standard function that tests a string to see if it passes the "valid" alphanumeric for user name and group name.
+  # For simplicity -- we limit to letters, numbers and underscores.
+  regex="^[a-zA-Z_]{1}[a-zA-Z0-9_-]*$"
+
+  if [ ! -z "$1" ] && [[ $1 =~ $regex ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+# Show config values and prompt user for confirmation to continue install
+prompt_install_confirmation()
+{
+  local backupStringValue=""
+
+  if [ $BACKUPSERVER == true ]; then
+    backupStringValue="YES"
+  else
+    backupStringValue="NO"
+  fi
+
+  echo -e "\nYou have chosen to install $GEES with the following settings:\n"
+  echo -e "# CPU's: \t\t\t$NUM_CPUS"
+  echo -e "Operating System: \t\t$MACHINE_OS_FRIENDLY"
+  echo -e "64 bit OS: \t\t\tYES"	# Will always be true because we exit if 32 bit OS
+  if [ $IS_NEWINSTALL == false ]; then
+    echo -e "Backup Server: \t\t\t$backupStringValue"
+  fi
+  echo -e "Publisher Root: \t\t${PUBLISHER_ROOT_VOLUME_INFO[0]}"
+  echo -e "Publisher Root Mount Point: \t${PUBLISHER_ROOT_VOLUME_INFO[3]}"
+  echo -e "Install Location: \t\t$BASEINSTALLDIR_OPT"
+  echo -e "Postgres User: \t\t\t$GEPGUSER_NAME"
+  echo -e "Apache User: \t\t\t$GEAPACHEUSER_NAME"
+  echo -e "Group: \t\t\t\t$GRPNAME"
+  echo -e "Disk Space:\n"
+
+#	GRPNAME="gegroup"
+#	GEPGUSER_NAME="gepguser"
+
+  # display disk space
+  df -h | grep -v -E "^none"
+
+  echo ""
+
+  if ! prompt_to_quit "X (Exit) the installer and cancel the installation - C (Continue) to install/upgrade."; then
+    return 1
+  else
+        echo -e "\nProceeding with installation..."
+    return 0
+    fi
+}
+
+# Get user/group info from previous installation.  Uses user/group for particular files/directories
+get_server_installation_info()
+{
+  GEAPACHEUSER_NAME=$(get_default_user "$PUBLISHER_ROOT/search_space" $GEAPACHEUSER_NAME)
+  GRPNAME=$(get_default_group "$PUBLISHER_ROOT/search_space" $GRPNAME)
+  GEPGUSER_NAME=$(get_default_user "$PGSQL_DATA" $GEPGUSER_NAME)
 }
 
 #-----------------------------------------------------------------

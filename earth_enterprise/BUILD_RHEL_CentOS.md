@@ -75,12 +75,14 @@ sudo yum install -y git-lfs
 
 ## GCC 4.8
 
-### CentOS 7 and RHEL 7
+For all versions of CentOS and RHEL, install the standard development/build tools:
 
 ```bash
 sudo yum install -y ant bzip2 doxygen gcc-c++ patch python-argparse python-setuptools \
   swig tar
 ```
+
+For CentOS 6 and RHEL 6, also install the devtoolset toolchain.
 
 ### CentOS 6
 
@@ -123,7 +125,7 @@ sudo yum install -y \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel \
   perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-devel \
   rpm-build rpmrebuild rsync scons \
-  xerces-c xerces-c-devel xorg-x11-server-devel zlib-devel
+  xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```
 
 ### CentOS 6 and RHEL 6
@@ -132,13 +134,13 @@ Execute:
 ```bash
 sudo yum install -y \
   bison-devel boost-devel cmake daemonize freeglut-devel \
-  gdbm-devel geos-devel giflib-devel GitPython \
+  gdbm-devel geos-devel gettext giflib-devel GitPython \
   libcap-devel libmng-devel libpng-devel libX11-devel libXcursor-devel \
     libXft-devel libXinerama-devel libxml2-devel libXmu-devel libXrandr-devel \
   ogdi-devel openjpeg-devel openjpeg2-devel openssl-devel \
   perl-Alien-Packages perl-Perl4-CoreLibs proj-devel python-devel python-unittest2 \
   rpm-build rpmrebuild rsync scons shunit2 \
-  xerces-c xerces-c-devel xorg-x11-server-devel zlib-devel
+  xerces-c xerces-c-devel xorg-x11-server-devel yaml-cpp-devel zlib-devel
 ```
 
 If you encounter an error about git dependency conflicts, consider 

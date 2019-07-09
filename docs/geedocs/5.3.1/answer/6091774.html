@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Example Search plug-in Python code sample</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
+</head>
+<body>
+<!-- 6091774.html -->
+<div class="container">
+<div class="sidebar1">
+  <p class="sidebar-toc"><a href="../answer/3468004.html">GEE Server Overview</a></p>
+  <p class="sidebar-toc"><a href="../answer/3470759.html">Sign in to GEE Server Admin console</a></p>
+  <p class="sidebar-toc"><a href="../answer/3479919.html">Snippet profiles page</a></p>
+  <p class="sidebar-toc"><a href="../answer/3480095.html">Search tabs page</a></p>
+  <p class="sidebar-toc"><a href="../answer/3479921.html">Settings page</a></p>
+  <p class="sidebar-toc"><a href="../answer/3480097.html">Dashboard page</a></p>
+  <p class="sidebar-toc"><a href="../answer/3479922.html">Databases page</a></p>
+  <p class="sidebar-toc"><a href="../answer/3497763.html">Publish databases and portables</a></p>
+  <p class="sidebar-toc"><a href="../answer/6004748.html">Manage snippet profiles</a></p>
+  <p class="sidebar-toc"><a href="../answer/176770.html">Display custom logos</a></p>
+  <p class="sidebar-toc"><a href="../answer/6013604.html">Manage virtual hosts</a></p>
+  <p class="sidebar-toc"><a href="../answer/4441137.html">Make Web Map Service (WMS) requests</a></p>
+  <p class="sidebar-toc"><a href="../answer/6062970.html">Publish databases with search</a></p>
+  <p class="sidebar-toc"><a href="../answer/6063101.html">Search your POI vector data or map layer data</a></p>
+  <p class="sidebar-toc"><a href="../answer/3497832.html">Create Search tabs</a></p>
+  <p class="sidebar-toc"><a href="../answer/6066597.html">Add custom search services</a></p>
+  <p class="sidebar-toc"><a href="../answer/6082250.html">Troubleshoot search services</a></p>
+  <p class="sidebar-toc"><a href="../answer/6091774.html" class="current-file">Example Search plug-in Python code sample</a></p>
+  <p class="sidebar-toc"><a href="../answer/6091810.html">Custom POI Search plug-in Python code sample</a></p>
+  <p class="sidebar-toc"><a href="../answer/3230777.html">Create portable globes and maps</a></p>
+  <p class="sidebar-toc"><a href="../answer/4643041.html">Create composite globes and maps</a></p>
+  <p class="sidebar-toc"><a href="../answer/6051534.html">View 3D databases</a></p>
+  <p class="sidebar-toc"><a href="../answer/6051659.html">View 2D databases</a></p>
+  <p class="sidebar-toc"><a href="../answer/6051568.html">Implement Google Earth Plugin</a></p>
+  <p class="sidebar-toc"><a href="../answer/6051584.html">(Deprecated) Provide Google Earth Plug-in for your users to install</a></p>
+</div>
+<div class="content"> <a name="top_of_file"></a>
+  <p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+  <h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | GEE Server administration</h1>
+  <h2>Example Search plug-in Python code sample</h2>
+  <p>The <code>ExampleSearch</code> search plug-in for GEE Server provides the interface to query a SQL database of San Francisco neighborhoods via a search tab in Google Earth EC or a browser. The following description captures the overall mechanism of the plug-in but we recommend that you take a look at the code directly.</p>
+  <p>You can find the two Python files for the <code>ExampleSearch</code> plug-in in the following location:</p>
+  <p><code>/opt/google/gehttpd/wsgi-bin/search/plug-in/example_search_app.py</code></p>
+  <p><code>/opt/google/gehttpd/wsgi-bin/search/plug-in/example_search_handler.py</code></p>
+  <p>In Google Earth Enterprise, a search plug-in Python-based framework relies on the Python Web Server Gateway Interface (WSGI), a Python API that acts as an interface between web servers and web applications. The web application or framework, <code>example_search_app.py</code> search plug-in, is represented to the server as a Python callable method, <code>__call__</code> to start the application. The callable method must include two arguments:</p>
+  <ul>
+    <li><code>environ</code> object—a list that contains the WSGI environment information</li>
+    <li><code>start_response</code> callable, which performs an example search and returns the KML/JSONP format output back in the HTTP response.</li>
+  </ul>
+  <p>A request returns a <code>response_body</code>, the search results that are sent back to the requesting client wrapped in a list.</p>
+  <p>The handler, <code>example_search_handler.py</code>, is the actual plug-in code. It defines a class, <code>ExampleSearch</code>, which demonstrates how to construct and query a spatial database based on a URL  search string, extract geometries from the result, associate various styles with them and return the response back to the client. The query definition, <code>RunExampleSearch</code>, performs a query search on the <code>san_francisco_neighborhoods</code> SQL table, with a response type of KML for Google Earth EC, or JSONP for a browser client, and returning the results as a list.
+  
+  <h4>JSON object and response structure</h4>
+  <p>The JSON object defined in <code>example_search_handler.py</code>, and the JSON response returned from the query, follow the default map structure that is bundled with GEE. If you want to create your own map application using a custom search response, you can structure the JSON to take advantage of Google Maps Javascript API functionality.</p>
+  <p>For example, if you have <code>GeoJSON</code> data, a standard for geospatial data on the internet, the <code>google.maps.Data</code> class allows you to add GeoJSON data to your map. The <code>Data</code> class follows the structure of <code>GeoJSON</code> in its data representation and makes it easy to  import <code>GeoJSON</code> data and display points, line-strings and polygons. For more information about the Data Layer of Google Maps Javascript API, see <a href="https://developers.google.com/maps/documentation/javascript/datalayer">https://developers.google.com/maps/documentation/javascript/datalayer</a>.
+  
+  <h4>SQL query settings</h4>
+  <p>The query that <code>example_search_handler.py</code> runs is hard-coded to the database scheme of the <code>san_francisco_neighborhoods</code> SQL table so if you have different schema, you’ll need to change the query. The search query is standard SQL available at: <code>/opt/google/gehttpd/wsgi-bin/search/common/geconstants.py</code>. For example, the following snippet shows the SQL query used to return the polygon perimeters of the neighborhoods listed in the “san_francisco_neighborhoods” SQL table:</p>
+  <pre>
+<p><code>self.example_query = (
+  "SELECT ${FUNC}(ST_Force_3DZ(the_geom)) AS the_geom,Area(the_geom),"
+  "Perimeter(the_geom),sfar_distr,nbrhood, "
+  "GeometryType(the_geom) AS geom_type "
+  "FROM san_francisco_neighborhoods "
+  "WHERE "
+  "lower(nbrhood) like %s"
+  )</code></p>
+</pre>
+  <p>As the <code>/opt/google/gehttpd/wsgi-bin/search/common/geconstants.py</code> file includes the queries for all the system search plug-ins provided with Google Earth Enterprise, you can check out the various constructs to help you build your plug-in. We recommend that you keep your SQL query in the handler of your plug-in.</p>
+  <h4>KML Geometric types supported</h4>
+  <p>The <strong>ExampleSearch</strong> plug-in returns polygons, but all KML geometric types are supported.</p>
+  <div class="tip"> Only point type query results will fly to first element; with geometric types, the query result flies to a bounding box within which all search results are visible. </div>
+  </p>
+  </p>
+  <div class="footer">
+    <p class="BackToTop"><a href="#top_of_file">Back to top</a>
+    <hr />
+    </p>
+    <p class="copyright">&copy;2015 Google</p>
+  </div>
+</div>
+</body>
+</html>

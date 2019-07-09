@@ -45,22 +45,26 @@ class StorageManager
     using HandleType = khRefGuard<AssetType>;
     using AssetKey = SharedString;
 
-    StorageManager(uint cacheSize, const std::string & type) :
+    StorageManager(uint cacheSize, bool limitByMemory, uint64 maxMemory, const std::string & type) :
         cache(cacheSize),
-        assetType(type) {}
+        assetType(type) { SetCacheMemoryLimit(limitByMemory, maxMemory); }
     ~StorageManager() = default;
 
     inline uint32 CacheSize() const { return cache.size(); }
     inline uint32 CacheCapacity() const { return cache.capacity(); }
     inline uint32 DirtySize() const { return dirtyMap.size(); }
+    inline uint64 CacheMemoryUse() const { return cache.getMemoryUse(); }
+    inline void SetCacheMemoryLimit(bool limitByMemory, uint64 maxMemory) { cache.setCacheMemoryLimit(limitByMemory, maxMemory); }
+    inline void UpdateCacheItemSize(const AssetKey & key) { cache.updateCacheItemSize(key); }
+    inline uint64 GetCacheItemSize(const AssetKey & key) { return cache.getCacheItemSize(key); }
     inline void AddNew(const AssetKey &, const HandleType &);
     inline void AddExisting(const AssetKey &, const HandleType &);
     inline void NoLongerNeeded(const AssetKey &, bool = true);
     void Abort();
-    bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<std::string> *);
+    bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<SharedString> *);
     HandleType Get(const AssetHandleInterface<AssetType> *, bool, bool, bool);
   private:
-    using CacheType = khCache<std::string, HandleType>;
+    using CacheType = khCache<AssetKey, HandleType>;
 
     static const bool check_timestamps;
 
@@ -176,7 +180,7 @@ void StorageManager<AssetType>::Abort() {
 template<class AssetType>
 bool StorageManager<AssetType>::SaveDirtyToDotNew(
     khFilesTransaction &savetrans,
-    std::vector<std::string> *saved) {
+    std::vector<SharedString> *saved) {
   notify(NFY_INFO, "Writing %lu %s records", dirtyMap.size(), assetType.c_str());
   typename std::map<AssetKey, HandleType>::iterator entry = dirtyMap.begin();
   while (entry != dirtyMap.end()) {

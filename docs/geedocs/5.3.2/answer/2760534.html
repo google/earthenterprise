@@ -1,0 +1,60 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Non-clickable icons</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 2760534.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/6153619.html">Supported file formats in GEE</a></p>
+<p class="sidebar-toc"><a href="../answer/6053241.html">Apply alpha masking to imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/172810.html">Import pre-processed data</a></p>
+<p class="sidebar-toc"><a href="../answer/1090589.html">Import a subset of imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/173054.html">Add .kip imagery</a></p>
+<p class="sidebar-toc"><a href="../answer/2882131.html">Vector data handling</a></p>
+<p class="sidebar-toc"><a href="../answer/2760298.html">Google Maps raster background</a></p>
+<p class="sidebar-toc"><a href="../answer/4525555.html">Create custom masks</a></p>
+<p class="sidebar-toc"><a href="../answer/6062318.html">Manage mosaics with virtual rasters</a></p>
+<p class="sidebar-toc"><a href="../answer/6081009.html">Map projection types in GEE 5.1.0</a></p>
+<p class="sidebar-toc"><a href="../answer/6081069.html">Add flat imagery to Mercator map databases in GEE 5.1.0</a></p>
+<p class="sidebar-toc"><a href="../answer/2760457.html">Add KML layers</a></p>
+<p class="sidebar-toc"><a href="../answer/2760534.html" class="current-file">Non-clickable icons</a></p>
+<p class="sidebar-toc"><a href="../answer/173053.html">Map projections</a></p>
+<p class="sidebar-toc"><a href="../answer/1089795.html">Map buttons</a></p>
+<p class="sidebar-toc"><a href="../answer/4492623.html">Create terrain overlays</a></p>
+<p class="sidebar-toc"><a href="../answer/2760655.html">Monitor builds with Twitter</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Fusion resources and projects</h1>
+<h2>Non-clickable icons</h2>
+<p>By default, any point icon that you configure in Fusion displays a pop-up balloon whenever EC users click it. You can configure your pop-up balloons to display information about the point. An example is shown below.</p>
+<p>However, if you don't want an icon to display a pop-up balloon, you can use one of Fusion's <strong>Advanced</strong> options to make it a non-clickable icon. (Non-clickable icons are point icons that don't change when clicked.)</p>
+<p><img alt="Clickable icon example" src="../art/fusion/projects/2964717_clickable_icon.jpg"/></p>
+<h2>To create a non-clickable icon:</h2>
+<ol class="spaced-list">
+<li>Add a new point vector resource to a vector project. In the example below, the point vector resource is called <strong>USA_Cities</strong>.
+
+<p><img alt="Point layer resource example" src="../art/fusion/projects/2966059_point_layer.jpg"/></p>
+</li>
+<li>Assign filters, icon types, and minimum and maximum visibility display rule settings to the point layer.
+<p><img alt="Vector Display Rules window" src="../art/fusion/projects/2966091_vector_display_rules.jpg"/></p>
+</li>
+<li>In the <strong>Balloon</strong> section, change the <strong>Style</strong> from <strong>Default</strong> to <strong>Advanced</strong>.
+<p><img alt="Balloon style options" src="../art/fusion/projects/2966060_balloon_style_options.jpg"/></p>
+</li>
+<li>Leave the <strong>Text</strong> field and the field that appears below <strong>Advanced</strong> empty.
+<p><img alt="Balloon style - Advanced" src="../art/fusion/projects/2966075_balloon_style_advanced.jpg"/></p>
+</li>
+<li>Click <strong>Advanced</strong>. The <strong>Balloon Style Text</strong> window appears.
+<p><img alt="Balloon Style Text window" src="../art/fusion/projects/2966062_balloon_style_text.jpg"/></p>
+</li>
+<li>Click <strong>Insert Default Text</strong>.</li>
+<li>Remove all text except: $[description].</li>
+<li>Click <strong>OK</strong> twice to exit all windows.</li>
+<li><strong>Save</strong> and <strong>Build</strong> the vector project.</li>
+<li>Build the 3D database, then publish to Fusion.
+<p>You can now view the non-clickable icon in EC.</p>
+</li>
+</ol>
+<div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>
