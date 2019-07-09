@@ -47,9 +47,6 @@ class DerivedAssetHandleD_ : public virtual BaseD_, public ROBase_
   typedef typename BBase::HandleType HandleType;
  public:
   virtual HandleType Load(const std::string &boundref) const {
-    // Impl::Load will succeed or throw.
-    // The derived khRefGuard will be automatically converted
-    // the the base khRefGuard
     return HandleType(Impl::Load(boundref));
   }
   virtual bool Valid(const HandleType & entry) const {
@@ -259,7 +256,6 @@ class MutableDerivedAssetHandleD_ : public DerivedBase_, public MutableBase_
   // invoke this constructor and there is no way to declare it a friend
   // here since we can't list the name
   explicit MutableDerivedAssetHandleD_(const std::shared_ptr<Impl>& handle_) :
-            //const khRefGuard<Impl> &handle_) :
       BBase(), BaseD(), DerivedBase(), MutableBase() {
     this->handle = handle_;
     if (this->handle != nullptr) {

@@ -42,7 +42,7 @@ template<class AssetType>
 class StorageManager
 {
   public:
-    using HandleType = std::shared_ptr<AssetType>;//khRefGuard<AssetType>;
+    using HandleType = std::shared_ptr<AssetType>;
     using AssetKey = SharedString;
 
     StorageManager(uint cacheSize, const std::string & type) :

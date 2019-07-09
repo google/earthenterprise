@@ -171,8 +171,6 @@ class khRefGuard {
 
 template <class T> inline khRefGuard<T> khRefGuardFromNew(T *newobj);
 template <class T> inline khRefGuard<T> khRefGuardFromThis_(T *thisobj);
-template <class T> inline std::shared_ptr<T> sharedPtrFromNew(T* newobj);
-template <class T> inline std::shared_ptr<T> sharedPtrFromThis(T* thisobj);
 #define khRefGuardFromThis() khRefGuardFromThis_(this)
 #define AnotherRefGuardFromRaw(x) khRefGuardFromThis_(x)
 
@@ -348,24 +346,10 @@ khRefGuardFromNew(T *newobj) {
   return khRefGuard<T>(khUnrefNewGuard_<T>(newobj));
 }
 
-template <typename T>
-inline std::shared_ptr<T>
-sharedPtrFromNew(T* newobj)
-{
-    return std::make_shared<T>(newobj);
-}
-
 template <class T>
 inline khRefGuard<T>
 khRefGuardFromThis_(T *thisobj) {
   return khRefGuard<T>(khRerefThisGuard_<T>(thisobj));
-}
-
-template <typename T>
-inline std::shared_ptr<T>
-sharedPtrFromThis(T* thisobj)
-{
-    return std::make_shared<T>(thisobj);
 }
 
 // ****************************************************************************

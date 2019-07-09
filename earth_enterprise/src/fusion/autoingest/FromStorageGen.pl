@@ -69,31 +69,18 @@ foreach my $plugin (@plugins) {
 #include <$header>
 #include <memory>
 
-//khRefGuard
 std::shared_ptr<${plugin}AssetImpl>
 ${plugin}AssetImpl::NewFromStorage(const AssetStorage &storage,
                                    const Config &config)
 {
-    /*khDeleteGuard<$assetimpl>
-        tmp(TransferOwnership(new $assetimpl(storage, config)));
-    tmp->AfterLoad();
-    return khRefGuard<${plugin}AssetImpl>(khRefGuardFromNew(tmp.take()));*/
-    return std::make_shared<${plugin}AssetImpl>
-        (storage, config);
+    return std::make_shared<${plugin}AssetImpl>(storage, config);
 }
 
-
-//khRefGuard
 std::shared_ptr<${plugin}AssetVersionImpl>
 ${plugin}AssetVersionImpl::NewFromStorage(const AssetVersionStorage &storage,
 					  const Config &config)
 {
-    /*khDeleteGuard<$versionimpl>
-        tmp(TransferOwnership(new $versionimpl(storage, config)));
-    tmp->AfterLoad();
-    return khRefGuard<${plugin}AssetVersionImpl>(khRefGuardFromNew(tmp.take()));*/
-    return std::make_shared<${plugin}AssetVersionImpl>
-        (storage, config);
+    return std::make_shared<${plugin}AssetVersionImpl>(storage, config);
 }
 
 

@@ -173,20 +173,11 @@ ${name}Factory::Make(const std::string &ref_ $formaltypearg,
 {
     typedef ${name}AssetImplD Impl;
 
-    // all of this wrapping is required and makes it nearl:y impossible
-    // to misuse the Handle and khRefGuard class
     return Mutable${name}AssetD(std::make_shared<Impl>
                                (AssetStorage::MakeStorage(
                                    ref_, $actualtypearg, "$subtype",
                                    $actualinputarg, meta_),
                                 config_));
-
-
-             /*(khRefGuardFromNew(new Impl
-                (AssetStorage::MakeStorage(ref_, $actualtypearg,
-                                           "$subtype",$actualinputarg,
-                                           meta_),
-                 config_)));*/
 }
 
 Mutable${name}AssetD
@@ -421,25 +412,21 @@ namespace {
     void AddConfig(DOMElement *parent, const $config &config);
 }
 
-//khRefGuard
 std::shared_ptr<${name}AssetImplD>
 ${name}AssetImplD::Load(const std::string &boundref)
 {
-    //khRefGuard<${name}AssetImplD> result;
-
     // make sure the base class loader actually instantiated one of me
     // this should always happen, but there are no compile time guarantees
-    //result.dyncastassign(${name}AssetImpl::Load(boundref));
-    //if (!result) {
-    //    AssetThrowPolicy::FatalOrThrow(
-    //        "Internal error: ${name}AssetImplD loaded wrong type for " +
-    //        boundref);
-    //}
-
-    //return result;
     std::shared_ptr<${name}AssetImplD> result =
         std::dynamic_pointer_cast<${name}AssetImplD>
         (${name}AssetImpl::Load(boundref));
+
+    if (!result) {
+        AssetThrowPolicy::FatalOrThrow(
+            "Internal error: ${name}AssetImplD loaded wrong type for " +
+            boundref);
+    }
+
     return result; //std::dynamic${name}AssetImplD::Load(boundref);
 }
 
@@ -498,7 +485,6 @@ ${name}AssetImplD::MakeNewVersion(const ${name}AssetImplD::Config &bound_config)
 
     Mutable${name}AssetVersionD newver(std::make_shared<VerImpl>
                                       (this, bound_config));
-        //(khRefGuardFromNew(new VerImpl(this, bound_config)));
 
     AddVersionRef(newver->GetRef());
     return newver;
@@ -513,8 +499,6 @@ ${name}AssetImplD::MakeNewVersion(void)
 {
     typedef ${name}AssetVersionImplD VerImpl;
     Mutable${name}AssetVersionD newver(std::make_shared<VerImpl>(this));
-
-        //khRefGuardFromNew(new VerImpl(this)));
 
     AddVersionRef(newver->GetRef().toString());
     return newver;
@@ -795,25 +779,21 @@ print $fh <<EOF;
 // ****************************************************************************
 // ***  ${name}AssetVersionImplD - Auto generated
 // ****************************************************************************
-//khRefGuard
 std::shared_ptr<${name}AssetVersionImplD>
 ${name}AssetVersionImplD::Load(const std::string &boundref)
 {
-    //khRefGuard<${name}AssetVersionImplD> result;
-
     // make sure the base class loader actually instantiated one of me
     // this should always happen, but there are no compile time guarantees
-    //result.dyncastassign(${name}AssetVersionImpl::Load(boundref));
-    //if (!result) {
-    //    AssetThrowPolicy::FatalOrThrow(
-    //        "Internal error: ${name}AssetVersionImplD loaded wrong type for " +
-    //        boundref);
-    //}
-    //return result;
+
     std::shared_ptr<${name}AssetVersionImplD> result =
         std::dynamic_pointer_cast<${name}AssetVersionImplD>
         (${name}AssetVersionImpl::Load(boundref));
-    return result;  //${name}AssetVersionImpl::Load(boundref);
+        if (!result) {
+            AssetThrowPolicy::FatalOrThrow(
+                "Internal error: ${name}AssetVersionImplD loaded wrong type for " +
+                boundref);
+        }
+    return result;
 }
 
 
