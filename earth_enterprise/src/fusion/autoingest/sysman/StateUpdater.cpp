@@ -187,7 +187,6 @@ void StateUpdater::SetStateForVertexAndDependents(
     AssetDefs::State newState,
     function<bool(AssetDefs::State)> updateStatePredicate) {
   if (updateStatePredicate(tree[vertex].state)) {
-    SharedString name = tree[vertex].name;
     // Set the state. The OnStateChange handler will take care
     // of stopping any running tasks, etc
     // false -> don't send notifications about the new state because we
