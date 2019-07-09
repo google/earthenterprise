@@ -132,74 +132,73 @@ utilsources = [
 geutil = env.sharedLib('geutil', utilsources,
                        LIBS = ['gecommon', 'qt-mt'])
 
-# Unit test executables, temporarily disable
-#env.test('quadtreepath_unittest',
-#         'quadtreepath_unittest.cpp',
-#         LIBS=['geutil', 'gecommon', 'qt-mt'])
-#
-#env.test('crc_unittest',
-#         '../third_party/rsa_md5/crc_unittest.cpp',
-#         LIBS=['gecommon'])
-#
-#env.test('filebundle_unittest',
-#         'filebundle/filebundle_unittest.cpp',
-#         LIBS=['geutil', 'gecommon', 'qt-mt'])
-#
-#env.test('cachedreadaccessor_unittest',
-#         'filebundle/cachedreadaccessor_unittest.cpp',
-#         LIBS=['gecommon', 'geutil'])
+env.test('quadtreepath_unittest',
+         'quadtreepath_unittest.cpp',
+         LIBS=['geutil', 'gecommon', 'qt-mt'])
 
-#env.test('merge_unittest',
-#        'merge/merge_unittest.cpp',
-#       LIBS=['gecommon', 'geutil'])
+env.test('crc_unittest',
+         '../third_party/rsa_md5/crc_unittest.cpp',
+         LIBS=['gecommon'])
 
-#env.test('packetfile_unittest',
-#        ['packetfile/packetfile_unittest.cpp'],
-#         LIBS=['geutil', 'gecommon', 'getests'])
-#
-#env.test('packetcompress_unittest',
-#         'packetcompress_unittest.cpp',
-#         LIBS=['geutil', 'gecommon', 'qt-mt'])
+env.test('filebundle_unittest',
+         'filebundle/filebundle_unittest.cpp',
+         LIBS=['geutil', 'gecommon', 'qt-mt'])
 
-#env.test('uuid_unittest',
-#         '../third_party/rfc_uuid/uuid_unittest.cpp',
-#         LIBS=['geutil'])
-#
-#env.test('khTimer_unittest',
-#         'khTimer_unittest.cpp',
-#         LIBS=['geutil'])
+env.test('cachedreadaccessor_unittest',
+         'filebundle/cachedreadaccessor_unittest.cpp',
+         LIBS=['gecommon', 'geutil'])
 
-#env.test('procpidstats_unittest',
-#         'procpidstats_unittest.cpp',
-#         LIBS=['geutil'])
+env.test('merge_unittest',
+        'merge/merge_unittest.cpp',
+       LIBS=['gecommon', 'geutil'])
 
-#env.test('tile_resampler_unittest',
-#         'tile_resampler_unittest.cpp',
-#         LIBS=['gecommon', 'gtest', 'qt-mt'])
+env.test('packetfile_unittest',
+        ['packetfile/packetfile_unittest.cpp'],
+         LIBS=['geutil', 'gecommon', 'getests'])
 
-#env.test('verref_storage_unittest',
-#         'verref_storage_unittest.cpp',
-#         LIBS=['geutil', 'gecommon', 'gtest'])
+env.test('packetcompress_unittest',
+         'packetcompress_unittest.cpp',
+         LIBS=['geutil', 'gecommon', 'qt-mt'])
 
-#env.test('timeutils_unittest',
-#         'timeutils_unittest.cpp',
-#         LIBS=['gecommon', 'gtest'])
+env.test('uuid_unittest',
+         '../third_party/rfc_uuid/uuid_unittest.cpp',
+         LIBS=['geutil'])
 
-#env.test('performancelogger_unittest',
-#         'performancelogger_unittest.cpp',
-#         LIBS=['gecommon', 'gtest'])
+env.test('khTimer_unittest',
+         'khTimer_unittest.cpp',
+         LIBS=['geutil'])
 
-#env.test('khThread_unittest',
-#         'khThread_unittest.cpp',
-#         LIBS=['gecommon', 'gtest', 'rt'])
+env.test('procpidstats_unittest',
+         'procpidstats_unittest.cpp',
+         LIBS=['geutil'])
 
-#env.test('khconfigparser_unittest',
-#         'khconfigparser_unittest.cpp',
-#          LIBS=['geutil', 'gtest'])
+env.test('tile_resampler_unittest',
+         'tile_resampler_unittest.cpp',
+         LIBS=['gecommon', 'gtest', 'qt-mt'])
 
-#env.test('sharedstring_unittest',
-#         'sharedstring_unittest.cpp',
-#          LIBS=['geutil', 'gtest','gecommon'])
+env.test('verref_storage_unittest',
+         'verref_storage_unittest.cpp',
+         LIBS=['geutil', 'gecommon', 'gtest'])
+
+env.test('timeutils_unittest',
+         'timeutils_unittest.cpp',
+         LIBS=['gecommon', 'gtest'])
+
+env.test('performancelogger_unittest',
+         'performancelogger_unittest.cpp',
+         LIBS=['gecommon', 'gtest'])
+
+env.test('khThread_unittest',
+         'khThread_unittest.cpp',
+         LIBS=['gecommon', 'gtest', 'rt'])
+
+env.test('khconfigparser_unittest',
+         'khconfigparser_unittest.cpp',
+          LIBS=['geutil', 'gtest'])
+
+env.test('sharedstring_unittest',
+         'sharedstring_unittest.cpp',
+          LIBS=['geutil', 'gtest','gecommon'])
 
 
 env.install('common_lib', [gecommon])
