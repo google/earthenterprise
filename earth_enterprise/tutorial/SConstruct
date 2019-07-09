@@ -92,6 +92,5 @@ if env.GetOption('clean'):
     # clean the search and getomcat install folders.
     commands.getstatusoutput("rm -rf " + tutorials_dir)
 else:
-    # makeSoftLinks(root_dir, tutorial_src_dir, ['.svn'])
     copyFiles(root_dir, tutorial_src_dir, ['.svn'])
 
