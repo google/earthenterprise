@@ -53,7 +53,7 @@ class TestHandle : public AssetHandleInterface<TestItem> {
     virtual const AssetKey Key() const { return name; }
     virtual string Filename() const { return "/dev/null"; }
     virtual HandleType Load(const string &) const {
-      return HandleType(new TestItem());
+      return HandleType(std::make_shared<TestItem>());
     }
     virtual bool Valid(const HandleType &) const { return true; }
     TestHandle(const AssetKey & name) : name(name) {}

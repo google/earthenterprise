@@ -610,7 +610,7 @@ AssetVersionImplD::InputVersionGuard::InputVersionGuard
 
 AssetVersionImplD::InputVersionGuard::~InputVersionGuard(void)
 {
-  if (refcount() == 1) {
+  if (use_count() == 1) {
     impl->verholder = 0;
     // my base destructor will delete the object for me
   }

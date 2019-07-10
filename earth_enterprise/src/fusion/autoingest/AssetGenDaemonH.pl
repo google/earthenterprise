@@ -153,7 +153,7 @@ print $fh <<EOF;
           ${base}AssetVersionImpl(),
           ${name}AssetVersionImpl(config_),
           ${base}AssetVersionImplD() { }
-public:
+
 $extra{"${name}AssetVersionImplD"}
 
     // supplied from ${name}.src ---v

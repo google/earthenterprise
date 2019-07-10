@@ -149,9 +149,7 @@ class DerivedAssetHandle_ : public virtual Base_ {
 
  public:
   virtual HandleType Load(const std::string &boundref) const {
-    // when switching to using shared_ptr, manually call Base load
-    // and don't rely on auto conversion, as is done via khRefGuard
-    return HandleType(Base::Load(boundref));
+    return HandleType(Impl::Load(boundref));
   }
 
   virtual bool Valid(const HandleType & entry) const { 

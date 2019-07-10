@@ -427,7 +427,7 @@ ${name}AssetImplD::Load(const std::string &boundref)
             boundref);
     }
 
-    return result; //std::dynamic${name}AssetImplD::Load(boundref);
+    return result;
 }
 
 extern void ToElement(DOMElement *elem, const AssetStorage &self);
