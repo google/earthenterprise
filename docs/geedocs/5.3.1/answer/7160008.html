@@ -72,12 +72,40 @@ gtag('config', 'UA-108632131-2');
             <th>Resolution</th>
           </tr>
           <tr>
+            <td>1236</td>
+            <td>Polygons and Polygon constructors should handle a KML string.</td>
+            <td>
+              Constructors now allows reading KML as string stream object in addition to reading it using file name.
+            </td>
+          </tr>          
+          <tr>
             <td>1255</td>
             <td>Version errors with GEE patch releases</td>
             <td>
               Limited internal version string to 3 parts to fix patch releases.
             </td>
           </tr>
+          <tr>
+            <td>1277</td>
+            <td>Change asset and asset version keys to ints.</td>
+            <td>
+              Fusion uses strings to refer to assets and asset versions. This is now updated to use integers.
+            </td>
+          </tr>
+          <tr>
+            <td>1292</td>
+            <td>Invalid qtpacket status with SharedString fixes.</td>
+            <td>
+              If one builds a project the status of the qtpacket will show as Bad even though it actually built successfully.  This fixes the issue.
+            </td>
+          </tr>
+          <tr>
+            <td>1301</td>
+            <td>Combine storage-related code.</td>
+            <td>
+              This is a re-factoring work to create a storage manager that manages reading, writing, and caching.
+            </td>
+          </tr>                          
           <tr>
             <td>1304</td>
             <td>Creating issues tickets in OpenGEE repo does not provide guidelines</td>
