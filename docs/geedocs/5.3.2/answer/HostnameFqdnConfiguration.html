@@ -30,8 +30,8 @@ FQDN. The <code>/etc/hostname</code> file should be updated to match as well so 
 setting the hostname to the FQDN is not possible then setting the FQDN in the <code>/etc/hosts</code> file is
 necessary. When using a static hostname some operating systems may still give a warning on Apache startup even if
 it correctly determined the FQDN. Adding the FQDN to <code>/etc/hosts</code> would fix this as well. If adding the
-FQDN to <code>/etc/hosts</code> is needed, then the FQDN followed by just the host portion should be added to any
-line that contains the IP address the server will be listening on, like this: </p>
+FQDN to <code>/etc/hosts</code> is needed, then the FQDN followed by just the host portion should be added to the
+line that contains the IP address the server will be listening on. This should be the first line of the file: </p>
 <p><code>127.0.0.1	myserver.mydomainname.com myserver localhost</code></p>
 <p>If GEE is not using DNS other clients that connect to the server non-locally would need to have the same static
 mapping set up in their hosts files since the server hostname would not be resolved dynamically.</p>
