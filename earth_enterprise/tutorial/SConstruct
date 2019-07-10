@@ -48,7 +48,7 @@ def copyFiles(dest_dir, src_dir):
     src_dir = src_dir.rstrip(os.sep)
     # Ensure the destination directory exists at each step
     commands.getstatusoutput("mkdir -p " + dest_dir)
-    commands.getstatusoutput("cp -R " + source_dir + os.sep 
+    commands.getstatusoutput("cp -R " + src_dir + os.sep 
                              + "*" + " " + dest_dir)
 
 # Clean install dir (note: the current sconscripts leave stuff behind, like
