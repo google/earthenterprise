@@ -37,6 +37,7 @@ class StorageManaged {
 };
 
 template<class AssetType> class AssetHandleInterface;
+template<class AssetType> class AssetHandle;
 
 template<class AssetType>
 class StorageManager
@@ -63,6 +64,12 @@ class StorageManager
     void Abort();
     bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<SharedString> *);
     HandleType Get(const AssetHandleInterface<AssetType> *, const SharedString &, bool, bool, bool);
+    
+    // Pass a handle to a const to prevent callers from modifying it.
+    AssetHandle<const AssetType> Get(const AssetKey & key);
+    
+    // Pass a handle to a non-const so callers can modify it.
+    AssetHandle<AssetType> GetMutable(const AssetKey & key);
   private:
     using CacheType = khCache<AssetKey, HandleType>;
 
@@ -74,6 +81,8 @@ class StorageManager
 
     StorageManager(const StorageManager &) = delete;
     StorageManager& operator=(const StorageManager &) = delete;
+    
+    HandleType GetEntryFromCacheOrDisk(const AssetKey & key);
 };
 
 // Handles to items stored in the storage manager must implement the asset handle interface
@@ -82,6 +91,23 @@ class AssetHandleInterface {
   public:
     virtual typename StorageManager<AssetType>::HandleType Load(const std::string &) const = 0;
     virtual bool Valid(const typename StorageManager<AssetType>::HandleType &) const = 0;
+};
+
+// Objects outside the storage manager will access assets through AssetHandles.
+// This allows the storage manager to properly clean up when the other object
+// is done using the asset (release locks, update cache size, etc). AssetHandles
+// provide read-only access and MutableAssetHandles provide read/write access.
+template<class AssetType>
+class AssetHandle {
+  private:
+    typename StorageManager<AssetType>::HandleType handle;
+  public:
+    AssetHandle(typename StorageManager<AssetType>::HandleType handle) : handle(handle) {}
+    virtual ~AssetHandle() {
+      // Clean up - currently no-op
+    }
+    explicit operator bool() const { return handle.operator bool(); }
+    inline AssetType * operator->() const { return handle.operator->(); }
 };
 
 template<class AssetType>
@@ -162,6 +188,61 @@ StorageManager<AssetType>::Get(
       dirtyMap.emplace(key, entry);
   }
 
+  return entry;
+}
+
+template<class AssetType>
+typename StorageManager<AssetType>::HandleType
+StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & key) {
+  const std::string filename = AssetType::Filename(key);
+
+  // Check in cache.
+  HandleType entry;
+  cache.Find(key, entry);
+  bool updated = false;
+
+  // Try to load from XML.
+  if (!entry) {
+    // Will succeed, generate stub, or throw exception.
+    entry = AssetType::Load(key);
+    updated = true;
+  } else if (check_timestamps) {
+    uint64 filesize = 0;
+    time_t timestamp = 0;
+    if (khGetFileInfo(filename, filesize, timestamp) &&
+        ((timestamp != entry->timestamp) ||
+         (filesize != entry->filesize))) {
+      // The file has changed on disk.
+
+      // Drop the current entry from the cache.
+      cache.Remove(key, false);  // Don't prune, the Add() will.
+
+      // Will succeed, generate stub, or throw exception.
+      entry = AssetType::Load(key);
+      updated = true;
+    }
+  }
+
+  if (entry && updated) {
+    // Add it to the cache.
+    cache.Add(key, entry);
+  }
+
+  return entry;
+}
+
+template<class AssetType>
+AssetHandle<const AssetType> StorageManager<AssetType>::Get(const AssetKey & key) {
+  HandleType entry = GetEntryFromCacheOrDisk(key);
+  return khRefGuard<const AssetType>(entry);
+}
+
+template<class AssetType>
+AssetHandle<AssetType> StorageManager<AssetType>::GetMutable(const AssetKey & key) {
+  HandleType entry = GetEntryFromCacheOrDisk(key);
+  // Add it to the dirty map. If it's already in the dirty map the existing
+  // one will win; that's OK.
+  dirtyMap.emplace(key, entry);
   return entry;
 }
 

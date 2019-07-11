@@ -15,7 +15,6 @@
  */
 
 #include "StateUpdater.h"
-#include "AssetVersionD.h"
 #include "common/notify.h"
 
 using namespace boost;
@@ -118,7 +117,7 @@ void StateUpdater::FillInVertex(
     list<TreeType::vertex_descriptor> & toFillIn) {
   SharedString name = tree[myVertex].name;
   notify(NFY_PROGRESS, "Loading '%s' for state update", name.toString().c_str());
-  AssetVersionD version(name);
+  auto version = storageManager->Get(name);
   if (!version) {
     notify(NFY_WARN, "Could not load asset '%s' which is referenced by another asset.",
            name.toString().c_str());
@@ -219,7 +218,7 @@ void StateUpdater::SetState(
     bool sendNotifications) {
   SharedString name = tree[vertex].name;
   if (newState != tree[vertex].state) {
-    MutableAssetVersionD version(name);
+    auto version = storageManager->GetMutable(name);
     notify(NFY_PROGRESS, "Setting state of '%s' to '%s'",
            name.toString().c_str(), ToString(newState).c_str());
     if (version) {
@@ -377,7 +376,7 @@ class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
         const StateUpdater::TreeType & tree) const {
       SharedString name = tree[vertex].name;
       notify(NFY_PROGRESS, "Calculating state for '%s'", name.toString().c_str());
-      AssetVersionD version(name);
+      auto version = updater->storageManager->Get(name);
       if (!version) {
         // This shoud never happen - we had to successfully load the asset
         // previously to get it into the tree.
