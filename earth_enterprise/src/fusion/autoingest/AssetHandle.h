@@ -47,9 +47,9 @@ class AssetHandle_ : public AssetHandleInterface<Impl_> {
   using HandleType = typename StorageManager<Impl>::HandleType;
   struct undefined_type; // never defined.  Just used for bool operations
 
- protected:
   static inline StorageManager<Impl> & storageManager();
 
+ protected:
   inline void DoBind(
       bool checkFileExistenceFirst,
       bool addToCache) const {
