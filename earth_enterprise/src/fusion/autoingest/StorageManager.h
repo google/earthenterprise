@@ -20,6 +20,7 @@
 #include <map>
 #include <string>
 #include <time.h>
+#include <type_traits>
 #include <vector>
 #include <memory>
 #include "common/khCache.h"
@@ -100,11 +101,21 @@ class AssetHandleInterface {
 template<class AssetType>
 class AssetHandle {
   private:
-    typename StorageManager<AssetType>::HandleType handle;
+    using NonConstAssetType = typename std::remove_const<AssetType>::type;
+    using StorageManagerType = StorageManager<NonConstAssetType>;
+
+    static constexpr bool isMutable = !std::is_const<AssetType>();
+
+    const typename StorageManager<AssetType>::HandleType handle;
+    StorageManagerType * const storageManager;
   public:
-    AssetHandle(typename StorageManager<AssetType>::HandleType handle) : handle(handle) {}
+    AssetHandle(typename StorageManager<AssetType>::HandleType handle,
+                StorageManagerType * sm) : handle(handle), storageManager(sm) {}
     virtual ~AssetHandle() {
-      // Clean up - currently no-op
+      // Clean up
+      if (isMutable) {
+        storageManager->UpdateCacheItemSize(handle->GetRef());
+      }
     }
     explicit operator bool() const { return handle.operator bool(); }
     inline AssetType * operator->() const { return handle.operator->(); }
@@ -234,7 +245,7 @@ StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & key) {
 template<class AssetType>
 AssetHandle<const AssetType> StorageManager<AssetType>::Get(const AssetKey & key) {
   HandleType entry = GetEntryFromCacheOrDisk(key);
-  return khRefGuard<const AssetType>(entry);
+  return AssetHandle<const AssetType>(khRefGuard<const AssetType>(entry), this);
 }
 
 template<class AssetType>
@@ -243,7 +254,7 @@ AssetHandle<AssetType> StorageManager<AssetType>::GetMutable(const AssetKey & ke
   // Add it to the dirty map. If it's already in the dirty map the existing
   // one will win; that's OK.
   dirtyMap.emplace(key, entry);
-  return entry;
+  return AssetHandle<AssetType>(entry, this);
 }
 
 template<class AssetType>
