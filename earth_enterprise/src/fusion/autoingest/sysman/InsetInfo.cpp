@@ -347,7 +347,7 @@ void OverlapCalculator<ProductAssetVersion>::
     }
     else
     {
-        FindNeededImageryInsets(gencov,
+        FindNeededTerrainInsets(gencov,
                                 env.insets,
                                 env.numInsets,
                                 neededIndexes,
