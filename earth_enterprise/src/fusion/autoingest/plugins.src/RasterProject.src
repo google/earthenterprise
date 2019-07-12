@@ -1055,13 +1055,12 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
     prevTime = curTime;
 
     overlapEnvelope<RasterProductAssetVersion> env (
-        type, genInfo[i].coverage, insetInfoPtrs, i,
+        type, insetInfoPtrs, i,
         beginMinifyLevel, endMinifyLevel, i);
 
     std::shared_ptr<OverlapCalculator<RasterProductAssetVersion>> calc =
         std::make_shared<OverlapCalculator<RasterProductAssetVersion>>(env);
-    calc->PreprocessForInset();
-    neededIndexes = std::move(calc->GetOverlapForLevel());
+    neededIndexes = std::move(calc->PreprocessForInset(genInfo[i].coverage));
     neededIndexes.push_back(i); // each inset always intersects itself
 
     curTime = std::chrono::high_resolution_clock::now();
@@ -1130,8 +1129,6 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
       extraArg.genInfo.push_back(&genInfo[idx]);
     }
 
-    // reuse or make a new PacketGenAssetVersion --> update children
-    // refactor this method call if wanting to do all calculations at once
       MutableAssetVersionD packgen =
         PacketGenFactory::ReuseOrMakeAndUpdate(genInfo[i].assetname,
                                                type,

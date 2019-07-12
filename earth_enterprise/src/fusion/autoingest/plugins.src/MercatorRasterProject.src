@@ -942,13 +942,12 @@ uint32 MercatorRasterProjectAssetVersionImplD::BuildIndex(
     neededIndexes.reserve(i);
 
     overlapEnvelope<MercatorRasterProductAssetVersion> env (
-        type, genInfo[i].coverage, insetInfoPtrs, i,
+        type, insetInfoPtrs, i,
         beginMinifyLevel, endMinifyLevel, i);
 
     std::shared_ptr<OverlapCalculator<MercatorRasterProductAssetVersion>> calc =
         std::make_shared<OverlapCalculator<MercatorRasterProductAssetVersion>>(env);
-    calc->PreprocessForInset();
-    neededIndexes = std::move(calc->GetOverlapForLevel());
+    neededIndexes = std::move(calc->PreprocessForInset(genInfo[i].coverage));
     neededIndexes.push_back(i); // each inset always intersects itself
 
 

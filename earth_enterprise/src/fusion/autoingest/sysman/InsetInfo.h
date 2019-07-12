@@ -175,21 +175,21 @@ template <typename ProductAssetVersion>
 struct overlapEnvelope
 {
     AssetDefs::Type& type;
-    khInsetCoverage& gencov;
     std::vector<const InsetInfo<ProductAssetVersion> *>& insets;
     uint numInsets;
     uint beginMinifyLevel;
     uint endMinifyLevel;
     uint level;
     overlapEnvelope(AssetDefs::Type& _type,
-                    khInsetCoverage& _gencov,
                     std::vector<const InsetInfo<ProductAssetVersion> *>& _insets,
                     uint _numInsets,
                     uint _beginMinifyLevel, uint _endMinifyLevel, uint _level)
 
-   :                type(_type), gencov(_gencov), insets(_insets),
+   :                type(_type),
+                    insets(_insets),
                     numInsets(_numInsets),
-                    beginMinifyLevel(_beginMinifyLevel), endMinifyLevel(_endMinifyLevel),
+                    beginMinifyLevel(_beginMinifyLevel),
+                    endMinifyLevel(_endMinifyLevel),
                     level(_level) {}
 };
 
@@ -197,28 +197,27 @@ template <typename ProductAssetVersion>
 class OverlapCalculator
 {
 private:
-    std::vector<uint> neededIndexes;
-    void CalculateOverlap();
+    void CalculateOverlap(std::vector<uint>&, const khInsetCoverage&);
+    overlapEnvelope<ProductAssetVersion>& env;
 
 public:
     OverlapCalculator(overlapEnvelope<ProductAssetVersion> _env) :
         env(_env) {}
 
-    overlapEnvelope<ProductAssetVersion>& env;
+    void setBeginMinifyLevel(uint _begin) { env.beginMinifyLevel = _begin; }
+    void setEndMinifyLevel(uint _end) { env.endMinifyLevel = _end; }
 
-    void PreprocessForInset()
+    std::vector<uint> PreprocessForInset(const khInsetCoverage& gencov)
     {
-        neededIndexes.clear();
-        CalculateOverlap();
+        std::vector<uint> neededIndexes;
+        CalculateOverlap(neededIndexes, gencov);
+        return neededIndexes;
     }
 
-    std::vector<uint> GetOverlapForLevel(bool recalculate = false)
+    std::vector<uint> GetOverlapForLevel(const khInsetCoverage& gencov)
     {
-        if (recalculate)
-        {
-            neededIndexes.clear();
-            CalculateOverlap();
-        }
+        std::vector<uint> neededIndexes;
+        CalculateOverlap(neededIndexes, gencov);
         return neededIndexes;
     }
 };
