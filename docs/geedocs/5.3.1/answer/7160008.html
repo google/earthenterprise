@@ -41,15 +41,15 @@ gtag('config', 'UA-108632131-2');
 <h2>Release notes: Open GEE 5.3.1</h2>
 
   <h5>
-    <p id="overview_5.3.1">New Features</p>
+    <h3 id="overview_5.3.1">New Features</h3>
   </h5>
     <p><strong>Uninstallation scripts are now copied to <code>/opt/google/install</code>. </strong>This will allow the user to uninstall without having to have a copy of the source code on hand.</p>
     <p><strong>Memory and performance improvements for large builds.</strong> Memory utilization and performance have been improved, especially for large builds.</p>
     <p><strong>Increased logging during long Fusion operations.</strong> Fusion can now be configured to log progress while calculating overlaps between resources.</p>
-    <p><strong>Overlay option is now supported in terrain project command-line interfaces.</strong> <code>genewterrainproject</code>, <code>geaddterrainproject</code> and <code>gemodifyterrainproject</code> has new option for overlay support.</p>
+    <p><strong>Overlay option is now supported in terrain project command-line interfaces.</strong> <code>genewterrainproject</code>, <code>geaddterrainproject</code> and <code>gemodifyterrainproject</code> have a new option for overlay support.</p>
     <p><strong>Cutter embeds extra metadata into portable files.</strong>  The bounding box metadata can be used to improve loading performance in some applications.</p>
   <h5>
-    <p id="supported_5.3.1">Supported Platforms</p>
+    <h3 id="supported_5.3.1">Supported Platforms</h3>
   </h5>
   <p>The Open GEE 5.3.1 release is supported on 64-bit versions of the following operating systems:</p>
     <ul>
@@ -61,7 +61,7 @@ gtag('config', 'UA-108632131-2');
     <p><p>To upgrade from Open GEE 5.2.0, do NOT uninstall it. We recommend that you upgrade Open GEE 5.2.0 by simply installing Open GEE 5.3.1. Installing Open GEE 5.3.1 on top of Open GEE 5.2.0 will ensure that your PostgreSQL databases are backed up and upgraded correctly to the new PostgreSQL version used by Open GEE 5.3.1.</p></p>
   <h5>
     <h5>
-      <p id="resolved_issues_5.3.1">Resolved Issues</p>
+      <h3 id="resolved_issues_5.3.1">Resolved Issues</h3>
     </h5>
     <div>
       <table class="nice-table">
@@ -70,14 +70,7 @@ gtag('config', 'UA-108632131-2');
             <th>Number</th>
             <th class="narrow">Description</th>
             <th>Resolution</th>
-          </tr>
-          <tr>
-            <td>1236</td>
-            <td>Polygons and Polygon constructors should handle a KML string.</td>
-            <td>
-              Constructors now allows reading KML as string stream object in addition to reading it using file name.
-            </td>
-          </tr>          
+          </tr>         
           <tr>
             <td>1255</td>
             <td>Version errors with GEE patch releases</td>
@@ -86,26 +79,12 @@ gtag('config', 'UA-108632131-2');
             </td>
           </tr>
           <tr>
-            <td>1277</td>
-            <td>Change asset and asset version keys to ints.</td>
-            <td>
-              Fusion uses strings to refer to assets and asset versions. This is now updated to use integers.
-            </td>
-          </tr>
-          <tr>
             <td>1292</td>
             <td>Invalid qtpacket status with SharedString fixes.</td>
             <td>
               If one builds a project the status of the qtpacket will show as Bad even though it actually built successfully.  This fixes the issue.
             </td>
-          </tr>
-          <tr>
-            <td>1301</td>
-            <td>Combine storage-related code.</td>
-            <td>
-              This is a re-factoring work to create a storage manager that manages reading, writing, and caching.
-            </td>
-          </tr>                          
+          </tr>                         
           <tr>
             <td>1304</td>
             <td>Creating issues tickets in OpenGEE repo does not provide guidelines</td>
@@ -126,19 +105,12 @@ gtag('config', 'UA-108632131-2');
             <td>
               Added error handling to certain asset caching to prevent incomplete assets from being cached. This prevents a version of the DelayedBuildChildren class of errors, and rectifies the <code>run_historical.sh</code> script problem.
             </td>
-          </tr>
-          <tr>
-            <td>1344</td>
-            <td>No method in GlcUnpacker to "walk" a single layer</td>
-            <td>
-              Added method in GlcUnpacker to "walk" a single layer.
-            </td>
-          </tr>          
+          </tr>         
         </tbody>
       </table>
   <h5>
   <h5>
-    <p id="known_issues_5.3.1">Known Issues</p>
+    <h3 id="known_issues_5.3.1">Known Issues</h3>
   </h5>
     <table class="nice-table">
       <tbody>
