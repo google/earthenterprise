@@ -18,7 +18,6 @@
 #define GEO_EARTH_ENTERPRISE_SRC_COMMON_KHREFCOUNTER_H_
 
 #include <assert.h>
-
 #include "common/khTypes.h"
 #include "common/khGuard.h"
 #include "common/khThreadingPolicy.h"
@@ -84,6 +83,8 @@ class khRefGuard {
 
   // expose refcount function from my shared object
   inline uint32 refcount(void) const  { return ptr ? ptr->refcount() : 0; }
+  inline uint32 use_count(void) const { return refcount(); }
+
   inline uint64 getSize(void) const { return sizeof(this) + ( ptr ? ptr->GetSize() : 0 ); }
   inline void release(void) {
     if (ptr) {
@@ -174,6 +175,7 @@ template <class T> inline khRefGuard<T> khRefGuardFromThis_(T *thisobj);
 #define AnotherRefGuardFromRaw(x) khRefGuardFromThis_(x)
 
 
+
 // ****************************************************************************
 // ***  khRefCounter
 // ***
@@ -253,6 +255,10 @@ class khRefCounterImpl : public ThreadPolicy::MutexHolder {
   uint32 refcount(void) const {
     LockGuard guard(this);
     return refcount_;
+  }
+
+  uint32 use_count(void) const {
+      return refcount();
   }
 };
 typedef khRefCounterImpl<SingleThreadingPolicy> khRefCounter;
@@ -339,12 +345,12 @@ inline khRefGuard<T>
 khRefGuardFromNew(T *newobj) {
   return khRefGuard<T>(khUnrefNewGuard_<T>(newobj));
 }
+
 template <class T>
 inline khRefGuard<T>
 khRefGuardFromThis_(T *thisobj) {
   return khRefGuard<T>(khRerefThisGuard_<T>(thisobj));
 }
-
 
 // ****************************************************************************
 // ***  like khRefGuard but for objects w/o native ref counting ability
@@ -399,6 +405,7 @@ class khSharedHandle {
 
   // expose refcount function from my shared object
   inline uint32 refcount(void) const  { return impl ? impl->refcount() : 0; }
+  inline uint32 use_count(void) const { return refcount(); }
 };
 
 

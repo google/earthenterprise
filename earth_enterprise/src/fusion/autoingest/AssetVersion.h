@@ -58,7 +58,7 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
   }
 
   // implemented in LoadAny.cpp
-  static khRefGuard<AssetVersionImpl> Load(const std::string &boundref);
+  static std::shared_ptr<AssetVersionImpl> Load(const std::string &boundref);
 
   virtual bool Save(const std::string &filename) const {
     assert(false); // Can only save from sub-classes
