@@ -134,13 +134,16 @@ AssetVersionImplD::Load(const std::string &boundref)
 {
   // make sure the base class loader actually instantiated one of me
   // this should always happen, but there are no compile time guarantees
+  auto loaded = AssetVersionImpl::Load(boundref);
   std::shared_ptr<AssetVersionImplD> result =
-      std::dynamic_pointer_cast<AssetVersionImplD>
-      (AssetVersionImpl::Load(boundref));
-  if (!result) {
-    AssetThrowPolicy::FatalOrThrow(
-        kh::tr("Internal error: AssetVersionImplD loaded wrong type for ") +
-       boundref);
+      std::dynamic_pointer_cast<AssetVersionImplD>(loaded);
+
+  if (result == nullptr) {
+    std::string error {"Internal error: " };
+    if (loaded == nullptr)
+        error += "base did not load and ";
+    error += "AssetVersionImplD loaded wrong type for ";
+    AssetThrowPolicy::FatalOrThrow(kh::tr(error.c_str()) + boundref);
   }
   return result;
 }

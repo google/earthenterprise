@@ -417,14 +417,16 @@ ${name}AssetImplD::Load(const std::string &boundref)
 {
     // make sure the base class loader actually instantiated one of me
     // this should always happen, but there are no compile time guarantees
+    auto loaded = ${name}AssetVersionImpl::Load(boundref);
     std::shared_ptr<${name}AssetImplD> result =
-        std::dynamic_pointer_cast<${name}AssetImplD>
-        (${name}AssetImpl::Load(boundref));
+        std::dynamic_pointer_cast<${name}AssetImplD>(loaded);
 
-    if (!result) {
-        AssetThrowPolicy::FatalOrThrow(
-            "Internal error: ${name}AssetImplD loaded wrong type for " +
-            boundref);
+    if (result == nullptr) {
+        std::string error {"Internal error: "};
+        if (loaded == nullptr)
+           error += "base did not load and ";
+        error += "${name}AssetImplD loaded wrong type for ";
+        AssetThrowPolicy::FatalOrThrow(error + boundref);
     }
 
     return result;
@@ -784,15 +786,18 @@ ${name}AssetVersionImplD::Load(const std::string &boundref)
 {
     // make sure the base class loader actually instantiated one of me
     // this should always happen, but there are no compile time guarantees
+    auto loaded = ${name}AssetVersionImpl::Load(boundref);
 
     std::shared_ptr<${name}AssetVersionImplD> result =
-        std::dynamic_pointer_cast<${name}AssetVersionImplD>
-        (${name}AssetVersionImpl::Load(boundref));
-        if (!result) {
-            AssetThrowPolicy::FatalOrThrow(
-                "Internal error: ${name}AssetVersionImplD loaded wrong type for " +
-                boundref);
-        }
+        std::dynamic_pointer_cast<${name}AssetVersionImplD>(loaded);
+
+    if (result == nullptr) {
+      std::string error {"Internal error: "};
+      if (loaded == nullptr)
+        error += "base did not load and ";
+      error += "${name}AssetVersionImplD loaded wrong type for ";
+      AssetThrowPolicy::FatalOrThrow(error + boundref);
+    }
     return result;
 }
 

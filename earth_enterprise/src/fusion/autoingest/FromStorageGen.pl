@@ -73,8 +73,8 @@ std::shared_ptr<${plugin}AssetImpl>
 ${plugin}AssetImpl::NewFromStorage(const AssetStorage &storage,
                                    const Config &config)
 {
-    std::shared_ptr<${plugin}AssetImpl> retval =
-        std::make_shared<${plugin}AssetImpl>(storage,config);
+    std::shared_ptr<$assetimpl> retval =
+        std::make_shared<$assetimpl>(storage,config);
     retval->AfterLoad();
     return retval;
 }
@@ -83,8 +83,8 @@ std::shared_ptr<${plugin}AssetVersionImpl>
 ${plugin}AssetVersionImpl::NewFromStorage(const AssetVersionStorage &storage,
 					  const Config &config)
 {
-    std::shared_ptr<${plugin}AssetVersionImpl> retval =
-        std::make_shared<${plugin}AssetVersionImpl>(storage,config);
+    std::shared_ptr<$versionimpl> retval =
+        std::make_shared<$versionimpl>(storage,config);
     retval->AfterLoad();
     return retval;
 }
