@@ -20,12 +20,12 @@ class FriendlyRasterProjectAssetVersionImplD : public RasterProjectAssetVersionI
 
     public:
 
-    static khRefGuard<FriendlyRasterProjectAssetVersionImplD> Load(std::string boundref)
+    static std::shared_ptr<FriendlyRasterProjectAssetVersionImplD> Load(std::string boundref)
     {
-        khRefGuard<RasterProjectAssetVersionImplD> unfriendly_result =
+        std::shared_ptr<RasterProjectAssetVersionImplD> unfriendly_result =
             RasterProjectAssetVersionImplD::Load(boundref);
-        khRefGuard<FriendlyRasterProjectAssetVersionImplD> result = 
-            *reinterpret_cast<khRefGuard<FriendlyRasterProjectAssetVersionImplD>*>(&unfriendly_result);
+        std::shared_ptr<FriendlyRasterProjectAssetVersionImplD> result = 
+            *reinterpret_cast<std::shared_ptr<FriendlyRasterProjectAssetVersionImplD>*>(&unfriendly_result);
 
         return result;
     }
@@ -57,7 +57,7 @@ class ParseRasterProjectXmlNoContent_Test :
 
         assert(asset_name_exists(asset_name));
 
-        khRefGuard<FriendlyRasterProjectAssetVersionImplD> asset_version =
+        std::shared_ptr<FriendlyRasterProjectAssetVersionImplD> asset_version =
             FriendlyRasterProjectAssetVersionImplD::Load(asset_name);
 
         // Currently, this causes a segmentation fault:
