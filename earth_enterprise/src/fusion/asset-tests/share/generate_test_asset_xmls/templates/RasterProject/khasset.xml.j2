@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<RasterProjectAsset>
+
+  <name>{{ name }}</name>
+
+  <type>Imagery</type>
+
+  <subtype>Project</subtype>
+
+  <inputs>
+{% for name in inputs %}
+    <input>{{ name }}</input>
+{% endfor %}
+  </inputs>
+
+  <meta/>
+
+  <versions>
+{% for name in versions %}
+    <version>{{ name }}</version>
+{% endfor %}
+  </versions>
+
+  <config idl_version="1">
+    <indexVersion>7</indexVersion>
+    <insets>
+{% for inset in insets %}
+      <inset>
+        <dataAsset>{{ inset.data_asset_name }}</dataAsset>
+        <maxlevel>{{ inset.max_level }}</maxlevel>
+        <overridemax>{{ inset.override_max }}</overridemax>
+      </inset>
+{% endfor %}
+    </insets>
+    <legend>
+      <defaultLocale>
+        <name useDefault="0">Imagery</name>
+        <isChecked useDefault="0">1</isChecked>
+        <desc useDefault="0"></desc>
+        <lookAt useDefault="0"></lookAt>
+        <icon useDefault="0">
+          <type>Internal</type>
+          <href>773</href>
+        </icon>
+      </defaultLocale>
+      <locales/>
+    </legend>
+    <fuid_channel>1000</fuid_channel>
+    <asset_uuid>{{ asset_uuid }}</asset_uuid>
+    <is_timemachine_project>0</is_timemachine_project>
+    <is_overlay_terrain_project>0</is_overlay_terrain_project>
+    <overlay_terrain_resources_min_level>12</overlay_terrain_resources_min_level>
+    <overlay_terrain_start_level>4</overlay_terrain_start_level>
+  </config>
+
+</RasterProjectAsset>

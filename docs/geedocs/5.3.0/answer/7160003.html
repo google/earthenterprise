@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Release notes: Open GEE 5.2.3</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" />
+<link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-108632131-2"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-108632131-2');
+</script>
+</head>
+<body>
+<!-- 7160002.html -->
+<div class="container">
+<div class="sidebar1">
+  <p class="sidebar-toc"><a href="../answer/7160007.html">Open GEE 5.3.0</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160006.html">Open GEE 5.2.5</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160004.html">Open GEE 5.2.4</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160003.html" class="current-file">Open GEE 5.2.3</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160002.html">Open GEE 5.2.2</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160001.html">Open GEE 5.2.1</a></p>
+  <p class="sidebar-toc"><a href="../answer/7160000.html">Open GEE 5.2.0</a></p>
+  <p class="sidebar-toc"><a href="../answer/7159245.html">GEE 5.1.3</a></p>
+  <p class="sidebar-toc"><a href="../answer/6259403.html">GEE 5.1.2</a></p>
+  <p class="sidebar-toc"><a href="../answer/6159443.html">GEE 5.1.1</a></p>
+  <p class="sidebar-toc"><a href="../answer/6078762.html">GEE 5.1.0</a></p>
+  <p class="sidebar-toc"><a href="../answer/6053170.html">GEE 5.0.2</a></p>
+  <p class="sidebar-toc"><a href="../answer/4556704.html">GEE 5.0.1</a></p>
+  <p class="sidebar-toc"><a href="../answer/3424202.html">GEE 5.0</a></p>
+</div>
+<div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Release notes</h1>
+<h2>Release notes: Open GEE 5.2.3</h2>
+
+  <h5>
+    <p id="overview_5.2.3">New Features</p>
+  </h5>
+  <p><strong>C++11 support</strong>. With release 5.2.3 Open GEE C++ code now supports and defaults to compiling using the <code>-std=gnu++11</code> compile flag.  This default can be overridden and the C++ code can be compiled using the <code>-std=gnu++98</code> flag instead.  However, Open GEE 5.2.3 will be the last release to support compiling C++ code using the <code>-std=gnu++98</code> flag.  The subsequent releases after Open GEE 5.2.3 will no longer support the <code>-std=gnu++98</code> flag. All C++ code will need to conform to the gnu++11 standard.</p>
+  <p><strong>Remove TCP/IP connections to PostgreSQL</strong>. With release 5.2.3 Open GEE code will now, by default, connect to PostgreSQL exclusively using Unix domain sockets. This will make it easier to secure PostgreSQL for security sensitive installations. For those upgrading from a previous release the following files will need to be changed before disabling PostgreSQL tcp listener:
+    <ul>
+      <li>/opt/google/search/conf/ExampleSearch.conf</li>
+      <li>/opt/google/search/conf/GEPlacesSearch.conf</li>
+      <li>/opt/google/search/conf/PoiSearch.conf</li>
+    </ul>
+    You will need to change the host from '127.0.0.1' to '/tmp'
+  </p>
+  <p><strong>Volume deletion</strong>. <code>geconfigureassetroot</code> now supports the option <code>--removevolume</code> for volume deletion.</p>
+  <p><strong>Performance tuning for gecombineterrain</strong>. <code>gecombineterrain</code> now supports the option <code>--numCompressThreads</code> which specifies the number of maximum worker threads used to compress packets in this operation.  If not specified <code>gecombineterrain</code> defaults this option to match the number of available CPUs.</p>
+  <p><strong>Package name customization at build time</strong>. Scons build now accepts a custom label argument which is appended to the version in RPM file names.</p>
+  <p><strong>Rewrite KML URLs</strong>. Users can rewrite the URLs for KML resources included in databases at publish time.</p>
+  <p><strong>Maps API Javascript Files</strong>. Maps API Javascript files are now available and installed at <code>/opt/google/gehttpd/htdocs/maps/mapfiles</code>.</p>
+<h5>
+    <p id="supported_5.2.3">Supported Platforms</p>
+  </h5>
+  <p>The Open GEE 5.2.3 release is supported on 64-bit versions of the following operating systems:</p>
+    <ul>
+      <li>Red Hat Enterprise Linux version 6.x and 7.x, including the most recent security patches</li>
+      <li>CentOS 6.x and 7.x</li>
+      <li>Ubuntu 14.04 LTS and 16.04 LTS</li>
+    </ul>
+    <p>Google Earth Enterprise 5.2.3 is compatible with Google Earth Enterprise Client (EC) version 7.1.5 and above.</p>
+    <p><p>To upgrade from Open GEE 5.2.0, do NOT uninstall it. We recommend that you upgrade Open GEE 5.2.0 by simply installing Open GEE 5.2.3. Installing Open GEE 5.2.3 on top of Open GEE 5.2.0 will ensure that your PostgreSQL databases are backed up and upgraded correctly to the new PostgreSQL version used by Open GEE 5.2.3.</p></p>
+  <h5>
+    <h5>
+      <p id="resolved_issues_5.2.3">Resolved Issues</p>
+    </h5>
+    <div>
+      <table class="nice-table">
+        <tbody>
+          <tr>
+            <th>Number</th>
+            <th class="narrow">Description</th>
+            <th>Resolution</th>
+          </tr>
+          <tr>
+            <td>225</td>
+            <td>Fusion lets you create folder with space in the name</td>
+            <td>AssetManager UI only allows letters, numbers, and underscores for directory name creation</td>
+          </tr>
+          <tr>
+            <td>226</td>
+            <td>Verify the wrongly spelled "aquisition" is not appearing anywhere in the product</td>
+            <td>Fixed these spelling errors by replacing with Acquisition in multiple files.</td>
+          </tr>
+          <tr>
+            <td>337</td>
+            <td>Add a compiler version check to scons scripts</td>
+            <td>Scons scripts ensure gcc version 4.8+ is installed before continuing with builds</td>
+          </tr>
+          <tr>
+            <td>342</td>
+            <td>Fusion UI crashes when opening non supported type of file</td>
+            <td>Added check to kiasset, ktasset, xml file load to handle invalid files</td>
+          </tr>
+          <tr>
+            <td>535</td>
+            <td>DownloadTutorial.sh often is not staged properly for install</td>
+            <td>Tutorial download script is now included in the Fusion RPM</td>
+          </tr>
+          <tr>
+            <td>682</td>
+            <td>Update geconfigurepublishroot to fully correct file permissions</td>
+            <td>geconfigurepublishroot recursively sets the owner and permissions for publish root</td>
+          </tr>
+          <tr>
+            <td>731</td>
+            <td>Error in publish of SSL-enabled database</td>
+            <td>Temporary fix from 5.2.2 was found to be the best solution</td>
+          </tr>
+          <tr>
+            <td>762</td>
+            <td>Package libraries and utilities common to Fusion and Server for Ubuntu 16</td>
+            <td>opengee-common deb packages can be created for Ubuntu 16</td>
+          </tr>
+          <tr>
+            <td>806</td>
+            <td>gecombineterrain defaulted to only 1 cpu to process data and ignored arguments</td>
+            <td>Added --numCompressThreads option to accept the number of threads to use.  Default value is the number of CPUs available.  Deprecated --numcpus option</td>
+          </tr>
+          <tr>
+            <td>821</td>
+            <td>Calling geeInitMap results in an infinite recursive loop</td>
+            <td>Code to display non-existent polygon removed</td>
+          </tr>
+          <tr>
+            <td>835</td>
+            <td>GE Server gets its URL from the client instead of itself</td>
+            <td>Fixed code so that when you publish DB, GEServer's URL will be used and not the URL which we get from the Publish request message.</td>
+          </tr>
+          <tr>
+            <td>861</td>
+            <td>Running diagnostics on a server only installation will result in a failure for testAdqeuateDiskSpace</td>
+            <td>This test is skipped if Fusion is not present.</td>
+          </tr>          
+          <tr>
+            <td>877</td>
+            <td>Fusion RPM install scripts to only <code>chown</code> the asset root when necessary</td>
+            <td>
+              Recursively <code>chown</code> only when the asset root directory has incorrect ownership on a Fusion master host.
+              This allows upgrading Fusion on machines where changing asset root ownership recursively would be very expensive.
+            </td>
+          </tr>
+          <tr>
+            <td>912</td>
+            <td>TestDiskSpace diagnostics test fails on CentOS7</td>
+            <td>Changed a function to return the percentage of available disk space instead of the percentage of used disk space.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  <h5>
+  <h5>
+    <p id="known_issues_5.2.3">Known Issues</p>
+  </h5>
+    <table class="nice-table">
+      <tbody>
+        <tr>
+          <th>Number</th>
+          <th class="narrow">Description</th>
+          <th>Workaround</th>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Google basemap fails to load in 2D Mercator Maps</td>
+          <td>Obtain a valid Google Maps API key and include it in <code>/opt/google/gehttpd/htdocs/maps/maps_google.html</code>.</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>Ensure GEE Portable Cutter Job Completes</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>Improve FileUnpacker Handling of Invalid Files</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>20</td>
+          <td>Simplify build process for portable builds on MacOS</td>
+          <td>Building and running Portable Server on MacOS should be possible with minimal changes.</td>
+        </tr>
+        <tr>
+          <td>34</td>
+          <td>Scons build creates temporary directories named “0” </td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>126</td>
+          <td>The Fusion installer creates a backup on the first run</td>
+          <td>No current work around. The created backup can be deleted.</td>
+        </tr>
+        <tr>
+          <td>127</td>
+          <td>Incorrect error messages from Fusion installer</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>190</td>
+          <td>Hostname mismatch check in installers doesn't work as expected</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>193</td>
+          <td>Updated docs are not copied if the <code>/tmp/fusion_os_install</code> directory already exists</td>
+          <td>Delete <code>/tmp/fusion_os_install</code> at the beginning of the stage_install build process.</td>
+        </tr>
+        <tr>
+          <td>200</td>
+          <td>stage_install fails on the tutorial files when <code>/home</code> and <code>/tmp</code> are on different file systems</td>
+          <td>Ensure that <code>/home</code> and <code>/tmp</code> are on the same file system or download the tutorial files to <code>/opt/google/share/tutorials/fusion/</code> after installing Fusion.</td>
+        </tr>
+        <tr>
+          <td>201</td>
+          <td>Some tiles are displayed incorrectly in the Enterprise Client when terrain is enabled</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>202</td>
+          <td>Icons are not displayed on vector layers in the Enterprise Client</td>
+          <td>No current work around. It is not clear if this is an error in GEE or in the Enterprise Client.</td>
+        </tr>
+        <tr>
+          <td>203</td>
+          <td>Some vector layer options are not saved</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>221</td>
+          <td>The asset manager may display that a job is "Queued" when in fact the job is "Blocked"</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>234</td>
+          <td>Geserver raises error executing apache_logs.pyc</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>254</td>
+          <td>Automasking fails for images stored with UTM projection</td>
+          <td>Use GDAL to convert the images to a different projection before ingesting them into Fusion.</td>
+        </tr>
+        <tr>
+          <td>269</td>
+          <td>gevectorimport doesn't crop features</td>
+          <td>Use GDAL/OGR to crop vector dataset before importing them using Fusion.</td>
+        </tr>
+        <tr>
+          <td>295</td>
+          <td>Fix buffer overflows and leaks in unit tests</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>309</td>
+          <td>Check for the FusionConnection before new asset is populated</td>
+          <td>Make sure that gefusion service is started.</td>
+        </tr>
+        <tr>
+          <td>320</td>
+          <td>The Portable Server web page uses obsolete REST calls</td>
+          <td>Do not use the buttons on the Portable Server web interface for adding remote servers or broadcasting to remote servers as these features are no longer supported.</td>
+        </tr>
+        <tr>
+          <td>326</td>
+          <td>Libraries may be loaded from the wrong directory</td>
+          <td>Delete any library versions that should not be loaded or use LD_LIBRARY_PATH to load libraries from <code>/opt/google/lib</code>.</td>
+        </tr>
+        <tr>
+          <td>340</td>
+          <td>GE Fusion Terrain is black</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>342</td>
+          <td>Fusion crashes when opening an unsupported file type</td>
+          <td>Re-open Fusion and avoid opening unsupported file types.</td>
+        </tr>
+        <tr>
+          <td>343</td>
+          <td>gefusion: File ->open->*.kiasset*,*.ktasset*,*.kip does not work</td>
+          <td>kip is not a supported format. Void opening files with .kip extension.</td>
+        </tr>
+        <tr>
+          <td>380</td>
+          <td>Provider field in resource-view is blank</td>
+          <td>Open the individual resource to see the provider.</td>
+        </tr>
+        <tr>
+          <td>401</td>
+          <td>GEE commands are not in the path for sudo. </td>
+          <td>Specify the full path when running commands or add <code>/opt/google/bin</code> to the path for all users, including the super user.</td>
+        </tr>
+        <tr>
+          <td>402</td>
+          <td>Provider manager window locked to main window.</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>403</td>
+          <td>Missing Close button on system manager window in RHEL 7</td>
+          <td>Right-click the title bar and select Close.</td>
+        </tr>
+        <tr>
+          <td>404</td>
+          <td>Opaque polygons in preview.</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>405</td>
+          <td>Vector layer preview not cleared in some situations</td>
+          <td>Reset the preview window to the correct state by either clicking on it or previewing another vector layer.</td>
+        </tr>
+        <tr>
+          <td>407</td>
+          <td>Corrupt data warning when starting Fusion</td>
+          <td>No current work around but Fusion loads and runs correctly.</td>
+        </tr>
+        <tr>
+          <td>419</td>
+          <td>Fix Fusion Graphics Acceleration in Ubuntu 14 Docker Container Hosted on Ubuntu 16</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>437</td>
+          <td>Rebooting VM while it is building resources results in a corrupted XML</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>439</td>
+          <td>Uninstalling Fusion without stopping it results in unexpected error message</td>
+          <td>Ignore that error message.</td>
+        </tr>
+        <tr>
+          <td>440</td>
+          <td>Fuzzy imagery in historical imagery tests.</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>442</td>
+          <td>Multiple database pushes after upgrade don't report a warning</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>444</td>
+          <td>Fusion installer does not upgrade the asset root on RHEL 7</td>
+          <td>Upgrade the asset root manually by running the command that is printed when you try to start the Fusion service.</td>
+        </tr>
+        <tr>
+          <td>445</td>
+          <td>Path to tutorial source volume in gee_test instructions is different from path used in installers</td>
+          <td>Use <code>/opt/google/share/tutorials</code>.</td>
+        </tr>
+        <tr>
+          <td>448</td>
+          <td>Out of Memory issues</td>
+          <td>Use a system that has more than 4GB RAM.</td>
+        </tr>
+        <tr>
+          <td>453</td>
+          <td>Improve `check_server_processes_running` detection for uninstall</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>456</td>
+          <td>Inconsistent behavior of vector layers after upgrade</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>460</td>
+          <td>Possibility of seg fault in QDateWrapper</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>474</td>
+          <td>Running gee_check on some supported platforms reports that the platform is not supported</td>
+          <td>You can ignore the failed test if using a supported platform (Ubuntu 14.04, Ubuntu 16.04, RHEL 7, and CentOS 7).</td>
+        </tr>
+        <tr>
+          <td>477</td>
+          <td>'service geserver stop/start/restart' doesn't work on Ubuntu 16.04 without a reboot</td>
+          <td>Reboot and try again.</td>
+        </tr>
+        <tr>
+          <td>487</td>
+          <td>gdal - python utilities do not recognize osgeo module</td>
+          <td>Install <code>python-gdal</code>.</td>
+        </tr>
+        <tr>
+          <td>507</td>
+          <td>Volume host is reported unavailable if `hostname` doesn't match volume host</td>
+          <td>Set the host values in <code>/gevol/assets/.config/volumes.xml</code> to the FQDN and restart the Fusion service.</td>
+        </tr>
+        <tr>
+          <td>557</td>
+          <td>WMS service problem with 'width' &amp; 'height' &amp; 'bbox'</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>569</td>
+          <td>geserver service installation and uninstallation issues</td>
+          <td>Before uninstalling geserver verify if it's running or not.</td>
+        </tr>
+        <tr>
+          <td>590</td>
+          <td>Maps API Javascript Files Not Found</td>
+          <td>No current work around.</td>
+        </tr>
+        <tr>
+          <td>594</td>
+          <td>Save errors only reported for the first image</td>
+          <td>Close the form in question and try again.</td>
+        </tr>
+        <tr>
+          <td>640</td>
+          <td>Save button disabled in 'Map Layer' creation dialog when an error encountered</td>
+          <td>Close the resource form and open it again to make the save option available again.</td>
+        </tr>
+        <tr>
+          <td>651</td>
+          <td>Release executables and libraries depend on gtest</td>
+          <td>Follow current build instructions that requires <code>gtest</code> to be installed.</td>
+        </tr>
+	      <tr>
+          <td>669</td>
+          <td>Missing repo in RHEL 7 build instructions</td>
+          <td>Enable <code>rhel-7-server-optional-rpms</code> and <code>rhel-7-server-optional-source-rpms</code> repos.</td>
+        </tr>
+        <tr>
+          <td>686</td>
+          <td>Scons fails to detect libpng library on CentOS 6</td>
+          <td>Ensure that a default <code>g++</code> compiler is installed.</td>
+        </tr>
+        <tr>
+          <td>700</td>
+          <td>Add EL6/EL7 check to RPMs</td>
+          <td>Make sure that RPMS are installed on same EL version that they were produced for.</td>
+        </tr>
+        <tr>
+          <td>788</td>
+          <td>Search fails after transferring and publishing a database using disconnected send from the command line</td>
+          <td>Re-publish the database from the web interface.</td>
+        </tr>
+        <tr>
+          <td>825</td>
+          <td>Geserver fails to startup fully due to conflicting protobuf library</td>
+          <td>Run <code>pip uninstall protobuf</code> to uninstall the protobuf library installed by pip. </td>
+        </tr>
+      </tbody>
+    </table>
+  <div class="footer">
+    <p class="BackToTop"><a href="#top_of_file">Back to top</a>
+
+    <hr />
+    </p>
+    <p class="copyright">&copy;2018 Open GEE Contributors</p>
+  </div>
+</div>
+</body>
+</html>

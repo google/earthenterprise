@@ -62,6 +62,7 @@ class AssetHandle_ : public AssetHandleInterface<Impl_> {
   static inline uint32 CacheSize(void) { return storageManager().CacheSize(); }
   static inline uint32 CacheCapacity(void) { return storageManager().CacheCapacity(); }
   static inline uint32 DirtySize(void) { return storageManager().DirtySize(); }
+  static uint64 CacheMemoryUse(void) { return storageManager().CacheMemoryUse(); }
 
   virtual HandleType Load(const std::string &boundref) const {
     return HandleType(Impl::Load(boundref));
