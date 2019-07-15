@@ -23,6 +23,8 @@
 #include <type_traits>
 #include <vector>
 #include <memory>
+
+#include "autoingest/.idl/storage/AssetDefs.h"
 #include "common/khCache.h"
 #include "common/khFileUtils.h"
 #include "common/khRefCounter.h"
@@ -117,8 +119,8 @@ class AssetHandle {
         storageManager->UpdateCacheItemSize(handle->GetRef());
       }
     }
-    explicit operator bool() const { return handle.operator bool(); }
     inline AssetType * operator->() const { return handle.operator->(); }
+    explicit operator bool() const { return handle && (handle->type != AssetDefs::Invalid); }
 };
 
 template<class AssetType>
@@ -205,6 +207,9 @@ StorageManager<AssetType>::Get(
 template<class AssetType>
 typename StorageManager<AssetType>::HandleType
 StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & key) {
+  // Deal quickly with an invalid key
+  if (!AssetType::ValidRef(key)) return HandleType();
+
   const std::string filename = AssetType::Filename(key);
 
   // Check in cache.
