@@ -44,6 +44,9 @@ class TestItem : public khRefCounter, public StorageManaged {
   static string Filename(const std::string ref) {
     return fileName;
   }
+  static SharedString Key(const SharedString & ref) {
+    return ref;
+  }
   // determine amount of memory used by TestItem
   uint64 GetSize() {
     return (GetObjectSize(val)
@@ -63,7 +66,6 @@ using AssetKey = typename StorageManager<TestItem>::AssetKey;
 
 class TestHandle : public AssetHandleInterface<TestItem> {
   public:
-    virtual const AssetKey Key() const { return name; }
     virtual HandleType Load(const string &) const {
       return khRefGuardFromNew<TestItem>(new TestItem());
     }
@@ -81,7 +83,7 @@ HandleClass Get(StorageManager<TestItem> & storageManager,
                 bool addToCache,
                 bool makeMutable) {
   HandleClass handle(name);
-  handle.handle = storageManager.Get(&handle, checkFileExistenceFirst, addToCache, makeMutable);
+  handle.handle = storageManager.Get(&handle, name, checkFileExistenceFirst, addToCache, makeMutable);
   return handle;
 }
 

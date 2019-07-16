@@ -177,6 +177,9 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
     AssetVersionRef boundVerRef(boundref);
     return AssetVersionImpl::XMLFilename(boundVerRef);
   }
+  static std::string Key(const SharedString & ref) {
+    return AssetVersionRef::Bind(ref);
+  }
 
   // Gets the database path, type and ref string for the given dbname.
   // This is useful for distinguishing specific types of databases and
@@ -268,12 +271,6 @@ inline bool AssetVersion::Valid(void) const {
     return handle && (handle->type != AssetDefs::Invalid);
   }
 }
-
-template <>
-inline const SharedString AssetVersion::Key() const {
-  return AssetVersionRef::Bind(ref);
-}
-
 
 // ****************************************************************************
 // ***  LeafAssetVersionImpl
