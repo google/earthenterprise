@@ -150,11 +150,9 @@ class DerivedAssetHandle_ : public virtual Base_ {
 
  public:
   virtual HandleType Load(const std::string &boundref) const {
-    // Impl::Load will succeed or throw.
-    // The derived khRefGuard will be automatically converted
-    // the the base khRefGuard
     return HandleType(Impl::Load(boundref));
   }
+
   virtual bool Valid(const HandleType & entry) const { 
     // we have to check if it maps to Impl* since somebody
     // else may have loaded it into the storage manager

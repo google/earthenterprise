@@ -25,6 +25,7 @@
 #include "common/khCppStd.h"
 #include "common/khRefCounter.h"
 #include "common/SharedString.h"
+#include "common/khConstants.h"
 
 
 /******************************************************************************
@@ -46,9 +47,6 @@ class DerivedAssetHandleD_ : public virtual BaseD_, public ROBase_
   typedef typename BBase::HandleType HandleType;
  public:
   virtual HandleType Load(const std::string &boundref) const {
-    // Impl::Load will succeed or throw.
-    // The derived khRefGuard will be automatically converted
-    // the the base khRefGuard
     return HandleType(Impl::Load(boundref));
   }
   virtual bool Valid(const HandleType & entry) const {
@@ -261,10 +259,10 @@ class MutableDerivedAssetHandleD_ : public DerivedBase_, public MutableBase_
   //    This is public because the various {name}Factory classes must
   // invoke this constructor and there is no way to declare it a friend
   // here since we can't list the name
-  explicit MutableDerivedAssetHandleD_(const khRefGuard<Impl> &handle_) :
+  explicit MutableDerivedAssetHandleD_(const std::shared_ptr<Impl>& handle_) :
       BBase(), BaseD(), DerivedBase(), MutableBase() {
     this->handle = handle_;
-    if (this->handle) {
+    if (this->handle != nullptr) {
       // we have a good handle
 
       // record the ref - since it comes from GetRef() we don't have to

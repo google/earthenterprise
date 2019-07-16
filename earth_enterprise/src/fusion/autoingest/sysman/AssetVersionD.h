@@ -65,7 +65,7 @@ class AssetVersionImplD : public virtual AssetVersionImpl
       void AddListenersToNotify(const std::vector<SharedString> &, AssetDefs::State);
   };
 
-  static khRefGuard<AssetVersionImplD> Load(const std::string &boundref);
+  static std::shared_ptr<AssetVersionImplD> Load(const std::string &boundref);
 
   bool NeedComputeState(void) const {
     if (state & (AssetDefs::Bad |
