@@ -69,10 +69,10 @@ class StorageManager
     HandleType Get(const AssetHandleInterface<AssetType> *, const SharedString &, bool, bool, bool);
     
     // Pass a handle to a const to prevent callers from modifying it.
-    AssetHandle<const AssetType> Get(const AssetKey & key);
+    AssetHandle<const AssetType> Get(const AssetKey &);
     
     // Pass a handle to a non-const so callers can modify it.
-    AssetHandle<AssetType> GetMutable(const AssetKey & key);
+    AssetHandle<AssetType> GetMutable(const AssetKey &);
   private:
     using CacheType = khCache<AssetKey, HandleType>;
 
@@ -85,7 +85,7 @@ class StorageManager
     StorageManager(const StorageManager &) = delete;
     StorageManager& operator=(const StorageManager &) = delete;
     
-    HandleType GetEntryFromCacheOrDisk(const AssetKey & key);
+    HandleType GetEntryFromCacheOrDisk(const AssetKey &);
 };
 
 // Handles to items stored in the storage manager must implement the asset handle interface
@@ -206,7 +206,9 @@ StorageManager<AssetType>::Get(
 
 template<class AssetType>
 typename StorageManager<AssetType>::HandleType
-StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & key) {
+StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & ref) {
+  SharedString key = AssetType::Key(ref);
+
   // Deal quickly with an invalid key
   if (!AssetType::ValidRef(key)) return HandleType();
 
@@ -248,17 +250,17 @@ StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & key) {
 }
 
 template<class AssetType>
-AssetHandle<const AssetType> StorageManager<AssetType>::Get(const AssetKey & key) {
-  HandleType entry = GetEntryFromCacheOrDisk(key);
+AssetHandle<const AssetType> StorageManager<AssetType>::Get(const AssetKey & ref) {
+  HandleType entry = GetEntryFromCacheOrDisk(ref);
   return AssetHandle<const AssetType>(khRefGuard<const AssetType>(entry), this);
 }
 
 template<class AssetType>
-AssetHandle<AssetType> StorageManager<AssetType>::GetMutable(const AssetKey & key) {
-  HandleType entry = GetEntryFromCacheOrDisk(key);
+AssetHandle<AssetType> StorageManager<AssetType>::GetMutable(const AssetKey & ref) {
+  HandleType entry = GetEntryFromCacheOrDisk(ref);
   // Add it to the dirty map. If it's already in the dirty map the existing
   // one will win; that's OK.
-  dirtyMap.emplace(key, entry);
+  dirtyMap.emplace(ref, entry);
   return AssetHandle<AssetType>(entry, this);
 }
 
