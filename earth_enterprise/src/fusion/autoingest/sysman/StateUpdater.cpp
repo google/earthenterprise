@@ -128,6 +128,13 @@ void StateUpdater::FillInVertex(
     return;
   }
   tree[myVertex].state = version->state;
+  // The ref passed in may be slightly different than the ref used in the storage
+  // manager, so fix that here.
+  if (name != version->GetRef()) {
+    name = version->GetRef();
+    tree[myVertex].name = name;
+    vertices[name] = myVertex;
+  }
   vector<SharedString> dependents;
   version->DependentChildren(dependents);
   for (const auto & dep : dependents) {
@@ -176,7 +183,8 @@ void StateUpdater::SetStateForRefAndDependents(
     const SharedString & ref,
     AssetDefs::State newState,
     function<bool(AssetDefs::State)> updateStatePredicate) {
-  auto refVertex = BuildTree(ref);
+  SharedString verref = AssetVersionRef::Bind(ref);
+  auto refVertex = BuildTree(verref);
   SetStateForVertexAndDependents(refVertex, newState, updateStatePredicate);
 }
 
