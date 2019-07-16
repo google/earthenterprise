@@ -39,6 +39,10 @@ class TestItem : public khRefCounter, public StorageManaged {
     savename = filename;
     return saveSucceeds;
   }
+  static khRefGuard<TestItem> Load(const std::string &boundref){
+    // DO NOT LEAVE LIKE THIS!!!
+    return khRefGuardFromNew<TestItem>(new TestItem());
+  }
  private:
   static int nextValue;
 };
@@ -56,10 +60,6 @@ class TestHandle : public AssetHandleInterface<TestItem> {
       return khRefGuardFromNew<TestItem>(new TestItem());
     }
     virtual bool Valid(const HandleType &) const { return true; }
-    static HandleType Load(const std::string &boundref){
-      // DO NOT LEAVE LIKE THIS!!!
-      return khRefGuardFromNew<TestItem>(new TestItem());
-    }
     TestHandle(const AssetKey & name) : name(name) {}
     TestHandle() = default;
     AssetKey name;
