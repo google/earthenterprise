@@ -20,7 +20,7 @@
 #include <algorithm>
 #include <gtest/gtest.h>
 #include <sstream>
-
+#include <memory>
 using namespace std;
 
 const size_t CACHE_SIZE = 5;
@@ -61,7 +61,7 @@ class TestHandle : public AssetHandleInterface<TestItem> {
     virtual const AssetKey Key() const { return name; }
     virtual string Filename() const { return "/dev/null"; }
     virtual HandleType Load(const string &) const {
-      return khRefGuardFromNew<TestItem>(new TestItem());
+      return HandleType(std::make_shared<TestItem>());
     }
     virtual bool Valid(const HandleType &) const { return true; }
     TestHandle(const AssetKey & name) : name(name) {}
@@ -124,7 +124,7 @@ TEST_F(StorageManagerTest, LoadWithoutCache) {
 }
 
 TEST_F(StorageManagerTest, AddNew) {
-  HandleType newItem(khRefGuardFromNew(new TestItem()));
+  HandleType newItem(new TestItem());
   ASSERT_EQ(storageManager.CacheSize(), 0) << "Storage manager has unexpected item in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
   

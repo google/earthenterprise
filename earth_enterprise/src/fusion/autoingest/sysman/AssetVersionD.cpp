@@ -129,20 +129,22 @@ AssetVersionImplD::StateChangeNotifier::NotifyListeners(
 // ****************************************************************************
 // ***  AssetVersionImplD
 // ****************************************************************************
-khRefGuard<AssetVersionImplD>
+std::shared_ptr<AssetVersionImplD>
 AssetVersionImplD::Load(const std::string &boundref)
 {
-  khRefGuard<AssetVersionImplD> result;
-
   // make sure the base class loader actually instantiated one of me
   // this should always happen, but there are no compile time guarantees
-  result.dyncastassign(AssetVersionImpl::Load(boundref));
-  if (!result) {
-    AssetThrowPolicy::FatalOrThrow(
-        kh::tr("Internal error: AssetVersionImplD loaded wrong type for ") +
-        boundref);
-  }
+  auto loaded = AssetVersionImpl::Load(boundref);
+  std::shared_ptr<AssetVersionImplD> result =
+      std::dynamic_pointer_cast<AssetVersionImplD>(loaded);
 
+  if (result == nullptr) {
+    std::string error {"Internal error: " };
+    if (loaded == nullptr)
+        error += "base did not load and ";
+    error += "AssetVersionImplD loaded wrong type for ";
+    AssetThrowPolicy::FatalOrThrow(kh::tr(error.c_str()) + boundref);
+  }
   return result;
 }
 
@@ -611,7 +613,7 @@ AssetVersionImplD::InputVersionGuard::InputVersionGuard
 
 AssetVersionImplD::InputVersionGuard::~InputVersionGuard(void)
 {
-  if (refcount() == 1) {
+  if (use_count() == 1) {
     impl->verholder = 0;
     // my base destructor will delete the object for me
   }
