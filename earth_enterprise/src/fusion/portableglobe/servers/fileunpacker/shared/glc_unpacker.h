@@ -76,7 +76,22 @@ class GlcUnpacker {
                          int layer,
                          PackageFileLoc* data_loc);
 
+  /**
+   * Call walker function on all map data packets in all layers of the file.
+   * @param walker   A function specifier taking an int layer ID and a const
+   *                 IndexItem& parameter to process.  If walker returns true after
+   *                 handling a packet, the traversal will stop.
+   */
   void MapDataPacketWalker(const map_packet_walker& walker) const;
+
+  /**
+   * Call walker function on all map data packets in the specified layer of the file.
+   * @param layer    The layer to walk
+   * @param walker   A function specifier taking an int layer ID and a const
+   *                 IndexItem& parameter to process.  If walker returns true after
+   *                 handling a packet, the traversal will stop.
+   */
+  void MapDataPacketWalker(int layer, const map_packet_walker& walker) const;
 
   /**
    * Find qtp packet and set offset and size for the packet. Qtp packets can
