@@ -38,6 +38,11 @@ class AssetVersionRef;
  ***
  ***  typedef AssetHandle_<AssetImpl> Asset;
  ***  typedef AssetHandle_<AssetVersionImpl> AssetVersion;
+ *** 
+ ***  IMPORTANT NOTE: The AssetHandle_ class is now considered legacy code.
+ ***  New code should call Get or GetMutable on the storage manager directly,
+ ***  which will return a new AssetHandle object. This class will eventually
+ ***  go away.
  ******************************************************************************/
 template <class Impl_>
 class AssetHandle_ : public AssetHandleInterface<Impl_> {

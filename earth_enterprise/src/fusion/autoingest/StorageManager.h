@@ -17,6 +17,7 @@
 #ifndef STORAGEMANAGER_H
 #define STORAGEMANAGER_H
 
+#include <functional>
 #include <map>
 #include <string>
 #include <time.h>
@@ -103,24 +104,18 @@ class AssetHandleInterface {
 template<class AssetType>
 class AssetHandle {
   private:
-    using NonConstAssetType = typename std::remove_const<AssetType>::type;
-    using StorageManagerType = StorageManager<NonConstAssetType>;
-
-    static constexpr bool isMutable = !std::is_const<AssetType>();
-
-    const typename StorageManager<AssetType>::HandleType handle;
-    StorageManagerType * const storageManager;
+    typename StorageManager<AssetType>::HandleType handle;
+    std::function<void(void)> onFinalize;
   public:
     AssetHandle(typename StorageManager<AssetType>::HandleType handle,
-                StorageManagerType * sm) : handle(handle), storageManager(sm) {}
-    virtual ~AssetHandle() {
-      // Clean up
-      if (isMutable) {
-        storageManager->UpdateCacheItemSize(handle->GetRef());
-      }
+                std::function<void(void)> onFinalize)
+      : handle(handle), onFinalize(onFinalize) {}
+    AssetHandle() = default;
+    ~AssetHandle() {
+      if (onFinalize) onFinalize();
     }
     inline AssetType * operator->() const { return handle.operator->(); }
-    explicit operator bool() const { return handle && (handle->type != AssetDefs::Invalid); }
+    inline explicit operator bool() const { return handle && (handle->type != AssetDefs::Invalid); }
 };
 
 template<class AssetType>
@@ -143,6 +138,10 @@ StorageManager<AssetType>::NoLongerNeeded(const AssetKey & key, bool prune) {
   cache.Remove(key, prune);
 }
 
+// This is the "legacy" Get function used by the AssetHandle_ class (see
+// AssetHandle.h). New code should use the other Get function or the
+// GetMutable function as appropriate, which return AssetHandle objects,
+// which are defined in this file. Evetually this function should go away.
 template<class AssetType>
 typename StorageManager<AssetType>::HandleType
 StorageManager<AssetType>::Get(
@@ -252,7 +251,7 @@ StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & ref) {
 template<class AssetType>
 AssetHandle<const AssetType> StorageManager<AssetType>::Get(const AssetKey & ref) {
   HandleType entry = GetEntryFromCacheOrDisk(ref);
-  return AssetHandle<const AssetType>(khRefGuard<const AssetType>(entry), this);
+  return AssetHandle<const AssetType>(khRefGuard<const AssetType>(entry), nullptr);
 }
 
 template<class AssetType>
@@ -261,7 +260,9 @@ AssetHandle<AssetType> StorageManager<AssetType>::GetMutable(const AssetKey & re
   // Add it to the dirty map. If it's already in the dirty map the existing
   // one will win; that's OK.
   dirtyMap.emplace(ref, entry);
-  return AssetHandle<AssetType>(entry, this);
+  return AssetHandle<AssetType>(entry, [&]() {
+    UpdateCacheItemSize(ref);
+  });
 }
 
 template<class AssetType>
