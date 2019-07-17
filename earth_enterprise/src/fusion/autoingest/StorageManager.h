@@ -220,6 +220,8 @@ StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & ref) {
 
   // Try to load from XML.
   if (!entry) {
+    // Avoid throwing exceptions when the file doesn't exist
+    if (!khExists(filename)) return HandleType();
     // Will succeed, generate stub, or throw exception.
     entry = AssetType::Load(key);
     updated = true;
