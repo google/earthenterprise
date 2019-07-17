@@ -36,9 +36,7 @@ class TestItem : public khRefCounter, public StorageManaged {
   string savename;
   bool saveSucceeds;
   const string XMLFilename() {
-    stringstream filename;
-    filename << val;
-    return filename.str();
+    return TestItem::Filename(SharedString());
   }
   virtual bool Save(const string &filename) {
     savename = filename;
@@ -62,8 +60,7 @@ class TestItem : public khRefCounter, public StorageManaged {
     return (GetObjectSize(val)
     + GetObjectSize(type)
     + GetObjectSize(savename)
-    + GetObjectSize(saveSucceeds)
-    + GetObjectSize(nextValue));
+    + GetObjectSize(saveSucceeds));
   }
 };
 int TestItem::nextValue = 1;
