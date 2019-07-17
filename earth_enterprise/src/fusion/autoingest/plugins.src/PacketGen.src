@@ -125,9 +125,14 @@ void PacketGenAssetVersionImplD::UpdateChildren(
 
     neededIndexes.reserve(numInsets);
     auto gencov = khInsetCoverage(levCov);
-
-    extra.calc->setBeginMinifyLevel(config.beginMinifyLevel);
-    extra.calc->setEndMinifyLevel(config.endMinifyLevel);
+    overlapEnvelope<ProductAssetVersion> env(
+        type,
+        extra.insetInfo,
+        numInsets,
+        config.beginMinifyLevel,
+        config.endMinifyLevel,
+        level);
+    extra.calc->setEnvelope(env);
     neededIndexes = std::move(extra.calc->GetOverlapForLevel(gencov));
 
     curTime = std::chrono::high_resolution_clock::now();

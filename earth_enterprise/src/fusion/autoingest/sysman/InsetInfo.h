@@ -174,14 +174,15 @@ void CalcPacketGenInfo(const khTilespace            &tilespace,
 template <typename ProductAssetVersion>
 struct overlapEnvelope
 {
-    AssetDefs::Type& type;
-    std::vector<const InsetInfo<ProductAssetVersion> *>& insets;
+    AssetDefs::Type type;
+    std::vector<const InsetInfo<ProductAssetVersion> *> insets;
     uint numInsets;
     uint beginMinifyLevel;
     uint endMinifyLevel;
     uint level;
-    overlapEnvelope(AssetDefs::Type& _type,
-                    std::vector<const InsetInfo<ProductAssetVersion> *>& _insets,
+    overlapEnvelope() = default;
+    overlapEnvelope(const AssetDefs::Type& _type,
+                    const std::vector<const InsetInfo<ProductAssetVersion> *>& _insets,
                     uint _numInsets,
                     uint _beginMinifyLevel, uint _endMinifyLevel, uint _level)
 
@@ -198,15 +199,15 @@ class OverlapCalculator
 {
 private:
     void CalculateOverlap(std::vector<uint>&, const khInsetCoverage&);
-    overlapEnvelope<ProductAssetVersion>& env;
+    overlapEnvelope<ProductAssetVersion> env;
 
 public:
-    OverlapCalculator(overlapEnvelope<ProductAssetVersion> _env) :
+    OverlapCalculator(const overlapEnvelope<ProductAssetVersion>& _env) :
         env(_env) {}
 
     void setBeginMinifyLevel(uint _begin) { env.beginMinifyLevel = _begin; }
     void setEndMinifyLevel(uint _end) { env.endMinifyLevel = _end; }
-
+    void setEnvelope(const overlapEnvelope<ProductAssetVersion>& _env) { env = _env; }
     std::vector<uint> PreprocessForInset(const khInsetCoverage& gencov)
     {
         std::vector<uint> neededIndexes;
