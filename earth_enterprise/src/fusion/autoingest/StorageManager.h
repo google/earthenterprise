@@ -21,7 +21,6 @@
 #include <map>
 #include <string>
 #include <time.h>
-#include <type_traits>
 #include <vector>
 #include <memory>
 
@@ -253,7 +252,7 @@ StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & ref) {
 template<class AssetType>
 AssetHandle<const AssetType> StorageManager<AssetType>::Get(const AssetKey & ref) {
   HandleType entry = GetEntryFromCacheOrDisk(ref);
-  return AssetHandle<const AssetType>(khRefGuard<const AssetType>(entry), nullptr);
+  return AssetHandle<const AssetType>(std::shared_ptr<const AssetType>(entry), nullptr);
 }
 
 template<class AssetType>

@@ -62,7 +62,7 @@ class TestItem : public khRefCounter, public StorageManaged {
     return isValidRef;
   }
   static typename StorageManager<TestItem>::HandleType Load(const string &) {
-    return khRefGuardFromNew<TestItem>(new TestItem());
+    return std::make_shared<TestItem>();
   }
 };
 int TestItem::nextValue;
@@ -366,7 +366,7 @@ TEST_F(StorageManagerTest, AddAndRetrieve) {
 }
 
 TEST_F(StorageManagerTest, AddNew) {
-  HandleType newItem(khRefGuardFromNew(new TestItem()));
+  HandleType newItem = make_shared<TestItem>();
   ASSERT_EQ(storageManager.CacheSize(), 0) << "Storage manager has unexpected item in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
   
