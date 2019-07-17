@@ -62,7 +62,7 @@ class AssetVersionImpl : public khMTRefCounter, public AssetVersionStorage, publ
   static std::shared_ptr<AssetVersionImpl> Load(const std::string &boundref);
 
   virtual bool Save(const std::string &filename) const {
-    assert(false); // Can only save from sub-classes
+    assert(false); // Can only call from sub-classes
     return false;
   };
 
@@ -149,12 +149,37 @@ class AssetVersionImpl : public khMTRefCounter, public AssetVersionStorage, publ
   virtual void GetOutputFilenames(std::vector<std::string> &out) const = 0;
   virtual std::string GetOutputFilename(uint i) const = 0;
   virtual void AfterLoad(void) { }
+  virtual void DependentChildren(std::vector<SharedString> &) const {
+    // No-op in base class. Sub-classes will override this
+    // with children that must be operated on similarly to the
+    // parent asset (ex: parent is canceled, so these children
+    // must also be canceled.
+  }
+  virtual AssetDefs::State CalcStateByInputsAndChildren(AssetDefs::State, AssetDefs::State, bool, uint32) const {
+    assert(false); // Can only call from sub-classes
+    return AssetDefs::Bad;
+  }
+  virtual void SetMyStateOnly(AssetDefs::State newstate, bool sendNotifications = true) {
+    assert(false);  // Can only call from sub-classes
+  }
+  virtual bool NeedComputeState() const {
+    assert(false);  // Can only call from sub-classes
+    return false;
+  }
 
   // static helpers
   static std::string WorkingDir(const AssetVersionRef &ref);
   static std::string XMLFilename(const AssetVersionRef &ref) {
     return AssetDefs::AssetPathToFilename(WorkingDir(ref) +
                                           "khassetver.xml");
+  }
+  static std::string Filename(const std::string & ref) {
+    std::string boundref = AssetVersionRef::Bind(ref);
+    AssetVersionRef boundVerRef(boundref);
+    return AssetVersionImpl::XMLFilename(boundVerRef);
+  }
+  static std::string Key(const SharedString & ref) {
+    return AssetVersionRef::Bind(ref);
   }
 
   // Gets the database path, type and ref string for the given dbname.
@@ -247,19 +272,6 @@ inline bool AssetVersion::Valid(void) const {
     return handle && (handle->type != AssetDefs::Invalid);
   }
 }
-
-template <>
-inline std::string AssetVersion::Filename() const {
-  std::string boundref = AssetVersionRef::Bind(ref);
-  AssetVersionRef boundVerRef(boundref);
-  return AssetVersionImpl::XMLFilename(boundVerRef);
-}
-
-template <>
-inline const SharedString AssetVersion::Key() const {
-  return AssetVersionRef::Bind(ref);
-}
-
 
 // ****************************************************************************
 // ***  LeafAssetVersionImpl

@@ -53,7 +53,7 @@ class AssetHandle_ : public AssetHandleInterface<Impl_> {
   inline void DoBind(
       bool checkFileExistenceFirst,
       bool addToCache) const {
-    handle = storageManager().Get(this, checkFileExistenceFirst, addToCache, isMutable());
+    handle = storageManager().Get(this, ref, checkFileExistenceFirst, addToCache, isMutable());
   }
 
   virtual bool isMutable() const { return false; }
@@ -68,10 +68,6 @@ class AssetHandle_ : public AssetHandleInterface<Impl_> {
     return HandleType(Impl::Load(boundref));
   }
   virtual bool Valid(const HandleType &) const { return true; }
-
-  // These two functions are implemented separately by Assets and AssetVersions
-  inline virtual std::string Filename() const;
-  inline const SharedString Key() const;
 
   inline void NoLongerNeeded() {
     storageManager().NoLongerNeeded(Ref());
