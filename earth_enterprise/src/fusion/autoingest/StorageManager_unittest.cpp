@@ -494,19 +494,23 @@ TEST_F(StorageManagerTest, Abort) {
   ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has wrong number of items in dirty map";
 }
 
-void getAssetsForDirtyTest(StorageManager<TestItem> & storageManager, TestHandle handles[5]) {
-  handles[0] = Get<TestHandle>(storageManager, "asset0", false, true, false);
-  handles[1] = Get<TestHandle>(storageManager, "asset1", false, true, false);
-  handles[2] = Get<TestHandle>(storageManager, "mutable2", false, true, true);
-  handles[3] = Get<TestHandle>(storageManager, "asset3", false, true, false);
-  handles[4] = Get<TestHandle>(storageManager, "mutable4", false, true, true);
+void getAssetsForDirtyTest(
+    StorageManager<TestItem> & storageManager,
+    AssetHandle<const TestItem> handles[3],
+    AssetHandle<TestItem> mutHandles[2]) {
+  handles[0] = storageManager.Get("asset0");
+  handles[1] = storageManager.Get("asset1");
+  mutHandles[0] = storageManager.GetMutable("mutable2");
+  handles[2] = storageManager.Get("asset3");
+  mutHandles[1] = storageManager.GetMutable("mutable4");
   ASSERT_EQ(storageManager.CacheSize(), 5) << "Unexpected number of items in cache";
   ASSERT_EQ(storageManager.DirtySize(), 2) << "Storage manager has wrong number of items in dirty map";
 }
 
 TEST_F(StorageManagerTest, SaveDirty) {
-  TestHandle handles[5];
-  getAssetsForDirtyTest(storageManager, handles);
+  AssetHandle<const TestItem> handles[3];
+  AssetHandle<TestItem> mutHandles[2];
+  getAssetsForDirtyTest(storageManager, handles, mutHandles);
   
   khFilesTransaction trans;
   bool result = storageManager.SaveDirtyToDotNew(trans, nullptr);
@@ -515,16 +519,17 @@ TEST_F(StorageManagerTest, SaveDirty) {
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has wrong number of items in dirty map";
   ASSERT_EQ(trans.NumNew(), 2) << "Wrong number of new items in file transaction";
   ASSERT_EQ(trans.NumDeleted(), 0) << "Wrong number of deleted items in file transaction";
-  ASSERT_EQ(handles[0].handle->savename, string()) << "Non-dirty files should not be saved";
-  ASSERT_NE(handles[4].handle->savename, string()) << "Dirty files should be saved";
-  string savename = handles[4].handle->savename;
+  ASSERT_EQ(handles[0]->savename, string()) << "Non-dirty files should not be saved";
+  ASSERT_NE(mutHandles[1]->savename, string()) << "Dirty files should be saved";
+  string savename = mutHandles[1]->savename;
   string ext = ".new";
   ASSERT_TRUE(equal(ext.rbegin(), ext.rend(), savename.rbegin())) << "Saved file name must end in .new";
 }
 
 TEST_F(StorageManagerTest, SaveDirtyToVector) {
-  TestHandle handles[5];
-  getAssetsForDirtyTest(storageManager, handles);
+  AssetHandle<const TestItem> handles[3];
+  AssetHandle<TestItem> mutHandles[2];
+  getAssetsForDirtyTest(storageManager, handles, mutHandles);
   
   khFilesTransaction trans;
   vector<SharedString> saved;
@@ -535,8 +540,8 @@ TEST_F(StorageManagerTest, SaveDirtyToVector) {
 }
 
 TEST_F(StorageManagerTest, FailedSave) {
-  TestHandle item = Get<TestHandle>(storageManager, "item", false, true, true);
-  item.handle->saveSucceeds = false;
+  auto item = storageManager.GetMutable("item");
+  item->saveSucceeds = false;
   khFilesTransaction trans;
   bool result = storageManager.SaveDirtyToDotNew(trans, nullptr);
   ASSERT_FALSE(result) << "SaveDirtyToDotNew should return false when a save fails";
