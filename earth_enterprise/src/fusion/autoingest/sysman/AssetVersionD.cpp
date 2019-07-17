@@ -275,33 +275,49 @@ void AssetVersionImplD::SetState(
     const std::shared_ptr<StateChangeNotifier> notifier)
 {
   if (newstate != state) {
-    notify(NFY_DEBUG, "SetState: current state: %s | newstate: %s | asset: %s",
-    	   ToString(state).c_str(),
-           ToString(newstate).c_str(),
-           GetRef().toString().c_str());
-    AssetDefs::State oldstate = state;
-    state = newstate;
-    try {
-      // NOTE: This can end up calling back here to switch us to
-      // another state (usually Failed or Succeded)
-      OnStateChange(newstate, oldstate);
-    } catch (const std::exception &e) {
-      notify(NFY_WARN, "Exception during OnStateChange: %s", 
-             e.what());
-    } catch (...) {
-      notify(NFY_WARN, "Unknown exception during OnStateChange");
-    }
+    SetMyStateOnly(newstate, propagate);
 
-    // only notify and propagate changes if the state is still what we
+    // only propagate changes if the state is still what we
     // set it to above. OnStateChange can call SetState recursively. We
-    // don't want to notify/propagate an old state.
+    // don't want to propagate an old state.
     if (propagate && (state == newstate)) {
-      notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
-             GetRef().toString().c_str(), 
-             ToString(newstate).c_str());
-      theAssetManager.NotifyVersionStateChange(GetRef(), newstate);
       PropagateStateChange(notifier);
     }
+  }
+}
+
+// This is a duplicate of the function above without the call to PropagateStateChange.
+// This version is used with the new, graph-based version of state updates.
+// Ultimately it should replace the one above.
+void AssetVersionImplD::SetMyStateOnly(AssetDefs::State newstate, bool sendNotifications)
+{
+  // We don't check if the new state is different from the old state here
+  // because by the time this function is called we've already done that.
+  notify(NFY_DEBUG, "SetState: current state: %s | newstate: %s | asset: %s",
+         ToString(state).c_str(),
+         ToString(newstate).c_str(),
+         GetRef().toString().c_str());
+  AssetDefs::State oldstate = state;
+  state = newstate;
+  try {
+    // NOTE: This can end up calling back here to switch us to
+    // another state (usually Failed or Succeded)
+    OnStateChange(newstate, oldstate);
+  } catch (const std::exception &e) {
+    notify(NFY_WARN, "Exception during OnStateChange: %s", 
+           e.what());
+  } catch (...) {
+    notify(NFY_WARN, "Unknown exception during OnStateChange");
+  }
+
+  // only notify and propagate changes if the state is still what we
+  // set it to above. OnStateChange can call SetState recursively. We
+  // don't want to notify an old state.
+  if (sendNotifications && (state == newstate)) {
+    notify(NFY_VERBOSE, "Calling theAssetManager.NotifyVersionStateChange(%s, %s)", 
+           GetRef().toString().c_str(), 
+           ToString(newstate).c_str());
+    theAssetManager.NotifyVersionStateChange(GetRef(), newstate);
   }
 }
 
@@ -739,6 +755,56 @@ LeafAssetVersionImplD::ComputeState(void) const
   return newstate;
 }
 
+AssetDefs::State
+LeafAssetVersionImplD::CalcStateByInputsAndChildren(
+    AssetDefs::State stateByInputs,
+    AssetDefs::State stateByChildren,
+    bool blockersAreOffline,
+    uint32 numWaitingFor) const
+{
+  this->numWaitingFor = numWaitingFor;
+  AssetDefs::State newstate = state;
+  if (!AssetDefs::Ready(state)) {
+    // I'm currently not ready, so take whatever my inputs say
+    newstate = stateByInputs;
+  } else if (stateByInputs != AssetDefs::Queued) {
+    // My imputs have regressed
+    // Let's see if I should regress too
+
+    if (AssetDefs::Working(state)) {
+      // I'm in the middle of building myself
+      // revert my state to wait/block on my inputs
+      // OnStateChange will pick up this revert and stop my running task
+      newstate = stateByInputs;
+    } else {
+      // my task has already finished
+      if ((stateByInputs == AssetDefs::Blocked) && blockersAreOffline) {
+        // If the only reason my inputs have reverted is because
+        // some of them have gone offline, that's usually OK and
+        // I don't need to revert my state.
+        // Check to see if I care about my inputs going offline
+        if (OfflineInputsBreakMe()) {
+          // I care, revert my state too.
+          newstate = stateByInputs;
+        } else {
+          // I don't care, so leave my state alone.
+          newstate = state;
+        }
+      } else {
+        // My inputs have regresseed for some reason other than some
+        // of them going offline.
+        // revert my state
+        newstate = stateByInputs;
+      }
+    }
+  } else {
+    // nothing to do
+    // my current state is correct based on what my task has told me so far
+  }
+
+  return newstate;
+}
+
 void
 LeafAssetVersionImplD::HandleTaskLost(const TaskLostMsg &msg)
 {
@@ -1112,6 +1178,36 @@ CompositeAssetVersionImplD::ComputeState(void) const
   }
 }
 
+AssetDefs::State
+CompositeAssetVersionImplD:: CalcStateByInputsAndChildren(
+    AssetDefs::State stateByInputs,
+    AssetDefs::State stateByChildren,
+    bool blockersAreOffline,
+    uint32 numWaitingFor) const
+{
+  // Undecided composites take their state from their inputs
+  if (children.empty()) {
+    return stateByInputs;
+  }
+
+  // some composite assets (namely Database) care about the state of their
+  // inputs, for all others all that matters is the state of their children
+  if (CompositeStateCaresAboutInputsToo()) {
+    if (stateByInputs != AssetDefs::Queued) {
+      // something is wrong with my inputs (or they're not done yet)
+      if ((stateByInputs == AssetDefs::Blocked) && blockersAreOffline) {
+        if (OfflineInputsBreakMe()) {
+          return stateByInputs;
+        }
+      } else {
+        return stateByInputs;
+      }
+    }
+  }
+
+  return stateByChildren;
+}
+
 void
 CompositeAssetVersionImplD::DelayedBuildChildren(void)
 {
@@ -1161,7 +1257,7 @@ CompositeAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
 }
 
 void
-CompositeAssetVersionImplD::ChildrenToCancel(std::vector<AssetVersion> &out)
+CompositeAssetVersionImplD::DependentChildren(std::vector<SharedString> &out) const
 {
   copy(children.begin(), children.end(), back_inserter(out));
 }
@@ -1212,20 +1308,18 @@ CompositeAssetVersionImplD::Rebuild(const std::shared_ptr<StateChangeNotifier> c
 
   std::shared_ptr<StateChangeNotifier> notifier = StateChangeNotifier::GetNotifier(callerNotifier);
 
-  std::vector<AssetVersion> tocancel;
-  ChildrenToCancel(tocancel);
-  if (tocancel.size()) {
-    for (const auto &i : tocancel) {
-      // only rebuild the child if it is necessary
-      if (i) {
-        if (i->state & (AssetDefs::Canceled | AssetDefs::Failed)) {
-          MutableAssetVersionD child(i->GetRef());
-          child->Rebuild(notifier);
-        }
-      } else {
-        notify(NFY_WARN, "'%s' has broken child to resume '%s'",
-               GetRef().toString().c_str(), i.Ref().toString().c_str());
+  std::vector<SharedString> dependents;
+  DependentChildren(dependents);
+  for (const auto &i : dependents) {
+    MutableAssetVersionD child(i);
+    // only rebuild the child if it is necessary
+    if (child) {
+      if (child->state & (AssetDefs::Canceled | AssetDefs::Failed)) {
+        child->Rebuild(notifier);
       }
+    } else {
+      notify(NFY_WARN, "'%s' has broken child to resume '%s'",
+             GetRef().toString().c_str(), i.toString().c_str());
     }
   }
   state = AssetDefs::New; // low-level to avoid callbacks
@@ -1245,20 +1339,18 @@ CompositeAssetVersionImplD::Cancel(const std::shared_ptr<StateChangeNotifier> ca
 
   SetState(AssetDefs::Canceled, notifier);
 
-  std::vector<AssetVersion> tocancel;
-  ChildrenToCancel(tocancel);
-  if (tocancel.size()) {
-    for (const auto &i : tocancel) {
-      // only cancel the child if it's not already finished
-      if (i) {
-        if (!AssetDefs::Finished(i->state)) {
-          MutableAssetVersionD child(i->GetRef());
-          child->Cancel(notifier);
-        }
-      } else {
-        notify(NFY_WARN, "'%s' has broken child to cancel '%s'",
-               GetRef().toString().c_str(), i.Ref().toString().c_str());
+  std::vector<SharedString> dependents;
+  DependentChildren(dependents);
+  for (const auto &i : dependents) {
+    MutableAssetVersionD child(i);
+    // only cancel the child if it's not already finished
+    if (child) {
+      if (!AssetDefs::Finished(child->state)) {
+        child->Cancel(notifier);
       }
+    } else {
+      notify(NFY_WARN, "'%s' has broken child to cancel '%s'",
+             GetRef().toString().c_str(), i.toString().c_str());
     }
   }
 }

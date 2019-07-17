@@ -67,16 +67,6 @@ class AssetVersionImplD : public virtual AssetVersionImpl
 
   static std::shared_ptr<AssetVersionImplD> Load(const std::string &boundref);
 
-  bool NeedComputeState(void) const {
-    if (state & (AssetDefs::Bad |
-                 AssetDefs::Offline |
-                 AssetDefs::Canceled)) {
-      // these states are explicitly set and must be explicitly cleared
-      return false;
-    } else {
-      return true;
-    }
-  }
   virtual AssetDefs::State ComputeState(void) const = 0;
   virtual bool CacheInputVersions(void) const = 0;
 
@@ -111,6 +101,17 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   virtual bool OfflineInputsBreakMe(void) const { return false; }
  public:
 
+  virtual bool NeedComputeState(void) const {
+    if (state & (AssetDefs::Bad |
+                 AssetDefs::Offline |
+                 AssetDefs::Canceled)) {
+      // these states are explicitly set and must be explicitly cleared
+      return false;
+    } else {
+      return true;
+    }
+  }
+  virtual void SetMyStateOnly(AssetDefs::State newstate, bool sendNotifications);
   bool OkToClean(std::vector<std::string> *wouldbreak = 0) const;
   bool OkToCleanAsInput(void) const;
   void SetBad(void);
@@ -192,6 +193,11 @@ class LeafAssetVersionImplD : public virtual LeafAssetVersionImpl,
   virtual void Cancel(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual void Rebuild(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual void DoClean(const std::shared_ptr<StateChangeNotifier> = nullptr);
+  virtual AssetDefs::State CalcStateByInputsAndChildren(
+      AssetDefs::State stateByInputs,
+      AssetDefs::State stateByChildren,
+      bool blockersAreOffline,
+      uint32 numWaitingFor) const;
 };
 
 
@@ -219,7 +225,6 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
   virtual void DelayedBuildChildren(void);
   virtual void OnStateChange(AssetDefs::State newstate,
                              AssetDefs::State oldstate);
-  virtual void ChildrenToCancel(std::vector<AssetVersion> &out);
   virtual bool CompositeStateCaresAboutInputsToo(void) const { return false; }
 
   void AddChild(MutableAssetVersionD &child);
@@ -229,6 +234,12 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
   virtual void Cancel(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual void Rebuild(const std::shared_ptr<StateChangeNotifier> = nullptr);
   virtual void DoClean(const std::shared_ptr<StateChangeNotifier> = nullptr);
+  virtual AssetDefs::State CalcStateByInputsAndChildren(
+      AssetDefs::State stateByInputs,
+      AssetDefs::State stateByChildren,
+      bool blockersAreOffline,
+      uint32 numWaitingFor) const;
+  virtual void DependentChildren(std::vector<SharedString> &out) const;
 };
 
 #endif /* __AssetVersionD_h */
