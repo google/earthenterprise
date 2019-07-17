@@ -28,13 +28,15 @@ const size_t CACHE_SIZE = 5;
 
 class TestItem : public khRefCounter, public StorageManaged {
  public:
-  static string fileName;
-  TestItem() : val(nextValue++), type(AssetDefs::Imagery), saveSucceeds(true) {}
   static int nextValue;
+  static string fileName;
+  static bool isValidRef;
+
   const int val;
   AssetDefs::Type type;
   string savename;
   bool saveSucceeds;
+  TestItem() : val(nextValue++), type(AssetDefs::Imagery), saveSucceeds(true) {}
   const string XMLFilename() {
     return TestItem::Filename(SharedString());
   }
@@ -42,19 +44,6 @@ class TestItem : public khRefCounter, public StorageManaged {
     savename = filename;
     return saveSucceeds;
   }
-  static string Filename(const std::string ref) {
-    return fileName;
-  }
-  static SharedString Key(const SharedString & ref) {
-    return ref;
-  }
-  static bool ValidRef(const SharedString & ref) {
-    return true;
-  }
-  static typename StorageManager<TestItem>::HandleType Load(const string &) {
-    return khRefGuardFromNew<TestItem>(new TestItem());
-  }
-  
   // determine amount of memory used by TestItem
   uint64 GetSize() {
     return (GetObjectSize(val)
@@ -62,9 +51,23 @@ class TestItem : public khRefCounter, public StorageManaged {
     + GetObjectSize(savename)
     + GetObjectSize(saveSucceeds));
   }
+
+  static string Filename(const std::string ref) {
+    return fileName;
+  }
+  static SharedString Key(const SharedString & ref) {
+    return ref;
+  }
+  static bool ValidRef(const SharedString & ref) {
+    return isValidRef;
+  }
+  static typename StorageManager<TestItem>::HandleType Load(const string &) {
+    return khRefGuardFromNew<TestItem>(new TestItem());
+  }
 };
-int TestItem::nextValue = 1;
+int TestItem::nextValue;
 string TestItem::fileName;
+bool TestItem::isValidRef;
 template<> const bool StorageManager<TestItem>::check_timestamps = false;
 
 using HandleType = typename StorageManager<TestItem>::HandleType;
@@ -99,7 +102,9 @@ class StorageManagerTest : public testing::Test {
  public:
   StorageManagerTest() : storageManager(CACHE_SIZE, false, 0, "test") {
     // Reset the static variables in TestItem
+    TestItem::nextValue = 1;
     TestItem::fileName = "/dev/null"; // A file that exists
+    TestItem::isValidRef = true;
   }
 };
 
@@ -546,6 +551,12 @@ TEST_F(StorageManagerTest, FailedSave) {
   ASSERT_EQ(storageManager.DirtySize(), 1) << "Storage manager has wrong number of items in dirty map";
   ASSERT_EQ(trans.NumNew(), 0) << "Transaction should be empty after failed save";
   ASSERT_EQ(trans.NumDeleted(), 0) << "Wrong number of deleted items in file transaction";
+}
+
+TEST_F(StorageManagerTest, InvalidRef) {
+  TestItem::isValidRef = false;
+  auto asset = storageManager.Get("ref");
+  ASSERT_FALSE(asset) << "Invalid refs should return empty handles";
 }
 
 int main(int argc, char **argv) {
