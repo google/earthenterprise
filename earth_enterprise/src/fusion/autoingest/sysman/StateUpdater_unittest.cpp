@@ -18,6 +18,7 @@
 #include "gee_version.h"
 #include "StateUpdater.h"
 
+#include <algorithm>
 #include <assert.h>
 #include <gtest/gtest.h>
 #include <map>
@@ -25,32 +26,44 @@
 
 using namespace std;
 
+// All refs must end with "?version=X" or the calls to AssetVersionRef::Bind
+// will try to load assets from disk. For simplicity, we force everything to
+// be version 1. When you write additional tests you have to remember to call
+// this function when working directly with the state updater.
+const string SUFFIX = "?version=1";
+AssetKey fix(AssetKey ref) {
+  return ref.toString() + SUFFIX;
+}
+
 class MockVersion : public AssetVersionImpl {
   public:
     bool stateSet;
+    vector<AssetKey> dependents;
 
     MockVersion() : stateSet(false) {
       type = AssetDefs::Imagery;
       state = AssetDefs::New;
     }
     MockVersion(const AssetKey & ref) : MockVersion() {
-      // All refs must end with "?version=X" or the calls to AssetVersionRef::Bind
-      // will try to load assets from disk. For simplicity, we force everything to
-      // be version 1.
-      string suffix = "?version=1";
-      string refStr = ref.toString();
-      assert(name.empty() || equal(suffix.rbegin(), suffix.rend(), refStr.rbegin()));
-      name = ref;
+      name = fix(ref);
     }
-    MockVersion(const MockVersion & that) : MockVersion(that.name) {}
-    void DependentChildren(vector<SharedString> & dependents) const {}
+    MockVersion(const MockVersion & that) : MockVersion() {
+      name = that.name; // Don't add the suffix - the other MockVersion already did
+    }
+    void DependentChildren(vector<SharedString> & d) const {
+      for(auto dependent : dependents) {
+        d.push_back(dependent);
+      }
+    }
     bool NeedComputeState() const { return true; }
     AssetDefs::State CalcStateByInputsAndChildren(
         AssetDefs::State stateByInputs,
         AssetDefs::State stateByChildren,
         bool blockersAreOffline,
         uint32 numWaitingFor) const
-    { return AssetDefs::New; }
+    {
+      return AssetDefs::New;
+    }
     void SetMyStateOnly(AssetDefs::State newState, bool sendNotifications) {
       stateSet = true;
     }
@@ -96,33 +109,101 @@ class StateUpdaterTest : public testing::Test {
    StateUpdaterTest() : sm(), updater(&sm) {}
 };
 
-MockVersion MakeVersion(const AssetKey & ref) {
-  return MockVersion(ref);
-}
-
 void SetVersions(MockStorageManager & sm, vector<MockVersion> versions) {
   for (auto & version: versions) {
     sm.AddVersion(version.name, version);
   }
 }
 
-const MockVersion * GetVersion(MockStorageManager & sm, const AssetKey & key) {
-  auto version = sm.Get(key);
-  return dynamic_cast<const MockVersion*>(version.operator->());
+// This is bad because technically the object could be deleted before you use
+// it, but it works for unit tests.
+AssetHandle<const MockVersion> GetVersion(MockStorageManager & sm, const AssetKey & key) {
+  return sm.Get(fix(key));
+}
+
+void SetParentChild(MockStorageManager & sm, AssetKey parent, AssetKey child) {
+  parent = fix(parent);
+  child = fix(child);
+  sm.GetMutable(parent)->children.push_back(child);
+  sm.GetMutable(child)->parents.push_back(parent);
+}
+
+void SetListenerInput(MockStorageManager & sm, AssetKey listener, AssetKey input) {
+  listener = fix(listener);
+  input = fix(input);
+  sm.GetMutable(listener)->inputs.push_back(input);
+  sm.GetMutable(input)->listeners.push_back(listener);
+}
+
+void SetDependent(MockStorageManager & sm, AssetKey dependee, AssetKey dependent) {
+  dependee = fix(dependee);
+  dependent = fix(dependent);
+  AssetHandle<MockVersion> dependeeHandle = sm.GetMutable(dependee);
+  dependeeHandle->dependents.push_back(dependent);
+}
+
+void GetBigTree(MockStorageManager & sm) {
+  SetVersions(sm,
+              {
+                MockVersion("gp"),
+                MockVersion("p1"),
+                MockVersion("p2"),
+                MockVersion("gpi"),
+                MockVersion("pi1"),
+                MockVersion("c1"),
+                MockVersion("c2"),
+                MockVersion("c3"),
+                MockVersion("c4"),
+                MockVersion("ci1"),
+                MockVersion("ci2"),
+                MockVersion("ci3")
+              });
+  SetParentChild(sm, "gp", "p1");
+  SetParentChild(sm, "gp", "p2");
+  SetListenerInput(sm, "gp", "gpi");
+  SetListenerInput(sm, "p1", "pi1");
+  SetParentChild(sm, "p1", "c1");
+  SetParentChild(sm, "p1", "c2");
+  SetParentChild(sm, "p2", "c3");
+  SetParentChild(sm, "p2", "c4");
+  SetListenerInput(sm, "c2", "ci3");
+  SetListenerInput(sm, "c4", "ci1");
+  SetListenerInput(sm, "c4", "ci2");
+  SetDependent(sm, "gp", "p1");
+  SetDependent(sm, "gp", "c2");
+  SetDependent(sm, "p1", "c1");
 }
 
 TEST_F(StateUpdaterTest, SetStateSingleVersion) {
-  AssetKey ref1 = "test1?version=1";
-  AssetKey ref2 = "test2?version=1";
-  AssetKey ref3 = "test3?version=1";
-  SetVersions(sm, {MakeVersion(ref1), MakeVersion(ref2), MakeVersion(ref3)});
-  updater.SetStateForRefAndDependents(ref1, AssetDefs::Bad, [](AssetDefs::State) { return true; });
+  AssetKey ref1 = "test1";
+  AssetKey ref2 = "test2";
+  AssetKey ref3 = "test3";
+  SetVersions(sm, {MockVersion(ref1), MockVersion(ref2), MockVersion(ref3)});
+  updater.SetStateForRefAndDependents(fix(ref1), AssetDefs::Bad, [](AssetDefs::State) { return true; });
   ASSERT_TRUE(GetVersion(sm, ref1)->stateSet);
   ASSERT_FALSE(GetVersion(sm, ref2)->stateSet);
   ASSERT_FALSE(GetVersion(sm, ref3)->stateSet);
-  updater.SetStateForRefAndDependents(ref2, AssetDefs::Bad, [](AssetDefs::State) { return false; });
+  updater.SetStateForRefAndDependents(fix(ref2), AssetDefs::Bad, [](AssetDefs::State) { return false; });
   ASSERT_FALSE(GetVersion(sm, ref2)->stateSet);
   ASSERT_FALSE(GetVersion(sm, ref3)->stateSet);
+}
+
+TEST_F(StateUpdaterTest, SetStateMultipleVersions) {
+  GetBigTree(sm);
+  updater.SetStateForRefAndDependents(fix("gp"), AssetDefs::Canceled, [](AssetDefs::State) {return true; });
+  
+  ASSERT_TRUE(GetVersion(sm, "gp")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "p1")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "c1")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "c2")->stateSet);
+  
+  ASSERT_FALSE(GetVersion(sm, "gpi")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "pi1")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "c3")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "c4")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "ci1")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "ci2")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "ci3")->stateSet);
 }
 
 int main(int argc, char **argv) {
