@@ -59,13 +59,20 @@ class AssetHandleInterface {
 template<class AssetType>
 class AssetHandle {
   private:
+    template<class OtherAssetType> friend class AssetHandle;
     AssetPointerType<AssetType> handle;
     std::function<void(void)> onFinalize;
   public:
     AssetHandle(AssetPointerType<AssetType> handle,
                 std::function<void(void)> onFinalize)
-      : handle(handle), onFinalize(onFinalize) {}
+        : handle(handle), onFinalize(onFinalize) {}
     AssetHandle() = default;
+    // Assignment from handles with convertable pointers
+    template<class OtherAssetType>
+    AssetHandle(const OtherAssetType &other)
+        : handle(std::dynamic_pointer_cast<AssetType>(other.handle)), onFinalize(other.onFinalize) {
+      assert(handle);
+    }
     ~AssetHandle() {
       if (onFinalize) onFinalize();
     }
