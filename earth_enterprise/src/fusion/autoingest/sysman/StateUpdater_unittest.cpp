@@ -38,11 +38,12 @@ AssetKey fix(AssetKey ref) {
 class MockVersion : public AssetVersionImpl {
   public:
     bool stateSet;
+    bool loadedMutable;
     vector<AssetKey> dependents;
 
-    MockVersion() : stateSet(false) {
+    MockVersion() : stateSet(false), loadedMutable(false) {
       type = AssetDefs::Imagery;
-      state = AssetDefs::New;
+      state = AssetDefs::Blocked;
     }
     MockVersion(const AssetKey & ref) : MockVersion() {
       name = fix(ref);
@@ -62,7 +63,7 @@ class MockVersion : public AssetVersionImpl {
         bool blockersAreOffline,
         uint32 numWaitingFor) const
     {
-      return AssetDefs::New;
+      return AssetDefs::InProgress;
     }
     void SetMyStateOnly(AssetDefs::State newState, bool sendNotifications) {
       stateSet = true;
@@ -97,7 +98,14 @@ class MockStorageManager : public StorageManagerInterface<AssetVersionImpl> {
       return AssetHandle<const AssetVersionImpl>(GetFromMap(ref), nullptr);
     }
     virtual AssetHandle<AssetVersionImpl> GetMutable(const AssetKey &ref) {
-      return AssetHandle<AssetVersionImpl>(GetFromMap(ref), nullptr);
+      auto handle = AssetHandle<AssetVersionImpl>(GetFromMap(ref), nullptr);
+      dynamic_cast<MockVersion*>(handle.operator->())->loadedMutable = true;
+      return handle;
+    }
+    void ResetLoadedMutable() {
+      for (auto & v : versions) {
+        v.second->loadedMutable = false;
+      }
     }
 };
 
@@ -204,6 +212,38 @@ TEST_F(StateUpdaterTest, SetStateMultipleVersions) {
   ASSERT_FALSE(GetVersion(sm, "ci1")->stateSet);
   ASSERT_FALSE(GetVersion(sm, "ci2")->stateSet);
   ASSERT_FALSE(GetVersion(sm, "ci3")->stateSet);
+}
+
+TEST_F(StateUpdaterTest, SetStateMultipleVersionsFromChild) {
+  GetBigTree(sm);
+  sm.ResetLoadedMutable();
+  updater.SetStateForRefAndDependents(fix("p1"), AssetDefs::Canceled, [](AssetDefs::State) {return true; });
+  
+  ASSERT_TRUE(GetVersion(sm, "p1")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "c1")->stateSet);
+  
+  ASSERT_FALSE(GetVersion(sm, "gp")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "gpi")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "pi1")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "c2")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "c3")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "c4")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "ci1")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "ci2")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "ci3")->stateSet);
+
+  ASSERT_TRUE(GetVersion(sm, "p1")->loadedMutable);
+  ASSERT_TRUE(GetVersion(sm, "c1")->loadedMutable);
+  
+  ASSERT_FALSE(GetVersion(sm, "gp")->loadedMutable);
+  ASSERT_FALSE(GetVersion(sm, "gpi")->loadedMutable);
+  ASSERT_FALSE(GetVersion(sm, "pi1")->loadedMutable);
+  ASSERT_FALSE(GetVersion(sm, "c2")->loadedMutable);
+  ASSERT_FALSE(GetVersion(sm, "c3")->loadedMutable);
+  ASSERT_FALSE(GetVersion(sm, "c4")->loadedMutable);
+  ASSERT_FALSE(GetVersion(sm, "ci1")->loadedMutable);
+  ASSERT_FALSE(GetVersion(sm, "ci2")->loadedMutable);
+  ASSERT_FALSE(GetVersion(sm, "ci3")->loadedMutable);
 }
 
 int main(int argc, char **argv) {
