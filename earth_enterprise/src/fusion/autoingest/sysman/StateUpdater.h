@@ -61,7 +61,7 @@ class StateUpdater
     friend struct boost::property_map<TreeType, boost::vertex_index_t>;
     class UpdateStateVisitor;
 
-    StorageManager<AssetVersionImpl> * const storageManager;
+    StorageManagerInterface<AssetVersionImpl> * const storageManager;
     TreeType tree;
 
     inline bool IsDependent(DependencyType type) { return type == DEPENDENT || type == DEPENDENT_AND_CHILD; }
@@ -89,7 +89,7 @@ class StateUpdater
         AssetDefs::State newState,
         bool sendNotifications);
   public:
-    StateUpdater(StorageManager<AssetVersionImpl> * sm = &AssetVersion::storageManager()) : storageManager(sm) {}
+    StateUpdater(StorageManagerInterface<AssetVersionImpl> * sm = &AssetVersion::storageManager()) : storageManager(sm) {}
     void SetStateForRefAndDependents(
         const SharedString & ref,
         AssetDefs::State newState,
