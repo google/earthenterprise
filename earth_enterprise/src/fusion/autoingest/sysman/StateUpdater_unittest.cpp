@@ -14,12 +14,29 @@
  * limitations under the License.
  */
 
-#include "StateUpdater.h"
+#include "AssetVersion.h"
 #include "gee_version.h"
+#include "StateUpdater.h"
 
 #include <gtest/gtest.h>
+#include <string>
+
+using namespace std;
+
+class MockStorageManager : public StorageManagerInterface<AssetVersionImpl> {
+  public:
+    virtual AssetHandle<const AssetVersionImpl> Get(const AssetKey &) { return AssetHandle<const AssetVersionImpl>(); }
+    virtual AssetHandle<AssetVersionImpl> GetMutable(const AssetKey &) { return AssetHandle<AssetVersionImpl>(); }
+};
 
 class StateUpdaterTest : public testing::Test {
+  protected:
+   MockStorageManager storageManager;
+   StateUpdater updater;
+  public:
+   StateUpdaterTest()
+     : storageManager(),
+       updater(&storageManager) {}
 };
 
 TEST_F(StateUpdaterTest, NullTest) {
