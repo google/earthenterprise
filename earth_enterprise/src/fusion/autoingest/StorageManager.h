@@ -76,6 +76,7 @@ class AssetHandle {
 template<class AssetType>
 class StorageManagerInterface {
   public:
+    using PointerType = AssetPointerType<AssetType>;
     virtual AssetHandle<const AssetType> Get(const AssetKey &) = 0;
     virtual AssetHandle<AssetType> GetMutable(const AssetKey &) = 0;
     virtual ~StorageManagerInterface() {}
@@ -84,7 +85,8 @@ class StorageManagerInterface {
 template<class AssetType>
 class StorageManager : public StorageManagerInterface<AssetType> {
   public:
-    using PointerType = AssetPointerType<AssetType>;
+    using Base = StorageManagerInterface<AssetType>;
+    using PointerType = typename Base::PointerType;
 
     StorageManager(uint cacheSize, bool limitByMemory, uint64 maxMemory, const std::string & type) :
         cache(cacheSize),
