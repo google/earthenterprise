@@ -18,7 +18,6 @@
 #define GEO_EARTH_ENTERPRISE_SRC_FUSION_AUTOINGEST_ASSETHANDLE_H_
 
 #include <string>
-#include "common/khRefCounter.h"
 #include "common/khTypes.h"
 #include "common/SharedString.h"
 #include "StorageManager.h"
@@ -49,7 +48,7 @@ class AssetHandle_ : public AssetHandleInterface<Impl_> {
   friend class Impl;
  public:
   typedef Impl_ Impl;
-  using HandleType = typename StorageManager<Impl>::HandleType;
+  using HandleType = typename StorageManager<Impl>::PointerType;
 
   static inline StorageManager<Impl> & storageManager();
 

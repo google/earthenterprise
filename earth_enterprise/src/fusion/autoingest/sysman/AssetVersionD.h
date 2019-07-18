@@ -20,6 +20,7 @@
 #include <AssetVersion.h>
 #include "AssetHandleD.h"
 #include <autoingest/sysman/.idl/TaskStorage.h>
+#include "common/khRefCounter.h"
 #include <set>
 #include <map>
 #include <memory>

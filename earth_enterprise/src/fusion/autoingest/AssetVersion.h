@@ -40,7 +40,7 @@
  ***     ... = ver->config.layers.size();
  ***  }
  ******************************************************************************/
-class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public StorageManaged {
+class AssetVersionImpl : public AssetVersionStorage, public StorageManaged {
   friend class AssetImpl;
   friend class AssetHandle_<AssetVersionImpl>;
 
