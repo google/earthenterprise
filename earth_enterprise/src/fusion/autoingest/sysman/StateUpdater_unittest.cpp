@@ -217,7 +217,7 @@ TEST_F(StateUpdaterTest, SetStateMultipleVersions) {
 TEST_F(StateUpdaterTest, SetStateMultipleVersionsFromChild) {
   GetBigTree(sm);
   sm.ResetLoadedMutable();
-  updater.SetStateForRefAndDependents(fix("p1"), AssetDefs::Canceled, [](AssetDefs::State) {return true; });
+  updater.SetStateForRefAndDependents(fix("p1"), AssetDefs::Canceled, [](AssetDefs::State) { return true; });
   
   ASSERT_TRUE(GetVersion(sm, "p1")->stateSet);
   ASSERT_TRUE(GetVersion(sm, "c1")->stateSet);
@@ -244,6 +244,22 @@ TEST_F(StateUpdaterTest, SetStateMultipleVersionsFromChild) {
   ASSERT_FALSE(GetVersion(sm, "ci1")->loadedMutable);
   ASSERT_FALSE(GetVersion(sm, "ci2")->loadedMutable);
   ASSERT_FALSE(GetVersion(sm, "ci3")->loadedMutable);
+}
+
+TEST_F(StateUpdaterTest, SetState_StateDoesAndDoesntChange) {
+  const AssetDefs::State SET_TO_STATE = AssetDefs::InProgress;
+  const AssetDefs::State STARTING_STATE = AssetDefs::Canceled;
+  SetVersions(sm, {MockVersion("a"), MockVersion("b")});
+  sm.GetMutable(fix("a"))->state = SET_TO_STATE;
+  sm.GetMutable(fix("b"))->state = STARTING_STATE;
+  
+  updater.SetStateForRefAndDependents(fix("a"), SET_TO_STATE, [](AssetDefs::State) { return true; });
+  ASSERT_FALSE(GetVersion(sm, "a")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "b")->stateSet);
+
+  updater.SetStateForRefAndDependents(fix("b"), SET_TO_STATE, [](AssetDefs::State) { return true; });
+  ASSERT_FALSE(GetVersion(sm, "a")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "b")->stateSet);
 }
 
 int main(int argc, char **argv) {
