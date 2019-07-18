@@ -262,6 +262,18 @@ TEST_F(StateUpdaterTest, SetState_StateDoesAndDoesntChange) {
   ASSERT_TRUE(GetVersion(sm, "b")->stateSet);
 }
 
+TEST_F(StateUpdaterTest, SetStatePredicate) {
+  SetVersions(sm, {MockVersion("a"), MockVersion("b")});
+  sm.GetMutable(fix("a"))->state = AssetDefs::Bad;
+  sm.GetMutable(fix("b"))->state = AssetDefs::Canceled;
+  SetDependent(sm, "a", "b");
+  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::Succeeded, [](AssetDefs::State state) {
+    return state != AssetDefs::Canceled;
+  });
+  ASSERT_TRUE(GetVersion(sm, "a")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "b")->stateSet);
+}
+
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
   return RUN_ALL_TESTS();
