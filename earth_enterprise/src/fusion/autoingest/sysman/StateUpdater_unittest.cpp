@@ -39,9 +39,10 @@ class MockVersion : public AssetVersionImpl {
   public:
     bool stateSet;
     bool loadedMutable;
+    bool notificationsSent;
     vector<AssetKey> dependents;
 
-    MockVersion() : stateSet(false), loadedMutable(false) {
+    MockVersion() : stateSet(false), loadedMutable(false), notificationsSent(false) {
       type = AssetDefs::Imagery;
       state = AssetDefs::Blocked;
     }
@@ -67,6 +68,7 @@ class MockVersion : public AssetVersionImpl {
     }
     void SetMyStateOnly(AssetDefs::State newState, bool sendNotifications) {
       stateSet = true;
+      notificationsSent = sendNotifications;
     }
     
     // Not used - only included to make MockVersion non-virtual
@@ -212,6 +214,11 @@ TEST_F(StateUpdaterTest, SetStateMultipleVersions) {
   ASSERT_FALSE(GetVersion(sm, "ci1")->stateSet);
   ASSERT_FALSE(GetVersion(sm, "ci2")->stateSet);
   ASSERT_FALSE(GetVersion(sm, "ci3")->stateSet);
+
+  ASSERT_FALSE(GetVersion(sm, "gp")->notificationsSent);
+  ASSERT_FALSE(GetVersion(sm, "p1")->notificationsSent);
+  ASSERT_FALSE(GetVersion(sm, "c1")->notificationsSent);
+  ASSERT_FALSE(GetVersion(sm, "c2")->notificationsSent);
 }
 
 TEST_F(StateUpdaterTest, SetStateMultipleVersionsFromChild) {
