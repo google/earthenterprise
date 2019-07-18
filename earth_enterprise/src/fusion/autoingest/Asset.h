@@ -37,7 +37,7 @@
  ***  ... = asset->config.layers.size();
  ***
  ******************************************************************************/
-class AssetImpl : public khRefCounter, public AssetStorage, public StorageManaged {
+class AssetImpl : public AssetStorage, public StorageManaged {
   friend class AssetHandle_<AssetImpl>;
 
   // Illegal to copy an AssetImpl

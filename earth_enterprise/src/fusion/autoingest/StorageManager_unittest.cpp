@@ -22,11 +22,12 @@
 #include <sstream>
 #include <memory>
 #include <type_traits>
+
 using namespace std;
 
 const size_t CACHE_SIZE = 5;
 
-class TestItem : public khRefCounter, public StorageManaged {
+class TestItem : public StorageManaged {
  public:
   static int nextValue;
   static string fileName;
@@ -61,7 +62,7 @@ class TestItem : public khRefCounter, public StorageManaged {
   static bool ValidRef(const SharedString & ref) {
     return isValidRef;
   }
-  static typename StorageManager<TestItem>::HandleType Load(const string &) {
+  static typename StorageManager<TestItem>::PointerType Load(const string &) {
     return std::make_shared<TestItem>();
   }
 };
@@ -70,19 +71,18 @@ string TestItem::fileName;
 bool TestItem::isValidRef;
 template<> const bool StorageManager<TestItem>::check_timestamps = false;
 
-using HandleType = typename StorageManager<TestItem>::HandleType;
-using AssetKey = typename StorageManager<TestItem>::AssetKey;
+using PointerType = AssetPointerType<TestItem>;
 
 class TestHandle : public AssetHandleInterface<TestItem> {
   public:
-    virtual HandleType Load(const string &) const {
-      return HandleType(std::make_shared<TestItem>());
+    virtual PointerType Load(const string &) const {
+      return PointerType(std::make_shared<TestItem>());
     }
-    virtual bool Valid(const HandleType &) const { return true; }
+    virtual bool Valid(const PointerType &) const { return true; }
     TestHandle(const AssetKey & name) : name(name) {}
     TestHandle() = default;
     AssetKey name;
-    HandleType handle;
+    PointerType handle;
 };
 
 template<class HandleClass>
@@ -146,7 +146,7 @@ TEST_F(StorageManagerTest, LoadWithoutCacheLegacy) {
 }
 
 TEST_F(StorageManagerTest, AddNewLegacy) {
-  HandleType newItem(new TestItem());
+  PointerType newItem(new TestItem());
   ASSERT_EQ(storageManager.CacheSize(), 0) << "Storage manager has unexpected item in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
   
@@ -247,7 +247,7 @@ TEST_F(StorageManagerTest, PurgeCacheWithHandlesLegacy) {
 
 class TestHandleInvalidLegacy : public TestHandle {
   public:
-    virtual bool Valid(const HandleType &) const { return false; }
+    virtual bool Valid(const PointerType &) const { return false; }
     TestHandleInvalidLegacy(const AssetKey & name) : TestHandle(name) {}
 };
 
@@ -366,7 +366,7 @@ TEST_F(StorageManagerTest, AddAndRetrieve) {
 }
 
 TEST_F(StorageManagerTest, AddNew) {
-  HandleType newItem = make_shared<TestItem>();
+  PointerType newItem = make_shared<TestItem>();
   ASSERT_EQ(storageManager.CacheSize(), 0) << "Storage manager has unexpected item in cache";
   ASSERT_EQ(storageManager.DirtySize(), 0) << "Storage manager has unexpected item in dirty map";
   
