@@ -296,6 +296,7 @@ TEST_F(StateUpdaterTest, RecalculateState_StateDoesAndDoesntChange) {
   GetMutableVersion(sm, "a")->state = CALCULATED_STATE;
   GetMutableVersion(sm, "b")->state = STARTING_STATE;
   SetListenerInput(sm, "a", "b");
+  GetMutableVersion(sm, "a")->loadedMutable = false;
   updater.SetStateForRefAndDependents(fix("a"), CALCULATED_STATE, [](AssetDefs::State) { return false; });
 
   // Verify that the setup is correct
@@ -305,6 +306,7 @@ TEST_F(StateUpdaterTest, RecalculateState_StateDoesAndDoesntChange) {
   updater.RecalculateAndSaveStates();
   ASSERT_FALSE(GetVersion(sm, "a")->stateSet);
   ASSERT_TRUE(GetVersion(sm, "b")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "a")->loadedMutable);
 }
 
 int main(int argc, char **argv) {
