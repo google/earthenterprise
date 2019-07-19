@@ -44,9 +44,21 @@ class MockVersion : public AssetVersionImpl {
     bool loadedMutable;
     bool notificationsSent;
     bool needComputeState;
+    mutable AssetDefs::State stateByInputsVal;
+    mutable AssetDefs::State stateByChildrenVal;
+    mutable bool blockersAreOfflineVal;
+    mutable uint32 numWaitingForVal;
     vector<AssetKey> dependents;
 
-    MockVersion() : stateSet(false), loadedMutable(false), notificationsSent(false), needComputeState(true) {
+    MockVersion()
+        : stateSet(false),
+          loadedMutable(false),
+          notificationsSent(false),
+          needComputeState(true),
+          stateByInputsVal(AssetDefs::Bad),
+          stateByChildrenVal(AssetDefs::Bad),
+          blockersAreOfflineVal(false),
+          numWaitingForVal(-1) {
       type = AssetDefs::Imagery;
       state = STARTING_STATE;
     }
@@ -68,6 +80,10 @@ class MockVersion : public AssetVersionImpl {
         AssetDefs::State stateByChildren,
         bool blockersAreOffline,
         uint32 numWaitingFor) const {
+      stateByInputsVal = stateByInputs;
+      stateByChildrenVal = stateByChildren;
+      blockersAreOfflineVal = blockersAreOffline;
+      numWaitingForVal = numWaitingFor;
       return CALCULATED_STATE;
     }
     void SetMyStateOnly(AssetDefs::State newState, bool sendNotifications) {
@@ -307,6 +323,16 @@ TEST_F(StateUpdaterTest, RecalculateState_StateDoesAndDoesntChange) {
   ASSERT_FALSE(GetVersion(sm, "a")->stateSet);
   ASSERT_TRUE(GetVersion(sm, "b")->stateSet);
   ASSERT_FALSE(GetVersion(sm, "a")->loadedMutable);
+}
+
+TEST_F(StateUpdaterTest, NoInputsNoChildren) {
+  SetVersions(sm, {MockVersion("a")});
+  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
+  updater.RecalculateAndSaveStates();
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateByInputsVal, AssetDefs::Queued);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateByChildrenVal, AssetDefs::Succeeded);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->blockersAreOfflineVal, true);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->numWaitingForVal, 0);
 }
 
 int main(int argc, char **argv) {
