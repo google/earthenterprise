@@ -327,9 +327,49 @@ TEST_F(StateUpdaterTest, RecalculateState_StateDoesAndDoesntChange) {
 
 TEST_F(StateUpdaterTest, NoInputsNoChildren) {
   SetVersions(sm, {MockVersion("a")});
-  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return true; });
+  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return false; });
   updater.RecalculateAndSaveStates();
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateByInputsVal, AssetDefs::Queued);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateByChildrenVal, AssetDefs::Succeeded);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->blockersAreOfflineVal, true);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->numWaitingForVal, 0);
+}
+
+void OnlineBlockerTest(MockStorageManager & sm, StateUpdater & updater, AssetDefs::State inputState) {
+  SetVersions(sm, {MockVersion("a"), MockVersion("b")});
+  SetListenerInput(sm, "a", "b");
+  GetMutableVersion(sm, "b")->state = inputState;
+  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return false; });
+  updater.RecalculateAndSaveStates();
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateByInputsVal, AssetDefs::Blocked);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateByChildrenVal, AssetDefs::Succeeded);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->blockersAreOfflineVal, false);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->numWaitingForVal, 0);
+}
+
+TEST_F(StateUpdaterTest, BlockedBlocker) {
+  OnlineBlockerTest(sm, updater, AssetDefs::Blocked);
+}
+
+TEST_F(StateUpdaterTest, FailedBlocker) {
+  OnlineBlockerTest(sm, updater, AssetDefs::Failed);
+}
+
+TEST_F(StateUpdaterTest, CanceledBlocker) {
+  OnlineBlockerTest(sm, updater, AssetDefs::Canceled);
+}
+
+TEST_F(StateUpdaterTest, BadBlocker) {
+  OnlineBlockerTest(sm, updater, AssetDefs::Bad);
+}
+
+TEST_F(StateUpdaterTest, OfflineBlocker) {
+  SetVersions(sm, {MockVersion("a"), MockVersion("b")});
+  SetListenerInput(sm, "a", "b");
+  GetMutableVersion(sm, "b")->state = AssetDefs::Offline;
+  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return false; });
+  updater.RecalculateAndSaveStates();
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateByInputsVal, AssetDefs::Blocked);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateByChildrenVal, AssetDefs::Succeeded);
   ASSERT_EQ(GetMutableVersion(sm, "a")->blockersAreOfflineVal, true);
   ASSERT_EQ(GetMutableVersion(sm, "a")->numWaitingForVal, 0);
