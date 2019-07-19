@@ -469,6 +469,19 @@ TEST_F(StateUpdaterTest, ChildInProgress) {
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateByChildrenVal, AssetDefs::InProgress);
 }
 
+TEST_F(StateUpdaterTest, ChildQueued) {
+  SetVersions(sm, {MockVersion("a"), MockVersion("b"), MockVersion("c"), MockVersion("d")});
+  SetParentChild(sm, "a", "b");
+  SetParentChild(sm, "a", "c");
+  SetParentChild(sm, "a", "d");
+  GetMutableVersion(sm, "b")->state = AssetDefs::Queued;
+  GetMutableVersion(sm, "c")->state = AssetDefs::Queued;
+  GetMutableVersion(sm, "d")->state = AssetDefs::Queued;
+  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return false; });
+  updater.RecalculateAndSaveStates();
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateByChildrenVal, AssetDefs::Queued);
+}
+
 TEST_F(StateUpdaterTest, SucceededChildren) {
   SetVersions(sm, {MockVersion("a"), MockVersion("b"), MockVersion("c"), MockVersion("d")});
   SetParentChild(sm, "a", "b");
@@ -482,12 +495,27 @@ TEST_F(StateUpdaterTest, SucceededChildren) {
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateByChildrenVal, AssetDefs::Succeeded);
 }
 
+TEST_F(StateUpdaterTest, ChildrenAndDependents) {
+  SetVersions(sm, {MockVersion("a"), MockVersion("b"), MockVersion("c"), MockVersion("d")});
+  SetParentChild(sm, "a", "b");
+  SetParentChild(sm, "a", "c");
+  SetDependent(sm, "a", "b");
+  SetDependent(sm, "a", "d");
+  // These states are carefully chosen. b is a dependent and a child, and d is
+  // a dependent but not a child. If b is not recognized as a child, the state
+  // will be Queued. If d is treated as a child, the state will be blocked.
+  // Only if both are handled correctly with the state be correct.
+  GetMutableVersion(sm, "b")->state = AssetDefs::Succeeded;
+  GetMutableVersion(sm, "c")->state = AssetDefs::Queued;
+  GetMutableVersion(sm, "d")->state = AssetDefs::Failed;
+  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return false; });
+  updater.RecalculateAndSaveStates();
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateByChildrenVal, AssetDefs::InProgress);
+}
 
 /*
  * TODO:
  * Children and inputs
- * Children that are and are not dependents
- * Dependents that are and are not children
  * Calculate state for multiple assets
  */
 
