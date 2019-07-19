@@ -297,17 +297,15 @@ class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
         uint numgood = 0;
         uint numblocking = 0;
         uint numinprog = 0;
-        uint numfailed = 0;
       public:
         void Add(AssetDefs::State childState) {
           ++numkids;
           if (childState == AssetDefs::Succeeded) {
             ++numgood;
-          } else if (childState == AssetDefs::Failed) {
-            ++numfailed;
           } else if (childState == AssetDefs::InProgress) {
             ++numinprog;
-          } else if (childState & (AssetDefs::Blocked  |
+          } else if (childState & (AssetDefs::Failed   |
+                                   AssetDefs::Blocked  |
                                    AssetDefs::Canceled |
                                    AssetDefs::Offline  |
                                    AssetDefs::Bad)) {
@@ -317,7 +315,7 @@ class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
         void GetOutputs(AssetDefs::State & stateByChildren) {
           if (numkids == numgood) {
             stateByChildren = AssetDefs::Succeeded;
-          } else if (numblocking || numfailed) {
+          } else if (numblocking) {
             stateByChildren = AssetDefs::Blocked;
           } else if (numgood || numinprog) {
             stateByChildren = AssetDefs::InProgress;
