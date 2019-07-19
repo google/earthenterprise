@@ -331,14 +331,17 @@ TEST_F(StateUpdaterTest, NoInputsNoChildren) {
   updater.RecalculateAndSaveStates();
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateByInputsVal, AssetDefs::Queued);
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateByChildrenVal, AssetDefs::Succeeded);
-  ASSERT_EQ(GetMutableVersion(sm, "a")->blockersAreOfflineVal, true);
   ASSERT_EQ(GetMutableVersion(sm, "a")->numWaitingForVal, 0);
 }
 
-void OnlineBlockerTest(MockStorageManager & sm, StateUpdater & updater, AssetDefs::State inputState) {
-  SetVersions(sm, {MockVersion("a"), MockVersion("b")});
+void OnlineInputBlockerTest(MockStorageManager & sm, StateUpdater & updater, AssetDefs::State inputState) {
+  SetVersions(sm, {MockVersion("a"), MockVersion("b"), MockVersion("c"), MockVersion("d")});
   SetListenerInput(sm, "a", "b");
+  SetListenerInput(sm, "a", "c");
+  SetListenerInput(sm, "a", "d");
   GetMutableVersion(sm, "b")->state = inputState;
+  GetMutableVersion(sm, "c")->state = AssetDefs::InProgress;
+  GetMutableVersion(sm, "d")->state = AssetDefs::Succeeded;
   updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return false; });
   updater.RecalculateAndSaveStates();
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateByInputsVal, AssetDefs::Blocked);
@@ -347,23 +350,23 @@ void OnlineBlockerTest(MockStorageManager & sm, StateUpdater & updater, AssetDef
   ASSERT_EQ(GetMutableVersion(sm, "a")->numWaitingForVal, 0);
 }
 
-TEST_F(StateUpdaterTest, BlockedBlocker) {
-  OnlineBlockerTest(sm, updater, AssetDefs::Blocked);
+TEST_F(StateUpdaterTest, BlockedInputBlocker) {
+  OnlineInputBlockerTest(sm, updater, AssetDefs::Blocked);
 }
 
-TEST_F(StateUpdaterTest, FailedBlocker) {
-  OnlineBlockerTest(sm, updater, AssetDefs::Failed);
+TEST_F(StateUpdaterTest, FailedInputBlocker) {
+  OnlineInputBlockerTest(sm, updater, AssetDefs::Failed);
 }
 
-TEST_F(StateUpdaterTest, CanceledBlocker) {
-  OnlineBlockerTest(sm, updater, AssetDefs::Canceled);
+TEST_F(StateUpdaterTest, CanceledInputBlocker) {
+  OnlineInputBlockerTest(sm, updater, AssetDefs::Canceled);
 }
 
-TEST_F(StateUpdaterTest, BadBlocker) {
-  OnlineBlockerTest(sm, updater, AssetDefs::Bad);
+TEST_F(StateUpdaterTest, BadInputBlocker) {
+  OnlineInputBlockerTest(sm, updater, AssetDefs::Bad);
 }
 
-TEST_F(StateUpdaterTest, OfflineBlocker) {
+TEST_F(StateUpdaterTest, OfflineInputBlocker) {
   SetVersions(sm, {MockVersion("a"), MockVersion("b")});
   SetListenerInput(sm, "a", "b");
   GetMutableVersion(sm, "b")->state = AssetDefs::Offline;
@@ -374,6 +377,62 @@ TEST_F(StateUpdaterTest, OfflineBlocker) {
   ASSERT_EQ(GetMutableVersion(sm, "a")->blockersAreOfflineVal, true);
   ASSERT_EQ(GetMutableVersion(sm, "a")->numWaitingForVal, 0);
 }
+
+TEST_F(StateUpdaterTest, BlockedAndOfflineInput) {
+  SetVersions(sm, {MockVersion("a"), MockVersion("b"), MockVersion("c")});
+  SetListenerInput(sm, "a", "b");
+  SetListenerInput(sm, "a", "c");
+  GetMutableVersion(sm, "b")->state = AssetDefs::Offline;
+  GetMutableVersion(sm, "c")->state = AssetDefs::Failed;
+  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return false; });
+  updater.RecalculateAndSaveStates();
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateByInputsVal, AssetDefs::Blocked);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateByChildrenVal, AssetDefs::Succeeded);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->blockersAreOfflineVal, false);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->numWaitingForVal, 0);
+}
+
+TEST_F(StateUpdaterTest, WaitingOnInput) {
+  SetVersions(sm, {MockVersion("a"), MockVersion("b"), MockVersion("c"), MockVersion("d")});
+  SetListenerInput(sm, "a", "b");
+  SetListenerInput(sm, "a", "c");
+  SetListenerInput(sm, "a", "d");
+  GetMutableVersion(sm, "b")->state = AssetDefs::Queued;
+  GetMutableVersion(sm, "c")->state = AssetDefs::InProgress;
+  GetMutableVersion(sm, "d")->state = AssetDefs::Succeeded;
+  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return false; });
+  updater.RecalculateAndSaveStates();
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateByInputsVal, AssetDefs::Waiting);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateByChildrenVal, AssetDefs::Succeeded);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->numWaitingForVal, 2);
+}
+
+TEST_F(StateUpdaterTest, SucceededInputs) {
+  SetVersions(sm, {MockVersion("a"), MockVersion("b"), MockVersion("c"), MockVersion("d")});
+  SetListenerInput(sm, "a", "b");
+  SetListenerInput(sm, "a", "c");
+  SetListenerInput(sm, "a", "d");
+  GetMutableVersion(sm, "b")->state = AssetDefs::Succeeded;
+  GetMutableVersion(sm, "c")->state = AssetDefs::Succeeded;
+  GetMutableVersion(sm, "d")->state = AssetDefs::Succeeded;
+  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return false; });
+  updater.RecalculateAndSaveStates();
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateByInputsVal, AssetDefs::Queued);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateByChildrenVal, AssetDefs::Succeeded);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->numWaitingForVal, 0);
+}
+
+/*
+ * TODO:
+ * Children and inputs
+ * Succeeded children
+ * Failed children
+ * InProgress children
+ * Blocked children
+ * Canceled children
+ * Offline children
+ * Bad children
+ */
 
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
