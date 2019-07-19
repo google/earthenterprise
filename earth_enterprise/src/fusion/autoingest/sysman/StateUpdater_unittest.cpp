@@ -40,13 +40,15 @@ class MockVersion : public AssetVersionImpl {
     bool stateSet;
     bool loadedMutable;
     bool notificationsSent;
+    bool needComputeState;
     vector<AssetKey> dependents;
 
     MockVersion() : stateSet(false), loadedMutable(false), notificationsSent(false) {
       type = AssetDefs::Imagery;
       state = AssetDefs::Blocked;
     }
-    MockVersion(const AssetKey & ref) : MockVersion() {
+    MockVersion(const AssetKey & ref)
+        : MockVersion() {
       name = fix(ref);
     }
     MockVersion(const MockVersion & that) : MockVersion() {
@@ -57,13 +59,12 @@ class MockVersion : public AssetVersionImpl {
         d.push_back(dependent);
       }
     }
-    bool NeedComputeState() const { return true; }
+    bool NeedComputeState() const { return needComputeState; }
     AssetDefs::State CalcStateByInputsAndChildren(
         AssetDefs::State stateByInputs,
         AssetDefs::State stateByChildren,
         bool blockersAreOffline,
-        uint32 numWaitingFor) const
-    {
+        uint32 numWaitingFor) const {
       return AssetDefs::InProgress;
     }
     void SetMyStateOnly(AssetDefs::State newState, bool sendNotifications) {
@@ -125,31 +126,26 @@ void SetVersions(MockStorageManager & sm, vector<MockVersion> versions) {
   }
 }
 
-// This is bad because technically the object could be deleted before you use
-// it, but it works for unit tests.
 AssetHandle<const MockVersion> GetVersion(MockStorageManager & sm, const AssetKey & key) {
   return sm.Get(fix(key));
 }
 
+AssetHandle<MockVersion> GetMutableVersion(MockStorageManager & sm, const AssetKey & key) {
+  return sm.GetMutable(fix(key));
+}
+
 void SetParentChild(MockStorageManager & sm, AssetKey parent, AssetKey child) {
-  parent = fix(parent);
-  child = fix(child);
-  sm.GetMutable(parent)->children.push_back(child);
-  sm.GetMutable(child)->parents.push_back(parent);
+  GetMutableVersion(sm, parent)->children.push_back(fix(child));
+  GetMutableVersion(sm, child)->parents.push_back(fix(parent));
 }
 
 void SetListenerInput(MockStorageManager & sm, AssetKey listener, AssetKey input) {
-  listener = fix(listener);
-  input = fix(input);
-  sm.GetMutable(listener)->inputs.push_back(input);
-  sm.GetMutable(input)->listeners.push_back(listener);
+  GetMutableVersion(sm, listener)->inputs.push_back(fix(input));
+  GetMutableVersion(sm, input)->listeners.push_back(fix(listener));
 }
 
 void SetDependent(MockStorageManager & sm, AssetKey dependee, AssetKey dependent) {
-  dependee = fix(dependee);
-  dependent = fix(dependent);
-  AssetHandle<MockVersion> dependeeHandle = sm.GetMutable(dependee);
-  dependeeHandle->dependents.push_back(dependent);
+  GetMutableVersion(sm, dependee)->dependents.push_back(fix(dependent));
 }
 
 void GetBigTree(MockStorageManager & sm) {
@@ -257,8 +253,8 @@ TEST_F(StateUpdaterTest, SetState_StateDoesAndDoesntChange) {
   const AssetDefs::State SET_TO_STATE = AssetDefs::InProgress;
   const AssetDefs::State STARTING_STATE = AssetDefs::Canceled;
   SetVersions(sm, {MockVersion("a"), MockVersion("b")});
-  sm.GetMutable(fix("a"))->state = SET_TO_STATE;
-  sm.GetMutable(fix("b"))->state = STARTING_STATE;
+  GetMutableVersion(sm, "a")->state = SET_TO_STATE;
+  GetMutableVersion(sm, "b")->state = STARTING_STATE;
   
   updater.SetStateForRefAndDependents(fix("a"), SET_TO_STATE, [](AssetDefs::State) { return true; });
   ASSERT_FALSE(GetVersion(sm, "a")->stateSet);
@@ -271,14 +267,27 @@ TEST_F(StateUpdaterTest, SetState_StateDoesAndDoesntChange) {
 
 TEST_F(StateUpdaterTest, SetStatePredicate) {
   SetVersions(sm, {MockVersion("a"), MockVersion("b")});
-  sm.GetMutable(fix("a"))->state = AssetDefs::Bad;
-  sm.GetMutable(fix("b"))->state = AssetDefs::Canceled;
+  GetMutableVersion(sm, "a")->state = AssetDefs::Bad;
+  GetMutableVersion(sm, "b")->state = AssetDefs::Canceled;
   SetDependent(sm, "a", "b");
   updater.SetStateForRefAndDependents(fix("a"), AssetDefs::Succeeded, [](AssetDefs::State state) {
     return state != AssetDefs::Canceled;
   });
   ASSERT_TRUE(GetVersion(sm, "a")->stateSet);
   ASSERT_FALSE(GetVersion(sm, "b")->stateSet);
+}
+
+TEST_F(StateUpdaterTest, NeedComputeStateFalse) {
+  SetVersions(sm, {MockVersion("a")});
+  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::Canceled, [](AssetDefs::State) { return true; });
+  GetMutableVersion(sm, "a")->needComputeState = false;
+  GetMutableVersion(sm, "a")->stateSet = false;
+  updater.RecalculateAndSaveStates();
+  ASSERT_FALSE(GetVersion(sm, "a")->stateSet);
+  GetMutableVersion(sm, "a")->needComputeState = true;
+  updater.RecalculateAndSaveStates();
+  ASSERT_TRUE(GetVersion(sm, "a")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "a")->notificationsSent);
 }
 
 int main(int argc, char **argv) {
