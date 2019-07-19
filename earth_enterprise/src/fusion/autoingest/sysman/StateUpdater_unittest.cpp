@@ -35,6 +35,9 @@ AssetKey fix(AssetKey ref) {
   return ref.toString() + SUFFIX;
 }
 
+const AssetDefs::State STARTING_STATE = AssetDefs::Blocked;
+const AssetDefs::State CALCULATED_STATE = AssetDefs::InProgress;
+
 class MockVersion : public AssetVersionImpl {
   public:
     bool stateSet;
@@ -43,9 +46,9 @@ class MockVersion : public AssetVersionImpl {
     bool needComputeState;
     vector<AssetKey> dependents;
 
-    MockVersion() : stateSet(false), loadedMutable(false), notificationsSent(false) {
+    MockVersion() : stateSet(false), loadedMutable(false), notificationsSent(false), needComputeState(true) {
       type = AssetDefs::Imagery;
-      state = AssetDefs::Blocked;
+      state = STARTING_STATE;
     }
     MockVersion(const AssetKey & ref)
         : MockVersion() {
@@ -65,7 +68,7 @@ class MockVersion : public AssetVersionImpl {
         AssetDefs::State stateByChildren,
         bool blockersAreOffline,
         uint32 numWaitingFor) const {
-      return AssetDefs::InProgress;
+      return CALCULATED_STATE;
     }
     void SetMyStateOnly(AssetDefs::State newState, bool sendNotifications) {
       stateSet = true;
@@ -250,17 +253,15 @@ TEST_F(StateUpdaterTest, SetStateMultipleVersionsFromChild) {
 }
 
 TEST_F(StateUpdaterTest, SetState_StateDoesAndDoesntChange) {
-  const AssetDefs::State SET_TO_STATE = AssetDefs::InProgress;
-  const AssetDefs::State STARTING_STATE = AssetDefs::Canceled;
   SetVersions(sm, {MockVersion("a"), MockVersion("b")});
-  GetMutableVersion(sm, "a")->state = SET_TO_STATE;
+  GetMutableVersion(sm, "a")->state = CALCULATED_STATE;
   GetMutableVersion(sm, "b")->state = STARTING_STATE;
   
-  updater.SetStateForRefAndDependents(fix("a"), SET_TO_STATE, [](AssetDefs::State) { return true; });
+  updater.SetStateForRefAndDependents(fix("a"), CALCULATED_STATE, [](AssetDefs::State) { return true; });
   ASSERT_FALSE(GetVersion(sm, "a")->stateSet);
   ASSERT_FALSE(GetVersion(sm, "b")->stateSet);
 
-  updater.SetStateForRefAndDependents(fix("b"), SET_TO_STATE, [](AssetDefs::State) { return true; });
+  updater.SetStateForRefAndDependents(fix("b"), CALCULATED_STATE, [](AssetDefs::State) { return true; });
   ASSERT_FALSE(GetVersion(sm, "a")->stateSet);
   ASSERT_TRUE(GetVersion(sm, "b")->stateSet);
 }
@@ -288,6 +289,22 @@ TEST_F(StateUpdaterTest, NeedComputeStateFalse) {
   updater.RecalculateAndSaveStates();
   ASSERT_TRUE(GetVersion(sm, "a")->stateSet);
   ASSERT_TRUE(GetVersion(sm, "a")->notificationsSent);
+}
+
+TEST_F(StateUpdaterTest, RecalculateState_StateDoesAndDoesntChange) {
+  SetVersions(sm, {MockVersion("a"), MockVersion("b")});
+  GetMutableVersion(sm, "a")->state = CALCULATED_STATE;
+  GetMutableVersion(sm, "b")->state = STARTING_STATE;
+  SetListenerInput(sm, "a", "b");
+  updater.SetStateForRefAndDependents(fix("a"), CALCULATED_STATE, [](AssetDefs::State) { return false; });
+
+  // Verify that the setup is correct
+  ASSERT_FALSE(GetVersion(sm, "a")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "b")->stateSet);
+  
+  updater.RecalculateAndSaveStates();
+  ASSERT_FALSE(GetVersion(sm, "a")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "b")->stateSet);
 }
 
 int main(int argc, char **argv) {
