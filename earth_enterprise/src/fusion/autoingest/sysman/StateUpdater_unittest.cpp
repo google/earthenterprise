@@ -422,16 +422,36 @@ TEST_F(StateUpdaterTest, SucceededInputs) {
   ASSERT_EQ(GetMutableVersion(sm, "a")->numWaitingForVal, 0);
 }
 
+void OnlineChildBlockerTest(MockStorageManager & sm, StateUpdater & updater, AssetDefs::State inputState) {
+  SetVersions(sm, {MockVersion("a"), MockVersion("b"), MockVersion("c"), MockVersion("d")});
+  SetParentChild(sm, "a", "b");
+  SetParentChild(sm, "a", "c");
+  SetParentChild(sm, "a", "d");
+  GetMutableVersion(sm, "b")->state = inputState;
+  GetMutableVersion(sm, "c")->state = AssetDefs::InProgress;
+  GetMutableVersion(sm, "d")->state = AssetDefs::Succeeded;
+  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return false; });
+  updater.RecalculateAndSaveStates();
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateByInputsVal, AssetDefs::Queued);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateByChildrenVal, AssetDefs::Blocked);
+}
+
+TEST_F(StateUpdaterTest, FailedChildBlocker) {
+  OnlineInputBlockerTest(sm, updater, AssetDefs::Failed);
+}
+
 /*
  * TODO:
- * Children and inputs
  * Succeeded children
- * Failed children
  * InProgress children
  * Blocked children
  * Canceled children
  * Offline children
  * Bad children
+ * Children and inputs
+ * Children that are and are not dependents
+ * Dependents that are and are not children
+ * Calculate state for multiple assets
  */
 
 int main(int argc, char **argv) {
