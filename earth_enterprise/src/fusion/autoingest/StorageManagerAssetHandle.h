@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef STORAGEMANAGERASSETHANDLE_CPP
-#define STORAGEMANAGERASSETHANDLE_CPP
+#ifndef STORAGEMANAGERASSETHANDLE_H
+#define STORAGEMANAGERASSETHANDLE_H
 
 #include <functional>
 #include <memory>
