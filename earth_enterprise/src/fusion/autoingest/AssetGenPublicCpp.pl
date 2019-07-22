@@ -68,6 +68,7 @@ print $fh <<EOF;
 #include <khFileUtils.h>
 #include <khGuard.h>
 #include <khxml/khdom.h>
+#include <memory>
 using namespace khxml;
 
 
@@ -86,7 +87,7 @@ namespace {
 
 extern void FromElement(DOMElement *elem, AssetStorage &self);
 
-khRefGuard<${name}AssetImpl>
+std::shared_ptr<${name}AssetImpl>
 ${name}AssetImpl::NewFromDOM(void *e)
 {
     DOMElement *elem = (DOMElement*)e;
@@ -97,8 +98,7 @@ ${name}AssetImpl::NewFromDOM(void *e)
     return NewFromStorage(storage, config);
 }
 
-
-khRefGuard<${name}AssetImpl>
+std::shared_ptr<${name}AssetImpl>
 ${name}AssetImpl::NewInvalid(const std::string &ref)
 {
     AssetStorage storage;
@@ -108,12 +108,12 @@ ${name}AssetImpl::NewInvalid(const std::string &ref)
 }
 
 
-
-khRefGuard<${name}AssetImpl>
+std::shared_ptr<${name}AssetImpl>
 ${name}AssetImpl::Load(const std::string &ref)
 {
     std::string filename = XMLFilename(ref);
-    khRefGuard<${name}AssetImpl> result;
+
+    std::shared_ptr<${name}AssetImpl> result;
     time_t timestamp = 0;
     uint64 filesize = 0;
 
@@ -168,7 +168,7 @@ ${name}AssetImpl::Load(const std::string &ref)
 // ****************************************************************************
 extern void FromElement(DOMElement *elem, AssetVersionStorage &self);
 
-khRefGuard<${name}AssetVersionImpl>
+std::shared_ptr<${name}AssetVersionImpl>
 ${name}AssetVersionImpl::NewFromDOM(void *e)
 {
     DOMElement *elem = (DOMElement*)e;
@@ -179,7 +179,7 @@ ${name}AssetVersionImpl::NewFromDOM(void *e)
     return NewFromStorage(storage, config);
 }
 
-khRefGuard<${name}AssetVersionImpl>
+std::shared_ptr<${name}AssetVersionImpl>
 ${name}AssetVersionImpl::NewInvalid(const std::string &ref)
 {
     AssetVersionStorage storage;
@@ -192,11 +192,12 @@ std::string ${name}AssetVersionImpl::PluginName(void) const {
   return "${name}";
 }
 
-khRefGuard<${name}AssetVersionImpl>
+std::shared_ptr<${name}AssetVersionImpl>
 ${name}AssetVersionImpl::Load(const std::string &boundref)
 {
     std::string filename = XMLFilename(boundref);
-    khRefGuard<${name}AssetVersionImpl> result;
+
+    std::shared_ptr<${name}AssetVersionImpl> result;
     time_t timestamp = 0;
     uint64 filesize = 0;
 
