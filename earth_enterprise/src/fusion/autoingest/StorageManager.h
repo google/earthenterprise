@@ -17,21 +17,16 @@
 #ifndef STORAGEMANAGER_H
 #define STORAGEMANAGER_H
 
-#include <functional>
 #include <map>
 #include <string>
 #include <time.h>
 #include <vector>
-#include <memory>
 
-#include "autoingest/.idl/storage/AssetDefs.h"
 #include "common/khCache.h"
 #include "common/khFileUtils.h"
 #include "common/notify.h"
 #include "common/SharedString.h"
-
-template<class AssetType>
-using AssetPointerType = std::shared_ptr<AssetType>;
+#include "StorageManagerAssetHandle.h"
 
 using AssetKey = SharedString;
 
@@ -52,33 +47,6 @@ class AssetHandleInterface {
     virtual bool Valid(const AssetPointerType<AssetType> &) const = 0;
 };
 
-// Objects outside the storage manager will access assets through AssetHandles.
-// This allows the storage manager to properly clean up when the other object
-// is done using the asset (release locks, update cache size, etc). AssetHandles
-// provide read-only access and MutableAssetHandles provide read/write access.
-template<class AssetType>
-class AssetHandle {
-  private:
-    template<class OtherAssetType> friend class AssetHandle;
-    AssetPointerType<AssetType> handle;
-    std::function<void(void)> onFinalize;
-  public:
-    AssetHandle(AssetPointerType<AssetType> handle,
-                std::function<void(void)> onFinalize)
-        : handle(handle), onFinalize(onFinalize) {}
-    AssetHandle() = default;
-    // Assignment from handles with convertable pointers
-    template<class OtherAssetType>
-    AssetHandle(const OtherAssetType &other)
-        : handle(std::dynamic_pointer_cast<AssetType>(other.handle)), onFinalize(other.onFinalize) {
-      assert(handle);
-    }
-    ~AssetHandle() {
-      if (onFinalize) onFinalize();
-    }
-    inline AssetType * operator->() const { return handle.operator->(); }
-    inline explicit operator bool() const { return handle && (handle->type != AssetDefs::Invalid); }
-};
 
 template<class AssetType>
 class StorageManagerInterface {
@@ -111,8 +79,8 @@ class StorageManager : public StorageManagerInterface<AssetType> {
     inline void AddExisting(const AssetKey &, const PointerType &);
     inline void NoLongerNeeded(const AssetKey &, bool = true);
     void Abort();
-    bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<SharedString> *);
-    PointerType Get(const AssetHandleInterface<AssetType> *, const SharedString &, bool, bool, bool);
+    bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<AssetKey> *);
+    PointerType Get(const AssetHandleInterface<AssetType> *, const AssetKey &, bool, bool, bool);
     
     // Pass a handle to a const to prevent callers from modifying it.
     AssetHandle<const AssetType> Get(const AssetKey &);
@@ -157,12 +125,13 @@ StorageManager<AssetType>::NoLongerNeeded(const AssetKey & key, bool prune) {
 // This is the "legacy" Get function used by the AssetHandle_ class (see
 // AssetHandle.h). New code should use the other Get function or the
 // GetMutable function as appropriate, which return AssetHandle objects,
-// which are defined in this file. Evetually this function should go away.
+// which are defined in StorageManagerAssetHandle.h. Evetually this function
+// should go away.
 template<class AssetType>
 typename StorageManager<AssetType>::PointerType
 StorageManager<AssetType>::Get(
     const AssetHandleInterface<AssetType> * handle,
-    const SharedString & ref,
+    const AssetKey & ref,
     bool checkFileExistenceFirst,
     bool addToCache,
     bool makeMutable) {
@@ -222,7 +191,7 @@ StorageManager<AssetType>::Get(
 template<class AssetType>
 typename StorageManager<AssetType>::PointerType
 StorageManager<AssetType>::GetEntryFromCacheOrDisk(const AssetKey & ref) {
-  SharedString key = AssetType::Key(ref);
+  AssetKey key = AssetType::Key(ref);
 
   // Deal quickly with an invalid key
   if (!AssetType::ValidRef(key)) return PointerType();
@@ -298,7 +267,7 @@ void StorageManager<AssetType>::Abort() {
 template<class AssetType>
 bool StorageManager<AssetType>::SaveDirtyToDotNew(
     khFilesTransaction &savetrans,
-    std::vector<SharedString> *saved) {
+    std::vector<AssetKey> *saved) {
   notify(NFY_INFO, "Writing %lu %s records", dirtyMap.size(), assetType.c_str());
   typename std::map<AssetKey, PointerType>::iterator entry = dirtyMap.begin();
   while (entry != dirtyMap.end()) {
