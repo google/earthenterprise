@@ -224,6 +224,7 @@ TEST_F(StateUpdaterTest, SetStateMultipleVersions) {
   
   ASSERT_FALSE(GetVersion(sm, "gpi")->stateSet);
   ASSERT_FALSE(GetVersion(sm, "pi1")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "p2")->stateSet);
   ASSERT_FALSE(GetVersion(sm, "c3")->stateSet);
   ASSERT_FALSE(GetVersion(sm, "c4")->stateSet);
   ASSERT_FALSE(GetVersion(sm, "ci1")->stateSet);
@@ -247,6 +248,7 @@ TEST_F(StateUpdaterTest, SetStateMultipleVersionsFromChild) {
   ASSERT_FALSE(GetVersion(sm, "gp")->stateSet);
   ASSERT_FALSE(GetVersion(sm, "gpi")->stateSet);
   ASSERT_FALSE(GetVersion(sm, "pi1")->stateSet);
+  ASSERT_FALSE(GetVersion(sm, "p2")->stateSet);
   ASSERT_FALSE(GetVersion(sm, "c2")->stateSet);
   ASSERT_FALSE(GetVersion(sm, "c3")->stateSet);
   ASSERT_FALSE(GetVersion(sm, "c4")->stateSet);
@@ -260,6 +262,7 @@ TEST_F(StateUpdaterTest, SetStateMultipleVersionsFromChild) {
   ASSERT_FALSE(GetVersion(sm, "gp")->loadedMutable);
   ASSERT_FALSE(GetVersion(sm, "gpi")->loadedMutable);
   ASSERT_FALSE(GetVersion(sm, "pi1")->loadedMutable);
+  ASSERT_FALSE(GetVersion(sm, "p2")->loadedMutable);
   ASSERT_FALSE(GetVersion(sm, "c2")->loadedMutable);
   ASSERT_FALSE(GetVersion(sm, "c3")->loadedMutable);
   ASSERT_FALSE(GetVersion(sm, "c4")->loadedMutable);
@@ -504,7 +507,7 @@ TEST_F(StateUpdaterTest, ChildrenAndDependents) {
   // These states are carefully chosen. b is a dependent and a child, and d is
   // a dependent but not a child. If b is not recognized as a child, the state
   // will be Queued. If d is treated as a child, the state will be blocked.
-  // Only if both are handled correctly with the state be correct.
+  // The state will only be correct if both are handled correctly.
   GetMutableVersion(sm, "b")->state = AssetDefs::Succeeded;
   GetMutableVersion(sm, "c")->state = AssetDefs::Queued;
   GetMutableVersion(sm, "d")->state = AssetDefs::Failed;
@@ -513,11 +516,45 @@ TEST_F(StateUpdaterTest, ChildrenAndDependents) {
   ASSERT_EQ(GetMutableVersion(sm, "a")->stateByChildrenVal, AssetDefs::InProgress);
 }
 
-/*
- * TODO:
- * Children and inputs
- * Calculate state for multiple assets
- */
+TEST_F(StateUpdaterTest, ChildrenAndInputs) {
+  SetVersions(sm, {MockVersion("a"), MockVersion("b"), MockVersion("c"), MockVersion("d"),
+                   MockVersion("e"), MockVersion("f"), MockVersion("g")});
+  SetParentChild(sm, "a", "b");
+  SetParentChild(sm, "a", "c");
+  SetParentChild(sm, "a", "d");
+  SetListenerInput(sm, "a", "e");
+  SetListenerInput(sm, "a", "f");
+  SetListenerInput(sm, "a", "g");
+  GetMutableVersion(sm, "b")->state = AssetDefs::Queued;
+  GetMutableVersion(sm, "c")->state = AssetDefs::InProgress;
+  GetMutableVersion(sm, "d")->state = AssetDefs::Succeeded;
+  GetMutableVersion(sm, "e")->state = AssetDefs::Queued;
+  GetMutableVersion(sm, "f")->state = AssetDefs::InProgress;
+  GetMutableVersion(sm, "g")->state = AssetDefs::Succeeded;
+  updater.SetStateForRefAndDependents(fix("a"), AssetDefs::New, [](AssetDefs::State) { return false; });
+  updater.RecalculateAndSaveStates();
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateByChildrenVal, AssetDefs::InProgress);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->stateByInputsVal, AssetDefs::Waiting);
+  ASSERT_EQ(GetMutableVersion(sm, "a")->numWaitingForVal, 2);
+}
+
+TEST_F(StateUpdaterTest, RecalculateMultipleStates) {
+  GetBigTree(sm);
+  updater.SetStateForRefAndDependents(fix("gp"), AssetDefs::New, [](AssetDefs::State) { return false; });
+  updater.RecalculateAndSaveStates();
+  ASSERT_TRUE(GetVersion(sm, "gp")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "gpi")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "p1")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "pi1")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "c1")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "p2")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "c2")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "c3")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "c4")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "ci1")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "ci2")->stateSet);
+  ASSERT_TRUE(GetVersion(sm, "ci3")->stateSet);
+}
 
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
