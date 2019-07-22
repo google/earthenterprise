@@ -51,7 +51,17 @@ TEST(AssetHandleTest, InvalidItem) {
   ASSERT_FALSE(handle.operator bool());
 }
 
-// TODO: onfinalize
+TEST(AssetHandleTest, Finalize) {
+  bool finalized = false;
+  {
+    auto item = make_shared<TestItem>();
+    AssetHandle<TestItem> handle(item, [&]() {
+      finalized = true;
+    });
+    ASSERT_FALSE(finalized);
+  }
+  ASSERT_TRUE(finalized);
+}
 
 TEST(AssetHandleTest, DownCast) {
   auto item = make_shared<DerivedItem1>();
