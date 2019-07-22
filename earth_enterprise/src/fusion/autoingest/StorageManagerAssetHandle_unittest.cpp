@@ -19,6 +19,8 @@
 
 #include <gtest/gtest.h>
 
+using namespace std;
+
 class TestItem {
   public:
     TestItem() : type(AssetDefs::Invalid) {}
@@ -27,7 +29,22 @@ class TestItem {
 
 TEST(AssetHandleTest, EmptyHandle) {
   AssetHandle<TestItem> empty;
-  ASSERT_FALSE(empty);
+  ASSERT_FALSE(empty.operator bool());
+  ASSERT_EQ(empty.operator->(), nullptr);
+}
+
+TEST(AssetHandleTest, BasicHandle) {
+  auto item = make_shared<TestItem>();
+  item->type = AssetDefs::Imagery;
+  AssetHandle<TestItem> handle(item, nullptr);
+  ASSERT_TRUE(handle.operator bool());
+  ASSERT_EQ(handle.operator->(), &*item);
+}
+
+TEST(AssetHandleTest, InvalidItem) {
+  auto item = make_shared<TestItem>();
+  AssetHandle<TestItem> handle(item, nullptr);
+  ASSERT_FALSE(handle.operator bool());
 }
 
 int main(int argc, char **argv) {
