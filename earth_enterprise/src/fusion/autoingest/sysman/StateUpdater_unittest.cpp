@@ -120,9 +120,9 @@ class MockStorageManager : public StorageManagerInterface<AssetVersionImpl> {
       return AssetHandle<const AssetVersionImpl>(GetFromMap(ref), nullptr);
     }
     virtual AssetHandle<AssetVersionImpl> GetMutable(const AssetKey &ref) {
-      auto handle = AssetHandle<AssetVersionImpl>(GetFromMap(ref), nullptr);
-      dynamic_cast<MockVersion*>(handle.operator->())->loadedMutable = true;
-      return handle;
+      auto ptr = GetFromMap(ref);
+      dynamic_pointer_cast<MockVersion>(ptr)->loadedMutable = true;
+      return AssetHandle<AssetVersionImpl>(ptr, nullptr);
     }
     void ResetLoadedMutable() {
       for (auto & v : versions) {
@@ -145,12 +145,18 @@ void SetVersions(MockStorageManager & sm, vector<MockVersion> versions) {
   }
 }
 
-AssetHandle<const MockVersion> GetVersion(MockStorageManager & sm, const AssetKey & key) {
-  return sm.Get(fix(key));
+// The two functions below pull the pointer out of the AssetHandle and use it
+// directly, which is really bad. We can get away with it in test code, but we
+// should never do this in production code. Hopefully the production code will
+// never need to convert AssetHandles to different types, but if it does we
+// need to come up with a better way.
+const MockVersion * GetVersion(MockStorageManager & sm, const AssetKey & key) {
+  AssetHandle<const AssetVersionImpl> handle = sm.Get(fix(key));
+  return dynamic_cast<const MockVersion *>(handle.operator->());
 }
-
-AssetHandle<MockVersion> GetMutableVersion(MockStorageManager & sm, const AssetKey & key) {
-  return sm.GetMutable(fix(key));
+MockVersion * GetMutableVersion(MockStorageManager & sm, const AssetKey & key) {
+  AssetHandle<AssetVersionImpl> handle = sm.GetMutable(fix(key));
+  return dynamic_cast<MockVersion *>(handle.operator->());
 }
 
 void SetParentChild(MockStorageManager & sm, AssetKey parent, AssetKey child) {

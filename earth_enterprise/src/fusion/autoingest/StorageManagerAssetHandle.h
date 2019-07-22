@@ -34,7 +34,6 @@ using AssetPointerType = std::shared_ptr<AssetType>;
 template<class AssetType>
 class AssetHandle {
   private:
-    template<class OtherAssetType> friend class AssetHandle;
     AssetPointerType<AssetType> ptr;
     std::function<void(void)> onFinalize;
   public:
@@ -42,12 +41,6 @@ class AssetHandle {
                 std::function<void(void)> onFinalize)
         : ptr(ptr), onFinalize(onFinalize) {}
     AssetHandle() = default;
-    // Assignment from handles with convertable pointers
-    template<class OtherAssetType>
-    AssetHandle(const OtherAssetType &other)
-        : ptr(std::dynamic_pointer_cast<AssetType>(other.ptr)), onFinalize(other.onFinalize) {
-      assert(ptr);
-    }
     ~AssetHandle() {
       if (onFinalize) onFinalize();
     }

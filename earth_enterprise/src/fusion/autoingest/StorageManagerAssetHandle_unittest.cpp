@@ -63,35 +63,6 @@ TEST(AssetHandleTest, Finalize) {
   ASSERT_TRUE(finalized);
 }
 
-TEST(AssetHandleTest, DownCast) {
-  auto item = make_shared<DerivedItem1>();
-  AssetHandle<DerivedItem1> derived(item, nullptr);
-  AssetHandle<TestItem> test = derived;
-  ASSERT_TRUE(test.operator bool());
-}
-
-TEST(AssetHandleTest, UpCast) {
-  auto item = make_shared<DerivedItem1>();
-  AssetHandle<TestItem> test(item, nullptr);
-  ASSERT_TRUE(test.operator bool());
-  AssetHandle<DerivedItem1> derived = test;
-  ASSERT_TRUE(derived.operator bool());
-}
-
-TEST(AssetHandleTest, IncompatibleConversion1) {
-  auto item = make_shared<DerivedItem1>();
-  AssetHandle<DerivedItem1> derived1(item, nullptr);
-  ASSERT_TRUE(derived1.operator bool());
-  ASSERT_DEATH({AssetHandle<DerivedItem2> derived2 = derived1;}, ".*");
-}
-
-TEST(AssetHandleTest, IncompatibleConversion2) {
-  auto item = make_shared<DerivedItem1>();
-  AssetHandle<TestItem> derived1(item, nullptr);
-  ASSERT_TRUE(derived1.operator bool());
-  ASSERT_DEATH({AssetHandle<DerivedItem2> derived2 = derived1;}, ".*");
-}
-
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc,argv);
   return RUN_ALL_TESTS();
