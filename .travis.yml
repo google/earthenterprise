@@ -26,6 +26,10 @@ cache:
   timeout: 600
   directories:
     - $HOME/cache
+
+git:
+  depth: 1000
+
 jobs:
   include:
   - stage: build third party
