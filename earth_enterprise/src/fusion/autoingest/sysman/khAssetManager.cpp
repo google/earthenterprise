@@ -102,7 +102,7 @@ khAssetManager::ApplyPending(void)
   // The actual list saved may be smaller than what's
   // in the dirty set. Some things can be in the dirty set
   // even if it really didn't change
-  std::vector</*SharedString*/AssetHandle> savedAssets;
+  std::vector<AssetHandle> savedAssets;
 
 
   QTime timer;
@@ -155,13 +155,13 @@ khAssetManager::ApplyPending(void)
   for (const auto & ref : savedAssets) {
     changes.items.push_back(AssetChanges::Item(ref, "Modified"));
   }
-  for (std::map</*SharedString*/AssetHandle, AssetDefs::State>::const_iterator i
+  for (std::map<AssetHandle, AssetDefs::State>::const_iterator i
          = pendingStateChanges.begin();
        i != pendingStateChanges.end(); ++i) {
     changes.items.push_back(AssetChanges::Item(std::string(i->first),
                                                ToString(i->second)));
   }
-  for (std::map</*SharedString*/AssetHandle, double>::const_iterator i
+  for (std::map<AssetHandle, double>::const_iterator i
          = pendingProgress.begin();
        i != pendingProgress.end(); ++i) {
     changes.items.push_back(AssetChanges::Item(std::string(i->first),
@@ -557,7 +557,7 @@ khAssetManager::ClientListenerLoop(void) throw() {
 // ***  khAssetManager - routines that gather changes while AssetGuard is held
 // ****************************************************************************
 void
-khAssetManager::NotifyVersionStateChange(const /*SharedString*/AssetHandle &ref,
+khAssetManager::NotifyVersionStateChange(const AssetHandle &ref,
                                          AssetDefs::State state)
 {
   // assert that we're already locked
@@ -578,7 +578,7 @@ khAssetManager::NotifyVersionStateChange(const /*SharedString*/AssetHandle &ref,
 }
 
 void
-khAssetManager::NotifyVersionProgress(const /*SharedString*/AssetHandle &ref, double progress)
+khAssetManager::NotifyVersionProgress(const AssetHandle &ref, double progress)
 {
   // assert that we're already locked
   assert(!mutex.TryLock());
@@ -587,7 +587,7 @@ khAssetManager::NotifyVersionProgress(const /*SharedString*/AssetHandle &ref, do
 }
 
 void
-khAssetManager::SubmitTask(const /*SharedString*/AssetHandle &verref, const TaskDef &taskdef,
+khAssetManager::SubmitTask(const AssetHandle &verref, const TaskDef &taskdef,
                            int priority)
 {
   // assert that we're already locked

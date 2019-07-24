@@ -19,6 +19,6 @@
 
 #include "common/SharedString.h"
 
-void RebuildVersion(const /*SharedString*/AssetHandle & ref);
+void RebuildVersion(const AssetHandle & ref);
 
 #endif // ASSETOPERATION_H

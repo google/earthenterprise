@@ -32,7 +32,7 @@ class AssetVersionRef {
   std::string version;
  public:
   AssetVersionRef(const std::string &ref_);
-  AssetVersionRef(const /*SharedString*/AssetHandle &ref_);
+  AssetVersionRef(const AssetHandle &ref_);
   AssetVersionRef& operator=(const std::string &ref) {
     return (*this = AssetVersionRef(ref));
   }

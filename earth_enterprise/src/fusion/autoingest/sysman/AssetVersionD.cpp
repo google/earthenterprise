@@ -44,12 +44,12 @@ AssetVersionImplD::StateChangeNotifier::GetNotifier(
 }
 
 void
-AssetVersionImplD::StateChangeNotifier::AddParentsToNotify(const std::vector</*SharedString*/AssetHandle> & parents) {
+AssetVersionImplD::StateChangeNotifier::AddParentsToNotify(const std::vector<AssetHandle> & parents) {
   std::copy(parents.begin(), parents.end(), std::inserter(parentsToNotify, parentsToNotify.end()));
 }
 
 void
-AssetVersionImplD::StateChangeNotifier::AddListenersToNotify(const std::vector</*SharedString*/AssetHandle> & listeners, AssetDefs::State inputState) {
+AssetVersionImplD::StateChangeNotifier::AddListenersToNotify(const std::vector<AssetHandle> & listeners, AssetDefs::State inputState) {
   for (const auto & listener : listeners) {
     // This ensures that the listener is in the list of listeners to notify
     InputStates & elem = listenersToNotify[listener];
@@ -152,14 +152,14 @@ AssetVersionImplD::Load(const std::string &boundref)
 
 // since AssetVersionImpl is a virtual base class
 // my derived classes will initialize it directly
-AssetVersionImplD::AssetVersionImplD(const std::vector</*SharedString*/AssetHandle> &inputs)
+AssetVersionImplD::AssetVersionImplD(const std::vector<AssetHandle> &inputs)
     : AssetVersionImpl(), verholder(0)
 {
   AddInputAssetRefs(inputs);
 }
 
 void
-AssetVersionImplD::AddInputAssetRefs(const std::vector</*SharedString*/AssetHandle> &inputs_)
+AssetVersionImplD::AddInputAssetRefs(const std::vector<AssetHandle> &inputs_)
 {
   for (const auto &i : inputs_) {
     // Add myself to the input's list of listeners.
@@ -413,7 +413,7 @@ AssetVersionImplD::HandleChildStateChange(const std::shared_ptr<StateChangeNotif
 }
 
 void
-AssetVersionImplD::HandleChildProgress(const /*SharedString*/AssetHandle &) const
+AssetVersionImplD::HandleChildProgress(const AssetHandle &) const
 {
   // NoOp in base since leaves don't do anything
 }
@@ -580,7 +580,7 @@ AssetVersionImplD::Clean(void)
 
 
 AssetVersionImplD::InputVersionHolder::InputVersionHolder
-(const std::vector</*SharedString*/AssetHandle> &inputrefs)
+(const std::vector<AssetHandle> &inputrefs)
 {
   inputvers.reserve(inputrefs.size());
   for (const auto &i : inputrefs) {
@@ -1094,7 +1094,7 @@ CompositeAssetVersionImplD::HandleInputStateChange(InputStates, const std::share
 }
 
 void
-CompositeAssetVersionImplD::HandleChildProgress(const /*SharedString*/AssetHandle &) const
+CompositeAssetVersionImplD::HandleChildProgress(const AssetHandle &) const
 {
   // TODO: - implement me some day
 }
@@ -1265,7 +1265,7 @@ CompositeAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
 }
 
 void
-CompositeAssetVersionImplD::DependentChildren(std::vector</*SharedString*/AssetHandle> &out) const
+CompositeAssetVersionImplD::DependentChildren(std::vector<AssetHandle> &out) const
 {
   copy(children.begin(), children.end(), back_inserter(out));
 }
@@ -1316,7 +1316,7 @@ CompositeAssetVersionImplD::Rebuild(const std::shared_ptr<StateChangeNotifier> c
 
   std::shared_ptr<StateChangeNotifier> notifier = StateChangeNotifier::GetNotifier(callerNotifier);
 
-  std::vector</*SharedString*/AssetHandle> dependents;
+  std::vector<AssetHandle> dependents;
   DependentChildren(dependents);
   for (const auto &i : dependents) {
     MutableAssetVersionD child(i);
@@ -1348,7 +1348,7 @@ CompositeAssetVersionImplD::Cancel(const std::shared_ptr<StateChangeNotifier> ca
 
   SetState(AssetDefs::Canceled, notifier);
 
-  std::vector</*SharedString*/AssetHandle> dependents;
+  std::vector<AssetHandle> dependents;
   DependentChildren(dependents);
   for (const auto &i : dependents) {
     MutableAssetVersionD child(i);

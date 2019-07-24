@@ -141,13 +141,13 @@ private:
   // Static helper to process all the inputs from a request, validate them and
   // pack them in a vector.  Used by HandleXXXRequest.
   static void ConstructInputsFromRequest(const DatabaseEditRequest &req,
-                                  std::vector</*SharedString*/AssetHandle>* inputs);
+                                  std::vector<AssetHandle>* inputs);
 };
 
 
 class DatabaseAssetVersionImplD {
  public:
-  virtual void DependentChildren(std::vector</*SharedString*/AssetHandle> &out) const;
+  virtual void DependentChildren(std::vector<AssetHandle> &out) const;
 
  protected:
   // Before fusion 3.0 a Database had 0 or 1 chidren (depending on whether
@@ -225,7 +225,7 @@ uint kSSTerrainChildPos       = 4;  // optional
 
 void DatabaseAssetImplD::ConstructInputsFromRequest(
                             const DatabaseEditRequest &req,
-                            std::vector</*SharedString*/AssetHandle>* inputs) {
+                            std::vector<AssetHandle>* inputs) {
   // make sure the project asset_ref_string's are valid
   if (!req.config.imageryProject.empty()) {
     RasterProjectFactory::ValidateRefForInput(req.config.imageryProject,
@@ -247,7 +247,7 @@ void
 DatabaseAssetImplD::HandleEditRequest(const DatabaseEditRequest &req)
 {
   // make sure the project asset_ref_string's are valid
-  std::vector</*SharedString*/AssetHandle> inputs;
+  std::vector<AssetHandle> inputs;
   ConstructInputsFromRequest(req, &inputs);
 
   // normalize the supplied asset name
@@ -279,7 +279,7 @@ void
 DatabaseAssetImplD::HandleNewRequest(const DatabaseEditRequest &req)
 {
   // make sure the project asset_ref_string's are valid
-  std::vector</*SharedString*/AssetHandle> inputs;
+  std::vector<AssetHandle> inputs;
   ConstructInputsFromRequest(req, &inputs);
 
   // normalize the supplied asset name
@@ -305,7 +305,7 @@ void
 DatabaseAssetImplD::HandleModifyRequest(const DatabaseEditRequest &req)
 {
   // make sure the project asset_ref_string's are valid
-  std::vector</*SharedString*/AssetHandle> inputs;
+  std::vector<AssetHandle> inputs;
   ConstructInputsFromRequest(req, &inputs);
 
   // normalize the supplied asset name
@@ -329,7 +329,7 @@ DatabaseAssetImplD::HandleModifyRequest(const DatabaseEditRequest &req)
 
 
 void
-DatabaseAssetVersionImplD::DependentChildren(std::vector</*SharedString*/AssetHandle> &out) const
+DatabaseAssetVersionImplD::DependentChildren(std::vector<AssetHandle> &out) const
 {
   if (children.size()) {
     if (children.size() >= 2) {
@@ -507,7 +507,7 @@ DatabaseAssetVersionImplD::CreateCombinedTerrain(
       combined_terrain =
         CombinedTerrainFactory::FindMakeAndUpdate(
             combinedTerrainAssetName,
-            makevec2</*SharedString*/AssetHandle>(terrainIndex->GetRef(), ssindex->GetRef()),
+            makevec2<AssetHandle>(terrainIndex->GetRef(), ssindex->GetRef()),
             khMetaData(),
             combinedConfig,
             makevec2(AssetVersion(terrainIndex), AssetVersion(ssindex)));
@@ -516,7 +516,7 @@ DatabaseAssetVersionImplD::CreateCombinedTerrain(
       combined_terrain =
         CombinedTerrainFactory::FindMakeAndUpdate(
             combinedTerrainAssetName,
-            makevec1</*SharedString*/AssetHandle>(terrainIndex->GetRef()),
+            makevec1<AssetHandle>(terrainIndex->GetRef()),
             khMetaData(),
             combinedConfig,
             makevec1(AssetVersion(terrainIndex)));
@@ -545,7 +545,7 @@ DatabaseAssetVersionImplD::CreateQTPacket(
   std::string qtpacket_asset_name
     (QTPacketFactory::SubAssetName(asset_ref_string, "qtpacket"));
   std::vector<AssetVersion> input_versions;
-  std::vector</*SharedString*/AssetHandle>  input_verrefs;
+  std::vector<AssetHandle>  input_verrefs;
 
   QTPacketConfig qtpacket_config;
   qtpacket_config.index_version_ = config.indexVersion;
@@ -600,7 +600,7 @@ DatabaseAssetVersionImplD::CreateUnifiedIndex(
   std::string unified_index_asset_name
     (UnifiedIndexFactory::SubAssetName(asset_ref_string, "unifiedindex"));
   std::vector<AssetVersion> index_input_versions;
-  std::vector</*SharedString*/AssetHandle>  index_input_verrefs;
+  std::vector<AssetHandle>  index_input_verrefs;
 
   UnifiedIndexConfig unified_index_config;
   if (imagery_project) {
@@ -697,7 +697,7 @@ DatabaseAssetVersionImplD::CreateGedbAsset(
   std::string gedb_asset_name
     (GEDBFactory::SubAssetName(asset_ref_string, kGedbBase));
   std::vector<AssetVersion> input_versions;
-  std::vector</*SharedString*/AssetHandle>  input_verrefs;
+  std::vector<AssetHandle>  input_verrefs;
 
   // populate inputs
   // Adding the unified index as my input and registering that offline inputs

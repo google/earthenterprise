@@ -79,7 +79,7 @@ KMLProjectAssetImplD::HandleEditRequest(const KMLProjectEditRequest &req)
                       AssetDefs::FileExtension(AssetDefs::KML,
                                                kProjectSubtype));
   // will be filled in later
-  std::vector</*SharedString*/AssetHandle> inputs;
+  std::vector<AssetHandle> inputs;
 
   // custom FindMake - modified to set/preserve indexVersion
   KMLProjectConfig projConfig = req.config;

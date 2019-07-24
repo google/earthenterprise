@@ -60,7 +60,7 @@ namespace boost {
 
 // Builds the asset version tree containing the specified asset version.
 StateUpdater::TreeType::vertex_descriptor
-StateUpdater::BuildTree(const /*SharedString*/AssetHandle & ref) {
+StateUpdater::BuildTree(const AssetHandle & ref) {
   VertexMap vertices;
   size_t index = 0;
   list<TreeType::vertex_descriptor> toFillIn, toFillInNext;
@@ -88,7 +88,7 @@ StateUpdater::BuildTree(const /*SharedString*/AssetHandle & ref) {
 // before it can be used.
 StateUpdater::TreeType::vertex_descriptor
 StateUpdater::AddEmptyVertex(
-    const /*SharedString*/AssetHandle & ref,
+    const AssetHandle & ref,
     VertexMap & vertices,
     size_t & index,
     list<TreeType::vertex_descriptor> & toFillIn) {
@@ -135,7 +135,7 @@ void StateUpdater::FillInVertex(
     tree[myVertex].name = name;
     vertices[name] = myVertex;
   }
-  vector</*SharedString*/AssetHandle> dependents;
+  vector<AssetHandle> dependents;
   version->DependentChildren(dependents);
   for (const auto & dep : dependents) {
     auto depVertex = AddEmptyVertex(dep, vertices, index, toFillIn);
@@ -180,10 +180,10 @@ void StateUpdater::AddEdge(
 }
 
 void StateUpdater::SetStateForRefAndDependents(
-    const /*SharedString*/AssetHandle & ref,
+    const AssetHandle & ref,
     AssetDefs::State newState,
     function<bool(AssetDefs::State)> updateStatePredicate) {
-  /*SharedString*/AssetHandle verref = AssetVersionRef::Bind(ref);
+  AssetHandle verref = AssetVersionRef::Bind(ref);
   auto refVertex = BuildTree(verref);
   SetStateForVertexAndDependents(refVertex, newState, updateStatePredicate);
 }
@@ -217,7 +217,7 @@ void StateUpdater::SetState(
     TreeType::vertex_descriptor vertex,
     AssetDefs::State newState,
     bool sendNotifications) {
-  /*SharedString*/AssetHandle name = tree[vertex].name;
+  AssetHandle name = tree[vertex].name;
   if (newState != tree[vertex].state) {
     MutableAssetVersionD version(name);
     notify(NFY_PROGRESS, "Setting state of '%s' to '%s'",
@@ -375,7 +375,7 @@ class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
     virtual void finish_vertex(
         StateUpdater::TreeType::vertex_descriptor vertex,
         const StateUpdater::TreeType & tree) const {
-      /*SharedString*/AssetHandle name = tree[vertex].name;
+      AssetHandle name = tree[vertex].name;
       notify(NFY_PROGRESS, "Calculating state for '%s'", std::string(name).c_str());
       AssetVersionD version(name);
       if (!version) {

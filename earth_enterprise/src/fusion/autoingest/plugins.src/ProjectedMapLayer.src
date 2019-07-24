@@ -115,7 +115,7 @@ ProjectedMapLayerAssetVersionImplD::UpdateChildren(void)
     MapLayerLevelConfig level_config(level, config.projection_);
     level_config.sub_layers_.reserve(layer_config.subLayers.size());
     std::vector<AssetVersion> inputvers;
-    std::vector</*SharedString*/AssetHandle>  inputrefs;
+    std::vector<AssetHandle>  inputrefs;
     for (uint sl = 0; sl < layer_config.subLayers.size(); ++sl) {
       const MapSubLayerConfig &sl_config = layer_config.subLayers[sl];
       // Change logic here so that mapping of layers to vector query output is

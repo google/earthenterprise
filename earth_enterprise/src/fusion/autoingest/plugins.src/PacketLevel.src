@@ -107,7 +107,7 @@ void PacketLevelAssetVersionImplD::DoSubmitTask(void) {
 
 namespace {
 void GetInputChildren(const AssetVersion &ver,
-                      std::vector</*SharedString*/AssetHandle> &inputkids) {
+                      std::vector<AssetHandle> &inputkids) {
   for (const auto &i : ver->inputs) {
     AssetVersion input(i);
     if (input) {
@@ -156,7 +156,7 @@ bool PacketLevelAssetVersionImplD::AttemptConvertFromOldLastGood(void) {
   }
 
   // make a list of my input KRPs & KRMPs
-  std::vector</*SharedString*/AssetHandle> inputkids;
+  std::vector<AssetHandle> inputkids;
   GetInputChildren(AssetVersion(GetRef()), inputkids);
 
   // make a modified copy of my config that we can compare against the old
@@ -218,7 +218,7 @@ bool PacketLevelAssetVersionImplD::AttemptConvertFromOldLastGood(void) {
     }
 
 
-    std::vector</*SharedString*/AssetHandle> oldinputkids;
+    std::vector<AssetHandle> oldinputkids;
     GetInputChildren(version, oldinputkids);
     if (inputkids != oldinputkids) {
       notify(NFY_DEBUG, "Input kids don't match: %s",

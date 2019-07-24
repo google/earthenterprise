@@ -167,7 +167,7 @@ class RasterProjectAssetImplD {
 
 class RasterProjectAssetVersionImplD {
  public:
-  virtual void DependentChildren(std::vector</*SharedString*/AssetHandle> &out) const;
+  virtual void DependentChildren(std::vector<AssetHandle> &out) const;
 
  protected:
   // This will make my children after my inputs have succeeded
@@ -205,7 +205,7 @@ class RasterProjectAssetVersionImplD {
 
   // Makes index subasset (subfunction for BuildIndex()).
   // Returns the version of the new geindex.
-  uint32 MakeIndexSubAsset(const std::vector</*SharedString*/AssetHandle> &packgenkids,
+  uint32 MakeIndexSubAsset(const std::vector<AssetHandle> &packgenkids,
                            const std::vector<std::string> &packgenassets,
                            const std::vector<AssetVersion> &packgenvers,
                            const std::vector<PacketGenInfo> &genInfo,
@@ -435,7 +435,7 @@ void RasterProjectAssetImplD::HandleEditRequest(
                         AssetDefs::FileExtension(req.type, kProjectSubtype));
 
   // Will be filled in later.
-  std::vector</*SharedString*/AssetHandle> inputs;
+  std::vector<AssetHandle> inputs;
 
 
   // Custom FindMake - modified to set/preserve indexVersion & fuid_channel_.
@@ -529,7 +529,7 @@ void RasterProjectAssetImplD::HandleNewRequest(
     MutableRasterProjectAssetD project =
       RasterProjectFactory::Make(projname,
                                  req.type,
-                                 std::vector</*SharedString*/AssetHandle>(),
+                                 std::vector<AssetHandle>(),
                                  khMetaData(),
                                  projConfig);
 
@@ -712,7 +712,7 @@ void RasterProjectAssetImplD::HandleDropFromRequest(
 
 
 void RasterProjectAssetVersionImplD::DependentChildren(
-    std::vector</*SharedString*/AssetHandle> &out) const {
+    std::vector<AssetHandle> &out) const {
   if (children.size()) {
     // my direct children are my index and optionally a copyright
     std::copy(children.begin(), children.end(), back_inserter(out));
@@ -905,7 +905,7 @@ void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
   MutableAssetVersionD dbroot =
     RasterDBRootFactory::FindMakeAndUpdateSubAsset(
         assetRef, type, "dbroot",
-        std::vector</*SharedString*/AssetHandle>(),
+        std::vector<AssetHandle>(),
         khMetaData(),
         dbrootConfig,
         std::vector<AssetVersion>());
@@ -929,7 +929,7 @@ void RasterProjectAssetVersionImplD::DelayedBuildChildren(void) {
             config.legend));
     MutableAssetVersionD layerjs =
       MapLayerJSFactory::FindMakeAndUpdate(layerJSAssetName,
-                                           std::vector</*SharedString*/AssetHandle>(),
+                                           std::vector<AssetHandle>(),
                                            khMetaData(),
                                            layerJSConfig,
                                            std::vector<AssetVersion>());
@@ -1065,7 +1065,7 @@ uint32 RasterProjectAssetVersionImplD::BuildIndex(
   }
 
   // create my children giving them each a bigger piece of the stack
-  std::vector</*SharedString*/AssetHandle> packgenkids;
+  std::vector<AssetHandle> packgenkids;
   std::vector<std::string> packgenassets;
   std::vector<AssetVersion> packgenvers;
   packgenkids.reserve(numInsets);
@@ -1256,7 +1256,7 @@ void RasterProjectAssetVersionImplD::CalcLevelsToSkipTransparentTiles(
 
 
 uint32 RasterProjectAssetVersionImplD::MakeIndexSubAsset(
-    const std::vector</*SharedString*/AssetHandle> &packgenkids,
+    const std::vector<AssetHandle> &packgenkids,
     const std::vector<std::string> &packgenassets,
     const std::vector<AssetVersion> &packgenvers,
     const std::vector<PacketGenInfo> &genInfo,

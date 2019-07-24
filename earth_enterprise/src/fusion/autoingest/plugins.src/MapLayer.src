@@ -70,7 +70,7 @@ void
 MapLayerAssetImplD::HandleEditRequest(const MapLayerEditRequest &req)
 {
   // Validate our inputs (Make sure they are all VectorProducts)
-  std::vector</*SharedString*/AssetHandle> productrefs;
+  std::vector<AssetHandle> productrefs;
   productrefs.reserve(req.config.subLayers.size());
   for (uint s = 0; s < req.config.subLayers.size(); ++s) {
     VectorProductFactory::ValidateRefForInput
@@ -137,7 +137,7 @@ MapLayerAssetVersionImplD::UpdateChildren(void)
   AssetVersion source = guard->inputvers[0];
 
   std::vector<AssetVersion> queries;
-  std::vector</*SharedString*/AssetHandle> queryRefs;
+  std::vector<AssetHandle> queryRefs;
   queries.push_back(source);
   queryRefs.push_back(source->GetRef());
 
@@ -162,7 +162,7 @@ MapLayerAssetVersionImplD::UpdateChildren(void)
     MutableAssetVersionD query_version =
       VectorQueryFactory::FindMakeAndUpdateSubAsset
       (assetRef, queryname,
-       makevec1</*SharedString*/AssetHandle>(guard->inputvers[sl]->GetRef()),
+       makevec1<AssetHandle>(guard->inputvers[sl]->GetRef()),
        khMetaData(),
        queryconfig,
        makevec1(guard->inputvers[sl]));
