@@ -319,6 +319,20 @@ void GlcUnpacker::MapDataPacketWalker(const map_packet_walker& walker) const
   }
 }
 
+void GlcUnpacker::MapDataPacketWalker(int layer, const map_packet_walker& walker) const
+{
+  if (!is_gee_) {
+    std::cerr << "Not a GEE file." << std::endl;
+    return;
+  }
+  auto iter = unpacker_index_.find(layer);
+  if (iter == unpacker_index_.end()) {
+    std::cerr << "Layer " << layer << " not found." << std::endl;
+    return;
+  }
+  iter->second->MapDataPacketWalker(layer, walker);
+}
+
 /**
  * Find qtp packet and set offset and size for the packet. Qtp packets can
  * be quadtree packets or a dbroot packet.
@@ -561,9 +575,9 @@ const char* GlcUnpacker::Id() {
       sstream << "-" << std::hex << InfoCrc();
     }
     sstream << "-" << std::hex << length_;
+    id_ = sstream.str();
   }
 
-  id_ = sstream.str();
   return id_.c_str();
 }
 

@@ -34,6 +34,14 @@ class gstGeometryImpl : public khRefCounter {
     Point(float _x, float _y) : x(_x), y(_y) {}
   };
 
+  // determine amount of memory used by gstGeometryImpl
+  uint64 GetSize() {
+    return sizeof(type_)
+    + sizeof(origin_)
+    + sizeof(points_)
+    + sizeof(lengths_);
+  }
+
   static gstGeometryHandle Create(gstGeodeHandle g) {
     return khRefGuardFromNew(new gstGeometryImpl(g));
   }

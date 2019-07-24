@@ -1,6 +1,6 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 #
-# Copyright 2017 Google Inc.
+# Copyright 2017 Google Inc., 2019 Open GEE Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,13 +15,25 @@
 # limitations under the License.
 #
 
+use warnings;
+use strict;
+use Getopt::Long qw(:config no_ignore_case no_auto_abbrev);
+use FindBin qw($Script);
 
-# make sure we're running as root
-die "You must run as root\n" unless $> == 0;
+my $help = 0;
 
-if ($#ARGV < 0) {
-  die "Usage: geselectpublishroot <publish_root_dir>\n";
+sub usage {
+  warn "usage: $Script [-h] <publish_root_dir>\n";
+  warn "   Update the OpenGEE server to point to the given\n";
+  warn "   published databases directory\n";
+  warn "Valid options are:\n";
+  warn "  -h, --help             Display this message\n";
+
+  exit(1);
 }
+
+GetOptions('help|h' => \$help) || usage();
+usage() if $help or $#ARGV != 0;
 
 my $dest_path = $ARGV[0];
 $dest_path =~ s/\/$//;
@@ -32,12 +44,18 @@ my $confd_dir = "$ge_root/gehttpd/conf.d";
 my $stream_dir = "$dest_path/stream_space";
 my $search_dir = "$dest_path/search_space";
 
+# make sure we're running as root
+die "You must run as root\n" unless $> == 0;
+
+# require the given directory to exist before continuing
+die "$dest_path does not exist, no changes made\n" unless -d $dest_path;
+
 # Create the stream_space and search_space conf files
 write_conf_file('stream_space', $stream_dir);
 write_conf_file('search_space', $search_dir);
 print "Please restart your server to apply the change.\n";
 
-
+# Writes an Alias configuration for the given type and corresponding directory
 sub write_conf_file {
   my $type = shift @_;
   my $dir = shift @_;
@@ -48,6 +66,4 @@ sub write_conf_file {
   print CONF "Alias /$type $dir\n";
   close CONF;
 }
-
-
 

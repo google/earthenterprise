@@ -1,0 +1,94 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Publish databases and portables</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 3497763.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/3468004.html">GEE Server Overview</a></p>
+<p class="sidebar-toc"><a href="../answer/3470759.html">Sign in to GEE Server Admin console</a></p>
+<p class="sidebar-toc"><a href="../answer/3479919.html">Snippet profiles page</a></p>
+<p class="sidebar-toc"><a href="../answer/3480095.html">Search tabs page</a></p>
+<p class="sidebar-toc"><a href="../answer/3479921.html">Settings page</a></p>
+<p class="sidebar-toc"><a href="../answer/3480097.html">Dashboard page</a></p>
+<p class="sidebar-toc"><a href="../answer/3479922.html">Databases page</a></p>
+<p class="sidebar-toc"><a href="../answer/3497763.html" class="current-file">Publish databases and portables</a></p>
+<p class="sidebar-toc"><a href="../answer/6004748.html">Manage snippet profiles</a></p>
+<p class="sidebar-toc"><a href="../answer/176770.html">Display custom logos</a></p>
+<p class="sidebar-toc"><a href="../answer/6013604.html">Manage virtual hosts</a></p>
+<p class="sidebar-toc"><a href="../answer/4441137.html">Make Web Map Service (WMS) requests</a></p>
+<p class="sidebar-toc"><a href="../answer/6062970.html">Publish databases with search</a></p>
+<p class="sidebar-toc"><a href="../answer/6063101.html">Search your POI vector data or map layer data</a></p>
+<p class="sidebar-toc"><a href="../answer/3497832.html">Create Search tabs</a></p>
+<p class="sidebar-toc"><a href="../answer/6066597.html">Add custom search services</a></p>
+<p class="sidebar-toc"><a href="../answer/6082250.html">Troubleshoot search services</a></p>
+<p class="sidebar-toc"><a href="../answer/6091774.html">Example Search plug-in Python code sample</a></p>
+<p class="sidebar-toc"><a href="../answer/6091810.html">Custom POI Search plug-in Python code sample</a></p>
+<p class="sidebar-toc"><a href="../answer/3230777.html">Create portable globes and maps</a></p>
+<p class="sidebar-toc"><a href="../answer/4643041.html">Create composite globes and maps</a></p>
+<p class="sidebar-toc"><a href="../answer/6051534.html">View 3D databases</a></p>
+<p class="sidebar-toc"><a href="../answer/6051659.html">View 2D databases</a></p>
+<p class="sidebar-toc"><a href="../answer/6051568.html">Implement Google Earth Plugin</a></p>
+<p class="sidebar-toc"><a href="../answer/6051584.html">(Deprecated) Provide Google Earth Plug-in for your users to install</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | GEE Server administration</h1>
+<h2>Publish databases and portables</h2>
+<p>When you <em>publish</em> a Fusion database, you select the database you want to publish, specify a <em>publish point</em>, then apply publishing options in the <strong>Publish</strong> dialog. Before you publish a Fusion database, you must register it by <a href="../answer/6034724.html"><em>pushing</em></a> it to <a href="../answer/3468004.html">GEE Server</a>. </p>
+<p>With portable files, the process is a little different. Instead, first you <em>register</em> your portable globes and maps in the <strong>Manage Portables</strong> dialog before publishing them. Registering a portable globe or map is similar to <em>pushing</em> a database from Fusion. </p>
+<ul>
+<li><a href="#publish_db">Publish a Fusion database</a></li>
+<li><a href="#register_portable">Register and publish a portable globe or map</a></li>
+</ul>
+<h2><a name="publish_db"></a>Publish a Fusion database</h2>
+<h3>To publish a Fusion database:</h3>
+<ol>
+<li dir="ltr">In the <a href="../answer/3470759.html">GEE Server Admin console</a>, click <strong>Databases</strong>.</li>
+<li dir="ltr">Check the box next to the database or portable to publish.</li>
+<li dir="ltr">Click <strong>Publish</strong> to open the Publish dialog.
+<p><img alt="Publish dialog example" src="../art/server/publish_databases/Publishdialog.png"/></p>
+</li>
+<li dir="ltr">Specify a <strong>Publish point</strong>, which is where you access the database or portable. For example, if you specify <i>sanfrancisco</i>, it will be accessible from <em>myserver.mydomainname</em>.com/sanfrancisco.
+<div class="note"><p><strong>Note:</strong> When publishing a database, the publish point you specify is case <em>insensitive</em>. Upper and lower case are not differentiated. Make sure each publish point path name you specify is unique.
+</p></div>
+</li>
+<li dir="ltr">Specify the following options:
+<ol>
+<li dir="ltr"><strong>POI Search</strong> (Fusion databases with search data only)</li>
+<li><strong>Search Tabs </strong> (Fusion databases only)</li>
+<li><strong>Snippet profile</strong> (Fusion 3D databases only)</li>
+</ol>
+</li>
+<li dir="ltr">Select a <strong>Virtual host</strong>.</li>
+<li dir="ltr">Optionally enable <strong>Serve WMS.</strong></li>
+<li dir="ltr">Click <strong>Publish</strong>. The <strong>Databases</strong> page updates to indicate the published status of your database.</li>
+</ol>
+<h2><a name="register_portable"></a>Register and publish a portable globe or map</h2>
+<h3>To register a portable globe or map:</h3>
+<ol>
+<li dir="ltr">In the <a href="../answer/3470759.html">GEE Server Admin console</a>, click <strong>Databases</strong>.</li>
+<li dir="ltr">Click <strong>Manage Portables</strong> to open the Manage portable globes dialog.
+<p><img alt="Manage Portables dialog example" src="../art/server/publish_databases/ManagePortablesdialog.png"/></p>
+<p>The list of globes and maps corresponds to the files located in your default <code>/opt/google/gehttpd/htdocs/cutter/globes</code> directory.</p>
+</li>
+<li>Click <strong>Register</strong> next to the globe or map that you want to make available for publishing on GEE Server. The registered globe or map appears in the list on the <strong>Databases</strong> page of the Admin console.
+<p>You can register as many portable globes or maps as you have listed in the dialog. Click <strong>Unregister</strong> to make a globe or map unavailable on GEE Server.</p>
+</li>
+<li dir="ltr">On the <strong>Databases</strong> page of the Admin console, check the box next to the portable globe or map to publish.</li>
+<li dir="ltr">Click <strong>Publish</strong> to open the Publish dialog.</li>
+<li dir="ltr">Specify a <strong>Publish point</strong>, where the portable will be accessible from. For example, if you specify <i>grandcanyon</i>, it will be accessible from <em>myserver.mydomainname</em>.com/grandcanyon.
+<div class="note"><p><strong>Note:</strong> When publishing a database, the publish point you specify is case <em>insensitive</em>. Upper and lower case are not differentiated. Make sure each publish point path name you specify is unique.
+</p></div>
+</li>
+<li dir="ltr">Select a <strong>Virtual host</strong>.</li>
+<li dir="ltr">Click <strong>Publish</strong>. The <strong>Databases</strong> page updates to indicate the published status of your portable globe or map.</li>
+</ol>
+<h2>Learn more</h2>
+<ul>
+<li><a href="../answer/6004748.html">Manage snippet profiles</a></li>
+<li><a href="../answer/6013604.html">Manage virtual hosts</a></li>
+<li><a href="../answer/4441137.html">Make Web Map Service (WMS) requests</a></li>
+<li><a href="../answer/3230777.html">Create portable globes and maps</a></li>
+</ul><div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>

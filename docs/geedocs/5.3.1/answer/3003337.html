@@ -1,0 +1,38 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"/>
+<title>Manually halt the cutter process</title>
+<link rel="stylesheet" href="../css/styles.css" type="text/css" media="all" /> <link rel="stylesheet" href="../css/containers.css" type="text/css" media="all" /> </head> <body>
+<!-- 3003337.html -->
+<div class="container">
+  <div class="sidebar1">
+<p class="sidebar-toc"><a href="../answer/4580164.html">Welcome to Portable 5.0</a></p>
+<p class="sidebar-toc"><a href="../answer/4594620.html">Portable Release Notes 5.0</a></p>
+<p class="sidebar-toc"><a href="../answer/3230746.html">Portable User Guide</a></p>
+<p class="sidebar-toc"><a href="../answer/4485225.html">Portable Globe and Server 5.2</a></p>
+<p class="sidebar-toc"><a href="../answer/3230807.html">Portable Developer Guide</a></p>
+<p class="sidebar-toc"><a href="../answer/3253752.html">Hello Earth! code sample</a></p>
+<p class="sidebar-toc"><a href="../answer/3253275.html">Hello Maps! code sample</a></p>
+<p class="sidebar-toc"><a href="../answer/4590263.html">Inspecting portable files</a></p>
+<p class="sidebar-toc"><a href="../answer/1066449.html">Custom folders</a></p>
+<p class="sidebar-toc"><a href="../answer/3003324.html">Cutter tool system information</a></p>
+<p class="sidebar-toc"><a href="../answer/3003337.html" class="current-file">Manually halt the cutter process</a></p>
+  </div>
+  <div class="content">
+<a name="top_of_file"></a>
+<p><img src="../art/common/googlelogo_color_260x88dp.png" width="130" height="44" alt="Google logo" /></p>
+<h1><a href="../index.html">Google Earth Enterprise Documentation Home</a> | Portable</h1>
+<h2>Manually halt the cutter process</h2>
+<p>Sometimes, a globe cutting procedure might be interrupted from the GEE Portable Globe Cutting web page. This can result in a "runaway" or "zombie" process on the system that hosts the Portable Globe Cutter tool. These processes must be halted at the operating system level.</p>
+<p>The GEE Portable Globe Cutting system uses the command line tools listed below. You can search for these as processes on the operating system:</p>
+<code>/opt/google/bin/gepolygontoqtnodes<br/>
+/opt/google/bin/gerewritedbroot<br/>
+/opt/google/bin/gekmlgrabber<br/>
+/opt/google/bin/geportableglobebuilder<br/>
+/opt/google/bin/geportableglobepacker<br/>
+/opt/google/gehttpd/cgi-bin/globe_cutter.py</code><br/>
+<p>You can use either of these methods to halt the processes from the command line:</p>
+<ul>
+<li>Invoke the Linux <code>top</code> command and look for any of the command line tools in the active process list. To stop the processes directly from the <code>top</code> command, press the <strong>k</strong> key and enter the process id number.</li>
+<li>Invoke the Linux <code>ps</code> command and search for any of the command line tools. For example: <code> ps aux | grep geportable</code>. If you find a process, you can halt it with the <code>kill</code> command: <code>kill -9 <em>process id</em></code></li>
+</ul>
+<div class="footer"><p class="BackToTop"><a href="#top_of_file">Back to top</a> <hr /></p> <p class="copyright">&copy;2015 Google</p></div>
+</div></body> </html>

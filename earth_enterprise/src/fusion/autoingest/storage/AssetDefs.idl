@@ -36,6 +36,9 @@ class AssetDefs {
   static bool Finished(State state) {
     return (state & (Failed | Succeeded | Canceled | Offline | Bad));
   }
+  static bool CanRebuild(State state) {
+    return state & (AssetDefs::Canceled | AssetDefs::Failed);
+  }
   static bool CanOffline(State state) {
     return ((state != Offline) &&
             (Finished(state) || (state == Blocked)));

@@ -26,6 +26,7 @@
 #include <iostream>  // NOLINT(readability/streams)
 #include <string>
 #include <vector>
+#include <sstream>
 #include "fusion/portableglobe/quadtree/qtutils.h"
 
 namespace fusion_portableglobe {
@@ -34,7 +35,7 @@ namespace fusion_portableglobe {
  * Polygon constructor.
  * Reads in the first polygon from the given kml file.
  */
-Polygon::Polygon(std::ifstream* fin) {
+Polygon::Polygon(std::istream* fin) {
   std::string token;
 
   bool found_linear_ring = false;
@@ -82,20 +83,39 @@ Polygon::Polygon(std::ifstream* fin) {
  */
 Polygons::Polygons(const std::string& kml_file) {
   std::ifstream fin(kml_file.c_str());
+  AddPolygonsFromStream(fin);
+  fin.close();
+}
+
+
+/**
+ * Polygons constructor.
+ * Reads in the polygons from the given kml string.
+ */
+Polygons::Polygons(const kml_as_string&, const std::string& kml_string) {
+  std::istringstream iss(kml_string);
+  AddPolygonsFromStream(iss);
+}
+
+
+/**
+ * Polygons constructor helper.
+ * Reads in the polygons from an input stream object.
+ */
+void Polygons::AddPolygonsFromStream(std::istream& in_stream) {
   std::string token;
 
   // TODO: Use more robust xml parsing.
-  while (!fin.eof()) {
+  while (!in_stream.eof()) {
     token = "";
-    fin >> token;
+    in_stream >> token;
     if (!token.empty()) {
       if ("<Polygon>" == token) {
-        polygons.push_back(Polygon(&fin));
+        polygons.push_back(Polygon(&in_stream));
       }
     }
   }
 
-  fin.close();
   notify(NFY_NOTICE, "Found %Zu polygons.", polygons.size());
 }
 
