@@ -134,7 +134,7 @@ ProjectedMapProjectAssetVersionImplD::UpdateChildren(void)
     std::string geindexAssetName(MapGEIndexFactory::SubAssetName(assetRef,
                                                                  "geindex"));
     std::vector<AssetVersion> index_input_vers;
-    std::vector</*SharedString*/AssetHandle> index_input_refs;
+    std::vector<AssetRefKey> index_input_refs;
 
     std::string dbname = khDropExtension(khBasename(assetRef));
     geindexConfig.db_name_ = dbname;
@@ -182,7 +182,7 @@ ProjectedMapProjectAssetVersionImplD::UpdateChildren(void)
       MutableProjectedMapLayerAssetVersionD layerver =
         ProjectedMapLayerFactory::FindMakeAndUpdate(
             projected_layer_name,
-            makevec1</*SharedString*/AssetHandle>(base_layer_ver->GetRef()),
+            makevec1<AssetRefKey>(base_layer_ver->GetRef()),
             khMetaData(),
             ProjectedMapLayerConfig(config.projection_),
             makevec1<AssetVersion>(base_layer_ver));
@@ -256,7 +256,7 @@ ProjectedMapProjectAssetVersionImplD::UpdateChildren(void)
     }
     MutableAssetVersionD layerjs =
       MapLayerJSFactory::FindMakeAndUpdate(layerJSAssetName,
-                                           std::vector</*SharedString*/AssetHandle>(),
+                                           std::vector<AssetRefKey>(),
                                            khMetaData(),
                                            layerJSConfig,
                                            std::vector<AssetVersion>());

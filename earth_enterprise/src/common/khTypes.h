@@ -62,59 +62,61 @@ typedef double                          float64;
 
 #ifdef __cplusplus
 
-// used to limit the number of strings in memory
-// thread-safe and removes when no longer needed
-#include <boost/flyweight.hpp>
 
-class AssetHandle
+#include <boost/flyweight.hpp>
+// wrapper class for boost flyweight
+// relies on a lot of underlying boot functionalty
+// but is necessary in places i.e. empty()
+// allows for any extensiblity to be done at a later date
+class AssetRefKey
 {
     boost::flyweights::flyweight<std::string> fw;
 public:
-    AssetHandle() = default;
-    AssetHandle(const AssetHandle& other) { fw = other.fw; }
-    AssetHandle(const std::string& ref) { fw = ref; }
-    AssetHandle(AssetHandle&& other) { fw = std::move(other.fw); }
-    AssetHandle(std::string&& ref) { fw = std::move(ref); }
+    AssetRefKey() = default;
+    AssetRefKey(const AssetRefKey& other) { fw = other.fw; }
+    AssetRefKey(const std::string& ref) { fw = ref; }
+    AssetRefKey(AssetRefKey&& other) { fw = std::move(other.fw); }
+    AssetRefKey(std::string&& ref) { fw = std::move(ref); }
 
-    AssetHandle& operator=(const AssetHandle& other)
+    AssetRefKey& operator=(const AssetRefKey& other)
     {
         fw = other.fw;
         return *this;
     }
-    AssetHandle& operator=(const std::string& ref)
+    AssetRefKey& operator=(const std::string& ref)
     {
         fw = ref;
         return *this;
     }
-    AssetHandle& operator=(AssetHandle&& other)
+    AssetRefKey& operator=(AssetRefKey&& other)
     {
         fw = std::move(other.fw);
         return *this;
     }
-    AssetHandle& operator=(std::string&& ref)
+    AssetRefKey& operator=(std::string&& ref)
     {
         fw = std::move(ref);
         return *this;
     }
 
     friend std::ostream& operator<<(std::ostream& out,
-                                    const AssetHandle& other)
+                                    const AssetRefKey& other)
     {
         out << other.fw;
         return out;
     }
 
     operator std::string() const { return std::string(fw); }
-    bool operator==(const AssetHandle& other) const { return fw == other.fw; }
-    bool operator!=(const AssetHandle& other) const { return fw != other.fw; }
-    bool operator<(const AssetHandle& other) const { return fw < other.fw; }
-    bool operator>(const AssetHandle& other) const { return fw > other.fw; }
+    bool operator==(const AssetRefKey& other) const { return fw == other.fw; }
+    bool operator!=(const AssetRefKey& other) const { return fw != other.fw; }
+    bool operator<(const AssetRefKey& other) const { return fw < other.fw; }
+    bool operator>(const AssetRefKey& other) const { return fw > other.fw; }
     bool operator==(const std::string& ref) const { return fw == ref; }
     bool operator!=(const std::string& ref) const { return fw != ref; }
     bool operator<(const std::string& ref) const { return fw < ref; }
     bool operator>(const std::string& ref) const { return fw > ref; }
 
-    bool empty() const { return std::string(fw).size() == 0 ? true : false; }
+    bool empty() const { return std::string(fw).empty() ? true : false; }
 };
 
 // Class template to extract properties from a generic type.

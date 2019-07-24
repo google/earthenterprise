@@ -44,12 +44,12 @@ AssetVersionImplD::StateChangeNotifier::GetNotifier(
 }
 
 void
-AssetVersionImplD::StateChangeNotifier::AddParentsToNotify(const std::vector<AssetHandle> & parents) {
+AssetVersionImplD::StateChangeNotifier::AddParentsToNotify(const std::vector<AssetRefKey> & parents) {
   std::copy(parents.begin(), parents.end(), std::inserter(parentsToNotify, parentsToNotify.end()));
 }
 
 void
-AssetVersionImplD::StateChangeNotifier::AddListenersToNotify(const std::vector<AssetHandle> & listeners, AssetDefs::State inputState) {
+AssetVersionImplD::StateChangeNotifier::AddListenersToNotify(const std::vector<AssetRefKey> & listeners, AssetDefs::State inputState) {
   for (const auto & listener : listeners) {
     // This ensures that the listener is in the list of listeners to notify
     InputStates & elem = listenersToNotify[listener];
@@ -105,8 +105,8 @@ AssetVersionImplD::StateChangeNotifier::NotifyListeners(
     std::shared_ptr<StateChangeNotifier> notifier) {
   notify(NFY_VERBOSE, "Iterate through listeners");
   int i = 1;
-  for (const std::pair<AssetHandle, InputStates> & elem : listenersToNotify) {
-    const AssetHandle & ref = elem.first;
+  for (const std::pair<AssetRefKey, InputStates> & elem : listenersToNotify) {
+    const AssetRefKey & ref = elem.first;
     const InputStates & states = elem.second;
     AssetVersionD assetVersion(ref);
     notify(NFY_PROGRESS, "Iteration: %d | Total Iterations: %s | listener: %s",
@@ -152,14 +152,14 @@ AssetVersionImplD::Load(const std::string &boundref)
 
 // since AssetVersionImpl is a virtual base class
 // my derived classes will initialize it directly
-AssetVersionImplD::AssetVersionImplD(const std::vector<AssetHandle> &inputs)
+AssetVersionImplD::AssetVersionImplD(const std::vector<AssetRefKey> &inputs)
     : AssetVersionImpl(), verholder(0)
 {
   AddInputAssetRefs(inputs);
 }
 
 void
-AssetVersionImplD::AddInputAssetRefs(const std::vector<AssetHandle> &inputs_)
+AssetVersionImplD::AddInputAssetRefs(const std::vector<AssetRefKey> &inputs_)
 {
   for (const auto &i : inputs_) {
     // Add myself to the input's list of listeners.
@@ -413,7 +413,7 @@ AssetVersionImplD::HandleChildStateChange(const std::shared_ptr<StateChangeNotif
 }
 
 void
-AssetVersionImplD::HandleChildProgress(const AssetHandle &) const
+AssetVersionImplD::HandleChildProgress(const AssetRefKey &) const
 {
   // NoOp in base since leaves don't do anything
 }
@@ -580,7 +580,7 @@ AssetVersionImplD::Clean(void)
 
 
 AssetVersionImplD::InputVersionHolder::InputVersionHolder
-(const std::vector<AssetHandle> &inputrefs)
+(const std::vector<AssetRefKey> &inputrefs)
 {
   inputvers.reserve(inputrefs.size());
   for (const auto &i : inputrefs) {
@@ -1094,7 +1094,7 @@ CompositeAssetVersionImplD::HandleInputStateChange(InputStates, const std::share
 }
 
 void
-CompositeAssetVersionImplD::HandleChildProgress(const AssetHandle &) const
+CompositeAssetVersionImplD::HandleChildProgress(const AssetRefKey &) const
 {
   // TODO: - implement me some day
 }
@@ -1265,7 +1265,7 @@ CompositeAssetVersionImplD::OnStateChange(AssetDefs::State newstate,
 }
 
 void
-CompositeAssetVersionImplD::DependentChildren(std::vector<AssetHandle> &out) const
+CompositeAssetVersionImplD::DependentChildren(std::vector<AssetRefKey> &out) const
 {
   copy(children.begin(), children.end(), back_inserter(out));
 }
@@ -1316,7 +1316,7 @@ CompositeAssetVersionImplD::Rebuild(const std::shared_ptr<StateChangeNotifier> c
 
   std::shared_ptr<StateChangeNotifier> notifier = StateChangeNotifier::GetNotifier(callerNotifier);
 
-  std::vector<AssetHandle> dependents;
+  std::vector<AssetRefKey> dependents;
   DependentChildren(dependents);
   for (const auto &i : dependents) {
     MutableAssetVersionD child(i);
@@ -1348,7 +1348,7 @@ CompositeAssetVersionImplD::Cancel(const std::shared_ptr<StateChangeNotifier> ca
 
   SetState(AssetDefs::Canceled, notifier);
 
-  std::vector<AssetHandle> dependents;
+  std::vector<AssetRefKey> dependents;
   DependentChildren(dependents);
   for (const auto &i : dependents) {
     MutableAssetVersionD child(i);

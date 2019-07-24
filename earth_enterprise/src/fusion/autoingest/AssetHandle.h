@@ -88,7 +88,7 @@ class AssetHandle_ : public AssetHandleInterface<Impl_> {
   }
 
  protected:
-  AssetHandle ref;
+  AssetRefKey ref;
   mutable HandleType handle;
 
   inline void Bind(void) const {
@@ -100,7 +100,7 @@ class AssetHandle_ : public AssetHandleInterface<Impl_> {
  public:
   AssetHandle_(void) : ref(), handle() { }
   AssetHandle_(const std::string &ref_) : ref(ref_), handle() { }
-  AssetHandle_(const AssetHandle &ref_) : ref(ref_), handle() { }
+  AssetHandle_(const AssetRefKey &ref_) : ref(ref_), handle() { }
 
   // the compiler generated assignment and copy constructor are fine for us
   // ref & handle have stable copy semantics and we don't have to worry about
@@ -108,7 +108,7 @@ class AssetHandle_ : public AssetHandleInterface<Impl_> {
   // Same goes for move constructor and assignment.
 
   virtual ~AssetHandle_(void) { }
-  const AssetHandle & Ref(void) const { return ref; }
+  const AssetRefKey & Ref(void) const { return ref; }
   bool Valid(void) const;
   // This is better than overloading the bool operator as it
   // more closely emulates what a pointer's boolean operations does.
@@ -157,7 +157,7 @@ class DerivedAssetHandle_ : public virtual Base_ {
 
   DerivedAssetHandle_(void) : Base() { }
   DerivedAssetHandle_(const std::string &ref_) : Base(ref_) { }
-  DerivedAssetHandle_(const AssetHandle &ref_) : Base(ref_) { }
+  DerivedAssetHandle_(const AssetRefKey &ref_) : Base(ref_) { }
 
   // it's OK to construct a derived from a base, we just check first
   // and clear the handle if the types don't match

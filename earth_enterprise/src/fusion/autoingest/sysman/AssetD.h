@@ -51,7 +51,7 @@ class AssetImplD : public virtual AssetImpl
   // uptodate).  needed is set to true iff everything was not up to date
   // and so something happened as a result of the Update call.
   virtual AssetVersionD Update(bool &needed) const = 0;
-  void Modify(const std::vector<AssetHandle>& inputs_,
+  void Modify(const std::vector<AssetRefKey>& inputs_,
               const khMetaData &meta_);
 };
 

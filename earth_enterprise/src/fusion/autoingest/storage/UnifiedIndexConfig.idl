@@ -24,7 +24,7 @@
 // ****************************************************************************
 class UnifiedIndexEntry {
   std::string type_;
-  AssetHandle verref_;
+  AssetRefKey verref_;
   uint32 version_;
 
   // used to add channel id to something that otherwise wouldn't have one

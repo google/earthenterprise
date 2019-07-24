@@ -36,12 +36,12 @@ class PacketLevelConfig {
     // Only filled/used when doing minify
     // In Asset/Versions this is a ref to another PacketLevelVersion
     // In khpacklevgen, this is the path to the cache.pack/ dir
-    AssetHandle packetLevel = AssetHandle();
+    AssetRefKey packetLevel = AssetRefKey();
 
     // Only filled/used when doing minify
     // In Asset/Versions this is a ref to another PacketLevelVersion
     // In khpacklevgen, this is the path to the cache_alpha.pack/ dir
-    AssetHandle packetAlphaLevel = AssetHandle();
+    AssetRefKey packetAlphaLevel = AssetRefKey();
 
 #pragma GenerateIsUpToDate
   };

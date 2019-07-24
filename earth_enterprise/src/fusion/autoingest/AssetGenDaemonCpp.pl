@@ -289,9 +289,9 @@ ${name}Factory::ReuseOrMakeAndUpdate(
 {
     // make a copy since actualinputarg is macro substituted, so begin() &
     // end() could be called on different temporary objects
-    std::vector</*SharedString*/AssetHandle> inputarg = $actualinputarg;
+    std::vector<AssetRefKey> inputarg = $actualinputarg;
     // bind my input versions refs
-    std::vector</*SharedString*/AssetHandle> boundInputs;
+    std::vector<AssetRefKey> boundInputs;
     boundInputs.reserve(inputarg.size());
     std::transform(inputarg.begin(), inputarg.end(), back_inserter(boundInputs),
                    ptr_fun(&AssetVersionRef::Bind));

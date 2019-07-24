@@ -36,7 +36,7 @@ class StateUpdater
 {
   private:
     struct AssetVertex {
-      AssetHandle name;
+      AssetRefKey name;
       AssetDefs::State state;
       size_t index; // Used by the dfs function
     };
@@ -53,7 +53,7 @@ class StateUpdater
         boost::directedS,
         AssetVertex,
         AssetEdge> TreeType;
-    typedef std::map<AssetHandle, TreeType::vertex_descriptor> VertexMap;
+    typedef std::map<AssetRefKey, TreeType::vertex_descriptor> VertexMap;
 
     // Used by dfs function to update states of assets in the tree
     friend struct boost::property_map<TreeType, boost::vertex_index_t>;
@@ -63,9 +63,9 @@ class StateUpdater
 
     inline bool IsDependent(DependencyType type) { return type == DEPENDENT || type == DEPENDENT_AND_CHILD; }
 
-    TreeType::vertex_descriptor BuildTree(const AssetHandle & ref);
+    TreeType::vertex_descriptor BuildTree(const AssetRefKey & ref);
     TreeType::vertex_descriptor AddEmptyVertex(
-        const AssetHandle & ref,
+        const AssetRefKey & ref,
         VertexMap & vertices,
         size_t & index,
         std::list<TreeType::vertex_descriptor> & toFillIn);
@@ -88,7 +88,7 @@ class StateUpdater
   public:
     StateUpdater() = default;
     void SetStateForRefAndDependents(
-        const AssetHandle & ref,
+        const AssetRefKey & ref,
         AssetDefs::State newState,
         std::function<bool(AssetDefs::State)> updateStatePredicate);
     void RecalculateAndSaveStates();

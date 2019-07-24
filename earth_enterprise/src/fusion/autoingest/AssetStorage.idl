@@ -33,10 +33,10 @@
 class AssetStorage {
   typedef VerRefGen VersionList;
 
-  AssetHandle name;
+  AssetRefKey name;
   AssetDefs::Type type;
   std::string subtype;
-  std::vector<AssetHandle> inputs;
+  std::vector<AssetRefKey> inputs;
   khMetaData          meta;
   VersionList versions;
 
@@ -47,10 +47,10 @@ class AssetStorage {
     type  = AssetDefs::Invalid;
   }
   static AssetStorage
-  MakeStorage(const AssetHandle &name_,
+  MakeStorage(const AssetRefKey &name_,
               AssetDefs::Type type_,
               const std::string &subtype_,
-              const std::vector<AssetHandle> &inputs_,
+              const std::vector<AssetRefKey> &inputs_,
               const khMetaData &meta_) {
     AssetStorage storage(name_, type_, subtype_,
                          inputs_, meta_,
@@ -67,11 +67,11 @@ class AssetStorage {
       return 0;
     }
   }
-  AssetHandle CurrVersionRef(void) const {
+  AssetRefKey CurrVersionRef(void) const {
     if (versions.size()) {
       return versions.front();
     } else {
-      return AssetHandle(AssetVersionRef(name, 0)); // an invalid version ref
+      return AssetRefKey(AssetVersionRef(name, 0)); // an invalid version ref
     }
   }
   std::string PrettySubtype(void) const {
@@ -81,17 +81,17 @@ class AssetStorage {
 };
 
 class AssetVersionStorage {
-  AssetHandle  name;
+  AssetRefKey  name;
   AssetDefs::Type  type;
   std::string  subtype;
   uint         version;
   AssetDefs::State state;
   double       progress;
   bool         locked;
-  std::vector<AssetHandle> inputs;
-  std::vector<AssetHandle> children;
-  std::vector<AssetHandle> parents;
-  std::vector<AssetHandle> listeners;
+  std::vector<AssetRefKey> inputs;
+  std::vector<AssetRefKey> children;
+  std::vector<AssetRefKey> parents;
+  std::vector<AssetRefKey> listeners;
   std::vector<std::string> outfiles;
   khMetaData               meta;
   time_t             beginTime = time_t(0);
@@ -124,10 +124,10 @@ class AssetVersionStorage {
                                 AssetDefs::New,        // state
                                 0,                // progress
                                 false,             // locked
-                                std::vector<AssetHandle>(),    // inputs
-                                std::vector<AssetHandle>(),    // children
-                                std::vector<AssetHandle>(),    // parents
-                                std::vector<AssetHandle>(),    // listeners
+                                std::vector<AssetRefKey>(),    // inputs
+                                std::vector<AssetRefKey>(),    // children
+                                std::vector<AssetRefKey>(),    // parents
+                                std::vector<AssetRefKey>(),    // listeners
                                 std::vector<std::string>(),    // outfiles
                                 asset.meta,
                                 0,                // beginTime

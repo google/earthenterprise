@@ -48,7 +48,7 @@ AssetImplD::AddVersionRef(const std::string &verref)
 }
 
 void
-AssetImplD::Modify(const std::vector<AssetHandle>& inputs_,
+AssetImplD::Modify(const std::vector<AssetRefKey>& inputs_,
                    const khMetaData &meta_) {
   inputs = inputs_;
   meta = meta_;

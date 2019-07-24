@@ -169,7 +169,7 @@ ToElement(khxml::DOMElement *elem, const std::map<QString, U> &map);
 
 template <class U>
 void
-ToElement(khxml::DOMElement *elem, const std::map</*SharedString*/AssetHandle, U> &map);
+ToElement(khxml::DOMElement *elem, const std::map<AssetRefKey, U> &map);
 
 template <class T>
 void
@@ -362,7 +362,7 @@ ToElement(khxml::DOMElement *elem, const std::map<QString, U> &map)
 
 template <class U>
 void
-ToElement(khxml::DOMElement *elem, const std::map</*SharedString*/AssetHandle, U> &map)
+ToElement(khxml::DOMElement *elem, const std::map<AssetRefKey, U> &map)
 {
   ToElementForStringMap(elem, map);
 }
@@ -557,7 +557,7 @@ FromElement(khxml::DOMElement *elem, std::map<QString, U> &map);
 
 template <class U>
 void
-FromElement(khxml::DOMElement *elem, std::map</*SharedString*/AssetHandle, U> &map);
+FromElement(khxml::DOMElement *elem, std::map<AssetRefKey, U> &map);
 
 template <class T>
 void
@@ -863,7 +863,7 @@ FromElement(khxml::DOMElement *elem, std::string &val)
 
 inline
 void
-FromElement(khxml::DOMElement *elem, /*SharedString*/AssetHandle &val)
+FromElement(khxml::DOMElement *elem, AssetRefKey &val)
 {
   std::string valStr;
   FromElement(elem, valStr);
@@ -1022,9 +1022,9 @@ FromXMLStrForMap(const XMLCh *xmlch) {
 }
 
 template<>
-inline AssetHandle//SharedString
+inline AssetRefKey
 FromXMLStrForMap(const XMLCh *xmlch) {
-  AssetHandle retval { FromXMLStr(xmlch) };
+  AssetRefKey retval { FromXMLStr(xmlch) };
   return retval;
 }
 
@@ -1080,7 +1080,7 @@ FromElement(khxml::DOMElement *elem, std::map<QString, U> &map)
 
 template <class U>
 void
-FromElement(khxml::DOMElement *elem, std::map</*SharedString*/AssetHandle, U> &map)
+FromElement(khxml::DOMElement *elem, std::map<AssetRefKey, U> &map)
 {
   FromElementForStringMap(elem, map);
 }

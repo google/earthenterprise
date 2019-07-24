@@ -67,7 +67,7 @@ class AssetImpl : public khRefCounter, public AssetStorage, public StorageManage
 
 
   virtual ~AssetImpl(void) { }
-  const AssetHandle & GetRef(void) const { return name; }
+  const AssetRefKey & GetRef(void) const { return name; }
 
   // determine amount of memory used by an AssetImpl
   uint64 GetSize() {
@@ -91,7 +91,7 @@ class AssetImpl : public khRefCounter, public AssetStorage, public StorageManage
   static std::string Filename(const std::string &ref) {
     return XMLFilename(ref);
   }
-  static AssetHandle Key(const AssetHandle & ref) {
+  static AssetRefKey Key(const AssetRefKey & ref) {
     return ref;
   }
 };
