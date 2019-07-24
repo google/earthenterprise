@@ -31,11 +31,11 @@
 // ****************************************************************************
 class QTPacketConfig {
   IsUpToDateIgnore uint      index_version_;
-  SharedString imagery_verref_;                     // RasterGEIndex
-  SharedString terrain_verref_;                     // CombinedTerrain
-  SharedString vector_verref_;                      // VectorGEIndex
-  SharedString imageryproj_verref_ = SharedString(); // RasterProject
-  SharedString terrainproj_verref_ = SharedString(); // RasterProject
+  AssetHandle imagery_verref_;                     // RasterGEIndex
+  AssetHandle terrain_verref_;                     // CombinedTerrain
+  AssetHandle vector_verref_;                      // VectorGEIndex
+  AssetHandle imageryproj_verref_ = AssetHandle(); // RasterProject
+  AssetHandle terrainproj_verref_ = AssetHandle(); // RasterProject
 
   // Acquisition date of the imagery project.
   std::string imagery_date_string_ = std::string();

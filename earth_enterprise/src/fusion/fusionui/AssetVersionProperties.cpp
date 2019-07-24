@@ -63,7 +63,7 @@ AssetChildItem::configureWidgets(const AssetVersion &ver,
   setText( COL_STATE, ver->PrettyState() );
   if ( ver->Logfile().size() != 0 )
     setPixmap( COL_LOG, uic_load_pixmap( "history.png" ) );
-  setText( COL_REF, ver->GetRef().toString().c_str() );
+  setText( COL_REF, std::string(ver->GetRef()).c_str() );
 
   setExpandable(ver->inputs.size() ||
                 (!ver->IsLeaf() && ver->children.size()));

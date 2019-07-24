@@ -30,7 +30,7 @@ PushDatabaseDialog::PushDatabaseDialog(
     const std::vector<QString>& nicknames)
     : PushDatabaseDialogBase(parent, 0, false, 0) {
 
-  std::string database_name = shortAssetName(asset->GetRef().toString());
+  std::string database_name = shortAssetName(std::string(asset->GetRef()));
   db_name_label->setText(database_name);
 
   std::vector<QString>::const_iterator nickname = nicknames.begin();

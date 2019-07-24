@@ -18,7 +18,6 @@
 #config Subtype   Project
 #config FixedType KML
 
-
 // ===== KMLProjectAsset.h =====
 #include <autoingest/.idl/storage/KMLProjectConfig.h>
 
@@ -80,7 +79,7 @@ KMLProjectAssetImplD::HandleEditRequest(const KMLProjectEditRequest &req)
                       AssetDefs::FileExtension(AssetDefs::KML,
                                                kProjectSubtype));
   // will be filled in later
-  std::vector<SharedString> inputs;
+  std::vector</*SharedString*/AssetHandle> inputs;
 
   // custom FindMake - modified to set/preserve indexVersion
   KMLProjectConfig projConfig = req.config;

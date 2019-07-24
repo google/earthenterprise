@@ -276,14 +276,14 @@ void DisplayVersionDependencies(const AssetVersion &version,
     printf("R  %s%s%s: %s\n",
            std::string((indent-1)*3, ' ').c_str(),
            prefix.c_str(),
-           version->GetRef().toString().c_str(),
+           std::string(version->GetRef()).c_str(),
            statestr.c_str());
   } else {
     seen.insert(version->GetRef());
     printf("%s%s%s: %s\n",
            std::string(indent*3, ' ').c_str(),
            prefix.c_str(),
-           version->GetRef().toString().c_str(),
+           std::string(version->GetRef()).c_str(),
            statestr.c_str());
     ++indent;
     if (version->inputs.size()) {
@@ -322,7 +322,7 @@ void DisplayBlockerDependencies(const AssetVersion &version,
                           AssetDefs::Failed |
                           AssetDefs::Offline |
                           AssetDefs::Bad)) {
-      printf("%s: %s\n", version->GetRef().toString().c_str(),
+      printf("%s: %s\n", std::string(version->GetRef()).c_str(),
              version->PrettyState().c_str());
     } else if (version->state == AssetDefs::Blocked) {
       std::string myskipext = skipInputExt;

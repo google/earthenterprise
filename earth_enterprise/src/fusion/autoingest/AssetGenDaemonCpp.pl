@@ -289,9 +289,9 @@ ${name}Factory::ReuseOrMakeAndUpdate(
 {
     // make a copy since actualinputarg is macro substituted, so begin() &
     // end() could be called on different temporary objects
-    std::vector<SharedString> inputarg = $actualinputarg;
+    std::vector</*SharedString*/AssetHandle> inputarg = $actualinputarg;
     // bind my input versions refs
-    std::vector<SharedString> boundInputs;
+    std::vector</*SharedString*/AssetHandle> boundInputs;
     boundInputs.reserve(inputarg.size());
     std::transform(inputarg.begin(), inputarg.end(), back_inserter(boundInputs),
                    ptr_fun(&AssetVersionRef::Bind));
@@ -509,7 +509,7 @@ ${name}AssetImplD::MakeNewVersion(void)
     typedef ${name}AssetVersionImplD VerImpl;
     Mutable${name}AssetVersionD newver(std::make_shared<VerImpl>(this));
 
-    AddVersionRef(newver->GetRef().toString());
+    AddVersionRef(std::string(newver->GetRef()));
     return newver;
 }
 EOF

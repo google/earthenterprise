@@ -53,16 +53,16 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   // versions.
   class StateChangeNotifier {
     private:
-      std::set<SharedString> parentsToNotify;
-      std::map<SharedString, InputStates> listenersToNotify;
+      std::set</*SharedString*/AssetHandle> parentsToNotify;
+      std::map</*SharedString*/AssetHandle, InputStates> listenersToNotify;
       void NotifyParents(std::shared_ptr<StateChangeNotifier>);
       void NotifyListeners(std::shared_ptr<StateChangeNotifier>);
     public:
       static std::shared_ptr<StateChangeNotifier> GetNotifier(std::shared_ptr<StateChangeNotifier>);
       StateChangeNotifier() = default;
       ~StateChangeNotifier();
-      void AddParentsToNotify(const std::vector<SharedString> &);
-      void AddListenersToNotify(const std::vector<SharedString> &, AssetDefs::State);
+      void AddParentsToNotify(const std::vector</*SharedString*/AssetHandle> &);
+      void AddListenersToNotify(const std::vector</*SharedString*/AssetHandle> &, AssetDefs::State);
   };
 
   static std::shared_ptr<AssetVersionImplD> Load(const std::string &boundref);
@@ -77,9 +77,9 @@ class AssetVersionImplD : public virtual AssetVersionImpl
 
   // used when being contructed from an asset
   // these are the inputs I need to bind and attach to
-  AssetVersionImplD(const std::vector<SharedString> &inputs);
+  AssetVersionImplD(const std::vector</*SharedString*/AssetHandle> &inputs);
 
-  void AddInputAssetRefs(const std::vector<SharedString> &inputs_);
+  void AddInputAssetRefs(const std::vector</*SharedString*/AssetHandle> &inputs_);
   AssetDefs::State StateByInputs(bool *blockersAreOffline = 0,
                                  uint32 *numWaiting = 0) const;
   template<bool propagate = true>
@@ -95,7 +95,7 @@ class AssetVersionImplD : public virtual AssetVersionImpl
   virtual void HandleTaskDone(const TaskDoneMsg &msg);
   virtual void HandleChildStateChange(const std::shared_ptr<StateChangeNotifier>) const;
   virtual void HandleInputStateChange(InputStates, const std::shared_ptr<StateChangeNotifier>) const = 0;
-  virtual void HandleChildProgress(const SharedString &) const;
+  virtual void HandleChildProgress(const /*SharedString*/AssetHandle &) const;
   virtual void OnStateChange(AssetDefs::State newstate,
                              AssetDefs::State oldstate);
   virtual bool OfflineInputsBreakMe(void) const { return false; }
@@ -126,7 +126,7 @@ class AssetVersionImplD : public virtual AssetVersionImpl
    public:
     std::vector<AssetVersion> inputvers;
 
-    InputVersionHolder(const std::vector<SharedString> &inputrefs);
+    InputVersionHolder(const std::vector</*SharedString*/AssetHandle> &inputrefs);
     InputVersionHolder(const std::vector<AssetVersion> &inputvers_);
   };
 
@@ -171,7 +171,7 @@ class LeafAssetVersionImplD : public virtual LeafAssetVersionImpl,
         AssetVersionImplD(), numWaitingFor(0) { }
   // used when being contructed from an asset
   // these are the inputs I need to bind and attach to
-  LeafAssetVersionImplD(const std::vector<SharedString> &inputs)
+  LeafAssetVersionImplD(const std::vector</*SharedString*/AssetHandle> &inputs)
       : AssetVersionImpl(), LeafAssetVersionImpl(),
         AssetVersionImplD(inputs), numWaitingFor(0) { }
 
@@ -213,7 +213,7 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
         AssetVersionImplD() { }
   // used when being contructed from an asset
   // these are the inputs I need to bind and attach to
-  CompositeAssetVersionImplD(const std::vector<SharedString> &inputs)
+  CompositeAssetVersionImplD(const std::vector</*SharedString*/AssetHandle> &inputs)
       : AssetVersionImpl(), CompositeAssetVersionImpl(),
         AssetVersionImplD(inputs) { }
 
@@ -221,7 +221,7 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
   virtual bool CacheInputVersions(void) const;
   virtual void HandleChildStateChange(const std::shared_ptr<StateChangeNotifier>) const;
   virtual void HandleInputStateChange(InputStates, const std::shared_ptr<StateChangeNotifier>) const;
-  virtual void HandleChildProgress(const SharedString &) const;
+  virtual void HandleChildProgress(const /*SharedString*/AssetHandle &) const;
   virtual void DelayedBuildChildren(void);
   virtual void OnStateChange(AssetDefs::State newstate,
                              AssetDefs::State oldstate);
@@ -239,7 +239,7 @@ class CompositeAssetVersionImplD : public virtual CompositeAssetVersionImpl,
       AssetDefs::State stateByChildren,
       bool blockersAreOffline,
       uint32 numWaitingFor) const;
-  virtual void DependentChildren(std::vector<SharedString> &out) const;
+  virtual void DependentChildren(std::vector</*SharedString*/AssetHandle> &out) const;
 };
 
 #endif /* __AssetVersionD_h */

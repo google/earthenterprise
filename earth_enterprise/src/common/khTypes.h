@@ -62,6 +62,61 @@ typedef double                          float64;
 
 #ifdef __cplusplus
 
+// used to limit the number of strings in memory
+// thread-safe and removes when no longer needed
+#include <boost/flyweight.hpp>
+
+class AssetHandle
+{
+    boost::flyweights::flyweight<std::string> fw;
+public:
+    AssetHandle() = default;
+    AssetHandle(const AssetHandle& other) { fw = other.fw; }
+    AssetHandle(const std::string& ref) { fw = ref; }
+    AssetHandle(AssetHandle&& other) { fw = std::move(other.fw); }
+    AssetHandle(std::string&& ref) { fw = std::move(ref); }
+
+    AssetHandle& operator=(const AssetHandle& other)
+    {
+        fw = other.fw;
+        return *this;
+    }
+    AssetHandle& operator=(const std::string& ref)
+    {
+        fw = ref;
+        return *this;
+    }
+    AssetHandle& operator=(AssetHandle&& other)
+    {
+        fw = std::move(other.fw);
+        return *this;
+    }
+    AssetHandle& operator=(std::string&& ref)
+    {
+        fw = std::move(ref);
+        return *this;
+    }
+
+    friend std::ostream& operator<<(std::ostream& out,
+                                    const AssetHandle& other)
+    {
+        out << other.fw;
+        return out;
+    }
+
+    operator std::string() const { return std::string(fw); }
+    bool operator==(const AssetHandle& other) const { return fw == other.fw; }
+    bool operator!=(const AssetHandle& other) const { return fw != other.fw; }
+    bool operator<(const AssetHandle& other) const { return fw < other.fw; }
+    bool operator>(const AssetHandle& other) const { return fw > other.fw; }
+    bool operator==(const std::string& ref) const { return fw == ref; }
+    bool operator!=(const std::string& ref) const { return fw != ref; }
+    bool operator<(const std::string& ref) const { return fw < ref; }
+    bool operator>(const std::string& ref) const { return fw > ref; }
+
+    bool empty() const { return std::string(fw).size() == 0 ? true : false; }
+};
+
 // Class template to extract properties from a generic type.
 // It is used to overload a function template based on a type condition.
 template <int v>

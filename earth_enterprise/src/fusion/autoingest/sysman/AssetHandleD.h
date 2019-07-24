@@ -56,7 +56,7 @@ class DerivedAssetHandleD_ : public virtual BaseD_, public ROBase_
   }
 
   DerivedAssetHandleD_(void) : BBase(), BaseD(), ROBase() { }
-  DerivedAssetHandleD_(const SharedString &ref_) :
+  DerivedAssetHandleD_(const /*SharedString*/AssetHandle &ref_) :
       // Only call the common (virtually inherited) base class with the initializtion state.
       // It's the only one that has state anyway.  Also, explicitly calling the virtual base
       // class puts a build time check to ensure BBase is a virtural base class of this class.
@@ -148,7 +148,7 @@ class MutableAssetHandleD_ : public virtual Base_ {
   }
 
   static bool SaveDirtyToDotNew(khFilesTransaction &savetrans,
-                                std::vector<SharedString> *saveDirty) {
+                                std::vector</*SharedString*/AssetHandle> *saveDirty) {
     return Base::storageManager().SaveDirtyToDotNew(savetrans, saveDirty);
   }
 
@@ -162,7 +162,7 @@ class MutableAssetHandleD_ : public virtual Base_ {
       // It's the only one that has state anyway.  Also, explicitly calling the virtual base
       // class puts an explicit check to ensure BBase a virtural base class of this class.
       BBase(ref_), Base() { }
-  MutableAssetHandleD_(const SharedString &ref_) :
+  MutableAssetHandleD_(const /*SharedString*/AssetHandle &ref_) :
       BBase(ref_), Base() { }
 
   // you should be able to create a mutable handle from the non-mutable
@@ -274,7 +274,7 @@ class MutableDerivedAssetHandleD_ : public DerivedBase_, public MutableBase_
  public:
   MutableDerivedAssetHandleD_(void) :
       BBase(), BaseD(), DerivedBase(), MutableBase() { }
-  MutableDerivedAssetHandleD_(const SharedString &ref_) :
+  MutableDerivedAssetHandleD_(const /*SharedString*/AssetHandle &ref_) :
       // Only call the common (virtually inherited) base class with the initializtion state.
       // It's the only one that has state anyway.  Also, explicitly calling the virtual base
       // class puts a build time check to ensure BBase is a virtural base class of this class.

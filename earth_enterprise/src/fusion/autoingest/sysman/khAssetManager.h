@@ -80,10 +80,10 @@ class khAssetManager
 
   // routines others can call to tell me about things that need to be done
   // once the AssetGuard has been released
-  void NotifyVersionStateChange(const SharedString &ref,
+  void NotifyVersionStateChange(const /*SharedString*/AssetHandle &ref,
                                 AssetDefs::State state);
-  void NotifyVersionProgress(const SharedString &ref,double progress);
-  void SubmitTask(const SharedString &verref, const TaskDef &taskdef,
+  void NotifyVersionProgress(const /*SharedString*/AssetHandle &ref,double progress);
+  void SubmitTask(const /*SharedString*/AssetHandle &verref, const TaskDef &taskdef,
                   int32 priority = 0);
   void DeleteTask(const std::string &verref);
   void DeleteFile(const std::string &path) {
@@ -139,8 +139,8 @@ class khAssetManager
   // this is no-destroy mutex because it needs to remain locked
   // even while the application exists
   khNoDestroyMutex                        mutex;
-  std::map<SharedString, AssetDefs::State> pendingStateChanges;
-  std::map<SharedString, double>           pendingProgress;
+  std::map</*SharedString*/AssetHandle, AssetDefs::State> pendingStateChanges;
+  std::map</*SharedString*/AssetHandle, double>           pendingProgress;
   std::vector<TaskCmd>                    pendingTaskCmds;
   std::vector<std::string>                pendingFileDeletes;
   void AssertPendingEmpty(void);

@@ -60,14 +60,14 @@ class AssetImpl : public khRefCounter, public AssetStorage, public StorageManage
   virtual bool Save(const std::string &filename) const {
     assert(false); // Can only save from sub-classes
     return false;
-  };
+  }
 
   std::string WorkingDir(void) const { return WorkingDir(GetRef()); }
   std::string XMLFilename() const { return XMLFilename(GetRef()); }
 
 
   virtual ~AssetImpl(void) { }
-  const SharedString & GetRef(void) const { return name; }
+  const AssetHandle & GetRef(void) const { return name; }
 
   // determine amount of memory used by an AssetImpl
   uint64 GetSize() {
@@ -91,7 +91,7 @@ class AssetImpl : public khRefCounter, public AssetStorage, public StorageManage
   static std::string Filename(const std::string &ref) {
     return XMLFilename(ref);
   }
-  static SharedString Key(const SharedString & ref) {
+  static AssetHandle Key(const AssetHandle & ref) {
     return ref;
   }
 };

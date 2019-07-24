@@ -109,7 +109,7 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
     return (state == AssetDefs::Bad);
   }
 
-  const SharedString & GetRef(void) const { return name; }
+  const /*SharedString*/AssetHandle & GetRef(void) const { return name; }
   std::string GetAssetRef(void) const {
     AssetVersionRef verref(name);
     return verref.AssetRef();
@@ -148,7 +148,7 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
   virtual void GetOutputFilenames(std::vector<std::string> &out) const = 0;
   virtual std::string GetOutputFilename(uint i) const = 0;
   virtual void AfterLoad(void) { }
-  virtual void DependentChildren(std::vector<SharedString> &) const {
+  virtual void DependentChildren(std::vector</*SharedString*/AssetHandle> &) const {
     // No-op in base class. Sub-classes will override this
     // with children that must be operated on similarly to the
     // parent asset (ex: parent is canceled, so these children
@@ -177,7 +177,7 @@ class AssetVersionImpl : public khRefCounter, public AssetVersionStorage, public
     AssetVersionRef boundVerRef(boundref);
     return AssetVersionImpl::XMLFilename(boundVerRef);
   }
-  static std::string Key(const SharedString & ref) {
+  static std::string Key(const /*SharedString*/AssetHandle & ref) {
     return AssetVersionRef::Bind(ref);
   }
 
@@ -256,7 +256,7 @@ inline bool AssetVersion::Valid(void) const {
       return false;
 
     // bind the ref
-    SharedString boundRef = AssetVersionRef::Bind(ref);
+    /*SharedString*/AssetHandle boundRef = AssetVersionRef::Bind(ref);
     AssetVersionRef boundVerRef(boundRef);
 
     // deal quickly with an invalid version

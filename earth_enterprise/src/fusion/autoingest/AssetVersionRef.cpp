@@ -31,7 +31,7 @@ AssetVersionRef::AssetVersionRef(const std::string &ref)
   }
 }
 
-AssetVersionRef::AssetVersionRef(const SharedString &ref) : AssetVersionRef(ref.toString())
+AssetVersionRef::AssetVersionRef(const /*SharedString*/AssetHandle &ref) :  AssetVersionRef(std::string(ref))
 {
 }
 

@@ -19,7 +19,7 @@
 #include "MiscConfig.h"
 #include "StateUpdater.h"
 
-void RebuildVersion(const SharedString & ref) {
+void RebuildVersion(const /*SharedString*/AssetHandle & ref) {
   if (MiscConfig::Instance().GraphOperations) {
     // Rebuilding an already succeeded asset is quite dangerous!
     // Those who depend on me may have already finished their work with me.

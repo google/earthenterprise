@@ -35,7 +35,7 @@ env.test('idl_tests',
          LIBS=['gexml', 'gecommon', 'geutil',
                'qt-mt', 'xerces-c', 'gtest'])
 
-env.test('khxml_unittest',
+'''env.test('khxml_unittest',
          'khxml_unittest.cpp',
          LIBS=['geutil', 'xerces-c', 'png12', 'qt-mt',
-               'gexml', 'gecommon', 'gtest'])
+               'gexml', 'gecommon', 'gtest'])'''

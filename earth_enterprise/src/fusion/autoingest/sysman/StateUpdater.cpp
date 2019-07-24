@@ -60,7 +60,7 @@ namespace boost {
 
 // Builds the asset version tree containing the specified asset version.
 StateUpdater::TreeType::vertex_descriptor
-StateUpdater::BuildTree(const SharedString & ref) {
+StateUpdater::BuildTree(const /*SharedString*/AssetHandle & ref) {
   VertexMap vertices;
   size_t index = 0;
   list<TreeType::vertex_descriptor> toFillIn, toFillInNext;
@@ -88,7 +88,7 @@ StateUpdater::BuildTree(const SharedString & ref) {
 // before it can be used.
 StateUpdater::TreeType::vertex_descriptor
 StateUpdater::AddEmptyVertex(
-    const SharedString & ref,
+    const /*SharedString*/AssetHandle & ref,
     VertexMap & vertices,
     size_t & index,
     list<TreeType::vertex_descriptor> & toFillIn) {
@@ -116,12 +116,12 @@ void StateUpdater::FillInVertex(
     VertexMap & vertices,
     size_t & index,
     list<TreeType::vertex_descriptor> & toFillIn) {
-  SharedString name = tree[myVertex].name;
-  notify(NFY_PROGRESS, "Loading '%s' for state update", name.toString().c_str());
+  AssetHandle name = tree[myVertex].name;
+  notify(NFY_PROGRESS, "Loading '%s' for state update", std::string(name).c_str());
   AssetVersionD version(name);
   if (!version) {
     notify(NFY_WARN, "Could not load asset '%s' which is referenced by another asset.",
-           name.toString().c_str());
+           std::string(name).c_str());
     // Set it to a bad state, but use a state that can be fixed by another
     // rebuild operation.
     tree[myVertex].state = AssetDefs::Blocked;
@@ -135,7 +135,7 @@ void StateUpdater::FillInVertex(
     tree[myVertex].name = name;
     vertices[name] = myVertex;
   }
-  vector<SharedString> dependents;
+  vector</*SharedString*/AssetHandle> dependents;
   version->DependentChildren(dependents);
   for (const auto & dep : dependents) {
     auto depVertex = AddEmptyVertex(dep, vertices, index, toFillIn);
@@ -180,10 +180,10 @@ void StateUpdater::AddEdge(
 }
 
 void StateUpdater::SetStateForRefAndDependents(
-    const SharedString & ref,
+    const /*SharedString*/AssetHandle & ref,
     AssetDefs::State newState,
     function<bool(AssetDefs::State)> updateStatePredicate) {
-  SharedString verref = AssetVersionRef::Bind(ref);
+  /*SharedString*/AssetHandle verref = AssetVersionRef::Bind(ref);
   auto refVertex = BuildTree(verref);
   SetStateForVertexAndDependents(refVertex, newState, updateStatePredicate);
 }
@@ -217,11 +217,11 @@ void StateUpdater::SetState(
     TreeType::vertex_descriptor vertex,
     AssetDefs::State newState,
     bool sendNotifications) {
-  SharedString name = tree[vertex].name;
+  /*SharedString*/AssetHandle name = tree[vertex].name;
   if (newState != tree[vertex].state) {
     MutableAssetVersionD version(name);
     notify(NFY_PROGRESS, "Setting state of '%s' to '%s'",
-           name.toString().c_str(), ToString(newState).c_str());
+           std::string(name).c_str(), ToString(newState).c_str());
     if (version) {
       // Set the state. The OnStateChange handler will take care
       // of stopping any running tasks, etc.
@@ -236,7 +236,7 @@ void StateUpdater::SetState(
       // This shoud never happen - we had to successfully load the asset
       // previously to get it into the tree.
       notify(NFY_WARN, "Could not load asset '%s' to set state.",
-             name.toString().c_str());
+             std::string(name).c_str());
     }
   }
 }
@@ -375,14 +375,14 @@ class StateUpdater::UpdateStateVisitor : public default_dfs_visitor {
     virtual void finish_vertex(
         StateUpdater::TreeType::vertex_descriptor vertex,
         const StateUpdater::TreeType & tree) const {
-      SharedString name = tree[vertex].name;
-      notify(NFY_PROGRESS, "Calculating state for '%s'", name.toString().c_str());
+      /*SharedString*/AssetHandle name = tree[vertex].name;
+      notify(NFY_PROGRESS, "Calculating state for '%s'", std::string(name).c_str());
       AssetVersionD version(name);
       if (!version) {
         // This shoud never happen - we had to successfully load the asset
         // previously to get it into the tree.
         notify(NFY_WARN, "Could not load asset '%s' to recalculate state.",
-               name.toString().c_str());
+               std::string(name).c_str());
         return;
       }
       if (!version->NeedComputeState()) return;

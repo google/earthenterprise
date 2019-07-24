@@ -38,7 +38,7 @@ class AddToAssetCache_Tester : public opengee::mem_usage::RasterProjectFunctionT
         asset.MakePermanent();
 
         // Cause the reference to be resolved by loading the XML:
-        asset_ref_character_count += asset->GetRef().toString().length();
+        asset_ref_character_count += std::string(asset->GetRef()).length();
 
         asset.NoLongerNeeded();
 

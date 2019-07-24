@@ -82,7 +82,7 @@ FromString(const std::string &str, T &val)
 
 inline
 void
-FromString(const std::string &str, SharedString &val)
+FromString(const std::string &str, AssetHandle& val)//SharedString &val)
 {
   val = str;
 }

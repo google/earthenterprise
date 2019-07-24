@@ -21,7 +21,7 @@
 #include <autoingest/.idl/storage/AssetDefs.h>
 #include "common/SharedString.h"
 #include "common/verref_storage.h"
-
+#include "common/khTypes.h"
 #cppquote
 #include <autoingest/.idl/storage/AssetDefs_impl.h>
 #/cppquote
@@ -33,10 +33,10 @@
 class AssetStorage {
   typedef VerRefGen VersionList;
 
-  SharedString name;
+  AssetHandle name;
   AssetDefs::Type type;
   std::string subtype;
-  std::vector<SharedString> inputs;
+  std::vector<AssetHandle> inputs;
   khMetaData          meta;
   VersionList versions;
 
@@ -47,10 +47,10 @@ class AssetStorage {
     type  = AssetDefs::Invalid;
   }
   static AssetStorage
-  MakeStorage(const SharedString &name_,
+  MakeStorage(const AssetHandle &name_,
               AssetDefs::Type type_,
               const std::string &subtype_,
-              const std::vector<SharedString> &inputs_,
+              const std::vector<AssetHandle> &inputs_,
               const khMetaData &meta_) {
     AssetStorage storage(name_, type_, subtype_,
                          inputs_, meta_,
@@ -67,11 +67,11 @@ class AssetStorage {
       return 0;
     }
   }
-  SharedString CurrVersionRef(void) const {
+  AssetHandle CurrVersionRef(void) const {
     if (versions.size()) {
       return versions.front();
     } else {
-      return SharedString(AssetVersionRef(name, 0)); // an invalid version ref
+      return AssetHandle(AssetVersionRef(name, 0)); // an invalid version ref
     }
   }
   std::string PrettySubtype(void) const {
@@ -81,17 +81,17 @@ class AssetStorage {
 };
 
 class AssetVersionStorage {
-  SharedString  name;
+  AssetHandle  name;
   AssetDefs::Type  type;
   std::string  subtype;
   uint         version;
   AssetDefs::State state;
   double       progress;
   bool         locked;
-  std::vector<SharedString> inputs;
-  std::vector<SharedString> children;
-  std::vector<SharedString> parents;
-  std::vector<SharedString> listeners;
+  std::vector<AssetHandle> inputs;
+  std::vector<AssetHandle> children;
+  std::vector<AssetHandle> parents;
+  std::vector<AssetHandle> listeners;
   std::vector<std::string> outfiles;
   khMetaData               meta;
   time_t             beginTime = time_t(0);
@@ -124,10 +124,10 @@ class AssetVersionStorage {
                                 AssetDefs::New,        // state
                                 0,                // progress
                                 false,             // locked
-                                std::vector<SharedString>(),    // inputs
-                                std::vector<SharedString>(),    // children
-                                std::vector<SharedString>(),    // parents
-                                std::vector<SharedString>(),    // listeners
+                                std::vector<AssetHandle>(),    // inputs
+                                std::vector<AssetHandle>(),    // children
+                                std::vector<AssetHandle>(),    // parents
+                                std::vector<AssetHandle>(),    // listeners
                                 std::vector<std::string>(),    // outfiles
                                 asset.meta,
                                 0,                // beginTime

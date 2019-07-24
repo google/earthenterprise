@@ -31,7 +31,7 @@ const char kSep = ':';
 AssetDrag::AssetDrag(QWidget* drag_source, Asset asset)
   : QTextDrag(drag_source)
 {
-  setText(asset->GetRef().toString());
+  setText(std::string(asset->GetRef()));
   std::string subtype = ToString(asset->type) + kSep + asset->subtype;
   setSubtype(subtype.c_str());
 }

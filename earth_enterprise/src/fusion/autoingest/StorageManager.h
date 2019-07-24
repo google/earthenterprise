@@ -43,7 +43,7 @@ class StorageManager
 {
   public:
     using HandleType = std::shared_ptr<AssetType>;
-    using AssetKey = SharedString;
+    using AssetKey = AssetHandle;
 
     StorageManager(uint cacheSize, bool limitByMemory, uint64 maxMemory, const std::string & type) :
         cache(cacheSize),
@@ -61,8 +61,8 @@ class StorageManager
     inline void AddExisting(const AssetKey &, const HandleType &);
     inline void NoLongerNeeded(const AssetKey &, bool = true);
     void Abort();
-    bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<SharedString> *);
-    HandleType Get(const AssetHandleInterface<AssetType> *, const SharedString &, bool, bool, bool);
+    bool SaveDirtyToDotNew(khFilesTransaction &, std::vector<AssetHandle> *);
+    HandleType Get(const AssetHandleInterface<AssetType> *, const AssetHandle &, bool, bool, bool);
   private:
     using CacheType = khCache<AssetKey, HandleType>;
 
@@ -108,11 +108,11 @@ template<class AssetType>
 typename StorageManager<AssetType>::HandleType
 StorageManager<AssetType>::Get(
     const AssetHandleInterface<AssetType> * handle,
-    const SharedString & ref,
+    const AssetHandle & ref,
     bool checkFileExistenceFirst,
     bool addToCache,
     bool makeMutable) {
-  const AssetKey key = AssetType::Key(ref);
+  const AssetKey key = AssetType::Key(std::string(ref));
   const std::string filename = AssetType::Filename(key);
 
   // Check in cache.
@@ -180,7 +180,7 @@ void StorageManager<AssetType>::Abort() {
 template<class AssetType>
 bool StorageManager<AssetType>::SaveDirtyToDotNew(
     khFilesTransaction &savetrans,
-    std::vector<SharedString> *saved) {
+    std::vector<AssetHandle> *saved) {
   notify(NFY_INFO, "Writing %lu %s records", dirtyMap.size(), assetType.c_str());
   typename std::map<AssetKey, HandleType>::iterator entry = dirtyMap.begin();
   while (entry != dirtyMap.end()) {

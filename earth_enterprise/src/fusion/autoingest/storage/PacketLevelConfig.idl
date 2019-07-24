@@ -36,12 +36,12 @@ class PacketLevelConfig {
     // Only filled/used when doing minify
     // In Asset/Versions this is a ref to another PacketLevelVersion
     // In khpacklevgen, this is the path to the cache.pack/ dir
-    SharedString packetLevel = SharedString();
+    AssetHandle packetLevel = AssetHandle();
 
     // Only filled/used when doing minify
     // In Asset/Versions this is a ref to another PacketLevelVersion
     // In khpacklevgen, this is the path to the cache_alpha.pack/ dir
-    SharedString packetAlphaLevel = SharedString();
+    AssetHandle packetAlphaLevel = AssetHandle();
 
 #pragma GenerateIsUpToDate
   };

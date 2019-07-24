@@ -53,7 +53,7 @@ class TaskLists {
   uint64 asset_cache_memory = uint64(0);
   // Total memory used by cached asset versions
   uint64 version_cache_memory = uint64(0);
-  // Number of strings in SharedString string store
+  // Number of strings in SharedString string store???
   size_t str_store_size = size_t(0);
 #pragma StrLoadAndSave
 };

@@ -42,7 +42,7 @@ class ParseAssetXml_Tester : public opengee::mem_usage::RasterProjectFunctionTes
             FriendlyRasterProjectAssetImpl::Load(asset_name);
 
         // Use the asset in an operation before throwing it away:
-        asset_ref_character_count += asset->GetRef().toString().length();
+        asset_ref_character_count += std::string(asset->GetRef()).length();
 
         // Keep processing operations:
         return false;
