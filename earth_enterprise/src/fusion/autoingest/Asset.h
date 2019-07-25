@@ -133,4 +133,6 @@ Asset::Valid(void) const
   }
 }
 
+void Find(const std::string &, const std::string &);
+
 #endif /* __Asset_h */

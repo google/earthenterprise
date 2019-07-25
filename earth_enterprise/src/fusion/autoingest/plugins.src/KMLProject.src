@@ -42,7 +42,6 @@ class KMLProjectAssetImplD {
 
 
 // ===== KMLProjectAssetD.cpp =====
-//#include <autoingest/sysman/plugins/KMLLayerAssetD.h>
 
 void
 KMLProjectAssetImplD::SyncInputRefs(void)
@@ -85,6 +84,7 @@ KMLProjectAssetImplD::HandleEditRequest(const KMLProjectEditRequest &req)
   // custom FindMake - modified to set/preserve indexVersion
   KMLProjectConfig projConfig = req.config;
   MutableKMLProjectAssetD project = KMLProjectFactory::Find(projname);
+  Find(projname, kProjectSubtype);
   if (project) {
     // We must preserve the indexVersion since the GUI doesn't/can't.
     // We really should split this KMLProjectConfig into two pieces.

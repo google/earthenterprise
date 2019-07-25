@@ -44,3 +44,15 @@ void AssetImpl::GetInputFilenames(std::vector<std::string> &out) const {
     AssetVersion(i)->GetOutputFilenames(out);
   }
 }
+
+void Find(const std::string &ref, const std::string &subtype) {
+  try {
+    Asset asset(ref);
+    if (asset &&
+        (asset->subtype == subtype)) {
+        notify(NFY_WARN, "FOUND 2");
+    }
+  } catch (...) {
+      // do nothing - don't even generate any warnings
+  }
+}
