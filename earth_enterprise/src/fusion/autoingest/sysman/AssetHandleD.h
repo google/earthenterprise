@@ -23,7 +23,6 @@
 #include <khException.h>
 #include <khFileUtils.h>
 #include "common/khCppStd.h"
-#include "common/khRefCounter.h"
 #include "common/SharedString.h"
 #include "common/khConstants.h"
 

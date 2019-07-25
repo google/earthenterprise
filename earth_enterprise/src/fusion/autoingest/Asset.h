@@ -37,7 +37,7 @@
  ***  ... = asset->config.layers.size();
  ***
  ******************************************************************************/
-class AssetImpl : public khRefCounter, public AssetStorage, public StorageManaged {
+class AssetImpl : public AssetStorage, public StorageManaged {
   friend class AssetHandle_<AssetImpl>;
 
   // Illegal to copy an AssetImpl
@@ -94,6 +94,9 @@ class AssetImpl : public khRefCounter, public AssetStorage, public StorageManage
   static SharedString Key(const SharedString & ref) {
     return ref;
   }
+  static bool ValidRef(const SharedString & ref) {
+    return !ref.empty();
+  }
 };
 
 // ****************************************************************************
@@ -117,8 +120,8 @@ Asset::Valid(void) const
   if (handle) {
     return handle->type != AssetDefs::Invalid;
   } else {
-    // deal quickly with an empty ref
-    if (ref.empty())
+
+    if (!AssetImpl::ValidRef(ref))
       return false;
 
     try {
