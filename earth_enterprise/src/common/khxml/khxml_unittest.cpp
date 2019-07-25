@@ -195,8 +195,8 @@ TEST_F(KhxmlTest, StdStringMapToElement) {
   fromStringMapTest<string>();
 }
 
-TEST_F(KhxmlTest, SharedStringMapToElement) {
-  fromStringMapTest<SharedString>();
+TEST_F(KhxmlTest, AssetRefKeyMapToElement) {
+  fromStringMapTest<AssetRefKey>();
 }
 
 TEST_F(KhxmlTest, QStringMapToElement) {
@@ -219,8 +219,8 @@ TEST_F(KhxmlTest, StdStringReadString) {
   toStringTest<string>();
 }
 
-TEST_F(KhxmlTest, SharedStringReadString) {
-  toStringTest<SharedString>();
+TEST_F(KhxmlTest, AssetRefKeyReadString) {
+  toStringTest<AssetRefKey>();
 }
 
 TEST_F(KhxmlTest, QStringReadString) {
@@ -259,8 +259,8 @@ TEST_F(KhxmlTest, StdStringReadMap) {
   toStringMapTest<string>();
 }
 
-TEST_F(KhxmlTest, SharedStringReadMap) {
-  toStringMapTest<SharedString>();
+TEST_F(KhxmlTest, AssetRefKeyReadMap) {
+  toStringMapTest<AssetRefKey>();
 }
 
 TEST_F(KhxmlTest, QStringReadMap) {
@@ -283,8 +283,8 @@ TEST_F(KhxmlTest, StdStringReadEmpty) {
   readEmptyStringFromXml<string>();
 }
 
-TEST_F(KhxmlTest, SharedStringReadEmpty) {
-  readEmptyStringFromXml<SharedString>();
+TEST_F(KhxmlTest, AssetRefKeyReadEmpty) {
+  readEmptyStringFromXml<AssetRefKey>();
 }
 
 TEST_F(KhxmlTest, QStringReadEmpty) {
@@ -307,8 +307,8 @@ TEST_F(KhxmlTest, StdStringReadNonEmpty) {
   readNonEmptyStringFromXml<string>();
 }
 
-TEST_F(KhxmlTest, SharedStringReadNonEmpty) {
-  readNonEmptyStringFromXml<SharedString>();
+TEST_F(KhxmlTest, AssetRefKeyReadNonEmpty) {
+  readNonEmptyStringFromXml<AssetRefKey>();
 }
 
 TEST_F(KhxmlTest, QStringReadNonEmpty) {

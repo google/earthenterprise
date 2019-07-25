@@ -44,7 +44,6 @@
 #include "common/Defaultable.h"
 #include "common/EncryptedQString.h"
 #include "common/geRange.h"
-#include "common/SharedString.h"
 
 
 /******************************************************************************

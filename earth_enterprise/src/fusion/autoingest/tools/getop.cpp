@@ -249,7 +249,7 @@ main(int argc, char *argv[])
                 readableMemorySize(taskLists.asset_cache_memory).c_str());
         outline("Total memory used by cached asset versions: %s",
                 readableMemorySize(taskLists.version_cache_memory).c_str());
-        outline("Number of strings cached: %u", taskLists.str_store_size);
+        outline("");
 
       }
       sleep(delay);

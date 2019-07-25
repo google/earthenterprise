@@ -20,7 +20,6 @@
 #include <string>
 #include "common/khRefCounter.h"
 #include "common/khTypes.h"
-#include "common/SharedString.h"
 #include "StorageManager.h"
 
 class AssetVersionRef;

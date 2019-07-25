@@ -17,7 +17,6 @@
 #include <vector>
 #include <khTypes.h>
 #include <autoingest/.idl/storage/DatedImageryIndexInfo.h>
-#include "common/SharedString.h"
 
 #cppquote
 #include <autoingest/.idl/storage/DatedImageryIndexInfo_impl.h>

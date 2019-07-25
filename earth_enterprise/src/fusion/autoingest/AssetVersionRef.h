@@ -25,7 +25,6 @@ Description: Helper class for extracting/manipulating pieces of a verion ref
 
 #include <string>
 #include <common/khTypes.h>
-#include "common/SharedString.h"
 
 class AssetVersionRef {
   std::string assetRef;

@@ -17,7 +17,6 @@
 #include <vector>
 #include <khTypes.h>
 #include <geindex/Entries.h>
-#include "common/SharedString.h"
 
 // ****************************************************************************
 // ***  UnifiedIndex

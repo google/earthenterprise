@@ -26,7 +26,6 @@
 #include "common/khFileUtils.h"
 #include "common/khRefCounter.h"
 #include "common/notify.h"
-#include "common/SharedString.h"
 
 // Items stored in the storage manager must inherit from the StorageManaged class
 class StorageManaged {

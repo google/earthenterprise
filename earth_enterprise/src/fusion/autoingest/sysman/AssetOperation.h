@@ -17,7 +17,7 @@
 #ifndef ASSETOPERATION_H
 #define ASSETOPERATION_H
 
-#include "common/SharedString.h"
+#include "common/khTypes.h"
 
 void RebuildVersion(const AssetRefKey & ref);
 

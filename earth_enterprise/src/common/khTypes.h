@@ -68,6 +68,7 @@ typedef double                          float64;
 // relies on a lot of underlying boot functionalty
 // but is necessary in places i.e. empty()
 // allows for any extensiblity to be done at a later date
+// many methods have been overloaed to allow for full functionality
 class AssetRefKey
 {
     boost::flyweights::flyweight<std::string> fw;
@@ -75,6 +76,7 @@ public:
     AssetRefKey() = default;
     AssetRefKey(const AssetRefKey& other) { fw = other.fw; }
     AssetRefKey(const std::string& ref) { fw = ref; }
+    AssetRefKey(const char* ref) { fw = std::string(ref); }
     AssetRefKey(AssetRefKey&& other) { fw = std::move(other.fw); }
     AssetRefKey(std::string&& ref) { fw = std::move(ref); }
 
@@ -87,6 +89,11 @@ public:
     {
         fw = ref;
         return *this;
+    }
+    AssetRefKey& operator=(const char* ref)
+    {
+        fw = std::string(ref);
+        return *this;;
     }
     AssetRefKey& operator=(AssetRefKey&& other)
     {
@@ -115,9 +122,14 @@ public:
     bool operator!=(const std::string& ref) const { return fw != ref; }
     bool operator<(const std::string& ref) const { return fw < ref; }
     bool operator>(const std::string& ref) const { return fw > ref; }
+    bool operator==(const char* ref) const { return fw == std::string(ref); }
+    bool operator!=(const char* ref) const { return fw != std::string(ref); }
+    bool operator>(const char* ref) const { return fw > std::string(ref); }
+    bool operator<(const char* ref) const { return fw < std::string(ref); }
 
-    bool empty() const { return std::string(fw).empty() ? true : false; }
+    bool empty() const { return std::string(fw).empty(); }
 };
+
 
 // Class template to extract properties from a generic type.
 // It is used to overload a function template based on a type condition.
@@ -126,7 +138,7 @@ struct Int2Type {
     enum {value = v};
 };
 
-// defined ptr_uint_t to the appropriate type for this platform
+// defined ptr_uint_t SharedStringto the appropriate type for this platform
 template <int size>
 class PointerAsUIntImpl;
 

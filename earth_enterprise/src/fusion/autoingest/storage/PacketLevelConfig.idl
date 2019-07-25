@@ -19,7 +19,6 @@
 
 #include "common/khTypes.h"
 #include "common/khTileAddr.h"
-#include "common/SharedString.h"
 
 class PacketLevelConfig {
 #pragma DontEmitDefaults

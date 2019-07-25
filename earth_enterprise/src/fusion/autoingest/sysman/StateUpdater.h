@@ -23,7 +23,6 @@
 #include <map>
 
 #include "autoingest/.idl/storage/AssetDefs.h"
-#include "common/SharedString.h"
 
 // This class efficiently updates the states of lots of asset versions at
 // the same time. The idea is that you create a state updater, use it to

@@ -19,7 +19,6 @@
 #include <khMetaData.h>
 #include <autoingest/Misc.h>
 #include <autoingest/.idl/storage/AssetDefs.h>
-#include "common/SharedString.h"
 #include "common/verref_storage.h"
 #include "common/khTypes.h"
 #cppquote

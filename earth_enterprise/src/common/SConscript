@@ -68,7 +68,6 @@ commonsources = [ '../third_party/rsa_md5/md5c.c',
                   'geInstallPaths.cpp',
                   'projection.cpp',
                   'ScopeCounter.cpp',
-                  'SharedString.cpp',
                   'SignalHandler.cpp',
                   'compressor.cpp',
                   'tile_resampler.cpp',
@@ -131,7 +130,6 @@ utilsources = [
 # TODO: consider to remove dependency from qt
 geutil = env.sharedLib('geutil', utilsources,
                        LIBS = ['gecommon', 'qt-mt'])
-'''
 env.test('quadtreepath_unittest',
          'quadtreepath_unittest.cpp',
          LIBS=['geutil', 'gecommon', 'qt-mt'])
@@ -196,9 +194,5 @@ env.test('khconfigparser_unittest',
          'khconfigparser_unittest.cpp',
           LIBS=['geutil', 'gtest'])
 
-env.test('sharedstring_unittest',
-         'sharedstring_unittest.cpp',
-          LIBS=['geutil', 'gtest','gecommon'])
-'''
 env.install('common_lib', [gecommon])
 env.install('common_lib', [geutil])

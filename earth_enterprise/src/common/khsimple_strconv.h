@@ -25,7 +25,6 @@
 #include <cctype>
 #include <algorithm>
 #include "common/khTypes.h"
-#include "common/SharedString.h"
 
 template <class T>
 std::string

@@ -44,7 +44,7 @@ class TestItem : public khRefCounter, public StorageManaged {
   static string Filename(const std::string ref) {
     return fileName;
   }
-  static SharedString Key(const SharedString & ref) {
+  static AssetRefKey Key(const AssetRefKey & ref) {
     return ref;
   }
   // determine amount of memory used by TestItem
@@ -309,7 +309,7 @@ TEST_F(StorageManagerTest, SaveDirtyToVector) {
   getAssetsForDirtyTest(storageManager, handles);
   
   khFilesTransaction trans;
-  vector<SharedString> saved;
+  vector<AssetRefKey> saved;
   storageManager.SaveDirtyToDotNew(trans, &saved);
   ASSERT_EQ(saved.size(), 2) << "Wrong number of items in saved vector";
   ASSERT_TRUE(find(saved.begin(), saved.end(), "mutable2") != saved.end()) << "Dirty item missing from saved vector";
